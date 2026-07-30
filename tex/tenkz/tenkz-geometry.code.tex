@@ -174,6 +174,67 @@
       \l__tenkz_geom_kind_ok_bool
   }
 
+% Recover the logical point under an affine frame.  Open-end projection uses
+% this inverse so it can keep the neighbouring point's transverse logical
+% coordinate before placing the tip on a projected margin; mixing a page x
+% with a separately projected page y is valid only for an axis-aligned frame.
+\cs_new_protected:Npn \__tenkz_geom_unapply:nnnNN #1#2#3#4#5
+  {
+    \tl_clear:N #4
+    \tl_clear:N #5
+    \__tenkz_geom_require_kind:nnnN {#1} {affine} {unapply}
+      \l__tenkz_geom_kind_ok_bool
+    \bool_if:NT \l__tenkz_geom_kind_ok_bool
+      {
+        \tl_set:Ne #4
+          {
+            \fp_eval:n
+              {
+                (
+                  \__tenkz_geom_field:nn{#1}{d}
+                    * ( (#2) - \__tenkz_geom_field:nn{#1}{dx} )
+                  - \__tenkz_geom_field:nn{#1}{b}
+                    * ( (#3) - \__tenkz_geom_field:nn{#1}{dy} )
+                )
+                /
+                (
+                  \__tenkz_geom_field:nn{#1}{a}
+                    * \__tenkz_geom_field:nn{#1}{d}
+                  - \__tenkz_geom_field:nn{#1}{b}
+                    * \__tenkz_geom_field:nn{#1}{c}
+                )
+              }
+          }
+        \tl_set:Ne #5
+          {
+            \fp_eval:n
+              {
+                (
+                  -\__tenkz_geom_field:nn{#1}{c}
+                    * ( (#2) - \__tenkz_geom_field:nn{#1}{dx} )
+                  + \__tenkz_geom_field:nn{#1}{a}
+                    * ( (#3) - \__tenkz_geom_field:nn{#1}{dy} )
+                )
+                /
+                (
+                  \__tenkz_geom_field:nn{#1}{a}
+                    * \__tenkz_geom_field:nn{#1}{d}
+                  - \__tenkz_geom_field:nn{#1}{b}
+                    * \__tenkz_geom_field:nn{#1}{c}
+                )
+              }
+          }
+      }
+  }
+
+\prg_new_conditional:Npnn \__tenkz_geom_frame_if_affine:n #1 { T, F, TF }
+  {
+    \prop_get:NnN \l__tenkz_geom_framekind_prop {#1} \l__tenkz_geom_kind_tl
+    \str_if_eq:VnTF \l__tenkz_geom_kind_tl {affine}
+      { \prg_return_true: }
+      { \prg_return_false: }
+  }
+
 % a direction crosses the linear part; shear and scale bend it honestly
 \cs_new_protected:Npn \__tenkz_geom_dir:nnN #1#2#3
   {
@@ -191,6 +252,14 @@
                     + \__tenkz_geom_field:nn{#1}{b} * sind(#2) ) } }
       }
   }
+
+% Kernel-local directions are measured from east in (east, north) axes,
+% while an affine frame consumes (row, column).  East is the column vector
+% and north is the negative row vector, so theta enters the matrix as
+% 90 + theta.  Keeping that convention here prevents row/column details from
+% leaking into each port, leg, and open-end consumer.
+\cs_new_protected:Npn \__tenkz_geom_local_dir:nnN #1#2#3
+  { \__tenkz_geom_dir:nnN {#1} { 90 + (#2) } #3 }
 
 % The axes a frame gives a record.  An address on a carrier is read in the
 % carrier's axes, and the ink the frame measures is measured in them, so

@@ -82,6 +82,10 @@ plane_frame_canonical=$(
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
+grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
+  echo "FAIL: the plane fixture lost its projected open physical port" >&2
+  exit 1
+}
 if grep -Eq 'name=(wrap|cup)-(west|east|north|south)' \
     "$WORK/k_twoshift.tnlog" "$WORK/r_cup.tnlog"; then
   echo "FAIL: a side-level closure survived normalization" >&2
