@@ -31,6 +31,9 @@ from tenkzlib.tnlog import ParsedLog, parse_log
 REPO = Path(__file__).resolve().parent.parent
 DEFAULT_MANIFEST = REPO / "tests" / "tenkz" / "rmp" / "manifest.toml"
 DEFAULT_VERDICT = REPO / "tests" / "tenkz" / "rmp" / "verdicts.toml"
+AUTHOR_SOURCE_HASHES = (
+    REPO / "tests" / "tenkz" / "rmp" / "author-source.sha256"
+)
 PAPER_SOURCE = REPO / "Papers" / "2011.12127" / "TN-Review-main.tex"
 FROZEN_TARGET_COUNT = 130
 BOOK_SOURCE = REPO / "docs" / "tenkz" / "rmp-benchmark.tex"
@@ -944,10 +947,91 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def load_author_source_hashes(path: Path) -> dict[Path, str]:
+    """Read the committed identity of the external author-source authority."""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError:
+        fail(f"author-source hash manifest does not exist: {path}")
+    except (OSError, UnicodeError) as exc:
+        fail(f"cannot read author-source hash manifest {path}: {exc}")
+
+    hashes: dict[Path, str] = {}
+    order: list[str] = []
+    for line_number, line in enumerate(lines, 1):
+        if not line or line.startswith("#"):
+            continue
+        match = re.fullmatch(r"([0-9a-f]{64})  (.+)", line)
+        if match is None:
+            fail(
+                f"{path}:{line_number}: expected '<sha256>  <relative .tex path>'"
+            )
+        source = relative_repo_path(
+            match.group(2),
+            field=f"{path}:{line_number}",
+            suffix=".tex",
+        )
+        if source in hashes:
+            fail(f"{path}:{line_number}: duplicate author source {source}")
+        hashes[source] = match.group(1)
+        order.append(source.as_posix())
+    if order != sorted(order):
+        fail(f"author-source hash manifest is not path-sorted: {path}")
+    if not hashes:
+        fail(f"author-source hash manifest is empty: {path}")
+    return hashes
+
+
+def verify_author_source_tree(
+    targets: Sequence[Target],
+    source_root: Path,
+    *,
+    hashes_path: Path = AUTHOR_SOURCE_HASHES,
+) -> int:
+    """Prove that comparison reads the authority reviewed by the verdicts."""
+    if not source_root.is_dir():
+        fail(f"source root does not exist: {source_root}")
+    hashes = load_author_source_hashes(hashes_path)
+    cited = {
+        target.author_source
+        for target in targets
+        if target.author_source is not None
+    }
+    recorded = set(hashes)
+    if recorded != cited:
+        missing = sorted(path.as_posix() for path in cited - recorded)
+        extra = sorted(path.as_posix() for path in recorded - cited)
+        details: list[str] = []
+        if missing:
+            details.append("missing: " + ", ".join(missing))
+        if extra:
+            details.append("uncited: " + ", ".join(extra))
+        fail(
+            "author-source hash manifest disagrees with manifest.toml ("
+            + "; ".join(details)
+            + ")"
+        )
+    for source in sorted(cited, key=lambda item: item.as_posix()):
+        candidate = source_root / source
+        try:
+            actual = sha256(candidate)
+        except FileNotFoundError:
+            fail(f"author source does not exist: {candidate}")
+        except OSError as exc:
+            fail(f"cannot hash author source {candidate}: {exc}")
+        if actual != hashes[source]:
+            fail(
+                f"author source hash mismatch: {source} "
+                f"(expected {hashes[source]}, got {actual})"
+            )
+    return len(cited)
+
+
 def campaign_digest(targets: Sequence[Target]) -> str:
     """Hash every committed input whose change invalidates visual verdicts."""
     paths = {
         DEFAULT_MANIFEST,
+        AUTHOR_SOURCE_HASHES,
         PAPER_SOURCE,
         BOOK_SOURCE,
         REPO / "docs" / "tenkz" / "tenkzrmpbenchmark.sty",
@@ -1764,8 +1848,14 @@ def main() -> int:
         # fail in seconds, not after 130 builds.
         verdicts = load_verdicts(targets)
         validate_verdict_consistency(targets, verdicts)
-        if args.command == "compare" and not args.source_root.is_dir():
-            fail(f"source root does not exist: {args.source_root}")
+        if args.command == "compare":
+            source_root = args.source_root.resolve()
+            verified = verify_author_source_tree(targets, source_root)
+            print(
+                "PASS: verified "
+                f"{verified} author-source authority file(s) against "
+                f"{AUTHOR_SOURCE_HASHES.relative_to(REPO)}"
+            )
         with tempfile.TemporaryDirectory(prefix="tenkz-rmp-") as temporary:
             work = Path(temporary)
             results = compile_targets(selected, work, jobs)
@@ -1798,7 +1888,7 @@ def main() -> int:
                 print(f"PASS: rendered {png_count} target/book page(s) to {destination}")
                 print(f"Checksums: {destination / 'SHA256SUMS'}")
                 return 0
-            comparison = compile_comparison(results, args.source_root.resolve(), work, jobs)
+            comparison = compile_comparison(results, source_root, work, jobs)
             install_pdf(comparison, COMPARE_OUTPUT)
             print(f"PASS: wrote source-only comparison book to {COMPARE_OUTPUT}")
             return 0

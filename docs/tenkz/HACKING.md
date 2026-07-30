@@ -41,13 +41,25 @@ python3 scripts/tenkz_rmp.py check --all
 python3 scripts/tenkz_rmp.py book --all
 python3 scripts/tenkz_rmp.py render --all
 python3 scripts/tenkz_rmp.py compare --all \
-  --source-root /absolute/path/to/author-source-tree
+  --source-root References/RMP_TIKZ_SOURCE_CODE
 ```
 
 The comparison command requires a separate author-source tree supplied through
-`--source-root`.  That tree is not part of this repository, so comparison is not
-a clean-checkout build command.  Run it only in a source-pairing session with an
-explicit external tree.
+`--source-root`.  The canonical local home is the gitignored
+`References/RMP_TIKZ_SOURCE_CODE/` directory.  It contains the authors'
+standalone `ImagesReview Section II` through `ImagesReview Section V` source
+drop used to establish the `author_source` and `author_lines` pairings in
+`tests/tenkz/rmp/manifest.toml`; the source drop is not redistributed by this
+repository.
+
+The four cited section files are identified by
+`tests/tenkz/rmp/author-source.sha256`.  `compare` verifies that manifest before
+compiling any corpus target, so a missing, edited, or different source drop
+fails quickly instead of producing a comparison book against unreviewed
+evidence.  Generated PDFs, auxiliary files, logs, and filesystem metadata are
+not provenance: only the section sources cited by the pairing manifest define
+the external authority.  A source tree in another local directory is acceptable
+only when it matches the committed hashes.
 
 Per-target verdicts are stored in `tests/tenkz/rmp/verdicts.toml`, one
 stanza per target.  Any status may be recorded, including failure; the check

@@ -11,9 +11,14 @@ from pathlib import Path
 
 from tenkz_audit import Audit
 from tenkz_rmp import (
+    DEFAULT_MANIFEST,
+    RMPError,
     ink_environment_problems,
+    load_manifest,
     rendered_ink_environment_families,
+    sha256,
     structural_capability_problems,
+    verify_author_source_tree,
 )
 from tenkzlib.tnlog import parse_log
 
@@ -155,9 +160,71 @@ def test_ink_environment_owner() -> None:
         raise AssertionError("compiled kernel owner was omitted")
 
 
+def test_rmp_author_source_identity() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    cited = sorted(
+        {
+            target.author_source
+            for target in targets
+            if target.author_source is not None
+        },
+        key=lambda path: path.as_posix(),
+    )
+    with tempfile.TemporaryDirectory(prefix="tenkz-rmp-author-source-") as tmp:
+        work = Path(tmp)
+        source_root = work / "RMP_TIKZ_SOURCE_CODE"
+        for index, source in enumerate(cited, 1):
+            candidate = source_root / source
+            candidate.parent.mkdir(parents=True, exist_ok=True)
+            candidate.write_text(f"author source {index}\n", encoding="utf-8")
+        hashes = work / "author-source.sha256"
+        hashes.write_text(
+            "".join(
+                f"{sha256(source_root / source)}  {source.as_posix()}\n"
+                for source in cited
+            ),
+            encoding="utf-8",
+        )
+        verified = verify_author_source_tree(
+            targets, source_root, hashes_path=hashes
+        )
+        if verified != len(cited):
+            raise AssertionError("author-source verifier lost a cited source")
+
+        changed = source_root / cited[0]
+        original = changed.read_text(encoding="utf-8")
+        changed.write_text("different authority\n", encoding="utf-8")
+        try:
+            verify_author_source_tree(targets, source_root, hashes_path=hashes)
+        except RMPError as exc:
+            if "author source hash mismatch" not in str(exc):
+                raise AssertionError(
+                    f"changed author source produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("changed author source passed identity verification")
+
+        changed.write_text(original, encoding="utf-8")
+        hashes.write_text(
+            hashes.read_text(encoding="utf-8")
+            + f"{'0' * 64}  uncited.tex\n",
+            encoding="utf-8",
+        )
+        try:
+            verify_author_source_tree(targets, source_root, hashes_path=hashes)
+        except RMPError as exc:
+            if "uncited: uncited.tex" not in str(exc):
+                raise AssertionError(
+                    f"uncited hash entry produced the wrong failure: {exc}"
+                ) from exc
+        else:
+            raise AssertionError("uncited author-source hash entry was accepted")
+
+
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_author_source_identity()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 
