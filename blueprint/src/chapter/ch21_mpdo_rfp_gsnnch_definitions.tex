@@ -888,9 +888,12 @@ firstSiteMatrix_mul_reducedBlockState}
     % **Scope restriction (sectorwise hypotheses):** The printed proposition
     % omits sectorwise source ZCL. The theorem retains per-sector MPDO,
     % one-site injectivity, normality, and source ZCL. BNT normality supplies
-    % injectivity only after blocking, so the source application still needs
-    % an injectivity-versus-blocking argument. The global outer sum and sector
-    % products now have the positive proportionality allowed by ApprhoNComm.
+    % injectivity only after blocking. Under the present blocking and SAL
+    % interfaces, blocked SAL supplies only block-aligned chains and cuts and
+    % does not by itself establish unblocked SAL. Following the present proof
+    % route requires all-original-cut visibility from eventual block
+    % injectivity. The global outer sum and sector products now have the
+    % positive proportionality allowed by ApprhoNComm.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 

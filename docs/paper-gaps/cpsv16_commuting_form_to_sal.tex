@@ -643,6 +643,41 @@ consequence of BNT normality alone: a normal tensor becomes injective only
 after blocking.  The source application therefore leaves an
 injectivity-versus-blocking step unaddressed.
 
+\paragraph{The present blocking interface gives only block-aligned SAL.}
+Suppose that normality supplies a positive blocking length \(L_0\) for a
+sector tensor \(\mathcal K\).  The closed operator of the blocked tensor on
+\(q\) blocked sites is the closed operator of \(\mathcal K\) on \(qL_0\)
+original sites, up to the canonical identification of physical indices.
+Likewise, a prefix of \(r\) blocked sites is a prefix of \(rL_0\) original
+sites.  Therefore SAL of the blocked tensor supplies only
+\[
+  I_{rL_0}^{(qL_0)}=I_{(r+1)L_0}^{(qL_0)}.
+\]
+The source definition of SAL for the original tensor instead requires
+\[
+  I_{\ell}^{(N)}=I_{\ell+1}^{(N)}
+\]
+for every admissible original chain length \(N\) and every consecutive cut
+\(\ell\).  Shifting the origin of the blocking does not change the retained
+length, and replacing \(L_0\) by a larger injective blocking length still
+cannot align both \(\ell\) and \(\ell+1\) unless the blocking length is one.
+Consequently, under the present physical-blocking identification and SAL
+interface, preservation of MPDO positivity, source ZCL, and the commuting bond
+presentation establishes only a block-aligned statement.  Blocked SAL does not
+by itself establish SAL for the original tensor.
+
+Any completion that follows the present all-cut Hayashi-decomposition route
+must retain the original one-site middle region.  The present proof uses
+one-site injectivity to show that the
+cyclic-active original one-site matrix family spans the virtual matrix
+algebra, to prove that the visible recurrent sectors form one component, and
+to prove that the cyclic-active sector set is nonempty.  Along this route,
+removing one-site injectivity requires word-length replacements for these
+three steps, derived from a positive block-injectivity witness, while the
+resulting Hayashi decomposition remains at every one-site cut of the unblocked
+chain.  No such word-length visibility theorem is presently available.
+Ordinary physical blocking does not by itself provide these replacements.
+
 The proportional orthogonal commuting sector family has pairwise orthogonal
 one-site projections and a positive commuting bond whose periodic product is
 proportional to the sector operator by a positive scalar at every length at
@@ -681,8 +716,10 @@ together with positive proportional orthogonal sector realizations.  The
 sector-product proportionality is therefore no longer a restriction.  The
 printed proposition still omits sectorwise source ZCL, and its application to
 normal BNT sectors still requires an unaddressed argument passing from
-injectivity after blocking to the one-site injectivity used by the
-single-sector theorem.
+eventual block injectivity to the all-original-cut visibility statements used
+by the present single-sector proof.  Under the available blocking and SAL
+interfaces, SAL of a blocked sector supplies only block-aligned chains and cuts
+and does not by itself discharge this obligation.
 
 \section{Completed proof}
 
