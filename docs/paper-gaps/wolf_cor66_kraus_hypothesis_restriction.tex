@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Complete Positivity in the Projected Support Corner Star-Algebra}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Corollary 6.6 of \emph{Quantum Channels \& Operations} (Wolf 2012), stated at
+lines 1380--1510 of \texttt{Notes/WolfNoteTexSource/ch06\_spectral\_properties.tex},
+concerns a positive trace-preserving linear map $T$ on $M_D(\mathbb{C})$ whose trace
+adjoint $T^{*}$ is unital and satisfies the Schwarz inequality. For a positive
+semidefinite fixed point $\rho$ of $T$ with support projection $Q$, the corner-restricted
+fixed-point set
+\[
+    \{\, Y \in Q\,M_D(\mathbb{C})\,Q \;\mid\; Q\,T^{*}(Y)\,Q = Y \,\}
+\]
+is a $*$-subalgebra of the corner algebra $Q\,M_D(\mathbb{C})\,Q$.
+
+Wolf offers complete positivity as an \emph{example} of a map meeting the hypothesis,
+not as part of the hypothesis. The Schwarz inequality for the adjoint is strictly weaker:
+every completely positive unital map satisfies it, but positive maps that are not
+completely positive can satisfy it as well.
+
+\section{The restriction in the formalization}
+
+The available Lean statement is \leanid{Kraus.cornerFixedPointsStarSubalgebra}, with the
+membership characterization \leanid{Kraus.mem\_cornerFixedPointsStarSubalgebra}, both in
+\texttt{TNLean/Channel/FixedPoint/CornerFixedPoints.lean}. Its hypotheses are a family
+$K$ of Kraus operators with \leanid{IsTP} $K$ and a positive semidefinite fixed point of
+the induced map. Presenting the map by a Kraus family assumes complete positivity, so the
+Lean hypothesis set is strictly stronger than the source's. Under the repository
+faithfulness rule this declaration establishes the completely positive case of
+Corollary 6.6 and is not a formalization of the corollary itself.
+
+The corresponding Blueprint entry states the Kraus form explicitly in its hypotheses, so
+its \leanid{\textbackslash leanok} is honest for the restricted statement; it must not be
+read as the unrestricted corollary. The analogous restriction for Corollary 6.7 is
+recorded separately in \texttt{wolf\_cor67\_maximal\_support\_restriction.tex}.
+
+\section{Elimination plan}
+
+No further material is needed from the source: the corollary is stated in full at the
+lines cited above, and the machinery to express its hypothesis without Kraus data already
+exists. The multiplicative domain of a bare linear map
+$E : M_D(\mathbb{C}) \to M_D(\mathbb{C})$ is available as \leanid{multiplicativeDomain} in
+\texttt{TNLean/Channel/Schwarz/AbstractMultiplicativeDomain.lean}, together with its
+membership characterization, so the Schwarz hypothesis can be carried directly.
+
+The elimination is therefore to restate the corollary for a positive trace-preserving map
+whose trace adjoint is unital and Schwarz, discharging it through the general support
+compression and the now-available Theorem 6.14, and then to recover the present Kraus
+declarations as specializations rather than maintaining a parallel development. The
+source-general statement is the one that may carry a source-facing Blueprint entry for
+Corollary 6.6.
+
+\end{document}

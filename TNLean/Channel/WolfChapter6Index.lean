@@ -275,7 +275,13 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — the channel specialization.
 * Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
 
-### Wolf Corollary 6.6 (projected support corner) — FORMALIZED
+### Wolf Corollary 6.6 (projected support corner) — FORMALIZED (Kraus case)
+
+Wolf states the corollary for a positive trace-preserving map whose trace
+adjoint is unital and satisfies the Schwarz inequality; complete positivity is
+an example there, not a hypothesis. The declarations below assume a
+trace-preserving Kraus family, so they establish the completely positive case
+only.
 
 In `TNLean.Channel.FixedPoint.CornerFixedPoints`:
 
