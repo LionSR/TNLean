@@ -740,6 +740,78 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
   · intro i
     rw [← htransport i, smul_smul, inv_mul_cancel₀ hc₀_ne, one_smul]
 
+/-- A cyclic corner product is supported on the right by its final corner.
+
+This is the support identity used in the concatenation in arXiv:1708.00029,
+Appendix A, lines 1041--1056. -/
+private lemma cornerProd_mul_finalCorner
+    {m : ℕ} [NeZero m]
+    (Q : Fin m → MatrixAlg D) (B : MPSTensor d D)
+    (hQ : ∀ v, IsOrthogonalProjection (Q v))
+    (hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1))
+    (v : Fin m) (w : List (Fin d)) :
+    cornerProd Q B v w * Q (v + w.length • (1 : Fin m)) =
+      cornerProd Q B v w := by
+  rw [cornerProd_eq_conj_evalWord Q B hQ hQ_shift]
+  simp only [Matrix.mul_assoc, (hQ (v + w.length • (1 : Fin m))).2]
+
+/-- Repeated ambient blocked-sector equations concatenate through the corner
+partial isometries.
+
+This is the cancellation of adjacent \(U_v^\dagger U_v=Q_v\) factors in
+arXiv:1708.00029, Appendix A, lines 1041--1056. -/
+private lemma cornerProd_blockMatch_partial_isometry_pow
+    {m : ℕ} [NeZero m]
+    (P Q : Fin m → MatrixAlg D) (A B : MPSTensor d D)
+    (q : Fin m) (U : Fin m → MatrixAlg D) (c : Fin m → ℂ)
+    (hP : ∀ u, IsOrthogonalProjection (P u))
+    (hQ : ∀ v, IsOrthogonalProjection (Q v))
+    (hQ_shift : ∀ (v : Fin m) (i : Fin d), Q v * B i = B i * Q (v + 1))
+    (hU_star_U : ∀ u, (U u)ᴴ * U u = Q (u + q))
+    (hBC : ∀ (u : Fin m) (w : List (Fin d)), w.length = m →
+      cornerProd P A u w =
+        c u • (U u * cornerProd Q B (u + q) w * (U u)ᴴ))
+    (u : Fin m) (k : ℕ) :
+    ∀ W : List (Fin d), W.length = (k + 1) * m →
+      cornerProd P A u W =
+        (c u) ^ (k + 1) •
+          (U u * cornerProd Q B (u + q) W * (U u)ᴴ) := by
+  induction k with
+  | zero =>
+      intro W hW
+      rw [zero_add, one_mul] at hW
+      simpa using hBC u W hW
+  | succ k ih =>
+      intro W hW
+      set block := W.take m with hblock_def
+      set rest := W.drop m with hrest_def
+      have hWlen : m ≤ W.length := by rw [hW]; nlinarith [Nat.zero_le k]
+      have hblock_len : block.length = m := by
+        rw [hblock_def, List.length_take, Nat.min_eq_left hWlen]
+      have hrest_len : rest.length = (k + 1) * m := by
+        rw [hrest_def, List.length_drop, hW]
+        ring_nf
+        omega
+      have hWeq : W = block ++ rest := (List.take_append_drop m W).symm
+      have hshift_block : block.length • (1 : Fin m) = 0 := by
+        rw [hblock_len]
+        exact nsmul_card_one_fin
+      rw [hWeq, cornerProd_append P A hP u block rest,
+        hshift_block, add_zero, hBC u block hblock_len, ih rest hrest_len,
+        smul_mul_smul_comm, ← pow_succ']
+      congr 1
+      rw [cornerProd_append Q B hQ (u + q) block rest,
+        hshift_block, add_zero]
+      have hblock_right :
+          cornerProd Q B (u + q) block * Q (u + q) =
+            cornerProd Q B (u + q) block := by
+        simpa only [hshift_block, add_zero] using
+          cornerProd_mul_finalCorner Q B hQ hQ_shift (u + q) block
+      simp only [Matrix.mul_assoc]
+      rw [← Matrix.mul_assoc (U u)ᴴ (U u), hU_star_U,
+        ← Matrix.mul_assoc (cornerProd Q B (u + q) block) (Q (u + q)),
+        hblock_right]
+
 /-- Full-cycle contraction step for periodic-overlap Case 3.
 
 At this point the sector transport has already been abstracted into
