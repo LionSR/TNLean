@@ -1,0 +1,96 @@
+% Regression: every affine consumer reads the plane frame itself.  The
+% selected alignment row supplies the TikZ baseline after projection, and
+% label bearings on both records and ports use the full local basis.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_plane_axis_count_int
+\int_new:N \l__tenkz_test_plane_label_count_int
+\tl_new:N \l__tenkz_test_plane_row_tl
+\tl_new:N \l__tenkz_test_plane_pos_tl
+\tl_new:N \l__tenkz_test_plane_angle_tl
+\cs_new_eq:NN
+  \__tenkz_test_plane_axis_place:
+  \__tenkz_kernel_r_axis_place:
+\cs_set_protected:Npn \__tenkz_kernel_r_axis_place:
+  {
+    \tl_set_eq:NN
+      \l__tenkz_test_plane_row_tl \l__tenkz_kernel_r_axis_tl
+    \__tenkz_test_plane_axis_place:
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \int_gincr:N \l__tenkz_test_plane_axis_count_int
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \l__tenkz_kernel_r_axis_tl
+                - \str_case_e:nn
+                    { \l__tenkz_test_plane_row_tl }
+                    { {2}{-0.6} {3}{-1.2} }
+              )
+          }
+          < {0.000001}
+          { \errmessage{plane~baseline~did~not~use~the~projected~row} }
+      }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_plane_mark_label_ink:n
+  \__tenkz_kernel_r_mark_label_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \int_gincr:N \l__tenkz_test_plane_label_count_int
+        \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_test_plane_pos_tl
+        \tl_set:Ne \l__tenkz_test_plane_angle_tl
+          {
+            \__tenkz_kernel_r_compass:n
+              { \tl_use:N \l__tenkz_test_plane_pos_tl }
+          }
+        \tl_set:Ne \l__tenkz_test_plane_angle_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_test_plane_angle_tl
+                + \l__tenkz_kernel_r_tau_tl
+              }
+          }
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \l__tenkz_test_plane_angle_tl
+                - \str_case:Vn \l__tenkz_test_plane_pos_tl
+                    { {e}{0} {n}{53.130102} }
+              )
+          }
+          < {0.000001}
+          { \errmessage{plane~label~did~not~use~the~projected~bearing} }
+      }
+    \__tenkz_test_plane_mark_label_ink:n {#1}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire,wire,wire,wire}, cols=5, frame=plane, bonds=none]
+  \tn[at=(3,3), skin=box, name=A, ports={90:virtual}]{A}
+  \tnmark[form=label, label pos=e]{A}{$E$}
+  \tnmark[form=label, label pos=n]{A.90}{$N$}
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire,wire,wire,wire,wire}, cols=5, frame=plane, bonds=none,
+    align=2]
+  \tn[at=(2,3), skin=box]{B}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_plane_axis_count_int } = {2}
+  { \errmessage{plane~baseline~fixture~did~not~render~both~pictures} }
+\int_compare:nNnF { \l__tenkz_test_plane_label_count_int } = {2}
+  { \errmessage{plane~label~fixture~did~not~render~both~marks} }
+\ExplSyntaxOff
+\end{document}
