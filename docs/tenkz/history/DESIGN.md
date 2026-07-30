@@ -579,7 +579,7 @@ not hand-maintained prose — the two drift out of step otherwise.
 |---|---|---|
 | `grid` | `atom`, `bond`, `faceports`, `pairleg`, `hole`, `cup`, `boundary`, `phtrace`, `pairtrace`, `trace`, `hooks`, `span` | `tenkz-grid.code.tex` |
 | `free` | `atom`, `join`, `region` | `tenkz-free.code.tex` |
-| `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `label-anchor-site`, `boundary` | `tenkz-lattice.code.tex` |
+| `lattice` | `lattice`, `site`, `region`, `edge`, `cup`, `trace`, `pairtrace`, `label-anchor-site`, `surface`, `boundary` | `tenkz-lattice.code.tex` |
 | `cd` | `cdcell`, `cdobject`, `cdmap`, `cdarrow`, `tree` | `tenkz-cd.code.tex` |
 
 Notes against the previous table: grid never emits `leg` or `fuse`; a
@@ -588,6 +588,9 @@ kind.  `\tnput`'s event kind is literally `atom` (with a `kind=` attribute selec
 skin), not `put`; `lattice` was previously undocumented entirely, and its
 `tenkzplanes` pictures do emit a `boundary` line (contradicting a stale
 `ch-reference.tex` sidenote that has been corrected alongside this table).
+The lattice-only `surface|picture=N|name=tenkzplanes` event records execution
+of that public preset while the enclosing picture remains `lang=lattice`; it
+is model-owner metadata, not a second picture language.
 `scripts/tenkz_audit.py`'s `DIALECT_KINDS` is generated from this same
 grep and must be kept in step with it by hand until a script does the
 generation.

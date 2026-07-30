@@ -138,7 +138,7 @@ DIALECT_KINDS = {
              "phtrace", "hooks", "cup", "hole", "span", "warning", "boundary"},
     "free": {"atom", "join", "region"},
     "lattice": {"lattice", "site", "region", "edge", "cup", "trace",
-                "pairtrace", "label-anchor-site", "boundary", "warning"},
+                "pairtrace", "label-anchor-site", "surface", "boundary", "warning"},
     "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
     "kernel": {
         "atom",

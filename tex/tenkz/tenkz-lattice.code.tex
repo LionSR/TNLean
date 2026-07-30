@@ -4386,8 +4386,8 @@
 % path (no private key family, no private renderer, no private header —
 % every accepted key IS a /tenkz/lattice key, and the picture emits the
 % same picture|lang=lattice line and lattice| header event as any other
-% lattice).  The preset states, through the ordinary state the user keys
-% then override:
+% lattice, plus one surface event identifying the executed public preset).
+% The preset states, through the ordinary state the user keys then override:
 %   - the double-layer-local frame ratios (0.40/0.45, see the ratio
 %     comments: only the double layer has pairing legs that climb
 %     multiple row-levels, so it maximizes leg-to-dot clearance instead
@@ -4403,6 +4403,7 @@
 %     the user states as sheets={...} in tenkzlattice).
 \cs_new_protected:Npn \tenkzl_planes_preset:
   {
+    \tenkz@event{surface|picture=\the\tenkz@pictureid|name=tenkzplanes}
     \bool_set_true:N \l__tenkzl_oblique_bool
     \cs_set_eq:NN \tenkz@r@planeslant \tenkz@r@planesslant
     \cs_set_eq:NN \tenkz@r@planerise  \tenkz@r@planesrise

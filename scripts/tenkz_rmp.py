@@ -137,6 +137,88 @@ STRUCTURAL_CAPABILITY_PATTERNS = {
     "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
     "fusion-tree": re.compile(r"\\tntree\b|\\begin\{tenkzcd\}"),
 }
+INK_ENVIRONMENT_FAMILIES = (
+    "tenkzcd",
+    "tenkzfree",
+    "tenkzlattice",
+    "tenkzplanes",
+    "tenkz",
+    "kernel",
+)
+INK_EVENT_FAMILIES = {
+    "cd": "tenkzcd",
+    "free": "tenkzfree",
+    "grid": "tenkz",
+    "kernel": "kernel",
+}
+
+
+def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
+    """Return picture owners from the compiled model event stream."""
+    languages = {
+        event.attrs["lang"]
+        for event in parsed.events
+        if event.kind == "picture"
+    }
+    unknown_languages = languages.difference((*INK_EVENT_FAMILIES, "lattice"))
+    if unknown_languages:
+        fail(
+            "compiled picture stream has unrecognized owners: "
+            + ", ".join(sorted(unknown_languages))
+        )
+    families = {
+        INK_EVENT_FAMILIES[language]
+        for language in languages
+        if language in INK_EVENT_FAMILIES
+    }
+    if any(
+        event.kind == "tree" and event.attrs["picture"] == "0"
+        for event in parsed.events
+    ):
+        # A command-scope \tntree is a complete public tenkz composition but
+        # deliberately logs against picture 0 rather than opening a container.
+        families.add("tenkz")
+    lattice_pictures = {
+        event.attrs["id"]
+        for event in parsed.events
+        if event.kind == "picture" and event.attrs["lang"] == "lattice"
+    }
+    planes_pictures = {
+        event.attrs["picture"]
+        for event in parsed.events
+        if event.kind == "surface" and event.attrs["name"] == "tenkzplanes"
+    }
+    if planes_pictures.difference(lattice_pictures):
+        fail("tenkzplanes surface event has no matching lattice picture")
+    if planes_pictures:
+        families.add("tenkzplanes")
+    if lattice_pictures.difference(planes_pictures):
+        families.add("tenkzlattice")
+    return families
+
+
+def ink_environment_problems(
+    target_id: str, ink: str, used: set[str]
+) -> list[str]:
+    """Return contradictions between Ink claims and compiled picture owners."""
+    problems: list[str] = []
+    claimed = {
+        family
+        for family in INK_ENVIRONMENT_FAMILIES
+        if re.search(rf"\b{family}\b", ink, flags=re.IGNORECASE)
+    }
+    for family in INK_ENVIRONMENT_FAMILIES:
+        if family in claimed and family not in used:
+            problems.append(
+                f"{target_id}: Ink names {family} but the compiled render model "
+                "has no owner in that family"
+            )
+        if family in used and family not in claimed:
+            problems.append(
+                f"{target_id}: compiled render model uses {family} but Ink does "
+                "not name that family"
+            )
+    return problems
 
 
 def structural_capability_problems(
@@ -803,6 +885,15 @@ def compile_one(target: Target, root: Path, env: dict[str, str]) -> BuildResult:
         (target_work / f"{target.id}.audit.txt").write_text(audit.stdout, encoding="utf-8")
         width, height, pages = pdf_dimensions(pdf)
         parsed = parse_log(tnlog.read_text(encoding="utf-8"), source_name=tnlog.name)
+        used_families = rendered_ink_environment_families(parsed)
+        ink_problems = ink_environment_problems(
+            target.id, target.ink, used_families
+        )
+        if ink_problems:
+            fail(
+                f"{target.case.as_posix()}: Ink environment mismatch:\n"
+                + "\n".join(ink_problems)
+            )
         signatures = event_signatures(parsed)
         return BuildResult(target, wrapper, pdf, tnlog, width, height, pages, signatures)
     except RMPError as exc:

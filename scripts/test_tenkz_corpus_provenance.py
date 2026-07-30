@@ -9,7 +9,13 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from tenkz_rmp import structural_capability_problems
+from tenkz_audit import Audit
+from tenkz_rmp import (
+    ink_environment_problems,
+    rendered_ink_environment_families,
+    structural_capability_problems,
+)
+from tenkzlib.tnlog import parse_log
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,8 +65,99 @@ def test_kernel_capability_owner() -> None:
         raise AssertionError("bare grid owner tag was rejected")
 
 
+def test_ink_environment_owner() -> None:
+    log = "\n".join(
+        (
+            "picture|id=1|lang=grid",
+            "picture|id=2|lang=cd",
+            "picture|id=3|lang=free",
+            "picture|id=4|lang=lattice",
+            "picture|id=5|lang=lattice",
+            "surface|picture=5|name=tenkzplanes",
+            "picture|id=k1|lang=kernel",
+            "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+            "topology=(1,2)|role=none|species=none",
+            "",
+        )
+    )
+    parsed = parse_log(log, source_name="ink-owner-test.tnlog")
+    used = rendered_ink_environment_families(parsed)
+    expected = {
+        "tenkz",
+        "tenkzcd",
+        "tenkzfree",
+        "tenkzlattice",
+        "tenkzplanes",
+        "kernel",
+    }
+    if used != expected:
+        raise AssertionError(f"compiled Ink owners disagree: {used!r}")
+    with tempfile.TemporaryDirectory(prefix="tenkz-ink-owner-") as tmp:
+        log_path = Path(tmp) / "ink-owner-test.tnlog"
+        log_path.write_text(log, encoding="utf-8")
+        audit = Audit(log_path, None)
+        audit.parse_log()
+        audit.check_dialects()
+        mismatches = [
+            finding for finding in audit.findings
+            if finding.rule == "dialect-mismatch"
+        ]
+        if mismatches:
+            raise AssertionError(
+                "compiled Ink owner metadata was foreign to its picture dialect: "
+                + "; ".join(finding.msg for finding in mismatches)
+            )
+    ink = (
+        "Canonical tenkz, tenkzcd, tenkzfree, tenkzlattice, tenkzplanes, "
+        "and kernel."
+    )
+    if ink_environment_problems("good", ink, used):
+        raise AssertionError("accurate compiled Ink owners were rejected")
+    cd_only = parse_log(
+        "picture|id=1|lang=cd\n", source_name="ink-cd-owner-test.tnlog"
+    )
+    cd_used = rendered_ink_environment_families(cd_only)
+    if cd_used != {"tenkzcd"}:
+        raise AssertionError(f"tenkzcd was collapsed into another owner: {cd_used!r}")
+    cd_mismatch = ink_environment_problems(
+        "cd-as-tenkz", "Canonical public tenkz environment.", cd_used
+    )
+    if not (
+        any("Ink names tenkz" in problem for problem in cd_mismatch)
+        and any("uses tenkzcd" in problem for problem in cd_mismatch)
+    ):
+        raise AssertionError("plain tenkz Ink was accepted for a tenkzcd picture")
+    tree_only = parse_log(
+        "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+        "topology=(1,2)|role=none|species=none\n",
+        source_name="ink-tree-owner-test.tnlog",
+    )
+    tree_used = rendered_ink_environment_families(tree_only)
+    if tree_used != {"tenkz"}:
+        raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
+    cd_tree = parse_log(
+        "picture|id=1|lang=cd\n"
+        "tree|picture=1|id=1|style=wire|leaves=2|vertices=1|"
+        "topology=(1,2)|role=none|species=none\n",
+        source_name="ink-cd-tree-owner-test.tnlog",
+    )
+    cd_tree_used = rendered_ink_environment_families(cd_tree)
+    if cd_tree_used != {"tenkzcd"}:
+        raise AssertionError(
+            f"tree inside tenkzcd gained a second owner: {cd_tree_used!r}"
+        )
+    mismatch = ink_environment_problems(
+        "wrong", "Canonical tenkzfree environment.", {"kernel"}
+    )
+    if not any("Ink names tenkzfree" in problem for problem in mismatch):
+        raise AssertionError("stale Ink family was accepted")
+    if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
+        raise AssertionError("compiled kernel owner was omitted")
+
+
 def main() -> int:
     test_kernel_capability_owner()
+    test_ink_environment_owner()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:
         rows = list(csv.reader(stream, dialect="excel-tab"))
 

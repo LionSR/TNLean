@@ -102,6 +102,10 @@ def _is_dimension(value: str) -> bool:
 # a coordinate that is not an integer addresses nothing.
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "picture": {"id": _is_picture_id, "lang": _any},
+    "surface": {
+        "picture": _is_picture_id,
+        "name": _enum("tenkzplanes"),
+    },
     "frame": {
         "picture": _is_picture_id,
         "scope": _enum("picture", "group"),
