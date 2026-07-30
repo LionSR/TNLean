@@ -212,6 +212,90 @@ physical indices, as in
     identification of Theorem~\ref{thm:mpdo_block_two_as_positive_blocking}.
 \end{proof}
 
+% This is the vertical-decomposition input to Appendix C.4, not the later
+% positive-fusion or Gibbs conclusion.
+\begin{theorem}[Literal one-site vertical decomposition]
+    \label{thm:mpdo_literal_cpsv_vertical_decomposition}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_cpsvVerticalDecomposition}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo,
+        def:bnt_cpsv}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. Then there are
+    normal tensors $A_\alpha$, positive multiplicities $r_\alpha$, positive
+    numbers $c_{\alpha,q}$, and a coisometry $U$ such that the
+    $A_\alpha$ form a CPSV basis of normal tensors for $\widetilde M$ and,
+    writing
+    \begin{align}
+        B_v
+        &=\bigoplus_\alpha\bigoplus_{q=0}^{r_\alpha-1}
+          c_{\alpha,q}A_\alpha^v,
+        \label{eq:mpdo_literal_cpsv_vertical_decomposition_block}
+    \end{align}
+    one has
+    \begin{align}
+        UU^\dagger&=\Id,
+        \notag\\
+        U\widetilde M_vU^\dagger&=B_v,
+        \notag\\
+        \widetilde M_v&=U^\dagger B_vU.
+        \label{eq:mpdo_literal_cpsv_vertical_decomposition}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_literal_vertical_bnt_grouping_with_isometries,
+        thm:cpsv_literal_normalized_grouped_sector_maps,
+        lem:same_mpv_exact_isometric_decomposition}
+    Group the normal vertical corners into phase classes and normalize their
+    physical sector maps. The exact original-sector reconstruction gives
+    positive-length matrix-product-vector equality with the corresponding
+    weighted direct sum. Hence the spectral representatives retain the CPSV
+    basis-of-normal-tensors property for $\widetilde M$. Flatten the pair
+    $(\alpha,q)$ into one finite index. Orthogonality of the normalized sector
+    maps gives $UU^\dagger=\Id$; their intertwining identities give the middle
+    equality in~(\ref{eq:mpdo_literal_cpsv_vertical_decomposition}), and their
+    exact reconstruction gives the last equality.
+\end{proof}
+
+\begin{theorem}[Literal two-site vertical decomposition]
+    \label{thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_cpsvVerticalDecomposition_blockTwo}
+    \leanok
+    \uses{def:mpdo_two_site_blocking, def:vertical_tensor_mpdo,
+        def:bnt_cpsv}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}, the concrete
+    two-site block $M^{[2]}$ has a decomposition of the same form:
+    there are $A^{[2]}_\alpha$, $r^{[2]}_\alpha>0$,
+    $c^{[2]}_{\alpha,q}>0$, and a coisometry $U^{[2]}$ such that
+    \begin{align}
+        U^{[2]}(U^{[2]})^\dagger&=\Id,
+        \notag\\
+        U^{[2]}\widetilde{M^{[2]}}_v(U^{[2]})^\dagger
+        &=\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
+          (A^{[2]}_\alpha)^v,
+        \notag\\
+        \widetilde{M^{[2]}}_v
+        &=(U^{[2]})^\dagger
+          \left(\bigoplus_{\alpha,q}c^{[2]}_{\alpha,q}
+          (A^{[2]}_\alpha)^v\right)U^{[2]}.
+        \label{eq:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    \end{align}
+    The tensors $A^{[2]}_\alpha$ form a CPSV basis of normal tensors for
+    $\widetilde{M^{[2]}}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_cpsv_positive_blocking,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:mpdo_literal_cpsv_vertical_decomposition}
+    Two-site blocking preserves both literal CPSV canonical form and
+    matrix-product-density-operator positivity. Apply
+    Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition} to $M^{[2]}$.
+\end{proof}
+
 \begin{lemma}[Two-site blocking preserves normalized BNT-refined horizontal form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
