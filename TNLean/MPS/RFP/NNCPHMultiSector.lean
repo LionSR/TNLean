@@ -184,7 +184,13 @@ theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection_of_identity_coeffic
 /-- A simultaneous one-site span propagates nearest-neighbor periodic
 constraints into the sum of the open-boundary block spaces. This is the
 restriction-intersection propagation in arXiv:quant-ph/0608197, Theorem 12,
-proof lines 1430--1452. -/
+proof lines 1430--1452.
+
+**Scope restriction (simultaneous one-site span):** The source uses
+right-canonical normalization. This theorem instead assumes that the
+simultaneous one-site word tuples span the product algebra and derives common
+identity coefficients from that hypothesis. Documented in
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpanTop_one
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
@@ -211,7 +217,13 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_wordTupleSpan
 /-- A nearest-neighbor chain vector has block-diagonal open-boundary matrices
 when the simultaneous one-site word tuples span the product algebra. This is
 the block-boundary decomposition in arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1430--1452. -/
+lines 1430--1452.
+
+**Scope restriction (simultaneous one-site span):** The source uses
+right-canonical normalization. This theorem instead obtains the open-boundary
+membership step through common identity coefficients derived from the
+simultaneous one-site span. Documented in
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_one
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
@@ -250,7 +262,13 @@ theorem exists_blockDiagonal_boundary_of_chainGroundSpace_of_wordTupleSpanTop_on
 
 /-- A global one-site change of cut closes the block-diagonal boundary
 matrices of a nearest-neighbor chain vector. This is the boundary-closing step
-in arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456. -/
+in arXiv:quant-ph/0608197, Theorem 12, proof lines 1454--1456.
+
+**Scope restriction (simultaneous one-site span):** The source uses
+right-canonical normalization. The block-diagonal boundary supplied here
+depends on the common identity coefficients derived from the simultaneous
+one-site span. Documented in
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
@@ -341,7 +359,13 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_wordTupleSpanTop_one
 /-- A simultaneous one-site product span splits the nearest-neighbor periodic
 chain space into the periodic chain spaces of the blocks. This is the
 multiplicity-one distinct-block specialization of arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1430--1456. -/
+Theorem 12, proof lines 1430--1456.
+
+**Scope restriction (simultaneous one-site span):** The source uses
+right-canonical normalization. This equality instead follows through the
+common identity coefficients derived from the simultaneous one-site product
+span. Documented in
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_wordTupleSpanTop_one
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j : Fin r, μ j ≠ 0)
