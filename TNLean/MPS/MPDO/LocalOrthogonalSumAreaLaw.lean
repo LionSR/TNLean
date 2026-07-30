@@ -13,10 +13,12 @@ import TNLean.MPS.MPDO.FirstSite
 
 A finite sum of matrix product density operators supported on pairwise
 orthogonal one-site subspaces satisfies the saturated area law whenever every
-summand does.  The sector label remains visible in every nonempty marginal, so
-the entropy of each marginal is the Shannon entropy of the sector weights plus
-the probability-weighted sector entropies.  The Shannon term is independent of
-the marginal length and cancels in the comparison of mutual informations.
+summand does, even when the sum is known only up to a positive
+length-dependent scalar. The sector label remains visible in every nonempty
+marginal, so the entropy of each marginal is the Shannon entropy of the sector
+weights plus the probability-weighted sector entropies. The Shannon term is
+independent of the marginal length and cancels in the comparison of mutual
+informations.
 
 This is the final local direct-sum argument in Appendix C.2 of
 arXiv:1606.00608.  It is separate from the assertion that a commuting
@@ -292,38 +294,185 @@ theorem blockEntropy_eq_sum_localOrthogonalSectorProbability
       simpa only [p, ρ, blockEntropy, add_comm] using
         vonNeumannEntropy_smul (hρpos s) (hρtrace s) (p s)
 
-/-- A finite local orthogonal sum of saturated-area-law sectors satisfies the
-saturated area law.
+private noncomputable def proportionalLocalOrthogonalSectorProbability
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (c : ℝ) (N : ℕ) (s : Fin g) : ℝ :=
+  c * (multiplicity s : ℝ) * (Matrix.trace (mpo (K s) N)).re /
+    (Matrix.trace (mpo M N)).re
 
-This is the conditional final sentence of CPSV16, Appendix C.2, Proposition
-`prop4to2`, lines 1806--1808.  It does not formalize the printed assertion that
-the GSNNCH form alone implies SAL: the proof there applies the single-sector
-Proposition `4to2`, whose hypotheses include ZCL.  The omission and the later
-conditional statement are recorded in
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+private theorem proportionalLocalOrthogonalSectorProbability_pos
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (hmultiplicity : ∀ s, 0 < multiplicity s)
+    {c : ℝ} (hc : 0 < c) {N : ℕ} (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) (s : Fin g) :
+    0 < proportionalLocalOrthogonalSectorProbability M K multiplicity c N s := by
+  rw [proportionalLocalOrthogonalSectorProbability]
+  exact div_pos
+    (mul_pos (mul_pos hc (by exact_mod_cast hmultiplicity s))
+      (RCLike.pos_iff.mp (hSectorTrace s)).1)
+    (RCLike.pos_iff.mp hMtrace).1
 
-The support hypothesis states the mathematical content of locality needed in
-the entropy argument.  In particular, it is independent of the BNT projectors
-whose present construction assumes SAL.
+private theorem normalizedMPO_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) {c : ℝ} (hc : 0 < c) {N : ℕ}
+    (hM : mpo M N =
+      (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
+    normalizedMPO M N = ∑ s : Fin g,
+      (proportionalLocalOrthogonalSectorProbability M K multiplicity c N s : ℂ) •
+        normalizedMPO (K s) N := by
+  classical
+  have hMtraceEq : Matrix.trace (mpo M N) =
+      ((Matrix.trace (mpo M N)).re : ℂ) := by
+    apply Complex.ext
+    · rfl
+    · simpa using (RCLike.pos_iff.mp hMtrace).2
+  have hSectorTraceEq : ∀ s,
+      Matrix.trace (mpo (K s) N) = ((Matrix.trace (mpo (K s) N)).re : ℂ) :=
+    fun s ↦ by
+      apply Complex.ext
+      · rfl
+      · simpa using (RCLike.pos_iff.mp (hSectorTrace s)).2
+  have hpComplex (s : Fin g) :
+      (proportionalLocalOrthogonalSectorProbability M K multiplicity c N s : ℂ) =
+        (c : ℂ) * (multiplicity s : ℂ) * Matrix.trace (mpo (K s) N) /
+          Matrix.trace (mpo M N) := by
+    rw [proportionalLocalOrthogonalSectorProbability, hMtraceEq, hSectorTraceEq s]
+    norm_num
+  rw [normalizedMPO]
+  nth_rewrite 2 [hM]
+  rw [Finset.smul_sum, Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro s _
+  rw [normalizedMPO, hpComplex]
+  simp only [smul_smul]
+  congr 1
+  field_simp [(ne_of_gt hMtrace), (ne_of_gt (hSectorTrace s))]
 
-The support condition starts at chain length two.  This is sufficient because
+private theorem
+    reducedBlockState_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) {c : ℝ} (hc : 0 < c) {N L : ℕ} (hL : L ≤ N)
+    (hM : mpo M N =
+      (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
+    reducedBlockState M N L hL = ∑ s : Fin g,
+      (proportionalLocalOrthogonalSectorProbability M K multiplicity c N s : ℂ) •
+        reducedBlockState (K s) N L hL := by
+  classical
+  have hfull :=
+    normalizedMPO_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+      M K multiplicity hc hM hMtrace hSectorTrace
+  ext u v
+  rw [reducedBlockState_eq_sum]
+  simp_rw [hfull, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  simp_rw [reducedBlockState_eq_sum]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro s _
+  rw [Finset.mul_sum]
+
+private theorem blockEntropy_eq_sum_proportionalLocalOrthogonalSectorProbability
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hMpdo : IsMPDO M) (hSectorMpdo : ∀ s, IsMPDO (K s))
+    {c : ℝ} (hc : 0 < c) {N L : ℕ} (hN : 0 < N) (hL : L + 1 ≤ N)
+    (hM : mpo M N =
+      (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N))
+    (hsupport : ∀ s,
+      firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
+        reducedBlockState (K s) N (L + 1) hL) :
+    blockEntropy M N (L + 1) hL (hMpdo N hN) =
+      ∑ s : Fin g,
+        (Real.negMulLog
+            (proportionalLocalOrthogonalSectorProbability M K multiplicity c N s) +
+          proportionalLocalOrthogonalSectorProbability M K multiplicity c N s *
+            blockEntropy (K s) N (L + 1) hL (hSectorMpdo s N hN)) := by
+  classical
+  let p : Fin g → ℝ := fun s ↦
+    proportionalLocalOrthogonalSectorProbability M K multiplicity c N s
+  let ρ : Fin g → Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
+    fun s ↦ reducedBlockState (K s) N (L + 1) hL
+  let Q : Fin g → Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
+    fun s ↦ firstSiteMatrix (P s) L
+  have hp : ∀ s, 0 < p s := fun s ↦
+    proportionalLocalOrthogonalSectorProbability_pos M K multiplicity
+      hmultiplicity hc hMtrace hSectorTrace s
+  have hρpos : ∀ s, (ρ s).PosSemidef := fun s ↦
+    reducedBlockState_posSemidef (K s) N (L + 1) hL (hSectorMpdo s N hN)
+  have hρtrace : ∀ s, Matrix.trace (ρ s) = 1 := fun s ↦
+    reducedBlockState_trace (K s) N (L + 1) hL (ne_of_gt (hSectorTrace s))
+  have hQherm : ∀ s, (Q s).IsHermitian := fun s ↦
+    firstSiteMatrix_isHermitian (hP s).1 L
+  have hQρ : ∀ s, Q s * ρ s = ρ s := by
+    intro s
+    simpa only [Q, ρ] using hsupport s
+  have hρQ : ∀ s, ρ s * Q s = ρ s := fun s ↦
+    mul_eq_self_of_isHermitian_of_mul_eq_self (hρpos s).isHermitian
+      (hQherm s) (hQρ s)
+  have hQorthogonal : ∀ s t, s ≠ t → Q s * Q t = 0 := by
+    intro s t hst
+    change firstSiteMatrix (P s) L * firstSiteMatrix (P t) L = 0
+    rw [firstSiteMatrix_mul_firstSiteMatrix, hPorthogonal hst]
+    ext u v
+    simp [firstSiteMatrix]
+  have hsum : reducedBlockState M N (L + 1) hL =
+      ∑ s, (p s : ℂ) • ρ s := by
+    exact reducedBlockState_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+      M K multiplicity hc hL hM hMtrace hSectorTrace
+  have hadd := vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
+    (reducedBlockState M N (L + 1) hL)
+    (reducedBlockState_isHermitian M N (L + 1) hL (hMpdo N hN))
+    (fun s ↦ (p s : ℂ) • ρ s) Q
+    (fun s ↦ ((hρpos s).smul (a := (p s : ℂ))
+      (by exact_mod_cast (hp s).le)).isHermitian)
+    hsum (fun s ↦ ⟨by rw [Matrix.mul_smul, hQρ],
+      by rw [Matrix.smul_mul, hρQ]⟩) hQorthogonal
+  calc
+    blockEntropy M N (L + 1) hL (hMpdo N hN) =
+        ∑ s, vonNeumannEntropy ((p s : ℂ) • ρ s)
+          (((hρpos s).smul (a := (p s : ℂ))
+            (by exact_mod_cast (hp s).le)).isHermitian) := hadd
+    _ = _ := by
+      apply Finset.sum_congr rfl
+      intro s _
+      simpa only [p, ρ, blockEntropy, add_comm] using
+        vonNeumannEntropy_smul (hρpos s) (hρtrace s) (p s)
+
+/-- A finite local orthogonal sum known up to a positive scalar at each chain
+length satisfies the saturated area law whenever every sector does.
+
+This is the conditional last inference in CPSV16, Appendix C.2, Proposition
+`prop4to2`, lines 1806--1808, with the proportional outer sum in equation
+`ApprhoNComm`, lines 1641--1665. It does not prove the printed assertion from
+the GSNNCH form alone: sectorwise SAL and the one-site support identities remain
+explicit hypotheses.
+
+The support condition starts at chain length two. This is sufficient because
 the mutual-information comparison in `IsSAL` has `1 ≤ L < N / 2`, and hence
 only invokes marginal support when `N ≥ 4`.
 
-**Scope restriction (exact local sum):** The theorem assumes the exact local
-orthogonal-sum equality at every positive chain length and is supplied with
-one-site projections whose tensor extensions support every nonempty normalized
-sector marginal on chains of length at least two.  This restriction is
-documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem isSAL_of_localOrthogonalSum
+**Local fix (global proportionality):** The positive length-dependent scalar
+in the outer sector sum cancels from the normalized chain and every marginal.
+This is documented in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem isSAL_of_proportionalLocalOrthogonalSum
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     [Nonempty (Fin g)]
     (hmultiplicity : ∀ s, 0 < multiplicity s)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hM : ∀ (N : ℕ), 0 < N →
-      mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hM : ∀ (N : ℕ), 0 < N → ∃ c : ℝ, 0 < c ∧
+      mpo M N =
+        (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hsupport : ∀ (s : Fin g) (N L : ℕ), 2 ≤ N → (hL : L + 1 ≤ N) →
       firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
         reducedBlockState (K s) N (L + 1) hL)
@@ -340,33 +489,37 @@ theorem isSAL_of_localOrthogonalSum
       rw [hzero, Matrix.trace_zero])
   let hMpdo : IsMPDO M := by
     intro N hN
-    rw [hM N hN]
-    refine Finset.sum_induction _ Matrix.PosSemidef (fun A B hA hB ↦ hA.add hB)
-      Matrix.PosSemidef.zero (fun s _ ↦ ?_)
-    exact (hSectorMpdo s N hN).smul
-      (by exact_mod_cast Nat.zero_le (multiplicity s))
+    obtain ⟨c, hc, hMN⟩ := hM N hN
+    rw [hMN]
+    have hsum :
+        (∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N).PosSemidef := by
+      refine Finset.sum_induction _ Matrix.PosSemidef (fun A B hA hB ↦ hA.add hB)
+        Matrix.PosSemidef.zero (fun s _ ↦ ?_)
+      exact (hSectorMpdo s N hN).smul
+        (by exact_mod_cast Nat.zero_le (multiplicity s))
+    exact hsum.smul (by exact_mod_cast hc.le)
   have hMtrace : ∀ (N : ℕ), 0 < N → 0 < Matrix.trace (mpo M N) := by
     intro N hN
+    obtain ⟨c, hc, hMN⟩ := hM N hN
     have hre : 0 < (Matrix.trace (mpo M N)).re := by
-      rw [hM N hN, Matrix.trace_sum, Complex.re_sum]
+      rw [hMN, Matrix.trace_smul]
+      norm_num
+      apply mul_pos hc
       apply Finset.sum_pos'
       · intro s _
-        rw [Matrix.trace_smul]
-        norm_num
         exact mul_nonneg (by exact_mod_cast Nat.zero_le (multiplicity s))
           (RCLike.nonneg_iff.mp (hSectorMpdo s N hN).trace_nonneg).1
       · let s : Fin g := Classical.choice inferInstance
         refine ⟨s, Finset.mem_univ s, ?_⟩
-        rw [Matrix.trace_smul]
-        norm_num
         exact mul_pos (by exact_mod_cast hmultiplicity s)
           (RCLike.pos_iff.mp (hSectorTrace N hN s)).1
     apply RCLike.pos_iff.mpr
     exact ⟨hre, (RCLike.nonneg_iff.mp (hMpdo N hN).trace_nonneg).2⟩
   refine ⟨hMpdo, fun N hN ↦ ne_of_gt (hMtrace N hN), ?_⟩
   intro N L hL hLN
+  obtain ⟨c, hc, hMN⟩ := hM N (by omega)
   let p : Fin g → ℝ := fun s ↦
-    localOrthogonalSectorProbability M K multiplicity N s
+    proportionalLocalOrthogonalSectorProbability M K multiplicity c N s
   have hMI (m : ℕ) (hm1 : 1 ≤ m) (hmN : m ≤ N / 2) :
       mutualInfoChain M N m (hmN.trans (Nat.div_le_self N 2))
           (hMpdo N (by omega)) =
@@ -378,13 +531,15 @@ theorem isSAL_of_localOrthogonalSum
         blockEntropy M N l hlN (hMpdo N (by omega)) =
           ∑ s : Fin g,
             (Real.negMulLog
-                (localOrthogonalSectorProbability M K multiplicity N s) +
-              localOrthogonalSectorProbability M K multiplicity N s *
+                (proportionalLocalOrthogonalSectorProbability
+                  M K multiplicity c N s) +
+              proportionalLocalOrthogonalSectorProbability
+                  M K multiplicity c N s *
                 blockEntropy (K s) N l hlN (hSectorMpdo s N (by omega))) := by
       obtain ⟨l, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hlpos)
-      exact blockEntropy_eq_sum_localOrthogonalSectorProbability
+      exact blockEntropy_eq_sum_proportionalLocalOrthogonalSectorProbability
         M K multiplicity P hmultiplicity hP hPorthogonal hMpdo hSectorMpdo
-        (N := N) (L := l) (by omega) hlN (hM N (by omega))
+        hc (N := N) (L := l) (by omega) hlN hMN
         (hMtrace N (by omega)) (hSectorTrace N (by omega))
         (fun s ↦ hsupport s N l (by omega) hlN)
     have hEm := hEntropy m (by omega) (hmN.trans (Nat.div_le_self N 2))
@@ -404,5 +559,47 @@ theorem isSAL_of_localOrthogonalSum
   intro s _
   congr 1
   exact (Classical.choose_spec (hSectorSAL s)).2 N L hL hLN
+
+/-- A finite local orthogonal sum of saturated-area-law sectors satisfies the
+saturated area law.
+
+This is the conditional final sentence of CPSV16, Appendix C.2, Proposition
+`prop4to2`, lines 1806--1808.  It does not formalize the printed assertion that
+the GSNNCH form alone implies SAL: the proof there applies the single-sector
+Proposition `4to2`, whose hypotheses include ZCL.  The omission and the later
+conditional statement are recorded in
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+
+The support hypothesis states the mathematical content of locality needed in
+the entropy argument.  In particular, it is independent of the BNT projectors
+whose present construction assumes SAL.
+
+The support condition starts at chain length two.  This is sufficient because
+the mutual-information comparison in `IsSAL` has `1 ≤ L < N / 2`, and hence
+only invokes marginal support when `N ≥ 4`.
+
+This is the scalar-one specialization of
+`isSAL_of_proportionalLocalOrthogonalSum`; the latter matches the positive
+length-dependent proportionality in the source. -/
+theorem isSAL_of_localOrthogonalSum
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    [Nonempty (Fin g)]
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hM : ∀ (N : ℕ), 0 < N →
+      mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hsupport : ∀ (s : Fin g) (N L : ℕ), 2 ≤ N → (hL : L + 1 ≤ N) →
+      firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
+        reducedBlockState (K s) N (L + 1) hL)
+    (hSectorSAL : ∀ s, IsSAL (K s)) :
+    IsSAL M := by
+  apply isSAL_of_proportionalLocalOrthogonalSum M K multiplicity P
+    hmultiplicity hP hPorthogonal
+  · intro N hN
+    exact ⟨1, zero_lt_one, by simpa using hM N hN⟩
+  · exact hsupport
+  · exact hSectorSAL
 
 end MPOTensor
