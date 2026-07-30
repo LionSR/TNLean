@@ -101,8 +101,13 @@ theorem pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coeffici
 /-- The two one-boundary restrictions imply membership in the next block
 ground-space sum when the identity tuple has a common one-letter expansion.
 This is the common-identity-coefficient variant of the local step in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452. The substitution is
-documented in `docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452.
+
+**Scope restriction (common identity coefficients):** The source uses
+right-canonical normalization. This theorem instead assumes one coefficient
+family \(c_i\), common to every block, with \(\sum_i c_iA_i^j=1\), and invokes
+the restricted boundary-matrix construction above. Documented in
+`docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions_of_identity_coefficients
     (A : (j : Fin r) → MPSTensor d (dim j))
     {n : ℕ} (hSpan : WordTupleSpanTop A n)
@@ -122,7 +127,12 @@ theorem pgvwc07_mem_iSup_groundSpace_of_iSup_restrictions_of_identity_coefficien
 /-- The PGVWC one-step restriction intersection needs only a common
 one-letter expansion of the block identities, rather than right-canonical
 normalization. This is a local variant of the intersection step in
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452, documented in
+arXiv:quant-ph/0608197, Theorem 12, proof lines 1442--1452.
+
+**Scope restriction (common identity coefficients):** The source uses
+right-canonical normalization. This theorem instead assumes one coefficient
+family \(c_i\), common to every block, with \(\sum_i c_iA_i^j=1\), through the
+restricted membership theorem above. Documented in
 `docs/paper-gaps/pgvwc07_common_identity_coefficients.tex`. -/
 theorem pgvwc07_iSup_groundSpace_eq_restriction_intersection_of_identity_coefficients
     (A : (j : Fin r) → MPSTensor d (dim j))
