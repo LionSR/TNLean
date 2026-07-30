@@ -608,21 +608,23 @@ private lemma isNormal_smul_of_ne
 This is equation `eq:blockedABprop` in ambient form, hence the input to
 `eq:BCmprop`, in arXiv:1708.00029, Appendix A, lines 985--1024. -/
 private lemma exists_ambient_corner_gauge_of_gaugePhase
-    {e n : ℕ} [NeZero n]
-    (CA CB : MPSTensor e n)
+    {e nA nB : ℕ} [NeZero nA]
+    (CA : MPSTensor e nA) (CB : MPSTensor e nB)
+    (hdim : nA = nB)
     (P Q : MatrixAlg D)
-    (φP : MatrixAlg n ≃ₗ[ℂ] cornerSubmodule P)
-    (φQ : MatrixAlg n ≃ₗ[ℂ] cornerSubmodule Q)
+    (φP : MatrixAlg nA ≃ₗ[ℂ] cornerSubmodule P)
+    (φQ : MatrixAlg nB ≃ₗ[ℂ] cornerSubmodule Q)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
-    (hφP_mul : ∀ X Y : MatrixAlg n,
+    (hφP_mul : ∀ X Y : MatrixAlg nA,
       (φP (X * Y)).1 = (φP X).1 * (φP Y).1)
-    (hφQ_mul : ∀ X Y : MatrixAlg n,
+    (hφQ_mul : ∀ X Y : MatrixAlg nB,
       (φQ (X * Y)).1 = (φQ X).1 * (φQ Y).1)
-    (hφP_star : ∀ X : MatrixAlg n, (φP Xᴴ).1 = (φP X).1ᴴ)
-    (hφQ_star : ∀ X : MatrixAlg n, (φQ Xᴴ).1 = (φQ X).1ᴴ)
+    (hφP_star : ∀ X : MatrixAlg nA, (φP Xᴴ).1 = (φP X).1ᴴ)
+    (hφQ_star : ∀ X : MatrixAlg nB, (φQ Xᴴ).1 = (φQ X).1ᴴ)
     (hCA_lc : IsLeftCanonical CA) (hCB_lc : IsLeftCanonical CB)
     (hCA_normal : IsNormal CA)
-    (hMatch : GaugePhaseEquiv CA CB) :
+    (hMatch : GaugePhaseEquiv
+      (cast (congr_arg (MPSTensor e) hdim) CA) CB) :
     ∃ (U : MatrixAlg D) (c : ℂ),
       U = P * U * Q ∧
       Uᴴ * U = Q ∧
@@ -631,8 +633,10 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
       ∀ i : Fin e, (φP (CA i)).1 =
         c • (U * (φQ (CB i)).1 * Uᴴ) := by
   classical
+  subst nB
+  simp only [cast_eq] at hMatch
   obtain ⟨X, z, hz, hCB⟩ := hMatch
-  let CB' : MPSTensor e n := fun i => z⁻¹ • CB i
+  let CB' : MPSTensor e nA := fun i => z⁻¹ • CB i
   have hGauge : GaugeEquiv CA CB' := by
     refine ⟨X, fun i => ?_⟩
     simp only [CB', hCB i, smul_smul, inv_mul_cancel₀ hz, one_smul]
@@ -652,8 +656,8 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
     exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible
       (show GaugePhaseEquiv CA CB from ⟨X, z, hz, hCB⟩)
       hCA_lc hCB_lc hCA_irr hCB_irr
-  let g : MatrixAlg n ≃ₗ[ℂ] MatrixAlg n :=
-    Matrix.unitaryReindexLinearEquiv (Equiv.refl (Fin n)) W W.prop
+  let g : MatrixAlg nA ≃ₗ[ℂ] MatrixAlg nA :=
+    Matrix.unitaryReindexLinearEquiv (Equiv.refl (Fin nA)) W W.prop
   let f : cornerSubmodule Q ≃ₗ[ℂ] cornerSubmodule P :=
     φQ.symm.trans (g.trans φP)
   let mulQ (A B : cornerSubmodule Q) : cornerSubmodule Q :=
@@ -684,7 +688,7 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
     rw [hφQ_symm_mul, show g (φQ.symm A * φQ.symm B) =
       g (φQ.symm A) * g (φQ.symm B) by
         exact Matrix.unitaryReindexLinearEquiv_mul
-          (Equiv.refl (Fin n)) W W.prop (φQ.symm A) (φQ.symm B)]
+          (Equiv.refl (Fin nA)) W W.prop (φQ.symm A) (φQ.symm B)]
     exact hφP_mul _ _
   let starQ (A : cornerSubmodule Q) : cornerSubmodule Q :=
     ⟨A.1ᴴ, by
@@ -703,7 +707,7 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
     rw [hφQ_symm_star, show g ((φQ.symm A)ᴴ) = (g (φQ.symm A))ᴴ by
       simpa only [Matrix.star_eq_conjTranspose] using
         Matrix.unitaryReindexLinearEquiv_star
-          (Equiv.refl (Fin n)) W W.prop (φQ.symm A)]
+          (Equiv.refl (Fin nA)) W W.prop (φQ.symm A)]
     exact hφP_star _
   obtain ⟨U, hU_corner, hU_star_U, hU_U_star, hU_transport⟩ :=
     exists_partial_isometry_implementing_corner_linearEquiv P Q hP hQ f
@@ -713,7 +717,7 @@ private lemma exists_ambient_corner_gauge_of_gaugePhase
       (by
         intro A
         simpa only [starQ] using hf_star A)
-  have hW_star_W : (W : MatrixAlg n)ᴴ * (W : MatrixAlg n) = 1 := by
+  have hW_star_W : (W : MatrixAlg nA)ᴴ * (W : MatrixAlg nA) = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Matrix.UnitaryGroup.star_mul_self W
   have hgCB (i : Fin e) : g (CB i) = c₀ • CA i := by
@@ -825,6 +829,28 @@ lemma sectorTensor_proportional_of_blockedMatch
   obtain ⟨L, hL_pos, Ω, hΩ⟩ :=
     exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
       blocksA hA_blocks_lc hNondeg hNormal
+  rcases hA_cyclic with
+    ⟨hPA_proj, hPA_sum, hPA_shift, hPA_comm, hPA_trace, hPA_intertwine,
+      hφA_mul, hφA_star⟩
+  rcases hB_cyclic with
+    ⟨hPB_proj, hPB_sum, hPB_shift, hPB_comm, hPB_trace, hPB_intertwine,
+      hφB_mul, hφB_star⟩
+  have hCornerData : ∀ u : Fin m,
+      ∃ (U : MatrixAlg D) (c : ℂ),
+        U = PA u * U * PB (u + q) ∧
+        Uᴴ * U = PB (u + q) ∧
+        U * Uᴴ = PA u ∧
+        ‖c‖ = 1 ∧
+        ∀ i : Fin (blockPhysDim d m), (φA u (blocksA u i)).1 =
+          c • (U * (φB (u + q) (blocksB (u + q) i)).1 * Uᴴ) := by
+    intro u
+    obtain ⟨hdim, hMatch⟩ := hBlockMatch u
+    haveI : NeZero (dimA u) := ⟨hNondeg u⟩
+    exact exists_ambient_corner_gauge_of_gaugePhase
+      (blocksA u) (blocksB (u + q)) hdim (PA u) (PB (u + q))
+      (φA u) (φB (u + q)) (hPA_proj u) (hPB_proj (u + q))
+      (hφA_mul u) (hφB_mul (u + q)) (hφA_star u) (hφB_star (u + q))
+      (hA_blocks_lc u) (hB_blocks_lc (u + q)) (hNormal u) hMatch
   -- Remaining obligation (arXiv:1708.00029 lines 1023--1117): an `m`-factor cyclic
   -- contraction theorem built from the common `L` and the sum-form right inverses
   -- `Ω u` satisfying `hΩ`; after producing the uniform product-tensor identity,
