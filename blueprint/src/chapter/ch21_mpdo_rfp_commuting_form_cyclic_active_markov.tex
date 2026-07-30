@@ -246,6 +246,38 @@
     factorization.
 \end{proof}
 
+\begin{theorem}[Contraction of a nonempty suffix fiber]
+    \label{thm:mpdo_nonempty_suffix_fiber_contraction}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      sum_suffixFiber_cyclicNeighboringProduct}
+    \leanok
+    \uses{thm:mpdo_sector_chain_fiber_contraction}
+    Let $k=(k_0,\ldots,k_n)$ be a nonempty retained sector word and
+    $t=(t_0,\ldots,t_m)$ a nonempty suffix sector word. In open-edge
+    coordinates $x=(x_{\mathrm{int}},x_{\partial})$ and
+    $y=(y_{\mathrm{int}},y_{\partial})$,
+    \begin{align}
+      \sum_{z\in I_t}\Omega_{kt}(xz,yz)
+      &=
+      \left(
+        \prod_{j=0}^{n-1}\eta_{k_j,k_{j+1}}
+      \right)(x_{\mathrm{int}},y_{\mathrm{int}})
+      \left(
+        \tr_{\mathrm R}(\eta_{k_n,t_0})
+        \otimes
+        \tr_{\mathrm L}(\eta_{t_m,k_0})
+      \right)(x_{\partial},y_{\partial})
+      \prod_{i=0}^{m-1}\tr(\eta_{t_i,t_{i+1}}).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Split the cyclic product into the retained internal edges, the two
+    boundary edges, and the internal suffix edges. Apply
+    Theorem~\ref{thm:mpdo_sector_chain_fiber_contraction} to the suffix
+    coordinates. The two boundary sums are the indicated partial traces.
+\end{proof}
+
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 % 1606--1617.
 % **Local fix (adjacent marginal comparison):** the cases R=1 and R=2 give
