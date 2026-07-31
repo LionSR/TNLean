@@ -256,37 +256,6 @@
     \end{align}
 \end{definition}
 
-\begin{lemma}[Tensor logarithm on a singular product support]
-    \label{lem:log_kronecker_possemidef}
-    \lean{Matrix.log_kronecker_posSemidef}
-    \leanok
-    Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
-    orthogonal projections onto their respective ranges. Then
-    \begin{align}
-        \log(A\otimes B)
-        &=(\log A)\otimes P_B+P_A\otimes(\log B).
-        \label{eq:entropy_log_product}
-    \end{align}
-    Here the logarithm is extended by zero on the kernel.
-    This identity is the analytic justification for the singular product
-    reference used below; it is not stated verbatim in
-    \cite{Hayden2004Structure}.
-\end{lemma}
-
-\begin{proof}\leanok
-    Diagonalize $A$ and $B$. On an eigenvector with eigenvalues $a,b\geq0$,
-    (\ref{eq:entropy_log_product}) becomes
-    \begin{align}
-        \log(ab)
-        &=\log(a)\mathbf 1_{b\ne0}
-            +\mathbf 1_{a\ne0}\log(b).
-        \notag
-    \end{align}
-    If $a,b>0$, this is the ordinary product identity for the logarithm. With
-    the kernel convention in the statement, both sides vanish if either
-    eigenvalue is zero.
-\end{proof}
-
 \begin{theorem}[Ancilla additivity on the support domain]
     \label{thm:relative_entropy_ancilla_additivity_support}
     \lean{quantumRelativeEntropy_kronecker_support}
@@ -304,7 +273,7 @@
 
 \begin{proof}\leanok
     \uses{def:hermitian_support_projection,
-        lem:log_kronecker_possemidef,
+        thm:mpdo_support_log_kronecker,
         thm:support_projection_absorption_kernel_inclusion}
     Write $P_\rho$, $P_\sigma$, and $P_\tau$ for the support projections. The
     kernel inclusion gives $P_\sigma\rho P_\sigma=\rho$ and
