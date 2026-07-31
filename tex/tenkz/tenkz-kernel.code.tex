@@ -1130,8 +1130,17 @@
               { \l__tenkz_model_last_tl } {##1} {##2}
           }
           {
-            \__tenkz_model_complete:nnn
-              { \l__tenkz_model_last_tl } {##1} {##2}
+            \bool_lazy_or:nnTF
+              { \str_if_eq_p:nn {##1} {up} }
+              { \str_if_eq_p:nn {##1} {down} }
+              {
+                \__tenkz_model_complete_raw:nnn
+                  { \l__tenkz_model_last_tl } {##1} {##2}
+              }
+              {
+                \__tenkz_model_complete:nnn
+                  { \l__tenkz_model_last_tl } {##1} {##2}
+              }
           }
       }
     \prop_get:NnN \l__tenkz_kernel_stage_prop {name} \l__tenkz_kernel_scratch_tl
@@ -2343,6 +2352,8 @@
 % addressable WIRE record for every horizontal and vertical adjacent pair.
 \tl_new:N \l__tenkz_kernel_cell_atom_tl
 \tl_new:N \l__tenkz_kernel_cell_void_tl
+\tl_new:N \l__tenkz_kernel_grid_host_row_tl
+\tl_new:N \l__tenkz_kernel_grid_host_col_tl
 \prg_new_conditional:Npnn \__tenkz_kernel_cell_sealed:nn #1#2 { p, T, F, TF }
   {
     \prop_get:NeN \l__tenkz_kernel_cell_prop {#1-#2}
@@ -2383,21 +2394,21 @@
           \l__tenkz_kernel_port_node_tl
         \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
           \l__tenkz_kernel_cell_atom_tl
-          \l__tenkz_kernel_claim_row_int
-          \l__tenkz_kernel_claim_col_int
+          \l__tenkz_kernel_grid_host_row_tl
+          \l__tenkz_kernel_grid_host_col_tl
           \l_tmpa_bool
         \int_compare:nNnTF {#2} = {#4}
           {
             \tl_set:Ne \l__tenkz_kernel_port_face_tl
               { \int_compare:nNnTF {#3} < {#5} {0} {180} }
             \tl_set:Ne \l__tenkz_kernel_port_slot_tl
-              { \int_eval:n { #2 - \l__tenkz_kernel_claim_row_int + 1 } }
+              { \int_eval:n { #2 - \l__tenkz_kernel_grid_host_row_tl + 1 } }
           }
           {
             \tl_set:Ne \l__tenkz_kernel_port_face_tl
               { \int_compare:nNnTF {#2} < {#4} {270} {90} }
             \tl_set:Ne \l__tenkz_kernel_port_slot_tl
-              { \int_eval:n { #3 - \l__tenkz_kernel_claim_col_int + 1 } }
+              { \int_eval:n { #3 - \l__tenkz_kernel_grid_host_col_tl + 1 } }
           }
         \__tenkz_kernel_node_put:Nnn
           \l__tenkz_kernel_port_node_tl {kind} {port}
@@ -2410,6 +2421,8 @@
         \__tenkz_kernel_node_put:NnV
           \l__tenkz_kernel_port_node_tl {slot}
           \l__tenkz_kernel_port_slot_tl
+        \__tenkz_kernel_node_put:Nnn
+          \l__tenkz_kernel_port_node_tl {port-type} {virtual}
       }
   }
 \tl_new:N \l__tenkz_kernel_first_owner_tl
@@ -3362,12 +3375,9 @@
                           }
                       }
                       {
-                        \str_if_eq:eeTF
-                          {
-                            \tl_use:N
-                              \l__tenkz_kernel_port_policy_label_tl
-                          }
-                          { \tl_use:N \l__tenkz_kernel_port_label_tl }
+                        \tl_if_eq:NNTF
+                          \l__tenkz_kernel_port_policy_label_tl
+                          \l__tenkz_kernel_port_label_tl
                           {
                             \prop_put:NVn
                               \l__tenkz_kernel_port_policy_label_owner_prop
@@ -5816,6 +5826,7 @@
 % like the hull builder it touches none of the shared scratch: these are its
 % alone.
 \tl_new:N \l__tenkz_kernel_ro_tl
+\tl_new:N \l__tenkz_kernel_ro_a_tl
 \tl_new:N \l__tenkz_kernel_ro_b_tl
 \tl_new:N \l__tenkz_kernel_ro_side_tl
 \tl_new:N \l__tenkz_kernel_ro_sel_tl
@@ -6281,35 +6292,63 @@
           }
       }
   }
-% the leg path ids the wire's own crossing declarations already name
+% The generated leg ids that this route's own complete crossing operands
+% already name.  Parsing whole operands avoids treating an identifier that
+% merely contains `port-open-N` as that generated wire.
 \cs_new_protected:Npn \__tenkz_kernel_route_declared:n #1
   {
     \seq_clear:N \l__tenkz_kernel_ro_have_seq
     \__tenkz_model_get:nnN {#1} {cross} \l__tenkz_kernel_ro_tl
     \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
       {
-        \exp_args:NnV \regex_extract_all:nnN
-          { leg \s+ ([nesw]) \s+ of \s+ \{? \s* \( \s* (\d+) \s* ,
-            \s* (\d+) \s* \) \s* \}? }
-          \l__tenkz_kernel_ro_tl \l__tenkz_kernel_ro_seq
-        \int_step_inline:nnnn {2} {4}
-          { \seq_count:N \l__tenkz_kernel_ro_seq }
+        \tl_set_eq:NN \l__tenkz_kernel_r_sid_tl
+          \l__tenkz_kernel_ro_sid_tl
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_ro_tl
+          { \__tenkz_kernel_route_declared_one:n {##1} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_route_declared_one:n #1
+  {
+    \regex_extract_once:nnNT
+      {
+        \A \s* (over|under) \s+ at \s+ crossing \s+ of \s+ (.+)
+        \s+ and \s+ (.+) \s* \Z
+      }
+      {#1} \l__tenkz_kernel_match_seq
+      {
+        \tl_set:Ne \l__tenkz_kernel_ro_a_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+        \tl_set:Ne \l__tenkz_kernel_ro_b_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+        \exp_args:NV \__tenkz_kernel_r_crossid:nN
+          \l__tenkz_kernel_ro_a_tl \l__tenkz_kernel_r_b_tl
+        \exp_args:NV \__tenkz_kernel_r_crossid:nN
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_r_c_tl
+        \tl_clear:N \l__tenkz_kernel_ro_a_tl
+        \str_if_eq:VVTF
+          \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_ro_sid_tl
           {
-            \seq_put_right:Ne \l__tenkz_kernel_ro_have_seq
+            \tl_set_eq:NN \l__tenkz_kernel_ro_a_tl
+              \l__tenkz_kernel_r_c_tl
+          }
+          {
+            \str_if_eq:VVT
+              \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_ro_sid_tl
               {
-                leg - \seq_item:Nn \l__tenkz_kernel_ro_seq {##1}
-                - \seq_item:Nn \l__tenkz_kernel_ro_seq { ##1 + 1 }
-                - \seq_item:Nn \l__tenkz_kernel_ro_seq { ##1 + 2 }
+                \tl_set_eq:NN \l__tenkz_kernel_ro_a_tl
+                  \l__tenkz_kernel_r_b_tl
               }
           }
-        \exp_args:NnV \regex_extract_all:nnN
-          { (port-open-[1-9]\d*) }
-          \l__tenkz_kernel_ro_tl \l__tenkz_kernel_ro_seq
-        \int_step_inline:nnnn {2} {2}
-          { \seq_count:N \l__tenkz_kernel_ro_seq }
+        \exp_args:NnV \regex_match:nnT
+          { \A (?:leg-[nesw]-\d+-\d+|port-open-[1-9]\d*) \Z }
+          \l__tenkz_kernel_ro_a_tl
           {
-            \seq_put_right:Ne \l__tenkz_kernel_ro_have_seq
-              { \seq_item:Nn \l__tenkz_kernel_ro_seq {##1} }
+            \seq_if_in:NVF
+              \l__tenkz_kernel_ro_have_seq \l__tenkz_kernel_ro_a_tl
+              {
+                \seq_put_right:NV
+                  \l__tenkz_kernel_ro_have_seq \l__tenkz_kernel_ro_a_tl
+              }
           }
       }
   }

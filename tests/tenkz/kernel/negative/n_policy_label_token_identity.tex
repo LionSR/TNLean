@@ -1,0 +1,12 @@
+% Negative: expansion-equivalent policy labels are not one authored label.
+\documentclass{standalone}
+\usepackage{tenkz}
+\ExplSyntaxOn
+\cs_new:Npn \TenkzAliasI {i}
+\ExplSyntaxOff
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[up=$i$, ports={90:physical:$\TenkzAliasI$}]{}
+\end{tenkz}
+\end{document}

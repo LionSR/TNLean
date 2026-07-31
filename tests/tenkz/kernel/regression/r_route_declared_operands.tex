@@ -1,0 +1,44 @@
+% Regression: route crossing deduplication recognizes complete operands and
+% only crossings that actually involve the declaring route.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\cs_new_protected:Npn \__tenkz_test_route_declared:nn #1#2
+  {
+    \seq_clear:N \l__tenkz_kernel_ro_have_seq
+    \tl_set:Nn \l__tenkz_kernel_ro_sid_tl {route}
+    \tl_set_eq:NN \l__tenkz_kernel_r_sid_tl
+      \l__tenkz_kernel_ro_sid_tl
+    \__tenkz_kernel_route_declared_one:n {#1}
+    \str_if_eq:nnTF {#2} {none}
+      {
+        \seq_if_empty:NF \l__tenkz_kernel_ro_have_seq
+          {\errmessage{route~deduplication~accepted~an~incomplete~operand}}
+      }
+      {
+        \seq_if_in:NnF \l__tenkz_kernel_ro_have_seq {#2}
+          {\errmessage{route~deduplication~lost~a~complete~operand}}
+        \int_compare:nNnF
+          { \seq_count:N \l__tenkz_kernel_ro_have_seq } = {1}
+          {\errmessage{route~deduplication~recorded~a~substring~operand}}
+      }
+  }
+\AtBeginDocument
+  {
+    \__tenkz_test_route_declared:nn
+      {under~at~crossing~of~route~and~foo-port-open-1} {none}
+    \__tenkz_test_route_declared:nn
+      {under~at~crossing~of~route~and~port-open-1-suffix} {none}
+    \__tenkz_test_route_declared:nn
+      {under~at~crossing~of~route~and~port-open-10} {port-open-10}
+    \__tenkz_test_route_declared:nn
+      {under~at~crossing~of~route~and~port-open-1} {port-open-1}
+    \__tenkz_test_route_declared:nn
+      {under~at~crossing~of~other~and~port-open-1} {none}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\end{document}

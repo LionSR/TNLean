@@ -890,8 +890,10 @@ for contract_negative in \
   n_port_open_cross_undeclared \
   n_port_type \
   n_closure_port_type \
+  n_grid_port_type_implicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
+  n_policy_label_token_identity \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
   n_port_slot \
@@ -924,10 +926,14 @@ do
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_closure_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_grid_port_type_implicit ] &&
+    expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_port_type_multiple_consumers ] &&
     expected='[TKZ-PORT-CONSUMED]'
   [ "$contract_negative" = n_port_policy_type ] &&
     expected='[TKZ-PORT-POLICY-TYPE]'
+  [ "$contract_negative" = n_policy_label_token_identity ] &&
+    expected='[TKZ-PORT-LABEL-CONFLICT]'
   [ "$contract_negative" = n_sealed_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_sealed_malformed_port ] &&
