@@ -900,13 +900,12 @@ corpus = "published"
 section = "section-iii-a"
 order = 54
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-ghz-state.tex"
-formula = "|CZX> = blocking of (x)_{i,j} |GHZ_ij> ,"
-ink = "Canonical public tenkzfree masonry checkerboard with staggered GHZ dot nodes."
-boundary = "Resolved by the public environment; open indices remain explicit."
+formula = "The cluster-state PEPS alternates four-leg GHZ copy tensors, with Hadamard matrices on every internal virtual bond."
+ink = "Canonical public kernel environment: a six-by-eight brick-wall patch of staggered GHZ copy junctions, with Hadamard dots on every internal virtual bond."
+boundary = "Unpaired virtual legs remain open on all four sides; each site carries an outward physical leg."
 source = "paper TN-Review-main.tex line 1446; author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356"
-capabilities = ["free-graph", "typed-ports"]
+capabilities = ["kernel", "staggered-sites", "copy-tensor", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "329-356"
 placements = [{ order = 54, line = 1446, asset = "fig3_fig3-pepe_GHZstatecompleted.pdf" }]
@@ -1983,17 +1982,16 @@ corpus = "author-workbench"
 section = "section-iii-a"
 order = 27
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-ghz-state-workbench.tex"
-formula = "The cluster-state workbench alternates up and down GHZ copy tensors."
-ink = "Canonical public tenkzfree masonry checkerboard with staggered GHZ dot nodes."
-boundary = "Horizontal copy bonds are open at the left and right boundaries."
+formula = "The cluster-state PEPS alternates four-leg GHZ copy tensors, with Hadamard matrices on every internal virtual bond."
+ink = "Canonical public kernel environment: a six-by-eight brick-wall patch of staggered GHZ copy junctions, with Hadamard dots on every internal virtual bond."
+boundary = "Unpaired virtual legs remain open on all four sides; each site carries an outward physical leg."
 source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 329-356; archival output ghzstate.pdf"
-capabilities = ["free-graph", "staggered-sites", "copy-tensor"]
+capabilities = ["kernel", "staggered-sites", "copy-tensor", "typed-ports"]
 equivalent_to = "rmp-iii-a-ghz-state"
 paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "329-356"
 placements = []
-fixture = "tests/tenkz/t2_czx.tex"
 
 [[target]]
 id = "rmp-workbench-iii-ghz-up"
