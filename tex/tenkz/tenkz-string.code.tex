@@ -253,8 +253,7 @@
       { \seq_use:Nn \l__tenkz_string_pts_seq { ~ -- ~ } }
     \use:e
       {
-        \exp_not:N \path
-          [ spath/save = #1 , rounded~corners = \exp_not:n {#3} ]
+        \exp_not:N \path [ spath/save = #1 , rounded~corners = \exp_not:n {#3} ]
           \exp_not:o \l__tenkz_string_pts_tl ;
       }
     \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}

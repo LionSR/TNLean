@@ -282,7 +282,7 @@ _INK_TOKEN = re.compile(
 _SAVED_PATH_CAPTURE = re.compile(r"\\path\s*\[([^]]*\bspath/save\s*=[^]]*)\]")
 _CAPTURE_ONLY_OPTIONS = re.compile(
     r"^\s*spath/save\s*=\s*(?:\{[^{}]*\}|[^,\]]+)\s*"
-    r"(?:,\s*use~Hobby~shortcut\s*)?$"
+    r"(?:,\s*(?:use~Hobby~shortcut|rounded~corners\s*=\s*[^,\]]+)\s*)?$"
 )
 _DECIMAL = re.compile(r"(?<![\w@.])\d*\.\d+")
 # Only metric-table DEFINITIONS are exempt; a stray literal multiplying a
