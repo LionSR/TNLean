@@ -2434,6 +2434,8 @@
           \l__tenkz_kernel_port_slot_tl
         \__tenkz_kernel_node_put:Nnn
           \l__tenkz_kernel_port_node_tl {port-type} {#6}
+        \__tenkz_kernel_node_put:Nnn
+          \l__tenkz_kernel_port_node_tl {port-required-type} {#6}
       }
   }
 \prg_new_conditional:Npnn \__tenkz_kernel_cell_sealed:nn #1#2 { p, T, F, TF }
@@ -3521,6 +3523,29 @@
                     \exp_args:NV \clist_map_inline:nn
                       \l__tenkz_kernel_port_node_tl
                       {
+                        \prop_get:NnN \l__tenkz_kernel_node_prop
+                          {##1/port-required-type}
+                          \l__tenkz_kernel_port_policy_field_tl
+                        \quark_if_no_value:NF
+                          \l__tenkz_kernel_port_policy_field_tl
+                          {
+                            \str_if_eq:VVF
+                              \l__tenkz_kernel_port_type_tl
+                              \l__tenkz_kernel_port_policy_field_tl
+                              {
+                                \msg_error:nneee
+                                  {tenkz}{kernel-port-type}
+                                  { \tl_use:N \l__tenkz_kernel_scratch_tl }
+                                  {
+                                    \tl_use:N
+                                      \l__tenkz_kernel_port_type_tl
+                                  }
+                                  {
+                                    \tl_use:N
+                                      \l__tenkz_kernel_port_policy_field_tl
+                                  }
+                              }
+                          }
                         \prop_put:Nee \l__tenkz_kernel_node_prop
                           {##1/port-type}
                           { \tl_use:N \l__tenkz_kernel_port_type_tl }
@@ -5913,6 +5938,7 @@
 \seq_new:N \l__tenkz_kernel_ro_seq
 \seq_new:N \l__tenkz_kernel_ro_leg_seq
 \seq_new:N \l__tenkz_kernel_ro_sort_seq
+\seq_new:N \l__tenkz_kernel_ro_face_seq
 \seq_new:N \l__tenkz_kernel_ro_have_seq
 \seq_new:N \l__tenkz_kernel_ro_mem_seq
 \seq_new:N \l__tenkz_kernel_ro_obst_seq
@@ -6008,6 +6034,44 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_route_end:nn { ee }
 
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_route_generated_lane:n #1 { T, F, TF }
+  {
+    \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
+      { \prg_return_true: }
+      {
+        \bool_set_true:N \l__tenkz_kernel_ro_bool
+        \clist_map_inline:nn {from,to}
+          {
+            \__tenkz_model_get:nnN {#1} {##1}
+              \l__tenkz_kernel_ro_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
+              { \bool_set_false:N \l__tenkz_kernel_ro_bool }
+            \__tenkz_model_get:nnN {#1} {##1-open}
+              \l__tenkz_kernel_ro_tl
+            \str_if_eq:VnF \l__tenkz_kernel_ro_tl {route}
+              { \bool_set_false:N \l__tenkz_kernel_ro_bool }
+          }
+        \bool_if:NTF \l__tenkz_kernel_ro_bool
+          { \prg_return_true: } { \prg_return_false: }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_route_all_faces:nN #1#2
+  {
+    \seq_clear:N #2
+    \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
+      { \seq_set_from_clist:Nn #2 {n,w,s,e} }
+      {
+        \__tenkz_kernel_route_generated_lane:nT {#1}
+          {
+            % Four open corner points span three segments.  The east face is
+            % the gap between the two bare ends, not part of the open path.
+            \seq_set_from_clist:Nn #2 {n,w,s}
+          }
+      }
+  }
+
 % The crossing set of wire #1, in hull order, as
 % {operand-id}{row}{col}{face}{declaration-operand}.  Policy legs and semantic
 % open-port wires answer through one boundary-exit query.  The last field keeps
@@ -6030,18 +6094,12 @@
             {w}   { \__tenkz_kernel_route_face:n {w} }
             {all}
               {
-                % A closed all-side route traverses the complete perimeter.
-                % An open one selects an endpoint-dependent arc, whose sides
-                % cannot be inferred from the model before geometry settles;
-                % crossing police, rather than a false derived declaration,
-                % remains authoritative for that case.
-                \prop_if_in:NeT \l__tenkz_model_record_prop { #1 / closed }
-                  {
-                    \__tenkz_kernel_route_face:n {n}
-                    \__tenkz_kernel_route_face:n {w}
-                    \__tenkz_kernel_route_face:n {s}
-                    \__tenkz_kernel_route_face:n {e}
-                  }
+                % Address-bearing open arcs remain geometry-dependent and
+                % crossing police stays authoritative for them.
+                \__tenkz_kernel_route_all_faces:nN {#1}
+                  \l__tenkz_kernel_ro_face_seq
+                \seq_map_inline:Nn \l__tenkz_kernel_ro_face_seq
+                  { \__tenkz_kernel_route_face:n {##1} }
               }
           }
         % hull order: the order the string meets them travelling the arc,
@@ -6559,27 +6617,7 @@
         % siblings.  An address-bearing route adds arbitrary segments between
         % its endpoints and the hull, and those segments still need geometric
         % crossing checks.
-        \bool_set_false:N \l__tenkz_kernel_ro_bool
-        \prop_if_in:NeTF \l__tenkz_model_record_prop { #1 / closed }
-          { \bool_set_true:N \l__tenkz_kernel_ro_bool }
-          {
-            \bool_set_true:N \l__tenkz_kernel_ro_bool
-            \clist_map_inline:nn {from, to}
-              {
-                \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_end_tl
-                \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
-                  { \bool_set_false:N \l__tenkz_kernel_ro_bool }
-                \__tenkz_model_get:nnN
-                  {#1} {##1-open} \l__tenkz_kernel_r_end_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_r_end_tl
-                  { \bool_set_false:N \l__tenkz_kernel_ro_bool }
-                  {
-                    \str_if_eq:VnF \l__tenkz_kernel_r_end_tl {route}
-                      { \bool_set_false:N \l__tenkz_kernel_ro_bool }
-                  }
-              }
-          }
-        \bool_if:NT \l__tenkz_kernel_ro_bool
+        \__tenkz_kernel_route_generated_lane:nT {#1}
           {
             \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
             \str_if_eq:VnTF \l__tenkz_kernel_ro_side_tl {all}
@@ -8753,7 +8791,7 @@
       \l__tenkz_kernel_r_from_tl \l__tenkz_kernel_ro_row_tl
     \__tenkz_kernel_r_route_turn_at:NN
       \l__tenkz_kernel_r_to_tl \l__tenkz_kernel_ro_col_tl
-    \prop_if_in:NeT \l__tenkz_model_record_prop { #1 / closed }
+    \__tenkz_kernel_route_generated_lane:nT {#1}
       {
         \tl_set:Nn \l__tenkz_kernel_ro_row_tl {0}
         \tl_set:Nn \l__tenkz_kernel_ro_col_tl {0}

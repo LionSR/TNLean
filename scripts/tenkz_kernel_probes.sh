@@ -72,6 +72,23 @@ grep -Fq 'kernel-boundary|signature=phys:n' \
   echo "FAIL: physical port type did not reach its explicit open boundary" >&2
   exit 1
 }
+grep -Fq 'kernel-boundary|signature=phys:n' \
+    "$WORK/r_cell_policy_typed_ports.tnlog" || {
+  echo "FAIL: matching physical-open policy lost its physical boundary" >&2
+  exit 1
+}
+grep -Fq \
+    '|cross=over at crossing of open-arc and port-open-1|' \
+    "$WORK/r_route_open_all_arc.tnlog" || {
+  echo "FAIL: bare open all-side route omitted its traversed port" >&2
+  exit 1
+}
+grep -Fq \
+    'stringcross|under=port-open-1|over=open-arc|hits=1' \
+    "$WORK/r_route_open_all_arc.tnlog" || {
+  echo "FAIL: bare open all-side route did not meet its traversed port" >&2
+  exit 1
+}
 grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
     "$WORK/k_torus.tnlog" || {
   echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
@@ -899,6 +916,9 @@ for contract_negative in \
   n_cell_trace_port_type \
   n_authored_port_type_implicit \
   n_authored_port_type_implicit_from \
+  n_physical_open_port_type \
+  n_interface_open_port_type \
+  n_physical_trace_required_type \
   n_grid_port_type_implicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
@@ -945,6 +965,12 @@ do
   [ "$contract_negative" = n_authored_port_type_implicit ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_authored_port_type_implicit_from ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_physical_open_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_interface_open_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_physical_trace_required_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_grid_port_type_implicit ] &&
     expected='[TKZ-PORT-TYPE]'

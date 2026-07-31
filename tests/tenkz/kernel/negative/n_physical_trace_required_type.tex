@@ -1,0 +1,9 @@
+% Negative: physical trace policy cannot be refined to two virtual endpoints.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, trace=physical]
+  \tn[ports={90:virtual,270:virtual}]{}
+\end{tenkz}
+\end{document}
