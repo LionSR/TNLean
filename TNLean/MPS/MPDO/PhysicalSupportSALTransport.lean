@@ -43,49 +43,8 @@ theorem partialTraceRight_singleKraus_kronecker_isometry
     partialTraceRight
         (singleKrausMap (kroneckerMap (· * ·) A B) X) =
       singleKrausMap A (partialTraceRight X) := by
-  classical
-  ext i j
-  have horth (x y : β) :
-      (∑ k : δ, B k x * star (B k y)) = if x = y then 1 else 0 := by
-    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-      Matrix.one_apply, mul_comm, eq_comm] using
-      congrFun (congrFun hB y) x
-  simp only [partialTraceRight_apply, singleKrausMap_apply,
-    Matrix.mul_apply, Matrix.conjTranspose_apply, kroneckerMap_apply,
-    Fintype.sum_prod_type, star_mul]
-  simp_rw [Finset.mul_sum, Finset.sum_mul]
-  rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
-    (t := (Finset.univ : Finset α))]
-  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
-    (t := (Finset.univ : Finset β))]
-  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
-    (t := (Finset.univ : Finset α))]
-  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
-    (t := (Finset.univ : Finset β))]
-  simp_rw [show ∀ (q : α) (b : β) (p : α) (a : β),
-      (∑ k : δ,
-        A i p * B k a * X (p, a) (q, b) *
-          (star (B k b) * star (A j q))) =
-        A i p * X (p, a) (q, b) *
-          (∑ k : δ, B k a * star (B k b)) * star (A j q) by
-    intro q b p a
-    calc
-      _ = ∑ k : δ,
-          (A i p * X (p, a) (q, b) * star (A j q)) *
-            (B k a * star (B k b)) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        ring
-      _ = (A i p * X (p, a) (q, b) * star (A j q)) *
-          ∑ k : δ, B k a * star (B k b) := by
-        rw [Finset.mul_sum]
-      _ = _ := by ring]
-  simp_rw [horth]
-  simp only [mul_ite, mul_one, mul_zero, RCLike.star_def, ite_mul,
-    zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
-  apply Finset.sum_congr rfl
-  intro q _
-  exact Finset.sum_comm
+  simpa only [singleKrausMap_apply] using
+    partialTraceRight_kronecker_mul_mul_conjTranspose A B hB X
 
 end Matrix
 

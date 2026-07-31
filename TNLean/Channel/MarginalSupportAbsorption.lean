@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
+import TNLean.Analysis.SupportCompression
 import TNLean.Channel.PartialTrace
 
 /-!
@@ -33,6 +34,11 @@ form is a specialization of the other on the product index \(L\times R\).
   compression to both marginal supports reconstructs the original operator.
 * `Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression`: this
   simultaneous compression preserves operator-Schmidt rank.
+* `Matrix.PosSemidef.partialTraceRight_marginalSupport_compression` and
+  `Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression`: the two
+  marginals after simultaneous support compression.
+* `Matrix.PosSemidef.marginalSupport_compression_partialTraces_posDef`: both
+  compressed marginals are positive definite.
 
 ## References
 
@@ -321,6 +327,86 @@ theorem PosSemidef.operatorSchmidtRank_marginalSupport_compression
   rw [hρ.eq_marginalSupport_expansion_compression V₁ V₂ hRange₁ hRange₂] at hrank
   exact hrank.symm
 
+/-- The right partial trace of the simultaneous support compression is the
+compression of the original retained left marginal. -/
+theorem PosSemidef.partialTraceRight_marginalSupport_compression
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef)
+    (V₁ : Matrix L L' ℂ) (V₂ : Matrix R R' ℂ)
+    (hV₁ : V₁ᴴ * V₁ = 1) (hV₂ : V₂ᴴ * V₂ = 1)
+    (hRange₁ : V₁ * V₁ᴴ = hρ.partialTraceRight.isHermitian.supportProj)
+    (hRange₂ : V₂ * V₂ᴴ = hρ.partialTraceLeft.isHermitian.supportProj) :
+    Matrix.partialTraceRight ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)) =
+      V₁ᴴ * Matrix.partialTraceRight ρ * V₁ := by
+  let ρc := (V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)
+  have hcov := partialTraceRight_kronecker_mul_mul_conjTranspose V₁ V₂ hV₂ ρc
+  rw [hρ.eq_marginalSupport_expansion_compression V₁ V₂ hRange₁ hRange₂] at hcov
+  change Matrix.partialTraceRight ρc = V₁ᴴ * Matrix.partialTraceRight ρ * V₁
+  calc
+    Matrix.partialTraceRight ρc =
+        (V₁ᴴ * V₁) * Matrix.partialTraceRight ρc * (V₁ᴴ * V₁) := by
+      rw [hV₁, Matrix.one_mul, Matrix.mul_one]
+    _ = V₁ᴴ * (V₁ * Matrix.partialTraceRight ρc * V₁ᴴ) * V₁ := by
+      simp only [Matrix.mul_assoc]
+    _ = V₁ᴴ * Matrix.partialTraceRight ρ * V₁ := by rw [hcov]
+
+/-- The left partial trace of the simultaneous support compression is the
+compression of the original retained right marginal. -/
+theorem PosSemidef.partialTraceLeft_marginalSupport_compression
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef)
+    (V₁ : Matrix L L' ℂ) (V₂ : Matrix R R' ℂ)
+    (hV₁ : V₁ᴴ * V₁ = 1) (hV₂ : V₂ᴴ * V₂ = 1)
+    (hRange₁ : V₁ * V₁ᴴ = hρ.partialTraceRight.isHermitian.supportProj)
+    (hRange₂ : V₂ * V₂ᴴ = hρ.partialTraceLeft.isHermitian.supportProj) :
+    Matrix.partialTraceLeft ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)) =
+      V₂ᴴ * Matrix.partialTraceLeft ρ * V₂ := by
+  let ρc := (V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)
+  have hcov := partialTraceLeft_kronecker_mul_mul_conjTranspose V₁ V₂ hV₁ ρc
+  rw [hρ.eq_marginalSupport_expansion_compression V₁ V₂ hRange₁ hRange₂] at hcov
+  change Matrix.partialTraceLeft ρc = V₂ᴴ * Matrix.partialTraceLeft ρ * V₂
+  calc
+    Matrix.partialTraceLeft ρc =
+        (V₂ᴴ * V₂) * Matrix.partialTraceLeft ρc * (V₂ᴴ * V₂) := by
+      rw [hV₂, Matrix.one_mul, Matrix.mul_one]
+    _ = V₂ᴴ * (V₂ * Matrix.partialTraceLeft ρc * V₂ᴴ) * V₂ := by
+      simp only [Matrix.mul_assoc]
+    _ = V₂ᴴ * Matrix.partialTraceLeft ρ * V₂ := by rw [hcov]
+
 end SimultaneousMarginalSupport
+
+section FinMarginalSupport
+
+variable {d₁ d₂ k₁ k₂ : ℕ}
+
+/-- Simultaneous compression to the two marginal supports makes both
+compressed marginals positive definite. This includes zero-dimensional
+coordinate spaces. -/
+theorem PosSemidef.marginalSupport_compression_partialTraces_posDef
+    {ρ : Matrix (Fin d₁ × Fin d₂) (Fin d₁ × Fin d₂) ℂ} (hρ : ρ.PosSemidef)
+    (V₁ : Matrix (Fin d₁) (Fin k₁) ℂ) (V₂ : Matrix (Fin d₂) (Fin k₂) ℂ)
+    (hV₁ : V₁ᴴ * V₁ = 1) (hV₂ : V₂ᴴ * V₂ = 1)
+    (hRange₁ : V₁ * V₁ᴴ = hρ.partialTraceRight.isHermitian.supportProj)
+    (hRange₂ : V₂ * V₂ᴴ = hρ.partialTraceLeft.isHermitian.supportProj) :
+    (Matrix.partialTraceRight ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂))).PosDef ∧
+      (Matrix.partialTraceLeft ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂))).PosDef := by
+  constructor
+  · rw [hρ.partialTraceRight_marginalSupport_compression
+      V₁ V₂ hV₁ hV₂ hRange₁ hRange₂]
+    simpa only [Matrix.conjTranspose_conjTranspose] using
+      hρ.partialTraceRight.compression_on_support_posDef
+        (V := V₁ᴴ)
+        (by simpa only [Matrix.conjTranspose_conjTranspose] using hV₁)
+        (by
+          rw [Matrix.conjTranspose_conjTranspose]
+          exact hRange₁)
+  · rw [hρ.partialTraceLeft_marginalSupport_compression V₁ V₂ hV₁ hV₂ hRange₁ hRange₂]
+    simpa only [Matrix.conjTranspose_conjTranspose] using
+      hρ.partialTraceLeft.compression_on_support_posDef
+        (V := V₂ᴴ)
+        (by simpa only [Matrix.conjTranspose_conjTranspose] using hV₂)
+        (by
+          rw [Matrix.conjTranspose_conjTranspose]
+          exact hRange₂)
+
+end FinMarginalSupport
 
 end Matrix

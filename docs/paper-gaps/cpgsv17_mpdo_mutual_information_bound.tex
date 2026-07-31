@@ -331,15 +331,16 @@ divergence, nor a comparison with Umegaki relative entropy.
 
 Neither development completes
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  Simultaneous
-compression by the two marginal support isometries, exact reconstruction, and
-preservation of operator-Schmidt rank are now formalized.
+compression by the two marginal support isometries, exact reconstruction,
+preservation of operator-Schmidt rank, and positive definiteness of both
+compressed marginals are now formalized.
 \footnote{Formal declarations:
 \leanid{Matrix.PosSemidef.eq_marginalSupport_expansion_compression} and
-\leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression} in
+\leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression},
+\leanid{Matrix.PosSemidef.partialTraceRight_marginalSupport_compression},
+\leanid{Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression}, and
+\leanid{Matrix.PosSemidef.marginalSupport_compression_partialTraces_posDef} in
 \doclink{TNLean/Channel/MarginalSupportAbsorption}.}
-The remaining support step is to prove that the two compressed marginals are
-positive definite; this is tracked in
-\href{https://github.com/LionSR/TNLean/issues/5245}{\#5245}.
 The faithful comparison itself remains open in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The support-aware
 Jensen inequality above does not by itself establish the relative-modular

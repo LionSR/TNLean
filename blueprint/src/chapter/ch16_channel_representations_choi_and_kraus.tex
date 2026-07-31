@@ -27,6 +27,32 @@ partial traces.
     \end{align}
 \end{definition}
 
+\begin{lemma}[Partial trace under product isometries]
+    \label{lem:partial_trace_product_isometry_covariance}
+    \lean{Matrix.partialTraceRight_kronecker_mul_mul_conjTranspose,
+      Matrix.partialTraceLeft_kronecker_mul_mul_conjTranspose}
+    \leanok
+    \uses{def:partial_trace}
+    Let $A$ and $B$ be rectangular complex matrices. If $B^\dagger B=1$, then
+    \begin{align}
+      \tr_B\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+      &=A(\tr_B X)A^\dagger.
+      \notag
+    \end{align}
+    Symmetrically, if $A^\dagger A=1$, then
+    \begin{align}
+      \tr_A\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+      &=B(\tr_A X)B^\dagger.
+      \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:partial_trace}
+    Expand the matrix products and the defining diagonal sum for the partial
+    trace. The sum over the discarded factor contracts to the corresponding
+    matrix entry of $B^\dagger B$, or of $A^\dagger A$ in the symmetric case.
+\end{proof}
+
 \begin{definition}[Invertible matrix congruence]
     \label{def:invertible_matrix_congruence}
     \lean{Matrix.congruenceLinearEquiv,

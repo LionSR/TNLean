@@ -42,6 +42,10 @@ Proposition 2.1) and for reduced states on contiguous tensor factors.
   product
 * `Matrix.partialTraceLeft_kronecker`: the left partial trace of a Kronecker
   product
+* `Matrix.partialTraceRight_kronecker_mul_mul_conjTranspose`: covariance of the
+  right partial trace under a product isometry
+* `Matrix.partialTraceLeft_kronecker_mul_mul_conjTranspose`: covariance of the
+  left partial trace under a product isometry
 * `Matrix.PosDef.partialTraceRight`: the right partial trace of a positive
   definite matrix is positive definite when the traced factor is nonempty
 * `Matrix.PosDef.partialTraceLeft`: the analogous statement for the left
@@ -144,6 +148,57 @@ theorem partialTraceRight_kronecker (A : Matrix α α ℂ) (B : Matrix β β ℂ
   simp only [partialTraceRight_apply, kroneckerMap_apply, Matrix.smul_apply, Matrix.trace,
     Matrix.diag, smul_eq_mul, ← Finset.mul_sum]
   ring
+
+/-- The right partial trace is covariant under conjugation by a product matrix
+when the discarded factor is an isometry. -/
+theorem partialTraceRight_kronecker_mul_mul_conjTranspose
+    {γ δ : Type*} [Fintype α] [DecidableEq β] [Fintype δ]
+    (A : Matrix γ α ℂ) (B : Matrix δ β ℂ) (hB : Bᴴ * B = 1)
+    (X : Matrix (α × β) (α × β) ℂ) :
+    partialTraceRight ((A ⊗ₖ B) * X * (A ⊗ₖ B)ᴴ) =
+      A * partialTraceRight X * Aᴴ := by
+  classical
+  ext i j
+  have horth (x y : β) :
+      (∑ k : δ, B k x * star (B k y)) = if x = y then 1 else 0 := by
+    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Matrix.one_apply, mul_comm, eq_comm] using
+      congrFun (congrFun hB y) x
+  simp only [partialTraceRight_apply, Matrix.mul_apply,
+    Matrix.conjTranspose_apply, kroneckerMap_apply, Fintype.sum_prod_type, star_mul]
+  simp_rw [Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
+    (t := (Finset.univ : Finset α))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
+    (t := (Finset.univ : Finset β))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
+    (t := (Finset.univ : Finset α))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset δ))
+    (t := (Finset.univ : Finset β))]
+  simp_rw [show ∀ (q : α) (b : β) (p : α) (a : β),
+      (∑ k : δ,
+        A i p * B k a * X (p, a) (q, b) *
+          (star (B k b) * star (A j q))) =
+        A i p * X (p, a) (q, b) *
+          (∑ k : δ, B k a * star (B k b)) * star (A j q) by
+    intro q b p a
+    calc
+      _ = ∑ k : δ,
+          (A i p * X (p, a) (q, b) * star (A j q)) *
+            (B k a * star (B k b)) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+      _ = (A i p * X (p, a) (q, b) * star (A j q)) *
+          ∑ k : δ, B k a * star (B k b) := by
+        rw [Finset.mul_sum]
+      _ = _ := by ring]
+  simp_rw [horth]
+  simp only [mul_ite, mul_one, mul_zero, RCLike.star_def, ite_mul,
+    zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
+  apply Finset.sum_congr rfl
+  intro q _
+  exact Finset.sum_comm
 
 /-- Reindex the right tensor factor as `β' × γ`, keeping the left factor fixed. -/
 def rightSplitEquiv {α β β' γ : Type*} (e : β ≃ β' × γ) :
@@ -262,6 +317,56 @@ theorem partialTraceLeft_kronecker (A : Matrix α α ℂ) (B : Matrix β β ℂ)
     Matrix.trace, Matrix.diag]
   rw [← Finset.sum_mul]
   rfl
+
+/-- The left partial trace is covariant under conjugation by a product matrix
+when the discarded factor is an isometry. -/
+theorem partialTraceLeft_kronecker_mul_mul_conjTranspose
+    {γ δ : Type*} [DecidableEq α] [Fintype β] [Fintype γ]
+    (A : Matrix γ α ℂ) (B : Matrix δ β ℂ) (hA : Aᴴ * A = 1)
+    (X : Matrix (α × β) (α × β) ℂ) :
+    partialTraceLeft ((A ⊗ₖ B) * X * (A ⊗ₖ B)ᴴ) =
+      B * partialTraceLeft X * Bᴴ := by
+  classical
+  ext i j
+  have horth (x y : α) :
+      (∑ k : γ, A k x * star (A k y)) = if x = y then 1 else 0 := by
+    simpa only [Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Matrix.one_apply, mul_comm, eq_comm] using
+      congrFun (congrFun hA y) x
+  simp only [partialTraceLeft_apply, Matrix.mul_apply,
+    Matrix.conjTranspose_apply, kroneckerMap_apply, Fintype.sum_prod_type, star_mul]
+  simp_rw [Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_comm (s := (Finset.univ : Finset γ))
+    (t := (Finset.univ : Finset α))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset γ))
+    (t := (Finset.univ : Finset β))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset γ))
+    (t := (Finset.univ : Finset α))]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset γ))
+    (t := (Finset.univ : Finset β))]
+  simp_rw [show ∀ (q : α) (b : β) (p : α) (a : β),
+      (∑ k : γ,
+        A k p * B i a * X (p, a) (q, b) *
+          (star (B j b) * star (A k q))) =
+        B i a * X (p, a) (q, b) *
+          (∑ k : γ, A k p * star (A k q)) * star (B j b) by
+    intro q b p a
+    calc
+      _ = ∑ k : γ,
+          (B i a * X (p, a) (q, b) * star (B j b)) *
+            (A k p * star (A k q)) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+      _ = (B i a * X (p, a) (q, b) * star (B j b)) *
+          ∑ k : γ, A k p * star (A k q) := by
+        rw [Finset.mul_sum]
+      _ = _ := by ring]
+  simp_rw [horth]
+  simp_rw [Finset.sum_comm (s := (Finset.univ : Finset α))
+    (t := (Finset.univ : Finset β))]
+  simp only [mul_ite, mul_one, mul_zero, RCLike.star_def, ite_mul,
+    zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte]
 
 /-- The left partial trace is adjoint to tensoring with the identity under the
 bilinear trace pairing:
