@@ -218,19 +218,48 @@ declarations:
 \leanid{Matrix.finrank_range_weightedHilbertSchmidtMap}, and
 \leanid{Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
 in \doclink{TNLean/Channel/WhitenedChoi}.}
-These results do not complete
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  They assume both
-weights are positive definite and therefore do not provide the two-local
-compression from singular ambient marginals to their support algebras.  The
-proof that this two-sided compression preserves operator-Schmidt rank is also
-absent.  Both statements remain part of \#5211 and are required for the
-unrestricted theorem tracked in
-\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.  The construction
-of the output support corner needed within this argument is separately tracked
-in \href{https://github.com/LionSR/TNLean/issues/5225}{\#5225}.
-The remaining order-monotonicity and order-one-limit step is not yet
-formalized and is tracked in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The sharp
+The single-reference support reduction is now formalized.  Let
+$\rho,\omega\geq0$ satisfy $\ker\omega\subseteq\ker\rho$, and let
+$V:\mathbb C^k\to\mathbb C^D$ obey
+$V^\dagger V=I_k$ and $VV^\dagger=P_{\operatorname{supp}\omega}$.  Then
+\begin{align}
+  D(\rho\Vert\omega)
+  &=D(V^\dagger\rho V\Vert V^\dagger\omega V),\\
+  Q_2(\rho,\omega)
+  &=Q_2(V^\dagger\rho V,V^\dagger\omega V).
+\end{align}
+Here the logarithm and negative quarter-power vanish on the zero eigenspace.
+The compressed reference is positive definite.  If $\rho$ and $\omega$ have
+trace one, isometric trace preservation gives the same normalization after
+compression.  Consequently, the singular-reference inequality reduces to the
+faithful inequality
+\[
+  D(A\Vert B)\leq\log Q_2(A,B),
+  \qquad A\geq0,\quad B>0,\quad\tr A=\tr B=1,
+\]
+with this faithful comparison retained as an explicit hypothesis rather than
+asserted as proved.
+\footnote{Formal declarations:
+\leanid{Matrix.isometryConjNonUnitalStarAlgHom},
+\leanid{Matrix.cfc_conj_isometry_of_zero},
+\leanid{Matrix.PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj},
+\leanid{TNLean.quantumRelativeEntropy_support_compression},
+\leanid{TNLean.sandwichedRenyiTwoTrace_support_compression}, and
+\leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
+in \doclink{TNLean/Analysis/SupportCompressedEntropy}.}
+
+This reduction does not complete
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  That issue still
+requires simultaneous compression by the two marginal support isometries and a
+proof that this local two-factor compression preserves operator-Schmidt rank.
+The singular-output weighted contraction is handled separately in
+\href{https://github.com/LionSR/TNLean/issues/5225}{\#5225}; it is not a
+consequence of the single-reference entropy identities above.  The faithful
+comparison itself still requires the weighted interpolation and order-one-limit
+analysis tracked in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}, following the
+order-monotonicity results of \cite[Theorem~7]{Beigi2013Sandwiched} and
+\cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
 mutual-information theorem remains tracked in
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 
