@@ -108,7 +108,7 @@ exact two-sided recovery.
 
 \section{Affected declarations}
 
-The six load-bearing declarations are the choice of support isometries for an
+The nine load-bearing declarations are the choice of support isometries for an
 active sector,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
 exists\_activeSector\_factorSupportIsometries}.}
 the simultaneous choice of factor-support
@@ -121,9 +121,19 @@ recovery of the original physical slice from sector coordinates,\footnote{%
 physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
 the restricted tensor,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
 activePhysicalSupportRestriction}.}
-and injectivity of that tensor.\footnote{%
+compression of the sectorwise factorization by the joint support
+inclusion,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+dependentSupportInclusion\_compression}.}
+exact recovery after returning to the original physical
+coordinates,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+changePhysicalBasis\_physicalSupportInclusion\_%
+activePhysicalSupportRestriction}.}
+injectivity of the restricted tensor,\footnote{%
 \leanid{MPOTensor.PhysicalSectorFactorization.%
 activePhysicalSupportRestriction\_isInjective}.}
+and the assembled restriction datum.\footnote{%
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+activePhysicalSupportRestrictionData}.}
 
 \section{Blueprint dependency}
 

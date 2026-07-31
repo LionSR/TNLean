@@ -37,7 +37,7 @@ original MPO at every length at least two.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`,
 `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines 1383--1450 and
-1680--1770.
+1680--1770, and Proposition `3to4`, lines 1570--1594.
 
 **Scope restriction (active physical support compression):** The proof first
 restricts to the joint column supports of the sector factor families, a
@@ -88,8 +88,8 @@ sector tensors have positive physical-sector factorizations.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0`,
 `AppUkU=rl`, `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines
-1383--1450 and 1628--1770, and Proposition `prop3to4`, lines
-1786--1796.
+1383--1450 and 1628--1770, Proposition `3to4`, lines 1570--1594, and
+Proposition `prop3to4`, lines 1786--1796.
 
 **Scope restriction (active physical support compression):** The proof calls
 the preceding active-support construction, which restricts each sector tensor

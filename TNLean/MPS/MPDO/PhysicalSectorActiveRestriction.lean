@@ -388,8 +388,13 @@ noncomputable def compressedRightTensor (F : PhysicalSectorFactorization K)
 /-- Compression by the dependent active-factor inclusion preserves the
 sectorwise left-right product form exactly.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** The displayed
+compression by the joint factor-support inclusion is an auxiliary
+finite-dimensional construction not made in CPSV16.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem dependentSupportInclusion_compression
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (β α : Fin D) :
@@ -920,8 +925,14 @@ theorem reindex_physicalSlice_activePhysicalSupportRestriction
 /-- Inclusion after active-factor restriction recovers the original MPO
 tensor exactly.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** Exact
+re-embedding follows from the auxiliary restriction to the joint column
+supports of the sector factor families; CPSV16 does not make this
+restriction.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -964,8 +975,13 @@ physical support restriction data.
 Unlike an arbitrary range-isometry construction, this datum retains the
 left-right sector coordinates of `AppUkU=rl`.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** This datum
+packages the auxiliary joint-support restriction and its exact re-embedding;
+it is not constructed in CPSV16.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 noncomputable def activePhysicalSupportRestrictionData
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
