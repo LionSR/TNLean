@@ -37,7 +37,13 @@ original MPO at every length at least two.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`,
 `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines 1383--1450 and
-1680--1770. -/
+1680--1770.
+
+**Scope restriction (active physical support compression):** The proof first
+restricts to the joint column supports of the sector factor families, a
+finite-dimensional auxiliary construction not made in CPSV16.  It then lifts
+the resulting bond to the printed physical support.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
     {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
     (P : Matrix (Fin d) (Fin d) ℂ)

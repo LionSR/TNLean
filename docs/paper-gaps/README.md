@@ -44,6 +44,13 @@ unless they are cited by one of the current blueprint chapters above.
 
 For MPDO renormalization fixed points:
 
+- `cpsv16_active_physical_support_compression.tex` records that CPSV16
+  Lemma `propSN` and Proposition `3to4` use the full physical-sector factor
+  spaces, whereas the local development first restricts them to the joint
+  column supports of the left and right factor families. It also separates
+  this restriction from the generic physical-coordinate transport identities,
+  which make explicit a basis change that the source uses without stating the
+  corresponding two-site and four-site congruences.
 - `cpsv16_vertical_sector_invertibility.tex` separates the proved fixed
   contraction families and product-generation theorem from the remaining
   density-weighted fixed-point argument in Appendix C.4. Wolf's full

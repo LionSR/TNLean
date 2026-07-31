@@ -35,10 +35,10 @@ particular at virtual dimension zero.
 **Scope restriction (active physical support compression):** the active
 factor-support compression (isometries onto joint column supports,
 zero-dimensional inactive sectors, compressed injective tensor) does not
-appear in CPSV16 lines 1381--1450.  It bridges Lemma `propSN` (the block
-factorization and $\eta$ construction) to Proposition `prop3to4`.  The
-compression is a standard finite-dimensional construction and is
-mathematically verified; it is recorded in
+appear in CPSV16 lines 1381--1450.  It is an auxiliary construction between
+Lemma `propSN` (the block factorization and neighboring operators) and
+Proposition `3to4`, later used in the argument for Proposition `prop3to4`.
+The compression is mathematically verified and is recorded in
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
@@ -941,7 +941,7 @@ Source context: injectivity of the compressed tensor $V^\dagger K V$ follows
 from injectivity of $K$ because $V$ is an isometry and $VV^\dagger$ absorbs
 every physical slice.  This is a standard finite-dimensional argument that
 does not appear in CPSV16 lines 1381--1450; it is the key property enabling
-the bridge from `propSN` to `prop3to4`.  The construction is ours. -/
+the active-support construction used after `propSN`. -/
 theorem activePhysicalSupportRestriction_isInjective
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)

@@ -7,8 +7,7 @@
 
 \input{command}
 
-\title{Active physical support compression bridges \texttt{propSN} to
-\texttt{prop3to4}}
+\title{Active physical support compression in the CPSV16 commuting-form argument}
 \author{}
 \date{2026-07-30}
 
@@ -18,7 +17,7 @@
 \section{Source passage}
 
 Lemma \texttt{propSN} of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete\footnote{Source:
-\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1381--1450}.} states that if
+\path{Papers/1606.00608/MPDO-22-12-17-2.tex:1406--1471}.} states that if
 $\mathcal K$ fulfills the saturation of the area law (SAL), there exists an
 isometry $U$ and tensors $l_k$, $r_k$ such that
 \[
@@ -27,17 +26,24 @@ isometry $U$ and tensors $l_k$, $r_k$ such that
 \]
 with
 \[
-  \eta_{k,h} = \sum_a (r_k)_a \otimes (\overline{l_h})_a \ge 0,
+  \eta_{k,h} = \sum_a (r_k)_a \otimes (l_h)_a \ge 0,
 \]
 and the non-negative matrix $T_{k,h} = \operatorname{tr}(\eta_{k,h})$ is
 primitive.
 
-The passage defines $U$, $r_k$, $l_k$, and $\eta_{k,h}$ (equation
-\texttt{etarl}, line~1444) and proves primitivity of $T_{k,h}$.  It does
+The passage defines $U$, $r_k$, $l_k$, and $\eta_{k,h}$ at
+lines~1436--1450.  It defines $T_{k,h}$ at lines~1452--1455 and proves its
+primitivity through line~1465.  It does
 \textbf{not} construct the active physical support compression: choosing
 isometries onto the joint column supports of the left and right factor
 families per sector, giving inactive sectors zero-dimensional coordinate
 spaces, and assembling the compressed injective tensor.
+
+Proposition~\texttt{3to4}, at lines~1570--1594, uses the uncompressed
+neighboring operators on the full factor spaces to form commuting positive
+bonds.  The later Proposition~\texttt{prop3to4}, at lines~1786--1797,
+concerns a simple tensor with a basis of normal tensors and invokes the
+preceding injective result.  These are distinct source statements.
 
 \section{The compression construction}
 
@@ -45,9 +51,9 @@ The three files
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring}, and
 \doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}
-(roughly 95~declarations total) build the following bridging construction
-between Lemma~\texttt{propSN} (lines~1381--1450) and
-Proposition~\texttt{prop3to4} (line~1787):
+(roughly 95~declarations total) build the following auxiliary construction
+after Lemma~\texttt{propSN} (lines~1406--1471).  It is used in the formal
+argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
 
 \begin{enumerate}
   \item \textbf{Factor-support coordinates} (\texttt{SectorActiveFactorSupportData},
@@ -95,22 +101,14 @@ preserves exact two-sided recovery.
 
 \section{Affected declarations}
 
-The five load-bearing declarations that most need per-declaration source
-context:
-
-\begin{itemize}
-  \item \leanid{ActiveFactorSupportData} (line~139) --- simultaneous choice of
-    factor-support coordinates.
-  \item \leanid{compressedLeftTensor} (line~354) --- left factor compressed to
-    retained support coordinates.
-  \item \leanid{physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}
-    (line~566) --- recovery of the original physical slice from its
-    sector-coordinate form.
-  \item \leanid{activePhysicalSupportRestriction} (line~776) --- MPO tensor
-    restricted to active factor-support coordinates.
-  \item \leanid{activePhysicalSupportRestriction\_isInjective} (line~908) ---
-    injectivity of the restricted tensor.
-\end{itemize}
+The five load-bearing declarations are the simultaneous choice of
+factor-support coordinates,\footnote{\leanid{ActiveFactorSupportData}.}
+the compressed left factor,\footnote{\leanid{compressedLeftTensor}.}
+recovery of the original physical slice from sector coordinates,\footnote{%
+\leanid{physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
+the restricted tensor,\footnote{\leanid{activePhysicalSupportRestriction}.}
+and injectivity of that tensor.\footnote{%
+\leanid{activePhysicalSupportRestriction\_isInjective}.}
 
 \section{Blueprint dependency}
 
@@ -125,11 +123,10 @@ at \doclink{blueprint/src/chapter/ch21\_mpdo\_rfp\_simple\_local\_structure\_cap
 The compression is mathematically sound but the source-citation chain is
 incomplete without the markers added in this note.
 
-\paragraph{Classification: open.} The compression itself is mathematically
-verified (all proofs are complete).  The gap is documentary: the three files
-previously carried no deviation marker and no per-declaration source
-pointers, so a reader could not distinguish the construction from the cited
-source passage.  The markers added by this disclosure make the bridge
-explicit.
+\paragraph{Classification: scope restriction.} The compression itself is
+mathematically verified.  The local development first passes to the canonical
+active physical support and states the coordinate changes separately, while
+the source propositions do not contain these constructions.  The markers
+added by this disclosure make that distinction explicit.
 
 \end{document}
