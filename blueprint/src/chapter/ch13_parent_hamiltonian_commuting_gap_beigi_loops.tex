@@ -560,6 +560,7 @@
 \begin{lemma}[Gauge-phase transport of mixed-transfer vanishing]
     \label{lem:mixed_transfer_gauge_phase_zero}
     \lean{MPSTensor.mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv}
+    \lean{MPSTensor.mixedTransferMap₂_cast_eq_zero_iff}
     \leanok
     \uses{def:gauge_phase_equiv}
     Let $U,A$ and $V,B$ be pairs of tensors with respective common bond
@@ -575,6 +576,8 @@
         \quad\Longrightarrow\quad
         \mathcal E_{U,V}=0.
     \end{align}
+    Identifying equal bond dimensions on either tensor leg preserves this
+    vanishing condition in both directions.
 \end{lemma}
 
 \begin{proof}
