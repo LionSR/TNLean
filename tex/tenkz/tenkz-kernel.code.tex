@@ -240,6 +240,11 @@
 \cs_new_protected:Npn \__tenkz_kernel_node_put:Nnn #1#2#3
   { \prop_put:Nen \l__tenkz_kernel_node_prop { #1 / #2 } {#3} }
 \cs_generate_variant:Nn \__tenkz_kernel_node_put:Nnn { NnV, Nne }
+\cs_new_protected:Npn \__tenkz_kernel_node_port_init:N #1
+  {
+    \__tenkz_kernel_node_put:Nnn #1 {kind} {port}
+    \__tenkz_kernel_node_put:Nnn #1 {port-type} {virtual}
+  }
 \cs_new:Npn \__tenkz_kernel_node_item:Nn #1#2
   { \prop_item:Ne \l__tenkz_kernel_node_prop { #1 / #2 } }
 % the same reading when the node id arrives as text rather than in a variable
@@ -480,7 +485,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_addr_port:nN #1#2
   {
     \__tenkz_kernel_node_new:nN {#1} #2
-    \__tenkz_kernel_node_put:Nne #2 {kind} {port}
+    \__tenkz_kernel_node_port_init:N #2
     \__tenkz_kernel_node_put:Nne #2 {record}
       { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
     \__tenkz_kernel_node_put:Nne #2 {face}
@@ -2416,8 +2421,8 @@
                   { #4 - \l__tenkz_kernel_grid_host_col_tl + 1 }
               }
           }
-        \__tenkz_kernel_node_put:Nnn
-          \l__tenkz_kernel_port_node_tl {kind} {port}
+        \__tenkz_kernel_node_port_init:N
+          \l__tenkz_kernel_port_node_tl
         \__tenkz_kernel_node_put:NnV
           \l__tenkz_kernel_port_node_tl {record-id}
           \l__tenkz_kernel_cell_atom_tl
@@ -3547,8 +3552,8 @@
                             @\tl_use:N \l__tenkz_kernel_port_slot_tl
                           }
                           \l__tenkz_kernel_port_node_tl
-                        \__tenkz_kernel_node_put:Nnn
-                          \l__tenkz_kernel_port_node_tl {kind} {port}
+                        \__tenkz_kernel_node_port_init:N
+                          \l__tenkz_kernel_port_node_tl
                         \__tenkz_kernel_node_put:Nnn
                           \l__tenkz_kernel_port_node_tl {record-id} {#1}
                         \__tenkz_kernel_node_put:NnV
@@ -3557,6 +3562,9 @@
                         \__tenkz_kernel_node_put:NnV
                           \l__tenkz_kernel_port_node_tl {slot}
                           \l__tenkz_kernel_port_slot_tl
+                        \__tenkz_kernel_node_put:NnV
+                          \l__tenkz_kernel_port_node_tl {port-type}
+                          \l__tenkz_kernel_port_type_tl
                         \__tenkz_model_record_wire:e
                           {
                             kind = index , origin = port-open ,
@@ -6016,10 +6024,10 @@
           \l__tenkz_kernel_ro_mem_seq
         \str_case:Vn \l__tenkz_kernel_ro_side_tl
           {
-            {n}   { \__tenkz_kernel_route_face:nn {n} {up} }
-            {s}   { \__tenkz_kernel_route_face:nn {s} {down} }
-            {e}   { \__tenkz_kernel_route_face:nn {e} {none} }
-            {w}   { \__tenkz_kernel_route_face:nn {w} {none} }
+            {n}   { \__tenkz_kernel_route_face:n {n} }
+            {s}   { \__tenkz_kernel_route_face:n {s} }
+            {e}   { \__tenkz_kernel_route_face:n {e} }
+            {w}   { \__tenkz_kernel_route_face:n {w} }
             {all}
               {
                 % A closed all-side route traverses the complete perimeter.
@@ -6029,10 +6037,10 @@
                 % remains authoritative for that case.
                 \prop_if_in:NeT \l__tenkz_model_record_prop { #1 / closed }
                   {
-                    \__tenkz_kernel_route_face:nn {n} {up}
-                    \__tenkz_kernel_route_face:nn {w} {none}
-                    \__tenkz_kernel_route_face:nn {s} {down}
-                    \__tenkz_kernel_route_face:nn {e} {none}
+                    \__tenkz_kernel_route_face:n {n}
+                    \__tenkz_kernel_route_face:n {w}
+                    \__tenkz_kernel_route_face:n {s}
+                    \__tenkz_kernel_route_face:n {e}
                   }
               }
           }
@@ -6082,18 +6090,43 @@
           }
       }
   }
-% every selected site whose physical policy sends a leg out of face #1, which
-% the policy word #2 or `updown` asks for
-\cs_new_protected:Npn \__tenkz_kernel_route_face:nn #1#2
+\prg_new_conditional:Npnn
+  \__tenkz_kernel_physical_policy_exits_face:nn #1#2 { p, T, F, TF }
+  {
+    \str_case:nnF {#1}
+      {
+        {up}
+          {
+            \str_if_eq:nnTF {#2} {n}
+              { \prg_return_true: } { \prg_return_false: }
+          }
+        {down}
+          {
+            \str_if_eq:nnTF {#2} {s}
+              { \prg_return_true: } { \prg_return_false: }
+          }
+        {updown}
+          {
+            \bool_lazy_or:nnTF
+              { \str_if_eq_p:nn {#2} {n} }
+              { \str_if_eq_p:nn {#2} {s} }
+              { \prg_return_true: } { \prg_return_false: }
+          }
+      }
+      { \prg_return_false: }
+  }
+
+% Every selected policy leg and semantic open port that exits through face #1.
+\cs_new_protected:Npn \__tenkz_kernel_route_face:n #1
   {
     \seq_map_inline:Nn \l__tenkz_kernel_ro_mem_seq
       {
         \__tenkz_model_get:nnN {##1} {physical} \l__tenkz_kernel_ro_tl
         \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
           {
-            \bool_lazy_or:nnT
-              { \str_if_eq_p:Vn \l__tenkz_kernel_ro_tl {updown} }
-              { \str_if_eq_p:Vn \l__tenkz_kernel_ro_tl {#2} }
+            \exp_args:NV
+              \__tenkz_kernel_physical_policy_exits_face:nnT
+              \l__tenkz_kernel_ro_tl {#1}
               { \__tenkz_kernel_route_face_add:nn {##1} {#1} }
           }
       }
@@ -11135,8 +11168,8 @@
     \exp_args:Ne \__tenkz_kernel_node_new:nN
       {#2.\l__tenkz_kernel_r_face_angle_tl @\l__tenkz_kernel_slot_tl}
       \l__tenkz_kernel_scratch_tl
-    \__tenkz_kernel_node_put:Nnn
-      \l__tenkz_kernel_scratch_tl {kind} {port}
+    \__tenkz_kernel_node_port_init:N
+      \l__tenkz_kernel_scratch_tl
     \__tenkz_kernel_node_put:Nnn
       \l__tenkz_kernel_scratch_tl {record} {#2}
     \__tenkz_kernel_node_put:Nnn

@@ -897,6 +897,8 @@ for contract_negative in \
   n_closure_implicit_port_type \
   n_cup_implicit_port_type \
   n_cell_trace_port_type \
+  n_authored_port_type_implicit \
+  n_authored_port_type_implicit_from \
   n_grid_port_type_implicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
@@ -939,6 +941,10 @@ do
   [ "$contract_negative" = n_cup_implicit_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_cell_trace_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_authored_port_type_implicit ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_authored_port_type_implicit_from ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_grid_port_type_implicit ] &&
     expected='[TKZ-PORT-TYPE]'

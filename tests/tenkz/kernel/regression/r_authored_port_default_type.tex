@@ -1,0 +1,55 @@
+% Regression: every authored port address starts virtual; a virtual descriptor
+% may refine one endpoint without changing that default.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_authored_virtual_int
+\cs_new_eq:NN
+  \__tenkz_test_authored_virtual_validate:n
+  \__tenkz_kernel_port_wire_type_validate:n
+\cs_set_protected:Npn \__tenkz_kernel_port_wire_type_validate:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
+    \str_case:Vn \l_tmpa_tl
+      {
+        {virtual-implicit}
+          { \__tenkz_test_authored_virtual_endpoints:n {#1} }
+        {implicit-implicit}
+          { \__tenkz_test_authored_virtual_endpoints:n {#1} }
+      }
+    \__tenkz_test_authored_virtual_validate:n {#1}
+  }
+\cs_new_protected:Npn \__tenkz_test_authored_virtual_endpoints:n #1
+  {
+    \clist_map_inline:nn {from,to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l_tmpb_tl
+        \str_if_eq:eeF
+          { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {port-type} }
+          {virtual}
+          {\errmessage{authored~port~lost~its~virtual~default}}
+      }
+    \int_gincr:N \g__tenkz_test_authored_virtual_int
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_authored_virtual_int } = {2}
+      {\errmessage{authored~virtual~endpoint~validation~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A, ports={0:virtual}]{A}
+  \tn[at=(1,2), name=B]{B}
+  \tnwire[name=virtual-implicit]{A.0}{B.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=C]{C}
+  \tn[at=(1,2), name=D]{D}
+  \tnwire[name=implicit-implicit]{C.0}{D.180}
+\end{tenkz}
+\end{document}
