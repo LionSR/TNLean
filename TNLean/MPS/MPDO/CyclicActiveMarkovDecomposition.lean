@@ -516,8 +516,8 @@ namespace MPOTensor.EtaLocalStructureData
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-/-- The fixed positive-bond representative selected from an injective normal
-source with zero correlation length yields a Hayashi decomposition at every
+/-- The fixed positive-bond representative selected from an injective source
+with zero correlation length yields a Hayashi decomposition at every
 one-site cut of the source tensor in the selected physical coordinates.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
