@@ -203,10 +203,17 @@ The Choi-matrix estimate is also formalized.\footnote{Formal declarations:
 \leanid{Matrix.rectangularChoi_frobenius_parseval} and
 \leanid{Matrix.rectangularChoi_frobenius_sq_le_finrank_range} in
 \doclink{TNLean/Algebra/RectangularChoi}.}
-The two analytic inequalities are not yet formalized; they are tracked in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} and
-\href{https://github.com/LionSR/TNLean/issues/5210}{\#5210}.  Their assembly
-into the sharp mutual-information theorem is tracked in
+The full-support exponent-two weighted Hilbert--Schmidt contraction used after
+the support compression is formalized.\footnote{Formal declarations:
+\leanid{Matrix.weightedHilbertSchmidtMap_norm_le} and
+\leanid{Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction} in
+\doclink{TNLean/Channel/WeightedHilbertSchmidt}.}
+This result assumes both weights are positive definite; it does not formalize
+an unrestricted support-compressed theorem for a singular output weight.
+The remaining order-monotonicity and order-one-limit step is not yet
+formalized and is tracked in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Assembly into the
+sharp mutual-information theorem is tracked in
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 
 \section{Diagonal matrix product operators}

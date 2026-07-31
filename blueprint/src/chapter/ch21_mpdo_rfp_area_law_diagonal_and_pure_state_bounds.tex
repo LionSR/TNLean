@@ -574,7 +574,8 @@ terms of operator-Schmidt rank.
     \end{align}
 \end{theorem}
 \begin{proof}
-    \uses{thm:rectangular_choi_rank_bound}
+    \uses{thm:rectangular_choi_rank_bound,
+        thm:weighted_hilbert_schmidt_contraction_full_support}
     Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
     This preserves both mutual information and operator-Schmidt rank, and makes
     the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
@@ -591,8 +592,8 @@ terms of operator-Schmidt rank.
         L=\Gamma_\tau^{-1/2}\circ\Phi\circ\Gamma_\sigma^{1/2}.
         \notag
     \end{align}
-    Equation~(18) of \cite[Theorem~6]{Beigi2013Sandwiched} shows that $L$ is a
-    Hilbert--Schmidt contraction.  The order-two sandwiched whitening of
+    Theorem~\ref{thm:weighted_hilbert_schmidt_contraction_full_support} shows
+    that $L$ is a Hilbert--Schmidt contraction.  The order-two sandwiched whitening of
     $\rho_{AB}$ is the unnormalized Choi matrix
     \begin{align}
         W=\sum_{i,j}E_{ij}\otimes L(E_{ij}).
