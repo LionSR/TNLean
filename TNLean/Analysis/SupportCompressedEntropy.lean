@@ -27,9 +27,11 @@ order-two sandwiched trace functional are unchanged by this compression.
 * `TNLean.sandwichedRenyiTwoTrace_support_compression` — the order-two
   sandwiched trace functional is invariant under the same compression.
 * `TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful` —
-  a faithful-reference inequality implies the support-restricted inequality.
+  a faithful-reference density-operator inequality implies the
+  support-restricted density-operator inequality.
 
-The last theorem is only a reduction.  It does not assert the missing
+The last theorem preserves both trace-one normalizations under support
+compression.  It is only a reduction and does not assert the missing
 faithful-reference inequality.
 -/
 
@@ -186,14 +188,18 @@ theorem sandwichedRenyiTwoTrace_support_compression
     rw [← map_mul]
   rw [hsquare, Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one V hV]
 
-/-- A faithful-reference proof of $D(\rho\Vert\omega)\leq\log Q_2(\rho,\omega)$
-reduces the support-restricted case to the support compression.  The faithful
-inequality is an explicit hypothesis and is not proved here. -/
+/-- A faithful-reference density-operator proof of
+$D(\rho\Vert\omega)\leq\log Q_2(\rho,\omega)$ reduces the support-restricted
+case to the support compression.  Both ambient matrices have trace one, and
+isometric trace preservation supplies the corresponding normalizations for
+the compressed matrices.  The faithful inequality is an explicit hypothesis
+and is not proved here. -/
 theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
     {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    (hρtr : ρ.trace = 1) (hωtr : ω.trace = 1)
     (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
     (hfaithful : ∀ {d : ℕ} (A B : Matrix (Fin d) (Fin d) ℂ),
-      A.PosSemidef → B.PosDef →
+      A.PosSemidef → B.PosDef → A.trace = 1 → B.trace = 1 →
         quantumRelativeEntropy A B ≤ Real.log (sandwichedRenyiTwoTrace A B)) :
     quantumRelativeEntropy ρ ω ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) := by
   obtain ⟨k, V, hV, hRange⟩ := hω.isOrthogonalProjection_supportProj.exists_range_isometry
@@ -207,7 +213,26 @@ theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
       hω.compression_on_support_posDef (V := Vᴴ) (by
         simpa only [Matrix.conjTranspose_conjTranspose] using hV) (by
         simpa only [Matrix.conjTranspose_conjTranspose] using hRange)
-  have hcompressed := hfaithful ρc ωc hρc hωc
+  have hρexpand : V * ρc * Vᴴ = ρ := by
+    simpa only [ρc] using
+      hρ.eq_isometry_expansion_compression_of_kernel_le hω hker V hRange
+  have hωexpand : V * ωc * Vᴴ = ω := by
+    simpa only [ωc] using
+      hω.eq_isometry_expansion_compression_of_kernel_le hω
+        (fun _ hv => hv) V hRange
+  have hρctr : ρc.trace = 1 := by
+    calc
+      ρc.trace = (V * ρc * Vᴴ).trace :=
+        (Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one V hV ρc).symm
+      _ = ρ.trace := congrArg Matrix.trace hρexpand
+      _ = 1 := hρtr
+  have hωctr : ωc.trace = 1 := by
+    calc
+      ωc.trace = (V * ωc * Vᴴ).trace :=
+        (Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one V hV ωc).symm
+      _ = ω.trace := congrArg Matrix.trace hωexpand
+      _ = 1 := hωtr
+  have hcompressed := hfaithful ρc ωc hρc hωc hρctr hωctr
   calc
     quantumRelativeEntropy ρ ω = quantumRelativeEntropy ρc ωc :=
       quantumRelativeEntropy_support_compression hρ hω hker V hV hRange
