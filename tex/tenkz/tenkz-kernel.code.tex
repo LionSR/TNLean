@@ -6005,8 +6005,9 @@
   }
 
 % Resolve a live glyph anchor in the host's local axes and carry it to the
-% page.  Non-cell pairing ink and ordinary wires share this face boundary;
-% the placed address node remains only dependency geometry.
+% page.  The resolved port node supplies the span-slot centre, while the host
+% glyph supplies the face-normal silhouette displacement.  Non-cell pairing
+% ink and ordinary wires share this face boundary.
 \cs_new_protected:Npn \__tenkz_kernel_r_hull_port_xy:nnNN #1#2#3#4
   {
     \prop_if_in:NnF \l__tenkz_kernel_hull_live_prop {#2/xmin}
@@ -6018,6 +6019,9 @@
           \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
         \__tenkz_kernel_hull_measure_glyph:n {#2}
       }
+    \__tenkz_kernel_r_node:n {#1}
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
     \__tenkz_geom_xy:nNN {#2}
       \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
     \__tenkz_kernel_r_turn:nN {#2} \l__tenkz_kernel_r_ink_turn_tl
@@ -6046,6 +6050,15 @@
       {
         \dim_to_fp:n { \l__tenkz_kernel_r_north_y_dim }
         / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+    \exp_args:NV \__tenkz_kernel_r_face_side:n
+      \l__tenkz_kernel_r_b_tl
+    \str_case:Vn \l__tenkz_kernel_r_face_side_tl
+      {
+        {n} { \__tenkz_kernel_r_skin_wire_slot_x: }
+        {s} { \__tenkz_kernel_r_skin_wire_slot_x: }
+        {e} { \__tenkz_kernel_r_skin_wire_slot_y: }
+        {w} { \__tenkz_kernel_r_skin_wire_slot_y: }
       }
     \fp_set:Nn #3
       {

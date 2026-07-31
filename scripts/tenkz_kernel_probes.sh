@@ -112,7 +112,7 @@ grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
   exit 1
 }
 [ "$(grep -c 'kernel-boundary|signature=$' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 1 ] || {
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 3 ] || {
   echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
   exit 1
 }
