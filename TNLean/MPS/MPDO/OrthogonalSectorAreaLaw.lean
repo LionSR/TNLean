@@ -272,20 +272,19 @@ theorem isSAL_of_orthogonalCommutingSectorFamily
 
 /-- A positive proportional sum of proportionally realized orthogonal
 fixed-bond sectors satisfies the saturated area law when every sector is an
-injective normal MPDO tensor with source zero correlation length.
+injective MPDO tensor with source zero correlation length.
 
 Source: CPSV16, equation `ApprhoNComm`, lines 1641--1665, and Appendix C.2,
 Proposition `prop4to2`, lines 1801--1808.
 
 **Scope restriction (sectorwise hypotheses):** The printed proposition omits
 the sectorwise source-ZCL hypothesis used by its proof. This theorem assumes
-separately that every sector generates MPDOs, is one-site injective and normal,
-and has source ZCL. Normality alone does not imply one-site injectivity. In the
-canonical Case II application, however, the standing biCF one-letter span
-supplies injectivity directly, while ambient source ZCL descends to the
-absorbed sectors; sector MPDO positivity and absorbed-sector normalized
-normality remain explicit inputs. The global outer sum and every sector product
-may carry the positive length-dependent scalars present in the source. See
+separately that every sector generates MPDOs, is one-site injective, and has
+source ZCL. In the canonical Case II application, the standing biCF one-letter
+span and nonzero absorbed weight supply injectivity directly, while ambient
+source ZCL descends to the absorbed sectors. Sector MPDO positivity remains an
+explicit input. The global outer sum and every sector product may carry the
+positive length-dependent scalars present in the source. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem
     isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
@@ -298,7 +297,6 @@ theorem
         (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hMPDO : ∀ s, IsMPDO (K s))
     (hK : ∀ s, (K s).IsInjective)
-    (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
@@ -307,26 +305,26 @@ theorem
   let data : EtaLocalStructureData (K s) := by
     exact ⟨F.bondData s, F.realizes_mpo s⟩
   exact EtaLocalStructureData.isSAL_of_isSourceZCL
-    (hMPDO s) (hK s) (hNormal s) data (hZCL s)
+    (hMPDO s) (hK s) data (hZCL s)
 
 /-- An exact positive-multiplicity sum of orthogonally supported fixed-bond
 sectors satisfies the saturated area law when every sector is an injective
-normal MPDO tensor with source zero correlation length.
+MPDO tensor with source zero correlation length.
 
 Source: CPSV16, Appendix C.2, Proposition `prop4to2`, lines 1801--1808.
 
 **Scope restriction (sectorwise hypotheses and exact realization):** The
 printed proposition assumes the proportional `ApprhoNComm` sector form, but
 omits the sectorwise source-ZCL hypothesis used by its proof. This theorem
-assumes separately that every sector generates MPDOs, is one-site injective
-and normal, and has source ZCL. In the canonical Case II application, the
-standing biCF one-letter span supplies injectivity directly, while ambient
-source ZCL descends to the absorbed sectors; sector MPDO positivity and
-absorbed-sector normalized normality remain explicit inputs. The supplied
-orthogonal commuting sector family realizes every sector with scalar one,
-which is stronger than the proportional source form, and the full tensor is
-assumed to be its exact positive-multiplicity sum. Thus this theorem does not
-formalize the printed proposition verbatim. See
+assumes separately that every sector generates MPDOs, is one-site injective,
+and has source ZCL. In the canonical Case II application, the standing biCF
+one-letter span and nonzero absorbed weight supply injectivity directly, while
+ambient source ZCL descends to the absorbed sectors. Sector MPDO positivity
+remains an explicit input. The supplied orthogonal commuting sector family
+realizes every sector with scalar one, which is stronger than the proportional
+source form, and the full tensor is assumed to be its exact
+positive-multiplicity sum. Thus this theorem does not formalize the printed
+proposition verbatim. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
@@ -337,7 +335,6 @@ theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
       mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hMPDO : ∀ s, IsMPDO (K s))
     (hK : ∀ s, (K s).IsInjective)
-    (hNormal : ∀ s, MPSTensor.IsNormalTensor (K s).toMPSTensor)
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply
@@ -347,11 +344,10 @@ theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
     exact ⟨1, zero_lt_one, by simpa using hM N hN⟩
   · exact hMPDO
   · exact hK
-  · exact hNormal
   · exact hZCL
 
 /-- The BNT all-positive-length decomposition satisfies the saturated area law
-when its absorbed normal representatives do and an independently constructed
+when its absorbed representatives do and an independently constructed
 orthogonal commuting sector family realizes those representatives.
 
 The exact sum is the established BNT identity, and positivity of its
@@ -391,16 +387,20 @@ law when its canonical sectors have proportional orthogonal commuting-bond
 realizations and the ambient tensor has source zero correlation length.
 
 The one-letter simultaneous BNT span gives injectivity of every absorbed
-sector.  The canonical block coordinates restrict the ambient source-ZCL
-equation to each sector.  The positive-length BNT identity supplies the outer
-sum with scalar one and multiplicities `S.copies`.
+sector. The canonical block coordinates restrict the ambient source-ZCL
+equation to each sector. The positive commuting bonds give sector positivity
+for every chain of length at least two; only one-site sector positivity remains
+explicit. The positive-length BNT identity supplies the outer sum with scalar
+one and multiplicities `S.copies`.
 
 Source: CPSV16, Case II, lines 1626--1665, and Appendix C.2, Proposition
 `prop4to2`, lines 1801--1808.
 
-**Scope restriction (ambient source ZCL):** The printed proposition omits the
-source-ZCL hypothesis needed to derive sectorwise source ZCL.  This corrected
-statement assumes `IsSourceZCL M`; see
+**Scope restriction (ambient source ZCL and one-site positivity):** The printed
+proposition omits the ambient source-ZCL hypothesis needed to derive sectorwise
+source ZCL. The commuting-bond form starts at length two, so this corrected
+statement also retains positivity of each one-site absorbed sector. It assumes
+no spectral normality of those sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem
     isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL
@@ -427,11 +427,13 @@ theorem
     [Nonempty (Fin S.basisCount)]
     (F : ProportionalOrthogonalCommutingSectorFamily
       (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
-    (hMPDO : ∀ s, IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s))
-    (hNormal : ∀ s, MPSTensor.IsNormalTensor
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s).toMPSTensor)
+    (hOne : ∀ s,
+      (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) 1).PosSemidef)
     (hZCL : IsSourceZCL M) :
     IsSAL M := by
+  have hMPDO : ∀ s,
+      IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+    F.isMPDO_of_mpo_one_pos hOne
   apply
     isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
       M (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)
@@ -444,7 +446,6 @@ theorem
   · exact hMPDO
   · exact fun s ↦
       commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
-  · exact hNormal
   · exact fun s ↦
       commonWeightAbsorbedBasisMPOTensor_isSourceZCL
         M S hTotal X hEq hZCL hWeight s (hnonNil s)
