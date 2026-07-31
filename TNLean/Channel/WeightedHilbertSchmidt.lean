@@ -284,4 +284,22 @@ theorem weightedHilbertSchmidtMap_isHilbertSchmidtContraction
   have hNorm := weightedHilbertSchmidtMap_norm_le hΦ hσ hτ hmap X
   nlinarith [norm_nonneg (weightedHilbertSchmidtMap Φ σ τ X), norm_nonneg X]
 
+-- Compile-time regression check for the identity channel in a nonzero dimension.
+private theorem weightedHilbertSchmidtMap_identity_fin_two
+    (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    ‖weightedHilbertSchmidtMap
+      (LinearMap.id : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ)
+      1 1 X‖ ≤ ‖X‖ := by
+  exact weightedHilbertSchmidtMap_norm_le isKrausCPTP_id
+    Matrix.PosDef.one Matrix.PosDef.one rfl X
+
+-- Compile-time regression check for the zero-dimensional matrix algebra.
+private theorem weightedHilbertSchmidtMap_identity_fin_zero
+    (X : Matrix (Fin 0) (Fin 0) ℂ) :
+    ‖weightedHilbertSchmidtMap
+      (LinearMap.id : Matrix (Fin 0) (Fin 0) ℂ →ₗ[ℂ] Matrix (Fin 0) (Fin 0) ℂ)
+      1 1 X‖ ≤ ‖X‖ := by
+  exact weightedHilbertSchmidtMap_norm_le isKrausCPTP_id
+    Matrix.PosDef.one Matrix.PosDef.one rfl X
+
 end Matrix
