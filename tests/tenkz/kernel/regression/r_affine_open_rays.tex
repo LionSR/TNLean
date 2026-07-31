@@ -75,6 +75,24 @@
     \__tenkz_geom_frame_declare_plane:n {kpic}
     \__tenkz_test_affine_open_ray:nnn {ne}{2}{2}
     \__tenkz_test_affine_open_ray:nnn {sw}{2}{4}
+    \__tenkz_kernel_r_frame_xy:nnNN {2}{6}
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+    \__tenkz_kernel_r_open_tip_affine_xy:nNN {e}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \__tenkz_geom_unapply:nnnNN {kpic}
+      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+      \l__tenkz_test_ray_end_row_tl \l__tenkz_test_ray_end_col_tl
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_test_ray_end_col_tl
+          - \l__tenkz_kernel_r_cols_int
+          - \__tenkz_metric_ratio:n {stub} )
+      }
+      < {0.000001}
+      { \errmessage{an~outward~outside~ray~lost~its~named~margin~fallback} }
+    \fp_compare:nNnF { abs(\l__tenkz_test_ray_end_row_tl - 2) } < {0.000001}
+      { \errmessage{an~outward~outside~ray~changed~its~transverse~coordinate} }
   }
 \ExplSyntaxOff
 \makeatother

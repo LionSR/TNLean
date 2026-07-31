@@ -5,6 +5,12 @@
 \begin{document}
 \ExplSyntaxOn
 \tl_new:N \l_probe_xa_tl \tl_new:N \l_probe_ya_tl \tl_new:N \l_probe_ta_tl
+\cs_new_protected:Npn \__tenkz_test_bearing:nnnnn #1#2#3#4#5
+  {
+    \__tenkz_geom_local_bearing:nnnnN {#1}{1}{1}{#2} \l_probe_ta_tl
+    \fp_compare:nNnF { abs(\l_probe_ta_tl - (#3)) } < {0.000001}
+      { \tex_errmessage:D { local~bearing~#4~on~#5~did~not~reach~the~page } }
+  }
 % a pure rotation moves the east unit vector onto the 30-degree ray
 \__tenkz_geom_frame_declare_rotation:nnnn {rotA} {30} {0} {0}
 \__tenkz_geom_apply:nnnNN {rotA} {1} {0} \l_probe_xa_tl \l_probe_ya_tl
@@ -23,15 +29,30 @@
 \__tenkz_geom_port_angle:nnN {rotA} {n} \l_probe_ta_tl
 \__tenkz_geom_probe:nn {rot-port-n}
   { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
-% kernel-local plane directions use east=column and north=negative row
+% The carrier-bearing service is an identity on the kernel flat frame.
+\__tenkz_geom_frame_declare_affine:nnnnnnn {flatK} {0}{1}{-1}{0}{0}{0}
+\__tenkz_test_bearing:nnnnn {flatK}{0}{0}{east}{flat}
+\__tenkz_test_bearing:nnnnn {flatK}{45}{45}{diagonal}{flat}
+\__tenkz_test_bearing:nnnnn {flatK}{90}{90}{north}{flat}
+% Kernel-local plane directions use east=column and north=negative row.  The
+% independent expected bearings retain both vectors of the sheared basis.
 \__tenkz_geom_frame_declare_plane:n {planeC}
-\__tenkz_geom_local_dir:nnN {planeC} {0} \l_probe_ta_tl
+\__tenkz_test_bearing:nnnnn {planeC}{0}{0}{east}{plane}
+\__tenkz_test_bearing:nnnnn
+  {planeC}{45}
+  { atand(\__tenkz_metric_ratio:n {planerise},1+\__tenkz_metric_ratio:n {planeslant}) }
+  {diagonal}{plane}
+\__tenkz_test_bearing:nnnnn
+  {planeC}{90}
+  { atand(\__tenkz_metric_ratio:n {planerise},\__tenkz_metric_ratio:n {planeslant}) }
+  {north}{plane}
+\__tenkz_geom_local_bearing:nnnnN {planeC}{1}{1}{0} \l_probe_ta_tl
 \__tenkz_geom_probe:nn {plane-local-east}
   { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
-\__tenkz_geom_local_dir:nnN {planeC} {45} \l_probe_ta_tl
+\__tenkz_geom_local_bearing:nnnnN {planeC}{1}{1}{45} \l_probe_ta_tl
 \__tenkz_geom_probe:nn {plane-local-ne}
   { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
-\__tenkz_geom_local_dir:nnN {planeC} {90} \l_probe_ta_tl
+\__tenkz_geom_local_bearing:nnnnN {planeC}{1}{1}{90} \l_probe_ta_tl
 \__tenkz_geom_probe:nn {plane-local-north}
   { angle = \__tenkz_geom_round:n { \l_probe_ta_tl } }
 % four stations on a unit circle starting north: east-going tangents

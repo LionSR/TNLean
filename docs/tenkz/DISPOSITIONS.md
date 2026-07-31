@@ -74,7 +74,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_foundations.tex` | — | L63, 67 `tenkz` → `C-policy+C-record` | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 292, 293, 294, 295, 296 `tntree` → `C-tree` | L291 `tenkzcd` → `C-tree+R-cd+R-record`<br>L410 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L400, 641, 647, 654, 661, 669, 674 `tnpic` → `C-picture+C-record+R-record`<br>L407 `tnpic` → `C-picture+C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L402, 643, 649, 656, 663, 671, 676 `tnpic` → `C-picture+C-record+R-record`<br>L409 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L420, 422 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L283 `tenkzfree` → `R-free+R-record` |
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L734 `tenkzcd` → `C-picture+C-policy+C-record+R-cd+R-record`<br>L736, 739, 742, 745 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | — | L279, 284 `tenkz` → `C-policy+C-record+R-record` |

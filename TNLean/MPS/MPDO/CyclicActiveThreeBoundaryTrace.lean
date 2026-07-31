@@ -48,7 +48,7 @@ the corresponding cyclic-active trace-matrix entry.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1441--1455.
 
-**Local fix (cyclic-active restriction):** This equality is recorded on the
+**Scope restriction (cyclic-active restriction):** This equality is recorded on the
 positive-length cyclic support used in the three-boundary coefficient.  It
 does not identify the restricted trace matrix with the unreduced Beigi
 matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -75,7 +75,7 @@ complexification of its real part.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The sum is restricted to sectors
+**Scope restriction (cyclic-active restriction):** The sum is restricted to sectors
 on positive-length directed cycles and yields the square of the restricted
 trace matrix.  It does not replace this square by the one-step trace matrix
 printed at source line 1613.  See
@@ -105,7 +105,7 @@ trace matrix:
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This is the normalized two-step
+**Scope restriction (cyclic-active restriction):** This is the normalized two-step
 coefficient on the positive-length cyclic support.  It does not identify the
 one-step matrix with its square or with the unreduced Beigi matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -130,7 +130,7 @@ coefficient $(T_C^2)_{q,h}$.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This is the three-boundary
+**Scope restriction (cyclic-active restriction):** This is the three-boundary
 coordinate identity for the positive-length cyclic support.  It proves only
 the appearance of the two-step coefficient; the identification with the
 source-ZCL reduced state and the Markov decomposition remain separate.  See
@@ -154,7 +154,7 @@ $T_C^2$.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The coefficient is the square of
+**Scope restriction (cyclic-active restriction):** The coefficient is the square of
 the restricted trace matrix.  It is not replaced by the one-step matrix
 printed at source line 1613.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -175,7 +175,7 @@ retain one partial trace each.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The coefficient is the square of
+**Scope restriction (cyclic-active restriction):** The coefficient is the square of
 the restricted normalized trace matrix, not the one-step coefficient printed
 at source line 1613.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -195,7 +195,7 @@ corresponding square from the unnormalized fourth-region boundary.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This identity relates $T_C^2$ to
+**Scope restriction (cyclic-active restriction):** This identity relates $T_C^2$ to
 $(\lambda^{-1}T_C)^2$ and does not identify either square with $T_C$.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveUnnormalizedTwoStepBoundaryContraction_eq_smul
@@ -241,7 +241,7 @@ normalized two-step cyclic-active coefficient.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The factors belong to
+**Scope restriction (cyclic-active restriction):** The factors belong to
 $(\lambda^{-1}T_C)^2$ and do not factor the one-step matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveSeparatedBoundary
@@ -261,7 +261,7 @@ the two surviving fourth-region boundaries.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This theorem uses a factorization
+**Scope restriction (cyclic-active restriction):** This theorem uses a factorization
 of $(\lambda^{-1}T_C)^2$.  It neither identifies $T_C$ with its square nor
 uses the unreduced sector matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/

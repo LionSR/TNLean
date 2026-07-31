@@ -96,6 +96,15 @@ unit-modulus copy weights is insufficient: distinct phases can also destroy
 idempotence.  Any replacement must therefore state explicitly how repeated
 copies and their phases are treated.
 
+The first formulation is now proved.  For the direct sum containing one
+unit-weight copy of each distinct BNT component, positive-gap physical CID
+together with BNT local orthogonality is equivalent to transfer idempotence.
+The reverse implication uses arbitrary sector-supported rank-one observables
+and nondegeneracy of the trace pairing, thereby avoiding the false
+nonzero-subleading-eigenvalue inference at source line~1250.  This result does
+not apply to the raw weighted tensor above and therefore does not change the
+counterexample verdict.
+
 Issue~\ghissue{2597} should not retain the unrestricted biconditional as a
 proof target.  Its replacement should distinguish the false raw-tensor
 statement from any theorem about a selected representative of the generated

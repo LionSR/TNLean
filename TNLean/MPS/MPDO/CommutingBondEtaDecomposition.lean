@@ -22,7 +22,7 @@ finite chain.
 
 ## References
 
-* S. Beigi, arXiv:1105.1019v2, Lemma 2.1.
+* S. Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1.
 * arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
 -/
 
@@ -76,7 +76,7 @@ No zero-correlation-length or area-law hypothesis is used.  In particular, this 
 does not assert the rank-one trace factorization invoked later in Proposition 4to2.
 
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
-lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III,
+lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III,
 equation (2). -/
 theorem exists_positive_etaPair_decomposition_of_overlappingLifts_commute
     (B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (hB : B.PosSemidef)
@@ -289,7 +289,7 @@ variable {d : ℕ}
 eta-pair decomposition.
 
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
-lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_positive_eta_pairBond_decomposition
     (data : TranslationInvariantBondData d) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
@@ -324,7 +324,7 @@ variable {d D : ℕ} {M : MPOTensor d D}
 sector decomposition with positive neighboring operators.
 
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2 and Proposition 4to2,
-lines 1581--1605; Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+lines 1581--1605; Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_positive_eta_pairBond_decomposition
     (data : EtaLocalStructureData M) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)

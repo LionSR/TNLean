@@ -1,0 +1,207 @@
+% Regression: label marks read the complete affine basis of every confirmed
+% carrier spelling.  Bare cells and members, named member atoms, and named
+% cluster children and ports all project local north through the plane basis.
+% A relative point remains page-space, a flat carrier remains unchanged, and
+% neither picture changes its empty boundary signature.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_carrier_label_count_int
+\int_new:N \l__tenkz_test_carrier_boundary_count_int
+\bool_new:N \l__tenkz_test_carrier_label_bool
+\tl_new:N \l__tenkz_test_carrier_label_tl
+\tl_new:N \l__tenkz_test_carrier_anchor_tl
+\tl_new:N \l__tenkz_test_carrier_style_tl
+\tl_new:N \l__tenkz_test_carrier_event_tl
+\fp_new:N \l__tenkz_test_carrier_centre_x_fp
+\fp_new:N \l__tenkz_test_carrier_centre_y_fp
+\fp_new:N \l__tenkz_test_carrier_bearing_fp
+\fp_new:N \l__tenkz_test_carrier_expected_x_fp
+\fp_new:N \l__tenkz_test_carrier_expected_y_fp
+\fp_new:N \l__tenkz_test_carrier_actual_x_fp
+\fp_new:N \l__tenkz_test_carrier_actual_y_fp
+\fp_new:N \l__tenkz_test_carrier_norm_fp
+
+\cs_new_eq:NN
+  \__tenkz_test_carrier_event:n
+  \__tenkz_kernel_event:n
+\cs_set_protected:Npn \__tenkz_kernel_event:n #1
+  {
+    \tl_set:Ne \l__tenkz_test_carrier_event_tl {#1}
+    \exp_args:NnV \regex_match:nnT
+      { \A \s* kernel-boundary } \l__tenkz_test_carrier_event_tl
+      {
+        \int_gincr:N \l__tenkz_test_carrier_boundary_count_int
+        \exp_args:NnV \regex_match:nnF
+          {
+            \A \s* kernel-boundary \s* \| \s* signature \s* = \s* \Z
+          }
+          \l__tenkz_test_carrier_event_tl
+          { \errmessage{label~carrier~fixture~changed~the~boundary~signature} }
+      }
+    \__tenkz_test_carrier_event:n {#1}
+  }
+
+\cs_new_eq:NN
+  \__tenkz_test_carrier_label_ink:n
+  \__tenkz_kernel_r_mark_label_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
+  {
+    \int_gincr:N \l__tenkz_test_carrier_label_count_int
+    \__tenkz_model_get:nnN {#1} {label}
+      \l__tenkz_test_carrier_label_tl
+    \fp_set_eq:NN
+      \l__tenkz_test_carrier_centre_x_fp \l__tenkz_kernel_r_x_fp
+    \fp_set_eq:NN
+      \l__tenkz_test_carrier_centre_y_fp \l__tenkz_kernel_r_y_fp
+    \str_case:VnF \l__tenkz_test_carrier_label_tl
+      {
+        {C}{ \__tenkz_test_carrier_expect_plane: }
+        {B}{ \__tenkz_test_carrier_expect_plane: }
+        {M}{ \__tenkz_test_carrier_expect_plane: }
+        {H}{ \__tenkz_test_carrier_expect_plane: }
+        {P}{ \__tenkz_test_carrier_expect_plane: }
+        {R}{ \__tenkz_test_carrier_expect_page: }
+        {F}{ \__tenkz_test_carrier_expect_page: }
+      }
+      { \errmessage{unexpected~label~in~carrier~fixture} }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            90 + \l__tenkz_kernel_r_tau_tl
+            - \l__tenkz_test_carrier_bearing_fp
+          )
+      }
+      < {0.000001}
+      { \errmessage{label~target~lost~its~effective~bearing} }
+    \bool_set_true:N \l__tenkz_test_carrier_label_bool
+    \__tenkz_test_carrier_label_ink:n {#1}
+    \bool_set_false:N \l__tenkz_test_carrier_label_bool
+  }
+
+\cs_new_protected:Npn \__tenkz_test_carrier_expect_plane:
+  {
+    \fp_set:Nn \l__tenkz_test_carrier_bearing_fp
+      {
+        atand
+          (
+            \__tenkz_metric_ratio:n {planerise},
+            \__tenkz_metric_ratio:n {planeslant}
+          )
+      }
+    \fp_set:Nn \l__tenkz_test_carrier_norm_fp
+      {
+        sqrt
+          (
+            \__tenkz_metric_ratio:n {planeslant} ^ 2
+            + \__tenkz_metric_ratio:n {planerise} ^ 2
+          )
+      }
+    \fp_set:Nn \l__tenkz_test_carrier_expected_x_fp
+      {
+        \l__tenkz_test_carrier_centre_x_fp
+        + \__tenkz_metric_ratio:n {dotlabelband}
+          * \__tenkz_metric_ratio:n {planeslant}
+          / \l__tenkz_test_carrier_norm_fp
+      }
+    \fp_set:Nn \l__tenkz_test_carrier_expected_y_fp
+      {
+        \l__tenkz_test_carrier_centre_y_fp
+        + \__tenkz_metric_ratio:n {dotlabelband}
+          * \__tenkz_metric_ratio:n {planerise}
+          / \l__tenkz_test_carrier_norm_fp
+      }
+    \tl_set:Nn \l__tenkz_test_carrier_anchor_tl {south~west}
+  }
+
+\cs_new_protected:Npn \__tenkz_test_carrier_expect_page:
+  {
+    \fp_set:Nn \l__tenkz_test_carrier_bearing_fp {90}
+    \fp_set_eq:NN
+      \l__tenkz_test_carrier_expected_x_fp
+      \l__tenkz_test_carrier_centre_x_fp
+    \fp_set:Nn \l__tenkz_test_carrier_expected_y_fp
+      {
+        \l__tenkz_test_carrier_centre_y_fp
+        + \__tenkz_metric_ratio:n {dotlabelband}
+      }
+    \tl_set:Nn \l__tenkz_test_carrier_anchor_tl {south}
+  }
+
+\cs_new_eq:NN
+  \__tenkz_test_carrier_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \bool_if:NT \l__tenkz_test_carrier_label_bool
+      {
+        \tl_set:Ne \l__tenkz_test_carrier_style_tl {#1}
+        \tl_if_in:NVF
+          \l__tenkz_test_carrier_style_tl
+          \l__tenkz_test_carrier_anchor_tl
+          { \errmessage{label~target~chose~the~wrong~anchor~sector} }
+        \path coordinate (tenkz-test-carrier-label) at #2;
+        \pgfpointanchor {tenkz-test-carrier-label} {center}
+        \fp_set:Nn \l__tenkz_test_carrier_actual_x_fp
+          {
+            \dim_to_fp:n { \use:c {pgf@x} }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+        \fp_set:Nn \l__tenkz_test_carrier_actual_y_fp
+          {
+            \dim_to_fp:n { \use:c {pgf@y} }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \l__tenkz_test_carrier_actual_x_fp
+                - \l__tenkz_test_carrier_expected_x_fp
+              )
+          }
+          < {0.00001}
+          { \errmessage{label~target~lost~its~projected~x~displacement} }
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \l__tenkz_test_carrier_actual_y_fp
+                - \l__tenkz_test_carrier_expected_y_fp
+              )
+          }
+          < {0.00001}
+          { \errmessage{label~target~lost~its~projected~y~displacement} }
+      }
+    \__tenkz_test_carrier_labelnode:nnn {#1}{#2}{#3}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    lattice={1x5}, bonds=none,
+    frame={plane,basis={
+      wire at (0,0), wire at (4,0), wire at (0,4)}}]
+  \tn[at=(1,3,2), skin=box, name=M]{M}
+  \tn[at=(1,4,2), skin=box, name=G, cluster=2x2]{}
+  \tnmark[form=label, label pos=n]{(1,1)}{C}
+  \tnmark[form=label, label pos=n]{(1,2,2)}{B}
+  \tnmark[form=label, label pos=n]{M}{M}
+  \tnmark[form=label, label pos=n]{G-1-1}{H}
+  \tnmark[form=label, label pos=n]{G-1-2.90}{P}
+  \tnmark[form=label, label pos=n]{1 n of (1,5)}{R}
+\end{tenkz}
+\begin{tenkz}[lattice={1x1}, bonds=none, frame=flat]
+  \tnmark[form=label, label pos=n]{(1,1)}{F}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_carrier_label_count_int } = {7}
+  { \errmessage{label~carrier~fixture~did~not~render~seven~labels} }
+\int_compare:nNnF { \l__tenkz_test_carrier_boundary_count_int } = {2}
+  { \errmessage{label~carrier~fixture~did~not~inspect~both~boundaries} }
+\ExplSyntaxOff
+\end{document}

@@ -1,4 +1,4 @@
-# Issue #826 scouting report — algebra ⇒ fusion converse
+# Issue #826 scouting report — algebra ⇒ transfer-retract converse
 
 Date: 2026-04-23; rebased on current `main` on 2026-04-25
 Branch: `feat/826-algebra-to-fusion-v2`
@@ -8,7 +8,7 @@ Target issue: #826
 
 Issue #826 asks for the converse direction of the MPDO §4.5 equivalence:
 
-given the algebra-structure formulation, derive the transfer-map fusion
+given the algebra-structure formulation, derive the transfer-retract
 formulation under the same trace-preserving and positive-definite fixed-point
 side hypotheses used by the forward implication.
 
@@ -78,6 +78,6 @@ of the blocked transfer maps.
 
 So the branch now gives an honest forward theorem and updated blueprint text,
 but it does **not** prove the requested converse
-`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_fusion`.
+`IsRFP_MPDO_via_algebra → IsRFP_MPDO_via_transferRetract`.
 The remaining gap is still the stronger coefficient/BNT layer from
 Appendix C.3–C.4.

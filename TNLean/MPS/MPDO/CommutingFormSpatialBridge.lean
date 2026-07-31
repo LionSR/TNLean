@@ -18,7 +18,7 @@ of a positive translation-invariant commuting family.
 
 ## References
 
-* S. Beigi, arXiv:1105.1019v2, Lemma 2.1.
+* S. Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1.
 * arXiv:1606.00608, Appendix C.2, lines 1597--1610.
 -/
 
@@ -35,7 +35,7 @@ Under the common three-site identification, the two abstract overlapping lifts a
 precisely the first two adjacent translates of the original bond.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1597--1610; Beigi,
-arXiv:1105.1019v2, Lemma 2.1. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_unitary_blockActions_of_pairBond
     (data : TranslationInvariantBondData d) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)
@@ -73,7 +73,7 @@ variable {d D : ℕ} {M : MPOTensor d D}
 decomposition of Beigi's lemma.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1597--1610; Beigi,
-arXiv:1105.1019v2, Lemma 2.1. -/
+J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 theorem exists_unitary_blockActions_of_pairBond
     (data : EtaLocalStructureData M) :
     ∃ (K : ℕ) (dl dr : Fin K → ℕ)

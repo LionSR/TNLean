@@ -316,7 +316,7 @@ noncomputable def sectorBond (F : PhysicalSectorFactorization K) :
 operator decomposition required by cyclic eta transport.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1581--1589; Beigi, arXiv:1105.1019v2, Section III. -/
+1581--1589; Beigi, J. Phys. A 45 (2012) 025306, Section III. -/
 theorem sectorCoordinateBond_etaPair_decomposition
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (Matrix.etaPairSpatialBlockEquiv F.etaSectorFinEquiv).symm

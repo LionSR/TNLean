@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -22,6 +23,72 @@ from tenkz_language import (  # noqa: E402
 )
 from tenkz_lint import ink_token_count, registry_alias_patterns  # noqa: E402
 import tenkz_shrink  # noqa: E402
+
+
+_TEX_DIMENSION_LITERAL = re.compile(
+    r"(?<![\w@.])"
+    r"(?P<value>\d+(?:\.\d*)?|\.\d+)"
+    r"[ \t]*(?P<unit>pt|pc|in|bp|cm|mm|dd|cc|sp|em|ex)\b",
+    re.IGNORECASE,
+)
+
+
+def nonzero_dimension_literals(source: str) -> list[str]:
+    return [
+        match.group()
+        for match in _TEX_DIMENSION_LITERAL.finditer(source)
+        if float(match.group("value")) != 0
+    ]
+
+
+def test_core_style_lengths_are_metric_owned() -> None:
+    source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(encoding="utf-8")
+    style_table = source.split(
+        "% ---------- style table", maxsplit=1
+    )[1].split(
+        "% ---------- event stream", maxsplit=1
+    )[0]
+    uncommented = "\n".join(
+        line.split("%", maxsplit=1)[0] for line in style_table.splitlines()
+    )
+    nonzero_literals = nonzero_dimension_literals(uncommented)
+    assert not nonzero_literals, (
+        "nonzero core style dimensions belong in tenkz-metric.code.tex: "
+        f"{nonzero_literals}"
+    )
+
+
+def test_core_style_length_ratchet_covers_tex_units() -> None:
+    source = (
+        "1pt 2pc 3in 4bp 5cm 6mm 7dd 8cc 9sp "
+        "10em .5ex 11 CM 12\tBP 0pt 0.0em word1mm 1ptx"
+    )
+    assert nonzero_dimension_literals(source) == [
+        "1pt",
+        "2pc",
+        "3in",
+        "4bp",
+        "5cm",
+        "6mm",
+        "7dd",
+        "8cc",
+        "9sp",
+        "10em",
+        ".5ex",
+        "11 CM",
+        "12\tBP",
+    ]
+
+
+def test_direction_marks_share_one_named_station() -> None:
+    source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(encoding="utf-8")
+    direction_styles = source.split(
+        "% directionality marks", maxsplit=1
+    )[1].split(
+        "% annotation ink", maxsplit=1
+    )[0]
+    assert direction_styles.count(r"position \tenkz@r@dirmarkstation") == 4
+    assert "position 0.55" not in direction_styles
 
 
 def test_saved_path_capture_is_not_rendering_debt() -> None:

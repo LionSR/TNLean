@@ -791,7 +791,13 @@ factorization directly.
 
 The primitivity hypothesis is kept in the statement because it is part of the
 paper's construction of `T`, but the PSD rank-one criterion is stronger and does
-not use primitivity once `trace T = 1` and constant trace powers are known. -/
+not use primitivity once `trace T = 1` and constant trace powers are known.
+
+**Scope restriction (positive-semidefinite trace matrix):** Positive
+semidefiniteness is absent from arXiv:1606.00608, Appendix C.2, Lemma
+`SALZCL` (Lemma C.5), lines 1484--1499. The primitivity hypothesis is retained
+for comparison with the source but is unused by this corrected argument.
+Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem sal_zcl_implies_rank_one_T_of_posSemidef
     (T : Matrix (Fin n) (Fin n) ℝ)
     (_hPrimitive : Matrix.IsPrimitive T)

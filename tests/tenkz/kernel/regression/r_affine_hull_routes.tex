@@ -8,6 +8,8 @@
 \fp_new:N \l__tenkz_test_route_x_fp
 \fp_new:N \l__tenkz_test_route_y_fp
 \tl_new:N \l__tenkz_test_route_name_tl
+\tl_new:N \l__tenkz_test_enclosure_bearing_tl
+\int_new:N \l__tenkz_test_enclosure_label_int
 \seq_new:N \l__tenkz_test_support_seq
 \cs_new_eq:NN
   \__tenkz_test_route_measure:n
@@ -93,6 +95,16 @@
       { \errmessage{a~diagonal~ray~snapped~to~a~rectangle~corner} }
     \fp_compare:nNnF { abs(\l_tmpb_tl - 3) } < {0.000001}
       { \errmessage{a~diagonal~ray~missed~the~first~rectangle~margin} }
+    \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+      {5}{1}{180}{0}{4}{0}{3} \l_tmpa_tl \l_tmpb_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 4) } < {0.000001}
+      { \errmessage{an~outside~ray~missed~its~first~rectangle~entry} }
+    \fp_compare:nNnF { abs(\l_tmpb_tl - 1) } < {0.000001}
+      { \errmessage{an~outside~ray~changed~its~transverse~coordinate} }
+    \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+      {5}{1}{0}{0}{4}{0}{3} \l_tmpa_tl \l_tmpb_tl
+    \tl_if_empty:NF \l_tmpa_tl
+      { \errmessage{an~outward~outside~ray~invented~a~backward~intersection} }
     \seq_clear:N \l__tenkz_test_support_seq
     \seq_put_right:Nn \l__tenkz_test_support_seq
       { {circle}{0}{0}{0}{0}{0}{0} }
@@ -126,6 +138,35 @@
       }
       < {0.000001}
       { \errmessage{a~parallel~leg~was~extended~toward~an~unreachable~lane} }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_enclosure_label_ink:n
+  \__tenkz_kernel_r_mark_label_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_label_ink:n #1
+  {
+    \int_gincr:N \l__tenkz_test_enclosure_label_int
+    \__tenkz_model_get:nnN {#1} {label-pos}
+      \l__tenkz_test_enclosure_bearing_tl
+    \tl_set:Ne \l__tenkz_test_enclosure_bearing_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_test_enclosure_bearing_tl
+            + \l__tenkz_kernel_r_tau_tl
+          }
+      }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_test_enclosure_bearing_tl
+          - atand(
+              0.5 * \__tenkz_metric_ratio:n {planerise},
+              cosd(30) + 0.5 * \__tenkz_metric_ratio:n {planeslant} )
+        )
+      }
+      < {0.000001}
+      { \errmessage{the~enclosure~label~lost~its~projected~bearing} }
+    \__tenkz_test_enclosure_label_ink:n {#1}
   }
 \ExplSyntaxOff
 \makeatother
@@ -163,4 +204,8 @@
   \tnwire[name=affine-all, closed,
           route={all of (1,1) .. (2,2)}]
 \end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_enclosure_label_int } = {1}
+  { \errmessage{the~enclosure~fixture~did~not~render~its~label} }
+\ExplSyntaxOff
 \end{document}

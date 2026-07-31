@@ -36,9 +36,12 @@ namespace MPSTensor
 span every sufficiently long nearest-neighbor parent ground space, then the dimension of
 that ground space is eventually the number of distinct basis sectors.
 
-Source: arXiv:1606.00608, Definition 3.9 and Theorem 3.10, lines 517--540.
-This supplies the eventual ground-state degeneracy used in Beigi,
-arXiv:1105.1019, Section IV. -/
+Comparison: arXiv:1606.00608, Definition 3.9 and Theorem 3.10, lines 517--540.
+Those passages do not state this dimension count. It is a local consequence of
+the all-chain spanning equality and eventual linear independence, and supplies
+the eventual ground-state degeneracy used in Beigi, J. Phys. A 45 (2012)
+025306, Section IV. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
     {d : ℕ} {P : SectorDecomposition d}
     (hBNT : HasBNTSectorData P)

@@ -34,7 +34,7 @@ factorization merely from the displayed commuting product.
 ## References
 
 * arXiv:1606.00608, Appendix C.2, converse implication, lines 1597--1619.
-* Beigi, arXiv:1105.1019v2, Lemma 2.1.
+* Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1.
 -/
 
 open scoped BigOperators ComplexOrder Matrix
@@ -50,7 +50,7 @@ noncomputable def tensor : MPOTensor 2 1 :=
   fun i j => if i = j then Matrix.of fun _ _ => sectorWeight i else 0
 
 /-- The two-dimensional physical space as two one-dimensional sectors in the
-decomposition of Beigi, arXiv:1105.1019v2, Lemma 2.1. -/
+decomposition of Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
 noncomputable def sectorEquiv :
     Fin 2 ≃ Sigma fun _k : Fin 2 => Fin 1 × Fin 1 where
   toFun k := ⟨k, (0, 0)⟩
@@ -107,7 +107,7 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
 /-- The two physical basis vectors as one sector with a two-dimensional left
 factor and a one-dimensional right factor.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1; arXiv:1606.00608,
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1; arXiv:1606.00608,
 Appendix C.2, lines 1603--1605. -/
 noncomputable def oneSectorEquiv :
     Fin 2 ≃ Sigma fun _k : Fin 1 => Fin 2 × Fin 1 where
@@ -125,7 +125,7 @@ noncomputable def oneSectorEquiv :
 /-- A one-sector factorization of the product tensor, with the sector weight
 placed entirely in its two-dimensional left factor.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1; arXiv:1606.00608,
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1; arXiv:1606.00608,
 Appendix C.2, lines 1603--1605. -/
 noncomputable def oneSectorFactorization : PhysicalSectorFactorization tensor where
   sectorCount := 1

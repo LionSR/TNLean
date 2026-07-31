@@ -701,15 +701,163 @@
     Theorem~\ref{thm:positive_gap_bnt_zcl_conditional_converse}.
 \end{proof}
 
+\begin{lemma}[Sector-supported probes without spectral assumptions]
+    \label{lem:positive_gap_bnt_rank_one_probe_expectation}
+    \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow}
+    \leanok
+    \uses{def:sector_bnt_cf, def:physical_two_point_expectation}
+    Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form, let
+    $A=\bigoplus_j A_j$, and fix a sector $j$. For every
+    $u,v\in\MN{D_j}$, there are a positive integer $L$ and observables
+    $O_1,O_2$ on $L$ sites such that, for all $n_1,n_2\in\N$,
+    \begin{align}
+        \operatorname{Tr}_{\MN{D}}\!\left(
+            \E_{O_2}\E_A^{n_2}\E_{O_1}\E_A^{n_1}\right)
+        =\tr\!\left(u\E_{A_j}^{n_1}(v)\right).
+        \notag
+    \end{align}
+% **Local fix (arXiv:1606.00608, line 1250):** this lemma replaces the
+% unjustified nonzero-subleading-eigenvalue inference by arbitrary trace probes.
+% See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:stationaryState,
+        thm:bnt_rank_one_observables_sharp_length,
+        lem:zcl_direct_sum_sector_calculus}
+    Choose the trace-one stationary state $\rho_j$ of $\E_{A_j}$. Simultaneous
+    block injectivity supplies observables with inserted maps
+    \begin{align}
+        \E_{O_1}&=\ket{\rho_j}\!\bra{u},
+        &
+        \E_{O_2}&=\ket{v}\!\bra{\Id}.
+        \notag
+    \end{align}
+    Compression to sector $j$ intertwines powers of $\E_A$ with powers of
+    $\E_{A_j}$. Hence $\E_A^{n_2}$ fixes the middle state $\rho_j$, and the
+    composed inserted map is
+    \begin{align}
+        \ket{v}\!\bra{(\E_{A_j}^{n_1})^*(u)}.
+        \notag
+    \end{align}
+    The operator trace of this rank-one map is
+    $\tr((\E_{A_j}^{n_1})^*(u)v)
+      =\tr(u\E_{A_j}^{n_1}(v))$.
+\end{proof}
+
 \begin{theorem}[Unconditional reverse implication at the multiplicity-one representative]%
     \label{thm:positive_gap_bnt_zcl_unconditional_converse}
-    \notready
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}
+    \leanok
     \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence,
         def:sector_bnt_cf}
-    Let $P$ be an auxiliary BNT sector decomposition and
+    Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
     $A=\bigoplus_j A_j$. If $A$ has
     positive-gap BNT zero correlation length, then $\E_A^2=\E_A$.
+% **Local fix (arXiv:1606.00608, line 1250):** the proof uses arbitrary
+% trace probes rather than the source's unjustified spectral inference.
+% See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive_gap_bnt_rank_one_probe_expectation,
+        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    Fix $j$ and arbitrary $u,v\in\MN{D_j}$. Apply positive-gap CID to the
+    observables of
+    Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation}, comparing
+    complementary gaps $(1,2)$ and $(2,1)$. This gives
+    \begin{align}
+        \tr\!\left(u\E_{A_j}(v)\right)
+        =\tr\!\left(u\E_{A_j}^2(v)\right).
+        \notag
+    \end{align}
+    Since $u$ and $v$ are arbitrary and the trace pairing is nondegenerate,
+    $\E_{A_j}^2=\E_{A_j}$. Local orthogonality makes every mixed map
+    $\E_{A_j,A_k}$ with $j\ne k$ equal to zero. Therefore every diagonal and
+    off-diagonal mixed map is idempotent, and the direct-sum criterion gives
+    $\E_A^2=\E_A$.
+\end{proof}
+
+\begin{theorem}[Positive-gap BNT zero correlation length at the
+    multiplicity-one representative]
+    \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp}
+    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence,
+        def:sector_bnt_cf}
+    Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
+    $A=\bigoplus_j A_j$. Then
+    \begin{align}
+        A\text{ has positive-gap BNT zero correlation length}
+        \quad\Longleftrightarrow\quad
+        \E_A^2=\E_A.
+        \notag
+    \end{align}
+% **Local fix (arXiv:1606.00608, line 1250):** only the forward implication
+% uses the eigenvalue-free correction.
+% See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,
+        thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    The forward implication is
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
+    Conversely, transfer idempotence implies positive-gap physical
+    correlation independence, while the BNT hypotheses give local
+    orthogonality for the distinct sectors.
+\end{proof}
+
+\begin{theorem}[Physical BNT zero correlation length at the multiplicity-one
+    representative]
+    \label{thm:physical_bnt_zcl_multiplicity_one_implies_rfp}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL}
+    \leanok
+    \uses{def:source_bnt_zcl, def:mps_transfer_idempotence,
+        def:sector_bnt_cf}
+    Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
+    $A=\bigoplus_j A_j$. If $A$ has physical BNT zero correlation length,
+    then $\E_A^2=\E_A$.
+% **Local fix (arXiv:1606.00608, line 1250):** the proof passes through the
+% corrected positive-gap converse at the multiplicity-one representative.
+% See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,
+        lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
+    Physical correlation independence includes all positive-gap
+    configurations. Restrict to those configurations and apply
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
+\end{proof}
+
+\begin{theorem}[Positive-gap BNT zero correlation length gives commuting
+    parent ground spaces]
+    \label{thm:positive_gap_bnt_zcl_unconditional_nncph}
+    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum}
+    \leanok
+    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf,
+        def:has_nncph_ground_spaces}
+    Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
+    $A=\bigoplus_j A_j$. If $A$ has positive-gap BNT zero correlation length,
+    then for every $N>2$ its translated two-site parent interactions satisfy
+    \begin{align}
+        h_i h_j&=h_j h_i,
+        \notag\\
+        h_iV^{(N)}(A)&=0,
+        \notag\\
+        \ker H_2^{(N)}(A)
+        &=\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}.
+        \notag
+    \end{align}
+% **Local fix (arXiv:1606.00608, line 1250):** this is the corrected
+% multiplicity-one implication, not the printed three-way equivalence.
+% See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,
+        thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} gives
+    $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
+    \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} gives the
+    stated interactions and ground spaces.
+\end{proof}
 
 \begin{remark}[Remaining obstructions in the printed converse]
     For the multiplicity-one unit-weight representative, the sector-supported
@@ -720,8 +868,11 @@
     insertions. Moreover, the preceding claim that $\E_j^2\ne\E_j$ yields a
     nonzero eigenvalue $\lambda$ with $|\lambda|<1$ is not valid for a
     non-idempotent operator with a nilpotent Jordan part at eigenvalue zero.
-    Hence these observable realizations do not prove the unconditional
-    converse in Theorem~3.8. Even at multiplicity one, a proof following the
-    source must still derive the nonzero subleading left and right eigenvectors
-    used in the correlation calculation at lines 1260--1268.
+    Hence the printed argument does not prove the unconditional converse in
+    Theorem~3.8. At multiplicity one,
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} repairs the
+    argument by arbitrary trace probes, without deriving the nonzero
+    subleading left and right eigenvectors used at lines 1260--1268. The
+    conditional theorems above remain the formal record of the printed
+    spectral argument.
 \end{remark}
