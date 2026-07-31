@@ -1,18 +1,18 @@
-% Regression: topology inference and crossing police traverse 100 index routes
-% by unordered pair, with one indexed touch fact per pair.
+% Regression: topology inference stores one class fact per index route rather
+% than expanding the class default over every unordered route pair.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
-\int_new:N \g__tenkz_test_index_pair_int
+\int_new:N \g__tenkz_test_index_pairing_int
 \cs_new_eq:NN
-  \__tenkz_test_index_join_pair:nn
-  \__tenkz_kernel_r_index_join_pair:nn
-\cs_set_protected:Npn \__tenkz_kernel_r_index_join_pair:nn #1#2
+  \__tenkz_test_index_join_oriented:nn
+  \__tenkz_kernel_r_index_join_oriented:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_index_join_oriented:nn #1#2
   {
-    \int_gincr:N \g__tenkz_test_index_pair_int
-    \__tenkz_test_index_join_pair:nn {#1} {#2}
+    \int_gincr:N \g__tenkz_test_index_pairing_int
+    \__tenkz_test_index_join_oriented:nn {#1} {#2}
   }
 \cs_new_eq:NN
   \__tenkz_test_index_resolve:
@@ -20,19 +20,21 @@
 \cs_set_protected:Npn \__tenkz_string_resolve:
   {
     \int_compare:nNnF
-      { \prop_count:N \l__tenkz_string_touch_prop } = {4950}
-      {\errmessage{touch~facts~were~not~indexed~once~per~unordered~pair}}
+      { \prop_count:N \l__tenkz_string_touch_all_prop } = {130}
+      {\errmessage{index~route~class~facts~were~not~stored~once~per~route}}
+    \prop_if_empty:NF \l__tenkz_string_touch_prop
+      {\errmessage{index~route~class~expanded~to~pair~touch~facts}}
     \__tenkz_test_index_resolve:
   }
 \cs_new_protected:Npn \__tenkz_test_many_index_wires:
   {
-    \int_step_inline:nn {100}
+    \int_step_inline:nn {130}
       { \tnwire[name=scale-##1]{w~outside}{e~outside} }
   }
 \AtEndDocument
   {
-    \int_compare:nNnF { \g__tenkz_test_index_pair_int } = {4950}
-      {\errmessage{index~routes~were~not~visited~once~per~unordered~pair}}
+    \int_compare:nNnF { \g__tenkz_test_index_pairing_int } = {0}
+      {\errmessage{ordinary~index~routes~entered~the~pairing~candidate~pass}}
   }
 \ExplSyntaxOff
 \makeatother
