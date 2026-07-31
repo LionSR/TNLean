@@ -203,11 +203,15 @@ The Choi-matrix estimate is also formalized.\footnote{Formal declarations:
 \leanid{Matrix.rectangularChoi_frobenius_parseval} and
 \leanid{Matrix.rectangularChoi_frobenius_sq_le_finrank_range} in
 \doclink{TNLean/Algebra/RectangularChoi}.}
-The full-support exponent-two weighted Hilbert--Schmidt contraction used after
-the support compression is formalized.\footnote{Formal declarations:
-\leanid{Matrix.weightedHilbertSchmidtMap_norm_le} and
-\leanid{Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction} in
-\doclink{TNLean/Channel/WeightedHilbertSchmidt}.}
+The exponent-two weighted Hilbert--Schmidt contraction is formalized both for
+positive-definite output weights and for arbitrary positive-semidefinite output
+weights, with the negative quarter power taken on the output support.\footnote{
+Formal declarations:
+\leanid{Matrix.weightedHilbertSchmidtMap_norm_le},
+\leanid{Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction},
+\leanid{Matrix.supportedWeightedHilbertSchmidtMap_norm_le}, and
+\leanid{Matrix.supportedWeightedHilbertSchmidtMap_isHilbertSchmidtContraction}
+in \doclink{TNLean/Channel/WeightedHilbertSchmidt}.}
 The full-support eigenbasis calculation is formalized: the whitening is
 identified exactly with the rectangular Choi matrix, including the input
 transpose convention, the modular congruences preserve the range dimension,
@@ -262,15 +266,20 @@ The reconstruction and entropy identities are formalized separately.
 \leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
 in \doclink{TNLean/Analysis/SupportCompressedEntropy}.}
 
+The one-sided output-support compression is also formalized: faithfulness of
+the input weight forces every channel output into the support of its image,
+the compressed channel is trace preserving, and the support-restricted
+negative quarter power agrees with the ordinary negative quarter power after
+compression.  The eigenbasis whitening statements still assume both marginal
+weights are positive definite and therefore do not supply the two-local
+compression from singular ambient marginals to both support algebras.
+
 This reduction does not complete
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  That issue still
 requires simultaneous compression by the two marginal support isometries and a
 proof that this local two-factor compression preserves operator-Schmidt rank.
-The singular-output weighted contraction is handled separately in
-\href{https://github.com/LionSR/TNLean/issues/5225}{\#5225}; it is not a
-consequence of the single-reference entropy identities above.  The faithful
-comparison itself still requires the weighted interpolation and order-one-limit
-analysis tracked in
+The faithful comparison itself still requires the weighted interpolation and
+order-one-limit analysis tracked in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Beigi proves
 order monotonicity \cite[Theorem~7]{Beigi2013Sandwiched}, while
 M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel prove the order-one

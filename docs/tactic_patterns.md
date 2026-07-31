@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### positive-semidefinite support congruence — promoted
+- **Pattern:** transport the support projection across an equality of positive
+  semidefinite matrices while identifying the two positivity proofs by proof
+  irrelevance.
+- **Seen:** three occurrences across `MatrixFamilySupport.lean` and
+  `WeightedHilbertSchmidt.lean` before promotion.
+- **Abstraction:** `Matrix.PosSemidef.supportProj_congr` in
+  `TNLean/Algebra/PosSemidefSupport.lean`.
+- **Notes:** the lemma isolates the dependent proof transport that ordinary
+  rewriting does not resolve directly.
+
 ### mpv_ext — promoted
 - **Pattern:** `intro N σ` / `intro N hN σ` prelude for `SameMPV₂` /
   `SameMPV₂Pos` goals.

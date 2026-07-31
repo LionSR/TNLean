@@ -285,6 +285,15 @@ variable {n : Type*} [Fintype n] [DecidableEq n] {A : Matrix n n ℂ}
 noncomputable def supportProj (hA : A.PosSemidef) : Matrix n n ℂ :=
   hA.isHermitian.supportProj
 
+/-- Equal positive-semidefinite matrices have equal support projections. -/
+theorem supportProj_congr {B : Matrix n n ℂ} (hA : A.PosSemidef)
+    (hB : B.PosSemidef) (hAB : A = B) :
+    hA.supportProj = hB.supportProj := by
+  subst B
+  have hProof : hA = hB := Subsingleton.elim _ _
+  subst hB
+  rfl
+
 /-- The support projection is Hermitian. -/
 theorem supportProj_isHermitian (hA : A.PosSemidef) : hA.supportProj.IsHermitian :=
   hA.isHermitian.supportProj_isHermitian

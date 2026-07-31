@@ -61,15 +61,6 @@ theorem familySupportProj_kronecker
     (A : ι → Matrix m n ℂ) (B : κ → Matrix p q ℂ) :
     familySupportProj (familyKronecker A B) =
       familySupportProj A ⊗ₖ familySupportProj B := by
-  have supportProj_congr :
-      ∀ {X Y : Matrix (m × p) (m × p) ℂ}
-        (hX : X.PosSemidef) (hY : Y.PosSemidef),
-        X = Y → hX.supportProj = hY.supportProj := by
-    intro X Y hX hY hXY
-    subst Y
-    have hProof : hX = hY := Subsingleton.elim _ _
-    subst hY
-    rfl
   let hA := familyColumnGram_posSemidef A
   let hB := familyColumnGram_posSemidef B
   let hProduct := familyColumnGram_posSemidef (familyKronecker A B)
@@ -77,7 +68,7 @@ theorem familySupportProj_kronecker
     familySupportProj (familyKronecker A B) =
         (hA.kronecker hB).supportProj := by
       rw [familySupportProj]
-      exact supportProj_congr hProduct (hA.kronecker hB)
+      exact hProduct.supportProj_congr (hA.kronecker hB)
         (familyColumnGram_kronecker A B)
     _ = hA.supportProj ⊗ₖ hB.supportProj :=
       hA.supportProj_kronecker hB

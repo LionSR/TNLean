@@ -261,6 +261,138 @@ partial traces.
     its operator norm, which proves the contraction estimate.
 \end{proof}
 
+\begin{theorem}[Functional calculus under support compression]
+    \label{thm:functional_calculus_support_compression}
+    \lean{Matrix.PosSemidef.supportProj_congr,
+        Matrix.PosSemidef.supportProj_cfc_sqrt,
+        Matrix.PosSemidef.supportInvSqrt_mul_supportProj,
+        Matrix.PosSemidef.supportProj_mul_supportInvSqrt,
+        Matrix.PosSemidef.sqrt_compression_on_support,
+        Matrix.PosSemidef.supportInvSqrt_compression_on_support,
+        Matrix.PosSemidef.supportInvFourthRoot_compression_on_support,
+        Matrix.frobenius_norm_isometry_mul_mul_conjTranspose}
+    \leanok
+    Let $\tau\geq0$, and let $P$ be its support projection.  Equal
+    positive-semidefinite matrices have equal support projections, and taking
+    the positive square root leaves $P$ unchanged.  If
+    $V:\mathbb C^K\to\mathbb C^J$ satisfies $VV^\dagger=P$, then
+    $\sqrt{V^\dagger\tau V}=V^\dagger\sqrt\tau V$.
+    Moreover, both $P\tau^{-1/2}_{\operatorname{supp}}
+    =\tau^{-1/2}_{\operatorname{supp}}$ and
+    $\tau^{-1/2}_{\operatorname{supp}}P
+    =\tau^{-1/2}_{\operatorname{supp}}$.  If, in addition,
+    $V^\dagger V=\Id$, then
+    \begin{align}
+        V^\dagger\tau^{-1/2}_{\operatorname{supp}}V
+        &=(\sqrt{V^\dagger\tau V})^{-1}, \notag \\
+        V^\dagger\tau^{-1/4}_{\operatorname{supp}}V
+        &=(\sqrt{\sqrt{V^\dagger\tau V}})^{-1}.
+        \notag
+    \end{align}
+    Independently, if $W:\mathbb C^L\to\mathbb C^J$ satisfies
+    $W^\dagger W=\Id$, then $\|WZW^\dagger\|_2=\|Z\|_2$ for every
+    $Z\in\mathbb C^{L\times L}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The square-root identity follows from uniqueness of the positive square
+    root.  The support inverse identities follow from the corresponding
+    cancellation relations on the positive spectral subspace.  The norm
+    identity follows by cyclicity of the trace and $W^\dagger W=\Id$.
+\end{proof}
+
+\begin{definition}[Output-support compression]
+    \label{def:output_support_compressed_map}
+    \lean{Matrix.outputSupportCompressedMap}
+    \leanok
+    For a matrix $V:\mathbb C^K\to\mathbb C^J$ and a complex-linear map
+    $\Phi:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$, define
+    $\Psi(X)=V^\dagger\Phi(X)V$.
+\end{definition}
+
+\begin{theorem}[Channel outputs from a faithful input lie in its image support]
+    \label{thm:channel_output_support_from_faithful_input}
+    \lean{Matrix.IsKrausCPTP.supportProj_mul_map,
+        Matrix.IsKrausCPTP.map_mul_supportProj,
+        Matrix.outputSupportCompressedMap_isKrausCPTP}
+    \leanok
+    \uses{def:is_kraus_cptp, def:output_support_compressed_map}
+    Let $\Phi$ be completely positive and trace preserving, let $\sigma>0$,
+    set $\tau=\Phi(\sigma)$, and let $P$ be the support projection of $\tau$.
+    Then every matrix $X$ satisfies
+    $P\Phi(X)=\Phi(X)=\Phi(X)P$.  If $VV^\dagger=P$, then
+    $\Psi(X)=V^\dagger\Phi(X)V$ is completely positive and trace preserving.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Choose Kraus operators $A_i$ for $\Phi$.  The joint column Gram matrix of
+    $A_i\sqrt\sigma$ is $\tau$, so its column support is $P$.  Since
+    $\sqrt\sigma$ is invertible, $PA_i=A_i$ for every $i$, which gives the
+    two support identities.  Cyclicity of the trace then shows that compression
+    by $V$ preserves the trace of every output.
+\end{proof}
+
+\begin{definition}[Support-weighted channel map]
+    \label{def:supported_weighted_hilbert_schmidt_map}
+    \lean{Matrix.PosSemidef.supportInvFourthRoot,
+        Matrix.supportedWeightedHilbertSchmidtMap}
+    \leanok
+    Let $\tau\geq 0$.  Its support-restricted negative quarter power
+    $\tau^{-1/4}_{\operatorname{supp}}$ acts by $x^{-1/4}$ on every positive
+    eigenspace and vanishes on the kernel.  For a complex-linear map $\Phi$,
+    define
+    \begin{align}
+        L_{\operatorname{supp}}(X)
+        &=\tau^{-1/4}_{\operatorname{supp}}
+          \Phi(\sigma^{1/4}X\sigma^{1/4})
+          \tau^{-1/4}_{\operatorname{supp}}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Support-weighted Hilbert--Schmidt contraction]
+    \label{thm:weighted_hilbert_schmidt_contraction_support}
+    \lean{Matrix.supportedWeightedHilbertSchmidtMap_norm_le,
+        Matrix.supportedWeightedHilbertSchmidtMap_isHilbertSchmidtContraction}
+    \leanok
+    \uses{def:is_kraus_cptp,
+        def:supported_weighted_hilbert_schmidt_map}
+    Let $\Phi:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$ be completely
+    positive and trace preserving, let $\sigma>0$, and set
+    $\tau=\Phi(\sigma)$.  Then, for every $X$,
+    \begin{align}
+        \left\|\tau^{-1/4}_{\operatorname{supp}}
+          \Phi(\sigma^{1/4}X\sigma^{1/4})
+          \tau^{-1/4}_{\operatorname{supp}}\right\|_2
+        &\leq \|X\|_2.
+        \notag
+    \end{align}
+    Equivalently, $L_{\operatorname{supp}}$ is a Hilbert--Schmidt
+    contraction.  This is the exponent-two specialization of
+    \cite[Theorem~6, Equation~(18)]{Beigi2013Sandwiched}, including singular
+    output weights.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:weighted_hilbert_schmidt_contraction_full_support,
+        thm:functional_calculus_support_compression,
+        thm:channel_output_support_from_faithful_input}
+    Let $P$ be the support projection of $\tau$, and choose an isometry
+    $V:\operatorname{supp}\tau\to\mathbb C^J$ with $VV^\dagger=P$.  Since
+    $\sigma$ is positive definite, every Kraus operator of $\Phi$ has range
+    in $\operatorname{supp}\tau$.  Hence
+    $\Psi(A)=V^\dagger\Phi(A)V$ is completely positive and trace preserving,
+    while $\tau_c=V^\dagger\tau V$ is positive definite and
+    $\Psi(\sigma)=\tau_c$.  The full-support estimate applies to $\Psi$.
+    Functional calculus on the support gives
+    $V^\dagger\tau^{-1/4}_{\operatorname{supp}}V=\tau_c^{-1/4}$, and
+    expansion by $V$ preserves the Hilbert--Schmidt norm.  Transporting the
+    compressed estimate along $V$ proves the result.
+\end{proof}
+
 %% =========================================================
 \section{Further Choi-matrix identities}
 \label{sec:choi_matrix_further_identities}
