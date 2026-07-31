@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Convex.Jensen
-import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Analysis.Matrix.PosDef
+import TNLean.Analysis.SpectralQuadraticForm
 
 /-!
 # Diagonal Jensen inequality for positive semidefinite matrices
@@ -48,8 +47,7 @@ This auxiliary lemma is a prerequisite for the trace convexity axioms
 * Bhatia, *Matrix Analysis*, Chapter V (matrix Jensen inequality).
 -/
 
-open scoped Matrix ComplexOrder
-open Finset Matrix
+open scoped Matrix ComplexOrder BigOperators
 
 noncomputable section
 
@@ -76,105 +74,18 @@ theorem diagonal_jensen_of_convexOn
     {v : n → ℂ} (hv : star v ⬝ᵥ v = (1 : ℂ)) :
     f ((star v ⬝ᵥ (A *ᵥ v)).re) ≤ (star v ⬝ᵥ (hA.1.cfc f *ᵥ v)).re := by
   classical
-  -- Spectral data for `A`.
-  set hH : A.IsHermitian := hA.1
-  set U : Matrix n n ℂ := (↑hH.eigenvectorUnitary : Matrix n n ℂ) with hU_def
-  set μ : n → ℝ := hH.eigenvalues with hμ_def
-  set w : n → ℂ := Uᴴ *ᵥ v
-  set p : n → ℝ := fun i => Complex.normSq (w i) with hp_def
-  -- Unitarity of `U`: `U * Uᴴ = 1`.
-  have hUUH : U * Uᴴ = 1 := by
-    rw [← Matrix.star_eq_conjTranspose]
-    exact Unitary.mul_star_self_of_mem hH.eigenvectorUnitary.prop
-  -- Key computational lemma: for any `g : n → ℂ`,
-  --   `star v ⬝ᵥ ((U * diagonal g * Uᴴ) *ᵥ v) = ∑ i, g i * (star (w i) * w i)`.
-  have hQ : ∀ g : n → ℂ,
-      star v ⬝ᵥ ((U * Matrix.diagonal g * Uᴴ) *ᵥ v)
-        = ∑ i, g i * (star (w i) * w i) := by
-    intro g
-    have hvU : star v ᵥ* U = star w := by
-      change star v ᵥ* U = star (Uᴴ *ᵥ v)
-      rw [Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-    have hmul :
-        (U * Matrix.diagonal g * Uᴴ) *ᵥ v
-          = U *ᵥ (Matrix.diagonal g *ᵥ (Uᴴ *ᵥ v)) := by
-      rw [mul_assoc, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-    rw [hmul, Matrix.dotProduct_mulVec, hvU]
-    -- `star w ⬝ᵥ (diagonal g *ᵥ w) = ∑ i, star (w i) * (g i * w i)`.
-    simp only [dotProduct, Matrix.mulVec_diagonal, Pi.star_apply]
-    refine Finset.sum_congr rfl (fun i _ => ?_)
-    ring
-  -- `star (w i) * w i = ↑(p i)` (Complex norm-square identity).
-  have h_normSq : ∀ i, star (w i) * w i = ((p i : ℝ) : ℂ) := by
-    intro i
-    have := Complex.normSq_eq_conj_mul_self (z := w i)
-    -- `(normSq (w i) : ℂ) = conj (w i) * w i = star (w i) * w i`.
-    simpa [hp_def, Complex.star_def] using this.symm
-  -- Spectral form of `A`.
-  have hA_spec : A = U * Matrix.diagonal (fun i => ((μ i : ℂ))) * Uᴴ := by
-    have h := hH.spectral_theorem
-    have hdiag : Matrix.diagonal (Complex.ofReal ∘ hH.eigenvalues) =
-        Matrix.diagonal (fun i => ((hH.eigenvalues i : ℝ) : ℂ)) := by
-      ext i j
-      by_cases hij : i = j
-      · subst hij
-        simp [Function.comp_apply]
-      · simp [Matrix.diagonal, hij]
-    simpa [Unitary.conjStarAlgAut_apply, Matrix.star_eq_conjTranspose,
-      Matrix.mul_assoc, hU_def, hμ_def, hdiag] using h
-  -- Spectral form of `hH.cfc f`.
-  have hfA_spec : hH.cfc f
-      = U * Matrix.diagonal (fun i => ((f (μ i) : ℂ))) * Uᴴ := by
-    unfold IsHermitian.cfc
-    rw [Unitary.conjStarAlgAut_apply, ← Matrix.star_eq_conjTranspose]
-    rfl
-  -- `⟨v, A v⟩` as a complex sum of `μ i * p i`.
-  have h_vAv : star v ⬝ᵥ (A *ᵥ v)
-      = ∑ i, ((μ i : ℂ) * ((p i : ℝ) : ℂ)) := by
-    rw [hA_spec, hQ]
-    refine Finset.sum_congr rfl (fun i _ => ?_)
-    rw [h_normSq i]
-  -- `⟨v, f(A) v⟩` as a complex sum of `f(μ i) * p i`.
-  have h_vfAv : star v ⬝ᵥ (hH.cfc f *ᵥ v)
-      = ∑ i, (((f (μ i) : ℝ) : ℂ) * ((p i : ℝ) : ℂ)) := by
-    rw [hfA_spec, hQ]
-    refine Finset.sum_congr rfl (fun i _ => ?_)
-    rw [h_normSq i]
-  -- Real parts.
-  have h_vAv_re : (star v ⬝ᵥ (A *ᵥ v)).re = ∑ i, p i * μ i := by
-    rw [h_vAv]; simp [mul_comm]
-  have h_vfAv_re : (star v ⬝ᵥ (hH.cfc f *ᵥ v)).re = ∑ i, p i * f (μ i) := by
-    rw [h_vfAv]; simp [mul_comm]
-  -- `∑ i, p i = 1` (unit vector + unitarity).
-  have hp_sum : ∑ i, p i = 1 := by
-    -- `∑ i, (p i : ℂ) = star w ⬝ᵥ w = star v ⬝ᵥ v = 1`.
-    have hstar_w : star w = star v ᵥ* U := by
-      change star (Uᴴ *ᵥ v) = star v ᵥ* U
-      rw [Matrix.star_mulVec, Matrix.conjTranspose_conjTranspose]
-    have hww : star w ⬝ᵥ w = (1 : ℂ) := by
-      rw [hstar_w]
-      calc (star v ᵥ* U) ⬝ᵥ w
-          = star v ⬝ᵥ (U *ᵥ w) := by rw [← Matrix.dotProduct_mulVec]
-        _ = star v ⬝ᵥ (U *ᵥ (Uᴴ *ᵥ v)) := rfl
-        _ = star v ⬝ᵥ ((U * Uᴴ) *ᵥ v) := by rw [Matrix.mulVec_mulVec]
-        _ = star v ⬝ᵥ ((1 : Matrix n n ℂ) *ᵥ v) := by rw [hUUH]
-        _ = star v ⬝ᵥ v := by rw [Matrix.one_mulVec]
-        _ = 1 := hv
-    have hsum_c : (∑ i, ((p i : ℝ) : ℂ)) = (1 : ℂ) := by
-      rw [← hww]
-      simp only [dotProduct, Pi.star_apply]
-      refine Finset.sum_congr rfl (fun i _ => (h_normSq i).symm)
-    exact_mod_cast hsum_c
-  -- Eigenvalues are nonneg: `μ i ∈ [0, ∞)`.
-  have hμ_nonneg : ∀ i, μ i ∈ Set.Ici (0 : ℝ) := fun i => hA.eigenvalues_nonneg i
-  -- Apply scalar Jensen.
-  have hp_nn : ∀ i ∈ (Finset.univ : Finset n), 0 ≤ p i :=
-    fun i _ => Complex.normSq_nonneg _
-  have hmem : ∀ i ∈ (Finset.univ : Finset n),
-      μ i ∈ Set.Ici (0 : ℝ) := fun i _ => hμ_nonneg i
-  have hjensen := hf.map_sum_le (t := Finset.univ) hp_nn hp_sum hmem
+  let hH : A.IsHermitian := hA.isHermitian
+  let p : n → ℝ := hH.spectralWeight v
+  let μ : n → ℝ := hH.eigenvalues
+  have hpSum : ∑ i, p i = 1 := by
+    simpa only [p] using hH.sum_spectralWeight hv
+  have hpNonneg : ∀ i ∈ (Finset.univ : Finset n), 0 ≤ p i :=
+    fun i _ => hH.spectralWeight_nonneg v i
+  have hμMem : ∀ i ∈ (Finset.univ : Finset n), μ i ∈ Set.Ici (0 : ℝ) :=
+    fun i _ => hA.eigenvalues_nonneg i
+  have hjensen := hf.map_sum_le (t := Finset.univ) hpNonneg hpSum hμMem
   simp only [smul_eq_mul] at hjensen
-  rw [h_vAv_re, h_vfAv_re]
+  rw [hH.re_dotProduct_mulVec_eq_sum, hH.re_dotProduct_cfc_mulVec_eq_sum]
   exact hjensen
 
 end Matrix
