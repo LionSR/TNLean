@@ -10,6 +10,18 @@
 \cs_new_eq:NN
   \__tenkz_test_skin_pairing_resolve:
   \__tenkz_string_resolve:
+% Pin the outer index SID and inner skin model-key roles in the nested maps.
+\cs_new_eq:NN
+  \__tenkz_test_skin_pairing_index_join_oriented:nn
+  \__tenkz_kernel_r_index_join_oriented:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_index_join_oriented:nn #1#2
+  {
+    \prop_if_in:NeF \l__tenkz_kernel_r_index_sid_prop {#1}
+      {\errmessage{skin~pairing~join~lost~index~route~#1}}
+    \prop_if_in:NeF \l__tenkz_kernel_r_sid_record_prop {#2}
+      {\errmessage{skin~pairing~join~lost~pairing~route~#2}}
+    \__tenkz_test_skin_pairing_index_join_oriented:nn {#1} {#2}
+  }
 \cs_set_protected:Npn \__tenkz_string_resolve:
   {
     \seq_if_empty:NF \l__tenkz_kernel_r_skin_routes_seq

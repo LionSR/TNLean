@@ -202,8 +202,8 @@
       { \int_set:Nn #4 { \l__tenkz_string_tmp_tl } }
   }
 
-% Traverse each unordered pair once in declaration order.  Both kernel
-% topology inference and crossing validation use this same scaling boundary.
+% Traverse each unordered pair once in declaration order.  Crossing
+% validation uses this shared scaling boundary.
 \cs_new_protected:Npn \__tenkz_string_map_unordered_pairs:N #1
   {
     \seq_set_eq:NN \l__tenkz_string_scan_seq \l__tenkz_string_ids_seq
