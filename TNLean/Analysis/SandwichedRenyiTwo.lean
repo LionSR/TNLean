@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.FrobeniusHilbert
+import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.SupportCompression
 import TNLean.Analysis.SupportLogJensen
@@ -42,6 +43,8 @@ reference support gives the singular-reference theorem in
 
 * `TNLean.sandwichedRenyiTwoTrace_nonneg` — positivity on
   positive-semidefinite arguments.
+* `TNLean.sandwichedRenyiTwoTrace_conj_unitary` — invariance under unitary
+  conjugation of both arguments.
 * `TNLean.posDef_rpow_neg_quarter_mul_self` — the faithful identity
   \(\omega^{-1/4}\omega^{-1/4}=\omega^{-1/2}\).
 * `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — a cyclically reordered trace
@@ -122,6 +125,48 @@ noncomputable def sandwichedRenyiTwoTrace
     (ρ ω : Matrix n n ℂ) : ℝ :=
   let q := ω ^ (-(1 / 4 : ℝ))
   (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
+
+/-- The order-two sandwiched trace functional is invariant under simultaneous
+unitary conjugation of its state and reference arguments. -/
+theorem sandwichedRenyiTwoTrace_conj_unitary
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ ω : Matrix n n ℂ} (hω : ω.PosSemidef)
+    (U : unitary (Matrix n n ℂ)) :
+    sandwichedRenyiTwoTrace
+        ((U : Matrix n n ℂ) * ρ * star (U : Matrix n n ℂ))
+        ((U : Matrix n n ℂ) * ω * star (U : Matrix n n ℂ)) =
+      sandwichedRenyiTwoTrace ρ ω := by
+  let q := ω ^ (-(1 / 4 : ℝ))
+  let Umat : Matrix n n ℂ := U
+  have hq :
+      (Umat * ω * star Umat) ^ (-(1 / 4 : ℝ)) =
+        Umat * q * star Umat := by
+    exact Matrix.rpow_conj_unitary hω (-(1 / 4 : ℝ)) U
+  have hU : star Umat * Umat = 1 := Unitary.coe_star_mul_self U
+  rw [sandwichedRenyiTwoTrace, sandwichedRenyiTwoTrace]
+  change (Matrix.trace
+      (((Umat * ω * star Umat) ^ (-(1 / 4 : ℝ)) *
+          (Umat * ρ * star Umat) *
+          (Umat * ω * star Umat) ^ (-(1 / 4 : ℝ))) *
+        ((Umat * ω * star Umat) ^ (-(1 / 4 : ℝ)) *
+          (Umat * ρ * star Umat) *
+          (Umat * ω * star Umat) ^ (-(1 / 4 : ℝ))))).re = _
+  rw [hq]
+  have hsandwich :
+      (Umat * q * star Umat) * (Umat * ρ * star Umat) *
+          (Umat * q * star Umat) =
+        Umat * (q * ρ * q) * star Umat := by
+    simp only [Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc (star Umat) Umat, hU, Matrix.one_mul,
+      ← Matrix.mul_assoc (star Umat) Umat, hU, Matrix.one_mul]
+  rw [hsandwich]
+  have hsquare :
+      (Umat * (q * ρ * q) * star Umat) *
+          (Umat * (q * ρ * q) * star Umat) =
+        Umat * ((q * ρ * q) * (q * ρ * q)) * star Umat := by
+    simp only [Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc (star Umat) Umat, hU, Matrix.one_mul]
+  rw [hsquare, Matrix.trace_mul_cycle, hU, Matrix.one_mul]
 
 /-- The order-two sandwiched trace functional is nonnegative on
 positive-semidefinite arguments.
