@@ -125,7 +125,8 @@ theorem quantumRelativeEntropy_support_compression
   let ωc := Vᴴ * ω * V
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj
+        hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
       hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
@@ -163,7 +164,8 @@ theorem sandwichedRenyiTwoTrace_support_compression
   let ωc := Vᴴ * ω * V
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj
+        hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
       hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
@@ -222,7 +224,8 @@ theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
         simpa only [Matrix.conjTranspose_conjTranspose] using hRange)
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj
+        hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
       hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
