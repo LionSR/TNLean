@@ -29,10 +29,13 @@ order-two sandwiched trace functional are unchanged by this compression.
 * `TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful` —
   a faithful-reference density-operator inequality implies the
   support-restricted density-operator inequality.
+* `TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace` — the
+  logarithmic comparison for a possibly singular reference under support
+  inclusion.
 
-The last theorem preserves both trace-one normalizations under support
-compression.  It is only a reduction and does not assert the missing
-faithful-reference inequality.
+The faithful comparison is proved directly in `TNLean.Analysis.SandwichedRenyiTwo`.
+The final theorem applies the compression result to extend it to singular
+references.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator

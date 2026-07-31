@@ -192,6 +192,26 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Support-correct tensor logarithm
+- **Pattern:** `MatrixSqrt.lean` and `Channel/Schwarz/SSAEqualityDPI.lean` each
+  diagonalized two positive-semidefinite factors to prove the same logarithm
+  formula on the product support.
+- **Reuse:** `Matrix.PosSemidef.cfc_log_kronecker` in
+  `TNLean/Analysis/CfcKronecker.lean` is the canonical low-layer theorem.
+- **Result:** the duplicate proof was removed from `MatrixSqrt.lean`,
+  `Matrix.log_kronecker_posSemidef` remains a compatibility wrapper, and the
+  faithful entropy comparison uses the Analysis declaration directly.
+
+### Transpose covariance of the continuous functional calculus
+- **Pattern:** `TNLean/Axioms/OperatorConvexity.lean` carried a private copy of
+  the conjugation star-algebra homomorphism and its functional-calculus
+  covariance proof solely to commute real powers with transpose.
+- **Reuse:** `Matrix.cfc_transpose` in `TNLean/Analysis/CfcConjugation.lean`
+  supplies the public covariance theorem.
+- **Result:** `rpow_transpose` keeps its private interface and now reduces to
+  the public theorem after rewriting both powers as continuous functional
+  calculi; the duplicated private conjugation stack was removed.
+
 ### Positive-semidefinite sandwich by real powers
 - **Pattern:** three sandwiched Rényi proofs separately proved that a real power
   of the reference matrix is positive semidefinite and used Hermiticity to

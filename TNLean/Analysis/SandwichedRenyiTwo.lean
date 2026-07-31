@@ -26,9 +26,10 @@ Rényi divergence for trace-one states satisfying
 vanish on the zero eigenspace. Outside this support domain the totalized trace
 functional below remains finite, whereas the sandwiched divergence is infinite.
 
-The logarithmic comparison with quantum relative entropy requires the
-monotonicity in the order of the sandwiched Rényi divergence. That analytic
-result is not asserted here.
+A support-aware logarithmic Jensen argument proves the comparison with
+quantum relative entropy directly for faithful references. Compression to the
+reference support gives the singular-reference theorem in
+`TNLean.Analysis.SupportCompressedEntropy`.
 
 ## Main definitions
 
@@ -43,6 +44,8 @@ result is not asserted here.
 * `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — a cyclically reordered trace
   expression for faithful \(\omega\); when \(\rho\) is Hermitian, its common
   value is the squared Hilbert--Schmidt norm of the sandwiched matrix.
+* `TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef` — the
+  direct logarithmic comparison for a faithful reference.
 
 ## References
 
