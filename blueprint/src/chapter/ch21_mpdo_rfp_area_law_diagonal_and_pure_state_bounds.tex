@@ -405,6 +405,7 @@
     \label{thm:supported_marginal_channel}
     \lean{Matrix.finrank_range_supportedMarginalMap,
       Matrix.supportedMarginalMap_isKrausCPTP,
+      Matrix.supportedMarginalMap_diagonal,
       Matrix.supportedMarginalReconstruction_eq}
     \leanok
     \uses{def:bipartite_operator_schmidt_rank,
@@ -418,8 +419,15 @@
         &=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
         \notag
     \end{align}
-    Then $\Phi_\rho$ is completely positive and trace preserving,
-    $\dim\range\Phi_\rho=\operatorname{OSR}(\rho)$, and application of
+    Write $\sigma=\diag(p_1,\ldots,p_{d_A})$ and
+    $\tau=\tr_A\rho$. Then $\Phi_\rho$ is completely positive and trace
+    preserving,
+    \begin{align}
+        \Phi_\rho(\sigma)&=\tau,
+        &\dim\range\Phi_\rho&=\operatorname{OSR}(\rho),
+        \notag
+    \end{align}
+    and application of
     $\Phi_\rho$ to the first half of
     $\sum_{i,j}\sqrt{p_ip_j}\,E_{ij}\otimes E_{ij}$, followed by restoring the
     order of the two factors, reconstructs $\rho$.
@@ -427,8 +435,9 @@
 \begin{proof}\leanok
     Strict positivity of the $p_i$ makes the entrywise input scaling
     invertible, so it does not change the range. Positivity of $\rho$ gives a
-    Kraus representation of $\Phi_\rho$, while the displayed marginal equation
-    gives trace preservation. Substitution on matrix units proves the
+    Kraus representation of $\Phi_\rho$, while the first marginal equation
+    gives trace preservation. Summing the diagonal blocks gives
+    $\Phi_\rho(\sigma)=\tau$. Substitution on matrix units proves the
     reconstruction identity. This is the finite-dimensional Choi
     representation \cite{Choi1975CompletelyPositive} with the input marginal
     absorbed into the canonical purification.
@@ -563,6 +572,102 @@ terms of operator-Schmidt rank.
     with $\|J(\mathcal L)\|_F^2$.
 \end{proof}
 
+\begin{theorem}[Full-support eigenbasis whitening as a Choi matrix]
+    \label{thm:full_support_eigenbasis_whitening_choi}
+    \lean{Matrix.rectangularChoi_singleKrausMap_comp_comp,
+      Matrix.supportedMarginalWhitenedState_eq_rectangularChoi,
+      Matrix.finrank_range_weightedHilbertSchmidtMap}
+    \leanok
+    \uses{thm:supported_marginal_channel,
+      def:rectangular_choi,
+      def:weighted_hilbert_schmidt_map}
+    Let $\rho_{AB}\geq0$, and choose an eigenbasis of its faithful first
+    marginal
+    $\sigma=\diag(p_1,\ldots,p_{d_A})>0$.  Suppose also that the second
+    marginal $\tau$ is positive definite.  For the supported-marginal channel
+    $\Phi_\rho$, set
+    \begin{align}
+      L(X)&=\tau^{-1/4}
+        \Phi_\rho(\sigma^{1/4}X\sigma^{1/4})\tau^{-1/4},\\
+      W&=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+        (\sigma^T\otimes\tau)^{-1/4}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+      W&=J(L),
+      &\dim_{\C}\range L&=\dim_{\C}\range\Phi_\rho.
+      \notag
+    \end{align}
+    Here $\sigma^T=\sigma$ because the chosen basis diagonalizes $\sigma$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:supported_marginal_channel}
+    For arbitrary congruence matrices $A$ and $B$, the matrix-unit convention
+    for the Choi matrix gives
+    \begin{align}
+      J(\Gamma_B\circ\Phi\circ\Gamma_A)
+      &=\Gamma_{A^T\otimes B}(J(\Phi)).
+      \notag
+    \end{align}
+    Apply this identity to the inverse-square-root scaling in
+    $\Phi_\rho$ and to the two fourth-root factors defining $L$.
+    Entrywise diagonal functional calculus gives
+    $\sigma^{1/4}=\diag(p_i^{1/4})$ and
+    $\diag(p_i^{-1/2})\sigma^{1/4}=\sigma^{-1/4}$, proving the first
+    assertion.  The two modular congruences are invertible linear maps, so
+    pre- and post-composition by them preserve the range dimension.
+\end{proof}
+
+\begin{theorem}[Full-support eigenbasis whitened Choi estimate]
+    \label{thm:full_support_eigenbasis_whitened_choi_bound}
+    \lean{Matrix.supportedMarginalWhitenedState_posSemidef,
+      Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank,
+      Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
+    \leanok
+    \uses{thm:full_support_eigenbasis_whitening_choi,
+      thm:rectangular_choi_rank_bound,
+      thm:weighted_hilbert_schmidt_contraction_full_support}
+    Under the hypotheses of
+    Theorem~\ref{thm:full_support_eigenbasis_whitening_choi},
+    the matrix
+    \begin{align}
+      W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+        (\sigma^T\otimes\tau)^{-1/4}
+        \notag
+    \end{align}
+    is positive semidefinite, and
+    \begin{align}
+      \tr(W^2)=\|W\|_F^2
+      &\leq \operatorname{OSR}(\rho_{AB}).
+      \notag
+    \end{align}
+    This is the faithful-marginal-support form of the order-two estimate
+    obtained from \cite[Theorem~6, Equation~(18)]{Beigi2013Sandwiched}.
+    % The passage from singular ambient marginals to their supports remains
+    % recorded in docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:full_support_eigenbasis_whitening_choi,
+      thm:rectangular_choi_rank_bound,
+      thm:weighted_hilbert_schmidt_contraction_full_support}
+    The matrix $W$ is a congruence of $\rho_{AB}\geq0$, so it is positive
+    semidefinite and Hermitian; consequently
+    $\tr(W^2)=\|W\|_F^2$.
+    The weighted map $L$ is a Hilbert--Schmidt contraction.  Its Choi matrix
+    is the whitened state by the preceding theorem, while invertibility of
+    the modular congruences and the supported-marginal correspondence give
+    \begin{align}
+      \dim_{\C}\range L
+      &=\dim_{\C}\range\Phi_\rho
+       =\operatorname{OSR}(\rho_{AB}).
+      \notag
+    \end{align}
+    The rectangular Choi range-dimension estimate now proves the claim.
+\end{proof}
+
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \uses{thm:supported_marginal_channel}
@@ -574,38 +679,20 @@ terms of operator-Schmidt rank.
     \end{align}
 \end{theorem}
 \begin{proof}
-    \uses{thm:rectangular_choi_rank_bound,
-        thm:weighted_hilbert_schmidt_contraction_full_support}
+    \uses{thm:full_support_eigenbasis_whitened_choi_bound}
     Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
     This preserves both mutual information and operator-Schmidt rank, and makes
     the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
-    Theorem~\ref{thm:supported_marginal_channel} gives a completely positive
-    trace-preserving map $\Phi$ satisfying
+    Choose an eigenbasis of $\sigma$, and set
     \begin{align}
-        \tau=\Phi(\sigma),
-        \qquad
-        \dim_{\mathbb C}\range\Phi=\operatorname{OSR}(\rho_{AB}).
+        W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+          (\sigma^T\otimes\tau)^{-1/4}.
         \notag
     \end{align}
-    For $\Gamma_\omega^z(X)=\omega^{z/2}X\omega^{z/2}$, set
+    The full-support eigenbasis estimate gives
     \begin{align}
-        L=\Gamma_\tau^{-1/2}\circ\Phi\circ\Gamma_\sigma^{1/2}.
-        \notag
-    \end{align}
-    Theorem~\ref{thm:weighted_hilbert_schmidt_contraction_full_support} shows
-    that $L$ is a Hilbert--Schmidt contraction.  The order-two sandwiched whitening of
-    $\rho_{AB}$ is the unnormalized Choi matrix
-    \begin{align}
-        W=\sum_{i,j}E_{ij}\otimes L(E_{ij}).
-        \notag
-    \end{align}
-    This is $J(L)$. Since $W$ is positive semidefinite,
-    Theorem~\ref{thm:rectangular_choi_rank_bound} gives
-    \begin{align}
-        \tr(W^2)
-        =\|W\|_F^2
-        \leq\dim_{\mathbb C}\range L
-        =\operatorname{OSR}(\rho_{AB}).
+        \tr(W^2)=\|W\|_F^2
+        \leq\operatorname{OSR}(\rho_{AB}).
         \notag
     \end{align}
     Monotonicity in the order and the order-one limit
