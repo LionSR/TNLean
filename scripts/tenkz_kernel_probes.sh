@@ -87,8 +87,8 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   exit 1
 }
 [ "$(grep -c '|origin=port-open|' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 6 ] || {
-  echo "FAIL: unmatched typed ports did not materialize exactly six open legs" >&2
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 8 ] || {
+  echo "FAIL: unmatched typed ports did not materialize exactly eight open legs" >&2
   exit 1
 }
 [ "$(grep -c '|origin=port-open|' \

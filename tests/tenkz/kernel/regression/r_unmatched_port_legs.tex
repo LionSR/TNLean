@@ -13,6 +13,7 @@
 \int_new:N \g__tenkz_test_port_label_int
 \int_new:N \g__tenkz_test_policy_port_label_int
 \int_new:N \g__tenkz_test_bonded_port_label_int
+\int_new:N \g__tenkz_test_string_port_label_int
 \fp_new:N \l__tenkz_test_port_dx_fp
 \fp_new:N \l__tenkz_test_port_dy_fp
 \tl_new:N \l__tenkz_test_port_face_tl
@@ -24,6 +25,12 @@
 \bool_new:N \l__tenkz_test_in_policy_label_bool
 \bool_new:N \l__tenkz_test_in_bonded_label_bool
 \int_new:N \g__tenkz_test_bonded_slot_int
+\cs_new:Npn \TenkzPortLabelMode
+  {
+    \mode_if_math:TF
+      {i}
+      {\errmessage{authored~port~label~expanded~before~typesetting}}
+  }
 \cs_new_protected:Npn \__tenkz_test_port_label_style:n #1
   {
     \tl_if_in:nnF {#1} {tenkz~audited~label}
@@ -82,6 +89,9 @@
 \cs_set_protected:Npn \__tenkz_kernel_r_wire_port_label:nn #1#2
   {
     \bool_set_true:N \l__tenkz_test_in_bonded_label_bool
+    \__tenkz_model_get:nnN {#1} {kind} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {string}
+      { \int_gincr:N \g__tenkz_test_string_port_label_int }
     \__tenkz_test_bonded_port_label:nn {#1}{#2}
     \bool_set_false:N \l__tenkz_test_in_bonded_label_bool
   }
@@ -279,8 +289,8 @@
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
   \tn[at=(1,1), name=F, ports={90:physical:$p$}]{F}
-  \tn[at=(1,2), name=G, ports={180:virtual}]{G}
-  \tnwire{F.90}{G.180}
+  \tn[at=(1,2), name=G, ports={180:virtual:$g$}]{G}
+  \tnwire[kind=string]{F.90}{G.180}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
   \tn[at=(1,1), name=H, up=$q$, ports={90:physical:$q$}]{H}
@@ -292,6 +302,16 @@
       ports={90@2:physical:$\ell$}]{L}
   \tn[at=(1,3), name=M, ports={180:virtual}]{M}
   \tnwire{L.90@2}{M.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
+  \tn[at=(1,1), wide=2,
+      ports={90:physical:$v$}]{V}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=up]
+  \tn[at=(1,1), wide=3, ports={90@2:physical:$c$}]{C}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), ports={90:physical:$\TenkzPortLabelMode$}]{Z}
 \end{tenkz}
 \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
   \tn[at=(1,1), wide=2, wires=2, name=T,
@@ -320,13 +340,13 @@
   \tnwire{X.0}{Y.180}
 \end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {4}
+\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {6}
   {\errmessage{flat~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_plane_int} = {2}
   {\errmessage{plane~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_wired_int} = {0}
   {\errmessage{an~explicitly~wired~port~grew~a~duplicate~stub}}
-\int_compare:nNnF {\g__tenkz_test_port_label_int} = {4}
+\int_compare:nNnF {\g__tenkz_test_port_label_int} = {6}
   {
     \errmessage
       {
@@ -334,10 +354,12 @@
         \int_use:N \g__tenkz_test_port_label_int
       }
   }
-\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {2}
+\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {3}
   {\errmessage{physical-policy~port~lost~its~typed-port~label}}
-\int_compare:nNnF {\g__tenkz_test_bonded_port_label_int} = {6}
+\int_compare:nNnF {\g__tenkz_test_bonded_port_label_int} = {7}
   {\errmessage{bonded~typed~ports~lost~their~labels}}
+\int_compare:nNnF {\g__tenkz_test_string_port_label_int} = {2}
+  {\errmessage{string~wire~lost~its~consumed~typed-port~label}}
 \int_compare:nNnF {\g__tenkz_test_bonded_slot_int} = {3}
   {\errmessage{bonded~typed-port~slot~regression~did~not~run}}
 \ExplSyntaxOff

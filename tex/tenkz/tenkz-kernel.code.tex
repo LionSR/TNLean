@@ -1123,7 +1123,17 @@
 \cs_new_protected:Npn \__tenkz_kernel_commit:
   {
     \prop_map_inline:Nn \l__tenkz_kernel_stage_prop
-      { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {##1} {##2} }
+      {
+        \str_if_eq:nnTF {##1} {ports}
+          {
+            \__tenkz_model_complete_raw:nnn
+              { \l__tenkz_model_last_tl } {##1} {##2}
+          }
+          {
+            \__tenkz_model_complete:nnn
+              { \l__tenkz_model_last_tl } {##1} {##2}
+          }
+      }
     \prop_get:NnN \l__tenkz_kernel_stage_prop {name} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
@@ -2822,6 +2832,24 @@
       }
   }
 
+\cs_new_protected:Npn
+  \__tenkz_kernel_policy_leg_port_slot:nN #1#2
+  {
+    \tl_set:Nn #2 { \q_no_value }
+    \__tenkz_kernel_policy_leg_renders:nT {#1}
+      {
+        \__tenkz_model_get:nnN {#1} {wide}
+          \l__tenkz_kernel_port_span_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_port_span_tl
+          { \tl_set:Nn \l__tenkz_kernel_port_span_tl {1} }
+        \int_if_odd:nT { \l__tenkz_kernel_port_span_tl }
+          {
+            \tl_set:Ne #2
+              { \int_eval:n { ( \l__tenkz_kernel_port_span_tl + 1 ) / 2 } }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_port_validate_slot:n #1
   {
     \__tenkz_kernel_atom_cell_placed:nTF {#1}
@@ -2900,12 +2928,15 @@
               }
           }
       }
-    % `physical=` is an expander whose established leg renderer already owns
-    % these typed faces.  An explicit matching descriptor supplies its type
-    % and label; it must not create a second open leg.
+    % `physical=` is an expander whose established leg renderer owns the
+    % transverse centre of an odd-width host.  That centre has a numbered
+    % port identity; an even-width centre lies between slots and consumes
+    % none.  A matching descriptor supplies the centre leg's type and label.
     \__tenkz_model_map_ids:nn {atom}
       {
-        \__tenkz_kernel_policy_leg_renders:nT {##1}
+        \__tenkz_kernel_policy_leg_port_slot:nN {##1}
+          \l__tenkz_kernel_port_slot_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
           {
             \__tenkz_model_get:nnN {##1} {physical}
               \l__tenkz_kernel_scratch_tl
@@ -2915,28 +2946,36 @@
                   {
                     {up}
                       {
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_used_prop {##1/90/1} {used}
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_policy_prop {##1/90/1} {up}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_used_prop
+                          {##1/90/\l__tenkz_kernel_port_slot_tl} {used}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_policy_prop
+                          {##1/90/\l__tenkz_kernel_port_slot_tl} {up}
                       }
                     {down}
                       {
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_used_prop {##1/270/1} {used}
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_policy_prop {##1/270/1} {down}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_used_prop
+                          {##1/270/\l__tenkz_kernel_port_slot_tl} {used}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_policy_prop
+                          {##1/270/\l__tenkz_kernel_port_slot_tl} {down}
                       }
                     {updown}
                       {
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_used_prop {##1/90/1} {used}
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_used_prop {##1/270/1} {used}
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_policy_prop {##1/90/1} {up}
-                        \prop_put:Nnn
-                          \l__tenkz_kernel_port_policy_prop {##1/270/1} {down}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_used_prop
+                          {##1/90/\l__tenkz_kernel_port_slot_tl} {used}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_used_prop
+                          {##1/270/\l__tenkz_kernel_port_slot_tl} {used}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_policy_prop
+                          {##1/90/\l__tenkz_kernel_port_slot_tl} {up}
+                        \prop_put:Nen
+                          \l__tenkz_kernel_port_policy_prop
+                          {##1/270/\l__tenkz_kernel_port_slot_tl} {down}
                       }
                   }
               }
@@ -6615,9 +6654,14 @@
             \__tenkz_kernel_r_pair:nn
               { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
           }
-        \__tenkz_kernel_r_wire_port_label:nn {#1} {from}
-        \__tenkz_kernel_r_wire_port_label:nn {#1} {to}
+        \__tenkz_kernel_r_wire_port_labels:n {#1}
       }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_port_labels:n #1
+  {
+    \clist_map_inline:nn {from,to}
+      { \__tenkz_kernel_r_wire_port_label:nn {#1} {##1} }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_port_label:nn #1#2
@@ -8376,6 +8420,7 @@
         \exp_args:NVV \__tenkz_render_string:nn
           \l__tenkz_kernel_r_sid_tl
           \l__tenkz_kernel_r_wire_ink_tl
+        \__tenkz_kernel_r_wire_port_labels:n {##1}
       }
   }
 
