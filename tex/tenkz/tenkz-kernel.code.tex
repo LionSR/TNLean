@@ -1379,6 +1379,28 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_signature_physical_bearing:n #1
+  {
+    \__tenkz_kernel_signature_bearing:nN {#1}
+      \l__tenkz_kernel_port_face_tl
+    \seq_put_right:Ne \l__tenkz_kernel_emit_seq
+      { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_signature_physical:n #1
+  {
+    \str_case:nn {#1}
+      {
+        {up}     { \__tenkz_kernel_signature_physical_bearing:n {90} }
+        {down}   { \__tenkz_kernel_signature_physical_bearing:n {270} }
+        {updown}
+          {
+            \__tenkz_kernel_signature_physical_bearing:n {90}
+            \__tenkz_kernel_signature_physical_bearing:n {270}
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_signature:N #1
   {
     \seq_clear:N \l__tenkz_kernel_emit_seq
@@ -1452,8 +1474,8 @@
         \__tenkz_model_get:nnN {##1} {physical} \l__tenkz_kernel_scratch_tl
         \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
           {
-            \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-              { phys: \tl_use:N \l__tenkz_kernel_scratch_tl }
+            \exp_args:NV \__tenkz_kernel_signature_physical:n
+              \l__tenkz_kernel_scratch_tl
           }
       }
     \seq_sort:Nn \l__tenkz_kernel_emit_seq

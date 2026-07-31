@@ -1,0 +1,39 @@
+% Regression: physical policy sugar and explicit typed physical ports expose
+% the same canonical boundary bearings, including both legs of updown.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+    \tn[at=(1,1)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), ports={90:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=down]
+    \tn[at=(1,1)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), ports={270:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=updown]
+    \tn[at=(1,1)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), ports={90:physical,270:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

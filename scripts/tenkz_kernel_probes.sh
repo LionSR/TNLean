@@ -101,6 +101,11 @@ grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
   echo "FAIL: plane unmatched ports lost their logical boundary bearings" >&2
   exit 1
 }
+[ "$(grep -c 'check|relation=1|result=equal' \
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 3 ] || {
+  echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
+  exit 1
+}
 [ "$(grep -c 'kernel-boundary|signature=$' \
       "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 1 ] || {
   echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
