@@ -55,7 +55,7 @@ namespace IsIdempotentElem
 
 /-- A nonzero idempotent in a complex Banach algebra has spectral radius one. -/
 theorem spectralRadius_eq_one_of_ne_zero
-    {A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A] [Nontrivial A]
+    {A : Type*} [NormedRing A] [NormedAlgebra ℂ A]
     {a : A} (ha : IsIdempotentElem a) (ha_ne : a ≠ 0) :
     spectralRadius ℂ a = 1 := by
   have hone : (1 : ℂ) ∈ spectrum ℂ a := by
