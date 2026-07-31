@@ -34,6 +34,9 @@ copy index.
   the source projector construction supplies the required compression.
 * `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
   source zero correlation length restricts to every absorbed representative.
+* `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
+  simple canonical data package copy-independent weights and sectorwise source
+  zero correlation length.
 * `trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos`:
   every nonempty-chain sector normalization is strictly positive.
 
