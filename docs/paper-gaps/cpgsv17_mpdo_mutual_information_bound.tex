@@ -239,9 +239,23 @@ faithful inequality
 \]
 with this faithful comparison retained as an explicit hypothesis rather than
 asserted as proved.
+The rectangular isometric-conjugation identities are formalized.
 \footnote{Formal declarations:
 \leanid{Matrix.isometryConjNonUnitalStarAlgHom},
+\leanid{Matrix.isometryConjNonUnitalStarAlgHom_apply},
 \leanid{Matrix.cfc_conj_isometry_of_zero},
+\leanid{Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one}, and
+\leanid{Matrix.conjTranspose_mul_mul_mul_conjTranspose_mul_of_isometry}
+in \doclink{TNLean/Analysis/IsometricCompression}.}
+Faithful compression of a positive semidefinite matrix onto its support is
+formalized by
+\leanid{Matrix.PosSemidef.compression_on_support_posDef} in
+\doclink{TNLean/Analysis/SupportCompression}.
+The order-two functional is
+\leanid{TNLean.sandwichedRenyiTwoTrace} in
+\doclink{TNLean/Analysis/SandwichedRenyiTwo}.
+The reconstruction and entropy identities are formalized separately.
+\footnote{Formal declarations:
 \leanid{Matrix.PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj},
 \leanid{TNLean.quantumRelativeEntropy_support_compression},
 \leanid{TNLean.sandwichedRenyiTwoTrace_support_compression}, and
@@ -257,9 +271,10 @@ The singular-output weighted contraction is handled separately in
 consequence of the single-reference entropy identities above.  The faithful
 comparison itself still requires the weighted interpolation and order-one-limit
 analysis tracked in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}, following the
-order-monotonicity results of \cite[Theorem~7]{Beigi2013Sandwiched} and
-\cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Beigi proves
+order monotonicity \cite[Theorem~7]{Beigi2013Sandwiched}, while
+M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel prove the order-one
+limit \cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
 mutual-information theorem remains tracked in
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 

@@ -459,15 +459,15 @@
       \iota_V(A)&=VAV^\dagger.
       \label{eq:mpdo_isometric_conjugation}
     \end{align}
-    is a complex-linear multiplicative $*$-map. In general it is not unital:
+    The map $\iota_V$ is complex-linear, multiplicative, and $*$-preserving.
+    In general it is not unital:
     $\iota_V(\Id_k)=VV^\dagger$ is the projection onto the range of $V$.
 \end{definition}
 
-\begin{lemma}[Functional calculus under rectangular isometric conjugation]
-    \label{lem:cfc_rectangular_isometry_zero}
+\begin{theorem}[Functional calculus under rectangular isometric conjugation]
+    \label{thm:cfc_rectangular_isometry_zero}
     \lean{Matrix.cfc_conj_isometry_of_zero}
     \leanok
-    \uses{def:isometric_nonunital_conjugation}
     Let $A\in\MN{k}$ be Hermitian, let $V:\C^k\to\C^D$ satisfy
     $V^\dagger V=\Id_k$, and let $f:\R\to\R$ satisfy $f(0)=0$. Then
     \begin{align}
@@ -476,7 +476,7 @@
     \end{align}
     where both sides use the continuous functional calculus on the respective
     finite spectra.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:isometric_nonunital_conjugation}
@@ -564,31 +564,42 @@
 
 \begin{proof}\leanok
     \uses{def:isometric_nonunital_conjugation,
-      lem:cfc_rectangular_isometry_zero,
+      thm:cfc_rectangular_isometry_zero,
       thm:isometric_embedding_trace,
       thm:support_compression_reconstruction}
     Theorem~\ref{thm:support_compression_reconstruction} reconstructs both
     $\rho$ and $\omega$ from their compressions. Apply
-    Lemma~\ref{lem:cfc_rectangular_isometry_zero} to the logarithm, use
+    Theorem~\ref{thm:cfc_rectangular_isometry_zero} to the logarithm, use
     multiplicativity of $\iota_V$, and finish with
     (\ref{eq:mpdo_isometric_trace}).
 \end{proof}
+
+\begin{definition}[Order-two sandwiched trace functional]
+    \label{def:sandwiched_renyi_two_trace}
+    \lean{TNLean.sandwichedRenyiTwoTrace}
+    \leanok
+    For square matrices $\rho$ and $\omega$ of the same size, define
+    \begin{align}
+      Q_2(\rho,\omega)
+      &=\re\tr\left[
+        \left(\omega^{-1/4}\rho\,\omega^{-1/4}\right)^2
+      \right].
+      \label{eq:mpdo_sandwiched_two_trace}
+    \end{align}
+    The negative power is defined by functional calculus and vanishes on the
+    kernel of $\omega$. On trace-one positive semidefinite matrices satisfying
+    $\ker\omega\subseteq\ker\rho$, its logarithm is the order-two sandwiched
+    R\'enyi divergence \cite[Definition~2]{MullerLennert2013Renyi}.
+\end{definition}
 
 \begin{theorem}[Order-two sandwiched functional under support compression]
     \label{thm:sandwiched_renyi_two_support_compression}
     \lean{TNLean.sandwichedRenyiTwoTrace_support_compression}
     \leanok
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite with
     $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
-    (\ref{eq:mpdo_reference_support_isometry}). Define
-    \begin{align}
-      Q_2(\rho,\omega)
-      &=\re\tr\left[
-        \left(\omega^{-1/4}\rho\,\omega^{-1/4}\right)^2
-      \right],
-      \label{eq:mpdo_sandwiched_two_trace}
-    \end{align}
-    where the negative power vanishes on the kernel of $\omega$. Then
+    (\ref{eq:mpdo_reference_support_isometry}). Then
     \begin{align}
       Q_2(\rho,\omega)
       &=Q_2(V^\dagger\rho V,V^\dagger\omega V).
@@ -598,11 +609,11 @@
 
 \begin{proof}\leanok
     \uses{def:isometric_nonunital_conjugation,
-      lem:cfc_rectangular_isometry_zero,
+      thm:cfc_rectangular_isometry_zero,
       thm:isometric_embedding_trace,
       thm:support_compression_reconstruction}
     The function $x\mapsto x^{-1/4}$ is taken to be zero at $x=0$, so
-    Lemma~\ref{lem:cfc_rectangular_isometry_zero} applies. Reconstruct
+    Theorem~\ref{thm:cfc_rectangular_isometry_zero} applies. Reconstruct
     $\rho$ and $\omega$, combine the three expanded factors by
     multiplicativity of $\iota_V$, and use trace preservation.
 \end{proof}
@@ -611,7 +622,8 @@
     \label{thm:relative_entropy_q2_faithful_reduction}
     \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
     \leanok
-    \uses{def:quantum_relative_entropy}
+    \uses{def:quantum_relative_entropy,
+      def:sandwiched_renyi_two_trace}
     Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one
     with $\ker\omega\subseteq\ker\rho$. Assume that for every dimension and
     every pair of trace-one matrices $A\succeq0$ and $B\succ0$,
@@ -626,9 +638,9 @@
     \end{align}
     Thus this theorem reduces the singular-reference case to the faithful
     comparison; it does not prove (\ref{eq:mpdo_faithful_relative_q2_hypothesis}).
-    That comparison follows mathematically from order monotonicity and the
-    order-one limit of sandwiched R\'enyi divergence
-    \cite[Theorem~7]{Beigi2013Sandwiched}
+    Beigi's order-monotonicity theorem supplies the first analytic step
+    \cite[Theorem~7]{Beigi2013Sandwiched}. The order-one limit is due to
+    M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel
     \cite[Theorem~5]{MullerLennert2013Renyi}.
 \end{theorem}
 
