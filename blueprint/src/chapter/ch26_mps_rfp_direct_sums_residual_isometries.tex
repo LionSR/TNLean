@@ -488,8 +488,8 @@
 \end{proof}
 
 
-\begin{lemma}[Transfer idempotence under coisometric reconstruction]%
-    \label{lem:rfp_coisometry_reconstruction_iff}
+\begin{theorem}[Transfer idempotence under coisometric reconstruction]%
+    \label{thm:rfp_coisometry_reconstruction_iff}
     \lean{MPSTensor.isTransferIdempotent_coisometry_reconstruction_iff}
     \leanok
     \uses{def:mps_transfer_idempotence}
@@ -502,7 +502,7 @@
     \end{align}
     Then $A$ is a renormalization fixed point if and only if $B$ is a
     renormalization fixed point.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     For every bond matrix $X$,
     \begin{align}
@@ -515,11 +515,12 @@
     each implication.
 \end{proof}
 
-\begin{lemma}[A fixed nonzero scaling of a normal tensor]%
-    \label{lem:normal_scaled_rfp}
+\begin{theorem}[A fixed nonzero scaling of a normal tensor]%
+    \label{thm:normal_scaled_rfp}
     \lean{MPSTensor.norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul}
     \leanok
-    \uses{def:nt_cpsv, def:mps_transfer_idempotence}
+    \uses{def:nt_cpsv, def:mps_transfer_idempotence,
+        thm:spectral_radius_smul, thm:idempotent_spectral_radius_one}
     Let $B$ be a normal tensor and let $c\in\C\setminus\{0\}$. If $cB$ is a
     renormalization fixed point, then
     \begin{align}
@@ -527,11 +528,13 @@
         &\E_B^2&=\E_B.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spectral_radius_smul, thm:idempotent_spectral_radius_one}
     Normality gives $r(\E_B)=1$, while
-    $\E_{cB}=|c|^2\E_B$. Since $c\ne0$, this operator is nonzero. A nonzero
-    idempotent has spectral radius one, and hence
+    $\E_{cB}=|c|^2\E_B$. Since $c\ne0$, this operator is nonzero.
+    Theorem~\ref{thm:idempotent_spectral_radius_one} gives
+    $r(\E_{cB})=1$, and Theorem~\ref{thm:spectral_radius_smul} gives
     \begin{align}
         1=r(\E_{cB})=|c|^2r(\E_B)=|c|^2.
         \notag
@@ -544,7 +547,7 @@
     \lean{MPSTensor.CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp}
     \leanok
     \uses{def:cpsv_canonical_form, def:mps_transfer_idempotence,
-        lem:rfp_coisometry_reconstruction_iff, lem:normal_scaled_rfp,
+        thm:rfp_coisometry_reconstruction_iff, thm:normal_scaled_rfp,
         lem:isrfp_block_of_rfp_direct_sum}
     Suppose $A$ has CPSV canonical-form data
     \begin{align}
@@ -562,13 +565,13 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:rfp_coisometry_reconstruction_iff,
-        lem:isrfp_block_of_rfp_direct_sum, lem:normal_scaled_rfp}
-    Lemma~\ref{lem:rfp_coisometry_reconstruction_iff} makes the retained direct
-    sum $\bigoplus_k\mu_kA_k$ a renormalization fixed point.
+    \uses{thm:rfp_coisometry_reconstruction_iff,
+        lem:isrfp_block_of_rfp_direct_sum, thm:normal_scaled_rfp}
+    Theorem~\ref{thm:rfp_coisometry_reconstruction_iff} makes the retained
+    direct sum $\bigoplus_k\mu_kA_k$ a renormalization fixed point.
     Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} then makes each scaled block
     $\mu_kA_k$ a renormalization fixed point. For an active block,
-    Lemma~\ref{lem:normal_scaled_rfp} gives both conclusions.
+    Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
 \begin{theorem}[An arbitrary BNT need not possess a joint residual isometry]%
