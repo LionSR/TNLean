@@ -274,7 +274,7 @@ compression.  The eigenbasis whitening statements still assume both marginal
 weights are positive definite and therefore do not supply the two-local
 compression from singular ambient marginals to both support algebras.
 
-The total sandwiched R\'enyi trace expression
+The unnormalized sandwiched R\'enyi trace term
 \[
   \widetilde Q_\alpha(\rho\Vert\omega)
   =\operatorname{Re}\operatorname{Tr}\!\left[
@@ -282,7 +282,13 @@ The total sandwiched R\'enyi trace expression
       \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
   \right]
 \]
-is now formalized, together with its nonnegativity for $\rho\geq0$ and
+is now formalized.  For trace-one $\rho$, at orders for which the sandwiched
+R\'enyi divergence is defined, this is the quantity inside the logarithm when
+$\rho,\omega\geq0$ and $\ker\omega\subseteq\ker\rho$.  This domain includes
+singular $\omega$: the zero-on-kernel powers implement the generalized inverse
+on its support.  If the support inclusion fails, the totalized
+continuous-functional-calculus value remains finite but is not the divergence
+trace term.  The formalized properties are nonnegativity for $\rho\geq0$ and
 $\omega>0$ and the exact identities at $\alpha=1$ and $\alpha=2$.
 \footnote{Formal declarations:
 \leanid{TNLean.sandwichedRenyiTrace},
