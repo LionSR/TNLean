@@ -471,6 +471,69 @@
     Substitution of the reconstruction identity proves the rank equality.
 \end{proof}
 
+\begin{lemma}[Partial traces under product isometries]
+    \label{lem:partial_trace_product_isometry}
+    \lean{Matrix.partialTraceRight_kronecker_conj_of_right_isometry,
+      Matrix.partialTraceLeft_kronecker_conj_of_left_isometry}
+    \leanok
+    \uses{def:partial_trace, def:partial_trace_left}
+    Let $A:H_A\to K_A$ and $B:H_B\to K_B$ be linear maps between
+    finite-dimensional complex spaces, and let $X$ be an operator on
+    $H_A\otimes H_B$. If $B^\dagger B=1$, then
+    \begin{align}
+      \tr_{K_B}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+      &=A(\tr_{H_B}X)A^\dagger.
+      \notag
+    \end{align}
+    If $A^\dagger A=1$, then, symmetrically,
+    \begin{align}
+      \tr_{K_A}\!\left((A\otimes B)X(A\otimes B)^\dagger\right)
+      &=B(\tr_{H_A}X)B^\dagger.
+      \notag
+    \end{align}
+    The identities include zero-dimensional spaces.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the matrix entries in orthonormal bases. In the first identity, the
+    sum over the traced output basis gives the matrix entries of
+    $B^\dagger B=1$, and hence collapses the two input indices on $H_B$.
+    The second identity follows by the same argument with the factors
+    interchanged.
+\end{proof}
+
+\begin{theorem}[Faithful marginals after simultaneous support compression]
+    \label{thm:faithful_marginals_support_compression}
+    \lean{Matrix.PosSemidef.partialTraceRight_marginalSupport_compression,
+      Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression,
+      Matrix.PosSemidef.marginalSupport_compression_marginals_posDef}
+    \leanok
+    \uses{thm:operator_schmidt_rank_marginal_support_compression}
+    In the setting of
+    Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}, the
+    two marginals of $\rho_c$ satisfy
+    \begin{align}
+      \tr_{\widehat H_B}\rho_c
+      &=V_A^\dagger(\tr_{H_B}\rho)V_A,
+      &
+      \tr_{\widehat H_A}\rho_c
+      &=V_B^\dagger(\tr_{H_A}\rho)V_B.
+      \notag
+    \end{align}
+    Both compressed marginals are positive definite, including when one of
+    their spaces has dimension zero.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:partial_trace_product_isometry,
+      thm:compression_on_support_posDef,
+      thm:operator_schmidt_rank_marginal_support_compression}
+    Insert the reconstruction $\rho=W\rho_cW^\dagger$ into the two covariance
+    identities of Lemma~\ref{lem:partial_trace_product_isometry}, and multiply
+    by the corresponding adjoint isometries. Each displayed marginal is the
+    compression of a positive semidefinite matrix to its support, so its
+    positive definiteness follows from
+    Theorem~\ref{thm:compression_on_support_posDef}.
+\end{proof}
+
 \begin{theorem}[Channel of a faithful bipartite marginal]
     \label{thm:supported_marginal_channel}
     \lean{Matrix.finrank_range_supportedMarginalMap,
@@ -515,9 +578,10 @@
 
 \section{Support compression for entropy functionals}
 
-% Issues #5229 and #5241 establish one- and two-marginal support compression,
-% including preservation of operator-Schmidt rank.  Faithfulness of the two
-% compressed marginals is tracked in #5245 as a remaining step for #5211.
+% Issues #5229, #5241, and #5245 establish one- and two-marginal support
+% compression, including preservation of operator-Schmidt rank and
+% faithfulness of both compressed marginals.  The remaining analytic and
+% integration steps are tracked in #5211.
 
 \begin{definition}[Isometric conjugation into a larger matrix algebra]
     \label{def:isometric_nonunital_conjugation}
@@ -1108,6 +1172,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \begin{proof}
     \uses{thm:relative_entropy_q2_faithful_reduction,
       thm:operator_schmidt_rank_marginal_support_compression,
+      thm:faithful_marginals_support_compression,
       thm:full_support_eigenbasis_whitened_choi_bound}
     Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
     $\ker\omega\subseteq\ker\rho_{AB}$, so
@@ -1118,8 +1183,9 @@ logarithmic divergence, or a comparison with relative entropy.
     supports of $\rho_A$ and $\rho_B$.
     Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}
     shows that this simultaneous local compression reconstructs the original
-    operator and preserves operator-Schmidt rank. It remains to verify that
-    the two compressed marginals are faithful.
+    operator and preserves operator-Schmidt rank. By
+    Theorem~\ref{thm:faithful_marginals_support_compression}, its two marginals
+    are faithful.
 
     In the resulting faithful spaces, write $\sigma=\rho_A$ and
     $\tau=\rho_B$. Choose an eigenbasis of $\sigma$, and set
