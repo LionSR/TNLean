@@ -18,8 +18,11 @@ first marginal with eigenvalues `p i > 0`, the `(i,j)` operator block is divided
 by `sqrt (p i * p j)`.  The resulting linear map has the same range dimension
 as the original operator-Schmidt reshaping.
 
-The unresolved inequality bounding entanglement-assisted mutual information by
-this range dimension is not asserted here.
+The finite-dimensional inequality bounding entanglement-assisted mutual
+information by the logarithm of this range dimension follows from Beigi's
+weighted Hilbert--Schmidt contraction and order monotonicity, together with
+the order-one limit of Müller-Lennert et al.  Its formalization is tracked
+separately in issue \#4295 and is not asserted here.
 
 ## Main definitions
 
@@ -45,8 +48,13 @@ this range dimension is not asserted here.
 
 * C. H. Bennett, P. W. Shor, J. A. Smolin, and A. V. Thapliyal,
   arXiv:quant-ph/0106052, entanglement-assisted channel mutual information.
+* S. Beigi, *Sandwiched Rényi Divergence Satisfies Data Processing
+  Inequality*, J. Math. Phys. 54 (2013), 122202, Theorems 6 and 7.
 * M.-D. Choi, *Completely positive linear maps on complex matrices*,
   Linear Algebra Appl. 10 (1975), 285--290.
+* M. Müller-Lennert, F. Dupuis, O. Szehr, S. Fehr, and M. Tomamichel,
+  *On quantum Rényi entropies: a new generalization and some properties*,
+  J. Math. Phys. 54 (2013), 122203, Theorem 5.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
