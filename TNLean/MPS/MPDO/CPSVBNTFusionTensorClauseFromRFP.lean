@@ -32,9 +32,9 @@ namespace MPOTensor
 
 namespace HasBNTFusionTensorClause
 
-/-- **Theorem 4.14(i) implies (iii).** An MPDO in literal CPSV canonical form
-that satisfies the Definition 4.1 renormalization fixed-point condition has
-the active-support BNT fusion clause.
+/-- **Corrected active-support formulation of Theorem 4.14(i) implies (iii).**
+An MPDO in literal CPSV canonical form that satisfies the Definition 4.1
+renormalization fixed-point condition has the active-support BNT fusion clause.
 
 **Scope restriction (active product BNT):** Only active product corners are
 retained. A one-site BNT label absent from a fixed product pair has zero fusion
