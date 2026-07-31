@@ -360,7 +360,7 @@ theorem log_expectation_eq_half_quantumRelativeEntropy
         Matrix.kronecker (CFC.log (Matrix.transpose R)) hT.supportProj +
           Matrix.kronecker hR.transpose.supportProj (CFC.log T) := by
     rw [operator, Matrix.kronecker]
-    exact Matrix.PosSemidef.cfc_log_kronecker hR.transpose hT
+    exact Matrix.log_kronecker_posSemidef hR.transpose hT
   have hlogT : CFC.log T = (-(1 / 2 : ℝ)) • CFC.log ω := by
     exact Matrix.PosDef.cfc_log_rpow hω (-(1 / 2 : ℝ))
   have hlogR : CFC.log R = (1 / 2 : ℝ) • CFC.log ρ := by
