@@ -7,6 +7,25 @@
 \makeatletter
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
+\cs_new_eq:NN
+  \__tenkz_test_skin_pairing_resolve:
+  \__tenkz_string_resolve:
+\cs_set_protected:Npn \__tenkz_string_resolve:
+  {
+    \seq_if_empty:NF \l__tenkz_kernel_r_skin_routes_seq
+      {
+        \seq_map_inline:Nn \l__tenkz_kernel_r_skin_routes_seq
+          {
+            \__tenkz_model_get:nnN {##1} {name}
+              \l__tenkz_kernel_scratch_tl
+            \prop_if_in:NVF
+              \l__tenkz_string_touch_all_exempt_prop
+              \l__tenkz_kernel_scratch_tl
+              {\errmessage{skin~pairing~lost~its~touch-all~exemption}}
+          }
+      }
+    \__tenkz_test_skin_pairing_resolve:
+  }
 \ExplSyntaxOff
 \makeatother
 \begin{document}

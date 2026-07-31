@@ -16,13 +16,25 @@
       {
         {1}
           {
+            \prop_if_empty:NF \l__tenkz_string_touch_all_prop
+              {\errmessage{port-open~route~entered~the~touch-all~class}}
             \prop_if_empty:NT \l__tenkz_string_touch_prop
               {\errmessage{shared-host~port~touch~was~lost}}
           }
         {2}
           {
+            \prop_if_empty:NF \l__tenkz_string_touch_all_prop
+              {\errmessage{port-open~route~entered~the~touch-all~class}}
             \prop_if_empty:NT \l__tenkz_string_disjoint_prop
               {\errmessage{disjoint~port~boxes~were~lost}}
+          }
+        {3}
+          {
+            \int_compare:nNnF
+              { \prop_count:N \l__tenkz_string_touch_all_prop } = {1}
+              {\errmessage{ordinary~index~route~lost~its~topology~class}}
+            \prop_if_empty:NF \l__tenkz_string_touch_all_exempt_prop
+              {\errmessage{port-open~route~became~a~class~exemption}}
           }
       }
       {\errmessage{unexpected~port-topology~resolution}}
@@ -31,7 +43,7 @@
 \AtEndDocument
   {
     \int_compare:nNnF
-      { \g__tenkz_test_port_topology_resolve_int } = {2}
+      { \g__tenkz_test_port_topology_resolve_int } = {3}
       {\errmessage{port-topology~resolution~count~changed}}
   }
 \ExplSyntaxOff
@@ -44,5 +56,10 @@
 \begin{tenkz}[rows={wire}, cols=2, bonds=none]
   \tn[ports={180:virtual}]{} &
   \tn[ports={0:physical}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A, ports={0:virtual,45:physical}]{A}
+  \tn[at=(1,2), name=B, ports={180:virtual}]{B}
+  \tnwire{A.0}{B.180}
 \end{tenkz}
 \end{document}

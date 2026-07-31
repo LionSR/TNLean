@@ -9923,27 +9923,26 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_index_joins:
   {
-    \prop_if_empty:NF \l__tenkz_kernel_r_index_sid_prop
+    \prop_map_inline:Nn \l__tenkz_kernel_r_index_sid_prop
       {
-        \__tenkz_string_map_unordered_pairs:N
-          \__tenkz_kernel_r_index_join_pair:nn
-      }
-  }
-
-\cs_new_protected:Npn \__tenkz_kernel_r_index_join_pair:nn #1#2
-  {
-    \prop_get:NnN \l__tenkz_kernel_r_index_sid_prop {#1}
-      \l__tenkz_kernel_r_wire_record_tl
-    \quark_if_no_value:NTF \l__tenkz_kernel_r_wire_record_tl
-      {
-        \prop_get:NnN \l__tenkz_kernel_r_index_sid_prop {#2}
-          \l__tenkz_kernel_r_wire_record_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_r_wire_record_tl
+        \tl_set:Nn \l__tenkz_kernel_r_wire_record_tl {##2}
+        \__tenkz_model_get:nnN {##2} {origin}
+          \l__tenkz_kernel_scratch_tl
+        \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {port-open}
+          { \__tenkz_string_touch_all:n {##1} }
+        % Deferred physical legs have saved paths but no model-wire owner.
+        % Preserve their explicit topology relation with every index route;
+        % unlike the common index class, they still cross-check user strings.
+        \prop_map_inline:Nn \l__tenkz_kernel_r_legdrawn_prop
+          { \__tenkz_string_touch:nn {##1} {####1} }
+        \seq_map_inline:Nn \l__tenkz_kernel_r_skin_routes_seq
           {
-            \__tenkz_kernel_r_index_join_oriented:nn {#2} {#1}
+            \__tenkz_model_get:nnN {####1} {name}
+              \l__tenkz_kernel_r_b_tl
+            \exp_args:NnV \__tenkz_kernel_r_index_join_oriented:nn
+              {##1} \l__tenkz_kernel_r_b_tl
           }
       }
-      { \__tenkz_kernel_r_index_join_oriented:nn {#1} {#2} }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_index_join_oriented:nn #1#2
@@ -10642,6 +10641,8 @@
     \exp_args:NVV \__tenkz_string_save_route:nn
       \l__tenkz_kernel_r_skin_wire_name_tl
       \l__tenkz_kernel_scratch_tl
+    \exp_args:NV \__tenkz_string_touch_all_exempt:n
+      \l__tenkz_kernel_r_skin_wire_name_tl
     \prop_put:NVn \l__tenkz_kernel_r_sid_record_prop
       \l__tenkz_kernel_r_skin_wire_name_tl {#1}
     \__tenkz_kernel_r_skin_wire_order:n {#1}
