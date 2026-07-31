@@ -940,10 +940,13 @@ theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestri
 /-- The active-factor restriction of an injective tensor is injective.
 
 Source context: injectivity of the compressed tensor $V^\dagger K V$ follows
-from injectivity of $K$ because $V$ is an isometry and $VV^\dagger$ absorbs
-every physical slice.  This is a standard finite-dimensional argument that
-does not appear in CPSV16 lines 1381--1450; it is the key property enabling
-the active-support construction used after `propSN`. -/
+from injectivity of $K$ and positivity of the neighboring operators.  The
+latter hypothesis is used to prove that $VV^\dagger$ absorbs every physical
+slice on the right; left absorption is canonical.  Since $V$ is an isometry,
+the resulting two-sided recovery preserves injectivity.  This
+finite-dimensional argument does not appear in CPSV16 lines 1381--1450; it is
+the key property enabling the active-support construction used after
+`propSN`. -/
 theorem activePhysicalSupportRestriction_isInjective
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
