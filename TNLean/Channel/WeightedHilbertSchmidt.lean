@@ -284,7 +284,7 @@ theorem weightedHilbertSchmidtMap_isHilbertSchmidtContraction
   have hNorm := weightedHilbertSchmidtMap_norm_le hΦ hσ hτ hmap X
   nlinarith [norm_nonneg (weightedHilbertSchmidtMap Φ σ τ X), norm_nonneg X]
 
--- Compile-time regression check for the identity channel in a nonzero dimension.
+-- The contraction specializes to the identity channel on the two-dimensional matrix algebra.
 private theorem weightedHilbertSchmidtMap_identity_fin_two
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
     ‖weightedHilbertSchmidtMap
@@ -293,7 +293,7 @@ private theorem weightedHilbertSchmidtMap_identity_fin_two
   exact weightedHilbertSchmidtMap_norm_le isKrausCPTP_id
     Matrix.PosDef.one Matrix.PosDef.one rfl X
 
--- Compile-time regression check for the zero-dimensional matrix algebra.
+-- The same specialization remains valid for the zero-dimensional matrix algebra.
 private theorem weightedHilbertSchmidtMap_identity_fin_zero
     (X : Matrix (Fin 0) (Fin 0) ℂ) :
     ‖weightedHilbertSchmidtMap

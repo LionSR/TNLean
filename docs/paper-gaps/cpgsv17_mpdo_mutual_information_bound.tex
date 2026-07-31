@@ -209,7 +209,15 @@ the support compression is formalized.\footnote{Formal declarations:
 \leanid{Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction} in
 \doclink{TNLean/Channel/WeightedHilbertSchmidt}.}
 This result assumes both weights are positive definite; it does not formalize
-an unrestricted support-compressed theorem for a singular output weight.
+an unrestricted support-compressed theorem for a singular output weight.  In
+particular, the Lean theorem assumes the output-faithfulness hypothesis
+$\tau>0$, which is absent from the cited source statement.  To eliminate this
+extra hypothesis, compress the output algebra to $\operatorname{supp}\tau$,
+interpret the negative quarter power as the inverse of the positive square
+root within that corner, prove the exponent-two contraction there, and
+transport the estimate back along the isometric inclusion of the support.
+This source-faithful singular-output extension is tracked in
+\href{https://github.com/LionSR/TNLean/issues/5225}{\#5225}.
 The remaining order-monotonicity and order-one-limit step is not yet
 formalized and is tracked in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Assembly into the
