@@ -193,14 +193,13 @@ abstracted — record why, so it is not re-proposed).
 ## Completed refactors
 
 ### Support-correct tensor logarithm
-- **Pattern:** `MatrixSqrt.lean` and `Channel/Schwarz/SSAEqualityDPI.lean` each
-  diagonalized two positive-semidefinite factors to prove the same logarithm
-  formula on the product support.
+- **Pattern:** `TNLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
+  simultaneous-diagonalization proof of the support-correct tensor logarithm.
 - **Reuse:** `Matrix.log_kronecker_posSemidef` in
   `TNLean/Analysis/CfcKronecker.lean` is the canonical low-layer theorem.
-- **Result:** the duplicate proof was removed from `MatrixSqrt.lean`,
-  `Matrix.log_kronecker_posSemidef` is the shared declaration, and the faithful
-  entropy comparison uses it directly.
+- **Result:** the duplicate proof was removed from
+  `TNLean/Channel/Schwarz/SSAEqualityDPI.lean`; the faithful entropy comparison
+  uses the Analysis declaration directly.
 
 ### Transpose covariance of the continuous functional calculus
 - **Pattern:** `TNLean/Axioms/OperatorConvexity.lean` carried a private copy of
