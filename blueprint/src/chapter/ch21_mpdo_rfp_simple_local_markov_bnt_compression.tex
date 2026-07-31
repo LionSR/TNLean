@@ -828,9 +828,6 @@ strong subadditivity for a normalized three-site reduced state.
 % 1646--1661, and the absorbed-sector ZCL conclusion at line 1781.
 \begin{theorem}[Ambient ZCL descends to the canonical absorbed BNT elements]
     \label{thm:mpdo_absorbed_bnt_sector_zcl}
-    \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
-    \lean{MPOTensor.IsSimpleCanonicalForm.%
-      exists_weight_copy_independent_of_isSourceZCL}
     \lean{MPOTensor.%
       physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
@@ -865,6 +862,28 @@ strong subadditivity for a normalized three-site reduced state.
     and nonnilpotence of $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the
     absorbed transfer is nonzero.
 \end{proof}
+
+\begin{remark}[Sectorwise hypotheses in the canonical BNT application]
+    \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
+      thm:mpdo_absorbed_bnt_sector_zcl,
+      thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    In the canonical absorbed BNT presentation, ambient source zero
+    correlation length supplies sectorwise source zero correlation length by
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. The standing biCF
+    hypothesis gives a simultaneous one-letter span, hence one-site
+    injectivity of every representative. Thus the sector theorem applies at
+    every original cut without passing through blocked SAL.
+
+    This does not prove the printed GSNNCH-only proposition. An arbitrary
+    GSNNCH presentation need not inherit source zero correlation length, since
+    that condition belongs to the tensor's physical-trace transfer rather than
+    only to its periodic operators.
+
+    % **Scope restriction (ambient source ZCL):** Proposition `prop4to2` omits
+    % the ambient source-ZCL hypothesis used to obtain sectorwise ZCL. See
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{remark}
 
 \begin{theorem}[Strict normalization at positive length]
     \label{thm:mpdo_source_zcl_strict_positive_length_normalization}
