@@ -266,6 +266,22 @@ The reconstruction and entropy identities are formalized separately.
 \leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
 in \doclink{TNLean/Analysis/SupportCompressedEntropy}.}
 
+A support-correct tensor-product identity for the logarithm is also
+formalized.  For positive semidefinite $A$ and $B$,
+\[
+  \log(A\otimes B)
+  = (\log A)\otimes P_{\operatorname{supp}(B)}
+    +P_{\operatorname{supp}(A)}\otimes(\log B),
+\]
+where the logarithm vanishes on each kernel.  The statement neither assumes
+positive definiteness nor excludes zero-dimensional matrix algebras.
+\footnote{Formal declaration:
+\leanid{Matrix.log_kronecker_posSemidef} in
+\doclink{TNLean/Analysis/CfcKronecker}.}
+This is a project-derived auxiliary identity, not a theorem of CPSV16.  In
+particular, it does not supply the missing half-moment argument and does not
+complete Proposition~4.5.
+
 A support-aware vector-state Jensen inequality for the logarithm is also
 formalized.  If $A\geq0$, $\langle v,v\rangle=1$, and the support projection of
 $A$ fixes $v$, then

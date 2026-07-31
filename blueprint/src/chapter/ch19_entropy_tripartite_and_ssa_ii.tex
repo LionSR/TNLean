@@ -973,14 +973,14 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:log_kronecker_possemidef,
+    \uses{thm:mpdo_support_log_kronecker,
         thm:marginal_support_left_absorption,
         thm:right_marginal_support_left_absorption,
         lem:trace_lift_left_factor_mul, lem:trace_lift_right_factor_mul}
     The lifted support projections $P_X\otimes\mathbf 1_Y$ and
     $\mathbf 1_X\otimes P_Y$ both fix $\omega_{XY}$. Substituting
-    Lemma~\ref{lem:log_kronecker_possemidef} into the cross term of the relative
-    entropy and using the two partial-trace adjoint identities gives
+    Theorem~\ref{thm:mpdo_support_log_kronecker} into the cross term of the
+    relative entropy and using the two partial-trace adjoint identities gives
     \begin{align}
         \re\tr
         (\omega_{XY}\log(\omega_X\otimes\omega_Y))
