@@ -1,0 +1,48 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\bool_new:N \g__tenkz_test_north_route_target_bool
+\bool_new:N \g__tenkz_test_east_route_target_bool
+\cs_new_eq:NN
+  \__tenkz_test_route_port_target_add:nnnn
+  \__tenkz_kernel_route_port_target_add:nnnn
+\cs_set_protected:Npn \__tenkz_kernel_route_port_target_add:nnnn #1#2#3#4
+  {
+    \str_if_eq:nnT {#2} {n}
+      {\bool_gset_true:N \g__tenkz_test_north_route_target_bool}
+    \str_if_eq:nnT {#2} {e}
+      {\bool_gset_true:N \g__tenkz_test_east_route_target_bool}
+    \__tenkz_test_route_port_target_add:nnnn {#1}{#2}{#3}{#4}
+  }
+\AtEndDocument
+  {
+    \bool_if:NF \g__tenkz_test_north_route_target_bool
+      {\errmessage{north~route~missed~its~physical~port}}
+    \bool_if:NF \g__tenkz_test_east_route_target_bool
+      {\errmessage{east~route~missed~its~virtual~port}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,2), name=P, ports={90:physical}]{P}
+  \tnwire[
+    kind=string,
+    name=route,
+    route={n of P},
+    crossing=under
+  ]{open}{open}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+  \tn[at=(2,1), name=Q, ports={0:virtual}]{Q}
+  \tnwire[
+    kind=string,
+    name=east-route,
+    route={e of Q},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\end{document}

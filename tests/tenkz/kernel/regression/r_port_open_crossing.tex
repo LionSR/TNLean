@@ -1,6 +1,5 @@
 %% A crossing may name the semantic wire generated for an unmatched typed
-%% port.  That one demanded leg enters the saved-route crossing pipeline;
-%% unrelated generated legs remain direct strokes.
+%% port.  Every generated leg enters the saved-route crossing pipeline.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -23,7 +22,7 @@
     \int_compare:nNnF { \g__tenkz_test_promoted_port_open_int } = {1}
       {
         \errmessage
-          {crossing~demand~did~not~promote~exactly~one~open~port~route}
+          {crossing~police~did~not~register~exactly~one~open~port~route}
       }
   }
 \ExplSyntaxOff

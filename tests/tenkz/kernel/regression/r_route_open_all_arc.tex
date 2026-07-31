@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[ports={0:virtual}]{}
+  \tnwire[
+    kind=string,
+    name=open-arc,
+    route={all of (1,1)},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\end{document}

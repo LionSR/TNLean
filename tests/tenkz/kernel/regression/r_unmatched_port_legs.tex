@@ -152,6 +152,9 @@
     \bool_set_true:N \l__tenkz_test_in_port_label_bool
     \__tenkz_test_port_open_leg:n {#1}
     \bool_set_false:N \l__tenkz_test_in_port_label_bool
+    \prop_get:NnN
+      \l__tenkz_kernel_r_index_style_prop {#1}
+      \l__tenkz_test_port_style_tl
     \str_case:enF { \__tenkz_kernel_r_frame_word: }
       {
         {flat}{\int_gincr:N \g__tenkz_test_port_open_flat_int}
@@ -258,8 +261,8 @@
               }
           }
       }
-    \prop_if_in:NnT \l__tenkz_kernel_r_index_style_prop {#1}
-      {\errmessage{unmatched~port~entered~the~saved-route~pipeline}}
+    \prop_if_in:NnF \l__tenkz_kernel_r_index_style_prop {#1}
+      {\errmessage{unmatched~port~missed~the~saved-route~pipeline}}
     \str_if_eq:VnTF \l_tmpa_tl {physical}
       {
         \tl_if_in:VnF \l__tenkz_test_port_style_tl {physical~leg}
@@ -269,6 +272,15 @@
         \tl_if_in:VnF \l__tenkz_test_port_style_tl {bond}
           {\errmessage{virtual~port~lost~its~semantic~stroke}}
       }
+  }
+\cs_new_eq:NN
+  \__tenkz_test_port_open_label:n
+  \__tenkz_kernel_r_port_open_label:n
+\cs_set_protected:Npn \__tenkz_kernel_r_port_open_label:n #1
+  {
+    \bool_set_true:N \l__tenkz_test_in_port_label_bool
+    \__tenkz_test_port_open_label:n {#1}
+    \bool_set_false:N \l__tenkz_test_in_port_label_bool
   }
 \ExplSyntaxOff
 \makeatother

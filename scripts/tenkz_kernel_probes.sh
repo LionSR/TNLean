@@ -59,6 +59,15 @@ grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
 }
+if grep -Fq '|origin=port-open|' "$WORK/r_closure_typed_ports.tnlog"; then
+  echo "FAIL: trace/cup closure left duplicate typed-port stubs" >&2
+  exit 1
+fi
+grep -Fq 'kernel-boundary|signature=phys:n' \
+    "$WORK/r_port_physical_open.tnlog" || {
+  echo "FAIL: physical port type did not reach its explicit open boundary" >&2
+  exit 1
+}
 grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
     "$WORK/k_torus.tnlog" || {
   echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
@@ -82,7 +91,8 @@ plane_frame_canonical=$(
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
-grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
+grep -Fq '|from=addr-13|kind=index|to-open-type=physical|to-open=n' \
+    "$WORK/k_plane.tnlog" || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
   exit 1
 }
@@ -877,7 +887,9 @@ done
 for contract_negative in \
   n_one_end_wire \
   n_duplicate_port \
+  n_port_open_cross_undeclared \
   n_port_type \
+  n_port_type_multiple_consumers \
   n_port_policy_type \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
@@ -905,8 +917,12 @@ do
     expected='[TKZ-LANG-WIRE-ARITY]'
   [ "$contract_negative" = n_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_port_open_cross_undeclared ] &&
+    expected='[TKZ-CROSS-UNDECLARED]'
   [ "$contract_negative" = n_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_port_type_multiple_consumers ] &&
+    expected='[TKZ-PORT-CONSUMED]'
   [ "$contract_negative" = n_port_policy_type ] &&
     expected='[TKZ-PORT-POLICY-TYPE]'
   [ "$contract_negative" = n_sealed_duplicate_port ] &&
