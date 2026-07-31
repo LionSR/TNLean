@@ -105,8 +105,9 @@ retained by
 \path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.tensor_eq}.  The two-site
 reference corner follows from the positive weights, coisometry, and
 reconstruction in \path{CPSVVerticalDecomposition}.  The theorem
-\path{IsHorizontalCF.gramDressing_eq_of_two_grouped_corners} compares two
-positive corners of a common representative, and
+\path{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
+compares two positive corners of a common representative under the literal
+CPSV canonical-form hypothesis, and
 \path{IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} turns that comparison into
 \eqref{eq:gram-scalar}.  However, the characterization
 \path{isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal} supplies
@@ -307,8 +308,8 @@ This is a sharp obstruction to any proof using only the fields
 \path{TwoSiteExactSectorGauge.sector_sameMPV}.  It is not a counterexample to
 the complete tensor-attached hypotheses of Theorem~4.14(ii): the displayed
 two-by-two tensor has not been made into a tensor-attached algebra clause
-satisfying horizontal canonical form and positivity of every matrix product
-operator.
+satisfying the literal CPSV canonical-form hypothesis and positivity of every
+matrix product operator.
 
 \section{Non-circular product corners}
 
@@ -351,9 +352,10 @@ Figure~8 identity
   \operatorname{gramDressing}(\mathbf 1,A_\gamma),
   \label{eq:gram-dressing-target}
 \end{equation}
-derived from the tensor-attached algebra clause, horizontal canonical form,
-and positivity of the matrix product operators, without assuming
-$F_{\alpha\beta}$ or a raw corner of the form \eqref{eq:V-compression}.
+derived from the tensor-attached algebra clause, the literal CPSV
+canonical-form hypothesis, and positivity of the matrix product operators,
+without assuming $F_{\alpha\beta}$ or a raw corner of the form
+\eqref{eq:V-compression}.
 Equivalently, for every vertical letter $v$,
 \[
   (X_\gamma^\dagger X_\gamma)A_\gamma^v
