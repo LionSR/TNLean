@@ -37,7 +37,13 @@ original MPO at every length at least two.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`,
 `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines 1383--1450 and
-1680--1770. -/
+1680--1770, and Proposition `3to4`, lines 1570--1594.
+
+**Scope restriction (active physical support compression):** The proof first
+restricts to the joint column supports of the sector factor families, a
+finite-dimensional auxiliary construction not made in CPSV16.  It then lifts
+the resulting bond to the printed physical support.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice
     {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
     (P : Matrix (Fin d) (Fin d) ℂ)
@@ -82,8 +88,14 @@ sector tensors have positive physical-sector factorizations.
 
 Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0`,
 `AppUkU=rl`, `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines
-1383--1450 and 1628--1770, and Proposition `prop3to4`, lines
-1786--1796. -/
+1383--1450 and 1628--1770, Proposition `3to4`, lines 1570--1594, and
+Proposition `prop3to4`, lines 1786--1796.
+
+**Scope restriction (active physical support compression):** The proof calls
+the preceding active-support construction, which restricts each sector tensor
+to the joint column supports of its factor families before constructing the
+commuting bond.  CPSV16 does not make this restriction.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization
     {g : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))

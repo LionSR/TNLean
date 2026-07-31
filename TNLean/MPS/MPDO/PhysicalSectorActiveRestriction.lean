@@ -31,6 +31,15 @@ particular at virtual dimension zero.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Appendix C.2, equations `AppUkU=rl` and `Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** the active
+factor-support compression (isometries onto joint column supports,
+zero-dimensional inactive sectors, compressed injective tensor) does not
+appear in CPSV16 lines 1381--1450.  It is an auxiliary construction between
+Lemma `propSN` (the block factorization and neighboring operators) and
+Proposition `3to4`, later used in the argument for Proposition `prop3to4`.
+The compression is mathematically verified and is recorded in
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -135,7 +144,13 @@ theorem nonempty_sectorActiveFactorSupportData
       rightDim_eq_zero_of_not_isActiveSector := fun _ ↦ rfl }⟩
 
 /-- A simultaneous choice of factor-support coordinates for all physical
-sectors. -/
+sectors.
+
+Source context: this datum supplies the factor-support coordinates used
+between Lemma `propSN` (CPSV16 lines 1381--1450) and Proposition `prop3to4`.
+The choice of isometries onto joint column supports per sector, with
+zero-dimensional inactive sectors, is not present in the cited source
+passage.  The construction is ours. -/
 structure ActiveFactorSupportData (F : PhysicalSectorFactorization K) where
   /-- The chosen support coordinates in each sector. -/
   sector : (k : Fin F.sectorCount) → SectorActiveFactorSupportData F k
@@ -350,7 +365,13 @@ theorem mul_dependentPhysicalSupportProj_eq_self_of_forall_mul_transformedPhysic
   simpa only [Matrix.mul_assoc] using congrArg
     (fun X ↦ X * (E k)ᴴ) (hPSupport k)
 
-/-- The left factor compressed to its retained support coordinates. -/
+/-- The left factor compressed to its retained support coordinates.
+
+Source context: the compression $(V^L_k)^\dagger \, l_{k,\beta} \, V^L_k$
+does not appear in CPSV16 lines 1381--1450.  It is the natural restriction
+of the left factor to the active coordinate space selected by the support
+isometries, used after `propSN` and before `prop3to4`.  The construction is
+ours. -/
 noncomputable def compressedLeftTensor (F : PhysicalSectorFactorization K)
     (A : ActiveFactorSupportData F) (k : Fin F.sectorCount) (β : Fin D) :
     Matrix (Fin (A.sector k).leftDim) (Fin (A.sector k).leftDim) ℂ :=
@@ -367,8 +388,13 @@ noncomputable def compressedRightTensor (F : PhysicalSectorFactorization K)
 /-- Compression by the dependent active-factor inclusion preserves the
 sectorwise left-right product form exactly.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** The displayed
+compression by the joint factor-support inclusion is an auxiliary construction
+absent from CPSV16.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem dependentSupportInclusion_compression
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (β α : Fin D) :
@@ -562,7 +588,13 @@ theorem physicalSlice_sectorCoordinateTensor_eq
   rfl
 
 /-- The original physical slice is recovered from its sector-coordinate
-form. -/
+form.
+
+Source context: this recovery identity $K = U^\dagger K_{\mathrm{sector}} U$
+uses the isometry $U$ from Lemma `propSN` (CPSV16 lines 1381--1450).  The
+subsequent compression by active-factor support isometries (which would
+produce $K_{\mathrm{act}} = V^\dagger K V$) is our construction used in the
+derivation of `prop3to4`. -/
 theorem physicalSlice_eq_conjTranspose_mul_sectorCoordinateTensor_mul
     (F : PhysicalSectorFactorization K) (β α : Fin D) :
     physicalSlice K β α =
@@ -772,7 +804,13 @@ theorem physicalSupportInclusion_range_eq_physicalSupportProj
   rw [F.physicalSupportInclusion_range,
     F.activePhysicalSupportProj_eq_physicalSupportProj]
 
-/-- The MPO tensor restricted to the active factor-support coordinates. -/
+/-- The MPO tensor restricted to the active factor-support coordinates.
+
+Source context: $K_{\mathrm{act}} = V^\dagger K V$ where $V$ is the
+active-factor support inclusion isometry.  This restriction is not present
+in CPSV16 lines 1381--1450; it removes inactive dimensions not addressed by
+the source passage and is used between Lemma `propSN` and Proposition
+`prop3to4`.  The construction is ours. -/
 noncomputable def activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F) :
     MPOTensor (F.supportedPhysicalDim A) D :=
@@ -887,8 +925,13 @@ theorem reindex_physicalSlice_activePhysicalSupportRestriction
 /-- Inclusion after active-factor restriction recovers the original MPO
 tensor exactly.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+
+**Scope restriction (active physical support compression):** Exact re-embedding
+uses the auxiliary restriction to the joint column supports of the sector
+factor families, which CPSV16 does not make.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -904,7 +947,16 @@ theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestri
     (fun β α ↦ ⟨F.activePhysicalSupportProj_mul_physicalSlice β α,
       F.physicalSlice_mul_activePhysicalSupportProj hK hpos β α⟩)
 
-/-- The active-factor restriction of an injective tensor is injective. -/
+/-- The active-factor restriction of an injective tensor is injective.
+
+Source context: injectivity of the compressed tensor $V^\dagger K V$ follows
+from injectivity of $K$ and positivity of the neighboring operators.  The
+latter hypothesis is used to prove that $VV^\dagger$ absorbs every physical
+slice on the right; left absorption is canonical.  Since $V$ is an isometry,
+the resulting two-sided recovery preserves injectivity.  This
+finite-dimensional argument does not appear in CPSV16 lines 1381--1450; it is
+the key property enabling the active-support construction used after
+`propSN`. -/
 theorem activePhysicalSupportRestriction_isInjective
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
@@ -922,8 +974,12 @@ physical support restriction data.
 Unlike an arbitrary range-isometry construction, this datum retains the
 left-right sector coordinates of `AppUkU=rl`.
 
-Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
-`Appetakhetc`, lines 1381--1450. -/
+Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
+`Appetakhetc`, lines 1381--1450.
+**Scope restriction (active physical support compression):** This datum
+packages the auxiliary joint-support restriction and exact re-embedding,
+neither of which CPSV16 constructs.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 noncomputable def activePhysicalSupportRestrictionData
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
     (hK : MPSTensor.IsInjective K.toMPSTensor)
