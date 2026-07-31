@@ -113,10 +113,8 @@ theorem sandwichedRenyiTrace_nonneg
     {α : ℝ} {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosDef) :
     0 ≤ sandwichedRenyiTrace α ρ ω := by
   let q := ω ^ ((1 - α) / (2 * α))
-  have hq : q.PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  have hX : (q * ρ * q).PosSemidef := by
-    simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
+  have hX : (q * ρ * q).PosSemidef :=
+    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω ((1 - α) / (2 * α))
   have hpow_nonneg : 0 ≤ (q * ρ * q) ^ α := by
     rw [CFC.rpow_eq_cfc_real hX.nonneg]
     exact cfc_nonneg fun x hx ↦
@@ -150,10 +148,8 @@ theorem sandwichedRenyiTrace_two
   rw [sandwichedRenyiTrace, sandwichedRenyiTwoTrace]
   rw [show (1 - (2 : ℝ)) / (2 * 2) = -(1 / 4 : ℝ) by norm_num]
   let q := ω ^ (-(1 / 4 : ℝ))
-  have hq : q.PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  have hX : (q * ρ * q).PosSemidef := by
-    simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
+  have hX : (q * ρ * q).PosSemidef :=
+    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
   change (Matrix.trace ((q * ρ * q) ^ (2 : ℝ))).re =
     (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
   rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) by norm_num,

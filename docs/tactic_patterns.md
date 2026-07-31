@@ -192,6 +192,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Positive-semidefinite sandwich by real powers
+- **Pattern:** three sandwiched Rényi proofs separately proved that a real power
+  of the reference matrix is positive semidefinite and used Hermiticity to
+  identify the resulting congruence with an equal-factor sandwich.
+- **Reuse:** `Matrix.PosSemidef.rpow_mul_mul_rpow` in
+  `TNLean/Analysis/SandwichedRenyiTwo.lean` proves
+  `(ω ^ r * ρ * ω ^ r).PosSemidef` from `ρ.PosSemidef`, for arbitrary real
+  `r` and with no hypothesis on `ω`.
+- **Result:** `sandwichedRenyiTwoTrace_nonneg`, `sandwichedRenyiTrace_nonneg`,
+  and `sandwichedRenyiTrace_two` retain their statements and each obtain the
+  sandwich positivity in one application.
+
 ### Distinguished grouped reference corner
 - **Pattern:** the horizontal BNT-refined and literal CPSV actual-grouped Figure~8 proofs
   both select the zero-index copy, use its identity gauge, and transport its physical corner

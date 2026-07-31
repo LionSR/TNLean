@@ -88,6 +88,15 @@ noncomputable def sandwichedRenyiTwoTrace (ρ ω : Mat) : ℝ :=
   let q := ω ^ (-(1 / 4 : ℝ))
   (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
 
+/-- Sandwiching a positive-semidefinite matrix between equal real powers of
+any matrix preserves positive semidefiniteness. -/
+theorem Matrix.PosSemidef.rpow_mul_mul_rpow
+    {ρ : Mat} (hρ : ρ.PosSemidef) (ω : Mat) (r : ℝ) :
+    (ω ^ r * ρ * ω ^ r).PosSemidef := by
+  have hωr : (ω ^ r).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  simpa only [hωr.isHermitian.eq] using hρ.mul_mul_conjTranspose_same (ω ^ r)
+
 /-- The order-two sandwiched trace functional is nonnegative on
 positive-semidefinite arguments.
 
@@ -97,10 +106,8 @@ theorem sandwichedRenyiTwoTrace_nonneg
     {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosSemidef) :
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
-  have hq : q.PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  have hX : (q * ρ * q).PosSemidef := by
-    simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
+  have hX : (q * ρ * q).PosSemidef :=
+    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
   exact (Complex.nonneg_iff.mp (hX.trace_mul_nonneg hX)).1
 
 /-- For a positive-definite matrix, two inverse quarter-powers multiply to the
