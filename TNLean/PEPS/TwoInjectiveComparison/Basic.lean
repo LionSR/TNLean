@@ -486,9 +486,9 @@ theorem fullContraction_eq
 /-! ### Operator-Schmidt uniqueness: the bond gauge -/
 
 -- The shared-bond `Fintype` instances are used in the proof (to sum over
--- `SharedBondConfig bondDim`) but not reflected in the statement, so they are
--- omitted from the type and supplied by `classical` in the body.
-omit [Fintype Bond] [(b : Bond) → Fintype (bondDim b)] in
+-- `SharedBondConfig bondDim`) but not reflected in the statement, so the
+-- `unusedFintypeInType` linter cannot see them.
+set_option linter.unusedFintypeInType false in
 open scoped Classical in
 /-- Config-indexed linear independence from joint injectivity.
 
