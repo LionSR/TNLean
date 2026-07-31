@@ -1,0 +1,46 @@
+% Regression: topology inference and crossing police traverse 100 index routes
+% by unordered pair, with one indexed touch fact per pair.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_index_pair_int
+\cs_new_eq:NN
+  \__tenkz_test_index_join_pair:nn
+  \__tenkz_kernel_r_index_join_pair:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_index_join_pair:nn #1#2
+  {
+    \int_gincr:N \g__tenkz_test_index_pair_int
+    \__tenkz_test_index_join_pair:nn {#1} {#2}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_index_resolve:
+  \__tenkz_string_resolve:
+\cs_set_protected:Npn \__tenkz_string_resolve:
+  {
+    \int_compare:nNnF
+      { \prop_count:N \l__tenkz_string_touch_prop } = {4950}
+      {\errmessage{touch~facts~were~not~indexed~once~per~unordered~pair}}
+    \__tenkz_test_index_resolve:
+  }
+\cs_new_protected:Npn \__tenkz_test_many_index_wires:
+  {
+    \int_step_inline:nn {100}
+      { \tnwire[name=scale-##1]{w~outside}{e~outside} }
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_index_pair_int } = {4950}
+      {\errmessage{index~routes~were~not~visited~once~per~unordered~pair}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \ExplSyntaxOn
+  \__tenkz_test_many_index_wires:
+  \ExplSyntaxOff
+\end{tenkz}
+\end{document}
