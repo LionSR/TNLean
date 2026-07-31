@@ -109,12 +109,105 @@ is therefore essential.  Bounding the two marginal entropies separately by
 $2\log D$ is not a valid argument for mixed MPOs.
 
 The operator-Schmidt decomposition across the cut therefore supplies no
-entropy bound by itself.  No theorem controlling quantum mutual information
-solely by the operator-Schmidt rank of an arbitrary positive operator is given
-in the cited sources or presently established in the development.  The status
-of the unrestricted estimate is consequently unresolved: the cited argument
-does not prove it, while the observations above do not furnish a
-counterexample.
+marginal-rank bound by itself.  Nevertheless, a different argument using the
+supported-marginal quantum channel and a weighted Hilbert--Schmidt contraction
+does control the mutual information directly.  This argument is given in the
+next section.  It is not the proof cited by
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete.
+
+\section{Mutual information and operator-Schmidt rank}
+
+Let $\rho_{AB}$ be a finite-dimensional density operator and set
+\[
+  r=\operatorname{OSR}(\rho_{AB}).
+\]
+Compress both tensor factors to the supports of $\rho_A$ and $\rho_B$.
+Positivity implies that $\rho_{AB}$ is supported on the tensor product of
+these two subspaces.  The compression and its inverse isometric inclusion
+preserve both mutual information and operator-Schmidt rank.  We may therefore
+write
+\[
+  \sigma=\rho_A>0,\qquad \tau=\rho_B>0.
+\]
+
+Choose an eigenbasis of $\sigma$.  The supported-marginal state--channel
+correspondence gives a trace-preserving completely positive map $\Phi$ such
+that
+\[
+  \rho_{AB}
+  =(\operatorname{id}\otimes\Phi)
+    (\lvert\Omega_\sigma\rangle\langle\Omega_\sigma\rvert),
+  \qquad
+  \tau=\Phi(\sigma),
+  \qquad
+  \dim_{\mathbb C}\operatorname{ran}\Phi=r,
+\]
+where
+\[
+  \lvert\Omega_\sigma\rangle
+  =\sum_i\sqrt{p_i}\lvert i,i\rangle
+  \quad\text{for}\quad
+  \sigma=\operatorname{diag}(p_i).
+\]
+The last equality follows because the invertible scaling by
+$\sqrt{p_ip_j}$ does not change the span of the operator blocks.
+
+For $\Gamma_\omega^z(X)=\omega^{z/2}X\omega^{z/2}$, define
+\[
+  L=\Gamma_\tau^{-1/2}\circ\Phi\circ\Gamma_\sigma^{1/2}.
+\]
+Equation~(18) of \cite[Theorem~6]{Beigi2013Sandwiched} implies, at exponent
+two, that $L$ is a Hilbert--Schmidt contraction.  Hence every singular value
+of $L$ is at most one.  Since the two modular conjugations are invertible,
+\[
+  \operatorname{rank}L=\operatorname{rank}\Phi=r.
+\]
+
+The order-two sandwiched whitening of $\rho_{AB}$ is the unnormalized Choi
+matrix of $L$:
+\[
+  W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+      (\sigma^T\otimes\tau)^{-1/4}
+    =\sum_{i,j}E_{ij}\otimes L(E_{ij}).
+\]
+The matrix units form a Hilbert--Schmidt orthonormal basis, so
+\[
+  \operatorname{Tr}(W^2)
+  =\sum_{i,j}\lVert L(E_{ij})\rVert_2^2
+  =\sum_k s_k(L)^2
+  \leq r.
+\]
+Monotonicity of the sandwiched R\'enyi divergence in its order, together with
+its order-one limit to Umegaki relative entropy
+\cite[Theorem~7]{Beigi2013Sandwiched}
+\cite[Theorem~5]{MullerLennert2013Renyi}, now gives
+\[
+  I(A:B)_\rho
+  =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
+  \leq\widetilde D_2(\rho_{AB}\Vert\rho_A\otimes\rho_B)
+  =\log\operatorname{Tr}(W^2)
+  \leq\log r.
+\]
+Thus the coefficient-one estimate holds for every finite-dimensional
+bipartite density operator.  It is sharp: the uniform perfectly correlated
+state on $r$ classical symbols has operator-Schmidt rank $r$ and mutual
+information $\log r$.
+
+The supported-marginal state--channel correspondence and its exact range
+dimension are formalized.\footnote{Formal declarations:
+\leanid{Matrix.supportedMarginalMap_isKrausCPTP},
+\leanid{Matrix.supportedMarginalReconstruction_eq}, and
+\leanid{Matrix.finrank_range_supportedMarginalMap} in
+\doclink{TNLean/Channel/SupportedMarginalChannel}.}
+The Choi-matrix estimate is also formalized.\footnote{Formal declarations:
+\leanid{Matrix.rectangularChoi_frobenius_parseval} and
+\leanid{Matrix.rectangularChoi_frobenius_sq_le_finrank_range} in
+\doclink{TNLean/Algebra/RectangularChoi}.}
+The two analytic inequalities are not yet formalized; they are tracked in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} and
+\href{https://github.com/LionSR/TNLean/issues/5210}{\#5210}.  Their assembly
+into the sharp mutual-information theorem is tracked in
+\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 
 \section{Diagonal matrix product operators}
 
@@ -161,9 +254,10 @@ diagonal periodic MPO satisfies the stronger finite-chain estimate
   I_L^{(N)}\leq2\log D.
 \]
 This conclusion needs positivity and normalization only at the chain length
-under consideration; positivity at all other lengths is unnecessary.  Hence a
-counterexample to the unrestricted estimate, if one exists, must be genuinely
-quantum rather than a classical hidden-state construction.
+under consideration; positivity at all other lengths is unnecessary.  It gives
+an independent proof of the diagonal case.  The coefficient-one theorem of the
+preceding section rules out both classical and genuinely quantum
+counterexamples to the unrestricted finite-chain estimate.
 
 \subsection{Local correction at the row-elimination endpoints}
 
@@ -232,8 +326,11 @@ For a positive diagonal operator at the chosen length, the real diagonal
 coefficients are nonnegative, their scalar extension is the cut matrix, and
 division by their positive total mass gives a joint distribution.  Diagonality
 identifies these normalized coefficients with the full classical finite-chain
-distribution.  The conclusion is classical; it does not settle the
-unrestricted quantum mutual-information question.
+distribution.  This formal conclusion is classical and therefore does not by
+itself settle the unrestricted quantum question.  The source-independent
+argument in the preceding section proves the unrestricted quantum estimate
+mathematically; its Lean formalization remains separate from this diagonal
+special case.
 
 \section{What the rank-three separation establishes}
 
@@ -396,15 +493,28 @@ representation need not exist, and the no-go results above show that this
 missing representation cannot be recovered uniformly from MPO positivity and
 bond dimension.
 
-The remaining unresolved question is whether the finite-chain estimate is true
-for arbitrary positive periodic MPO families of bond dimension $D$.  A proof
-must use only the hypotheses of Proposition~4.5, and a counterexample must
-satisfy positivity for every chain length.  No operator-Schmidt-rank
-implication is assumed here.
+The finite-chain estimate is mathematically valid for arbitrary positive
+periodic MPO families of bond dimension $D$ at every chain length for which the
+periodic operator has positive trace.  After normalization, opening the two
+virtual boundary bonds gives
+\[
+  \operatorname{OSR}(\widehat\rho^{(N)}_{L:N-L})\leq D^2,
+\]
+and the coefficient-one theorem above gives the stronger conclusion
+\[
+  I_L^{(N)}\leq2\log D.
+\]
+The operator-Schmidt rank estimate is formalized.\footnote{Formal declaration:
+\leanid{MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le} in
+\doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
+The entropy implication and the resulting finite-chain theorem remain to be
+formalized; this continuation is tracked by
+\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
 
 The thermodynamic-limit clause of Proposition~4.5 is false at its stated
-hypothesis set, while the unrestricted finite-chain bound remains
-unformalized.  These two conclusions are tracked by issue
+hypothesis set, while the finite-chain bound for every positive periodic
+operator of nonzero trace is mathematically proved but not yet formalized.
+These two conclusions are tracked by issue
 \href{https://github.com/LionSR/TNLean/issues/4169}{\#4169} under the MPDO
 coverage audit
 \href{https://github.com/LionSR/TNLean/issues/2380}{\#2380}.

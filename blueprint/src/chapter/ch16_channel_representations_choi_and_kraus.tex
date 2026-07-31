@@ -27,6 +27,91 @@ partial traces.
     \end{align}
 \end{definition}
 
+\begin{definition}[Frobenius vectorization]
+    \label{def:frobenius_vectorization}
+    \lean{Matrix.frobeniusEquivEuclidean}
+    \leanok
+    For finite index sets $I$ and $J$, define
+    \begin{align}
+        U_{I,J}&:\mathbb C^{I\times J}\longrightarrow\ell^2(J\times I),
+        \qquad
+        \bigl(U_{I,J}(A)\bigr)_{(j,i)}=A_{ij}.
+        \notag
+    \end{align}
+    This is a complex-linear isometric equivalence when the matrix space is
+    equipped with the Frobenius norm.
+\end{definition}
+
+\begin{lemma}[Frobenius vectorization and the Hilbert--Schmidt pairing]
+    \label{lem:frobenius_vectorization_inner}
+    \lean{Matrix.inner_frobeniusEquivEuclidean}
+    \leanok
+    \uses{def:frobenius_vectorization}
+    For finite matrices $A$ and $B$ of the same shape,
+    \begin{align}
+        \left\langle U_{I,J}(A),U_{I,J}(B)\right\rangle
+        &=\tr(A^\dagger B).
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:frobenius_vectorization}
+    Both sides equal
+    $\sum_{i\in I}\sum_{j\in J}\overline{A_{ij}}B_{ij}$.
+\end{proof}
+
+\begin{definition}[Frobenius transport of a matrix superoperator]
+    \label{def:frobenius_superoperator_transport}
+    \lean{Matrix.frobeniusEuclideanMap}
+    \leanok
+    \uses{def:frobenius_vectorization}
+    For a complex-linear map
+    $E:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$, define its Frobenius
+    transport by
+    \begin{align}
+        \widehat E
+        &=U_{J,J}\circ E\circ U_{I,I}^{-1}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Hilbert adjoint of a transported Kraus map]
+    \label{thm:kraus_trace_adjoint_frobenius_adjoint}
+    \lean{Matrix.adjoint_frobeniusEuclideanMap_eq}
+    \leanok
+    \uses{def:trace_pairing_adjoint,
+        def:frobenius_superoperator_transport}
+    Let $E:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$ be a completely
+    positive map with a Kraus representation, and let $E^*$ be its
+    trace-pairing adjoint. Then the Hilbert-space adjoint of $\widehat E$ is
+    \begin{align}
+        \widehat E^\dagger&=\widehat{E^*}.
+        \notag
+    \end{align}
+    This is the adjoint identity used in the direct exponent-two
+    specialization of \cite[Theorem~6, Equation~(18)]{Beigi2013Sandwiched}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:trace_pairing_adjoint,
+        lem:frobenius_vectorization_inner,
+        thm:trace_pairing_adjoint_identity,
+        def:frobenius_superoperator_transport}
+    Complete positivity implies that $E^*$ preserves adjoints. Therefore, for
+    $X\in\mathbb C^{J\times J}$ and $Y\in\mathbb C^{I\times I}$,
+    \begin{align}
+        \tr\!\left((E^*(X))^\dagger Y\right)
+        &=\tr\!\left(E^*(X^\dagger)Y\right)
+         =\tr\!\left(X^\dagger E(Y)\right).
+        \notag
+    \end{align}
+    The preceding lemma transports this identity to the Euclidean inner
+    products and proves the assertion.
+\end{proof}
+
 %% =========================================================
 \section{Further Choi-matrix identities}
 \label{sec:choi_matrix_further_identities}

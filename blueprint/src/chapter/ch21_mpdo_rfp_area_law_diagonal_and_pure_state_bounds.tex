@@ -364,7 +364,6 @@
     \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}. It does not by itself prove
     $I_L\leq4\log D$: such a conclusion would require an entropy bound in
     terms of the operator-Schmidt rank.
-    % The unresolved analytic inequality is tracked in issue #4295.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -435,6 +434,192 @@
     absorbed into the canonical purification.
 \end{proof}
 
+\section{Rectangular Choi matrices and a range-dimension estimate}
+
+The following construction is the unnormalized, different-dimension form of
+the Choi correspondence \cite[Proposition~2.1]{Wolf2012Quantum}. The resulting
+estimate bounds the order-two Choi functional of a Hilbert--Schmidt contraction
+by the dimension of its range. It is used below to bound mutual information in
+terms of operator-Schmidt rank.
+
+\begin{definition}[Matrix of a linear map in matrix-unit bases]
+    \label{def:linear_map_matrix}
+    \lean{Matrix.linearMapMatrix}
+    \leanok
+    Let $\mathcal L:\MN{d}\to\MN{e}$ be complex-linear. Its coefficient
+    matrix $C(\mathcal L)\in M_{e^2\times d^2}(\C)$ in the matrix-unit bases is
+    defined by
+    \begin{align}
+        C(\mathcal L)_{(a,b),(i,j)}
+        &=(\mathcal L(E_{ij}))_{ab}.
+        \label{eq:rectangular_choi_coefficient_matrix}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Unnormalized rectangular Choi matrix]
+    \label{def:rectangular_choi}
+    \lean{Matrix.rectangularChoi}
+    \leanok
+    \uses{def:linear_map_matrix}
+    For a complex-linear map $\mathcal L:\MN{d}\to\MN{e}$, its unnormalized
+    rectangular Choi matrix $J(\mathcal L)\in\MN{de}$ is the reshaping
+    \begin{align}
+        J(\mathcal L)_{(i,a),(j,b)}
+        &=C(\mathcal L)_{(a,b),(i,j)}
+         =(\mathcal L(E_{ij}))_{ab}.
+        \label{eq:rectangular_choi_entries}
+    \end{align}
+    When $d=e$, this is $d$ times the normalized Choi matrix convention in
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Frobenius norm under rectangular Choi reshaping]
+    \label{thm:rectangular_choi_parseval}
+    \lean{Matrix.rectangularChoi_frobenius_parseval}
+    \leanok
+    \uses{def:linear_map_matrix, def:rectangular_choi}
+    For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
+    \begin{align}
+        \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
+        &=
+        \re\tr\!\left(C(\mathcal L)^\dagger C(\mathcal L)\right).
+        \label{eq:rectangular_choi_parseval}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rectangular_choi}
+    The two traces are the sums of the squared absolute values of their
+    respective matrix entries. The bijection
+    \begin{align}
+        ((i,a),(j,b))\longmapsto((i,j),(a,b))
+        \notag
+    \end{align}
+    identifies the two sums by~(\ref{eq:rectangular_choi_entries}).
+\end{proof}
+
+\begin{theorem}[Matrix-unit Parseval identity for a rectangular Choi matrix]
+    \label{thm:rectangular_choi_parseval_matrix_units}
+    \lean{Matrix.rectangularChoi_frobenius_parseval_matrix_units}
+    \leanok
+    \uses{def:rectangular_choi}
+    For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
+    \begin{align}
+        \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
+        &=
+        \sum_{i,j=0}^{d-1}\sum_{a,b=0}^{e-1}
+        \left|(\mathcal L(E_{ij}))_{ab}\right|^2.
+        \label{eq:rectangular_choi_parseval_matrix_units}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:linear_map_matrix, thm:rectangular_choi_parseval}
+    Apply Theorem~\ref{thm:rectangular_choi_parseval} and substitute
+    (\ref{eq:rectangular_choi_coefficient_matrix}) into the entrywise
+    Frobenius-norm formula for $C(\mathcal L)$.
+\end{proof}
+
+\begin{definition}[Hilbert--Schmidt contraction]
+    \label{def:rectangular_hilbert_schmidt_contraction}
+    \lean{Matrix.IsHilbertSchmidtContraction}
+    \leanok
+    A complex-linear map $\mathcal L:\MN{d}\to\MN{e}$ is a
+    \emph{Hilbert--Schmidt contraction} if, for every $X\in\MN{d}$,
+    \begin{align}
+        \re\tr\!\left((\mathcal L(X))^\dagger\mathcal L(X)\right)
+        &\leq \re\tr(X^\dagger X).
+        \label{eq:rectangular_hilbert_schmidt_contraction}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Rectangular Choi norm bounded by the range dimension]
+    \label{thm:rectangular_choi_rank_bound}
+    \lean{Matrix.rectangularChoi_frobenius_sq_le_finrank_range}
+    \leanok
+    \uses{def:rectangular_choi,
+      def:rectangular_hilbert_schmidt_contraction}
+    If $\mathcal L:\MN{d}\to\MN{e}$ is a Hilbert--Schmidt contraction, then
+    \begin{align}
+        \left\|J(\mathcal L)\right\|_F^2
+        &\leq\dim_{\C}\range\mathcal L.
+        \label{eq:rectangular_choi_rank_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:linear_map_matrix, thm:rectangular_choi_parseval}
+    Set $G=C(\mathcal L)^\dagger C(\mathcal L)$. The contraction inequality
+    applied in the matrix-unit bases shows that every eigenvalue of the
+    positive semidefinite matrix $G$ is at most one. Hence
+    \begin{align}
+        \tr G
+        &\leq\#\{k:\lambda_k(G)\neq0\}
+         =\rank C(\mathcal L)
+         =\dim_{\C}\range\mathcal L.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:rectangular_choi_parseval} identifies the left-hand side
+    with $\|J(\mathcal L)\|_F^2$.
+\end{proof}
+
+\begin{theorem}[Mutual information from operator-Schmidt rank]
+    \label{thm:mutual_information_le_log_operator_schmidt_rank}
+    \uses{thm:supported_marginal_channel}
+    For every finite-dimensional bipartite density operator $\rho_{AB}$,
+    \begin{align}
+        I(A:B)_\rho
+        \leq \log\operatorname{OSR}(\rho_{AB}).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:rectangular_choi_rank_bound}
+    Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
+    This preserves both mutual information and operator-Schmidt rank, and makes
+    the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
+    Theorem~\ref{thm:supported_marginal_channel} gives a completely positive
+    trace-preserving map $\Phi$ satisfying
+    \begin{align}
+        \tau=\Phi(\sigma),
+        \qquad
+        \dim_{\mathbb C}\range\Phi=\operatorname{OSR}(\rho_{AB}).
+        \notag
+    \end{align}
+    For $\Gamma_\omega^z(X)=\omega^{z/2}X\omega^{z/2}$, set
+    \begin{align}
+        L=\Gamma_\tau^{-1/2}\circ\Phi\circ\Gamma_\sigma^{1/2}.
+        \notag
+    \end{align}
+    Equation~(18) of \cite[Theorem~6]{Beigi2013Sandwiched} shows that $L$ is a
+    Hilbert--Schmidt contraction.  The order-two sandwiched whitening of
+    $\rho_{AB}$ is the unnormalized Choi matrix
+    \begin{align}
+        W=\sum_{i,j}E_{ij}\otimes L(E_{ij}).
+        \notag
+    \end{align}
+    This is $J(L)$. Since $W$ is positive semidefinite,
+    Theorem~\ref{thm:rectangular_choi_rank_bound} gives
+    \begin{align}
+        \tr(W^2)
+        =\|W\|_F^2
+        \leq\dim_{\mathbb C}\range L
+        =\operatorname{OSR}(\rho_{AB}).
+        \notag
+    \end{align}
+    Monotonicity in the order and the order-one limit
+    \cite[Theorem~7]{Beigi2013Sandwiched}
+    \cite[Theorem~5]{MullerLennert2013Renyi} give
+    \begin{align}
+        I(A:B)_\rho
+        =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
+        \leq\widetilde D_2(\rho_{AB}\Vert\rho_A\otimes\rho_B)
+        =\log\tr(W^2),
+        \notag
+    \end{align}
+    which proves the result.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
     uniform estimate $I_L\leq4\log D$ for every MPDO. Its cited argument,
@@ -457,22 +642,25 @@
     they do not bound the ordinary rank of either marginal.
     For example, a bond-one tensor can generate $q^{\otimes N}$ for a full-rank
     one-site density matrix $q$. Thus its $L$-site marginal has rank
-    $\rank(q)^L$, although its mutual information vanishes. The
-    unrestricted estimate therefore requires a direct operator-Schmidt
-    argument not supplied by the cited proof.
+    $\rank(q)^L$, although its mutual information vanishes.
 
-    Diagonal operators cannot violate the finite-chain estimate. Indeed,
+    Theorem~\ref{thm:mutual_information_le_log_operator_schmidt_rank} instead
+    gives the stronger estimate
+    \begin{align}
+        I_L^{(N)}\leq\log D^2=2\log D
+        \notag
+    \end{align}
+    whenever the finite-chain operator is positive and has positive trace.
+    Thus no classical or genuinely quantum counterexample exists.
+    The diagonal argument gives an independent special-case proof. Indeed,
     Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     bounds by $2\log D$ the classical mutual information of the normalized
     diagonal coefficients whenever the finite-chain operator is diagonal and
     positive semidefinite and has positive total mass.
-    Thus any counterexample must have genuine quantum coherences.
-    Theorem~\ref{thm:supported_marginal_channel} identifies the faithful-marginal
-    problem with a channel whose linear range has dimension
-    $\operatorname{OSR}(\rho)$; it does not supply the desired mutual-information
-    inequality. The unrestricted quantum estimate remains open. The
-    same example as Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} also
-    makes the iterated mutual-information limit false; see
+
+    The same example as
+    Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit} makes the iterated
+    mutual-information limit false; see
     \path{docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex}. The
     channel-image implication is
     Theorem~\ref{thm:local_channel_image_mutual_info_bound}, and the pure-state

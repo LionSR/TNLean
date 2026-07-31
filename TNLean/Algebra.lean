@@ -26,6 +26,7 @@ import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.IrreducibleTensorAction
@@ -51,6 +52,7 @@ import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
+import TNLean.Algebra.RectangularChoi
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.SkolemNoether

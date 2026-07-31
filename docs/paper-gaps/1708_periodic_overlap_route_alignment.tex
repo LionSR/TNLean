@@ -25,8 +25,9 @@ statements restrict the source.\footnote{Formal files:
 \leanid{Papers/1708.00029/main.tex}. Paper-level umbrella:
 \href{https://github.com/LionSR/TNLean/issues/619}{issue \#619}; proposition-level
 subtracking: \href{https://github.com/LionSR/TNLean/issues/81}{issue \#81};
-the remaining Case-3 contraction and phase construction is tracked by
-\href{https://github.com/LionSR/TNLean/issues/873}{issue \#873}.}
+the Case-3 contraction and phase construction was tracked by
+\href{https://github.com/LionSR/TNLean/issues/873}{issue \#873} and is now
+formalized by \leanid{sectorTensor_proportional_of_blockedMatch}.}
 
 The source proposition is \emph{equal-or-orthogonal-generalized}.\footnote{Stated
 in \cite{DeLasCuevas2017Irreducible}, lines 589--609, and proved in Appendix~A,
@@ -158,14 +159,18 @@ single global unitary $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$, giving
 $A^i=e^{i\xi}UB^iU^\dagger$.
 
 \textbf{\Lean{} status.}\footnote{Formal declarations:
-\leanid{sectorMatch_propagation},
-\leanid{sectorTensor_proportional_of_blockedMatch}, and
-\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in \leanid{SectorMatch.lean}.}
+\leanid{sectorMatch_propagation} in
+\leanid{SectorMatch/Propagation.lean}, and
+\leanid{sectorTensor_proportional_of_blockedMatch} in
+\leanid{SectorMatch/Contraction.lean}, and
+\leanid{periodicOverlap_gaugeEquiv_of_sector_match} in
+\leanid{SectorMatch/Consequences.lean}.}
 The statements track this two-stage structure: the $T^l$ + Theorem~2.10
 staircase, followed by the $\Omega_u$ contraction and the
 $\kappa/\theta/\phi$ phase construction. The top-level theorem now invokes these
-component lemmas and is proved modulo the single remaining leaf
-\leanid{sectorTensor_proportional_of_blockedMatch}. The
+component lemmas; the contraction leaf
+\leanid{sectorTensor_proportional_of_blockedMatch} and the resulting
+unitary global gauge are proved, and the repeated-blocks theorem follows. The
 docstrings have been realigned to cite the source equation labels and line
 ranges (replacing earlier published-version labels such as ``A.8'' and
 ``A.14--A.18'' that do not occur in the local source), and the
@@ -212,8 +217,8 @@ It is the overlap-sum form of the translation step in lines~985--1002, using
 the single-site relations inside the paired trace sum and the repository's
 inverse cyclic indexing convention.
 
-\textbf{Remaining Case-3 input.} After these single-site inputs, the open
-Case-3 leaf is the contraction and gauge construction:
+\textbf{Formalized Case-3 contraction.} After these single-site inputs, the
+contraction and gauge construction proceeds as follows:
 \begin{itemize}
   \item The $m$-factor cyclic $\Omega_u$-contraction with the $\eta$ bookkeeping:
     starting from the common right inverses for the injective tensors $F_u$,
@@ -229,9 +234,10 @@ Case-3 leaf is the contraction and gauge construction:
     the global unitary
     $U=\sum_u e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q}$.
 \end{itemize}
-This is the remaining obligation for the repeated-blocks
+These steps discharge the contraction obligation for the repeated-blocks
 theorem.\footnote{Formal declaration:
-\leanid{sectorTensor_proportional_of_blockedMatch}.} The tensor-product scalar
+\leanid{sectorTensor_proportional_of_blockedMatch} in
+\leanid{SectorMatch/Contraction.lean}.} The tensor-product scalar
 extraction and product-one normalization have already been isolated in
 \leanid{PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul} and
 \leanid{PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul};
@@ -252,9 +258,10 @@ concatenation law $F_u^{\mathbf{i}_1\mathbf{i}_2}
 single block around the cycle to an injective length, is
 \leanid{MPSTensor.cornerProd_append}; the junction projector is absorbed by
 idempotency, so the law needs no injectivity or normality input. These are the
-$A_u^i/F_u$ building blocks that enter the first bullet above; the right-inverse
-contraction of $F_u$ to \emph{eq:resultprop} and the global gauge assembly remain
-open.
+$A_u^i/F_u$ building blocks that enter the first bullet above. The formal
+right-inverse contraction of $F_u$ to \emph{eq:resultprop} and the unitary
+global gauge assembly are completed in
+\leanid{sectorTensor_proportional_of_blockedMatch}.
 
 \section{Scope restriction: independence without spanning}
 
