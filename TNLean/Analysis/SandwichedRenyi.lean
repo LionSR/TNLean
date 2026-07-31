@@ -107,8 +107,12 @@ theorem sandwichedRenyiTrace_nonneg
     Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
   have hX : (q * ρ * q).PosSemidef := by
     simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
+  have hpow_nonneg : 0 ≤ (q * ρ * q) ^ α := by
+    rw [CFC.rpow_eq_cfc_real hX.nonneg]
+    exact cfc_nonneg fun x hx ↦
+      Real.rpow_nonneg (spectrum_nonneg_of_nonneg hX.nonneg hx) α
   have hpow : ((q * ρ * q) ^ α).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+    Matrix.nonneg_iff_posSemidef.mp hpow_nonneg
   exact (Complex.nonneg_iff.mp hpow.trace_nonneg).1
 
 /-- At order one, the sandwiched Rényi trace functional is
