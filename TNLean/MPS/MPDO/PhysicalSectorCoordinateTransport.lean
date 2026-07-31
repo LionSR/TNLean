@@ -23,8 +23,8 @@ corresponding closures in the original physical coordinates.
 identities do not appear as standalone constructions in CPSV16.  The source
 uses the physical isometry $U$ from Lemma `propSN` to transport closures
 implicitly inside the proof of Theorem 4.9; this file isolates the transport
-as a reusable algebraic gadget.  It participates in the bridge from `propSN`
-to `prop3to4`.  Recorded in
+as a reusable algebraic construction.  It is independent of the active
+factor-support compression.  Recorded in
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
