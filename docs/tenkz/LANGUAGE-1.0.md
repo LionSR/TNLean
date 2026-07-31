@@ -121,8 +121,9 @@ where the type is `virtual` or `physical` and the label is the mathematics
 set at that port's tip — `ports={90:physical:$i$, 0:virtual, 180:virtual}`.
 The label component is where the retired page-relative keys went: an index
 name belongs to the port it names, and a port already knows which way it
-points. `void=open` is a hole that preserves indices; `void=sealed` removes
-the site and its bonds.
+points. A cluster carrier is a glyphless group and owns no authored `ports=`;
+attach wires to its addressable member atoms instead. `void=open` is a hole
+that preserves indices; `void=sealed` removes the site and its bonds.
 
 ### 2.4 Wire keys (9)
 
@@ -631,7 +632,7 @@ Teaching text uses sugar freely. Twenty-five rows:
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: adds the outward physical port to every wire-row atom |
+| `physical=up\|down\|updown\|none` | expander: adds the outward physical port to every wire-row atom; an explicit port on that face merges when type and label agree, and conflicting types or token-distinct labels are errors |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |

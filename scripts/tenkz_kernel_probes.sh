@@ -173,6 +173,11 @@ grep -Fq 'name=clearance-route' \
   echo "FAIL: address in the hull clearance annulus was rejected" >&2
   exit 1
 }
+grep -Fq 'name=selected-port-route' \
+    "$WORK/r_route_address_all_faces.tnlog" || {
+  echo "FAIL: a selected authored port was rejected as an inside route end" >&2
+  exit 1
+}
 exact_route=$(
   grep -F 'name=exact-route' "$WORK/r_route_dependent_turns.tnlog"
 ) || {
@@ -977,6 +982,34 @@ if ( cd "$WORK" &&
 fi
 grep -Fq '[TKZ-LANG-CLUSTER-NAME]' "$WORK/n_unnamed_cluster.transcript" || {
   echo "FAIL: unnamed cluster rejection lacked TKZ-LANG-CLUSTER-NAME" >&2
+  exit 1
+}
+
+cluster_ports_negative="$KERNEL/negative/n_cluster_ports.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$cluster_ports_negative" >"$WORK/n_cluster_ports.transcript" 2>&1 ); then
+  echo "FAIL: a glyphless cluster carrier accepted ports" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-PORT-CLUSTER]' "$WORK/n_cluster_ports.transcript" || {
+  echo "FAIL: cluster-port rejection lacked TKZ-PORT-CLUSTER" >&2
+  exit 1
+}
+
+cluster_endpoint_negative="$KERNEL/negative/n_cluster_port_endpoint.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$cluster_endpoint_negative" \
+       >"$WORK/n_cluster_port_endpoint.transcript" 2>&1 ); then
+  echo "FAIL: an implicit endpoint invented a cluster-carrier port" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-PORT-CLUSTER]' \
+  "$WORK/n_cluster_port_endpoint.transcript" || {
+  echo "FAIL: cluster endpoint rejection lacked TKZ-PORT-CLUSTER" >&2
   exit 1
 }
 

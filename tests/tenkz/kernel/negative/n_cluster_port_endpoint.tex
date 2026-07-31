@@ -1,0 +1,11 @@
+% Negative regression: an implicit endpoint cannot invent a port on a cluster.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=C, cluster=1x1]{}
+  \tn[at=(1,2), name=D]{D}
+  \tnwire{C.0}{D.180}
+\end{tenkz}
+\end{document}

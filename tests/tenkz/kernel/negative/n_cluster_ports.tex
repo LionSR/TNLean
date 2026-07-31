@@ -1,0 +1,9 @@
+% Negative regression: a glyphless cluster carrier cannot own ports.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=C, cluster=1x1, ports={90:physical}]{}
+\end{tenkz}
+\end{document}
