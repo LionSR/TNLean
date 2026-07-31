@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Fintype.Pi
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Basis.VectorSpace
