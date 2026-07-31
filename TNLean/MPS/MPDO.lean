@@ -76,6 +76,7 @@ import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.CPSVSharpBlocking
+import TNLean.MPS.MPDO.CPSVTopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
 import TNLean.MPS.MPDO.CPSVVerticalDecomposition

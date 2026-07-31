@@ -36,6 +36,20 @@ namespace HasBNTFusionTensorClause
 that satisfies the Definition 4.1 renormalization fixed-point condition has
 the active-support BNT fusion clause.
 
+**Scope restriction (active product BNT):** Only active product corners are
+retained. A one-site BNT label absent from a fixed product pair has zero fusion
+multiplicity. Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; no unsupported corner is inserted. Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
+orientation and is a coisometry onto the active direct sum. Its adjoint gives
+the exact reconstruction. Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
 lines 1929--2046 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem of_isRFPViaTS_of_cpsvCanonicalForm (M : MPOTensor d D)

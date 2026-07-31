@@ -48,22 +48,32 @@ theorem. This is tracked by issue #873 under the proposition-level tracker #81.
 
 ## 2. Coverage crosswalk: CPSV16 (arXiv:1606.00608)
 
-At this revision, after the normal-tensor RFP characterization, the trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition `prop3to4`, the fixed-bond/source-ZCL SAL theorem, and the literal sharp `propblockinj` theorem, the paper has 45 theorem-like occurrences and 40 distinct results. The occurrence-level count is 22 complete, 9 partial, and 14 not-ready; the distinct-result count is 21 complete, 7 partial, and 12 not-ready. Here **not-ready** means that the printed statement is false, ambiguous, or depends essentially on a formally refuted source lemma. It does not mean that every printed result has been formalized.
+At this revision, after the normal-tensor RFP characterization, the
+trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
+`prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
+`propblockinj` theorem, and the literal CPSV topological-projector commuting
+Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
+results. The occurrence-level count is 23 complete, 8 partial, and 14
+not-ready; the distinct-result count is 22 complete, 6 partial, and 12
+not-ready. Here **not-ready** means that the printed statement is false,
+ambiguous, or depends essentially on a formally refuted source lemma. It does
+not mean that every printed result has been formalized.
 
 The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (21 distinct):** 249, 253, 342, 398, 606, 945, 1080, 1121, 1130,
-  1274, 1333, 1351, 1406, 1510, 1569, 1597, 1647, 1680, 1786, 1835, and 2221.
-- **Partial (7 distinct):** 278, 583, 801, 851, 972, 1013, and 1801.
+- **Complete (22 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
+  1130, 1274, 1333, 1351, 1406, 1510, 1569, 1597, 1647, 1680, 1786, 1835, and
+  2221.
+- **Partial (6 distinct):** 278, 583, 801, 851, 972, and 1801.
 - **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
   1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 22/9/14.
+  occurrences, giving the displayed totals 23/8/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -114,7 +124,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | **Theorem 4.9** (l.851, `thm:main-simple`) | 851–893 | Simple-MPDO implication chain \((i)\Rightarrow(ii)\Leftrightarrow(iii)\Rightarrow(iv)\Rightarrow(v)\) | `TNLean/MPS/MPDO/RFPViaTSSAL.lean`; `TNLean/MPS/MPDO/CyclicActiveAreaLaw.lean`; `TNLean/MPS/MPDO/ActiveSectorSpanningAreaLaw.lean`; `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`; `TNLean/Channel/PetzProductReference.lean` | **partial** — implication \((i)\Rightarrow(ii)\) is complete at the explicit density-family boundary: positive semidefinite rings, nonzero trace at every positive length, and the Definition 4.1 local RFP equations imply source ZCL and SAL. The fixed-bond and source-ZCL implication to SAL is now complete for the original injective normal tensor. The overall theorem remains partial because the printed route to \((iv)\) depends on false Lemma C.5 and the recovery alternative remains incomplete under #4228/#4405; #4961/#4962 are dependent research follow-ups |
 | **Proposition 4.13** (source label `Prop:IV.12`, l.945) | 945–952; proof 1863–1922 | A literal CPSV canonical-form MPDO tensor is vertically in canonical form | `TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean` (`MPOTensor.verticalCF_of_cpsvCanonicalForm`) and its prerequisite modules | **complete** — the theorem constructs positive grouped weights and a rectangular coisometry $U$ with $UU^\dagger=I$, $U\widetilde M U^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, and $\widetilde M=U^\dagger(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha)U$; it does not assert $U^\dagger U=I$ |
 | **Theorem 4.14** (source label `thm:IV.13`, l.972) | 972–993; proof 1929–2088 | RFP iff the tensor-attached BNT algebra condition iff the fusion-isometry condition | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean`; `BNTAlgebraTensorClauseSpectrum.lean`; `BNTFusionTensorClauseFromRFP.lean`; `AlgebraFusionCounterexample.lean` | **partial** — several directions and the tensor-attached data are complete; algebra⇒RFP still requires #4648, then #4645, then the CPTP construction and #3949. All three issues are assigned to `LionSR`; Proposition 4.13 does not supply the missing marked/common-target comparison |
-| Theorem (l.1013) | 1013–1016 | Length-independent coefficients imply a topological-projector commuting Gibbs form | `TNLean/MPS/MPDO/TopologicalPhysicalGibbs.lean` (`MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS`) | **partial** — the physical decomposition is proved for chains of length at least two under the stronger BNT-refined `IsHorizontalCF` hypothesis; the printed theorem assumes only an RFP MPDO and does not state that restriction |
+| Theorem (l.1013) | 1013–1016 | Length-independent coefficients imply a topological-projector commuting Gibbs form | `TNLean/MPS/MPDO/CPSVTopologicalPhysicalGibbs.lean` (`MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm`) | **complete, with documented local corrections and length boundary** — for a literal CPSV canonical-form MPDO tensor satisfying the RFP condition and clause-relative length independence, the theorem gives the physical-space decomposition for every source-defined chain length $L=N+2$. Active product sectors, empty fixed-pair support, retained-row coisometries, the finite physical complement, and the unspecified length-one two-site convention are recorded in the corresponding paper-gap notes |
 
 ### 2.4 Appendix A — Proofs of Section II
 
@@ -313,7 +323,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 19 non-complete distinct CPSV16 results comprise 7 partial and 12
+The 18 non-complete distinct CPSV16 results comprise 6 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -336,7 +346,6 @@ axiom-free.
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the finite $4\log D$ bound remains open | #4169/#4242/#4295, assigned to `LionSR` |
 | Partial | CPSV16 | Theorem 4.9 | Implication \((i)\Rightarrow(ii)\) is complete for positive semidefinite rings with nonzero trace at every positive length, and the fixed-bond plus source-ZCL implication to SAL is complete; Lemma C.5 is false, and the recovery alternative remains incomplete | #4228/#4405, assigned to `LionSR`; #4961/#4962 are dependent research follow-ups |
 | Partial | CPSV16 | Theorem 4.14 | Algebra⇒RFP still needs the tensor-attached Gram comparison, unitary normalization, and CPTP maps | #4648 → #4645 → #3949, assigned to `LionSR` |
-| Partial | CPSV16 | Topological-projector commuting Gibbs theorem, lines 1013–1016 | The physical decomposition is proved only above one site and under the stronger `IsHorizontalCF` hypothesis | Literal-RFP scope extension remains open |
 | Not-ready | CPSV16 | Lemma C.5 (`SALZCL`) | A formal injective four-sector counterexample has SAL and source ZCL but no rank-one active trace factorization | #4270 closed by counterexample |
 | Not-ready | CPSV16 | Structural corollary, lines 1503–1506 | Its printed proof depends on false Lemma C.5 | No source-faithful replacement known |
 | Complete | CPSV16 | Proposition `4to2`, lines 1597–1601 | The selected physical coordinates give all-cut Markov decompositions for the original tensor, hence SAL, which is transported back through the one-site isometry | `MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL` |
