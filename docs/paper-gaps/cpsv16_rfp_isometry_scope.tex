@@ -9,7 +9,7 @@
 
 \title{Per-block RFP Isometry Form and the Source Isometry Condition in CPSV16}
 \author{}
-\date{2026-06-14}
+\date{2026-07-31}
 
 \begin{document}
 \maketitle
@@ -313,6 +313,69 @@ renormalization fixed point of the direct sum by
 \leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  This is the
 residual-isometry content of Corollary~III.cor3 at the normal-tensor-block level.
 
+
+\section{Corollary 3.12: arbitrary and active BNT members}
+
+The printed Corollary~3.12 applies the joint residual-isometry conclusion to an
+arbitrary BNT of a canonical-form renormalization fixed point. This is false
+because the BNT definition permits a listed normal tensor whose coefficient
+vanishes at every positive length. Such a tensor need not be orthogonal to the
+active members.
+
+A bond-one example has two physical letters and
+\begin{align}
+  A^0=B_0^0&=1,
+  &A^1=B_0^1&=0,
+  &B_1^0=B_1^1&=\frac1{\sqrt2}.
+\end{align}
+The tensor $A$ is in CPSV canonical form and has identity transfer map. The
+family $(B_0,B_1)$ is eventually linearly independent and spans every
+positive-length matrix product vector of $A$ with coefficients $1$ and $0$,
+respectively. It is therefore a BNT for $A$. Both $B_0$ and $B_1$ have identity
+transfer map, but
+\begin{align}
+  \sum_{i=0}^1 B_0^i\overline{B_1^i}
+  =\frac1{\sqrt2}\ne0.
+\end{align}
+In bond dimension one, trace normalization fixes the positive diagonal factor
+to $1$, while scalar conjugation cancels. Hence no square-root decomposition of
+these two BNT members can produce a joint residual-isometry family. This is the
+theorem
+\leanid{MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample} in
+\doclink{TNLean/MPS/RFP/BNTResidualIsometryCounterexample}.
+
+The diagonal conclusion does hold for the active blocks listed by literal CPSV
+canonical-form data. Write
+\begin{align}
+  A^i=U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U,
+  \qquad UU^\dagger=I,
+\end{align}
+with every $A_k$ normal. If $A$ has idempotent transfer map and $\mu_k\ne0$,
+then
+\begin{align}
+  |\mu_k|=1,
+  \qquad
+  \mathcal E_{A_k}^2=\mathcal E_{A_k}.
+\end{align}
+Indeed, coisometric reconstruction preserves transfer idempotence, each scaled
+block $\mu_kA_k$ is then a fixed point, and
+$\mathcal E_{\mu_kA_k}=|\mu_k|^2\mathcal E_{A_k}$. Normality gives
+$r(\mathcal E_{A_k})=1$, while a nonzero idempotent has spectral radius one, so
+$|\mu_k|=1$. These statements are
+\leanid{MPSTensor.isTransferIdempotent_coisometry_reconstruction_iff},
+\leanid{MPSTensor.norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul},
+and
+\leanid{MPSTensor.CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp}
+in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.
+
+Consequently every active listed block has the trace-normalized square-root
+form furnished by the single-normal-tensor characterization. The remaining
+statement is the simultaneous off-diagonal equation for one representative of
+each active gauge-phase class. The direct-sum theorem proves this equation when
+the direct sum of those representatives is itself a renormalization fixed
+point. Deriving that hypothesis from the literal canonical-form data has not yet
+been proved.
+
 \section{Backward direction (multiplicity-one)}
 
 The backward direction of the characterization is also formalized at the
@@ -494,18 +557,24 @@ The diagonal weight is
 $\Lambda_\alpha=\rho_{\alpha,\alpha}/\tr\rho$, and $\sqrt\Lambda$ dresses the
 unit isometry.  This closes the single-normal-tensor lemma under its printed
 hypotheses while preserving the local square-root correction.  The cross-block
-$\delta_{j,j'}$ orthogonality equations of \path{eq:III_isometry} are formalized
-at the normal-tensor-block level by
-\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.  For the
-multiplicity-one basis direct sum, the single BNT canonical-form predicate now
-supplies all blockwise hypotheses and the residual family.  The remaining part
-of the printed theorem is not presently a well-specified mathematical
-statement: its displayed isometry omits $q$, while the prose invokes an
-unspecified physical direct sum.  The tensor
+$\delta_{j,j'}$ orthogonality equations of \path{eq:III_isometry} hold for a
+direct sum of distinct normal blocks whose whole transfer map is idempotent, by
+\leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.
+For literal CPSV canonical-form data, every active listed block has unit-modulus
+weight and is itself a renormalization fixed point. This proves the diagonal
+part of Corollary~3.12 for active blocks. The printed arbitrary-BNT statement is
+false: the bond-one pair $(B_0,B_1)$ above includes an unused BNT member and has
+cross inner product $1/\sqrt2$. The joint residual-isometry equations for
+representatives of all active gauge-phase classes have not yet been derived
+from the literal canonical-form hypothesis.
+
+The remaining repeated-copy part of Theorem~3.11 is not presently a
+well-specified mathematical statement: its displayed isometry omits $q$, while
+the prose invokes an unspecified physical direct sum. The tensor
 $A^0=\operatorname{diag}(1,-1)$ proves that the literal virtual-block reading
-fails both \path{AA=A} and whole-tensor transfer-map idempotence.  The formal
-development therefore records the exact literal-block criterion and leaves the
-independent-phase claim unmarked pending a corrected source statement.
+fails both \path{AA=A} and whole-tensor transfer-map idempotence. The exact
+literal-block criterion is therefore recorded, while the independent-phase
+claim awaits a corrected source statement.
 
 \bibliographystyle{alpha}
 \bibliography{references}
