@@ -14,6 +14,7 @@ import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.BNTOrthogonality
+import TNLean.MPS.RFP.BNTResidualIsometryCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
