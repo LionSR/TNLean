@@ -208,6 +208,15 @@ the support compression is formalized.\footnote{Formal declarations:
 \leanid{Matrix.weightedHilbertSchmidtMap_norm_le} and
 \leanid{Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction} in
 \doclink{TNLean/Channel/WeightedHilbertSchmidt}.}
+The full-support eigenbasis assembly is also formalized: the whitening is
+identified exactly with the rectangular Choi matrix, including the input
+transpose convention, the modular congruences preserve the range dimension,
+and the resulting squared Frobenius norm is bounded by operator-Schmidt
+rank.\footnote{Formal declarations:
+\leanid{Matrix.supportedMarginalWhitenedState_eq_rectangularChoi},
+\leanid{Matrix.finrank_range_weightedHilbertSchmidtMap}, and
+\leanid{Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank}
+in \doclink{TNLean/Channel/WhitenedChoi}.}
 This result assumes both weights are positive definite; it does not formalize
 an unrestricted support-compressed theorem for a singular output weight.  In
 particular, the Lean theorem assumes the output-faithfulness hypothesis

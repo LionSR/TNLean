@@ -35,6 +35,8 @@ is not asserted here.
 
 ## Main statements
 
+* `Matrix.supportedMarginalMap_diagonal`: the supported-marginal map sends the
+  diagonal marginal density to the second marginal.
 * `Matrix.supportedMarginalInputScaling_surjective`: positivity of every
   marginal eigenvalue makes the scaling invertible.
 * `Matrix.range_supportedMarginalMap`: the resulting map has the same range as
@@ -192,6 +194,37 @@ theorem supportedMarginalMap_trace
     exact (pow_two (Real.sqrt (p i))).symm.trans (Real.sq_sqrt (le_of_lt (hp i)))
   rw [← hsq]
   field_simp
+
+omit [Fintype β] [DecidableEq β] in
+/-- The supported-marginal map sends the diagonal first marginal to the
+second marginal.
+
+This is the identity \(\Phi(\sigma)=\tau\) in the state--channel
+correspondence used in Beigi, arXiv:1306.5920, Theorem 6, equation (18). -/
+theorem supportedMarginalMap_diagonal
+    (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
+    (hp : ∀ i, 0 < p i) :
+    supportedMarginalMap ρ p (diagonal fun i ↦ (p i : ℂ)) =
+      partialTraceLeft ρ := by
+  ext a b
+  rw [supportedMarginalMap_apply, partialTraceLeft_apply]
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, operatorBlock]
+  rw [Fintype.sum_prod_type]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Finset.sum_eq_single i]
+  · simp only [Matrix.diagonal_apply, if_pos, marginalInvSqrt]
+    have hi : (Real.sqrt (p i) : ℂ) ≠ 0 := by
+      exact_mod_cast ne_of_gt (Real.sqrt_pos.2 (hp i))
+    have hsq : (Real.sqrt (p i) : ℂ) * (Real.sqrt (p i) : ℂ) = (p i : ℂ) := by
+      norm_cast
+      exact (pow_two (Real.sqrt (p i))).symm.trans
+        (Real.sq_sqrt (le_of_lt (hp i)))
+    rw [← hsq]
+    field_simp
+  · intro j _ hji
+    simp [Ne.symm hji]
+  · simp
 
 /-- Positivity of the bipartite operator gives a rectangular Kraus
 representation of its supported-marginal map. -/
