@@ -21,8 +21,10 @@ as the original operator-Schmidt reshaping.
 The finite-dimensional inequality bounding entanglement-assisted mutual
 information by the logarithm of this range dimension follows from Beigi's
 weighted Hilbert--Schmidt contraction and order monotonicity, together with
-the order-one limit of Müller-Lennert et al.  Its formalization is tracked
-separately in issue \#4295 and is not asserted here.
+the order-one limit of Müller-Lennert et al.  The mathematical argument and
+formalization status are recorded in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`; the inequality
+is not asserted here.
 
 ## Main definitions
 
