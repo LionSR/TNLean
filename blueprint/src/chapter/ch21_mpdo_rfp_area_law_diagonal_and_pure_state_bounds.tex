@@ -1284,6 +1284,162 @@ terms of operator-Schmidt rank.
     The rectangular Choi range-dimension estimate now proves the claim.
 \end{proof}
 
+\begin{theorem}[Real powers under unitary conjugation]
+    \label{thm:rpow_conj_unitary}
+    \lean{Matrix.rpow_conj_unitary}
+    \leanok
+    \uses{lem:cfc_conj_unitary}
+    Let $A\succeq0$, let $s\in\R$, and let $U$ be unitary. Then
+    \begin{align}
+      (UAU^\dagger)^s&=UA^sU^\dagger.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cfc_conj_unitary}
+    Apply Lemma~\ref{lem:cfc_conj_unitary} to the function $x\mapsto x^s$.
+\end{proof}
+
+\begin{theorem}[Real powers of positive tensor products]
+    \label{thm:rpow_kronecker_possemidef}
+    \lean{Matrix.PosSemidef.rpow_kronecker}
+    \leanok
+    \uses{thm:multiplicative_functional_calculus_tensor_product}
+    Let $A\succeq0$ and $B\succeq0$. For every $s\in\R$,
+    \begin{align}
+      (A\otimes B)^s&=A^s\otimes B^s.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:multiplicative_functional_calculus_tensor_product}
+    Apply
+    Theorem~\ref{thm:multiplicative_functional_calculus_tensor_product} to
+    $x\mapsto x^s$, using $(xy)^s=x^sy^s$ for $x,y\geq0$.
+\end{proof}
+
+\begin{theorem}[Inverse quarter-power from iterated square roots]
+    \label{thm:rpow_neg_quarter_inv_sqrt_sqrt}
+    \lean{Matrix.PosDef.rpow_neg_quarter_eq_inv_sqrt_sqrt}
+    \leanok
+    If $A\succ0$, then
+    \begin{align}
+      A^{-1/4}&=\left(\sqrt{\sqrt A}\right)^{-1}.
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The continuous functional calculus gives
+    $\sqrt{\sqrt A}=A^{1/4}$. Positive definiteness makes this matrix
+    invertible, and inversion changes the exponent from $1/4$ to $-1/4$.
+\end{proof}
+
+\begin{theorem}[Unitary invariance of the order-two functional]
+    \label{thm:sandwiched_renyi_two_unitary_invariance}
+    \lean{TNLean.sandwichedRenyiTwoTrace_conj_unitary}
+    \leanok
+    \uses{def:sandwiched_renyi_two_trace, thm:rpow_conj_unitary}
+    Let $\omega\succeq0$, let $\rho$ be a square matrix of the same size, and
+    let $U$ be unitary. Then
+    \begin{align}
+      Q_2(U\rho U^\dagger,U\omega U^\dagger)
+      &=Q_2(\rho,\omega).
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:rpow_conj_unitary}
+    Theorem~\ref{thm:rpow_conj_unitary} gives
+    $(U\omega U^\dagger)^{-1/4}=U\omega^{-1/4}U^\dagger$.
+    Substitute this identity into both sandwiching factors and use
+    $U^\dagger U=1$ and cyclicity of the trace.
+\end{proof}
+
+\begin{theorem}[Faithful marginal whitening bound]
+    \label{thm:sandwiched_renyi_two_osr_faithful}
+    \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef}
+    \leanok
+    \uses{def:sandwiched_renyi_two_trace,
+      def:bipartite_operator_schmidt_rank,
+      lem:partial_trace_product_isometry,
+      thm:operator_schmidt_rank_local_isometry,
+      thm:full_support_eigenbasis_whitened_choi_bound,
+      thm:rpow_kronecker_possemidef,
+      thm:rpow_neg_quarter_inv_sqrt_sqrt,
+      thm:sandwiched_renyi_two_unitary_invariance}
+    Let $\rho_{AB}\succeq0$ have positive definite marginals $\rho_A$ and
+    $\rho_B$. Then
+    \begin{align}
+      Q_2(\rho_{AB},\rho_A\otimes\rho_B)
+      &\leq\operatorname{OSR}(\rho_{AB}).
+      \label{eq:mpdo_faithful_q2_osr}
+    \end{align}
+    No trace normalization is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:partial_trace_product_isometry,
+      thm:operator_schmidt_rank_local_isometry,
+      thm:full_support_eigenbasis_whitened_choi_bound,
+      thm:rpow_kronecker_possemidef,
+      thm:rpow_neg_quarter_inv_sqrt_sqrt,
+      thm:sandwiched_renyi_two_unitary_invariance}
+    Choose a unitary $U$ that diagonalizes the first marginal and conjugate
+    $\rho_{AB}$ by $U^\dagger\otimes1$. The two marginals become
+    $\diag(p_i)$ and $\rho_B$, while positivity and operator-Schmidt rank are
+    unchanged. The transpose in the Choi whitening convention becomes
+    invisible only in this eigenbasis, since $\diag(p_i)^T=\diag(p_i)$.
+
+    Theorems~\ref{thm:rpow_kronecker_possemidef} and
+    \ref{thm:rpow_neg_quarter_inv_sqrt_sqrt} identify the negative
+    quarter-power of the product marginal with the two whitening factors in
+    Theorem~\ref{thm:full_support_eigenbasis_whitened_choi_bound}. That theorem
+    bounds the squared whitened trace by the ordinary operator-Schmidt rank.
+    Finally, Theorem~\ref{thm:sandwiched_renyi_two_unitary_invariance} and the
+    invariance of operator-Schmidt rank under local unitaries return
+    to the original basis.
+\end{proof}
+
+\begin{theorem}[Marginal-support whitening bound]
+    \label{thm:sandwiched_renyi_two_osr_support}
+    \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank}
+    \leanok
+    \uses{thm:sandwiched_renyi_two_osr_faithful,
+      thm:sandwiched_renyi_two_support_compression,
+      thm:operator_schmidt_rank_marginal_support_compression,
+      thm:faithful_marginals_support_compression}
+    Let $\rho_{AB}\succeq0$ be any finite-dimensional bipartite operator. Then
+    \begin{align}
+      Q_2(\rho_{AB},\rho_A\otimes\rho_B)
+      &\leq\operatorname{OSR}(\rho_{AB}).
+      \label{eq:mpdo_support_q2_osr}
+    \end{align}
+    No trace normalization or positive-dimension hypothesis is required. The
+    statement includes the cases in which either marginal support has
+    dimension zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:sandwiched_renyi_two_osr_faithful,
+      thm:sandwiched_renyi_two_support_compression,
+      thm:operator_schmidt_rank_marginal_support_compression,
+      thm:faithful_marginals_support_compression}
+    Compress both factors simultaneously to the supports of $\rho_A$ and
+    $\rho_B$. The compressed marginals are positive definite by
+    Theorem~\ref{thm:faithful_marginals_support_compression}, even when a
+    support coordinate space has dimension zero. The order-two functional is
+    unchanged by
+    Theorem~\ref{thm:sandwiched_renyi_two_support_compression}, and the
+    ordinary operator-Schmidt rank is unchanged by
+    Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}.
+    Apply Theorem~\ref{thm:sandwiched_renyi_two_osr_faithful} to the compressed
+    operator.
+\end{proof}
+
 The sandwiched R\'enyi comparison also uses the following unnormalized
 trace term.  For trace-one $\rho$ and $\alpha>1$, it is the quantity inside the
 logarithm of the sandwiched R\'enyi divergence
@@ -1392,50 +1548,25 @@ logarithmic divergence, or a comparison with relative entropy.
         \leq \log\operatorname{OSR}(\rho_{AB}).
         \notag
     \end{align}
-    The mathematical inequality is established, but its formal verification is
-    not yet complete.
-    % Formalization is tracked by issues #5211, #5212, and #5213.
+    % Formalization is tracked by issue #5212.
 \end{theorem}
 \begin{proof}
     \uses{thm:relative_entropy_q2_support,
-      thm:operator_schmidt_rank_marginal_support_compression,
-      thm:faithful_marginals_support_compression,
-      thm:full_support_eigenbasis_whitened_choi_bound}
+      thm:sandwiched_renyi_two_osr_support}
     Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
-    $\ker\omega\subseteq\ker\rho_{AB}$, so
-    Theorem~\ref{thm:relative_entropy_q2_support} gives
-    $D(\rho_{AB}\Vert\omega)\leq\log Q_2(\rho_{AB},\omega)$ directly.
-    To relate the order-two functional to operator-Schmidt rank, compress the
-    two tensor factors separately to the supports of $\rho_A$ and $\rho_B$.
-    Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}
-    shows that this simultaneous local compression reconstructs the original
-    operator and preserves operator-Schmidt rank. By
-    Theorem~\ref{thm:faithful_marginals_support_compression}, its two marginals
-    are faithful.
-
-    In the resulting faithful spaces, write $\sigma=\rho_A$ and
-    $\tau=\rho_B$. Choose an eigenbasis of $\sigma$, and set
+    $\ker\omega\subseteq\ker\rho_{AB}$, and the two matrices have trace one.
+    Therefore
     \begin{align}
-        W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
-          (\sigma^T\otimes\tau)^{-1/4}.
-        \notag
+      I(A:B)_\rho
+      &=D(\rho_{AB}\Vert\omega) \\
+      &\leq\log Q_2(\rho_{AB},\omega) \\
+      &\leq\log\operatorname{OSR}(\rho_{AB}).
+      \notag
     \end{align}
-    The full-support eigenbasis estimate gives
-    \begin{align}
-        \tr(W^2)=\|W\|_F^2
-        \leq\operatorname{OSR}(\rho_{AB}).
-        \notag
-    \end{align}
-    Theorem~\ref{thm:relative_entropy_q2_support} and the whitened
-    estimate now give
-    \begin{align}
-        I(A:B)_\rho
-        =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-        \leq\log\tr(W^2)
-        \leq\log\operatorname{OSR}(\rho_{AB}),
-        \notag
-    \end{align}
-    which proves the result.
+    The first inequality is
+    Theorem~\ref{thm:relative_entropy_q2_support}; the second follows from
+    Theorem~\ref{thm:sandwiched_renyi_two_osr_support} and monotonicity of the
+    logarithm.
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]
