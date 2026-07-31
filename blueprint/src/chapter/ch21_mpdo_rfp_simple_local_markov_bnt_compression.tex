@@ -824,8 +824,8 @@ strong subadditivity for a normalized three-site reduced state.
     integer $n_s$ then gives positivity of the sector operator.
 \end{proof}
 
-% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
-% 1597--1619, and Proposition `prop4to2`, lines 1801--1808.
+% Source: arXiv:1606.00608, Appendix C.2, Lemma `lemmus`, lines
+% 1646--1661, and the absorbed-sector ZCL conclusion at line 1781.
 \begin{theorem}[Ambient ZCL descends to the canonical absorbed BNT elements]
     \label{thm:mpdo_absorbed_bnt_sector_zcl}
     \lean{MPOTensor.weight_copy_independent_of_isSourceZCL}
@@ -835,9 +835,7 @@ strong subadditivity for a normalized three-site reduced state.
       physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
-    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
-      lem:mpdo_simple_blockwise_zcl_equation,
-      def:mpdo_common_sector_weight_absorption}
+    \uses{def:mpdo_common_sector_weight_absorption}
     Let $K$ be a simple tensor in its chosen canonical form and suppose that
     $K$ has source zero correlation length. Then the copy weights over each
     normal representative agree. For every representative $A_s$ with
@@ -858,6 +856,8 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
+      lem:mpdo_simple_blockwise_zcl_equation}
     Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
     common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
     then gives the displayed quadratic identity. The common weight is nonzero,
