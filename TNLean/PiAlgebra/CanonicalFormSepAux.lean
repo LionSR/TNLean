@@ -33,11 +33,6 @@ the non-strict, ties-allowed order used in the reduction to canonical form.
 - Canonical-form conditions: `IsCanonicalForm` and `IsNormalCanonicalForm`.
 -/
 
-set_option linter.unusedSectionVars false
-set_option linter.unusedVariables false
-set_option linter.style.longLine false
-set_option linter.unusedSimpArgs false
-
 open scoped Matrix BigOperators
 
 namespace MPSTensor
