@@ -229,29 +229,26 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
     fun k => ⟨Nat.ne_of_gt (data.dim_pos k)⟩
   letI : ∀ j : Fin data.activePhaseClasses.g, NeZero (repDim j) :=
     fun j => ⟨Nat.ne_of_gt (data.dim_pos (data.activeRepresentativeIndex j))⟩
-  have hμ : ∀ j, ‖μ j‖ = 1 := fun j =>
-    (data.active_weight_norm_one_and_block_rfp hRFP
-      (data.activeRepresentativeIndex j)).1
+  have hActive : ∀ j, ‖μ j‖ = 1 ∧ IsTransferIdempotent (B j) := fun j =>
+    data.active_weight_norm_one_and_block_rfp hRFP (data.activeRepresentativeIndex j)
+  have hμ : ∀ j, ‖μ j‖ = 1 := fun j => (hActive j).1
   have hμne : ∀ j, μ j ≠ 0 := fun j => Complex.ne_zero_of_norm_eq_one (hμ j)
-  have hBRFP : ∀ j, IsTransferIdempotent (B j) := fun j =>
-    (data.active_weight_norm_one_and_block_rfp hRFP
-      (data.activeRepresentativeIndex j)).2
+  have hBRFP : ∀ j, IsTransferIdempotent (B j) := fun j => (hActive j).2
   have hBICF : ∀ j, IsIsometryCanonicalForm (B j) := fun j =>
     (ref.representativeNormal j).isTransferIdempotent_iff_isIsometryCanonicalForm.mp (hBRFP j)
   let allScaled : (k : Fin data.r) → MPSTensor d (data.dim k) :=
     fun k i => data.weights k • data.blocks k i
-  have hRetained : IsTransferIdempotent (directSumTensor allScaled) := by
-    have h := (isTransferIdempotent_coisometry_reconstruction_iff A
+  have hRetained : IsTransferIdempotent (directSumTensor allScaled) :=
+    (isTransferIdempotent_coisometry_reconstruction_iff A
       (toTensorFromBlocks data.weights data.blocks)
       data.ambient_coisometry data.coisometric data.reconstruct).mp hRFP
-    exact h
   have hCRFP : IsTransferIdempotent (directSumTensor C) :=
     (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
       C).2 fun j k =>
         mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
           allScaled hRetained (data.activeRepresentativeIndex j)
             (data.activeRepresentativeIndex k)
-  choose σ hσ hσfix hTP hGauge hPrim hIrr using
+  choose σ _hσ _hσfix hTP hGauge _hPrim hIrr using
     fun j => (ref.representativeNormal j).exists_tpGauge
   let P : (j : Fin data.activePhaseClasses.g) → MPSTensor d (repDim j) :=
     fun j i => μ j • tpGauge (B j) (σ j) i
@@ -302,7 +299,7 @@ and its chosen active BNT refinement, the representative blocks possess simultan
 isometry forms with a joint residual-isometry family.
 
 Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/
-theorem exists_activeBNT_residualIsometryFamily
+theorem exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent
     (hCF : IsCPSVCanonicalForm A) (hRFP : IsTransferIdempotent A) :
     ∃ (X : (j : Fin hCF.data.activePhaseClasses.g) →
         Matrix (Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j)))
