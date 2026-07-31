@@ -89,6 +89,7 @@ conjugacies between its paired normal tensors.
 invertible conjugacy from Appendix C.4, but not the line-2057 conclusion that the
 gauge may be chosen unitary.  The missing common-target normalization contract is
 documented in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and
+tracked in issue 4648.  The subsequent scalar-to-unitary normalization is
 tracked in issue 4645.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057 of
@@ -160,7 +161,8 @@ canonical form used in Appendix C.4 through Proposition 4.13; see
 equality and phase-one invertible conjugacy, but does not prove the line-2057
 unitary upgrade.  The missing common-target normalization contract is documented
 in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and tracked in
-issue 4645.
+issue 4648.  The subsequent scalar-to-unitary normalization is tracked in issue
+4645.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
