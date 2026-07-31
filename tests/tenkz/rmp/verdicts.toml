@@ -586,10 +586,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "6d28f37dc9c4709d8f513c76e253a713d60c0fac566fba7d4c79669cd4468846"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "masonry patch with diagonal stubs; truncated to the line cap (#4931 for the lattice-genre gaps)"
+case_sha256 = "4d8d628bab9154229183c1f8042a583dc82e21c680a4469155bc6e5941cc2363"
+reviewed = "2026-07-30"
+renderer = "codex-source-split-page-review-2026-07-30-180dpi"
+note = "the six-by-eight topology, 48 GHZ copy junctions, 62 internal Hadamard bonds, 20 open virtual legs, and 48 physical legs match the source; only the shared kernel spacing and stroke profile differ"
 
 [[verdict]]
 id = "rmp-iii-a-ghz-tensor"
@@ -1273,10 +1273,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "9f1941da3694c489e3559f67f1b3bf01f54b79057e1ec10cfc53c4444b9876b0"
-reviewed = "2026-07-27"
-renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
-note = "the dense masonry checkerboard, transcribed as the equivalence twin of rmp-iii-a-ghz-state -- both targets cite author lines 329-356 -- with the twin declared in the manifest"
+case_sha256 = "d1a3bd092167ec337527930ffb0790e389a2c3f0438653239c5336d0e192b517"
+reviewed = "2026-07-30"
+renderer = "codex-source-split-page-review-2026-07-30-180dpi"
+note = "equivalence twin is pixel-identical to the published target; topology and counts match the source, with only the shared kernel spacing and stroke profile remaining"
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-up"
