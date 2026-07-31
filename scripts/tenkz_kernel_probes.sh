@@ -112,7 +112,7 @@ grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
   exit 1
 }
 [ "$(grep -c 'kernel-boundary|signature=$' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 3 ] || {
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 4 ] || {
   echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
   exit 1
 }
@@ -877,6 +877,7 @@ done
 for contract_negative in \
   n_one_end_wire \
   n_duplicate_port \
+  n_port_type \
   n_port_policy_type \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
@@ -904,6 +905,8 @@ do
     expected='[TKZ-LANG-WIRE-ARITY]'
   [ "$contract_negative" = n_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_port_policy_type ] &&
     expected='[TKZ-PORT-POLICY-TYPE]'
   [ "$contract_negative" = n_sealed_duplicate_port ] &&
