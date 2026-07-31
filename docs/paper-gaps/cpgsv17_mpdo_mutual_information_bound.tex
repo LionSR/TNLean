@@ -354,7 +354,7 @@ the singular theorem assumes $\rho,\omega\geq0$, both traces equal to one, and
 $\ker\omega\subseteq\ker\rho$.
 \footnote{Formal declarations:
 \leanid{Matrix.cfc_transpose},
-\leanid{Matrix.PosSemidef.cfc_log_kronecker},
+\leanid{Matrix.log_kronecker_posSemidef},
 \leanid{Matrix.PosSemidef.cfc_log_sqrt},
 \leanid{Matrix.PosDef.cfc_log_rpow},
 \leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef},
@@ -365,9 +365,6 @@ and
 \doclink{TNLean/Analysis/MatrixSqrt},
 \doclink{TNLean/Analysis/SandwichedRenyiTwo}, and
 \doclink{TNLean/Analysis/SupportCompressedEntropy}.}
-Thus the mathematical comparison tracked by
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete.
-
 The one-sided output-support compression is also formalized: faithfulness of
 the input weight forces every channel output into the support of its image,
 the compressed channel is trace preserving, and the support-restricted
@@ -421,12 +418,12 @@ marginals, and their positive definiteness are now formalized.
 \leanid{Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression}, and
 \leanid{Matrix.PosSemidef.marginalSupport_compression_marginals_posDef} in
 \doclink{TNLean/Channel/MarginalSupportAbsorption}.}
-The faithful and singular relative-entropy comparisons are now proved, so the
-mathematical task in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete.  The
-proof uses the relative-modular half-moment, support-aware Jensen, and
-Hilbert--Schmidt Cauchy--Schwarz; it requires neither a general weighted
-interpolation theorem nor an order-one limit.  The remaining work in
+The mathematical task tracked in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete: the
+faithful and singular relative-entropy comparisons are proved using the
+relative-modular half-moment, support-aware Jensen, and Hilbert--Schmidt
+Cauchy--Schwarz, without a general weighted interpolation theorem or an
+order-one limit.  The remaining work in
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is to apply the
 existing full-support whitened-state/Choi identification and Hilbert--Schmidt
 rank estimate after simultaneous marginal-support compression.  The

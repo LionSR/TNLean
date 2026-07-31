@@ -885,7 +885,7 @@
 
 \begin{proof}\leanok
     \uses{thm:cfc_transpose_hermitian,
-      thm:log_kronecker_support,
+      thm:mpdo_support_log_kronecker,
       thm:log_sqrt_possemidef,
       thm:log_rpow_posdef,
       thm:support_log_vector_jensen,
@@ -905,13 +905,21 @@
       &=\langle R,RTR\rangle_{\mathrm{HS}}.
       \label{eq:mpdo_relative_modular_half_moment}
     \end{align}
-    The support projection of $\Delta$ fixes $v$. Indeed, $T$ is positive
-    definite, while the support projection of $R^T$ fixes $R^T$; after
-    transposition this gives $R P_{\supp(R^T)}^T=R$. This support condition is
-    essential when $\rho$ is singular: it removes the zero spectral weights
-    before Jensen's inequality is applied.
+    The support projection of $\Delta$ fixes $v$:
+    \begin{align}
+      P_{\supp(\Delta)}v
+      &=(P_{\supp(R^T)}\otimes P_{\supp(T)})\operatorname{vec}(R)
+       =\operatorname{vec}(R)=v.
+      \label{eq:mpdo_relative_modular_support_fixing}
+    \end{align}
+    Indeed, $T$ is positive definite, so $P_{\supp(T)}=1$, while the support
+    projection of $R^T$ fixes $R^T$ and hence
+    $R P_{\supp(R^T)}^T=R$. The column-stacking identity
+    (\ref{eq:mpdo_column_vec_kronecker}) proves the displayed equality. This
+    support condition is essential when $\rho$ is singular: it removes the
+    zero spectral weights before Jensen's inequality is applied.
 
-    Theorems~\ref{thm:log_kronecker_support},
+    Theorems~\ref{thm:mpdo_support_log_kronecker},
     \ref{thm:log_sqrt_possemidef}, \ref{thm:log_rpow_posdef}, and
     \ref{thm:cfc_transpose_hermitian} give
     \begin{align}

@@ -196,11 +196,11 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** `MatrixSqrt.lean` and `Channel/Schwarz/SSAEqualityDPI.lean` each
   diagonalized two positive-semidefinite factors to prove the same logarithm
   formula on the product support.
-- **Reuse:** `Matrix.PosSemidef.cfc_log_kronecker` in
+- **Reuse:** `Matrix.log_kronecker_posSemidef` in
   `TNLean/Analysis/CfcKronecker.lean` is the canonical low-layer theorem.
 - **Result:** the duplicate proof was removed from `MatrixSqrt.lean`,
-  `Matrix.log_kronecker_posSemidef` remains a compatibility wrapper, and the
-  faithful entropy comparison uses the Analysis declaration directly.
+  `Matrix.log_kronecker_posSemidef` is the shared declaration, and the faithful
+  entropy comparison uses it directly.
 
 ### Transpose covariance of the continuous functional calculus
 - **Pattern:** `TNLean/Axioms/OperatorConvexity.lean` carried a private copy of
