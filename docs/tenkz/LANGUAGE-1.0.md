@@ -403,6 +403,26 @@ computed and never chosen. An empty crossing set is legal and meaningful. A
 derived crossing enters the model with every field a declared one carries, so
 an audit cannot tell the two apart.
 
+An addressed all-side route joins its ends to a rounded hull polyline. Hull
+faces remain straight and only the turns consume the shared `corner` metric,
+so a boundary wire leaving through a traversed face meets the route exactly
+once; changing an endpoint does not bow the face away from that crossing.
+
+When an all-side route has addressed ends, the run begins and ends at the
+turns of the measured hull nearest those ends. Address dependencies are
+resolved first: an end such as `on carrier 0.25` therefore uses the carrier's
+actual saved path. The same resolved turns determine both the drawn run and
+its ordered crossing set. Coordinates cross into the route engine at TeX's
+native scaled-point precision; policy classifies that same representable
+point, with no separate decimal rounding. Smaller offsets are coincident.
+An arbitrary addressed end must lie outside the selected hull: otherwise its
+connector and the hull run can meet one boundary wire twice, contradicting
+the route's single-crossing contract. A typed port belonging to the selection
+is the exception, since it is the route's own endpoint rather than a boundary
+wire to cross. The daylight clearance between the selected silhouettes and
+the offset route remains outside the hull and is a valid place for an end.
+An inside arbitrary end is `TKZ-ROUTE-END-INSIDE`.
+
 Two rules travel with the hull, and they are doctrine rather than elements.
 **Concentric order:** curves over the same selection are separated by one
 clearance, outward in declaration order for routes, inward by containment for
@@ -869,9 +889,10 @@ the whole picture.
 2. Picture options declare topology and policy; they create no hidden atoms.
 3. Body order may establish references; it never changes an earlier record.
    Crossing references resolve at validation (§5).
-4. Validation finishes before measurement; a renderer never repairs,
-   guesses, or silently drops requested ink. Unsupported ink is a coded hard
-   error.
+4. Topology measurement resolves hull routes and their address dependencies;
+   validation then freezes the completed model before ink. The renderer never
+   repairs, guesses, or silently drops requested ink. Unsupported ink is a
+   coded hard error.
 5. Open ink is declared content: the boundary signature is computed from
    port and wire records and written to the event stream.
 6. Raw TikZ is not public syntax. Themes rebind ink and typography; they add

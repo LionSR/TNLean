@@ -1,0 +1,10 @@
+% Negative: endpoint order does not make an open physical carrier virtual.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=A, ports={90:physical}]{A}
+  \tnwire[dir=from]{open n}{A.90}
+\end{tenkz}
+\end{document}

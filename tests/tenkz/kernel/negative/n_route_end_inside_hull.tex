@@ -1,0 +1,15 @@
+% Negative: an arbitrary endpoint inside a selected hull makes its connector
+% and hull arc cross the same boundary more than once.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=P, ports={0:virtual}]{P}
+  \tnwire[
+    kind=string,
+    route={all of P},
+    crossing=over
+  ]{0.0000001 s of P}{(1,3)}
+\end{tenkz}
+\end{document}

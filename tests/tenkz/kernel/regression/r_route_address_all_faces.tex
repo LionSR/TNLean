@@ -1,0 +1,60 @@
+% Regression: address-bearing all-side routes derive exactly the hull faces
+% between their endpoint corners, including a run that wraps through east.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[
+    at=(2,2),
+    name=P,
+    ports={90:virtual,180:virtual,270:virtual,0:virtual}
+  ]{P}
+  \tnwire[
+    kind=string,
+    name=address-route,
+    route={all of P},
+    crossing=over
+  ]{(1,3)}{(3,1)}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=Q, ports={0:virtual,90:virtual}]{Q}
+  \tnwire[
+    kind=string,
+    name=wrap-route,
+    route={all of Q},
+    crossing={alternate=under}
+  ]{(3,3)}{(1,1)}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=R, ports={90:virtual,180:virtual}]{R}
+  \tnwire[
+    kind=string,
+    name=same-corner-route,
+    route={all of R},
+    crossing=over
+  ]{(1,3)}{0.5 n of (1,3)}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,3), name=A]{A}
+  \tn[at=(3,3), name=B]{B}
+  \tn[at=(2,2), name=S, ports={90:virtual,180:virtual}]{S}
+  \tnwire[kind=string, name=carrier]{A}{B}
+  \tnwire[
+    kind=string,
+    name=dependent-route,
+    route={all of S},
+    crossing=over,
+    cross={over at crossing of dependent-route and carrier}
+  ]{on carrier 0.25}{(3,1)}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=T]{T}
+  \tnwire[
+    kind=string,
+    name=clearance-route,
+    route={all of T},
+    crossing=over
+  ]{0.5 e of T}{(1,3)}
+\end{tenkz}
+\end{document}

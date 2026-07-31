@@ -237,6 +237,29 @@
     \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
   }
 
+% An open route whose intermediate points are topological hull turns.  Its
+% faces stay straight so every boundary wire leaves through the face named by
+% the route model; only the turns consume the caller's shared corner radius.
+\cs_new_protected:Npn \__tenkz_string_declare_polyline:nnn #1#2#3
+  {
+    \__tenkz_string_register:nn {#1} {open}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
+    \__tenkz_string_load_pts:n {#2}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \seq_count:N \l__tenkz_string_pts_seq }
+    \seq_set_map:NNn \l__tenkz_string_pts_seq \l__tenkz_string_pts_seq
+      { ( ##1 ) }
+    \tl_set:Ne \l__tenkz_string_pts_tl
+      { \seq_use:Nn \l__tenkz_string_pts_seq { ~ -- ~ } }
+    \use:e
+      {
+        \exp_not:N \path
+          [ spath/save = #1 , rounded~corners = \exp_not:n {#3} ]
+          \exp_not:o \l__tenkz_string_pts_tl ;
+      }
+    \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
+  }
+
 % A closed string: one smooth Hobby cycle through every listed point.
 \cs_new_protected:Npn \__tenkz_string_declare_closed:nn #1#2
   {

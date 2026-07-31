@@ -116,6 +116,107 @@ if grep -F 'name=off-face-route' "$WORK/r_route_noncell_port.tnlog" |
   echo "FAIL: north route collected a non-cell carrier's east port" >&2
   exit 1
 fi
+address_route=$(
+  grep -F 'name=address-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: address-bearing all-side route emitted no record" >&2
+  exit 1
+}
+address_crossings='cross=over at crossing of address-route and port-open-1,'
+address_crossings="${address_crossings}over at crossing of address-route and port-open-2"
+printf '%s\n' "$address_route" |
+  grep -Fq "$address_crossings" || {
+  echo "FAIL: NE-to-SW all-side route lost its north-west face order" >&2
+  exit 1
+}
+if printf '%s\n' "$address_route" | grep -Eq 'port-open-[34]'; then
+  echo "FAIL: NE-to-SW all-side route collected an untraversed face" >&2
+  exit 1
+fi
+wrap_route=$(
+  grep -F 'name=wrap-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: wrapped address-bearing all-side route emitted no record" >&2
+  exit 1
+}
+wrap_crossings='cross=under at crossing of wrap-route and port-open-1,'
+wrap_crossings="${wrap_crossings}over at crossing of wrap-route and port-open-2"
+printf '%s\n' "$wrap_route" |
+  grep -Fq "$wrap_crossings" || {
+  echo "FAIL: SE-to-NW all-side route lost its east-north face order" >&2
+  exit 1
+}
+if grep -F 'name=same-corner-route' \
+     "$WORK/r_route_address_all_faces.tnlog" |
+   grep -Fq 'port-open-'; then
+  echo "FAIL: same-corner all-side route invented a hull-face crossing" >&2
+  exit 1
+fi
+dependent_route=$(
+  grep -F 'name=dependent-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: named-string-dependent all-side route emitted no record" >&2
+  exit 1
+}
+for crossing in \
+  'over at crossing of dependent-route and carrier' \
+  'over at crossing of dependent-route and port-open-1' \
+  'over at crossing of dependent-route and port-open-2'
+do
+  printf '%s\n' "$dependent_route" | grep -Fq "$crossing" || {
+    echo "FAIL: named-string-dependent route lost $crossing" >&2
+    exit 1
+  }
+done
+grep -Fq 'name=clearance-route' \
+    "$WORK/r_route_address_all_faces.tnlog" || {
+  echo "FAIL: address in the hull clearance annulus was rejected" >&2
+  exit 1
+}
+exact_route=$(
+  grep -F 'name=exact-route' "$WORK/r_route_dependent_turns.tnlog"
+) || {
+  echo "FAIL: exact all-side route emitted no record" >&2
+  exit 1
+}
+for crossing in \
+  'over at crossing of exact-route and port-open-1' \
+  'over at crossing of exact-route and port-open-2'
+do
+  printf '%s\n' "$exact_route" | grep -Fq "$crossing" || {
+    echo "FAIL: exact all-side route lost $crossing" >&2
+    exit 1
+  }
+done
+grep -Fq 'string|id=precision-route|kind=open|pts=5' \
+    "$WORK/r_route_dependent_turns.tnlog" || {
+  echo "FAIL: native coordinate precision collapsed a representable turn" >&2
+  exit 1
+}
+deferred_route=$(
+  grep -F 'name=h' "$WORK/r_route_dependent_turns.tnlog"
+) || {
+  echo "FAIL: leg-dependent all-side route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$deferred_route" | grep -Fq 'leg-s-1-1'; then
+  echo "FAIL: leg-dependent route used the pre-settlement default turn" >&2
+  exit 1
+fi
+for crossing in \
+  'stringcross|under=port-open-1|over=address-route|hits=1' \
+  'stringcross|under=port-open-2|over=address-route|hits=1' \
+  'stringcross|under=wrap-route|over=port-open-1|hits=1' \
+  'stringcross|under=port-open-2|over=wrap-route|hits=1' \
+  'stringcross|under=carrier|over=dependent-route|hits=1' \
+  'stringcross|under=port-open-1|over=dependent-route|hits=1' \
+  'stringcross|under=port-open-2|over=dependent-route|hits=1'
+do
+  grep -Fq "$crossing" "$WORK/r_route_address_all_faces.tnlog" || {
+    echo "FAIL: address-bearing all-side route missed $crossing" >&2
+    exit 1
+  }
+done
 grep -Fq \
     'stringcross|under=probe|over=port-open-1|hits=1' \
     "$WORK/r_port_open_crossing.tnlog" || {
@@ -151,11 +252,18 @@ plane_frame_canonical=$(
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
-grep -Fq '|from=addr-13|kind=index|to-open-type=physical|to-open=n' \
-    "$WORK/k_plane.tnlog" || {
+plane_physical_open=$(grep -F '|from=addr-13|' "$WORK/k_plane.tnlog") || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
   exit 1
 }
+for field in '|kind=index|' '|port-type=physical|' \
+             '|to-open-type=physical|' '|to-open=n'
+do
+  printf '%s\n' "$plane_physical_open" | grep -Fq "$field" || {
+    echo "FAIL: the plane fixture lost physical open field $field" >&2
+    exit 1
+  }
+done
 [ "$(grep -c '|origin=port-open|' \
       "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 8 ] || {
   echo "FAIL: unmatched typed ports did not materialize exactly eight open legs" >&2
@@ -959,6 +1067,9 @@ for contract_negative in \
   n_cell_port_type \
   n_physical_wire_dir_to \
   n_physical_wire_dir_from \
+  n_physical_open_wire_dir \
+  n_physical_open_wire_dir_from \
+  n_route_end_inside_hull \
   n_physical_open_port_type \
   n_interface_open_port_type \
   n_physical_trace_required_type \
@@ -1017,6 +1128,12 @@ do
     expected='[TKZ-PORT-DIRECTION]'
   [ "$contract_negative" = n_physical_wire_dir_from ] &&
     expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_open_wire_dir ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_open_wire_dir_from ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_route_end_inside_hull ] &&
+    expected='[TKZ-ROUTE-END-INSIDE]'
   [ "$contract_negative" = n_physical_open_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_interface_open_port_type ] &&
