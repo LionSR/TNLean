@@ -887,17 +887,6 @@ firstSiteMatrix_mul_reducedBlockState}
     \end{align}
     Then $M$ satisfies SAL.
 
-    In the canonical absorbed BNT presentation, ambient source zero
-    correlation length supplies the sectorwise hypothesis by
-    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. This conclusion is specific
-    to that canonical presentation. An arbitrary GSNNCH presentation does not
-    inherit source zero correlation length, since that condition belongs to
-    the tensor's physical-trace transfer rather than only to its periodic
-    operators.
-
-    % The remaining canonical BNT application is the all-original-cut bridge
-    % from eventual injectivity, tracked in issue #5208. The literal source
-    % proposition `prop4to2` is not complete until that bridge is proved.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
@@ -910,6 +899,24 @@ firstSiteMatrix_mul_reducedBlockState}
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
     then gives SAL for $M$.
 \end{proof}
+
+\begin{remark}[Sectorwise source ZCL in the canonical BNT application]
+    \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
+      thm:mpdo_absorbed_bnt_sector_zcl,
+      thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    In the canonical absorbed BNT presentation, ambient source zero
+    correlation length supplies the sectorwise hypothesis by
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. This conclusion is specific
+    to that canonical presentation. An arbitrary GSNNCH presentation does not
+    inherit source zero correlation length, since that condition belongs to
+    the tensor's physical-trace transfer rather than only to its periodic
+    operators. The remaining source application is the passage from eventual
+    injectivity to visibility at every original consecutive cut.
+
+    % The remaining bridge is tracked in issue #5208. The literal source
+    % proposition `prop4to2` is not complete until that bridge is proved.
+\end{remark}
 
 \begin{theorem}[Orthogonal commuting-bond sectors with ZCL satisfy SAL]
     \label{thm:mpdo_orthogonal_commuting_sector_zcl_sal}
