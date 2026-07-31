@@ -673,7 +673,7 @@
     \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
 
     \textbf{Scope restriction (positive chains of length at least two):}
-    the conclusion is proved for $L=N+2$. Definition~4.8 of
+    the conclusion is proved for $L=N+2$. Definition~4.8 of~
     \cite{Cirac2016MPDO_arXiv} defines $h$ on two spins but does not state a
     length-one convention; see
     \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
@@ -697,15 +697,19 @@
     reconstruction of the retained density operator.
 \end{proof}
 
-\begin{theorem}[Physical-coordinate commuting Gibbs decomposition above one
-    site]%
-    \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
-    \uses{thm:mpdo_topological_gibbs_at_least_two}
-    \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
+\begin{theorem}[Active-sector fusion gives a physical-coordinate commuting
+    Gibbs decomposition above one site]%
+    \label{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        hasPhysicalTopologicalGibbsDecomposition}
     \leanok
-    Let $M$ be in normalized BNT-refined horizontal form and satisfy the
-    hypotheses of Theorem~\ref{thm:mpdo_topological_gibbs_at_least_two}. There
-    are
+    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_gibbs_data_at_least_two,
+        thm:mpdo_topological_gibbs_at_least_two}
+    Let $M$ generate matrix product density operators, and fix an
+    active-sector fusion clause for a vertical canonical decomposition of
+    $M$. Suppose that the trace-power coefficients of its positive diagonal
+    fusion matrices are independent of the positive chain length. There are
     non-negative numbers $\lambda_1,\ldots,\lambda_d$ and one fixed Hermitian
     two-site matrix $\widehat h$, all independent of the chain length. For
     every $L\geq2$, let
@@ -725,17 +729,35 @@
           e^{-\widehat H_L}.
         \label{eq:rfp_physical_gibbs_sum}
     \end{align}
+    This is the fusion-clause implication in the proof of~
+    \cite[lines~999--1016]{Cirac2016MPDO_arXiv}.
 
-    \textbf{Scope restriction (BNT-refined horizontal form):}
-    the normalized BNT-refined horizontal hypothesis is stronger than the
-    literal CPSV canonical-form hypothesis.
-    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the fusion clause. A normal label
+    absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family, and no unsupported
+    normal sector is inserted. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction of the product tensor. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
 
     \textbf{Local fix (physical complement):}
     the retained one-site energy is compressed to physical coordinates and
     extended by zero energy on the orthogonal complement. The retained
     projectors are transported through the adjoint sitewise coisometry. See
     \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
+
+    \textbf{Scope restriction (positive chains of length at least two):}
+    the conclusion is proved for $L=N+2$. Definition~4.8 of
+    \cite{Cirac2016MPDO_arXiv} defines the local interaction on two spins but
+    gives no length-one convention. See
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
 \end{theorem}
 \begin{proof}\leanok
     Put $V$ for the retained-row coisometry and $k$ for the retained
@@ -758,6 +780,116 @@
     identities term by term to (\ref{eq:rfp_retained_gibbs_sum}), and then
     using exact adjoint reconstruction, gives
     (\ref{eq:rfp_physical_gibbs_sum}).
+\end{proof}
+
+\begin{theorem}[Physical-coordinate commuting Gibbs decomposition above one
+    site]%
+    \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
+    \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
+    \leanok
+    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
+        thm:mpdo_rfp_to_bnt_fusion_tensor,
+        thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form satisfying the renormalization fixed-point condition.
+    Select the active-sector fusion clause supplied by that condition, and
+    suppose that the trace-power coefficients of this same clause are
+    independent of the positive chain length. Then the physical-coordinate
+    commuting Gibbs decomposition of
+    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    holds for every $L=N+2$.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+
+    \textbf{Scope restriction (positive chains of length at least two):}
+    the conclusion is proved for $L=N+2$; no length-one two-site convention
+    is asserted. See
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Select the active-sector fusion clause supplied by the renormalization
+    fixed-point condition and apply
+    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    with the assumed length independence of its trace-power coefficients.
+\end{proof}
+
+\begin{theorem}[Literal CPSV physical-coordinate commuting Gibbs decomposition
+    above one site]%
+    \label{thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two}
+    \lean{MPOTensor.%
+physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_gibbs_data_at_least_two,
+        thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,
+        thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    Let $M$ generate matrix product density operators, suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form, and suppose
+    that $M$ satisfies the renormalization fixed-point condition of
+    Definition~4.1. Select the active-sector fusion clause supplied by these
+    three hypotheses, and assume that the trace-power coefficients of this
+    same clause are independent of the positive chain length.
+
+    There are non-negative numbers
+    $\lambda_1,\ldots,\lambda_d$ and one fixed Hermitian two-site matrix
+    $\widehat h$, all independent of the chain length. For every $L=N+2$, let
+    $\widehat H_L=\sum_{j=1}^{L}\widehat h_{j,j+1}$. The translates of
+    $\widehat h$ commute pairwise, and there are pairwise orthogonal
+    projections
+    $\widehat P_1^{(L)},\ldots,\widehat P_d^{(L)}$ on the physical chain such
+    that
+    \begin{align}
+        [\widehat h_{j-1,j},\widehat h_{j,j+1}]
+        &=0,
+        \notag\\
+        [\widehat P_i^{(L)},e^{-\widehat H_L}]
+        &=0,
+        \notag\\
+        \rho^{(L)}(M)
+        &=\sum_{i=1}^{d}\lambda_i\widehat P_i^{(L)}
+          e^{-\widehat H_L}.
+        \notag
+    \end{align}
+    This is the physical-coordinate conclusion of~
+    \cite[lines~1013--1016]{Cirac2016MPDO_arXiv}, under the literal canonical
+    form and renormalization fixed-point hypotheses of~
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the selected fusion clause. A normal
+    label absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family, and no unsupported
+    normal sector is inserted. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction of the product tensor. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+
+    \textbf{Local fix (physical complement):}
+    the retained one-site energy is compressed to physical coordinates and
+    extended by zero energy on the orthogonal complement. The retained
+    projectors are transported through the adjoint sitewise coisometry. See
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex}.
+
+    \textbf{Scope restriction (positive chains of length at least two):}
+    the conclusion is proved exactly for $L=N+2$. Definition~4.8 of~
+    \cite{Cirac2016MPDO_arXiv} defines the local interaction on two spins but
+    gives no length-one convention. See
+    \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose the active-sector fusion clause supplied by
+    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}. Its
+    trace-power coefficients are length independent by hypothesis. Apply
+    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}.
 \end{proof}
 
 \begin{remark}[Printed length-one domain boundary]%
