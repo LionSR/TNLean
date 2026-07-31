@@ -18,8 +18,8 @@ first marginal with eigenvalues `p i > 0`, the `(i,j)` operator block is divided
 by `sqrt (p i * p j)`.  The resulting linear map has the same range dimension
 as the original operator-Schmidt reshaping.
 
-The finite-dimensional inequality bounding entanglement-assisted mutual
-information by the logarithm of this range dimension follows from Beigi's
+The finite-dimensional inequality bounding quantum mutual information by the
+logarithm of this range dimension follows from Beigi's
 weighted Hilbert--Schmidt contraction and order monotonicity, together with
 the order-one limit of Müller-Lennert et al.  The mathematical argument and
 formalization status are recorded in
