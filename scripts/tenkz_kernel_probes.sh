@@ -87,8 +87,8 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   exit 1
 }
 [ "$(grep -c '|origin=port-open|' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 4 ] || {
-  echo "FAIL: unmatched typed ports did not materialize exactly four open legs" >&2
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 6 ] || {
+  echo "FAIL: unmatched typed ports did not materialize exactly six open legs" >&2
   exit 1
 }
 [ "$(grep -c '|origin=port-open|' \
@@ -880,6 +880,9 @@ for contract_negative in \
   n_port_policy_type \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
+  n_port_slot \
+  n_noncell_port_slot \
+  n_port_open_name \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -904,6 +907,12 @@ do
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_sealed_malformed_port ] &&
     expected='[TKZ-PORT-PARSE]'
+  [ "$contract_negative" = n_port_slot ] &&
+    expected='[TKZ-PORT-SLOT]'
+  [ "$contract_negative" = n_noncell_port_slot ] &&
+    expected='[TKZ-PORT-SLOT]'
+  [ "$contract_negative" = n_port_open_name ] &&
+    expected='[TKZ-LANG-NAME-COLLISION]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
     echo "FAIL: $contract_negative lacked $expected" >&2
     exit 1

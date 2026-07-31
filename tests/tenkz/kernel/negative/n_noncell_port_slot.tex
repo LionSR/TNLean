@@ -1,0 +1,15 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A]{A}
+  \tn[at=(1,2), name=B]{B}
+  \tn[at={midway A and B}, wide=2, ports={90@2:physical}]{M}
+\end{tenkz}
+\end{document}

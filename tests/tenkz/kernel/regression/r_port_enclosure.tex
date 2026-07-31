@@ -1,0 +1,67 @@
+% Regression: typed physical ports and physical-policy legs share enclosure
+% reach, so neither endpoint can stop inside a contour around its host.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\fp_new:N \g__tenkz_test_typed_enclosure_reach_fp
+\fp_new:N \g__tenkz_test_policy_enclosure_reach_fp
+\cs_new_eq:NN \__tenkz_test_enclosure_port:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \__tenkz_test_enclosure_port:n {#1}
+    \fp_gset:Nn \g__tenkz_test_typed_enclosure_reach_fp
+      {
+        sqrt
+          (
+            (\l__tenkz_kernel_r_xb_fp-\l__tenkz_kernel_r_x_fp)^2
+            +(\l__tenkz_kernel_r_yb_fp-\l__tenkz_kernel_r_y_fp)^2
+          )
+      }
+  }
+\cs_new_eq:NN \__tenkz_test_enclosure_leg:nnn
+  \__tenkz_kernel_r_leg:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
+  {
+    \__tenkz_test_enclosure_leg:nnn {#1}{#2}{#3}
+    \__tenkz_model_get:nnN {#1} {label} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {A}
+      {
+        \fp_gset_eq:NN \g__tenkz_test_policy_enclosure_reach_fp
+          \l__tenkz_kernel_r_reach_fp
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+  \tn[at=(1,1)]{B}
+  \tn[at=(2,1), ports={90:physical}]{A}
+  \tnmark[form=enclosure]{(1,1)..(2,1)}{}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, physical=up]
+  \tn[at=(1,1)]{B}
+  \tn[at=(2,1)]{A}
+  \tnmark[form=enclosure]{(1,1)..(2,1)}{}
+\end{tenkz}
+\ExplSyntaxOn
+\fp_compare:nNnF
+  {\g__tenkz_test_typed_enclosure_reach_fp}
+  >
+  {\__tenkz_metric_ratio:n {physleg}}
+  { \errmessage{typed~physical~port~stopped~inside~its~enclosure} }
+\fp_compare:nNnF
+  {
+    abs
+      (
+        \g__tenkz_test_typed_enclosure_reach_fp
+        -\g__tenkz_test_policy_enclosure_reach_fp
+      )
+  }
+  < {0.000001}
+  { \errmessage{typed~port~and~policy~leg~used~different~enclosure~reach} }
+\ExplSyntaxOff
+\end{document}

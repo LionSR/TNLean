@@ -203,7 +203,8 @@
   \tn[at=(1,1), name=A,
       ports={0:virtual, 90:physical, 45:physical:$i$}]{A}
   \tn[at=(1,2), name=B, ports={180:virtual}]{B}
-  \tnwire{A.0}{B.180}
+  \tnwire{A.0@01}{B.180@001}
+  \tn[skin=dot, at=on port-open-1 0.5]{}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=plane]
   \tn[at=(1,1), name=P,
@@ -214,19 +215,29 @@
 \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
   \tn[at=(1,1), name=U, ports={90:physical:$k$}]{U}
 \end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[at=(1,1), skin=dots,
+      ports={90:physical:$d$}]{\dots}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
+  \tn[at=(1,1), name=R, skin=dots]{\dots}
+  \tn[at=(1,2), name=S, skin=dots]{\dots}
+  \tn[at={midway R and S},
+      ports={90:physical:$m$}]{M}
+\end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=circle]
   \tn[at=(1,1), name=X, ports={0:virtual}]{X}
   \tn[at=(1,2), name=Y, ports={180:virtual}]{Y}
   \tnwire{X.0}{Y.180}
 \end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {2}
+\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {4}
   {\errmessage{flat~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_plane_int} = {2}
   {\errmessage{plane~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_wired_int} = {0}
   {\errmessage{an~explicitly~wired~port~grew~a~duplicate~stub}}
-\int_compare:nNnF {\g__tenkz_test_port_label_int} = {2}
+\int_compare:nNnF {\g__tenkz_test_port_label_int} = {4}
   {
     \errmessage
       {
