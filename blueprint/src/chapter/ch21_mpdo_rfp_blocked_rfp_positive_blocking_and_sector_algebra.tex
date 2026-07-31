@@ -296,6 +296,28 @@ physical indices, as in
     Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition} to $M^{[2]}$.
 \end{proof}
 
+\begin{corollary}[Paired literal vertical decompositions]
+    \label{cor:mpdo_literal_cpsv_vertical_decomposition_pair}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_cpsvVerticalDecomposition_pair}
+    \leanok
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
+        thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    Under the hypotheses of
+    Theorem~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}, there exist
+    simultaneously a one-site vertical decomposition of $M$ and a two-site
+    vertical decomposition of $M^{[2]}$ of the respective forms stated in
+    Theorems~\ref{thm:mpdo_literal_cpsv_vertical_decomposition}
+    and~\ref{thm:mpdo_literal_cpsv_vertical_decomposition_block_two}.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
+        thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
+    Choose the one-site and two-site decompositions independently and take
+    their ordered pair.
+\end{proof}
+
 \begin{lemma}[Two-site blocking preserves normalized BNT-refined horizontal form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
