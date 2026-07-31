@@ -509,3 +509,158 @@
     $L_j^i = \zeta X B^i X^{-1}$.
     Transfer idempotence is preserved by these transformations.
 \end{proof}
+
+\begin{lemma}[Common physical unitaries preserve mixed transfer maps]
+    \label{lem:mixed_transfer_common_physical_unitary}
+    \lean{MPSTensor.mixedTransferMap₂_rotatePhysical}
+    \leanok
+    Let $A=(A_i)_i$ and $B=(B_i)_i$ be two tensors, possibly with
+    different bond dimensions, and let $u$ be unitary on the physical index.
+    If
+    \[
+        \widetilde A_i=\sum_j u_{ij}A_j,
+        \qquad
+        \widetilde B_i=\sum_j u_{ij}B_j,
+    \]
+    then
+    \[
+        \mathcal E_{\widetilde A,\widetilde B}
+        =
+        \mathcal E_{A,B}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both physical sums. The coefficient of
+    $A_jX B_k^\dagger$ is
+    $\sum_i u_{ij}\overline{u_{ik}}=\delta_{jk}$, so only the diagonal
+    terms remain.
+\end{proof}
+
+\begin{lemma}[Gauge-phase transport of mixed-transfer vanishing]
+    \label{lem:mixed_transfer_gauge_phase_zero}
+    \lean{MPSTensor.mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv}
+    \lean{MPSTensor.mixedTransferMap₂_cast_eq_zero_iff}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Let $U,A$ and $V,B$ be pairs of tensors with respective common bond
+    dimensions. Suppose that $\zeta_A,\zeta_B\ne 0$ and that $X_A,X_B$ are
+    invertible matrices such that, for every physical index $i$,
+    \begin{align}
+        A^i &= \zeta_A X_A U^i X_A^{-1}, \\
+        B^i &= \zeta_B X_B V^i X_B^{-1}.
+    \end{align}
+    Then
+    \begin{align}
+        \mathcal E_{A,B}=0
+        \quad\Longrightarrow\quad
+        \mathcal E_{U,V}=0.
+    \end{align}
+    Identifying equal bond dimensions on either tensor leg preserves this
+    vanishing condition in both directions.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Set $D_A=\zeta_A I$ and $D_B=\zeta_B I$. For every rectangular matrix
+    $Z$, covariance of the mixed transfer map gives
+    \begin{align}
+        \mathcal E_{A,B}(X_A Z X_B^\dagger)
+        &=
+        X_A D_A\,\mathcal E_{U,V}(Z)\,(X_B D_B)^\dagger .
+    \end{align}
+    If $\mathcal E_{A,B}=0$, the left-hand side vanishes. The two outer
+    factors are invertible, so cancellation gives
+    $\mathcal E_{U,V}(Z)=0$ for every $Z$.
+\end{proof}
+
+\begin{lemma}[Distinct normalized Beigi loops are locally orthogonal]
+    \label{lem:beigi_normalized_minimal_loop_mixed_transfer_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne}
+    \leanok
+    \uses{lem:mixed_transfer_common_physical_unitary}
+    If $a$ and $b$ are distinct positive loops in the sector graph, then the
+    mixed transfer map of their normalized minimal loop tensors vanishes:
+    \[
+        \mathcal E_{L_a,L_b}=0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In sector coordinates, every physical letter of $L_a$ is supported in
+    sector $a$, while every physical letter of $L_b$ is supported in sector
+    $b$. Hence, for every rectangular matrix $Z$ and every physical index $i$,
+    \begin{align}
+        L_a^i Z (L_b^i)^\dagger &= 0, \\
+        \mathcal E_{L_a,L_b}(Z)
+        &= \sum_i L_a^i Z (L_b^i)^\dagger = 0.
+    \end{align}
+    The common one-site physical unitary preserves the mixed transfer map by
+    Lemma~\ref{lem:mixed_transfer_common_physical_unitary}.
+\end{proof}
+
+\begin{theorem}[Multi-sector NNCPH ground spaces imply a fixed point for the basis direct sum]
+    \label{thm:nncph_implies_rfp_basis_direct_sum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces,
+        thm:bnt_cf_basis_is_bnt_for_direct_sum,
+        thm:beigi_loop_product_states_span_ground_space,
+        thm:beigi_normalized_minimal_loop_tensor_rfp,
+        lem:beigi_normalized_minimal_loop_mixed_transfer_zero,
+        lem:mixed_transfer_gauge_phase_zero,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and set
+    \[
+        B=\bigoplus_{j=1}^g A_j .
+    \]
+    Suppose that, for every $N>2$, the translated length-two parent
+    interactions of $B$ commute, every $V^{(N)}(A_j)$ has zero energy, and
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    Then $B$ is a renormalization fixed point.
+
+    This is the multiplicity-one, unit-weight representative case of the
+    reverse implication in Theorem~3.10 of
+    \cite{Cirac2016MPDO_arXiv}. It does not assert the printed theorem for
+    repeated copies or arbitrary raw weights.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Beigi's positive-loop product states span each parent ground space.
+    Consequently every normal basis tensor $A_j$ agrees, up to a unit-modulus
+    scalar and an invertible virtual change of basis, with a normalized
+    minimal loop tensor $L_{\ell(j)}$. Distinctness of the BNT basis makes
+    $j\mapsto\ell(j)$ injective. Thus there are $\zeta_j\ne 0$ and invertible
+    $X_j$ such that
+    \begin{align}
+        L_{\ell(j)}^i &= \zeta_j X_j A_j^i X_j^{-1}.
+    \end{align}
+
+    Each $L_{\ell(j)}$ has an idempotent transfer map. If $j\ne k$, then
+    $L_{\ell(j)}$ and $L_{\ell(k)}$ have disjoint sector support, so their
+    mixed transfer map vanishes. Lemma~\ref{lem:mixed_transfer_gauge_phase_zero}
+    transports this vanishing through the two virtual changes of basis:
+    \begin{align}
+        \mathcal E_{L_{\ell(j)},L_{\ell(k)}}=0
+        \quad\Longrightarrow\quad
+        \mathcal E_{A_j,A_k}=0.
+    \end{align}
+    Thus the diagonal mixed transfer maps of the family $A_j$ are idempotent
+    and the off-diagonal ones vanish. The blockwise criterion is
+    \begin{align}
+        \mathcal E_B\circ\mathcal E_B=\mathcal E_B
+        \quad\Longleftrightarrow\quad
+        \mathcal E_{A_j,A_k}\circ\mathcal E_{A_j,A_k}
+        =\mathcal E_{A_j,A_k}
+    \end{align}
+    for every pair $j,k$, and proves the claim.
+\end{proof}

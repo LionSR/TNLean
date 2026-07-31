@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Irreducible.SpectralRadius
-import TNLean.MPS.CanonicalForm.CPSVPhysicalReindex
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks
 

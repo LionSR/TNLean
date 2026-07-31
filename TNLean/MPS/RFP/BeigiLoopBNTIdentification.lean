@@ -8,6 +8,8 @@ import TNLean.MPS.BNT.Basic
 import TNLean.MPS.Overlap.NormalTensorDichotomy
 import TNLean.MPS.RFP.BeigiLoopFixedPoint
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
+import TNLean.MPS.RFP.BNTDirectSumBasis
+import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.RFP.StructuralForm
 import TNLean.Wielandt.Primitivity.Equivalence
 
@@ -25,6 +27,10 @@ arXiv:0909.5347, Proposition 3, together with the Perron--Frobenius theorem for 
 completely positive maps (Wolf, Theorem 6.3). The companion conversion from an algebraically
 normal left-canonical tensor is `isNormalTensor_of_isNormal_leftCanonical` in
 `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean`.
+
+The final theorem applies the comparison familywise to the distinct BNT basis
+sectors and derives transfer idempotence of their multiplicity-one, unit-weight
+direct sum from the all-chain NNCPH ground-space condition.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -344,32 +350,21 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
     F.mpvState_normalizedMinimalLoopTensor m]
   simp [F.loopProductStateES_inner_eq_zero_of_ne hlm]
 
-/-- The periodic MPV state of the NNCPH tensor eventually belongs to the span of the normalized
-minimal loop MPV states. -/
-private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMinimalLoopTensor
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
-    {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+/-- A periodic MPV state in the parent ground space belongs to the span of the
+normalized minimal-loop MPV states. -/
+private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTensor
+    {D' : ℕ} {B : MPSTensor d D} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
       Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
-    (hNNCPH : HasNNCPHGroundSpaces B A) :
-    ∀ᶠ N in Filter.atTop,
-      mpvState (d := d) B N ∈
-        Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
-          mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
-  refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
-  intro N hN
-  have hTwo : 2 < N := by omega
+    {C : MPSTensor d D'} {N : ℕ} (hN : 2 < N)
+    (hGround :
+      mpvState (d := d) C N ∈ parentHamiltonianGroundSpaceES B 2 N) :
+    mpvState (d := d) C N ∈
+      Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
+        mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
   letI : NeZero N := ⟨by omega⟩
-  have hGround : mpvState (d := d) B N ∈ parentHamiltonianGroundSpaceES B 2 N := by
-    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
-    refine ⟨(mpv B : NSiteSpace d N), ?_, rfl⟩
-    rw [LinearMap.mem_ker, parentHamiltonian]
-    rw [LinearMap.sum_apply]
-    apply Finset.sum_eq_zero
-    intro i _hi
-    exact (hNNCPH N hTwo).isFrustrationFree i
-  have hLoopSpan := F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hTwo
-  have hInLoopSpan : mpvState (d := d) B N ∈
+  have hLoopSpan := F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hN
+  have hInLoopSpan : mpvState (d := d) C N ∈
       Submodule.span ℂ
         (Set.range fun l : Loop F.edgeWeight => F.loopProductStateES l) := by
     rw [hLoopSpan]
@@ -395,6 +390,55 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
   rw [hEq]
   exact hScaled
 
+/-- The periodic MPV state of the NNCPH tensor eventually belongs to the span of the normalized
+minimal loop MPV states. -/
+private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMinimalLoopTensor
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
+      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
+    (hNNCPH : HasNNCPHGroundSpaces B A) :
+    ∀ᶠ N in Filter.atTop,
+      mpvState (d := d) B N ∈
+        Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
+          mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
+  refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
+  intro N hN
+  have hTwo : 2 < N := by omega
+  have hGround : mpvState (d := d) B N ∈ parentHamiltonianGroundSpaceES B 2 N := by
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+    refine ⟨(mpv B : NSiteSpace d N), ?_, rfl⟩
+    rw [LinearMap.mem_ker, parentHamiltonian]
+    rw [LinearMap.sum_apply]
+    apply Finset.sum_eq_zero
+    intro i _hi
+    exact (hNNCPH N hTwo).isFrustrationFree i
+  exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
+
+/-- Each BNT component in an all-chain NNCPH ground-space family eventually
+belongs to the span of the normalized minimal-loop MPV states. -/
+private theorem
+    BeigiSectorGraphData.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
+    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
+    {B : MPSTensor d D} (F : BeigiSectorGraphData B)
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
+      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
+    (hNNCPH : HasNNCPHGroundSpaces B A) (j : Fin r) :
+    ∀ᶠ N in Filter.atTop,
+      mpvState (d := d) (A j) N ∈
+        Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
+          mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
+  refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
+  intro N hN
+  have hTwo : 2 < N := by omega
+  have hGround :
+      mpvState (d := d) (A j) N ∈ parentHamiltonianGroundSpaceES B 2 N := by
+    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+    refine ⟨(mpv (A j) : NSiteSpace d N), ?_, rfl⟩
+    rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
+    exact Submodule.subset_span ⟨j, rfl⟩
+  exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
+
 /-- All-chain nearest-neighbor commuting parent-Hamiltonian ground spaces imply transfer
 idempotence for a normal left-canonical representative.
 
@@ -414,7 +458,9 @@ ground-space condition. In the source canonical decomposition, normality selects
 one-sector case \(g=1\), for which a source-level proof need not use Beigi's
 finite-degeneracy classification. The present formal proof nevertheless uses the finite
 sector graph and its loop-span theorem as an intermediate route to the gauge-phase match.
-The multi-sector case \(g>1\), which motivates the classification, remains unproved.
+The familywise theorem below proves the multi-sector case for the
+multiplicity-one, unit-weight basis direct sum. The unrestricted repeated-copy
+and raw-weight canonical-form case remains unproved.
 This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 theorem nncph_implies_rfp
@@ -462,5 +508,129 @@ theorem nncph_implies_rfp
       (hLoopNormal l) hBCastNormal
       (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
   exact (isTransferIdempotent_cast_iff hdim B).1 hBCastRFP
+
+namespace IsBNTCanonicalForm
+
+variable {P : SectorDecomposition d}
+
+/-- The all-chain NNCPH ground-space condition for the distinct BNT basis
+sectors implies transfer idempotence of their unit-weight direct sum.
+
+The proof follows CPSV16, proof of Theorem 3.10 at line 1307: Beigi's
+positive-loop product states span the parent ground spaces, each normal BNT
+basis tensor is gauge-phase equivalent to one normalized minimal loop tensor,
+distinct basis tensors select distinct locally orthogonal loops, and the
+blockwise fixed-point and mixed-transfer equations assemble on the direct sum.
+
+Source: CPSV16, Theorem `thm:main-MPS`, lines 534--541, and its reverse proof
+at line 1307; Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV.
+
+**Scope restriction (multiplicity-one unit-weight representative):** This
+proves the reverse implication for `directSumTensor P.basis`, containing one
+unit-weight copy of each distinct BNT basis sector. It does not prove the
+printed theorem for arbitrary raw weights or repeated copies. Documented in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
+theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
+    (hCF : IsBNTCanonicalForm P)
+    (hNNCPH : HasNNCPHGroundSpaces (directSumTensor P.basis) P.basis) :
+    IsTransferIdempotent (directSumTensor P.basis) := by
+  classical
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  have hNNCPH3 : IsNNCPH (directSumTensor P.basis) 3 :=
+    (hNNCPH 3 (by omega)).isNNCPH
+  let F : BeigiSectorGraphData (directSumTensor P.basis) :=
+    hNNCPH3.beigiSectorGraphData
+  letI : ∀ l : Loop F.edgeWeight, NeZero (F.loopSchmidtRank l) :=
+    fun l => ⟨(F.loopSchmidtRank_pos l).ne'⟩
+  have hBasisNormal : ∀ j, IsNormalTensor (P.basis j) := by
+    intro j
+    exact isNormalTensor_of_isNormal_leftCanonical
+      (P.basis j) (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
+  have hLoopNormal : ∀ l : Loop F.edgeWeight,
+      IsNormalTensor (F.normalizedMinimalLoopTensor l) := by
+    intro l
+    exact isNormalTensor_of_isNormal_isTransferIdempotent
+      (F.normalizedMinimalLoopTensor l)
+      (F.normalizedMinimalLoopTensor_isNormal l)
+      (F.normalizedMinimalLoopTensor_isTransferIdempotent l)
+  have hparent :=
+    eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT
+      hCF.isBNT_basisDirectSum hNNCPH
+  have hPhaseExists : ∀ j : Fin P.basisCount,
+      ∃ l : Loop F.edgeWeight,
+        MPVBlockPhaseEquiv (P.basis j) (F.normalizedMinimalLoopTensor l) := by
+    intro j
+    apply exists_mpvBlockPhaseEquiv_of_mem_span_eventually
+      (hBasisNormal j) F.normalizedMinimalLoopTensor hLoopNormal
+    · intro l m hlm
+      exact F.normalizedMinimalLoopTensor_overlap_tendsto_zero hlm
+    · exact
+        F.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
+          hparent hNNCPH j
+  let loopOf (j : Fin P.basisCount) : Loop F.edgeWeight :=
+    (hPhaseExists j).choose
+  have hPhase (j : Fin P.basisCount) :
+      MPVBlockPhaseEquiv (P.basis j) (F.normalizedMinimalLoopTensor (loopOf j)) :=
+    (hPhaseExists j).choose_spec
+  have hLoopOf_ne {j k : Fin P.basisCount} (hjk : j ≠ k) :
+      loopOf j ≠ loopOf k := by
+    intro hEq
+    have hPhaseBack :
+        MPVBlockPhaseEquiv (F.normalizedMinimalLoopTensor (loopOf j)) (P.basis k) := by
+      rw [hEq]
+      exact (hPhase k).symm
+    have hPhaseJK : MPVBlockPhaseEquiv (P.basis j) (P.basis k) :=
+      (hPhase j).trans hPhaseBack
+    obtain ⟨hdim, hGauge⟩ :=
+      hPhaseJK.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hBasisNormal j) (hBasisNormal k)
+    exact hCF.basis_distinct j k hjk hdim hGauge
+  have hBlockRFP : ∀ j : Fin P.basisCount, IsTransferIdempotent (P.basis j) := by
+    intro j
+    obtain ⟨hdim, hGauge⟩ :=
+      (hPhase j).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hBasisNormal j) (hLoopNormal (loopOf j))
+    have hCastNormal :
+        IsNormalTensor (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) :=
+      (isNormalTensor_cast_iff hdim (P.basis j)).2 (hBasisNormal j)
+    have hCastRFP :
+        IsTransferIdempotent (cast (congr_arg (MPSTensor d) hdim) (P.basis j)) :=
+      (gaugePhaseEquiv_symm_same_dim hGauge).isTransferIdempotent
+        (hLoopNormal (loopOf j)) hCastNormal
+        (F.normalizedMinimalLoopTensor_isTransferIdempotent (loopOf j))
+    exact (isTransferIdempotent_cast_iff hdim (P.basis j)).1 hCastRFP
+  apply
+    (isTransferIdempotent_directSumTensor_iff_pairwise_mixedTransferMap₂_isIdempotentElem
+      P.basis).2
+  intro j k
+  by_cases hjk : j = k
+  · subst k
+    rw [mixedTransferMap₂_self]
+    change IsTransferIdempotent (P.basis j)
+    exact hBlockRFP j
+  · obtain ⟨hdimJ, hGaugeJ⟩ :=
+      (hPhase j).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hBasisNormal j) (hLoopNormal (loopOf j))
+    obtain ⟨hdimK, hGaugeK⟩ :=
+      (hPhase k).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hBasisNormal k) (hLoopNormal (loopOf k))
+    have hLoopZero :
+        mixedTransferMap₂
+            (F.normalizedMinimalLoopTensor (loopOf j))
+            (F.normalizedMinimalLoopTensor (loopOf k)) = 0 :=
+      F.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne (hLoopOf_ne hjk)
+    have hCastZero :
+        mixedTransferMap₂
+            (cast (congr_arg (MPSTensor d) hdimJ) (P.basis j))
+            (cast (congr_arg (MPSTensor d) hdimK) (P.basis k)) = 0 :=
+      mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv hGaugeJ hGaugeK hLoopZero
+    have hZero : mixedTransferMap₂ (P.basis j) (P.basis k) = 0 :=
+      (mixedTransferMap₂_cast_eq_zero_iff
+        hdimJ hdimK (P.basis j) (P.basis k)).1 hCastZero
+    rw [hZero]
+    exact IsIdempotentElem.zero
+
+end IsBNTCanonicalForm
 
 end MPSTensor
