@@ -503,14 +503,15 @@ referenceInclusion_isometry}
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
 activeCoefficient_mul_phase_pos_of_sectorCompression_separation}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage,
+    \uses{def:mpdo, thm:mpdo_active_product_corner_blocked_bnt_coverage,
       thm:mpdo_blocked_reference_corners,
       thm:mpdo_retained_product_spectral_family_exists,
       thm:mpdo_sector_weight_pos}
-    Assume exact coisometric reconstructions of the one-site and blocked
-    vertical tensors, positive multiplicities and weights for the blocked
-    BNT, and normality of its representatives. Suppose moreover that every
-    projection with a nonzero two-sided corner of the blocked vertical tensor
+    Assume that $M$ generates matrix product density operators and that the
+    one-site and blocked vertical tensors admit exact coisometric
+    reconstructions. Assume positive multiplicities and weights for the
+    blocked BNT and normality of its representatives. Suppose moreover that
+    every projection with a nonzero two-sided corner of the blocked vertical tensor
     has a nonzero finite-chain sector compression. Then every active product
     corner $j$ satisfies $0<\lambda_j\zeta_j$.
 \end{theorem}
