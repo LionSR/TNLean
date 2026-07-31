@@ -709,6 +709,39 @@
     (\ref{eq:mpdo_isometric_trace}).
 \end{proof}
 
+\begin{theorem}[Logarithm of a tensor product on its support]
+    \label{thm:mpdo_support_log_kronecker}
+    \lean{Matrix.log_kronecker_posSemidef}
+    \leanok
+    \uses{def:hermitian_support_projection}
+    Let $A$ and $B$ be positive semidefinite, with $P_A$ and $P_B$ the
+    orthogonal projections onto their respective ranges. Then
+    \begin{align}
+      \log(A\otimes B)
+      &=(\log A)\otimes P_B+P_A\otimes(\log B).
+      \label{eq:mpdo_support_log_tensor_product}
+    \end{align}
+    Here the logarithm is extended by zero on the kernel. Neither matrix is
+    required to be positive definite, and either index set may be empty.
+    This auxiliary identity is project-derived rather than a theorem of
+    CPSV16.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_support_projection, lem:cfc_conj_unitary}
+    Diagonalize $A$ and $B$. On a product eigenvector with eigenvalues
+    $a,b\geq0$, equation~(\ref{eq:mpdo_support_log_tensor_product}) becomes
+    \begin{align}
+      \log(ab)
+      &=\log(a)\mathbf 1_{b\ne0}
+        +\mathbf 1_{a\ne0}\log(b).
+      \notag
+    \end{align}
+    If $a,b>0$, this is the ordinary product identity for the logarithm. If
+    either eigenvalue is zero, both sides vanish. Conjugating the resulting
+    diagonal identity by the product eigenbasis proves the formula.
+\end{proof}
+
 \begin{theorem}[Support-aware vector-state Jensen inequality for the logarithm]
     \label{thm:support_log_vector_jensen}
     \lean{Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log}
