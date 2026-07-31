@@ -37,7 +37,9 @@ open scoped ComplexConjugate ComplexOrder Matrix.Norms.Frobenius
 
 namespace Matrix
 
-variable {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+variable {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α]
+
+attribute [local instance] Classical.decEq
 
 /-- The coefficient matrix of a linear map between matrix spaces, in the matrix-unit
 bases.  Its rows are indexed by output matrix entries and its columns by input entries. -/
@@ -56,7 +58,6 @@ noncomputable def rectangularChoi
   classical
   exact fun ia jb ↦ linearMapMatrix L (ia.2, jb.2) (ia.1, jb.1)
 
-omit [DecidableEq β] in
 /-- Entrywise formula for the coefficient matrix. -/
 @[simp]
 theorem linearMapMatrix_apply
@@ -66,7 +67,6 @@ theorem linearMapMatrix_apply
   rw [linearMapMatrix, LinearMap.toMatrix_apply, stdBasis_eq_single]
   simp [stdBasis, Module.Basis.map_repr, Pi.basis_repr, Pi.basisFun_repr]
 
-omit [DecidableEq β] in
 /-- Entrywise formula for the rectangular Choi matrix. -/
 @[simp]
 theorem rectangularChoi_apply
@@ -74,7 +74,6 @@ theorem rectangularChoi_apply
     rectangularChoi L (i, a) (j, b) = L (single i j 1) a b := by
   rw [rectangularChoi, linearMapMatrix_apply]
 
-omit [DecidableEq β] in
 /-- Reshaping a coefficient matrix into the rectangular Choi matrix preserves its
 squared Frobenius norm. -/
 theorem rectangularChoi_frobenius_parseval
@@ -104,7 +103,6 @@ theorem rectangularChoi_frobenius_parseval
           exact Fintype.sum_prod_type
             (fun x : (α × α) × (β × β) ↦ ‖linearMapMatrix L x.2 x.1‖ ^ 2)
 
-omit [DecidableEq β] in
 /-- Parseval's identity for the rectangular Choi matrix, expressed as the sum
 of the squared absolute values of the images of the matrix units. -/
 theorem rectangularChoi_frobenius_parseval_matrix_units
@@ -121,7 +119,6 @@ theorem rectangularChoi_frobenius_parseval_matrix_units
       rw [linearMapMatrix_apply L ij.1 ij.2 ab.1 ab.2]
       simp
 
-omit [DecidableEq β] in
 /-- A linear map between matrix spaces is a Hilbert--Schmidt contraction if it does
 not increase the Hilbert--Schmidt quadratic form. -/
 def IsHilbertSchmidtContraction
@@ -191,18 +188,14 @@ private theorem trace_gram_re_le_rank_of_contraction
           push_cast
           simp
 
-omit [DecidableEq β] in
 /-- A Hilbert--Schmidt contraction has squared Choi Frobenius norm at most the
 dimension of its range.  This is the algebraic estimate used in
 `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem rectangularChoi_frobenius_sq_le_finrank_range
     (L : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
-    (hL : IsHilbertSchmidtContraction L) : by
-    classical
-    letI : DecidableEq β := Classical.decEq β
-    exact ‖rectangularChoi L‖ ^ 2 ≤ Module.finrank ℂ L.range := by
+    (hL : IsHilbertSchmidtContraction L) :
+    ‖rectangularChoi L‖ ^ 2 ≤ Module.finrank ℂ L.range := by
   classical
-  letI : DecidableEq β := Classical.decEq β
   let bα := stdBasis ℂ α α
   let bβ := stdBasis ℂ β β
   let A := linearMapMatrix L
