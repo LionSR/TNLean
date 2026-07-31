@@ -38,14 +38,21 @@ theorem isTransferIdempotent_coisometry_reconstruction_iff
     intro X
     simp only [transferMap_apply, hReconstruct, Matrix.conjTranspose_mul,
       Matrix.conjTranspose_conjTranspose]
-    simp_rw [← Matrix.mul_assoc]
-    rw [Finset.mul_sum]
-    simp_rw [Matrix.mul_assoc]
-    rw [Finset.sum_mul]
+    calc
+      _ = ∑ i, Uᴴ * (B i * (U * X * Uᴴ) * (B i)ᴴ) * U := by
+        apply Finset.sum_congr rfl
+        intro i _
+        simp only [Matrix.mul_assoc]
+      _ = Uᴴ * (∑ i, B i * (U * X * Uᴴ) * (B i)ᴴ) * U := by
+        symm
+        rw [Matrix.mul_sum, Matrix.sum_mul]
   have hCancel : ∀ Y : Matrix (Fin R) (Fin R) ℂ,
       U * (Uᴴ * Y * U) * Uᴴ = Y := by
     intro Y
-    simp only [← Matrix.mul_assoc, hU, Matrix.one_mul, Matrix.mul_one]
+    calc
+      U * (Uᴴ * Y * U) * Uᴴ = (U * Uᴴ) * Y * (U * Uᴴ) := by
+        simp only [Matrix.mul_assoc]
+      _ = Y := by rw [hU, Matrix.one_mul, Matrix.mul_one]
   constructor
   · intro hA
     change transferMap B ∘ₗ transferMap B = transferMap B
@@ -53,8 +60,8 @@ theorem isTransferIdempotent_coisometry_reconstruction_iff
     intro Y
     have hAY := LinearMap.congr_fun hA (Uᴴ * Y * U)
     simp only [LinearMap.comp_apply, hTransfer, hCancel] at hAY
-    exact (hCancel (transferMap B (transferMap B Y))) ▸
-      (hCancel (transferMap B Y)) ▸ congrArg (fun Z => U * Z * Uᴴ) hAY
+    have h := congrArg (fun Z => U * Z * Uᴴ) hAY
+    simpa only [LinearMap.comp_apply, hCancel] using h
   · intro hB
     change transferMap A ∘ₗ transferMap A = transferMap A
     apply LinearMap.ext
@@ -97,7 +104,7 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
       (Matrix (Fin R) (Fin R) ℂ))
     simpa only [hMap, map_smul, Eclm] using hMapped
   have hradScaled : spectralRadius ℂ (q • Eclm) = 1 :=
-    hIdem.spectralRadius_eq_one_of_ne_zero hqEclm_ne
+    MPSTensor.IsIdempotentElem.spectralRadius_eq_one_of_ne_zero hIdem hqEclm_ne
   have hscale := spectralRadius_smul_matrixEnd Eclm hq
   have hradE : spectralRadius ℂ Eclm = 1 := hA.spectral_radius_one
   have hqNormENN : (‖q‖₊ : ℝ≥0∞) = 1 := by
@@ -105,15 +112,15 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
       (‖q‖₊ : ℝ≥0∞) = (‖q‖₊ : ℝ≥0∞) * spectralRadius ℂ Eclm := by rw [hradE, mul_one]
       _ = spectralRadius ℂ (q • Eclm) := hscale.symm
       _ = 1 := hradScaled
-  have hqNorm : ‖q‖ = 1 := by
-    exact_mod_cast hqNormENN
+  have hqNormNN : ‖q‖₊ = 1 := ENNReal.coe_injective hqNormENN
+  have hqNorm : ‖q‖ = 1 := congrArg Subtype.val hqNormNN
   have hcSq : ‖c‖ * ‖c‖ = 1 := by
-    simpa only [q, norm_mul, norm_star] using hqNorm
+    simpa only [q, norm_mul, RCLike.star_def, RCLike.norm_conj] using hqNorm
   have hcNorm : ‖c‖ = 1 := by
     nlinarith [norm_nonneg c]
   refine ⟨hcNorm, ?_⟩
   have hqOne : q = 1 := by
-    simpa only [q, Complex.normSq_eq_norm_sq, hcNorm, one_pow] using Complex.mul_conj c
+    simpa [q, RCLike.star_def, Complex.normSq_eq_norm_sq, hcNorm] using Complex.mul_conj c
   rw [IsTransferIdempotent, hMap, hqOne, one_smul] at hRFP
   exact hRFP
 
@@ -131,19 +138,22 @@ theorem active_weight_norm_one_and_block_rfp
     ‖data.weights k‖ = 1 ∧ IsTransferIdempotent (data.blocks k) := by
   letI : ∀ j : Fin data.r, NeZero (data.dim j) :=
     fun j => ⟨Nat.ne_of_gt (data.dim_pos j)⟩
-  let scaledBlocks : (j : Fin data.r) → MPSTensor d (data.dim j) :=
+  let scaledBlocks : (j : Fin data.r) → MPSTensor _ (data.dim j) :=
     fun j i => data.weights j • data.blocks j i
   have hRetained :
-      IsTransferIdempotent (toTensorFromBlocks (d := d) data.weights data.blocks) :=
+      IsTransferIdempotent (toTensorFromBlocks data.weights data.blocks) :=
     (isTransferIdempotent_coisometry_reconstruction_iff A
-      (toTensorFromBlocks (d := d) data.weights data.blocks)
+      (toTensorFromBlocks data.weights data.blocks)
       data.ambient_coisometry data.coisometric data.reconstruct).mp hRFP
   have hDirect :
-      toTensorFromBlocks (d := d) data.weights data.blocks = directSumTensor scaledBlocks := by
+      toTensorFromBlocks data.weights data.blocks = directSumTensor scaledBlocks := by
     rfl
   rw [hDirect] at hRetained
-  have hScaledBlock : IsTransferIdempotent (scaledBlocks k) :=
-    isTransferIdempotent_block_of_isTransferIdempotent_directSum scaledBlocks hRetained k
+  have hScaledBlock : IsTransferIdempotent (scaledBlocks k) := by
+    have hIdem :=
+      mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
+        scaledBlocks hRetained k k
+    rwa [mixedTransferMap₂_self] at hIdem
   exact norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     (data.blocks k) (data.blocks_normal k) (data.weights k) k.property hScaledBlock
 

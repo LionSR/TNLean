@@ -151,7 +151,10 @@ theorem IsIdempotentElem.spectralRadius_eq_one_of_ne_zero
   apply le_antisymm
   · rw [spectralRadius]
     refine iSup₂_le fun z hz => ?_
-    rcases ha.spectrum_subset ℂ hz with hz | hz <;> simp [hz]
-  · exact le_of_not_gt fun h => ha_ne (ha.eq_zero_of_spectralRadius_lt_one h)
+    have hz' : z = 0 ∨ z = 1 := by
+      simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using ha.spectrum_subset ℂ hz
+    rcases hz' with rfl | rfl <;> norm_num
+  · exact le_of_not_gt fun h =>
+      ha_ne (MPSTensor.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one ha h)
 
 end MPSTensor
