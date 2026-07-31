@@ -34,6 +34,9 @@ reference support gives the singular-reference theorem in
 ## Main definitions
 
 * `TNLean.sandwichedRenyiTwoTrace` — the order-two sandwiched trace functional.
+* `TNLean.RelativeModularHalfMoment.operator` and
+  `TNLean.RelativeModularHalfMoment.vector` — the operator and vector in the
+  relative-modular half-moment construction.
 
 ## Main results
 
@@ -44,6 +47,10 @@ reference support gives the singular-reference theorem in
 * `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — a cyclically reordered trace
   expression for faithful \(\omega\); when \(\rho\) is Hermitian, its common
   value is the squared Hilbert--Schmidt norm of the sandwiched matrix.
+* `TNLean.RelativeModularHalfMoment.log_expectation_eq_half_quantumRelativeEntropy` —
+  the exact logarithmic half-moment identity.
+* `TNLean.RelativeModularHalfMoment.expectation_sq_le_sandwichedRenyiTwoTrace` —
+  the Hilbert--Schmidt bound for the ordinary half moment.
 * `TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef` — the
   direct logarithmic comparison for a faithful reference.
 
@@ -171,6 +178,240 @@ theorem sandwichedRenyiTwoTrace_eq_weighted
         simp only [Matrix.mul_assoc]
   rw [hcycle, hq]
 
+namespace RelativeModularHalfMoment
+
+/-- The square root of the state in the relative-modular half-moment construction. -/
+noncomputable def sqrtState (ρ : Mat) : Mat :=
+  CFC.sqrt ρ
+
+/-- The inverse square root of the reference in the relative-modular half-moment construction. -/
+noncomputable def referenceInvSqrt (ω : Mat) : Mat :=
+  ω ^ (-(1 / 2 : ℝ))
+
+/-- The positive relative-modular operator used in the order-two half-moment argument. -/
+noncomputable def operator (ρ ω : Mat) : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+  Matrix.kronecker (Matrix.transpose (sqrtState ρ)) (referenceInvSqrt ω)
+
+/-- The vectorized square root of the state in the relative-modular half-moment argument. -/
+noncomputable def vector (ρ : Mat) : Fin D × Fin D → ℂ :=
+  Matrix.vec (sqrtState ρ)
+
+private theorem real_inner_eq_complex_re (x y : EuclideanSpace ℂ (Fin D × Fin D)) :
+    inner ℝ x y = (inner ℂ x y).re := by
+  simp [PiLp.inner_apply, RCLike.inner_apply, Complex.inner]
+
+/-- The state square root is positive semidefinite. -/
+theorem sqrtState_posSemidef (ρ : Mat) : (sqrtState ρ).PosSemidef :=
+  Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
+
+/-- The inverse square root of a faithful reference is positive definite. -/
+theorem referenceInvSqrt_posDef {ω : Mat} (hω : ω.PosDef) :
+    (referenceInvSqrt ω).PosDef := by
+  have hT : (referenceInvSqrt ω).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  apply hT.posDef_iff_isUnit.mpr
+  apply IsUnit.of_mul_eq_one (ω ^ (1 / 2 : ℝ))
+  rw [referenceInvSqrt, ← CFC.rpow_add hω.isUnit]
+  convert CFC.rpow_zero ω using 1
+  norm_num
+
+/-- The relative-modular half-moment operator is positive semidefinite. -/
+theorem operator_posSemidef (ρ ω : Mat) : (operator ρ ω).PosSemidef :=
+  (sqrtState_posSemidef ρ).transpose.kronecker
+    (Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg)
+
+/-- The squared norm of the vectorized state square root is the trace of the state. -/
+theorem vector_norm_sq {ρ : Mat} (hρ : ρ.PosSemidef) :
+    star (vector ρ) ⬝ᵥ vector ρ = ρ.trace := by
+  rw [vector, Matrix.star_vec_dotProduct_vec]
+  have hR := sqrtState_posSemidef ρ
+  rw [hR.isHermitian.eq, sqrtState, CFC.sqrt_mul_sqrt_self ρ hρ.nonneg]
+
+/-- A trace-one state has a unit vectorized square root. -/
+theorem vector_unit {ρ : Mat} (hρ : ρ.PosSemidef) (hρtr : ρ.trace = 1) :
+    star (vector ρ) ⬝ᵥ vector ρ = (1 : ℂ) := by
+  rw [vector_norm_sq hρ, hρtr]
+
+/-- For a faithful reference, the vectorized state square root lies in the support of the
+relative-modular half-moment operator. -/
+theorem supportProj_mulVec_vector {ρ ω : Mat} (hω : ω.PosDef) :
+    (operator_posSemidef ρ ω).supportProj *ᵥ vector ρ = vector ρ := by
+  let R := sqrtState ρ
+  have hR : R.PosSemidef := sqrtState_posSemidef ρ
+  have hT : (referenceInvSqrt ω).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  have hsupport :
+      (operator_posSemidef ρ ω).supportProj =
+        Matrix.kronecker hR.transpose.supportProj hT.supportProj :=
+    hR.transpose.supportProj_kronecker hT
+  rw [hsupport, (referenceInvSqrt_posDef hω).supportProj_eq_one]
+  rw [vector, Matrix.kronecker, Matrix.kronecker_mulVec_vec]
+  simp only [Matrix.one_mul]
+  have hPRt : hR.transpose.supportProj * Matrix.transpose R = Matrix.transpose R :=
+    hR.transpose.isHermitian.supportProj_mul_self
+  have hRPt : R * hR.transpose.supportProjᵀ = R := by
+    have ht := congrArg Matrix.transpose hPRt
+    simpa only [Matrix.transpose_mul, Matrix.transpose_transpose] using ht
+  rw [hRPt]
+
+/-- Applying the relative-modular half-moment operator to the vectorized state square root
+produces the vectorized weighted state. -/
+theorem operator_mulVec_vector {ρ ω : Mat} (hρ : ρ.PosSemidef) :
+    operator ρ ω *ᵥ vector ρ = Matrix.vec (referenceInvSqrt ω * ρ) := by
+  rw [operator, vector, Matrix.kronecker, Matrix.kronecker_mulVec_vec,
+    Matrix.transpose_transpose, Matrix.mul_assoc, sqrtState,
+    CFC.sqrt_mul_sqrt_self ρ hρ.nonneg]
+
+/-- The ordinary relative-modular moment is the real Hilbert--Schmidt pairing of the state
+square root with its reference-weighted sandwich. -/
+theorem expectation_eq_frobenius_inner (ρ ω : Mat) :
+    (star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ)).re =
+      inner ℝ
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (sqrtState ρ))
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+          (sqrtState ρ * referenceInvSqrt ω * sqrtState ρ)) := by
+  let R := sqrtState ρ
+  let T := referenceInvSqrt ω
+  have hR : R.PosSemidef := sqrtState_posSemidef ρ
+  rw [operator, vector, Matrix.kronecker, Matrix.kronecker_mulVec_vec,
+    Matrix.star_vec_dotProduct_vec, real_inner_eq_complex_re,
+    Matrix.inner_frobeniusEquivEuclidean, hR.isHermitian.eq,
+    Matrix.transpose_transpose]
+  calc
+    (Matrix.trace (R * (T * R * R))).re =
+        (Matrix.trace ((R * T * R) * R)).re := by
+      simp only [Matrix.mul_assoc]
+    _ = (Matrix.trace (R * (R * T * R))).re := by
+      rw [Matrix.trace_mul_comm]
+
+/-- The squared Hilbert--Schmidt norm of the reference-weighted square-root sandwich is the
+order-two sandwiched trace. -/
+theorem frobenius_inner_sandwich_self_eq_sandwichedRenyiTwoTrace
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) :
+    inner ℝ
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+          (sqrtState ρ * referenceInvSqrt ω * sqrtState ρ))
+        (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+          (sqrtState ρ * referenceInvSqrt ω * sqrtState ρ)) =
+      sandwichedRenyiTwoTrace ρ ω := by
+  let R := sqrtState ρ
+  let T := referenceInvSqrt ω
+  have hR : R.PosSemidef := sqrtState_posSemidef ρ
+  have hRR : R * R = ρ := CFC.sqrt_mul_sqrt_self ρ hρ.nonneg
+  have hT : T.PosSemidef := Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  rw [real_inner_eq_complex_re, Matrix.inner_frobeniusEquivEuclidean,
+    Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_mul, hR.isHermitian.eq, hT.isHermitian.eq,
+    sandwichedRenyiTwoTrace_eq_weighted hω]
+  change (Matrix.trace ((R * (T * R)) * (R * T * R))).re = _
+  calc
+    (Matrix.trace ((R * (T * R)) * (R * T * R))).re =
+        (Matrix.trace (R * (T * (R * R) * T * R))).re := by
+      congr 1
+      simp only [Matrix.mul_assoc]
+    _ = (Matrix.trace (R * (T * ρ * T * R))).re := by rw [hRR]
+    _ = (Matrix.trace ((T * ρ * T * R) * R)).re := by
+      rw [Matrix.trace_mul_comm]
+    _ = (Matrix.trace ((T * ρ * T) * ρ)).re := by
+      rw [← hRR]
+      simp only [Matrix.mul_assoc]
+    _ = (Matrix.trace (ρ * (T * ρ * T))).re := by
+      rw [Matrix.trace_mul_comm]
+    _ = (Matrix.trace (ρ * T * ρ * T)).re := by
+      simp only [Matrix.mul_assoc]
+
+/-- The square of the ordinary relative-modular moment is at most the order-two sandwiched
+trace. -/
+theorem expectation_sq_le_sandwichedRenyiTwoTrace
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) (hρtr : ρ.trace = 1) :
+    ((star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ)).re) ^ 2 ≤
+      sandwichedRenyiTwoTrace ρ ω := by
+  let X := Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (sqrtState ρ)
+  let Y := Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
+    (sqrtState ρ * referenceInvSqrt ω * sqrtState ρ)
+  have hXX : inner ℝ X X = 1 := by
+    rw [real_inner_eq_complex_re, Matrix.inner_frobeniusEquivEuclidean]
+    rw [(sqrtState_posSemidef ρ).isHermitian.eq, sqrtState,
+      CFC.sqrt_mul_sqrt_self ρ hρ.nonneg, hρtr]
+    simp
+  have hYY : inner ℝ Y Y = sandwichedRenyiTwoTrace ρ ω :=
+    frobenius_inner_sandwich_self_eq_sandwichedRenyiTwoTrace hρ hω
+  have hcs := real_inner_mul_inner_self_le X Y
+  rw [hXX, hYY, one_mul] at hcs
+  rw [pow_two, expectation_eq_frobenius_inner ρ ω]
+  exact hcs
+
+/-- The logarithmic expectation of the relative-modular half-moment operator is one half of
+Umegaki relative entropy. -/
+theorem log_expectation_eq_half_quantumRelativeEntropy
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) :
+    (star (vector ρ) ⬝ᵥ (CFC.log (operator ρ ω) *ᵥ vector ρ)).re =
+      (1 / 2 : ℝ) * quantumRelativeEntropy ρ ω := by
+  let R := sqrtState ρ
+  let T := referenceInvSqrt ω
+  have hR : R.PosSemidef := sqrtState_posSemidef ρ
+  have hRR : R * R = ρ := by
+    exact CFC.sqrt_mul_sqrt_self ρ hρ.nonneg
+  have hT : T.PosSemidef := Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  have hTpd : T.PosDef := referenceInvSqrt_posDef hω
+  have hlogOperator :
+      CFC.log (operator ρ ω) =
+        Matrix.kronecker (CFC.log (Matrix.transpose R)) hT.supportProj +
+          Matrix.kronecker hR.transpose.supportProj (CFC.log T) := by
+    rw [operator, Matrix.kronecker]
+    exact Matrix.PosSemidef.cfc_log_kronecker hR.transpose hT
+  have hlogT : CFC.log T = (-(1 / 2 : ℝ)) • CFC.log ω := by
+    exact Matrix.PosDef.cfc_log_rpow hω (-(1 / 2 : ℝ))
+  have hlogR : CFC.log R = (1 / 2 : ℝ) • CFC.log ρ := by
+    exact Matrix.PosSemidef.cfc_log_sqrt hρ
+  have hlogRt : CFC.log (Matrix.transpose R) = Matrix.transpose (CFC.log R) := by
+    rw [CFC.log, CFC.log, ← Matrix.cfc_transpose hR.isHermitian Real.log]
+  have htermR :
+      (star (vector ρ) ⬝ᵥ
+          ((Matrix.kronecker (CFC.log (Matrix.transpose R)) hT.supportProj) *ᵥ
+            vector ρ)).re =
+        (1 / 2 : ℝ) * (Matrix.trace (ρ * CFC.log ρ)).re := by
+    rw [hTpd.supportProj_eq_one, vector, Matrix.kronecker,
+      Matrix.kronecker_mulVec_vec]
+    simp only [Matrix.one_mul]
+    rw [Matrix.star_vec_dotProduct_vec, hlogRt, hlogR]
+    simp only [Matrix.transpose_transpose]
+    rw [hR.isHermitian.eq, ← Matrix.mul_assoc, hRR, Matrix.mul_smul,
+      Matrix.trace_smul]
+    simp
+  have htermW :
+      (star (vector ρ) ⬝ᵥ
+          ((Matrix.kronecker hR.transpose.supportProj (CFC.log T)) *ᵥ
+            vector ρ)).re =
+        (-(1 / 2 : ℝ)) * (Matrix.trace (ρ * CFC.log ω)).re := by
+    rw [vector, Matrix.kronecker, Matrix.kronecker_mulVec_vec,
+      Matrix.star_vec_dotProduct_vec]
+    have hPRt : hR.transpose.supportProj * Matrix.transpose R = Matrix.transpose R :=
+      hR.transpose.isHermitian.supportProj_mul_self
+    have hRPt : R * hR.transpose.supportProjᵀ = R := by
+      have ht := congrArg Matrix.transpose hPRt
+      simpa only [Matrix.transpose_mul, Matrix.transpose_transpose] using ht
+    rw [Matrix.mul_assoc (CFC.log T) R hR.transpose.supportProjᵀ, hRPt,
+      hR.isHermitian.eq]
+    calc
+      (Matrix.trace (R * (CFC.log T * R))).re =
+          (Matrix.trace ((R * CFC.log T) * R)).re := by
+        rw [Matrix.mul_assoc]
+      _ = (Matrix.trace (R * (R * CFC.log T))).re := by
+        rw [Matrix.trace_mul_comm]
+      _ = (Matrix.trace (ρ * CFC.log T)).re := by
+        rw [← Matrix.mul_assoc, hRR]
+      _ = (-(1 / 2 : ℝ)) * (Matrix.trace (ρ * CFC.log ω)).re := by
+        rw [hlogT, Matrix.mul_smul, Matrix.trace_smul]
+        simp
+  rw [hlogOperator, Matrix.add_mulVec, dotProduct_add, Complex.add_re,
+    htermR, htermW, quantumRelativeEntropy_eq_trace_mul_log_sub]
+  ring
+
+end RelativeModularHalfMoment
+
+open RelativeModularHalfMoment
+
 /-- For a positive-semidefinite trace-one state and a faithful reference,
 Umegaki relative entropy is bounded by the logarithm of the order-two
 sandwiched trace.
@@ -186,202 +427,31 @@ Hilbert--Schmidt Cauchy--Schwarz on \(R\) and \(R\omega^{-1/2}R\). -/
 theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef
     {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) (hρtr : ρ.trace = 1) :
     quantumRelativeEntropy ρ ω ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) := by
-  let R : Mat := CFC.sqrt ρ
-  let T : Mat := ω ^ (-(1 / 2 : ℝ))
-  let Aop : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    Matrix.kronecker (Matrix.transpose R) T
-  let v : Fin D × Fin D → ℂ := Matrix.vec R
-  have hR : R.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
-  have hRR : R * R = ρ := by
-    dsimp only [R]
-    exact CFC.sqrt_mul_sqrt_self ρ hρ.nonneg
-  have hRt : (Matrix.transpose R).PosSemidef := hR.transpose
-  have hTpsd : T.PosSemidef := Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  have hTpd : T.PosDef := by
-    have hTpsd' : (ω ^ (-(1 / 2 : ℝ))).PosSemidef :=
-      Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-    apply hTpsd'.posDef_iff_isUnit.mpr
-    apply IsUnit.of_mul_eq_one (ω ^ (1 / 2 : ℝ))
-    rw [← CFC.rpow_add hω.isUnit]
-    convert CFC.rpow_zero ω using 1
-    norm_num
-  have hAop : Aop.PosSemidef := hRt.kronecker hTpsd
-  have hvnorm : star v ⬝ᵥ v = (1 : ℂ) := by
-    dsimp only [v, R]
-    rw [Matrix.star_vec_dotProduct_vec]
-    have hRherm : (CFC.sqrt ρ).IsHermitian :=
-      (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).isHermitian
-    rw [hRherm.eq, hRR, hρtr]
-  have hsupport : hAop.supportProj *ᵥ v = v := by
-    have hsupportA :
-        hAop.supportProj = Matrix.kronecker hRt.supportProj hTpsd.supportProj :=
-      hRt.supportProj_kronecker hTpsd
-    rw [hsupportA, hTpd.supportProj_eq_one]
-    dsimp only [v, R, T, Aop]
-    rw [Matrix.kronecker, Matrix.kronecker_mulVec_vec]
-    simp only [Matrix.one_mul]
-    have hPRt :
-        hRt.supportProj * Matrix.transpose (CFC.sqrt ρ) =
-          Matrix.transpose (CFC.sqrt ρ) :=
-      hRt.isHermitian.supportProj_mul_self
-    have hRPt : CFC.sqrt ρ * hRt.supportProjᵀ = CFC.sqrt ρ := by
-      have ht := congrArg Matrix.transpose hPRt
-      simpa only [Matrix.transpose_mul, Matrix.transpose_transpose] using ht
-    rw [hRPt]
-  have hj := hAop.re_dotProduct_cfc_log_mulVec_le_log hvnorm hsupport
-  have hlogAop : CFC.log Aop =
-      Matrix.kronecker (CFC.log (Matrix.transpose R)) hTpsd.supportProj +
-        Matrix.kronecker hRt.supportProj (CFC.log T) := by
-    dsimp only [Aop]
-    rw [Matrix.kronecker]
-    exact Matrix.PosSemidef.cfc_log_kronecker hRt hTpsd
-  have hlogT : CFC.log T = (-(1 / 2 : ℝ)) • CFC.log ω := by
-    dsimp only [T]
-    exact Matrix.PosDef.cfc_log_rpow hω (-(1 / 2 : ℝ))
-  have hlogR : CFC.log R = (1 / 2 : ℝ) • CFC.log ρ := by
-    dsimp only [R]
-    exact Matrix.PosSemidef.cfc_log_sqrt hρ
-  have hlogRt : CFC.log (Matrix.transpose R) = Matrix.transpose (CFC.log R) := by
-    dsimp only [R]
-    rw [CFC.log, CFC.log]
-    rw [← Matrix.cfc_transpose hR.isHermitian Real.log]
-  have htermR :
-      (star v ⬝ᵥ
-          ((Matrix.kronecker (CFC.log (Matrix.transpose R)) hTpsd.supportProj) *ᵥ
-            v)).re =
-        (1 / 2 : ℝ) * (Matrix.trace (ρ * CFC.log ρ)).re := by
-    rw [hTpd.supportProj_eq_one]
-    dsimp only [v, R]
-    rw [Matrix.kronecker, Matrix.kronecker_mulVec_vec]
-    simp only [Matrix.one_mul]
-    rw [Matrix.star_vec_dotProduct_vec]
-    rw [hlogRt, hlogR]
-    simp only [Matrix.transpose_transpose]
-    rw [hR.isHermitian.eq, ← Matrix.mul_assoc, hRR]
-    rw [Matrix.mul_smul, Matrix.trace_smul]
-    simp
-  have htermW :
-      (star v ⬝ᵥ ((Matrix.kronecker hRt.supportProj (CFC.log T)) *ᵥ v)).re =
-        (-(1 / 2 : ℝ)) * (Matrix.trace (ρ * CFC.log ω)).re := by
-    dsimp only [v, R]
-    rw [Matrix.kronecker, Matrix.kronecker_mulVec_vec]
-    rw [Matrix.star_vec_dotProduct_vec]
-    have hPRt : hRt.supportProj * (CFC.sqrt ρ)ᵀ = (CFC.sqrt ρ)ᵀ :=
-      hRt.isHermitian.supportProj_mul_self
-    have hRPt : CFC.sqrt ρ * hRt.supportProjᵀ = CFC.sqrt ρ := by
-      have ht := congrArg Matrix.transpose hPRt
-      simpa only [Matrix.transpose_mul, Matrix.transpose_transpose] using ht
-    rw [Matrix.mul_assoc (CFC.log T) (CFC.sqrt ρ) hRt.supportProjᵀ, hRPt]
-    rw [hR.isHermitian.eq]
-    calc
-      (Matrix.trace (CFC.sqrt ρ * (CFC.log T * CFC.sqrt ρ))).re =
-          (Matrix.trace ((CFC.sqrt ρ * CFC.log T) * CFC.sqrt ρ)).re := by
-        rw [Matrix.mul_assoc]
-      _ = (Matrix.trace (CFC.sqrt ρ * (CFC.sqrt ρ * CFC.log T))).re := by
-        rw [Matrix.trace_mul_comm]
-      _ = (Matrix.trace (ρ * CFC.log T)).re := by
-        rw [← Matrix.mul_assoc, hRR]
-      _ = (-(1 / 2 : ℝ)) * (Matrix.trace (ρ * CFC.log ω)).re := by
-        rw [hlogT, Matrix.mul_smul, Matrix.trace_smul]
-        simp
-  have hleft :
-      (star v ⬝ᵥ (CFC.log Aop *ᵥ v)).re =
-        (1 / 2 : ℝ) * quantumRelativeEntropy ρ ω := by
-    rw [hlogAop, Matrix.add_mulVec, dotProduct_add, Complex.add_re]
-    rw [htermR, htermW, quantumRelativeEntropy_eq_trace_mul_log_sub]
-    ring
-  have hrealInner (x y : EuclideanSpace ℂ (Fin D × Fin D)) :
-      inner ℝ x y = (inner ℂ x y).re := by
-    simp [PiLp.inner_apply, RCLike.inner_apply, Complex.inner]
-  let X : EuclideanSpace ℂ (Fin D × Fin D) :=
-    Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) R
-  let Y : EuclideanSpace ℂ (Fin D × Fin D) :=
-    Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (R * T * R)
-  have hmoment_inner :
-      (star v ⬝ᵥ (Aop *ᵥ v)).re = inner ℝ X Y := by
-    dsimp only [v, Aop, X, Y]
-    rw [Matrix.kronecker]
-    rw [Matrix.kronecker_mulVec_vec]
-    rw [Matrix.star_vec_dotProduct_vec]
-    rw [hrealInner, Matrix.inner_frobeniusEquivEuclidean]
-    rw [hR.isHermitian.eq]
-    rw [Matrix.transpose_transpose]
-    calc
-      (Matrix.trace (R * (T * R * R))).re =
-          (Matrix.trace ((R * T * R) * R)).re := by
-        simp only [Matrix.mul_assoc]
-      _ = (Matrix.trace (R * (R * T * R))).re := by
-        rw [Matrix.trace_mul_comm]
-  have hXX : inner ℝ X X = 1 := by
-    dsimp only [X, R]
-    rw [hrealInner, Matrix.inner_frobeniusEquivEuclidean]
-    rw [hR.isHermitian.eq, hRR, hρtr]
-    simp
-  have hYY : inner ℝ Y Y = sandwichedRenyiTwoTrace ρ ω := by
-    dsimp only [Y]
-    rw [hrealInner, Matrix.inner_frobeniusEquivEuclidean]
-    have hTherm : T.IsHermitian := hTpsd.isHermitian
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hR.isHermitian.eq, hTherm.eq]
-    rw [sandwichedRenyiTwoTrace_eq_weighted hω]
-    dsimp only [T]
-    calc
-      (Matrix.trace ((R * (ω ^ (-(1 / 2 : ℝ)) * R)) *
-            (R * ω ^ (-(1 / 2 : ℝ)) * R))).re =
-          (Matrix.trace (R * (ω ^ (-(1 / 2 : ℝ)) * (R * R) *
-            ω ^ (-(1 / 2 : ℝ)) * R))).re := by
-        congr 1
-        simp only [Matrix.mul_assoc]
-      _ = (Matrix.trace (R * (ω ^ (-(1 / 2 : ℝ)) * ρ *
-            ω ^ (-(1 / 2 : ℝ)) * R))).re := by
-        rw [hRR]
-      _ = (Matrix.trace ((ω ^ (-(1 / 2 : ℝ)) * ρ *
-            ω ^ (-(1 / 2 : ℝ)) * R) * R)).re := by
-        rw [Matrix.trace_mul_comm]
-      _ = (Matrix.trace ((ω ^ (-(1 / 2 : ℝ)) * ρ *
-            ω ^ (-(1 / 2 : ℝ))) * ρ)).re := by
-        rw [← hRR]
-        simp only [Matrix.mul_assoc]
-      _ = (Matrix.trace (ρ * (ω ^ (-(1 / 2 : ℝ)) * ρ *
-            ω ^ (-(1 / 2 : ℝ))))).re := by
-        rw [Matrix.trace_mul_comm]
-      _ = (Matrix.trace (ρ * ω ^ (-(1 / 2 : ℝ)) * ρ *
-            ω ^ (-(1 / 2 : ℝ)))).re := by
-        simp only [Matrix.mul_assoc]
-  have hm_sq_le : ((star v ⬝ᵥ (Aop *ᵥ v)).re) ^ 2 ≤
-      sandwichedRenyiTwoTrace ρ ω := by
-    have hcs := real_inner_mul_inner_self_le X Y
-    have hcs' : inner ℝ X Y * inner ℝ X Y ≤ sandwichedRenyiTwoTrace ρ ω := by
-      calc
-        inner ℝ X Y * inner ℝ X Y ≤ inner ℝ X X * inner ℝ Y Y := hcs
-        _ = sandwichedRenyiTwoTrace ρ ω := by rw [hXX, hYY, one_mul]
-    simpa [pow_two, hmoment_inner] using hcs'
-  have hv_ne : v ≠ 0 := by
-    intro hv0
-    have hzero : star v ⬝ᵥ v = (0 : ℂ) := by
-      rw [hv0]
-      simp
-    rw [hzero] at hvnorm
-    norm_num at hvnorm
-  have hm_pos_complex : (0 : ℂ) < star v ⬝ᵥ (Aop *ᵥ v) :=
-    Matrix.PosSemidef.dotProduct_mulVec_pos_of_supportProj_fixed hAop hv_ne
-      (by simpa only [] using hsupport)
-  have hm_pos : 0 < (star v ⬝ᵥ (Aop *ᵥ v)).re :=
-    (Complex.lt_def.mp hm_pos_complex).1
-  let m : ℝ := (star v ⬝ᵥ (Aop *ᵥ v)).re
-  have hhalf_le_logm : (1 / 2 : ℝ) * quantumRelativeEntropy ρ ω ≤ Real.log m := by
-    dsimp only [m]
-    rw [← hleft]
+  have hvnorm := vector_unit hρ hρtr
+  have hsupport := supportProj_mulVec_vector (ρ := ρ) hω
+  have hj := (operator_posSemidef ρ ω).re_dotProduct_cfc_log_mulVec_le_log
+    hvnorm hsupport
+  have hhalf_le_logm :
+      (1 / 2 : ℝ) * quantumRelativeEntropy ρ ω ≤
+        Real.log ((star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ)).re) := by
+    rw [← log_expectation_eq_half_quantumRelativeEntropy hρ hω]
     exact hj
-  have hm_sq_le' : m ^ 2 ≤ sandwichedRenyiTwoTrace ρ ω := by
-    dsimp only [m]
-    exact hm_sq_le
-  have hm_pos' : 0 < m := by
-    dsimp only [m]
-    exact hm_pos
+  have hm_sq_le := expectation_sq_le_sandwichedRenyiTwoTrace hρ hω hρtr
+  have hv_ne : vector ρ ≠ 0 := by
+    intro hv0
+    rw [hv0] at hvnorm
+    norm_num at hvnorm
+  have hm_pos_complex : (0 : ℂ) <
+      star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ) :=
+    Matrix.PosSemidef.dotProduct_mulVec_pos_of_supportProj_fixed
+      (operator_posSemidef ρ ω) hv_ne hsupport
+  have hm_pos : 0 < (star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ)).re :=
+    (Complex.lt_def.mp hm_pos_complex).1
+  let m := (star (vector ρ) ⬝ᵥ (operator ρ ω *ᵥ vector ρ)).re
   have hlog_sq_le : Real.log (m ^ 2) ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) :=
-    Real.log_le_log (sq_pos_of_pos hm_pos') hm_sq_le'
+    Real.log_le_log (sq_pos_of_pos hm_pos) hm_sq_le
   have htwolog_eq : 2 * Real.log m = Real.log (m ^ 2) := by
-    rw [pow_two, Real.log_mul hm_pos'.ne' hm_pos'.ne']
+    rw [pow_two, Real.log_mul hm_pos.ne' hm_pos.ne']
     ring
   have hD_le_twolog : quantumRelativeEntropy ρ ω ≤ 2 * Real.log m := by
     nlinarith
