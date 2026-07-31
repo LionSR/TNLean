@@ -242,6 +242,52 @@ def IsResidualIsometryFamily (U : (j : Fin r) → MPSTensor d (dim j)) : Prop :=
       ∀ (α β : Fin (dim j)) (α' β' : Fin (dim j')),
         ∑ i : Fin d, U j i α β * star (U j' i α' β') = 0)
 
+/-- Package per-block isometry canonical forms and cross mixed-map vanishing into a
+single residual-isometry family.
+
+This is the algebraic content of the joint isometry equation
+(arXiv:1606.00608, eq. `III_isometry`, line 551) once the diagonal and off-diagonal
+block statements have been established. It is neutral about how those two inputs
+were obtained and includes the empty family. -/
+theorem exists_residualIsometryFamily_of_isIsometryCanonicalForm
+    (B : (k : Fin r) → MPSTensor d (dim k))
+    (hICF : ∀ k, IsIsometryCanonicalForm (B k))
+    (hcross : ∀ j j' : Fin r, j ≠ j' → mixedTransferMap₂ (B j) (B j') = 0) :
+    ∃ (X : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+      (Λ : (j : Fin r) → Fin (dim j) → ℝ)
+      (U : (j : Fin r) → MPSTensor d (dim j)),
+      (∀ j, (X j).det ≠ 0) ∧
+      (∀ j k, 0 < Λ j k) ∧
+      (∀ j, ∑ k, Λ j k = 1) ∧
+      (∀ j i, B j i =
+        X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) * U j i * (X j)⁻¹) ∧
+      IsResidualIsometryFamily U := by
+  classical
+  choose X Λ U hXdet hΛpos hΛsum hUiso hdecomp using hICF
+  have hDdet : ∀ j,
+      (Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ))).det ≠ 0 := by
+    intro j
+    rw [Matrix.det_diagonal, Finset.prod_ne_zero_iff]
+    intro k _
+    exact Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (hΛpos j k)).ne'
+  refine ⟨X, Λ, U, hXdet, hΛpos, hΛsum, hdecomp, ?_, ?_⟩
+  · intro j α β α' β'
+    have h := hUiso j (α, β) (α', β')
+    have hstar := congrArg star h
+    rw [star_sum] at hstar
+    simp only [star_mul', star_star] at hstar
+    rw [hstar]
+    simp only [apply_ite (star : ℂ → ℂ), star_one, star_zero, Prod.mk.injEq]
+  · intro j j' hjj' α β α' β'
+    have hUjj' : mixedTransferMap₂ (U j) (U j') = 0 :=
+      mixedTransferMap₂_eq_zero_of_conj (B j) (U j) (B j') (U j')
+        (X j) (Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)))
+        (X j') (Matrix.diagonal (fun k => (Real.sqrt (Λ j' k) : ℂ)))
+        (hdecomp j) (hdecomp j')
+        (hXdet j) (hDdet j) (hXdet j') (hDdet j') (hcross j j' hjj')
+    exact residual_isometry_entry_of_mixedTransferMap₂_eq_zero
+      (U j) (U j') hUjj' α β α' β'
+
 /-- **Residual-isometry form of the cross-block RFP structure.**
 
 For a family of normal, irreducible, left-canonical blocks $B$, no two
@@ -283,33 +329,9 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent_directSum [∀ k, 
   have hICF : ∀ j, IsIsometryCanonicalForm (B j) := fun j =>
     isIsometryCanonicalForm_of_rfp_nt (B j) (hnormal j)
       (isTransferIdempotent_block_of_isTransferIdempotent_directSum B hRFP j) (hleft j)
-  choose X Λ U hXdet hΛpos hΛsum hUiso hdecomp using hICF
-  have hDdet : ∀ j,
-      (Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ))).det ≠ 0 := by
-    intro j
-    rw [Matrix.det_diagonal, Finset.prod_ne_zero_iff]
-    intro k _
-    exact Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr (hΛpos j k)).ne'
-  have hBNT : IsBNTLocallyOrthogonal B :=
-    isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum B hirr hleft hdist hRFP
-  refine ⟨X, Λ, U, hXdet, hΛpos, hΛsum, hdecomp, ?_, ?_⟩
-  · -- within-block orthonormality, conjugate of the isometry-canonical-form field
-    intro j α β α' β'
-    have h := hUiso j (α, β) (α', β')
-    have hstar := congrArg star h
-    rw [star_sum] at hstar
-    simp only [star_mul', star_star] at hstar
-    rw [hstar]
-    simp only [apply_ite (star : ℂ → ℂ), star_one, star_zero, Prod.mk.injEq]
-  · -- cross-block vanishing via the residual-operator route
-    intro j j' hjj' α β α' β'
-    have hUjj' : mixedTransferMap₂ (U j) (U j') = 0 :=
-      mixedTransferMap₂_eq_zero_of_conj (B j) (U j) (B j') (U j')
-        (X j) (Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)))
-        (X j') (Matrix.diagonal (fun k => (Real.sqrt (Λ j' k) : ℂ)))
-        (hdecomp j) (hdecomp j')
-        (hXdet j) (hDdet j) (hXdet j') (hDdet j') (hBNT j j' hjj')
-    exact residual_isometry_entry_of_mixedTransferMap₂_eq_zero (U j) (U j') hUjj' α β α' β'
+  exact exists_residualIsometryFamily_of_isIsometryCanonicalForm B hICF
+    (isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum
+      B hirr hleft hdist hRFP)
 
 /-! ## Backward direction: a direct sum of isometry-canonical-form blocks is a
 renormalization fixed point -/
