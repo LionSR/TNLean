@@ -149,7 +149,12 @@ theorem IsPrimitive.similarityMap_iff
 
 end SimilarityCLM
 
-private lemma spectralRadius_smul
+/-- Scaling a finite-dimensional continuous matrix endomorphism by a nonzero complex scalar
+scales its spectral radius by the norm of that scalar.
+
+This is the standard spectrum-scaling identity used in the Perron normalization argument of
+Wolf, *Quantum Channels & Operations*, Section 6.2. -/
+theorem spectralRadius_smul_matrixEnd
     [NeZero D]
     (F : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
     {c : ℂ} (hc : c ≠ 0) :
@@ -432,7 +437,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       rw [hE'_def]
       rfl
     rw [hE'_clm]
-    exact spectralRadius_smul (D := D)
+    exact spectralRadius_smul_matrixEnd (D := D)
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (similarityMap (D := D) S⁻¹ E))
       (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))
