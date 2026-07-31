@@ -51,8 +51,6 @@ result is not asserted here.
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
-namespace TNLean
-
 noncomputable section
 
 variable {D : ℕ}
@@ -74,6 +72,21 @@ private local instance instRenyiTwoStarOrderedRing : StarOrderedRing Mat :=
 private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
+namespace Matrix.PosSemidef
+
+/-- Sandwiching a positive-semidefinite matrix between equal real powers of
+any matrix preserves positive semidefiniteness. -/
+theorem rpow_mul_mul_rpow
+    {ρ : Mat} (hρ : ρ.PosSemidef) (ω : Mat) (r : ℝ) :
+    (ω ^ r * ρ * ω ^ r).PosSemidef := by
+  have hωr : (ω ^ r).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  simpa only [hωr.isHermitian.eq] using hρ.mul_mul_conjTranspose_same (ω ^ r)
+
+end Matrix.PosSemidef
+
+namespace TNLean
+
 /-- The order-two sandwiched trace functional
 \(\operatorname{Re}\operatorname{Tr}[(\omega^{-1/4}\rho\omega^{-1/4})^2]\).
 
@@ -88,15 +101,6 @@ noncomputable def sandwichedRenyiTwoTrace (ρ ω : Mat) : ℝ :=
   let q := ω ^ (-(1 / 4 : ℝ))
   (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
 
-/-- Sandwiching a positive-semidefinite matrix between equal real powers of
-any matrix preserves positive semidefiniteness. -/
-theorem Matrix.PosSemidef.rpow_mul_mul_rpow
-    {ρ : Mat} (hρ : ρ.PosSemidef) (ω : Mat) (r : ℝ) :
-    (ω ^ r * ρ * ω ^ r).PosSemidef := by
-  have hωr : (ω ^ r).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  simpa only [hωr.isHermitian.eq] using hρ.mul_mul_conjTranspose_same (ω ^ r)
-
 /-- The order-two sandwiched trace functional is nonnegative on
 positive-semidefinite arguments.
 
@@ -107,7 +111,7 @@ theorem sandwichedRenyiTwoTrace_nonneg
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
   have hX : (q * ρ * q).PosSemidef :=
-    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
   exact (Complex.nonneg_iff.mp (hX.trace_mul_nonneg hX)).1
 
 /-- For a positive-definite matrix, two inverse quarter-powers multiply to the
@@ -155,6 +159,6 @@ theorem sandwichedRenyiTwoTrace_eq_weighted
         simp only [Matrix.mul_assoc]
   rw [hcycle, hq]
 
-end
-
 end TNLean
+
+end

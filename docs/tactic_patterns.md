@@ -196,7 +196,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** three sandwiched Rényi proofs separately proved that a real power
   of the reference matrix is positive semidefinite and used Hermiticity to
   identify the resulting congruence with an equal-factor sandwich.
-- **Reuse:** `Matrix.PosSemidef.rpow_mul_mul_rpow` in
+- **Reuse:** `_root_.Matrix.PosSemidef.rpow_mul_mul_rpow` in
   `TNLean/Analysis/SandwichedRenyiTwo.lean` proves
   `(ω ^ r * ρ * ω ^ r).PosSemidef` from `ρ.PosSemidef`, for arbitrary real
   `r` and with no hypothesis on `ω`.

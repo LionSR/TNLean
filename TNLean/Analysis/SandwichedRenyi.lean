@@ -114,7 +114,7 @@ theorem sandwichedRenyiTrace_nonneg
     0 ≤ sandwichedRenyiTrace α ρ ω := by
   let q := ω ^ ((1 - α) / (2 * α))
   have hX : (q * ρ * q).PosSemidef :=
-    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω ((1 - α) / (2 * α))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω ((1 - α) / (2 * α))
   have hpow_nonneg : 0 ≤ (q * ρ * q) ^ α := by
     rw [CFC.rpow_eq_cfc_real hX.nonneg]
     exact cfc_nonneg fun x hx ↦
@@ -149,7 +149,7 @@ theorem sandwichedRenyiTrace_two
   rw [show (1 - (2 : ℝ)) / (2 * 2) = -(1 / 4 : ℝ) by norm_num]
   let q := ω ^ (-(1 / 4 : ℝ))
   have hX : (q * ρ * q).PosSemidef :=
-    Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
   change (Matrix.trace ((q * ρ * q) ^ (2 : ℝ))).re =
     (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
   rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) by norm_num,
