@@ -219,6 +219,45 @@
     which completes the fusion clause.
 \end{proof}
 
+\begin{theorem}[Literal CPSV renormalization fixed points have active-sector fusion]%
+    \label{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
+    \lean{MPOTensor.HasBNTFusionTensorClause.%
+of_isRFPViaTS_of_cpsvCanonicalForm}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $M$ generate matrix product density operators, and suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form. If the
+    one-site and two-site physical closures are related in both directions by
+    trace-preserving completely positive maps as in Definition~4.1, then a
+    vertical canonical decomposition of $M$ has the active-sector fusion
+    clause. In particular, its positive diagonal fusion matrices satisfy
+    \begin{align}
+      m_\gamma
+      &=\sum_{\alpha,\beta}
+        \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta.
+      \notag
+    \end{align}
+    This is implication (i)$\Rightarrow$(iii) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
+      thm:mpdo_literal_cpsv_vertical_decomposition_block_two,
+      thm:mpdo_transported_vertical_sector_coefficient_comparison,
+      thm:mpdo_blocked_vertical_operator_representations,
+      thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition,
+      thm:mpdo_blocked_representations_idempotent_trace_scalars}
+    Choose the literal one-site and two-site vertical decompositions.
+    Transporting the two physical maps through them identifies their normal
+    sectors by trace-ratio unitary conjugacies. The literal positive-fusion
+    theorem gives the positive diagonal matrices, coisometries, and exact
+    reconstruction on every active product sector. The two simultaneous
+    blocked-operator representations and eventual linear independence of the
+    BNT operators then give the length-one idempotent trace-scalar identity.
+\end{proof}
+
 \begin{theorem}[Active-sector fusion implies the tensor-attached algebra clause]%
     \label{thm:mpdo_bnt_fusion_tensor_to_algebra_tensor}
     \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}

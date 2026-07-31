@@ -256,6 +256,65 @@ noncomputable def toBNTFusionCoisometryFamily
 
 end OriginalCornerFamily
 
+/-- Positive normalized product corners determine a family of fusion
+coisometries for the original one-site BNT labels.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem exists_bntFusionCoisometryFamily
+    {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    (S : RetainedProductSpectralFamily dim mult weight B)
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (hMult : ∀ α, 0 < mult α)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
+    (sigma : Fin g ≃ Fin g₂) (hDim : ∀ i, dim i = dim₂ (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+      A₂ (sigma i) ab =
+        (verticalMultiplicityTrace weight i /
+          verticalMultiplicityTrace weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (B i ab) *
+          (V i : Matrix (Fin (dim₂ (sigma i)))
+            (Fin (dim₂ (sigma i))) ℂ)ᴴ))
+    (hActivePos : ∀ j, (0 : ℂ) < S.flatCoefficient j * C.phase j)
+    (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
+    (homega : ∀ j, 0 < omega j)
+    (hGram : ∀ j,
+      (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
+        C.gauge j = (omega j : ℂ) • 1) :
+    ∃ (chi : DiagonalChiFamily (Fin g))
+      (U : ∀ α β : Fin g,
+        Matrix
+          ((γ : Fin g) × (Fin (chi.dim α β γ) × Fin (dim γ)))
+          (Fin (dim α * dim β)) ℂ),
+      chi.PosEntries ∧
+      (∀ α β, U α β * (U α β)ᴴ = 1) ∧
+      (∀ (α β : Fin g) (i j : Fin D),
+        U α β *
+            (mulTensor (verticalBNTMPO (B α))
+              (verticalBNTMPO (B β))) i j *
+            (U α β)ᴴ =
+          Matrix.blockDiagonal' fun γ =>
+            chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) i j) ∧
+      ∀ (α β : Fin g) (i j : Fin D),
+        (mulTensor (verticalBNTMPO (B α))
+          (verticalBNTMPO (B β))) i j =
+          (U α β)ᴴ *
+            (Matrix.blockDiagonal' fun γ =>
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) i j) *
+            U α β := by
+  obtain ⟨O⟩ := S.exists_originalCornerFamily C hMult hWeight
+    mult₂ hMult₂ weight₂ hWeight₂ sigma hDim V hLetter
+    hActivePos omega homega hGram
+  let Fam := O.toBNTFusionCoisometryFamily hMult
+  exact ⟨Fam.chi, Fam.fusionCoisometry, Fam.posEntries,
+    Fam.coisometry, Fam.fusion, Fam.reconstruction⟩
+
 end RetainedProductSpectralFamily
 
 /-- A fixed one-site/two-site sector transport witness determines positive
@@ -342,12 +401,9 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
     C.exists_unitaryNormalization M hHorizontal hM
       U₁ hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
       U₂ hU₂ hReconstruct₂ hNormal₂ j
-  obtain ⟨O⟩ := R.exists_originalCornerFamily C hMult₁ hWeight₁
+  exact R.exists_bntFusionCoisometryFamily C hMult₁ hWeight₁
     mult₂ hMult₂ weight₂ hWeight₂ sigma hDim V hLetter
     hActivePos omega homega hGram
-  let Fam := O.toBNTFusionCoisometryFamily hMult₁
-  exact ⟨Fam.chi, Fam.fusionCoisometry, Fam.posEntries,
-    Fam.coisometry, Fam.fusion, Fam.reconstruction⟩
 
 /-- The one-site vertical BNT is closed under pairwise products through
 positive diagonal multiplicity matrices and coisometries onto the active
