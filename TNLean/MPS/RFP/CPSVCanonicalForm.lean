@@ -198,7 +198,11 @@ retained direct sum. After independent trace-preserving Perron gauges, the mixed
 forces each off-diagonal map to vanish. The conclusion includes the empty active family.
 
 The square-root diagonal follows TNLean's corrected convention for arXiv:1606.00608,
-Corollary `III.cor3`, lines 583--590; see `IsIsometryCanonicalForm`. -/
+Corollary `III.cor3`, lines 583--590; see `IsIsometryCanonicalForm`.
+
+**Scope restriction (active canonical blocks):** the printed corollary's arbitrary-BNT reading is
+false; this theorem uses representatives of the nonzero-weight active gauge-phase classes. See
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem exists_residualIsometryFamily_of_isTransferIdempotent
     {data : CPSVCanonicalFormData A} (ref : data.ActiveBNTRefinement)
     (hRFP : IsTransferIdempotent A) :
@@ -298,7 +302,11 @@ namespace IsCPSVCanonicalForm
 and its chosen active BNT refinement, the representative blocks possess simultaneous square-root
 isometry forms with a joint residual-isometry family.
 
-Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/
+Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590.
+
+**Scope restriction (active canonical blocks):** the printed corollary's arbitrary-BNT reading is
+false; this theorem uses representatives of the nonzero-weight active gauge-phase classes. See
+`docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent
     (hCF : IsCPSVCanonicalForm A) (hRFP : IsTransferIdempotent A) :
     ∃ (X : (j : Fin hCF.data.activePhaseClasses.g) →
