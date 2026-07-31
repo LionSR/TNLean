@@ -175,6 +175,43 @@ physical indices, as in
     column reindexing preserves positive semidefiniteness.
 \end{proof}
 
+\begin{theorem}[MPO blocking preserves literal CPSV doubled-index form]
+    \label{thm:mpdo_literal_cpsv_positive_blocking}
+    \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor}
+    \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo}
+    \leanok
+    \uses{def:mpdo_positive_physical_blocking, def:mpdo_two_site_blocking,
+        thm:mpdo_positive_blocking_doubled_index,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:cpsv_physical_reindexing,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    Let $A_M$ be the doubled-index MPS tensor associated to an MPO tensor
+    $M$. If $A_M$ is in literal CPSV canonical form and $L\geq1$, then the
+    doubled-index MPS tensor associated to $M^{[L]}$ is again in literal CPSV
+    canonical form. The same conclusion holds for the concrete two-site
+    blocking $M^{[2]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_positive_physical_blocking, def:mpdo_two_site_blocking,
+        thm:mpdo_positive_blocking_doubled_index,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:cpsv_physical_reindexing,
+        thm:cpsv_literal_canonical_form_positive_blocking}
+    The doubled-index tensor of $M^{[L]}$ is, under the canonical pairing of
+    ket and bra words, a physical relabeling of $A_M^{[L]}$:
+    \begin{align}
+        A_{M^{[L]}}
+        &=\psi_L^*(A_M^{[L]}).
+        \label{eq:mpdo_cpsv_block_tensor_reindex}
+    \end{align}
+    Theorem~\ref{thm:cpsv_literal_canonical_form_positive_blocking} gives
+    literal CPSV canonical form for $A_M^{[L]}$, and
+    Theorem~\ref{thm:cpsv_physical_reindexing} carries it across
+    $\psi_L$. For two-site blocking one takes $L=2$ and uses the concrete
+    identification of Theorem~\ref{thm:mpdo_block_two_as_positive_blocking}.
+\end{proof}
+
 \begin{lemma}[Two-site blocking preserves normalized BNT-refined horizontal form]
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}

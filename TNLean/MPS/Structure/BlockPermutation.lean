@@ -36,7 +36,6 @@ Technical note on the two-level algebraic structure:
 * `algEquiv_pi_matrix_decomposition` — the main decomposition theorem
 -/
 
-set_option linter.unusedSectionVars false
 set_option linter.unusedFintypeInType false
 set_option linter.style.show false
 
