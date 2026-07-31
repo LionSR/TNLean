@@ -889,6 +889,7 @@ for contract_negative in \
   n_duplicate_port \
   n_port_open_cross_undeclared \
   n_port_type \
+  n_closure_port_type \
   n_port_type_multiple_consumers \
   n_port_policy_type \
   n_sealed_duplicate_port \
@@ -920,6 +921,8 @@ do
   [ "$contract_negative" = n_port_open_cross_undeclared ] &&
     expected='[TKZ-CROSS-UNDECLARED]'
   [ "$contract_negative" = n_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_closure_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_port_type_multiple_consumers ] &&
     expected='[TKZ-PORT-CONSUMED]'

@@ -3091,6 +3091,66 @@
       }
   }
 
+\cs_new_protected:Npn
+  \__tenkz_kernel_port_closure_node_materialize:n #1
+  {
+    \prop_get:NVN
+      \l__tenkz_kernel_port_external_consumer_prop
+      \l__tenkz_kernel_scratch_tl
+      \l__tenkz_kernel_port_record_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_port_record_tl
+      {
+        \__tenkz_model_get:nnN
+          { \tl_use:N \l__tenkz_kernel_port_record_tl } {origin}
+          \l__tenkz_kernel_port_policy_field_tl
+        \bool_lazy_or:nnT
+          {
+            \str_if_eq_p:Vn
+              \l__tenkz_kernel_port_policy_field_tl {trace}
+          }
+          {
+            \str_if_eq_p:Vn
+              \l__tenkz_kernel_port_policy_field_tl {cup}
+          }
+          {
+            \__tenkz_kernel_node_new:nN
+              {
+                #1.\tl_use:N \l__tenkz_kernel_port_face_tl
+                @\tl_use:N \l__tenkz_kernel_port_slot_tl
+              }
+              \l__tenkz_kernel_port_node_tl
+            \__tenkz_kernel_node_put:Nnn
+              \l__tenkz_kernel_port_node_tl {kind} {port}
+            \__tenkz_kernel_node_put:Nnn
+              \l__tenkz_kernel_port_node_tl {record-id} {#1}
+            \__tenkz_kernel_node_put:NnV
+              \l__tenkz_kernel_port_node_tl {face}
+              \l__tenkz_kernel_port_face_tl
+            \__tenkz_kernel_node_put:NnV
+              \l__tenkz_kernel_port_node_tl {slot}
+              \l__tenkz_kernel_port_slot_tl
+            \__tenkz_model_get:nnN
+              { \tl_use:N \l__tenkz_kernel_port_record_tl } {from}
+              \l__tenkz_kernel_port_place_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_port_place_tl
+              {
+                \__tenkz_model_complete:nnn
+                  { \tl_use:N \l__tenkz_kernel_port_record_tl } {from}
+                  { \tl_use:N \l__tenkz_kernel_port_node_tl }
+              }
+              {
+                \__tenkz_model_complete:nnn
+                  { \tl_use:N \l__tenkz_kernel_port_record_tl } {to}
+                  { \tl_use:N \l__tenkz_kernel_port_node_tl }
+              }
+            \prop_put:NVV
+              \l__tenkz_kernel_port_used_node_prop
+              \l__tenkz_kernel_scratch_tl
+              \l__tenkz_kernel_port_node_tl
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_port_used_collect:
   {
     \prop_clear:N \l__tenkz_kernel_port_used_prop
@@ -3383,6 +3443,7 @@
             \prop_if_in:NVTF
               \l__tenkz_kernel_port_used_prop \l__tenkz_kernel_scratch_tl
               {
+                \__tenkz_kernel_port_closure_node_materialize:n {#1}
                 \prop_get:NVN \l__tenkz_kernel_port_used_node_prop
                   \l__tenkz_kernel_scratch_tl
                   \l__tenkz_kernel_port_node_tl
@@ -7174,6 +7235,7 @@
         \msg_error:nnee {tenkz}{kernel-render-todo}
           { cup ~ side = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
       }
+    \__tenkz_kernel_r_wire_port_labels:n {#1}
   }
 
 % A bond between two unoccupied cells is rail territory: the wrap records
@@ -7631,6 +7693,7 @@
         \msg_error:nnee {tenkz}{kernel-render-todo}
           { trace ~ side = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
       }
+    \__tenkz_kernel_r_wire_port_labels:n {#1}
   }
 
 % A multi-row physical trace joins the limiting rows.  Its circular turns
