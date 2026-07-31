@@ -28,6 +28,8 @@ the full isometry condition of Corollary III.cor3 (arXiv:1606.00608, line 584).
 * `mixedTransferMap₂_eq_zero_of_conj` — cancelling the invertible outer factors
   turns the vanishing of `mixedTransferMap₂ A B` into that of
   `mixedTransferMap₂ U V`.
+* `mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv` — the corresponding
+  gauge-phase transport API for two tensor legs.
 * `residual_isometry_entry_of_mixedTransferMap₂_eq_zero` — reading off a matrix
   entry turns the vanishing operator into the entrywise residual-isometry sum.
 * `IsResidualIsometryFamily` — the full isometry condition eq:III_isometry as a
@@ -139,6 +141,45 @@ lemma mixedTransferMap₂_eq_zero_of_conj
   · rw [Matrix.det_mul]; exact mul_ne_zero hXa hDa
   · rw [Matrix.det_conjTranspose, Matrix.det_mul]
     exact star_ne_zero.mpr (mul_ne_zero hXb hDb)
+
+/-- Vanishing of a rectangular mixed transfer map descends through independent
+gauge-phase equivalences on its two tensor legs. -/
+theorem mixedTransferMap₂_eq_zero_of_gaugePhaseEquiv
+    {A U : MPSTensor d D₁} {B V : MPSTensor d D₂}
+    (hA : GaugePhaseEquiv U A) (hB : GaugePhaseEquiv V B)
+    (hAB : mixedTransferMap₂ A B = 0) :
+    mixedTransferMap₂ U V = 0 := by
+  obtain ⟨Xa, ζa, hζa, hrelA⟩ := hA
+  obtain ⟨Xb, ζb, hζb, hrelB⟩ := hB
+  let Da : Matrix (Fin D₁) (Fin D₁) ℂ := ζa • 1
+  let Db : Matrix (Fin D₂) (Fin D₂) ℂ := ζb • 1
+  apply mixedTransferMap₂_eq_zero_of_conj A U B V
+    (Xa : Matrix (Fin D₁) (Fin D₁) ℂ) Da
+    (Xb : Matrix (Fin D₂) (Fin D₂) ℂ) Db
+  · intro i
+    rw [hrelA i]
+    simp [Da, Matrix.mul_assoc]
+  · intro i
+    rw [hrelB i]
+    simp [Db, Matrix.mul_assoc]
+  · exact Matrix.GeneralLinearGroup.det_ne_zero Xa
+  · simp [Da, hζa]
+  · exact Matrix.GeneralLinearGroup.det_ne_zero Xb
+  · simp [Db, hζb]
+  · exact hAB
+
+/-- Transport across equalities of the two bond dimensions preserves
+vanishing of the rectangular mixed transfer map. -/
+theorem mixedTransferMap₂_cast_eq_zero_iff
+    {D₁ D₁' D₂ D₂' : ℕ} (h₁ : D₁ = D₁') (h₂ : D₂ = D₂')
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    mixedTransferMap₂
+        (cast (congr_arg (MPSTensor d) h₁) A)
+        (cast (congr_arg (MPSTensor d) h₂) B) = 0 ↔
+      mixedTransferMap₂ A B = 0 := by
+  subst D₁'
+  subst D₂'
+  rfl
 
 /-- **Entrywise form of the vanishing residual operator.** If
 `mixedTransferMap₂ U V` vanishes, then for all virtual indices

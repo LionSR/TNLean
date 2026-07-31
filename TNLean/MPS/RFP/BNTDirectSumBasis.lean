@@ -12,7 +12,7 @@ import TNLean.MPS.RFP.BNTOrthogonality
 
 This file proves that the multiplicity-one unit-weight direct-sum representative
 of a BNT canonical form is in literal CPSV canonical form and that its distinct
-blocks form a CPSV basis of normal tensors.
+blocks form both a CPSV basis of normal tensors and an algebraic BNT.
 -/
 
 open scoped Matrix BigOperators
@@ -81,6 +81,18 @@ theorem isCPSVBasisOfNormalTensors_basisDirectSum
         (hCF.basis_isNormal j) (hCF.basis_left_canonical j)
     spans_mpv := ?_
     eventually_li := by exact hCF.bnt_data }
+  intro N _hN
+  refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
+  rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
+    mpv_toTensorFromBlocks_eq_sum]
+  simp
+
+/-- The distinct basis tensors form an algebraic BNT for their
+multiplicity-one, unit-weight direct sum. -/
+theorem isBNT_basisDirectSum
+    (hCF : IsBNTCanonicalForm P) :
+    IsBNT (directSumTensor P.basis) P.basisCount P.basisDim P.basis := by
+  refine ⟨hCF.basis_isNormal, ?_, hCF.bnt_data⟩
   intro N _hN
   refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
   rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
