@@ -428,9 +428,9 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     \label{lem:cpsv_gauge_transfer_similarity}
     \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
     \leanok
-    \uses{def:gauge_equiv}
-    If \(B^i=XA^iX^{-1}\) for every physical index \(i\), then there is an
-    invertible matrix \(C\) such that
+    \uses{def:gauge_equiv, def:transfer_map}
+    If $B^i=XA^iX^{-1}$ for every physical index $i$, then there is an
+    invertible matrix $C$ such that
     \begin{align}
         \E_B(Y)
         &=C^{-1}\E_A(CYC^\dagger)(C^\dagger)^{-1}.
@@ -439,36 +439,39 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand both transfer maps and take \(C=X^{-1}\).
+    Expand both transfer maps and take $C=X^{-1}$.
 \end{proof}
 
 \begin{lemma}[Spectral radius under congruence similarity]
     \label{lem:cpsv_spectral_radius_similarity}
     \lean{spectralRadius_similarityMap_eq}
     \leanok
-    For an invertible matrix \(C\), the linear maps
-    \[
+    For an invertible matrix $C$, the linear maps
+    \begin{align}
         E
         \quad\hbox{and}\quad
         Y\longmapsto C^{-1}E(CYC^\dagger)(C^\dagger)^{-1}
-    \]
+        \notag
+    \end{align}
     have the same spectral radius.
 \end{lemma}
 
 \begin{proof}\leanok
     The two maps are conjugate by the invertible linear transformation
-    \(Y\mapsto CYC^\dagger\), and therefore have the same spectrum.
+    $Y\mapsto CYC^\dagger$, and therefore have the same spectrum.
 \end{proof}
 
 \begin{lemma}[Primitivity under congruence similarity]
     \label{lem:cpsv_primitivity_similarity}
     \lean{IsPrimitive.similarityMap_iff}
     \leanok
-    For an invertible matrix \(C\), a linear map \(E\) is primitive if and
+    \uses{def:primitive_channel}
+    For an invertible matrix $C$, a linear map $E$ is primitive if and
     only if
-    \[
+    \begin{align}
         Y\longmapsto C^{-1}E(CYC^\dagger)(C^\dagger)^{-1}
-    \]
+        \notag
+    \end{align}
     is primitive.
 \end{lemma}
 
@@ -493,7 +496,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:cpsv_gauge_transfer_similarity,
+    \uses{def:nt_cpsv,
+        lem:cpsv_gauge_transfer_similarity,
         lem:cpsv_spectral_radius_similarity,
         lem:similarity_irred_iff,
         lem:cpsv_primitivity_similarity}
