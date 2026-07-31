@@ -22,6 +22,8 @@ for irreducible completely positive maps on `M_D(ℂ)`.
 
 ## Main results
 
+* `spectralRadius_smul_matrixEnd`: scalar multiplication scales the spectral radius of a
+  finite-dimensional continuous matrix endomorphism by the scalar norm.
 * `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`:
   if `E ρ = r • ρ` with `ρ > 0` and `r > 0`, then the spectral radius of `E`
   is `r`.
