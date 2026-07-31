@@ -39,13 +39,13 @@ abstracted — record why, so it is not re-proposed).
 ### dependent finite-sum flattening — promoted
 - **Pattern:** pass between the double sum over `j` and `q : Fin (mult j)` and the
   single sum over `Fin (∑ j, mult j)` reindexed by `finSigmaFinEquiv.symm`.
-- **Seen:** four reconstruction proofs across `VerticalCanonicalForm.lean`,
-  `CPSVVerticalCanonicalForm.lean`, `RFPPositiveFusionDecomposition.lean`, and
-  `CPSVVerticalDecomposition.lean` before promotion.
+- **Seen:** five proofs across `VerticalCanonicalForm.lean`,
+  `CPSVVerticalCanonicalForm.lean`, `RFPPositiveFusionDecomposition.lean`,
+  `CPSVVerticalDecomposition.lean`, and `PooledKrausFamily.lean` before promotion.
 - **Abstraction:** `Fintype.sum_finSigmaFinEquiv` in
-  `TNLean/MPS/MPDO/VerticalCoisometry.lean`.
+  `TNLean/Algebra/FinSum.lean`.
 - **Notes:** the shared lemma is polymorphic over the additive commutative monoid,
-  so reconstruction proofs retain only the MPDO-specific summand.
+  so callers retain only their application-specific summand.
 
 ### suffix marginal sector-block expansion — promoted
 - **Pattern:** reindex a normalized reduced state into physical-sector
