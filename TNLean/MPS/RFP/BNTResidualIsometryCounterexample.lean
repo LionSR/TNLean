@@ -58,7 +58,9 @@ private lemma corollary312UnusedTensor_transferMap :
   ext x y
   fin_cases x
   fin_cases y
-  simp [transferMap_apply, corollary312UnusedTensor]
+  suffices h : 2 * ((↑(Real.sqrt 2) : ℂ)⁻¹ *
+      ((↑(Real.sqrt 2) : ℂ)⁻¹ * X 0 0)) = X 0 0 by
+    simpa [transferMap_apply, corollary312UnusedTensor] using h
   calc
     2 * ((↑(Real.sqrt 2) : ℂ)⁻¹ * ((↑(Real.sqrt 2) : ℂ)⁻¹ * X 0 0)) =
         2 * (((↑(Real.sqrt 2) : ℂ)⁻¹ * (↑(Real.sqrt 2) : ℂ)⁻¹) * X 0 0) := by ring
@@ -191,7 +193,6 @@ private theorem corollary312Tensor_isCPSVCanonicalForm :
         rfl
       rw [hzzero]
       exact hxzero.symm
-
   rw [← hEq]
   exact (CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 1 => by simp) (fun _ => (1 : ℂ)) (fun _ => corollary312Tensor)
