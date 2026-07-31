@@ -79,9 +79,7 @@ theorem exists_cpsvVerticalDecomposition
         blocks (C.repr p.1) ab) * (W p)ᴴ
     change (∑ j, ∑ q, f ⟨j, q⟩) =
       ∑ q, f (finSigmaFinEquiv.symm q)
-    calc
-      _ = ∑ p, f p := (Fintype.sum_sigma f).symm
-      _ = _ := (Equiv.sum_comp finSigmaFinEquiv.symm f).symm
+    exact (Fintype.sum_finSigmaFinEquiv f).symm
   exact MPOTensor.cpsvVerticalDecomposition_of_grouped_orthogonal_sectors M
     (fun j ↦ dim (C.repr j)) C.copies C.copies_pos
     (fun j q ↦ mu (C.enum j q) * zeta j q) hCoeffPos

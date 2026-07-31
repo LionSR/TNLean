@@ -79,8 +79,6 @@ theorem verticalCF_of_horizontalCF (M : MPOTensor d D)
       ((mu (C.enum p.1 p.2) * zeta p.1 p.2) • blocks (C.repr p.1) v) *
       (W p)ᴴ
   change (∑ j, ∑ q, f ⟨j, q⟩) = ∑ q, f (finSigmaFinEquiv.symm q)
-  calc
-    _ = ∑ p, f p := (Fintype.sum_sigma f).symm
-    _ = _ := (Equiv.sum_comp finSigmaFinEquiv.symm f).symm
+  exact (Fintype.sum_finSigmaFinEquiv f).symm
 
 end MPOTensor

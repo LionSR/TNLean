@@ -45,6 +45,18 @@ conditional consequence of an assumed literal sum over the sector corners.
 
 open scoped Matrix BigOperators ComplexOrder
 
+namespace Fintype
+
+/-- Reindex a sum over a finite dependent pair by `finSigmaFinEquiv`. -/
+theorem sum_finSigmaFinEquiv {g : ℕ} {mult : Fin g → ℕ} {β : Type*}
+    [AddCommMonoid β] (f : ((j : Fin g) × Fin (mult j)) → β) :
+    ∑ q : Fin (∑ j, mult j), f (finSigmaFinEquiv.symm q) =
+      ∑ j, ∑ q, f ⟨j, q⟩ := by
+  rw [Equiv.sum_comp finSigmaFinEquiv.symm f, ← Finset.univ_sigma_univ,
+    Finset.sum_sigma]
+
+end Fintype
+
 namespace Matrix
 
 variable {r d s : ℕ} {dim : Fin r → ℕ}
