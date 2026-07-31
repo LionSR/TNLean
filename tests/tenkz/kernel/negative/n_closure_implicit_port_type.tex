@@ -1,0 +1,16 @@
+% Negative: a generated closure contracts a declared port with its implicit
+% virtual mate, so a sole physical descriptor is a type mismatch.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+  rows={wire},
+  cols=2,
+  bonds=none,
+  west=trace,
+  east=trace
+]
+  \tn[ports={180:physical}]{} & \tn{}
+\end{tenkz}
+\end{document}

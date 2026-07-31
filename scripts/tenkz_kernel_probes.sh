@@ -63,6 +63,10 @@ if grep -Fq '|origin=port-open|' "$WORK/r_closure_typed_ports.tnlog"; then
   echo "FAIL: trace/cup closure left duplicate typed-port stubs" >&2
   exit 1
 fi
+if grep -Fq '|origin=port-open|' "$WORK/r_closure_implicit_virtual.tnlog"; then
+  echo "FAIL: implicit closure endpoints grew open-port stubs" >&2
+  exit 1
+fi
 grep -Fq 'kernel-boundary|signature=phys:n' \
     "$WORK/r_port_physical_open.tnlog" || {
   echo "FAIL: physical port type did not reach its explicit open boundary" >&2
@@ -890,6 +894,8 @@ for contract_negative in \
   n_port_open_cross_undeclared \
   n_port_type \
   n_closure_port_type \
+  n_closure_implicit_port_type \
+  n_cup_implicit_port_type \
   n_cell_trace_port_type \
   n_grid_port_type_implicit \
   n_port_type_multiple_consumers \
@@ -927,6 +933,10 @@ do
   [ "$contract_negative" = n_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_closure_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_closure_implicit_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cup_implicit_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_cell_trace_port_type ] &&
     expected='[TKZ-PORT-TYPE]'

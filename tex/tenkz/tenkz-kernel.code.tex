@@ -2981,8 +2981,33 @@
                 \tl_use:N \l__tenkz_kernel_port_record_tl / #3 /
                 \tl_use:N \l__tenkz_kernel_port_slot_tl
               }
-            \exp_args:NV \__tenkz_kernel_port_external_consume:nn
-              \l__tenkz_kernel_scratch_tl {#4}
+            % Trace and cup records are closed topology.  Give every semantic
+            % endpoint its default virtual node before authored descriptors
+            % refine types or labels, so an undeclared mate is never confused
+            % with an explicit open end.
+            \__tenkz_model_get:nnN {#4} {from}
+              \l__tenkz_kernel_port_node_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_port_node_tl
+              {
+                \tl_set:Nn \l__tenkz_kernel_port_policy_field_tl {from}
+              }
+              {
+                \__tenkz_model_get:nnN {#4} {to}
+                  \l__tenkz_kernel_port_node_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_port_node_tl
+                  {
+                    \tl_set:Nn
+                      \l__tenkz_kernel_port_policy_field_tl {to}
+                  }
+                  { \tl_clear:N \l__tenkz_kernel_port_policy_field_tl }
+              }
+            \tl_if_blank:VF \l__tenkz_kernel_port_policy_field_tl
+              {
+                \__tenkz_kernel_generated_port_end:nnnnnn
+                  {#4}
+                  { \l__tenkz_kernel_port_policy_field_tl }
+                  {#1}{#2}{#3}{virtual}
+              }
           }
       }
   }
@@ -3173,75 +3198,6 @@
           { \tl_use:N \l__tenkz_kernel_port_slot_tl }
           { \tl_use:N \l__tenkz_kernel_port_face_tl }
           { \tl_use:N \l__tenkz_kernel_port_span_tl }
-      }
-  }
-
-\cs_new_protected:Npn
-  \__tenkz_kernel_port_closure_node_materialize:n #1
-  {
-    \prop_if_in:NVF
-      \l__tenkz_kernel_port_used_node_prop
-      \l__tenkz_kernel_scratch_tl
-      {
-        \prop_get:NVN
-          \l__tenkz_kernel_port_external_consumer_prop
-          \l__tenkz_kernel_scratch_tl
-          \l__tenkz_kernel_port_record_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_port_record_tl
-          {
-            \__tenkz_model_get:nnN
-              { \tl_use:N \l__tenkz_kernel_port_record_tl } {origin}
-              \l__tenkz_kernel_port_policy_field_tl
-            \bool_lazy_or:nnT
-              {
-                \str_if_eq_p:Vn
-                  \l__tenkz_kernel_port_policy_field_tl {trace}
-              }
-              {
-                \str_if_eq_p:Vn
-                  \l__tenkz_kernel_port_policy_field_tl {cup}
-              }
-              {
-                \__tenkz_kernel_node_new:nN
-                  {
-                    #1.\tl_use:N \l__tenkz_kernel_port_face_tl
-                    @\tl_use:N \l__tenkz_kernel_port_slot_tl
-                  }
-                  \l__tenkz_kernel_port_node_tl
-                \__tenkz_kernel_node_put:Nnn
-                  \l__tenkz_kernel_port_node_tl {kind} {port}
-                \__tenkz_kernel_node_put:Nnn
-                  \l__tenkz_kernel_port_node_tl {record-id} {#1}
-                \__tenkz_kernel_node_put:NnV
-                  \l__tenkz_kernel_port_node_tl {face}
-                  \l__tenkz_kernel_port_face_tl
-                \__tenkz_kernel_node_put:NnV
-                  \l__tenkz_kernel_port_node_tl {slot}
-                  \l__tenkz_kernel_port_slot_tl
-                \__tenkz_model_get:nnN
-                  { \tl_use:N \l__tenkz_kernel_port_record_tl } {from}
-                  \l__tenkz_kernel_port_place_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_port_place_tl
-                  {
-                    \__tenkz_model_complete:nnn
-                      { \tl_use:N \l__tenkz_kernel_port_record_tl } {from}
-                      { \tl_use:N \l__tenkz_kernel_port_node_tl }
-                  }
-                  {
-                    \__tenkz_model_complete:nnn
-                      { \tl_use:N \l__tenkz_kernel_port_record_tl } {to}
-                      { \tl_use:N \l__tenkz_kernel_port_node_tl }
-                  }
-                \prop_put:NVV
-                  \l__tenkz_kernel_port_used_node_prop
-                  \l__tenkz_kernel_scratch_tl
-                  \l__tenkz_kernel_port_node_tl
-                \prop_put:NVV
-                  \l__tenkz_kernel_port_label_node_prop
-                  \l__tenkz_kernel_scratch_tl
-                  \l__tenkz_kernel_port_node_tl
-              }
-          }
       }
   }
 
@@ -3552,7 +3508,6 @@
             \prop_if_in:NVTF
               \l__tenkz_kernel_port_used_prop \l__tenkz_kernel_scratch_tl
               {
-                \__tenkz_kernel_port_closure_node_materialize:n {#1}
                 \prop_get:NVN \l__tenkz_kernel_port_used_node_prop
                   \l__tenkz_kernel_scratch_tl
                   \l__tenkz_kernel_port_node_tl
@@ -3672,18 +3627,28 @@
           {
             \quark_if_no_value:NF \l__tenkz_kernel_port_node_tl
               {
-                \exp_args:NnV
-                  \__tenkz_kernel_port_open_type_validate:nnn {#1}
-                  \l__tenkz_kernel_port_node_tl {to}
+                \__tenkz_model_get:nnN {#1} {to-open}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                  {
+                    \exp_args:NnV
+                      \__tenkz_kernel_port_open_type_validate:nnn {#1}
+                      \l__tenkz_kernel_port_node_tl {to}
+                  }
               }
           }
         \quark_if_no_value:NT \l__tenkz_kernel_port_node_tl
           {
             \quark_if_no_value:NF \l__tenkz_kernel_port_record_tl
               {
-                \exp_args:NnV
-                  \__tenkz_kernel_port_open_type_validate:nnn {#1}
-                  \l__tenkz_kernel_port_record_tl {from}
+                \__tenkz_model_get:nnN {#1} {from-open}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                  {
+                    \exp_args:NnV
+                      \__tenkz_kernel_port_open_type_validate:nnn {#1}
+                      \l__tenkz_kernel_port_record_tl {from}
+                  }
               }
           }
         \quark_if_no_value:NF \l__tenkz_kernel_port_node_tl
@@ -9301,8 +9266,6 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_index_joins:
   {
     \prop_clear:N \l__tenkz_kernel_r_index_join_prop
-    \prop_clear:N \l__tenkz_kernel_r_port_box_prop
-    \prop_clear:N \l__tenkz_kernel_r_port_host_routes_prop
     \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
       {
         \tl_set:Nn \l__tenkz_kernel_r_wire_record_tl {##1}
@@ -10865,6 +10828,11 @@
 \cs_new_protected:Npn \__tenkz_kernel_render:
   {
     \__tenkz_string_reset:
+    % Port route topology is rebuilt by the ordinary-wire pass and consumed
+    % by crossing resolution.  Reset it before that producer, not inside the
+    % later join pass.
+    \prop_clear:N \l__tenkz_kernel_r_port_box_prop
+    \prop_clear:N \l__tenkz_kernel_r_port_host_routes_prop
     \__tenkz_model_map_ids:nn {wire}
       { \__tenkz_kernel_r_wire_queue:n {##1} }
     % Panels meet on the axis their wires run along, not on the middle of
