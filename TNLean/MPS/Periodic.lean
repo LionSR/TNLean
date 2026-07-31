@@ -22,6 +22,12 @@ import TNLean.MPS.Periodic.Overlap.DifferentPeriod
 import TNLean.MPS.Periodic.Overlap.GaugePhase
 import TNLean.MPS.Periodic.Overlap.NoSectorMatch
 import TNLean.MPS.Periodic.Overlap.SectorMatch
+import TNLean.MPS.Periodic.Overlap.SectorMatch.Basic
+import TNLean.MPS.Periodic.Overlap.SectorMatch.Consequences
+import TNLean.MPS.Periodic.Overlap.SectorMatch.Contraction
+import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTrace
+import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTransport
+import TNLean.MPS.Periodic.Overlap.SectorMatch.Propagation
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
