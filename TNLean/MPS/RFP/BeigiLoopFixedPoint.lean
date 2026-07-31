@@ -19,6 +19,8 @@ of `φ` gives an injective normal tensor whose transfer map is idempotent.
 
 The normalization does not alter the associated ray of periodic vectors: at
 length `N`, it multiplies Beigi's product-of-pairs vector by `‖φ‖₂⁻ᴺ`.
+Normalized tensors belonging to distinct positive loops have zero rectangular
+mixed transfer map because their sector-coordinate supports are disjoint.
 
 ## References
 

@@ -509,3 +509,97 @@
     $L_j^i = \zeta X B^i X^{-1}$.
     Transfer idempotence is preserved by these transformations.
 \end{proof}
+
+\begin{lemma}[Common physical unitaries preserve mixed transfer maps]
+    \label{lem:mixed_transfer_common_physical_unitary}
+    \lean{MPSTensor.mixedTransferMap₂_rotatePhysical}
+    \leanok
+    Let $A=(A_i)_i$ and $B=(B_i)_i$ be two tensors, possibly with
+    different bond dimensions, and let $u$ be unitary on the physical index.
+    If
+    \[
+        \widetilde A_i=\sum_j u_{ij}A_j,
+        \qquad
+        \widetilde B_i=\sum_j u_{ij}B_j,
+    \]
+    then
+    \[
+        \mathcal E_{\widetilde A,\widetilde B}
+        =
+        \mathcal E_{A,B}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand both physical sums. The coefficient of
+    $A_jX B_k^\dagger$ is
+    $\sum_i u_{ij}\overline{u_{ik}}=\delta_{jk}$, so only the diagonal
+    terms remain.
+\end{proof}
+
+\begin{lemma}[Distinct normalized Beigi loops are locally orthogonal]
+    \label{lem:beigi_normalized_minimal_loop_mixed_transfer_zero}
+    \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne}
+    \leanok
+    \uses{lem:mixed_transfer_common_physical_unitary}
+    If $a$ and $b$ are distinct positive loops in the sector graph, then the
+    mixed transfer map of their normalized minimal loop tensors vanishes:
+    \[
+        \mathcal E_{L_a,L_b}=0.
+    \]
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In sector coordinates, every physical letter of $L_a$ is supported in
+    sector $a$, while every physical letter of $L_b$ is supported in sector
+    $b$. Thus each summand in the mixed transfer map is zero. The common
+    one-site physical unitary preserves the mixed transfer map by
+    Lemma~\ref{lem:mixed_transfer_common_physical_unitary}.
+\end{proof}
+
+\begin{theorem}[Multi-sector NNCPH ground spaces imply a fixed point for the basis direct sum]
+    \label{thm:nncph_implies_rfp_basis_direct_sum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}
+    \leanok
+    \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces,
+        thm:beigi_loop_product_states_span_ground_space,
+        thm:beigi_normalized_minimal_loop_tensor_rfp,
+        lem:beigi_normalized_minimal_loop_mixed_transfer_zero}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and set
+    \[
+        B=\bigoplus_{j=1}^g A_j .
+    \]
+    Suppose that, for every $N>2$, the translated length-two parent
+    interactions of $B$ commute, every $V^{(N)}(A_j)$ has zero energy, and
+    \[
+        \ker H_2^{(N)}(B)
+        =
+        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+    \]
+    Then $B$ is a renormalization fixed point.
+
+    This is the multiplicity-one, unit-weight representative case of the
+    reverse implication in Theorem~3.10 of
+    \cite{Cirac2016MPDO_arXiv}. It does not assert the printed theorem for
+    repeated copies or arbitrary raw weights.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Beigi's positive-loop product states span each parent ground space.
+    Consequently every normal basis tensor $A_j$ agrees, up to a nonzero
+    phase and an invertible virtual change of basis, with a normalized
+    minimal loop tensor $L_{\ell(j)}$. Distinctness of the BNT basis makes
+    $j\mapsto\ell(j)$ injective.
+
+    Each $L_{\ell(j)}$ has an idempotent transfer map. If $j\ne k$, then
+    $L_{\ell(j)}$ and $L_{\ell(k)}$ have disjoint sector support, so their
+    mixed transfer map vanishes. The common physical unitary and the two
+    virtual changes of basis preserve this vanishing. Thus the diagonal
+    mixed transfer maps of the family $A_j$ are idempotent and the
+    off-diagonal ones vanish. The blockwise criterion for the direct-sum
+    transfer map now proves the claim.
+\end{proof}

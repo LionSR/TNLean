@@ -24,8 +24,9 @@ corollary belongs to Section 4.2. It contains:
 2. A **periodic-form theorem** that isolates the periodic equal-case FT input
    for the symmetry corollary of arXiv:1708.00029, Section 4.2.
 3. **Preservation lemmas** showing that unitary rotation of the physical index
-   preserves the transfer map, left-canonical normalization, irreducibility,
-   periodicity, and irreducible form II structure.
+   preserves transfer maps, rectangular mixed transfer maps, left-canonical
+   normalization, irreducibility, periodicity, and irreducible form II
+   structure.
 
 ## Status for Section 4 (as of merged periodic FT theory)
 
