@@ -1,0 +1,57 @@
+% Regression: generated trace/open cell policies consume their typed ports,
+% retain their labels, and do not add duplicate port-open legs.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_cell_policy_label_int
+\int_new:N \g__tenkz_test_cell_policy_port_open_int
+\cs_new_eq:NN
+  \__tenkz_test_cell_policy_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \int_gincr:N \g__tenkz_test_cell_policy_label_int
+    \__tenkz_test_cell_policy_labelnode:nnn {#1}{#2}{#3}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_cell_policy_port_open:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \int_gincr:N \g__tenkz_test_cell_policy_port_open_int
+    \__tenkz_test_cell_policy_port_open:n {#1}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_cell_policy_label_int } = {7}
+      {
+        \errmessage
+          {
+            cell-policy~typed-port~label~count~
+            \int_use:N \g__tenkz_test_cell_policy_label_int
+          }
+      }
+    \int_compare:nNnF { \g__tenkz_test_cell_policy_port_open_int } = {0}
+      {\errmessage{cell-policy~ports~grew~duplicate~open~legs}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, trace={(1,1)}]
+  \tn[ports={270:virtual:$a$}]{} \\
+  \tn[ports={90:virtual:$b$}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, open={(1,1)}]
+  \tn[ports={270:virtual:$c$}]{} \\
+  \tn[ports={90:virtual:$d$}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, trace=physical]
+  \tn[ports={90:physical:$e$,270:physical:$f$}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, open={(physical,1)}]
+  \tn[ports={90:physical:$g$}]{}
+\end{tenkz}
+\end{document}

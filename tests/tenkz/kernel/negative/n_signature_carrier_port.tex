@@ -1,0 +1,15 @@
+% Negative: equal local port faces at distinct circle stations point apart.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=4, frame=circle, bonds=none]
+    \tn[at=(1,1), ports={90:physical}]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=4, frame=circle, bonds=none]
+    \tn[at=(1,2), ports={90:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

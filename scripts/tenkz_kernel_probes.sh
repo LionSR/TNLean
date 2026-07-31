@@ -111,9 +111,9 @@ grep -Fq 'kernel-boundary|signature=phys:45, phys:n' \
   echo "FAIL: flat unmatched ports lost their typed boundary bearings" >&2
   exit 1
 }
-grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
+grep -Fq 'kernel-boundary|signature=open:22.479434, phys:53.130102' \
     "$WORK/r_unmatched_port_legs.tnlog" || {
-  echo "FAIL: plane unmatched ports lost their logical boundary bearings" >&2
+  echo "FAIL: plane unmatched ports lost their transported boundary bearings" >&2
   exit 1
 }
 [ "$(grep -c 'check|relation=1|result=equal' \
@@ -890,6 +890,7 @@ for contract_negative in \
   n_port_open_cross_undeclared \
   n_port_type \
   n_closure_port_type \
+  n_cell_trace_port_type \
   n_grid_port_type_implicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
@@ -905,7 +906,8 @@ for contract_negative in \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
-  n_noncell_leg
+  n_noncell_leg \
+  n_signature_carrier_port
 do
   source="$KERNEL/negative/$contract_negative.tex"
   if ( cd "$WORK" &&
@@ -925,6 +927,8 @@ do
   [ "$contract_negative" = n_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_closure_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cell_trace_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_grid_port_type_implicit ] &&
     expected='[TKZ-PORT-TYPE]'
@@ -950,6 +954,8 @@ do
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_bonded_policy_label_conflict ] &&
     expected='[TKZ-PORT-LABEL-CONFLICT]'
+  [ "$contract_negative" = n_signature_carrier_port ] &&
+    expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
     echo "FAIL: $contract_negative lacked $expected" >&2
     exit 1
