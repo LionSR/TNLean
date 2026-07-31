@@ -44,6 +44,7 @@ import TNLean.Analysis.SandwichedRenyiTwo
 import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.SupportCompressedEntropy
+import TNLean.Analysis.SupportCompression
 import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TraceNormContractivity

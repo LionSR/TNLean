@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.SandwichedRenyiTwo
-import TNLean.Channel.Spectral.Support
+import TNLean.Analysis.SupportCompression
 
 /-!
 # Entropy functionals compressed to the reference support
@@ -20,8 +20,8 @@ order-two sandwiched trace functional are unchanged by this compression.
 
 ## Main declarations
 
-* `Matrix.PosSemidef.eq_isometry_expansion_compression_of_kernel_le` — support
-  inclusion reconstructs a matrix from its support compression.
+* `Matrix.PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj`
+  — support inclusion reconstructs a matrix from its support compression.
 * `TNLean.quantumRelativeEntropy_support_compression` — relative entropy is
   invariant under compression to the reference support.
 * `TNLean.sandwichedRenyiTwoTrace_support_compression` — the order-two
@@ -42,9 +42,10 @@ namespace Matrix
 
 variable {D k : ℕ}
 
-/-- If $\ker\omega\subseteq\ker\rho$, an isometry whose range projection is the
-support of $\omega$ reconstructs $\rho$ exactly from its compression. -/
-theorem PosSemidef.eq_isometry_expansion_compression_of_kernel_le
+/-- If $\ker\omega\subseteq\ker\rho$, a rectangular matrix whose product with
+its adjoint is the support projection of $\omega$ reconstructs $\rho$ exactly
+from the corresponding compression and expansion. -/
+theorem PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj
     {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
     (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
     (V : Matrix (Fin D) (Fin k) ℂ)
@@ -70,7 +71,7 @@ noncomputable section
 
 variable {D k : ℕ}
 
-private theorem supportCompression_log
+private theorem support_compression_log
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
     (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1)
     (hexpand : V * (Vᴴ * A * V) * Vᴴ = A) :
@@ -86,7 +87,7 @@ private theorem supportCompression_log
       exact Matrix.cfc_conj_isometry_of_zero hAc.isHermitian
         Real.log Real.log_zero V hV
 
-private theorem supportCompression_rpow
+private theorem support_compression_rpow
     {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
     (s : ℝ) (hs : s ≠ 0) (V : Matrix (Fin D) (Fin k) ℂ)
     (hV : Vᴴ * V = 1) (hexpand : V * (Vᴴ * A * V) * Vᴴ = A) :
@@ -119,15 +120,15 @@ theorem quantumRelativeEntropy_support_compression
   let ωc := Vᴴ * ω * V
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_isometry_expansion_compression_of_kernel_le hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
-      hω.eq_isometry_expansion_compression_of_kernel_le hω
+      hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
         (fun _ hv => hv) V hRange
   have hlogρ : CFC.log ρ = V * CFC.log ρc * Vᴴ :=
-    supportCompression_log hρ V hV hρexpand
+    support_compression_log hρ V hV hρexpand
   have hlogω : CFC.log ω = V * CFC.log ωc * Vᴴ :=
-    supportCompression_log hω V hV hωexpand
+    support_compression_log hω V hV hωexpand
   change quantumRelativeEntropy ρ ω = quantumRelativeEntropy ρc ωc
   rw [quantumRelativeEntropy, quantumRelativeEntropy]
   rw [hlogρ, hlogω, ← hρexpand]
@@ -156,13 +157,13 @@ theorem sandwichedRenyiTwoTrace_support_compression
   let ωc := Vᴴ * ω * V
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_isometry_expansion_compression_of_kernel_le hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
-      hω.eq_isometry_expansion_compression_of_kernel_le hω
+      hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
         (fun _ hv => hv) V hRange
   have hq : ω ^ (-(1 / 4 : ℝ)) = V * ωc ^ (-(1 / 4 : ℝ)) * Vᴴ :=
-    supportCompression_rpow hω (-(1 / 4 : ℝ)) (by norm_num) V hV hωexpand
+    support_compression_rpow hω (-(1 / 4 : ℝ)) (by norm_num) V hV hωexpand
   change sandwichedRenyiTwoTrace ρ ω = sandwichedRenyiTwoTrace ρc ωc
   rw [sandwichedRenyiTwoTrace, sandwichedRenyiTwoTrace]
   change (Matrix.trace
@@ -215,10 +216,10 @@ theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
         simpa only [Matrix.conjTranspose_conjTranspose] using hRange)
   have hρexpand : V * ρc * Vᴴ = ρ := by
     simpa only [ρc] using
-      hρ.eq_isometry_expansion_compression_of_kernel_le hω hker V hRange
+      hρ.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω hker V hRange
   have hωexpand : V * ωc * Vᴴ = ω := by
     simpa only [ωc] using
-      hω.eq_isometry_expansion_compression_of_kernel_le hω
+      hω.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj hω
         (fun _ hv => hv) V hRange
   have hρctr : ρc.trace = 1 := by
     calc
