@@ -64,6 +64,7 @@ import TNLean.Channel.SchmidtRank
 import TNLean.Channel.Schwarz
 import TNLean.Channel.Semigroup
 import TNLean.Channel.Separable
+import TNLean.Channel.SingleKraus
 import TNLean.Channel.SingleKrausPositivity
 import TNLean.Channel.Spectral
 import TNLean.Channel.Stinespring

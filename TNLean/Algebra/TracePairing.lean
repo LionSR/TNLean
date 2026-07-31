@@ -201,6 +201,23 @@ theorem traceAdjointMap_traceAdjointMap {n m : Type*} [Fintype n] [Fintype m]
             rw [Matrix.trace_mul_comm]
   simp [Matrix.sub_mul, Matrix.trace_sub, htrace]
 
+/-- The trace-pairing adjoint reverses composition of linear maps between
+finite matrix algebras. -/
+theorem traceAdjointMap_comp
+    {n m k : Type*} [Finite n] [Fintype m] [Fintype k]
+    (E : Matrix n n ℂ →ₗ[ℂ] Matrix m m ℂ)
+    (F : Matrix m m ℂ →ₗ[ℂ] Matrix k k ℂ) :
+    traceAdjointMap (F.comp E) =
+      (traceAdjointMap E).comp (traceAdjointMap F) := by
+  letI := Fintype.ofFinite n
+  apply LinearMap.ext
+  intro X
+  apply Matrix.ext_iff_trace_mul_right.mpr
+  intro Y
+  simp only [LinearMap.comp_apply]
+  rw [trace_traceAdjointMap_mul, trace_traceAdjointMap_mul,
+    trace_traceAdjointMap_mul, LinearMap.comp_apply]
+
 end Matrix
 
 namespace MPSTensor

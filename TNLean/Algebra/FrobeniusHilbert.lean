@@ -22,6 +22,8 @@ superoperators without introducing a second norm on matrices.
   isometric equivalence.
 * `Matrix.frobeniusEuclideanMap`: transport of a matrix superoperator through
   this equivalence.
+* `Matrix.frobeniusEuclideanLinearEquiv`: transport of a linear equivalence
+  between matrix spaces.
 * `Matrix.frobeniusEuclideanMap_comp`: Frobenius transport preserves
   composition.
 -/
@@ -113,6 +115,29 @@ theorem frobeniusEuclideanMap_apply
     frobeniusEquivEuclidean β β (E X)
   rw [(frobeniusEquivEuclidean α α).symm_apply_apply]
 
+/-- Transport a linear equivalence between finite matrix spaces through
+Frobenius vectorization. -/
+noncomputable def frobeniusEuclideanLinearEquiv
+    {α β : Type*} [Fintype α] [Fintype β]
+    (E : Matrix α α ℂ ≃ₗ[ℂ] Matrix β β ℂ) :
+    EuclideanSpace ℂ (α × α) ≃ₗ[ℂ] EuclideanSpace ℂ (β × β) :=
+  (frobeniusEquivEuclidean α α).toLinearEquiv.symm.trans
+    (E.trans (frobeniusEquivEuclidean β β).toLinearEquiv)
+
+/-- Frobenius transport of a linear equivalence agrees with its action on a
+vectorized matrix. -/
+@[simp]
+theorem frobeniusEuclideanLinearEquiv_apply
+    {α β : Type*} [Fintype α] [Fintype β]
+    (E : Matrix α α ℂ ≃ₗ[ℂ] Matrix β β ℂ) (X : Matrix α α ℂ) :
+    frobeniusEuclideanLinearEquiv E (frobeniusEquivEuclidean α α X) =
+      frobeniusEquivEuclidean β β (E X) := by
+  change frobeniusEquivEuclidean β β
+      (E ((frobeniusEquivEuclidean α α).symm
+        (frobeniusEquivEuclidean α α X))) =
+    frobeniusEquivEuclidean β β (E X)
+  rw [(frobeniusEquivEuclidean α α).symm_apply_apply]
+
 /-- Frobenius transport preserves composition of linear maps between matrix
 spaces. -/
 @[simp]
@@ -139,6 +164,16 @@ theorem frobeniusEuclideanMap_eq_conj
     (E : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
     frobeniusEuclideanMap E =
       (frobeniusEquivEuclidean α α).toLinearEquiv.conj E := by
+  rfl
+
+/-- Frobenius transport carries conjugation by a matrix-space equivalence to
+conjugation by the transported Euclidean-space equivalence. -/
+theorem frobeniusEuclideanMap_conj
+    {α β : Type*} [Fintype α] [Fintype β]
+    (S : Matrix α α ℂ ≃ₗ[ℂ] Matrix β β ℂ)
+    (E : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
+    frobeniusEuclideanMap (S.conj E) =
+      (frobeniusEuclideanLinearEquiv S).conj (frobeniusEuclideanMap E) := by
   rfl
 
 end Matrix

@@ -157,6 +157,110 @@ partial traces.
     products and proves the assertion.
 \end{proof}
 
+\begin{lemma}[Transport identities for weighted channel maps]
+    \label{lem:weighted_channel_transport_identities}
+    \lean{Matrix.traceAdjointMap_comp,
+        singleKrausMap_comp,
+        Matrix.traceAdjointMap_singleKrausMap,
+        Matrix.frobeniusEuclideanLinearEquiv,
+        Matrix.frobeniusEuclideanLinearEquiv_apply,
+        Matrix.frobeniusEuclideanMap_conj}
+    \leanok
+    \uses{def:trace_pairing_adjoint,
+        def:frobenius_superoperator_transport}
+    Single-Kraus maps satisfy
+    $\mathcal K_V\circ\mathcal K_W=\mathcal K_{VW}$. Trace adjoints reverse
+    composition, and the trace adjoint of
+    $X\mapsto VXV^\dagger$ is $Y\mapsto V^\dagger YV$.  Frobenius
+    vectorization transports both linear equivalences and conjugation by such
+    equivalences.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Associativity proves the single-Kraus composition identity. The two
+    trace-adjoint assertions follow from cyclicity and non-degeneracy of the
+    trace pairing. The transport assertions follow by inserting the
+    vectorization and its inverse.
+\end{proof}
+
+\begin{theorem}[Spectral bound for a vectorized unital Kraus map]
+    \label{thm:unital_kraus_frobenius_spectral_radius}
+    \lean{IsKrausCP.spectralRadius_frobeniusEuclideanMap_le_one_of_map_one_eq_one}
+    \leanok
+    \uses{thm:unital_kraus_eigenvalue_bound,
+        def:frobenius_superoperator_transport}
+    Let $E:\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be a completely
+    positive map with $E(\Id)=\Id$.  Then the spectral radius of its
+    Frobenius transport is at most one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:unital_kraus_eigenvalue_bound,
+        def:frobenius_superoperator_transport}
+    A unital completely positive map is contractive in the matrix operator
+    norm, so every eigenvalue has modulus at most one.  Similarity under
+    Frobenius vectorization preserves the spectrum.
+\end{proof}
+
+\begin{definition}[Full-support weighted channel map]
+    \label{def:weighted_hilbert_schmidt_map}
+    \lean{Matrix.weightedHilbertSchmidtMap}
+    \leanok
+    For matrices $\sigma\in\mathbb C^{I\times I}$ and
+    $\tau\in\mathbb C^{J\times J}$ and a complex-linear map
+    $\Phi:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$, define
+    \begin{align}
+        L(X)&=\tau^{-1/4}\Phi(\sigma^{1/4}X\sigma^{1/4})\tau^{-1/4}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Full-support weighted Hilbert--Schmidt contraction]
+    \label{thm:weighted_hilbert_schmidt_contraction_full_support}
+    \lean{Matrix.weightedHilbertSchmidtMap_norm_le,
+        Matrix.weightedHilbertSchmidtMap_isHilbertSchmidtContraction}
+    \leanok
+    \uses{def:is_kraus_cptp,
+        def:weighted_hilbert_schmidt_map}
+    Let $I$ and $J$ be finite index sets, let
+    $\Phi:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$ be completely
+    positive and trace preserving, and let $\sigma$ and $\tau$ be positive
+    definite matrices satisfying $\Phi(\sigma)=\tau$.  Then, for every $X$,
+    \begin{align}
+        \left\|\tau^{-1/4}
+          \Phi(\sigma^{1/4}X\sigma^{1/4})\tau^{-1/4}\right\|_2
+        &\leq \|X\|_2.
+        \notag
+    \end{align}
+    Equivalently, $L$ is a Hilbert--Schmidt contraction.  This is the
+    full-support exponent-two specialization of
+    \cite[Theorem~6, Equation~(18)]{Beigi2013Sandwiched}; it does not assert
+    the support-compressed form for a singular output weight.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_trace_adjoint_frobenius_adjoint,
+        lem:weighted_channel_transport_identities,
+        thm:unital_kraus_frobenius_spectral_radius,
+        thm:is_kraus_cptp_trace_adjoint_one,
+        def:weighted_hilbert_schmidt_map}
+    Write $\Gamma_a(X)=aXa$.  The completely positive map
+    \begin{align}
+        E&=\Phi^*\circ\Gamma_{\tau^{1/2}}^{-1}
+             \circ\Phi\circ\Gamma_{\sigma^{1/2}}
+        \notag
+    \end{align}
+    is unital because $\Phi(\sigma)=\tau$ and trace preservation gives
+    $\Phi^*(\Id)=\Id$.  The adjoint-square of the Frobenius transport of $L$
+    is similar, by congruence with $\sigma^{1/4}$, to the Frobenius transport
+    of $E$.  Its spectral radius is therefore at most one.  Positivity and
+    self-adjointness of the adjoint-square identify its spectral radius with
+    its operator norm, which proves the contraction estimate.
+\end{proof}
+
 %% =========================================================
 \section{Further Choi-matrix identities}
 \label{sec:choi_matrix_further_identities}
