@@ -88,12 +88,10 @@ Suppose:
   `ζ`:
   `P u A^i P_{u+1} = ζ • (U_{u+q} (Q_{u+q} B^i Q_{u+q+1}) U_{u+q+1}^†)`.
 
-Then `A` and `B` are related by a single unit-modulus gauge phase and an
-invertible (in fact unitary) gauge, i.e. `RepeatedBlocks A B`.  The gauge is the
-global gauge `∑ u, P u U_{u+q} Q_{u+q}`, which the corner relations show is
-unitary, and the per-site proportionality reassembles into the global
-conjugation `A^i = ζ • (U_glob B^i U_glob^†)`. -/
-theorem repeatedBlocks_of_globalGauge [NeZero m]
+Then the global gauge `∑ u, P u U_{u+q} Q_{u+q}` is unitary, and the per-site
+proportionality reassembles into the global conjugation
+`A^i = ζ • (U_glob B^i U_glob^†)`. -/
+theorem exists_unitary_globalGauge [NeZero m]
     {A B : MPSTensor d D}
     {P Q U : Fin m → Matrix (Fin D) (Fin D) ℂ}
     {q : Fin m} {ζ : ℂ}
@@ -110,7 +108,11 @@ theorem repeatedBlocks_of_globalGauge [NeZero m]
       P u * A i * P (u + 1)
         = ζ • (U (u + q) * (Q (u + q) * B i * Q (u + q + 1)) * (U (u + q + 1))ᴴ))
     (hζ : ‖ζ‖ = 1) :
-    RepeatedBlocks A B := by
+    ∃ Uglob : Matrix (Fin D) (Fin D) ℂ,
+      ‖ζ‖ = 1 ∧
+      Uglob * Uglobᴴ = 1 ∧
+      Uglobᴴ * Uglob = 1 ∧
+      ∀ i, A i = ζ • (Uglob * B i * Uglobᴴ) := by
   classical
   -- Projector facts.
   have hP_idem : ∀ u, P u * P u = P u := fun u => (hP_proj u).2
@@ -207,15 +209,39 @@ theorem repeatedBlocks_of_globalGauge [NeZero m]
       (fun hv => absurd (Finset.mem_univ (v + 1)) hv)
   -- The global gauge equals `∑ v, U v`.
   have hgs : globalGauge P Q U q = ∑ v : Fin m, U v := globalGauge_eq_sum hU_corner
-  -- Assemble the `RepeatedBlocks` witness.
-  refine ⟨ζ, ⟨globalGauge P Q U q, (globalGauge P Q U q)ᴴ, ?_, ?_⟩, hζ, fun i => ?_⟩
+  -- Assemble the unitary global-gauge witness.
+  refine ⟨globalGauge P Q U q, hζ, ?_, ?_, fun i => ?_⟩
   · rw [hgs]; exact hSSh
   · rw [hgs]; exact hShS
-  · change A i = ζ • (globalGauge P Q U q * B i * (globalGauge P Q U q)ᴴ)
-    rw [hgs, hconj i, hA_cyclic i,
+  · rw [hgs, hconj i, hA_cyclic i,
       Finset.sum_congr rfl (fun u (_ : u ∈ Finset.univ) => hprop u i), ← Finset.smul_sum]
     congr 1
     exact Equiv.sum_comp (Equiv.addRight q)
       (fun v => U v * (Q v * B i * Q (v + 1)) * (U (v + 1))ᴴ)
+
+/-- A unitary global gauge in particular gives the invertible gauge recorded by
+`RepeatedBlocks`. -/
+theorem repeatedBlocks_of_globalGauge [NeZero m]
+    {A B : MPSTensor d D}
+    {P Q U : Fin m → Matrix (Fin D) (Fin D) ℂ}
+    {q : Fin m} {ζ : ℂ}
+    (hP_proj : ∀ u, IsOrthogonalProjection (P u))
+    (hP_sum : ∑ u : Fin m, P u = 1)
+    (hQ_proj : ∀ v, IsOrthogonalProjection (Q v))
+    (hQ_sum : ∑ v : Fin m, Q v = 1)
+    (hU_corner : ∀ v, U v = P (v - q) * U v * Q v)
+    (hU_isoQ : ∀ v, (U v)ᴴ * U v = Q v)
+    (hU_isoP : ∀ v, U v * (U v)ᴴ = P (v - q))
+    (hA_cyclic : ∀ i, A i = ∑ u : Fin m, P u * A i * P (u + 1))
+    (hB_cyclic : ∀ i, B i = ∑ v : Fin m, Q v * B i * Q (v + 1))
+    (hprop : ∀ (u : Fin m) (i : Fin d),
+      P u * A i * P (u + 1)
+        = ζ • (U (u + q) * (Q (u + q) * B i * Q (u + q + 1)) * (U (u + q + 1))ᴴ))
+    (hζ : ‖ζ‖ = 1) :
+    RepeatedBlocks A B := by
+  obtain ⟨Uglob, hζ, hUUstar, hUstarU, hconj⟩ :=
+    exists_unitary_globalGauge hP_proj hP_sum hQ_proj hQ_sum
+      hU_corner hU_isoQ hU_isoP hA_cyclic hB_cyclic hprop hζ
+  exact ⟨ζ, ⟨Uglob, Uglobᴴ, hUUstar, hUstarU⟩, hζ, hconj⟩
 
 end MPSTensor
