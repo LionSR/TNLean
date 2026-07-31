@@ -117,7 +117,7 @@ The chosen data retain the nonnilpotence condition from simplicity, so the
 sectorwise zero-correlation-length theorem applies without an additional
 hypothesis.
 
-Source: arXiv:1606.00608, Appendix C.2, lines 1628 and 1646--1661. -/
+Source: arXiv:1606.00608, Appendix C.2, lines 1628, 1646--1661, and 1781. -/
 theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL
     {D : ℕ} {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
     (hZCL : IsSourceZCL M) :
