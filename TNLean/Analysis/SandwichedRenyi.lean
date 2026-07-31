@@ -50,7 +50,7 @@ entropy is made.
   *On quantum Rényi entropies: a new generalization and some properties*,
   arXiv:1306.3142v4, Definition 2 and Theorem 5.
 * Beigi, *Sandwiched Rényi divergence satisfies data processing inequality*,
-  arXiv:1306.5920, Equation (2) and Theorem 7.
+  arXiv:1306.5920, Equation (3) and Theorem 7.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -89,7 +89,7 @@ private local instance instRenyiCStarAlgebra : CStarAlgebra Mat :=
 For positive-semidefinite \(\rho\), positive-definite \(\omega\), and
 \(1\leq\alpha\leq2\), this is the unnormalized trace term used in the faithful
 sandwiched Rényi divergence of Müller-Lennert et al., arXiv:1306.3142v4,
-Definition 2, and Beigi, arXiv:1306.5920, Equation (2). For trace-one \(\rho\),
+Definition 2, and Beigi, arXiv:1306.5920, Equation (3). For trace-one \(\rho\),
 it is the quantity inside the logarithm. The definition is total for every real
 \(\alpha\), including \(\alpha=0\), and for singular \(\omega\). For
 \(\alpha>1\), within the present \(1\leq\alpha\leq2\) application, finite
@@ -107,7 +107,7 @@ positive semidefinite and \(\omega\) is positive definite.
 
 This is the faithful-domain positivity of the trace expression in
 Müller-Lennert et al., arXiv:1306.3142v4, Definition 2, and Beigi,
-arXiv:1306.5920, Equation (2). It holds for every real order because the
+arXiv:1306.5920, Equation (3). It holds for every real order because the
 continuous-functional-calculus real power is positive semidefinite. -/
 theorem sandwichedRenyiTrace_nonneg
     {α : ℝ} {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosDef) :
@@ -141,7 +141,7 @@ theorem sandwichedRenyiTrace_one
 with `sandwichedRenyiTwoTrace`.
 
 This is the \(\alpha=2\) endpoint of Müller-Lennert et al.,
-arXiv:1306.3142v4, Definition 2, and Beigi, arXiv:1306.5920, Equation (2). -/
+arXiv:1306.3142v4, Definition 2, and Beigi, arXiv:1306.5920, Equation (3). -/
 theorem sandwichedRenyiTrace_two
     {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosDef) :
     sandwichedRenyiTrace 2 ρ ω = sandwichedRenyiTwoTrace ρ ω := by
