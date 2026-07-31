@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.RFP.BNTOrthogonality
+import TNLean.MPS.RFP.ResidualIsometry
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.Spectral.Radius
 
@@ -154,9 +155,8 @@ theorem active_weight_norm_one_and_block_rfp
       data.ambient_coisometry data.coisometric data.reconstruct).mp hRFP
   change IsTransferIdempotent (directSumTensor scaledBlocks) at hRetained
   have hScaledBlock :=
-    mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
-      scaledBlocks hRetained k k
-  rw [mixedTransferMap₂_self] at hScaledBlock
+    isTransferIdempotent_block_of_isTransferIdempotent_directSum
+      scaledBlocks hRetained k
   exact norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     (data.blocks k) (data.blocks_normal k) (data.weights k) k.property hScaledBlock
 

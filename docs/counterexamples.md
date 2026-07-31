@@ -77,8 +77,10 @@ mathematical obstruction.
   $B^0=B^1=1/\sqrt{2}$, with BNT coefficients $1$ and $0$. Both transfer maps
   are the identity and the positive-length MPV families are linearly
   independent, but their cross inner product is $1/\sqrt{2}\ne0$.
-- Boundary: the corrected theorem applies to representatives of active
-  nonzero-weight canonical phase classes, not to unused arbitrary-BNT members.
+- Proved boundary: every active listed canonical block has unit-modulus weight
+  and is individually a renormalization fixed point. The joint residual-isometry
+  statement for active phase-class representatives remains open at this stage;
+  unused arbitrary-BNT members lie outside that corrected active statement.
 
 ## Block Separation and Canonical Form
 
