@@ -54,6 +54,7 @@ noncomputable def isometryConjNonUnitalStarAlgHom
     simp only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_mul,
       Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
 
+omit [DecidableEq n] in
 @[simp] theorem isometryConjNonUnitalStarAlgHom_apply
     (V : Matrix n m ℂ) (hV : Vᴴ * V = 1) (A : Matrix m m ℂ) :
     isometryConjNonUnitalStarAlgHom V hV A = V * A * Vᴴ := rfl
@@ -81,6 +82,7 @@ theorem cfc_conj_isometry_of_zero {A : Matrix m m ℂ} (hA : A.IsHermitian)
   rw [cfcₙ_eq_cfc hf hf0, cfcₙ_eq_cfc hfφ hf0] at hmap
   exact hmap.symm
 
+omit [DecidableEq n] in
 /-- Embedding by a rectangular isometry preserves the matrix trace. -/
 theorem trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one
     (V : Matrix n m ℂ) (hV : Vᴴ * V = 1) (A : Matrix m m ℂ) :
@@ -92,6 +94,7 @@ theorem trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one
       exact congrArg Matrix.trace (Matrix.mul_assoc Vᴴ V A).symm
     _ = Matrix.trace A := by rw [hV, Matrix.one_mul]
 
+omit [DecidableEq n] in
 /-- Compression by the adjoint of an isometry cancels an isometric expansion. -/
 theorem conjTranspose_mul_mul_mul_conjTranspose_mul_of_isometry
     (V : Matrix n m ℂ) (hV : Vᴴ * V = 1) (A : Matrix m m ℂ) :

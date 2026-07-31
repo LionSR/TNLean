@@ -18,6 +18,7 @@ import TNLean.Analysis.EntropyDecomposition
 import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.KyFanNorm
 import TNLean.Analysis.LiebIntegrandConcave
@@ -42,6 +43,7 @@ import TNLean.Analysis.RpowConvexity
 import TNLean.Analysis.SandwichedRenyiTwo
 import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.SuperoperatorResolvent
+import TNLean.Analysis.SupportCompressedEntropy
 import TNLean.Analysis.TraceCFC
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Analysis.TraceNormContractivity
