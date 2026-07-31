@@ -49,9 +49,10 @@ variable {D k : ℕ}
 its adjoint is the support projection of $\omega$ reconstructs $\rho$ exactly
 from the corresponding compression and expansion. -/
 theorem PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj
-    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
-    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
-    (V : Matrix (Fin D) (Fin k) ℂ)
+    {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    (hker : ∀ v : n → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (V : Matrix n m ℂ)
     (hRange : V * Vᴴ = hω.supportProj) :
     V * (Vᴴ * ρ * V) * Vᴴ = ρ := by
   have hright : ρ * hω.supportProj = ρ :=
@@ -91,8 +92,9 @@ private theorem support_compression_log
         Real.log Real.log_zero V hV
 
 private theorem support_compression_rpow
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
-    (s : ℝ) (hs : s ≠ 0) (V : Matrix (Fin D) (Fin k) ℂ)
+    {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m]
+    {A : Matrix n n ℂ} (hA : A.PosSemidef)
+    (s : ℝ) (hs : s ≠ 0) (V : Matrix n m ℂ)
     (hV : Vᴴ * V = 1) (hexpand : V * (Vᴴ * A * V) * Vᴴ = A) :
     A ^ s = V * (Vᴴ * A * V) ^ s * Vᴴ := by
   have hAc : (Vᴴ * A * V).PosSemidef := by
@@ -150,9 +152,10 @@ the support of its positive-semidefinite reference under the support inclusion
 $\ker\omega\subseteq\ker\rho$.  Negative quarter-powers use the zero-on-kernel
 convention on both sides. -/
 theorem sandwichedRenyiTwoTrace_support_compression
-    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
-    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
-    (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1)
+    {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    (hker : ∀ v : n → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (V : Matrix n m ℂ) (hV : Vᴴ * V = 1)
     (hRange : V * Vᴴ = hω.supportProj) :
     sandwichedRenyiTwoTrace ρ ω =
       sandwichedRenyiTwoTrace (Vᴴ * ρ * V) (Vᴴ * ω * V) := by
