@@ -22,6 +22,8 @@ superoperators without introducing a second norm on matrices.
   isometric equivalence.
 * `Matrix.frobeniusEuclideanMap`: transport of a matrix superoperator through
   this equivalence.
+* `Matrix.frobeniusEuclideanMap_comp`: Frobenius transport preserves
+  composition.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius
@@ -110,5 +112,33 @@ theorem frobeniusEuclideanMap_apply
         (frobeniusEquivEuclidean α α X))) =
     frobeniusEquivEuclidean β β (E X)
   rw [(frobeniusEquivEuclidean α α).symm_apply_apply]
+
+/-- Frobenius transport preserves composition of linear maps between matrix
+spaces. -/
+@[simp]
+theorem frobeniusEuclideanMap_comp
+    {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
+    (E : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
+    (F : Matrix β β ℂ →ₗ[ℂ] Matrix γ γ ℂ) :
+    frobeniusEuclideanMap (F.comp E) =
+      (frobeniusEuclideanMap F).comp (frobeniusEuclideanMap E) := by
+  apply LinearMap.ext
+  intro x
+  obtain ⟨X, rfl⟩ := (frobeniusEquivEuclidean α α).surjective x
+  change frobeniusEuclideanMap (F.comp E)
+      (frobeniusEquivEuclidean α α X) =
+    frobeniusEuclideanMap F
+      (frobeniusEuclideanMap E (frobeniusEquivEuclidean α α X))
+  rw [frobeniusEuclideanMap_apply, frobeniusEuclideanMap_apply,
+    frobeniusEuclideanMap_apply, LinearMap.comp_apply]
+
+/-- For a matrix endomorphism, Frobenius transport is conjugation by the
+vectorization equivalence. -/
+theorem frobeniusEuclideanMap_eq_conj
+    {α : Type*} [Fintype α]
+    (E : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
+    frobeniusEuclideanMap E =
+      (frobeniusEquivEuclidean α α).toLinearEquiv.conj E := by
+  rfl
 
 end Matrix
