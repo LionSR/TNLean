@@ -295,4 +295,32 @@ end ActiveBNTRefinement
 
 end CPSVCanonicalFormData
 
+namespace IsCPSVCanonicalForm
+
+/-- Predicate-level form of the corrected active Corollary 3.12: for the canonical witness data
+and its chosen active BNT refinement, the representative blocks admit simultaneous square-root
+isometry forms with a joint residual-isometry family.
+
+Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/
+theorem exists_activeBNT_residualIsometryFamily
+    (hCF : IsCPSVCanonicalForm A) (hRFP : IsTransferIdempotent A) :
+    ∃ (X : (j : Fin hCF.data.activePhaseClasses.g) →
+        Matrix (Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j)))
+          (Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j))) ℂ)
+      (Λ : (j : Fin hCF.data.activePhaseClasses.g) →
+        Fin (hCF.data.dim (hCF.data.activeRepresentativeIndex j)) → ℝ)
+      (U : (j : Fin hCF.data.activePhaseClasses.g) →
+        MPSTensor d (hCF.data.dim (hCF.data.activeRepresentativeIndex j))),
+      (∀ j, (X j).det ≠ 0) ∧
+      (∀ j k, 0 < Λ j k) ∧
+      (∀ j, ∑ k, Λ j k = 1) ∧
+      (∀ j i, hCF.data.blocks (hCF.data.activeRepresentativeIndex j) i =
+        X j * Matrix.diagonal (fun k => (Real.sqrt (Λ j k) : ℂ)) *
+          U j i * (X j)⁻¹) ∧
+      IsResidualIsometryFamily U := by
+  let ref := CPSVCanonicalFormData.activeBNTRefinement hCF.data
+  exact ref.exists_residualIsometryFamily_of_isTransferIdempotent hRFP
+
+end IsCPSVCanonicalForm
+
 end MPSTensor
