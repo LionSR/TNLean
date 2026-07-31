@@ -60,8 +60,7 @@ theorem PosSemidef.rpow_kronecker
 conjugation. -/
 theorem sandwichedRenyiTwoTrace_conj_unitary
     {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {ρ ω : Matrix ι ι ℂ}
-    (_hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    {ρ ω : Matrix ι ι ℂ} (hω : ω.PosSemidef)
     (U : unitary (Matrix ι ι ℂ)) :
     TNLean.sandwichedRenyiTwoTrace
         ((U : Matrix ι ι ℂ) * ρ * star (U : Matrix ι ι ℂ))
@@ -222,7 +221,7 @@ theorem sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_o
           (partialTraceRight ρ ⊗ₖ partialTraceLeft ρ) := by
     rw [← hrefConj]
     simpa only [ρ', K, star_eq_conjTranspose] using
-      Matrix.sandwichedRenyiTwoTrace_conj_unitary hρ
+      Matrix.sandwichedRenyiTwoTrace_conj_unitary
         (hA.posSemidef.kronecker hB.posSemidef) K
   calc
     sandwichedRenyiTwoTrace ρ
