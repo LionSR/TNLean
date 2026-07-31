@@ -285,12 +285,12 @@ grep -Fq 'kernel-boundary|signature=open:22.479434, phys:53.130102' \
   exit 1
 }
 [ "$(grep -c 'check|relation=1|result=equal' \
-      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 4 ] || {
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 5 ] || {
   echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
   exit 1
 }
 [ "$(grep -c 'kernel-boundary|signature=$' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 4 ] || {
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 5 ] || {
   echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
   exit 1
 }

@@ -1421,13 +1421,16 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_signature_physical_bearing:nn #1#2
   {
-    \__tenkz_kernel_r_page_face:nnN {#1} {#2}
-      \l__tenkz_kernel_r_leg_turn_tl
-    \exp_args:NV \__tenkz_kernel_signature_bearing:nN
-      \l__tenkz_kernel_r_leg_turn_tl
-      \l__tenkz_kernel_port_face_tl
-    \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-      { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1} {#2}
+      {
+        \__tenkz_kernel_r_page_face:nnN {#1} {#2}
+          \l__tenkz_kernel_r_leg_turn_tl
+        \exp_args:NV \__tenkz_kernel_signature_bearing:nN
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_port_face_tl
+        \seq_put_right:Ne \l__tenkz_kernel_emit_seq
+          { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_signature_physical:nn #1#2
@@ -3171,6 +3174,30 @@
       }
   }
 
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_policy_leg_exposed:nn #1#2 { T, F, TF }
+  {
+    \__tenkz_kernel_policy_leg_renders:nTF {#1}
+      {
+        \__tenkz_kernel_policy_leg_port_slot:nN {#1}
+          \l__tenkz_kernel_port_slot_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
+          {
+            % An even-width centre lies between numbered slots, so no
+            % authored port endpoint can consume this policy leg.
+            \prg_return_true:
+          }
+          {
+            \prop_if_in:NeTF
+              \l__tenkz_kernel_port_external_consumer_prop
+              {#1/#2/\l__tenkz_kernel_port_slot_tl}
+              { \prg_return_false: }
+              { \prg_return_true: }
+          }
+      }
+      { \prg_return_false: }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_port_validate_slot:n #1
   {
     \__tenkz_kernel_atom_cell_placed:nTF {#1}
@@ -3417,16 +3444,16 @@
           {
             \bool_if:NT \l__tenkz_kernel_port_materialize_bool
               {
-                \tl_if_blank:VF \l__tenkz_kernel_port_label_tl
+                \prop_get:NeN \l__tenkz_model_record_prop
                   {
-                    \prop_get:NeN \l__tenkz_model_record_prop
-                      {
-                        #1/
-                        \tl_use:N \l__tenkz_kernel_port_policy_field_tl
-                      }
-                      \l__tenkz_kernel_port_policy_label_tl
-                    \quark_if_no_value:NTF
-                      \l__tenkz_kernel_port_policy_label_tl
+                    #1/
+                    \tl_use:N \l__tenkz_kernel_port_policy_field_tl
+                  }
+                  \l__tenkz_kernel_port_policy_label_tl
+                \quark_if_no_value:NTF
+                  \l__tenkz_kernel_port_policy_label_tl
+                  {
+                    \tl_if_blank:VF \l__tenkz_kernel_port_label_tl
                       {
                         % With no authored policy label, a bonded endpoint
                         % owns the descriptor.  Otherwise the policy leg does.
@@ -3439,14 +3466,34 @@
                               \l__tenkz_kernel_port_label_tl
                           }
                       }
+                  }
+                  {
+                    \tl_if_blank:VTF \l__tenkz_kernel_port_label_tl
+                      {
+                        % Once the policy face is contracted, its label moves
+                        % with the port to the external wire owner.
+                        \prop_if_in:NVT
+                          \l__tenkz_kernel_port_external_consumer_prop
+                          \l__tenkz_kernel_scratch_tl
+                          {
+                            \tl_set_eq:NN
+                              \l__tenkz_kernel_port_label_tl
+                              \l__tenkz_kernel_port_policy_label_tl
+                          }
+                      }
                       {
                         \tl_if_eq:NNTF
                           \l__tenkz_kernel_port_policy_label_tl
                           \l__tenkz_kernel_port_label_tl
                           {
-                            \prop_put:NVn
-                              \l__tenkz_kernel_port_policy_label_owner_prop
-                              \l__tenkz_kernel_scratch_tl {policy}
+                            \prop_if_in:NVF
+                              \l__tenkz_kernel_port_external_consumer_prop
+                              \l__tenkz_kernel_scratch_tl
+                              {
+                                \prop_put:NVn
+                                  \l__tenkz_kernel_port_policy_label_owner_prop
+                                  \l__tenkz_kernel_scratch_tl {policy}
+                              }
                           }
                           {
                             \msg_error:nnee
@@ -6364,7 +6411,21 @@
             \exp_args:NV
               \__tenkz_kernel_physical_policy_exits_face:nnT
               \l__tenkz_kernel_ro_tl {#1}
-              { \__tenkz_kernel_route_face_add:nn {##1} {#1} }
+              {
+                \str_case:nn {#1}
+                  {
+                    {n}
+                      {
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {90}
+                          { \__tenkz_kernel_route_face_add:nn {##1} {#1} }
+                      }
+                    {s}
+                      {
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {270}
+                          { \__tenkz_kernel_route_face_add:nn {##1} {#1} }
+                      }
+                  }
+              }
           }
       }
     \__tenkz_model_map_ids:nn {wire}
@@ -8171,12 +8232,22 @@
               {
                 \str_case:Vn \l__tenkz_kernel_r_tl
                   {
-                    {up}     { \__tenkz_kernel_r_leg:nnn {##1} {n} {up} }
-                    {down}   { \__tenkz_kernel_r_leg:nnn {##1} {s} {down} }
+                    {up}
+                      {
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {90}
+                          { \__tenkz_kernel_r_leg:nnn {##1} {n} {up} }
+                      }
+                    {down}
+                      {
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {270}
+                          { \__tenkz_kernel_r_leg:nnn {##1} {s} {down} }
+                      }
                     {updown}
                       {
-                        \__tenkz_kernel_r_leg:nnn {##1} {n} {up}
-                        \__tenkz_kernel_r_leg:nnn {##1} {s} {down}
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {90}
+                          { \__tenkz_kernel_r_leg:nnn {##1} {n} {up} }
+                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {270}
+                          { \__tenkz_kernel_r_leg:nnn {##1} {s} {down} }
                       }
                   }
               }

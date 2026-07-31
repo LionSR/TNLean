@@ -660,6 +660,9 @@ Two rows are expanders: their expansion is a rule over the picture, not a
 token substitution — `physical=` adds a port per wire-row atom, `\tntree`
 builds atoms and wires from the word. Expander output is still pure kernel
 records, and the same test class verifies it.
+An expanded physical port contributes a boundary leg only while it is
+unconsumed. If a wire contracts that face, the wire owns the port and its
+label; neither a second leg nor a boundary-signature entry remains.
 
 String verb table: `through a` → `route={all of a}` entering and leaving
 tangent ports · `loop a` → `closed, route={all of a}` · `over w at p` /

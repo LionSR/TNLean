@@ -45,4 +45,15 @@
     \tn[at=(1,1), ports={90:physical,270:physical}]{}
   \end{tenkz}
 \end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+    \tn[at=(1,1), name=A, ports={90:physical,270:physical}]{}
+    \tnwire{A.90}{A.270}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), name=A, ports={90:physical,270:physical}]{}
+    \tnwire{A.90}{A.270}
+  \end{tenkz}
+\end{tenkzeq}
 \end{document}
