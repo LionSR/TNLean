@@ -429,6 +429,48 @@
     $V_B^\dagger V_B=1$ identify the twice-transformed operator with $X$.
 \end{proof}
 
+\begin{theorem}[Compression to both marginal supports]
+    \label{thm:operator_schmidt_rank_marginal_support_compression}
+    \lean{Matrix.PosSemidef.eq_marginalSupport_expansion_compression,
+      Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression}
+    \leanok
+    \uses{def:bipartite_operator_schmidt_rank}
+    Let $\rho\geq0$ be an operator on $H_A\otimes H_B$. Let
+    $V_A:\widehat H_A\to H_A$ and $V_B:\widehat H_B\to H_B$ be isometries
+    whose range projectors are the support projectors $P_A$ and $P_B$ of the
+    two marginals. Set $W=V_A\otimes V_B$ and
+    $\rho_c=W^\dagger\rho W$. Then
+    \begin{align}
+      W\rho_cW^\dagger&=\rho,
+      &\operatorname{OSR}(\rho_c)&=\operatorname{OSR}(\rho).
+      \notag
+    \end{align}
+    No marginal is required to be faithful, and zero-dimensional coordinate
+    spaces are permitted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:marginal_support_left_absorption,
+      thm:marginal_support_right_absorption,
+      thm:right_marginal_support_left_absorption,
+      thm:right_marginal_support_right_absorption,
+      thm:operator_schmidt_rank_local_isometry}
+    The four marginal-support absorption identities give
+    \begin{align}
+      (P_A\otimes P_B)\rho&=\rho,
+      &\rho(P_A\otimes P_B)&=\rho.
+      \notag
+    \end{align}
+    Since $WW^\dagger=P_A\otimes P_B$, associativity yields
+    \begin{align}
+      W\rho_cW^\dagger
+      &=(WW^\dagger)\rho(WW^\dagger)=\rho.
+      \notag
+    \end{align}
+    The local-isometry theorem applied to $\rho_c$ gives
+    $\operatorname{OSR}(W\rho_cW^\dagger)=\operatorname{OSR}(\rho_c)$.
+    Substitution of the reconstruction identity proves the rank equality.
+\end{proof}
+
 \begin{theorem}[Channel of a faithful bipartite marginal]
     \label{thm:supported_marginal_channel}
     \lean{Matrix.finrank_range_supportedMarginalMap,
@@ -473,8 +515,9 @@
 
 \section{Support compression for entropy functionals}
 
-% Issue #5229: single-reference support compression.  The remaining
-% simultaneous two-marginal and operator-Schmidt-rank step is tracked in #5211.
+% Issues #5229 and #5241 establish one- and two-marginal support compression,
+% including preservation of operator-Schmidt rank.  Faithfulness of the two
+% compressed marginals is tracked in #5245 as a remaining step for #5211.
 
 \begin{definition}[Isometric conjugation into a larger matrix algebra]
     \label{def:isometric_nonunital_conjugation}
@@ -606,6 +649,7 @@
     \label{thm:support_log_vector_jensen}
     \lean{Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log}
     \leanok
+    \uses{def:hermitian_support_projection}
     Let $A\in\MN{n}$ be positive semidefinite and let $v\in\C^n$ satisfy
     $\langle v,v\rangle=1$ and $P_{\supp(A)}v=v$. Then
     \begin{align}
@@ -619,6 +663,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:hermitian_support_projection}
     Diagonalize $A=U\diag(\mu_i)U^\dagger$, set $w=U^\dagger v$, and put
     $p_i=|w_i|^2$. The support condition implies
     $\mu_i=0\Longrightarrow w_i=0$, so every spectral weight at zero vanishes.
@@ -1062,6 +1107,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \end{theorem}
 \begin{proof}
     \uses{thm:relative_entropy_q2_faithful_reduction,
+      thm:operator_schmidt_rank_marginal_support_compression,
       thm:full_support_eigenbasis_whitened_choi_bound}
     Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
     $\ker\omega\subseteq\ker\rho_{AB}$, so
@@ -1069,8 +1115,11 @@ logarithmic divergence, or a comparison with relative entropy.
     comparison $D(\rho_{AB}\Vert\omega)\leq\log Q_2(\rho_{AB},\omega)$ to
     faithful marginals. To relate the remaining order-two estimate to
     operator-Schmidt rank, compress the two tensor factors separately to the
-    supports of $\rho_A$ and $\rho_B$. This simultaneous local compression
-    must preserve operator-Schmidt rank.
+    supports of $\rho_A$ and $\rho_B$.
+    Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}
+    shows that this simultaneous local compression reconstructs the original
+    operator and preserves operator-Schmidt rank. It remains to verify that
+    the two compressed marginals are faithful.
 
     In the resulting faithful spaces, write $\sigma=\rho_A$ and
     $\tau=\rho_B$. Choose an eigenbasis of $\sigma$, and set
