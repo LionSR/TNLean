@@ -424,8 +424,8 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     from Formula~(\ref{eq:cpsv_canonical_form}) by replacing $i$ with $e(j)$.
 \end{proof}
 
-\begin{lemma}[Transfer maps under a bond-space gauge]
-    \label{lem:cpsv_gauge_transfer_similarity}
+\begin{theorem}[Transfer maps under a bond-space gauge]
+    \label{thm:cpsv_gauge_transfer_similarity}
     \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
     \leanok
     \uses{def:gauge_equiv, def:transfer_map}
@@ -436,14 +436,14 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         &=C^{-1}\E_A(CYC^\dagger)(C^\dagger)^{-1}.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expand both transfer maps and take $C=X^{-1}$.
 \end{proof}
 
-\begin{lemma}[Spectral radius under congruence similarity]
-    \label{lem:cpsv_spectral_radius_similarity}
+\begin{theorem}[Spectral radius under congruence similarity]
+    \label{thm:cpsv_spectral_radius_similarity}
     \lean{spectralRadius_similarityMap_eq}
     \leanok
     For an invertible matrix $C$, the linear maps
@@ -454,15 +454,15 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         \notag
     \end{align}
     have the same spectral radius.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The two maps are conjugate by the invertible linear transformation
     $Y\mapsto CYC^\dagger$, and therefore have the same spectrum.
 \end{proof}
 
-\begin{lemma}[Primitivity under congruence similarity]
-    \label{lem:cpsv_primitivity_similarity}
+\begin{theorem}[Primitivity under congruence similarity]
+    \label{thm:cpsv_primitivity_similarity}
     \lean{IsPrimitive.similarityMap_iff}
     \leanok
     \uses{def:primitive_channel}
@@ -473,7 +473,7 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
         \notag
     \end{align}
     is primitive.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Congruence similarity is an algebra isomorphism on the endomorphism
@@ -497,10 +497,10 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 
 \begin{proof}\leanok
     \uses{def:nt_cpsv,
-        lem:cpsv_gauge_transfer_similarity,
-        lem:cpsv_spectral_radius_similarity,
+        thm:cpsv_gauge_transfer_similarity,
+        thm:cpsv_spectral_radius_similarity,
         lem:similarity_irred_iff,
-        lem:cpsv_primitivity_similarity}
+        thm:cpsv_primitivity_similarity}
     With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
     \begin{align}
         \E_B
