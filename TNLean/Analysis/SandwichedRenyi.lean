@@ -16,14 +16,18 @@ For a real order \(\alpha\), this file defines the total trace functional
   \right].
 \]
 On positive-semidefinite \(\rho\) and positive-definite \(\omega\), this is the
-quantity inside the logarithm in the faithful sandwiched Rényi divergence. The
+unnormalized trace term entering the faithful sandwiched Rényi divergence. When
+\(\rho\) is a density matrix, it is the quantity inside the logarithm. The
 intended range here is \(1\leq\alpha\leq2\). No trace-one assumption is needed
 for the algebraic properties proved below.
 
 Continuous-functional-calculus real powers are total: in particular, negative
-powers vanish at a zero eigenvalue. Thus the definition remains finite outside
-the faithful domain, but that totalized value must not be identified with the
-sandwiched Rényi divergence when its support condition fails. We prove only
+powers vanish at a zero eigenvalue. For positive-semidefinite \(\rho\) and
+singular \(\omega\) satisfying \(\ker\omega\subseteq\ker\rho\), equivalently
+the required support inclusion, this zero-on-kernel convention is the
+generalized-inverse convention and gives the trace term of a finite divergence.
+If support inclusion fails, the divergence is infinite, whereas the totalized
+functional remains finite and must not be identified with it. We prove only
 nonnegativity on the faithful domain and the exact order-one and order-two
 endpoints; no assertion about continuity, interpolation, monotonicity, limits,
 derivatives, logarithmic divergence, or comparison with Umegaki relative
@@ -82,12 +86,15 @@ private local instance instRenyiCStarAlgebra : CStarAlgebra Mat :=
   \right].
 \]
 For positive-semidefinite \(\rho\), positive-definite \(\omega\), and
-\(1\leq\alpha\leq2\), this is the trace quantity used in the faithful
+\(1\leq\alpha\leq2\), this is the unnormalized trace term used in the faithful
 sandwiched Rényi divergence of Müller-Lennert et al., arXiv:1306.3142v4,
-Definition 2, and Beigi, arXiv:1306.5920, Definition 2. The definition is total
-for every real \(\alpha\), including \(\alpha=0\), and for nonfaithful
-\(\omega\); those extra values are algebraic totalizations, not values of the
-divergence. -/
+Definition 2, and Beigi, arXiv:1306.5920, Definition 2. For trace-one \(\rho\),
+it is the quantity inside the logarithm. The definition is total for every real
+\(\alpha\), including \(\alpha=0\), and for singular \(\omega\). On
+positive-semidefinite inputs with \(\ker\omega\subseteq\ker\rho\), its
+zero-on-kernel powers implement the generalized inverse and give the finite
+divergence trace term. If this support inclusion fails, the finite totalized
+value is not the divergence. -/
 noncomputable def sandwichedRenyiTrace (α : ℝ) (ρ ω : Mat) : ℝ :=
   let q := ω ^ ((1 - α) / (2 * α))
   (Matrix.trace ((q * ρ * q) ^ α)).re
