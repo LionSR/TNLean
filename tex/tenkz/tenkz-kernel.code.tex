@@ -5301,6 +5301,16 @@
     \__tenkz_kernel_r_atom_rc:nNNN {#1} #2#3#4
     \bool_if:NF #4
       {
+        \__tenkz_model_get:nnN {#1} {node}
+          \l__tenkz_kernel_carrier_record_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+          {
+            \exp_args:NV \__tenkz_kernel_r_node_carrier:nNNN
+              \l__tenkz_kernel_carrier_record_tl #2#3#4
+          }
+      }
+    \bool_if:NF #4
+      {
         \__tenkz_model_get:nnN {#1} {cluster-of}
           \l__tenkz_kernel_carrier_parent_tl
         \quark_if_no_value:NF \l__tenkz_kernel_carrier_parent_tl
@@ -8044,6 +8054,24 @@
                   {
                     \__tenkz_kernel_r_compass:n
                       { \tl_use:N \l__tenkz_kernel_r_c_tl }
+                  }
+                % The label side belongs to the dot's own carrier.  Cells,
+                % basis members, and cluster children therefore carry it
+                % through the complete frame basis; a relative or on-wire
+                % dot has no carrier chart and retains its page-space side.
+                \__tenkz_kernel_r_record_carrier:nNNN {#1}
+                  \l__tenkz_kernel_r_row_tl
+                  \l__tenkz_kernel_r_col_tl
+                  \l__tenkz_kernel_turn_bool
+                \bool_if:NT \l__tenkz_kernel_turn_bool
+                  {
+                    \__tenkz_geom_local_bearing:nnnnN {kpic}
+                      { \l__tenkz_kernel_r_row_tl }
+                      { \l__tenkz_kernel_r_col_tl }
+                      { \l__tenkz_kernel_r_c_tl }
+                      \l__tenkz_kernel_r_tl
+                    \tl_set_eq:NN
+                      \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_tl
                   }
                 \__tenkz_kernel_r_xy:nNN {#1}
                   \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
