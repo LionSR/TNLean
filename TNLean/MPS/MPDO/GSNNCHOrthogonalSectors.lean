@@ -20,6 +20,10 @@ multiplicity of each sector remains outside its bond product.
 * `MPOTensor.ProportionalOrthogonalCommutingSectorFamily`: the corresponding
   family when each sector operator is a positive scalar multiple of its bond
   product.
+* `MPOTensor.ProportionalOrthogonalCommutingSectorFamily.mpo_posSemidef_of_two_le`:
+  every sector operator of length at least two is positive semidefinite.
+* `MPOTensor.ProportionalOrthogonalCommutingSectorFamily.isMPDO_of_mpo_one_pos`:
+  one-site positivity completes the sector MPDO property.
 * `MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData`: the corresponding
   finite-chain GSNNCH sector decomposition.
 * `MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily`: the outer-sector
