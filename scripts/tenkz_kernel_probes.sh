@@ -298,6 +298,12 @@ grep -Fq 'kernel-boundary|signature=open:22.479434, phys:53.130102' \
   echo "FAIL: plane unmatched ports lost their transported boundary bearings" >&2
   exit 1
 }
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_unmatched_port_legs.tnlog" \
+  "$KERNEL/regression/r_unmatched_port_legs.tex" >/dev/null || {
+  echo "FAIL: unmatched typed ports leaked a private open-end sentinel" >&2
+  exit 1
+}
 [ "$(grep -c 'check|relation=1|result=equal' \
       "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 5 ] || {
   echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
