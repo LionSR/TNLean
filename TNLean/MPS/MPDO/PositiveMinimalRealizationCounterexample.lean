@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalCommutant
+import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.Tactic.Basic
 
 /-!
@@ -27,8 +28,10 @@ information.
 This is the obstruction recorded in the discussion of arXiv:1606.00608,
 Appendix C.4, lines 2048--2057, and Proposition 4.13, lines 1898--1921.
 
-## Main result
+## Main results
 
+* `gramDressing_gauge_ne_one`: the exact invertible gauge does not preserve
+  the identity Gram dressing.
 * `sameMPV₂Pos_does_not_force_positive_isometric_realization`: the explicit
   nonunitary-similarity counterexample.
 -/
@@ -139,6 +142,31 @@ vectors. -/
 lemma tensor_sameMPV₂Pos_gaugedTensor : SameMPV₂Pos tensor gaugedTensor := by
   mpv_ext
   exact GaugeEquiv.sameMPV tensor_gaugeEquiv_gaugedTensor N σ
+
+/-- The nonunitary similarity has a nontrivial Gram dressing on the source
+tensor.
+
+Thus equality of all positive-length closed chains and an exact invertible
+gauge do not permit transport of the identity Gram dressing through a general
+invertible gauge.  A common physical target or equivalent marked-chain
+identity is still necessary.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 2048--2057, and Proposition
+4.13, lines 1898--1921. -/
+lemma gramDressing_gauge_ne_one :
+    MPOTensor.gramDressing (D := 2) gauge tensor ≠
+      MPOTensor.gramDressing (D := 2) (1 : GL (Fin 2) ℂ) tensor := by
+  intro h
+  have h2 := congrFun h 2
+  simp only [MPOTensor.gramDressing] at h2
+  rw [Matrix.mul_inv_rev, ← Matrix.conjTranspose_nonsing_inv] at h2
+  rw [← Matrix.coe_units_inv gauge] at h2
+  rw [gauge_inv_val] at h2
+  have h201 := congrArg (fun M ↦ M 0 1) h2
+  norm_num [gauge_val, gaugeMatrix, tensor,
+    Matrix.mul_apply, Matrix.vecMul, dotProduct, Fin.sum_univ_two,
+    Matrix.conjTranspose_apply, map_ofNat] at h201
+  simp at h201
 
 @[simp]
 private lemma tensor_zero : tensor 0 = 1 := by

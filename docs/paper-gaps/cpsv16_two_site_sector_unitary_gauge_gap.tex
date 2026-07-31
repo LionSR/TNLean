@@ -278,6 +278,66 @@ explicitly.  The explicit obstruction is formalized in the declaration
 \mbox{\leanid{isometric_realization}}.
 \end{center}
 
+\section{The exact Gram-dressing obstruction}
+
+The same example also rules out transporting the identity Gram dressing
+through an arbitrary exact invertible gauge.  With the notation above,
+\[
+  \operatorname{gramDressing}(X,A)^v
+  =(X^\dagger X)A^v(X^\dagger X)^{-1}.
+\]
+For the letter $A^v=E_{01}$ and
+$X^\dagger X=\operatorname{diag}(4,1)$, this gives
+\[
+  \operatorname{gramDressing}(X,A)^v=4E_{01},
+  \qquad
+  \operatorname{gramDressing}(\mathbf 1,A)^v=E_{01}.
+\]
+Consequently the exact gauge and equality of every positive-length closed
+chain do not imply the marked Figure~8 identity.  This assertion is
+formalized as
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
+\mbox{\leanid{gramDressing_gauge_ne_one}.}
+\end{center}
+
+This is a sharp obstruction to any proof using only the fields
+\path{TwoSiteExactSectorGauge.tensor_eq} and
+\path{TwoSiteExactSectorGauge.sector_sameMPV}.  It is not a counterexample to
+the complete tensor-attached hypotheses of Theorem~4.14(ii): the displayed
+two-by-two tensor has not been made into a tensor-attached algebra clause
+satisfying horizontal canonical form and positivity of every matrix product
+operator.
+
+\section{Non-circular product corners}
+
+The one-site coisometric reconstruction does give genuine local information
+beyond closed chains.  Squaring it produces isometric inclusions for the
+retained product sectors of the two-site blocking.  Decomposing those product
+tensors into normal summands, comparing them with the actual two-site
+vertical canonical form, and applying Proposition~4.13 legitimately
+normalizes every active product gauge.  This part uses the common physical
+tensor and does not assume a renormalization map.
+
+The first unresolved step is the identification of such an active product
+corner with the prescribed original representative $M_\gamma$.  The present
+transport theorem requires a unitary matrix and the letterwise identity
+\[
+  A_{\sigma(\gamma)}^v
+  =
+  \frac{\operatorname{tr}(\mu_\gamma)}
+       {\operatorname{tr}(\nu_{\sigma(\gamma)})}
+  U_\gamma M_\gamma^v U_\gamma^\dagger.
+\]
+The only current construction of these data uses the mutually inverse
+completely positive trace-preserving maps whose existence is downstream of
+the implication under study.  The algebra clause supplies instead only the
+closed cyclic product law.  Hence the active-corner construction stops at the
+same metric boundary exhibited by the preceding example: it gives coverage
+up to phase and invertible similarity, but not the star-preserving local
+comparison needed to identify the two Gram dressings.
+
 \section{Faithful target and remaining boundary}
 
 For a matched label $\gamma$, let $A_\gamma$ be the algebra-side
