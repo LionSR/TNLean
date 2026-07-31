@@ -139,10 +139,10 @@ the site and its bonds.
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
 `dir=` draws the direction mark of a directed virtual index; it changes no
-topology. A wire carries no waypoint list, no bend factor and no stroke
-weight: a route names the records it must clear, an arc leaves and enters
-along its ends' faces, and the stroke follows the type the port already
-carries (§5).
+topology and is rejected on a physical contraction. A wire carries no waypoint
+list, no bend factor and no stroke weight: a route names the records it must
+clear, an arc leaves and enters along its ends' faces, and the stroke follows
+the resolved endpoint type (§5).
 
 ### 2.5 Mark keys (5)
 
@@ -374,13 +374,15 @@ Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
 
 A wire is one typed index line. `kind=index` is a bond: two typed-port
 endpoints, a straight route, and the type check `[TKZ-PORT-TYPE]` — a virtual
-port never meets a physical one. `kind=pairing` is a declared skin's curved
-own-port route: it belongs to one host, remains addressable by arclength, and
-its declared list order controls the over-glyph ink and supplies the crossing
-order between pairings of that same skin. `kind=string` travels: it carries
-routes, crossings, winding, and beads, and its endpoints may be any address,
-cells included. The distinction is a field of the record; all three are one
-record class.
+port never meets a physical one. A bare cell endpoint is therefore an implicit
+virtual endpoint, not an untyped escape hatch. Two physical endpoints produce
+the physical-leg stroke, while two virtual endpoints produce the bond stroke.
+`kind=pairing` is a declared skin's curved own-port route: it belongs to one
+host, remains addressable by arclength, and its declared list order controls
+the over-glyph ink and supplies the crossing order between pairings of that
+same skin. `kind=string` travels: it carries routes, crossings, winding, and
+beads, and its endpoints may be any address, cells included. The distinction
+is a field of the record; all three are one record class.
 
 **The offset hull.** The offset hull of a selection is the support hull of
 the selected records' silhouettes, measured in the frame's own axes, expanded

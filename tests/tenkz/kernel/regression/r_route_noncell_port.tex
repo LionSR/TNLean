@@ -1,0 +1,41 @@
+% Regression: a selector may name a derived carrier.  Its resolved boundary
+% exit, rather than an invented grid cell, determines routed crossings.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=A]{A}
+  \tn[at=(1,3), name=B]{B}
+  \tn[at=midway A and B, name=M, ports={90:virtual}]{M}
+  \tnwire[
+    kind=string,
+    name=north-route,
+    route={n of M},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=C]{C}
+  \tn[at=(1,3), name=D]{D}
+  \tn[at=midway C and D, name=N, ports={0:virtual}]{N}
+  \tnwire[
+    kind=string,
+    name=off-face-route,
+    route={n of N},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=E]{E}
+  \tn[at=(1,3), name=F]{F}
+  \tnwire[name=carrier]{E.0}{F.180}
+  \tn[at=on carrier 0.5, name=O, ports={90:virtual}]{O}
+  \tnwire[
+    kind=string,
+    name=onwire-route,
+    route={n of O},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\end{document}

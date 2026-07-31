@@ -89,6 +89,45 @@ grep -Fq \
   echo "FAIL: bare open all-side route did not meet its traversed port" >&2
   exit 1
 }
+if ! grep -F 'name=north-route' "$WORK/r_route_noncell_port.tnlog" |
+     grep -Fq 'cross=over at crossing of north-route and port-open-1'; then
+  echo "FAIL: a midpoint carrier was omitted from its routed crossing set" >&2
+  exit 1
+fi
+grep -Fq \
+    'stringcross|under=port-open-1|over=north-route|hits=1' \
+    "$WORK/r_route_noncell_port.tnlog" || {
+  echo "FAIL: a midpoint carrier port did not reach its routed crossing" >&2
+  exit 1
+}
+if ! grep -F 'name=onwire-route' "$WORK/r_route_noncell_port.tnlog" |
+     grep -Fq 'cross=over at crossing of onwire-route and port-open-1'; then
+  echo "FAIL: an on-wire carrier was omitted from its routed crossing set" >&2
+  exit 1
+fi
+grep -Fq \
+    'stringcross|under=port-open-1|over=onwire-route|hits=1' \
+    "$WORK/r_route_noncell_port.tnlog" || {
+  echo "FAIL: an on-wire carrier port did not reach its routed crossing" >&2
+  exit 1
+}
+if grep -F 'name=off-face-route' "$WORK/r_route_noncell_port.tnlog" |
+   grep -Fq 'port-open-1'; then
+  echo "FAIL: north route collected a non-cell carrier's east port" >&2
+  exit 1
+fi
+grep -Fq \
+    'stringcross|under=probe|over=port-open-1|hits=1' \
+    "$WORK/r_port_open_crossing.tnlog" || {
+  echo "FAIL: explicit crossing did not lengthen the generated port leg" >&2
+  exit 1
+}
+grep -Fq \
+    'stringcross|under=near-probe|over=port-open-1|hits=1' \
+    "$WORK/r_port_open_crossing.tnlog" || {
+  echo "FAIL: generated port reach discarded one of several references" >&2
+  exit 1
+}
 grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
     "$WORK/k_torus.tnlog" || {
   echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
@@ -916,6 +955,10 @@ for contract_negative in \
   n_cell_trace_port_type \
   n_authored_port_type_implicit \
   n_authored_port_type_implicit_from \
+  n_port_cell_type \
+  n_cell_port_type \
+  n_physical_wire_dir_to \
+  n_physical_wire_dir_from \
   n_physical_open_port_type \
   n_interface_open_port_type \
   n_physical_trace_required_type \
@@ -966,6 +1009,14 @@ do
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_authored_port_type_implicit_from ] &&
     expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_port_cell_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cell_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_physical_wire_dir_to ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_wire_dir_from ] &&
+    expected='[TKZ-PORT-DIRECTION]'
   [ "$contract_negative" = n_physical_open_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_interface_open_port_type ] &&
