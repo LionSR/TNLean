@@ -385,6 +385,164 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     Definition~\ref{def:bnt}; it is not part of canonical form itself.
 \end{definition}
 
+\begin{theorem}[Physical relabeling preserves CPSV normal and canonical form]
+    \label{thm:cpsv_physical_reindexing}
+    \lean{MPSTensor.IsNormalTensor.reindexPhysical}
+    \lean{MPSTensor.CPSVCanonicalFormData.reindexPhysical}
+    \lean{MPSTensor.IsCPSVCanonicalForm.reindexPhysical}
+    \leanok
+    \uses{def:nt_cpsv, def:cpsv_canonical_form}
+    Let $e:\{0,\ldots,d'-1\}\to\{0,\ldots,d-1\}$ be a bijection and set
+    \begin{align}
+        (e^*A)^j
+        &= A^{e(j)}.
+        \label{eq:cpsv_physical_reindexing_tensor}
+    \end{align}
+    If $A$ is a CPSV normal tensor, then $e^*A$ is a CPSV normal tensor. If
+    $A$ has canonical-form data
+    \begin{align}
+        A^i
+        &=U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
+        \notag
+    \end{align}
+    then $e^*A$ has the same weights and coisometry and the relabeled normal
+    blocks:
+    \begin{align}
+        (e^*A)^j
+        &=U^\dagger\!\left(\bigoplus_{k=1}^r
+            \mu_k(e^*A_k)^j\right)U.
+        \label{eq:cpsv_physical_reindexing_cf}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:nt_cpsv, def:cpsv_canonical_form}
+    A bijection of the physical alphabet only permutes the summands in
+    $\E_A(X)=\sum_iA^iX(A^i)^\dagger$. Hence the transfer map, its spectral
+    radius, its peripheral spectrum, and its invariant orthogonal projections
+    are unchanged. Formula~(\ref{eq:cpsv_physical_reindexing_cf}) is obtained
+    from Formula~(\ref{eq:cpsv_canonical_form}) by replacing $i$ with $e(j)$.
+\end{proof}
+
+\begin{theorem}[Gauge transport of CPSV normality]
+    \label{thm:cpsv_normal_tensor_gauge_transport}
+    \lean{spectralRadius_similarityMap_eq}
+    \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
+    \lean{MPSTensor.IsNormalTensor.of_gaugeEquiv}
+    \leanok
+    \uses{def:nt_cpsv}
+    Let $X$ be invertible and suppose
+    \begin{align}
+        B^i
+        &=XA^iX^{-1}
+        \notag
+    \end{align}
+    for every physical index $i$. If $B$ is a CPSV normal tensor, then $A$ is
+    a CPSV normal tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:nt_cpsv}
+    With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
+    \begin{align}
+        \E_B
+        &= S_X\circ\E_A\circ S_X^{-1}.
+        \label{eq:cpsv_transfer_similarity}
+    \end{align}
+    Similarity preserves the spectral radius and the peripheral spectrum.
+    For irreducibility, start with an invariant orthogonal projection $Q$ for
+    one transfer map and form the support projection of the corresponding
+    positive congruence $XQX^\dagger$ (using $X^{-1}$ in the reverse
+    direction).  The intertwining in
+    Formula~(\ref{eq:cpsv_transfer_similarity}) makes this support projection
+    invariant for the other transfer map.  Irreducibility forces its support
+    to be zero or full, and invertibility of $X$ then forces $Q=0$ or
+    $Q=\Id$.  Thus both conditions in Definition~\ref{def:nt_cpsv} are
+    transported across the gauge.
+\end{proof}
+
+\begin{theorem}[Positive blocking preserves CPSV normal tensors]
+    \label{thm:cpsv_normal_tensor_positive_blocking}
+    \lean{MPSTensor.GaugeEquiv.blockTensor}
+    \lean{MPSTensor.IsNormalTensor.blockTensor}
+    \leanok
+    \uses{def:nt_cpsv, def:blocked_tensor,
+        thm:cpsv_normal_tp_gauge,
+        thm:tp_primitive_irreducible_extra_blocking,
+        thm:cpsv_normal_tensor_gauge_transport,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    Let $A$ be a CPSV normal tensor and let $L\geq1$. Then the blocked tensor
+    $A^{[L]}$ is a CPSV normal tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cpsv_normal_tp_gauge,
+        thm:tp_primitive_irreducible_extra_blocking,
+        thm:cpsv_normal_tensor_gauge_transport,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    Choose a trace-preserving gauge $B^i=XA^iX^{-1}$. Positive blocking gives
+    \begin{align}
+        (B^{[L]})^I
+        &=X(A^{[L]})^IX^{-1}.
+        \label{eq:cpsv_blocking_gauge}
+    \end{align}
+    The trace-preserving primitive and irreducible structure of $B$ is
+    preserved by positive blocking, so Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
+    makes $B^{[L]}$ CPSV normal. Gauge transport
+    (Theorem~\ref{thm:cpsv_normal_tensor_gauge_transport}) then gives CPSV
+    normality of $A^{[L]}$.
+\end{proof}
+
+\begin{theorem}[Literal CPSV canonical form is preserved by positive blocking]
+    \label{thm:cpsv_literal_canonical_form_positive_blocking}
+    \lean{MPSTensor.evalWord_eq_coisometry_reconstruction_of_ne_nil}
+    \lean{MPSTensor.blockTensor_toTensorFromBlocks_apply}
+    \lean{MPSTensor.CPSVCanonicalFormData.blockTensor}
+    \lean{MPSTensor.IsCPSVCanonicalForm.blockTensor}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:blocked_tensor,
+        thm:cpsv_normal_tensor_positive_blocking}
+    Let $A$ have canonical-form data
+    \begin{align}
+        A^i
+        &=U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U,
+        \qquad
+        UU^\dagger=\Id.
+        \notag
+    \end{align}
+    For every $L\geq1$, $A^{[L]}$ has canonical-form data with the same
+    coisometry $U$, the blocked normal tensors $A_k^{[L]}$, and the weights
+    $\mu_k^L$:
+    \begin{align}
+        (A^{[L]})^I
+        &=U^\dagger\!\left(\bigoplus_{k=1}^r
+            \mu_k^L(A_k^{[L]})^I\right)U.
+        \label{eq:cpsv_literal_blocking_cf}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form, def:blocked_tensor,
+        thm:cpsv_normal_tensor_positive_blocking}
+    Write $I=(i_1,\ldots,i_L)$. Since $L\geq1$, the word $I$ is nonempty.
+    Repeatedly inserting $UU^\dagger=\Id$ into
+    $A^{i_1}\cdots A^{i_L}$ gives
+    \begin{align}
+        A^{i_1}\cdots A^{i_L}
+        &=
+        U^\dagger\!\left(\bigoplus_{k=1}^r
+            \mu_k^L A_k^{i_1}\cdots A_k^{i_L}\right)U
+        \notag\\
+        &=
+        U^\dagger\!\left(\bigoplus_{k=1}^r
+            \mu_k^L(A_k^{[L]})^I\right)U.
+        \notag
+    \end{align}
+    The preceding theorem gives CPSV normality of every blocked block
+    $A_k^{[L]}$, and the displayed identity is exactly the retained direct-sum
+    reconstruction.
+\end{proof}
+
 \begin{theorem}[CPSV canonical-form representative after blocking]
     \label{thm:cpsv_canonical_form_representative_after_blocking}
     \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking}
