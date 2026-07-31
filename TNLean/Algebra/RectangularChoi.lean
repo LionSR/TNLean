@@ -11,7 +11,8 @@ import Mathlib.LinearAlgebra.Matrix.StdBasis
 /-!
 # Rectangular Choi matrices and a Hilbert--Schmidt rank estimate
 
-This file contains the algebraic part of TNLean issue #4295.  For a linear map
+This file contains the algebraic estimate used in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`.  For a linear map
 `L : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ`, it defines the unnormalized Choi matrix in the
 natural `α × β` ordering and proves its Frobenius Parseval identity.  It also proves that
 the squared Frobenius norm is at most `finrank ℂ L.range` whenever `L` is a
@@ -57,6 +58,7 @@ noncomputable def rectangularChoi
 
 omit [DecidableEq β] in
 /-- Entrywise formula for the coefficient matrix. -/
+@[simp]
 theorem linearMapMatrix_apply
     (L : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) (i j : α) (a b : β) :
     linearMapMatrix L (a, b) (i, j) = L (single i j 1) a b := by
@@ -66,6 +68,7 @@ theorem linearMapMatrix_apply
 
 omit [DecidableEq β] in
 /-- Entrywise formula for the rectangular Choi matrix. -/
+@[simp]
 theorem rectangularChoi_apply
     (L : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ) (i j : α) (a b : β) :
     rectangularChoi L (i, a) (j, b) = L (single i j 1) a b := by
@@ -118,6 +121,7 @@ theorem rectangularChoi_frobenius_parseval_matrix_units
       rw [linearMapMatrix_apply L ij.1 ij.2 ab.1 ab.2]
       simp
 
+omit [DecidableEq β] in
 /-- A linear map between matrix spaces is a Hilbert--Schmidt contraction if it does
 not increase the Hilbert--Schmidt quadratic form. -/
 def IsHilbertSchmidtContraction
@@ -187,13 +191,18 @@ private theorem trace_gram_re_le_rank_of_contraction
           push_cast
           simp
 
+omit [DecidableEq β] in
 /-- A Hilbert--Schmidt contraction has squared Choi Frobenius norm at most the
-dimension of its range.  This is the algebraic estimate needed in TNLean issue #4295. -/
+dimension of its range.  This is the algebraic estimate used in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem rectangularChoi_frobenius_sq_le_finrank_range
     (L : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ)
-    (hL : IsHilbertSchmidtContraction L) :
-    ‖rectangularChoi L‖ ^ 2 ≤ Module.finrank ℂ L.range := by
+    (hL : IsHilbertSchmidtContraction L) : by
+    classical
+    letI : DecidableEq β := Classical.decEq β
+    exact ‖rectangularChoi L‖ ^ 2 ≤ Module.finrank ℂ L.range := by
   classical
+  letI : DecidableEq β := Classical.decEq β
   let bα := stdBasis ℂ α α
   let bβ := stdBasis ℂ β β
   let A := linearMapMatrix L
