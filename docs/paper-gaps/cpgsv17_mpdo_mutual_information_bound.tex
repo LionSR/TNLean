@@ -282,14 +282,17 @@ The unnormalized sandwiched R\'enyi trace term
       \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
   \right]
 \]
-is now formalized.  For trace-one $\rho$, at orders for which the sandwiched
-R\'enyi divergence is defined, this is the quantity inside the logarithm when
-$\rho,\omega\geq0$ and $\ker\omega\subseteq\ker\rho$.  This domain includes
-singular $\omega$: the zero-on-kernel powers implement the generalized inverse
-on its support.  If the support inclusion fails, the totalized
+is now formalized.  For trace-one $\rho$ and $\alpha>1$, this is the quantity
+inside the logarithm of the sandwiched R\'enyi divergence when
+$\rho,\omega\geq0$ and $\ker\omega\subseteq\ker\rho$.  This includes singular
+$\omega$: the zero-on-kernel powers implement the generalized inverse on its
+support.  In this regime, finiteness of the divergence requires the support
+inclusion.  If the inclusion fails, the totalized
 continuous-functional-calculus value remains finite but is not the divergence
-trace term.  The formalized properties are nonnegativity for $\rho\geq0$ and
-$\omega>0$ and the exact identities at $\alpha=1$ and $\alpha=2$.
+trace term.  The present application uses $1<\alpha\leq2$; the order-one case
+is the Umegaki endpoint.  The formalized properties are nonnegativity for
+$\rho\geq0$ and $\omega>0$ and the exact identities at $\alpha=1$ and
+$\alpha=2$.
 \footnote{Formal declarations:
 \leanid{TNLean.sandwichedRenyiTrace},
 \leanid{TNLean.sandwichedRenyiTrace_nonneg},

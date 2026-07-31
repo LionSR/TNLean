@@ -915,14 +915,16 @@ terms of operator-Schmidt rank.
 \end{proof}
 
 The sandwiched R\'enyi comparison also uses the following unnormalized
-trace term.  For trace-one $\rho$, at orders for which the sandwiched R\'enyi
-divergence is defined, it is the quantity inside the logarithm
-\cite[Definition~2]{Beigi2013Sandwiched}
-\cite[Definition~2]{MullerLennert2013Renyi}.  This includes singular
-$\omega$ whenever $\rho,\omega\geq0$ and
-$\ker\omega\subseteq\ker\rho$, with negative powers interpreted as the
-generalized inverse on the support of $\omega$.  The statements below concern
-only this algebraic expression.  They are not assertions of
+trace term.  For trace-one $\rho$ and $\alpha>1$, it is the quantity inside the
+logarithm of the sandwiched R\'enyi divergence
+\cite[Equation~(2)]{Beigi2013Sandwiched}
+\cite[Definition~2]{MullerLennert2013Renyi} whenever
+$\rho,\omega\geq0$ and $\ker\omega\subseteq\ker\rho$.  This includes singular
+$\omega$, with negative powers interpreted as the generalized inverse on its
+support.  In this regime, finiteness of the divergence requires the support
+inclusion.  The present application uses $1<\alpha\leq2$; the order-one case is
+the Umegaki endpoint.  The statements below concern only this algebraic
+expression.  They are not assertions of
 \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, and they do not establish
 continuity or monotonicity in the order, interpolation between the endpoints,
 differentiability at order one, a limit to Umegaki relative entropy, a
@@ -945,10 +947,11 @@ logarithmic divergence, or a comparison with relative entropy.
     Real powers are defined by continuous functional calculus, with negative
     powers equal to zero on the zero eigenspace.  Thus
     $\widetilde Q_\alpha$ is total even when $\alpha=0$ or $\omega$ is singular.
-    On positive semidefinite inputs satisfying
+    For $\alpha>1$, on positive semidefinite inputs satisfying
     $\ker\omega\subseteq\ker\rho$, this convention gives the finite
-    sandwiched R\'enyi trace term.  If the support inclusion fails, the
-    totalized value remains finite but is not the divergence trace term.
+    sandwiched R\'enyi trace term.  In this regime, if the support inclusion
+    fails, the totalized value remains finite but is not the divergence trace
+    term.
 \end{definition}
 
 \begin{theorem}[Nonnegativity on the faithful domain]
