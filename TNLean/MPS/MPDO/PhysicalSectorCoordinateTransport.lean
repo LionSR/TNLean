@@ -17,6 +17,16 @@ corresponding closures in the original physical coordinates.
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Theorem 4.9, direction (iv) implies (v), and Appendix C.2, lines 1510--1563
   and 1821--1825
+
+**Scope restriction (active physical support compression):** the explicit
+`changePhysicalBasis` operation and the two-site/four-site closure transport
+identities do not appear as standalone constructions in CPSV16.  The source
+conjugates the full state by the physical isometry $U$ at lines 1439 and 1582,
+then explicitly ignores $U$ in the proof at lines 1519--1521.  This file gives
+the formal two-site and four-site identities which justify discarding that
+basis change.  It is independent of the active factor-support compression.
+Recorded in
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
 -/
 
 open scoped Matrix Kronecker

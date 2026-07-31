@@ -24,6 +24,13 @@ the closure relation to the left and right factor families separately. Their
 joint column supports consequently absorb the factors on both sides and have
 positive-dimensional isometric parametrizations.
 
+**Scope restriction (active factor supports):** CPSV16 lines 1381--1450 give
+the sector factorization and positivity of the neighboring operators, but do
+not introduce the joint support projections, prove their two-sided absorption,
+or choose their isometric parametrizations.  These are auxiliary
+finite-dimensional constructions in this development.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -353,8 +360,10 @@ theorem sectorProductFamily_supportProj
 /-- An active sector has positive-dimensional isometric parametrizations of
 both factor supports.
 
-These isometries give a finite-dimensional normalization of the factors in
-`AppUkU=rl`, arXiv:1606.00608, Appendix C.2, lines 1381--1450. -/
+These isometries give an auxiliary finite-dimensional normalization of the
+factors in `AppUkU=rl`.  The normalization is not constructed in
+arXiv:1606.00608, Appendix C.2, lines 1381--1450.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem exists_activeSector_factorSupportIsometries
     (F : PhysicalSectorFactorization K)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
