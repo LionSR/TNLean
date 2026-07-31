@@ -177,15 +177,54 @@ The matrix units form a Hilbert--Schmidt orthonormal basis, so
   =\sum_k s_k(L)^2
   \leq r.
 \]
-Monotonicity of the sandwiched R\'enyi divergence in its order, together with
-its order-one limit to Umegaki relative entropy
-\cite[Theorem~7]{Beigi2013Sandwiched}
-\cite[Theorem~5]{MullerLennert2013Renyi}, now gives
+A direct endpoint comparison gives
+\[
+  D(\rho\Vert\omega)\leq\log Q_2(\rho,\omega)
+\]
+for trace-one $\rho,\omega\geq0$ with
+$\ker\omega\subseteq\ker\rho$.  For a faithful reference, set
+$R=\sqrt\rho$, $T=\omega^{-1/2}$,
+$\Delta=R^T\otimes T$, and $v=\operatorname{vec}(R)$.  Under column-stacking,
+\[
+  (B\otimes A)\operatorname{vec}(X)=\operatorname{vec}(AXB^T),
+\]
+so the factor order in $\Delta$ gives
+$\Delta v=\operatorname{vec}(T\rho)$ and
+\[
+  m=\operatorname{Re}\langle v,\Delta v\rangle
+   =\langle R,RTR\rangle_{\mathrm{HS}}.
+\]
+The support projection of $\Delta$ fixes $v$.  The support projectors in
+\[
+  \log(A\otimes B)
+  =(\log A)\otimes P_{\operatorname{supp}B}
+   +P_{\operatorname{supp}A}\otimes(\log B)
+\]
+are essential when an eigenvalue vanishes: with the convention $\log0=0$, the
+identity with ambient identities in their place is false.  Together with
+$\log\sqrt\rho=\frac12\log\rho$,
+$\log(\omega^{-1/2})=-\frac12\log\omega$, and transpose covariance, this gives
+\[
+  \operatorname{Re}\langle v,(\log\Delta)v\rangle
+  =\frac12D(\rho\Vert\omega).
+\]
+Support-aware Jensen yields $\frac12D(\rho\Vert\omega)\leq\log m$, while
+Hilbert--Schmidt Cauchy--Schwarz gives
+\[
+  m^2\leq\lVert R\rVert_2^2\lVert RTR\rVert_2^2
+  =Q_2(\rho,\omega).
+\]
+This is the $\tau=\rho$, $\alpha=1,2$ specialization of the auxiliary
+divergence and vector-state Jensen mechanism in
+\cite[arXiv:1306.3142v4, Definition~5 and proof of Theorem~5]{MullerLennert2013Renyi},
+followed by the endpoint Cauchy--Schwarz estimate.  The shortened endpoint proof
+is not Beigi's interpolation argument.  Compression to the support of
+$\omega$ proves the singular-reference statement.  Applying it to
+$\omega=\rho_A\otimes\rho_B$ therefore gives
 \[
   I(A:B)_\rho
   =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-  \leq\widetilde D_2(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-  =\log\operatorname{Tr}(W^2)
+  \leq\log\operatorname{Tr}(W^2)
   \leq\log r.
 \]
 Thus the coefficient-one estimate holds for every finite-dimensional
@@ -239,10 +278,9 @@ compression.  Consequently, the singular-reference inequality reduces to the
 faithful inequality
 \[
   D(A\Vert B)\leq\log Q_2(A,B),
-  \qquad A\geq0,\quad B>0,\quad\tr A=\tr B=1,
+  \qquad A\geq0,\quad B>0,\quad\tr A=1.
 \]
-with this faithful comparison retained as an explicit hypothesis rather than
-asserted as proved.
+This faithful comparison is now proved; no normalization of $B$ is required.
 The rectangular isometric-conjugation identities are formalized.
 \footnote{Formal declarations:
 \leanid{Matrix.isometryConjNonUnitalStarAlgHom},
@@ -306,6 +344,30 @@ a Hermitian matrix and its functional calculus.
 This is an auxiliary analytic result, not a theorem of CPSV16.  It does not
 alter the source-coverage count or complete Proposition~4.5.
 
+The reusable logarithm identities and the entropy comparison are now
+formalized.  The tensor-product logarithm retains the two support projections,
+the logarithm commutes with transpose on Hermitian matrices, the logarithm of a
+positive-semidefinite square root is half the logarithm, and the logarithm of a
+real power of a positive-definite matrix is the exponent times the logarithm.
+The faithful theorem assumes only $\rho\geq0$, $\omega>0$, and $\tr\rho=1$;
+the singular theorem assumes $\rho,\omega\geq0$, both traces equal to one, and
+$\ker\omega\subseteq\ker\rho$.
+\footnote{Formal declarations:
+\leanid{Matrix.cfc_transpose},
+\leanid{Matrix.PosSemidef.cfc_log_kronecker},
+\leanid{Matrix.PosSemidef.cfc_log_sqrt},
+\leanid{Matrix.PosDef.cfc_log_rpow},
+\leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef},
+and
+\leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace} in
+\doclink{TNLean/Analysis/CfcConjugation},
+\doclink{TNLean/Analysis/CfcKronecker},
+\doclink{TNLean/Analysis/MatrixSqrt},
+\doclink{TNLean/Analysis/SandwichedRenyiTwo}, and
+\doclink{TNLean/Analysis/SupportCompressedEntropy}.}
+Thus the mathematical comparison tracked by
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete.
+
 The one-sided output-support compression is also formalized: faithfulness of
 the input weight forces every channel output into the support of its image,
 the compressed channel is trace preserving, and the support-restricted
@@ -359,18 +421,15 @@ marginals, and their positive definiteness are now formalized.
 \leanid{Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression}, and
 \leanid{Matrix.PosSemidef.marginalSupport_compression_marginals_posDef} in
 \doclink{TNLean/Channel/MarginalSupportAbsorption}.}
-The faithful comparison itself remains open in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The support-aware
-Jensen inequality above does not by itself establish the relative-modular
-half-moment identities or the Umegaki-to-order-two comparison.  A direct
-endpoint argument based on those identities is tracked in
-\href{https://github.com/LionSR/TNLean/issues/5242}{\#5242}; it does not require
-a general weighted-interpolation theorem or an order-one limit.  Beigi proves
-the general order monotonicity by interpolation
-\cite[Theorem~7]{Beigi2013Sandwiched}, while M\"uller-Lennert, Dupuis, Szehr,
-Fehr, and Tomamichel prove the order-one limit
-\cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
-mutual-information theorem remains tracked in
+The faithful and singular relative-entropy comparisons are now proved, so the
+mathematical task in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete.  The
+proof uses the relative-modular half-moment, support-aware Jensen, and
+Hilbert--Schmidt Cauchy--Schwarz; it requires neither a general weighted
+interpolation theorem nor an order-one limit.  The remaining work in
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is the
+whitened-state/Choi identification and its Hilbert--Schmidt rank estimate.  The
+unrestricted sharp mutual-information theorem remains tracked in
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 
 \section{Diagonal matrix product operators}

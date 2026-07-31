@@ -709,6 +709,24 @@
     (\ref{eq:mpdo_isometric_trace}).
 \end{proof}
 
+\begin{theorem}[Functional calculus under transpose]
+    \label{thm:cfc_transpose_hermitian}
+    \lean{Matrix.cfc_transpose}
+    \leanok
+    If $A\in\MN{n}$ is Hermitian and $f:\R\to\R$, then
+    \begin{align}
+      f(A)^T&=f(A^T).
+      \label{eq:mpdo_cfc_transpose}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    For a Hermitian matrix, transpose is entrywise complex conjugation.
+    Apply covariance of the continuous functional calculus under this real
+    star-algebra automorphism. Continuity of $f$ is needed only on the finite
+    spectrum of $A$, where it is automatic.
+\end{proof}
+
 \begin{theorem}[Logarithm of a tensor product on its support]
     \label{thm:mpdo_support_log_kronecker}
     \lean{Matrix.log_kronecker_posSemidef}
@@ -740,6 +758,40 @@
     If $a,b>0$, this is the ordinary product identity for the logarithm. If
     either eigenvalue is zero, both sides vanish. Conjugating the resulting
     diagonal identity by the product eigenbasis proves the formula.
+\end{proof}
+
+\begin{theorem}[Logarithm of a positive square root]
+    \label{thm:log_sqrt_possemidef}
+    \lean{Matrix.PosSemidef.cfc_log_sqrt}
+    \leanok
+    If $\rho\succeq0$, then
+    \begin{align}
+      \log\sqrt{\rho}&=\frac12\log\rho.
+      \label{eq:mpdo_log_sqrt}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    On every positive eigenvalue this is the scalar identity
+    $\log\sqrt{x}=\frac12\log x$. At $x=0$, both sides vanish under the
+    convention $\log0=0$.
+\end{proof}
+
+\begin{theorem}[Logarithm of a real power]
+    \label{thm:log_rpow_posdef}
+    \lean{Matrix.PosDef.cfc_log_rpow}
+    \leanok
+    If $A\succ0$, then, for every $s\in\R$,
+    \begin{align}
+      \log(A^s)&=s\log A.
+      \label{eq:mpdo_log_rpow}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Every eigenvalue of $A$ is positive, so the assertion follows from
+    $\log(x^s)=s\log x$ on $(0,\infty)$ and the continuous functional
+    calculus.
 \end{proof}
 
 \begin{theorem}[Support-aware vector-state Jensen inequality for the logarithm]
@@ -796,6 +848,97 @@
     R\'enyi divergence \cite[Definition~2]{MullerLennert2013Renyi}.
 \end{definition}
 
+\begin{theorem}[Faithful cyclic form of the order-two functional]
+    \label{thm:sandwiched_renyi_two_weighted}
+    \lean{TNLean.sandwichedRenyiTwoTrace_eq_weighted}
+    \leanok
+    \uses{def:sandwiched_renyi_two_trace}
+    If $\omega\succ0$, then, for every square matrix $\rho$ of the same size,
+    \begin{align}
+      Q_2(\rho,\omega)
+      &=\re\tr\left(\rho\,\omega^{-1/2}
+ho\,\omega^{-1/2}\right).
+      \label{eq:mpdo_sandwiched_two_weighted}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine the two adjacent inverse quarter-powers by
+    $\omega^{-1/4}\omega^{-1/4}=\omega^{-1/2}$ and rotate the factors under
+    the trace. No Hermiticity assumption on $\rho$ is needed.
+\end{proof}
+
+\begin{theorem}[Relative entropy bounded by the faithful order-two functional]
+    \label{thm:relative_entropy_q2_posdef}
+    \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+      def:sandwiched_renyi_two_trace}
+    Let $\rho,\omega\in\MN{D}$ satisfy $\rho\succeq0$, $\omega\succ0$, and
+    $\tr\rho=1$. Then
+    \begin{align}
+      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
+      \label{eq:mpdo_relative_q2_posdef}
+    \end{align}
+    No normalization of $\omega$ is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cfc_transpose_hermitian,
+      thm:log_kronecker_support,
+      thm:log_sqrt_possemidef,
+      thm:log_rpow_posdef,
+      thm:support_log_vector_jensen,
+      thm:sandwiched_renyi_two_weighted}
+    Set $R=\sqrt\rho$, $T=\omega^{-1/2}$,
+    $\Delta=R^T\otimes T$, and $v=\operatorname{vec}(R)$. The vectorization
+    is column-stacking, with factor order
+    \begin{align}
+      (B\otimes A)\operatorname{vec}(X)
+      &=\operatorname{vec}(AXB^T).
+      \label{eq:mpdo_column_vec_kronecker}
+    \end{align}
+    Hence $\Delta v=\operatorname{vec}(T\rho)$, and cyclicity of the trace
+    identifies its first moment with
+    \begin{align}
+      m=\re\langle v,\Delta v\rangle
+      &=\langle R,RTR\rangle_{\mathrm{HS}}.
+      \label{eq:mpdo_relative_modular_half_moment}
+    \end{align}
+    The support projection of $\Delta$ fixes $v$. Indeed, $T$ is positive
+    definite, while the support projection of $R^T$ fixes $R^T$; after
+    transposition this gives $R P_{\supp(R^T)}^T=R$. This support condition is
+    essential when $\rho$ is singular: it removes the zero spectral weights
+    before Jensen's inequality is applied.
+
+    Theorems~\ref{thm:log_kronecker_support},
+    \ref{thm:log_sqrt_possemidef}, \ref{thm:log_rpow_posdef}, and
+    \ref{thm:cfc_transpose_hermitian} give
+    \begin{align}
+      \re\langle v,(\log\Delta)v\rangle
+      &=\frac12 D(\rho\Vert\omega).
+      \label{eq:mpdo_relative_modular_log_moment}
+    \end{align}
+    Theorem~\ref{thm:support_log_vector_jensen} therefore yields
+    $\frac12D(\rho\Vert\omega)\leq\log m$. Since
+    $\|R\|_{\mathrm{HS}}^2=\tr\rho=1$, Hilbert--Schmidt
+    Cauchy--Schwarz gives
+    \begin{align}
+      m^2
+      &\leq\|R\|_{\mathrm{HS}}^2\|RTR\|_{\mathrm{HS}}^2
+       =Q_2(\rho,\omega).
+      \label{eq:mpdo_relative_modular_cauchy_schwarz}
+    \end{align}
+    Positivity of $m$ now gives
+    $D(\rho\Vert\omega)\leq\log(m^2)\leq\log Q_2(\rho,\omega)$.
+
+    The auxiliary divergence and its vector-state Jensen argument follow the
+    $\tau=\rho$, $\alpha=1,2$ specialization of
+    \cite[arXiv:1306.3142v4, Definition~5 and proof of Theorem~5]{MullerLennert2013Renyi}.
+    The final Cauchy--Schwarz estimate is the direct endpoint proof used here;
+    it is not an application of Beigi's interpolation theorem.
+\end{proof}
+
 \begin{theorem}[Order-two sandwiched functional under support compression]
     \label{thm:sandwiched_renyi_two_support_compression}
     \lean{TNLean.sandwichedRenyiTwoTrace_support_compression}
@@ -841,11 +984,8 @@
       \label{eq:mpdo_singular_relative_q2_comparison}
     \end{align}
     Thus this theorem reduces the singular-reference case to the faithful
-    comparison; it does not prove (\ref{eq:mpdo_faithful_relative_q2_hypothesis}).
-    Beigi's order-monotonicity theorem supplies the first analytic step
-    \cite[Theorem~7]{Beigi2013Sandwiched}. The order-one limit is due to
-    M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel
-    \cite[Theorem~5]{MullerLennert2013Renyi}.
+    comparison. Theorem~\ref{thm:relative_entropy_q2_posdef} supplies the
+    hypothesis in~(\ref{eq:mpdo_faithful_relative_q2_hypothesis}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -863,6 +1003,29 @@
     $(\rho_V,\omega_V)$, then use
     (\ref{eq:mpdo_relative_entropy_support_compression}) and
     (\ref{eq:mpdo_sandwiched_two_support_compression}).
+\end{proof}
+
+\begin{theorem}[Relative entropy bounded by the support-restricted order-two functional]
+    \label{thm:relative_entropy_q2_support}
+    \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace}
+    \leanok
+    \uses{def:quantum_relative_entropy,
+      def:sandwiched_renyi_two_trace}
+    Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one.
+    If $\ker\omega\subseteq\ker\rho$, then
+    \begin{align}
+      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
+      \label{eq:mpdo_relative_q2_support}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_q2_posdef,
+      thm:relative_entropy_q2_faithful_reduction}
+    Apply Theorem~\ref{thm:relative_entropy_q2_faithful_reduction} with the
+    faithful comparison from Theorem~\ref{thm:relative_entropy_q2_posdef}.
+    Compression to the support of $\omega$ preserves both entropy functionals
+    and both trace normalizations, and makes the reference positive definite.
 \end{proof}
 
 \section{Rectangular Choi matrices and a range-dimension estimate}
@@ -1200,20 +1363,19 @@ logarithmic divergence, or a comparison with relative entropy.
     \end{align}
     The mathematical inequality is established, but its formal verification is
     not yet complete.
-    % Formalization is tracked by issues #5209, #5211, #5212, and #5213.
+    % Formalization is tracked by issues #5211, #5212, and #5213.
 \end{theorem}
 \begin{proof}
-    \uses{thm:relative_entropy_q2_faithful_reduction,
+    \uses{thm:relative_entropy_q2_support,
       thm:operator_schmidt_rank_marginal_support_compression,
       thm:faithful_marginals_support_compression,
       thm:full_support_eigenbasis_whitened_choi_bound}
     Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
     $\ker\omega\subseteq\ker\rho_{AB}$, so
-    Theorem~\ref{thm:relative_entropy_q2_faithful_reduction} reduces the
-    comparison $D(\rho_{AB}\Vert\omega)\leq\log Q_2(\rho_{AB},\omega)$ to
-    faithful marginals. To relate the remaining order-two estimate to
-    operator-Schmidt rank, compress the two tensor factors separately to the
-    supports of $\rho_A$ and $\rho_B$.
+    Theorem~\ref{thm:relative_entropy_q2_support} gives
+    $D(\rho_{AB}\Vert\omega)\leq\log Q_2(\rho_{AB},\omega)$ directly.
+    To relate the order-two functional to operator-Schmidt rank, compress the
+    two tensor factors separately to the supports of $\rho_A$ and $\rho_B$.
     Theorem~\ref{thm:operator_schmidt_rank_marginal_support_compression}
     shows that this simultaneous local compression reconstructs the original
     operator and preserves operator-Schmidt rank. By
@@ -1233,14 +1395,13 @@ logarithmic divergence, or a comparison with relative entropy.
         \leq\operatorname{OSR}(\rho_{AB}).
         \notag
     \end{align}
-    Monotonicity in the order and the order-one limit
-    \cite[Theorem~7]{Beigi2013Sandwiched}
-    \cite[Theorem~5]{MullerLennert2013Renyi} give
+    Theorem~\ref{thm:relative_entropy_q2_support} and the whitened
+    estimate now give
     \begin{align}
         I(A:B)_\rho
         =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-        \leq\widetilde D_2(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-        =\log\tr(W^2),
+        \leq\log\tr(W^2)
+        \leq\log\operatorname{OSR}(\rho_{AB}),
         \notag
     \end{align}
     which proves the result.
