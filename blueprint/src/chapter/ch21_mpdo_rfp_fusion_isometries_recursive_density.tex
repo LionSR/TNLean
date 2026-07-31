@@ -312,21 +312,71 @@
     the complementary tensor factors of each block.
 \end{definition}
 
-\begin{theorem}[All-label density decomposition of an RFP MPDO]%
-    \label{thm:mpdo_topological_density_decomposition}
+\begin{theorem}[All-label density decomposition from an active-sector fusion
+    clause]%
+    \label{thm:mpdo_fusion_clause_topological_density_decomposition}
     \lean{MPOTensor.BNTFusionTensorClause.%
         singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc}
     \lean{MPOTensor.BNTFusionTensorClause.%
         singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo}
     \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityDecomposition}
     \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityDecomposition}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_density_operator,
+        def:mpdo_single_kraus_map,
+        def:mpdo_sitewise_physical_matrix}
+    Fix an active-sector fusion clause for a vertical canonical decomposition
+    of $M$. For every $N>0$, its retained-row vertical coisometry $V$ and
+    all-label recursive density operator $R_N$ satisfy
+    \begin{align}
+        V^{\otimes N}\rho^{(N)}(M)(V^{\otimes N})^\dagger
+        &=R_N,
+        \notag\\
+        ((V^\dagger)^{\otimes N})R_NV^{\otimes N}
+        &=\rho^{(N)}(M).
+        \notag
+    \end{align}
+
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the fusion clause. A normal label
+    absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+
+    \textbf{Local fix (rectangular vertical map):}
+    the reverse equality uses exact retained-sector reconstruction rather
+    than a square-unitary identity. See
+    \path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_topological_projector_recursion,
+        lem:mpdo_sitewise_physical_coordinate_congruence}
+    In retained coordinates, the one-site entries are block diagonal in the
+    label and multiplicity coordinates. Within each configuration, multiply
+    the scalar weights and apply the forward and adjoint recursive fusion
+    identities. Summing over all configurations gives the forward equality;
+    exact sitewise retained-sector reconstruction gives the reverse equality.
+\end{proof}
+
+\begin{theorem}[All-label density decomposition of an RFP MPDO]%
+    \label{thm:mpdo_topological_density_decomposition}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_bnt_fusion_tensor_clause,
         def:mpdo_topological_density_operator,
         def:mpdo_single_kraus_map,
-        def:mpdo_sitewise_physical_matrix}
+        def:mpdo_sitewise_physical_matrix,
+        thm:mpdo_fusion_clause_topological_density_decomposition}
     Let $M$ be a matrix product density operator in normalized BNT-refined
     horizontal form and suppose that it satisfies the renormalization
     fixed-point condition.
@@ -377,18 +427,46 @@
     every site, gives (\ref{eq:rfp_density_reverse}).
 \end{proof}
 
-\begin{corollary}[All-label density-factor commutator]%
-    \label{cor:mpdo_topological_density_factor_commutator}
+\begin{corollary}[All-label density-factor commutator from an active-sector
+    fusion clause]%
+    \label{cor:mpdo_fusion_clause_topological_density_factor_commutator}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalMultiplicityWeightFactorSucc_commutes_recursiveFactor}
-    \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityFactorCommutator}
-    \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityFactorCommutator}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        HasTopologicalDensityFactorCommutator}
+    \lean{MPOTensor.BNTFusionTensorClause.%
+        hasTopologicalDensityFactorCommutator}
+    \leanok
+    \uses{def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_density_operator}
+    For any active-sector fusion clause and every $N>0$, its all-label
+    recursive density operator factors as
+    \begin{align}
+        R_N&=A_NT_N,
+        \notag\\
+        A_NT_N&=T_NA_N.
+        \notag
+    \end{align}
+    Thus the multiplicity-weight factor commutes with the reconstructed
+    recursive factor. No length-independence or spectral hypothesis is used.
+\end{corollary}
+\begin{proof}\leanok
+    In every copy configuration, $A_N$ is a scalar multiple of the identity
+    on the corresponding simple-bond space, so it commutes with the
+    coisometrically reconstructed recursive factor. Taking the direct sum
+    gives both identities.
+\end{proof}
+
+\begin{corollary}[All-label density-factor commutator]%
+    \label{cor:mpdo_topological_density_factor_commutator}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
-        def:mpdo_topological_density_operator}
+        def:mpdo_topological_density_operator,
+        thm:mpdo_rfp_to_bnt_fusion_tensor,
+        cor:mpdo_fusion_clause_topological_density_factor_commutator}
     Let $M$ be a matrix product density operator in normalized BNT-refined
     horizontal form and suppose that it satisfies the renormalization
     fixed-point condition.
@@ -424,8 +502,9 @@
     decomposition.
 \end{proof}
 
-\begin{definition}[Terminal spectral refinement data]%
-    \label{def:mpdo_terminal_spectral_refinement}
+\begin{definition}[Terminal spectral refinement for an active-sector fusion
+    clause]%
+    \label{def:mpdo_fusion_clause_terminal_spectral_refinement}
     \lean{MPOTensor.BNTFusionTensorClause.terminalMatrix}
     \lean{MPOTensor.BNTFusionTensorClause.TerminalSpectralIndex}
     \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue}
@@ -437,12 +516,43 @@
         topologicalSpectralProjectorSucc}
     \lean{MPOTensor.BNTFusionTensorClause.%
         HasTerminalSpectralProjectorRefinement}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_topological_density_operator,
+        def:mpdo_topological_projector_recursion,
+        thm:mpdo_terminal_transfer_positivity}
+    Let $M$ generate matrix product density operators, and fix an
+    active-sector fusion clause. For every terminal label $\gamma$, close the
+    horizontal operator leg of $M_\gamma$ to obtain a positive semidefinite
+    bond matrix $K_\gamma$. Its spectral indices are pairs
+    $s=(\gamma,k)$; write $\lambda_s$ for the corresponding eigenvalue and
+    $E_s$ for the rank-one spectral projection. Recursively transport this
+    family through every fusion history and the adjoint sequential
+    coisometry, and denote the resulting all-label operator at positive
+    length $N$ by $P_s^{(N)}$.
+
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the fusion clause. A normal label
+    absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{definition}
+
+\begin{definition}[Terminal spectral refinement data]%
+    \label{def:mpdo_terminal_spectral_refinement}
     \lean{MPOTensor.rfpBNTFusionTensorClause}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_bnt_fusion_tensor_clause,
-        def:mpdo_topological_density_operator,
-        def:mpdo_topological_projector_recursion,
+        def:mpdo_fusion_clause_terminal_spectral_refinement,
         thm:mpdo_rfp_to_bnt_fusion_tensor}
     For an MPDO in normalized BNT-refined horizontal form satisfying the
     renormalization fixed-point condition, fix the fusion clause selected by
@@ -464,9 +574,9 @@
     % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{definition}
 
-\begin{theorem}[Terminal spectral projectors for a length-independent RFP
-    MPDO]%
-    \label{thm:mpdo_terminal_spectral_projector_refinement}
+\begin{theorem}[Terminal spectral projectors from an active-sector fusion
+    clause]%
+    \label{thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalSpectralProjectorSucc_isOrthogonalProjection}
@@ -480,11 +590,60 @@
         topologicalDensityOperatorSucc_eq_sum_terminalSpectralProjector}
     \lean{MPOTensor.BNTFusionTensorClause.%
         hasTerminalSpectralProjectorRefinement}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_fusion_clause_terminal_spectral_refinement,
+        thm:mpdo_fusion_clause_topological_density_decomposition,
+        cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    Let $M$ generate matrix product density operators, fix an active-sector
+    fusion clause, and suppose that its positive trace-power coefficients are
+    independent of the positive chain length. Then every terminal eigenvalue
+    $\lambda_s$ is non-negative. For every $N>0$, the operators
+    $P_s^{(N)}$ are pairwise orthogonal projections and
+    \begin{align}
+        T_N&=\sum_s\lambda_sP_s^{(N)},
+        \notag\\
+        A_NP_s^{(N)}&=P_s^{(N)}A_N,
+        \notag\\
+        R_N&=\sum_s\lambda_sA_NP_s^{(N)}.
+        \notag
+    \end{align}
+    This is the terminal spectral decomposition of
+    \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}; it makes no Hamiltonian or
+    Gibbs-state assertion.
+
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the fusion clause. A normal label
+    absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    Positivity of the physical density operator makes each terminal bond
+    matrix positive semidefinite. Its spectral theorem supplies the
+    non-negative eigenvalues and orthogonal rank-one projections. Length
+    independence makes every retained fusion coefficient equal to one, so
+    recursive coisometric transport preserves orthogonality and the spectral
+    sum. The generic density-factor commutator gives the final two identities.
+\end{proof}
+
+\begin{theorem}[Terminal spectral projectors for a length-independent RFP
+    MPDO]%
+    \label{thm:mpdo_terminal_spectral_projector_refinement}
     \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts,
         def:mpdo_terminal_spectral_refinement,
-        cor:mpdo_topological_density_factor_commutator}
+        thm:mpdo_rfp_to_bnt_fusion_tensor,
+        thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Let $M$ be a matrix product density operator in normalized BNT-refined
     horizontal form satisfying the renormalization fixed-point condition. Fix
     internally the
@@ -581,9 +740,10 @@
         topologicalGibbsHamiltonianSuccSucc}
     \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalGibbsDecomposition}
     \leanok
-    \uses{def:mpdo_terminal_spectral_refinement}
-    Let $\mu$ be the strictly positive diagonal multiplicity matrix in the
-    retained one-site coordinates. Define
+    \uses{def:mpdo_fusion_clause_terminal_spectral_refinement}
+    Let $M$ generate matrix product density operators, fix an active-sector
+    fusion clause, and let $\mu$ be its strictly positive diagonal
+    multiplicity matrix in the retained one-site coordinates. Define
     $h=\diag(-\log\mu)\otimes I$ on two adjacent sites. For a chain of length
     $L=N+2$, let $H_L=\sum_{i=1}^{L}h_{i,i+1}$, with periodic indices.
 
@@ -626,7 +786,7 @@
     \leanok
     \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
         def:mpdo_topological_gibbs_data_at_least_two,
-        thm:mpdo_terminal_spectral_projector_refinement}
+        thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Let $M$ generate matrix product density operators, and fix an
     active-sector fusion clause for a vertical canonical decomposition of
     $M$. Suppose that the trace-power coefficients of its positive diagonal
@@ -686,9 +846,9 @@
     \path{docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_topological_density_decomposition,
-        cor:mpdo_topological_density_factor_commutator,
-        thm:mpdo_terminal_spectral_projector_refinement}
+    \uses{thm:mpdo_fusion_clause_topological_density_decomposition,
+        cor:mpdo_fusion_clause_topological_density_factor_commutator,
+        thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Each diagonal entry of $\mu$ is strictly positive, so its negative
     logarithm is real. The translated terms are diagonal, and each site
     contributes once to their sum. Exponentiating gives
