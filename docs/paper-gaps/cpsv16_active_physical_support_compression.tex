@@ -112,15 +112,21 @@ exact two-sided recovery.
 \section{Affected declarations}
 
 The six load-bearing declarations are the choice of support isometries for an
-active sector,\footnote{\leanid{exists\_activeSector\_factorSupportIsometries}.}
+active sector,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+exists\_activeSector\_factorSupportIsometries}.}
 the simultaneous choice of factor-support
-coordinates,\footnote{\leanid{ActiveFactorSupportData}.}
-the compressed left factor,\footnote{\leanid{compressedLeftTensor}.}
+coordinates,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+ActiveFactorSupportData}.}
+the compressed left factor,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+compressedLeftTensor}.}
 recovery of the original physical slice from sector coordinates,\footnote{%
-\leanid{physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
-the restricted tensor,\footnote{\leanid{activePhysicalSupportRestriction}.}
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
+the restricted tensor,\footnote{\leanid{MPOTensor.PhysicalSectorFactorization.%
+activePhysicalSupportRestriction}.}
 and injectivity of that tensor.\footnote{%
-\leanid{activePhysicalSupportRestriction\_isInjective}.}
+\leanid{MPOTensor.PhysicalSectorFactorization.%
+activePhysicalSupportRestriction\_isInjective}.}
 
 \section{Blueprint dependency}
 
@@ -130,7 +136,8 @@ $\to$ \texttt{PhysicalSectorActiveNeighboring}
 $\to$ \texttt{PhysicalSectorActiveBond}
 $\to$ \texttt{BNTPhysicalSectorGSNNCH}
 feeds the \texttt{\textbackslash leanok}-tagged capstone
-\leanid{hasGSNNCHForm\_of\_bntLayerOrthogonal\_of\_physicalSectorFactorization}
+\leanid{MPOTensor.%
+hasGSNNCHForm\_of\_bntLayerOrthogonal\_of\_physicalSectorFactorization}
 labelled \texttt{thm:mpdo\_bnt\_physical\_sector\_gsnnch} in
 \path{blueprint/src/chapter/ch21_mpdo_rfp_simple_local_structure_capstone.tex}.
 The compression is mathematically sound but the source-citation chain is
