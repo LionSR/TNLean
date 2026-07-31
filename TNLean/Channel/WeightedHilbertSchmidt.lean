@@ -406,24 +406,6 @@ noncomputable def supportedWeightedHilbertSchmidtMap
   (singleKrausMap hτ.supportInvFourthRoot).comp
     (Φ.comp (singleKrausMap (CFC.sqrt (CFC.sqrt σ))))
 
-/-- Expansion along an isometry preserves the Frobenius norm. -/
-theorem frobenius_norm_isometry_mul_mul_conjTranspose
-    {p s : ℕ} (V : Matrix (Fin p) (Fin s) ℂ) (hV : Vᴴ * V = 1)
-    (Z : Matrix (Fin s) (Fin s) ℂ) :
-    ‖V * Z * Vᴴ‖ = ‖Z‖ := by
-  have hsquare : ‖V * Z * Vᴴ‖ ^ 2 = ‖Z‖ ^ 2 := by
-    rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq,
-      ← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
-    congr 1
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.conjTranspose_conjTranspose]
-    simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc Vᴴ V (Z * Vᴴ), hV, Matrix.one_mul]
-    rw [Matrix.trace_mul_comm V (Zᴴ * (Z * Vᴴ))]
-    rw [Matrix.mul_assoc Zᴴ (Z * Vᴴ) V, Matrix.mul_assoc Z Vᴴ V,
-      hV, Matrix.mul_one]
-  nlinarith [norm_nonneg (V * Z * Vᴴ), norm_nonneg Z]
-
 /-- Compression proof of the support-weighted contraction with a named output
 weight and an explicit proof of its positivity. -/
 private theorem supportedWeightedHilbertSchmidtMap_norm_le_aux

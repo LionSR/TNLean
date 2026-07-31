@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 import Mathlib.LinearAlgebra.Matrix.Bilinear
+import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Analysis.MarginalSupport
 
@@ -29,9 +30,11 @@ when $Z$ is supported on that initial space.
   on the initial space.
 * `Matrix.trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one` — expansion
   by the adjoint of a coisometry preserves the trace.
+* `Matrix.frobenius_norm_isometry_mul_mul_conjTranspose` — expansion by an
+  isometry preserves the Frobenius norm.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix ComplexOrder Matrix.Norms.Frobenius
 
 namespace Matrix
 
@@ -107,6 +110,24 @@ theorem trace_conjTranspose_mul_mul_of_mul_conjTranspose_eq_one
     Matrix.trace (Uᴴ * Z * U) = Matrix.trace (U * Uᴴ * Z) := by
       rw [Matrix.trace_mul_cycle]
     _ = Matrix.trace Z := by rw [hU, Matrix.one_mul]
+
+/-- Expansion along an isometry preserves the Frobenius norm. -/
+theorem frobenius_norm_isometry_mul_mul_conjTranspose
+    {p s : Type*} [Fintype p] [DecidableEq p] [Fintype s] [DecidableEq s]
+    (V : Matrix p s ℂ) (hV : Vᴴ * V = 1) (Z : Matrix s s ℂ) :
+    ‖V * Z * Vᴴ‖ = ‖Z‖ := by
+  have hsquare : ‖V * Z * Vᴴ‖ ^ 2 = ‖Z‖ ^ 2 := by
+    rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq,
+      ← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
+    congr 1
+    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_conjTranspose]
+    simp only [Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc Vᴴ V (Z * Vᴴ), hV, Matrix.one_mul]
+    rw [Matrix.trace_mul_comm V (Zᴴ * (Z * Vᴴ))]
+    rw [Matrix.mul_assoc Zᴴ (Z * Vᴴ) V, Matrix.mul_assoc Z Vᴴ V,
+      hV, Matrix.mul_one]
+  nlinarith [norm_nonneg (V * Z * Vᴴ), norm_nonneg Z]
 
 open scoped Norms.Operator in
 /-- Matrix exponential transports across a rectangular intertwiner. -/

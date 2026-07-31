@@ -137,18 +137,18 @@ theorem PosSemidef.supportProj_mul_cfc_sqrt
       congrArg Matrix.conjTranspose hρ.cfc_sqrt_mul_supportProj
 
 /-- Taking the positive square root does not change the support projection. -/
-theorem PosSemidef.supportProj_cfc_sqrt {D : ℕ}
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) :
+theorem PosSemidef.supportProj_cfc_sqrt
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
     (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).supportProj =
       hρ.supportProj := by
   let q := CFC.sqrt ρ
   let hq : q.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
   have hq_sq : q * q = ρ := CFC.sqrt_mul_sqrt_self ρ hρ.nonneg
-  have hkerρq (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) : q *ᵥ v = 0 := by
+  have hkerρq (v : n → ℂ) (hv : ρ *ᵥ v = 0) : q *ᵥ v = 0 := by
     apply (Matrix.conjTranspose_mul_self_mulVec_eq_zero q v).mp
     rw [hq.isHermitian.eq, hq_sq]
     exact hv
-  have hkerqρ (v : Fin D → ℂ) (hv : q *ᵥ v = 0) : ρ *ᵥ v = 0 := by
+  have hkerqρ (v : n → ℂ) (hv : q *ᵥ v = 0) : ρ *ᵥ v = 0 := by
     rw [← hq_sq, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero]
   have hPqPρ : hq.supportProj * hρ.supportProj = hq.supportProj :=
     hρ.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le fun v hv ↦
