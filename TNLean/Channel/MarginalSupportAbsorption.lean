@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OperatorSchmidt
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.MarginalSupport
 import TNLean.Channel.PartialTrace
@@ -28,6 +29,10 @@ form is a specialization of the other on the product index \(L\times R\).
   by the lifted support projector of the right partial trace.
 * `Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self`: the corresponding
   right absorption identity.
+* `Matrix.PosSemidef.eq_marginalSupport_expansion_compression`: simultaneous
+  compression to both marginal supports reconstructs the original operator.
+* `Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression`: this
+  simultaneous compression preserves operator-Schmidt rank.
 
 ## References
 
@@ -241,5 +246,81 @@ theorem PosSemidef.mul_rightKroneckerEmbed_supportProj_self
   rwa [Matrix.conjTranspose_mul, hρ.isHermitian.eq, hliftHerm.eq] at h
 
 end LeftMarginal
+
+/-! ### Simultaneous compression to both marginal supports -/
+
+section SimultaneousMarginalSupport
+
+variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
+variable {L' R' : Type*} [Fintype L'] [Fintype R']
+
+/-- Compression by coordinate maps for both marginal supports reconstructs
+the original positive semidefinite operator exactly.
+
+The statement permits zero-dimensional index types. It requires only that the
+two coordinate maps have the prescribed range projections; their isometry
+identities are not needed for reconstruction. -/
+theorem PosSemidef.eq_marginalSupport_expansion_compression
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef)
+    (V₁ : Matrix L L' ℂ) (V₂ : Matrix R R' ℂ)
+    (hRange₁ : V₁ * V₁ᴴ = hρ.partialTraceRight.isHermitian.supportProj)
+    (hRange₂ : V₂ * V₂ᴴ = hρ.partialTraceLeft.isHermitian.supportProj) :
+    (V₁ ⊗ₖ V₂) * ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)) *
+      (V₁ ⊗ₖ V₂)ᴴ = ρ := by
+  let P₁ := hρ.partialTraceRight.isHermitian.supportProj
+  let P₂ := hρ.partialTraceLeft.isHermitian.supportProj
+  have hP₁ρ : (P₁ ⊗ₖ (1 : Matrix R R ℂ)) * ρ = ρ := by
+    simpa only [P₁, leftKroneckerEmbed_apply] using
+      hρ.leftKroneckerEmbed_supportProj_mul_self
+  have hP₂ρ : ((1 : Matrix L L ℂ) ⊗ₖ P₂) * ρ = ρ := by
+    simpa only [P₂, rightKroneckerEmbed_apply] using
+      hρ.rightKroneckerEmbed_supportProj_mul_self
+  have hρP₁ : ρ * (P₁ ⊗ₖ (1 : Matrix R R ℂ)) = ρ := by
+    simpa only [P₁, leftKroneckerEmbed_apply] using
+      hρ.mul_leftKroneckerEmbed_supportProj_self
+  have hρP₂ : ρ * ((1 : Matrix L L ℂ) ⊗ₖ P₂) = ρ := by
+    simpa only [P₂, rightKroneckerEmbed_apply] using
+      hρ.mul_rightKroneckerEmbed_supportProj_self
+  have hPρ : (P₁ ⊗ₖ P₂) * ρ = ρ := by
+    rw [show P₁ ⊗ₖ P₂ = (P₁ ⊗ₖ (1 : Matrix R R ℂ)) *
+        ((1 : Matrix L L ℂ) ⊗ₖ P₂) by
+      rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]]
+    rw [Matrix.mul_assoc, hP₂ρ, hP₁ρ]
+  have hρP : ρ * (P₁ ⊗ₖ P₂) = ρ := by
+    rw [show P₁ ⊗ₖ P₂ = ((1 : Matrix L L ℂ) ⊗ₖ P₂) *
+        (P₁ ⊗ₖ (1 : Matrix R R ℂ)) by
+      rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]]
+    rw [← Matrix.mul_assoc, hρP₂, hρP₁]
+  have hRange : (V₁ ⊗ₖ V₂) * (V₁ ⊗ₖ V₂)ᴴ = P₁ ⊗ₖ P₂ := by
+    rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hRange₁, hRange₂]
+  calc
+    (V₁ ⊗ₖ V₂) * ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)) * (V₁ ⊗ₖ V₂)ᴴ =
+        ((V₁ ⊗ₖ V₂) * (V₁ ⊗ₖ V₂)ᴴ) * ρ *
+          ((V₁ ⊗ₖ V₂) * (V₁ ⊗ₖ V₂)ᴴ) := by
+      simp only [Matrix.mul_assoc]
+    _ = (P₁ ⊗ₖ P₂) * ρ * (P₁ ⊗ₖ P₂) := by rw [hRange]
+    _ = ρ := by rw [hPρ, hρP]
+
+variable [DecidableEq L'] [DecidableEq R']
+
+/-- Simultaneous compression to coordinate spaces for the two marginal supports
+preserves operator-Schmidt rank.
+
+No marginal is assumed faithful, and the statement remains valid for
+zero-dimensional index types. -/
+theorem PosSemidef.operatorSchmidtRank_marginalSupport_compression
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef)
+    (V₁ : Matrix L L' ℂ) (V₂ : Matrix R R' ℂ)
+    (hV₁ : V₁ᴴ * V₁ = 1) (hV₂ : V₂ᴴ * V₂ = 1)
+    (hRange₁ : V₁ * V₁ᴴ = hρ.partialTraceRight.isHermitian.supportProj)
+    (hRange₂ : V₂ * V₂ᴴ = hρ.partialTraceLeft.isHermitian.supportProj) :
+    operatorSchmidtRank ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂)) =
+      operatorSchmidtRank ρ := by
+  have hrank := operatorSchmidtRank_local_isometry_conj V₁ V₂ hV₁ hV₂
+    ((V₁ ⊗ₖ V₂)ᴴ * ρ * (V₁ ⊗ₖ V₂))
+  rw [hρ.eq_marginalSupport_expansion_compression V₁ V₂ hRange₁ hRange₂] at hrank
+  exact hrank.symm
+
+end SimultaneousMarginalSupport
 
 end Matrix
