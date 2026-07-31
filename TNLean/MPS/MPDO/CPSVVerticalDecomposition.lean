@@ -19,6 +19,7 @@ normal tensors.
 
 * `MPSTensor.IsCPSVCanonicalForm.exists_cpsvVerticalDecomposition`
 * `MPSTensor.IsCPSVCanonicalForm.exists_cpsvVerticalDecomposition_blockTwo`
+* `MPSTensor.IsCPSVCanonicalForm.exists_cpsvVerticalDecomposition_pair`
 
 ## References
 
@@ -98,5 +99,20 @@ theorem exists_cpsvVerticalDecomposition_blockTwo
   have hBlocked :=
     MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo hCanonical
   exact hBlocked.exists_cpsvVerticalDecomposition (MPOTensor.blockTwo M) hM.blockTwo
+
+/-- Literal CPSV canonical form gives the one-site and concrete two-site
+vertical decompositions as a single pair for their comparison in Appendix C.4.
+
+Source: arXiv:1606.00608, Proposition 4.13 and Appendix C.4,
+lines 1863--1956. -/
+theorem exists_cpsvVerticalDecomposition_pair
+    (M : MPOTensor d D)
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : MPOTensor.IsMPDO M) :
+    Nonempty (MPOTensor.CPSVVerticalDecomposition M ×
+      MPOTensor.CPSVVerticalDecomposition (MPOTensor.blockTwo M)) := by
+  obtain ⟨D₁⟩ := hCanonical.exists_cpsvVerticalDecomposition M hM
+  obtain ⟨D₂⟩ := hCanonical.exists_cpsvVerticalDecomposition_blockTwo M hM
+  exact ⟨D₁, D₂⟩
 
 end MPSTensor.IsCPSVCanonicalForm
