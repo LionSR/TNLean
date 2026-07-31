@@ -107,7 +107,7 @@ grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
   exit 1
 }
 [ "$(grep -c 'check|relation=1|result=equal' \
-      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 3 ] || {
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 4 ] || {
   echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
   exit 1
 }
@@ -883,6 +883,9 @@ for contract_negative in \
   n_port_slot \
   n_noncell_port_slot \
   n_port_open_name \
+  n_padded_duplicate_port \
+  n_rounding_duplicate_port \
+  n_bonded_policy_label_conflict \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -913,6 +916,12 @@ do
     expected='[TKZ-PORT-SLOT]'
   [ "$contract_negative" = n_port_open_name ] &&
     expected='[TKZ-LANG-NAME-COLLISION]'
+  [ "$contract_negative" = n_padded_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_rounding_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_bonded_policy_label_conflict ] &&
+    expected='[TKZ-PORT-LABEL-CONFLICT]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
     echo "FAIL: $contract_negative lacked $expected" >&2
     exit 1

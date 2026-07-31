@@ -12,6 +12,7 @@
 \int_new:N \g__tenkz_test_port_open_wired_int
 \int_new:N \g__tenkz_test_port_label_int
 \int_new:N \g__tenkz_test_policy_port_label_int
+\int_new:N \g__tenkz_test_bonded_port_label_int
 \fp_new:N \l__tenkz_test_port_dx_fp
 \fp_new:N \l__tenkz_test_port_dy_fp
 \tl_new:N \l__tenkz_test_port_face_tl
@@ -21,6 +22,7 @@
 \tl_new:N \l__tenkz_test_port_label_clear_tl
 \bool_new:N \l__tenkz_test_in_port_label_bool
 \bool_new:N \l__tenkz_test_in_policy_label_bool
+\bool_new:N \l__tenkz_test_in_bonded_label_bool
 \cs_new_protected:Npn \__tenkz_test_port_label_style:n #1
   {
     \tl_if_in:nnF {#1} {tenkz~audited~label}
@@ -48,6 +50,11 @@
         \int_gincr:N \g__tenkz_test_policy_port_label_int
         \__tenkz_test_port_label_style:n {#1}
       }
+    \bool_if:NT \l__tenkz_test_in_bonded_label_bool
+      {
+        \int_gincr:N \g__tenkz_test_bonded_port_label_int
+        \__tenkz_test_port_label_style:n {#1}
+      }
     \__tenkz_test_port_labelnode:nnn {#1}{#2}{#3}
   }
 \cs_new_eq:NN
@@ -67,6 +74,15 @@
     \bool_set_true:N \l__tenkz_test_in_policy_label_bool
     \__tenkz_test_policy_port_leg:nnn {#1}{#2}{#3}
     \bool_set_false:N \l__tenkz_test_in_policy_label_bool
+  }
+\cs_new_eq:NN
+  \__tenkz_test_bonded_port_label:nn
+  \__tenkz_kernel_r_wire_port_label:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_label:nn #1#2
+  {
+    \bool_set_true:N \l__tenkz_test_in_bonded_label_bool
+    \__tenkz_test_bonded_port_label:nn {#1}{#2}
+    \bool_set_false:N \l__tenkz_test_in_bonded_label_bool
   }
 \cs_new_eq:NN
   \__tenkz_test_port_open_leg:n
@@ -201,8 +217,8 @@
 \tenkzkernel
 \begin{tenkz}[rows={wire}, cols=2, bonds=none]
   \tn[at=(1,1), name=A,
-      ports={0:virtual, 90:physical, 45:physical:$i$}]{A}
-  \tn[at=(1,2), name=B, ports={180:virtual}]{B}
+      ports={0@01:virtual:$a$, 90:physical, 45:physical:$i$}]{A}
+  \tn[at=(1,2), name=B, ports={180@001:virtual:$b$}]{B}
   \tnwire{A.0@01}{B.180@001}
   \tn[skin=dot, at=on port-open-1 0.5]{}
 \end{tenkz}
@@ -211,6 +227,16 @@
       ports={0:virtual, 90:physical, 45:virtual:$j$}]{P}
   \tn[at=(1,2), name=Q, ports={180:virtual}]{Q}
   \tnwire{P.0}{Q.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
+  \tn[at=(1,1), name=F, ports={90:physical:$p$}]{F}
+  \tn[at=(1,2), name=G, ports={180:virtual}]{G}
+  \tnwire{F.90}{G.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
+  \tn[at=(1,1), name=H, up=$q$, ports={90:physical:$q$}]{H}
+  \tn[at=(1,2), name=I, ports={180:virtual}]{I}
+  \tnwire{H.90}{I.180}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
   \tn[at=(1,1), name=U, ports={90:physical:$k$}]{U}
@@ -245,7 +271,9 @@
         \int_use:N \g__tenkz_test_port_label_int
       }
   }
-\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {1}
+\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {2}
   {\errmessage{physical-policy~port~lost~its~typed-port~label}}
+\int_compare:nNnF {\g__tenkz_test_bonded_port_label_int} = {3}
+  {\errmessage{bonded~typed~ports~lost~their~labels}}
 \ExplSyntaxOff
 \end{document}

@@ -1356,10 +1356,19 @@
 % one entry per open wire end and one per outward physical port.  tenkzeq
 % compares adjacent panels and errors on mismatch.
 
-\cs_new_protected:Npn \__tenkz_kernel_signature_bearing:nN #1#2
+\cs_new_protected:Npn \__tenkz_kernel_bearing_normalize:nN #1#2
   {
     \tl_set:Ne #2
       { \fp_eval:n { round( #1 - 360 * floor( (#1) / 360 ), 6 ) } }
+    % Rounding can carry 359.9999999 to a full turn.  Canonicalize once more
+    % so face identities and panel signatures share the same half-open turn.
+    \tl_set:Ne #2
+      { \fp_eval:n { #2 - 360 * floor( (#2) / 360 ) } }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_signature_bearing:nN #1#2
+  {
+    \__tenkz_kernel_bearing_normalize:nN {#1} #2
     \str_case:Vn #2
       { {0}{\tl_set:Nn #2 {e}} {90}{\tl_set:Nn #2 {n}}
         {180}{\tl_set:Nn #2 {w}} {270}{\tl_set:Nn #2 {s}} }
@@ -2721,6 +2730,8 @@
 \tl_new:N \l__tenkz_kernel_port_skin_tl
 \tl_new:N \l__tenkz_kernel_port_span_tl
 \tl_new:N \l__tenkz_kernel_port_name_tl
+\prop_new:N \l__tenkz_kernel_port_used_node_prop
+\prop_new:N \l__tenkz_kernel_port_policy_label_owner_prop
 \int_new:N \l__tenkz_kernel_port_open_int
 \bool_new:N \l__tenkz_kernel_port_materialize_bool
 
@@ -2741,18 +2752,8 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_port_face_normalize:nN #1#2
   {
-    \tl_set:Ne #2
-      {
-        \fp_eval:n
-          {
-            round
-              (
-                \__tenkz_kernel_face_angle:n {#1}
-                - 360 * floor( \__tenkz_kernel_face_angle:n {#1} / 360 ),
-                6
-              )
-          }
-      }
+    \exp_args:Ne \__tenkz_kernel_bearing_normalize:nN
+      { \__tenkz_kernel_face_angle:n {#1} } #2
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_port_node_record:nN #1#2
@@ -2865,6 +2866,8 @@
   {
     \prop_clear:N \l__tenkz_kernel_port_used_prop
     \prop_clear:N \l__tenkz_kernel_port_policy_prop
+    \prop_clear:N \l__tenkz_kernel_port_used_node_prop
+    \prop_clear:N \l__tenkz_kernel_port_policy_label_owner_prop
     \__tenkz_model_map_ids:nn {wire}
       {
         \clist_map_inline:nn {from,to}
@@ -2888,6 +2891,10 @@
                         \prop_put:NVn
                           \l__tenkz_kernel_port_used_prop
                           \l__tenkz_kernel_scratch_tl {used}
+                        \prop_put:NVV
+                          \l__tenkz_kernel_port_used_node_prop
+                          \l__tenkz_kernel_scratch_tl
+                          \l__tenkz_kernel_port_node_tl
                       }
                   }
               }
@@ -2937,6 +2944,30 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_kernel_port_wire_label_consume:
+  {
+    \bool_if:NT \l__tenkz_kernel_port_materialize_bool
+      {
+        \tl_if_blank:VF \l__tenkz_kernel_port_label_tl
+          {
+            \prop_if_in:NVF
+              \l__tenkz_kernel_port_policy_label_owner_prop
+              \l__tenkz_kernel_scratch_tl
+              {
+                \prop_get:NVN \l__tenkz_kernel_port_used_node_prop
+                  \l__tenkz_kernel_scratch_tl
+                  \l__tenkz_kernel_port_node_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_port_node_tl
+                  {
+                    \__tenkz_kernel_node_put:NnV
+                      \l__tenkz_kernel_port_node_tl {port-label}
+                      \l__tenkz_kernel_port_label_tl
+                  }
+              }
+          }
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_port_policy_consume:n #1
   {
     \prop_get:NVN
@@ -2959,14 +2990,29 @@
                     \quark_if_no_value:NTF
                       \l__tenkz_kernel_port_policy_label_tl
                       {
-                        \__tenkz_model_complete:nVV {#1}
-                          \l__tenkz_kernel_port_policy_field_tl
-                          \l__tenkz_kernel_port_label_tl
+                        % With no authored policy label, a bonded endpoint
+                        % owns the descriptor.  Otherwise the policy leg does.
+                        \prop_if_in:NVF
+                          \l__tenkz_kernel_port_used_node_prop
+                          \l__tenkz_kernel_scratch_tl
+                          {
+                            \__tenkz_model_complete:nVV {#1}
+                              \l__tenkz_kernel_port_policy_field_tl
+                              \l__tenkz_kernel_port_label_tl
+                          }
                       }
                       {
-                        \str_if_eq:eeF
-                          { \tl_use:N \l__tenkz_kernel_port_policy_label_tl }
+                        \str_if_eq:eeTF
+                          {
+                            \tl_use:N
+                              \l__tenkz_kernel_port_policy_label_tl
+                          }
                           { \tl_use:N \l__tenkz_kernel_port_label_tl }
+                          {
+                            \prop_put:NVn
+                              \l__tenkz_kernel_port_policy_label_owner_prop
+                              \l__tenkz_kernel_scratch_tl {policy}
+                          }
                           {
                             \msg_error:nnee
                               {tenkz}{kernel-port-label-conflict} {#1}
@@ -2989,7 +3035,7 @@
       {
         \A \s*
         ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)|n|e|s|w)
-        (?: \s* @ \s* ([1-9]\d*) )?
+        (?: \s* @ \s* (0*[1-9]\d*) )?
         \s* : \s* (virtual|physical)
         (?: \s* : \s* (.*) )?
         \s* \Z
@@ -3004,6 +3050,8 @@
         \tl_if_blank:VT
           \l__tenkz_kernel_port_slot_tl
           { \tl_set:Nn \l__tenkz_kernel_port_slot_tl {1} }
+        \tl_set:Ne \l__tenkz_kernel_port_slot_tl
+          { \int_eval:n { \l__tenkz_kernel_port_slot_tl } }
         \tl_set:Ne \l__tenkz_kernel_port_type_tl
           { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
         \tl_clear:N \l__tenkz_kernel_port_label_tl
@@ -3034,7 +3082,10 @@
               \l__tenkz_kernel_scratch_tl {seen}
             \prop_if_in:NVTF
               \l__tenkz_kernel_port_used_prop \l__tenkz_kernel_scratch_tl
-              { \__tenkz_kernel_port_policy_consume:n {#1} }
+              {
+                \__tenkz_kernel_port_policy_consume:n {#1}
+                \__tenkz_kernel_port_wire_label_consume:
+              }
               {
                 \bool_if:NT \l__tenkz_kernel_port_materialize_bool
                   {
@@ -6550,6 +6601,60 @@
             --
             \__tenkz_kernel_r_pair:nn
               { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+          }
+        \__tenkz_kernel_r_wire_port_label:nn {#1} {from}
+        \__tenkz_kernel_r_wire_port_label:nn {#1} {to}
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_port_label:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_port_node_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_port_node_tl
+      {
+        \str_if_eq:eeT
+          {
+            \__tenkz_kernel_node_item:Nn
+              \l__tenkz_kernel_port_node_tl {kind}
+          }
+          {port}
+          {
+            \prop_get:NeN \l__tenkz_kernel_node_prop
+              { \l__tenkz_kernel_port_node_tl / port-label }
+              \l__tenkz_kernel_port_label_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_port_label_tl
+              {
+                \__tenkz_kernel_r_port_record:nN
+                  { \tl_use:N \l__tenkz_kernel_port_node_tl }
+                  \l__tenkz_kernel_port_record_tl
+                \__tenkz_kernel_r_hull_port_xy:VVNN
+                  \l__tenkz_kernel_port_node_tl
+                  \l__tenkz_kernel_port_record_tl
+                  \l__tenkz_kernel_r_x_fp
+                  \l__tenkz_kernel_r_y_fp
+                \tl_set:Ne \l__tenkz_kernel_port_face_tl
+                  {
+                    \__tenkz_kernel_node_item:Nn
+                      \l__tenkz_kernel_port_node_tl {face}
+                  }
+                \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+                  \l__tenkz_kernel_port_record_tl
+                  \l__tenkz_kernel_port_face_tl
+                  \l__tenkz_kernel_r_leg_turn_tl
+                \__tenkz_render_labelnode:nnn
+                  {
+                    tenkz~audited~label ,
+                    anchor = \exp_args:NV \__tenkz_render_label_anchor:n
+                      \l__tenkz_kernel_r_leg_turn_tl ,
+                    inner~sep = \__tenkz_dim:n {labelclear}
+                  }
+                  {
+                    \__tenkz_kernel_r_pair:nn
+                      { \l__tenkz_kernel_r_x_fp }
+                      { \l__tenkz_kernel_r_y_fp }
+                  }
+                  { \tl_use:N \l__tenkz_kernel_port_label_tl }
+              }
           }
       }
   }
