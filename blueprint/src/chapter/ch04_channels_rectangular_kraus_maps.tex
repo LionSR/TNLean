@@ -1,0 +1,146 @@
+\section{Trace adjoints and rectangular Kraus maps}
+
+\begin{definition}[Trace-pairing adjoint]\label{def:trace_pairing_adjoint}
+    \lean{Matrix.traceAdjointMap}
+    \leanok
+    The trace-pairing adjoint $E^* : \MN{D'} \to \MN{D}$ of a linear map
+    $E : \MN{D} \to \MN{D'}$ between matrix algebras of possibly different
+    dimensions is the adjoint for the bilinear pairing
+    $(A,B)\mapsto \tr(AB)$.
+\end{definition}
+
+\begin{definition}[Completely positive map in rectangular Kraus form]
+    \label{def:is_kraus_cp}
+    \lean{IsKrausCP}
+    \leanok
+    A linear map $\mathcal S$ between matrix algebras is \emph{completely
+    positive in rectangular Kraus form} if there are finitely many operators
+    $A_i:H\to K$ such that
+    \begin{align}
+        \mathcal S(X)&=\sum_i A_iXA_i^\dagger.
+        \notag
+    \end{align}
+    No trace-preservation normalization is imposed.
+\end{definition}
+
+\begin{lemma}[Agreement with square-map complete positivity]
+    \label{lem:is_kraus_cp_iff_is_cp_map}
+    \lean{isKrausCP_iff_isCPMap}
+    \leanok
+    \uses{def:is_kraus_cp, def:cp_map}
+    When the input and output matrix algebras agree, rectangular Kraus complete
+    positivity is equivalent to the square-map notion of complete positivity.
+\end{lemma}
+
+\begin{lemma}[Basic properties of rectangular Kraus complete positivity]
+    \label{lem:is_kraus_cp_basic}
+    \lean{IsKrausCP.map_posSemidef, IsKrausCPTP.isKrausCP}
+    \leanok
+    \uses{def:is_kraus_cp, def:is_kraus_cptp}
+    A map in rectangular Kraus form sends positive semidefinite matrices to
+    positive semidefinite matrices. Every trace-preserving completely positive
+    Kraus map is a completely positive Kraus map.
+\end{lemma}
+
+\begin{lemma}[Sum of rectangular Kraus maps]
+    \label{lem:is_kraus_cp_add}
+    \lean{IsKrausCP.add}
+    \leanok
+    \uses{def:is_kraus_cp}
+    The sum of two completely positive maps in rectangular Kraus form is
+    completely positive in rectangular Kraus form.
+\end{lemma}
+
+\begin{proof}\leanok
+    Concatenating Kraus families for the two summands gives a Kraus family for
+    their sum.
+\end{proof}
+
+\begin{definition}[Trace-preserving completely positive map]
+    \label{def:is_kraus_cptp}
+    \lean{IsKrausCPTP}
+    \leanok
+    A linear map $\mathcal{S}$ between matrix algebras is \emph{trace-preserving
+        completely positive} if it has a Kraus form
+    $\mathcal{S}(X)=\sum_i A_iXA_i^\dagger$ with
+    $\sum_i A_i^\dagger A_i=I$. The Kraus operators may be rectangular, so the
+    input and output dimensions need not agree.
+\end{definition}
+
+\begin{theorem}[Trace preservation completes a Kraus channel]
+    \label{thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving}
+    \lean{isKrausCPTP_of_isKrausCP_trace_preserving}
+    \leanok
+    \uses{def:is_kraus_cp, def:is_kraus_cptp}
+    A completely positive map in rectangular Kraus form that preserves the
+    matrix trace is trace-preserving completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $(A_i)_i$ is a Kraus family, trace preservation and cyclicity give
+    $\tr((\sum_i A_i^\dagger A_i)X)=\tr(X)$ for every $X$.
+    Nondegeneracy of the trace pairing implies
+    $\sum_i A_i^\dagger A_i=\Id$.
+\end{proof}
+
+\begin{theorem}[Trace preservation from a Kraus resolution]
+    \label{thm:is_kraus_cptp_trace_map}
+    \lean{IsKrausCPTP.trace_map}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    Every trace-preserving completely positive map in rectangular Kraus form
+    preserves the matrix trace.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $\mathcal S(X)=\sum_a A_aXA_a^\dagger$ and
+    $\sum_a A_a^\dagger A_a=I$, cyclicity gives
+    \begin{align}
+        \tr\mathcal S(X)
+        &=\sum_a\tr(A_aXA_a^\dagger)
+          =\tr\left(\left(\sum_a A_a^\dagger A_a\right)X\right)
+          =\tr X.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The trace adjoint of a channel is unital]
+    \label{thm:is_kraus_cptp_trace_adjoint_one}
+    \lean{IsKrausCPTP.traceAdjointMap_one}
+    \leanok
+    \uses{def:is_kraus_cptp, def:trace_pairing_adjoint}
+    If $\mathcal S:\MN{D}\to\MN{D'}$ is trace-preserving and completely
+    positive, then its trace-pairing adjoint satisfies
+    \begin{align}
+        \mathcal S^*(\Id_{D'})
+        &=\Id_D.
+        \notag
+    \end{align}
+    This is the Schrödinger--Heisenberg duality of
+    \cite[Section~1.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_identity,
+        thm:is_kraus_cptp_trace_map, thm:trace_nondeg}
+    For every $X\in\MN{D}$, trace duality and trace preservation give
+    \begin{align}
+        \tr\bigl(\mathcal S^*(\Id_{D'})X\bigr)
+        &=\tr\bigl(\mathcal S(X)\bigr)
+        =\tr(X)
+        =\tr(\Id_DX).
+        \notag
+    \end{align}
+    Nondegeneracy of the trace pairing proves the identity.
+\end{proof}
+
+\begin{lemma}[Positivity preservation for Kraus maps]
+    \label{lem:is_kraus_cptp_map_pos}
+    \lean{IsKrausCPTP.map_posSemidef}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    If $\mathcal S$ is trace-preserving completely positive and $X\geq0$, then
+    $\mathcal S(X)\geq0$.
+\end{lemma}
