@@ -91,6 +91,11 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   echo "FAIL: unmatched typed ports did not materialize exactly four open legs" >&2
   exit 1
 }
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_many_unmatched_ports.tnlog" || true)" -eq 36 ] || {
+  echo "FAIL: high-multiplicity typed ports did not materialize 36 open legs" >&2
+  exit 1
+}
 grep -Fq 'kernel-boundary|signature=phys:45, phys:n' \
     "$WORK/r_unmatched_port_legs.tnlog" || {
   echo "FAIL: flat unmatched ports lost their typed boundary bearings" >&2

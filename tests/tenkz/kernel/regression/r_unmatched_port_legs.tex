@@ -51,6 +51,15 @@
     \__tenkz_test_port_labelnode:nnn {#1}{#2}{#3}
   }
 \cs_new_eq:NN
+  \__tenkz_test_port_stroke:nn
+  \__tenkz_render_stroke:nn
+\cs_set_protected:Npn \__tenkz_render_stroke:nn #1#2
+  {
+    \bool_if:NT \l__tenkz_test_in_port_label_bool
+      { \tl_set:Nn \l__tenkz_test_port_style_tl {#1} }
+    \__tenkz_test_port_stroke:nn {#1}{#2}
+  }
+\cs_new_eq:NN
   \__tenkz_test_policy_port_leg:nnn
   \__tenkz_kernel_r_leg:nnn
 \cs_set_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
@@ -64,6 +73,7 @@
   \__tenkz_kernel_r_wire_port_open:n
 \cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
   {
+    \tl_clear:N \l__tenkz_test_port_style_tl
     \bool_set_true:N \l__tenkz_test_in_port_label_bool
     \__tenkz_test_port_open_leg:n {#1}
     \bool_set_false:N \l__tenkz_test_in_port_label_bool
@@ -173,8 +183,8 @@
               }
           }
       }
-    \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {#1}
-      \l__tenkz_test_port_style_tl
+    \prop_if_in:NnT \l__tenkz_kernel_r_index_style_prop {#1}
+      {\errmessage{unmatched~port~entered~the~saved-route~pipeline}}
     \str_if_eq:VnTF \l_tmpa_tl {physical}
       {
         \tl_if_in:VnF \l__tenkz_test_port_style_tl {physical~leg}

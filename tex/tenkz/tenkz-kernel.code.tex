@@ -6015,11 +6015,14 @@
         + \l__tenkz_kernel_r_reach_fp
           * sind( \l__tenkz_kernel_r_leg_turn_tl )
       }
-    \__tenkz_kernel_r_wire_stroke:nn
+    \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
       {
         \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
-          { physical~leg } { bond }
+          { physical~leg } { bond } ,
+        \tl_use:N \l__tenkz_kernel_r_wire_ink_tl
       }
+    \exp_args:NV \__tenkz_render_stroke:nn
+      \l__tenkz_kernel_r_wire_style_tl
       {
         \__tenkz_kernel_r_pair:nn
           { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }

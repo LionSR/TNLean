@@ -1,0 +1,33 @@
+% Regression: many implicit open legs remain direct renderer ink.  Sending
+% these 36 policy-owned stubs through saved-route crossing surgery exceeded
+% the kernel probe's 120-second compilation gate.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=6, bonds=none]
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} &
+  \tn[ports={45:physical}]{} & \tn[ports={45:physical}]{} \\
+\end{tenkz}
+\end{document}
