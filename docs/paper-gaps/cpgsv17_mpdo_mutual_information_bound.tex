@@ -330,9 +330,16 @@ differentiability or a limit at $\alpha=1$, the logarithmic sandwiched R\'enyi
 divergence, nor a comparison with Umegaki relative entropy.
 
 Neither development completes
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  That issue still
-requires simultaneous compression by the two marginal support isometries and a
-proof that this local two-factor compression preserves operator-Schmidt rank.
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  Simultaneous
+compression by the two marginal support isometries, exact reconstruction, and
+preservation of operator-Schmidt rank are now formalized.
+\footnote{Formal declarations:
+\leanid{Matrix.PosSemidef.eq_marginalSupport_expansion_compression} and
+\leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression} in
+\doclink{TNLean/Channel/MarginalSupportAbsorption}.}
+The remaining support step is to prove that the two compressed marginals are
+positive definite; this is tracked in
+\href{https://github.com/LionSR/TNLean/issues/5245}{\#5245}.
 The faithful comparison itself remains open in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The support-aware
 Jensen inequality above does not by itself establish the relative-modular
