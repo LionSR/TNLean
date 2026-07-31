@@ -20,6 +20,10 @@ multiplicity of each sector remains outside its bond product.
 * `MPOTensor.ProportionalOrthogonalCommutingSectorFamily`: the corresponding
   family when each sector operator is a positive scalar multiple of its bond
   product.
+* `MPOTensor.ProportionalOrthogonalCommutingSectorFamily.mpo_posSemidef_of_two_le`:
+  every sector operator of length at least two is positive semidefinite.
+* `MPOTensor.ProportionalOrthogonalCommutingSectorFamily.isMPDO_of_mpo_one_pos`:
+  one-site positivity completes the sector MPDO property.
 * `MPOTensor.OrthogonalCommutingSectorFamily.toGSNNCHData`: the corresponding
   finite-chain GSNNCH sector decomposition.
 * `MPOTensor.hasGSNNCHForm_of_orthogonalCommutingSectorFamily`: the outer-sector
@@ -115,6 +119,46 @@ structure ProportionalOrthogonalCommutingSectorFamily
   Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
   realizes_mpo : ∀ s N (hN : 2 ≤ N),
     ((bondData s).toCommutingFormData hN).Realizes (mpo (K s) N)
+
+namespace ProportionalOrthogonalCommutingSectorFamily
+
+variable {K : (s : Fin g) → MPOTensor d (dim s)}
+
+/-- Every chain of length at least two in a proportional orthogonal commuting
+sector family is positive semidefinite. The positive commuting bond gives a
+positive product, and the realization rescales it by a positive real number.
+
+Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
+theorem mpo_posSemidef_of_two_le
+    (F : ProportionalOrthogonalCommutingSectorFamily K)
+    (s : Fin g) (N : ℕ) (hN : 2 ≤ N) :
+    (mpo (K s) N).PosSemidef := by
+  let form := (F.bondData s).toCommutingFormData hN
+  have hproduct : form.product.PosSemidef := by
+    rw [← GSNNCHData.ofCommutingFormData_unnormalizedState]
+    exact (GSNNCHData.ofCommutingFormData form).unnormalizedState_posSemidef
+  obtain ⟨c, hc, hreal⟩ := F.realizes_mpo s N hN
+  rw [hreal]
+  exact hproduct.smul (by exact_mod_cast hc.le)
+
+/-- One-site positivity completes the positive commuting-product realization
+to MPDO positivity at every nonempty chain length.
+
+The commuting bond controls exactly the source-defined lengths $N \ge 2$; the
+one-site case is therefore retained as the sharp additional boundary.
+
+Source: arXiv:1606.00608, equation `ApprhoNComm`, lines 1641--1665. -/
+theorem isMPDO_of_mpo_one_pos
+    (F : ProportionalOrthogonalCommutingSectorFamily K)
+    (hOne : ∀ s, (mpo (K s) 1).PosSemidef) :
+    ∀ s, IsMPDO (K s) := by
+  intro s N hN
+  by_cases hN1 : N = 1
+  · subst N
+    exact hOne s
+  · exact F.mpo_posSemidef_of_two_le s N (by omega)
+
+end ProportionalOrthogonalCommutingSectorFamily
 
 namespace OrthogonalCommutingSectorFamily
 

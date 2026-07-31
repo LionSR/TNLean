@@ -565,9 +565,12 @@ marginal with that of the original source tensor in the same one-site
 physical coordinates.  This is
 \leanid{MPOTensor.EtaLocalStructureData.%
 exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
-It assumes exactly the hypotheses of Proposition~\emph{4to2} together with
-the standing MPDO and normal-block hypotheses; it assumes no injectivity,
-normality, or zero correlation length for the selected fixed-product tensor.
+It assumes injectivity of the source tensor, an eta-local structure, and
+source ZCL.  It assumes no MPDO positivity at this intermediate stage and no
+injectivity, normality, or zero correlation length for the selected
+fixed-product tensor.  MPDO positivity enters only in the final SAL capstone,
+where it supplies positivity of the source operators in the selected physical
+coordinates.
 
 Applying the all-cut Markov criterion to these physical-coordinate marginals
 and transporting saturation through the one-site isometry gives
@@ -575,8 +578,8 @@ and transporting saturation through the one-site isometry gives
 the physical-coordinate periodic operators follows from the MPDO hypothesis
 by isometric conjugation, and their traces agree with the original traces,
 which are nonzero at every positive length by source ZCL.  The theorem assumes
-exactly the source tensor, its MPDO, injectivity, and normality hypotheses, the
-fixed eta-local structure, and source ZCL.  It assumes no injectivity,
+exactly the source tensor, its MPDO and injectivity hypotheses, the fixed
+eta-local structure, and source ZCL.  It assumes no injectivity,
 normality, ZCL, or SAL property of the selected fixed-product tensor.
 
 \paragraph{Scope restriction (sectorwise source ZCL).}
@@ -658,86 +661,70 @@ canonical absorbed sectors.
 The downstream theorem
 \leanid{MPOTensor.%
 isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
-accepts these sectorwise source-ZCL conclusions together with sector MPDO
-positivity, one-site injectivity, normality, and positive proportional sector
-data.  The standing biCF hypothesis at source line~1628 is the simultaneous
-one-letter span of the BNT representatives.  Combining that span with the
-nonzero common weight,
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective} supplies
-one-site injectivity for every absorbed representative; no passage through
-blocked SAL is needed.  Sector MPDO positivity and normality of the absorbed,
-normalized sector remain explicit inputs.  They must be supplied independently,
-not inferred from SAL of the ambient tensor, which is the conclusion being
-proved.  The exact outer equality for the canonical BNT family is provided by
-\leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
-and the natural multiplicities are positive.
+requires only that each sector generate MPDOs, be one-site injective, and have
+source ZCL.  It does not require normality.  Source ZCL itself forces a nonzero
+bond dimension by \leanid{MPOTensor.IsSourceZCL.bondDim_ne_zero}, so no
+normality assumption is needed to install the nonzero-dimensional
+bond-space hypothesis in the all-cut Markov argument.
 
-\paragraph{Blocking alone would give only block-aligned SAL.}
-Suppose instead that one began with a merely normal sector tensor and first
-chose a positive injective blocking length \(L_0\).  SAL of the blocked tensor
-would control only original chain lengths and cuts divisible by \(L_0\):
+For the canonical absorbed sectors, the standing biCF one-letter span and
+copy-independent weights give one-site injectivity directly through
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}.  Ambient
+source ZCL descends to each absorbed sector by
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.  Thus the
+only remaining positivity question is the chain length not covered by the
+commuting-bond product formula.
+
+The proportional orthogonal commuting sector family records a positive
+commuting bond whose periodic product is proportional to the sector operator
+by a positive scalar for every $N\geq2$.  Hence
+\leanid{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+mpo_posSemidef_of_two_le} proves positivity at every such length.  The theorem
+\leanid{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+isMPDO_of_mpo_one_pos} shows that the sharp additional interface is only
 \[
-  I_{rL_0}^{(qL_0)}=I_{(r+1)L_0}^{(qL_0)}.
+  \rho^{(1)}(K_s)\geq0.
 \]
-It would not imply the source equalities
-\[
-  I_{\ell}^{(N)}=I_{\ell+1}^{(N)}
-\]
-for every admissible original chain length \(N\) and consecutive cut
-\(\ell\).  This explains why ordinary physical blocking is not a substitute
-for one-site injectivity in the single-sector theorem.
+Together these facts give full sector MPDO positivity.  No positivity at
+length $N\geq2$ and no spectral normality of an absorbed sector is assumed
+separately.
 
-The source's Case~II application does not make that substitution.  It fixes
-$K$ in biCF at line~1628, and biCF supplies the simultaneous one-letter span
-before Proposition~\emph{prop4to2} is invoked.  The nonzero absorbed weight then
-preserves one-site injectivity by
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}.  Thus there
-is no unresolved injectivity gap in the Case~II application.  The all-cut
-Hayashi decomposition applies directly to a canonical absorbed sector once
-the theorem's remaining explicit hypotheses---sector MPDO positivity and
-normality in the absorbed normalization---are supplied independently of
-ambient SAL.
-
-The proportional orthogonal commuting sector family has pairwise orthogonal
-one-site projections and a positive commuting bond whose periodic product is
-proportional to the sector operator by a positive scalar at every length at
-least two.  This matches the proportional \emph{ApprhoNComm} sector form at
-source lines~1641--1665.  The full tensor may also differ from the
-positive-natural-multiplicity sector sum by a positive length-dependent
-scalar.  When the explicit sector MPDO and normality hypotheses hold, applying
-\leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL} to each sector
-supplies the sectorwise SAL premise, after which the preceding direct-sum
-theorem
-\leanid{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily}
-gives SAL for the full tensor.  This is the corrected ambient-ZCL-conditioned
-statement; it does not derive sector positivity from ambient SAL.  Neither
-global nor sectorwise positive proportionality remains a restriction.  The
-exact theorem
+The corrected canonical statement is
 \leanid{MPOTensor.%
-isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
-is the specialization in which all these scalars equal one.
+isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}.
+It assumes the chosen canonical decomposition, the reconstructing
+block-diagonal gauge and positive-length MPV equality, copy-independent
+weights, nonnilpotence of the representative physical-trace transfers, the
+standing biCF one-letter product-algebra span, the proportional orthogonal
+commuting sector family, one-site positivity of every absorbed sector, and
+ambient source ZCL.  The exact canonical BNT outer sum, one-site injectivity,
+sectorwise source ZCL, and the preceding positivity result then supply every
+hypothesis of the general orthogonal-sector SAL theorem.  The conclusion is
+SAL at all original cuts.
+
+The length-one premise cannot be removed merely by reading the source's
+commuting-product display: TNLean's unambiguous periodic bond realization
+begins at $N=2$.  The standing Case~II biCF hypothesis already gives the
+one-letter simultaneous span needed for injectivity at every original cut.
 
 \paragraph{Verdict.}
 Proposition~\emph{4to2} is formalized by
 \leanid{MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL}.  The
 positive fixed-product representative, its cyclic-active recurrent component,
 the normalized square--cube identity, and the positive rank-one factorization
-of the two-step coefficient are now obtained from the source tensor without a
-virtual comparison between the two tensors.  The resulting Hayashi
-decomposition holds at every one-site cut of the original source tensor in the
-selected physical coordinates.  The all-cut Markov criterion proves SAL in
-those coordinates, and isometric invariance transports SAL back to the source
-tensor.
+of the two-step coefficient are obtained from the source tensor.  The resulting
+Hayashi decomposition holds at every one-site cut, and isometric invariance
+returns SAL to the original physical coordinates.  Normality is not a
+hypothesis of this theorem.
 
-For the later orthogonal direct-sum implication, the final entropy argument is
-formalized under a positive proportional outer sum, conditionally on
-sectorwise SAL.  The global and sector-product proportionality scalars are
-therefore no longer restrictions.  Under ambient source ZCL, copy independence
-and the blockwise transfer equation give source ZCL for every canonical
-absorbed simple-BNT sector.  The standing biCF one-letter span and the nonzero
-common weight give one-site injectivity of those sectors.  The single-sector
-theorem therefore retains every original cut when sector MPDO positivity and
-absorbed-sector normalized normality are supplied independently.
+For Proposition~\emph{prop4to2}, the positive proportional outer-sum theorem
+reduces the conclusion to sectorwise SAL.  In the canonical Case~II
+application, ambient source ZCL supplies sectorwise source ZCL, the biCF
+one-letter span supplies sector injectivity, and one-site positivity completes
+sector positivity because the commuting bonds already give positivity for all
+$N\geq2$.  The corrected canonical theorem is therefore complete at the
+ambient-source-ZCL and one-site-positivity boundary, with no independent
+absorbed-sector normality or full sector-MPDO premise.
 
 The literal proposition \emph{prop4to2} is still not proved as printed.  Its
 statement assumes only GSNNCH, while Proposition~\emph{4to2}, invoked in its

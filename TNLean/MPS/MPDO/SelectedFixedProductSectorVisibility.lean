@@ -540,9 +540,7 @@ injective tensor in the selected physical coordinates, and does not assert
 injectivity or normality of the selected fixed-product tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero
-    (_hMPDO : IsMPDO K) (hK : K.IsInjective)
-    (_hNormal : MPSTensor.IsNormalTensor K.toMPSTensor)
-    (data : EtaLocalStructureData K) (_hZCL : K.IsSourceZCL)
+    (hK : K.IsInjective) (data : EtaLocalStructureData K)
     (q h :
       data.bondData.fixedProductTensorDataPhysicalSectorFactorization
         |>.CyclicActiveSector) :

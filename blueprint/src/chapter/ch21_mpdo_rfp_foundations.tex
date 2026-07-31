@@ -34,6 +34,21 @@
     positive scalar makes the condition invariant under rescaling of $M$.
 \end{definition}
 
+\begin{theorem}[Source zero correlation length requires a nonzero bond space]
+    \label{thm:mpo_source_zcl_bond_dim_ne_zero}
+    \lean{MPOTensor.IsSourceZCL.bondDim_ne_zero}
+    \leanok
+    \uses{def:mpo_source_zcl}
+    If an MPO tensor has source zero correlation length, then its bond
+    dimension is positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    On a zero-dimensional bond space every endomorphism vanishes, contrary to
+    the nonzero physical-trace transfer in
+    Definition~\ref{def:mpo_source_zcl}.
+\end{proof}
+
 \begin{theorem}[Literal physical-trace idempotence gives source ZCL]
     \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
     \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}

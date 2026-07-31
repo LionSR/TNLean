@@ -365,6 +365,27 @@ Definition~\ref{def:mpdo_source_gsnnch}; the converse comparison is not used.
     \end{align}
 \end{definition}
 
+\begin{theorem}[One-site positivity completes proportional sector positivity]
+    \label{thm:mpdo_proportional_commuting_sector_positivity}
+    \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+      mpo_posSemidef_of_two_le}
+    \lean{MPOTensor.ProportionalOrthogonalCommutingSectorFamily.%
+      isMPDO_of_mpo_one_pos}
+    \leanok
+    \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo}
+    Every sector operator of length $N\geq2$ in a proportionally realized
+    orthogonal commuting sector family is positive semidefinite. Consequently,
+    if the one-site operator $\rho^{(1)}(K_x)$ is positive semidefinite for
+    every sector $x$, then every $K_x$ generates matrix product density
+    operators at all positive lengths.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $N\geq2$, the sector operator is a positive scalar multiple of a
+    product of commuting positive bonds, hence is positive semidefinite. The
+    one-site hypothesis supplies the only remaining positive chain length.
+\end{proof}
+
 \begin{definition}[Exactly realized orthogonal commuting sector products]
     \label{def:mpdo_orthogonal_commuting_sector_family}
     \lean{MPOTensor.OrthogonalCommutingSectorFamily}
@@ -866,9 +887,9 @@ firstSiteMatrix_mul_reducedBlockState}
     \lean{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
     \leanok
     \uses{def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpdo,
-        def:injective, def:normal, def:mpo_source_zcl, def:is_sal}
-    Let $K_x$ be a nonempty finite family of injective normal tensors
-    generating MPDOs. Suppose that there are pairwise orthogonal one-site
+        def:injective, def:mpo_source_zcl, def:is_sal}
+    Let $K_x$ be a nonempty finite family of injective tensors generating
+    MPDOs. Suppose that there are pairwise orthogonal one-site
     projections $P_x$ and fixed translation-invariant positive commuting
     bonds $B^{(x)}$, supported on $P_x\otimes P_x$. For every sector $x$ and
     every $N\geq2$, suppose that there is a number $a_{x,N}>0$ such that
@@ -887,12 +908,10 @@ firstSiteMatrix_mul_reducedBlockState}
     \end{align}
     Then $M$ satisfies SAL.
 
-    % **Scope restriction (ambient source ZCL):** The printed GSNNCH-only
-    % proposition omits the source-ZCL hypothesis used by its proof. In the
-    % canonical Case II application, biCF and the nonzero absorbed weight
-    % supply sector injectivity, and ambient source ZCL descends to every
-    % absorbed sector. Sector MPDO positivity and absorbed-sector normalized
-    % normality remain explicit independent inputs.
+    % **Scope restriction (sectorwise source ZCL and positivity):** The
+    % printed GSNNCH-only proposition omits the source-ZCL hypothesis used by
+    % its proof. This general theorem assumes sector MPDO positivity, one-site
+    % injectivity, and sectorwise source ZCL, but no normality.
     % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
@@ -906,14 +925,70 @@ firstSiteMatrix_mul_reducedBlockState}
     then gives SAL for $M$.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `prop4to2`, lines
+% 1801--1808. The standing Case II biCF and source-ZCL hypotheses supply the
+% sector-decomposition data below, but are not assumptions of this theorem.
+\begin{theorem}[A compatible sector decomposition with ambient ZCL satisfies SAL]
+    \label{thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
+    \lean{MPOTensor.%
+      isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
+    \leanok
+    \uses{def:mpo_tensor, def:sector_weight_data,
+      def:global_gauge_of_blocks, def:same_mpv2_pos,
+      def:blockwise_product_word_span,
+      def:mpdo_doubled_phys_trace_transfer,
+      def:mpdo_common_sector_weight_absorption,
+      def:mpdo_proportional_orthogonal_commuting_sector_family,
+      def:mpo_source_zcl, def:is_sal}
+    Let $S$ be a nonempty sector decomposition with representatives $A_x$,
+    positive copy numbers $n_x$, and nonzero copy weights. Suppose its total
+    bond dimension equals that of an MPO tensor $M$, and a block-diagonal gauge
+    reconstructs $M$ from the tensor associated with $S$. Suppose also that
+    this tensor has the same matrix product vectors as $M$ at every positive
+    length, that all copy weights over $A_x$ have a common value $\mu_x$, and
+    that the physical-trace transfer of every $A_x$ is nonnilpotent. Assume
+    that the one-letter tuples $(A_x^i)_x$ span the full product of the
+    representative matrix algebras, and put $K_x=\mu_xA_x$.
+
+    Suppose that the tensors $K_x$ form a proportionally realized orthogonal
+    commuting sector family and that each one-site operator
+    $\rho^{(1)}(K_x)$ is positive semidefinite. If $M$ has source zero
+    correlation length, then $M$ satisfies SAL.
+
+    % **Scope restriction (ambient source ZCL and one-site positivity):**
+    % Proposition `prop4to2` omits the ambient source-ZCL hypothesis used to
+    % obtain sectorwise ZCL. The positive commuting-bond realization starts at
+    % length two, so positivity of rho_1(K_x) is the sharp additional boundary;
+    % positivity at every N >= 2 follows from the commuting bonds. See
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_proportional_commuting_sector_positivity,
+      thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal,
+      thm:mpdo_bnt_physical_support_restriction,
+      thm:mpdo_absorbed_bnt_sector_zcl}
+    The one-site hypothesis and
+    Theorem~\ref{thm:mpdo_proportional_commuting_sector_positivity} show that
+    every $K_x$ generates matrix product density operators. The simultaneous
+    one-letter span and the nonzero absorbed weights give one-site injectivity
+    by Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}. Ambient source
+    zero correlation length descends to every $K_x$ by
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. Finally, the supplied
+    positive-length sector-decomposition identity gives
+    $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$ for every $N>0$, so
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    applies.
+\end{proof}
+
 \begin{theorem}[Orthogonal commuting-bond sectors with ZCL satisfy SAL]
     \label{thm:mpdo_orthogonal_commuting_sector_zcl_sal}
     \lean{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
     \leanok
     \uses{def:mpdo_orthogonal_commuting_sector_family, def:mpdo,
-        def:injective, def:normal, def:mpo_source_zcl, def:is_sal}
-    Let $K_x$ be a nonempty finite family of injective normal tensors
-    generating MPDOs. Suppose that there are pairwise orthogonal one-site
+        def:injective, def:mpo_source_zcl, def:is_sal}
+    Let $K_x$ be a nonempty finite family of injective tensors generating
+    MPDOs. Suppose that there are pairwise orthogonal one-site
     projections $P_x$ and fixed translation-invariant positive commuting
     bonds $B^{(x)}$, supported on $P_x\otimes P_x$, whose periodic products
     equal $\rho^{(N)}(K_x)$ for every $N\geq2$. Suppose also that every $K_x$
@@ -929,12 +1004,12 @@ firstSiteMatrix_mul_reducedBlockState}
     % **Scope restriction (sectorwise hypotheses and exact realization):**
     % The printed proposition has proportional ApprhoNComm data and omits
     % sectorwise source ZCL. This theorem assumes per-sector MPDO, one-site
-    % injectivity, normality, and source ZCL, an orthogonal commuting sector
+    % injectivity and source ZCL, an orthogonal commuting sector
     % family with exact scalar-one realization, and the exact positive-
-    % multiplicity outer sum. Outside biCF, BNT normality alone supplies only
-    % eventual injectivity; in the Case II application, the biCF one-letter
+    % multiplicity outer sum. In the Case II application, the biCF one-letter
     % span supplies one-site injectivity. Sector MPDO positivity remains an
-    % explicit input. The exact realization is stronger than the proportional
+    % explicit input. No normality is assumed. The exact realization is stronger
+    % than the proportional
     % source identity.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
