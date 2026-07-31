@@ -246,7 +246,11 @@ is disjoint from `T`, they read `p.2`, provided the pair agrees on the `T`-bound
 omit [Fintype V] in
 /-- A boundary edge of a region `H` with `H ⊆ T`, read off the merge `regionMerge A T p`,
 equals the value of `p.1`: such an edge touches `H ⊆ T`, hence is `T`-incident, where the
-merge reads `p.1`. -/
+merge reads `p.1`.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex` (the host-side boundary-edge reading);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
 theorem regionBoundaryLabel_regionMerge_of_subset_left {T H : Finset V} (hHT : H ⊆ T)
     (p : VirtualConfig A × VirtualConfig A) :
     regionBoundaryLabel (G := G) A H (regionMerge (G := G) A T p) =
@@ -263,7 +267,11 @@ theorem regionBoundaryLabel_regionMerge_of_subset_left {T H : Finset V} (hHT : H
 `regionMerge A T p`, equals the value of `p.2`, provided the pair agrees on the `T`-boundary.
 Such an edge has its `K`-endpoint in `univ \ T` (so not in `T`); if `T`-incident, its other
 endpoint is in `T`, making it a `T`-boundary edge where the agreement pins the value, and
-otherwise the merge reads `p.2` directly. -/
+otherwise the merge reads `p.2` directly.
+
+Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
+`Papers/1804.04964/paper_normal.tex` (the complement-side boundary-edge reading);
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
 theorem regionBoundaryLabel_regionMerge_compl_of_subset {T K : Finset V}
     (hKT : K ⊆ Finset.univ \ T) (p : VirtualConfig A × VirtualConfig A)
     (hp : regionBoundaryLabel (G := G) A T p.1 = regionBoundaryLabel (G := G) A T p.2) :
@@ -297,7 +305,10 @@ theorem regionBoundaryLabel_regionMerge_compl_of_subset {T K : Finset V}
 
 omit [Fintype V] in
 /-- A vertex product over `B ⊆ T` reads `p.1` through the merge `regionMerge A T p`: edges
-incident to `B ⊆ T` are `T`-incident, where the merge reads `p.1`. -/
+incident to `B ⊆ T` are `T`-incident, where the merge reads `p.1`.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
 theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
     (σ : RegionPhysicalConfig (V := V) (d := d) B) (p : VirtualConfig A × VirtualConfig A) :
     (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) =
@@ -312,7 +323,10 @@ theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
 /-- A vertex product over `B ⊆ univ \ T` reads `p.2` through the merge `regionMerge A T p`, given
 the pair agrees on the `T`-boundary: an edge incident to `B` either misses `T` (where the merge
 reads `p.2`) or, being `T`-incident with an endpoint in `B ⊆ univ \ T`, is a `T`-boundary edge
-where the agreement pins it. -/
+where the agreement pins it.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3. -/
 theorem regionProd_p2_eq_merge_of_compl {T B : Finset V} (hBT : B ⊆ Finset.univ \ T)
     (σ : RegionPhysicalConfig (V := V) (d := d) B) (p : VirtualConfig A × VirtualConfig A)
     (hp : regionBoundaryLabel (G := G) A T p.1 = regionBoundaryLabel (G := G) A T p.2) :
