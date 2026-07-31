@@ -53,8 +53,8 @@ trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
 `prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
 `propblockinj` theorem, and the literal CPSV topological-projector commuting
 Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
-results. The occurrence-level count is 23 complete, 8 partial, and 14
-not-ready; the distinct-result count is 22 complete, 6 partial, and 12
+results. The occurrence-level count is 23 complete, 7 partial, and 15
+not-ready; the distinct-result count is 22 complete, 5 partial, and 13
 not-ready. Here **not-ready** means that the printed statement is false,
 ambiguous, or depends essentially on a formally refuted source lemma. It does
 not mean that every printed result has been formalized.
@@ -66,14 +66,14 @@ The following ledger makes the count reproducible from source line numbers:
 - **Complete (22 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
   1130, 1274, 1333, 1351, 1406, 1510, 1569, 1597, 1647, 1680, 1786, 1835, and
   2221.
-- **Partial (6 distinct):** 278, 583, 801, 851, 972, and 1801.
-- **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 777, 1155, 1197,
-  1484, 1503, 1740, and 1810.
+- **Partial (5 distinct):** 278, 801, 851, 972, and 1801.
+- **Not-ready (13 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
+  1197, 1484, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 23/8/14.
+  occurrences, giving the displayed totals 23/7/15.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -108,7 +108,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Defn parent Hamiltonian (l.522) | 522–525 | Parent-Hamiltonian BNT ground-space spanning for arbitrary \(L\), with commuting and nearest-neighbor refinements | `TNLean/MPS/ParentHamiltonian/Commuting.lean` (`MPSTensor.HasParentHamiltonianGroundSpaceSpanning`, `MPSTensor.IsCommutingParentHam`, `MPSTensor.IsNNCPH`; `MPSTensor.HasNNCPHGroundSpaces` packages the \(L=2\) all-chain condition) | `leanok` |
 | **Theorem 3.10** (l.534, `thm:main-MPS`) | 534–541 | RFP iff ZCL iff NNCPH | `TNLean/MPS/RFP/ZCLReverse.lean`; `MainMPSConditional.lean` (`IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum`); `PhysicalObservableRealization.lean` | **not-ready** — positive-gap BNT ZCL now implies the all-chain NNCPH ground-space condition at the multiplicity-one unit-weight representative by the local correction to line 1250. The printed three-way equivalence remains false because it inherits the raw-weight and adjacent-gap counterexamples to Theorem 3.8 |
 | **Theorem 3.11** (l.543, `thm:charact-MPS`) | 543–555 | Repeated-copy structural characterization of RFP | `TNLean/MPS/RFP/StructuralFull.lean` (`MPSTensor.rfp_nt_structural_full`); `TNLean/MPS/RFP/PhaseMultiplicityCounterexample.lean`; `TNLean/MPS/RFP/ResidualIsometry.lean` | **not-ready** — the displayed physical isometry has no copy index; the literal shared-map reading is contradicted by the phase-flip repeated-copy tensor; #2598 closed as a source obstruction |
-| Corollary 3.12 (l.583, `III_cor3`) | 583–590 | Structural form of the BNT elements of an RFP tensor | `TNLean/MPS/RFP/ResidualIsometry.lean` (`IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum`); `TNLean/MPS/RFP/StructuralFull.lean` | **partial** — the residual-isometry family is constructed for a packaged BNT basis direct sum whose whole transfer is idempotent; the bridge from the literal canonical-form whole-tensor RFP hypothesis to that surface is still missing |
+| Corollary 3.12 (l.583, `III_cor3`) | 583–590 | Structural form of the BNT elements of an RFP tensor | `TNLean/MPS/RFP/CPSVCanonicalForm.lean` (`CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp`); `TNLean/MPS/RFP/BNTResidualIsometryCounterexample.lean` (`MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample`); `TNLean/MPS/RFP/ResidualIsometry.lean`; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` | **not-ready** — the printed arbitrary-BNT statement is false because a BNT may contain an unused normal tensor whose joint cross term is nonzero. For literal canonical-form data, every active listed block has unit-modulus weight and is itself an RFP, so the diagonal square-root conclusion is complete. The joint residual-isometry theorem for representatives of all active gauge-phase classes remains unproved |
 | Prop (l.606) | 606–609 | Pure RFP implies saturation of the area law | `TNLean/MPS/MPDO/PureRFPSAL.lean` (`MPSTensor.isSAL_of_isTransferIdempotent`) | **complete** |
 
 ### 2.3 Section IV — Mixed States (MPDO)
@@ -323,7 +323,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 18 non-complete distinct CPSV16 results comprise 6 partial and 12
+The 18 non-complete distinct CPSV16 results comprise 5 partial and 13
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -341,7 +341,7 @@ axiom-free.
 | Not-ready | CPSV16 | Theorem 3.8 | Raw weights and the Bell-pair adjacent-gap example refute the two unrestricted directions | Corrected branch #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.10 | Inherits Theorem 3.8 counterexamples; line 1250 also fails for nilpotent zero-Jordan defects | #2633, assigned to `LionSR` |
 | Not-ready | CPSV16 | Theorem 3.11 | The repeated-copy physical isometry lacks a copy index; the literal shared-map reading is false | #2598 closed as source obstruction |
-| Partial | CPSV16 | Corollary 3.12 | A residual-isometry family is constructed for packaged BNT basis-direct-sum transfer idempotence | The bridge from literal canonical-form whole-tensor RFP to the packaged BNT surface remains open; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
+| Not-ready | CPSV16 | Corollary 3.12 | An unused BNT member gives a formal counterexample to the printed arbitrary-BNT joint isometry. Every active listed canonical-form block nevertheless has unit-modulus weight and is itself an RFP | The joint residual-isometry theorem for representatives of the active gauge-phase classes remains unproved; `TNLean/MPS/RFP/CPSVCanonicalForm.lean`; `TNLean/MPS/RFP/BNTResidualIsometryCounterexample.lean`; `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex` |
 | Not-ready | CPSV16 | Purification RFP equivalence | Nilpotent hidden bond sectors refute the global-to-local implication | #3947 closed as not planned |
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity is proved; the thermodynamic limit is refuted; the stronger finite $2\log D$ bound is proved mathematically but not yet formalized in Lean | `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`; formalization tracked by #5213 |
 | Partial | CPSV16 | Theorem 4.9 | Implication \((i)\Rightarrow(ii)\) is complete for positive semidefinite rings with nonzero trace at every positive length, and the fixed-bond plus source-ZCL implication to SAL is complete; Lemma C.5 is false, and the recovery alternative remains incomplete | #4228/#4405, assigned to `LionSR`; #4961/#4962 are dependent research follow-ups |

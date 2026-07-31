@@ -381,6 +381,46 @@ a block embedding of a mixed-transfer eigenvector.
 
 \section{MPV overlap decay}
 
+We first record two spectral-radius identities for complex normed algebras.
+They will also control the scalar weights of normal fixed-point blocks in
+Chapter~\ref{ch:mps_rfp}.
+
+\begin{theorem}[Spectral radius under nonzero scaling]%
+    \label{thm:spectral_radius_smul}
+    \lean{spectralRadius_smul}
+    \leanok
+    Let $a$ belong to a complex Banach algebra and let $c\in\C\setminus\{0\}$.
+    Then
+    \begin{align}
+        \rho_{\spec}(ca)&=|c|\,\rho_{\spec}(a).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiplication by $c$ sends the spectrum of $a$ onto the spectrum of
+    $ca$. Taking the supremum of the moduli of the spectral values gives the
+    formula.
+\end{proof}
+
+\begin{theorem}[Spectral radius of a nonzero idempotent]%
+    \label{thm:idempotent_spectral_radius_one}
+    \lean{IsIdempotentElem.spectralRadius_eq_one_of_ne_zero}
+    \leanok
+    Let $a$ be a nonzero element of a complex normed algebra. If $a^2=a$, then
+    \begin{align}
+        \rho_{\spec}(a)&=1.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity $a^2=a$ gives $a(a-1)=0$. Since $a\ne0$, the element $a-1$
+    is not invertible, so $1$ belongs to the spectrum of $a$. Every spectral
+    value $\lambda$ satisfies $\lambda^2=\lambda$, hence the spectrum is
+    contained in $\{0,1\}$.
+\end{proof}
+
 The Banach-algebra fact that powers below unit spectral radius vanish is
 proved in Section~\ref{sec:app_spectral_decay}.
 

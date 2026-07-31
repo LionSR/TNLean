@@ -14,6 +14,7 @@ import TNLean.MPS.RFP.AppendixBSupport
 import TNLean.MPS.RFP.Assembly
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.BNTOrthogonality
+import TNLean.MPS.RFP.BNTResidualIsometryCounterexample
 import TNLean.MPS.RFP.BNTWeightCounterexample
 import TNLean.MPS.RFP.BeigiEventuallyConstantSectorGraph
 import TNLean.MPS.RFP.BeigiGroundSpaceDimension
@@ -26,6 +27,7 @@ import TNLean.MPS.RFP.BeigiSectorGraph
 import TNLean.MPS.RFP.BeigiSectorGraphConstruction
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
 import TNLean.MPS.RFP.BellPairCIDObstruction
+import TNLean.MPS.RFP.CPSVCanonicalForm
 import TNLean.MPS.RFP.CommutingBridge
 import TNLean.MPS.RFP.Convergence
 import TNLean.MPS.RFP.Decorrelation
