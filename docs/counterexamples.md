@@ -67,6 +67,19 @@ mathematical obstruction.
   canonical-representative condition is therefore necessary for a
   global-to-local implication.
 
+### An unused BNT member need not share a joint residual isometry
+
+- Location: `TNLean/MPS/RFP/BNTResidualIsometryCounterexample.lean`
+- Main declaration: `MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample`
+- Statement refuted: every member of an arbitrary BNT representing a
+  renormalization fixed point belongs to one joint residual-isometry family.
+- Witness: the bond-one tensors $A^0=1$, $A^1=0$ and
+  $B^0=B^1=1/\sqrt{2}$, with BNT coefficients $1$ and $0$. Both transfer maps
+  are the identity and the positive-length MPV families are linearly
+  independent, but their cross inner product is $1/\sqrt{2}\ne0$.
+- Boundary: the corrected theorem applies to representatives of active
+  nonzero-weight canonical phase classes, not to unused arbitrary-BNT members.
+
 ## Block Separation and Canonical Form
 
 ### Weighted MPV cancellation does not imply per-block SameMPV
