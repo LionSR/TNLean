@@ -355,11 +355,11 @@ This combines the `p = 2` contraction from Beigi, arXiv:1306.5920,
 Theorem 6, equation (18), with the rectangular Choi rank estimate.
 
 **Scope restriction (faithful marginal supports):** Both marginals are
-positive definite in the displayed coordinates.  Compression of singular
-ambient marginals to their supports, and transport back to the ambient
-spaces, is recorded in
-`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` and tracked in
-issue #5225. -/
+positive definite in the displayed coordinates.  Two-sided compression of
+singular ambient marginals, including preservation of operator-Schmidt rank,
+is tracked in issue #5211; construction of the output support corner is
+tracked separately in issue #5225.  Both gaps are recorded in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hρ : ρ.PosSemidef) (hp : ∀ i, 0 < p i)
