@@ -22,12 +22,13 @@ intended range here is \(1\leq\alpha\leq2\). No trace-one assumption is needed
 for the algebraic properties proved below.
 
 Continuous-functional-calculus real powers are total: in particular, negative
-powers vanish at a zero eigenvalue. For positive-semidefinite \(\rho\) and
-singular \(\omega\) satisfying \(\ker\omega\subseteq\ker\rho\), equivalently
-the required support inclusion, this zero-on-kernel convention is the
-generalized-inverse convention and gives the trace term of a finite divergence.
-If support inclusion fails, the divergence is infinite, whereas the totalized
-functional remains finite and must not be identified with it. We prove only
+powers vanish at a zero eigenvalue. For \(\alpha>1\), within the present
+\(1\leq\alpha\leq2\) application, finite divergence requires
+\(\operatorname{supp}\rho\subseteq\operatorname{supp}\omega\), equivalently
+\(\ker\omega\subseteq\ker\rho\). On positive-semidefinite inputs satisfying
+this inclusion, the zero-on-kernel convention is the generalized inverse. If
+the inclusion fails, the divergence is infinite, whereas the totalized CFC
+value remains finite and is not the divergence trace term. We prove only
 nonnegativity on the faithful domain and the exact order-one and order-two
 endpoints; no assertion about continuity, interpolation, monotonicity, limits,
 derivatives, logarithmic divergence, or comparison with Umegaki relative
@@ -90,11 +91,13 @@ For positive-semidefinite \(\rho\), positive-definite \(\omega\), and
 sandwiched Rényi divergence of Müller-Lennert et al., arXiv:1306.3142v4,
 Definition 2, and Beigi, arXiv:1306.5920, Definition 2. For trace-one \(\rho\),
 it is the quantity inside the logarithm. The definition is total for every real
-\(\alpha\), including \(\alpha=0\), and for singular \(\omega\). On
-positive-semidefinite inputs with \(\ker\omega\subseteq\ker\rho\), its
-zero-on-kernel powers implement the generalized inverse and give the finite
-divergence trace term. If this support inclusion fails, the finite totalized
-value is not the divergence. -/
+\(\alpha\), including \(\alpha=0\), and for singular \(\omega\). For
+\(\alpha>1\), within the present \(1\leq\alpha\leq2\) application, finite
+divergence requires
+\(\operatorname{supp}\rho\subseteq\operatorname{supp}\omega\). On
+positive-semidefinite inputs satisfying this inclusion, the zero-on-kernel
+powers implement the generalized inverse. If the inclusion fails, the finite
+totalized CFC value is not the divergence trace term. -/
 noncomputable def sandwichedRenyiTrace (α : ℝ) (ρ ω : Mat) : ℝ :=
   let q := ω ^ ((1 - α) / (2 * α))
   (Matrix.trace ((q * ρ * q) ^ α)).re
