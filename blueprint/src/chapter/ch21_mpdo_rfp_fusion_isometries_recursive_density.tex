@@ -815,6 +815,35 @@
     with the assumed length independence of its trace-power coefficients.
 \end{proof}
 
+\begin{definition}[Selected literal CPSV RFP fusion clause]%
+    \label{def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause}
+    \lean{MPOTensor.cpsvRFPBNTFusionTensorClause}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause,
+        thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
+    Let $M$ generate matrix product density operators, suppose that its
+    doubled-index MPS tensor is in literal CPSV canonical form, and suppose
+    that $M$ satisfies the renormalization fixed-point condition. Choose one
+    active-sector BNT fusion tensor clause furnished by these hypotheses and
+    denote it by $\mathcal F_{\mathrm{CPSV}}(M)$.
+
+    \textbf{Scope restriction (active product BNT):}
+    only nonzero product corners occur in the selected fusion clause. A normal
+    label absent from a fixed product pair has zero fusion multiplicity. See
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (Figure-11 fixed-pair support):}
+    a fixed product pair may have an empty active family, and no unsupported
+    normal sector is inserted. See
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex}.
+
+    \textbf{Local fix (Figure-11 fusion coisometry):}
+    the retained-row fusion map is a coisometry onto the active direct sum,
+    and its adjoint gives exact reconstruction of the product tensor. See
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+\end{definition}
+
 \begin{theorem}[Literal CPSV physical-coordinate commuting Gibbs decomposition
     above one site]%
     \label{thm:mpdo_literal_cpsv_physical_coordinate_gibbs_at_least_two}
@@ -823,6 +852,7 @@ physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
         def:mpdo_bnt_fusion_tensor_clause,
+        def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause,
         def:mpdo_topological_gibbs_data_at_least_two,
         thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,
         thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
