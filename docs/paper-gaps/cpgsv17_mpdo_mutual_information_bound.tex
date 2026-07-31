@@ -266,6 +266,30 @@ The reconstruction and entropy identities are formalized separately.
 \leanid{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
 in \doclink{TNLean/Analysis/SupportCompressedEntropy}.}
 
+A support-aware vector-state Jensen inequality for the logarithm is also
+formalized.  If $A\geq0$, $\langle v,v\rangle=1$, and the support projection of
+$A$ fixes $v$, then
+\[
+  \operatorname{Re}\langle v,(\log A)v\rangle
+  \leq\log\!\left(\operatorname{Re}\langle v,Av\rangle\right).
+\]
+In an eigenbasis of $A$, the support condition makes every weight at a zero
+eigenvalue vanish.  Scalar log concavity is therefore applied only to positive
+eigenvalues; neither concavity at zero nor positive definiteness of $A$ is
+assumed.  The proof uses shared spectral-weight formulas for quadratic forms of
+a Hermitian matrix and its functional calculus.
+\footnote{Formal declarations:
+\leanid{Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log} in
+\doclink{TNLean/Analysis/SupportLogJensen}, and
+\leanid{Matrix.IsHermitian.spectralWeight},
+\leanid{Matrix.IsHermitian.spectralWeight_nonneg},
+\leanid{Matrix.IsHermitian.sum_spectralWeight},
+\leanid{Matrix.IsHermitian.re_dotProduct_cfc_mulVec_eq_sum}, and
+\leanid{Matrix.IsHermitian.re_dotProduct_mulVec_eq_sum} in
+\doclink{TNLean/Analysis/SpectralQuadraticForm}.}
+This is an auxiliary analytic result, not a theorem of CPSV16.  It does not
+alter the source-coverage count or complete Proposition~4.5.
+
 The one-sided output-support compression is also formalized: faithfulness of
 the input weight forces every channel output into the support of its image,
 the compressed channel is trace preserving, and the support-restricted
@@ -309,12 +333,17 @@ Neither development completes
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  That issue still
 requires simultaneous compression by the two marginal support isometries and a
 proof that this local two-factor compression preserves operator-Schmidt rank.
-The faithful comparison itself still requires continuity, weighted
-interpolation, order monotonicity, and the order-one limit tracked in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Beigi proves
-order monotonicity \cite[Theorem~7]{Beigi2013Sandwiched}, while
-M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel prove the order-one
-limit \cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
+The faithful comparison itself remains open in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The support-aware
+Jensen inequality above does not by itself establish the relative-modular
+half-moment identities or the Umegaki-to-order-two comparison.  A direct
+endpoint argument based on those identities is tracked in
+\href{https://github.com/LionSR/TNLean/issues/5242}{\#5242}; it does not require
+a general weighted-interpolation theorem or an order-one limit.  Beigi proves
+the general order monotonicity by interpolation
+\cite[Theorem~7]{Beigi2013Sandwiched}, while M\"uller-Lennert, Dupuis, Szehr,
+Fehr, and Tomamichel prove the order-one limit
+\cite[Theorem~5]{MullerLennert2013Renyi}.  The unrestricted sharp
 mutual-information theorem remains tracked in
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
 

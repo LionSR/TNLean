@@ -602,6 +602,40 @@
     (\ref{eq:mpdo_isometric_trace}).
 \end{proof}
 
+\begin{theorem}[Support-aware vector-state Jensen inequality for the logarithm]
+    \label{thm:support_log_vector_jensen}
+    \lean{Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log}
+    \leanok
+    Let $A\in\MN{n}$ be positive semidefinite and let $v\in\C^n$ satisfy
+    $\langle v,v\rangle=1$ and $P_{\supp(A)}v=v$. Then
+    \begin{align}
+      \re\langle v,(\log A)v\rangle
+      &\leq\log\!\left(\re\langle v,Av\rangle\right).
+      \label{eq:mpdo_support_log_jensen}
+    \end{align}
+    Here $\log A$ is defined by the continuous functional calculus with
+    $\log 0=0$. Compare the finite-dimensional vector-state Jensen argument
+    in \cite[Chapter~V]{Bhatia1997Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A=U\diag(\mu_i)U^\dagger$, set $w=U^\dagger v$, and put
+    $p_i=|w_i|^2$. The support condition implies
+    $\mu_i=0\Longrightarrow w_i=0$, so every spectral weight at zero vanishes.
+    Thus $p_i\geq0$ for every $i\in S=\{i:\mu_i>0\}$ and
+    $\sum_{i\in S}p_i=1$. The spectral formulas give
+    \begin{align}
+      \re\langle v,(\log A)v\rangle
+      &=\sum_{i\in S}p_i\log\mu_i, \notag\\
+      \re\langle v,Av\rangle
+      &=\sum_{i\in S}p_i\mu_i.
+      \notag
+    \end{align}
+    Scalar concavity of the logarithm on $(0,\infty)$ now gives
+    (\ref{eq:mpdo_support_log_jensen}). No concavity assertion at zero and no
+    positive-definiteness of $A$ are used.
+\end{proof}
+
 \begin{definition}[Order-two sandwiched trace functional]
     \label{def:sandwiched_renyi_two_trace}
     \lean{TNLean.sandwichedRenyiTwoTrace}

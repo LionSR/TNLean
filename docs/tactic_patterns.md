@@ -204,6 +204,18 @@ abstracted — record why, so it is not re-proposed).
   and `sandwichedRenyiTrace_two` retain their statements and each obtain the
   sandwich positivity in one application.
 
+### Hermitian spectral quadratic-form weights
+- **Pattern:** two Jensen proofs separately diagonalized a Hermitian matrix, evaluated vector
+  quadratic forms as eigenvalue-weighted sums, and proved that the squared eigenbasis
+  coordinates of a unit vector form a probability distribution.
+- **Reuse:** `Matrix.IsHermitian.spectralWeight`, `sum_spectralWeight`,
+  `re_dotProduct_mulVec_eq_sum`, and `re_dotProduct_cfc_mulVec_eq_sum` in
+  `TNLean/Analysis/SpectralQuadraticForm.lean` provide the basis-independent API used by both
+  `SupportLogJensen.lean` and `Channel/Schwarz/DiagonalJensen.lean`.
+- **Result:** the Channel proof imports the lowest-layer Analysis helper instead of carrying its
+  own spectral calculation, while the support-aware logarithmic proof uses the same formulas and
+  removes zero-eigenvalue terms explicitly through its support-weight vanishing lemma.
+
 ### Distinguished grouped reference corner
 - **Pattern:** the horizontal BNT-refined and literal CPSV actual-grouped Figure~8 proofs
   both select the zero-index copy, use its identity gauge, and transport its physical corner
