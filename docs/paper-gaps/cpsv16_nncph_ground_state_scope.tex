@@ -134,10 +134,12 @@ This implication uses only BNT canonical form and transfer idempotence of the
 whole multiplicity-one direct sum. It uses no comparison, crossing,
 repeated-copy, raw-weight, or externally supplied commutation hypothesis.
 
-This scope-restricted implication does not prove the full source theorem.  The
-ground-space spanning condition for repeated copies and arbitrary raw sector
-weights, the three-way equivalence with ZCL, the complete canonical-form
-hypotheses from the source statement remain open.
+This scope-restricted implication does not prove the full source theorem.
+Together with the reverse implication and the corrected positive-gap
+zero-correlation-length equivalence, it does prove the three-way equivalence
+for the multiplicity-one, unit-weight basis direct sum.  Repeated copies,
+arbitrary raw sector weights, adjacent complementary gaps, and the complete
+unrestricted canonical-form statement remain excluded.
 For the forward RFP-to-NNCPH direction, the three-site \(AX/XB\) support maps
 are now represented in \leanid{MPSTensor.HasOverlappingTwoSiteCommutation};
 Appendix~B supplies the basic-vector form.  The local projectors in
@@ -536,11 +538,10 @@ parent interactions.  If the criterion is needed independently of Beigi's
 decomposition, its hypothesis should be replaced by explicit pairwise
 commutativity of the translated interactions.
 
-\section{Remaining extension plan}
+\section{Completed representative equivalence and residual scope}
 
-The immediate remaining theorem should assemble the corrected three-way
-equivalence for the multiplicity-one, unit-weight direct sum of the distinct
-BNT basis tensors:
+The corrected three-way equivalence is now assembled for the
+multiplicity-one, unit-weight direct sum of the distinct BNT basis tensors:
 \begin{align}
   \mathrm{RFP}(A_{\mathrm{basis}})
   \Longleftrightarrow
@@ -548,14 +549,17 @@ BNT basis tensors:
   \Longleftrightarrow
   \mathrm{HasNNCPHGroundSpaces}(A_{\mathrm{basis}}).
 \end{align}
-The reverse implication is now proved both for a normal left-canonical
+The reverse implication is proved both for a normal left-canonical
 representative and for the multiplicity-one, unit-weight direct sum of all
 distinct BNT basis sectors.  In the latter statement the comparison with
 Beigi's locally orthogonal product-of-pairs loop states is performed
-familywise and requires no axiom.  The remaining task is therefore only to
-combine this reverse implication with the already proved representative-level
-RFP--positive-gap-ZCL equivalence and RFP-to-NNCPH direction in one theorem
-with precise hypotheses.\footnote{Tracked by \ghissue{2633}.}
+familywise and requires no axiom.  The pairwise equivalences are formalized by
+\leanid{MPSTensor.IsBNTCanonicalForm.%
+isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
+and
+\leanid{MPSTensor.IsBNTCanonicalForm.%
+isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
+\footnote{Tracked by \ghissue{2633}.}
 
 The current proof boundary is therefore: the reverse implication is proved for
 the corrected basis-direct-sum representative satisfying the source all-chain
@@ -589,8 +593,10 @@ independence together with the source all-chain ground-space condition.  Their
 comparison with the original tensor is proved for one normal left-canonical
 representative and familywise for the multiplicity-one, unit-weight BNT basis
 direct sum; the corresponding transfer-idempotence statements are proved.
-What remains is to assemble these representative-level implications into the
-corrected three-way theorem stated above.
+These representative-level implications are assembled by the two
+biconditionals above.  The residual gap is only the printed unrestricted
+statement, whose repeated-copy, raw-weight, and adjacent-gap boundaries are
+excluded from the corrected theorem.
 
 \bibliographystyle{alpha}
 \bibliography{references}

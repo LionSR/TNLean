@@ -664,3 +664,28 @@
     \end{align}
     for every pair $j,k$, and proves the claim.
 \end{proof}
+
+\begin{theorem}[Fixed points and commuting parent ground spaces for the basis direct sum]
+    \label{thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
+    \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff_hasNNCPHGroundSpaces}
+    \leanok
+    \uses{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces,
+        thm:nncph_implies_rfp_basis_direct_sum}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and set $A=\bigoplus_{j=1}^g A_j$. Then
+    \begin{align}
+        \mathcal E_A^2=\mathcal E_A
+        \quad\Longleftrightarrow\quad
+        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
+    \end{align}
+    This statement concerns the multiplicity-one, unit-weight direct sum; it
+    does not include repeated copies or arbitrary raw weights.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward implication is
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}, and the
+    reverse implication is
+    Theorem~\ref{thm:nncph_implies_rfp_basis_direct_sum}.
+\end{proof}

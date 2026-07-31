@@ -257,6 +257,15 @@ correction to line 1250 rather than a formalization of the printed spectral
 argument.  It does not alter the raw-weight counterexample or the adjacent-gap
 scope restriction.
 
+Combining this repair with the fixed-point characterization of the all-chain
+commuting parent ground spaces gives the corrected representative-level
+equivalence, formalized by
+\leanid{MPSTensor.IsBNTCanonicalForm.%
+isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}.
+The statement concerns the multiplicity-one, unit-weight basis direct sum and
+positive complementary gaps.  Repeated copies, arbitrary raw weights, and
+zero complementary gaps remain excluded.
+
 Since the older predicate universally quantifies over positive definite fixed
 points, it is also vacuous for a tensor without such a fixed point.  The
 periodic-chain predicate avoids this boundary-state issue.  For the
