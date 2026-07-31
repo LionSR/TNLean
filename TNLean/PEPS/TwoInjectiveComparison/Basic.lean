@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Complex.Basic
-import Mathlib.Data.Fintype.Pi
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Basis.VectorSpace
@@ -30,7 +29,7 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {Bond : Type*} [Fintype Bond]
+variable {Bond : Type*} [DecidableEq Bond] [Fintype Bond]
 variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
 
 /-! ### Abstract two-block tensors -/
