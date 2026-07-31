@@ -117,7 +117,9 @@ is the order-two sandwiched Rényi divergence. The negative power is zero on the
 zero eigenspace, so this totalized functional remains finite outside that
 support domain and must not there be identified with the divergence; see
 Müller-Lennert et al., arXiv:1306.3142v4, Definition 2 and lines 94--96. -/
-noncomputable def sandwichedRenyiTwoTrace (ρ ω : Mat) : ℝ :=
+noncomputable def sandwichedRenyiTwoTrace
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (ρ ω : Matrix n n ℂ) : ℝ :=
   let q := ω ^ (-(1 / 4 : ℝ))
   (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
 
