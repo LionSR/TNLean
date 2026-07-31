@@ -61,6 +61,7 @@ maps.
 
 \begin{theorem}[Kadison--Schwarz inequality]\label{thm:kadison_schwarz}
     \lean{KadisonSchwarz.kadison_schwarz}
+    \lean{IsKrausCP.kadison_schwarz_of_map_one_eq_one}
     \leanok
     \uses{def:unital_kraus}
     Let $E(X) = \sum_i K_i X K_i^\dagger$ be a \emph{unital}
@@ -98,6 +99,65 @@ maps.
     semidefiniteness; unitality ensures that the $(2,2)$-block maps to~$\Id$.
     The Schur complement of this block gives
     (\ref{eq:schwarz_kadison}).
+\end{proof}
+
+\begin{theorem}[Operator-norm contraction of a unital Kraus map]
+    \label{thm:unital_kraus_operator_norm_contraction}
+    \lean{IsKrausCP.norm_apply_le_of_map_one_eq_one}
+    \leanok
+    \uses{def:kraus_map, def:unital_kraus}
+    Let $E:\MN{D}\to\MN{D}$ be a Kraus map satisfying $E(\Id)=\Id$.
+    Then, for every $X\in\MN{D}$,
+    \begin{align}
+        \|E(X)\|_\infty
+        &\leq \|X\|_\infty.
+        \label{eq:schwarz_unital_operator_contraction}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:is_kraus_cp_basic, thm:positive_map_monotone,
+        thm:kadison_schwarz}
+    The operator inequality
+    $X^\dagger X\leq\|X\|_\infty^2\Id$, positivity of $E$, and unitality give
+    $E(X^\dagger X)\leq\|X\|_\infty^2\Id$. Combining this with
+    (\ref{eq:schwarz_kadison}) yields
+    \begin{align}
+        E(X)^\dagger E(X)
+        &\leq E(X^\dagger X)
+        \leq \|X\|_\infty^2\Id.
+        \notag
+    \end{align}
+    The $C^*$-identity now gives
+    $\|E(X)\|_\infty^2\leq\|X\|_\infty^2$, which is
+    (\ref{eq:schwarz_unital_operator_contraction}).
+\end{proof}
+
+\begin{theorem}[Eigenvalue bound for a unital Kraus map]
+    \label{thm:unital_kraus_eigenvalue_bound}
+    \lean{IsKrausCP.eigenvalue_norm_le_one_of_map_one_eq_one}
+    \leanok
+    \uses{def:kraus_map, def:unital_kraus}
+    Let $E:\MN{D}\to\MN{D}$ be a Kraus map satisfying $E(\Id)=\Id$.
+    Every eigenvalue $\mu$ of $E$ satisfies
+    \begin{align}
+        |\mu|
+        &\leq 1.
+        \label{eq:schwarz_unital_eigenvalue_bound}
+    \end{align}
+    This is the unital Kraus specialization of
+    \cite[Proposition~6.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:unital_kraus_operator_norm_contraction}
+    Choose a nonzero matrix $X$ such that $E(X)=\mu X$. Then
+    Theorem~\ref{thm:unital_kraus_operator_norm_contraction} gives
+    $|\mu|\|X\|_\infty=\|E(X)\|_\infty\leq\|X\|_\infty$.
+    Since $\|X\|_\infty>0$, division by this norm proves
+    (\ref{eq:schwarz_unital_eigenvalue_bound}).
 \end{proof}
 
 \begin{theorem}[Kadison--Schwarz for the adjoint channel]\label{thm:kadison_schwarz_adjoint}
