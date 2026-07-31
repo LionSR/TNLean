@@ -62,7 +62,7 @@ theorem IsKrausCP.norm_apply_le_of_map_one_eq_one
 
 /-- Every eigenvalue of a unital Kraus completely positive endomorphism has modulus at most one.
 
-This is the unital form of the spectral bound in Wolf, Section 6.1. -/
+This is the unital form of the spectral bound in Wolf, Proposition 6.1. -/
 theorem IsKrausCP.eigenvalue_norm_le_one_of_map_one_eq_one
     {α : Type*} [Fintype α] [DecidableEq α]
     {E : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ}
