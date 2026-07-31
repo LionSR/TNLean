@@ -146,10 +146,11 @@ theorem nonempty_sectorActiveFactorSupportData
 /-- A simultaneous choice of factor-support coordinates for all physical
 sectors.
 
-Source context: this datum bridges Lemma `propSN` (CPSV16 lines 1381--1450)
-to Proposition `prop3to4`.  The choice of isometries onto joint column
-supports per sector, with zero-dimensional inactive sectors, is not present
-in the cited source passage.  The construction is ours. -/
+Source context: this datum supplies the factor-support coordinates used
+between Lemma `propSN` (CPSV16 lines 1381--1450) and Proposition `prop3to4`.
+The choice of isometries onto joint column supports per sector, with
+zero-dimensional inactive sectors, is not present in the cited source
+passage.  The construction is ours. -/
 structure ActiveFactorSupportData (F : PhysicalSectorFactorization K) where
   /-- The chosen support coordinates in each sector. -/
   sector : (k : Fin F.sectorCount) → SectorActiveFactorSupportData F k
@@ -369,7 +370,8 @@ theorem mul_dependentPhysicalSupportProj_eq_self_of_forall_mul_transformedPhysic
 Source context: the compression $(V^L_k)^\dagger \, l_{k,\beta} \, V^L_k$
 does not appear in CPSV16 lines 1381--1450.  It is the natural restriction
 of the left factor to the active coordinate space selected by the support
-isometries, bridging `propSN` to `prop3to4`.  The construction is ours. -/
+isometries, used after `propSN` and before `prop3to4`.  The construction is
+ours. -/
 noncomputable def compressedLeftTensor (F : PhysicalSectorFactorization K)
     (A : ActiveFactorSupportData F) (k : Fin F.sectorCount) (β : Fin D) :
     Matrix (Fin (A.sector k).leftDim) (Fin (A.sector k).leftDim) ℂ :=
@@ -586,8 +588,8 @@ form.
 Source context: this recovery identity $K = U^\dagger K_{\mathrm{sector}} U$
 uses the isometry $U$ from Lemma `propSN` (CPSV16 lines 1381--1450).  The
 subsequent compression by active-factor support isometries (which would
-produce $K_{\mathrm{act}} = V^\dagger K V$) is our construction bridging to
-`prop3to4`. -/
+produce $K_{\mathrm{act}} = V^\dagger K V$) is our construction used in the
+derivation of `prop3to4`. -/
 theorem physicalSlice_eq_conjTranspose_mul_sectorCoordinateTensor_mul
     (F : PhysicalSectorFactorization K) (β α : Fin D) :
     physicalSlice K β α =
@@ -801,9 +803,9 @@ theorem physicalSupportInclusion_range_eq_physicalSupportProj
 
 Source context: $K_{\mathrm{act}} = V^\dagger K V$ where $V$ is the
 active-factor support inclusion isometry.  This restriction is not present
-in CPSV16 lines 1381--1450; it bridges Lemma `propSN` to
-Proposition `prop3to4` by removing inactive dimensions that the source
-passage does not address.  The construction is ours. -/
+in CPSV16 lines 1381--1450; it removes inactive dimensions not addressed by
+the source passage and is used between Lemma `propSN` and Proposition
+`prop3to4`.  The construction is ours. -/
 noncomputable def activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F) :
     MPOTensor (F.supportedPhysicalDim A) D :=
