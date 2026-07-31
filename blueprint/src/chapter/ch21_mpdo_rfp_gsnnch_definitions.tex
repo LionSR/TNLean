@@ -859,6 +859,8 @@ firstSiteMatrix_mul_reducedBlockState}
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1597--1619, and Proposition `prop4to2`, lines 1801--1808.
 \begin{theorem}[Proportional orthogonal commuting-bond sectors with ZCL satisfy SAL]
     \label{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
     \lean{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
@@ -885,15 +887,17 @@ firstSiteMatrix_mul_reducedBlockState}
     \end{align}
     Then $M$ satisfies SAL.
 
-    % **Scope restriction (sectorwise hypotheses):** The printed proposition
-    % omits sectorwise source ZCL. The theorem retains per-sector MPDO,
-    % one-site injectivity, normality, and source ZCL. BNT normality supplies
-    % injectivity only after blocking. Under the present blocking and SAL
-    % interfaces, blocked SAL supplies only block-aligned chains and cuts and
-    % does not by itself establish unblocked SAL. Following the present proof
-    % route requires all-original-cut visibility from eventual block
-    % injectivity. The global outer sum and sector products now have the
-    % positive proportionality allowed by ApprhoNComm.
+    In the canonical absorbed BNT presentation, ambient source zero
+    correlation length supplies the sectorwise hypothesis by
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. This conclusion is specific
+    to that canonical presentation. An arbitrary GSNNCH presentation does not
+    inherit source zero correlation length, since that condition belongs to
+    the tensor's physical-trace transfer rather than only to its periodic
+    operators.
+
+    % The remaining canonical BNT application is the all-original-cut bridge
+    % from eventual injectivity, tracked in issue #5208. The literal source
+    % proposition `prop4to2` is not complete until that bridge is proved.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 

@@ -8,7 +8,7 @@
 
 \title{The Commuting-Form-to-SAL Implication for Simple MPDOs}
 \author{}
-\date{2026-07-29}
+\date{2026-07-31}
 
 \begin{document}
 \maketitle
@@ -626,22 +626,50 @@ it neither derives the sectorwise SAL premise nor uses ZCL.  The earlier exact
 theorem \leanid{MPOTensor.isSAL_of_localOrthogonalSum} is its specialization
 with $c_N=1$.
 
-In the BNT specialization the exact outer equality is already provided by
-\leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
-while positivity of the natural multiplicities is part of the sector
-decomposition.  Consequently the corollary
-\leanid{MPOTensor.isSAL_of_orthogonalCommutingSectorFamily} assumes the exact
-outer sum and sectorwise SAL, although exactness of the global outer sum is no
-longer required by the entropy argument.
-The restricted specialization
+In the canonical BNT specialization, ambient source ZCL does supply the
+missing sectorwise source-ZCL premise.  For a simple tensor already in the
+chosen canonical form,
+\leanid{MPOTensor.IsSimpleCanonicalForm.%
+exists_weight_copy_independent_of_isSourceZCL} combines the canonical witness
+with
+\leanid{MPOTensor.weight_copy_independent_of_isSourceZCL} to show that the
+weights over each normal representative are independent of the copy index.
+After absorbing this common weight, the block equation restricts the ambient
+source-ZCL identity to every representative; this is
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.  Hence every
+canonical absorbed simple-BNT sector has source ZCL under ambient source ZCL.
+This is precisely the sectorwise hypothesis used when Proposition
+\emph{4to2}, at source lines~1597--1619, is applied sector by sector in
+Proposition \emph{prop4to2}, at source lines~1801--1808.
+
+This conclusion belongs to the canonical absorbed presentation, not to an
+arbitrary GSNNCH presentation of the same finite-chain operators.  Source ZCL
+is a property of the tensor's physical-trace transfer, whereas GSNNCH records
+only the represented periodic operators.  For example, in physical dimension
+one the one-dimensional tensor $(1)$ and the virtual direct sum
+\[
+  (1)\oplus
+  \begin{pmatrix}0&1\\0&0\end{pmatrix}
+\]
+generate the same scalar operator at every positive length.  The first tensor
+has source ZCL, while the second transfer has a nonzero nilpotent summand and
+satisfies no equation $E^2=\lambda E$ with $\lambda>0$.  Thus representation-
+level source ZCL cannot be inferred from GSNNCH alone without selecting the
+canonical absorbed sectors.
+
+The downstream theorem
 \leanid{MPOTensor.%
 isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
-assumes that every sector generates MPDOs, is one-site injective and normal,
-and has source ZCL.  Source ZCL is omitted by the printed proposition.
-Normality is inherited in the BNT setting, but one-site injectivity is not a
-consequence of BNT normality alone: a normal tensor becomes injective only
-after blocking.  The source application therefore leaves an
-injectivity-versus-blocking step unaddressed.
+accepts these sectorwise source-ZCL conclusions together with the sector MPDO,
+one-site injectivity, normality, and positive proportional sector data.  The
+exact outer equality for the canonical BNT family is provided by
+\leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
+and the natural multiplicities are positive.  The remaining source application
+is therefore not a source-ZCL problem.  It is the separate all-original-cut
+problem: a normal BNT sector is only eventually injective, while the present
+single-sector proof uses one-site injectivity.  Replacing those uses by
+word-length visibility while retaining every original consecutive cut is the
+unresolved obligation recorded in issue~\#5208.
 
 \paragraph{The present blocking interface gives only block-aligned SAL.}
 Suppose that normality supplies a positive blocking length \(L_0\) for a
@@ -709,17 +737,19 @@ tensor.
 
 For the later orthogonal direct-sum implication, the final entropy argument is
 formalized under a positive proportional outer sum, conditionally on
-sectorwise SAL.  The global proportionality scalar is therefore no longer a
-restriction.  A further theorem derives sectorwise SAL from explicit
-sectorwise MPDO, one-site injectivity, normality, and source-ZCL hypotheses,
-together with positive proportional orthogonal sector realizations.  The
-sector-product proportionality is therefore no longer a restriction.  The
-printed proposition still omits sectorwise source ZCL, and its application to
-normal BNT sectors still requires an unaddressed argument passing from
-eventual block injectivity to the all-original-cut visibility statements used
-by the present single-sector proof.  Under the available blocking and SAL
-interfaces, SAL of a blocked sector supplies only block-aligned chains and cuts
-and does not by itself discharge this obligation.
+sectorwise SAL.  The global and sector-product proportionality scalars are
+therefore no longer restrictions.  Ambient source ZCL now descends to every
+canonical absorbed simple-BNT sector through copy independence and the
+blockwise transfer equation.  This completes the missing sectorwise source-ZCL
+step used between source lines~1597--1619 and~1801--1808.  It does not make
+source ZCL a property of an arbitrary GSNNCH presentation.
+
+The literal proposition \emph{prop4to2} is not yet complete.  Its canonical
+BNT sectors are normal and hence eventually injective, but the available
+single-sector theorem assumes one-site injectivity to obtain visibility at
+every original cut.  Under the present blocking and SAL interfaces, SAL of a
+blocked sector supplies only block-aligned chains and cuts.  The separate
+all-original-cut and eventual-injectivity problem in issue~\#5208 remains.
 
 \section{Completed proof}
 
