@@ -30,6 +30,7 @@ theory development.
 * `Matrix.PosSemidef.blockDiagonal'`: a finite dependent block diagonal of
   positive-semidefinite matrices is positive semidefinite.
 * `Matrix.PosSemidef.supportInvSqrt`: the inverse square root on the support.
+* `Matrix.PosSemidef.supportInvFourthRoot`: the negative quarter power on the support.
 * `Matrix.PosSemidef.supportInv`: the generalized inverse on the support.
 * `Matrix.PosDef.supportInvSqrt_eq_inv_sqrt`: agreement with the ordinary
   inverse square root for positive-definite matrices.
@@ -135,6 +136,32 @@ theorem PosSemidef.supportProj_mul_cfc_sqrt
     hρ.isHermitian.supportProj_isHermitian.eq] using
       congrArg Matrix.conjTranspose hρ.cfc_sqrt_mul_supportProj
 
+/-- Taking the positive square root does not change the support projection. -/
+theorem PosSemidef.supportProj_cfc_sqrt {D : ℕ}
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) :
+    (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).supportProj =
+      hρ.supportProj := by
+  let q := CFC.sqrt ρ
+  let hq : q.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
+  have hq_sq : q * q = ρ := CFC.sqrt_mul_sqrt_self ρ hρ.nonneg
+  have hkerρq (v : Fin D → ℂ) (hv : ρ *ᵥ v = 0) : q *ᵥ v = 0 := by
+    apply (Matrix.conjTranspose_mul_self_mulVec_eq_zero q v).mp
+    rw [hq.isHermitian.eq, hq_sq]
+    exact hv
+  have hkerqρ (v : Fin D → ℂ) (hv : q *ᵥ v = 0) : ρ *ᵥ v = 0 := by
+    rw [← hq_sq, ← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero]
+  have hPqPρ : hq.supportProj * hρ.supportProj = hq.supportProj :=
+    hρ.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le fun v hv ↦
+      hq.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerρq v hv)
+  have hPρPq : hρ.supportProj * hq.supportProj = hρ.supportProj :=
+    hq.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le fun v hv ↦
+      hρ.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerqρ v hv)
+  have hPρPq' : hρ.supportProj * hq.supportProj = hq.supportProj := by
+    simpa only [Matrix.conjTranspose_mul, hρ.supportProj_isHermitian.eq,
+      hq.supportProj_isHermitian.eq] using congrArg Matrix.conjTranspose hPqPρ
+  change hq.supportProj = hρ.supportProj
+  exact hPρPq'.symm.trans hPρPq
+
 /-- The square of the Hermitian functional-calculus square root recovers the
 positive-semidefinite matrix. -/
 theorem PosSemidef.cfc_sqrt_mul_self {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
@@ -159,6 +186,43 @@ equation (8). -/
 noncomputable def PosSemidef.supportInvSqrt {ρ : Matrix n n ℂ}
     (hρ : ρ.PosSemidef) : Matrix n n ℂ :=
   hρ.isHermitian.cfc fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
+
+/-- The negative quarter power of a positive-semidefinite matrix on its support:
+the zero eigenspace is sent to zero and every positive eigenvalue `x` is sent
+to `x⁻¹⁄⁴`.
+
+This is the support convention in Beigi, arXiv:1306.5920, Theorem 6 and
+equation (18). -/
+noncomputable def PosSemidef.supportInvFourthRoot {ρ : Matrix n n ℂ}
+    (_hρ : ρ.PosSemidef) : Matrix n n ℂ :=
+  (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).supportInvSqrt
+
+/-- The support inverse square root is absorbed on the right by the support
+projection. -/
+theorem PosSemidef.supportInvSqrt_mul_supportProj {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) :
+    hρ.supportInvSqrt * hρ.supportProj = hρ.supportInvSqrt := by
+  let f : ℝ → ℝ := fun x ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0
+  change hρ.isHermitian.cfc f * hρ.isHermitian.supportProj =
+    hρ.isHermitian.cfc f
+  rw [hρ.isHermitian.cfc_form f]
+  unfold Matrix.IsHermitian.supportProj
+  let U := (hρ.isHermitian.eigenvectorUnitary : Matrix n n ℂ)
+  let D := Matrix.diagonal
+    (fun i ↦ ((f (hρ.isHermitian.eigenvalues i) : ℝ) : ℂ))
+  let P := Matrix.diagonal
+    (fun i ↦ if hρ.isHermitian.eigenvalues i ≠ 0 then (1 : ℂ) else 0)
+  have hU : star U * U = 1 := by
+    exact Unitary.coe_star_mul_self hρ.isHermitian.eigenvectorUnitary
+  change (U * D * star U) * (U * P * star U) = U * D * star U
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (star U) U (P * star U), hU, Matrix.one_mul,
+    ← Matrix.mul_assoc D P (star U)]
+  congr 2
+  simp only [D, P, Matrix.diagonal_mul_diagonal]
+  congr 1
+  funext i
+  by_cases hi : hρ.isHermitian.eigenvalues i = 0 <;> simp [f, hi]
 
 /-- The support inverse square root commutes with reindexing by an
 equivalence. -/
@@ -188,6 +252,15 @@ theorem PosSemidef.supportInvSqrt_isHermitian {ρ : Matrix n n ℂ}
   rw [PosSemidef.supportInvSqrt, ← hρ.isHermitian.cfc_eq]
   exact Matrix.isHermitian_iff_isSelfAdjoint.mpr
     (cfc_predicate (fun x : ℝ ↦ if x ≠ 0 then (Real.sqrt x)⁻¹ else 0) ρ)
+
+/-- The support inverse square root is absorbed on the left by the support
+projection. -/
+theorem PosSemidef.supportProj_mul_supportInvSqrt {ρ : Matrix n n ℂ}
+    (hρ : ρ.PosSemidef) :
+    hρ.supportProj * hρ.supportInvSqrt = hρ.supportInvSqrt := by
+  simpa only [Matrix.conjTranspose_mul, hρ.supportProj_isHermitian.eq,
+    hρ.supportInvSqrt_isHermitian.eq] using
+      congrArg Matrix.conjTranspose hρ.supportInvSqrt_mul_supportProj
 
 /-- The support inverse square root is positive semidefinite.
 
