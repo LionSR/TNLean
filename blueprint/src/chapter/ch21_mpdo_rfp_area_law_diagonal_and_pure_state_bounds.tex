@@ -443,6 +443,212 @@
     absorbed into the canonical purification.
 \end{proof}
 
+\section{Support compression for entropy functionals}
+
+% Issue #5229: single-reference support compression.  The remaining
+% simultaneous two-marginal and operator-Schmidt-rank step is tracked in #5211.
+
+\begin{definition}[Isometric conjugation into a larger matrix algebra]
+    \label{def:isometric_nonunital_conjugation}
+    \lean{Matrix.isometryConjNonUnitalStarAlgHom,
+      Matrix.isometryConjNonUnitalStarAlgHom_apply}
+    \leanok
+    Let $V:\C^k\to\C^D$ be an isometry, so that
+    $V^\dagger V=\Id_k$. Define $\iota_V:\MN{k}\to\MN{D}$ by
+    \begin{align}
+      \iota_V(A)&=VAV^\dagger.
+      \label{eq:mpdo_isometric_conjugation}
+    \end{align}
+    is a complex-linear multiplicative $*$-map. In general it is not unital:
+    $\iota_V(\Id_k)=VV^\dagger$ is the projection onto the range of $V$.
+\end{definition}
+
+\begin{lemma}[Functional calculus under rectangular isometric conjugation]
+    \label{lem:cfc_rectangular_isometry_zero}
+    \lean{Matrix.cfc_conj_isometry_of_zero}
+    \leanok
+    \uses{def:isometric_nonunital_conjugation}
+    Let $A\in\MN{k}$ be Hermitian, let $V:\C^k\to\C^D$ satisfy
+    $V^\dagger V=\Id_k$, and let $f:\R\to\R$ satisfy $f(0)=0$. Then
+    \begin{align}
+      f(VAV^\dagger)&=Vf(A)V^\dagger,
+      \label{eq:mpdo_cfc_isometric_conjugation}
+    \end{align}
+    where both sides use the continuous functional calculus on the respective
+    finite spectra.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:isometric_nonunital_conjugation}
+    Apply functoriality of the continuous functional calculus to
+    $\iota_V$. The condition $f(0)=0$ removes the contribution from the
+    orthogonal complement of the range of $V$, where $\iota_V(A)$ vanishes.
+\end{proof}
+
+\begin{theorem}[Trace preservation under isometric inclusion]
+    \label{thm:isometric_embedding_trace}
+    \lean{Matrix.trace_mul_mul_conjTranspose_of_conjTranspose_mul_eq_one}
+    \leanok
+    Let $V:\C^k\to\C^D$ satisfy $V^\dagger V=\Id_k$. For every
+    $A\in\MN{k}$,
+    \begin{align}
+      \tr(VAV^\dagger)&=\tr(A).
+      \label{eq:mpdo_isometric_trace}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Cyclicity of the trace gives
+    $\tr(VAV^\dagger)=\tr(V^\dagger VA)=\tr(A)$.
+\end{proof}
+
+\begin{theorem}[Compression cancels isometric expansion]
+    \label{thm:isometric_compression_expansion}
+    \lean{Matrix.conjTranspose_mul_mul_mul_conjTranspose_mul_of_isometry}
+    \leanok
+    Let $V:\C^k\to\C^D$ satisfy $V^\dagger V=\Id_k$. For every
+    $A\in\MN{k}$,
+    \begin{align}
+      V^\dagger(VAV^\dagger)V&=A.
+      \label{eq:mpdo_isometric_compression_expansion}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Associativity and $V^\dagger V=\Id_k$ reduce the left-hand side to
+    $(V^\dagger V)A(V^\dagger V)=A$.
+\end{proof}
+
+\begin{theorem}[Reconstruction from a reference support]
+    \label{thm:support_compression_reconstruction}
+    \lean{Matrix.PosSemidef.eq_expansion_compression_of_kernel_le_of_mul_conjTranspose_eq_supportProj}
+    \leanok
+    Let $\rho,\omega\in\MN{D}$ be positive semidefinite and suppose that
+    $\ker\omega\subseteq\ker\rho$. If
+    $V:\C^k\to\C^D$ satisfies $VV^\dagger=P_{\supp(\omega)}$, then
+    \begin{align}
+      V(V^\dagger\rho V)V^\dagger&=\rho.
+      \label{eq:mpdo_support_reconstruction}
+    \end{align}
+    No condition on $V^\dagger V$ is needed for this identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    The kernel inclusion and positivity give
+    $\rho P_{\supp(\omega)}=\rho$; taking adjoints also gives
+    $P_{\supp(\omega)}\rho=\rho$. Substituting
+    $VV^\dagger=P_{\supp(\omega)}$ on both sides of $\rho$ proves
+    (\ref{eq:mpdo_support_reconstruction}).
+\end{proof}
+
+\begin{theorem}[Relative entropy under support compression]
+    \label{thm:relative_entropy_support_compression}
+    \lean{TNLean.quantumRelativeEntropy_support_compression}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho,\omega\in\MN{D}$ be positive semidefinite with
+    $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
+    \begin{align}
+      V^\dagger V&=\Id_k,\\
+      VV^\dagger&=P_{\supp(\omega)}.
+      \label{eq:mpdo_reference_support_isometry}
+    \end{align}
+    Then
+    \begin{align}
+      D(\rho\Vert\omega)
+      &=D(V^\dagger\rho V\Vert V^\dagger\omega V).
+      \label{eq:mpdo_relative_entropy_support_compression}
+    \end{align}
+    The logarithm is totalized by $\log 0=0$ on the kernel.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:isometric_nonunital_conjugation,
+      lem:cfc_rectangular_isometry_zero,
+      thm:isometric_embedding_trace,
+      thm:support_compression_reconstruction}
+    Theorem~\ref{thm:support_compression_reconstruction} reconstructs both
+    $\rho$ and $\omega$ from their compressions. Apply
+    Lemma~\ref{lem:cfc_rectangular_isometry_zero} to the logarithm, use
+    multiplicativity of $\iota_V$, and finish with
+    (\ref{eq:mpdo_isometric_trace}).
+\end{proof}
+
+\begin{theorem}[Order-two sandwiched functional under support compression]
+    \label{thm:sandwiched_renyi_two_support_compression}
+    \lean{TNLean.sandwichedRenyiTwoTrace_support_compression}
+    \leanok
+    Let $\rho,\omega\in\MN{D}$ be positive semidefinite with
+    $\ker\omega\subseteq\ker\rho$. Let $V:\C^k\to\C^D$ satisfy
+    (\ref{eq:mpdo_reference_support_isometry}). Define
+    \begin{align}
+      Q_2(\rho,\omega)
+      &=\re\tr\left[
+        \left(\omega^{-1/4}\rho\,\omega^{-1/4}\right)^2
+      \right],
+      \label{eq:mpdo_sandwiched_two_trace}
+    \end{align}
+    where the negative power vanishes on the kernel of $\omega$. Then
+    \begin{align}
+      Q_2(\rho,\omega)
+      &=Q_2(V^\dagger\rho V,V^\dagger\omega V).
+      \label{eq:mpdo_sandwiched_two_support_compression}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:isometric_nonunital_conjugation,
+      lem:cfc_rectangular_isometry_zero,
+      thm:isometric_embedding_trace,
+      thm:support_compression_reconstruction}
+    The function $x\mapsto x^{-1/4}$ is taken to be zero at $x=0$, so
+    Lemma~\ref{lem:cfc_rectangular_isometry_zero} applies. Reconstruct
+    $\rho$ and $\omega$, combine the three expanded factors by
+    multiplicativity of $\iota_V$, and use trace preservation.
+\end{proof}
+
+\begin{theorem}[Reduction of the singular order-two comparison to the faithful case]
+    \label{thm:relative_entropy_q2_faithful_reduction}
+    \lean{TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful}
+    \leanok
+    \uses{def:quantum_relative_entropy}
+    Let $\rho,\omega\in\MN{D}$ be positive semidefinite matrices of trace one
+    with $\ker\omega\subseteq\ker\rho$. Assume that for every dimension and
+    every pair of trace-one matrices $A\succeq0$ and $B\succ0$,
+    \begin{align}
+      D(A\Vert B)&\leq\log Q_2(A,B).
+      \label{eq:mpdo_faithful_relative_q2_hypothesis}
+    \end{align}
+    Then
+    \begin{align}
+      D(\rho\Vert\omega)&\leq\log Q_2(\rho,\omega).
+      \label{eq:mpdo_singular_relative_q2_comparison}
+    \end{align}
+    Thus this theorem reduces the singular-reference case to the faithful
+    comparison; it does not prove (\ref{eq:mpdo_faithful_relative_q2_hypothesis}).
+    That comparison follows mathematically from order monotonicity and the
+    order-one limit of sandwiched R\'enyi divergence
+    \cite[Theorem~7]{Beigi2013Sandwiched}
+    \cite[Theorem~5]{MullerLennert2013Renyi}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_on_support_posDef,
+      thm:isometric_embedding_trace,
+      thm:support_compression_reconstruction,
+      thm:relative_entropy_support_compression,
+      thm:sandwiched_renyi_two_support_compression}
+    Choose an isometric inclusion of the support of $\omega$. Its compression
+    $\omega_V=V^\dagger\omega V$ is positive definite by
+    Theorem~\ref{thm:compression_on_support_posDef}, while
+    $\rho_V=V^\dagger\rho V$ remains positive semidefinite. Reconstruction
+    and (\ref{eq:mpdo_isometric_trace}) show that both compressed matrices
+    have trace one. Apply (\ref{eq:mpdo_faithful_relative_q2_hypothesis}) to
+    $(\rho_V,\omega_V)$, then use
+    (\ref{eq:mpdo_relative_entropy_support_compression}) and
+    (\ref{eq:mpdo_sandwiched_two_support_compression}).
+\end{proof}
+
 \section{Rectangular Choi matrices and a range-dimension estimate}
 
 The following construction is the unnormalized, different-dimension form of
@@ -670,7 +876,7 @@ terms of operator-Schmidt rank.
 
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
-    \uses{thm:supported_marginal_channel}
+    \uses{def:bipartite_operator_schmidt_rank}
     For every finite-dimensional bipartite density operator $\rho_{AB}$,
     \begin{align}
         I(A:B)_\rho
@@ -682,11 +888,19 @@ terms of operator-Schmidt rank.
     % Formalization is tracked by issues #5209, #5211, #5212, and #5213.
 \end{theorem}
 \begin{proof}
-    \uses{thm:full_support_eigenbasis_whitened_choi_bound}
-    Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
-    This preserves both mutual information and operator-Schmidt rank, and makes
-    the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
-    Choose an eigenbasis of $\sigma$, and set
+    \uses{thm:relative_entropy_q2_faithful_reduction,
+      thm:full_support_eigenbasis_whitened_choi_bound}
+    Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
+    $\ker\omega\subseteq\ker\rho_{AB}$, so
+    Theorem~\ref{thm:relative_entropy_q2_faithful_reduction} reduces the
+    comparison $D(\rho_{AB}\Vert\omega)\leq\log Q_2(\rho_{AB},\omega)$ to
+    faithful marginals. To relate the remaining order-two estimate to
+    operator-Schmidt rank, compress the two tensor factors separately to the
+    supports of $\rho_A$ and $\rho_B$. This simultaneous local compression
+    must preserve operator-Schmidt rank.
+
+    In the resulting faithful spaces, write $\sigma=\rho_A$ and
+    $\tau=\rho_B$. Choose an eigenbasis of $\sigma$, and set
     \begin{align}
         W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
           (\sigma^T\otimes\tau)^{-1/4}.
