@@ -294,9 +294,11 @@ The one-sided output-support compression is also formalized: faithfulness of
 the input weight forces every channel output into the support of its image,
 the compressed channel is trace preserving, and the support-restricted
 negative quarter power agrees with the ordinary negative quarter power after
-compression.  The eigenbasis whitening statements still assume both marginal
-weights are positive definite and therefore do not supply the two-local
-compression from singular ambient marginals to both support algebras.
+compression.  Simultaneous compression from singular ambient marginals to
+both support algebras is formalized below.  The eigenbasis whitening statements
+still assume both marginal weights are positive definite, so their application
+to the compressed operator remains part of the argument tracked in
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.
 
 The unnormalized sandwiched R\'enyi trace term
 \[
@@ -331,15 +333,16 @@ divergence, nor a comparison with Umegaki relative entropy.
 
 Neither development completes
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  Simultaneous
-compression by the two marginal support isometries, exact reconstruction, and
-preservation of operator-Schmidt rank are now formalized.
+compression by the two marginal support isometries, exact reconstruction,
+preservation of operator-Schmidt rank, the exact formulas for the compressed
+marginals, and their positive definiteness are now formalized.
 \footnote{Formal declarations:
-\leanid{Matrix.PosSemidef.eq_marginalSupport_expansion_compression} and
-\leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression} in
+\leanid{Matrix.PosSemidef.eq_marginalSupport_expansion_compression},
+\leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression},
+\leanid{Matrix.PosSemidef.partialTraceRight_marginalSupport_compression},
+\leanid{Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression}, and
+\leanid{Matrix.PosSemidef.marginalSupport_compression_marginals_posDef} in
 \doclink{TNLean/Channel/MarginalSupportAbsorption}.}
-The remaining support step is to prove that the two compressed marginals are
-positive definite; this is tracked in
-\href{https://github.com/LionSR/TNLean/issues/5245}{\#5245}.
 The faithful comparison itself remains open in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  The support-aware
 Jensen inequality above does not by itself establish the relative-modular
