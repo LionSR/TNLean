@@ -7457,12 +7457,6 @@
       \l__tenkz_kernel_r_port_tip_y_fp
     \tl_set_eq:NN \l__tenkz_kernel_r_leg_turn_tl
       \l__tenkz_kernel_r_port_turn_tl
-    \tl_set:Ne \l__tenkz_kernel_r_wire_style_tl
-      {
-        \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
-          { physical~leg } { bond } ,
-        \tl_use:N \l__tenkz_kernel_r_wire_ink_tl
-      }
     \tl_set:Ne \l__tenkz_kernel_r_pts_tl
       {
         \__tenkz_kernel_r_pair:nn

@@ -111,9 +111,14 @@ grep -Fq \
   echo "FAIL: an on-wire carrier port did not reach its routed crossing" >&2
   exit 1
 }
-if grep -F 'name=off-face-route' "$WORK/r_route_noncell_port.tnlog" |
-   grep -Fq 'port-open-1'; then
-  echo "FAIL: north route collected a non-cell carrier's east port" >&2
+off_face_route=$(
+  grep -F 'name=off-face-route' "$WORK/r_route_noncell_port.tnlog"
+) || {
+  echo "FAIL: off-face route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$off_face_route" | grep -Fq 'port-open-1'; then
+  echo "FAIL: off-face route collected its carrier's east port" >&2
   exit 1
 fi
 address_route=$(
@@ -146,9 +151,13 @@ printf '%s\n' "$wrap_route" |
   echo "FAIL: SE-to-NW all-side route lost its east-north face order" >&2
   exit 1
 }
-if grep -F 'name=same-corner-route' \
-     "$WORK/r_route_address_all_faces.tnlog" |
-   grep -Fq 'port-open-'; then
+same_corner_route=$(
+  grep -F 'name=same-corner-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: same-corner all-side route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$same_corner_route" | grep -Fq 'port-open-'; then
   echo "FAIL: same-corner all-side route invented a hull-face crossing" >&2
   exit 1
 fi
