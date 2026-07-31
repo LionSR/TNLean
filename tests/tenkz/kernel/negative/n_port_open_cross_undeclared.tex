@@ -1,0 +1,10 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,2), name=P, ports={90:physical}]{P}
+  \tnwire[kind=string, name=probe]
+    {0.2 n of (1,1)}{0.2 n of (1,3)}
+\end{tenkz}
+\end{document}

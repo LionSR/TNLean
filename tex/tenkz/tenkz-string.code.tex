@@ -75,7 +75,7 @@
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
 \seq_new:N \l__tenkz_string_join_seq         % unordered endpoint joins
 \seq_new:N \l__tenkz_string_touch_seq        % shared semantic wire ports
-\seq_new:N \l__tenkz_string_disjoint_seq     % model-proven disjoint pairs
+\prop_new:N \l__tenkz_string_disjoint_prop   % model-proven disjoint pairs
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
@@ -150,7 +150,7 @@
     \seq_clear:N \l__tenkz_string_cross_seq
     \seq_clear:N \l__tenkz_string_join_seq
     \seq_clear:N \l__tenkz_string_touch_seq
-    \seq_clear:N \l__tenkz_string_disjoint_seq
+    \prop_clear:N \l__tenkz_string_disjoint_prop
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
     \seq_clear:N \l__tenkz_string_processed_seq
@@ -233,6 +233,28 @@
               to [ curve~through = { \exp_not:o \l__tenkz_string_pts_tl } ]
               ( \exp_not:o \l__tenkz_string_last_tl ) ;
           }
+      }
+    \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
+  }
+
+% An open route whose intermediate points are topological hull turns.  Its
+% faces stay straight so every boundary wire leaves through the face named by
+% the route model; only the turns consume the caller's shared corner radius.
+\cs_new_protected:Npn \__tenkz_string_declare_polyline:nnn #1#2#3
+  {
+    \__tenkz_string_register:nn {#1} {open}
+    \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
+    \__tenkz_string_load_pts:n {#2}
+    \int_set:Nn \l__tenkz_string_n_int
+      { \seq_count:N \l__tenkz_string_pts_seq }
+    \seq_set_map:NNn \l__tenkz_string_pts_seq \l__tenkz_string_pts_seq
+      { ( ##1 ) }
+    \tl_set:Ne \l__tenkz_string_pts_tl
+      { \seq_use:Nn \l__tenkz_string_pts_seq { ~ -- ~ } }
+    \use:e
+      {
+        \exp_not:N \path [ spath/save = #1 , rounded~corners = \exp_not:n {#3} ]
+          \exp_not:o \l__tenkz_string_pts_tl ;
       }
     \tenkz@event{string|id=#1|kind=open|pts=\int_use:N \l__tenkz_string_n_int}
   }
@@ -453,7 +475,7 @@
 % from potentially singular path arithmetic.
 \cs_new_protected:Npn \__tenkz_string_disjoint:nn #1#2
   {
-    \seq_put_right:Nn \l__tenkz_string_disjoint_seq { {#1} {#2} }
+    \prop_put:Nnn \l__tenkz_string_disjoint_prop { #1 / #2 } { }
   }
 
 % intersection count of two saved paths through the pgf engine
@@ -1142,9 +1164,9 @@
 \cs_new_protected:Npn \__tenkz_string_police_pair:nn #1#2
   {
     \bool_set_false:N \l_tmpa_bool
-    \seq_if_in:NnT \l__tenkz_string_disjoint_seq { {#1} {#2} }
+    \prop_if_in:NnT \l__tenkz_string_disjoint_prop { #1 / #2 }
       { \bool_set_true:N \l_tmpa_bool }
-    \seq_if_in:NnT \l__tenkz_string_disjoint_seq { {#2} {#1} }
+    \prop_if_in:NnT \l__tenkz_string_disjoint_prop { #2 / #1 }
       { \bool_set_true:N \l_tmpa_bool }
     \bool_if:NTF \l_tmpa_bool
       { \__tenkz_string_police_pair_disjoint:nn {#1} {#2} }

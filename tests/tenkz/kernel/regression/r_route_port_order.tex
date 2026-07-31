@@ -1,0 +1,63 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \g__tenkz_test_north_order_tl
+\tl_new:N \g__tenkz_test_all_order_tl
+\cs_new_eq:NN
+  \__tenkz_test_route_habit:n
+  \__tenkz_kernel_route_habit:n
+\cs_set_protected:Npn \__tenkz_kernel_route_habit:n #1
+  {
+    \__tenkz_test_route_habit:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
+    \__tenkz_model_get:nnN {#1} {cross} \l_tmpb_tl
+    \str_case:Vn \l_tmpa_tl
+      {
+        {north-order}{\tl_gset_eq:NN \g__tenkz_test_north_order_tl \l_tmpb_tl}
+        {all-order}{\tl_gset_eq:NN \g__tenkz_test_all_order_tl \l_tmpb_tl}
+      }
+  }
+\AtEndDocument
+  {
+    \tl_if_eq:NnF \g__tenkz_test_north_order_tl
+      {
+        under~at~crossing~of~north-order~and~port-open-2,
+        over~at~crossing~of~north-order~and~port-open-1
+      }
+      {\errmessage{north~route~followed~port~declaration~rather~than~slot~order}}
+    \tl_if_eq:NnF \g__tenkz_test_all_order_tl
+      {
+        under~at~crossing~of~all-order~and~port-open-4,
+        over~at~crossing~of~all-order~and~port-open-3,
+        under~at~crossing~of~all-order~and~port-open-2,
+        over~at~crossing~of~all-order~and~port-open-1
+      }
+      {\errmessage{all-side~route~lost~perimeter~traversal~order}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,3), ports={90:virtual}]{}
+  \tn[at=(1,1), ports={90:virtual}]{}
+  \tnwire[
+    kind=string,
+    name=north-order,
+    route={n of (1,1) .. (1,3)},
+    crossing={alternate=under}
+  ]{open}{open}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[ports={0:virtual, 270:virtual, 180:virtual, 90:virtual}]{}
+  \tnwire[
+    kind=string,
+    name=all-order,
+    closed,
+    route={all of (1,1)},
+    crossing={alternate=under}
+  ]
+\end{tenkz}
+\end{document}

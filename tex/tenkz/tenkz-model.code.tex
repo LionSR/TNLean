@@ -93,6 +93,15 @@
       { \prop_put:Nee \l__tenkz_model_record_prop {#1/#2} {#3} }
   }
 
+% Copy an author-owned staged value without evaluating its token program.
+% Derived semantic fields use the expanding completion door above.
+\cs_new_protected:Npn \__tenkz_model_complete_raw:nnn #1#2#3
+  {
+    \bool_if:NTF \l__tenkz_model_validated_bool
+      { \msg_error:nn {tenkz}{model-frozen} }
+      { \prop_put:Nen \l__tenkz_model_record_prop {#1/#2} {#3} }
+  }
+
 % Replace an author expression by the semantic field value derived from it.
 % The expression does not survive the model freeze.
 \cs_new_protected:Npn \__tenkz_model_normalize_field:nnnn #1#2#3#4

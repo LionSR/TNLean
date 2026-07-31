@@ -1,0 +1,57 @@
+% Regression: trace and cup closures materialize both semantic endpoints
+% before a sole virtual descriptor refines one of them.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_implicit_closure_int
+\cs_new_eq:NN
+  \__tenkz_test_implicit_closure_validate:n
+  \__tenkz_kernel_port_wire_type_validate:n
+\cs_set_protected:Npn \__tenkz_kernel_port_wire_type_validate:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {origin} \l_tmpa_tl
+    \str_case:Vn \l_tmpa_tl
+      {
+        {trace}{ \__tenkz_test_implicit_closure_endpoints:n {#1} }
+        {cup}{ \__tenkz_test_implicit_closure_endpoints:n {#1} }
+      }
+    \__tenkz_test_implicit_closure_validate:n {#1}
+  }
+\cs_new_protected:Npn \__tenkz_test_implicit_closure_endpoints:n #1
+  {
+    \clist_map_inline:nn {from,to}
+      {
+        \__tenkz_model_get:nnN {#1} {##1} \l_tmpb_tl
+        \quark_if_no_value:NT \l_tmpb_tl
+          {\errmessage{implicit~closure~endpoint~was~absent}}
+        \str_if_eq:eeF
+          { \__tenkz_kernel_node_item:Nn \l_tmpb_tl {kind} } {port}
+          {\errmessage{implicit~closure~endpoint~was~not~a~port}}
+      }
+    \int_gincr:N \g__tenkz_test_implicit_closure_int
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_implicit_closure_int } = {2}
+      {\errmessage{implicit~closure~validation~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+  rows={wire},
+  cols=2,
+  bonds=none,
+  west=trace,
+  east=trace
+]
+  \tn[ports={180:virtual}]{} & \tn{}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[ports={0:virtual}]{} \\
+  \tn{}
+\end{tenkz}
+\end{document}

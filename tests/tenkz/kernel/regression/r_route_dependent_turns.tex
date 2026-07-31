@@ -1,0 +1,47 @@
+% Regression: all-side endpoint turns use exact geometry after dependencies
+% on named strings and the wire-stage leg paths have settled.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=T, ports={0:virtual,90:virtual}]{T}
+  \tnwire[
+    kind=string,
+    name=exact-route,
+    route={all of T},
+    crossing=over
+  ]{0.01 s of 0.5 e of T}{(1,1)}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=U]{U}
+  \tnwire[
+    kind=string,
+    name=precision-route,
+    route={all of U}
+  ]{0.0000005 s of 0.5 e of U}{(1,1)}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=down]
+  \tn[at=(1,1), name=Q, ports={0:virtual}]{Q}
+  \tn[at=(1,2), name=M]{M}
+  \tn[at=(1,3), name=L]{L}
+  \tnwire[
+    kind=string,
+    name=g,
+    route={s of (1,1) .. (1,3)},
+    crossing=over
+  ]{open}{open}
+  \tnwire[
+    kind=string,
+    name=h,
+    route={all of Q},
+    crossing=over,
+    cross={
+      under at crossing of g and h,
+      over at crossing of h and leg s of (1,2),
+      over at crossing of h and leg s of (1,3)
+    }
+  ]
+    {crossing of g and leg s of (1,3)}{1 n of Q}
+\end{tenkz}
+\end{document}

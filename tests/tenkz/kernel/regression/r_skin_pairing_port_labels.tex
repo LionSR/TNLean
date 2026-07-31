@@ -1,0 +1,36 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_pairing_label_int
+\cs_new_eq:NN
+  \__tenkz_test_pairing_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \int_gincr:N \g__tenkz_test_pairing_label_int
+    \__tenkz_test_pairing_labelnode:nnn {#1}{#2}{#3}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_pairing_label_int } = {3}
+      {\errmessage{skin~pairing~lost~typed-port~labels}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{probe}{hue=source:blue}
+\tndeclare{skin}{labelled-pairing}{
+  base=box,
+  pairings={90@1 > 0@1 : probe}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[
+    at=(1,1),
+    skin=labelled-pairing,
+    ports={90:virtual:$i$, 0:virtual:$j$}
+  ]{A}
+\end{tenkz}
+\end{document}

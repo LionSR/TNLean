@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+  rows={wire},
+  cols=2,
+  bonds=none,
+  west=trace,
+  east=trace
+]
+  \tn[ports={180:virtual}]{} &
+  \tn[ports={0:virtual}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[ports={0:virtual}]{} \\
+  \tn[ports={0:virtual}]{}
+\end{tenkz}
+\end{document}

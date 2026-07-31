@@ -1,0 +1,14 @@
+% Negative: a physical open policy cannot consume a virtual port.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+  rows={wire},
+  cols=1,
+  bonds=none,
+  open={(physical,1)}
+]
+  \tn[ports={90:virtual}]{}
+\end{tenkz}
+\end{document}

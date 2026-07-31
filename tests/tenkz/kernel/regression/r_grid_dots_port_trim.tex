@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_dots_retract_int
+\cs_new_eq:NN
+  \__tenkz_test_dots_retract:n
+  \__tenkz_kernel_r_retract:n
+\cs_set_protected:Npn \__tenkz_kernel_r_retract:n #1
+  {
+    \int_gincr:N \g__tenkz_test_dots_retract_int
+    \__tenkz_test_dots_retract:n {#1}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_dots_retract_int } = {2}
+      {\errmessage{grid~port~promotion~disabled~dots~clearance}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[at=(1,1), skin=dots]{} &
+  \tn[at=(1,2)]{A}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[at=(1,1), skin=dots, ports={0:virtual}]{} &
+  \tn[at=(1,2), ports={180:virtual}]{B}
+\end{tenkz}
+\end{document}

@@ -1,0 +1,107 @@
+% Regression: generated open-port names are analytic on-wire addresses, and
+% resolving a port carried by another port preserves both authored fractions.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_nested_name_tl
+\tl_new:N \l__tenkz_test_nested_x_tl
+\tl_new:N \l__tenkz_test_nested_y_tl
+\fp_new:N \g__tenkz_test_nested_ax_fp
+\fp_new:N \g__tenkz_test_nested_ay_fp
+\fp_new:N \g__tenkz_test_nested_bx_fp
+\fp_new:N \g__tenkz_test_nested_by_fp
+\fp_new:N \g__tenkz_test_nested_cx_fp
+\fp_new:N \g__tenkz_test_nested_cy_fp
+\fp_new:N \g__tenkz_test_nested_sx_fp
+\fp_new:N \g__tenkz_test_nested_sy_fp
+\cs_new_eq:NN \__tenkz_test_nested_atom_place:n
+  \__tenkz_kernel_r_atom_place:n
+\cs_set_protected:Npn \__tenkz_kernel_r_atom_place:n #1
+  {
+    \__tenkz_test_nested_atom_place:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_nested_name_tl
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_test_nested_x_tl \l__tenkz_test_nested_y_tl
+    \str_case:Vn \l__tenkz_test_nested_name_tl
+      {
+        {A}
+          {
+            \fp_gset:Nn \g__tenkz_test_nested_ax_fp
+              {\l__tenkz_test_nested_x_tl}
+            \fp_gset:Nn \g__tenkz_test_nested_ay_fp
+              {\l__tenkz_test_nested_y_tl}
+          }
+        {B}
+          {
+            \fp_gset:Nn \g__tenkz_test_nested_bx_fp
+              {\l__tenkz_test_nested_x_tl}
+            \fp_gset:Nn \g__tenkz_test_nested_by_fp
+              {\l__tenkz_test_nested_y_tl}
+          }
+        {C}
+          {
+            \fp_gset:Nn \g__tenkz_test_nested_cx_fp
+              {\l__tenkz_test_nested_x_tl}
+            \fp_gset:Nn \g__tenkz_test_nested_cy_fp
+              {\l__tenkz_test_nested_y_tl}
+          }
+      }
+  }
+\cs_new_eq:NN \__tenkz_test_nested_port_open:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \__tenkz_test_nested_port_open:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_nested_name_tl
+    \str_if_eq:VnT \l__tenkz_test_nested_name_tl {port-open-2}
+      {
+        \fp_gset_eq:NN \g__tenkz_test_nested_sx_fp
+          \l__tenkz_kernel_r_x_fp
+        \fp_gset_eq:NN \g__tenkz_test_nested_sy_fp
+          \l__tenkz_kernel_r_y_fp
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=A, ports={90:physical}]{A}
+  % C precedes B so resolving C must recursively settle B and port-open-1.
+  \tn[skin=dot, name=C, at=on port-open-2 0.75]{}
+  \tn[skin=dot, name=B, at=on port-open-1 0.25,
+      ports={0:virtual}]{}
+\end{tenkz}
+\ExplSyntaxOn
+\fp_compare:nNnF
+  { abs(\g__tenkz_test_nested_bx_fp-\g__tenkz_test_nested_ax_fp) }
+  < {0.000001}
+  { \errmessage{nested~port~lost~the~outer~north~bearing} }
+\fp_compare:nNnF
+  {
+    abs
+      (
+        \g__tenkz_test_nested_by_fp-\g__tenkz_test_nested_ay_fp
+        -0.25*\__tenkz_metric_ratio:n {physleg}
+      )
+  }
+  < {0.000001}
+  { \errmessage{nested~port~lost~the~outer~fraction} }
+\fp_compare:nNnF
+  { abs(\g__tenkz_test_nested_cy_fp-\g__tenkz_test_nested_sy_fp) }
+  < {0.000001}
+  { \errmessage{nested~port~lost~the~inner~east~bearing} }
+\fp_compare:nNnF
+  {
+    abs
+      (
+        \g__tenkz_test_nested_cx_fp-\g__tenkz_test_nested_sx_fp
+        -0.75*\__tenkz_metric_ratio:n {stub}
+      )
+  }
+  < {0.000001}
+  { \errmessage{nested~port~lost~the~inner~fraction} }
+\ExplSyntaxOff
+\end{document}

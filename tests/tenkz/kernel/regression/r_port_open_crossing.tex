@@ -1,0 +1,47 @@
+%% A crossing may name the semantic wire generated for an unmatched typed
+%% port.  Every generated leg enters the saved-route crossing pipeline.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_promoted_port_open_int
+\cs_new_eq:NN
+  \__tenkz_test_port_open_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {origin} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {port-open}
+      { \int_gincr:N \g__tenkz_test_promoted_port_open_int }
+    \__tenkz_test_port_open_stroke:nn {#1} {#2}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_promoted_port_open_int } = {1}
+      {
+        \errmessage
+          {crossing~police~did~not~register~exactly~one~open~port~route}
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,2), name=P, ports={90:physical}]{P}
+  \tnwire[
+    kind=string,
+    name=probe,
+    via={1.5 n of (1,2)},
+    cross={under at crossing of probe and port-open-1}
+  ]{1.5 n of (1,1)}{1.5 n of (1,3)}
+  \tnwire[
+    kind=string,
+    name=near-probe,
+    via={0.8 n of (1,2)},
+    cross={under at crossing of near-probe and port-open-1}
+  ]{0.8 n of (1,1)}{0.8 n of (1,3)}
+\end{tenkz}
+\end{document}

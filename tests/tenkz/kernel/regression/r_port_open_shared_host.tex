@@ -1,0 +1,48 @@
+% Regression: open-port topology reaches the crossing engine as shared-host
+% touch and model-proven disjoint facts.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_port_topology_resolve_int
+\cs_new_eq:NN
+  \__tenkz_test_port_topology_resolve:
+  \__tenkz_string_resolve:
+\cs_set_protected:Npn \__tenkz_string_resolve:
+  {
+    \int_gincr:N \g__tenkz_test_port_topology_resolve_int
+    \int_case:nnF { \g__tenkz_test_port_topology_resolve_int }
+      {
+        {1}
+          {
+            \seq_if_empty:NT \l__tenkz_string_touch_seq
+              {\errmessage{shared-host~port~touch~was~lost}}
+          }
+        {2}
+          {
+            \prop_if_empty:NT \l__tenkz_string_disjoint_prop
+              {\errmessage{disjoint~port~boxes~were~lost}}
+          }
+      }
+      {\errmessage{unexpected~port-topology~resolution}}
+    \__tenkz_test_port_topology_resolve:
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF
+      { \g__tenkz_test_port_topology_resolve_int } = {2}
+      {\errmessage{port-topology~resolution~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[ports={0:virtual,90:physical}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[ports={180:virtual}]{} &
+  \tn[ports={0:physical}]{}
+\end{tenkz}
+\end{document}
