@@ -510,6 +510,25 @@
     Transfer idempotence is preserved by these transformations.
 \end{proof}
 
+\begin{lemma}[The unit-weight basis direct sum is a BNT]
+    \label{lem:bnt_basis_direct_sum}
+    \lean{MPSTensor.IsBNTCanonicalForm.isBNT_basisDirectSum}
+    \leanok
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form. Then their multiplicity-one, unit-weight direct sum
+    \[
+        B=\bigoplus_{j=1}^g A_j
+    \]
+    has the same family $A_1,\ldots,A_g$ as an algebraic BNT.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each $A_j$ is normal and left-canonical. The direct-sum state is the sum
+    of the states of the $A_j$ with coefficient one, and the eventual linear
+    independence is part of the given BNT canonical form.
+\end{proof}
+
 \begin{lemma}[Common physical unitaries preserve mixed transfer maps]
     \label{lem:mixed_transfer_common_physical_unitary}
     \lean{MPSTensor.mixedTransferMap₂_rotatePhysical}
@@ -572,6 +591,20 @@
     $\mathcal E_{U,V}(Z)=0$ for every $Z$.
 \end{proof}
 
+\begin{lemma}[Equal bond-dimension identifications preserve mixed-transfer vanishing]
+    \label{lem:mixed_transfer_dimension_identification_zero}
+    \lean{MPSTensor.mixedTransferMap₂_cast_eq_zero_iff}
+    \leanok
+    Identifying either bond dimension with an equal natural number does not
+    change whether the rectangular mixed transfer map vanishes.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    After the two dimension identifications, both tensors and their mixed
+    transfer map are unchanged.
+\end{proof}
+
 \begin{lemma}[Distinct normalized Beigi loops are locally orthogonal]
     \label{lem:beigi_normalized_minimal_loop_mixed_transfer_zero}
     \lean{MPSTensor.BeigiSectorGraphData.normalizedMinimalLoopTensor_mixedTransferMap₂_eq_zero_of_ne}
@@ -603,10 +636,12 @@
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces}
     \leanok
     \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces,
+        lem:bnt_basis_direct_sum,
         thm:beigi_loop_product_states_span_ground_space,
         thm:beigi_normalized_minimal_loop_tensor_rfp,
         lem:beigi_normalized_minimal_loop_mixed_transfer_zero,
         lem:mixed_transfer_gauge_phase_zero,
+        lem:mixed_transfer_dimension_identification_zero,
         thm:cpsv_normal_mpv_phase_gauge,
         thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
