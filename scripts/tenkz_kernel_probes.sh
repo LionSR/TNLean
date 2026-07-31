@@ -86,6 +86,26 @@ grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
   exit 1
 }
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 4 ] || {
+  echo "FAIL: unmatched typed ports did not materialize exactly four open legs" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=phys:45, phys:n' \
+    "$WORK/r_unmatched_port_legs.tnlog" || {
+  echo "FAIL: flat unmatched ports lost their typed boundary bearings" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=open:45, phys:n' \
+    "$WORK/r_unmatched_port_legs.tnlog" || {
+  echo "FAIL: plane unmatched ports lost their logical boundary bearings" >&2
+  exit 1
+}
+[ "$(grep -c 'kernel-boundary|signature=$' \
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 1 ] || {
+  echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
+  exit 1
+}
 basis_atom_count=$(grep -c '^atom|' "$WORK/r_basis_plane.tnlog" || true)
 [ "$basis_atom_count" -eq 3 ] || {
   echo "FAIL: the declared basis did not populate three member atoms" >&2
@@ -846,6 +866,10 @@ done
 
 for contract_negative in \
   n_one_end_wire \
+  n_duplicate_port \
+  n_port_policy_type \
+  n_sealed_duplicate_port \
+  n_sealed_malformed_port \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -862,6 +886,14 @@ do
   expected='[TKZ-LANG-ADDRESS]'
   [ "$contract_negative" = n_one_end_wire ] &&
     expected='[TKZ-LANG-WIRE-ARITY]'
+  [ "$contract_negative" = n_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_port_policy_type ] &&
+    expected='[TKZ-PORT-POLICY-TYPE]'
+  [ "$contract_negative" = n_sealed_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_sealed_malformed_port ] &&
+    expected='[TKZ-PORT-PARSE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
     echo "FAIL: $contract_negative lacked $expected" >&2
     exit 1

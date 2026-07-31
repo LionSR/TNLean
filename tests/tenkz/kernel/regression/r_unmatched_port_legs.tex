@@ -1,0 +1,230 @@
+% Regression: every unconsumed typed port owns one short semantic open leg.
+% Explicit port-to-port wires consume their endpoints.  Cardinal and arbitrary
+% faces use the complete flat or plane carrier basis, and physical/virtual
+% reaches remain owned by the existing physleg/stub metrics.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_port_open_flat_int
+\int_new:N \g__tenkz_test_port_open_plane_int
+\int_new:N \g__tenkz_test_port_open_wired_int
+\int_new:N \g__tenkz_test_port_label_int
+\int_new:N \g__tenkz_test_policy_port_label_int
+\fp_new:N \l__tenkz_test_port_dx_fp
+\fp_new:N \l__tenkz_test_port_dy_fp
+\tl_new:N \l__tenkz_test_port_face_tl
+\tl_new:N \l__tenkz_test_port_frame_tl
+\tl_new:N \l__tenkz_test_port_style_tl
+\tl_new:N \l__tenkz_test_port_label_style_tl
+\tl_new:N \l__tenkz_test_port_label_clear_tl
+\bool_new:N \l__tenkz_test_in_port_label_bool
+\bool_new:N \l__tenkz_test_in_policy_label_bool
+\cs_new_protected:Npn \__tenkz_test_port_label_style:n #1
+  {
+    \tl_if_in:nnF {#1} {tenkz~audited~label}
+      {\errmessage{port~label~bypassed~the~audited~label~style}}
+    \tl_set:Ne \l__tenkz_test_port_label_style_tl {#1}
+    \tl_set:Ne \l__tenkz_test_port_label_clear_tl
+      { \__tenkz_dim:n {labelclear} }
+    \exp_args:NVV \tl_if_in:nnF
+      \l__tenkz_test_port_label_style_tl
+      \l__tenkz_test_port_label_clear_tl
+      {\errmessage{port~label~lost~the~shared~clearance~metric}}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_port_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \bool_if:NT \l__tenkz_test_in_port_label_bool
+      {
+        \int_gincr:N \g__tenkz_test_port_label_int
+        \__tenkz_test_port_label_style:n {#1}
+      }
+    \bool_if:NT \l__tenkz_test_in_policy_label_bool
+      {
+        \int_gincr:N \g__tenkz_test_policy_port_label_int
+        \__tenkz_test_port_label_style:n {#1}
+      }
+    \__tenkz_test_port_labelnode:nnn {#1}{#2}{#3}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_policy_port_leg:nnn
+  \__tenkz_kernel_r_leg:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
+  {
+    \bool_set_true:N \l__tenkz_test_in_policy_label_bool
+    \__tenkz_test_policy_port_leg:nnn {#1}{#2}{#3}
+    \bool_set_false:N \l__tenkz_test_in_policy_label_bool
+  }
+\cs_new_eq:NN
+  \__tenkz_test_port_open_leg:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \bool_set_true:N \l__tenkz_test_in_port_label_bool
+    \__tenkz_test_port_open_leg:n {#1}
+    \bool_set_false:N \l__tenkz_test_in_port_label_bool
+    \str_case:enF { \__tenkz_kernel_r_frame_word: }
+      {
+        {flat}{\int_gincr:N \g__tenkz_test_port_open_flat_int}
+        {plane}{\int_gincr:N \g__tenkz_test_port_open_plane_int}
+      }
+      {\int_gincr:N \g__tenkz_test_port_open_wired_int}
+    \__tenkz_model_get:nnN {#1} {port-type} \l_tmpa_tl
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \str_if_eq:VnTF \l_tmpa_tl {physical}
+          {\__tenkz_metric_ratio:n {physleg}}
+          {\__tenkz_metric_ratio:n {stub}}
+      }
+    \fp_compare:nNnF
+      {
+        abs
+          (
+            sqrt
+              (
+                (\l__tenkz_kernel_r_xb_fp-\l__tenkz_kernel_r_x_fp)^2
+                +(\l__tenkz_kernel_r_yb_fp-\l__tenkz_kernel_r_y_fp)^2
+              )
+            -\l_tmpa_fp
+          )
+      }
+      < {0.000001}
+      {\errmessage{unmatched~port~lost~its~type-owned~reach}}
+    \__tenkz_model_get:nnN {#1} {port-face} \l__tenkz_test_port_face_tl
+    \tl_set:Ne \l__tenkz_test_port_frame_tl
+      { \__tenkz_kernel_r_frame_word: }
+    \fp_set:Nn \l__tenkz_test_port_dx_fp
+      { \l__tenkz_kernel_r_xb_fp - \l__tenkz_kernel_r_x_fp }
+    \fp_set:Nn \l__tenkz_test_port_dy_fp
+      { \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp }
+    \str_case:Vn \l__tenkz_test_port_frame_tl
+      {
+        {flat}
+          {
+            \fp_compare:nNnF {\l__tenkz_test_port_dy_fp} > {0}
+              {\errmessage{flat~unmatched~port~did~not~point~outward}}
+            \str_case:Vn \l__tenkz_test_port_face_tl
+              {
+                {90}
+                  {
+                    \fp_compare:nNnF
+                      {abs(\l__tenkz_test_port_dx_fp)} < {0.000001}
+                      {\errmessage{flat~north~port~lost~its~bearing}}
+                  }
+                {45}
+                  {
+                    \fp_compare:nNnF {\l__tenkz_test_port_dx_fp} > {0}
+                      {\errmessage{flat~diagonal~port~did~not~point~east}}
+                    \fp_compare:nNnF
+                      {
+                        abs
+                          (
+                            \l__tenkz_test_port_dx_fp
+                            - \l__tenkz_test_port_dy_fp
+                          )
+                      }
+                      < {0.000001}
+                      {\errmessage{flat~diagonal~port~lost~its~bearing}}
+                  }
+              }
+          }
+        {plane}
+          {
+            \fp_compare:nNnF {\l__tenkz_test_port_dx_fp} > {0}
+              {\errmessage{plane~unmatched~port~did~not~point~east}}
+            \fp_compare:nNnF {\l__tenkz_test_port_dy_fp} > {0}
+              {\errmessage{plane~unmatched~port~did~not~point~north}}
+            \str_case:Vn \l__tenkz_test_port_face_tl
+              {
+                {90}
+                  {
+                    \fp_compare:nNnF
+                      {
+                        abs
+                          (
+                            \l__tenkz_test_port_dx_fp
+                              * \__tenkz_metric_ratio:n {planerise}
+                            - \l__tenkz_test_port_dy_fp
+                              * \__tenkz_metric_ratio:n {planeslant}
+                          )
+                      }
+                      < {0.000001}
+                      {\errmessage{plane~north~port~lost~the~plane~normal}}
+                  }
+                {45}
+                  {
+                    \fp_compare:nNnF
+                      {
+                        abs
+                          (
+                            \l__tenkz_test_port_dx_fp
+                              * \__tenkz_metric_ratio:n {planerise}
+                            - \l__tenkz_test_port_dy_fp
+                              * (1+\__tenkz_metric_ratio:n {planeslant})
+                          )
+                      }
+                      < {0.000001}
+                      {\errmessage{plane~diagonal~port~lost~E+N}}
+                  }
+              }
+          }
+      }
+    \prop_get:NnN \l__tenkz_kernel_r_index_style_prop {#1}
+      \l__tenkz_test_port_style_tl
+    \str_if_eq:VnTF \l_tmpa_tl {physical}
+      {
+        \tl_if_in:VnF \l__tenkz_test_port_style_tl {physical~leg}
+          {\errmessage{physical~port~lost~its~semantic~stroke}}
+      }
+      {
+        \tl_if_in:VnF \l__tenkz_test_port_style_tl {bond}
+          {\errmessage{virtual~port~lost~its~semantic~stroke}}
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A,
+      ports={0:virtual, 90:physical, 45:physical:$i$}]{A}
+  \tn[at=(1,2), name=B, ports={180:virtual}]{B}
+  \tnwire{A.0}{B.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=plane]
+  \tn[at=(1,1), name=P,
+      ports={0:virtual, 90:physical, 45:virtual:$j$}]{P}
+  \tn[at=(1,2), name=Q, ports={180:virtual}]{Q}
+  \tnwire{P.0}{Q.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[at=(1,1), name=U, ports={90:physical:$k$}]{U}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=circle]
+  \tn[at=(1,1), name=X, ports={0:virtual}]{X}
+  \tn[at=(1,2), name=Y, ports={180:virtual}]{Y}
+  \tnwire{X.0}{Y.180}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {2}
+  {\errmessage{flat~unmatched-port~count~changed}}
+\int_compare:nNnF {\g__tenkz_test_port_open_plane_int} = {2}
+  {\errmessage{plane~unmatched-port~count~changed}}
+\int_compare:nNnF {\g__tenkz_test_port_open_wired_int} = {0}
+  {\errmessage{an~explicitly~wired~port~grew~a~duplicate~stub}}
+\int_compare:nNnF {\g__tenkz_test_port_label_int} = {2}
+  {
+    \errmessage
+      {
+        labelled~arbitrary-angle~port~label~count~
+        \int_use:N \g__tenkz_test_port_label_int
+      }
+  }
+\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {1}
+  {\errmessage{physical-policy~port~lost~its~typed-port~label}}
+\ExplSyntaxOff
+\end{document}

@@ -1356,11 +1356,40 @@
 % one entry per open wire end and one per outward physical port.  tenkzeq
 % compares adjacent panels and errors on mismatch.
 
+\cs_new_protected:Npn \__tenkz_kernel_signature_bearing:nN #1#2
+  {
+    \tl_set:Ne #2
+      { \fp_eval:n { round( #1 - 360 * floor( (#1) / 360 ), 6 ) } }
+    \str_case:Vn #2
+      { {0}{\tl_set:Nn #2 {e}} {90}{\tl_set:Nn #2 {n}}
+        {180}{\tl_set:Nn #2 {w}} {270}{\tl_set:Nn #2 {s}} }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_signature_port_open:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {port-face} \l__tenkz_kernel_port_face_tl
+    \exp_args:NV \__tenkz_kernel_signature_bearing:nN
+      \l__tenkz_kernel_port_face_tl \l__tenkz_kernel_port_face_tl
+    \__tenkz_model_get:nnN {#1} {port-type} \l__tenkz_kernel_port_type_tl
+    \tl_set:Ne #2
+      {
+        \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
+          {phys}{open}
+        : \tl_use:N \l__tenkz_kernel_port_face_tl
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_signature:N #1
   {
     \seq_clear:N \l__tenkz_kernel_emit_seq
     \__tenkz_model_map_ids:nn {wire}
       {
+        \__tenkz_model_get:nnN {##1} {origin} \l__tenkz_kernel_scratch_tl
+        \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {port-open}
+          {
+            \__tenkz_kernel_signature_port_open:nN {##1} \l_tmpa_tl
+            \seq_put_right:NV \l__tenkz_kernel_emit_seq \l_tmpa_tl
+          }
         \tl_clear:N \l_tmpb_tl
         \__tenkz_model_get:nnN {##1} {weight} \l_tmpa_tl
         \quark_if_no_value:NF \l_tmpa_tl
@@ -1374,23 +1403,28 @@
               \l__tenkz_kernel_scratch_tl
             \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
               {
-                % An end with no direction is still an index the frame cuts,
-                % and the side it is cut on is the end of the arc its route
-                % travels.
-                \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {route}
+                \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {port}
                   {
-                    \__tenkz_kernel_route_of:nNN {##1}
-                      \l__tenkz_kernel_ro_side_tl \l__tenkz_kernel_ro_sel_tl
-                    \tl_set:Ne \l__tenkz_kernel_scratch_tl
+                    % An end with no direction is still an index the frame
+                    % cuts, and the side it is cut on is the end of the arc
+                    % its route travels.
+                    \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {route}
                       {
-                        \__tenkz_kernel_route_end:ee
-                          { \tl_use:N \l__tenkz_kernel_ro_side_tl } {####1}
+                        \__tenkz_kernel_route_of:nNN {##1}
+                          \l__tenkz_kernel_ro_side_tl
+                          \l__tenkz_kernel_ro_sel_tl
+                        \tl_set:Ne \l__tenkz_kernel_scratch_tl
+                          {
+                            \__tenkz_kernel_route_end:ee
+                              { \tl_use:N \l__tenkz_kernel_ro_side_tl }
+                              {####1}
+                          }
                       }
-                  }
-                \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-                  {
-                    open: \tl_use:N \l__tenkz_kernel_scratch_tl
-                    \tl_use:N \l_tmpb_tl
+                    \seq_put_right:Ne \l__tenkz_kernel_emit_seq
+                      {
+                        open: \tl_use:N \l__tenkz_kernel_scratch_tl
+                        \tl_use:N \l_tmpb_tl
+                      }
                   }
               }
             \__tenkz_model_get:nnN {##1} {####1} \l__tenkz_kernel_scratch_tl
@@ -2638,6 +2672,321 @@
               }
           }
       }
+  }
+
+% ---------- unmatched typed ports -------------------------------------------------------------
+% Ports are topology, not renderer hints.  Once authored and policy-derived
+% wires exist, every declared port that no wire endpoint consumes becomes one
+% semantic open-leg WIRE.  Its ink length remains renderer-owned (`stub` for
+% a virtual index, `physleg` for a physical one), while its local face stays
+% model data and is transported through the carrier basis only at rendering.
+\prop_new:N \l__tenkz_kernel_port_used_prop
+\prop_new:N \l__tenkz_kernel_port_seen_prop
+\prop_new:N \l__tenkz_kernel_port_policy_prop
+\tl_new:N \l__tenkz_kernel_port_face_tl
+\tl_new:N \l__tenkz_kernel_port_slot_tl
+\tl_new:N \l__tenkz_kernel_port_type_tl
+\tl_new:N \l__tenkz_kernel_port_label_tl
+\tl_new:N \l__tenkz_kernel_port_record_tl
+\tl_new:N \l__tenkz_kernel_port_node_tl
+\tl_new:N \l__tenkz_kernel_port_policy_field_tl
+\tl_new:N \l__tenkz_kernel_port_policy_label_tl
+\int_new:N \l__tenkz_kernel_port_open_int
+\bool_new:N \l__tenkz_kernel_port_materialize_bool
+
+\msg_new:nnn {tenkz}{kernel-port-parse}
+  { [TKZ-PORT-PARSE]~port~'#1'~on~atom~#2~does~not~match~
+    <angle>[@<slot>]:<virtual|physical>[:<label>]. }
+\msg_new:nnn {tenkz}{kernel-port-duplicate}
+  { [TKZ-PORT-DUPLICATE]~atom~#1~declares~port~#2~more~than~once. }
+\msg_new:nnn {tenkz}{kernel-port-label-conflict}
+  { [TKZ-PORT-LABEL-CONFLICT]~typed~port~#2~on~atom~#1~conflicts~with~
+    its~physical-policy~label. }
+\msg_new:nnn {tenkz}{kernel-port-policy-type}
+  { [TKZ-PORT-POLICY-TYPE]~port~#2~on~atom~#1~must~be~physical~because~
+    the~physical~policy~owns~that~identity. }
+\cs_generate_variant:Nn \__tenkz_model_complete:nnn { nVV }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_face_normalize:nN #1#2
+  {
+    \tl_set:Ne #2
+      {
+        \fp_eval:n
+          {
+            round
+              (
+                \__tenkz_kernel_face_angle:n {#1}
+                - 360 * floor( \__tenkz_kernel_face_angle:n {#1} / 360 ),
+                6
+              )
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_node_record:nN #1#2
+  {
+    \prop_get:NeN \l__tenkz_kernel_node_prop {#1/record-id} #2
+    \quark_if_no_value:NT #2
+      {
+        \prop_get:NeN \l__tenkz_kernel_named_prop
+          { \__tenkz_kernel_node_item:nn {#1} {record} } #2
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_key:nN #1#2
+  {
+    \__tenkz_kernel_port_node_record:nN {#1}
+      \l__tenkz_kernel_port_record_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_port_record_tl
+      { \tl_set:Nn #2 { \q_no_value } }
+      {
+        \exp_args:Ne \__tenkz_kernel_port_face_normalize:nN
+          { \__tenkz_kernel_node_item:nn {#1} {face} }
+          \l__tenkz_kernel_port_face_tl
+        \tl_set:Ne #2
+          {
+            \tl_use:N \l__tenkz_kernel_port_record_tl /
+            \tl_use:N \l__tenkz_kernel_port_face_tl /
+            \__tenkz_kernel_node_item:nn {#1} {slot}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_used_collect:
+  {
+    \prop_clear:N \l__tenkz_kernel_port_used_prop
+    \prop_clear:N \l__tenkz_kernel_port_policy_prop
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \clist_map_inline:nn {from,to}
+          {
+            \__tenkz_model_get:nnN {##1} {####1}
+              \l__tenkz_kernel_port_node_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_port_node_tl
+              {
+                \str_if_eq:eeT
+                  {
+                    \__tenkz_kernel_node_item:Nn
+                      \l__tenkz_kernel_port_node_tl {kind}
+                  }
+                  {port}
+                  {
+                    \exp_args:NV \__tenkz_kernel_port_key:nN
+                      \l__tenkz_kernel_port_node_tl
+                      \l__tenkz_kernel_scratch_tl
+                    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                      {
+                        \prop_put:NVn
+                          \l__tenkz_kernel_port_used_prop
+                          \l__tenkz_kernel_scratch_tl {used}
+                      }
+                  }
+              }
+          }
+      }
+    % `physical=` is an expander whose established leg renderer already owns
+    % these typed faces.  An explicit matching descriptor supplies its type
+    % and label; it must not create a second open leg.
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \__tenkz_model_get:nnN {##1} {physical}
+          \l__tenkz_kernel_scratch_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+          {
+            \str_case:Vn \l__tenkz_kernel_scratch_tl
+              {
+                {up}
+                  {
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_used_prop {##1/90/1} {used}
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_policy_prop {##1/90/1} {up}
+                  }
+                {down}
+                  {
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_used_prop {##1/270/1} {used}
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_policy_prop {##1/270/1} {down}
+                  }
+                {updown}
+                  {
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_used_prop {##1/90/1} {used}
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_used_prop {##1/270/1} {used}
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_policy_prop {##1/90/1} {up}
+                    \prop_put:Nnn
+                      \l__tenkz_kernel_port_policy_prop {##1/270/1} {down}
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_policy_consume:n #1
+  {
+    \prop_get:NVN
+      \l__tenkz_kernel_port_policy_prop \l__tenkz_kernel_scratch_tl
+      \l__tenkz_kernel_port_policy_field_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_port_policy_field_tl
+      {
+        \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
+          {
+            \bool_if:NT \l__tenkz_kernel_port_materialize_bool
+              {
+                \tl_if_blank:VF \l__tenkz_kernel_port_label_tl
+                  {
+                    \prop_get:NeN \l__tenkz_model_record_prop
+                      {
+                        #1/
+                        \tl_use:N \l__tenkz_kernel_port_policy_field_tl
+                      }
+                      \l__tenkz_kernel_port_policy_label_tl
+                    \quark_if_no_value:NTF
+                      \l__tenkz_kernel_port_policy_label_tl
+                      {
+                        \__tenkz_model_complete:nVV {#1}
+                          \l__tenkz_kernel_port_policy_field_tl
+                          \l__tenkz_kernel_port_label_tl
+                      }
+                      {
+                        \str_if_eq:eeF
+                          { \tl_use:N \l__tenkz_kernel_port_policy_label_tl }
+                          { \tl_use:N \l__tenkz_kernel_port_label_tl }
+                          {
+                            \msg_error:nnee
+                              {tenkz}{kernel-port-label-conflict} {#1}
+                              { \tl_use:N \l__tenkz_kernel_port_face_tl }
+                          }
+                      }
+                  }
+              }
+          }
+          {
+            \msg_error:nnee {tenkz}{kernel-port-policy-type} {#1}
+              { \tl_use:N \l__tenkz_kernel_port_face_tl }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_open_one:nn #1#2
+  {
+    \regex_extract_once:nnNTF
+      {
+        \A \s*
+        ([-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)|n|e|s|w)
+        (?: \s* @ \s* ([1-9]\d*) )?
+        \s* : \s* (virtual|physical)
+        (?: \s* : \s* (.*) )?
+        \s* \Z
+      }
+      {#2} \l__tenkz_kernel_match_seq
+      {
+        \exp_args:Ne \__tenkz_kernel_port_face_normalize:nN
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+          \l__tenkz_kernel_port_face_tl
+        \tl_set:Ne \l__tenkz_kernel_port_slot_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {3} }
+        \tl_if_blank:VT
+          \l__tenkz_kernel_port_slot_tl
+          { \tl_set:Nn \l__tenkz_kernel_port_slot_tl {1} }
+        \tl_set:Ne \l__tenkz_kernel_port_type_tl
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {4} }
+        \tl_clear:N \l__tenkz_kernel_port_label_tl
+        \int_compare:nNnT
+          { \seq_count:N \l__tenkz_kernel_match_seq } > {4}
+          {
+            \tl_set:Ne \l__tenkz_kernel_port_label_tl
+              { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
+          }
+        \tl_set:Ne \l__tenkz_kernel_scratch_tl
+          {
+            #1 / \tl_use:N \l__tenkz_kernel_port_face_tl /
+            \tl_use:N \l__tenkz_kernel_port_slot_tl
+          }
+        \prop_if_in:NVTF
+          \l__tenkz_kernel_port_seen_prop \l__tenkz_kernel_scratch_tl
+          {
+            \msg_error:nnee {tenkz}{kernel-port-duplicate} {#1}
+              {
+                \tl_use:N \l__tenkz_kernel_port_face_tl
+                @\tl_use:N \l__tenkz_kernel_port_slot_tl
+              }
+          }
+          {
+            \prop_put:NVn
+              \l__tenkz_kernel_port_seen_prop
+              \l__tenkz_kernel_scratch_tl {seen}
+            \prop_if_in:NVTF
+              \l__tenkz_kernel_port_used_prop \l__tenkz_kernel_scratch_tl
+              { \__tenkz_kernel_port_policy_consume:n {#1} }
+              {
+                \bool_if:NT \l__tenkz_kernel_port_materialize_bool
+                  {
+                    \int_incr:N \l__tenkz_kernel_port_open_int
+                    \__tenkz_kernel_node_new:nN
+                      {
+                        #1.\tl_use:N \l__tenkz_kernel_port_face_tl
+                        @\tl_use:N \l__tenkz_kernel_port_slot_tl
+                      }
+                      \l__tenkz_kernel_port_node_tl
+                    \__tenkz_kernel_node_put:Nnn
+                      \l__tenkz_kernel_port_node_tl {kind} {port}
+                    \__tenkz_kernel_node_put:Nnn
+                      \l__tenkz_kernel_port_node_tl {record-id} {#1}
+                    \__tenkz_kernel_node_put:NnV
+                      \l__tenkz_kernel_port_node_tl {face}
+                      \l__tenkz_kernel_port_face_tl
+                    \__tenkz_kernel_node_put:NnV
+                      \l__tenkz_kernel_port_node_tl {slot}
+                      \l__tenkz_kernel_port_slot_tl
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = port-open ,
+                        name =
+                          port-open-\int_use:N \l__tenkz_kernel_port_open_int ,
+                        host = #1 ,
+                        port-face = \tl_use:N \l__tenkz_kernel_port_face_tl ,
+                        port-slot = \tl_use:N \l__tenkz_kernel_port_slot_tl ,
+                        port-type = \tl_use:N \l__tenkz_kernel_port_type_tl ,
+                        from = \tl_use:N \l__tenkz_kernel_port_node_tl ,
+                        to-open = port
+                        \tl_if_blank:VF \l__tenkz_kernel_port_label_tl
+                          {
+                            , port-label =
+                              \exp_not:V \l__tenkz_kernel_port_label_tl
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      { \msg_error:nnnn {tenkz}{kernel-port-parse} {#2} {#1} }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_open_atom:n #1
+  {
+    \bool_set_true:N \l__tenkz_kernel_port_materialize_bool
+    \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_port_type_tl
+    \str_if_eq:VnT \l__tenkz_kernel_port_type_tl {sealed}
+      { \bool_set_false:N \l__tenkz_kernel_port_materialize_bool }
+    \__tenkz_model_get:nnN {#1} {ports} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_scratch_tl
+          { \__tenkz_kernel_port_open_one:nn {#1} {##1} }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_opens:
+  {
+    \__tenkz_kernel_port_used_collect:
+    \prop_clear:N \l__tenkz_kernel_port_seen_prop
+    \int_zero:N \l__tenkz_kernel_port_open_int
+    \__tenkz_model_map_ids:nn {atom}
+      { \__tenkz_kernel_port_open_atom:n {##1} }
   }
 
 % ---------- render: records make ink ---------------------------------------------------------
@@ -5593,6 +5942,7 @@
               {
                 {grid}  { \__tenkz_kernel_r_wire_grid:n {#1} }
                 {open}  { \__tenkz_kernel_r_wire_ends:n {#1} }
+                {port-open} { \__tenkz_kernel_r_wire_port_open:n {#1} }
                 {trace} { \__tenkz_kernel_r_wire_trace:n {#1} }
                 {cup}   { \__tenkz_kernel_r_wire_cup:n {#1} }
                 % A skin wire settles here so its endpoint geometry is ready,
@@ -5604,6 +5954,72 @@
                   { origin = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
               }
           }
+      }
+  }
+
+% A declared port that no wire consumes owns a short open leg.  Its type
+% selects the existing reach doctrine; its authored face is transported by
+% the same complete carrier basis used by attached wires and labels.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
+    \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_port_record_tl
+    \__tenkz_model_get:nnN {#1} {port-face} \l__tenkz_kernel_port_face_tl
+    \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+      \l__tenkz_kernel_port_record_tl
+      \l__tenkz_kernel_port_face_tl
+      \l__tenkz_kernel_r_leg_turn_tl
+    \__tenkz_model_get:nnN {#1} {port-type} \l__tenkz_kernel_port_type_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+          { \__tenkz_metric_ratio:n {physleg} }
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+          { \__tenkz_metric_ratio:n {stub} }
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+      {
+        \l__tenkz_kernel_r_x_fp
+        + \l__tenkz_kernel_r_reach_fp
+          * cosd( \l__tenkz_kernel_r_leg_turn_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_yb_fp
+      {
+        \l__tenkz_kernel_r_y_fp
+        + \l__tenkz_kernel_r_reach_fp
+          * sind( \l__tenkz_kernel_r_leg_turn_tl )
+      }
+    \__tenkz_kernel_r_wire_stroke:nn
+      {
+        \str_if_eq:VnTF \l__tenkz_kernel_port_type_tl {physical}
+          { physical~leg } { bond }
+      }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+        --
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+      }
+    \__tenkz_model_get:nnN {#1} {port-label} \l__tenkz_kernel_port_label_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_port_label_tl
+      {
+        \__tenkz_render_labelnode:nnn
+          {
+            tenkz~audited~label ,
+            anchor = \exp_args:NV \__tenkz_render_label_anchor:n
+              \l__tenkz_kernel_r_leg_turn_tl ,
+            inner~sep = \__tenkz_dim:n {labelclear}
+          }
+          {
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+          }
+          { \tl_use:N \l__tenkz_kernel_port_label_tl }
       }
   }
 
@@ -9545,6 +9961,7 @@
     \__tenkz_kernel_prepare_cell_policies:
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:
+    \__tenkz_kernel_port_opens:
     \__tenkz_kernel_validate_addresses:
     % The route's crossing set is model data, not measurement: which wires
     % leave the selection on the named side is a question the records answer.
