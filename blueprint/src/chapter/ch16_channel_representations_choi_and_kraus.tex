@@ -27,8 +27,8 @@ partial traces.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Partial trace under product isometries]
-    \label{lem:partial_trace_product_isometry_covariance}
+\begin{theorem}[Partial trace under product isometries]
+    \label{thm:partial_trace_product_isometry_covariance}
     \lean{Matrix.partialTraceRight_kronecker_mul_mul_conjTranspose,
       Matrix.partialTraceLeft_kronecker_mul_mul_conjTranspose}
     \leanok
@@ -45,7 +45,7 @@ partial traces.
       &=B(\tr_A X)B^\dagger.
       \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{def:partial_trace}
     Expand the matrix products and the defining diagonal sum for the partial
