@@ -90,12 +90,12 @@ structure RetainedProductSpectralFamily
     (∑ k, localDim p k) ≤ dim p.1.1 * dim p.2.1
 
 /-- The local spectral decompositions may be chosen simultaneously for every
-retained copy pair.  Empty active families are preserved.
+retained copy pair when the blocked vertical tensor has projector closure and
+no periodic vectors. Empty active families are preserved.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
-theorem exists_retainedProductSpectralFamily
+Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
+lines 2020--2029. -/
+theorem exists_retainedProductSpectralFamily_of_blockTwo
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
     (B : (α : Fin g) → MPSTensor (D * D) (dim α))
@@ -106,12 +106,13 @@ theorem exists_retainedProductSpectralFamily
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
+    (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M))) :
     Nonempty (RetainedProductSpectralFamily dim mult weight B) := by
   classical
   have hExists := fun p ↦
-    exists_weightedVerticalProductBlock_normalDecomposition
-      dim mult weight B M U hU hReconstruct hHorizontal hM p
+    exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
+      dim mult weight B M U hU hReconstruct hClosure hPer p
   choose count localDim coefficient block localInclusion
     localDim_pos coefficient_pos block_normal localInclusion_isometry
     localInclusion_orthogonal local_intertwine local_intertwine_adjoint
@@ -134,6 +135,37 @@ theorem exists_retainedProductSpectralFamily
     local_reconstruction := local_reconstruction
     local_sameMPV₂Pos := local_sameMPV₂Pos
     local_dimension_bound := local_dimension_bound }⟩
+
+/-- The local spectral decompositions may be chosen simultaneously for every
+retained copy pair of a tensor in normalized BNT-refined horizontal form.
+Empty active families are preserved.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Appendix C.4 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
+lines 2020--2029. -/
+theorem exists_retainedProductSpectralFamily
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    Nonempty (RetainedProductSpectralFamily dim mult weight B) := by
+  have hHorizontalTwo := hHorizontal.blockTwo
+  have hMTwo := hM.blockTwo
+  exact exists_retainedProductSpectralFamily_of_blockTwo
+    dim mult weight B M U hU hReconstruct
+    (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
+    (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
+      (blockTwo M) hMTwo hHorizontalTwo)
 
 namespace RetainedProductSpectralFamily
 
