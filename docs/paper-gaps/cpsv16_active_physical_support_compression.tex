@@ -32,7 +32,7 @@ with
   \eta_{k,h} = \sum_a (r_k)_a \otimes (l_h)_a \ge 0,
   \notag
 \end{align}
-and the non-negative matrix $T_{k,h} = \operatorname{tr}(\eta_{k,h})$ is
+and the non-negative matrix $T_{k,h} = \tr(\eta_{k,h})$ is
 primitive.
 
 The passage defines $U$, $r_k$, $l_k$, and $\eta_{k,h}$ at
@@ -61,8 +61,7 @@ build the following auxiliary construction after Lemma~\texttt{propSN}
 Proposition~\texttt{prop3to4} (line~1787):
 
 \begin{enumerate}
-  \item \textbf{Factor-support coordinates} (\texttt{SectorActiveFactorSupportData},
-    \texttt{ActiveFactorSupportData}): For each active sector, choose isometries
+  \item \textbf{Factor-support coordinates:} For each active sector, choose isometries
     $V^L_k$, $V^R_k$ whose ranges are the joint column supports of the left and
     right factor families $\{l_{k,\beta}\}_\beta$ and
     $\{r_{k,\alpha}\}_\alpha$.  For inactive sectors, set both coordinate
@@ -72,30 +71,28 @@ Proposition~\texttt{prop3to4} (line~1787):
     the adjoint-closure relation used to prove two-sided absorption by these
     support projections.
 
-  \item \textbf{Compressed factors} (\texttt{compressedLeftTensor},
-    \texttt{compressedRightTensor}): Form $\tilde l_{k,\beta} =
+  \item \textbf{Compressed factors:} Form $\tilde l_{k,\beta} =
     (V^L_k)^\dagger l_{k,\beta} V^L_k$ and similarly for $\tilde r_{k,\alpha}$.
     These are the factor matrices restricted to the active coordinate spaces.
 
-  \item \textbf{Physical inclusion} (\texttt{physicalSupportInclusion}):
+  \item \textbf{Physical inclusion:}
     Assemble a block-diagonal isometry $V$ from the sector support isometries,
     transport it back to original physical coordinates via $U^\dagger$, and
     obtain $V : \C^e \to \C^d$ with $VV^\dagger$ equal to the canonical joint
     column support of the original physical slices.
 
-  \item \textbf{Compressed tensor} (\texttt{activePhysicalSupportRestriction}):
+  \item \textbf{Compressed tensor:}
     Define $K_{\mathrm{act}} = V^\dagger K V$.  This tensor lives on
     $\C^e$ where $e$ is the total dimension of the retained active-factor
-    supports.  Its injectivity is proved from the injectivity of $K$ together
-    with positivity of every neighboring operator in
-    \texttt{activePhysicalSupportRestriction\_isInjective}.
+    supports.  Its injectivity follows from the injectivity of $K$ together
+    with positivity of every neighboring operator.
 
-  \item \textbf{Neighboring congruence} (\texttt{compressedNeighboringOperator}):
+  \item \textbf{Neighboring congruence:}
     The compressed neighboring operator is the congruence of the ambient one by
     the Kronecker product of the source right and target left support isometries.
     Positive semidefiniteness follows from preservation under matrix congruence.
 
-  \item \textbf{Coordinate transport} (\texttt{changePhysicalBasis}): The
+  \item \textbf{Coordinate transport:} The
     generic operation $M \mapsto V M V^\dagger$ changes physical coordinates of
     any MPO tensor, together with its two-site and four-site closures.
 \end{enumerate}
