@@ -241,6 +241,23 @@ theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
     _ = Real.log (sandwichedRenyiTwoTrace ρ ω) := congrArg Real.log
       (sandwichedRenyiTwoTrace_support_compression hρ hω hker V hV hRange).symm
 
+/-- The support-restricted order-two sandwiched comparison.
+
+For density matrices \(\rho,\omega\) with
+\(\ker\omega\subseteq\ker\rho\), Umegaki relative entropy is bounded by the
+logarithm of the order-two sandwiched trace. The proof compresses to the
+support of \(\omega\), where the reference is positive definite, and applies
+`quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef`. -/
+theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace
+    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    (hρtr : ρ.trace = 1) (hωtr : ω.trace = 1)
+    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0) :
+    quantumRelativeEntropy ρ ω ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) := by
+  exact quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
+    hρ hω hρtr hωtr hker
+    (fun A B hA hB hAtr _hBtr =>
+      quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef hA hB hAtr)
+
 end
 
 end TNLean

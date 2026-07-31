@@ -41,7 +41,8 @@ variable {D : ℕ} {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
 /-- If `v` is fixed by the support projection `P = supportProj ρ` and `v ≠ 0`, then
 `star v ⬝ᵥ (ρ *ᵥ v) > 0`. -/
 theorem dotProduct_mulVec_pos_of_supportProj_fixed
-    {v : Fin D → ℂ} (hv_ne : v ≠ 0)
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) {v : n → ℂ} (hv_ne : v ≠ 0)
     (hv_fix : hρ.supportProj *ᵥ v = v) :
     0 < star v ⬝ᵥ (ρ *ᵥ v) := by
   classical
