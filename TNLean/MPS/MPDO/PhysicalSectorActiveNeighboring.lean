@@ -19,14 +19,14 @@ congruence.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Appendix C.2, equations `Appetakhetc`, `etarl`, and `StochT`, lines
-  1435--1465.
+  1435--1471.
 
 **Scope restriction (active physical support compression):** the compressed
 neighboring operator as an explicit congruence by the support isometries
-does not appear in CPSV16 lines 1435--1465.  The source defines
+does not appear in CPSV16 lines 1435--1471.  The source defines
 $\eta_{k,h}$ at lines 1441--1445 and proves positivity at lines 1447--1450;
 it defines $T_{k,h}$ at lines 1452--1455 and proves primitivity through
-line 1465.  The congruence
+line 1471.  The congruence
 $\tilde\eta_{k,h} = (V^R_k \otimes V^L_h)^\dagger \eta_{k,h}
 (V^R_k \otimes V^L_h)$ and its positive semidefiniteness are additional
 constructions.  Recorded in

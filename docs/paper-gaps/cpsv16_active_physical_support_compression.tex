@@ -20,20 +20,22 @@ Lemma \texttt{propSN} of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete\footnote{So
 \path{Papers/1606.00608/MPDO-22-12-17-2.tex:1406--1471}.} states that if
 $\mathcal K$ fulfills the saturation of the area law (SAL), there exists an
 isometry $U$ and tensors $l_k$, $r_k$ such that
-\[
+\begin{align}
   U\mathcal K_{\beta,\alpha}U^* = \bigoplus_k
   (l_k)_\beta \otimes (r_k)_\alpha
-\]
+  \notag
+\end{align}
 with
-\[
+\begin{align}
   \eta_{k,h} = \sum_a (r_k)_a \otimes (l_h)_a \ge 0,
-\]
+  \notag
+\end{align}
 and the non-negative matrix $T_{k,h} = \operatorname{tr}(\eta_{k,h})$ is
 primitive.
 
 The passage defines $U$, $r_k$, $l_k$, and $\eta_{k,h}$ at
 lines~1436--1450.  It defines $T_{k,h}$ at lines~1452--1455 and proves its
-primitivity through line~1465.  It does
+primitivity through line~1471.  It does
 \textbf{not} construct the active physical support compression: choosing
 isometries onto the joint column supports of the left and right factor
 families per sector, giving inactive sectors zero-dimensional coordinate
@@ -91,13 +93,13 @@ argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
     any MPO tensor, together with its two-site and four-site closures.
 \end{enumerate}
 
-None of these steps appears in lines~1381--1450 of CPSV16.  The source has
+None of these steps appears in lines~1406--1471 of CPSV16.  The source has
 the block factorization and the $\eta$ construction; the compression removes
-inactive dimensions so that the result matches the input format expected by
-Proposition~\texttt{prop3to4}.  The argument is a standard finite-dimensional
-linear algebra construction: the joint column support projections absorb every
-physical slice on both sides, so compression by their conjugate transposes
-preserves exact two-sided recovery.
+inactive dimensions as an auxiliary input preparation in the formal route to
+the theorem corresponding to Proposition~\texttt{prop3to4}.  The argument is
+a standard finite-dimensional linear algebra construction: the joint column
+support projections absorb every physical slice on both sides, so compression
+by their conjugate transposes preserves exact two-sided recovery.
 
 \section{Affected declarations}
 
