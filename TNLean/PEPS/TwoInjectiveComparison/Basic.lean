@@ -29,7 +29,7 @@ open scoped BigOperators Matrix
 namespace TNLean
 namespace PEPS
 
-variable {Bond : Type*} [Fintype Bond]
+variable {Bond : Type*} [DecidableEq Bond] [Fintype Bond]
 variable {bondDim : Bond → Type*} [∀ b, Fintype (bondDim b)]
 
 /-! ### Abstract two-block tensors -/
