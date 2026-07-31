@@ -424,10 +424,64 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
     from Formula~(\ref{eq:cpsv_canonical_form}) by replacing $i$ with $e(j)$.
 \end{proof}
 
+\begin{theorem}[Transfer maps under a bond-space gauge]
+    \label{thm:cpsv_gauge_transfer_similarity}
+    \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
+    \leanok
+    \uses{def:gauge_equiv, def:transfer_map}
+    If $B^i=XA^iX^{-1}$ for every physical index $i$, then there is an
+    invertible matrix $C$ such that
+    \begin{align}
+        \E_B(Y)
+        &=C^{-1}\E_A(CYC^\dagger)(C^\dagger)^{-1}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both transfer maps and take $C=X^{-1}$.
+\end{proof}
+
+\begin{theorem}[Spectral radius under congruence similarity]
+    \label{thm:cpsv_spectral_radius_similarity}
+    \lean{spectralRadius_similarityMap_eq}
+    \leanok
+    For an invertible matrix $C$, the linear maps
+    \begin{align}
+        E
+        \quad\hbox{and}\quad
+        Y\longmapsto C^{-1}E(CYC^\dagger)(C^\dagger)^{-1}
+        \notag
+    \end{align}
+    have the same spectral radius.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two maps are conjugate by the invertible linear transformation
+    $Y\mapsto CYC^\dagger$, and therefore have the same spectrum.
+\end{proof}
+
+\begin{theorem}[Primitivity under congruence similarity]
+    \label{thm:cpsv_primitivity_similarity}
+    \lean{IsPrimitive.similarityMap_iff}
+    \leanok
+    \uses{def:primitive_channel}
+    For an invertible matrix $C$, a linear map $E$ is primitive if and
+    only if
+    \begin{align}
+        Y\longmapsto C^{-1}E(CYC^\dagger)(C^\dagger)^{-1}
+        \notag
+    \end{align}
+    is primitive.
+\end{theorem}
+
+\begin{proof}\leanok
+    Congruence similarity is an algebra isomorphism on the endomorphism
+    algebra and hence preserves the peripheral spectrum.
+\end{proof}
+
 \begin{theorem}[Gauge transport of CPSV normality]
     \label{thm:cpsv_normal_tensor_gauge_transport}
-    \lean{spectralRadius_similarityMap_eq}
-    \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
     \lean{MPSTensor.IsNormalTensor.of_gaugeEquiv}
     \leanok
     \uses{def:nt_cpsv}
@@ -442,7 +496,11 @@ the coefficient argument of Chapter~\ref{ch:bnt}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:nt_cpsv}
+    \uses{def:nt_cpsv,
+        thm:cpsv_gauge_transfer_similarity,
+        thm:cpsv_spectral_radius_similarity,
+        lem:similarity_irred_iff,
+        thm:cpsv_primitivity_similarity}
     With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
     \begin{align}
         \E_B
