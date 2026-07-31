@@ -70,6 +70,7 @@ import TNLean.Channel.Stinespring
 import TNLean.Channel.SupportedMarginalChannel
 import TNLean.Channel.TensorMap
 import TNLean.Channel.TransferMatrix
+import TNLean.Channel.WeightedHilbertSchmidt
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
 import TNLean.Channel.WolfChapter6Wrappers
