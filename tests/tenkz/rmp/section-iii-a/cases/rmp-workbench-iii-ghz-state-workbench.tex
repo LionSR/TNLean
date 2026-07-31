@@ -1,88 +1,92 @@
 % Target: rmp-workbench-iii-ghz-state-workbench
-% Formula: The cluster-state workbench alternates up and down GHZ copy tensors.
-% Ink: Canonical public tenkzfree masonry checkerboard with staggered GHZ dot nodes.
-% Boundary: Horizontal copy bonds are open at the left and right boundaries.
+% Formula: The cluster-state PEPS alternates four-leg GHZ copy tensors, with
+%   Hadamard matrices on every internal virtual bond.
+% Ink: Canonical public kernel environment: a six-by-eight brick-wall patch of
+%   staggered GHZ copy junctions, with Hadamard dots on every internal virtual
+%   bond.
+% Boundary: Unpaired virtual legs remain open on all four sides; each site
+%   carries an outward physical leg.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 329-356; archival output ghzstate.pdf
-% Capabilities: free-graph, staggered-sites, copy-tensor
+% Capabilities: kernel, staggered-sites, copy-tensor, typed-ports
+\tenkzkernel
+\tndeclare{atom}{tnghzdown}
+  {skin=none, ports={180:virtual, 0:virtual, 270:virtual, 45:physical}}
+\tndeclare{atom}{tnghzup}
+  {skin=none, ports={180:virtual, 0:virtual, 90:virtual, 45:physical}}
+\ProvideDocumentCommand{\tnghzhbond}{mmm}{
+  \tnwire[name=#1]{#2}{#3}\tn[skin=dot, at=on #1 0.5]{}
+}
 \[
-  \begin{tenkzfree}
-    \tnjoin{-5mm,0mm}{5mm,0mm}  \tnjoin{0mm,0mm}{0mm,-5mm}
-    \tnjoin{0mm,0mm}{2mm,2mm}  \tnjoin{-5mm,-10mm}{5mm,-10mm}
-    \tnjoin{0mm,-10mm}{0mm,-5mm}  \tnjoin{0mm,-10mm}{2mm,-8mm}
-    \tnjoin{-5mm,20mm}{5mm,20mm}  \tnjoin{0mm,20mm}{0mm,15mm}
-    \tnjoin{0mm,20mm}{2mm,22mm}  \tnjoin{-5mm,10mm}{5mm,10mm}
-    \tnjoin{0mm,10mm}{0mm,15mm}  \tnjoin{0mm,10mm}{2mm,12mm}
-    \tnjoin{-5mm,40mm}{5mm,40mm}  \tnjoin{0mm,40mm}{0mm,35mm}
-    \tnjoin{0mm,40mm}{2mm,42mm}  \tnjoin{-5mm,30mm}{5mm,30mm}
-    \tnjoin{0mm,30mm}{0mm,35mm}  \tnjoin{0mm,30mm}{2mm,32mm}
-    \tnjoin{15mm,0mm}{25mm,0mm}  \tnjoin{20mm,0mm}{20mm,-5mm}
-    \tnjoin{20mm,0mm}{22mm,2mm}  \tnjoin{15mm,-10mm}{25mm,-10mm}
-    \tnjoin{20mm,-10mm}{20mm,-5mm}  \tnjoin{20mm,-10mm}{22mm,-8mm}
-    \tnjoin{15mm,20mm}{25mm,20mm}  \tnjoin{20mm,20mm}{20mm,15mm}
-    \tnjoin{20mm,20mm}{22mm,22mm}  \tnjoin{15mm,10mm}{25mm,10mm}
-    \tnjoin{20mm,10mm}{20mm,15mm}  \tnjoin{20mm,10mm}{22mm,12mm}
-    \tnjoin{15mm,40mm}{25mm,40mm}  \tnjoin{20mm,40mm}{20mm,35mm}
-    \tnjoin{20mm,40mm}{22mm,42mm}  \tnjoin{15mm,30mm}{25mm,30mm}
-    \tnjoin{20mm,30mm}{20mm,35mm}  \tnjoin{20mm,30mm}{22mm,32mm}
-    \tnjoin{35mm,0mm}{45mm,0mm}  \tnjoin{40mm,0mm}{40mm,-5mm}
-    \tnjoin{40mm,0mm}{42mm,2mm}  \tnjoin{35mm,-10mm}{45mm,-10mm}
-    \tnjoin{40mm,-10mm}{40mm,-5mm}  \tnjoin{40mm,-10mm}{42mm,-8mm}
-    \tnjoin{35mm,20mm}{45mm,20mm}  \tnjoin{40mm,20mm}{40mm,15mm}
-    \tnjoin{40mm,20mm}{42mm,22mm}  \tnjoin{35mm,10mm}{45mm,10mm}
-    \tnjoin{40mm,10mm}{40mm,15mm}  \tnjoin{40mm,10mm}{42mm,12mm}
-    \tnjoin{35mm,40mm}{45mm,40mm}  \tnjoin{40mm,40mm}{40mm,35mm}
-    \tnjoin{40mm,40mm}{42mm,42mm}  \tnjoin{35mm,30mm}{45mm,30mm}
-    \tnjoin{40mm,30mm}{40mm,35mm}  \tnjoin{40mm,30mm}{42mm,32mm}
-    \tnjoin{5mm,10mm}{15mm,10mm}  \tnjoin{10mm,10mm}{10mm,5mm}
-    \tnjoin{10mm,10mm}{12mm,12mm}  \tnjoin{5mm,0mm}{15mm,0mm}
-    \tnjoin{10mm,0mm}{10mm,5mm}  \tnjoin{10mm,0mm}{12mm,2mm}
-    \tnjoin{5mm,30mm}{15mm,30mm}  \tnjoin{10mm,30mm}{10mm,25mm}
-    \tnjoin{10mm,30mm}{12mm,32mm}  \tnjoin{5mm,20mm}{15mm,20mm}
-    \tnjoin{10mm,20mm}{10mm,25mm}  \tnjoin{10mm,20mm}{12mm,22mm}
-    \tnjoin{25mm,10mm}{35mm,10mm}  \tnjoin{30mm,10mm}{30mm,5mm}
-    \tnjoin{30mm,10mm}{32mm,12mm}  \tnjoin{25mm,0mm}{35mm,0mm}
-    \tnjoin{30mm,0mm}{30mm,5mm}  \tnjoin{30mm,0mm}{32mm,2mm}
-    \tnjoin{25mm,30mm}{35mm,30mm}  \tnjoin{30mm,30mm}{30mm,25mm}
-    \tnjoin{30mm,30mm}{32mm,32mm}  \tnjoin{25mm,20mm}{35mm,20mm}
-    \tnjoin{30mm,20mm}{30mm,25mm}  \tnjoin{30mm,20mm}{32mm,22mm}
-    \tnjoin{45mm,10mm}{55mm,10mm}  \tnjoin{50mm,10mm}{50mm,5mm}
-    \tnjoin{50mm,10mm}{52mm,12mm}  \tnjoin{45mm,0mm}{55mm,0mm}
-    \tnjoin{50mm,0mm}{50mm,5mm}  \tnjoin{50mm,0mm}{52mm,2mm}
-    \tnjoin{45mm,30mm}{55mm,30mm}  \tnjoin{50mm,30mm}{50mm,25mm}
-    \tnjoin{50mm,30mm}{52mm,32mm}  \tnjoin{45mm,20mm}{55mm,20mm}
-    \tnjoin{50mm,20mm}{50mm,25mm}  \tnjoin{50mm,20mm}{52mm,22mm}
-    \tnjoin{5mm,-10mm}{15mm,-10mm}  \tnjoin{10mm,-10mm}{10mm,-15mm}
-    \tnjoin{10mm,-10mm}{12mm,-8mm}  \tnjoin{5mm,40mm}{15mm,40mm}
-    \tnjoin{10mm,40mm}{10mm,45mm}  \tnjoin{10mm,40mm}{12mm,42mm}
-    \tnjoin{25mm,-10mm}{35mm,-10mm}  \tnjoin{30mm,-10mm}{30mm,-15mm}
-    \tnjoin{30mm,-10mm}{32mm,-8mm}  \tnjoin{25mm,40mm}{35mm,40mm}
-    \tnjoin{30mm,40mm}{30mm,45mm}  \tnjoin{30mm,40mm}{32mm,42mm}
-    \tnjoin{45mm,-10mm}{55mm,-10mm}  \tnjoin{50mm,-10mm}{50mm,-15mm}
-    \tnjoin{50mm,-10mm}{52mm,-8mm}  \tnjoin{45mm,40mm}{55mm,40mm}
-    \tnjoin{50mm,40mm}{50mm,45mm}  \tnjoin{50mm,40mm}{52mm,42mm}
-    \tnput[dot]{b1}{(5mm,40mm)}{}  \tnput[dot]{b2}{(15mm,40mm)}{}
-    \tnput[dot]{b3}{(25mm,40mm)}{}  \tnput[dot]{b4}{(35mm,40mm)}{}
-    \tnput[dot]{b5}{(45mm,40mm)}{}  \tnput[dot]{b6}{(0mm,35mm)}{}
-    \tnput[dot]{b7}{(20mm,35mm)}{}  \tnput[dot]{b8}{(40mm,35mm)}{}
-    \tnput[dot]{b9}{(5mm,30mm)}{}  \tnput[dot]{b10}{(15mm,30mm)}{}
-    \tnput[dot]{b11}{(25mm,30mm)}{}  \tnput[dot]{b12}{(35mm,30mm)}{}
-    \tnput[dot]{b13}{(45mm,30mm)}{}  \tnput[dot]{b14}{(10mm,25mm)}{}
-    \tnput[dot]{b15}{(30mm,25mm)}{}  \tnput[dot]{b16}{(50mm,25mm)}{}
-    \tnput[dot]{b17}{(5mm,20mm)}{}  \tnput[dot]{b18}{(15mm,20mm)}{}
-    \tnput[dot]{b19}{(25mm,20mm)}{}  \tnput[dot]{b20}{(35mm,20mm)}{}
-    \tnput[dot]{b21}{(45mm,20mm)}{}  \tnput[dot]{b22}{(0mm,15mm)}{}
-    \tnput[dot]{b23}{(20mm,15mm)}{}  \tnput[dot]{b24}{(40mm,15mm)}{}
-    \tnput[dot]{b25}{(5mm,10mm)}{}  \tnput[dot]{b26}{(15mm,10mm)}{}
-    \tnput[dot]{b27}{(25mm,10mm)}{}  \tnput[dot]{b28}{(35mm,10mm)}{}
-    \tnput[dot]{b29}{(45mm,10mm)}{}  \tnput[dot]{b30}{(10mm,5mm)}{}
-    \tnput[dot]{b31}{(30mm,5mm)}{}  \tnput[dot]{b32}{(50mm,5mm)}{}
-    \tnput[dot]{b33}{(5mm,0mm)}{}  \tnput[dot]{b34}{(15mm,0mm)}{}
-    \tnput[dot]{b35}{(25mm,0mm)}{}  \tnput[dot]{b36}{(35mm,0mm)}{}
-    \tnput[dot]{b37}{(45mm,0mm)}{}  \tnput[dot]{b38}{(0mm,-5mm)}{}
-    \tnput[dot]{b39}{(20mm,-5mm)}{}  \tnput[dot]{b40}{(40mm,-5mm)}{}
-    \tnput[dot]{b41}{(5mm,-10mm)}{}  \tnput[dot]{b42}{(15mm,-10mm)}{}
-    \tnput[dot]{b43}{(25mm,-10mm)}{}  \tnput[dot]{b44}{(35mm,-10mm)}{}
-    \tnput[dot]{b45}{(45mm,-10mm)}{}
-  \end{tenkzfree}
+  \begin{tenkz}[
+      lattice={6x8}, bonds=none,
+      west=none, east=none, north=none, south=none,
+      frame={flat, basis={wire at (0,0)}}]
+    \tnghzdown[name=g11]{} & \tnghzup[name=g12]{} &
+    \tnghzdown[name=g13]{} & \tnghzup[name=g14]{} &
+    \tnghzdown[name=g15]{} & \tnghzup[name=g16]{} &
+    \tnghzdown[name=g17]{} & \tnghzup[name=g18]{} \\
+    \tnghzup[name=g21]{} & \tnghzdown[name=g22]{} &
+    \tnghzup[name=g23]{} & \tnghzdown[name=g24]{} &
+    \tnghzup[name=g25]{} & \tnghzdown[name=g26]{} &
+    \tnghzup[name=g27]{} & \tnghzdown[name=g28]{} \\
+    \tnghzdown[name=g31]{} & \tnghzup[name=g32]{} &
+    \tnghzdown[name=g33]{} & \tnghzup[name=g34]{} &
+    \tnghzdown[name=g35]{} & \tnghzup[name=g36]{} &
+    \tnghzdown[name=g37]{} & \tnghzup[name=g38]{} \\
+    \tnghzup[name=g41]{} & \tnghzdown[name=g42]{} &
+    \tnghzup[name=g43]{} & \tnghzdown[name=g44]{} &
+    \tnghzup[name=g45]{} & \tnghzdown[name=g46]{} &
+    \tnghzup[name=g47]{} & \tnghzdown[name=g48]{} \\
+    \tnghzdown[name=g51]{} & \tnghzup[name=g52]{} &
+    \tnghzdown[name=g53]{} & \tnghzup[name=g54]{} &
+    \tnghzdown[name=g55]{} & \tnghzup[name=g56]{} &
+    \tnghzdown[name=g57]{} & \tnghzup[name=g58]{} \\
+    \tnghzup[name=g61]{} & \tnghzdown[name=g62]{} &
+    \tnghzup[name=g63]{} & \tnghzdown[name=g64]{} &
+    \tnghzup[name=g65]{} & \tnghzdown[name=g66]{} &
+    \tnghzup[name=g67]{} & \tnghzdown[name=g68]{}
+    \tnghzhbond{h11}{g11.0}{g12.180} \tnghzhbond{h12}{g12.0}{g13.180}
+    \tnghzhbond{h13}{g13.0}{g14.180} \tnghzhbond{h14}{g14.0}{g15.180}
+    \tnghzhbond{h15}{g15.0}{g16.180} \tnghzhbond{h16}{g16.0}{g17.180}
+    \tnghzhbond{h17}{g17.0}{g18.180}
+    \tnghzhbond{h21}{g21.0}{g22.180} \tnghzhbond{h22}{g22.0}{g23.180}
+    \tnghzhbond{h23}{g23.0}{g24.180} \tnghzhbond{h24}{g24.0}{g25.180}
+    \tnghzhbond{h25}{g25.0}{g26.180} \tnghzhbond{h26}{g26.0}{g27.180}
+    \tnghzhbond{h27}{g27.0}{g28.180}
+    \tnghzhbond{h31}{g31.0}{g32.180} \tnghzhbond{h32}{g32.0}{g33.180}
+    \tnghzhbond{h33}{g33.0}{g34.180} \tnghzhbond{h34}{g34.0}{g35.180}
+    \tnghzhbond{h35}{g35.0}{g36.180} \tnghzhbond{h36}{g36.0}{g37.180}
+    \tnghzhbond{h37}{g37.0}{g38.180}
+    \tnghzhbond{h41}{g41.0}{g42.180} \tnghzhbond{h42}{g42.0}{g43.180}
+    \tnghzhbond{h43}{g43.0}{g44.180} \tnghzhbond{h44}{g44.0}{g45.180}
+    \tnghzhbond{h45}{g45.0}{g46.180} \tnghzhbond{h46}{g46.0}{g47.180}
+    \tnghzhbond{h47}{g47.0}{g48.180}
+    \tnghzhbond{h51}{g51.0}{g52.180} \tnghzhbond{h52}{g52.0}{g53.180}
+    \tnghzhbond{h53}{g53.0}{g54.180} \tnghzhbond{h54}{g54.0}{g55.180}
+    \tnghzhbond{h55}{g55.0}{g56.180} \tnghzhbond{h56}{g56.0}{g57.180}
+    \tnghzhbond{h57}{g57.0}{g58.180}
+    \tnghzhbond{h61}{g61.0}{g62.180} \tnghzhbond{h62}{g62.0}{g63.180}
+    \tnghzhbond{h63}{g63.0}{g64.180} \tnghzhbond{h64}{g64.0}{g65.180}
+    \tnghzhbond{h65}{g65.0}{g66.180} \tnghzhbond{h66}{g66.0}{g67.180}
+    \tnghzhbond{h67}{g67.0}{g68.180}
+    \tnghzhbond{v11}{g11.270}{g21.90} \tnghzhbond{v13}{g13.270}{g23.90}
+    \tnghzhbond{v15}{g15.270}{g25.90} \tnghzhbond{v17}{g17.270}{g27.90}
+    \tnghzhbond{v22}{g22.270}{g32.90} \tnghzhbond{v24}{g24.270}{g34.90}
+    \tnghzhbond{v26}{g26.270}{g36.90} \tnghzhbond{v28}{g28.270}{g38.90}
+    \tnghzhbond{v31}{g31.270}{g41.90} \tnghzhbond{v33}{g33.270}{g43.90}
+    \tnghzhbond{v35}{g35.270}{g45.90} \tnghzhbond{v37}{g37.270}{g47.90}
+    \tnghzhbond{v42}{g42.270}{g52.90} \tnghzhbond{v44}{g44.270}{g54.90}
+    \tnghzhbond{v46}{g46.270}{g56.90} \tnghzhbond{v48}{g48.270}{g58.90}
+    \tnghzhbond{v51}{g51.270}{g61.90} \tnghzhbond{v53}{g53.270}{g63.90}
+    \tnghzhbond{v55}{g55.270}{g65.90} \tnghzhbond{v57}{g57.270}{g67.90}
+    \tnwire{g11.180}{open w}\tnwire{g21.180}{open w}\tnwire{g31.180}{open w}
+    \tnwire{g41.180}{open w}\tnwire{g51.180}{open w}\tnwire{g61.180}{open w}
+    \tnwire{g18.0}{open e}\tnwire{g28.0}{open e}\tnwire{g38.0}{open e}
+    \tnwire{g48.0}{open e}\tnwire{g58.0}{open e}\tnwire{g68.0}{open e}
+    \tnwire{g12.90}{open n}\tnwire{g14.90}{open n}
+    \tnwire{g16.90}{open n}\tnwire{g18.90}{open n}
+    \tnwire{g62.270}{open s}\tnwire{g64.270}{open s}
+    \tnwire{g66.270}{open s}\tnwire{g68.270}{open s}
+  \end{tenkz}
 \]
