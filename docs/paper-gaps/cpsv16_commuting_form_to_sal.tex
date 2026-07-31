@@ -565,9 +565,12 @@ marginal with that of the original source tensor in the same one-site
 physical coordinates.  This is
 \leanid{MPOTensor.EtaLocalStructureData.%
 exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}.
-It assumes exactly the hypotheses of Proposition~\emph{4to2} together with
-the standing MPDO and injectivity hypotheses; it assumes no injectivity,
-normality, or zero correlation length for the selected fixed-product tensor.
+It assumes injectivity of the source tensor, an eta-local structure, and
+source ZCL.  It assumes no MPDO positivity at this intermediate stage and no
+injectivity, normality, or zero correlation length for the selected
+fixed-product tensor.  MPDO positivity enters only in the final SAL capstone,
+where it supplies positivity of the source operators in the selected physical
+coordinates.
 
 Applying the all-cut Markov criterion to these physical-coordinate marginals
 and transporting saturation through the one-site isometry gives

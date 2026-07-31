@@ -926,25 +926,29 @@ firstSiteMatrix_mul_reducedBlockState}
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `prop4to2`, lines
-% 1801--1808, under the standing Case II biCF hypothesis at line 1628 and
-% the surrounding source-ZCL hypothesis.
-\begin{theorem}[Canonical BNT commuting sectors with ambient ZCL satisfy SAL]
+% 1801--1808. The standing Case II biCF and source-ZCL hypotheses supply the
+% sector-decomposition data below, but are not assumptions of this theorem.
+\begin{theorem}[A compatible sector decomposition with ambient ZCL satisfies SAL]
     \label{thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
     \lean{MPOTensor.%
       isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo_proportional_orthogonal_commuting_sector_family,
-      def:mpdo_common_sector_weight_absorption, def:mpo_source_zcl,
-      def:is_sal, thm:mpdo_bnt_physical_support_restriction}
-    Let $M$ admit a nonempty BNT presentation with representatives
-    $A_x$, positive copy numbers $n_x$, and a block-diagonal gauge that
-    reconstructs $M$ from the corresponding direct sum. Suppose that this
-    presentation gives the same matrix product vectors as $M$ at every
-    positive length, that the weights of all copies of $A_x$ agree with a
-    common value $\mu_x$, and that the physical-trace transfer of
-    every $A_x$ is nonnilpotent. Assume also that the one-letter tuples
-    $(A_x^i)_x$ span the full product of the representative matrix algebras.
-    Put $K_x=\mu_xA_x$.
+    \uses{def:mpo_tensor, def:sector_weight_data,
+      def:global_gauge_of_blocks, def:same_mpv2_pos,
+      def:blockwise_product_word_span,
+      def:mpdo_doubled_phys_trace_transfer,
+      def:mpdo_common_sector_weight_absorption,
+      def:mpdo_proportional_orthogonal_commuting_sector_family,
+      def:mpo_source_zcl, def:is_sal}
+    Let $S$ be a nonempty sector decomposition with representatives $A_x$,
+    positive copy numbers $n_x$, and nonzero copy weights. Suppose its total
+    bond dimension equals that of an MPO tensor $M$, and a block-diagonal gauge
+    reconstructs $M$ from the tensor associated with $S$. Suppose also that
+    this tensor has the same matrix product vectors as $M$ at every positive
+    length, that all copy weights over $A_x$ have a common value $\mu_x$, and
+    that the physical-trace transfer of every $A_x$ is nonnilpotent. Assume
+    that the one-letter tuples $(A_x^i)_x$ span the full product of the
+    representative matrix algebras, and put $K_x=\mu_xA_x$.
 
     Suppose that the tensors $K_x$ form a proportionally realized orthogonal
     commuting sector family and that each one-site operator
@@ -970,8 +974,8 @@ firstSiteMatrix_mul_reducedBlockState}
     one-letter span and the nonzero absorbed weights give one-site injectivity
     by Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}. Ambient source
     zero correlation length descends to every $K_x$ by
-    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. Finally, the canonical BNT
-    identity gives
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. Finally, the supplied
+    positive-length sector-decomposition identity gives
     $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$ for every $N>0$, so
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
     applies.

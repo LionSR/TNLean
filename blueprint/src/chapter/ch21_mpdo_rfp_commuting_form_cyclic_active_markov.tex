@@ -644,16 +644,14 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero}
     \leanok
-    \uses{def:mpdo, def:injective, def:mpo_source_zcl,
-      def:mpdo_eta_local_structure_data,
+    \uses{def:injective, def:mpdo_eta_local_structure_data,
       thm:mpdo_eta_fixed_bond_product_tensor,
       thm:mpdo_fixed_bond_positive_physical_sector_representative,
       def:mpdo_physical_sector_factorization,
       def:mpdo_cyclic_active_sector}
-    Let $K$ be an injective normal matrix-product density tensor with source
-    zero correlation length and an eta-local structure. Let $C$ be the exact
-    fixed-product tensor selected from its commuting bond, and let $F$ be the
-    associated positive physical-sector factorization. Then any two sectors
+    Let $K$ be an injective tensor with an eta-local structure. Let $C$ be the
+    exact fixed-product tensor selected from its commuting bond, and let $F$ be
+    the associated positive physical-sector factorization. Then any two sectors
     in the positive-length cyclic support of $F$ are joined by a directed path
     of nonzero neighboring operators.
 \end{theorem}
@@ -883,14 +881,14 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three}
     \leanok
-    \uses{def:mpdo, def:injective, def:normal, def:mpo_source_zcl,
+    \uses{def:injective, def:mpo_source_zcl,
       def:mpdo_eta_local_structure_data,
       def:mpdo_physical_sector_factorization,
       thm:mpdo_eta_fixed_bond_product_tensor,
       thm:mpdo_fixed_bond_positive_physical_sector_representative,
       def:mpdo_cyclic_active_sector}
-    Let $K$ be an injective normal matrix-product density tensor with source
-    zero correlation length and an eta-local structure. Let $F$ be the
+    Let $K$ be an injective tensor with an eta-local structure and source zero
+    correlation length. Let $F$ be the
     positive physical-sector factorization of the selected fixed-product
     tensor, and let $T_C$ be its trace matrix on cyclic-active sectors. There
     is a number $\lambda>0$ such that
@@ -924,15 +922,14 @@
     \lean{MPOTensor.EtaLocalStructureData.%
       exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL}
     \leanok
-    \uses{def:mpdo, def:injective, def:normal, def:mpo_source_zcl,
+    \uses{def:injective, def:mpo_source_zcl,
       def:mpdo_eta_local_structure_data,
       thm:mpdo_fixed_bond_positive_physical_sector_representative,
       def:hayashi_markov_decomposition}
-    Let $K$ be an injective tensor generating matrix-product density
-    operators, with an eta-local structure and source zero correlation
-    length. Express $K$ in the one-site physical coordinates of the positive
-    fixed-product factorization selected by the eta-local structure. For
-    arbitrary $A,C\geq0$, the normalized marginal on consecutive regions of
+    Let $K$ be an injective tensor with an eta-local structure and source zero
+    correlation length. Express $K$ in the one-site physical coordinates of the
+    positive fixed-product factorization selected by the eta-local structure.
+    For arbitrary $A,C\geq0$, the normalized marginal on consecutive regions of
     lengths $A$, $1$, and $C$, obtained from the periodic chain of length
     $A+C+2$, admits a Hayashi Markov decomposition.
 \end{theorem}
