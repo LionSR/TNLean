@@ -10,6 +10,7 @@ import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Core.TPGauge
+import TNLean.Spectral.Radius
 import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Algebra.Module.Equiv.Basic
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
@@ -22,8 +23,6 @@ for irreducible completely positive maps on `M_D(ℂ)`.
 
 ## Main results
 
-* `spectralRadius_smul_matrixEnd`: scalar multiplication scales the spectral radius of a
-  finite-dimensional continuous matrix endomorphism by the scalar norm.
 * `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp`:
   if `E ρ = r • ρ` with `ρ > 0` and `r > 0`, then the spectral radius of `E`
   is `r`.
@@ -150,69 +149,6 @@ theorem IsPrimitive.similarityMap_iff
   exact IsPrimitive.conj_iff (sandwichLinearEquiv (D := D) C hC).symm E
 
 end SimilarityCLM
-
-/-- Scaling a finite-dimensional continuous matrix endomorphism by a nonzero complex scalar
-scales its spectral radius by the norm of that scalar.
-
-This is the standard spectrum-scaling identity used in the Perron normalization argument of
-Wolf, *Quantum Channels & Operations*, Section 6.2. -/
-theorem spectralRadius_smul_matrixEnd
-    [NeZero D]
-    (F : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-    {c : ℂ} (hc : c ≠ 0) :
-    spectralRadius ℂ (c • F) = (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
-  letI : FiniteDimensional ℂ
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    (Module.End.toContinuousLinearMap
-      (Matrix (Fin D) (Fin D) ℂ)).toLinearEquiv.finiteDimensional
-  have hF_nonempty : (spectrum ℂ F).Nonempty :=
-    spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ F
-  have hspec : spectrum ℂ (c • F) = c • spectrum ℂ F := by
-    simpa using spectrum.smul_eq_smul c F hF_nonempty
-  apply le_antisymm
-  · rw [spectralRadius, hspec]
-    refine iSup₂_le ?_
-    intro z hz
-    have hμ : c⁻¹ • z ∈ spectrum ℂ F := by
-      rwa [Set.mem_smul_set_iff_inv_smul_mem₀ hc] at hz
-    have hz' : c • (c⁻¹ • z) = z := by
-      rw [smul_smul, mul_inv_cancel₀ hc, one_smul]
-    have hnorm : (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ :=
-      congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c (c⁻¹ • z))
-    calc
-      (‖z‖₊ : ℝ≥0∞) = (‖c • (c⁻¹ • z)‖₊ : ℝ≥0∞) := by rw [hz']
-      _ = (‖c‖₊ : ℝ≥0∞) * ‖c⁻¹ • z‖₊ := hnorm
-      _ ≤ (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F := by
-          gcongr
-          change (‖c⁻¹ • z‖₊ : ℝ≥0∞) ≤ spectralRadius ℂ F
-          rw [spectralRadius]
-          exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ F) _
-            (fun k _ => (‖k‖₊ : ENNReal)) (c⁻¹ • z) hμ
-  · have hcompact : IsCompact (spectrum ℂ F) := by
-      let hComplete :
-          CompleteSpace (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-        FiniteDimensional.complete ℂ
-          (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      exact @spectrum.isCompact ℂ
-        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
-        inferInstance inferInstance inferInstance hComplete inferInstance F
-    obtain ⟨μ, hμ_spec, hμ_max⟩ :=
-      hcompact.exists_isMaxOn hF_nonempty continuous_nnnorm.continuousOn
-    have hμ_rad : (‖μ‖₊ : ℝ≥0∞) = spectralRadius ℂ F :=
-      le_antisymm (le_iSup₂ (α := ℝ≥0∞) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
-    have hcμ_spec : c • μ ∈ spectrum ℂ (c • F) := by
-      rw [hspec]
-      exact Set.smul_mem_smul_set hμ_spec
-    calc
-      (‖c‖₊ : ℝ≥0∞) * spectralRadius ℂ F
-          = (‖c‖₊ : ℝ≥0∞) * (‖μ‖₊ : ℝ≥0∞) := by rw [hμ_rad]
-      _ = (‖c • μ‖₊ : ℝ≥0∞) := by
-            symm
-            exact congrArg (fun t : ℝ≥0 => (t : ℝ≥0∞)) (nnnorm_smul c μ)
-      _ ≤ spectralRadius ℂ (c • F) := by
-          rw [spectralRadius]
-          exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (c • F)) _
-            (fun k _ => (‖k‖₊ : ENNReal)) (c • μ) hcμ_spec
 
 /-- **Perron eigenvalue = spectral radius** (Wolf Theorem 6.3(4)).
 
@@ -439,7 +375,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
       rw [hE'_def]
       rfl
     rw [hE'_clm]
-    exact spectralRadius_smul_matrixEnd (D := D)
+    exact spectralRadius_smul
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (similarityMap (D := D) S⁻¹ E))
       (c := (↑r : ℂ)⁻¹) (inv_ne_zero (by exact_mod_cast hr.ne'))

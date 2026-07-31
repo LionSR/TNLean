@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.ActiveBNTRefinement
+import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.RFP.BNTOrthogonality
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.Spectral.Radius
 
 /-!
 # Active blocks of a literal CPSV renormalization fixed point
@@ -104,12 +105,14 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
       (Matrix (Fin R) (Fin R) ℂ))
     simpa only [hMap, map_smul, Eclm] using hMapped
   have hradScaled : spectralRadius ℂ (q • Eclm) = 1 :=
-    MPSTensor.IsIdempotentElem.spectralRadius_eq_one_of_ne_zero hIdem hqEclm_ne
-  have hscale := spectralRadius_smul_matrixEnd Eclm hq
+    IsIdempotentElem.spectralRadius_eq_one_of_ne_zero hIdem hqEclm_ne
+  have hscale := spectralRadius_smul Eclm hq
   have hradE : spectralRadius ℂ Eclm = 1 := hA.spectral_radius_one
   have hqNormENN : (‖q‖₊ : ℝ≥0∞) = 1 := by
     calc
-      (‖q‖₊ : ℝ≥0∞) = (‖q‖₊ : ℝ≥0∞) * spectralRadius ℂ Eclm := by rw [hradE, mul_one]
+      (‖q‖₊ : ℝ≥0∞) =
+          (‖q‖₊ : ℝ≥0∞) * spectralRadius ℂ Eclm := by
+        rw [hradE, mul_one]
       _ = spectralRadius ℂ (q • Eclm) := hscale.symm
       _ = 1 := hradScaled
   have hqNormNN : ‖q‖₊ = 1 := ENNReal.coe_injective hqNormENN
@@ -120,7 +123,8 @@ theorem norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     nlinarith [norm_nonneg c]
   refine ⟨hcNorm, ?_⟩
   have hqOne : q = 1 := by
-    simpa [q, RCLike.star_def, Complex.normSq_eq_norm_sq, hcNorm] using Complex.mul_conj c
+    simpa [q, RCLike.star_def, Complex.normSq_eq_norm_sq, hcNorm] using
+      Complex.mul_conj c
   rw [IsTransferIdempotent, hMap, hqOne, one_smul] at hRFP
   exact hRFP
 
@@ -145,15 +149,11 @@ theorem active_weight_norm_one_and_block_rfp
     (isTransferIdempotent_coisometry_reconstruction_iff A
       (toTensorFromBlocks data.weights data.blocks)
       data.ambient_coisometry data.coisometric data.reconstruct).mp hRFP
-  have hDirect :
-      toTensorFromBlocks data.weights data.blocks = directSumTensor scaledBlocks := by
-    rfl
-  rw [hDirect] at hRetained
-  have hScaledBlock : IsTransferIdempotent (scaledBlocks k) := by
-    have hIdem :=
-      mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
-        scaledBlocks hRetained k k
-    rwa [mixedTransferMap₂_self] at hIdem
+  change IsTransferIdempotent (directSumTensor scaledBlocks) at hRetained
+  have hScaledBlock :=
+    mixedTransferMap₂_isIdempotentElem_of_isTransferIdempotent_directSum
+      scaledBlocks hRetained k k
+  rw [mixedTransferMap₂_self] at hScaledBlock
   exact norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul
     (data.blocks k) (data.blocks_normal k) (data.weights k) k.property hScaledBlock
 

@@ -139,22 +139,4 @@ theorem IsIdempotentElem.eq_zero_of_spectralRadius_lt_one
     exact tendsto_const_nhds
   exact tendsto_nhds_unique hconst hshift
 
-/-- A nonzero idempotent in a complex Banach algebra has spectral radius one.
-
-The upper bound follows because the spectrum of an idempotent is contained in
-`{0, 1}`; the lower bound is the contrapositive of
-`IsIdempotentElem.eq_zero_of_spectralRadius_lt_one`. -/
-theorem IsIdempotentElem.spectralRadius_eq_one_of_ne_zero
-    {A : Type*} [NormedRing A] [CompleteSpace A] [NormedAlgebra ℂ A]
-    {a : A} (ha : IsIdempotentElem a) (ha_ne : a ≠ 0) :
-    spectralRadius ℂ a = 1 := by
-  apply le_antisymm
-  · rw [spectralRadius]
-    refine iSup₂_le fun z hz => ?_
-    have hz' : z = 0 ∨ z = 1 := by
-      simpa only [Set.mem_insert_iff, Set.mem_singleton_iff] using ha.spectrum_subset ℂ hz
-    rcases hz' with rfl | rfl <;> norm_num
-  · exact le_of_not_gt fun h =>
-      ha_ne (MPSTensor.IsIdempotentElem.eq_zero_of_spectralRadius_lt_one ha h)
-
 end MPSTensor
