@@ -149,9 +149,10 @@ theorem isMPDO_of_mpo_one_pos
     (hOne : ∀ s, (mpo (K s) 1).PosSemidef) :
     ∀ s, IsMPDO (K s) := by
   intro s N hN
-  rcases Nat.eq_one_or_one_lt_of_pos hN with rfl | hN
-  · exact hOne s
-  · exact F.mpo_posSemidef_of_two_le s N hN
+  by_cases hN1 : N = 1
+  · subst N
+    exact hOne s
+  · exact F.mpo_posSemidef_of_two_le s N (by omega)
 
 end ProportionalOrthogonalCommutingSectorFamily
 
