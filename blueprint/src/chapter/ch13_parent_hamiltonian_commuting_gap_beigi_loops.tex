@@ -566,7 +566,9 @@
     \uses{def:mps_transfer_idempotence, def:has_nncph_ground_spaces,
         thm:beigi_loop_product_states_span_ground_space,
         thm:beigi_normalized_minimal_loop_tensor_rfp,
-        lem:beigi_normalized_minimal_loop_mixed_transfer_zero}
+        lem:beigi_normalized_minimal_loop_mixed_transfer_zero,
+        thm:cpsv_normal_mpv_phase_gauge,
+        thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and set
     \[
@@ -590,8 +592,8 @@
 \begin{proof}
     \leanok
     Beigi's positive-loop product states span each parent ground space.
-    Consequently every normal basis tensor $A_j$ agrees, up to a nonzero
-    phase and an invertible virtual change of basis, with a normalized
+    Consequently every normal basis tensor $A_j$ agrees, up to a unit-modulus
+    scalar and an invertible virtual change of basis, with a normalized
     minimal loop tensor $L_{\ell(j)}$. Distinctness of the BNT basis makes
     $j\mapsto\ell(j)$ injective.
 

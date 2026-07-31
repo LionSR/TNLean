@@ -417,7 +417,8 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
 
 /-- Each BNT component in an all-chain NNCPH ground-space family eventually
 belongs to the span of the normalized minimal-loop MPV states. -/
-private theorem BeigiSectorGraphData.eventually_component_mpvState_mem_loopSpan
+private theorem
+    BeigiSectorGraphData.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {B : MPSTensor d D} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
@@ -564,7 +565,9 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       (hBasisNormal j) F.normalizedMinimalLoopTensor hLoopNormal
     · intro l m hlm
       exact F.normalizedMinimalLoopTensor_overlap_tendsto_zero hlm
-    · exact F.eventually_component_mpvState_mem_loopSpan hparent hNNCPH j
+    · exact
+        F.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
+          hparent hNNCPH j
   let loopOf (j : Fin P.basisCount) : Loop F.edgeWeight :=
     (hPhaseExists j).choose
   have hPhase (j : Fin P.basisCount) :
