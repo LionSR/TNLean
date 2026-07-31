@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Channel.KoashiImoto.CommonInvariantAlgebra
 
 /-!
@@ -78,14 +79,6 @@ noncomputable def pooledKfam (K : (μ : Fin M) → Fin (r μ) → Mat) :
   fun k => ((poolScale M : ℝ) : ℂ) • K (finSigmaFinEquiv.symm k).1 (finSigmaFinEquiv.symm k).2
 
 omit [NeZero M] in
-/-- A sum over the pooled index `Fin (∑ μ, r μ)`, reindexed along `finSigmaFinEquiv`, splits
-into the double sum over `μ` and the Kraus index of `K μ`. -/
-private theorem sum_pooled_reindex {β : Type*} [AddCommMonoid β]
-    (f : (Σ _μ : Fin M, Fin (r _μ)) → β) :
-    ∑ k : Fin (∑ μ, r μ), f (finSigmaFinEquiv.symm k) = ∑ μ, ∑ i, f ⟨μ, i⟩ := by
-  rw [Equiv.sum_comp finSigmaFinEquiv.symm f, ← Finset.univ_sigma_univ, Finset.sum_sigma]
-
-omit [NeZero M] in
 /-- **The pooled Kraus map is the average of the individual ones.**
 
 HJPW, arXiv:quant-ph/0304007v2, line 849: `F_0 = (1/M) ∑_μ F_μ`. -/
@@ -96,8 +89,9 @@ theorem map_pooledKfam (K : (μ : Fin M) → Fin (r μ) → Mat) (X : Mat) :
     change ∑ k : Fin (∑ μ, r μ), pooledKfam K k * X * (pooledKfam K k)ᴴ = _
     simp only [pooledKfam, Matrix.conjTranspose_smul, Complex.star_def,
       Complex.conj_ofReal, smul_mul_assoc, mul_smul_comm, smul_smul]
-    rw [sum_pooled_reindex (fun p => (((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ)) •
-      (K p.1 p.2 * X * (K p.1 p.2)ᴴ))]
+    rw [Fintype.sum_finSigmaFinEquiv
+      (fun p => (((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ)) •
+        (K p.1 p.2 * X * (K p.1 p.2)ᴴ))]
     simp only [cpow_poolScale_sq, ← Finset.smul_sum]
   rw [hstep]
   simp only [map]
@@ -109,8 +103,9 @@ theorem isTP_pooledKfam (K : (μ : Fin M) → Fin (r μ) → Mat) (hK : ∀ μ, 
       = (M : ℂ)⁻¹ • ∑ μ, ∑ i, (K μ i)ᴴ * K μ i := by
     simp only [pooledKfam, Matrix.conjTranspose_smul, Complex.star_def, Complex.conj_ofReal,
       smul_mul_assoc, mul_smul_comm, smul_smul]
-    rw [sum_pooled_reindex (fun p => (((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ)) •
-      ((K p.1 p.2)ᴴ * K p.1 p.2))]
+    rw [Fintype.sum_finSigmaFinEquiv
+      (fun p => (((poolScale M : ℝ) : ℂ) * ((poolScale M : ℝ) : ℂ)) •
+        ((K p.1 p.2)ᴴ * K p.1 p.2))]
     simp only [cpow_poolScale_sq, ← Finset.smul_sum]
   change ∑ k : Fin (∑ μ, r μ), (pooledKfam K k)ᴴ * pooledKfam K k = 1
   rw [hstep]
