@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FrobeniusHilbert
+import TNLean.Algebra.MatrixFamilySupport
 import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.RectangularChoi
+import TNLean.Analysis.CoisometricCompression
+import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.Peripheral.UnitalKraus
 import TNLean.Channel.SingleKraus
+import TNLean.Channel.Spectral.Support
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
@@ -26,6 +30,10 @@ Kraus map with its Hilbert-space adjoint after Frobenius vectorization.
   Kraus map is its trace-pairing adjoint.
 * `Matrix.weightedHilbertSchmidtMap`: the full-support weighted channel map.
 * `Matrix.weightedHilbertSchmidtMap_norm_le`: its Hilbert--Schmidt contraction bound.
+* `Matrix.supportedWeightedHilbertSchmidtMap`: the weighted channel map with
+  the negative output power restricted to its support.
+* `Matrix.supportedWeightedHilbertSchmidtMap_norm_le`: the contraction bound
+  without a full-support assumption on the output.
 
 ## References
 
@@ -284,6 +292,236 @@ theorem weightedHilbertSchmidtMap_isHilbertSchmidtContraction
   have hNorm := weightedHilbertSchmidtMap_norm_le hΦ hσ hτ hmap X
   nlinarith [norm_nonneg (weightedHilbertSchmidtMap Φ σ τ X), norm_nonneg X]
 
+/-! ### Singular output support -/
+
+/-- If a channel sends a positive-definite matrix to `τ`, then every output of the
+channel is supported on the support projection of `τ`.
+
+This is the support statement underlying the singular-output specialization of
+Beigi, arXiv:1306.5920, Theorem 6 and equation (18). -/
+theorem IsKrausCPTP.supportProj_mul_map
+    {r p : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ} {τ : Matrix (Fin p) (Fin p) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) (hmap : Φ σ = τ)
+    (X : Matrix (Fin r) (Fin r) ℂ) :
+    (hΦ.map_posSemidef hσ.posSemidef).supportProj * Φ X = Φ X := by
+  obtain ⟨d, A, hA⟩ := hΦ.isKrausCP
+  let sσ := CFC.sqrt σ
+  let B : Fin d → Matrix (Fin p) (Fin r) ℂ := fun i ↦ A i * sσ
+  have hsσ_psd : sσ.PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)
+  have hsσ_sq : sσ * sσ = σ := by
+    simpa only [sσ] using CFC.sqrt_mul_sqrt_self σ hσ.posSemidef.nonneg
+  have hsσ_star : sσᴴ = sσ := hsσ_psd.isHermitian.eq
+  have hsσ_unit : IsUnit sσ :=
+    (CFC.isUnit_sqrt_iff σ hσ.posSemidef.nonneg).2 hσ.isUnit
+  have hsσ_det : sσ.det ≠ 0 :=
+    ((Matrix.isUnit_iff_isUnit_det sσ).1 hsσ_unit).ne_zero
+  have hGram : familyColumnGram B = τ := by
+    rw [familyColumnGram_eq_sum]
+    calc
+      ∑ i, B i * (B i)ᴴ = ∑ i, A i * σ * (A i)ᴴ := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        simp only [B, Matrix.conjTranspose_mul, hsσ_star]
+        simp only [Matrix.mul_assoc]
+        rw [← Matrix.mul_assoc sσ sσ, hsσ_sq]
+      _ = Φ σ := (hA σ).symm
+      _ = τ := hmap
+  have hSupport :
+      (hΦ.map_posSemidef hσ.posSemidef).supportProj = familySupportProj B := by
+    exact ((familyColumnGram_posSemidef B).supportProj_congr
+      (hΦ.map_posSemidef hσ.posSemidef) (hGram.trans hmap.symm)).symm
+  rw [hSupport, hA, Matrix.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  have hPA : familySupportProj B * A i = A i := by
+    calc
+      familySupportProj B * A i =
+          (familySupportProj B * A i) * (1 : Matrix (Fin r) (Fin r) ℂ) := by
+        rw [Matrix.mul_one]
+      _ = (familySupportProj B * A i) * (sσ * sσ⁻¹) := by
+        rw [Matrix.mul_nonsing_inv sσ (Ne.isUnit hsσ_det)]
+      _ = (familySupportProj B * (A i * sσ)) * sσ⁻¹ := by
+        simp only [Matrix.mul_assoc]
+      _ = (familySupportProj B * B i) * sσ⁻¹ := rfl
+      _ = B i * sσ⁻¹ := by rw [familySupportProj_mul]
+      _ = (A i * sσ) * sσ⁻¹ := rfl
+      _ = A i * (sσ * sσ⁻¹) := Matrix.mul_assoc _ _ _
+      _ = A i := by rw [Matrix.mul_nonsing_inv sσ (Ne.isUnit hsσ_det), Matrix.mul_one]
+  simp only [← Matrix.mul_assoc, hPA]
+
+/-- Under the hypotheses of `IsKrausCPTP.supportProj_mul_map`, every channel
+output is also supported on the right. -/
+theorem IsKrausCPTP.map_mul_supportProj
+    {r p : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ} {τ : Matrix (Fin p) (Fin p) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) (hmap : Φ σ = τ)
+    (X : Matrix (Fin r) (Fin r) ℂ) :
+    Φ X * (hΦ.map_posSemidef hσ.posSemidef).supportProj = Φ X := by
+  have hleft := Matrix.IsKrausCPTP.supportProj_mul_map hΦ hσ hmap Xᴴ
+  have hΦpos : IsPositiveMap Φ := fun Y hY ↦ hΦ.map_posSemidef hY
+  have hstar := congrArg Matrix.conjTranspose hleft
+  simpa only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
+    (hΦ.map_posSemidef hσ.posSemidef).supportProj_isHermitian.eq,
+    hΦpos.map_conjTranspose] using hstar
+
+/-- Compress the output of a matrix map along an isometry `V`. -/
+noncomputable def outputSupportCompressedMap
+    {r p s : ℕ} (Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ)
+    (V : Matrix (Fin p) (Fin s) ℂ) :
+    Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin s) (Fin s) ℂ :=
+  (singleKrausMap Vᴴ).comp Φ
+
+/-- Compression of a channel to the support of the image of a faithful weight
+is again trace preserving and completely positive. -/
+theorem outputSupportCompressedMap_isKrausCPTP
+    {r p s : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ} {τ : Matrix (Fin p) (Fin p) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) (hmap : Φ σ = τ)
+    (V : Matrix (Fin p) (Fin s) ℂ)
+    (hVVt : V * Vᴴ = (hΦ.map_posSemidef hσ.posSemidef).supportProj) :
+    IsKrausCPTP (outputSupportCompressedMap Φ V) := by
+  apply isKrausCPTP_of_isKrausCP_trace_preserving
+  · exact isKrausCP_comp hΦ.isKrausCP (singleKrausMap_isKrausCP Vᴴ)
+  · intro X
+    rw [outputSupportCompressedMap, LinearMap.comp_apply, singleKrausMap_apply,
+      Matrix.conjTranspose_conjTranspose]
+    calc
+      Matrix.trace (Vᴴ * Φ X * V) = Matrix.trace (V * Vᴴ * Φ X) := by
+        rw [Matrix.trace_mul_cycle]
+      _ = Matrix.trace
+          ((hΦ.map_posSemidef hσ.posSemidef).supportProj * Φ X) := by rw [hVVt]
+      _ = Matrix.trace (Φ X) := by rw [Matrix.IsKrausCPTP.supportProj_mul_map hΦ hσ hmap]
+      _ = Matrix.trace X := hΦ.trace_map X
+
+/-- The support-weighted map
+`X ↦ τ⁻¹⁄⁴ Φ(σ¹⁄⁴ X σ¹⁄⁴) τ⁻¹⁄⁴`, with the negative power
+zero on the kernel of `τ`. -/
+noncomputable def supportedWeightedHilbertSchmidtMap
+    {r p : ℕ} (Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ)
+    (σ : Matrix (Fin r) (Fin r) ℂ) {τ : Matrix (Fin p) (Fin p) ℂ}
+    (hτ : τ.PosSemidef) :
+    Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ :=
+  (singleKrausMap hτ.supportInvFourthRoot).comp
+    (Φ.comp (singleKrausMap (CFC.sqrt (CFC.sqrt σ))))
+
+/-- Compression proof of the support-weighted contraction with a named output
+weight and an explicit proof of its positivity. -/
+private theorem supportedWeightedHilbertSchmidtMap_norm_le_aux
+    {r p : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ} {τ : Matrix (Fin p) (Fin p) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) (hτ : τ.PosSemidef)
+    (hmap : Φ σ = τ) (X : Matrix (Fin r) (Fin r) ℂ) :
+    ‖supportedWeightedHilbertSchmidtMap Φ σ hτ X‖ ≤ ‖X‖ := by
+  obtain ⟨s, V, hV, hVrange⟩ :=
+    hτ.isOrthogonalProjection_supportProj.exists_range_isometry
+  have hSupport :
+      (hΦ.map_posSemidef hσ.posSemidef).supportProj = hτ.supportProj := by
+    exact (hΦ.map_posSemidef hσ.posSemidef).supportProj_congr hτ hmap
+  let Ψ := outputSupportCompressedMap Φ V
+  let τc := Vᴴ * τ * V
+  have hΨ : IsKrausCPTP Ψ := by
+    apply outputSupportCompressedMap_isKrausCPTP hΦ hσ hmap V
+    exact hVrange.trans hSupport.symm
+  have hτc : τc.PosDef := by
+    have h := hτ.compression_on_support_posDef (V := Vᴴ)
+      (by simpa only [Matrix.conjTranspose_conjTranspose] using hV)
+      (by simpa only [Matrix.conjTranspose_conjTranspose] using hVrange)
+    simpa only [τc, Matrix.conjTranspose_conjTranspose] using h
+  have hmapc : Ψ σ = τc := by
+    simp only [Ψ, τc, outputSupportCompressedMap, LinearMap.comp_apply,
+      singleKrausMap_apply, Matrix.conjTranspose_conjTranspose, hmap]
+  let q := hτ.supportInvFourthRoot
+  let qc := (CFC.sqrt (CFC.sqrt τc))⁻¹
+  have hqcomp : Vᴴ * q * V = qc := by
+    simpa only [q, qc, τc] using
+      hτ.supportInvFourthRoot_compression_on_support V hV hVrange
+  have hPq : hτ.supportProj * q = q := by
+    let hsτ : (CFC.sqrt τ).PosSemidef :=
+      Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg τ)
+    change hτ.supportProj * hsτ.supportInvSqrt = hsτ.supportInvSqrt
+    rw [← hτ.supportProj_cfc_sqrt]
+    exact hsτ.supportProj_mul_supportInvSqrt
+  have hqP : q * hτ.supportProj = q := by
+    let hsτ : (CFC.sqrt τ).PosSemidef :=
+      Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg τ)
+    change hsτ.supportInvSqrt * hτ.supportProj = hsτ.supportInvSqrt
+    rw [← hτ.supportProj_cfc_sqrt]
+    exact hsτ.supportInvSqrt_mul_supportProj
+  have hqstar : qᴴ = q := by
+    exact (Matrix.nonneg_iff_posSemidef.mp
+      (CFC.sqrt_nonneg τ)).supportInvSqrt_isHermitian.eq
+  let qσ := CFC.sqrt (CFC.sqrt σ)
+  let Y := Φ (qσ * X * qσ)
+  have hPY : hτ.supportProj * Y = Y := by
+    rw [← hSupport]
+    exact Matrix.IsKrausCPTP.supportProj_mul_map hΦ hσ hmap (qσ * X * qσ)
+  have hYP : Y * hτ.supportProj = Y := by
+    rw [← hSupport]
+    exact Matrix.IsKrausCPTP.map_mul_supportProj hΦ hσ hmap (qσ * X * qσ)
+  let Z := weightedHilbertSchmidtMap Ψ σ τc X
+  have hZnorm : ‖Z‖ ≤ ‖X‖ :=
+    weightedHilbertSchmidtMap_norm_le hΨ hσ hτc hmapc X
+  have hqσstar : qσᴴ = qσ := by
+    exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg (CFC.sqrt σ))).isHermitian.eq
+  have hqcstar : qcᴴ = qc := by
+    dsimp only [qc]
+    rw [Matrix.conjTranspose_nonsing_inv]
+    exact congrArg Inv.inv
+      (Matrix.nonneg_iff_posSemidef.mp
+        (CFC.sqrt_nonneg (CFC.sqrt τc))).isHermitian.eq
+  have hZ : Z = qc * (Vᴴ * Y * V) * qc := by
+    simp only [Z, weightedHilbertSchmidtMap, LinearMap.comp_apply,
+      singleKrausMap_apply, Ψ, outputSupportCompressedMap,
+      Matrix.conjTranspose_conjTranspose, hqσstar, qσ, Y, qc, hqcstar]
+  have hembed : V * Z * Vᴴ = q * Y * q := by
+    rw [hZ, ← hqcomp]
+    calc
+      V * ((Vᴴ * q * V) * (Vᴴ * Y * V) * (Vᴴ * q * V)) * Vᴴ =
+          (V * Vᴴ) * q * (V * Vᴴ) * Y * (V * Vᴴ) * q * (V * Vᴴ) := by
+        simp only [Matrix.mul_assoc]
+      _ = hτ.supportProj * q * hτ.supportProj * Y *
+          hτ.supportProj * q * hτ.supportProj := by rw [hVrange]
+      _ = q * Y * q := by
+        simp only [Matrix.mul_assoc, hPq, hqP, hYP]
+  have hsupported : supportedWeightedHilbertSchmidtMap Φ σ hτ X = q * Y * q := by
+    simp only [supportedWeightedHilbertSchmidtMap, LinearMap.comp_apply,
+      singleKrausMap_apply, hqstar, hqσstar, q, qσ, Y]
+  rw [hsupported, ← hembed, frobenius_norm_isometry_mul_mul_conjTranspose V hV]
+  exact hZnorm
+
+/-- The support-weighted `p = 2` specialization of the Schatten-norm
+contraction in Beigi, arXiv:1306.5920, Theorem 6 and equation (18).
+
+No full-support hypothesis is imposed on the output `Φ σ`; its negative
+quarter power vanishes on the kernel. -/
+theorem supportedWeightedHilbertSchmidtMap_norm_le
+    {r p : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) (X : Matrix (Fin r) (Fin r) ℂ) :
+    ‖supportedWeightedHilbertSchmidtMap Φ σ
+      (hΦ.map_posSemidef hσ.posSemidef) X‖ ≤ ‖X‖ := by
+  exact supportedWeightedHilbertSchmidtMap_norm_le_aux hΦ hσ
+    (hΦ.map_posSemidef hσ.posSemidef) rfl X
+
+/-- The support-weighted channel map is a Hilbert--Schmidt contraction without
+a full-support assumption on the output weight. -/
+theorem supportedWeightedHilbertSchmidtMap_isHilbertSchmidtContraction
+    {r p : ℕ} {Φ : Matrix (Fin r) (Fin r) ℂ →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ}
+    {σ : Matrix (Fin r) (Fin r) ℂ}
+    (hΦ : IsKrausCPTP Φ) (hσ : σ.PosDef) :
+    IsHilbertSchmidtContraction
+      (supportedWeightedHilbertSchmidtMap Φ σ
+        (hΦ.map_posSemidef hσ.posSemidef)) := by
+  intro X
+  rw [trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq,
+    trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
+  have hNorm := supportedWeightedHilbertSchmidtMap_norm_le hΦ hσ X
+  nlinarith [norm_nonneg
+    (supportedWeightedHilbertSchmidtMap Φ σ
+      (hΦ.map_posSemidef hσ.posSemidef) X), norm_nonneg X]
+
 -- The contraction specializes to the identity channel on the two-dimensional matrix algebra.
 private theorem weightedHilbertSchmidtMap_identity_fin_two
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
@@ -301,5 +539,13 @@ private theorem weightedHilbertSchmidtMap_identity_fin_zero
       1 1 X‖ ≤ ‖X‖ := by
   exact weightedHilbertSchmidtMap_norm_le isKrausCPTP_id
     Matrix.PosDef.one Matrix.PosDef.one rfl X
+
+-- The support-weighted theorem includes the zero-dimensional output algebra.
+private theorem supportedWeightedHilbertSchmidtMap_identity_fin_zero
+    (X : Matrix (Fin 0) (Fin 0) ℂ) :
+    ‖supportedWeightedHilbertSchmidtMap
+      (LinearMap.id : Matrix (Fin 0) (Fin 0) ℂ →ₗ[ℂ] Matrix (Fin 0) (Fin 0) ℂ)
+      1 (isKrausCPTP_id.map_posSemidef Matrix.PosDef.one.posSemidef) X‖ ≤ ‖X‖ := by
+  exact supportedWeightedHilbertSchmidtMap_norm_le isKrausCPTP_id Matrix.PosDef.one X
 
 end Matrix
