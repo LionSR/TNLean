@@ -16,8 +16,10 @@ This file introduces only the order-two trace functional
   \right],
 \]
 which is the expression inside the logarithm in the order-two sandwiched
-Rényi divergence for trace-one states. Negative powers vanish on the zero
-eigenspace, in accordance with the support convention of the source.
+Rényi divergence for trace-one states satisfying
+\(\operatorname{supp}\rho\subseteq\operatorname{supp}\omega\). Negative powers
+vanish on the zero eigenspace. Outside this support domain the totalized trace
+functional below remains finite, whereas the sandwiched divergence is infinite.
 
 The logarithmic comparison with quantum relative entropy requires the
 monotonicity in the order of the sandwiched Rényi divergence. That analytic
@@ -31,16 +33,17 @@ result is not asserted here.
 
 * `TNLean.sandwichedRenyiTwoTrace_nonneg` — positivity on
   positive-semidefinite arguments.
-* `TNLean.posDef_quarter_inv_sq` — the faithful identity
+* `TNLean.posDef_rpow_neg_quarter_mul_self` — the faithful identity
   \(\omega^{-1/4}\omega^{-1/4}=\omega^{-1/2}\).
-* `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — the equivalent weighted
-  Hilbert--Schmidt trace expression for faithful \(\omega\).
+* `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — a cyclically reordered trace
+  expression for faithful \(\omega\); when \(\rho\) is Hermitian, its common
+  value is the squared Hilbert--Schmidt norm of the sandwiched matrix.
 
 ## References
 
 * Müller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel,
   *On quantum Rényi entropies: a new generalization and some properties*,
-  arXiv:1306.3142v4, Definition 2.
+  arXiv:1306.3142v4, Definition 2 and Theorem 5.
 * Beigi, *Sandwiched Rényi divergence satisfies data processing inequality*,
   arXiv:1306.5920, Theorem 7.
 -/
@@ -74,10 +77,13 @@ private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
 /-- The order-two sandwiched trace functional
 \(\operatorname{Re}\operatorname{Tr}[(\omega^{-1/4}\rho\omega^{-1/4})^2]\).
 
-For positive-semidefinite matrices the real part is redundant. The definition
-uses the source's convention that a negative power is zero on the zero
-eigenspace; see Müller-Lennert et al., arXiv:1306.3142v4, Definition 2 and
-lines 94--96. -/
+For positive-semidefinite matrices the real part is redundant. When the
+matrices have trace one and
+\(\operatorname{supp}\rho\subseteq\operatorname{supp}\omega\), its logarithm
+is the order-two sandwiched Rényi divergence. The negative power is zero on the
+zero eigenspace, so this totalized functional remains finite outside that
+support domain and must not there be identified with the divergence; see
+Müller-Lennert et al., arXiv:1306.3142v4, Definition 2 and lines 94--96. -/
 noncomputable def sandwichedRenyiTwoTrace (ρ ω : Mat) : ℝ :=
   let q := ω ^ (-(1 / 4 : ℝ))
   (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
@@ -102,18 +108,22 @@ inverse square root.
 
 This is the exponent identity used in the order-two specialization of
 Müller-Lennert et al., arXiv:1306.3142v4, Definition 2. -/
-theorem posDef_quarter_inv_sq
+theorem posDef_rpow_neg_quarter_mul_self
     {ω : Mat} (hω : ω.PosDef) :
     ω ^ (-(1 / 4 : ℝ)) * ω ^ (-(1 / 4 : ℝ)) = ω ^ (-(1 / 2 : ℝ)) := by
   rw [← CFC.rpow_add hω.isUnit]
   congr 1
   ring
 
-/-- For faithful \(\omega\), the order-two sandwiched trace is
+/-- For faithful \(\omega\), the order-two sandwiched trace satisfies the
+algebraic identity
 \(\operatorname{Re}\operatorname{Tr}
   (\rho\omega^{-1/2}\rho\omega^{-1/2})\).
 
-This is the weighted Hilbert--Schmidt form of the order-two expression in
+No Hermiticity assumption on \(\rho\) is needed for this cyclic trace identity.
+When \(\rho\) is Hermitian, in particular when it is positive semidefinite,
+\(\omega^{-1/4}\rho\omega^{-1/4}\) is Hermitian, and the common value is its
+squared Hilbert--Schmidt norm. This is the order-two expression in
 Müller-Lennert et al., arXiv:1306.3142v4, Definition 2. -/
 theorem sandwichedRenyiTwoTrace_eq_weighted
     {ρ ω : Mat} (hω : ω.PosDef) :
@@ -121,7 +131,8 @@ theorem sandwichedRenyiTwoTrace_eq_weighted
       (Matrix.trace (ρ * ω ^ (-(1 / 2 : ℝ)) * ρ * ω ^ (-(1 / 2 : ℝ)))).re := by
   rw [sandwichedRenyiTwoTrace]
   let q := ω ^ (-(1 / 4 : ℝ))
-  have hq : q * q = ω ^ (-(1 / 2 : ℝ)) := posDef_quarter_inv_sq hω
+  have hq : q * q = ω ^ (-(1 / 2 : ℝ)) :=
+    posDef_rpow_neg_quarter_mul_self hω
   have hcycle :
       Matrix.trace ((q * ρ * q) * (q * ρ * q)) =
         Matrix.trace (ρ * (q * q) * ρ * (q * q)) := by
