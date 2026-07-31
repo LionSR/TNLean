@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.CyclicActiveAreaLaw
+import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
+import TNLean.MPS.MPDO.PhysicalSupportRestriction
 
 /-!
 # Saturated area law for orthogonal commuting sectors
@@ -383,5 +385,68 @@ theorem isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSector
       mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
         M S hM hWeight hN)
     hSectorSAL
+
+/-- The common-weight-absorbed BNT decomposition satisfies the saturated area
+law when its canonical sectors have proportional orthogonal commuting-bond
+realizations and the ambient tensor has source zero correlation length.
+
+The one-letter simultaneous BNT span gives injectivity of every absorbed
+sector.  The canonical block coordinates restrict the ambient source-ZCL
+equation to each sector.  The positive-length BNT identity supplies the outer
+sum with scalar one and multiplicities `S.copies`.
+
+Source: CPSV16, Case II, lines 1626--1665, and Appendix C.2, Proposition
+`prop4to2`, lines 1801--1808.
+
+**Scope restriction (ambient source ZCL):** The printed proposition omits the
+source-ZCL hypothesis needed to derive sectorwise source ZCL.  This corrected
+statement assumes `IsSourceZCL M`; see
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
+theorem
+    isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    [Nonempty (Fin S.basisCount)]
+    (F : ProportionalOrthogonalCommutingSectorFamily
+      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
+    (hMPDO : ∀ s, IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s))
+    (hNormal : ∀ s, MPSTensor.IsNormalTensor
+      (commonWeightAbsorbedBasisMPOTensor S hWeight s).toMPSTensor)
+    (hZCL : IsSourceZCL M) :
+    IsSAL M := by
+  apply
+    isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
+      M (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)
+      S.copies S.copies_pos F
+  · intro N hN
+    exact ⟨1, zero_lt_one, by
+      simpa using
+        mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+          M S hM hWeight hN⟩
+  · exact hMPDO
+  · exact fun s ↦
+      commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
+  · exact hNormal
+  · exact fun s ↦
+      commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+        M S hTotal X hEq hZCL hWeight s (hnonNil s)
 
 end MPOTensor
