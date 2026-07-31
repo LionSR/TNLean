@@ -860,6 +860,35 @@
     stated interactions and ground spaces.
 \end{proof}
 
+\begin{theorem}[Positive-gap zero correlation length and commuting parent
+    ground spaces for the basis direct sum]
+    \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_nncph_ground_spaces}
+    \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}
+    \leanok
+    \uses{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp,
+        thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
+    Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
+    form, and set $A=\bigoplus_{j=1}^g A_j$. Then
+    \begin{align}
+        A\text{ has positive-gap BNT zero correlation length}
+        \quad\Longleftrightarrow\quad
+        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
+    \end{align}
+    This statement concerns one unit-weight copy of each distinct sector and
+    positive complementary gaps. It does not include repeated copies,
+    arbitrary raw weights, or adjacent complementary regions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By
+    Theorem~\ref{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp},
+    positive-gap BNT zero correlation length is equivalent to transfer
+    idempotence. The latter is equivalent to the all-chain commuting parent
+    ground-space condition by
+    Theorem~\ref{thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}.
+\end{proof}
+
 \begin{remark}[Remaining obstructions in the printed converse]
     For the multiplicity-one unit-weight representative, the sector-supported
     observables require no additional hypothesis. The full literal CPSV
