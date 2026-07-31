@@ -56,7 +56,7 @@ noncomputable def cpsvRFPBNTFusionTensorClause (M : MPOTensor d D)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     BNTFusionTensorClause M :=
-  Classical.choose
+  Classical.choice
     (HasBNTFusionTensorClause.of_isRFPViaTS_of_cpsvCanonicalForm
       M hCanonical hM hRFP)
 
