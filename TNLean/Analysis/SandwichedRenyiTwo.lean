@@ -58,7 +58,8 @@ reference support gives the singular-reference theorem in
 
 * Müller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel,
   *On quantum Rényi entropies: a new generalization and some properties*,
-  arXiv:1306.3142v4, Definition 2 and Theorem 5.
+  arXiv:1306.3142v4, Definitions 2 and 5, and Lemma 19 (used in the proof of
+  Theorem 7).
 * Beigi, *Sandwiched Rényi divergence satisfies data processing inequality*,
   arXiv:1306.5920, Theorem 7.
 -/
@@ -421,6 +422,9 @@ This is the finite-dimensional faithful-reference comparison
   D(\rho\Vert\omega)
     \leq \log\operatorname{Tr}(\rho\,\omega^{-1/2}\rho\,\omega^{-1/2}).
 \]
+It is the direct order-two endpoint of the auxiliary-divergence argument in
+Müller-Lennert et al., arXiv:1306.3142v4, Definition 5 and Lemma 19 (used in
+the proof of Theorem 7).
 The proof applies the support-aware Jensen inequality to the relative modular
 operator \((\sqrt\rho)^T\otimes\omega^{-1/2}\) and then uses
 Hilbert--Schmidt Cauchy--Schwarz on \(R\) and \(R\omega^{-1/2}R\). -/
