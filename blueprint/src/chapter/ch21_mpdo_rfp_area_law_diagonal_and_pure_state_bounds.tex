@@ -364,7 +364,6 @@
     \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}. It does not by itself prove
     $I_L\leq4\log D$: such a conclusion would require an entropy bound in
     terms of the operator-Schmidt rank.
-    % The unresolved analytic inequality is tracked in issue #4295.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -439,10 +438,11 @@
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \uses{thm:supported_marginal_channel}
     For every finite-dimensional bipartite density operator $\rho_{AB}$,
-    \[
+    \begin{align}
         I(A:B)_\rho
         \leq \log\operatorname{OSR}(\rho_{AB}).
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
@@ -450,37 +450,42 @@
     the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
     Theorem~\ref{thm:supported_marginal_channel} gives a completely positive
     trace-preserving map $\Phi$ satisfying
-    \[
+    \begin{align}
         \tau=\Phi(\sigma),
         \qquad
         \dim_{\mathbb C}\range\Phi=\operatorname{OSR}(\rho_{AB}).
-    \]
+        \notag
+    \end{align}
     For $\Gamma_\omega^z(X)=\omega^{z/2}X\omega^{z/2}$, set
-    \[
+    \begin{align}
         L=\Gamma_\tau^{-1/2}\circ\Phi\circ\Gamma_\sigma^{1/2}.
-    \]
+        \notag
+    \end{align}
     Equation~(18) of \cite[Theorem~6]{Beigi2013Sandwiched} shows that $L$ is a
     Hilbert--Schmidt contraction.  The order-two sandwiched whitening of
     $\rho_{AB}$ is the unnormalized Choi matrix
-    \[
+    \begin{align}
         W=\sum_{i,j}E_{ij}\otimes L(E_{ij}).
-    \]
+        \notag
+    \end{align}
     Hence, writing $s_k(L)$ for the singular values of $L$,
-    \[
-        \Tr(W^2)
+    \begin{align}
+        \tr(W^2)
         =\sum_k s_k(L)^2
         \leq\rank L
         =\operatorname{OSR}(\rho_{AB}).
-    \]
+        \notag
+    \end{align}
     Monotonicity in the order and the order-one limit
     \cite[Theorem~7]{Beigi2013Sandwiched}
     \cite[Theorem~5]{MullerLennert2013Renyi} give
-    \[
+    \begin{align}
         I(A:B)_\rho
         =D(\rho_{AB}\Vert\rho_A\otimes\rho_B)
         \leq\widetilde D_2(\rho_{AB}\Vert\rho_A\otimes\rho_B)
-        =\log\Tr(W^2),
-    \]
+        =\log\tr(W^2).
+        \notag
+    \end{align}
     which proves the result.
 \end{proof}
 
@@ -510,9 +515,10 @@
 
     Theorem~\ref{thm:mutual_information_le_log_operator_schmidt_rank} instead
     gives the stronger estimate
-    \[
+    \begin{align}
         I_L^{(N)}\leq\log D^2=2\log D
-    \]
+        \notag
+    \end{align}
     whenever the finite-chain operator is positive and has positive trace.
     Thus no classical or genuinely quantum counterexample exists.
     The diagonal argument gives an independent special-case proof. Indeed,
