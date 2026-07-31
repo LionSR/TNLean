@@ -74,13 +74,17 @@ private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
 
 namespace Matrix.PosSemidef
 
-/-- Sandwiching a positive-semidefinite matrix between equal real powers of
-any matrix preserves positive semidefiniteness. -/
+/-- Sandwiching a positive-semidefinite matrix between equal real powers of a
+positive-semidefinite matrix preserves positive semidefiniteness. -/
 theorem rpow_mul_mul_rpow
-    {ρ : Mat} (hρ : ρ.PosSemidef) (ω : Mat) (r : ℝ) :
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) (r : ℝ) :
     (ω ^ r * ρ * ω ^ r).PosSemidef := by
+  have hωr_nonneg : 0 ≤ ω ^ r := by
+    rw [CFC.rpow_eq_cfc_real hω.nonneg]
+    exact cfc_nonneg fun x hx ↦
+      Real.rpow_nonneg (spectrum_nonneg_of_nonneg hω.nonneg hx) r
   have hωr : (ω ^ r).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+    Matrix.nonneg_iff_posSemidef.mp hωr_nonneg
   simpa only [hωr.isHermitian.eq] using hρ.mul_mul_conjTranspose_same (ω ^ r)
 
 end Matrix.PosSemidef
@@ -107,11 +111,11 @@ positive-semidefinite arguments.
 This is the positivity of the expression in Müller-Lennert et al.,
 arXiv:1306.3142v4, Definition 2, specialized to order two. -/
 theorem sandwichedRenyiTwoTrace_nonneg
-    {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosSemidef) :
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) :
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
   have hX : (q * ρ * q).PosSemidef :=
-    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ hω (-(1 / 4 : ℝ))
   exact (Complex.nonneg_iff.mp (hX.trace_mul_nonneg hX)).1
 
 /-- For a positive-definite matrix, two inverse quarter-powers multiply to the

@@ -110,11 +110,12 @@ Müller-Lennert et al., arXiv:1306.3142v4, Definition 2, and Beigi,
 arXiv:1306.5920, Equation (3). It holds for every real order because the
 continuous-functional-calculus real power is positive semidefinite. -/
 theorem sandwichedRenyiTrace_nonneg
-    {α : ℝ} {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosDef) :
+    {α : ℝ} {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) :
     0 ≤ sandwichedRenyiTrace α ρ ω := by
   let q := ω ^ ((1 - α) / (2 * α))
   have hX : (q * ρ * q).PosSemidef :=
-    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω ((1 - α) / (2 * α))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ hω.posSemidef
+      ((1 - α) / (2 * α))
   have hpow_nonneg : 0 ≤ (q * ρ * q) ^ α := by
     rw [CFC.rpow_eq_cfc_real hX.nonneg]
     exact cfc_nonneg fun x hx ↦
@@ -143,13 +144,13 @@ with `sandwichedRenyiTwoTrace`.
 This is the \(\alpha=2\) endpoint of Müller-Lennert et al.,
 arXiv:1306.3142v4, Definition 2, and Beigi, arXiv:1306.5920, Equation (3). -/
 theorem sandwichedRenyiTrace_two
-    {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosDef) :
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosDef) :
     sandwichedRenyiTrace 2 ρ ω = sandwichedRenyiTwoTrace ρ ω := by
   rw [sandwichedRenyiTrace, sandwichedRenyiTwoTrace]
   rw [show (1 - (2 : ℝ)) / (2 * 2) = -(1 / 4 : ℝ) by norm_num]
   let q := ω ^ (-(1 / 4 : ℝ))
   have hX : (q * ρ * q).PosSemidef :=
-    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ ω (-(1 / 4 : ℝ))
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ hω.posSemidef (-(1 / 4 : ℝ))
   change (Matrix.trace ((q * ρ * q) ^ (2 : ℝ))).re =
     (Matrix.trace ((q * ρ * q) * (q * ρ * q))).re
   rw [show (2 : ℝ) = ((2 : ℕ) : ℝ) by norm_num,
