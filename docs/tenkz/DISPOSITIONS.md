@@ -63,7 +63,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | — | — | L97 `tenkz` → `C-policy+C-record+R-record` |
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | — | — | L35, 489, 528 `tenkz` → `C-policy+C-record+R-record` |
 | `ch14_correlations.tex` | — | — | L67 `tenkz` → `C-policy+C-record+R-record` |
-| `ch16_channel_representations_choi_and_kraus.tex` | — | L434 `tenkz` → `C-policy+C-record` | — |
+| `ch16_channel_representations_choi_and_kraus.tex` | — | L538 `tenkz` → `C-policy+C-record` | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | — | L20 `tenkz` → `C-policy+C-record` | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L232, 238 `tenkz` → `C-policy+C-record` | L153, 159, 336, 433 `tenkz` → `C-policy+C-record+R-record`<br>L177, 182 `tenkz` → `R-record` |
 | `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | — | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record`<br>L224, 359, 391, 465 `tenkzfree` → `R-free+R-record` |
