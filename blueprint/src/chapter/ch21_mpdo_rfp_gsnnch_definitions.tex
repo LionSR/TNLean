@@ -889,9 +889,11 @@ firstSiteMatrix_mul_reducedBlockState}
 
     % **Scope restriction (ambient source ZCL):** The printed GSNNCH-only
     % proposition omits the source-ZCL hypothesis used by its proof. In the
-    % canonical Case II application, biCF supplies sector injectivity and
-    % ambient source ZCL descends to every absorbed sector. See
-    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    % canonical Case II application, biCF supplies sector injectivity,
+    % canonical BNT data supplies normality, and ambient source ZCL descends
+    % to every absorbed sector. Sector MPDO positivity remains an explicit
+    % input and must come from the positive sector data, not from ambient SAL.
+    % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -929,9 +931,11 @@ firstSiteMatrix_mul_reducedBlockState}
     % sectorwise source ZCL. This theorem assumes per-sector MPDO, one-site
     % injectivity, normality, and source ZCL, an orthogonal commuting sector
     % family with exact scalar-one realization, and the exact positive-
-    % multiplicity outer sum. One-site injectivity is not supplied merely by
-    % BNT normality, leaving a blocking gap in the source application. The
-    % exact realization is stronger than the proportional source identity.
+    % multiplicity outer sum. Outside biCF, BNT normality alone supplies only
+    % eventual injectivity; in the Case II application, the biCF one-letter
+    % span supplies one-site injectivity. Sector MPDO positivity remains an
+    % explicit input. The exact realization is stronger than the proportional
+    % source identity.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
