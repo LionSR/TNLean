@@ -89,7 +89,13 @@ sector tensors have positive physical-sector factorizations.
 Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0`,
 `AppUkU=rl`, `Appetakhetc`, `PjKiPj`, and `generateMPDO`, lines
 1383--1450 and 1628--1770, and Proposition `prop3to4`, lines
-1786--1796. -/
+1786--1796.
+
+**Scope restriction (active physical support compression):** The proof calls
+the preceding active-support construction, which restricts each sector tensor
+to the joint column supports of its factor families before constructing the
+commuting bond.  CPSV16 does not make this restriction.  See
+`docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactorization
     {g : ℕ} {dim : Fin g → ℕ}
     (K : (s : Fin g) → MPOTensor d (dim s))
