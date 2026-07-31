@@ -49,13 +49,14 @@ preceding injective result.  These are distinct source statements.
 
 \section{The compression construction}
 
-The three files
+The four files
+\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveFactorSupport},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
 \doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring}, and
 \doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}
-(roughly 95~declarations total) build the following auxiliary construction
-after Lemma~\texttt{propSN} (lines~1406--1471).  It is used in the formal
-argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
+build the following auxiliary construction after Lemma~\texttt{propSN}
+(lines~1406--1471).  It is used in the formal argument corresponding to
+Proposition~\texttt{prop3to4} (line~1787):
 
 \begin{enumerate}
   \item \textbf{Factor-support coordinates} (\texttt{SectorActiveFactorSupportData},
@@ -64,7 +65,10 @@ argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
     right factor families $\{l_{k,\beta}\}_\beta$ and
     $\{r_{k,\alpha}\}_\alpha$.  For inactive sectors, set both coordinate
     dimensions to zero.  The product range of each pair is exactly the
-    family-support projection of the sector product family.
+    family-support projection of the sector product family.  Injectivity of
+    the original tensor and positivity of every neighboring operator imply
+    the adjoint-closure relation used to prove two-sided absorption by these
+    support projections.
 
   \item \textbf{Compressed factors} (\texttt{compressedLeftTensor},
     \texttt{compressedRightTensor}): Form $\tilde l_{k,\beta} =
@@ -80,7 +84,8 @@ argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
   \item \textbf{Compressed tensor} (\texttt{activePhysicalSupportRestriction}):
     Define $K_{\mathrm{act}} = V^\dagger K V$.  This tensor lives on
     $\C^e$ where $e$ is the total dimension of the retained active-factor
-    supports.  Its injectivity is proved from the injectivity of $K$ in
+    supports.  Its injectivity is proved from the injectivity of $K$ together
+    with positivity of every neighboring operator in
     \texttt{activePhysicalSupportRestriction\_isInjective}.
 
   \item \textbf{Neighboring congruence} (\texttt{compressedNeighboringOperator}):
@@ -96,15 +101,18 @@ argument corresponding to Proposition~\texttt{prop3to4} (line~1787):
 None of these steps appears in lines~1406--1471 of CPSV16.  The source has
 the block factorization and the $\eta$ construction; the compression removes
 inactive dimensions as an auxiliary input preparation in the formal route to
-the theorem corresponding to Proposition~\texttt{prop3to4}.  The argument is
-a standard finite-dimensional linear algebra construction: the joint column
-support projections absorb every physical slice on both sides, so compression
-by their conjugate transposes preserves exact two-sided recovery.
+the theorem corresponding to Proposition~\texttt{prop3to4}.  Under
+injectivity of the original tensor and positivity of the neighboring
+operators, the joint column support projections absorb every physical slice
+on both sides.  Compression by their conjugate transposes therefore preserves
+exact two-sided recovery.
 
 \section{Affected declarations}
 
-The five load-bearing declarations are the simultaneous choice of
-factor-support coordinates,\footnote{\leanid{ActiveFactorSupportData}.}
+The six load-bearing declarations are the choice of support isometries for an
+active sector,\footnote{\leanid{exists\_activeSector\_factorSupportIsometries}.}
+the simultaneous choice of factor-support
+coordinates,\footnote{\leanid{ActiveFactorSupportData}.}
 the compressed left factor,\footnote{\leanid{compressedLeftTensor}.}
 recovery of the original physical slice from sector coordinates,\footnote{%
 \leanid{physicalSlice\_eq\_conjTranspose\_mul\_sectorCoordinateTensor\_mul}.}
