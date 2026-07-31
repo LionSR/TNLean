@@ -1,0 +1,11 @@
+% Negative: a generated cup contracts a declared port with its implicit
+% virtual mate, so a sole physical descriptor is a type mismatch.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[ports={0:physical}]{} \\
+  \tn{}
+\end{tenkz}
+\end{document}

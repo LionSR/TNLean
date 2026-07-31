@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\bool_new:N \g__tenkz_test_open_all_route_bool
+\cs_new_eq:NN
+  \__tenkz_test_open_all_route_habit:n
+  \__tenkz_kernel_route_habit:n
+\cs_set_protected:Npn \__tenkz_kernel_route_habit:n #1
+  {
+    \__tenkz_test_open_all_route_habit:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open-arc}
+      {
+        \__tenkz_model_get:nnN {#1} {cross} \l_tmpb_tl
+        \tl_if_in:VnF \l_tmpb_tl {port-open-1}
+          {\errmessage{open~all-side~route~lost~its~port~crossing}}
+        \bool_gset_true:N \g__tenkz_test_open_all_route_bool
+      }
+  }
+\AtEndDocument
+  {
+    \bool_if:NF \g__tenkz_test_open_all_route_bool
+      {\errmessage{open~all-side~route~habit~was~not~validated}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[ports={90:virtual}]{}
+  \tnwire[
+    kind=string,
+    name=open-arc,
+    route={all of (1,1)},
+    crossing=over
+  ]{open}{open}
+\end{tenkz}
+\end{document}

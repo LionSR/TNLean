@@ -1,0 +1,86 @@
+% Regression: a closed index wire uses the stroke selected by its resolved
+% endpoint type; virtual direction marks remain valid.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_physical_stroke_int
+\int_new:N \g__tenkz_test_physical_open_stroke_int
+\int_new:N \g__tenkz_test_physical_policy_stroke_int
+\int_new:N \g__tenkz_test_virtual_stroke_int
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \exp_args:NV \__tenkz_model_get:nnN
+      \l__tenkz_kernel_r_wire_record_tl {name} \l_tmpa_tl
+    \str_case:Vn \l_tmpa_tl
+      {
+        {physical-wire}
+          {
+            \str_if_eq:eeF {#1} {physical~leg}
+              {\errmessage{physical~wire~lost~physical~stroke}}
+            \int_gincr:N \g__tenkz_test_physical_stroke_int
+          }
+        {physical-open}
+          {
+            \str_if_eq:eeF {#1} {physical~leg}
+              {\errmessage{physical~open~wire~lost~physical~stroke}}
+            \int_gincr:N \g__tenkz_test_physical_open_stroke_int
+          }
+        {virtual-wire}
+          {
+            \str_if_eq:eeF {#1} {bond}
+              {\errmessage{virtual~wire~lost~bond~stroke}}
+            \int_gincr:N \g__tenkz_test_virtual_stroke_int
+          }
+      }
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {origin} \l_tmpb_tl
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {mode} \l_tmpc_tl
+    \bool_lazy_and:nnT
+      { \str_if_eq_p:Vn \l_tmpb_tl {open} }
+      { \str_if_eq_p:Vn \l_tmpc_tl {physical} }
+      {
+        \str_if_eq:eeF {#1} {physical~leg}
+          {\errmessage{physical~open~policy~lost~physical~stroke}}
+        \int_gincr:N \g__tenkz_test_physical_policy_stroke_int
+      }
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_physical_stroke_int } = {1}
+      {\errmessage{physical~wire~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_physical_open_stroke_int } = {1}
+      {\errmessage{physical~open~wire~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_physical_policy_stroke_int } = {1}
+      {\errmessage{physical~open~policy~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_virtual_stroke_int } = {1}
+      {\errmessage{virtual~wire~stroke~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A, ports={0:physical}]{A}
+  \tn[at=(1,2), name=B, ports={180:physical}]{B}
+  \tnwire[name=physical-wire]{A.0}{B.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=C, ports={0:virtual}]{C}
+  \tn[at=(1,2), name=D, ports={180:virtual}]{D}
+  \tnwire[name=virtual-wire, dir=to]{C.0}{D.180}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=E, ports={90:physical}]{E}
+  \tnwire[name=physical-open]{E.90}{open n}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, open={(physical,1)}]
+  \tn[ports={90:physical}]{F}
+\end{tenkz}
+\end{document}

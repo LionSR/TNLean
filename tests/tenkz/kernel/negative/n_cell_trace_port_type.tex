@@ -1,0 +1,10 @@
+% Negative: a cell-policy trace cannot contract unlike typed ports.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, trace={(1,1)}]
+  \tn[ports={270:physical}]{} \\
+  \tn[ports={90:virtual}]{}
+\end{tenkz}
+\end{document}

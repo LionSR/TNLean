@@ -1,0 +1,63 @@
+% Regression: a skin pairing and external bond may share topology, but the
+% canonical port label renders once and only after both paths are painted.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\bool_new:N \g__tenkz_test_shared_pairing_bool
+\bool_new:N \g__tenkz_test_shared_index_bool
+\int_new:N \g__tenkz_test_shared_label_int
+\cs_new_eq:NN
+  \__tenkz_test_shared_pairing:nn
+  \__tenkz_render_skin_pairing:nn
+\cs_set_protected:Npn \__tenkz_render_skin_pairing:nn #1#2
+  {
+    \__tenkz_test_shared_pairing:nn {#1}{#2}
+    \bool_gset_true:N \g__tenkz_test_shared_pairing_bool
+  }
+\cs_new_eq:NN
+  \__tenkz_test_shared_index:n
+  \__tenkz_kernel_r_index_route:n
+\cs_set_protected:Npn \__tenkz_kernel_r_index_route:n #1
+  {
+    \__tenkz_test_shared_index:n {#1}
+    \bool_gset_true:N \g__tenkz_test_shared_index_bool
+  }
+\cs_new_eq:NN
+  \__tenkz_test_shared_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \int_gincr:N \g__tenkz_test_shared_label_int
+    \bool_if:NF \g__tenkz_test_shared_pairing_bool
+      {\errmessage{shared~port~label~preceded~its~skin~pairing}}
+    \bool_if:NF \g__tenkz_test_shared_index_bool
+      {\errmessage{shared~port~label~preceded~its~index~wire}}
+    \__tenkz_test_shared_labelnode:nnn {#1}{#2}{#3}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_shared_label_int } = {1}
+      {\errmessage{shared~port~label~did~not~have~one~owner}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{probe}{hue=source:blue}
+\tndeclare{skin}{shared-pairing}{
+  base=box,
+  pairings={90@1 > 0@1 : probe}
+}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[
+    at=(1,1),
+    name=A,
+    skin=shared-pairing,
+    ports={90:virtual:$i$,0:virtual}
+  ]{} &
+  \tn[at=(1,2), name=B, ports={180:virtual}]{}
+  \tnwire{A.90}{B.180}
+\end{tenkz}
+\end{document}

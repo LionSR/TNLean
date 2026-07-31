@@ -1,0 +1,41 @@
+% Regression: comparing a typed-port label with its policy-owned spelling
+% preserves author tokens until audited math typesetting.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_policy_equal_label_int
+\cs_new:Npn \TenkzPolicyLabelProbe
+  {
+    \mode_if_math:TF
+      {i}
+      {\cs:w g__tenkz_test_policy_label_premature_cs\cs_end: i}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_policy_equal_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \int_gincr:N \g__tenkz_test_policy_equal_label_int
+    \__tenkz_test_policy_equal_labelnode:nnn {#1}{#2}{#3}
+  }
+\AtEndDocument
+  {
+    \cs_if_exist:NT \g__tenkz_test_policy_label_premature_cs
+      {\errmessage{matching~policy~labels~expanded~during~model~close}}
+    \int_compare:nNnF
+      { \g__tenkz_test_policy_equal_label_int } = {1}
+      {\errmessage{matching~policy~label~did~not~render~exactly~once}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[
+    up=$\TenkzPolicyLabelProbe$,
+    ports={90:physical:$\TenkzPolicyLabelProbe$}
+  ]{}
+\end{tenkz}
+\end{document}

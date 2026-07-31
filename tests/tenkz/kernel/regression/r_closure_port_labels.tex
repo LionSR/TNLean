@@ -1,0 +1,41 @@
+% Regression: labels on typed ports consumed by trace and cup closures remain
+% renderer-owned and are emitted after their closure ink.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_closure_port_label_int
+\cs_new_eq:NN
+  \__tenkz_test_closure_port_labelnode:nnn
+  \__tenkz_render_labelnode:nnn
+\cs_set_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
+  {
+    \int_gincr:N \g__tenkz_test_closure_port_label_int
+    \__tenkz_test_closure_port_labelnode:nnn {#1}{#2}{#3}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF
+      { \g__tenkz_test_closure_port_label_int } = {4}
+      {\errmessage{closure-consumed~port~labels~were~not~all~rendered}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+  rows={wire},
+  cols=2,
+  bonds=none,
+  west=trace,
+  east=trace
+]
+  \tn[ports={180:virtual:$a$}]{} &
+  \tn[ports={0:virtual:$b$}]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+  \tn[ports={0:virtual:$c$}]{} \\
+  \tn[ports={0:virtual:$d$}]{}
+\end{tenkz}
+\end{document}

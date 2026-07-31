@@ -1,0 +1,11 @@
+% Negative: an index wire cannot contract physical and virtual ports.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A, ports={0:physical}]{A}
+  \tn[at=(1,2), name=B, ports={180:virtual}]{B}
+  \tnwire{A.0}{B.180}
+\end{tenkz}
+\end{document}

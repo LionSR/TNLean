@@ -97,6 +97,10 @@ def test_saved_path_capture_is_not_rendering_debt() -> None:
         r"\path [ spath/save = {route} , use~Hobby~shortcut ] (0,0) -- (1,0) ;"
     ) == 0
     assert ink_token_count(
+        r"\path [ spath/save = {route} , rounded~corners = \tenkz@corner ] "
+        r"(0,0) -- (1,0) ;"
+    ) == 0
+    assert ink_token_count(
         r"\path [ spath/save = {route} , draw ] (0,0) -- (1,0) ;"
     ) == 1
     assert ink_token_count(

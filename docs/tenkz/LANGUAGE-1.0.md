@@ -121,8 +121,9 @@ where the type is `virtual` or `physical` and the label is the mathematics
 set at that port's tip — `ports={90:physical:$i$, 0:virtual, 180:virtual}`.
 The label component is where the retired page-relative keys went: an index
 name belongs to the port it names, and a port already knows which way it
-points. `void=open` is a hole that preserves indices; `void=sealed` removes
-the site and its bonds.
+points. A cluster carrier is a glyphless group and owns no authored `ports=`;
+attach wires to its addressable member atoms instead. `void=open` is a hole
+that preserves indices; `void=sealed` removes the site and its bonds.
 
 ### 2.4 Wire keys (9)
 
@@ -139,10 +140,10 @@ the site and its bonds.
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
 `dir=` draws the direction mark of a directed virtual index; it changes no
-topology. A wire carries no waypoint list, no bend factor and no stroke
-weight: a route names the records it must clear, an arc leaves and enters
-along its ends' faces, and the stroke follows the type the port already
-carries (§5).
+topology and is rejected on a physical contraction. A wire carries no waypoint
+list, no bend factor and no stroke weight: a route names the records it must
+clear, an arc leaves and enters along its ends' faces, and the stroke follows
+the resolved endpoint type (§5).
 
 ### 2.5 Mark keys (5)
 
@@ -374,13 +375,15 @@ Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
 
 A wire is one typed index line. `kind=index` is a bond: two typed-port
 endpoints, a straight route, and the type check `[TKZ-PORT-TYPE]` — a virtual
-port never meets a physical one. `kind=pairing` is a declared skin's curved
-own-port route: it belongs to one host, remains addressable by arclength, and
-its declared list order controls the over-glyph ink and supplies the crossing
-order between pairings of that same skin. `kind=string` travels: it carries
-routes, crossings, winding, and beads, and its endpoints may be any address,
-cells included. The distinction is a field of the record; all three are one
-record class.
+port never meets a physical one. A bare cell endpoint is therefore an implicit
+virtual endpoint, not an untyped escape hatch. Two physical endpoints produce
+the physical-leg stroke, while two virtual endpoints produce the bond stroke.
+`kind=pairing` is a declared skin's curved own-port route: it belongs to one
+host, remains addressable by arclength, and its declared list order controls
+the over-glyph ink and supplies the crossing order between pairings of that
+same skin. `kind=string` travels: it carries routes, crossings, winding, and
+beads, and its endpoints may be any address, cells included. The distinction
+is a field of the record; all three are one record class.
 
 **The offset hull.** The offset hull of a selection is the support hull of
 the selected records' silhouettes, measured in the frame's own axes, expanded
@@ -400,6 +403,26 @@ on this side of these records; the crossing set is the answer to that claim,
 computed and never chosen. An empty crossing set is legal and meaningful. A
 derived crossing enters the model with every field a declared one carries, so
 an audit cannot tell the two apart.
+
+An addressed all-side route joins its ends to a rounded hull polyline. Hull
+faces remain straight and only the turns consume the shared `corner` metric,
+so a boundary wire leaving through a traversed face meets the route exactly
+once; changing an endpoint does not bow the face away from that crossing.
+
+When an all-side route has addressed ends, the run begins and ends at the
+turns of the measured hull nearest those ends. Address dependencies are
+resolved first: an end such as `on carrier 0.25` therefore uses the carrier's
+actual saved path. The same resolved turns determine both the drawn run and
+its ordered crossing set. Coordinates cross into the route engine at TeX's
+native scaled-point precision; policy classifies that same representable
+point, with no separate decimal rounding. Smaller offsets are coincident.
+An arbitrary addressed end must lie outside the selected hull: otherwise its
+connector and the hull run can meet one boundary wire twice, contradicting
+the route's single-crossing contract. A typed port belonging to the selection
+is the exception, since it is the route's own endpoint rather than a boundary
+wire to cross. The daylight clearance between the selected silhouettes and
+the offset route remains outside the hull and is a valid place for an end.
+An inside arbitrary end is `TKZ-ROUTE-END-INSIDE`.
 
 Two rules travel with the hull, and they are doctrine rather than elements.
 **Concentric order:** curves over the same selection are separated by one
@@ -609,7 +632,7 @@ Teaching text uses sugar freely. Twenty-five rows:
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: adds the outward physical port to every wire-row atom |
+| `physical=up\|down\|updown\|none` | expander: adds the outward physical port to every wire-row atom; an explicit port on that face merges when type and label agree, and conflicting types or token-distinct labels are errors |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
@@ -638,6 +661,9 @@ Two rows are expanders: their expansion is a rule over the picture, not a
 token substitution — `physical=` adds a port per wire-row atom, `\tntree`
 builds atoms and wires from the word. Expander output is still pure kernel
 records, and the same test class verifies it.
+An expanded physical port contributes a boundary leg only while it is
+unconsumed. If a wire contracts that face, the wire owns the port and its
+label; neither a second leg nor a boundary-signature entry remains.
 
 String verb table: `through a` → `route={all of a}` entering and leaving
 tangent ports · `loop a` → `closed, route={all of a}` · `over w at p` /
@@ -867,9 +893,10 @@ the whole picture.
 2. Picture options declare topology and policy; they create no hidden atoms.
 3. Body order may establish references; it never changes an earlier record.
    Crossing references resolve at validation (§5).
-4. Validation finishes before measurement; a renderer never repairs,
-   guesses, or silently drops requested ink. Unsupported ink is a coded hard
-   error.
+4. Topology measurement resolves hull routes and their address dependencies;
+   validation then freezes the completed model before ink. The renderer never
+   repairs, guesses, or silently drops requested ink. Unsupported ink is a
+   coded hard error.
 5. Open ink is declared content: the boundary signature is computed from
    port and wire records and written to the event stream.
 6. Raw TikZ is not public syntax. Themes rebind ink and typography; they add

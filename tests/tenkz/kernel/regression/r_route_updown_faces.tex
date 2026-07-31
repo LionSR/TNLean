@@ -1,0 +1,72 @@
+% Regression: updown policy legs leave through north and south only; an
+% all-side hull route must not invent east or west leg crossings.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\bool_new:N \g__tenkz_test_updown_route_bool
+\bool_new:N \g__tenkz_test_partial_updown_route_bool
+\cs_new_eq:NN
+  \__tenkz_test_updown_route_habit:n
+  \__tenkz_kernel_route_habit:n
+\cs_set_protected:Npn \__tenkz_kernel_route_habit:n #1
+  {
+    \__tenkz_test_updown_route_habit:n {#1}
+    \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {updown-route}
+      {
+        \__tenkz_model_get:nnN {#1} {cross} \l_tmpb_tl
+        \tl_if_in:VnT \l_tmpb_tl {leg~e}
+          {\errmessage{updown~policy~invented~an~east~leg}}
+        \tl_if_in:VnT \l_tmpb_tl {leg~w}
+          {\errmessage{updown~policy~invented~a~west~leg}}
+        \tl_if_in:VnF \l_tmpb_tl {leg~n}
+          {\errmessage{updown~policy~lost~its~north~leg}}
+        \tl_if_in:VnF \l_tmpb_tl {leg~s}
+          {\errmessage{updown~policy~lost~its~south~leg}}
+        \bool_gset_true:N \g__tenkz_test_updown_route_bool
+      }
+    \str_if_eq:VnT \l_tmpa_tl {partial-updown-route}
+      {
+        \__tenkz_model_get:nnN {#1} {cross} \l_tmpb_tl
+        \tl_if_in:VnT \l_tmpb_tl {leg~n}
+          {\errmessage{consumed~north~policy~leg~remained~routable}}
+        \tl_if_in:VnF \l_tmpb_tl {leg~s}
+          {\errmessage{unconsumed~south~policy~leg~left~the~route}}
+        \bool_gset_true:N \g__tenkz_test_partial_updown_route_bool
+      }
+  }
+\AtEndDocument
+  {
+    \bool_if:NF \g__tenkz_test_updown_route_bool
+      {\errmessage{updown~route~habit~was~not~validated}}
+    \bool_if:NF \g__tenkz_test_partial_updown_route_bool
+      {\errmessage{partial~updown~route~habit~was~not~validated}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=updown]
+  \tn{}
+  \tnwire[
+    kind=string,
+    name=updown-route,
+    closed,
+    route={all of (1,1)},
+    crossing=alternate
+  ]
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=updown]
+  \tn[name=A, ports={90:physical,180:physical}]{}
+  \tnwire{A.90}{A.180}
+  \tnwire[
+    kind=string,
+    name=partial-updown-route,
+    closed,
+    route={all of A},
+    crossing=alternate
+  ]
+\end{tenkz}
+\end{document}

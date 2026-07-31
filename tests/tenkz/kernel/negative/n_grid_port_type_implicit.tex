@@ -1,0 +1,10 @@
+% Negative: an implicit grid endpoint is virtual, not an unknown type.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[ports={0:physical}]{A} &
+  \tn{B}
+\end{tenkz}
+\end{document}

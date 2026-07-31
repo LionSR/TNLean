@@ -59,6 +59,190 @@ grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
 }
+if grep -Fq '|origin=port-open|' "$WORK/r_closure_typed_ports.tnlog"; then
+  echo "FAIL: trace/cup closure left duplicate typed-port stubs" >&2
+  exit 1
+fi
+if grep -Fq '|origin=port-open|' "$WORK/r_closure_implicit_virtual.tnlog"; then
+  echo "FAIL: implicit closure endpoints grew open-port stubs" >&2
+  exit 1
+fi
+grep -Fq 'kernel-boundary|signature=phys:n' \
+    "$WORK/r_port_physical_open.tnlog" || {
+  echo "FAIL: physical port type did not reach its explicit open boundary" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=phys:n' \
+    "$WORK/r_cell_policy_typed_ports.tnlog" || {
+  echo "FAIL: matching physical-open policy lost its physical boundary" >&2
+  exit 1
+}
+grep -Fq \
+    '|cross=over at crossing of open-arc and port-open-1|' \
+    "$WORK/r_route_open_all_arc.tnlog" || {
+  echo "FAIL: bare open all-side route omitted its traversed port" >&2
+  exit 1
+}
+grep -Fq \
+    'stringcross|under=port-open-1|over=open-arc|hits=1' \
+    "$WORK/r_route_open_all_arc.tnlog" || {
+  echo "FAIL: bare open all-side route did not meet its traversed port" >&2
+  exit 1
+}
+if ! grep -F 'name=north-route' "$WORK/r_route_noncell_port.tnlog" |
+     grep -Fq 'cross=over at crossing of north-route and port-open-1'; then
+  echo "FAIL: a midpoint carrier was omitted from its routed crossing set" >&2
+  exit 1
+fi
+grep -Fq \
+    'stringcross|under=port-open-1|over=north-route|hits=1' \
+    "$WORK/r_route_noncell_port.tnlog" || {
+  echo "FAIL: a midpoint carrier port did not reach its routed crossing" >&2
+  exit 1
+}
+if ! grep -F 'name=onwire-route' "$WORK/r_route_noncell_port.tnlog" |
+     grep -Fq 'cross=over at crossing of onwire-route and port-open-1'; then
+  echo "FAIL: an on-wire carrier was omitted from its routed crossing set" >&2
+  exit 1
+fi
+grep -Fq \
+    'stringcross|under=port-open-1|over=onwire-route|hits=1' \
+    "$WORK/r_route_noncell_port.tnlog" || {
+  echo "FAIL: an on-wire carrier port did not reach its routed crossing" >&2
+  exit 1
+}
+off_face_route=$(
+  grep -F 'name=off-face-route' "$WORK/r_route_noncell_port.tnlog"
+) || {
+  echo "FAIL: off-face route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$off_face_route" | grep -Fq 'port-open-1'; then
+  echo "FAIL: off-face route collected its carrier's east port" >&2
+  exit 1
+fi
+address_route=$(
+  grep -F 'name=address-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: address-bearing all-side route emitted no record" >&2
+  exit 1
+}
+address_crossings='cross=over at crossing of address-route and port-open-1,'
+address_crossings="${address_crossings}over at crossing of address-route and port-open-2"
+printf '%s\n' "$address_route" |
+  grep -Fq "$address_crossings" || {
+  echo "FAIL: NE-to-SW all-side route lost its north-west face order" >&2
+  exit 1
+}
+if printf '%s\n' "$address_route" | grep -Eq 'port-open-[34]'; then
+  echo "FAIL: NE-to-SW all-side route collected an untraversed face" >&2
+  exit 1
+fi
+wrap_route=$(
+  grep -F 'name=wrap-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: wrapped address-bearing all-side route emitted no record" >&2
+  exit 1
+}
+wrap_crossings='cross=under at crossing of wrap-route and port-open-1,'
+wrap_crossings="${wrap_crossings}over at crossing of wrap-route and port-open-2"
+printf '%s\n' "$wrap_route" |
+  grep -Fq "$wrap_crossings" || {
+  echo "FAIL: SE-to-NW all-side route lost its east-north face order" >&2
+  exit 1
+}
+same_corner_route=$(
+  grep -F 'name=same-corner-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: same-corner all-side route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$same_corner_route" | grep -Fq 'port-open-'; then
+  echo "FAIL: same-corner all-side route invented a hull-face crossing" >&2
+  exit 1
+fi
+dependent_route=$(
+  grep -F 'name=dependent-route' "$WORK/r_route_address_all_faces.tnlog"
+) || {
+  echo "FAIL: named-string-dependent all-side route emitted no record" >&2
+  exit 1
+}
+for crossing in \
+  'over at crossing of dependent-route and carrier' \
+  'over at crossing of dependent-route and port-open-1' \
+  'over at crossing of dependent-route and port-open-2'
+do
+  printf '%s\n' "$dependent_route" | grep -Fq "$crossing" || {
+    echo "FAIL: named-string-dependent route lost $crossing" >&2
+    exit 1
+  }
+done
+grep -Fq 'name=clearance-route' \
+    "$WORK/r_route_address_all_faces.tnlog" || {
+  echo "FAIL: address in the hull clearance annulus was rejected" >&2
+  exit 1
+}
+grep -Fq 'name=selected-port-route' \
+    "$WORK/r_route_address_all_faces.tnlog" || {
+  echo "FAIL: a selected authored port was rejected as an inside route end" >&2
+  exit 1
+}
+exact_route=$(
+  grep -F 'name=exact-route' "$WORK/r_route_dependent_turns.tnlog"
+) || {
+  echo "FAIL: exact all-side route emitted no record" >&2
+  exit 1
+}
+for crossing in \
+  'over at crossing of exact-route and port-open-1' \
+  'over at crossing of exact-route and port-open-2'
+do
+  printf '%s\n' "$exact_route" | grep -Fq "$crossing" || {
+    echo "FAIL: exact all-side route lost $crossing" >&2
+    exit 1
+  }
+done
+grep -Fq 'string|id=precision-route|kind=open|pts=5' \
+    "$WORK/r_route_dependent_turns.tnlog" || {
+  echo "FAIL: native coordinate precision collapsed a representable turn" >&2
+  exit 1
+}
+deferred_route=$(
+  grep -F 'name=h' "$WORK/r_route_dependent_turns.tnlog"
+) || {
+  echo "FAIL: leg-dependent all-side route emitted no record" >&2
+  exit 1
+}
+if printf '%s\n' "$deferred_route" | grep -Fq 'leg-s-1-1'; then
+  echo "FAIL: leg-dependent route used the pre-settlement default turn" >&2
+  exit 1
+fi
+for crossing in \
+  'stringcross|under=port-open-1|over=address-route|hits=1' \
+  'stringcross|under=port-open-2|over=address-route|hits=1' \
+  'stringcross|under=wrap-route|over=port-open-1|hits=1' \
+  'stringcross|under=port-open-2|over=wrap-route|hits=1' \
+  'stringcross|under=carrier|over=dependent-route|hits=1' \
+  'stringcross|under=port-open-1|over=dependent-route|hits=1' \
+  'stringcross|under=port-open-2|over=dependent-route|hits=1'
+do
+  grep -Fq "$crossing" "$WORK/r_route_address_all_faces.tnlog" || {
+    echo "FAIL: address-bearing all-side route missed $crossing" >&2
+    exit 1
+  }
+done
+grep -Fq \
+    'stringcross|under=probe|over=port-open-1|hits=1' \
+    "$WORK/r_port_open_crossing.tnlog" || {
+  echo "FAIL: explicit crossing did not lengthen the generated port leg" >&2
+  exit 1
+}
+grep -Fq \
+    'stringcross|under=near-probe|over=port-open-1|hits=1' \
+    "$WORK/r_port_open_crossing.tnlog" || {
+  echo "FAIL: generated port reach discarded one of several references" >&2
+  exit 1
+}
 grep -Fq 'string|id=horizontal|kind=wind|class=1,0|pts=12' \
     "$WORK/k_torus.tnlog" || {
   echo "FAIL: the horizontal torus class did not reach the winding renderer" >&2
@@ -82,8 +266,46 @@ plane_frame_canonical=$(
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
-grep -Fq '|from=addr-13|kind=index|to-open=n' "$WORK/k_plane.tnlog" || {
+plane_physical_open=$(grep -F '|from=addr-13|' "$WORK/k_plane.tnlog") || {
   echo "FAIL: the plane fixture lost its projected open physical port" >&2
+  exit 1
+}
+for field in '|kind=index|' '|port-type=physical|' \
+             '|to-open-type=physical|' '|to-open=n'
+do
+  printf '%s\n' "$plane_physical_open" | grep -Fq "$field" || {
+    echo "FAIL: the plane fixture lost physical open field $field" >&2
+    exit 1
+  }
+done
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 8 ] || {
+  echo "FAIL: unmatched typed ports did not materialize exactly eight open legs" >&2
+  exit 1
+}
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_many_unmatched_ports.tnlog" || true)" -eq 36 ] || {
+  echo "FAIL: high-multiplicity typed ports did not materialize 36 open legs" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=phys:45, phys:n' \
+    "$WORK/r_unmatched_port_legs.tnlog" || {
+  echo "FAIL: flat unmatched ports lost their typed boundary bearings" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=open:22.479434, phys:53.130102' \
+    "$WORK/r_unmatched_port_legs.tnlog" || {
+  echo "FAIL: plane unmatched ports lost their transported boundary bearings" >&2
+  exit 1
+}
+[ "$(grep -c 'check|relation=1|result=equal' \
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 5 ] || {
+  echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
+  exit 1
+}
+[ "$(grep -c 'kernel-boundary|signature=$' \
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 5 ] || {
+  echo "FAIL: explicitly wired ports retained an implicit open leg" >&2
   exit 1
 }
 basis_atom_count=$(grep -c '^atom|' "$WORK/r_basis_plane.tnlog" || true)
@@ -772,6 +994,34 @@ grep -Fq '[TKZ-LANG-CLUSTER-NAME]' "$WORK/n_unnamed_cluster.transcript" || {
   exit 1
 }
 
+cluster_ports_negative="$KERNEL/negative/n_cluster_ports.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$cluster_ports_negative" >"$WORK/n_cluster_ports.transcript" 2>&1 ); then
+  echo "FAIL: a glyphless cluster carrier accepted ports" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-PORT-CLUSTER]' "$WORK/n_cluster_ports.transcript" || {
+  echo "FAIL: cluster-port rejection lacked TKZ-PORT-CLUSTER" >&2
+  exit 1
+}
+
+cluster_endpoint_negative="$KERNEL/negative/n_cluster_port_endpoint.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$cluster_endpoint_negative" \
+       >"$WORK/n_cluster_port_endpoint.transcript" 2>&1 ); then
+  echo "FAIL: an implicit endpoint invented a cluster-carrier port" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-PORT-CLUSTER]' \
+  "$WORK/n_cluster_port_endpoint.transcript" || {
+  echo "FAIL: cluster endpoint rejection lacked TKZ-PORT-CLUSTER" >&2
+  exit 1
+}
+
 for sugar_negative in \
   n_malformed_sugar \
   n_malformed_surface \
@@ -846,10 +1096,42 @@ done
 
 for contract_negative in \
   n_one_end_wire \
+  n_duplicate_port \
+  n_port_open_cross_undeclared \
+  n_port_type \
+  n_closure_port_type \
+  n_closure_implicit_port_type \
+  n_cup_implicit_port_type \
+  n_cell_trace_port_type \
+  n_authored_port_type_implicit \
+  n_authored_port_type_implicit_from \
+  n_port_cell_type \
+  n_cell_port_type \
+  n_physical_wire_dir_to \
+  n_physical_wire_dir_from \
+  n_physical_open_wire_dir \
+  n_physical_open_wire_dir_from \
+  n_route_end_inside_hull \
+  n_physical_open_port_type \
+  n_interface_open_port_type \
+  n_physical_trace_required_type \
+  n_grid_port_type_implicit \
+  n_port_type_multiple_consumers \
+  n_port_policy_type \
+  n_policy_label_token_identity \
+  n_sealed_duplicate_port \
+  n_sealed_malformed_port \
+  n_port_slot \
+  n_noncell_port_slot \
+  n_port_open_name \
+  n_padded_duplicate_port \
+  n_rounding_duplicate_port \
+  n_bonded_policy_label_conflict \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
-  n_noncell_leg
+  n_noncell_leg \
+  n_signature_carrier_port
 do
   source="$KERNEL/negative/$contract_negative.tex"
   if ( cd "$WORK" &&
@@ -862,6 +1144,70 @@ do
   expected='[TKZ-LANG-ADDRESS]'
   [ "$contract_negative" = n_one_end_wire ] &&
     expected='[TKZ-LANG-WIRE-ARITY]'
+  [ "$contract_negative" = n_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_port_open_cross_undeclared ] &&
+    expected='[TKZ-CROSS-UNDECLARED]'
+  [ "$contract_negative" = n_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_closure_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_closure_implicit_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cup_implicit_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cell_trace_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_authored_port_type_implicit ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_authored_port_type_implicit_from ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_port_cell_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_cell_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_physical_wire_dir_to ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_wire_dir_from ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_open_wire_dir ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_open_wire_dir_from ] &&
+    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_route_end_inside_hull ] &&
+    expected='[TKZ-ROUTE-END-INSIDE]'
+  [ "$contract_negative" = n_physical_open_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_interface_open_port_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_physical_trace_required_type ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_grid_port_type_implicit ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_port_type_multiple_consumers ] &&
+    expected='[TKZ-PORT-CONSUMED]'
+  [ "$contract_negative" = n_port_policy_type ] &&
+    expected='[TKZ-PORT-POLICY-TYPE]'
+  [ "$contract_negative" = n_policy_label_token_identity ] &&
+    expected='[TKZ-PORT-LABEL-CONFLICT]'
+  [ "$contract_negative" = n_sealed_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_sealed_malformed_port ] &&
+    expected='[TKZ-PORT-PARSE]'
+  [ "$contract_negative" = n_port_slot ] &&
+    expected='[TKZ-PORT-SLOT]'
+  [ "$contract_negative" = n_noncell_port_slot ] &&
+    expected='[TKZ-PORT-SLOT]'
+  [ "$contract_negative" = n_port_open_name ] &&
+    expected='[TKZ-LANG-NAME-COLLISION]'
+  [ "$contract_negative" = n_padded_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_rounding_duplicate_port ] &&
+    expected='[TKZ-PORT-DUPLICATE]'
+  [ "$contract_negative" = n_bonded_policy_label_conflict ] &&
+    expected='[TKZ-PORT-LABEL-CONFLICT]'
+  [ "$contract_negative" = n_signature_carrier_port ] &&
+    expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
     echo "FAIL: $contract_negative lacked $expected" >&2
     exit 1
