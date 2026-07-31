@@ -39,6 +39,7 @@ import TNLean.Analysis.RelativeEntropySupportIntegral
 import TNLean.Analysis.RelativeEntropySupportLeftRightQuadratic
 import TNLean.Analysis.ResolventFunctionalCalculus
 import TNLean.Analysis.RpowConvexity
+import TNLean.Analysis.SandwichedRenyiTwo
 import TNLean.Analysis.SchattenNorm
 import TNLean.Analysis.SuperoperatorResolvent
 import TNLean.Analysis.TraceCFC
