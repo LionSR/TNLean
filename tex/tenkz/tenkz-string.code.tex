@@ -73,8 +73,9 @@
 \prop_new:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
 \prop_new:N \l__tenkz_string_source_prop     % id -> caller|generated
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
-\seq_new:N \l__tenkz_string_join_seq         % unordered endpoint joins
-\seq_new:N \l__tenkz_string_touch_seq        % shared semantic wire ports
+\prop_new:N \l__tenkz_string_cross_prop      % unordered pair -> declarations
+\prop_new:N \l__tenkz_string_join_prop       % unordered pair -> endpoint joins
+\prop_new:N \l__tenkz_string_touch_prop      % shared semantic wire ports
 \prop_new:N \l__tenkz_string_disjoint_prop   % model-proven disjoint pairs
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
@@ -148,8 +149,9 @@
     \prop_clear:N \l__tenkz_string_kind_prop
     \prop_clear:N \l__tenkz_string_source_prop
     \seq_clear:N \l__tenkz_string_cross_seq
-    \seq_clear:N \l__tenkz_string_join_seq
-    \seq_clear:N \l__tenkz_string_touch_seq
+    \prop_clear:N \l__tenkz_string_cross_prop
+    \prop_clear:N \l__tenkz_string_join_prop
+    \prop_clear:N \l__tenkz_string_touch_prop
     \prop_clear:N \l__tenkz_string_disjoint_prop
     \seq_clear:N \l__tenkz_string_gap_ids_seq
     \seq_clear:N \l__tenkz_string_self_gap_ids_seq
@@ -157,6 +159,56 @@
     \prop_clear:N \l__tenkz_string_self_gap_prop
     \prop_clear:N \l__tenkz_string_external_gap_prop
     \prop_clear:N \l__tenkz_string_crossing_point_prop
+  }
+
+% Every unordered relation uses one canonical key.  The grouped form is
+% unambiguous even when one string id is a prefix of another.
+\cs_new:Npn \__tenkz_string_pair_key:nn #1#2
+  {
+    \str_compare:eNeTF {#1} > {#2}
+      { {#2} {#1} }
+      { {#1} {#2} }
+  }
+
+\cs_new_protected:Npn \__tenkz_string_pair_put:Nnn #1#2#3
+  { \prop_put:Nen #1 { \__tenkz_string_pair_key:nn {#2} {#3} } { } }
+
+\cs_new_protected:Npn \__tenkz_string_pair_count_incr:Nnn #1#2#3
+  {
+    \prop_get:NeNTF #1
+      { \__tenkz_string_pair_key:nn {#2} {#3} }
+      \l__tenkz_string_tmp_tl
+      {
+        \tl_set:Ne \l__tenkz_string_tmp_tl
+          { \int_eval:n { \l__tenkz_string_tmp_tl + 1 } }
+      }
+      { \tl_set:Nn \l__tenkz_string_tmp_tl {1} }
+    \prop_put:NeV #1
+      { \__tenkz_string_pair_key:nn {#2} {#3} }
+      \l__tenkz_string_tmp_tl
+  }
+
+\cs_new_protected:Npn \__tenkz_string_pair_count_get:NnnN #1#2#3#4
+  {
+    \prop_get:NeN #1
+      { \__tenkz_string_pair_key:nn {#2} {#3} }
+      \l__tenkz_string_tmp_tl
+    \quark_if_no_value:NTF \l__tenkz_string_tmp_tl
+      { \int_zero:N #4 }
+      { \int_set:Nn #4 { \l__tenkz_string_tmp_tl } }
+  }
+
+% Traverse each unordered pair once in declaration order.  Both kernel
+% topology inference and crossing validation use this same scaling boundary.
+\cs_new_protected:Npn \__tenkz_string_map_unordered_pairs:N #1
+  {
+    \seq_set_eq:NN \l__tenkz_string_scan_seq \l__tenkz_string_ids_seq
+    \seq_map_inline:Nn \l__tenkz_string_ids_seq
+      {
+        \seq_pop_left:NN \l__tenkz_string_scan_seq \l__tenkz_string_tmp_tl
+        \seq_map_inline:Nn \l__tenkz_string_scan_seq
+          { #1 {##1} {####1} }
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_string_require_libs:
@@ -439,6 +491,8 @@
     \prop_if_in:NnF \l__tenkz_string_kind_prop {#2}
       { \msg_error:nnn {tenkz}{string-unknown} {#2} }
     \seq_put_right:Nn \l__tenkz_string_cross_seq { {#1} {#2} }
+    \__tenkz_string_pair_count_incr:Nnn
+      \l__tenkz_string_cross_prop {#1} {#2}
     \str_if_eq:nnT {#1} {#2}
       {
         \prop_get:NnNTF
@@ -460,23 +514,20 @@
       { \msg_error:nnn {tenkz}{string-unknown} {#1} }
     \prop_if_in:NnF \l__tenkz_string_kind_prop {#2}
       { \msg_error:nnn {tenkz}{string-unknown} {#2} }
-    \seq_put_right:Nn \l__tenkz_string_join_seq { {#1} {#2} }
+    \__tenkz_string_pair_count_incr:Nnn
+      \l__tenkz_string_join_prop {#1} {#2}
   }
 
 % Two model wires may share a semantic port while their measured ink paths
 % overlap near the glyph border.  That attachment is topology, not a crossing.
 \cs_new_protected:Npn \__tenkz_string_touch:nn #1#2
-  {
-    \seq_put_right:Nn \l__tenkz_string_touch_seq { {#1} {#2} }
-  }
+  { \__tenkz_string_pair_put:Nnn \l__tenkz_string_touch_prop {#1} {#2} }
 
 % Record a pair whose owning model proves cannot meet.  The crossing police
 % can answer zero without asking the drawing engine to rediscover topology
 % from potentially singular path arithmetic.
 \cs_new_protected:Npn \__tenkz_string_disjoint:nn #1#2
-  {
-    \prop_put:Nnn \l__tenkz_string_disjoint_prop { #1 / #2 } { }
-  }
+  { \__tenkz_string_pair_put:Nnn \l__tenkz_string_disjoint_prop {#1} {#2} }
 
 % intersection count of two saved paths through the pgf engine
 \cs_new_protected:Npn \__tenkz_string_count:nnN #1#2#3
@@ -1126,22 +1177,13 @@
   {
     \seq_map_inline:Nn \l__tenkz_string_ids_seq
       { \__tenkz_string_police_self:n {##1} }
-    \seq_set_eq:NN \l__tenkz_string_scan_seq \l__tenkz_string_ids_seq
-    \seq_map_inline:Nn \l__tenkz_string_ids_seq
-      {
-        \seq_pop_left:NN \l__tenkz_string_scan_seq \l__tenkz_string_tmp_tl
-        \seq_map_inline:Nn \l__tenkz_string_scan_seq
-          { \__tenkz_string_police_pair:nn {##1} {####1} }
-      }
+    \__tenkz_string_map_unordered_pairs:N \__tenkz_string_police_pair:nn
   }
 \cs_new_protected:Npn \__tenkz_string_police_self:n #1
   {
-    \int_zero:N \l__tenkz_string_declared_int
-    \seq_map_inline:Nn \l__tenkz_string_cross_seq
-      {
-        \tl_if_eq:nnT { {#1} {#1} } {##1}
-          { \int_incr:N \l__tenkz_string_declared_int }
-      }
+    \__tenkz_string_pair_count_get:NnnN
+      \l__tenkz_string_cross_prop {#1} {#1}
+      \l__tenkz_string_declared_int
     \prop_get:NnN
       \l__tenkz_string_kind_prop {#1} \l__tenkz_string_tmp_tl
     % A winding is a generated projection of its declared homotopy class.
@@ -1164,16 +1206,14 @@
 \cs_new_protected:Npn \__tenkz_string_police_pair:nn #1#2
   {
     \bool_set_false:N \l_tmpa_bool
-    \prop_if_in:NnT \l__tenkz_string_disjoint_prop { #1 / #2 }
-      { \bool_set_true:N \l_tmpa_bool }
-    \prop_if_in:NnT \l__tenkz_string_disjoint_prop { #2 / #1 }
+    \prop_if_in:NeT \l__tenkz_string_disjoint_prop
+      { \__tenkz_string_pair_key:nn {#1} {#2} }
       { \bool_set_true:N \l_tmpa_bool }
     \bool_if:NTF \l_tmpa_bool
       { \__tenkz_string_police_pair_disjoint:nn {#1} {#2} }
       {
-        \seq_if_in:NnT \l__tenkz_string_touch_seq { {#1} {#2} }
-          { \bool_set_true:N \l_tmpa_bool }
-        \seq_if_in:NnT \l__tenkz_string_touch_seq { {#2} {#1} }
+        \prop_if_in:NeT \l__tenkz_string_touch_prop
+          { \__tenkz_string_pair_key:nn {#1} {#2} }
           { \bool_set_true:N \l_tmpa_bool }
         \bool_if:NF \l_tmpa_bool
           { \__tenkz_string_police_pair_cross:nn {#1} {#2} }
@@ -1181,39 +1221,21 @@
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair_disjoint:nn #1#2
   {
-    \seq_map_inline:Nn \l__tenkz_string_cross_seq
-      {
-        \tl_if_eq:nnT { {#1} {#2} } {##1}
-          { \msg_error:nnnn {tenkz}{cross-disjoint} {#1} {#2} }
-        \tl_if_eq:nnT { {#2} {#1} } {##1}
-          { \msg_error:nnnn {tenkz}{cross-disjoint} {#1} {#2} }
-      }
-    \seq_map_inline:Nn \l__tenkz_string_join_seq
-      {
-        \tl_if_eq:nnT { {#1} {#2} } {##1}
-          { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
-        \tl_if_eq:nnT { {#2} {#1} } {##1}
-          { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
-      }
+    \prop_if_in:NeT \l__tenkz_string_cross_prop
+      { \__tenkz_string_pair_key:nn {#1} {#2} }
+      { \msg_error:nnnn {tenkz}{cross-disjoint} {#1} {#2} }
+    \prop_if_in:NeT \l__tenkz_string_join_prop
+      { \__tenkz_string_pair_key:nn {#1} {#2} }
+      { \msg_error:nnnn {tenkz}{join-disjoint} {#1} {#2} }
   }
 \cs_new_protected:Npn \__tenkz_string_police_pair_cross:nn #1#2
   {
-    \int_zero:N \l__tenkz_string_n_int
-    \seq_map_inline:Nn \l__tenkz_string_cross_seq
-      {
-        \tl_if_eq:nnT { {#1} {#2} } {##1}
-          { \int_incr:N \l__tenkz_string_n_int }
-        \tl_if_eq:nnT { {#2} {#1} } {##1}
-          { \int_incr:N \l__tenkz_string_n_int }
-      }
-    \int_zero:N \l__tenkz_string_declared_int
-    \seq_map_inline:Nn \l__tenkz_string_join_seq
-      {
-        \tl_if_eq:nnT { {#1} {#2} } {##1}
-          { \int_incr:N \l__tenkz_string_declared_int }
-        \tl_if_eq:nnT { {#2} {#1} } {##1}
-          { \int_incr:N \l__tenkz_string_declared_int }
-      }
+    \__tenkz_string_pair_count_get:NnnN
+      \l__tenkz_string_cross_prop {#1} {#2}
+      \l__tenkz_string_n_int
+    \__tenkz_string_pair_count_get:NnnN
+      \l__tenkz_string_join_prop {#1} {#2}
+      \l__tenkz_string_declared_int
     \int_set_eq:NN \l_tmpa_int \l__tenkz_string_n_int
     \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_string_n_int
     \int_compare:nNnT { \l__tenkz_string_n_int } > {1}
