@@ -29,7 +29,7 @@ to the strictly positive eigenvalues.
 
 ## Main result
 
-* `Matrix.PosSemidef.re_dotProduct_cfcLog_mulVec_le_log`: support-aware vector-state
+* `Matrix.PosSemidef.re_dotProduct_cfc_log_mulVec_le_log`: support-aware vector-state
   Jensen inequality for `CFC.log`.
 
 ## References
@@ -57,7 +57,7 @@ The support hypothesis removes the zero eigenspace before applying concavity of
 `Real.log` on $(0,\infty)$; it cannot be omitted under the convention `Real.log 0 = 0`.
 This is the finite-dimensional vector-state form of Jensen's inequality; see Bhatia,
 *Matrix Analysis*, Chapter V. -/
-theorem re_dotProduct_cfcLog_mulVec_le_log
+theorem re_dotProduct_cfc_log_mulVec_le_log
     {A : Matrix n n ℂ} (hA : A.PosSemidef) {v : n → ℂ}
     (hv : star v ⬝ᵥ v = (1 : ℂ))
     (hsupport : hA.supportProj *ᵥ v = v) :
@@ -134,7 +134,7 @@ theorem re_dotProduct_cfcLog_mulVec_le_log
     rw [← hall]
     apply Finset.sum_subset (Finset.filter_subset _ _)
     intro i _ hiS
-    simp only [S, Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
     exact hpZero i hiS
   have hASpec : A = U * Matrix.diagonal (fun i => ((μ i : ℂ))) * Uᴴ := by
     simpa [hH, U, μ, Matrix.star_eq_conjTranspose] using hH.spectral_form
@@ -149,7 +149,7 @@ theorem re_dotProduct_cfcLog_mulVec_le_log
     rw [Finset.sum_subset (Finset.filter_subset _ _)]
     · exact Finset.sum_congr rfl fun i _ => by ring
     · intro i _ hiS
-      simp only [S, Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
       simp [hiS]
   have hlogAv : (star v ⬝ᵥ (CFC.log A *ᵥ v)).re =
       ∑ i ∈ S, p i * Real.log (μ i) := by
@@ -159,7 +159,7 @@ theorem re_dotProduct_cfcLog_mulVec_le_log
     rw [Finset.sum_subset (Finset.filter_subset _ _)]
     · exact Finset.sum_congr rfl fun i _ => by ring
     · intro i _ hiS
-      simp only [S, Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_ne_iff] at hiS
       simp [hiS]
   have hμPos : ∀ i ∈ S, 0 < μ i := by
     intro i hi
