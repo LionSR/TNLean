@@ -34,6 +34,9 @@ copy index.
   the source projector construction supplies the required compression.
 * `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
   source zero correlation length restricts to every absorbed representative.
+* `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
+  simple canonical data package copy-independent weights and sectorwise source
+  zero correlation length.
 * `trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos`:
   every nonempty-chain sector normalization is strictly positive.
 
@@ -108,6 +111,44 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
   rw [S.weight_eq_commonWeight hWeight] at hsquare
   rw [IsSourceZCL, htransfer]
   exact ⟨hweighted, lam, hlam, hsquare⟩
+
+/-- A simple canonical-form tensor with source zero correlation length admits
+canonical-form data whose weights are copy-independent and whose absorbed
+normal representatives all have source zero correlation length.
+
+The chosen data retain the nonnilpotence condition from simplicity, so the
+sectorwise zero-correlation-length theorem applies without an additional
+hypothesis.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1628, 1646--1661, and 1781. -/
+theorem IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+    {D : ℕ} {M : MPOTensor d D} (hM : IsSimpleCanonicalForm M)
+    (hZCL : IsSourceZCL M) :
+    ∃ S : MPSTensor.SectorDecomposition (d * d),
+      MPSTensor.IsBNTCanonicalForm S ∧
+        (∃ hTotal : S.totalDim = D,
+          ∃ X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ,
+          ∀ i : Fin (d * d),
+            M.toMPSTensor i =
+              cast (by rw [hTotal] :
+                  Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+                    Matrix (Fin D) (Fin D) ℂ)
+                ((MPSTensor.globalGaugeOfBlocks X :
+                      Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+                  S.toTensor i *
+                  (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                      GL (Fin S.totalDim) ℂ) :
+                    Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ))) ∧
+        (∀ j, ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j))) ∧
+        ∃ hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+          S.weight j q = S.weight j q',
+          ∀ s : Fin S.basisCount,
+            IsSourceZCL (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+  obtain ⟨S, hCF, ⟨hTotal, X, hEq⟩, hnonNil, hWeight⟩ :=
+    hM.exists_weight_copy_independent_of_isSourceZCL hZCL
+  refine ⟨S, hCF, ⟨hTotal, X, hEq⟩, hnonNil, hWeight, fun s ↦ ?_⟩
+  exact commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+    M S hTotal X hEq hZCL hWeight s (hnonNil s)
 
 /-- If the tensor-power BNT projection selects an absorbed representative,
 then that representative generates positive semidefinite operators on every

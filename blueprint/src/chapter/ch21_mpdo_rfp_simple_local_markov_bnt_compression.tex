@@ -824,19 +824,24 @@ strong subadditivity for a normalized three-site reduced state.
     integer $n_s$ then gives positivity of the sector operator.
 \end{proof}
 
-\begin{theorem}[Zero correlation length of the absorbed BNT elements]
+% Source: arXiv:1606.00608, Appendix C.2, Lemma `lemmus`, lines
+% 1646--1661, and the absorbed-sector ZCL conclusion at line 1781.
+\begin{theorem}[Ambient ZCL descends to the canonical absorbed BNT elements]
     \label{thm:mpdo_absorbed_bnt_sector_zcl}
+    \lean{MPOTensor.IsSimpleCanonicalForm.%
+      exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \lean{MPOTensor.%
       physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
-    \uses{lem:mpdo_simple_blockwise_zcl_equation,
+    \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
       def:mpdo_common_sector_weight_absorption}
-    Let $K$ have zero correlation length and let
-    $\mathcal K_s=\mu_sA_s$ be an absorbed BNT element of its horizontal
-    canonical form. If the physical-trace transfer $\mathcal B_s$ is not
-    nilpotent, then $\mathcal K_s$ has zero correlation length. More
-    precisely,
+    Let $K$ be a simple tensor in its chosen canonical form and suppose that
+    $K$ has source zero correlation length. Then the copy weights over each
+    normal representative agree. For every representative $A_s$ with
+    non-nilpotent physical-trace transfer $\mathcal B_s$, absorb the common
+    weight and write $\mathcal K_s=\mu_sA_s$. Each $\mathcal K_s$ has source
+    zero correlation length. More precisely,
     \begin{align}
         \mathcal T_{\mathcal K_s}
         &=\mu_s\mathcal B_s\ne0,
@@ -851,11 +856,45 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation} gives the displayed
-    quadratic identity. The common weight is nonzero, and nonnilpotence of
-    $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the absorbed transfer is
-    nonzero.
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
+      lem:mpdo_simple_blockwise_zcl_equation}
+    Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
+    common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
+    then gives the displayed quadratic identity. The common weight is nonzero,
+    and nonnilpotence of $\mathcal B_s$ implies $\mathcal B_s\ne0$, so the
+    absorbed transfer is nonzero.
 \end{proof}
+
+\begin{remark}[Sectorwise hypotheses in the canonical BNT application]
+    \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
+    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
+      thm:mpdo_absorbed_bnt_sector_zcl,
+      thm:mpdo_bnt_physical_support_restriction,
+      thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    In the canonical absorbed BNT presentation, ambient source zero
+    correlation length supplies sectorwise source zero correlation length by
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. The standing biCF
+    hypothesis gives a simultaneous one-letter span. Together with the
+    nonzero common weight, Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}
+    therefore gives one-site injectivity of every absorbed representative, so
+    no blocking argument is needed.
+
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    still assumes separately that every absorbed sector generates matrix
+    product density operators and is normal with the chosen normalization.
+    These hypotheses must come from the surrounding positive normalized sector
+    data; neither may be inferred from SAL of the ambient tensor, since SAL is
+    the conclusion under discussion. When these inputs are present, the
+    theorem applies at every original cut. This is the corrected implication
+    conditioned on ambient source zero correlation length. It does not prove
+    the printed GSNNCH-only proposition, which omits that hypothesis. An
+    arbitrary GSNNCH presentation need not inherit source zero correlation
+    length from its periodic operators.
+
+    % **Scope restriction (ambient source ZCL):** Proposition `prop4to2` omits
+    % the ambient source-ZCL hypothesis used to obtain sectorwise ZCL. See
+    % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\end{remark}
 
 \begin{theorem}[Strict normalization at positive length]
     \label{thm:mpdo_source_zcl_strict_positive_length_normalization}
