@@ -3874,7 +3874,7 @@
 \prop_new:N \l__tenkz_kernel_r_species_prop   % species word -> hue
 \prop_new:N \l__tenkz_kernel_r_sid_record_prop
 \prop_new:N \l__tenkz_kernel_r_index_style_prop
-\prop_new:N \l__tenkz_kernel_r_index_join_prop
+\prop_new:N \l__tenkz_kernel_r_index_sid_prop
 \prop_new:N \l__tenkz_kernel_r_skin_over_wire_prop
 \prop_new:N \l__tenkz_kernel_r_port_box_prop
 \prop_new:N \l__tenkz_kernel_r_port_host_routes_prop
@@ -7393,6 +7393,8 @@
       \l__tenkz_kernel_r_sid_tl {#2}
     \prop_put:NVV \l__tenkz_kernel_r_sid_record_prop
       \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_wire_record_tl
+    \prop_put:NVV \l__tenkz_kernel_r_index_sid_prop
+      \l__tenkz_kernel_r_sid_tl \l__tenkz_kernel_r_wire_record_tl
     \prop_put:NVV \l__tenkz_kernel_r_index_style_prop
       \l__tenkz_kernel_r_wire_record_tl \l__tenkz_kernel_r_wire_style_tl
     \seq_put_right:NV \l__tenkz_kernel_r_index_routes_seq
@@ -9922,74 +9924,80 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_index_joins:
   {
-    \prop_clear:N \l__tenkz_kernel_r_index_join_prop
-    \seq_map_inline:Nn \l__tenkz_kernel_r_index_routes_seq
+    \prop_if_empty:NF \l__tenkz_kernel_r_index_sid_prop
       {
-        \tl_set:Nn \l__tenkz_kernel_r_wire_record_tl {##1}
-        \__tenkz_kernel_r_sid:nN {##1} \l__tenkz_kernel_r_sid_tl
-        \seq_map_inline:Nn \l__tenkz_string_ids_seq
+        \__tenkz_string_map_unordered_pairs:N
+          \__tenkz_kernel_r_index_join_pair:nn
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_index_join_pair:nn #1#2
+  {
+    \prop_get:NnN \l__tenkz_kernel_r_index_sid_prop {#1}
+      \l__tenkz_kernel_r_wire_record_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_wire_record_tl
+      {
+        \prop_get:NnN \l__tenkz_kernel_r_index_sid_prop {#2}
+          \l__tenkz_kernel_r_wire_record_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_wire_record_tl
           {
-            \str_if_eq:VnF \l__tenkz_kernel_r_sid_tl {####1}
+            \__tenkz_kernel_r_index_join_oriented:nn {#2} {#1}
+          }
+      }
+      { \__tenkz_kernel_r_index_join_oriented:nn {#1} {#2} }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_index_join_oriented:nn #1#2
+  {
+    \tl_set:Nn \l__tenkz_kernel_r_sid_tl {#1}
+    \tl_set:Nn \l__tenkz_kernel_r_b_tl {#2}
+    \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {#2}
+      \l__tenkz_kernel_r_c_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
+      {
+        \exp_args:NVV \__tenkz_string_touch:nn
+          \l__tenkz_kernel_r_sid_tl
+          \l__tenkz_kernel_r_b_tl
+      }
+      {
+        \__tenkz_model_get:nnN
+          { \l__tenkz_kernel_r_c_tl } {kind}
+          \l__tenkz_kernel_scratch_tl
+        \str_if_eq:VnTF
+          \l__tenkz_kernel_scratch_tl {pairing}
+          {
+            \exp_args:NVV
+              \__tenkz_kernel_r_wires_share_port:nnTF
+              \l__tenkz_kernel_r_wire_record_tl
+              \l__tenkz_kernel_r_c_tl
               {
-                \prop_if_in:NeF \l__tenkz_kernel_r_index_join_prop
-                  { \l__tenkz_kernel_r_sid_tl / ####1 }
+                \exp_args:NVV \__tenkz_string_touch:nn
+                  \l__tenkz_kernel_r_sid_tl
+                  \l__tenkz_kernel_r_b_tl
+              }
+              {
+                \exp_args:NVV
+                  \__tenkz_string_endpoint_meeting:nnTF
+                  \l__tenkz_kernel_r_sid_tl
+                  \l__tenkz_kernel_r_b_tl
                   {
-                    \prop_put:Nen \l__tenkz_kernel_r_index_join_prop
-                      { \l__tenkz_kernel_r_sid_tl / ####1 } {seen}
-                    \prop_put:Nen \l__tenkz_kernel_r_index_join_prop
-                      { ####1 / \l__tenkz_kernel_r_sid_tl } {seen}
-                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {####1}
-                    \prop_get:NnN \l__tenkz_kernel_r_sid_record_prop {####1}
-                      \l__tenkz_kernel_r_c_tl
-                    \quark_if_no_value:NTF \l__tenkz_kernel_r_c_tl
-                      {
-                        \exp_args:NVV \__tenkz_string_touch:nn
-                          \l__tenkz_kernel_r_sid_tl
-                          \l__tenkz_kernel_r_b_tl
-                      }
-                      {
-                        \__tenkz_model_get:nnN
-                          { \l__tenkz_kernel_r_c_tl } {kind}
-                          \l__tenkz_kernel_scratch_tl
-                        \str_if_eq:VnTF
-                          \l__tenkz_kernel_scratch_tl {pairing}
-                          {
-                            \exp_args:NVV
-                              \__tenkz_kernel_r_wires_share_port:nnTF
-                              \l__tenkz_kernel_r_wire_record_tl
-                              \l__tenkz_kernel_r_c_tl
-                              {
-                                \exp_args:NVV \__tenkz_string_touch:nn
-                                  \l__tenkz_kernel_r_sid_tl
-                                  \l__tenkz_kernel_r_b_tl
-                              }
-                              {
-                                \exp_args:NVV
-                                  \__tenkz_string_endpoint_meeting:nnTF
-                                  \l__tenkz_kernel_r_sid_tl
-                                  \l__tenkz_kernel_r_b_tl
-                                  {
-                                    \exp_args:NVV \__tenkz_string_join:nn
-                                      \l__tenkz_kernel_r_sid_tl
-                                      \l__tenkz_kernel_r_b_tl
-                                  }
-                                  { }
-                              }
-                          }
-                          {
-                            \__tenkz_model_get:nnN
-                              { \l__tenkz_kernel_r_wire_record_tl } {origin}
-                              \l__tenkz_kernel_scratch_tl
-                            \str_if_eq:VnF
-                              \l__tenkz_kernel_scratch_tl {port-open}
-                              {
-                                \exp_args:NVV \__tenkz_string_touch:nn
-                                  \l__tenkz_kernel_r_sid_tl
-                                  \l__tenkz_kernel_r_b_tl
-                              }
-                          }
-                      }
+                    \exp_args:NVV \__tenkz_string_join:nn
+                      \l__tenkz_kernel_r_sid_tl
+                      \l__tenkz_kernel_r_b_tl
                   }
+                  { }
+              }
+          }
+          {
+            \__tenkz_model_get:nnN
+              { \l__tenkz_kernel_r_wire_record_tl } {origin}
+              \l__tenkz_kernel_scratch_tl
+            \str_if_eq:VnF
+              \l__tenkz_kernel_scratch_tl {port-open}
+              {
+                \exp_args:NVV \__tenkz_string_touch:nn
+                  \l__tenkz_kernel_r_sid_tl
+                  \l__tenkz_kernel_r_b_tl
               }
           }
       }
@@ -11448,7 +11456,7 @@
     \prop_clear:N \l__tenkz_kernel_r_species_prop
     \prop_clear:N \l__tenkz_kernel_r_sid_record_prop
     \prop_clear:N \l__tenkz_kernel_r_index_style_prop
-    \prop_clear:N \l__tenkz_kernel_r_index_join_prop
+    \prop_clear:N \l__tenkz_kernel_r_index_sid_prop
     \seq_clear:N \l__tenkz_kernel_r_index_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_port_label_routes_seq
     \seq_clear:N \l__tenkz_kernel_r_strings_seq
