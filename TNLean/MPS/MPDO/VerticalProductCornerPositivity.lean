@@ -31,20 +31,20 @@ variable {g D : ℕ} {dim mult : Fin g → ℕ}
   {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
 
 /-- The scalar multiplying the blocked BNT representative in every active
-product corner is positive.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Appendix C.4 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+product corner is positive whenever nonzero blocked corners can be separated
+by a finite sector compression.
 
 Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
 positivity argument from Proposition 4.13, lines 1898--1902. -/
-theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
+theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompression_separation
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
     {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (M : MPOTensor d D) (hM : IsMPDO M)
+    (hSeparate : ∀ P : Matrix (Fin (d * d)) (Fin (d * d)) ℂ,
+      (∃ v, P * verticalTensor (blockTwo M) v * P ≠ 0) →
+        ∃ N, sectorCompression (blockTwo M) P N ≠ 0)
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)
@@ -113,12 +113,52 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
       simpa using hReferenceCorner ab)
   have hRange := exists_rangeProjection_corner_ne_zero
     (blockTwo M) A hA Vact hVact (C.gauge j) c hc hActiveCorner
-  obtain ⟨N, hne⟩ :=
-    (hHorizontal.blockTwo).exists_sectorCompression_ne_zero_of_corner
-      (blockTwo M) (Vact * Vactᴴ) hRange
+  obtain ⟨N, hne⟩ := hSeparate (Vact * Vactᴴ) hRange
   exact sector_weight_pos hM.blockTwo hSectorRef
     (hWeight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩)
     hSectorAct N hne
+
+/-- The scalar multiplying the blocked BNT representative in every active
+product corner is positive for an MPDO in normalized BNT-refined horizontal
+form.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Appendix C.4 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
+positivity argument from Proposition 4.13, lines 1898--1902. -/
+theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
+    {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
+    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {S : RetainedProductSpectralFamily dim mult weight B}
+    (C : FlatBlockedBNTComparison S dim₂ A₂)
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (U₁ : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU₁ : U₁ * U₁ᴴ = 1)
+    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
+      U₁ᴴ * verticalAssembledTensor dim mult weight B ab * U₁)
+    (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
+    (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
+    (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
+    (U₂ : Matrix
+      (Fin (∑ q : Fin (∑ γ : Fin g₂, mult₂ γ),
+        verticalCopyDim dim₂ mult₂ q))
+      (Fin (d * d)) ℂ)
+    (hU₂ : U₂ * U₂ᴴ = 1)
+    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
+      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
+    (hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ))
+    (j : Fin (Fintype.card S.ActiveLabel)) :
+    (0 : ℂ) < S.flatCoefficient j * C.phase j := by
+  refine C.activeCoefficient_mul_phase_pos_of_sectorCompression_separation M hM
+    ?_ (U₁ := U₁) hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
+      U₂ hU₂ hReconstruct₂ hNormal₂ j
+  intro P hP
+  exact (hHorizontal.blockTwo).exists_sectorCompression_ne_zero_of_corner
+    (blockTwo M) P hP
 
 /-- Every active product gauge has scalar positive Gram matrix and becomes
 unitary after division by the square root of that scalar.
