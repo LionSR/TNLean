@@ -914,6 +914,98 @@ terms of operator-Schmidt rank.
     The rectangular Choi range-dimension estimate now proves the claim.
 \end{proof}
 
+The sandwiched R\'enyi comparison also uses the following total trace
+functional.  For faithful $\omega$ it is the quantity inside the logarithm of
+the sandwiched R\'enyi divergence
+\cite[Definition~2]{Beigi2013Sandwiched}
+\cite[Definition~2]{MullerLennert2013Renyi}.  The statements below concern only
+this algebraic expression.  They are not assertions of
+\cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, and they do not establish
+continuity or monotonicity in the order, interpolation between the endpoints,
+differentiability at order one, a limit to Umegaki relative entropy, a
+logarithmic divergence, or a comparison with relative entropy.
+
+\begin{definition}[Total sandwiched R\'enyi trace]
+    \label{def:sandwiched_renyi_trace}
+    \lean{TNLean.sandwichedRenyiTrace}
+    \leanok
+    For square complex matrices $\rho$ and $\omega$ and every $\alpha\in\R$,
+    set
+    \begin{align}
+        \widetilde Q_\alpha(\rho\Vert\omega)
+        &=\re\tr\!\left[
+          \left(\omega^{(1-\alpha)/(2\alpha)}
+          \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
+          \right].
+        \label{eq:sandwiched_renyi_trace}
+    \end{align}
+    Real powers are defined by continuous functional calculus, with negative
+    powers equal to zero on the zero eigenspace.  Thus
+    $\widetilde Q_\alpha$ is total even when $\alpha=0$ or $\omega$ is singular;
+    outside the faithful support domain it is not the sandwiched R\'enyi
+    divergence.
+\end{definition}
+
+\begin{theorem}[Nonnegativity on the faithful domain]
+    \label{thm:sandwiched_renyi_trace_nonneg}
+    \lean{TNLean.sandwichedRenyiTrace_nonneg}
+    \leanok
+    \uses{def:sandwiched_renyi_trace}
+    If $\rho\geq0$ and $\omega>0$, then, for every $\alpha\in\R$,
+    \begin{align}
+        0&\leq\widetilde Q_\alpha(\rho\Vert\omega).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:sandwiched_renyi_trace}
+    Put $q=\omega^{(1-\alpha)/(2\alpha)}$.  Continuous functional calculus
+    gives $q\geq0$, hence $q\rho q\geq0$ and $(q\rho q)^\alpha\geq0$.
+    The trace of the last matrix is real and nonnegative.
+\end{proof}
+
+\begin{theorem}[Order-one sandwiched trace]
+    \label{thm:sandwiched_renyi_trace_one}
+    \lean{TNLean.sandwichedRenyiTrace_one}
+    \leanok
+    \uses{def:sandwiched_renyi_trace}
+    If $\rho\geq0$ and $\omega>0$, then
+    \begin{align}
+        \widetilde Q_1(\rho\Vert\omega)&=\re\tr(\rho).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:sandwiched_renyi_trace}
+    At $\alpha=1$ the two powers of $\omega$ have exponent zero, while the
+    remaining real power of $\rho$ has exponent one.  Substitution into
+    (\ref{eq:sandwiched_renyi_trace}) gives the identity.
+\end{proof}
+
+\begin{theorem}[Order-two sandwiched trace]
+    \label{thm:sandwiched_renyi_trace_two}
+    \lean{TNLean.sandwichedRenyiTrace_two}
+    \leanok
+    \uses{def:sandwiched_renyi_trace}
+    If $\rho\geq0$ and $\omega>0$, then
+    \begin{align}
+        \widetilde Q_2(\rho\Vert\omega)
+        &=\re\tr\!\left[
+          (\omega^{-1/4}\rho\,\omega^{-1/4})
+          (\omega^{-1/4}\rho\,\omega^{-1/4})\right].
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:sandwiched_renyi_trace}
+    At $\alpha=2$ the sandwiching exponent is $-1/4$.
+    Since $\omega^{-1/4}\rho\,\omega^{-1/4}$ is positive semidefinite, its
+    continuous-functional-calculus square is its ordinary matrix square.
+\end{proof}
+
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \uses{def:bipartite_operator_schmidt_rank}

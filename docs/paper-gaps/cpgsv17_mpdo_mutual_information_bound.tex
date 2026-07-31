@@ -9,7 +9,7 @@
 
 \title{The Mutual-Information Bound for Matrix Product Density Operators}
 \author{}
-\date{2026-07-18}
+\date{2026-07-31}
 
 \begin{document}
 \maketitle
@@ -274,12 +274,34 @@ compression.  The eigenbasis whitening statements still assume both marginal
 weights are positive definite and therefore do not supply the two-local
 compression from singular ambient marginals to both support algebras.
 
-This reduction does not complete
+The total sandwiched R\'enyi trace expression
+\[
+  \widetilde Q_\alpha(\rho\Vert\omega)
+  =\operatorname{Re}\operatorname{Tr}\!\left[
+    \left(\omega^{(1-\alpha)/(2\alpha)}
+      \rho\,\omega^{(1-\alpha)/(2\alpha)}\right)^\alpha
+  \right]
+\]
+is now formalized, together with its nonnegativity for $\rho\geq0$ and
+$\omega>0$ and the exact identities at $\alpha=1$ and $\alpha=2$.
+\footnote{Formal declarations:
+\leanid{TNLean.sandwichedRenyiTrace},
+\leanid{TNLean.sandwichedRenyiTrace_nonneg},
+\leanid{TNLean.sandwichedRenyiTrace_one}, and
+\leanid{TNLean.sandwichedRenyiTrace_two} in
+\doclink{TNLean/Analysis/SandwichedRenyi}.}
+These are supporting analytic identities, not a theorem of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete.  They prove neither continuity nor
+monotonicity in $\alpha$, interpolation between orders one and two,
+differentiability or a limit at $\alpha=1$, the logarithmic sandwiched R\'enyi
+divergence, nor a comparison with Umegaki relative entropy.
+
+Neither development completes
 \href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  That issue still
 requires simultaneous compression by the two marginal support isometries and a
 proof that this local two-factor compression preserves operator-Schmidt rank.
-The faithful comparison itself still requires the weighted interpolation and
-order-one-limit analysis tracked in
+The faithful comparison itself still requires continuity, weighted
+interpolation, order monotonicity, and the order-one limit tracked in
 \href{https://github.com/LionSR/TNLean/issues/5209}{\#5209}.  Beigi proves
 order monotonicity \cite[Theorem~7]{Beigi2013Sandwiched}, while
 M\"uller-Lennert, Dupuis, Szehr, Fehr, and Tomamichel prove the order-one
