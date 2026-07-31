@@ -115,6 +115,37 @@ section.
     \end{align}
 \end{proof}
 
+\begin{theorem}[The trace adjoint of a channel is unital]
+    \label{thm:is_kraus_cptp_trace_adjoint_one}
+    \lean{IsKrausCPTP.traceAdjointMap_one}
+    \leanok
+    \uses{def:is_kraus_cptp, def:trace_pairing_adjoint}
+    If $\mathcal S:\MN{D}\to\MN{D'}$ is trace-preserving and completely
+    positive, then its trace-pairing adjoint satisfies
+    \begin{align}
+        \mathcal S^*(\Id_{D'})
+        &=\Id_D.
+        \notag
+    \end{align}
+    This is the Schrödinger--Heisenberg duality of
+    \cite[Section~1.2]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:trace_pairing_adjoint_identity,
+        thm:is_kraus_cptp_trace_map, thm:trace_nondeg}
+    For every $X\in\MN{D}$, trace duality and trace preservation give
+    \begin{align}
+        \tr\bigl(\mathcal S^*(\Id_{D'})X\bigr)
+        &=\tr\bigl(\mathcal S(X)\bigr)
+        =\tr(X)
+        =\tr(\Id_DX).
+        \notag
+    \end{align}
+    Nondegeneracy of the trace pairing proves the identity.
+\end{proof}
+
 \begin{lemma}[Positivity preservation for Kraus maps]
     \label{lem:is_kraus_cptp_map_pos}
     \lean{IsKrausCPTP.map_posSemidef}
