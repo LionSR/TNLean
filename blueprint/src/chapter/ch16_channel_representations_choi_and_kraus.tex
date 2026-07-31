@@ -27,6 +27,29 @@ partial traces.
     \end{align}
 \end{definition}
 
+\begin{definition}[Invertible matrix congruence]
+    \label{def:invertible_matrix_congruence}
+    \lean{Matrix.congruenceLinearEquiv,
+        Matrix.congruenceLinearEquiv_apply,
+        Matrix.congruenceLinearEquiv_symm_apply}
+    \leanok
+    Let $I$ be a finite index set and let $C\in\mathbb C^{I\times I}$ be
+    invertible. Congruence by $C$ is the complex-linear equivalence
+    \begin{align}
+        \mathcal C_C:\mathbb C^{I\times I}&\longrightarrow
+            \mathbb C^{I\times I},
+        &
+        \mathcal C_C(X)&=CXC^\dagger,
+        \notag
+    \end{align}
+    whose inverse is
+    \begin{align}
+        \mathcal C_C^{-1}(X)
+        &=C^{-1}X(C^\dagger)^{-1}.
+        \notag
+    \end{align}
+\end{definition}
+
 \begin{definition}[Frobenius vectorization]
     \label{def:frobenius_vectorization}
     \lean{Matrix.frobeniusEquivEuclidean}
@@ -64,7 +87,8 @@ partial traces.
 
 \begin{definition}[Frobenius transport of a matrix superoperator]
     \label{def:frobenius_superoperator_transport}
-    \lean{Matrix.frobeniusEuclideanMap}
+    \lean{Matrix.frobeniusEuclideanMap,
+        Matrix.frobeniusEuclideanMap_eq_conj}
     \leanok
     \uses{def:frobenius_vectorization}
     For a complex-linear map
@@ -76,6 +100,27 @@ partial traces.
         \notag
     \end{align}
 \end{definition}
+
+\begin{theorem}[Composition under Frobenius transport]
+    \label{thm:frobenius_superoperator_transport_comp}
+    \lean{Matrix.frobeniusEuclideanMap_comp}
+    \leanok
+    \uses{def:frobenius_superoperator_transport}
+    For complex-linear maps
+    $E:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$ and
+    $F:\mathbb C^{J\times J}\to\mathbb C^{K\times K}$,
+    \begin{align}
+        \widehat{F\circ E}
+        &=\widehat F\circ\widehat E.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:frobenius_vectorization}
+    Insert $U_{J,J}^{-1}U_{J,J}=\Id$ between the two transported maps.
+\end{proof}
 
 \begin{theorem}[Hilbert adjoint of a transported Kraus map]
     \label{thm:kraus_trace_adjoint_frobenius_adjoint}

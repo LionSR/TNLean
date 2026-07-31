@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
@@ -12,7 +13,6 @@ import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.TransferOperatorGap
 import Mathlib.Algebra.Module.Equiv.Basic
-import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
 /-!
 # Irreducible spectral-radius identity (Wolf Theorem 6.3(4))
@@ -53,38 +53,6 @@ variable {D : ℕ}
 
 section SimilarityCLM
 
-private noncomputable def sandwichUnit
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) : GL (Fin D) ℂ :=
-  Matrix.GeneralLinearGroup.mkOfDetNeZero C hC
-
-private noncomputable def sandwichLinearEquiv
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0) :
-    Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-  ((sandwichUnit (D := D) C hC).mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ)).trans
-    ((star (sandwichUnit (D := D) C hC)).mulRightLinearEquiv ℂ)
-
-@[simp] private lemma sandwichLinearEquiv_apply
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    sandwichLinearEquiv (D := D) C hC X = C * X * Cᴴ := by
-  simp [sandwichLinearEquiv, sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.mul_assoc]
-
-@[simp] private lemma sandwichLinearEquiv_symm_apply
-    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    (sandwichLinearEquiv (D := D) C hC).symm X = C⁻¹ * X * (Cᴴ)⁻¹ := by
-  have hSymmMulLeft : ∀ Z : Matrix (Fin D) (Fin D) ℂ,
-      ((Units.mulLeftLinearEquiv ℂ (Matrix (Fin D) (Fin D) ℂ))
-        (sandwichUnit (D := D) C hC)).symm Z = C⁻¹ * Z := by
-    intro Z
-    simpa [sandwichUnit, Matrix.GeneralLinearGroup.coe_inv] using
-      Units.symm_mulLeftLinearEquiv_apply (R := ℂ) (sandwichUnit (D := D) C hC) Z
-  simp only [sandwichLinearEquiv, LinearEquiv.symm_trans_apply,
-    Units.symm_mulRightLinearEquiv_apply]
-  rw [hSymmMulLeft]
-  simp [sandwichUnit, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_nonsing_inv,
-    Matrix.mul_assoc]
-
 /-- Spectral radius is invariant under the congruence similarity
 `X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`.
 
@@ -107,7 +75,7 @@ theorem spectralRadius_similarityMap_eq
     Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
   have hsim_alg :
       similarityMap (D := D) C E =
-        (sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ E := by
+        (Matrix.congruenceLinearEquiv C hC).symm.conjAlgEquiv ℂ E := by
     apply LinearMap.ext
     intro X
     ext i j
@@ -120,7 +88,7 @@ theorem spectralRadius_similarityMap_eq
       spectrum ℂ (similarityMap (D := D) C E) = spectrum ℂ E := by
     rw [hsim_alg]
     exact AlgEquiv.spectrum_eq
-      ((sandwichLinearEquiv (D := D) C hC).symm.conjAlgEquiv ℂ) E
+      ((Matrix.congruenceLinearEquiv C hC).symm.conjAlgEquiv ℂ) E
   have hspec_right :
       spectrum ℂ (Φ E) = spectrum ℂ E :=
     AlgEquiv.spectrum_eq Φ E
@@ -139,13 +107,13 @@ theorem IsPrimitive.similarityMap_iff
       _root_.IsPrimitive E := by
   have hsim :
       similarityMap (D := D) C E =
-        (sandwichLinearEquiv (D := D) C hC).symm.conj E := by
+        (Matrix.congruenceLinearEquiv C hC).symm.conj E := by
     apply LinearMap.ext
     intro X
     ext i j
     simp [similarityMap, LinearEquiv.conj_apply, Matrix.mul_assoc]
   rw [hsim]
-  exact IsPrimitive.conj_iff (sandwichLinearEquiv (D := D) C hC).symm E
+  exact IsPrimitive.conj_iff (Matrix.congruenceLinearEquiv C hC).symm E
 
 end SimilarityCLM
 
