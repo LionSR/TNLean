@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.MatrixCongruence
 import TNLean.Algebra.RectangularChoi
-import TNLean.Channel.KrausCPTP
 import TNLean.Channel.Peripheral.UnitalKraus
+import TNLean.Channel.SingleKraus
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Rayleigh
