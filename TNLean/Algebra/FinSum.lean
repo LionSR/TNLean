@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Module.BigOperators
 import Mathlib.Data.Complex.Basic
@@ -15,6 +16,18 @@ This file collects small finite-sum identities.
 -/
 
 open scoped BigOperators
+
+namespace Fintype
+
+/-- Reindex a sum over a finite dependent pair by `finSigmaFinEquiv`. -/
+theorem sum_finSigmaFinEquiv {g : ℕ} {mult : Fin g → ℕ} {β : Type*}
+    [AddCommMonoid β] (f : ((j : Fin g) × Fin (mult j)) → β) :
+    ∑ q : Fin (∑ j, mult j), f (finSigmaFinEquiv.symm q) =
+      ∑ j, ∑ q, f ⟨j, q⟩ := by
+  rw [Equiv.sum_comp finSigmaFinEquiv.symm f, ← Finset.univ_sigma_univ,
+    Finset.sum_sigma]
+
+end Fintype
 
 namespace Fin
 
