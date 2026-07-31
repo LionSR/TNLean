@@ -168,8 +168,8 @@
     $\E_{j,j'}=\sum_iA_j^i\otimes\overline{A_{j'}^i}=0$.
     This is the cross-block ($\delta_{j,j'}$) content of the isometry condition
     of \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv} at the level of
-    the normal-tensor blocks; converting it to the isometries $U_j$ is a
-    further step left open.
+    the normal-tensor blocks. The passage to the residual tensors $U_j$ is given
+    by Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
 % The U-level conversion is recorded in docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{theorem}
 \begin{proof}\leanok
@@ -574,6 +574,64 @@
     Theorem~\ref{thm:normal_scaled_rfp} gives both conclusions.
 \end{proof}
 
+\begin{theorem}[Active phase-class residual isometries]%
+    \label{thm:cpsv_active_phase_class_residual_isometries}
+    \lean{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.%
+        exists_residualIsometryFamily_of_isTransferIdempotent}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_activeBNT_residualIsometryFamily_of_isTransferIdempotent}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:is_residual_isometry_family}
+    Let $A$ be a CPSV canonical-form renormalization fixed point. Choose one
+    representative $C_j$ from each active matrix-product-vector phase class.
+    Then there are invertible matrices $X_j$, positive numbers
+    $\lambda_{j,\alpha}$ with $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors
+    $U_j$ such that
+    \begin{align}
+        C_j^i
+        &=X_j\diag\!\left(\sqrt{\lambda_{j,\alpha}}\right)
+          U_j^iX_j^{-1},
+        \notag\\
+        \sum_i(U_j^i)_{\alpha,\beta}
+          \overline{(U_{j'}^i)_{\alpha',\beta'}}
+        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \notag
+    \end{align}
+    The conclusion also covers the case in which there are no active classes.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cpsv_canonical_form_active_bnt_refinement,
+        thm:rfp_coisometry_reconstruction_iff,
+        thm:cpsv_active_weight_norm_one_and_block_rfp,
+        thm:normal_rfp_iff_isometry_canonical_form,
+        thm:bnt_locally_orthogonal_of_rfp_direct_sum,
+        lem:mixed_transfer_eq_zero_of_conj,
+        lem:residual_isometry_entry}
+    The retained weighted direct sum is a renormalization fixed point. For each
+    representative, Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp}
+    gives
+    \begin{align}
+        |\mu_j|&=1,
+        &\E_{C_j}^2&=\E_{C_j}.
+        \notag
+    \end{align}
+    The normal-tensor characterization supplies the displayed square-root form.
+    Put the representatives independently in left-canonical gauge and retain
+    the unit-modulus factors $\mu_j$. Distinct phase-class representatives are
+    not gauge-phase equivalent, while idempotence of the retained direct sum
+    restricts to every mixed pair. Hence
+    Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
+    \begin{align}
+        \E_{\mu_jC_j,\mu_{j'}C_{j'}}&=0
+        \qquad (j\ne j').
+        \notag
+    \end{align}
+    Cancelling the nonzero scalar factors and the invertible gauges yields
+    $\E_{C_j,C_{j'}}=0$. Removing the positive diagonal factors and evaluating
+    at matrix units gives the off-diagonal residual equation. Together with
+    the within-block orthonormality, this is the joint isometry condition.
+\end{proof}
+
 \begin{theorem}[An arbitrary BNT need not possess a joint residual isometry]%
     \label{thm:cpsv_cor312_arbitrary_bnt_counterexample}
     \lean{MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample}
@@ -660,9 +718,8 @@
 \end{theorem}
 
 % CPSV16 Corollary 3.12 (`III_cor3`), lines 583--590.
-% The arbitrary-BNT statement is refuted by an inactive BNT member.  The active
-% diagonal conclusion is proved for literal CPSV canonical-form data.  The
-% joint residual family for active phase-class representatives is still open.
+% The arbitrary-BNT statement is refuted by an inactive BNT member. The full
+% corrected conclusion for active phase-class representatives is proved above.
 \begin{corollary}[Basis tensors of a fixed point]
     \label{cor:cpsv_iii_cor3_status}
     \notready
@@ -670,8 +727,8 @@
         def:mps_transfer_idempotence, def:is_isometry_canonical_form,
         def:is_residual_isometry_family,
         thm:cpsv_active_weight_norm_one_and_block_rfp,
-        thm:cpsv_cor312_arbitrary_bnt_counterexample,
-        thm:residual_isometry_of_rfp_direct_sum}
+        thm:cpsv_active_phase_class_residual_isometries,
+        thm:cpsv_cor312_arbitrary_bnt_counterexample}
     Let $A$ be a CPSV canonical-form renormalization fixed point, and let
     $(A_j)_j$ be an arbitrary basis of normal tensors for $A$. CPSV asserts that
     there are invertible matrices $X_j$, positive diagonal matrices $\rho_j$
@@ -690,21 +747,29 @@
     Theorem~\ref{thm:cpsv_cor312_arbitrary_bnt_counterexample} shows that an
     unused member can violate the cross-block equation.
 
-    The diagonal conclusion has a corrected active form. For the normal blocks
-    $(A_k)_k$ occurring with nonzero weights $\mu_k$ in literal CPSV
-    canonical-form data, Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp}
-    proves
+    The corrected active conclusion is complete. For the normal blocks $(A_k)_k$
+    occurring with nonzero weights $\mu_k$ in literal CPSV canonical-form data,
+    Theorem~\ref{thm:cpsv_active_weight_norm_one_and_block_rfp} proves
     \begin{align}
         |\mu_k|&=1,
         &\E_{A_k}^2&=\E_{A_k}.
         \notag
     \end{align}
-    The single-block fixed-point characterization then gives the
-    trace-normalized square-root decomposition of each active block. It remains
-    to prove the off-diagonal joint-isometry equations simultaneously for the
-    representatives of the active gauge-phase classes. Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}
-    proves these equations once the direct sum of those representatives is
-    known to be a renormalization fixed point.
+    After choosing one representative $C_j$ from each active phase class,
+    Theorem~\ref{thm:cpsv_active_phase_class_residual_isometries} supplies
+    invertible $X_j$, positive trace-one diagonal data $\rho_j$, and tensors
+    $U_j$ such that
+    \begin{align}
+        C_j^i&=X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
+        \notag\\
+        \sum_i(U_j^i)_{\alpha,\beta}
+          \overline{(U_{j'}^i)_{\alpha',\beta'}}
+        &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
+        \notag
+    \end{align}
+    Thus both the diagonal square-root forms and the simultaneous off-diagonal
+    equations hold for the active representatives. The corollary remains
+    not ready as printed because its quantifier ranges over an arbitrary BNT.
 
     \textbf{Local fix (square-root diagonal).} CPSV prints a bare $\Lambda_j$
     in Corollary~3.12, whereas the reference tensor at line~1300 has
