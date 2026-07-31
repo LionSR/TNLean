@@ -392,8 +392,8 @@ Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450.
 
 **Scope restriction (active physical support compression):** The displayed
-compression by the joint factor-support inclusion is an auxiliary
-finite-dimensional construction not made in CPSV16.  See
+compression by the joint factor-support inclusion is an auxiliary construction
+absent from CPSV16.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem dependentSupportInclusion_compression
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
@@ -928,10 +928,9 @@ tensor exactly.
 Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450.
 
-**Scope restriction (active physical support compression):** Exact
-re-embedding follows from the auxiliary restriction to the joint column
-supports of the sector factor families; CPSV16 does not make this
-restriction.  See
+**Scope restriction (active physical support compression):** Exact re-embedding
+uses the auxiliary restriction to the joint column supports of the sector
+factor families, which CPSV16 does not make.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 theorem changePhysicalBasis_physicalSupportInclusion_activePhysicalSupportRestriction
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
@@ -977,10 +976,9 @@ left-right sector coordinates of `AppUkU=rl`.
 
 Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 `Appetakhetc`, lines 1381--1450.
-
 **Scope restriction (active physical support compression):** This datum
-packages the auxiliary joint-support restriction and its exact re-embedding;
-it is not constructed in CPSV16.  See
+packages the auxiliary joint-support restriction and exact re-embedding,
+neither of which CPSV16 constructs.  See
 `docs/paper-gaps/cpsv16_active_physical_support_compression.tex`. -/
 noncomputable def activePhysicalSupportRestrictionData
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
