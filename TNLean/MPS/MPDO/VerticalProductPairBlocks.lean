@@ -506,14 +506,37 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
 /-- The squared retained product inherits projector closure and absence of
 periodic vectors from the blocked vertical tensor.
 
-The one-site coisometric reconstruction is squared exactly. Normalized
-BNT-refined horizontal form and positivity pass to two-site blocking, so the
-blocked vertical tensor has the two canonical-form hypotheses. The preceding
+The one-site coisometric reconstruction is squared exactly. The preceding
 coisometric transfer theorem then passes both hypotheses to the retained
 product tensor, including when its active support is smaller than the full
 product bond space.
 
-Source: CPSV16, Appendix C.4, lines 2015--2025. -/
+Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
+lines 2015--2025. -/
+theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockTwo
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U)
+    (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
+    (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M))) :
+    let C :=
+      (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+    MPSTensor.HasInvariantProjectorClosure C ∧
+      MPSTensor.HasNoPeriodicVectors C := by
+  dsimp only
+  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
+    M A U hU hReconstruct
+  exact MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
+    (verticalTensor (blockTwo M))
+    (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
+    (verticalCoisometrySquare U) hsquare.1 hsquare.2
+    hClosure hPer
+
+/-- The squared retained product of a tensor in normalized BNT-refined
+horizontal form has projector closure and no periodic vectors.
+
+Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
+lines 2015--2025. -/
 theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
     {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
     (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
@@ -523,15 +546,10 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
       (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
     MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
-  dsimp only
-  have hsquare := verticalTensor_blockTwo_squared_coisometry_reconstruction
-    M A U hU hReconstruct
   have hHorizontalTwo := hHorizontal.blockTwo
   have hMTwo := hM.blockTwo
-  exact MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
-    (verticalTensor (blockTwo M))
-    (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)).toMPSTensor
-    (verticalCoisometrySquare U) hsquare.1 hsquare.2
+  exact retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockTwo
+    M A U hU hReconstruct
     (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
     (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
       (blockTwo M) hMTwo hHorizontalTwo)
@@ -794,6 +812,51 @@ summands.  Unused blocked labels are represented later by empty fibers.
 Documented in `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_blockTwo
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
+    (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M)))
+    (p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α))) :
+    MPSTensor.HasInvariantProjectorClosure
+        (weightedVerticalProductBlock dim mult weight B p) ∧
+      MPSTensor.HasNoPeriodicVectors
+        (weightedVerticalProductBlock dim mult weight B p) := by
+  let C := (mulTensor
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
+    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
+  have hCanonical : MPSTensor.HasInvariantProjectorClosure C ∧
+      MPSTensor.HasNoPeriodicVectors C := by
+    simpa only [C] using
+      retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockTwo M
+        (verticalAssembledTensor dim mult weight B) U hU hReconstruct
+        hClosure hPer
+  exact MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
+    (fun p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α)) ↦ dim p.1.1 * dim p.2.1)
+    (fun p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α)) ↦
+        Fin (dim p.1.1) × Fin (dim p.2.1))
+    (fun _ ↦ finProdFinEquiv.symm) C
+    (weightedVerticalProductBlock dim mult weight B)
+    (productRetainedEquiv dim mult)
+    (mulTensor_verticalAssembledTensor_reindex dim mult weight B)
+    hCanonical.1 hCanonical.2 p
+
+/-- Every ordered pair of retained vertical BNT copies of a tensor in
+normalized BNT-refined horizontal form has projector closure and no periodic
+vectors.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
@@ -812,26 +875,13 @@ theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
         (weightedVerticalProductBlock dim mult weight B p) ∧
       MPSTensor.HasNoPeriodicVectors
         (weightedVerticalProductBlock dim mult weight B p) := by
-  let C := (mulTensor
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))).toMPSTensor
-  have hCanonical : MPSTensor.HasInvariantProjectorClosure C ∧
-      MPSTensor.HasNoPeriodicVectors C := by
-    simpa only [C] using
-      retainedVerticalProduct_projectorClosure_and_noPeriodicVectors M
-        (verticalAssembledTensor dim mult weight B) U hU hReconstruct
-        hHorizontal hM
-  exact MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal
-    (fun p : ((α : Fin g) × Fin (mult α)) ×
-      ((α : Fin g) × Fin (mult α)) ↦ dim p.1.1 * dim p.2.1)
-    (fun p : ((α : Fin g) × Fin (mult α)) ×
-      ((α : Fin g) × Fin (mult α)) ↦
-        Fin (dim p.1.1) × Fin (dim p.2.1))
-    (fun _ ↦ finProdFinEquiv.symm) C
-    (weightedVerticalProductBlock dim mult weight B)
-    (productRetainedEquiv dim mult)
-    (mulTensor_verticalAssembledTensor_reindex dim mult weight B)
-    hCanonical.1 hCanonical.2 p
+  have hHorizontalTwo := hHorizontal.blockTwo
+  have hMTwo := hM.blockTwo
+  exact weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_blockTwo
+    dim mult weight B M U hU hReconstruct
+    (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
+    (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
+      (blockTwo M) hMTwo hHorizontalTwo) p
 
 /-- Every retained copy-pair tensor has an exact decomposition into its
 nonzero normal corners, with the corner isometries retained.
@@ -839,6 +889,59 @@ nonzero normal corners, with the corner isometries retained.
 The active family may be empty.  Thus a zero-dimensional copy pair, or a
 copy-pair tensor whose every letter vanishes, contributes no artificial
 normal sector.  No division by the outer copy weight occurs in this theorem.
+
+Source: CPSV16, Appendix C.4, lines 2020--2029. -/
+theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
+    {g d D : ℕ} (dim mult : Fin g → ℕ)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (M : MPOTensor d D)
+    (U : Matrix
+      (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ)
+    (hU : U * Uᴴ = 1)
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
+    (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
+    (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M)))
+    (p : ((α : Fin g) × Fin (mult α)) ×
+      ((α : Fin g) × Fin (mult α))) :
+    ∃ (r : ℕ) (localDim : Fin r → ℕ) (coefficient : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor (D * D) (localDim k))
+      (V : (k : Fin r) →
+        Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
+      (∀ k, 0 < localDim k) ∧
+      (∀ k, (0 : ℂ) < coefficient k) ∧
+      (∀ k, MPSTensor.IsNormalTensor (blocks k)) ∧
+      (∀ k, (V k)ᴴ * V k = 1) ∧
+      (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        weightedVerticalProductBlock dim mult weight B p ab * V k =
+          V k * (coefficient k • blocks k ab)) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
+          (coefficient k • blocks k ab) * (V k)ᴴ) ∧
+      (∀ (k : Fin r) (ab : Fin (D * D)),
+        coefficient k • blocks k ab =
+          (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab * V k) ∧
+      (∀ ab : Fin (D * D),
+        weightedVerticalProductBlock dim mult weight B p ab =
+          ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
+      MPSTensor.SameMPV₂Pos
+        (weightedVerticalProductBlock dim mult weight B p)
+        (MPSTensor.toTensorFromBlocks (d := D * D)
+          (μ := coefficient) blocks) ∧
+      (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
+  have hCanonical :=
+    weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_blockTwo
+      dim mult weight B M U hU hReconstruct hClosure hPer p
+  exact MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
+    (weightedVerticalProductBlock dim mult weight B p)
+    hCanonical.1 hCanonical.2
+
+/-- Every retained copy-pair tensor of a tensor in normalized BNT-refined
+horizontal form has an exact decomposition into its nonzero normal corners,
+with the corner isometries retained.
 
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_weightedVerticalProductBlock_normalDecomposition
@@ -881,11 +984,12 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
         (MPSTensor.toTensorFromBlocks (d := D * D)
           (μ := coefficient) blocks) ∧
       (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
-  have hCanonical :=
-    weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
-      dim mult weight B M U hU hReconstruct hHorizontal hM p
-  exact MPSTensor.exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
-    (weightedVerticalProductBlock dim mult weight B p)
-    hCanonical.1 hCanonical.2
+  have hHorizontalTwo := hHorizontal.blockTwo
+  have hMTwo := hM.blockTwo
+  exact exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
+    dim mult weight B M U hU hReconstruct
+    (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
+    (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
+      (blockTwo M) hMTwo hHorizontalTwo) p
 
 end MPOTensor

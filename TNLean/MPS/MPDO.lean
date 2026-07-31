@@ -66,6 +66,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
 import TNLean.MPS.MPDO.BlockedRFPConstruction
+import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
@@ -78,6 +79,9 @@ import TNLean.MPS.MPDO.CPSVSharpBlocking
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
 import TNLean.MPS.MPDO.CPSVVerticalDecomposition
+import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
+import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
+import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.CommutingBondEtaBoundaryTrace
