@@ -419,8 +419,15 @@
         &=\frac{\rho_{ij}}{\sqrt{p_ip_j}}.
         \notag
     \end{align}
-    Then $\Phi_\rho$ is completely positive and trace preserving,
-    $\dim\range\Phi_\rho=\operatorname{OSR}(\rho)$, and application of
+    Write $\sigma=\diag(p_1,\ldots,p_{d_A})$ and
+    $\tau=\tr_A\rho$. Then $\Phi_\rho$ is completely positive and trace
+    preserving,
+    \begin{align}
+        \Phi_\rho(\sigma)&=\tau,
+        &\dim\range\Phi_\rho&=\operatorname{OSR}(\rho),
+        \notag
+    \end{align}
+    and application of
     $\Phi_\rho$ to the first half of
     $\sum_{i,j}\sqrt{p_ip_j}\,E_{ij}\otimes E_{ij}$, followed by restoring the
     order of the two factors, reconstructs $\rho$.
@@ -428,8 +435,9 @@
 \begin{proof}\leanok
     Strict positivity of the $p_i$ makes the entrywise input scaling
     invertible, so it does not change the range. Positivity of $\rho$ gives a
-    Kraus representation of $\Phi_\rho$, while the displayed marginal equation
-    gives trace preservation. Substitution on matrix units proves the
+    Kraus representation of $\Phi_\rho$, while the first marginal equation
+    gives trace preservation. Summing the diagonal blocks gives
+    $\Phi_\rho(\sigma)=\tau$. Substitution on matrix units proves the
     reconstruction identity. This is the finite-dimensional Choi
     representation \cite{Choi1975CompletelyPositive} with the input marginal
     absorbed into the canonical purification.
@@ -614,16 +622,24 @@ terms of operator-Schmidt rank.
 
 \begin{theorem}[Full-support eigenbasis whitened Choi estimate]
     \label{thm:full_support_eigenbasis_whitened_choi_bound}
-    \lean{Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank}
+    \lean{Matrix.supportedMarginalWhitenedState_posSemidef,
+      Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank,
+      Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank}
     \leanok
     \uses{thm:full_support_eigenbasis_whitening_choi,
       thm:rectangular_choi_rank_bound,
       thm:weighted_hilbert_schmidt_contraction_full_support}
     Under the hypotheses of
     Theorem~\ref{thm:full_support_eigenbasis_whitening_choi},
+    the matrix
     \begin{align}
-      \left\|(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
-        (\sigma^T\otimes\tau)^{-1/4}\right\|_F^2
+      W=(\sigma^T\otimes\tau)^{-1/4}\rho_{AB}
+        (\sigma^T\otimes\tau)^{-1/4}
+        \notag
+    \end{align}
+    is positive semidefinite, and
+    \begin{align}
+      \tr(W^2)=\|W\|_F^2
       &\leq \operatorname{OSR}(\rho_{AB}).
       \notag
     \end{align}

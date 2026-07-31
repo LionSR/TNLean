@@ -199,8 +199,10 @@ omit [Fintype β] [DecidableEq β] in
 /-- The supported-marginal map sends the diagonal first marginal to the
 second marginal.
 
-This is the identity \(\Phi(\sigma)=\tau\) in the state--channel
-correspondence used in Beigi, arXiv:1306.5920, Theorem 6, equation (18). -/
+This normalization identity is needed to apply the weighted estimate from
+Beigi, arXiv:1306.5920, Theorem 6, equation (18), to the state--channel
+correspondence.  It follows directly from the partial-trace definitions and
+is not stated separately by Beigi. -/
 theorem supportedMarginalMap_diagonal
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hp : ∀ i, 0 < p i) :

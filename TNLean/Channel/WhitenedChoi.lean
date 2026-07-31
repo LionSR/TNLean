@@ -19,12 +19,16 @@ Choi covariance identity below.
 
 * `Matrix.rectangularChoi_singleKrausMap_comp_comp`: Choi covariance under
   input and output congruences, including the input transpose.
-* `Matrix.supportedMarginalWhitenedState`: the order-two whitened bipartite
-  operator in a first-marginal eigenbasis.
-* `Matrix.supportedMarginalWhitenedState_eq_rectangularChoi`: the whitened
-  operator is exactly the Choi matrix of the weighted supported-marginal map.
+* `Matrix.supportedMarginalWhitenedState`: the raw congruence used for
+  order-two whitening in a first-marginal eigenbasis.
+* `Matrix.supportedMarginalWhitenedState_posSemidef`: the defining congruence
+  preserves positive semidefiniteness.
+* `Matrix.supportedMarginalWhitenedState_eq_rectangularChoi`: this congruence
+  is exactly the Choi matrix of the weighted supported-marginal map.
 * `Matrix.supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank`:
   the full-support whitened Choi estimate.
+* `Matrix.supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank`:
+  the full-support estimate in trace-square form.
 
 ## References
 
@@ -205,12 +209,15 @@ theorem marginalInvSqrtDiagonal_mul_diagonalMarginalQuarter
       noncomm_ring
     _ = (diagonalMarginalQuarter p)⁻¹ := by rw [hprod, Matrix.one_mul]
 
-/-- The order-two whitened bipartite operator in an eigenbasis of its faithful
-first marginal.
+/-- The raw same-factor congruence used for order-two whitening in an
+eigenbasis of the first marginal.
 
-If `σ = diagonal p`, then `σ.transpose = σ`; hence this is
+If `σ = diagonal p` and `τ` is positive definite, then
+`σ.transpose = σ`; hence this is
 \((\sigma^T\otimes\tau)^{-1/4}\rho
-(\sigma^T\otimes\tau)^{-1/4}\) in the natural `α × β` ordering. -/
+(\sigma^T\otimes\tau)^{-1/4}\) in the natural `α × β` ordering.  For an
+arbitrary `τ`, this definition denotes only the displayed raw congruence; no
+identification with the inverse fourth power of `τ` is asserted. -/
 noncomputable def supportedMarginalWhitenedState
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ) (τ : Matrix β β ℂ) :
     Matrix (α × β) (α × β) ℂ :=
@@ -218,14 +225,26 @@ noncomputable def supportedMarginalWhitenedState
     ((diagonalMarginalQuarter p)⁻¹ ⊗ₖ
       (CFC.sqrt (CFC.sqrt τ))⁻¹) ρ
 
-/-- In a faithful first-marginal eigenbasis, the order-two whitened state is
-exactly the unnormalized Choi matrix of the weighted supported-marginal map.
+/-- The raw congruence defining `supportedMarginalWhitenedState` preserves
+positive semidefiniteness.  When the two marginal weights are positive
+definite, this is positivity of the order-two whitened operator. -/
+theorem supportedMarginalWhitenedState_posSemidef
+    (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
+    (τ : Matrix β β ℂ) (hρ : ρ.PosSemidef) :
+    (supportedMarginalWhitenedState ρ p τ).PosSemidef := by
+  unfold supportedMarginalWhitenedState singleKrausMap
+  exact hρ.mul_mul_conjTranspose_same _
+
+/-- In a first-marginal eigenbasis, the raw congruence defining
+`supportedMarginalWhitenedState` is exactly the unnormalized Choi matrix of
+the weighted supported-marginal map.
 
 The input transpose is explicit in
 `rectangularChoi_singleKrausMap_comp_comp` and disappears here only because
-the first marginal and its positive fourth root are diagonal.  This is the
-finite-dimensional Choi identification used after Beigi, arXiv:1306.5920,
-Theorem 6, equation (18). -/
+the first marginal and its positive fourth root are diagonal.  When `τ` is
+positive definite, the raw congruence is the order-two whitening used after
+Beigi, arXiv:1306.5920, Theorem 6, equation (18); without this hypothesis, the
+theorem is only the algebraic Choi identity displayed in its statement. -/
 theorem supportedMarginalWhitenedState_eq_rectangularChoi
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (τ : Matrix β β ℂ) (hp : ∀ i, 0 < p i) :
@@ -373,5 +392,37 @@ theorem supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank
         (supportedMarginalMap ρ p) _ _ hdiag hB
     _ = operatorSchmidtRank ρ := by
       exact_mod_cast finrank_range_supportedMarginalMap ρ p hp
+
+/-- **Full-support, eigenbasis trace-square estimate.**  Under faithful
+marginal weights, the whitened operator is positive semidefinite and the real
+trace of its square is at most its operator-Schmidt rank.
+
+This is the trace-square form of the order-two estimate used after Beigi,
+arXiv:1306.5920, Theorem 6, equation (18).
+
+**Scope restriction (faithful marginal supports):** The two-sided compression
+from singular ambient marginals to their supports, including preservation of
+operator-Schmidt rank, remains to be proved as recorded in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` and issue #5211. -/
+theorem supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank
+    (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
+    (hρ : ρ.PosSemidef) (hp : ∀ i, 0 < p i)
+    (hA : partialTraceRight ρ = diagonal fun i ↦ (p i : ℂ))
+    (hB : (partialTraceLeft ρ).PosDef) :
+    (trace (supportedMarginalWhitenedState ρ p (partialTraceLeft ρ) *
+      supportedMarginalWhitenedState ρ p (partialTraceLeft ρ))).re ≤
+      operatorSchmidtRank ρ := by
+  have hW := supportedMarginalWhitenedState_posSemidef
+    ρ p (partialTraceLeft ρ) hρ
+  calc
+    (trace (supportedMarginalWhitenedState ρ p (partialTraceLeft ρ) *
+      supportedMarginalWhitenedState ρ p (partialTraceLeft ρ))).re =
+        (trace ((supportedMarginalWhitenedState ρ p (partialTraceLeft ρ))ᴴ *
+          supportedMarginalWhitenedState ρ p (partialTraceLeft ρ))).re := by
+      rw [hW.isHermitian.eq]
+    _ ≤ operatorSchmidtRank ρ := by
+      rw [trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq]
+      exact supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank
+        ρ p hρ hp hA hB
 
 end Matrix
