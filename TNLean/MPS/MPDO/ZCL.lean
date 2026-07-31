@@ -18,6 +18,8 @@ networks, following arXiv:1606.00608, lines 736–741.
   `∑ i, M i i` obtained by closing the ket and bra physical legs of one tensor.
 * `MPOTensor.IsSourceZCL`: the source-faithful zero-correlation-length
   condition for the physical-trace transfer.
+* `MPOTensor.IsSourceZCL.bondDim_ne_zero`: source ZCL forces a nonzero bond
+  space.
 * `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`: literal idempotence of the
   physical-trace transfer gives source ZCL.
 * `MPOTensor.IsZCL`: the MPO transfer map is idempotent.
@@ -94,6 +96,18 @@ def IsSourceZCL (M : MPOTensor d D) : Prop :=
   physTraceTransfer M ≠ 0 ∧
     ∃ lam : ℝ, 0 < lam ∧
       physTraceTransfer M * physTraceTransfer M = (lam : ℂ) • physTraceTransfer M
+
+/-- A tensor with source zero correlation length has nonzero bond dimension.
+
+The nonzero physical-trace transfer in Definition 4.2 cannot be represented on
+an empty bond space.
+
+Source: arXiv:1606.00608, Definition 4.2, lines 735--739. -/
+theorem IsSourceZCL.bondDim_ne_zero {M : MPOTensor d D} (h : IsSourceZCL M) :
+    D ≠ 0 := by
+  intro hD
+  subst D
+  exact h.1 (Subsingleton.elim _ _)
 
 /-- Literal idempotence of the physical-trace transfer (the `λ = 1`
 canonical-form case) gives source zero correlation length, provided the transfer

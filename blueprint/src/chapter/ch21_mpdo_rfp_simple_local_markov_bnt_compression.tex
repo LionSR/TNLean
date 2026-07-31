@@ -867,32 +867,30 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{remark}[Sectorwise hypotheses in the canonical BNT application]
     \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
-    \uses{cor:mpdo_simple_zcl_weight_copy_independent,
-      thm:mpdo_absorbed_bnt_sector_zcl,
+    \uses{thm:mpdo_absorbed_bnt_sector_zcl,
       thm:mpdo_bnt_physical_support_restriction,
-      thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+      thm:mpdo_proportional_commuting_sector_positivity,
+      thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
     In the canonical absorbed BNT presentation, ambient source zero
-    correlation length supplies sectorwise source zero correlation length by
+    correlation length supplies source zero correlation length for every
+    absorbed representative by
     Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. The standing biCF
-    hypothesis gives a simultaneous one-letter span. Together with the
-    nonzero common weight, Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}
-    therefore gives one-site injectivity of every absorbed representative, so
-    no blocking argument is needed.
+    one-letter span and the nonzero common weights give one-site injectivity by
+    Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}.
 
-    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
-    still assumes separately that every absorbed sector generates matrix
-    product density operators and is normal with the chosen normalization.
-    These hypotheses must come from the surrounding positive normalized sector
-    data; neither may be inferred from SAL of the ambient tensor, since SAL is
-    the conclusion under discussion. When these inputs are present, the
-    theorem applies at every original cut. This is the corrected implication
-    conditioned on ambient source zero correlation length. It does not prove
-    the printed GSNNCH-only proposition, which omits that hypothesis. An
-    arbitrary GSNNCH presentation need not inherit source zero correlation
-    length from its periodic operators.
+    The positive commuting-bond realization begins at length two. It therefore
+    proves positivity of $\rho^{(N)}(K_x)$ for all $N\geq2$, while positivity
+    of $\rho^{(1)}(K_x)$ remains the only separate sector-positivity
+    hypothesis. Theorem~\ref{thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
+    combines these facts and proves SAL at every original cut, without a
+    normality hypothesis on the absorbed sectors. The printed GSNNCH-only
+    proposition remains incomplete because it omits ambient source zero
+    correlation length; an arbitrary GSNNCH presentation need not inherit this
+    tensor-level property.
 
-    % **Scope restriction (ambient source ZCL):** Proposition `prop4to2` omits
-    % the ambient source-ZCL hypothesis used to obtain sectorwise ZCL. See
+    % **Scope restriction (ambient source ZCL and one-site positivity):**
+    % Proposition `prop4to2` omits ambient source ZCL, and its commuting-bond
+    % identity begins at length two. See
     % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{remark}
 

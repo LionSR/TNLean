@@ -937,9 +937,8 @@ coefficient identity preceding the rank-one conclusion of Proposition
 the selected tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three
-    (hMPDO : IsMPDO K) (hK : K.IsInjective)
-    (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor)
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL) :
+    (hK : K.IsInjective) (data : EtaLocalStructureData K)
+    (hZCL : K.IsSourceZCL) :
     let F :=
       data.bondData.fixedProductTensorDataPhysicalSectorFactorization
     ∃ lam : ℝ, 0 < lam ∧
@@ -955,7 +954,7 @@ theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow
         (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h := by
     intro q h
     exact data.selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero
-      hMPDO hK hNormal hZCL q h
+      hK q h
   have hmarg : ∀ L, 0 < L →
       F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
         F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
