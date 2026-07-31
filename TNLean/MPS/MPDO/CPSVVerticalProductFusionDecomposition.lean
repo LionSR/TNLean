@@ -34,6 +34,20 @@ namespace MPOTensor
 determines positive diagonal fusion data and coisometries onto the active
 product sectors.
 
+**Scope restriction (active product BNT):** Only active product corners are
+retained. A one-site BNT label absent from a fixed product pair has zero fusion
+multiplicity. Documented in
+`docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; no unsupported corner is inserted. Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
+orientation and is a coisometry onto the active direct sum. Its adjoint gives
+the exact reconstruction. Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
 Source: CPSV16, Proposition 4.13, lines 1863--1921, and Appendix C.4,
 lines 2001--2029. -/
 theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm
