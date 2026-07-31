@@ -33,6 +33,7 @@ dimensions.
   map satisfies the Kadison--Schwarz inequality.
 * `IsKrausCP.traceAdjointMap`: the trace adjoint of a Kraus CP map is Kraus CP.
 * `IsKrausCPTP.trace_map`: a map satisfying `IsKrausCPTP` preserves trace.
+* `IsKrausCPTP.traceAdjointMap_one`: the trace adjoint of a Kraus CPTP map is unital.
 * `isKrausCPTP_of_isKrausCP_trace_preserving`: a Kraus CP map that preserves
   trace is Kraus CPTP.
 * `IsKrausCPTP.map_posSemidef`: a map satisfying `IsKrausCPTP` preserves
@@ -208,6 +209,18 @@ theorem IsKrausCPTP.trace_map
   obtain ⟨r, A, hA, hA_norm⟩ := hS
   rw [hA]
   exact kraus_tp_of_sum_conjTranspose_mul A hA_norm X
+
+/-- The trace-pairing adjoint of a trace-preserving completely positive map is unital.
+
+This is the Schrödinger--Heisenberg duality stated in Wolf, Section 1.2; local source
+`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, line 315. -/
+theorem IsKrausCPTP.traceAdjointMap_one
+    {α β : Type*} [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCPTP S) :
+    Matrix.traceAdjointMap S 1 = 1 := by
+  apply Matrix.ext_iff_trace_mul_right.mpr
+  intro X
+  simpa only [Matrix.trace_traceAdjointMap_mul, Matrix.one_mul] using hS.trace_map X
 
 /-- A completely positive Kraus map that preserves the matrix trace is
 trace-preserving completely positive. -/
