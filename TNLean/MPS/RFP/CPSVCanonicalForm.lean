@@ -298,7 +298,7 @@ end CPSVCanonicalFormData
 namespace IsCPSVCanonicalForm
 
 /-- Predicate-level form of the corrected active Corollary 3.12: for the canonical witness data
-and its chosen active BNT refinement, the representative blocks admit simultaneous square-root
+and its chosen active BNT refinement, the representative blocks possess simultaneous square-root
 isometry forms with a joint residual-isometry family.
 
 Source: arXiv:1606.00608, Corollary `III.cor3`, lines 583--590. -/

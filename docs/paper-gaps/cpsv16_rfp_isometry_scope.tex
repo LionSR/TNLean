@@ -344,37 +344,60 @@ theorem
 \leanid{MPSTensor.cpsvCorollary312_arbitraryBNT_counterexample} in
 \doclink{TNLean/MPS/RFP/BNTResidualIsometryCounterexample}.
 
-The diagonal conclusion does hold for the active blocks listed by literal CPSV
-canonical-form data. Write
+The full corrected conclusion holds for the active phase classes of literal
+CPSV canonical-form data. Write
 \begin{align}
   A^i=U^\dagger\!\left(\bigoplus_k\mu_kA_k^i\right)U,
   \qquad UU^\dagger=I,
 \end{align}
-with every $A_k$ normal. If $A$ has idempotent transfer map and $\mu_k\ne0$,
-then
+with every $A_k$ normal, and choose one representative $C_j$ from each phase
+class among the indices with $\mu_k\ne0$. If $A$ has idempotent transfer map,
+then there are invertible matrices $X_j$, positive numbers
+$\lambda_{j,\alpha}$ with $\sum_\alpha\lambda_{j,\alpha}=1$, and tensors $V_j$
+such that
 \begin{align}
-  |\mu_k|=1,
-  \qquad
-  \mathcal E_{A_k}^2=\mathcal E_{A_k}.
+  C_j^i
+    &=X_j\operatorname{diag}\!\left(\sqrt{\lambda_{j,\alpha}}\right)
+      V_j^iX_j^{-1},
+  \\
+  \sum_i(V_j^i)_{\alpha,\beta}
+    \overline{(V_{j'}^i)_{\alpha',\beta'}}
+    &=\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
 \end{align}
-Indeed, coisometric reconstruction preserves transfer idempotence, each scaled
-block $\mu_kA_k$ is then a fixed point, and
-$\mathcal E_{\mu_kA_k}=|\mu_k|^2\mathcal E_{A_k}$. Normality gives
-$r(\mathcal E_{A_k})=1$, while a nonzero idempotent has spectral radius one, so
-$|\mu_k|=1$. These statements are
-\leanid{MPSTensor.isTransferIdempotent_coisometry_reconstruction_iff},
-\leanid{MPSTensor.norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul},
-and
-\leanid{MPSTensor.CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp}
-in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.
+This statement includes the empty active family. It is formalized by
+\leanid{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent}.
+The predicate-level wrapper, which chooses the canonical witness data and its
+active refinement, is
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_activeBNT_residualIsometryFamily}.
+Both declarations are in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.
 
-Consequently every active listed block has the trace-normalized square-root
-form furnished by the single-normal-tensor characterization. The remaining
-statement is the simultaneous off-diagonal equation for one representative of
-each active gauge-phase class. The direct-sum theorem proves this equation when
-the direct sum of those representatives is itself a renormalization fixed
-point. Deriving that hypothesis from the literal canonical-form data has not yet
-been proved.
+The proof first recovers the retained weighted direct sum through the ambient
+coisometry. For every active representative,
+\leanid{MPSTensor.CPSVCanonicalFormData.active_weight_norm_one_and_block_rfp}
+gives
+\begin{align}
+  |\mu_j|&=1,
+  &\mathcal E_{C_j}^2&=\mathcal E_{C_j}.
+\end{align}
+The normal-tensor characterization supplies the square-root decomposition.
+Next put each representative in a trace-preserving Perron gauge and keep its
+unit-modulus weight. Idempotence of the retained direct sum restricts to every
+mixed active pair. Distinct phase-class representatives are not gauge-phase
+equivalent, so the mixed spectral gap forces
+\begin{align}
+  \mathcal E_{\mu_jC_j,\mu_{j'}C_{j'}}&=0
+  \qquad (j\ne j').
+\end{align}
+Cancelling the nonzero scalar factors and the invertible gauges gives
+$\mathcal E_{C_j,C_{j'}}=0$. Removing the positive diagonal factors in the
+square-root decompositions and evaluating at matrix units yields the second
+display. Thus the simultaneous off-diagonal equations require no additional
+direct-sum hypothesis.
+
+The source classification nevertheless remains \emph{not-ready as printed}.
+The corrected theorem quantifies over representatives of the active phase
+classes, whereas Corollary~3.12 quantifies over an arbitrary BNT. The formal
+unused-member counterexample above refutes that printed quantifier.
 
 \section{Backward direction (multiplicity-one)}
 
@@ -561,12 +584,16 @@ $\delta_{j,j'}$ orthogonality equations of \path{eq:III_isometry} hold for a
 direct sum of distinct normal blocks whose whole transfer map is idempotent, by
 \leanid{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}.
 For literal CPSV canonical-form data, every active listed block has unit-modulus
-weight and is itself a renormalization fixed point. This proves the diagonal
-part of Corollary~3.12 for active blocks. The printed arbitrary-BNT statement is
-false: the bond-one pair $(B_0,B_1)$ above includes an unused BNT member and has
-cross inner product $1/\sqrt2$. The joint residual-isometry equations for
-representatives of all active gauge-phase classes have not yet been derived
-from the literal canonical-form hypothesis.
+weight and is itself a renormalization fixed point. After choosing one
+representative from each active phase class, the trace-normalized square-root
+forms can be chosen simultaneously so that all diagonal and off-diagonal joint
+residual-isometry equations hold. This is
+\leanid{MPSTensor.CPSVCanonicalFormData.ActiveBNTRefinement.exists_residualIsometryFamily_of_isTransferIdempotent},
+with predicate wrapper
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_activeBNT_residualIsometryFamily}.
+The printed arbitrary-BNT statement remains false: the bond-one pair
+$(B_0,B_1)$ above includes an unused BNT member and has cross inner product
+$1/\sqrt2$.
 
 The remaining repeated-copy part of Theorem~3.11 is not presently a
 well-specified mathematical statement: its displayed isometry omits $q$, while
