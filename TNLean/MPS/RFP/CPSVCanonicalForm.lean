@@ -134,8 +134,11 @@ namespace CPSVCanonicalFormData
 unit-modulus weight and is itself a renormalization fixed point.
 
 This is the active-block consequence of arXiv:1606.00608, Corollary 3.12, lines 583--590,
-with the proof observation at line 1303. Literal canonical-form syntax may contain unused
-zero-weight blocks, so the conclusion is intentionally restricted to `data.Active`. -/
+with the proof observation at line 1303.
+
+**Scope restriction (active canonical blocks):** the printed assertion concerns arbitrary BNT
+members, whereas literal BNT data may contain unused zero-coefficient members. This theorem
+therefore restricts to `data.Active`; see `docs/paper-gaps/cpsv16_rfp_isometry_scope.tex`. -/
 theorem active_weight_norm_one_and_block_rfp
     (data : CPSVCanonicalFormData A) (hRFP : IsTransferIdempotent A)
     (k : data.Active) :
