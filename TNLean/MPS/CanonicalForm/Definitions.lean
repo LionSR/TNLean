@@ -229,7 +229,7 @@ namespace CPSVCanonicalFormData
 /-- Indices of the displayed CPSV canonical-form blocks whose weights are nonzero.
 
 Source: arXiv:1606.00608, eq. `II_CF1` and Proposition 4.13, lines 1863--1898. -/
-abbrev Active (data : CPSVCanonicalFormData A) :=
+abbrev Active {A : MPSTensor d D} (data : CPSVCanonicalFormData A) : Type :=
   {k : Fin data.r // data.weights k ≠ 0}
 
 /-- The weighted direct sum of positive-dimensional normal blocks is in literal
