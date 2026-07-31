@@ -278,10 +278,12 @@ Proposition `prop4to2`, lines 1801--1808.
 **Scope restriction (sectorwise hypotheses):** The printed proposition omits
 the sectorwise source-ZCL hypothesis used by its proof. This theorem assumes
 separately that every sector generates MPDOs, is one-site injective and normal,
-and has source ZCL. One-site injectivity does not follow merely from BNT
-normality, leaving an injectivity-versus-blocking gap in the source
-application. The global outer sum and every sector product may carry the
-positive length-dependent scalars present in the source. See
+and has source ZCL. Normality alone does not imply one-site injectivity. In the
+canonical Case II application, however, the standing biCF one-letter span
+supplies injectivity directly, while ambient source ZCL descends to the
+absorbed sectors; sector MPDO positivity and absorbed-sector normalized
+normality remain explicit inputs. The global outer sum and every sector product
+may carry the positive length-dependent scalars present in the source. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem
     isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
@@ -315,12 +317,14 @@ Source: CPSV16, Appendix C.2, Proposition `prop4to2`, lines 1801--1808.
 printed proposition assumes the proportional `ApprhoNComm` sector form, but
 omits the sectorwise source-ZCL hypothesis used by its proof. This theorem
 assumes separately that every sector generates MPDOs, is one-site injective
-and normal, and has source ZCL. One-site injectivity does not follow merely
-from BNT normality, leaving an injectivity-versus-blocking gap in the source
-application. The supplied orthogonal commuting sector family realizes every
-sector with scalar one, which is stronger than the proportional source form,
-and the full tensor is assumed to be its exact positive-multiplicity sum.
-Thus this theorem does not formalize the printed proposition verbatim. See
+and normal, and has source ZCL. In the canonical Case II application, the
+standing biCF one-letter span supplies injectivity directly, while ambient
+source ZCL descends to the absorbed sectors; sector MPDO positivity and
+absorbed-sector normalized normality remain explicit inputs. The supplied
+orthogonal commuting sector family realizes every sector with scalar one,
+which is stronger than the proportional source form, and the full tensor is
+assumed to be its exact positive-multiplicity sum. Thus this theorem does not
+formalize the printed proposition verbatim. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))

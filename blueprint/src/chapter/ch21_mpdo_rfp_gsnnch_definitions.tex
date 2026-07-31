@@ -859,6 +859,8 @@ firstSiteMatrix_mul_reducedBlockState}
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
+% 1597--1619, and Proposition `prop4to2`, lines 1801--1808.
 \begin{theorem}[Proportional orthogonal commuting-bond sectors with ZCL satisfy SAL]
     \label{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
     \lean{MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
@@ -885,16 +887,13 @@ firstSiteMatrix_mul_reducedBlockState}
     \end{align}
     Then $M$ satisfies SAL.
 
-    % **Scope restriction (sectorwise hypotheses):** The printed proposition
-    % omits sectorwise source ZCL. The theorem retains per-sector MPDO,
-    % one-site injectivity, normality, and source ZCL. BNT normality supplies
-    % injectivity only after blocking. Under the present blocking and SAL
-    % interfaces, blocked SAL supplies only block-aligned chains and cuts and
-    % does not by itself establish unblocked SAL. Following the present proof
-    % route requires all-original-cut visibility from eventual block
-    % injectivity. The global outer sum and sector products now have the
-    % positive proportionality allowed by ApprhoNComm.
-    % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+    % **Scope restriction (ambient source ZCL):** The printed GSNNCH-only
+    % proposition omits the source-ZCL hypothesis used by its proof. In the
+    % canonical Case II application, biCF and the nonzero absorbed weight
+    % supply sector injectivity, and ambient source ZCL descends to every
+    % absorbed sector. Sector MPDO positivity and absorbed-sector normalized
+    % normality remain explicit independent inputs.
+    % See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -932,9 +931,11 @@ firstSiteMatrix_mul_reducedBlockState}
     % sectorwise source ZCL. This theorem assumes per-sector MPDO, one-site
     % injectivity, normality, and source ZCL, an orthogonal commuting sector
     % family with exact scalar-one realization, and the exact positive-
-    % multiplicity outer sum. One-site injectivity is not supplied merely by
-    % BNT normality, leaving a blocking gap in the source application. The
-    % exact realization is stronger than the proportional source identity.
+    % multiplicity outer sum. Outside biCF, BNT normality alone supplies only
+    % eventual injectivity; in the Case II application, the biCF one-letter
+    % span supplies one-site injectivity. Sector MPDO positivity remains an
+    % explicit input. The exact realization is stronger than the proportional
+    % source identity.
     % Documented in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \end{theorem}
 
