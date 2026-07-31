@@ -272,24 +272,28 @@ partial traces.
         Matrix.PosSemidef.supportInvFourthRoot_compression_on_support,
         Matrix.frobenius_norm_isometry_mul_mul_conjTranspose}
     \leanok
-    Let $\tau\geq0$, let $P$ be its support projection, and let
-    $V:\operatorname{supp}\tau\to\mathbb C^J$ be an isometry with
-    $VV^\dagger=P$.  Taking the positive square root leaves $P$ unchanged,
-    and both $P\tau^{-1/2}_{\operatorname{supp}}
+    Let $\tau\geq0$, and let $P$ be its support projection.  Equal
+    positive-semidefinite matrices have equal support projections, and taking
+    the positive square root leaves $P$ unchanged.  If
+    $V:\mathbb C^K\to\mathbb C^J$ satisfies $VV^\dagger=P$, then
+    \[
+        \sqrt{V^\dagger\tau V}=V^\dagger\sqrt\tau V.
+    \]
+    Moreover, both $P\tau^{-1/2}_{\operatorname{supp}}
     =\tau^{-1/2}_{\operatorname{supp}}$ and
     $\tau^{-1/2}_{\operatorname{supp}}P
-    =\tau^{-1/2}_{\operatorname{supp}}$.  Moreover,
+    =\tau^{-1/2}_{\operatorname{supp}}$.  If, in addition,
+    $V^\dagger V=\Id$, then
     \begin{align}
-        \sqrt{V^\dagger\tau V}
-        &=V^\dagger\sqrt\tau V, \notag \\
         V^\dagger\tau^{-1/2}_{\operatorname{supp}}V
         &=(\sqrt{V^\dagger\tau V})^{-1}, \notag \\
         V^\dagger\tau^{-1/4}_{\operatorname{supp}}V
         &=(\sqrt{\sqrt{V^\dagger\tau V}})^{-1}.
         \notag
     \end{align}
-    For every matrix $Z$ on $\operatorname{supp}\tau$,
-    $\|VZV^\dagger\|_2=\|Z\|_2$.
+    Independently, if $W:\mathbb C^L\to\mathbb C^J$ satisfies
+    $W^\dagger W=\Id$, then $\|WZW^\dagger\|_2=\|Z\|_2$ for every
+    $Z\in\mathbb C^{L\times L}$.
 \end{theorem}
 
 \begin{proof}
@@ -297,14 +301,14 @@ partial traces.
     The square-root identity follows from uniqueness of the positive square
     root.  The support inverse identities follow from the corresponding
     cancellation relations on the positive spectral subspace.  The norm
-    identity follows by cyclicity of the trace and $V^\dagger V=\Id$.
+    identity follows by cyclicity of the trace and $W^\dagger W=\Id$.
 \end{proof}
 
 \begin{definition}[Output-support compression]
     \label{def:output_support_compressed_map}
     \lean{Matrix.outputSupportCompressedMap}
     \leanok
-    For an isometry $V:\mathbb C^K\to\mathbb C^J$ and a complex-linear map
+    For a matrix $V:\mathbb C^K\to\mathbb C^J$ and a complex-linear map
     $\Phi:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$, define
     $\Psi(X)=V^\dagger\Phi(X)V$.
 \end{definition}
@@ -319,9 +323,8 @@ partial traces.
     Let $\Phi$ be completely positive and trace preserving, let $\sigma>0$,
     set $\tau=\Phi(\sigma)$, and let $P$ be the support projection of $\tau$.
     Then every matrix $X$ satisfies
-    $P\Phi(X)=\Phi(X)=\Phi(X)P$.  If $VV^\dagger=P$ and
-    $V^\dagger V=\Id$, then $\Psi(X)=V^\dagger\Phi(X)V$ is completely
-    positive and trace preserving.
+    $P\Phi(X)=\Phi(X)=\Phi(X)P$.  If $VV^\dagger=P$, then
+    $\Psi(X)=V^\dagger\Phi(X)V$ is completely positive and trace preserving.
 \end{theorem}
 
 \begin{proof}
