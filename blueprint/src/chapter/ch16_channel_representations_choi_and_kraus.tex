@@ -82,7 +82,6 @@ partial traces.
     \lean{Matrix.adjoint_frobeniusEuclideanMap_eq}
     \leanok
     \uses{def:trace_pairing_adjoint,
-        lem:frobenius_vectorization_inner,
         def:frobenius_superoperator_transport}
     Let $E:\mathbb C^{I\times I}\to\mathbb C^{J\times J}$ be a completely
     positive map with a Kraus representation, and let $E^*$ be its
@@ -99,6 +98,7 @@ partial traces.
     \leanok
     \uses{def:trace_pairing_adjoint,
         lem:frobenius_vectorization_inner,
+        thm:trace_pairing_adjoint_identity,
         def:frobenius_superoperator_transport}
     Complete positivity implies that $E^*$ preserves adjoints. Therefore, for
     $X\in\mathbb C^{J\times J}$ and $Y\in\mathbb C^{I\times I}$,
