@@ -26,6 +26,7 @@ import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FiniteCycleCoboundary
+import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
 import TNLean.Algebra.IrreducibleTensorAction
