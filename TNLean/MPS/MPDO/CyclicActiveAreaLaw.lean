@@ -75,9 +75,9 @@ namespace MPOTensor.EtaLocalStructureData
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-/-- An injective normal tensor generating matrix-product density operators,
-with a fixed translation-invariant positive commuting-bond presentation and
-source zero correlation length, saturates the area law.
+/-- An injective tensor generating matrix-product density operators, with a
+fixed translation-invariant positive commuting-bond presentation and source
+zero correlation length, saturates the area law.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1597--1619.
@@ -91,7 +91,6 @@ source tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem isSAL_of_isSourceZCL
     (hMPDO : IsMPDO K) (hK : K.IsInjective)
-    (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor)
     (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL) :
     IsSAL K := by
   let F :=
@@ -117,7 +116,7 @@ theorem isSAL_of_isSourceZCL
     have hlength : (m - 1) + (N - m - 1) + 2 = N := by omega
     convert
       data.exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
-        hMPDO hK hNormal hZCL (m - 1) (N - m - 1) using 1
+        hK hZCL (m - 1) (N - m - 1) using 1
     congr 1
     ext x y
     simp only [Matrix.submatrix_apply, hlength, M, U, F]

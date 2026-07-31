@@ -529,9 +529,8 @@ additional marginal replacement. It assumes no injectivity, normality, or
 zero-correlation-length property of the selected fixed-product tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
-    (hMPDO : IsMPDO K) (hK : K.IsInjective)
-    (hNormal : MPSTensor.IsNormalTensor K.toMPSTensor)
-    (data : EtaLocalStructureData K) (hZCL : K.IsSourceZCL)
+    (hK : K.IsInjective) (data : EtaLocalStructureData K)
+    (hZCL : K.IsSourceZCL)
     (A C : ℕ) :
     let F :=
       data.bondData.fixedProductTensorDataPhysicalSectorFactorization
@@ -558,7 +557,7 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
         (fun a b : F.CyclicActiveSector ↦ F.neighboringOperator a b ≠ 0) q h := by
     intro q h
     exact data.selectedFixedProduct_cyclicActive_reflTransGen_neighboringOperator_ne_zero
-      hMPDO hK hNormal hZCL q h
+      hK q h
   have hmarg : ∀ L, 0 < L →
       F.sectorCoordinateTensor.reducedBlockState (L + 2) L (by omega) =
         F.sectorCoordinateTensor.reducedBlockState (L + 1) L (by omega) := by
@@ -571,11 +570,11 @@ theorem exists_hayashiMarkovDecomposition_selectedPhysicalCut_of_isSourceZCL
     exact data.exists_pos_trace_mpo_selectedFixedProduct_of_isSourceZCL hZCL N hN
   obtain ⟨lam, hlam, hpow⟩ :=
     data.exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three
-      hMPDO hK hNormal hZCL
+      hK hZCL
   have hTtwo : ∀ q h, 0 < (F.cyclicActiveSectorTraceMatrix ^ 2) q h :=
     F.cyclicActiveSectorTraceMatrix_pow_two_pos_of_adjacent_marginals
       hpos hreach hmarg htrace
-  letI : NeZero D := ⟨hNormal.bondDim_ne_zero⟩
+  letI : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   letI : Nonempty F.CyclicActiveSector := by
     obtain ⟨c₂, _, h₂⟩ :=
       data.exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected 2 (by omega)
