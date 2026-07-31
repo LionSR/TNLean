@@ -869,24 +869,27 @@ strong subadditivity for a normalized three-site reduced state.
     \label{rem:mpdo_prop4to2_sectorwise_zcl_boundary}
     \uses{cor:mpdo_simple_zcl_weight_copy_independent,
       thm:mpdo_absorbed_bnt_sector_zcl,
+      thm:mpdo_bnt_physical_support_restriction,
       thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
     In the canonical absorbed BNT presentation, ambient source zero
     correlation length supplies sectorwise source zero correlation length by
     Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. The standing biCF
-    hypothesis gives a simultaneous one-letter span, hence one-site
-    injectivity of every representative. The chosen BNT representatives are
-    normal. Thus no blocking argument is needed for these two hypotheses.
+    hypothesis gives a simultaneous one-letter span. Together with the
+    nonzero common weight, Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}
+    therefore gives one-site injectivity of every absorbed representative, so
+    no blocking argument is needed.
 
-    The formal sector theorem still assumes separately that every absorbed
-    sector generates matrix product density operators. This positivity must
-    come from the surrounding positive sector data; it cannot be inferred from
-    SAL of the ambient tensor, since SAL is the conclusion under discussion.
-    When this positivity input is present, the sector theorem applies at every
-    original cut. This is the corrected implication conditioned on ambient
-    source zero correlation length. It does not prove the printed GSNNCH-only
-    proposition, which omits that hypothesis. An arbitrary GSNNCH presentation
-    need not inherit source zero correlation length from its periodic
-    operators.
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
+    still assumes separately that every absorbed sector generates matrix
+    product density operators and is normal with the chosen normalization.
+    These hypotheses must come from the surrounding positive normalized sector
+    data; neither may be inferred from SAL of the ambient tensor, since SAL is
+    the conclusion under discussion. When these inputs are present, the
+    theorem applies at every original cut. This is the corrected implication
+    conditioned on ambient source zero correlation length. It does not prove
+    the printed GSNNCH-only proposition, which omits that hypothesis. An
+    arbitrary GSNNCH presentation need not inherit source zero correlation
+    length from its periodic operators.
 
     % **Scope restriction (ambient source ZCL):** Proposition `prop4to2` omits
     % the ambient source-ZCL hypothesis used to obtain sectorwise ZCL. See

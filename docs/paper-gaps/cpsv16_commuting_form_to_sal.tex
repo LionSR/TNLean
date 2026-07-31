@@ -661,12 +661,12 @@ isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL}
 accepts these sectorwise source-ZCL conclusions together with sector MPDO
 positivity, one-site injectivity, normality, and positive proportional sector
 data.  The standing biCF hypothesis at source line~1628 is the simultaneous
-one-letter span of the BNT representatives.  The formal implication
-\leanid{MPSTensor.WordTupleSpanTop.isInjective_one} therefore supplies
+one-letter span of the BNT representatives.  Combining that span with the
+nonzero common weight,
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective} supplies
 one-site injectivity for every absorbed representative; no passage through
-blocked SAL is needed.  Normality comes from the chosen normal BNT
-representatives.  Sector MPDO positivity remains an explicit input to the
-formal theorem.  It must be supplied by the surrounding positive sector data,
+blocked SAL is needed.  Sector MPDO positivity and normality of the absorbed,
+normalized sector remain explicit inputs.  They must be supplied independently,
 not inferred from SAL of the ambient tensor, which is the conclusion being
 proved.  The exact outer equality for the canonical BNT family is provided by
 \leanid{MPOTensor.mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor},
@@ -689,13 +689,14 @@ for one-site injectivity in the single-sector theorem.
 
 The source's Case~II application does not make that substitution.  It fixes
 $K$ in biCF at line~1628, and biCF supplies the simultaneous one-letter span
-before Proposition~\emph{prop4to2} is invoked.  Projecting this span to one
-representative gives its one-site injectivity.  Thus there is no unresolved
-injectivity gap in the Case~II application.  The all-cut Hayashi decomposition
-applies directly to a canonical absorbed sector once the theorem's remaining
-explicit hypotheses---sector MPDO positivity and normality---are supplied.
-The canonical BNT representative supplies normality; positivity must come
-from the positive sector data and not from an assumption of ambient SAL.
+before Proposition~\emph{prop4to2} is invoked.  The nonzero absorbed weight then
+preserves one-site injectivity by
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}.  Thus there
+is no unresolved injectivity gap in the Case~II application.  The all-cut
+Hayashi decomposition applies directly to a canonical absorbed sector once
+the theorem's remaining explicit hypotheses---sector MPDO positivity and
+normality in the absorbed normalization---are supplied independently of
+ambient SAL.
 
 The proportional orthogonal commuting sector family has pairwise orthogonal
 one-site projections and a positive commuting bond whose periodic product is
