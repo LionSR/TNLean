@@ -52,6 +52,7 @@ import TNLean.Algebra.PosSemidefSupport
 import TNLean.Algebra.PositiveSemidefiniteNormalization
 import TNLean.Algebra.ProjectionTriangularTrace
 import TNLean.Algebra.ProjectiveRepresentation
+import TNLean.Algebra.RectangularChoi
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.SkolemNoether

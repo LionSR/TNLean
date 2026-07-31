@@ -434,6 +434,135 @@
     absorbed into the canonical purification.
 \end{proof}
 
+\section{Rectangular Choi matrices and a range-dimension estimate}
+
+The following construction is the unnormalized, different-dimension form of
+the Choi correspondence \cite[Proposition~2.1]{Wolf2012Quantum}. The resulting
+estimate bounds the order-two Choi functional of a Hilbert--Schmidt contraction
+by the dimension of its range. It is used below to bound mutual information in
+terms of operator-Schmidt rank.
+
+\begin{definition}[Matrix of a linear map in matrix-unit bases]
+    \label{def:linear_map_matrix}
+    \lean{Matrix.linearMapMatrix}
+    \leanok
+    Let $\mathcal L:\MN{d}\to\MN{e}$ be complex-linear. Its coefficient
+    matrix $C(\mathcal L)\in M_{e^2\times d^2}(\C)$ in the matrix-unit bases is
+    defined by
+    \begin{align}
+        C(\mathcal L)_{(a,b),(i,j)}
+        &=(\mathcal L(E_{ij}))_{ab}.
+        \label{eq:rectangular_choi_coefficient_matrix}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Unnormalized rectangular Choi matrix]
+    \label{def:rectangular_choi}
+    \lean{Matrix.rectangularChoi}
+    \leanok
+    \uses{def:linear_map_matrix}
+    For a complex-linear map $\mathcal L:\MN{d}\to\MN{e}$, its unnormalized
+    rectangular Choi matrix $J(\mathcal L)\in\MN{de}$ is the reshaping
+    \begin{align}
+        J(\mathcal L)_{(i,a),(j,b)}
+        &=C(\mathcal L)_{(a,b),(i,j)}
+         =(\mathcal L(E_{ij}))_{ab}.
+        \label{eq:rectangular_choi_entries}
+    \end{align}
+    When $d=e$, this is $d$ times the normalized Choi matrix convention in
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Frobenius norm under rectangular Choi reshaping]
+    \label{thm:rectangular_choi_parseval}
+    \lean{Matrix.rectangularChoi_frobenius_parseval}
+    \leanok
+    \uses{def:linear_map_matrix, def:rectangular_choi}
+    For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
+    \begin{align}
+        \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
+        &=
+        \re\tr\!\left(C(\mathcal L)^\dagger C(\mathcal L)\right).
+        \label{eq:rectangular_choi_parseval}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:rectangular_choi}
+    The two traces are the sums of the squared absolute values of their
+    respective matrix entries. The bijection
+    \begin{align}
+        ((i,a),(j,b))\longmapsto((i,j),(a,b))
+        \notag
+    \end{align}
+    identifies the two sums by~(\ref{eq:rectangular_choi_entries}).
+\end{proof}
+
+\begin{theorem}[Matrix-unit Parseval identity for a rectangular Choi matrix]
+    \label{thm:rectangular_choi_parseval_matrix_units}
+    \lean{Matrix.rectangularChoi_frobenius_parseval_matrix_units}
+    \leanok
+    \uses{def:rectangular_choi}
+    For every complex-linear map $\mathcal L:\MN{d}\to\MN{e}$,
+    \begin{align}
+        \re\tr\!\left(J(\mathcal L)^\dagger J(\mathcal L)\right)
+        &=
+        \sum_{i,j=0}^{d-1}\sum_{a,b=0}^{e-1}
+        \left|(\mathcal L(E_{ij}))_{ab}\right|^2.
+        \label{eq:rectangular_choi_parseval_matrix_units}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:linear_map_matrix, thm:rectangular_choi_parseval}
+    Apply Theorem~\ref{thm:rectangular_choi_parseval} and substitute
+    (\ref{eq:rectangular_choi_coefficient_matrix}) into the entrywise
+    Frobenius-norm formula for $C(\mathcal L)$.
+\end{proof}
+
+\begin{definition}[Hilbert--Schmidt contraction]
+    \label{def:rectangular_hilbert_schmidt_contraction}
+    \lean{Matrix.IsHilbertSchmidtContraction}
+    \leanok
+    A complex-linear map $\mathcal L:\MN{d}\to\MN{e}$ is a
+    \emph{Hilbert--Schmidt contraction} if, for every $X\in\MN{d}$,
+    \begin{align}
+        \re\tr\!\left((\mathcal L(X))^\dagger\mathcal L(X)\right)
+        &\leq \re\tr(X^\dagger X).
+        \label{eq:rectangular_hilbert_schmidt_contraction}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Rectangular Choi norm bounded by the range dimension]
+    \label{thm:rectangular_choi_rank_bound}
+    \lean{Matrix.rectangularChoi_frobenius_sq_le_finrank_range}
+    \leanok
+    \uses{def:rectangular_choi,
+      def:rectangular_hilbert_schmidt_contraction}
+    If $\mathcal L:\MN{d}\to\MN{e}$ is a Hilbert--Schmidt contraction, then
+    \begin{align}
+        \left\|J(\mathcal L)\right\|_F^2
+        &\leq\dim_{\C}\range\mathcal L.
+        \label{eq:rectangular_choi_rank_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:linear_map_matrix, thm:rectangular_choi_parseval}
+    Set $G=C(\mathcal L)^\dagger C(\mathcal L)$. The contraction inequality
+    applied in the matrix-unit bases shows that every eigenvalue of the
+    positive semidefinite matrix $G$ is at most one. Hence
+    \begin{align}
+        \tr G
+        &\leq\#\{k:\lambda_k(G)\neq0\}
+         =\rank C(\mathcal L)
+         =\dim_{\C}\range\mathcal L.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:rectangular_choi_parseval} identifies the left-hand side
+    with $\|J(\mathcal L)\|_F^2$.
+\end{proof}
+
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
     \uses{thm:supported_marginal_channel}
@@ -445,6 +574,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \uses{thm:rectangular_choi_rank_bound}
     Compress the two tensor factors to the supports of $\rho_A$ and $\rho_B$.
     This preserves both mutual information and operator-Schmidt rank, and makes
     the two marginals $\sigma=\rho_A$ and $\tau=\rho_B$ strictly positive.
@@ -468,11 +598,12 @@
         W=\sum_{i,j}E_{ij}\otimes L(E_{ij}).
         \notag
     \end{align}
-    Hence, writing $s_k(L)$ for the singular values of $L$,
+    This is $J(L)$. Since $W$ is positive semidefinite,
+    Theorem~\ref{thm:rectangular_choi_rank_bound} gives
     \begin{align}
         \tr(W^2)
-        =\sum_k s_k(L)^2
-        \leq\rank L
+        =\|W\|_F^2
+        \leq\dim_{\mathbb C}\range L
         =\operatorname{OSR}(\rho_{AB}).
         \notag
     \end{align}
