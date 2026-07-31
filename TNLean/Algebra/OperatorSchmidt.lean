@@ -38,6 +38,10 @@ of the operator blocks.
   decomposition exists with exactly the range dimension many terms.
 * `Matrix.operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition`: every
   product decomposition has at least the range dimension many terms.
+* `Matrix.operatorSchmidtRank_local_mul_le`: local left and right
+  multiplication cannot increase operator-Schmidt rank.
+* `Matrix.operatorSchmidtRank_local_isometry_conj`: local isometric
+  conjugation preserves operator-Schmidt rank.
 
 ## References
 
@@ -186,5 +190,61 @@ theorem operatorSchmidtRank_minimal (ρ : Matrix (m × n) (m × n) ℂ) :
     fun _ ↦ operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition⟩
 
 end Complex
+
+section LocalMultiplication
+
+variable {m' n' : Type*}
+
+/-- Multiplication on the left and right by product matrices cannot increase
+operator-Schmidt rank. This includes rectangular local matrices and empty finite
+index types. -/
+theorem operatorSchmidtRank_local_mul_le
+    [Fintype m] [Fintype m'] [Finite n] [Fintype n']
+    (L₁ : Matrix m m' ℂ) (L₂ : Matrix n n' ℂ)
+    (R₁ : Matrix m' m ℂ) (R₂ : Matrix n' n ℂ)
+    (X : Matrix (m' × n') (m' × n') ℂ) :
+    operatorSchmidtRank ((L₁ ⊗ₖ L₂) * X * (R₁ ⊗ₖ R₂)) ≤
+      operatorSchmidtRank X := by
+  letI := Fintype.ofFinite n
+  obtain ⟨A, B, hX⟩ := hasOperatorSchmidtDecomposition_operatorSchmidtRank X
+  apply operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
+  refine ⟨fun t ↦ L₁ * A t * R₁, fun t ↦ L₂ * B t * R₂, ?_⟩
+  conv_lhs => rw [hX]
+  rw [Matrix.mul_sum, Matrix.sum_mul]
+  apply Finset.sum_congr rfl
+  intro t _
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
+
+/-- Conjugation by a tensor product of two isometries preserves
+operator-Schmidt rank. No nonemptiness assumption is needed on any index type. -/
+theorem operatorSchmidtRank_local_isometry_conj
+    [Fintype m] [Fintype m'] [Fintype n] [Fintype n']
+    [DecidableEq m'] [DecidableEq n']
+    (V₁ : Matrix m m' ℂ) (V₂ : Matrix n n' ℂ)
+    (hV₁ : V₁ᴴ * V₁ = 1) (hV₂ : V₂ᴴ * V₂ = 1)
+    (X : Matrix (m' × n') (m' × n') ℂ) :
+    operatorSchmidtRank ((V₁ ⊗ₖ V₂) * X * (V₁ ⊗ₖ V₂)ᴴ) =
+      operatorSchmidtRank X := by
+  apply Nat.le_antisymm
+  · rw [Matrix.conjTranspose_kronecker]
+    exact operatorSchmidtRank_local_mul_le V₁ V₂ V₁ᴴ V₂ᴴ X
+  · have hV : (V₁ ⊗ₖ V₂)ᴴ * (V₁ ⊗ₖ V₂) = 1 := by
+      rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hV₁, hV₂,
+        Matrix.one_kronecker_one]
+    have hrecover :
+        (V₁ ⊗ₖ V₂)ᴴ * ((V₁ ⊗ₖ V₂) * X * (V₁ ⊗ₖ V₂)ᴴ) *
+          (V₁ ⊗ₖ V₂) = X := by
+      calc
+        _ = ((V₁ ⊗ₖ V₂)ᴴ * (V₁ ⊗ₖ V₂)) * X *
+            ((V₁ ⊗ₖ V₂)ᴴ * (V₁ ⊗ₖ V₂)) := by
+          simp only [Matrix.mul_assoc]
+        _ = X := by rw [hV, Matrix.one_mul, Matrix.mul_one]
+    have hle := operatorSchmidtRank_local_mul_le V₁ᴴ V₂ᴴ V₁ V₂
+      ((V₁ ⊗ₖ V₂) * X * (V₁ ⊗ₖ V₂)ᴴ)
+    rw [← Matrix.conjTranspose_kronecker] at hle
+    rw [hrecover] at hle
+    exact hle
+
+end LocalMultiplication
 
 end Matrix

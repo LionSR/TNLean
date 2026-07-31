@@ -401,6 +401,34 @@
     $s=\dim\range\mathcal R_\rho$.
 \end{proof}
 
+\begin{theorem}[Operator-Schmidt rank under local isometries]
+    \label{thm:operator_schmidt_rank_local_isometry}
+    \lean{Matrix.operatorSchmidtRank_local_mul_le,
+      Matrix.operatorSchmidtRank_local_isometry_conj}
+    \leanok
+    \uses{def:bipartite_operator_schmidt_rank}
+    Let $V_A:\mathcal H_A\to\mathcal K_A$ and
+    $V_B:\mathcal H_B\to\mathcal K_B$ be isometries between finite-dimensional
+    complex spaces. For every operator $X$ on
+    $\mathcal H_A\otimes\mathcal H_B$,
+    \begin{align}
+      \operatorname{OSR}\!\left(
+        (V_A\otimes V_B)X(V_A\otimes V_B)^\dagger\right)
+      &=\operatorname{OSR}(X).
+      \notag
+    \end{align}
+    This remains valid when one or more of the spaces have dimension zero.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:operator_schmidt_coefficient_space}
+    More generally, multiplying on the left and right by product matrices
+    cannot increase operator-Schmidt rank: apply the four local matrices to
+    the two factors in each term of a shortest product decomposition. Applying
+    this inequality first to $V_A,V_B$ and then to their adjoints gives the two
+    inequalities. The identities $V_A^\dagger V_A=1$ and
+    $V_B^\dagger V_B=1$ identify the twice-transformed operator with $X$.
+\end{proof}
+
 \begin{theorem}[Channel of a faithful bipartite marginal]
     \label{thm:supported_marginal_channel}
     \lean{Matrix.finrank_range_supportedMarginalMap,
