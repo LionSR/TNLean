@@ -21,7 +21,7 @@ commuting parent interaction and packages them as `BeigiSectorGraphData`.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Lemma 2.1 and Section III, equation (2).
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2).
 -/
 
 open scoped ComplexOrder Kronecker Matrix MatrixOrder
@@ -32,7 +32,7 @@ variable {d D : ℕ}
 
 /-- The canonical two-site parent interaction is an orthogonal projection.
 
-Source: Beigi, arXiv:1105.1019v2, Section II, paragraph before Lemma 2.1, and
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section II, paragraph before Lemma 2.1, and
 Section III, equation (2). -/
 theorem twoSiteParentInteractionMatrix_isStarProjection (A : MPSTensor d D) :
     IsStarProjection (twoSiteParentInteractionMatrix A) := by
@@ -56,14 +56,14 @@ theorem twoSiteParentInteractionMatrix_isStarProjection (A : MPSTensor d D) :
 
 /-- The complementary two-site parent interaction is an orthogonal projection.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (2). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2). -/
 theorem twoSiteParentGroundProjectorMatrix_isStarProjection (A : MPSTensor d D) :
     IsStarProjection (twoSiteParentGroundProjectorMatrix A) := by
   exact (twoSiteParentInteractionMatrix_isStarProjection A).one_sub
 
 /-- The complementary two-site parent interaction is positive semidefinite.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (2). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2). -/
 theorem twoSiteParentGroundProjectorMatrix_posSemidef (A : MPSTensor d D) :
     (twoSiteParentGroundProjectorMatrix A).PosSemidef := by
   rw [← Matrix.nonneg_iff_posSemidef]
@@ -74,7 +74,7 @@ theorem twoSiteParentGroundProjectorMatrix_posSemidef (A : MPSTensor d D) :
 This is the complement form of the local commutator used in Beigi's spatial
 decomposition.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III, equation (2). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 theorem IsNNCPH.twoSiteParentGroundProjectorMatrix_overlappingLifts_commute
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
     Matrix.leftOverlappingLift (twoSiteParentGroundProjectorMatrix A) *
@@ -150,7 +150,7 @@ private theorem eta_isIdempotent_of_blockDiagonal_isIdempotent
 /-- A nearest-neighbor commuting parent interaction determines Beigi's finite sector graph
 data in the symmetric two-sided coordinates.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III, equation (2). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 theorem IsNNCPH.nonempty_beigiSectorGraphData
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) :
     Nonempty (BeigiSectorGraphData A) := by
@@ -199,7 +199,7 @@ theorem IsNNCPH.nonempty_beigiSectorGraphData
 
 /-- A chosen Beigi sector graph datum for a nearest-neighbor commuting parent interaction.
 
-Source: Beigi, arXiv:1105.1019v2, Lemma 2.1 and Section III, equation (2). -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 and Section III, equation (2). -/
 noncomputable def IsNNCPH.beigiSectorGraphData
     {A : MPSTensor d D} (hNNCPH : IsNNCPH A 3) : BeigiSectorGraphData A :=
   Classical.choice hNNCPH.nonempty_beigiSectorGraphData

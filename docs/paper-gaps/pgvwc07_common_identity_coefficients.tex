@@ -1,0 +1,90 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{Common Identity Coefficients in the Block Ground-Space Intersection}
+\author{}
+\date{2026-07-30}
+
+\begin{document}
+\maketitle
+
+\section{The source argument}
+
+The proof of Theorem~12 in
+\cite[lines~1424--1456]{PerezGarcia2007MPSReps} compares two boundary
+representations of a vector in the intersection
+\[
+  \mathbb C^d\otimes\left(\bigoplus_j\mathcal G_m^{A^j}\right)
+  \cap
+  \left(\bigoplus_j\mathcal G_m^{A^j}\right)\otimes\mathbb C^d.
+\]
+The common word-span condition gives, for every block \(j\) and physical
+indices \(a,b\),
+\[
+  A_b^j C_a^j=D_b^j A_a^j.
+\]
+The source then uses the right-canonical normalization
+\[
+  \sum_a A_a^j A_a^{j\dagger}=I.
+\]
+Its displayed definition \(E^j=\sum_a C_a^jA_a^j\) omits the adjoint required
+by the following calculation.  With the adjoint-corrected definition
+\[
+  E^j=\sum_a C_a^jA_a^{j\dagger},
+\]
+one obtains
+\[
+  D_b^j=A_b^jE^j,\qquad
+  A_b^jC_a^j=A_b^jE^jA_a^j.
+\]
+This source-aligned argument is formalized by
+\path{MPSTensor.pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}.
+
+\section{The common-coefficient variant}
+
+The local variant
+\path{MPSTensor.%
+pgvwc07_mem_iSup_groundSpace_of_trace_decomposition_of_identity_coefficients}
+does not assume right-canonical normalization.  Instead, it assumes common
+coefficients \(c_a\), independent of the block \(j\), such that
+\[
+  \sum_a c_a A_a^j=I
+\]
+for every block, and defines
+\[
+  E^j=\sum_a c_a C_a^j.
+\]
+Summing \(A_b^jC_a^j=D_b^jA_a^j\) against \(c_a\) gives
+\[
+  A_b^jE^j=D_b^j,
+\]
+and hence the same boundary identity
+\[
+  A_b^jC_a^j=A_b^jE^jA_a^j.
+\]
+Thus the conclusion agrees with the local step of the source proof, but the
+hypothesis and construction of \(E^j\) are different.
+
+\section{Formal boundary}
+
+The common-coefficient theorem is a scope restriction: it is a conditional
+local variant, not the formalization of the right-canonical step printed in
+Theorem~12.  Results that derive the common coefficients from a simultaneous
+one-letter word-span condition may use this variant.  A source-faithful proof
+should instead use
+\path{MPSTensor.%
+pgvwc07_mem_iSup_groundSpace_of_trace_decomposition}, which retains the
+right-canonical hypothesis and the adjoint-corrected boundary matrix.  No
+mathematical hypothesis should be transferred between these two statements
+without a separate implication.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

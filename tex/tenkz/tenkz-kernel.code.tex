@@ -2998,11 +2998,9 @@
 \prop_new:N \l__tenkz_kernel_r_turn_prop
 
 % Carry one of an atom's logical face directions to the page.  Kernel cell
-% coordinates are (row, column), whereas geometry direction angles are
-% measured from the first affine input.  Thus a face angle theta enters the
-% matrix as 90 + theta: east follows the column vector and north follows the
-% negative row vector.  A circle or a carrier-local atom retains the turn
-% model because its axes vary by station rather than by one affine matrix.
+% coordinates are (row, column), whereas the face is measured from local east.
+% Geometry owns the complete east/north basis at that address and carries the
+% direction through it.  A non-cell atom retains its carrier-local turn model.
 \cs_new_protected:Npn \__tenkz_kernel_r_page_face:nnN #1#2#3
   {
     \__tenkz_kernel_r_atom_rc:nNNN {#1}
@@ -3010,13 +3008,10 @@
       \l__tenkz_kernel_turn_bool
     \bool_if:NTF \l__tenkz_kernel_turn_bool
       {
-        \__tenkz_geom_frame_if_affine:nTF {kpic}
-          { \__tenkz_geom_local_dir:nnN {kpic} {#2} #3 }
-          {
-            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
-            \tl_set:Ne #3
-              { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
-          }
+        \__tenkz_geom_local_bearing:nnnnN {kpic}
+          { \l__tenkz_kernel_turn_a_tl }
+          { \l__tenkz_kernel_turn_b_tl }
+          {#2} #3
       }
       {
         \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
@@ -5293,6 +5288,86 @@
       }
   }
 
+% The affine carrier of a label target, when it has one.  A cell and one of
+% its basis members share the frame chart at (row, column).  Named records
+% answer through the atom they name; a cluster child inherits the chart of
+% its named parent, and a port inherits the chart of its host.  Composite and
+% curve addresses deliberately answer false: relative, midway, crossing, and
+% on-wire nodes are page-space points rather than local-frame carriers.
+\tl_new:N \l__tenkz_kernel_carrier_parent_tl
+\tl_new:N \l__tenkz_kernel_carrier_record_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_record_carrier:nNNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_atom_rc:nNNN {#1} #2#3#4
+    \bool_if:NF #4
+      {
+        \__tenkz_model_get:nnN {#1} {node}
+          \l__tenkz_kernel_carrier_record_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+          {
+            \exp_args:NV \__tenkz_kernel_r_node_carrier:nNNN
+              \l__tenkz_kernel_carrier_record_tl #2#3#4
+          }
+      }
+    \bool_if:NF #4
+      {
+        \__tenkz_model_get:nnN {#1} {cluster-of}
+          \l__tenkz_kernel_carrier_parent_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_carrier_parent_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_carrier_parent_tl
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_node_carrier:nNNN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \str_case:en
+      { \__tenkz_kernel_r_item:nn {#1} {kind} }
+      {
+        {cell}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_r_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_r_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {member}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_r_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_r_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              { \__tenkz_kernel_r_item:nn {#1} {name} }
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+        {port}
+          {
+            \__tenkz_kernel_r_port_record:nN {#1}
+              \l__tenkz_kernel_carrier_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_carrier_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+                  \l__tenkz_kernel_carrier_record_tl #2#3#4
+              }
+          }
+      }
+  }
+
 % Resolve a live glyph anchor in the host's local axes and carry it to the
 % page.  Non-cell pairing ink and ordinary wires share this face boundary;
 % the placed address node remains only dependency geometry.
@@ -6756,7 +6831,50 @@
       { \l__tenkz_kernel_r_cols_int + \__tenkz_metric_ratio:n {stub} }
       { 1 - \__tenkz_metric_ratio:n {stub} }
       { \l__tenkz_kernel_r_rows_int + \__tenkz_metric_ratio:n {stub} }
-      \l__tenkz_kernel_r_col_tl \l__tenkz_kernel_r_row_tl
+      \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+    \tl_if_empty:NTF \l__tenkz_kernel_r_x_tl
+      {
+        % A point already outside the picture can face farther outward, so
+        % its forward ray need not meet the rectangle.  Preserve the
+        % established named-margin fallback in that case; this matters for
+        % off-cell relative waypoints in flat pictures.
+        \fp_compare:nNnT { cosd(\l__tenkz_kernel_r_b_tl) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        \fp_compare:nNnT { cosd(\l__tenkz_kernel_r_b_tl) } > {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_col_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_cols_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+        \fp_compare:nNnT { sind(\l__tenkz_kernel_r_b_tl) } < {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              { \fp_eval:n { 1 - \__tenkz_metric_ratio:n {stub} } }
+          }
+        \fp_compare:nNnT { sind(\l__tenkz_kernel_r_b_tl) } > {0}
+          {
+            \tl_set:Ne \l__tenkz_kernel_r_row_tl
+              {
+                \fp_eval:n
+                  {
+                    \l__tenkz_kernel_r_rows_int
+                    + \__tenkz_metric_ratio:n {stub}
+                  }
+              }
+          }
+      }
+      {
+        \tl_set_eq:NN \l__tenkz_kernel_r_col_tl \l__tenkz_kernel_r_x_tl
+        \tl_set_eq:NN \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_y_tl
+      }
     \__tenkz_kernel_r_frame_xy:nnNN
       { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_col_tl }
       #2 #3
@@ -7937,6 +8055,24 @@
                     \__tenkz_kernel_r_compass:n
                       { \tl_use:N \l__tenkz_kernel_r_c_tl }
                   }
+                % The label side belongs to the dot's own carrier.  Cells,
+                % basis members, and cluster children therefore carry it
+                % through the complete frame basis; a relative or on-wire
+                % dot has no carrier chart and retains its page-space side.
+                \__tenkz_kernel_r_record_carrier:nNNN {#1}
+                  \l__tenkz_kernel_r_row_tl
+                  \l__tenkz_kernel_r_col_tl
+                  \l__tenkz_kernel_turn_bool
+                \bool_if:NT \l__tenkz_kernel_turn_bool
+                  {
+                    \__tenkz_geom_local_bearing:nnnnN {kpic}
+                      { \l__tenkz_kernel_r_row_tl }
+                      { \l__tenkz_kernel_r_col_tl }
+                      { \l__tenkz_kernel_r_c_tl }
+                      \l__tenkz_kernel_r_tl
+                    \tl_set_eq:NN
+                      \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_tl
+                  }
                 \__tenkz_kernel_r_xy:nNN {#1}
                   \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
                 \fp_set:Nn \l__tenkz_kernel_r_x_fp
@@ -8588,26 +8724,11 @@
     \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
     \__tenkz_kernel_r_xy:nNN { \tl_use:N \l__tenkz_kernel_r_node_tl }
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-    \tl_set:Nn \l__tenkz_kernel_r_tl { \q_no_value }
-    \str_case:en
-      { \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_node_tl {kind} }
-      {
-        {record}
-          {
-            \prop_get:NeN \l__tenkz_kernel_named_prop
-              {
-                \__tenkz_kernel_node_item:Nn
-                  \l__tenkz_kernel_r_node_tl {name}
-              }
-              \l__tenkz_kernel_r_tl
-          }
-        {port}
-          {
-            \exp_args:NV \__tenkz_kernel_r_port_record:nN
-              \l__tenkz_kernel_r_node_tl \l__tenkz_kernel_r_tl
-          }
-      }
-    \quark_if_no_value:NF \l__tenkz_kernel_r_tl
+    \exp_args:NV \__tenkz_kernel_r_node_carrier:nNNN
+      \l__tenkz_kernel_r_node_tl
+      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NT \l__tenkz_kernel_turn_bool
       {
         \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_c_tl
         \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
@@ -8620,8 +8741,10 @@
         % A label bearing is a carrier-local direction, just like a port
         % face.  Subtract its local angle again because the shared ink helper
         % below adds that angle to the carrier contribution.
-        \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
-          \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_c_tl
+        \__tenkz_geom_local_bearing:nnnnN {kpic}
+          { \l__tenkz_kernel_r_row_tl }
+          { \l__tenkz_kernel_r_col_tl }
+          { \l__tenkz_kernel_r_c_tl }
           \l__tenkz_kernel_r_tau_tl
         \tl_set:Ne \l__tenkz_kernel_r_tau_tl
           {
@@ -8865,21 +8988,18 @@
       {
         \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_ro_apply_y_tl
       }
-    \__tenkz_geom_basis_apply:nnnnnnNN
+    \__tenkz_geom_basis_bearing:nnnnnN
       { \l__tenkz_kernel_hull_ex_tl }
       { \l__tenkz_kernel_hull_ey_tl }
       { \l__tenkz_kernel_hull_nx_tl }
       { \l__tenkz_kernel_hull_ny_tl }
-      { cosd(\l__tenkz_kernel_r_tl) }
-      { sind(\l__tenkz_kernel_r_tl) }
-      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+      { \l__tenkz_kernel_r_tl }
+      \l__tenkz_kernel_r_tau_tl
     \tl_set:Ne \l__tenkz_kernel_r_tau_tl
       {
         \fp_eval:n
           {
-            atand(
-              \l__tenkz_kernel_ro_apply_y_tl ,
-              \l__tenkz_kernel_ro_apply_x_tl )
+            \l__tenkz_kernel_r_tau_tl
             - \l__tenkz_kernel_r_tl
           }
       }

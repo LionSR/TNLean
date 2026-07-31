@@ -31,7 +31,7 @@ variable {d D : ℕ} {K : MPOTensor d D}
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This reassociation is used for the
+**Scope restriction (cyclic-active restriction):** This reassociation is used for the
 retained cyclic-active chain after the additional marginal replacement. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveCutLengthEquiv
@@ -48,7 +48,7 @@ and split at the middle sector.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The retained coordinates use only
+**Scope restriction (cyclic-active restriction):** The retained coordinates use only
 positive-length cyclic sectors.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveHayashiCutEquiv
@@ -97,7 +97,7 @@ one-site cut, with its blocks expressed as normalized left and right states.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The coefficient is restricted to
+**Scope restriction (cyclic-active restriction):** The coefficient is restricted to
 positive-length cyclic sectors and uses one additional marginal replacement.
 See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 private theorem reindex_reducedBlockState_eq_cyclicActiveCut
@@ -305,7 +305,7 @@ private theorem cyclicActiveCutProbability_nonneg
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** The normalization is the trace of
+**Scope restriction (cyclic-active restriction):** The normalization is the trace of
 the fourth-region marginal before the final restriction.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 private theorem sum_cyclicActiveCutProbability_eq_one
@@ -347,7 +347,7 @@ block matrix is the Hayashi block state.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the sector-coordinate
+**Scope restriction (cyclic-active restriction):** This is the sector-coordinate
 statement; transport to the original physical basis lies outside this
 sector-coordinate result.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -415,7 +415,7 @@ fourth-region formula.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The separating coefficient is the
+**Scope restriction (cyclic-active restriction):** The separating coefficient is the
 square of the trace matrix restricted to positive-length cyclic sectors,
 after one additional marginal replacement. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -478,7 +478,7 @@ decomposition at every one-site cut of the fourth-region marginal.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The separating coefficient is the
+**Scope restriction (cyclic-active restriction):** The separating coefficient is the
 normalized square of the trace matrix restricted to positive-length cyclic
 sectors, and it is obtained after one additional marginal replacement.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
@@ -523,7 +523,7 @@ one-site cut of the source tensor in the selected physical coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1597--1619.
 
-**Local fix (cyclic-active restriction):** The proof factors the normalized
+**Scope restriction (cyclic-active restriction):** The proof factors the normalized
 square of the trace matrix on positive-length cyclic sectors after one
 additional marginal replacement. It assumes no injectivity, normality, or
 zero-correlation-length property of the selected fixed-product tensor. See

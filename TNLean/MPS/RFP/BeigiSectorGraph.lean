@@ -39,7 +39,7 @@ Hamiltonian, its trace gives Beigi's ordered-cycle formula.
 ## References
 
 * S. Beigi, *Classification of the phases of 1D spin chains with commuting
-  Hamiltonians*, arXiv:1105.1019v2, Section III, equations (2)--(4), pages
+  Hamiltonians*, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(4), pages
   3--4.
 -/
 
@@ -52,7 +52,7 @@ variable {d D : ℕ}
 /-- The two-site projector onto the canonical parent ground space, in ordered
 pair coordinates.  It is the complement of the canonical parent interaction.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
 noncomputable def twoSiteParentGroundProjectorMatrix (A : MPSTensor d D) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   1 - twoSiteParentInteractionMatrix A
@@ -65,50 +65,50 @@ notation.  The only compatibility field is the local coordinate identity for
 the complementary bond `1 - h`; no finite-chain ground-space statement or
 scale-invariance hypothesis is part of the data.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
 structure BeigiSectorGraphData (A : MPSTensor d D) where
   /-- The number of sectors in the one-site spatial decomposition.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   sectorCount : ℕ
   /-- The dimension of the left factor in each sector.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   leftDim : Fin sectorCount → ℕ
   /-- The dimension of the right factor in each sector.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   rightDim : Fin sectorCount → ℕ
   /-- Identification of one physical site with its finite sum of right--left
   sector factors.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   sectorEquiv : Matrix.EtaSiteIndex sectorCount leftDim rightDim ≃ Fin d
   /-- The one-site unitary implementing the spatial coordinates.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   unitary : Matrix (Fin d) (Fin d) ℂ
   /-- The spatial coordinate change is unitary.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   unitary_mem : unitary ∈ Matrix.unitaryGroup (Fin d) ℂ
   /-- The projector onto the ground space carried by the directed edge
   `a ⟶ b`.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
   edgeProjector : (a b : Fin sectorCount) →
     Matrix (Matrix.EtaEdgeIndex leftDim rightDim a b)
       (Matrix.EtaEdgeIndex leftDim rightDim a b) ℂ
   /-- Every edge ground-space operator is an orthogonal projector.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
   edgeProjector_isOrthogonal : ∀ a b,
     (edgeProjector a b).IsHermitian ∧ IsIdempotentElem (edgeProjector a b)
   /-- In spatial coordinates, the complementary parent interaction is the
   direct sum of the edge ground-space projectors, with identities on the two
   boundary factors.
 
-  Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+  Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
   groundProjector_block :
     Matrix.reindex (Matrix.etaPairSpatialBlockEquiv sectorEquiv).symm
         (Matrix.etaPairSpatialBlockEquiv sectorEquiv).symm
@@ -128,7 +128,7 @@ variable {A : MPSTensor d D}
 This is `ker Q_{a,b}` in Beigi's notation, represented as the range of its
 orthogonal projector `P_{a,b}`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (3), page 4. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (3), page 4. -/
 noncomputable def edgeGroundSpace (F : BeigiSectorGraphData A)
     (a b : Fin F.sectorCount) :
     Submodule ℂ (Matrix.EtaEdgeIndex F.leftDim F.rightDim a b → ℂ) :=
@@ -136,7 +136,7 @@ noncomputable def edgeGroundSpace (F : BeigiSectorGraphData A)
 
 /-- The edge projector is a projection onto its edge ground space.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(3), pages 3--4. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
 theorem edgeProjector_isProj (F : BeigiSectorGraphData A)
     (a b : Fin F.sectorCount) :
     LinearMap.IsProj (F.edgeGroundSpace a b)
@@ -149,7 +149,7 @@ theorem edgeProjector_isProj (F : BeigiSectorGraphData A)
 
 /-- The spatial coordinate matrix is right-unitary.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
 theorem unitary_mul_conjTranspose (F : BeigiSectorGraphData A) :
     F.unitary * F.unitaryᴴ = 1 := by
   simpa only [Matrix.star_eq_conjTranspose] using
@@ -157,7 +157,7 @@ theorem unitary_mul_conjTranspose (F : BeigiSectorGraphData A) :
 
 /-- A directed edge is present exactly when its edge ground space is nonzero.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, graph definition immediately
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, graph definition immediately
 after equation (2), page 3. -/
 def IsEdge (F : BeigiSectorGraphData A) (a b : Fin F.sectorCount) : Prop :=
   F.edgeGroundSpace a b ≠ ⊥
@@ -166,7 +166,7 @@ def IsEdge (F : BeigiSectorGraphData A) (a b : Fin F.sectorCount) : Prop :=
 are nonzero.  Cyclic rotation is not quotiented out: the source sum is over
 ordered cycles.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (3)--(4), page 4. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (3)--(4), page 4. -/
 def OrderedCycle (F : BeigiSectorGraphData A) (N : ℕ) [NeZero N] :=
   {k : Fin N → Fin F.sectorCount // ∀ n : Fin N, F.IsEdge (k n) (k (n + 1))}
 
@@ -283,7 +283,7 @@ private theorem singleKrausMap_groundBond_eq_transformedGroundBond
 the sitewise spatial unitary gives the corresponding product in sector
 coordinates.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equation (2), page 3. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
 theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N)
@@ -608,7 +608,7 @@ parent interactions.  This restricted auxiliary form, and its possible
 generalization to an explicit commutativity hypothesis, are recorded in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, source lines 487--500. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III. -/
 theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (v : NSiteSpace d N)
@@ -651,8 +651,7 @@ periodic lengths, whereas this theorem treats `2 ≤ N`; the one-site periodic
 interaction convention remains open. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(4), source
-lines 451--512. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(4). -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
@@ -691,9 +690,8 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq
 two cyclic windows traverse the same pair of sites in opposite orders, so
 `(a, b)` and `(b, a)` remain distinct ordered cycles when `a ≠ b`.
 
-Source: Beigi, arXiv:1105.1019v2, Section III, equations (2)--(4), source
-lines 451--512; the period-two ordered-cycle convention is explicit at source
-lines 509--512. -/
+Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(4),
+including the period-two ordered-cycle convention. -/
 theorem parentHamiltonianGroundSpaceES_finrank_eq_two
     (F : BeigiSectorGraphData A) :
     Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 2) =

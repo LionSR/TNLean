@@ -135,10 +135,10 @@ the fixed-point-space identity
     \qquad n>0.
 \]
 This rules out root-of-unity peripheral eigenvalues of $E^\dagger$, but it does
-not imply the fusion-side idempotence equation $E^2=E$.
+not imply the transfer-retract idempotence equation $E^2=E$.
 
 This failure is formalized by
-\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_fusion}.
+\leanid{MPOTensor.exists_isRFP_MPDO_via_algebra_not_isRFP_MPDO_via_transferRetract}.
 The counterexample is the phase-flip channel with Kraus operators
 $K_0=\frac35 I$ and $K_1=\frac45 Z$.  It is trace-preserving, fixes the
 positive-definite matrix $I$, and has off-diagonal eigenvalue $-\frac7{25}$.
@@ -207,10 +207,12 @@ The present algebra predicate
 \leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
 coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
 idempotent trace identity.  It proves the fixed-point-space equation above, not
-the displayed BNT coefficient comparison.  Thus the source-faithful route to the
-fusion formulation must construct the BNT-label theorem witness from the MPDO
-tensor and then use the one-site retract criterion
-\leanid{MPOTensor.fusionIsometryData_one_iff_isRFP}.
+the displayed BNT coefficient comparison.  Thus a source-faithful construction
+must first obtain the BNT-label theorem witness from the MPDO tensor and then use
+the trace identity to construct the physical trace-preserving completely
+positive maps of Appendix~C.4.  The one-site transfer-retract criterion
+\leanid{MPOTensor.transferRetractData_one_iff_isRFP} concerns the separate
+transfer-map idempotence predicate and cannot supply these physical maps.
 
 The scalar normalization step is now isolated independently of the still
 missing channel construction.  The structure
@@ -826,7 +828,7 @@ To eliminate the source-theorem gap, the formalization should instead:
         $S=\widetilde R_1\widetilde S R_2$ exactly as in lines~2065--2085;
     \item conclude the paper's renormalization fixed-point predicate, namely
         the existence of the two trace-preserving completely positive maps in
-        Definition~4.1.  Any comparison with the transfer-map fusion predicate
+        Definition~4.1.  Any comparison with the transfer-retract predicate
         must then be stated separately, because the latter is presently
         equivalent to transfer-map idempotence rather than Definition~4.1.
 \end{enumerate}

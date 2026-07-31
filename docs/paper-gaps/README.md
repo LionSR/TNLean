@@ -196,6 +196,9 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   PGVWC07 \(C^j,D^j\) comparison is now formalized under a crossing-tail
   word-span hypothesis; the remaining boundary is the replacement of that
   span-dependent short-tail statement by the source \(C^j,D^j,E^j\) comparison.
+- `pgvwc07_common_identity_coefficients.tex` distinguishes the right-canonical
+  normalization used in the proof of PGVWC07 Theorem 12 from the local variant
+  that assumes a common one-letter expansion of every block identity.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison: the finite-row cyclic-window reduction is formalized, while the
   remaining source comparison is the overlapping-window anticommutator estimate;

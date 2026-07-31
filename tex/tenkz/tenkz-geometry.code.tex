@@ -34,8 +34,6 @@
   { [TKZ-GEOM-COMPASS]~no~compass~face~named~'#1';~expected~n,~e,~s,~or~w }
 \msg_new:nnn {tenkz}{geom-singular-basis}
   { [TKZ-GEOM-SINGULAR-BASIS]~a~carrier~basis~must~have~nonzero~determinant }
-\msg_new:nnn {tenkz}{geom-zero-ray}
-  { [TKZ-GEOM-ZERO-RAY]~a~boundary~ray~must~have~a~nonzero~direction }
 
 % ---------- frames ----------------------------------------------------------
 % A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
@@ -263,7 +261,7 @@
 % 90 + theta.  Keeping that convention here prevents row/column details from
 % leaking into each port, leg, and open-end consumer.
 \cs_new_protected:Npn \__tenkz_geom_local_dir:nnN #1#2#3
-  { \__tenkz_geom_dir:nnN {#1} { 90 + (#2) } #3 }
+  { \__tenkz_geom_local_bearing:nnnnN {#1}{1}{1}{#2} #3 }
 
 % A carrier basis is the complete local east/north pair on the page.  Keeping
 % both vectors, rather than one turn angle, preserves shear and unequal scale.
@@ -274,6 +272,28 @@
   {
     \tl_set:Ne #7 { \fp_eval:n { (#1) * (#5) + (#3) * (#6) } }
     \tl_set:Ne #8 { \fp_eval:n { (#2) * (#5) + (#4) * (#6) } }
+  }
+% Carry a local direction through a complete carrier basis and read its page
+% bearing.  A scalar turn cannot answer this question under shear or unequal
+% axis scale; the two basis vectors are the one source of direction geometry.
+\tl_new:N \l__tenkz_geom_bearing_x_tl
+\tl_new:N \l__tenkz_geom_bearing_y_tl
+\cs_new_protected:Npn \__tenkz_geom_basis_bearing:nnnnnN
+    #1#2#3#4#5#6
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      {#1}{#2}{#3}{#4}
+      { cosd(#5) } { sind(#5) }
+      \l__tenkz_geom_bearing_x_tl \l__tenkz_geom_bearing_y_tl
+    \tl_set:Ne #6
+      {
+        \fp_eval:n
+          {
+            atand(
+              \l__tenkz_geom_bearing_y_tl ,
+              \l__tenkz_geom_bearing_x_tl )
+          }
+      }
   }
 \cs_new_protected:Npn \__tenkz_geom_basis_unapply:nnnnnnNN
     #1#2#3#4#5#6#7#8
@@ -350,74 +370,112 @@
       }
   }
 
-% The first intersection of a ray from an interior point with an
-% axis-aligned rectangle.  Positions and bounds are expressed in one local
-% coordinate system; #3 is the ray angle in that system.
-\tl_new:N \l__tenkz_geom_ray_tx_tl
-\tl_new:N \l__tenkz_geom_ray_ty_tl
+% Update the entry/exit parameters of a ray against one axis-aligned slab.
+% A zero direction component either leaves that axis unconstrained or proves
+% that the ray misses the slab.
+\tl_new:N \l__tenkz_geom_ray_near_tl
+\tl_new:N \l__tenkz_geom_ray_far_tl
+\tl_new:N \l__tenkz_geom_ray_enter_tl
+\tl_new:N \l__tenkz_geom_ray_exit_tl
 \tl_new:N \l__tenkz_geom_ray_t_tl
-\cs_new_protected:Npn \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
-    #1#2#3#4#5#6#7#8#9
+\bool_new:N \l__tenkz_geom_ray_hit_bool
+\cs_new_protected:Npn \__tenkz_geom_ray_slab:nnnn #1#2#3#4
   {
-    \tl_clear:N \l__tenkz_geom_ray_tx_tl
-    \tl_clear:N \l__tenkz_geom_ray_ty_tl
-    \tl_clear:N \l__tenkz_geom_ray_t_tl
-    \fp_compare:nNnTF { cosd(#3) } > {0}
+    \fp_compare:nNnTF {#2} = {0}
       {
-        \tl_set:Ne \l__tenkz_geom_ray_tx_tl
-          { \fp_eval:n { ((#5) - (#1)) / cosd(#3) } }
+        \bool_lazy_or:nnT
+          { \fp_compare_p:nNn {#1} < {#3} }
+          { \fp_compare_p:nNn {#1} > {#4} }
+          { \bool_set_false:N \l__tenkz_geom_ray_hit_bool }
       }
       {
-        \fp_compare:nNnT { cosd(#3) } < {0}
+        \tl_set:Ne \l__tenkz_geom_ray_near_tl
           {
-            \tl_set:Ne \l__tenkz_geom_ray_tx_tl
-              { \fp_eval:n { ((#4) - (#1)) / cosd(#3) } }
+            \fp_eval:n
+              { min(((#3) - (#1)) / (#2), ((#4) - (#1)) / (#2)) }
           }
-      }
-    \fp_compare:nNnTF { sind(#3) } > {0}
-      {
-        \tl_set:Ne \l__tenkz_geom_ray_ty_tl
-          { \fp_eval:n { ((#7) - (#2)) / sind(#3) } }
-      }
-      {
-        \fp_compare:nNnT { sind(#3) } < {0}
+        \tl_set:Ne \l__tenkz_geom_ray_far_tl
           {
-            \tl_set:Ne \l__tenkz_geom_ray_ty_tl
-              { \fp_eval:n { ((#6) - (#2)) / sind(#3) } }
+            \fp_eval:n
+              { max(((#3) - (#1)) / (#2), ((#4) - (#1)) / (#2)) }
           }
-      }
-    \tl_if_empty:NTF \l__tenkz_geom_ray_tx_tl
-      {
-        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
+        \tl_if_empty:NTF \l__tenkz_geom_ray_enter_tl
           {
-            \tl_clear:N #8
-            \tl_clear:N #9
-            \msg_error:nn {tenkz}{geom-zero-ray}
+            \tl_set_eq:NN
+              \l__tenkz_geom_ray_enter_tl \l__tenkz_geom_ray_near_tl
           }
-          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_ty_tl }
-      }
-      {
-        \tl_if_empty:NTF \l__tenkz_geom_ray_ty_tl
-          { \tl_set_eq:NN \l__tenkz_geom_ray_t_tl \l__tenkz_geom_ray_tx_tl }
           {
-            \tl_set:Ne \l__tenkz_geom_ray_t_tl
+            \tl_set:Ne \l__tenkz_geom_ray_enter_tl
+              {
+                \fp_eval:n
+                  {
+                    max(
+                      \l__tenkz_geom_ray_enter_tl ,
+                      \l__tenkz_geom_ray_near_tl )
+                  }
+              }
+          }
+        \tl_if_empty:NTF \l__tenkz_geom_ray_exit_tl
+          {
+            \tl_set_eq:NN
+              \l__tenkz_geom_ray_exit_tl \l__tenkz_geom_ray_far_tl
+          }
+          {
+            \tl_set:Ne \l__tenkz_geom_ray_exit_tl
               {
                 \fp_eval:n
                   {
                     min(
-                      \l__tenkz_geom_ray_tx_tl ,
-                      \l__tenkz_geom_ray_ty_tl )
+                      \l__tenkz_geom_ray_exit_tl ,
+                      \l__tenkz_geom_ray_far_tl )
                   }
               }
           }
       }
-    \tl_if_empty:NF \l__tenkz_geom_ray_t_tl
+  }
+
+% The first forward intersection of a ray with an axis-aligned rectangle.
+% Positions and bounds are expressed in one local coordinate system; #3 is
+% the ray angle in that system.  An interior origin returns its first exit;
+% an exterior origin returns its first entry.  Both outputs are empty when
+% the forward ray misses the rectangle.
+\cs_new_protected:Npn \__tenkz_geom_rect_ray_intersect:nnnnnnnNN
+    #1#2#3#4#5#6#7#8#9
+  {
+    \bool_set_true:N \l__tenkz_geom_ray_hit_bool
+    \tl_clear:N \l__tenkz_geom_ray_enter_tl
+    \tl_clear:N \l__tenkz_geom_ray_exit_tl
+    \tl_clear:N \l__tenkz_geom_ray_t_tl
+    \__tenkz_geom_ray_slab:nnnn {#1}{cosd(#3)}{#4}{#5}
+    \__tenkz_geom_ray_slab:nnnn {#2}{sind(#3)}{#6}{#7}
+    \bool_if:NT \l__tenkz_geom_ray_hit_bool
       {
+        \bool_lazy_or:nnT
+          {
+            \fp_compare_p:nNn
+              { \l__tenkz_geom_ray_enter_tl }
+              > { \l__tenkz_geom_ray_exit_tl }
+          }
+          { \fp_compare_p:nNn { \l__tenkz_geom_ray_exit_tl } < {0} }
+          { \bool_set_false:N \l__tenkz_geom_ray_hit_bool }
+      }
+    \bool_if:NTF \l__tenkz_geom_ray_hit_bool
+      {
+        \tl_set:Ne \l__tenkz_geom_ray_t_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_geom_ray_enter_tl >= 0
+                  ? \l__tenkz_geom_ray_enter_tl
+                  : \l__tenkz_geom_ray_exit_tl
+              }
+          }
         \tl_set:Ne #8
           { \fp_eval:n { (#1) + \l__tenkz_geom_ray_t_tl * cosd(#3) } }
         \tl_set:Ne #9
           { \fp_eval:n { (#2) + \l__tenkz_geom_ray_t_tl * sind(#3) } }
       }
+      { \tl_clear:N #8 \tl_clear:N #9 }
   }
 
 % The local east/north basis supplied by one frame address.  Affine frames
@@ -450,6 +508,26 @@
             \tl_set:Ne #7 { \fp_eval:n { -\__tenkz_geom_field:nn{#1}{c} } }
           }
       }
+  }
+
+% The page bearing of one direction in the local east/north axes of a frame
+% address.  Both affine and circular carriers answer through the same complete
+% basis; consumers do not inspect frame kinds or reproduce projection formulae.
+\tl_new:N \l__tenkz_geom_bearing_ex_tl
+\tl_new:N \l__tenkz_geom_bearing_ey_tl
+\tl_new:N \l__tenkz_geom_bearing_nx_tl
+\tl_new:N \l__tenkz_geom_bearing_ny_tl
+\cs_new_protected:Npn \__tenkz_geom_local_bearing:nnnnN #1#2#3#4#5
+  {
+    \__tenkz_geom_local_basis:nnnNNNN {#1}{#2}{#3}
+      \l__tenkz_geom_bearing_ex_tl \l__tenkz_geom_bearing_ey_tl
+      \l__tenkz_geom_bearing_nx_tl \l__tenkz_geom_bearing_ny_tl
+    \__tenkz_geom_basis_bearing:nnnnnN
+      { \l__tenkz_geom_bearing_ex_tl }
+      { \l__tenkz_geom_bearing_ey_tl }
+      { \l__tenkz_geom_bearing_nx_tl }
+      { \l__tenkz_geom_bearing_ny_tl }
+      {#4} #5
   }
 
 % The axes a frame gives a record.  An address on a carrier is read in the

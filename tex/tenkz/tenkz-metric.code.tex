@@ -185,6 +185,12 @@
 \__tenkz_metric_declare:nnn {clusterdot} {0.11}
   { a~spin~on~a~cluster~sub-frame:~small~enough~that~the~gap~between~two~
     spins~exceeds~their~radius,~so~four~of~them~read~as~four }
+\__tenkz_metric_declare:nnn {canonicalwidth} {0.34}
+  { canonical-form~triangles~clear~their~inscribed~labels~without~widening~
+    enough~to~crowd~the~neighbouring~bond }
+\__tenkz_metric_declare:nnn {dirmarkstation} {0.55}
+  { direction~barbs~sit~just~past~mid-wire,~clear~of~central~glyphs~while~
+    remaining~visually~attached~to~the~bond~they~orient }
 
 \__tenkz_metric_declare_length:nnn {wirewidth} {0.55pt}
   { the~wire~stroke~of~the~ink~hierarchy }
@@ -200,6 +206,32 @@
   { barb~spanning~a~doubled~wire }
 \__tenkz_metric_declare_length:nnn {braceamp} {2.6pt}
   { brace~amplitude:~numerically~the~barb~floor,~semantically~independent }
+\__tenkz_metric_declare_length:nnn {boxinset} {1.6pt}
+  { inscribed-label~padding~that~keeps~a~box~compact~at~the~glyph~floor }
+\__tenkz_metric_declare_length:nnn {pillcap} {2.2pt}
+  { the~corner~radius~rounds~a~pill's~ends~without~making~it~a~circle }
+\__tenkz_metric_declare_length:nnn {pillxinset} {3.2pt}
+  { a~pill~leaves~more~horizontal~than~vertical~room~around~its~label }
+\__tenkz_metric_declare_length:nnn {pillyinset} {2.2pt}
+  { a~pill's~vertical~label~padding~keeps~the~skin~flatter~than~a~box }
+\__tenkz_metric_declare_length:nnn {wireglyphxinset} {1.8pt}
+  { an~on-wire~capsule~keeps~its~label~off~the~rounded~end~caps }
+\__tenkz_metric_declare_length:nnn {wireglyphyinset} {1.4pt}
+  { an~on-wire~capsule~stays~flatter~than~an~ordinary~labelled~glyph }
+\__tenkz_metric_declare_length:nnn {triangleinset} {0.6pt}
+  { a~triangle~circumscribes~its~label,~so~a~small~inset~protects~row~clearance }
+\__tenkz_metric_declare_length:nnn {fusedwiregap} {1.1pt}
+  { the~paper~channel~between~a~fused~bond's~two~wire-weight~strokes }
+\__tenkz_metric_declare_length:nnn {groupcorner} {2pt}
+  { grouped-object~outlines~turn~gently~without~reading~as~pill~glyphs }
+\__tenkz_metric_declare_length:nnn {labelinset} {1pt}
+  { the~house~label~skin~keeps~script~text~clear~of~its~anchor~ink }
+\__tenkz_metric_declare_length:nnn {cdbarblen} {3.4pt}
+  { a~commutative-diagram~arrowhead~remains~legible~on~annotation-weight~shafts }
+\__tenkz_metric_declare_length:nnn {cdsourceshorten} {3.5pt}
+  { source-side~shortening~keeps~the~path~start~clear~of~its~source~node }
+\__tenkz_metric_declare_length:nnn {cdtargetshorten} {3.5pt}
+  { target-side~shortening~seats~the~arrowhead~before~the~target~node }
 
 % ---------- one truth, two spellings: assert agreement with the legacy ----
 \cs_new_protected:Npn \__tenkz_metric_assert:nn #1#2

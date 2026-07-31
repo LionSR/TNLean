@@ -29,9 +29,9 @@ that the compatibility relation is trivial.
 
 ## The merged #611 API that one would naturally transfer from
 
-PR #665 (#611) added the transfer-map-level fusion formulation in
+PR #665 (#611) added the transfer-retract formulation in
 `TNLean/MPS/MPDO/FusionIsometries.lean`. For each blocked size `n`, it provides
-`MPOTensor.FusionIsometryData M n` consisting of:
+`MPOTensor.TransferRetractData M n` consisting of:
 
 - a support subspace
   `supportAlgebra : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)`;
@@ -45,7 +45,7 @@ PR #665 (#611) added the transfer-map-level fusion formulation in
   `S ∘ₗ T = blockedTransferMap M n`.
 
 This is strong enough to prove
-`MPOTensor.isRFP_MPDO_via_fusion_iff_isRFP`, because an idempotent blocked
+`MPOTensor.isRFP_MPDO_via_transferRetract_iff_isRFP`, because an idempotent blocked
 transfer map factors through its range and conversely any such retract makes the
 blocked transfer map idempotent.
 
@@ -55,12 +55,12 @@ The paper's algebra-structure formulation is not just a retract through a subspa
 It needs a genuine algebra object at each blocked size, together with multiplication
 coefficients `c_{αβγ}^{(L)}` and compatibility across blocking levels.
 
-The natural route from the merged fusion API would be to define a projected product
+The natural route from the merged transfer-retract API would be to define a projected product
 on the range of `blockedTransferMap M n` by
 
 `a ⋆ b := T (S a * S b)`.
 
-However, the current `supportAlgebra` in `FusionIsometryData` is only a
+However, the current `supportAlgebra` in `TransferRetractData` is only a
 `Submodule`, not a `Subalgebra` / `StarSubalgebra`, and the existing API does not
 prove that this projected product is associative or unital.
 
@@ -87,7 +87,7 @@ Equivalently, one wants the standard form
 `E_n (E_n x * E_n y) = E_n (x * y)`.
 
 Without these identities there is no sound route to an associative multiplication
-on the support object extracted from the fusion datum.
+on the support object extracted from the transfer-retract datum.
 
 ### 2. Packaging the range as an algebra / support-algebra object
 
@@ -102,7 +102,7 @@ support-algebra structure carrying:
 - associativity and unit laws;
 - the relation to `E_n` as the corresponding projection / conditional expectation.
 
-At present, `FusionIsometryData.supportAlgebra` is only a `Submodule`, so the
+At present, `TransferRetractData.supportAlgebra` is only a `Submodule`, so the
 necessary algebraic laws cannot even be stated in the right form.
 
 ### 3. Basis-coordinate extraction for the coefficients
@@ -121,7 +121,7 @@ actually reflects the paper.
 ## Conclusion
 
 Issue #612 is blocked not by a local proof gap in `AlgebraStructure.lean`, but by a
-missing layer between the current fusion retracts and the paper's support-algebra
+missing layer between the current transfer retracts and the paper's support-algebra
 formulation. The correct next step is to build that missing layer first, and only
 then return to the algebra-structure coefficients themselves.
 
@@ -137,6 +137,6 @@ Suggested scope:
    identities needed on `range(E_n)`.
 2. Package `range(E_n)` as a `StarSubalgebra`-like support algebra with projected
    multiplication.
-3. Expose the bridge from `FusionIsometryData` to that support algebra.
+3. Expose the bridge from `TransferRetractData` to that support algebra.
 4. Only after this, return to issue #612 and define the algebra-structure
    coefficients and compatibility predicate in a non-vacuous way.

@@ -33,7 +33,7 @@ edge from the last retained site back to the first.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** These coordinates retain only the
+**Scope restriction (cyclic-active restriction):** These coordinates retain only the
 sector words used in the cyclic-active fourth-region formula. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 abbrev RetainedOpenEdgeIndex (F : PhysicalSectorFactorization K) {n : ℕ}
@@ -50,7 +50,7 @@ the remaining boundary edge.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identification is applied to
+**Scope restriction (cyclic-active restriction):** This identification is applied to
 the retained cyclic-active sector words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def retainedOpenEdgeEquiv (F : PhysicalSectorFactorization K) {n : ℕ}
@@ -67,7 +67,7 @@ corresponding open-edge coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity is used after
+**Scope restriction (cyclic-active restriction):** This identity is used after
 restricting to retained cyclic-active words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem cyclicEdgeEquiv_retainedOpenEdgeEquiv_symm_internal
@@ -84,7 +84,7 @@ that open-edge coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This identity is used after
+**Scope restriction (cyclic-active restriction):** This identity is used after
 restricting to retained cyclic-active words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedOpenEdgeEquiv_symm_internal_edge
@@ -104,7 +104,7 @@ boundary coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity is used for
+**Scope restriction (cyclic-active restriction):** This endpoint identity is used for
 retained cyclic-active words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem cyclicEdgeEquiv_retainedOpenEdgeEquiv_symm_last
@@ -121,7 +121,7 @@ the remaining boundary edge.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity is used for
+**Scope restriction (cyclic-active restriction):** This endpoint identity is used for
 retained cyclic-active words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedOpenEdgeEquiv_symm_last_right
@@ -138,7 +138,7 @@ the remaining boundary edge.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This endpoint identity is used for
+**Scope restriction (cyclic-active restriction):** This endpoint identity is used for
 retained cyclic-active words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem retainedOpenEdgeEquiv_symm_first_left
@@ -156,7 +156,7 @@ neighboring edges.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The change of coordinates is used
+**Scope restriction (cyclic-active restriction):** The change of coordinates is used
 on the sector words surviving the cyclic-active restriction. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def retainedOpenEdgeChainEquiv
@@ -172,7 +172,7 @@ coordinates.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1614--1617.
 
-**Local fix (cyclic-active restriction):** This is the unchanged interior
+**Scope restriction (cyclic-active restriction):** This is the unchanged interior
 product on a retained cyclic-active sector word. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def retainedBulkProduct
@@ -402,7 +402,7 @@ sector word.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This identification separates the
+**Scope restriction (cyclic-active restriction):** This identification separates the
 retained word from the three traced boundary sites. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def appendSectorFiber (F : PhysicalSectorFactorization K)
@@ -419,7 +419,7 @@ def appendSectorFiber (F : PhysicalSectorFactorization K)
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** These are the three boundary sites
+**Scope restriction (cyclic-active restriction):** These are the three boundary sites
 traced after the cyclic-active restriction. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def threeSectorFiberEquiv (F : PhysicalSectorFactorization K)
@@ -441,7 +441,7 @@ first sector coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 first traced boundary site. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem threeSectorFiberEquiv_symm_apply_zero
@@ -458,7 +458,7 @@ second sector coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 second traced boundary site. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem threeSectorFiberEquiv_symm_apply_one
@@ -475,7 +475,7 @@ third sector coordinate.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 third traced boundary site. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem threeSectorFiberEquiv_symm_apply_two

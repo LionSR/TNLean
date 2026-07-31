@@ -404,14 +404,18 @@ normal-family span argument therefore matches the original tensor to one loop te
 phase and an invertible virtual gauge, which transports transfer idempotence.
 
 Source: CPSV16, proof of Theorem 3.10 at line 1307; Beigi,
-arXiv:1105.1019v2, Sections III--IV; algebraic-to-spectral normality uses quantum Wielandt
+J. Phys. A 45 (2012) 025306, Sections III--IV; algebraic-to-spectral normality uses quantum Wielandt
 Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 
 **Scope restriction (normal representative):** CPSV16, Theorem 3.10 is stated for a tensor in
 canonical form. This theorem proves its reverse implication for one explicitly normal and
 left-canonical representative, together with an explicit BNT relation and the all-chain
-ground-space condition. It does not assert the unrestricted canonical-form theorem. This
-restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+ground-space condition. In the source canonical decomposition, normality selects the
+one-sector case \(g=1\), for which a source-level proof need not use Beigi's
+finite-degeneracy classification. The present formal proof nevertheless uses the finite
+sector graph and its loop-span theorem as an intermediate route to the gauge-phase match.
+The multi-sector case \(g>1\), which motivates the classification, remains unproved.
+This restriction is documented in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 -/
 theorem nncph_implies_rfp
     (B : MPSTensor d D) [NeZero D]

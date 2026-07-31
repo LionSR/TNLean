@@ -426,7 +426,7 @@ cyclic neighboring product, summing over all three discarded sector labels.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The suffix sum is later restricted
+**Scope restriction (cyclic-active restriction):** The suffix sum is later restricted
 to cyclic-active sector labels, producing the restricted two-step
 coefficient. See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable abbrev threeSuffixSectorContraction
@@ -536,7 +536,7 @@ lies on a positive-length directed cycle.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The source sum is represented on
+**Scope restriction (cyclic-active restriction):** The source sum is represented on
 the sectors occurring in nonzero cyclic products. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def IsCyclicActiveRetainedWord
@@ -550,7 +550,7 @@ subtype.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This word belongs to the restricted
+**Scope restriction (cyclic-active restriction):** This word belongs to the restricted
 sector set used in the fourth-region formula. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def cyclicActiveRetainedWord
@@ -675,7 +675,7 @@ three-suffix contractions of the cyclic neighboring products.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The direct sum is subsequently
+**Scope restriction (cyclic-active restriction):** The direct sum is subsequently
 reduced to retained cyclic-active sector words. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem reindex_reducedBlockState_add_three_eq_threeSuffixSectorContraction
@@ -693,7 +693,7 @@ isometry defining the sector-coordinate tensor.
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This replacement supplies the
+**Scope restriction (cyclic-active restriction):** This replacement supplies the
 extra marginal step used before restricting the sector sum. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem sectorCoordinateTensor_reducedBlockState_add_three_eq_succ_of_isSourceZCL
@@ -712,7 +712,7 @@ theorem sectorCoordinateTensor_reducedBlockState_add_three_eq_succ_of_isSourceZC
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The word ranges over the restricted
+**Scope restriction (cyclic-active restriction):** The word ranges over the restricted
 cyclic-active sector set. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 def activeThreeSectorWord
@@ -725,7 +725,7 @@ def activeThreeSectorWord
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 first sector of the restricted suffix. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem activeThreeSectorWord_zero
@@ -738,7 +738,7 @@ first sector of the restricted suffix. See
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 middle sector of the restricted suffix. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem activeThreeSectorWord_one
@@ -751,7 +751,7 @@ middle sector of the restricted suffix. See
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** This projection identifies the
+**Scope restriction (cyclic-active restriction):** This projection identifies the
 last sector of the restricted suffix. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 @[simp] theorem activeThreeSectorWord_two
@@ -764,7 +764,7 @@ last sector of the restricted suffix. See
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 1606--1617.
 
-**Local fix (cyclic-active restriction):** The contraction is evaluated only
+**Scope restriction (cyclic-active restriction):** The contraction is evaluated only
 on the sectors surviving cyclic-active deletion. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem sum_threeSuffixFiber_cyclicNeighboringProduct_active
