@@ -51,8 +51,6 @@ result is not asserted here.
 open scoped Matrix ComplexOrder MatrixOrder
 open Matrix
 
-namespace TNLean
-
 noncomputable section
 
 variable {D : ℕ}
@@ -74,6 +72,25 @@ private local instance instRenyiTwoStarOrderedRing : StarOrderedRing Mat :=
 private local instance instRenyiTwoCStarAlgebra : CStarAlgebra Mat :=
   CStarAlgebra.mk
 
+namespace Matrix.PosSemidef
+
+/-- Sandwiching a positive-semidefinite matrix between equal real powers of a
+positive-semidefinite matrix preserves positive semidefiniteness. -/
+theorem rpow_mul_mul_rpow
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) (r : ℝ) :
+    (ω ^ r * ρ * ω ^ r).PosSemidef := by
+  have hωr_nonneg : 0 ≤ ω ^ r := by
+    rw [CFC.rpow_eq_cfc_real hω.nonneg]
+    exact cfc_nonneg fun x hx ↦
+      Real.rpow_nonneg (spectrum_nonneg_of_nonneg hω.nonneg hx) r
+  have hωr : (ω ^ r).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp hωr_nonneg
+  simpa only [hωr.isHermitian.eq] using hρ.mul_mul_conjTranspose_same (ω ^ r)
+
+end Matrix.PosSemidef
+
+namespace TNLean
+
 /-- The order-two sandwiched trace functional
 \(\operatorname{Re}\operatorname{Tr}[(\omega^{-1/4}\rho\omega^{-1/4})^2]\).
 
@@ -94,13 +111,11 @@ positive-semidefinite arguments.
 This is the positivity of the expression in Müller-Lennert et al.,
 arXiv:1306.3142v4, Definition 2, specialized to order two. -/
 theorem sandwichedRenyiTwoTrace_nonneg
-    {ρ ω : Mat} (hρ : ρ.PosSemidef) (_hω : ω.PosSemidef) :
+    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) :
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
-  have hq : q.PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
-  have hX : (q * ρ * q).PosSemidef := by
-    simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
+  have hX : (q * ρ * q).PosSemidef :=
+    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ hω (-(1 / 4 : ℝ))
   exact (Complex.nonneg_iff.mp (hX.trace_mul_nonneg hX)).1
 
 /-- For a positive-definite matrix, two inverse quarter-powers multiply to the
@@ -148,6 +163,6 @@ theorem sandwichedRenyiTwoTrace_eq_weighted
         simp only [Matrix.mul_assoc]
   rw [hcycle, hq]
 
-end
-
 end TNLean
+
+end
