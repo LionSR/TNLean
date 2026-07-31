@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.BNT.Bridge
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.RFP.BNTOrthogonality
@@ -92,12 +93,9 @@ multiplicity-one, unit-weight direct sum. -/
 theorem isBNT_basisDirectSum
     (hCF : IsBNTCanonicalForm P) :
     IsBNT (directSumTensor P.basis) P.basisCount P.basisDim P.basis := by
-  refine ⟨hCF.basis_isNormal, ?_, hCF.bnt_data⟩
-  intro N _hN
-  refine ⟨fun _ ↦ 1, fun σ ↦ ?_⟩
-  rw [← toTensorFromBlocks_one_eq_directSumTensor P.basis,
-    mpv_toTensorFromBlocks_eq_sum]
-  simp
+  letI : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  exact hCF.isCPSVBasisOfNormalTensors_basisDirectSum.isBNT
 
 end IsBNTCanonicalForm
 
