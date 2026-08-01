@@ -414,16 +414,47 @@
     position, and positivity of $c$ permits cancellation without a phase.
 \end{proof}
 
+\begin{theorem}[Gram-dressed reflected marked-chain identity]
+    \label{thm:mpdo_gram_dressed_reflected_marked_chain}
+    \lean{MPOTensor.gramDressing}
+    \lean{MPOTensor.IsMPDO.%
+        markedChainCoefficient_gramDressing_eq_reflectedAdjoint}
+    \leanok
+    \uses{def:mpdo, thm:mpdo_reflected_marked_chain}
+    Let $M$ generate positive semidefinite operators on every nonempty chain,
+    and suppose that one vertical corner is a positive scalar multiple of a
+    similarity of a tensor $A$,
+    \begin{align}
+        V^\dagger\widetilde M^vV&=c\,X A^vX^{-1},
+        &c&>0.
+        \notag
+    \end{align}
+    Then the marked-chain coefficient of the Gram-dressed tensor
+    $(X^\dagger X)A^v(X^\dagger X)^{-1}$ equals the reflected-adjoint
+    marked-chain coefficient of $A$ in the adjoint tensor, with the two tail
+    words reversed. This is the single-corner, open-index conjugation step in
+    Figure~7 of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_reflected_marked_chain}
+    Apply the reflected marked-chain identity to the similar tensor
+    $XA^vX^{-1}$. Conjugate its two open virtual indices by $X^\dagger$ and
+    $(X^{-1})^\dagger$. On the original side this gives the Gram dressing of
+    $A$; on the reflected side the gauge factors cancel, leaving the
+    reflected adjoint of $A$.
+\end{proof}
+
 \begin{theorem}[Pairwise Gram conjugation of grouped vertical corners]
     \label{thm:mpdo_pairwise_vertical_gram_conjugation}
-    \lean{MPOTensor.gramDressing}
     \lean{MPOTensor.cornerGramCoefficients}
-    \lean{MPOTensor.IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint}
     \lean{MPOTensor.IsMPDO.markedChainCoefficient_gramDressing_eq_of_two_corners}
     \lean{MPOTensor.IsHorizontalCF.gramDressing_eq_of_two_grouped_corners}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo,
-        thm:mpdo_reflected_marked_chain,
+        thm:mpdo_gram_dressed_reflected_marked_chain,
         cor:horizontal_cf_linear_marked_separation}
     Let $M$ be in normalized BNT-refined horizontal form and generate positive
     semidefinite operators on every nonempty chain. Suppose two vertical
@@ -460,7 +491,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_reflected_marked_chain,
+    \uses{thm:mpdo_gram_dressed_reflected_marked_chain,
         cor:horizontal_cf_linear_marked_separation}
     Conjugate the open indices in the reflected marked-chain identity for
     the first corner by $X^\dagger$. Its left side becomes the marked chain
