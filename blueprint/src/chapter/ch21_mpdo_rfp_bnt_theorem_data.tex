@@ -80,9 +80,11 @@
     \uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause,
         def:mpo_physical_trace_transfer,
         lem:mpdo_sitewise_physical_coordinate_congruence}
-    Let $M$ be a matrix product density operator with a tensor-attached BNT
-    algebra clause, and let $M_\gamma$ be any retained normal tensor. Closing
-    the two physical legs of $M_\gamma$ gives the bond matrix
+    Let $M$ be a matrix product density operator with physical dimension $d$
+    and bond dimension $D$, equipped with a tensor-attached BNT algebra
+    clause, and let $M_\gamma$ be any retained normal tensor. Separating its
+    doubled physical index gives two physical legs of dimension $D$. Closing
+    these legs gives the bond matrix
     \begin{align}
         T_\gamma
         &=\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
@@ -110,6 +112,7 @@
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         physTraceTransfer_gaugedTensor}
     \leanok
+    \uses{def:mpo_physical_trace_transfer}
     Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
     $X=\diag(2,1)$, and set $B^v=XA^vX^{-1}$. After separating the doubled
     physical index, their terminal transfer matrices are
