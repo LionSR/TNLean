@@ -2,9 +2,10 @@
 % Formula: A j-loop around the i tensor reduces by the idempotent relation
 %   delta_{i,j}.
 % Ink: Canonical public kernel plane with four unmarked MPO stations and the
-%   marked j station on one closed loop.
+%   marked j station on one closed loop, contracted by explicit port bonds.
 % Boundary: Both sides retain the horizontal and diagonal virtual rails and one
-%   upward physical leg; each side has one open red tail.
+%   upward physical leg; the j-string remains open at its marked station, so
+%   each side has one open red tail.
 % Source: paper TN-Review-main.tex line 1649; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 661-687
 % Capabilities: kernel, plane-frame, ring-closure, typed-ports
@@ -13,7 +14,11 @@
 \[
   \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
     % The plane frame is the source's XZ canvas.  Addressed stations, rather
-    % than page coordinates, give the loop its projected compass order.
+    % than page coordinates, give the loop its projected compass order.  The
+    % picture-level physical policy would assign a transverse leg to every
+    % frame-cell atom, including the five legless MPO stations, so the
+    % central tensor keeps its typed physical port until the kernel grows a
+    % per-atom policy exclusion.
     \tn[at=(2,2), name=i, role=marked, ports={90:physical}]{}
     \tnmark[form=label, label pos=nw]{i}{$i$}
     \tn[skin=box, at=(1,3), name=N,
@@ -44,10 +49,13 @@
     \tnwire[species=operator, name=j-tail-out]{J.315}{open se}
   \end{tenkz}
   \;=\;\delta_{i,j}\;
-  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
-    \tn[at=(2,2), name=bare, role=marked, ports={90:physical}]{}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none,
+      physical=up]
+    % The bare tensor is the only frame-cell atom here, so the plane physical
+    % policy supplies its upward leg directly.
+    \tn[at=(2,2), name=bare, role=marked]{}
     \tnmark[form=label, label pos=nw]{bare}{$i$}
-    \tnwire{bare.w}{open w} \tnwire{bare.e}{open e} \tnwire{bare.90}{open n}
+    \tnwire{bare.w}{open w} \tnwire{bare.e}{open e}
     \tnwire{open sw}{bare.225} \tnwire{bare.45}{open ne}
     \tnwire[species=operator, name=bare-tail]{bare.315}{open se}
   \end{tenkz}
