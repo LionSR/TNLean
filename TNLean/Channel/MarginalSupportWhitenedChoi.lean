@@ -17,7 +17,7 @@ The support coordinate spaces may both be zero-dimensional.
 
 ## Main declaration
 
-* `TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank`
+* `TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank`
   is the arbitrary-support whitened Choi estimate.
 -/
 
@@ -37,7 +37,7 @@ operator-Schmidt rank.
 No normalization or positive-dimension assumption is needed.  Simultaneous
 compression to the two marginal supports includes the cases where either
 support coordinate space is `Fin 0`. -/
-theorem sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank
+theorem sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank
     (ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ : ρ.PosSemidef) :
     sandwichedRenyiTwoTrace ρ
@@ -103,7 +103,7 @@ theorem sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank
           rw [show partialTraceRight ρ ⊗ₖ partialTraceLeft ρ = ω from rfl,
             hQ2, hωc]
     _ ≤ Matrix.operatorSchmidtRank ρc :=
-      sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef
+      sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef
         ρc hρc hMarginals.1 hMarginals.2
     _ = Matrix.operatorSchmidtRank ρ := by exact_mod_cast hOSR
 

@@ -17,7 +17,7 @@ that basis change.
 
 ## Main declaration
 
-* `TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef`
+* `TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef`
   bounds the order-two sandwiched trace by ordinary operator-Schmidt rank when
   both marginals are positive definite.
 -/
@@ -39,7 +39,7 @@ most its operator-Schmidt rank.
 The first marginal is conjugated by the adjoint of its eigenvector unitary.
 Under the Choi convention the input whitening carries a transpose; it becomes
 the ordinary diagonal whitening only in this eigenbasis. -/
-theorem sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef
+theorem sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef
     (ρ : Matrix (α × β) (α × β) ℂ)
     (hρ : ρ.PosSemidef) (hA : (partialTraceRight ρ).PosDef)
     (hB : (partialTraceLeft ρ).PosDef) :

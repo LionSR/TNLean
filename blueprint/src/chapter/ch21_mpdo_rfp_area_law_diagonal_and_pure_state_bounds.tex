@@ -746,8 +746,7 @@
     star-algebra automorphism. Continuity of $f$ is needed only on the finite
     spectrum of $A$, where it is automatic. The logarithm, real-power, and
     square-root identities follow by specialization. For the support
-    projection, specialize to the function that is one away from zero and zero
-    at zero.
+    projection, specialize to $f(x)=1$ for $x\neq0$ and $f(0)=0$.
 \end{proof}
 
 \begin{theorem}[Logarithm of a tensor product on its support]
@@ -1361,7 +1360,7 @@ terms of operator-Schmidt rank.
 
 \begin{theorem}[Faithful marginal whitening bound]
     \label{thm:sandwiched_renyi_two_osr_faithful}
-    \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef}
+    \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef}
     \leanok
     \uses{def:sandwiched_renyi_two_trace,
       def:bipartite_operator_schmidt_rank}
@@ -1400,7 +1399,7 @@ terms of operator-Schmidt rank.
 
 \begin{theorem}[Marginal-support whitening bound]
     \label{thm:sandwiched_renyi_two_osr_support}
-    \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank}
+    \lean{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
     \leanok
     \uses{def:sandwiched_renyi_two_trace,
       def:bipartite_operator_schmidt_rank}
