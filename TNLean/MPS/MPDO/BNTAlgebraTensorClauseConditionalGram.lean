@@ -139,12 +139,12 @@ noncomputable def IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealiza
     fId := cornerGramCoefficients V X c
     physical := fun u ↦
       linearMarkedTensor_cornerGramCoefficients
-      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-        (H.tensor γ)) V X c hc hcornerOne u
+        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (H.tensor γ)) V X c hc hcornerOne u
     target := fun N _hN r s σ τ ↦
       hBlock.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
-      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-        (H.tensor γ)) V X c hc hcornerOne N r s σ τ }
+        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (H.tensor γ)) V X c hc hcornerOne N r s σ τ }
 
 /-- An identity-dressed physical-letter marked realization with the same
 reflected target as the exact gauge-dressed corner at every positive tail
