@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.EntropyReindex
 import TNLean.Channel.MarginalSupportWhitenedChoi
-import TNLean.Channel.Schwarz.SSAEqualityDPI
-import TNLean.Entropy.MutualInformation
+import TNLean.Entropy.MutualInformationBasic
+import TNLean.Entropy.ProductMarginals
 
 /-!
 # Mutual information and operator-Schmidt rank
@@ -64,17 +65,7 @@ theorem mutualInformation_le_log_operatorSchmidtRank
     dsimp only [ω']
     rw [Matrix.trace_submatrix_equiv, hωtr]
   have hker' : ∀ v : Fin (dA * dB) → ℂ, ω' *ᵥ v = 0 → ρ' *ᵥ v = 0 := by
-    intro v hv
-    have hv' : ω *ᵥ (v ∘ e) = 0 := by
-      funext i
-      have hi := congrFun hv (e i)
-      simpa only [ω', Matrix.submatrix_mulVec_equiv, Equiv.symm_symm,
-        Equiv.symm_apply_apply, Function.comp_apply, Pi.zero_apply] using hi
-    have hρv := hker (v ∘ e) hv'
-    funext j
-    have hj := congrFun hρv (e.symm j)
-    simpa only [ρ', Matrix.submatrix_mulVec_equiv, Equiv.symm_symm,
-      Equiv.apply_symm_apply, Function.comp_apply, Pi.zero_apply] using hj
+    simpa only [ρ', ω'] using Matrix.mulVec_submatrix_support e hker
   have hrelative' :
       quantumRelativeEntropy ρ' ω' ≤ Real.log (TNLean.sandwichedRenyiTwoTrace ρ' ω') :=
     TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace

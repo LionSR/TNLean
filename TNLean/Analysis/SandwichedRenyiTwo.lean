@@ -44,8 +44,9 @@ reference support gives the singular-reference theorem in
 * `TNLean.sandwichedRenyiTwoTrace_nonneg` — positivity on
   positive-semidefinite arguments.
 * `TNLean.sandwichedRenyiTwoTrace_conj_unitary` — invariance under unitary
-* `TNLean.sandwichedRenyiTwoTrace_submatrix_equiv` — invariance under reindexing
   conjugation of both arguments.
+* `TNLean.sandwichedRenyiTwoTrace_submatrix_equiv` — invariance under simultaneous
+  reindexing of both arguments.
 * `TNLean.posDef_rpow_neg_quarter_mul_self` — the faithful identity
   \(\omega^{-1/4}\omega^{-1/4}=\omega^{-1/2}\).
 * `TNLean.sandwichedRenyiTwoTrace_eq_weighted` — a cyclically reordered trace
