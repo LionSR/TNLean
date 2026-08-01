@@ -8,6 +8,7 @@ import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.TraceCFC
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
@@ -23,6 +24,10 @@ theory development.
   root of a positive-semidefinite matrix is Hermitian.
 * `Matrix.PosSemidef.cfc_sqrt_mul_self`: the square of that square root is the
   original matrix.
+* `Matrix.PosSemidef.cfc_log_sqrt`: on the support of a positive-semidefinite
+  matrix, the logarithm of the square root is half the logarithm.
+* `Matrix.PosDef.cfc_log_rpow`: for a positive-definite matrix, the logarithm
+  of a real power is the exponent times the logarithm.
 * `Matrix.PosSemidef.sqrt_smul`: the positive square root commutes with
   nonnegative real scaling.
 * `Matrix.PosSemidef.sqrt_kronecker`: positive square roots factor across
@@ -83,6 +88,19 @@ theorem PosSemidef.sqrt_kronecker
     (fun x y hx _hy ↦ Real.sqrt_mul hx y)
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
+
+noncomputable local instance cfcLogNormedRing : NormedRing (Matrix n n ℂ) :=
+  Matrix.instL2OpNormedRing
+noncomputable local instance cfcLogNormedAlgebra : NormedAlgebra ℂ (Matrix n n ℂ) :=
+  Matrix.instL2OpNormedAlgebra
+noncomputable local instance cfcLogCStarRing : CStarRing (Matrix n n ℂ) :=
+  Matrix.instCStarRing
+noncomputable local instance cfcLogPartialOrder : PartialOrder (Matrix n n ℂ) :=
+  Matrix.instPartialOrder
+noncomputable local instance cfcLogStarOrderedRing : StarOrderedRing (Matrix n n ℂ) :=
+  Matrix.instStarOrderedRing
+noncomputable local instance cfcLogCStarAlgebra : CStarAlgebra (Matrix n n ℂ) :=
+  CStarAlgebra.mk
 
 /-- The Hermitian functional-calculus square root of a positive-semidefinite
 matrix is Hermitian. -/
@@ -175,6 +193,47 @@ theorem PosSemidef.cfc_sqrt_mul_self {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef)
     simp only [Function.comp_apply, id_eq]
     exact congrArg (RCLike.ofReal) (Real.mul_self_sqrt (hρ.eigenvalues_nonneg i))
   rw [hcongr, hρ.isHermitian.cfc_id]
+
+/-- For a positive-semidefinite matrix, the totalized logarithm of the
+positive square root is half the totalized logarithm of the matrix.
+
+At a zero eigenvalue both sides vanish because Mathlib's scalar convention is
+`Real.log 0 = 0`. -/
+theorem PosSemidef.cfc_log_sqrt {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    CFC.log (CFC.sqrt ρ) = (1 / 2 : ℝ) • CFC.log ρ := by
+  rw [CFC.log, CFC.log]
+  rw [CFC.sqrt_eq_real_sqrt ρ hρ.nonneg, cfcₙ_eq_cfc]
+  rw [← cfc_comp' Real.log Real.sqrt ρ
+    ((ρ.finite_real_spectrum.image Real.sqrt).continuousOn Real.log)]
+  rw [← cfc_smul (1 / 2 : ℝ) Real.log ρ
+    (ρ.finite_real_spectrum.continuousOn Real.log)]
+  apply cfc_congr
+  intro x hx
+  have hxnonneg : 0 ≤ x := spectrum_nonneg_of_nonneg hρ.nonneg hx
+  by_cases hxzero : x = 0
+  · simp [hxzero]
+  · change Real.log (Real.sqrt x) = (1 / 2 : ℝ) * Real.log x
+    rw [Real.log_sqrt hxnonneg]
+    ring
+
+/-- For a positive-definite matrix, the logarithm of a real power is the
+exponent times the logarithm. -/
+theorem PosDef.cfc_log_rpow {A : Matrix n n ℂ} (hA : A.PosDef) (s : ℝ) :
+    CFC.log (A ^ s) = s • CFC.log A := by
+  rw [CFC.log, CFC.log]
+  rw [CFC.rpow_eq_cfc_real hA.posSemidef.nonneg]
+  rw [← cfc_comp' Real.log (fun x : ℝ => x ^ s) A
+    ((A.finite_real_spectrum.image (fun x : ℝ => x ^ s)).continuousOn Real.log)
+    (A.finite_real_spectrum.continuousOn (fun x : ℝ => x ^ s))]
+  rw [← cfc_smul s Real.log A (A.finite_real_spectrum.continuousOn Real.log)]
+  apply cfc_congr
+  intro x hx
+  have hxpos : 0 < x := by
+    rw [hA.isHermitian.spectrum_real_eq_range_eigenvalues] at hx
+    obtain ⟨i, rfl⟩ := hx
+    exact hA.eigenvalues_pos i
+  change Real.log (x ^ s) = s * Real.log x
+  rw [Real.log_rpow hxpos]
 
 /-- The inverse square root of a positive-semidefinite matrix on its support:
 the zero eigenspace is sent to zero and every positive eigenvalue `x` is sent

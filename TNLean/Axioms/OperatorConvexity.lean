@@ -616,55 +616,13 @@ section Lieb
 
 open scoped Kronecker
 
-/-- Entrywise complex conjugation of square matrices as an `ℝ`-`⋆`-algebra hom. -/
-private def conjMatStarAlgHom : Mat →⋆ₐ[ℝ] Mat :=
-  { (RCLike.conjAe (K := ℂ)).mapMatrix.toAlgHom with
-    map_star' := fun M => by
-      change ((star M).map (RCLike.conjAe (K := ℂ))) = star (M.map (RCLike.conjAe (K := ℂ)))
-      ext i j
-      simp [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_apply, Matrix.map_apply,
-        RCLike.conjAe_coe] }
-
-private lemma conjMatStarAlgHom_apply (M : Mat) :
-    conjMatStarAlgHom M = M.map (starRingEnd ℂ) := rfl
-
-private lemma conjMatStarAlgHom_continuous : Continuous (conjMatStarAlgHom (D := D)) :=
-  conjMatStarAlgHom.toLinearMap.continuous_of_finiteDimensional
-
-/-- For Hermitian `A`, the transpose equals entrywise complex conjugation. -/
-private lemma transpose_eq_map_conj {A : Mat} (hA : A.IsHermitian) :
-    Aᵀ = A.map (starRingEnd ℂ) := by
-  have h1 : Aᵀ = (Aᴴ).map star := by
-    rw [Matrix.conjTranspose, Matrix.map_map]; simp [Function.comp_def]
-  rw [h1, hA.eq]; rfl
-
-/-- The continuous functional calculus commutes with transpose on a Hermitian matrix:
-`(cfc f A)ᵀ = cfc f Aᵀ`, since the transpose of a Hermitian matrix is its entrywise
-conjugate, and entrywise conjugation is an `ℝ`-`⋆`-algebra hom commuting with the calculus. -/
-private lemma cfc_transpose {A : Mat} (hA : A.IsHermitian) (f : ℝ → ℝ)
-    (hf : ContinuousOn f (spectrum ℝ A)) :
-    (cfc f A)ᵀ = cfc f (Aᵀ) := by
-  have hsa : IsSelfAdjoint A := hA
-  have hcfc : (cfc f A).IsHermitian :=
-    Matrix.isHermitian_iff_isSelfAdjoint.mpr (cfc_predicate f A)
-  rw [transpose_eq_map_conj hcfc, transpose_eq_map_conj hA,
-    ← conjMatStarAlgHom_apply, ← conjMatStarAlgHom_apply]
-  exact StarAlgHomClass.map_cfc conjMatStarAlgHom f A hf conjMatStarAlgHom_continuous hsa
-    (hsa.map conjMatStarAlgHom)
-
 /-- The real power of a positive-definite matrix commutes with transpose:
 `(Bᵀ) ^ r = (B ^ r)ᵀ`. -/
 private lemma rpow_transpose (B : Mat) (hB : B.PosDef) (r : ℝ) : (Bᵀ) ^ r = (B ^ r)ᵀ := by
   have h0B : (0 : Mat) ≤ B := hB.posSemidef.nonneg
   have h0BT : (0 : Mat) ≤ Bᵀ := hB.transpose.posSemidef.nonneg
   rw [CFC.rpow_eq_cfc_real h0BT, CFC.rpow_eq_cfc_real h0B]
-  refine (cfc_transpose hB.isHermitian (fun x : ℝ => x ^ r) ?_).symm
-  apply ContinuousOn.rpow_const continuousOn_id
-  intro x hx
-  left
-  rw [hB.isHermitian.spectrum_real_eq_range_eigenvalues] at hx
-  obtain ⟨i, rfl⟩ := hx
-  exact (hB.eigenvalues_pos i).ne'
+  exact (Matrix.cfc_transpose hB.isHermitian (fun x : ℝ => x ^ r)).symm
 
 /-- The reduction `(A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s} = A^s ⊗ₖ (Bᵀ)^{1-s}`, obtained by pushing the
 continuous functional calculus through each unital tensor embedding. -/
