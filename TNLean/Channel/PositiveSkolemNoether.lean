@@ -49,7 +49,7 @@ theorem exists_unitary_conj_of_positive_algEquiv_matrix
       exact hf.map_conjTranspose M
   exact exists_unitary_conj_of_starAlgEquiv_matrix fstar
 
-/-- A positive, bijective, unital, multiplicative linear endomorphism of a
+/-- A positive, bijective, multiplicative linear endomorphism of a
 nonzero full complex matrix algebra is implemented by unitary conjugation.
 
 This form permits applications in which the algebra equivalence has first
@@ -60,12 +60,18 @@ with Wolf--Perez-Garcia, arXiv:1005.4545, Theorem 8. -/
 theorem exists_unitary_conj_of_positive_bijective_multiplicative_matrix_linearMap
     {n : Type*} [Fintype n] [DecidableEq n] [Nonempty n]
     (T : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ)
-    (hOne : T 1 = 1)
     (hMul : ∀ A B, T (A * B) = T A * T B)
     (hBij : Function.Bijective T)
     (hPos : IsPositiveMap T) :
     ∃ U : Matrix.unitaryGroup n ℂ, ∀ M : Matrix n n ℂ,
       T M = (U : Matrix n n ℂ) * M * (U : Matrix n n ℂ)ᴴ := by
+  obtain ⟨X, hX⟩ := hBij.2 1
+  have hOne : T 1 = 1 := by
+    calc
+      T 1 = 1 * T 1 := (one_mul _).symm
+      _ = T X * T 1 := by rw [hX]
+      _ = T (X * 1) := (hMul X 1).symm
+      _ = 1 := by rw [mul_one, hX]
   let f : Matrix n n ℂ ≃ₐ[ℂ] Matrix n n ℂ :=
     AlgEquiv.ofBijective
       { toFun := T
