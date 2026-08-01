@@ -1364,13 +1364,7 @@ terms of operator-Schmidt rank.
     \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank_of_posDef}
     \leanok
     \uses{def:sandwiched_renyi_two_trace,
-      def:bipartite_operator_schmidt_rank,
-      lem:partial_trace_product_isometry,
-      thm:operator_schmidt_rank_local_isometry,
-      thm:full_support_eigenbasis_whitened_choi_bound,
-      thm:rpow_kronecker_possemidef,
-      thm:rpow_neg_quarter_inv_sqrt_sqrt,
-      thm:sandwiched_renyi_two_unitary_invariance}
+      def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ have positive definite marginals $\rho_A$ and
     $\rho_B$. Then
     \begin{align}
@@ -1408,10 +1402,8 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_osr_support}
     \lean{TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank}
     \leanok
-    \uses{thm:sandwiched_renyi_two_osr_faithful,
-      thm:sandwiched_renyi_two_support_compression,
-      thm:operator_schmidt_rank_marginal_support_compression,
-      thm:faithful_marginals_support_compression}
+    \uses{def:sandwiched_renyi_two_trace,
+      def:bipartite_operator_schmidt_rank}
     Let $\rho_{AB}\succeq0$ be any finite-dimensional bipartite operator. Then
     \begin{align}
       Q_2(\rho_{AB},\rho_A\otimes\rho_B)
@@ -1424,7 +1416,9 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:sandwiched_renyi_two_osr_faithful,
+    \uses{def:sandwiched_renyi_two_trace,
+      def:bipartite_operator_schmidt_rank,
+      thm:sandwiched_renyi_two_osr_faithful,
       thm:sandwiched_renyi_two_support_compression,
       thm:operator_schmidt_rank_marginal_support_compression,
       thm:faithful_marginals_support_compression}

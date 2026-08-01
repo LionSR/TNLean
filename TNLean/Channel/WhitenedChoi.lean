@@ -357,7 +357,9 @@ Theorem 6, equation (18), with the rectangular Choi rank estimate.
 **Scope restriction (faithful marginal supports):** Both marginals are
 positive definite in the displayed coordinates.  The arbitrary-basis result
 follows by unitary diagonalization, and simultaneous compression to both
-marginal supports gives the singular-marginal result. -/
+marginal supports gives the singular-marginal result.  This restriction and
+its removal are recorded in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem supportedMarginalWhitenedState_frobenius_sq_le_operatorSchmidtRank
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hρ : ρ.PosSemidef) (hp : ∀ i, 0 < p i)
@@ -401,7 +403,8 @@ arXiv:1306.5920, Theorem 6, equation (18).
 **Scope restriction (faithful marginal supports):** This eigenbasis statement
 is the faithful core.  Unitary diagonalization gives the arbitrary-basis
 version, and simultaneous support compression gives the singular-marginal
-version. -/
+version.  This restriction and its removal are recorded in
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem supportedMarginalWhitenedState_trace_sq_re_le_operatorSchmidtRank
     (ρ : Matrix (α × β) (α × β) ℂ) (p : α → ℝ)
     (hρ : ρ.PosSemidef) (hp : ∀ i, 0 < p i)
