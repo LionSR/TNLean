@@ -38,6 +38,10 @@ SOURCE = r"""
   \fi}
 \def\tenkzassertsnapshotclean{%
   \edef\tenkztesttoken{\the\tenkz@glyphsnapuid}%
+  \tenkzassertrelax{tenkz@pathxmin@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@pathxmax@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@pathymin@\tenkztesttoken}%
+  \tenkzassertrelax{tenkz@pathymax@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@outerx@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@outery@\tenkztesttoken}%
   \tenkzassertrelax{tenkz@stroke@\tenkztesttoken}%
@@ -237,6 +241,52 @@ SOURCE = r"""
 \end{tenkzfree}
 \endgroup
 \tenkzassertsnapshotclean
+\end{document}
+"""
+
+AFFINE_GLYPHS = r"""
+\documentclass{article}
+\usepackage{tenkz}
+\pagestyle{empty}
+\begin{document}
+\tikzset{
+  tensor/.append style={tenkz glyph basis={1,0,.5,.75}},
+  box tensor/.append style={tenkz glyph basis={1,0,.5,.75}},
+  pill tensor/.append style={tenkz glyph basis={1,0,.5,.75}},
+  canonical tensor/.append style={tenkz glyph basis={1,0,.5,.75}}}
+\begin{tenkzfree}
+  \tnput[dot]{dot}{(0,0)}{}
+  \tnput[box]{box}{(2,0)}{}
+  \tnput[pill]{pill}{(4,0)}{}
+\end{tenkzfree}
+\begingroup
+\tikzset{tensor/.append style={outer sep=0pt}}
+\begin{tenkzfree}
+  \tnput[dot]{outer-zero}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+\begingroup
+\tikzset{tensor/.append style={outer sep=20pt}}
+\begin{tenkzfree}
+  \tnput[dot]{outer-large}{(0,0)}{}
+\end{tenkzfree}
+\endgroup
+\begin{tenkz}
+  \tn[tri=l]{}
+\end{tenkz}
+\makeatletter
+\def\tenkzassertaffineclean#1{%
+  \@for\tenkztestslot:=pathxmin,pathxmax,pathymin,pathymax\do{%
+    \expandafter\ifx\csname tenkz@\tenkztestslot @#1\endcsname\relax\else
+      \PackageError{tenkz test}{Affine path snapshot #1 was not released}{}%
+    \fi}}
+\tenkzassertaffineclean{1}
+\tenkzassertaffineclean{2}
+\tenkzassertaffineclean{3}
+\tenkzassertaffineclean{4}
+\tenkzassertaffineclean{5}
+\tenkzassertaffineclean{6}
+\makeatother
 \end{document}
 """
 
@@ -686,6 +736,56 @@ def main() -> int:
         if (len(rotate_control) != 1
                 or rotate_control[0].attrs.get("shape") != "roundrect"):
             raise AssertionError("ordinary node rotation was rejected as transformed")
+
+        affine = work / "affine-glyphs.tex"
+        affine.write_text(AFFINE_GLYPHS, encoding="utf-8")
+        affine_run = subprocess.run(
+            [engine, "-interaction=nonstopmode", "-halt-on-error", affine.name],
+            cwd=work,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=120,
+        )
+        if affine_run.returncode:
+            print(affine_run.stdout)
+            raise AssertionError("affine glyph fixture did not compile")
+        affine_status, affine_audit = audit_status(work / "affine-glyphs.tnlog")
+        if affine_status != 0:
+            raise AssertionError(
+                "audit rejected explicitly tagged affine glyphs: "
+                + "; ".join(finding.msg for finding in affine_audit.findings)
+            )
+        affine_geometry = [
+            event for event in affine_audit.events()
+            if event.kind == "glyph-geometry"
+        ]
+        if len(affine_geometry) != 6:
+            raise AssertionError(
+                f"affine fixture emitted {len(affine_geometry)} glyphs"
+            )
+        if any(
+                event.attrs.get("shape") != "rect"
+                or event.attrs.get("radius") != "0"
+                or any(event.attrs.get(field) != "0"
+                       for field in ("x1", "y1", "x2", "y2", "x3", "y3"))
+                for event in affine_geometry):
+            raise AssertionError(
+                "affine glyphs did not use conservative rectangular hulls: "
+                + repr([event.attrs for event in affine_geometry])
+            )
+        extents = [
+            (int(event.attrs["xmax"]) - int(event.attrs["xmin"]),
+             int(event.attrs["ymax"]) - int(event.attrs["ymin"]))
+            for event in affine_geometry
+        ]
+        if extents[-3] != extents[-2]:
+            raise AssertionError(
+                f"affine glyph hull retained outer separation: {extents[-3:-1]}"
+            )
+        if extents[0][0] == extents[0][1]:
+            raise AssertionError("affine dot fixture did not exercise anisotropy")
 
         invalid = work / "invalid-corners.tex"
         invalid.write_text(INVALID_CORNERS, encoding="utf-8")

@@ -456,6 +456,7 @@
 \newif\iftenkz@bboxcapture
 \newif\iftenkz@identitylinear
 \newif\iftenkz@frameglyphrotated
+\newif\iftenkz@frameglyphaffine
 \newif\iftenkz@labelrectangle
 \newif\iftenkz@auditownermatch
 \tenkz@bboxcapturetrue
@@ -606,6 +607,10 @@
   \fi
   \endgroup}
 \def\tenkz@cleanupvisiblesnapshot#1{%
+  \global\expandafter\let\csname tenkz@pathxmin@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@pathxmax@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@pathymin@#1\endcsname\relax
+  \global\expandafter\let\csname tenkz@pathymax@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@outerx@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@outery@#1\endcsname\relax
   \global\expandafter\let\csname tenkz@stroke@#1\endcsname\relax
@@ -687,6 +692,15 @@
   \fi}
 \def\tenkz@captureactualpath#1#2{%
   \tenkz@incrementtokenslot{usecount}{#1}%
+  \def\tenkz@affine{affine}%
+  \ifx\tenkz@frameglyphangle\tenkz@affine
+    % PGF has already materialized the node's transformed visible path here.
+    % Preserve its page-space hull before the backend consumes and clears it.
+    \expandafter\xdef\csname tenkz@pathxmin@#1\endcsname{\the\pgf@pathminx}%
+    \expandafter\xdef\csname tenkz@pathxmax@#1\endcsname{\the\pgf@pathmaxx}%
+    \expandafter\xdef\csname tenkz@pathymin@#1\endcsname{\the\pgf@pathminy}%
+    \expandafter\xdef\csname tenkz@pathymax@#1\endcsname{\the\pgf@pathmaxy}%
+  \fi
   \pgfutil@in@{draw}{#2}%
   \ifpgfutil@in@
     \expandafter\gdef\csname tenkz@draw@#1\endcsname{1}%
@@ -1185,15 +1199,25 @@
           {Give every audited glyph a live fill, not only a drawn outline.}%
       \fi
       \tenkz@frameglyphrotatedfalse
+      \tenkz@frameglyphaffinefalse
       \expandafter\ifx\csname tenkz@frameglyph@#4\endcsname\relax
         \tenkz@requireidentitylinear{#1}{glyph}%
         \iftenkz@identitylinear\else\def\tenkz@glyphshape{unsupported}\fi
       \else
-        % The private frame key constructs rotation-only node transforms.
-        % Other affine transforms retain the identity-only audit contract.
+        % Only the private frame and basis keys sanction transformed glyphs.
+        % Arbitrary transform-shape customization remains identity-only.
         \edef\tenkz@nodematrix{\csname pgf@sh@nt@#1\endcsname}%
         \expandafter\tenkz@checklinear\tenkz@nodematrix
         \iftenkz@identitylinear\else\tenkz@frameglyphrotatedtrue\fi
+        \edef\tenkz@frameglyphkind{\csname tenkz@frameglyph@#4\endcsname}%
+        \def\tenkz@affine{affine}%
+        \ifx\tenkz@frameglyphkind\tenkz@affine
+          \tenkz@frameglyphaffinetrue
+          % The current audit schema has no ellipse or general curved-path
+          % primitive.  Publish the conservative captured path hull instead.
+          \def\tenkz@glyphshape{rect}%
+          \tenkz@glyphradius=0pt
+        \fi
       \fi
       \iftenkz@frameglyphrotated
         % A rotated rounded rectangle is not an axis-aligned rounded
@@ -1205,7 +1229,7 @@
         \fi
       \fi
       \tenkz@emitglyphinkuse
-      \tenkz@emitglyphgeometry{#1}%
+      \tenkz@emitglyphgeometry{#1}{#4}%
       \fi
     \fi
     \tenkz@cleanupglyphsnapshot{#4}%
@@ -1221,10 +1245,15 @@
   \ifdim\tenkz@bboxxa>\tenkz@bboxxmax \tenkz@bboxxmax=\tenkz@bboxxa\fi
   \ifdim\tenkz@bboxya<\tenkz@bboxymin \tenkz@bboxymin=\tenkz@bboxya\fi
   \ifdim\tenkz@bboxya>\tenkz@bboxymax \tenkz@bboxymax=\tenkz@bboxya\fi}
-\def\tenkz@emitglyphgeometry#1{%
+\def\tenkz@emitglyphgeometry#1#2{%
   \begingroup
   \def\tenkz@circle{circle}%
-  \ifx\tenkz@glyphshape\tenkz@circle
+  \iftenkz@frameglyphaffine
+    \tenkz@bboxxmin=\csname tenkz@pathxmin@#2\endcsname\relax
+    \tenkz@bboxxmax=\csname tenkz@pathxmax@#2\endcsname\relax
+    \tenkz@bboxymin=\csname tenkz@pathymin@#2\endcsname\relax
+    \tenkz@bboxymax=\csname tenkz@pathymax@#2\endcsname\relax
+  \else\ifx\tenkz@glyphshape\tenkz@circle
     % A circle's rotated corner anchors are not its axis extrema.  Recover
     % its invariant radius from the transformed centre-to-east vector.
     \pgfextractx{\tenkz@bboxxmin}{\pgfpointanchor{#1}{center}}%
@@ -1257,8 +1286,9 @@
       \pgfextracty{\tenkz@bboxymin}{\pgfpointanchor{#1}{south}}%
       \pgfextracty{\tenkz@bboxymax}{\pgfpointanchor{#1}{north}}%
     \fi
-  \fi
-  \ifx\tenkz@glyphshape\tenkz@circle
+  \fi\fi
+  \iftenkz@frameglyphaffine
+  \else\ifx\tenkz@glyphshape\tenkz@circle
     \ifdim\tenkz@glyphouterxsep<\tenkz@glyphouterysep
       \tenkz@glyphouterxsep=\tenkz@glyphouterysep
     \fi
@@ -1271,7 +1301,7 @@
     \advance\tenkz@bboxxmax by -\tenkz@glyphouterxsep
     \advance\tenkz@bboxymin by \tenkz@glyphouterysep
     \advance\tenkz@bboxymax by -\tenkz@glyphouterysep
-  \fi
+  \fi\fi
   \advance\tenkz@bboxxmin by -\tenkz@glyphhalfstroke
   \advance\tenkz@bboxxmax by \tenkz@glyphhalfstroke
   \advance\tenkz@bboxymin by -\tenkz@glyphhalfstroke
@@ -1335,6 +1365,10 @@
     transform shape,
     rotate=#1,
     /utils/exec={\def\tenkz@frameglyphangle{#1}}},
+  tenkz glyph basis/.style args={#1,#2,#3,#4}{
+    transform shape,
+    cm={#1,#2,#3,#4,(0pt,0pt)},
+    /utils/exec={\def\tenkz@frameglyphangle{affine}}},
   tenkz audited label/.style={
     /utils/exec=\tenkz@installlabelaudit},
   tenkz audited glyph/.style 2 args={
