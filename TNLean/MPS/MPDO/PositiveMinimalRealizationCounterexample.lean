@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalCommutant
+import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.Tactic.Basic
 
@@ -36,7 +37,7 @@ Appendix C.4, lines 2048--2057, and Proposition 4.13, lines 1898--1921.
   nonunitary-similarity counterexample.
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 
 noncomputable section
 
@@ -174,11 +175,23 @@ private lemma tensor_zero : tensor 0 = 1 := by
   fin_cases i <;> fin_cases j <;> simp [tensor]
 
 @[simp]
+private lemma tensor_three : tensor 3 = !![0, 0; 1, 0] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [tensor]
+
+@[simp]
 private lemma gaugedTensor_zero : gaugedTensor 0 = 1 := by
   rw [gaugedTensor, tensor_zero, Matrix.mul_one]
   change ((gauge * gauge⁻¹ : GL (Fin 2) ℂ) :
     Matrix (Fin 2) (Fin 2) ℂ) = 1
   simp
+
+@[simp]
+private lemma gaugedTensor_three : gaugedTensor 3 = !![0, 0; 1 / 2, 0] := by
+  rw [gaugedTensor, tensor_three, gauge_val, gauge_inv_val]
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [gaugeMatrix, Matrix.mul_apply, Fin.sum_univ_two]
 
 private lemma gauge_gram_not_scalar :
     ¬ ∃ z : ℂ,
@@ -276,5 +289,95 @@ theorem sameMPV₂Pos_does_not_force_positive_isometric_realization :
     gaugedTensor_isInjective, gaugedTensor_isNormal,
     tensor_gaugeEquiv_gaugedTensor, tensor_sameMPV₂Pos_gaugedTensor,
     no_positive_isometric_realization⟩
+
+/-- The terminal physical-trace transfer of the source tensor is
+\(\begin{psmallmatrix}1&0\\1&1\end{psmallmatrix}\). -/
+lemma physTraceTransfer_tensor :
+    MPOTensor.physTraceTransfer (MPOTensor.verticalBNTMPO (D := 2) tensor) =
+      !![1, 0; 1, 1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [MPOTensor.physTraceTransfer, MPOTensor.verticalBNTMPO, tensor,
+      Fin.sum_univ_two, finProdFinEquiv]
+
+/-- The source tensor in the minimal-realization counterexample has a
+non-Hermitian terminal physical-trace transfer, hence it is not positive
+semidefinite. -/
+lemma physTraceTransfer_tensor_not_posSemidef :
+    ¬ (MPOTensor.physTraceTransfer
+      (MPOTensor.verticalBNTMPO (D := 2) tensor)).PosSemidef := by
+  intro hPos
+  have hHerm := hPos.isHermitian.apply (0 : Fin 2) (1 : Fin 2)
+  rw [physTraceTransfer_tensor] at hHerm
+  norm_num [Matrix.conjTranspose_apply] at hHerm
+
+private theorem physTraceTransfer_verticalBNTMPO_cast_posSemidef {n m : ℕ}
+    (h : n = m) (A : MPSTensor (2 * 2) n)
+    (hPos : (MPOTensor.physTraceTransfer
+      (MPOTensor.verticalBNTMPO (D := 2) A)).PosSemidef) :
+    (MPOTensor.physTraceTransfer
+      (MPOTensor.verticalBNTMPO
+        (cast (congrArg (MPSTensor (2 * 2)) h) A))).PosSemidef := by
+  cases h
+  simpa using hPos
+
+private theorem not_retained_positive_sector_of_physTraceTransfer_not_posSemidef
+    (A : MPSTensor 4 2)
+    (hA : ¬ (MPOTensor.physTraceTransfer
+      (MPOTensor.verticalBNTMPO (D := 2) A)).PosSemidef) :
+    ¬ ∃ (d : ℕ) (M : MPOTensor d 2) (H : MPOTensor.BNTAlgebraTensorClause M)
+        (γ : Fin H.labelCount) (hBond : H.bondDim γ = 2),
+      M.IsMPDO ∧
+        cast (congrArg (MPSTensor (2 * 2)) hBond) (H.tensor γ) = A := by
+  rintro ⟨d, M, H, γ, hBond, hM, hTensor⟩
+  have hPos := H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ
+  have hPosCast :
+      (MPOTensor.physTraceTransfer
+        (MPOTensor.verticalBNTMPO
+          (cast (congrArg (MPSTensor (2 * 2)) hBond) (H.tensor γ)))).PosSemidef := by
+    exact physTraceTransfer_verticalBNTMPO_cast_posSemidef hBond (H.tensor γ) hPos
+  rw [hTensor] at hPosCast
+  exact hA hPosCast
+
+/-- The source tensor of the minimal-realization counterexample cannot be a
+retained sector of a tensor-attached BNT algebra clause for a positive MPO. -/
+theorem tensor_not_retained_positive_sector :
+    ¬ ∃ (d : ℕ) (M : MPOTensor d 2) (H : MPOTensor.BNTAlgebraTensorClause M)
+        (γ : Fin H.labelCount) (hBond : H.bondDim γ = 2),
+      M.IsMPDO ∧
+        cast (congrArg (MPSTensor (2 * 2)) hBond) (H.tensor γ) = tensor := by
+  exact not_retained_positive_sector_of_physTraceTransfer_not_posSemidef tensor
+    physTraceTransfer_tensor_not_posSemidef
+
+/-- The terminal physical-trace transfer of the gauged tensor is
+\(\begin{psmallmatrix}1&0\\1/2&1\end{psmallmatrix}\). -/
+lemma physTraceTransfer_gaugedTensor :
+    MPOTensor.physTraceTransfer (MPOTensor.verticalBNTMPO (D := 2) gaugedTensor) =
+      !![1, 0; 1 / 2, 1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [MPOTensor.physTraceTransfer, MPOTensor.verticalBNTMPO, Fin.sum_univ_two,
+      finProdFinEquiv, Matrix.add_apply]
+
+/-- The gauged tensor in the minimal-realization counterexample has a
+non-Hermitian terminal physical-trace transfer, hence it is not positive
+semidefinite. -/
+lemma physTraceTransfer_gaugedTensor_not_posSemidef :
+    ¬ (MPOTensor.physTraceTransfer
+      (MPOTensor.verticalBNTMPO (D := 2) gaugedTensor)).PosSemidef := by
+  intro hPos
+  have hHerm := hPos.isHermitian.apply (0 : Fin 2) (1 : Fin 2)
+  rw [physTraceTransfer_gaugedTensor] at hHerm
+  norm_num [Matrix.conjTranspose_apply] at hHerm
+
+/-- The gauged tensor of the minimal-realization counterexample cannot be a
+retained sector of a tensor-attached BNT algebra clause for a positive MPO. -/
+theorem gaugedTensor_not_retained_positive_sector :
+    ¬ ∃ (d : ℕ) (M : MPOTensor d 2) (H : MPOTensor.BNTAlgebraTensorClause M)
+        (γ : Fin H.labelCount) (hBond : H.bondDim γ = 2),
+      M.IsMPDO ∧
+        cast (congrArg (MPSTensor (2 * 2)) hBond) (H.tensor γ) = gaugedTensor := by
+  exact not_retained_positive_sector_of_physTraceTransfer_not_posSemidef gaugedTensor
+    physTraceTransfer_gaugedTensor_not_posSemidef
 
 end MPSTensor.PositiveMinimalRealizationCounterexample
