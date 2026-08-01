@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTUniqueness
 import TNLean.MPS.MPDO.BNTMultiplicityNormalization
-import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
+import TNLean.MPS.MPDO.CPSVVerticalDecomposition
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 
 /-!
@@ -15,9 +15,8 @@ This file compares the chosen one-site vertical basis in a tensor-attached
 BNT algebra clause with a vertical canonical decomposition of the two-site
 blocking.  The same-length product law identifies the sectorwise power sums,
 and positivity turns them into the multiplicity-spectrum comparison used in
-the algebra-to-RFP implication.  The constructions below assume normalized
-BNT-refined horizontal form, which is stronger than literal CPSV canonical
-form.
+the algebra-to-RFP implication.  The constructions below use literal CPSV
+canonical form, as in the source.
 
 ## Main results
 
@@ -152,11 +151,6 @@ correspondence are assumed: full support of the two positive vertical
 decompositions derives the sector relabelling, and eventual BNT linear
 independence derives the power-sum equality.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is the
-normalized BNT-refined horizontal form, stronger than the literal CPSV
-canonical form used in Appendix C.4 through Proposition 4.13; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
 **Scope restriction (invertible gauge):** The result retains bond-dimension
 equality and phase-one invertible conjugacy, but does not prove the line-2057
 unitary upgrade.  The missing common-target normalization contract is documented
@@ -168,7 +162,8 @@ Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteExactSectorGauge
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) :
     TwoSiteExactSectorGauge H := by
   classical
   let chi := H.algebraClause.positiveChi.chi
@@ -386,8 +381,7 @@ noncomputable def toTwoSiteExactSectorGauge
     rw [hPair] at hEntry
     exact hEntry.trans (P.mpv_toTensor_eq_sum_coeff σ).symm
   let D₂ : CPSVVerticalDecomposition (blockTwo M) := Classical.choice
-    (hHorizontal.blockTwo.exists_cpsvVerticalDecomposition
-      (blockTwo M) hM.blockTwo)
+    (hCanonical.exists_cpsvVerticalDecomposition_blockTwo M hM)
   let Q : MPSTensor.SectorDecomposition (D * D) := {
     basisCount := D₂.labelCount
     basisDim := D₂.bondDim
@@ -714,35 +708,29 @@ noncomputable def toTwoSiteExactSectorGauge
       exact hExact }
 
 /-- The exact sector gauges determine the two-site multiplicity spectrum under
-normalized BNT-refined horizontal form.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+literal CPSV canonical form.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toTwoSiteMultiplicitySpectrum
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) :
     TwoSiteMultiplicitySpectrum H :=
-  (H.toTwoSiteExactSectorGauge hHorizontal hM).toTwoSiteMultiplicitySpectrum
+  (H.toTwoSiteExactSectorGauge hCanonical hM).toTwoSiteMultiplicitySpectrum
 
-/-- The two-site multiplicity spectrum under normalized BNT-refined horizontal
-form entails the corresponding multiplicity-spectrum comparison.
-
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+/-- The two-site multiplicity spectrum under literal CPSV canonical form entails
+the corresponding multiplicity-spectrum comparison.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2046--2058 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 noncomputable def toMultiplicitySpectrumComparison
     {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) :
     BNTMultiplicitySpectrumComparison H.algebraClause.positiveChi.chi
       H.traceScalars :=
-  (H.toTwoSiteMultiplicitySpectrum hHorizontal hM).toComparison
+  (H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison
 
 end BNTAlgebraTensorClause
 

@@ -137,7 +137,8 @@
     \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
     It does not include the further conclusion on line~2057 that $Z_\gamma$
     may be chosen unitary.
-    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % The line-2057 common-target Gram step is tracked in issue 4648; the
+    % subsequent scalar-to-unitary normalization is tracked in issue 4645 and
     % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{definition}
 
@@ -149,14 +150,14 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         toTwoSiteMultiplicitySpectrum}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo,
+    \uses{def:cpsv_canonical_form, def:mpdo,
         def:mpdo_bnt_algebra_tensor_clause,
         def:mpdo_bnt_two_site_multiplicity_spectrum,
         def:mpdo_bnt_two_site_exact_sector_gauge,
         def:mpdo_bnt_multiplicity_spectrum_comparison,
         def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
-    Let $M$ be an MPDO in normalized BNT-refined horizontal form, equipped
-    with a tensor-attached BNT algebra clause
+    Let $M$ be an MPDO whose doubled-index MPS tensor is in literal CPSV
+    canonical form, equipped with a tensor-attached BNT algebra clause
     $\widetilde M=\bigoplus_\alpha \mu_\alpha\otimes M_\alpha$.
     There is a vertical canonical decomposition of the two-site blocking,
     \begin{align}
@@ -188,16 +189,13 @@
     lines~2053--2057; no unitary choice of $Z_\gamma$ follows from this
     statement.
 
-    \textbf{Scope restriction (BNT-refined horizontal form):}
-    the normalized BNT-refined horizontal hypothesis is stronger than the
-    literal CPSV canonical-form hypothesis.
-    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-    % The full line-2057 unitary source step is tracked in issue 4645 and
+    % The line-2057 common-target Gram step is tracked in issue 4648; the
+    % subsequent scalar-to-unitary normalization is tracked in issue 4645 and
     % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:vertical_cf_of_horizontal_cf}
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition_block_two}
     Multiplying the two one-site decompositions and using the BNT algebra law
     expresses the two-site closed chain in the basis $M_\gamma$, with
     coefficient
