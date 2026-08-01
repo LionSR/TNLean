@@ -34,13 +34,24 @@ at lines~2053--2056.  Line~2057 then invokes the result labelled
 
 \section{Formal boundary}
 
-The current two-site comparison retains equality of the matched bond
+The unconditional two-site comparison retains equality of the matched bond
 dimensions and the invertible matrix $Z_\gamma$ in
 \eqref{eq:gauge-phase}.  Positivity of the coefficients at two consecutive
 lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
 This proves the invertible-gauge sub-result of lines~2053--2057.
 
-It does not yet prove the second part of \eqref{eq:unitary-upgrade}.
+Pull request~5282 proves the Gram identity
+\eqref{eq:gram-dressing-target}, and hence
+$Z_\gamma^\dagger Z_\gamma=\omega_\gamma\mathbf 1$ with
+$\omega_\gamma>0$, from a supplied identity-dressed marked realization.
+The inverse-square-root normalization
+$U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ is now formalized: it is unitary and
+has exactly the same conjugation action as $Z_\gamma$.  Thus the entire
+line~2057 conclusion is available conditionally on that supplied
+realization.
+
+This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
+tensor-attached algebra clause alone.
 The result labelled \path{Prop:IV.12} obtains unitary representatives by
 comparing every copy of a normal tensor with a common canonical target and
 proving proportionality of the corresponding Gram matrices.  The present
@@ -363,20 +374,39 @@ Equivalently, for every vertical letter $v$,
 \]
 Normality then implies \eqref{eq:gram-scalar}.
 
-The subsequent rescaling of $X_\gamma$ to a unitary gauge belongs to
-\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645}.  Until
-\eqref{eq:gram-dressing-target} has been proved without condition~(iii), the
-formal declaration and its blueprint entry remain restricted to phase-one
-invertible conjugacy.  Issues 4648 and 4645 remain open, and the full
-line~2057 unitary conclusion remains unformalized.
+Pull request~5282 establishes \eqref{eq:gram-dressing-target} conditionally on a
+supplied identity-dressed physical-letter coefficient family and its common
+reflected target.  From its positive scalar Gram conclusion, the present
+normalization result constructs
+\[
+  U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
+  \qquad
+  A_{\sigma(\gamma)}^v
+  =U_\gamma A_\gamma^vU_\gamma^\dagger.
+\]
+This is the conditional endpoint of the scalar-to-unitary argument; it does
+not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
+
+The remaining premise is to construct the coefficient family and the two
+target identities used by pull request~5282 directly from the tensor-attached
+algebra clause, literal CPSV canonical form, and the MPDO hypothesis.  This is
+tracked in \href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284},
+under \href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, without
+assuming a raw corner, a Gram identity, a unitary gauge, fusion data, or a
+renormalization fixed point.  Consequently issues 4648 and
+\href{https://github.com/LionSR/TNLean/issues/4645}{4645} remain open, and the
+unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Verdict: open gap.}  The Gram-dressing identity
-\eqref{eq:gram-dressing-target} has not been derived from condition~(ii)
-alone.  Appendix~C.4 therefore does not presently justify the line~2057
-unitary conclusion without the additional local map supplied by
-condition~(iii).
+\textbf{Scope restriction: the conditional endpoint is complete, while the
+unconditional premise remains open.}  The
+Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
+unitary normalization are formalized under the supplied identity-dressed
+marked realization.  That realization has not been derived from
+condition~(ii) alone.  Appendix~C.4 therefore does not presently justify the
+unconditional line~2057 unitary conclusion without a separately supplied
+local marked realization.
 
 \bibliographystyle{alpha}
 \bibliography{references}
