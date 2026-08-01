@@ -71,9 +71,15 @@ There is an independent sufficient route which need not pass through
 \eqref{eq:positive-coefficient-realization}.  The invertible similarity determines an
 algebra automorphism of the virtual matrix algebra.  If this automorphism is a
 positive map, then it preserves adjoints and hence is a star automorphism.
-Unitary Skolem--Noether then gives a unitary implementer.  Positivity of this
-virtual algebra map is therefore another possible target for completing the
-argument; it has not been derived from the tensor-attached algebra clause.
+Unitary Skolem--Noether then gives a unitary implementer.  This implication,
+including its application to the per-block linear extension, is now
+formalized.\footnote{\scriptsize Formal declarations:
+\leanid{MPSTensor.exists_unitary_conj_of_positive_algEquiv_matrix}\\
+and
+\leanid{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}.}
+Positivity of the virtual algebra map is therefore another possible target
+for completing the argument; it has not been derived from the tensor-attached
+algebra clause.
 
 Positivity of the virtual algebra map must not be confused with positivity of
 the closed sector operators.  A nonunitary similarity preserves every closed
