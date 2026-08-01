@@ -90,30 +90,7 @@ theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount)
-    (fId : Fin (S.decomposition.bondDim (S.relabel γ) *
-        S.decomposition.bondDim (S.relabel γ)) →
-      Fin ((d * d) * (d * d)) → ℂ)
-    (hPhysical : ∀ u,
-      MPSTensor.linearMarkedTensor fId (blockTwo M).toMPSTensor u =
-        horizontalSlice
-          (gramDressing (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
-            (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-              (H.tensor γ))) u.divNat u.modNat)
-    (hTarget : ∀ (N : ℕ)
-      (r s : Fin (S.decomposition.bondDim (S.relabel γ)))
-      (σ τ : Fin N → Fin (d * d)),
-      markedChainCoefficient
-          (gramDressing
-            (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
-            (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-              (H.tensor γ)))
-          (blockTwo M) r s (List.ofFn σ) (List.ofFn τ) =
-        markedChainCoefficient
-          (reflectedAdjoint
-            (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
-              (H.tensor γ)))
-          (adjointTensor (blockTwo M)) r s
-          (List.ofFn σ).reverse (List.ofFn τ).reverse) :
+    (R : IdentityMarkedRealization S γ) :
     ∃ U : Matrix.unitaryGroup
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
       ∀ i : Fin (D * D),
@@ -126,7 +103,7 @@ theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
   obtain ⟨ω, hω, hGram⟩ :=
     S.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
-      hCanonical hM γ fId hPhysical hTarget
+      hCanonical hM γ R
   exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
     γ ω hω hGram
 
