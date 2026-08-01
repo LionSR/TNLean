@@ -168,15 +168,15 @@ theorem linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor
 
 /-- **Lemma L in the original bond coordinates of a literal CPSV canonical form.**
 
-Equality of every closed chain with one marked physical letter implies equality of the two linear
-marked tensors on the original bond space.  The proof uses the original ambient coisometry in the
-orientation `U * Uᴴ = 1`, the listed block gauge, and the full grouped tensor including inactive
-zero-weight coordinates.
+Equality of every positive-tail closed chain with one marked physical letter implies equality of
+the two linear marked tensors on the original bond space.  The proof uses the original ambient
+coisometry in the orientation `U * Uᴴ = 1`, the listed block gauge, and the full
+grouped tensor including inactive zero-weight coordinates.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem linearMarkedTensor_eq_of_trace_agree
     (ref : data.ActiveBNTRefinement) (f g : Fin e → Fin d → ℂ)
-    (hTrace : ∀ (L : ℕ) (u : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (linearMarkedTensor f A u * evalWord A (List.ofFn w)) =
         Matrix.trace (linearMarkedTensor g A u * evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by
@@ -195,17 +195,17 @@ theorem linearMarkedTensor_eq_of_trace_agree
     linearMarkedTensor f (data.blocks (data.activeRepresentativeIndex j))
   let Cg := fun j : Fin data.activePhaseClasses.g =>
     linearMarkedTensor g (data.blocks (data.activeRepresentativeIndex j))
-  have hGroupedTrace : ∀ (L : ℕ) (u : Fin e) (w : Fin L → Fin d),
+  have hGroupedTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (ref.groupedMarkedTensor Cf u * evalWord ref.groupedTensor (List.ofFn w)) =
         Matrix.trace (ref.groupedMarkedTensor Cg u * evalWord ref.groupedTensor (List.ofFn w)) := by
-    intro L u w
+    intro L hL u w
     rw [← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor f,
       ← ref.linearMarkedTensor_groupedTensor_eq_groupedMarkedTensor g]
     have hf := trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction
       f A B ref.ambientCoisometry ref.ambientCoisometric hReconstruct u (List.ofFn w)
     have hg := trace_linearMarkedTensor_mul_evalWord_of_coisometry_reconstruction
       g A B ref.ambientCoisometry ref.ambientCoisometric hReconstruct u (List.ofFn w)
-    have hfg := hTrace L u w
+    have hfg := hTrace L hL u w
     have hGaugeF := trace_linearMarkedTensor_mul_evalWord_gauge
       f X hGauge u (List.ofFn w)
     have hGaugeG := trace_linearMarkedTensor_mul_evalWord_gauge
@@ -236,7 +236,7 @@ theorem insertedTensor_eq_of_firstSiteActionAgree
     (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
   apply ref.linearMarkedTensor_eq_of_trace_agree Y Z
-  intro L u w
+  intro L _hL u w
   simpa [linearMarkedTensor, insertedTensor] using
     hAct.trace_evalWord u (List.ofFn w)
 
@@ -249,7 +249,7 @@ form. -/
 theorem linearMarkedTensor_eq_of_trace_agree
     (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
     (f g : Fin e → Fin d → ℂ)
-    (hTrace : ∀ (L : ℕ) (u : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
       Matrix.trace (linearMarkedTensor f A u * evalWord A (List.ofFn w)) =
         Matrix.trace (linearMarkedTensor g A u * evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by

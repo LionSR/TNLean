@@ -322,17 +322,18 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
 
 /-- Representative-grouped marked Lemma L for a literal CPSV active refinement.
 
-This is the algebraic arbitrary-marked-letter extension of the source's physical first-site
-statement.  If all full-coordinate grouped marked closed-chain traces agree, then the two marks
-agree on every chosen normal representative.  The inactive listed coordinates remain present
-in the hypothesis and vanish through their zero marked blocks.
+This is the algebraic arbitrary-marked-letter extension of the source's
+physical first-site statement.  If the full-coordinate grouped marked
+closed-chain traces agree at every positive tail length, then the two marks
+agree on every chosen normal representative.  The inactive listed coordinates
+remain present in the hypothesis and vanish through their zero marked blocks.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858 and the marked use at
 lines 1909--1919. -/
 theorem groupedMarkedTensor_basis_eq_of_trace_agree
     (C E : (j : Fin data.activePhaseClasses.g) →
       MPSTensor e (data.dim (data.activeRepresentativeIndex j)))
-    (hTrace : ∀ (L : ℕ) (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace
           (ref.groupedMarkedTensor C s * evalWord ref.groupedTensor (List.ofFn w)) =
         Matrix.trace
@@ -341,10 +342,10 @@ theorem groupedMarkedTensor_basis_eq_of_trace_agree
   let P := ref.representativeSectorDecomposition
   apply P.markedTensor_basis_eq_of_trace_agree C E
     ref.eventuallyRepresentativeWordTupleSpan
-  intro L s w
+  intro L hL s w
   rw [← ref.trace_groupedMarkedTensor_eq_representative_markedTensor C s (List.ofFn w)]
   rw [← ref.trace_groupedMarkedTensor_eq_representative_markedTensor E s (List.ofFn w)]
-  exact hTrace L s w
+  exact hTrace L hL s w
 
 /-- Physical first-site Lemma L on every chosen representative of a literal CPSV active
 refinement.

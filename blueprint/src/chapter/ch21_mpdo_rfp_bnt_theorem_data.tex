@@ -938,9 +938,10 @@
     doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that
     there is a family of linear combinations of the physical letters of
     $M^{[2]}$ whose open-bond matrices are the horizontal slices of
-    $M_\gamma$, and that every resulting marked chain equals the
-    reflected-adjoint marked chain of $M_\gamma$ in the adjoint two-site
-    blocking. Then, for every vertical letter $v$,
+    $M_\gamma$, and that, for every positive tail length, every resulting
+    marked chain equals the reflected-adjoint marked chain of $M_\gamma$ in
+    the adjoint two-site blocking. No equality for the empty tail is assumed.
+    Then, for every vertical letter $v$,
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
@@ -955,11 +956,13 @@
     \end{align}
 
     \textbf{Scope restriction (conditional identity-dressed marked
-    realization):} The physical-letter realization used here is the missing
-    assertion implicit at Appendix~C.4, line~2048. It is assumed rather than
-    derived from the algebra clause. Thus this theorem does not establish the
-    unconditional realization or the conclusion of Appendix~C.4,
-    lines~2048--2057. The remaining gap is recorded in
+    realization):} The physical-letter realization and common reflected
+    target used here are assumed rather than derived from the algebra clause.
+    Appendix~C.4, lines~2048--2057, gives two independently chosen vertical
+    canonical forms and their closed-chain comparison; it does not construct
+    a common identity-gauge physical corner for $M_\gamma$. Thus this theorem
+    does not establish the unconditional realization or the conclusion of
+    those lines. The remaining gap is recorded in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
 \end{theorem}
 
@@ -972,9 +975,11 @@
     gauge-dressed mark and identifies its marked chains with the reflected
     target. By hypothesis, the identity-dressed mark has another
     physical-letter coefficient family with the same target. Their marked
-    traces therefore agree for every tail word. Literal CPSV canonical form
-    passes to the two-site blocking, and the original-coordinate marked
-    separation theorem identifies the two open-bond matrices. This gives
+    traces therefore agree for every positive-length tail word. Literal CPSV
+    canonical form passes to the two-site blocking, and the positive-tail
+    form of the original-coordinate marked separation theorem, corresponding
+    to \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}, identifies
+    the two open-bond matrices. This gives
     (\ref{eq:mpdo_bnt_conditional_identity_marked_gram}). Normality of
     $M_\gamma$ then makes its commuting Gram matrix a positive real scalar
     multiple of the identity, proving
@@ -1010,10 +1015,12 @@
     at Appendix~C.4, lines~2053--2057.
 
     \textbf{Scope restriction (conditional identity-dressed marked
-    realization):} The physical-letter realization at Appendix~C.4,
-    line~2048 remains an assumption.  Hence this theorem does not establish
-    the unconditional line-2057 conclusion.  Its derivation from the
-    tensor-attached algebra clause is the remaining premise recorded in
+    realization):} The positive-tail marked realization remains an
+    assumption. Appendix~C.4, lines~2048--2057, does not construct the common
+    identity-gauge physical corner that would supply it. Hence this theorem
+    does not establish the unconditional line-2057 conclusion. Its derivation
+    from the tensor-attached algebra clause is the remaining premise recorded
+    in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
     % Pull request 5282 is the conditional Gram theorem, and pull request 5286
     % composes it with scalar-to-unitary normalization.  Issue 5284, under issue 4648,

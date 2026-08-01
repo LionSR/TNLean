@@ -11,8 +11,8 @@ import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 
 A marked direct sum permits the first matrix in each representative chain to
 be arbitrary, while every subsequent matrix comes from the unmarked sector
-tensor.  Equality of all such closed marked chains separates the marked
-matrices representative by representative.
+tensor.  Equality of such closed marked chains at every positive tail length
+separates the marked matrices representative by representative.
 
 The proof first treats one length at which the simultaneous representative
 word tuples span the product matrix algebra.  A bounded nonvanishing power
@@ -102,11 +102,11 @@ theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
     (smul_eq_zero.mp hj).resolve_left hcoeff
   exact sub_eq_zero.mp hdiff
 
-/-- Equality of all closed marked chains identifies the marked tensor on
+/-- Equality of closed marked chains at every positive tail length identifies the marked tensor on
 every representative under eventual representative word-tuple separation.
 
 For each representative, the bounded nonvanishing power-sum theorem selects
-a sufficiently large length at which its grouped coefficient is nonzero.
+a strictly positive, sufficiently large tail length at which its grouped coefficient is nonzero.
 The fixed-length marked separation theorem then applies.
 
 This is the algebraic extension of arXiv:1606.00608, Appendix C.3,
@@ -117,14 +117,14 @@ theorem markedTensor_basis_eq_of_trace_agree
     (P : SectorDecomposition d)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
-    (hTrace : ∀ (L : ℕ) (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace (P.markedTensor C s * evalWord P.toTensor (List.ofFn w)) =
         Matrix.trace (P.markedTensor E s * evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   classical
   obtain ⟨L₀, hSpan⟩ := hSpan
   intro j
-  let M := L₀ + 1
+  let M := L₀ + 2
   obtain ⟨r, hrpos, _hrle, hsum⟩ :=
     Matrix.exists_sum_pow_ne_zero_of_pos_card
       (P.copies j) (fun q ↦ (P.weight j q) ^ M) (P.copies_pos j)
@@ -140,8 +140,11 @@ theorem markedTensor_basis_eq_of_trace_agree
   have hL₀leL : L₀ ≤ L := by
     dsimp [L, M] at hMleN ⊢
     omega
+  have hLpos : 0 < L := by
+    dsimp [L, M] at hMleN ⊢
+    omega
   apply P.markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero C E
-    (hSpan L hL₀leL) (hTrace L) j
+    (hSpan L hL₀leL) (hTrace L hLpos) j
   rwa [hLadd]
 
 end MPSTensor.SectorDecomposition
@@ -150,8 +153,8 @@ namespace MPSTensor.IsBNTCanonicalForm
 
 variable {d e : ℕ} {P : SectorDecomposition d}
 
-/-- Equality of all closed marked chains identifies arbitrary marked letters
-on every representative of a BNT canonical form.
+/-- Equality of closed marked chains at every positive tail length identifies
+arbitrary marked letters on every representative of a BNT canonical form.
 
 The BNT hypotheses give eventual simultaneous representative word-tuple span.
 The algebraic marked-letter extension of the representative-grouped
@@ -164,7 +167,7 @@ are an auxiliary algebraic extension. -/
 theorem markedTensor_basis_eq_of_trace_agree
     (hCF : IsBNTCanonicalForm P)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
-    (hTrace : ∀ (L : ℕ) (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
       Matrix.trace (P.markedTensor C s * evalWord P.toTensor (List.ofFn w)) =
         Matrix.trace (P.markedTensor E s * evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by

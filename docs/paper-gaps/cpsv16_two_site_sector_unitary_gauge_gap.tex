@@ -51,6 +51,18 @@ line~2057 conclusion is available conditionally on that supplied
 realization.
 % The conditional Gram and unitary results are pull requests 5282 and 5286.
 
+The structure
+\path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization}
+requires the common-target identity only at positive tail lengths.  More
+precisely, after one open-bond matrix has been inserted at the marked site,
+equality with the common reflected-adjoint target is assumed for every tail
+length $N>0$; no empty-tail equality is required.  This is sufficient because
+representative separation chooses a sufficiently large tail length.  It is
+the form of Lemma~L justified by Appendix~C.3, lines~1835--1858: the source
+states first-site equality for positive system sizes, and its proof uses a
+length at which block injectivity and a nonzero power sum separate the normal
+representatives.
+
 This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
 tensor-attached algebra clause alone.
 The result labelled \path{Prop:IV.12} obtains unitary representatives by
@@ -72,6 +84,15 @@ an isometric physical inclusion of the algebra-side representative into the
 bond space of the two-site blocking.  Proposition~4.13, lines~1898--1921,
 compares actual physical sectors; it cannot be applied until this inclusion is
 available.
+
+Thus the positive-tail restriction removes an unnecessary empty-word premise,
+but it does not provide the geometric premise of the comparison.
+Appendix~C.4, lines~2048--2051, gives equality of positive-length closed
+chains for two independently chosen vertical canonical forms.
+Lines~2053--2057 then give an invertible similarity and invoke
+Proposition~4.13.  None of these lines constructs the common identity-gauge
+isometric corner whose open-bond compression would yield the identity-dressed
+marked family.
 
 \section{The circular corner construction}
 
@@ -546,7 +567,8 @@ Normality then implies \eqref{eq:gram-scalar}.
 
 The conditional Gram theorem establishes \eqref{eq:gram-dressing-target}
 from a supplied identity-dressed physical-letter coefficient family and its
-common reflected target.  Its unitary-normalization corollary then constructs
+common reflected target at every positive tail length.  The empty tail is not
+part of this hypothesis.  Its unitary-normalization corollary then constructs
 \[
   U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
   \qquad
@@ -560,9 +582,12 @@ from the full tensor-attached setting.  The bond-two calculation further
 excludes the natural physical-similarity deformation whenever its Gram matrix
 is nonscalar.  Neither result supplies the missing marked comparison.
 
-The remaining premise is to construct the coefficient family and the two
-target identities used by the conditional Gram theorem directly from the tensor-attached
-algebra clause, literal CPSV canonical form, and the MPDO hypothesis.  This is
+The remaining premise is to construct the coefficient family, prove its
+physical-slice identity, and prove its common reflected-target identity at
+positive tail lengths directly from the tensor-attached algebra clause,
+literal CPSV canonical form, and the MPDO hypothesis.  A common identity-gauge
+isometric corner would suffice to produce these marked identities, but that
+corner remains unconstructed.  This is
 tracked in \href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284},
 under \href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, without
 assuming a raw corner, a Gram identity, a unitary gauge, fusion data, or a
@@ -576,10 +601,12 @@ unconditional line~2057 unitary conclusion remains unformalized.
 unconditional marked realization remains an open gap.}  The
 Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
 unitary normalization are formalized under a supplied identity-dressed marked
-realization.  That realization has not been derived from condition~(ii) alone.
-Terminal sector positivity rules out the generic nonunitary witness.  The
-bond-two calculation also rules out the natural physical-similarity deformation
-whenever $X^\dagger X$ is nonscalar.  This is not a deformed tensor-attached BNT
+realization whose common-target identity is required only at positive tail
+lengths.  That realization, and in particular its common identity-gauge
+physical corner, has not been derived from condition~(ii) alone.  Terminal
+sector positivity rules out the generic nonunitary witness.  The bond-two
+calculation also rules out the natural physical-similarity deformation whenever
+$X^\dagger X$ is nonscalar.  This is not a deformed tensor-attached BNT
 algebra-clause counterexample and does not construct the required marked
 realization.  Appendix~C.4 therefore does not presently justify the
 unconditional line~2057 unitary conclusion without a separately supplied local

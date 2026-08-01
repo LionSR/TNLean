@@ -15,8 +15,9 @@ matrices.  Such marked letters commute with weighted direct sums and are
 covariant under a common virtual similarity.
 
 For a tensor in normalized BNT-refined horizontal form, equality of every
-closed chain with one such marked letter implies equality of the marked
-tensors.  The proof passes to the representative-indexed sector decomposition,
+closed chain with one such marked letter and a positive-length tail implies
+equality of the marked tensors.  The proof passes to the representative-indexed
+sector decomposition,
 applies representative-grouped marked separation, and returns through the
 block-diagonal gauge.
 
@@ -31,7 +32,7 @@ not detect arbitrary off-diagonal matrices between repeated sectors.
   marking commutes with the representative-grouped weighted direct sum.
 * `linearMarkedTensor_gauge`: linear marking is covariant under a common
   virtual similarity.
-* `MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree`: closed
+* `MPOTensor.IsHorizontalCF.linearMarkedTensor_eq_of_trace_agree`: positive-tail
   marked-chain equality separates physical-letter marks in normalized
   BNT-refined horizontal form.
 
@@ -176,8 +177,8 @@ for a tensor in normalized BNT-refined horizontal form.
 
 For coefficient families `f` and `g`, suppose that replacing the first
 physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal
-closed chains for every marked index, tail word, and tail length.  Then the
-two marked tensors are equal.
+closed chains for every marked index, tail word, and positive tail length.
+Then the two marked tensors are equal.
 
 The proof uses only marks in the span of the physical letters.  Arbitrary
 bond-space marks would give a false statement because closed chains cannot
@@ -191,7 +192,7 @@ canonical form needed by Proposition 4.13; see
 theorem linearMarkedTensor_eq_of_trace_agree
     (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF)
     (f g : Fin e → Fin (d * d) → ℂ)
-    (hTrace : ∀ (L : ℕ) (u : Fin e) (w : Fin L → Fin (d * d)),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin (d * d)),
       Matrix.trace
           (MPSTensor.linearMarkedTensor f M.toMPSTensor u *
             MPSTensor.evalWord M.toMPSTensor (List.ofFn w)) =
@@ -214,14 +215,14 @@ theorem linearMarkedTensor_eq_of_trace_agree
       MPSTensor.linearMarkedTensor f (S.basis j) =
         MPSTensor.linearMarkedTensor g (S.basis j) := by
     apply hCF.markedTensor_basis_eq_of_trace_agree
-    intro L u w
+    intro L hL u w
     rw [← S.linearMarkedTensor_toTensor_eq_markedTensor f,
       ← S.linearMarkedTensor_toTensor_eq_markedTensor g]
     have hf := MPSTensor.trace_linearMarkedTensor_mul_evalWord_gauge
       f X hX' u (List.ofFn w)
     have hg := MPSTensor.trace_linearMarkedTensor_mul_evalWord_gauge
       g X hX' u (List.ofFn w)
-    exact hf.symm.trans ((hTrace L u w).trans hg)
+    exact hf.symm.trans ((hTrace L hL u w).trans hg)
   have hSector : MPSTensor.linearMarkedTensor f S.toTensor =
       MPSTensor.linearMarkedTensor g S.toTensor := by
     rw [S.linearMarkedTensor_toTensor_eq_markedTensor,
