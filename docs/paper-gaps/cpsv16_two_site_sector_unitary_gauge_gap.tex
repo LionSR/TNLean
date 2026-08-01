@@ -434,12 +434,45 @@ Appendix~C.4, lines~2048--2057, and Proposition~4.13 motivate this
 finite-dimensional terminal/Bell comparison, but they do not state the
 criterion \eqref{eq:singleton-scalar-gram}.  The criterion applies to the
 chosen $J$ and companion $P$; it is not a theorem about a two-site operator of
-$A$ or $B$.  In particular, the present result supplies neither an all-length
-MPDO predicate nor a tensor-attached BNT algebra clause for the singleton.
-The missing identification of the Bell projector with a singleton-derived
-two-site operator, together with the all-length tensor-attached/base-model
-construction, is recorded in
-\href{https://github.com/LionSR/TNLean/issues/5290}{issue 5290}.
+$A$ or $B$.
+
+The singleton does admit a separate all-length positive ambient realization.
+Use pairs in $I\times I$ as a four-dimensional bond index and define
+\begin{align}
+  M^{i,j}_{(r,s),(r',s')}
+  &=\delta_{(r,s),(r',s')}\delta_{i,r}\delta_{j,s}.
+  \label{eq:singleton-base-mpo}
+\end{align}
+The vertical reshaping of $M$ is exactly $A$.  For every $N>0$, cyclic
+contraction gives
+\begin{align}
+  M_N
+  &=\bigl(\ket{0}^{\otimes N}+\ket{1}^{\otimes N}\bigr)
+    \bigl(\bra{0}^{\otimes N}+\bra{1}^{\otimes N}\bigr)
+  \succeq0.
+  \label{eq:singleton-base-ghz}
+\end{align}
+In particular, after the canonical identification of two-site words with
+$I\times I$, $M_2=P$.
+
+The raw retained closed operators are diagonal indicators of cyclically
+composable directed-edge words.  They are therefore orthogonal projections and
+obey the coefficient-one product law.  The normalized representative
+$\widehat A=2^{-1/2}A$, together with the unique multiplicity weight $\sqrt2$,
+has coefficient $2^{-L/2}$ at length $L$ and reconstructs $A$.  The canonical
+identification of its retained coordinates with the original bond coordinates
+is a coisometry.  These data give a genuine one-label tensor-attached BNT
+algebra clause for the all-length positive model $M$.
+
+This construction completes the attachment tracked in
+\href{https://github.com/LionSR/TNLean/issues/5290}{issue 5290}.  The proved
+reindexing identity also attaches the nonunitary Bell similarity from
+\href{https://github.com/LionSR/TNLean/issues/5289}{issue 5289} to the matrix of
+the base operator: $P_X$ is the stated similarity of the reindexed matrix of
+$M_2$.  No deformed tensor-attached BNT algebra clause or deformed MPDO tensor
+with two-site operator $P_X$ has been constructed.  Hence this is not a
+nonunitary full-contract counterexample and does not supply the
+identity-dressed marked realization.
 
 Consequently Theorem~4.14 remains partial.  The identity-dressed marked
 comparison remains open in
