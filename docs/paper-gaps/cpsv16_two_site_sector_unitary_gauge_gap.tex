@@ -81,6 +81,34 @@ Positivity of the virtual algebra map is therefore another possible target
 for completing the argument; it has not been derived from the tensor-attached
 algebra clause.
 
+It cannot be derived from the per-block equality of closed matrix product
+vectors alone.  For the explicit two-dimensional nonunitary similarity below,
+the corresponding one-block linear extension is not positive.  Otherwise the
+preceding unitary implementation theorem would give the positive isometric
+realization already ruled out for these tensors.  This obstruction is
+formalized by
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
+\mbox{\leanid{perBlockLinearExtension_not_positive}}.
+\end{center}
+Thus any proof of positivity must use an additional tensor-attached physical
+comparison, rather than only injectivity and equality of closed chains.
+
+This per-block extension is distinct from the positive algebra maps in the
+RFP-to-algebra implication of Appendix~C.4, lines~1955--1997.  There
+$\mathcal A_1$ and $\mathcal A_2$ are the direct sums of the one-site and
+two-site vertical sector matrix algebras.  The maps $R_j$ attach the normalized
+positive multiplicity matrix to each sector, while $\tilde R_j$ remove it.
+The trace-preserving completely positive blocking and refinement maps $T$ and
+$S$ are already part of the RFP hypothesis.  Hence the sector maps
+$\tilde T=\tilde R_2TR_1$ and $\tilde S=\tilde R_1SR_2$ are positive because
+their physical and insertion/removal constituents are positive.  In the
+converse implication, the physical maps are defined only after the matrices
+$U_\gamma$ have been declared unitary.  Those later maps cannot prove
+positivity of the virtual extension without assuming the unitary conclusion
+they are meant to establish.
+
 Positivity of the virtual algebra map must not be confused with positivity of
 the closed sector operators.  A nonunitary similarity preserves every closed
 chain, and therefore transports an all-length positive closed family to the
