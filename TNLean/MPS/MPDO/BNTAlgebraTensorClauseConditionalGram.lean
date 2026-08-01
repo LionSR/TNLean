@@ -15,13 +15,16 @@ same reflected target as the gauge-dressed corner, determines the Gram
 conjugation of an exact two-site sector gauge.  Normality then makes the gauge
 Gram matrix a positive scalar multiple of the identity.
 
-The identity-dressed realization is assumed here, not constructed.  Thus these
-results isolate the remaining implication in Appendix C.4 and do not complete
-the two-site unitary-gauge argument.
+The identity-dressed realization remains conditional.  A constructor reduces
+it to a positive-coefficient two-sided physical realization, but does not
+derive that realization from the BNT algebra clause.  Thus these results
+isolate the remaining implication in Appendix C.4 and do not complete the
+two-site unitary-gauge argument.
 
 ## Main results
 
 * `TwoSiteExactSectorGauge.IdentityMarkedRealization`
+* `TwoSiteExactSectorGauge.IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization`
 * `TwoSiteExactSectorGauge.gramDressing_gauge_eq_one_of_identityMarkedRealization`
 * `TwoSiteExactSectorGauge.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization`
 
@@ -92,6 +95,56 @@ structure IdentityMarkedRealization (S : TwoSiteExactSectorGauge H)
             (H.tensor γ)))
         (adjointTensor (blockTwo M)) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse
+
+/-- A positive-coefficient two-sided physical realization of the algebra-side
+representative gives an identity-dressed marked realization.
+
+No isometry condition on `V` is needed.  The physical-letter expansion uses
+the positive coefficient and the two-sided realization equation; the reflected
+marked-chain identity additionally uses MPDO positivity of the blocked tensor.
+
+**Scope restriction (conditional physical realization):** The two-sided
+realization is supplied as a hypothesis rather than derived from the
+tensor-attached algebra clause.  Its unconditional construction is one possible
+local identification for completing Appendix C.4; see
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
+1898--1921, applied at Appendix C.4, lines 2048--2057. -/
+noncomputable def IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization
+    (S : TwoSiteExactSectorGauge H) (hBlock : IsMPDO (blockTwo M))
+    (γ : Fin H.labelCount)
+    (V : Matrix (Fin (d * d))
+      (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
+    (c : ℂ) (hc : (0 : ℂ) < c)
+    (hcorner : ∀ v : Fin (D * D),
+      Vᴴ * verticalTensor (blockTwo M) v * V =
+        c • (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (H.tensor γ)) v) :
+    IdentityMarkedRealization S γ := by
+  let X : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ := 1
+  have hcornerOne : ∀ v : Fin (D * D),
+      Vᴴ * verticalTensor (blockTwo M) v * V =
+        c • ((X : Matrix
+          (Fin (S.decomposition.bondDim (S.relabel γ)))
+          (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
+          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            (H.tensor γ)) v *
+          (↑(X⁻¹) : Matrix
+            (Fin (S.decomposition.bondDim (S.relabel γ)))
+            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)) := by
+    intro v
+    simpa [X] using hcorner v
+  refine {
+    fId := cornerGramCoefficients V X c
+    physical := fun u ↦
+      linearMarkedTensor_cornerGramCoefficients
+        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (H.tensor γ)) V X c hc hcornerOne u
+    target := fun N _hN r s σ τ ↦
+      hBlock.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
+        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (H.tensor γ)) V X c hc hcornerOne N r s σ τ }
 
 /-- An identity-dressed physical-letter marked realization with the same
 reflected target as the exact gauge-dressed corner at every positive tail
