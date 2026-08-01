@@ -107,4 +107,69 @@ theorem baseMPO_isMPDO : IsMPDO baseMPO := by
   rw [mpo_baseMPO_eq_unnormalizedGHZRankOne N hN]
   exact Matrix.posSemidef_vecMulVec_self_star (ghzAmplitude N)
 
+/-! ### Literal CPSV canonical form -/
+
+/-- The bond-one normal block supported on one doubled physical symbol. -/
+def baseSymbolTensor (a : Fin 4) : MPSTensor 4 1 :=
+  fun i => if i = a then 1 else 0
+
+private theorem baseSymbolTensor_transferMap (a : Fin 4) :
+    MPSTensor.transferMap (baseSymbolTensor a) = LinearMap.id := by
+  apply LinearMap.ext
+  intro X
+  ext x y
+  fin_cases x
+  fin_cases y
+  simp [MPSTensor.transferMap_apply, baseSymbolTensor]
+
+/-- Every symbol block in the four-block decomposition is a normal tensor. -/
+theorem baseSymbolTensor_isNormalTensor (a : Fin 4) :
+    MPSTensor.IsNormalTensor (baseSymbolTensor a) :=
+  MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    (baseSymbolTensor a) (baseSymbolTensor_transferMap a)
+
+/-- The four bond-one blocks used in the literal canonical form. -/
+def baseSymbolBlocks : (a : Fin 4) → MPSTensor 4 1 :=
+  baseSymbolTensor
+
+/-- The doubled-index tensor of the ambient MPO is literally the direct sum of
+its four bond-one symbol blocks, each with weight one. -/
+theorem baseMPO_toMPSTensor_eq_symbolBlocks :
+    baseMPO.toMPSTensor =
+      MPSTensor.toTensorFromBlocks (fun _ : Fin 4 => (1 : ℂ)) baseSymbolBlocks := by
+  let e : (Σ _k : Fin 4, Fin 1) ≃ Fin 4 := finSigmaFinEquiv
+  have hflat (k : Fin 4) : e ⟨k, 0⟩ = k := by
+    fin_cases k <;> rfl
+  have hflat_symm (k : Fin 4) : e.symm k = ⟨k, 0⟩ := by
+    apply e.injective
+    rw [e.apply_symm_apply, hflat]
+  funext p
+  obtain ⟨⟨i, j⟩, rfl⟩ :=
+    (finProdFinEquiv : I × I ≃ Fin 4).surjective p
+  ext x y
+  simp only [baseMPO, toMPSTensor, MPSTensor.toTensorFromBlocks,
+    baseSymbolBlocks, baseSymbolTensor, Matrix.reindex_apply, one_smul,
+    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  change Matrix.single (finProdFinEquiv (i, j)) (finProdFinEquiv (i, j)) 1 x y =
+    Matrix.blockDiagonal' (fun k : Fin 4 => baseSymbolTensor k (finProdFinEquiv (i, j)))
+      (e.symm x) (e.symm y)
+  rw [hflat_symm x, hflat_symm y]
+  by_cases h : x = y
+  · subst y
+    by_cases hp : finProdFinEquiv (i, j) = x <;>
+      simp [hp, baseSymbolTensor, Matrix.single]
+  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ h]
+    simp [Matrix.single]
+    aesop
+
+/-- The ambient doubled-index MPS is in literal CPSV canonical form via the
+four displayed bond-one symbol blocks. -/
+theorem baseMPO_toMPSTensor_isCPSVCanonicalForm :
+    MPSTensor.IsCPSVCanonicalForm baseMPO.toMPSTensor := by
+  rw [baseMPO_toMPSTensor_eq_symbolBlocks]
+  exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
+    (fun _ : Fin 4 => by simp)
+    (fun _ : Fin 4 => (1 : ℂ)) baseSymbolBlocks
+    (fun a => baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
+
 end MPOTensor.BondTwoSingletonBaseModel
