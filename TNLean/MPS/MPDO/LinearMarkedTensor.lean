@@ -177,8 +177,8 @@ for a tensor in normalized BNT-refined horizontal form.
 
 For coefficient families `f` and `g`, suppose that replacing the first
 physical letter by `sum_z f u z M^z` or by `sum_z g u z M^z` gives equal
-closed chains for every marked index, tail word, and tail length.  Then the
-two marked tensors are equal.
+closed chains for every marked index, tail word, and positive tail length.
+Then the two marked tensors are equal.
 
 The proof uses only marks in the span of the physical letters.  Arbitrary
 bond-space marks would give a false statement because closed chains cannot
