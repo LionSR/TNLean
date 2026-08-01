@@ -54,8 +54,9 @@ canonical-form, or positive-bond-dimension assumption is needed. Positivity of
 `D` follows because a zero-dimensional bond gives a zero finite-chain trace.
 The cuts `L = 0` and `L = N` are included.
 
-This strengthens the finite-chain estimate in arXiv:1606.00608,
-Proposition 4.5, lines 795--809 and 1316--1321. -/
+This strengthens the finite-chain estimate invoked in the proof of
+arXiv:1606.00608, Proposition 4.5; see the normalization convention at lines
+792--797 and the Appendix argument at lines 1316--1321. -/
 theorem mutualInfoChain_le_two_log_bondDim
     (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N)
     (hM : (mpo M N).PosSemidef)
@@ -89,14 +90,20 @@ theorem mutualInfoChain_le_two_log_bondDim
       rw [Real.log_mul (by exact_mod_cast hD.ne') (by exact_mod_cast hD.ne')]
       ring
 
-/-- The finite-chain estimate with coefficient `4` stated for positive matrix
-product density operators in arXiv:1606.00608, Proposition 4.5, lines 792--809
-and 1316--1321.
+/-- The finite-chain estimate with coefficient `4` invoked for positive matrix
+product density operators in the proof of arXiv:1606.00608, Proposition 4.5;
+see the normalization convention at lines 792--797 and the Appendix argument
+at lines 1316--1321.
 
 This follows from the stronger bound `I_L(M,N) ≤ 2 log D`. It concerns a fixed
 positive chain length and does not include the proposition's thermodynamic-limit
 assertion. The nonzero-trace hypothesis makes explicit the paper's convention
-of normalizing by the finite-chain trace. -/
+of normalizing by the finite-chain trace.
+
+**Local fix (finite-chain bound):** The local-purification argument cited in
+the Appendix does not apply to every positive MPO. The proof instead uses the
+periodic-cut operator-Schmidt estimate; see
+`docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex`. -/
 theorem IsMPDO.mutualInfoChain_le_four_log_bondDim
     {M : MPOTensor d D} (hM : IsMPDO M) (N L : ℕ) (hN : 0 < N)
     (hL : L ≤ N) (htr : (mpo M N).trace ≠ 0) :
