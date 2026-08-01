@@ -42,6 +42,69 @@
 \fp_new:N \l__tenkz_test_lp_tipy_fp
 \tl_new:N \l__tenkz_test_lp_record_tl
 \tl_new:N \l__tenkz_test_lp_result_tl
+\tl_new:N \l__tenkz_test_lp_corridors_before_tl
+\tl_new:N \l__tenkz_test_lp_requests_before_tl
+\tl_new:N \l__tenkz_test_lp_results_before_tl
+\tl_new:N \l__tenkz_test_lp_corridors_after_tl
+\tl_new:N \l__tenkz_test_lp_requests_after_tl
+\tl_new:N \l__tenkz_test_lp_results_after_tl
+\int_new:N \l__tenkz_test_lp_diagnostic_count_int
+
+\cs_new_eq:NN \__tenkz_test_lp_msg_error:nne \msg_error:nne
+\cs_new_eq:NN \__tenkz_test_lp_msg_error:nnee \msg_error:nnee
+\cs_new_eq:NN \__tenkz_test_lp_msg_error:nneee \msg_error:nneee
+
+\cs_new_protected:Npn \__tenkz_test_lp_rejected:nn #1#2
+  {
+    \group_begin:
+      \tl_set:Ne \l__tenkz_test_lp_corridors_before_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_corridor_prop}
+      \tl_set:Ne \l__tenkz_test_lp_requests_before_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_request_prop}
+      \tl_set:Ne \l__tenkz_test_lp_results_before_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_result_prop}
+      \int_zero:N \l__tenkz_test_lp_diagnostic_count_int
+      \cs_set_protected:Npn \msg_error:nne ##1##2##3
+        {
+          \str_if_eq:eeTF {##1/##2}{tenkz/#1}
+            {\int_incr:N \l__tenkz_test_lp_diagnostic_count_int}
+            {\__tenkz_test_lp_msg_error:nne {##1}{##2}{##3}}
+        }
+      \cs_set_protected:Npn \msg_error:nnee ##1##2##3##4
+        {
+          \str_if_eq:eeTF {##1/##2}{tenkz/#1}
+            {\int_incr:N \l__tenkz_test_lp_diagnostic_count_int}
+            {\__tenkz_test_lp_msg_error:nnee {##1}{##2}{##3}{##4}}
+        }
+      \cs_set_protected:Npn \msg_error:nneee ##1##2##3##4##5
+        {
+          \str_if_eq:eeTF {##1/##2}{tenkz/#1}
+            {\int_incr:N \l__tenkz_test_lp_diagnostic_count_int}
+            {\__tenkz_test_lp_msg_error:nneee {##1}{##2}{##3}{##4}{##5}}
+        }
+      #2
+      \int_compare:nNnF \l__tenkz_test_lp_diagnostic_count_int = {1}
+        {\errmessage{a~rejected~leg-plan~operation~lost~its~coded~diagnostic}}
+      \tl_set:Ne \l__tenkz_test_lp_corridors_after_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_corridor_prop}
+      \tl_set:Ne \l__tenkz_test_lp_requests_after_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_request_prop}
+      \tl_set:Ne \l__tenkz_test_lp_results_after_tl
+        {\prop_to_keyval:N \l__tenkz_kernel_lp_result_prop}
+      \tl_if_eq:NNF
+        \l__tenkz_test_lp_corridors_before_tl
+        \l__tenkz_test_lp_corridors_after_tl
+        {\errmessage{a~rejected~leg-plan~operation~changed~corridor~state}}
+      \tl_if_eq:NNF
+        \l__tenkz_test_lp_requests_before_tl
+        \l__tenkz_test_lp_requests_after_tl
+        {\errmessage{a~rejected~leg-plan~operation~changed~request~state}}
+      \tl_if_eq:NNF
+        \l__tenkz_test_lp_results_before_tl
+        \l__tenkz_test_lp_results_after_tl
+        {\errmessage{a~rejected~leg-plan~operation~changed~result~state}}
+    \group_end:
+  }
 
 \cs_new_protected:Npn \__tenkz_test_lp_close:nnn #1#2#3
   {
@@ -182,6 +245,37 @@
       { \errmessage{a~request~mutation~left~stale~lane~results} }
     \__tenkz_kernel_leg_plan_resolve:
     \__tenkz_test_lp_assertions:
+    \__tenkz_test_lp_rejected:nn {kernel-leg-plan-vector}
+      {
+        \__tenkz_kernel_leg_plan_corridor:nnnnn
+          {invalid-zero-vector}{0}{0}{1}{0}
+      }
+    \__tenkz_test_lp_rejected:nn {kernel-leg-plan-basis}
+      {
+        \__tenkz_kernel_leg_plan_corridor:nnnnn
+          {member-1/north/col-1}
+          {-\l__tenkz_kernel_r_basis_nx_tl}
+          {-\l__tenkz_kernel_r_basis_ny_tl}
+          {\l__tenkz_kernel_r_basis_ex_tl}
+          {\l__tenkz_kernel_r_basis_ey_tl}
+      }
+    \__tenkz_test_lp_rejected:nn {kernel-leg-plan-corridor}
+      {
+        \__tenkz_kernel_leg_plan_enrol:nnnnn
+          {invalid-corridor}{undeclared}{0}{0}{1}
+      }
+    \__tenkz_test_lp_rejected:nn {kernel-leg-plan-face}
+      {
+        \__tenkz_kernel_leg_plan_enrol:nnnnn
+          {A}{member-1/north/col-1}
+          {\l__tenkz_test_lp_ax_fp + 1}{\l__tenkz_test_lp_ay_fp}
+          {\l__tenkz_test_lp_daylight_fp}
+      }
+    \__tenkz_test_lp_rejected:nn {kernel-leg-plan-reach}
+      {
+        \__tenkz_kernel_leg_plan_enrol:nnnnn
+          {invalid-reach}{member-1/north/col-1}{0}{0}{-1}
+      }
     % Resolution owns its transient occupancy and is repeatable.
     \__tenkz_kernel_leg_plan_resolve:
     \__tenkz_test_lp_assertions:
