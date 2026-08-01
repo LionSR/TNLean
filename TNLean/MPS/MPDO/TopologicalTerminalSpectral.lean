@@ -613,7 +613,8 @@ noncomputable def rfpBNTFusionTensorClause (M : MPOTensor d D)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
     (hRFP : IsRFPViaTS M) : BNTFusionTensorClause M :=
   Classical.choice
-    (HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP)
+    (HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF
+      M hHorizontal hM hRFP)
 
 /-- **Terminal spectral projector refinement for a length-independent RFP
 MPDO.**

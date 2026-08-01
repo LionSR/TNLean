@@ -16,7 +16,7 @@ BNT fusion tensor clause.
 
 ## Main result
 
-* `MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_cpsvCanonicalForm`
+* `MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS`
 
 ## References
 
@@ -52,7 +52,7 @@ the exact reconstruction. Documented in
 
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
 lines 1929--2046 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem of_isRFPViaTS_of_cpsvCanonicalForm (M : MPOTensor d D)
+theorem of_isRFPViaTS (M : MPOTensor d D)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     HasBNTFusionTensorClause M := by
@@ -71,27 +71,6 @@ theorem of_isRFPViaTS_of_cpsvCanonicalForm (M : MPOTensor d D)
       D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
       D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
       hTphys hSphys
-  have hRepresentations : ∀ (L : ℕ), 0 < L →
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
-          ∑ γ,
-            (((verticalMultiplicityTrace D₁.weight γ /
-                verticalMultiplicityTrace D₂.weight (sigma γ)) ^ L) *
-              (∑ r, D₂.weight (sigma γ) r ^ L)) •
-              mpo (verticalBNTMPO (D₁.tensor γ)) L ∧
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
-        ∑ α, ∑ β,
-          ((∑ q, D₁.weight α q ^ L) * (∑ r, D₁.weight β r ^ L)) •
-            (mpo (verticalBNTMPO (D₁.tensor α)) L *
-              mpo (verticalBNTMPO (D₁.tensor β)) L) := by
-    intro L hL
-    exact blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
-      D₁.bondDim D₁.multiplicity D₁.weight
-      D₂.bondDim D₂.multiplicity D₂.weight
-      M D₁.tensor D₂.tensor
-      D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry
-      D₁.reconstruction D₂.reconstruction
-      sigma hDim V hLetter hL
   obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
     exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm
       D₁.bondDim D₁.multiplicity D₁.weight
@@ -102,30 +81,9 @@ theorem of_isRFPViaTS_of_cpsvCanonicalForm (M : MPOTensor d D)
       D₁.verticalCoisometry D₂.verticalCoisometry
       D₁.coisometry D₂.coisometry D₁.reconstruction D₂.reconstruction
       sigma hDim V hLetter hCanonical hM
-  have hIdempotent := hasIdempotentCoefficientForm_of_blockedRepresentations
-    D₁ D₂ sigma chi U hChiPos hU hFusion hFusionReconstruction
-    hRepresentations
-  exact ⟨{
-    labelCount := D₁.labelCount
-    bondDim := D₁.bondDim
-    multiplicity := D₁.multiplicity
-    weight := D₁.weight
-    tensor := D₁.tensor
-    verticalCoisometry := D₁.verticalCoisometry
-    multiplicity_pos := D₁.multiplicity_pos
-    weight_pos := D₁.weight_pos
-    coisometry := D₁.coisometry
-    isCPSVBNT := D₁.isCPSVBNT
-    forward := D₁.forward
-    reconstruction := D₁.reconstruction
-    chi := chi
-    chi_pos := hChiPos
-    fusionCoisometry := U
-    fusionCoisometry_mul_conjTranspose := hU
-    fusion := hFusion
-    fusionReconstruction := hFusionReconstruction
-    idempotent := hIdempotent
-  }⟩
+  exact of_verticalDecompositions_of_unitaryBlockEquiv
+    D₁ D₂ sigma hDim V hLetter chi U hChiPos hU hFusion
+    hFusionReconstruction
 
 end HasBNTFusionTensorClause
 
