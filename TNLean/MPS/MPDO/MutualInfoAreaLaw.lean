@@ -90,7 +90,7 @@ theorem mutualInfoChain_le_two_log_bondDim
       ring
 
 /-- The finite-chain estimate with coefficient `4` stated for positive matrix
-product density operators in arXiv:1606.00608, Proposition 4.5, lines 795--809
+product density operators in arXiv:1606.00608, Proposition 4.5, lines 792--809
 and 1316--1321.
 
 This follows from the stronger bound `I_L(M,N) ≤ 2 log D`. It concerns a fixed

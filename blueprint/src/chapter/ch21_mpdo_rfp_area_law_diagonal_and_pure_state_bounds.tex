@@ -1683,7 +1683,8 @@ logarithmic divergence, or a comparison with relative entropy.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_chain_mutual_information_bipartition,
+    \uses{def:mpdo_split_normalized_mpo,
+      lem:mpdo_chain_mutual_information_bipartition,
       thm:mpdo_periodic_cut_operator_schmidt_rank,
       thm:mutual_information_le_log_operator_schmidt_rank,
       thm:operator_schmidt_rank_pos}
@@ -1705,7 +1706,7 @@ logarithmic divergence, or a comparison with relative entropy.
     \label{thm:mpdo_finite_chain_mutual_information_four_log}
     \lean{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim}
     \leanok
-    \uses{def:mutual_info_chain}
+    \uses{def:mutual_info_chain, def:mpdo}
     Let $M$ be a matrix product density operator of operator bond dimension
     $D$. For every positive chain length $N$, every cut $0\leq L\leq N$, and
     every nonzero finite-chain trace,
@@ -1720,7 +1721,7 @@ logarithmic divergence, or a comparison with relative entropy.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_finite_chain_mutual_information_two_log}
+    \uses{def:mpdo, thm:mpdo_finite_chain_mutual_information_two_log}
     Global positivity supplies positivity at the chosen positive chain
     length. Apply Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log}.
     The same nonzero-trace argument gives $D>0$, hence
