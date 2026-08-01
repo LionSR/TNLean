@@ -1665,6 +1665,69 @@ logarithmic divergence, or a comparison with relative entropy.
     $\log q\leq\log\operatorname{OSR}(\rho_{AB})$.
 \end{proof}
 
+\begin{theorem}[Finite-chain mutual information from the operator bond]
+    \label{thm:mpdo_finite_chain_mutual_information_two_log}
+    \lean{MPOTensor.mutualInfoChain_le_two_log_bondDim}
+    \leanok
+    \uses{def:mutual_info_chain}
+    Let $M$ be an MPO tensor of operator bond dimension $D$. Fix a chain of
+    length $N$ and a cut with $0\leq L\leq N$. If the corresponding
+    finite-chain operator is positive semidefinite and has nonzero trace, then
+    \begin{align}
+        I_L^{(N)}&\leq 2\log D.
+        \notag
+    \end{align}
+    No global positivity, local purification, canonical form, or separate
+    positive-bond-dimension hypothesis is required. The cuts $L=0$ and $L=N$
+    are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_split_normalized_mpo,
+      lem:mpdo_chain_mutual_information_bipartition,
+      thm:mpdo_periodic_cut_operator_schmidt_rank,
+      thm:mutual_information_le_log_operator_schmidt_rank,
+      thm:operator_schmidt_rank_pos}
+    Reindex the normalized chain operator across the consecutive cut. Its
+    trace is one, and its positivity is preserved by this reindexing. Hence
+    \begin{align}
+      I_L^{(N)}
+      &\leq \log\operatorname{OSR}(\sigma^{(N)}_{L:N-L})
+       \leq \log D^2
+       =2\log D.
+      \notag
+    \end{align}
+    Nonzero trace makes the normalized operator nonzero, so its
+    operator-Schmidt rank is positive. If $D=0$, then every finite-chain trace
+    vanishes. Hence $D>0$, which justifies the last logarithmic identity.
+\end{proof}
+
+\begin{theorem}[Finite-chain mutual-information estimate for matrix product density operators]
+    \label{thm:mpdo_finite_chain_mutual_information_four_log}
+    \lean{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim}
+    \leanok
+    \uses{def:mutual_info_chain, def:mpdo}
+    Let $M$ be a matrix product density operator of operator bond dimension
+    $D$. For every positive chain length $N$, every cut $0\leq L\leq N$, and
+    every nonzero finite-chain trace,
+    \begin{align}
+        I_L^{(N)}&\leq 4\log D.
+        \notag
+    \end{align}
+    This is the finite-chain estimate invoked in the proof of
+    Proposition~4.5 of \cite{Cirac2016MPDO_arXiv}. The nonzero-trace hypothesis
+    states explicitly the normalization convention preceding that proposition.
+    This theorem does not assert the proposition's thermodynamic-limit clause.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo, thm:mpdo_finite_chain_mutual_information_two_log}
+    Global positivity supplies positivity at the chosen positive chain
+    length. Apply Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log}.
+    The same nonzero-trace argument gives $D>0$, hence
+    $0\leq\log D$ and $2\log D\leq4\log D$.
+\end{proof}
+
 \begin{remark}[Boundedness of the mutual information]
     The proof of Proposition~4.5 of \cite{Cirac2016MPDO_arXiv} invokes the
     uniform estimate $I_L\leq4\log D$ for every MPDO. Its cited argument,
@@ -1689,8 +1752,8 @@ logarithmic divergence, or a comparison with relative entropy.
     one-site density matrix $q$. Thus its $L$-site marginal has rank
     $\rank(q)^L$, although its mutual information vanishes.
 
-    Theorem~\ref{thm:mutual_information_le_log_operator_schmidt_rank} instead
-    gives the stronger estimate
+    Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log} gives the
+    stronger estimate
     \begin{align}
         I_L^{(N)}\leq\log D^2=2\log D
         \notag
