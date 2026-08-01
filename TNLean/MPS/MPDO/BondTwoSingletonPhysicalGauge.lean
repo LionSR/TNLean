@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.CanonicalForm.CPSVBlocking
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.InvariantProjection
-import TNLean.MPS.CanonicalForm.CPSVBlocking
 
 /-!
 # Physical similarities of the bond-two singleton base model
@@ -202,11 +202,6 @@ private lemma gaugedNormalizedSingleton_verticalAssembledTensor :
         (fun v ↦ Matrix.reindex singletonRetainedCoordinateEquiv.symm
           singletonRetainedCoordinateEquiv.symm (gaugedSingletonTensor v)) := by
   let e : (Σ _k : Fin 1, Fin 2) ≃ Fin 2 := finSigmaFinEquiv
-  have hsymm (i : Fin 2) : e.symm i = ⟨0, i⟩ := by
-    apply e.injective
-    rw [e.apply_symm_apply]
-    ext
-    exact (@finSigmaFinEquiv_one (fun _ : Fin 1 ↦ 2) ⟨(0 : Fin 1), i⟩).symm
   have hs : (singletonScale : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt singletonScale_pos_physicalGauge
   have hscaled (v : Fin (4 * 4)) :
@@ -364,13 +359,6 @@ noncomputable def gaugeDeformedBaseMPOBNTAlgebraTensorClause :
 @[simp] private lemma finProdFinEquiv_one_one :
     finProdFinEquiv ((1 : I), (1 : I)) = (3 : Fin 4) := by decide
 
-@[simp] private lemma fin4_zero_ne_one : (0 : Fin 4) ≠ 1 := by decide
-@[simp] private lemma fin4_zero_ne_two : (0 : Fin 4) ≠ 2 := by decide
-@[simp] private lemma fin4_zero_ne_three : (0 : Fin 4) ≠ 3 := by decide
-@[simp] private lemma fin4_one_ne_two : (1 : Fin 4) ≠ 2 := by decide
-@[simp] private lemma fin4_one_ne_three : (1 : Fin 4) ≠ 3 := by decide
-@[simp] private lemma fin4_two_ne_three : (2 : Fin 4) ≠ 3 := by decide
-
 private def gaugeDeformedSymbolCoefficient (p a : Fin 4) : ℂ :=
   if p = 0 then
     if a = 0 then 9 / 8 else if a = 1 then -3 / 8 else
@@ -385,25 +373,24 @@ private def gaugeDeformedSymbolCoefficient (p a : Fin 4) : ℂ :=
     if a = 0 then -1 / 8 else if a = 1 then 3 / 8 else
       if a = 2 then -3 / 8 else 9 / 8
 
-set_option maxHeartbeats 800000 in
--- The explicit six-index case split expands to 64 concrete matrix calculations.
 private theorem gaugeDeformedBaseMPO_toMPSTensor_apply
     (p x y : Fin 4) :
     (gaugeDeformedBaseMPO gauge).toMPSTensor p x y =
       if x = y then gaugeDeformedSymbolCoefficient p x else 0 := by
   simp only [gaugeDeformedBaseMPO, gauge_inv_val]
-  obtain ⟨⟨pi, pj⟩, rfl⟩ :=
-    (finProdFinEquiv : I × I ≃ Fin 4).surjective p
-  obtain ⟨⟨xi, xj⟩, rfl⟩ :=
-    (finProdFinEquiv : I × I ≃ Fin 4).surjective x
-  obtain ⟨⟨yi, yj⟩, rfl⟩ :=
-    (finProdFinEquiv : I × I ≃ Fin 4).surjective y
-  fin_cases pi <;> fin_cases pj <;> fin_cases xi <;> fin_cases xj <;>
-    fin_cases yi <;> fin_cases yj <;>
+  by_cases hxy : x = y
+  · subst y
+    obtain ⟨⟨pi, pj⟩, rfl⟩ :=
+      (finProdFinEquiv : I × I ≃ Fin 4).surjective p
+    obtain ⟨⟨xi, xj⟩, rfl⟩ :=
+      (finProdFinEquiv : I × I ≃ Fin 4).surjective x
+    fin_cases pi <;> fin_cases pj <;> fin_cases xi <;> fin_cases xj <;>
       norm_num [toMPSTensor, ketLeftMul, braRightMul, baseMPO, gaugeMatrix,
-        gaugeDeformedSymbolCoefficient, Matrix.mul_apply, Fin.sum_univ_two,
-        Fin.sum_univ_four, Matrix.single, Fin.modNat, Fin.divNat] <;>
+        gaugeDeformedSymbolCoefficient, Matrix.single, Fin.modNat, Fin.divNat] <;>
         simp_all
+  · simp only [if_neg hxy]
+    simp [toMPSTensor, ketLeftMul, braRightMul, baseMPO, Matrix.single]
+    aesop
 
 
 /-- The normalized bond-one horizontal block attached to a doubled virtual
