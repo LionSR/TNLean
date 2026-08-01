@@ -9,7 +9,7 @@
 
 \title{The Two-Site Sector Comparison Stops at an Invertible Gauge}
 \author{}
-\date{2026-07-23}
+\date{2026-08-01}
 
 \begin{document}
 \maketitle
@@ -40,15 +40,16 @@ dimensions and the invertible matrix $Z_\gamma$ in
 lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
 This proves the invertible-gauge sub-result of lines~2053--2057.
 
-Pull request~5282 proves the Gram identity
+The conditional Gram theorem proves
 \eqref{eq:gram-dressing-target}, and hence
 $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\mathbf 1$ with
 $\omega_\gamma>0$, from a supplied identity-dressed marked realization.
-The inverse-square-root normalization
-$U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ is now formalized: it is unitary and
-has exactly the same conjugation action as $Z_\gamma$.  Thus the entire
+Its unitary-normalization corollary sets
+$U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ and proves that $U_\gamma$ is
+unitary with the same conjugation action as $Z_\gamma$.  Thus the entire
 line~2057 conclusion is available conditionally on that supplied
 realization.
+% The conditional Gram and unitary results are issues 5282 and 5286.
 
 This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
 tensor-attached algebra clause alone.
@@ -372,12 +373,75 @@ an invertible gauge.
 
 This no-go result does not settle the missing tensor-attached marked
 comparison.  \href{https://github.com/LionSR/TNLean/issues/5284}{Issue 5284}
-remains genuinely open.  Every counterexample to that proposed comparison
-must use retained sectors whose terminal transfers are positive semidefinite.
-In particular, any replacement bond-two witness must differ from the excluded
-pair.  Conversely, terminal positivity alone
-does not produce the identity-dressed marked realization or a unitary gauge.
-This slice therefore neither proves nor refutes Theorem~4.14.
+remains open.  Every counterexample to that proposed comparison must use
+retained sectors whose terminal transfers are positive semidefinite.
+Terminal positivity alone does not produce the identity-dressed marked
+realization or a unitary gauge.
+
+\section{A bond-two singleton boundary}
+
+% Verified against Lean head f0f8a921c3c25bdf3f0ac121d3d0dcb75bfe368d.
+A second bond-two model satisfies the terminal condition but fails at two
+sites.  Let $A$ be the normal tensor whose four diagonal doubled-physical
+letters are the matrix units $E_{a,b}$ of $\mathbb C^{2\times2}$.  Its
+terminal matrix is
+\begin{equation}
+  J=\begin{pmatrix}1&1\\1&1\end{pmatrix}\succeq0.
+  \label{eq:singleton-terminal-J}
+\end{equation}
+Let
+\begin{equation}
+  X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix},
+  \qquad B^v=XA^vX^{-1}.
+  \label{eq:singleton-deformation}
+\end{equation}
+The matrix $X$ is invertible and nonunitary.  The tensors $A$ and $B$ have the
+same positive-length closed chains, and their terminal matrices both equal
+$J$.  Thus the deformation preserves the positive one-site boundary.
+
+Let $\ket{\Phi}=\ket{0,0}+\ket{1,1}$ and
+$P=\ket{\Phi}\!\bra{\Phi}$.  The corresponding two-site deformation
+\begin{equation}
+  P_X=(X\otimes X)P(X^{-1}\otimes X^{-1})
+  \label{eq:singleton-two-site-deformation}
+\end{equation}
+is not Hermitian.  Hence it cannot be a positive two-site operator.  This is
+a sharper necessary-condition boundary than terminal positivity: the explicit
+nonunitary deformation survives the one-site test but fails the two-site test.
+
+The converse is also formalized for this model.  For any
+$Y\in\mathrm{GL}(2,\mathbb C)$, put $G=Y^\dagger Y$.  If both
+$YJY^{-1}$ and
+$(Y\otimes Y)P(Y^{-1}\otimes Y^{-1})$ are Hermitian, then
+\begin{equation}
+  G=\omega\mathbf 1
+  \qquad\text{for some }\omega>0.
+  \label{eq:singleton-scalar-gram}
+\end{equation}
+Indeed, one-site Hermiticity gives $GJ=JG$, while two-site Hermiticity gives
+$G_{00}G_{01}+G_{10}G_{11}=0$.  The first identity makes the diagonal entries
+equal and the off-diagonal entries equal; positive definiteness and the second
+identity then force the off-diagonal entries to vanish.  Thus
+$\omega^{-1/2}Y$ is unitary.
+
+Appendix~C.4, lines~2048--2057, and Proposition~4.13 motivate this
+one-site/two-site test, but they do not state the model-specific theorem
+\eqref{eq:singleton-scalar-gram}.  The result is a necessary condition and a
+no-go theorem for the explicit deformation, not an all-length construction.
+In particular, this result does not supply an all-length MPDO
+predicate or a tensor-attached BNT algebra clause for $A$ or $B$.
+The separate all-length tensor-attached/base-model construction is recorded in
+\href{https://github.com/LionSR/TNLean/issues/5290}{issue 5290}.
+
+Consequently Theorem~4.14 remains partial.  The identity-dressed marked
+comparison remains open in
+\href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284}, under
+\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, and
+\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645} remains open.
+The terminal-positivity theorem and the conditional Gram and unitary theorems
+remain unchanged.
+% Terminal positivity is issue 5288; the conditional Gram and unitary results
+% are issues 5282 and 5286.  Issue 5290 is separate from issue 5289.
 
 \section{Non-circular product corners}
 
@@ -431,24 +495,23 @@ Equivalently, for every vertical letter $v$,
 \]
 Normality then implies \eqref{eq:gram-scalar}.
 
-Pull request~5282 establishes \eqref{eq:gram-dressing-target} conditionally on a
-supplied identity-dressed physical-letter coefficient family and its common
-reflected target.  From its positive scalar Gram conclusion, the subsequent
-normalization constructs
+The conditional Gram theorem establishes \eqref{eq:gram-dressing-target}
+from a supplied identity-dressed physical-letter coefficient family and its
+common reflected target.  Its unitary-normalization corollary then constructs
 \[
   U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
   \qquad
   A_{\sigma(\gamma)}^v
   =U_\gamma A_\gamma^vU_\gamma^\dagger.
 \]
-This is the conditional endpoint of the scalar-to-unitary argument; it does
+This is the conditional conclusion of the scalar-to-unitary argument; it does
 not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
 Terminal sector positivity excludes the explicit nonunitary-similarity witness
 from the full tensor-attached setting, but it does not supply the missing
 marked comparison.
 
 The remaining premise is to construct the coefficient family and the two
-target identities used by pull request~5282 directly from the tensor-attached
+target identities used by the conditional Gram theorem directly from the tensor-attached
 algebra clause, literal CPSV canonical form, and the MPDO hypothesis.  This is
 tracked in \href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284},
 under \href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, without
@@ -459,7 +522,7 @@ unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Scope restriction: the conditional endpoint is complete, while the
+\textbf{Scope restriction: the conditional conclusion is complete, while the
 unconditional marked realization remains an open gap.}  The
 Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
 unitary normalization are formalized under a supplied identity-dressed marked
