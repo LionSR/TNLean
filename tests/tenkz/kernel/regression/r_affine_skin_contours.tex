@@ -40,17 +40,25 @@
   {
     \__tenkz_test_affine_glyph:n {#1}
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_test_affine_skin_tl
+    \exp_args:NV \__tenkz_kernel_skin_base:nN
+      \l__tenkz_test_affine_skin_tl \l__tenkz_test_affine_skin_tl
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_test_affine_label_tl
     \str_if_eq:VnT \l__tenkz_test_affine_skin_tl {box}
       {
-        \str_if_eq:VnT \l__tenkz_test_affine_label_tl {A}
+        \str_case:Vn \l__tenkz_test_affine_label_tl
           {
-            \__tenkz_kernel_r_carrier_basis:n {#1}
-            \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
-              { \__tenkz_test_affine_box:n {#1} }
-              { \int_gincr:N \l__tenkz_test_orthogonal_box_int }
+            {A}{ \__tenkz_test_affine_box_carrier:n {#1} }
+            {P}{ \__tenkz_test_affine_box_carrier:n {#1} }
           }
       }
+  }
+
+\cs_new_protected:Npn \__tenkz_test_affine_box_carrier:n #1
+  {
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
+      { \__tenkz_test_affine_box:n {#1} }
+      { \int_gincr:N \l__tenkz_test_orthogonal_box_int }
   }
 
 \cs_new_eq:NN
@@ -186,6 +194,16 @@
       { \l__tenkz_test_se_x_dim - \l__tenkz_test_sw_x_dim }
       { \errmessage{the~plane~box~east~edges~are~not~parallel} }
     \dim_compare:nNnF
+      { \l__tenkz_test_ne_y_dim - \l__tenkz_test_nw_y_dim }
+      =
+      { \l__tenkz_test_se_y_dim - \l__tenkz_test_sw_y_dim }
+      { \errmessage{the~plane~box~east~edges~have~different~slopes} }
+    \dim_compare:nNnF
+      { \l__tenkz_test_nw_x_dim - \l__tenkz_test_sw_x_dim }
+      =
+      { \l__tenkz_test_ne_x_dim - \l__tenkz_test_se_x_dim }
+      { \errmessage{the~plane~box~north~edges~have~different~slopes} }
+    \dim_compare:nNnF
       { \l__tenkz_test_nw_y_dim - \l__tenkz_test_sw_y_dim }
       =
       { \l__tenkz_test_ne_y_dim - \l__tenkz_test_se_y_dim }
@@ -210,6 +228,26 @@
           }
           < {0.000001}
           { \errmessage{the~upright~label~lost~the~inverse~east~basis} }
+        \fp_compare:nNnF
+          {
+            abs(
+              \l__tenkz_kernel_r_basis_ux_tl
+                * \l__tenkz_kernel_r_basis_nx_tl
+              + \l__tenkz_kernel_r_basis_uy_tl
+                * \l__tenkz_kernel_r_basis_ny_tl )
+          }
+          < {0.000001}
+          { \errmessage{the~upright~label~east~dual~did~not~annihilate~north} }
+        \fp_compare:nNnF
+          {
+            abs(
+              \l__tenkz_kernel_r_basis_vx_tl
+                * \l__tenkz_kernel_r_basis_ex_tl
+              + \l__tenkz_kernel_r_basis_vy_tl
+                * \l__tenkz_kernel_r_basis_ey_tl )
+          }
+          < {0.000001}
+          { \errmessage{the~upright~label~north~dual~did~not~annihilate~east} }
         \fp_compare:nNnF
           {
             abs(
@@ -253,8 +291,8 @@
   \tn[at=(1,2), skin=box]{A}
 \end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF { \l__tenkz_test_affine_box_int } = {1}
-  { \errmessage{the~affine~box~fixture~did~not~inspect~one~box} }
+\int_compare:nNnF { \l__tenkz_test_affine_box_int } = {2}
+  { \errmessage{the~affine~fixture~did~not~inspect~both~box~contours} }
 \int_compare:nNnF { \l__tenkz_test_orthogonal_box_int } = {2}
   { \errmessage{flat~or~circle~box~left~the~orthogonal~path} }
 \int_compare:nNnF { \l__tenkz_test_affine_upright_int } > {0}
