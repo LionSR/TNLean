@@ -16,6 +16,7 @@ import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.BNTAssociativity
