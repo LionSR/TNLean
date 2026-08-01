@@ -38,7 +38,6 @@ combined with the resolvent-integrand concavity, yields the joint concavity of
 
 * `Matrix.rpow_diagonal`: the real power of a positive real diagonal matrix is the
   diagonal of the entrywise real powers.
-* `Matrix.rpow_conj_unitary`: covariance of the real power under unitary conjugation.
 * `Matrix.diagonal_lieb_integral`: the Lieb integral identity for a commuting pair of
   positive diagonal matrices.
 * `superop_lieb_integral_rep`: the operator integral representation on the Kronecker
@@ -82,21 +81,6 @@ lemma rpow_diagonal {g : n → ℝ} (hg : ∀ i, 0 < g i) (s : ℝ) :
   exact cfc_diagonal g (fun x => x ^ s)
     (ContinuousOn.rpow_const continuousOn_id fun x hx => Or.inl <| by
       rcases hx with ⟨i, rfl⟩; exact (hg i).ne')
-
-/-- **Covariance of the real power under unitary conjugation.** For a positive
-semidefinite matrix `M` and a unitary `U`, `(U M U^†)^s = U M^s U^†`. -/
-lemma rpow_conj_unitary {M : Matrix n n ℂ} (hM : M.PosSemidef) (s : ℝ)
-    (U : unitary (Matrix n n ℂ)) :
-    ((U : Matrix n n ℂ) * M * star (U : Matrix n n ℂ)) ^ s
-      = (U : Matrix n n ℂ) * M ^ s * star (U : Matrix n n ℂ) := by
-  have hUU : star (U : Matrix n n ℂ) * (U : Matrix n n ℂ) = 1 :=
-    Unitary.star_mul_self_of_mem U.prop
-  -- `U M U^†` is positive semidefinite, hence `0 ≤ U M U^†`.
-  have hconj : ((U : Matrix n n ℂ) * M * star (U : Matrix n n ℂ)).PosSemidef := by
-    have := hM.conjTranspose_mul_mul_same (star (U : Matrix n n ℂ))
-    rwa [star_eq_conjTranspose, conjTranspose_conjTranspose] at this
-  rw [CFC.rpow_eq_cfc_real hconj.nonneg, CFC.rpow_eq_cfc_real hM.nonneg]
-  exact cfc_conj_unitary hM.isHermitian (fun x => x ^ s) U
 
 set_option linter.unusedDecidableInType false in
 /-- The Bochner integral of a matrix-valued function is computed entrywise. The

@@ -28,6 +28,8 @@ theory development.
   matrix, the logarithm of the square root is half the logarithm.
 * `Matrix.PosDef.cfc_log_rpow`: for a positive-definite matrix, the logarithm
   of a real power is the exponent times the logarithm.
+* `Matrix.PosDef.rpow_neg_quarter_eq_inv_sqrt_sqrt`: the inverse fourth power
+  is the inverse of the iterated positive square root.
 * `Matrix.PosSemidef.sqrt_smul`: the positive square root commutes with
   nonnegative real scaling.
 * `Matrix.PosSemidef.sqrt_kronecker`: positive square roots factor across
@@ -234,6 +236,18 @@ theorem PosDef.cfc_log_rpow {A : Matrix n n ℂ} (hA : A.PosDef) (s : ℝ) :
     exact hA.eigenvalues_pos i
   change Real.log (x ^ s) = s * Real.log x
   rw [Real.log_rpow hxpos]
+
+/-- The inverse fourth power of a positive-definite matrix is the inverse of
+its iterated positive square root. -/
+theorem PosDef.rpow_neg_quarter_eq_inv_sqrt_sqrt
+    {A : Matrix n n ℂ} (hA : A.PosDef) :
+    A ^ (-(1 / 4 : ℝ)) = (CFC.sqrt (CFC.sqrt A))⁻¹ := by
+  rw [CFC.sqrt_eq_rpow, CFC.sqrt_eq_rpow,
+    CFC.rpow_rpow _ _ _ (by norm_num)]
+  rw [Matrix.nonsing_inv_eq_ringInverse, CFC.inverse_eq_rpow_neg_one]
+  rw [CFC.rpow_rpow _ _ _ (by norm_num)]
+  congr 1
+  ring
 
 /-- The inverse square root of a positive-semidefinite matrix on its support:
 the zero eigenspace is sent to zero and every positive eigenvalue `x` is sent
