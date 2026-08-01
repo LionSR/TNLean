@@ -1,0 +1,128 @@
+\subsection{Direct-sum sector conjugations}
+
+\begin{definition}[Direct-sum unitary conjugations]
+    \label{def:mpdo_bnt_direct_sum_unitary_conjugations}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        RelabeledTwoSiteSectorAlgebra}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.sectorLinearEquiv}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryT}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryT_apply}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryS_apply}
+    \leanok
+    \uses{def:mpdo_bnt_two_site_exact_sector_gauge}
+    Work in the setting of
+    Definition~\ref{def:mpdo_bnt_two_site_exact_sector_gauge}.  Let
+    \begin{align}
+        \mathcal A_1
+        &=\bigoplus_\gamma \MN{d_\gamma},
+        &
+        \mathcal A_2^\sigma
+        &=\bigoplus_\gamma \MN{\widetilde d_{\sigma(\gamma)}}
+    \end{align}
+    be the one-site sector algebra and the two-site sector algebra relabelled
+    by the given sector matching.  Suppose that
+    $d_\gamma=\widetilde d_{\sigma(\gamma)}$ and that there is a unitary
+    $U_\gamma$ on each matched sector such that
+    \begin{align}
+        A_{\sigma(\gamma)}^i
+        &=U_\gamma M_\gamma^i U_\gamma^*
+        \label{eq:mpdo_bnt_sector_unitary_conjugacy}
+    \end{align}
+    for every physical index $i$.  Denote by $\iota_\gamma$ the coordinate
+    identification induced by the equality of the two bond dimensions.
+    Define mutually inverse linear maps
+    \begin{align}
+        \widetilde T\colon \mathcal A_1&\longrightarrow\mathcal A_2^\sigma,
+        &
+        [\widetilde T(X)]_\gamma
+        &=U_\gamma\iota_\gamma(X_\gamma)U_\gamma^*,
+        \label{eq:mpdo_bnt_direct_sum_unitary_T}
+        \\
+        \widetilde S\colon \mathcal A_2^\sigma&\longrightarrow\mathcal A_1,
+        &
+        [\widetilde S(Y)]_\gamma
+        &=\iota_\gamma^{-1}
+          (U_\gamma^*Y_\gamma U_\gamma).
+        \label{eq:mpdo_bnt_direct_sum_unitary_S}
+    \end{align}
+    These are the converse-direction middle conjugations introduced in
+    \cite[Appendix~C.4, lines~2053--2080]{Cirac2016MPDO_arXiv}.  The
+    existence of the unitaries in
+    (\ref{eq:mpdo_bnt_sector_unitary_conjugacy}) is an assumption here.
+    They are distinct from the transported direct-sum maps in
+    \cite[Appendix~C.4, lines~1955--1997]{Cirac2016MPDO_arXiv}.  No maps
+    between the ambient full matrix algebras are included here.
+\end{definition}
+
+\begin{theorem}[Properties of the direct-sum unitary conjugations]
+    \label{thm:mpdo_bnt_direct_sum_unitary_conjugations}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryT_isKrausDirectSumMap}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryS_isKrausDirectSumMap}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.%
+        directSumUnitaryT_isTracePreservingBetweenDirectSums}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.%
+        directSumUnitaryS_isTracePreservingBetweenDirectSums}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryS_comp_directSumUnitaryT}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryT_comp_directSumUnitaryS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryT_tensor}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.directSumUnitaryS_tensor}
+    \leanok
+    \uses{def:kraus_map_between_direct_sums,
+        def:mpdo_bnt_direct_sum_unitary_conjugations}
+    The maps $\widetilde T$ and $\widetilde S$ are completely positive and
+    preserve the total trace on the direct sums.  They are mutually inverse:
+    \begin{align}
+        \widetilde S\widetilde T
+        &=\id_{\mathcal A_1},
+        &
+        \widetilde T\widetilde S
+        &=\id_{\mathcal A_2^\sigma}.
+        \label{eq:mpdo_bnt_direct_sum_unitary_inverses}
+    \end{align}
+    They also carry the matched tensor letters in both directions:
+    \begin{align}
+        \widetilde T\bigl((M_\gamma^i)_\gamma\bigr)
+        &=\bigl(A_{\sigma(\gamma)}^i\bigr)_\gamma,
+        \notag
+        \\
+        \widetilde S\bigl((A_{\sigma(\gamma)}^i)_\gamma\bigr)
+        &=\bigl(M_\gamma^i\bigr)_\gamma.
+        \label{eq:mpdo_bnt_direct_sum_unitary_tensor_letters}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:direct_sum_kraus_composition_schwarz}
+    On each summand, conjugation by $U_\gamma$ and the coordinate
+    identification $\iota_\gamma$ are completely positive and
+    trace-preserving.  Their direct sums therefore have the same properties.
+    Unitarity gives
+    \begin{align}
+        U_\gamma^*U_\gamma
+        &=I,
+        &
+        U_\gamma U_\gamma^*
+        &=I,
+    \end{align}
+    which proves (\ref{eq:mpdo_bnt_direct_sum_unitary_inverses}) sector by
+    sector.  The first identity in
+    (\ref{eq:mpdo_bnt_direct_sum_unitary_tensor_letters}) is precisely
+    (\ref{eq:mpdo_bnt_sector_unitary_conjugacy}); the second follows by
+    applying the inverse map.
+\end{proof}
