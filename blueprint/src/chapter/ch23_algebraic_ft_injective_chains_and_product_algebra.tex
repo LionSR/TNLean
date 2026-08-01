@@ -487,6 +487,7 @@ applies.
 \begin{definition}[Per-block linear extension]%
     \label{def:perBlockLinearExtension}
     \lean{MPSTensor.perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension_spec}
     \leanok
     \uses{def:injective, def:same_mpv}
     Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
@@ -496,32 +497,6 @@ applies.
     is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
     for every physical index~$i$.
 \end{definition}
-
-\begin{theorem}[Positive per-block extensions are unitarily implemented]%
-    \label{thm:positive_perBlockLinearExtension_unitary_conj}
-    \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
-    \leanok
-    \uses{def:perBlockLinearExtension}
-    Let $T_k:\MN{D_k}\to\MN{D_k}$ be the per-block linear extension of an
-    injective MPS family and a matched family with the same closed matrix
-    product vectors.
-    If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
-    \begin{align}
-        T_k(M)&=U_kMU_k^\dagger
-        \label{eq:positive_perBlockLinearExtension_unitary_conj}
-    \end{align}
-    for every $M\in\MN{D_k}$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{lem:perBlockLinearExtension_mul,
-        lem:perBlockLinearExtension_bijective,
-        thm:unitary_skolem_noether_matrix}
-    The per-block extension is multiplicative and bijective. Positivity makes
-    the resulting algebra automorphism preserve adjoints. The unitary
-    Skolem--Noether theorem then gives
-    (\ref{eq:positive_perBlockLinearExtension_unitary_conj}).
-\end{proof}
 
 \begin{lemma}[Per-block multiplicativity]%
     \label{lem:perBlockLinearExtension_mul}
@@ -554,6 +529,27 @@ applies.
     Non-vanishing of $T_k$ is established via the trace pairing: if
     $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
     of the trace pairing for injective tensors.
+\end{proof}
+
+\begin{theorem}[Unitary implementation of a positive per-block extension]%
+    \label{thm:positive_perBlockLinearExtension_unitary}
+    \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
+    \leanok
+    \uses{def:perBlockLinearExtension}
+    If the per-block linear extension $T_k$ is positive, then there is a
+    unitary matrix $U_k$ such that
+    $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:perBlockLinearExtension_mul,
+        lem:perBlockLinearExtension_bijective,
+        thm:unitary_skolem_noether_matrix}
+    By Lemmas~\ref{lem:perBlockLinearExtension_mul}
+    and~\ref{lem:perBlockLinearExtension_bijective}, $T_k$ is a bijective
+    multiplicative linear map. Positivity makes this algebra automorphism
+    preserve adjoints. Unitary Skolem--Noether therefore implements it by
+    conjugation with a unitary matrix.
 \end{proof}
 
 \begin{definition}[Product algebra automorphism]%
