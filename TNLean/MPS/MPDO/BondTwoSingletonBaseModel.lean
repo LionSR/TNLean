@@ -114,7 +114,7 @@ theorem baseMPO_isMPDO : IsMPDO baseMPO := by
 the length-two ambient operator is the companion Bell projector from the
 singleton Gram boundary. -/
 theorem twoSite_baseMPO_eq_bellProjector :
-    Matrix.reindex (finTwoArrowEquiv I).symm (finTwoArrowEquiv I).symm
+    Matrix.reindex (finTwoArrowEquiv I) (finTwoArrowEquiv I)
       (mpo baseMPO 2) = bellProjector := by
   rw [mpo_baseMPO_eq_unnormalizedGHZRankOne 2 (by norm_num)]
   ext p q
@@ -123,7 +123,8 @@ theorem twoSite_baseMPO_eq_bellProjector :
   fin_cases p₀ <;> fin_cases p₁ <;> fin_cases q₀ <;> fin_cases q₁ <;>
     norm_num [Matrix.reindex_apply, unnormalizedGHZRankOne, ghzAmplitude,
       bellProjector, bellVector, Matrix.vecMulVec, finTwoArrowEquiv,
-      piFinTwoEquiv_apply, finRotate_apply, Fin.prod_univ_two]
+      piFinTwoEquiv_apply, finRotate_apply, Fin.prod_univ_two, Fin.add_def,
+      Matrix.cons_val_zero, Matrix.cons_val_one]
 
 /-! ### Literal CPSV canonical form -/
 
