@@ -207,7 +207,7 @@
               differ by a unit-modulus phase and an invertible gauge.
     \end{enumerate}
 \end{theorem}
-\begin{proof}\notready
+\begin{proof}\leanok
     \uses{thm:periodic_overlap_zero_ne_period,
         thm:periodic_overlap_zero_no_sector_match,
         thm:periodic_overlap_zero_ne_dim,
@@ -269,14 +269,12 @@
     this restriction and its elimination plan.
 \end{theorem}
 
-\begin{proof}
-    \notready
+\begin{proof}\leanok
     \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
-    The missing point is not the Gram-matrix argument itself. It is the
-    sector-match alternative in
-    Theorem~\ref{thm:periodic_overlap_dichotomy}. In the notation of
-    Appendix~A of \cite{DeLasCuevas2017Irreducible}, after choosing inverses
-    $\Omega_u$ for the injective words $F_u$, the required contraction is
+    The sector-match alternative in
+    Theorem~\ref{thm:periodic_overlap_dichotomy} follows the construction in
+    Appendix~A of \cite{DeLasCuevas2017Irreducible}. After choosing inverses
+    $\Omega_u$ for the injective words $F_u$, one proves
     \begin{align}
         A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots
         \otimes A_{u+m-1}^{i_m}
@@ -314,10 +312,6 @@
         \notag
     \end{align}
     one obtains the global relation $A^i=e^{i\xi}UB^iU^\dagger$.
-    % Remaining step: see
-    % docs/paper-gaps/1708_periodic_overlap_route_alignment.tex,
-    % Section ``Remaining Case-3 input''.
-
     Let
     $G_N(j,k)=\braket{V^{(pN)}(A_j)}{V^{(pN)}(A_k)}$
     be the Gram matrix of the periodic vectors. The diagonal entries have
@@ -402,7 +396,7 @@
 \begin{theorem}[Peripheral proportional case from positive-length MPV equality]
     \label{thm:peripheral_periodic_ft_proportional_same}
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos}
-    \notready
+    \leanok
     \uses{def:periodic_tensor, def:same_mpv2_pos, thm:periodic_overlap_dichotomy,
         thm:periodic_self_overlap_tendsto}
     Let $A$ and $B$ be periodic tensors with the same matrix product vectors
@@ -410,7 +404,7 @@
     Then their bond dimensions agree, and after identifying the bond spaces,
     $A$ and $B$ are repeated blocks.
 \end{theorem}
-\begin{proof}\notready
+\begin{proof}\leanok
     By Theorem~\ref{thm:periodic_overlap_dichotomy}, either the overlap
     $\braket{V^{(N)}(A)}{V^{(N)}(B)}$ tends to $0$ or the bond dimensions agree
     and $A$ and $B$ are repeated blocks. In the decay case,
@@ -440,14 +434,14 @@
 \begin{theorem}[Peripheral proportional case from phase rescaling]
     \label{thm:peripheral_periodic_ft_proportional_rescaling}
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling}
-    \notready
+    \leanok
     \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
     Assume that whenever two periodic tensors have proportional MPV families,
     one can rescale one tensor by a unit-modulus phase so that the MPV families
     agree at every positive length. Then proportional periodic MPV families already force the
     tensors to be repeated blocks.
 \end{theorem}
-\begin{proof}\notready
+\begin{proof}\leanok
     Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
     $A'$ with the same positive-length MPV family as $B$.
     Theorem~\ref{thm:peripheral_periodic_ft_proportional_same}
