@@ -192,6 +192,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Completed refactors
 
+### Product-marginal support kernel
+- **Pattern:** the simultaneous marginal-support whitening proof and the
+  mutual-information estimate both need the support inclusion
+  $\ker(\rho_A\otimes\rho_B)\subseteq\ker\rho_{AB}$ for a positive
+  semidefinite bipartite operator.
+- **Reuse:** `Matrix.PosSemidef.productMarginals_kernel_le` in
+  `TNLean/Channel/MarginalSupportAbsorption.lean` records this support-kernel
+  fact once, using the two marginal support absorptions.
+- **Result:** `MarginalSupportWhitenedChoi` and the new entropy theorem
+  `Entropy.mutualInformation_le_log_operatorSchmidtRank` both use the shared
+  semantic support statement instead of repeating support-projector algebra.
+
 ### Support-correct tensor logarithm
 - **Pattern:** `TNLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
   simultaneous-diagonalization proof of the support-correct tensor logarithm.

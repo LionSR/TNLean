@@ -435,11 +435,32 @@ in \doclink{TNLean/Channel/FaithfulMarginalWhitenedChoi}, and
 \leanid{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
 in \doclink{TNLean/Channel/MarginalSupportWhitenedChoi}.}
 Thus the mathematical work tracked by
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is complete.  The
-unrestricted mutual-information inequality remains the downstream task in
-\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}; its application to
-the finite-chain MPO estimate remains tracked by
-\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is complete.
+The unrestricted coefficient-one inequality is also formalized:
+\[
+  I(A:B)_\rho\leq\log\operatorname{OSR}(\rho_{AB})
+\]
+for every positive semidefinite bipartite operator of trace one, with ordinary
+operator-Schmidt rank and without positive-dimension or faithful-marginal
+assumptions.  The proof identifies mutual information with relative entropy
+against the product of the marginals, applies the singular-reference
+relative-entropy comparison and the order-two whitening bound, and treats the
+zero value of the totalized order-two functional separately before applying
+monotonicity of the logarithm.
+\footnote{Formal declarations:
+\leanid{Matrix.operatorSchmidtRank_pos_of_ne_zero},
+\leanid{Matrix.PosSemidef.productMarginals_kernel_le},
+\leanid{TNLean.sandwichedRenyiTwoTrace_submatrix_equiv}, and
+\leanid{Entropy.mutualInformation_le_log_operatorSchmidtRank} in
+\doclink{TNLean/Algebra/OperatorSchmidt},
+\doclink{TNLean/Channel/MarginalSupportAbsorption},
+\doclink{TNLean/Analysis/SandwichedRenyiTwo}, and
+\doclink{TNLean/Entropy/MutualInformationOperatorSchmidt}.}
+Hence the mathematical work tracked by
+\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212} is complete.  Its
+application to the finite-chain MPO estimate remains tracked by
+\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.  This does not
+complete Proposition~4.5 or alter the CPSV16 coverage count.
 
 \section{Diagonal matrix product operators}
 
@@ -739,8 +760,11 @@ and the coefficient-one theorem above gives the stronger conclusion
 The operator-Schmidt rank estimate is formalized.\footnote{Formal declaration:
 \leanid{MPOTensor.operatorSchmidtRank_bipartitionedNormalizedMPO_le} in
 \doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
-The entropy implication and the resulting finite-chain theorem remain to be
-formalized; this continuation is tracked by
+The coefficient-one entropy implication is formalized by
+\leanid{Entropy.mutualInformation_le_log_operatorSchmidtRank} in
+\doclink{TNLean/Entropy/MutualInformationOperatorSchmidt}.  The remaining
+finite-chain application of that theorem to the displayed operator-Schmidt
+rank bound is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
 
 The thermodynamic-limit clause of Proposition~4.5 is false at its stated

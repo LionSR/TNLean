@@ -698,6 +698,24 @@
     definite. Moreover, $\tr\tau_C=d_C^{-1}\tr\Id_C=1$.
 \end{proof}
 
+\begin{theorem}[Covariance of the matrix logarithm under reindexing]
+    \label{thm:log_submatrix_equiv}
+    \lean{Matrix.log_submatrix_equiv}
+    \leanok
+    Let $A$ be a Hermitian matrix on a finite index set, and let $e$ be a
+    bijection onto another finite index set. Then
+    \begin{align}
+        \log(A_{e^{-1},e^{-1}})
+        &=(\log A)_{e^{-1},e^{-1}}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindexing is a star-algebra isomorphism and therefore commutes with the
+    continuous functional calculus for the real logarithm.
+\end{proof}
+
 \begin{lemma}[Reindexing invariance of the quantum relative entropy]
     \label{lem:relative_entropy_submatrix_equiv}
     \lean{Matrix.quantumRelativeEntropy_submatrix_equiv}
@@ -713,7 +731,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:quantum_relative_entropy}
+    \uses{def:quantum_relative_entropy, thm:log_submatrix_equiv}
     Write
     $D(\rho\Vert\sigma)
         =\re\tr(\rho(\log\rho-\log\sigma))$.
