@@ -16,12 +16,16 @@ import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseDirectSumUnitary
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseOneSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseTwoSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTCoefficients
@@ -280,6 +284,7 @@ import TNLean.MPS.MPDO.VerticalProductPairBlocks
 import TNLean.MPS.MPDO.VerticalProductReconstruction
 import TNLean.MPS.MPDO.VerticalProductSpectralFamily
 import TNLean.MPS.MPDO.VerticalReduction
+import TNLean.MPS.MPDO.VerticalSectorAmbientMaps
 import TNLean.MPS.MPDO.VerticalSectorCoefficientComparison
 import TNLean.MPS.MPDO.VerticalSectorCompletePositivity
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
