@@ -75,7 +75,8 @@ def ghzAmplitude (N : ℕ) (sigma : Fin N → I) : ℂ :=
   ∏ n : Fin N, if sigma n = sigma (finRotate N n) then 1 else 0
 
 /-- The rank-one operator built from the unnormalized two-symbol GHZ vector.
-At positive length its support is the span of the two constant words. -/
+At positive length its defining amplitude is supported on the two constant
+words, and its range is the line spanned by their sum. -/
 def unnormalizedGHZRankOne (N : ℕ) :
     Matrix (Fin N → I) (Fin N → I) ℂ :=
   Matrix.vecMulVec (ghzAmplitude N) (star (ghzAmplitude N))
