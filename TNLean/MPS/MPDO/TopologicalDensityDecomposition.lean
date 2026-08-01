@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.PiSigmaEquiv
+import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
@@ -439,36 +440,7 @@ leg of the vertical basis tensor and leaves its bond pair open.  This is documen
 theorem physTraceTransfer_verticalBNTMPO_posSemidef
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (γ : Fin H.labelCount) :
     (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
-  classical
-  let q : Fin (H.multiplicity γ) := ⟨0, H.multiplicity_pos γ⟩
-  let p : H.VerticalCopy := ⟨γ, q⟩
-  let e : Fin (H.bondDim γ) → (Fin 1 → Fin H.verticalRetainedDim) :=
-    fun x _ ↦
-      (verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩
-  have hRetained :
-      (mpo (changePhysicalBasis H.verticalCoisometry M) 1).PosSemidef := by
-    rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
-    exact (singleKrausMap_isKrausCP _).map_posSemidef (hM 1 zero_lt_one)
-  have hPrincipalEq :
-      (mpo (changePhysicalBasis H.verticalCoisometry M) 1).submatrix e e =
-        H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)) := by
-    ext x y
-    simp only [Matrix.submatrix_apply, mpo_apply, mpoMatrixEntry, List.ofFn_succ,
-      List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one, e]
-    rw [H.changePhysicalBasis_verticalCoisometry_copy_same]
-    rw [Matrix.trace_smul, Matrix.smul_apply]
-    congr 1
-    simp [p, Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyChainLetter,
-      verticalBNTMPO]
-  have hScaled :
-      (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
-    rw [← hPrincipalEq]
-    exact hRetained.submatrix e
-  have hUnscaled :
-      ((H.weight γ q)⁻¹ •
-        (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)))).PosSemidef :=
-    hScaled.smul (inv_nonneg_of_nonneg (H.weight_pos γ q).le)
-  simpa only [inv_smul_smul₀ (H.weight_pos γ q).ne'] using hUnscaled
+  exact H.toBNTAlgebraTensorClause.physTraceTransfer_verticalBNTMPO_posSemidef hM γ
 
 /-- The recursive line-999 block has the fixed-copy closed-chain matrix entries.
 

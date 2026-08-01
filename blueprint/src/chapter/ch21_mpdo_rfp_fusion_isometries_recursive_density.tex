@@ -230,7 +230,7 @@
     \leanok
     \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause,
         def:mpo_physical_trace_transfer,
-        lem:mpdo_sitewise_physical_coordinate_congruence}
+        thm:mpdo_algebra_clause_terminal_transfer_positivity}
     Let $M$ be a matrix product density operator, and choose a vertical
     canonical decomposition with basis tensors $M_\gamma$ and positive
     diagonal multiplicity matrices $\mu_\gamma$. Then every terminal
@@ -246,12 +246,10 @@
     \path{docs/paper-gaps/cpsv16_topological_projector_recursion.tex}.
 \end{theorem}
 \begin{proof}\leanok
-    At chain length one, conjugating the positive density operator by the
-    retained-row vertical coisometry preserves positivity. Fix a label
-    $\gamma$ and a diagonal coordinate $q$ of $\mu_\gamma$. The corresponding
-    principal block is $(\mu_\gamma)_{q,q}\,T_\gamma$.
-    Since $(\mu_\gamma)_{q,q}>0$, multiplication by its reciprocal proves
-    $T_\gamma\geq0$.
+    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity}
+    The fusion clause gives the tensor-attached algebra clause for the same
+    vertical decomposition. Apply
+    Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
 \end{proof}
 
 \begin{definition}[All-label recursive density operator]%
