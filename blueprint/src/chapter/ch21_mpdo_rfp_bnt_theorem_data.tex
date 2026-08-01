@@ -206,9 +206,10 @@
 \begin{theorem}[Positive virtual per-block extensions are unitarily implemented]%
     \label{thm:mpdo_positive_perBlockLinearExtension_unitary}
     \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension_mul}
+    \lean{MPSTensor.perBlockLinearExtension_bijective}
     \leanok
-    \uses{def:mpdo_virtual_perBlockLinearExtension,
-        thm:unitary_skolem_noether_matrix}
+    \uses{def:mpdo_virtual_perBlockLinearExtension}
     If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
     $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
 \end{theorem}
