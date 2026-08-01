@@ -203,6 +203,8 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** `MarginalSupportWhitenedChoi` and the new entropy theorem
   `Entropy.mutualInformation_le_log_operatorSchmidtRank` both use the shared
   semantic support statement instead of repeating support-projector algebra.
+  The source-facing theorem `Matrix.product_marginal_support` used in the
+  strong-subadditivity argument is a direct corollary of the same statement.
 
 ### Support-correct tensor logarithm
 - **Pattern:** `TNLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
