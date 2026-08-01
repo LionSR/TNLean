@@ -51,6 +51,38 @@ line~2057 conclusion is available conditionally on that supplied
 realization.
 % The conditional Gram and unitary results are pull requests 5282 and 5286.
 
+One direct sufficient datum is weaker than the full marked realization.  Let
+$V$ be any matrix and let $c>0$ satisfy the positive-coefficient two-sided
+physical realization
+\begin{equation}
+  V^\dagger\widetilde M_{[2]}^vV=cM_\gamma^v
+  \label{eq:positive-coefficient-realization}
+\end{equation}
+for every vertical letter $v$.  The physical-letter expansion of the marked
+matrix uses \eqref{eq:positive-coefficient-realization}, while MPDO reflection identifies
+the resulting marked chain with the common target.  Neither step requires
+$V^\dagger V=\mathbf 1$.  This reduction is formalized by a conditional
+constructor.\footnote{Formal declaration:
+\leanid{IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization}.}
+It gives a concrete sufficient local premise without adding orthogonality,
+reconstruction, or normalization assumptions.
+
+There is an independent sufficient route which need not pass through
+\eqref{eq:positive-coefficient-realization}.  The invertible similarity determines an
+algebra automorphism of the virtual matrix algebra.  If this automorphism is a
+positive map, then it preserves adjoints and hence is a star automorphism.
+Unitary Skolem--Noether then gives a unitary implementer.  Positivity of this
+virtual algebra map is therefore another possible target for completing the
+argument; it has not been derived from the tensor-attached algebra clause.
+
+Positivity of the virtual algebra map must not be confused with positivity of
+the closed sector operators.  A nonunitary similarity preserves every closed
+chain, and therefore transports an all-length positive closed family to the
+same positive family, while its virtual algebra automorphism need not be
+positive.  The bond-two singleton examples below exhibit precisely this
+distinction.  Thus closed sector MPDO positivity alone does not supply either
+of the sufficient local premises just described.
+
 The structure
 \path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization}
 requires the common-target identity only at positive tail lengths.  More
@@ -65,13 +97,15 @@ representatives.
 
 This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
 tensor-attached algebra clause alone.
-The result labelled \path{Prop:IV.12} obtains unitary representatives by
-comparing every copy of a normal tensor with a common canonical target and
-proving proportionality of the corresponding Gram matrices.  The present
+The result labelled \path{Prop:IV.12} first compares two actual physical
+copies of a common normal representative and proves proportionality of their
+Gram matrices.  Only afterwards does the source choose the first copy to have
+identity gauge.  The present
 one-site and two-site decompositions are constructed independently.  The
 available normal-tensor matching theorem therefore supplies an invertible
-conjugacy, but no common target or Gram-normalization contract from which that
-particular conjugacy can be rescaled to a unitary one.
+conjugacy, but no second positive-coefficient physical realization of the form
+\eqref{eq:positive-coefficient-realization} with which the existing two-site corner can
+be compared.
 
 The missing step occurs immediately before the comparison.  At line~2048 the
 source writes the algebra-side positive direct sum and the independently
@@ -90,9 +124,10 @@ but it does not provide the geometric premise of the comparison.
 Appendix~C.4, lines~2048--2051, gives equality of positive-length closed
 chains for two independently chosen vertical canonical forms.
 Lines~2053--2057 then give an invertible similarity and invoke
-Proposition~4.13.  None of these lines constructs the common identity-gauge
-isometric corner whose open-bond compression would yield the identity-dressed
-marked family.
+Proposition~4.13.  None of these lines constructs a positive-coefficient
+two-sided physical realization whose open-bond matrices would yield the
+identity-dressed marked family.  An identity-gauge isometric corner would be a
+stronger sufficient datum, but is not needed by the marked-chain argument.
 
 \section{The circular corner construction}
 
