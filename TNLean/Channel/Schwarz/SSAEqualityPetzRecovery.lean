@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.PetzProductReference
 import TNLean.Channel.Schwarz.SSAEqualityDPI
 import TNLean.Channel.Schwarz.WeylSupportPetzRecovery
@@ -19,8 +20,9 @@ supported input \(\rho_{AB}\).
 
 ## Main results
 
-* `Matrix.product_marginal_support` places a bipartite positive semidefinite
-  matrix in the support of the product of its marginals.
+* `Matrix.product_marginal_support` restates, for the Petz-recovery argument,
+  that a bipartite positive semidefinite matrix lies in the support of the
+  product of its marginals.
 * `Matrix.partialTraceRightPetzMap_product_marginal_recovery_of_isSSAEquality`
   gives the recovery identity for the product reference.
 * `Matrix.idTensor_partialTraceRightPetzMap_traceC_ABC_eq_of_isSSAEquality`
@@ -80,30 +82,7 @@ theorem product_marginal_support
     {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
     ∀ v : L × R → ℂ,
       (partialTraceRight ρ ⊗ₖ partialTraceLeft ρ) *ᵥ v = 0 → ρ *ᵥ v = 0 := by
-  classical
-  intro v hv
-  let hL := hρ.partialTraceRight
-  let hR := hρ.partialTraceLeft
-  have hPzero :
-      (hL.supportProj ⊗ₖ hR.supportProj) *ᵥ v = 0 := by
-    simpa only [hL.supportProj_kronecker hR] using
-      (hL.kronecker hR).supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
-  have hPL :
-      ρ * (hL.supportProj ⊗ₖ (1 : Matrix R R ℂ)) = ρ := by
-    simpa only [hL, PosSemidef.supportProj, leftKroneckerEmbed_apply] using
-      hρ.mul_leftKroneckerEmbed_supportProj_self
-  have hPR :
-      ρ * ((1 : Matrix L L ℂ) ⊗ₖ hR.supportProj) = ρ := by
-    simpa only [hR, PosSemidef.supportProj, rightKroneckerEmbed_apply] using
-      hρ.mul_rightKroneckerEmbed_supportProj_self
-  have hP :
-      ρ * (hL.supportProj ⊗ₖ hR.supportProj) = ρ := by
-    rw [show hL.supportProj ⊗ₖ hR.supportProj =
-        (hL.supportProj ⊗ₖ (1 : Matrix R R ℂ)) *
-          ((1 : Matrix L L ℂ) ⊗ₖ hR.supportProj) by
-        rw [← Matrix.mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul],
-      ← Matrix.mul_assoc, hPL, hPR]
-  rw [← hP, ← Matrix.mulVec_mulVec, hPzero, Matrix.mulVec_zero]
+  exact hρ.productMarginals_kernel_le
 
 end ProductMarginalSupport
 

@@ -30,6 +30,8 @@ form is a specialization of the other on the product index \(L\times R\).
   by the lifted support projector of the right partial trace.
 * `Matrix.PosSemidef.mul_leftKroneckerEmbed_supportProj_self`: the corresponding
   right absorption identity.
+* `Matrix.PosSemidef.productMarginals_kernel_le`: the kernel of the product of
+  the two marginals is contained in the kernel of the original operator.
 * `Matrix.PosSemidef.eq_marginalSupport_expansion_compression`: simultaneous
   compression to both marginal supports reconstructs the original operator.
 * `Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression`: this
@@ -261,6 +263,43 @@ section SimultaneousMarginalSupport
 
 variable {L R : Type*} [Fintype L] [DecidableEq L] [Fintype R] [DecidableEq R]
 variable {L' R' : Type*} [Fintype L'] [Fintype R']
+
+omit [DecidableEq L] [DecidableEq R] in
+/-- The kernel of the product of the two marginals of a positive semidefinite
+bipartite operator is contained in the kernel of the operator itself.
+
+Equivalently, the support of the operator is contained in the tensor product
+of its two marginal supports. The statement includes empty finite index types. -/
+theorem PosSemidef.productMarginals_kernel_le
+    {ρ : Matrix (L × R) (L × R) ℂ} (hρ : ρ.PosSemidef) :
+    ∀ v : L × R → ℂ,
+      (Matrix.partialTraceRight ρ ⊗ₖ Matrix.partialTraceLeft ρ) *ᵥ v = 0 →
+        ρ *ᵥ v = 0 := by
+  classical
+  let hL : (Matrix.partialTraceRight ρ).PosSemidef := hρ.partialTraceRight
+  let hR : (Matrix.partialTraceLeft ρ).PosSemidef := hρ.partialTraceLeft
+  let P₁ := hL.isHermitian.supportProj
+  let P₂ := hR.isHermitian.supportProj
+  have hρP₁ : ρ * (P₁ ⊗ₖ (1 : Matrix R R ℂ)) = ρ := by
+    simpa only [P₁, leftKroneckerEmbed_apply] using
+      hρ.mul_leftKroneckerEmbed_supportProj_self
+  have hρP₂ : ρ * ((1 : Matrix L L ℂ) ⊗ₖ P₂) = ρ := by
+    simpa only [P₂, rightKroneckerEmbed_apply] using
+      hρ.mul_rightKroneckerEmbed_supportProj_self
+  have hρP : ρ * (P₁ ⊗ₖ P₂) = ρ := by
+    rw [show P₁ ⊗ₖ P₂ = ((1 : Matrix L L ℂ) ⊗ₖ P₂) *
+        (P₁ ⊗ₖ (1 : Matrix R R ℂ)) by
+      rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]]
+    rw [← Matrix.mul_assoc, hρP₂, hρP₁]
+  intro v hv
+  let hω : (Matrix.partialTraceRight ρ ⊗ₖ Matrix.partialTraceLeft ρ).PosSemidef :=
+    hL.kronecker hR
+  have hPv := hω.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
+  have hsupport : hω.supportProj = P₁ ⊗ₖ P₂ := by
+    change (hL.kronecker hR).supportProj = hL.supportProj ⊗ₖ hR.supportProj
+    exact hL.supportProj_kronecker hR
+  rw [hsupport] at hPv
+  rw [← hρP, ← Matrix.mulVec_mulVec, hPv, Matrix.mulVec_zero]
 
 /-- Compression by coordinate maps for both marginal supports reconstructs
 the original positive semidefinite operator exactly.
