@@ -188,9 +188,9 @@
     \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[BNT-refined renormalization fixed points have active-sector fusion]%
+\begin{theorem}[Horizontal-form renormalization fixed points have active-sector fusion]%
     \label{thm:mpdo_rfp_to_bnt_fusion_tensor}
-    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
     \leanok
     \uses{def:is_rfp_via_ts,
         def:vertical_cf_mpdo,
@@ -221,8 +221,7 @@
 
 \begin{theorem}[Literal CPSV renormalization fixed points have active-sector fusion]%
     \label{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
-    \lean{MPOTensor.HasBNTFusionTensorClause.%
-of_isRFPViaTS_of_cpsvCanonicalForm}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
         def:mpdo_bnt_fusion_tensor_clause}
