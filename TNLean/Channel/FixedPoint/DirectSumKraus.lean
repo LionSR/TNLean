@@ -127,6 +127,36 @@ theorem IsKrausDirectSumMap.comp
   rw [IsKrausDirectSumMap, directSumMapExtension_comp]
   exact isKrausCP_comp hT hS
 
+section PiMap
+
+variable {q : ι → Type*}
+variable [∀ i, Fintype (q i)] [∀ i, DecidableEq (q i)]
+
+/-- A coordinatewise family of completely positive maps determines a completely positive map
+between the corresponding finite sums of matrix algebras. -/
+theorem isKrausDirectSumMap_piMap
+    (T : ∀ i, Matrix (n i) (n i) ℂ →ₗ[ℂ] Matrix (q i) (q i) ℂ)
+    (hT : ∀ i, IsKrausCP (T i)) :
+    IsKrausDirectSumMap (LinearMap.piMap T) := by
+  classical
+  choose r A hA using hT
+  change IsKrausCP (directSumMapExtension (LinearMap.piMap T))
+  rw [show directSumMapExtension (LinearMap.piMap T) = controlledKrausMap r A by
+    apply LinearMap.ext
+    intro X
+    ext ⟨i, b⟩ ⟨j, c⟩
+    by_cases hij : i = j
+    · subst j
+      rw [directSumMapExtension_apply, directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_eq, controlledKrausMap_sameBlock_apply]
+      exact congrFun (congrFun (hA i (X.submatrix (Sigma.mk i) (Sigma.mk i))) b) c
+    · rw [directSumMapExtension_apply, directSumDiagonalEmbedding_apply,
+        Matrix.blockDiagonal'_apply_ne _ _ _ hij,
+        controlledKrausMap_apply_of_ne _ _ _ hij]]
+  exact rectangularKrausMap_isKrausCP _
+
+end PiMap
+
 omit [Fintype ι] [(i : ι) → Fintype (n i)]
     [(i : ι) → DecidableEq (n i)] in
 /-- For an endomorphism of one finite direct sum, the extension between two
