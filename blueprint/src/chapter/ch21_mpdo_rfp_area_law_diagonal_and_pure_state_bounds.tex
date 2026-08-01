@@ -303,7 +303,9 @@
 \begin{definition}[Operator-Schmidt rank]
     \label{def:bipartite_operator_schmidt_rank}
     \lean{Matrix.HasOperatorSchmidtDecomposition,
-      Matrix.operatorSchmidtRank, Matrix.operatorSchmidtRank_minimal}
+      Matrix.operatorSchmidtRank,
+      Matrix.hasOperatorSchmidtDecomposition_operatorSchmidtRank,
+      Matrix.operatorSchmidtRank_minimal}
     \leanok
     For a bipartite density operator
     $\rho\in\MN{d_A}\otimes\MN{d_B}$, its
@@ -317,6 +319,26 @@
     the definition in \cite[Equation~(1)]{DeLasCuevas2019Separability}; the
     same formula defines the rank of an arbitrary complex bipartite matrix.
 \end{definition}
+
+\begin{theorem}[Positivity of the operator-Schmidt rank]
+    \label{thm:operator_schmidt_rank_pos}
+    \lean{Matrix.operatorSchmidtRank_pos_of_ne_zero}
+    \leanok
+    \uses{def:bipartite_operator_schmidt_rank}
+    Every nonzero finite-dimensional bipartite operator $X$ satisfies
+    \begin{align}
+        0&<\operatorname{OSR}(X).
+        \notag
+    \end{align}
+    This includes zero-dimensional factors, where the nonzero hypothesis is
+    impossible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:bipartite_operator_schmidt_rank}
+    If $\operatorname{OSR}(X)=0$, a shortest product decomposition of $X$ is
+    an empty sum. Hence $X=0$.
+\end{proof}
 
 \begin{theorem}[Two virtual boundaries bound the operator-Schmidt rank]
     \label{thm:mpdo_periodic_cut_operator_schmidt_rank}
@@ -427,6 +449,30 @@
     this inequality first to $V_A,V_B$ and then to their adjoints gives the two
     inequalities. The identities $V_A^\dagger V_A=1$ and
     $V_B^\dagger V_B=1$ identify the twice-transformed operator with $X$.
+\end{proof}
+
+\begin{theorem}[Support of a bipartite positive operator]
+    \label{thm:product_marginals_kernel}
+    \lean{Matrix.PosSemidef.productMarginals_kernel_le}
+    \leanok
+    Let $\rho_{AB}\succeq0$, with marginals $\rho_A$ and $\rho_B$. Then
+    \begin{align}
+      \ker(\rho_A\otimes\rho_B)&\subseteq\ker\rho_{AB}.
+      \notag
+    \end{align}
+    Equivalently, the support of $\rho_{AB}$ is contained in
+    $\supp(\rho_A)\otimes\supp(\rho_B)$. This remains valid when either
+    factor has dimension zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:marginal_support_right_absorption,
+      thm:right_marginal_support_right_absorption}
+    Let $P_A$ and $P_B$ be the support projections of the marginals. The two
+    right-absorption identities give
+    $\rho_{AB}(P_A\otimes P_B)=\rho_{AB}$. The support projection of
+    $\rho_A\otimes\rho_B$ is $P_A\otimes P_B$. Therefore every vector
+    annihilated by $\rho_A\otimes\rho_B$ is annihilated by $\rho_{AB}$.
 \end{proof}
 
 \begin{theorem}[Compression to both marginal supports]
@@ -870,6 +916,22 @@
     R\'enyi divergence \cite[Definition~2]{MullerLennert2013Renyi}.
 \end{definition}
 
+\begin{theorem}[Nonnegativity of the order-two functional]
+    \label{thm:sandwiched_renyi_two_nonneg}
+    \lean{TNLean.sandwichedRenyiTwoTrace_nonneg}
+    \leanok
+    \uses{def:sandwiched_renyi_two_trace}
+    If $\rho\succeq0$ and $\omega\succeq0$, then
+    $Q_2(\rho,\omega)\geq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:sandwiched_renyi_two_trace}
+    The sandwiched matrix
+    $\omega^{-1/4}\rho\,\omega^{-1/4}$ is positive semidefinite. The trace of
+    its square is therefore nonnegative.
+\end{proof}
+
 \begin{theorem}[Faithful cyclic form of the order-two functional]
     \label{thm:sandwiched_renyi_two_weighted}
     \lean{TNLean.sandwichedRenyiTwoTrace_eq_weighted}
@@ -1287,7 +1349,6 @@ terms of operator-Schmidt rank.
     \label{thm:rpow_conj_unitary}
     \lean{Matrix.rpow_conj_unitary}
     \leanok
-    \uses{lem:cfc_conj_unitary}
     Let $A\succeq0$, let $s\in\R$, and let $U$ be unitary. Then
     \begin{align}
       (UAU^\dagger)^s&=UA^sU^\dagger.
@@ -1304,7 +1365,6 @@ terms of operator-Schmidt rank.
     \label{thm:rpow_kronecker_possemidef}
     \lean{Matrix.PosSemidef.rpow_kronecker}
     \leanok
-    \uses{thm:multiplicative_functional_calculus_tensor_product}
     Let $A\succeq0$ and $B\succeq0$. For every $s\in\R$,
     \begin{align}
       (A\otimes B)^s&=A^s\otimes B^s.
@@ -1340,7 +1400,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_unitary_invariance}
     \lean{TNLean.sandwichedRenyiTwoTrace_conj_unitary}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace, thm:rpow_conj_unitary}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\omega\succeq0$, let $\rho$ be a square matrix of the same size, and
     let $U$ be unitary. Then
     \begin{align}
@@ -1356,6 +1416,27 @@ terms of operator-Schmidt rank.
     $(U\omega U^\dagger)^{-1/4}=U\omega^{-1/4}U^\dagger$.
     Substitute this identity into both sandwiching factors and use
     $U^\dagger U=1$ and cyclicity of the trace.
+\end{proof}
+
+\begin{theorem}[Reindexing invariance of the order-two functional]
+    \label{thm:sandwiched_renyi_two_submatrix_equiv}
+    \lean{TNLean.sandwichedRenyiTwoTrace_submatrix_equiv}
+    \leanok
+    \uses{def:sandwiched_renyi_two_trace}
+    Let $\rho$ be a square matrix and let $\omega\succeq0$ have the same finite
+    index set. Let $e$ be a bijection onto another finite index set. Then
+    \begin{align}
+      Q_2(\rho_{e^{-1},e^{-1}},\omega_{e^{-1},e^{-1}})
+      &=Q_2(\rho,\omega).
+      \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:sandwiched_renyi_two_trace}
+    Reindexing commutes with the continuous functional calculus, matrix
+    multiplication, and the trace. Apply these three identities to the two
+    inverse quarter-powers and the two copies of the sandwiched matrix.
 \end{proof}
 
 \begin{theorem}[Faithful marginal whitening bound]
@@ -1415,10 +1496,9 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:sandwiched_renyi_two_trace,
-      def:bipartite_operator_schmidt_rank,
-      thm:sandwiched_renyi_two_osr_faithful,
+    \uses{thm:sandwiched_renyi_two_osr_faithful,
       thm:sandwiched_renyi_two_support_compression,
+      thm:product_marginals_kernel,
       thm:operator_schmidt_rank_marginal_support_compression,
       thm:faithful_marginals_support_compression}
     Compress both factors simultaneously to the supports of $\rho_A$ and
@@ -1534,32 +1614,55 @@ logarithmic divergence, or a comparison with relative entropy.
 
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
-    \uses{def:bipartite_operator_schmidt_rank}
-    For every finite-dimensional bipartite density operator $\rho_{AB}$,
+    \lean{Entropy.mutualInformation_le_log_operatorSchmidtRank}
+    \leanok
+    \uses{def:entropy_mutual_information,
+      def:bipartite_operator_schmidt_rank}
+    Let $\rho_{AB}\succeq0$ be a finite-dimensional bipartite operator with
+    $\tr\rho_{AB}=1$. Then
     \begin{align}
         I(A:B)_\rho
         \leq \log\operatorname{OSR}(\rho_{AB}).
         \notag
     \end{align}
-    % Formalization is tracked by issue #5212.
+    No positive-dimension or faithful-marginal hypothesis is required. The
+    operator-Schmidt rank is the ordinary operator-Schmidt rank.
 \end{theorem}
-\begin{proof}
-    \uses{thm:relative_entropy_q2_support,
-      thm:sandwiched_renyi_two_osr_support}
-    Set $\omega=\rho_A\otimes\rho_B$. Positivity gives
-    $\ker\omega\subseteq\ker\rho_{AB}$, and the two matrices have trace one.
-    Therefore
+\begin{proof}\leanok
+    \uses{thm:relative_entropy_product_marginals,
+      thm:product_marginals_kernel,
+      lem:relative_entropy_submatrix_equiv,
+      thm:sandwiched_renyi_two_submatrix_equiv,
+      thm:relative_entropy_q2_support,
+      thm:sandwiched_renyi_two_nonneg,
+      thm:sandwiched_renyi_two_osr_support,
+      thm:operator_schmidt_rank_pos}
+    Set $\omega=\rho_A\otimes\rho_B$. The marginals are positive semidefinite,
+    $\tr\omega=1$, and Theorem~\ref{thm:product_marginals_kernel} gives
+    $\ker\omega\subseteq\ker\rho_{AB}$. Reindex the product basis by a single
+    finite coordinate set. Lemma~\ref{lem:relative_entropy_submatrix_equiv} and
+    Theorem~\ref{thm:sandwiched_renyi_two_submatrix_equiv} preserve the two
+    functionals, so Theorem~\ref{thm:relative_entropy_q2_support} applies.
+    Theorem~\ref{thm:relative_entropy_product_marginals} identifies its left
+    side with mutual information. Thus, with
+    $q=Q_2(\rho_{AB},\omega)$,
     \begin{align}
       I(A:B)_\rho
-      &=D(\rho_{AB}\Vert\omega) \\
-      &\leq\log Q_2(\rho_{AB},\omega) \\
-      &\leq\log\operatorname{OSR}(\rho_{AB}).
+      &=D(\rho_{AB}\Vert\omega)
+      \leq\log q,
+      \notag\\
+      0&\leq q\leq\operatorname{OSR}(\rho_{AB}).
       \notag
     \end{align}
-    The first inequality is
-    Theorem~\ref{thm:relative_entropy_q2_support}; the second follows from
-    Theorem~\ref{thm:sandwiched_renyi_two_osr_support} and monotonicity of the
-    logarithm.
+    The second inequality is
+    Theorem~\ref{thm:sandwiched_renyi_two_osr_support}. Since
+    $\tr\rho_{AB}=1$, the operator is nonzero, and
+    Theorem~\ref{thm:operator_schmidt_rank_pos} gives
+    $\operatorname{OSR}(\rho_{AB})>0$. This positive integer is at least one,
+    so its logarithm is nonnegative. If $q=0$, the totalized convention
+    $\log0=0$ gives $I(A:B)_\rho\leq0\leq\log\operatorname{OSR}(\rho_{AB})$.
+    If $q>0$, monotonicity of the logarithm gives
+    $\log q\leq\log\operatorname{OSR}(\rho_{AB})$.
 \end{proof}
 
 \begin{remark}[Boundedness of the mutual information]

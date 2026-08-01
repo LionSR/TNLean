@@ -17,6 +17,7 @@ import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition
 import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
+import TNLean.Analysis.EntropyReindex
 import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.KleinInequality
