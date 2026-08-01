@@ -6,7 +6,7 @@
 \DeclareUnicodeCharacter{2099}{\ifmmode{}_{n}\else\textsubscript{n}\fi}
 
 \newcommand{\Lean}{\textsc{Lean}}
-\newcommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\newcommand{\leanid}[1]{\begingroup\urlstyle{sf}\nolinkurl{#1}\endgroup}
 \providecommand{\tr}{\operatorname{tr}}
 \newcommand{\tnleanIssueBase}{https://github.com/LionSR/TNLean/issues/}
 \newcommand{\tnleanPrBase}{https://github.com/LionSR/TNLean/pull/}
