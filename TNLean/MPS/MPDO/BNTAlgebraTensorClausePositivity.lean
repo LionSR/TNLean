@@ -104,8 +104,8 @@ positivity.  In particular, a proposed normal representative whose terminal
 transfer is not positive semidefinite cannot occur as one of these retained
 sectors.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 943--951, and the terminal
-matrices at lines 1010--1012. -/
+Derived from arXiv:1606.00608, Proposition 4.13, and one-site MPDO
+positivity; compare the terminal matrices at lines 1010--1012. -/
 theorem physTraceTransfer_verticalBNTMPO_posSemidef
     (H : BNTAlgebraTensorClause M) (hM : IsMPDO M) (γ : Fin H.labelCount) :
     (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
