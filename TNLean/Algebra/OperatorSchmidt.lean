@@ -38,6 +38,8 @@ of the operator blocks.
   decomposition exists with exactly the range dimension many terms.
 * `Matrix.operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition`: every
   product decomposition has at least the range dimension many terms.
+* `Matrix.operatorSchmidtRank_eq_zero_iff`: operator-Schmidt rank vanishes
+  exactly for the zero matrix.
 * `Matrix.operatorSchmidtRank_local_mul_le`: local left and right
   multiplication cannot increase operator-Schmidt rank.
 * `Matrix.operatorSchmidtRank_local_isometry_conj`: local isometric
@@ -188,6 +190,38 @@ theorem operatorSchmidtRank_minimal (ρ : Matrix (m × n) (m × n) ℂ) :
       ∀ r, HasOperatorSchmidtDecomposition ρ r → operatorSchmidtRank ρ ≤ r :=
   ⟨hasOperatorSchmidtDecomposition_operatorSchmidtRank ρ,
     fun _ ↦ operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition⟩
+
+/-- A bipartite complex matrix has operator-Schmidt rank zero exactly when it
+is the zero matrix. -/
+@[simp]
+theorem operatorSchmidtRank_eq_zero_iff
+    (ρ : Matrix (m × n) (m × n) ℂ) :
+    operatorSchmidtRank ρ = 0 ↔ ρ = 0 := by
+  rw [operatorSchmidtRank_eq_finrank_operatorBlockSpan,
+    Submodule.finrank_eq_zero]
+  constructor
+  · intro hspan
+    ext ⟨i, k⟩ ⟨j, l⟩
+    have hblock : operatorBlock ρ i j ∈ operatorBlockSpan ρ :=
+      Submodule.subset_span ⟨(i, j), rfl⟩
+    rw [hspan] at hblock
+    change operatorBlock ρ i j = 0 at hblock
+    simpa using congrFun (congrFun hblock k) l
+  · rintro rfl
+    rw [operatorBlockSpan]
+    apply le_antisymm
+    · apply Submodule.span_le.mpr
+      rintro _ ⟨⟨i, j⟩, rfl⟩
+      change (0 : Matrix n n ℂ) ∈ (⊥ : Submodule ℂ (Matrix n n ℂ))
+      exact Submodule.zero_mem _
+    · exact bot_le
+
+/-- A bipartite complex matrix has positive operator-Schmidt rank exactly when
+it is nonzero. -/
+theorem operatorSchmidtRank_pos_iff
+    (ρ : Matrix (m × n) (m × n) ℂ) :
+    0 < operatorSchmidtRank ρ ↔ ρ ≠ 0 := by
+  rw [Nat.pos_iff_ne_zero, ne_eq, operatorSchmidtRank_eq_zero_iff]
 
 end Complex
 

@@ -76,8 +76,9 @@ noncomputable section
 variable {D k : ℕ}
 
 private theorem support_compression_log
-    {A : Matrix (Fin D) (Fin D) ℂ} (hA : A.PosSemidef)
-    (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1)
+    {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m]
+    {A : Matrix n n ℂ} (hA : A.PosSemidef)
+    (V : Matrix n m ℂ) (hV : Vᴴ * V = 1)
     (hexpand : V * (Vᴴ * A * V) * Vᴴ = A) :
     CFC.log A = V * CFC.log (Vᴴ * A * V) * Vᴴ := by
   let Ac := Vᴴ * A * V
@@ -115,9 +116,10 @@ positive-semidefinite reference.  The kernel inclusion is exactly the finite
 relative-entropy support condition; no faithfulness assumption is made on the
 ambient reference. -/
 theorem quantumRelativeEntropy_support_compression
-    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
-    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
-    (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1)
+    {n m : Type*} [Fintype n] [DecidableEq n] [Fintype m] [DecidableEq m]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    (hker : ∀ v : n → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (V : Matrix n m ℂ) (hV : Vᴴ * V = 1)
     (hRange : V * Vᴴ = hω.supportProj) :
     quantumRelativeEntropy ρ ω =
       quantumRelativeEntropy (Vᴴ * ρ * V) (Vᴴ * ω * V) := by
@@ -204,9 +206,10 @@ isometric trace preservation supplies the corresponding normalizations for
 the compressed matrices.  The faithful inequality is an explicit hypothesis
 and is not proved here. -/
 theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
-    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
     (hρtr : ρ.trace = 1) (hωtr : ω.trace = 1)
-    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
+    (hker : ∀ v : n → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0)
     (hfaithful : ∀ {d : ℕ} (A B : Matrix (Fin d) (Fin d) ℂ),
       A.PosSemidef → B.PosDef → A.trace = 1 → B.trace = 1 →
         quantumRelativeEntropy A B ≤ Real.log (sandwichedRenyiTwoTrace A B)) :
@@ -258,9 +261,10 @@ logarithm of the order-two sandwiched trace. The proof compresses to the
 support of \(\omega\), where the reference is positive definite, and applies
 `quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_posDef`. -/
 theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace
-    {ρ ω : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef)
     (hρtr : ρ.trace = 1) (hωtr : ω.trace = 1)
-    (hker : ∀ v : Fin D → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0) :
+    (hker : ∀ v : n → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0) :
     quantumRelativeEntropy ρ ω ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) := by
   exact quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
     hρ hω hρtr hωtr hker

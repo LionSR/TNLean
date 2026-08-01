@@ -434,11 +434,21 @@ requires no trace normalization.
 in \doclink{TNLean/Channel/FaithfulMarginalWhitenedChoi}, and
 \leanid{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
 in \doclink{TNLean/Channel/MarginalSupportWhitenedChoi}.}
-Thus the mathematical work tracked by
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is complete.  The
-unrestricted mutual-information inequality remains the downstream task in
-\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}; its application to
-the finite-chain MPO estimate remains tracked by
+Combining this estimate with the support-restricted order-two comparison gives
+the unrestricted finite-dimensional inequality
+\[
+  I(A:B)_\rho\leq\log\operatorname{OSR}(\rho_{AB})
+\]
+for every bipartite density operator.
+\footnote{Formal declaration:
+\leanid{TNLean.Entropy.mutualInformation_le_log_operatorSchmidtRank}
+in \doclink{TNLean/Channel/Schwarz/MutualInformationOperatorSchmidt}.}
+This is a finite-dimensional consequence of the cited sandwiched R\'enyi
+results, not a statement of Proposition~4.5 in arXiv:1606.00608.  Thus the
+mathematical work tracked by
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} and
+\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212} is complete.  Its
+application to the finite-chain MPO estimate remains tracked by
 \href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
 
 \section{Diagonal matrix product operators}

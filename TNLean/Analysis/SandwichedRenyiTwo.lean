@@ -174,11 +174,14 @@ positive-semidefinite arguments.
 This is the positivity of the expression in Müller-Lennert et al.,
 arXiv:1306.3142v4, Definition 2, specialized to order two. -/
 theorem sandwichedRenyiTwoTrace_nonneg
-    {ρ ω : Mat} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) :
+    {n : Type*} [Fintype n] [DecidableEq n]
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) :
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
-  have hX : (q * ρ * q).PosSemidef :=
-    _root_.Matrix.PosSemidef.rpow_mul_mul_rpow hρ hω (-(1 / 4 : ℝ))
+  have hq : q.PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp CFC.rpow_nonneg
+  have hX : (q * ρ * q).PosSemidef := by
+    simpa only [hq.isHermitian.eq] using hρ.mul_mul_conjTranspose_same q
   exact (Complex.nonneg_iff.mp (hX.trace_mul_nonneg hX)).1
 
 /-- For a positive-definite matrix, two inverse quarter-powers multiply to the
