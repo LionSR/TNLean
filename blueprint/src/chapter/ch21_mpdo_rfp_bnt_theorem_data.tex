@@ -191,78 +191,71 @@
     $X^\dagger X=\diag(4,1)$ scalar, a contradiction.
 \end{proof}
 
-\begin{definition}[Per-block linear extension]%
-    \label{def:perBlockLinearExtension}
+\begin{definition}[Virtual per-block linear extension]%
+    \label{def:mpdo_virtual_perBlockLinearExtension}
     \lean{MPSTensor.perBlockLinearExtension}
     \lean{MPSTensor.perBlockLinearExtension_spec}
     \leanok
     \uses{def:injective, def:same_mpv}
-    Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
-    $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
-    $k \in \{0, \ldots, r{-}1\}$.
-    The \emph{per-block linear extension} $T_k : \MN{D_k} \to \MN{D_k}$
-    is the unique $\C$-linear map satisfying $T_k(A_k^i) = B_k^i$
-    for every physical index~$i$.
+    For injective families $A_k$ and $B_k$ with the same closed matrix
+    product vectors, the per-block linear extension is the unique linear map
+    $T_k:\MN{D_k}\to\MN{D_k}$ satisfying $T_k(A_k^i)=B_k^i$ for every
+    letter~$i$.
 \end{definition}
 
-\begin{lemma}[Per-block multiplicativity]%
-    \label{lem:perBlockLinearExtension_mul}
+\begin{theorem}[Multiplicativity of the virtual per-block extension]%
+    \label{thm:mpdo_virtual_perBlockLinearExtension_mul}
     \lean{MPSTensor.perBlockLinearExtension_mul}
     \leanok
-    \uses{def:perBlockLinearExtension}
-    For each block~$k$, the per-block linear extension $T_k$ is
-    multiplicative:
-    $T_k(MN) = T_k(M)T_k(N)$ for all $M, N \in \MN{D_k}$.
-\end{lemma}
+    \uses{def:mpdo_virtual_perBlockLinearExtension}
+    The per-block extension satisfies $T_k(MN)=T_k(M)T_k(N)$ for all
+    $M,N\in\MN{D_k}$.
+\end{theorem}
 
-\begin{proof}\leanok\uses{def:perBlockLinearExtension}
-    Since $\{A_k^i\}$ spans $\MN{D_k}$, it suffices to check on spanning
-    elements, where the result follows from the MPV identity.
+\begin{proof}\leanok\uses{def:mpdo_virtual_perBlockLinearExtension}
+    The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
+    product vectors gives the identity on products of spanning letters.
 \end{proof}
 
-\begin{lemma}[Per-block bijectivity]%
-    \label{lem:perBlockLinearExtension_bijective}
+\begin{theorem}[Bijectivity of the virtual per-block extension]%
+    \label{thm:mpdo_virtual_perBlockLinearExtension_bijective}
     \lean{MPSTensor.perBlockLinearExtension_bijective}
     \leanok
-    \uses{lem:perBlockLinearExtension_mul}
-    Each $T_k$ is bijective.
-\end{lemma}
+    \uses{def:mpdo_virtual_perBlockLinearExtension}
+    The per-block extension $T_k$ is bijective.
+\end{theorem}
 
-\begin{proof}\leanok\uses{lem:perBlockLinearExtension_mul}
-    A nonzero multiplicative linear endomorphism of $\MN{D_k}$ is
-    automatically bijective: injectivity follows from the simplicity
-    of $\MN{D_k}$ (the kernel is a proper ideal, hence zero), and
-    surjectivity from finite dimension.
-    Non-vanishing of $T_k$ is established via the trace pairing: if
-    $T_k = 0$, then all $B_k^i = 0$, contradicting the non-vanishing
-    of the trace pairing for injective tensors.
+\begin{proof}\leanok\uses{thm:mpdo_virtual_perBlockLinearExtension_mul}
+    Multiplicativity makes the kernel an ideal of the simple matrix algebra.
+    The map is nonzero: otherwise every letter of $B_k$ would vanish,
+    contradicting the nonvanishing trace pairing for the injective family.
+    Thus the kernel is zero, and finite dimensionality gives surjectivity.
 \end{proof}
 
-\begin{theorem}[Unitary implementation of a positive per-block extension]%
-    \label{thm:positive_perBlockLinearExtension_unitary}
+\begin{theorem}[Positive virtual per-block extensions are unitarily implemented]%
+    \label{thm:mpdo_positive_perBlockLinearExtension_unitary}
     \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
     \leanok
-    \uses{def:perBlockLinearExtension}
-    If the per-block linear extension $T_k$ is positive, then there is a
-    unitary matrix $U_k$ such that
+    \uses{def:mpdo_virtual_perBlockLinearExtension}
+    If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
     $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:perBlockLinearExtension_mul,
-        lem:perBlockLinearExtension_bijective,
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,
+        thm:mpdo_virtual_perBlockLinearExtension_bijective,
         thm:unitary_skolem_noether_matrix}
-    By Lemmas~\ref{lem:perBlockLinearExtension_mul}
-    and~\ref{lem:perBlockLinearExtension_bijective}, $T_k$ is a bijective
-    multiplicative linear map. Positivity makes this algebra automorphism
-    preserve adjoints. Unitary Skolem--Noether therefore implements it by
-    conjugation with a unitary matrix.
+    The per-block map is a bijective algebra endomorphism. Positivity makes it
+    preserve adjoints, so unitary Skolem--Noether implements it by conjugation
+    with a unitary matrix.
 \end{proof}
 
 \begin{theorem}[Closed matrix product vectors do not force a positive virtual extension]%
     \label{thm:mpdo_closed_mpv_not_force_positive_virtual_extension}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         perBlockLinearExtension_not_positive}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.gaugedTensorFamily}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily_isInjective}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.gaugedTensor_isInjective}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
@@ -270,7 +263,7 @@
     \leanok
     \discussion{5284}
     \uses{def:injective, def:same_mpv,
-        def:perBlockLinearExtension,
+        def:mpdo_virtual_perBlockLinearExtension,
         lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     Regard the tensors $A$ and $B$ of
     Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
@@ -284,8 +277,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:perBlockLinearExtension,
-        thm:positive_perBlockLinearExtension_unitary,
+    \uses{def:mpdo_virtual_perBlockLinearExtension,
+        thm:mpdo_positive_perBlockLinearExtension_unitary,
         lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     If the per-block extension were positive, its unitary-implementation
     theorem would give a unitary $U$ satisfying
