@@ -11741,6 +11741,7 @@
 \tl_new:N \l__tenkz_kernel_r_skin_to_slot_tl
 \tl_new:N \l__tenkz_kernel_r_skin_wire_host_tl
 \tl_new:N \l__tenkz_kernel_r_skin_wire_name_tl
+\prop_new:N \l__tenkz_kernel_glyph_owner_prop
 \seq_new:N \l__tenkz_kernel_r_skin_routes_seq
 \int_new:N \l__tenkz_kernel_r_skin_crossings_int
 \seq_new:N \l__tenkz_kernel_skin_base_seq
@@ -12170,6 +12171,11 @@
               }
           }
       }
+    % The affine plane redraws the upright label after the carried glyph.
+    % Preserve the glyph's audit owner before any intervening skin wires
+    % advance the independent ink counter.
+    \prop_put:Nne \l__tenkz_kernel_glyph_owner_prop {#1}
+      { \the\tenkz@inkuid }
     \__tenkz_kernel_r_skin_wires:n {#1}
     \__tenkz_kernel_r_skin_over_wires:n {#1}
     \bool_lazy_or:nnT
@@ -12183,8 +12189,14 @@
   {
     \tl_if_empty:NF \l__tenkz_kernel_r_skin_label_tl
       {
+        \prop_get:NnN \l__tenkz_kernel_glyph_owner_prop {#1}
+          \l__tenkz_kernel_r_tl
         \tl_set:Nn \l__tenkz_kernel_r_atom_style_tl
-          { tenkz~audited~label , inner~sep = 0pt }
+          {
+            tenkz~audited~label ,
+            tenkz~audited~label~owner = \l__tenkz_kernel_r_tl ,
+            inner~sep = 0pt
+          }
         \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
           {
             \__tenkz_kernel_r_hue:nN {#1}

@@ -1081,6 +1081,8 @@ class Audit:
                 label_shape = label[3]
                 label_radius = label[4]
                 label_id = int(label[0].attrs["id"])
+                owner = label[0].attrs.get("owner", "0")
+                label_owner = int(owner) if _is_nonnegative_int(owner) else 0
                 for other in wire_boxes:
                     other_rect = other[2]
                     if label_shape == "rect":
@@ -1154,11 +1156,12 @@ class Audit:
                             and 2 * site[1] == bounds[2] + bounds[3]
                             for site in anchor_sites)):
                         continue
-                    glyph_owner = int(event.attrs.get("owner", "-1"))
+                    glyph_owner = int(event.attrs["owner"])
                     # A box label is deliberately inscribed in its own glyph.
                     # Partial overlaps and intersections with sibling glyphs
                     # remain reportable.
-                    if (shape == "rect" and label_id == glyph_owner
+                    if (shape == "rect" and label_owner > 0
+                            and label_owner == glyph_owner
                             and _rect_contains(bounds, label_rect)):
                         continue
                     if label_shape == "rect":
