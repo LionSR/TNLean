@@ -19,6 +19,26 @@
   \end{tenkz}
 \end{tenkzeq}
 \begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[
+      rows={wire}, cols=1, frame=plane, bonds=none, physical=up]
+    \tn[at=(1,1)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, frame=plane, bonds=none]
+    \tn[at=(1,1), ports={90:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[
+      rows={wire}, cols=4, frame=circle, bonds=none, physical=up]
+    \tn[at=(1,2)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=4, frame=circle, bonds=none]
+    \tn[at=(1,2), ports={90:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
     \tn[at=(1,1), ports={359.9999999:physical}]{}
   \end{tenkz}
