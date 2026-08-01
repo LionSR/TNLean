@@ -345,7 +345,7 @@
     pair labels agree, and gives zero otherwise.
 \end{proof}
 
-\begin{theorem}[All-length ambient GHZ formula]%
+\begin{theorem}[Positive-length ambient GHZ formula]%
     \label{thm:mpdo_bond_two_singleton_ambient_ghz}
     \lean{MPOTensor.BondTwoSingletonBaseModel.constantPairWeight}
     \lean{MPOTensor.BondTwoSingletonBaseModel.ghzAmplitude}
@@ -461,7 +461,9 @@
     algebra law. It is distinct from the ambient unnormalized GHZ rank-one
     operator in Theorem~\ref{thm:mpdo_bond_two_singleton_ambient_ghz}. At
     $N=0$, the raw retained contraction is $2\Id$, whereas the empty cyclic
-    indicator gives $\Id$.
+    indicator gives $\Id$. In particular, the raw contraction is not
+    idempotent at length zero, so neither the projection identity nor the
+    coefficient-one algebra law extends to $N=0$.
 \end{theorem}
 \begin{proof}\leanok
     The cyclic indicator takes only the values zero and one, so its diagonal
@@ -506,7 +508,9 @@
         \notag
     \end{align}
     These data reconstruct $A$ and satisfy the positive-$\chi$,
-    product, and idempotent algebra conditions.
+    product, and idempotent algebra conditions. At $L=0$, however,
+    $\widehat Q_0=2\Id$, so $\widehat Q_0^2=4\Id\ne2\Id$; the geometric
+    algebra identity therefore also requires positive length.
 \end{theorem}
 \begin{proof}\leanok
     The identity $s^2=1/2$ gives left-canonical normalization. Scaling every
