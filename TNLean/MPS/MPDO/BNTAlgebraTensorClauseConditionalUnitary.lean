@@ -21,7 +21,7 @@ unconditional conclusion of Appendix C.4.
 ## Main results
 
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`
-* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identity_marked_realization`
+* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization`
 
 ## References
 
@@ -86,7 +86,7 @@ the unconditional line-2057 conclusion.  See
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
 applied at Appendix C.4, lines 2048--2057. -/
-theorem exists_unitary_sector_conjugacy_of_identity_marked_realization
+theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount)
@@ -102,7 +102,7 @@ theorem exists_unitary_sector_conjugacy_of_identity_marked_realization
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
   obtain ⟨ω, hω, hGram⟩ :=
-    S.gauge_gram_eq_pos_smul_one_of_identity_marked_realization
+    S.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
       hCanonical hM γ R
   exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
     γ ω hω hGram
