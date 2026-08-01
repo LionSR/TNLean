@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
+import TNLean.MPS.MPDO.VerticalSectorCoordinates
 import TNLean.Algebra.OrthogonalProjection
 
 /-!
@@ -108,6 +109,21 @@ theorem baseMPO_isMPDO : IsMPDO baseMPO := by
   intro N hN
   rw [mpo_baseMPO_eq_unnormalizedGHZRankOne N hN]
   exact Matrix.posSemidef_vecMulVec_self_star (ghzAmplitude N)
+
+/-- After the canonical identification of two-site words with ordered pairs,
+the length-two ambient operator is the companion Bell projector from the
+singleton Gram boundary. -/
+theorem twoSite_baseMPO_eq_bellProjector :
+    Matrix.reindex (finTwoArrowEquiv I).symm (finTwoArrowEquiv I).symm
+      (mpo baseMPO 2) = bellProjector := by
+  rw [mpo_baseMPO_eq_unnormalizedGHZRankOne 2 (by norm_num)]
+  ext p q
+  rcases p with ⟨p₀, p₁⟩
+  rcases q with ⟨q₀, q₁⟩
+  fin_cases p₀ <;> fin_cases p₁ <;> fin_cases q₀ <;> fin_cases q₁ <;>
+    norm_num [Matrix.reindex_apply, unnormalizedGHZRankOne, ghzAmplitude,
+      bellProjector, bellVector, Matrix.vecMulVec, finTwoArrowEquiv,
+      piFinTwoEquiv_apply, finRotate_apply, Fin.prod_univ_two]
 
 /-! ### Literal CPSV canonical form -/
 
@@ -510,6 +526,135 @@ theorem normalizedSingleton_verticalAssembledTensor :
           ((singletonScale : ℂ) • singletonTensor v)))) i j = singletonTensor v i j
   simp [Matrix.reindex_apply, hsymm, hs]
 
+private abbrev singletonBondDim : Fin 1 → ℕ := fun _ => 2
+private abbrev singletonMultiplicity : Fin 1 → ℕ := fun _ => 1
+private abbrev SingletonRetainedCoordinate :=
+  Fin (∑ q : Fin (∑ alpha : Fin 1, singletonMultiplicity alpha),
+    verticalCopyDim singletonBondDim singletonMultiplicity q)
+
+/-- The unique-label/unique-copy sector coordinate is canonically its bond
+coordinate. -/
+def singletonSectorCoordinateEquiv :
+    (Σ alpha : Fin 1, Fin (singletonMultiplicity alpha) ×
+      Fin (singletonBondDim alpha)) ≃ Fin 2 where
+  toFun x := x.2.2
+  invFun i := ⟨0, (0, i)⟩
+  left_inv x := by
+    rcases x with ⟨alpha, q, i⟩
+    fin_cases alpha
+    fin_cases q
+    rfl
+  right_inv _ := rfl
+
+/-- Canonical equivalence between the dependent retained coordinates and the
+original two-dimensional physical space. -/
+def singletonRetainedCoordinateEquiv : SingletonRetainedCoordinate ≃ Fin 2 :=
+  (verticalSectorFinEquiv singletonBondDim singletonMultiplicity).symm.trans
+    singletonSectorCoordinateEquiv
+
+private theorem singletonRetainedCoordinateEquiv_apply
+    (x : SingletonRetainedCoordinate) :
+    singletonRetainedCoordinateEquiv x = x := by
+  fin_cases x <;> rfl
+
+/-- The square coordinate-change matrix induced by the canonical retained
+coordinate equivalence. -/
+noncomputable def singletonVerticalCoisometry :
+    Matrix SingletonRetainedCoordinate (Fin 2) ℂ :=
+  Matrix.reindex singletonRetainedCoordinateEquiv.symm (Equiv.refl (Fin 2))
+    (1 : Matrix (Fin 2) (Fin 2) ℂ)
+
+private theorem singletonVerticalCoisometry_apply
+    (x : SingletonRetainedCoordinate) (i : Fin 2) :
+    singletonVerticalCoisometry x i =
+      if singletonRetainedCoordinateEquiv x = i then 1 else 0 := by
+  simp [singletonVerticalCoisometry, Matrix.reindex_apply, Matrix.one_apply]
+
+/-- The canonical retained-coordinate matrix is a coisometry. -/
+theorem singletonVerticalCoisometry_coisometry :
+    singletonVerticalCoisometry * singletonVerticalCoisometryᴴ =
+      (1 : Matrix SingletonRetainedCoordinate SingletonRetainedCoordinate ℂ) := by
+  ext x y
+  simp [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    singletonVerticalCoisometry_apply, Matrix.one_apply]
+
+/-- Conjugation by the coordinate matrix reindexes an ambient matrix into the
+retained coordinates. -/
+theorem singletonVerticalCoisometry_conj
+    (A : Matrix (Fin 2) (Fin 2) ℂ) :
+    singletonVerticalCoisometry * A * singletonVerticalCoisometryᴴ =
+      Matrix.reindex singletonRetainedCoordinateEquiv.symm
+        singletonRetainedCoordinateEquiv.symm A := by
+  ext x y
+  simp [Matrix.mul_apply, Matrix.conjTranspose_apply,
+    singletonVerticalCoisometry_apply, Matrix.reindex_apply]
+
+private theorem singletonVerticalCoisometry_conjTranspose :
+    (singletonVerticalCoisometryᴴ :
+      Matrix (Fin 2) SingletonRetainedCoordinate ℂ) =
+      Matrix.reindex (Equiv.refl (Fin 2))
+        singletonRetainedCoordinateEquiv.symm
+        (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
+  ext i x
+  rw [Matrix.conjTranspose_apply, singletonVerticalCoisometry_apply]
+  change star (if singletonRetainedCoordinateEquiv x = i then 1 else 0) =
+    if i = singletonRetainedCoordinateEquiv x then 1 else 0
+  by_cases h : singletonRetainedCoordinateEquiv x = i
+  · simp [h]
+  · simp [h, Ne.symm h]
+
+private theorem singletonRetainedCoordinate_reindex_eq_self
+    (A : Matrix (Fin 2) (Fin 2) ℂ) :
+    Matrix.reindex singletonRetainedCoordinateEquiv.symm
+      singletonRetainedCoordinateEquiv.symm A = A := by
+  ext x y
+  simp [Matrix.reindex_apply, singletonRetainedCoordinateEquiv_apply]
+
+private theorem singletonVerticalCoisometry_conj_eq_self
+    (A : Matrix (Fin 2) (Fin 2) ℂ) :
+    singletonVerticalCoisometry * A * singletonVerticalCoisometryᴴ = A := by
+  rw [singletonVerticalCoisometry_conj,
+    singletonRetainedCoordinate_reindex_eq_self]
+
+/-- Conjugating a retained-coordinate matrix back by the adjoint inverts the
+canonical reindexing. -/
+theorem singletonVerticalCoisometry_reconstruction
+    (A : Matrix (Fin 2) (Fin 2) ℂ) :
+    (singletonVerticalCoisometryᴴ :
+        Matrix (Fin 2) SingletonRetainedCoordinate ℂ) *
+        Matrix.reindex singletonRetainedCoordinateEquiv.symm
+          singletonRetainedCoordinateEquiv.symm A *
+      singletonVerticalCoisometry = A := by
+  rw [singletonVerticalCoisometry_conjTranspose, singletonVerticalCoisometry]
+  have hleft :
+      Matrix.reindex (Equiv.refl (Fin 2)) singletonRetainedCoordinateEquiv.symm
+          (1 : Matrix (Fin 2) (Fin 2) ℂ) *
+        Matrix.reindex singletonRetainedCoordinateEquiv.symm
+          singletonRetainedCoordinateEquiv.symm A =
+      Matrix.reindex (Equiv.refl (Fin 2)) singletonRetainedCoordinateEquiv.symm
+        ((1 : Matrix (Fin 2) (Fin 2) ℂ) * A) := by
+    simpa only [Matrix.coe_reindexLinearEquiv] using
+      Matrix.reindexLinearEquiv_mul ℂ ℂ
+        (Equiv.refl (Fin 2)) singletonRetainedCoordinateEquiv.symm
+        singletonRetainedCoordinateEquiv.symm
+        (1 : Matrix (Fin 2) (Fin 2) ℂ) A
+  rw [hleft]
+  have hright :
+      Matrix.reindex (Equiv.refl (Fin 2)) singletonRetainedCoordinateEquiv.symm
+          ((1 : Matrix (Fin 2) (Fin 2) ℂ) * A) *
+        Matrix.reindex singletonRetainedCoordinateEquiv.symm
+          (Equiv.refl (Fin 2)) (1 : Matrix (Fin 2) (Fin 2) ℂ) =
+      Matrix.reindex (Equiv.refl (Fin 2)) (Equiv.refl (Fin 2))
+        (((1 : Matrix (Fin 2) (Fin 2) ℂ) * A) * 1) := by
+    simpa only [Matrix.coe_reindexLinearEquiv] using
+      Matrix.reindexLinearEquiv_mul ℂ ℂ
+        (Equiv.refl (Fin 2)) singletonRetainedCoordinateEquiv.symm
+        (Equiv.refl (Fin 2))
+        ((1 : Matrix (Fin 2) (Fin 2) ℂ) * A)
+        (1 : Matrix (Fin 2) (Fin 2) ℂ)
+  rw [hright]
+  simp [Matrix.reindex_apply]
+
 /-- The normalized singleton carries the complete one-label coefficient,
 positive-chi, product, and idempotent algebra data. -/
 noncomputable def normalizedSingleton_algebraClause :
@@ -538,5 +683,72 @@ noncomputable def normalizedSingleton_algebraClause :
       normalizedSingletonWeight, Finset.univ_unique, Fin.default_eq_zero,
       Finset.sum_singleton, normalizedSingletonCoeffs_coeff]
     field_simp
+
+private theorem singletonMultiplicity_pos
+    (alpha : Fin 1) : 0 < singletonMultiplicity alpha := by
+  simp [singletonMultiplicity]
+
+private theorem normalizedSingletonWeight_pos
+    (alpha : Fin 1) (q : Fin (singletonMultiplicity alpha)) :
+    (0 : ℂ) < normalizedSingletonWeight alpha q := by
+  have hs : (0 : ℂ) < (singletonScale : ℂ) :=
+    Complex.zero_lt_real.mpr singletonScale_pos
+  simpa [normalizedSingletonWeight] using inv_pos.mpr hs
+
+private theorem baseMPO_isCPSVBasis :
+    MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor baseMPO)
+      (fun alpha : Fin 1 =>
+        ⟨singletonBondDim alpha, normalizedSingletonFamily alpha⟩) := by
+  rw [verticalTensor_baseMPO]
+  exact normalizedSingleton_isCPSVBasis
+
+private theorem baseMPO_vertical_forward (v : Fin (4 * 4)) :
+    singletonVerticalCoisometry * verticalTensor baseMPO v *
+        singletonVerticalCoisometryᴴ =
+      verticalAssembledTensor singletonBondDim singletonMultiplicity
+        normalizedSingletonWeight normalizedSingletonFamily v := by
+  rw [verticalTensor_baseMPO, normalizedSingleton_verticalAssembledTensor]
+  exact singletonVerticalCoisometry_conj_eq_self (singletonTensor v)
+
+private theorem baseMPO_vertical_reconstruction (v : Fin (4 * 4)) :
+    verticalTensor baseMPO v = singletonVerticalCoisometryᴴ *
+        verticalAssembledTensor singletonBondDim singletonMultiplicity
+          normalizedSingletonWeight normalizedSingletonFamily v *
+      singletonVerticalCoisometry := by
+  rw [verticalTensor_baseMPO]
+  have hassembled :
+      verticalAssembledTensor singletonBondDim singletonMultiplicity
+          normalizedSingletonWeight normalizedSingletonFamily v =
+        Matrix.reindex singletonRetainedCoordinateEquiv.symm
+          singletonRetainedCoordinateEquiv.symm (singletonTensor v) := by
+    rw [normalizedSingleton_verticalAssembledTensor,
+      singletonRetainedCoordinate_reindex_eq_self]
+  rw [hassembled]
+  exact (singletonVerticalCoisometry_reconstruction (singletonTensor v)).symm
+
+/-- The base MPO carries the genuine one-label tensor-attached BNT algebra
+clause.  Its retained coordinates are related to the ambient bond coordinates
+by the canonical permutation matrix `singletonVerticalCoisometry`. -/
+noncomputable def baseMPO_bntAlgebraTensorClause :
+    BNTAlgebraTensorClause baseMPO where
+  labelCount := 1
+  bondDim := singletonBondDim
+  multiplicity := singletonMultiplicity
+  weight := normalizedSingletonWeight
+  tensor := normalizedSingletonFamily
+  verticalCoisometry := singletonVerticalCoisometry
+  multiplicity_pos := singletonMultiplicity_pos
+  weight_pos := normalizedSingletonWeight_pos
+  coisometry := singletonVerticalCoisometry_coisometry
+  isCPSVBNT := baseMPO_isCPSVBasis
+  forward := baseMPO_vertical_forward
+  reconstruction := baseMPO_vertical_reconstruction
+  coeffs := normalizedSingletonCoeffs
+  algebraClause := normalizedSingleton_algebraClause
+
+/-- The singleton base MPO admits a tensor-attached BNT algebra clause. -/
+theorem baseMPO_hasBNTAlgebraTensorClause :
+    HasBNTAlgebraTensorClause baseMPO :=
+  ⟨baseMPO_bntAlgebraTensorClause⟩
 
 end MPOTensor.BondTwoSingletonBaseModel
