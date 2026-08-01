@@ -1,0 +1,404 @@
+% Regression: measured glyph faces are recoverable in a record's complete
+% carrier basis before any live renderer adopts them.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_face_count_int
+\int_new:N \g__tenkz_test_parity_count_int
+\int_new:N \g__tenkz_test_live_parity_count_int
+\int_new:N \g__tenkz_test_tensor_style_count_int
+\int_new:N \g__tenkz_test_rejected_guard_count_int
+\int_new:N \g__tenkz_test_rejected_diagnostic_count_int
+\int_new:N \l__tenkz_test_rejected_diagnostic_before_int
+\fp_new:N \l__tenkz_test_face_a_fp
+\fp_new:N \l__tenkz_test_face_b_fp
+\fp_new:N \l__tenkz_test_face_c_fp
+\fp_new:N \l__tenkz_test_face_d_fp
+\fp_new:N \l__tenkz_test_face_e_fp
+\fp_new:N \l__tenkz_test_face_f_fp
+\tl_new:N \l__tenkz_test_face_name_tl
+\tl_new:N \l__tenkz_test_face_turn_tl
+\tl_new:N \l__tenkz_test_face_record_tl
+\dim_new:N \l__tenkz_test_face_a_dim
+\dim_new:N \l__tenkz_test_face_b_dim
+\dim_new:N \l__tenkz_test_face_c_dim
+\dim_new:N \l__tenkz_test_face_d_dim
+\cs_new_eq:NN \__tenkz_test_face_msg_error:nnn \msg_error:nnn
+\cs_new_protected:Npn \__tenkz_test_face_close:nnn #1#2#3
+  {
+    \fp_compare:nNnF { abs((#1)-(#2)) } < {0.000001}
+      { \errmessage{#3} }
+  }
+\cs_new_protected:Npn \__tenkz_test_glyph_face:nn #1#2
+  {
+    \int_gincr:N \g__tenkz_test_face_count_int
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{#2}
+      \l__tenkz_test_face_a_fp \l__tenkz_test_face_b_fp
+    \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{#2}
+      \l__tenkz_test_face_c_fp \l__tenkz_test_face_d_fp
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_test_face_e_fp \l__tenkz_test_face_f_fp
+    \fp_sub:Nn \l__tenkz_test_face_c_fp { \l__tenkz_test_face_e_fp }
+    \fp_sub:Nn \l__tenkz_test_face_d_fp { \l__tenkz_test_face_f_fp }
+    \fp_set:Nn \l__tenkz_test_face_e_fp
+      {
+        \l__tenkz_kernel_r_basis_ux_tl * \l__tenkz_test_face_c_fp
+        + \l__tenkz_kernel_r_basis_uy_tl * \l__tenkz_test_face_d_fp
+      }
+    \fp_set:Nn \l__tenkz_test_face_f_fp
+      {
+        \l__tenkz_kernel_r_basis_vx_tl * \l__tenkz_test_face_c_fp
+        + \l__tenkz_kernel_r_basis_vy_tl * \l__tenkz_test_face_d_fp
+      }
+    \__tenkz_test_face_close:nnn
+      {\l__tenkz_test_face_e_fp}{\l__tenkz_test_face_a_fp}
+      {a~transported~glyph~face~lost~its~local~east~coordinate}
+    \__tenkz_test_face_close:nnn
+      {\l__tenkz_test_face_f_fp}{\l__tenkz_test_face_b_fp}
+      {a~transported~glyph~face~lost~its~local~north~coordinate}
+  }
+\cs_new_protected:Npn \__tenkz_test_face_parity:nn #1#2
+  {
+    \int_gincr:N \g__tenkz_test_parity_count_int
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{#2}
+      \l__tenkz_test_face_a_fp \l__tenkz_test_face_b_fp
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_test_face_turn_tl
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_test_face_c_fp \l__tenkz_test_face_d_fp
+    \fp_set:Nn \l__tenkz_test_face_e_fp
+      {
+        \l__tenkz_test_face_c_fp
+        + \l__tenkz_test_face_a_fp * cosd(\l__tenkz_test_face_turn_tl)
+        - \l__tenkz_test_face_b_fp * sind(\l__tenkz_test_face_turn_tl)
+      }
+    \fp_set:Nn \l__tenkz_test_face_f_fp
+      {
+        \l__tenkz_test_face_d_fp
+        + \l__tenkz_test_face_a_fp * sind(\l__tenkz_test_face_turn_tl)
+        + \l__tenkz_test_face_b_fp * cosd(\l__tenkz_test_face_turn_tl)
+      }
+    \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{#2}
+      \l__tenkz_test_face_c_fp \l__tenkz_test_face_d_fp
+    \__tenkz_test_face_close:nnn
+      {\l__tenkz_test_face_c_fp}{\l__tenkz_test_face_e_fp}
+      {the~face~query~changed~a~rotation-only~x~coordinate}
+    \__tenkz_test_face_close:nnn
+      {\l__tenkz_test_face_d_fp}{\l__tenkz_test_face_f_fp}
+      {the~face~query~changed~a~rotation-only~y~coordinate}
+    \prop_if_in:NnT \l__tenkz_kernel_hull_live_prop {#1/xmin}
+      {
+        \errmessage{
+          a~face-only~probe~published~temporary~bounds~as~live~hull~support
+        }
+      }
+    \prop_if_in:NnF \l__tenkz_kernel_glyph_face_probe_prop {#1}
+      { \errmessage{a~repeated~face~query~lost~its~private~probe} }
+  }
+\cs_new_protected:Npn \__tenkz_test_live_measurement_parity:n #1
+  {
+    \int_gincr:N \g__tenkz_test_live_parity_count_int
+    \tl_set:Ne \l__tenkz_test_face_name_tl
+      { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
+    \pgfextractx \l__tenkz_test_face_a_dim
+      { \pgfpointanchor{#1}{east} }
+    \pgfextractx \l__tenkz_test_face_b_dim
+      { \pgfpointanchor{#1}{west} }
+    \pgfextractx \l__tenkz_test_face_c_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_test_face_name_tl}{east}
+      }
+    \pgfextractx \l__tenkz_test_face_d_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_test_face_name_tl}{west}
+      }
+    \__tenkz_test_face_close:nnn
+      {
+        \dim_to_fp:n
+          { \l__tenkz_test_face_a_dim - \l__tenkz_test_face_b_dim }
+      }
+      {
+        \dim_to_fp:n
+          { \l__tenkz_test_face_c_dim - \l__tenkz_test_face_d_dim }
+      }
+      {an~on-demand~dot~measurement~changed~the~live~horizontal~diameter}
+    \fp_set:Nn \l__tenkz_test_face_e_fp
+      {
+        \dim_to_fp:n
+          { \l__tenkz_test_face_c_dim - \l__tenkz_test_face_d_dim }
+        / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_face_turn_tl
+    \pgfextracty \l__tenkz_test_face_a_dim
+      { \pgfpointanchor{#1}{north} }
+    \pgfextracty \l__tenkz_test_face_b_dim
+      { \pgfpointanchor{#1}{south} }
+    \pgfextracty \l__tenkz_test_face_c_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_test_face_name_tl}{north}
+      }
+    \pgfextracty \l__tenkz_test_face_d_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_test_face_name_tl}{south}
+      }
+    \__tenkz_test_face_close:nnn
+      {
+        \dim_to_fp:n
+          { \l__tenkz_test_face_a_dim - \l__tenkz_test_face_b_dim }
+      }
+      {
+        \dim_to_fp:n
+          { \l__tenkz_test_face_c_dim - \l__tenkz_test_face_d_dim }
+      }
+      {an~on-demand~dot~measurement~changed~the~live~vertical~diameter}
+    \tl_if_eq:VnT \l__tenkz_test_face_turn_tl {P}
+      {
+        \fp_set:Nn \l__tenkz_test_face_f_fp
+          {
+            \dim_to_fp:n
+              { \l__tenkz_test_face_c_dim - \l__tenkz_test_face_d_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+        \fp_compare:nNnF
+          { max(\l__tenkz_test_face_e_fp,\l__tenkz_test_face_f_fp) }
+          <
+          { \__tenkz_metric_ratio:n {glyphref} }
+          {
+            \errmessage{
+              a~pairing~dot~used~the~canonical~glyph~size~
+              \fp_eval:n
+                { min(\l__tenkz_test_face_e_fp,\l__tenkz_test_face_f_fp) }
+            }
+          }
+      }
+    \tl_if_eq:VnT \l__tenkz_test_face_turn_tl {S}
+      {
+        \fp_set:Nn \l__tenkz_test_face_f_fp
+          {
+            \dim_to_fp:n
+              { \l__tenkz_test_face_c_dim - \l__tenkz_test_face_d_dim }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+        \fp_compare:nNnF
+          { \l__tenkz_test_face_e_fp }
+          >
+          {1}
+          { \errmessage{a~pairing~dot~lost~its~wide~slot~support} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_test_probe_then_hull:n #1
+  {
+    \__tenkz_kernel_hull_ensure_measured:nN {#1}
+      \l__tenkz_kernel_hull_measure_valid_bool
+    \bool_if:NF \l__tenkz_kernel_hull_measure_valid_bool
+      { \errmessage{a~private~face~probe~blocked~later~hull~materialization} }
+    \prop_if_in:NnF \l__tenkz_kernel_hull_live_prop {#1/xmin}
+      { \errmessage{later~hull~materialization~did~not~publish~live~bounds} }
+  }
+\cs_new_protected:Npn \__tenkz_test_rejected_face:nn #1#2
+  {
+    \int_gincr:N \g__tenkz_test_rejected_guard_count_int
+    \int_set_eq:NN \l__tenkz_test_rejected_diagnostic_before_int
+      \g__tenkz_test_rejected_diagnostic_count_int
+    \group_begin:
+      \cs_set_protected:Npn \msg_error:nnn ##1##2##3
+        {
+          \str_if_eq:nnTF {##1/##2}{tenkz/#2}
+            { \int_gincr:N \g__tenkz_test_rejected_diagnostic_count_int }
+            { \__tenkz_test_face_msg_error:nnn {##1}{##2}{##3} }
+        }
+      \fp_set:Nn \l__tenkz_test_face_a_fp {17}
+      \fp_set:Nn \l__tenkz_test_face_b_fp {19}
+      \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{90}
+        \l__tenkz_test_face_a_fp \l__tenkz_test_face_b_fp
+      \prop_if_in:NnT \l__tenkz_kernel_hull_live_prop {#1/xmin}
+        { \errmessage{a~rejected~record~received~a~synthetic~glyph~face} }
+      \fp_compare:nNnF { \l__tenkz_test_face_a_fp } = {0}
+        { \errmessage{a~rejected~glyph~face~left~a~nonzero~x~output} }
+      \fp_compare:nNnF { \l__tenkz_test_face_b_fp } = {0}
+        { \errmessage{a~rejected~glyph~face~left~a~nonzero~y~output} }
+      \fp_set:Nn \l__tenkz_test_face_a_fp {17}
+      \fp_set:Nn \l__tenkz_test_face_b_fp {19}
+      \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{90}
+        \l__tenkz_test_face_a_fp \l__tenkz_test_face_b_fp
+      \fp_compare:nNnF { \l__tenkz_test_face_a_fp } = {0}
+        { \errmessage{a~rejected~glyph~face~left~a~nonzero~page~x~output} }
+      \fp_compare:nNnF { \l__tenkz_test_face_b_fp } = {0}
+        { \errmessage{a~rejected~glyph~face~left~a~nonzero~page~y~output} }
+      \int_compare:nNnF
+        {
+          \g__tenkz_test_rejected_diagnostic_count_int
+          - \l__tenkz_test_rejected_diagnostic_before_int
+        }
+        = {2}
+        { \errmessage{a~no-glyph~guard~lost~its~exact~coded~diagnostic} }
+    \group_end:
+  }
+\cs_new_protected:Npn \__tenkz_test_cluster_face_guard:
+  {
+    \prop_get:NnN \l__tenkz_kernel_named_prop {G}
+      \l__tenkz_test_face_record_tl
+    \exp_args:NV \__tenkz_test_rejected_face:nn
+      \l__tenkz_test_face_record_tl {kernel-glyph-face-cluster}
+  }
+\cs_new_protected:Npn \__tenkz_test_rejected_port:nn #1#2
+  {
+    \int_set_eq:NN \l__tenkz_test_rejected_diagnostic_before_int
+      \g__tenkz_test_rejected_diagnostic_count_int
+    \group_begin:
+      \cs_set_protected:Npn \msg_error:nnn ##1##2##3
+        {
+          \str_if_eq:nnTF {##1/##2}{tenkz/#2}
+            { \int_gincr:N \g__tenkz_test_rejected_diagnostic_count_int }
+            { \__tenkz_test_face_msg_error:nnn {##1}{##2}{##3} }
+        }
+      \fp_set:Nn \l__tenkz_test_face_a_fp {17}
+      \fp_set:Nn \l__tenkz_test_face_b_fp {19}
+      \__tenkz_kernel_r_hull_port_xy:nnNN
+        {unresolved-port-must-not-be-read}
+        {#1}
+        \l__tenkz_test_face_a_fp \l__tenkz_test_face_b_fp
+      \prop_if_in:NnT \l__tenkz_kernel_hull_live_prop {#1/xmin}
+        { \errmessage{a~rejected~port~received~synthetic~glyph~support} }
+      \fp_compare:nNnF { \l__tenkz_test_face_a_fp } = {0}
+        { \errmessage{a~rejected~port~face~left~a~nonzero~x~output} }
+      \fp_compare:nNnF { \l__tenkz_test_face_b_fp } = {0}
+        { \errmessage{a~rejected~port~face~left~a~nonzero~y~output} }
+      \int_compare:nNnF
+        {
+          \g__tenkz_test_rejected_diagnostic_count_int
+          - \l__tenkz_test_rejected_diagnostic_before_int
+        }
+        = {1}
+        { \errmessage{a~rejected~port~lost~its~coded~diagnostic} }
+    \group_end:
+  }
+\cs_new_protected:Npn \__tenkz_test_cluster_port_guard:
+  {
+    \prop_get:NnN \l__tenkz_kernel_named_prop {G}
+      \l__tenkz_test_face_record_tl
+    \exp_args:NV \__tenkz_test_rejected_port:nn
+      \l__tenkz_test_face_record_tl {kernel-glyph-face-cluster}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_face_atom_glyph_ink:n
+  \__tenkz_kernel_r_atom_glyph_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_atom_glyph_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_face_name_tl
+    \quark_if_no_value:NF \l__tenkz_test_face_name_tl
+      {
+        \str_case:Vn \l__tenkz_test_face_name_tl
+          {
+            {A}
+              {
+                \__tenkz_test_glyph_face:nn {#1}{0}
+                \__tenkz_test_glyph_face:nn {#1}{90}
+                \__tenkz_test_glyph_face:nn {#1}{180}
+                \__tenkz_test_glyph_face:nn {#1}{270}
+              }
+            {G-1-1}
+              {
+                \__tenkz_test_cluster_face_guard:
+                \__tenkz_test_glyph_face:nn {#1}{0}
+                \__tenkz_test_glyph_face:nn {#1}{90}
+                \__tenkz_test_glyph_face:nn {#1}{180}
+                \__tenkz_test_glyph_face:nn {#1}{270}
+              }
+            {F}{ \__tenkz_test_face_parity:nn {#1}{90} }
+            {C}{ \__tenkz_test_face_parity:nn {#1}{90} }
+            {D}
+              {
+                \__tenkz_test_glyph_face:nn {#1}{0}
+                \__tenkz_test_glyph_face:nn {#1}{90}
+              }
+            {N}
+              {
+                \__tenkz_test_rejected_face:nn
+                  {#1}{kernel-glyph-face-none}
+              }
+          }
+      }
+    \__tenkz_test_face_atom_glyph_ink:n {#1}
+    \str_case:Vn \l__tenkz_test_face_name_tl
+      {
+        {A}{ \__tenkz_test_live_measurement_parity:n {#1} }
+        {G-1-1}
+          {
+            \__tenkz_test_live_measurement_parity:n {#1}
+            \__tenkz_test_cluster_port_guard:
+          }
+        {D}{ \__tenkz_test_live_measurement_parity:n {#1} }
+        {P}{ \__tenkz_test_live_measurement_parity:n {#1} }
+        {S}{ \__tenkz_test_live_measurement_parity:n {#1} }
+      }
+    \str_if_eq:VnT \l__tenkz_test_face_name_tl {F}
+      { \__tenkz_test_probe_then_hull:n {#1} }
+  }
+\tikzset{
+  tenkz~test~tensor~use/.code={
+    \int_gincr:N \g__tenkz_test_tensor_style_count_int
+  },
+  tensor/.append~style={tenkz~test~tensor~use}
+}
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire}, cols=2, bonds=none,
+    frame={plane,basis={wire at (0,0),wire at (2,0)}}]
+  \tn[at=(2,1,2), name=G, cluster=1x1, skin=none]{}
+  \tn[at=(1,1,1), name=A, wide=2, wires=2]{A}
+\end{tenkz}
+\tndeclare{species}{probe}{hue=source:blue}
+\tndeclare{skin}{paired-dot}{
+  base=dot,
+  pairings={90@1 > 270@1 : probe}
+}
+\tndeclare{skin}{paired-dot-span}{
+  base=dot,
+  pairings={90@2 > 270@1 : probe}
+}
+\begin{tenkz}[rows={wire}, cols=1, frame=flat, bonds=none]
+  \tn[at=(1,1), name=P, skin=paired-dot, size=l]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, frame=flat, bonds=none]
+  \tn[
+    at=(1,1), name=S, skin=paired-dot-span, size=l, wide=2
+  ]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=4, frame=flat, bonds=none]
+  \tn[at=(1,1), name=F]{F}
+  \tn[at=(1,2), name=D, skin=dots, size=l, wide=2]{}
+  \tn[at=(1,4), name=N, skin=none]{}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=4, frame=circle, bonds=none]
+  \tn[at=(1,2), name=C]{C}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkz_test_face_count_int } = {10}
+  { \errmessage{the~fixture~did~not~inspect~ten~transported~glyph~faces} }
+\int_compare:nNnF { \g__tenkz_test_parity_count_int } = {2}
+  { \errmessage{the~fixture~did~not~inspect~flat~and~circle~parity} }
+\int_compare:nNnF { \g__tenkz_test_live_parity_count_int } = {5}
+  { \errmessage{the~fixture~did~not~compare~all~live~glyph~diameters} }
+\int_compare:nNnF { \g__tenkz_test_tensor_style_count_int } = {16}
+  {
+    \errmessage{
+      a~dot~applied~the~base~tensor~style~an~unexpected~
+      \int_use:N \g__tenkz_test_tensor_style_count_int ~times
+    }
+  }
+\int_compare:nNnF { \g__tenkz_test_rejected_guard_count_int } = {2}
+  { \errmessage{the~fixture~did~not~query~both~no-glyph~guards} }
+\int_compare:nNnF { \g__tenkz_test_rejected_diagnostic_count_int } = {5}
+  { \errmessage{a~no-glyph~guard~lost~its~coded~diagnostic} }
+\ExplSyntaxOff
+\end{document}

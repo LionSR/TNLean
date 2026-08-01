@@ -125,6 +125,12 @@
 \msg_new:nnn {tenkz}{kernel-port-cluster}
   { [TKZ-PORT-CLUSTER]~cluster~carrier~#1~is~a~group~with~no~glyph~
     or~authored~ports;~attach~wires~to~its~addressable~members. }
+\msg_new:nnn {tenkz}{kernel-glyph-face-cluster}
+  { [TKZ-GLYPH-FACE-CLUSTER]~cluster~carrier~#1~is~a~group~with~no~
+    glyph~face;~query~one~of~its~addressable~members. }
+\msg_new:nnn {tenkz}{kernel-glyph-face-none}
+  { [TKZ-GLYPH-FACE-NONE]~record~#1~has~skin=none~and~no~declared~
+    pairing~support,~so~it~has~no~glyph~face. }
 \msg_new:nnn {tenkz}{kernel-skin-pairings-parse}
   { [TKZ-SKIN-PAIRING-PARSE]~pairings~on~declared~skin~'#1'~must~be~
     one~braced~port-pair-list. }
@@ -5152,12 +5158,14 @@
 \tl_new:N \l__tenkz_kernel_hull_xmax_tl
 \tl_new:N \l__tenkz_kernel_hull_ymin_tl
 \tl_new:N \l__tenkz_kernel_hull_ymax_tl
+\bool_new:N \l__tenkz_kernel_hull_measure_valid_bool
 \tl_new:N \l__tenkz_kernel_sel_tl
 \bool_new:N \l__tenkz_kernel_sel_bool
 \bool_new:N \l__tenkz_kernel_sel_valid_bool
 \int_new:N \l__tenkz_kernel_hull_box_int
 \prop_new:N \l__tenkz_kernel_hull_live_prop
 \prop_new:N \l__tenkz_kernel_hull_measured_prop
+\prop_new:N \l__tenkz_kernel_glyph_face_probe_prop
 \dim_new:N \l__tenkz_kernel_hull_west_dim
 \dim_new:N \l__tenkz_kernel_hull_east_dim
 \dim_new:N \l__tenkz_kernel_hull_south_dim
@@ -5483,6 +5491,7 @@
   {
     \prop_clear:N \l__tenkz_kernel_hull_live_prop
     \prop_clear:N \l__tenkz_kernel_hull_measured_prop
+    \prop_clear:N \l__tenkz_kernel_glyph_face_probe_prop
     % Box registers are a reusable per-picture pool.  Atom ids are global,
     % so keying allocations by id would consume one finite TeX box register
     % for every measured glyph across the whole document.
@@ -5506,6 +5515,88 @@
       }
   }
 
+% Resolve the effective base skin shared by scheduled and on-demand probes.
+\cs_new_protected:Npn \__tenkz_kernel_hull_resolve_skin:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_skin_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
+      { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
+    \exp_args:NV \__tenkz_kernel_skin_base:nN
+      \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
+  }
+
+% Materialize a validated glyph probe at most once.
+\cs_new_protected:Npn \__tenkz_kernel_hull_materialize:n #1
+  {
+    \prop_if_in:NnF \l__tenkz_kernel_hull_live_prop {#1/xmin}
+      {
+        \prop_put:Nnn \l__tenkz_kernel_hull_measured_prop {#1} { }
+        \__tenkz_kernel_hull_measure_glyph:n {#1}
+      }
+  }
+
+% A face-only probe needs the measurement node, but must not publish temporary
+% bounds as live hull support.  In particular, an ordinary labelled dot uses
+% the conservative dot-label band until a hull consumer deliberately measures
+% it; merely asking for its ink face must not replace that contract with the
+% dot-only measurement.
+\cs_new_protected:Npn \__tenkz_kernel_glyph_face_probe_materialize:n #1
+  {
+    \prop_if_in:NnF \l__tenkz_kernel_hull_live_prop {#1/xmin}
+      {
+        \prop_if_in:NnF \l__tenkz_kernel_glyph_face_probe_prop {#1}
+          {
+            \__tenkz_kernel_hull_measure_glyph:n {#1}
+            \clist_map_inline:nn {box,family,xmin,xmax,ymin,ymax}
+              {
+                \prop_remove:Nn \l__tenkz_kernel_hull_live_prop
+                  {#1/##1}
+              }
+            \prop_put:Nnn \l__tenkz_kernel_glyph_face_probe_prop {#1} { }
+          }
+      }
+  }
+
+% Validate and materialize a record's live support.  The bool output is true
+% for every non-cluster record; a cluster emits its coded diagnostic and
+% leaves the live cache untouched.  A `none` record may still need synthetic
+% support for an authored port even when it has no glyph ink of its own.
+\cs_new_protected:Npn \__tenkz_kernel_hull_ensure_measured:nN #1#2
+  {
+    \bool_set_false:N #2
+    \__tenkz_model_get:nnN {#1} {cluster} \l__tenkz_kernel_hull_a_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_hull_a_tl
+      {
+        \__tenkz_kernel_hull_resolve_skin:n {#1}
+        \__tenkz_kernel_hull_materialize:n {#1}
+        \bool_set_true:N #2
+      }
+      { \msg_error:nnn {tenkz}{kernel-glyph-face-cluster}{#1} }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_glyph_face_ensure_measured:n #1
+  {
+    \__tenkz_kernel_hull_resolve_skin:n {#1}
+    \str_case:VnF \l__tenkz_kernel_hull_skin_tl
+      {
+        {dot}
+          {
+            \prop_if_in:NnTF
+              \l__tenkz_kernel_skin_pairing_host_prop {#1}
+              { \__tenkz_kernel_hull_materialize:n {#1} }
+              { \__tenkz_kernel_glyph_face_probe_materialize:n {#1} }
+          }
+        {dots}
+          {
+            \prop_if_in:NnTF
+              \l__tenkz_kernel_skin_pairing_host_prop {#1}
+              { \__tenkz_kernel_hull_materialize:n {#1} }
+              { \__tenkz_kernel_glyph_face_probe_materialize:n {#1} }
+          }
+      }
+      { \__tenkz_kernel_hull_materialize:n {#1} }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_hull_measure_atom:n #1
   {
     \prop_put:Nnn \l__tenkz_kernel_hull_measured_prop {#1} { }
@@ -5513,11 +5604,7 @@
     \__tenkz_model_get:nnN {#1} {cluster} \l__tenkz_kernel_hull_a_tl
     \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
       {
-        \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_skin_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
-          { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
-        \exp_args:NV \__tenkz_kernel_skin_base:nN
-          \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
+        \__tenkz_kernel_hull_resolve_skin:n {#1}
         \str_case:VnF \l__tenkz_kernel_hull_skin_tl
           {
             {dot}
@@ -5568,8 +5655,41 @@
         {dots} { \tl_set:Nn \l__tenkz_kernel_hull_a_tl { \cdots } }
         {none} { \tl_clear:N \l__tenkz_kernel_hull_a_tl }
       }
-    \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
-      {#1} \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_b_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {dot}
+      {
+        \prop_if_in:NnTF
+          \l__tenkz_kernel_skin_pairing_host_prop {#1}
+          {
+            \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
+              {#1} \l__tenkz_kernel_hull_skin_tl
+              \l__tenkz_kernel_hull_b_tl
+          }
+          {
+            \__tenkz_kernel_r_atom_dot_measure_style:nN {#1}
+              \l__tenkz_kernel_hull_b_tl
+          }
+      }
+      {
+        \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {dots}
+          {
+            \prop_if_in:NnTF
+              \l__tenkz_kernel_skin_pairing_host_prop {#1}
+              {
+                \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
+                  {#1} \l__tenkz_kernel_hull_skin_tl
+                  \l__tenkz_kernel_hull_b_tl
+              }
+              {
+                \tl_set:Nn \l__tenkz_kernel_hull_b_tl
+                  {tenkz~kernel~dots~geometry}
+              }
+          }
+          {
+            \exp_args:NnV \__tenkz_kernel_r_atom_glyph_style:nnN
+              {#1} \l__tenkz_kernel_hull_skin_tl
+              \l__tenkz_kernel_hull_b_tl
+          }
+      }
     \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
     \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
       { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
@@ -5581,7 +5701,17 @@
         {
           \hbox_gset:cn { \tl_use:N \l__tenkz_kernel_hull_box_tl }
             {
-              $ \use:c {tenkz@labelsize}
+              % Ordinary ellipsis glyphs use the live renderer's normal style.
+              % Pairing hosts retain their established route-support box until
+              % pairing boundaries and ink switch together.
+              $
+                \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {dots}
+                  {
+                    \prop_if_in:NnT
+                      \l__tenkz_kernel_skin_pairing_host_prop {#1}
+                      { \use:c {tenkz@labelsize} }
+                  }
+                  { \use:c {tenkz@labelsize} }
                 \tl_use:N \l__tenkz_kernel_hull_a_tl $
             }
           \__tenkz_kernel_r_upright:n
@@ -7243,21 +7373,128 @@
       }
   }
 
+% Read one measurement-node anchor in the glyph's own east/north axes.  A live
+% hull measurement is reused when present; an unscheduled ordinary dot instead
+% gets a private face node so the query cannot replace its label-aware fallback
+% support.  Both paths use the final skin style rather than print constants.
+\fp_new:N \l__tenkz_kernel_r_face_u_fp
+\fp_new:N \l__tenkz_kernel_r_face_v_fp
+\tl_new:N \l__tenkz_kernel_r_face_du_tl
+\tl_new:N \l__tenkz_kernel_r_face_dv_tl
+\fp_new:N \l__tenkz_kernel_r_face_cx_fp
+\fp_new:N \l__tenkz_kernel_r_face_cy_fp
+% `none` may own synthetic support for an authored port or a pairing, but
+% without a declared pairing it has no glyph ink face for this query.
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_face_validate:nN #1#2
+  {
+    \bool_set_false:N #2
+    \__tenkz_model_get:nnN {#1} {cluster} \l__tenkz_kernel_hull_a_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_hull_a_tl
+      {
+        \bool_set_true:N #2
+        \__tenkz_kernel_hull_resolve_skin:n {#1}
+        \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {none}
+          {
+            \prop_if_in:NnF \l__tenkz_kernel_skin_pairing_host_prop {#1}
+              {
+                \bool_set_false:N #2
+                \msg_error:nnn {tenkz}{kernel-glyph-face-none}{#1}
+              }
+          }
+      }
+      { \msg_error:nnn {tenkz}{kernel-glyph-face-cluster}{#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_anchor_local:nnNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_glyph_face_validate:nN {#1}
+      \l__tenkz_kernel_hull_measure_valid_bool
+    \bool_if:NT \l__tenkz_kernel_hull_measure_valid_bool
+      {
+        \__tenkz_kernel_glyph_face_ensure_measured:n {#1}
+      }
+    \bool_if:NTF \l__tenkz_kernel_hull_measure_valid_bool
+      { \__tenkz_kernel_r_glyph_anchor_local_aux:nnNN {#1}{#2}#3#4 }
+      {
+        \fp_zero:N #3
+        \fp_zero:N #4
+      }
+  }
+% Read compass-angle anchor #2 from the record's measurement node.  The
+% outputs are glyph-local east/north coordinates normalized by picture pitch.
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_anchor_local_aux:nnNN #1#2#3#4
+  {
+    \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
+      { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
+    \pgfextractx \l__tenkz_kernel_r_north_x_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{#2}
+      }
+    \pgfextracty \l__tenkz_kernel_r_north_y_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{#2}
+      }
+    \fp_set:Nn #3
+      {
+        \dim_to_fp:n { \l__tenkz_kernel_r_north_x_dim }
+        / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+    \fp_set:Nn #4
+      {
+        \dim_to_fp:n { \l__tenkz_kernel_r_north_y_dim }
+        / \dim_to_fp:n { \use:c {tenkz@pitch} }
+      }
+  }
+
+% Carry a measured glyph anchor through its complete record carrier.  This is
+% a query only: live renderers keep their current endpoints until affine skins,
+% truthful support, and lane planning can switch atomically.
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_anchor_xy:nnNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{#2}
+      \l__tenkz_kernel_r_face_u_fp \l__tenkz_kernel_r_face_v_fp
+    \bool_if:NTF \l__tenkz_kernel_hull_measure_valid_bool
+      {
+        \__tenkz_kernel_r_carrier_basis:n {#1}
+        \__tenkz_geom_basis_apply:nnnnnnNN
+          { \l__tenkz_kernel_r_basis_ex_tl }
+          { \l__tenkz_kernel_r_basis_ey_tl }
+          { \l__tenkz_kernel_r_basis_nx_tl }
+          { \l__tenkz_kernel_r_basis_ny_tl }
+          { \l__tenkz_kernel_r_face_u_fp }
+          { \l__tenkz_kernel_r_face_v_fp }
+          \l__tenkz_kernel_r_face_du_tl \l__tenkz_kernel_r_face_dv_tl
+        \__tenkz_geom_xy:nNN {#1}
+          \l__tenkz_kernel_r_face_cx_fp \l__tenkz_kernel_r_face_cy_fp
+        \fp_set:Nn #3
+          { \l__tenkz_kernel_r_face_cx_fp + \l__tenkz_kernel_r_face_du_tl }
+        \fp_set:Nn #4
+          { \l__tenkz_kernel_r_face_cy_fp + \l__tenkz_kernel_r_face_dv_tl }
+      }
+      {
+        \fp_zero:N #3
+        \fp_zero:N #4
+      }
+  }
+
 % Resolve a live glyph anchor in the host's local axes and carry it to the
 % page.  The resolved port node supplies the span-slot centre, while the host
 % glyph supplies the face-normal silhouette displacement.  Non-cell pairing
 % ink and ordinary wires share this face boundary.
 \cs_new_protected:Npn \__tenkz_kernel_r_hull_port_xy:nnNN #1#2#3#4
   {
-    \prop_if_in:NnF \l__tenkz_kernel_hull_live_prop {#2/xmin}
+    \__tenkz_kernel_hull_ensure_measured:nN {#2}
+      \l__tenkz_kernel_hull_measure_valid_bool
+    \bool_if:NTF \l__tenkz_kernel_hull_measure_valid_bool
+      { \__tenkz_kernel_r_hull_port_xy_aux:nnNN {#1}{#2}#3#4 }
       {
-        \__tenkz_model_get:nnN {#2} {skin} \l__tenkz_kernel_hull_skin_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
-          { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
-        \exp_args:NV \__tenkz_kernel_skin_base:nN
-          \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
-        \__tenkz_kernel_hull_measure_glyph:n {#2}
+        \fp_zero:N #3
+        \fp_zero:N #4
       }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_hull_port_xy_aux:nnNN #1#2#3#4
+  {
     \__tenkz_kernel_r_node:n {#1}
     \__tenkz_geom_xy:nNN {#1}
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
@@ -10311,10 +10548,8 @@
           {
             \tl_set:Nn \l__tenkz_kernel_r_atom_style_tl
               {
-                tenkz~audited~label ,
-                alias = #1 ,
-                inner~sep = \__tenkz_dim:n {labelclear} ,
-                fill = tenkzPaper
+                tenkz~kernel~dots ,
+                alias = #1
               }
             \__tenkz_model_get:nnN {#1} {species}
               \l__tenkz_kernel_r_species_tl
@@ -10367,18 +10602,23 @@
                 \prop_if_in:NnTF
                   \l__tenkz_kernel_skin_pairing_host_prop {#1}
                   {
-                    \__tenkz_kernel_r_atom_glyph_style:nnN
+                    \__tenkz_kernel_r_atom_glyph_geometry_style:nnN
                       {#1} {dot} \l__tenkz_kernel_r_atom_style_tl
                     \tl_put_left:Nn \l__tenkz_kernel_r_atom_style_tl { , }
                     \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
                       { , alias = #1 }
                   }
                   {
-                    \tl_set:Ne \l__tenkz_kernel_r_atom_style_tl
+                    \__tenkz_kernel_r_atom_dot_size_style:nN {#1}
+                      \l__tenkz_kernel_r_atom_style_tl
+                    \tl_if_empty:NF \l__tenkz_kernel_r_atom_style_tl
+                      {
+                        \tl_put_left:Nn
+                          \l__tenkz_kernel_r_atom_style_tl { , }
+                      }
+                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
                       { , alias = #1 }
                   }
-                \__tenkz_model_get:nnN {#1} {size}
-                  \l__tenkz_kernel_r_row_tl
                 \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
                   {
                     \__tenkz_kernel_r_hue:nN {#1}
@@ -10389,23 +10629,15 @@
                         , fill = \tl_use:N \l__tenkz_kernel_r_hue_tl
                       }
                   }
-                \quark_if_no_value:NF \l__tenkz_kernel_r_row_tl
-                  {
-                    \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
-                      {
-                        , tenkz~dot~size~
-                            \tl_use:N \l__tenkz_kernel_r_row_tl
-                      }
-                  }
                 \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
               {
-                \tl_set:Ne \l__tenkz_kernel_r_atom_style_tl
-                  {
-                    , alias = #1
-                    , minimum~size = \__tenkz_dim:n {clusterdot}
-                  }
+                \__tenkz_kernel_r_atom_dot_size_style:nN {#1}
+                  \l__tenkz_kernel_r_atom_style_tl
+                \tl_put_left:Nn \l__tenkz_kernel_r_atom_style_tl { , }
+                \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
+                  { , alias = #1 }
                 \quark_if_no_value:NF \l__tenkz_kernel_r_species_tl
                   {
                     \__tenkz_kernel_r_hue:nN {#1}
@@ -10523,11 +10755,69 @@
 % The complete unturned live style of an inscribed glyph.  Measurement and
 % ink share it; the caller adds the record's turn after measuring in the
 % glyph's own axes.
+\tikzset{
+  tenkz~kernel~dots~geometry/.style={
+    inner~sep=\__tenkz_dim:n {labelclear},
+    fill=tenkzPaper
+  },
+  tenkz~kernel~dots/.style={
+    tenkz~kernel~dots~geometry,
+    tenkz~audited~label
+  },
+  tenkz~kernel~dot/.style={tensor},
+  tenkz~kernel~dot~s/.style={tensor,tenkz~dot~size~s},
+  tenkz~kernel~dot~m/.style={tensor,tenkz~dot~size~m},
+  tenkz~kernel~dot~l/.style={tensor,tenkz~dot~size~l},
+  tenkz~kernel~cluster~dot/.style={
+    tensor,
+    minimum~size=\__tenkz_dim:n {clusterdot}
+  }
+}
+% Resolve a dot's size class.  Cluster members use `cluster`, an omitted size
+% uses `default`, and an explicit size retains its declared size letter.
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_dot_class:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {cluster-of} \l_tmpa_tl
+    \quark_if_no_value:NTF \l_tmpa_tl
+      {
+        \__tenkz_model_get:nnN {#1} {size} \l_tmpa_tl
+        \quark_if_no_value:NTF \l_tmpa_tl
+          { \tl_set:Nn #2 {default} }
+          { \tl_set:NV #2 \l_tmpa_tl }
+      }
+      { \tl_set:Nn #2 {cluster} }
+  }
+% Select the measurement-node style for a default, cluster, or sized dot.
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_dot_measure_style:nN #1#2
+  {
+    \__tenkz_kernel_r_atom_dot_class:nN {#1} \l_tmpa_tl
+    \str_case:VnF \l_tmpa_tl
+      {
+        {default}{ \tl_set:Nn #2 {tenkz~kernel~dot} }
+        {cluster}{ \tl_set:Nn #2 {tenkz~kernel~cluster~dot} }
+      }
+      { \tl_set:Ne #2 {tenkz~kernel~dot~\tl_use:N \l_tmpa_tl} }
+  }
+% Produce the live dot's size-only style fragment.  The default class adds
+% nothing, cluster dots use their named minimum size, and sized dots use the
+% corresponding `tenkz dot size <letter>` style.
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_dot_size_style:nN #1#2
+  {
+    \__tenkz_kernel_r_atom_dot_class:nN {#1} \l_tmpa_tl
+    \str_case:VnF \l_tmpa_tl
+      {
+        {default}{ \tl_clear:N #2 }
+        {cluster}
+          {
+            \tl_set:Ne #2
+              { minimum~size = \__tenkz_dim:n {clusterdot} }
+          }
+      }
+      { \tl_set:Ne #2 {tenkz~dot~size~\tl_use:N \l_tmpa_tl} }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_style:nnN #1#2#3
   {
-    \__tenkz_kernel_r_span:nNN {#1}
-      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
-    \__tenkz_kernel_skin_base:nN {#2} \l__tenkz_kernel_r_skin_base_tl
+    \__tenkz_kernel_r_atom_glyph_style_setup:nn {#1}{#2}
     \str_case:VnF \l__tenkz_kernel_r_skin_base_tl
       {
         {dot}  { \tl_set:Nn #3 { tensor } }
@@ -10555,20 +10845,49 @@
           { skin = #2 } {#1}
         \tl_set:Nn #3 { box~tensor }
       }
+    \__tenkz_kernel_r_atom_glyph_geometry_append:nN {#1}#3
+  }
+% Build only the glyph's geometry style, without its full ink decoration.
+% The output is cleared before the shared size and span geometry is appended.
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_geometry_style:nnN #1#2#3
+  {
+    \__tenkz_kernel_r_atom_glyph_style_setup:nn {#1}{#2}
+    \tl_clear:N #3
+    \__tenkz_kernel_r_atom_glyph_geometry_append:nN {#1}#3
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_style_setup:nn #1#2
+  {
+    \__tenkz_kernel_r_span:nNN {#1}
+      \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+    \__tenkz_kernel_skin_base:nN {#2} \l__tenkz_kernel_r_skin_base_tl
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_geometry_append:nN #1#2
+  {
     \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_r_x_tl
-    % An absent size keeps the established per-skin geometry.  Once a class
-    % is requested, all canonical skins use its reference on both axes.
+    % An absent size keeps the established per-skin geometry.  Dot sizing
+    % precedes the span minima below, so a multi-slot pairing host retains its
+    % support.  Other canonical skins use their shared reference on both axes.
     \quark_if_no_value:NF \l__tenkz_kernel_r_x_tl
       {
-        \tl_put_right:Ne #3
+        \str_if_eq:VnTF \l__tenkz_kernel_r_skin_base_tl {dot}
           {
-            , tenkz~canonical~size~
-                \tl_use:N \l__tenkz_kernel_r_x_tl
+            \tl_put_right:Ne #2
+              {
+                , tenkz~dot~size~
+                    \tl_use:N \l__tenkz_kernel_r_x_tl
+              }
+          }
+          {
+            \tl_put_right:Ne #2
+              {
+                , tenkz~canonical~size~
+                    \tl_use:N \l__tenkz_kernel_r_x_tl
+              }
           }
       }
     \int_compare:nNnT { \l__tenkz_kernel_r_row_tl } > {1}
       {
-        \tl_put_right:Ne #3
+        \tl_put_right:Ne #2
           {
             , minimum~width = \__tenkz_kernel_r_pt:n
                 {
@@ -10579,7 +10898,7 @@
       }
     \int_compare:nNnT { \l__tenkz_kernel_r_col_tl } > {1}
       {
-        \tl_put_right:Ne #3
+        \tl_put_right:Ne #2
           {
             , minimum~height = \__tenkz_kernel_r_pt:n
                 {
