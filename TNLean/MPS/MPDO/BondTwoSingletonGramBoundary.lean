@@ -212,6 +212,33 @@ def gauge : GL I ℂ :=
       (by norm_num [Matrix.det_fin_two]) from inv_eq_of_mul_eq_one_right h]
   exact Matrix.GeneralLinearGroup.val_mkOfDetNeZero _ _
 
+/-- The concrete gauge is not unitary. -/
+lemma gauge_gram_ne_one :
+    (gauge : Matrix I I ℂ)ᴴ * (gauge : Matrix I I ℂ) ≠ 1 := by
+  intro h
+  have h01 := congrArg (fun M : Matrix I I ℂ ↦ M 0 1) h
+  norm_num [gaugeMatrix, Matrix.mul_apply, Matrix.conjTranspose_apply,
+    Fin.sum_univ_two, map_ofNat] at h01
+
+/-- The retained tensor obtained by the concrete nonunitary similarity. -/
+def gaugedSingletonTensor : MPSTensor (4 * 4) 2 :=
+  fun v ↦ (gauge : Matrix I I ℂ) * singletonTensor v *
+    ((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ)
+
+/-- The original and deformed retained tensors are related by the concrete
+invertible similarity. -/
+lemma singletonTensor_gaugeEquiv_gaugedSingletonTensor :
+    MPSTensor.GaugeEquiv singletonTensor gaugedSingletonTensor :=
+  ⟨gauge, fun _ ↦ rfl⟩
+
+/-- The nonunitary similarity preserves every positive-length vertical closed
+matrix-product vector. -/
+lemma singletonTensor_sameMPV₂Pos_gaugedSingletonTensor :
+    MPSTensor.SameMPV₂Pos singletonTensor gaugedSingletonTensor := by
+  intro N _hN σ
+  exact MPSTensor.GaugeEquiv.sameMPV
+    singletonTensor_gaugeEquiv_gaugedSingletonTensor N σ
+
 /-- Similarity deformation of the one-site terminal operator. -/
 def deformedOneSite : Matrix I I ℂ :=
   (gauge : Matrix I I ℂ) * terminalJ *
@@ -229,6 +256,24 @@ lemma gauge_commutes_terminalJ :
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [gaugeMatrix, terminalJ, Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- The nonunitarily similar retained tensor has the same terminal all-ones
+matrix. -/
+lemma physTraceTransfer_gaugedSingletonTensor :
+    physTraceTransfer (verticalBNTMPO gaugedSingletonTensor) = terminalJ := by
+  unfold physTraceTransfer
+  change (∑ i : Fin 4,
+    (gauge : Matrix I I ℂ) *
+      singletonTensor (finProdFinEquiv (i, i)) *
+        ((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ)) = terminalJ
+  simp_rw [Matrix.mul_assoc]
+  rw [← Matrix.mul_sum, ← Matrix.sum_mul]
+  have hterm := physTraceTransfer_singletonTensor
+  unfold physTraceTransfer at hterm
+  change (∑ i : Fin 4, singletonTensor (finProdFinEquiv (i, i))) = terminalJ at hterm
+  rw [hterm, ← Matrix.mul_assoc, gauge_commutes_terminalJ, Matrix.mul_assoc]
+  change terminalJ * ((gauge * gauge⁻¹ : GL I ℂ) : Matrix I I ℂ) = terminalJ
+  simp
 
 /-- The one-site deformation leaves the positive terminal matrix unchanged. -/
 lemma deformedOneSite_eq_terminalJ : deformedOneSite = terminalJ := by
