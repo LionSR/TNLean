@@ -226,11 +226,12 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         markedChainCoefficient_gauge_eq_reflectedAdjoint}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_two_site_exact_sector_gauge}
-    Let $M$ generate matrix product density operators, and suppose that the
-    one-site and two-site sectors are related by the exact invertible gauges
-    above. Let $\gamma$ be a one-site sector matched with a two-site sector by
-    the bijection $\sigma$, and identify their bond dimensions. There are an
+    \uses{def:mpdo, def:mpdo_bnt_two_site_exact_sector_gauge,
+        thm:mpdo_gram_dressed_reflected_marked_chain}
+    Suppose that the one-site and two-site sectors are related by the exact
+    invertible gauges above. Let $\gamma$ be a one-site sector matched with a
+    two-site sector by the bijection $\sigma$, and identify their bond
+    dimensions. There are an
     isometry $V_\gamma$ from the sector bond space into the blocked physical-index
     space and a scalar $c_\gamma>0$ such that, for every vertical letter $v$,
     \begin{align}
@@ -238,8 +239,9 @@
         &=c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
         \label{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}
     \end{align}
-    Consequently, for every pair of open bond indices and every pair of
-    two-site tail words, the marked-chain coefficient of
+    If, in addition, $M$ generates matrix product density operators, then for
+    every pair of open bond indices and every pair of two-site tail words, the
+    marked-chain coefficient of
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
