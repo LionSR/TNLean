@@ -1,0 +1,285 @@
+% Regression: a behavior-neutral physical-leg planner colors overlapping
+% face-relative intervals in discrete affine-carrier corridors.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+% Make the named clearance nonstock so a literal copy of its default value
+% cannot satisfy the geometry assertions.
+\tl_set:Ne \l_tmpa_tl
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {labelclear}
+        + \__tenkz_metric_ratio:n {cupmouth}
+      }
+  }
+\prop_gput:NnV \g__tenkz_metric_value_prop {daylight} \l_tmpa_tl
+\fp_new:N \l__tenkz_test_lp_ax_fp
+\fp_new:N \l__tenkz_test_lp_ay_fp
+\fp_new:N \l__tenkz_test_lp_bx_fp
+\fp_new:N \l__tenkz_test_lp_by_fp
+\fp_new:N \l__tenkz_test_lp_cx_fp
+\fp_new:N \l__tenkz_test_lp_cy_fp
+\fp_new:N \l__tenkz_test_lp_dx_fp
+\fp_new:N \l__tenkz_test_lp_dy_fp
+\fp_new:N \l__tenkz_test_lp_ex_fp
+\fp_new:N \l__tenkz_test_lp_ey_fp
+\fp_new:N \l__tenkz_test_lp_nx_fp
+\fp_new:N \l__tenkz_test_lp_ny_fp
+\fp_new:N \l__tenkz_test_lp_gap_ab_fp
+\fp_new:N \l__tenkz_test_lp_gap_ac_fp
+\fp_new:N \l__tenkz_test_lp_daylight_fp
+\fp_new:N \l__tenkz_test_lp_expected_b_reach_fp
+\fp_new:N \l__tenkz_test_lp_lane_fp
+\fp_new:N \l__tenkz_test_lp_reach_fp
+\fp_new:N \l__tenkz_test_lp_sx_fp
+\fp_new:N \l__tenkz_test_lp_sy_fp
+\fp_new:N \l__tenkz_test_lp_bendx_fp
+\fp_new:N \l__tenkz_test_lp_bendy_fp
+\fp_new:N \l__tenkz_test_lp_tipx_fp
+\fp_new:N \l__tenkz_test_lp_tipy_fp
+\tl_new:N \l__tenkz_test_lp_record_tl
+\tl_new:N \l__tenkz_test_lp_result_tl
+
+\cs_new_protected:Npn \__tenkz_test_lp_close:nnn #1#2#3
+  {
+    \fp_compare:nNnF {abs((#1)-(#2))} < {0.000001}
+      { \errmessage{#3} }
+  }
+\cs_new_protected:Npn \__tenkz_test_lp_unpack:nnnnnnnn #1#2#3#4#5#6#7#8
+  {
+    \fp_set:Nn \l__tenkz_test_lp_lane_fp {#1}
+    \fp_set:Nn \l__tenkz_test_lp_reach_fp {#2}
+    \fp_set:Nn \l__tenkz_test_lp_sx_fp {#3}
+    \fp_set:Nn \l__tenkz_test_lp_sy_fp {#4}
+    \fp_set:Nn \l__tenkz_test_lp_bendx_fp {#5}
+    \fp_set:Nn \l__tenkz_test_lp_bendy_fp {#6}
+    \fp_set:Nn \l__tenkz_test_lp_tipx_fp {#7}
+    \fp_set:Nn \l__tenkz_test_lp_tipy_fp {#8}
+  }
+\cs_new_protected:Npn \__tenkz_test_lp_get:n #1
+  {
+    \__tenkz_kernel_leg_plan_get:nN {#1} \l__tenkz_test_lp_result_tl
+    \quark_if_no_value:NT \l__tenkz_test_lp_result_tl
+      { \errmessage{the~lane~planner~lost~semantic~leg~#1} }
+    \exp_last_unbraced:NV \__tenkz_test_lp_unpack:nnnnnnnn
+      \l__tenkz_test_lp_result_tl
+  }
+\cs_new_protected:Npn \__tenkz_test_lp_plan:n #1
+  {
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \fp_set:Nn \l__tenkz_test_lp_ex_fp
+      {\l__tenkz_kernel_r_basis_ex_tl}
+    \fp_set:Nn \l__tenkz_test_lp_ey_fp
+      {\l__tenkz_kernel_r_basis_ey_tl}
+    \fp_set:Nn \l__tenkz_test_lp_nx_fp
+      {\l__tenkz_kernel_r_basis_nx_tl}
+    \fp_set:Nn \l__tenkz_test_lp_ny_fp
+      {\l__tenkz_kernel_r_basis_ny_tl}
+    \fp_set:Nn \l_tmpa_fp
+      {sqrt(\l__tenkz_test_lp_nx_fp^2+\l__tenkz_test_lp_ny_fp^2)}
+    \fp_set:Nn \l__tenkz_test_lp_nx_fp
+      {\l__tenkz_test_lp_nx_fp/\l_tmpa_fp}
+    \fp_set:Nn \l__tenkz_test_lp_ny_fp
+      {\l__tenkz_test_lp_ny_fp/\l_tmpa_fp}
+    \fp_set:Nn \l__tenkz_test_lp_daylight_fp
+      {\__tenkz_metric_ratio:n {daylight}}
+    \fp_set:Nn \l__tenkz_test_lp_gap_ab_fp
+      {
+        (\l__tenkz_test_lp_ax_fp-\l__tenkz_test_lp_bx_fp)
+          *\l__tenkz_test_lp_nx_fp
+        +(\l__tenkz_test_lp_ay_fp-\l__tenkz_test_lp_by_fp)
+          *\l__tenkz_test_lp_ny_fp
+      }
+    \fp_set:Nn \l__tenkz_test_lp_gap_ac_fp
+      {
+        (\l__tenkz_test_lp_ax_fp-\l__tenkz_test_lp_cx_fp)
+          *\l__tenkz_test_lp_nx_fp
+        +(\l__tenkz_test_lp_ay_fp-\l__tenkz_test_lp_cy_fp)
+          *\l__tenkz_test_lp_ny_fp
+      }
+    \__tenkz_kernel_leg_plan_reset:
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      {member-1/north/col-1}
+      {\l__tenkz_kernel_r_basis_nx_tl}
+      {\l__tenkz_kernel_r_basis_ny_tl}
+      {\l__tenkz_kernel_r_basis_ex_tl}
+      {\l__tenkz_kernel_r_basis_ey_tl}
+    % Repeating the same declared corridor is an idempotent topology fact.
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      {member-1/north/col-1}
+      {\l__tenkz_kernel_r_basis_nx_tl}
+      {\l__tenkz_kernel_r_basis_ny_tl}
+      {\l__tenkz_kernel_r_basis_ex_tl}
+      {\l__tenkz_kernel_r_basis_ey_tl}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {A}{member-1/north/col-1}
+      {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {B}{member-1/north/col-1}
+      {\l__tenkz_test_lp_bx_fp}{\l__tenkz_test_lp_by_fp}
+      {\l__tenkz_test_lp_gap_ab_fp}
+    \fp_set:Nn \l__tenkz_test_lp_expected_b_reach_fp
+      {
+        \l__tenkz_test_lp_gap_ab_fp
+        + 2 * \l__tenkz_test_lp_daylight_fp
+      }
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {B}{member-1/north/col-1}
+      {\l__tenkz_test_lp_bx_fp}{\l__tenkz_test_lp_by_fp}
+      {\l__tenkz_test_lp_expected_b_reach_fp}
+    % C ends exactly at A's start: closed intervals must still conflict.
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {C}{member-1/north/col-1}
+      {\l__tenkz_test_lp_cx_fp}{\l__tenkz_test_lp_cy_fp}
+      {\l__tenkz_test_lp_gap_ac_fp}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {D}{member-1/north/col-1}
+      {\l__tenkz_test_lp_dx_fp}{\l__tenkz_test_lp_dy_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    % A second corridor isolates the final SID tie-break from numeric order.
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      {member-1/north/tie}
+      {\l__tenkz_kernel_r_basis_nx_tl}
+      {\l__tenkz_kernel_r_basis_ny_tl}
+      {\l__tenkz_kernel_r_basis_ex_tl}
+      {\l__tenkz_kernel_r_basis_ey_tl}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {tie-a}{member-1/north/tie}
+      {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {tie-z}{member-1/north/tie}
+      {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    \__tenkz_kernel_leg_plan_get:nN {A} \l__tenkz_test_lp_result_tl
+    \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
+      { \errmessage{a~lane~result~existed~before~resolution} }
+    \__tenkz_kernel_leg_plan_resolve:
+    \__tenkz_test_lp_assertions:
+    % A longer duplicate request invalidates every interdependent result.
+    \fp_set:Nn \l__tenkz_test_lp_expected_b_reach_fp
+      {
+        \l__tenkz_test_lp_gap_ab_fp
+        + 3 * \l__tenkz_test_lp_daylight_fp
+      }
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {B}{member-1/north/col-1}
+      {\l__tenkz_test_lp_bx_fp}{\l__tenkz_test_lp_by_fp}
+      {\l__tenkz_test_lp_expected_b_reach_fp}
+    \__tenkz_kernel_leg_plan_get:nN {A} \l__tenkz_test_lp_result_tl
+    \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
+      { \errmessage{a~request~mutation~left~stale~lane~results} }
+    \__tenkz_kernel_leg_plan_resolve:
+    \__tenkz_test_lp_assertions:
+    % Resolution owns its transient occupancy and is repeatable.
+    \__tenkz_kernel_leg_plan_resolve:
+    \__tenkz_test_lp_assertions:
+    \__tenkz_kernel_leg_plan_get:nN {missing} \l__tenkz_test_lp_result_tl
+    \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
+      { \errmessage{an~unknown~semantic~leg~acquired~a~lane} }
+    \__tenkz_kernel_leg_plan_enrol:nnnnn {late}{member-1/north/tie}
+      {\l__tenkz_test_lp_dx_fp}{\l__tenkz_test_lp_dy_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    \__tenkz_kernel_leg_plan_get:nN {A} \l__tenkz_test_lp_result_tl
+    \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
+      { \errmessage{a~new~request~left~stale~lane~results} }
+  }
+\cs_new_protected:Npn \__tenkz_test_lp_assertions:
+  {
+    \__tenkz_test_lp_get:n {A}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{0}
+      {the~outermost~leg~did~not~take~lane~zero}
+    \__tenkz_test_lp_close:nnn
+      {\l__tenkz_test_lp_bendx_fp}{\l__tenkz_test_lp_sx_fp}
+      {lane~zero~moved~its~bend~in~x}
+    \__tenkz_test_lp_close:nnn
+      {\l__tenkz_test_lp_bendy_fp}{\l__tenkz_test_lp_sy_fp}
+      {lane~zero~moved~its~bend~in~y}
+    \__tenkz_test_lp_get:n {B}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{1}
+      {the~middle~overlap~did~not~take~lane~one}
+    \__tenkz_test_lp_close:nnn
+      {\l__tenkz_test_lp_reach_fp}
+      {\l__tenkz_test_lp_expected_b_reach_fp}
+      {duplicate~semantic~legs~did~not~retain~maximum~reach}
+    \__tenkz_test_lp_close:nnn
+      {\l__tenkz_test_lp_sx_fp}{\l__tenkz_test_lp_bx_fp}
+      {the~lane~plan~lost~the~measured~face~x~coordinate}
+    \__tenkz_test_lp_close:nnn
+      {\l__tenkz_test_lp_sy_fp}{\l__tenkz_test_lp_by_fp}
+      {the~lane~plan~lost~the~measured~face~y~coordinate}
+    \fp_set:Nn \l_tmpa_fp
+      {\l__tenkz_test_lp_bendx_fp-\l__tenkz_test_lp_sx_fp}
+    \fp_set:Nn \l_tmpb_fp
+      {\l__tenkz_test_lp_bendy_fp-\l__tenkz_test_lp_sy_fp}
+    \__tenkz_test_lp_close:nnn
+      {sqrt(\l_tmpa_fp^2+\l_tmpb_fp^2)}
+      {\l__tenkz_test_lp_daylight_fp}
+      {one~lane~was~not~one~named~page-space~daylight}
+    \__tenkz_test_lp_close:nnn
+      {\l_tmpa_fp*\l__tenkz_test_lp_nx_fp
+        +\l_tmpb_fp*\l__tenkz_test_lp_ny_fp}
+      {0}
+      {a~lane~shift~was~not~perpendicular~to~its~outward~direction}
+    \fp_compare:nNnF
+      {\l_tmpa_fp*\l__tenkz_test_lp_ex_fp
+        +\l_tmpb_fp*\l__tenkz_test_lp_ey_fp} > {0}
+      { \errmessage{the~lane~normal~lost~the~carrier-east~handedness} }
+    \__tenkz_test_lp_close:nnn
+      {
+        (\l__tenkz_test_lp_tipx_fp-\l__tenkz_test_lp_bendx_fp)
+          *\l__tenkz_test_lp_nx_fp
+        +(\l__tenkz_test_lp_tipy_fp-\l__tenkz_test_lp_bendy_fp)
+          *\l__tenkz_test_lp_ny_fp
+      }
+      {\l__tenkz_test_lp_reach_fp}
+      {the~planned~tip~lost~its~face-relative~reach}
+    \__tenkz_test_lp_get:n {C}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{2}
+      {closed~endpoint~contact~did~not~consume~the~third~lane}
+    \__tenkz_test_lp_get:n {D}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{0}
+      {a~disjoint~deeper~interval~did~not~reuse~lane~zero}
+    \__tenkz_test_lp_get:n {tie-z}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{0}
+      {descending~semantic-id~order~did~not~take~the~first~lane}
+    \__tenkz_test_lp_get:n {tie-a}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{1}
+      {descending~semantic-id~order~did~not~take~the~second~lane}
+  }
+
+\cs_new_eq:NN \__tenkz_test_lp_atoms: \__tenkz_kernel_r_atoms:
+\cs_set_protected:Npn \__tenkz_kernel_r_atoms:
+  {
+    \prop_get:NnN \l__tenkz_kernel_named_prop {A}
+      \l__tenkz_test_lp_record_tl
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_test_lp_record_tl {90}
+      \l__tenkz_test_lp_ax_fp \l__tenkz_test_lp_ay_fp
+    \prop_get:NnN \l__tenkz_kernel_named_prop {B}
+      \l__tenkz_test_lp_record_tl
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_test_lp_record_tl {90}
+      \l__tenkz_test_lp_bx_fp \l__tenkz_test_lp_by_fp
+    \prop_get:NnN \l__tenkz_kernel_named_prop {C}
+      \l__tenkz_test_lp_record_tl
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_test_lp_record_tl {90}
+      \l__tenkz_test_lp_cx_fp \l__tenkz_test_lp_cy_fp
+    \prop_get:NnN \l__tenkz_kernel_named_prop {D}
+      \l__tenkz_test_lp_record_tl
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_test_lp_record_tl {90}
+      \l__tenkz_test_lp_dx_fp \l__tenkz_test_lp_dy_fp
+    \exp_args:NV \__tenkz_test_lp_plan:n \l__tenkz_test_lp_record_tl
+    \__tenkz_test_lp_atoms:
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire,wire,wire}, cols=1, bonds=none,
+    frame={plane,basis={wire at (0,0)}}]
+  \tn[at=(1,1,1), name=A]{}
+  \tn[at=(2,1,1), name=B]{}
+  \tn[at=(3,1,1), name=C]{}
+  \tn[at=(4,1,1), name=D]{}
+\end{tenkz}
+\end{document}

@@ -131,6 +131,21 @@
 \msg_new:nnn {tenkz}{kernel-glyph-face-none}
   { [TKZ-GLYPH-FACE-NONE]~record~#1~has~skin=none~and~no~declared~
     pairing~support,~so~it~has~no~glyph~face. }
+\msg_new:nnn {tenkz}{kernel-leg-plan-vector}
+  { [TKZ-LEG-PLAN-VECTOR]~physical-leg~corridor~'#1'~has~a~zero~
+    outward~direction. }
+\msg_new:nnn {tenkz}{kernel-leg-plan-basis}
+  { [TKZ-LEG-PLAN-BASIS]~physical-leg~corridor~'#1'~was~redeclared~
+    with~a~different~page-space~basis. }
+\msg_new:nnn {tenkz}{kernel-leg-plan-corridor}
+  { [TKZ-LEG-PLAN-CORRIDOR]~semantic~leg~'#1'~names~undeclared~
+    corridor~'#2'. }
+\msg_new:nnn {tenkz}{kernel-leg-plan-face}
+  { [TKZ-LEG-PLAN-FACE]~semantic~leg~'#1'~was~first~enrolled~at~#2,~
+    then~re-enrolled~at~#3. }
+\msg_new:nnn {tenkz}{kernel-leg-plan-reach}
+  { [TKZ-LEG-PLAN-REACH]~semantic~leg~'#1'~has~negative~face-relative~
+    reach~#2. }
 \msg_new:nnn {tenkz}{kernel-skin-pairings-parse}
   { [TKZ-SKIN-PAIRING-PARSE]~pairings~on~declared~skin~'#1'~must~be~
     one~braced~port-pair-list. }
@@ -7477,6 +7492,386 @@
         \fp_zero:N #4
       }
   }
+
+% ---------- physical-leg lane plan -------------------------------------------
+% This planner is deliberately data-only.  A later atomic contour switch may
+% consume it, but current leg ink, route lanes, labels, crossings, and events
+% do not.  Corridors are discrete topology identities supplied by the caller;
+% floating coordinates are never clustered to invent one.
+\seq_new:N  \l__tenkz_kernel_lp_sort_seq
+\prop_new:N \l__tenkz_kernel_lp_corridor_prop
+\prop_new:N \l__tenkz_kernel_lp_request_prop
+\prop_new:N \l__tenkz_kernel_lp_result_prop
+\prop_new:N \l__tenkz_kernel_lp_occupied_prop
+\tl_new:N   \l__tenkz_kernel_lp_cid_tl
+\tl_new:N   \l__tenkz_kernel_lp_request_cid_tl
+\tl_new:N   \l__tenkz_kernel_lp_sid_tl
+\tl_new:N   \l__tenkz_kernel_lp_tuple_tl
+\tl_new:N   \l__tenkz_kernel_lp_old_tl
+\tl_new:N   \l__tenkz_kernel_lp_face_tl
+\fp_new:N   \l__tenkz_kernel_lp_dx_fp
+\fp_new:N   \l__tenkz_kernel_lp_dy_fp
+\fp_new:N   \l__tenkz_kernel_lp_qx_fp
+\fp_new:N   \l__tenkz_kernel_lp_qy_fp
+\fp_new:N   \l__tenkz_kernel_lp_norm_fp
+\fp_new:N   \l__tenkz_kernel_lp_sx_fp
+\fp_new:N   \l__tenkz_kernel_lp_sy_fp
+\fp_new:N   \l__tenkz_kernel_lp_reach_fp
+\fp_new:N   \l__tenkz_kernel_lp_start_fp
+\fp_new:N   \l__tenkz_kernel_lp_end_fp
+\fp_new:N   \l__tenkz_kernel_lp_bx_fp
+\fp_new:N   \l__tenkz_kernel_lp_by_fp
+\fp_new:N   \l__tenkz_kernel_lp_tx_fp
+\fp_new:N   \l__tenkz_kernel_lp_ty_fp
+\int_new:N  \l__tenkz_kernel_lp_lane_int
+\bool_new:N \l__tenkz_kernel_lp_same_bool
+\bool_new:N \l__tenkz_kernel_lp_conflict_bool
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_reset:
+  {
+    \prop_clear:N \l__tenkz_kernel_lp_corridor_prop
+    \prop_clear:N \l__tenkz_kernel_lp_request_prop
+    \prop_clear:N \l__tenkz_kernel_lp_result_prop
+  }
+
+% Declare one topology-owned corridor.  The outward vector becomes the unit
+% direction d.  Its page-perpendicular q is oriented toward carrier east, so
+% one lane is exactly one page-space daylight in a stable handedness.  A valid
+% carrier basis makes east nonparallel to the outward direction.
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_corridor:nnnnn #1#2#3#4#5
+  {
+    \tl_set:Ne \l__tenkz_kernel_lp_cid_tl {#1}
+    \fp_set:Nn \l__tenkz_kernel_lp_dx_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_lp_dy_fp {#3}
+    \fp_set:Nn \l__tenkz_kernel_lp_norm_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_lp_dx_fp ^ 2
+          + \l__tenkz_kernel_lp_dy_fp ^ 2 )
+      }
+    \fp_compare:nNnTF {\l__tenkz_kernel_lp_norm_fp} = {0}
+      {
+        \msg_error:nne {tenkz}{kernel-leg-plan-vector}
+          {\tl_use:N \l__tenkz_kernel_lp_cid_tl}
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_lp_dx_fp
+          { \l__tenkz_kernel_lp_dx_fp / \l__tenkz_kernel_lp_norm_fp }
+        \fp_set:Nn \l__tenkz_kernel_lp_dy_fp
+          { \l__tenkz_kernel_lp_dy_fp / \l__tenkz_kernel_lp_norm_fp }
+        \fp_set:Nn \l__tenkz_kernel_lp_qx_fp
+          { -\l__tenkz_kernel_lp_dy_fp }
+        \fp_set_eq:NN \l__tenkz_kernel_lp_qy_fp
+          \l__tenkz_kernel_lp_dx_fp
+        \fp_compare:nNnT
+          {
+            \l__tenkz_kernel_lp_qx_fp * (#4)
+            + \l__tenkz_kernel_lp_qy_fp * (#5)
+          }
+          < {0}
+          {
+            \fp_set:Nn \l__tenkz_kernel_lp_qx_fp
+              { -\l__tenkz_kernel_lp_qx_fp }
+            \fp_set:Nn \l__tenkz_kernel_lp_qy_fp
+              { -\l__tenkz_kernel_lp_qy_fp }
+          }
+        \tl_set:Ne \l__tenkz_kernel_lp_tuple_tl
+          {
+            {\fp_use:N \l__tenkz_kernel_lp_dx_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_dy_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_qx_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_qy_fp}
+          }
+        \prop_get:NVN \l__tenkz_kernel_lp_corridor_prop
+          \l__tenkz_kernel_lp_cid_tl \l__tenkz_kernel_lp_old_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_lp_old_tl
+          {
+            \prop_put:NVV \l__tenkz_kernel_lp_corridor_prop
+              \l__tenkz_kernel_lp_cid_tl \l__tenkz_kernel_lp_tuple_tl
+          }
+          {
+            \tl_if_eq:NNTF
+              \l__tenkz_kernel_lp_old_tl \l__tenkz_kernel_lp_tuple_tl
+              { }
+              {
+                \msg_error:nne {tenkz}{kernel-leg-plan-basis}
+                  {\tl_use:N \l__tenkz_kernel_lp_cid_tl}
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_request_set:nnnn #1#2#3#4
+  {
+    \tl_set:Nn \l__tenkz_kernel_lp_request_cid_tl {#1}
+    \fp_set:Nn \l__tenkz_kernel_lp_sx_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_lp_sy_fp {#3}
+    \fp_set:Nn \l__tenkz_kernel_lp_reach_fp {#4}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_enrol_new:
+  {
+    \prop_put:NVV \l__tenkz_kernel_lp_request_prop
+      \l__tenkz_kernel_lp_sid_tl \l__tenkz_kernel_lp_tuple_tl
+    \prop_clear:N \l__tenkz_kernel_lp_result_prop
+  }
+
+% Enrol one face-relative outward interval.  Repeated observations of the
+% same semantic leg share one exact face and retain only their greatest reach.
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_enrol:nnnnn #1#2#3#4#5
+  {
+    \tl_set:Ne \l__tenkz_kernel_lp_sid_tl {#1}
+    \tl_set:Ne \l__tenkz_kernel_lp_cid_tl {#2}
+    \fp_set:Nn \l__tenkz_kernel_lp_sx_fp {#3}
+    \fp_set:Nn \l__tenkz_kernel_lp_sy_fp {#4}
+    \fp_set:Nn \l__tenkz_kernel_lp_reach_fp {#5}
+    % Freeze caller expressions before unpacking an earlier request into the
+    % planner's scratch registers.
+    \tl_set:Ne \l__tenkz_kernel_lp_tuple_tl
+      {
+        {\tl_use:N \l__tenkz_kernel_lp_cid_tl}
+        {\fp_use:N \l__tenkz_kernel_lp_sx_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_sy_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_reach_fp}
+      }
+    \fp_compare:nNnTF {\l__tenkz_kernel_lp_reach_fp} < {0}
+      {
+        \msg_error:nnee {tenkz}{kernel-leg-plan-reach}
+          {\tl_use:N \l__tenkz_kernel_lp_sid_tl}
+          {\fp_use:N \l__tenkz_kernel_lp_reach_fp}
+      }
+      {
+        \prop_if_in:NVTF \l__tenkz_kernel_lp_corridor_prop
+          \l__tenkz_kernel_lp_cid_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_lp_request_prop
+              \l__tenkz_kernel_lp_sid_tl \l__tenkz_kernel_lp_old_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_lp_old_tl
+              { \__tenkz_kernel_leg_plan_enrol_new: }
+              {
+                \exp_last_unbraced:NV
+                  \__tenkz_kernel_leg_plan_request_set:nnnn
+                  \l__tenkz_kernel_lp_old_tl
+                \bool_set_true:N \l__tenkz_kernel_lp_same_bool
+                \str_if_eq:eeF
+                  {\tl_use:N \l__tenkz_kernel_lp_request_cid_tl}
+                  {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {1}}
+                  { \bool_set_false:N \l__tenkz_kernel_lp_same_bool }
+                \fp_compare:nNnF
+                  {\l__tenkz_kernel_lp_sx_fp}
+                  = {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {2}}
+                  { \bool_set_false:N \l__tenkz_kernel_lp_same_bool }
+                \fp_compare:nNnF
+                  {\l__tenkz_kernel_lp_sy_fp}
+                  = {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {3}}
+                  { \bool_set_false:N \l__tenkz_kernel_lp_same_bool }
+                \bool_if:NTF \l__tenkz_kernel_lp_same_bool
+                  {
+                    \fp_compare:nNnT
+                      {\l__tenkz_kernel_lp_reach_fp}
+                      < {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {4}}
+                      {
+                        \tl_set:Ne \l__tenkz_kernel_lp_old_tl
+                          {
+                            {\tl_use:N \l__tenkz_kernel_lp_request_cid_tl}
+                            {\fp_use:N \l__tenkz_kernel_lp_sx_fp}
+                            {\fp_use:N \l__tenkz_kernel_lp_sy_fp}
+                            {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {4}}
+                          }
+                        \prop_put:NVV \l__tenkz_kernel_lp_request_prop
+                          \l__tenkz_kernel_lp_sid_tl
+                          \l__tenkz_kernel_lp_old_tl
+                        \prop_clear:N \l__tenkz_kernel_lp_result_prop
+                      }
+                  }
+                  {
+                    \tl_set:Ne \l__tenkz_kernel_lp_old_tl
+                      {
+                        {\tl_use:N \l__tenkz_kernel_lp_request_cid_tl}
+                        {\fp_use:N \l__tenkz_kernel_lp_sx_fp}
+                        {\fp_use:N \l__tenkz_kernel_lp_sy_fp}
+                      }
+                    \tl_set:Ne \l__tenkz_kernel_lp_face_tl
+                      {
+                        {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {1}}
+                        {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {2}}
+                        {\tl_item:Nn \l__tenkz_kernel_lp_tuple_tl {3}}
+                      }
+                    \msg_error:nneee {tenkz}{kernel-leg-plan-face}
+                      {\tl_use:N \l__tenkz_kernel_lp_sid_tl}
+                      {\tl_use:N \l__tenkz_kernel_lp_old_tl}
+                      {\tl_use:N \l__tenkz_kernel_lp_face_tl}
+                  }
+              }
+          }
+          {
+            \msg_error:nnee {tenkz}{kernel-leg-plan-corridor}
+              {\tl_use:N \l__tenkz_kernel_lp_sid_tl}
+              {\tl_use:N \l__tenkz_kernel_lp_cid_tl}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_basis_set:nnnn #1#2#3#4
+  {
+    \fp_set:Nn \l__tenkz_kernel_lp_dx_fp {#1}
+    \fp_set:Nn \l__tenkz_kernel_lp_dy_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_lp_qx_fp {#3}
+    \fp_set:Nn \l__tenkz_kernel_lp_qy_fp {#4}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_sort_item:nnn #1#2#3
+  {
+    \tl_set:Nn \l__tenkz_kernel_lp_sid_tl {#1}
+    \fp_set:Nn \l__tenkz_kernel_lp_start_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_lp_end_fp {#3}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_conflict:
+  {
+    \bool_set_false:N \l__tenkz_kernel_lp_conflict_bool
+    \prop_get:NeN \l__tenkz_kernel_lp_occupied_prop
+      {\int_use:N \l__tenkz_kernel_lp_lane_int}
+      \l__tenkz_kernel_lp_old_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_lp_old_tl
+      {
+        % Descending starts make the most recently placed start the only
+        % boundary to check.  Equality still conflicts: intervals are closed.
+        \fp_compare:nNnF
+          {\l__tenkz_kernel_lp_end_fp}
+          < {\l__tenkz_kernel_lp_old_tl}
+          { \bool_set_true:N \l__tenkz_kernel_lp_conflict_bool }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_resolve_one:n #1
+  {
+    \__tenkz_kernel_leg_plan_sort_item:nnn #1
+    \prop_get:NVN \l__tenkz_kernel_lp_request_prop
+      \l__tenkz_kernel_lp_sid_tl \l__tenkz_kernel_lp_old_tl
+    \exp_last_unbraced:NV
+      \__tenkz_kernel_leg_plan_request_set:nnnn
+      \l__tenkz_kernel_lp_old_tl
+    \int_zero:N \l__tenkz_kernel_lp_lane_int
+    \bool_set_true:N \l__tenkz_kernel_lp_conflict_bool
+    \bool_while_do:Nn \l__tenkz_kernel_lp_conflict_bool
+      {
+        \__tenkz_kernel_leg_plan_conflict:
+        \bool_if:NT \l__tenkz_kernel_lp_conflict_bool
+          { \int_incr:N \l__tenkz_kernel_lp_lane_int }
+      }
+    \prop_put:Nee \l__tenkz_kernel_lp_occupied_prop
+      {\int_use:N \l__tenkz_kernel_lp_lane_int}
+      {\fp_use:N \l__tenkz_kernel_lp_start_fp}
+    \fp_set:Nn \l__tenkz_kernel_lp_bx_fp
+      {
+        \l__tenkz_kernel_lp_sx_fp
+        + \l__tenkz_kernel_lp_lane_int
+          * \__tenkz_metric_ratio:n {daylight}
+          * \l__tenkz_kernel_lp_qx_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_lp_by_fp
+      {
+        \l__tenkz_kernel_lp_sy_fp
+        + \l__tenkz_kernel_lp_lane_int
+          * \__tenkz_metric_ratio:n {daylight}
+          * \l__tenkz_kernel_lp_qy_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_lp_tx_fp
+      { \l__tenkz_kernel_lp_bx_fp + \l__tenkz_kernel_lp_reach_fp
+          * \l__tenkz_kernel_lp_dx_fp }
+    \fp_set:Nn \l__tenkz_kernel_lp_ty_fp
+      { \l__tenkz_kernel_lp_by_fp + \l__tenkz_kernel_lp_reach_fp
+          * \l__tenkz_kernel_lp_dy_fp }
+    \tl_set:Ne \l__tenkz_kernel_lp_tuple_tl
+      {
+        {\int_use:N \l__tenkz_kernel_lp_lane_int}
+        {\fp_use:N \l__tenkz_kernel_lp_reach_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_sx_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_sy_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_bx_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_by_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_tx_fp}
+        {\fp_use:N \l__tenkz_kernel_lp_ty_fp}
+      }
+    \prop_put:NVV \l__tenkz_kernel_lp_result_prop
+      \l__tenkz_kernel_lp_sid_tl \l__tenkz_kernel_lp_tuple_tl
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_collect_request:nn #1#2
+  {
+    \__tenkz_kernel_leg_plan_request_set:nnnn #2
+    \str_if_eq:eeT
+      {\tl_use:N \l__tenkz_kernel_lp_request_cid_tl}
+      {\tl_use:N \l__tenkz_kernel_lp_cid_tl}
+      {
+        \fp_set:Nn \l__tenkz_kernel_lp_start_fp
+          {
+            \l__tenkz_kernel_lp_sx_fp * \l__tenkz_kernel_lp_dx_fp
+            + \l__tenkz_kernel_lp_sy_fp * \l__tenkz_kernel_lp_dy_fp
+          }
+        \fp_set:Nn \l__tenkz_kernel_lp_end_fp
+          { \l__tenkz_kernel_lp_start_fp + \l__tenkz_kernel_lp_reach_fp }
+        \seq_put_right:Ne \l__tenkz_kernel_lp_sort_seq
+          {
+            {#1}
+            {\fp_use:N \l__tenkz_kernel_lp_start_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_end_fp}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_resolve_corridor:nn #1#2
+  {
+    \tl_set:Nn \l__tenkz_kernel_lp_cid_tl {#1}
+    \__tenkz_kernel_leg_plan_basis_set:nnnn #2
+    \seq_clear:N \l__tenkz_kernel_lp_sort_seq
+    \prop_clear:N \l__tenkz_kernel_lp_occupied_prop
+    \prop_map_function:NN \l__tenkz_kernel_lp_request_prop
+      \__tenkz_kernel_leg_plan_collect_request:nn
+    \seq_sort:Nn \l__tenkz_kernel_lp_sort_seq
+      {
+        \fp_compare:nNnTF
+          {\tl_item:nn {##1}{2}} < {\tl_item:nn {##2}{2}}
+          { \sort_return_swapped: }
+          {
+            \fp_compare:nNnTF
+              {\tl_item:nn {##1}{2}} > {\tl_item:nn {##2}{2}}
+              { \sort_return_same: }
+              {
+                \fp_compare:nNnTF
+                  {\tl_item:nn {##1}{3}} < {\tl_item:nn {##2}{3}}
+                  { \sort_return_swapped: }
+                  {
+                    \fp_compare:nNnTF
+                      {\tl_item:nn {##1}{3}} > {\tl_item:nn {##2}{3}}
+                      { \sort_return_same: }
+                      {
+                        \str_compare:eNeTF
+                          {\tl_item:nn {##1}{1}}
+                          < {\tl_item:nn {##2}{1}}
+                          { \sort_return_swapped: }
+                          { \sort_return_same: }
+                      }
+                  }
+              }
+          }
+      }
+    \seq_map_function:NN \l__tenkz_kernel_lp_sort_seq
+      \__tenkz_kernel_leg_plan_resolve_one:n
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_resolve:
+  {
+    \prop_clear:N \l__tenkz_kernel_lp_result_prop
+    \prop_map_function:NN \l__tenkz_kernel_lp_corridor_prop
+      \__tenkz_kernel_leg_plan_resolve_corridor:nn
+  }
+
+% Return {lane}{reach}{start-x}{start-y}{bend-x}{bend-y}{tip-x}{tip-y}.
+% An unknown or not-yet-resolved semantic id deliberately returns q_no_value.
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_get:nN #1#2
+  { \prop_get:NeN \l__tenkz_kernel_lp_result_prop {#1} #2 }
 
 % Resolve a live glyph anchor in the host's local axes and carry it to the
 % page.  The resolved port node supplies the span-slot centre, while the host
