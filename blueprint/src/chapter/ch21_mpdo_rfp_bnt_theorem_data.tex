@@ -437,7 +437,8 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_vertical_identity}
+    \uses{def:mpdo_vertical_one_site_actions,
+        thm:mpdo_bond_two_singleton_vertical_identity}
     Left and right multiplication on the physical indices become matrix
     multiplication on the vertically viewed tensor. Now use
     Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity}.
@@ -450,8 +451,8 @@
     \leanok
     \uses{def:mpdo_bond_two_singleton_physical_deformation,
         def:mpdo_bond_two_singleton_deformation}
-    After identifying the unique one-site word with $I$, the one-site operator
-    of $M_X$ is
+    After identifying one-site words with their single letters in $I$, the
+    one-site operator of $M_X$ is
     \begin{align}
         \operatorname{reindex}\bigl(\rho_1(M_X)\bigr)&=XJX^{-1}.
         \notag

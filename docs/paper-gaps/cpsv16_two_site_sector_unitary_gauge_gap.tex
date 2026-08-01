@@ -459,7 +459,11 @@ exactly the earlier nonunitary similarity
   \label{eq:singleton-deformation}
 \end{align}
 This upgrades the previous terminal/Bell comparator to a concrete obstruction
-for the natural physical deformation itself.
+for the natural physical deformation itself.\footnote{Formal declarations:
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO} and
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeDeformedBaseMPO_gauge_not_isMPDO}.}
 
 Appendix~C.4, lines~2048--2057, motivates comparing the one-site and two-site
 sector descriptions, and Proposition~4.13, lines~1898--1921, supplies the
@@ -476,11 +480,11 @@ reconstructs $A$.  The canonical identification of its retained coordinates
 with the original bond coordinates is a coisometry.  These data give a genuine
 one-label tensor-attached BNT algebra clause for the undeformed MPDO $M$.
 
-The new obstruction does not construct a deformed
-\path{BNTAlgebraTensorClause}.  In particular, it is not a counterexample to
-that tensor-attached clause: the natural deformation with nonscalar Gram matrix
-already fails the MPDO premise.  It also does not construct
-\path{IdentityMarkedRealization} or prove the general marked comparison.
+The new obstruction does not construct a deformed tensor-attached BNT algebra
+clause.  In particular, it is not a counterexample to that clause: the natural
+deformation with nonscalar Gram matrix already fails the MPDO premise.  It also
+does not construct the identity-dressed marked realization or prove the general
+marked comparison.
 Consequently Theorem~4.14 remains partial.  Issue
 \href{https://github.com/LionSR/TNLean/issues/5284}{\#5284} remains open under
 \href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
