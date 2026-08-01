@@ -82,11 +82,9 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |
 | `rmp-iii-b-r-tensor-left` | K3 | Normalize pitch while preserving the three-station winding route. |
-| `rmp-iii-b-r-tensor-right` | K2 | Upright house box versus a slanted source parallelogram is equivalent. |
 | `rmp-iii-b-braid-one` | K2 | Stations and noncrossing winding strings match the source. |
 | `rmp-iii-b-braid-two` | K2 | The nested noncrossing strands match the flattened source. |
 | `rmp-iii-b-braid-three` | K2 | Lattice slant differs without changing the winding contraction. |
-| `rmp-iii-b-braid-four` | K2 | Upright boxes replace source parallelograms without changing the identity. |
 | `rmp-iii-b-condensation` | K4 | Add the finite projection mark named by the verdict note. |
 | `rmp-iv-ground-space-1d` | K3 | Improve the small X glyph and overly tight placement. |
 | `rmp-iv-ground-space-2d` | X | `physical=up` creates ports but records no wire direction; model the source arrowed legs before theme review. |

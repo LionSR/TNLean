@@ -1223,3 +1223,17 @@ Census-correction: #5086
 |---|---|
 | flag:consumers:key:kernel-frame:basis | keep-because: the CZX fixture consumes the member table now; the GHZ, cluster-state, bilayer, and condensation consumers named by LANGUAGE-1.0 migrate through #5086; expiry 1.0 |
 | flag:lonely-type:basis-spec | keep-because: this type alone combines an ordered row-kind list with signed two-axis quarter-pitch offsets; ordinary row-list and selector grammars cannot express that frame-owned structure; expiry 1.0 |
+
+### 2026-08-01 — projected resolver panels restore source topology
+
+The right R-tensor and fourth braid cases now use the shared plane frame. The
+former free-graph construction loses its raw millimetre coordinates, while the
+fourth braid restores the source ordering of its sites, resolver boxes, lower
+rail bead, and outgoing tail. M4 rises from 18.22 to 18.32 because the two
+fixtures now record the complete open rails, diagonal transversal, and
+continuous resolved strings instead of flattening or omitting that topology.
+No parser row, escape, or case-specific geometry control is added.
+
+Census-correction: #5086
+
+No language-ledger row changes and no flag verdict is re-examined here.

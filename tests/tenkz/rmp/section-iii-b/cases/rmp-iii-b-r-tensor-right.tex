@@ -1,34 +1,45 @@
 % Target: rmp-iii-b-r-tensor-right
-% Formula: R_{i,b} resolves the i-string crossing of the b,a,b triple.
-% Ink: Canonical public tenkzfree R box, strands, and marked endpoints.
-% Boundary: Two lattice rails and three upper string ends remain open.
+% Formula: R_{i,b} replaces the crossings of the i-string with the ordered
+%   b,a,b strands.
+% Ink: Canonical public kernel plane with an R box, strands, and marked endpoints.
+% Boundary: Two horizontal rails and the diagonal transversal are open; three
+%   resolved strings continue below the lower rail.
 % Source: paper TN-Review-main.tex line 1669; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 773-798
-% Capabilities: free-graph, braid-resolver, crossing-order
+% Capabilities: kernel, plane-frame, braid-resolver, crossing-order
 \[
-  \begin{tenkzfree}
-    % the anyon i on the upper rail; one strand leaves it for the resolver
-    \tnput[dot, role=marked, label pos=west]{i}{(0mm,9mm)}{i}
-    % the resolver stands for every crossing of the i-string with a b-strand
-    \tnput[box]{R}{(9mm,1mm)}{\mathcal R_{i,b}}
-    \tnjoin{-14mm,9mm}{i.west} \tnjoin{i.east}{20mm,9mm}
-    \tnjoin{0mm,18mm}{i.north} \tnjoin{i.south}{0mm,-16mm}
-    \tnjoin[role=operator]{i.south east}{R.north}
-    % the lattice vertex where the vertical rail crosses the lower rail
-    \tnput[dot]{v}{(0mm,-8mm)}{}
-    % the b, a, b strands on the lower rail, east of the vertical rail
-    \tnput[dot, role=extra, label pos=south west]{bL}{(4mm,-8mm)}{b}
-    \tnput[dot, role=marked, label pos=south west]{a}{(9mm,-8mm)}{a}
-    \tnput[dot, role=extra, label pos=south west]{bR}{(14mm,-8mm)}{b}
-    \tnjoin{-14mm,-8mm}{v.west} \tnjoin{v.east}{bL.west} \tnjoin{bL.east}{a.west}
-    \tnjoin{a.east}{bR.west} \tnjoin{bR.east}{20mm,-8mm}
-    % the three resolved strands leave the box for b, a, b
-    \tnjoin[role=operator]{R.south west}{bL.north}
-    \tnjoin[role=operator]{R.south}{a.north}
-    \tnjoin[role=operator]{R.south east}{bR.north}
-    % the strands continue past the rail as the open string ends
-    \tnjoin[role=operator]{bL.south}{4mm,-14mm}
-    \tnjoin[role=operator]{a.south}{9mm,-14mm}
-    \tnjoin[role=operator]{bR.south}{14mm,-14mm}
-  \end{tenkzfree}
+  \tenkzkernel
+  \tndeclare{species}{operator}{hue=source:red}
+  \begin{tenkz}[
+      rows={wire,wire,wire}, cols=4,
+      frame=plane, bonds=none]
+    % The plane frame carries both rails, the transverse direction, and the
+    % resolver contour through one shared affine basis.
+    \tn[at=(1,1), name=i, role=marked, label pos=nw]{i}
+    \tn[at=(2,3), skin=box, name=R]{R_{i,b}}
+    \tn[at=(3,1), name=v]{}
+    \tn[at=(3,2), name=bL, role=extra, label pos=sw]{b}
+    \tn[at=(3,3), name=a, role=marked, label pos=sw]{a}
+    \tn[at=(3,4), name=bR, role=extra, label pos=sw]{b}
+    % Two horizontal rails and the oblique transverse rail remain open.
+    \tnwire{open w}{i.w} \tnwire{i.e}{open e}
+    \tnwire{open w}{v.w} \tnwire{v.e}{bL.w}
+    \tnwire{bL.e}{a.w} \tnwire{a.e}{bR.w} \tnwire{bR.e}{open e}
+    \tnwire{open n}{i.n} \tnwire{i.s}{v.n} \tnwire{v.s}{open s}
+    % The i string enters the resolver, which fans out to b, a, b.
+    \tnwire[kind=string, species=operator, name=incoming]
+      {i.315}{R.45}
+    \tnwire[kind=string, species=operator, name=sb, via={bL},
+            cross={under at crossing of sb and incoming}]
+      {R.s}{open s}
+    \tnwire[kind=string, species=operator, name=sa,
+            via={a}, cross={over at crossing of sa and sb,
+                            under at crossing of sa and incoming}]
+      {R.w}{open s}
+    \tnwire[kind=string, species=operator, name=sbr,
+            via={bR},
+            cross={over at crossing of sbr and sb,
+                   over at crossing of sbr and sa,
+                   under at crossing of sbr and incoming}]{R.e}{open s}
+  \end{tenkz}
 \]
