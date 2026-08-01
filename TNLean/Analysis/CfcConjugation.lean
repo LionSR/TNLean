@@ -3,18 +3,21 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PosSemidefSupport
 import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
+import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
 # Covariance of the matrix continuous functional calculus
 
 This file records covariance of the continuous functional calculus for
-Hermitian matrices under reindexing and unitary conjugation. These are matrix
-instances of the general fact that continuous star-algebra homomorphisms
-commute with the continuous functional calculus.
+Hermitian matrices under reindexing, transpose, and unitary conjugation. These
+are matrix instances of the general fact that continuous star-algebra
+homomorphisms commute with the continuous functional calculus.
 
 The results have no quantum-information content. They are isolated in this
 low-level analysis module so that consumers can use them without importing the
@@ -26,14 +29,18 @@ quantum relative-entropy stack.
   homomorphism.
 * `Matrix.cfc_submatrix_equiv` — covariance of the continuous functional
   calculus under reindexing.
+* `Matrix.cfc_transpose` — covariance of the continuous functional calculus
+  under transpose.
+* `Matrix.IsHermitian.log_transpose` and `Matrix.IsHermitian.supportProj_transpose` —
+  transpose covariance of the logarithm and support projection.
+* `Matrix.PosSemidef.rpow_transpose` and `Matrix.PosSemidef.sqrt_transpose` —
+  transpose covariance of real powers and the positive square root.
 * `Matrix.cfc_conj_unitary` — covariance of the continuous functional calculus
   under conjugation by a unitary.
-* `Matrix.cfc_transpose` — covariance of the continuous functional calculus under
-  transpose on Hermitian matrices.
 * `Matrix.cfc_diagonal` — entrywise functional calculus for real diagonal matrices.
 -/
 
-open scoped Matrix.Norms.L2Operator
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace Matrix
 
@@ -126,6 +133,65 @@ theorem cfc_transpose {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → ℝ
     ← conjugateStarAlgHom_apply, ← conjugateStarAlgHom_apply]
   exact StarAlgHomClass.map_cfc conjugateStarAlgHom f A hcont hcontφ hsa
     (hsa.map conjugateStarAlgHom)
+
+/-- The matrix logarithm commutes with transpose on Hermitian matrices. -/
+theorem IsHermitian.log_transpose {A : Matrix n n ℂ} (hA : A.IsHermitian) :
+    CFC.log Aᵀ = (CFC.log A)ᵀ := by
+  exact (cfc_transpose hA Real.log).symm
+
+/-- Every real power of a positive-semidefinite matrix commutes with transpose. -/
+theorem PosSemidef.rpow_transpose {A : Matrix n n ℂ} (hA : A.PosSemidef) (r : ℝ) :
+    (Aᵀ) ^ r = (A ^ r)ᵀ := by
+  rw [CFC.rpow_eq_cfc_real hA.transpose.nonneg, CFC.rpow_eq_cfc_real hA.nonneg]
+  exact (cfc_transpose hA.isHermitian (fun x : ℝ ↦ x ^ r)).symm
+
+set_option linter.unusedDecidableInType false in
+/-- The positive square root of a positive-semidefinite matrix commutes with transpose. -/
+theorem PosSemidef.sqrt_transpose {A : Matrix n n ℂ} (hA : A.PosSemidef) :
+    CFC.sqrt Aᵀ = (CFC.sqrt A)ᵀ := by
+  classical
+  rw [CFC.sqrt_eq_real_sqrt Aᵀ hA.transpose.nonneg,
+    CFC.sqrt_eq_real_sqrt A hA.nonneg, cfcₙ_eq_cfc, cfcₙ_eq_cfc]
+  exact (cfc_transpose hA.isHermitian Real.sqrt).symm
+
+/-- The support projection of a Hermitian matrix commutes with transpose. -/
+theorem IsHermitian.supportProj_transpose {A : Matrix n n ℂ} (hA : A.IsHermitian) :
+    hA.transpose.supportProj = hA.supportProjᵀ := by
+  let f : ℝ → ℝ := fun x ↦ if x ≠ 0 then 1 else 0
+  have hsupport (B : Matrix n n ℂ) (hB : B.IsHermitian) :
+      hB.supportProj = cfc f B := by
+    rw [hB.cfc_eq]
+    unfold Matrix.IsHermitian.supportProj Matrix.IsHermitian.cfc
+    rw [Unitary.conjStarAlgAut_apply]
+    congr 2
+    ext i j
+    by_cases hij : i = j
+    · subst j
+      by_cases hi : hB.eigenvalues i = 0 <;> simp [f, hi]
+    · simp [Matrix.diagonal_apply_ne _ hij]
+  rw [hsupport Aᵀ hA.transpose, hsupport A hA]
+  exact (cfc_transpose hA f).symm
+
+-- All four consequences include the singular zero matrix.
+private theorem transpose_cfc_consequences_zero_fin_two (r : ℝ) :
+    let h0 : (0 : Matrix (Fin 2) (Fin 2) ℂ).PosSemidef := Matrix.PosSemidef.zero
+    CFC.log (0 : Matrix (Fin 2) (Fin 2) ℂ)ᵀ =
+        (CFC.log (0 : Matrix (Fin 2) (Fin 2) ℂ))ᵀ ∧
+      ((0 : Matrix (Fin 2) (Fin 2) ℂ)ᵀ) ^ r =
+        ((0 : Matrix (Fin 2) (Fin 2) ℂ) ^ r)ᵀ ∧
+      CFC.sqrt (0 : Matrix (Fin 2) (Fin 2) ℂ)ᵀ =
+        (CFC.sqrt (0 : Matrix (Fin 2) (Fin 2) ℂ))ᵀ ∧
+      h0.isHermitian.transpose.supportProj = h0.isHermitian.supportProjᵀ := by
+  dsimp only
+  let h0 : (0 : Matrix (Fin 2) (Fin 2) ℂ).PosSemidef := Matrix.PosSemidef.zero
+  exact ⟨h0.isHermitian.log_transpose, h0.rpow_transpose r,
+    h0.sqrt_transpose, h0.isHermitian.supportProj_transpose⟩
+
+-- Transpose covariance also permits the zero-dimensional matrix algebra.
+private theorem cfc_transpose_fin_zero (A : Matrix (Fin 0) (Fin 0) ℂ)
+    (hA : A.IsHermitian) (f : ℝ → ℝ) :
+    (cfc f A)ᵀ = cfc f Aᵀ :=
+  cfc_transpose hA f
 
 end Transpose
 

@@ -328,19 +328,27 @@ a Hermitian matrix and its functional calculus.
 This is an auxiliary analytic result, not a theorem of CPSV16.  It does not
 alter the source-coverage count or complete Proposition~4.5.
 
-The reusable logarithm identities and the entropy comparison are now
-formalized.  The tensor-product logarithm retains the two support projections,
-the logarithm commutes with transpose on Hermitian matrices, the logarithm of a
-positive-semidefinite square root is half the logarithm, and the logarithm of a
-real power of a positive-definite matrix is the exponent times the logarithm.
+The reusable functional-calculus identities and the entropy comparison are now
+formalized.  Functional calculus commutes with transpose on Hermitian matrices;
+in particular, so do the logarithm and support projection, and every real power
+and the positive square root commute with transpose on positive-semidefinite
+matrices.  These transpose identities include singular matrices and
+zero-dimensional matrix algebras.  The tensor-product logarithm retains the two
+support projections, the logarithm of a positive-semidefinite square root is
+half the logarithm, and the logarithm of a real power of a positive-definite
+matrix is the exponent times the logarithm.
 The faithful theorem assumes only $\rho\geq0$, $\omega>0$, and $\tr\rho=1$;
 the singular theorem assumes $\rho,\omega\geq0$, both traces equal to one, and
 $\ker\omega\subseteq\ker\rho$.
-These logarithm identities are project-derived auxiliary results, not theorems
-of CPSV16; in particular, the tensor-product statement permits singular
-factors and zero-dimensional matrix algebras.
+These functional-calculus identities are project-derived auxiliary results,
+not theorems of CPSV16; in particular, the tensor-product statement permits
+singular factors and zero-dimensional matrix algebras.
 \footnote{Formal declarations:
 \leanid{Matrix.cfc_transpose},
+\leanid{Matrix.IsHermitian.log_transpose},
+\leanid{Matrix.PosSemidef.rpow_transpose},
+\leanid{Matrix.PosSemidef.sqrt_transpose},
+\leanid{Matrix.IsHermitian.supportProj_transpose},
 \leanid{Matrix.log_kronecker_posSemidef},
 \leanid{Matrix.PosSemidef.cfc_log_sqrt},
 \leanid{Matrix.PosDef.cfc_log_rpow},
@@ -405,8 +413,9 @@ marginals, and their positive definiteness are now formalized.
 \leanid{Matrix.PosSemidef.partialTraceLeft_marginalSupport_compression}, and
 \leanid{Matrix.PosSemidef.marginalSupport_compression_marginals_posDef} in
 \doclink{TNLean/Channel/MarginalSupportAbsorption}.}
-The mathematical task tracked in
-\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} is complete: the
+The mathematical tasks tracked in
+\href{https://github.com/LionSR/TNLean/issues/5209}{\#5209} and
+\href{https://github.com/LionSR/TNLean/issues/5242}{\#5242} are complete: the
 faithful and singular relative-entropy comparisons are proved using the
 relative-modular half-moment, support-aware Jensen, and Hilbert--Schmidt
 Cauchy--Schwarz, without a general weighted interpolation theorem or an
