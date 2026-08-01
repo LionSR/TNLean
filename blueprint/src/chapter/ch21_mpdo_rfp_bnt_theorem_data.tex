@@ -191,6 +191,36 @@
     $X^\dagger X=\diag(4,1)$ scalar, a contradiction.
 \end{proof}
 
+\begin{definition}[Virtual per-block linear extension]%
+    \label{def:mpdo_virtual_perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension}
+    \lean{MPSTensor.perBlockLinearExtension_spec}
+    \leanok
+    \uses{def:injective, def:same_mpv}
+    For injective families $A_k$ and $B_k$ with the same closed matrix
+    product vectors, the per-block linear extension is the unique linear map
+    $T_k:\MN{D_k}\to\MN{D_k}$ satisfying $T_k(A_k^i)=B_k^i$ for every
+    letter~$i$.
+\end{definition}
+
+\begin{theorem}[Positive virtual per-block extensions are unitarily implemented]%
+    \label{thm:mpdo_positive_perBlockLinearExtension_unitary}
+    \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
+    \leanok
+    \uses{def:mpdo_virtual_perBlockLinearExtension,
+        thm:unitary_skolem_noether_matrix}
+    If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
+    $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpdo_virtual_perBlockLinearExtension,
+        thm:unitary_skolem_noether_matrix}
+    The per-block map is a bijective algebra endomorphism. Positivity makes it
+    preserve adjoints, so unitary Skolem--Noether implements it by conjugation
+    with a unitary matrix.
+\end{proof}
+
 \begin{theorem}[Closed matrix product vectors do not force a positive virtual extension]%
     \label{thm:mpdo_closed_mpv_not_force_positive_virtual_extension}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
@@ -201,7 +231,8 @@
         tensorFamily_sameMPV_gaugedTensorFamily}
     \leanok
     \discussion{5284}
-    \uses{def:injective, def:same_mpv, def:perBlockLinearExtension,
+    \uses{def:injective, def:same_mpv,
+        def:mpdo_virtual_perBlockLinearExtension,
         lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     Regard the tensors $A$ and $B$ of
     Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
@@ -215,12 +246,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:perBlockLinearExtension,
-        thm:positive_perBlockLinearExtension_unitary,
+    \uses{def:mpdo_virtual_perBlockLinearExtension,
+        thm:mpdo_positive_perBlockLinearExtension_unitary,
         lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
-    If the per-block extension were positive,
-    Theorem~\ref{thm:positive_perBlockLinearExtension_unitary} would give a
-    unitary $U$ satisfying $B^i=UA^iU^\dagger$ for every letter~$i$.
+    If the per-block extension were positive, its unitary-implementation
+    theorem would give a unitary $U$ satisfying
+    $B^i=UA^iU^\dagger$ for every letter~$i$.
     Hence $U^\dagger B^iU=A^i$, giving the forbidden realization with
     $c=1$ in
     Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}.
