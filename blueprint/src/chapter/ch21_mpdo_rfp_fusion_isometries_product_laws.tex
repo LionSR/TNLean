@@ -188,7 +188,7 @@
     \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Fusion-clause assembly from paired decompositions and positive fusion data]%
+\begin{theorem}[Fusion matrices and coisometries from paired vertical decompositions]%
     \label{thm:mpdo_paired_vertical_decompositions_fusion}
     \lean{MPOTensor.HasBNTFusionTensorClause.%
 of_verticalDecompositions_of_unitaryBlockEquiv}
@@ -216,7 +216,7 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \end{align}
     Then the simultaneous blocked representations yield the missing
     length-one idempotent trace-scalar law and complete the tensor-attached
-    fusion clause. This is the final assembly construction extracted from
+    fusion clause. This is the resulting construction extracted from
     \cite[Appendix~C.4, lines~2001--2046]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -284,8 +284,8 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     theorem then gives the tensor-attached fusion clause.
 \end{proof}
 
-\begin{corollary}[Horizontal-form renormalization fixed points have active-sector fusion]%
-    \label{cor:mpdo_rfp_to_bnt_fusion_tensor}
+\begin{theorem}[Horizontal-form specialization of active-sector fusion]%
+    \label{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
     \leanok
     \uses{def:is_rfp_via_ts,
@@ -301,8 +301,8 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     \textbf{Scope restriction (BNT-refined horizontal form):}
     the normalized BNT-refined horizontal hypothesis is stronger than the
     literal CPSV canonical-form hypothesis.
-    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-\end{corollary}
+    See \path{docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex}.
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:vertical_cf_of_horizontal_cf,
       thm:mpdo_transported_vertical_sector_coefficient_comparison,
