@@ -404,6 +404,147 @@
     $N=2$ and evaluate the coordinate identification.
 \end{proof}
 
+\begin{definition}[Physical-similarity deformation of the ambient model]%
+    \label{def:mpdo_bond_two_singleton_physical_deformation}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.gaugeDeformedBaseMPO}
+    \leanok
+    \uses{def:mpdo_bond_two_singleton_base_mpo}
+    For $X\in\GL(2,\C)$, define $M_X$ by applying $X$ to the ket index and
+    $X^{-1}$ to the bra index of $M$:
+    \begin{align}
+        M_X^{i,j}
+        &=\sum_{a,b\in I}X_{i,a}(X^{-1})_{b,j}M^{a,b}.
+        \notag
+    \end{align}
+    This family is motivated by the sector comparison in
+    \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}, with the
+    physical-sector argument of
+    \cite[Proposition~4.13, lines~1898--1921]{Cirac2016MPDO_arXiv} as a
+    template. Neither passage states the deformation or the results below.
+\end{definition}
+
+\begin{theorem}[Vertical tensor under physical similarity]%
+    \label{thm:mpdo_bond_two_singleton_physical_vertical}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        verticalTensor_gaugeDeformedBaseMPO}
+    \leanok
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,
+        thm:mpdo_bond_two_singleton_vertical_identity}
+    For every vertical letter $v$,
+    \begin{align}
+        \widetilde M_X^v&=XA^vX^{-1}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_bond_two_singleton_vertical_identity}
+    Left and right multiplication on the physical indices become matrix
+    multiplication on the vertically viewed tensor. Now use
+    Theorem~\ref{thm:mpdo_bond_two_singleton_vertical_identity}.
+\end{proof}
+
+\begin{theorem}[Exact one-site physical-similarity identity]%
+    \label{thm:mpdo_bond_two_singleton_physical_one_site}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        oneSite_gaugeDeformedBaseMPO_eq_terminalJ}
+    \leanok
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,
+        def:mpdo_bond_two_singleton_deformation}
+    After identifying the unique one-site word with $I$, the one-site operator
+    of $M_X$ is
+    \begin{align}
+        \operatorname{reindex}\bigl(\rho_1(M_X)\bigr)&=XJX^{-1}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Expand the one-site contraction. The four diagonal physical letters sum to
+    $J$, and the two physical multiplications give conjugation by $X$.
+\end{proof}
+
+\begin{theorem}[Exact two-site physical-similarity identity]%
+    \label{thm:mpdo_bond_two_singleton_physical_two_site}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        twoSite_gaugeDeformedBaseMPO_eq_bellProjector}
+    \leanok
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,
+        thm:mpdo_bond_two_singleton_bell_identity}
+    Under the ordered-pair identification $\varepsilon$ from
+    Theorem~\ref{thm:mpdo_bond_two_singleton_bell_identity},
+    \begin{align}
+        \operatorname{reindex}_{\varepsilon,\varepsilon}
+        \bigl(\rho_2(M_X)\bigr)
+        &=(X\otimes X)P(X^{-1}\otimes X^{-1}).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Evaluate the two-site contraction in ordered-pair coordinates. Each ket
+    index contributes $X$, each bra index contributes $X^{-1}$, and the
+    undeformed contraction is $P$.
+\end{proof}
+
+\begin{theorem}[MPDO positivity forces a scalar physical Gram matrix]%
+    \label{thm:mpdo_bond_two_singleton_physical_scalar_gram}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO}
+    \leanok
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site,
+        thm:mpdo_bond_two_singleton_physical_two_site,
+        thm:mpdo_bond_two_singleton_scalar_gram}
+    If $M_X$ is a matrix product density operator, then there is a real number
+    $\omega>0$ such that
+    \begin{align}
+        X^\dagger X&=\omega\Id.
+        \notag
+    \end{align}
+    Thus this natural physical-similarity family is excluded whenever
+    $X^\dagger X$ is nonscalar.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site,
+        thm:mpdo_bond_two_singleton_physical_two_site,
+        thm:mpdo_bond_two_singleton_scalar_gram}
+    Positivity of the one- and two-site operators implies Hermiticity. Apply
+    the two exact reindexing identities and then
+    Theorem~\ref{thm:mpdo_bond_two_singleton_scalar_gram}.
+\end{proof}
+
+\begin{lemma}[The concrete physical Gram matrix is nonscalar]%
+    \label{lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.gauge_gram_ne_smul_one}
+    \leanok
+    \uses{def:mpdo_bond_two_singleton_deformation}
+    For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$ and every
+    $\omega\in\R$,
+    \begin{align}
+        X^\dagger X&\ne\omega\Id.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The $(0,1)$ entry of $X^\dagger X$ equals $3/2$, whereas every scalar
+    matrix has vanishing $(0,1)$ entry.
+\end{proof}
+
+\begin{theorem}[Concrete physical similarity is not an MPDO]%
+    \label{thm:mpdo_bond_two_singleton_physical_not_mpdo}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        gaugeDeformedBaseMPO_gauge_not_isMPDO}
+    \leanok
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,
+        lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, the physical
+    deformation $M_X$ is not a matrix product density operator.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,
+        lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    Otherwise Theorem~\ref{thm:mpdo_bond_two_singleton_physical_scalar_gram}
+    would make $X^\dagger X$ scalar, contrary to
+    Lemma~\ref{lem:mpdo_bond_two_singleton_physical_nonscalar_gram}.
+\end{proof}
+
 \begin{theorem}[Literal canonical form of the ambient model]%
     \label{thm:mpdo_bond_two_singleton_cpsv_form}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseSymbolTensor}
