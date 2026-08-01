@@ -148,6 +148,21 @@
     \__tenkz_kernel_leg_plan_enrol:nnnnn {tie-z}{member-1/north/tie}
       {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
       {\l__tenkz_test_lp_daylight_fp}
+    % A third corridor pins the descending-end key ahead of the SID key.
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      {member-1/north/end-tie}
+      {\l__tenkz_kernel_r_basis_nx_tl}
+      {\l__tenkz_kernel_r_basis_ny_tl}
+      {\l__tenkz_kernel_r_basis_ex_tl}
+      {\l__tenkz_kernel_r_basis_ey_tl}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn
+      {zz-short}{member-1/north/end-tie}
+      {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
+      {\l__tenkz_test_lp_daylight_fp}
+    \__tenkz_kernel_leg_plan_enrol:nnnnn
+      {aa-long}{member-1/north/end-tie}
+      {\l__tenkz_test_lp_ax_fp}{\l__tenkz_test_lp_ay_fp}
+      {2 * \l__tenkz_test_lp_daylight_fp}
     \__tenkz_kernel_leg_plan_get:nN {A} \l__tenkz_test_lp_result_tl
     \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
       { \errmessage{a~lane~result~existed~before~resolution} }
@@ -242,6 +257,12 @@
     \__tenkz_test_lp_get:n {tie-a}
     \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{1}
       {descending~semantic-id~order~did~not~take~the~second~lane}
+    \__tenkz_test_lp_get:n {aa-long}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{0}
+      {descending~end~order~did~not~place~the~longer~interval~first}
+    \__tenkz_test_lp_get:n {zz-short}
+    \__tenkz_test_lp_close:nnn {\l__tenkz_test_lp_lane_fp}{1}
+      {descending~end~order~did~not~place~the~shorter~interval~second}
   }
 
 \cs_new_eq:NN \__tenkz_test_lp_atoms: \__tenkz_kernel_r_atoms:
