@@ -11742,6 +11742,7 @@
 \tl_new:N \l__tenkz_kernel_r_skin_wire_host_tl
 \tl_new:N \l__tenkz_kernel_r_skin_wire_name_tl
 \prop_new:N \l__tenkz_kernel_glyph_owner_prop
+\int_new:N \l__tenkz_kernel_r_ink_before_int
 \seq_new:N \l__tenkz_kernel_r_skin_routes_seq
 \int_new:N \l__tenkz_kernel_r_skin_crossings_int
 \seq_new:N \l__tenkz_kernel_skin_base_seq
@@ -12124,6 +12125,7 @@
     \__tenkz_kernel_r_affine_page_padding:n {#1}
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
+    \int_set:Nn \l__tenkz_kernel_r_ink_before_int {\tenkz@inkuid}
     \prop_if_in:NnTF \l__tenkz_kernel_hull_live_prop {#1/xmin}
       {
         \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
@@ -12174,8 +12176,13 @@
     % The affine plane redraws the upright label after the carried glyph.
     % Preserve the glyph's audit owner before any intervening skin wires
     % advance the independent ink counter.
-    \prop_put:Nne \l__tenkz_kernel_glyph_owner_prop {#1}
-      { \the\tenkz@inkuid }
+    \int_compare:nNnTF {\tenkz@inkuid} >
+      {\l__tenkz_kernel_r_ink_before_int}
+      {
+        \prop_put:Nne \l__tenkz_kernel_glyph_owner_prop {#1}
+          { \the\tenkz@inkuid }
+      }
+      { \prop_put:Nnn \l__tenkz_kernel_glyph_owner_prop {#1} {0} }
     \__tenkz_kernel_r_skin_wires:n {#1}
     \__tenkz_kernel_r_skin_over_wires:n {#1}
     \bool_lazy_or:nnT

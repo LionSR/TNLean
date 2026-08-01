@@ -170,7 +170,9 @@ picture|id=k1|lang=kernel
 atom|id=atom-1|kind=tn
 kernel-boundary|signature=
 label-use|picture=k1
-bbox|picture=k1|class=label|id=11|owner=1|xmin=4|xmax=6|ymin=4|ymax=6|shape=rect|radius=0
+bbox|picture=k1|class=label|id=1|owner=0|xmin=20|xmax=22|ymin=20|ymax=22|shape=rect|radius=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=2|owner=1|xmin=4|xmax=6|ymin=4|ymax=6|shape=rect|radius=0
 ink-use|picture=k1|class=glyph|id=1|shape=rect
 glyph-geometry|picture=k1|owner=1|shape=rect|xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 """
@@ -179,9 +181,15 @@ glyph-geometry|picture=k1|owner=1|shape=rect|xmin=0|xmax=10|ymin=0|ymax=10|radiu
         finding.rule for finding in inscribed_label.findings
     ]
 
-    coincident_id_log = inscribed_label_log.replace(
-        "id=11|owner=1", "id=1|owner=0"
-    )
+    coincident_id_log = """\
+picture|id=k1|lang=kernel
+atom|id=atom-1|kind=tn
+kernel-boundary|signature=
+label-use|picture=k1
+bbox|picture=k1|class=label|id=2|owner=0|xmin=4|xmax=6|ymin=4|ymax=6|shape=rect|radius=0
+ink-use|picture=k1|class=glyph|id=2|shape=rect
+glyph-geometry|picture=k1|owner=2|shape=rect|xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+"""
     coincident_id = audit_log(coincident_id_log)
     assert "label-overlap" in [
         finding.rule for finding in coincident_id.findings
@@ -204,7 +212,7 @@ picture|id=k1|lang=kernel
 atom|id=atom-1|kind=tn
 kernel-boundary|signature=
 label-use|picture=k1
-bbox|picture=k1|class=label|id=11|owner=1|xmin=8|xmax=12|ymin=4|ymax=6|shape=rect|radius=0
+bbox|picture=k1|class=label|id=2|owner=1|xmin=8|xmax=12|ymin=4|ymax=6|shape=rect|radius=0
 ink-use|picture=k1|class=glyph|id=1|shape=rect
 glyph-geometry|picture=k1|owner=1|shape=rect|xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 """
