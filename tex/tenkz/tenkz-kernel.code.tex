@@ -11156,6 +11156,116 @@
   }
 % The physical closure clears the live glyph, including label- and span-grown
 % silhouettes.  Find the atom at the traced column, then read its border.
+\fp_new:N \l__tenkz_kernel_phtrace_nu_fp
+\fp_new:N \l__tenkz_kernel_phtrace_nv_fp
+\fp_new:N \l__tenkz_kernel_phtrace_su_fp
+\fp_new:N \l__tenkz_kernel_phtrace_sv_fp
+\fp_new:N \l__tenkz_kernel_phtrace_eu_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ev_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ur_fp
+\fp_new:N \l__tenkz_kernel_phtrace_vt_fp
+\fp_new:N \l__tenkz_kernel_phtrace_vb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_xb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_yb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_xs_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ys_fp
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_xy:nnNN #1#2#3#4
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      {#1}{#2}
+      \l__tenkz_kernel_r_face_du_tl \l__tenkz_kernel_r_face_dv_tl
+    \fp_set:Nn #3
+      { \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_face_du_tl }
+    \fp_set:Nn #4
+      { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_face_dv_tl }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_affine:n #1
+  {
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{north}
+      \l__tenkz_kernel_phtrace_nu_fp \l__tenkz_kernel_phtrace_nv_fp
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{south}
+      \l__tenkz_kernel_phtrace_su_fp \l__tenkz_kernel_phtrace_sv_fp
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{east}
+      \l__tenkz_kernel_phtrace_eu_fp \l__tenkz_kernel_phtrace_ev_fp
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \fp_set:Nn \l_tmpa_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_ex_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ey_tl ^ 2 )
+      }
+    \fp_set:Nn \l_tmpb_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_nx_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ny_tl ^ 2 )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_ur_fp
+      {
+        max(
+          \l__tenkz_kernel_phtrace_nu_fp,
+          \l__tenkz_kernel_phtrace_su_fp,
+          \l__tenkz_kernel_phtrace_eu_fp )
+        + \__tenkz_metric_ratio:n {phtracereach} / \l_tmpa_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_vt_fp
+      {
+        \l__tenkz_kernel_phtrace_nv_fp
+        + \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_vb_fp
+      {
+        \l__tenkz_kernel_phtrace_sv_fp
+        - \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
+      }
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_nu_fp }
+      { \l__tenkz_kernel_phtrace_nv_fp }
+      \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_nu_fp }
+      { \l__tenkz_kernel_phtrace_vt_fp }
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_ur_fp }
+      { \l__tenkz_kernel_phtrace_vt_fp }
+      \l__tenkz_kernel_r_tipx_fp \l__tenkz_kernel_r_tipy_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_ur_fp }
+      { \l__tenkz_kernel_phtrace_vb_fp }
+      \l__tenkz_kernel_leg_bendx_fp \l__tenkz_kernel_leg_bendy_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_su_fp }
+      { \l__tenkz_kernel_phtrace_vb_fp }
+      \l__tenkz_kernel_phtrace_xb_fp \l__tenkz_kernel_phtrace_yb_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_su_fp }
+      { \l__tenkz_kernel_phtrace_sv_fp }
+      \l__tenkz_kernel_phtrace_xs_fp \l__tenkz_kernel_phtrace_ys_fp
+    \__tenkz_render_stroke:nn { trace }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_tipx_fp } { \l__tenkz_kernel_r_tipy_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_leg_bendx_fp }
+          { \l__tenkz_kernel_leg_bendy_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_phtrace_xb_fp }
+          { \l__tenkz_kernel_phtrace_yb_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_phtrace_xs_fp }
+          { \l__tenkz_kernel_phtrace_ys_fp }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_physical_trace:n #1
   {
     \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
@@ -11192,25 +11302,35 @@
       }
     \bool_if:NTF \l_tmpa_bool
       {
-        \pgfextractx \l__tenkz_kernel_r_north_x_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-        \pgfextracty \l__tenkz_kernel_r_north_y_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-        \pgfextracty \l__tenkz_kernel_r_south_y_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
-        \pgfextractx \l__tenkz_kernel_r_east_x_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
-        \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
-          { \__tenkz_dim:n {phtracereach} }
-        \__tenkz_render_stroke:nn { trace }
+        \exp_args:NV \__tenkz_kernel_r_carrier_basis:n
+          \l__tenkz_kernel_r_tl
+        \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
           {
-            ( \l__tenkz_kernel_r_north_x_dim ,
-              \l__tenkz_kernel_r_north_y_dim )
-            -- ++( 0 , \__tenkz_dim:n {physleg} )
-            -| ( \l__tenkz_kernel_r_east_x_dim ,
-                 \l__tenkz_kernel_r_south_y_dim - \__tenkz_dim:n {physleg} )
-            -| ( \l__tenkz_kernel_r_north_x_dim ,
-                 \l__tenkz_kernel_r_south_y_dim )
+            \exp_args:NV \__tenkz_kernel_r_physical_trace_affine:n
+              \l__tenkz_kernel_r_tl
+          }
+          {
+            \pgfextractx \l__tenkz_kernel_r_north_x_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+            \pgfextracty \l__tenkz_kernel_r_north_y_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+            \pgfextracty \l__tenkz_kernel_r_south_y_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
+            \pgfextractx \l__tenkz_kernel_r_east_x_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
+            \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
+              { \__tenkz_dim:n {phtracereach} }
+            \__tenkz_render_stroke:nn { trace }
+              {
+                ( \l__tenkz_kernel_r_north_x_dim ,
+                  \l__tenkz_kernel_r_north_y_dim )
+                -- ++( 0 , \__tenkz_dim:n {physleg} )
+                -| ( \l__tenkz_kernel_r_east_x_dim ,
+                     \l__tenkz_kernel_r_south_y_dim
+                       - \__tenkz_dim:n {physleg} )
+                -| ( \l__tenkz_kernel_r_north_x_dim ,
+                     \l__tenkz_kernel_r_south_y_dim )
+              }
           }
       }
       {

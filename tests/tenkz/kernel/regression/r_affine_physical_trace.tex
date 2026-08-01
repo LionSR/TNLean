@@ -1,0 +1,136 @@
+% Regression: a physical trace around a plane-carried glyph follows the
+% complete affine basis and retains page-space named clearances.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_set:Ne \l_tmpa_tl
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {labelclear}
+        + \__tenkz_metric_ratio:n {dotdia}
+      }
+  }
+\prop_gput:NnV \g__tenkz_metric_value_prop {physleg} \l_tmpa_tl
+\tl_set:Ne \l_tmpa_tl
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {glyphbox}
+        + \__tenkz_metric_ratio:n {labelclear}
+      }
+  }
+\prop_gput:NnV \g__tenkz_metric_value_prop {phtracereach} \l_tmpa_tl
+\int_new:N \l__tenkz_test_phtrace_int
+
+\cs_new_protected:Npn \__tenkz_test_phtrace_close:nnn #1#2#3
+  {
+    \fp_compare:nNnF {abs((#1)-(#2))} < {0.000001}
+      { \errmessage{#3} }
+  }
+
+\cs_new_eq:NN
+  \__tenkz_test_phtrace_affine:n
+  \__tenkz_kernel_r_physical_trace_affine:n
+\cs_set_protected:Npn \__tenkz_kernel_r_physical_trace_affine:n #1
+  {
+    \__tenkz_test_phtrace_affine:n {#1}
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{north}
+      \l_tmpa_fp \l_tmpb_fp
+    \__tenkz_test_phtrace_close:nnn
+      {\l__tenkz_kernel_r_xb_fp}{\l_tmpa_fp}
+      {an~affine~physical~trace~missed~the~transformed~north~face}
+    \__tenkz_test_phtrace_close:nnn
+      {\l__tenkz_kernel_r_yb_fp}{\l_tmpb_fp}
+      {an~affine~physical~trace~missed~the~transformed~north~face}
+    \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{south}
+      \l_tmpa_fp \l_tmpb_fp
+    \__tenkz_test_phtrace_close:nnn
+      {\l__tenkz_kernel_phtrace_xs_fp}{\l_tmpa_fp}
+      {an~affine~physical~trace~missed~the~transformed~south~face}
+    \__tenkz_test_phtrace_close:nnn
+      {\l__tenkz_kernel_phtrace_ys_fp}{\l_tmpb_fp}
+      {an~affine~physical~trace~missed~the~transformed~south~face}
+    \fp_set:Nn \l_tmpa_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_ex_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ey_tl ^ 2 )
+      }
+    \fp_set:Nn \l_tmpb_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_nx_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ny_tl ^ 2 )
+      }
+    \__tenkz_test_phtrace_close:nnn
+      {
+        ( \l__tenkz_kernel_phtrace_ur_fp
+          - max(
+              \l__tenkz_kernel_phtrace_nu_fp,
+              \l__tenkz_kernel_phtrace_su_fp,
+              \l__tenkz_kernel_phtrace_eu_fp ) )
+          * \l_tmpa_fp
+      }
+      {\__tenkz_metric_ratio:n {phtracereach}}
+      {an~affine~physical~trace~lost~its~named~east~clearance}
+    \__tenkz_test_phtrace_close:nnn
+      {
+        ( \l__tenkz_kernel_phtrace_vt_fp
+          - \l__tenkz_kernel_phtrace_nv_fp ) * \l_tmpb_fp
+      }
+      {\__tenkz_metric_ratio:n {physleg}}
+      {an~affine~physical~trace~lost~its~named~north~excursion}
+    \__tenkz_test_phtrace_close:nnn
+      {
+        ( \l__tenkz_kernel_phtrace_sv_fp
+          - \l__tenkz_kernel_phtrace_vb_fp ) * \l_tmpb_fp
+      }
+      {\__tenkz_metric_ratio:n {physleg}}
+      {an~affine~physical~trace~lost~its~named~south~excursion}
+    \__tenkz_test_phtrace_close:nnn
+      {
+        (\l__tenkz_kernel_r_tipx_fp-\l__tenkz_kernel_r_xc_fp)
+          * \l__tenkz_kernel_r_basis_ey_tl
+        - (\l__tenkz_kernel_r_tipy_fp-\l__tenkz_kernel_r_yc_fp)
+          * \l__tenkz_kernel_r_basis_ex_tl
+      }
+      {0}
+      {an~affine~physical~trace~top~connector~left~carrier~east}
+    \__tenkz_test_phtrace_close:nnn
+      {
+        (\l__tenkz_kernel_leg_bendx_fp-\l__tenkz_kernel_r_tipx_fp)
+          * \l__tenkz_kernel_r_basis_ny_tl
+        - (\l__tenkz_kernel_leg_bendy_fp-\l__tenkz_kernel_r_tipy_fp)
+          * \l__tenkz_kernel_r_basis_nx_tl
+      }
+      {0}
+      {an~affine~physical~trace~outer~side~left~carrier~north}
+    \__tenkz_test_phtrace_close:nnn
+      {
+        (\l__tenkz_kernel_phtrace_xb_fp-\l__tenkz_kernel_leg_bendx_fp)
+          * \l__tenkz_kernel_r_basis_ey_tl
+        - (\l__tenkz_kernel_phtrace_yb_fp-\l__tenkz_kernel_leg_bendy_fp)
+          * \l__tenkz_kernel_r_basis_ex_tl
+      }
+      {0}
+      {an~affine~physical~trace~bottom~connector~left~carrier~east}
+    \int_gincr:N \l__tenkz_test_phtrace_int
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none, physical=updown, trace=physical,
+    frame={plane,basis={wire at (0,0)}}]
+  \tn[at=(1,1,1), skin=box]{P}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF {\l__tenkz_test_phtrace_int} = {1}
+  {\errmessage{the~plane~physical~trace~was~not~inspected~once}}
+\ExplSyntaxOff
+\end{document}
