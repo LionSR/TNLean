@@ -46,12 +46,11 @@ multiple of `m`).
   corner data, contracting the concatenation
   `∏_k (A_k^{σ_k} · F_{k+1}^{ρ_k})` to the chain `∏_k (A_k^{σ_k} · X_k)`.
 
-The remaining steps of Appendix A (lines 1063--1080) — recombining the two
-mechanisms with the per-sector scalar bookkeeping into the uniform
-product-tensor identity `eq:resultprop`, and feeding it to
+The downstream theorem `sectorTensor_proportional_of_blockedMatch` recombines
+these mechanisms with the per-sector scalar bookkeeping into the uniform
+product-tensor identity `eq:resultprop`, then applies
 `PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`
-— are not addressed here; see
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+to continue Appendix A, lines 1063--1080.
 
 ## References
 

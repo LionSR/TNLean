@@ -493,11 +493,11 @@ The equal-case Fundamental Theorem of MPS in irreducible form combines:
 2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`):
    Newton–Girard plus a scalar multiplicity-entry Z-gauge diagonal.
 
-**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and per-block
-multiplicity-entry power equality hypotheses remain to be discharged from the
-periodic overlap dichotomy (`equal-or-orthogonal-generalized`) and the coefficient
-extraction theory.
-The Z-gauge construction itself is fully proved.
+**Remaining source hypotheses:** The existence of non-decaying cross-family
+partners in `PeriodicOverlapHypothesis` must still be derived from equality of the
+assembled MPVs; the proved overlap dichotomy then supplies its repeated-block field.
+The per-block multiplicity-entry power equalities remain to be derived by coefficient
+extraction. The Z-gauge construction itself is fully proved.
 -/
 
 section EqualCase
@@ -513,8 +513,9 @@ per-block `HetRepeatedBlocks` equivalence.
 Convenience reformulation of `fundamentalTheorem_periodic_proportional` that extracts block
 families from `IsIrreducibleForm`.
 
-**Remaining source hypothesis:** The `PeriodicOverlapHypothesis` parameter remains to be
-discharged from the periodic overlap dichotomy (`equal-or-orthogonal-generalized`). -/
+**Remaining source hypothesis:** The two non-decaying-partner fields of
+`PeriodicOverlapHypothesis` must be derived from equality of the assembled MPVs; the
+proved overlap dichotomy supplies its repeated-block field. -/
 theorem fundamentalTheorem_periodic_equalCase_matching
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
@@ -541,10 +542,12 @@ overlap dichotomy and per-block multiplicity-entry power equality, then:
 
 This composes the proportional theorem `thm:bd` with the Z-gauge construction.
 
-**Remaining source hypotheses:** The `PeriodicOverlapHypothesis` and `hPowEq` hypotheses
-remain to be discharged from the periodic overlap dichotomy and coefficient extraction
-theory. The Z-gauge construction itself (`equalCase_zgauge_of_power_sums`) is fully
-proved. The source theorem allows arbitrary diagonal multiplicity matrices
+**Remaining source hypotheses:** Equality of the assembled MPVs must still provide the
+non-decaying-partner fields of `PeriodicOverlapHypothesis`; its repeated-block field
+comes from the proved overlap dichotomy. The `hPowEq` hypothesis remains to be derived
+by coefficient extraction. The Z-gauge construction itself
+(`equalCase_zgauge_of_power_sums`) is fully proved. The source theorem allows arbitrary
+diagonal multiplicity matrices
 `R_j, S_j`; the present theorem records the scalar multiplicity-entry component,
 not the full multiplicity-space statement. -/
 theorem fundamentalTheorem_periodic_equalCase

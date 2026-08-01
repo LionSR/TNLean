@@ -259,11 +259,13 @@
 
     \emph{Scope restriction.}  The source consequence following the
     periodic-overlap dichotomy
-    \cite[lines~589--609]{DeLasCuevas2017Irreducible} also states that
-    the non-zero vectors $\ket{V_N(A_j)}$ span the vector $\ket{V_N(A)}$;
+    \cite[lines~589--609]{DeLasCuevas2017Irreducible} states eventual
+    independence at every sufficiently large length and also states that the
+    non-zero vectors $\ket{V_N(A_j)}$ span the vector $\ket{V_N(A)}$;
     this spanning assertion is what the paper cites as justification for
     the phrase ``basis of periodic vectors''. The theorem recorded here
-    contains only the independence assertion. The corresponding paper-gap
+    proves independence only along the common-multiple subsequence $pN$ and
+    omits the spanning assertion. The corresponding paper-gap
     note, \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex},
     Section ``Scope restriction: independence without spanning'', records
     this restriction and its elimination plan.
@@ -280,8 +282,8 @@
         \otimes A_{u+m-1}^{i_m}
         &=
         e^{i\eta_v}
-        B_v^{i_1}\otimes B_{v+1}^{i_2}\otimes\cdots
-        \otimes B_{v+m-1}^{i_m}.
+        \widetilde B_v^{i_1}\otimes \widetilde B_{v+1}^{i_2}\otimes\cdots
+        \otimes \widetilde B_{v+m-1}^{i_m}.
         \notag
     \end{align}
     Applying the same identity after a cyclic translation gives
@@ -289,7 +291,7 @@
     $\ell=0,\ldots,m-1$, so we write the common phase as $e^{i\eta}$.
     The product-tensor identity then gives scalars $\kappa_v$ with
     \begin{align}
-        A_u^i&=\kappa_v e^{i\eta/m}B_v^i,
+        A_u^i&=\kappa_v e^{i\eta/m}\widetilde B_v^i,
         \notag\\
         \prod_{v=1}^{m}\kappa_v&=1.
         \notag
@@ -308,10 +310,10 @@
     \begin{align}
         U&=\sum_{u=1}^{m}e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q},
         \notag\\
-        \xi&=\eta/m,
+        \theta&=\eta/m,
         \notag
     \end{align}
-    one obtains the global relation $A^i=e^{i\xi}UB^iU^\dagger$.
+    one obtains the global relation $A^i=e^{i\theta}UB^iU^\dagger$.
     Let
     $G_N(j,k)=\braket{V^{(pN)}(A_j)}{V^{(pN)}(A_k)}$
     be the Gram matrix of the periodic vectors. The diagonal entries have
@@ -436,10 +438,12 @@
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling}
     \leanok
     \uses{def:periodic_tensor, thm:peripheral_periodic_ft_proportional_same}
-    Assume that whenever two periodic tensors have proportional MPV families,
-    one can rescale one tensor by a unit-modulus phase so that the MPV families
-    agree at every positive length. Then proportional periodic MPV families already force the
-    tensors to be repeated blocks.
+    Assume a uniform rescaling principle for the prescribed bond dimensions:
+    whenever the first tensor is periodic and has an MPV family proportional to
+    that of an arbitrary second tensor, one can rescale the first tensor by a
+    unit-modulus phase so that the MPV families agree at every positive length.
+    Then proportional MPV families of two periodic tensors force the tensors to
+    be repeated blocks.
 \end{theorem}
 \begin{proof}\leanok
     Apply the phase-rescaling hypothesis to replace $A$ by a periodic tensor
