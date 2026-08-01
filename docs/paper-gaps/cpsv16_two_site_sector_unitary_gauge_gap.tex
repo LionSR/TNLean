@@ -322,6 +322,62 @@ two-by-two tensor has not been made into a tensor-attached algebra clause
 satisfying the literal CPSV canonical-form hypothesis and positivity of every
 matrix product operator.
 
+\section{Terminal-sector positivity excludes this witness}
+
+The tensor-attached algebra clause and MPDO positivity impose an additional
+one-site condition on every retained normal tensor.  If $M_\gamma$ is a
+retained sector, then its terminal physical-trace transfer
+\begin{equation}
+  T_\gamma=\sum_a M_\gamma^{(a,a)}
+  \label{eq:terminal-sector-transfer}
+\end{equation}
+is positive semidefinite.  Indeed, after applying the retained physical
+coisometry to the positive one-site operator, the principal block belonging
+to a positive multiplicity coordinate $q$ is
+$(\mu_\gamma)_{q,q}T_\gamma$.  Since $(\mu_\gamma)_{q,q}>0$, positivity of
+the principal block implies $T_\gamma\succeq0$.  This necessary condition is
+formalized in
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.}}\\
+\mbox{\leanid{physTraceTransfer_verticalBNTMPO_posSemidef}}.
+\end{center}
+The older fusion-level statement now follows by passing from the fusion clause
+to its tensor-attached algebra clause.
+
+For the source tensor $A$ and its nonunitarily similar tensor $B$, direct
+calculation gives
+\begin{equation}
+  T_A=\begin{pmatrix}1&0\\1&1\end{pmatrix},
+  \qquad
+  T_B=\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
+  \label{eq:counterexample-terminal-transfers}
+\end{equation}
+Neither matrix is Hermitian, so neither is positive semidefinite.  The
+corresponding computations and exclusions are formalized in
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
+\mbox{\leanid{physTraceTransfer_tensor},
+      \leanid{physTraceTransfer_tensor_not_posSemidef},}\\
+\mbox{\leanid{tensor_not_retained_positive_sector},}\\
+\mbox{\leanid{physTraceTransfer_gaugedTensor},
+      \leanid{physTraceTransfer_gaugedTensor_not_posSemidef},}\\
+\mbox{\leanid{gaugedTensor_not_retained_positive_sector}}.
+\end{center}
+Thus the generic nonunitary-similarity witness is now formally excluded from
+the full tensor-attached algebra-clause/MPDO setting.  It remains a valid
+obstruction to any argument based only on positive-length closed chains and
+an invertible gauge.
+
+This no-go result does not settle the missing tensor-attached marked
+comparison.  \href{https://github.com/LionSR/TNLean/issues/5284}{Issue 5284}
+remains genuinely open.  Any counterexample to that proposed comparison must use a
+different bond-two sector whose terminal transfer satisfies
+\eqref{eq:terminal-sector-transfer}.  Conversely, terminal positivity alone
+does not produce the identity-dressed marked realization or a unitary gauge.
+This slice therefore neither proves nor refutes Theorem~4.14.
+
 \section{Non-circular product corners}
 
 The one-site coisometric reconstruction does give genuine local information
@@ -354,8 +410,8 @@ comparison needed to identify the two Gram dressings.
 
 For a matched label $\gamma$, let $A_\gamma$ be the algebra-side
 representative and let $X_\gamma$ be the exact invertible gauge to the chosen
-two-site representative.  The source-faithful target of
-\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648} is the marked
+two-site representative.  The source-faithful target tracked in
+\href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284} is the marked
 Figure~8 identity
 \begin{equation}
   \operatorname{gramDressing}(X_\gamma,A_\gamma)
@@ -376,8 +432,8 @@ Normality then implies \eqref{eq:gram-scalar}.
 
 Pull request~5282 establishes \eqref{eq:gram-dressing-target} conditionally on a
 supplied identity-dressed physical-letter coefficient family and its common
-reflected target.  From its positive scalar Gram conclusion, the present
-normalization result constructs
+reflected target.  From its positive scalar Gram conclusion, the subsequent
+normalization constructs
 \[
   U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
   \qquad
@@ -386,6 +442,9 @@ normalization result constructs
 \]
 This is the conditional endpoint of the scalar-to-unitary argument; it does
 not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
+Terminal sector positivity excludes the explicit nonunitary-similarity witness
+from the full tensor-attached setting, but it does not supply the missing
+marked comparison.
 
 The remaining premise is to construct the coefficient family and the two
 target identities used by pull request~5282 directly from the tensor-attached
@@ -399,14 +458,14 @@ unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Scope restriction: the conditional endpoint is complete, while the
-unconditional premise remains open.}  The
+\textbf{Verdict: open gap with a formal necessary condition.}  The
 Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
-unitary normalization are formalized under the supplied identity-dressed
-marked realization.  That realization has not been derived from
-condition~(ii) alone.  Appendix~C.4 therefore does not presently justify the
-unconditional line~2057 unitary conclusion without a separately supplied
-local marked realization.
+unitary normalization are formalized under a supplied identity-dressed marked
+realization.  That realization has not been derived from condition~(ii) alone.
+Terminal sector positivity rules out the present nonunitary witness but does
+not construct the required realization.  Appendix~C.4 therefore does not
+presently justify the unconditional line~2057 unitary conclusion without a
+separately supplied local marked realization.
 
 \bibliographystyle{alpha}
 \bibliography{references}
