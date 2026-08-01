@@ -31,16 +31,12 @@ noncomputable section
 
 namespace MPSTensor.PositiveMinimalRealizationCounterexample
 
-/-- The constant bond-dimension family for the one-block counterexample. -/
-private abbrev oneBlockBondDim : Fin 1 → ℕ :=
-  fun _ ↦ 2
-
 /-- The source tensor, regarded as a one-block family. -/
-def tensorFamily : (k : Fin 1) → MPSTensor 4 (oneBlockBondDim k) :=
+def tensorFamily : Fin 1 → MPSTensor 4 2 :=
   fun _ ↦ tensor
 
 /-- The nonunitarily conjugated tensor, regarded as a one-block family. -/
-def gaugedTensorFamily : (k : Fin 1) → MPSTensor 4 (oneBlockBondDim k) :=
+def gaugedTensorFamily : Fin 1 → MPSTensor 4 2 :=
   fun _ ↦ gaugedTensor
 
 /-- The source one-block family is injective. -/

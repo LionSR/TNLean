@@ -202,7 +202,8 @@
         perBlockLinearExtension_not_positive}
     \leanok
     \discussion{5284}
-    \uses{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{thm:positive_perBlockLinearExtension_unitary_conj,
+        lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
     $X=\diag(2,1)$, and set $B^i=XA^iX^{-1}$. Regard them as one-block
     families $A_0=A$ and $B_0=B$, both of bond dimension two. Both families
@@ -217,7 +218,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{thm:positive_perBlockLinearExtension_unitary_conj,
+        lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     The letters of $A$ span $\MN{2}$, so $A_0$ is injective; similarity by
     $X$ also makes $B_0$ injective. Cyclicity of the trace gives equality of
     all closed matrix product vectors.
