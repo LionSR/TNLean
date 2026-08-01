@@ -45,7 +45,8 @@ theorem verticalTensor_baseMPO : verticalTensor baseMPO = singletonTensor := by
     (finProdFinEquiv : I × I ≃ Fin 4).surjective y
   rw [verticalTensor_finProdFinEquiv]
   simp only [baseMPO, singletonTensor, Equiv.symm_apply_apply]
-  split_ifs <;> simp_all [Matrix.single] <;> aesop
+  split_ifs <;> simp_all [Matrix.single]
+  all_goals aesop
 
 /-- The cyclic equality weight selecting one fixed ket--bra pair around the chain. -/
 def constantPairWeight (i j i' j' : I) : ℂ :=
@@ -61,7 +62,8 @@ theorem baseMPO_eq_cyclicEdgeWeightTensor :
     (finProdFinEquiv : I × I ≃ Fin 4).surjective b
   simp only [baseMPO, cyclicEdgeWeightTensor, constantPairWeight,
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-  split_ifs <;> simp_all [Matrix.single] <;> aesop
+  split_ifs <;> simp_all [Matrix.single]
+  all_goals aesop
 
 /-- The cyclic-constant amplitude of the unnormalized two-symbol GHZ vector. -/
 def ghzAmplitude (N : ℕ) (sigma : Fin N → I) : ℂ :=
@@ -265,7 +267,7 @@ theorem mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent
       rcases retainedCyclicIndicator_eq_zero_or_one N sigma with hzero | hone
       · simp [Matrix.conjTranspose_apply, hzero]
       · simp [Matrix.conjTranspose_apply, hone]
-    · simp [Matrix.conjTranspose_apply, Matrix.diagonal_apply, hst, Ne.symm hst]
+    · simp [Matrix.conjTranspose_apply, hst, Ne.symm hst]
   · rw [Matrix.diagonal_mul_diagonal]
     apply congrArg Matrix.diagonal
     funext sigma
@@ -292,5 +294,249 @@ theorem raw_singleton_coefficient_one_algebra
         mpo (verticalBNTMPO singletonTensor) L := by
   rw [(mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent L hL).2]
   simp
+
+/-! ### Normalized singleton -/
+
+/-- The positive normalization scalar `sqrt (1/2)`. -/
+def singletonScale : ℝ := Real.sqrt (1 / 2)
+
+/-- The normalized singleton retained tensor. -/
+def normalizedSingletonTensor : MPSTensor (4 * 4) 2 :=
+  fun v => (singletonScale : ℂ) • singletonTensor v
+
+private lemma singletonScale_pos : 0 < singletonScale := by
+  simp [singletonScale]
+
+private lemma singletonScale_sq : singletonScale ^ 2 = 1 / 2 := by
+  rw [singletonScale, Real.sq_sqrt]
+  norm_num
+
+private lemma singletonScale_star_mul :
+    star ((singletonScale : ℝ) : ℂ) * (singletonScale : ℂ) = 1 / 2 := by
+  rw [show star ((singletonScale : ℝ) : ℂ) = (singletonScale : ℂ) by simp]
+  rw [← Complex.ofReal_mul, ← pow_two, singletonScale_sq]
+  norm_num
+
+private lemma singletonScale_mul :
+    (singletonScale : ℂ) * (singletonScale : ℂ) = 1 / 2 := by
+  simpa using singletonScale_star_mul
+
+/-- The normalized singleton is left-canonical. -/
+theorem normalizedSingletonTensor_isLeftCanonical :
+    MPSTensor.IsLeftCanonical normalizedSingletonTensor := by
+  unfold MPSTensor.IsLeftCanonical
+  calc
+    (∑ v : Fin (4 * 4),
+        (normalizedSingletonTensor v)ᴴ * normalizedSingletonTensor v) =
+        ∑ x : Fin 4,
+          (normalizedSingletonTensor (finProdFinEquiv (x, x)))ᴴ *
+            normalizedSingletonTensor (finProdFinEquiv (x, x)) := by
+      rw [← Equiv.sum_comp
+        (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin (4 * 4))]
+      rw [Fintype.sum_prod_type]
+      simp [normalizedSingletonTensor, singletonTensor]
+    _ = ∑ ab : I × I,
+          (normalizedSingletonTensor
+            (finProdFinEquiv (finProdFinEquiv ab, finProdFinEquiv ab)))ᴴ *
+          normalizedSingletonTensor
+            (finProdFinEquiv (finProdFinEquiv ab, finProdFinEquiv ab)) :=
+      (Equiv.sum_comp (finProdFinEquiv : I × I ≃ Fin 4)
+        (fun x : Fin 4 =>
+          (normalizedSingletonTensor (finProdFinEquiv (x, x)))ᴴ *
+            normalizedSingletonTensor (finProdFinEquiv (x, x)))).symm
+    _ = 1 := by
+      rw [Fintype.sum_prod_type]
+      simp_rw [normalizedSingletonTensor, singletonTensor_diagonal]
+      ext i j
+      fin_cases i <;> fin_cases j <;>
+        simp [Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.sum_univ_two,
+          Matrix.single, singletonScale_mul] <;> norm_num
+
+/-- The normalized singleton is a CPSV normal tensor. -/
+theorem normalizedSingletonTensor_isNormalTensor :
+    MPSTensor.IsNormalTensor normalizedSingletonTensor := by
+  have hs : ((singletonScale : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast ne_of_gt singletonScale_pos
+  have hNormal : normalizedSingletonTensor.IsNormal :=
+    (singletonTensor_isInjective.smul hs).isNormal
+  exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical
+    normalizedSingletonTensor hNormal normalizedSingletonTensor_isLeftCanonical
+
+/-- Closed normalized singleton operators differ from the raw cyclic-edge
+projections by the geometric factor `singletonScale ^ L`. -/
+theorem mpo_verticalBNTMPO_normalizedSingletonTensor
+    (L : ℕ) :
+    mpo (verticalBNTMPO normalizedSingletonTensor) L =
+      ((singletonScale : ℂ) ^ L) •
+        mpo (verticalBNTMPO singletonTensor) L := by
+  ext sigma tau
+  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
+    verticalBNTMPO_toMPSTensor]
+  change MPSTensor.mpv
+      (fun v => (singletonScale : ℂ) • singletonTensor v)
+      (fun n => finProdFinEquiv (sigma n, tau n)) = _
+  rw [MPSTensor.mpv_smul]
+  change (singletonScale : ℂ) ^ L *
+      MPSTensor.mpv singletonTensor
+        (fun n => finProdFinEquiv (sigma n, tau n)) =
+    (singletonScale : ℂ) ^ L *
+      mpo (verticalBNTMPO singletonTensor) L sigma tau
+  congr 1
+  simpa only [verticalBNTMPO_toMPSTensor] using
+    MPSTensor.mpv_toMPSTensor_pairConfig
+      (verticalBNTMPO singletonTensor) sigma tau
+
+/-- The normalized one-label operator algebra has coefficient
+`singletonScale ^ L`. -/
+theorem normalized_singleton_geometric_algebra
+    (L : ℕ) (hL : 0 < L) :
+    mpo (verticalBNTMPO normalizedSingletonTensor) L *
+        mpo (verticalBNTMPO normalizedSingletonTensor) L =
+      ((singletonScale : ℂ) ^ L) •
+        mpo (verticalBNTMPO normalizedSingletonTensor) L := by
+  rw [mpo_verticalBNTMPO_normalizedSingletonTensor,
+    Matrix.smul_mul, Matrix.mul_smul,
+    (mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent L hL).2]
+
+/-- The one-dimensional positive chi family with diagonal entry
+`singletonScale`. -/
+def normalizedSingletonChi : DiagonalChiFamily (Fin 1) where
+  dim _ _ _ := 1
+  entry _ _ _ _ := singletonScale
+
+/-- The canonical coefficient family of the normalized singleton chi. -/
+def normalizedSingletonCoeffs : BNTLabelCoefficientFamily (Fin 1) :=
+  BNTLabelCoefficientFamily.ofChi normalizedSingletonChi
+
+@[simp] theorem normalizedSingletonCoeffs_coeff
+    (L : ℕ) (alpha beta gamma : Fin 1) :
+    normalizedSingletonCoeffs.coeff L alpha beta gamma =
+      (singletonScale : ℂ) ^ L := by
+  simp [normalizedSingletonCoeffs, BNTLabelCoefficientFamily.ofChi,
+    DiagonalChiFamily.tracePowerCoeff, normalizedSingletonChi]
+
+/-- The normalized singleton family, indexed by its unique BNT label. -/
+def normalizedSingletonFamily :
+    (alpha : Fin 1) → MPSTensor (4 * 4) 2 :=
+  fun _ => normalizedSingletonTensor
+
+/-- The multiplicity weight reconstructing the raw singleton from its
+normalized representative. -/
+def normalizedSingletonWeight : (alpha : Fin 1) → Fin 1 → ℂ :=
+  fun _ _ => (singletonScale : ℂ)⁻¹
+
+private def retainedZeroLoopLetter : Fin (4 * 4) :=
+  finProdFinEquiv
+    (finProdFinEquiv ((0 : I), (0 : I)), finProdFinEquiv ((0 : I), (0 : I)))
+
+private lemma normalizedSingletonTensor_mpv_zeroLoop
+    (N : ℕ) (hN : 0 < N) :
+    MPSTensor.mpv normalizedSingletonTensor
+      (fun _ : Fin N => retainedZeroLoopLetter) =
+        (singletonScale : ℂ) ^ N := by
+  rw [MPSTensor.mpv_const_eq_trace_pow]
+  have hletter : normalizedSingletonTensor retainedZeroLoopLetter =
+      (singletonScale : ℂ) • Matrix.single (0 : I) (0 : I) 1 := by
+    rw [normalizedSingletonTensor, retainedZeroLoopLetter,
+      singletonTensor_diagonal]
+  rw [hletter, smul_pow]
+  have hE : IsIdempotentElem (Matrix.single (0 : I) (0 : I) (1 : ℂ)) := by
+    simp [IsIdempotentElem, Matrix.single_mul_single_same]
+  rw [hE.pow_eq (Nat.ne_of_gt hN)]
+  simp [Matrix.trace, Matrix.single]
+
+/-- The unique normalized block is a CPSV basis of normal tensors for the raw
+vertical singleton. -/
+theorem normalizedSingleton_isCPSVBasis :
+    MPSTensor.IsCPSVBasisOfNormalTensors singletonTensor
+      (fun _ : Fin 1 => ⟨2, normalizedSingletonTensor⟩) := by
+  refine {
+    blocks_normal := fun _ => normalizedSingletonTensor_isNormalTensor
+    spans_mpv := ?_
+    eventually_li := ?_
+  }
+  · intro N _hN
+    refine ⟨fun _ => (singletonScale : ℂ)⁻¹ ^ N, ?_⟩
+    intro sigma
+    simp only [Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton]
+    change MPSTensor.mpv singletonTensor sigma =
+      (singletonScale : ℂ)⁻¹ ^ N *
+        MPSTensor.mpv (fun v => (singletonScale : ℂ) • singletonTensor v) sigma
+    rw [MPSTensor.mpv_smul]
+    have hs : (singletonScale : ℂ) ≠ 0 := by
+      exact_mod_cast ne_of_gt singletonScale_pos
+    symm
+    calc
+      (singletonScale : ℂ)⁻¹ ^ N *
+          ((singletonScale : ℂ) ^ N * MPSTensor.mpv singletonTensor sigma) =
+        ((singletonScale : ℂ)⁻¹ ^ N * (singletonScale : ℂ) ^ N) *
+          MPSTensor.mpv singletonTensor sigma := (mul_assoc _ _ _).symm
+      _ = MPSTensor.mpv singletonTensor sigma := by
+        rw [← mul_pow, inv_mul_cancel₀ hs, one_pow, one_mul]
+  · refine ⟨0, ?_⟩
+    intro N hN
+    apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
+    intro hzero
+    have hcomponent := congrArg
+      (fun v : MPSTensor.MPVSpace (4 * 4) N =>
+        v (fun _ : Fin N => retainedZeroLoopLetter)) hzero
+    have hs : (singletonScale : ℂ) ≠ 0 := by
+      exact_mod_cast ne_of_gt singletonScale_pos
+    have hpow : (singletonScale : ℂ) ^ N ≠ 0 := pow_ne_zero N hs
+    apply hpow
+    simpa only [MPSTensor.mpvState_apply,
+      normalizedSingletonTensor_mpv_zeroLoop N hN, PiLp.zero_apply] using hcomponent
+
+/-- The one-label weighted assembly recovers the raw singleton tensor. -/
+theorem normalizedSingleton_verticalAssembledTensor :
+    verticalAssembledTensor (fun _ : Fin 1 => 2) (fun _ : Fin 1 => 1)
+      normalizedSingletonWeight normalizedSingletonFamily = singletonTensor := by
+  let e : (Σ _k : Fin 1, Fin 2) ≃ Fin 2 := finSigmaFinEquiv
+  have hsymm (i : Fin 2) : e.symm i = ⟨0, i⟩ := by
+    apply e.injective
+    rw [e.apply_symm_apply]
+    ext
+    exact (@finSigmaFinEquiv_one (fun _ : Fin 1 => 2) ⟨(0 : Fin 1), i⟩).symm
+  have hs : (singletonScale : ℂ) ≠ 0 := by
+    exact_mod_cast ne_of_gt singletonScale_pos
+  funext v
+  ext i j
+  simp only [verticalAssembledTensor, verticalCopyWeights, verticalCopyBlocks,
+    verticalCopyDim, MPSTensor.toTensorFromBlocks, normalizedSingletonWeight,
+    normalizedSingletonFamily, normalizedSingletonTensor]
+  change (Matrix.reindex e e
+      (Matrix.blockDiagonal' (fun _k : Fin 1 =>
+        (singletonScale : ℂ)⁻¹ •
+          ((singletonScale : ℂ) • singletonTensor v)))) i j = singletonTensor v i j
+  simp [Matrix.reindex_apply, hsymm, hs]
+
+/-- The normalized singleton carries the complete one-label coefficient,
+positive-chi, product, and idempotent algebra data. -/
+noncomputable def normalizedSingleton_algebraClause :
+    BNTAlgebraClause normalizedSingletonCoeffs
+      (verticalBNTOperatorFamily normalizedSingletonFamily)
+      (verticalBNTTraceScalarFamily normalizedSingletonWeight) := by
+  refine {
+    positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi
+      normalizedSingletonChi ?_
+    sameLengthProduct := ?_
+    idempotent := ?_
+  }
+  · intro alpha beta gamma q
+    simpa [normalizedSingletonChi] using
+      (Complex.zero_lt_real.mpr singletonScale_pos)
+  · intro L hL alpha beta
+    fin_cases alpha
+    fin_cases beta
+    simpa [normalizedSingletonFamily] using
+      normalized_singleton_geometric_algebra L hL
+  · intro gamma
+    fin_cases gamma
+    have hs : (singletonScale : ℂ) ≠ 0 := by
+      exact_mod_cast ne_of_gt singletonScale_pos
+    simp only [verticalBNTTraceScalarFamily_traceScalar,
+      normalizedSingletonWeight, Finset.univ_unique, Fin.default_eq_zero,
+      Finset.sum_singleton, normalizedSingletonCoeffs_coeff]
+    field_simp
 
 end MPOTensor.BondTwoSingletonBaseModel
