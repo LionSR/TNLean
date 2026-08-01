@@ -1,0 +1,10 @@
+%% Negative regression: one corridor has one page-space basis.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\__tenkz_kernel_leg_plan_reset:
+\__tenkz_kernel_leg_plan_corridor:nnnnn {north}{0}{1}{1}{0}
+\__tenkz_kernel_leg_plan_corridor:nnnnn {north}{0}{-1}{1}{0}
+\ExplSyntaxOff
+\end{document}

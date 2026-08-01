@@ -49,6 +49,54 @@
 \tl_new:N \l__tenkz_test_lp_requests_after_tl
 \tl_new:N \l__tenkz_test_lp_results_after_tl
 \int_new:N \l__tenkz_test_lp_diagnostic_count_int
+\int_new:N \l__tenkz_test_lp_collect_count_int
+\int_new:N \l__tenkz_test_lp_consume_count_int
+\int_new:N \l__tenkz_test_lp_resolve_count_int
+\bool_new:N \l__tenkz_test_lp_production_bool
+
+\cs_new_eq:NN \__tenkz_test_lp_legs: \__tenkz_kernel_r_legs:
+\cs_set_protected:Npn \__tenkz_kernel_r_legs:
+  {
+    \int_zero:N \l__tenkz_test_lp_collect_count_int
+    \int_zero:N \l__tenkz_test_lp_consume_count_int
+    \int_zero:N \l__tenkz_test_lp_resolve_count_int
+    \bool_set_true:N \l__tenkz_test_lp_production_bool
+    \__tenkz_test_lp_legs:
+    \bool_set_false:N \l__tenkz_test_lp_production_bool
+    \int_compare:nNnF {\l__tenkz_test_lp_collect_count_int} = {4}
+      {\errmessage{production~leg~collection~lost~a~measurable~plane~face}}
+    \int_compare:nNnF {\l__tenkz_test_lp_resolve_count_int} = {1}
+      {\errmessage{production~leg~planning~did~not~resolve~exactly~once}}
+    \int_compare:nNnF {\l__tenkz_test_lp_consume_count_int} = {5}
+      {\errmessage{production~leg~consumption~lost~its~none-skin~fallback}}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_lp_production_enrol:nn
+  \__tenkz_kernel_r_leg_plan_enrol:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_plan_enrol:nn #1#2
+  {
+    \bool_if:NT \l__tenkz_test_lp_production_bool
+      {\int_incr:N \l__tenkz_test_lp_collect_count_int}
+    \__tenkz_test_lp_production_enrol:nn {#1}{#2}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_lp_production_resolve:
+  \__tenkz_kernel_leg_plan_resolve:
+\cs_set_protected:Npn \__tenkz_kernel_leg_plan_resolve:
+  {
+    \bool_if:NT \l__tenkz_test_lp_production_bool
+      {\int_incr:N \l__tenkz_test_lp_resolve_count_int}
+    \__tenkz_test_lp_production_resolve:
+  }
+\cs_new_eq:NN
+  \__tenkz_test_lp_production_consume:nnn
+  \__tenkz_kernel_r_leg_consume:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_consume:nnn #1#2#3
+  {
+    \bool_if:NT \l__tenkz_test_lp_production_bool
+      {\int_incr:N \l__tenkz_test_lp_consume_count_int}
+    \__tenkz_test_lp_production_consume:nnn {#1}{#2}{#3}
+  }
 
 \cs_new_eq:NN \__tenkz_test_lp_msg_error:nne \msg_error:nne
 \cs_new_eq:NN \__tenkz_test_lp_msg_error:nnee \msg_error:nnee
@@ -328,15 +376,38 @@
       {\l__tenkz_test_lp_bendx_fp-\l__tenkz_test_lp_sx_fp}
     \fp_set:Nn \l_tmpb_fp
       {\l__tenkz_test_lp_bendy_fp-\l__tenkz_test_lp_sy_fp}
+    \fp_set:Nn \l_tmpc_fp {-\l__tenkz_test_lp_ny_fp}
+    \fp_set_eq:NN \l_tmpd_fp \l__tenkz_test_lp_nx_fp
+    \fp_compare:nNnT
+      {
+        \l_tmpc_fp * \l__tenkz_test_lp_ex_fp
+        + \l_tmpd_fp * \l__tenkz_test_lp_ey_fp
+      }
+      < {0}
+      {
+        \fp_set:Nn \l_tmpc_fp {-\l_tmpc_fp}
+        \fp_set:Nn \l_tmpd_fp {-\l_tmpd_fp}
+      }
     \__tenkz_test_lp_close:nnn
-      {sqrt(\l_tmpa_fp^2+\l_tmpb_fp^2)}
+      {\l_tmpa_fp*\l_tmpc_fp+\l_tmpb_fp*\l_tmpd_fp}
       {\l__tenkz_test_lp_daylight_fp}
-      {one~lane~was~not~one~named~page-space~daylight}
-    \__tenkz_test_lp_close:nnn
-      {\l_tmpa_fp*\l__tenkz_test_lp_nx_fp
-        +\l_tmpb_fp*\l__tenkz_test_lp_ny_fp}
-      {0}
-      {a~lane~shift~was~not~perpendicular~to~its~outward~direction}
+      {one~lane~lost~one~named~page-space~daylight~laterally}
+    \fp_set:Nn \l_tmpc_fp {-\l__tenkz_test_lp_ey_fp}
+    \fp_set_eq:NN \l_tmpd_fp \l__tenkz_test_lp_ex_fp
+    \fp_compare:nNnT
+      {
+        \l_tmpc_fp * \l__tenkz_test_lp_nx_fp
+        + \l_tmpd_fp * \l__tenkz_test_lp_ny_fp
+      }
+      < {0}
+      {
+        \fp_set:Nn \l_tmpc_fp {-\l_tmpc_fp}
+        \fp_set:Nn \l_tmpd_fp {-\l_tmpd_fp}
+      }
+    \fp_compare:nNnT
+      {\l_tmpa_fp*\l_tmpc_fp+\l_tmpb_fp*\l_tmpd_fp}
+      < {-0.000001}
+      { \errmessage{the~nonzero~lane~bend~entered~its~affine~host} }
     \fp_compare:nNnF
       {\l_tmpa_fp*\l__tenkz_test_lp_ex_fp
         +\l_tmpb_fp*\l__tenkz_test_lp_ey_fp} > {0}
@@ -401,11 +472,12 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[
-    rows={wire,wire,wire,wire}, cols=1, bonds=none,
+    rows={wire,wire,wire,wire,wire}, cols=1, bonds=none, physical=up,
     frame={plane,basis={wire at (0,0)}}]
   \tn[at=(1,1,1), name=A]{}
   \tn[at=(2,1,1), name=B]{}
   \tn[at=(3,1,1), name=C]{}
   \tn[at=(4,1,1), name=D]{}
+  \tn[at=(5,1,1), name=E, skin=none]{}
 \end{tenkz}
 \end{document}

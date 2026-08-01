@@ -1,5 +1,6 @@
 % Regression: measured glyph faces are recoverable in a record's complete
-% carrier basis before any live renderer adopts them.
+% carrier basis, while flat and circular live glyphs retain measurement
+% parity.  The affine live-contour contract has its own focused fixture.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -328,10 +329,8 @@
     \__tenkz_test_face_atom_glyph_ink:n {#1}
     \str_case:Vn \l__tenkz_test_face_name_tl
       {
-        {A}{ \__tenkz_test_live_measurement_parity:n {#1} }
         {G-1-1}
           {
-            \__tenkz_test_live_measurement_parity:n {#1}
             \__tenkz_test_cluster_port_guard:
           }
         {D}{ \__tenkz_test_live_measurement_parity:n {#1} }
@@ -387,7 +386,7 @@
   { \errmessage{the~fixture~did~not~inspect~ten~transported~glyph~faces} }
 \int_compare:nNnF { \g__tenkz_test_parity_count_int } = {2}
   { \errmessage{the~fixture~did~not~inspect~flat~and~circle~parity} }
-\int_compare:nNnF { \g__tenkz_test_live_parity_count_int } = {5}
+\int_compare:nNnF { \g__tenkz_test_live_parity_count_int } = {3}
   { \errmessage{the~fixture~did~not~compare~all~live~glyph~diameters} }
 \int_compare:nNnF { \g__tenkz_test_tensor_style_count_int } = {16}
   {

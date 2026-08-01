@@ -1,0 +1,9 @@
+%% Negative regression: a physical-leg corridor needs an outward direction.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\__tenkz_kernel_leg_plan_reset:
+\__tenkz_kernel_leg_plan_corridor:nnnnn {zero}{0}{0}{1}{0}
+\ExplSyntaxOff
+\end{document}
