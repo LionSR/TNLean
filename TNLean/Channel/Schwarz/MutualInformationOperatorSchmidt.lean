@@ -18,7 +18,7 @@ density operator by the logarithm of its ordinary operator-Schmidt rank.
 * `TNLean.quantumRelativeEntropy_product_marginals_eq_mutualInformation`
   identifies mutual information with relative entropy from the product of the
   marginals.
-* `TNLean.Entropy.mutualInformation_le_log_operatorSchmidtRank` proves the
+* `Entropy.mutualInformation_le_log_operatorSchmidtRank` proves the
   operator-Schmidt-rank bound.
 
 ## References
@@ -53,6 +53,10 @@ theorem quantumRelativeEntropy_product_marginals_eq_mutualInformation
   simpa only [Entropy.mutualInformation, Matrix.traceRight, Matrix.traceLeft]
     using quantumRelativeEntropy_product_marginals hρ
 
+end TNLean
+
+namespace Entropy
+
 /-- The mutual information of a finite-dimensional bipartite density operator
 is at most the logarithm of its ordinary operator-Schmidt rank.
 
@@ -60,10 +64,10 @@ This is a finite-dimensional consequence of the order-two sandwiched
 relative-entropy comparison of Müller-Lennert et al., arXiv:1306.3142v4,
 Definition 5 and Lemma 19, together with Beigi, arXiv:1306.5920, Theorem 6,
 equation (18). -/
-theorem Entropy.mutualInformation_le_log_operatorSchmidtRank
+theorem mutualInformation_le_log_operatorSchmidtRank
     (ρ : Matrix (Fin dA × Fin dB) (Fin dA × Fin dB) ℂ)
     (hρ : ρ.PosSemidef) (hρtr : ρ.trace = 1) :
-    Entropy.mutualInformation ρ hρ.isHermitian ≤
+    mutualInformation ρ hρ.isHermitian ≤
       Real.log (Matrix.operatorSchmidtRank ρ) := by
   let ω := partialTraceRight ρ ⊗ₖ partialTraceLeft ρ
   have hA : (partialTraceRight ρ).PosSemidef := hρ.partialTraceRight
@@ -82,21 +86,21 @@ theorem Entropy.mutualInformation_le_log_operatorSchmidtRank
   have hRankOne : (1 : ℝ) ≤ Matrix.operatorSchmidtRank ρ := by
     exact_mod_cast hRankPos
   have hQ2nonneg :
-      0 ≤ sandwichedRenyiTwoTrace ρ ω :=
-    sandwichedRenyiTwoTrace_nonneg hρ hω
+      0 ≤ TNLean.sandwichedRenyiTwoTrace ρ ω :=
+    TNLean.sandwichedRenyiTwoTrace_nonneg hρ hω
   have hQ2le :
-      sandwichedRenyiTwoTrace ρ ω ≤ Matrix.operatorSchmidtRank ρ :=
-    sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank ρ hρ
-  rw [← quantumRelativeEntropy_product_marginals_eq_mutualInformation hρ]
+      TNLean.sandwichedRenyiTwoTrace ρ ω ≤ Matrix.operatorSchmidtRank ρ :=
+    TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank ρ hρ
+  rw [← TNLean.quantumRelativeEntropy_product_marginals_eq_mutualInformation hρ]
   calc
-    quantumRelativeEntropy ρ ω ≤
-        Real.log (sandwichedRenyiTwoTrace ρ ω) :=
-      quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace
+    TNLean.quantumRelativeEntropy ρ ω ≤
+        Real.log (TNLean.sandwichedRenyiTwoTrace ρ ω) :=
+      TNLean.quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace
         hρ hω hρtr hωtr (Matrix.product_marginal_support hρ)
     _ ≤ Real.log (Matrix.operatorSchmidtRank ρ) := by
-      by_cases hQ2zero : sandwichedRenyiTwoTrace ρ ω = 0
+      by_cases hQ2zero : TNLean.sandwichedRenyiTwoTrace ρ ω = 0
       · rw [hQ2zero, Real.log_zero]
         exact Real.log_nonneg hRankOne
       · exact Real.log_le_log (lt_of_le_of_ne hQ2nonneg (Ne.symm hQ2zero)) hQ2le
 
-end TNLean
+end Entropy

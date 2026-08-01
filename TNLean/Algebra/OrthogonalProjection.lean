@@ -19,6 +19,7 @@ channels and irreducibility.
 * `IsOrthogonalProjection`
 * `IsOrthogonalProjection.one_sub`
 * `IsOrthogonalProjection.exists_range_isometry`
+* `IsStarProjection.exists_range_isometry`
 * `IsStarProjection.conjTranspose_mul_mul_of_mul_conjTranspose_eq_one`
 * `isOrthogonalProjection_posSemidef`
 * `isOrthogonalProjection_sum_of_pairwise_mul_eq_zero`
@@ -169,6 +170,39 @@ theorem IsOrthogonalProjection.exists_range_isometry
           by_cases hp : p j
           · simp [hp, show f j = 1 from hp]
           · simp [hp, show f j = 0 from (hf01 j).resolve_right hp]
+
+/-- A star projection on an arbitrary finite index type is the range projection
+of an isometry from a finite coordinate space. -/
+theorem IsStarProjection.exists_range_isometry
+    {n : Type*} [Fintype n]
+    {P : Matrix n n ℂ} (hP : IsStarProjection P) :
+    ∃ (k : ℕ) (V : Matrix n (Fin k) ℂ),
+      Vᴴ * V = 1 ∧ V * Vᴴ = P := by
+  classical
+  let e : n ≃ Fin (Fintype.card n) := Fintype.equivFin n
+  let P' : Matrix (Fin (Fintype.card n)) (Fin (Fintype.card n)) ℂ :=
+    P.submatrix e.symm e.symm
+  have hHerm : P.IsHermitian := by
+    change Pᴴ = P
+    simpa [Matrix.star_eq_conjTranspose] using hP.isSelfAdjoint.star_eq
+  have hP' : IsOrthogonalProjection P' := by
+    constructor
+    · exact (Matrix.isHermitian_submatrix_equiv e.symm).2 hHerm
+    · dsimp only [P']
+      rw [Matrix.submatrix_mul_equiv, hP.isIdempotentElem.eq]
+  obtain ⟨k, V', hV', hRange'⟩ := hP'.exists_range_isometry
+  let V : Matrix n (Fin k) ℂ :=
+    V'.submatrix e (Equiv.refl (Fin k))
+  refine ⟨k, V, ?_, ?_⟩
+  · dsimp only [V]
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv, hV', Matrix.submatrix_one_equiv]
+  · dsimp only [V]
+    rw [Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv, hRange']
+    simp only [P', Matrix.submatrix_submatrix, Function.comp_def,
+      Equiv.symm_apply_apply]
+    rfl
 
 /-- A finite sum of pairwise orthogonal projections is an orthogonal
 projection. -/

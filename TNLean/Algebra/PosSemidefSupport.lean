@@ -23,6 +23,8 @@ are specializations of that construction.
 * `Matrix.IsHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le`: right
   absorption under kernel inclusion.
 * `Matrix.PosSemidef.supportProj`: the positive-semidefinite specialization.
+* `Matrix.PosSemidef.isStarProjection_supportProj`: the support projection is
+  a star projection on an arbitrary finite index type.
 * `Matrix.PosSemidef.isOrthogonalProjection_supportProj`: orthogonality of the
   positive-semidefinite support projection.
 * `Matrix.supportProj_mul_conjTranspose_mul_self`: the support projection of
@@ -354,12 +356,19 @@ definite is not the identity. -/
 theorem supportProj_ne_one_of_not_posDef (hA : A.PosSemidef) (hnotPD : ¬ A.PosDef) :
     hA.supportProj ≠ 1 := fun h => hnotPD (hA.posDef_of_supportProj_eq_one h)
 
+/-- The support projection is a star projection. -/
+theorem isStarProjection_supportProj (hρ : A.PosSemidef) :
+    IsStarProjection hρ.supportProj := by
+  rw [isStarProjection_iff']
+  refine ⟨hρ.supportProj_idem, ?_⟩
+  simpa [Matrix.star_eq_conjTranspose] using hρ.supportProj_isHermitian.eq
+
 variable {D : ℕ} {ρ : Matrix (Fin D) (Fin D) ℂ}
 
 /-- The support projection is an orthogonal projection. -/
 theorem isOrthogonalProjection_supportProj (hρ : ρ.PosSemidef) :
     IsOrthogonalProjection hρ.supportProj :=
-  ⟨hρ.supportProj_isHermitian, hρ.supportProj_idem⟩
+  hρ.isStarProjection_supportProj.isOrthogonalProjection
 
 end Matrix.PosSemidef
 

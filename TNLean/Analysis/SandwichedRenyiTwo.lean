@@ -175,7 +175,7 @@ This is the positivity of the expression in Müller-Lennert et al.,
 arXiv:1306.3142v4, Definition 2, specialized to order two. -/
 theorem sandwichedRenyiTwoTrace_nonneg
     {n : Type*} [Fintype n] [DecidableEq n]
-    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (hω : ω.PosSemidef) :
+    {ρ ω : Matrix n n ℂ} (hρ : ρ.PosSemidef) (_hω : ω.PosSemidef) :
     0 ≤ sandwichedRenyiTwoTrace ρ ω := by
   let q := ω ^ (-(1 / 4 : ℝ))
   have hq : q.PosSemidef :=

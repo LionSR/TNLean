@@ -214,7 +214,7 @@ theorem quantumRelativeEntropy_le_log_sandwichedRenyiTwoTrace_of_faithful
       A.PosSemidef → B.PosDef → A.trace = 1 → B.trace = 1 →
         quantumRelativeEntropy A B ≤ Real.log (sandwichedRenyiTwoTrace A B)) :
     quantumRelativeEntropy ρ ω ≤ Real.log (sandwichedRenyiTwoTrace ρ ω) := by
-  obtain ⟨k, V, hV, hRange⟩ := hω.isOrthogonalProjection_supportProj.exists_range_isometry
+  obtain ⟨k, V, hV, hRange⟩ := hω.isStarProjection_supportProj.exists_range_isometry
   let ρc := Vᴴ * ρ * V
   let ωc := Vᴴ * ω * V
   have hρc : ρc.PosSemidef := by

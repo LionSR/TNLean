@@ -1534,7 +1534,7 @@ logarithmic divergence, or a comparison with relative entropy.
 
 \begin{theorem}[Mutual information from operator-Schmidt rank]
     \label{thm:mutual_information_le_log_operator_schmidt_rank}
-    \lean{TNLean.Entropy.mutualInformation_le_log_operatorSchmidtRank}
+    \lean{Entropy.mutualInformation_le_log_operatorSchmidtRank}
     \leanok
     \uses{def:mutual_information,
       def:bipartite_operator_schmidt_rank}
@@ -1560,9 +1560,8 @@ logarithmic divergence, or a comparison with relative entropy.
       &\leq\log\operatorname{OSR}(\rho_{AB}).
       \notag
     \end{align}
-    Since $\rho_{AB}$ has trace one, it is nonzero and its
-    operator-Schmidt rank is positive.  Thus the last logarithmic comparison
-    also covers the totalized case $Q_2=0$.
+    Since $\rho_{AB}$ has trace one, both $Q_2$ and its operator-Schmidt rank
+    are positive, so logarithmic monotonicity applies.
     The first inequality is
     Theorem~\ref{thm:relative_entropy_q2_support}; the second follows from
     Theorem~\ref{thm:sandwiched_renyi_two_osr_support} and monotonicity of the
