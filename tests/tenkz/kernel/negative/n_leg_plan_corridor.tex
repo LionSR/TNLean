@@ -1,0 +1,9 @@
+%% Negative regression: a semantic leg must name a declared corridor.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\ExplSyntaxOn
+\__tenkz_kernel_leg_plan_reset:
+\__tenkz_kernel_leg_plan_enrol:nnnnn {leg}{missing}{0}{0}{1}
+\ExplSyntaxOff
+\end{document}

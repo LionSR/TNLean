@@ -738,6 +738,24 @@ do
     exit 1
   fi
 done
+
+for leg_plan_case in vector basis corridor face reach; do
+  leg_plan_negative="$KERNEL/negative/n_leg_plan_$leg_plan_case.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$leg_plan_negative" \
+         >"$WORK/n_leg_plan_$leg_plan_case.transcript" 2>&1 ); then
+    echo "FAIL: malformed physical-leg plan $leg_plan_case was accepted" >&2
+    exit 1
+  fi
+  leg_plan_code=$(printf '%s' "$leg_plan_case" | tr '[:lower:]' '[:upper:]')
+  grep -Fq "[TKZ-LEG-PLAN-$leg_plan_code]" \
+    "$WORK/n_leg_plan_$leg_plan_case.transcript" || {
+    echo "FAIL: physical-leg plan $leg_plan_case lacked its coded diagnostic" >&2
+    exit 1
+  }
+done
 grep -Fq '[TKZ-FRAME-BASIS-PARSE]' \
   "$WORK/n_frame_basis_parse.transcript" || {
   echo "FAIL: malformed basis member lacked TKZ-FRAME-BASIS-PARSE" >&2

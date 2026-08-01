@@ -5737,7 +5737,7 @@
           }
       }
     \__tenkz_kernel_r_carrier_basis:n {#1}
-    \dim_zero:N \l__tenkz_kernel_r_affine_page_padding_dim
+    \__tenkz_kernel_r_affine_page_padding:n {#1}
     \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
       {
         % A paired ellipsis is itself page-upright, including the backing
@@ -5748,8 +5748,6 @@
             \prop_if_in:NnT
               \l__tenkz_kernel_skin_pairing_host_prop {#1}
               {
-                \dim_set:Nn \l__tenkz_kernel_r_affine_page_padding_dim
-                  { \__tenkz_dim:n {labelclear} }
                 \tl_put_right:Nn \l__tenkz_kernel_hull_b_tl
                   { , inner~sep = 0pt }
               }
@@ -6012,6 +6010,40 @@
                 { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
                 { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
               }
+            % The dot itself follows the affine chart, but its external label
+            % occupies a page-space band.  Publish both supports so a
+            % contracting chart cannot contract the label clearance.
+            \__tenkz_model_get:nnN {##1} {skin}
+              \l__tenkz_kernel_hull_a_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
+              { \tl_set:Nn \l__tenkz_kernel_hull_a_tl {dot} }
+            \exp_args:NV \__tenkz_kernel_skin_base:nN
+              \l__tenkz_kernel_hull_a_tl \l__tenkz_kernel_hull_a_tl
+            \str_if_eq:VnT \l__tenkz_kernel_hull_a_tl {dot}
+              {
+                \__tenkz_model_get:nnN {##1} {label}
+                  \l__tenkz_kernel_hull_b_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_hull_b_tl
+                  {
+                    \__tenkz_model_get:nnN {##1} {cluster-of}
+                      \l__tenkz_kernel_hull_size_tl
+                    \quark_if_no_value:NT \l__tenkz_kernel_hull_size_tl
+                      {
+                        \__tenkz_kernel_r_carrier_basis:n {##1}
+                        \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+                          {
+                            \seq_put_right:Ne #2
+                              {
+                                {circle}
+                                { \__tenkz_metric_ratio:n {dotlabelband} }
+                                {0}{0}{0}
+                                { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
+                                { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
+                              }
+                          }
+                      }
+                  }
+              }
           }
       }
   }
@@ -6034,6 +6066,7 @@
             \__tenkz_model_get:nnN {#1} {cluster-of} \l_tmpb_tl
             \__tenkz_kernel_hull_dot_radius:nN {#1}
               \l__tenkz_kernel_hull_radius_tl
+            \__tenkz_kernel_r_carrier_basis:n {#1}
             \tl_set:Ne #2
               {
                 {circle}
@@ -6043,9 +6076,13 @@
                       \quark_if_no_value_p:N \l_tmpb_tl
                         ? ( \quark_if_no_value_p:N \l_tmpa_tl
                               ? \l__tenkz_kernel_hull_radius_tl
-                              : max(
-                                  \l__tenkz_kernel_hull_radius_tl ,
-                                  \__tenkz_metric_ratio:n {dotlabelband} ) )
+                              : ( \bool_if_p:N
+                                    \l__tenkz_kernel_r_basis_plane_bool
+                                  ? \l__tenkz_kernel_hull_radius_tl
+                                  : max(
+                                      \l__tenkz_kernel_hull_radius_tl ,
+                                      \__tenkz_metric_ratio:n
+                                        {dotlabelband} ) ) )
                         : \__tenkz_metric_ratio:n {clusterdot} / 2
                     }
                 }
@@ -7588,6 +7625,8 @@
 \fp_new:N   \l__tenkz_kernel_lp_dy_fp
 \fp_new:N   \l__tenkz_kernel_lp_qx_fp
 \fp_new:N   \l__tenkz_kernel_lp_qy_fp
+\fp_new:N   \l__tenkz_kernel_lp_gx_fp
+\fp_new:N   \l__tenkz_kernel_lp_gy_fp
 \fp_new:N   \l__tenkz_kernel_lp_norm_fp
 \fp_new:N   \l__tenkz_kernel_lp_sx_fp
 \fp_new:N   \l__tenkz_kernel_lp_sy_fp
@@ -7596,6 +7635,7 @@
 \fp_new:N   \l__tenkz_kernel_lp_end_fp
 \fp_new:N   \l__tenkz_kernel_lp_bx_fp
 \fp_new:N   \l__tenkz_kernel_lp_by_fp
+\fp_new:N   \l__tenkz_kernel_lp_safe_fp
 \fp_new:N   \l__tenkz_kernel_lp_tx_fp
 \fp_new:N   \l__tenkz_kernel_lp_ty_fp
 \int_new:N  \l__tenkz_kernel_lp_lane_int
@@ -7652,12 +7692,30 @@
             \fp_set:Nn \l__tenkz_kernel_lp_qy_fp
               { -\l__tenkz_kernel_lp_qy_fp }
           }
+        % The carrier-east line is the affine face tangent.  Its oriented
+        % page covector detects whether a lane shift would enter the host.
+        \fp_set:Nn \l__tenkz_kernel_lp_gx_fp {-(#5)}
+        \fp_set:Nn \l__tenkz_kernel_lp_gy_fp {#4}
+        \fp_compare:nNnT
+          {
+            \l__tenkz_kernel_lp_gx_fp * \l__tenkz_kernel_lp_dx_fp
+            + \l__tenkz_kernel_lp_gy_fp * \l__tenkz_kernel_lp_dy_fp
+          }
+          < {0}
+          {
+            \fp_set:Nn \l__tenkz_kernel_lp_gx_fp
+              {-\l__tenkz_kernel_lp_gx_fp}
+            \fp_set:Nn \l__tenkz_kernel_lp_gy_fp
+              {-\l__tenkz_kernel_lp_gy_fp}
+          }
         \tl_set:Ne \l__tenkz_kernel_lp_tuple_tl
           {
             {\fp_use:N \l__tenkz_kernel_lp_dx_fp}
             {\fp_use:N \l__tenkz_kernel_lp_dy_fp}
             {\fp_use:N \l__tenkz_kernel_lp_qx_fp}
             {\fp_use:N \l__tenkz_kernel_lp_qy_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_gx_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_gy_fp}
           }
         \prop_get:NVN \l__tenkz_kernel_lp_corridor_prop
           \l__tenkz_kernel_lp_cid_tl \l__tenkz_kernel_lp_old_tl
@@ -7789,12 +7847,15 @@
       }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_leg_plan_basis_set:nnnn #1#2#3#4
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_basis_set:nnnnnn
+    #1#2#3#4#5#6
   {
     \fp_set:Nn \l__tenkz_kernel_lp_dx_fp {#1}
     \fp_set:Nn \l__tenkz_kernel_lp_dy_fp {#2}
     \fp_set:Nn \l__tenkz_kernel_lp_qx_fp {#3}
     \fp_set:Nn \l__tenkz_kernel_lp_qy_fp {#4}
+    \fp_set:Nn \l__tenkz_kernel_lp_gx_fp {#5}
+    \fp_set:Nn \l__tenkz_kernel_lp_gy_fp {#6}
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_leg_plan_sort_item:nnn #1#2#3
@@ -7840,9 +7901,28 @@
     \prop_put:Nee \l__tenkz_kernel_lp_occupied_prop
       {\int_use:N \l__tenkz_kernel_lp_lane_int}
       {\fp_use:N \l__tenkz_kernel_lp_start_fp}
+    % A nonzero lane first moves along an outward-safe diagonal.  The affine
+    % face covector chooses the least outward correction whose whole S--B
+    % segment stays on or beyond the supporting face.
+    \fp_set:Nn \l__tenkz_kernel_lp_safe_fp
+      {
+        max(
+          0,
+          -\l__tenkz_kernel_lp_lane_int
+            * \__tenkz_metric_ratio:n {daylight}
+            * ( \l__tenkz_kernel_lp_gx_fp
+                  * \l__tenkz_kernel_lp_qx_fp
+                + \l__tenkz_kernel_lp_gy_fp
+                  * \l__tenkz_kernel_lp_qy_fp )
+            / ( \l__tenkz_kernel_lp_gx_fp
+                  * \l__tenkz_kernel_lp_dx_fp
+                + \l__tenkz_kernel_lp_gy_fp
+                  * \l__tenkz_kernel_lp_dy_fp ) )
+      }
     \fp_set:Nn \l__tenkz_kernel_lp_bx_fp
       {
         \l__tenkz_kernel_lp_sx_fp
+        + \l__tenkz_kernel_lp_safe_fp * \l__tenkz_kernel_lp_dx_fp
         + \l__tenkz_kernel_lp_lane_int
           * \__tenkz_metric_ratio:n {daylight}
           * \l__tenkz_kernel_lp_qx_fp
@@ -7850,6 +7930,7 @@
     \fp_set:Nn \l__tenkz_kernel_lp_by_fp
       {
         \l__tenkz_kernel_lp_sy_fp
+        + \l__tenkz_kernel_lp_safe_fp * \l__tenkz_kernel_lp_dy_fp
         + \l__tenkz_kernel_lp_lane_int
           * \__tenkz_metric_ratio:n {daylight}
           * \l__tenkz_kernel_lp_qy_fp
@@ -7901,7 +7982,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_leg_plan_resolve_corridor:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_lp_cid_tl {#1}
-    \__tenkz_kernel_leg_plan_basis_set:nnnn #2
+    \__tenkz_kernel_leg_plan_basis_set:nnnnnn #2
     \seq_clear:N \l__tenkz_kernel_lp_sort_seq
     \prop_clear:N \l__tenkz_kernel_lp_occupied_prop
     \prop_map_function:NN \l__tenkz_kernel_lp_request_prop
@@ -9170,7 +9251,19 @@
         \__tenkz_kernel_r_carrier_basis:n {#1}
         \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
         \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
-          { \bool_set_true:N \l__tenkz_kernel_leg_planned_bool }
+          {
+            \bool_set_true:N \l__tenkz_kernel_leg_planned_bool
+            % A barren `none` host has no glyph face to probe.  Its physical
+            % leg retains the established centre-origin fallback and stays
+            % outside the affine lane planner.
+            \__tenkz_kernel_hull_resolve_skin:n {#1}
+            \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {none}
+              {
+                \prop_if_in:NnF
+                  \l__tenkz_kernel_skin_pairing_host_prop {#1}
+                  { \bool_set_false:N \l__tenkz_kernel_leg_planned_bool }
+              }
+          }
         \bool_if:NTF \l__tenkz_kernel_leg_planned_bool
           {
             \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
@@ -11918,6 +12011,7 @@
     % name inside it is placed, so it is turned back by the same angle and
     % reads level however the carrier stands.
     \__tenkz_kernel_r_glyph_frame:nN {#1} \l__tenkz_kernel_r_c_tl
+    \__tenkz_kernel_r_affine_page_padding:n {#1}
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
     \prop_if_in:NnTF \l__tenkz_kernel_hull_live_prop {#1/xmin}
@@ -12006,6 +12100,22 @@
 \dim_new:N \l__tenkz_kernel_r_affine_page_height_dim
 \dim_new:N \l__tenkz_kernel_r_affine_text_width_dim
 \dim_new:N \l__tenkz_kernel_r_affine_text_height_dim
+% Select page-owned padding from the record being measured or inked.  This is
+% deliberately recomputed at each consumer boundary: a preceding paired
+% ellipsis must not enlarge the next record's upright envelope.
+\cs_new_protected:Npn \__tenkz_kernel_r_affine_page_padding:n #1
+  {
+    \dim_zero:N \l__tenkz_kernel_r_affine_page_padding_dim
+    \__tenkz_kernel_hull_resolve_skin:n {#1}
+    \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {dots}
+      {
+        \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
+          {
+            \dim_set:Nn \l__tenkz_kernel_r_affine_page_padding_dim
+              { \__tenkz_dim:n {labelclear} }
+          }
+      }
+  }
 % #1 typeset by a record whose skin the frame has turned by the angle in
 % \l__tenkz_kernel_r_ink_turn_tl: label text never rotates.
 \cs_new_protected:Npn \__tenkz_kernel_r_upright:n #1
