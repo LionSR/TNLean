@@ -44,6 +44,7 @@ reference support gives the singular-reference theorem in
 * `TNLean.sandwichedRenyiTwoTrace_nonneg` — positivity on
   positive-semidefinite arguments.
 * `TNLean.sandwichedRenyiTwoTrace_conj_unitary` — invariance under unitary
+* `TNLean.sandwichedRenyiTwoTrace_submatrix_equiv` — invariance under reindexing
   conjugation of both arguments.
 * `TNLean.posDef_rpow_neg_quarter_mul_self` — the faithful identity
   \(\omega^{-1/4}\omega^{-1/4}=\omega^{-1/2}\).
@@ -167,6 +168,24 @@ theorem sandwichedRenyiTwoTrace_conj_unitary
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc (star Umat) Umat, hU, Matrix.one_mul]
   rw [hsquare, Matrix.trace_mul_cycle, hU, Matrix.one_mul]
+
+/-- The order-two sandwiched trace functional is invariant under simultaneous
+reindexing of its state and reference arguments. -/
+theorem sandwichedRenyiTwoTrace_submatrix_equiv
+    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
+    {ρ ω : Matrix m m ℂ} (hω : ω.PosSemidef) (e : m ≃ n) :
+    sandwichedRenyiTwoTrace
+        (ρ.submatrix e.symm e.symm) (ω.submatrix e.symm e.symm) =
+      sandwichedRenyiTwoTrace ρ ω := by
+  have hq :
+      (ω.submatrix e.symm e.symm) ^ (-(1 / 4 : ℝ)) =
+        (ω ^ (-(1 / 4 : ℝ))).submatrix e.symm e.symm := by
+    rw [CFC.rpow_eq_cfc_real (hω.submatrix e.symm).nonneg,
+      CFC.rpow_eq_cfc_real hω.nonneg]
+    exact Matrix.cfc_submatrix_equiv hω.isHermitian (fun x : ℝ => x ^ (-(1 / 4 : ℝ))) e
+  rw [sandwichedRenyiTwoTrace, sandwichedRenyiTwoTrace, hq,
+    Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
+    Matrix.submatrix_mul_equiv, Matrix.trace_submatrix_equiv]
 
 /-- The order-two sandwiched trace functional is nonnegative on
 positive-semidefinite arguments.

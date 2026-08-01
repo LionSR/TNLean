@@ -12,6 +12,7 @@ import TNLean.Entropy.ClassicalMutualInformation
 import TNLean.Entropy.MarkovChain
 import TNLean.Entropy.MutualInformation
 import TNLean.Entropy.MutualInformationDataProcessing
+import TNLean.Entropy.MutualInformationOperatorSchmidt
 import TNLean.Entropy.StrongSubadditivity
 import TNLean.Entropy.TripartiteTrace
 import TNLean.Entropy.VonNeumann
