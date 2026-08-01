@@ -34,6 +34,8 @@ of the operator blocks.
   reshaped map is exactly the span of the operator blocks.
 * `Matrix.operatorSchmidtRank_eq_finrank_operatorBlockSpan`: the
   operator-Schmidt rank is the dimension of that span.
+* `Matrix.operatorSchmidtRank_pos_of_ne_zero`: every nonzero bipartite matrix
+  has positive operator-Schmidt rank.
 * `Matrix.hasOperatorSchmidtDecomposition_operatorSchmidtRank`: a product
   decomposition exists with exactly the range dimension many terms.
 * `Matrix.operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition`: every
@@ -180,6 +182,23 @@ theorem hasOperatorSchmidtDecomposition_operatorSchmidtRank
   simp only [Submodule.coe_sum, Submodule.coe_smul] at hrepr
   have hentry := congrFun (congrFun hrepr k) l
   simpa only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using hentry.symm
+
+/-- Every nonzero bipartite complex matrix has positive ordinary
+operator-Schmidt rank. This includes the empty-index cases, where the premise
+is necessarily false. -/
+theorem operatorSchmidtRank_pos_of_ne_zero
+    (ρ : Matrix (m × n) (m × n) ℂ) (hρ : ρ ≠ 0) :
+    0 < operatorSchmidtRank ρ := by
+  by_contra hpos
+  have hrank : operatorSchmidtRank ρ = 0 := Nat.eq_zero_of_not_pos hpos
+  obtain ⟨A, B, hdecomp⟩ := hasOperatorSchmidtDecomposition_operatorSchmidtRank ρ
+  apply hρ
+  rw [hdecomp]
+  apply Finset.sum_eq_zero
+  intro i _
+  exfalso
+  have hi : i.val < 0 := by simpa only [hrank] using i.isLt
+  exact (Nat.not_lt_zero i.val) hi
 
 /-- The range dimension is the least length of a product decomposition, hence
 it is the operator-Schmidt rank of arXiv:1903.05373, equation (1). -/

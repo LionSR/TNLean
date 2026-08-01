@@ -60,13 +60,6 @@ theorem sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank
     rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
       hRangeA, hRangeB, hA.supportProj_kronecker hB]
   have hρc : ρc.PosSemidef := hρ.conjTranspose_mul_mul_same V
-  have hreconstruct : V * ρc * Vᴴ = ρ := by
-    simpa only [V, ρc] using
-      hρ.eq_marginalSupport_expansion_compression VA VB hRangeA hRangeB
-  have hρP : ρ * (hA.kronecker hB).supportProj = ρ := by
-    rw [← hRange, ← hreconstruct]
-    simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc Vᴴ V, hV, Matrix.one_mul]
   have hMarginals :
       (partialTraceRight ρc).PosDef ∧ (partialTraceLeft ρc).PosDef :=
     hρ.marginalSupport_compression_marginals_posDef
@@ -80,12 +73,7 @@ theorem sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank
   let ω := partialTraceRight ρ ⊗ₖ partialTraceLeft ρ
   have hω : ω.PosSemidef := hA.kronecker hB
   have hker : ∀ v : Fin dA × Fin dB → ℂ, ω *ᵥ v = 0 → ρ *ᵥ v = 0 := by
-    intro v hv
-    have hPv := hω.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
-    have hsupport : hω.supportProj = (hA.kronecker hB).supportProj :=
-      hω.supportProj_congr (hA.kronecker hB) rfl
-    rw [hsupport] at hPv
-    rw [← hρP, ← Matrix.mulVec_mulVec, hPv, Matrix.mulVec_zero]
+    simpa only [ω] using hρ.productMarginals_kernel_le
   have hωc : Vᴴ * ω * V = partialTraceRight ρc ⊗ₖ partialTraceLeft ρc := by
     dsimp only [V, ω]
     rw [Matrix.conjTranspose_kronecker,
