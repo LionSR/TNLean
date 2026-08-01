@@ -31,12 +31,15 @@ noncomputable section
 
 namespace MPSTensor.PositiveMinimalRealizationCounterexample
 
+private abbrev oneBlockBondDim : Fin 1 → ℕ :=
+  fun _ ↦ 2
+
 /-- The source tensor, regarded as a one-block family. -/
-def tensorFamily : (k : Fin 1) → MPSTensor 4 ((fun _ : Fin 1 ↦ 2) k) :=
+def tensorFamily : (k : Fin 1) → MPSTensor 4 (oneBlockBondDim k) :=
   fun _ ↦ tensor
 
 /-- The nonunitarily conjugated tensor, regarded as a one-block family. -/
-def gaugedTensorFamily : (k : Fin 1) → MPSTensor 4 ((fun _ : Fin 1 ↦ 2) k) :=
+def gaugedTensorFamily : (k : Fin 1) → MPSTensor 4 (oneBlockBondDim k) :=
   fun _ ↦ gaugedTensor
 
 /-- The source one-block family is injective. -/
