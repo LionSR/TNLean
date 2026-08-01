@@ -12,21 +12,20 @@ import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 /-!
 # The BNT fusion clause from the MPDO renormalization fixed-point condition
 
-This file proves the implication from statement (i) to statement (iii) of
-CPSV16, Theorem 4.14, for an MPDO in normalized BNT-refined horizontal form.
-The transported one-site and two-site vertical forms give both representations
-of the blocked closed-chain operator.  Eventual linear independence of the BNT
-operators compares their coefficients, and the positive power-sum lemma gives
-the length-one trace-scalar identity.  The corresponding Theorem 4.14
-implication from the literal CPSV canonical form is not established here.
-Literal Proposition 4.13 is complete; see
-`docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+This file gives the common construction of the BNT fusion tensor clause from
+one-site and two-site vertical decompositions, and its specialization to an
+MPDO in normalized BNT-refined horizontal form. The transported vertical forms
+give both representations of the blocked closed-chain operator. Eventual
+linear independence of the BNT operators compares their coefficients, and the
+positive power-sum lemma gives the length-one trace-scalar identity.
 
 ## Main result
 
-* `HasBNTFusionTensorClause.of_isRFPViaTS` constructs the active-support fusion
-  clause from the Definition 4.1 RFP maps under the normalized BNT-refined
-  horizontal-form hypothesis.
+* `HasBNTFusionTensorClause.of_verticalDecompositions_of_unitaryBlockEquiv`
+  completes positive fusion data related by a unitary sector equivalence to a
+  BNT fusion tensor clause.
+* `HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF` specializes the
+  construction to normalized BNT-refined horizontal form.
 
 ## References
 
@@ -304,42 +303,55 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
 
 namespace HasBNTFusionTensorClause
 
-/-- **BNT-refined Theorem 4.14(i) implies (iii).** An MPDO in normalized
-BNT-refined horizontal form that satisfies the Definition 4.1 renormalization
-fixed-point condition has the active-support BNT fusion clause.
+/-- Two vertical decompositions related by a unitary sector equivalence and a
+positive active-sector fusion decomposition determine the BNT fusion tensor
+clause.
 
-**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
-stronger than the literal CPSV canonical form used in Theorem 4.14 through
-Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-
-The one-site vertical decomposition supplies the BNT tensors, multiplicities,
-and positive weights.
-The transported RFP maps compare it with the two-site decomposition, produce
-the positive chi matrices and fusion coisometries, and give both blocked
-operator representations.  The preceding coefficient comparison supplies the
-remaining length-one idempotent law.
+This is the common final construction in the forward implication of CPSV16,
+Theorem 4.14. The simultaneous one-site and two-site representations give the
+idempotent trace-scalar identity, which completes the supplied positive fusion
+data to the tensor clause.
 
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
-lines 1929--2046 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem of_isRFPViaTS (M : MPOTensor d D)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
-    (hRFP : IsRFPViaTS M) : HasBNTFusionTensorClause M := by
-  classical
-  obtain ⟨D₁⟩ := hHorizontal.exists_cpsvVerticalDecomposition M hM
-  obtain ⟨D₂⟩ := hHorizontal.blockTwo.exists_cpsvVerticalDecomposition
-    (blockTwo M) hM.blockTwo
-  obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
-  obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
-    transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
-      D₁.bondDim D₁.multiplicity D₁.weight
-      D₂.bondDim D₂.multiplicity D₂.weight
-      D₁.multiplicity_pos D₁.weight_pos
-      D₂.multiplicity_pos D₂.weight_pos
-      M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
-      D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-      D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-      hTphys hSphys
+lines 2001--2046 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem of_verticalDecompositions_of_unitaryBlockEquiv
+    {d D : ℕ} {M : MPOTensor d D}
+    (D₁ : CPSVVerticalDecomposition M)
+    (D₂ : CPSVVerticalDecomposition (blockTwo M))
+    (sigma : Fin D₁.labelCount ≃ Fin D₂.labelCount)
+    (hDim : ∀ i, D₁.bondDim i = D₂.bondDim (sigma i))
+    (V : ∀ i, Matrix.unitaryGroup (Fin (D₂.bondDim (sigma i))) ℂ)
+    (hLetter : ∀ (i : Fin D₁.labelCount) (ab : Fin (D * D)),
+      D₂.tensor (sigma i) ab =
+        (verticalMultiplicityTrace D₁.weight i /
+          verticalMultiplicityTrace D₂.weight (sigma i)) •
+        ((V i : Matrix (Fin (D₂.bondDim (sigma i)))
+            (Fin (D₂.bondDim (sigma i))) ℂ) *
+          Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (D₁.tensor i ab) *
+          (V i : Matrix (Fin (D₂.bondDim (sigma i)))
+            (Fin (D₂.bondDim (sigma i))) ℂ)ᴴ))
+    (chi : DiagonalChiFamily (Fin D₁.labelCount))
+    (U : ∀ α β : Fin D₁.labelCount,
+      Matrix ((γ : Fin D₁.labelCount) ×
+        (Fin (chi.dim α β γ) × Fin (D₁.bondDim γ)))
+        (Fin (D₁.bondDim α * D₁.bondDim β)) ℂ)
+    (hChiPos : chi.PosEntries)
+    (hCoisometry : ∀ α β, U α β * (U α β)ᴴ = 1)
+    (hFusion : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
+      U α β *
+          (mulTensor (verticalBNTMPO (D₁.tensor α))
+            (verticalBNTMPO (D₁.tensor β))) i j *
+          (U α β)ᴴ =
+        Matrix.blockDiagonal' fun γ ↦
+          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j)
+    (hReconstruction : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
+      (mulTensor (verticalBNTMPO (D₁.tensor α))
+        (verticalBNTMPO (D₁.tensor β))) i j =
+        (U α β)ᴴ *
+          (Matrix.blockDiagonal' fun γ ↦
+            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) i j) *
+          U α β) :
+    HasBNTFusionTensorClause M := by
   have hRepresentations : ∀ (L : ℕ), 0 < L →
       mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
           ∑ γ,
@@ -361,18 +373,8 @@ theorem of_isRFPViaTS (M : MPOTensor d D)
       D₁.coisometry D₂.coisometry
       D₁.reconstruction D₂.reconstruction
       sigma hDim V hLetter hL
-  obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
-    exists_positiveFusionDecomposition_of_unitaryBlockEquiv
-      D₁.bondDim D₁.multiplicity D₁.weight
-      D₂.bondDim D₂.multiplicity D₂.weight
-      D₁.multiplicity_pos D₁.weight_pos
-      D₂.multiplicity_pos D₂.weight_pos
-      M D₁.tensor D₂.tensor D₂.isCPSVBNT
-      D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry D₁.reconstruction D₂.reconstruction
-      sigma hDim V hLetter hHorizontal hM
   have hIdempotent := hasIdempotentCoefficientForm_of_blockedRepresentations
-    D₁ D₂ sigma chi U hChiPos hU hFusion hFusionReconstruction
+    D₁ D₂ sigma chi U hChiPos hCoisometry hFusion hReconstruction
     hRepresentations
   exact ⟨{
     labelCount := D₁.labelCount
@@ -390,11 +392,61 @@ theorem of_isRFPViaTS (M : MPOTensor d D)
     chi := chi
     chi_pos := hChiPos
     fusionCoisometry := U
-    fusionCoisometry_mul_conjTranspose := hU
+    fusionCoisometry_mul_conjTranspose := hCoisometry
     fusion := hFusion
-    fusionReconstruction := hFusionReconstruction
+    fusionReconstruction := hReconstruction
     idempotent := hIdempotent
   }⟩
+
+/-- An MPDO in normalized BNT-refined horizontal form that satisfies the
+Definition 4.1 renormalization fixed-point condition has the active-support
+BNT fusion clause.
+
+**Scope restriction (BNT-refined horizontal form):** `IsHorizontalCF` is
+stronger than the literal CPSV canonical form used in Theorem 4.14 through
+Proposition 4.13; see `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
+
+The one-site vertical decomposition supplies the BNT tensors, multiplicities,
+and positive weights.
+The transported RFP maps compare it with the two-site decomposition, produce
+the positive chi matrices and fusion coisometries, and give both blocked
+operator representations.  The preceding coefficient comparison supplies the
+remaining length-one idempotent law.
+
+Source: CPSV16, Appendix C.4, lines 1929--2046 of
+`Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem of_isRFPViaTS_of_horizontalCF (M : MPOTensor d D)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) : HasBNTFusionTensorClause M := by
+  classical
+  obtain ⟨D₁⟩ := hHorizontal.exists_cpsvVerticalDecomposition M hM
+  obtain ⟨D₂⟩ := hHorizontal.blockTwo.exists_cpsvVerticalDecomposition
+    (blockTwo M) hM.blockTwo
+  obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
+  obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
+    transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
+      D₁.bondDim D₁.multiplicity D₁.weight
+      D₂.bondDim D₂.multiplicity D₂.weight
+      D₁.multiplicity_pos D₁.weight_pos
+      D₂.multiplicity_pos D₂.weight_pos
+      M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
+      D₁.verticalCoisometry D₂.verticalCoisometry
+      D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
+      D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
+      hTphys hSphys
+  obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
+    exists_positiveFusionDecomposition_of_unitaryBlockEquiv
+      D₁.bondDim D₁.multiplicity D₁.weight
+      D₂.bondDim D₂.multiplicity D₂.weight
+      D₁.multiplicity_pos D₁.weight_pos
+      D₂.multiplicity_pos D₂.weight_pos
+      M D₁.tensor D₂.tensor D₂.isCPSVBNT
+      D₁.verticalCoisometry D₂.verticalCoisometry
+      D₁.coisometry D₂.coisometry D₁.reconstruction D₂.reconstruction
+      sigma hDim V hLetter hHorizontal hM
+  exact of_verticalDecompositions_of_unitaryBlockEquiv
+    D₁ D₂ sigma hDim V hLetter chi U hChiPos hU hFusion
+      hFusionReconstruction
 
 end HasBNTFusionTensorClause
 

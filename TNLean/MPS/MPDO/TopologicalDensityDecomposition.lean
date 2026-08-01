@@ -690,7 +690,8 @@ theorem exists_topologicalDensityDecomposition_of_isRFPViaTS
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
     (hRFP : IsRFPViaTS M) :
     ∃ H : BNTFusionTensorClause M, H.HasTopologicalDensityDecomposition := by
-  obtain ⟨H⟩ := HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
+  obtain ⟨H⟩ :=
+    HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF M hHorizontal hM hRFP
   exact ⟨H, H.hasTopologicalDensityDecomposition⟩
 
 /-- **All-label density-factor commutator for an RFP MPDO.**
@@ -714,7 +715,8 @@ theorem exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaT
     (hRFP : IsRFPViaTS M) :
     ∃ H : BNTFusionTensorClause M,
       H.HasTopologicalDensityDecomposition ∧ H.HasTopologicalDensityFactorCommutator := by
-  obtain ⟨H⟩ := HasBNTFusionTensorClause.of_isRFPViaTS M hHorizontal hM hRFP
+  obtain ⟨H⟩ :=
+    HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF M hHorizontal hM hRFP
   exact ⟨H, H.hasTopologicalDensityDecomposition,
     H.hasTopologicalDensityFactorCommutator⟩
 
