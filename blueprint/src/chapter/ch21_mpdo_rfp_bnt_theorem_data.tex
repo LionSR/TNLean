@@ -283,6 +283,62 @@
     coefficients; the gauge factors cancel on the reflected side.
 \end{proof}
 
+\begin{theorem}[Conditional Gram identity from an identity-dressed marked realization]
+    \label{thm:mpdo_bnt_conditional_identity_marked_gram}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gramDressing_gauge_eq_one_of_identityMarkedRealization}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gauge_gram_eq_pos_smul_one_of_identityMarkedRealization}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:mpdo_bnt_two_site_exact_sector_gauge}
+    In the setting of the preceding theorem, suppose in addition that the
+    doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that
+    there is a family of linear combinations of the physical letters of
+    $M^{[2]}$ whose open-bond matrices are the horizontal slices of
+    $M_\gamma$, and that every resulting marked chain equals the
+    reflected-adjoint marked chain of $M_\gamma$ in the adjoint two-site
+    blocking. Then, for every vertical letter $v$,
+    \begin{align}
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}
+        &=M_\gamma^v
+        \label{eq:mpdo_bnt_conditional_identity_marked_gram}
+    \end{align}
+    Consequently, there is a real number $\omega_\gamma>0$ such that
+    \begin{align}
+        Z_\gamma^\dagger Z_\gamma
+        &=\omega_\gamma\Id.
+        \label{eq:mpdo_bnt_conditional_scalar_gram}
+    \end{align}
+
+    \textbf{Scope restriction (conditional identity-dressed marked
+    realization):} The physical-letter realization used here is the missing
+    assertion implicit at Appendix~C.4, line~2048. It is assumed rather than
+    derived from the algebra clause. Thus this theorem does not establish the
+    unconditional realization or the conclusion of Appendix~C.4,
+    lines~2048--2057. The remaining gap is recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner,
+        thm:mpdo_literal_cpsv_positive_blocking,
+        thm:cpsv_original_coordinate_marked_lemma_l,
+        thm:eq3_of_dressed_adjoint}
+    The preceding theorem gives a physical-letter coefficient family for the
+    gauge-dressed mark and identifies its marked chains with the reflected
+    target. By hypothesis, the identity-dressed mark has another
+    physical-letter coefficient family with the same target. Their marked
+    traces therefore agree for every tail word. Literal CPSV canonical form
+    passes to the two-site blocking, and the original-coordinate marked
+    separation theorem identifies the two open-bond matrices. This gives
+    (\ref{eq:mpdo_bnt_conditional_identity_marked_gram}). Normality of
+    $M_\gamma$ then makes its commuting Gram matrix a positive real scalar
+    multiple of the identity, proving
+    (\ref{eq:mpdo_bnt_conditional_scalar_gram}).
+\end{proof}
+
 \begin{lemma}[Idempotence for the canonical chi coefficients]%
     \label{lem:mpdo_bnt_idempotent_coefficient_form_of_chi}
     \lean{MPOTensor.BNTAlgebraClause.idempotent_coefficient_form_ofChi}
