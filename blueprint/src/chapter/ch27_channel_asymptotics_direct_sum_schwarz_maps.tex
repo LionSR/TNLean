@@ -27,14 +27,17 @@
 % transported composites in CPSV16, Appendix C.4, lines 1974--1995.  It does
 % not establish Kraus representations for those transported maps; that is the
 % tensor-specific preparation and partial-trace step tracked in issue #4438.
-\begin{lemma}[Composition and trace-adjoint Schwarz for direct-sum Kraus maps]
+\begin{lemma}[Coordinatewise maps, composition, and trace-adjoint Schwarz for direct sums]
     \label{lem:direct_sum_kraus_composition_schwarz}
-    \lean{Matrix.directSumMapExtension_comp,
+    \lean{Matrix.isKrausDirectSumMap_piMap,
+        Matrix.directSumMapExtension_comp,
         Matrix.IsKrausDirectSumMap.comp, Matrix.isSchwarzDirectSumMap_of_directSumExtension_isSchwarzMap,
         Matrix.IsKrausDirectSumMap.directSumTraceAdjointMap_isSchwarz}
     \leanok
     \uses{def:kraus_map_between_direct_sums}
-    For direct-sum Kraus maps $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal C$, one has
+    A coordinatewise family of completely positive maps between paired
+    summands determines a direct-sum Kraus map. For direct-sum Kraus maps
+    $T:\mathcal A\to\mathcal B$ and $S:\mathcal B\to\mathcal C$, one has
     $\widehat{S\circ T}=\widehat S\circ\widehat T$, and $S\circ T$ is again a direct-sum Kraus map. If an endomorphism
     $T:\mathcal A\to\mathcal A$ has an extension satisfying
     \begin{align}
@@ -54,6 +57,17 @@
 
 \begin{proof}\leanok
     \uses{thm:kadison_schwarz}
+    Choose a Kraus family $K_{i,r}$ for the map on the $i$-th paired
+    summand. The canonical extension of the coordinatewise map is the
+    controlled Kraus map
+    \begin{align}
+        \widehat T(X)
+        &=\sum_{i,r}K_{i,r}XK_{i,r}^*.
+        \notag
+    \end{align}
+    Each $K_{i,r}$ is supported on its paired input and output summands, so
+    the sum retains precisely the diagonal input blocks.
+
     Since $\pi_{\mathcal B}\iota_{\mathcal B}=\id_{\mathcal B}$,
     \begin{align}
         \widehat S\,\widehat T
