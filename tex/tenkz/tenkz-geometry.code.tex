@@ -797,13 +797,70 @@
 \cs_new:Npn \__tenkz_geom_rr:nnn #1#2#3
   { min( (#1) , (#2) , (#3) ) }
 
+% Support of one primitive transported through a complete east/north basis.
+% This is a distinct contract from the scalar-turn function above: an affine
+% support record is
+%   {affine}{family}{hx}{hy}{radius}{ex}{ey}{nx}{ny}{cx}{cy}.
+% The explicit tag keeps a basis out of the rotated record's angle slot and
+% lets one obstacle sequence contain established rotated and affine shapes.
+\cs_new:Npn \__tenkz_geom_support_basis:nnnnnnnnn
+    #1#2#3#4#5#6#7#8#9
+  {
+    \str_case:enF {#1}
+      {
+        {circle}
+          {
+            (#2) * sqrt(
+              ( (#5) * cosd(#9) + (#6) * sind(#9) ) ^ 2
+              + ( (#7) * cosd(#9) + (#8) * sind(#9) ) ^ 2 )
+          }
+        {rect}
+          {
+            abs( (#2) * ( (#5) * cosd(#9) + (#6) * sind(#9) ) )
+            + abs( (#3) * ( (#7) * cosd(#9) + (#8) * sind(#9) ) )
+          }
+        {roundrect}
+          {
+            abs(
+              ( (#2) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+              * ( (#5) * cosd(#9) + (#6) * sind(#9) ) )
+            + abs(
+                ( (#3) - \__tenkz_geom_rr:nnn{#4}{#2}{#3} )
+                * ( (#7) * cosd(#9) + (#8) * sind(#9) ) )
+            + \__tenkz_geom_rr:nnn{#4}{#2}{#3}
+              * sqrt(
+                  ( (#5) * cosd(#9) + (#6) * sind(#9) ) ^ 2
+                  + ( (#7) * cosd(#9) + (#8) * sind(#9) ) ^ 2 )
+          }
+        {triangle}
+          {
+            max(
+              (#2) * ( (#5) * cosd(#9) + (#6) * sind(#9) ) ,
+              - (#2) * ( (#5) * cosd(#9) + (#6) * sind(#9) )
+                + (#3) * ( (#7) * cosd(#9) + (#8) * sind(#9) ) ,
+              - (#2) * ( (#5) * cosd(#9) + (#6) * sind(#9) )
+                - (#3) * ( (#7) * cosd(#9) + (#8) * sind(#9) ) )
+          }
+      }
+      { \msg_expandable_error:nnn {tenkz}{geom-family} {#1} 0 }
+  }
+
 % fold max-support over {family}{hx}{hy}{radius}{theta}{cx}{cy} records:
 % each contributes its centre's reach plus its shape's support
 \cs_new_protected:Npn \__tenkz_geom_support_max:nnN #1#2#3
   {
     \tl_set:Nn #3 { -10000 }
     \seq_map_inline:cn {#1}
-      { \__tenkz_geom_support_max_one:nnnnnnnnN ##1 {#2} #3 }
+      { \__tenkz_geom_support_max_record:nnN {##1} {#2} #3 }
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_record:nnN #1#2#3
+  { \__tenkz_geom_support_max_record_aux:w #1 \q_stop {#2} #3 }
+\cs_new_protected:Npn \__tenkz_geom_support_max_record_aux:w
+    #1#2\q_stop #3#4
+  {
+    \str_if_eq:nnTF {#1}{affine}
+      { \__tenkz_geom_support_max_affine_setup:w #2 \q_stop {#3} #4 }
+      { \__tenkz_geom_support_max_one:nnnnnnnnN {#1} #2 {#3} #4 }
   }
 \cs_new_protected:Npn \__tenkz_geom_support_max_one:nnnnnnnnN
     #1#2#3#4#5#6#7#8#9
@@ -814,6 +871,39 @@
                  (#6) * cosd(#8) + (#7) * sind(#8)
                  + \__tenkz_geom_support:nnnnnn
                      {#1}{#2}{#3}{#4}{#5}{#8} ) } }
+  }
+\tl_new:N \l__tenkz_geom_support_family_tl
+\tl_new:N \l__tenkz_geom_support_hx_tl
+\tl_new:N \l__tenkz_geom_support_hy_tl
+\tl_new:N \l__tenkz_geom_support_radius_tl
+\tl_new:N \l__tenkz_geom_support_shape_tl
+\cs_new_protected:Npn \__tenkz_geom_support_max_affine_setup:w
+    #1#2#3#4#5\q_stop #6#7
+  {
+    \tl_set:Nn \l__tenkz_geom_support_family_tl {#1}
+    \tl_set:Nn \l__tenkz_geom_support_hx_tl {#2}
+    \tl_set:Nn \l__tenkz_geom_support_hy_tl {#3}
+    \tl_set:Nn \l__tenkz_geom_support_radius_tl {#4}
+    \__tenkz_geom_support_max_affine_finish:w #5 \q_stop {#6} #7
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_affine_finish:w
+    #1#2#3#4#5#6\q_stop #7#8
+  {
+    \tl_set:Ne #8
+      {
+        \fp_eval:n
+          {
+            max(
+              #8 ,
+              (#5) * cosd(#7) + (#6) * sind(#7)
+              + \__tenkz_geom_support_basis:nnnnnnnnn
+                  { \l__tenkz_geom_support_family_tl }
+                  { \l__tenkz_geom_support_hx_tl }
+                  { \l__tenkz_geom_support_hy_tl }
+                  { \l__tenkz_geom_support_radius_tl }
+                  {#1}{#2}{#3}{#4}{#7} )
+          }
+      }
   }
 
 % Fold support against an arbitrary page covector (gx,gy).  The result is in
@@ -828,8 +918,17 @@
     \tl_set:Nn #4 { -10000 }
     \seq_map_inline:cn {#1}
       {
-        \__tenkz_geom_support_max_linear_one:nnnnnnnN ##1 #4
+        \__tenkz_geom_support_max_linear_record:nN {##1} #4
       }
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear_record:nN #1#2
+  { \__tenkz_geom_support_max_linear_record_aux:w #1 \q_stop #2 }
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear_record_aux:w
+    #1#2\q_stop #3
+  {
+    \str_if_eq:nnTF {#1}{affine}
+      { \__tenkz_geom_support_max_linear_affine_setup:w #2 \q_stop #3 }
+      { \__tenkz_geom_support_max_linear_one:nnnnnnnN {#1} #2 #3 }
   }
 \cs_new_protected:Npn \__tenkz_geom_support_max_linear_one:nnnnnnnN
     #1#2#3#4#5#6#7#8
@@ -852,6 +951,51 @@
                         \l__tenkz_geom_support_gy_tl ,
                         \l__tenkz_geom_support_gx_tl )
                     }
+            )
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear_affine_setup:w
+    #1#2#3#4#5\q_stop #6
+  {
+    \tl_set:Nn \l__tenkz_geom_support_family_tl {#1}
+    \tl_set:Nn \l__tenkz_geom_support_hx_tl {#2}
+    \tl_set:Nn \l__tenkz_geom_support_hy_tl {#3}
+    \tl_set:Nn \l__tenkz_geom_support_radius_tl {#4}
+    \__tenkz_geom_support_max_linear_affine_finish:w #5 \q_stop #6
+  }
+\cs_new_protected:Npn \__tenkz_geom_support_max_linear_affine_finish:w
+    #1#2#3#4#5#6\q_stop #7
+  {
+    \tl_set:Ne \l__tenkz_geom_support_shape_tl
+      {
+        \fp_eval:n
+          {
+            \__tenkz_geom_support_basis:nnnnnnnnn
+              { \l__tenkz_geom_support_family_tl }
+              { \l__tenkz_geom_support_hx_tl }
+              { \l__tenkz_geom_support_hy_tl }
+              { \l__tenkz_geom_support_radius_tl }
+              {#1}{#2}{#3}{#4}
+              {
+                atand(
+                  \l__tenkz_geom_support_gy_tl ,
+                  \l__tenkz_geom_support_gx_tl )
+              }
+          }
+      }
+    \tl_set:Ne #7
+      {
+        \fp_eval:n
+          {
+            max(
+              #7 ,
+              (#5) * \l__tenkz_geom_support_gx_tl
+                + (#6) * \l__tenkz_geom_support_gy_tl
+              + sqrt(
+                  ( \l__tenkz_geom_support_gx_tl ) ^ 2
+                  + ( \l__tenkz_geom_support_gy_tl ) ^ 2 )
+                * \l__tenkz_geom_support_shape_tl
             )
           }
       }
