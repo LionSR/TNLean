@@ -203,29 +203,29 @@
     letter~$i$.
 \end{definition}
 
-\begin{lemma}[Multiplicativity of the virtual per-block extension]%
-    \label{lem:mpdo_virtual_perBlockLinearExtension_mul}
+\begin{theorem}[Multiplicativity of the virtual per-block extension]%
+    \label{thm:mpdo_virtual_perBlockLinearExtension_mul}
     \lean{MPSTensor.perBlockLinearExtension_mul}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     The per-block extension satisfies $T_k(MN)=T_k(M)T_k(N)$ for all
     $M,N\in\MN{D_k}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok\uses{def:mpdo_virtual_perBlockLinearExtension}
     The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
     product vectors gives the identity on products of spanning letters.
 \end{proof}
 
-\begin{lemma}[Bijectivity of the virtual per-block extension]%
-    \label{lem:mpdo_virtual_perBlockLinearExtension_bijective}
+\begin{theorem}[Bijectivity of the virtual per-block extension]%
+    \label{thm:mpdo_virtual_perBlockLinearExtension_bijective}
     \lean{MPSTensor.perBlockLinearExtension_bijective}
     \leanok
-    \uses{lem:mpdo_virtual_perBlockLinearExtension_mul}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul}
     The per-block extension $T_k$ is bijective.
-\end{lemma}
+\end{theorem}
 
-\begin{proof}\leanok\uses{lem:mpdo_virtual_perBlockLinearExtension_mul}
+\begin{proof}\leanok\uses{thm:mpdo_virtual_perBlockLinearExtension_mul}
     Multiplicativity makes the kernel an ideal of the simple matrix algebra.
     The map is nonzero: otherwise every letter of $B_k$ would vanish,
     contradicting the nonvanishing trace pairing for the injective family.
@@ -242,8 +242,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_virtual_perBlockLinearExtension_mul,
-        lem:mpdo_virtual_perBlockLinearExtension_bijective,
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,
+        thm:mpdo_virtual_perBlockLinearExtension_bijective,
         thm:unitary_skolem_noether_matrix}
     The per-block map is a bijective algebra endomorphism. Positivity makes it
     preserve adjoints, so unitary Skolem--Noether implements it by conjugation
