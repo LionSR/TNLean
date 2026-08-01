@@ -182,6 +182,23 @@ theorem exists_unitary_zero_extension_eq
       simp only [Matrix.mul_assoc]
     _ = _ := by rw [hJAJ]
 
+/-- The scalar identities used when normalizing by the inverse square root of
+a positive real number. -/
+private theorem inv_sqrt_star_eq_and_mul_self_of_pos
+    {ω : ℝ} (hω : 0 < ω) :
+    star ((Real.sqrt ω : ℂ))⁻¹ = ((Real.sqrt ω : ℂ))⁻¹ ∧
+      ((Real.sqrt ω : ℂ))⁻¹ * ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) = 1 := by
+  have hs_ne : ((Real.sqrt ω : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_pos.mpr hω).ne'
+  constructor
+  · rw [star_inv₀]
+    congr 1
+    exact Complex.conj_ofReal _
+  · rw [show ((ω : ℝ) : ℂ) =
+        (Real.sqrt ω : ℂ) * (Real.sqrt ω : ℂ) by
+      rw [← Complex.ofReal_mul, Real.mul_self_sqrt hω.le]]
+    field_simp [hs_ne]
+
 /-- A matrix whose Gram matrix is a positive multiple of the identity becomes
 unitary after dividing by the square root of the multiple.  This is the
 isometric normalization $U_{\alpha,k} = \omega_{\alpha,k}^{-1/2}X_{\alpha,k}$
@@ -191,17 +208,7 @@ theorem smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
     {X : Matrix n n ℂ} {ω : ℝ} (hω : 0 < ω)
     (h : Xᴴ * X = (ω : ℂ) • 1) :
     ((Real.sqrt ω : ℂ))⁻¹ • X ∈ Matrix.unitaryGroup n ℂ := by
-  have hs_pos : 0 < Real.sqrt ω := Real.sqrt_pos.mpr hω
-  have hs_ne : ((Real.sqrt ω : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hs_pos.ne'
-  have hs_sq : Real.sqrt ω * Real.sqrt ω = ω := Real.mul_self_sqrt hω.le
-  have hconjs : star ((Real.sqrt ω : ℂ))⁻¹ = ((Real.sqrt ω : ℂ))⁻¹ := by
-    rw [star_inv₀]
-    congr 1
-    exact Complex.conj_ofReal _
-  have hscalar : ((Real.sqrt ω : ℂ))⁻¹ * ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) = 1 := by
-    rw [show ((ω : ℝ) : ℂ) = (Real.sqrt ω : ℂ) * (Real.sqrt ω : ℂ) by
-      rw [← Complex.ofReal_mul, hs_sq]]
-    field_simp
+  obtain ⟨hconjs, hscalar⟩ := inv_sqrt_star_eq_and_mul_self_of_pos hω
   refine Matrix.mem_unitaryGroup_iff'.mpr ?_
   rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_smul, hconjs]
   simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
@@ -212,8 +219,8 @@ invertible matrix whose Gram matrix is a positive scalar multiple of the
 identity.
 
 This is the equality between conjugation by
-$U = \omega^{-1/2}X$ and conjugation by $X$ used after equation
-`eq3:proof.IV.12` in CPSV16, Proposition 4.13, lines 1903--1908.
+$U = \omega^{-1/2}X$ and conjugation by $X$ used after equation (IV.12)
+in the proof of CPSV16, Proposition 4.13, lines 1903--1908.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1903--1908. -/
 theorem normalized_conj_eq_conj_inv_of_gram_eq_smul_one
@@ -223,21 +230,7 @@ theorem normalized_conj_eq_conj_inv_of_gram_eq_smul_one
     (((Real.sqrt ω : ℂ))⁻¹ • (X : Matrix n n ℂ)) * A *
         (((Real.sqrt ω : ℂ))⁻¹ • (X : Matrix n n ℂ))ᴴ =
       (X : Matrix n n ℂ) * A * (↑(X⁻¹) : Matrix n n ℂ) := by
-  have hs_sq : Real.sqrt ω * Real.sqrt ω = ω :=
-    Real.mul_self_sqrt hω.le
-  have hs_ne : ((Real.sqrt ω : ℝ) : ℂ) ≠ 0 := by
-    exact_mod_cast (Real.sqrt_pos.mpr hω).ne'
-  have hconjs : star ((Real.sqrt ω : ℂ))⁻¹ =
-      ((Real.sqrt ω : ℂ))⁻¹ := by
-    rw [star_inv₀]
-    congr 1
-    exact Complex.conj_ofReal _
-  have hscalar : ((Real.sqrt ω : ℂ))⁻¹ *
-      ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) = 1 := by
-    rw [show ((ω : ℝ) : ℂ) =
-        (Real.sqrt ω : ℂ) * (Real.sqrt ω : ℂ) by
-      rw [← Complex.ofReal_mul, hs_sq]]
-    field_simp [hs_ne]
+  obtain ⟨hconjs, hscalar⟩ := inv_sqrt_star_eq_and_mul_self_of_pos hω
   have hXstar : (X : Matrix n n ℂ)ᴴ =
       (ω : ℂ) • (↑(X⁻¹) : Matrix n n ℂ) := by
     have hXinv : (X : Matrix n n ℂ) *
