@@ -53,7 +53,6 @@ theorem exists_unitary_conj_of_positive_perBlockLinearExtension
             (U : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)ᴴ :=
   exists_unitary_conj_of_positive_bijective_multiplicative_matrix_linearMap
     (perBlockLinearExtension A B hA hSame k)
-    (perBlockLinearExtension_one A B hA hSame k)
     (perBlockLinearExtension_mul A B hA hSame k)
     (perBlockLinearExtension_bijective A B hA hSame k)
     hPos
