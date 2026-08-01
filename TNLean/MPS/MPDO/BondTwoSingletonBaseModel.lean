@@ -559,7 +559,7 @@ theorem normalizedSingleton_isCPSVBasis :
     simpa only [MPSTensor.mpvState_apply,
       normalizedSingletonTensor_mpv_zeroLoop N hN, PiLp.zero_apply] using hcomponent
 
-/-- The one-label weighted assembly recovers the raw singleton tensor. -/
+/-- The one-label weighted reconstruction recovers the raw singleton tensor. -/
 theorem normalizedSingleton_verticalAssembledTensor :
     verticalAssembledTensor (fun _ : Fin 1 => 2) (fun _ : Fin 1 => 1)
       normalizedSingletonWeight normalizedSingletonFamily = singletonTensor := by
