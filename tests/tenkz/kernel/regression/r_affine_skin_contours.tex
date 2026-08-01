@@ -15,6 +15,7 @@
 \int_new:N \l__tenkz_test_affine_ring_int
 \int_new:N \l__tenkz_test_affine_tri_int
 \int_new:N \l__tenkz_test_affine_pairing_end_int
+\int_new:N \l__tenkz_test_affine_page_style_int
 \tl_new:N \l__tenkz_test_affine_skin_tl
 \tl_new:N \l__tenkz_test_affine_label_tl
 \tl_new:N \l__tenkz_test_affine_xmin_tl
@@ -45,6 +46,21 @@
 \tl_new:N \l__tenkz_test_affine_local_y_tl
 \seq_new:N \l__tenkz_test_affine_sel_seq
 \seq_new:N \l__tenkz_test_affine_obst_seq
+
+\cs_new_eq:NN
+  \__tenkz_test_affine_page_style:N
+  \__tenkz_kernel_r_affine_page_style:N
+\cs_set_protected:Npn \__tenkz_kernel_r_affine_page_style:N #1
+  {
+    \__tenkz_test_affine_page_style:N #1
+    \dim_compare:nNnT
+      {\l__tenkz_kernel_r_affine_page_padding_dim} > {0pt}
+      {
+        \tl_if_in:VnF #1 {inner~sep = 0pt}
+          {\errmessage{ellipsis~kept~affine-scaled~page~padding}}
+        \int_gincr:N \l__tenkz_test_affine_page_style_int
+      }
+  }
 
 \cs_new_eq:NN
   \__tenkz_test_affine_glyph:n
@@ -441,5 +457,11 @@
   { \errmessage{the~affine~fixture~did~not~inspect~the~triangle~contour} }
 \int_compare:nNnF { \l__tenkz_test_affine_pairing_end_int } = {6}
   { \errmessage{the~affine~fixture~did~not~inspect~all~pairing~endpoints} }
+\int_compare:nNnF { \l__tenkz_test_affine_page_style_int } = {2}
+  {
+    \errmessage
+      {ellipsis~page-style~normalizations~=~
+       \int_use:N \l__tenkz_test_affine_page_style_int;~expected~2}
+  }
 \ExplSyntaxOff
 \end{document}

@@ -5738,21 +5738,7 @@
       }
     \__tenkz_kernel_r_carrier_basis:n {#1}
     \__tenkz_kernel_r_affine_page_padding:n {#1}
-    \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
-      {
-        % A paired ellipsis is itself page-upright, including the backing
-        % node that erases wires.  Move that page-space padding inside the
-        % inverse envelope instead of letting the affine node scale it.
-        \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {dots}
-          {
-            \prop_if_in:NnT
-              \l__tenkz_kernel_skin_pairing_host_prop {#1}
-              {
-                \tl_put_right:Nn \l__tenkz_kernel_hull_b_tl
-                  { , inner~sep = 0pt }
-              }
-          }
-      }
+    \__tenkz_kernel_r_affine_page_style:N \l__tenkz_kernel_hull_b_tl
     \bool_if:NF \l__tenkz_kernel_r_basis_plane_bool
       { \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl }
     \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
@@ -11408,6 +11394,9 @@
                 \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
                   { , text = \tl_use:N \l__tenkz_kernel_r_hue_tl }
               }
+            \__tenkz_kernel_r_affine_page_padding:n {#1}
+            \__tenkz_kernel_r_affine_page_style:N
+              \l__tenkz_kernel_r_atom_style_tl
             \__tenkz_kernel_r_xy:nNN {#1}
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \prop_if_in:NnTF
@@ -12259,6 +12248,14 @@
               { \__tenkz_dim:n {labelclear} }
           }
       }
+  }
+% Page padding belongs to the inverse envelope, not the carried node.  Apply
+% this same style normalization to measurement and live ink.
+\cs_new_protected:Npn \__tenkz_kernel_r_affine_page_style:N #1
+  {
+    \dim_compare:nNnT
+      { \l__tenkz_kernel_r_affine_page_padding_dim } > {0pt}
+      { \tl_put_right:Nn #1 { , inner~sep = 0pt } }
   }
 % #1 typeset by a record whose skin the frame has turned by the angle in
 % \l__tenkz_kernel_r_ink_turn_tl: label text never rotates.
