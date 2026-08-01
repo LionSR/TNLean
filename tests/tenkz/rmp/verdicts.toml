@@ -753,14 +753,15 @@ note = "the three source-red strings wind from i down through the b, a, b statio
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "4d9ba84be6abdfb0a51d65b67f09061e8e6cdfe9914aa40985d9e239e003821c"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "i strings into R_{i,b} which fans to b, a, b; the R box upright where the source slants a parallelogram"
+case_sha256 = "9f5d5f08f5cebd374f9b8897cf746794fc8428f2191f4061904255b50bf69c87"
+second_viewer = "rmp-r-resolver-visual-audit-2026-08-01"
+reviewed = "2026-08-01"
+renderer = "codex-plane-source-review-2026-08-01-300dpi"
+note = "one plane basis now carries both rails, the diagonal transversal, the resolver contour, and the three ordered b, a, b continuations"
 
 [[verdict]]
 id = "rmp-iii-b-braid-one"
@@ -797,14 +798,15 @@ note = "the source-red strings wind through their bead stations into R_{j,a} wit
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "21005213ed7aa4e9f1886445072a56da5d03f3c17aa9acd6594d01bc8e9e10d3"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "both R boxes stacked on the strings with i and j at the rails; the source slants its boxes as parallelograms"
+case_sha256 = "f129f0357b069e343ec419d26098d2f8425f1daea799e88fbda5b653376189dd"
+second_viewer = "rmp-r-resolver-visual-audit-2026-08-01"
+reviewed = "2026-08-01"
+renderer = "codex-plane-source-review-2026-08-01-300dpi"
+note = "the plane projection restores upper i, lower j, upper R_{i,b}, lower R_{j,a}, and the source lower-rail bead and outgoing tail"
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
