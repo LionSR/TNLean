@@ -171,6 +171,11 @@ def _rects_intersect(left: Rect, right: Rect) -> bool:
             and max(left[2], right[2]) < min(left[3], right[3]))
 
 
+def _rect_contains(outer: Rect, inner: Rect) -> bool:
+    return (outer[0] <= inner[0] and inner[1] <= outer[1]
+            and outer[2] <= inner[2] and inner[3] <= outer[3])
+
+
 def _circle2_intersects_rect(center: Point, diameter: int, rect: Rect) -> bool:
     """Strict overlap of a circle in doubled coordinates with a rectangle."""
     doubled_rect = tuple(2 * coordinate for coordinate in rect)
@@ -1148,6 +1153,13 @@ class Audit:
                             2 * site[0] == bounds[0] + bounds[1]
                             and 2 * site[1] == bounds[2] + bounds[3]
                             for site in anchor_sites)):
+                        continue
+                    glyph_owner = int(event.attrs.get("owner", "-1"))
+                    # A box label is deliberately inscribed in its own glyph.
+                    # Partial overlaps and intersections with sibling glyphs
+                    # remain reportable.
+                    if (shape == "rect" and label_id == glyph_owner
+                            and _rect_contains(bounds, label_rect)):
                         continue
                     if label_shape == "rect":
                         if shape == "rect":
