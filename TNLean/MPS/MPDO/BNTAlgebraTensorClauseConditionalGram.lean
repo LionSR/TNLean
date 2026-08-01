@@ -22,8 +22,8 @@ the two-site unitary-gauge argument.
 ## Main results
 
 * `TwoSiteExactSectorGauge.IdentityMarkedRealization`
-* `TwoSiteExactSectorGauge.gramDressing_gauge_eq_one_of_identityMarkedRealization`
-* `TwoSiteExactSectorGauge.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization`
+* `TwoSiteExactSectorGauge.gramDressing_gauge_eq_one_of_identity_marked_realization`
+* `TwoSiteExactSectorGauge.gauge_gram_eq_pos_smul_one_of_identity_marked_realization`
 
 ## References
 
@@ -105,7 +105,7 @@ the unconditional realization or conclusion of Appendix C.4.  See
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
-theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
+theorem gramDressing_gauge_eq_one_of_identity_marked_realization
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount)
@@ -178,7 +178,7 @@ the unconditional realization or conclusion of Appendix C.4.  See
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
-theorem gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
+theorem gauge_gram_eq_pos_smul_one_of_identity_marked_realization
     (S : TwoSiteExactSectorGauge H)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) (γ : Fin H.labelCount)
@@ -187,7 +187,7 @@ theorem gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
       (S.gauge γ : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
           (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ * S.gauge γ =
         (ω : ℂ) • 1 := by
-  have hDress := S.gramDressing_gauge_eq_one_of_identityMarkedRealization
+  have hDress := S.gramDressing_gauge_eq_one_of_identity_marked_realization
     hCanonical hM γ R
   have hNormalTensor : MPSTensor.IsNormalTensor
       (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) :=
