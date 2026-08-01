@@ -4197,6 +4197,63 @@
   }
 \prop_new:N \l__tenkz_kernel_r_turn_prop
 
+% The complete basis carried by one rendered atom.  Cell atoms and cluster
+% children resolve through the same carrier lookup used by projected labels;
+% page-space atoms retain their scalar-turn basis.  The dual is cached beside
+% the basis for inverse consumers such as local anchors and upright labels.
+% The plane result is a declared frame fact, not a floating-point guess about
+% whether the returned vectors happen to be orthogonal.
+\tl_new:N \l__tenkz_kernel_r_basis_ex_tl
+\tl_new:N \l__tenkz_kernel_r_basis_ey_tl
+\tl_new:N \l__tenkz_kernel_r_basis_nx_tl
+\tl_new:N \l__tenkz_kernel_r_basis_ny_tl
+\tl_new:N \l__tenkz_kernel_r_basis_ux_tl
+\tl_new:N \l__tenkz_kernel_r_basis_uy_tl
+\tl_new:N \l__tenkz_kernel_r_basis_vx_tl
+\tl_new:N \l__tenkz_kernel_r_basis_vy_tl
+\tl_new:N \l__tenkz_kernel_r_basis_turn_tl
+\bool_new:N \l__tenkz_kernel_r_basis_plane_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_carrier_basis:n #1
+  {
+    \bool_set_false:N \l__tenkz_kernel_r_basis_plane_bool
+    \__tenkz_kernel_r_record_carrier:nNNN {#1}
+      \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
+      \l__tenkz_kernel_turn_bool
+    \bool_if:NTF \l__tenkz_kernel_turn_bool
+      {
+        \__tenkz_geom_local_basis:nnnNNNN {kpic}
+          { \l__tenkz_kernel_turn_a_tl }
+          { \l__tenkz_kernel_turn_b_tl }
+          \l__tenkz_kernel_r_basis_ex_tl
+          \l__tenkz_kernel_r_basis_ey_tl
+          \l__tenkz_kernel_r_basis_nx_tl
+          \l__tenkz_kernel_r_basis_ny_tl
+        \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+          { \bool_set_true:N \l__tenkz_kernel_r_basis_plane_bool }
+      }
+      {
+        \__tenkz_kernel_r_turn:nN {#1}
+          \l__tenkz_kernel_r_basis_turn_tl
+        \tl_set:Ne \l__tenkz_kernel_r_basis_ex_tl
+          { \fp_eval:n { cosd(\l__tenkz_kernel_r_basis_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_r_basis_ey_tl
+          { \fp_eval:n { sind(\l__tenkz_kernel_r_basis_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_r_basis_nx_tl
+          { \fp_eval:n { -sind(\l__tenkz_kernel_r_basis_turn_tl) } }
+        \tl_set:Ne \l__tenkz_kernel_r_basis_ny_tl
+          { \fp_eval:n { cosd(\l__tenkz_kernel_r_basis_turn_tl) } }
+      }
+    \__tenkz_geom_basis_dual:nnnnNNNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      \l__tenkz_kernel_r_basis_ux_tl
+      \l__tenkz_kernel_r_basis_uy_tl
+      \l__tenkz_kernel_r_basis_vx_tl
+      \l__tenkz_kernel_r_basis_vy_tl
+  }
+
 % Carry one of an atom's logical face directions to the page.  Kernel cell
 % coordinates are (row, column), whereas the face is measured from local east.
 % Geometry owns the complete east/north basis at that address and carries the

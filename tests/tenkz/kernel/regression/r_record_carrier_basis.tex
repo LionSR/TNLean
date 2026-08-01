@@ -1,0 +1,162 @@
+% Regression: one record-level service exposes the complete carrier basis and
+% its dual for plane, flat, circle, cluster-child, and page-space atoms.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \l__tenkz_test_basis_count_int
+\tl_new:N \l__tenkz_test_basis_name_tl
+\cs_new_eq:NN
+  \__tenkz_test_basis_atom_glyph_ink:n
+  \__tenkz_kernel_r_atom_glyph_ink:n
+\cs_set_protected:Npn \__tenkz_kernel_r_atom_glyph_ink:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {name} \l__tenkz_test_basis_name_tl
+    \quark_if_no_value:NF \l__tenkz_test_basis_name_tl
+      {
+        \str_case:Vn \l__tenkz_test_basis_name_tl
+          {
+            {G-1-1}{ \__tenkz_test_basis_plane:n {#1} }
+            {A}{ \__tenkz_test_basis_plane:n {#1} }
+            {K}{ \__tenkz_test_basis_plane:n {#1} }
+            {B}{ \__tenkz_test_basis_plane:n {#1} }
+            {M}{ \__tenkz_test_basis_page:n {#1} }
+            {F}{ \__tenkz_test_basis_page:n {#1} }
+            {C}{ \__tenkz_test_basis_circle:n {#1} }
+          }
+      }
+    \__tenkz_test_basis_atom_glyph_ink:n {#1}
+  }
+\cs_new_protected:Npn \__tenkz_test_basis_read:n #1
+  {
+    \int_gincr:N \l__tenkz_test_basis_count_int
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_ux_tl
+            * \l__tenkz_kernel_r_basis_ex_tl
+          + \l__tenkz_kernel_r_basis_uy_tl
+            * \l__tenkz_kernel_r_basis_ey_tl - 1 )
+      }
+      < {0.000001}
+      { \errmessage{the~east~dual~does~not~read~the~east~basis} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_ux_tl
+            * \l__tenkz_kernel_r_basis_nx_tl
+          + \l__tenkz_kernel_r_basis_uy_tl
+            * \l__tenkz_kernel_r_basis_ny_tl )
+      }
+      < {0.000001}
+      { \errmessage{the~east~dual~does~not~annihilate~the~north~basis} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_vx_tl
+            * \l__tenkz_kernel_r_basis_ex_tl
+          + \l__tenkz_kernel_r_basis_vy_tl
+            * \l__tenkz_kernel_r_basis_ey_tl )
+      }
+      < {0.000001}
+      { \errmessage{the~north~dual~does~not~annihilate~the~east~basis} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_vx_tl
+            * \l__tenkz_kernel_r_basis_nx_tl
+          + \l__tenkz_kernel_r_basis_vy_tl
+            * \l__tenkz_kernel_r_basis_ny_tl - 1 )
+      }
+      < {0.000001}
+      { \errmessage{the~north~dual~does~not~read~the~north~basis} }
+  }
+\cs_new_protected:Npn \__tenkz_test_basis_plane:n #1
+  {
+    \__tenkz_test_basis_read:n {#1}
+    \bool_if:NF \l__tenkz_kernel_r_basis_plane_bool
+      { \errmessage{a~plane~carrier~lost~its~declared~frame~kind} }
+    \fp_compare:nNnF
+      { abs(\l__tenkz_kernel_r_basis_ex_tl - 1) } < {0.000001}
+      { \errmessage{a~plane~carrier~lost~its~east~basis} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_nx_tl
+          - \__tenkz_metric_ratio:n {planeslant} )
+      }
+      < {0.000001}
+      { \errmessage{a~plane~carrier~lost~its~north~shear} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_kernel_r_basis_ny_tl
+          - \__tenkz_metric_ratio:n {planerise} )
+      }
+      < {0.000001}
+      { \errmessage{a~plane~carrier~lost~its~north~rise} }
+  }
+\cs_new_protected:Npn \__tenkz_test_basis_page:n #1
+  {
+    \__tenkz_test_basis_read:n {#1}
+    \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+      { \errmessage{a~page-space~or~flat~atom~claimed~a~plane~basis} }
+    \fp_compare:nNnF
+      {
+        abs(\l__tenkz_kernel_r_basis_ex_tl - 1)
+        + abs(\l__tenkz_kernel_r_basis_ey_tl)
+        + abs(\l__tenkz_kernel_r_basis_nx_tl)
+        + abs(\l__tenkz_kernel_r_basis_ny_tl - 1)
+      }
+      < {0.000001}
+      { \errmessage{a~page-space~or~flat~atom~lost~the~identity~basis} }
+  }
+\cs_new_protected:Npn \__tenkz_test_basis_circle:n #1
+  {
+    \__tenkz_test_basis_read:n {#1}
+    \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+      { \errmessage{a~circle~station~claimed~a~plane~basis} }
+    \__tenkz_geom_local_basis:nnnNNNN {kpic}{1}{2}
+      \l_tmpa_tl \l_tmpb_tl \l_tmpc_tl \l_tmpd_tl
+    \fp_compare:nNnF
+      {
+        abs(\l__tenkz_kernel_r_basis_ex_tl - \l_tmpa_tl)
+        + abs(\l__tenkz_kernel_r_basis_ey_tl - \l_tmpb_tl)
+        + abs(\l__tenkz_kernel_r_basis_nx_tl - \l_tmpc_tl)
+        + abs(\l__tenkz_kernel_r_basis_ny_tl - \l_tmpd_tl)
+      }
+      < {0.000001}
+      { \errmessage{a~circle~station~lost~its~local~basis} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire}, cols=3, bonds=none,
+    frame={plane,basis={wire at (0,0),wire at (2,0)}}]
+  \tn[at=(1,1,1), name=G, cluster=1x1]{}
+  \tn[at=(1,2,1), name=A]{A}
+  \tn[at=(1,2,2), name=K]{K}
+  \tn[at=(1,3,1), name=B]{B}
+  \tn[at={midway A and B}, name=M]{M}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=1, frame=flat, bonds=none]
+  \tn[at=(1,1), name=F]{F}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=4, frame=circle, bonds=none]
+  \tn[at=(1,2), name=C]{C}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \l__tenkz_test_basis_count_int } = {7}
+  {
+    \errmessage
+      {
+        the~carrier-basis~fixture~inspected~
+        \int_use:N \l__tenkz_test_basis_count_int ~atoms
+      }
+  }
+\ExplSyntaxOff
+\end{document}
