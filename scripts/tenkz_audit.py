@@ -50,12 +50,15 @@ Hard errors (exit 1):
                       recorded under/over occlusion, or hit no intersection.
   kernel-check        A kernel equation check reported a malformed relation
                       or unequal boundary signatures.
+  eq-boundary-mismatch Consecutive kernel pictures joined by `=` in the
+                       source have different boundary kinds or
+                       multiplicities.  A tensor equation equates two maps
+                       of one type, so the multisets of open legs must agree
+                       side-to-side; their drawing directions may rotate.
 
 Advisories (never affect the exit code):
-  eq-boundary-mismatch Consecutive grid pictures joined by `=` in the
-                       source have different boundary signatures.  A
-                       tensor equation equates two maps of one type, so
-                       the multisets of open legs must agree side-to-side.
+  eq-boundary-mismatch Consecutive legacy-grid pictures joined by `=` have
+                       different directional boundary signatures.
   periodic-no-dots     A traced (periodic) chain of >= 4 columns without
                        an ellipsis cell: a closed word of generic length n
                        drawn with every site reads as fixed length.
@@ -1522,16 +1525,52 @@ class Audit:
             if not same_equation(sep):
                 continue
             if a.lang == "kernel":
+                # `tenkzeq` already emits the authoritative result after
+                # applying `off=` and `modulo=bundles`.  The log-only kernel
+                # check consumes that result; do not re-check its raw panel
+                # signatures here with less policy information.
+                begin_a = self._tex_src.rfind(r"\begin{tenkzeq}", 0, ca.start)
+                end_a = self._tex_src.rfind(r"\end{tenkzeq}", 0, ca.start)
+                begin_b = self._tex_src.rfind(r"\begin{tenkzeq}", 0, cb.start)
+                end_b = self._tex_src.rfind(r"\end{tenkzeq}", 0, cb.start)
+                if begin_a > end_a and begin_a == begin_b and begin_b > end_b:
+                    continue
+            if a.lang == "kernel":
                 sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
             else:
                 sig_a, sig_b = a.boundary(), b.boundary()
             if sig_a is None or sig_b is None or sig_a == sig_b:
                 continue
-            self.adv("eq-boundary-mismatch",
-                     f"{self.log_path.name}:{a.line}",
-                     f"pictures {a.ident} and {b.ident} sit on one `=` but "
-                     f"open-leg signatures differ: {sig_a} vs {sig_b} "
-                     f"[{self.tex_path.name}:{ca.line}]")
+            if a.lang == "kernel":
+                # Rotation may change only the direction field.  Everything
+                # after it, notably strand weight, remains semantic.
+                def without_direction(item: str) -> tuple[str, ...]:
+                    parts = item.split(":")
+                    kind = parts[0].strip()
+                    if kind in {"open", "edge"}:
+                        kind = "virtual"
+                    weight = (
+                        ":".join(parts[2:]).strip()
+                        if len(parts) > 2 else "single"
+                    )
+                    weight = re.sub(r"\s*=\s*", "=", weight)
+                    return kind, weight
+
+                kinds_a = Counter(without_direction(item) for item in sig_a)
+                kinds_b = Counter(without_direction(item) for item in sig_b)
+                if kinds_a == kinds_b:
+                    continue
+                self.hard("eq-boundary-mismatch",
+                          f"{self.log_path.name}:{a.line}",
+                          f"pictures {a.ident} and {b.ident} sit on one `=` "
+                          f"but open-leg kinds differ: {sig_a} vs {sig_b} "
+                          f"[{self.tex_path.name}:{ca.line}]")
+            else:
+                self.adv("eq-boundary-mismatch",
+                         f"{self.log_path.name}:{a.line}",
+                         f"pictures {a.ident} and {b.ident} sit on one `=` "
+                         f"but open-leg signatures differ: {sig_a} vs "
+                         f"{sig_b} [{self.tex_path.name}:{ca.line}]")
 
     # ---------------- driver ----------------
 

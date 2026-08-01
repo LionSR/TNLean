@@ -709,14 +709,15 @@ note = "the string now bends through both intermediate marked sites (the unlabel
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "21df9d052d7f13dc9ae23ff6dceac95954c0131f24cfe93ec4cb684ca02644e0"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "contraction corrected"
+case_sha256 = "1532a9c8576d40e76639d67d8cca06802cda3f14b04f8bd135efea30d8ca1447"
+second_viewer = "codex-independent-source-topology-review-2026-08-01"
+reviewed = "2026-08-01"
+renderer = "codex-explicit-four-port-j-source-review-2026-08-01-300dpi"
+note = "the exact hash renders one central physical leg, four split virtual rails, and five explicit MPO stations; the marked four-port j tensor owns both loop bonds and both radial bonds, with no braid crossing"
 
 [[verdict]]
 id = "rmp-iii-b-dyon"
@@ -742,14 +743,15 @@ note = "the double winding carries eight tensors plus the source tail crossing a
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-left"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "90884fb18af31b6efeb4e5f1ee4574c9f3c1c7cfe9b7f628e07805bd1b2e3506"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the three source-red strings wind from i down through the b, a, b stations with the under-i detour; pitch differs"
+case_sha256 = "5e93377ce5007cc6bd60e346a2f5ebe0146bca5314efc4a1c6d5054199e74fa6"
+second_viewer = "rmp-r-resolver-named-contract-review-2026-08-01"
+reviewed = "2026-08-01"
+renderer = "codex-named-ring-contract-source-review-2026-08-01-300dpi"
+note = "one plane basis carries both rails and the diagonal transversal; the b winding contracts with all four ring tensors and both b stations, passes under i's leg, and the i-string runs from i through a"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"

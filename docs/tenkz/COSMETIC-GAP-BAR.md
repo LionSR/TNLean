@@ -78,10 +78,8 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-torus-one` | K2 | Wound cycles and inner bends are explicit; line weight is house style. |
 | `rmp-iii-a-torus-two` | K2 | Public-theme colour replaces vivid source ink without changing meaning. |
 | `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
-| `rmp-iii-b-idempotent` | K2 | The contraction is recorded as corrected; no residue is named. |
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |
-| `rmp-iii-b-r-tensor-left` | K3 | Normalize pitch while preserving the three-station winding route. |
 | `rmp-iii-b-braid-one` | K2 | Stations and noncrossing winding strings match the source. |
 | `rmp-iii-b-braid-two` | K2 | The nested noncrossing strands match the flattened source. |
 | `rmp-iii-b-braid-three` | K2 | Lattice slant differs without changing the winding contraction. |

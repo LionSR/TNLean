@@ -149,8 +149,98 @@ atom|id=atom-1|kind=tn
 kernel-boundary|signature=phys:up
 """
     equation = audit_log(equation_log, equation_source)
+    equation_mismatches = [
+        finding for finding in equation.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(equation_mismatches) == 1, equation.findings
+    assert equation_mismatches[0].severity == "HARD", equation_mismatches
+
+    matching_physical_equation = audit_log(
+        equation_log.replace(
+            "kernel-boundary|signature=open:w",
+            "kernel-boundary|signature=phys:up",
+        ),
+        equation_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in matching_physical_equation.findings
+    ]
+
+    rotated_open_equation = audit_log(
+        equation_log.replace("open:w", "edge:n").replace("phys:up", "edge:e"),
+        equation_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in rotated_open_equation.findings
+    ]
+
+    equivalent_virtual_equation = audit_log(
+        equation_log.replace("phys:up", "edge:e"),
+        equation_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in equivalent_virtual_equation.findings
+    ]
+
+    checked_equation_source = (
+        "\\begin{tenkzeq}[check={signature, off={1: reason}}]\n"
+        + equation_source
+        + "\\end{tenkzeq}\n"
+    )
+    checked_equation = audit_log(
+        "check|relation=1|result=off|reason=reason\n" + equation_log,
+        checked_equation_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in checked_equation.findings
+    ]
+    bundled_equation = audit_log(
+        "check|relation=1|result=equal|modulo=bundles\n" + equation_log,
+        checked_equation_source.replace("off={1: reason}", "modulo=bundles"),
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in bundled_equation.findings
+    ]
+    mismatched_checked_equation = audit_log(
+        "check|relation=1|result=mismatch|reason=boundary\n" + equation_log,
+        checked_equation_source,
+    )
+    assert "kernel-check" in [
+        finding.rule for finding in mismatched_checked_equation.findings
+    ]
+
+    weighted_open_equation = audit_log(
+        equation_log.replace("open:w", "open:w:double").replace(
+            "phys:up", "open:e:single"
+        ),
+        equation_source,
+    )
+    weighted_mismatches = [
+        finding for finding in weighted_open_equation.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(weighted_mismatches) == 1, weighted_open_equation.findings
+    assert weighted_mismatches[0].severity == "HARD", weighted_mismatches
+
+    equivalent_bundle_equation = audit_log(
+        equation_log.replace("open:w", "edge:n:bundle=3").replace(
+            "phys:up", "edge:e:bundle = 3"
+        ),
+        equation_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in equivalent_bundle_equation.findings
+    ]
+
+    different_bundle_equation = audit_log(
+        equation_log.replace("open:w", "edge:n:bundle=3").replace(
+            "phys:up", "edge:e:bundle = 4"
+        ),
+        equation_source,
+    )
     assert "eq-boundary-mismatch" in [
-        finding.rule for finding in equation.findings
+        finding.rule for finding in different_bundle_equation.findings
     ]
 
     overlap_log = """\
