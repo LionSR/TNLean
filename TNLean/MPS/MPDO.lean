@@ -19,6 +19,7 @@ import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalGram
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
+import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTClosingSelection

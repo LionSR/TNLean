@@ -72,6 +72,107 @@
     with a two-site vertical canonical decomposition.
 \end{definition}
 
+\begin{theorem}[Terminal sector positivity from the tensor-attached algebra clause]%
+    \label{thm:mpdo_algebra_clause_terminal_transfer_positivity}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        physTraceTransfer_verticalBNTMPO_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause,
+        def:mpo_physical_trace_transfer,
+        lem:mpdo_sitewise_physical_coordinate_congruence}
+    Let $M$ be a matrix product density operator with physical dimension $d$
+    and bond dimension $D$, equipped with a tensor-attached BNT algebra
+    clause, and let $M_\gamma$ be any retained normal tensor. Separating its
+    doubled physical index gives two physical legs of dimension $D$. Closing
+    these legs gives the bond matrix
+    \begin{align}
+        T_\gamma
+        &=\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
+        \label{eq:rfp_algebra_terminal_transfer}
+    \end{align}
+    Then $T_\gamma\succeq0$. This is a necessary consequence of the
+    tensor-attached clause and positivity of the one-site operator; it does
+    not require fusion maps or a renormalization fixed-point hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
+    Apply the retained physical coisometry to the positive one-site operator.
+    For a positive diagonal coordinate $q$ of the multiplicity matrix
+    $\mu_\gamma$, the corresponding principal submatrix is
+    $(\mu_\gamma)_{q,q}T_\gamma$. Principal submatrices remain positive
+    semidefinite, and $(\mu_\gamma)_{q,q}>0$; division by this scalar proves
+    $T_\gamma\succeq0$.
+\end{proof}
+
+\begin{lemma}[Terminal transfers of a nonunitary similarity pair]%
+    \label{lem:mpdo_nonunitary_pair_terminal_transfers}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        physTraceTransfer_tensor}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        physTraceTransfer_gaugedTensor}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer}
+    Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
+    $X=\diag(2,1)$, and set $B^v=XA^vX^{-1}$. After separating the doubled
+    physical index, their terminal transfer matrices are
+    \begin{align}
+        T_A&=\begin{pmatrix}1&0\\1&1\end{pmatrix},
+        \notag\\
+        T_B&=\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Sum the two diagonal physical letters $A^{(0,0)}+A^{(1,1)}$ and then use
+    $B^v=XA^vX^{-1}$ with $X=\diag(2,1)$.
+\end{proof}
+
+\begin{lemma}[The nonunitary similarity pair violates terminal positivity]%
+    \label{lem:mpdo_nonunitary_pair_terminal_not_positive}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        physTraceTransfer_tensor_not_posSemidef}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        physTraceTransfer_gaugedTensor_not_posSemidef}
+    \leanok
+    \uses{lem:mpdo_nonunitary_pair_terminal_transfers}
+    Neither $T_A$ nor $T_B$ in
+    Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_transfers} is positive
+    semidefinite.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_nonunitary_pair_terminal_transfers}
+    A positive semidefinite matrix is Hermitian. In both matrices the
+    $(0,1)$ entry is zero, whereas the $(1,0)$ entry is respectively $1$ and
+    $1/2$. Hence neither matrix is Hermitian.
+\end{proof}
+
+\begin{theorem}[The nonunitary similarity pair is excluded from retained positive sectors]%
+    \label{thm:mpdo_nonunitary_pair_not_retained_positive_sector}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        tensor_not_retained_positive_sector}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        gaugedTensor_not_retained_positive_sector}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        thm:mpdo_algebra_clause_terminal_transfer_positivity,
+        lem:mpdo_nonunitary_pair_terminal_not_positive}
+    Neither $A$ nor $B$ can occur, up to the bond-dimension identification,
+    as a retained bond-two sector of a tensor-attached BNT algebra clause for
+    a matrix product density operator.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity,
+        lem:mpdo_nonunitary_pair_terminal_not_positive}
+    Any such retained sector has positive-semidefinite terminal transfer by
+    Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
+    Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_not_positive} gives the
+    contradiction for both tensors.
+\end{proof}
+
 \begin{definition}[BNT multiplicity-spectrum comparison]%
     \label{def:mpdo_bnt_multiplicity_spectrum_comparison}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison}
