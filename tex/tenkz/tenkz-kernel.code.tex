@@ -9337,9 +9337,8 @@
 % no page coordinate is rounded or clustered to invent that identity.
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_enrol:nn #1#2
   {
-    \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_leg_member_tl
-      { \tl_set:Nn \l__tenkz_kernel_leg_member_tl {1} }
+    \__tenkz_kernel_r_leg_plan_id:nnN {#1}{#2}
+      \l__tenkz_kernel_leg_plan_result_tl
     \tl_set:Ne \l__tenkz_kernel_leg_plan_cid_tl
       {
         member-\tl_use:N \l__tenkz_kernel_leg_member_tl /
@@ -9367,14 +9366,44 @@
           { \l__tenkz_kernel_r_basis_ey_tl }
       }
     \__tenkz_kernel_leg_plan_enrol:nnnnn
-      {
-        leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-        -\tl_use:N \l__tenkz_kernel_leg_col_tl
-      }
+      { \l__tenkz_kernel_leg_plan_result_tl }
       { \l__tenkz_kernel_leg_plan_cid_tl }
       { \l__tenkz_kernel_r_x_fp }
       { \l__tenkz_kernel_r_y_fp }
       { \l__tenkz_kernel_r_reach_fp }
+  }
+
+% The lane planner's semantic identity includes the explicit basis member.
+% Ink and crossing path names retain their established cell-level spelling.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_id:nnN #1#2#3
+  {
+    \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_leg_member_tl
+      { \tl_set:Nn \l__tenkz_kernel_leg_member_tl {1} }
+    \tl_set:Ne #3
+      {
+        leg-#2-member-\tl_use:N \l__tenkz_kernel_leg_member_tl
+        -\tl_use:N \l__tenkz_kernel_leg_row_tl
+        -\tl_use:N \l__tenkz_kernel_leg_col_tl
+      }
+  }
+
+% Default-member engine paths keep their public crossing name.  An explicit
+% later member needs a private suffix so two valid legs cannot redeclare one
+% saved string; crossing lookup itself remains cell-level and unchanged.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_path_id:nnN #1#2#3
+  {
+    \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_leg_member_tl
+      { \tl_set:Nn \l__tenkz_kernel_leg_member_tl {1} }
+    \tl_set:Ne #3
+      {
+        leg-#2-
+        \int_compare:nNnF {\l__tenkz_kernel_leg_member_tl} = {1}
+          {member-\tl_use:N \l__tenkz_kernel_leg_member_tl-}
+        \tl_use:N \l__tenkz_kernel_leg_row_tl
+        -\tl_use:N \l__tenkz_kernel_leg_col_tl
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_unpack:nnnnnnnn
@@ -9393,11 +9422,10 @@
   {
     \bool_if:NT \l__tenkz_kernel_leg_planned_bool
       {
+        \__tenkz_kernel_r_leg_plan_id:nnN {#1}{#2}
+          \l__tenkz_kernel_leg_plan_cid_tl
         \__tenkz_kernel_leg_plan_get:nN
-          {
-            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-            -\tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+          { \l__tenkz_kernel_leg_plan_cid_tl }
           \l__tenkz_kernel_leg_plan_result_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_leg_plan_result_tl
           { \bool_set_false:N \l__tenkz_kernel_leg_planned_bool }
@@ -9407,23 +9435,19 @@
               \l__tenkz_kernel_leg_plan_result_tl
           }
       }
+    \__tenkz_kernel_r_leg_path_id:nnN {#1}{#2}
+      \l__tenkz_kernel_leg_plan_cid_tl
     \bool_if:NTF \l__tenkz_kernel_topology_bool
       {
         \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
-          {
-            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-            -\tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+          { \l__tenkz_kernel_leg_plan_cid_tl }
       }
       {
         \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
           { \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { } }
           {
             \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
-              {
-                leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-                -\tl_use:N \l__tenkz_kernel_leg_col_tl
-              }
+              { \l__tenkz_kernel_leg_plan_cid_tl }
           }
       }
     % Author-owned up=/down= tokens remain page-upright and execute once at

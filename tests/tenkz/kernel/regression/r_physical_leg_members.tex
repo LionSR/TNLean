@@ -1,0 +1,81 @@
+% Regression: physical legs on distinct members of one basis cell keep
+% distinct planner identities and private saved paths.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_leg_member_record_tl
+\tl_new:N \l__tenkz_test_leg_member_path_tl
+\int_new:N \g__tenkz_test_leg_member_plan_int
+\cs_new_eq:NN
+  \__tenkz_test_leg_member_closures:
+  \__tenkz_kernel_closures:
+\cs_set_protected:Npn \__tenkz_kernel_closures:
+  {
+    \__tenkz_test_leg_member_closures:
+    % A picture-wide physical policy is unavailable for a multi-member basis;
+    % set the two member-local fields at the last pre-freeze topology seam.
+    \prop_get:NnN \l__tenkz_kernel_named_prop {M1}
+      \l__tenkz_test_leg_member_record_tl
+    \exp_args:NV \__tenkz_model_complete:nnn
+      \l__tenkz_test_leg_member_record_tl {physical}{up}
+    \prop_get:NnN \l__tenkz_kernel_named_prop {M2}
+      \l__tenkz_test_leg_member_record_tl
+    \exp_args:NV \__tenkz_model_complete:nnn
+      \l__tenkz_test_leg_member_record_tl {physical}{up}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_leg_member_ink:nnn
+  \__tenkz_kernel_r_leg_ink:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
+  {
+    \bool_if:NT \l__tenkz_kernel_topology_bool
+      {
+        \__tenkz_model_get:nnN {#1}{member}
+          \l__tenkz_test_leg_member_record_tl
+        \tl_set:Ne \l__tenkz_test_leg_member_path_tl {#3}
+        \tl_trim_spaces:N \l__tenkz_test_leg_member_path_tl
+        \int_compare:nNnTF {\l__tenkz_test_leg_member_record_tl} = {1}
+          {
+            \str_if_eq:VnF \l__tenkz_test_leg_member_path_tl {leg-n-1-1}
+              { \errmessage{the~default~member~path~name~changed} }
+          }
+          {
+            \str_if_eq:VnF \l__tenkz_test_leg_member_path_tl
+              {leg-n-member-2-1-1}
+              { \errmessage{the~later~member~did~not~get~a~private~path} }
+          }
+      }
+    \__tenkz_test_leg_member_ink:nnn {#1}{#2}{#3}
+  }
+\cs_new_eq:NN
+  \__tenkz_test_leg_member_legs:
+  \__tenkz_kernel_r_legs:
+\cs_set_protected:Npn \__tenkz_kernel_r_legs:
+  {
+    \__tenkz_test_leg_member_legs:
+    \prop_if_in:NnF \l__tenkz_kernel_lp_result_prop
+      {leg-n-member-1-1-1}
+      { \errmessage{the~first~basis~member~lost~its~planned~leg} }
+    \prop_if_in:NnF \l__tenkz_kernel_lp_result_prop
+      {leg-n-member-2-1-1}
+      { \errmessage{the~second~basis~member~lost~its~planned~leg} }
+    \int_gincr:N \g__tenkz_test_leg_member_plan_int
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF {\g__tenkz_test_leg_member_plan_int} > {0}
+      { \errmessage{the~member-aware~production~planner~was~not~exercised} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    frame={plane,basis={wire at (0,0),wire at (2,0)}}]
+  \tn[at=(1,1,1), name=M1]{}
+  \tn[at=(1,1,2), name=M2]{}
+\end{tenkz}
+\end{document}
