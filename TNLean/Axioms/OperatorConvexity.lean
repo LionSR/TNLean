@@ -616,14 +616,6 @@ section Lieb
 
 open scoped Kronecker
 
-/-- The real power of a positive-definite matrix commutes with transpose:
-`(Bᵀ) ^ r = (B ^ r)ᵀ`. -/
-private lemma rpow_transpose (B : Mat) (hB : B.PosDef) (r : ℝ) : (Bᵀ) ^ r = (B ^ r)ᵀ := by
-  have h0B : (0 : Mat) ≤ B := hB.posSemidef.nonneg
-  have h0BT : (0 : Mat) ≤ Bᵀ := hB.transpose.posSemidef.nonneg
-  rw [CFC.rpow_eq_cfc_real h0BT, CFC.rpow_eq_cfc_real h0B]
-  exact (Matrix.cfc_transpose hB.isHermitian (fun x : ℝ => x ^ r)).symm
-
 /-- The reduction `(A ⊗ₖ 1)^s (1 ⊗ₖ Bᵀ)^{1-s} = A^s ⊗ₖ (Bᵀ)^{1-s}`, obtained by pushing the
 continuous functional calculus through each unital tensor embedding. -/
 private lemma lieb_kronecker_reduction (A B : Mat) (hA : A.PosDef) (hB : B.PosDef) (s : ℝ) :
@@ -648,7 +640,7 @@ private lemma lieb_quad_eq_trace (A B K : Mat) (hB : B.PosDef) (s : ℝ) :
       = (Kᴴ * A ^ s * K * B ^ (1 - s)).trace := by
   rw [Matrix.kronecker_mulVec_vec ((Bᵀ) ^ (1 - s)) Kᵀ (A ^ s),
     Matrix.star_vec_dotProduct_vec, ← Matrix.mul_assoc, ← Matrix.mul_assoc,
-    rpow_transpose B hB (1 - s), Matrix.transpose_conjTranspose K,
+    hB.posSemidef.rpow_transpose (1 - s), Matrix.transpose_conjTranspose K,
     ← Matrix.trace_transpose (Kᴴ * A ^ s * K * B ^ (1 - s))]
   simp only [Matrix.transpose_mul, Matrix.conjTranspose_transpose, Matrix.mul_assoc]
   rw [Matrix.trace_mul_comm (K.map star)]

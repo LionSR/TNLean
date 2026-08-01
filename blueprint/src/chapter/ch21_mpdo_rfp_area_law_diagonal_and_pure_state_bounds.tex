@@ -712,19 +712,42 @@
 \begin{theorem}[Functional calculus under transpose]
     \label{thm:cfc_transpose_hermitian}
     \lean{Matrix.cfc_transpose}
+    \lean{Matrix.IsHermitian.log_transpose}
+    \lean{Matrix.PosSemidef.rpow_transpose}
+    \lean{Matrix.PosSemidef.sqrt_transpose}
+    \lean{Matrix.IsHermitian.supportProj_transpose}
     \leanok
+    \uses{def:hermitian_support_projection}
     If $A\in\MN{n}$ is Hermitian and $f:\R\to\R$, then
     \begin{align}
       f(A)^T&=f(A^T).
       \label{eq:mpdo_cfc_transpose}
     \end{align}
+    In particular,
+    \begin{align}
+      \log(A^T)&=(\log A)^T, &
+      P_{A^T}&=P_A^T.
+      \label{eq:mpdo_log_support_transpose}
+    \end{align}
+    If $A$ is positive semidefinite, then for every $r\in\R$,
+    \begin{align}
+      (A^T)^r&=(A^r)^T, &
+      \sqrt{A^T}&=(\sqrt A)^T.
+      \label{eq:mpdo_power_sqrt_transpose}
+    \end{align}
+    These identities include singular matrices and matrices whose index set is
+    empty. They are project-derived rather than statements of CPSV16.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:hermitian_support_projection}
     For a Hermitian matrix, transpose is entrywise complex conjugation.
     Apply covariance of the continuous functional calculus under this real
     star-algebra automorphism. Continuity of $f$ is needed only on the finite
-    spectrum of $A$, where it is automatic.
+    spectrum of $A$, where it is automatic. The logarithm, real-power, and
+    square-root identities follow by specialization. For the support
+    projection, specialize to the function that is one away from zero and zero
+    at zero.
 \end{proof}
 
 \begin{theorem}[Logarithm of a tensor product on its support]
