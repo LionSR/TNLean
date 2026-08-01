@@ -1349,7 +1349,6 @@ terms of operator-Schmidt rank.
     \label{thm:rpow_conj_unitary}
     \lean{Matrix.rpow_conj_unitary}
     \leanok
-    \uses{lem:cfc_conj_unitary}
     Let $A\succeq0$, let $s\in\R$, and let $U$ be unitary. Then
     \begin{align}
       (UAU^\dagger)^s&=UA^sU^\dagger.
@@ -1366,7 +1365,6 @@ terms of operator-Schmidt rank.
     \label{thm:rpow_kronecker_possemidef}
     \lean{Matrix.PosSemidef.rpow_kronecker}
     \leanok
-    \uses{thm:multiplicative_functional_calculus_tensor_product}
     Let $A\succeq0$ and $B\succeq0$. For every $s\in\R$,
     \begin{align}
       (A\otimes B)^s&=A^s\otimes B^s.
@@ -1402,7 +1400,7 @@ terms of operator-Schmidt rank.
     \label{thm:sandwiched_renyi_two_unitary_invariance}
     \lean{TNLean.sandwichedRenyiTwoTrace_conj_unitary}
     \leanok
-    \uses{def:sandwiched_renyi_two_trace, thm:rpow_conj_unitary}
+    \uses{def:sandwiched_renyi_two_trace}
     Let $\omega\succeq0$, let $\rho$ be a square matrix of the same size, and
     let $U$ be unitary. Then
     \begin{align}
@@ -1498,9 +1496,7 @@ terms of operator-Schmidt rank.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:sandwiched_renyi_two_trace,
-      def:bipartite_operator_schmidt_rank,
-      thm:sandwiched_renyi_two_osr_faithful,
+    \uses{thm:sandwiched_renyi_two_osr_faithful,
       thm:sandwiched_renyi_two_support_compression,
       thm:product_marginals_kernel,
       thm:operator_schmidt_rank_marginal_support_compression,
