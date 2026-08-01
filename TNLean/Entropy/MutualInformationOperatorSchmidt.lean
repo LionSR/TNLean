@@ -92,7 +92,7 @@ theorem mutualInformation_le_log_operatorSchmidtRank
     exact TNLean.sandwichedRenyiTwoTrace_nonneg hρ' hω'
   have hqle : q ≤ Matrix.operatorSchmidtRank ρ := by
     simpa only [q, ω] using
-      TNLean.sandwichedRenyiTwoTrace_partialTraces_kronecker_le_operatorSchmidtRank
+      TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank
         ρ hρ.1
   have hρne : ρ ≠ 0 := by
     intro hzero
