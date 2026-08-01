@@ -172,4 +172,125 @@ theorem baseMPO_toMPSTensor_isCPSVCanonicalForm :
     (fun _ : Fin 4 => (1 : ℂ)) baseSymbolBlocks
     (fun a => baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
 
+/-! ### Raw retained cyclic-edge projections -/
+
+/-- The source vertex of an encoded directed two-state edge. -/
+def edgeSource (x : Fin 4) : I :=
+  (finProdFinEquiv.symm x : I × I).1
+
+/-- The target vertex of an encoded directed two-state edge. -/
+def edgeTarget (x : Fin 4) : I :=
+  (finProdFinEquiv.symm x : I × I).2
+
+/-- The indicator that a word of directed two-state edges closes cyclically. -/
+def retainedCyclicIndicator (N : ℕ) (sigma : Fin N → Fin 4) : ℂ :=
+  ∏ n : Fin N,
+    if edgeTarget (sigma n) = edgeSource (sigma (finRotate N n)) then 1 else 0
+
+/-- The retained singleton's positive-length closed operators are diagonal
+cyclic-edge indicators. -/
+theorem mpo_verticalBNTMPO_singletonTensor_eq_diagonal
+    (N : ℕ) (hN : 0 < N) :
+    mpo (verticalBNTMPO singletonTensor) N =
+      Matrix.diagonal (retainedCyclicIndicator N) := by
+  letI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  ext sigma tau
+  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
+  have hcyc := MPSTensor.trace_evalWord_eq_sum_cyclic singletonTensor
+    (fun n => finProdFinEquiv (sigma n, tau n))
+  rw [MPSTensor.evalWord_ofFn_eq_prod] at hcyc
+  change (List.ofFn fun n => singletonTensor
+      (finProdFinEquiv (sigma n, tau n))).prod.trace = _
+  rw [hcyc]
+  let g0 : Fin N → I := fun n => edgeSource (sigma n)
+  rw [Fintype.sum_eq_single g0]
+  · rw [Matrix.diagonal_apply]
+    by_cases hst : sigma = tau
+    · subst tau
+      simp only [retainedCyclicIndicator]
+      apply Finset.prod_congr rfl
+      intro n _hn
+      simp only [singletonTensor, Equiv.symm_apply_apply,
+        Matrix.single, g0, finRotate_apply]
+      split_ifs <;> simp_all [edgeSource, edgeTarget]
+    · rw [if_neg hst]
+      obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
+      apply Finset.prod_eq_zero (Finset.mem_univ n)
+      simp [singletonTensor, hn]
+  · intro g hg
+    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
+    apply Finset.prod_eq_zero (Finset.mem_univ n)
+    dsimp [g0, edgeSource] at hn
+    by_cases hs : sigma n = tau n
+    · rw [← hs]
+      simp [singletonTensor, Matrix.single]
+      aesop
+    · simp [singletonTensor, hs]
+
+private lemma retainedCyclicIndicator_eq_zero_or_one
+    (N : ℕ) (sigma : Fin N → Fin 4) :
+    retainedCyclicIndicator N sigma = 0 ∨
+      retainedCyclicIndicator N sigma = 1 := by
+  classical
+  by_cases h : ∀ n : Fin N,
+      edgeTarget (sigma n) = edgeSource (sigma (finRotate N n))
+  · right
+    unfold retainedCyclicIndicator
+    apply Finset.prod_eq_one
+    intro n _hn
+    simp [h n]
+  · left
+    push Not at h
+    obtain ⟨n, hn⟩ := h
+    unfold retainedCyclicIndicator
+    apply Finset.prod_eq_zero (Finset.mem_univ n)
+    rw [if_neg (by simpa only [finRotate_apply] using hn)]
+
+/-- At every positive length the raw retained closed operator is Hermitian and
+idempotent, hence an orthogonal projection in the matrix algebra indexed by
+edge words. -/
+theorem mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent
+    (N : ℕ) (hN : 0 < N) :
+    (mpo (verticalBNTMPO singletonTensor) N).IsHermitian ∧
+      mpo (verticalBNTMPO singletonTensor) N *
+        mpo (verticalBNTMPO singletonTensor) N =
+          mpo (verticalBNTMPO singletonTensor) N := by
+  rw [mpo_verticalBNTMPO_singletonTensor_eq_diagonal N hN]
+  constructor
+  · change (Matrix.diagonal (retainedCyclicIndicator N))ᴴ =
+      Matrix.diagonal (retainedCyclicIndicator N)
+    ext sigma tau
+    by_cases hst : sigma = tau
+    · subst tau
+      rcases retainedCyclicIndicator_eq_zero_or_one N sigma with hzero | hone
+      · simp [Matrix.conjTranspose_apply, hzero]
+      · simp [Matrix.conjTranspose_apply, hone]
+    · simp [Matrix.conjTranspose_apply, Matrix.diagonal_apply, hst, Ne.symm hst]
+  · rw [Matrix.diagonal_mul_diagonal]
+    apply congrArg Matrix.diagonal
+    funext sigma
+    rcases retainedCyclicIndicator_eq_zero_or_one N sigma with hzero | hone
+    · simp [hzero]
+    · simp [hone]
+
+/-- The raw retained closed operator is a star projection at every positive
+length. -/
+theorem mpo_verticalBNTMPO_singletonTensor_isStarProjection
+    (N : ℕ) (hN : 0 < N) :
+    IsStarProjection (mpo (verticalBNTMPO singletonTensor) N) := by
+  rw [isStarProjection_iff']
+  have h := mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent N hN
+  exact ⟨h.2, by simpa [Matrix.star_eq_conjTranspose] using h.1.eq⟩
+
+/-- The coefficient-one multiplication law for the raw singleton retained
+operator. -/
+theorem raw_singleton_coefficient_one_algebra
+    (L : ℕ) (hL : 0 < L) :
+    mpo (verticalBNTMPO singletonTensor) L *
+        mpo (verticalBNTMPO singletonTensor) L =
+      ∑ _gamma : Fin 1, (1 : ℂ) •
+        mpo (verticalBNTMPO singletonTensor) L := by
+  rw [(mpo_verticalBNTMPO_singletonTensor_isHermitian_and_idempotent L hL).2]
+  simp
+
 end MPOTensor.BondTwoSingletonBaseModel
