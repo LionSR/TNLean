@@ -173,8 +173,7 @@
     contradiction for both tensors.
 \end{proof}
 
-% Verified against Lean head f0f8a921c3c25bdf3f0ac121d3d0dcb75bfe368d.
-\begin{definition}[Bond-two singleton and companion Bell data]%
+\begin{definition}[Bond-two singleton tensor and companion Bell projector]%
     \label{def:mpdo_bond_two_singleton_deformation}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.singletonTensor}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.terminalJ}
@@ -183,8 +182,8 @@
     \lean{MPOTensor.BondTwoSingletonGramBoundary.gaugeMatrix}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.gauge}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.gaugedSingletonTensor}
-    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedOneSite}
-    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedTwoSite}
+    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedTerminal}
+    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedCompanionBell}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
     Let $I=\{0,1\}$ and let $E_{a,b}$ be the matrix units of
@@ -243,9 +242,9 @@
     \lean{MPOTensor.BondTwoSingletonGramBoundary.gauge_commutes_terminalJ}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
         physTraceTransfer_gaugedSingletonTensor}
-    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedOneSite_eq_terminalJ}
-    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedOneSite_posSemidef}
-    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedTwoSite_not_isHermitian}
+    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedTerminal_eq_terminalJ}
+    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedTerminal_posSemidef}
+    \lean{MPOTensor.BondTwoSingletonGramBoundary.deformedCompanionBell_not_isHermitian}
     \leanok
     \uses{def:mpdo_bond_two_singleton_deformation}
     The tensor $A$ is injective and normal. The matrix $X$ is invertible but
@@ -278,11 +277,11 @@
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
         posDef_eq_pos_smul_one_of_commutes_terminalJ_of_bellCross}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
-        gaugeGram_commutes_terminalJ_of_oneSite_isHermitian}
+        gaugeGram_commutes_terminalJ_of_terminal_isHermitian}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
-        gaugeGram_bellCross_of_twoSite_isHermitian}
+        gaugeGram_bellCross_of_companionBell_isHermitian}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.%
-        gaugeGram_eq_pos_smul_one_of_one_two_isHermitian}
+        gaugeGram_eq_pos_smul_one_of_terminal_companionBell_isHermitian}
     \leanok
     \uses{def:mpdo_bond_two_singleton_deformation}
     Let $Y\in\GL(2,\C)$. If the terminal-matrix similarity $YJY^{-1}$ and

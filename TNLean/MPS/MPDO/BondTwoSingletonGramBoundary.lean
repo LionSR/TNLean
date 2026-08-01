@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.ZCL
+import TNLean.MPS.Tactic.Basic
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
@@ -242,12 +243,12 @@ lemma singletonTensor_gaugeEquiv_gaugedSingletonTensor :
 matrix-product vector. -/
 lemma singletonTensor_sameMPV₂Pos_gaugedSingletonTensor :
     MPSTensor.SameMPV₂Pos singletonTensor gaugedSingletonTensor := by
-  intro N _hN σ
+  mpv_ext
   exact MPSTensor.GaugeEquiv.sameMPV
     singletonTensor_gaugeEquiv_gaugedSingletonTensor N σ
 
 /-- Similarity deformation of the one-site terminal operator. -/
-def deformedOneSite : Matrix I I ℂ :=
+def deformedTerminal : Matrix I I ℂ :=
   (gauge : Matrix I I ℂ) * terminalJ *
     ((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ)
 
@@ -255,7 +256,7 @@ def deformedOneSite : Matrix I I ℂ :=
 
 This matrix is not asserted to arise from `singletonTensor` or
 `gaugedSingletonTensor`. -/
-def deformedTwoSite : Matrix I₂ I₂ ℂ :=
+def deformedCompanionBell : Matrix I₂ I₂ ℂ :=
   ((gauge : Matrix I I ℂ) ⊗ₖ (gauge : Matrix I I ℂ)) * bellProjector *
     (((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ) ⊗ₖ
       ((gauge⁻¹ : GL I ℂ) : Matrix I I ℂ))
@@ -286,14 +287,14 @@ lemma physTraceTransfer_gaugedSingletonTensor :
   simp
 
 /-- The one-site deformation leaves the positive terminal matrix unchanged. -/
-lemma deformedOneSite_eq_terminalJ : deformedOneSite = terminalJ := by
-  rw [deformedOneSite, gauge_commutes_terminalJ, Matrix.mul_assoc]
+lemma deformedTerminal_eq_terminalJ : deformedTerminal = terminalJ := by
+  rw [deformedTerminal, gauge_commutes_terminalJ, Matrix.mul_assoc]
   change terminalJ * ((gauge * gauge⁻¹ : GL I ℂ) : Matrix I I ℂ) = terminalJ
   simp
 
 /-- The one-site deformation remains positive semidefinite. -/
-lemma deformedOneSite_posSemidef : deformedOneSite.PosSemidef := by
-  rw [deformedOneSite_eq_terminalJ]
+lemma deformedTerminal_posSemidef : deformedTerminal.PosSemidef := by
+  rw [deformedTerminal_eq_terminalJ]
   exact terminalJ_posSemidef
 
 /-- The concrete tensor-square similarity of the companion Bell projector is
@@ -302,11 +303,11 @@ not Hermitian.
 This standalone matrix calculation does not imply that `gaugedSingletonTensor`
 fails a two-site MPDO test; the missing tensor-derived identification is
 documented in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`. -/
-lemma deformedTwoSite_not_isHermitian : ¬ deformedTwoSite.IsHermitian := by
+lemma deformedCompanionBell_not_isHermitian : ¬ deformedCompanionBell.IsHermitian := by
   intro h
   have hentry := congrArg
     (fun M : Matrix I₂ I₂ ℂ ↦ M (0, 0) (0, 1)) h.eq
-  rw [deformedTwoSite, gauge_val, gauge_inv_val] at hentry
+  rw [deformedCompanionBell, gauge_val, gauge_inv_val] at hentry
   norm_num [bellProjector, bellVector, gaugeMatrix, Matrix.vecMulVec,
     Matrix.conjTranspose_apply, Matrix.mul_apply, Matrix.kroneckerMap_apply,
     Fintype.sum_prod_type, Fin.sum_univ_two] at hentry
@@ -326,9 +327,9 @@ commute with the terminal all-ones matrix.
 
 This is the one-site part of the model-specific boundary motivated by
 arXiv:1606.00608, Appendix C.4, lines 2048--2057. -/
-lemma gaugeGram_commutes_terminalJ_of_oneSite_isHermitian
+lemma gaugeGram_commutes_terminalJ_of_terminal_isHermitian
     (X : GL I ℂ)
-    (h : ((X : Matrix I I ℂ) * terminalJ *
+    (hTerminal : ((X : Matrix I I ℂ) * terminalJ *
       ((X⁻¹ : GL I ℂ) : Matrix I I ℂ)).IsHermitian) :
     ((X : Matrix I I ℂ)ᴴ * (X : Matrix I I ℂ)) * terminalJ =
       terminalJ * ((X : Matrix I I ℂ)ᴴ * (X : Matrix I I ℂ)) := by
@@ -338,16 +339,16 @@ lemma gaugeGram_commutes_terminalJ_of_oneSite_isHermitian
   · rw [← Units.val_mul]
     simp
   · exact terminalJ_posSemidef.isHermitian
-  · exact h
+  · exact hTerminal
 
 /-- Hermiticity of the companion Bell-projector similarity gives the Bell-cross
 equation for the gauge Gram matrix.
 
 This is an independent matrix comparator motivated by arXiv:1606.00608,
 Appendix C.4, lines 2048--2057; no singleton-tensor attachment is assumed. -/
-lemma gaugeGram_bellCross_of_twoSite_isHermitian
+lemma gaugeGram_bellCross_of_companionBell_isHermitian
     (X : GL I ℂ)
-    (h : (((X : Matrix I I ℂ) ⊗ₖ (X : Matrix I I ℂ)) * bellProjector *
+    (hCompanionBell : (((X : Matrix I I ℂ) ⊗ₖ (X : Matrix I I ℂ)) * bellProjector *
       (((X⁻¹ : GL I ℂ) : Matrix I I ℂ) ⊗ₖ
         ((X⁻¹ : GL I ℂ) : Matrix I I ℂ))).IsHermitian) :
     let G := (X : Matrix I I ℂ)ᴴ * (X : Matrix I I ℂ)
@@ -364,7 +365,7 @@ lemma gaugeGram_bellCross_of_twoSite_isHermitian
       ((X⁻¹ * X : GL I ℂ) : Matrix I I ℂ)) = 1
     simp
   have hcomm := gram_commutes_of_similarity_isHermitian S T bellProjector
-    hTS bellProjector_posSemidef.isHermitian h
+    hTS bellProjector_posSemidef.isHermitian hCompanionBell
   have hGram : Sᴴ * S =
       (((X : Matrix I I ℂ)ᴴ * (X : Matrix I I ℂ)) ⊗ₖ
         ((X : Matrix I I ℂ)ᴴ * (X : Matrix I I ℂ))) := by
@@ -382,11 +383,11 @@ does not identify the Bell projector with a singleton-tensor-derived operator
 or construct the marked common-target realization missing from the source
 argument.  The former attachment is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`. -/
-theorem gaugeGram_eq_pos_smul_one_of_one_two_isHermitian
+theorem gaugeGram_eq_pos_smul_one_of_terminal_companionBell_isHermitian
     (X : GL I ℂ)
-    (hOne : ((X : Matrix I I ℂ) * terminalJ *
+    (hTerminal : ((X : Matrix I I ℂ) * terminalJ *
       ((X⁻¹ : GL I ℂ) : Matrix I I ℂ)).IsHermitian)
-    (hTwo : (((X : Matrix I I ℂ) ⊗ₖ (X : Matrix I I ℂ)) * bellProjector *
+    (hCompanionBell : (((X : Matrix I I ℂ) ⊗ₖ (X : Matrix I I ℂ)) * bellProjector *
       (((X⁻¹ : GL I ℂ) : Matrix I I ℂ) ⊗ₖ
         ((X⁻¹ : GL I ℂ) : Matrix I I ℂ))).IsHermitian) :
     ∃ ω : ℝ, 0 < ω ∧
@@ -397,7 +398,7 @@ theorem gaugeGram_eq_pos_smul_one_of_one_two_isHermitian
     Matrix.PosDef.conjTranspose_mul_self _
       (Matrix.mulVec_injective_of_isUnit hXunit)
   exact posDef_eq_pos_smul_one_of_commutes_terminalJ_of_bellCross hG
-    (gaugeGram_commutes_terminalJ_of_oneSite_isHermitian X hOne)
-    (gaugeGram_bellCross_of_twoSite_isHermitian X hTwo)
+    (gaugeGram_commutes_terminalJ_of_terminal_isHermitian X hTerminal)
+    (gaugeGram_bellCross_of_companionBell_isHermitian X hCompanionBell)
 
 end MPOTensor.BondTwoSingletonGramBoundary
