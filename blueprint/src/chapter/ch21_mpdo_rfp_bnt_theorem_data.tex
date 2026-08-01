@@ -173,6 +173,61 @@
     contradiction for both tensors.
 \end{proof}
 
+\begin{lemma}[No positive isometric realization of the nonunitary pair]%
+    \label{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        no_positive_isometric_realization}
+    \leanok
+    Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
+    $X=\diag(2,1)$, and set $B^i=XA^iX^{-1}$. There are no $c>0$ and
+    $V\in\MN{2}$ such that $V^\dagger V=\Id$ and
+    $V^\dagger B^iV=cA^i$ for every physical index~$i$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The identity letter forces $c=1$. If such a matrix $V$ existed, then
+    $V^\dagger X$ would commute with every letter of $A$. Normality makes
+    $V^\dagger X$ scalar, so $X^\dagger X$ would also be scalar. This
+    contradicts $X^\dagger X=\diag(4,1)$.
+\end{proof}
+
+\begin{theorem}[Closed matrix product vectors do not force a positive virtual extension]%
+    \label{thm:perBlockLinearExtension_not_positive}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.gaugedTensorFamily}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.tensorFamily_isInjective}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        tensorFamily_sameMPV_gaugedTensorFamily}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        perBlockLinearExtension_not_positive}
+    \leanok
+    \discussion{5284}
+    \uses{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    Let $A$ have letters $\Id,E_{00},E_{01},E_{10}$, let
+    $X=\diag(2,1)$, and set $B^i=XA^iX^{-1}$. Regard them as one-block
+    families $A_0=A$ and $B_0=B$, both of bond dimension two. Both families
+    are injective. They have equal closed matrix product vectors at every
+    length, and their per-block linear extension is not
+    positive.
+
+    This does not refute the physical-sector comparison in
+    \cite[Proposition~4.13 and Appendix~C.4]{Cirac2016MPDO_arXiv}. It concerns
+    only the generic virtual extension determined by closed chains, and does
+    not close issue~\#5284.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    The letters of $A$ span $\MN{2}$, so $A_0$ is injective; similarity by
+    $X$ also makes $B_0$ injective. Cyclicity of the trace gives equality of
+    all closed matrix product vectors.
+    If the per-block extension were positive, then positive
+    Skolem--Noether would implement it by a unitary $U$. Evaluating the extension on each letter
+    would give $U^\dagger B^iU=A^i$, contradicting
+    Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    with $c=1$.
+\end{proof}
+
 \begin{definition}[Bond-two singleton tensor and companion Bell projector]%
     \label{def:mpdo_bond_two_singleton_deformation}
     \lean{MPOTensor.BondTwoSingletonGramBoundary.singletonTensor}
