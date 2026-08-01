@@ -57,8 +57,7 @@ noncomputable def cpsvRFPBNTFusionTensorClause (M : MPOTensor d D)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     BNTFusionTensorClause M :=
   Classical.choice
-    (HasBNTFusionTensorClause.of_isRFPViaTS_of_cpsvCanonicalForm
-      M hCanonical hM hRFP)
+    (HasBNTFusionTensorClause.of_isRFPViaTS M hCanonical hM hRFP)
 
 /-- **Physical-coordinate commuting Gibbs decomposition for a literal CPSV
 RFP MPDO above one site.**
