@@ -399,68 +399,20 @@ retained sectors whose terminal transfers are positive semidefinite.
 Terminal positivity alone does not produce the identity-dressed marked
 realization or a unitary gauge.
 
-\section{A bond-two singleton terminal boundary and Bell comparator}
+\section{A bond-two singleton physical-similarity obstruction}
 
 A bond-two singleton tensor satisfies the terminal condition.  Let $A$ be the
-normal tensor whose four diagonal doubled-physical
-letters are the matrix units $E_{a,b}$ of $\mathbb C^{2\times2}$.  Its
-terminal matrix is
+normal tensor whose four diagonal doubled-physical letters are the matrix units
+$E_{a,b}$ of $\mathbb C^{2\times2}$.  Its terminal matrix is
 \begin{align}
   J&=\begin{pmatrix}1&1\\1&1\end{pmatrix}\succeq0.
   \label{eq:singleton-terminal-J}
 \end{align}
-Let
-\begin{align}
-  X&=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}.
-  \notag
-\end{align}
-and set
-\begin{align}
-  B^v&=XA^vX^{-1}.
-  \label{eq:singleton-deformation}
-\end{align}
-The matrix $X$ is invertible and nonunitary.  The tensors $A$ and $B$ have the
-same positive-length closed chains, and their terminal matrices both equal
-$J$.  Thus the deformation preserves the positive one-site boundary.
+Let $\ket{\Phi}=\ket{0,0}+\ket{1,1}$ and
+$P=\ket{\Phi}\!\bra{\Phi}$.
 
-Separately, let $\ket{\Phi}=\ket{0,0}+\ket{1,1}$ and
-$P=\ket{\Phi}\!\bra{\Phi}$.  The companion matrix similarity
-\begin{align}
-  P_X&=(X\otimes X)P(X^{-1}\otimes X^{-1})
-  \label{eq:companion-bell-similarity}
-\end{align}
-is not Hermitian.  Hence this chosen Bell-projector similarity is not positive.
-The matrix $P$ is not the retained closed operator $O_2(A)$, and no result
-identifies $P_X$ with $O_2(B)$ or with the two-site operator of a deformed
-MPDO tensor.  As shown below, $P$ is instead the reindexed two-site operator
-of a separate ambient MPO whose vertical tensor is $A$.  Thus the calculation
-does not show that $B$ fails an MPDO two-site test.
-
-A scalar-Gram criterion is also formalized for the chosen pair of matrices.
-For any
-$Y\in\mathrm{GL}(2,\mathbb C)$, put $G=Y^\dagger Y$.  If both
-$YJY^{-1}$ and
-$(Y\otimes Y)P(Y^{-1}\otimes Y^{-1})$ are Hermitian, then there is a real
-number $\omega>0$ such that
-\begin{align}
-  G&=\omega\mathbf 1.
-  \label{eq:singleton-scalar-gram}
-\end{align}
-Indeed, Hermiticity of the terminal-matrix similarity gives $GJ=JG$, while
-Hermiticity of the companion Bell-projector similarity gives
-$G_{00}G_{01}+G_{10}G_{11}=0$.  The first identity makes the diagonal entries
-equal and the off-diagonal entries equal; positive definiteness and the second
-identity then force the off-diagonal entries to vanish.  Thus
-$\omega^{-1/2}Y$ is unitary.
-
-Appendix~C.4, lines~2048--2057, and Proposition~4.13 motivate this
-finite-dimensional terminal/Bell comparison, but they do not state the
-criterion \eqref{eq:singleton-scalar-gram}.  The criterion applies to the
-chosen $J$ and companion $P$; it is not a theorem about the retained closed
-operators $O_2(A)$ or $O_2(B)$.
-
-The singleton does admit a separate all-length positive ambient realization.
-Use pairs in $I\times I$ as a four-dimensional bond index and define
+The singleton has an all-length positive ambient realization.  Use pairs in
+$I\times I$ as a four-dimensional bond index and define
 \begin{align}
   M^{i,j}_{(r,s),(r',s')}
   &=\delta_{(r,s),(r',s')}\delta_{i,r}\delta_{j,s}.
@@ -478,36 +430,88 @@ contraction gives
 In particular, the canonical reindexing of the two-site operator gives
 $M_2=P$.
 
-For every $N>0$, the raw retained closed operators are diagonal indicators of
-cyclically composable directed-edge words.  They are therefore orthogonal
-projections and obey the coefficient-one product law.  At every $L>0$, the
-normalized representative $\widehat A=2^{-1/2}A$, together with the unique
-multiplicity weight $\sqrt2$, has coefficient $2^{-L/2}$ and reconstructs
-$A$.  The canonical
-identification of its retained coordinates with the original bond coordinates
-is a coisometry.  These data give a genuine one-label tensor-attached BNT
-algebra clause for the model $M$, whose closed operators are positive at every
-positive length.
+For any $Y\in\mathrm{GL}(2,\mathbb C)$, define the physical-similarity
+deformation $M_Y$ by applying $Y$ to each ket index and $Y^{-1}$ to each bra
+index.  Its vertical tensor is
+\begin{align}
+  \widetilde M_Y^v&=YA^vY^{-1}.
+  \label{eq:singleton-physical-vertical}
+\end{align}
+The one- and two-site operators satisfy the exact reindexing identities
+\begin{align}
+  \operatorname{reindex}(M_{Y,1})&=YJY^{-1},
+  \label{eq:singleton-physical-one-site}\\
+  \operatorname{reindex}(M_{Y,2})
+  &=(Y\otimes Y)P(Y^{-1}\otimes Y^{-1}).
+  \label{eq:singleton-physical-two-site}
+\end{align}
+These are identities for one physical deformation of the ambient tensor, not
+an independent comparison between two matrices.
 
-This construction completes the attachment tracked in
-\href{https://github.com/LionSR/TNLean/issues/5290}{issue 5290}.  The proved
-reindexing identity also attaches the nonunitary Bell similarity from
-\href{https://github.com/LionSR/TNLean/issues/5289}{issue 5289} to the matrix of
-the base operator: $P_X$ is the stated similarity of the reindexed matrix of
-$M_2$.  No deformed tensor-attached BNT algebra clause or deformed MPDO tensor
-with two-site operator $P_X$ has been constructed.  Hence this is not a
-nonunitary full-contract counterexample and does not supply the
-identity-dressed marked realization.
+Put $G=Y^\dagger Y$.  If $M_Y$ is an MPDO, then both matrices in
+\eqref{eq:singleton-physical-one-site}--\eqref{eq:singleton-physical-two-site}
+are Hermitian.  The one-site identity gives $GJ=JG$, while the two-site
+identity gives $G_{00}G_{01}+G_{10}G_{11}=0$.  The first relation makes the
+diagonal entries equal and the off-diagonal entries equal.  Positive
+definiteness and the second relation then force the off-diagonal entries to
+vanish.  Hence there is a real number $\omega>0$ such that
+\begin{align}
+  Y^\dagger Y&=\omega\mathbf 1.
+  \label{eq:singleton-scalar-gram}
+\end{align}
+Thus the natural physical-similarity deformation family is excluded whenever
+$Y^\dagger Y$ is nonscalar.
 
-Consequently Theorem~4.14 remains partial.  The identity-dressed marked
-comparison remains open in
-\href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284}, under
-\href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, and
-\href{https://github.com/LionSR/TNLean/issues/4645}{issue 4645} remains open.
+For the concrete matrix
+\begin{align}
+  X&=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix},
+  \notag
+\end{align}
+one has
+\begin{align}
+  X^\dagger X
+  &=\begin{pmatrix}\tfrac52&\tfrac32\\[2pt]\tfrac32&\tfrac52\end{pmatrix},
+  \notag
+\end{align}
+which is not scalar.  Therefore $M_X$ is not an MPDO.  Its vertical tensor is
+exactly the earlier nonunitary similarity
+\begin{align}
+  B^v&=XA^vX^{-1}.
+  \label{eq:singleton-deformation}
+\end{align}
+This upgrades the previous terminal/Bell comparator to a concrete obstruction
+for the natural physical deformation itself.\footnote{Formal declarations:
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO} and
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeDeformedBaseMPO_gauge_not_isMPDO}.}
+
+Appendix~C.4, lines~2048--2057, motivates comparing the one-site and two-site
+sector descriptions, and Proposition~4.13, lines~1898--1921, supplies the
+metric-comparison template.  Neither passage states the deformation
+\eqref{eq:singleton-physical-vertical}, the exact reindexing identities, the
+scalar-Gram necessity, or the non-MPDO corollary proved here.
+
+For every $N>0$, the raw retained closed operators of the undeformed model are
+diagonal indicators of cyclically composable directed-edge words.  They are
+therefore orthogonal projections and obey the coefficient-one product law.  At
+every $L>0$, the normalized representative $\widehat A=2^{-1/2}A$, together
+with the unique multiplicity weight $\sqrt2$, has coefficient $2^{-L/2}$ and
+reconstructs $A$.  The canonical identification of its retained coordinates
+with the original bond coordinates is a coisometry.  These data give a genuine
+one-label tensor-attached BNT algebra clause for the undeformed MPDO $M$.
+
+The new obstruction does not construct a deformed tensor-attached BNT algebra
+clause.  In particular, it is not a counterexample to that clause: the natural
+deformation with nonscalar Gram matrix already fails the MPDO premise.  It also
+does not construct the identity-dressed marked realization or prove the general
+marked comparison.
+Consequently Theorem~4.14 remains partial.  Issue
+\href{https://github.com/LionSR/TNLean/issues/5284}{\#5284} remains open under
+\href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
+\href{https://github.com/LionSR/TNLean/issues/4645}{\#4645} remains open.
 The terminal-positivity theorem and the conditional Gram and unitary theorems
 remain unchanged.
-% Terminal positivity is pull request 5288; the conditional Gram and unitary
-% results are pull requests 5282 and 5286.  Issue 5290 is separate from issue 5289.
 
 \section{Non-circular product corners}
 
@@ -573,9 +577,10 @@ part of this hypothesis.  Its unitary-normalization corollary then constructs
 \]
 This is the conditional conclusion of the scalar-to-unitary argument; it does
 not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
-Terminal sector positivity excludes the explicit nonunitary-similarity witness
-from the full tensor-attached setting, but it does not supply the missing
-marked comparison.
+Terminal sector positivity excludes the generic nonunitary-similarity witness
+from the full tensor-attached setting.  The bond-two calculation further
+excludes the natural physical-similarity deformation whenever its Gram matrix
+is nonscalar.  Neither result supplies the missing marked comparison.
 
 The remaining premise is to construct the coefficient family, prove its
 physical-slice identity, and prove its common reflected-target identity at
@@ -598,11 +603,14 @@ Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
 unitary normalization are formalized under a supplied identity-dressed marked
 realization whose common-target identity is required only at positive tail
 lengths.  That realization, and in particular its common identity-gauge
-physical corner, has not been derived from condition~(ii) alone.
-Terminal sector positivity rules out the present nonunitary witness but does
-not construct the required realization.  Appendix~C.4 therefore does not
-presently justify the unconditional line~2057 unitary conclusion without a
-separately supplied local marked realization.
+physical corner, has not been derived from condition~(ii) alone.  Terminal
+sector positivity rules out the generic nonunitary witness.  The bond-two
+calculation also rules out the natural physical-similarity deformation whenever
+$X^\dagger X$ is nonscalar.  This is not a deformed tensor-attached BNT
+algebra-clause counterexample and does not construct the required marked
+realization.  Appendix~C.4 therefore does not presently justify the
+unconditional line~2057 unitary conclusion without a separately supplied local
+marked realization.
 
 \bibliographystyle{alpha}
 \bibliography{references}
