@@ -497,6 +497,28 @@ applies.
     for every physical index~$i$.
 \end{definition}
 
+\begin{theorem}[Nonpositivity of an explicit per-block extension]%
+    \label{thm:perBlockLinearExtension_not_positive}
+    \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
+        perBlockLinearExtension_not_positive}
+    \leanok
+    \uses{def:perBlockLinearExtension}
+    Let $A$ be the four-letter bond-two tensor with letters
+    $\Id,E_{00},E_{01},E_{10}$, let $X=\diag(2,1)$, and set
+    $B^i=XA^iX^{-1}$. Viewed as one-block families, $A$ and $B$ are
+    injective and have equal closed matrix product vectors at every length.
+    Nevertheless, their per-block linear extension $T$ is not positive.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:perBlockLinearExtension}
+    Suppose that $T$ is positive. Positive Skolem--Noether then gives a
+    unitary matrix $U$ such that $T(M)=UMU^\dagger$. In particular,
+    $B^i=UA^iU^\dagger$ for every letter $i$, and hence
+    $A^i=U^\dagger B^iU$. This is the positive isometric realization with
+    scalar coefficient one that is excluded for the displayed nonunitary
+    similarity pair, a contradiction.
+\end{proof}
+
 \begin{lemma}[Per-block multiplicativity]%
     \label{lem:perBlockLinearExtension_mul}
     \lean{MPSTensor.perBlockLinearExtension_mul}
