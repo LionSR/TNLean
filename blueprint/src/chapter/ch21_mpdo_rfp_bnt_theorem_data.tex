@@ -185,6 +185,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:normal_tensor_gram_rigidity}
     The identity letter forces $c=1$. The matrix $S=V^\dagger X$ then
     commutes with all four letters of $A$, which span $\MN{2}$, and hence
     $S$ is scalar. Together with $V^\dagger V=\Id$, this would make
@@ -212,7 +213,8 @@
     $M,N\in\MN{D_k}$.
 \end{theorem}
 
-\begin{proof}\leanok\uses{def:mpdo_virtual_perBlockLinearExtension}
+\begin{proof}\leanok
+    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul}
     The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
     product vectors gives the identity on products of spanning letters.
 \end{proof}
@@ -225,7 +227,9 @@
     The per-block extension $T_k$ is bijective.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:mpdo_virtual_perBlockLinearExtension_mul}
+\begin{proof}\leanok
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,
+        thm:simplicity, lem:trace_ne_zero}
     Multiplicativity makes the kernel an ideal of the simple matrix algebra.
     The map is nonzero: otherwise every letter of $B_k$ would vanish,
     contradicting the nonvanishing trace pairing for the injective family.
