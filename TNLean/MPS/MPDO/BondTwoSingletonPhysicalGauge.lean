@@ -100,13 +100,16 @@ theorem twoSite_gaugeDeformedBaseMPO_eq_bellProjector (X : GL I ℂ) :
   ext p q
   rcases p with ⟨p₀, p₁⟩
   rcases q with ⟨q₀, q₁⟩
-  fin_cases p₀ <;> fin_cases p₁ <;> fin_cases q₀ <;> fin_cases q₁ <;>
-    simp [Matrix.reindex_apply, mpo_apply, mpoMatrixEntry, evalWord,
-      gaugeDeformedBaseMPO, ketLeftMul, braRightMul, baseMPO, Matrix.trace,
-      bellProjector, bellVector, Matrix.vecMulVec, Matrix.mul_apply,
-      Matrix.kroneckerMap_apply, Fintype.sum_prod_type, Fin.sum_univ_two,
-      Fin.sum_univ_four, finTwoArrowEquiv, piFinTwoEquiv_apply, Matrix.single,
-      finProdFinEquiv] <;> ring
+  fin_cases p₀ <;>
+    fin_cases p₁ <;>
+      fin_cases q₀ <;>
+        fin_cases q₁ <;>
+          simp [Matrix.reindex_apply, mpo_apply, mpoMatrixEntry, evalWord,
+            gaugeDeformedBaseMPO, ketLeftMul, braRightMul, baseMPO, Matrix.trace,
+            bellProjector, bellVector, Matrix.vecMulVec, Matrix.mul_apply,
+            Matrix.kroneckerMap_apply, Fintype.sum_prod_type, Fin.sum_univ_two,
+            Fin.sum_univ_four, finTwoArrowEquiv, piFinTwoEquiv_apply, Matrix.single,
+            finProdFinEquiv] <;> ring
 
 /-- If the physically deformed base model is an MPDO, then the physical
 similarity has positive scalar Gram matrix.
