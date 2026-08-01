@@ -31,7 +31,8 @@ noncomputable section
 
 namespace MPSTensor.PositiveMinimalRealizationCounterexample
 
-private abbrev oneBlockBondDim : Fin 1 → ℕ :=
+/-- The constant bond-dimension family for the one-block counterexample. -/
+abbrev oneBlockBondDim : Fin 1 → ℕ :=
   fun _ ↦ 2
 
 /-- The source tensor, regarded as a one-block family. -/
