@@ -112,6 +112,82 @@
       \l__tenkz_test_support_seq {0}{1.6666666666667}{0.3} \l_tmpa_tl
     \fp_compare:nNnF { abs(\l_tmpa_tl - 0.5) } < {0.000001}
       { \errmessage{page~daylight~was~not~lifted~into~dual~units} }
+    \__tenkz_test_affine_support:
+  }
+\cs_new_protected:Npn \__tenkz_test_affine_support:
+  {
+    \__tenkz_test_support_equiv:nnnnn {circle}{0.5}{0}{0}{31}
+    \__tenkz_test_support_equiv:nnnnn {rect}{2}{1}{0}{31}
+    \__tenkz_test_support_equiv:nnnnn {roundrect}{2}{1}{0.25}{31}
+    \__tenkz_test_support_equiv:nnnnn {triangle}{2}{1}{0}{31}
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {circle}{0.5}{0}{0}{1}{0}{0.45}{0.60}{0}
+      }
+    \fp_compare:nNnF
+      { abs(\l_tmpa_fp - 0.5 * sqrt(1 + 0.45^2)) } < {0.000001}
+      { \errmessage{an~affine~circle~lost~its~transformed~support} }
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {rect}{2}{1}{0}{1}{0}{0.45}{0.60}{0}
+      }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 2.45) } < {0.000001}
+      { \errmessage{an~affine~rectangle~lost~one~basis~vector} }
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {roundrect}{2}{1}{0.25}{1}{0}{0.45}{0.60}{0}
+      }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l_tmpa_fp
+          - 1.75 - 0.75 * 0.45 - 0.25 * sqrt(1 + 0.45^2) )
+      }
+      < {0.000001}
+      { \errmessage{an~affine~rounded~rectangle~lost~its~corner~support} }
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {triangle}{2}{1}{0}{1}{0}{0.45}{0.60}{0}
+      }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 2) } < {0.000001}
+      { \errmessage{an~affine~triangle~lost~its~apex~support} }
+    \seq_clear:N \l__tenkz_test_support_seq
+    \seq_put_right:Nn \l__tenkz_test_support_seq
+      { {rect}{1}{2}{0}{0}{-5}{0} }
+    \seq_put_right:Nn \l__tenkz_test_support_seq
+      { {affine}{rect}{2}{1}{0}{1}{0}{0.45}{0.60}{3}{4} }
+    \__tenkz_geom_support_max:nnN
+      {l__tenkz_test_support_seq}{0} \l_tmpa_tl
+    \fp_compare:nNnF { abs(\l_tmpa_tl - 5.45) } < {0.000001}
+      { \errmessage{a~mixed~support~fold~lost~its~affine~record} }
+    \__tenkz_geom_support_max_linear:nnnN
+      {l__tenkz_test_support_seq}{0}{1.6666666666667} \l_tmpa_tl
+    \fp_compare:nNnF
+      { abs(\l_tmpa_tl - 7.6666666666668) } < {0.000001}
+      {
+        \errmessage
+          {
+            a~dual-basis~support~fold~lost~its~affine~record:
+            ~\tl_use:N \l_tmpa_tl
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_test_support_equiv:nnnnn #1#2#3#4#5
+  {
+    \fp_set:Nn \l_tmpa_fp
+      { \__tenkz_geom_support:nnnnnn {#1}{#2}{#3}{#4}{#5}{17} }
+    \fp_set:Nn \l_tmpb_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {#1}{#2}{#3}{#4}
+          {cosd(#5)}{sind(#5)}{-sind(#5)}{cosd(#5)}{17}
+      }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - \l_tmpb_fp) } < {0.000001}
+      { \errmessage{an~orthogonal~basis~changed~established~support} }
   }
 \cs_new_protected:Npn \__tenkz_test_leg_lane:
   {
