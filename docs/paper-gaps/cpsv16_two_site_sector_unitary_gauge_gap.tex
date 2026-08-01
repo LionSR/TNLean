@@ -542,11 +542,28 @@ reconstructs $A$.  The canonical identification of its retained coordinates
 with the original bond coordinates is a coisometry.  These data give a genuine
 one-label tensor-attached BNT algebra clause for the undeformed MPDO $M$.
 
-The new obstruction does not construct a deformed tensor-attached BNT algebra
-clause.  In particular, it is not a counterexample to that clause: the natural
-deformation with nonscalar Gram matrix already fails the MPDO premise.  It also
-does not construct the identity-dressed marked realization or prove the general
-marked comparison.
+The tensor-attached clause persists under the concrete physical similarity.
+The retained representative becomes $X\widehat A^vX^{-1}$, with the same
+positive one-label coefficient and the same closed product law, while the
+forward and reconstruction identities use the original retained-coordinate
+coisometry.  Hence $M_X$ has a genuine \path{BNTAlgebraTensorClause}.  Its
+horizontal doubled-index tensor is also in the literal CPSV canonical form: it
+is a direct sum of four bond-one normal tensors, each with nonzero weight
+$5/4$.
+
+Thus the concrete nonunitary deformation satisfies the two nonpositivity
+premises relevant here: the BNT algebra clause in Theorem~4.14(ii) and the
+standing literal horizontal CPSV canonical form.  It nevertheless fails
+positivity of the length-two matrix product operator, and therefore is not an
+MPDO.  It is not a full-contract counterexample to Theorem~4.14 and constructs
+no \path{IdentityMarkedRealization}.
+\footnote{Formal declarations:
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeDeformedBaseMPOBNTAlgebraTensorClause},
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm}, and
+\leanid{MPOTensor.BondTwoSingletonBaseModel.%
+gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO}.}
 Consequently Theorem~4.14 remains partial.  Issue
 \href{https://github.com/LionSR/TNLean/issues/5284}{\#5284} remains open under
 \href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
@@ -619,9 +636,10 @@ part of this hypothesis.  Its unitary-normalization corollary then constructs
 This is the conditional conclusion of the scalar-to-unitary argument; it does
 not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
 Terminal sector positivity excludes the generic nonunitary-similarity witness
-from the full tensor-attached setting.  The bond-two calculation further
-excludes the natural physical-similarity deformation whenever its Gram matrix
-is nonscalar.  Neither result supplies the missing marked comparison.
+from the full tensor-attached setting.  The bond-two deformation has a genuine
+tensor-attached BNT algebra clause and literal horizontal CPSV canonical form,
+but a nonscalar Gram matrix makes its length-two operator nonpositive.  These
+facts do not supply the missing marked comparison.
 
 The remaining premise is to construct the coefficient family, prove its
 physical-slice identity, and prove its common reflected-target identity at
@@ -645,11 +663,12 @@ unitary normalization are formalized under a supplied identity-dressed marked
 realization whose common-target identity is required only at positive tail
 lengths.  That realization, and in particular its common identity-gauge
 physical corner, has not been derived from condition~(ii) alone.  Terminal
-sector positivity rules out the generic nonunitary witness.  The bond-two
-calculation also rules out the natural physical-similarity deformation whenever
-$X^\dagger X$ is nonscalar.  This is not a deformed tensor-attached BNT
-algebra-clause counterexample and does not construct the required marked
-realization.  Appendix~C.4 therefore does not presently justify the
+sector positivity rules out the generic nonunitary witness.  The concrete
+bond-two deformation does carry a tensor-attached BNT algebra clause and has
+literal horizontal CPSV canonical form, but it fails the MPDO hypothesis at
+length two.  It is therefore not a full-contract counterexample and constructs
+no identity-dressed marked realization.  Appendix~C.4 therefore does not
+presently justify the
 unconditional line~2057 unitary conclusion without a separately supplied local
 marked realization.
 
