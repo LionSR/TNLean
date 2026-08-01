@@ -137,8 +137,10 @@
     \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
     It does not include the further conclusion on line~2057 that $Z_\gamma$
     may be chosen unitary.
-    % The line-2057 common-target Gram step is tracked in issue 4648; the
-    % subsequent scalar-to-unitary normalization is tracked in issue 4645 and
+    % Pull request 5282 proves the common-target Gram step conditionally, and issue
+    % 5283 proves the ensuing scalar-to-unitary normalization.  Issue 5284,
+    % under issue 4648, tracks the missing identity-dressed realization;
+    % issue 4645 therefore remains open.  See
     % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{definition}
 
@@ -189,8 +191,10 @@
     lines~2053--2057; no unitary choice of $Z_\gamma$ follows from this
     statement.
 
-    % The line-2057 common-target Gram step is tracked in issue 4648; the
-    % subsequent scalar-to-unitary normalization is tracked in issue 4645 and
+    % Pull request 5282 proves the common-target Gram step conditionally, and issue
+    % 5283 proves the ensuing scalar-to-unitary normalization.  Issue 5284,
+    % under issue 4648, tracks the missing identity-dressed realization;
+    % issue 4645 therefore remains open.  See
     % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{theorem}
 
@@ -265,8 +269,9 @@
     \end{align}
     This restriction is documented in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
-    % The missing identity-dressed corner and common-target Gram identity are
-    % tracked in issue 4648.
+    % Pull request 5282 proves the common-target Gram identity from a supplied
+    % identity-dressed realization.  Constructing that realization from the
+    % tensor-attached algebra clause is tracked in issue 5284 under issue 4648.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -337,6 +342,58 @@
     $M_\gamma$ then makes its commuting Gram matrix a positive real scalar
     multiple of the identity, proving
     (\ref{eq:mpdo_bnt_conditional_scalar_gram}).
+\end{proof}
+
+\begin{theorem}[Conditional unitary conjugacy from an identity-dressed marked
+    realization]
+    \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_unitary_sector_conjugacy_of_identityMarkedRealization}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:mpdo_bnt_two_site_exact_sector_gauge}
+    Under the hypotheses of the preceding conditional theorem, define
+    \begin{align}
+        U_\gamma&=\omega_\gamma^{-1/2}Z_\gamma.
+        \notag
+    \end{align}
+    Then $U_\gamma$ is unitary and, for every physical index $i$,
+    \begin{align}
+        A_{\sigma(\gamma)}^i
+        &=U_\gamma M_\gamma^i U_\gamma^\dagger.
+        \label{eq:mpdo_bnt_conditional_unitary_conjugacy}
+    \end{align}
+    More generally, the same conclusion follows from any exact invertible
+    sector gauge whose Gram matrix is a positive scalar multiple of the
+    identity.  This is the inverse-square-root normalization used in
+    \cite[Proposition~4.13, lines~1903--1908]{Cirac2016MPDO_arXiv}, applied
+    at Appendix~C.4, lines~2053--2057.
+
+    \textbf{Scope restriction (conditional identity-dressed marked
+    realization):} The physical-letter realization at Appendix~C.4,
+    line~2048 remains an assumption.  Hence this theorem does not establish
+    the unconditional line-2057 conclusion.  Its derivation from the
+    tensor-attached algebra clause is the remaining premise recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+    % Pull request 5282 is the conditional Gram endpoint, and issue 5283 composes it
+    % with scalar-to-unitary normalization.  Issue 5284, under issue 4648,
+    % tracks the missing premise; issue 4645 remains open.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_conditional_identity_marked_gram}
+    The preceding theorem gives
+    $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\Id$ with
+    $\omega_\gamma>0$.  Therefore
+    $U_\gamma^\dagger U_\gamma=\Id$.  The two scalar factors introduced by
+    $U_\gamma$ and $U_\gamma^\dagger$ cancel, using the Gram identity to
+    identify the adjoint factor with $Z_\gamma^{-1}$.  Thus conjugation by
+    $U_\gamma$ equals conjugation by $Z_\gamma$, and the exact sector
+    conjugacy gives
+    (\ref{eq:mpdo_bnt_conditional_unitary_conjugacy}).
 \end{proof}
 
 \begin{lemma}[Idempotence for the canonical chi coefficients]%

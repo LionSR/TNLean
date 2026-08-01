@@ -20,6 +20,15 @@ ranges to the ambient finite-dimensional Hilbert space.
 It also applies this extension to an isometric rectangular matrix, realizing
 its compression as a unitary conjugate of the corresponding square matrix
 with one complementary zero block.
+
+The inverse-square-root normalization of a matrix with positive scalar Gram
+matrix is unitary and has the same conjugation action as the original
+invertible matrix.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
+  Proposition 4.13, lines 1903--1908.
 -/
 
 open scoped Matrix InnerProductSpace
@@ -197,5 +206,63 @@ theorem smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
   rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_smul, hconjs]
   simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
   rw [h, smul_smul, hscalar, one_smul]
+
+/-- Inverse-square-root normalization preserves the conjugation action of an
+invertible matrix whose Gram matrix is a positive scalar multiple of the
+identity.
+
+This is the equality between conjugation by
+$U = \omega^{-1/2}X$ and conjugation by $X$ used after equation
+`eq3:proof.IV.12` in CPSV16, Proposition 4.13, lines 1903--1908.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1903--1908. -/
+theorem normalized_conj_eq_conj_inv_of_gram_eq_smul_one
+    {n : Type*} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℂ) (X : GL n ℂ) {ω : ℝ} (hω : 0 < ω)
+    (hGram : (X : Matrix n n ℂ)ᴴ * X = (ω : ℂ) • 1) :
+    (((Real.sqrt ω : ℂ))⁻¹ • (X : Matrix n n ℂ)) * A *
+        (((Real.sqrt ω : ℂ))⁻¹ • (X : Matrix n n ℂ))ᴴ =
+      (X : Matrix n n ℂ) * A * (↑(X⁻¹) : Matrix n n ℂ) := by
+  have hs_sq : Real.sqrt ω * Real.sqrt ω = ω :=
+    Real.mul_self_sqrt hω.le
+  have hs_ne : ((Real.sqrt ω : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_pos.mpr hω).ne'
+  have hconjs : star ((Real.sqrt ω : ℂ))⁻¹ =
+      ((Real.sqrt ω : ℂ))⁻¹ := by
+    rw [star_inv₀]
+    congr 1
+    exact Complex.conj_ofReal _
+  have hscalar : ((Real.sqrt ω : ℂ))⁻¹ *
+      ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) = 1 := by
+    rw [show ((ω : ℝ) : ℂ) =
+        (Real.sqrt ω : ℂ) * (Real.sqrt ω : ℂ) by
+      rw [← Complex.ofReal_mul, hs_sq]]
+    field_simp [hs_ne]
+  have hXstar : (X : Matrix n n ℂ)ᴴ =
+      (ω : ℂ) • (↑(X⁻¹) : Matrix n n ℂ) := by
+    have hXinv : (X : Matrix n n ℂ) *
+        (↑(X⁻¹) : Matrix n n ℂ) = 1 := X.val_inv
+    calc
+      (X : Matrix n n ℂ)ᴴ =
+          (X : Matrix n n ℂ)ᴴ *
+            ((X : Matrix n n ℂ) * (↑(X⁻¹) : Matrix n n ℂ)) := by
+              rw [hXinv, Matrix.mul_one]
+      _ = ((X : Matrix n n ℂ)ᴴ * X) *
+          (↑(X⁻¹) : Matrix n n ℂ) := by
+            rw [Matrix.mul_assoc]
+      _ = (ω : ℂ) • (↑(X⁻¹) : Matrix n n ℂ) := by
+            rw [hGram, Matrix.smul_mul, Matrix.one_mul]
+  rw [Matrix.conjTranspose_smul, hconjs, hXstar]
+  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+    Matrix.mul_assoc]
+  rw [show ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) *
+      ((Real.sqrt ω : ℂ))⁻¹ = 1 by
+    calc
+      ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) *
+          ((Real.sqrt ω : ℂ))⁻¹ =
+        ((Real.sqrt ω : ℂ))⁻¹ *
+          ((Real.sqrt ω : ℂ))⁻¹ * (ω : ℂ) := by ring
+      _ = 1 := hscalar]
+  simp
 
 end Matrix

@@ -120,56 +120,6 @@ private theorem normalized_gauge_intertwining
   simp only [Matrix.mul_one, smul_smul]
   rw [mul_comm (((Real.sqrt omega : ℂ))⁻¹) c]
 
-private theorem normalized_gauge_corner
-    (A : Matrix (Fin n) (Fin n) ℂ) (X : GL (Fin n) ℂ)
-    (c : ℂ) (omega : ℝ) (homega : 0 < omega)
-    (hGram : (X : Matrix (Fin n) (Fin n) ℂ)ᴴ * X = (omega : ℂ) • 1) :
-    (((Real.sqrt omega : ℂ))⁻¹ •
-          (X : Matrix (Fin n) (Fin n) ℂ)) * (c • A) *
-        (((Real.sqrt omega : ℂ))⁻¹ •
-          (X : Matrix (Fin n) (Fin n) ℂ))ᴴ =
-      c • ((X : Matrix (Fin n) (Fin n) ℂ) * A *
-        (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) := by
-  have hs_sq : Real.sqrt omega * Real.sqrt omega = omega :=
-    Real.mul_self_sqrt homega.le
-  have hconjs : star ((Real.sqrt omega : ℂ))⁻¹ =
-      ((Real.sqrt omega : ℂ))⁻¹ := by
-    rw [star_inv₀]
-    congr 1
-    exact Complex.conj_ofReal _
-  have hscalar : ((Real.sqrt omega : ℂ))⁻¹ *
-      ((Real.sqrt omega : ℂ))⁻¹ * (omega : ℂ) = 1 := by
-    rw [show ((omega : ℝ) : ℂ) =
-        (Real.sqrt omega : ℂ) * (Real.sqrt omega : ℂ) by
-      rw [← Complex.ofReal_mul, hs_sq]]
-    field_simp
-  have hXstar : (X : Matrix (Fin n) (Fin n) ℂ)ᴴ =
-      (omega : ℂ) • (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) := by
-    have hXinv : (X : Matrix (Fin n) (Fin n) ℂ) *
-        (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) = 1 := by
-      exact X.val_inv
-    calc
-      (X : Matrix (Fin n) (Fin n) ℂ)ᴴ =
-          (X : Matrix (Fin n) (Fin n) ℂ)ᴴ *
-            ((X : Matrix (Fin n) (Fin n) ℂ) *
-              (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) := by
-                rw [hXinv, Matrix.mul_one]
-      _ = ((X : Matrix (Fin n) (Fin n) ℂ)ᴴ * X) *
-          (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) := by
-            rw [Matrix.mul_assoc]
-      _ = (omega : ℂ) • (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) := by
-            rw [hGram, Matrix.smul_mul, Matrix.one_mul]
-  rw [Matrix.conjTranspose_smul, hconjs, hXstar]
-  simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, Matrix.mul_assoc]
-  rw [show ((Real.sqrt omega : ℂ))⁻¹ * (omega : ℂ) *
-      (c * ((Real.sqrt omega : ℂ))⁻¹) = c by
-    calc
-      ((Real.sqrt omega : ℂ))⁻¹ * (omega : ℂ) *
-          (c * ((Real.sqrt omega : ℂ))⁻¹) =
-        c * (((Real.sqrt omega : ℂ))⁻¹ *
-          ((Real.sqrt omega : ℂ))⁻¹ * (omega : ℂ)) := by ring
-      _ = c := by rw [hscalar, mul_one]]
-
 /-- The normalized sector map intertwines with the ungauged representative
 tensor.
 
@@ -214,7 +164,9 @@ theorem normalizedGroupedSectorMap_corner (h : m = n)
             simp only [Matrix.mul_assoc]
     _ = V * (c • ((X : Matrix (Fin m) (Fin m) ℂ) * A *
         (↑(X⁻¹) : Matrix (Fin m) (Fin m) ℂ))) * Vᴴ := by
-          rw [normalized_gauge_corner A X c omega homega hGram]
+          rw [Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one
+            (c • A) X homega hGram]
+          simp only [Matrix.mul_smul, Matrix.smul_mul]
 
 end LinearAlgebra
 
