@@ -458,9 +458,14 @@ monotonicity of the logarithm.
 \doclink{TNLean/Entropy/MutualInformationOperatorSchmidt}.}
 Hence the mathematical work tracked by
 \href{https://github.com/LionSR/TNLean/issues/5212}{\#5212} is complete.  Its
-application to the finite-chain MPO estimate remains tracked by
-\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.  This does not
-complete Proposition~4.5 or alter the CPSV16 coverage count.
+application to the finite-chain MPO estimate is formalized by
+\leanid{MPOTensor.mutualInfoChain_le_two_log_bondDim}, and the source-facing
+coefficient-four consequence is formalized by
+\leanid{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim}, both in
+\doclink{TNLean/MPS/MPDO/MutualInfoAreaLaw}.  Thus the finite-chain work
+tracked by \href{https://github.com/LionSR/TNLean/issues/5213}{\#5213} is
+complete.  This does not formalize the false thermodynamic-limit clause of
+Proposition~4.5 or alter its separate negative status.
 
 \section{Diagonal matrix product operators}
 
@@ -762,15 +767,17 @@ The operator-Schmidt rank estimate is formalized.\footnote{Formal declaration:
 \doclink{TNLean/MPS/MPDO/MutualInfoBridge}.}
 The coefficient-one entropy implication is formalized by
 \leanid{Entropy.mutualInformation_le_log_operatorSchmidtRank} in
-\doclink{TNLean/Entropy/MutualInformationOperatorSchmidt}.  The remaining
-finite-chain application of that theorem to the displayed operator-Schmidt
-rank bound is tracked by
-\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
+\doclink{TNLean/Entropy/MutualInformationOperatorSchmidt}.  The resulting
+finite-chain estimate and its coefficient-four source-facing consequence are
+formalized by
+\leanid{MPOTensor.mutualInfoChain_le_two_log_bondDim} and
+\leanid{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim} in
+\doclink{TNLean/MPS/MPDO/MutualInfoAreaLaw}.
 
 The thermodynamic-limit clause of Proposition~4.5 is false at its stated
 hypothesis set, while the finite-chain bound for every positive periodic
-operator of nonzero trace is mathematically proved but not yet formalized.
-These two conclusions are tracked by issue
+operator of nonzero trace is formalized.  The remaining negative conclusion
+is tracked by issue
 \href{https://github.com/LionSR/TNLean/issues/4169}{\#4169} under the MPDO
 coverage audit
 \href{https://github.com/LionSR/TNLean/issues/2380}{\#2380}.
