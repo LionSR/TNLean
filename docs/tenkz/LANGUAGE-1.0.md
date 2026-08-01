@@ -10,10 +10,12 @@ below in the change that lands the kernel; until then the 0.7 registry and
 kernel lands, a spelling absent from the registry does not exist, and every
 table below is checked against the registry by the census.
 
-<!-- Status: L1 draft for maintainer sign-off. Supersedes LANGUAGE.md (0.7).
-     Kernel follows the Session-0 compression review; where the earlier D1-D8
-     draft and the compression review differ, the compression review wins.
-     Open sign-off decisions are collected in §14. -->
+<!-- Status: signed off (#4687); this is the binding contract. Supersedes
+     LANGUAGE.md (0.7). Kernel follows the Session-0 compression review; where
+     the earlier D1-D8 draft and the compression review differ, the
+     compression review wins. The §14 decisions were confirmed at acceptance
+     (§14.3 was later reversed, as recorded there); execution state to the S4
+     surface swap is tracked on issue #4709. -->
 
 <!-- Amended 2026-07-25 by the nine signed amendments
      (AMENDMENT-corridor-and-crossing-order.md, AMENDMENT-remaining-demand.md,
