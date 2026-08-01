@@ -188,7 +188,7 @@
     \cite[Proposition~4.13, lines~943--951]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Paired vertical decompositions determine active-sector fusion]%
+\begin{theorem}[Fusion-clause assembly from paired decompositions and positive fusion data]%
     \label{thm:mpdo_paired_vertical_decompositions_fusion}
     \lean{MPOTensor.HasBNTFusionTensorClause.%
 of_verticalDecompositions_of_unitaryBlockEquiv}
@@ -197,12 +197,27 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     Let $\mathcal D_1$ and $\mathcal D_2$ be positive vertical canonical
     decompositions of an MPO tensor and its two-site blocking. Suppose their
     normal sectors are identified by a bijection $\sigma$ and unitary
-    conjugacies with the corresponding multiplicity-trace ratios. If the
-    products of the one-site normal tensors have positive active-sector fusion
-    coisometries, then $\mathcal D_1$ determines a tensor-attached fusion
-    clause. This is the common final construction in the forward implication
-    of \cite[Theorem~4.14(i),(iii), lines~972--993, and Appendix~C.4,
-    lines~2001--2046]{Cirac2016MPDO_arXiv}.
+    conjugacies with the corresponding multiplicity-trace ratios. Suppose also
+    that positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ and
+    coisometries $U_{\alpha,\beta}$ are supplied, with
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=1$, and satisfy both
+    \begin{align}
+      U_{\alpha,\beta}(M_\alpha M_\beta)^{ij}
+        U_{\alpha,\beta}^{\dagger}
+      &=\bigoplus_\gamma
+        \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij},
+      \notag\\
+      (M_\alpha M_\beta)^{ij}
+      &=U_{\alpha,\beta}^{\dagger}
+        \left(\bigoplus_\gamma
+          \chi_{\alpha,\beta,\gamma}\otimes M_\gamma^{ij}\right)
+        U_{\alpha,\beta}.
+      \notag
+    \end{align}
+    Then the simultaneous blocked representations yield the missing
+    length-one idempotent trace-scalar law and complete the tensor-attached
+    fusion clause. This is the final assembly construction extracted from
+    \cite[Appendix~C.4, lines~2001--2046]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_vertical_operator_representations,
@@ -215,32 +230,6 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     the multiplicity multisets, and summing their entries gives
     $m_\gamma=\sum_{\alpha,\beta}
       \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
-\end{proof}
-
-\begin{theorem}[Horizontal-form renormalization fixed points have active-sector fusion]%
-    \label{thm:mpdo_rfp_to_bnt_fusion_tensor}
-    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
-    \leanok
-    \uses{def:is_rfp_via_ts,
-        def:horizontal_cf_mpdo,
-        def:mpdo_bnt_fusion_tensor_clause}
-    Let $M$ be a matrix product density operator in normalized BNT-refined
-    horizontal form. If the one-site and two-site physical closures are
-    related in both directions by trace-preserving completely positive maps
-    as in Definition~4.1, then a vertical canonical decomposition of $M$ has the
-    active-sector fusion clause above. In particular, its positive diagonal
-    fusion matrices satisfy the length-one idempotent trace-scalar identity.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:vertical_cf_of_horizontal_cf,
-      thm:mpdo_transported_vertical_sector_coefficient_comparison,
-      thm:mpdo_transported_vertical_product_positive_fusion_decomposition,
-      thm:mpdo_paired_vertical_decompositions_fusion}
-    Choose the one-site and two-site vertical canonical decompositions supplied
-    by the normalized BNT-refined horizontal form. The renormalization maps
-    identify their normal sectors and give positive fusion coisometries.
-    Apply the paired-decomposition theorem to obtain the tensor-attached
-    fusion clause.
 \end{proof}
 
 \begin{theorem}[Literal CPSV renormalization fixed points have active-sector fusion]%
@@ -293,6 +282,37 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     theorem gives the positive diagonal matrices, coisometries, and exact
     reconstruction on every active product sector. The paired-decomposition
     theorem then gives the tensor-attached fusion clause.
+\end{proof}
+
+\begin{corollary}[Horizontal-form renormalization fixed points have active-sector fusion]%
+    \label{cor:mpdo_rfp_to_bnt_fusion_tensor}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+        def:horizontal_cf_mpdo,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $M$ be a matrix product density operator in normalized BNT-refined
+    horizontal form. If the one-site and two-site physical closures are
+    related in both directions by trace-preserving completely positive maps
+    as in Definition~4.1, then a vertical canonical decomposition of $M$ has the
+    active-sector fusion clause above. In particular, its positive diagonal
+    fusion matrices satisfy the length-one idempotent trace-scalar identity.
+
+    \textbf{Scope restriction (BNT-refined horizontal form):}
+    the normalized BNT-refined horizontal hypothesis is stronger than the
+    literal CPSV canonical-form hypothesis.
+    % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:vertical_cf_of_horizontal_cf,
+      thm:mpdo_transported_vertical_sector_coefficient_comparison,
+      thm:mpdo_transported_vertical_product_positive_fusion_decomposition,
+      thm:mpdo_paired_vertical_decompositions_fusion}
+    Choose the one-site and two-site vertical canonical decompositions supplied
+    by the normalized BNT-refined horizontal form. The renormalization maps
+    identify their normal sectors and give positive fusion coisometries.
+    Apply the paired-decomposition theorem to obtain the tensor-attached
+    fusion clause.
 \end{proof}
 
 \begin{theorem}[Active-sector fusion implies the tensor-attached algebra clause]%
