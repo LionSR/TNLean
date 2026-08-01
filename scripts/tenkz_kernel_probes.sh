@@ -305,7 +305,7 @@ python3 "$REPO/scripts/tenkz_audit.py" \
   exit 1
 }
 [ "$(grep -c 'check|relation=1|result=equal' \
-      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 5 ] || {
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 7 ] || {
   echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
   exit 1
 }
