@@ -1,0 +1,373 @@
+\subsection{Ambient sector retractions and normalized embeddings}
+
+\begin{definition}[Ambient sector retractions and normalized embeddings]
+    \label{def:mpdo_bnt_ambient_sector_maps}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetraction}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetraction_apply}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteNormalizedAmbientSectorRestoration}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteNormalizedAmbientSectorRestoration_apply}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetraction}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetraction_apply}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestoration}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestoration_apply}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestoration_apply_explicit}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        relabeledTwoSiteMultiplicityTrace_eq_oneSite}
+    \lean{MPOTensor.verticalSectorAmbientRetraction}
+    \lean{MPOTensor.verticalSectorAmbientRetraction_apply}
+    \lean{MPOTensor.verticalSectorAmbientRetraction_apply_sector}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestoration}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestoration_apply}
+    \leanok
+    \uses{def:mpdo_bnt_two_site_multiplicity_spectrum,
+        def:mpdo_normalized_vertical_sector_maps,
+        def:mpdo_retained_vertical_sector_coordinates,
+        def:mpdo_two_site_blocking,
+        thm:mpdo_bnt_multiplicity_trace_normalization}
+    Let
+    \begin{align}
+        \mathcal A_1
+        &=\bigoplus_\gamma \MN{d_\gamma},
+        &
+        \mathcal A_2^\sigma
+        &=\bigoplus_\gamma \MN{\widetilde d_{\sigma(\gamma)}}
+        \notag
+    \end{align}
+    be the one-site sector algebra and the relabelled two-site sector algebra.
+    Their retained physical spaces are
+    \begin{align}
+        \mathcal K_1
+        &=\bigoplus_\gamma
+          \left(\C^{r_\gamma}\otimes\C^{d_\gamma}\right),
+        &
+        \mathcal K_2^\sigma
+        &=\bigoplus_\gamma
+          \left(\C^{\widetilde r_{\sigma(\gamma)}}
+            \otimes\C^{\widetilde d_{\sigma(\gamma)}}\right).
+        \notag
+    \end{align}
+    Let $W_1\colon\C^d\to\mathcal K_1$ and
+    $W_2\colon\C^{d^2}\to\mathcal K_2^\sigma$ be the corresponding
+    coisometries, so that $W_i W_i^\dagger=I$.  Write $\Pi_{1,\gamma}$ for
+    the projection onto the $\gamma$-summand of $\mathcal K_1$ and
+    $\Pi_{2,\gamma}^\sigma$ for the projection onto the
+    $\sigma(\gamma)$-summand of $\mathcal K_2^\sigma$.  Let
+    \begin{align}
+        \kappa_\ast\colon\MN{d^2}
+        &\longrightarrow \MN{d}\otimes\MN{d}
+        \notag
+    \end{align}
+    be the canonical relabelling of a pair of physical indices.  For the
+    positive diagonal multiplicity matrices $\mu_\gamma$ and
+    $\nu_{\sigma(\gamma)}$, set
+    \begin{align}
+        m_\gamma
+        &=\tr(\mu_\gamma)
+         =\tr(\nu_{\sigma(\gamma)}).
+        \label{eq:mpdo_bnt_ambient_sector_trace_weights}
+    \end{align}
+    Define
+    \begin{align}
+        R_1\colon\MN{d}&\longrightarrow\mathcal A_1,
+        &
+        [R_1(X)]_\gamma
+        &=\tr_{\mathrm{mult}}
+          \left(\Pi_{1,\gamma}W_1XW_1^\dagger\Pi_{1,\gamma}\right),
+        \label{eq:mpdo_bnt_ambient_sector_R1}
+        \\
+        R_2\colon\MN{d}\otimes\MN{d}&\longrightarrow\mathcal A_2^\sigma,
+        &
+        [R_2(Y)]_\gamma
+        &=\tr_{\mathrm{mult}}
+          \left(\Pi_{2,\gamma}^\sigma W_2\kappa_\ast^{-1}(Y)W_2^\dagger
+            \Pi_{2,\gamma}^\sigma\right),
+        \label{eq:mpdo_bnt_ambient_sector_R2}
+        \\
+        \widetilde R_1\colon\mathcal A_1&\longrightarrow\MN{d},
+        &
+        \widetilde R_1((X_\gamma)_\gamma)
+        &=W_1^\dagger
+          \left(\bigoplus_\gamma
+            \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)W_1,
+        \label{eq:mpdo_bnt_ambient_sector_R1_tilde}
+        \\
+        \widetilde R_2\colon\mathcal A_2^\sigma
+          &\longrightarrow\MN{d}\otimes\MN{d},
+        &
+        \widetilde R_2((Y_\gamma)_\gamma)
+        &=\kappa_\ast\!\left[
+          W_2^\dagger\left(\bigoplus_\gamma
+            \frac{\nu_{\sigma(\gamma)}}{m_\gamma}\otimes Y_\gamma\right)W_2
+          \right].
+        \label{eq:mpdo_bnt_ambient_sector_R2_tilde}
+    \end{align}
+    In Appendix~C.4 of \cite{Cirac2016MPDO_arXiv}, lines~2067--2068 define
+    $R_1$ by~(\ref{eq:mpdo_bnt_ambient_sector_R1}), and lines~2078--2079
+    define $R_2$ by~(\ref{eq:mpdo_bnt_ambient_sector_R2}).
+    Lines~2081--2083 give the normalized map $\widetilde R_1$ in
+    (\ref{eq:mpdo_bnt_ambient_sector_R1_tilde}).  Lines~2058--2071 give
+    $\widetilde R_2$, including its common denominator, in
+    (\ref{eq:mpdo_bnt_ambient_sector_R2_tilde}).
+    These four definitions use only the two vertical decompositions, their
+    sector relabelling, and
+    (\ref{eq:mpdo_bnt_ambient_sector_trace_weights}).
+\end{definition}
+
+\begin{theorem}[Complete positivity of the ambient sector maps]
+    \label{thm:mpdo_bnt_ambient_sector_complete_positivity}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetractionExtension_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetractionExtension}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        oneSiteNormalizedAmbientSectorRestorationExtension_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteNormalizedAmbientSectorRestorationExtension}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetractionExtension_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetractionExtension}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestorationExtension_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestorationExtension}
+    \lean{MPOTensor.verticalSectorAmbientRetractionExtension}
+    \lean{MPOTensor.verticalSectorAmbientRetractionExtension_factorization}
+    \lean{MPOTensor.verticalSectorAmbientRetractionExtension_isKrausCP}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension_factorization}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension_isKrausCP}
+    \leanok
+    \uses{def:kraus_map_between_direct_sums,
+        def:mpdo_bnt_ambient_sector_maps}
+    Represent a sector family by its block-diagonal matrix.  For a map whose
+    domain is a sector algebra, first extract the diagonal sector blocks from
+    an arbitrary matrix.  With these canonical full-matrix representatives,
+    each of $R_1$, $R_2$, $\widetilde R_1$, and $\widetilde R_2$ is completely
+    positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_vertical_sector_partial_trace_kraus,
+        lem:mpdo_single_kraus_map_cp,
+        thm:mpdo_equiv_reindex_cptp,
+        lem:is_kraus_cp_comp}
+    Each raw retraction is the composition of compression by $W_i$, a unitary
+    relabelling of coordinates, sectorwise partial trace, and block-diagonal
+    inclusion.  Each normalized embedding is the composition of diagonal-block
+    extraction, preparation of the positive matrix
+    $\mu_\gamma/m_\gamma$ or
+    $\nu_{\sigma(\gamma)}/m_\gamma$, coordinate relabelling, and expansion by
+    $W_i^\dagger$.  Every constituent has a Kraus representation, and
+    compositions of such maps are completely positive.
+\end{proof}
+
+% Local fix (zero-sector complement): the coisometries need not have full
+% ambient support, so the raw maps are trace-nonincreasing rather than
+% trace-preserving. Documented in
+% docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
+\begin{theorem}[Trace of the ambient sector maps]
+    \label{thm:mpdo_bnt_ambient_sector_trace}
+    \lean{MPOTensor.BNTAlgebraTensorClause.verticalSectorTrace_oneSiteAmbientSectorRetraction}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        verticalSectorTrace_twoSiteAmbientSectorRetraction}
+    \lean{MPOTensor.BNTAlgebraTensorClause.verticalSectorTrace_oneSiteAmbientSectorRetraction_le}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        verticalSectorTrace_twoSiteAmbientSectorRetraction_le}
+    \lean{MPOTensor.BNTAlgebraTensorClause.trace_oneSiteNormalizedAmbientSectorRestoration}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        trace_twoSiteNormalizedAmbientSectorRestoration}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        oneSiteNormalizedAmbientSectorRestorationExtension_isKrausCPTP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestorationExtension_isKrausCPTP}
+    \lean{MPOTensor.verticalSectorTrace_verticalSectorAmbientRetraction_le}
+    \lean{MPOTensor.trace_normalizedVerticalSectorAmbientRestoration}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestorationExtension_isKrausCPTP}
+    \leanok
+    \uses{def:mpdo_bnt_ambient_sector_maps,
+        def:mpdo_positive_vertical_sector_family,
+        thm:mpdo_bnt_ambient_sector_complete_positivity}
+    For arbitrary ambient matrices $X\in\MN{d}$ and
+    $Y\in\MN{d}\otimes\MN{d}$,
+    \begin{align}
+        \Trsec(R_1(X))
+        &=\tr(W_1XW_1^\dagger),
+        \label{eq:mpdo_bnt_ambient_sector_R1_trace}
+        \\
+        \Trsec(R_2(Y))
+        &=\tr\!\left(W_2\kappa_\ast^{-1}(Y)W_2^\dagger\right).
+        \label{eq:mpdo_bnt_ambient_sector_R2_trace}
+    \end{align}
+    If $X$ and $Y$ are positive semidefinite, then
+    \begin{align}
+        \Trsec(R_1(X))
+        &\leq\tr(X),
+        &
+        \Trsec(R_2(Y))
+        &\leq\tr(Y).
+        \label{eq:mpdo_bnt_ambient_sector_trace_loss}
+    \end{align}
+    In the other direction, for $Z\in\mathcal A_1$ and
+    $Z'\in\mathcal A_2^\sigma$,
+    \begin{align}
+        \tr(\widetilde R_1(Z))
+        &=\Trsec(Z),
+        &
+        \tr(\widetilde R_2(Z'))
+        &=\Trsec(Z').
+        \label{eq:mpdo_bnt_ambient_sector_embedding_trace}
+    \end{align}
+    Hence the canonical full-matrix representatives of $\widetilde R_1$ and
+    $\widetilde R_2$ are trace-preserving completely positive maps.
+
+    The inequalities in
+    (\ref{eq:mpdo_bnt_ambient_sector_trace_loss}) may be strict.  Indeed,
+    $W_i^\dagger W_i$ is the projection onto the retained nonzero sectors and
+    need not be the identity on the ambient space.  A positive matrix supported
+    on the discarded orthogonal complement is annihilated by the corresponding
+    compression.  Thus $R_1$ and $R_2$ are not asserted to preserve the trace
+    on all ambient positive matrices, and no term acting on the discarded
+    complement is included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_normalized_vertical_sector_positive_trace,
+        lem:mpdo_coisometric_compression_trace,
+        thm:mpdo_equiv_reindex_cptp}
+    Sectorwise partial trace and block-diagonal inclusion preserve the total
+    trace, which gives
+    (\ref{eq:mpdo_bnt_ambient_sector_R1_trace}) and
+    (\ref{eq:mpdo_bnt_ambient_sector_R2_trace}).  For
+    $P_i=W_i^\dagger W_i$, cyclicity of trace gives
+    \begin{align}
+        \tr(W_i ZW_i^\dagger)
+        &=\tr(P_i Z)\leq\tr(Z)
+        \notag
+    \end{align}
+    when $Z\succeq0$.  The relabelling $\kappa_\ast$ preserves positivity and
+    trace, proving (\ref{eq:mpdo_bnt_ambient_sector_trace_loss}).  Finally, each
+    normalized multiplicity matrix has trace one, and
+    $W_i W_i^\dagger=I$ gives
+    $\tr(W_i^\dagger BW_i)=\tr(B)$.  This proves
+    (\ref{eq:mpdo_bnt_ambient_sector_embedding_trace}); complete positivity is
+    supplied by the preceding theorem.
+\end{proof}
+
+\begin{theorem}[Retraction identities for the ambient sector maps]
+    \label{thm:mpdo_bnt_ambient_sector_retractions}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        oneSiteAmbientSectorRetraction_comp_normalizedRestoration}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetraction_comp_normalizedRestoration}
+    \lean{MPOTensor.verticalSectorAmbientRetraction_comp_normalizedRestoration}
+    \leanok
+    \uses{def:mpdo_bnt_ambient_sector_maps}
+    The raw retractions are left inverses of their normalized embeddings:
+    \begin{align}
+        R_1\widetilde R_1
+        &=\id_{\mathcal A_1},
+        &
+        R_2\widetilde R_2
+        &=\id_{\mathcal A_2^\sigma}.
+        \label{eq:mpdo_bnt_ambient_sector_retractions}
+    \end{align}
+    No identity is asserted for either reverse composite on the full ambient
+    matrix algebra.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_retained_vertical_sector_retraction,
+        thm:mpdo_equiv_reindex_cptp}
+    Compressing an expansion by $W_i^\dagger$ gives the original retained
+    block-diagonal matrix because $W_i W_i^\dagger=I$.  On every sector,
+    \begin{align}
+        \tr_{\mathrm{mult}}
+        \left(\frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)
+        &=X_\gamma,
+        &
+        \tr_{\mathrm{mult}}
+        \left(\frac{\nu_{\sigma(\gamma)}}{m_\gamma}\otimes Y_\gamma\right)
+        &=Y_\gamma,
+        \notag
+    \end{align}
+    where the second equality uses
+    $\tr(\nu_{\sigma(\gamma)})=m_\gamma$.  The two coordinate relabellings in
+    the two-site composite cancel.  These identities prove
+    (\ref{eq:mpdo_bnt_ambient_sector_retractions}).
+\end{proof}
+
+\begin{theorem}[Action on the weighted tensor letters]
+    \label{thm:mpdo_bnt_ambient_sector_tensor_letters}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteAmbientSectorRetraction_verticalTensor}
+    \lean{MPOTensor.BNTAlgebraTensorClause.%
+        oneSiteNormalizedAmbientSectorRestoration_trace_smul_verticalTensor}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteAmbientSectorRetraction_verticalTensor}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteNormalizedAmbientSectorRestoration_trace_smul_verticalTensor}
+    \lean{MPOTensor.verticalSectorAmbientRetraction_weightedBlockDiagonal}
+    \lean{MPOTensor.normalizedVerticalSectorAmbientRestoration_trace_smul}
+    \leanok
+    \uses{def:mpdo_bnt_ambient_sector_maps,
+        lem:mpdo_normalized_retained_vertical_sector_embedding,
+        lem:mpdo_retained_vertical_sector_partial_trace,
+        thm:mpdo_bnt_multiplicity_trace_normalization}
+    For every vertical letter $v$, the one-site maps satisfy
+    \begin{align}
+        R_1(\widetilde M_v)
+        &=\bigl(m_\gamma M_\gamma^v\bigr)_\gamma,
+        &
+        \widetilde R_1\bigl((m_\gamma M_\gamma^v)_\gamma\bigr)
+        &=\widetilde M_v.
+        \label{eq:mpdo_bnt_ambient_sector_one_site_letters}
+    \end{align}
+    The relabelled two-site maps satisfy
+    \begin{align}
+        R_2\!\left(\kappa_\ast(\widetilde{M^{[2]}}_v)\right)
+        &=\bigl(m_\gamma A_{\sigma(\gamma)}^v\bigr)_\gamma,
+        \notag\\
+        \widetilde R_2\bigl((m_\gamma A_{\sigma(\gamma)}^v)_\gamma\bigr)
+        &=\kappa_\ast(\widetilde{M^{[2]}}_v).
+        \label{eq:mpdo_bnt_ambient_sector_two_site_letters}
+    \end{align}
+    The first and second one-site identities combine the one-site weighted
+    sector form of
+    \cite[Appendix~C.4, lines~2048--2051]{Cirac2016MPDO_arXiv} with,
+    respectively,
+    \cite[Appendix~C.4, lines~2067--2068]{Cirac2016MPDO_arXiv} and
+    \cite[Appendix~C.4, lines~2081--2083]{Cirac2016MPDO_arXiv}.
+    The first two-site identity combines the matched weighted sector form of
+    \cite[Appendix~C.4, lines~2048--2064]{Cirac2016MPDO_arXiv} with the map
+    $R_2$ of \cite[Appendix~C.4, lines~2078--2079]{Cirac2016MPDO_arXiv}.
+    The second combines the same sector form with the normalized map
+    $\widetilde R_2$ of
+    \cite[Appendix~C.4, lines~2070--2071]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_normalized_retained_vertical_sector_embedding,
+        lem:mpdo_retained_vertical_sector_partial_trace,
+        thm:mpdo_bnt_multiplicity_trace_normalization}
+    The vertical reconstruction identities give
+    \begin{align}
+        \widetilde M_v
+        &=W_1^\dagger\left(\bigoplus_\gamma
+          \mu_\gamma\otimes M_\gamma^v\right)W_1,
+        \notag\\
+        \widetilde{M^{[2]}}_v
+        &=W_2^\dagger\left(\bigoplus_\gamma
+          \nu_{\sigma(\gamma)}\otimes A_{\sigma(\gamma)}^v\right)W_2.
+        \notag
+    \end{align}
+    Compression removes the two outer coisometries, and partial trace over the
+    multiplicity coordinate multiplies the simple-sector letter by
+    $\tr(\mu_\gamma)=m_\gamma$ or
+    $\tr(\nu_{\sigma(\gamma)})=m_\gamma$.  This proves the first identity in
+    each of (\ref{eq:mpdo_bnt_ambient_sector_one_site_letters}) and
+    (\ref{eq:mpdo_bnt_ambient_sector_two_site_letters}).  Preparing the
+    normalized multiplicity matrix cancels the factor $m_\gamma$ and the
+    reconstruction identities give the two reverse formulas.
+\end{proof}
