@@ -34,8 +34,6 @@ discharge the standalone strong-subadditivity axiom.
   of the conjugations by the $d_C^2$ unitaries $\mathbf 1_S \otimes W(a,b)$ on the
   ancilla factor equals the partial trace tensored with the maximally mixed
   ancilla state.
-* `quantumRelativeEntropy_submatrix_equiv` — invariance of the relative entropy
-  under reindexing both arguments by a bijection of the index set.
 * `TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_index` — joint
   convexity of the relative entropy on an arbitrary finite index, transported from
   the canonical finite index.
