@@ -539,6 +539,21 @@ private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
               simp [Matrix.trace_smul, mul_add]
         _ = 0 := by simp [hM]
 
+private theorem eq_zero_and_eq_zero_of_pair_trace_eq_zero {D₁ D₂ : ℕ}
+    (W : Submodule ℂ
+      (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ))
+    (hW : W = ⊤)
+    (ΔA : Matrix (Fin D₁) (Fin D₁) ℂ)
+    (ΔB : Matrix (Fin D₂) (Fin D₂) ℂ)
+    (hZero : ∀ M ∈ W,
+      Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0) :
+    ΔA = 0 ∧ ΔB = 0 := by
+  constructor
+  · exact (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2 fun M ↦ by
+      simpa using hZero (M, 0) (by rw [hW]; exact Submodule.mem_top)
+  · exact (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2 fun N ↦ by
+      simpa using hZero (0, N) (by rw [hW]; exact Submodule.mem_top)
+
 /-- The pair trace-separation criterion is the dual form of pair product-span. -/
 theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
@@ -586,15 +601,8 @@ theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
         rintro M ⟨w, rfl⟩
         exact hΔ w)
       M hM
-  constructor
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
-    intro M
-    have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
-    intro N
-    have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
+  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
+    (Submodule.span ℂ (Set.range (pairWordTuple A B S))) hSpan ΔA ΔB hZeroOnSpan
 
 /-- Homogeneous pair product-span is equivalent to homogeneous trace separation. -/
 theorem pairWordTupleSpanTop_iff_pairTraceSeparatingAt {D₁ D₂ : ℕ}
@@ -650,15 +658,8 @@ theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : �
         rintro M ⟨w, hw, rfl⟩
         exact hΔ w hw)
       M (by simpa [pairCumulativeSpan] using hM)
-  constructor
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
-    intro M
-    have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
-    intro N
-    have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
+  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
+    (pairCumulativeSpan A B S) hSpan ΔA ΔB hZeroOnSpan
 
 /-- Cumulative trace separation is equivalent to cumulative pair product-span. -/
 theorem pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo {D₁ D₂ : ℕ}
@@ -742,15 +743,8 @@ theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
         rintro M ⟨w, rfl⟩
         exact hΔ w)
       M (by simpa [pairAllWordsSpan] using hM)
-  constructor
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔA) (B := 0)).2
-    intro M
-    have hpair := hZeroOnSpan (M, 0) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
-  · apply (Matrix.ext_iff_trace_mul_right (A := ΔB) (B := 0)).2
-    intro N
-    have hpair := hZeroOnSpan (0, N) (by rw [hSpan]; exact Submodule.mem_top)
-    simpa using hpair
+  exact eq_zero_and_eq_zero_of_pair_trace_eq_zero
+    (pairAllWordsSpan A B) hSpan ΔA ΔB hZeroOnSpan
 
 /-- All-length trace separation is equivalent to all-word pair product-span. -/
 theorem pairAllWordsSpanTop_iff_pairTraceSeparatingAll {D₁ D₂ : ℕ}
