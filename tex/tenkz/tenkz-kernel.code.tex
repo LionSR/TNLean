@@ -4275,6 +4275,37 @@
       \l__tenkz_kernel_r_basis_vy_tl
   }
 
+% Append the one sanctioned glyph transform for a record's carrier.  Plane
+% contours consume their declared complete basis; flat and circular carriers
+% retain the established scalar-turn path.
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_frame:nN #1#2
+  {
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
+      {
+        \tl_put_right:Ne #2
+          {
+            , tenkz~glyph~basis = {
+                \l__tenkz_kernel_r_basis_ex_tl ,
+                \l__tenkz_kernel_r_basis_ey_tl ,
+                \l__tenkz_kernel_r_basis_nx_tl ,
+                \l__tenkz_kernel_r_basis_ny_tl
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
+        \fp_compare:nNnF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
+          {
+            \tl_put_right:Ne #2
+              {
+                , tenkz~glyph~frame =
+                    \tl_use:N \l__tenkz_kernel_r_ink_turn_tl
+              }
+          }
+      }
+  }
+
 % Carry one of an atom's logical face directions to the page.  Kernel cell
 % coordinates are (row, column), whereas the face is measured from local east.
 % Geometry owns the complete east/north basis at that address and carries the
@@ -5705,7 +5736,11 @@
               \l__tenkz_kernel_hull_b_tl
           }
       }
-    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \__tenkz_kernel_r_affine_page_padding:n {#1}
+    \__tenkz_kernel_r_affine_page_style:N \l__tenkz_kernel_hull_b_tl
+    \bool_if:NF \l__tenkz_kernel_r_basis_plane_bool
+      { \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl }
     \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
       { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
     \group_begin:
@@ -5716,16 +5751,10 @@
         {
           \hbox_gset:cn { \tl_use:N \l__tenkz_kernel_hull_box_tl }
             {
-              % Ordinary ellipsis glyphs use the live renderer's normal style.
-              % Pairing hosts retain their established route-support box until
-              % pairing boundaries and ink switch together.
+              % Ellipsis glyphs use the live renderer's normal math size.
+              % Inscribed labels use the audited smaller label size.
               $
-                \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {dots}
-                  {
-                    \prop_if_in:NnT
-                      \l__tenkz_kernel_skin_pairing_host_prop {#1}
-                      { \use:c {tenkz@labelsize} }
-                  }
+                \str_if_eq:VnF \l__tenkz_kernel_hull_skin_tl {dots}
                   { \use:c {tenkz@labelsize} }
                 \tl_use:N \l__tenkz_kernel_hull_a_tl $
             }
@@ -5885,7 +5914,6 @@
               \l__tenkz_kernel_hull_shape_tl
             \quark_if_no_value:NT \l__tenkz_kernel_hull_shape_tl
               { \tl_set:Nn \l__tenkz_kernel_hull_shape_tl {rect} }
-            \__tenkz_kernel_r_turn:nN {##1} \l__tenkz_kernel_hull_turn_tl
             \fp_set:Nn \l__tenkz_kernel_hull_xoff_fp
               {
                 ( \l__tenkz_kernel_hull_xmin_tl
@@ -5896,53 +5924,67 @@
                 ( \l__tenkz_kernel_hull_ymin_tl
                   + \l__tenkz_kernel_hull_ymax_tl ) / 2
               }
-            \fp_set:Nn \l__tenkz_kernel_hull_xrot_fp
+            \__tenkz_kernel_r_carrier_basis:n {##1}
+            \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
               {
-                \l__tenkz_kernel_hull_xoff_fp
-                  * cosd( \l__tenkz_kernel_hull_turn_tl )
-                - \l__tenkz_kernel_hull_yoff_fp
-                  * sind( \l__tenkz_kernel_hull_turn_tl )
+                \__tenkz_geom_basis_apply:nnnnnnNN
+                  { \l__tenkz_kernel_r_basis_ex_tl }
+                  { \l__tenkz_kernel_r_basis_ey_tl }
+                  { \l__tenkz_kernel_r_basis_nx_tl }
+                  { \l__tenkz_kernel_r_basis_ny_tl }
+                  { \l__tenkz_kernel_hull_xoff_fp }
+                  { \l__tenkz_kernel_hull_yoff_fp }
+                  \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
+                \seq_put_right:Ne #2
+                  {
+                    {affine}
+                    { \tl_use:N \l__tenkz_kernel_hull_shape_tl }
+                    { \fp_eval:n { ( \l__tenkz_kernel_hull_xmax_tl
+                        - \l__tenkz_kernel_hull_xmin_tl ) / 2 } }
+                    { \fp_eval:n { ( \l__tenkz_kernel_hull_ymax_tl
+                        - \l__tenkz_kernel_hull_ymin_tl ) / 2 } }
+                    {0}
+                    { \l__tenkz_kernel_r_basis_ex_tl }
+                    { \l__tenkz_kernel_r_basis_ey_tl }
+                    { \l__tenkz_kernel_r_basis_nx_tl }
+                    { \l__tenkz_kernel_r_basis_ny_tl }
+                    { \fp_eval:n { \l__tenkz_kernel_hull_x_fp
+                        + \l__tenkz_kernel_r_x_tl } }
+                    { \fp_eval:n { \l__tenkz_kernel_hull_y_fp
+                        + \l__tenkz_kernel_r_y_tl } }
+                  }
               }
-            \fp_set:Nn \l__tenkz_kernel_hull_yrot_fp
               {
-                \l__tenkz_kernel_hull_xoff_fp
-                  * sind( \l__tenkz_kernel_hull_turn_tl )
-                + \l__tenkz_kernel_hull_yoff_fp
-                  * cosd( \l__tenkz_kernel_hull_turn_tl )
-              }
-            \seq_put_right:Ne #2
-              {
-                { \tl_use:N \l__tenkz_kernel_hull_shape_tl }
-                {
-                  \fp_eval:n
-                    {
-                      ( \l__tenkz_kernel_hull_xmax_tl
-                        - \l__tenkz_kernel_hull_xmin_tl ) / 2
-                    }
-                }
-                {
-                  \fp_eval:n
-                    {
-                      ( \l__tenkz_kernel_hull_ymax_tl
-                        - \l__tenkz_kernel_hull_ymin_tl ) / 2
-                    }
-                }
-                {0}
-                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
-                {
-                  \fp_eval:n
-                    {
-                      \l__tenkz_kernel_hull_x_fp
-                      + \l__tenkz_kernel_hull_xrot_fp
-                    }
-                }
-                {
-                  \fp_eval:n
-                    {
-                      \l__tenkz_kernel_hull_y_fp
-                      + \l__tenkz_kernel_hull_yrot_fp
-                    }
-                }
+                \__tenkz_kernel_r_turn:nN {##1}
+                  \l__tenkz_kernel_hull_turn_tl
+                \fp_set:Nn \l__tenkz_kernel_hull_xrot_fp
+                  {
+                    \l__tenkz_kernel_hull_xoff_fp
+                      * cosd( \l__tenkz_kernel_hull_turn_tl )
+                    - \l__tenkz_kernel_hull_yoff_fp
+                      * sind( \l__tenkz_kernel_hull_turn_tl )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_hull_yrot_fp
+                  {
+                    \l__tenkz_kernel_hull_xoff_fp
+                      * sind( \l__tenkz_kernel_hull_turn_tl )
+                    + \l__tenkz_kernel_hull_yoff_fp
+                      * cosd( \l__tenkz_kernel_hull_turn_tl )
+                  }
+                \seq_put_right:Ne #2
+                  {
+                    { \tl_use:N \l__tenkz_kernel_hull_shape_tl }
+                    { \fp_eval:n { ( \l__tenkz_kernel_hull_xmax_tl
+                        - \l__tenkz_kernel_hull_xmin_tl ) / 2 } }
+                    { \fp_eval:n { ( \l__tenkz_kernel_hull_ymax_tl
+                        - \l__tenkz_kernel_hull_ymin_tl ) / 2 } }
+                    {0}
+                    { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+                    { \fp_eval:n { \l__tenkz_kernel_hull_x_fp
+                        + \l__tenkz_kernel_hull_xrot_fp } }
+                    { \fp_eval:n { \l__tenkz_kernel_hull_y_fp
+                        + \l__tenkz_kernel_hull_yrot_fp } }
+                  }
               }
           }
           {
@@ -5953,6 +5995,40 @@
                 \exp_not:V \l__tenkz_kernel_hull_skin_tl
                 { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
                 { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
+              }
+            % The dot itself follows the affine chart, but its external label
+            % occupies a page-space band.  Publish both supports so a
+            % contracting chart cannot contract the label clearance.
+            \__tenkz_model_get:nnN {##1} {skin}
+              \l__tenkz_kernel_hull_a_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
+              { \tl_set:Nn \l__tenkz_kernel_hull_a_tl {dot} }
+            \exp_args:NV \__tenkz_kernel_skin_base:nN
+              \l__tenkz_kernel_hull_a_tl \l__tenkz_kernel_hull_a_tl
+            \str_if_eq:VnT \l__tenkz_kernel_hull_a_tl {dot}
+              {
+                \__tenkz_model_get:nnN {##1} {label}
+                  \l__tenkz_kernel_hull_b_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_hull_b_tl
+                  {
+                    \__tenkz_model_get:nnN {##1} {cluster-of}
+                      \l__tenkz_kernel_hull_size_tl
+                    \quark_if_no_value:NT \l__tenkz_kernel_hull_size_tl
+                      {
+                        \__tenkz_kernel_r_carrier_basis:n {##1}
+                        \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+                          {
+                            \seq_put_right:Ne #2
+                              {
+                                {circle}
+                                { \__tenkz_metric_ratio:n {dotlabelband} }
+                                {0}{0}{0}
+                                { \fp_eval:n { \l__tenkz_kernel_hull_x_fp } }
+                                { \fp_eval:n { \l__tenkz_kernel_hull_y_fp } }
+                              }
+                          }
+                      }
+                  }
               }
           }
       }
@@ -5976,6 +6052,7 @@
             \__tenkz_model_get:nnN {#1} {cluster-of} \l_tmpb_tl
             \__tenkz_kernel_hull_dot_radius:nN {#1}
               \l__tenkz_kernel_hull_radius_tl
+            \__tenkz_kernel_r_carrier_basis:n {#1}
             \tl_set:Ne #2
               {
                 {circle}
@@ -5985,9 +6062,13 @@
                       \quark_if_no_value_p:N \l_tmpb_tl
                         ? ( \quark_if_no_value_p:N \l_tmpa_tl
                               ? \l__tenkz_kernel_hull_radius_tl
-                              : max(
-                                  \l__tenkz_kernel_hull_radius_tl ,
-                                  \__tenkz_metric_ratio:n {dotlabelband} ) )
+                              : ( \bool_if_p:N
+                                    \l__tenkz_kernel_r_basis_plane_bool
+                                  ? \l__tenkz_kernel_hull_radius_tl
+                                  : max(
+                                      \l__tenkz_kernel_hull_radius_tl ,
+                                      \__tenkz_metric_ratio:n
+                                        {dotlabelband} ) ) )
                         : \__tenkz_metric_ratio:n {clusterdot} / 2
                     }
                 }
@@ -6021,6 +6102,24 @@
             {0}
             { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
           }
+      }
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+      {
+        \exp_last_unbraced:NV
+          \__tenkz_kernel_hull_skin_affine:nnnnnN #2 #2
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_hull_skin_affine:nnnnnN
+    #1#2#3#4#5#6
+  {
+    \tl_set:Ne #6
+      {
+        {affine}{#1}{#2}{#3}{#4}
+        { \l__tenkz_kernel_r_basis_ex_tl }
+        { \l__tenkz_kernel_r_basis_ey_tl }
+        { \l__tenkz_kernel_r_basis_nx_tl }
+        { \l__tenkz_kernel_r_basis_ny_tl }
       }
   }
 % Radius of an ordinary dot's declared size class, in pitch units.  Cluster
@@ -7462,9 +7561,8 @@
       }
   }
 
-% Carry a measured glyph anchor through its complete record carrier.  This is
-% a query only: live renderers keep their current endpoints until affine skins,
-% truthful support, and lane planning can switch atomically.
+% Carry a measured glyph anchor through its complete record carrier.  Live
+% ports, pairings, and planned physical legs share this one face boundary.
 \cs_new_protected:Npn \__tenkz_kernel_r_glyph_anchor_xy:nnNN #1#2#3#4
   {
     \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{#2}
@@ -7494,10 +7592,10 @@
   }
 
 % ---------- physical-leg lane plan -------------------------------------------
-% This planner is deliberately data-only.  A later atomic contour switch may
-% consume it, but current leg ink, route lanes, labels, crossings, and events
-% do not.  Corridors are discrete topology identities supplied by the caller;
-% floating coordinates are never clustered to invent one.
+% The planner is data-only: the physical-leg renderer collects every eligible
+% request, resolves once, then consumes the resulting S--B--T paths.  Corridors
+% are discrete topology identities supplied by the caller; floating coordinates
+% are never clustered to invent one.
 \seq_new:N  \l__tenkz_kernel_lp_sort_seq
 \prop_new:N \l__tenkz_kernel_lp_corridor_prop
 \prop_new:N \l__tenkz_kernel_lp_request_prop
@@ -7513,6 +7611,8 @@
 \fp_new:N   \l__tenkz_kernel_lp_dy_fp
 \fp_new:N   \l__tenkz_kernel_lp_qx_fp
 \fp_new:N   \l__tenkz_kernel_lp_qy_fp
+\fp_new:N   \l__tenkz_kernel_lp_gx_fp
+\fp_new:N   \l__tenkz_kernel_lp_gy_fp
 \fp_new:N   \l__tenkz_kernel_lp_norm_fp
 \fp_new:N   \l__tenkz_kernel_lp_sx_fp
 \fp_new:N   \l__tenkz_kernel_lp_sy_fp
@@ -7521,6 +7621,7 @@
 \fp_new:N   \l__tenkz_kernel_lp_end_fp
 \fp_new:N   \l__tenkz_kernel_lp_bx_fp
 \fp_new:N   \l__tenkz_kernel_lp_by_fp
+\fp_new:N   \l__tenkz_kernel_lp_safe_fp
 \fp_new:N   \l__tenkz_kernel_lp_tx_fp
 \fp_new:N   \l__tenkz_kernel_lp_ty_fp
 \int_new:N  \l__tenkz_kernel_lp_lane_int
@@ -7577,12 +7678,30 @@
             \fp_set:Nn \l__tenkz_kernel_lp_qy_fp
               { -\l__tenkz_kernel_lp_qy_fp }
           }
+        % The carrier-east line is the affine face tangent.  Its oriented
+        % page covector detects whether a lane shift would enter the host.
+        \fp_set:Nn \l__tenkz_kernel_lp_gx_fp {-(#5)}
+        \fp_set:Nn \l__tenkz_kernel_lp_gy_fp {#4}
+        \fp_compare:nNnT
+          {
+            \l__tenkz_kernel_lp_gx_fp * \l__tenkz_kernel_lp_dx_fp
+            + \l__tenkz_kernel_lp_gy_fp * \l__tenkz_kernel_lp_dy_fp
+          }
+          < {0}
+          {
+            \fp_set:Nn \l__tenkz_kernel_lp_gx_fp
+              {-\l__tenkz_kernel_lp_gx_fp}
+            \fp_set:Nn \l__tenkz_kernel_lp_gy_fp
+              {-\l__tenkz_kernel_lp_gy_fp}
+          }
         \tl_set:Ne \l__tenkz_kernel_lp_tuple_tl
           {
             {\fp_use:N \l__tenkz_kernel_lp_dx_fp}
             {\fp_use:N \l__tenkz_kernel_lp_dy_fp}
             {\fp_use:N \l__tenkz_kernel_lp_qx_fp}
             {\fp_use:N \l__tenkz_kernel_lp_qy_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_gx_fp}
+            {\fp_use:N \l__tenkz_kernel_lp_gy_fp}
           }
         \prop_get:NVN \l__tenkz_kernel_lp_corridor_prop
           \l__tenkz_kernel_lp_cid_tl \l__tenkz_kernel_lp_old_tl
@@ -7714,12 +7833,15 @@
       }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_leg_plan_basis_set:nnnn #1#2#3#4
+\cs_new_protected:Npn \__tenkz_kernel_leg_plan_basis_set:nnnnnn
+    #1#2#3#4#5#6
   {
     \fp_set:Nn \l__tenkz_kernel_lp_dx_fp {#1}
     \fp_set:Nn \l__tenkz_kernel_lp_dy_fp {#2}
     \fp_set:Nn \l__tenkz_kernel_lp_qx_fp {#3}
     \fp_set:Nn \l__tenkz_kernel_lp_qy_fp {#4}
+    \fp_set:Nn \l__tenkz_kernel_lp_gx_fp {#5}
+    \fp_set:Nn \l__tenkz_kernel_lp_gy_fp {#6}
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_leg_plan_sort_item:nnn #1#2#3
@@ -7765,9 +7887,28 @@
     \prop_put:Nee \l__tenkz_kernel_lp_occupied_prop
       {\int_use:N \l__tenkz_kernel_lp_lane_int}
       {\fp_use:N \l__tenkz_kernel_lp_start_fp}
+    % A nonzero lane first moves along an outward-safe diagonal.  The affine
+    % face covector chooses the least outward correction whose whole S--B
+    % segment stays on or beyond the supporting face.
+    \fp_set:Nn \l__tenkz_kernel_lp_safe_fp
+      {
+        max(
+          0,
+          -\l__tenkz_kernel_lp_lane_int
+            * \__tenkz_metric_ratio:n {daylight}
+            * ( \l__tenkz_kernel_lp_gx_fp
+                  * \l__tenkz_kernel_lp_qx_fp
+                + \l__tenkz_kernel_lp_gy_fp
+                  * \l__tenkz_kernel_lp_qy_fp )
+            / ( \l__tenkz_kernel_lp_gx_fp
+                  * \l__tenkz_kernel_lp_dx_fp
+                + \l__tenkz_kernel_lp_gy_fp
+                  * \l__tenkz_kernel_lp_dy_fp ) )
+      }
     \fp_set:Nn \l__tenkz_kernel_lp_bx_fp
       {
         \l__tenkz_kernel_lp_sx_fp
+        + \l__tenkz_kernel_lp_safe_fp * \l__tenkz_kernel_lp_dx_fp
         + \l__tenkz_kernel_lp_lane_int
           * \__tenkz_metric_ratio:n {daylight}
           * \l__tenkz_kernel_lp_qx_fp
@@ -7775,6 +7916,7 @@
     \fp_set:Nn \l__tenkz_kernel_lp_by_fp
       {
         \l__tenkz_kernel_lp_sy_fp
+        + \l__tenkz_kernel_lp_safe_fp * \l__tenkz_kernel_lp_dy_fp
         + \l__tenkz_kernel_lp_lane_int
           * \__tenkz_metric_ratio:n {daylight}
           * \l__tenkz_kernel_lp_qy_fp
@@ -7826,7 +7968,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_leg_plan_resolve_corridor:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_lp_cid_tl {#1}
-    \__tenkz_kernel_leg_plan_basis_set:nnnn #2
+    \__tenkz_kernel_leg_plan_basis_set:nnnnnn #2
     \seq_clear:N \l__tenkz_kernel_lp_sort_seq
     \prop_clear:N \l__tenkz_kernel_lp_occupied_prop
     \prop_map_function:NN \l__tenkz_kernel_lp_request_prop
@@ -7897,7 +8039,7 @@
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
     \__tenkz_geom_xy:nNN {#2}
       \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-    \__tenkz_kernel_r_turn:nN {#2} \l__tenkz_kernel_r_ink_turn_tl
+    \__tenkz_kernel_r_carrier_basis:n {#2}
     \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
       { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#2 }
     \tl_set:Ne \l__tenkz_kernel_r_b_tl
@@ -7933,22 +8075,17 @@
         {e} { \__tenkz_kernel_r_skin_wire_slot_y: }
         {w} { \__tenkz_kernel_r_skin_wire_slot_y: }
       }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
     \fp_set:Nn #3
-      {
-        \l__tenkz_kernel_r_xb_fp
-        + \l__tenkz_kernel_r_xc_fp
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-        - \l__tenkz_kernel_r_yc_fp
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+      { \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_x_tl }
     \fp_set:Nn #4
-      {
-        \l__tenkz_kernel_r_yb_fp
-        + \l__tenkz_kernel_r_xc_fp
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-        + \l__tenkz_kernel_r_yc_fp
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+      { \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_y_tl }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_hull_port_xy:nnNN { nVNN, VVNN }
 
@@ -8942,7 +9079,23 @@
 % A leg referenced by a declared crossing becomes an engine path (saved,
 % policed, gapped); its ink waits for the surgery.  Every other leg draws
 % now.  The leg's reach: physleg, or past its highest declared crossing.
+\bool_new:N \l__tenkz_kernel_leg_plan_collect_bool
+\bool_new:N \l__tenkz_kernel_leg_planned_bool
+\tl_new:N \l__tenkz_kernel_leg_plan_result_tl
+\tl_new:N \l__tenkz_kernel_leg_plan_cid_tl
+\tl_new:N \l__tenkz_kernel_leg_member_tl
+\fp_new:N \l__tenkz_kernel_leg_bendx_fp
+\fp_new:N \l__tenkz_kernel_leg_bendy_fp
 \cs_new_protected:Npn \__tenkz_kernel_r_legs:
+  {
+    \__tenkz_kernel_leg_plan_reset:
+    \bool_set_true:N \l__tenkz_kernel_leg_plan_collect_bool
+    \__tenkz_kernel_r_legs_walk:
+    \__tenkz_kernel_leg_plan_resolve:
+    \bool_set_false:N \l__tenkz_kernel_leg_plan_collect_bool
+    \__tenkz_kernel_r_legs_walk:
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_legs_walk:
   {
     \__tenkz_model_map_ids:nn {atom}
       {
@@ -9081,8 +9234,38 @@
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
-        \__tenkz_kernel_r_xy:nNN {#1}
-          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \__tenkz_kernel_r_carrier_basis:n {#1}
+        \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
+        \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
+          {
+            \bool_set_true:N \l__tenkz_kernel_leg_planned_bool
+            % A barren `none` host has no glyph face to probe.  Its physical
+            % leg retains the established centre-origin fallback and stays
+            % outside the affine lane planner.
+            \__tenkz_kernel_hull_resolve_skin:n {#1}
+            \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {none}
+              {
+                \prop_if_in:NnF
+                  \l__tenkz_kernel_skin_pairing_host_prop {#1}
+                  { \bool_set_false:N \l__tenkz_kernel_leg_planned_bool }
+              }
+          }
+        \bool_if:NTF \l__tenkz_kernel_leg_planned_bool
+          {
+            \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
+              { \str_if_eq:nnTF {#2} {n} {north} {south} }
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \bool_if:NF \l__tenkz_kernel_hull_measure_valid_bool
+              {
+                \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
+                \__tenkz_kernel_r_xy:nNN {#1}
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+              }
+          }
+          {
+            \__tenkz_kernel_r_xy:nNN {#1}
+              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+          }
         % the leg's outward direction: its face read in the atom's own axes
         \__tenkz_kernel_r_page_face:nnN {#1}
           { \str_if_eq:nnTF {#2} {n} {90} {270} }
@@ -9126,51 +9309,130 @@
             \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_r_b_tl
               { \__tenkz_kernel_r_leg_reach:n {##1} }
           }
-        \bool_if:NTF \l__tenkz_kernel_topology_bool
+        \bool_if:NTF \l__tenkz_kernel_leg_plan_collect_bool
+          {
+            \bool_if:NT \l__tenkz_kernel_leg_planned_bool
+              { \__tenkz_kernel_r_leg_plan_enrol:nn {#1}{#2} }
+          }
+          { \__tenkz_kernel_r_leg_consume:nnn {#1}{#2}{#3} }
+      }
+  }
+
+% Enrol one plane-carried physical leg in a discrete topology corridor.
+% Rows in the same basis member, face, and logical column share a corridor;
+% no page coordinate is rounded or clustered to invent that identity.
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_enrol:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
+    \quark_if_no_value:NT \l__tenkz_kernel_leg_member_tl
+      { \tl_set:Nn \l__tenkz_kernel_leg_member_tl {1} }
+    \tl_set:Ne \l__tenkz_kernel_leg_plan_cid_tl
+      {
+        member-\tl_use:N \l__tenkz_kernel_leg_member_tl /
+        \str_if_eq:nnTF {#2}{n}{north}{south} /
+        col-\tl_use:N \l__tenkz_kernel_leg_col_tl
+      }
+    % Reach computation may have used hull services with the same scratch
+    % registers, so reload the record basis immediately before declaration.
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \str_if_eq:nnTF {#2}{n}
+      {
+        \__tenkz_kernel_leg_plan_corridor:nnnnn
+          { \l__tenkz_kernel_leg_plan_cid_tl }
+          { \l__tenkz_kernel_r_basis_nx_tl }
+          { \l__tenkz_kernel_r_basis_ny_tl }
+          { \l__tenkz_kernel_r_basis_ex_tl }
+          { \l__tenkz_kernel_r_basis_ey_tl }
+      }
+      {
+        \__tenkz_kernel_leg_plan_corridor:nnnnn
+          { \l__tenkz_kernel_leg_plan_cid_tl }
+          { -\l__tenkz_kernel_r_basis_nx_tl }
+          { -\l__tenkz_kernel_r_basis_ny_tl }
+          { \l__tenkz_kernel_r_basis_ex_tl }
+          { \l__tenkz_kernel_r_basis_ey_tl }
+      }
+    \__tenkz_kernel_leg_plan_enrol:nnnnn
+      {
+        leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
+        -\tl_use:N \l__tenkz_kernel_leg_col_tl
+      }
+      { \l__tenkz_kernel_leg_plan_cid_tl }
+      { \l__tenkz_kernel_r_x_fp }
+      { \l__tenkz_kernel_r_y_fp }
+      { \l__tenkz_kernel_r_reach_fp }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_unpack:nnnnnnnn
+    #1#2#3#4#5#6#7#8
+  {
+    \fp_set:Nn \l__tenkz_kernel_r_reach_fp {#2}
+    \fp_set:Nn \l__tenkz_kernel_r_x_fp {#3}
+    \fp_set:Nn \l__tenkz_kernel_r_y_fp {#4}
+    \fp_set:Nn \l__tenkz_kernel_leg_bendx_fp {#5}
+    \fp_set:Nn \l__tenkz_kernel_leg_bendy_fp {#6}
+    \fp_set:Nn \l__tenkz_kernel_r_tipx_fp {#7}
+    \fp_set:Nn \l__tenkz_kernel_r_tipy_fp {#8}
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_consume:nnn #1#2#3
+  {
+    \bool_if:NT \l__tenkz_kernel_leg_planned_bool
+      {
+        \__tenkz_kernel_leg_plan_get:nN
+          {
+            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
+            -\tl_use:N \l__tenkz_kernel_leg_col_tl
+          }
+          \l__tenkz_kernel_leg_plan_result_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_leg_plan_result_tl
+          { \bool_set_false:N \l__tenkz_kernel_leg_planned_bool }
+          {
+            \exp_last_unbraced:NV
+              \__tenkz_kernel_r_leg_plan_unpack:nnnnnnnn
+              \l__tenkz_kernel_leg_plan_result_tl
+          }
+      }
+    \bool_if:NTF \l__tenkz_kernel_topology_bool
+      {
+        \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
+          {
+            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
+            -\tl_use:N \l__tenkz_kernel_leg_col_tl
+          }
+      }
+      {
+        \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
+          { \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { } }
           {
             \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
               {
-                leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
-                - \tl_use:N \l__tenkz_kernel_leg_col_tl
+                leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
+                -\tl_use:N \l__tenkz_kernel_leg_col_tl
               }
           }
+      }
+    % Author-owned up=/down= tokens remain page-upright and execute once at
+    % the planned tip; topology creates paths only and emits no label ink.
+    \bool_if:NF \l__tenkz_kernel_topology_bool
+      {
+        \__tenkz_model_get:nnN {#1} {#3} \l__tenkz_kernel_r_b_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
           {
-            \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
-              { \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { } }
+            \__tenkz_render_labelnode:nnn
               {
-                \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
-                  {
-                    leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
-                    - \tl_use:N \l__tenkz_kernel_leg_col_tl
-                  }
+                tenkz~audited~label ,
+                anchor = \exp_args:NV \__tenkz_render_label_anchor:n
+                  \l__tenkz_kernel_leg_dir_tl ,
+                inner~sep = \__tenkz_dim:n {labelclear}
               }
-          }
-        % The leg-tip label: author-owned tokens from up= / down=.  It stands
-        % beyond the tip along the leg's own direction and anchors on its own
-        % opposite side, which is one statement for both faces -- the face
-        % chose the anchor only while every leg ran down the page.
-        \bool_if:NF \l__tenkz_kernel_topology_bool
-          {
-            \__tenkz_model_get:nnN {#1} {#3} \l__tenkz_kernel_r_b_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
               {
-                \__tenkz_render_labelnode:nnn
-                  {
-                    tenkz~audited~label ,
-                    anchor = \exp_args:NV \__tenkz_render_label_anchor:n
-                      \l__tenkz_kernel_leg_dir_tl ,
-                    inner~sep = \__tenkz_dim:n {labelclear}
-                  }
-                  {
-                    (
-                      \__tenkz_kernel_r_pt:n
-                        { \l__tenkz_kernel_r_tipx_fp } ,
-                      \__tenkz_kernel_r_pt:n
-                        { \l__tenkz_kernel_r_tipy_fp }
-                    )
-                  }
-                  { \tl_use:N \l__tenkz_kernel_r_b_tl }
+                (
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipx_fp } ,
+                  \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_tipy_fp }
+                )
               }
+              { \tl_use:N \l__tenkz_kernel_r_b_tl }
           }
       }
   }
@@ -9266,47 +9528,79 @@
 \fp_new:N \l__tenkz_kernel_r_tipx_fp
 \fp_new:N \l__tenkz_kernel_r_tipy_fp
 \tl_new:N \l__tenkz_kernel_r_leg_turn_tl
+\tl_new:N \l__tenkz_kernel_r_leg_path_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
   {
-    \fp_set:Nn \l__tenkz_kernel_r_yc_fp { \l__tenkz_kernel_r_reach_fp }
-    \__tenkz_kernel_r_page_face:nnN {#1}
-      { \str_if_eq:nnTF {#2} {n} {90} {270} }
-      \l__tenkz_kernel_r_leg_turn_tl
-    \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
+    \bool_if:NF \l__tenkz_kernel_leg_planned_bool
       {
-        \l__tenkz_kernel_r_x_fp
-        + \l__tenkz_kernel_r_yc_fp
-          * cosd( \l__tenkz_kernel_r_leg_turn_tl )
+        \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+          { \l__tenkz_kernel_r_reach_fp }
+        \__tenkz_kernel_r_page_face:nnN {#1}
+          { \str_if_eq:nnTF {#2} {n} {90} {270} }
+          \l__tenkz_kernel_r_leg_turn_tl
+        \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
+          {
+            \l__tenkz_kernel_r_x_fp
+            + \l__tenkz_kernel_r_yc_fp
+              * cosd( \l__tenkz_kernel_r_leg_turn_tl )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
+          {
+            \l__tenkz_kernel_r_y_fp
+            + \l__tenkz_kernel_r_yc_fp
+              * sind( \l__tenkz_kernel_r_leg_turn_tl )
+          }
       }
-    \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
+    \tl_set:Ne \l__tenkz_kernel_r_leg_path_tl
       {
-        \l__tenkz_kernel_r_y_fp
-        + \l__tenkz_kernel_r_yc_fp
-          * sind( \l__tenkz_kernel_r_leg_turn_tl )
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+      }
+    \bool_if:NT \l__tenkz_kernel_leg_planned_bool
+      {
+        \tl_put_right:Ne \l__tenkz_kernel_r_leg_path_tl
+          {
+            -- \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_leg_bendx_fp }
+              { \l__tenkz_kernel_leg_bendy_fp }
+          }
+      }
+    \tl_put_right:Ne \l__tenkz_kernel_r_leg_path_tl
+      {
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_tipx_fp }
+          { \l__tenkz_kernel_r_tipy_fp }
       }
     \tl_if_blank:nTF {#3}
       {
-        \__tenkz_render_stroke:nn { bond }
+        \exp_args:NnV \__tenkz_render_stroke:nn { bond }
+          \l__tenkz_kernel_r_leg_path_tl
+      }
+      {
+        \tl_set:Ne \l__tenkz_kernel_r_c_tl
           {
-            \__tenkz_kernel_r_pair:nn
+            \__tenkz_kernel_r_ppt:nn
               { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
-            --
-            \__tenkz_kernel_r_pair:nn
+          }
+        \bool_if:NT \l__tenkz_kernel_leg_planned_bool
+          {
+            \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+              {
+                \__tenkz_kernel_r_ppt:nn
+                  { \l__tenkz_kernel_leg_bendx_fp }
+                  { \l__tenkz_kernel_leg_bendy_fp }
+              }
+          }
+        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
+          {
+            \__tenkz_kernel_r_ppt:nn
               { \l__tenkz_kernel_r_tipx_fp }
               { \l__tenkz_kernel_r_tipy_fp }
           }
-      }
-      {
         \use:e
           {
             \exp_not:N \__tenkz_string_declare_open:nn {#3}
-              {
-                \__tenkz_kernel_r_ppt:nn
-                  { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
-                \__tenkz_kernel_r_ppt:nn
-                  { \l__tenkz_kernel_r_tipx_fp }
-                  { \l__tenkz_kernel_r_tipy_fp }
-              }
+              { \exp_not:V \l__tenkz_kernel_r_c_tl }
           }
         \prop_put:Nen \l__tenkz_kernel_r_legdrawn_prop {#3} { }
       }
@@ -10848,6 +11142,116 @@
   }
 % The physical closure clears the live glyph, including label- and span-grown
 % silhouettes.  Find the atom at the traced column, then read its border.
+\fp_new:N \l__tenkz_kernel_phtrace_nu_fp
+\fp_new:N \l__tenkz_kernel_phtrace_nv_fp
+\fp_new:N \l__tenkz_kernel_phtrace_su_fp
+\fp_new:N \l__tenkz_kernel_phtrace_sv_fp
+\fp_new:N \l__tenkz_kernel_phtrace_eu_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ev_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ur_fp
+\fp_new:N \l__tenkz_kernel_phtrace_vt_fp
+\fp_new:N \l__tenkz_kernel_phtrace_vb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_xb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_yb_fp
+\fp_new:N \l__tenkz_kernel_phtrace_xs_fp
+\fp_new:N \l__tenkz_kernel_phtrace_ys_fp
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_xy:nnNN #1#2#3#4
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      {#1}{#2}
+      \l__tenkz_kernel_r_face_du_tl \l__tenkz_kernel_r_face_dv_tl
+    \fp_set:Nn #3
+      { \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_face_du_tl }
+    \fp_set:Nn #4
+      { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_face_dv_tl }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_affine:n #1
+  {
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{north}
+      \l__tenkz_kernel_phtrace_nu_fp \l__tenkz_kernel_phtrace_nv_fp
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{south}
+      \l__tenkz_kernel_phtrace_su_fp \l__tenkz_kernel_phtrace_sv_fp
+    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{east}
+      \l__tenkz_kernel_phtrace_eu_fp \l__tenkz_kernel_phtrace_ev_fp
+    \__tenkz_geom_xy:nNN {#1}
+      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+    \fp_set:Nn \l_tmpa_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_ex_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ey_tl ^ 2 )
+      }
+    \fp_set:Nn \l_tmpb_fp
+      {
+        sqrt(
+          \l__tenkz_kernel_r_basis_nx_tl ^ 2
+          + \l__tenkz_kernel_r_basis_ny_tl ^ 2 )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_ur_fp
+      {
+        max(
+          \l__tenkz_kernel_phtrace_nu_fp,
+          \l__tenkz_kernel_phtrace_su_fp,
+          \l__tenkz_kernel_phtrace_eu_fp )
+        + \__tenkz_metric_ratio:n {phtracereach} / \l_tmpa_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_vt_fp
+      {
+        \l__tenkz_kernel_phtrace_nv_fp
+        + \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_vb_fp
+      {
+        \l__tenkz_kernel_phtrace_sv_fp
+        - \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
+      }
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_nu_fp }
+      { \l__tenkz_kernel_phtrace_nv_fp }
+      \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_nu_fp }
+      { \l__tenkz_kernel_phtrace_vt_fp }
+      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_ur_fp }
+      { \l__tenkz_kernel_phtrace_vt_fp }
+      \l__tenkz_kernel_r_tipx_fp \l__tenkz_kernel_r_tipy_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_ur_fp }
+      { \l__tenkz_kernel_phtrace_vb_fp }
+      \l__tenkz_kernel_leg_bendx_fp \l__tenkz_kernel_leg_bendy_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_su_fp }
+      { \l__tenkz_kernel_phtrace_vb_fp }
+      \l__tenkz_kernel_phtrace_xb_fp \l__tenkz_kernel_phtrace_yb_fp
+    \__tenkz_kernel_r_physical_trace_xy:nnNN
+      { \l__tenkz_kernel_phtrace_su_fp }
+      { \l__tenkz_kernel_phtrace_sv_fp }
+      \l__tenkz_kernel_phtrace_xs_fp \l__tenkz_kernel_phtrace_ys_fp
+    \__tenkz_render_stroke:nn { trace }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_tipx_fp } { \l__tenkz_kernel_r_tipy_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_leg_bendx_fp }
+          { \l__tenkz_kernel_leg_bendy_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_phtrace_xb_fp }
+          { \l__tenkz_kernel_phtrace_yb_fp }
+        -- \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_phtrace_xs_fp }
+          { \l__tenkz_kernel_phtrace_ys_fp }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_physical_trace:n #1
   {
     \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
@@ -10884,25 +11288,35 @@
       }
     \bool_if:NTF \l_tmpa_bool
       {
-        \pgfextractx \l__tenkz_kernel_r_north_x_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-        \pgfextracty \l__tenkz_kernel_r_north_y_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
-        \pgfextracty \l__tenkz_kernel_r_south_y_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
-        \pgfextractx \l__tenkz_kernel_r_east_x_dim
-          { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
-        \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
-          { \__tenkz_dim:n {phtracereach} }
-        \__tenkz_render_stroke:nn { trace }
+        \exp_args:NV \__tenkz_kernel_r_carrier_basis:n
+          \l__tenkz_kernel_r_tl
+        \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
           {
-            ( \l__tenkz_kernel_r_north_x_dim ,
-              \l__tenkz_kernel_r_north_y_dim )
-            -- ++( 0 , \__tenkz_dim:n {physleg} )
-            -| ( \l__tenkz_kernel_r_east_x_dim ,
-                 \l__tenkz_kernel_r_south_y_dim - \__tenkz_dim:n {physleg} )
-            -| ( \l__tenkz_kernel_r_north_x_dim ,
-                 \l__tenkz_kernel_r_south_y_dim )
+            \exp_args:NV \__tenkz_kernel_r_physical_trace_affine:n
+              \l__tenkz_kernel_r_tl
+          }
+          {
+            \pgfextractx \l__tenkz_kernel_r_north_x_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+            \pgfextracty \l__tenkz_kernel_r_north_y_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
+            \pgfextracty \l__tenkz_kernel_r_south_y_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{south} }
+            \pgfextractx \l__tenkz_kernel_r_east_x_dim
+              { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{east} }
+            \dim_add:Nn \l__tenkz_kernel_r_east_x_dim
+              { \__tenkz_dim:n {phtracereach} }
+            \__tenkz_render_stroke:nn { trace }
+              {
+                ( \l__tenkz_kernel_r_north_x_dim ,
+                  \l__tenkz_kernel_r_north_y_dim )
+                -- ++( 0 , \__tenkz_dim:n {physleg} )
+                -| ( \l__tenkz_kernel_r_east_x_dim ,
+                     \l__tenkz_kernel_r_south_y_dim
+                       - \__tenkz_dim:n {physleg} )
+                -| ( \l__tenkz_kernel_r_north_x_dim ,
+                     \l__tenkz_kernel_r_south_y_dim )
+              }
           }
       }
       {
@@ -10956,6 +11370,9 @@
                 \tl_put_right:Ne \l__tenkz_kernel_r_atom_style_tl
                   { , text = \tl_use:N \l__tenkz_kernel_r_hue_tl }
               }
+            \__tenkz_kernel_r_affine_page_padding:n {#1}
+            \__tenkz_kernel_r_affine_page_style:N
+              \l__tenkz_kernel_r_atom_style_tl
             \__tenkz_kernel_r_xy:nNN {#1}
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \prop_if_in:NnTF
@@ -11026,6 +11443,8 @@
                         , fill = \tl_use:N \l__tenkz_kernel_r_hue_tl
                       }
                   }
+                \__tenkz_kernel_r_glyph_frame:nN
+                  {#1} \l__tenkz_kernel_r_atom_style_tl
                 \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
@@ -11045,6 +11464,8 @@
                         , fill = \tl_use:N \l__tenkz_kernel_r_hue_tl
                       }
                   }
+                \__tenkz_kernel_r_glyph_frame:nN
+                  {#1} \l__tenkz_kernel_r_atom_style_tl
                 \exp_args:NnnnV \__tenkz_render_atom_scaled:nnnn
                   { dot } {#1} { } \l__tenkz_kernel_r_atom_style_tl
               }
@@ -11455,9 +11876,6 @@
   {
     \__tenkz_model_get:nnN {#1} {host}
       \l__tenkz_kernel_r_skin_wire_host_tl
-    \exp_args:NV \__tenkz_kernel_r_turn:nN
-      \l__tenkz_kernel_r_skin_wire_host_tl
-      \l__tenkz_kernel_r_ink_turn_tl
     \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_skin_from_tl
     \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_skin_to_tl
     \__tenkz_kernel_r_skin_wire_end:VNN
@@ -11477,13 +11895,11 @@
               \fp_eval:n
                 {
                   \l__tenkz_kernel_r_skin_from_face_tl - 180
-                  + \l__tenkz_kernel_r_ink_turn_tl
                 } ,
             in =
               \fp_eval:n
                 {
                   \l__tenkz_kernel_r_skin_to_face_tl + 180
-                  + \l__tenkz_kernel_r_ink_turn_tl
                 }
           ]
         \tl_use:N \l__tenkz_kernel_r_skin_to_tl
@@ -11514,6 +11930,9 @@
             )
           }
       }
+    \exp_args:NV \__tenkz_kernel_r_page_face:nnN
+      \l__tenkz_kernel_r_skin_wire_host_tl
+      { \tl_use:N #3 } #3
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_cell_end:nNN #1#2#3
@@ -11525,6 +11944,8 @@
     \exp_args:NV \__tenkz_geom_xy:nNN
       \l__tenkz_kernel_r_skin_wire_host_tl
       \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
+    \exp_args:NV \__tenkz_kernel_r_carrier_basis:n
+      \l__tenkz_kernel_r_skin_wire_host_tl
     \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
       {
         tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _
@@ -11560,22 +11981,17 @@
         {w} { \__tenkz_kernel_r_skin_wire_slot_y: }
       }
       { }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
     \fp_set:Nn \l__tenkz_kernel_r_x_fp
-      {
-        \l__tenkz_kernel_r_xb_fp
-        + \l__tenkz_kernel_r_xc_fp
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-        - \l__tenkz_kernel_r_yc_fp
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+      { \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_x_tl }
     \fp_set:Nn \l__tenkz_kernel_r_y_fp
-      {
-        \l__tenkz_kernel_r_yb_fp
-        + \l__tenkz_kernel_r_xc_fp
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-        + \l__tenkz_kernel_r_yc_fp
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+      { \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_y_tl }
     \tl_set:Ne #2
       {
         (
@@ -11586,27 +12002,29 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_slot_x:
   {
-    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-      {
-        ( \l__tenkz_kernel_r_x_fp - \l__tenkz_kernel_r_xb_fp )
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-        + ( \l__tenkz_kernel_r_y_fp - \l__tenkz_kernel_r_yb_fp )
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+    \__tenkz_geom_basis_unapply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      { \fp_eval:n { \l__tenkz_kernel_r_x_fp - \l__tenkz_kernel_r_xb_fp } }
+      { \fp_eval:n { \l__tenkz_kernel_r_y_fp - \l__tenkz_kernel_r_yb_fp } }
+      \l__tenkz_kernel_r_reach_tl \l__tenkz_kernel_scratch_tl
     \fp_add:Nn \l__tenkz_kernel_r_xc_fp
-      { \l__tenkz_kernel_r_reach_fp }
+      { \l__tenkz_kernel_r_reach_tl }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_slot_y:
   {
-    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-      {
-        - ( \l__tenkz_kernel_r_x_fp - \l__tenkz_kernel_r_xb_fp )
-          * sind( \l__tenkz_kernel_r_ink_turn_tl )
-        + ( \l__tenkz_kernel_r_y_fp - \l__tenkz_kernel_r_yb_fp )
-          * cosd( \l__tenkz_kernel_r_ink_turn_tl )
-      }
+    \__tenkz_geom_basis_unapply:nnnnnnNN
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
+      { \l__tenkz_kernel_r_basis_nx_tl }
+      { \l__tenkz_kernel_r_basis_ny_tl }
+      { \fp_eval:n { \l__tenkz_kernel_r_x_fp - \l__tenkz_kernel_r_xb_fp } }
+      { \fp_eval:n { \l__tenkz_kernel_r_y_fp - \l__tenkz_kernel_r_yb_fp } }
+      \l__tenkz_kernel_scratch_tl \l__tenkz_kernel_r_reach_tl
     \fp_add:Nn \l__tenkz_kernel_r_yc_fp
-      { \l__tenkz_kernel_r_reach_fp }
+      { \l__tenkz_kernel_r_reach_tl }
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_skin_wire_end:nNN { VNN }
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_wires:n #1
@@ -11701,22 +12119,20 @@
     % stays upright.  A skin is measured, so it turns with its carrier; the
     % name inside it is placed, so it is turned back by the same angle and
     % reads level however the carrier stands.
-    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_r_ink_turn_tl
-    \fp_compare:nNnF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
-      {
-        \tl_put_right:Ne \l__tenkz_kernel_r_c_tl
-          {
-            , tenkz~glyph~frame =
-                \tl_use:N \l__tenkz_kernel_r_ink_turn_tl
-          }
-      }
+    \__tenkz_kernel_r_glyph_frame:nN {#1} \l__tenkz_kernel_r_c_tl
+    \__tenkz_kernel_r_affine_page_padding:n {#1}
     % pgfkeys splits its option list on the commas it can see; an unexpanded
     % variable is one opaque key, so the style reaches the node expanded.
     \prop_if_in:NnTF \l__tenkz_kernel_hull_live_prop {#1/xmin}
       {
         \prop_get:NnN \l__tenkz_kernel_hull_live_prop {#1/box}
           \l__tenkz_kernel_hull_box_tl
-        \prop_if_in:NnTF \l__tenkz_kernel_skin_pairing_host_prop {#1}
+        \bool_lazy_or:nnTF
+          {
+            \prop_if_in_p:Nn
+              \l__tenkz_kernel_skin_pairing_host_prop {#1}
+          }
+          { \bool_if_p:N \l__tenkz_kernel_r_basis_plane_bool }
           {
             \__tenkz_render_atom_labelled:nen {#1}
               { \l__tenkz_kernel_r_c_tl }
@@ -11756,7 +12172,11 @@
       }
     \__tenkz_kernel_r_skin_wires:n {#1}
     \__tenkz_kernel_r_skin_over_wires:n {#1}
-    \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
+    \bool_lazy_or:nnT
+      {
+        \prop_if_in_p:Nn \l__tenkz_kernel_skin_pairing_host_prop {#1}
+      }
+      { \bool_if_p:N \l__tenkz_kernel_r_basis_plane_bool }
       { \__tenkz_kernel_r_skin_label:n {#1} }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_label:n #1
@@ -11784,13 +12204,99 @@
       }
   }
 \tl_new:N \l__tenkz_kernel_r_ink_turn_tl
+\dim_new:N \l__tenkz_kernel_r_affine_page_padding_dim
+\dim_new:N \l__tenkz_kernel_r_affine_page_width_dim
+\dim_new:N \l__tenkz_kernel_r_affine_page_height_dim
+\dim_new:N \l__tenkz_kernel_r_affine_text_width_dim
+\dim_new:N \l__tenkz_kernel_r_affine_text_height_dim
+% Select page-owned padding from the record being measured or inked.  This is
+% deliberately recomputed at each consumer boundary: a preceding paired
+% ellipsis must not enlarge the next record's upright envelope.
+\cs_new_protected:Npn \__tenkz_kernel_r_affine_page_padding:n #1
+  {
+    \dim_zero:N \l__tenkz_kernel_r_affine_page_padding_dim
+    \__tenkz_kernel_hull_resolve_skin:n {#1}
+    \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {dots}
+      {
+        \prop_if_in:NnT \l__tenkz_kernel_skin_pairing_host_prop {#1}
+          {
+            \dim_set:Nn \l__tenkz_kernel_r_affine_page_padding_dim
+              { \__tenkz_dim:n {labelclear} }
+          }
+      }
+  }
+% Page padding belongs to the inverse envelope, not the carried node.  Apply
+% this same style normalization to measurement and live ink.
+\cs_new_protected:Npn \__tenkz_kernel_r_affine_page_style:N #1
+  {
+    \dim_compare:nNnT
+      { \l__tenkz_kernel_r_affine_page_padding_dim } > {0pt}
+      { \tl_put_right:Nn #1 { , inner~sep = 0pt } }
+  }
 % #1 typeset by a record whose skin the frame has turned by the angle in
 % \l__tenkz_kernel_r_ink_turn_tl: label text never rotates.
 \cs_new_protected:Npn \__tenkz_kernel_r_upright:n #1
   {
-    \fp_compare:nNnTF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
-      {#1}
-      { \rotatebox{ \fp_eval:n { - \l__tenkz_kernel_r_ink_turn_tl } }{#1} }
+    \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
+      {
+        % Plane text is overlaid once in page space.  Its invisible local box
+        % is the inverse-basis envelope of the complete upright page box, so
+        % the carried contour measures exactly the ink it must enclose.
+        \dim_set:Nn \l__tenkz_kernel_r_affine_page_width_dim
+          {
+            \box_wd:c { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+            + 2 \l__tenkz_kernel_r_affine_page_padding_dim
+          }
+        \dim_set:Nn \l__tenkz_kernel_r_affine_page_height_dim
+          {
+            \box_ht:c { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+            + \box_dp:c { \tl_use:N \l__tenkz_kernel_hull_box_tl }
+            + 2 \l__tenkz_kernel_r_affine_page_padding_dim
+          }
+        \dim_set:Nn \l__tenkz_kernel_r_affine_text_width_dim
+          {
+            \fp_to_dim:n
+              {
+                abs(\l__tenkz_kernel_r_basis_ux_tl)
+                  * \dim_to_fp:n
+                      { \l__tenkz_kernel_r_affine_page_width_dim }
+                + abs(\l__tenkz_kernel_r_basis_uy_tl)
+                  * \dim_to_fp:n
+                      { \l__tenkz_kernel_r_affine_page_height_dim }
+              }
+          }
+        \dim_set:Nn \l__tenkz_kernel_r_affine_text_height_dim
+          {
+            \fp_to_dim:n
+              {
+                abs(\l__tenkz_kernel_r_basis_vx_tl)
+                  * \dim_to_fp:n
+                      { \l__tenkz_kernel_r_affine_page_width_dim }
+                + abs(\l__tenkz_kernel_r_basis_vy_tl)
+                  * \dim_to_fp:n
+                      { \l__tenkz_kernel_r_affine_page_height_dim }
+              }
+          }
+        \hbox_to_wd:nn { \l__tenkz_kernel_r_affine_text_width_dim }
+          {
+            \hfil
+            \tex_vrule:D
+              width 0pt
+              height \dim_eval:n
+                { \l__tenkz_kernel_r_affine_text_height_dim / 2 }
+              depth \dim_eval:n
+                { \l__tenkz_kernel_r_affine_text_height_dim / 2 }
+            \hfil
+          }
+      }
+      {
+        \fp_compare:nNnTF { \l__tenkz_kernel_r_ink_turn_tl } = {0}
+          {#1}
+          {
+            \rotatebox
+              { \fp_eval:n { - \l__tenkz_kernel_r_ink_turn_tl } }{#1}
+          }
+      }
   }
 
 % ---------- marks --------------------------------------------------------------------------------
