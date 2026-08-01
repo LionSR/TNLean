@@ -7529,9 +7529,11 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_leg_plan_reset:
   {
+    \seq_clear:N \l__tenkz_kernel_lp_sort_seq
     \prop_clear:N \l__tenkz_kernel_lp_corridor_prop
     \prop_clear:N \l__tenkz_kernel_lp_request_prop
     \prop_clear:N \l__tenkz_kernel_lp_result_prop
+    \prop_clear:N \l__tenkz_kernel_lp_occupied_prop
   }
 
 % Declare one topology-owned corridor.  The outward vector becomes the unit

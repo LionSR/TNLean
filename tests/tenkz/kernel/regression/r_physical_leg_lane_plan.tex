@@ -194,6 +194,17 @@
     \__tenkz_kernel_leg_plan_get:nN {A} \l__tenkz_test_lp_result_tl
     \quark_if_no_value:NF \l__tenkz_test_lp_result_tl
       { \errmessage{a~new~request~left~stale~lane~results} }
+    \__tenkz_kernel_leg_plan_reset:
+    \seq_if_empty:NF \l__tenkz_kernel_lp_sort_seq
+      { \errmessage{reset~left~the~transient~sort~sequence~populated} }
+    \prop_if_empty:NF \l__tenkz_kernel_lp_corridor_prop
+      { \errmessage{reset~left~corridor~state~populated} }
+    \prop_if_empty:NF \l__tenkz_kernel_lp_request_prop
+      { \errmessage{reset~left~request~state~populated} }
+    \prop_if_empty:NF \l__tenkz_kernel_lp_result_prop
+      { \errmessage{reset~left~result~state~populated} }
+    \prop_if_empty:NF \l__tenkz_kernel_lp_occupied_prop
+      { \errmessage{reset~left~transient~occupancy~state~populated} }
   }
 \cs_new_protected:Npn \__tenkz_test_lp_assertions:
   {
