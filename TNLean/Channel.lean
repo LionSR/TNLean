@@ -21,6 +21,7 @@ import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Channel.Determinant.HilbertSchmidt
 import TNLean.Channel.Determinant.UnitaryCharacterization
 import TNLean.Channel.EntanglementWitness
+import TNLean.Channel.FaithfulMarginalWhitenedChoi
 import TNLean.Channel.FixedPoint
 import TNLean.Channel.InformationallyCompleteEffects
 import TNLean.Channel.Irreducible
@@ -33,6 +34,7 @@ import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.LocalizedKrausCPTP
 import TNLean.Channel.LorentzNormalForm
 import TNLean.Channel.MarginalSupportAbsorption
+import TNLean.Channel.MarginalSupportWhitenedChoi
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.NPositivityChainStrict

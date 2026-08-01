@@ -364,11 +364,8 @@ The one-sided output-support compression is also formalized: faithfulness of
 the input weight forces every channel output into the support of its image,
 the compressed channel is trace preserving, and the support-restricted
 negative quarter power agrees with the ordinary negative quarter power after
-compression.  Simultaneous compression from singular ambient marginals to
-both support algebras is formalized below.  The eigenbasis whitening statements
-still assume both marginal weights are positive definite, so their application
-to the compressed operator remains part of the argument tracked in
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.
+compression.  Simultaneous compression to both marginal supports is used in
+the arbitrary-support estimate below.
 
 The unnormalized sandwiched R\'enyi trace term
 \[
@@ -401,11 +398,10 @@ monotonicity in $\alpha$, interpolation between orders one and two,
 differentiability or a limit at $\alpha=1$, the logarithmic sandwiched R\'enyi
 divergence, nor a comparison with Umegaki relative entropy.
 
-Neither development completes
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211}.  Simultaneous
-compression by the two marginal support isometries, exact reconstruction,
-preservation of operator-Schmidt rank, the exact formulas for the compressed
-marginals, and their positive definiteness are now formalized.
+Simultaneous compression by the two marginal support isometries, exact
+reconstruction, preservation of ordinary operator-Schmidt rank, the exact
+formulas for the compressed marginals, and their positive definiteness are
+formalized.
 \footnote{Formal declarations:
 \leanid{Matrix.PosSemidef.eq_marginalSupport_expansion_compression},
 \leanid{Matrix.PosSemidef.operatorSchmidtRank_marginalSupport_compression},
@@ -419,12 +415,31 @@ The mathematical tasks tracked in
 faithful and singular relative-entropy comparisons are proved using the
 relative-modular half-moment, support-aware Jensen, and Hilbert--Schmidt
 Cauchy--Schwarz, without a general weighted interpolation theorem or an
-order-one limit.  The remaining work in
-\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is to apply the
-existing full-support whitened-state/Choi identification and Hilbert--Schmidt
-rank estimate after simultaneous marginal-support compression.  The
-unrestricted sharp mutual-information theorem remains tracked in
-\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}.
+order-one limit.
+
+The faithful marginal-whitening theorem now diagonalizes the first marginal,
+where the input transpose from the Choi convention agrees with the diagonal
+marginal, and proves
+\[
+  Q_2(\rho_{AB},\rho_A\otimes\rho_B)
+  \leq\operatorname{OSR}(\rho_{AB})
+\]
+when both marginals are positive definite.  The arbitrary-support theorem
+compresses simultaneously to the two marginal supports, applies the faithful
+theorem there, and returns using exact preservation of $Q_2$ and ordinary
+operator-Schmidt rank.  It includes zero-dimensional support coordinates and
+requires no trace normalization.
+\footnote{Formal declarations:
+\leanid{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank_of_marginals_posDef}
+in \doclink{TNLean/Channel/FaithfulMarginalWhitenedChoi}, and
+\leanid{TNLean.sandwichedRenyiTwoTrace_product_marginals_le_operatorSchmidtRank}
+in \doclink{TNLean/Channel/MarginalSupportWhitenedChoi}.}
+Thus the mathematical work tracked by
+\href{https://github.com/LionSR/TNLean/issues/5211}{\#5211} is complete.  The
+unrestricted mutual-information inequality remains the downstream task in
+\href{https://github.com/LionSR/TNLean/issues/5212}{\#5212}; its application to
+the finite-chain MPO estimate remains tracked by
+\href{https://github.com/LionSR/TNLean/issues/5213}{\#5213}.
 
 \section{Diagonal matrix product operators}
 

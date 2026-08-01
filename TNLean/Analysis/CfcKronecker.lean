@@ -35,6 +35,8 @@ either depending on the other.
   $f(\mathbf 1 \otimes B) = \mathbf 1 \otimes f(B)$.
 * `Matrix.cfc_kronecker_of_mul_posSemidef` — multiplicative functional calculus
   on Kronecker products of positive-semidefinite matrices.
+* `Matrix.PosSemidef.rpow_kronecker` — real powers factor across
+  positive-semidefinite Kronecker products.
 * `Matrix.log_kronecker_posSemidef` — the support-correct logarithm of a
   Kronecker product of positive-semidefinite matrices.
 -/
@@ -207,6 +209,16 @@ theorem cfc_kronecker_of_mul_posSemidef
     · simp [Matrix.diagonal_apply_ne _ hpq]
   rw [hcfAB, hcfA, hcfB, hU, hUstar, Matrix.mul_kronecker_mul,
     Matrix.mul_kronecker_mul, hdiag]
+
+/-- Real powers distribute over a positive-semidefinite Kronecker product. -/
+theorem PosSemidef.rpow_kronecker
+    {A : Matrix m m ℂ} {B : Matrix n n ℂ}
+    (hA : A.PosSemidef) (hB : B.PosSemidef) (s : ℝ) :
+    (A ⊗ₖ B) ^ s = (A ^ s) ⊗ₖ (B ^ s) := by
+  rw [CFC.rpow_eq_cfc_real (hA.kronecker hB).nonneg,
+    CFC.rpow_eq_cfc_real hA.nonneg, CFC.rpow_eq_cfc_real hB.nonneg]
+  exact cfc_kronecker_of_mul_posSemidef hA hB (fun x : ℝ ↦ x ^ s)
+    (fun x y hx hy ↦ Real.mul_rpow hx hy)
 
 /-- **Logarithm of a Kronecker product on its support.** If $A,B\geq0$, then
 \[

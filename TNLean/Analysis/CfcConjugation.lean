@@ -7,6 +7,7 @@ import TNLean.Algebra.PosSemidefSupport
 import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
+import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 import Mathlib.LinearAlgebra.Matrix.Reindex
@@ -37,6 +38,7 @@ quantum relative-entropy stack.
   transpose covariance of real powers and the positive square root.
 * `Matrix.cfc_conj_unitary` — covariance of the continuous functional calculus
   under conjugation by a unitary.
+* `Matrix.rpow_conj_unitary` — covariance of real powers under unitary conjugation.
 * `Matrix.cfc_diagonal` — entrywise functional calculus for real diagonal matrices.
 -/
 
@@ -220,6 +222,18 @@ theorem cfc_conj_unitary {A : Matrix n n ℂ} (hA : A.IsHermitian) (f : ℝ → 
   have hconj := StarAlgHomClass.map_cfc φ f A hcont hcontφ hsa hsa'
   rw [happ, happ] at hconj
   exact hconj.symm
+
+/-- Real powers commute with unitary conjugation of a positive-semidefinite
+matrix: $(U A U^\dagger)^s=U A^s U^\dagger$. -/
+theorem rpow_conj_unitary {A : Matrix n n ℂ} (hA : A.PosSemidef) (s : ℝ)
+    (U : unitary (Matrix n n ℂ)) :
+    ((U : Matrix n n ℂ) * A * star (U : Matrix n n ℂ)) ^ s =
+      (U : Matrix n n ℂ) * A ^ s * star (U : Matrix n n ℂ) := by
+  have hconj : ((U : Matrix n n ℂ) * A * star (U : Matrix n n ℂ)).PosSemidef := by
+    have := hA.conjTranspose_mul_mul_same (star (U : Matrix n n ℂ))
+    rwa [star_eq_conjTranspose, conjTranspose_conjTranspose] at this
+  rw [CFC.rpow_eq_cfc_real hconj.nonneg, CFC.rpow_eq_cfc_real hA.nonneg]
+  exact cfc_conj_unitary hA.isHermitian (fun x => x ^ s) U
 
 section Diagonal
 
