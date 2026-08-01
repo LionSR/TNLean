@@ -11,8 +11,8 @@ import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 
 A marked direct sum permits the first matrix in each representative chain to
 be arbitrary, while every subsequent matrix comes from the unmarked sector
-tensor.  Equality of such closed marked chains at every positive tail length separates the marked
-matrices representative by representative.
+tensor.  Equality of such closed marked chains at every positive tail length
+separates the marked matrices representative by representative.
 
 The proof first treats one length at which the simultaneous representative
 word tuples span the product matrix algebra.  A bounded nonvanishing power

@@ -322,11 +322,11 @@ theorem trace_groupedMarkedTensor_eq_representative_markedTensor
 
 /-- Representative-grouped marked Lemma L for a literal CPSV active refinement.
 
-This is the algebraic arbitrary-marked-letter extension of the source's physical first-site
-statement.  If the full-coordinate grouped marked closed-chain traces agree at every positive
-tail length, then the two marks agree on every chosen normal representative.  The inactive listed
-coordinates remain present
-in the hypothesis and vanish through their zero marked blocks.
+This is the algebraic arbitrary-marked-letter extension of the source's
+physical first-site statement.  If the full-coordinate grouped marked
+closed-chain traces agree at every positive tail length, then the two marks
+agree on every chosen normal representative.  The inactive listed coordinates
+remain present in the hypothesis and vanish through their zero marked blocks.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858 and the marked use at
 lines 1909--1919. -/
