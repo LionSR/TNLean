@@ -219,6 +219,70 @@
     the multiset equality (\ref{eq:rfp_multiplicity_spectrum}).
 \end{proof}
 
+\begin{theorem}[Gauge-dressed physical corner of a matched two-site sector]
+    \label{thm:mpdo_bnt_exact_sector_gauge_blocked_corner}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_blockTwo_gauge_sector_corner}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        markedChainCoefficient_gauge_eq_reflectedAdjoint}
+    \leanok
+    \uses{def:mpdo, def:mpdo_bnt_two_site_exact_sector_gauge}
+    Suppose that the one-site and two-site sectors are related by the exact
+    invertible gauges above. Let $\gamma$ be a one-site sector matched with a
+    two-site sector by the bijection $\sigma$, and identify their bond
+    dimensions. There are an
+    isometry $V_\gamma$ from the sector bond space into the blocked physical-index
+    space and a scalar $c_\gamma>0$ such that, for every vertical letter $v$,
+    \begin{align}
+        V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma
+        &=c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
+        \label{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}
+    \end{align}
+    If, in addition, $M$ generates matrix product density operators, then for
+    every pair of open bond indices and every pair of two-site tail words, the
+    marked-chain coefficient of
+    \begin{align}
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}
+        \notag
+    \end{align}
+    equals the corresponding reflected-adjoint marked-chain coefficient in
+    the adjoint two-site blocking. This is one of the two marked comparisons
+    in Figures~7--8 of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, applied
+    to the sector matching of Appendix~C.4, lines~2048--2057.
+
+    \textbf{Scope restriction (gauge-dressed corner):} This theorem constructs
+    only the physical corner in
+    (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}). It does not
+    construct an identity-dressed physical corner for $M_\gamma$ and does not
+    prove the common-target Gram identity
+    \begin{align}
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}
+        &=M_\gamma^v.
+        \notag
+    \end{align}
+    This restriction is documented in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+    % The missing identity-dressed corner and common-target Gram identity are
+    % tracked in issue 4648.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_blocked_reference_corners,
+        thm:mpdo_gram_dressed_reflected_marked_chain}
+    Choose the first positive-weight copy of the matched two-site sector.
+    Its distinguished inclusion is isometric and its compression selects the
+    corresponding weighted normal tensor. Substituting the exact sector
+    conjugacy gives
+    (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}), with the selected
+    weight as $c_\gamma$. The reflected marked-chain identity for this corner,
+    conjugated on its open indices by $Z_\gamma^\dagger$ and
+    $(Z_\gamma^{-1})^\dagger$, gives the stated equality of marked-chain
+    coefficients; the gauge factors cancel on the reflected side.
+\end{proof}
+
 \begin{lemma}[Idempotence for the canonical chi coefficients]%
     \label{lem:mpdo_bnt_idempotent_coefficient_form_of_chi}
     \lean{MPOTensor.BNTAlgebraClause.idempotent_coefficient_form_ofChi}
