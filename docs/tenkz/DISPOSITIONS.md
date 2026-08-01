@@ -65,9 +65,9 @@ separate public-surface occurrence and therefore appears separately.
 | `ch14_correlations.tex` | — | — | L67 `tenkz` → `C-policy+C-record+R-record` |
 | `ch16_channel_representations_choi_and_kraus.tex` | — | L670 `tenkz` → `C-policy+C-record` | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | — | L20 `tenkz` → `C-policy+C-record` | — |
-| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L232, 238 `tenkz` → `C-policy+C-record` | L153, 159, 336, 433 `tenkz` → `C-policy+C-record+R-record`<br>L177, 182 `tenkz` → `R-record` |
+| `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L234, 240 `tenkz` → `C-policy+C-record` | L154, 160, 338, 435 `tenkz` → `C-policy+C-record+R-record`<br>L178, 183 `tenkz` → `R-record` |
 | `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | — | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record`<br>L224, 359, 391, 465 `tenkzfree` → `R-free+R-record` |
-| `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | — | — | L634, 639 `tenkz` → `C-policy+C-record+R-record` |
+| `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | — | — | L637, 642 `tenkz` → `C-policy+C-record+R-record` |
 | `ch20_mpdo_foundations.tex` | — | — | L16, 124, 370 `tenkz` → `C-policy+C-record+R-record`<br>L374 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_algebra_tower.tex` | — | — | L78, 93 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | — | — | L18, 21 `tnpic` → `C-picture+C-policy+C-record+R-record` |
