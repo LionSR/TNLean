@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
-import TNLean.MPS.MPDO.VerticalProductPairBlocks
+import TNLean.MPS.MPDO.VerticalSectorCoordinates
 
 /-!
 # Positivity forced by a tensor-attached BNT algebra clause
@@ -52,24 +52,49 @@ private def verticalCopyLetter (H : BNTAlgebraTensorClause M)
     (x y : Fin (H.bondDim p.1)) : Matrix (Fin D) (Fin D) ℂ :=
   fun a b ↦ H.tensor p.1 (finProdFinEquiv (a, b)) x y
 
+private theorem verticalAssembledTensor_apply_copy_same
+    (H : BNTAlgebraTensorClause M) (γ : Fin H.labelCount)
+    (q : Fin (H.multiplicity γ)) (v : Fin (D * D))
+    (x y : Fin (H.bondDim γ)) :
+    verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor v
+        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩)
+        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, y)⟩) =
+      H.weight γ q * H.tensor γ v x y := by
+  unfold verticalAssembledTensor MPSTensor.toTensorFromBlocks
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+    verticalSectorFinEquiv_outer_symm]
+  rw [Matrix.blockDiagonal'_apply_eq]
+  let p := finSigmaFinEquiv.symm (finSigmaFinEquiv ⟨γ, q⟩)
+  have hp : p = ⟨γ, q⟩ := finSigmaFinEquiv.symm_apply_apply ⟨γ, q⟩
+  have hdim : H.bondDim p.1 = H.bondDim γ :=
+    congrArg (fun s ↦ H.bondDim s.1) hp
+  have hweight : H.weight p.1 p.2 = H.weight γ q :=
+    congrArg (fun s ↦ H.weight s.1 s.2) hp
+  let block (s : (α : Fin H.labelCount) × Fin (H.multiplicity α)) :=
+    H.tensor s.1 v
+  let packed (s : (α : Fin H.labelCount) × Fin (H.multiplicity α)) :
+      (r : (α : Fin H.labelCount) × Fin (H.multiplicity α)) ×
+        Matrix (Fin (H.bondDim r.1)) (Fin (H.bondDim r.1)) ℂ :=
+    ⟨s, block s⟩
+  have hpacked : packed p = packed ⟨γ, q⟩ := congrArg packed hp
+  have hblock : HEq (block p) (block ⟨γ, q⟩) :=
+    (Sigma.mk.inj_iff.mp hpacked).2
+  have hentry := (Fin.heq_fun₂_iff hdim.symm hdim.symm).mp hblock.symm x y
+  simp only [verticalCopyWeights, verticalCopyBlocks]
+  change H.weight p.1 p.2 * block p (Fin.cast _ x) (Fin.cast _ y) = _
+  rw [hweight]
+  exact congrArg (H.weight γ q * ·) hentry.symm
+
 private theorem changePhysicalBasis_verticalCoisometry_copy_same
-    (H : BNTAlgebraTensorClause M)
-    (p : (α : Fin H.labelCount) × Fin (H.multiplicity α))
-    (x y : Fin (H.bondDim p.1)) :
+    (H : BNTAlgebraTensorClause M) (γ : Fin H.labelCount)
+    (q : Fin (H.multiplicity γ)) (x y : Fin (H.bondDim γ)) :
     changePhysicalBasis H.verticalCoisometry M
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩)
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, y⟩) =
-      H.weight p.1 p.2 • H.verticalCopyLetter p x y := by
+        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩)
+        (verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, y)⟩) =
+      H.weight γ q • H.verticalCopyLetter ⟨γ, q⟩ x y := by
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO]
   ext a b
-  have hAssembled := congrFun (congrFun
-    (verticalAssembledTensor_reindex_copyCoordinates H.bondDim H.multiplicity
-      H.weight H.tensor (finProdFinEquiv (a, b)))
-    ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩))
-    ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, y⟩)
-  simpa only [retainedAssembledMPO, Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_symm, Equiv.apply_symm_apply, Matrix.blockDiagonal'_apply_eq,
-    Matrix.smul_apply, verticalCopyLetter] using hAssembled
+  exact H.verticalAssembledTensor_apply_copy_same γ q (finProdFinEquiv (a, b)) x y
 
 /-- Every retained vertical BNT tensor in a tensor-attached algebra clause has
 positive-semidefinite terminal physical-trace transfer.
@@ -86,10 +111,8 @@ theorem physTraceTransfer_verticalBNTMPO_posSemidef
     (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
   classical
   let q : Fin (H.multiplicity γ) := ⟨0, H.multiplicity_pos γ⟩
-  let p : (α : Fin H.labelCount) × Fin (H.multiplicity α) := ⟨γ, q⟩
   let e : Fin (H.bondDim γ) → (Fin 1 → Fin H.retainedDim) :=
-    fun x _ ↦
-      (verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩
+    fun x _ ↦ verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩
   have hRetained :
       (mpo (changePhysicalBasis H.verticalCoisometry M) 1).PosSemidef := by
     rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
@@ -100,10 +123,10 @@ theorem physTraceTransfer_verticalBNTMPO_posSemidef
     ext x y
     simp only [Matrix.submatrix_apply, mpo_apply, mpoMatrixEntry, List.ofFn_succ,
       List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one, e]
-    rw [H.changePhysicalBasis_verticalCoisometry_copy_same]
+    rw [H.changePhysicalBasis_verticalCoisometry_copy_same γ q]
     rw [Matrix.trace_smul, Matrix.smul_apply]
     congr 1
-    simp [p, Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyLetter,
+    simp [Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyLetter,
       verticalBNTMPO]
   have hScaled :
       (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
