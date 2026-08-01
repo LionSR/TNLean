@@ -72,12 +72,12 @@ structure IdentityMarkedRealization (S : TwoSiteExactSectorGauge H)
         (gramDressing (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
           (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
             (H.tensor γ))) u.divNat u.modNat
-  /-- The identity-dressed marked chains have the reflected-adjoint target
-  used for the gauge-dressed marked chains.
+  /-- At every positive tail length, the identity-dressed marked chains have the
+  reflected-adjoint target used for the gauge-dressed marked chains.
 
   Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and
   lines 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
-  target : ∀ (N : ℕ)
+  target : ∀ (N : ℕ), 0 < N → ∀
     (r s : Fin (S.decomposition.bondDim (S.relabel γ)))
     (σ τ : Fin N → Fin (d * d)),
     markedChainCoefficient
@@ -94,8 +94,8 @@ structure IdentityMarkedRealization (S : TwoSiteExactSectorGauge H)
         (List.ofFn σ).reverse (List.ofFn τ).reverse
 
 /-- An identity-dressed physical-letter marked realization with the same
-reflected target as the exact gauge-dressed corner forces the two Gram
-dressings to agree.
+reflected target as the exact gauge-dressed corner at every positive tail
+length forces the two Gram dressings to agree.
 
 **Scope restriction (conditional identity-dressed marked realization):** The
 theorem assumes the physical-letter realization implicit at CPSV16 Appendix
@@ -117,7 +117,7 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
   classical
   obtain ⟨V, c, _, hc, hCorner⟩ := S.exists_blockTwo_gauge_sector_corner γ
   let fGauge := cornerGramCoefficients V (S.gauge γ) c
-  have hTrace : ∀ (L : ℕ)
+  have hTrace : ∀ (L : ℕ), 0 < L → ∀
       (u : Fin (S.decomposition.bondDim (S.relabel γ) *
         S.decomposition.bondDim (S.relabel γ)))
       (w : Fin L → Fin ((d * d) * (d * d))),
@@ -127,7 +127,7 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
         Matrix.trace
           (MPSTensor.linearMarkedTensor R.fId (blockTwo M).toMPSTensor u *
             MPSTensor.evalWord (blockTwo M).toMPSTensor (List.ofFn w)) := by
-    intro L u w
+    intro L hL u w
     rw [show MPSTensor.linearMarkedTensor fGauge (blockTwo M).toMPSTensor u =
         horizontalSlice
           (gramDressing (S.gauge γ)
@@ -141,7 +141,7 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
     exact
       (S.markedChainCoefficient_gauge_eq_reflectedAdjoint hM γ L
         u.divNat u.modNat (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat)).trans
-      (R.target L u.divNat u.modNat
+      (R.target L hL u.divNat u.modNat
         (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat)).symm
   have hMarks :
       MPSTensor.linearMarkedTensor fGauge (blockTwo M).toMPSTensor =

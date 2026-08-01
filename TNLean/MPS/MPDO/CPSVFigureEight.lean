@@ -67,7 +67,7 @@ theorem gramDressing_eq_of_two_grouped_corners
     gramDressing X A = gramDressing Y A := by
   let fX := cornerGramCoefficients VX X cX
   let fY := cornerGramCoefficients VY Y cY
-  have hTrace : ∀ (L : ℕ) (u : Fin (n * n))
+  have hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin (n * n))
       (w : Fin L → Fin (d * d)),
       Matrix.trace
           (linearMarkedTensor fX M.toMPSTensor u *
@@ -75,7 +75,7 @@ theorem gramDressing_eq_of_two_grouped_corners
         Matrix.trace
           (linearMarkedTensor fY M.toMPSTensor u *
             evalWord M.toMPSTensor (List.ofFn w)) := by
-    intro L u w
+    intro L _hL u w
     rw [show linearMarkedTensor fX M.toMPSTensor u =
         horizontalSlice (gramDressing X A) u.divNat u.modNat by
       exact linearMarkedTensor_cornerGramCoefficients

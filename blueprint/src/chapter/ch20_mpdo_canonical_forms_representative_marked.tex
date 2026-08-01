@@ -143,8 +143,8 @@
         lem:marked_representative_trace_expansion,
         cor:nonvanishing_finite_power_sum}
     Let $(C_j^s)$ and $(E_j^s)$ be two marked families over the same sector
-    decomposition. Suppose that, for every marked index $s$ and every
-    unmarked word $w$,
+    decomposition. Fix a tail length $L$, and suppose that, for every marked
+    index $s$ and every unmarked word $w$ of length $L$,
     \begin{align}
         \tr\!\left(C_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right)
         &=\tr\!\left(E_{\mathrm{tot}}^s A_{\mathrm{tot}}^w\right).
@@ -152,7 +152,8 @@
     \end{align}
     If representative word-tuple separation holds at length $L$ and
     $c_{j_0}^{(L+1)}\neq0$, then $C_{j_0}=E_{j_0}$. Under eventual
-    representative word-tuple separation, one has $C_j=E_j$ for every $j$.
+    representative word-tuple separation, agreement for every marked index
+    and every positive-length unmarked word implies $C_j=E_j$ for every $j$.
 
     Lemma~L is stated for marks induced by physical operators on the first
     site. After its closed-chain identity has been expanded, the separation
@@ -252,8 +253,8 @@
         &=\tr\!\left(\widehat E_{\mathrm{grp}}^sT_{\mathrm{grp}}^w\right)
         \label{eq:cpsv_retained_marked_trace_agreement}
     \end{align}
-    for every $s$ and every word $w$, then $C_j=E_j$ for every active
-    representative $j$.
+    for every $s$ and every word $w$ of positive length, then $C_j=E_j$ for
+    every active representative $j$.
 
     In particular, let $Y,Z\in\MN{d}$. If their first-site actions agree on
     the positive-length matrix product vectors of $T_{\mathrm{grp}}$, then
@@ -329,8 +330,14 @@
         &=\tr\!\left(G_A^uA^w\right)
         \label{eq:cpsv_original_linear_marked_agreement}
     \end{align}
-    for every marked letter $u$ and every word $w$, then $F_A=G_A$ on the
-    original bond space.
+    for every marked letter $u$ and every word $w$ of positive length, then
+    $F_A=G_A$ on the original bond space.
+
+    Thus the separation conclusion does not require the marked trace identity
+    for the empty tail word. This is the positive-tail form of the argument in
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}: the source
+    assumes first-site agreement at every positive system size, while its
+    proof separates the representatives at a suitable nonzero tail length.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -560,8 +567,8 @@
         thm:representative_grouped_marked_separation}
     Let $(C_j^s)$ and $(E_j^s)$ be two marked families over a BNT canonical
     form. If their closed marked chains agree for every marked index $s$ and
-    every unmarked word $w$, then $C_j^s=E_j^s$ for every representative $j$
-    and every marked index $s$.
+    every unmarked word $w$ of positive length, then $C_j^s=E_j^s$ for every
+    representative $j$ and every marked index $s$.
 \end{corollary}
 
 \begin{proof}
@@ -588,7 +595,7 @@
     coefficient families $f_{u,z}$ and $g_{u,z}$, put
     $C^u=\sum_z f_{u,z}M^z$ and $E^u=\sum_z g_{u,z}M^z$.
     If $\tr(C^uM^w)=\tr(E^uM^w)$ for every marked index $u$ and every word
-    $w$, then $C^u=E^u$ for every $u$.
+    $w$ of positive length, then $C^u=E^u$ for every $u$.
 
     The marks are required to lie in the span of the physical letters. No
     assertion is made for arbitrary bond-space matrices, since off-diagonal
