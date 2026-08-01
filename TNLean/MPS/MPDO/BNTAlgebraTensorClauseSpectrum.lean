@@ -88,8 +88,9 @@ conjugacies between its paired normal tensors.
 invertible conjugacy from Appendix C.4, but not the line-2057 conclusion that the
 gauge may be chosen unitary.  The missing common-target normalization contract is
 documented in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and
-tracked in issue 4648.  The subsequent scalar-to-unitary normalization is
-tracked in issue 4645.
+tracked in issues 5284 and 4648.  The Gram identity and scalar-to-unitary
+normalization are available conditionally on a supplied identity-dressed
+marked realization, but issue 4645 remains open at the unconditional level.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
@@ -155,8 +156,9 @@ independence derives the power-sum equality.
 equality and phase-one invertible conjugacy, but does not prove the line-2057
 unitary upgrade.  The missing common-target normalization contract is documented
 in `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` and tracked in
-issue 4648.  The subsequent scalar-to-unitary normalization is tracked in issue
-4645.
+issues 5284 and 4648.  The Gram identity and scalar-to-unitary normalization are
+available conditionally on a supplied identity-dressed marked realization, but
+issue 4645 remains open at the unconditional level.
 
 Source: arXiv:1606.00608, Theorem 4.14(ii) and Appendix C.4, lines 2046--2058
 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
