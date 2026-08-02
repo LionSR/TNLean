@@ -56,7 +56,6 @@ No new proofs are introduced here; this is a documentation-only index module.
 * `IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` — every eigenvalue of a
   positive trace-preserving map lies in the closed unit disk, in
   `TNLean.Channel.Determinant.Bound`.
-* `IsChannel.eigenvalue_norm_le_one` — the completely positive specialization.
 
 The general bound `ρ(T) ≤ ‖T(1)‖∞`, existence of the eigenvalue `1`, and the resulting
 spectral-radius equality remain unformalized.
