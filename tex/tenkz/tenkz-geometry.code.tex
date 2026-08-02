@@ -522,8 +522,12 @@
 % For a nonzero centre vector, the required separation is the support of both
 % affine-carried beads in that direction plus the page-space gap.  At exact
 % coincidence there is no direction, so the largest affine body support
-% defines a conservative direction-free convention.  The strict minimum
-% margin and fixed traversal order make the reported witness deterministic.
+% defines a conservative direction-free convention.  A live authored span can
+% have canonical row or column zero while still intersecting the declared
+% 1..rows by 1..cols population window.  The complete translation domain is
+% therefore -rows..rows by -cols..cols, one step wider on every side than the
+% differences between ordinary in-window cells.  The strict minimum margin and
+% fixed traversal order make the reported witness deterministic.
 % The output is empty when no realized candidate has a negative margin.
 \prop_new:N \l__tenkz_geom_basis_spacing_east_prop
 \prop_new:N \l__tenkz_geom_basis_spacing_north_prop
@@ -721,8 +725,8 @@
   {
     \int_set:Nn \l__tenkz_geom_basis_spacing_dr_int {#1}
     \int_step_function:nnN
-      { 1 - \l__tenkz_geom_basis_spacing_cols_int }
-      { \l__tenkz_geom_basis_spacing_cols_int - 1 }
+      { -\l__tenkz_geom_basis_spacing_cols_int }
+      { \l__tenkz_geom_basis_spacing_cols_int }
       \__tenkz_geom_basis_spacing_dc:n
   }
 
@@ -750,8 +754,8 @@
           }
       }
     \int_step_function:nnN
-      { 1 - \l__tenkz_geom_basis_spacing_rows_int }
-      { \l__tenkz_geom_basis_spacing_rows_int - 1 }
+      { -\l__tenkz_geom_basis_spacing_rows_int }
+      { \l__tenkz_geom_basis_spacing_rows_int }
       \__tenkz_geom_basis_spacing_dr:n
   }
 

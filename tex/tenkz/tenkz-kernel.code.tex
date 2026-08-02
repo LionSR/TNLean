@@ -4287,11 +4287,12 @@
 %
 % Population indexes each live record by its canonical member address.  Whole-
 % cell overrides contribute no record; member-addressed replacements remain
-% live; spanning records contribute only their anchor, including anchors just
-% outside the declared window.  For each member pair the plan either enumerates
-% its sparse record product or marks it dense, whichever is bounded by the
-% finite translation window.  Geometry owns the raw support calculation and
-% asks this kernel callback about model realization only for negative margins.
+% live; spanning records contribute only their anchor, including row or column
+% zero when a positive span reaches the declared window.  For each member pair
+% the plan either enumerates its sparse record product or marks it dense,
+% whichever is bounded by the complete [-rows,rows] x [-cols,cols] translation
+% window.  Geometry owns the raw support calculation and asks this kernel
+% callback about model realization only for negative margins.
 \cs_new_protected:Npn \__tenkz_kernel_basis_spacing_sparse_inner:n #1
   {
     \prop_get:NeN \l__tenkz_kernel_basis_live_record_prop
@@ -4410,8 +4411,8 @@
       }
     \int_set:Nn \l__tenkz_kernel_basis_spacing_translation_count_int
       {
-        ( 2 * \__tenkz_kernel_rows: - 1 )
-        * ( 2 * \__tenkz_kernel_cols: - 1 )
+        ( 2 * \__tenkz_kernel_rows: + 1 )
+        * ( 2 * \__tenkz_kernel_cols: + 1 )
       }
     \int_step_function:nnN {1}
       { \l__tenkz_kernel_basis_count_int - 1 }

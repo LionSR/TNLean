@@ -337,7 +337,7 @@ basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
 override_selection_atoms=$(
   grep -c '^atom|' "$WORK/r_basis_override_selection.tnlog" || true
 )
-[ "$override_selection_atoms" -eq 44 ] || {
+[ "$override_selection_atoms" -eq 64 ] || {
   echo "FAIL: whole-cell overrides did not suppress their basis members" >&2
   exit 1
 }
@@ -418,6 +418,41 @@ if ! grep -F '|addr=(1,1,1)|' "$WORK/r_basis_override.tnlog" |
   echo "FAIL: an authored member lost its normalized basis address" >&2
   exit 1
 fi
+outside_translation_atoms=$(
+  grep -c '^atom|' "$WORK/r_basis_outside_translation.tnlog" || true
+)
+[ "$outside_translation_atoms" -eq 8 ] || {
+  echo "FAIL: the outside-anchor translation fixture lost a basis record" >&2
+  exit 1
+}
+outside_translation_count=$(
+  grep -Fc '|code=basis-spacing|' \
+    "$WORK/r_basis_outside_translation.tnlog" || true
+)
+[ "$outside_translation_count" -eq 1 ] || {
+  echo "FAIL: the complete canonical-anchor translation was not unique" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k1|code=basis-spacing|member-a=1|member-b=2|dr=2|dc=2|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_outside_translation.tnlog" || {
+  echo "FAIL: the row/column-zero anchor collision was not diagnosed" >&2
+  exit 1
+}
+outside_translation_messages=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_outside_translation.tex.transcript" || true
+)
+[ "$outside_translation_messages" -eq 1 ] || {
+  echo "FAIL: outside-anchor event and human diagnostic diverged" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_basis_outside_translation.tnlog" \
+  "$KERNEL/regression/r_basis_outside_translation.tex" >/dev/null || {
+  echo "FAIL: the outside-anchor stream did not pass the one-pass audit" >&2
+  exit 1
+}
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
     "$WORK/r_basis_override.tnlog" || {
   echo "FAIL: an explicit origin singleton lost ordinary grid bonds" >&2

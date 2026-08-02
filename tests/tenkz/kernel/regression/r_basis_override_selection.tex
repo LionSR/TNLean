@@ -61,17 +61,17 @@
 \cs_set_protected:Npn \__tenkz_kernel_basis_spacing_sparse_outer:n #1
   { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{dense-plan} }
 \ExplSyntaxOff
-\begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
+\begin{tenkz}[rows={ket, ket, ket}, cols=3, bonds=none,
               frame={flat,basis={wire at (0,0), wire at (0,0)}}]
-  \tn[at=(2,2), name=H]{H}
+  \tn[at=(3,3), name=H]{H}
 \end{tenkz}
 \ExplSyntaxOn
 \cs_set_protected:Npn
   \__tenkz_kernel_basis_spacing_dense_realized:nnnn #1#2#3#4
   { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{nonnegative-scan} }
 \ExplSyntaxOff
-\begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
+\begin{tenkz}[rows={ket, ket, ket}, cols=3, bonds=none,
               frame={flat,basis={wire at (0,0), wire at (2,0)}}]
-  \tn[at=(2,2), name=S]{S}
+  \tn[at=(3,3), name=S]{S}
 \end{tenkz}
 \end{document}

@@ -1,0 +1,23 @@
+%% Regression: a canonical member anchor at row/column zero enlarges the
+%% realized basis-translation domain beyond ordinary in-window cell deltas.
+%% The 2x2 live-record product is smaller than the complete 5x5 translation
+%% window, so the adaptive plan must remain sparse; a dense realization call is
+%% fatal.  The only unsafe pair is the outside anchor and cell (2,2), at the
+%% extreme translation (2,2).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\cs_set_protected:Npn
+  \__tenkz_kernel_basis_spacing_dense_realized:nnnn #1#2#3#4
+  { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{outside-translation-dense} }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={ket,ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (-8,8)}}]
+  \tn[at=(0,0,1), wide=2, wires=2, name=E]{E}
+\end{tenkz}
+\end{document}
