@@ -53,10 +53,8 @@ the original blocked tensor, and `hCyclic` ensures the block indexing
 follows the cyclic orbit structure of the transfer map's peripheral
 spectrum (see `IsCyclicSectorDecomp`).
 
-The orbit-lift / corner-irreducibility input is now supplied unconditionally by
-`SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. The
-remaining gaps in this file lie further along, in the sector-match and
-mixed-overlap arguments. -/
+The orbit-lift / corner-irreducibility input is supplied unconditionally by
+`SelfOverlap.primitive_and_irreducible_sectorBlocks_of_cyclicDecomp`. -/
 lemma sectorBlocked_isNormal_of_isPeriodic
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)
