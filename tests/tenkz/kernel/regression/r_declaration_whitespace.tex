@@ -1,0 +1,65 @@
+% Regression: declarative kernel commands do not turn source layout into ink.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+
+\newsavebox{\tenkzCompactSetup}
+\newsavebox{\tenkzMultilineSetup}
+\newsavebox{\tenkzCompactDeclare}
+\newsavebox{\tenkzMultilineDeclare}
+\newsavebox{\tenkzCompactRecords}
+\newsavebox{\tenkzMultilineRecords}
+
+\newcommand{\tenkzAssertSameExtent}[3]{%
+  \ifdim\wd#1=\wd#2\else
+    \errmessage{#3 width depends on declarative whitespace}%
+  \fi
+  \ifdim\ht#1=\ht#2\else
+    \errmessage{#3 height depends on declarative whitespace}%
+  \fi
+  \ifdim\dp#1=\dp#2\else
+    \errmessage{#3 depth depends on declarative whitespace}%
+  \fi
+}
+
+\begin{document}
+\tenkzkernel
+
+\sbox{\tenkzCompactSetup}{L\tnset{theme=house}R}
+\sbox{\tenkzMultilineSetup}{L\tnset{theme=house}
+R}
+\tenkzAssertSameExtent
+  {\tenkzCompactSetup}{\tenkzMultilineSetup}{kernel setup}
+
+\sbox{\tenkzCompactDeclare}{L\tndeclare{species}{compact}{hue=source:red}R}
+\sbox{\tenkzMultilineDeclare}{L\tndeclare{species}{multiline}{hue=source:red}
+R}
+\tenkzAssertSameExtent
+  {\tenkzCompactDeclare}{\tenkzMultilineDeclare}{kernel declaration}
+
+\tndeclare{atom}{\tnwhitespaceatom}{skin=box}
+\sbox{\tenkzCompactRecords}{%
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwhitespaceatom[at=(1,1), name=A]{A}%
+  \tn[at=(1,2), name=B]{B}%
+  \tnwire{A.e}{B.w}%
+  \tngroup[frame=flat]{\tnmark[form=label, label pos=n]{A}{$m$}}%
+\end{tenkz}}
+\sbox{\tenkzMultilineRecords}{%
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwhitespaceatom[at=(1,1), name=A]{A}
+  \tn[at=(1,2), name=B]{B}
+  \tnwire{A.e}{B.w}
+  \tngroup[frame=flat]{
+    \tnmark[form=label, label pos=n]{A}{$m$}
+  }
+\end{tenkz}}
+\tenkzAssertSameExtent
+  {\tenkzCompactRecords}{\tenkzMultilineRecords}{kernel record source}
+
+\usebox{\tenkzCompactRecords}
+\end{document}
