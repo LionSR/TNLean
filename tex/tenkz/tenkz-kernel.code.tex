@@ -91,6 +91,9 @@
     not~a~picture~(record~picture). }
 \msg_new:nnn {tenkz}{kernel-frame-word}
   { [TKZ-FRAME-WORD]~frame~word~'#1'~is~not~flat|plane|circle. }
+\msg_new:nnn {tenkz}{kernel-circle-open-direction}
+  { [TKZ-CIRCLE-OPEN-DIRECTION]~circle~frame~does~not~define~diagonal~open~
+    direction~'#3'~at~the~#2~end~of~wire~'#1';~use~n|e|s|w. }
 \msg_new:nnn {tenkz}{kernel-frame-basis-parse}
   { [TKZ-FRAME-BASIS-PARSE]~basis~member~'#1'~must~be~
     '<row~kind>~at~(<integer>,<integer>)'. }
@@ -2054,6 +2057,33 @@
                       \l__tenkz_kernel_list_item_tl
                     \exp_args:NnnnV \__tenkz_model_normalize_field:nnnn
                       {##1} {target} {node} \l__tenkz_kernel_list_item_tl
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_validate_circle_open_ends:
+  {
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {circle}
+      {
+        \__tenkz_model_map_ids:nn {wire}
+          {
+            \clist_map_inline:nn {from, to}
+              {
+                \__tenkz_model_get:nnN {##1} {####1-open}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                  {
+                    \exp_args:NnV \regex_match:nnT
+                      { \A (nw|ne|sw|se) \Z }
+                      \l__tenkz_kernel_scratch_tl
+                      {
+                        \msg_error:nneee
+                          {tenkz}{kernel-circle-open-direction}
+                          {##1} {####1}
+                          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+                      }
                   }
               }
           }
@@ -13723,6 +13753,7 @@
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:
     \__tenkz_kernel_port_opens:
+    \__tenkz_kernel_validate_circle_open_ends:
     \__tenkz_kernel_validate_addresses:
     \__tenkz_kernel_plane_model:
     % Boundary topology and signatures use the same resolved carrier geometry
