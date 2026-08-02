@@ -53,6 +53,15 @@ workflow resolve to the pinned bytes. It cannot replace the independent
 evidence-supervisor result. A missing, renamed, non-blob, or changed workflow
 fails closed.
 
+The resolver closes the workflow's transitive executable dependency graph.
+Each local action or reusable workflow is pinned by its activation Git object
+and joins every later byte-and-mode check. Each external action or reusable
+workflow reference ends in a full commit SHA, never a tag or branch; each
+container reference ends in a content digest. The same rules recursively cover
+composite actions and called workflows. Mutable, unavailable, incomplete, or
+cyclic dependency evidence fails closed. GitHub's control plane and hosted
+runner remain trusted; repository-selected executable content does not.
+
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
 it never revises, deletes, reorders, or inserts preceding bytes.
@@ -333,8 +342,14 @@ Required additional fields:
 
 `prerequisites` is the pinned `DESIGN.md` policy's `soak_blocker_chain`
 flattened row by row. This file owns no second prerequisite list. `PATCH` is a
-non-negative decimal integer and is strictly larger than the previous
-attempt's patch number.
+non-negative decimal integer. The resolver completely paginates the current Git
+tag namespace, parses every name matching `tenkz-v0.9.PATCH`, and requires this
+patch to be strictly larger than every matching tag other than this entry's
+exact `freeze_tag`, and every earlier freeze entry's patch. Annotated and
+lightweight refs both contribute their names to this maximum; a wrong tag kind
+still fails its separate validation. Thus an
+abandoned tag with no ledger entry cannot be skipped or followed by a smaller
+patch.
 
 Before the entry is proposed, let `H_S = source_pr.headRefOid`. GitHub must
 report `source_pr` merged to `main` with non-null author, `H_S`, `mergedAt`, and
@@ -370,7 +385,8 @@ it never determines ordering.
 
 If `main` advances after `source_sha` but before this record integrates, no
 attempt has started: abandon the unused tag and repeat the source/tag step with
-a larger unused `PATCH`. Reusing or moving the stale tag is forbidden.
+a `PATCH` larger than the complete tag-namespace maximum. Reusing or moving the
+stale tag is forbidden.
 
 ### `work`
 

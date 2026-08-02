@@ -60,6 +60,7 @@ release_test_support_root = "tests/tenkz/release-support"
 release_test_support_tree = "pending"
 release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
 release_enforcement_workflows = [".github/workflows/pr-ci.yml"]
+release_workflow_dependencies = "transitive-immutable-git-sha-or-content-digest"
 release_test_dependency_contract = "pinned-code-support-declared-subject-data"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
@@ -234,8 +235,19 @@ head and executed workflow resolve to those pinned bytes. The independent
 evidence-supervisor result is still required; a workflow status cannot replace
 it. A missing, renamed, non-blob, or changed workflow fails closed.
 
-The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
-non-negative decimal integer and increases strictly between attempts. For each
+The resolver also closes the workflow's executable dependency graph. A local
+action or reusable workflow is pinned by its activation Git object and included
+in later byte-and-mode checks. Every external action or reusable workflow uses
+a full commit SHA, never a tag or branch; every container reference uses a
+content digest. Composite-action and reusable-workflow dependencies are checked
+recursively. A mutable, unavailable, incomplete, or cyclic dependency graph
+fails closed. GitHub's control plane and hosted runner remain inside the stated
+trust boundary; repository-selected executable content does not.
+
+The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` is a
+non-negative decimal integer strictly larger than every other patch in the
+complete current `tenkz-v0.9.*` tag namespace and every earlier freeze entry.
+This includes an abandoned tag that never obtained a ledger entry. For each
 attempt, first merge the frozen source through a source pull request targeting
 `main`. A reviewer distinct from its author approves its exact final head before
 merge, and its integration tree equals that approved tree. The tree must carry

@@ -227,6 +227,10 @@ The policy's closed workflow list is pinned indirectly by the activation
 integration.  Every later candidate and post-merge check requires those exact
 workflow blobs and modes at its exact target, rejects a candidate diff touching
 them, and binds an accepted GitHub run to the pinned workflow bytes and head.
+Local actions and reusable workflows join that activation-derived object set.
+External actions and called workflows use full commit SHAs, containers use
+content digests, and the resolver checks the dependency graph recursively; a
+tag, branch, missing object, or incomplete closure fails closed.
 
 Release-test code and imported or sourced helpers live under `scripts/`.
 Expected outputs, baselines, allowlists, thresholds, and other immutable
@@ -244,7 +248,8 @@ in row-major order; `SOAK-1.0.md` does not own a duplicate list.  The source PR
 needs an independent approval on its exact final head and an integration tree
 equal to that approved tree.  The tagged source integration and freeze-record
 merge are atomic: `main` must not advance between them, or the unused tag is
-abandoned and the source/tag step repeats.
+abandoned and the source/tag step repeats with a patch larger than every
+existing `tenkz-v0.9.*` tag, including one with no ledger entry.
 
 Once the freeze record lands, the evidence gate has no calendar delay.  It
 requires two distinct, independently approved real-work pull requests merged
