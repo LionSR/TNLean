@@ -120,11 +120,15 @@ note = "both sides now expose the same twelve legs; the type advisory (operator 
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-note = "kernel skin-pairing migration awaits visual countersign"
+case_sha256 = "41ec5277c2314d0345a8e58fc6c1388eed7c86882360220e57313e23419a3b55"
+reviewed = "2026-08-02"
+renderer = "codex-author-source-plane-review-2026-08-02-300dpi"
+second_viewer = "codex-author-source-plane-review-2026-08-02"
+note = "the north-to-east and south-to-west local turns match author lines 467--470 and compose across east--west bonds into the paper's left-moving shift"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
@@ -139,11 +143,15 @@ note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two tra
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
-status = "unreviewed"
+status = "structural-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = []
-note = "kernel plane-frame migration awaits visual countersign"
+defects = ["boundary-mismatch"]
+missing = ["plane-transverse-physical-axis"]
+case_sha256 = "89bd11ba536c2f20bd62b63773f718f007d646c6319353b66584a9e60fdb619e"
+reviewed = "2026-08-02"
+renderer = "codex-author-source-plane-review-2026-08-02-300dpi"
+note = "all seven openings are distinct; frame=plane cannot yet place the physical index on the source's independent page-transverse axis; tracked by #5375"
 
 [[verdict]]
 id = "rmp-ii-reduced-density"
