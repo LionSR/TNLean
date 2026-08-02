@@ -266,7 +266,7 @@ def review(
     *,
     state: str = "APPROVED",
     dismissed: bool = False,
-    permission: str | None = "push",
+    permission: str | None = "write",
 ) -> policy.ReviewEvidence:
     return policy.ReviewEvidence(login, state, submitted_at, head, dismissed, permission)
 
@@ -382,6 +382,7 @@ class Context:
         target: str,
         receipt_ref: str,
         receipt_digest: str,
+        current_tree_oid: str,
     ) -> policy.RecordInvalidResetReplayEvidence:
         override = self.reset_replays.get(entry_id)
         if override is not None:
@@ -399,7 +400,9 @@ class Context:
             changes_exactly_one_new_regular_blob=True,
             receipt_path=f"docs/tenkz/soak-replay/{receipt_ref[1:]}.json",
             raw_blob_sha256=receipt_digest,
-            raw_blob_read_from_receipt_integration=True,
+            validated_current_tree_oid=current_tree_oid,
+            raw_blob_read_from_current_validation_tree=True,
+            current_tree_blob_has_exact_path_mode_bytes_and_digest=True,
             schema_path=policy.policy_rules(ARMED_POLICY)[4].reset_replay_schema,
             schema_support_tree_oid=TEST_SUPPORT_TREE,
             schema_from_pinned_support_tree=True,
@@ -433,6 +436,11 @@ class Context:
             external_dependencies_use_full_commit_shas=True,
             containers_use_content_digests=True,
             dependency_graph_complete_and_acyclic=True,
+            package_managers_absent=True,
+            downloaders_absent=True,
+            unhashed_runtime_dependencies_absent=True,
+            runtime_fetched_executables_absent=True,
+            network_disabled_before_repository_code=True,
             candidate_diff_untouched=True,
             github_checks_bind_exact_head_and_workflows=True,
             supervisor_receipt_complete_and_matching=True,
@@ -821,7 +829,62 @@ def prepare_reset_receipts(entries: list[dict], facts: Context) -> None:
                 if record_diff.validated_receipt_integration is None
                 else record_diff.validated_receipt_integration
             ),
+            receipt_blob_preserved_from_candidate_base_to_head=(
+                True
+                if record_diff.receipt_blob_preserved_from_candidate_base_to_head is None
+                else record_diff.receipt_blob_preserved_from_candidate_base_to_head
+            ),
+            receipt_blob_preserved_in_integration=(
+                True
+                if record_diff.receipt_blob_preserved_in_integration is None
+                else record_diff.receipt_blob_preserved_in_integration
+            ),
         )
+
+
+def prepare_receipt_retention(entries: list[dict], facts: Context) -> None:
+    """Bind every later record tree to all earlier durable receipt blobs."""
+
+    prior_receipts: list[tuple[str, str]] = []
+    for entry in entries:
+        if prior_receipts:
+            record_diff = facts.records[entry["id"]]
+            facts.records[entry["id"]] = replace(
+                record_diff,
+                validated_prior_receipts=(
+                    tuple(prior_receipts)
+                    if record_diff.validated_prior_receipts is None
+                    else record_diff.validated_prior_receipts
+                ),
+                candidate_target_preserves_prior_receipts=(
+                    True
+                    if record_diff.candidate_target_preserves_prior_receipts is None
+                    else record_diff.candidate_target_preserves_prior_receipts
+                ),
+                head_preserves_prior_receipts=(
+                    True
+                    if record_diff.head_preserves_prior_receipts is None
+                    else record_diff.head_preserves_prior_receipts
+                ),
+                integration_preserves_prior_receipts=(
+                    True
+                    if record_diff.integration_preserves_prior_receipts is None
+                    else record_diff.integration_preserves_prior_receipts
+                ),
+                entry_diff_untouched_prior_receipts=(
+                    True
+                    if record_diff.entry_diff_untouched_prior_receipts is None
+                    else record_diff.entry_diff_untouched_prior_receipts
+                ),
+            )
+        if entry["kind"] == "reset" and entry["cause"] == "record-invalid":
+            receipt_ref = entry["replay_receipt_pr"]
+            prior_receipts.append(
+                (
+                    f"docs/tenkz/soak-replay/{receipt_ref[1:]}.json",
+                    entry["replay_receipt_sha256"],
+                )
+            )
 
 
 def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
@@ -920,7 +983,7 @@ def set_review_permission(facts: Context, ref: str, permission: str | None) -> N
     facts.prs[ref] = replace(
         pull_request,
         reviews=tuple(
-            replace(item, repository_permission=permission)
+            replace(item, repository_top_level_permission=permission)
             for item in pull_request.reviews
         ),
     )
@@ -930,6 +993,7 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
     prepare_reset_receipts(entries, facts)
     prepare_resolution_facts(entries, facts)
+    prepare_receipt_retention(entries, facts)
     if "audit" not in overrides:
         boundary: str | None = None
         target_oid = facts.prs[ACTIVATION].merge_commit_oid
@@ -1121,16 +1185,19 @@ def main() -> int:
     assert validate(complete_log(), context()) == "signed-off-awaiting-tag"
 
     # Every approval path uses the policy's closed collaborator-permission set.
-    for denied_permission in (None, "pull", "triage"):
+    for denied_permission in (None, "none", "read", "maintain", "push", "triage"):
         denied_activation = context()
         set_review_permission(denied_activation, ACTIVATION, denied_permission)
         expect_failure(
             lambda facts=denied_activation: validate([], facts),
             "repository-authorized independent exact-head approval",
         )
+    admin_reviewer = context()
+    set_review_permission(admin_reviewer, ACTIVATION, "admin")
+    assert validate([], admin_reviewer) == "not-started"
 
     denied_source = context()
-    set_review_permission(denied_source, SOURCE, "pull")
+    set_review_permission(denied_source, SOURCE, "read")
     denied_source.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
     expect_failure(
         lambda: validate([freeze()], denied_source),
@@ -1138,7 +1205,7 @@ def main() -> int:
     )
 
     denied_work = context()
-    set_review_permission(denied_work, FORMAL_WORK, "triage")
+    set_review_permission(denied_work, FORMAL_WORK, "read")
     denied_work.prs[FORMAL_RECORD] = candidate_pr(904, author="record-author")
     expect_failure(
         lambda: validate(complete_log()[:2], denied_work),
@@ -1146,7 +1213,7 @@ def main() -> int:
     )
 
     denied_release = context()
-    set_review_permission(denied_release, RELEASE_PREP, "pull")
+    set_review_permission(denied_release, RELEASE_PREP, "read")
     signoff_head = denied_release.prs[SIGNOFF_RECORD].head_oid
     assert signoff_head is not None
     denied_release.prs[SIGNOFF_RECORD] = candidate_pr(
@@ -1170,7 +1237,7 @@ def main() -> int:
                 "release-reviewer",
                 SIGNOFF_REVIEW,
                 signoff_head,
-                permission="pull",
+                permission="read",
             ),
         ),
     )
@@ -1195,7 +1262,7 @@ def main() -> int:
     receipt_entries = parsed_entries(*receipt_log)
     prepare_reset_receipts(receipt_entries, denied_receipt)
     receipt_ref = receipt_entries[-1]["replay_receipt_pr"]
-    set_review_permission(denied_receipt, receipt_ref, "triage")
+    set_review_permission(denied_receipt, receipt_ref, "read")
     expect_failure(
         lambda: validate(
             receipt_log,
@@ -1262,14 +1329,15 @@ def main() -> int:
         prepare_reset_receipts(entries, facts)
         receipt_ref = entries[-1]["replay_receipt_pr"]
         receipt_digest = entries[-1]["replay_receipt_sha256"]
+        candidate_head = facts.prs["#908"].head_oid
+        assert candidate_head is not None
         replay = facts.resolve_replay_record_invalid_reset(
             "S1-0002",
             "S1-0001",
             receipt_ref,
             receipt_digest,
+            candidate_head,
         )
-        candidate_head = facts.prs["#908"].head_oid
-        assert candidate_head is not None
         audit = audit_evidence(
             "S1-0001",
             ("S1-0001",),
@@ -1290,7 +1358,16 @@ def main() -> int:
         ("receipt_candidate_main_tip_exact", False, "exact current main tip"),
         ("changes_exactly_one_new_regular_blob", False, "new regular blob"),
         ("receipt_path", "docs/tenkz/soak-replay/wrong.json", "wrong path"),
-        ("raw_blob_read_from_receipt_integration", False, "reachable integration"),
+        (
+            "raw_blob_read_from_current_validation_tree",
+            False,
+            "current validation tree",
+        ),
+        (
+            "current_tree_blob_has_exact_path_mode_bytes_and_digest",
+            False,
+            "does not retain the exact receipt blob",
+        ),
         ("schema_path", "schema.json", "used another schema"),
         ("schema_support_tree_oid", oid(99_993), "used another support tree"),
         ("schema_from_pinned_support_tree", False, "pinned support tree"),
@@ -1367,6 +1444,22 @@ def main() -> int:
         "candidate base differs from receipt integration",
     )
 
+    missing_receipt_in_head_blocks, missing_receipt_in_head, head_audit, _replay = (
+        reset_candidate_case()
+    )
+    missing_receipt_in_head.records["S1-0002"] = replace(
+        missing_receipt_in_head.records["S1-0002"],
+        receipt_blob_preserved_from_candidate_base_to_head=False,
+    )
+    expect_failure(
+        lambda: validate(
+            missing_receipt_in_head_blocks,
+            missing_receipt_in_head,
+            audit=head_audit,
+        ),
+        "reset head does not preserve its receipt blob",
+    )
+
     invalid_acknowledgement = context()
     add_record(
         invalid_acknowledgement,
@@ -1390,6 +1483,153 @@ def main() -> int:
             "S1-0002",
             ("S1-0001", "S1-0002"),
             target_oid=invalid_acknowledgement.prs["#908"].merge_commit_oid,
+        ),
+    ) == "reset-required:S1-0001"
+
+    def retained_receipt_case(candidate_record: bool) -> tuple[list[str], Context, str]:
+        blocks = [
+            freeze(),
+            reset("S1-0002", "#908", "record-invalid", "S1-0001"),
+            correction("S1-0003", "#909", "S1-0001"),
+        ]
+        facts = context()
+        add_record(
+            facts,
+            "S1-0002",
+            "#908",
+            908,
+            FREEZE_TIME + timedelta(seconds=1),
+        )
+        add_record(
+            facts,
+            "S1-0003",
+            "#909",
+            909,
+            FREEZE_TIME + timedelta(seconds=2),
+        )
+        if candidate_record:
+            facts.prs["#909"] = candidate_pr(909, author="record-author")
+        entries = parsed_entries(*blocks)
+        prepare_reset_receipts(entries, facts)
+        prepare_receipt_retention(entries, facts)
+        return blocks, facts, entries[1]["replay_receipt_pr"]
+
+    retained_candidate, retained_candidate_facts, receipt_ref = retained_receipt_case(True)
+    retained_candidate_facts.prs[receipt_ref] = replace(
+        retained_candidate_facts.prs[receipt_ref],
+        integration_reachable_from_main=False,
+    )
+    assert validate(retained_candidate, retained_candidate_facts) == "correction-pending"
+
+    missing_current_blob, missing_current_blob_facts, receipt_ref = retained_receipt_case(
+        False
+    )
+    missing_current_blob = missing_current_blob[:2]
+    current_tree_oid = missing_current_blob_facts.prs["#908"].merge_commit_oid
+    assert current_tree_oid is not None
+    receipt_entry = parsed_entries(*missing_current_blob)[1]
+    replay = missing_current_blob_facts.resolve_replay_record_invalid_reset(
+        "S1-0002",
+        "S1-0001",
+        receipt_ref,
+        receipt_entry["replay_receipt_sha256"],
+        current_tree_oid,
+    )
+    missing_current_blob_facts.reset_replays["S1-0002"] = replace(
+        replay,
+        current_tree_blob_has_exact_path_mode_bytes_and_digest=False,
+    )
+    assert validate(
+        missing_current_blob,
+        missing_current_blob_facts,
+        audit=audit_evidence(
+            "S1-0002",
+            (),
+            target_oid=current_tree_oid,
+        ),
+    ) == "reset-required:S1-0001"
+
+    unreachable_creation_blocks, unreachable_creation, creation_audit, _replay = (
+        reset_candidate_case()
+    )
+    receipt_ref = parsed_entries(*unreachable_creation_blocks)[1]["replay_receipt_pr"]
+    unreachable_creation.prs[receipt_ref] = replace(
+        unreachable_creation.prs[receipt_ref],
+        integration_reachable_from_main=False,
+    )
+    expect_failure(
+        lambda: validate(
+            unreachable_creation_blocks,
+            unreachable_creation,
+            audit=creation_audit,
+        ),
+        "integration is not reachable from main",
+    )
+
+    retention_candidate_failures = (
+        (
+            "candidate_target_preserves_prior_receipts",
+            False,
+            "candidate target does not retain every prior receipt",
+        ),
+        (
+            "head_preserves_prior_receipts",
+            False,
+            "exact head does not retain every prior receipt",
+        ),
+        (
+            "entry_diff_untouched_prior_receipts",
+            False,
+            "diff changes a prior receipt path",
+        ),
+        (
+            "validated_prior_receipts",
+            (("docs/tenkz/soak-replay/wrong.json", "0" * 64),),
+            "another prior-receipt set",
+        ),
+    )
+    for field_name, bad_value, error_fragment in retention_candidate_failures:
+        blocks, facts, _receipt_ref = retained_receipt_case(True)
+        facts.records["S1-0003"] = replace(
+            facts.records["S1-0003"],
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda blocks=blocks, facts=facts: validate(blocks, facts),
+            error_fragment,
+        )
+
+    retained_postmerge, retained_postmerge_facts, _receipt_ref = retained_receipt_case(False)
+    retained_postmerge_facts.records["S1-0003"] = replace(
+        retained_postmerge_facts.records["S1-0003"],
+        integration_preserves_prior_receipts=False,
+    )
+    assert validate(retained_postmerge, retained_postmerge_facts) == (
+        "reset-required:S1-0003"
+    )
+
+    missing_reset_integration = context()
+    add_record(
+        missing_reset_integration,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(seconds=1),
+    )
+    missing_reset_integration.records["S1-0002"] = replace(
+        missing_reset_integration.records["S1-0002"],
+        receipt_blob_preserved_in_integration=False,
+    )
+    assert validate(
+        [
+            freeze(),
+            reset("S1-0002", "#908", "record-invalid", "S1-0001"),
+        ],
+        missing_reset_integration,
+        audit=audit_evidence(
+            "S1-0002",
+            ("S1-0001", "S1-0002"),
+            target_oid=missing_reset_integration.prs["#908"].merge_commit_oid,
         ),
     ) == "reset-required:S1-0001"
 
@@ -1419,7 +1659,7 @@ def main() -> int:
     workflow = mutable_workflow.resolve_current_workflow(
         activation_integration,
         target_oid,
-        (".github/workflows/pr-ci.yml",),
+        (".github/workflows/tenkz-release-policy.yml",),
     )
     mutable_workflow.workflow_override = replace(
         workflow,
@@ -1429,6 +1669,43 @@ def main() -> int:
         lambda: validate(complete_log(), mutable_workflow),
         "external workflow dependency uses a mutable ref",
     )
+    workflow_failures = (
+        ("package_managers_absent", False, "invokes a package manager"),
+        ("downloaders_absent", False, "invokes a downloader"),
+        (
+            "unhashed_runtime_dependencies_absent",
+            False,
+            "unhashed runtime dependency",
+        ),
+        (
+            "runtime_fetched_executables_absent",
+            False,
+            "fetches executable content at runtime",
+        ),
+        (
+            "network_disabled_before_repository_code",
+            False,
+            "does not disable network before repository code",
+        ),
+    )
+    for field_name, bad_value, error_fragment in workflow_failures:
+        workflow_facts = context()
+        activation_integration = workflow_facts.prs[ACTIVATION].merge_commit_oid
+        target_oid = workflow_facts.prs[SIGNOFF_RECORD].merge_commit_oid
+        assert activation_integration is not None and target_oid is not None
+        workflow = workflow_facts.resolve_current_workflow(
+            activation_integration,
+            target_oid,
+            (".github/workflows/tenkz-release-policy.yml",),
+        )
+        workflow_facts.workflow_override = replace(
+            workflow,
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda facts=workflow_facts: validate(complete_log(), facts),
+            error_fragment,
+        )
 
     boolean_record_parent = context()
     boolean_record_parent.records["S1-0001"] = replace(
@@ -1548,7 +1825,7 @@ def main() -> int:
     )
 
     unauthorized_resolution, unauthorized_facts, fix_ref = resolution_case(True)
-    set_review_permission(unauthorized_facts, fix_ref, "pull")
+    set_review_permission(unauthorized_facts, fix_ref, "read")
     expect_failure(
         lambda: validate(unauthorized_resolution, unauthorized_facts),
         "repository-authorized independent exact-head approval",

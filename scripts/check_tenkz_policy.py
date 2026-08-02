@@ -65,7 +65,7 @@ EXPECTED_POLICY = {
         "frozen_twin_precedent": "quantikz/quantikz2",
         "maintainer_identity": "github:lionsr",
         "signer_identity_scheme": "github:lowercase-login",
-        "reviewer_repository_permissions": ["push", "maintain", "admin"],
+        "reviewer_repository_permissions": ["write", "admin"],
         "tag_immutability": "github-ruleset-no-update-delete-or-bypass",
         "release_manifest_pattern": "docs/tenkz/releases/TAG.toml",
         "release_package_metadata": "tex/tenkz/tenkz.sty",
@@ -79,8 +79,13 @@ EXPECTED_POLICY = {
         "release_test_support_root": "tests/tenkz/release-support",
         "release_test_support_tree": "pending",
         "release_test_data_roots": ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"],
-        "release_enforcement_workflows": [".github/workflows/pr-ci.yml"],
-        "release_workflow_dependencies": "transitive-immutable-git-sha-or-content-digest",
+        "release_enforcement_workflows": [
+            ".github/workflows/tenkz-release-policy.yml"
+        ],
+        "release_workflow_dependencies": (
+            "transitive-content-addressed-no-runtime-downloads"
+        ),
+        "release_enforcement_network": "disabled-before-repository-code",
         "release_reset_replay_schema": (
             "tests/tenkz/release-support/reset-replay-v1.schema.json"
         ),
@@ -164,7 +169,7 @@ class ReviewEvidence:
     submitted_at: datetime | None
     commit_oid: str | None
     dismissed: bool | None = False
-    repository_permission: str | None = None
+    repository_top_level_permission: str | None = None
 
 
 @dataclass(frozen=True)
@@ -216,6 +221,13 @@ class RecordDiffEvidence:
     candidate_main_tip_descends_from_fix_integration: bool | None = None
     integration_parent_descends_from_fix_integration: bool | None = None
     validated_fix_integration: str | None = None
+    validated_prior_receipts: tuple[tuple[str, str], ...] | None = None
+    candidate_target_preserves_prior_receipts: bool | None = None
+    head_preserves_prior_receipts: bool | None = None
+    integration_preserves_prior_receipts: bool | None = None
+    entry_diff_untouched_prior_receipts: bool | None = None
+    receipt_blob_preserved_from_candidate_base_to_head: bool | None = None
+    receipt_blob_preserved_in_integration: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -290,6 +302,7 @@ class ReleaseContract:
     test_data_roots: tuple[str, ...]
     enforcement_workflows: tuple[str, ...]
     workflow_dependency_contract: str
+    enforcement_network_contract: str
     reset_replay_schema: str
     test_dependency_contract: str
     test_protocol: str
@@ -397,7 +410,9 @@ class RecordInvalidResetReplayEvidence:
     changes_exactly_one_new_regular_blob: bool | None
     receipt_path: str | None
     raw_blob_sha256: str | None
-    raw_blob_read_from_receipt_integration: bool | None
+    validated_current_tree_oid: str | None
+    raw_blob_read_from_current_validation_tree: bool | None
+    current_tree_blob_has_exact_path_mode_bytes_and_digest: bool | None
     schema_path: str | None
     schema_support_tree_oid: str | None
     schema_from_pinned_support_tree: bool | None
@@ -426,6 +441,11 @@ class WorkflowEvidence:
     external_dependencies_use_full_commit_shas: bool | None
     containers_use_content_digests: bool | None
     dependency_graph_complete_and_acyclic: bool | None
+    package_managers_absent: bool | None
+    downloaders_absent: bool | None
+    unhashed_runtime_dependencies_absent: bool | None
+    runtime_fetched_executables_absent: bool | None
+    network_disabled_before_repository_code: bool | None
     candidate_diff_untouched: bool | None
     github_checks_bind_exact_head_and_workflows: bool | None
     supervisor_receipt_complete_and_matching: bool | None
@@ -507,7 +527,7 @@ ResolveReplayFreezeTag = Callable[[str], TagEvidence]
 ResolveCurrentFinalTag = Callable[[str], TagEvidence]
 ResolveReplayIssue = Callable[[str], IssueEvidence]
 ResolveReplayRecordInvalidReset = Callable[
-    [str, str, str, str], RecordInvalidResetReplayEvidence
+    [str, str, str, str, str], RecordInvalidResetReplayEvidence
 ]
 ResolveCurrentWorkflow = Callable[[str, str, tuple[str, ...]], WorkflowEvidence]
 
@@ -793,7 +813,7 @@ def policy_rules(
     )
     reviewer_permissions = root.get("reviewer_repository_permissions")
     require(
-        reviewer_permissions == ["push", "maintain", "admin"],
+        reviewer_permissions == ["write", "admin"],
         "policy has the wrong reviewer permission set",
     )
     require(
@@ -815,6 +835,7 @@ def policy_rules(
         test_data_roots=tuple(root.get("release_test_data_roots", ())),
         enforcement_workflows=tuple(root.get("release_enforcement_workflows", ())),
         workflow_dependency_contract=str(root.get("release_workflow_dependencies", "")),
+        enforcement_network_contract=str(root.get("release_enforcement_network", "")),
         reset_replay_schema=str(root.get("release_reset_replay_schema", "")),
         test_dependency_contract=str(root.get("release_test_dependency_contract", "")),
         test_protocol=str(root.get("release_test_protocol", "")),
@@ -832,6 +853,7 @@ def policy_rules(
             contract.test_data_roots,
             contract.enforcement_workflows,
             contract.workflow_dependency_contract,
+            contract.enforcement_network_contract,
             contract.reset_replay_schema,
             contract.test_dependency_contract,
             contract.test_protocol,
@@ -846,8 +868,9 @@ def policy_rules(
             "scripts",
             "tests/tenkz/release-support",
             ("tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"),
-            (".github/workflows/pr-ci.yml",),
-            "transitive-immutable-git-sha-or-content-digest",
+            (".github/workflows/tenkz-release-policy.yml",),
+            "transitive-content-addressed-no-runtime-downloads",
+            "disabled-before-repository-code",
             "tests/tenkz/release-support/reset-replay-v1.schema.json",
             "pinned-code-support-declared-subject-data",
             "hermetic-repository-view-no-shell-or-network",
@@ -926,6 +949,7 @@ def validate_merged_pr(
     *,
     require_descendant: bool,
     require_tree: bool,
+    require_reachable: bool = True,
 ) -> tuple[datetime, str]:
     require(pr.merged is True, f"{pr_name} is not merged")
     merged_at = utc_instant(pr.merged_at, f"{pr_name} mergedAt")
@@ -934,10 +958,11 @@ def validate_merged_pr(
         isinstance(integration, str) and SHA_RE.fullmatch(integration) is not None,
         f"{pr_name} merge commit is invalid",
     )
-    require(
-        pr.integration_reachable_from_main is True,
-        f"{pr_name} integration is not reachable from main",
-    )
+    if require_reachable:
+        require(
+            pr.integration_reachable_from_main is True,
+            f"{pr_name} integration is not reachable from main",
+        )
     if require_tree:
         require(
             pr.integration_tree_matches_head is True,
@@ -1116,7 +1141,7 @@ def require_independent_approval(
         submitted = utc_instant(review.submitted_at, f"{pr_name} review submittedAt")
         if review.state != "APPROVED" or review.commit_oid != pr.head_oid:
             continue
-        if review.repository_permission not in authorized_permissions:
+        if review.repository_top_level_permission not in authorized_permissions:
             continue
         if after is not None and submitted <= after:
             continue
@@ -1287,6 +1312,23 @@ def validate_workflow_evidence(
     require(
         evidence.dependency_graph_complete_and_acyclic is True,
         "workflow dependency graph is incomplete or cyclic",
+    )
+    require(
+        evidence.package_managers_absent is True,
+        "release workflow invokes a package manager",
+    )
+    require(evidence.downloaders_absent is True, "release workflow invokes a downloader")
+    require(
+        evidence.unhashed_runtime_dependencies_absent is True,
+        "release workflow has an unhashed runtime dependency",
+    )
+    require(
+        evidence.runtime_fetched_executables_absent is True,
+        "release workflow fetches executable content at runtime",
+    )
+    require(
+        evidence.network_disabled_before_repository_code is True,
+        "release workflow does not disable network before repository code",
     )
     require(
         evidence.candidate_diff_untouched is True,
@@ -1801,6 +1843,47 @@ def validate_entries(
             if record_pending:
                 raise PolicyError(message)
             record_invalid_reasons.append(message)
+
+        prior_receipts = tuple(
+            (
+                "docs/tenkz/soak-replay/"
+                + pr_ref(
+                    prior_entry["replay_receipt_pr"],
+                    "replay_receipt_pr",
+                    prior_shape[0],
+                )[1:]
+                + ".json",
+                sha256(
+                    prior_entry["replay_receipt_sha256"],
+                    "replay_receipt_sha256",
+                    prior_shape[0],
+                ),
+            )
+            for prior_entry, prior_shape in zip(entries[: index - 1], shaped[: index - 1])
+            if prior_shape[1] == "reset" and prior_entry.get("cause") == "record-invalid"
+        )
+        if prior_receipts:
+            check_kind_record_fact(
+                diff.validated_prior_receipts == prior_receipts,
+                f"{entry_id} retention evidence used another prior-receipt set",
+            )
+            check_kind_record_fact(
+                diff.candidate_target_preserves_prior_receipts is True,
+                f"{entry_id} candidate target does not retain every prior receipt",
+            )
+            check_kind_record_fact(
+                diff.head_preserves_prior_receipts is True,
+                f"{entry_id} exact head does not retain every prior receipt",
+            )
+            check_kind_record_fact(
+                diff.entry_diff_untouched_prior_receipts is True,
+                f"{entry_id} diff changes a prior receipt path",
+            )
+            if not record_pending:
+                check_kind_record_fact(
+                    diff.integration_preserves_prior_receipts is True,
+                    f"{entry_id} integration does not retain every prior receipt",
+                )
 
         if kind == "freeze":
             check_kind_record_fact(
@@ -2339,6 +2422,7 @@ def validate_entries(
                         receipt_ref,
                         require_descendant=False,
                         require_tree=True,
+                        require_reachable=not historical_record_reset,
                     )
                     require(
                         normalized_login(receipt_pr.merged_by_login, f"{receipt_ref} mergedBy")
@@ -2368,6 +2452,7 @@ def validate_entries(
                         target,
                         receipt_ref,
                         receipt_digest,
+                        validation_target_oid,
                     )
                     require(
                         replay.validated_entry_id == entry_id,
@@ -2408,8 +2493,16 @@ def validate_entries(
                         f"{entry_id} reset receipt blob digest differs from the entry",
                     )
                     require(
-                        replay.raw_blob_read_from_receipt_integration is True,
-                        f"{entry_id} reset receipt was not read from its reachable integration",
+                        replay.validated_current_tree_oid == validation_target_oid,
+                        f"{entry_id} reset receipt was read from another validation tree",
+                    )
+                    require(
+                        replay.raw_blob_read_from_current_validation_tree is True,
+                        f"{entry_id} reset receipt was not read from the current validation tree",
+                    )
+                    require(
+                        replay.current_tree_blob_has_exact_path_mode_bytes_and_digest is True,
+                        f"{entry_id} current tree does not retain the exact receipt blob",
                     )
                     require(
                         replay.schema_path == release_contract.reset_replay_schema,
@@ -2495,10 +2588,18 @@ def validate_entries(
                         diff.candidate_main_tip_is_receipt_integration is True,
                         f"{entry_id} candidate base differs from receipt integration",
                     )
+                    check_kind_record_fact(
+                        diff.receipt_blob_preserved_from_candidate_base_to_head is True,
+                        f"{entry_id} reset head does not preserve its receipt blob",
+                    )
                     if not record_pending:
                         check_kind_record_fact(
                             diff.integration_parent_is_receipt_integration is True,
                             f"{entry_id} integration parent differs from receipt integration",
+                        )
+                        check_kind_record_fact(
+                            diff.receipt_blob_preserved_in_integration is True,
+                            f"{entry_id} reset integration does not preserve its receipt blob",
                         )
                     receipt_required = (
                         ("breaking-required", breaking_target)
@@ -2777,8 +2878,16 @@ def validate_entries(
         seen_attempts[entry_id] = attempt
         if entry_is_invalid():
             require(not record_pending, f"{entry_id} cannot be invalid before merge")
+            if kind == "reset" and entry.get("cause") == "record-invalid":
+                uncovered_target = nonempty_string(entry["target"], "target", entry_id)
+                if (
+                    uncovered_target not in drift_targets
+                    and uncovered_target not in deferred_invalid_targets
+                ):
+                    deferred_invalid_targets.append(uncovered_target)
             if entry_id not in deferred_invalid_targets:
                 deferred_invalid_targets.append(entry_id)
+            deferred_invalid_targets.sort(key=entry_positions.__getitem__)
 
     activate_current_record_queue()
     validate_current_controls()
