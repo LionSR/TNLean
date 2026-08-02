@@ -166,7 +166,10 @@ def _command_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
     for command in _COMMAND_RE.finditer(source):
         position = _skip_space(source, command.end())
-        if source[position : position + 1] == "*":
+        if (
+            command.group(1) == "tnarrow"
+            and source[position : position + 1] == "*"
+        ):
             position = _skip_space(source, position + 1)
         if source[position : position + 1] == "[":
             closed = match_group(source, position, "[", "]")

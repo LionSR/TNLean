@@ -283,11 +283,11 @@ def test_rmp_dimension_ownership() -> None:
         )
     starred_command_units = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnarrow*[bend={1mm}]{from}{to}{2mm}",
+        r"\tnarrow*[from=1,to=2]{\rule{1mm}{2pt}}",
     )
     if [occurrence.literal for occurrence in starred_command_units] != [
         "1mm",
-        "2mm",
+        "2pt",
     ] or any(
         occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in starred_command_units
