@@ -3,7 +3,7 @@
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
 pairing_sha256 = "b3375317e8dddb4402eda08b0d74e1aaa4789467cf5a84fe4d4bd722ef470e89"
-campaign_sha256 = "d7d2b456aec151048b28665f01d71493048c901ebb6ba43d41ba18667783f1e2"
+campaign_sha256 = "3b107105285885a085972b0598e8b37a3add3af253c3484c17f082a03af347d8"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -747,11 +747,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "5e93377ce5007cc6bd60e346a2f5ebe0146bca5314efc4a1c6d5054199e74fa6"
-second_viewer = "rmp-r-resolver-named-contract-review-2026-08-01"
-reviewed = "2026-08-01"
-renderer = "codex-named-ring-contract-source-review-2026-08-01-300dpi"
-note = "one plane basis carries both rails and the diagonal transversal; the b winding contracts with all four ring tensors and both b stations, passes under i's leg, and the i-string runs from i through a"
+case_sha256 = "50c2435dfff2fd51eeaddf2d8d79aaf49cebd9e64bd6626a96bc790c7ee11038"
+second_viewer = "codex-semantic-boundary-source-review-2026-08-02"
+reviewed = "2026-08-02"
+renderer = "codex-semantic-boundary-source-review-2026-08-02-300dpi"
+note = "one plane basis carries both rails and the diagonal transversal; seven four-port tensors split their black carriers and red operator strings, all nine virtual boundary legs are semantic open events, the rW-to-rN segment passes under i's leg, and the i-string terminates on a"
 
 [[verdict]]
 id = "rmp-iii-b-r-tensor-right"
