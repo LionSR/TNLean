@@ -9,6 +9,8 @@
 % Declarative reading: tenkzplanes is the ket-over-bra oblique double layer.
 % Per-sheet coordinates repeat the same marked path on sheet 1 (ket) and
 % sheet 0 (bra), as the source repeats every segment and marker at y=+/-0.2.
+% Every one of the 24 ket-bra physical pairs remains contracted; the marked
+% string endpoints do not open those physical contractions in the source.
 % Its source-faithful explicit vectors leave centres 0.2431 pitch apart, but
 % the audited outer bead ink retains less than daylight; the warning is expected.
 \documentclass[varwidth=19cm, border=6pt]{standalone}
@@ -19,8 +21,7 @@
 \[
   \begin{tenkzplanes}[rows=6, cols=4,
                       row vector={-2.475mm,-3.7125mm},
-                      sheet vector={0mm,2.70mm},
-                      open={(1,2),(5,3)}]
+                      sheet vector={0mm,2.70mm}]
     \tnsite[role=marked, size=l]{(1,2,1)}
     \tnsite[role=marked, size=s]{(2,2,1)}
     \tnsite[role=marked, size=s]{(3,2,1)}

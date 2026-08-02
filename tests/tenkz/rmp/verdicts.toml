@@ -697,15 +697,14 @@ note = "The pull arrow remains outside the PEPS window; the enlarged crossing is
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "faithful"
+status = "structural-gap"
 pairing = "verified"
-pairing_by = "site-glyph-source-review-2026-07-27"
-defects = []
-case_sha256 = "e9b9fc0a997ba19f9e7ba210eb66e5aeee974d9434f7d42fc46586345b9465b2"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-27"
-renderer = "fable-residual-batch-2026-07-27-200dpi"
-note = "the string now bends through both intermediate marked sites (the unlabeled one and a), as the source draws its two-dot path"
+pairing_by = "codex-source-topology-review-2026-08-02"
+defects = ["missing-element"]
+case_sha256 = "50913504e8d89b73b05ea18f0bdebdc52db2750810953974780233f16ff1766c"
+reviewed = "2026-08-02"
+renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
+note = "the shared lattice preserves nine PEPS sites, twelve cut virtual bonds, and page-vertical physical legs, but its integer-cell address surface cannot place the two blue half-grid insertions or the source's five-position curved string; tracked in #5375"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
@@ -814,12 +813,12 @@ note = "the plane projection restores upper i, lower j, upper R_{i,b}, lower R_{
 id = "rmp-iii-b-condensation"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "site-glyph-source-review-2026-07-27"
+pairing_by = "codex-source-topology-review-2026-08-02"
 defects = []
-case_sha256 = "289161fa519a838e7f4a46f9dfe414ad69e94c6be5320c77e8f1e5adb23d0c36"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "named oblique row frame and source-measured interleaved sheet offset preserve the doubled path; projection remains a cosmetic gap"
+case_sha256 = "392ec0951645c9a41dc7878b8e13a0b98224a53c43b5699bdc73199c4e941198"
+reviewed = "2026-08-02"
+renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
+note = "the shared oblique lattice preserves both 6x4 grids, all 40 perimeter virtual openings, both marked paths, and all 24 inter-sheet physical contractions; projection and stroke remain cosmetic"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"

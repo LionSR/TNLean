@@ -1,18 +1,16 @@
 % Target: rmp-iii-b-condensation
 % Formula: A doubled anyon string joins paired endpoints on ket and bra sheets.
 % Ink: Canonical public tenkzplanes with the same marked path on both sheets.
-% Boundary: Both 6x4 sheets are open; paired string endpoints stay uncontracted.
+% Boundary: Both 6x4 sheets retain every perimeter virtual stub; all 24
+%   inter-sheet physical pairs are contracted.
 % Source: paper TN-Review-main.tex line 1697; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 925-953
 % Capabilities: lattice, double-layer-string, marked-endpoints
 \[
-  % The author source repeats one path at y=-0.2 and y=0.2. The named oblique
-  % frame separates the same-x ket/bra markers; the endpoint interfaces remain
-  % open.
-  \begin{tenkzplanes}[rows=6, cols=4,
-                      frame=oblique,
-                      sheet vector={0mm,2.70mm},
-                      open={(1,2),(5,3)}]
+  % The shared oblique frame owns the sheet separation.  The lattice owner
+  % retains all four perimeter sides and contracts every physical sheet pair.
+  \begin{tenkzplanes}[rows=6, cols=4, frame=oblique,
+                      boundary=open]
     \tnsite[role=marked, size=l]{(1,2,1)}
     \tnsite[role=marked,size=s]{(2,2,1)} \tnsite[role=marked,size=s]{(3,2,1)}
     \tnsite[role=marked,size=s]{(4,2,1)} \tnsite[role=marked,size=l]{(5,3,1)}
