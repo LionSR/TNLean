@@ -685,7 +685,7 @@ def _environment_tokens(
         if _ENVIRONMENT_NAME_RE.fullmatch(spelling) is not None:
             name: str | None = spelling
             match_name = f"static:{spelling}"
-        elif "\\" in spelling:
+        elif "\\" in spelling or "#" in spelling:
             name = None
             match_name = f"unresolved:{spelling}"
         else:
@@ -704,7 +704,12 @@ def _environment_spans(
     """Return neutral barriers for public environments and malformed controls."""
     tokens = _environment_tokens(source, owner_source)
     spans = [
-        _OwnerSpan(start, len(source) if end < 0 else end, None)
+        _OwnerSpan(
+            start,
+            len(source) if end < 0 else end,
+            None,
+            end < 0,
+        )
         for start, end in _environment_scope_spans(
             tokens, _PUBLIC_ENVIRONMENTS
         )

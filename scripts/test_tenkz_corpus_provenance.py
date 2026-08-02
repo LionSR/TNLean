@@ -36,6 +36,7 @@ from tenkzlib.dimensions import (
     DimensionReport,
     _COMMAND_GRAMMARS,
     _PUBLIC_ENVIRONMENTS,
+    _environment_spans,
     collect_dimension_report,
     scan_book_dimensions,
     scan_case_dimensions,
@@ -578,43 +579,79 @@ def test_rmp_dimension_ownership() -> None:
                 f"source={malformed_nested_source!r}, "
                 f"occurrences={malformed_nested!r}"
             )
-    for unclosed_environment_source in (
-        r"\tnarrow{x \begin{tenkz}[pitch=45mm \tnput{x}{(46mm,0)}{} "
-        r"\end{tenkz}}",
-        r"\tnarrow{x \begin{tenkzeq}[check=55mm \tnput{x}{(56mm,0)}{} "
-        r"\end{tenkzeq}}",
-        r"\def\tenname{tenkz}"
-        r"\tnarrow{x \begin{\tenname}[pitch=57mm \tnput{x}{(58mm,0)}{} "
-        r"\end{\tenname}}",
-    ):
-        unclosed_environment_option = scan_case_dimensions(
-            Path("synthetic.tex"), unclosed_environment_source
+    environment_names = (
+        ("static", "tenkz", ""),
+        ("unresolved", r"\tenname", r"\def\tenname{tenkz}"),
+        ("parameterized", "#1", ""),
+    )
+    owner_contexts = (
+        (
+            "route",
+            r"\tnarrow{",
+            "}",
+            r"\tnput{x}{(DIM,0)}{}",
+        ),
+        (
+            "layout",
+            r"\tnput{x}{(0,0)}{",
+            "}",
+            r"\tnarrow{DIM}",
+        ),
+    )
+    malformed_kinds = ("unclosed name", "unclosed option", "missing end")
+    literal_index = 61
+    for name_kind, environment_name, prelude in environment_names:
+        for malformed_kind in malformed_kinds:
+            for owner_kind, outer_open, outer_close, inner_template in owner_contexts:
+                literal = f"{literal_index}mm"
+                literal_index += 1
+                inner_command = inner_template.replace("DIM", literal)
+                if malformed_kind == "unclosed name":
+                    environment = rf"\begin{{{environment_name} " + inner_command
+                    # Keep the name group genuinely unclosed; the outer owner
+                    # is intentionally opened but cannot close across it.
+                    suffix = ""
+                elif malformed_kind == "unclosed option":
+                    environment = (
+                        rf"\begin{{{environment_name}}}[malformed "
+                        + inner_command
+                        + rf"\end{{{environment_name}}}"
+                    )
+                    suffix = outer_close
+                else:
+                    environment = rf"\begin{{{environment_name}}}" + inner_command
+                    suffix = outer_close
+                source = prelude + outer_open + environment + suffix
+                owner_source = strip_comments(source)
+                literal_offset = source.index(literal)
+                environment_barriers = _environment_spans(source, owner_source)
+                if not any(
+                    span.is_quarantine
+                    and span.start <= literal_offset < span.end
+                    for span in environment_barriers
+                ):
+                    raise AssertionError(
+                        "a malformed environment remainder lacked a quarantine: "
+                        f"name={name_kind}, malformed={malformed_kind}, "
+                        f"outer={owner_kind}, source={source!r}, "
+                        f"spans={environment_barriers!r}"
+                    )
+                occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+                if len(occurrences) != 1 or occurrences[0].owner is not None:
+                    raise AssertionError(
+                        "a malformed environment remainder exposed an owner: "
+                        f"name={name_kind}, malformed={malformed_kind}, "
+                        f"outer={owner_kind}, source={source!r}, "
+                        f"occurrences={occurrences!r}"
+                    )
+    unclosed_environment_end = scan_case_dimensions(
+        Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
+    )
+    if len(unclosed_environment_end) != 1 or unclosed_environment_end[0].owner is not None:
+        raise AssertionError(
+            "an unclosed environment end name exposed nested ownership: "
+            f"{unclosed_environment_end!r}"
         )
-        if len(unclosed_environment_option) != 2 or any(
-            occurrence.owner is not None
-            for occurrence in unclosed_environment_option
-        ):
-            raise AssertionError(
-                "an unclosed environment option exposed nested ownership: "
-                f"source={unclosed_environment_source!r}, "
-                f"occurrences={unclosed_environment_option!r}"
-            )
-    for malformed_environment_name in (
-        r"\begin{tenkz \tnput{x}{(59mm,0)}{}",
-        r"\end{tenkz \tnput{x}{(60mm,0)}{}",
-    ):
-        malformed_name_dimensions = scan_case_dimensions(
-            Path("synthetic.tex"), malformed_environment_name
-        )
-        if (
-            len(malformed_name_dimensions) != 1
-            or malformed_name_dimensions[0].owner is not None
-        ):
-            raise AssertionError(
-                "an unclosed environment name exposed nested ownership: "
-                f"source={malformed_environment_name!r}, "
-                f"occurrences={malformed_name_dimensions!r}"
-            )
     for case_variant in (
         r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
         r"\tnarrow{x \tn[Label Shift={35mm,36mm}]{A}}",
