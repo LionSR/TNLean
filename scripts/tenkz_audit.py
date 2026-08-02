@@ -1514,6 +1514,68 @@ class Audit:
     def check_equation_boundaries(self) -> None:
         if not self.tex_linked:
             return
+        relation_checks: dict[int, Event] = {}
+        check_events = [
+            event for event in self.log_events if event.kind == "check"
+        ]
+        check_offset = 0
+        equation_tokens = list(re.finditer(
+            r"\\(begin|end)\{tenkzeq\}", self._tex_src
+        ))
+        equation_stack: list[re.Match[str]] = []
+        equation_scopes: list[tuple[int, list[int], bool]] = []
+        for token in equation_tokens:
+            if token.group(1) == "begin":
+                equation_stack.append(token)
+                continue
+            if not equation_stack:
+                continue
+            begin = equation_stack.pop()
+            first_construct = next(
+                (construct for construct in self.constructs
+                 if begin.end() <= construct.start < token.start()),
+                None,
+            )
+            if first_construct is None:
+                continue
+            header = self._tex_src[begin.end():first_construct.start]
+            checked = re.search(r"\bcheck\s*=", header) is not None
+            members = [
+                index for index, construct in enumerate(self.constructs)
+                if begin.end() <= construct.start and construct.end <= token.start()
+            ]
+            relation_pairs = [
+                left for left, right in zip(members, members[1:])
+                if same_equation(
+                    self._tex_src[
+                        self.constructs[left].end:self.constructs[right].start
+                    ]
+                )
+            ]
+            equation_scopes.append((begin.start(), relation_pairs, checked))
+
+        # Every tenkzeq emits one record per relation, even without `check=`.
+        # Some `off` records precede its pictures while ordinary results follow
+        # them, so partition all records by source scope before using the
+        # relation number.  Only explicitly checked scopes may delegate.
+        for _, relation_pairs, checked in sorted(equation_scopes):
+            relation_count = len(relation_pairs)
+            if relation_count == 0:
+                continue
+            scope_events = check_events[
+                check_offset:check_offset + relation_count
+            ]
+            check_offset += relation_count
+            if not checked or len(scope_events) != relation_count:
+                continue
+            for event in scope_events:
+                relation = event.attrs.get("relation", "")
+                if not relation.isdigit():
+                    continue
+                relation_index = int(relation)
+                if 1 <= relation_index <= relation_count:
+                    relation_checks[relation_pairs[relation_index - 1]] = event
+
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
             if a.lang != b.lang or a.lang not in {"grid", "kernel"}:
@@ -1524,17 +1586,12 @@ class Audit:
             sep = self._tex_src[ca.end:cb.start]
             if not same_equation(sep):
                 continue
-            if a.lang == "kernel":
-                # `tenkzeq` already emits the authoritative result after
-                # applying `off=` and `modulo=bundles`.  The log-only kernel
-                # check consumes that result; do not re-check its raw panel
-                # signatures here with less policy information.
-                begin_a = self._tex_src.rfind(r"\begin{tenkzeq}", 0, ca.start)
-                end_a = self._tex_src.rfind(r"\end{tenkzeq}", 0, ca.start)
-                begin_b = self._tex_src.rfind(r"\begin{tenkzeq}", 0, cb.start)
-                end_b = self._tex_src.rfind(r"\end{tenkzeq}", 0, cb.start)
-                if begin_a > end_a and begin_a == begin_b and begin_b > end_b:
-                    continue
+            relation_check = relation_checks.get(i)
+            if (
+                relation_check is not None
+                and relation_check.attrs.get("result") in {"equal", "off"}
+            ):
+                continue
             if a.lang == "kernel":
                 sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
             else:
@@ -1547,7 +1604,7 @@ class Audit:
                 def without_direction(item: str) -> tuple[str, ...]:
                     parts = item.split(":")
                     kind = parts[0].strip()
-                    if kind in {"open", "edge"}:
+                    if kind in {"edge", "open"}:
                         kind = "virtual"
                     weight = (
                         ":".join(parts[2:]).strip()
@@ -1692,7 +1749,7 @@ _INLINE_EQUALITY_GLUE = re.compile(
 
 def same_equation(sep: str) -> bool:
     """Heuristic: the comment-stripped source between two constructs is a
-    single displayed equation's glue iff it contains `=`, crosses no
+    single displayed equation's glue iff it contains a brace-top-level `=`, crosses no
     math-mode boundary and no other environment, and is short.  This keeps
     the check to `A = B` pairs like the gauge/blocking benchmarks.
 
@@ -1703,11 +1760,24 @@ def same_equation(sep: str) -> bool:
     """
     if _INLINE_EQUALITY_GLUE.fullmatch(sep.strip()):
         return True
-    if "=" not in sep:
-        return False
     if any(tok in sep for tok in ("$", "\\[", "\\]", "&", "\\begin", "\\end")):
         return False
-    return len(sep.strip()) <= 200
+    if len(sep.strip()) > 200:
+        return False
+    depth = 0
+    escaped = False
+    for char in sep:
+        if char == "\\":
+            escaped = not escaped
+            continue
+        if char == "{" and not escaped:
+            depth += 1
+        elif char == "}" and not escaped:
+            depth = max(0, depth - 1)
+        elif char == "=" and depth == 0:
+            return True
+        escaped = False
+    return False
 
 
 # ---------------- CLI ----------------
