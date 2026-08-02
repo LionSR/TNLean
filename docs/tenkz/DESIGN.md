@@ -47,6 +47,7 @@ frozen_twin_lifetime = "permanent"
 frozen_twin_precedent = "quantikz/quantikz2"
 maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
+reviewer_repository_permissions = ["push", "maintain", "admin"]
 release_manifest_pattern = "docs/tenkz/releases/TAG.toml"
 release_package_metadata = "tex/tenkz/tenkz.sty"
 release_manual = "docs/tenkz/manual2.tex"
@@ -206,7 +207,8 @@ the successor entry point.
 
 Package tags use `tenkz-vMAJOR.MINOR.PATCH`. Repository tags named
 `vMAJOR.MINOR.PATCH` belong to the Lean toolchain and are a distinct
-namespace. `PATCH` is a non-negative decimal integer. A package tag is
+namespace. `PATCH` is `0` or a nonzero decimal digit followed by decimal
+digits; leading zeroes are forbidden. A package tag is
 annotated and points to a commit at which the `\ProvidesPackage` version and
 date, manual version, change record, event-format declaration, and
 compatibility tests all agree with the tag. A moved or reused release tag is
@@ -245,13 +247,14 @@ recursively. A mutable, unavailable, incomplete, or cyclic dependency graph
 fails closed. GitHub's control plane and hosted runner remain inside the stated
 trust boundary; repository-selected executable content does not.
 
-The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` is a
-non-negative decimal integer strictly larger than every other patch in the
+The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
+canonical grammar `0|[1-9][0-9]*` and is strictly larger than every other patch in the
 complete current `tenkz-v0.9.*` tag namespace and every earlier freeze entry.
 This includes an abandoned tag that never obtained a ledger entry. For each
 attempt, first merge the frozen source through a source pull request targeting
-`main`. A reviewer distinct from its author approves its exact final head before
-merge, and its integration tree equals that approved tree. The tree must carry
+`main`. A repository-authorized reviewer distinct from its author approves its
+exact final head before merge, and its integration tree equals that approved
+tree. The tree must carry
 the tag-derived 0.9 manifest, canonical release artifacts, pinned test
 inventory, and passing inventory commands. Then create and push the annotated
 tag on GitHub's `source_pr.mergeCommit.oid`. Only then open the ledger-entry pull
@@ -381,8 +384,8 @@ entry, remains owned by its target's attempt, and never changes attempt state.
 The sign-off entry's `record_pr` is its own pull request. GitHub's `mergedAt`
 is the sign-off time and must be later than both qualifying work merges;
 normalized `mergedBy` must equal the pinned policy's `maintainer_identity`. The
-named, distinct reviewer's latest effective review must be `APPROVED` on the
-exact final head, submitted
+named, distinct, repository-authorized reviewer's latest effective review must
+be `APPROVED` on the exact final head, submitted
 after the later qualifying work merge and the named release-preparation merge,
 and before sign-off merge. The sign-off head and integration must descend from
 all three integrations. The sign-off may proceed immediately once those ordered

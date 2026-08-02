@@ -245,8 +245,9 @@ other in-repository dependency fail closed.
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
 in row-major order; `SOAK-1.0.md` does not own a duplicate list.  The source PR
-needs an independent approval on its exact final head and an integration tree
-equal to that approved tree.  The tagged source integration and freeze-record
+needs an approval from a repository-authorized independent reviewer on its
+exact final head and an integration tree equal to that approved tree.  The
+tagged source integration and freeze-record
 merge are atomic: `main` must not advance between them, or the unused tag is
 abandoned and the source/tag step repeats with a patch larger than every
 existing `tenkz-v0.9.*` tag, including one with no ledger entry.

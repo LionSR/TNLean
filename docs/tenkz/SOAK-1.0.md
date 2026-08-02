@@ -34,9 +34,10 @@ visibility needed to receive unredacted rule and bypass details, although the
 validator performs only read requests. Missing, omitted, redacted, inactive,
 weaker, ambiguous, or bypassable protection fails closed.
 
-A reviewer distinct from both the activation PR's normalized author and the
-pinned policy's `maintainer_identity` must have a latest effective `APPROVED`
-review on `H` before merge. GitHub must then report the PR merged to `main`,
+A repository-authorized reviewer distinct from both the activation PR's
+normalized author and the pinned policy's `maintainer_identity` must have a
+latest effective `APPROVED` review on `H` before merge. GitHub must then report
+the PR merged to `main`,
 with normalized `mergedBy` equal to that pinned identity and `armed_by_pr`
 naming the PR. Its integration tree must equal `H`'s tree. Only that
 post-validated head pins the inventory, test-code tree, test-support tree,
@@ -92,7 +93,8 @@ are read from the exact `DESIGN.md` policy pinned by `policy_sha256`; this
 ledger schema does not duplicate them. Tag immutability and the release
 manifest, canonical-artifact, inventory, runner, and enforcement-workflow
 configuration are likewise read only from that pinned policy, as are the
-maintainer identity and signer identity scheme.
+maintainer identity, signer identity scheme, and authorized reviewer permission
+set.
 
 Once armed, the normative blocks in `DESIGN.md` and this file have closed
 tables and field sets. Unknown tables or fields are rejected. Changing their
@@ -185,7 +187,11 @@ administrator-created gap that was restored before that snapshot.
 For a reviewer, the latest effective review is that reviewer's latest
 non-dismissed `APPROVED` or `CHANGES_REQUESTED` review by `submittedAt`; it is
 effective for a head only when its commit OID equals the PR's exact final
-`headRefOid`. A later effective review supersedes an earlier one.
+`headRefOid`. A later effective review supersedes an earlier one. A reviewer is
+repository-authorized only when the complete current GitHub snapshot's
+collaborator-permission response for that normalized login is one of the pinned
+policy's `reviewer_repository_permissions`. Missing or unavailable permission
+evidence fails closed; `pull` and `triage` permission do not authorize approval.
 
 ## Release payload evidence
 
@@ -303,7 +309,8 @@ supervisor receipts. Unknown or missing data fails closed.
 The receipt pull request targets the exact current `main` tip and changes only
 one new regular blob at `docs/tenkz/soak-replay/NUMBER.json`, where `NUMBER` is
 its own decimal pull-request number. Its author is distinct from an exact-head
-approving reviewer; normalized `mergedBy` equals the pinned maintainer. GitHub
+approving repository-authorized reviewer; normalized `mergedBy` equals the
+pinned maintainer. GitHub
 reports it merged to `main`, reachable, with its integration tree equal to its
 approved final-head tree. The reset record's candidate base and later
 integration parent equal that receipt integration. If `main` advances first, a
@@ -362,8 +369,8 @@ Required additional fields:
 | `evidence` | `text` |
 
 `prerequisites` is the pinned `DESIGN.md` policy's `soak_blocker_chain`
-flattened row by row. This file owns no second prerequisite list. `PATCH` is a
-non-negative decimal integer. The resolver completely paginates the current Git
+flattened row by row. This file owns no second prerequisite list. `PATCH`
+matches the canonical grammar `0|[1-9][0-9]*`. The resolver completely paginates the current Git
 tag namespace, parses every name matching `tenkz-v0.9.PATCH`, and requires this
 patch to be strictly larger than every matching tag other than this entry's
 exact `freeze_tag`, and every earlier freeze entry's patch. Annotated and
@@ -374,8 +381,9 @@ patch.
 
 Before the entry is proposed, let `H_S = source_pr.headRefOid`. GitHub must
 report `source_pr` merged to `main` with non-null author, `H_S`, `mergedAt`, and
-`source_pr.mergeCommit.oid = source_sha`. A reviewer distinct from the
-normalized source-PR author must have a latest effective `APPROVED` review on
+`source_pr.mergeCommit.oid = source_sha`. A repository-authorized reviewer
+distinct from the normalized source-PR author must have a latest effective
+`APPROVED` review on
 the exact `H_S`, submitted before `source_pr.mergedAt`. The Git tree of `source_sha`
 must equal the Git tree of `H_S`. The first attempt's `source_sha` is a strict
 descendant of `armed_by_pr.mergeCommit.oid`; a later attempt's `source_sha` is a
@@ -447,8 +455,9 @@ a missing or ambiguous merge base fails closed. `P` must be an ancestor of
   work class.
 - `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr` or
   `replay_receipt_pr`, or a `work_pr` already named by another entry.
-- A reviewer distinct from the normalized `work_pr.author.login` has a latest
-  effective `APPROVED` review on the exact final `headRefOid`, submitted before
+- A repository-authorized reviewer distinct from the normalized
+  `work_pr.author.login` has a latest effective `APPROVED` review on the exact
+  final `headRefOid`, submitted before
   `work_pr.mergedAt`.
 
 Glob matching is against slash-separated repository paths; `**` spans zero or
@@ -570,8 +579,8 @@ predicates:
 - The complete immutable `P_R`-to-`H_R` path set is exactly the 1.0 manifest
   path and the four canonical release-artifact paths from the pinned policy;
   all five blobs change.
-- A reviewer distinct from `R`'s author has a latest effective `APPROVED`
-  review on `H_R`, submitted before `R.mergedAt`.
+- A repository-authorized reviewer distinct from `R`'s author has a latest
+  effective `APPROVED` review on `H_R`, submitted before `R.mergedAt`.
 - `validate-release-payload(H_R, tenkz-v1.0.0)` passes.
 
 The sign-off's `record_pr` is the sign-off pull request. It changes only the
@@ -592,8 +601,9 @@ Git tree of the approved `H`. Let `W` be the latest GitHub `mergedAt` among the
 work PRs named by `work_evidence`. GitHub's
 `record_pr.mergedAt` must be later than both `W` and `R.mergedAt`, and normalized
 `mergedBy` must equal the pinned policy's `maintainer_identity`. The entry's
-reviewer is distinct from that maintainer and from the normalized record-PR
-author. That reviewer's latest effective review must be `APPROVED` on `H`, with
+reviewer is repository-authorized and distinct from that maintainer and from
+the normalized record-PR author. That reviewer's latest effective review must
+be `APPROVED` on `H`, with
 `submittedAt` later than both
 `W` and `R.mergedAt` and earlier than `record_pr.mergedAt`. There is no further
 waiting interval: sign-off can proceed as soon as the class coverage,
