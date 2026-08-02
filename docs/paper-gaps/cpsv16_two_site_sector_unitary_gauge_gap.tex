@@ -5,808 +5,425 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
-\title{The Two-Site Sector Comparison Stops at an Invertible Gauge}
+\title{A Mixed-Prefix Repair of the Two-Site Sector Comparison}
 \author{}
 \date{2026-08-02}
 
 \begin{document}
 \maketitle
 
-\section{Source statement}
+\section{Source statement and classification}
 
-Appendix~C.4 of \cite{Cirac2016MPDO_arXiv} first matches the one-site and
-two-site normal tensors, up to relabelling, by
+Appendix~C.4 of \cite{Cirac2016MPDO_arXiv} compares the normal tensors in
+the one-site and two-site vertical canonical forms.  After relabelling, the
+comparison at lines~2053--2056 has the form
 \begin{equation}
-  A_\gamma
-  =e^{i\theta_\gamma}Z_\gamma M_\gamma Z_\gamma^{-1}
+  B_\gamma^v
+  =e^{i\theta_\gamma}Z_\gamma A_\gamma^vZ_\gamma^{-1},
   \label{eq:gauge-phase}
 \end{equation}
-at lines~2053--2056.  Line~2057 then invokes the result labelled
-\path{Prop:IV.12} to conclude both
+where $A_\gamma$ is a one-site normal representative and $B_\gamma$ is its
+matched two-site representative.  Line~2057 invokes Proposition~4.13 to
+conclude
 \begin{equation}
-  e^{i\theta_\gamma}=1
-  \qquad\text{and}\qquad
-  Z_\gamma=U_\gamma\ \text{unitary}.
-  \label{eq:unitary-upgrade}
-\end{equation}
-
-\section{Formal boundary}
-
-The unconditional two-site comparison retains equality of the matched bond
-dimensions and the invertible matrix $Z_\gamma$ in
-\eqref{eq:gauge-phase}.  Positivity of the coefficients at two consecutive
-lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
-This proves the invertible-gauge sub-result of lines~2053--2057.
-
-The target-only conditional Gram theorem proves
-\eqref{eq:gram-dressing-target}, and hence
-$Z_\gamma^\dagger Z_\gamma=\omega_\gamma\mathbf 1$ with
-$\omega_\gamma>0$, from the positive-tail identity
-\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
-\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} supplies the
-physical-letter coefficient family and its physical-slice identity from the
-oblique compression.  The unitary-normalization corollary sets
-$U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ and proves that $U_\gamma$ is
-unitary with the same conjugation action as $Z_\gamma$.  Thus the entire
-line~2057 conclusion is available conditionally on the positive-tail
-reflected target alone.
-% The conditional Gram and unitary results are pull requests 5282 and 5286.
-
-If this target holds for every sector, the corresponding unitaries may be
-chosen simultaneously.  The direct-sum conjugations, vertical retractions,
-and normalized restorations give the two composites written in
-Appendix~C.4, lines~2065--2085, on the retained physical sectors.  The source
-does not prescribe their values on the discarded complements.  The
-formalization uses the trace-restoring completion documented in
-\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex} to obtain the
-two channels of Definition~4.1 on the full physical matrix algebras.  The
-additional terms vanish on $M_1(X)$ and $M_2(X)$, so they do not alter the
-retained-sector identities.
-Consequently, beyond the tensor-attached algebra clause, literal CPSV
-canonical form, MPDO positivity, and the source-derived sector pairing with
-matched multiplicity spectra, the all-sector positive-tail target is the sole
-additional unproved comparison needed for the renormalization-fixed-point
-conclusion.  No unitary conjugacy, fusion isometry, or renormalization fixed
-point is assumed.
-
-The physical-letter part of this realization is now unconditional.  The
-gauge-dressed two-site corner provides $V_\gamma$ and $c_\gamma>0$ such that
-\begin{equation}
-  V_\gamma^\dagger\widetilde M_{[2]}^vV_\gamma
-  =c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
-  \label{eq:gauge-dressed-corner}
-\end{equation}
-Set
-\begin{equation}
-  L_\gamma=V_\gamma(Z_\gamma^{-1})^\dagger,
+  e^{i\theta_\gamma}=1,
   \qquad
-  R_\gamma=V_\gamma Z_\gamma.
-  \label{eq:oblique-maps}
+  Z_\gamma^\dagger Z_\gamma
+    =\omega_\gamma\mathbf 1,
+  \qquad
+  \omega_\gamma>0.
+  \label{eq:source-unitary-upgrade}
 \end{equation}
-Then direct cancellation of the invertible gauge gives
+Consequently $U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ is unitary and has the
+same conjugation action as $Z_\gamma$.
+
+\textbf{Local fix (mixed-prefix alignment).}  The formal proof requires one
+small geometric clarification which is not explicit in the source.  The
+two-site sector corner must compress the first two physical sites jointly
+while leaving the remaining sites as single, unblocked copies of the original
+tensor.  Applying the ordinary reflected-chain argument to the blocked tensor
+would instead leave a tail made of two-site blocks, which cannot be compared
+directly with the one-site sector corner.  The mixed-prefix reflection lemma
+supplies the required common unblocked tail.  This changes no hypothesis or
+conclusion of the implication Theorem~4.14(ii)$\Rightarrow$(i); it repairs the
+proof-level alignment at the invocation of Proposition~4.13.
+
+The phase in \eqref{eq:gauge-phase} is already removed by positivity of two
+consecutive closed-chain coefficients.  The discussion below concerns the
+remaining metric statement in \eqref{eq:source-unitary-upgrade}.
+
+\section{The two corners}
+
+Let $M$ be an MPO tensor which generates matrix product density operators,
+whose doubled-index tensor is in literal CPSV canonical form, and let a
+tensor-attached BNT algebra clause be fixed.  For one matched label, write
+$A$ for its one-site normal representative, $B$ for the corresponding
+two-site representative, and $Z$ for the exact invertible gauge, so that
 \begin{equation}
-  L_\gamma^\dagger\widetilde M_{[2]}^vR_\gamma
-  =c_\gamma M_\gamma^v.
-  \label{eq:oblique-raw-compression}
+  B^v=ZA^vZ^{-1}.
+  \label{eq:exact-gauge}
+\end{equation}
+
+The one-site vertical coisometric decomposition has a distinguished positive
+copy of $A$.  Its inclusion gives a matrix $W$ and a scalar $a>0$ satisfying
+\begin{equation}
+  W^\dagger W=\mathbf 1,
+  \qquad
+  W^\dagger\widetilde M^vW=aA^v.
+  \label{eq:one-site-raw-corner}
+\end{equation}
+This is a genuine one-site physical corner; it does not use the two-site
+gauge, a Gram identity, fusion data, or a renormalization map.
+
+The matched positive copy in the two-site vertical decomposition similarly
+gives a matrix $V$ and a scalar $b>0$ such that
+\begin{equation}
+  V^\dagger V=\mathbf 1,
+  \qquad
+  V^\dagger\widetilde M_{[2]}^vV
+    =bZA^vZ^{-1}.
+  \label{eq:two-site-gauge-corner}
+\end{equation}
+The formal declarations for these two corners are
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.}}\\
+\mbox{\leanid{exists_oneSite_raw_sector_corner},}\qquad
+\mbox{\leanid{exists_blockTwo_gauge_sector_corner}.}
+\end{center}
+
+\section{The common unblocked reflected tail}
+
+Write $\mathfrak m_N(C;M)$ for a marked-chain coefficient with marked tensor
+$C$ followed by a tail of $N$ copies of $M$; the open bond indices and the two
+tail words are suppressed.  Hermiticity of the matrix product density
+operators and \eqref{eq:one-site-raw-corner} give
+\begin{equation}
+  \mathfrak m_N(A;M)
+  =\mathfrak m_N(A^{\mathrm{ref}\dagger};M^\dagger),
+  \label{eq:raw-reflection}
+\end{equation}
+with the bond indices interchanged and both tail words reversed on the
+right-hand side, as prescribed by Proposition~4.13.
+
+For the two-site corner, one compresses the first two physical sites jointly
+through $V$ and then leaves the next $N$ sites unblocked.  Hermiticity of the
+same length-$(N+2)$ density operator gives
+\begin{equation}
+  \mathfrak m_N\bigl(\operatorname{gramDressing}(Z,A);M\bigr)
+  =\mathfrak m_N(A^{\mathrm{ref}\dagger};M^\dagger).
+  \label{eq:dressed-reflection}
+\end{equation}
+The right-hand side is exactly the target in \eqref{eq:raw-reflection}; in
+particular, it contains the same unblocked $M^\dagger$ tail.  The positive
+corner coefficients $a$ and $b$ cancel separately in the two reflection
+arguments.  Hence, for every positive tail length and all open indices and
+tail words,
+\begin{equation}
+  \mathfrak m_N\bigl(\operatorname{gramDressing}(Z,A);M\bigr)
+  =\mathfrak m_N(A;M).
+  \label{eq:raw-dressed-marked-chain}
+\end{equation}
+
+The mixed-prefix identity is formalized by
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPOTensor.IsMPDO.}}\\
+\mbox{\leanid{markedChainCoefficient_blockTwoPrefix_}}\\
+\mbox{\leanid{gramDressing_eq_reflectedAdjoint}.}
+\end{center}
+Its point is precisely that the two-site prefix is followed by the original
+one-site tensor, rather than by the blocked tensor.
+
+\section{Both marks lie in the one-site physical-letter span}
+
+Put
+\begin{equation}
+  G=Z^\dagger Z.
+  \label{eq:gram-matrix}
+\end{equation}
+The corner \eqref{eq:one-site-raw-corner} realizes the raw marked tensor in
+the one-site physical-letter span by the two-sided pair $(W,W)$.  More
+explicitly, taking a matrix entry of
+$a^{-1}W^\dagger\widetilde M^vW=A^v$ expresses every horizontal slice of $A$
+as a linear combination of the physical letters of $M$.
+
+The pair
+\begin{equation}
+  (WG^\dagger,\,WG^{-1})
+  \label{eq:gram-pair}
+\end{equation}
+realizes the Gram-dressed mark in the same one-site physical-letter span,
+because
+\begin{align}
+  (WG^\dagger)^\dagger\widetilde M^v(WG^{-1})
+  &=G\bigl(W^\dagger\widetilde M^vW\bigr)G^{-1}
+  \notag\\
+  &=aGA^vG^{-1}
+   =a\operatorname{gramDressing}(Z,A)^v.
+  \label{eq:gram-one-site-compression}
+\end{align}
+Thus both sides of \eqref{eq:raw-dressed-marked-chain} satisfy the
+physical-letter premise of the literal CPSV Lemma~L.  This is the second
+essential feature of the repair: one does not need an identity-gauge corner
+inside the blocked physical space.
+
+Lemma~L now applies to \eqref{eq:raw-dressed-marked-chain}.  Literal CPSV
+canonical form supplies representative separation at a sufficiently large
+positive tail length, and therefore
+\begin{equation}
+  \operatorname{gramDressing}(Z,A)=A.
+  \label{eq:gram-dressing-target}
+\end{equation}
+Equivalently,
+\begin{equation}
+  GA^vG^{-1}=A^v
+  \qquad\text{for every vertical letter }v.
+  \label{eq:gram-commutation}
+\end{equation}
+
+Since $A$ is normal, its letters generate the full matrix algebra after a
+finite blocking.  Equation~\eqref{eq:gram-commutation} therefore places $G$
+in the scalar commutant.  As $G=Z^\dagger Z$ is positive definite, there is a
+real number $\omega>0$ such that
+\begin{equation}
+  Z^\dagger Z=\omega\mathbf 1.
+  \label{eq:gram-scalar}
 \end{equation}
 Consequently
 \begin{equation}
-  f^\gamma_{(r,s),(i,j)}
-  =c_\gamma^{-1}\overline{(L_\gamma)_{ir}}(R_\gamma)_{js}
-  \label{eq:oblique-physical-coefficients}
+  U=\omega^{-1/2}Z,
+  \qquad
+  U^\dagger U=\mathbf 1,
+  \qquad
+  B^v=UA^vU^\dagger.
+  \label{eq:unitary-normalization}
 \end{equation}
-expresses every horizontal slice of $M_\gamma$ as a linear combination of
-the physical letters of the two-site blocking.  Thus the \path{fId} and
-\path{physical} fields of the marked realization are discharged.
-\footnote{Formal declarations:
-\leanid{MPOTensor.twoSidedCompressionCoefficients},
-\leanid{MPOTensor.linearMarkedTensor_twoSidedCompressionCoefficients},
-\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
-exists_blockTwo_identity_oblique_compression}, and
-\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
-exists_identity_physical_letter_coefficients}.}
+This proves the line~2057 unitary normalization without assuming a positive
+blocked raw corner, fusion coisometries, or renormalization maps.
 
-This construction is oblique: in general $L_\gamma\ne R_\gamma$.  Reversing
-the two maps gives
-\begin{equation}
-  R_\gamma^\dagger\widetilde M_{[2]}^vL_\gamma
-  =c_\gamma(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
-    (Z_\gamma^\dagger Z_\gamma)^{-1}.
-  \label{eq:oblique-gram-compression}
-\end{equation}
-At the marked-chain level, adjoint reflection exchanges the two oblique maps
-together with the bond-pair and tail reversal.  The reflected orientation is
-therefore governed by the Gram-dressed compression
-\eqref{eq:oblique-gram-compression}; it does not identify the raw mark with the
-common reflected target.  The irreducible remaining gap is the star-compatible
-positive-tail target identity, which is equivalent to
-\eqref{eq:gram-dressing-target}; it is not the physical-letter span assertion.
+\section{Completion of Theorem 4.14}
 
-A same-sided realization is a stronger local datum, but it is still weaker
-than the full marked realization.  Let $V$ be any matrix and let $c>0$ satisfy
-the positive-coefficient same-sided physical realization
-\begin{equation}
-  V^\dagger\widetilde M_{[2]}^vV=cM_\gamma^v
-  \label{eq:positive-coefficient-realization}
-\end{equation}
-for every vertical letter $v$.  The physical-letter expansion of the marked
-matrix uses \eqref{eq:positive-coefficient-realization}, while MPDO reflection
-identifies the resulting marked chain with the common target.  Neither step
-requires $V^\dagger V=\mathbf 1$.  This reduction is formalized by a
-conditional constructor.\footnote{Formal declaration:
-\leanid{IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization}.}
-It gives a concrete sufficient local premise for the missing target without
-adding orthogonality, reconstruction, or normalization assumptions.  The
-oblique maps in \eqref{eq:oblique-maps} do not meet this premise because their
-left and right factors are different.
+Applying the construction sector by sector gives simultaneous unitaries for
+the one-site and two-site vertical decompositions.  The direct-sum
+conjugations, vertical retractions, and normalized restorations then give the
+two physical maps written in Appendix~C.4, lines~2065--2085.  The
+trace-restoring completion on discarded zero-sector complements is the local
+fix documented in
+\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}; its added
+terms vanish on the physical closures generated by $M$.
 
-There is an independent sufficient route which need not pass through
-\eqref{eq:positive-coefficient-realization}.  The invertible similarity determines an
-algebra automorphism of the virtual matrix algebra.  If this automorphism is a
-positive map, then it preserves adjoints and hence is a star automorphism.
-Unitary Skolem--Noether then gives a unitary implementer.  This implication,
-including its application to the per-block linear extension, is now
-formalized.\footnote{\scriptsize Formal declarations:
-\leanid{MPSTensor.exists_unitary_conj_of_positive_algEquiv_matrix}\\
-and
-\leanid{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}.}
-Positivity of the virtual algebra map is therefore another possible target
-for completing the argument; it has not been derived from the tensor-attached
-algebra clause.
-
-It cannot be derived from the per-block equality of closed matrix product
-vectors alone.  For the explicit two-dimensional nonunitary similarity below,
-the corresponding one-block linear extension is not positive.  Otherwise the
-preceding unitary implementation theorem would give the positive isometric
-realization already ruled out for these tensors.  This obstruction is
-formalized by
+It follows that a tensor-attached BNT algebra clause, together with the
+standing literal CPSV canonical-form and MPDO hypotheses of the source,
+implies the trace-preserving completely positive renormalization identities
+of Definition~4.1.  This is the unconditional implication
+Theorem~4.14(ii)$\Rightarrow$(i), formalized by
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
-\mbox{\leanid{perBlockLinearExtension_not_positive}}.
+\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}.
 \end{center}
-Thus any proof of positivity must use an additional tensor-attached physical
-comparison, rather than only injectivity and equality of closed chains.
 
-This per-block extension is distinct from the positive algebra maps in the
-RFP-to-algebra implication of Appendix~C.4, lines~1955--1997.  There
-$\mathcal A_1$ and $\mathcal A_2$ are the direct sums of the one-site and
-two-site vertical sector matrix algebras.  The maps $R_j$ attach the normalized
-positive multiplicity matrix to each sector, while $\tilde R_j$ remove it.
-The trace-preserving completely positive blocking and refinement maps $T$ and
-$S$ are already part of the RFP hypothesis.  Hence the sector maps
-$\tilde T=\tilde R_2TR_1$ and $\tilde S=\tilde R_1SR_2$ are positive because
-their physical and insertion/removal constituents are positive.  In the
-converse implication, the physical maps are defined only after the matrices
-$U_\gamma$ have been declared unitary.  Those later maps cannot prove
-positivity of the virtual extension without assuming the unitary conclusion
-they are meant to establish.
+The already formalized forward implication produces the corrected
+active-support fusion clause, and active-support fusion implies the
+tensor-attached algebra clause.  Combining these directions gives
+\begin{align}
+  \operatorname{IsRFPViaTS}(M)
+  &\Longleftrightarrow
+    \operatorname{HasBNTAlgebraTensorClause}(M),
+  \notag\\
+  \operatorname{IsRFPViaTS}(M)
+  &\Longleftrightarrow
+    \operatorname{HasBNTFusionTensorClause}(M),
+  \label{eq:theorem-414-equivalences}
+\end{align}
+under exactly the standing canonical-form and MPDO hypotheses.  The second
+line uses the corrected active-support reading of statement~(iii), including
+the previously documented empty-support and coisometry local fixes.  No
+stronger horizontal canonical form and no extra reflected-target hypothesis
+is present in either equivalence.
+The corresponding formal declarations are
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause},}\\
+\mbox{\leanid{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}.}
+\end{center}
 
-Positivity of the virtual algebra map must not be confused with positivity of
-the closed sector operators.  A nonunitary similarity preserves every closed
-chain, and therefore transports an all-length positive closed family to the
-same positive family, while its virtual algebra automorphism need not be
-positive.  The bond-two singleton examples below exhibit precisely this
-distinction.  Thus closed sector MPDO positivity alone does not supply either
-of the sufficient local premises just described.
+\section{Why the former direct route stopped}
 
-The structure
-\path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization}
-has a physical-letter coefficient field, its physical-slice identity, and a
-common-target identity.  Equations~\eqref{eq:oblique-raw-compression} and
-\eqref{eq:oblique-physical-coefficients} discharge the first two parts.  The
-last part is isolated as
-\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
-\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} obtains the
-first two fields from the oblique compression and assumes exactly this final
-target.  Thus the conditional Gram and unitary conclusions now have
-target-only forms; no independent physical-letter hypothesis remains.
-More precisely, after
-one open-bond matrix has been inserted at the marked site, equality with the
-common reflected-adjoint target is assumed for every tail length $N>0$; no
-empty-tail equality is required.  This is sufficient because representative
-separation chooses a sufficiently large tail length.  It is the form of
-Lemma~L justified by Appendix~C.3, lines~1835--1858: the source states
-first-site equality for positive system sizes, and its proof uses a length at
-which block injectivity and a nonzero power sum separate the normal
-representatives.
+The mixed-prefix proof does not invalidate the earlier obstruction analyses.
+It shows instead that they concerned an unnecessarily strong route: trying
+to construct a raw representative as a same-sided corner of the blocked
+physical tensor and then comparing two ordinary blocked chains.
 
-This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
-tensor-attached algebra clause alone.
-The result labelled \path{Prop:IV.12} first compares two actual physical
-copies of a common normal representative and proves proportionality of their
-Gram matrices.  Only afterwards does the source choose the first copy to have
-identity gauge.  The present
-one-site and two-site decompositions are constructed independently.  The
-available normal-tensor matching theorem and the existing two-site corner
-therefore supply the oblique realization
-\eqref{eq:oblique-raw-compression}, but no second same-sided
-positive-coefficient realization of the form
-\eqref{eq:positive-coefficient-realization} with which the gauge-dressed
-corner can be compared.
+\subsection{The circular blocked raw corner}
 
-The missing step occurs immediately before the comparison.  At line~2048 the
-source writes the algebra-side positive direct sum and the independently
-chosen two-site decomposition as physical vertical canonical forms, up to
-unitary changes of basis.  The displayed operator identity at lines~2049--2051
-then gives equality of all positive-length closed chains.  In the present
-formalization this implication yields equality of those closed chains and
-gauge-phase coverage of their normal representatives.  The invertible gauge
-then produces an oblique inclusion of the algebra-side representative into
-the bond space of the two-site blocking, but not a same-sided isometric or
-positive corner.  Proposition~4.13, lines~1898--1921, compares actual
-physical sectors through the latter kind of corner; the oblique inclusion
-does not supply its star-compatible comparison.
+From the two-site gauge corner \eqref{eq:two-site-gauge-corner}, the natural
+candidate for a blocked physical inclusion of $A$ is a scalar multiple of
+$VZ$.  It is an isometry precisely when
+$Z^\dagger Z=\omega\mathbf 1$.  Indeed, after that identity is known,
+$\omega^{-1/2}VZ$ gives a positive same-sided raw corner.  Conversely, a raw
+isometric corner of this form, compared with $V$, would prove the same Gram
+identity.  Therefore this construction is circular if used to establish
+\eqref{eq:gram-scalar}.
 
-Thus the positive-tail restriction removes an unnecessary empty-word premise,
-but it does not provide the geometric premise of the comparison.
-Appendix~C.4, lines~2048--2051, gives equality of positive-length closed
-chains for two independently chosen vertical canonical forms.
-Lines~2053--2057 then give an invertible similarity and invoke
-Proposition~4.13.  None of these lines constructs a positive-coefficient
-same-sided physical realization.  The formal oblique construction does yield
-the identity-dressed physical-letter family, but its reflected orientation is
-the Gram-dressed family in \eqref{eq:oblique-gram-compression}.  An
-identity-gauge isometric corner would be a stronger sufficient datum for the
-missing target, but the exact remaining assertion is only the positive-tail
-star-compatible marked identity.
+The repair avoids the circle.  It uses the independent one-site corner $W$
+for the raw marked chain and uses $V$ only for the two-site prefix.  The two
+corners need not inhabit the same physical space because their reflection
+identities meet at the common unblocked tail.
 
-\section{The circular corner construction}
+\subsection{The oblique blocked compression}
 
-Fix a matched label and identify the two bond dimensions.  Write $A$ for the
-one-site representative, $B$ for the two-site representative, and $X$ for the
-retained invertible gauge, so that
+The invertible gauge always gives the oblique maps
 \begin{equation}
-  B^i=XA^iX^{-1}.
-  \label{eq:exact-gauge}
-\end{equation}
-The positive two-site vertical decomposition provides an isometric inclusion
-$W$ and a positive coefficient $\nu$ satisfying
-\begin{equation}
-  W^\dagger W=\mathbf{1},
+  L=V(Z^{-1})^\dagger,
   \qquad
-  W^\dagger\widetilde M_{[2]}^iW=\nu B^i.
-  \label{eq:reference-corner}
+  R=VZ,
+  \label{eq:oblique-maps}
 \end{equation}
-A natural candidate for a physical inclusion of the raw representative $A$
-is therefore a scalar multiple of $WX$.  This candidate is an isometry exactly
-after the missing Gram normalization.  Indeed, if
-\begin{equation}
-  X^\dagger X=\omega\mathbf{1},
-  \qquad \omega>0,
-  \label{eq:gram-scalar}
-\end{equation}
-then $V=\omega^{-1/2}WX$ satisfies
-\begin{equation}
-  V^\dagger V=\mathbf{1},
-  \qquad
-  V^\dagger\widetilde M_{[2]}^iV=\nu A^i.
-  \label{eq:raw-corner}
-\end{equation}
-Conversely, an independently derived positive isometric corner of the form
-\eqref{eq:raw-corner}, together with \eqref{eq:reference-corner}, is precisely
-the pair of physical corners to which the reflected marked-chain comparison of
-Proposition~4.13 applies.  It gives \eqref{eq:gram-scalar}.  Thus constructing
-the raw corner from $W$ and $X$ presupposes the Gram conclusion, while deriving
-the Gram conclusion by the available comparison presupposes the raw corner.
+and hence
+\begin{align}
+  L^\dagger\widetilde M_{[2]}^vR&=bA^v,
+  \label{eq:oblique-raw-compression}\\
+  R^\dagger\widetilde M_{[2]}^vL
+    &=b(Z^\dagger Z)A^v(Z^\dagger Z)^{-1}.
+  \label{eq:oblique-gram-compression}
+\end{align}
+This remains a useful physical-letter realization, but it is not a positive
+same-sided corner.  Adjoint reflection exchanges $L$ and $R$, so the opposite
+orientation is Gram-dressed.  Thus the oblique blocked construction alone
+does not prove \eqref{eq:gram-dressing-target}.  The mixed-prefix proof uses
+neither this false inference nor a conversion of $L$ and $R$ into one map.
 
-This is also the boundary of the current formal results.  The exact gauge is
-retained by
-\path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.tensor_eq}.  The two-site
-reference corner follows from the positive weights, coisometry, and
-reconstruction in \path{CPSVVerticalDecomposition}.  The theorem
-\path{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
-compares two positive corners of a common representative under the literal
-CPSV canonical-form hypothesis, and
-\path{IsNormal.gram_eq_pos_smul_gram_of_gram_conj_eq} turns that comparison into
-\eqref{eq:gram-scalar}.  However, the characterization
-\path{isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal} supplies
-only gauge-phase coverage from closed-chain equality.  It supplies no physical
-isometry.  Likewise,
-\path{FlatBlockedBNTComparison.exists_unitaryNormalization} treats an actual
-retained product corner, while \path{exists_originalCornerFamily} requires the
-unitary one-site/two-site identification before transporting such corners back
-to the original representatives.
+\subsection{Fusion data cannot be imported into the converse}
 
-\section{The exact tensor-attached map}
+A local coisometry $F_{\alpha\beta}$ satisfying
+\begin{equation}
+  F_{\alpha\beta}(A_\alpha A_\beta)^vF_{\alpha\beta}^\dagger
+  =\bigoplus_\gamma
+    \chi_{\alpha\beta\gamma}\otimes A_\gamma^v
+  \label{eq:fusion-compression}
+\end{equation}
+would produce isometric blocked raw corners immediately.  But such an
+$F_{\alpha\beta}$ is precisely the fusion datum in statement~(iii).
+Using it to prove statement~(ii)$\Rightarrow$(i) would be circular.  The
+algebra clause supplies the closed-chain product law, not the local map in
+\eqref{eq:fusion-compression}.  The completed proof does not use fusion data
+in the converse direction.
 
-The missing assertion is more specific than a general positive
-minimal-realization principle.  Write $d_\alpha$ for the bond dimension of
-$M_\alpha$, and let $r_{\alpha\beta\gamma}$ be the number of diagonal entries
-of $\chi_{\alpha,\beta,\gamma}$.  For fixed $\alpha,\beta$, set
-\[
-  \mathcal K_{\alpha\beta}
-  =\bigoplus_\gamma\bigoplus_{k=1}^{r_{\alpha\beta\gamma}}
-    \mathbb C^{d_\gamma}.
-\]
-The coordinate inclusion of the $(\gamma,k)$ summand is
-\[
-  J_{\alpha\beta\gamma k}\colon
-    \mathbb C^{d_\gamma}\longrightarrow\mathcal K_{\alpha\beta}.
-\]
-It satisfies
-\begin{equation}
-  J_{\alpha\beta\gamma k}^\dagger J_{\alpha\beta\gamma k}
-  =\mathbf 1
-  \label{eq:J-isometry}
-\end{equation}
-and, for every vertical letter $v$,
-\begin{equation}
-  J_{\alpha\beta\gamma k}^\dagger
-  \left(
-    \bigoplus_\eta
-      \chi_{\alpha,\beta,\eta}\otimes M_\eta^v
-  \right)
-  J_{\alpha\beta\gamma k}
-  =\chi_{\alpha,\beta,\gamma,k}M_\gamma^v.
-  \label{eq:J-compression}
-\end{equation}
-Thus the required tensor-attached information is not merely the trace-power
-coefficient $\operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)$.  One needs the
-map which places the corresponding copy of $M_\gamma$ inside the same local
-two-site product tensor.
+\section{Counterexamples delimiting the direct route}
 
-To see the orientation of this map, suppose there were a coisometry
-\[
-  F_{\alpha\beta}\colon
-    \mathbb C^{d_\alpha}\otimes\mathbb C^{d_\beta}
-      \longrightarrow\mathcal K_{\alpha\beta}
-\]
-such that
-\begin{equation}
-  F_{\alpha\beta}F_{\alpha\beta}^\dagger=\mathbf 1
-  \label{eq:F-coisometry}
-\end{equation}
-and
-\begin{equation}
-  F_{\alpha\beta}(M_\alpha M_\beta)^v
-    F_{\alpha\beta}^\dagger
-  =
-  \bigoplus_\eta
-    \chi_{\alpha,\beta,\eta}\otimes M_\eta^v.
-  \label{eq:F-compression}
-\end{equation}
-Here $(M_\alpha M_\beta)^v$ denotes the two-site product letter.  The source
-calls $F_{\alpha\beta}$ an isometry; with the displayed orientation its
-adjoint is the isometric inclusion into the product bond space.
+\subsection{Closed chains and an invertible gauge are insufficient}
 
-Let
-\[
-  W_{\alpha i}\colon\mathbb C^{d_\alpha}\longrightarrow\mathbb C^d,
-  \qquad
-  W_{\beta j}\colon\mathbb C^{d_\beta}\longrightarrow\mathbb C^d
-\]
-be the one-site physical inclusions belonging to positive weights
-$\mu_{\alpha,i}$ and $\mu_{\beta,j}$.  Then the map into the bond space of the
-two-site blocking has the forced orientation
+Let the letters of $A$ contain the identity and the matrix units of
+$\mathcal M_2(\mathbb C)$, and put
 \begin{equation}
-  V_{\alpha\beta\gamma ijk}
-  =
-  (W_{\alpha i}\otimes W_{\beta j})
-  F_{\alpha\beta}^\dagger J_{\alpha\beta\gamma k}.
-  \label{eq:V-composition}
-\end{equation}
-Equations~\eqref{eq:J-isometry} and \eqref{eq:F-coisometry}, together with the
-isometry of the two $W$ maps, give
-\begin{equation}
-  V_{\alpha\beta\gamma ijk}^\dagger
-  V_{\alpha\beta\gamma ijk}=\mathbf 1.
-  \label{eq:V-isometry}
-\end{equation}
-The one-site corner equations and
-\eqref{eq:J-compression}--\eqref{eq:F-compression} give
-\begin{equation}
-  V_{\alpha\beta\gamma ijk}^\dagger
-  \widetilde M_{[2]}^v
-  V_{\alpha\beta\gamma ijk}
-  =
-  \mu_{\alpha,i}\mu_{\beta,j}
-  \chi_{\alpha,\beta,\gamma,k}M_\gamma^v.
-  \label{eq:V-compression}
-\end{equation}
-All three scalar factors on the right are positive.
-
-This calculation identifies the precise circularity.  The existence of the
-maps $F_{\alpha\beta}$ satisfying
-\eqref{eq:F-coisometry}--\eqref{eq:F-compression} is condition~(iii) of
-Theorem~IV.13.  It may prove that condition~(iii) implies condition~(ii), but it
-cannot be used in the proof that condition~(ii) implies condition~(i).
-Condition~(ii) gives only the closed-chain identity
-\[
-  O_L(M_\alpha)O_L(M_\beta)
-  =
-  \sum_\gamma
-    \operatorname{tr}(\chi_{\alpha,\beta,\gamma}^L)O_L(M_\gamma).
-\]
-It does not provide $F_{\alpha\beta}$, the local inclusion
-$F_{\alpha\beta}^\dagger J_{\alpha\beta\gamma k}$, or the compression
-\eqref{eq:V-compression}.  Appendix~C.4, lines~2048--2057, uses this missing
-local identification when it treats the algebra-side sum as a physical
-vertical canonical form and then invokes Proposition~4.13,
-lines~1898--1921.
-
-\section{Closed chains do not determine the physical inclusion}
-
-There is also a direct obstruction to the previously proposed generic
-minimal-realization statement.  Let $A$ be a matrix-valued tensor whose
-letters contain the identity and the matrix units.  Its letters span
-$\mathcal M_2(\mathbb C)$, so $A$ is normal in the matrix-product-tensor
-sense.  Set
-\[
   X=\begin{pmatrix}2&0\\0&1\end{pmatrix},
   \qquad
-  B^v=XA^vX^{-1}.
-\]
-Similarity preserves every closed-chain trace, so $A$ and $B$ have the same
-positive-length closed chains.  The coefficient may be chosen to be the
-positive number one.
-
-Suppose that this information alone produced a square isometry $V$ and a
-positive scalar $c$ satisfying
-\[
-  V^\dagger B^vV=cA^v
-\]
-for every letter $v$.  The identity letter gives $c=1$.  Since a square
-isometry is unitary, the displayed equality says that conjugation by
-$V^\dagger X$ fixes every matrix in $\mathcal M_2(\mathbb C)$.  Hence
-$V^\dagger X$ is scalar, and therefore $X^\dagger X$ is scalar.  This
-contradicts
+  C^v=XA^vX^{-1}.
+  \label{eq:generic-similarity}
+\end{equation}
+The tensors $A$ and $C$ have identical closed chains at every positive length.
+If that fact alone produced a square isometry $Q$ and a positive scalar $c$
+with $Q^\dagger C^vQ=cA^v$, the identity letter would give $c=1$.  Since
+$Q$ is then unitary, $Q^\dagger X$ would commute with every matrix and hence
+would be scalar.  This would force $X^\dagger X$ to be scalar, contrary to
 \[
   X^\dagger X=\begin{pmatrix}4&0\\0&1\end{pmatrix}.
 \]
-Consequently positive coefficients and positive-length closed-chain equality,
-including the relation formalized as
-\leanid{MPSTensor.SameMPV}\ensuremath{{}_{2}}\leanid{Pos}, do not determine an
-isometric physical realization of a chosen representative.  This
-counterexample does not rule out a theorem using additional tensor-attached
-marked information; it shows that such information must be stated and proved
-explicitly.  The explicit obstruction is formalized in the declaration
+Likewise,
+\begin{equation}
+  \operatorname{gramDressing}(X,A)^{v_0}=4E_{01}
+  \ne E_{01}=A^{v_0}
+  \label{eq:generic-gram-obstruction}
+\end{equation}
+for a letter $A^{v_0}=E_{01}$.
+
+These examples remain valid obstructions to deriving a blocked raw corner or
+a Gram identity from positive-length closed-chain equality and an invertible
+gauge alone.  They do not contradict the completed tensor-attached theorem:
+they do not provide one MPO tensor satisfying the algebra clause, literal
+CPSV canonical form, and MPDO positivity from which both physical corners
+arise.  The relevant formal declarations are
 \begin{center}
 \scriptsize
 \mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
-\mbox{\leanid{sameMPV}}\ensuremath{{}_{2}}%
-\mbox{\leanid{Pos_does_not_force_positive_}}\\
-\mbox{\leanid{isometric_realization}}.
-\end{center}
-
-\section{The exact Gram-dressing obstruction}
-
-The same example also rules out transporting the identity Gram dressing
-through an arbitrary exact invertible gauge.  With the notation above,
-\[
-  \operatorname{gramDressing}(X,A)^v
-  =(X^\dagger X)A^v(X^\dagger X)^{-1}.
-\]
-For the letter $A^v=E_{01}$ and
-$X^\dagger X=\operatorname{diag}(4,1)$, this gives
-\[
-  \operatorname{gramDressing}(X,A)^v=4E_{01},
-  \qquad
-  \operatorname{gramDressing}(\mathbf 1,A)^v=E_{01}.
-\]
-Consequently the exact gauge and equality of every positive-length closed
-chain do not imply the marked Figure~8 identity.  This assertion is
-formalized as
-\begin{center}
-\scriptsize
-\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
+\mbox{\leanid{sameMPV}\ensuremath{{}_{2}}\leanid{Pos_does_not_force_positive_}}\\
+\mbox{\leanid{isometric_realization},}\qquad
 \mbox{\leanid{gramDressing_gauge_ne_one}.}
 \end{center}
 
-This is a sharp obstruction to any proof using only the fields
-\path{TwoSiteExactSectorGauge.tensor_eq} and
-\path{TwoSiteExactSectorGauge.sector_sameMPV}.  It is not a counterexample to
-the complete tensor-attached hypotheses of Theorem~4.14(ii): the displayed
-two-by-two tensor has not been made into a tensor-attached algebra clause
-satisfying the literal CPSV canonical-form hypothesis and positivity of every
-matrix product operator.
+The same distinction explains the negative result for the per-block linear
+extension.  A positive algebra automorphism of a full matrix algebra is a
+star automorphism and therefore has a unitary implementer by unitary
+Skolem--Noether.  The generic nonunitary similarity makes the corresponding
+per-block extension nonpositive.  Thus positivity of that extension cannot
+be inferred from closed chains alone.  This fact is still useful, but the
+mixed-prefix proof does not require such positivity.  The corresponding
+formal declarations are
+\begin{center}
+\scriptsize
+\mbox{\leanid{MPSTensor.exists_unitary_conj_of_positive_algEquiv_matrix},}\\
+\mbox{\leanid{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension},}\\
+\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
+\mbox{\leanid{perBlockLinearExtension_not_positive}.}
+\end{center}
 
-\section{Terminal-sector positivity excludes this witness}
+\subsection{Terminal positivity and the bond-two test}
 
-The tensor-attached algebra clause and MPDO positivity impose an additional
-one-site condition on every retained normal tensor.  If $M_\gamma$ is a
-retained sector, then its terminal physical-trace transfer
+For every retained one-site sector, tensor-attached MPDO positivity implies
 \begin{equation}
-  T_\gamma=\sum_a M_\gamma^{(a,a)}
+  T_\gamma=\sum_a A_\gamma^{(a,a)}\succeq0.
   \label{eq:terminal-sector-transfer}
 \end{equation}
-is positive semidefinite.  Indeed, after applying the retained physical
-coisometry to the positive one-site operator, the principal block belonging
-to a positive multiplicity coordinate $q$ is
-$(\mu_\gamma)_{q,q}T_\gamma$.  Since $(\mu_\gamma)_{q,q}>0$, positivity of
-the principal block implies $T_\gamma\succeq0$.  This necessary condition is
-formalized in
+This excludes the simplest nonunitary minimal-realization witness from the
+full theorem, because its terminal transfer is not Hermitian.  The declaration
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPOTensor.BNTAlgebraTensorClause.}}\\
-\mbox{\leanid{physTraceTransfer_verticalBNTMPO_posSemidef}}.
+\leanid{MPOTensor.BNTAlgebraTensorClause.%
+physTraceTransfer_verticalBNTMPO_posSemidef}
 \end{center}
-The older fusion-level statement now follows by passing from the fusion clause
-to its tensor-attached algebra clause.
+formalizes this necessary condition.
 
-For the source tensor $A$ and its nonunitarily similar tensor $B$, direct
-calculation gives
-\begin{equation}
-  T_A=\begin{pmatrix}1&0\\1&1\end{pmatrix},
-  \qquad
-  T_B=\begin{pmatrix}1&0\\\tfrac12&1\end{pmatrix}.
-  \label{eq:counterexample-terminal-transfers}
-\end{equation}
-Neither matrix is Hermitian, so neither is positive semidefinite.  The
-corresponding computations and exclusions are formalized in
+The bond-two singleton family provides a sharper diagnostic.  Its undeformed
+member is an all-length MPDO with a genuine one-label tensor-attached algebra
+clause.  A concrete nonunitary physical similarity preserves the algebra
+clause and literal horizontal CPSV canonical form, but its length-two MPO is
+not positive.  Thus it fails the MPDO hypothesis.  This example correctly
+shows that the positivity hypothesis is necessary; it is not a
+counterexample to Theorem~4.14.  Its earlier role as evidence for a metric
+boundary is superseded by the mixed-prefix comparison.  The formal tests are
 \begin{center}
 \scriptsize
-\mbox{\leanid{MPSTensor.PositiveMinimalRealizationCounterexample.}}\\
-\mbox{\leanid{physTraceTransfer_tensor},
-      \leanid{physTraceTransfer_tensor_not_posSemidef},}\\
-\mbox{\leanid{tensor_not_retained_positive_sector},}\\
-\mbox{\leanid{physTraceTransfer_gaugedTensor},
-      \leanid{physTraceTransfer_gaugedTensor_not_posSemidef},}\\
-\mbox{\leanid{gaugedTensor_not_retained_positive_sector}}.
+\mbox{\leanid{MPOTensor.BondTwoSingletonBaseModel.}}\\
+\mbox{\leanid{gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO},}\\
+\mbox{\leanid{gaugeDeformedBaseMPO_gauge_not_isMPDO},}\\
+\mbox{\leanid{gaugeDeformedBaseMPOBNTAlgebraTensorClause},}\qquad
+\mbox{\leanid{gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO}.}
 \end{center}
-Thus the generic nonunitary-similarity witness is now formally excluded from
-the full tensor-attached algebra-clause/MPDO setting.  It remains a valid
-obstruction to any argument based only on positive-length closed chains and
-an invertible gauge.
-
-This no-go result does not settle the missing tensor-attached marked
-comparison.  \href{https://github.com/LionSR/TNLean/issues/5284}{Issue 5284}
-remains open.  Every counterexample to that proposed comparison must use
-retained sectors whose terminal transfers are positive semidefinite.
-Terminal positivity alone does not produce the star-compatible positive-tail
-target identity or a unitary gauge.
-
-\section{A bond-two singleton physical-similarity obstruction}
-
-A bond-two singleton tensor satisfies the terminal condition.  Let $A$ be the
-normal tensor whose four diagonal doubled-physical letters are the matrix units
-$E_{a,b}$ of $\mathbb C^{2\times2}$.  Its terminal matrix is
-\begin{align}
-  J&=\begin{pmatrix}1&1\\1&1\end{pmatrix}\succeq0.
-  \label{eq:singleton-terminal-J}
-\end{align}
-Let $\ket{\Phi}=\ket{0,0}+\ket{1,1}$ and
-$P=\ket{\Phi}\!\bra{\Phi}$.
-
-The singleton has an all-length positive ambient realization.  Use pairs in
-$I\times I$ as a four-dimensional bond index and define
-\begin{align}
-  M^{i,j}_{(r,s),(r',s')}
-  &=\delta_{(r,s),(r',s')}\delta_{i,r}\delta_{j,s}.
-  \label{eq:singleton-base-mpo}
-\end{align}
-The vertical reshaping of $M$ is exactly $A$.  For every $N>0$, cyclic
-contraction gives
-\begin{align}
-  M_N
-  &=\bigl(\ket{0}^{\otimes N}+\ket{1}^{\otimes N}\bigr)
-    \bigl(\bra{0}^{\otimes N}+\bra{1}^{\otimes N}\bigr)
-  \succeq0.
-  \label{eq:singleton-base-ghz}
-\end{align}
-In particular, the canonical reindexing of the two-site operator gives
-$M_2=P$.
-
-For any $Y\in\mathrm{GL}(2,\mathbb C)$, define the physical-similarity
-deformation $M_Y$ by applying $Y$ to each ket index and $Y^{-1}$ to each bra
-index.  Its vertical tensor is
-\begin{align}
-  \widetilde M_Y^v&=YA^vY^{-1}.
-  \label{eq:singleton-physical-vertical}
-\end{align}
-The one- and two-site operators satisfy the exact reindexing identities
-\begin{align}
-  \operatorname{reindex}(M_{Y,1})&=YJY^{-1},
-  \label{eq:singleton-physical-one-site}\\
-  \operatorname{reindex}(M_{Y,2})
-  &=(Y\otimes Y)P(Y^{-1}\otimes Y^{-1}).
-  \label{eq:singleton-physical-two-site}
-\end{align}
-These are identities for one physical deformation of the ambient tensor, not
-an independent comparison between two matrices.
-
-Put $G=Y^\dagger Y$.  If $M_Y$ is an MPDO, then both matrices in
-\eqref{eq:singleton-physical-one-site}--\eqref{eq:singleton-physical-two-site}
-are Hermitian.  The one-site identity gives $GJ=JG$, while the two-site
-identity gives $G_{00}G_{01}+G_{10}G_{11}=0$.  The first relation makes the
-diagonal entries equal and the off-diagonal entries equal.  Positive
-definiteness and the second relation then force the off-diagonal entries to
-vanish.  Hence there is a real number $\omega>0$ such that
-\begin{align}
-  Y^\dagger Y&=\omega\mathbf 1.
-  \label{eq:singleton-scalar-gram}
-\end{align}
-Thus the natural physical-similarity deformation family is excluded whenever
-$Y^\dagger Y$ is nonscalar.
-
-For the concrete matrix
-\begin{align}
-  X&=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix},
-  \notag
-\end{align}
-one has
-\begin{align}
-  X^\dagger X
-  &=\begin{pmatrix}\tfrac52&\tfrac32\\[2pt]\tfrac32&\tfrac52\end{pmatrix},
-  \notag
-\end{align}
-which is not scalar.  Therefore $M_X$ is not an MPDO.  Its vertical tensor is
-exactly the earlier nonunitary similarity
-\begin{align}
-  B^v&=XA^vX^{-1}.
-  \label{eq:singleton-deformation}
-\end{align}
-This upgrades the previous terminal/Bell comparator to a concrete obstruction
-for the natural physical deformation itself.\footnote{Formal declarations:
-\leanid{MPOTensor.BondTwoSingletonBaseModel.%
-gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO} and
-\leanid{MPOTensor.BondTwoSingletonBaseModel.%
-gaugeDeformedBaseMPO_gauge_not_isMPDO}.}
-
-Appendix~C.4, lines~2048--2057, motivates comparing the one-site and two-site
-sector descriptions, and Proposition~4.13, lines~1898--1921, supplies the
-metric-comparison template.  Neither passage states the deformation
-\eqref{eq:singleton-physical-vertical}, the exact reindexing identities, the
-scalar-Gram necessity, or the non-MPDO corollary proved here.
-
-For every $N>0$, the raw retained closed operators of the undeformed model are
-diagonal indicators of cyclically composable directed-edge words.  They are
-therefore orthogonal projections and obey the coefficient-one product law.  At
-every $L>0$, the normalized representative $\widehat A=2^{-1/2}A$, together
-with the unique multiplicity weight $\sqrt2$, has coefficient $2^{-L/2}$ and
-reconstructs $A$.  The canonical identification of its retained coordinates
-with the original bond coordinates is a coisometry.  These data give a genuine
-one-label tensor-attached BNT algebra clause for the undeformed MPDO $M$.
-
-The tensor-attached clause persists under the concrete physical similarity.
-The retained representative becomes $X\widehat A^vX^{-1}$, with the same
-positive one-label coefficient and the same closed product law, while the
-forward and reconstruction identities use the original retained-coordinate
-coisometry.  Hence $M_X$ has a genuine \path{BNTAlgebraTensorClause}.  Its
-horizontal doubled-index tensor is also in the literal CPSV canonical form: it
-is a direct sum of four bond-one normal tensors, each with nonzero weight
-$5/4$.
-
-Thus the concrete nonunitary deformation satisfies the two nonpositivity
-premises relevant here: the BNT algebra clause in Theorem~4.14(ii) and the
-standing literal horizontal CPSV canonical form.  It nevertheless fails
-positivity of the length-two matrix product operator, and therefore is not an
-MPDO.  It is not a full-contract counterexample to Theorem~4.14 and constructs
-no \path{IdentityMarkedRealization}.
-\footnote{Formal declarations:
-\leanid{MPOTensor.BondTwoSingletonBaseModel.%
-gaugeDeformedBaseMPOBNTAlgebraTensorClause},
-\leanid{MPOTensor.BondTwoSingletonBaseModel.%
-gaugeDeformedBaseMPO_toMPSTensor_isCPSVCanonicalForm}, and
-\leanid{MPOTensor.BondTwoSingletonBaseModel.%
-gaugeDeformedBaseMPO_algebraClause_canonicalForm_not_isMPDO}.}
-Consequently Theorem~4.14 remains partial.  Issue
-\href{https://github.com/LionSR/TNLean/issues/5284}{\#5284} remains open under
-\href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
-\href{https://github.com/LionSR/TNLean/issues/4645}{\#4645} remains open.
-The terminal-positivity theorem and the conditional Gram and unitary theorems
-remain valid; the latter now assume precisely the positive-tail reflected
-target isolated above.
-
-\section{Non-circular product corners}
-
-The one-site coisometric reconstruction does give genuine local information
-beyond closed chains.  Squaring it produces isometric inclusions for the
-retained product sectors of the two-site blocking.  Decomposing those product
-tensors into normal summands, comparing them with the actual two-site
-vertical canonical form, and applying Proposition~4.13 legitimately
-normalizes every active product gauge.  This part uses the common physical
-tensor and does not assume a renormalization map.
-
-The first unresolved step is the identification of such an active product
-corner with the prescribed original representative $M_\gamma$.  The present
-transport theorem requires a unitary matrix and the letterwise identity
-\[
-  A_{\sigma(\gamma)}^v
-  =
-  \frac{\operatorname{tr}(\mu_\gamma)}
-       {\operatorname{tr}(\nu_{\sigma(\gamma)})}
-  U_\gamma M_\gamma^v U_\gamma^\dagger.
-\]
-The only current construction of these data uses the mutually inverse
-completely positive trace-preserving maps whose existence is downstream of
-the implication under study.  The algebra clause supplies instead only the
-closed cyclic product law.  Hence the active-corner construction stops at a
-metric boundary: it gives coverage up to phase and invertible similarity, but
-not the star-preserving local comparison needed to identify the two Gram
-dressings.
-
-\section{Faithful target and remaining boundary}
-
-For a matched label $\gamma$, let $A_\gamma$ be the algebra-side
-representative and let $X_\gamma$ be the exact invertible gauge to the chosen
-two-site representative.  The source-faithful target tracked in
-\href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284} is the marked
-Figure~8 identity
-\begin{equation}
-  \operatorname{gramDressing}(X_\gamma,A_\gamma)
-  =
-  \operatorname{gramDressing}(\mathbf 1,A_\gamma),
-  \label{eq:gram-dressing-target}
-\end{equation}
-derived from the tensor-attached algebra clause, the literal CPSV
-canonical-form hypothesis, and positivity of the matrix product operators,
-without assuming $F_{\alpha\beta}$ or a raw corner of the form
-\eqref{eq:V-compression}.
-Equivalently, for every vertical letter $v$,
-\[
-  (X_\gamma^\dagger X_\gamma)A_\gamma^v
-  (X_\gamma^\dagger X_\gamma)^{-1}=A_\gamma^v.
-\]
-Normality then implies \eqref{eq:gram-scalar}.
-
-The target-only conditional Gram theorem establishes
-\eqref{eq:gram-dressing-target} from the common reflected target at every
-positive tail length.  The empty tail is not part of this hypothesis.  The
-coefficient family and its physical-slice identity are supplied
-unconditionally by \eqref{eq:oblique-physical-coefficients} and packaged by
-\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget}; only the
-common reflected target remains conditional.  The unitary-normalization
-corollary then constructs
-\[
-  U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
-  \qquad
-  A_{\sigma(\gamma)}^v
-  =U_\gamma A_\gamma^vU_\gamma^\dagger.
-\]
-This is the conditional conclusion of the scalar-to-unitary argument; it does
-not assert that the stored invertible gauge $X_\gamma$ itself is unitary.
-Terminal sector positivity excludes the generic nonunitary-similarity witness
-from the full tensor-attached setting.  The bond-two deformation has a genuine
-tensor-attached BNT algebra clause and literal horizontal CPSV canonical form,
-but a nonscalar Gram matrix makes its length-two operator nonpositive.  These
-facts do not supply the missing star-compatible marked comparison.
-
-The remaining premise is to prove the common reflected-target identity at
-positive tail lengths for the coefficient family in
-\eqref{eq:oblique-physical-coefficients}, directly from the tensor-attached
-algebra clause, literal CPSV canonical form, and the MPDO hypothesis.  A
-common identity-gauge isometric corner would suffice to produce this identity,
-but such a positive corner is stronger than the required conclusion and
-remains unconstructed.  The target identity is
-tracked in \href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284},
-under \href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, without
-assuming a positive raw corner, a Gram identity, a unitary gauge, fusion data,
-or a renormalization fixed point.  Consequently issues 4648 and
-\href{https://github.com/LionSR/TNLean/issues/4645}{4645} remain open, and the
-unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Scope restriction: the renormalization-fixed-point conclusion is
-complete conditional on the common positive-tail targets, while those targets
-remain open.}  Once the targets are supplied in every sector, the conditional
-Gram theorem, unitary normalization, and physical channel construction give
-completely positive, trace-preserving maps satisfying
-\(
-  \mathcal T[M_1(X)]=M_2(X)
-\)
-and
-\(
-  \mathcal S[M_2(X)]=M_1(X)
-\)
-for every virtual matrix $X$.  The oblique maps
-\eqref{eq:oblique-maps} give the coefficients
-\eqref{eq:oblique-physical-coefficients} without a scalar Gram hypothesis or a
-unitary gauge.  Since $L_\gamma$ and $R_\gamma$ need not agree, this result is
-not a positive corner.  Its adjoint-reflected orientation is governed by the
-Gram-dressed compression \eqref{eq:oblique-gram-compression}, with the
-bond-pair and tail reversal included.  The direct equality of this target
-with the reflected raw target remains unproved; equivalently,
-\eqref{eq:gram-dressing-target} remains conditional.  Terminal sector
-positivity rules out the generic nonunitary witness.  The concrete bond-two
-deformation does carry a tensor-attached BNT algebra clause and has literal
-horizontal CPSV canonical form, but it fails the MPDO hypothesis at length
-two.  It is therefore not a full-contract counterexample and does not supply
-the missing target.  Appendix~C.4 therefore does not presently justify the
-unconditional line~2057 unitary conclusion.
+The two-site sector comparison no longer stops at an invertible gauge.  The
+one-site raw corner and the two-site gauge corner have reflection identities
+with the same unblocked tail.  Their common reflected target equates the raw
+and Gram-dressed marked chains, and the pairs $(W,W)$ and
+$(WG^\dagger,WG^{-1})$ place both marks in the one-site physical-letter span.
+Literal CPSV Lemma~L yields
+$\operatorname{gramDressing}(Z,A)=A$; normality then gives
+$Z^\dagger Z=\omega\mathbf 1$ with $\omega>0$, followed by unitary
+normalization and the physical renormalization maps.
+
+This is a local repair of the source proof, not a change to its mathematical
+statement.  It discharges the comparison formerly tracked in issues 5284,
+4648, and 4645, establishes the unconditional line~2057 conclusion, and
+completes the tensor-attached algebra equivalence and the corrected
+active-support fusion equivalence associated with Theorem~4.14.  The
+direct-route counterexamples above remain useful warnings: closed chains and
+invertible similarity do not by themselves produce a blocked raw corner.  The
+completed proof succeeds because it compares a one-site corner with a mixed
+two-site prefix inside the same MPDO family.
 
 \bibliographystyle{alpha}
 \bibliography{references}
