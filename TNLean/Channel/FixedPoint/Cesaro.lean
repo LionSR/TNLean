@@ -3,14 +3,16 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.HermitianHelpers
 import TNLean.Channel.Basic
+import TNLean.Channel.Schwarz.PositiveMapProperties
 
 /-!
 # Fixed point existence via Cesàro means
 
 This file proves that every quantum channel (CPTP map) on `M_D(ℂ)` has a nonzero
-PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also states
-the decomposition of Hermitian fixed points (Wolf Proposition 6.8).
+PSD fixed point, using the Cesàro mean / Markov-Kakutani argument. It also proves
+the positive fixed-point decomposition of Wolf Proposition 6.8.
 
 The decomposition theorem uses only positivity and trace preservation. The fixed-point
 existence theorem is stated for channels.
@@ -20,9 +22,12 @@ existence theorem is stated for channels.
 * `cesaroMean`: the Cesàro mean of iterates of a linear map
 * `cesaroMean_telescope`: telescoping identity for Cesàro means
 * `IsChannel.exists_posSemidef_fixedPoint`: existence of PSD fixed point
-* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint`: Wolf Proposition 6.8
-  for positive trace-preserving maps, stated for the canonical positive and negative
-  parts.
+* `IsPositiveMap.posPart_negPart_fixed_of_fixedPoint`: Wolf Proposition 6.8 for
+  positive trace-preserving maps, using the four canonical positive parts.
+* `IsPositiveMap.exists_posSemidef_fixedPoints_decomposition`: existential form of
+  the preceding theorem.
+* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint`: the Hermitian
+  intermediate result.
 * `IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint`: existential compatibility
   form of the preceding theorem.
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint`: the channel specialization.
@@ -197,6 +202,69 @@ theorem IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint
   have hEQ₁ : E Q₁ = Q₁ := by rw [hEQ₁_eq, hY_zero, add_zero]
   have hEQ₂ : E Q₂ = Q₂ := by rw [hEQ₂_eq, hY_zero, add_zero]
   simpa [hQ₁_def, hQ₂_def] using And.intro hEQ₁ hEQ₂
+
+/-- **Wolf Proposition 6.8.** If `E` is positive and trace-preserving, then the
+four canonical positive parts obtained from the Hermitian and skew-Hermitian
+components of any fixed point are also fixed points.
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.8; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1161--1191. -/
+theorem IsPositiveMap.posPart_negPart_fixed_of_fixedPoint
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX_fix : E X = X) :
+    E (X + Xᴴ)⁺ = (X + Xᴴ)⁺ ∧
+      E (X + Xᴴ)⁻ = (X + Xᴴ)⁻ ∧
+      E (Complex.I • (X - Xᴴ))⁺ = (Complex.I • (X - Xᴴ))⁺ ∧
+      E (Complex.I • (X - Xᴴ))⁻ = (Complex.I • (X - Xᴴ))⁻ := by
+  obtain ⟨H₁, H₂, hH₁def, hH₂def, hH₁herm, hH₂herm, _hXdecomp⟩ :=
+    Matrix.exists_isHermitian_decomposition X
+  have hXstar : E Xᴴ = Xᴴ := by
+    rw [hE.map_conjTranspose, hX_fix]
+  have hH₁fix : E H₁ = H₁ := by
+    rw [hH₁def, E.map_add, hX_fix, hXstar]
+  have hH₂fix : E H₂ = H₂ := by
+    rw [hH₂def, E.map_smul, E.map_sub, hX_fix, hXstar]
+  obtain ⟨hH₁pos, hH₁neg⟩ :=
+    IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint
+      E hE hTP hH₁herm hH₁fix
+  obtain ⟨hH₂pos, hH₂neg⟩ :=
+    IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint
+      E hE hTP hH₂herm hH₂fix
+  simpa only [hH₁def, hH₂def] using
+    And.intro hH₁pos (And.intro hH₁neg (And.intro hH₂pos hH₂neg))
+
+/-- Existential form of Wolf Proposition 6.8: every fixed point of a positive,
+trace-preserving map is a fixed complex linear combination of four positive
+semidefinite fixed points.
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.8; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1161--1191. -/
+theorem IsPositiveMap.exists_posSemidef_fixedPoints_decomposition
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX_fix : E X = X) :
+    ∃ P₁ P₂ P₃ P₄ : Matrix (Fin D) (Fin D) ℂ,
+      P₁.PosSemidef ∧ P₂.PosSemidef ∧ P₃.PosSemidef ∧ P₄.PosSemidef ∧
+      E P₁ = P₁ ∧ E P₂ = P₂ ∧ E P₃ = P₃ ∧ E P₄ = P₄ ∧
+      X = (2⁻¹ : ℂ) • (P₁ - P₂) - ((2⁻¹ : ℂ) * Complex.I) • (P₃ - P₄) := by
+  obtain ⟨H₁, H₂, hH₁def, hH₂def, hH₁herm, hH₂herm, hXdecomp⟩ :=
+    Matrix.exists_isHermitian_decomposition X
+  have hH₁decomp : H₁ = H₁⁺ - H₁⁻ :=
+    (CFC.posPart_sub_negPart H₁ (isSelfAdjoint_iff.mpr hH₁herm)).symm
+  have hH₂decomp : H₂ = H₂⁺ - H₂⁻ :=
+    (CFC.posPart_sub_negPart H₂ (isSelfAdjoint_iff.mpr hH₂herm)).symm
+  obtain ⟨hP₁fix, hP₂fix, hP₃fix, hP₄fix⟩ :=
+    IsPositiveMap.posPart_negPart_fixed_of_fixedPoint E hE hTP hX_fix
+  have hH₁posfix : E H₁⁺ = H₁⁺ := by simpa only [hH₁def] using hP₁fix
+  have hH₁negfix : E H₁⁻ = H₁⁻ := by simpa only [hH₁def] using hP₂fix
+  have hH₂posfix : E H₂⁺ = H₂⁺ := by simpa only [hH₂def] using hP₃fix
+  have hH₂negfix : E H₂⁻ = H₂⁻ := by simpa only [hH₂def] using hP₄fix
+  rw [hH₁decomp, hH₂decomp] at hXdecomp
+  exact ⟨H₁⁺, H₁⁻, H₂⁺, H₂⁻,
+    Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H₁),
+    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H₁),
+    Matrix.nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H₂),
+    Matrix.nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H₂),
+    hH₁posfix, hH₁negfix, hH₂posfix, hH₂negfix, hXdecomp⟩
 
 /-- Existential compatibility form of Wolf Proposition 6.8. The witnesses are the
 canonical positive and negative parts of the Hermitian fixed point. -/

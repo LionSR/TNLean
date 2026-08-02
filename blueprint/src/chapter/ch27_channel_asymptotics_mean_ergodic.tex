@@ -208,28 +208,30 @@
     Theorem~\ref{thm:adjoint_mean_ergodic_projection}.
 \end{proof}
 
-\begin{theorem}[Hermitian fixed-point decomposition]\label{thm:hermitian_fixedpoint_parts}
-    \lean{IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint}
+\begin{theorem}[Positive fixed-point decomposition]\label{thm:positive_fixedpoint_parts}
+    \lean{IsPositiveMap.posPart_negPart_fixed_of_fixedPoint}
     \leanok
     \uses{def:positive_map, def:trace_preserving}
     Let $E$ be a positive trace-preserving linear map and let $X=E(X)$ be a
-    Hermitian fixed point. Let $P_+=X^+$ and $P_-=X^-$ be its canonical
-    positive and negative parts. Thus $X=P_+-P_-$, $P_\pm\geq0$, and
-    $P_+P_-=P_-P_+=0$. Then $E(P_+)=P_+$ and $E(P_-)=P_-$.
-    This is \cite[Proposition~6.8]{Wolf2012Quantum}.
+    fixed point. Set $H_1=X+X^*$ and $H_2=i(X-X^*)$, and write
+    $H_j=P_{j,+}-P_{j,-}$ for the canonical positive and negative parts.
+    Then all four positive semidefinite matrices $P_{j,\pm}$ are fixed by
+    $E$. This is \cite[Proposition~6.8]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The fixed-point equation gives the common difference
-    $Y=E(P_+)-P_+=E(P_-)-P_-$. Hence $P_++Y$ and $P_-+Y$ are positive
-    semidefinite, while trace preservation gives $\tr(Y)=0$. Diagonalize
-    $P_+$. Since $P_+P_-=P_-P_+=0$, each eigenvector belongs to the kernel
-    of $P_+$ or to the kernel of $P_-$. Positivity of the corresponding
-    matrix $P_++Y$ or $P_-+Y$ shows that every diagonal coefficient of $Y$
-    in this basis is non-negative. Their sum is $\tr(Y)=0$, so every such
-    coefficient vanishes. A positive semidefinite matrix with a zero diagonal
-    coefficient annihilates the corresponding basis vector. Applying this to
-    $P_++Y$ or $P_-+Y$ shows that $Y$ annihilates the entire eigenbasis.
-    Thus $Y=0$, and consequently $E(P_\pm)=P_\pm$.
+    Positivity implies that $E$ preserves adjoints. Hence $H_1$ and $H_2$
+    are Hermitian fixed points. For either $H_j$, the fixed-point equation
+    gives the common difference
+    $Y=E(P_{j,+})-P_{j,+}=E(P_{j,-})-P_{j,-}$. Hence $P_{j,+}+Y$ and
+    $P_{j,-}+Y$ are positive semidefinite, while trace preservation gives
+    $\tr(Y)=0$. Diagonalize $P_{j,+}$. Orthogonality of the positive and
+    negative parts shows that each eigenvector belongs to the kernel of one
+    of them. Positivity of the corresponding matrix shows that every diagonal
+    coefficient of $Y$ in this basis is non-negative. Their sum is zero, so
+    every such coefficient vanishes. The positive semidefinite matrices then
+    annihilate the corresponding basis vectors, and therefore $Y=0$.
+    Applying this argument to $H_1$ and $H_2$ proves that all four parts are
+    fixed.
 \end{proof}

@@ -267,13 +267,16 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 ### Wolf Proposition 6.8 (Positive fixed-points)
 
-* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint` — the source-faithful
-  positive trace-preserving statement for the canonical positive and negative parts in
+* `IsPositiveMap.posPart_negPart_fixed_of_fixedPoint` — the source-faithful positive
+  trace-preserving statement for the four canonical positive parts in
   `TNLean.Channel.FixedPoint.Cesaro`.
-* `IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint` — the existential
-  compatibility form.
+* `IsPositiveMap.exists_posSemidef_fixedPoints_decomposition` — the existential form.
+* `IsPositiveMap.posPart_negPart_fixed_of_hermitian_fixedPoint` and
+  `IsPositiveMap.posSemidef_parts_of_hermitian_fixedPoint` — Hermitian intermediate
+  forms.
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — the channel specialization.
-* Numbered theorem: `IsChannel.wolf_prop_6_8` — `TNLean.Channel.WolfChapter6Wrappers`
+* Numbered theorem: `IsPositiveMap.wolf_prop_6_8` —
+  `TNLean.Channel.WolfChapter6Wrappers`.
 
 ### Wolf Corollary 6.6 (projected support corner) — FORMALIZED (Kraus case)
 
