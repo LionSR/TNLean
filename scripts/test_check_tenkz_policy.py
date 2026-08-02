@@ -41,6 +41,7 @@ TEST_CODE_TREE = "e" * 40
 TEST_SUPPORT_TREE = "1" * 40
 POLICY_DIGEST = "f" * 64
 REGRESSION_TEST = "tex-api-regression"
+FAILURE_FINGERPRINT = "2" * 64
 
 ARMED_POLICY = {
     **policy.EXPECTED_POLICY,
@@ -367,6 +368,7 @@ class Context:
         ref: str,
         _paths: tuple[str, ...],
         _work_integrations: tuple[str, ...],
+        _resolution_integrations: tuple[str, ...],
     ) -> policy.ReleasePrepEvidence:
         return self.release_preps[ref]
 
@@ -432,7 +434,7 @@ class Context:
             boundary_entry_id=f"S1-{index - 1:04d}",
             validation_target_oid=receipt.head_oid,
             raw_invalid_entries=(target,),
-            pending_breaking_target=None,
+            pending_restart_target=None,
             normalized_resolver_inputs_complete_and_matching=True,
             workflow_dependency_closure_pinned=True,
             supervisor_receipts_complete_and_matching=True,
@@ -485,19 +487,25 @@ def payload_evidence(
         manifest_contract_valid=True,
         artifact_declarations_agree=True,
         inventory_digest_matches=True,
-        inventory_contract_valid=True,
+        inventory_exact_schema_valid=True,
+        inventory_ids_and_failure_fingerprints_unique=True,
+        inventory_test_surface_valid=True,
+        inventory_atomic_assertions_one_per_test=True,
         test_code_tree_matches=True,
         test_support_tree_matches=True,
-        inventory_data_paths_within_mutable_roots=True,
-        executable_dependencies_within_code_tree=True,
+        inventory_subject_paths_within_subject_roots=True,
+        inventory_program_paths_regular_and_surface_owned=True,
+        inventory_fixture_paths_regular_or_trees=True,
+        inventory_subject_roles_disjoint=True,
+        inventory_fixtures_nonexecutable=True,
+        executable_dependencies_within_harness_tree=True,
         acceptance_dependencies_within_support_tree=True,
-        subject_data_cannot_reduce_coverage=True,
+        subjects_cannot_supply_evidence_logic=True,
         hermetic_execution_contract_valid=True,
         payload_execution_receipts_complete_and_matching=True,
         test_execution_complete=True,
         compatibility_tests_passed=True,
         payload_blob_oids=blob_oids,
-        inventory_test_surfaces_valid=True,
     )
 
 
@@ -506,10 +514,14 @@ def observation_evidence(
     tag: str,
     test_ref: str,
     *,
-    surfaces: tuple[str, ...] = ("tex-api",),
-    exit_code: int = 1,
+    surface: str = "tex-api",
+    result: str = "assertion-failed",
+    failure_fingerprint: str = FAILURE_FINGERPRINT,
+    program_paths: tuple[str, ...] = ("tex/tenkz/tenkz.sty",),
+    fixture_paths: tuple[str, ...] = ("tests/tenkz/rmp/fixtures/baseline.tex",),
 ) -> policy.ReleaseTestObservationEvidence:
     contract = policy.policy_rules(ARMED_POLICY)[4]
+    assertion_failed = result == "assertion-failed"
     return policy.ReleaseTestObservationEvidence(
         validated_tree_oid=tree_oid,
         validated_tag=tag,
@@ -521,19 +533,29 @@ def observation_evidence(
         manifest_contract_valid=True,
         artifact_declarations_agree=True,
         inventory_digest_matches=True,
-        inventory_contract_valid=True,
-        inventory_test_surfaces_valid=True,
+        inventory_exact_schema_valid=True,
+        inventory_ids_and_failure_fingerprints_unique=True,
+        inventory_test_surface_valid=True,
+        inventory_atomic_assertions_one_per_test=True,
         inventory_test_exists=True,
         inventory_command_exact_and_matching=True,
         test_code_tree_matches=True,
         test_support_tree_matches=True,
-        inventory_data_paths_within_mutable_roots=True,
-        executable_dependencies_within_code_tree=True,
+        inventory_subject_paths_within_subject_roots=True,
+        executable_dependencies_within_harness_tree=True,
         acceptance_dependencies_within_support_tree=True,
-        subject_data_cannot_reduce_coverage=True,
+        subjects_cannot_supply_evidence_logic=True,
         hermetic_execution_contract_valid=True,
         tool_fingerprints_match=True,
-        inventory_test_surfaces=surfaces,
+        inventory_test_surface=surface,
+        inventory_test_failure_fingerprint=failure_fingerprint,
+        inventory_test_program_paths=program_paths,
+        inventory_test_fixture_paths=fixture_paths,
+        inventory_test_program_paths_regular_blobs=True,
+        inventory_test_fixture_paths_regular_blobs_or_trees=True,
+        inventory_test_fixture_trees_exclude_program_paths=True,
+        inventory_test_fixtures_nonexecutable=True,
+        atomic_assertion_count=1,
         exactly_one_inventory_test_run=True,
         setup_complete_and_matching=True,
         isolation_valid=True,
@@ -541,8 +563,21 @@ def observation_evidence(
         execution_complete=True,
         timed_out=False,
         terminated_by_signal=False,
-        clean_process_exit=True,
-        exit_code=exit_code,
+        result=result,
+        exit_code=10 if assertion_failed else 0,
+        assertion_failure_receipt_path=(
+            "/tenkz-output/assertion-failure-v1.json" if assertion_failed else None
+        ),
+        observed_failure_fingerprint=(
+            failure_fingerprint if assertion_failed else None
+        ),
+        assertion_failure_receipt_exact_and_matching=(
+            True if assertion_failed else None
+        ),
+        assertion_failure_receipt_atomically_written=(
+            True if assertion_failed else None
+        ),
+        single_failure_cause=True if assertion_failed else None,
     )
 
 
@@ -648,18 +683,25 @@ def context() -> Context:
         unique_merge_base=True,
         exact_seven_scalar_replacements=True,
         inventory_digest_matches=True,
+        inventory_exact_schema_valid=True,
+        inventory_ids_and_failure_fingerprints_unique=True,
+        inventory_test_surface_valid=True,
+        inventory_atomic_assertions_one_per_test=True,
         test_code_tree_matches=True,
         test_support_tree_matches=True,
-        inventory_data_paths_within_mutable_roots=True,
-        executable_dependencies_within_code_tree=True,
+        inventory_subject_paths_within_subject_roots=True,
+        inventory_program_paths_regular_and_surface_owned=True,
+        inventory_fixture_paths_regular_or_trees=True,
+        inventory_subject_roles_disjoint=True,
+        inventory_fixtures_nonexecutable=True,
+        executable_dependencies_within_harness_tree=True,
         acceptance_dependencies_within_support_tree=True,
-        subject_data_cannot_reduce_coverage=True,
+        subjects_cannot_supply_evidence_logic=True,
         hermetic_execution_contract_valid=True,
         supervisor_self_test_receipt_valid=True,
         enforcement_workflows_pinned=True,
         policy_digest_matches=True,
         ledger_prefix_matches=True,
-        inventory_test_surfaces_valid=True,
     )
     records = {
         entry_id: policy.RecordDiffEvidence(
@@ -759,12 +801,14 @@ def context() -> Context:
                 policy.FINAL_TAG
             ),
             validated_work_integrations=work_integrations,
+            validated_resolution_integrations=(),
             complete=True,
             integration_parent_count=1,
             unique_merge_base=True,
             integration_parent_is_ancestor_of_head=True,
             integration_second_parent_matches_head=True,
             integration_descends_from_work_integrations=True,
+            integration_descends_from_resolution_integrations=True,
             exact_release_varying_path_diff=True,
         )
     }
@@ -811,9 +855,8 @@ def context() -> Context:
                 TAG_OBJECT,
                 "tag",
                 SHA,
-                True,
-                True,
-                True,
+                historical_candidate_check_exact_and_successful=True,
+                historical_compares_only_earlier_freezes=True,
             ),
             policy.FINAL_TAG: policy.TagEvidence(None, None, None, exists=False),
         },
@@ -972,6 +1015,11 @@ def prepare_friction_observations(entries: list[dict], facts: Context) -> None:
         trees = [record.head_oid]
         if record.merged is True:
             trees.append(record.merge_commit_oid)
+        program_path = (
+            "scripts/tenkzlib/tnlog.py"
+            if entry["surface"] == "tnlog"
+            else "tex/tenkz/tenkz.sty"
+        )
         for tree_oid in trees:
             assert isinstance(tree_oid, str)
             for test_ref in entry["regression_tests"]:
@@ -981,8 +1029,9 @@ def prepare_friction_observations(entries: list[dict], facts: Context) -> None:
                         tree_oid,
                         tag,
                         test_ref,
-                        surfaces=(entry["surface"],),
-                        exit_code=1,
+                        surface=entry["surface"],
+                        result="assertion-failed",
+                        program_paths=(program_path,),
                     ),
                 )
 
@@ -996,6 +1045,8 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
             continue
         entry_id = entry["id"]
         friction_entry = by_id[entry["friction"]]
+        if friction_entry["triage"] != "fix-compatible":
+            continue
         friction_pr = facts.prs[friction_entry["record_pr"]]
         friction_time = friction_pr.merged_at
         friction_integration = friction_pr.merge_commit_oid
@@ -1036,6 +1087,31 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
         fix_head = fix_pr.head_oid
         assert fix_head is not None
         fix_base = oid(fix_number * 10 - 1)
+        surface = friction_entry["surface"]
+        program_path = (
+            "scripts/tenkzlib/tnlog.py"
+            if surface == "tnlog"
+            else "tex/tenkz/tenkz.sty"
+        )
+        stream_kind = (
+            "python-location-free-ast"
+            if surface == "tnlog"
+            else "tex-comment-stripped-tokens"
+        )
+        regression_fixes = tuple(
+            policy.RegressionFixEvidence(
+                test_ref=test_ref,
+                validated_surface=surface,
+                declared_program_paths=(program_path,),
+                changed_program_path=program_path,
+                program_blob_modified=True,
+                semantic_stream_kind=stream_kind,
+                semantic_stream_changed=True,
+                python_reader_parses=True if surface == "tnlog" else None,
+                baseline_failure_fingerprint=FAILURE_FINGERPRINT,
+            )
+            for test_ref in friction_entry["regression_tests"]
+        )
         if fix_ref not in facts.resolution_diffs:
             facts.resolution_diffs[fix_ref] = policy.ResolutionDiffEvidence(
                 validated_pr_ref=fix_ref,
@@ -1052,14 +1128,17 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
                 integration_strict_descendant_of_friction=True,
                 policy_paths_untouched=True,
                 validated_base_oid=fix_base,
-                validated_surface=friction_entry["surface"],
-                validated_fix_path_patterns=policy.policy_rules(ARMED_POLICY)[
-                    4
-                ].fix_paths(friction_entry["surface"]),
-                semantic_witness_path="tex/tenkz/tenkz.sty",
-                surface_matching_added_or_modified_regular_blob=True,
-                tex_comment_stripped_token_stream_changed=True,
-                semantic_witness_is_same_surface_regular_blob=True,
+                validated_regression_tests=tuple(friction_entry["regression_tests"]),
+                regression_fixes=regression_fixes,
+                validated_identity_trees=(
+                    friction_pr.head_oid,
+                    friction_integration,
+                    fix_base,
+                    fix_head,
+                    fix_integration,
+                ),
+                fixture_blobs_modes_and_trees_identical=True,
+                freeze_manifest_blob_identical=True,
             )
         fix_diff = facts.resolution_diffs[fix_ref]
         observation_base = fix_diff.validated_base_oid
@@ -1071,8 +1150,9 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
                         observation_base,
                         freeze_entry["freeze_tag"],
                         test_ref,
-                        surfaces=(friction_entry["surface"],),
-                        exit_code=1,
+                        surface=surface,
+                        result="assertion-failed",
+                        program_paths=(program_path,),
                     ),
                 )
                 facts.observations.setdefault(
@@ -1081,8 +1161,9 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
                         fix_head,
                         freeze_entry["freeze_tag"],
                         test_ref,
-                        surfaces=(friction_entry["surface"],),
-                        exit_code=0,
+                        surface=surface,
+                        result="passed",
+                        program_paths=(program_path,),
                     ),
                 )
         facts.payloads.setdefault(
@@ -1113,6 +1194,23 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
             ),
         )
 
+    resolution_integrations = tuple(
+        facts.prs[entry["record_pr"]].merge_commit_oid
+        for entry in entries
+        if entry["kind"] == "resolution"
+        and entry["fix_pr"] in facts.resolution_diffs
+        and isinstance(facts.prs[entry["record_pr"]].merge_commit_oid, str)
+    )
+    assert all(isinstance(item, str) for item in resolution_integrations)
+    if resolution_integrations:
+        for ref, evidence in tuple(facts.release_preps.items()):
+            if evidence.validated_resolution_integrations == ():
+                facts.release_preps[ref] = replace(
+                    evidence,
+                    validated_resolution_integrations=resolution_integrations,
+                    integration_descends_from_resolution_integrations=True,
+                )
+
 
 def set_review_permission(facts: Context, ref: str, permission: str | None) -> None:
     pull_request = facts.prs[ref]
@@ -1128,6 +1226,26 @@ def set_review_permission(facts: Context, ref: str, permission: str | None) -> N
 
 def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
+    for entry in entries:
+        if entry["kind"] != "freeze":
+            continue
+        record = facts.prs.get(entry["record_pr"])
+        if record is None or record.merged is not False:
+            continue
+        tag = facts.tags[entry["freeze_tag"]]
+        facts.tags[entry["freeze_tag"]] = replace(
+            tag,
+            candidate_namespace_complete=(
+                True
+                if tag.candidate_namespace_complete is None
+                else tag.candidate_namespace_complete
+            ),
+            candidate_patch_exceeds_current_namespace=(
+                True
+                if tag.candidate_patch_exceeds_current_namespace is None
+                else tag.candidate_patch_exceeds_current_namespace
+            ),
+        )
     prepare_reset_receipts(entries, facts)
     prepare_friction_observations(entries, facts)
     prepare_resolution_facts(entries, facts)
@@ -1271,9 +1389,8 @@ def add_freeze_facts(
         tag_object,
         "tag",
         source_sha,
-        True,
-        True,
-        True,
+        historical_candidate_check_exact_and_successful=True,
+        historical_compares_only_earlier_freezes=True,
     )
     facts.payloads[(source_sha, tag)] = payload_evidence(
         source_sha,
@@ -1307,11 +1424,11 @@ def main() -> int:
     invalid_activation_surfaces = context()
     invalid_activation_surfaces.activation_diff = replace(
         invalid_activation_surfaces.activation_diff,
-        inventory_test_surfaces_valid=False,
+        inventory_test_surface_valid=False,
     )
     expect_failure(
         lambda: validate([], invalid_activation_surfaces),
-        "activation inventory test surfaces are invalid",
+        "activation inventory test surface is invalid",
     )
     expect_failure(
         lambda: validate(
@@ -1330,15 +1447,18 @@ def main() -> int:
     ]
     contract = policy.policy_rules(ARMED_POLICY)[4]
     assert contract.fix_paths("tex-api") == (
-        "tex/tenkz/**/*.tex",
-        "tex/tenkz/**/*.sty",
+        "tex/tenkz/*.tex",
+        "tex/tenkz/*.sty",
     )
-    assert contract.fix_paths("tnlog") == contract.fix_paths("tex-api")
+    assert contract.fix_paths("tnlog") == (
+        *contract.fix_paths("tex-api"),
+        "scripts/tenkzlib/tnlog.py",
+    )
     assert policy.policy_glob_matches(
         "tex/tenkz/tenkz.sty",
         contract.fix_paths("tex-api")[1],
     )
-    assert policy.policy_glob_matches(
+    assert not policy.policy_glob_matches(
         "tex/tenkz/internal/parser.tex",
         contract.fix_paths("tex-api")[0],
     )
@@ -1470,8 +1590,8 @@ def main() -> int:
         ),
         "fields differ from schema",
     )
-    breaking_with_receipt = reset(
-        "S1-0002", "#908", "breaking-required", "S1-0001"
+    restart_with_receipt = reset(
+        "S1-0002", "#908", "restart-required", "S1-0001"
     ).replace(
         'evidence = "verified reset cause"',
         'evidence = "verified reset cause"\nreplay_receipt_pr = "#19002"\n'
@@ -1479,7 +1599,7 @@ def main() -> int:
     )
     expect_failure(
         lambda: policy.validate_entry_shape(
-            parsed_entries(freeze(), breaking_with_receipt)[1],
+            parsed_entries(freeze(), restart_with_receipt)[1],
             2,
         ),
         "fields differ from schema",
@@ -1555,9 +1675,9 @@ def main() -> int:
         ("validation_target_oid", oid(99_994), "inexact validation target"),
         ("raw_invalid_entries", (), "does not match its current reset receipt"),
         (
-            "pending_breaking_target",
+            "pending_restart_target",
             "S1-0001",
-            "wrong pending breaking target",
+            "wrong pending restart target",
         ),
         (
             "normalized_resolver_inputs_complete_and_matching",
@@ -1992,19 +2112,31 @@ def main() -> int:
         return blocks, facts, (tree_oid, "tenkz-v0.9.0", REGRESSION_TEST)
 
     friction_observation_failures = (
-        ("inventory_test_surfaces", ("tnlog",), "does not cover surface tex-api"),
-        ("inventory_test_surfaces", (), "test surfaces are missing"),
-        ("inventory_test_surfaces", ("tex-api", "tex-api"), "surfaces have duplicates"),
+        ("inventory_test_surface", "tnlog", "test covers another surface"),
+        ("inventory_test_surface", None, "test surface is missing or invalid"),
         ("inventory_test_exists", False, "test is absent from inventory"),
         ("inventory_command_exact_and_matching", False, "command differs from the pinned"),
+        (
+            "inventory_test_fixture_trees_exclude_program_paths",
+            False,
+            "fixture tree contains a program path",
+        ),
+        ("inventory_test_fixtures_nonexecutable", False, "fixture is executable"),
+        ("atomic_assertion_count", 2, "does not contain exactly one atomic assertion"),
         ("timed_out", True, "timed out"),
         ("terminated_by_signal", True, "ended by signal"),
         ("setup_complete_and_matching", False, "setup is incomplete"),
         ("isolation_valid", False, "isolation failed"),
         ("execution_complete", False, "execution is incomplete"),
-        ("clean_process_exit", False, "did not exit cleanly"),
-        ("exit_code", 0, "did not reproduce friction"),
+        ("result", "setup-failed", "returned another result"),
+        ("exit_code", 9, "assertion failure did not exit exactly 10"),
         ("exit_code", True, "invalid process exit code"),
+        (
+            "observed_failure_fingerprint",
+            "3" * 64,
+            "observed another failure fingerprint",
+        ),
+        ("single_failure_cause", False, "coarse or multiple-cause failure"),
         ("validated_tag", "tenkz-v0.9.1", "used another freeze tag"),
     )
     for field_name, bad_value, error_fragment in friction_observation_failures:
@@ -2017,6 +2149,17 @@ def main() -> int:
             lambda blocks=blocks, facts=facts: validate(blocks, facts),
             error_fragment,
         )
+
+    fixture_gaming, fixture_gaming_facts, observation_key = friction_case(True)
+    observation = fixture_gaming_facts.observations[observation_key]
+    fixture_gaming_facts.observations[observation_key] = replace(
+        observation,
+        inventory_test_fixture_paths=observation.inventory_test_program_paths,
+    )
+    expect_failure(
+        lambda: validate(fixture_gaming, fixture_gaming_facts),
+        "program and fixture roles overlap",
+    )
 
     postmerge_friction, postmerge_friction_facts, integration_key = friction_case(False)
     postmerge_friction_facts.observations[integration_key] = replace(
@@ -2055,7 +2198,7 @@ def main() -> int:
     ]
     expect_failure(
         lambda: validate(empty_regression_resolution, context()),
-        "cannot resolve an empty regression-test evidence gap",
+        "regression_tests must be nonempty",
     )
 
     empty_gap_signoff = [
@@ -2114,13 +2257,24 @@ def main() -> int:
     )
     expect_failure(
         lambda: validate(empty_gap_signoff, empty_gap_facts),
-        "unresolved friction: S1-0002",
+        "regression_tests must be nonempty",
     )
 
-    def resolution_case(candidate_record: bool) -> tuple[list[str], Context, str]:
+    def resolution_case(
+        candidate_record: bool,
+        *,
+        surface: str = "tex-api",
+        test_ref: str = REGRESSION_TEST,
+    ) -> tuple[list[str], Context, str]:
         blocks = [
             freeze(),
-            friction("S1-0002", FORMAL_RECORD, "fix-compatible"),
+            friction(
+                "S1-0002",
+                FORMAL_RECORD,
+                "fix-compatible",
+                surface=surface,
+                regression_tests=(test_ref,),
+            ),
             resolution("S1-0003", RMP_RECORD, "S1-0002"),
         ]
         facts = context()
@@ -2135,26 +2289,44 @@ def main() -> int:
     pending_resolution, pending_resolution_facts, _fix_ref = resolution_case(True)
     assert validate(pending_resolution, pending_resolution_facts) == "resolution-pending"
 
+    reader_resolution, reader_resolution_facts, reader_fix_ref = resolution_case(
+        True,
+        surface="tnlog",
+        test_ref="tnlog-reader-regression",
+    )
+    assert validate(reader_resolution, reader_resolution_facts) == "resolution-pending"
+    reader_diff = reader_resolution_facts.resolution_diffs[reader_fix_ref]
+    assert reader_diff.regression_fixes is not None
+    reader_resolution_facts.resolution_diffs[reader_fix_ref] = replace(
+        reader_diff,
+        regression_fixes=(
+            replace(reader_diff.regression_fixes[0], python_reader_parses=False),
+        ),
+    )
+    expect_failure(
+        lambda: validate(reader_resolution, reader_resolution_facts),
+        "reader semantic stream is invalid",
+    )
+
     resolution_diff_failures = (
-        (
-            "surface_matching_added_or_modified_regular_blob",
-            False,
-            "no added or modified surface-owned TeX blob",
-        ),
-        (
-            "tex_comment_stripped_token_stream_changed",
-            False,
-            "no TeX-comment-stripped token change",
-        ),
-        (
-            "semantic_witness_is_same_surface_regular_blob",
-            False,
-            "not one surface-owned TeX blob",
-        ),
         ("validated_base_oid", "bad", "merge base is missing or malformed"),
-        ("validated_surface", "tnlog", "used another compatibility surface"),
-        ("validated_fix_path_patterns", ("TNLean/**/*.lean",), "another surface path set"),
-        ("semantic_witness_path", "TNLean/Fix.lean", "not surface-owned TeX"),
+        ("validated_regression_tests", (), "used another regression-test set"),
+        ("regression_fixes", (), "lacks one semantic witness per regression test"),
+        (
+            "validated_identity_trees",
+            (SHA, SHA, SHA, SHA, SHA),
+            "identity check used another five-tree boundary",
+        ),
+        (
+            "fixture_blobs_modes_and_trees_identical",
+            False,
+            "changes a regression fixture identity",
+        ),
+        (
+            "freeze_manifest_blob_identical",
+            False,
+            "changes the active-freeze manifest identity",
+        ),
         ("validated_head_oid", oid(99_980), "not validated at its exact head"),
         (
             "integration_strict_descendant_of_friction",
@@ -2174,17 +2346,60 @@ def main() -> int:
             error_fragment,
         )
 
-    # Neither an unrelated Lean-only change nor a test-only change supplies
-    # the required surface-owned TeX implementation witness.
-    for rejected_path in ("TNLean/Fix.lean", "tests/tenkz/test_fix.py"):
+    regression_fix_failures = (
+        ("validated_surface", "tnlog", "used another compatibility surface"),
+        (
+            "declared_program_paths",
+            ("tex/tenkz/other.sty",),
+            "used another declared program set",
+        ),
+        ("program_blob_modified", False, "program blob was not modified"),
+        ("semantic_stream_changed", False, "changed only nonsemantic text"),
+        ("semantic_stream_kind", "raw-bytes", "TeX semantic stream is invalid"),
+        ("python_reader_parses", True, "TeX semantic stream is invalid"),
+        (
+            "baseline_failure_fingerprint",
+            "3" * 64,
+            "used another baseline fingerprint",
+        ),
+    )
+    for field_name, bad_value, error_fragment in regression_fix_failures:
         blocks, facts, fix_ref = resolution_case(True)
+        fix_diff = facts.resolution_diffs[fix_ref]
+        assert fix_diff.regression_fixes is not None
         facts.resolution_diffs[fix_ref] = replace(
-            facts.resolution_diffs[fix_ref],
-            semantic_witness_path=rejected_path,
+            fix_diff,
+            regression_fixes=(
+                replace(fix_diff.regression_fixes[0], **{field_name: bad_value}),
+            ),
         )
         expect_failure(
             lambda blocks=blocks, facts=facts: validate(blocks, facts),
-            "semantic witness path is not surface-owned TeX",
+            error_fragment,
+        )
+
+    # Neither a Lean-only change, a harness-only change, nor a fixture change
+    # can stand in for the declared compatibility program.
+    for rejected_path in (
+        "TNLean/Fix.lean",
+        "tests/tenkz/release-harness/test_fix.py",
+        "tests/tenkz/rmp/fixtures/baseline.tex",
+    ):
+        blocks, facts, fix_ref = resolution_case(True)
+        fix_diff = facts.resolution_diffs[fix_ref]
+        assert fix_diff.regression_fixes is not None
+        facts.resolution_diffs[fix_ref] = replace(
+            fix_diff,
+            regression_fixes=(
+                replace(
+                    fix_diff.regression_fixes[0],
+                    changed_program_path=rejected_path,
+                ),
+            ),
+        )
+        expect_failure(
+            lambda blocks=blocks, facts=facts: validate(blocks, facts),
+            "changed no eligible declared program",
         )
 
     def fix_observation_keys(
@@ -2208,7 +2423,7 @@ def main() -> int:
     )
     expect_failure(
         lambda: validate(base_passes, base_passes_facts),
-        "fix-base test tex-api-regression regression test did not reproduce friction",
+        "fix-base test tex-api-regression assertion failure did not exit exactly 10",
     )
 
     head_fails, head_fails_facts, fix_ref = resolution_case(True)
@@ -2219,7 +2434,7 @@ def main() -> int:
     )
     expect_failure(
         lambda: validate(head_fails, head_fails_facts),
-        "fix-head test tex-api-regression regression test did not pass",
+        "fix-head test tex-api-regression passed result did not exit zero",
     )
 
     wrong_fix_tag, wrong_fix_tag_facts, fix_ref = resolution_case(True)
@@ -2252,11 +2467,11 @@ def main() -> int:
     payload_key = (fix_head, "tenkz-v0.9.0")
     invalid_inventory_facts.payloads[payload_key] = replace(
         invalid_inventory_facts.payloads[payload_key],
-        inventory_test_surfaces_valid=False,
+        inventory_test_surface_valid=False,
     )
     expect_failure(
         lambda: validate(invalid_inventory_surfaces, invalid_inventory_facts),
-        "fix head test inventory has invalid surface declarations",
+        "fix head test inventory has an invalid surface declaration",
     )
 
     postmerge_recheck, postmerge_recheck_facts, fix_ref = resolution_case(False)
@@ -2300,6 +2515,186 @@ def main() -> int:
     )
     assert validate(wrong_postmerge_ancestry, wrong_postmerge_facts) == (
         "reset-required:S1-0003"
+    )
+
+    old_attempt_facts = context()
+    add_record(
+        old_attempt_facts,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(seconds=1),
+    )
+    add_record(
+        old_attempt_facts,
+        "S1-0003",
+        "#909",
+        909,
+        FREEZE_TIME + timedelta(seconds=2),
+    )
+    second_source_sha = "4" * 40
+    add_freeze_facts(
+        old_attempt_facts,
+        "S1-0004",
+        source_ref="#910",
+        source_number=910,
+        source_sha=second_source_sha,
+        record_ref="#911",
+        record_number=911,
+        tag="tenkz-v0.9.1",
+        tag_object="5" * 40,
+        merged_at=FREEZE_TIME + timedelta(seconds=4),
+    )
+    add_record(
+        old_attempt_facts,
+        "S1-0005",
+        "#912",
+        912,
+        FREEZE_TIME + timedelta(seconds=6),
+    )
+    old_attempt_resolution = [
+        freeze(),
+        friction("S1-0002", "#908", "restart-required"),
+        reset("S1-0003", "#909", "restart-required", "S1-0002"),
+        freeze(
+            "S1-0004",
+            record_pr="#911",
+            attempt=2,
+            source_pr="#910",
+            source_sha=second_source_sha,
+            tag_object="5" * 40,
+            tag="tenkz-v0.9.1",
+        ),
+        resolution(
+            "S1-0005",
+            "#912",
+            "S1-0002",
+            attempt=2,
+        ),
+    ]
+    expect_failure(
+        lambda: validate(old_attempt_resolution, old_attempt_facts),
+        "names no friction in this attempt",
+    )
+
+    def resolution_signoff_case(
+        *,
+        release_merge: datetime,
+        candidate_signoff: bool,
+    ) -> tuple[list[str], Context]:
+        facts = context()
+        record_specs = (
+            ("S1-0002", "#908", 908, 3),
+            ("S1-0003", "#909", 909, 5),
+            ("S1-0004", "#910", 910, 6),
+            ("S1-0005", "#911", 911, 7),
+            ("S1-0006", "#912", 912, 11),
+        )
+        for entry_id, ref, number, seconds in record_specs:
+            add_record(
+                facts,
+                entry_id,
+                ref,
+                number,
+                FREEZE_TIME + timedelta(seconds=seconds),
+            )
+        release_head = facts.prs[RELEASE_PREP].head_oid
+        assert isinstance(release_head, str)
+        facts.prs[RELEASE_PREP] = replace(
+            facts.prs[RELEASE_PREP],
+            merged_at=release_merge,
+            reviews=(
+                review(
+                    "release-prep-reviewer",
+                    release_merge - timedelta(microseconds=1),
+                    release_head,
+                ),
+            ),
+        )
+        signoff_head = facts.prs["#912"].head_oid
+        assert isinstance(signoff_head, str)
+        if candidate_signoff:
+            facts.prs["#912"] = candidate_pr(
+                912,
+                author="release-author",
+                reviews=(
+                    review(
+                        "release-reviewer",
+                        FREEZE_TIME + timedelta(seconds=10),
+                        signoff_head,
+                    ),
+                ),
+            )
+        else:
+            facts.prs["#912"] = replace(
+                facts.prs["#912"],
+                author_login="release-author",
+                reviews=(
+                    review(
+                        "release-reviewer",
+                        FREEZE_TIME + timedelta(seconds=10),
+                        signoff_head,
+                    ),
+                ),
+            )
+        work_integrations = (
+            facts.prs[FORMAL_WORK].merge_commit_oid,
+            facts.prs[RMP_WORK].merge_commit_oid,
+        )
+        facts.records["S1-0006"] = replace(
+            facts.records["S1-0006"],
+            candidate_main_tip_is_release_integration=True,
+            integration_parent_is_release_integration=True,
+            validated_release_integration=facts.prs[RELEASE_PREP].merge_commit_oid,
+            validated_work_integrations=work_integrations,
+        )
+        facts.payloads[(signoff_head, policy.FINAL_TAG)] = payload_evidence(
+            signoff_head,
+            policy.FINAL_TAG,
+            FINAL_PAYLOAD_BLOBS,
+        )
+        signoff_integration = facts.prs["#912"].merge_commit_oid
+        if isinstance(signoff_integration, str):
+            facts.payloads[(signoff_integration, policy.FINAL_TAG)] = payload_evidence(
+                signoff_integration,
+                policy.FINAL_TAG,
+                FINAL_PAYLOAD_BLOBS,
+            )
+        blocks = [
+            freeze(),
+            friction("S1-0002", "#908", "fix-compatible"),
+            resolution("S1-0003", "#909", "S1-0002"),
+            work(
+                "S1-0004",
+                "#910",
+                FORMAL_WORK,
+                "formalization-or-blueprint",
+            ),
+            work("S1-0005", "#911", RMP_WORK, "rmp-benchmark"),
+            sign_off(
+                "S1-0006",
+                "#912",
+                ["S1-0004", "S1-0005"],
+            ),
+        ]
+        prepared_entries = parsed_entries(*blocks)
+        prepare_friction_observations(prepared_entries, facts)
+        prepare_resolution_facts(prepared_entries, facts)
+        return blocks, facts
+
+    resolution_signoff, resolution_signoff_facts = resolution_signoff_case(
+        release_merge=FREEZE_TIME + timedelta(seconds=8),
+        candidate_signoff=True,
+    )
+    resolution_signoff_status = validate(resolution_signoff, resolution_signoff_facts)
+    assert resolution_signoff_status == "sign-off-pending", resolution_signoff_status
+    prep_before_resolution, prep_before_resolution_facts = resolution_signoff_case(
+        release_merge=FREEZE_TIME + timedelta(seconds=3, microseconds=500_000),
+        candidate_signoff=True,
+    )
+    expect_failure(
+        lambda: validate(prep_before_resolution, prep_before_resolution_facts),
+        "release preparation merged before work or resolution evidence",
     )
 
     candidate = context()
@@ -2536,11 +2931,11 @@ def main() -> int:
     activation_subject_controls_coverage = context()
     activation_subject_controls_coverage.activation_diff = replace(
         activation_subject_controls_coverage.activation_diff,
-        subject_data_cannot_reduce_coverage=False,
+        subjects_cannot_supply_evidence_logic=False,
     )
     expect_failure(
         lambda: validate([freeze()], activation_subject_controls_coverage),
-        "subject data can reduce release-test coverage",
+        "activation subjects can supply evidence or coverage logic",
     )
     activation_unhermetic = context()
     activation_unhermetic.activation_diff = replace(
@@ -2585,7 +2980,7 @@ def main() -> int:
     bad_release_payload = context()
     bad_release_payload.payloads[(oid(9200), policy.FINAL_TAG)] = replace(
         bad_release_payload.payloads[(oid(9200), policy.FINAL_TAG)],
-        inventory_contract_valid=False,
+        inventory_exact_schema_valid=False,
     )
     assert (
         validate(complete_log(), bad_release_payload)
@@ -2615,7 +3010,7 @@ def main() -> int:
     undeclared_subject_data = context()
     undeclared_subject_data.payloads[(oid(9200), policy.FINAL_TAG)] = replace(
         undeclared_subject_data.payloads[(oid(9200), policy.FINAL_TAG)],
-        inventory_data_paths_within_mutable_roots=False,
+        inventory_subject_paths_within_subject_roots=False,
     )
     assert (
         validate(complete_log(), undeclared_subject_data)
@@ -2635,7 +3030,7 @@ def main() -> int:
     executable_from_subject = context()
     executable_from_subject.payloads[(oid(9200), policy.FINAL_TAG)] = replace(
         executable_from_subject.payloads[(oid(9200), policy.FINAL_TAG)],
-        executable_dependencies_within_code_tree=False,
+        executable_dependencies_within_harness_tree=False,
     )
     assert (
         validate(complete_log(), executable_from_subject)
@@ -2645,7 +3040,7 @@ def main() -> int:
     subject_reduces_coverage = context()
     subject_reduces_coverage.payloads[(oid(9200), policy.FINAL_TAG)] = replace(
         subject_reduces_coverage.payloads[(oid(9200), policy.FINAL_TAG)],
-        subject_data_cannot_reduce_coverage=False,
+        subjects_cannot_supply_evidence_logic=False,
     )
     assert (
         validate(complete_log(), subject_reduces_coverage)
@@ -3078,9 +3473,9 @@ def main() -> int:
         )
     reset_log = [
         freeze(),
-        friction("S1-0002", "#908", "breaking-required"),
+        friction("S1-0002", "#908", "restart-required"),
         correction("S1-0003", "#909", "S1-0002"),
-        reset("S1-0004", "#910", "breaking-required", "S1-0002"),
+        reset("S1-0004", "#910", "restart-required", "S1-0002"),
     ]
     assert validate(reset_log, reset_facts) == "reset"
 
@@ -3202,7 +3597,7 @@ def main() -> int:
         corrected_drift,
     ) == "reset"
 
-    # An already-pending breaking-required reset has priority at the drift
+    # An already-pending restart-required reset has priority at the drift
     # boundary; the administrative drift reset follows immediately after it.
     ordered_resets = context()
     add_record(
@@ -3226,15 +3621,15 @@ def main() -> int:
         910,
         FREEZE_TIME + timedelta(seconds=5),
     )
-    breaking_then_drift = [
+    restart_then_drift = [
         freeze(),
-        friction("S1-0002", "#908", "breaking-required"),
-        reset("S1-0003", "#909", "breaking-required", "S1-0002"),
+        friction("S1-0002", "#908", "restart-required"),
+        reset("S1-0003", "#909", "restart-required", "S1-0002"),
         reset("S1-0004", "#910", "record-invalid", "S1-0001"),
     ]
     assert (
         validate(
-            breaking_then_drift[:3],
+            restart_then_drift[:3],
             ordered_resets,
             audit=audit_evidence(
                 "S1-0003",
@@ -3244,7 +3639,7 @@ def main() -> int:
         )
         == "reset-required:S1-0001"
     )
-    assert validate(breaking_then_drift, ordered_resets) == "reset"
+    assert validate(restart_then_drift, ordered_resets) == "reset"
 
     batched_drift = context()
     add_record(
@@ -3480,9 +3875,9 @@ def main() -> int:
             "reset",
             [
                 freeze(),
-                friction("S1-0002", "#908", "breaking-required"),
-                reset("S1-0003", "#909", "breaking-required", "S1-0002"),
-                reset("S1-0004", "#910", "breaking-required", "S1-0002"),
+                friction("S1-0002", "#908", "restart-required"),
+                reset("S1-0003", "#909", "restart-required", "S1-0002"),
+                reset("S1-0004", "#910", "restart-required", "S1-0002"),
                 reset("S1-0005", "#911", "record-invalid", "S1-0003"),
             ],
             "S1-0003",
@@ -3633,11 +4028,11 @@ def main() -> int:
     stale_patch.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
     stale_patch.tags["tenkz-v0.9.0"] = replace(
         stale_patch.tags["tenkz-v0.9.0"],
-        patch_exceeds_other_namespace_tags=False,
+        candidate_patch_exceeds_current_namespace=False,
     )
     expect_failure(
         lambda: validate([freeze()], stale_patch),
-        "PATCH does not exceed abandoned tags",
+        "candidate PATCH does not exceed the current namespace",
     )
 
     mixed_record = context()
@@ -3748,8 +4143,8 @@ def main() -> int:
     )
     historical_log = [
         freeze(),
-        friction("S1-0002", "#908", "breaking-required"),
-        reset("S1-0003", "#909", "breaking-required", "S1-0002"),
+        friction("S1-0002", "#908", "restart-required"),
+        reset("S1-0003", "#909", "restart-required", "S1-0002"),
         correction("S1-0004", "#910", "S1-0001", attempt=1),
         reset("S1-0005", "#911", "record-invalid", "S1-0004", attempt=1),
         freeze(
