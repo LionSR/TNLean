@@ -206,6 +206,20 @@ lifetime.  The alternative execution form must begin exactly
 `executes at the <milestone> freeze`.  Prose outside such a row is not a
 machine-readable verdict.
 
+## Compatibility policy and 1.0 soak
+
+`DESIGN.md` owns package and event-stream compatibility. `SOAK-1.0.md` is an
+append-only ledger: never edit or insert before its final marker. Validate the
+policy, entry grammar, and immutable prefix with:
+
+```sh
+python3 scripts/test_check_tenkz_policy.py
+python3 scripts/check_tenkz_policy.py --base-ref origin/main
+```
+
+The first actual soak entry waits until the blocker chain recorded in the
+policy has closed. Running these checks does not start the clock.
+
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
