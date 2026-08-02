@@ -55,8 +55,9 @@ ratchet review.
 
 The reviewed dimension inventory is
 `tests/tenkz/rmp/dimension-ownership.json`. It records each normalized literal
-by path, semantic site, and owner, rejecting additions, removals, balanced
-replacements, and cross-site moves until the reviewed inventory changes too.
+by path, owner, command or option occurrence, and dimension position. This
+rejects additions, removals, balanced replacements, and moves between two
+otherwise identical command kinds until the reviewed inventory changes too.
 After reviewing an intentional dimension change, regenerate it with
 `python3 scripts/update_tenkz_dimension_inventory.py` and include the inventory
 diff in the same pull request.

@@ -417,6 +417,16 @@ def test_rmp_dimension_ownership() -> None:
     )
     if case_dimension_inventory(normalized_a) != case_dimension_inventory(normalized_b):
         raise AssertionError("dimension inventory depends on whitespace or line number")
+    relocated_a = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnjoin{19mm,0mm}{1mm,2mm}\tnjoin{3mm,4mm}{19mm,5mm}",
+    )
+    relocated_b = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnjoin{3mm,0mm}{1mm,2mm}\tnjoin{19mm,4mm}{19mm,5mm}",
+    )
+    if case_dimension_inventory(relocated_a) == case_dimension_inventory(relocated_b):
+        raise AssertionError("cross-command dimension relocation escaped the inventory")
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
         (

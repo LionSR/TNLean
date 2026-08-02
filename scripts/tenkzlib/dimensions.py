@@ -132,7 +132,7 @@ def _skip_space(source: str, position: int) -> int:
 
 def _command_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
-    for command in _COMMAND_RE.finditer(source):
+    for ordinal, command in enumerate(_COMMAND_RE.finditer(source), start=1):
         position = _skip_space(source, command.end())
         if source[position : position + 1] == "[":
             closed = match_group(source, position, "[", "]")
@@ -149,7 +149,7 @@ def _command_spans(source: str) -> list[_OwnerSpan]:
                 command.start(),
                 position,
                 _COMMAND_OWNERS[command.group(1)],
-                f"command:{command.group(1)}",
+                f"command:{command.group(1)}:{ordinal}",
             )
         )
     return spans
@@ -183,7 +183,7 @@ def _option_value_end(source: str, position: int) -> int:
 
 def _option_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
-    for option in _OPTION_OWNER_RE.finditer(source):
+    for ordinal, option in enumerate(_OPTION_OWNER_RE.finditer(source), start=1):
         key = re.sub(r"\s+", " ", option.group("key").lower())
         owner = (
             DimensionOwner.FRAME if key in _FRAME_KEYS else DimensionOwner.METRIC
@@ -193,7 +193,7 @@ def _option_spans(source: str) -> list[_OwnerSpan]:
                 option.end(),
                 _option_value_end(source, option.end()),
                 owner,
-                f"option:{key}",
+                f"option:{key}:{ordinal}",
             )
         )
     return spans
@@ -259,6 +259,7 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     owner_spans.sort(key=lambda span: span.end - span.start)
     comments = _comment_ranges(source)
     occurrences: list[DimensionOccurrence] = []
+    site_counts: Counter[str] = Counter()
     for match in DIMENSION_RE.finditer(source):
         comment_range = next(
             (span for span in comments if span[0] <= match.start() < span[1]),
@@ -285,7 +286,13 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
                 None,
             )
             owner = None if owner_span is None else owner_span.owner
-            site = None if owner_span is None else owner_span.site
+            if owner_span is None:
+                site = None
+            else:
+                site_counts[owner_span.site] += 1
+                site = (
+                    f"{owner_span.site}:dimension:{site_counts[owner_span.site]}"
+                )
             in_comment = False
         occurrences.append(
             DimensionOccurrence(
