@@ -15,8 +15,9 @@ CI wiring, closed release-test inventory, and active tag-protection ruleset. Its
 complete diff is restricted to the seven activation scalars defined in
 `SOAK-1.0.md`: the two enforcement values, inventory digest, test-code tree,
 test-support tree, policy digest, and its own pull-request reference. This pins
-the inventory, test implementation and acceptance data, policy, and ledger
-prefix without allowing activation to replace any of them. A later
+the inventory, test implementation and acceptance data, enforcement workflow,
+policy, and ledger prefix without allowing activation to replace any of them.
+A later
 self-referential freeze-entry pull request supplies the trusted attempt-ordering
 anchor.
 
@@ -58,6 +59,7 @@ release_test_code_tree = "pending"
 release_test_support_root = "tests/tenkz/release-support"
 release_test_support_tree = "pending"
 release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
+release_enforcement_workflows = [".github/workflows/pr-ci.yml"]
 release_test_dependency_contract = "pinned-code-support-declared-subject-data"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
@@ -222,6 +224,16 @@ manifest and four canonical artifacts. The tests run through the single pinned
 protocol at the exact release head. This binds each payload to its tag and the
 1.0 preparation to the reviewed pull request.
 
+The closed enforcement-workflow list names regular Git blobs. Their exact blob
+OIDs and modes at the activation integration are pinned through the immutable
+`armed_by_pr` identity; they are not additional activation scalars. Every
+candidate and post-merge validation resolves that integration and requires the
+same blobs and modes at its exact validation target. A candidate diff touching
+one of these paths is invalid. A GitHub check result counts only when its exact
+head and executed workflow resolve to those pinned bytes. The independent
+evidence-supervisor result is still required; a workflow status cannot replace
+it. A missing, renamed, non-blob, or changed workflow fails closed.
+
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
 non-negative decimal integer and increases strictly between attempts. For each
 attempt, first merge the frozen source through a source pull request targeting
@@ -323,11 +335,16 @@ Interface friction is appended when found and triaged as `fix-compatible`,
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists
-and otherwise leaves the campaign inactive. When an audit's reset queue is
+and otherwise leaves the campaign inactive. A currently valid record-invalid
+reset acknowledges its target while that reset remains valid; an audit queues
+only invalid entries not already acknowledged by such a later reset. If the
+acknowledging reset itself becomes invalid, its target is uncovered and both
+defects require valid acknowledgements. When an audit's reset queue is
 nonempty, its head is the first new non-correction entry after the boundary. A
-pending breaking-required reset heads the queue; otherwise the earliest invalid
-target's record-invalid reset does. Remaining record-invalid resets follow in
-ledger order, consecutively apart from corrections. External drift may occur after
+pending breaking-required reset heads the queue; otherwise the earliest
+unacknowledged invalid target's record-invalid reset does. Remaining targets
+follow in ledger order, consecutively apart from corrections. External drift
+may occur after
 later historical entries already landed, so a reset need not be adjacent to its
 target. Ignoring historical corrections and administrative resets, the next
 freeze is attempt number one higher than the most recently opened attempt,

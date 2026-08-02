@@ -223,6 +223,11 @@ cannot change the checker, workflow, inventory, either pinned tree, policy
 prose, or any other byte.  A later self-referential freeze record validates the
 tag-derived 0.9 payload and supplies the verified attempt-ordering anchor.
 
+The policy's closed workflow list is pinned indirectly by the activation
+integration.  Every later candidate and post-merge check requires those exact
+workflow blobs and modes at its exact target, rejects a candidate diff touching
+them, and binds an accepted GitHub run to the pinned workflow bytes and head.
+
 Release-test code and imported or sourced helpers live under `scripts/`.
 Expected outputs, baselines, allowlists, thresholds, and other immutable
 acceptance configuration live under `tests/tenkz/release-support/`.  The closed
@@ -260,6 +265,10 @@ the exact annotated final tag is observed under current required protection.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
 never reopens the ledger.
+
+A valid `record-invalid` reset acknowledges its historical target, so the same
+failed fact is not queued forever.  If that reset later becomes invalid, its
+target is uncovered and both invalid records require later valid resets.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and

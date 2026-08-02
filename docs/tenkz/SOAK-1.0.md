@@ -40,8 +40,18 @@ review on `H` before merge. GitHub must then report the PR merged to `main`,
 with normalized `mergedBy` equal to that pinned identity and `armed_by_pr`
 naming the PR. Its integration tree must equal `H`'s tree. Only that
 post-validated head pins the inventory, test-code tree, test-support tree,
-policy, and prefix and arms the campaign. Every later validation rechecks their
-exact values and the current ruleset state.
+enforcement workflows, policy, and prefix and arms the campaign. Every later
+validation rechecks their exact values and the current ruleset state.
+
+The policy's closed enforcement-workflow list names regular Git blobs. Their
+exact blob OIDs and modes at the activation integration are pinned through
+`armed_by_pr`, not through another editable scalar. Every candidate and
+post-merge validation resolves that integration and requires the same blobs and
+modes at its exact target; its complete candidate diff may not touch those
+paths. A GitHub check result counts only when its exact head and executed
+workflow resolve to the pinned bytes. It cannot replace the independent
+evidence-supervisor result. A missing, renamed, non-blob, or changed workflow
+fails closed.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -71,9 +81,9 @@ release_tag = "tenkz-v1.0.0"
 The work count, class set, excluded paths, and one-class-per-pull-request rule
 are read from the exact `DESIGN.md` policy pinned by `policy_sha256`; this
 ledger schema does not duplicate them. Tag immutability and the release
-manifest, canonical-artifact, inventory, and runner configuration are likewise
-read only from that pinned policy, as are the maintainer identity and signer
-identity scheme.
+manifest, canonical-artifact, inventory, runner, and enforcement-workflow
+configuration are likewise read only from that pinned policy, as are the
+maintainer identity and signer identity scheme.
 
 Once armed, the normative blocks in `DESIGN.md` and this file have closed
 tables and field sets. Unknown tables or fields are rejected. Changing their
@@ -265,9 +275,24 @@ field, timestamp, or caller choice: it is the final live entry in the immutable
 ledger prefix at the start of a fail-closed validation against one complete
 current GitHub/Git snapshot and exact validation target. The resolver supplies
 a closed `AuditEvidence` value containing that `boundary_entry_id`, the
-ledger-ordered `invalid_entries`, and true `snapshot_complete` and
+ledger-ordered `invalid_entries` not already acknowledged as defined below, and
+true `snapshot_complete` and
 `validation_target_exact` flags. A caller cannot choose or weaken those fields.
 Historical entries already in that prefix remain replayable.
+
+First form the raw invalid set from current post-merge checks other than reset
+queue placement. Then scan the ledger in order with an initially empty set of
+acknowledged targets. At each `record-invalid` reset, derive the required queue
+head from earlier raw-invalid entries minus targets already acknowledged, with
+the pending-breaking priority below. The reset acknowledges its target only if
+it passes every other common, external, and kind-specific check and names that
+head. Otherwise the reset itself joins the raw invalid set and acknowledges
+nothing. `invalid_entries` is the resulting raw set minus the acknowledged
+targets. Thus a valid reset retires its target even while the failed external
+fact remains failed. If that reset later fails a current check, it no longer
+acknowledges the target; the target and reset remain independently eligible
+until later valid resets acknowledge them. This ordered scan is deterministic
+and does not use the final `invalid_entries` value as its own input.
 
 When the reset queue is nonempty, the first new non-correction entry after the
 boundary is its head. If a `breaking-required` reset was already pending at the
@@ -275,9 +300,8 @@ boundary, it heads the queue and closes the active attempt; otherwise the queue
 starts with the `record-invalid` reset for the earliest invalid entry. Remaining
 `record-invalid` targets follow in ledger order, consecutively while the
 campaign is inactive; corrections are the only entries that may interleave.
-Such a target is any merged entry that currently fails a required post-merge
-identity, ancestry, tree, diff, or ordering check, and may belong to any
-attempt. External facts may drift after later
+Such a target is any unacknowledged raw-invalid merged entry and may belong to
+any attempt. External facts may drift after later
 entries already landed; those intervening entries remain historical and do not
 make an adjacent reset possible. A record-invalid reset closes the active
 attempt if one remains and otherwise uses the most recently opened attempt
@@ -443,7 +467,9 @@ evidence is invalid. If an attempt is active, the reset uses and closes it. If
 none is active, it uses the most recently opened attempt and leaves the campaign
 inactive. In either case it occupies its required position in the audit
 batch's reset queue, not necessarily the position immediately following its
-historical target, and a correction cannot repair the cause.
+historical target, and a correction cannot repair the cause. Once this reset
+passes its own current post-merge validation, it acknowledges that target under
+the state-sequence rule and prevents the same defect from being queued forever.
 
 The next freeze has attempt number one higher than the most recently opened
 attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new
