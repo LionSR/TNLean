@@ -10,7 +10,7 @@ from tenkz_audit import Audit, same_equation
 
 
 GOOD_LOG = """\
-picture|id=k1|lang=kernel
+picture|id=k1|lang=kernel|scope=1
 wire|id=wire-1|from=addr-1|kind=string|name=a|to=addr-2
 wire|id=wire-2|cross=under at crossing of a and b|from=addr-3|kind=string|name=b|to=addr-4
 wire|id=wire-3|from=addr-5|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|route=arc|species=shift|to=addr-6
@@ -249,6 +249,166 @@ kernel-boundary|signature=phys:up
     assert "eq-boundary-mismatch" not in [
         finding.rule for finding in opted_out_equation.findings
     ]
+
+    undeclared_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=stale\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in undeclared_opt_out.findings
+    ]
+
+    surplus_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        "check|scope=1|relation=2|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}",
+            "check={signature, off={1: documented}}",
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in surplus_opt_out.findings
+    ]
+
+    duplicate_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        "check|scope=1|relation=1|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}",
+            "check={signature, off={1: documented}}",
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in duplicate_opt_out.findings
+    ]
+
+    duplicate_scope = audit_log(
+        "check|scope=1|scope=9|relation=1|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    duplicate_scope_rules = [finding.rule for finding in duplicate_scope.findings]
+    assert "malformed-event" in duplicate_scope_rules
+    assert "eq-boundary-mismatch" in duplicate_scope_rules
+
+    missing_result = audit_log(
+        "check|scope=1|relation=1\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    missing_result_rules = [finding.rule for finding in missing_result.findings]
+    assert "malformed-event" in missing_result_rules
+    assert "eq-boundary-mismatch" in missing_result_rules
+
+    for incomplete_check in (
+        "check|scope=1|relation=1|result=off\n",
+        "check|scope=1|relation=1|result=equal\n",
+        "check|scope=1|result=mismatch|reason=boundary\n",
+    ):
+        incomplete = audit_log(
+            incomplete_check
+            + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+            checked_equation_source.replace(
+                "check={signature, modulo=bundles}",
+                "check={signature, off={1: documented}}",
+            ),
+        )
+        incomplete_rules = [finding.rule for finding in incomplete.findings]
+        assert "malformed-event" in incomplete_rules
+        assert "eq-boundary-mismatch" in incomplete_rules
+
+    duplicate_result = audit_log(
+        "check|scope=1|relation=1|result=mismatch|result=equal\n"
+    )
+    duplicate_result_rules = [
+        finding.rule for finding in duplicate_result.findings
+    ]
+    assert "malformed-event" in duplicate_result_rules
+    assert "kernel-check" not in duplicate_result_rules
+
+    invalid_picture_scope = audit_log(
+        equation_log.replace(
+            "picture|id=k1|lang=kernel",
+            "picture|id=k1|lang=kernel|scope=9",
+        ).replace(
+            "picture|id=k2|lang=kernel",
+            "picture|id=k1|lang=kernel|scope=1|scope=9\n"
+            "picture|id=k2|lang=kernel|scope=1",
+        )
+        + "check|scope=1|relation=1|result=equal|signature=\n",
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    invalid_picture_rules = [
+        finding.rule for finding in invalid_picture_scope.findings
+    ]
+    assert "malformed-event" in invalid_picture_rules
+    assert "eq-boundary-mismatch" in invalid_picture_rules
+
+    for picture_reference in ("oops", "k1"):
+        picture_owned_check = audit_log(
+            f"check|picture={picture_reference}|scope=1|relation=1|"
+            "result=equal|signature=\n"
+            + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+            checked_equation_source.replace(
+                "check={signature, modulo=bundles}", "check={signature}"
+            ),
+        )
+        picture_owned_rules = [
+            finding.rule for finding in picture_owned_check.findings
+        ]
+        assert "malformed-event" in picture_owned_rules
+        assert "eq-boundary-mismatch" in picture_owned_rules
+
+    scoped_off_log = (
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
+    )
+    optionless_body_spoof = checked_equation_source.replace(
+        "[check={signature, modulo=bundles}]",
+        "\n$check={signature, off={1:\\mathrm{note}}}$",
+    )
+    body_off_spoof = checked_equation_source.replace(
+        "check={signature, modulo=bundles}]",
+        "check={signature}]\n$off={1:\\mathrm{note}}$",
+    )
+    nested_option_spoof = checked_equation_source.replace(
+        "check={signature, modulo=bundles}",
+        "frame={note={check={signature}, off={1: documented}}}",
+    )
+    for spoofed_source in (
+        optionless_body_spoof,
+        body_off_spoof,
+        nested_option_spoof,
+    ):
+        spoofed = audit_log(scoped_off_log, spoofed_source)
+        assert "eq-boundary-mismatch" in [
+            finding.rule for finding in spoofed.findings
+        ]
+
+    trailing_boundary = audit_log(
+        "picture|id=k1|lang=kernel|scope=1\n"
+        "atom|id=atom-1|kind=tn\n"
+        "kernel-boundary|signature=phys:up\n"
+        "picture|id=k2|lang=kernel|scope=1\n"
+        "atom|id=atom-1|kind=tn\n"
+        "check|scope=1|relation=1|result=equal|signature=phys:up\n"
+        "kernel-boundary|signature=phys:up\n",
+        checked_equation_source,
+    )
+    trailing_boundary_rules = [finding.rule for finding in trailing_boundary.findings]
+    assert "malformed-event" in trailing_boundary_rules
+    assert "kernel-check" in trailing_boundary_rules
 
     checkless_equation_source = (
         "\\begin{tenkzeq}[size=m]\n"

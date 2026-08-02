@@ -72,6 +72,9 @@
 \msg_new:nnn {tenkz}{kernel-equation-arity}
   { [TKZ-EQ-ARITY]~an~equation~with~#1~panel(s)~has~#2~relation~glyph(s);~
     expected~one~fewer~relation~than~panels~and~at~least~two~panels. }
+\msg_new:nnn {tenkz}{kernel-equation-nested}
+  { [TKZ-EQ-NESTED]~tenkzeq~cannot~be~nested;~each~equation~is~one~
+    audit~scope,~and~the~tngroup~command~nests~picture~content. }
 \msg_new:nnn {tenkz}{kernel-cellset}
   { [TKZ-LANG-CELLSET]~#1=#2~is~not~a~cell-set~of~
     (interface,column)~terms~(record~#3). }
@@ -13269,6 +13272,8 @@
 % per glyph, and the audit compares adjacent panels per relation.
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
+    \bool_if:NT \l__tenkz_kernel_ineq_bool
+      { \msg_fatal:nn {tenkz}{kernel-equation-nested} }
     \group_begin:
     \int_gincr:N \g__tenkz_kernel_eq_scope_int
     \bool_set_true:N \l__tenkz_kernel_ineq_bool

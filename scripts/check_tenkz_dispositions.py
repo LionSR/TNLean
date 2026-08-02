@@ -12,7 +12,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tenkzlib.texcase import Construct, match_group, scan_constructs, strip_comments
+from tenkzlib.texcase import (
+    Construct,
+    following_group,
+    following_group_span,
+    match_group,
+    scan_constructs,
+    strip_comments,
+    top_level_options,
+)
 from tenkz_language import load_registry
 
 
@@ -177,59 +185,6 @@ def normalized_environment_spacing(source: str) -> str:
         return rf"\{match.group(1)}{{{match.group(4)}}}" + whitespace
 
     return pattern.sub(replace, source)
-
-
-def top_level_options(options: str) -> list[tuple[str, str | None]]:
-    """Parse one comma-separated option group without splitting nested values."""
-    start = 0
-    depths = {"{": 0, "[": 0, "(": 0}
-    closing = {"}": "{", "]": "[", ")": "("}
-    parts: list[str] = []
-    index = 0
-    while index < len(options):
-        character = options[index]
-        if character == "\\":
-            index += 2
-            continue
-        if character in depths:
-            depths[character] += 1
-        elif character in closing:
-            opener = closing[character]
-            depths[opener] = max(0, depths[opener] - 1)
-        elif character == "," and not any(depths.values()):
-            parts.append(options[start:index])
-            start = index + 1
-        index += 1
-    parts.append(options[start:])
-    result: list[tuple[str, str | None]] = []
-    for part in parts:
-        key, separator, value = part.partition("=")
-        key = re.sub(r"\s+", " ", key.strip())
-        if key:
-            result.append((key, value.strip() if separator else None))
-    return result
-
-
-def following_group_span(
-    source: str, position: int, opener: str, closer: str
-) -> tuple[str, int] | None:
-    """Return a following group's contents and ending offset."""
-    while position < len(source) and source[position].isspace():
-        position += 1
-    if source[position : position + 1] != opener:
-        return None
-    end = match_group(source, position, opener, closer)
-    if end == -1:
-        return None
-    return source[position + 1 : end - 1], end
-
-
-def following_group(
-    source: str, position: int, opener: str, closer: str
-) -> str | None:
-    """Return the contents of a group following optional whitespace."""
-    group = following_group_span(source, position, opener, closer)
-    return group[0] if group is not None else None
 
 
 def encountered_option_groups(source: str) -> list[tuple[str, str]]:
