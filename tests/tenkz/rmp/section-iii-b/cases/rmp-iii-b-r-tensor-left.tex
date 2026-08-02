@@ -19,40 +19,51 @@
     \tn[at=(3,1), name=v, ports={90:physical}]{}
     \tnwire[name=iphys]{i.90}{open n}
     \tnwire[name=vphys]{v.90}{open n}
-    % String tensors own named virtual faces on the black rails: three on the
-    % lower rail and four ringing the anyon.  Their placement uses only the
-    % plane basis and named-address constructions.
-    \tn[at=(3,2), name=bL, role=extra, label pos=s,
-      ports={0:virtual,180:virtual}]{b}
-    \tn[at=(3,3), name=bR, role=extra, label pos=se,
-      ports={0:virtual,180:virtual}]{b}
-    \tn[at=midway bL and bR, name=aa, role=marked, label pos=sw,
-      ports={0:virtual,180:virtual}]{a}
+    % The seven string tensors own separate lattice and operator ports.  Their
+    % named placements use only the plane frame's relative-address grammar.
+    \tn[at=1 e of v, name=bL, role=extra, label pos=s,
+      ports={0:virtual,60:virtual,180:virtual,270:virtual}]{b}
+    \tn[at=1.5 e of v, name=aa, role=marked, label pos=s,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{a}
+    \tn[at=2 e of v, name=bR, role=extra, label pos=s,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{b}
     \tn[at=midway i and v, name=rS, role=extra,
-      ports={45:virtual,225:virtual}]{}
-    \tn[at=midway (1,1) and i, name=rW, role=extra,
-      ports={0:virtual,180:virtual}]{}
-    \tn[at=midway i and 1 n of 1 e of i, name=rN, role=extra,
-      ports={45:virtual,225:virtual}]{}
-    \tn[at=midway i and (1,3), name=rE, role=extra, label pos=ne,
-      ports={0:virtual,180:virtual}]{b}
-    % Two horizontal rails and the diagonal transversal terminate on those
-    % faces, so every black contraction belongs to the semantic graph.
+      ports={30:virtual,90:virtual,210:virtual,240:virtual}]{}
+    \tn[at=0.5 w of i, name=rW, role=extra,
+      ports={0:virtual,45:virtual,180:virtual,270:virtual}]{}
+    \tn[at=0.7 ne of i, name=rN, role=extra,
+      ports={45:virtual,180:virtual,225:virtual,270:virtual}]{}
+    \tn[at=1 e of i, name=rE, role=extra, label pos=ne,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{b}
+    % Each black carrier terminates on the two lattice-facing ports.
     \tnwire{open w}{rW.180} \tnwire{rW.0}{i.w}
     \tnwire{i.e}{rE.180} \tnwire{rE.0}{open e}
     \tnwire{open w}{v.w} \tnwire{v.e}{bL.180}
     \tnwire{bL.0}{aa.180} \tnwire{aa.0}{bR.180}
     \tnwire{bR.0}{open e}
     \tnwire{i.45}{rN.225} \tnwire{rN.45}{open ne}
-    \tnwire{i.225}{rS.45} \tnwire{rS.225}{v.45}
+    \tnwire{i.225}{rS.30} \tnwire{rS.210}{v.45}
     \tnwire{v.225}{open sw}
-    % the b string winds once around the anyon, passing under its physical leg
-    \tnwire[kind=string, species=operator, name=s,
-            via={bL, rS, rW, midway i and rN, rN, rE, bR},
-            cross={under at crossing of s and iphys}]
-           {1 s of bL}{1 s of bR}
-    % The i string lands on the a station before continuing below the rail.
-    \tnwire[kind=string, species=operator, name=t,
-            via={aa}]{i.315}{open s}
+    % The b string is a chain of port-owned segments.  Only the segment from
+    % rW to rN crosses the physical leg, with the source's under-order.
+    \tnwire[kind=string, species=operator, name=s-in]
+      {open s}{bL.270}
+    \tnwire[kind=string, species=operator, name=s-bL-rS]
+      {bL.60}{rS.240}
+    \tnwire[kind=string, species=operator, name=s-rS-rW]
+      {rS.90}{rW.270}
+    \tnwire[kind=string, species=operator, name=s-rW-rN,
+      via={midway i and rN},
+      cross={under at crossing of s-rW-rN and iphys}]
+      {rW.45}{rN.180}
+    \tnwire[kind=string, species=operator, name=s-rN-rE]
+      {rN.270}{rE.90}
+    \tnwire[kind=string, species=operator, name=s-rE-bR]
+      {rE.270}{bR.90}
+    \tnwire[kind=string, species=operator, name=s-out]
+      {bR.270}{open s}
+    % The i string terminates on both operator-facing ports of a.
+    \tnwire[kind=string, species=operator, name=t-in]{i.315}{aa.90}
+    \tnwire[kind=string, species=operator, name=t-out]{aa.270}{open s}
   \end{tenkz}
 \]
