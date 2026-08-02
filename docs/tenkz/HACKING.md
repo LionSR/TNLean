@@ -515,6 +515,31 @@ python3 scripts/test_tenkz_enclosures.py
 Run the focused test while iterating, then the affected corpus or benchmark
 section, then the repository gates appropriate to the change.
 
+### RMP dimension inventory
+
+The RMP driver applies two dimension checks before compiling any target.  The
+aggregate ownership ratchets reject increases, unowned or commented case
+dimensions, and benchmark-book allowlist drift.  The version-2 inventory in
+`tests/tenkz/rmp/dimension-ownership.json` additionally freezes every active
+literal at its semantic owner site.  Its per-case rows use the containing
+environment ordinal and a whitespace- and comment-independent command or
+option skeleton.  Only repeated identical skeletons receive a local
+occurrence number.  This catches a balanced replacement or cross-site move
+that leaves all aggregate counts unchanged.
+
+After an intentional, reviewed migration, update that exact inventory with:
+
+```sh
+python3 scripts/update_tenkz_dimension_inventory.py
+python3 scripts/test_tenkz_dimension_inventory.py
+```
+
+The updater runs the aggregate ceilings before writing, rejects a malformed
+old inventory, prints the site-level diff and the case/site/dimension totals,
+and is byte-idempotent.  Do not edit the inventory to make an unexplained
+movement pass.  Comment literals and the benchmark-book layout allowlist stay
+under their existing orthogonal ratchets and never appear in these case rows.
+
 ## Historical design records
 
 Superseded design proposals, migration inventories, reviews, and 0.6

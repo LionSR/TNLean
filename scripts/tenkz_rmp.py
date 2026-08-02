@@ -24,12 +24,11 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-from tenkzlib.dimensions import (
-    DimensionOwnershipError,
-    collect_dimension_report,
-    format_dimension_report,
-    validate_dimension_report,
+from tenkzlib.dimension_inventory import (
+    DimensionInventoryError,
+    validate_rmp_dimension_gate,
 )
+from tenkzlib.dimensions import DimensionOwnershipError, format_dimension_report
 from tenkzlib.texcase import strip_comments
 from tenkzlib.tnlog import ParsedLog, parse_log
 
@@ -1886,12 +1885,10 @@ def main() -> int:
     try:
         manifest = Path(os.environ.get("TENKZ_RMP_MANIFEST", DEFAULT_MANIFEST))
         targets = load_manifest(manifest)
+        case_paths = tuple(target.case for target in targets)
         try:
-            dimension_report = collect_dimension_report(
-                REPO, (target.case for target in targets)
-            )
-            validate_dimension_report(dimension_report)
-        except DimensionOwnershipError as exc:
+            dimension_report = validate_rmp_dimension_gate(REPO, case_paths)
+        except (DimensionInventoryError, DimensionOwnershipError) as exc:
             fail(f"RMP dimension ownership failed:\n{exc}")
         print(f"PASS: {format_dimension_report(dimension_report)}")
         selected = select_targets(targets, args)
