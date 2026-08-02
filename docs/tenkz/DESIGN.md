@@ -40,6 +40,7 @@ frozen_twin_lifetime = "permanent"
 frozen_twin_precedent = "quantikz/quantikz2"
 maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
+release_manifest = "docs/tenkz/RELEASE-1.0.toml"
 
 [event_format]
 reader_accepts = "same-major-any-minor"
@@ -188,6 +189,14 @@ date, manual version, change record, event-format declaration, and
 compatibility tests all agree with the tag. A moved or reused release tag is
 invalid.
 
+The final release-preparation pull request creates the policy-pinned release
+manifest. The manifest names the package metadata, manual version, change
+record, event-format declaration, and compatibility-test paths in its bound
+tree. Its immutable pull-request diff must change the manifest and every named
+release-varying artifact; pre-existing tests may remain unchanged but must be
+named and pass at the exact release head. This binds the prepared payload to
+the reviewed pull request instead of accepting state landed by another route.
+
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
 non-negative decimal integer and increases strictly between attempts. For each
 attempt, first merge the frozen source through a source pull request targeting
@@ -229,15 +238,18 @@ The final `tenkz-v1.0.0` annotated tag is created only after the self-referentia
 sign-off record has landed on `main` and passed post-merge validation. A
 separate release-preparation pull request first lands the 1.0
 `\ProvidesPackage` metadata, manual version, change record, event-format
-declaration, and compatibility tests. The sign-off record pull request then
-changes only its ledger append, so its exact approved final head carries that
-prepared state and the sign-off entry without mixing evidence and
-implementation. GitHub supplies the record pull request's integration commit,
-whose Git tree must equal that approved head's tree. The final tag points to
-that integration commit. Sign-off records the intended release tag but cannot
-require that tag to exist yet; requiring it earlier would make the ledger and
-tag circular. A tree mismatch requires a `record-invalid` reset and forbids
-the tag.
+declaration, and compatibility tests. The sign-off entry names that PR;
+GitHub/Git evidence binds its exact approved head, complete diff, integration
+tree, merge time, and ancestry after both work integrations. The sign-off record
+pull request then changes only its ledger append, so its exact approved final
+head carries that prepared state and the sign-off entry without mixing evidence
+and implementation. Both its candidate target and final integration must
+descend from the release preparation and the two work integrations. GitHub
+supplies the record pull request's integration commit, whose Git tree must equal
+that approved head's tree. The final tag points to that integration commit.
+Sign-off records the intended release tag but cannot require that tag to exist
+yet; requiring it earlier would make the ledger and tag circular. A tree or
+ancestry mismatch requires a `record-invalid` reset and forbids the tag.
 
 ## The 1.0 freeze and evidence gate
 
@@ -256,8 +268,10 @@ The dependency chain is ordered:
    attempt at GitHub's verified merge time `T`;
 6. merge two distinct qualifying real-work pull requests after `T`: one in the
    `formalization-or-blueprint` class and one in the `rmp-benchmark` class;
-7. merge and post-merge validate the independently approved sign-off record,
-   then create `tenkz-v1.0.0` on its integration commit.
+7. merge an independently exact-head-approved release-preparation pull request
+   descending from both work integrations, then merge and post-merge validate
+   the independently approved sign-off record and create `tenkz-v1.0.0` on its
+   integration commit.
 
 Every prerequisite must be closed, with GitHub `closedAt <= T`. Each qualifying
 work pull request must be merged to `main` strictly after `T`. Its integration
@@ -280,7 +294,10 @@ earlier externally invalid entry; it closes the active attempt when one exists
 and otherwise leaves the campaign inactive. It is the first new non-correction
 entry appended after the invalidity is detected; external drift may occur after
 later historical entries already landed, so the reset need not be adjacent to
-its target. Ignoring historical corrections and administrative resets, the
+its target. A detection batch orders invalid targets by ledger position. If a
+breaking-required reset was already pending at that boundary, it lands first;
+the record-invalid resets then land consecutively in that order, apart from
+corrections. Ignoring historical corrections and administrative resets, the
 next freeze is attempt number one higher than the most recently opened attempt,
 with a strictly larger `PATCH`, a new source pull request and SHA, a new
 annotated tag and object, and a new freeze record.
@@ -292,9 +309,16 @@ The sign-off entry's `record_pr` is its own pull request. GitHub's `mergedAt`
 is the sign-off time and must be later than both qualifying work merges;
 normalized `mergedBy` must be `github:lionsr`. The named, distinct reviewer's
 latest effective review must be `APPROVED` on the exact final head, submitted
-after the later qualifying work merge and before sign-off merge. The sign-off
-may proceed immediately once those ordered facts hold. It also requires one
-qualifying work entry in each class, no unresolved fix-compatible friction, and
-no condition requiring reset. No entry follows a successfully validated
-sign-off. The exact entry grammar, state transitions, external-fact rules, and
-reset rules live in `SOAK-1.0.md`.
+after the later qualifying work merge and the named release-preparation merge,
+and before sign-off merge. The sign-off head and integration must descend from
+all three integrations. The sign-off may proceed immediately once those ordered
+facts hold. It also requires one qualifying work entry in each class, no
+unresolved fix-compatible friction, and no condition requiring reset. No entry
+follows a successfully validated sign-off. A validated sign-off first enters
+`signed-off-awaiting-tag`; mutable evidence remains live until the exact
+annotated final tag is observed on its integration. That observation enters
+terminal `released` state. Later review, issue, or pull-request drift does not
+reopen the campaign. A final tag that is created wrong, or is later missing,
+moved, or replaced, is a hard release incident and is never repaired by moving
+or reusing the name. The exact entry grammar, state transitions, external-fact
+rules, and reset rules live in `SOAK-1.0.md`.

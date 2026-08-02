@@ -91,23 +91,25 @@ The `record_pr` targets `main`, is in this repository, and first introduces
 exactly this one entry: its base lacks the entry and its exact final
 `headRefOid` appends the complete block. Let `H` be that exact head, `C` the
 target `main` tip used by candidate validation, and `B` the unique Git merge
-base of `H` and `C`. The complete `B`-to-`H` path set and diff must be exactly
-that one append to `docs/tenkz/SOAK-1.0.md`: no other file, pinned byte, or live
-entry changes. GitHub's normalized `record_pr.author.login` must be a valid
-lowercase login; authorship is not copied into a self-declared entry field.
-Candidate validation must run on that declared pull request at `H`; copying
-the block into another pull request is invalid. Before merge it reports the
-kind-specific pending state because the integration facts do not yet exist.
+base of `H` and `C`. `C` must be an ancestor of `H`, hence `B = C`. The complete
+`C`-to-`H` path set and diff must be exactly that one append to
+`docs/tenkz/SOAK-1.0.md`: no other file, pinned byte, or live entry changes.
+GitHub's normalized `record_pr.author.login` must be a valid lowercase login;
+authorship is not copied into a self-declared entry field. Candidate validation
+must run on that declared pull request at `H`; copying the block into another
+pull request is invalid. Before merge it reports the kind-specific pending
+state because the integration facts do not yet exist.
 
 After merge, GitHub must report `record_pr` merged to `main` with non-null
 `mergedAt` and `mergeCommit.oid`. Let `I` be that integration commit and `P`
 its sole parent for a one-parent integration or first parent for a two-parent
 integration. Zero or more than two parents, a missing object, or a missing or
-ambiguous merge base fails closed. Recompute `B` as the unique merge base of
-`H` and `P` and revalidate the complete ledger-only `B`-to-`H` diff. `I` must
-be reachable from `main`, and its Git tree must equal `H`'s tree. These common
-post-merge rules apply to every entry kind; the kind-specific rules add their
-ancestry and ordering predicates.
+ambiguous merge base fails closed. `P` must be an ancestor of `H`, hence the
+recomputed `B = P`; for a two-parent integration, the second parent must equal
+`H`. Revalidate the complete ledger-only `P`-to-`H` diff. `I` must be reachable
+from `main`, and its Git tree must equal `H`'s tree. These common post-merge
+rules apply to every entry kind; the kind-specific rules add their ancestry and
+ordering predicates.
 
 For each kind, the common fields plus that kind's fields below are the exact
 allowed set. Missing required fields, fields belonging to another kind,
@@ -150,14 +152,19 @@ a sign-off while that sign-off remains successfully validated.
 Each attempt has exactly one opening freeze. If a merged entry fails a required
 post-merge identity, ancestry, tree, diff, or ordering check, a `reset` entry
 with `cause = "record-invalid"` is the first new non-correction record appended
-after detection. Its target may belong to any attempt. External facts may drift
-after later entries already landed; those intervening entries remain historical
-and do not make an adjacent reset possible. If an attempt is active, the reset
-uses and closes that attempt. If none is active, it uses the most recently
-opened attempt and leaves the campaign inactive. Until that reset lands, no new
-work, freeze, or sign-off can validate. The next freeze is numbered one higher
-than the most recently opened attempt, independent of how many administrative
-resets landed.
+after detection. A single audit may detect multiple invalid entries; their
+targets are reset in ledger order. If a `breaking-required` reset was already
+pending at that detection boundary, it lands first and closes the active
+attempt. The required `record-invalid` resets follow consecutively while the
+campaign is inactive; corrections are the only entries that may interleave.
+Their targets may belong to any attempt. External facts may drift after later
+entries already landed; those intervening entries remain historical and do not
+make an adjacent reset possible. A record-invalid reset closes the active
+attempt if one remains and otherwise uses the most recently opened attempt
+while leaving the campaign inactive. Until the ordered reset queue is empty,
+no work, freeze, or sign-off can validate. The next freeze is numbered one
+higher than the most recently opened attempt, independent of how many
+administrative resets landed.
 
 ## Entry kinds
 
@@ -225,8 +232,9 @@ Let `H = work_pr.headRefOid` and `I = work_pr.mergeCommit.oid`, as reported by
 GitHub. Let `P` be `I`'s sole parent for a one-parent integration or its first
 parent for a two-parent integration, and let `B` be the unique Git merge base
 of `H` and `P`. A missing object, zero or more than two integration parents, or
-a missing or ambiguous merge base fails closed. The work qualifies exactly
-when all of these predicates hold:
+a missing or ambiguous merge base fails closed. `P` must be an ancestor of
+`H`, hence `B = P`; for a two-parent integration, the second parent must equal
+`H`. The work qualifies exactly when all of these predicates hold:
 
 - GitHub reports `work_pr` merged to `main`, with non-null final
   `headRefOid`, `mergedAt`, and `mergeCommit.oid`.
@@ -291,9 +299,9 @@ For `cause = "record-invalid"`, `target` names any earlier entry whose externall
 verified identity, history, ancestry, tree, complete record diff, or ordering
 evidence is invalid. If an attempt is active, the reset uses and closes it. If
 none is active, it uses the most recently opened attempt and leaves the campaign
-inactive. In either case the reset is the first new non-correction entry after
-detection, not necessarily the entry immediately following its historical
-target, and a correction cannot repair the cause.
+inactive. In either case it occupies its required position in the detection
+batch's reset queue, not necessarily the position immediately following its
+historical target, and a correction cannot repair the cause.
 
 The next freeze has attempt number one higher than the most recently opened
 attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new
@@ -320,6 +328,7 @@ Required additional fields:
 |---|---|
 | `freeze` | `entry-ref` |
 | `source_sha` | `sha` |
+| `release_prep_pr` | `pr-ref` |
 | `release_tag` | `tag`, exactly `tenkz-v1.0.0` |
 | `reviewer` | `identity` |
 | `work_evidence` | `list[entry-ref]` |
@@ -331,26 +340,58 @@ contains exactly the active attempt's two work-entry IDs: one
 fills only its recorded class, and the work-entry rules make the referenced
 work PRs distinct. Values are entry references, not pull-request references.
 
-The sign-off's `record_pr` is the sign-off pull request. A separate
-release-preparation pull request must already have landed the 1.0 package
-metadata, manual version, change record, event-format declaration,
-compatibility tests, and no ledger entry. The record pull request changes only
-the sign-off append under the common rule. Let `H` be its exact final
-`headRefOid`. Candidate CI validates `H` and reports `sign-off-pending`; it
-cannot invent the future merge time or integration commit. That approved head
-therefore carries the prepared release state and this sign-off entry.
+Let `R` be the `release_prep_pr` named by the entry, with exact final head `H_R`,
+integration `I_R`, and integration parent `P_R` defined as for a work PR. `R`
+must be distinct from the activation PR, every source, work, and entry-record
+PR, and must satisfy all of these externally checked predicates:
+
+- GitHub reports `R` merged to `main` after both named work PRs, with non-null
+  `headRefOid`, `mergedAt`, and `mergeCommit.oid`.
+- `I_R` is reachable from `main`, is a strict descendant of both named work
+  integrations, and has the same tree as `H_R`.
+- `P_R` is an ancestor of `H_R`; the unique merge base equals `P_R`; and a
+  two-parent integration's second parent equals `H_R`.
+- The complete immutable `P_R`-to-`H_R` diff is nonempty, changes neither
+  policy document, and contains no ledger entry.
+- A reviewer distinct from `R`'s author has a latest effective `APPROVED`
+  review on `H_R`, submitted before `R.mergedAt`.
+- The release-payload validator checks the tree and complete diff of `H_R`, not
+  entry prose. The diff creates the policy-pinned release manifest and changes
+  every release-varying artifact named by it. The manifest is a closed TOML
+  document with one `[release]` table and exactly the scalar fields `tag`,
+  `version`, `date`, `package_metadata`, `manual_version`, `change_record`, and
+  `event_format`, plus the nonempty string list `compatibility_tests`. `tag` is
+  `tenkz-v1.0.0`, `version` is `1.0.0`, and `date` is an ISO 8601 calendar date.
+  All paths are distinct normalized repository-relative paths, name regular
+  files in `H_R`, and name neither policy document nor the ledger. The four
+  release-varying artifact paths and the manifest itself must occur in the
+  immutable diff; test paths may pre-exist. In `P_R`, the manifest is absent
+  and each release-varying artifact lacks or differs from its final declaration;
+  in `H_R`, the package and manual declare version 1.0.0 and the same release
+  date, all named artifacts agree with `tenkz-v1.0.0`, and every named test
+  passes.
+
+The sign-off's `record_pr` is the sign-off pull request. It changes only the
+sign-off append under the common rule. Let `H` be its exact final `headRefOid`.
+The current target tip `C` and `H` must descend from `I_R` and both work
+integrations. Candidate CI validates those facts at `H` and reports
+`sign-off-pending`; it cannot invent the future merge time or integration
+commit. That approved head therefore carries the externally bound release
+preparation and this sign-off entry.
 
 After merge, GitHub must report that `record_pr` targeted `main`. Let
-`I = record_pr.mergeCommit.oid`; `I` must descend from the active freeze
-integration, and the Git tree of `I` must equal the Git tree of the approved
-`H`. Let `W` be the latest GitHub `mergedAt` among the work PRs named by
-`work_evidence`. GitHub's `record_pr.mergedAt` must be later than `W`, and
-normalized `mergedBy` must be `github:lionsr`. The entry's reviewer is distinct
-from that maintainer and from the normalized record-PR author. That reviewer's
-latest effective review must be `APPROVED` on `H`, with `submittedAt > W` and
-`submittedAt < record_pr.mergedAt`. There is no further waiting interval:
-sign-off can proceed as soon as the class coverage, independent exact-head
-approval, and all other predicates hold.
+`I = record_pr.mergeCommit.oid`; `I` must be a strict descendant of `I_R`, both
+named work integrations, and the active freeze integration, and the Git tree
+of `I` must equal the Git tree of the approved `H`. Let `W` be the latest
+GitHub `mergedAt` among the work PRs named by `work_evidence`. GitHub's
+`record_pr.mergedAt` must be later than both `W` and `R.mergedAt`, and normalized
+`mergedBy` must be `github:lionsr`. The entry's reviewer is distinct from that
+maintainer and from the normalized record-PR author. That reviewer's latest
+effective review must be `APPROVED` on `H`, with `submittedAt` later than both
+`W` and `R.mergedAt` and earlier than `record_pr.mergedAt`. There is no further
+waiting interval: sign-off can proceed as soon as the class coverage,
+independent exact-head approvals, release preparation, and all other predicates
+hold.
 
 All compatible friction must be resolved, every work predicate must still
 hold, and no condition may require a reset. Post-merge validation also
@@ -362,9 +403,20 @@ prerequisite, moved or replaced tag, changed source fact, or pinned-byte
 mismatch requires a `record-invalid` reset targeting the active freeze. A
 sign-off tree or sign-off-specific external-fact mismatch requires that reset
 targeting the sign-off. Neither case is a validated sign-off. After post-merge
-validation succeeds, the sign-off is terminal and the annotated
-`tenkz-v1.0.0` tag may be created on `I`. The tag must not exist before that
-success.
+validation succeeds, the campaign is `signed-off-awaiting-tag` and the
+annotated `tenkz-v1.0.0` tag may be created on `I`. The tag must not exist
+before that success. Until the exact annotated tag object is observed peeling
+to `I`, all mutable external facts remain subject to revalidation and drift
+requires the ordered reset process above.
+
+The first observed object named `tenkz-v1.0.0` must be annotated and peel to
+the validated sign-off integration `I`. That observation changes the campaign
+to terminal `released` state; no later ledger entry or new sign-off is valid,
+and later review, issue, or pull-request drift does not reopen the release.
+Creating the name with the wrong kind or target is a hard release incident.
+Once released, a missing, moved, or replaced tag is also a hard release
+incident. Neither incident is repaired by deleting, moving, or reusing the
+name, and neither starts another 1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,
