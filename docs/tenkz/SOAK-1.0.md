@@ -4,6 +4,15 @@ This is the evidence ledger for the 1.0 compatibility campaign. Enforcement is
 pending: no entry is valid, and the prefix may still be
 corrected through ordinary reviewed pull requests.
 
+For orientation, a successful attempt has this shape:
+
+`freeze -> two real-work records -> resolve active friction -> prepare -> sign off -> tag`
+
+Friction may be recorded whenever it appears, and the two work records may land
+in either order. There is no clock delay. A breaking change or invalid record
+resets the attempt instead of asking the next attempt to inherit its unfinished
+business. This map is only a reading aid; the exact rules below decide validity.
+
 Only after the checker, repository-evidence resolver, tests, CI wiring, and
 closed test inventory exist on `main`, and the complete blocker chain is closed,
 may one self-referential enforcement-activation pull request arm the campaign.
@@ -223,28 +232,38 @@ paths, malformed declarations, or disagreement fails closed.
 The inventory is a TOML document with `schema = 1` and one or more `[[test]]`
 tables. Each test has exactly `id` (a unique lowercase hyphenated identifier),
 `surfaces` (a nonempty duplicate-free list drawn from `tex-api` and `tnlog`),
-`runner` (exactly `python3` or `bash`), `path` (a normalized regular file below
-`scripts/` with the matching `.py` or `.sh` suffix), `args` (a list of nonempty
-argument strings), `data_paths` (a duplicate-free list of normalized subject
-files or trees beneath the policy's mutable-data roots), and `timeout_seconds`
-(a positive integer). The evidence runner executes `[runner, path, *args]`
-directly, without a shell expansion or added argument, from the root of the
-hermetic view below, in inventory order, and kills it at its declared timeout.
-Every command must exit zero. Incomplete execution, a signal, timeout, unknown
-field, path escape, or nonzero exit fails closed. The activation validator
-recomputes the inventory's raw-blob SHA-256 before arming; every later payload
-validation recomputes it and rejects a mismatch.
+`failure_fingerprint` (a `sha256` value unique across the inventory), `runner`
+(exactly `python3` or `bash`), `path` (a normalized regular file below the
+configured test-code root with the matching `.py` or `.sh` suffix), `args` (a
+list of nonempty argument strings), `program_paths` (a duplicate-free list of
+normalized regular subject blobs beneath the policy's `release_test_subject_roots`),
+`fixture_paths` (a duplicate-free list of normalized subject blobs or trees
+beneath those roots), and `timeout_seconds` (a positive
+integer). Program paths also lie beneath those subject roots. Program and
+fixture paths are disjoint, and no fixture tree may contain a program path.
+Every program path matches at least one fix-path set for the test's declared
+surfaces, and every declared surface has at least one matching program path.
+
+Each inventory command evaluates exactly one atomic compatibility assertion;
+its ID and failure fingerprint cannot represent a suite or multiple failure
+causes. The evidence runner executes `[runner, path, *args]` directly, without a
+shell expansion or added argument, from the root of the hermetic view below, in
+inventory order, and kills it at its declared timeout. Payload validation
+requires every command to exit zero. Incomplete execution, a signal, timeout,
+unknown field, path escape, or nonzero exit fails closed. The activation
+validator recomputes the inventory's raw-blob SHA-256 before arming; every later
+payload validation recomputes it and rejects a mismatch.
 
 For each command, the evidence supervisor creates a fresh repository-shaped
 filesystem view of `K`. At their original relative paths it exposes read-only
 copies of only the pinned code tree, pinned support tree, inventory blob,
 tag-derived manifest, canonical artifacts, and that command's declared
-`data_paths`. Every exposed repository entry is recursively a regular blob or
-tree; symlinks, submodules, and other Git modes are rejected without following
-them. The supervisor mounts one empty writable directory at `/tenkz-output` and
-sets `TENKZ_TEST_OUTPUT=/tenkz-output`; no command argument is added. The real
-checkout, user files, and every other repository path are absent from the
-process mount namespace.
+`program_paths` and `fixture_paths`. Every exposed repository entry is
+recursively a regular blob or tree; symlinks, submodules, and other Git modes are
+rejected without following them. The supervisor mounts one empty writable
+directory at `/tenkz-output` and sets `TENKZ_TEST_OUTPUT=/tenkz-output`; no
+command argument is added. The real checkout, user files, and every other
+repository path are absent from the process mount namespace.
 
 The environment has fixed locale and timezone, no inherited repository-path
 variables, and no network access. Its sanitized `PATH` contains the inventory
@@ -259,25 +278,34 @@ Activation runs a closed supervisor self-test suite from the pinned support
 tree against pinned synthetic fixtures. Its receipt binds the code and support
 trees, output mount, environment, access denials, tool fingerprints, and
 completion of every isolation probe. It requires no package tag, release
-manifest, canonical payload, or mutable subject data. A missing or mismatched
+manifest, canonical payload, or mutable subject. A missing or mismatched
 self-test receipt prevents arming.
 
 The configured test-code and test-support roots must be regular Git trees in
 `K` whose exact tree OIDs equal their policy and manifest values. Runner code
 and every imported, sourced, or executed in-repository helper must come from the
-test-code tree. Expected outputs, baselines, allowlists, thresholds, selector
-manifests, and other acceptance-control files must come from the test-support
+dedicated test-code tree. Expected outputs, baselines, allowlists, thresholds,
+selector manifests, and other acceptance-control files must come from the test-support
 tree. The payload checker and each test may read only the tag-derived manifest,
-canonical artifacts, and its declared `data_paths` as mutable subject data.
-Subject TeX is executable only as the program under test launched by the pinned
-harness; subject data cannot supply runner, helper, acceptance-control, or
-coverage-selection logic. Loading any other repository file, or using subject
-data to reduce the inventory-defined checks, fails closed. The supervisor emits
-a per-command payload receipt naming the exact trees, blobs, data paths,
-command, exit status, timeout result, output mount and environment value, and
-child-tool fingerprints. Only `validate-release-payload(K, Q)` executes these
-payload commands; every such validation rejects an incomplete or mismatched
-payload receipt.
+canonical artifacts, and its declared program and fixture paths as mutable
+subjects. Every canonical artifact that a test reads must also occur in exactly
+one of its two declared roles. Only a declared program path may be executed,
+sourced, or imported as the product under test through the pinned harness.
+Fixture paths remain non-executable. Neither subject role can supply runner, helper,
+acceptance-control, or coverage-selection logic. Loading any other repository
+file, or using a subject to reduce the inventory-defined checks, fails closed.
+
+On its sole atomic assertion failure, a pinned harness command exits exactly 10
+only after atomically writing `/tenkz-output/assertion-failure-v1.json`. That
+closed JSON object has exactly four fields: integer `schema = 1`, string
+`test_id` equal to the selected inventory test's `id`, its string
+`failure_fingerprint`, and Boolean `completed = true`. Exit 10 without that
+exact receipt, the receipt with another exit, a second failure cause, or any
+other nonzero exit fails closed. The supervisor emits a per-command payload
+receipt naming the exact trees, blobs, program paths, fixture paths, command,
+assertion result, exit status, timeout result, output mount and environment
+value, and child-tool fingerprints. `validate-release-payload(K, Q)` accepts
+only assertion passes and rejects any incomplete or mismatched payload receipt.
 
 `validate-release-payload(K, Q)` means checking this complete manifest,
 canonical-artifact, pinned-inventory, both pinned test trees, dependency
@@ -285,9 +313,10 @@ boundary, and test contract in Git tree `K` for tag `Q`.
 
 `observe-release-test(K, Q, R)` performs those same manifest, artifact,
 inventory, pinned-tree, dependency, hermetic-view, and tool checks, then runs
-exactly the inventory test with `id = R`. It returns the exact execution receipt
-without requiring exit zero. A missing test, wrong surface, signal, timeout,
-incomplete run, isolation failure, or setup mismatch still fails closed. This
+exactly the inventory test with `id = R`. It returns either `passed` for exit
+zero or `assertion-failed` for exit 10 with the exact fingerprint receipt above.
+A missing test, unrelated nonzero exit, signal, timeout,
+incomplete run, isolation failure, or setup mismatch fails closed. This
 single-test observation cannot replace `validate-release-payload`; it exists
 only to bind a friction's before-and-after regression evidence.
 
@@ -483,8 +512,9 @@ a missing or ambiguous merge base fails closed. `P` must be an ancestor of
   final `headRefOid`, submitted before
   `work_pr.mergedAt`.
 
-Glob matching is against slash-separated repository paths; `**` spans zero or
-more complete path components. The immutable `B`-to-`H` Git diff, not an
+Glob matching is against slash-separated repository paths. `*` spans zero or
+more non-slash characters within one component, while `**` spans zero or more
+complete path components. The immutable `B`-to-`H` Git diff, not an
 integration's final commit alone or a PR title, label, description, or entry
 summary, decides path eligibility. The normalizer uses a deterministic
 source-specific lexer: it removes Lean or TeX comments while respecting nested
@@ -519,25 +549,24 @@ requests may merge normally; only these two entries are release evidence.
 Required additional fields: `surface` (`tex-api` or `tnlog`), `triage`
 (`fix-compatible`, `defer-to-2.0`, or `breaking-required`), `summary` (`text`),
 and `evidence` (`text`). A `fix-compatible` friction additionally requires
-`regression_tests` (`list[test-ref]`); that field is forbidden for the other
-triages. `defer-to-2.0` changes nothing in the active major.
+`regression_tests` (a nonempty `list[test-ref]`); that field is forbidden for
+the other triages. `defer-to-2.0` changes nothing in the active major.
 `breaking-required` requires a reset as the next non-correction entry.
 
 Let `Q` be the active freeze's exact `freeze_tag`, `H_E` the friction record's
 exact final head, and `I_E` its later integration. Every named inventory test's
 `surfaces` must contain the friction's exact `surface`. Candidate validation
-requires each `observe-release-test(H_E, Q, R)` receipt to complete with a
-nonzero exit; post-merge validation requires the same at `I_E`. An empty
-`regression_tests` list records an uncovered evidence gap but cannot receive a
-`resolution` under this activation, so it continues to block sign-off.
-Otherwise the friction must receive a later `resolution` before sign-off.
+requires each `observe-release-test(H_E, Q, R)` receipt to return
+`assertion-failed` with its exact pinned fingerprint; post-merge validation
+requires the same at `I_E`. The friction must receive a later `resolution`
+before the active attempt can proceed to release preparation or sign-off.
 
 ### `resolution`
 
 Required additional fields: `friction` (`entry-ref`), `fix_pr` (`pr-ref`),
 `summary` (`text`), and `evidence` (`text`). It can resolve only one preceding,
-unresolved `fix-compatible` friction entry with nonempty `regression_tests` in
-the same active attempt. It cannot resolve or reclassify another triage.
+unresolved `fix-compatible` friction entry in the same active attempt. It cannot
+resolve or reclassify another triage.
 
 Let `H_F = fix_pr.headRefOid` and `I_F = fix_pr.mergeCommit.oid`. GitHub must
 report `fix_pr` merged to `main` after the friction record, with non-null author,
@@ -555,16 +584,22 @@ integration `I`.
 A repository-authorized reviewer distinct from the normalized fix-PR author
 must have a latest effective `APPROVED` review on the exact `H_F`, submitted before
 `fix_pr.mergedAt`. The complete `B_F`-to-`H_F` diff may not touch
-`docs/tenkz/DESIGN.md` or this ledger. It must add or modify at least one regular
-blob whose path matches the pinned policy's `tex_api_fix_paths` for
-`surface = "tex-api"`, or its `tnlog_fix_paths` for `surface = "tnlog"`, and
-whose TeX-comment-stripped token stream changes. A
-comment-only, whitespace-only, empty-file, deletion-only, test-only, policy-only,
+`docs/tenkz/DESIGN.md` or this ledger. For every regression test, at least one of
+its declared program blobs must be modified, match the pinned policy's
+`tex_api_fix_paths` for `surface = "tex-api"` or `tnlog_fix_paths` for
+`surface = "tnlog"`, and change semantically. A TeX or style blob uses the TeX
+normalizer defined for work entries. The canonical Python reader must parse
+under the pinned interpreter and uses its location-free `ast.dump` as the
+semantic stream. Every declared fixture blob, mode, and tree OID for the named
+tests must be identical at `H_E`, `I_E`, `B_F`, `H_F`, and `I_F`; the
+tag-derived manifest must also be byte-identical at those trees. A comment-only,
+whitespace-only, empty-file, deletion-only, test-only, fixture-changing, policy-only,
 title, label, description, or unrelated Lean change is not a fix.
 
 Let `Q` be the active freeze's exact `freeze_tag`. For every test `R` named by
-the friction, `observe-release-test(B_F, Q, R)` must complete nonzero and
-`observe-release-test(H_F, Q, R)` must complete with exit zero.
+the friction, `observe-release-test(B_F, Q, R)` must return the same pinned
+`assertion-failed` fingerprint observed at the friction, while
+`observe-release-test(H_F, Q, R)` must return `passed`.
 `validate-release-payload(H_F, Q)` must then pass, binding the complete pinned
 inventory, tag-derived manifest, canonical artifacts, and receipts. Candidate
 validation rechecks the fix PR, review, Git objects, complete diff, ancestry,
@@ -643,6 +678,9 @@ predicates:
   integrations, and has the same tree as `H_R`.
 - `P_R` is an ancestor of `H_R`; the unique merge base equals `P_R`; and a
   two-parent integration's second parent equals `H_R`.
+- Every `fix-compatible` friction in the active attempt has one validated
+  resolution whose record integration is an ancestor of `P_R`, and no condition
+  in that attempt requires a reset.
 - The complete immutable `P_R`-to-`H_R` path set is exactly the 1.0 manifest
   path and the four canonical release-artifact paths from the pinned policy;
   all five blobs change.
@@ -677,10 +715,10 @@ waiting interval: sign-off can proceed as soon as the class coverage,
 independent exact-head approvals, release preparation, and all other predicates
 hold.
 
-All compatible friction must be resolved, every work predicate must still
-hold, and no condition may require a reset. Post-merge validation also
-revalidates the pinned policy hash and ledger prefix and every active-freeze
-fact: its record integration and start time, immutable annotated tag object and
+All `fix-compatible` friction in the active attempt must remain resolved, every
+work predicate must still hold, and no condition may require a reset. Post-merge
+validation also revalidates the pinned policy hash and ledger prefix and every
+active-freeze fact: its record integration and start time, immutable annotated tag object and
 peel to `source_sha`, source-PR integration, valid 0.9 payload at `source_sha`,
 and the current closed state and `closedAt <= T` of every derived prerequisite.
 A reopened or reclosed prerequisite, moved or replaced freeze tag, changed

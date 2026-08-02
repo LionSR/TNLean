@@ -38,8 +38,8 @@ required_distinct_work_prs = 2
 work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
 one_class_per_work_pr = true
 work_excluded_paths = ["TNLean/Archive/**"]
-tex_api_fix_paths = ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"]
-tnlog_fix_paths = ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"]
+tex_api_fix_paths = ["tex/tenkz/*.tex", "tex/tenkz/*.sty"]
+tnlog_fix_paths = ["tex/tenkz/*.tex", "tex/tenkz/*.sty", "scripts/tenkzlib/tnlog.py"]
 event_format_owners = ["#4162", "#4703"]
 soak_blocker_chain = [["#5086", "#4699", "#4162"], ["#4703", "#4708", "#4163"]]
 deprecation_removal = "not-before-next-major"
@@ -57,16 +57,21 @@ release_change_record = "docs/tenkz/CHANGES.md"
 release_event_format = "docs/tenkz/TNLOG.md"
 release_test_inventory = "tests/tenkz/release-tests.toml"
 release_test_inventory_sha256 = "pending"
-release_test_code_root = "scripts"
+release_test_code_root = "tests/tenkz/release-harness"
 release_test_code_tree = "pending"
 release_test_support_root = "tests/tenkz/release-support"
 release_test_support_tree = "pending"
-release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
+release_test_subject_roots = [
+  "tex/tenkz",
+  "scripts/tenkzlib/tnlog.py",
+  "docs/tenkz",
+  "tests/tenkz/rmp",
+]
 release_enforcement_workflows = [".github/workflows/tenkz-release-policy.yml"]
 release_workflow_dependencies = "transitive-content-addressed-no-runtime-downloads"
 release_enforcement_network = "disabled-before-repository-code"
 release_reset_replay_schema = "tests/tenkz/release-support/reset-replay-v1.schema.json"
-release_test_dependency_contract = "pinned-code-support-declared-subject-data"
+release_test_dependency_contract = "pinned-harness-support-declared-subject-roles"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
 [event_format]
@@ -94,16 +99,16 @@ tenkz has two public surfaces. A release decision names both; compatibility on
 one cannot excuse a break in the other.
 
 During an active attempt, `tex_api_fix_paths` constrains a compatible TeX-surface
-fix and `tnlog_fix_paths` constrains a compatible event-surface fix. Both lists
-name the TeX package tree because its source implements the public API and emits
-the event stream. The pinned canonical reader and release-test code are evidence,
-not mutable fix surfaces.
+fix and `tnlog_fix_paths` constrains a compatible event-surface fix. The former
+admits only root package implementation files, never examples or fixtures. The
+latter admits those event emitters and the canonical Python reader. Dedicated
+pinned harness code supplies the evidence but is not a mutable fix surface.
 
-These classifications govern the 0.9 release candidate from its valid freeze
-through the 1.0 evidence campaign, and every release beginning with 1.0. They do not freeze
-the current v0.7 transitional surface. Before the freeze, the v0.7-to-v0.9
-migration remains governed by `LANGUAGE-1.0.md`, the shrink ledger, and the
-ordered prerequisite issues below.
+These classifications begin at the valid 0.9 freeze. They do not preserve the
+current v0.7 transition surface. Before the freeze, prefer the clean 1.0 model:
+rename or remove an obsolete command, key, or event and update its callers in
+the same change instead of adding a compatibility shim. `LANGUAGE-1.0.md`, the
+shrink ledger, and the ordered prerequisite issues below govern that migration.
 
 ### TeX surface
 
@@ -228,9 +233,11 @@ for `TAG` in the policy pattern. The policy, not the manifest, owns the four
 canonical release-artifact paths, hashed test inventory, and pinned Git trees of
 in-repository test code and immutable test support. The manifest repeats the
 inventory digest and both tree OIDs so that payload validation binds them at the
-exact candidate tree. Release artifacts and declared benchmark inputs remain
-mutable subject data; they cannot provide executable helpers, coverage
-selection, expected results, allowlists, or thresholds. The freeze validates
+exact candidate tree. Release artifacts, declared benchmark inputs, and the
+canonical event reader remain mutable subjects. The dedicated pinned harness
+separates their declared program files from non-executable fixtures; neither role
+can provide harness helpers, coverage selection, expected results, allowlists,
+or thresholds. The freeze validates
 the 0.9 manifest, artifacts, and tests before its tag is created. The final
 release-preparation pull request changes exactly the 1.0
 manifest and four canonical artifacts. The tests run through the single pinned
@@ -341,10 +348,11 @@ The dependency chain is ordered:
    attempt at GitHub's verified merge time `T`;
 7. merge two distinct qualifying real-work pull requests after `T`: one in the
    `formalization-or-blueprint` class and one in the `rmp-benchmark` class;
-8. merge an independently exact-head-approved release-preparation pull request
-   descending from both work integrations, then merge and post-merge validate
-   the independently approved sign-off record and create `tenkz-v1.0.0` on its
-   integration commit.
+8. resolve every `fix-compatible` friction in the active attempt, then merge an
+   independently exact-head-approved release-preparation pull request descending
+   from both work integrations and all resolution records;
+9. merge and post-merge validate the independently approved sign-off record and
+   create `tenkz-v1.0.0` on its integration commit.
 
 Closing #5086 in step 2 means that its plane-basis capability has landed for
 0.8. The `expiry 1.0` values on related SHRINK entries bound the later removal
@@ -365,13 +373,14 @@ record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A compatible resolution names the exact
-later fix pull request and the friction entry's immutable pinned regression
-tests. Those tests fail at the recorded friction tree and immediately before
-the fix, while the policy-owned implementation path and tests pass at the fix
-head under the active freeze tag. The fix pull request's repository-authorized
-exact-head approval, integration tree, ancestry, surface-specific semantic
-diff, and complete pinned test run are revalidated before the friction is
-resolved. A reset has cause
+later fix pull request and a nonempty list of the friction entry's immutable
+pinned atomic regression tests. Each test reports its pinned assertion-failure
+fingerprint at the recorded friction tree and immediately before the fix, while
+its immutable fixtures remain byte-identical and its surface-owned program path
+and assertion pass at the fix head under the active freeze tag. The fix pull
+request's repository-authorized exact-head approval, integration tree, ancestry,
+surface-specific semantic diff, and complete pinned test run are revalidated
+before the friction is resolved. A reset has cause
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists
@@ -418,7 +427,8 @@ after the later qualifying work merge and the named release-preparation merge,
 and before sign-off merge. The sign-off head and integration must descend from
 all three integrations. The sign-off may proceed immediately once those ordered
 facts hold. It also requires one qualifying work entry in each class, no
-unresolved fix-compatible friction, and no condition requiring reset. A
+unresolved `fix-compatible` friction in the active attempt, and no condition
+requiring reset. A
 validated sign-off first enters `signed-off-awaiting-tag`; mutable evidence
 remains live until a full replay succeeds and the exact annotated final tag is
 currently observed on its integration under the required no-update, no-delete,

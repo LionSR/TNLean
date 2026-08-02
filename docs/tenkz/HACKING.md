@@ -211,14 +211,22 @@ machine-readable verdict.
 `DESIGN.md` owns package and event-stream compatibility.  `SOAK-1.0.md` is an
 inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no campaign entry is valid and reviewed follow-up PRs may still
-correct the prefix.  The activation slice under #5352 will add the validation
-commands here only after their scripts, repository-evidence checks, tests, and
-CI wiring exist on `main`.  Close both blocker groups before activation.  One
+correct the prefix.
+
+Before the 0.9 freeze, do not preserve an obsolete spelling merely because it
+exists today.  Move its callers to the clean 1.0 form in the same change, then
+delete it.  Add a temporary bridge only when a staged migration cannot land
+atomically, and give that bridge an explicit SHRINK expiry.
+
+The activation slice under #5352 will add the validation commands here only
+after their scripts, repository-evidence checks, tests, and CI wiring exist on
+`main`.  Close both blocker groups before activation.  One
 self-referential activation pull request then verifies the current no-update,
 no-delete, no-bypass `tenkz-v*` protection and changes exactly seven scalars:
 both normative enforcement values, the inventory's raw-blob digest, the Git
-tree OIDs of `scripts/` and `tests/tenkz/release-support/`, the SHA-256 of the
-exact armed `DESIGN.md` UTF-8 blob, and its own pull-request reference.  It
+tree OIDs of `tests/tenkz/release-harness/` and
+`tests/tenkz/release-support/`, the SHA-256 of the exact armed `DESIGN.md` UTF-8
+blob, and its own pull-request reference.  It
 cannot change the checker, workflow, inventory, either pinned tree, policy
 prose, or any other byte.  A later self-referential freeze record validates the
 tag-derived 0.9 payload and supplies the verified attempt-ordering anchor.
@@ -235,15 +243,17 @@ downloader execution, an unhashed lock, a tag, branch, missing object, or
 incomplete closure fails closed.  Network access is disabled before any
 repository code or validation command runs.
 
-Release-test code and imported or sourced helpers live under `scripts/`.
+Release-test code and imported or sourced helpers live under the dedicated
+`tests/tenkz/release-harness/` tree.
 Expected outputs, baselines, allowlists, thresholds, and other immutable
 acceptance configuration live under `tests/tenkz/release-support/`.  The closed
-inventory may declare release artifacts and RMP cases as mutable subject data,
-but those files cannot select coverage or supply runner, helper, or acceptance
-logic.  Each command runs in the hermetic repository-shaped view specified by
-`SOAK-1.0.md`, with a fixed output mount, pinned child-tool profile, and no
-host-checkout or network access.  Symlinks, submodules, special entries, and any
-other in-repository dependency fail closed.
+inventory separates mutable product-program paths from non-executable fixtures; the
+program may be run only through the pinned harness, and neither role can select
+coverage or supply runner, helper, or acceptance logic.  Each atomic test owns
+one pinned assertion-failure fingerprint.  Commands run in the hermetic
+repository-shaped view specified by `SOAK-1.0.md`, with a fixed output mount,
+pinned child-tool profile, and no host-checkout or network access.  Symlinks,
+submodules, special entries, and any other in-repository dependency fail closed.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
@@ -265,14 +275,14 @@ comment-stripped token stream, and pass its class-specific Lean, blueprint, or
 RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
 not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
 ledger-record, and reset-receipt pull requests do not qualify.  Each record
-pull request changes only its one ledger append.  A compatible-friction
-entry records pinned inventory tests for its public surface.  A resolution
-names a separate exact-head-approved fix pull request: the same tests fail at
-the friction and fix-parent trees, its surface-owned TeX implementation changes,
-and the tests plus the full active-freeze payload pass at the fix head.  An
-empty regression list records an evidence gap and cannot be resolved under the
-current activation.
-Release preparation lands separately after both work merges; its exact diff
+pull request changes only its one ledger append.  A compatible-friction entry
+records a nonempty list of pinned atomic tests for its public surface.  A
+resolution names a separate exact-head-approved fix pull request: every test
+reports its exact fingerprint at the friction and fix-parent trees, its fixtures
+remain byte-identical, a declared surface-owned program changes, and the tests
+plus full active-freeze payload pass at the fix head.  Release preparation lands
+only after every compatible friction in the active attempt is resolved and both
+work merges have landed; its exact diff
 changes only the tag-derived 1.0 manifest and four canonical release artifacts.
 Exact-head sign-off review follows immediately on that integration; if `main`
 advances, repeat preparation on the
