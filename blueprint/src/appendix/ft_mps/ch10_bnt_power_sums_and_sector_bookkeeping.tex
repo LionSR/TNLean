@@ -220,18 +220,22 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 \begin{lemma}[Sector-decomposition coefficient is not eventually zero]
     \label{lem:sector_decomposition_coeff_not_eventually_zero}
     \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
+    \lean{MPSTensor.SectorDecomposition.coeff_mul_not_eventually_zero}
     \leanok
     \uses{def:sector_weight_data,
         lem:finite_geometric_sum_eventual_vanishing}
     For any sector decomposition $P$ and any sector $j$, the coefficient
-    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.
+    $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.  More
+    generally, for every positive integer $p$, the subsequence
+    $c_{P,j}^{(pN)}$ is not eventually zero.
 \end{lemma}
 
 \begin{proof}\leanok
     If the coefficient vanished for every $N\geq M$, the finite geometric-sum
     extrapolation would make it vanish at every non-negative exponent. However,
     at exponent zero, $c_{P,j}^{(0)}=\sum_q\mu_{j,q}^0=r_j>0$, which is
-    impossible.
+    impossible.  For the subsequence, apply the same argument to the nonzero
+    bases $\mu_{j,q}^p$.
 \end{proof}
 
 \begin{lemma}[Sector coefficient is not eventually zero]

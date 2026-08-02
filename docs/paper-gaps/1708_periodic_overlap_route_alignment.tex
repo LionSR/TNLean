@@ -288,7 +288,7 @@ lemma is not used. Restoring the spanning clause and routing through
 half is formalized; no unrestricted spanning assertion is presently attributed
 to the source consequence.
 
-\section{Scope restriction: weights, length, representation, and normalization}
+\section{Normalized multiplicity theorem and remaining normalization restriction}
 
 \textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, equations
 \emph{bdnr} and \emph{Bbdnr}, lines 286--305 and 575--585; the normalization
@@ -301,58 +301,75 @@ irreducible forms used in the proportional Fundamental Theorem are
 where the diagonal matrices $R_j$ and $S_k$ retain the multiplicities and
 weights of repeated copies of each periodic basis tensor.
 
-\textbf{Restricted theorem.} The declaration
-\path{PeriodicOverlapHypothesis.ofIsIrreducibleForm} treats an irreducible-form
-representation with one positive real scalar weight attached to each block and
-assumes that distinct listed blocks are not repeated. From nonzero
-proportionality at every positive length, with a scalar allowed to depend on the
-length, it derives a non-decaying mixed-overlap partner for every block in both
-families. The proof makes the paper's terse contradiction at line 631 explicit:
-it partitions one family by mixed-overlap decay, passes to a common-period
-subsequence, and compares coefficients in an eventually linearly independent
-coproduct-indexed family.
+\textbf{Multiplicity-bearing normalized theorem.} The declaration
+\path{PeriodicOverlapHypothesis.ofSectorDecompositions} uses literal sector
+decompositions
+\begin{align}
+  P^i&=\bigoplus_{j,q}(\mu_{j,q}A_j^i),&
+  Q^i&=\bigoplus_{k,r}(\nu_{k,r}B_k^i),
+\end{align}
+where every complex weight is nonzero.  This flattened presentation is the
+coordinate form of $\bigoplus_j(R_j\otimes A_j^i)$ and
+$\bigoplus_k(S_k\otimes B_k^i)$, with
+\begin{align}
+  \operatorname{tr}(R_j^N)&=\sum_q\mu_{j,q}^N,&
+  \operatorname{tr}(S_k^N)&=\sum_r\nu_{k,r}^N.
+\end{align}
+It assumes proportionality only at positive lengths, permits different total
+bond dimensions, and allows the proportionality scalar to depend freely on
+the length.  Thus the multiplicity, literal-representation, and empty-word
+restrictions of the earlier scalar theorem are absent.
 
-The local representation also differs from the source irreducible form in
-three further respects. First, its periodic blocks are left-canonical, whereas the
-source assumes only that their transfer maps are irreducible and have spectral
-radius one. This is an additional normalization hypothesis. Second, its
-defining field asserts equality of matrix-product-vector families with the
-scalar-weight direct-sum tensor; it does not assert that the original tensor
-is literally equal to that tensor. The restricted theorem consequently
-concerns the periodic families carried by these witnesses, not a literal
-block-diagonal presentation of the original tensors.
+The proof makes the paper's terse contradiction at line~631 explicit.  It
+partitions one basis by mixed-overlap decay, passes to a common-period
+subsequence, and compares the grouped coefficients in an eventually linearly
+independent coproduct-indexed family.  Linear independence forces
+$\operatorname{tr}(R_{j_0}^{pN})=0$ for every sufficiently large $N$.
+Geometric extrapolation applied to the nonzero numbers $\mu_{j_0,q}^p$ then
+forces the same power sum to vanish at exponent zero, contradicting the
+positive multiplicity of the sector.  In particular, the proof never treats
+the repeated copies of $A_{j_0}$ as independent vectors.
 
-Third, the local equality of matrix-product-vector families includes the empty
-word and therefore forces equality of the associated bond-dimension traces.
-The source compares physical states at positive lengths and explicitly allows
-the irreducible-form representative to have smaller bond dimension
-\cite[lines~266--271]{DeLasCuevas2017Irreducible}. Thus the local witness has an
-additional empty-word restriction absent from the source theorem.
+The earlier declaration
+\path{PeriodicOverlapHypothesis.ofIsIrreducibleForm} remains as the
+one-weight-per-listed-block specialization.  Its hypothesis still asserts
+matrix-product-vector equality at the empty word and may describe an ambient
+tensor only through such an equality.  These are restrictions of that older
+formulation, not of the new literal multiplicity-bearing theorem.
+
+\textbf{Remaining normalization restriction.} The basis blocks in the new
+theorem satisfy the local predicate \path{IsPeriodic}, which includes
+left-canonical normalization.  The source initially assumes only that each
+transfer map is irreducible with spectral radius one, then uses the positive
+adjoint Perron eigenmatrix to obtain a trace-preserving block by pure
+similarity \cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The formal
+development does not yet provide this normalization simultaneously for all
+sectors while preserving the displayed multiplicity weights, nor does it yet
+transport the resulting overlap hypothesis back through those blockwise
+similarities.  Applying the theorem to an arbitrary original tensor through a
+lower-dimensional representative also requires a positive-length transport
+statement of the kind allowed at lines~266--271.
 
 The declarations \leanid{fundamentalTheorem_periodic_proportional} and
 \leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} begin after
 this step: they accept the periodic-overlap hypothesis, or its non-decaying
 partner fields, as premises and prove the resulting finite block matching.
-They are conditional components toward \emph{thm:bd}, not formalizations of
-the source theorem itself.
+Together with the new normalized overlap theorem they give the block matching for
+literal normalized irreducible forms.  The source theorem itself remains
+unformalized until the preceding normalization and transport step is proved;
+the exact source-labelled blueprint statement must therefore remain
+\emph{not ready}.
 
-This is a mathematically correct restriction, but it is not the full statement
-of \emph{thm:bd}: replacing $R_j$ by a single scalar removes the grouped
-repeated-copy data. Consequently the restricted theorem must not be used to mark
-the unrestricted proportional Fundamental Theorem as complete.
-
-\textbf{Elimination plan.} Formalize a multiplicity-bearing periodic basis, or
-prove a reduction from the matrices $R_j,S_k$ to grouped power-sum coefficients
-without treating repeated copies as linearly independent. Replace the
-MPV-equivalent witness by a literal block-diagonal presentation, or prove a
-transport theorem between the two formulations. Replace the empty-word
-equality by a positive-length comparison so that the representative may have
-the source-allowed smaller bond dimension. Formalize the source's
-block-diagonal similarity to trace-preserving form and transport the overlap
-and repeated-block conclusions back, thereby removing the extra normalization
-hypothesis. Then repeat the coefficient comparison at the grouped level and
-derive the scalar-weight theorem as a corollary. The mixed-overlap step remains
-tracked by
+\textbf{Elimination plan.} Introduce the source predicate consisting of
+irreducibility, spectral radius one, positive period, and the prescribed
+peripheral spectrum.  Extract the pure Perron similarity argument from the
+existing primitive special case, apply it to every basis block without scalar
+rescaling, and assemble the block gauges while leaving all multiplicity
+entries unchanged.  Prove invariance of proportional positive-length MPVs,
+overlap decay, pairwise non-repetition, and the final repeated-block relation
+under these similarities.  A separate positive-length representative
+transport then covers the source-allowed lower-dimensional representative.
+The mixed-overlap and normalization work remains tracked by
 \href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the subsequent
 multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.

@@ -199,6 +199,39 @@ lemma coeff_not_eventually_zero (P : SectorDecomposition d)
   rw [hcard] at h0
   exact (Nat.cast_ne_zero.mpr (P.copies_pos j).ne') h0
 
+/-- Along every positive arithmetic subsequence, a sector coefficient cannot vanish at all
+sufficiently large indices.
+
+For a positive integer `p`, the subsequence is the geometric sum with nonzero bases
+`(P.weight j q) ^ p`. Geometric extrapolation therefore reduces eventual vanishing to exponent
+zero, where the sum is the positive number of copies in the sector.
+
+This is the common-period coefficient input in the proof of arXiv:1708.00029,
+theorem `thm:bd`, line 631. -/
+lemma coeff_mul_not_eventually_zero (P : SectorDecomposition d)
+    (p : ℕ) (hp : 0 < p) (j : Fin P.basisCount) :
+    ¬ (∀ᶠ N in Filter.atTop, P.coeff (p * N) j = 0) := by
+  classical
+  obtain ⟨p₀, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hp)
+  intro hEv
+  rw [Filter.eventually_atTop] at hEv
+  obtain ⟨M, hM⟩ := hEv
+  have hAll : ∀ k,
+      ∑ q : Fin (P.copies j), (1 : ℂ) * ((P.weight j q) ^ (p₀ + 1)) ^ k = 0 := by
+    refine SectorWeightData.geom_sum_eventually_zero
+      (w := fun q ↦ (P.weight j q) ^ (p₀ + 1)) (c := fun _ ↦ 1) (M := M) ?_ ?_
+    · intro q
+      exact pow_ne_zero (p₀ + 1) (P.weight_ne_zero j q)
+    · intro N hN
+      simpa [SectorDecomposition.coeff, SectorWeightData.coeff, pow_mul] using hM N hN
+  have h0 := hAll 0
+  have hcard :
+      (∑ q : Fin (P.copies j), (1 : ℂ) * ((P.weight j q) ^ (p₀ + 1)) ^ 0) =
+        (P.copies j : ℂ) := by
+    simp
+  rw [hcard] at h0
+  exact (Nat.cast_ne_zero.mpr (P.copies_pos j).ne') h0
+
 end SectorDecomposition
 
 end MPSTensor
