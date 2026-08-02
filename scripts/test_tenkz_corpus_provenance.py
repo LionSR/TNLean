@@ -281,6 +281,20 @@ def test_rmp_dimension_ownership() -> None:
             "command-adjacent/mixed-case dimensions escaped: "
             f"{command_adjacent_units!r}"
         )
+    starred_command_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow*[bend={1mm}]{from}{to}{2mm}",
+    )
+    if [occurrence.literal for occurrence in starred_command_units] != [
+        "1mm",
+        "2mm",
+    ] or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in starred_command_units
+    ):
+        raise AssertionError(
+            f"starred command dimensions escaped: {starred_command_units!r}"
+        )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix
