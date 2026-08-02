@@ -7,6 +7,7 @@ import TNLean.Algebra.FinSum
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.Overlap.Dichotomy
+import TNLean.MPS.Periodic.SectorNormalization
 
 /-!
 # Non-decaying periodic overlaps from proportional matrix-product vectors
@@ -23,6 +24,9 @@ the nonzero complex multiplicity weights.
 * `PeriodicOverlapHypothesis.ofSectorDecompositions`: literal normalized
   multiplicity-bearing tensors with proportional MPVs satisfy the periodic
   overlap hypothesis.
+* `PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions`:
+  spectral-radius-one multiplicity-bearing tensors satisfy the same hypothesis
+  after a pure block-diagonal Perron gauge.
 * `PeriodicOverlapHypothesis.ofIsIrreducibleForm`: the scalar-weight
   irreducible-form specialization.
 
@@ -270,15 +274,15 @@ may depend freely on the positive chain length.
 Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; proof of theorem `thm:bd`, lines 630--631.
 
-**Scope restriction (normalization):** The source first assumes irreducible
-blocks of spectral radius one and then obtains trace-preserving blocks by a
-block-diagonal similarity at lines 313--332. Here each basis block is already
-`IsPeriodic`, hence left-canonical. The literal multiplicity-bearing
-presentation and positive-length proportionality agree with the source, but
-the pure Perron normalization must still be applied sectorwise and the result
-transported back to the original blocks. The normalization of each individual
-block is supplied by the individual pure Perron normalization theorem. This
-theorem constructs the three fields of
+**Scope restriction (normalization boundary):** The source first assumes
+irreducible blocks of spectral radius one and then obtains trace-preserving
+blocks by a block-diagonal similarity at lines 313--332. This theorem instead
+takes each basis block to be `IsPeriodic`, hence left-canonical. The companion
+theorem `ofSpectrallyPeriodicSectorDecompositions` below applies the individual
+pure Perron normalizations sectorwise, assembles the global block-diagonal
+similarities, and transports the conclusion back. The literal
+multiplicity-bearing presentation and positive-length proportionality agree
+with the source. This theorem constructs the three fields of
 `PeriodicOverlapHypothesis`; it does not assert the unique basis matching in
 source theorem `thm:bd`. This restriction is recorded in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
@@ -321,6 +325,68 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
     exact tendsto_mpvOverlap_zero_swap (P.basis j₀) (Q.basis k₀) hDecay
   exact PeriodicOverlapHypothesis.ofIsPeriodic
     P.basis Q.basis periodP periodQ hPerP hPerQ hExP hExQ
+
+/-- Spectrally periodic multiplicity-bearing decompositions with proportional
+matrix-product vectors satisfy the periodic overlap hypothesis.
+
+Each representative block is put in left-canonical form by its positive Perron
+gauge.  Repeating the representative gauge over all copies gives the global
+block-diagonal similarity
+\(\bigoplus_j (I_{r_j} \otimes X_j)\).  The multiplicities and their weights are
+unchanged, so the normalized overlap theorem applies with the original grouped
+coefficients.  Pure-gauge invariance then returns its conclusion to the
+original representatives.
+
+Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
+and 575--585; normalization by block-diagonal similarity, lines 313--332; and
+theorem `thm:bd`, lines 613--632. -/
+theorem PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
+    (P Q : SectorDecomposition d)
+    (periodP : Fin P.basisCount → ℕ)
+    (periodQ : Fin Q.basisCount → ℕ)
+    (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))
+    (hPerQ : ∀ k, IsSpectrallyPeriodic (periodQ k) (Q.basis k))
+    (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hProp : NonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    PeriodicOverlapHypothesis P.basis Q.basis := by
+  classical
+  obtain ⟨basisP, hGaugeP, hPeriodicP, hGlobalP⟩ :=
+    P.exists_isPeriodic_replaceBasis periodP hPerP
+  obtain ⟨basisQ, hGaugeQ, hPeriodicQ, hGlobalQ⟩ :=
+    Q.exists_isPeriodic_replaceBasis periodQ hPerQ
+  have hRepeatedP : ∀ j, HetRepeatedBlocks (P.basis j) (basisP j) := fun j =>
+    (hGaugeP j).toHetRepeatedBlocks
+  have hRepeatedQ : ∀ k, HetRepeatedBlocks (Q.basis k) (basisQ k) := fun k =>
+    (hGaugeQ k).toHetRepeatedBlocks
+  have hNonRepP' : ∀ i j, i ≠ j →
+      ¬ HetRepeatedBlocks ((P.replaceBasis basisP).basis i)
+        ((P.replaceBasis basisP).basis j) := by
+    intro i j hij hRepeated
+    apply hNonRepP i j hij
+    exact (hRepeatedP i).trans (hRepeated.trans (hRepeatedP j).symm)
+  have hNonRepQ' : ∀ i j, i ≠ j →
+      ¬ HetRepeatedBlocks ((Q.replaceBasis basisQ).basis i)
+        ((Q.replaceBasis basisQ).basis j) := by
+    intro i j hij hRepeated
+    apply hNonRepQ i j hij
+    exact (hRepeatedQ i).trans (hRepeated.trans (hRepeatedQ j).symm)
+  have hProp' : NonzeroProportionalMPV₂
+      (P.replaceBasis basisP).toTensor (Q.replaceBasis basisQ).toTensor := by
+    intro N hN
+    obtain ⟨c, hc, hEq⟩ := hProp N hN
+    refine ⟨c, hc, fun σ ↦ ?_⟩
+    calc
+      mpv (P.replaceBasis basisP).toTensor σ = mpv P.toTensor σ :=
+        (GaugeEquiv.sameMPV hGlobalP N σ).symm
+      _ = c * mpv Q.toTensor σ := hEq σ
+      _ = c * mpv (Q.replaceBasis basisQ).toTensor σ :=
+        congrArg (fun z : ℂ ↦ c * z) (GaugeEquiv.sameMPV hGlobalQ N σ)
+  have hNormalized :=
+    PeriodicOverlapHypothesis.ofSectorDecompositions
+      (P.replaceBasis basisP) (Q.replaceBasis basisQ) periodP periodQ
+      hPeriodicP hPeriodicQ hNonRepP' hNonRepQ' hProp'
+  exact PeriodicOverlapHypothesis.of_gaugeEquiv hGaugeP hGaugeQ hNormalized
 
 /-- Proportional, normalized scalar-weight MPV representations have
 non-decaying overlap partners in both directions.

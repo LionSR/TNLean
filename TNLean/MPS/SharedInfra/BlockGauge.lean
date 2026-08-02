@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.SharedInfra.BlockAssembly
+import TNLean.MPS.SharedInfra.SectorDecomposition
 
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Algebra.Group.Pi.Units
@@ -12,27 +12,31 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 /-!
 # Shared block-diagonal gauge infrastructure
 
-This file factors out the pure-linear-algebra block-diagonal gauge machinery
-used by the block-gauge constructions in the multi-block and BNT fundamental
-theorem arguments.
+This file factors out the shared block-diagonal and sector-coordinate gauge
+machinery used by the multi-block and BNT fundamental theorem arguments and by
+periodic sector normalization.
 
 Exports:
 
 * `blockDiagonalGL` — block-diagonal `GL`-element from a family of invertible
   blocks.
+* `matched_block_gauge` — repetition of a representative gauge over every
+  multiplicity copy in flattened sector coordinates.
 * `globalGaugeOfBlocks` — the reindexed block-diagonal gauge on the flattened
   bond `Fin (∑ k, dim k)` used by `toTensorFromBlocks`.
 * `toTensorFromBlocks_eq_globalGaugeOfBlocks_conj` — direct-sum conjugation
   identity: per-block conjugation lifts to a `globalGaugeOfBlocks`-conjugation
   of `toTensorFromBlocks`.
 
-These declarations are pure linear-algebra intermediate constructions rather
-than statements of the fundamental theorem itself.
+These declarations are shared intermediate constructions rather than
+statements of the fundamental theorem itself.
 
 ## Reference
 
 * arXiv:1606.00608, Corollary II.2 (`eq:II_auxcor`, lines 1172--1178)
   and its block-diagonal gauge construction in lines 1189--1192.
+* arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the sectorwise
+  normalization similarities at lines 313--332.
 -/
 
 open scoped Matrix BigOperators
@@ -40,6 +44,23 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ}
+
+/-! ## Repetition over sector copies -/
+
+/-- Duplicate each representative gauge over all its multiplicity copies in
+flattened sector coordinates.
+
+For gauges $X_j$, applying `globalGaugeOfBlocks` to this family gives
+$\bigoplus_j (I_{r_j} \otimes X_j)$.
+
+Sources: arXiv:1606.00608, Appendix MPV proof, line 1191; arXiv:1708.00029,
+equation `eq:bdnr`, lines 286--305, and the blockwise similarities at
+lines 313--332. -/
+noncomputable def matched_block_gauge {Q : SectorDecomposition d}
+    (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ) :
+    (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ := fun s => by
+  change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
+  exact Xblock (Q.flatIndexEquiv.symm s).1
 
 /-! ## Block-diagonal invertible matrices -/
 
