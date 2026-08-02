@@ -579,13 +579,16 @@ the other triages. `defer-to-2.0` changes nothing in the active major.
 atomic assertion can witness the finding. It requires a reset as the next
 non-correction entry.
 
-Let `Q` be the active freeze's exact `freeze_tag`, `H_E` the friction record's
-exact final head, and `I_E` its later integration. Every named inventory test's
-`surface` must equal the friction's exact `surface`. Candidate validation
-requires each `observe-release-test(H_E, Q, R)` receipt to return
-`assertion-failed` with its exact pinned fingerprint; post-merge validation
-requires the same at `I_E`. The friction must receive a later `resolution`
-before the active attempt can proceed to release preparation or sign-off.
+For `fix-compatible` friction, let `Q` be the active freeze's exact
+`freeze_tag`, `H_E` the friction record's exact final head, and `I_E` its later
+integration. Every named inventory test's `surface` must equal the friction's
+exact `surface`. Candidate validation requires each
+`observe-release-test(H_E, Q, R)` receipt to return `assertion-failed` with its
+exact pinned fingerprint; post-merge validation requires the same at `I_E`.
+This triage must receive a later `resolution` before the active attempt can
+proceed to release preparation or sign-off. A `defer-to-2.0` entry needs no
+resolution and does not block either gate. A `restart-required` entry exits
+through its required reset instead.
 
 ### `resolution`
 
