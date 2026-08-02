@@ -308,9 +308,23 @@ kernel-boundary|signature=phys:up
     missing_result_rules = [finding.rule for finding in missing_result.findings]
     assert "malformed-event" in missing_result_rules
     assert "eq-boundary-mismatch" in missing_result_rules
-    assert not next(
-        event for event in missing_result.log_events if event.kind == "check"
-    ).valid
+
+    for incomplete_check in (
+        "check|scope=1|relation=1|result=off\n",
+        "check|scope=1|relation=1|result=equal\n",
+        "check|scope=1|result=mismatch|reason=boundary\n",
+    ):
+        incomplete = audit_log(
+            incomplete_check
+            + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+            checked_equation_source.replace(
+                "check={signature, modulo=bundles}",
+                "check={signature, off={1: documented}}",
+            ),
+        )
+        incomplete_rules = [finding.rule for finding in incomplete.findings]
+        assert "malformed-event" in incomplete_rules
+        assert "eq-boundary-mismatch" in incomplete_rules
 
     duplicate_result = audit_log(
         "check|scope=1|relation=1|result=mismatch|result=equal\n"
@@ -340,6 +354,61 @@ kernel-boundary|signature=phys:up
     ]
     assert "malformed-event" in invalid_picture_rules
     assert "eq-boundary-mismatch" in invalid_picture_rules
+
+    for picture_reference in ("oops", "k1"):
+        picture_owned_check = audit_log(
+            f"check|picture={picture_reference}|scope=1|relation=1|"
+            "result=equal|signature=\n"
+            + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+            checked_equation_source.replace(
+                "check={signature, modulo=bundles}", "check={signature}"
+            ),
+        )
+        picture_owned_rules = [
+            finding.rule for finding in picture_owned_check.findings
+        ]
+        assert "malformed-event" in picture_owned_rules
+        assert "eq-boundary-mismatch" in picture_owned_rules
+
+    scoped_off_log = (
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
+    )
+    optionless_body_spoof = checked_equation_source.replace(
+        "[check={signature, modulo=bundles}]",
+        "\n$check={signature, off={1:\\mathrm{note}}}$",
+    )
+    body_off_spoof = checked_equation_source.replace(
+        "check={signature, modulo=bundles}]",
+        "check={signature}]\n$off={1:\\mathrm{note}}$",
+    )
+    nested_option_spoof = checked_equation_source.replace(
+        "check={signature, modulo=bundles}",
+        "frame={note={check={signature}, off={1: documented}}}",
+    )
+    for spoofed_source in (
+        optionless_body_spoof,
+        body_off_spoof,
+        nested_option_spoof,
+    ):
+        spoofed = audit_log(scoped_off_log, spoofed_source)
+        assert "eq-boundary-mismatch" in [
+            finding.rule for finding in spoofed.findings
+        ]
+
+    trailing_boundary = audit_log(
+        "picture|id=k1|lang=kernel|scope=1\n"
+        "atom|id=atom-1|kind=tn\n"
+        "kernel-boundary|signature=phys:up\n"
+        "picture|id=k2|lang=kernel|scope=1\n"
+        "atom|id=atom-1|kind=tn\n"
+        "check|scope=1|relation=1|result=equal|signature=phys:up\n"
+        "kernel-boundary|signature=phys:up\n",
+        checked_equation_source,
+    )
+    trailing_boundary_rules = [finding.rule for finding in trailing_boundary.findings]
+    assert "malformed-event" in trailing_boundary_rules
+    assert "kernel-check" in trailing_boundary_rules
 
     checkless_equation_source = (
         "\\begin{tenkzeq}[size=m]\n"

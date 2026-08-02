@@ -160,7 +160,7 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
     """Return picture owners from the compiled model event stream."""
     languages = {
         event.attrs["lang"]
-        for event in parsed.events
+        for event in parsed.valid_events
         if event.kind == "picture"
     }
     unknown_languages = languages.difference((*INK_EVENT_FAMILIES, "lattice"))
@@ -176,19 +176,19 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
     }
     if any(
         event.kind == "tree" and event.attrs["picture"] == "0"
-        for event in parsed.events
+        for event in parsed.valid_events
     ):
         # A command-scope \tntree is a complete public tenkz composition but
         # deliberately logs against picture 0 rather than opening a container.
         families.add("tenkz")
     lattice_pictures = {
         event.attrs["id"]
-        for event in parsed.events
+        for event in parsed.valid_events
         if event.kind == "picture" and event.attrs["lang"] == "lattice"
     }
     planes_pictures = {
         event.attrs["picture"]
-        for event in parsed.events
+        for event in parsed.valid_events
         if event.kind == "surface" and event.attrs["name"] == "tenkzplanes"
     }
     if planes_pictures.difference(lattice_pictures):
@@ -807,7 +807,7 @@ def event_signatures(parsed: ParsedLog) -> tuple[str, ...]:
     """Return concise signatures from a parsed render event stream."""
     boundaries = tuple(
         event.raw
-        for event in parsed.events
+        for event in parsed.valid_events
         if event.kind in {"boundary", "kernel-boundary"}
     )
     if boundaries:
@@ -816,7 +816,7 @@ def event_signatures(parsed: ParsedLog) -> tuple[str, ...]:
     languages: dict[str, str] = {}
     counts: dict[str, Counter[str]] = {}
     boundary_atoms: Counter[str] = Counter()
-    for event in parsed.events:
+    for event in parsed.valid_events:
         if event.kind == "picture":
             picture = event.attrs.get("id", "?")
             languages[picture] = event.attrs.get("lang", "unknown")

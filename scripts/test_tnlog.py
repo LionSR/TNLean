@@ -60,6 +60,11 @@ def main() -> int:
                 "a=bad|b=0|c=0|d=1",
                 "check|relation=1|result=equal",
                 "check|scope=9|scope=1|relation=1|result=equal",
+                "check|picture=1|scope=1|relation=1|result=equal",
+                "check|scope=1|relation=1|result=off",
+                "check|scope=1|relation=1|result=equal",
+                "check|scope=1|result=mismatch",
+                "check|scope=1|result=malformed|reason=relation-count",
                 "mystery|picture=2|bare",
             )
         ),
@@ -80,12 +85,54 @@ def main() -> int:
         for finding in malformed
     )
     assert any("duplicate field 'scope'" in finding[2] for finding in malformed)
+    assert any(
+        "check event forbids field(s): picture" in finding[2]
+        for finding in malformed
+    )
     assert all(
         not event.valid
         for event in malformed_parsed.events
         if event.kind == "check"
     )
     assert not malformed_parsed.by_id[1].events
+
+    stale_findings: list[tuple[str, str, str]] = []
+    stale_owner = parse_log(
+        "picture|id=k1|lang=kernel\n"
+        "atom|id=atom-1|kind=tn\n"
+        "picture|id=k2|lang=kernel|scope=1|scope=2\n"
+        "kernel-boundary|signature=bad\n",
+        source_name="stale-owner.tnlog",
+        known_langs={"kernel"},
+        hard=lambda *finding: stale_findings.append(finding),
+    )
+    assert {finding[0] for finding in stale_findings} == {"malformed-event"}
+    assert [event.kind for event in stale_owner.by_id["k1"].events] == ["atom"]
+    assert not next(
+        event for event in stale_owner.events
+        if event.kind == "kernel-boundary"
+    ).valid
+
+    check_delimiter_findings: list[tuple[str, str, str]] = []
+    check_delimiter = parse_log(
+        "picture|id=k1|lang=kernel\n"
+        "atom|id=atom-1|kind=tn\n"
+        "check|scope=1|relation=1|result=equal|signature=open:e\n"
+        "kernel-boundary|signature=open:e\n",
+        source_name="check-delimiter.tnlog",
+        known_langs={"kernel"},
+        hard=lambda *finding: check_delimiter_findings.append(finding),
+    )
+    assert {finding[0] for finding in check_delimiter_findings} == {
+        "malformed-event"
+    }
+    assert [event.kind for event in check_delimiter.by_id["k1"].events] == [
+        "atom"
+    ]
+    assert not next(
+        event for event in check_delimiter.events
+        if event.kind == "kernel-boundary"
+    ).valid
 
     assert AuditEvent is Event
     assert AuditPicture is Picture

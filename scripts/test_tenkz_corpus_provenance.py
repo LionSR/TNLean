@@ -17,6 +17,7 @@ from tenkz_rmp import (
     DEFAULT_MANIFEST,
     DEFAULT_VERDICT,
     RMPError,
+    event_signatures,
     ink_environment_problems,
     load_author_source_hashes,
     load_manifest,
@@ -102,6 +103,19 @@ def test_ink_environment_owner() -> None:
     }
     if used != expected:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
+    malformed: list[tuple[str, str, str]] = []
+    rejected = parse_log(
+        "picture|id=1|id=2|lang=grid\n"
+        "kernel-boundary|picture=1|signature=a|signature=b\n",
+        source_name="invalid-owner-test.tnlog",
+        hard=lambda *finding: malformed.append(finding),
+    )
+    if not malformed or rejected.valid_events:
+        raise AssertionError("invalid records escaped canonical quarantine")
+    if rendered_ink_environment_families(rejected):
+        raise AssertionError("invalid picture changed compiled Ink ownership")
+    if event_signatures(rejected) != ("model-events|none",):
+        raise AssertionError("invalid boundary changed compiled event signatures")
     with tempfile.TemporaryDirectory(prefix="tenkz-ink-owner-") as tmp:
         log_path = Path(tmp) / "ink-owner-test.tnlog"
         log_path.write_text(log, encoding="utf-8")

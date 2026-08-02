@@ -94,7 +94,14 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Optional
 
-from tenkzlib.texcase import Construct, scan_constructs, strip_comments
+from tenkzlib.texcase import (
+    Construct,
+    following_group,
+    following_group_span,
+    scan_constructs,
+    strip_comments,
+    top_level_options,
+)
 from tenkzlib.tnlog import (
     FIELD_VALIDATORS,
     Event,
@@ -477,7 +484,7 @@ class Audit:
                 self.check_tree_event(event) if event.kind == "tree" else None
             ),
         )
-        self.log_events = parsed.events
+        self.log_events = parsed.valid_events
         self.pictures = parsed.pictures
         self.by_id = parsed.by_id
 
@@ -773,22 +780,9 @@ class Audit:
                     "boundary records; expected exactly one",
                 )
         for event in self.log_events:
-            if event.kind != "check" or not event.valid:
-                continue
-            # The canonical parser already reports these record-level fields;
-            # keep invalid events out of the semantic checks without emitting
-            # the same malformed-event finding twice.
-            if not {"scope", "result"}.issubset(event.attrs):
+            if event.kind != "check":
                 continue
             result = event.attrs["result"]
-            if result != "malformed" and not self.require_fields(
-                event, {"relation"}, "check"
-            ):
-                continue
-            if result == "off" and not self.require_fields(
-                event, {"reason"}, "check opt-out"
-            ):
-                continue
             if result in {"mismatch", "malformed"}:
                 relation = event.attrs.get("relation", "?")
                 self.hard(
@@ -1535,7 +1529,7 @@ class Audit:
         picture_scopes: dict[int, int] = {}
         scope_pictures: dict[int, list[int]] = {}
         for event in self.log_events:
-            if event.kind != "picture" or not event.valid:
+            if event.kind != "picture":
                 continue
             scope = event.attrs.get("scope", "")
             picture = picture_indices.get(event.attrs.get("id", ""))
@@ -1548,7 +1542,7 @@ class Audit:
         scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
-            if event.kind != "check" or not event.valid:
+            if event.kind != "check":
                 continue
             scope = event.attrs.get("scope", "")
             if not scope.isdigit():
@@ -1577,16 +1571,9 @@ class Audit:
             )
             if first_construct is None:
                 continue
-            header = self._tex_src[begin.end():first_construct.start]
-            checked = re.search(r"\bcheck\s*=", header) is not None
-            if not checked:
+            declared_offs = _tenkzeq_declared_offs(self._tex_src, begin.end())
+            if declared_offs is None:
                 continue
-            declared_offs = {
-                int(match.group(1))
-                for match in re.finditer(
-                    r"\boff\s*=\s*\{\s*(\d+)\s*:", header
-                )
-            }
             members = [
                 index for index, construct in enumerate(self.constructs)
                 if begin.end() <= construct.start and construct.end <= token.start()
@@ -1798,6 +1785,34 @@ _INLINE_EQUALITY_SPACE = r"(?:\s|\\[,;:!]|\\(?:quad|qquad)\b)*"
 _INLINE_EQUALITY_GLUE = re.compile(
     rf"\${_INLINE_EQUALITY_SPACE}={_INLINE_EQUALITY_SPACE}\$"
 )
+
+
+def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
+    """Return source-authorized opt-outs from one equation's actual options.
+
+    ``None`` means that the environment has no single top-level ``check`` key,
+    so its event records cannot authorize source-linked boundary delegation.
+    """
+    options = following_group(source, position, "[", "]")
+    if options is None:
+        return None
+    check_values = [
+        value for key, value in top_level_options(options) if key == "check"
+    ]
+    if len(check_values) != 1 or check_values[0] is None:
+        return None
+    check_value = check_values[0]
+    grouped = following_group_span(check_value, 0, "{", "}")
+    if grouped is not None and not check_value[grouped[1] :].strip():
+        check_value = grouped[0]
+    declared: set[int] = set()
+    for key, value in top_level_options(check_value):
+        if key != "off" or value is None:
+            continue
+        match = re.fullmatch(r"\{\s*(\d+)\s*:\s*[^}]*\}", value)
+        if match is not None:
+            declared.add(int(match.group(1)))
+    return declared
 
 
 def same_equation(sep: str) -> bool:

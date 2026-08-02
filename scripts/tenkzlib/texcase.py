@@ -72,6 +72,59 @@ def match_group(
     return -1
 
 
+def following_group_span(
+    source: str, position: int, opener: str, closer: str
+) -> tuple[str, int] | None:
+    """Return a following group's contents and ending offset."""
+    while position < len(source) and source[position].isspace():
+        position += 1
+    if source[position : position + 1] != opener:
+        return None
+    end = match_group(source, position, opener, closer)
+    if end == -1:
+        return None
+    return source[position + 1 : end - 1], end
+
+
+def following_group(
+    source: str, position: int, opener: str, closer: str
+) -> str | None:
+    """Return the contents of a group following optional whitespace."""
+    group = following_group_span(source, position, opener, closer)
+    return group[0] if group is not None else None
+
+
+def top_level_options(options: str) -> list[tuple[str, str | None]]:
+    """Parse one comma-separated option group without splitting nested values."""
+    start = 0
+    depths = {"{": 0, "[": 0, "(": 0}
+    closing = {"}": "{", "]": "[", ")": "("}
+    parts: list[str] = []
+    index = 0
+    while index < len(options):
+        character = options[index]
+        if character == "\\":
+            index += 2
+            continue
+        if character in depths:
+            depths[character] += 1
+        elif character in closing:
+            opener = closing[character]
+            depths[opener] = max(0, depths[opener] - 1)
+        elif character == "," and not any(depths.values()):
+            parts.append(options[start:index])
+            start = index + 1
+        index += 1
+    parts.append(options[start:])
+    result: list[tuple[str, str | None]] = []
+    for part in parts:
+        key, separator, value = part.partition("=")
+        key = re.sub(r"\s+", " ", key.strip())
+        if key:
+            result.append((key, value.strip() if separator else None))
+    return result
+
+
 def _find_env_end(
     source: str, name: str, position: int
 ) -> re.Match[str] | None:

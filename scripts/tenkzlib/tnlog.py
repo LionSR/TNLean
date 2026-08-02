@@ -362,6 +362,19 @@ REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
 }
 
+REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
+    "equal": frozenset({"relation", "signature"}),
+    "mismatch": frozenset({"relation"}),
+    "off": frozenset({"relation", "reason"}),
+    "malformed": frozenset({"reason", "panels", "relations"}),
+}
+
+# Equation checks are scope-owned top-level records.  A picture= field would
+# give them a second, conflicting owner and must never enter semantic checks.
+FORBIDDEN_FIELDS: dict[str, frozenset[str]] = {
+    "check": frozenset({"picture"}),
+}
+
 
 @dataclass
 class Event:
@@ -446,6 +459,11 @@ class ParsedLog:
     pictures: list[Picture]
     by_id: dict[int | str, Picture]
 
+    @property
+    def valid_events(self) -> list[Event]:
+        """Return only records accepted by the canonical parser."""
+        return [event for event in self.events if event.valid]
+
 
 FindingCallback = Callable[[str, str, str], None]
 EventCallback = Callable[[Event], None]
@@ -515,7 +533,14 @@ def parse_log(
                         f"{kind} field {key}={value!r} fails validation: {line}",
                     )
                     valid = False
-            missing = sorted(REQUIRED_FIELDS.get(kind, frozenset()) - attrs.keys())
+            required = set(REQUIRED_FIELDS.get(kind, frozenset()))
+            if kind == "check":
+                required.update(
+                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(
+                        attrs.get("result", ""), frozenset()
+                    )
+                )
+            missing = sorted(required - attrs.keys())
             if missing:
                 hard(
                     "malformed-event",
@@ -523,7 +548,20 @@ def parse_log(
                     f"{kind} event lacks required field(s): {', '.join(missing)}: {line}",
                 )
                 valid = False
+            forbidden = sorted(FORBIDDEN_FIELDS.get(kind, frozenset()) & attrs.keys())
+            if forbidden:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"{kind} event forbids field(s): {', '.join(forbidden)}: {line}",
+                )
+                valid = False
             event.valid = valid
+            if kind == "check":
+                # A scope-owned equation check is emitted outside every panel
+                # and therefore closes the preceding kernel picture even when
+                # the check itself is malformed.
+                current_kernel = None
             if kind != "picture" and "picture" not in attrs:
                 if current_kernel is not None and kind in {
                     "atom",
@@ -552,6 +590,9 @@ def parse_log(
                 valid = False
                 event.valid = False
         if kind == "picture":
+            # Every picture header ends the preceding picture's implicit
+            # ownership, even when the new header is malformed or duplicate.
+            current_kernel = None
             if not valid or "id" not in attrs or not _is_picture_id(attrs["id"]):
                 event.valid = False
                 continue
