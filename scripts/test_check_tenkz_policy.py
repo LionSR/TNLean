@@ -108,8 +108,13 @@ def freeze(
     source_sha: str = SHA,
     tag_object: str = TAG_OBJECT,
     tag: str = "tenkz-v0.9.0",
+    tag_snapshot: tuple[str, ...] | None = None,
     prerequisites: str = PREREQUISITES,
 ) -> str:
+    if tag_snapshot is None:
+        patch = int(tag.rsplit(".", 1)[1])
+        tag_snapshot = tuple(f"tenkz-v0.9.{index}" for index in range(patch + 1))
+    rendered_snapshot = ", ".join(f'"{item}"' for item in tag_snapshot)
     return block(
         f'''id = "{entry_id}"
 kind = "freeze"
@@ -119,6 +124,7 @@ source_pr = "{source_pr}"
 source_sha = "{source_sha}"
 freeze_tag_object = "{tag_object}"
 freeze_tag = "{tag}"
+freeze_tag_snapshot = [{rendered_snapshot}]
 prerequisites = {prerequisites}
 evidence = "source, tag, and issue evidence"'''
     )
@@ -324,6 +330,38 @@ def candidate_pr(
     )
 
 
+def publisher_evidence(
+    integration_oid: str,
+    *,
+    status: str = "not-run",
+    object_oid: str = FINAL_TAG_OBJECT,
+) -> policy.FinalTagPublisherEvidence:
+    ran = status in {"success", "failure"}
+    succeeded = status == "success"
+    return policy.FinalTagPublisherEvidence(
+        validated_integration_oid=integration_oid,
+        complete=True,
+        pinned_workflow_run_exact=True,
+        postmerge_validation_succeeded=True,
+        postmerge_validation_network_disabled=True,
+        publisher_status=status,
+        publisher_needs_exact_postmerge_validation=True,
+        publisher_started_after_validation_success=True if ran else None,
+        validation_jobs_lack_contents_write=True,
+        publisher_has_only_contents_write=True,
+        publisher_has_no_checkout_or_repository_execution=True,
+        publisher_uses_version_fingerprinted_hosted_gh=True,
+        publisher_command_and_inputs_closed=True,
+        publisher_uses_only_github_control_plane=True,
+        other_networked_steps_absent=True,
+        final_ref_absent_before_create=True if succeeded else None,
+        annotated_tag_object_targets_integration=True if succeeded else None,
+        ref_created_without_force=True if succeeded else None,
+        readback_complete_and_matching=True if succeeded else None,
+        reported_tag_object_oid=object_oid if succeeded else None,
+    )
+
+
 @dataclass
 class Context:
     prs: dict[str, policy.PullRequestEvidence]
@@ -335,6 +373,7 @@ class Context:
     payloads: dict[tuple[str, str], policy.ReleasePayloadEvidence]
     tags: dict[str, policy.TagEvidence]
     issues: dict[str, policy.IssueEvidence]
+    publishers: dict[str, policy.FinalTagPublisherEvidence] = field(default_factory=dict)
     observations: dict[
         tuple[str, str, str], policy.ReleaseTestObservationEvidence
     ] = field(default_factory=dict)
@@ -396,6 +435,15 @@ class Context:
     def resolve_current_final_tag(self, tag: str) -> policy.TagEvidence:
         assert tag == policy.FINAL_TAG
         return self.tags[tag]
+
+    def resolve_final_tag_publisher(
+        self,
+        integration_oid: str,
+    ) -> policy.FinalTagPublisherEvidence:
+        return self.publishers.get(
+            integration_oid,
+            publisher_evidence(integration_oid),
+        )
 
     def resolve_replay_issue(self, issue: str) -> policy.IssueEvidence:
         return self.issues[issue]
@@ -856,7 +904,8 @@ def context() -> Context:
                 "tag",
                 SHA,
                 historical_candidate_check_exact_and_successful=True,
-                historical_compares_only_earlier_freezes=True,
+                historical_current_namespace_complete=True,
+                historical_current_matching_tag_names=("tenkz-v0.9.0",),
             ),
             policy.FINAL_TAG: policy.TagEvidence(None, None, None, exists=False),
         },
@@ -1240,10 +1289,10 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
                 if tag.candidate_namespace_complete is None
                 else tag.candidate_namespace_complete
             ),
-            candidate_patch_exceeds_current_namespace=(
-                True
-                if tag.candidate_patch_exceeds_current_namespace is None
-                else tag.candidate_patch_exceeds_current_namespace
+            candidate_matching_tag_names=(
+                tuple(entry["freeze_tag_snapshot"])
+                if tag.candidate_matching_tag_names is None
+                else tag.candidate_matching_tag_names
             ),
         )
     prepare_reset_receipts(entries, facts)
@@ -1279,6 +1328,7 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
         ),
         "resolve_replay_freeze_tag": facts.resolve_replay_freeze_tag,
         "resolve_current_final_tag": facts.resolve_current_final_tag,
+        "resolve_final_tag_publisher": facts.resolve_final_tag_publisher,
         "resolve_replay_issue": facts.resolve_replay_issue,
         "resolve_replay_record_invalid_reset": facts.resolve_replay_record_invalid_reset,
         "resolve_current_workflow": facts.resolve_current_workflow,
@@ -1390,8 +1440,20 @@ def add_freeze_facts(
         "tag",
         source_sha,
         historical_candidate_check_exact_and_successful=True,
-        historical_compares_only_earlier_freezes=True,
+        historical_current_namespace_complete=True,
     )
+    current_names = tuple(
+        sorted(
+            (name for name in facts.tags if policy.FREEZE_TAG_RE.fullmatch(name)),
+            key=lambda name: int(name.rsplit(".", 1)[1]),
+        )
+    )
+    for name in current_names:
+        facts.tags[name] = replace(
+            facts.tags[name],
+            historical_current_namespace_complete=True,
+            historical_current_matching_tag_names=current_names,
+        )
     facts.payloads[(source_sha, tag)] = payload_evidence(
         source_sha,
         tag,
@@ -1579,6 +1641,64 @@ def main() -> int:
         lambda: validate([freeze(tag="tenkz-v0.9.00")], context()),
         "invalid freeze tag",
     )
+
+    missing_snapshot = freeze().replace(
+        '\nfreeze_tag_snapshot = ["tenkz-v0.9.0"]',
+        "",
+    )
+    expect_failure(
+        lambda: policy.validate_entry_shape(parsed_entries(missing_snapshot)[0], 1),
+        "fields differ from schema",
+    )
+    expect_failure(
+        lambda: validate([freeze(tag_snapshot=())], context()),
+        "freeze_tag_snapshot is missing",
+    )
+    expect_failure(
+        lambda: validate(
+            [
+                freeze(
+                    tag="tenkz-v0.9.2",
+                    tag_snapshot=(
+                        "tenkz-v0.9.1",
+                        "tenkz-v0.9.0",
+                        "tenkz-v0.9.2",
+                    ),
+                )
+            ],
+            context(),
+        ),
+        "not in ascending numeric PATCH order",
+    )
+    expect_failure(
+        lambda: validate(
+            [
+                freeze(
+                    tag="tenkz-v0.9.1",
+                    tag_snapshot=("tenkz-v0.9.1", "tenkz-v0.9.2"),
+                )
+            ],
+            context(),
+        ),
+        "freeze PATCH is not maximal in its retained snapshot",
+    )
+
+    later_reservation = context()
+    later_reservation.tags["tenkz-v0.9.0"] = replace(
+        later_reservation.tags["tenkz-v0.9.0"],
+        historical_current_matching_tag_names=(
+            "tenkz-v0.9.0",
+            "tenkz-v0.9.1",
+        ),
+    )
+    assert validate([freeze()], later_reservation) == "attempt-1-active"
+
+    lost_retained_name = context()
+    lost_retained_name.tags["tenkz-v0.9.0"] = replace(
+        lost_retained_name.tags["tenkz-v0.9.0"],
+        historical_current_matching_tag_names=("tenkz-v0.9.1",),
+    )
+    assert validate([freeze()], lost_retained_name) == "reset-required:S1-0001"
 
     missing_receipt_field = reset(
         "S1-0002", "#908", "record-invalid", "S1-0001"
@@ -2719,11 +2839,158 @@ def main() -> int:
         "tag",
         oid(9071),
         exists=True,
-        validated_entry_id="S1-0004",
-        validated_record_pr=SIGNOFF_RECORD,
-        commit_is_validated_record_integration=True,
+    )
+    released.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
     )
     assert validate(complete_log(), released) == "released"
+
+    manual_final = context()
+    manual_final.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    expect_failure(
+        lambda: validate(complete_log(), manual_final),
+        "without the successful pinned publisher",
+    )
+
+    failed_publisher = context()
+    failed_publisher.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="failure",
+    )
+    expect_failure(
+        lambda: validate(complete_log(), failed_publisher),
+        "publisher failed; hard release incident",
+    )
+
+    lost_published_ref = context()
+    lost_published_ref.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    expect_failure(
+        lambda: validate(complete_log(), lost_published_ref),
+        "publisher succeeded but the final ref is absent",
+    )
+
+    published_then_drifted = context()
+    published_then_drifted.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    expect_failure(
+        lambda: validate(
+            complete_log(),
+            published_then_drifted,
+            audit=audit_evidence("S1-0004", ("S1-0002",)),
+        ),
+        "publisher succeeded while release evidence requires reset",
+    )
+
+    replaced_published_object = context()
+    replaced_published_object.tags[policy.FINAL_TAG] = policy.TagEvidence(
+        "d" * 40,
+        "tag",
+        oid(9071),
+        exists=True,
+    )
+    replaced_published_object.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    expect_failure(
+        lambda: validate(complete_log(), replaced_published_object),
+        "current final tag object differs from the publisher output",
+    )
+
+    publisher_contract_failures = (
+        (
+            "postmerge_validation_network_disabled",
+            False,
+            "validation was not network-disabled",
+        ),
+        (
+            "publisher_needs_exact_postmerge_validation",
+            False,
+            "does not depend on the exact validation job",
+        ),
+        (
+            "validation_jobs_lack_contents_write",
+            False,
+            "validation job has contents write permission",
+        ),
+        (
+            "publisher_has_only_contents_write",
+            False,
+            "missing or excess permissions",
+        ),
+        (
+            "publisher_has_no_checkout_or_repository_execution",
+            False,
+            "checks out or executes repository content",
+        ),
+        (
+            "publisher_uses_version_fingerprinted_hosted_gh",
+            False,
+            "uses another executable",
+        ),
+        (
+            "publisher_command_and_inputs_closed",
+            False,
+            "command or inputs are not closed",
+        ),
+        (
+            "publisher_uses_only_github_control_plane",
+            False,
+            "uses a non-GitHub network service",
+        ),
+        ("other_networked_steps_absent", False, "another networked step"),
+        (
+            "publisher_started_after_validation_success",
+            False,
+            "did not start after validation success",
+        ),
+        ("final_ref_absent_before_create", False, "existed before the publisher"),
+        (
+            "annotated_tag_object_targets_integration",
+            False,
+            "annotated tag object for the integration",
+        ),
+        ("ref_created_without_force", False, "without force"),
+        ("readback_complete_and_matching", False, "readback is incomplete"),
+    )
+    for field_name, bad_value, error_fragment in publisher_contract_failures:
+        bad_publisher = context()
+        bad_publisher.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+        bad_publisher.publishers[oid(9071)] = replace(
+            publisher_evidence(oid(9071), status="success"),
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda facts=bad_publisher: validate(complete_log(), facts),
+            error_fragment,
+        )
+
+    wrong_publisher_integration = context()
+    wrong_publisher_integration.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    wrong_publisher_integration.publishers[oid(9071)] = replace(
+        publisher_evidence(oid(9071), status="success"),
+        validated_integration_oid=oid(9991),
+    )
+    expect_failure(
+        lambda: validate(complete_log(), wrong_publisher_integration),
+        "used another sign-off integration",
+    )
+
+    premature_publisher_output = context()
+    premature_publisher_output.publishers[oid(9071)] = replace(
+        publisher_evidence(oid(9071)),
+        reported_tag_object_oid=FINAL_TAG_OBJECT,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), premature_publisher_output),
+        "publisher that did not run carries creation evidence",
+    )
 
     trailing_correction = context()
     add_record(
@@ -2734,6 +3001,7 @@ def main() -> int:
         SIGNOFF_MERGE + timedelta(seconds=1),
     )
     trailing_correction.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    trailing_correction.publishers.update(released.publishers)
     assert validate(
         complete_log() + [correction("S1-0005", "#908", "S1-0002")],
         trailing_correction,
@@ -2809,6 +3077,10 @@ def main() -> int:
         oid(9071),
         exists=True,
     )
+    lightweight_final.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
     expect_failure(
         lambda: validate(complete_log(), lightweight_final),
         "final release tag is not annotated",
@@ -2830,9 +3102,10 @@ def main() -> int:
         "tag",
         oid(9991),
         exists=True,
-        validated_entry_id="S1-0004",
-        validated_record_pr=SIGNOFF_RECORD,
-        commit_is_validated_record_integration=False,
+    )
+    wrong_final_target.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
     )
     expect_failure(
         lambda: validate(complete_log(), wrong_final_target),
@@ -2845,9 +3118,6 @@ def main() -> int:
         "tag",
         oid(9071),
         exists=True,
-        validated_entry_id="S1-0004",
-        validated_record_pr=SIGNOFF_RECORD,
-        commit_is_validated_record_integration=True,
     )
     expect_failure(
         lambda: validate(complete_log()[:3], premature_final),
@@ -2857,7 +3127,7 @@ def main() -> int:
     inconsistent_absent = context()
     inconsistent_absent.tags[policy.FINAL_TAG] = replace(
         inconsistent_absent.tags[policy.FINAL_TAG],
-        validated_entry_id="S1-0004",
+        object_id=FINAL_TAG_OBJECT,
     )
     expect_failure(
         lambda: validate(complete_log(), inconsistent_absent),
@@ -2869,10 +3139,6 @@ def main() -> int:
         forged_release.records["S1-0004"],
         validated_pr_ref=SIGNOFF_RECORD,
         validated_head_oid=forged_release.prs[SIGNOFF_RECORD].head_oid,
-    )
-    forged_release.tags[policy.FINAL_TAG] = replace(
-        released.tags[policy.FINAL_TAG],
-        validated_entry_id="S1-0003",
     )
     forged_log = [
         freeze(),
@@ -3961,9 +4227,9 @@ def main() -> int:
         "9" * 40,
         "tag",
         SHA,
-        True,
-        True,
-        True,
+        historical_candidate_check_exact_and_successful=True,
+        historical_current_namespace_complete=True,
+        historical_current_matching_tag_names=("tenkz-v0.9.0",),
     )
     add_record(
         moved_tag,
@@ -3985,9 +4251,8 @@ def main() -> int:
         "9" * 40,
         "tag",
         SHA,
-        True,
-        True,
-        True,
+        candidate_namespace_complete=True,
+        candidate_matching_tag_names=("tenkz-v0.9.0",),
     )
     expect_failure(
         lambda: validate([freeze()], moved_tag_candidate),
@@ -4028,11 +4293,11 @@ def main() -> int:
     stale_patch.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
     stale_patch.tags["tenkz-v0.9.0"] = replace(
         stale_patch.tags["tenkz-v0.9.0"],
-        candidate_patch_exceeds_current_namespace=False,
+        candidate_matching_tag_names=("tenkz-v0.9.0", "tenkz-v0.9.1"),
     )
     expect_failure(
         lambda: validate([freeze()], stale_patch),
-        "candidate PATCH does not exceed the current namespace",
+        "retained snapshot differs from the candidate namespace",
     )
 
     mixed_record = context()
