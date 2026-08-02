@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import csv
+import dataclasses
 import os
 import re
 import subprocess
 import tempfile
+from collections import Counter
 from pathlib import Path
 
 import tenkz_rmp
@@ -25,6 +27,17 @@ from tenkz_rmp import (
     sha256,
     structural_capability_problems,
     verify_author_source_tree,
+)
+from tenkzlib.dimensions import (
+    BOOK_LAYOUT_ALLOWLIST,
+    DimensionOccurrence,
+    DimensionOwner,
+    DimensionOwnershipError,
+    DimensionReport,
+    collect_dimension_report,
+    scan_book_dimensions,
+    scan_case_dimensions,
+    validate_dimension_report,
 )
 from tenkzlib.tnlog import parse_log
 
@@ -179,6 +192,459 @@ def test_ink_environment_owner() -> None:
         raise AssertionError("compiled kernel owner was omitted")
 
 
+def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
+    try:
+        validate_dimension_report(report)
+    except DimensionOwnershipError as exc:
+        if phrase not in str(exc):
+            raise AssertionError(
+                f"dimension mutation produced the wrong failure: {exc}"
+            ) from exc
+    else:
+        raise AssertionError(f"dimension mutation escaped the {phrase!r} ratchet")
+
+
+def test_rmp_dimension_ownership() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    report = collect_dimension_report(ROOT, (target.case for target in targets))
+    expected = Counter(
+        {
+            DimensionOwner.METRIC: 0,
+            DimensionOwner.FRAME: 0,
+            DimensionOwner.ROUTE: 396,
+            DimensionOwner.LAYOUT: 530,
+        }
+    )
+    if report.case_count != 926 or report.case_counts != expected:
+        raise AssertionError(
+            "RMP dimension ownership baseline drifted: "
+            f"total={report.case_count}, owners={report.case_counts!r}"
+        )
+    if report.comment_count:
+        raise AssertionError("RMP case comments regained physical dimensions")
+    if report.book_counts != Counter(BOOK_LAYOUT_ALLOWLIST):
+        raise AssertionError(
+            f"benchmark-book dimension allowlist drifted: {report.book_counts!r}"
+        )
+    validate_dimension_report(report)
+
+    synthetic = r"""% pitch=14mm remains visible to the comment audit
+\begin{tenkz}[pitch=11mm,
+  sheet vector={0mm,2.5mm}]
+  \tnput{a}{(1mm,2mm)}{}
+  \tnjoin[via={(3mm,4mm)}]{a}{5mm,6mm}
+\end{tenkz}
+"""
+    occurrences = scan_case_dimensions(Path("synthetic.tex"), synthetic)
+    synthetic_counts = Counter(
+        occurrence.owner for occurrence in occurrences if not occurrence.in_comment
+    )
+    if synthetic_counts != Counter(
+        {
+            DimensionOwner.METRIC: 1,
+            DimensionOwner.FRAME: 2,
+            DimensionOwner.ROUTE: 4,
+            DimensionOwner.LAYOUT: 2,
+        }
+    ):
+        raise AssertionError(
+            f"balanced dimension classification failed: {synthetic_counts!r}"
+        )
+    if sum(occurrence.in_comment for occurrence in occurrences) != 1:
+        raise AssertionError("comment dimensions were not counted orthogonally")
+
+    absolute_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(1 in, 1truept, 1 true pt, 1 true in)}{}",
+    )
+    if len(absolute_units) != 4 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in absolute_units
+    ):
+        raise AssertionError(
+            f"spaced/true absolute dimensions escaped: {absolute_units!r}"
+        )
+    command_adjacent_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(\kern1mm,1MM,1Mm,\kern1mmfoo)}{}",
+    )
+    if [occurrence.literal for occurrence in command_adjacent_units] != [
+        "1mm",
+        "1MM",
+        "1Mm",
+        "1mm",
+    ] or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in command_adjacent_units
+    ):
+        raise AssertionError(
+            "command-adjacent/mixed-case dimensions escaped: "
+            f"{command_adjacent_units!r}"
+        )
+    starred_command_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow*[from=1,to=2]{\rule{1mm}{2pt}}",
+    )
+    if [occurrence.literal for occurrence in starred_command_units] != [
+        "1mm",
+        "2pt",
+    ] or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in starred_command_units
+    ):
+        raise AssertionError(
+            f"starred command dimensions escaped: {starred_command_units!r}"
+        )
+    command_arity_cases = (
+        (
+            r"\tnput{a}{(3mm,0)}{\rule{4pt}{5pt}}{\hspace{6mm}}",
+            DimensionOwner.LAYOUT,
+            ("3mm", "4pt", "5pt"),
+            "6mm",
+        ),
+        (
+            r"\tnjoin[label={\rule{11pt}{12pt}}]{0mm,0}{13mm,0}"
+            r"{\hspace{14mm}}",
+            DimensionOwner.ROUTE,
+            ("11pt", "12pt", "0mm", "13mm"),
+            "14mm",
+        ),
+        (
+            r"\tnwire{A.e}{B.w}{\hspace{22mm}}",
+            DimensionOwner.ROUTE,
+            (),
+            "22mm",
+        ),
+        (
+            r"\tnedge[label={\rule{31pt}{32pt}}]{(1,1)-(1,2)}"
+            r"{\hspace{33mm}}",
+            DimensionOwner.ROUTE,
+            ("31pt", "32pt"),
+            "33mm",
+        ),
+        (
+            r"\tnarrow[from=1,to=2]{\rule{41pt}{42pt}}{\hspace{43mm}}",
+            DimensionOwner.ROUTE,
+            ("41pt", "42pt"),
+            "43mm",
+        ),
+        (
+            r"\tnarrow*[from=1,to=2]{\rule{51pt}{52pt}}{\hspace{53mm}}",
+            DimensionOwner.ROUTE,
+            ("51pt", "52pt"),
+            "53mm",
+        ),
+    )
+    for source, owner, owned_literals, independent_literal in command_arity_cases:
+        occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+        actual = tuple(
+            (occurrence.literal, occurrence.owner) for occurrence in occurrences
+        )
+        expected = (
+            *((literal, owner) for literal in owned_literals),
+            (independent_literal, None),
+        )
+        if actual != expected:
+            raise AssertionError(
+                "a command swallowed an independent following TeX group: "
+                f"source={source!r}, occurrences={occurrences!r}"
+            )
+    escaped_command_units = scan_case_dimensions(
+        Path("synthetic.tex"), r"\\tnput{x}{(1mm,0)}{}"
+    )
+    if (
+        len(escaped_command_units) != 1
+        or escaped_command_units[0].owner is not None
+    ):
+        raise AssertionError(
+            "an escaped command spelling gained dimension ownership: "
+            f"{escaped_command_units!r}"
+        )
+    active_after_escape_units = scan_case_dimensions(
+        Path("synthetic.tex"), r"\\\tnput{x}{(2mm,0)}{}"
+    )
+    if (
+        len(active_after_escape_units) != 1
+        or active_after_escape_units[0].owner is not DimensionOwner.LAYOUT
+    ):
+        raise AssertionError(
+            "an active command after an escaped backslash lost ownership: "
+            f"{active_after_escape_units!r}"
+        )
+    label_option_text = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(0,0)}{pitch=1mm, row vector={2mm,3mm}}",
+    )
+    if len(label_option_text) != 3 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in label_option_text
+    ):
+        raise AssertionError(
+            "option-like text inside a command label overrode its owner: "
+            f"{label_option_text!r}"
+        )
+    setting_option = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tnset{physical=up, pitch=4mm}"
+    )
+    if (
+        len(setting_option) != 1
+        or setting_option[0].owner is not DimensionOwner.METRIC
+    ):
+        raise AssertionError(
+            f"a tnset metric option lost ownership: {setting_option!r}"
+        )
+    nested_picture_option = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow[from=1,to=2]{\tnpic[pitch=5mm]{x}}",
+    )
+    if (
+        len(nested_picture_option) != 1
+        or nested_picture_option[0].owner is not DimensionOwner.METRIC
+    ):
+        raise AssertionError(
+            "a nested tnpic metric option inherited command ownership: "
+            f"{nested_picture_option!r}"
+        )
+    tree_option = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tntree[pitch=6mm]{a(b,c)}"
+    )
+    if len(tree_option) != 1 or tree_option[0].owner is not DimensionOwner.METRIC:
+        raise AssertionError(f"a tntree metric option lost ownership: {tree_option!r}")
+    comment_spliced_source = """\\tnput{x}{(1% join the number and unit
+ mm,2m% join the unit letters
+ m,3tr% join the true prefix
+ ue pt)}{}
+"""
+    comment_spliced_units = scan_case_dimensions(
+        Path("synthetic.tex"), comment_spliced_source
+    )
+    expected_spliced = [
+        ("1mm", 1, comment_spliced_source.index("1%")),
+        ("2mm", 2, comment_spliced_source.index("2m%")),
+        ("3true pt", 3, comment_spliced_source.index("3tr%")),
+    ]
+    if [
+        (occurrence.literal, occurrence.line, occurrence.offset)
+        for occurrence in comment_spliced_units
+    ] != expected_spliced or any(
+        occurrence.in_comment
+        or occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in comment_spliced_units
+    ):
+        raise AssertionError(
+            "comment-spliced active dimensions lost their source locations: "
+            f"{comment_spliced_units!r}"
+        )
+    split_owner_source = "\\tn% terminate the control word\nput{x}{1mm}{}\n"
+    split_owner = scan_case_dimensions(Path("synthetic.tex"), split_owner_source)
+    if (
+        len(split_owner) != 1
+        or split_owner[0].owner is not None
+        or split_owner[0].line != 2
+        or split_owner[0].offset != split_owner_source.index("1mm")
+    ):
+        raise AssertionError(
+            f"a comment-split control word gained dimension ownership: {split_owner!r}"
+        )
+    book_spliced_source = "\\setlength\\textwidth{1m% join the unit\n m}\n"
+    book_spliced = scan_book_dimensions(Path("book.tex"), book_spliced_source)
+    if (
+        len(book_spliced) != 1
+        or book_spliced[0].literal != "1mm"
+        or book_spliced[0].line != 1
+        or book_spliced[0].offset != book_spliced_source.index("1m%")
+    ):
+        raise AssertionError(
+            f"book comment-spliced dimension escaped: {book_spliced!r}"
+        )
+    suffix_key = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\begin{tenkz}[narrow vector=1mm]\end{tenkz}",
+    )
+    if len(suffix_key) != 1 or suffix_key[0].owner is not None:
+        raise AssertionError(f"option key suffix gained an owner: {suffix_key!r}")
+    if scan_case_dimensions(
+        Path("synthetic.tex"), "% at y=-0.75 in the author source\n"
+    ):
+        raise AssertionError("the English preposition 'in' became an inch unit")
+    for prose in (
+        "% site 3 in Section III\n",
+        "% each of 4 in total\n",
+        "% label 2 in figure 3\n",
+        "% Figure 3 in the layout shows the path\n",
+        "% use site 2 in the frame\n",
+        "% There are 3 inputs in the panel.\n",
+        "% The panel has 3 insets in total.\n",
+        "% 2 points, 1 piece, and 3 special cases remain.\n",
+        "% 2 pts and 1 pcs remain.\n",
+        "% version 3 in the layout uses the old syntax\n",
+        "% equation 2 in the figure shows the route\n",
+        "% width of Figure 3 in the layout is fixed\n",
+    ):
+        if scan_case_dimensions(Path("synthetic.tex"), prose):
+            raise AssertionError(f"English prose became an inch unit: {prose!r}")
+    quantified_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% each of 4 in wide sheets is retained\n"
+    )
+    if (
+        len(quantified_comment_inch) != 1
+        or quantified_comment_inch[0].owner is not DimensionOwner.LAYOUT
+        or not quantified_comment_inch[0].in_comment
+    ):
+        raise AssertionError(
+            "a dimension adjective did not disambiguate a quantified inch: "
+            f"{quantified_comment_inch!r}"
+        )
+    compact_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% retained clearance 1in\n"
+    )
+    if len(compact_comment_inch) != 1 or not compact_comment_inch[0].in_comment:
+        raise AssertionError(
+            f"compact comment inch escaped: {compact_comment_inch!r}"
+        )
+    governed_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% clearance is 1 in.\n"
+    )
+    if (
+        len(governed_comment_inch) != 1
+        or not governed_comment_inch[0].in_comment
+    ):
+        raise AssertionError(
+            "a local measurement phrase did not govern a spaced inch: "
+            f"{governed_comment_inch!r}"
+        )
+    for source, owner in (
+        ("% clearance = 1 in.\n", None),
+        ("% width: 1 in.\n", DimensionOwner.LAYOUT),
+        ("% spacing of 1 in.\n", DimensionOwner.METRIC),
+    ):
+        governed_comment_inch = scan_case_dimensions(Path("synthetic.tex"), source)
+        if (
+            len(governed_comment_inch) != 1
+            or governed_comment_inch[0].owner is not owner
+            or not governed_comment_inch[0].in_comment
+        ):
+            raise AssertionError(
+                "measurement punctuation did not govern a spaced inch: "
+                f"{governed_comment_inch!r}"
+            )
+    for source in (
+        r"% \tnjoin path is 1 in from the origin" "\n",
+        "% routes 2 in long\n",
+        "% the distances 5 in apart\n",
+    ):
+        local_measurement = scan_case_dimensions(Path("synthetic.tex"), source)
+        if len(local_measurement) != 1 or not local_measurement[0].in_comment:
+            raise AssertionError(
+                f"local comment measurement escaped: {local_measurement!r}"
+            )
+    ownerless_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% shifted 1 in leftward\n"
+    )
+    if len(ownerless_comment_inch) != 1 or not ownerless_comment_inch[0].in_comment:
+        raise AssertionError(
+            f"ownerless comment inch escaped: {ownerless_comment_inch!r}"
+        )
+    active_inch = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"
+    )
+    if [occurrence.literal for occurrence in active_inch] != ["1 in", "2pt"]:
+        raise AssertionError(f"active spaced inch escaped: {active_inch!r}")
+    comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% layout width is 1 in wide\n"
+    )
+    if len(comment_inch) != 1 or not comment_inch[0].in_comment:
+        raise AssertionError(f"comment inch escaped: {comment_inch!r}")
+    owned_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% pitch is 1 in the final figure\n"
+    )
+    if (
+        len(owned_comment_inch) != 1
+        or owned_comment_inch[0].owner is not DimensionOwner.METRIC
+        or not owned_comment_inch[0].in_comment
+    ):
+        raise AssertionError(
+            f"owned comment inch escaped: {owned_comment_inch!r}"
+        )
+    for source, owner in (
+        ("% width is 1 in wide\n", DimensionOwner.LAYOUT),
+        ("% offset 1 in north\n", DimensionOwner.FRAME),
+    ):
+        semantic_comment_inch = scan_case_dimensions(Path("synthetic.tex"), source)
+        if (
+            len(semantic_comment_inch) != 1
+            or semantic_comment_inch[0].owner is not owner
+            or not semantic_comment_inch[0].in_comment
+        ):
+            raise AssertionError(
+                f"semantic comment inch escaped: {semantic_comment_inch!r}"
+            )
+
+    extra_layout = DimensionOccurrence(
+        Path("synthetic.tex"),
+        1,
+        "1mm",
+        DimensionOwner.LAYOUT,
+        False,
+        0,
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, extra_layout)),
+        "case dimensions increased to 927",
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, extra_layout)),
+        "composition/layout dimensions increased to 531",
+    )
+    for source, phrase in (
+        (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
+        (
+            r"\begin{tenkz}[sheet vector={0mm,1mm}]\end{tenkz}",
+            "projection/frame dimensions increased",
+        ),
+        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 397"),
+    ):
+        mutation = scan_case_dimensions(Path("synthetic.tex"), source)
+        _expect_dimension_failure(
+            dataclasses.replace(report, cases=(*report.cases, *mutation)),
+            phrase,
+        )
+    unknown = scan_case_dimensions(Path("synthetic.tex"), r"\foo{1 in}")
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, *unknown)),
+        "unowned case dimension",
+    )
+    comment = scan_case_dimensions(Path("synthetic.tex"), "% pitch=1mm\n")
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, *comment)),
+        "comment dimensions increased",
+    )
+    book_path = next(iter(BOOK_LAYOUT_ALLOWLIST))
+    extra_book = DimensionOccurrence(
+        book_path,
+        1,
+        "1pt",
+        DimensionOwner.BOOK_LAYOUT,
+        False,
+        0,
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, book=(*report.book, extra_book)),
+        "allowlist requires exactly",
+    )
+
+    first_route = next(
+        index
+        for index, occurrence in enumerate(report.cases)
+        if occurrence.owner is DimensionOwner.ROUTE
+    )
+    reduced = dataclasses.replace(
+        report,
+        cases=report.cases[:first_route] + report.cases[first_route + 1 :],
+    )
+    validate_dimension_report(reduced)
+
+
 def test_rmp_author_source_identity() -> None:
     targets = load_manifest(DEFAULT_MANIFEST)
     cited = sorted(
@@ -289,6 +755,7 @@ def test_rmp_pairing_identity() -> None:
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_dimension_ownership()
     test_rmp_author_source_identity()
     test_rmp_pairing_identity()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:

@@ -1307,3 +1307,40 @@ The metric ledger moves by zero. M1--M6, parser identity, raw-ink census, and
 decimal-literal census are unchanged; the removed lattice definition was a
 metric-table line already exempt from the latter. Issue #5331 carries the
 geometry and event regressions.
+
+### 2026-08-02 — RMP physical dimensions acquire executable owners
+
+Before this change, the final scanner finds 929 active absolute dimensions and
+2 comment literals in the 130-case RMP corpus. Afterwards it finds 926 active
+dimensions and no comment literals. The active reduction is one metric literal
+and two projection/frame literals; the two removed comment pitches are tracked
+orthogonally. The anyon pair now inherits the shared lattice metric. Its
+lattice, perimeter stubs, and vertical physical legs are source-faithful; the
+integer-cell surface cannot express the
+two half-grid insertions and the five-position curved string, so the verdict
+records a structural gap tracked in #5375. The condensation panel uses the
+existing `tenkzplanes` owner for both sheet grids, all 24 inter-sheet physical
+pairings, and one marked path per sheet; its measured sheet vector disappears.
+No ratio, parser spelling, registry row, or case-specific public syntax is
+added.
+
+The RMP driver now classifies every remaining case dimension at its semantic
+boundary: 0 metric, 0 projection/frame, 396 route/string, and 530
+composition/layout, with 0 in comments. Those aggregate counts are ceilings,
+so net removals pass while uncompensated count increases fail. Exact balanced
+replacement and ownership-site moves are checked by the per-occurrence gate in
+#5378; until then they require manual review. The benchmark book's 28
+page-layout dimensions are checked by exact counts in its two fixed owner files
+rather than being mistaken for figure geometry. Synthetic perturbations pin
+balanced options, comment classification, unknown-owner rejection, every
+ceiling, and the book allowlist.
+
+M3 falls from 30 to 29 when the last RMP `sheet vector` escape disappears. M4
+falls from 18.60 to 18.55 because the public lattice owners state the complete
+grid and boundary policies without repeating their generated incidence in the
+cases. The anyon verdict does not trade that shrink for a fidelity claim: its
+missing projected physical axis remains explicit in #5375.
+
+Census-correction: #5345
+
+No language-ledger row or flag verdict changes.
