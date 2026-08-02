@@ -10,7 +10,7 @@ from tenkz_audit import Audit, same_equation
 
 
 GOOD_LOG = """\
-picture|id=k1|lang=kernel
+picture|id=k1|lang=kernel|scope=1
 wire|id=wire-1|from=addr-1|kind=string|name=a|to=addr-2
 wire|id=wire-2|cross=under at crossing of a and b|from=addr-3|kind=string|name=b|to=addr-4
 wire|id=wire-3|from=addr-5|host=atom-1|kind=pairing|name=skin-atom-1-1|origin=skin|route=arc|species=shift|to=addr-6
@@ -248,6 +248,30 @@ kernel-boundary|signature=phys:up
     )
     assert "eq-boundary-mismatch" not in [
         finding.rule for finding in opted_out_equation.findings
+    ]
+
+    undeclared_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=stale\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in undeclared_opt_out.findings
+    ]
+
+    surplus_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        "check|scope=1|relation=2|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}",
+            "check={signature, off={1: documented}}",
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in surplus_opt_out.findings
     ]
 
     checkless_equation_source = (

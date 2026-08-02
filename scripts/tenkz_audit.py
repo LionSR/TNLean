@@ -775,9 +775,20 @@ class Audit:
         for event in self.log_events:
             if event.kind != "check":
                 continue
-            if not self.require_fields(event, {"result"}, "check"):
+            # The canonical parser already reports these record-level fields;
+            # keep invalid events out of the semantic checks without emitting
+            # the same malformed-event finding twice.
+            if not {"scope", "result"}.issubset(event.attrs):
                 continue
             result = event.attrs["result"]
+            if result != "malformed" and not self.require_fields(
+                event, {"relation"}, "check"
+            ):
+                continue
+            if result == "off" and not self.require_fields(
+                event, {"reason"}, "check opt-out"
+            ):
+                continue
             if result in {"mismatch", "malformed"}:
                 relation = event.attrs.get("relation", "?")
                 self.hard(
@@ -1534,18 +1545,19 @@ class Audit:
             picture_scopes[picture] = scope_index
             scope_pictures.setdefault(scope_index, []).append(picture)
 
-        relation_events: dict[tuple[int, int], list[Event]] = {}
+        scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
             if event.kind != "check":
                 continue
             scope = event.attrs.get("scope", "")
-            if scope.isdigit() and event.attrs.get("result") == "malformed":
-                malformed_scopes.add(int(scope))
-            relation = event.attrs.get("relation", "")
-            if not scope.isdigit() or not relation.isdigit():
+            if not scope.isdigit():
                 continue
-            relation_events.setdefault((int(scope), int(relation)), []).append(event)
+            scope_index = int(scope)
+            if event.attrs.get("result") == "malformed":
+                malformed_scopes.add(scope_index)
+                continue
+            scope_events.setdefault(scope_index, []).append(event)
 
         equation_tokens = list(re.finditer(
             r"\\(begin|end)\{tenkzeq\}", self._tex_src
@@ -1569,6 +1581,12 @@ class Audit:
             checked = re.search(r"\bcheck\s*=", header) is not None
             if not checked:
                 continue
+            declared_offs = {
+                int(match.group(1))
+                for match in re.finditer(
+                    r"\boff\s*=\s*\{\s*(\d+)\s*:", header
+                )
+            }
             members = [
                 index for index, construct in enumerate(self.constructs)
                 if begin.end() <= construct.start and construct.end <= token.start()
@@ -1581,11 +1599,35 @@ class Audit:
             )
             if scope in malformed_scopes or scope_pictures.get(scope) != members:
                 continue
+            expected_relations = set(range(1, len(members)))
+            events = scope_events.get(scope, [])
+            relation_numbers = [
+                int(event.attrs["relation"])
+                for event in events
+                if event.attrs.get("relation", "").isdigit()
+            ]
+            # Every non-malformed event in the scope must own exactly one
+            # expected relation.  Missing, duplicate, unowned, and surplus
+            # records disable the whole scope instead of authorizing a waiver.
+            if (
+                len(events) != len(expected_relations)
+                or len(relation_numbers) != len(events)
+                or set(relation_numbers) != expected_relations
+            ):
+                continue
+            by_relation = {
+                int(event.attrs["relation"]): event for event in events
+            }
+            logged_offs = {
+                relation for relation, event in by_relation.items()
+                if event.attrs.get("result") == "off"
+            }
+            # An event-stream opt-out is authority only when the same relation
+            # is explicitly waived in this source scope.
+            if logged_offs != declared_offs:
+                continue
             for relation, left in enumerate(members[:-1], 1):
-                events = relation_events.get((scope, relation), [])
-                if len(events) != 1:
-                    continue
-                relation_checks[left] = events[0]
+                relation_checks[left] = by_relation[relation]
 
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]

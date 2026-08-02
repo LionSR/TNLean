@@ -57,7 +57,8 @@ def main() -> int:
                 "atom|picture=oops|cell=1-1|name=A|kind=tensor",
                 "frame|picture=1|scope=atom|map=rotate(30)|"
                 "a=bad|b=0|c=0|d=1",
-                "check|relation=1|result=equal|signature=open:e",
+                "check|relation=1|result=equal",
+                "check|scope=9|scope=1|relation=1|result=equal",
                 "mystery|picture=2|bare",
             )
         ),
@@ -77,6 +78,7 @@ def main() -> int:
         and "check event lacks required field(s): scope" in finding[2]
         for finding in malformed
     )
+    assert any("duplicate field 'scope'" in finding[2] for finding in malformed)
 
     assert AuditEvent is Event
     assert AuditPicture is Picture

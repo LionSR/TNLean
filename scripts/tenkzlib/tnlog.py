@@ -356,9 +356,10 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 
 # Fields whose absence makes an otherwise typed event unusable.  Most event
 # kinds are picture records and use the shared picture= requirement below;
-# equation checks are top-level records whose scope is their ownership key.
+# equation checks are top-level records whose scope is their ownership key and
+# whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
-    "check": frozenset({"scope"}),
+    "check": frozenset({"scope", "result"}),
 }
 
 
@@ -488,7 +489,16 @@ def parse_log(
                 valid = False
                 continue
             key, value = part.split("=", 1)
-            attrs[key.strip()] = value.strip()
+            key = key.strip()
+            if key in attrs:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"duplicate field {key!r}: {line}",
+                )
+                valid = False
+                continue
+            attrs[key] = value.strip()
         event = Event(kind, attrs, line_number, line)
         events.append(event)
         validators = FIELD_VALIDATORS.get(kind)

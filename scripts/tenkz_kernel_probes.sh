@@ -1476,6 +1476,24 @@ grep -Fq 'result=mismatch|modulo=bundles' \
   exit 1
 }
 
+nested_equation="$KERNEL/negative/n_nested_equation.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$nested_equation" \
+       >"$WORK/n_nested_equation.transcript" 2>&1 ); then
+  echo "FAIL: a nested equation audit scope was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-NESTED]' "$WORK/n_nested_equation.transcript" || {
+  echo "FAIL: nested equation lacked TKZ-EQ-NESTED" >&2
+  exit 1
+}
+if grep -Fq '|scope=2' "$WORK/n_nested_equation.tnlog"; then
+  echo "FAIL: a rejected nested equation mutated scope ownership" >&2
+  exit 1
+fi
+
 for arity_negative in n_missing_relation n_dangling_relation; do
   source="$KERNEL/negative/$arity_negative.tex"
   if ( cd "$WORK" &&
