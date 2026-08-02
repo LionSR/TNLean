@@ -341,12 +341,22 @@ def read_dimension_inventory(repo: Path) -> Counter[tuple[str, str, str, str]]:
     """Read the reviewed active-dimension inventory committed with the corpus."""
     path = repo / CASE_DIMENSION_INVENTORY
     try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
+        source = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise DimensionOwnershipError(
+            f"cannot read dimension inventory {path}: {exc}"
+        ) from exc
+    try:
+        payload = json.loads(source)
     except json.JSONDecodeError as exc:
         raise DimensionOwnershipError(
             f"invalid dimension inventory JSON: {path}: {exc}"
         ) from exc
-    if payload.get("version") != 1 or not isinstance(payload.get("occurrences"), list):
+    if (
+        not isinstance(payload, dict)
+        or payload.get("version") != 1
+        or not isinstance(payload.get("occurrences"), list)
+    ):
         raise DimensionOwnershipError(f"invalid dimension inventory schema: {path}")
     inventory: Counter[tuple[str, str, str, str]] = Counter()
     for row in payload["occurrences"]:

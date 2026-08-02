@@ -347,16 +347,22 @@ def test_rmp_dimension_ownership() -> None:
             Path(tmp) / "tests" / "tenkz" / "rmp" / "dimension-ownership.json"
         )
         inventory.parent.mkdir(parents=True)
-        inventory.write_text("{not JSON}\n", encoding="utf-8")
-        try:
-            read_dimension_inventory(Path(tmp))
-        except DimensionOwnershipError as exc:
-            if "invalid dimension inventory JSON" not in str(exc):
-                raise AssertionError(
-                    f"malformed inventory produced the wrong failure: {exc}"
-                )
-        else:
-            raise AssertionError("malformed dimension inventory was accepted")
+        for source, phrase in (
+            (None, "cannot read dimension inventory"),
+            ("{not JSON}\n", "invalid dimension inventory JSON"),
+            ("[]\n", "invalid dimension inventory schema"),
+        ):
+            if source is not None:
+                inventory.write_text(source, encoding="utf-8")
+            try:
+                read_dimension_inventory(Path(tmp))
+            except DimensionOwnershipError as exc:
+                if phrase not in str(exc):
+                    raise AssertionError(
+                        f"invalid inventory produced the wrong failure: {exc}"
+                    )
+            else:
+                raise AssertionError("invalid dimension inventory was accepted")
 
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),
