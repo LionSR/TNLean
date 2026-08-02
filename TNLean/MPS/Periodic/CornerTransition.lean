@@ -29,12 +29,12 @@ requires no injectivity or normality input:
   cycle to reach an injective length (eq:Fu).  The junction projector
   `P (u + w₁.length • 1)` is absorbed by idempotency.
 
-These are the `A_u^i`/`F_u` building blocks named in the issue's split plan for
-Case 3.  The remaining steps of Appendix A — the right-inverse contraction of
-`F_u` to the uniform product-tensor identity (feeding
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`)
-and the global gauge assembly — are not addressed here; see
-`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
+These are the `A_u^i`/`F_u` building blocks for the sector-match case. In
+`TNLean.MPS.Periodic.Overlap.SectorMatch.Contraction`, the theorem
+`sectorTensor_proportional_of_blockedMatch` uses their right-inverse contraction
+to obtain the uniform product-tensor identity, applies
+`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`,
+and assembles the global gauge.
 
 ## References
 
