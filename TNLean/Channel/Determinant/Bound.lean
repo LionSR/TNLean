@@ -21,6 +21,8 @@ this bounded-orbit argument to eigenvectors of the channel.
 
 ## Main statements
 
+* `IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` — every eigenvalue of a
+  positive trace-preserving map lies in the closed unit disk.
 * `channelDet_norm_le_one_of_positive_tracePreserving` — Wolf's determinant
   bound for positive trace-preserving maps.
 * `channelDet_norm_le_one_of_channel` — the CPTP specialization.
@@ -141,7 +143,12 @@ private theorem positiveTracePreserving_bounded_orbit_of_trace_zero_hermitian [N
     _ ≤ ‖c‖ * (M + M) :=
       mul_le_mul_of_nonneg_left (add_le_add hρ_orbit hσ_orbit) (norm_nonneg _)
 
-private theorem positiveTracePreserving_eigenvalue_norm_le_one [NeZero d]
+/-- Every eigenvalue of a positive trace-preserving map lies in the closed unit disk.
+
+This is the unit-disk conclusion of Wolf, *Quantum Channels & Operations*,
+Proposition 6.1; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 73--91. -/
+theorem IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving [NeZero d]
     {T : MatrixEnd d} (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
     (μ : ℂ) (hμ : Module.End.HasEigenvalue T μ) :
     ‖μ‖ ≤ 1 := by
@@ -282,7 +289,7 @@ theorem channelDet_norm_le_one_of_positive_tracePreserving
   · haveI : NeZero d := ⟨hd⟩
     apply channelDet_norm_le_one_of_eigenvalues_bounded
     intro μ hμ
-    exact positiveTracePreserving_eigenvalue_norm_le_one (d := d) hPos hTP μ
+    exact hPos.eigenvalue_norm_le_one_of_tracePreserving (d := d) hTP μ
       (Module.End.hasEigenvalue_iff_mem_spectrum.2
         ((AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv
             (ChannelDeterminant.Internal.matrixSpaceBasis d)) T) ▸

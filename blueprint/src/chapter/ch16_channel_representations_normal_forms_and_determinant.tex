@@ -499,6 +499,25 @@ This section states the existence theorems from
     $\overline{\det U}^{\,D}(\det U)^D=1$.
 \end{proof}
 
+\begin{theorem}[Eigenvalue disk bound for positive trace-preserving maps]
+    \label{thm:positive_tp_eigenvalue_disk}
+    \lean{IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving}\leanok
+    \uses{def:positive_map, def:trace_preserving}
+    Let $D>0$, and let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving.
+    If $T(X)=\mu X$ for some nonzero $X$, then $|\mu|\leq1$.
+    This is the unit-disk conclusion of
+    \cite[Proposition~6.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $\tr(X)\neq0$, trace preservation gives $\mu=1$. Otherwise decompose
+    $X$ into trace-zero Hermitian and skew-Hermitian parts. Each Hermitian
+    part is a scalar multiple of the difference of two density matrices.
+    Positivity and trace preservation keep all iterates of those density
+    matrices in the compact set of density matrices, so the orbit of $X$ is
+    bounded. Since $T^n(X)=\mu^nX$, this is impossible when $|\mu|>1$.
+\end{proof}
+
 \begin{theorem}[Determinant bound for positive trace-preserving maps]
     \label{thm:channelDet_norm_le_one}
     \lean{channelDet_norm_le_one_of_positive_tracePreserving,
@@ -510,6 +529,7 @@ This section states the existence theorems from
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:positive_tp_eigenvalue_disk}
     Every eigenvalue $\mu$ of $T$ satisfies $|\mu|\leq1$
     (positivity and trace preservation force spectral radius~$\leq1$).
     Since $\det T$ is the product of the eigenvalues

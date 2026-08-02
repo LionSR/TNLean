@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.HeisenbergDual
+import TNLean.Channel.KrausRepresentation
 import TNLean.Algebra.SkolemNoether
 import Mathlib.Algebra.Central.Matrix
 import Mathlib.LinearAlgebra.Matrix.Vec
