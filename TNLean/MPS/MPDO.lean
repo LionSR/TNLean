@@ -78,7 +78,6 @@ import TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization.Span
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
-import TNLean.MPS.MPDO.BlockedRFPConstruction
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
