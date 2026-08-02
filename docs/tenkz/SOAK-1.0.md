@@ -181,7 +181,9 @@ with `source_pr.mergeCommit.oid = source_sha`. The first attempt's `source_sha`
 is a strict descendant of `armed_by_pr.mergeCommit.oid`; a later attempt's
 `source_sha` is a strict descendant of the preceding reset record's
 `record_pr.mergeCommit.oid`. The annotated tag already exists, has object SHA
-`freeze_tag_object`, and peels to `source_sha`.
+`freeze_tag_object`, and peels to `source_sha`. The target `main` tip `C` from
+the common candidate rule must equal `source_sha`; the source integration is
+therefore the candidate's unique merge base `B`.
 
 The freeze's `record_pr` is its attempt-activation pull request. Let `H` be
 that PR's exact final `headRefOid`. `source_sha` is an ancestor of `H`, and the
@@ -192,14 +194,18 @@ prerequisite state, and entry grammar, then reports `freeze-pending`. It cannot
 record the future merge SHA or time.
 
 After merge, let `I = record_pr.mergeCommit.oid`. GitHub must report the PR
-merged to `main`; `I` must be a strict descendant of `source_sha`; and the Git
-tree of `I` must equal the Git tree of `H`. GitHub's verified
-`record_pr.mergedAt` is the attempt-activation instant `T`, and `I` is its
-ancestry anchor.
+merged to `main`; the integration parent `P` from the common rule must equal
+`source_sha`; `I` must be a strict descendant of `source_sha`; and the Git tree
+of `I` must equal the Git tree of `H`. GitHub's verified `record_pr.mergedAt`
+is the attempt-activation instant `T`, and `I` is its ancestry anchor.
 Every derived prerequisite must be closed with `closedAt <= T`. A tree, source,
 tag, prerequisite, or external-identity mismatch requires a `record-invalid`
 reset targeting this freeze. A tagger timestamp may appear in `evidence`, but
 it never determines ordering.
+
+If `main` advances after `source_sha` but before this record integrates, no
+attempt has started: abandon the unused tag and repeat the source/tag step with
+a larger unused `PATCH`. Reusing or moving the stale tag is forbidden.
 
 ### `work`
 

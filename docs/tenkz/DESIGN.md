@@ -193,7 +193,10 @@ non-negative decimal integer and increases strictly between attempts. For each
 attempt, first merge the frozen source through a source pull request targeting
 `main`, then create and push the annotated tag on GitHub's
 `source_pr.mergeCommit.oid`. Only then open the ledger-entry pull request and
-append its self-referential `freeze` entry.
+append its self-referential `freeze` entry. The target branch must remain at
+that source integration until the freeze record merges; an intervening `main`
+commit invalidates the candidate before any attempt starts and requires a new
+source/tag step with a larger unused `PATCH`.
 
 Every entry records the pull request that first appends it as `record_pr`;
 GitHub supplies that pull request's author, final head, merge time, and
@@ -202,13 +205,16 @@ GitHub supplies that pull request's author, final head, merge time, and
 row-major order from the pinned policy, and descriptive evidence. It cannot
 record its own integration commit or merge time because neither exists before
 merge. Candidate CI validates every fact already known and reports
-`freeze-pending`. The source-to-head diff must be exactly one append to
-`SOAK-1.0.md`. After merge, the integration tree must equal the approved final
-head's tree; GitHub's verified `record_pr.mergedAt` is the attempt-activation
-instant `T`, and `record_pr.mergeCommit.oid` anchors later ancestry. The validator checks
-the source pull request, source SHA, tag object, and peeled commit agree, and
-rejects a lightweight, moved, replaced, or mismatched tag. A tagger timestamp,
-if transcribed as evidence, is descriptive only and never determines ordering.
+`freeze-pending`. Candidate validation requires the current `main` tip to equal
+`source_sha`; the source-to-head diff must be exactly one append to
+`SOAK-1.0.md`. After merge, the integration's first parent must still equal
+`source_sha`, and the integration tree must equal the approved final head's
+tree. GitHub's verified `record_pr.mergedAt` is the attempt-activation instant
+`T`, and `record_pr.mergeCommit.oid` anchors later ancestry. The validator
+checks the source pull request, source SHA, tag object, and peeled commit agree,
+and rejects a lightweight, moved, replaced, or mismatched tag. A tagger
+timestamp, if transcribed as evidence, is descriptive only and never determines
+ordering.
 
 The same record provenance applies to every later entry. Candidate validation
 must run on the declared `record_pr` at its exact final head, whose complete

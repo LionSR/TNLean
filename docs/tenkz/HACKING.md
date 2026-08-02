@@ -222,7 +222,9 @@ supplies the verified attempt-ordering anchor.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
-in row-major order; `SOAK-1.0.md` does not own a duplicate list.
+in row-major order; `SOAK-1.0.md` does not own a duplicate list.  The tagged
+source integration and freeze-record merge are atomic: `main` must not advance
+between them, or the unused tag is abandoned and the source/tag step repeats.
 
 Once the freeze record lands, the evidence gate has no calendar delay.  It
 requires two distinct, independently approved real-work pull requests merged
