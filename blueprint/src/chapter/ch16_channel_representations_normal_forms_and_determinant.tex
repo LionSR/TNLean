@@ -522,14 +522,14 @@ This section states the existence theorems from
     \label{thm:channelDet_norm_le_one}
     \lean{channelDet_norm_le_one_of_positive_tracePreserving,
         channelDet_norm_le_one_of_channel}\leanok
-    \uses{def:channel_det, def:positive_map, def:trace_preserving,
-        thm:positive_tp_eigenvalue_disk}
+    \uses{def:channel_det, def:positive_map, def:trace_preserving}
     For any positive trace-preserving map $T : \MN{D} \to \MN{D}$,
     $|\det T|\leq1$.
     This is \cite[Theorem~6.1(1)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:positive_tp_eigenvalue_disk}
     Every eigenvalue $\mu$ of $T$ satisfies $|\mu|\leq1$
     (positivity and trace preservation force spectral radius~$\leq1$).
     Since $\det T$ is the product of the eigenvalues
