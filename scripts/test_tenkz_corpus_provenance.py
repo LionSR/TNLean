@@ -351,6 +351,15 @@ def test_rmp_dimension_ownership() -> None:
             (None, "cannot read dimension inventory"),
             ("{not JSON}\n", "invalid dimension inventory JSON"),
             ("[]\n", "invalid dimension inventory schema"),
+            (
+                '{"version":1,"occurrences":[["a","b","c","d",0]]}\n',
+                "invalid dimension inventory row",
+            ),
+            (
+                '{"version":1,"occurrences":['
+                '["a","b","c","d",1],["a","b","c","d",1]]}\n',
+                "duplicate dimension inventory row",
+            ),
         ):
             if source is not None:
                 inventory.write_text(source, encoding="utf-8")
