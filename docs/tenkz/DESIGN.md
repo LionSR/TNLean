@@ -47,7 +47,7 @@ frozen_twin_lifetime = "permanent"
 frozen_twin_precedent = "quantikz/quantikz2"
 maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
-reviewer_repository_permissions = ["push", "maintain", "admin"]
+reviewer_repository_permissions = ["write", "admin"]
 release_manifest_pattern = "docs/tenkz/releases/TAG.toml"
 release_package_metadata = "tex/tenkz/tenkz.sty"
 release_manual = "docs/tenkz/manual2.tex"
@@ -60,8 +60,9 @@ release_test_code_tree = "pending"
 release_test_support_root = "tests/tenkz/release-support"
 release_test_support_tree = "pending"
 release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
-release_enforcement_workflows = [".github/workflows/pr-ci.yml"]
-release_workflow_dependencies = "transitive-immutable-git-sha-or-content-digest"
+release_enforcement_workflows = [".github/workflows/tenkz-release-policy.yml"]
+release_workflow_dependencies = "transitive-content-addressed-no-runtime-downloads"
+release_enforcement_network = "disabled-before-repository-code"
 release_reset_replay_schema = "tests/tenkz/release-support/reset-replay-v1.schema.json"
 release_test_dependency_contract = "pinned-code-support-declared-subject-data"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
@@ -238,14 +239,18 @@ head and executed workflow resolve to those pinned bytes. The independent
 evidence-supervisor result is still required; a workflow status cannot replace
 it. A missing, renamed, non-blob, or changed workflow fails closed.
 
-The resolver also closes the workflow's executable dependency graph. A local
-action or reusable workflow is pinned by its activation Git object and included
-in later byte-and-mode checks. Every external action or reusable workflow uses
-a full commit SHA, never a tag or branch; every container reference uses a
-content digest. Composite-action and reusable-workflow dependencies are checked
-recursively. A mutable, unavailable, incomplete, or cyclic dependency graph
-fails closed. GitHub's control plane and hosted runner remain inside the stated
-trust boundary; repository-selected executable content does not.
+The resolver also closes the dedicated workflow's executable dependency graph.
+A local action or reusable workflow is pinned by its activation Git object and
+included in later byte-and-mode checks. Every external action or reusable
+workflow uses a full commit SHA, never a tag or branch; every container uses a
+content digest. Composite-action, called-workflow, interpreter, helper, package,
+and runtime-fetched executable dependencies are checked recursively. A package
+manager, downloader, unhashed lock, mutable resolution, unavailable object,
+incomplete closure, or cycle fails closed. After GitHub materializes the
+checkout and content-addressed dependencies, network access is removed before
+repository code or a validation command runs. GitHub's control plane and hosted
+runner remain inside the stated trust boundary; downloaded mutable executable
+content does not.
 
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
 canonical grammar `0|[1-9][0-9]*` and is strictly larger than every other patch in the
@@ -365,10 +370,14 @@ That replay is durable: a separate, independently exact-head-approved receipt
 pull request lands one new canonical receipt blob under
 `docs/tenkz/soak-replay/` immediately before the ledger-only reset record. Its
 closed schema comes from the pinned support tree. The reset entry binds the
-receipt pull request and raw-blob digest; later replay reads the blob from that
-reachable integration, never from an expiring workflow artifact or a newly
-supplied historical snapshot. The trusted approval, maintainer merge, exact
-tree binding, and embedded supervisor receipts establish its provenance.
+receipt pull request and raw-blob digest. The reset integration and every later
+validation tree retain that exact regular blob at its canonical path. Later
+replay reads the retained blob from the exact current validation tree, not from
+an old integration that history rewriting may make unreachable, an expiring
+workflow artifact, or a newly supplied snapshot. The trusted approval,
+maintainer merge, initial tree binding, carried-forward digest, and embedded
+supervisor receipts establish its provenance. A missing retained blob can be
+repaired only by restoring those exact bytes at the same path.
 When an audit's reset queue is nonempty, its head is the first new
 non-correction entry after the boundary. A
 pending breaking-required reset heads the queue; otherwise the earliest

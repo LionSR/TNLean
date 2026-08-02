@@ -54,14 +54,18 @@ workflow resolve to the pinned bytes. It cannot replace the independent
 evidence-supervisor result. A missing, renamed, non-blob, or changed workflow
 fails closed.
 
-The resolver closes the workflow's transitive executable dependency graph.
-Each local action or reusable workflow is pinned by its activation Git object
-and joins every later byte-and-mode check. Each external action or reusable
-workflow reference ends in a full commit SHA, never a tag or branch; each
-container reference ends in a content digest. The same rules recursively cover
-composite actions and called workflows. Mutable, unavailable, incomplete, or
-cyclic dependency evidence fails closed. GitHub's control plane and hosted
-runner remain trusted; repository-selected executable content does not.
+The resolver closes the dedicated workflow's transitive executable dependency
+graph. Each local action or reusable workflow is pinned by its activation Git
+object and joins every later byte-and-mode check. Each external action or
+reusable workflow reference ends in a full commit SHA, never a tag or branch;
+each container ends in a content digest. The same rules recursively cover
+composite actions, called workflows, interpreters, helpers, packages, and any
+executable fetched at runtime. A package manager, downloader, unhashed lock,
+mutable resolution, unavailable object, incomplete closure, or cycle fails
+closed. After GitHub materializes the checkout and content-addressed closure,
+the job disables network access before repository code, the checker, a helper,
+or a validation command runs. GitHub's control plane and hosted runner remain
+trusted; downloaded mutable executable content does not.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -189,9 +193,11 @@ non-dismissed `APPROVED` or `CHANGES_REQUESTED` review by `submittedAt`; it is
 effective for a head only when its commit OID equals the PR's exact final
 `headRefOid`. A later effective review supersedes an earlier one. A reviewer is
 repository-authorized only when the complete current GitHub snapshot's
-collaborator-permission response for that normalized login is one of the pinned
-policy's `reviewer_repository_permissions`. Missing or unavailable permission
-evidence fails closed; `pull` and `triage` permission do not authorize approval.
+collaborator-permission response for that normalized login has a top-level
+`permission` value in the pinned policy's `reviewer_repository_permissions`.
+These are GitHub's legacy base values: `maintain` maps to `write`, while
+`triage` maps to `read`; nested `push` and `pull` capability flags are not role
+names. Missing, `none`, `read`, or unavailable permission evidence fails closed.
 
 ## Release payload evidence
 
@@ -298,9 +304,10 @@ live entry in that prefix; reusing an earlier boundary is invalid.
 
 Historical reset placement and prospective drift use separate evidence
 channels. For every merged `record-invalid` reset at or before the boundary,
-the resolver reads the reset's named receipt blob from the receipt pull
-request's reachable integration. The blob uses the closed JSON schema at the
-pinned policy's `release_reset_replay_schema`. It binds the reset and target
+the resolver reads the reset's named receipt blob at its canonical path from
+the exact current validation tree. The raw bytes must match the reset's digest.
+The blob uses the closed JSON schema at the pinned policy's
+`release_reset_replay_schema`. It binds the reset and target
 entry IDs, exact pre-reset ledger boundary, exact validation-target commit,
 ledger-ordered raw-invalid queue, pending breaking target or null, complete
 normalized resolver inputs, pinned workflow dependency closure, and independent
@@ -313,7 +320,8 @@ approving repository-authorized reviewer; normalized `mergedBy` equals the
 pinned maintainer. GitHub
 reports it merged to `main`, reachable, with its integration tree equal to its
 approved final-head tree. The reset record's candidate base and later
-integration parent equal that receipt integration. If `main` advances first, a
+integration parent equal that receipt integration, so its integration tree
+contains the same regular receipt blob, mode, and raw bytes. If `main` advances first, a
 new receipt pull request is required; a stale receipt is never overwritten.
 At reset-candidate validation, a complete current snapshot at that exact base
 must reproduce the receipt's queue and still-mutable inputs. A mismatch makes
@@ -321,12 +329,16 @@ the receipt stale and requires another receipt pull request.
 
 The reset entry binds the receipt PR and SHA-256 of the raw receipt blob. The
 validator reconstructs its historical queue, applies the pending-breaking
-priority below, and requires the reset to name its head. The receipt's durable
-provenance is its independent exact-head approval, maintainer merge, tree and
-digest binding, and embedded pinned-supervisor results. Later replay reads that
-reachable Git blob; an expiring workflow artifact, check log, or newly supplied
-historical snapshot cannot replace it. This is not a caller-selected audit
-boundary.
+priority below, and requires the reset to name its head. Receipt-PR reachability,
+review, merge, and tree equality are creation predicates rechecked when the
+reset first integrates. Every later entry's candidate target, exact head, and
+integration must retain every earlier reset's receipt as the same regular blob,
+mode, path, and raw digest; its entry diff cannot touch those paths. Later
+replay reads the retained blob from the exact current validation tree and does
+not require an old receipt integration to remain reachable. An expiring
+workflow artifact, check log, or newly supplied historical snapshot cannot
+replace it. Missing retained bytes fail closed until the exact digest is
+restored at the canonical path. This is not a caller-selected audit boundary.
 
 A historically valid reset acknowledges its target while that reset continues
 to pass its own current common, external, and kind-specific checks. The current

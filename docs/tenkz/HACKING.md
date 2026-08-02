@@ -223,14 +223,17 @@ cannot change the checker, workflow, inventory, either pinned tree, policy
 prose, or any other byte.  A later self-referential freeze record validates the
 tag-derived 0.9 payload and supplies the verified attempt-ordering anchor.
 
-The policy's closed workflow list is pinned indirectly by the activation
-integration.  Every later candidate and post-merge check requires those exact
-workflow blobs and modes at its exact target, rejects a candidate diff touching
-them, and binds an accepted GitHub run to the pinned workflow bytes and head.
-Local actions and reusable workflows join that activation-derived object set.
-External actions and called workflows use full commit SHAs, containers use
-content digests, and the resolver checks the dependency graph recursively; a
-tag, branch, missing object, or incomplete closure fails closed.
+The policy's dedicated closed workflow list is pinned indirectly by the
+activation integration.  Every later candidate and post-merge check requires
+those exact workflow blobs and modes at its exact target, rejects a candidate
+diff touching them, and binds an accepted GitHub run to the pinned workflow
+bytes and head.  Local actions and reusable workflows join that
+activation-derived object set.  External actions and called workflows use full
+commit SHAs, containers use content digests, and interpreters, helpers,
+packages, and runtime downloads join the recursive closure.  Package-manager or
+downloader execution, an unhashed lock, a tag, branch, missing object, or
+incomplete closure fails closed.  Network access is disabled before any
+repository code or validation command runs.
 
 Release-test code and imported or sourced helpers live under `scripts/`.
 Expected outputs, baselines, allowlists, thresholds, and other immutable
@@ -284,8 +287,10 @@ boundary; a stale caller-selected boundary is rejected.
 Before a `record-invalid` ledger append, a separate independently approved
 receipt PR adds one canonical blob under `docs/tenkz/soak-replay/`, using the
 schema in the pinned support tree.  The ledger-only reset names that PR and the
-blob digest.  Later replay reads the receipt from its reachable integration;
-workflow artifacts and newly supplied historical snapshots are not evidence.
+blob digest.  The reset and every later validation tree retain the exact blob.
+Later replay reads that current-tree copy, so a rewritten old integration is
+recoverable by restoring the same bytes; workflow artifacts and newly supplied
+historical snapshots are not evidence.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and
