@@ -212,11 +212,19 @@ class _EnvironmentToken:
 
 
 _PUBLIC_ENVIRONMENTS = frozenset((*_OPTION_ENVIRONMENT_KEYS, "tenkzeq"))
-_TEX_CONTROL_WORD_END = r"(?![A-Za-z])"
+# A source-only scan cannot recover arbitrary catcode changes.  Treat Unicode
+# letters plus LaTeX/expl3's conventional ``@``, ``:``, and ``_`` letters as
+# one conservative control-word alphabet: refusing to split an ambiguous
+# spelling is safer than assigning dimensions to a shorter public command.
+_STATIC_CONTROL_WORD_NAME_RE = re.compile(r"(?:[^\W\d_]|[@:_])+")
+_TEX_CONTROL_WORD_END = r"(?![^\W\d_]|[@:_])"
 _ENVIRONMENT_CONTROL_RE = re.compile(
     r"\\(begin|end)" + _TEX_CONTROL_WORD_END
 )
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
+_CSNAME_SPACE_RE = re.compile(r"\\space" + _TEX_CONTROL_WORD_END)
+
+
 @dataclass(frozen=True)
 class _OptionCommandGrammar:
     """Physical keys accepted by one bracket-option command."""
@@ -340,6 +348,36 @@ def _is_control_word_start(source: str, position: int) -> bool:
     return run_length % 2 == 1
 
 
+def _is_static_control_word_letter(character: str) -> bool:
+    """Recognize a conservative letter across common LaTeX catcode modes."""
+    return _STATIC_CONTROL_WORD_NAME_RE.fullmatch(character) is not None
+
+
+def _control_sequence_name(source: str) -> str | None:
+    """Return one literal control-sequence token, if ``source`` is exactly one."""
+    if len(source) < 2 or source[0] != "\\":
+        return None
+    name = source[1:]
+    if _is_static_control_word_letter(name[0]):
+        if all(_is_static_control_word_letter(character) for character in name):
+            return name
+        return None
+    return name if len(name) == 1 else None
+
+
+def _csname_spelling(source: str, *, expand_space: bool) -> str:
+    """Normalize the statically reproducible part of a ``\\csname`` spelling.
+
+    Environment dispatch expands its token-list argument, so canonical
+    ``\\space`` tokens become ordinary spaces before ``\\csname`` ignores
+    them.  Kernel declaration names are first stringified with
+    ``\\tl_to_str:n`` and therefore request whitespace removal only.
+    """
+    if expand_space:
+        source = _CSNAME_SPACE_RE.sub(" ", source)
+    return re.sub(r"\s+", "", _active_source(source).text)
+
+
 def _following_mandatory_arguments(
     source: str, position: int, count: int
 ) -> list[_MandatoryArgument] | None:
@@ -360,8 +398,10 @@ def _following_mandatory_arguments(
             if position + 1 >= len(source):
                 return None
             token_end = position + 2
-            if source[position + 1].isalpha():
-                while token_end < len(source) and source[token_end].isalpha():
+            if _is_static_control_word_letter(source[position + 1]):
+                while token_end < len(source) and _is_static_control_word_letter(
+                    source[token_end]
+                ):
                     token_end += 1
             argument = _MandatoryArgument(position, token_end, token_end)
         else:
@@ -435,9 +475,9 @@ def _declared_atom_commands(
         name_source = owner_source[
             arguments[0].content_start : arguments[0].content_end
         ].strip()
-        name_match = re.fullmatch(r"\\([A-Za-z]+)", name_source)
-        if name_match is not None:
-            names.add(name_match.group(1))
+        name = _control_sequence_name(name_source)
+        if name is not None:
+            names.add(name)
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
         if not _is_control_word_start(owner_source, declaration.start()):
             continue
@@ -453,14 +493,18 @@ def _declared_atom_commands(
         ).text.strip()
         if class_name != "atom":
             continue
-        command_name = _active_source(
+        command_name = _csname_spelling(
             source[
                 arguments[1].content_start : arguments[1].content_end
-            ]
-        ).text.strip()
+            ],
+            expand_space=False,
+        ).strip()
         if command_name.startswith("\\"):
             command_name = command_name[1:]
-        if re.fullmatch(r"[A-Za-z]+", command_name) is not None:
+        if (
+            _STATIC_CONTROL_WORD_NAME_RE.fullmatch(command_name) is not None
+            or len(command_name) == 1
+        ):
             names.add(command_name)
     return frozenset(names)
 
@@ -480,32 +524,47 @@ def _command_spans(
         )
     pattern = re.compile(
         r"\\("
-        + "|".join(sorted(grammars, key=len, reverse=True))
+        + "|".join(
+            re.escape(name)
+            + (
+                _TEX_CONTROL_WORD_END
+                if _STATIC_CONTROL_WORD_NAME_RE.fullmatch(name) is not None
+                else ""
+            )
+            for name in sorted(grammars, key=len, reverse=True)
+        )
         + r")"
-        + _TEX_CONTROL_WORD_END
     )
     for command in pattern.finditer(source):
         if not _is_control_word_start(source, command.start()):
             continue
-        grammar = grammars[command.group(1)]
+        name = command.group(1)
+        grammar = grammars[name]
         position = _skip_space(source, command.end())
-        if grammar.accepts_star and source[position : position + 1] == "*":
-            position = _skip_space(source, position + 1)
-        if grammar.accepts_options and source[position : position + 1] == "[":
-            closed = match_group(source, position, "[", "]")
-            if closed < 0:
-                continue
-            position = _skip_space(source, closed)
-        if command.group(1) in dynamic_names:
+        if name in dynamic_names:
             # The declaration may have collided with a command of unknown
-            # arity.  Quarantine every adjacent braced argument rather than
-            # guessing the successful atom command's one-argument grammar.
-            while source[position : position + 1] == "{":
-                closed = match_group(source, position, "{", "}")
+            # signature.  Quarantine every adjacent syntactic argument rather
+            # than guessing how many stars, options, or groups it accepts.
+            while position < len(source):
+                character = source[position : position + 1]
+                if character == "*":
+                    position = _skip_space(source, position + 1)
+                    continue
+                if character not in "[{":
+                    break
+                closer = "]" if character == "[" else "}"
+                closed = match_group(source, position, character, closer)
                 if closed < 0:
                     break
                 position = _skip_space(source, closed)
         else:
+            if grammar.accepts_star and source[position : position + 1] == "*":
+                position = _skip_space(source, position + 1)
+            if grammar.accepts_options and source[position : position + 1] == "[":
+                closed = match_group(source, position, "[", "]")
+                if closed < 0:
+                    continue
+                position = _skip_space(source, closed)
             for _ in range(max(grammar.positional_group_counts)):
                 if source[position : position + 1] != "{":
                     break
@@ -596,10 +655,11 @@ def _environment_tokens(
         closed = match_group(owner_source, position, "{", "}")
         if closed < 0:
             continue
-        active_name = _active_source(source[position + 1 : closed - 1]).text
-        # LaTeX dispatches environments through ``\csname``, which ignores
-        # ordinary spaces while constructing the control-sequence name.
-        name = re.sub(r"\s+", "", active_name)
+        # LaTeX dispatch expands the name in ``\csname``; model the canonical
+        # expandable space token as well as ordinary ignored whitespace.
+        name = _csname_spelling(
+            source[position + 1 : closed - 1], expand_space=True
+        )
         if _ENVIRONMENT_NAME_RE.fullmatch(name) is None:
             continue
         tokens.append(

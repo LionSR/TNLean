@@ -647,6 +647,26 @@ def test_rmp_dimension_ownership() -> None:
             "an unbraced xparse declaration escaped quarantine: "
             f"{unbraced_compatibility_atom!r}"
         )
+    for catcode_prelude, atom_name in (
+        (r"\makeatletter", "tn@atom"),
+        (r"\ExplSyntaxOn", "tn:atom"),
+        (r"\ExplSyntaxOn", "tn_atom"),
+        ("", "tnλatom"),
+        ("", "?"),
+    ):
+        catcode_atom = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"{catcode_prelude}\tndeclareatom{{\{atom_name}}}{{skin=dot}}"
+            rf"\tnarrow{{\{atom_name}[label shift={{99mm,100mm}}]"
+            r"{101mm}{102mm}}",
+        )
+        if len(catcode_atom) != 4 or any(
+            occurrence.owner is not None for occurrence in catcode_atom
+        ):
+            raise AssertionError(
+                "a control-sequence atom name escaped dynamic quarantine: "
+                f"name={atom_name!r}, occurrences={catcode_atom!r}"
+            )
     declared_kernel_atom = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclare{atom}{tnkernelatom}{skin=dot}"
@@ -755,6 +775,32 @@ def test_rmp_dimension_ownership() -> None:
             "a source-local command collision activated dynamic ownership: "
             f"{source_local_collision!r}"
         )
+    repeated_optional_collision = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\NewDocumentCommand{\tnoccupied}{O{} O{} m}{}"
+        r"\tnarrow{\tndeclareatom{\tnoccupied}{skin=dot}"
+        r"\tnoccupied[][103mm]{104mm}}",
+    )
+    if len(repeated_optional_collision) != 2 or any(
+        occurrence.owner is not None
+        for occurrence in repeated_optional_collision
+    ):
+        raise AssertionError(
+            "a repeated optional argument escaped unknown-arity quarantine: "
+            f"{repeated_optional_collision!r}"
+        )
+    colliding_parbox = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\tndeclareatom{\parbox}{skin=dot}"
+        r"\parbox[c][105mm][c]{106mm}{x}}",
+    )
+    if len(colliding_parbox) != 2 or any(
+        occurrence.owner is not None for occurrence in colliding_parbox
+    ):
+        raise AssertionError(
+            "a real multi-option command escaped unknown-arity quarantine: "
+            f"{colliding_parbox!r}"
+        )
     scoped_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tnarrow{{\tndeclareatom{\tnlocalatom}{skin=dot}"
@@ -840,6 +886,19 @@ def test_rmp_dimension_ownership() -> None:
             "an environment-local atom escaped source-wide quarantine: "
             f"{environment_scoped_atom!r}"
         )
+    for kernel_name in ("tn spaced", "tn\nspaced"):
+        csname_declared_atom = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\tndeclare{{atom}}{{{kernel_name}}}{{skin=dot}}"
+            r"\tnarrow{\tnspaced[label shift={107mm,108mm}]{A}}",
+        )
+        if len(csname_declared_atom) != 2 or any(
+            occurrence.owner is not None for occurrence in csname_declared_atom
+        ):
+            raise AssertionError(
+                "a csname-normalized kernel atom escaped quarantine: "
+                f"name={kernel_name!r}, occurrences={csname_declared_atom!r}"
+            )
     for environment in (
         "tenkz",
         "tenkzcd",
@@ -928,6 +987,29 @@ kz}}
             raise AssertionError(
                 "a csname-spaced environment lost its public boundary: "
                 f"name={spaced_name!r}, occurrences={spaced_environment!r}"
+            )
+    for expanded_space_name in (
+        r"ten\space kz",
+        r"ten\space\space kz",
+        "ten\\space% preserve the control-word boundary\nkz",
+    ):
+        expanded_space_environment = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\tnarrow{{\begin{{{expanded_space_name}}}[pitch=109mm]"
+            rf"\rule{{110mm}}{{111mm}}\end{{{expanded_space_name}}}}}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in expanded_space_environment
+        ] != [
+            ("109mm", DimensionOwner.METRIC),
+            ("110mm", None),
+            ("111mm", None),
+        ]:
+            raise AssertionError(
+                "an expanded-space environment lost its public boundary: "
+                f"name={expanded_space_name!r}, "
+                f"occurrences={expanded_space_environment!r}"
             )
     nested_label_shift = scan_case_dimensions(
         Path("synthetic.tex"),
