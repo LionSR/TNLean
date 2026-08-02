@@ -21,7 +21,7 @@ string|id=b|kind=open|pts=2
 string|id=c|kind=wind|pts=2
 string|id=d|kind=around|pts=2
 stringcross|under=b|over=a|hits=1
-check|relation=1|result=equal|signature=open:e, open:w
+check|scope=1|relation=1|result=equal|signature=open:e, open:w
 """
 
 

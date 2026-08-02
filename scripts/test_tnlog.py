@@ -57,6 +57,7 @@ def main() -> int:
                 "atom|picture=oops|cell=1-1|name=A|kind=tensor",
                 "frame|picture=1|scope=atom|map=rotate(30)|"
                 "a=bad|b=0|c=0|d=1",
+                "check|relation=1|result=equal|signature=open:e",
                 "mystery|picture=2|bare",
             )
         ),
@@ -71,6 +72,11 @@ def main() -> int:
         "dangling-picture-ref",
     }
     assert {finding[0] for finding in notes} == {"unknown-event", "unknown-lang"}
+    assert any(
+        finding[0] == "malformed-event"
+        and "check event lacks required field(s): scope" in finding[2]
+        for finding in malformed
+    )
 
     assert AuditEvent is Event
     assert AuditPicture is Picture

@@ -354,6 +354,13 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     },
 }
 
+# Fields whose absence makes an otherwise typed event unusable.  Most event
+# kinds are picture records and use the shared picture= requirement below;
+# equation checks are top-level records whose scope is their ownership key.
+REQUIRED_FIELDS: dict[str, frozenset[str]] = {
+    "check": frozenset({"scope"}),
+}
+
 
 @dataclass
 class Event:
@@ -497,6 +504,14 @@ def parse_log(
                         f"{kind} field {key}={value!r} fails validation: {line}",
                     )
                     valid = False
+            missing = sorted(REQUIRED_FIELDS.get(kind, frozenset()) - attrs.keys())
+            if missing:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"{kind} event lacks required field(s): {', '.join(missing)}: {line}",
+                )
+                valid = False
             if kind != "picture" and "picture" not in attrs:
                 if current_kernel is not None and kind in {
                     "atom",
