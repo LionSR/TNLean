@@ -54,6 +54,23 @@ line~2057 conclusion is available conditionally on the positive-tail
 reflected target alone.
 % The conditional Gram and unitary results are pull requests 5282 and 5286.
 
+If this target holds for every sector, the corresponding unitaries may be
+chosen simultaneously.  The direct-sum conjugations, vertical retractions,
+and normalized restorations give the two composites written in
+Appendix~C.4, lines~2065--2085, on the retained physical sectors.  The source
+does not prescribe their values on the discarded complements.  The
+formalization uses the trace-restoring completion documented in
+\path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex} to obtain the
+two channels of Definition~4.1 on the full physical matrix algebras.  The
+additional terms vanish on $M_1(X)$ and $M_2(X)$, so they do not alter the
+retained-sector identities.
+Consequently, beyond the tensor-attached algebra clause, literal CPSV
+canonical form, MPDO positivity, and the source-derived sector pairing with
+matched multiplicity spectra, the all-sector positive-tail target is the sole
+additional unproved comparison needed for the renormalization-fixed-point
+conclusion.  No unitary conjugacy, fusion isometry, or renormalization fixed
+point is assumed.
+
 The physical-letter part of this realization is now unconditional.  The
 gauge-dressed two-site corner provides $V_\gamma$ and $c_\gamma>0$ such that
 \begin{equation}
@@ -763,9 +780,20 @@ unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Scope restriction: the identity-dressed physical-letter span is
-complete, while the common positive-tail target remains open.}  The oblique
-maps \eqref{eq:oblique-maps} give the coefficients
+\textbf{Scope restriction: the renormalization-fixed-point conclusion is
+complete conditional on the common positive-tail targets, while those targets
+remain open.}  Once the targets are supplied in every sector, the conditional
+Gram theorem, unitary normalization, and physical channel construction give
+completely positive, trace-preserving maps satisfying
+\(
+  \mathcal T[M_1(X)]=M_2(X)
+\)
+and
+\(
+  \mathcal S[M_2(X)]=M_1(X)
+\)
+for every virtual matrix $X$.  The oblique maps
+\eqref{eq:oblique-maps} give the coefficients
 \eqref{eq:oblique-physical-coefficients} without a scalar Gram hypothesis or a
 unitary gauge.  Since $L_\gamma$ and $R_\gamma$ need not agree, this result is
 not a positive corner.  Its adjoint-reflected orientation is governed by the
