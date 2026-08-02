@@ -376,18 +376,20 @@ policy document do not qualify. A policy-, checker-, CI-, receipt-, or
 record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
-`defer-to-2.0`, or `breaking-required`. A compatible resolution names the exact
-later fix pull request and a nonempty list of the friction entry's immutable
+`defer-to-2.0`, or `restart-required`. Use `restart-required` when the frozen
+surface must break or no pinned atomic assertion can witness the finding. A
+compatible resolution names the exact later fix pull request and a nonempty
+list of the friction entry's immutable
 pinned atomic regression tests. Each test reports its pinned assertion-failure
 fingerprint at the recorded friction tree and immediately before the fix, while
 its immutable fixtures remain byte-identical and its surface-owned program path
 and assertion pass at the fix head under the active freeze tag. The fix pull
 request's repository-authorized exact-head approval, integration tree, ancestry,
 surface-specific semantic diff, and complete pinned test run are revalidated
-before the friction is resolved. A reset has cause
-`breaking-required` or `record-invalid` and names the entry that caused it. A
-breaking reset closes the active attempt. A record-invalid reset targets any
-earlier externally invalid entry; it closes the active attempt when one exists
+before the friction is resolved. A reset has cause `restart-required` or
+`record-invalid` and names the entry that caused it. A restart reset closes the
+active attempt. A record-invalid reset targets any earlier externally invalid
+entry; it closes the active attempt when one exists
 and otherwise leaves the campaign inactive. A currently valid record-invalid
 reset acknowledges its target while that reset remains valid; an audit queues
 only invalid entries not already acknowledged by such a later reset. If the
@@ -408,8 +410,8 @@ maintainer merge, initial tree binding, carried-forward digest, and embedded
 supervisor receipts establish its provenance. A missing retained blob can be
 repaired only by restoring those exact bytes at the same path.
 When an audit's reset queue is nonempty, its head is the first new
-non-correction entry after the boundary. A
-pending breaking-required reset heads the queue; otherwise the earliest
+non-correction entry after the boundary. A pending `restart-required` reset
+heads the queue; otherwise the earliest
 unacknowledged invalid target's record-invalid reset does. Remaining targets
 follow in ledger order, consecutively apart from corrections. External drift
 may occur after

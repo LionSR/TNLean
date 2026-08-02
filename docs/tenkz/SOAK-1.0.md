@@ -231,18 +231,18 @@ paths, malformed declarations, or disagreement fails closed.
 
 The inventory is a TOML document with `schema = 1` and one or more `[[test]]`
 tables. Each test has exactly `id` (a unique lowercase hyphenated identifier),
-`surfaces` (a nonempty duplicate-free list drawn from `tex-api` and `tnlog`),
-`failure_fingerprint` (a `sha256` value unique across the inventory), `runner`
+`surface` (exactly `tex-api` or `tnlog`), `failure_fingerprint` (a `sha256` value
+unique across the inventory), `runner`
 (exactly `python3` or `bash`), `path` (a normalized regular file below the
 configured test-code root with the matching `.py` or `.sh` suffix), `args` (a
 list of nonempty argument strings), `program_paths` (a duplicate-free list of
-normalized regular subject blobs beneath the policy's `release_test_subject_roots`),
+normalized regular subject blobs beneath the policy's
+`release_test_subject_roots`),
 `fixture_paths` (a duplicate-free list of normalized subject blobs or trees
-beneath those roots), and `timeout_seconds` (a positive
-integer). Program paths also lie beneath those subject roots. Program and
+beneath those roots), and `timeout_seconds` (a positive integer). Program paths
+also lie beneath those subject roots. Program and
 fixture paths are disjoint, and no fixture tree may contain a program path.
-Every program path matches at least one fix-path set for the test's declared
-surfaces, and every declared surface has at least one matching program path.
+Every program path matches the fix-path set for the test's one surface.
 
 Each inventory command evaluates exactly one atomic compatibility assertion;
 its ID and failure fingerprint cannot represent a suite or multiple failure
@@ -390,7 +390,7 @@ an earlier prefix for the current boundary, and the final `invalid_entries`
 value is not fed back into its own derivation.
 
 When the reset queue is nonempty, the first new non-correction entry after the
-boundary is its head. If a `breaking-required` reset was already pending at the
+boundary is its head. If a `restart-required` reset was already pending at the
 boundary, it heads the queue and closes the active attempt; otherwise the queue
 starts with the `record-invalid` reset for the earliest invalid entry. Remaining
 `record-invalid` targets follow in ledger order, consecutively while the
@@ -553,15 +553,17 @@ requests may merge normally; only these two entries are release evidence.
 ### `friction`
 
 Required additional fields: `surface` (`tex-api` or `tnlog`), `triage`
-(`fix-compatible`, `defer-to-2.0`, or `breaking-required`), `summary` (`text`),
+(`fix-compatible`, `defer-to-2.0`, or `restart-required`), `summary` (`text`),
 and `evidence` (`text`). A `fix-compatible` friction additionally requires
 `regression_tests` (a nonempty `list[test-ref]`); that field is forbidden for
 the other triages. `defer-to-2.0` changes nothing in the active major.
-`breaking-required` requires a reset as the next non-correction entry.
+`restart-required` is mandatory when the frozen surface must break or no pinned
+atomic assertion can witness the finding. It requires a reset as the next
+non-correction entry.
 
 Let `Q` be the active freeze's exact `freeze_tag`, `H_E` the friction record's
 exact final head, and `I_E` its later integration. Every named inventory test's
-`surfaces` must contain the friction's exact `surface`. Candidate validation
+`surface` must equal the friction's exact `surface`. Candidate validation
 requires each `observe-release-test(H_E, Q, R)` receipt to return
 `assertion-failed` with its exact pinned fingerprint; post-merge validation
 requires the same at `I_E`. The friction must receive a later `resolution`
@@ -616,13 +618,13 @@ reruns all of them before the friction is resolved. Descriptive `summary` or
 
 ### `reset`
 
-Required additional fields: `cause` (`breaking-required` or `record-invalid`),
+Required additional fields: `cause` (`restart-required` or `record-invalid`),
 `target` (`entry-ref`), `reason` (`text`), and `evidence` (`text`). A
 `record-invalid` reset additionally requires `replay_receipt_pr` (`pr-ref`) and
 `replay_receipt_sha256` (`sha256`); those fields are forbidden on a
-`breaking-required` reset.
+`restart-required` reset.
 
-For `cause = "breaking-required"`, `target` names an unresolved friction entry
+For `cause = "restart-required"`, `target` names an unresolved friction entry
 with that triage in the active attempt; the reset uses and closes that attempt.
 For `cause = "record-invalid"`, `target` names any earlier entry whose externally
 verified identity, history, ancestry, tree, complete record diff, or ordering
@@ -633,7 +635,7 @@ batch's reset queue, not necessarily the position immediately following its
 historical target, and a correction cannot repair the cause. Once this reset
 passes its own current post-merge validation, it acknowledges the target only
 when `cause = "record-invalid"`; this prevents the same defect from being queued
-forever. A `breaking-required` reset never acknowledges a raw-invalid entry.
+forever. A `restart-required` reset never acknowledges a raw-invalid entry.
 
 The next freeze has attempt number one higher than the most recently opened
 attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new

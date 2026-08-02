@@ -280,13 +280,15 @@ records a nonempty list of pinned atomic tests for its public surface.  A
 resolution names a separate exact-head-approved fix pull request: every test
 reports its exact fingerprint at the friction and fix-parent trees, its fixtures
 remain byte-identical, a declared surface-owned program changes, and the tests
-plus full active-freeze payload pass at the fix head.  Release preparation lands
-only after every compatible friction in the active attempt is resolved and both
-work merges have landed; its exact diff
-changes only the tag-derived 1.0 manifest and four canonical release artifacts.
-Exact-head sign-off review follows immediately on that integration; if `main`
-advances, repeat preparation on the
-new tip.  A validated sign-off remains live until a full replay succeeds and
+plus full active-freeze payload pass at the fix head.
+If no pinned atomic test witnesses a finding, or the frozen surface must break,
+record `restart-required` and reset the attempt; do not disguise a broad failure
+as compatibility evidence.  Release preparation lands only after every
+compatible friction in the active attempt is resolved and both work merges have
+landed; its exact diff changes only the tag-derived 1.0 manifest and four
+canonical release artifacts.  Exact-head sign-off review follows immediately
+on that integration; if `main` advances, repeat preparation on the new tip.  A
+validated sign-off remains live until a full replay succeeds and
 the exact annotated final tag is observed under current required protection.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
