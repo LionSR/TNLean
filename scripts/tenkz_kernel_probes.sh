@@ -1489,6 +1489,10 @@ grep -Fq '[TKZ-EQ-NESTED]' "$WORK/n_nested_equation.transcript" || {
   echo "FAIL: nested equation lacked TKZ-EQ-NESTED" >&2
   exit 1
 }
+[ -f "$WORK/n_nested_equation.tnlog" ] || {
+  echo "FAIL: nested equation did not write its audit log" >&2
+  exit 1
+}
 if grep -Fq '|scope=2' "$WORK/n_nested_equation.tnlog"; then
   echo "FAIL: a rejected nested equation mutated scope ownership" >&2
   exit 1
