@@ -1,39 +1,54 @@
 % Target: rmp-iii-b-idempotent
-% Formula: ring_j( T_i ) = delta_{i,j} T_i — the virtual MPO string
-% Ink: Canonical public tenkzfree MPO ring and central PEPS tensor.
-% Boundary: The MPO tail and five tensor legs are open on both sides.
+% Formula: A j-loop around the i tensor reduces by the idempotent relation
+%   delta_{i,j}.
+% Ink: Canonical public kernel plane with four unmarked MPO stations and the
+%   marked j station on one closed loop.
+% Boundary: Both sides retain the horizontal and diagonal virtual rails and one
+%   upward physical leg; each side has one open red tail.
 % Source: paper TN-Review-main.tex line 1649; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 661-687
-% Capabilities: free-graph, ring-closure, typed-ports
+% Capabilities: kernel, plane-frame, ring-closure, typed-ports
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkzfree}
-    % the PEPS tensor: physical leg up, horizontal and diagonal lattice wires
-    \tnput[dot, role=marked, label pos=south]{C}{(0,0)}{i}
-    \tnjoin{C.north}{0mm,6mm}
-    % the four MPO tensors the ring places on the four virtual legs
-    \tnput[mpo]{W}{(-11mm,0)}{} \tnput[mpo]{E}{(11mm,0)}{}
-    \tnput[mpo]{N}{(6mm,7mm)}{} \tnput[mpo]{S}{(-6mm,-7mm)}{}
-    \tnjoin{-17mm,0mm}{W.west} \tnjoin{W.east}{C.west}
-    \tnjoin{C.east}{E.west} \tnjoin{E.east}{17mm,0mm}
-    \tnjoin{-10mm,-12mm}{S.south west} \tnjoin{S.north east}{C.south west}
-    \tnjoin{C.north east}{N.south west} \tnjoin{N.north east}{10mm,12mm}
-    % the marked tensor j on the ring, free string end exiting south east
-    \tnput[mpo, role=marked]{J}{(7mm,-7mm)}{j}
-    \tnjoin[role=operator]{J.south east}{13mm,-12mm}
-    % the MPO ring: W -> N -> E -> J -> S -> W
-    \tnjoin[role=operator, route=arc]{W.north}{N.west}
-    \tnjoin[role=operator, route=arc]{N.east}{E.north}
-    \tnjoin[role=operator, route=arc]{E.south}{J.north east}
-    \tnjoin[role=operator, route=arc]{J.south west}{S.east}
-    \tnjoin[role=operator, route=arc]{S.west}{W.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
+    % The plane frame is the source's XZ canvas.  Addressed stations, rather
+    % than page coordinates, give the loop its projected compass order.
+    \tn[at=(2,2), name=i, role=marked, ports={90:physical}]{}
+    \tnmark[form=label, label pos=nw]{i}{$i$}
+    \tn[skin=box, at=(1,3), name=N,
+      ports={0:virtual,45:virtual,180:virtual,225:virtual}]{}
+    \tn[skin=box, at=(2,3), name=E,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
+    \tn[skin=box, at=(3,1), name=S,
+      ports={0:virtual,45:virtual,180:virtual,225:virtual}]{}
+    \tn[skin=box, at=(2,1), name=W,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
+    \tn[skin=box, at=(3,3), name=J, role=marked,
+      ports={45:virtual,135:virtual,225:virtual,315:virtual}]{}
+    \tnmark[form=label, label pos=s]{J}{$j$}
+    % The four unmarked MPO stations split the source's virtual rails.  The
+    % explicit port bonds make the contraction part of the model rather than
+    % an accidental overlap in the projection.
+    \tnwire{W.w}{open w} \tnwire{W.e}{i.w} \tnwire{i.e}{E.w} \tnwire{E.e}{open e}
+    \tnwire{i.90}{open n} \tnwire{open sw}{S.225} \tnwire{S.45}{i.225}
+    \tnwire{i.45}{N.225} \tnwire{N.45}{open ne}
+    % Each red bond terminates on a named tensor face.  Thus all five MPO
+    % stations, including marked j, are contractions rather than waypoints.
+    \tnwire[species=operator, name=j-wn]{W.90}{N.180}
+    \tnwire[species=operator, name=j-ne]{N.0}{E.90}
+    \tnwire[species=operator, name=j-ej]{E.270}{J.45}
+    \tnwire[species=operator, name=j-js]{J.225}{S.0}
+    \tnwire[species=operator, name=j-sw]{S.180}{W.270}
+    \tnwire[species=operator, name=j-tail-in]{i.315}{J.135}
+    \tnwire[species=operator, name=j-tail-out]{J.315}{open se}
+  \end{tenkz}
   \;=\;\delta_{i,j}\;
-  \begin{tenkzfree}
-    % the bare tensor: same legs, one residual string stub to the south east
-    \tnput[dot, role=marked, label pos=south]{D}{(0,0)}{i}
-    \tnjoin{D.north}{0mm,6mm}
-    \tnjoin{-9mm,0mm}{D.west} \tnjoin{D.east}{9mm,0mm}
-    \tnjoin{-6mm,-7mm}{D.south west} \tnjoin{D.north east}{6mm,7mm}
-    \tnjoin[role=operator]{D.south east}{7mm,-5mm}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
+    \tn[at=(2,2), name=bare, role=marked, ports={90:physical}]{}
+    \tnmark[form=label, label pos=nw]{bare}{$i$}
+    \tnwire{bare.w}{open w} \tnwire{bare.e}{open e} \tnwire{bare.90}{open n}
+    \tnwire{open sw}{bare.225} \tnwire{bare.45}{open ne}
+    \tnwire[species=operator, name=bare-tail]{bare.315}{open se}
+  \end{tenkz}
 \]

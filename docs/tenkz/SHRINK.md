@@ -1237,3 +1237,17 @@ No parser row, escape, or case-specific geometry control is added.
 Census-correction: #5086
 
 No language-ledger row changes and no flag verdict is re-examined here.
+
+### 2026-08-01 — the remaining projected panels state their contractions
+
+M4 rises from 18.32 to 18.50. The projected idempotent case now splits the four
+virtual rails at their MPO stations instead of relying on geometric
+coincidence. The left R panel names both physical legs, carries its winding
+through all four ring tensors and both b stations, starts the i-string at the
+marked tensor, and splits every black rail through the tensor ports it meets.
+All five idempotent-loop stations are explicit atoms joined face to face; the
+marked four-port j atom owns the two loop bonds and the two radial bonds. These
+case lines record real contractions without a new parser row, geometric
+tolerance, escape, alias, or overload.
+
+Census-correction: #5086
