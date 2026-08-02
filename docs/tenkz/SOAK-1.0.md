@@ -92,6 +92,16 @@ exactly this one entry: its base lacks the entry and its exact final
 `headRefOid` appends the complete block without changing any pinned byte or
 other live entry. GitHub's normalized `record_pr.author.login` must be a valid
 lowercase login; authorship is not copied into a self-declared entry field.
+Candidate validation of a newly appended entry must run on that declared pull
+request at that exact head; copying the block into another pull request is
+invalid. Before merge it reports the kind-specific pending state because the
+integration facts do not yet exist.
+After merge,
+GitHub must report `record_pr` merged to `main` with non-null `mergedAt` and
+`mergeCommit.oid`. The integration commit must be reachable from `main`, and
+its Git tree must equal the exact final head's tree. These common post-merge
+rules apply to every entry kind; the kind-specific rules add their ancestry and
+ordering predicates.
 
 For each kind, the common fields plus that kind's fields below are the exact
 allowed set. Missing required fields, fields belonging to another kind,
@@ -133,9 +143,9 @@ opens, closes, or changes the active attempt. No entry follows a successfully
 validated sign-off.
 
 Each attempt has exactly one opening freeze. If a merged entry fails a required
-post-merge identity, ancestry, tree, or ordering check, `record-invalid` is the
-next non-correction record; until that reset lands, no later work or sign-off
-can validate.
+post-merge identity, ancestry, tree, or ordering check, a `reset` entry with
+`cause = "record-invalid"` is the next non-correction record; until that reset
+lands, no later work or sign-off can validate.
 
 ## Entry kinds
 

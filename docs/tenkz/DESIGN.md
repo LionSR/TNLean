@@ -209,6 +209,13 @@ the source pull request, source SHA, tag object, and peeled commit agree, and
 rejects a lightweight, moved, replaced, or mismatched tag. A tagger timestamp,
 if transcribed as evidence, is descriptive only and never determines ordering.
 
+The same record provenance applies to every later entry. Candidate validation
+must run on the declared `record_pr` at its exact final head. Post-merge
+validation requires that pull request to be merged to `main`, with its
+integration commit reachable from `main` and its tree equal to the approved
+head. Copying an entry through another pull request is invalid and requires a
+`record-invalid` reset after merge.
+
 The final `tenkz-v1.0.0` annotated tag is created only after the self-referential
 sign-off record has landed on `main` and passed post-merge validation. Its exact
 approved final head already carries the 1.0 `\ProvidesPackage` metadata, manual
