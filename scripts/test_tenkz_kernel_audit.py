@@ -274,6 +274,19 @@ kernel-boundary|signature=phys:up
         finding.rule for finding in surplus_opt_out.findings
     ]
 
+    duplicate_opt_out = audit_log(
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        "check|scope=1|relation=1|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}",
+            "check={signature, off={1: documented}}",
+        ),
+    )
+    assert "eq-boundary-mismatch" in [
+        finding.rule for finding in duplicate_opt_out.findings
+    ]
+
     checkless_equation_source = (
         "\\begin{tenkzeq}[size=m]\n"
         + equation_source
