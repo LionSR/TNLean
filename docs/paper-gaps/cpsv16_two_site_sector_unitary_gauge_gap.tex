@@ -40,15 +40,18 @@ dimensions and the invertible matrix $Z_\gamma$ in
 lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
 This proves the invertible-gauge sub-result of lines~2053--2057.
 
-The conditional Gram theorem proves
+The target-only conditional Gram theorem proves
 \eqref{eq:gram-dressing-target}, and hence
 $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\mathbf 1$ with
-$\omega_\gamma>0$, from a supplied identity-dressed marked realization.
-Its unitary-normalization corollary sets
+$\omega_\gamma>0$, from the positive-tail identity
+\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} supplies the
+physical-letter coefficient family and its physical-slice identity from the
+oblique compression.  The unitary-normalization corollary sets
 $U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ and proves that $U_\gamma$ is
 unitary with the same conjugation action as $Z_\gamma$.  Thus the entire
-line~2057 conclusion is available conditionally on that supplied
-realization.
+line~2057 conclusion is available conditionally on the positive-tail
+reflected target alone.
 % The conditional Gram and unitary results are pull requests 5282 and 5286.
 
 The physical-letter part of this realization is now unconditional.  The
@@ -177,7 +180,13 @@ The structure
 has a physical-letter coefficient field, its physical-slice identity, and a
 common-target identity.  Equations~\eqref{eq:oblique-raw-compression} and
 \eqref{eq:oblique-physical-coefficients} discharge the first two parts.  The
-last part is required only at positive tail lengths.  More precisely, after
+last part is isolated as
+\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} obtains the
+first two fields from the oblique compression and assumes exactly this final
+target.  Thus the conditional Gram and unitary conclusions now have
+target-only forms; no independent physical-letter hypothesis remains.
+More precisely, after
 one open-bond matrix has been inserted at the marked site, equality with the
 common reflected-adjoint target is assumed for every tail length $N>0$; no
 empty-tail equality is required.  This is sufficient because representative
@@ -661,7 +670,8 @@ Consequently Theorem~4.14 remains partial.  Issue
 \href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
 \href{https://github.com/LionSR/TNLean/issues/4645}{\#4645} remains open.
 The terminal-positivity theorem and the conditional Gram and unitary theorems
-remain unchanged.
+remain valid; the latter now assume precisely the positive-tail reflected
+target isolated above.
 
 \section{Non-circular product corners}
 
@@ -715,13 +725,14 @@ Equivalently, for every vertical letter $v$,
 \]
 Normality then implies \eqref{eq:gram-scalar}.
 
-The conditional Gram theorem establishes \eqref{eq:gram-dressing-target}
-from a supplied identity-dressed physical-letter coefficient family and its
-common reflected target at every positive tail length.  The empty tail is not
-part of this hypothesis.  The coefficient family and its physical-slice
-identity are now supplied unconditionally by
-\eqref{eq:oblique-physical-coefficients}; only the common reflected target
-remains conditional.  The unitary-normalization corollary then constructs
+The target-only conditional Gram theorem establishes
+\eqref{eq:gram-dressing-target} from the common reflected target at every
+positive tail length.  The empty tail is not part of this hypothesis.  The
+coefficient family and its physical-slice identity are supplied
+unconditionally by \eqref{eq:oblique-physical-coefficients} and packaged by
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget}; only the
+common reflected target remains conditional.  The unitary-normalization
+corollary then constructs
 \[
   U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
   \qquad

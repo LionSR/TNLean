@@ -264,10 +264,9 @@ span of the horizontal tensor. -/
 noncomputable def cornerGramCoefficients
     (V : Matrix (Fin d) (Fin n) ℂ) (X : GL (Fin n) ℂ) (c : ℂ) :
     Fin (n * n) → Fin (d * d) → ℂ :=
-  fun u z ↦ c⁻¹ *
-    star ((V * (X : Matrix (Fin n) (Fin n) ℂ)) z.divNat u.divNat) *
-      (V * ((((X)⁻¹ : GL (Fin n) ℂ) :
-        Matrix (Fin n) (Fin n) ℂ))ᴴ) z.modNat u.modNat
+  twoSidedCompressionCoefficients
+    (V * (X : Matrix (Fin n) (Fin n) ℂ))
+    (V * ((↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))ᴴ) c
 
 /-- The coefficients of a grouped corner recover the horizontal slices of
 its Gram-dressed representative. -/
@@ -308,13 +307,7 @@ theorem linearMarkedTensor_cornerGramCoefficients
   have hPhysical := linearMarkedTensor_twoSidedCompressionCoefficients
     (gramDressing X A) (V * (X : Matrix (Fin n) (Fin n) ℂ))
     (V * Xiᴴ) c hc0 (fun v ↦ (hScaled v).symm) u
-  have hCoefficients : cornerGramCoefficients V X c =
-      twoSidedCompressionCoefficients
-        (V * (X : Matrix (Fin n) (Fin n) ℂ)) (V * Xiᴴ) c := by
-    funext r z
-    rfl
-  rw [hCoefficients]
-  exact hPhysical
+  simpa [cornerGramCoefficients, Xi] using hPhysical
 
 /-- Evaluating the doubled-index MPS view on paired physical letters is the
 same as evaluating the ket and bra words separately. -/

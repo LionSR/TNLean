@@ -1142,22 +1142,28 @@
     (\ref{eq:mpdo_bnt_identity_physical_span}).
 \end{proof}
 
-\begin{theorem}[Conditional Gram identity from an identity-dressed marked realization]
+\begin{theorem}[Conditional Gram identity from the positive-tail reflected target]
     \label{thm:mpdo_bnt_conditional_identity_marked_gram}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        HasIdentityPositiveTailReflectedTarget}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        IdentityMarkedRealization.ofPositiveTailReflectedTarget}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gramDressing_gauge_eq_one_of_identityMarkedRealization}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gauge_gram_eq_pos_smul_one_of_identityMarkedRealization}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gramDressing_gauge_eq_one_of_positive_tail_reflected_target}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form,
         def:mpdo_bnt_two_site_exact_sector_gauge}
     In the setting of the preceding theorem, suppose in addition that the
-    doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that
-    there is a family of linear combinations of the physical letters of
-    $M^{[2]}$ whose open-bond matrices are the horizontal slices of
-    $M_\gamma$, and that, for every positive tail length, every resulting
-    marked chain equals the reflected-adjoint marked chain of $M_\gamma$ in
-    the adjoint two-site blocking. No equality for the empty tail is assumed.
+    doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that,
+    for every positive tail length, the identity-dressed marked chain equals
+    the reflected-adjoint marked chain of $M_\gamma$ in the adjoint two-site
+    blocking. No equality for the empty tail is assumed.
     Then, for every vertical letter $v$,
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
@@ -1208,14 +1214,14 @@
     (\ref{eq:mpdo_bnt_conditional_scalar_gram}).
 \end{proof}
 
-\begin{theorem}[Conditional unitary conjugacy from an identity-dressed marked
-    realization]
+\begin{theorem}[Conditional unitary conjugacy from the positive-tail reflected
+    target]
     \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
-        exists_unitary_sector_conjugacy_of_identityMarkedRealization}
+        exists_unitary_sector_conjugacy_of_positive_tail_reflected_target}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form,
         def:mpdo_bnt_two_site_exact_sector_gauge}
