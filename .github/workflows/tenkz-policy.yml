@@ -1,0 +1,98 @@
+name: Tenkz Compatibility Policy
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.after || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    name: Check append-only tenkz evidence
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.event.after || github.sha }}
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Test and check exact Git evidence
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+          ZERO_SHA: '0000000000000000000000000000000000000000'
+        run: |
+          set -euo pipefail
+
+          ensure_commit() {
+            local oid="$1"
+            if ! git cat-file -e "${oid}^{commit}" 2>/dev/null; then
+              git fetch --no-tags origin "$oid"
+            fi
+            test "$(git rev-parse "${oid}^{commit}")" = "$oid"
+          }
+
+          python3 scripts/test_check_tenkz_policy.py
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            ensure_commit "$PR_BASE_SHA"
+            ensure_commit "$PR_HEAD_SHA"
+            test "$(git rev-parse HEAD)" = "$PR_HEAD_SHA"
+            python3 scripts/check_tenkz_policy.py \
+              --target-ref "$PR_HEAD_SHA" \
+              --pull-request-base-ref "$PR_BASE_SHA" \
+              --main-ref "$PR_BASE_SHA"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            ensure_commit "$PUSH_AFTER"
+            test "$(git rev-parse HEAD)" = "$PUSH_AFTER"
+            if [ "$PUSH_BEFORE" = "$ZERO_SHA" ]; then
+              python3 scripts/check_tenkz_policy.py \
+                --target-ref "$PUSH_AFTER" \
+                --history-base-ref "$ZERO_SHA" \
+                --history-head-ref "$PUSH_AFTER" \
+                --main-ref "$PUSH_AFTER"
+            else
+              ensure_commit "$PUSH_BEFORE"
+              python3 scripts/check_tenkz_policy.py \
+                --target-ref "$PUSH_AFTER" \
+                --history-base-ref "$PUSH_BEFORE" \
+                --history-head-ref "$PUSH_AFTER" \
+                --main-ref "$PUSH_AFTER"
+            fi
+          else
+            TARGET="$(git rev-parse HEAD)"
+            read -r -a LINEAGE <<< "$(git rev-list --parents -n 1 "$TARGET")"
+            if [ "${#LINEAGE[@]}" -eq 1 ]; then
+              RANGE_BASE="$ZERO_SHA"
+              python3 scripts/check_tenkz_policy.py \
+                --target-ref "$TARGET" \
+                --history-base-ref "$RANGE_BASE" \
+                --history-head-ref "$TARGET" \
+                --main-ref "$TARGET"
+            else
+              RANGE_BASE="${LINEAGE[1]}"
+              python3 scripts/check_tenkz_policy.py \
+                --target-ref "$TARGET" \
+                --history-base-ref "$RANGE_BASE" \
+                --history-head-ref "$TARGET" \
+                --main-ref "$TARGET"
+            fi
+          fi
