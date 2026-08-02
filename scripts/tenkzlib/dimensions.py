@@ -179,9 +179,19 @@ def _skip_space(source: str, position: int) -> int:
     return position
 
 
+def _is_control_word_start(source: str, position: int) -> bool:
+    """Whether this backslash starts a TeX control word rather than ``\\``."""
+    run_length = 1
+    while position >= run_length and source[position - run_length] == "\\":
+        run_length += 1
+    return run_length % 2 == 1
+
+
 def _command_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
     for command in _COMMAND_RE.finditer(source):
+        if not _is_control_word_start(source, command.start()):
+            continue
         grammar = _COMMAND_GRAMMARS[command.group(1)]
         position = _skip_space(source, command.end())
         if grammar.accepts_star and source[position : position + 1] == "*":

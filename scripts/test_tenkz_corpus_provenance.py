@@ -349,6 +349,28 @@ def test_rmp_dimension_ownership() -> None:
                 "a command swallowed an independent following TeX group: "
                 f"source={source!r}, occurrences={occurrences!r}"
             )
+    escaped_command_units = scan_case_dimensions(
+        Path("synthetic.tex"), r"\\tnput{x}{(1mm,0)}{}"
+    )
+    if (
+        len(escaped_command_units) != 1
+        or escaped_command_units[0].owner is not None
+    ):
+        raise AssertionError(
+            "an escaped command spelling gained dimension ownership: "
+            f"{escaped_command_units!r}"
+        )
+    active_after_escape_units = scan_case_dimensions(
+        Path("synthetic.tex"), r"\\\tnput{x}{(2mm,0)}{}"
+    )
+    if (
+        len(active_after_escape_units) != 1
+        or active_after_escape_units[0].owner is not DimensionOwner.LAYOUT
+    ):
+        raise AssertionError(
+            "an active command after an escaped backslash lost ownership: "
+            f"{active_after_escape_units!r}"
+        )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix
