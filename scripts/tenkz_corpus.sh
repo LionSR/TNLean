@@ -252,6 +252,7 @@ if tracked_fixtures != actual_fixtures:
 PY
 
 python3 "$REPO/scripts/tenkz_lint.py" --census
+python3 "$REPO/scripts/test_tenkz_cubic.py"
 
 source_count=$(find "$CORPUS" -maxdepth 1 -type f -name '*.tex' | wc -l | tr -d ' ')
 
