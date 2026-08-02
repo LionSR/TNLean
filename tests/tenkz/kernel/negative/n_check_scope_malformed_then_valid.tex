@@ -1,0 +1,24 @@
+%% Negative: a malformed equation cannot donate records to a later scope.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{A}
+  \end{tenkz}
+  = =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{B}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{C}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{D}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

@@ -304,7 +304,7 @@ python3 "$REPO/scripts/tenkz_audit.py" \
   echo "FAIL: unmatched typed ports leaked a private open-end sentinel" >&2
   exit 1
 }
-[ "$(grep -c 'check|relation=1|result=equal' \
+[ "$(grep -Ec 'check\|scope=[0-9]+\|relation=1\|result=equal' \
       "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 7 ] || {
   echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
   exit 1
@@ -1501,12 +1501,12 @@ off_count=$(grep -c 'result=off' "$WORK/r_multiple_off.tnlog" || true)
   echo "FAIL: multiple equation opt-outs did not each emit an event" >&2
   exit 1
 }
-grep -Fq 'check|relation=1|result=off|reason=first' \
+grep -Fq 'check|scope=1|relation=1|result=off|reason=first' \
   "$WORK/r_multiple_off.tnlog" || {
   echo "FAIL: the first equation opt-out was not preserved" >&2
   exit 1
 }
-grep -Fq 'check|relation=3|result=off|reason=third' \
+grep -Fq 'check|scope=1|relation=3|result=off|reason=third' \
   "$WORK/r_multiple_off.tnlog" || {
   echo "FAIL: the later equation opt-out was silently dropped" >&2
   exit 1
@@ -1516,6 +1516,62 @@ python3 "$REPO/scripts/tenkz_audit.py" \
   >"$WORK/r_multiple_off.audit" || {
   echo "FAIL: multiple equation opt-outs failed the event audit" >&2
   cat "$WORK/r_multiple_off.audit" >&2
+  exit 1
+}
+
+grep -Fq 'check|scope=1|relation=1|result=equal' \
+  "$WORK/r_check_scope_nested.tnlog" || {
+  echo "FAIL: brace-nested relation lost its equation scope" >&2
+  exit 1
+}
+grep -Fq 'check|scope=2|relation=1|result=off|reason=documented' \
+  "$WORK/r_check_scope_nested.tnlog" || {
+  echo "FAIL: later equation opt-out lost its own scope" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_check_scope_nested.tnlog" \
+  "$KERNEL/regression/r_check_scope_nested.tex" \
+  >"$WORK/r_check_scope_nested.audit" || {
+  echo "FAIL: scoped brace-nested relations failed the event audit" >&2
+  cat "$WORK/r_check_scope_nested.audit" >&2
+  exit 1
+}
+grep -Fv 'check|scope=1|relation=1|' \
+  "$WORK/r_check_scope_nested.tnlog" \
+  >"$WORK/r_check_scope_nested_truncated.tnlog"
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_check_scope_nested_truncated.tnlog" \
+  "$KERNEL/regression/r_check_scope_nested.tex" \
+  >"$WORK/r_check_scope_nested_truncated.audit" || {
+  echo "FAIL: a missing record stole the later equation scope" >&2
+  cat "$WORK/r_check_scope_nested_truncated.audit" >&2
+  exit 1
+}
+
+scope_malformed="$KERNEL/negative/n_check_scope_malformed_then_valid.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode \
+       "$scope_malformed" \
+       >"$WORK/n_check_scope_malformed_then_valid.transcript" 2>&1 ); then
+  echo "FAIL: malformed scoped equation was accepted" >&2
+  exit 1
+fi
+grep -Fq \
+  'check|scope=1|result=malformed|reason=relation-count|panels=2|relations=2' \
+  "$WORK/n_check_scope_malformed_then_valid.tnlog" || {
+  echo "FAIL: malformed relation count lost its equation scope" >&2
+  exit 1
+}
+grep -Fq 'check|scope=1|relation=1|result=equal' \
+  "$WORK/n_check_scope_malformed_then_valid.tnlog" || {
+  echo "FAIL: malformed equation lost its per-relation scope" >&2
+  exit 1
+}
+grep -Fq 'check|scope=2|relation=1|result=equal' \
+  "$WORK/n_check_scope_malformed_then_valid.tnlog" || {
+  echo "FAIL: later valid equation inherited the malformed scope" >&2
   exit 1
 }
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
