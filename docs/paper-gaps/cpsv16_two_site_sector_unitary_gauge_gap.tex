@@ -9,7 +9,7 @@
 
 \title{The Two-Site Sector Comparison Stops at an Invertible Gauge}
 \author{}
-\date{2026-08-01}
+\date{2026-08-02}
 
 \begin{document}
 \maketitle
@@ -40,32 +40,90 @@ dimensions and the invertible matrix $Z_\gamma$ in
 lengths proves $e^{i\theta_\gamma}=1$, so the resulting conjugacy is exact.
 This proves the invertible-gauge sub-result of lines~2053--2057.
 
-The conditional Gram theorem proves
+The target-only conditional Gram theorem proves
 \eqref{eq:gram-dressing-target}, and hence
 $Z_\gamma^\dagger Z_\gamma=\omega_\gamma\mathbf 1$ with
-$\omega_\gamma>0$, from a supplied identity-dressed marked realization.
-Its unitary-normalization corollary sets
+$\omega_\gamma>0$, from the positive-tail identity
+\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} supplies the
+physical-letter coefficient family and its physical-slice identity from the
+oblique compression.  The unitary-normalization corollary sets
 $U_\gamma=\omega_\gamma^{-1/2}Z_\gamma$ and proves that $U_\gamma$ is
 unitary with the same conjugation action as $Z_\gamma$.  Thus the entire
-line~2057 conclusion is available conditionally on that supplied
-realization.
+line~2057 conclusion is available conditionally on the positive-tail
+reflected target alone.
 % The conditional Gram and unitary results are pull requests 5282 and 5286.
 
-One direct sufficient datum is weaker than the full marked realization.  Let
-$V$ be any matrix and let $c>0$ satisfy the positive-coefficient two-sided
-physical realization
+The physical-letter part of this realization is now unconditional.  The
+gauge-dressed two-site corner provides $V_\gamma$ and $c_\gamma>0$ such that
+\begin{equation}
+  V_\gamma^\dagger\widetilde M_{[2]}^vV_\gamma
+  =c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
+  \label{eq:gauge-dressed-corner}
+\end{equation}
+Set
+\begin{equation}
+  L_\gamma=V_\gamma(Z_\gamma^{-1})^\dagger,
+  \qquad
+  R_\gamma=V_\gamma Z_\gamma.
+  \label{eq:oblique-maps}
+\end{equation}
+Then direct cancellation of the invertible gauge gives
+\begin{equation}
+  L_\gamma^\dagger\widetilde M_{[2]}^vR_\gamma
+  =c_\gamma M_\gamma^v.
+  \label{eq:oblique-raw-compression}
+\end{equation}
+Consequently
+\begin{equation}
+  f^\gamma_{(r,s),(i,j)}
+  =c_\gamma^{-1}\overline{(L_\gamma)_{ir}}(R_\gamma)_{js}
+  \label{eq:oblique-physical-coefficients}
+\end{equation}
+expresses every horizontal slice of $M_\gamma$ as a linear combination of
+the physical letters of the two-site blocking.  Thus the \path{fId} and
+\path{physical} fields of the marked realization are discharged.
+\footnote{Formal declarations:
+\leanid{MPOTensor.twoSidedCompressionCoefficients},
+\leanid{MPOTensor.linearMarkedTensor_twoSidedCompressionCoefficients},
+\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+exists_blockTwo_identity_oblique_compression}, and
+\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+exists_identity_physical_letter_coefficients}.}
+
+This construction is oblique: in general $L_\gamma\ne R_\gamma$.  Reversing
+the two maps gives
+\begin{equation}
+  R_\gamma^\dagger\widetilde M_{[2]}^vL_\gamma
+  =c_\gamma(Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+    (Z_\gamma^\dagger Z_\gamma)^{-1}.
+  \label{eq:oblique-gram-compression}
+\end{equation}
+At the marked-chain level, adjoint reflection exchanges the two oblique maps
+together with the bond-pair and tail reversal.  The reflected orientation is
+therefore governed by the Gram-dressed compression
+\eqref{eq:oblique-gram-compression}; it does not identify the raw mark with the
+common reflected target.  The irreducible remaining gap is the star-compatible
+positive-tail target identity, which is equivalent to
+\eqref{eq:gram-dressing-target}; it is not the physical-letter span assertion.
+
+A same-sided realization is a stronger local datum, but it is still weaker
+than the full marked realization.  Let $V$ be any matrix and let $c>0$ satisfy
+the positive-coefficient same-sided physical realization
 \begin{equation}
   V^\dagger\widetilde M_{[2]}^vV=cM_\gamma^v
   \label{eq:positive-coefficient-realization}
 \end{equation}
 for every vertical letter $v$.  The physical-letter expansion of the marked
-matrix uses \eqref{eq:positive-coefficient-realization}, while MPDO reflection identifies
-the resulting marked chain with the common target.  Neither step requires
-$V^\dagger V=\mathbf 1$.  This reduction is formalized by a conditional
-constructor.\footnote{Formal declaration:
+matrix uses \eqref{eq:positive-coefficient-realization}, while MPDO reflection
+identifies the resulting marked chain with the common target.  Neither step
+requires $V^\dagger V=\mathbf 1$.  This reduction is formalized by a
+conditional constructor.\footnote{Formal declaration:
 \leanid{IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization}.}
-It gives a concrete sufficient local premise without adding orthogonality,
-reconstruction, or normalization assumptions.
+It gives a concrete sufficient local premise for the missing target without
+adding orthogonality, reconstruction, or normalization assumptions.  The
+oblique maps in \eqref{eq:oblique-maps} do not meet this premise because their
+left and right factors are different.
 
 There is an independent sufficient route which need not pass through
 \eqref{eq:positive-coefficient-realization}.  The invertible similarity determines an
@@ -119,14 +177,23 @@ of the sufficient local premises just described.
 
 The structure
 \path{BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization}
-requires the common-target identity only at positive tail lengths.  More
-precisely, after one open-bond matrix has been inserted at the marked site,
-equality with the common reflected-adjoint target is assumed for every tail
-length $N>0$; no empty-tail equality is required.  This is sufficient because
-representative separation chooses a sufficiently large tail length.  It is
-the form of Lemma~L justified by Appendix~C.3, lines~1835--1858: the source
-states first-site equality for positive system sizes, and its proof uses a
-length at which block injectivity and a nonzero power sum separate the normal
+has a physical-letter coefficient field, its physical-slice identity, and a
+common-target identity.  Equations~\eqref{eq:oblique-raw-compression} and
+\eqref{eq:oblique-physical-coefficients} discharge the first two parts.  The
+last part is isolated as
+\path{HasIdentityPositiveTailReflectedTarget}.  The constructor
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget} obtains the
+first two fields from the oblique compression and assumes exactly this final
+target.  Thus the conditional Gram and unitary conclusions now have
+target-only forms; no independent physical-letter hypothesis remains.
+More precisely, after
+one open-bond matrix has been inserted at the marked site, equality with the
+common reflected-adjoint target is assumed for every tail length $N>0$; no
+empty-tail equality is required.  This is sufficient because representative
+separation chooses a sufficiently large tail length.  It is the form of
+Lemma~L justified by Appendix~C.3, lines~1835--1858: the source states
+first-site equality for positive system sizes, and its proof uses a length at
+which block injectivity and a nonzero power sum separate the normal
 representatives.
 
 This does not yet prove the second part of \eqref{eq:unitary-upgrade} from the
@@ -136,10 +203,12 @@ copies of a common normal representative and proves proportionality of their
 Gram matrices.  Only afterwards does the source choose the first copy to have
 identity gauge.  The present
 one-site and two-site decompositions are constructed independently.  The
-available normal-tensor matching theorem therefore supplies an invertible
-conjugacy, but no second positive-coefficient physical realization of the form
-\eqref{eq:positive-coefficient-realization} with which the existing two-site corner can
-be compared.
+available normal-tensor matching theorem and the existing two-site corner
+therefore supply the oblique realization
+\eqref{eq:oblique-raw-compression}, but no second same-sided
+positive-coefficient realization of the form
+\eqref{eq:positive-coefficient-realization} with which the gauge-dressed
+corner can be compared.
 
 The missing step occurs immediately before the comparison.  At line~2048 the
 source writes the algebra-side positive direct sum and the independently
@@ -147,11 +216,12 @@ chosen two-site decomposition as physical vertical canonical forms, up to
 unitary changes of basis.  The displayed operator identity at lines~2049--2051
 then gives equality of all positive-length closed chains.  In the present
 formalization this implication yields equality of those closed chains and
-gauge-phase coverage of their normal representatives, but it does not produce
-an isometric physical inclusion of the algebra-side representative into the
-bond space of the two-site blocking.  Proposition~4.13, lines~1898--1921,
-compares actual physical sectors; it cannot be applied until this inclusion is
-available.
+gauge-phase coverage of their normal representatives.  The invertible gauge
+then produces an oblique inclusion of the algebra-side representative into
+the bond space of the two-site blocking, but not a same-sided isometric or
+positive corner.  Proposition~4.13, lines~1898--1921, compares actual
+physical sectors through the latter kind of corner; the oblique inclusion
+does not supply its star-compatible comparison.
 
 Thus the positive-tail restriction removes an unnecessary empty-word premise,
 but it does not provide the geometric premise of the comparison.
@@ -159,9 +229,12 @@ Appendix~C.4, lines~2048--2051, gives equality of positive-length closed
 chains for two independently chosen vertical canonical forms.
 Lines~2053--2057 then give an invertible similarity and invoke
 Proposition~4.13.  None of these lines constructs a positive-coefficient
-two-sided physical realization whose open-bond matrices would yield the
-identity-dressed marked family.  An identity-gauge isometric corner would be a
-stronger sufficient datum, but is not needed by the marked-chain argument.
+same-sided physical realization.  The formal oblique construction does yield
+the identity-dressed physical-letter family, but its reflected orientation is
+the Gram-dressed family in \eqref{eq:oblique-gram-compression}.  An
+identity-gauge isometric corner would be a stronger sufficient datum for the
+missing target, but the exact remaining assertion is only the positive-tail
+star-compatible marked identity.
 
 \section{The circular corner construction}
 
@@ -465,8 +538,8 @@ This no-go result does not settle the missing tensor-attached marked
 comparison.  \href{https://github.com/LionSR/TNLean/issues/5284}{Issue 5284}
 remains open.  Every counterexample to that proposed comparison must use
 retained sectors whose terminal transfers are positive semidefinite.
-Terminal positivity alone does not produce the identity-dressed marked
-realization or a unitary gauge.
+Terminal positivity alone does not produce the star-compatible positive-tail
+target identity or a unitary gauge.
 
 \section{A bond-two singleton physical-similarity obstruction}
 
@@ -597,7 +670,8 @@ Consequently Theorem~4.14 remains partial.  Issue
 \href{https://github.com/LionSR/TNLean/issues/4648}{\#4648}, and
 \href{https://github.com/LionSR/TNLean/issues/4645}{\#4645} remains open.
 The terminal-positivity theorem and the conditional Gram and unitary theorems
-remain unchanged.
+remain valid; the latter now assume precisely the positive-tail reflected
+target isolated above.
 
 \section{Non-circular product corners}
 
@@ -651,10 +725,14 @@ Equivalently, for every vertical letter $v$,
 \]
 Normality then implies \eqref{eq:gram-scalar}.
 
-The conditional Gram theorem establishes \eqref{eq:gram-dressing-target}
-from a supplied identity-dressed physical-letter coefficient family and its
-common reflected target at every positive tail length.  The empty tail is not
-part of this hypothesis.  Its unitary-normalization corollary then constructs
+The target-only conditional Gram theorem establishes
+\eqref{eq:gram-dressing-target} from the common reflected target at every
+positive tail length.  The empty tail is not part of this hypothesis.  The
+coefficient family and its physical-slice identity are supplied
+unconditionally by \eqref{eq:oblique-physical-coefficients} and packaged by
+\path{IdentityMarkedRealization.ofPositiveTailReflectedTarget}; only the
+common reflected target remains conditional.  The unitary-normalization
+corollary then constructs
 \[
   U_\gamma=\omega_\gamma^{-1/2}X_\gamma,
   \qquad
@@ -667,38 +745,40 @@ Terminal sector positivity excludes the generic nonunitary-similarity witness
 from the full tensor-attached setting.  The bond-two deformation has a genuine
 tensor-attached BNT algebra clause and literal horizontal CPSV canonical form,
 but a nonscalar Gram matrix makes its length-two operator nonpositive.  These
-facts do not supply the missing marked comparison.
+facts do not supply the missing star-compatible marked comparison.
 
-The remaining premise is to construct the coefficient family, prove its
-physical-slice identity, and prove its common reflected-target identity at
-positive tail lengths directly from the tensor-attached algebra clause,
-literal CPSV canonical form, and the MPDO hypothesis.  A common identity-gauge
-isometric corner would suffice to produce these marked identities, but that
-corner remains unconstructed.  This is
+The remaining premise is to prove the common reflected-target identity at
+positive tail lengths for the coefficient family in
+\eqref{eq:oblique-physical-coefficients}, directly from the tensor-attached
+algebra clause, literal CPSV canonical form, and the MPDO hypothesis.  A
+common identity-gauge isometric corner would suffice to produce this identity,
+but such a positive corner is stronger than the required conclusion and
+remains unconstructed.  The target identity is
 tracked in \href{https://github.com/LionSR/TNLean/issues/5284}{issue 5284},
 under \href{https://github.com/LionSR/TNLean/issues/4648}{issue 4648}, without
-assuming a raw corner, a Gram identity, a unitary gauge, fusion data, or a
-renormalization fixed point.  Consequently issues 4648 and
+assuming a positive raw corner, a Gram identity, a unitary gauge, fusion data,
+or a renormalization fixed point.  Consequently issues 4648 and
 \href{https://github.com/LionSR/TNLean/issues/4645}{4645} remain open, and the
 unconditional line~2057 unitary conclusion remains unformalized.
 
 \section{Verdict}
 
-\textbf{Scope restriction: the conditional conclusion is complete, while the
-unconditional marked realization remains an open gap.}  The
-Gram-dressing identity \eqref{eq:gram-dressing-target} and the subsequent
-unitary normalization are formalized under a supplied identity-dressed marked
-realization whose common-target identity is required only at positive tail
-lengths.  That realization, and in particular its common identity-gauge
-physical corner, has not been derived from condition~(ii) alone.  Terminal
-sector positivity rules out the generic nonunitary witness.  The concrete
-bond-two deformation does carry a tensor-attached BNT algebra clause and has
-literal horizontal CPSV canonical form, but it fails the MPDO hypothesis at
-length two.  It is therefore not a full-contract counterexample and constructs
-no identity-dressed marked realization.  Appendix~C.4 therefore does not
-presently justify the
-unconditional line~2057 unitary conclusion without a separately supplied local
-marked realization.
+\textbf{Scope restriction: the identity-dressed physical-letter span is
+complete, while the common positive-tail target remains open.}  The oblique
+maps \eqref{eq:oblique-maps} give the coefficients
+\eqref{eq:oblique-physical-coefficients} without a scalar Gram hypothesis or a
+unitary gauge.  Since $L_\gamma$ and $R_\gamma$ need not agree, this result is
+not a positive corner.  Its adjoint-reflected orientation is governed by the
+Gram-dressed compression \eqref{eq:oblique-gram-compression}, with the
+bond-pair and tail reversal included.  The direct equality of this target
+with the reflected raw target remains unproved; equivalently,
+\eqref{eq:gram-dressing-target} remains conditional.  Terminal sector
+positivity rules out the generic nonunitary witness.  The concrete bond-two
+deformation does carry a tensor-attached BNT algebra clause and has literal
+horizontal CPSV canonical form, but it fails the MPDO hypothesis at length
+two.  It is therefore not a full-contract counterexample and does not supply
+the missing target.  Appendix~C.4 therefore does not presently justify the
+unconditional line~2057 unitary conclusion.
 
 \bibliographystyle{alpha}
 \bibliography{references}
