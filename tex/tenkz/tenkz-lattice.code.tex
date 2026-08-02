@@ -569,9 +569,10 @@
 
 % ---------- plane-ratio guards ----------
 % Warnings, never clamps: the keys draw what they are told, and the log
-% names the regime the value has entered.  Each threshold cites its sweep
-% measurement; the leg threshold is COMPUTED from physleg/latticepitch so
-% a metric retune moves it automatically.
+% names the regime the value has entered.  Thresholds come from named metrics
+% or dimensionless geometry; measured examples only explain failure modes.
+% The leg threshold is COMPUTED from physleg/latticepitch so a metric retune
+% moves it automatically.
 \msg_new:nnn { tenkz } { plane-rise-low }
   { plane~rise=#1~is~at~or~below~the~normalized~physical-leg~clearance~
     threshold~#2:~vertical~
@@ -579,10 +580,10 @@
     the~worst~sweep~cell~0.30/0.40~produced~false~5-valent~junctions).~
     Keep~plane~rise~above~#2. }
 \msg_new:nnn { tenkz } { plane-slant-band }
-  { plane~slant=#1~is~outside~the~readable~band~(#2,~#3).~At~or~
-    below~#2,~depth~bonds~reach~61-67~degrees~in~the~measured~sweep~
-    and~can~be~mistaken~for~vertical~physical~legs;~at~or~above~#3,~
-    a~depth~neighbour~can~be~mistaken~for~a~column~neighbour. }
+  { plane~slant=#1~is~outside~the~readable~band~(#2,~#3).~Choose~a~
+    plane~slant~strictly~inside~this~band.~Below~the~band,~depth~bonds~
+    trend~toward~vertical~physical~legs;~above~the~band,~depth~neighbours~
+    trend~toward~column~neighbours. }
 \msg_new:nnn { tenkz } { plane-tall-window }
   { (rows-1)~x~plane~slant~=~#1~exceeds~(cols-1)/2~=~#2.~The~sheared~
     projection~approaches~a~rhombus~staircase~and~can~be~mistaken~for~
