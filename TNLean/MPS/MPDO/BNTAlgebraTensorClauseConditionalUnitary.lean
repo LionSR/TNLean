@@ -15,9 +15,10 @@ conditional Gram identity gives unitary conjugacy under an identity-dressed
 marked realization.
 
 The physical-letter part of the marked realization is constructed from the
-exact sector gauge.  Its positive-tail reflected target remains assumed.
-Thus the final theorem is conditional and does not establish the unconditional
-conclusion of Appendix C.4.
+exact sector gauge, while the declarations here retain the positive-tail
+reflected target as a hypothesis.  The mixed-prefix argument in
+`BNTAlgebraTensorClauseReflectedTarget` derives that target under the standing
+canonical-form and positivity assumptions.
 
 ## Main results
 
@@ -81,11 +82,10 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
 sector unitarily conjugate to its matched one-site tensor.
 
 **Scope restriction (packaged conditional form):** This form accepts all three
-parts of the marked realization.  The physical-letter part is now obtained
-unconditionally from the oblique compression, and the target-only theorem
-below gives the sharper hypothesis.  In either form, the reflected target is
-not derived from the algebra clause, so the unconditional line-2057 conclusion
-does not follow.  See
+parts of the marked realization.  The physical-letter part follows from the
+oblique compression, while the target-only theorem below gives the sharper
+hypothesis.  The mixed-prefix theorem derives the reflected target from the
+algebra clause under the standing assumptions; see
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
@@ -115,9 +115,9 @@ theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
 sector is unitarily conjugate to its matched one-site tensor.  The
 physical-letter coefficients are constructed from the exact sector gauge.
 
-**Scope restriction (conditional reflected target):** The target hypothesis is
-not derived from the tensor-attached algebra clause and remains the missing
-step in Appendix C.4.  See
+**Scope restriction (conditional reflected target):** The target is a
+hypothesis of this theorem.  Its derivation from the tensor-attached algebra
+clause by the mixed-prefix comparison is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,

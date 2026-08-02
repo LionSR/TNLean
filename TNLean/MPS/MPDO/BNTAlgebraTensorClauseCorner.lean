@@ -15,8 +15,10 @@ give isometric physical inclusions for the raw and exact gauge-dressed
 algebra-side sectors.  The Gram-dressed marked chain of the latter therefore
 has the reflected form appearing on the right-hand side of Figures 7--8.
 
-These corners do not prove the common-target Gram identity required for the
-unitary gauge conclusion.
+These corner identities alone do not prove the common-target Gram identity
+required for the unitary gauge conclusion.  The mixed one-site/two-site
+marked comparison in `BNTAlgebraTensorClauseReflectedTarget` supplies the
+additional argument.
 
 ## Main results
 
@@ -49,8 +51,8 @@ The construction uses the distinguished first copy in the one-site vertical
 decomposition and does not assume any normalization of the matched two-site
 gauge.
 
-Source: arXiv:1606.00608, Proposition 4.13, lines 1898--1921, and Appendix C.4,
-lines 2048--2057. -/
+Source: arXiv:1606.00608, Proposition 4.13, statement lines 943--951 and proof
+lines 1898--1921, and Appendix C.4, lines 2048--2057. -/
 theorem exists_oneSite_raw_sector_corner
     (S : TwoSiteExactSectorGauge H) (γ : Fin H.labelCount) :
     ∃ (W : Matrix (Fin d)
@@ -122,9 +124,9 @@ This is the gauge-dressed half of the marked sector comparison in CPSV16,
 Proposition 4.13, Figures 7--8, lines 1909--1919, applied to the two-site
 decomposition in Appendix C.4, lines 2048--2057.
 
-**Scope restriction (gauge-dressed corner):** This does not construct an
-identity-dressed corner and therefore does not prove the common-target Gram
-identity.  The remaining comparison is documented in
+**Scope restriction (gauge-dressed corner):** This theorem alone does not
+construct an identity-dressed corner or prove the common-target Gram identity.
+The mixed-prefix comparison that supplies the latter is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1909--1919, and Appendix C.4,
@@ -172,10 +174,10 @@ This is the gauge-dressed Figure 7 identity used on one side of Figure 8 in
 CPSV16, Proposition 4.13, lines 1909--1919, for the sector matching of
 Appendix C.4, lines 2048--2057.
 
-**Scope restriction (gauge-dressed corner):** The theorem does not compare
-this expression with the identity-dressed algebra-side representative and
-hence does not prove the common-target Gram identity.  The remaining
-comparison is documented in
+**Scope restriction (gauge-dressed corner):** This theorem alone does not
+compare the expression with the identity-dressed algebra-side representative.
+The mixed-prefix comparison that proves the common-target Gram identity is
+documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1909--1919, and Appendix C.4,

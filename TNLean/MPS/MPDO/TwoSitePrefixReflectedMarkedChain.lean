@@ -217,8 +217,14 @@ the length-`N + 2` density operator gives the reflected chain. Conjugating the
 two open indices by the adjoint of `X` produces `gramDressing X A` on the
 original side and cancels the gauge on the reflected side.
 
+**Local fix (mixed one-site/two-site prefix):** Appendix C.4 invokes
+Proposition 4.13 after choosing one-site and two-site vertical forms.  Keeping
+the two-site prefix but the one-site tail supplies the omitted common-space
+comparison.  This is documented in
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
 Source: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
-1909--1919, together with Appendix C.4, lines 1951--1956. -/
+1909--1919, together with Appendix C.4, lines 1951--1956 and 2048--2057. -/
 theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint
     {M : MPOTensor d D} (hM : IsMPDO M)
     (A : MPSTensor (D * D) n)

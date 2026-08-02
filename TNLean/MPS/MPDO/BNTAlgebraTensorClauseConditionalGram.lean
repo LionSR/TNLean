@@ -15,12 +15,12 @@ same reflected target as the gauge-dressed corner, determines the Gram
 conjugation of an exact two-site sector gauge.  Normality then makes the gauge
 Gram matrix a positive scalar multiple of the identity.
 
-The identity-dressed physical-letter coefficients are supplied unconditionally
-by the oblique two-sided compression.  Its reversed orientation gives the
-Gram-dressed representative, however, so the positive-tail equality with the
-raw reflected target remains conditional.  Thus these results isolate the
-remaining implication in Appendix C.4 and do not complete the two-site
-unitary-gauge argument.
+The identity-dressed physical-letter coefficients are supplied by the oblique
+two-sided compression.  Its reversed orientation gives the Gram-dressed
+representative, so the declarations in this file retain the positive-tail
+equality with the raw reflected target as a hypothesis.  The mixed-prefix
+argument in `BNTAlgebraTensorClauseReflectedTarget` derives that equality
+under the standing canonical-form and positivity assumptions.
 
 ## Main results
 
@@ -51,11 +51,12 @@ variable {d D : ℕ} {M : MPOTensor d D} {H : BNTAlgebraTensorClause M}
 /-- The identity-dressed marked chains have the reflected-adjoint target used
 for the gauge-dressed marked chains at every positive tail length.
 
-**Scope restriction (conditional reflected target):** This is precisely the
-remaining target identity; it is assumed here rather than derived from the
-tensor-attached algebra clause.  The oblique physical-letter construction
-supplies the marked insertion, but its reversed orientation is Gram-dressed.
-See `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+**Scope restriction (conditional reflected target):** The target identity is
+assumed here rather than derived from the tensor-attached algebra clause.  The
+oblique physical-letter construction supplies the marked insertion, but its
+reversed orientation is Gram-dressed.  The separate mixed-prefix argument
+derives the target under the standing assumptions; see
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
@@ -120,8 +121,8 @@ physical-letter coefficients to an identity-dressed marked realization.
 
 **Scope restriction (conditional reflected target):** The target is assumed.
 The coefficient family and its physical-letter identity are instead obtained
-from the oblique compression.  Thus this constructor introduces no further
-hypothesis beyond the remaining star-compatible target.  See
+from the oblique compression.  The mixed-prefix argument derives the target
+under the standing assumptions; see
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
@@ -193,11 +194,10 @@ reflected target as the exact gauge-dressed corner at every positive tail
 length forces the two Gram dressings to agree.
 
 **Scope restriction (conditional reflected target):** The physical-letter
-component is available unconditionally from the oblique compression.  The
-theorem additionally assumes its positive-tail equality with the raw reflected
-target, which is not derived from the algebra clause and remains the missing
-step in Appendix C.4.  See
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+component follows from the oblique compression.  This theorem additionally
+assumes its positive-tail equality with the raw reflected target.  The
+mixed-prefix argument derives that equality under the standing assumptions;
+see `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
@@ -266,9 +266,9 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
 Gram dressings to agree.  The physical-letter coefficients are constructed
 from the exact sector gauge by the oblique compression.
 
-**Scope restriction (conditional reflected target):** The target hypothesis is
-not derived from the tensor-attached algebra clause and remains the missing
-step in Appendix C.4.  See
+**Scope restriction (conditional reflected target):** The target is a
+hypothesis of this theorem.  Its derivation from the tensor-attached algebra
+clause by the mixed-prefix argument is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
@@ -291,11 +291,10 @@ matrix of the exact two-site sector gauge is a positive real scalar multiple
 of the identity.
 
 **Scope restriction (conditional reflected target):** The physical-letter
-component is available unconditionally from the oblique compression.  The
-theorem additionally assumes its positive-tail equality with the raw reflected
-target, which is not derived from the algebra clause and remains the missing
-step in Appendix C.4.  See
-`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+component follows from the oblique compression.  This theorem additionally
+assumes its positive-tail equality with the raw reflected target.  The
+mixed-prefix argument derives that equality under the standing assumptions;
+see `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1898--1921, applied at Appendix C.4, lines 2048--2057. -/
@@ -323,9 +322,9 @@ theorem gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
 positive real scalar multiple of the identity.  The identity-dressed
 physical-letter realization is supplied by the oblique compression.
 
-**Scope restriction (conditional reflected target):** The target hypothesis is
-not derived from the tensor-attached algebra clause and remains the missing
-step in Appendix C.4.  See
+**Scope restriction (conditional reflected target):** The target is a
+hypothesis of this theorem.  Its derivation from the tensor-attached algebra
+clause by the mixed-prefix argument is documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
