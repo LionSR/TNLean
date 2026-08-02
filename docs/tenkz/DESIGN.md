@@ -339,8 +339,11 @@ and otherwise leaves the campaign inactive. A currently valid record-invalid
 reset acknowledges its target while that reset remains valid; an audit queues
 only invalid entries not already acknowledged by such a later reset. If the
 acknowledging reset itself becomes invalid, its target is uncovered and both
-defects require valid acknowledgements. When an audit's reset queue is
-nonempty, its head is the first new non-correction entry after the boundary. A
+defects require valid acknowledgements. Exact-head replay evidence proves each
+historical reset's placement against its pre-reset prefix; the current audit
+still uses the actual final-prefix boundary and only queues prospective drift.
+When an audit's reset queue is nonempty, its head is the first new
+non-correction entry after the boundary. A
 pending breaking-required reset heads the queue; otherwise the earliest
 unacknowledged invalid target's record-invalid reset does. Remaining targets
 follow in ledger order, consecutively apart from corrections. External drift

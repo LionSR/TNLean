@@ -269,6 +269,9 @@ never reopens the ledger.
 A valid `record-invalid` reset acknowledges its historical target, so the same
 failed fact is not queued forever.  If that reset later becomes invalid, its
 target is uncovered and both invalid records require later valid resets.
+Historical placement is replayed from exact-head evidence bound to the reset's
+pre-reset prefix.  The current audit always uses the actual final-prefix
+boundary; a stale caller-selected boundary is rejected.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and

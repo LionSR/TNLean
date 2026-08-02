@@ -275,24 +275,30 @@ field, timestamp, or caller choice: it is the final live entry in the immutable
 ledger prefix at the start of a fail-closed validation against one complete
 current GitHub/Git snapshot and exact validation target. The resolver supplies
 a closed `AuditEvidence` value containing that `boundary_entry_id`, the
-ledger-ordered `invalid_entries` not already acknowledged as defined below, and
-true `snapshot_complete` and
-`validation_target_exact` flags. A caller cannot choose or weaken those fields.
-Historical entries already in that prefix remain replayable.
+ledger-ordered `invalid_entries` not already acknowledged as defined below,
+and true `snapshot_complete` and `validation_target_exact` flags. A caller
+cannot choose or weaken those fields. The boundary must equal the actual final
+live entry in that prefix; reusing an earlier boundary is invalid.
 
-First form the raw invalid set from current post-merge checks other than reset
-queue placement. Then scan the ledger in order with an initially empty set of
-acknowledged targets. At each `record-invalid` reset, derive the required queue
-head from earlier raw-invalid entries minus targets already acknowledged, with
-the pending-breaking priority below. The reset acknowledges its target only if
-it passes every other common, external, and kind-specific check and names that
-head. Otherwise the reset itself joins the raw invalid set and acknowledges
-nothing. `invalid_entries` is the resulting raw set minus the acknowledged
-targets. Thus a valid reset retires its target even while the failed external
-fact remains failed. If that reset later fails a current check, it no longer
-acknowledges the target; the target and reset remain independently eligible
-until later valid resets acknowledge them. This ordered scan is deterministic
-and does not use the final `invalid_entries` value as its own input.
+Historical reset placement and prospective drift use separate evidence
+channels. For every merged `record-invalid` reset at or before the boundary,
+the resolver supplies closed replay evidence bound to its entry ID, exact
+record head, integration, and exact pre-reset prefix. The evidence records a
+complete exact-target snapshot and the ledger-ordered raw-invalid queue before
+that reset. The validator reconstructs that historical queue, applies the
+pending-breaking priority below, and requires the reset to name its head. The
+replay result counts only when its exact-head workflow and independent
+supervisor receipts satisfy the pinned enforcement contract. It is not a
+caller-selected audit boundary.
+
+A historically valid reset acknowledges its target while that reset continues
+to pass its own current common, external, and kind-specific checks. The current
+resolver forms `AuditEvidence.invalid_entries` from current raw-invalid entries
+after subtracting those acknowledged targets. If an acknowledging reset later
+fails a current check, its target is uncovered and both the target and reset
+are independently included when invalid. Historical replay never substitutes
+an earlier prefix for the current boundary, and the final `invalid_entries`
+value is not fed back into its own derivation.
 
 When the reset queue is nonempty, the first new non-correction entry after the
 boundary is its head. If a `breaking-required` reset was already pending at the
