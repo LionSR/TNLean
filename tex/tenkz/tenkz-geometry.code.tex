@@ -513,7 +513,8 @@
 % Smallest conservative centre-bearing default-bead support margin between
 % distinct basis-member families in one finite affine cell window.  Geometry
 % owns the exhaustive silhouette calculation, while its caller supplies the
-% realized candidate mask, bead-body radius, and page-owned gap.  Member
+% sparse realized-candidate mask or universal full-window marker, bead-body
+% radius, and page-owned gap.  Member
 % offsets are already expressed in the caller's local east/north units.  With
 % dr/dc equal to member j's cell minus
 % member i's cell, their local displacement is
@@ -684,14 +685,18 @@
 
 \cs_new_protected:Npn \__tenkz_geom_basis_spacing_candidate:
   {
-    \prop_if_in:NeT \l__tenkz_geom_basis_spacing_candidate_prop
-      {
-        \int_use:N \l__tenkz_geom_basis_spacing_a_int /
-        \int_use:N \l__tenkz_geom_basis_spacing_b_int /
-        \int_use:N \l__tenkz_geom_basis_spacing_dr_int /
-        \int_use:N \l__tenkz_geom_basis_spacing_dc_int
-      }
+    \prop_if_in:NnTF \l__tenkz_geom_basis_spacing_candidate_prop {all}
       { \__tenkz_geom_basis_spacing_candidate_realized: }
+      {
+        \prop_if_in:NeT \l__tenkz_geom_basis_spacing_candidate_prop
+          {
+            \int_use:N \l__tenkz_geom_basis_spacing_a_int /
+            \int_use:N \l__tenkz_geom_basis_spacing_b_int /
+            \int_use:N \l__tenkz_geom_basis_spacing_dr_int /
+            \int_use:N \l__tenkz_geom_basis_spacing_dc_int
+          }
+          { \__tenkz_geom_basis_spacing_candidate_realized: }
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_geom_basis_spacing_dc:n #1

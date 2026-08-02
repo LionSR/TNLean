@@ -3,7 +3,10 @@
 %% collision that requires a suppressed member remains quiet.  A
 %% member-addressed replacement remains a live member, and a spanning member
 %% contributes its canonical anchor rather than aliases at every claimed cell.
-%% A final suppressed picture checks that no live-candidate state leaks.
+%% A suppressed picture checks that no live-candidate state leaks.  An
+%% out-of-window span defeats count-only completeness without inventing a
+%% candidate.  The final dense picture replaces the sparse callback with a
+%% fatal probe: successful compilation therefore pins the universal-mask path.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -41,5 +44,16 @@
 \begin{tenkz}[rows={ket}, cols=1, bonds=none,
               frame={flat,basis={wire at (0,0), wire at (0,0)}}]
   \tn[at=(1,1), name=Q]{Q}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,0,1), wide=2, name=O]{O}
+\end{tenkz}
+\ExplSyntaxOn
+\cs_set_protected:Npn \__tenkz_kernel_basis_spacing_candidate_inner:nn #1#2
+  { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{dense-fast-path} }
+\ExplSyntaxOff
+\begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
 \end{tenkz}
 \end{document}
