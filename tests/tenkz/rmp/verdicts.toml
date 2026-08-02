@@ -148,10 +148,10 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["boundary-mismatch"]
 missing = ["plane-transverse-physical-axis"]
-case_sha256 = "89bd11ba536c2f20bd62b63773f718f007d646c6319353b66584a9e60fdb619e"
+case_sha256 = "b68945914aa310926b38653a60ed9db8b2a91dac2272fdf2fd4bd23d945517cc"
 reviewed = "2026-08-02"
-renderer = "codex-author-source-plane-review-2026-08-02-300dpi"
-note = "all seven openings are distinct; frame=plane cannot yet place the physical index on the source's independent page-transverse axis; tracked by #5375"
+renderer = "codex-unpaired-physical-port-review-2026-08-02-200dpi"
+note = "all seven openings are distinct and the physical port is short and separate from the marked path; frame=plane cannot yet place it on the source's independent page-transverse axis; tracked by #5375"
 
 [[verdict]]
 id = "rmp-ii-reduced-density"
