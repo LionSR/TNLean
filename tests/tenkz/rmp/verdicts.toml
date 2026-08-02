@@ -3,7 +3,7 @@
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
 pairing_sha256 = "b3375317e8dddb4402eda08b0d74e1aaa4789467cf5a84fe4d4bd722ef470e89"
-campaign_sha256 = "d7d2b456aec151048b28665f01d71493048c901ebb6ba43d41ba18667783f1e2"
+campaign_sha256 = "9329171ae1126dcab8467201a57a125905a1b6a31a3a86eba5921e4386f3134b"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
