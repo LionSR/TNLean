@@ -99,6 +99,13 @@ _COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
     "tnedge": DimensionOwner.ROUTE,
     "tnarrow": DimensionOwner.ROUTE,
 }
+_COMMAND_ARGUMENT_COUNTS: Mapping[str, int] = {
+    "tnput": 3,
+    "tnjoin": 2,
+    "tnwire": 2,
+    "tnedge": 1,
+    "tnarrow": 1,
+}
 _COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_OWNERS) + r")\b")
 _OPTION_OWNER_RE = re.compile(
     r"(?<![A-Za-z0-9_])"
@@ -176,7 +183,9 @@ def _command_spans(source: str) -> list[_OwnerSpan]:
             if closed < 0:
                 continue
             position = _skip_space(source, closed)
-        while source[position : position + 1] == "{":
+        for _ in range(_COMMAND_ARGUMENT_COUNTS[command.group(1)]):
+            if source[position : position + 1] != "{":
+                break
             closed = match_group(source, position, "{", "}")
             if closed < 0:
                 break

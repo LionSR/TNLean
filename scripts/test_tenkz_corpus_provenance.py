@@ -295,6 +295,18 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"starred command dimensions escaped: {starred_command_units!r}"
         )
+    independent_group_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnedge{(1,1)-(1,2)} {\hspace{1mm}}",
+    )
+    if (
+        len(independent_group_units) != 1
+        or independent_group_units[0].owner is not None
+    ):
+        raise AssertionError(
+            "a group following a complete command gained ownership: "
+            f"{independent_group_units!r}"
+        )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix
