@@ -510,15 +510,23 @@ lemma activeSectorTraceMatrix_not_rankOne :
   rw [hT, Matrix.vecMulVec_mul_vecMulVec, hdot']
   simp
 
-/-- The four-sector tensor is a formal counterexample to the rank-one
-inference in the printed Lemma C.5.  It is injective, satisfies SAL and source
-ZCL, and its source-selected inverse-map factorization has positive
-neighboring operators and a primitive trace-one active trace matrix.  Yet that
-matrix has no factorization `T_{k,h} = a_k b_h`; equivalently the rectangular
-remainder `Q(1-LQ)L` is nonzero.
+/-- The raw four-sector tensor is injective, satisfies SAL and `IsSourceZCL`,
+and its source-selected inverse-map factorization has positive neighboring
+operators and a primitive trace-one active trace matrix. Yet that matrix has
+no factorization `T_{k,h} = a_k b_h`; equivalently, the rectangular remainder
+`Q(1-LQ)L` is nonzero.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1473--1499. -/
-theorem tensor_refutes_printed_sal_zcl_rank_one_inference :
+**Scope restriction (non-normal representative):** Lemma C.5 is proved inside
+the source's Case I, where the tensor is assumed to be an injective normal
+tensor. The raw tensor here has doubled-transfer spectral radius `5 / 16` and
+does not meet that normalization. Its normalized representative loses the
+paper's literal zero-correlation-length identity. Thus this theorem records the
+normalization obstruction but does not refute Lemma C.5 under its complete
+standing hypotheses. Documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, Case I at lines 1374--1381 and Lemma
+`SALZCL` at lines 1473--1499. -/
+theorem tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix :
     tensor.IsInjective ∧ tensor.IsSAL ∧ tensor.IsSourceZCL ∧
       (∀ k h, inverseMapFactorization.neighboringOperator k h =
         factorization.neighboringOperator k h) ∧

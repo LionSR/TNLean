@@ -71,20 +71,20 @@ separate public-surface occurrence and therefore appears separately.
 | `ch20_mpdo_foundations.tex` | — | — | L16, 124, 370 `tenkz` → `C-policy+C-record+R-record`<br>L374 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_algebra_tower.tex` | — | — | L78, 93 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | — | — | L18, 21 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_foundations.tex` | — | L78, 82 `tenkz` → `C-policy+C-record` | — |
+| `ch21_mpdo_rfp_foundations.tex` | — | L86, 90 `tenkz` → `C-policy+C-record` | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 292, 293, 294, 295, 296 `tntree` → `C-tree` | L291 `tenkzcd` → `C-tree+R-cd+R-record`<br>L410 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L402, 643, 649, 656, 663, 671, 676 `tnpic` → `C-picture+C-record+R-record`<br>L409 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L581, 583 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L444 `tenkzfree` → `R-free+R-record` |
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L629 `tenkzcd` → `C-picture+C-policy+C-record+R-cd+R-record`<br>L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | — | L279, 284 `tenkz` → `C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | — | — | L281, 286 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | — | — | L43, 48, 53 `tenkz` → `R-record`<br>L70, 709 `tenkz` → `C-record+R-record`<br>L80, 131, 265, 270, 275, 282, 287 `tenkz` → `C-policy+C-record+R-record`<br>L485 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L715, 719 `tenkz` → `C-policy+R-record` |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | — | — | L792, 801, 808, 815, 888, 894 `tenkz` → `C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex` | — | — | L427 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | — | — | L188 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_sector_coordinates.tex` | — | — | L160, 175 `tenkzcd` → `R-cd+R-record` |
-| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | — | L214 `tenkz` → `C-record`<br>L732 `tenkz` → `C-policy+C-record` | L736, 742, 747 `tenkz` → `C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | — | L332 `tenkz` → `C-record`<br>L850 `tenkz` → `C-policy+C-record` | L854, 860, 865 `tenkz` → `C-record+R-record` |
 | `ch23_algebraic_ft_foundations.tex` | — | — | L47, 51, 167, 371, 375, 387, 391, 433, 437, 441, 450, 454 `tenkz` → `C-policy+C-record+R-record`<br>L171 `tenkz` → `C-record+R-record` |
 | `ch24_peps_ft.tex` | — | — | L25 `tenkzlattice` → `C-policy+R-lattice+R-record`<br>L53, 96 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_balanced_edge_scalars.tex` | — | — | L18 `tenkzfree` → `C-species+R-free+R-record` |
