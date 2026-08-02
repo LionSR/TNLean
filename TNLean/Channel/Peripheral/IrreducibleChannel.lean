@@ -8,6 +8,7 @@ import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.KrausRepresentation
+import TNLean.Channel.Determinant.Bound
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.Spectral.TransferOperatorGap
 
@@ -41,22 +42,13 @@ variable {D : ℕ}
 
 /-- Every eigenvalue of a quantum channel has modulus at most `1`.
 
-We choose a Kraus representation `E = transferMap K` and reduce to the existing
-mixed-transfer bound for normalized tensors. -/
+This is the completely positive specialization of the unit-disk theorem for
+positive trace-preserving maps. -/
 theorem IsChannel.eigenvalue_norm_le_one [NeZero D]
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hE : IsChannel E) (μ : ℂ) (hμ : Module.End.HasEigenvalue E μ) :
     ‖μ‖ ≤ 1 := by
-  obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq : E = MPSTensor.transferMap (d := r) (D := D) K := by
-    apply LinearMap.ext
-    intro X
-    simpa [MPSTensor.transferMap_apply] using hK X
-  have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
-    kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
-  have hμ_mixed : Module.End.HasEigenvalue (MPSTensor.mixedTransferMap K K) μ := by
-    simpa [MPSTensor.mixedTransferMap_self, hE_eq] using hμ
-  exact MPSTensor.eigenvalue_norm_le_one (A := K) (B := K) hK_tp hK_tp μ hμ_mixed
+  exact hE.cp.isPositiveMap.eigenvalue_norm_le_one_of_tracePreserving hE.tp μ hμ
 
 /-- Hermitian fixed points of trace `0` vanish for irreducible channels. -/
 private theorem hermitian_fixedPoint_eq_zero_of_trace_eq_zero_of_irreducible_channel
