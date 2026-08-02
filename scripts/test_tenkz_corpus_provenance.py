@@ -617,8 +617,8 @@ def test_rmp_dimension_ownership() -> None:
             )
     declared_compatibility_atom = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tndeclareatom{\myatom}{skin=dot}"
-        r"\tnarrow{\myatom[label shift={52mm,53mm}]"
+        r"\tndeclareatom{\tnmyatom}{skin=dot}"
+        r"\tnarrow{\tnmyatom[label shift={52mm,53mm}]"
         r"{\rule{54mm}{55mm}}}",
     )
     if [
@@ -634,10 +634,23 @@ def test_rmp_dimension_ownership() -> None:
             "a declared compatibility atom lost its typed boundary: "
             f"{declared_compatibility_atom!r}"
         )
+    unbraced_compatibility_atom = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\tndeclareatom\tnbareatom{skin=dot}"
+        r"\tnbareatom[label shift={86mm,87mm}]{A}}",
+    )
+    if len(unbraced_compatibility_atom) != 2 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in unbraced_compatibility_atom
+    ):
+        raise AssertionError(
+            "an unbraced xparse declaration argument lost its binding: "
+            f"{unbraced_compatibility_atom!r}"
+        )
     declared_kernel_atom = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tndeclare{atom}{kernelatom}{skin=dot}"
-        r"\tnarrow{\kernelatom[label shift={56mm,57mm}]"
+        r"\tndeclare{atom}{tnkernelatom}{skin=dot}"
+        r"\tnarrow{\tnkernelatom[label shift={56mm,57mm}]"
         r"{\rule{58mm}{59mm}}}",
     )
     if len(declared_kernel_atom) != 4 or any(
@@ -655,9 +668,9 @@ def test_rmp_dimension_ownership() -> None:
     ):
         rejected_compatibility_atom = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnarrow{{\tndeclareatom{{\invalidatom}}"
+            rf"\tnarrow{{\tndeclareatom{{\tninvalidatom}}"
             rf"{{{invalid_descriptor}}}"
-            r"\invalidatom[label shift={80mm,81mm}]{A}}",
+            r"\tninvalidatom[label shift={80mm,81mm}]{A}}",
         )
         if len(rejected_compatibility_atom) != 2 or any(
             occurrence.owner is not None
@@ -674,9 +687,9 @@ def test_rmp_dimension_ownership() -> None:
     ):
         digit_delimited_group = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\{opener}1\tndeclareatom{{\groupatom}}{{skin=dot}}"
-            rf"\groupatom[label shift={{82mm,83mm}}]{{A}}\{closer}2"
-            r"\tnarrow{\groupatom[label shift={84mm,85mm}]{B}}",
+            rf"\{opener}1\tndeclareatom{{\tngroupatom}}{{skin=dot}}"
+            rf"\tngroupatom[label shift={{82mm,83mm}}]{{A}}\{closer}2"
+            r"\tnarrow{\tngroupatom[label shift={84mm,85mm}]{B}}",
         )
         if [
             (occurrence.literal, occurrence.owner)
@@ -693,8 +706,8 @@ def test_rmp_dimension_ownership() -> None:
             )
     atom_before_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnarrow{\lateatom[label shift={60mm,61mm}]{A}}"
-        r"\tndeclareatom{\lateatom}{skin=dot}",
+        r"\tnarrow{\tnlateatom[label shift={60mm,61mm}]{A}}"
+        r"\tndeclareatom{\tnlateatom}{skin=dot}",
     )
     if len(atom_before_declaration) != 2 or any(
         occurrence.owner is not None for occurrence in atom_before_declaration
@@ -716,11 +729,24 @@ def test_rmp_dimension_ownership() -> None:
             "a rejected declaration changed a fixed public command owner: "
             f"{colliding_atom_declaration!r}"
         )
+    colliding_latex_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\tndeclareatom\rule{skin=dot}"
+        r"\rule[label shift={88mm,89mm}]{A}}",
+    )
+    if len(colliding_latex_declaration) != 2 or any(
+        occurrence.owner is not None
+        for occurrence in colliding_latex_declaration
+    ):
+        raise AssertionError(
+            "a format command collision activated dynamic ownership: "
+            f"{colliding_latex_declaration!r}"
+        )
     scoped_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnarrow{{\tndeclareatom{\localatom}{skin=dot}"
-        r"\localatom[label shift={64mm,65mm}]{A}}"
-        r"\localatom[label shift={66mm,67mm}]{B}}",
+        r"\tnarrow{{\tndeclareatom{\tnlocalatom}{skin=dot}"
+        r"\tnlocalatom[label shift={64mm,65mm}]{A}}"
+        r"\tnlocalatom[label shift={66mm,67mm}]{B}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -737,9 +763,9 @@ def test_rmp_dimension_ownership() -> None:
         )
     compatibility_then_duplicate = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tndeclareatom{\duplicateatom}{skin=dot}"
-        r"\tndeclare{atom}{duplicateatom}{skin=dot}"
-        r"\duplicateatom[label shift={68mm,69mm}]{A}",
+        r"\tndeclareatom{\tnduplicateatom}{skin=dot}"
+        r"\tndeclare{atom}{tnduplicateatom}{skin=dot}"
+        r"\tnduplicateatom[label shift={68mm,69mm}]{A}",
     )
     if len(compatibility_then_duplicate) != 2 or any(
         occurrence.owner is not DimensionOwner.LAYOUT
@@ -751,9 +777,9 @@ def test_rmp_dimension_ownership() -> None:
         )
     kernel_then_duplicate = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tndeclare{atom}{otherduplicate}{skin=dot}"
-        r"\tndeclareatom{\otherduplicate}{skin=dot}"
-        r"\otherduplicate[label shift={70mm,71mm}]{A}",
+        r"\tndeclare{atom}{tnotherduplicate}{skin=dot}"
+        r"\tndeclareatom{\tnotherduplicate}{skin=dot}"
+        r"\tnotherduplicate[label shift={70mm,71mm}]{A}",
     )
     if len(kernel_then_duplicate) != 2 or any(
         occurrence.owner is not None for occurrence in kernel_then_duplicate
@@ -764,10 +790,10 @@ def test_rmp_dimension_ownership() -> None:
         )
     reused_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"{\tndeclareatom{\reusedatom}{skin=dot}"
-        r"\reusedatom[label shift={72mm,73mm}]{A}}"
-        r"{\tndeclare{atom}{reusedatom}{skin=dot}"
-        r"\reusedatom[label shift={74mm,75mm}]{B}}",
+        r"{\tndeclareatom{\tnreusedatom}{skin=dot}"
+        r"\tnreusedatom[label shift={72mm,73mm}]{A}}"
+        r"{\tndeclare{atom}{tnreusedatom}{skin=dot}"
+        r"\tnreusedatom[label shift={74mm,75mm}]{B}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -784,9 +810,9 @@ def test_rmp_dimension_ownership() -> None:
         )
     environment_scoped_atom = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\begin{tenkzeq}\tndeclareatom{\envatom}{skin=dot}"
-        r"\envatom[label shift={76mm,77mm}]{A}\end{tenkzeq}"
-        r"\tnarrow{\envatom[label shift={78mm,79mm}]{B}}",
+        r"\begin{tenkzeq}\tndeclareatom{\tnenvatom}{skin=dot}"
+        r"\tnenvatom[label shift={76mm,77mm}]{A}\end{tenkzeq}"
+        r"\tnarrow{\tnenvatom[label shift={78mm,79mm}]{B}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -872,6 +898,20 @@ kz}}
             "a comment-spliced environment lost its neutral boundary: "
             f"{spliced_environment!r}"
         )
+    for spaced_name in ("ten kz", "tenkz cd", " tenkz"):
+        spaced_environment = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\begin{{{spaced_name}}}[pitch=90mm]"
+            rf"\rule{{91mm}}{{92mm}}\end{{{spaced_name}}}",
+        )
+        if len(spaced_environment) != 3 or any(
+            occurrence.owner is not None
+            for occurrence in spaced_environment
+        ):
+            raise AssertionError(
+                "whitespace inside an environment name was collapsed: "
+                f"name={spaced_name!r}, occurrences={spaced_environment!r}"
+            )
     nested_label_shift = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tnarrow[from=1,to=2]{\tnpic[inline]{"

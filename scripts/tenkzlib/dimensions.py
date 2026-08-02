@@ -256,6 +256,11 @@ _DECLARE_ATOM_RE = re.compile(r"\\tndeclareatom" + _TEX_CONTROL_WORD_END)
 _KERNEL_DECLARE_RE = re.compile(r"\\tndeclare" + _TEX_CONTROL_WORD_END)
 _DECLARE_ATOM_SKINS = frozenset({"dot", "box", "pill", "mpo"})
 _DECLARE_ATOM_PHYSICAL_KEYS = frozenset({"label shift"})
+# A static source scan cannot reproduce TeX's complete ``\cs_if_exist`` state.
+# Activate only the tenkz extension namespace; arbitrary spellings remain
+# neutral barriers, so a collision with a format or package command cannot
+# acquire physical ownership.  The public examples use this namespace.
+_DYNAMIC_ATOM_NAME_RE = re.compile(r"tn[A-Za-z]+")
 _DECLARE_ATOM_PORT_RE = re.compile(
     r"(?:west|east):virtual|(?:up|down):physical"
 )
@@ -323,6 +328,15 @@ class _ActiveSource:
     offsets: tuple[int, ...]
 
 
+@dataclass(frozen=True)
+class _MandatoryArgument:
+    """One xparse ``m`` argument and its complete source extent."""
+
+    content_start: int
+    content_end: int
+    end: int
+
+
 def _active_source(source: str) -> _ActiveSource:
     """Remove TeX comments as token splices while retaining source locations."""
     characters: list[str] = []
@@ -370,21 +384,35 @@ def _is_control_word_start(source: str, position: int) -> bool:
     return run_length % 2 == 1
 
 
-def _following_brace_groups(
+def _following_mandatory_arguments(
     source: str, position: int, count: int
-) -> list[tuple[int, int]] | None:
-    """Return the next exact number of mandatory brace-group spans."""
-    groups: list[tuple[int, int]] = []
+) -> list[_MandatoryArgument] | None:
+    """Return following xparse ``m`` arguments, braced or one-token."""
+    arguments: list[_MandatoryArgument] = []
     for _ in range(count):
         position = _skip_space(source, position)
-        if source[position : position + 1] != "{":
+        if position >= len(source):
             return None
-        closed = match_group(source, position, "{", "}")
-        if closed < 0:
-            return None
-        groups.append((position + 1, closed - 1))
-        position = closed
-    return groups
+        if source[position] == "{":
+            closed = match_group(source, position, "{", "}")
+            if closed < 0:
+                return None
+            argument = _MandatoryArgument(
+                position + 1, closed - 1, closed
+            )
+        elif source[position] == "\\":
+            if position + 1 >= len(source):
+                return None
+            token_end = position + 2
+            if source[position + 1].isalpha():
+                while token_end < len(source) and source[token_end].isalpha():
+                    token_end += 1
+            argument = _MandatoryArgument(position, token_end, token_end)
+        else:
+            argument = _MandatoryArgument(position, position + 1, position + 1)
+        arguments.append(argument)
+        position = argument.end
+    return arguments
 
 
 def _top_level_comma_segments(source: str) -> list[tuple[int, int]]:
@@ -531,16 +559,24 @@ def _declared_atom_commands(
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
         if not _is_control_word_start(owner_source, declaration.start()):
             continue
-        groups = _following_brace_groups(owner_source, declaration.end(), 2)
-        if groups is None:
+        arguments = _following_mandatory_arguments(
+            owner_source, declaration.end(), 2
+        )
+        if arguments is None:
             continue
-        name_source = owner_source[groups[0][0] : groups[0][1]].strip()
+        name_source = owner_source[
+            arguments[0].content_start : arguments[0].content_end
+        ].strip()
         name_match = re.fullmatch(r"\\([A-Za-z]+)", name_source)
         if name_match is not None:
             name = name_match.group(1)
             names.add(name)
+            if _DYNAMIC_ATOM_NAME_RE.fullmatch(name) is None:
+                continue
             descriptor = _active_source(
-                source[groups[1][0] : groups[1][1]]
+                source[
+                    arguments[1].content_start : arguments[1].content_end
+                ]
             ).text
             if not _valid_compatibility_atom_descriptor(descriptor):
                 continue
@@ -548,33 +584,41 @@ def _declared_atom_commands(
                 _DeclarationCandidate(
                     name,
                     declaration.start(),
-                    groups[-1][1] + 1,
+                    arguments[-1].end,
                     _DECLARE_ATOM_PHYSICAL_KEYS,
                 )
             )
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
         if not _is_control_word_start(owner_source, declaration.start()):
             continue
-        groups = _following_brace_groups(owner_source, declaration.end(), 3)
-        if groups is None:
+        arguments = _following_mandatory_arguments(
+            owner_source, declaration.end(), 3
+        )
+        if arguments is None:
             continue
         class_name = _active_source(
-            source[groups[0][0] : groups[0][1]]
+            source[
+                arguments[0].content_start : arguments[0].content_end
+            ]
         ).text.strip()
         if class_name != "atom":
             continue
         command_name = _active_source(
-            source[groups[1][0] : groups[1][1]]
+            source[
+                arguments[1].content_start : arguments[1].content_end
+            ]
         ).text.strip()
         if command_name.startswith("\\"):
             command_name = command_name[1:]
         if re.fullmatch(r"[A-Za-z]+", command_name) is not None:
             names.add(command_name)
+            if _DYNAMIC_ATOM_NAME_RE.fullmatch(command_name) is None:
+                continue
             candidates.append(
                 _DeclarationCandidate(
                     command_name,
                     declaration.start(),
-                    groups[-1][1] + 1,
+                    arguments[-1].end,
                     frozenset(),
                 )
             )
@@ -744,8 +788,7 @@ def _environment_tokens(
         closed = match_group(owner_source, position, "{", "}")
         if closed < 0:
             continue
-        active_name = _active_source(source[position + 1 : closed - 1]).text
-        name = re.sub(r"\s+", "", active_name)
+        name = _active_source(source[position + 1 : closed - 1]).text
         if _ENVIRONMENT_NAME_RE.fullmatch(name) is None:
             continue
         tokens.append(
