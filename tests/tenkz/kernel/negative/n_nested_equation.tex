@@ -1,0 +1,21 @@
+% Negative regression: one equation audit scope cannot contain another.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{A}
+  \end{tenkz}
+  =
+  \begin{tenkzeq}[check={signature}]
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+      \tn[ports={}]{B}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+      \tn[ports={}]{C}
+    \end{tenkz}
+  \end{tenkzeq}
+\end{tenkzeq}
+\end{document}

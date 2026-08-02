@@ -4,7 +4,13 @@
 from tenkz_audit import scan_constructs as audit_scan_constructs
 from tenkz_audit import strip_comments as audit_strip_comments
 from tenkz_lint import scan_bodies
-from tenkzlib.texcase import scan_constructs, strip_comments
+from tenkzlib.texcase import (
+    following_group,
+    following_group_span,
+    scan_constructs,
+    strip_comments,
+    top_level_options,
+)
 
 
 def main() -> int:
@@ -24,6 +30,18 @@ def main() -> int:
     assert "\\% visible percent" in stripped
     assert "hidden after" not in stripped
     assert "hidden atom" not in stripped
+
+    option_source = "  [check={signature, off={1: note}}, frame={x=[a,b]}] tail"
+    option_group = following_group(option_source, 0, "[", "]")
+    assert option_group == "check={signature, off={1: note}}, frame={x=[a,b]}"
+    assert following_group_span(option_source, 0, "[", "]") == (
+        option_group,
+        option_source.index("] tail") + 1,
+    )
+    assert top_level_options(option_group) == [
+        ("check", "{signature, off={1: note}}"),
+        ("frame", "{x=[a,b]}"),
+    ]
 
     constructs = scan_constructs(stripped)
     assert [construct.name for construct in constructs] == [

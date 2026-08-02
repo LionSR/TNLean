@@ -94,7 +94,14 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Optional
 
-from tenkzlib.texcase import Construct, scan_constructs, strip_comments
+from tenkzlib.texcase import (
+    Construct,
+    following_group,
+    following_group_span,
+    scan_constructs,
+    strip_comments,
+    top_level_options,
+)
 from tenkzlib.tnlog import (
     FIELD_VALIDATORS,
     Event,
@@ -477,7 +484,7 @@ class Audit:
                 self.check_tree_event(event) if event.kind == "tree" else None
             ),
         )
-        self.log_events = parsed.events
+        self.log_events = parsed.valid_events
         self.pictures = parsed.pictures
         self.by_id = parsed.by_id
 
@@ -774,8 +781,6 @@ class Audit:
                 )
         for event in self.log_events:
             if event.kind != "check":
-                continue
-            if not self.require_fields(event, {"result"}, "check"):
                 continue
             result = event.attrs["result"]
             if result in {"mismatch", "malformed"}:
@@ -1534,18 +1539,19 @@ class Audit:
             picture_scopes[picture] = scope_index
             scope_pictures.setdefault(scope_index, []).append(picture)
 
-        relation_events: dict[tuple[int, int], list[Event]] = {}
+        scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
             if event.kind != "check":
                 continue
             scope = event.attrs.get("scope", "")
-            if scope.isdigit() and event.attrs.get("result") == "malformed":
-                malformed_scopes.add(int(scope))
-            relation = event.attrs.get("relation", "")
-            if not scope.isdigit() or not relation.isdigit():
+            if not scope.isdigit():
                 continue
-            relation_events.setdefault((int(scope), int(relation)), []).append(event)
+            scope_index = int(scope)
+            if event.attrs.get("result") == "malformed":
+                malformed_scopes.add(scope_index)
+                continue
+            scope_events.setdefault(scope_index, []).append(event)
 
         equation_tokens = list(re.finditer(
             r"\\(begin|end)\{tenkzeq\}", self._tex_src
@@ -1565,9 +1571,8 @@ class Audit:
             )
             if first_construct is None:
                 continue
-            header = self._tex_src[begin.end():first_construct.start]
-            checked = re.search(r"\bcheck\s*=", header) is not None
-            if not checked:
+            declared_offs = _tenkzeq_declared_offs(self._tex_src, begin.end())
+            if declared_offs is None:
                 continue
             members = [
                 index for index, construct in enumerate(self.constructs)
@@ -1581,11 +1586,35 @@ class Audit:
             )
             if scope in malformed_scopes or scope_pictures.get(scope) != members:
                 continue
+            expected_relations = set(range(1, len(members)))
+            events = scope_events.get(scope, [])
+            relation_numbers = [
+                int(event.attrs["relation"])
+                for event in events
+                if event.attrs.get("relation", "").isdigit()
+            ]
+            # Every non-malformed event in the scope must own exactly one
+            # expected relation.  Missing, duplicate, unowned, and surplus
+            # records disable the whole scope instead of authorizing a waiver.
+            if (
+                len(events) != len(expected_relations)
+                or len(relation_numbers) != len(events)
+                or set(relation_numbers) != expected_relations
+            ):
+                continue
+            by_relation = {
+                int(event.attrs["relation"]): event for event in events
+            }
+            logged_offs = {
+                relation for relation, event in by_relation.items()
+                if event.attrs.get("result") == "off"
+            }
+            # An event-stream opt-out is authority only when the same relation
+            # is explicitly waived in this source scope.
+            if logged_offs != declared_offs:
+                continue
             for relation, left in enumerate(members[:-1], 1):
-                events = relation_events.get((scope, relation), [])
-                if len(events) != 1:
-                    continue
-                relation_checks[left] = events[0]
+                relation_checks[left] = by_relation[relation]
 
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
@@ -1756,6 +1785,34 @@ _INLINE_EQUALITY_SPACE = r"(?:\s|\\[,;:!]|\\(?:quad|qquad)\b)*"
 _INLINE_EQUALITY_GLUE = re.compile(
     rf"\${_INLINE_EQUALITY_SPACE}={_INLINE_EQUALITY_SPACE}\$"
 )
+
+
+def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
+    """Return source-authorized opt-outs from one equation's actual options.
+
+    ``None`` means that the environment has no single top-level ``check`` key,
+    so its event records cannot authorize source-linked boundary delegation.
+    """
+    options = following_group(source, position, "[", "]")
+    if options is None:
+        return None
+    check_values = [
+        value for key, value in top_level_options(options) if key == "check"
+    ]
+    if len(check_values) != 1 or check_values[0] is None:
+        return None
+    check_value = check_values[0]
+    grouped = following_group_span(check_value, 0, "{", "}")
+    if grouped is not None and not check_value[grouped[1] :].strip():
+        check_value = grouped[0]
+    declared: set[int] = set()
+    for key, value in top_level_options(check_value):
+        if key != "off" or value is None:
+            continue
+        match = re.fullmatch(r"\{\s*(\d+)\s*:\s*[^}]*\}", value)
+        if match is not None:
+            declared.add(int(match.group(1)))
+    return declared
 
 
 def same_equation(sep: str) -> bool:

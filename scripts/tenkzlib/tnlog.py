@@ -356,9 +356,23 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 
 # Fields whose absence makes an otherwise typed event unusable.  Most event
 # kinds are picture records and use the shared picture= requirement below;
-# equation checks are top-level records whose scope is their ownership key.
+# equation checks are top-level records whose scope is their ownership key and
+# whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
-    "check": frozenset({"scope"}),
+    "check": frozenset({"scope", "result"}),
+}
+
+REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
+    "equal": frozenset({"relation", "signature"}),
+    "mismatch": frozenset({"relation"}),
+    "off": frozenset({"relation", "reason"}),
+    "malformed": frozenset({"reason", "panels", "relations"}),
+}
+
+# Equation checks are scope-owned top-level records.  A picture= field would
+# give them a second, conflicting owner and must never enter semantic checks.
+FORBIDDEN_FIELDS: dict[str, frozenset[str]] = {
+    "check": frozenset({"picture"}),
 }
 
 
@@ -368,6 +382,7 @@ class Event:
     attrs: dict[str, str]
     line: int
     raw: str
+    valid: bool = True  # False when canonical parsing rejects the record.
 
 
 @dataclass
@@ -444,6 +459,11 @@ class ParsedLog:
     pictures: list[Picture]
     by_id: dict[int | str, Picture]
 
+    @property
+    def valid_events(self) -> list[Event]:
+        """Return only records accepted by the canonical parser."""
+        return [event for event in self.events if event.valid]
+
 
 FindingCallback = Callable[[str, str, str], None]
 EventCallback = Callable[[Event], None]
@@ -488,8 +508,17 @@ def parse_log(
                 valid = False
                 continue
             key, value = part.split("=", 1)
-            attrs[key.strip()] = value.strip()
-        event = Event(kind, attrs, line_number, line)
+            key = key.strip()
+            if key in attrs:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"duplicate field {key!r}: {line}",
+                )
+                valid = False
+                continue
+            attrs[key] = value.strip()
+        event = Event(kind, attrs, line_number, line, valid)
         events.append(event)
         validators = FIELD_VALIDATORS.get(kind)
         if validators is None:
@@ -504,7 +533,14 @@ def parse_log(
                         f"{kind} field {key}={value!r} fails validation: {line}",
                     )
                     valid = False
-            missing = sorted(REQUIRED_FIELDS.get(kind, frozenset()) - attrs.keys())
+            required = set(REQUIRED_FIELDS.get(kind, frozenset()))
+            if kind == "check":
+                required.update(
+                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(
+                        attrs.get("result", ""), frozenset()
+                    )
+                )
+            missing = sorted(required - attrs.keys())
             if missing:
                 hard(
                     "malformed-event",
@@ -512,6 +548,20 @@ def parse_log(
                     f"{kind} event lacks required field(s): {', '.join(missing)}: {line}",
                 )
                 valid = False
+            forbidden = sorted(FORBIDDEN_FIELDS.get(kind, frozenset()) & attrs.keys())
+            if forbidden:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"{kind} event forbids field(s): {', '.join(forbidden)}: {line}",
+                )
+                valid = False
+            event.valid = valid
+            if kind == "check":
+                # A scope-owned equation check is emitted outside every panel
+                # and therefore closes the preceding kernel picture even when
+                # the check itself is malformed.
+                current_kernel = None
             if kind != "picture" and "picture" not in attrs:
                 if current_kernel is not None and kind in {
                     "atom",
@@ -525,10 +575,11 @@ def parse_log(
                 }:
                     # A kernel record: it belongs to the open kernel picture
                     # by nesting, not by a picture= field.
-                    current_kernel.events.append(event)
+                    if event.valid:
+                        current_kernel.events.append(event)
                     continue
                 if kind == "check":
-                    if check_event is not None:
+                    if check_event is not None and event.valid:
                         check_event(event)
                     continue
                 hard(
@@ -537,8 +588,13 @@ def parse_log(
                     f"{kind} event lacks required picture=: {line}",
                 )
                 valid = False
+                event.valid = False
         if kind == "picture":
+            # Every picture header ends the preceding picture's implicit
+            # ownership, even when the new header is malformed or duplicate.
+            current_kernel = None
             if not valid or "id" not in attrs or not _is_picture_id(attrs["id"]):
+                event.valid = False
                 continue
             # Dialect ids stay integers (every existing consumer indexes with
             # them); kernel ids keep their k-prefixed spelling as strings.
@@ -558,19 +614,20 @@ def parse_log(
                     f"picture id {picture_id} already declared at line "
                     f"{by_id[picture_id].line}",
                 )
+                event.valid = False
                 continue
             picture = Picture(picture_id, lang, line_number)
             by_id[picture_id] = picture
             pictures.append(picture)
             current_kernel = picture if lang == "kernel" else None
             continue
-        if check_event is not None:
-            check_event(event)
         reference = attrs.get("picture", "")
         if not _is_picture_id(reference):
             continue
         picture_id = reference if reference.startswith("k") else int(reference)
         if picture_id == 0 and kind == "tree":
+            if check_event is not None and event.valid:
+                check_event(event)
             continue
         if picture_id not in by_id:
             hard(
@@ -578,6 +635,11 @@ def parse_log(
                 where,
                 f"{kind} references undeclared picture {picture_id}",
             )
+            event.valid = False
             continue
+        if not event.valid:
+            continue
+        if check_event is not None:
+            check_event(event)
         by_id[picture_id].events.append(event)
     return ParsedLog(events, pictures, by_id)
