@@ -625,13 +625,13 @@ def test_rmp_dimension_ownership() -> None:
         (occurrence.literal, occurrence.owner)
         for occurrence in declared_compatibility_atom
     ] != [
-        ("52mm", DimensionOwner.LAYOUT),
-        ("53mm", DimensionOwner.LAYOUT),
+        ("52mm", None),
+        ("53mm", None),
         ("54mm", None),
         ("55mm", None),
     ]:
         raise AssertionError(
-            "a declared compatibility atom lost its typed boundary: "
+            "a source-only compatibility declaration granted ownership: "
             f"{declared_compatibility_atom!r}"
         )
     unbraced_compatibility_atom = scan_case_dimensions(
@@ -640,11 +640,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnbareatom[label shift={86mm,87mm}]{A}}",
     )
     if len(unbraced_compatibility_atom) != 2 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not None
         for occurrence in unbraced_compatibility_atom
     ):
         raise AssertionError(
-            "an unbraced xparse declaration argument lost its binding: "
+            "an unbraced xparse declaration escaped quarantine: "
             f"{unbraced_compatibility_atom!r}"
         )
     declared_kernel_atom = scan_case_dimensions(
@@ -695,13 +695,13 @@ def test_rmp_dimension_ownership() -> None:
             (occurrence.literal, occurrence.owner)
             for occurrence in digit_delimited_group
         ] != [
-            ("82mm", DimensionOwner.LAYOUT),
-            ("83mm", DimensionOwner.LAYOUT),
+            ("82mm", None),
+            ("83mm", None),
             ("84mm", None),
             ("85mm", None),
         ]:
             raise AssertionError(
-                "a digit-delimited TeX group primitive lost its scope: "
+                "a grouped dynamic declaration escaped quarantine: "
                 f"opener={opener!r}, occurrences={digit_delimited_group!r}"
             )
     atom_before_declaration = scan_case_dimensions(
@@ -732,15 +732,28 @@ def test_rmp_dimension_ownership() -> None:
     colliding_latex_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tnarrow{\tndeclareatom\rule{skin=dot}"
-        r"\rule[label shift={88mm,89mm}]{A}}",
+        r"\rule[label shift={88mm,89mm}]{95mm}{96mm}}",
     )
-    if len(colliding_latex_declaration) != 2 or any(
+    if len(colliding_latex_declaration) != 4 or any(
         occurrence.owner is not None
         for occurrence in colliding_latex_declaration
     ):
         raise AssertionError(
             "a format command collision activated dynamic ownership: "
             f"{colliding_latex_declaration!r}"
+        )
+    source_local_collision = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\newcommand{\tnoccupied}[2][]{A}"
+        r"\tnarrow{\tndeclareatom{\tnoccupied}{skin=dot}"
+        r"\tnoccupied[label shift={93mm,94mm}]{97mm}{98mm}}",
+    )
+    if len(source_local_collision) != 4 or any(
+        occurrence.owner is not None for occurrence in source_local_collision
+    ):
+        raise AssertionError(
+            "a source-local command collision activated dynamic ownership: "
+            f"{source_local_collision!r}"
         )
     scoped_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
@@ -752,13 +765,13 @@ def test_rmp_dimension_ownership() -> None:
         (occurrence.literal, occurrence.owner)
         for occurrence in scoped_atom_declaration
     ] != [
-        ("64mm", DimensionOwner.LAYOUT),
-        ("65mm", DimensionOwner.LAYOUT),
+        ("64mm", None),
+        ("65mm", None),
         ("66mm", None),
         ("67mm", None),
     ]:
         raise AssertionError(
-            "a local dynamic atom escaped its brace scope: "
+            "a local dynamic atom escaped source-wide quarantine: "
             f"{scoped_atom_declaration!r}"
         )
     compatibility_then_duplicate = scan_case_dimensions(
@@ -768,11 +781,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnduplicateatom[label shift={68mm,69mm}]{A}",
     )
     if len(compatibility_then_duplicate) != 2 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not None
         for occurrence in compatibility_then_duplicate
     ):
         raise AssertionError(
-            "a rejected duplicate replaced an active compatibility atom: "
+            "duplicate declarations escaped dynamic quarantine: "
             f"{compatibility_then_duplicate!r}"
         )
     kernel_then_duplicate = scan_case_dimensions(
@@ -799,13 +812,13 @@ def test_rmp_dimension_ownership() -> None:
         (occurrence.literal, occurrence.owner)
         for occurrence in reused_atom_declaration
     ] != [
-        ("72mm", DimensionOwner.LAYOUT),
-        ("73mm", DimensionOwner.LAYOUT),
+        ("72mm", None),
+        ("73mm", None),
         ("74mm", None),
         ("75mm", None),
     ]:
         raise AssertionError(
-            "a later scope could not safely reuse a dynamic atom name: "
+            "a reused dynamic name escaped source-wide quarantine: "
             f"{reused_atom_declaration!r}"
         )
     environment_scoped_atom = scan_case_dimensions(
@@ -818,13 +831,13 @@ def test_rmp_dimension_ownership() -> None:
         (occurrence.literal, occurrence.owner)
         for occurrence in environment_scoped_atom
     ] != [
-        ("76mm", DimensionOwner.LAYOUT),
-        ("77mm", DimensionOwner.LAYOUT),
+        ("76mm", None),
+        ("77mm", None),
         ("78mm", None),
         ("79mm", None),
     ]:
         raise AssertionError(
-            "a dynamic atom escaped its environment scope: "
+            "an environment-local atom escaped source-wide quarantine: "
             f"{environment_scoped_atom!r}"
         )
     for environment in (
@@ -898,18 +911,22 @@ kz}}
             "a comment-spliced environment lost its neutral boundary: "
             f"{spliced_environment!r}"
         )
-    for spaced_name in ("ten kz", "tenkz cd", " tenkz"):
+    for spaced_name in ("ten kz", "tenkz cd", " tenkz", "ten\nkz"):
         spaced_environment = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\begin{{{spaced_name}}}[pitch=90mm]"
-            rf"\rule{{91mm}}{{92mm}}\end{{{spaced_name}}}",
+            rf"\tnarrow{{\begin{{{spaced_name}}}[pitch=90mm]"
+            rf"\rule{{91mm}}{{92mm}}\end{{{spaced_name}}}}}",
         )
-        if len(spaced_environment) != 3 or any(
-            occurrence.owner is not None
+        if [
+            (occurrence.literal, occurrence.owner)
             for occurrence in spaced_environment
-        ):
+        ] != [
+            ("90mm", DimensionOwner.METRIC),
+            ("91mm", None),
+            ("92mm", None),
+        ]:
             raise AssertionError(
-                "whitespace inside an environment name was collapsed: "
+                "a csname-spaced environment lost its public boundary: "
                 f"name={spaced_name!r}, occurrences={spaced_environment!r}"
             )
     nested_label_shift = scan_case_dimensions(

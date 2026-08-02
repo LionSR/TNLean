@@ -217,11 +217,6 @@ _ENVIRONMENT_CONTROL_RE = re.compile(
     r"\\(begin|end)" + _TEX_CONTROL_WORD_END
 )
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
-_EXPLICIT_GROUP_RE = re.compile(
-    r"\\(begingroup|endgroup|bgroup|egroup)" + _TEX_CONTROL_WORD_END
-)
-
-
 @dataclass(frozen=True)
 class _OptionCommandGrammar:
     """Physical keys accepted by one bracket-option command."""
@@ -254,16 +249,6 @@ _OPTION_BRACE_COMMAND_RE = re.compile(r"\\tnset" + _TEX_CONTROL_WORD_END)
 _SETUP_PHYSICAL_KEYS = frozenset({"pitch"})
 _DECLARE_ATOM_RE = re.compile(r"\\tndeclareatom" + _TEX_CONTROL_WORD_END)
 _KERNEL_DECLARE_RE = re.compile(r"\\tndeclare" + _TEX_CONTROL_WORD_END)
-_DECLARE_ATOM_SKINS = frozenset({"dot", "box", "pill", "mpo"})
-_DECLARE_ATOM_PHYSICAL_KEYS = frozenset({"label shift"})
-# A static source scan cannot reproduce TeX's complete ``\cs_if_exist`` state.
-# Activate only the tenkz extension namespace; arbitrary spellings remain
-# neutral barriers, so a collision with a format or package command cannot
-# acquire physical ownership.  The public examples use this namespace.
-_DYNAMIC_ATOM_NAME_RE = re.compile(r"tn[A-Za-z]+")
-_DECLARE_ATOM_PORT_RE = re.compile(
-    r"(?:west|east):virtual|(?:up|down):physical"
-)
 
 
 def _validate_physical_option_key_sets() -> None:
@@ -272,7 +257,6 @@ def _validate_physical_option_key_sets() -> None:
         *_OPTION_ENVIRONMENT_KEYS.values(),
         *(grammar.physical_keys for grammar in _OPTION_BRACKET_COMMANDS.values()),
         _SETUP_PHYSICAL_KEYS,
-        _DECLARE_ATOM_PHYSICAL_KEYS,
     ]
     unknown = set().union(*key_sets).difference(_PHYSICAL_OPTION_KEY_OWNERS)
     if unknown:
@@ -290,34 +274,6 @@ class _OwnerSpan:
     start: int
     end: int
     owner: DimensionOwner | None
-
-
-@dataclass(frozen=True)
-class _DeclaredCommand:
-    """One valid dynamic atom binding over its TeX lexical scope."""
-
-    name: str
-    start: int
-    end: int
-    physical_keys: frozenset[str]
-
-
-@dataclass(frozen=True)
-class _DeclarationCandidate:
-    """A parsed declaration before collision and duplicate checks."""
-
-    name: str
-    declaration_start: int
-    binding_start: int
-    physical_keys: frozenset[str]
-
-
-@dataclass(frozen=True)
-class _DynamicCommands:
-    """Known dynamic spellings and the declarations that actually bind them."""
-
-    names: frozenset[str]
-    bindings: tuple[_DeclaredCommand, ...]
 
 
 @dataclass(frozen=True)
@@ -438,63 +394,6 @@ def _top_level_comma_segments(source: str) -> list[tuple[int, int]]:
     return segments
 
 
-def _literal_option_value(value: str) -> str | None:
-    """Remove one complete outer brace group from a literal PGF value."""
-    value = value.strip()
-    if not value.startswith("{"):
-        return value
-    closed = match_group(value, 0, "{", "}")
-    if closed != len(value):
-        return None
-    return value[1:-1].strip()
-
-
-def _valid_compatibility_atom_descriptor(source: str) -> bool:
-    """Whether a literal descriptor creates a public compatibility atom."""
-    for start, end in _top_level_comma_segments(source):
-        segment = source[start:end].strip()
-        if not segment:
-            continue
-        key, separator, raw_value = segment.partition("=")
-        if not separator:
-            return False
-        value = _literal_option_value(raw_value)
-        if value is None:
-            return False
-        key = key.strip()
-        if key == "skin":
-            if value not in _DECLARE_ATOM_SKINS:
-                return False
-        elif key == "ports":
-            if value and any(
-                _DECLARE_ATOM_PORT_RE.fullmatch(port.strip()) is None
-                for port in value.split(",")
-            ):
-                return False
-        else:
-            return False
-    return True
-
-
-def _brace_scope_spans(source: str) -> list[tuple[int, int]]:
-    """Return conservative lexical scopes delimited by unescaped braces."""
-    openings: list[int] = []
-    spans: list[tuple[int, int]] = []
-    index = 0
-    while index < len(source):
-        character = source[index]
-        if character == "\\":
-            index += 2
-            continue
-        if character == "{":
-            openings.append(index)
-        elif character == "}" and openings:
-            spans.append((openings.pop(), index + 1))
-        index += 1
-    spans.extend((opening, len(source)) for opening in openings)
-    return spans
-
-
 def _environment_scope_spans(
     tokens: Iterable[_EnvironmentToken],
     names: frozenset[str] | None = None,
@@ -515,46 +414,15 @@ def _environment_scope_spans(
     return spans
 
 
-def _explicit_group_scope_spans(source: str) -> list[tuple[int, int]]:
-    """Return scopes made with TeX's word and control-symbol group aliases."""
-    openings: dict[str, list[int]] = {"word": [], "alias": []}
-    spans: list[tuple[int, int]] = []
-    group_kinds = {
-        "begingroup": ("word", True),
-        "endgroup": ("word", False),
-        "bgroup": ("alias", True),
-        "egroup": ("alias", False),
-    }
-    for token in _EXPLICIT_GROUP_RE.finditer(source):
-        if not _is_control_word_start(source, token.start()):
-            continue
-        group_kind, is_opening = group_kinds[token.group(1)]
-        if is_opening:
-            openings[group_kind].append(token.start())
-        elif openings[group_kind]:
-            spans.append((openings[group_kind].pop(), token.end()))
-    for stack in openings.values():
-        spans.extend((opening, len(source)) for opening in stack)
-    return spans
-
-
-def _scope_end(position: int, spans: Iterable[tuple[int, int]], length: int) -> int:
-    """Return the end of the innermost lexical scope containing ``position``."""
-    return min(
-        (
-            length if end < 0 else end
-            for start, end in spans
-            if start < position < (length if end < 0 else end)
-        ),
-        default=length,
-    )
-
-
 def _declared_atom_commands(
     source: str, owner_source: str
-) -> _DynamicCommands:
-    """Return non-colliding dynamic atoms with position- and scope-bound keys."""
-    candidates: list[_DeclarationCandidate] = []
+) -> frozenset[str]:
+    """Return dynamic spellings as neutral, source-wide barriers.
+
+    Whether ``NewDocumentCommand`` succeeds depends on TeX's ambient control
+    sequence table, which a source-only scanner cannot reconstruct.  Dynamic
+    declarations therefore never grant dimension ownership here.
+    """
     names: set[str] = set()
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
         if not _is_control_word_start(owner_source, declaration.start()):
@@ -569,25 +437,7 @@ def _declared_atom_commands(
         ].strip()
         name_match = re.fullmatch(r"\\([A-Za-z]+)", name_source)
         if name_match is not None:
-            name = name_match.group(1)
-            names.add(name)
-            if _DYNAMIC_ATOM_NAME_RE.fullmatch(name) is None:
-                continue
-            descriptor = _active_source(
-                source[
-                    arguments[1].content_start : arguments[1].content_end
-                ]
-            ).text
-            if not _valid_compatibility_atom_descriptor(descriptor):
-                continue
-            candidates.append(
-                _DeclarationCandidate(
-                    name,
-                    declaration.start(),
-                    arguments[-1].end,
-                    _DECLARE_ATOM_PHYSICAL_KEYS,
-                )
-            )
+            names.add(name_match.group(1))
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
         if not _is_control_word_start(owner_source, declaration.start()):
             continue
@@ -612,74 +462,22 @@ def _declared_atom_commands(
             command_name = command_name[1:]
         if re.fullmatch(r"[A-Za-z]+", command_name) is not None:
             names.add(command_name)
-            if _DYNAMIC_ATOM_NAME_RE.fullmatch(command_name) is None:
-                continue
-            candidates.append(
-                _DeclarationCandidate(
-                    command_name,
-                    declaration.start(),
-                    arguments[-1].end,
-                    frozenset(),
-                )
-            )
-
-    environment_tokens = _environment_tokens(source, owner_source)
-    scope_spans = (
-        _brace_scope_spans(owner_source)
-        + _environment_scope_spans(environment_tokens)
-        + _explicit_group_scope_spans(owner_source)
-    )
-    commands: list[_DeclaredCommand] = []
-    for candidate in sorted(candidates, key=lambda item: item.declaration_start):
-        # Both declaration mechanisms use NewDocumentCommand.  A fixed public
-        # command or an already-active dynamic binding therefore makes the
-        # declaration invalid; in particular it must not alter option owners.
-        if candidate.name in _COMMAND_GRAMMARS or any(
-            command.name == candidate.name
-            and command.start <= candidate.declaration_start < command.end
-            for command in commands
-        ):
-            continue
-        end = _scope_end(
-            candidate.declaration_start, scope_spans, len(owner_source)
-        )
-        if candidate.binding_start <= end:
-            commands.append(
-                _DeclaredCommand(
-                    candidate.name,
-                    candidate.binding_start,
-                    end,
-                    candidate.physical_keys,
-                )
-            )
-    return _DynamicCommands(frozenset(names), tuple(commands))
-
-
-def _active_declaration(
-    declarations: Iterable[_DeclaredCommand], name: str, position: int
-) -> _DeclaredCommand | None:
-    """Return the dynamic binding active at one invocation position."""
-    return next(
-        (
-            declaration
-            for declaration in declarations
-            if declaration.name == name
-            and declaration.start <= position < declaration.end
-        ),
-        None,
-    )
+    return frozenset(names)
 
 
 def _command_spans(
-    source: str, declared_commands: _DynamicCommands
+    source: str, declared_commands: Iterable[str]
 ) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
     grammars = dict(_COMMAND_GRAMMARS)
-    # Known dynamic names are neutral even before or outside their valid
-    # binding.  This is a fail-closed quarantine, not retroactive activation:
-    # no physical option key is accepted without an active declaration.
-    for name in declared_commands.names:
-        grammars.setdefault(name, _CommandGrammar(None, (1,)))
+    # Dynamic spellings are source-wide neutral barriers.  This deliberately
+    # sacrifices ownership inference rather than guessing whether TeX's
+    # ambient control-sequence collision check accepted a declaration.
+    dynamic_names = frozenset(declared_commands).difference(grammars)
+    for name in dynamic_names:
+        grammars[name] = _CommandGrammar(
+            None, (0,), accepts_star=True
+        )
     pattern = re.compile(
         r"\\("
         + "|".join(sorted(grammars, key=len, reverse=True))
@@ -698,13 +496,23 @@ def _command_spans(
             if closed < 0:
                 continue
             position = _skip_space(source, closed)
-        for _ in range(max(grammar.positional_group_counts)):
-            if source[position : position + 1] != "{":
-                break
-            closed = match_group(source, position, "{", "}")
-            if closed < 0:
-                break
-            position = _skip_space(source, closed)
+        if command.group(1) in dynamic_names:
+            # The declaration may have collided with a command of unknown
+            # arity.  Quarantine every adjacent braced argument rather than
+            # guessing the successful atom command's one-argument grammar.
+            while source[position : position + 1] == "{":
+                closed = match_group(source, position, "{", "}")
+                if closed < 0:
+                    break
+                position = _skip_space(source, closed)
+        else:
+            for _ in range(max(grammar.positional_group_counts)):
+                if source[position : position + 1] != "{":
+                    break
+                closed = match_group(source, position, "{", "}")
+                if closed < 0:
+                    break
+                position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
                 command.start(), position, grammar.owner
@@ -788,7 +596,10 @@ def _environment_tokens(
         closed = match_group(owner_source, position, "{", "}")
         if closed < 0:
             continue
-        name = _active_source(source[position + 1 : closed - 1]).text
+        active_name = _active_source(source[position + 1 : closed - 1]).text
+        # LaTeX dispatches environments through ``\csname``, which ignores
+        # ordinary spaces while constructing the control-sequence name.
+        name = re.sub(r"\s+", "", active_name)
         if _ENVIRONMENT_NAME_RE.fullmatch(name) is None:
             continue
         tokens.append(
@@ -814,7 +625,6 @@ def _environment_spans(
 def _option_spans(
     source: str,
     owner_source: str,
-    declared_commands: _DynamicCommands,
 ) -> list[_OwnerSpan]:
     """Find public option containers without joining split control words."""
     spans: list[_OwnerSpan] = []
@@ -863,37 +673,6 @@ def _option_spans(
             spans.extend(
                 _option_group_spans(
                     source, position + 1, closed - 1, allowed_keys
-                )
-            )
-    declared_bindings = declared_commands.bindings
-    declared_names = declared_commands.names
-    if declared_names:
-        declared_pattern = re.compile(
-            r"\\("
-            + "|".join(sorted(declared_names, key=len, reverse=True))
-            + r")"
-            + _TEX_CONTROL_WORD_END
-        )
-        for container in declared_pattern.finditer(owner_source):
-            if not _is_control_word_start(owner_source, container.start()):
-                continue
-            declaration = _active_declaration(
-                declared_bindings, container.group(1), container.start()
-            )
-            if declaration is None:
-                continue
-            position = _skip_space(owner_source, container.end())
-            if owner_source[position : position + 1] != "[":
-                continue
-            closed = match_group(owner_source, position, "[", "]")
-            if closed < 0:
-                continue
-            spans.extend(
-                _option_group_spans(
-                    source,
-                    position + 1,
-                    closed - 1,
-                    declaration.physical_keys,
                 )
             )
     return spans
@@ -997,7 +776,7 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     owner_source = strip_comments(source)
     declared_commands = _declared_atom_commands(source, owner_source)
     owner_spans = (
-        _option_spans(source, owner_source, declared_commands)
+        _option_spans(source, owner_source)
         + _command_spans(owner_source, declared_commands)
         + _environment_spans(source, owner_source)
     )
