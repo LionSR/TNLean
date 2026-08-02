@@ -3,7 +3,7 @@
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
 pairing_sha256 = "b3375317e8dddb4402eda08b0d74e1aaa4789467cf5a84fe4d4bd722ef470e89"
-campaign_sha256 = "8e42628a7e0ff3617541ad85decde74ec5a399f5638682c47c8b19d98d8a808d"
+campaign_sha256 = "d7d2b456aec151048b28665f01d71493048c901ebb6ba43d41ba18667783f1e2"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -614,12 +614,12 @@ note = "paired author panel is an unlabeled black bond node, not the declared Ha
 id = "rmp-iii-a-spt-mpo"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+pairing_by = "codex-port-contract-source-review-2026-08-01"
 defects = []
-case_sha256 = "61a6397cae65960293e59efc50f811d0b87553a1917356ccf0ef15e8c6492306"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the source-red g string pulls through the black lattice with its action boxes riding the string over the measured legs on both sides"
+case_sha256 = "8c5f4cfcf58d40e9248de65932e531dc7eb69af04185ec4a65ccb31d01c61e7f"
+reviewed = "2026-08-01"
+renderer = "codex-port-contract-source-review-2026-08-01-240dpi"
+note = "the exact hash keeps the source-red g string on the black lattice and models the open physical leg with U_g as a typed two-port insertion only after the pull"
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -1296,12 +1296,12 @@ note = "glyph and leg geometry"
 id = "rmp-workbench-iii-g-injective-pull"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "codex-source-repair-2026-07-29"
+pairing_by = "codex-port-contract-source-review-2026-08-01"
 defects = []
-case_sha256 = "628cac9279fe83e41a4a54d139d75305bff054272e62bd25ac89d9e6f0bef002"
-reviewed = "2026-07-29"
-renderer = "codex-source-repair-2026-07-29-300dpi"
-note = "the author-source G-injective pull at lines 468-497: the g string moves across the tensor while the short physical leg remains undecorated"
+case_sha256 = "7e636c9eac4298b2d19f380abc27ce60059aa4a8c388fc324d39e95c07660cad"
+reviewed = "2026-08-01"
+renderer = "codex-port-contract-source-review-2026-08-01-240dpi"
+note = "the exact hash follows the author-source G-injective pull at lines 468-497: the g string moves across the tensor while the northeast physical leg remains open"
 
 [[verdict]]
 id = "rmp-workbench-iii-intertwining-mpo"
@@ -1317,12 +1317,12 @@ note = "line weight only"
 id = "rmp-workbench-iii-mpo-injective-white"
 status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "codex-pairing-sweep-2026-07-24"
+pairing_by = "codex-port-contract-source-review-2026-08-01"
 defects = []
-case_sha256 = "4372c9e4f556b7a0a3413b783a2c0e01da8a5353148cc9c516e95689db1b42e6"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the g string crosses the site and pulls to the far side, drawn as strings rather than the substituted boxes"
+case_sha256 = "6941d8e4171cca51c7be77953fd9d39823c287b6f0414b8f3bff01549073ea11"
+reviewed = "2026-08-01"
+renderer = "codex-port-contract-source-review-2026-08-01-240dpi"
+note = "the exact hash shows the g string crossing and pulling through the site while the source upward physical leg remains open"
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-on-peps-definition"

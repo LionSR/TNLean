@@ -1251,3 +1251,13 @@ case lines record real contractions without a new parser row, geometric
 tolerance, escape, alias, or overload.
 
 Census-correction: #5086
+
+### 2026-08-02 — typed PEPS stars keep source-short physical legs
+
+M4 rises from 18.50 to 18.51. The SPT and white MPO-injective panels now
+terminate all four virtual legs on typed faces of the PEPS tensor, while an
+unconsumed physical face supplies the shared renderer's short physical stub.
+The post-pull SPT panel retains the explicit physical contraction through
+the two-port `U_g` station. No parser row or case-specific metric is added.
+
+Census-correction: #5086
