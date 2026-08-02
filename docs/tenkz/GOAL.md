@@ -54,7 +54,7 @@ lives beside it and always in the `%` comments.
 ## Where everything lives
 
 - `docs/tenkz/LANGUAGE.md` — the public mental model and semantic rules.
-- `docs/tenkz/DESIGN.md` — compatibility, version, release-tag, and soak
+- `docs/tenkz/DESIGN.md` — compatibility, version, release-tag, and evidence
   policy; `SOAK-1.0.md` is its inactive release ledger until enforcement pins
   the exact policy hash and immutable ledger prefix.
 - `tex/tenkz/tenkz-language-registry.tex` — the executable vocabulary.

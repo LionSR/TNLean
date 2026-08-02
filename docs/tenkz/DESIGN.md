@@ -1,18 +1,18 @@
 # tenkz compatibility and release policy
 
 This file is the authority for compatibility, package versions, release tags,
-and the 1.0 soak. `LANGUAGE.md` owns the public mental model,
+and the 1.0 release-evidence campaign. `LANGUAGE.md` owns the public mental model,
 `LANGUAGE-1.0.md` owns the frozen 1.0 grammar, and `ARCHITECTURE.md` owns the
 implementation boundaries. The earlier file at `history/DESIGN.md` records the
 0.6 design campaign; it does not define the released contract.
 
 Adopting this policy neither changes the package version nor starts the 1.0
-soak. Automated enforcement is pending under #5352, and no soak entry is valid
+campaign. Automated enforcement is pending under #5352, and no campaign entry is valid
 until the policy, repository-evidence checks, and CI wiring are armed. The
 enforcement-activation pull request changes both normative `enforcement`
 values to `armed`, replaces the two pending activation fields in `SOAK-1.0.md`,
-and pins both this policy and the ledger prefix. It starts no clock. A later
-self-referential freeze-entry pull request supplies the trusted start time
+and pins both this policy and the ledger prefix. A later self-referential
+freeze-entry pull request supplies the trusted attempt-ordering anchor
 after every prerequisite below has closed.
 
 The following block is normative. A later #5352 slice activates its
@@ -27,7 +27,9 @@ tag_namespace = "tenkz-v*"
 repository_tag_namespace = "v*"
 freeze_tag_pattern = "tenkz-v0.9.PATCH"
 freeze_tag_kind = "annotated"
-soak_days = 28
+minimum_distinct_work_prs = 2
+work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
+one_class_per_work_pr = true
 event_format_implementation = "pending"
 event_format_owners = ["#4162", "#4703"]
 soak_blocker_chain = [["#5086", "#4699", "#4162"], ["#4703", "#4708", "#4163"]]
@@ -64,7 +66,7 @@ tenkz has two public surfaces. A release decision names both; compatibility on
 one cannot excuse a break in the other.
 
 These classifications govern the 0.9 release candidate from its valid freeze
-through the 1.0 soak, and every release beginning with 1.0. They do not freeze
+through the 1.0 evidence campaign, and every release beginning with 1.0. They do not freeze
 the current v0.7 transitional surface. Before the freeze, the v0.7-to-v0.9
 migration remains governed by `LANGUAGE-1.0.md`, the shrink ledger, and the
 ordered prerequisite issues below.
@@ -186,7 +188,7 @@ date, manual version, change record, event-format declaration, and
 compatibility tests all agree with the tag. A moved or reused release tag is
 invalid.
 
-The soak freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
+The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
 non-negative decimal integer and increases strictly between attempts. For each
 attempt, first merge the frozen source through a source pull request targeting
 `main`, then create and push the annotated tag on GitHub's
@@ -202,11 +204,11 @@ record its own integration commit or merge time because neither exists before
 merge. Candidate CI validates every fact already known and reports
 `freeze-pending`. The source-to-head diff must be exactly one append to
 `SOAK-1.0.md`. After merge, the integration tree must equal the approved final
-head's tree; GitHub's verified `record_pr.mergedAt` is the clock anchor `T`,
-and `record_pr.mergeCommit.oid` anchors later ancestry. The validator checks
+head's tree; GitHub's verified `record_pr.mergedAt` is the attempt-activation
+instant `T`, and `record_pr.mergeCommit.oid` anchors later ancestry. The validator checks
 the source pull request, source SHA, tag object, and peeled commit agree, and
 rejects a lightweight, moved, replaced, or mismatched tag. A tagger timestamp,
-if transcribed as evidence, is descriptive only and never starts the clock.
+if transcribed as evidence, is descriptive only and never determines ordering.
 
 The final `tenkz-v1.0.0` annotated tag is created only after the self-referential
 sign-off record has landed on `main` and passed post-merge validation. Its exact
@@ -219,14 +221,14 @@ require that tag to exist yet; requiring it earlier would make the ledger and
 tag circular. A tree mismatch requires a `record-invalid` reset and forbids
 the tag.
 
-## The 1.0 freeze and soak
+## The 1.0 freeze and evidence gate
 
 The dependency chain is ordered:
 
 1. land the checker, repository-evidence resolver, tests, and CI; then use one
    self-referential enforcement-activation pull request to change both
    normative enforcement fields from `pending` to `armed`, pin the exact armed
-   policy hash and ledger prefix, and start no clock;
+   policy hash and ledger prefix;
 2. close #5086, #4699, and #4162 for 0.8;
 3. close #4703, #4708, and #4163 for the 0.9 contract freeze;
 4. merge the frozen source through a source pull request to `main`, then create
@@ -234,23 +236,22 @@ The dependency chain is ordered:
 5. open a ledger-entry draft pull request, append a self-referential `freeze`
    entry, observe `freeze-pending` in candidate CI, and merge it to start the
    attempt at GitHub's verified merge time `T`;
-6. expose that frozen documented contract to 28 elapsed days with qualifying
-   work merged to `main` in each seven-day window;
+6. merge two distinct qualifying real-work pull requests after `T`: one in the
+   `formalization-or-blueprint` class and one in the `rmp-benchmark` class;
 7. merge and post-merge validate the independently approved sign-off record,
    then create `tenkz-v1.0.0` on its integration commit.
 
-Every prerequisite must be closed, with GitHub `closedAt <= T`. Window `i` is
-the half-open UTC interval `[T + 7i days, T + 7(i+1) days)` for
-`i = 0, 1, 2, 3`; work merged exactly on a boundary belongs to the later
-window, and `T + 28 days` lies outside the fourth window. Work evidence names
-at least one independently approved pull request in each window. GitHub must
-report it merged to `main` in that interval. Its integration commit must be
-reachable from `main` and a strict descendant of the freeze record's external
-integration commit, and its tree must equal the independently approved final
-head's tree. `SOAK-1.0.md` defines the complete merge-base-to-head diff and
-eligible-path predicate. The enforcement-activation PR, source PRs, entry
-record PRs, repeated work PRs, unmerged PRs, and any diff touching either
-policy document do not qualify.
+Every prerequisite must be closed, with GitHub `closedAt <= T`. Each qualifying
+work pull request must be merged to `main` strictly after `T`. Its integration
+commit must be reachable from `main` and a strict descendant of the freeze
+record's external integration commit, and its tree must equal the independently
+approved final head's tree. `SOAK-1.0.md` defines the immutable complete
+merge-base-to-head diff, the two eligible-path predicates, and the one-class
+assignment rule. The two classes must be filled by distinct pull requests; a
+pull request can fill only its recorded class. The enforcement-activation PR,
+source PRs, entry record PRs, repeated work PRs, unmerged PRs, and any diff
+touching either policy document do not qualify. A policy-, checker-, CI-, or
+record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A reset has cause
@@ -258,16 +259,17 @@ Interface friction is appended when found and triaged as `fix-compatible`,
 closes the active attempt; ignoring historical corrections, the next entry is
 attempt number one higher with a strictly larger `PATCH`, a new source pull
 request and SHA, a new annotated tag and object, and a new freeze record.
-Compatible fixes retain the clock only when both public surfaces remain
+Compatible fixes retain the active attempt only when both public surfaces remain
 compatible under the rules above. A correction may target any historical
 entry, remains owned by its target's attempt, and never changes attempt state.
 
 The sign-off entry's `record_pr` is its own pull request. GitHub's `mergedAt`
-is the sign-off time and must be at least `T + 28 days`; normalized `mergedBy`
-must be `github:lionsr`. The named, distinct reviewer's latest effective review
-must be `APPROVED` on the exact final head, submitted after `T + 28 days` and
-before merge. Sign-off also requires one qualifying work entry in each window,
-no unresolved fix-compatible friction, and no condition requiring reset. No
-entry follows a successfully validated sign-off. The exact entry grammar,
-state transitions, external-fact rules, and reset rules live in
-`SOAK-1.0.md`.
+is the sign-off time and must be later than both qualifying work merges;
+normalized `mergedBy` must be `github:lionsr`. The named, distinct reviewer's
+latest effective review must be `APPROVED` on the exact final head, submitted
+after the later qualifying work merge and before sign-off merge. The sign-off
+may proceed immediately once those ordered facts hold. It also requires one
+qualifying work entry in each class, no unresolved fix-compatible friction, and
+no condition requiring reset. No entry follows a successfully validated
+sign-off. The exact entry grammar, state transitions, external-fact rules, and
+reset rules live in `SOAK-1.0.md`.

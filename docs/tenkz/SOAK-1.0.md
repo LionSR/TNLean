@@ -1,7 +1,7 @@
-# tenkz 1.0 soak log
+# tenkz 1.0 release-evidence log
 
-This is the evidence ledger for the 1.0 compatibility soak. Enforcement is
-pending: no entry is valid, no clock is running, and the prefix may still be
+This is the evidence ledger for the 1.0 compatibility campaign. Enforcement is
+pending: no entry is valid, and the prefix may still be
 corrected through ordinary reviewed pull requests.
 
 After the checker, repository-evidence resolver, tests, and CI wiring land, one
@@ -18,7 +18,7 @@ merged to `main`, with normalized `mergedBy = github:lionsr` and
 `armed_by_pr` naming that PR. Its integration tree must equal `H`'s tree, the
 recorded digest must match the exact armed policy blob in that tree, and the
 prefix through the final marker must match `H`. Only that post-validated head
-pins the policy and prefix. Arming starts no clock.
+pins the policy and prefix.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -37,11 +37,10 @@ policy_sha256 = "pending"
 armed_by_pr = "pending"
 append_only = true
 append_only_from = "armed"
-minimum_days = 28
-normal_work_windows = 4
-window_days = 7
-window_interval = "half-open-utc"
-clock_anchor = "freeze-record-pr-merged-at"
+minimum_distinct_work_prs = 2
+work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
+one_class_per_work_pr = true
+ordering_anchor = "freeze-record-pr-merged-at"
 ancestry_anchor = "freeze-record-pr-merge-commit"
 work_anchor = "work-pr-merged-at"
 freeze_tag_pattern = "tenkz-v0.9.PATCH"
@@ -110,7 +109,7 @@ by the lowercase GitHub login.
 An integration commit is exactly GitHub's `mergeCommit.oid`; an entry never
 chooses it. Ancestry, parent, tree, tag-object, peeled-commit, and path-diff
 claims are checked against the exact fetched Git objects. Author, committer,
-and tagger timestamps are never clock-bearing. Missing or null fields,
+and tagger timestamps never determine entry ordering. Missing or null fields,
 incomplete pagination, unavailable Git objects, malformed values, and any
 GitHub/Git disagreement fail closed. The free-form `evidence` field is
 descriptive and cannot replace an external fact.
@@ -133,7 +132,7 @@ opens, closes, or changes the active attempt. No entry follows a successfully
 validated sign-off.
 
 Each attempt has exactly one opening freeze. If a merged entry fails a required
-post-merge identity, ancestry, tree, or clock check, `record-invalid` is the
+post-merge identity, ancestry, tree, or ordering check, `record-invalid` is the
 next non-correction record; until that reset lands, no later work or sign-off
 can validate.
 
@@ -175,11 +174,12 @@ record the future merge SHA or time.
 After merge, let `I = record_pr.mergeCommit.oid`. GitHub must report the PR
 merged to `main`; `I` must be a strict descendant of `source_sha`; and the Git
 tree of `I` must equal the Git tree of `H`. GitHub's verified
-`record_pr.mergedAt` is the attempt start `T`, and `I` is its ancestry anchor.
+`record_pr.mergedAt` is the attempt-activation instant `T`, and `I` is its
+ancestry anchor.
 Every derived prerequisite must be closed with `closedAt <= T`. A tree, source,
 tag, prerequisite, or external-identity mismatch requires a `record-invalid`
 reset targeting this freeze. A tagger timestamp may appear in `evidence`, but
-it never starts the clock.
+it never determines ordering.
 
 ### `work`
 
@@ -188,6 +188,7 @@ Required additional fields:
 | Field | Type |
 |---|---|
 | `work_pr` | `pr-ref` |
+| `class` | `formalization-or-blueprint` or `rmp-benchmark` |
 | `summary` | `text` |
 | `evidence` | `text` |
 
@@ -207,10 +208,10 @@ when all of these predicates hold:
   `docs/tenkz/DESIGN.md` nor
   `docs/tenkz/SOAK-1.0.md`.
 - After whitespace-only changes are ignored, the complete Git diff from `B`
-  to `H` has a nonempty change under at least one path matching
-  `TNLean/**/*.lean`, `blueprint/src/chapter/**/*.tex`,
-  `blueprint/src/appendix/**/*.tex`, or
-  `tests/tenkz/rmp/**/cases/*.tex`.
+  to `H` has a nonempty change in the recorded class. The
+  `formalization-or-blueprint` class matches `TNLean/**/*.lean`,
+  `blueprint/src/chapter/**/*.tex`, or `blueprint/src/appendix/**/*.tex`. The
+  `rmp-benchmark` class matches `tests/tenkz/rmp/**/cases/*.tex`.
 - `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr`, or a
   `work_pr` already named by another entry.
 - A reviewer distinct from the normalized `work_pr.author.login` has a latest
@@ -222,11 +223,13 @@ more complete path components. The immutable `B`-to-`H` Git diff, not an
 integration's final commit alone or a PR title, label, description, or entry
 summary, decides path eligibility.
 
-Let `T` be the active attempt's verified freeze merge time. Window `i` is the
-half-open UTC interval `[T + 7i days, T + 7(i+1) days)` for
-`i = 0, 1, 2, 3`. The work PR's GitHub `mergedAt` must lie in one such window.
-Work merged exactly on a boundary belongs to the later window. `T + 28 days`
-lies outside the fourth window.
+Let `T` be the active attempt's verified freeze merge time. The work PR's
+GitHub `mergedAt` must be strictly later than `T`. A work PR fills only the
+single class recorded by its entry, even when its immutable diff contains
+eligible changes from both classes. Distinct work entries cannot name the same
+work PR. Therefore the two required classes are necessarily evidenced by two
+distinct post-freeze pull requests. A policy-, checker-, CI-, or record-only
+diff contains no class-eligible change and does not qualify.
 
 ### `friction`
 
@@ -251,7 +254,7 @@ Required additional fields: `cause` (`breaking-required` or `record-invalid`),
 For `cause = "breaking-required"`, `target` names an unresolved friction entry
 with that triage in the active attempt. For `cause = "record-invalid"`,
 `target` names the entry in the active attempt whose externally verified
-identity, history, ancestry, tree, or clock-bearing evidence is invalid. In
+identity, history, ancestry, tree, or ordering evidence is invalid. In
 either case the reset is the next non-correction entry, and a correction cannot
 repair the cause.
 
@@ -263,9 +266,9 @@ must be a strict descendant of this reset's `record_pr.mergeCommit.oid`.
 ### `correction`
 
 Required additional fields: `target` (`entry-ref`), `summary` (`text`), and
-`evidence` (`text`). It adds explanatory or non-clock evidence to any earlier
-entry and cannot alter a compatibility decision, identity, ancestry, tree,
-merge time, or other clock-bearing fact.
+`evidence` (`text`). It adds explanatory evidence to any earlier entry and
+cannot alter a compatibility decision, identity, ancestry, tree, merge time,
+or other externally ordered fact.
 
 A correction's `attempt` equals its target's attempt, including after that
 attempt has reset. It remains historical evidence for that attempt and never
@@ -285,9 +288,11 @@ Required additional fields:
 | `decision` | the exact string `release` |
 
 `freeze` and `source_sha` must match the active attempt. `work_evidence`
-contains distinct earlier work-entry IDs from that attempt, at least one whose
-externally verified work PR falls in each window. Values are entry references,
-not pull-request references.
+contains at least two distinct earlier work-entry IDs from that attempt: at
+least one `formalization-or-blueprint` entry and at least one `rmp-benchmark`
+entry. Each work PR fills only its recorded class, and the work-entry rules make
+the referenced work PRs distinct. Values are entry references, not pull-request
+references.
 
 The sign-off's `record_pr` is the sign-off pull request. Let `H` be its exact
 final `headRefOid`. Candidate CI validates `H` and reports
@@ -299,11 +304,14 @@ this sign-off entry.
 After merge, GitHub must report that `record_pr` targeted `main`. Let
 `I = record_pr.mergeCommit.oid`; `I` must descend from the active freeze
 integration, and the Git tree of `I` must equal the Git tree of the approved
-`H`. GitHub's `record_pr.mergedAt` must be at least `T + 28 days`, and
+`H`. Let `W` be the latest GitHub `mergedAt` among the work PRs named by
+`work_evidence`. GitHub's `record_pr.mergedAt` must be later than `W`, and
 normalized `mergedBy` must be `github:lionsr`. The entry's reviewer is distinct
 from that maintainer and from the normalized record-PR author. That reviewer's
-latest effective review must be `APPROVED` on `H`, with
-`submittedAt > T + 28 days` and `submittedAt < record_pr.mergedAt`.
+latest effective review must be `APPROVED` on `H`, with `submittedAt > W` and
+`submittedAt < record_pr.mergedAt`. There is no further waiting interval:
+sign-off can proceed as soon as the class coverage, independent exact-head
+approval, and all other predicates hold.
 
 All compatible friction must be resolved, every work predicate must still
 hold, and no condition may require a reset. Post-merge validation also
