@@ -6,23 +6,25 @@ corrected through ordinary reviewed pull requests.
 
 Only after the checker, repository-evidence resolver, tests, CI wiring, and
 closed test inventory exist on `main`, and the complete blocker chain is closed,
-may one self-referential enforcement-activation pull request arm the campaign. Let `C`
-be its exact current `main` target and `H` its exact final head. `C` must be an
+may one self-referential enforcement-activation pull request arm the campaign.
+Let `C` be its exact current `main` target and `H` its exact final head. `C` must be an
 ancestor of `H` and their unique merge base. The complete `C`-to-`H` diff may
-change only `DESIGN.md` and this file, and only these six scalar values:
+change only `DESIGN.md` and this file, and only these seven scalar values:
 
 - `DESIGN.md`: `enforcement` from `pending` to `armed`, the pending inventory
   digest to the inventory blob's SHA-256, and the pending test-code tree to the
-  exact Git tree OID of its configured root;
+  exact Git tree OID of its configured root, and the pending test-support tree
+  to the exact Git tree OID of its configured root;
 - this file: `enforcement` from `pending` to `armed`, the pending policy digest
   to the resulting armed `DESIGN.md` blob's SHA-256, and `armed_by_pr` to this
   pull request's `pr-ref`.
 
 No other byte or path may change. Each digest is exactly 64 lowercase
 hexadecimal digits computed from raw blob bytes without newline normalization;
-the Git tree OID is exactly 40 lowercase hexadecimal digits. The activation
-validator recomputes all three values at `H`, verifies the scripts tree contains
-the inventory paths, and verifies the prefix through the final marker.
+each Git tree OID is exactly 40 lowercase hexadecimal digits. The activation
+validator recomputes all four pinned values at `H`, verifies that runner paths
+are inside the test-code tree, verifies the declared dependency boundary, and
+verifies the prefix through the final marker.
 
 GitHub must report current active protection covering the complete `tenkz-v*`
 tag namespace, forbidding updates and deletions and exposing no bypass actor. The
@@ -37,9 +39,9 @@ pinned policy's `maintainer_identity` must have a latest effective `APPROVED`
 review on `H` before merge. GitHub must then report the PR merged to `main`,
 with normalized `mergedBy` equal to that pinned identity and `armed_by_pr`
 naming the PR. Its integration tree must equal `H`'s tree. Only that
-post-validated head pins the inventory, test-code tree, policy, and prefix and
-arms the campaign. Every later validation rechecks their exact values and the
-current ruleset state.
+post-validated head pins the inventory, test-code tree, test-support tree,
+policy, and prefix and arms the campaign. Every later validation rechecks their
+exact values and the current ruleset state.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -170,11 +172,11 @@ effective for a head only when its commit OID equals the PR's exact final
 For a package tag `Q`, substitute the exact tag name for `TAG` in the pinned
 policy's `release_manifest_pattern`. The resulting manifest is a regular Git
 blob with one `[release]` table and exactly `schema`, `tag`, `version`, `date`,
-`test_inventory_sha256`, and `test_code_tree`. `schema` is integer 1; `tag`
-equals `Q`; `version` is the numeric version suffix of `Q`; `date` is an ISO
-8601 calendar date; the inventory digest equals the pinned policy value; and
-the test-code tree is a 40-digit lowercase Git OID equal to its pinned policy
-value.
+`test_inventory_sha256`, `test_code_tree`, and `test_support_tree`. `schema` is
+integer 1; `tag` equals `Q`; `version` is the numeric version suffix of `Q`;
+`date` is an ISO 8601 calendar date; the inventory digest equals the pinned
+policy value; and each tree is a 40-digit lowercase Git OID equal to its pinned
+policy value.
 
 The package metadata, manual, change record, event-format declaration, and
 test-inventory paths come only from the pinned policy, never from the release
@@ -188,20 +190,63 @@ The inventory is a TOML document with `schema = 1` and one or more `[[test]]`
 tables. Each test has exactly `id` (a unique lowercase hyphenated identifier),
 `runner` (exactly `python3` or `bash`), `path` (a normalized regular file below
 `scripts/` with the matching `.py` or `.sh` suffix), `args` (a list of nonempty
-argument strings), and `timeout_seconds` (a positive integer). The evidence
-runner executes `[runner, path, *args]` directly, without a shell expansion or
-added argument, from the repository root in inventory order and kills it at
-its declared timeout. Every command must exit zero. Incomplete execution, a
-signal, timeout, unknown field, path escape, or nonzero exit fails closed. The
-activation validator recomputes the inventory's raw-blob SHA-256 before arming;
-every later payload validation recomputes it and rejects a mismatch. The
-configured test-code root must be a regular Git tree in `K` whose exact tree OID
-equals both the policy and manifest values. This binds every in-repository file
-under that root, including helpers imported or invoked by inventory commands.
+argument strings), `data_paths` (a duplicate-free list of normalized subject
+files or trees beneath the policy's mutable-data roots), and `timeout_seconds`
+(a positive integer). The evidence runner executes `[runner, path, *args]`
+directly, without a shell expansion or added argument, from the root of the
+hermetic view below, in inventory order, and kills it at its declared timeout.
+Every command must exit zero. Incomplete execution, a signal, timeout, unknown
+field, path escape, or nonzero exit fails closed. The activation validator
+recomputes the inventory's raw-blob SHA-256 before arming; every later payload
+validation recomputes it and rejects a mismatch.
+
+For each command, the evidence supervisor creates a fresh repository-shaped
+filesystem view of `K`. At their original relative paths it exposes read-only
+copies of only the pinned code tree, pinned support tree, inventory blob,
+tag-derived manifest, canonical artifacts, and that command's declared
+`data_paths`. Every exposed repository entry is recursively a regular blob or
+tree; symlinks, submodules, and other Git modes are rejected without following
+them. The supervisor mounts one empty writable directory at `/tenkz-output` and
+sets `TENKZ_TEST_OUTPUT=/tenkz-output`; no command argument is added. The real
+checkout, user files, and every other repository path are absent from the
+process mount namespace.
+
+The environment has fixed locale and timezone, no inherited repository-path
+variables, and no network access. Its sanitized `PATH` contains the inventory
+runner and only child tools in an explicit allowlist embedded in the pinned
+supervisor. The supervisor resolves each tool without following a repository
+link, validates its configured version fingerprint, and records the resolved
+identity in the receipt. An undeclared read, import, source, execution, or
+repository-tree write fails the command. A test that cannot run under this view
+cannot enter the inventory.
+
+Activation runs a closed supervisor self-test suite from the pinned support
+tree against pinned synthetic fixtures. Its receipt binds the code and support
+trees, output mount, environment, access denials, tool fingerprints, and
+completion of every isolation probe. It requires no package tag, release
+manifest, canonical payload, or mutable subject data. A missing or mismatched
+self-test receipt prevents arming.
+
+The configured test-code and test-support roots must be regular Git trees in
+`K` whose exact tree OIDs equal their policy and manifest values. Runner code
+and every imported, sourced, or executed in-repository helper must come from the
+test-code tree. Expected outputs, baselines, allowlists, thresholds, selector
+manifests, and other acceptance-control files must come from the test-support
+tree. The payload checker and each test may read only the tag-derived manifest,
+canonical artifacts, and its declared `data_paths` as mutable subject data.
+Subject TeX is executable only as the program under test launched by the pinned
+harness; subject data cannot supply runner, helper, acceptance-control, or
+coverage-selection logic. Loading any other repository file, or using subject
+data to reduce the inventory-defined checks, fails closed. The supervisor emits
+a per-command payload receipt naming the exact trees, blobs, data paths,
+command, exit status, timeout result, output mount and environment value, and
+child-tool fingerprints. Only `validate-release-payload(K, Q)` executes these
+payload commands; every such validation rejects an incomplete or mismatched
+payload receipt.
 
 `validate-release-payload(K, Q)` means checking this complete manifest,
-canonical-artifact, pinned-inventory, pinned-test-code-tree, and test contract
-in Git tree `K` for tag `Q`.
+canonical-artifact, pinned-inventory, both pinned test trees, dependency
+boundary, and test contract in Git tree `K` for tag `Q`.
 
 ## Attempt state sequence
 
@@ -469,8 +514,8 @@ work PRs named by `work_evidence`. GitHub's
 `record_pr.mergedAt` must be later than both `W` and `R.mergedAt`, and normalized
 `mergedBy` must equal the pinned policy's `maintainer_identity`. The entry's
 reviewer is distinct from that maintainer and from the normalized record-PR
-author. That reviewer's latest
-effective review must be `APPROVED` on `H`, with `submittedAt` later than both
+author. That reviewer's latest effective review must be `APPROVED` on `H`, with
+`submittedAt` later than both
 `W` and `R.mergedAt` and earlier than `record_pr.mergedAt`. There is no further
 waiting interval: sign-off can proceed as soon as the class coverage,
 independent exact-head approvals, release preparation, and all other predicates
@@ -502,12 +547,16 @@ that replay. The current object named `tenkz-v1.0.0` must then be annotated and
 peel to the validated sign-off integration `I` under the required current
 no-update, no-delete, no-bypass protection. That observation changes the
 campaign to terminal `released` state. No later ledger entry or new sign-off is
-valid, and later review, issue, or pull-request drift does not reopen the
-release. Creating the protected name with the wrong kind or target is a hard
-release incident. After release, missing or weaker current protection, or a
-missing, moved, or replaced tag, is also a hard release incident. Neither
-incident is repaired by deleting, moving, or reusing the name, and neither
-starts another 1.0 attempt.
+valid. Every later validation still replays every current mutable fact. A
+mismatch that requires the ordered reset process while the final-tag ref is
+absent becomes a hard release incident once that ref exists; it never reopens
+the ledger. Creating the protected name with the wrong kind or target is also a
+hard release incident. Weaker current protection, or a moved or replaced
+present tag, is likewise a hard release incident. An absent final-tag ref always
+remains `signed-off-awaiting-tag`: this state-based contract stores no immutable
+prior-observation witness and does not claim to detect deletion by a trusted
+administrator. No incident is repaired by deleting, moving, or reusing the
+name, and none starts another 1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,

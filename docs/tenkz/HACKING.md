@@ -215,13 +215,23 @@ correct the prefix.  The activation slice under #5352 will add the validation
 commands here only after their scripts, repository-evidence checks, tests, and
 CI wiring exist on `main`.  Close both blocker groups before activation.  One
 self-referential activation pull request then verifies the current no-update,
-no-delete, no-bypass `tenkz-v*` protection and changes exactly six scalars: both
-normative enforcement values, the inventory's raw-blob digest, the Git tree OID
-of `scripts/`, the SHA-256 of the exact armed `DESIGN.md` UTF-8 blob, and its own
-pull-request reference.  It cannot change the checker, workflow, inventory,
-scripts, policy prose, or any other byte.  A later self-referential freeze
-record validates the tag-derived 0.9 payload and supplies the verified
-attempt-ordering anchor.
+no-delete, no-bypass `tenkz-v*` protection and changes exactly seven scalars:
+both normative enforcement values, the inventory's raw-blob digest, the Git
+tree OIDs of `scripts/` and `tests/tenkz/release-support/`, the SHA-256 of the
+exact armed `DESIGN.md` UTF-8 blob, and its own pull-request reference.  It
+cannot change the checker, workflow, inventory, either pinned tree, policy
+prose, or any other byte.  A later self-referential freeze record validates the
+tag-derived 0.9 payload and supplies the verified attempt-ordering anchor.
+
+Release-test code and imported or sourced helpers live under `scripts/`.
+Expected outputs, baselines, allowlists, thresholds, and other immutable
+acceptance configuration live under `tests/tenkz/release-support/`.  The closed
+inventory may declare release artifacts and RMP cases as mutable subject data,
+but those files cannot select coverage or supply runner, helper, or acceptance
+logic.  Each command runs in the hermetic repository-shaped view specified by
+`SOAK-1.0.md`, with a fixed output mount, pinned child-tool profile, and no
+host-checkout or network access.  Symlinks, submodules, special entries, and any
+other in-repository dependency fail closed.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
@@ -245,6 +255,9 @@ four canonical release artifacts.  Exact-head sign-off review follows
 immediately on that integration; if `main` advances, repeat preparation on the
 new tip.  A validated sign-off remains live until a full replay succeeds and
 the exact annotated final tag is observed under current required protection.
+Current mutable facts are replayed forever: drift before the final-tag ref uses
+the reset process, while drift after that ref exists is a hard incident and
+never reopens the ledger.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and

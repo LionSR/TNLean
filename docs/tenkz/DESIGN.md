@@ -12,12 +12,13 @@ is valid until the implementation and blocker chain below are complete. The
 enforcement-activation pull request is the final prerequisite before a source
 candidate. Its base contains the checker, repository-evidence resolver, tests,
 CI wiring, closed release-test inventory, and active tag-protection ruleset. Its
-complete diff is restricted to the six activation scalars defined in
+complete diff is restricted to the seven activation scalars defined in
 `SOAK-1.0.md`: the two enforcement values, inventory digest, test-code tree,
-policy digest, and its own pull-request reference. This pins the inventory,
-test implementation, policy, and ledger prefix without allowing activation to
-replace any of them. A later self-referential freeze-entry pull request supplies
-the trusted attempt-ordering anchor.
+test-support tree, policy digest, and its own pull-request reference. This pins
+the inventory, test implementation and acceptance data, policy, and ledger
+prefix without allowing activation to replace any of them. A later
+self-referential freeze-entry pull request supplies the trusted attempt-ordering
+anchor.
 
 The following block is normative. A later #5352 slice activates its
 machine-checking contract.
@@ -54,7 +55,11 @@ release_test_inventory = "tests/tenkz/release-tests.toml"
 release_test_inventory_sha256 = "pending"
 release_test_code_root = "scripts"
 release_test_code_tree = "pending"
-release_test_protocol = "pinned-script-from-repository-root-no-shell"
+release_test_support_root = "tests/tenkz/release-support"
+release_test_support_tree = "pending"
+release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
+release_test_dependency_contract = "pinned-code-support-declared-subject-data"
+release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
 [event_format]
 reader_accepts = "same-major-any-minor"
@@ -205,10 +210,13 @@ invalid.
 
 Every package tag has the manifest obtained by substituting its exact tag name
 for `TAG` in the policy pattern. The policy, not the manifest, owns the four
-canonical release-artifact paths, hashed test inventory, and pinned Git tree of
-in-repository test code. The manifest repeats the inventory digest and test-code
-tree so that payload validation binds both at the exact candidate tree. The
-freeze validates the 0.9 manifest, artifacts, and tests before its tag is
+canonical release-artifact paths, hashed test inventory, and pinned Git trees of
+in-repository test code and immutable test support. The manifest repeats the
+inventory digest and both tree OIDs so that payload validation binds them at the
+exact candidate tree. Release artifacts and declared benchmark inputs remain
+mutable subject data; they cannot provide executable helpers, coverage
+selection, expected results, allowlists, or thresholds. The freeze validates
+the 0.9 manifest, artifacts, and tests before its tag is
 created. The final release-preparation pull request changes exactly the 1.0
 manifest and four canonical artifacts. The tests run through the single pinned
 protocol at the exact release head. This binds each payload to its tag and the
@@ -280,9 +288,9 @@ The dependency chain is ordered:
 2. close #5086, #4699, and #4162 for 0.8;
 3. close #4703, #4708, and #4163 for the 0.9 contract freeze;
 4. configure and verify the tag-protection ruleset, then use one
-   self-referential enforcement-activation pull request to perform only the six
-   permitted scalar replacements and pin the inventory, test-code tree, exact
-   armed policy hash, and ledger prefix;
+   self-referential enforcement-activation pull request to perform only the
+   seven permitted scalar replacements and pin the inventory, test-code tree,
+   test-support tree, exact armed policy hash, and ledger prefix;
 5. merge the frozen source through a source pull request to `main`, then create
    and push an annotated `tenkz-v0.9.PATCH` tag on its integration commit;
 6. open a ledger-entry draft pull request, append a self-referential `freeze`
@@ -342,11 +350,13 @@ validated sign-off first enters `signed-off-awaiting-tag`; mutable evidence
 remains live until a full replay succeeds and the exact annotated final tag is
 currently observed on its integration under the required no-update, no-delete,
 no-bypass protection. That current-state observation enters terminal
-`released` state, and no entry follows it. Later review, issue, or pull-request
-drift does not reopen the campaign, but every validation still checks the tag
-and protection and reports a hard release incident if either is wrong. Ruleset
-administrators and the GitHub control plane are trusted: the validator does not
-claim to detect a protection gap that an administrator restores before its
-snapshot. A wrong, missing, moved, or replaced tag is never repaired by moving
-or reusing the name. The exact entry grammar, state transitions, external-fact
-rules, and reset rules live in `SOAK-1.0.md`.
+`released` state, and no entry follows it. Every later validation still replays
+all current mutable facts. Before the final tag exists, drift follows the
+ordered reset process; after the tag exists, the same drift is a hard release
+incident and never reopens the ledger. Ruleset administrators and the GitHub
+control plane are trusted: the validator does not claim to detect drift or a
+protection gap that an administrator restores before its snapshot. A wrong,
+moved, or replaced present tag is never repaired by moving or reusing the name.
+An absent final-tag ref remains `signed-off-awaiting-tag`; this state-based
+contract stores no prior-observation witness. The exact entry grammar, state
+transitions, external-fact rules, and reset rules live in `SOAK-1.0.md`.
