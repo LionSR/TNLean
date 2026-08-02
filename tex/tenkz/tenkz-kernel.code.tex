@@ -4103,7 +4103,7 @@
 
 % A projected picture carries its map as model data.  This is recorded after
 % authored and derived topology, so enabling a frame cannot renumber atoms or
-% wires.  The fixed guard thresholds are still evaluated from named metrics:
+% wires.  The readability guard thresholds are evaluated from named metrics:
 % a future metric retune therefore reports the same hazards as the lattice
 % sweep rather than silently changing the projection.
 \cs_new_protected:Npn \__tenkz_kernel_plane_model:
@@ -4138,8 +4138,10 @@
               < { \__tenkz_metric_ratio:n {slantmax} }
           }
           {
-            \msg_warning:nnn {tenkz}{plane-slant-band}
+            \msg_warning:nneee {tenkz}{plane-slant-band}
               { \__tenkz_metric_ratio:n {planeslant} }
+              { \__tenkz_metric_ratio:n {slantmin} }
+              { \__tenkz_metric_ratio:n {slantmax} }
           }
         \fp_compare:nNnT
           {
@@ -4148,7 +4150,7 @@
           }
           > { ( \__tenkz_kernel_cols: - 1 ) / 2 }
           {
-            \msg_warning:nnee {tenkz}{plane-tall-window}
+            \msg_warning:nneee {tenkz}{plane-tall-window}
               {
                 \fp_eval:n
                   {
@@ -4157,6 +4159,7 @@
                   }
               }
               { \fp_eval:n { ( \__tenkz_kernel_cols: - 1 ) / 2 } }
+              { \__tenkz_metric_ratio:n {slantmin} }
           }
       }
   }
