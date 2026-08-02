@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
+import TNLean.MPS.MPDO.ActiveSectorSpanningRFP
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
@@ -239,6 +240,7 @@ import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.RFPSubspinMaps
 import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.RFPViaTSBlocking
 import TNLean.MPS.MPDO.RFPViaTSGlobal
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.RecurrentSectorRephasing

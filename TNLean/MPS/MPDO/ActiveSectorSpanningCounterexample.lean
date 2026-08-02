@@ -333,17 +333,22 @@ lemma rectangular_remainder_ne_zero :
 
 /-- Full virtual-matrix spanning does not force the rectangular remainder
 $Q(1-LQ)L$ to vanish.  The example has normalized positive sector weights,
-positive semidefinite neighboring operators, an injective tensor with source zero
-correlation length, and a primitive trace-one active trace matrix, while that
-matrix is non-idempotent and the rectangular remainder is nonzero.
+positive semidefinite neighboring operators, an injective tensor with literal
+physical-trace idempotence, and a primitive trace-one active trace matrix, while
+that matrix is non-idempotent and the rectangular remainder is nonzero.
 
-This is a counterexample only to the proposed intermediate implication.  The
-formal statement does not assert the strong area law, although the induced
-classical cyclic family satisfies it by a direct entropy calculation.  The
+The companion area-law theorem proves the strong area law for this tensor.
+Nevertheless, this is a counterexample only to the proposed intermediate
+implication.  Lemma C.5 is proved in Case I under the standing assumption that
+the tensor is an injective normal tensor; the raw tensor here does not have that
+normalization, and its normalized representative loses the paper's literal
+physical-trace identity.  Hence the result records a normalization obstruction,
+not a counterexample to Lemma C.5 under its complete hypotheses.  The
 source-selected inverse-map identification is proved separately in
-`inverseMap_provenance_preserves_rectangular_remainder`.  A formal
-counterexample to Lemma C.5 of arXiv:1606.00608 still requires a theorem that
-the same tensor satisfies the strong area law. -/
+`inverseMap_provenance_preserves_rectangular_remainder`.
+
+**Scope restriction (non-normal representative):** documented in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`. -/
 theorem virtual_spanning_does_not_force_rectangular_remainder_zero :
     tensor.IsInjective ∧ tensor.IsSourceZCL ∧
       physTraceTransfer tensor * physTraceTransfer tensor = physTraceTransfer tensor ∧
