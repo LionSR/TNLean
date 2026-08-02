@@ -213,16 +213,15 @@ inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no campaign entry is valid and reviewed follow-up PRs may still
 correct the prefix.  The activation slice under #5352 will add the validation
 commands here only after their scripts, repository-evidence checks, tests, and
-CI wiring exist on `main`.  One self-referential activation pull request then
-pins the closed release-test inventory, verifies the no-update, no-delete,
-no-bypass `tenkz-v*` ruleset, changes both normative enforcement fields to
-`armed`, replaces `release_test_inventory_sha256 = "pending"` with the
-inventory's raw-blob digest, replaces
-`policy_sha256 = "pending"` with the SHA-256 of the exact armed `DESIGN.md`
-UTF-8 blob, replaces `armed_by_pr = "pending"` with its own pull-request
-reference, and pins the ledger prefix.  A later self-referential freeze record
-validates the tag-derived 0.9 payload and supplies the verified attempt-ordering
-anchor.
+CI wiring exist on `main`.  Close both blocker groups before activation.  One
+self-referential activation pull request then verifies the current no-update,
+no-delete, no-bypass `tenkz-v*` protection and changes exactly six scalars: both
+normative enforcement values, the inventory's raw-blob digest, the Git tree OID
+of `scripts/`, the SHA-256 of the exact armed `DESIGN.md` UTF-8 blob, and its own
+pull-request reference.  It cannot change the checker, workflow, inventory,
+scripts, policy prose, or any other byte.  A later self-referential freeze
+record validates the tag-derived 0.9 payload and supplies the verified
+attempt-ordering anchor.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
@@ -234,24 +233,32 @@ Once the freeze record lands, the evidence gate has no calendar delay.  It
 requires two distinct, independently approved real-work pull requests merged
 after the freeze: one changing a production Lean formalization (excluding
 `TNLean/Archive/**`) or blueprint chapter or appendix, and one changing an RMP
-benchmark case.  Immutable full pull-request diffs decide eligibility, and one
-pull request fills only one class.  Policy-, checker-, CI-, and ledger-record
-pull requests do not qualify.  Each record pull request changes only its one
-ledger append.  Release preparation lands separately after both work merges;
-its exact diff changes only the tag-derived 1.0 manifest and four canonical
-release artifacts.  Exact-head sign-off review follows immediately on that
-integration; if `main` advances, repeat preparation on the new tip.  A validated
-sign-off remains live until the exact annotated final tag is observed on its
-integration.  The immutable tag ruleset makes that observation terminal.
+benchmark case.  Immutable full pull-request diffs decide eligibility.  The
+eligible source must still exist at the reviewed head, have a changed
+comment-stripped token stream, and pass its class-specific Lean, blueprint, or
+RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
+not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
+and ledger-record pull requests do not qualify.  Each record pull request
+changes only its one ledger append.  Release preparation lands separately after
+both work merges; its exact diff changes only the tag-derived 1.0 manifest and
+four canonical release artifacts.  Exact-head sign-off review follows
+immediately on that integration; if `main` advances, repeat preparation on the
+new tip.  A validated sign-off remains live until a full replay succeeds and
+the exact annotated final tag is observed under current required protection.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and
 post-merge checks need pull-request open, reopen, synchronize, ready-for-review,
 and close activity; review submission, edit, and dismissal activity; issue
 close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
-namespace.  It needs read access to repository contents, pull requests, reviews,
-issues, and repository rulesets.  No live-entry or release command is available
-while enforcement is pending.
+namespace.  It performs only read requests.  Its credential principal needs
+read access to repository contents, pull requests, reviews, and issues, plus
+the write-level ruleset visibility GitHub requires to return unredacted rule
+and bypass details.  Missing or redacted details fail closed.  Ruleset
+administrators and the GitHub control plane are trusted; this current-state
+check does not claim to detect an administrative protection gap restored before
+the snapshot.  No live-entry or release command is available while enforcement
+is pending.
 
 ## Shared parsers
 

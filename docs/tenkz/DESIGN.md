@@ -7,15 +7,17 @@ implementation boundaries. The earlier file at `history/DESIGN.md` records the
 0.6 design campaign; it does not define the released contract.
 
 Adopting this policy neither changes the package version nor starts the 1.0
-campaign. Automated enforcement is pending under #5352, and no campaign entry is valid
-until the policy, repository-evidence checks, and CI wiring are armed. The
-enforcement-activation pull request requires the closed release-test inventory
-and active tag-immutability ruleset on its base, replaces the pending inventory
-digest here, changes both normative `enforcement` values to `armed`, replaces
-the two pending activation fields in `SOAK-1.0.md`, and pins the inventory, this
-policy, and the ledger prefix. A later self-referential freeze-entry pull
-request supplies the trusted attempt-ordering anchor after every prerequisite
-below has closed.
+campaign. Automated enforcement is pending under #5352, and no campaign entry
+is valid until the implementation and blocker chain below are complete. The
+enforcement-activation pull request is the final prerequisite before a source
+candidate. Its base contains the checker, repository-evidence resolver, tests,
+CI wiring, closed release-test inventory, and active tag-protection ruleset. Its
+complete diff is restricted to the six activation scalars defined in
+`SOAK-1.0.md`: the two enforcement values, inventory digest, test-code tree,
+policy digest, and its own pull-request reference. This pins the inventory,
+test implementation, policy, and ledger prefix without allowing activation to
+replace any of them. A later self-referential freeze-entry pull request supplies
+the trusted attempt-ordering anchor.
 
 The following block is normative. A later #5352 slice activates its
 machine-checking contract.
@@ -50,6 +52,8 @@ release_change_record = "docs/tenkz/CHANGES.md"
 release_event_format = "docs/tenkz/TNLOG.md"
 release_test_inventory = "tests/tenkz/release-tests.toml"
 release_test_inventory_sha256 = "pending"
+release_test_code_root = "scripts"
+release_test_code_tree = "pending"
 release_test_protocol = "pinned-script-from-repository-root-no-shell"
 
 [event_format]
@@ -201,12 +205,14 @@ invalid.
 
 Every package tag has the manifest obtained by substituting its exact tag name
 for `TAG` in the policy pattern. The policy, not the manifest, owns the four
-canonical release-artifact paths and the hashed test inventory. The freeze
-validates the 0.9 manifest, artifacts, and tests before its tag is created. The
-final release-preparation pull request changes exactly the 1.0 manifest and
-four canonical artifacts. The tests run through the single pinned protocol at
-the exact release head. This binds each payload to its tag and the 1.0
-preparation to the reviewed pull request.
+canonical release-artifact paths, hashed test inventory, and pinned Git tree of
+in-repository test code. The manifest repeats the inventory digest and test-code
+tree so that payload validation binds both at the exact candidate tree. The
+freeze validates the 0.9 manifest, artifacts, and tests before its tag is
+created. The final release-preparation pull request changes exactly the 1.0
+manifest and four canonical artifacts. The tests run through the single pinned
+protocol at the exact release head. This binds each payload to its tag and the
+1.0 preparation to the reviewed pull request.
 
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
 non-negative decimal integer and increases strictly between attempts. For each
@@ -256,7 +262,7 @@ GitHub/Git evidence binds its exact approved head, complete diff, integration
 tree, merge time, and ancestry after both work integrations. The sign-off record
 pull request then changes only its ledger append, so its exact approved final
 head carries that prepared state and the sign-off entry without mixing evidence
-and implementation. Its candidate target and final integration parent must
+and implementation. Its exact validation target and final integration parent must
 equal the release-preparation integration; an intervening `main` commit requires
 another reviewed preparation on the new tip before any final tag exists.
 GitHub supplies the record pull request's integration commit, whose Git tree
@@ -269,20 +275,22 @@ tree or ancestry mismatch requires a `record-invalid` reset and forbids the tag.
 
 The dependency chain is ordered:
 
-1. land the checker, repository-evidence resolver, tests, and CI; then use one
-   self-referential enforcement-activation pull request to change both
-   normative enforcement fields from `pending` to `armed`, pin the exact armed
-   policy hash and ledger prefix;
+1. land the checker, repository-evidence resolver, tests, CI, and closed test
+   inventory;
 2. close #5086, #4699, and #4162 for 0.8;
 3. close #4703, #4708, and #4163 for the 0.9 contract freeze;
-4. merge the frozen source through a source pull request to `main`, then create
+4. configure and verify the tag-protection ruleset, then use one
+   self-referential enforcement-activation pull request to perform only the six
+   permitted scalar replacements and pin the inventory, test-code tree, exact
+   armed policy hash, and ledger prefix;
+5. merge the frozen source through a source pull request to `main`, then create
    and push an annotated `tenkz-v0.9.PATCH` tag on its integration commit;
-5. open a ledger-entry draft pull request, append a self-referential `freeze`
+6. open a ledger-entry draft pull request, append a self-referential `freeze`
    entry, observe `freeze-pending` in candidate CI, and merge it to start the
    attempt at GitHub's verified merge time `T`;
-6. merge two distinct qualifying real-work pull requests after `T`: one in the
+7. merge two distinct qualifying real-work pull requests after `T`: one in the
    `formalization-or-blueprint` class and one in the `rmp-benchmark` class;
-7. merge an independently exact-head-approved release-preparation pull request
+8. merge an independently exact-head-approved release-preparation pull request
    descending from both work integrations, then merge and post-merge validate
    the independently approved sign-off record and create `tenkz-v1.0.0` on its
    integration commit.
@@ -322,7 +330,8 @@ entry, remains owned by its target's attempt, and never changes attempt state.
 
 The sign-off entry's `record_pr` is its own pull request. GitHub's `mergedAt`
 is the sign-off time and must be later than both qualifying work merges;
-normalized `mergedBy` must be `github:lionsr`. The named, distinct reviewer's
+normalized `mergedBy` must equal the pinned policy's `maintainer_identity`. The
+named, distinct reviewer's
 latest effective review must be `APPROVED` on the exact final head, submitted
 after the later qualifying work merge and the named release-preparation merge,
 and before sign-off merge. The sign-off head and integration must descend from
@@ -330,11 +339,14 @@ all three integrations. The sign-off may proceed immediately once those ordered
 facts hold. It also requires one qualifying work entry in each class, no
 unresolved fix-compatible friction, and no condition requiring reset. A
 validated sign-off first enters `signed-off-awaiting-tag`; mutable evidence
-remains live until the exact annotated final tag is observed on its integration.
-The active no-update, no-delete, no-bypass tag ruleset makes that observation
-monotone and enters terminal `released` state. No entry follows it. Later
-review, issue, or pull-request drift does not reopen the campaign. A final tag
-that is created wrong, or later has missing or weaker protection, is a hard
-release incident and is never repaired by moving or reusing the name. The exact
-entry grammar, state transitions, external-fact rules, and reset rules live in
-`SOAK-1.0.md`.
+remains live until a full replay succeeds and the exact annotated final tag is
+currently observed on its integration under the required no-update, no-delete,
+no-bypass protection. That current-state observation enters terminal
+`released` state, and no entry follows it. Later review, issue, or pull-request
+drift does not reopen the campaign, but every validation still checks the tag
+and protection and reports a hard release incident if either is wrong. Ruleset
+administrators and the GitHub control plane are trusted: the validator does not
+claim to detect a protection gap that an administrator restores before its
+snapshot. A wrong, missing, moved, or replaced tag is never repaired by moving
+or reusing the name. The exact entry grammar, state transitions, external-fact
+rules, and reset rules live in `SOAK-1.0.md`.
