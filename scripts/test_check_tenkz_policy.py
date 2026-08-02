@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import check_tenkz_policy as policy
+import check_tenkz_policy as policy  # noqa: E402
 
 
 DESIGN_TEXT = (ROOT / "docs/tenkz/DESIGN.md").read_text(encoding="utf-8")
@@ -186,7 +186,18 @@ def reset(
     target: str,
     *,
     attempt: int = 1,
+    replay_receipt_pr: str | None = None,
+    replay_receipt_sha256: str | None = None,
 ) -> str:
+    replay_fields = ""
+    if cause == "record-invalid":
+        entry_number = int(entry_id.removeprefix("S1-"))
+        receipt_ref = replay_receipt_pr or f"#{19_000 + entry_number}"
+        receipt_digest = replay_receipt_sha256 or f"{entry_number:064x}"
+        replay_fields = (
+            f'\nreplay_receipt_pr = "{receipt_ref}"'
+            f'\nreplay_receipt_sha256 = "{receipt_digest}"'
+        )
     return block(
         f'''id = "{entry_id}"
 kind = "reset"
@@ -195,7 +206,7 @@ attempt = {attempt}
 cause = "{cause}"
 target = "{target}"
 reason = "attempt evidence requires a new freeze"
-evidence = "verified reset cause"'''
+evidence = "verified reset cause"{replay_fields}'''
     )
 
 
@@ -251,8 +262,9 @@ def review(
     *,
     state: str = "APPROVED",
     dismissed: bool = False,
+    permission: str | None = "push",
 ) -> policy.ReviewEvidence:
-    return policy.ReviewEvidence(login, state, submitted_at, head, dismissed)
+    return policy.ReviewEvidence(login, state, submitted_at, head, dismissed, permission)
 
 
 def merged_pr(
@@ -307,6 +319,10 @@ class Context:
     payloads: dict[tuple[str, str], policy.ReleasePayloadEvidence]
     tags: dict[str, policy.TagEvidence]
     issues: dict[str, policy.IssueEvidence]
+    reset_replays: dict[str, policy.RecordInvalidResetReplayEvidence] = field(
+        default_factory=dict
+    )
+    workflow_override: policy.WorkflowEvidence | None = None
 
     def resolve_replay_activation_diff(self, _ref: str) -> policy.ActivationDiffEvidence:
         return self.activation_diff
@@ -351,6 +367,68 @@ class Context:
 
     def resolve_replay_issue(self, issue: str) -> policy.IssueEvidence:
         return self.issues[issue]
+
+    def resolve_replay_record_invalid_reset(
+        self,
+        entry_id: str,
+        target: str,
+        receipt_ref: str,
+        receipt_digest: str,
+    ) -> policy.RecordInvalidResetReplayEvidence:
+        override = self.reset_replays.get(entry_id)
+        if override is not None:
+            return override
+        receipt = self.prs[receipt_ref]
+        index = int(entry_id.removeprefix("S1-"))
+        return policy.RecordInvalidResetReplayEvidence(
+            validated_entry_id=entry_id,
+            validated_target_entry_id=target,
+            validated_receipt_pr=receipt_ref,
+            validated_receipt_head_oid=receipt.head_oid,
+            validated_receipt_integration_oid=receipt.merge_commit_oid,
+            complete=True,
+            receipt_candidate_main_tip_exact=True,
+            changes_exactly_one_new_regular_blob=True,
+            receipt_path=f"docs/tenkz/soak-replay/{receipt_ref[1:]}.json",
+            raw_blob_sha256=receipt_digest,
+            raw_blob_read_from_receipt_integration=True,
+            schema_path=policy.policy_rules(ARMED_POLICY)[4].reset_replay_schema,
+            schema_support_tree_oid=TEST_SUPPORT_TREE,
+            schema_from_pinned_support_tree=True,
+            schema_closed_and_valid=True,
+            boundary_entry_id=f"S1-{index - 1:04d}",
+            validation_target_oid=receipt.head_oid,
+            raw_invalid_entries=(target,),
+            pending_breaking_target=None,
+            normalized_resolver_inputs_complete_and_matching=True,
+            workflow_dependency_closure_pinned=True,
+            supervisor_receipts_complete_and_matching=True,
+            current_candidate_snapshot_reproduces_receipt=True,
+        )
+
+    def resolve_current_workflow(
+        self,
+        activation_integration: str,
+        target_oid: str,
+        paths: tuple[str, ...],
+    ) -> policy.WorkflowEvidence:
+        if self.workflow_override is not None:
+            return self.workflow_override
+        return policy.WorkflowEvidence(
+            validated_activation_integration=activation_integration,
+            validated_target_oid=target_oid,
+            validated_paths=paths,
+            complete=True,
+            activation_paths_are_regular_blobs=True,
+            target_blobs_and_modes_match_activation=True,
+            local_dependencies_pinned_and_matching=True,
+            external_dependencies_use_full_commit_shas=True,
+            containers_use_content_digests=True,
+            dependency_graph_complete_and_acyclic=True,
+            candidate_diff_untouched=True,
+            github_checks_bind_exact_head_and_workflows=True,
+            supervisor_receipt_complete_and_matching=True,
+        )
 
 
 def payload_evidence(
@@ -494,6 +572,7 @@ def context() -> Context:
         subject_data_cannot_reduce_coverage=True,
         hermetic_execution_contract_valid=True,
         supervisor_self_test_receipt_valid=True,
+        enforcement_workflows_pinned=True,
         policy_digest_matches=True,
         ledger_prefix_matches=True,
     )
@@ -533,6 +612,10 @@ def context() -> Context:
     }
     work_diffs = {
         FORMAL_WORK: policy.WorkDiffEvidence(
+            validated_pr_ref=FORMAL_WORK,
+            validated_head_oid=prs[FORMAL_WORK].head_oid,
+            validated_integration_oid=prs[FORMAL_WORK].merge_commit_oid,
+            validated_freeze_integration=prs[FREEZE_RECORD].merge_commit_oid,
             complete=True,
             integration_parent_count=1,
             unique_merge_base=True,
@@ -553,6 +636,10 @@ def context() -> Context:
             rmp_checks_passed=True,
         ),
         RMP_WORK: policy.WorkDiffEvidence(
+            validated_pr_ref=RMP_WORK,
+            validated_head_oid=prs[RMP_WORK].head_oid,
+            validated_integration_oid=prs[RMP_WORK].merge_commit_oid,
+            validated_freeze_integration=prs[FREEZE_RECORD].merge_commit_oid,
             complete=True,
             integration_parent_count=2,
             unique_merge_base=True,
@@ -634,7 +721,14 @@ def context() -> Context:
         release_preps,
         payloads,
         {
-            "tenkz-v0.9.0": policy.TagEvidence(TAG_OBJECT, "tag", SHA, True),
+            "tenkz-v0.9.0": policy.TagEvidence(
+                TAG_OBJECT,
+                "tag",
+                SHA,
+                True,
+                True,
+                True,
+            ),
             policy.FINAL_TAG: policy.TagEvidence(None, None, None, exists=False),
         },
         issues,
@@ -649,8 +743,9 @@ def parsed_entries(*blocks: str) -> list[dict]:
 def audit_evidence(
     boundary: str | None,
     invalid_entries: tuple[str, ...] = (),
+    target_oid: str = oid(99_999),
 ) -> policy.AuditEvidence:
-    return policy.AuditEvidence(boundary, invalid_entries, True, True)
+    return policy.AuditEvidence(boundary, invalid_entries, True, True, target_oid)
 
 
 def protected_tags() -> policy.TagProtectionEvidence:
@@ -668,16 +763,87 @@ def protected_tags() -> policy.TagProtectionEvidence:
     )
 
 
+def prepare_reset_receipts(entries: list[dict], facts: Context) -> None:
+    """Populate the default durable receipt facts used by unrelated scenarios."""
+
+    for entry in entries:
+        if entry["kind"] != "reset" or entry["cause"] != "record-invalid":
+            continue
+        entry_id = entry["id"]
+        record = facts.prs[entry["record_pr"]]
+        receipt_ref = entry["replay_receipt_pr"]
+        receipt_number = int(receipt_ref[1:])
+        if receipt_ref not in facts.prs:
+            record_time = record.merged_at
+            receipt_time = (
+                record_time - timedelta(microseconds=1)
+                if record_time is not None
+                else SIGNOFF_MERGE + timedelta(seconds=100 + receipt_number)
+            )
+            receipt_head = oid(receipt_number * 10)
+            facts.prs[receipt_ref] = merged_pr(
+                receipt_number,
+                receipt_time,
+                author=f"receipt-author-{receipt_number}",
+                reviews=(
+                    review(
+                        f"receipt-reviewer-{receipt_number}",
+                        receipt_time - timedelta(microseconds=1),
+                        receipt_head,
+                    ),
+                ),
+            )
+        receipt_integration = facts.prs[receipt_ref].merge_commit_oid
+        record_diff = facts.records[entry_id]
+        facts.records[entry_id] = replace(
+            record_diff,
+            candidate_main_tip_is_receipt_integration=(
+                True
+                if record_diff.candidate_main_tip_is_receipt_integration is None
+                else record_diff.candidate_main_tip_is_receipt_integration
+            ),
+            integration_parent_is_receipt_integration=(
+                True
+                if record_diff.integration_parent_is_receipt_integration is None
+                else record_diff.integration_parent_is_receipt_integration
+            ),
+            validated_receipt_integration=(
+                receipt_integration
+                if record_diff.validated_receipt_integration is None
+                else record_diff.validated_receipt_integration
+            ),
+        )
+
+
+def set_review_permission(facts: Context, ref: str, permission: str | None) -> None:
+    pull_request = facts.prs[ref]
+    assert pull_request.reviews is not None
+    facts.prs[ref] = replace(
+        pull_request,
+        reviews=tuple(
+            replace(item, repository_permission=permission)
+            for item in pull_request.reviews
+        ),
+    )
+
+
 def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
+    prepare_reset_receipts(entries, facts)
     if "audit" not in overrides:
         boundary: str | None = None
+        target_oid = facts.prs[ACTIVATION].merge_commit_oid
         for entry in entries:
             record = facts.prs.get(entry["record_pr"])
-            if record is None or record.merged is not True:
+            if record is None:
+                break
+            target_oid = record.head_oid
+            if record.merged is not True:
                 break
             boundary = entry["id"]
-        overrides["audit"] = audit_evidence(boundary)
+            target_oid = record.merge_commit_oid
+        assert isinstance(target_oid, str)
+        overrides["audit"] = audit_evidence(boundary, target_oid=target_oid)
     arguments = {
         "policy": ARMED_POLICY,
         "soak": ARMED_SOAK,
@@ -690,6 +856,8 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
         "resolve_replay_freeze_tag": facts.resolve_replay_freeze_tag,
         "resolve_current_final_tag": facts.resolve_current_final_tag,
         "resolve_replay_issue": facts.resolve_replay_issue,
+        "resolve_replay_record_invalid_reset": facts.resolve_replay_record_invalid_reset,
+        "resolve_current_workflow": facts.resolve_current_workflow,
         "tag_protection": protected_tags(),
     }
     arguments.update(overrides)
@@ -793,7 +961,14 @@ def add_freeze_facts(
         merged_at,
         freeze_entry=True,
     )
-    facts.tags[tag] = policy.TagEvidence(tag_object, "tag", source_sha, True)
+    facts.tags[tag] = policy.TagEvidence(
+        tag_object,
+        "tag",
+        source_sha,
+        True,
+        True,
+        True,
+    )
     facts.payloads[(source_sha, tag)] = payload_evidence(
         source_sha,
         tag,
@@ -843,6 +1018,350 @@ def main() -> int:
     # Both qualifying merges, the sign-off review, and sign-off merge occur in
     # one minute.  Strict event ordering, not elapsed calendar time, is enough.
     assert validate(complete_log(), context()) == "signed-off-awaiting-tag"
+
+    # Every approval path uses the policy's closed collaborator-permission set.
+    for denied_permission in (None, "pull", "triage"):
+        denied_activation = context()
+        set_review_permission(denied_activation, ACTIVATION, denied_permission)
+        expect_failure(
+            lambda facts=denied_activation: validate([], facts),
+            "repository-authorized independent exact-head approval",
+        )
+
+    denied_source = context()
+    set_review_permission(denied_source, SOURCE, "pull")
+    denied_source.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
+    expect_failure(
+        lambda: validate([freeze()], denied_source),
+        "repository-authorized independent exact-head approval",
+    )
+
+    denied_work = context()
+    set_review_permission(denied_work, FORMAL_WORK, "triage")
+    denied_work.prs[FORMAL_RECORD] = candidate_pr(904, author="record-author")
+    expect_failure(
+        lambda: validate(complete_log()[:2], denied_work),
+        "repository-authorized independent exact-head approval",
+    )
+
+    denied_release = context()
+    set_review_permission(denied_release, RELEASE_PREP, "pull")
+    signoff_head = denied_release.prs[SIGNOFF_RECORD].head_oid
+    assert signoff_head is not None
+    denied_release.prs[SIGNOFF_RECORD] = candidate_pr(
+        907,
+        author="release-author",
+        reviews=(review("release-reviewer", SIGNOFF_REVIEW, signoff_head),),
+    )
+    expect_failure(
+        lambda: validate(complete_log(), denied_release),
+        "repository-authorized independent exact-head approval",
+    )
+
+    denied_signoff = context()
+    signoff_head = denied_signoff.prs[SIGNOFF_RECORD].head_oid
+    assert signoff_head is not None
+    denied_signoff.prs[SIGNOFF_RECORD] = candidate_pr(
+        907,
+        author="release-author",
+        reviews=(
+            review(
+                "release-reviewer",
+                SIGNOFF_REVIEW,
+                signoff_head,
+                permission="pull",
+            ),
+        ),
+    )
+    expect_failure(
+        lambda: validate(complete_log(), denied_signoff),
+        "repository-authorized independent exact-head approval",
+    )
+
+    receipt_log = [
+        freeze(),
+        reset("S1-0002", "#908", "record-invalid", "S1-0001"),
+    ]
+    denied_receipt = context()
+    add_record(
+        denied_receipt,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(seconds=1),
+    )
+    denied_receipt.prs["#908"] = candidate_pr(908, author="record-author")
+    receipt_entries = parsed_entries(*receipt_log)
+    prepare_reset_receipts(receipt_entries, denied_receipt)
+    receipt_ref = receipt_entries[-1]["replay_receipt_pr"]
+    set_review_permission(denied_receipt, receipt_ref, "triage")
+    expect_failure(
+        lambda: validate(
+            receipt_log,
+            denied_receipt,
+            audit=audit_evidence(
+                "S1-0001",
+                ("S1-0001",),
+                target_oid=denied_receipt.prs["#908"].head_oid,
+            ),
+        ),
+        "repository-authorized independent exact-head approval",
+    )
+
+    expect_failure(
+        lambda: validate([freeze(tag="tenkz-v0.9.00")], context()),
+        "invalid freeze tag",
+    )
+
+    missing_receipt_field = reset(
+        "S1-0002", "#908", "record-invalid", "S1-0001"
+    ).replace('\nreplay_receipt_pr = "#19002"', "")
+    expect_failure(
+        lambda: policy.validate_entry_shape(
+            parsed_entries(freeze(), missing_receipt_field)[1],
+            2,
+        ),
+        "fields differ from schema",
+    )
+    breaking_with_receipt = reset(
+        "S1-0002", "#908", "breaking-required", "S1-0001"
+    ).replace(
+        'evidence = "verified reset cause"',
+        'evidence = "verified reset cause"\nreplay_receipt_pr = "#19002"\n'
+        f'replay_receipt_sha256 = "{"2" * 64}"',
+    )
+    expect_failure(
+        lambda: policy.validate_entry_shape(
+            parsed_entries(freeze(), breaking_with_receipt)[1],
+            2,
+        ),
+        "fields differ from schema",
+    )
+
+    def reset_candidate_case() -> tuple[
+        list[str],
+        Context,
+        policy.AuditEvidence,
+        policy.RecordInvalidResetReplayEvidence,
+    ]:
+        blocks = [
+            freeze(),
+            reset("S1-0002", "#908", "record-invalid", "S1-0001"),
+        ]
+        facts = context()
+        add_record(
+            facts,
+            "S1-0002",
+            "#908",
+            908,
+            FREEZE_TIME + timedelta(seconds=1),
+        )
+        facts.prs["#908"] = candidate_pr(908, author="record-author")
+        entries = parsed_entries(*blocks)
+        prepare_reset_receipts(entries, facts)
+        receipt_ref = entries[-1]["replay_receipt_pr"]
+        receipt_digest = entries[-1]["replay_receipt_sha256"]
+        replay = facts.resolve_replay_record_invalid_reset(
+            "S1-0002",
+            "S1-0001",
+            receipt_ref,
+            receipt_digest,
+        )
+        candidate_head = facts.prs["#908"].head_oid
+        assert candidate_head is not None
+        audit = audit_evidence(
+            "S1-0001",
+            ("S1-0001",),
+            target_oid=candidate_head,
+        )
+        return blocks, facts, audit, replay
+
+    receipt_perturbations = (
+        ("validated_target_entry_id", "S1-9999", "used another target"),
+        ("validated_receipt_pr", "#9999", "used another PR"),
+        ("validated_receipt_head_oid", oid(99_991), "used another exact head"),
+        (
+            "validated_receipt_integration_oid",
+            oid(99_992),
+            "used another integration",
+        ),
+        ("complete", False, "reset receipt is incomplete"),
+        ("receipt_candidate_main_tip_exact", False, "exact current main tip"),
+        ("changes_exactly_one_new_regular_blob", False, "new regular blob"),
+        ("receipt_path", "docs/tenkz/soak-replay/wrong.json", "wrong path"),
+        ("raw_blob_read_from_receipt_integration", False, "reachable integration"),
+        ("schema_path", "schema.json", "used another schema"),
+        ("schema_support_tree_oid", oid(99_993), "used another support tree"),
+        ("schema_from_pinned_support_tree", False, "pinned support tree"),
+        ("schema_closed_and_valid", False, "closed schema"),
+        ("boundary_entry_id", "S1-9999", "another pre-reset prefix"),
+        ("validation_target_oid", oid(99_994), "inexact validation target"),
+        ("raw_invalid_entries", (), "does not match its current reset receipt"),
+        (
+            "pending_breaking_target",
+            "S1-0001",
+            "wrong pending breaking target",
+        ),
+        (
+            "normalized_resolver_inputs_complete_and_matching",
+            False,
+            "resolver inputs are incomplete",
+        ),
+        ("workflow_dependency_closure_pinned", False, "workflow closure is not pinned"),
+        (
+            "supervisor_receipts_complete_and_matching",
+            False,
+            "supervisor results are incomplete",
+        ),
+        (
+            "current_candidate_snapshot_reproduces_receipt",
+            False,
+            "no longer reproduces its receipt",
+        ),
+    )
+    for field_name, bad_value, error_fragment in receipt_perturbations:
+        receipt_blocks, receipt_facts, receipt_audit, replay = reset_candidate_case()
+        receipt_facts.reset_replays["S1-0002"] = replace(
+            replay,
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda blocks=receipt_blocks, facts=receipt_facts, audit=receipt_audit: validate(
+                blocks,
+                facts,
+                audit=audit,
+            ),
+            error_fragment,
+        )
+
+    wrong_receipt_digest_blocks, wrong_receipt_digest, digest_audit, replay = (
+        reset_candidate_case()
+    )
+    wrong_receipt_digest.reset_replays["S1-0002"] = replace(
+        replay,
+        raw_blob_sha256="f" * 64,
+    )
+    expect_failure(
+        lambda: validate(
+            wrong_receipt_digest_blocks,
+            wrong_receipt_digest,
+            audit=digest_audit,
+        ),
+        "blob digest differs from the entry",
+    )
+
+    wrong_receipt_base_blocks, wrong_receipt_base, base_audit, _replay = (
+        reset_candidate_case()
+    )
+    wrong_receipt_base.records["S1-0002"] = replace(
+        wrong_receipt_base.records["S1-0002"],
+        candidate_main_tip_is_receipt_integration=False,
+    )
+    expect_failure(
+        lambda: validate(
+            wrong_receipt_base_blocks,
+            wrong_receipt_base,
+            audit=base_audit,
+        ),
+        "candidate base differs from receipt integration",
+    )
+
+    invalid_acknowledgement = context()
+    add_record(
+        invalid_acknowledgement,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(seconds=1),
+    )
+    invalid_acknowledgement.records["S1-0002"] = replace(
+        invalid_acknowledgement.records["S1-0002"],
+        integration_parent_is_receipt_integration=False,
+    )
+    invalid_ack_log = [
+        freeze(),
+        reset("S1-0002", "#908", "record-invalid", "S1-0001"),
+    ]
+    assert validate(
+        invalid_ack_log,
+        invalid_acknowledgement,
+        audit=audit_evidence(
+            "S1-0002",
+            ("S1-0001", "S1-0002"),
+            target_oid=invalid_acknowledgement.prs["#908"].merge_commit_oid,
+        ),
+    ) == "reset-required:S1-0001"
+
+    receipt_collision_blocks, receipt_collision, collision_audit, _replay = (
+        reset_candidate_case()
+    )
+    receipt_collision_blocks[-1] = reset(
+        "S1-0002",
+        "#908",
+        "record-invalid",
+        "S1-0001",
+        replay_receipt_pr=ACTIVATION,
+    )
+    expect_failure(
+        lambda: validate(
+            receipt_collision_blocks,
+            receipt_collision,
+            audit=collision_audit,
+        ),
+        "replay receipt PR #900 is the activation PR",
+    )
+
+    mutable_workflow = context()
+    activation_integration = mutable_workflow.prs[ACTIVATION].merge_commit_oid
+    target_oid = mutable_workflow.prs[SIGNOFF_RECORD].merge_commit_oid
+    assert activation_integration is not None and target_oid is not None
+    workflow = mutable_workflow.resolve_current_workflow(
+        activation_integration,
+        target_oid,
+        (".github/workflows/pr-ci.yml",),
+    )
+    mutable_workflow.workflow_override = replace(
+        workflow,
+        external_dependencies_use_full_commit_shas=False,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), mutable_workflow),
+        "external workflow dependency uses a mutable ref",
+    )
+
+    boolean_record_parent = context()
+    boolean_record_parent.records["S1-0001"] = replace(
+        boolean_record_parent.records["S1-0001"],
+        integration_parent_count=True,
+    )
+    assert validate([freeze()], boolean_record_parent) == "reset-required:S1-0001"
+
+    boolean_work_parent = context()
+    boolean_work_parent.work_diffs[FORMAL_WORK] = replace(
+        boolean_work_parent.work_diffs[FORMAL_WORK],
+        integration_parent_count=True,
+    )
+    assert validate(complete_log()[:2], boolean_work_parent) == (
+        "reset-required:S1-0002"
+    )
+
+    work_after_record = context()
+    work_after_record.prs[FORMAL_RECORD] = replace(
+        work_after_record.prs[FORMAL_RECORD],
+        merged_at=FORMAL_MERGE - timedelta(microseconds=1),
+    )
+    assert validate(complete_log()[:2], work_after_record) == (
+        "reset-required:S1-0002"
+    )
+
+    cross_bound_work = context()
+    cross_bound_work.work_diffs[FORMAL_WORK] = replace(
+        cross_bound_work.work_diffs[FORMAL_WORK],
+        validated_head_oid=oid(99_995),
+    )
+    assert validate(complete_log()[:2], cross_bound_work) == (
+        "reset-required:S1-0002"
+    )
 
     candidate = context()
     candidate_head = candidate.prs[SIGNOFF_RECORD].head_oid
@@ -1022,12 +1541,12 @@ def main() -> int:
         "lacks one work class",
     )
 
-    incomplete_audit = policy.AuditEvidence("S1-0004", (), False, True)
+    incomplete_audit = policy.AuditEvidence("S1-0004", (), False, True, oid(99_999))
     expect_failure(
         lambda: validate(complete_log(), context(), audit=incomplete_audit),
         "audit snapshot is incomplete",
     )
-    inexact_target_audit = policy.AuditEvidence("S1-0004", (), True, False)
+    inexact_target_audit = policy.AuditEvidence("S1-0004", (), True, False, oid(99_999))
     expect_failure(
         lambda: validate(complete_log(), context(), audit=inexact_target_audit),
         "audit validation target is not exact",
@@ -1399,6 +1918,10 @@ def main() -> int:
     )
     third_facts.prs["#909"] = merged_pr(909, FREEZE_TIME + timedelta(seconds=8))
     third_facts.work_diffs["#908"] = policy.WorkDiffEvidence(
+        validated_pr_ref="#908",
+        validated_head_oid=third_facts.prs["#908"].head_oid,
+        validated_integration_oid=third_facts.prs["#908"].merge_commit_oid,
+        validated_freeze_integration=third_facts.prs[FREEZE_RECORD].merge_commit_oid,
         complete=True,
         integration_parent_count=1,
         unique_merge_base=True,
@@ -1645,14 +2168,7 @@ def main() -> int:
     recovered = invalid_log + [
         reset("S1-0003", "#908", "record-invalid", "S1-0002")
     ]
-    assert (
-        validate(
-            recovered,
-            invalid_facts,
-            audit=audit_evidence("S1-0002", ("S1-0002",)),
-        )
-        == "reset"
-    )
+    assert validate(recovered, invalid_facts) == "reset"
     expect_failure(
         lambda: validate(
             invalid_log,
@@ -1690,15 +2206,10 @@ def main() -> int:
         )
         == "reset-required:S1-0002"
     )
-    assert (
-        validate(
-            complete_log()
-            + [reset("S1-0005", "#908", "record-invalid", "S1-0002")],
-            replayed_drift,
-            audit=audit_evidence("S1-0004", ("S1-0002",)),
-        )
-        == "reset"
-    )
+    assert validate(
+        complete_log() + [reset("S1-0005", "#908", "record-invalid", "S1-0002")],
+        replayed_drift,
+    ) == "reset"
 
     replayed_freeze_drift = context()
     add_record(
@@ -1708,15 +2219,11 @@ def main() -> int:
         908,
         FREEZE_TIME + timedelta(seconds=8),
     )
-    assert (
-        validate(
-            complete_log()[:3]
-            + [reset("S1-0004", "#908", "record-invalid", "S1-0001")],
-            replayed_freeze_drift,
-            audit=audit_evidence("S1-0003", ("S1-0001",)),
-        )
-        == "reset"
-    )
+    assert validate(
+        complete_log()[:3]
+        + [reset("S1-0004", "#908", "record-invalid", "S1-0001")],
+        replayed_freeze_drift,
+    ) == "reset"
 
     corrected_drift = context()
     add_record(
@@ -1733,18 +2240,14 @@ def main() -> int:
         909,
         SIGNOFF_MERGE + timedelta(seconds=2),
     )
-    assert (
-        validate(
-            complete_log()
-            + [
-                correction("S1-0005", "#908", "S1-0001"),
-                reset("S1-0006", "#909", "record-invalid", "S1-0002"),
-            ],
-            corrected_drift,
-            audit=audit_evidence("S1-0004", ("S1-0002",)),
-        )
-        == "reset"
-    )
+    assert validate(
+        complete_log()
+        + [
+            correction("S1-0005", "#908", "S1-0001"),
+            reset("S1-0006", "#909", "record-invalid", "S1-0002"),
+        ],
+        corrected_drift,
+    ) == "reset"
 
     # An already-pending breaking-required reset has priority at the drift
     # boundary; the administrative drift reset follows immediately after it.
@@ -1780,18 +2283,15 @@ def main() -> int:
         validate(
             breaking_then_drift[:3],
             ordered_resets,
-            audit=audit_evidence("S1-0002", ("S1-0001",)),
+            audit=audit_evidence(
+                "S1-0003",
+                ("S1-0001",),
+                target_oid=ordered_resets.prs["#909"].merge_commit_oid,
+            ),
         )
         == "reset-required:S1-0001"
     )
-    assert (
-        validate(
-            breaking_then_drift,
-            ordered_resets,
-            audit=audit_evidence("S1-0002", ("S1-0001",)),
-        )
-        == "reset"
-    )
+    assert validate(breaking_then_drift, ordered_resets) == "reset"
 
     batched_drift = context()
     add_record(
@@ -1813,25 +2313,25 @@ def main() -> int:
         ("S1-0002", "S1-0001"),
         True,
         True,
+        oid(99_999),
     )
     expect_failure(
         lambda: validate(complete_log(), batched_drift, audit=unsorted_audit),
         "invalid entries are not in ledger order",
     )
-    ordered_audit = policy.AuditEvidence(
-        "S1-0004",
-        ("S1-0001", "S1-0002"),
-        True,
-        True,
-    )
     batched_log = complete_log() + [
         reset("S1-0005", "#908", "record-invalid", "S1-0001"),
         reset("S1-0006", "#909", "record-invalid", "S1-0002"),
     ]
-    assert validate(batched_log[:-1], batched_drift, audit=ordered_audit) == (
+    first_reset_audit = audit_evidence(
+        "S1-0005",
+        ("S1-0002",),
+        target_oid=batched_drift.prs["#908"].merge_commit_oid,
+    )
+    assert validate(batched_log[:-1], batched_drift, audit=first_reset_audit) == (
         "reset-required:S1-0002"
     )
-    assert validate(batched_log, batched_drift, audit=ordered_audit) == "reset"
+    assert validate(batched_log, batched_drift) == "reset"
 
     # The self-referential record rule is common to every entry kind.  A
     # copied or tree-mismatched merged record never supplies usable evidence;
@@ -2015,6 +2515,13 @@ def main() -> int:
         910,
         FREEZE_TIME + timedelta(seconds=5),
     )
+    add_record(
+        reset_common,
+        "S1-0005",
+        "#911",
+        911,
+        FREEZE_TIME + timedelta(seconds=6),
+    )
     common_cases.append(
         (
             "reset",
@@ -2022,11 +2529,12 @@ def main() -> int:
                 freeze(),
                 friction("S1-0002", "#908", "breaking-required"),
                 reset("S1-0003", "#909", "breaking-required", "S1-0002"),
-                reset("S1-0004", "#910", "record-invalid", "S1-0003"),
+                reset("S1-0004", "#910", "breaking-required", "S1-0002"),
+                reset("S1-0005", "#911", "record-invalid", "S1-0003"),
             ],
             "S1-0003",
-            "S1-0004",
-            "#910",
+            "S1-0005",
+            "#911",
         )
     )
 
@@ -2064,9 +2572,11 @@ def main() -> int:
     }
     for name, log, invalid_id, reset_id, _reset_pr in common_cases:
         facts = case_facts[name]
-        assert validate(log[:-1], facts) == f"reset-required:{invalid_id}"
+        actual = validate(log[:-1], facts)
+        assert actual == f"reset-required:{invalid_id}", (name, actual)
         assert log[-1].find(f'id = "{reset_id}"') >= 0
-        assert validate(log, facts) == "reset"
+        final_actual = validate(log, facts)
+        assert final_actual == "reset", (name, final_actual)
 
     copied_candidate = context()
     copied_candidate.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
@@ -2099,7 +2609,14 @@ def main() -> int:
     assert validate(copied_log, copied_merged) == "reset"
 
     moved_tag = context()
-    moved_tag.tags["tenkz-v0.9.0"] = policy.TagEvidence("9" * 40, "tag", SHA, True)
+    moved_tag.tags["tenkz-v0.9.0"] = policy.TagEvidence(
+        "9" * 40,
+        "tag",
+        SHA,
+        True,
+        True,
+        True,
+    )
     add_record(
         moved_tag,
         "S1-0002",
@@ -2120,6 +2637,8 @@ def main() -> int:
         "9" * 40,
         "tag",
         SHA,
+        True,
+        True,
         True,
     )
     expect_failure(
@@ -2161,7 +2680,7 @@ def main() -> int:
     stale_patch.prs[FREEZE_RECORD] = candidate_pr(902, author="record-author")
     stale_patch.tags["tenkz-v0.9.0"] = replace(
         stale_patch.tags["tenkz-v0.9.0"],
-        patch_is_fresh_for_attempt=False,
+        patch_exceeds_other_namespace_tags=False,
     )
     expect_failure(
         lambda: validate([freeze()], stale_patch),
@@ -2325,6 +2844,12 @@ def main() -> int:
     )
     expect_failure(
         lambda: policy.validate_policy_text(
+            DESIGN_TEXT.replace("schema = 1", "schema = true", 1)
+        ),
+        "signed policy",
+    )
+    expect_failure(
+        lambda: policy.validate_policy_text(
             DESIGN_TEXT.replace(
                 'work_classes = ["formalization-or-blueprint", "rmp-benchmark"]',
                 'work_classes = ["rmp-benchmark", "formalization-or-blueprint"]',
@@ -2338,6 +2863,12 @@ def main() -> int:
                 "append_only = true",
                 'minimum_elapsed = "forbidden"\nappend_only = true',
             )
+        ),
+        "signed schema",
+    )
+    expect_failure(
+        lambda: policy.parse_soak_text(
+            SOAK_TEXT.replace("append_only = true", "append_only = 1", 1)
         ),
         "signed schema",
     )
