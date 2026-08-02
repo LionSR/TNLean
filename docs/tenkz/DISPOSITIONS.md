@@ -52,7 +52,7 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | — | L200 `tenkz` → `C-policy+C-record` | L24, 54, 171, 272, 815, 941 `tenkz` → `C-policy+C-record+R-record` |
+| `ch02_mps.tex` | — | L200 `tenkz` → `C-policy+C-record` | L24, 54, 171, 272, 840, 966 `tenkz` → `C-policy+C-record+R-record` |
 | `ch03_single.tex` | — | — | L250 `tenkz` → `C-policy+C-record+R-record` |
 | `ch04_channels_choi_foundations.tex` | — | — | L86 `tenkz` → `C-policy+C-record+R-record` |
 | `ch11_fundamental_theorem_core.tex` | — | — | L41, 45 `tenkz` → `C-policy+C-record+R-record` |
