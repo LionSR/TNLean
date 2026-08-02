@@ -1,0 +1,24 @@
+% Regression: the registry-owned MPO prelude name retains skin=mpo in each
+% atom record while resolving through the measured box geometry at every size.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=s]
+  \tn[skin=mpo, at=(2,2), name=small,
+    ports={37:virtual,217:virtual}]{M}
+  \tnwire{small.37}{open ne} \tnwire{open sw}{small.217}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, size=m]
+  \tn[skin=mpo, at=(2,2), name=medium, wide=2,
+    ports={73:virtual,253:virtual}]{M_{\alpha\beta}}
+  \tnwire{medium.73}{open n} \tnwire{open s}{medium.253}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none, size=l]
+  \tn[skin=mpo, at=(2,2), name=large, wide=3,
+    ports={143:virtual,323:virtual}]{M^{(L)}}
+  \tnwire{large.143}{open nw} \tnwire{open se}{large.323}
+\end{tenkz}
+\end{document}

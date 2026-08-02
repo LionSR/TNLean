@@ -10,6 +10,7 @@
 \seq_new:N \g__tenkz_language_keys_seq
 \seq_new:N \g__tenkz_language_aliases_seq
 \seq_new:N \g__tenkz_language_examples_seq
+\seq_new:N \g__tenkz_language_preludes_seq
 \prop_new:N \g__tenkz_language_atom_skin_prop
 \prop_new:N \g__tenkz_language_atom_ports_prop
 \prop_new:N \g__tenkz_language_atom_options_prop
@@ -28,6 +29,8 @@
   { \seq_gput_right:Nn \g__tenkz_language_aliases_seq {{#1}{#2}{#3}{#4}} }
 \cs_new_protected:Npn \__tenkz_language_registry_example:nnn #1#2#3
   { \seq_gput_right:Nn \g__tenkz_language_examples_seq {{#1}{#2}{#3}} }
+\cs_new_protected:Npn \__tenkz_language_registry_prelude:nnn #1#2#3
+  { \seq_gput_right:Nn \g__tenkz_language_preludes_seq {{#1}{#2}{#3}} }
 \input{tenkz-language-registry.tex}
 
 \msg_new:nnn {tenkz} {language-value}

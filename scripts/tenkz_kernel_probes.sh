@@ -840,13 +840,34 @@ grep -Fq '|skin=slotted-dot|wide=2' \
   echo "FAIL: the span-aware paired-dot fixture disappeared" >&2
   exit 1
 }
+mpo_atoms=$(grep -Ec '^atom.*[|]skin=mpo([|]|$)' \
+  "$WORK/r_mpo_skin_prelude.tnlog" || true)
+[ "$mpo_atoms" -eq 3 ] || {
+  echo "FAIL: the stock MPO name did not remain in all three atom records" >&2
+  exit 1
+}
+mpo_hulls=$(grep -c '^glyph-geometry|' \
+  "$WORK/r_mpo_skin_prelude.tnlog" || true)
+[ "$mpo_hulls" -eq 3 ] || {
+  echo "FAIL: the stock MPO declaration did not resolve to three box hulls" >&2
+  exit 1
+}
+sed 's/skin=mpo/skin=box/g' "$WORK/r_mpo_skin_prelude.tnlog" \
+  >"$WORK/r_mpo_skin_prelude.normalized.tnlog"
+cmp -s "$WORK/r_mpo_skin_box.tnlog" \
+  "$WORK/r_mpo_skin_prelude.normalized.tnlog" || {
+  echo "FAIL: the stock MPO declaration changed box geometry or events" >&2
+  diff -u "$WORK/r_mpo_skin_box.tnlog" \
+    "$WORK/r_mpo_skin_prelude.normalized.tnlog" >&2 || true
+  exit 1
+}
 command -v pdftoppm >/dev/null 2>&1 || {
   echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
 }
 for pixel_fixture in \
     k_plane k_skin_pairings r_hull_live r_ink_semantics r_label_turn \
-    r_parallel_lanes r_ring_closure; do
+    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_ring_closure; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -857,6 +878,10 @@ for pixel_fixture in \
     exit 1
   }
 done
+cmp -s "$WORK/r_mpo_skin_box.png" "$WORK/r_mpo_skin_prelude.png" || {
+  echo "FAIL: the stock MPO declaration changed box pixels" >&2
+  exit 1
+}
 grep -Eq '^atom.*\|size=s\|.*\|species=warm($|\|)' \
   "$WORK/r_ink_semantics.tnlog" || {
   echo "FAIL: small warm atom semantics were not recorded" >&2

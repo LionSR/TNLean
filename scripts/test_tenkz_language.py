@@ -8,6 +8,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+import tenkz_language
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,6 +51,16 @@ def compile_event_source(source: str) -> tuple[subprocess.CompletedProcess[str],
 
 def main() -> int:
     run("python3", "scripts/tenkz_language.py", "check")
+    mpo_preludes = [
+        entry.fields
+        for entry in tenkz_language.load_registry()
+        if entry.kind == "prelude" and entry.fields[:2] == ("skin", "mpo")
+    ]
+    if mpo_preludes != [("skin", "mpo", "base=box")]:
+        raise SystemExit("the executable registry lost the stock MPO box declaration")
+    reference = tenkz_language.REFERENCE.read_text(encoding="utf-8")
+    if "Prelude class & Name & Declaration" not in reference or "base=box" not in reference:
+        raise SystemExit("the generated language reference omitted the stock MPO declaration")
     good = compile_source(r"""\documentclass{standalone}
 \usepackage{tenkz}
 \tndeclareatom{\tnphase}{skin=box, ports={west:virtual,east:virtual}}
