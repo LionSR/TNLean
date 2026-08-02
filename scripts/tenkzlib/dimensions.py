@@ -283,6 +283,7 @@ class _OwnerSpan:
     start: int
     end: int
     owner: DimensionOwner | None
+    is_quarantine: bool = False
 
 
 @dataclass(frozen=True)
@@ -546,6 +547,7 @@ def _command_spans(
         name = command.group(1)
         grammar = grammars[name]
         span_owner = grammar.owner
+        is_quarantine = False
         position = _skip_space(source, command.end())
         if name in dynamic_names:
             # The declaration may have collided with a command of unknown
@@ -566,6 +568,7 @@ def _command_spans(
                     # enclosing owner through a guessed command boundary.
                     position = len(source)
                     span_owner = None
+                    is_quarantine = True
                     break
                 position = _skip_space(source, closed)
         else:
@@ -576,6 +579,7 @@ def _command_spans(
                 if closed < 0:
                     position = len(source)
                     span_owner = None
+                    is_quarantine = True
                 else:
                     position = _skip_space(source, closed)
             for _ in range(max(grammar.positional_group_counts)):
@@ -585,11 +589,12 @@ def _command_spans(
                 if closed < 0:
                     position = len(source)
                     span_owner = None
+                    is_quarantine = True
                     break
                 position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
-                command.start(), position, span_owner
+                command.start(), position, span_owner, is_quarantine
             )
         )
     return spans
@@ -719,6 +724,7 @@ def _option_spans(
             continue
         closed = match_group(owner_source, position, "[", "]")
         if closed < 0:
+            spans.append(_OwnerSpan(container.start, len(source), None, True))
             continue
         spans.extend(
             _option_group_spans(
@@ -788,13 +794,17 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     ):
         return DimensionOwner.FRAME
     if re.search(
-        r"\\tn(?:join|wire|edge|arrow)(?![a-z])|\b(?:route|string)\b",
+        r"\\tn(?:join|wire|edge|arrow)"
+        + _TEX_CONTROL_WORD_END
+        + r"|\b(?:route|string)\b",
         lowered,
     ):
         return DimensionOwner.ROUTE
     if re.search(
-        r"\\tnput(?![a-z])|\b(?:composition|layout|width|height|length|radius|"
-        r"diameter|wide|tall|long|thick)\b",
+        r"\\tnput"
+        + _TEX_CONTROL_WORD_END
+        + r"|\b(?:composition|layout|width|height|length|radius|diameter|wide|"
+        r"tall|long|thick)\b",
         lowered,
     ):
         return DimensionOwner.LAYOUT
@@ -864,7 +874,14 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
         + _environment_spans(source, owner_source)
     )
     # A semantic option value is more specific than its containing command.
-    owner_spans.sort(key=lambda span: span.end - span.start)
+    # A malformed remainder has no trustworthy nested grammar, however, so
+    # its neutral quarantine must win over every shorter span inside it.
+    owner_spans.sort(
+        key=lambda span: (
+            0 if span.is_quarantine else 1,
+            span.end - span.start,
+        )
+    )
     comments = _comment_ranges(source)
     occurrences: list[DimensionOccurrence] = []
     for match in DIMENSION_RE.finditer(active.text):

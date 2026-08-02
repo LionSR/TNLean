@@ -552,14 +552,43 @@ def test_rmp_dimension_ownership() -> None:
             )
     unclosed_public_argument = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnarrow{x \tnpic[pitch=41mm \rule{42mm}{43mm}}",
+        r"\tnarrow{x \tnpic[pitch=41mm \tnput{x}{(42mm,0)}{} "
+        r"\rule{43mm}{44mm}}",
     )
-    if len(unclosed_public_argument) != 3 or any(
+    if len(unclosed_public_argument) != 4 or any(
         occurrence.owner is not None for occurrence in unclosed_public_argument
     ):
         raise AssertionError(
             "an unclosed public argument exposed dimensions to an enclosing owner: "
             f"{unclosed_public_argument!r}"
+        )
+    for malformed_nested_source in (
+        r"\tnpic{51mm \tnput{x}{(52mm,0)}{}",
+        r"\tndeclareatom{\tnmalformed}{skin=dot}"
+        r"\tnmalformed[label shift=53mm \tnput{x}{(54mm,0)}{}",
+    ):
+        malformed_nested = scan_case_dimensions(
+            Path("synthetic.tex"), malformed_nested_source
+        )
+        if len(malformed_nested) != 2 or any(
+            occurrence.owner is not None for occurrence in malformed_nested
+        ):
+            raise AssertionError(
+                "a malformed static or dynamic argument exposed nested ownership: "
+                f"source={malformed_nested_source!r}, "
+                f"occurrences={malformed_nested!r}"
+            )
+    unclosed_environment_option = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{x \begin{tenkz}[pitch=45mm \tnput{x}{(46mm,0)}{} "
+        r"\end{tenkz}}",
+    )
+    if len(unclosed_environment_option) != 2 or any(
+        occurrence.owner is not None for occurrence in unclosed_environment_option
+    ):
+        raise AssertionError(
+            "an unclosed environment option exposed nested ownership: "
+            f"{unclosed_environment_option!r}"
         )
     for case_variant in (
         r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
@@ -1115,6 +1144,25 @@ ch=21mm,inline]{\\tn{A}}}
         raise AssertionError(
             f"a comment-split control word gained dimension ownership: {split_owner!r}"
         )
+    for extended_comment_command in (
+        "% \\tnput_extra 47mm\n",
+        "% \\tnjoin@extra 48mm\n",
+        "% \\tnwire:extra 49mm\n",
+        "% \\tnedgeλ 50mm\n",
+    ):
+        comment_dimensions = scan_case_dimensions(
+            Path("synthetic.tex"), extended_comment_command
+        )
+        if (
+            len(comment_dimensions) != 1
+            or comment_dimensions[0].owner is not None
+            or not comment_dimensions[0].in_comment
+        ):
+            raise AssertionError(
+                "an extended comment control word matched a public-command prefix: "
+                f"source={extended_comment_command!r}, "
+                f"occurrences={comment_dimensions!r}"
+            )
     book_spliced_source = "\\setlength\\textwidth{1m% join the unit\n m}\n"
     book_spliced = scan_book_dimensions(Path("book.tex"), book_spliced_source)
     if (
