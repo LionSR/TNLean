@@ -105,7 +105,6 @@ BOOK_LAYOUT_ALLOWLIST: Mapping[Path, int] = {
     Path("docs/tenkz/tenkzrmpbenchmark.sty"): 24,
 }
 
-
 @dataclass(frozen=True)
 class _CommandGrammar:
     """The public xparse shape relevant to dimension ownership."""
@@ -169,6 +168,11 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
         None, (0,), accepts_options=False
     ),
 }
+DIMENSION_COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
+    name: grammar.owner
+    for name, grammar in _COMMAND_GRAMMARS.items()
+    if grammar.owner is not None
+}
 # This is the physical subset of the public option registry, not the current
 # corpus vocabulary.  Plane rise/slant and sheet sep are dimensionless ratios;
 # out/in are angles.  Keeping key spelling and owner in one table prevents a
@@ -186,6 +190,9 @@ _PHYSICAL_OPTION_KEY_OWNERS: Mapping[str, DimensionOwner] = {
     "sheet vector": DimensionOwner.FRAME,
     "label shift": DimensionOwner.LAYOUT,
 }
+DIMENSION_OPTION_OWNERS: Mapping[str, DimensionOwner] = dict(
+    _PHYSICAL_OPTION_KEY_OWNERS
+)
 
 
 def _option_key_pattern(key: str) -> str:
@@ -631,7 +638,14 @@ def _command_spans(
                 else _skip_space(source, arguments[0].end)
             )
         dynamic_spans.append(
-            _OwnerSpan(command.start(), position, None, True)
+            _OwnerSpan(
+                start=command.start(),
+                end=position,
+                owner=None,
+                site_start=command.start(),
+                kind="command",
+                is_quarantine=True,
+            )
         )
 
     spans = list(dynamic_spans)

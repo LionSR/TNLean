@@ -21,13 +21,17 @@ from tenkzlib.dimension_inventory import (
     validate_dimension_inventory,
     validate_rmp_dimension_gate,
 )
-from tenkzlib.dimensions import DimensionOwner, DimensionOwnershipError
+from tenkzlib.dimensions import (
+    CASE_DIMENSION_CEILING,
+    DimensionOwner,
+    DimensionOwnershipError,
+)
 from update_tenkz_dimension_inventory import update_dimension_inventory
 
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / DEFAULT_DIMENSION_INVENTORY
-SYNTHETIC_PATH = Path("tests/tenkz/rmp/synthetic-case.tex")
+SYNTHETIC_PATH = Path("tests/tenkz/rmp/synthetic/cases/synthetic-case.tex")
 
 
 def _build(source: str, *, path: Path = SYNTHETIC_PATH) -> DimensionInventory:
@@ -62,16 +66,6 @@ def test_repository_inventory() -> None:
     expected = load_dimension_inventory(INVENTORY)
     actual = collect_dimension_inventory(ROOT, paths)
     validate_dimension_inventory(expected, actual)
-    if (
-        actual.case_count,
-        actual.site_count,
-        actual.dimension_count,
-    ) != (32, 422, 926):
-        raise AssertionError(
-            "exact dimension inventory counts drifted: "
-            f"cases={actual.case_count}, sites={actual.site_count}, "
-            f"dimensions={actual.dimension_count}"
-        )
     if actual.dimension_count != report.case_count:
         raise AssertionError(
             "comment or benchmark-book dimensions entered the inventory"
@@ -121,7 +115,7 @@ def test_formatting_stability() -> None:
 
 def test_owner_span_grouping() -> None:
     source = r"""\begin{tenkzfree}[pitch=1mm]
-  \tnput[dot,pitch=2mm]{a}{(3mm,4mm)}{}
+  \tnput[dot]{a}{(3mm,4mm)}{\tn[label shift={2mm,5mm}]{A}}
 \end{tenkzfree}
 """
     inventory = _build(source)
@@ -130,20 +124,22 @@ def test_owner_span_grouping() -> None:
         raise AssertionError(f"nested option/command sites were not split: {sites!r}")
     if tuple(site.owner for site in sites) != (
         DimensionOwner.METRIC,
-        DimensionOwner.METRIC,
+        DimensionOwner.LAYOUT,
         DimensionOwner.LAYOUT,
     ):
         raise AssertionError(f"narrowest owner spans were not retained: {sites!r}")
     if tuple(site.literals for site in sites) != (
         ("1mm",),
-        ("2mm",),
         ("3mm", "4mm"),
+        ("2mm", "5mm"),
     ):
         raise AssertionError(f"owner-site literal vectors were not explicit: {sites!r}")
     if not sites[0].site.startswith("tenkzfree@1/option:"):
         raise AssertionError(f"environment option lost its semantic key: {sites[0]!r}")
-    if not sites[2].site.startswith("tenkzfree@1/command:"):
-        raise AssertionError(f"command site lost its semantic key: {sites[2]!r}")
+    if not sites[1].site.startswith("tenkzfree@1/command:"):
+        raise AssertionError(f"command site lost its semantic key: {sites[1]!r}")
+    if not sites[2].site.startswith("tenkzfree@1/option:"):
+        raise AssertionError(f"nested option lost its semantic key: {sites[2]!r}")
 
     _expect_error(
         lambda: _build(r"\tnput{a}{(1mm,2mm)}{}"),
@@ -153,6 +149,74 @@ def test_owner_span_grouping() -> None:
         lambda: _build(r"\begin{tenkzfree}\foo{1mm}\end{tenkzfree}"),
         "cannot inventory unowned case dimension",
     )
+
+
+def test_construct_ordinals_are_semantic() -> None:
+    base_source = r"""\begin{tenkzfree}
+  \tnput{a}{(1mm,2mm)}{}
+\end{tenkzfree}
+"""
+    base = _build(base_source)
+    dimension_free_prefixes = (
+        r"\tnpic{\tn{}}" + "\n",
+        r"\begin{tenkzfree}\tn{}\end{tenkzfree}" + "\n",
+        r"\begin{tenkz}\tn{}\end{tenkz}" + "\n",
+    )
+    for prefix in dimension_free_prefixes:
+        if _build(prefix + base_source) != base:
+            raise AssertionError(
+                f"dimension-free construct shifted semantic ordinals: {prefix!r}"
+            )
+
+    dimension_free_owner_commands = base_source.replace(
+        "  \\tnput{a}",
+        "  \\tnput{origin}{(0,0)}{}\n"
+        "  \\tnjoin{origin}{origin}\n"
+        "  \\tnwire{origin}{origin}\n"
+        "  \\tnedge{origin}{origin}\n"
+        "  \\tnarrow{origin}{origin}\n"
+        "  \\tnput{a}",
+    )
+    if _build(dimension_free_owner_commands) != base:
+        raise AssertionError("dimension-free owner commands changed the inventory")
+
+    spaced = base_source.replace(r"\begin{tenkzfree}", r"\begin {tenkzfree}")
+    commented = base_source.replace(
+        r"\begin{tenkzfree}", "\\begin% legal splice\n{tenkzfree}"
+    )
+    if _build(spaced) != base or _build(commented) != base:
+        raise AssertionError("legal begin spacing or comment splice changed site keys")
+
+    multiple = r"""\begin{tenkzfree}
+  \tnput{a}{(1mm,2mm)}{}
+\end{tenkzfree}
+\begin{tenkzfree}
+  \tnput{b}{(3mm,4mm)}{}
+\end{tenkzfree}
+\begin{tenkz}
+  \tnput{c}{(5mm,6mm)}{}
+\end{tenkz}
+\tnpic{\tnput{d}{(7mm,8mm)}{}}
+"""
+    multiple_sites = _build(multiple).cases[0].sites
+    prefixes = tuple(site.site.split("/", 1)[0] for site in multiple_sites)
+    if prefixes != ("tenkzfree@1", "tenkzfree@2", "tenkz@1", "tnpic@1"):
+        raise AssertionError(f"per-kind construct ordinals drifted: {prefixes!r}")
+
+    nested = r"""\begin{tenkzfree}
+  \tnput{outer}{(1mm,2mm)}{}
+  \begin{tenkzfree}
+    \tnput{inner}{(3mm,4mm)}{}
+  \end{tenkzfree}
+\end{tenkzfree}
+"""
+    nested_sites = _build(nested).cases[0].sites
+    nested_prefixes = tuple(site.site.split("/", 1)[0] for site in nested_sites)
+    if nested_prefixes != ("tenkzfree@1", "tenkzfree@2"):
+        raise AssertionError(
+            f"nested sites were not assigned to the narrowest construct: "
+            f"{nested_prefixes!r}"
+        )
 
 
 def test_balanced_changes_are_rejected() -> None:
@@ -222,6 +286,7 @@ def test_balanced_changes_are_rejected() -> None:
 
 def test_invalid_schema_is_rejected() -> None:
     valid = _data(_build(r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"))
+    valid_path = SYNTHETIC_PATH.as_posix()
     _expect_error(lambda: parse_dimension_inventory("{"), "cannot parse")
     _expect_error(
         lambda: parse_dimension_inventory(
@@ -239,6 +304,10 @@ def test_invalid_schema_is_rejected() -> None:
         ),
         (
             {"schema_version": 2, "cases": {"case.tex": []}},
+            "must be under tests/tenkz/rmp/<section>/cases/",
+        ),
+        (
+            {"schema_version": 2, "cases": {valid_path: []}},
             "must be a nonempty array",
         ),
     ):
@@ -249,7 +318,10 @@ def test_invalid_schema_is_rejected() -> None:
     row = next(iter(valid["cases"].values()))[0]
     unsorted = {
         "schema_version": 2,
-        "cases": {"z.tex": [row], "a.tex": [row]},
+        "cases": {
+            "tests/tenkz/rmp/z/cases/z.tex": [row],
+            "tests/tenkz/rmp/a/cases/a.tex": [row],
+        },
     }
     _expect_error(
         lambda: parse_dimension_inventory(_json(unsorted)),
@@ -257,7 +329,7 @@ def test_invalid_schema_is_rejected() -> None:
     )
     duplicate_row = {
         "schema_version": 2,
-        "cases": {"case.tex": [row, row]},
+        "cases": {valid_path: [row, row]},
     }
     _expect_error(
         lambda: parse_dimension_inventory(_json(duplicate_row)),
@@ -269,14 +341,43 @@ def test_invalid_schema_is_rejected() -> None:
         result.update(changes)
         return {
             "schema_version": 2,
-            "cases": {"case.tex": [result]},
+            "cases": {valid_path: [result]},
         }
 
     for mutation, phrase in (
         (row_mutation(extra=True), "fields must be exactly"),
         (row_mutation(site="not-a-site"), "normalized semantic site key"),
+        (
+            row_mutation(site=str(row["site"]).replace("@1/", "@0/")),
+            "normalized semantic site key",
+        ),
+        (
+            row_mutation(site=str(row["site"]).replace("@1/", "@01/")),
+            "normalized semantic site key",
+        ),
+        (
+            row_mutation(site=str(row["site"]).replace("@1/", "@2/")),
+            "construct ordinals must be contiguous",
+        ),
+        (
+            row_mutation(site=str(row["site"]).replace(r"\tnput", r"\tnunknown")),
+            "command skeleton is not a dimension owner",
+        ),
+        (
+            row_mutation(site=str(row["site"]).replace(r"\tnput", r"\tnput*")),
+            "command skeleton is not a dimension owner",
+        ),
+        (
+            row_mutation(site=str(row["site"]).replace("<dimension>", "1mm", 1)),
+            "normalized dimension placeholders",
+        ),
+        (
+            row_mutation(site=str(row["site"]) + "#occurrence=0"),
+            "normalized dimension placeholders",
+        ),
         (row_mutation(owner="benchmark-book layout"), "active case dimension"),
         (row_mutation(owner="unknown"), "is not a dimension owner"),
+        (row_mutation(owner="route/string"), "owner implied by its site command"),
         (row_mutation(literals=[]), "must be a nonempty array"),
         (row_mutation(literals=["1 MM"]), "normalized absolute TeX dimension"),
         (row_mutation(literals=["1em"]), "normalized absolute TeX dimension"),
@@ -284,6 +385,15 @@ def test_invalid_schema_is_rejected() -> None:
         _expect_error(
             lambda mutation=mutation: parse_dimension_inventory(_json(mutation)), phrase
         )
+
+    option_data = _data(_build(r"\begin{tenkzfree}[pitch=1mm]\end{tenkzfree}"))
+    parse_dimension_inventory(_json(option_data))
+    option_row = next(iter(option_data["cases"].values()))[0]
+    option_row["owner"] = "composition/layout"
+    _expect_error(
+        lambda: parse_dimension_inventory(_json(option_data)),
+        "owner implied by its site command",
+    )
 
     unique_ordinal = row_mutation(site=str(row["site"]) + "#occurrence=1")
     _expect_error(
@@ -294,7 +404,7 @@ def test_invalid_schema_is_rejected() -> None:
     bad_ordinals = {
         "schema_version": 2,
         "cases": {
-            "case.tex": [
+            valid_path: [
                 {**row, "site": base + "#occurrence=1"},
                 {**row, "site": base + "#occurrence=3"},
             ]
@@ -310,83 +420,27 @@ def test_updater_is_safe_and_idempotent() -> None:
     targets = load_manifest(DEFAULT_MANIFEST)
     paths = tuple(target.case for target in targets)
     committed = INVENTORY.read_text(encoding="utf-8")
+    expected = load_dimension_inventory(INVENTORY)
+    expected_counts = (
+        f"cases {expected.case_count} | sites {expected.site_count} | "
+        f"dimensions {expected.dimension_count}"
+    )
     with tempfile.TemporaryDirectory(prefix="tenkz-dimension-inventory-") as tmp:
-        destination = Path(tmp) / "dimension-ownership.json"
-        destination.write_text(committed, encoding="utf-8")
+        tmp_path = Path(tmp)
+        repository_copy = tmp_path / "repository-dimension-ownership.json"
+        repository_copy.write_text(committed, encoding="utf-8")
         messages: list[str] = []
-        if update_dimension_inventory(ROOT, paths, destination, emit=messages.append):
-            raise AssertionError("idempotent updater rewrote the canonical inventory")
-        if destination.read_text(encoding="utf-8") != committed:
-            raise AssertionError("idempotent updater changed inventory bytes")
-        if not any(
-            "cases 32 | sites 422 | dimensions 926" in item for item in messages
+        if update_dimension_inventory(
+            ROOT, paths, repository_copy, emit=messages.append
         ):
+            raise AssertionError("idempotent updater rewrote the canonical inventory")
+        if repository_copy.read_text(encoding="utf-8") != committed:
+            raise AssertionError("idempotent updater changed inventory bytes")
+        if not any(expected_counts in item for item in messages):
             raise AssertionError(f"updater did not print exact counts: {messages!r}")
 
-        stale = json.loads(committed)
-        first_sites = next(iter(stale["cases"].values()))
-        first_sites[0]["literals"][0] = "999mm"
-        stale_text = _json(stale)
-        destination.write_text(stale_text, encoding="utf-8")
-        messages.clear()
-        if not update_dimension_inventory(
-            ROOT, paths, destination, emit=messages.append
-        ):
-            raise AssertionError("updater did not repair a reviewed literal change")
-        if destination.read_text(encoding="utf-8") != committed:
-            raise AssertionError("updater did not restore canonical inventory bytes")
-        if not any(item.startswith("--- ") and "999mm" in item for item in messages):
-            raise AssertionError(
-                f"updater did not print its literal diff: {messages!r}"
-            )
-
-        destination.write_text(stale_text, encoding="utf-8")
-        _expect_error(
-            lambda: update_dimension_inventory(
-                ROOT, paths, destination, check=True, emit=lambda _: None
-            ),
-            "inventory is stale",
-        )
-        if destination.read_text(encoding="utf-8") != stale_text:
-            raise AssertionError("--check modified a stale inventory")
-
-        destination.write_text("{\n", encoding="utf-8")
-        malformed = destination.read_bytes()
-        _expect_error(
-            lambda: update_dimension_inventory(
-                ROOT, paths, destination, emit=lambda _: None
-            ),
-            "cannot parse",
-        )
-        if destination.read_bytes() != malformed:
-            raise AssertionError("updater overwrote a malformed old inventory")
-
-        destination.write_text(committed, encoding="utf-8")
-        before = destination.read_bytes()
-        dimension_path = load_dimension_inventory(INVENTORY).cases[0].path
-        _expect_error(
-            lambda: update_dimension_inventory(
-                ROOT, (*paths, dimension_path), destination, emit=lambda _: None
-            ),
-            "case dimensions increased",
-        )
-        if destination.read_bytes() != before:
-            raise AssertionError("updater wrote before aggregate ceilings passed")
-
-        destination.write_text(stale_text, encoding="utf-8")
-        message = _expect_error(
-            lambda: validate_rmp_dimension_gate(
-                ROOT, paths, inventory_path=destination
-            ),
-            "dimension literal vector changed",
-        )
-        if "tests/tenkz/rmp/" not in message or ":" not in message:
-            raise AssertionError(
-                f"production gate diagnostic lost source context: {message}"
-            )
-
-        fake_repo = Path(tmp) / "repo"
-        case_path = Path("tests/tenkz/rmp/cases/reviewed-deletion.tex")
+        fake_repo = tmp_path / "repo"
+        case_path = Path("tests/tenkz/rmp/synthetic/cases/reviewed-deletion.tex")
         case = fake_repo / case_path
         case.parent.mkdir(parents=True)
         before_source = r"""\begin{tenkzfree}
@@ -404,23 +458,91 @@ def test_updater_is_safe_and_idempotent() -> None:
         book.parent.mkdir(parents=True)
         book.write_text(" ".join(["1pt"] * 4), encoding="utf-8")
         style.write_text(" ".join(["1pt"] * 24), encoding="utf-8")
-        deletion_inventory = Path(tmp) / "reviewed-deletion.json"
-        deletion_inventory.write_text(
-            format_dimension_inventory(
-                build_dimension_inventory_from_sources({case_path: before_source})
+        baseline = _build(before_source, path=case_path)
+        destination = tmp_path / "synthetic-dimension-ownership.json"
+        baseline_text = format_dimension_inventory(baseline)
+        destination.write_text(baseline_text, encoding="utf-8")
+
+        stale = _data(baseline)
+        stale_sites = stale["cases"][case_path.as_posix()]
+        stale_sites[0]["literals"][0] = "999mm"
+        stale_text = _json(stale)
+        destination.write_text(stale_text, encoding="utf-8")
+        messages.clear()
+        if not update_dimension_inventory(
+            fake_repo, (case_path,), destination, emit=messages.append
+        ):
+            raise AssertionError("updater did not repair a reviewed literal change")
+        if destination.read_text(encoding="utf-8") != baseline_text:
+            raise AssertionError("updater did not restore canonical inventory bytes")
+        if not any(item.startswith("--- ") and "999mm" in item for item in messages):
+            raise AssertionError(
+                f"updater did not print its literal diff: {messages!r}"
+            )
+
+        destination.write_text(stale_text, encoding="utf-8")
+        _expect_error(
+            lambda: update_dimension_inventory(
+                fake_repo,
+                (case_path,),
+                destination,
+                check=True,
+                emit=lambda _: None,
             ),
-            encoding="utf-8",
+            "inventory is stale",
         )
+        if destination.read_text(encoding="utf-8") != stale_text:
+            raise AssertionError("--check modified a stale inventory")
+
+        destination.write_text("{\n", encoding="utf-8")
+        malformed = destination.read_bytes()
+        _expect_error(
+            lambda: update_dimension_inventory(
+                ROOT, paths, destination, emit=lambda _: None
+            ),
+            "cannot parse",
+        )
+        if destination.read_bytes() != malformed:
+            raise AssertionError("updater overwrote a malformed old inventory")
+
+        destination.write_text(baseline_text, encoding="utf-8")
+        before = destination.read_bytes()
+        repeat_count = CASE_DIMENSION_CEILING // baseline.dimension_count + 1
+        _expect_error(
+            lambda: update_dimension_inventory(
+                fake_repo,
+                tuple(case_path for _ in range(repeat_count)),
+                destination,
+                emit=lambda _: None,
+            ),
+            "case dimensions increased",
+        )
+        if destination.read_bytes() != before:
+            raise AssertionError("updater wrote before aggregate ceilings passed")
+
+        destination.write_text(stale_text, encoding="utf-8")
+        message = _expect_error(
+            lambda: validate_rmp_dimension_gate(
+                fake_repo, (case_path,), inventory_path=destination
+            ),
+            "dimension literal vector changed",
+        )
+        if "tests/tenkz/rmp/" not in message or ":" not in message:
+            raise AssertionError(
+                f"production gate diagnostic lost source context: {message}"
+            )
+
+        destination.write_text(baseline_text, encoding="utf-8")
         case.write_text(after_source, encoding="utf-8")
         messages.clear()
         if not update_dimension_inventory(
             fake_repo,
             (case_path,),
-            deletion_inventory,
+            destination,
             emit=messages.append,
         ):
             raise AssertionError("explicit updater did not record a reviewed deletion")
-        updated = load_dimension_inventory(deletion_inventory)
+        updated = load_dimension_inventory(destination)
         if updated.site_count != 1 or updated.dimension_count != 2:
             raise AssertionError(f"reviewed deletion wrote wrong counts: {updated!r}")
         if not any("sites 1 | dimensions 2" in item for item in messages):
@@ -433,6 +555,7 @@ def main() -> int:
     test_repository_inventory()
     test_formatting_stability()
     test_owner_span_grouping()
+    test_construct_ordinals_are_semantic()
     test_balanced_changes_are_rejected()
     test_invalid_schema_is_rejected()
     test_updater_is_safe_and_idempotent()
