@@ -19,6 +19,7 @@ SOAK_MARKER = "<!-- tenkz-soak-entries: append below only while enforcement=arme
 FREEZE_TAG_RE = re.compile(r"tenkz-v0\.9\.(?:0|[1-9][0-9]*)")
 FINAL_TAG = "tenkz-v1.0.0"
 SHA_RE = re.compile(r"[0-9a-f]{40}")
+SHA256_RE = re.compile(r"[0-9a-f]{64}")
 ENTRY_ID_RE = re.compile(r"S1-[0-9]{4}")
 PR_REF_RE = re.compile(r"#[1-9][0-9]*")
 ISSUE_REF_RE = PR_REF_RE
@@ -64,6 +65,7 @@ EXPECTED_POLICY = {
         "frozen_twin_precedent": "quantikz/quantikz2",
         "maintainer_identity": "github:lionsr",
         "signer_identity_scheme": "github:lowercase-login",
+        "reviewer_repository_permissions": ["push", "maintain", "admin"],
         "tag_immutability": "github-ruleset-no-update-delete-or-bypass",
         "release_manifest_pattern": "docs/tenkz/releases/TAG.toml",
         "release_package_metadata": "tex/tenkz/tenkz.sty",
@@ -77,6 +79,11 @@ EXPECTED_POLICY = {
         "release_test_support_root": "tests/tenkz/release-support",
         "release_test_support_tree": "pending",
         "release_test_data_roots": ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"],
+        "release_enforcement_workflows": [".github/workflows/pr-ci.yml"],
+        "release_workflow_dependencies": "transitive-immutable-git-sha-or-content-digest",
+        "release_reset_replay_schema": (
+            "tests/tenkz/release-support/reset-replay-v1.schema.json"
+        ),
         "release_test_dependency_contract": "pinned-code-support-declared-subject-data",
         "release_test_protocol": "hermetic-repository-view-no-shell-or-network",
     },
@@ -157,6 +164,7 @@ class ReviewEvidence:
     submitted_at: datetime | None
     commit_oid: str | None
     dismissed: bool | None = False
+    repository_permission: str | None = None
 
 
 @dataclass(frozen=True)
@@ -202,12 +210,19 @@ class RecordDiffEvidence:
     integration_parent_is_release_integration: bool | None = None
     validated_release_integration: str | None = None
     validated_work_integrations: tuple[str, ...] | None = None
+    candidate_main_tip_is_receipt_integration: bool | None = None
+    integration_parent_is_receipt_integration: bool | None = None
+    validated_receipt_integration: str | None = None
 
 
 @dataclass(frozen=True)
 class WorkDiffEvidence:
     """Facts derived from the complete immutable merge-base-to-head work diff."""
 
+    validated_pr_ref: str | None
+    validated_head_oid: str | None
+    validated_integration_oid: str | None
+    validated_freeze_integration: str | None
     complete: bool | None
     integration_parent_count: int | None
     unique_merge_base: bool | None
@@ -244,6 +259,9 @@ class ReleaseContract:
     test_support_root: str
     test_support_tree: str
     test_data_roots: tuple[str, ...]
+    enforcement_workflows: tuple[str, ...]
+    workflow_dependency_contract: str
+    reset_replay_schema: str
     test_dependency_contract: str
     test_protocol: str
 
@@ -311,6 +329,8 @@ class TagEvidence:
     object_type: str | None
     commit: str | None
     patch_is_fresh_for_attempt: bool | None = None
+    namespace_complete: bool | None = None
+    patch_exceeds_other_namespace_tags: bool | None = None
     exists: bool | None = True
     validated_entry_id: str | None = None
     validated_record_pr: str | None = None
@@ -331,6 +351,55 @@ class AuditEvidence:
     invalid_entries: tuple[str, ...] | None
     snapshot_complete: bool | None
     validation_target_exact: bool | None
+    validation_target_oid: str | None
+
+
+@dataclass(frozen=True)
+class RecordInvalidResetReplayEvidence:
+    """Durable receipt-blob evidence for one ``record-invalid`` reset."""
+
+    validated_entry_id: str | None
+    validated_target_entry_id: str | None
+    validated_receipt_pr: str | None
+    validated_receipt_head_oid: str | None
+    validated_receipt_integration_oid: str | None
+    complete: bool | None
+    receipt_candidate_main_tip_exact: bool | None
+    changes_exactly_one_new_regular_blob: bool | None
+    receipt_path: str | None
+    raw_blob_sha256: str | None
+    raw_blob_read_from_receipt_integration: bool | None
+    schema_path: str | None
+    schema_support_tree_oid: str | None
+    schema_from_pinned_support_tree: bool | None
+    schema_closed_and_valid: bool | None
+    boundary_entry_id: str | None
+    validation_target_oid: str | None
+    raw_invalid_entries: tuple[str, ...] | None
+    pending_breaking_target: str | None
+    normalized_resolver_inputs_complete_and_matching: bool | None
+    workflow_dependency_closure_pinned: bool | None
+    supervisor_receipts_complete_and_matching: bool | None
+    current_candidate_snapshot_reproduces_receipt: bool | None
+
+
+@dataclass(frozen=True)
+class WorkflowEvidence:
+    """Pinned enforcement-workflow facts for one exact validation target."""
+
+    validated_activation_integration: str | None
+    validated_target_oid: str | None
+    validated_paths: tuple[str, ...] | None
+    complete: bool | None
+    activation_paths_are_regular_blobs: bool | None
+    target_blobs_and_modes_match_activation: bool | None
+    local_dependencies_pinned_and_matching: bool | None
+    external_dependencies_use_full_commit_shas: bool | None
+    containers_use_content_digests: bool | None
+    dependency_graph_complete_and_acyclic: bool | None
+    candidate_diff_untouched: bool | None
+    github_checks_bind_exact_head_and_workflows: bool | None
+    supervisor_receipt_complete_and_matching: bool | None
 
 
 @dataclass(frozen=True)
@@ -352,6 +421,7 @@ class ActivationDiffEvidence:
     subject_data_cannot_reduce_coverage: bool | None
     hermetic_execution_contract_valid: bool | None
     supervisor_self_test_receipt_valid: bool | None
+    enforcement_workflows_pinned: bool | None
     policy_digest_matches: bool | None
     ledger_prefix_matches: bool | None
 
@@ -406,11 +476,41 @@ ResolveReplayReleasePayload = Callable[[str, str, ReleaseContract], ReleasePaylo
 ResolveReplayFreezeTag = Callable[[str], TagEvidence]
 ResolveCurrentFinalTag = Callable[[str], TagEvidence]
 ResolveReplayIssue = Callable[[str], IssueEvidence]
+ResolveReplayRecordInvalidReset = Callable[
+    [str, str, str, str], RecordInvalidResetReplayEvidence
+]
+ResolveCurrentWorkflow = Callable[[str, str, tuple[str, ...]], WorkflowEvidence]
 
 
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise PolicyError(message)
+
+
+def closed_value_matches(actual: object, expected: object) -> bool:
+    """Compare a closed schema without Python's bool/int numeric coercions."""
+
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return set(actual) == set(expected) and all(  # type: ignore[arg-type]
+            closed_value_matches(actual[key], value)  # type: ignore[index]
+            for key, value in expected.items()
+        )
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(  # type: ignore[arg-type]
+            closed_value_matches(item, wanted)
+            for item, wanted in zip(actual, expected, strict=True)  # type: ignore[arg-type]
+        )
+    return actual == expected
+
+
+def integration_parent_count(value: object, subject: str) -> int:
+    require(
+        isinstance(value, int) and not isinstance(value, bool) and value in {1, 2},
+        f"{subject} has an invalid parent count",
+    )
+    return value
 
 
 def fenced_blocks(text: str, label: str) -> list[str]:
@@ -462,7 +562,10 @@ def validate_policy_mapping(policy: dict) -> dict:
         normalized["policy"]["release_test_inventory_sha256"] = "pending"
         normalized["policy"]["release_test_code_tree"] = "pending"
         normalized["policy"]["release_test_support_tree"] = "pending"
-    require(normalized == EXPECTED_POLICY, "tenkz-policy-v1 differs from the signed policy")
+    require(
+        closed_value_matches(normalized, EXPECTED_POLICY),
+        "tenkz-policy-v1 differs from the signed policy",
+    )
     return policy
 
 
@@ -514,7 +617,10 @@ def validate_soak_mapping(soak: dict) -> dict:
         normalized["soak"]["enforcement"] = "pending"
         normalized["soak"]["policy_sha256"] = "pending"
         normalized["soak"]["armed_by_pr"] = "pending"
-    require(normalized == EXPECTED_SOAK, "tenkz-soak-v1 differs from the signed schema")
+    require(
+        closed_value_matches(normalized, EXPECTED_SOAK),
+        "tenkz-soak-v1 differs from the signed schema",
+    )
     return soak
 
 
@@ -571,6 +677,12 @@ def sha(value: object, field: str, entry_id: str) -> str:
     return result
 
 
+def sha256(value: object, field: str, entry_id: str) -> str:
+    result = nonempty_string(value, field, entry_id)
+    require(SHA256_RE.fullmatch(result) is not None, f"{entry_id} has invalid {field}")
+    return result
+
+
 def pr_ref(value: object, field: str, entry_id: str) -> str:
     result = nonempty_string(value, field, entry_id)
     require(PR_REF_RE.fullmatch(result) is not None, f"{entry_id} has invalid {field}")
@@ -610,7 +722,15 @@ def utc_instant(value: object, field: str) -> datetime:
 
 def policy_rules(
     policy: dict,
-) -> tuple[int, tuple[str, ...], tuple[str, ...], list[str], ReleaseContract, str]:
+) -> tuple[
+    int,
+    tuple[str, ...],
+    tuple[str, ...],
+    list[str],
+    ReleaseContract,
+    str,
+    tuple[str, ...],
+]:
     validate_policy_mapping(policy)
     root = policy.get("policy")
     require(isinstance(root, dict), "policy evidence lacks [policy]")
@@ -641,6 +761,11 @@ def policy_rules(
         root.get("signer_identity_scheme") == "github:lowercase-login",
         "policy has the wrong signer identity scheme",
     )
+    reviewer_permissions = root.get("reviewer_repository_permissions")
+    require(
+        reviewer_permissions == ["push", "maintain", "admin"],
+        "policy has the wrong reviewer permission set",
+    )
     require(
         root.get("tag_immutability") == "github-ruleset-no-update-delete-or-bypass",
         "policy has the wrong tag-immutability model",
@@ -658,6 +783,9 @@ def policy_rules(
         test_support_root=str(root.get("release_test_support_root", "")),
         test_support_tree=str(root.get("release_test_support_tree", "")),
         test_data_roots=tuple(root.get("release_test_data_roots", ())),
+        enforcement_workflows=tuple(root.get("release_enforcement_workflows", ())),
+        workflow_dependency_contract=str(root.get("release_workflow_dependencies", "")),
+        reset_replay_schema=str(root.get("release_reset_replay_schema", "")),
         test_dependency_contract=str(root.get("release_test_dependency_contract", "")),
         test_protocol=str(root.get("release_test_protocol", "")),
     )
@@ -672,6 +800,9 @@ def policy_rules(
             contract.test_code_root,
             contract.test_support_root,
             contract.test_data_roots,
+            contract.enforcement_workflows,
+            contract.workflow_dependency_contract,
+            contract.reset_replay_schema,
             contract.test_dependency_contract,
             contract.test_protocol,
         )
@@ -685,6 +816,9 @@ def policy_rules(
             "scripts",
             "tests/tenkz/release-support",
             ("tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"),
+            (".github/workflows/pr-ci.yml",),
+            "transitive-immutable-git-sha-or-content-digest",
+            "tests/tenkz/release-support/reset-replay-v1.schema.json",
             "pinned-code-support-declared-subject-data",
             "hermetic-repository-view-no-shell-or-network",
         ),
@@ -719,6 +853,7 @@ def policy_rules(
         prerequisites,
         contract,
         maintainer_identity.removeprefix("github:"),
+        tuple(reviewer_permissions),
     )
 
 
@@ -729,7 +864,10 @@ def validate_entry_shape(entry: dict, index: int) -> tuple[str, str, int, str]:
     require(entry_id == expected_id, f"expected entry id {expected_id}, found {entry_id}")
     kind = nonempty_string(entry.get("kind"), "kind", entry_id)
     require(kind in ENTRY_KINDS, f"{entry_id} has unknown kind {kind}")
-    require(set(entry) == FIELDS_BY_KIND[kind], f"{entry_id} {kind} fields differ from schema")
+    expected_fields = FIELDS_BY_KIND[kind]
+    if kind == "reset" and entry.get("cause") == "record-invalid":
+        expected_fields = expected_fields | {"replay_receipt_pr", "replay_receipt_sha256"}
+    require(set(entry) == expected_fields, f"{entry_id} {kind} fields differ from schema")
     record_pr = pr_ref(entry["record_pr"], "record_pr", entry_id)
     attempt = entry["attempt"]
     require(
@@ -860,15 +998,17 @@ def inspect_record_pr(
     integration = pr.merge_commit_oid
     integration_valid = isinstance(integration, str) and SHA_RE.fullmatch(integration) is not None
     check(integration_valid, f"{record_ref} merge commit is invalid")
-    check(
-        diff.integration_parent_count in {1, 2},
-        f"{record_ref} integration has an invalid parent count",
+    parent_count_valid = (
+        isinstance(diff.integration_parent_count, int)
+        and not isinstance(diff.integration_parent_count, bool)
+        and diff.integration_parent_count in {1, 2}
     )
+    check(parent_count_valid, f"{record_ref} integration has an invalid parent count")
     check(
         diff.integration_parent_is_ancestor_of_head is True,
         f"{record_ref} integration parent is not an ancestor of the record head",
     )
-    if diff.integration_parent_count == 2:
+    if parent_count_valid and diff.integration_parent_count == 2:
         check(
             diff.integration_second_parent_matches_head is True,
             f"{record_ref} integration second parent differs from the record head",
@@ -934,6 +1074,7 @@ def require_independent_approval(
     before: datetime | None = None,
     named_reviewer: str | None = None,
     distinct_from: Collection[str] = (),
+    authorized_permissions: Collection[str],
 ) -> tuple[str, datetime]:
     latest = latest_effective_reviews(pr, pr_name)
     candidates = latest.items()
@@ -945,13 +1086,17 @@ def require_independent_approval(
         submitted = utc_instant(review.submitted_at, f"{pr_name} review submittedAt")
         if review.state != "APPROVED" or review.commit_oid != pr.head_oid:
             continue
+        if review.repository_permission not in authorized_permissions:
+            continue
         if after is not None and submitted <= after:
             continue
         if before is not None and submitted >= before:
             continue
         return reviewer, submitted
     qualifier = f" by {named_reviewer}" if named_reviewer is not None else ""
-    raise PolicyError(f"{pr_name} lacks an independent exact-head approval{qualifier}")
+    raise PolicyError(
+        f"{pr_name} lacks a repository-authorized independent exact-head approval{qualifier}"
+    )
 
 
 def validate_release_payload(
@@ -1073,6 +1218,60 @@ def validate_tag_protection(evidence: TagProtectionEvidence) -> None:
     require(evidence.unambiguous is True, "applicable tag protection is ambiguous")
 
 
+def validate_workflow_evidence(
+    evidence: WorkflowEvidence,
+    *,
+    activation_integration: str,
+    target_oid: str,
+    workflow_paths: tuple[str, ...],
+) -> None:
+    """Bind enforcement results to pinned workflow bytes and dependencies."""
+
+    require(
+        evidence.validated_activation_integration == activation_integration,
+        "workflow evidence used another activation integration",
+    )
+    require(evidence.validated_target_oid == target_oid, "workflow evidence used another target")
+    require(evidence.validated_paths == workflow_paths, "workflow evidence used another path set")
+    require(evidence.complete is True, "workflow evidence is incomplete")
+    require(
+        evidence.activation_paths_are_regular_blobs is True,
+        "activation enforcement workflow is not a regular blob",
+    )
+    require(
+        evidence.target_blobs_and_modes_match_activation is True,
+        "enforcement workflow bytes or modes differ from activation",
+    )
+    require(
+        evidence.local_dependencies_pinned_and_matching is True,
+        "local workflow dependency differs from its activation object",
+    )
+    require(
+        evidence.external_dependencies_use_full_commit_shas is True,
+        "external workflow dependency uses a mutable ref",
+    )
+    require(
+        evidence.containers_use_content_digests is True,
+        "workflow container dependency is not content-addressed",
+    )
+    require(
+        evidence.dependency_graph_complete_and_acyclic is True,
+        "workflow dependency graph is incomplete or cyclic",
+    )
+    require(
+        evidence.candidate_diff_untouched is True,
+        "candidate diff changes a pinned enforcement workflow",
+    )
+    require(
+        evidence.github_checks_bind_exact_head_and_workflows is True,
+        "GitHub checks are not bound to the exact head and pinned workflows",
+    )
+    require(
+        evidence.supervisor_receipt_complete_and_matching is True,
+        "independent evidence-supervisor receipt is incomplete or mismatched",
+    )
+
+
 def validate_entries(
     entries: list[dict],
     *,
@@ -1087,6 +1286,8 @@ def validate_entries(
     resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
     resolve_current_final_tag: ResolveCurrentFinalTag | None = None,
     resolve_replay_issue: ResolveReplayIssue | None = None,
+    resolve_replay_record_invalid_reset: ResolveReplayRecordInvalidReset | None = None,
+    resolve_current_workflow: ResolveCurrentWorkflow | None = None,
     audit: AuditEvidence | None = None,
     tag_protection: TagProtectionEvidence | None = None,
 ) -> str:
@@ -1107,6 +1308,7 @@ def validate_entries(
         prerequisites,
         release_contract,
         maintainer_login,
+        reviewer_permissions,
     ) = policy_rules(policy)
     validate_soak_mapping(soak)
     enforcement = policy["policy"]["enforcement"]
@@ -1131,35 +1333,18 @@ def validate_entries(
     require(audit is not None, "entry validation requires complete audit evidence")
     require(audit.snapshot_complete is True, "audit snapshot is incomplete")
     require(audit.validation_target_exact is True, "audit validation target is not exact")
+    validation_target_oid = audit.validation_target_oid
+    require(
+        isinstance(validation_target_oid, str)
+        and SHA_RE.fullmatch(validation_target_oid) is not None,
+        "audit validation target OID is missing or malformed",
+    )
     activation_ref = pr_ref(soak_root["armed_by_pr"], "armed_by_pr", "soak")
 
     shaped = [validate_entry_shape(entry, index) for index, entry in enumerate(entries, 1)]
     record_refs = [shape[3] for shape in shaped]
     require(len(record_refs) == len(set(record_refs)), "record_pr values must be distinct")
     record_ref_set = set(record_refs)
-    final_tag = resolve_current_final_tag(FINAL_TAG)
-    require(isinstance(final_tag.exists, bool), "final-tag existence is unavailable")
-
-    def validate_absent_final_tag() -> None:
-        require(final_tag.exists is False, "final tag exists before successful sign-off")
-        require(
-            final_tag.object_id is None
-            and final_tag.object_type is None
-            and final_tag.commit is None
-            and final_tag.patch_is_fresh_for_attempt is None
-            and final_tag.validated_entry_id is None
-            and final_tag.validated_record_pr is None
-            and final_tag.commit_is_validated_record_integration is None,
-            "absent final-tag evidence is inconsistent",
-        )
-
-    def finish_pending(state: str) -> str:
-        assert tag_protection is not None
-        validate_tag_protection(tag_protection)
-        validate_absent_final_tag()
-        return state
-
-    terminal_tag_present = final_tag.exists is True
 
     require(resolve_replay_pr is not None, "entry validation requires replay PR evidence")
     require(
@@ -1182,6 +1367,18 @@ def validate_entries(
         resolve_replay_issue is not None,
         "entry validation requires replay issue evidence",
     )
+    require(
+        resolve_current_workflow is not None,
+        "entry validation requires current workflow evidence",
+    )
+    if any(
+        shape[1] == "reset" and entry.get("cause") == "record-invalid"
+        for entry, shape in zip(entries, shaped)
+    ):
+        require(
+            resolve_replay_record_invalid_reset is not None,
+            "record-invalid reset validation requires historical placement evidence",
+        )
     if any(shape[1] == "sign-off" for shape in shaped):
         require(
             resolve_replay_release_prep is not None,
@@ -1216,6 +1413,31 @@ def validate_entries(
             all(entry_positions[target] <= drift_boundary for target in invalid_set),
             "audit boundary precedes an invalid target",
         )
+    require(
+        drift_boundary in {len(shaped), max(0, len(shaped) - 1)},
+        "audit boundary is stale rather than the actual final live prefix",
+    )
+    for reset_index, (entry, shape) in enumerate(zip(entries, shaped)):
+        entry_id, kind, _attempt, _record_ref = shape
+        if kind != "reset" or entry.get("cause") != "record-invalid":
+            continue
+        if entry_id not in invalid_set:
+            continue
+        target = nonempty_string(entry.get("target"), "target", entry_id)
+        later_valid_acknowledgement = any(
+            later_shape[1] == "reset"
+            and later_entry.get("cause") == "record-invalid"
+            and later_entry.get("target") == target
+            and later_shape[0] not in invalid_set
+            for later_entry, later_shape in zip(
+                entries[reset_index + 1 :],
+                shaped[reset_index + 1 :],
+            )
+        )
+        require(
+            later_valid_acknowledgement or target in invalid_set,
+            f"{entry_id} invalid acknowledgement does not uncover {target}",
+        )
     # The audit channel has replayed every current mutable fact.  Before tag
     # creation, its classified drift enters the ordered reset queue.  Once any
     # final-tag ref exists, the same drift is a hard release incident and never
@@ -1237,11 +1459,38 @@ def validate_entries(
         for entry, shape in zip(entries, shaped)
         if shape[1] == "sign-off"
     ]
+    replay_receipt_refs = [
+        pr_ref(entry["replay_receipt_pr"], "replay_receipt_pr", shape[0])
+        for entry, shape in zip(entries, shaped)
+        if shape[1] == "reset" and entry.get("cause") == "record-invalid"
+    ]
     require(
         len(release_prep_refs) == len(set(release_prep_refs)),
         "release_prep_pr values must be distinct",
     )
     require(len(all_work_refs) == len(set(all_work_refs)), "work_pr values must be distinct")
+    require(
+        len(replay_receipt_refs) == len(set(replay_receipt_refs)),
+        "replay_receipt_pr values must be distinct",
+    )
+    replay_receipt_ref_set = set(replay_receipt_refs)
+    for receipt_ref in replay_receipt_refs:
+        require(
+            receipt_ref != activation_ref,
+            f"replay receipt PR {receipt_ref} is the activation PR",
+        )
+        require(
+            receipt_ref not in source_ref_set,
+            f"replay receipt PR {receipt_ref} is a source PR",
+        )
+        require(
+            receipt_ref not in record_ref_set,
+            f"replay receipt PR {receipt_ref} is an entry record PR",
+        )
+        require(
+            receipt_ref not in release_prep_refs,
+            f"replay receipt PR {receipt_ref} is a release-preparation PR",
+        )
     for work_ref in all_work_refs:
         require(work_ref != activation_ref, f"work PR {work_ref} is the activation PR")
         require(work_ref not in source_ref_set, f"work PR {work_ref} is a source PR")
@@ -1249,6 +1498,10 @@ def validate_entries(
         require(
             work_ref not in release_prep_refs,
             f"work PR {work_ref} is a release-preparation PR",
+        )
+        require(
+            work_ref not in replay_receipt_ref_set,
+            f"work PR {work_ref} is a replay receipt PR",
         )
     for release_ref in release_prep_refs:
         require(
@@ -1262,6 +1515,10 @@ def validate_entries(
         require(
             release_ref not in record_ref_set,
             f"release-preparation PR {release_ref} is an entry record PR",
+        )
+        require(
+            release_ref not in replay_receipt_ref_set,
+            f"release-preparation PR {release_ref} is a replay receipt PR",
         )
 
     activation = resolve_replay_pr(activation_ref, None)
@@ -1325,6 +1582,10 @@ def validate_entries(
         "activation supervisor self-test receipt is invalid",
     )
     require(
+        activation_diff.enforcement_workflows_pinned is True,
+        "activation enforcement workflows or dependencies are not pinned",
+    )
+    require(
         activation_diff.policy_digest_matches is True,
         "activation policy digest is wrong",
     )
@@ -1338,7 +1599,6 @@ def validate_entries(
         require_descendant=False,
         require_tree=True,
     )
-    del activation_merged_at
     activation_merger = normalized_login(activation.merged_by_login, f"{activation_ref} mergedBy")
     require(
         activation_merger == maintainer_login,
@@ -1350,16 +1610,66 @@ def validate_entries(
         author=activation_author,
         before=utc_instant(activation.merged_at, f"{activation_ref} mergedAt"),
         distinct_from={maintainer_login},
+        authorized_permissions=reviewer_permissions,
     )
+
+    final_tag_cache: TagEvidence | None = None
+
+    def current_final_tag() -> TagEvidence:
+        nonlocal final_tag_cache
+        if final_tag_cache is None:
+            final_tag_cache = resolve_current_final_tag(FINAL_TAG)
+            require(
+                isinstance(final_tag_cache.exists, bool),
+                "final-tag existence is unavailable",
+            )
+        return final_tag_cache
+
+    def validate_current_controls() -> None:
+        assert tag_protection is not None and resolve_current_workflow is not None
+        validate_workflow_evidence(
+            resolve_current_workflow(
+                activation_integration,
+                validation_target_oid,
+                release_contract.enforcement_workflows,
+            ),
+            activation_integration=activation_integration,
+            target_oid=validation_target_oid,
+            workflow_paths=release_contract.enforcement_workflows,
+        )
+        validate_tag_protection(tag_protection)
+
+    def validate_absent_final_tag() -> None:
+        final_tag = current_final_tag()
+        require(final_tag.exists is False, "final tag exists before successful sign-off")
+        require(
+            final_tag.object_id is None
+            and final_tag.object_type is None
+            and final_tag.commit is None
+            and final_tag.patch_is_fresh_for_attempt is None
+            and final_tag.namespace_complete is None
+            and final_tag.patch_exceeds_other_namespace_tags is None
+            and final_tag.validated_entry_id is None
+            and final_tag.validated_record_pr is None
+            and final_tag.commit_is_validated_record_integration is None,
+            "absent final-tag evidence is inconsistent",
+        )
+
+    def finish_pending(state: str) -> str:
+        validate_current_controls()
+        validate_absent_final_tag()
+        return state
 
     seen: dict[str, dict] = {}
     seen_attempts: dict[str, int] = {}
     active: dict | None = None
     last_attempt = 0
     last_record_integration: str | None = activation_integration
+    last_ledger_record_merged_at: datetime | None = activation_merged_at
     last_reset_integration: str | None = None
     prior_patch = -1
     pending_reset: tuple[str, str] | None = None
+    deferred_invalid_targets: list[str] = []
     signed = False
     successful_signoff: tuple[str, str, str] | None = None
     used_source_refs: set[str] = set()
@@ -1367,12 +1677,29 @@ def validate_entries(
     used_tag_names: set[str] = set()
     used_tag_objects: set[str] = set()
 
+    def activate_current_record_queue() -> None:
+        nonlocal pending_reset, signed
+        if pending_reset is not None:
+            return
+        if drift_targets:
+            pending_reset = ("record-invalid", drift_targets[0])
+        elif deferred_invalid_targets:
+            pending_reset = ("record-invalid", deferred_invalid_targets[0])
+        if pending_reset is not None:
+            signed = False
+
     for index, (entry, shape) in enumerate(zip(entries, shaped), start=1):
         entry_id, kind, attempt, record_ref = shape
-        if index > drift_boundary and drift_targets and pending_reset is None:
-            pending_reset = ("record-invalid", drift_targets[0])
-            signed = False
-        require(not signed, f"{entry_id} appears after final sign-off")
+        if index > drift_boundary:
+            activate_current_record_queue()
+        if signed:
+            require(
+                kind == "correction"
+                or (kind == "reset" and entry.get("cause") == "record-invalid"),
+                f"{entry_id} appears after final sign-off",
+            )
+            if kind == "reset":
+                signed = False
         if pending_reset is not None and kind != "correction":
             require(kind == "reset", f"{pending_reset[1]} must be followed by its reset")
 
@@ -1420,6 +1747,17 @@ def validate_entries(
         record_merged_at = inspection.merged_at
         record_integration = inspection.integration
         record_invalid_reasons = list(inspection.invalid_reasons)
+        if index == len(entries):
+            expected_boundary = index - 1 if record_pending else index
+            require(
+                drift_boundary == expected_boundary,
+                "audit boundary is stale rather than the actual final live prefix",
+            )
+            if record_pending:
+                require(
+                    validation_target_oid == record.head_oid,
+                    f"{entry_id} candidate audit targets another head",
+                )
 
         def check_kind_record_fact(condition: bool, message: str) -> None:
             if condition:
@@ -1511,6 +1849,7 @@ def validate_entries(
                     source_ref,
                     author=source_author,
                     before=source_time,
+                    authorized_permissions=reviewer_permissions,
                 )
                 require(
                     source_integration == source_sha,
@@ -1529,7 +1868,16 @@ def validate_entries(
                 )
                 require(
                     tag.patch_is_fresh_for_attempt is True,
-                    f"{entry_id} freeze PATCH does not exceed abandoned tags",
+                    f"{entry_id} freeze PATCH does not exceed earlier freeze entries",
+                )
+                require(
+                    tag.namespace_complete is True,
+                    f"{entry_id} freeze tag namespace is incompletely paginated",
+                )
+                require(
+                    tag.patch_exceeds_other_namespace_tags is True,
+                    f"{entry_id} freeze PATCH does not exceed abandoned tags "
+                    "or other namespace tags",
                 )
                 payload_blobs = validate_release_payload(
                     resolve_replay_release_payload(source_sha, tag_name, release_contract),
@@ -1612,7 +1960,7 @@ def validate_entries(
 
             def work_external_facts() -> tuple[datetime, str]:
                 work_pr = resolve_replay_pr(work_ref, active["freeze_integration"])
-                work_author, _work_head = validate_pr_core(work_pr, work_ref)
+                work_author, work_head = validate_pr_core(work_pr, work_ref)
                 work_merged_at, work_integration = validate_merged_pr(
                     work_pr,
                     work_ref,
@@ -1628,12 +1976,29 @@ def validate_entries(
                     work_ref,
                     author=work_author,
                     before=work_merged_at,
+                    authorized_permissions=reviewer_permissions,
                 )
                 work_diff = resolve_replay_work_diff(work_ref)
-                require(work_diff.complete is True, f"{entry_id} work diff is incomplete")
                 require(
-                    work_diff.integration_parent_count in {1, 2},
-                    f"{entry_id} work integration has an invalid parent count",
+                    work_diff.validated_pr_ref == work_ref,
+                    f"{entry_id} work diff was validated on another PR",
+                )
+                require(
+                    work_diff.validated_head_oid == work_head,
+                    f"{entry_id} work diff was not validated at its exact head",
+                )
+                require(
+                    work_diff.validated_integration_oid == work_integration,
+                    f"{entry_id} work diff used another integration",
+                )
+                require(
+                    work_diff.validated_freeze_integration == active["freeze_integration"],
+                    f"{entry_id} work diff used another freeze integration",
+                )
+                require(work_diff.complete is True, f"{entry_id} work diff is incomplete")
+                work_parent_count = integration_parent_count(
+                    work_diff.integration_parent_count,
+                    f"{entry_id} work integration",
                 )
                 require(
                     work_diff.unique_merge_base is True,
@@ -1643,7 +2008,7 @@ def validate_entries(
                     work_diff.integration_parent_is_ancestor_of_head is True,
                     f"{entry_id} work integration parent is not an ancestor of its head",
                 )
-                if work_diff.integration_parent_count == 2:
+                if work_parent_count == 2:
                     require(
                         work_diff.integration_second_parent_matches_head is True,
                         f"{entry_id} work integration second parent differs from its head",
@@ -1735,6 +2100,14 @@ def validate_entries(
             if not entry_is_invalid():
                 assert isinstance(work_result, tuple)
                 work_merged_at, work_integration = work_result
+                assert record_merged_at is not None
+                check_kind_record_fact(
+                    record_merged_at > work_merged_at,
+                    f"{entry_id} evidence record did not merge after its work PR",
+                )
+            if not entry_is_invalid():
+                assert isinstance(work_result, tuple)
+                work_merged_at, work_integration = work_result
                 active["work"][work_class] = {
                     "entry_id": entry_id,
                     "pr": work_ref,
@@ -1781,21 +2154,215 @@ def validate_entries(
                     seen_attempts[target] == attempt,
                     f"{entry_id} breaking reset target is in another attempt",
                 )
-            require(
-                pending_reset == (cause, target),
-                f"{entry_id} does not match the required reset",
-            )
+            historical_record_reset = cause == "record-invalid" and index <= drift_boundary
+            if cause == "record-invalid":
+                assert resolve_replay_record_invalid_reset is not None
+                receipt_ref = pr_ref(entry["replay_receipt_pr"], "replay_receipt_pr", entry_id)
+                receipt_digest = sha256(
+                    entry["replay_receipt_sha256"],
+                    "replay_receipt_sha256",
+                    entry_id,
+                )
+
+                def replay_receipt_facts() -> tuple[list[str], str | None, str]:
+                    receipt_pr = resolve_replay_pr(receipt_ref, last_record_integration)
+                    receipt_author, receipt_head = validate_pr_core(receipt_pr, receipt_ref)
+                    receipt_time, receipt_integration = validate_merged_pr(
+                        receipt_pr,
+                        receipt_ref,
+                        require_descendant=False,
+                        require_tree=True,
+                    )
+                    require(
+                        normalized_login(receipt_pr.merged_by_login, f"{receipt_ref} mergedBy")
+                        == maintainer_login,
+                        f"{receipt_ref} was not merged by github:{maintainer_login}",
+                    )
+                    require_independent_approval(
+                        receipt_pr,
+                        receipt_ref,
+                        author=receipt_author,
+                        before=receipt_time,
+                        distinct_from={maintainer_login},
+                        authorized_permissions=reviewer_permissions,
+                    )
+                    if record_merged_at is not None:
+                        require(
+                            record_merged_at > receipt_time,
+                            f"{entry_id} reset record did not merge after its receipt PR",
+                        )
+                    require(
+                        last_ledger_record_merged_at is not None
+                        and receipt_time > last_ledger_record_merged_at,
+                        f"{entry_id} receipt PR did not merge after its ledger boundary",
+                    )
+                    replay = resolve_replay_record_invalid_reset(
+                        entry_id,
+                        target,
+                        receipt_ref,
+                        receipt_digest,
+                    )
+                    require(
+                        replay.validated_entry_id == entry_id,
+                        f"{entry_id} reset receipt used another entry",
+                    )
+                    require(
+                        replay.validated_target_entry_id == target,
+                        f"{entry_id} reset receipt used another target",
+                    )
+                    require(
+                        replay.validated_receipt_pr == receipt_ref,
+                        f"{entry_id} reset receipt used another PR",
+                    )
+                    require(
+                        replay.validated_receipt_head_oid == receipt_head,
+                        f"{entry_id} reset receipt used another exact head",
+                    )
+                    require(
+                        replay.validated_receipt_integration_oid == receipt_integration,
+                        f"{entry_id} reset receipt used another integration",
+                    )
+                    require(replay.complete is True, f"{entry_id} reset receipt is incomplete")
+                    require(
+                        replay.receipt_candidate_main_tip_exact is True,
+                        f"{entry_id} receipt PR did not target the exact current main tip",
+                    )
+                    require(
+                        replay.changes_exactly_one_new_regular_blob is True,
+                        f"{entry_id} receipt PR changes more than its new regular blob",
+                    )
+                    expected_path = f"docs/tenkz/soak-replay/{receipt_ref[1:]}.json"
+                    require(
+                        replay.receipt_path == expected_path,
+                        f"{entry_id} reset receipt has the wrong path",
+                    )
+                    require(
+                        replay.raw_blob_sha256 == receipt_digest,
+                        f"{entry_id} reset receipt blob digest differs from the entry",
+                    )
+                    require(
+                        replay.raw_blob_read_from_receipt_integration is True,
+                        f"{entry_id} reset receipt was not read from its reachable integration",
+                    )
+                    require(
+                        replay.schema_path == release_contract.reset_replay_schema,
+                        f"{entry_id} reset receipt used another schema",
+                    )
+                    require(
+                        replay.schema_support_tree_oid == release_contract.test_support_tree,
+                        f"{entry_id} reset receipt used another support tree",
+                    )
+                    require(
+                        replay.schema_from_pinned_support_tree is True,
+                        f"{entry_id} reset receipt schema is not from the pinned support tree",
+                    )
+                    require(
+                        replay.schema_closed_and_valid is True,
+                        f"{entry_id} reset receipt does not satisfy the closed schema",
+                    )
+                    expected_boundary = shaped[index - 2][0]
+                    require(
+                        replay.boundary_entry_id == expected_boundary,
+                        f"{entry_id} reset receipt used another pre-reset prefix",
+                    )
+                    require(
+                        replay.validation_target_oid == receipt_head,
+                        f"{entry_id} reset receipt used an inexact validation target",
+                    )
+                    replay_invalid = replay.raw_invalid_entries
+                    require(
+                        isinstance(replay_invalid, tuple)
+                        and all(isinstance(item, str) for item in replay_invalid),
+                        f"{entry_id} reset receipt raw-invalid queue is missing",
+                    )
+                    replay_list = list(replay_invalid)
+                    require(
+                        len(replay_list) == len(set(replay_list)),
+                        f"{entry_id} reset receipt raw-invalid queue has duplicates",
+                    )
+                    require(
+                        all(item in seen for item in replay_list),
+                        f"{entry_id} reset receipt names a non-prefix entry",
+                    )
+                    require(
+                        replay_list == sorted(replay_list, key=entry_positions.__getitem__),
+                        f"{entry_id} reset receipt queue is not in ledger order",
+                    )
+                    breaking_target = replay.pending_breaking_target
+                    actual_breaking_target = (
+                        pending_reset[1]
+                        if pending_reset is not None
+                        and pending_reset[0] == "breaking-required"
+                        else None
+                    )
+                    require(
+                        breaking_target == actual_breaking_target,
+                        f"{entry_id} reset receipt has the wrong pending breaking target",
+                    )
+                    require(
+                        replay.normalized_resolver_inputs_complete_and_matching is True,
+                        f"{entry_id} reset receipt resolver inputs are incomplete or mismatched",
+                    )
+                    require(
+                        replay.workflow_dependency_closure_pinned is True,
+                        f"{entry_id} reset receipt workflow closure is not pinned",
+                    )
+                    require(
+                        replay.supervisor_receipts_complete_and_matching is True,
+                        f"{entry_id} reset receipt supervisor results are incomplete or mismatched",
+                    )
+                    require(
+                        replay.current_candidate_snapshot_reproduces_receipt is True,
+                        f"{entry_id} reset candidate no longer reproduces its receipt",
+                    )
+                    return replay_list, breaking_target, receipt_integration
+
+                receipt_result = check_external(replay_receipt_facts)
+                if isinstance(receipt_result, tuple):
+                    replay_list, breaking_target, receipt_integration = receipt_result
+                    check_kind_record_fact(
+                        diff.validated_receipt_integration == receipt_integration,
+                        f"{entry_id} record diff used another receipt integration",
+                    )
+                    check_kind_record_fact(
+                        diff.candidate_main_tip_is_receipt_integration is True,
+                        f"{entry_id} candidate base differs from receipt integration",
+                    )
+                    if not record_pending:
+                        check_kind_record_fact(
+                            diff.integration_parent_is_receipt_integration is True,
+                            f"{entry_id} integration parent differs from receipt integration",
+                        )
+                    receipt_required = (
+                        ("breaking-required", breaking_target)
+                        if breaking_target is not None
+                        else (("record-invalid", replay_list[0]) if replay_list else None)
+                    )
+                    if historical_record_reset:
+                        require(
+                            receipt_required == (cause, target),
+                            f"{entry_id} does not match its durable historical reset receipt",
+                        )
+                    else:
+                        require(
+                            pending_reset == (cause, target) == receipt_required,
+                            f"{entry_id} does not match its current reset receipt",
+                        )
+            else:
+                require(
+                    pending_reset == (cause, target),
+                    f"{entry_id} does not match the required reset",
+                )
             nonempty_string(entry["reason"], "reason", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
             if record_pending:
                 return finish_pending("reset-pending")
             if not entry_is_invalid():
-                if cause == "record-invalid" and drift_targets:
-                    require(
-                        target == drift_targets[0],
-                        f"{entry_id} does not reset the earliest drifted record",
-                    )
-                    drift_targets.pop(0)
+                if cause == "record-invalid":
+                    if drift_targets and target == drift_targets[0]:
+                        drift_targets.pop(0)
+                    if target in deferred_invalid_targets:
+                        deferred_invalid_targets.remove(target)
                 pending_reset = None
                 last_reset_integration = record_integration
                 active = None
@@ -1864,6 +2431,7 @@ def validate_entries(
                     release_ref,
                     author=release_author,
                     before=release_merged_at,
+                    authorized_permissions=reviewer_permissions,
                 )
                 release = resolve_replay_release_prep(
                     release_ref,
@@ -1891,9 +2459,9 @@ def validate_entries(
                     f"{entry_id} release preparation used other work integrations",
                 )
                 require(release.complete is True, f"{entry_id} release diff is incomplete")
-                require(
-                    release.integration_parent_count in {1, 2},
-                    f"{entry_id} release integration has an invalid parent count",
+                release_parent_count = integration_parent_count(
+                    release.integration_parent_count,
+                    f"{entry_id} release integration",
                 )
                 require(
                     release.unique_merge_base is True,
@@ -1903,7 +2471,7 @@ def validate_entries(
                     release.integration_parent_is_ancestor_of_head is True,
                     f"{entry_id} release parent is not an ancestor of its head",
                 )
-                if release.integration_parent_count == 2:
+                if release_parent_count == 2:
                     require(
                         release.integration_second_parent_matches_head is True,
                         f"{entry_id} release second parent differs from its head",
@@ -1957,21 +2525,6 @@ def validate_entries(
                         head_blobs == release_payload_blobs,
                         f"{entry_id} sign-off head changed the prepared payload blobs",
                     )
-                    freeze_blobs = validate_release_payload(
-                        resolve_replay_release_payload(
-                            source_sha,
-                            active["freeze_tag"],
-                            release_contract,
-                        ),
-                        tree_oid=source_sha,
-                        tag=active["freeze_tag"],
-                        contract=release_contract,
-                        subject=f"{entry_id} active freeze",
-                    )
-                    require(
-                        freeze_blobs == active["freeze_payload_blobs"],
-                        f"{entry_id} active freeze payload blobs changed",
-                    )
 
                 check_external(signoff_payload_facts)
             require(
@@ -1995,6 +2548,7 @@ def validate_entries(
                         before=before,
                         named_reviewer=reviewer,
                         distinct_from={maintainer_login},
+                        authorized_permissions=reviewer_permissions,
                     )
                 )
             unresolved = sorted(
@@ -2050,17 +2604,19 @@ def validate_entries(
 
         if record_integration is not None and not entry_is_invalid():
             last_record_integration = record_integration
+        if record_merged_at is not None:
+            last_ledger_record_merged_at = record_merged_at
         seen[entry_id] = entry
         seen_attempts[entry_id] = attempt
         if entry_is_invalid():
             require(not record_pending, f"{entry_id} cannot be invalid before merge")
-            pending_reset = ("record-invalid", entry_id)
+            if entry_id not in deferred_invalid_targets:
+                deferred_invalid_targets.append(entry_id)
 
-    if drift_targets and pending_reset is None:
-        pending_reset = ("record-invalid", drift_targets[0])
-        signed = False
-    assert tag_protection is not None
-    validate_tag_protection(tag_protection)
+    activate_current_record_queue()
+    validate_current_controls()
+    final_tag = current_final_tag()
+    terminal_tag_present = final_tag.exists is True
     if terminal_tag_present and pending_reset is not None:
         raise PolicyError("final tag exists while release evidence requires reset")
     if terminal_tag_present and not signed:
