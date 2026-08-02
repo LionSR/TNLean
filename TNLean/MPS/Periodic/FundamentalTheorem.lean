@@ -21,8 +21,9 @@ in its equal-case strengthening:
   if two non-repeated block families satisfy a supplied periodic-overlap
   hypothesis, their blocks match bijectively up to `RepeatedBlocks`. Source
   theorem `thm:bd` instead assumes proportionality of the assembled MPV
-  families; the multiplicity-bearing deduction of the supplied hypothesis is
-  not complete.
+  families. The deduction of the supplied hypothesis is proved for literal
+  multiplicity-bearing families of normalized periodic blocks; transport from
+  the source's unnormalized blocks remains incomplete.
 
 * **Supporting lemmas for the equal-case theorem `thm:bdequal`**: The equal-case
   strengthening produces per-block Z-gauge data (diagonal Z with Z^m = 1) from the
@@ -44,8 +45,9 @@ forms:
   Callers only need to supply per-block `IsPeriodic` data
   plus the existence of non-decaying cross-family overlaps
   (`exists_nondecaying_A/B`). The companion module `ProportionalOverlap`
-  derives these witnesses from nonzero proportionality only for the explicitly
-  restricted scalar-weight irreducible-form representation.
+  derives these witnesses from nonzero proportionality for literal
+  multiplicity-bearing families of normalized periodic blocks, and also for
+  the more restrictive scalar-weight irreducible-form representation.
 
   The overlap dichotomy, including the full-cycle contraction with \(F_u\),
   \(\Omega_u\), and the phases \(\kappa_v\), is proved in
@@ -150,8 +152,9 @@ non-decay, leaving the repeated-block alternative.
 
 The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encode the
 paper's content that proportional total MPVs force non-vanishing per-block overlaps.
-They are derived for scalar-weight irreducible forms in
-`PeriodicOverlapHypothesis.ofIsIrreducibleForm`.
+The companion `ProportionalOverlap` module derives them both for literal
+multiplicity-bearing normalized periodic forms and for scalar-weight
+irreducible-form witnesses.
 
 All branches of `periodicOverlapDichotomy` are proved in the split overlap development:
 `SelfOverlap` supplies the cyclic-sector setup, `NoSectorMatch` supplies the decay route,
@@ -309,10 +312,11 @@ The single-block proportional-to-equal reduction is now split explicitly.
 step, and `peripheralProportionalCase_periodicFT_of_rootFromRescaling` shows that,
 once this step is available, the exact-MPV theorem
 `peripheralProportionalCase_periodicFT_of_sameMPV₂Pos` yields the repeated-block
-conclusion for different bond dimensions. The companion theorem
-`PeriodicOverlapHypothesis.ofIsIrreducibleForm` supplies the multi-block
-non-decaying cross-overlap hypotheses for scalar-weight irreducible-form
-representations. The multiplicity-matrix version of the source theorem remains
+conclusion for different bond dimensions. The companion module
+`ProportionalOverlap` supplies the multi-block non-decaying cross-overlap
+hypotheses for literal multiplicity-bearing normalized periodic forms, with
+`PeriodicOverlapHypothesis.ofIsIrreducibleForm` as a scalar-weight
+specialization. Transport from the source's unnormalized blocks remains
 separate, as recorded in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
 
