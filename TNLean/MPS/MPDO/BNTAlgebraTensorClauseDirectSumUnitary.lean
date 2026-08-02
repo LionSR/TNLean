@@ -16,10 +16,10 @@ unitary sector conjugacies determines mutually inverse maps between the two
 finite sums of simple matrix algebras. The maps are completely positive and
 preserve the sum of the block traces.
 
-The unitary sector conjugacies are supplied as a hypothesis.  Their
-unconditional construction is the preceding open step in Appendix C.4.  The
-ambient retractions, normalized multiplicity embeddings, and physical maps
-are not constructed here.
+The unitary sector conjugacies are supplied as a hypothesis in this file.
+Their construction from the tensor-attached algebra clause is given in
+`BNTAlgebraTensorClauseReflectedTarget`.  The ambient retractions, normalized
+multiplicity embeddings, and physical maps are developed separately.
 
 These are the middle conjugations in the converse implication of Appendix
 C.4, lines 2069 and 2080. They are distinct from the transported direct-sum
@@ -69,8 +69,9 @@ abbrev RelabeledTwoSiteSectorAlgebra (S : TwoSiteExactSectorGauge H) :=
 /-- Unitary conjugacies between the paired one-site and two-site BNT sectors.
 
 **Scope restriction (supplied unitary sector conjugacies):** The structure
-records the unitary conclusion of Appendix C.4, line 2057, as a hypothesis.
-Its derivation from the tensor-attached algebra clause remains open; see
+records the unitary conclusion of Appendix C.4, line 2057, as data.  Its
+derivation from the tensor-attached algebra clause is supplied by the
+mixed-prefix comparison documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/

@@ -27,6 +27,7 @@ import TNLean.MPS.MPDO.BNTAlgebraTensorClauseDirectSumUnitary
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseIdentityPhysicalSpan
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseOneSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseReflectedTarget
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseTwoSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAssociativity
@@ -82,6 +83,7 @@ import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
 import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
+import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVGroupedFigureEight
@@ -271,6 +273,7 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
+import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction

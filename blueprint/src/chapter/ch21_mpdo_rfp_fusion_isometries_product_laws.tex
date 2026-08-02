@@ -349,6 +349,70 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     gives the tensor-attached algebra clause.
 \end{proof}
 
+\begin{theorem}[BNT characterizations of MPDO renormalization fixed points]
+    \label{thm:mpdo_cpsv_bnt_rfp_equivalence}
+    \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}
+    \lean{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts,
+        def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
+    canonical form.  Consider the following conditions:
+    \begin{enumerate}
+        \item[(i)] $M$ is a renormalization fixed point;
+        \item[(ii)] $M$ has a tensor-attached BNT algebra clause;
+        \item[(iii$_{\mathrm{act}}$)] $M$ has the active-support BNT fusion
+            clause.
+    \end{enumerate}
+    Then
+    \begin{align}
+        \textnormal{(i)}&\iff\textnormal{(ii)},
+        &
+        \textnormal{(i)}&\iff\textnormal{(iii}_{\mathrm{act}}\textnormal{)}.
+        \label{eq:mpdo_cpsv_bnt_rfp_equivalence}
+    \end{align}
+    The first equivalence is the equivalence of (i) and (ii) in
+    \cite[Theorem~4.14, lines~972--985]{Cirac2016MPDO_arXiv}.  The second is
+    the corrected active-support form corresponding to the printed
+    conditions (i) and (iii), rather than an assertion of the unrestricted
+    printed condition (iii).
+
+    \textbf{Scope restriction (active product BNT):} Only nonzero product
+    corners occur in (iii$_{\mathrm{act}}$); a sector absent from a fixed
+    product pair has zero fusion multiplicity.  This is recorded in
+    \path{docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex}.
+
+    \textbf{Local fix (fixed-pair support and coisometry):} A fixed pair may
+    have empty active support, and the retained-row fusion map is a
+    coisometry.  These points are recorded in
+    \path{docs/paper-gaps/cpsv16_figure11_per_pair_support.tex} and
+    \path{docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex}.
+
+    \textbf{Local fix (mixed one-site/two-site prefix):} The implication
+    (ii)$\Rightarrow$(i) uses the marked comparison recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+
+    \textbf{Local fix (zero-sector complement):} The physical maps in
+    (ii)$\Rightarrow$(i) are completed on the discarded complements as
+    recorded in
+    \path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,
+        thm:mpdo_bnt_fusion_tensor_to_algebra_tensor,
+        thm:mpdo_bnt_algebra_tensor_to_rfp}
+    A renormalization fixed point has the active-support fusion clause by
+    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}.  Such a
+    fusion clause gives the tensor-attached algebra clause by
+    Theorem~\ref{thm:mpdo_bnt_fusion_tensor_to_algebra_tensor}.  Finally, the
+    algebra clause gives a renormalization fixed point by
+    Theorem~\ref{thm:mpdo_bnt_algebra_tensor_to_rfp}.  These three
+    implications prove both equivalences in
+    (\ref{eq:mpdo_cpsv_bnt_rfp_equivalence}).
+\end{proof}
+
 \begin{figure}[ht]
     \centering
     % Writing Q_N for the N-site operator and r=N-1, the recursion is

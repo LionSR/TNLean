@@ -14,10 +14,10 @@ reflected target gives a unitary conjugacy.  Selecting these unitaries
 simultaneously and applying the physical trace-preserving completely positive
 maps gives the renormalization identities of Definition 4.1.
 
-The positive-tail reflected targets remain assumptions.  Their derivation from
-the tensor-attached algebra product law, literal CPSV canonical form, and MPDO
-positivity is the remaining step in the implication (ii) to (i) of Theorem
-4.14.
+The declarations in this file retain the positive-tail reflected targets as
+hypotheses.  Their derivation from the tensor-attached algebra product law,
+literal CPSV canonical form, and MPDO positivity is given in
+`BNTAlgebraTensorClauseReflectedTarget`.
 
 ## Main results
 
@@ -69,10 +69,10 @@ noncomputable def UnitarySectorConjugacy.ofPositiveTailReflectedTarget
 trace-preserving completely positive maps and the two renormalization
 identities of Definition 4.1.
 
-**Scope restriction (conditional reflected targets):** The reflected-target
-identities are assumed rather than derived from the tensor-attached algebra
-product law.  Thus this theorem does not prove the unconditional implication
-(ii) to (i) of Theorem 4.14.  See
+**Scope restriction (conditional reflected targets):** This theorem assumes
+the reflected-target identities.  The unconditional implication (ii) to (i)
+of Theorem 4.14 is obtained by deriving these identities through the
+mixed-prefix comparison documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 **Local fix (zero-sector complement):** The physical channels used here have
