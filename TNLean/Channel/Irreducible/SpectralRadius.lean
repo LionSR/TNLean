@@ -28,6 +28,8 @@ for irreducible completely positive maps on `M_D(ℂ)`.
   is `r`.
 * `spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp`:
   the same statement as a real-valued identity.
+* `peripheralEigenvalues_similarityMap_eq`: peripheral eigenvalues are
+  invariant under the positive-congruence similarity used for Perron gauges.
 * `IsPrimitive.similarityMap_iff`: primitivity is invariant under the
   positive-congruence similarity used for Perron gauges.
 
@@ -98,6 +100,27 @@ theorem spectralRadius_similarityMap_eq
     rw [hspec_left, hspec_alg, hspec_right]
   change spectralRadius ℂ (Φ (similarityMap (D := D) C E)) = spectralRadius ℂ (Φ E)
   rw [spectralRadius, spectralRadius, hspec]
+
+/-- Peripheral eigenvalues are invariant under the congruence similarity
+`X ↦ C⁻¹ * E (C * X * Cᴴ) * (Cᴴ)⁻¹`.
+
+Source context: the normalization in arXiv:1708.00029, lines 313--332 uses this bond-space
+similarity to pass from irreducible blocks to trace-preserving irreducible blocks without
+rescaling them. The spectral invariance is the finite-dimensional similarity step in M. Wolf,
+*Quantum Channels & Operations: Guided Tour*, Section 6.2, Theorem 6.3 [Wolf2012QChannels]. -/
+theorem peripheralEigenvalues_similarityMap_eq
+    (C : Matrix (Fin D) (Fin D) ℂ) (hC : C.det ≠ 0)
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    peripheralEigenvalues (similarityMap (D := D) C E) = peripheralEigenvalues E := by
+  have hsim :
+      similarityMap (D := D) C E =
+        (Matrix.congruenceLinearEquiv C hC).symm.conj E := by
+    apply LinearMap.ext
+    intro X
+    ext i j
+    simp [similarityMap, LinearEquiv.conj_apply, Matrix.mul_assoc]
+  rw [hsim]
+  exact peripheralEigenvalues_conj (Matrix.congruenceLinearEquiv C hC).symm E
 
 /-- Peripheral-spectrum primitivity is invariant under the positive-congruence
 similarity used to change Kraus gauges. -/

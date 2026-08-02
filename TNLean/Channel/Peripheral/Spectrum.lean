@@ -26,6 +26,8 @@ the eigenvalues on the unit circle.
 
 ## Main results
 
+* `matrix_dim_ne_zero_of_spectralRadius_eq_one` — spectral radius one forces
+  positive matrix dimension
 * `one_mem_peripheralEigenvalues` — 1 is a peripheral eigenvalue
 * `peripheralEigenvalues_finite` — peripheral eigenvalues are finite
 * `isRootOfUnity_of_finite_powers` — pigeonhole for roots of unity
@@ -62,6 +64,19 @@ def peripheralEigenvalues {V : Type*} [AddCommGroup V] [Module ℂ V]
   {μ : ℂ | Module.End.HasEigenvalue f μ ∧ ‖μ‖ = 1}
 
 /-! ## Part 2: Basic properties -/
+
+/-- A continuous endomorphism of square matrices with spectral radius one has
+positive matrix dimension.
+
+If the matrix dimension were zero, then the endomorphism algebra would be
+subsingleton and every endomorphism would have spectral radius zero. -/
+theorem matrix_dim_ne_zero_of_spectralRadius_eq_one
+    (T : Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hT : spectralRadius ℂ T = 1) : D ≠ 0 := by
+  intro hD
+  subst D
+  rw [spectrum.SpectralRadius.of_subsingleton] at hT
+  exact zero_ne_one hT
 
 section PeripheralBasic
 
