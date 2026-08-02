@@ -124,6 +124,7 @@ The scalar and reference types are closed:
 | `sha256` | exactly 64 lowercase hexadecimal digits |
 | `identity` | `github:lowercase-login` |
 | `tag` | a nonempty tag name in the `tenkz-v*` namespace |
+| `test-ref` | the exact `id` of a test in the pinned release-test inventory |
 | `text` | a nonempty TOML string |
 | `attempt` | a positive TOML integer |
 | `entry-kind` | one of the seven entry-kind headings below |
@@ -220,6 +221,7 @@ paths, malformed declarations, or disagreement fails closed.
 
 The inventory is a TOML document with `schema = 1` and one or more `[[test]]`
 tables. Each test has exactly `id` (a unique lowercase hyphenated identifier),
+`surfaces` (a nonempty duplicate-free list drawn from `tex-api` and `tnlog`),
 `runner` (exactly `python3` or `bash`), `path` (a normalized regular file below
 `scripts/` with the matching `.py` or `.sh` suffix), `args` (a list of nonempty
 argument strings), `data_paths` (a duplicate-free list of normalized subject
@@ -279,6 +281,14 @@ payload receipt.
 `validate-release-payload(K, Q)` means checking this complete manifest,
 canonical-artifact, pinned-inventory, both pinned test trees, dependency
 boundary, and test contract in Git tree `K` for tag `Q`.
+
+`observe-release-test(K, Q, R)` performs those same manifest, artifact,
+inventory, pinned-tree, dependency, hermetic-view, and tool checks, then runs
+exactly the inventory test with `id = R`. It returns the exact execution receipt
+without requiring exit zero. A missing test, wrong surface, signal, timeout,
+incomplete run, isolation failure, or setup mismatch still fails closed. This
+single-test observation cannot replace `validate-release-payload`; it exists
+only to bind a friction's before-and-after regression evidence.
 
 ## Attempt state sequence
 
@@ -507,16 +517,26 @@ requests may merge normally; only these two entries are release evidence.
 
 Required additional fields: `surface` (`tex-api` or `tnlog`), `triage`
 (`fix-compatible`, `defer-to-2.0`, or `breaking-required`), `summary` (`text`),
-and `evidence` (`text`). `fix-compatible` must receive a later `resolution`
-before sign-off. `defer-to-2.0` changes nothing in the active major.
+and `evidence` (`text`). A `fix-compatible` friction additionally requires
+`regression_tests` (`list[test-ref]`); that field is forbidden for the other
+triages. `defer-to-2.0` changes nothing in the active major.
 `breaking-required` requires a reset as the next non-correction entry.
+
+Let `Q` be the active freeze's exact `freeze_tag`, `H_E` the friction record's
+exact final head, and `I_E` its later integration. Every named inventory test's
+`surfaces` must contain the friction's exact `surface`. Candidate validation
+requires each `observe-release-test(H_E, Q, R)` receipt to complete with a
+nonzero exit; post-merge validation requires the same at `I_E`. An empty
+`regression_tests` list records an uncovered evidence gap but cannot receive a
+`resolution` under this activation, so it continues to block sign-off.
+Otherwise the friction must receive a later `resolution` before sign-off.
 
 ### `resolution`
 
 Required additional fields: `friction` (`entry-ref`), `fix_pr` (`pr-ref`),
 `summary` (`text`), and `evidence` (`text`). It can resolve only one preceding,
-unresolved `fix-compatible` friction entry in the same active attempt. It
-cannot resolve or reclassify another triage.
+unresolved `fix-compatible` friction entry with nonempty `regression_tests` in
+the same active attempt. It cannot resolve or reclassify another triage.
 
 Let `H_F = fix_pr.headRefOid` and `I_F = fix_pr.mergeCommit.oid`. GitHub must
 report `fix_pr` merged to `main` after the friction record, with non-null author,
@@ -534,18 +554,22 @@ integration `I`.
 A repository-authorized reviewer distinct from the normalized fix-PR author
 must have a latest effective `APPROVED` review on the exact `H_F`, submitted before
 `fix_pr.mergedAt`. The complete `B_F`-to-`H_F` diff may not touch `DESIGN.md` or
-this ledger and must add or modify at least one regular non-ledger blob whose
-source-specific normalized token stream changes. The normalizer is the one
-defined for `work` entries; a comment-only, whitespace-only, empty-file,
-deletion-only, policy-only, test-result, title, label, or description is not a
-fix.
+this ledger. It must add or modify at least one regular blob matching the pinned
+policy's `tex_api_fix_paths` for `surface = "tex-api"`, or `tnlog_fix_paths` for
+`surface = "tnlog"`, whose TeX-comment-stripped token stream changes. A
+comment-only, whitespace-only, empty-file, deletion-only, test-only, policy-only,
+title, label, description, or unrelated Lean change is not a fix.
 
-Every command in the pinned release-test inventory runs at `H_F` through the
-pinned hermetic protocol and passes with exact execution receipts. Candidate
+Let `Q` be the active freeze's exact `freeze_tag`. For every test `R` named by
+the friction, `observe-release-test(B_F, Q, R)` must complete nonzero and
+`observe-release-test(H_F, Q, R)` must complete with exit zero.
+`validate-release-payload(H_F, Q)` must then pass, binding the complete pinned
+inventory, tag-derived manifest, canonical artifacts, and receipts. Candidate
 validation rechecks the fix PR, review, Git objects, complete diff, ancestry,
-ordering, and test receipts before reporting `resolution-pending`; post-merge
-validation reruns all of them before the friction is resolved. Descriptive
-`summary` or `evidence` text cannot replace any fix fact.
+ordering, surface witness, before-and-after regression receipts, and full
+tag-bound payload before reporting `resolution-pending`; post-merge validation
+reruns all of them before the friction is resolved. Descriptive `summary` or
+`evidence` text cannot replace any fix fact.
 
 ### `reset`
 

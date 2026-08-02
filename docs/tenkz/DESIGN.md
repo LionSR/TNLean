@@ -38,6 +38,8 @@ required_distinct_work_prs = 2
 work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
 one_class_per_work_pr = true
 work_excluded_paths = ["TNLean/Archive/**"]
+tex_api_fix_paths = ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"]
+tnlog_fix_paths = ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"]
 event_format_owners = ["#4162", "#4703"]
 soak_blocker_chain = [["#5086", "#4699", "#4162"], ["#4703", "#4708", "#4163"]]
 deprecation_removal = "not-before-next-major"
@@ -353,9 +355,13 @@ record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A compatible resolution names the exact
-later fix pull request. Its repository-authorized exact-head approval,
-integration tree, ancestry, semantic non-ledger diff, and complete pinned test
-run are revalidated before the friction is resolved. A reset has cause
+later fix pull request and the friction entry's immutable pinned regression
+tests. Those tests fail at the recorded friction tree and immediately before
+the fix, while the policy-owned implementation path and tests pass at the fix
+head under the active freeze tag. The fix pull request's repository-authorized
+exact-head approval, integration tree, ancestry, surface-specific semantic
+diff, and complete pinned test run are revalidated before the friction is
+resolved. A reset has cause
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists

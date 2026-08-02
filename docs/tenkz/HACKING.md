@@ -266,8 +266,12 @@ RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
 not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
 ledger-record, and reset-receipt pull requests do not qualify.  Each record
 pull request changes only its one ledger append.  A compatible-friction
-resolution names a separate exact-head-approved fix pull request whose
-integration, semantic diff, ancestry, and complete pinned test run all verify.
+entry records pinned inventory tests for its public surface.  A resolution
+names a separate exact-head-approved fix pull request: the same tests fail at
+the friction and fix-parent trees, its surface-owned TeX implementation changes,
+and the tests plus the full active-freeze payload pass at the fix head.  An
+empty regression list records an evidence gap and cannot be resolved under the
+current activation.
 Release preparation lands separately after both work merges; its exact diff
 changes only the tag-derived 1.0 manifest and four canonical release artifacts.
 Exact-head sign-off review follows immediately on that integration; if `main`
