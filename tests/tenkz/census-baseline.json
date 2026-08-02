@@ -17,11 +17,11 @@
   },
   "m3_escape_usage": {
     "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",
-    "value": 30
+    "value": 29
   },
   "m4_lines_per_case": {
     "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
-    "value": 18.6
+    "value": 18.55
   },
   "m5_aliases": {
     "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
