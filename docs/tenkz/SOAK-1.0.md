@@ -9,15 +9,16 @@ closed test inventory exist on `main`, and the complete blocker chain is closed,
 may one self-referential enforcement-activation pull request arm the campaign.
 Let `C` be its exact current `main` target and `H` its exact final head. `C` must be an
 ancestor of `H` and their unique merge base. The complete `C`-to-`H` diff may
-change only `DESIGN.md` and this file, and only these seven scalar values:
+change only `docs/tenkz/DESIGN.md` and this file, and only these seven scalar
+values:
 
-- `DESIGN.md`: `enforcement` from `pending` to `armed`, the pending inventory
-  digest to the inventory blob's SHA-256, and the pending test-code tree to the
-  exact Git tree OID of its configured root, and the pending test-support tree
-  to the exact Git tree OID of its configured root;
+- `docs/tenkz/DESIGN.md`: `enforcement` from `pending` to `armed`, the pending
+  inventory digest to the inventory blob's SHA-256, and the pending test-code
+  tree to the exact Git tree OID of its configured root, and the pending
+  test-support tree to the exact Git tree OID of its configured root;
 - this file: `enforcement` from `pending` to `armed`, the pending policy digest
-  to the resulting armed `DESIGN.md` blob's SHA-256, and `armed_by_pr` to this
-  pull request's `pr-ref`.
+  to the resulting armed `docs/tenkz/DESIGN.md` blob's SHA-256, and
+  `armed_by_pr` to this pull request's `pr-ref`.
 
 No other byte or path may change. Each digest is exactly 64 lowercase
 hexadecimal digits computed from raw blob bytes without newline normalization;
@@ -93,17 +94,17 @@ release_tag = "tenkz-v1.0.0"
 ```
 
 The work count, class set, excluded paths, and one-class-per-pull-request rule
-are read from the exact `DESIGN.md` policy pinned by `policy_sha256`; this
-ledger schema does not duplicate them. Tag immutability and the release
-manifest, canonical-artifact, inventory, runner, and enforcement-workflow
+are read from the exact `docs/tenkz/DESIGN.md` policy pinned by
+`policy_sha256`; this ledger schema does not duplicate them. Tag immutability
+and the release manifest, canonical-artifact, inventory, runner, and enforcement-workflow
 configuration are likewise read only from that pinned policy, as are the
 maintainer identity, signer identity scheme, and authorized reviewer permission
 set.
 
-Once armed, the normative blocks in `DESIGN.md` and this file have closed
-tables and field sets. Unknown tables or fields are rejected. Changing their
-schema requires a policy change before arming; it cannot be smuggled into a
-live entry.
+Once armed, the normative blocks in `docs/tenkz/DESIGN.md` and this file have
+closed tables and field sets. Unknown tables or fields are rejected. Changing
+their schema requires a policy change before arming; it cannot be smuggled into
+a live entry.
 
 ## Live block and value grammar
 
@@ -390,7 +391,7 @@ Required additional fields:
 | `prerequisites` | `list[issue-ref]`, defined below |
 | `evidence` | `text` |
 
-`prerequisites` is the pinned `DESIGN.md` policy's `soak_blocker_chain`
+`prerequisites` is the pinned `docs/tenkz/DESIGN.md` policy's `soak_blocker_chain`
 flattened row by row. This file owns no second prerequisite list. `PATCH`
 matches the canonical grammar `0|[1-9][0-9]*`. The resolver completely paginates the current Git
 tag namespace, parses every name matching `tenkz-v0.9.PATCH`, and requires this
@@ -553,10 +554,11 @@ integration `I`.
 
 A repository-authorized reviewer distinct from the normalized fix-PR author
 must have a latest effective `APPROVED` review on the exact `H_F`, submitted before
-`fix_pr.mergedAt`. The complete `B_F`-to-`H_F` diff may not touch `DESIGN.md` or
-this ledger. It must add or modify at least one regular blob matching the pinned
-policy's `tex_api_fix_paths` for `surface = "tex-api"`, or `tnlog_fix_paths` for
-`surface = "tnlog"`, whose TeX-comment-stripped token stream changes. A
+`fix_pr.mergedAt`. The complete `B_F`-to-`H_F` diff may not touch
+`docs/tenkz/DESIGN.md` or this ledger. It must add or modify at least one regular
+blob whose path matches the pinned policy's `tex_api_fix_paths` for
+`surface = "tex-api"`, or its `tnlog_fix_paths` for `surface = "tnlog"`, and
+whose TeX-comment-stripped token stream changes. A
 comment-only, whitespace-only, empty-file, deletion-only, test-only, policy-only,
 title, label, description, or unrelated Lean change is not a fix.
 
