@@ -1967,7 +1967,7 @@ def validate_entries(
     pending_reset: tuple[str, str] | None = None
     deferred_invalid_targets: list[str] = []
     signed = False
-    successful_signoff: tuple[str, str, str] | None = None
+    successful_signoff: tuple[str, str, str, str] | None = None
     used_source_refs: set[str] = set()
     used_source_shas: set[str] = set()
     used_tag_names: set[str] = set()
@@ -2273,6 +2273,7 @@ def validate_entries(
                 "source_sha": source_sha,
                 "freeze_tag": tag_name,
                 "freeze_time": record_merged_at,
+                "freeze_valid": not entry_is_invalid(),
                 "freeze_integration": record_integration or source_sha,
                 "freeze_payload_blobs": freeze_payload_blobs,
                 "work": {},
@@ -2304,10 +2305,16 @@ def validate_entries(
                     require_descendant=True,
                     require_tree=True,
                 )
-                require(
-                    work_merged_at > active["freeze_time"],
-                    f"{entry_id} work PR did not merge after T",
-                )
+                if active["freeze_valid"]:
+                    freeze_time = active["freeze_time"]
+                    require(
+                        isinstance(freeze_time, datetime),
+                        f"{entry_id} active freeze merge time is unavailable",
+                    )
+                    require(
+                        work_merged_at > freeze_time,
+                        f"{entry_id} work PR did not merge after T",
+                    )
                 require_independent_approval(
                     work_pr,
                     work_ref,
@@ -3186,7 +3193,12 @@ def validate_entries(
                     assert record_integration is not None and release_integration is not None
                     active = None
                     signed = True
-                    successful_signoff = (entry_id, record_ref, record_integration)
+                    successful_signoff = (
+                        entry_id,
+                        record_ref,
+                        record_integration,
+                        release_tag,
+                    )
 
         if record_integration is not None and not entry_is_invalid():
             last_record_integration = record_integration
@@ -3221,11 +3233,6 @@ def validate_entries(
     if signed:
         assert successful_signoff is not None
         if terminal_tag_present:
-            require(shaped[-1][1] == "sign-off", "final tag exists without a final sign-off")
-            require(
-                entries[-1]["release_tag"] == FINAL_TAG,
-                "released sign-off names another tag",
-            )
             require(final_tag.object_type == "tag", "final release tag is not annotated")
             require(
                 isinstance(final_tag.object_id, str)
@@ -3237,7 +3244,10 @@ def validate_entries(
                 and SHA_RE.fullmatch(final_tag.commit) is not None,
                 "final release tag target is invalid",
             )
-            signoff_entry, signoff_record, signoff_integration = successful_signoff
+            signoff_entry, signoff_record, signoff_integration, signoff_tag = (
+                successful_signoff
+            )
+            require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
             require(
                 final_tag.validated_entry_id == signoff_entry,
                 "final tag was bound to another sign-off entry",
