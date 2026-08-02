@@ -220,7 +220,10 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     lowered = re.sub(r"\s+", " ", comment.lower())
     if re.search(r"\b(?:pitch|metric|spacing|distance)\b", lowered):
         return DimensionOwner.METRIC
-    if any(key in lowered for key in (*_FRAME_KEYS, "projection", "frame", "offset")):
+    if re.search(
+        r"\b(?:sheet vector|row vector|col vector|projection|frame|offset)\b",
+        lowered,
+    ):
         return DimensionOwner.FRAME
     if re.search(r"\\tn(?:join|wire|edge|arrow)\b|\b(?:route|string)\b", lowered):
         return DimensionOwner.ROUTE
@@ -236,12 +239,16 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
 def _comment_uses_in_as_preposition(
     source: str,
     occurrence: re.Match[str],
-    comment_end: int,
+    comment_start: int,
 ) -> bool:
     if re.search(r"in\s*$", occurrence.group(0), flags=re.IGNORECASE) is None:
         return False
-    tail = source[occurrence.end() : comment_end]
-    return re.match(r"\s+[A-Za-z]", tail) is not None
+    prefix = source[comment_start : occurrence.start()]
+    return re.search(
+        r"(?:\by\s*=\s*|\b(?:site|figure|label|section)\s+|\beach\s+of\s+)$",
+        prefix,
+        flags=re.IGNORECASE,
+    ) is not None
 
 
 def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, ...]:
@@ -260,7 +267,7 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
         if comment_range is not None:
             comment = source[comment_range[0] : comment_range[1]]
             owner = _comment_owner(comment)
-            if _comment_uses_in_as_preposition(source, match, comment_range[1]):
+            if _comment_uses_in_as_preposition(source, match, comment_range[0]):
                 # An owner word after the occurrence can belong to ordinary
                 # prose ("3 in the layout"), not to the apparent inch value.
                 owner = _comment_owner(source[comment_range[0] : match.start()])

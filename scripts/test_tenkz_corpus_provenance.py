@@ -300,6 +300,13 @@ def test_rmp_dimension_ownership() -> None:
     ):
         if scan_case_dimensions(Path("synthetic.tex"), prose):
             raise AssertionError(f"English prose became an inch unit: {prose!r}")
+    ownerless_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% shifted 1 in leftward\n"
+    )
+    if len(ownerless_comment_inch) != 1 or not ownerless_comment_inch[0].in_comment:
+        raise AssertionError(
+            f"ownerless comment inch escaped: {ownerless_comment_inch!r}"
+        )
     active_inch = scan_case_dimensions(
         Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"
     )
