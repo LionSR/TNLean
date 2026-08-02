@@ -135,7 +135,7 @@ FIELDS_BY_KIND = {
     },
     "work": COMMON_FIELDS | {"work_pr", "class", "summary", "evidence"},
     "friction": COMMON_FIELDS | {"surface", "triage", "summary", "evidence"},
-    "resolution": COMMON_FIELDS | {"friction", "summary", "evidence"},
+    "resolution": COMMON_FIELDS | {"friction", "fix_pr", "summary", "evidence"},
     "reset": COMMON_FIELDS | {"cause", "target", "reason", "evidence"},
     "correction": COMMON_FIELDS | {"target", "summary", "evidence"},
     "sign-off": COMMON_FIELDS
@@ -213,6 +213,9 @@ class RecordDiffEvidence:
     candidate_main_tip_is_receipt_integration: bool | None = None
     integration_parent_is_receipt_integration: bool | None = None
     validated_receipt_integration: str | None = None
+    candidate_main_tip_descends_from_fix_integration: bool | None = None
+    integration_parent_descends_from_fix_integration: bool | None = None
+    validated_fix_integration: str | None = None
 
 
 @dataclass(frozen=True)
@@ -241,6 +244,32 @@ class WorkDiffEvidence:
     rmp_targets_resolved: bool | None
     rmp_stages_complete: bool | None
     rmp_checks_passed: bool | None
+
+
+@dataclass(frozen=True)
+class ResolutionDiffEvidence:
+    """Complete exact-head evidence for one compatible fix pull request."""
+
+    validated_pr_ref: str | None
+    validated_head_oid: str | None
+    validated_integration_oid: str | None
+    validated_freeze_integration: str | None
+    validated_friction_integration: str | None
+    complete: bool | None
+    integration_parent_count: int | None
+    unique_merge_base: bool | None
+    integration_parent_is_ancestor_of_head: bool | None
+    integration_second_parent_matches_head: bool | None
+    integration_strict_descendant_of_freeze: bool | None
+    integration_strict_descendant_of_friction: bool | None
+    policy_paths_untouched: bool | None
+    has_added_or_modified_regular_nonledger_blob: bool | None
+    normalized_token_stream_changed: bool | None
+    semantic_witness_is_same_regular_nonledger_blob: bool | None
+    validated_contract: ReleaseContract | None
+    inventory_commands_complete: bool | None
+    inventory_commands_passed: bool | None
+    execution_receipts_exact_and_matching: bool | None
 
 
 @dataclass(frozen=True)
@@ -469,6 +498,7 @@ ResolveReplayPullRequest = Callable[[str, str | None], PullRequestEvidence]
 ResolveReplayActivationDiff = Callable[[str], ActivationDiffEvidence]
 ResolveReplayRecordDiff = Callable[[str, str, str | None], RecordDiffEvidence]
 ResolveReplayWorkDiff = Callable[[str], WorkDiffEvidence]
+ResolveReplayResolutionDiff = Callable[[str], ResolutionDiffEvidence]
 ResolveReplayReleasePrep = Callable[
     [str, tuple[str, ...], tuple[str, ...]], ReleasePrepEvidence
 ]
@@ -1281,6 +1311,7 @@ def validate_entries(
     resolve_replay_activation_diff: ResolveReplayActivationDiff | None = None,
     resolve_replay_record_diff: ResolveReplayRecordDiff | None = None,
     resolve_replay_work_diff: ResolveReplayWorkDiff | None = None,
+    resolve_replay_resolution_diff: ResolveReplayResolutionDiff | None = None,
     resolve_replay_release_prep: ResolveReplayReleasePrep | None = None,
     resolve_replay_release_payload: ResolveReplayReleasePayload | None = None,
     resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
@@ -1359,6 +1390,11 @@ def validate_entries(
         resolve_replay_work_diff is not None,
         "entry validation requires replay work-diff evidence",
     )
+    if any(shape[1] == "resolution" for shape in shaped):
+        require(
+            resolve_replay_resolution_diff is not None,
+            "resolution validation requires replay fix-diff evidence",
+        )
     require(
         resolve_replay_release_payload is not None,
         "entry validation requires replay release-payload evidence",
@@ -2126,19 +2162,150 @@ def validate_entries(
             if record_pending:
                 return finish_pending("friction-pending")
             if not entry_is_invalid():
-                active["friction"][entry_id] = {"triage": triage, "resolved": False}
+                assert record_merged_at is not None and record_integration is not None
+                active["friction"][entry_id] = {
+                    "triage": triage,
+                    "resolved": False,
+                    "merged_at": record_merged_at,
+                    "integration": record_integration,
+                }
                 if triage == "breaking-required":
                     pending_reset = ("breaking-required", entry_id)
 
         elif kind == "resolution":
             assert active is not None
             friction = nonempty_string(entry["friction"], "friction", entry_id)
+            fix_ref = pr_ref(entry["fix_pr"], "fix_pr", entry_id)
             fact = active["friction"].get(friction)
             require(fact is not None, f"{entry_id} names no friction in this attempt")
             require(fact["triage"] == "fix-compatible", f"{entry_id} resolves incompatible triage")
             require(fact["resolved"] is False, f"{entry_id} resolves friction twice")
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
+
+            def resolution_external_facts() -> tuple[datetime, str]:
+                assert resolve_replay_resolution_diff is not None
+                fix_pr = resolve_replay_pr(fix_ref, active["freeze_integration"])
+                fix_author, fix_head = validate_pr_core(fix_pr, fix_ref)
+                fix_merged_at, fix_integration = validate_merged_pr(
+                    fix_pr,
+                    fix_ref,
+                    require_descendant=True,
+                    require_tree=True,
+                )
+                require(
+                    fix_merged_at > fact["merged_at"],
+                    f"{entry_id} fix PR did not merge after its friction record",
+                )
+                require_independent_approval(
+                    fix_pr,
+                    fix_ref,
+                    author=fix_author,
+                    before=fix_merged_at,
+                    authorized_permissions=reviewer_permissions,
+                )
+                fix_diff = resolve_replay_resolution_diff(fix_ref)
+                require(
+                    fix_diff.validated_pr_ref == fix_ref,
+                    f"{entry_id} fix diff was validated on another PR",
+                )
+                require(
+                    fix_diff.validated_head_oid == fix_head,
+                    f"{entry_id} fix diff was not validated at its exact head",
+                )
+                require(
+                    fix_diff.validated_integration_oid == fix_integration,
+                    f"{entry_id} fix diff used another integration",
+                )
+                require(
+                    fix_diff.validated_freeze_integration == active["freeze_integration"],
+                    f"{entry_id} fix diff used another freeze integration",
+                )
+                require(
+                    fix_diff.validated_friction_integration == fact["integration"],
+                    f"{entry_id} fix diff used another friction integration",
+                )
+                require(fix_diff.complete is True, f"{entry_id} fix diff is incomplete")
+                fix_parent_count = integration_parent_count(
+                    fix_diff.integration_parent_count,
+                    f"{entry_id} fix integration",
+                )
+                require(
+                    fix_diff.unique_merge_base is True,
+                    f"{entry_id} fix merge base is ambiguous",
+                )
+                require(
+                    fix_diff.integration_parent_is_ancestor_of_head is True,
+                    f"{entry_id} fix integration parent is not an ancestor of its head",
+                )
+                if fix_parent_count == 2:
+                    require(
+                        fix_diff.integration_second_parent_matches_head is True,
+                        f"{entry_id} fix integration second parent differs from its head",
+                    )
+                require(
+                    fix_diff.integration_strict_descendant_of_freeze is True,
+                    f"{entry_id} fix integration does not descend from the active freeze",
+                )
+                require(
+                    fix_diff.integration_strict_descendant_of_friction is True,
+                    f"{entry_id} fix integration does not descend from its friction record",
+                )
+                require(
+                    fix_diff.policy_paths_untouched is True,
+                    f"{entry_id} fix diff changes policy or the soak ledger",
+                )
+                require(
+                    fix_diff.has_added_or_modified_regular_nonledger_blob is True,
+                    f"{entry_id} fix diff has no added or modified regular non-ledger blob",
+                )
+                require(
+                    fix_diff.normalized_token_stream_changed is True,
+                    f"{entry_id} fix diff has no semantic normalized-token change",
+                )
+                require(
+                    fix_diff.semantic_witness_is_same_regular_nonledger_blob is True,
+                    f"{entry_id} fix semantic witness is not one qualifying blob",
+                )
+                require(
+                    fix_diff.validated_contract == release_contract,
+                    f"{entry_id} fix tests used another release-test contract",
+                )
+                require(
+                    fix_diff.inventory_commands_complete is True,
+                    f"{entry_id} fix did not run every pinned inventory command",
+                )
+                require(
+                    fix_diff.inventory_commands_passed is True,
+                    f"{entry_id} fix failed a pinned inventory command",
+                )
+                require(
+                    fix_diff.execution_receipts_exact_and_matching is True,
+                    f"{entry_id} fix execution receipts are incomplete or mismatched",
+                )
+                return fix_merged_at, fix_integration
+
+            resolution_result = check_external(resolution_external_facts)
+            if isinstance(resolution_result, tuple):
+                fix_merged_at, fix_integration = resolution_result
+                check_kind_record_fact(
+                    diff.validated_fix_integration == fix_integration,
+                    f"{entry_id} resolution record used another fix integration",
+                )
+                check_kind_record_fact(
+                    diff.candidate_main_tip_descends_from_fix_integration is True,
+                    f"{entry_id} resolution candidate does not descend from its fix",
+                )
+                if not record_pending:
+                    check_kind_record_fact(
+                        diff.integration_parent_descends_from_fix_integration is True,
+                        f"{entry_id} resolution integration parent does not descend from its fix",
+                    )
+                    assert record_merged_at is not None
+                    check_kind_record_fact(
+                        record_merged_at > fix_merged_at,
+                        f"{entry_id} resolution record did not merge after its fix PR",
+                    )
             if record_pending:
                 return finish_pending("resolution-pending")
             if not entry_is_invalid():
