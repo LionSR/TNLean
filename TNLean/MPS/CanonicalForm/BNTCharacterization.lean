@@ -225,80 +225,13 @@ theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
             mpvState (d := d) (P.basis j) N) =
           ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
       hPstate.symm.trans hBstate
-    let sumT : MPVSpace d N :=
-      ∑ t : {j : Fin P.basisCount // j ∈ T}, P.coeff N t.1 •
-        mpvState (d := d) (P.basis t.1) N
-    let sumC : MPVSpace d N :=
-      ∑ c : {j : Fin P.basisCount // j ∉ T}, P.coeff N c.1 •
-        mpvState (d := d) (P.basis c.1) N
-    let sumB : MPVSpace d N :=
-      ∑ k : Fin g, cB k • mpvState (d := d) (B k) N
-    let agg : Fin g → ℂ := fun k =>
-      ∑ c : {j : Fin P.basisCount // j ∉ T},
-        if kOf c = k then P.coeff N c.1 * αOf c N else 0
-    let sumAgg : MPVSpace d N :=
-      ∑ k : Fin g, agg k • mpvState (d := d) (B k) N
-    have hSplitP : sumT + sumC = sumB := by
-      have hsplit :=
-        Fintype.sum_subtype_add_sum_subtype
-          (p := fun j : Fin P.basisCount => j ∈ T)
-          (f := fun j : Fin P.basisCount =>
-            P.coeff N j • mpvState (d := d) (P.basis j) N)
-      exact hsplit.trans hPBsum
-    have hCSubst :
-        sumC = ∑ c : {j : Fin P.basisCount // j ∉ T},
-          (P.coeff N c.1 * αOf c N) •
-            mpvState (d := d) (B (kOf c)) N := by
-      refine Finset.sum_congr rfl ?_
-      intro c _
-      calc
-        P.coeff N c.1 • mpvState (d := d) (P.basis c.1) N =
-            P.coeff N c.1 •
-              (αOf c N • mpvState (d := d) (B (kOf c)) N) := by
-                rw [hStateOf c N hNpos]
-        _ = (P.coeff N c.1 * αOf c N) •
-              mpvState (d := d) (B (kOf c)) N := by
-                rw [smul_smul]
-    have hCGroup :
-        (∑ c : {j : Fin P.basisCount // j ∉ T},
-          (P.coeff N c.1 * αOf c N) •
-            mpvState (d := d) (B (kOf c)) N) = sumAgg := by
-      simpa [sumAgg, agg] using
-        (sum_fiber_smul (φ := kOf)
-          (a := fun c : {j : Fin P.basisCount // j ∉ T} =>
-            P.coeff N c.1 * αOf c N)
-          (v := fun k : Fin g => mpvState (d := d) (B k) N))
-    have hMain : sumT + sumAgg = sumB := by
-      calc
-        sumT + sumAgg = sumT + sumC := by rw [← hCGroup, ← hCSubst]
-        _ = sumB := hSplitP
-    let coeff : Sum {j : Fin P.basisCount // j ∈ T} (Fin g) → ℂ :=
-      Sum.elim (fun t => P.coeff N t.1) (fun k => agg k - cB k)
-    have hZeroCombined :
-        ∑ x : Sum {j : Fin P.basisCount // j ∈ T} (Fin g),
-          coeff x •
-            Sum.elim
-              (fun t : {j : Fin P.basisCount // j ∈ T} =>
-                mpvState (d := d) (P.basis t.1) N)
-              (fun k : Fin g => mpvState (d := d) (B k) N) x = 0 := by
-      have hBsub :
-          (∑ k : Fin g, (agg k - cB k) • mpvState (d := d) (B k) N) =
-            sumAgg - sumB := by
-        simp [sumAgg, sumB, sub_smul, Finset.sum_sub_distrib]
-      have hZero :
-          sumT +
-            (∑ k : Fin g, (agg k - cB k) • mpvState (d := d) (B k) N) = 0 := by
-        calc
-          sumT +
-              (∑ k : Fin g, (agg k - cB k) • mpvState (d := d) (B k) N) =
-              sumT + (sumAgg - sumB) := by rw [hBsub]
-          _ = (sumT + sumAgg) - sumB := by abel
-          _ = 0 := sub_eq_zero.mpr hMain
-      simpa [coeff, sumT] using hZero
-    have hcoeff :=
-      Fintype.linearIndependent_iff.mp hLIN coeff hZeroCombined
-        (Sum.inl ⟨j₀, hj₀T⟩)
-    simpa [coeff] using hcoeff
+    exact coefficient_eq_zero_of_sum_eq_of_complement_smul
+      (T := T) (a := fun j => P.coeff N j)
+      (u := fun j => mpvState (d := d) (P.basis j) N)
+      (b := cB) (v := fun k => mpvState (d := d) (B k) N)
+      (kOf := kOf) (α := fun c => αOf c N)
+      (hComplement := fun c => hStateOf c N hNpos)
+      (hSum := hPBsum) (hLI := hLIN) (i₀ := j₀) hj₀T
   exact (P.coeff_not_eventually_zero j₀) hCoeffEventuallyZero
 
 /-- The all-active-block form of the CPSV16 basis characterization. -/

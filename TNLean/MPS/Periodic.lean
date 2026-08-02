@@ -33,6 +33,7 @@ import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Periodic.Overlap.SelfOverlapSetup
 import TNLean.MPS.Periodic.ProjectiveRep
+import TNLean.MPS.Periodic.ProportionalOverlap
 import TNLean.MPS.Periodic.SectorContraction
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Periodic.SectorIrreducibility.HLift
