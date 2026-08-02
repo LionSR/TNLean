@@ -37,9 +37,9 @@ ENTRY_KINDS = {
     "sign-off",
 }
 WORK_CLASSES = ("formalization-or-blueprint", "rmp-benchmark")
-TRIAGE = {"fix-compatible", "defer-to-2.0", "breaking-required"}
+TRIAGE = {"fix-compatible", "defer-to-2.0", "restart-required"}
 SURFACES = {"tex-api", "tnlog"}
-RESET_CAUSES = {"breaking-required", "record-invalid"}
+RESET_CAUSES = {"restart-required", "record-invalid"}
 
 EXPECTED_POLICY = {
     "policy": {
@@ -54,8 +54,12 @@ EXPECTED_POLICY = {
         "work_classes": list(WORK_CLASSES),
         "one_class_per_work_pr": True,
         "work_excluded_paths": ["TNLean/Archive/**"],
-        "tex_api_fix_paths": ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"],
-        "tnlog_fix_paths": ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"],
+        "tex_api_fix_paths": ["tex/tenkz/*.tex", "tex/tenkz/*.sty"],
+        "tnlog_fix_paths": [
+            "tex/tenkz/*.tex",
+            "tex/tenkz/*.sty",
+            "scripts/tenkzlib/tnlog.py",
+        ],
         "event_format_owners": ["#4162", "#4703"],
         "soak_blocker_chain": [
             ["#5086", "#4699", "#4162"],
@@ -77,11 +81,16 @@ EXPECTED_POLICY = {
         "release_event_format": "docs/tenkz/TNLOG.md",
         "release_test_inventory": "tests/tenkz/release-tests.toml",
         "release_test_inventory_sha256": "pending",
-        "release_test_code_root": "scripts",
+        "release_test_code_root": "tests/tenkz/release-harness",
         "release_test_code_tree": "pending",
         "release_test_support_root": "tests/tenkz/release-support",
         "release_test_support_tree": "pending",
-        "release_test_data_roots": ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"],
+        "release_test_subject_roots": [
+            "tex/tenkz",
+            "scripts/tenkzlib/tnlog.py",
+            "docs/tenkz",
+            "tests/tenkz/rmp",
+        ],
         "release_enforcement_workflows": [
             ".github/workflows/tenkz-release-policy.yml"
         ],
@@ -92,7 +101,9 @@ EXPECTED_POLICY = {
         "release_reset_replay_schema": (
             "tests/tenkz/release-support/reset-replay-v1.schema.json"
         ),
-        "release_test_dependency_contract": "pinned-code-support-declared-subject-data",
+        "release_test_dependency_contract": (
+            "pinned-harness-support-declared-subject-roles"
+        ),
         "release_test_protocol": "hermetic-repository-view-no-shell-or-network",
     },
     "event_format": {
@@ -262,6 +273,21 @@ class WorkDiffEvidence:
 
 
 @dataclass(frozen=True)
+class RegressionFixEvidence:
+    """One test-specific semantic program witness in a compatible fix diff."""
+
+    test_ref: str | None
+    validated_surface: str | None
+    declared_program_paths: tuple[str, ...] | None
+    changed_program_path: str | None
+    program_blob_modified: bool | None
+    semantic_stream_kind: str | None
+    semantic_stream_changed: bool | None
+    python_reader_parses: bool | None
+    baseline_failure_fingerprint: str | None
+
+
+@dataclass(frozen=True)
 class ResolutionDiffEvidence:
     """Complete exact-head evidence for one compatible fix pull request."""
 
@@ -279,12 +305,11 @@ class ResolutionDiffEvidence:
     integration_strict_descendant_of_friction: bool | None
     policy_paths_untouched: bool | None
     validated_base_oid: str | None
-    validated_surface: str | None
-    validated_fix_path_patterns: tuple[str, ...] | None
-    semantic_witness_path: str | None
-    surface_matching_added_or_modified_regular_blob: bool | None
-    tex_comment_stripped_token_stream_changed: bool | None
-    semantic_witness_is_same_surface_regular_blob: bool | None
+    validated_regression_tests: tuple[str, ...] | None
+    regression_fixes: tuple[RegressionFixEvidence, ...] | None
+    validated_identity_trees: tuple[str, str, str, str, str] | None
+    fixture_blobs_modes_and_trees_identical: bool | None
+    freeze_manifest_blob_identical: bool | None
 
 
 @dataclass(frozen=True)
@@ -302,7 +327,7 @@ class ReleaseContract:
     test_code_tree: str
     test_support_root: str
     test_support_tree: str
-    test_data_roots: tuple[str, ...]
+    test_subject_roots: tuple[str, ...]
     tex_api_fix_paths: tuple[str, ...]
     tnlog_fix_paths: tuple[str, ...]
     enforcement_workflows: tuple[str, ...]
@@ -344,19 +369,25 @@ class ReleasePayloadEvidence:
     manifest_contract_valid: bool | None
     artifact_declarations_agree: bool | None
     inventory_digest_matches: bool | None
-    inventory_contract_valid: bool | None
+    inventory_exact_schema_valid: bool | None
+    inventory_ids_and_failure_fingerprints_unique: bool | None
+    inventory_test_surface_valid: bool | None
+    inventory_atomic_assertions_one_per_test: bool | None
     test_code_tree_matches: bool | None
     test_support_tree_matches: bool | None
-    inventory_data_paths_within_mutable_roots: bool | None
-    executable_dependencies_within_code_tree: bool | None
+    inventory_subject_paths_within_subject_roots: bool | None
+    inventory_program_paths_regular_and_surface_owned: bool | None
+    inventory_fixture_paths_regular_or_trees: bool | None
+    inventory_subject_roles_disjoint: bool | None
+    inventory_fixtures_nonexecutable: bool | None
+    executable_dependencies_within_harness_tree: bool | None
     acceptance_dependencies_within_support_tree: bool | None
-    subject_data_cannot_reduce_coverage: bool | None
+    subjects_cannot_supply_evidence_logic: bool | None
     hermetic_execution_contract_valid: bool | None
     payload_execution_receipts_complete_and_matching: bool | None
     test_execution_complete: bool | None
     compatibility_tests_passed: bool | None
     payload_blob_oids: tuple[str, ...] | None
-    inventory_test_surfaces_valid: bool | None
 
 
 @dataclass(frozen=True)
@@ -373,19 +404,29 @@ class ReleaseTestObservationEvidence:
     manifest_contract_valid: bool | None
     artifact_declarations_agree: bool | None
     inventory_digest_matches: bool | None
-    inventory_contract_valid: bool | None
-    inventory_test_surfaces_valid: bool | None
+    inventory_exact_schema_valid: bool | None
+    inventory_ids_and_failure_fingerprints_unique: bool | None
+    inventory_test_surface_valid: bool | None
+    inventory_atomic_assertions_one_per_test: bool | None
     inventory_test_exists: bool | None
     inventory_command_exact_and_matching: bool | None
     test_code_tree_matches: bool | None
     test_support_tree_matches: bool | None
-    inventory_data_paths_within_mutable_roots: bool | None
-    executable_dependencies_within_code_tree: bool | None
+    inventory_subject_paths_within_subject_roots: bool | None
+    executable_dependencies_within_harness_tree: bool | None
     acceptance_dependencies_within_support_tree: bool | None
-    subject_data_cannot_reduce_coverage: bool | None
+    subjects_cannot_supply_evidence_logic: bool | None
     hermetic_execution_contract_valid: bool | None
     tool_fingerprints_match: bool | None
-    inventory_test_surfaces: tuple[str, ...] | None
+    inventory_test_surface: str | None
+    inventory_test_failure_fingerprint: str | None
+    inventory_test_program_paths: tuple[str, ...] | None
+    inventory_test_fixture_paths: tuple[str, ...] | None
+    inventory_test_program_paths_regular_blobs: bool | None
+    inventory_test_fixture_paths_regular_blobs_or_trees: bool | None
+    inventory_test_fixture_trees_exclude_program_paths: bool | None
+    inventory_test_fixtures_nonexecutable: bool | None
+    atomic_assertion_count: int | None
     exactly_one_inventory_test_run: bool | None
     setup_complete_and_matching: bool | None
     isolation_valid: bool | None
@@ -393,8 +434,13 @@ class ReleaseTestObservationEvidence:
     execution_complete: bool | None
     timed_out: bool | None
     terminated_by_signal: bool | None
-    clean_process_exit: bool | None
+    result: str | None
     exit_code: int | None
+    assertion_failure_receipt_path: str | None
+    observed_failure_fingerprint: str | None
+    assertion_failure_receipt_exact_and_matching: bool | None
+    assertion_failure_receipt_atomically_written: bool | None
+    single_failure_cause: bool | None
 
 
 @dataclass(frozen=True)
@@ -406,12 +452,14 @@ class ReleasePrepEvidence:
     validated_manifest_path: str | None
     validated_changed_paths: tuple[str, ...] | None
     validated_work_integrations: tuple[str, ...] | None
+    validated_resolution_integrations: tuple[str, ...] | None
     complete: bool | None
     integration_parent_count: int | None
     unique_merge_base: bool | None
     integration_parent_is_ancestor_of_head: bool | None
     integration_second_parent_matches_head: bool | None
     integration_descends_from_work_integrations: bool | None
+    integration_descends_from_resolution_integrations: bool | None
     exact_release_varying_path_diff: bool | None
 
 
@@ -420,9 +468,10 @@ class TagEvidence:
     object_id: str | None
     object_type: str | None
     commit: str | None
-    patch_is_fresh_for_attempt: bool | None = None
-    namespace_complete: bool | None = None
-    patch_exceeds_other_namespace_tags: bool | None = None
+    candidate_namespace_complete: bool | None = None
+    candidate_patch_exceeds_current_namespace: bool | None = None
+    historical_candidate_check_exact_and_successful: bool | None = None
+    historical_compares_only_earlier_freezes: bool | None = None
     exists: bool | None = True
     validated_entry_id: str | None = None
     validated_record_pr: str | None = None
@@ -470,7 +519,7 @@ class RecordInvalidResetReplayEvidence:
     boundary_entry_id: str | None
     validation_target_oid: str | None
     raw_invalid_entries: tuple[str, ...] | None
-    pending_breaking_target: str | None
+    pending_restart_target: str | None
     normalized_resolver_inputs_complete_and_matching: bool | None
     workflow_dependency_closure_pinned: bool | None
     supervisor_receipts_complete_and_matching: bool | None
@@ -512,18 +561,25 @@ class ActivationDiffEvidence:
     unique_merge_base: bool | None
     exact_seven_scalar_replacements: bool | None
     inventory_digest_matches: bool | None
+    inventory_exact_schema_valid: bool | None
+    inventory_ids_and_failure_fingerprints_unique: bool | None
+    inventory_test_surface_valid: bool | None
+    inventory_atomic_assertions_one_per_test: bool | None
     test_code_tree_matches: bool | None
     test_support_tree_matches: bool | None
-    inventory_data_paths_within_mutable_roots: bool | None
-    executable_dependencies_within_code_tree: bool | None
+    inventory_subject_paths_within_subject_roots: bool | None
+    inventory_program_paths_regular_and_surface_owned: bool | None
+    inventory_fixture_paths_regular_or_trees: bool | None
+    inventory_subject_roles_disjoint: bool | None
+    inventory_fixtures_nonexecutable: bool | None
+    executable_dependencies_within_harness_tree: bool | None
     acceptance_dependencies_within_support_tree: bool | None
-    subject_data_cannot_reduce_coverage: bool | None
+    subjects_cannot_supply_evidence_logic: bool | None
     hermetic_execution_contract_valid: bool | None
     supervisor_self_test_receipt_valid: bool | None
     enforcement_workflows_pinned: bool | None
     policy_digest_matches: bool | None
     ledger_prefix_matches: bool | None
-    inventory_test_surfaces_valid: bool | None
 
 
 @dataclass(frozen=True)
@@ -571,7 +627,7 @@ ResolveReplayRecordDiff = Callable[[str, str, str | None], RecordDiffEvidence]
 ResolveReplayWorkDiff = Callable[[str], WorkDiffEvidence]
 ResolveReplayResolutionDiff = Callable[[str], ResolutionDiffEvidence]
 ResolveReplayReleasePrep = Callable[
-    [str, tuple[str, ...], tuple[str, ...]], ReleasePrepEvidence
+    [str, tuple[str, ...], tuple[str, ...], tuple[str, ...]], ReleasePrepEvidence
 ]
 ResolveReplayReleasePayload = Callable[[str, str, ReleaseContract], ReleasePayloadEvidence]
 ResolveReplayReleaseTestObservation = Callable[
@@ -796,6 +852,12 @@ def policy_glob_matches(path: str, pattern: str) -> bool:
     return re.fullmatch(expression, path) is not None
 
 
+def path_within_subject_roots(path: str, roots: tuple[str, ...]) -> bool:
+    """Check a normalized subject path against closed file-or-tree roots."""
+
+    return any(path == root or path.startswith(f"{root}/") for root in roots)
+
+
 def sha(value: object, field: str, entry_id: str) -> str:
     result = nonempty_string(value, field, entry_id)
     require(SHA_RE.fullmatch(result) is not None, f"{entry_id} has invalid {field}")
@@ -907,7 +969,7 @@ def policy_rules(
         test_code_tree=str(root.get("release_test_code_tree", "")),
         test_support_root=str(root.get("release_test_support_root", "")),
         test_support_tree=str(root.get("release_test_support_tree", "")),
-        test_data_roots=tuple(root.get("release_test_data_roots", ())),
+        test_subject_roots=tuple(root.get("release_test_subject_roots", ())),
         tex_api_fix_paths=tuple(root.get("tex_api_fix_paths", ())),
         tnlog_fix_paths=tuple(root.get("tnlog_fix_paths", ())),
         enforcement_workflows=tuple(root.get("release_enforcement_workflows", ())),
@@ -927,7 +989,7 @@ def policy_rules(
             contract.test_inventory,
             contract.test_code_root,
             contract.test_support_root,
-            contract.test_data_roots,
+            contract.test_subject_roots,
             contract.tex_api_fix_paths,
             contract.tnlog_fix_paths,
             contract.enforcement_workflows,
@@ -944,16 +1006,25 @@ def policy_rules(
             "docs/tenkz/CHANGES.md",
             "docs/tenkz/TNLOG.md",
             "tests/tenkz/release-tests.toml",
-            "scripts",
+            "tests/tenkz/release-harness",
             "tests/tenkz/release-support",
-            ("tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"),
-            ("tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"),
-            ("tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"),
+            (
+                "tex/tenkz",
+                "scripts/tenkzlib/tnlog.py",
+                "docs/tenkz",
+                "tests/tenkz/rmp",
+            ),
+            ("tex/tenkz/*.tex", "tex/tenkz/*.sty"),
+            (
+                "tex/tenkz/*.tex",
+                "tex/tenkz/*.sty",
+                "scripts/tenkzlib/tnlog.py",
+            ),
             (".github/workflows/tenkz-release-policy.yml",),
             "transitive-content-addressed-no-runtime-downloads",
             "disabled-before-repository-code",
             "tests/tenkz/release-support/reset-replay-v1.schema.json",
-            "pinned-code-support-declared-subject-data",
+            "pinned-harness-support-declared-subject-roles",
             "hermetic-repository-view-no-shell-or-network",
         ),
         "policy has the wrong release-payload contract",
@@ -1271,13 +1342,18 @@ def validate_release_payload(
         evidence.inventory_digest_matches is True,
         f"{subject} test-inventory digest differs from policy",
     )
+    require(evidence.inventory_exact_schema_valid is True, f"{subject} inventory schema is invalid")
     require(
-        evidence.inventory_contract_valid is True,
-        f"{subject} test inventory is invalid",
+        evidence.inventory_ids_and_failure_fingerprints_unique is True,
+        f"{subject} inventory IDs or failure fingerprints are not unique",
     )
     require(
-        evidence.inventory_test_surfaces_valid is True,
-        f"{subject} test inventory has invalid surface declarations",
+        evidence.inventory_test_surface_valid is True,
+        f"{subject} test inventory has an invalid surface declaration",
+    )
+    require(
+        evidence.inventory_atomic_assertions_one_per_test is True,
+        f"{subject} inventory contains a non-atomic compatibility test",
     )
     require(
         evidence.test_code_tree_matches is True,
@@ -1288,20 +1364,36 @@ def validate_release_payload(
         f"{subject} release-test support tree differs from policy",
     )
     require(
-        evidence.inventory_data_paths_within_mutable_roots is True,
-        f"{subject} inventory data paths escape the mutable subject roots",
+        evidence.inventory_subject_paths_within_subject_roots is True,
+        f"{subject} inventory subject paths escape the pinned subject roots",
     )
     require(
-        evidence.executable_dependencies_within_code_tree is True,
-        f"{subject} executable dependency escapes the pinned code tree",
+        evidence.inventory_program_paths_regular_and_surface_owned is True,
+        f"{subject} inventory program paths are not regular surface-owned blobs",
+    )
+    require(
+        evidence.inventory_fixture_paths_regular_or_trees is True,
+        f"{subject} inventory fixture paths are not regular blobs or trees",
+    )
+    require(
+        evidence.inventory_subject_roles_disjoint is True,
+        f"{subject} inventory program and fixture roles overlap",
+    )
+    require(
+        evidence.inventory_fixtures_nonexecutable is True,
+        f"{subject} inventory permits an executable fixture",
+    )
+    require(
+        evidence.executable_dependencies_within_harness_tree is True,
+        f"{subject} executable dependency escapes the pinned harness tree",
     )
     require(
         evidence.acceptance_dependencies_within_support_tree is True,
         f"{subject} acceptance dependency escapes the pinned support tree",
     )
     require(
-        evidence.subject_data_cannot_reduce_coverage is True,
-        f"{subject} subject data can reduce release-test coverage",
+        evidence.subjects_cannot_supply_evidence_logic is True,
+        f"{subject} subject paths can supply evidence or coverage logic",
     )
     require(
         evidence.hermetic_execution_contract_valid is True,
@@ -1336,11 +1428,12 @@ def validate_release_test_observation(
     tag: str,
     test_ref: str,
     surface: str,
-    expect_exit_zero: bool,
+    expected_result: str,
+    expected_failure_fingerprint: str | None,
     contract: ReleaseContract,
     subject: str,
-) -> None:
-    """Validate one exact test observation, including a clean process exit."""
+) -> tuple[str, tuple[str, ...], tuple[str, ...]]:
+    """Validate one atomic test observation and return its pinned inventory facts."""
 
     require(evidence.validated_tree_oid == tree_oid, f"{subject} used another tree")
     require(evidence.validated_tag == tag, f"{subject} used another freeze tag")
@@ -1364,10 +1457,21 @@ def validate_release_test_observation(
         evidence.inventory_digest_matches is True,
         f"{subject} test-inventory digest differs from policy",
     )
-    require(evidence.inventory_contract_valid is True, f"{subject} inventory is invalid")
     require(
-        evidence.inventory_test_surfaces_valid is True,
-        f"{subject} inventory has invalid surface declarations",
+        evidence.inventory_exact_schema_valid is True,
+        f"{subject} inventory schema is invalid",
+    )
+    require(
+        evidence.inventory_ids_and_failure_fingerprints_unique is True,
+        f"{subject} inventory IDs or failure fingerprints are not unique",
+    )
+    require(
+        evidence.inventory_test_surface_valid is True,
+        f"{subject} inventory has an invalid surface declaration",
+    )
+    require(
+        evidence.inventory_atomic_assertions_one_per_test is True,
+        f"{subject} inventory contains a non-atomic compatibility test",
     )
     require(evidence.inventory_test_exists is True, f"{subject} test is absent from inventory")
     require(
@@ -1383,36 +1487,112 @@ def validate_release_test_observation(
         f"{subject} test-support tree differs from policy",
     )
     require(
-        evidence.inventory_data_paths_within_mutable_roots is True,
-        f"{subject} data paths escape the mutable subject roots",
+        evidence.inventory_subject_paths_within_subject_roots is True,
+        f"{subject} subject paths escape the pinned subject roots",
     )
     require(
-        evidence.executable_dependencies_within_code_tree is True,
-        f"{subject} executable dependency escapes the pinned code tree",
+        evidence.executable_dependencies_within_harness_tree is True,
+        f"{subject} executable dependency escapes the pinned harness tree",
     )
     require(
         evidence.acceptance_dependencies_within_support_tree is True,
         f"{subject} acceptance dependency escapes the pinned support tree",
     )
     require(
-        evidence.subject_data_cannot_reduce_coverage is True,
-        f"{subject} subject data can reduce test coverage",
+        evidence.subjects_cannot_supply_evidence_logic is True,
+        f"{subject} subjects can supply evidence or coverage logic",
     )
     require(
         evidence.hermetic_execution_contract_valid is True,
         f"{subject} hermetic execution contract is invalid",
     )
     require(evidence.tool_fingerprints_match is True, f"{subject} tool identity differs")
-    surfaces = evidence.inventory_test_surfaces
+    test_surface = evidence.inventory_test_surface
     require(
-        isinstance(surfaces, tuple)
-        and bool(surfaces)
-        and all(isinstance(item, str) for item in surfaces),
-        f"{subject} inventory test surfaces are missing",
+        isinstance(test_surface, str) and test_surface in SURFACES,
+        f"{subject} inventory test surface is missing or invalid",
     )
-    require(len(surfaces) == len(set(surfaces)), f"{subject} test surfaces have duplicates")
-    require(set(surfaces) <= SURFACES, f"{subject} test has an unknown surface")
-    require(surface in surfaces, f"{subject} test does not cover surface {surface}")
+    require(test_surface == surface, f"{subject} test covers another surface")
+    fingerprint = evidence.inventory_test_failure_fingerprint
+    require(
+        isinstance(fingerprint, str) and SHA256_RE.fullmatch(fingerprint) is not None,
+        f"{subject} has an invalid pinned failure fingerprint",
+    )
+    if expected_failure_fingerprint is not None:
+        require(
+            fingerprint == expected_failure_fingerprint,
+            f"{subject} used another pinned failure fingerprint",
+        )
+    program_paths = evidence.inventory_test_program_paths
+    fixture_paths = evidence.inventory_test_fixture_paths
+    require(
+        isinstance(program_paths, tuple)
+        and bool(program_paths)
+        and all(normalized_repository_path(path) == path for path in program_paths),
+        f"{subject} program paths are missing or malformed",
+    )
+    require(
+        isinstance(fixture_paths, tuple)
+        and all(normalized_repository_path(path) == path for path in fixture_paths),
+        f"{subject} fixture paths are malformed",
+    )
+    require(
+        len(program_paths) == len(set(program_paths)),
+        f"{subject} program paths contain duplicates",
+    )
+    require(
+        len(fixture_paths) == len(set(fixture_paths)),
+        f"{subject} fixture paths contain duplicates",
+    )
+    require(
+        all(path_within_subject_roots(path, contract.test_subject_roots) for path in program_paths),
+        f"{subject} program path escapes the pinned subject roots",
+    )
+    require(
+        all(path_within_subject_roots(path, contract.test_subject_roots) for path in fixture_paths),
+        f"{subject} fixture path escapes the pinned subject roots",
+    )
+    require(
+        set(program_paths).isdisjoint(fixture_paths)
+        and all(
+            not program.startswith(f"{fixture}/")
+            for program in program_paths
+            for fixture in fixture_paths
+        ),
+        f"{subject} program and fixture roles overlap",
+    )
+    require(
+        all(
+            any(
+                policy_glob_matches(program, pattern)
+                for pattern in contract.fix_paths(test_surface)
+            )
+            for program in program_paths
+        ),
+        f"{subject} program path does not match its declared surface",
+    )
+    require(
+        evidence.inventory_test_program_paths_regular_blobs is True,
+        f"{subject} program path is not a regular blob",
+    )
+    require(
+        evidence.inventory_test_fixture_paths_regular_blobs_or_trees is True,
+        f"{subject} fixture path is not a regular blob or tree",
+    )
+    require(
+        evidence.inventory_test_fixture_trees_exclude_program_paths is True,
+        f"{subject} fixture tree contains a program path",
+    )
+    require(
+        evidence.inventory_test_fixtures_nonexecutable is True,
+        f"{subject} fixture is executable",
+    )
+    require(
+        isinstance(evidence.atomic_assertion_count, int)
+        and not isinstance(evidence.atomic_assertion_count, bool)
+        and evidence.atomic_assertion_count == 1,
+        f"{subject} does not contain exactly one atomic assertion",
+    )
     require(
         evidence.exactly_one_inventory_test_run is True,
         f"{subject} did not run exactly one inventory test",
@@ -1429,7 +1609,8 @@ def validate_release_test_observation(
     require(evidence.execution_complete is True, f"{subject} execution is incomplete")
     require(evidence.timed_out is False, f"{subject} timed out")
     require(evidence.terminated_by_signal is False, f"{subject} ended by signal")
-    require(evidence.clean_process_exit is True, f"{subject} did not exit cleanly")
+    require(expected_result in {"passed", "assertion-failed"}, "invalid expected result")
+    require(evidence.result == expected_result, f"{subject} returned another result")
     exit_code = evidence.exit_code
     require(
         isinstance(exit_code, int)
@@ -1437,10 +1618,40 @@ def validate_release_test_observation(
         and 0 <= exit_code <= 255,
         f"{subject} has an invalid process exit code",
     )
-    if expect_exit_zero:
-        require(exit_code == 0, f"{subject} regression test did not pass")
+    if expected_result == "passed":
+        require(exit_code == 0, f"{subject} passed result did not exit zero")
+        require(
+            evidence.assertion_failure_receipt_path is None
+            and evidence.observed_failure_fingerprint is None
+            and evidence.assertion_failure_receipt_exact_and_matching is None
+            and evidence.assertion_failure_receipt_atomically_written is None
+            and evidence.single_failure_cause is None,
+            f"{subject} passed result carries assertion-failure evidence",
+        )
     else:
-        require(exit_code != 0, f"{subject} regression test did not reproduce friction")
+        require(exit_code == 10, f"{subject} assertion failure did not exit exactly 10")
+        require(
+            evidence.assertion_failure_receipt_path
+            == "/tenkz-output/assertion-failure-v1.json",
+            f"{subject} used another assertion-failure receipt path",
+        )
+        require(
+            evidence.observed_failure_fingerprint == fingerprint,
+            f"{subject} observed another failure fingerprint",
+        )
+        require(
+            evidence.assertion_failure_receipt_exact_and_matching is True,
+            f"{subject} assertion-failure receipt is incomplete or mismatched",
+        )
+        require(
+            evidence.assertion_failure_receipt_atomically_written is True,
+            f"{subject} assertion-failure receipt was not written atomically",
+        )
+        require(
+            evidence.single_failure_cause is True,
+            f"{subject} reported a coarse or multiple-cause failure",
+        )
+    return fingerprint, program_paths, fixture_paths
 
 
 def validate_tag_protection(evidence: TagProtectionEvidence) -> None:
@@ -1842,8 +2053,20 @@ def validate_entries(
         "activation inventory digest is wrong",
     )
     require(
-        activation_diff.inventory_test_surfaces_valid is True,
-        "activation inventory test surfaces are invalid",
+        activation_diff.inventory_exact_schema_valid is True,
+        "activation inventory schema is invalid",
+    )
+    require(
+        activation_diff.inventory_ids_and_failure_fingerprints_unique is True,
+        "activation inventory IDs or failure fingerprints are not unique",
+    )
+    require(
+        activation_diff.inventory_test_surface_valid is True,
+        "activation inventory test surface is invalid",
+    )
+    require(
+        activation_diff.inventory_atomic_assertions_one_per_test is True,
+        "activation inventory contains a non-atomic compatibility test",
     )
     require(
         activation_diff.test_code_tree_matches is True,
@@ -1854,20 +2077,36 @@ def validate_entries(
         "activation test-support tree is wrong",
     )
     require(
-        activation_diff.inventory_data_paths_within_mutable_roots is True,
-        "activation inventory data paths escape the mutable subject roots",
+        activation_diff.inventory_subject_paths_within_subject_roots is True,
+        "activation inventory subject paths escape the pinned subject roots",
     )
     require(
-        activation_diff.executable_dependencies_within_code_tree is True,
-        "activation executable dependency escapes the pinned code tree",
+        activation_diff.inventory_program_paths_regular_and_surface_owned is True,
+        "activation inventory program paths are not regular surface-owned blobs",
+    )
+    require(
+        activation_diff.inventory_fixture_paths_regular_or_trees is True,
+        "activation inventory fixture paths are not regular blobs or trees",
+    )
+    require(
+        activation_diff.inventory_subject_roles_disjoint is True,
+        "activation inventory subject roles overlap",
+    )
+    require(
+        activation_diff.inventory_fixtures_nonexecutable is True,
+        "activation inventory permits an executable fixture",
+    )
+    require(
+        activation_diff.executable_dependencies_within_harness_tree is True,
+        "activation executable dependency escapes the pinned harness tree",
     )
     require(
         activation_diff.acceptance_dependencies_within_support_tree is True,
         "activation acceptance dependency escapes the pinned support tree",
     )
     require(
-        activation_diff.subject_data_cannot_reduce_coverage is True,
-        "activation subject data can reduce release-test coverage",
+        activation_diff.subjects_cannot_supply_evidence_logic is True,
+        "activation subjects can supply evidence or coverage logic",
     )
     require(
         activation_diff.hermetic_execution_contract_valid is True,
@@ -1942,9 +2181,10 @@ def validate_entries(
             final_tag.object_id is None
             and final_tag.object_type is None
             and final_tag.commit is None
-            and final_tag.patch_is_fresh_for_attempt is None
-            and final_tag.namespace_complete is None
-            and final_tag.patch_exceeds_other_namespace_tags is None
+            and final_tag.candidate_namespace_complete is None
+            and final_tag.candidate_patch_exceeds_current_namespace is None
+            and final_tag.historical_candidate_check_exact_and_successful is None
+            and final_tag.historical_compares_only_earlier_freezes is None
             and final_tag.validated_entry_id is None
             and final_tag.validated_record_pr is None
             and final_tag.commit_is_validated_record_integration is None,
@@ -2013,8 +2253,8 @@ def validate_entries(
         elif kind == "reset":
             reset_cause = nonempty_string(entry["cause"], "cause", entry_id)
             require(reset_cause in RESET_CAUSES, f"{entry_id} has invalid reset cause")
-            if reset_cause == "breaking-required":
-                require(active is not None, f"{entry_id} breaking reset has no active attempt")
+            if reset_cause == "restart-required":
+                require(active is not None, f"{entry_id} restart reset has no active attempt")
                 require(attempt == active["attempt"], f"{entry_id} has the wrong active attempt")
             else:
                 require(last_attempt > 0, f"{entry_id} record-invalid reset has no prior attempt")
@@ -2203,19 +2443,24 @@ def validate_entries(
                     tag.commit == source_sha,
                     f"{entry_id} freeze tag peels to another commit",
                 )
-                require(
-                    tag.patch_is_fresh_for_attempt is True,
-                    f"{entry_id} freeze PATCH does not exceed earlier freeze entries",
-                )
-                require(
-                    tag.namespace_complete is True,
-                    f"{entry_id} freeze tag namespace is incompletely paginated",
-                )
-                require(
-                    tag.patch_exceeds_other_namespace_tags is True,
-                    f"{entry_id} freeze PATCH does not exceed abandoned tags "
-                    "or other namespace tags",
-                )
+                if record_pending:
+                    require(
+                        tag.candidate_namespace_complete is True,
+                        f"{entry_id} candidate tag namespace is incompletely paginated",
+                    )
+                    require(
+                        tag.candidate_patch_exceeds_current_namespace is True,
+                        f"{entry_id} candidate PATCH does not exceed the current namespace",
+                    )
+                else:
+                    require(
+                        tag.historical_candidate_check_exact_and_successful is True,
+                        f"{entry_id} lacks its exact successful candidate PATCH check",
+                    )
+                    require(
+                        tag.historical_compares_only_earlier_freezes is True,
+                        f"{entry_id} historical PATCH check includes a later tag",
+                    )
                 payload_blobs = validate_release_payload(
                     resolve_replay_release_payload(source_sha, tag_name, release_contract),
                     tree_oid=source_sha,
@@ -2472,6 +2717,10 @@ def validate_entries(
                     "regression_tests",
                     entry_id,
                 )
+                require(
+                    bool(listed_tests),
+                    f"{entry_id} regression_tests must be nonempty",
+                )
                 for test_ref in listed_tests:
                     require(
                         TEST_REF_RE.fullmatch(test_ref) is not None,
@@ -2481,19 +2730,24 @@ def validate_entries(
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
-            def friction_observation_facts() -> None:
+            def friction_observation_facts() -> dict[str, dict[str, object]]:
                 if not regression_tests:
-                    return
+                    return {}
                 assert resolve_replay_release_test_observation is not None
                 record_head = record.head_oid
                 assert isinstance(record_head, str)
-                trees = [("head", record_head)]
-                if not record_pending:
-                    assert record_integration is not None
-                    trees.append(("integration", record_integration))
-                for stage, tree_oid in trees:
+                observations: dict[str, dict[str, object]] = {}
+
+                def observe_tree(
+                    stage: str,
+                    tree_oid: str,
+                    expected: dict[str, dict[str, object]] | None,
+                ) -> dict[str, dict[str, object]]:
+                    result: dict[str, dict[str, object]] = {}
                     for test_ref in regression_tests:
-                        validate_release_test_observation(
+                        expected_test = expected.get(test_ref) if expected is not None else None
+                        fingerprint, program_paths, fixture_paths = (
+                            validate_release_test_observation(
                             resolve_replay_release_test_observation(
                                 tree_oid,
                                 active["freeze_tag"],
@@ -2504,12 +2758,39 @@ def validate_entries(
                             tag=active["freeze_tag"],
                             test_ref=test_ref,
                             surface=surface,
-                            expect_exit_zero=False,
+                            expected_result="assertion-failed",
+                            expected_failure_fingerprint=(
+                                str(expected_test["fingerprint"])
+                                if expected_test is not None
+                                else None
+                            ),
                             contract=release_contract,
                             subject=f"{entry_id} friction {stage} test {test_ref}",
                         )
+                        )
+                        if expected_test is not None:
+                            require(
+                                program_paths == expected_test["program_paths"],
+                                f"{entry_id} friction test {test_ref} changed program roles",
+                            )
+                            require(
+                                fixture_paths == expected_test["fixture_paths"],
+                                f"{entry_id} friction test {test_ref} changed fixture roles",
+                            )
+                        result[test_ref] = {
+                            "fingerprint": fingerprint,
+                            "program_paths": program_paths,
+                            "fixture_paths": fixture_paths,
+                        }
+                    return result
 
-            check_external(friction_observation_facts)
+                observations = observe_tree("head", record_head, None)
+                if not record_pending:
+                    assert record_integration is not None
+                    observe_tree("integration", record_integration, observations)
+                return observations
+
+            friction_result = check_external(friction_observation_facts)
             if record_pending:
                 return finish_pending("friction-pending")
             if not entry_is_invalid():
@@ -2518,12 +2799,14 @@ def validate_entries(
                     "surface": surface,
                     "triage": triage,
                     "regression_tests": regression_tests,
+                    "test_facts": friction_result,
+                    "head": record.head_oid,
                     "resolved": False,
                     "merged_at": record_merged_at,
                     "integration": record_integration,
                 }
-                if triage == "breaking-required":
-                    pending_reset = ("breaking-required", entry_id)
+                if triage == "restart-required":
+                    pending_reset = ("restart-required", entry_id)
 
         elif kind == "resolution":
             assert active is not None
@@ -2533,10 +2816,6 @@ def validate_entries(
             require(fact is not None, f"{entry_id} names no friction in this attempt")
             require(fact["triage"] == "fix-compatible", f"{entry_id} resolves incompatible triage")
             require(fact["resolved"] is False, f"{entry_id} resolves friction twice")
-            require(
-                bool(fact["regression_tests"]),
-                f"{entry_id} cannot resolve an empty regression-test evidence gap",
-            )
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
@@ -2617,40 +2896,108 @@ def validate_entries(
                     isinstance(fix_base, str) and SHA_RE.fullmatch(fix_base) is not None,
                     f"{entry_id} fix merge base is missing or malformed",
                 )
+                regression_tests = fact["regression_tests"]
                 require(
-                    fix_diff.validated_surface == fact["surface"],
-                    f"{entry_id} fix diff used another compatibility surface",
+                    fix_diff.validated_regression_tests == regression_tests,
+                    f"{entry_id} fix diff used another regression-test set",
+                )
+                regression_fixes = fix_diff.regression_fixes
+                require(
+                    isinstance(regression_fixes, tuple)
+                    and len(regression_fixes) == len(regression_tests),
+                    f"{entry_id} fix lacks one semantic witness per regression test",
+                )
+                fixes_by_test: dict[str, RegressionFixEvidence] = {}
+                for fix_evidence in regression_fixes:
+                    test_ref = fix_evidence.test_ref
+                    require(
+                        isinstance(test_ref, str)
+                        and test_ref in regression_tests
+                        and test_ref not in fixes_by_test,
+                        f"{entry_id} fix semantic witnesses do not match its tests",
+                    )
+                    fixes_by_test[test_ref] = fix_evidence
+                test_facts = fact["test_facts"]
+                assert isinstance(test_facts, dict)
+                for test_ref in regression_tests:
+                    fix_evidence = fixes_by_test[test_ref]
+                    inventory_fact = test_facts[test_ref]
+                    assert isinstance(inventory_fact, dict)
+                    declared_program_paths = inventory_fact["program_paths"]
+                    fingerprint = inventory_fact["fingerprint"]
+                    require(
+                        fix_evidence.validated_surface == fact["surface"],
+                        f"{entry_id} test {test_ref} used another compatibility surface",
+                    )
+                    require(
+                        fix_evidence.declared_program_paths == declared_program_paths,
+                        f"{entry_id} test {test_ref} used another declared program set",
+                    )
+                    changed_path = normalized_repository_path(
+                        fix_evidence.changed_program_path
+                    )
+                    require(
+                        changed_path is not None
+                        and changed_path in declared_program_paths
+                        and any(
+                            policy_glob_matches(changed_path, pattern)
+                            for pattern in release_contract.fix_paths(fact["surface"])
+                        ),
+                        f"{entry_id} test {test_ref} changed no eligible declared program",
+                    )
+                    require(
+                        fix_evidence.program_blob_modified is True,
+                        f"{entry_id} test {test_ref} program blob was not modified",
+                    )
+                    require(
+                        fix_evidence.semantic_stream_changed is True,
+                        f"{entry_id} test {test_ref} program changed only nonsemantic text",
+                    )
+                    if changed_path == "scripts/tenkzlib/tnlog.py":
+                        require(
+                            fact["surface"] == "tnlog"
+                            and fix_evidence.semantic_stream_kind
+                            == "python-location-free-ast"
+                            and fix_evidence.python_reader_parses is True,
+                            f"{entry_id} test {test_ref} reader semantic stream is invalid",
+                        )
+                    else:
+                        require(
+                            fix_evidence.semantic_stream_kind
+                            == "tex-comment-stripped-tokens"
+                            and fix_evidence.python_reader_parses is None,
+                            f"{entry_id} test {test_ref} TeX semantic stream is invalid",
+                        )
+                    require(
+                        fix_evidence.baseline_failure_fingerprint == fingerprint,
+                        f"{entry_id} test {test_ref} used another baseline fingerprint",
+                    )
+                identity_trees = (
+                    fact["head"],
+                    fact["integration"],
+                    fix_base,
+                    fix_head,
+                    fix_integration,
                 )
                 require(
-                    fix_diff.validated_fix_path_patterns
-                    == release_contract.fix_paths(fact["surface"]),
-                    f"{entry_id} fix diff used another surface path set",
-                )
-                witness_path = fix_diff.semantic_witness_path
-                normalized_witness = normalized_repository_path(witness_path)
-                require(
-                    normalized_witness is not None
-                    and any(
-                        policy_glob_matches(normalized_witness, pattern)
-                        for pattern in release_contract.fix_paths(fact["surface"])
-                    ),
-                    f"{entry_id} fix semantic witness path is not surface-owned TeX",
+                    fix_diff.validated_identity_trees == identity_trees,
+                    f"{entry_id} fix identity check used another five-tree boundary",
                 )
                 require(
-                    fix_diff.surface_matching_added_or_modified_regular_blob is True,
-                    f"{entry_id} fix has no added or modified surface-owned TeX blob",
+                    fix_diff.fixture_blobs_modes_and_trees_identical is True,
+                    f"{entry_id} fix changes a regression fixture identity",
                 )
                 require(
-                    fix_diff.tex_comment_stripped_token_stream_changed is True,
-                    f"{entry_id} fix has no TeX-comment-stripped token change",
-                )
-                require(
-                    fix_diff.semantic_witness_is_same_surface_regular_blob is True,
-                    f"{entry_id} fix semantic witness is not one surface-owned TeX blob",
+                    fix_diff.freeze_manifest_blob_identical is True,
+                    f"{entry_id} fix changes the active-freeze manifest identity",
                 )
                 assert resolve_replay_release_test_observation is not None
-                for test_ref in fact["regression_tests"]:
-                    validate_release_test_observation(
+                for test_ref in regression_tests:
+                    inventory_fact = test_facts[test_ref]
+                    assert isinstance(inventory_fact, dict)
+                    fingerprint = str(inventory_fact["fingerprint"])
+                    base_fingerprint, base_programs, base_fixtures = (
+                        validate_release_test_observation(
                         resolve_replay_release_test_observation(
                             fix_base,
                             active["freeze_tag"],
@@ -2661,11 +3008,14 @@ def validate_entries(
                         tag=active["freeze_tag"],
                         test_ref=test_ref,
                         surface=fact["surface"],
-                        expect_exit_zero=False,
+                        expected_result="assertion-failed",
+                        expected_failure_fingerprint=fingerprint,
                         contract=release_contract,
                         subject=f"{entry_id} fix-base test {test_ref}",
                     )
-                    validate_release_test_observation(
+                    )
+                    head_fingerprint, head_programs, head_fixtures = (
+                        validate_release_test_observation(
                         resolve_replay_release_test_observation(
                             fix_head,
                             active["freeze_tag"],
@@ -2676,9 +3026,27 @@ def validate_entries(
                         tag=active["freeze_tag"],
                         test_ref=test_ref,
                         surface=fact["surface"],
-                        expect_exit_zero=True,
+                        expected_result="passed",
+                        expected_failure_fingerprint=fingerprint,
                         contract=release_contract,
                         subject=f"{entry_id} fix-head test {test_ref}",
+                    )
+                    )
+                    require(
+                        base_fingerprint == head_fingerprint == fingerprint,
+                        f"{entry_id} test {test_ref} changed its pinned fingerprint",
+                    )
+                    require(
+                        base_programs
+                        == head_programs
+                        == inventory_fact["program_paths"],
+                        f"{entry_id} test {test_ref} changed its declared program roles",
+                    )
+                    require(
+                        base_fixtures
+                        == head_fixtures
+                        == inventory_fact["fixture_paths"],
+                        f"{entry_id} test {test_ref} changed its declared fixture roles",
                     )
                 validate_release_payload(
                     resolve_replay_release_payload(
@@ -2717,17 +3085,21 @@ def validate_entries(
             if record_pending:
                 return finish_pending("resolution-pending")
             if not entry_is_invalid():
+                assert record_integration is not None
+                assert record_merged_at is not None
                 fact["resolved"] = True
+                fact["resolution_integration"] = record_integration
+                fact["resolution_merged_at"] = record_merged_at
 
         elif kind == "reset":
             cause = nonempty_string(entry["cause"], "cause", entry_id)
             target = nonempty_string(entry["target"], "target", entry_id)
             require(cause in RESET_CAUSES, f"{entry_id} has invalid reset cause")
             require(target in seen, f"{entry_id} reset target is not earlier")
-            if cause == "breaking-required":
+            if cause == "restart-required":
                 require(
                     seen_attempts[target] == attempt,
-                    f"{entry_id} breaking reset target is in another attempt",
+                    f"{entry_id} restart reset target is in another attempt",
                 )
             historical_record_reset = cause == "record-invalid" and index <= drift_boundary
             if cause == "record-invalid":
@@ -2873,16 +3245,16 @@ def validate_entries(
                         replay_list == sorted(replay_list, key=entry_positions.__getitem__),
                         f"{entry_id} reset receipt queue is not in ledger order",
                     )
-                    breaking_target = replay.pending_breaking_target
-                    actual_breaking_target = (
+                    restart_target = replay.pending_restart_target
+                    actual_restart_target = (
                         pending_reset[1]
                         if pending_reset is not None
-                        and pending_reset[0] == "breaking-required"
+                        and pending_reset[0] == "restart-required"
                         else None
                     )
                     require(
-                        breaking_target == actual_breaking_target,
-                        f"{entry_id} reset receipt has the wrong pending breaking target",
+                        restart_target == actual_restart_target,
+                        f"{entry_id} reset receipt has the wrong pending restart target",
                     )
                     require(
                         replay.normalized_resolver_inputs_complete_and_matching is True,
@@ -2900,11 +3272,11 @@ def validate_entries(
                         replay.current_candidate_snapshot_reproduces_receipt is True,
                         f"{entry_id} reset candidate no longer reproduces its receipt",
                     )
-                    return replay_list, breaking_target, receipt_integration
+                    return replay_list, restart_target, receipt_integration
 
                 receipt_result = check_external(replay_receipt_facts)
                 if isinstance(receipt_result, tuple):
-                    replay_list, breaking_target, receipt_integration = receipt_result
+                    replay_list, restart_target, receipt_integration = receipt_result
                     check_kind_record_fact(
                         diff.validated_receipt_integration == receipt_integration,
                         f"{entry_id} record diff used another receipt integration",
@@ -2927,8 +3299,8 @@ def validate_entries(
                             f"{entry_id} reset integration does not preserve its receipt blob",
                         )
                     receipt_required = (
-                        ("breaking-required", breaking_target)
-                        if breaking_target is not None
+                        ("restart-required", restart_target)
+                        if restart_target is not None
                         else (("record-invalid", replay_list[0]) if replay_list else None)
                     )
                     if historical_record_reset:
@@ -2997,6 +3369,28 @@ def validate_entries(
             work_integrations = tuple(
                 active["work"][work_class]["integration"] for work_class in work_classes
             )
+            compatible_frictions = [
+                (friction_id, fact)
+                for friction_id, fact in active["friction"].items()
+                if fact["triage"] == "fix-compatible"
+            ]
+            unresolved = [
+                friction_id
+                for friction_id, fact in compatible_frictions
+                if fact["resolved"] is False
+            ]
+            require(
+                not unresolved,
+                f"{entry_id} has unresolved friction: {', '.join(unresolved)}",
+            )
+            require(pending_reset is None, f"{entry_id} cannot prepare before reset")
+            resolution_integrations = tuple(
+                fact["resolution_integration"] for _friction_id, fact in compatible_frictions
+            )
+            latest_resolution_merge = max(
+                (fact["resolution_merged_at"] for _friction_id, fact in compatible_frictions),
+                default=latest_work_merge,
+            )
             release_ref = pr_ref(
                 entry["release_prep_pr"],
                 "release_prep_pr",
@@ -3016,8 +3410,8 @@ def validate_entries(
                     require_tree=True,
                 )
                 require(
-                    release_merged_at > latest_work_merge,
-                    f"{entry_id} release preparation did not merge after both work PRs",
+                    release_merged_at > max(latest_work_merge, latest_resolution_merge),
+                    f"{entry_id} release preparation merged before work or resolution evidence",
                 )
                 require_independent_approval(
                     release_pr,
@@ -3030,6 +3424,7 @@ def validate_entries(
                     release_ref,
                     release_paths,
                     work_integrations,
+                    resolution_integrations,
                 )
                 require(
                     release.validated_pr_ref == release_ref,
@@ -3050,6 +3445,10 @@ def validate_entries(
                 require(
                     release.validated_work_integrations == work_integrations,
                     f"{entry_id} release preparation used other work integrations",
+                )
+                require(
+                    release.validated_resolution_integrations == resolution_integrations,
+                    f"{entry_id} release preparation used other resolution integrations",
                 )
                 require(release.complete is True, f"{entry_id} release diff is incomplete")
                 release_parent_count = integration_parent_count(
@@ -3072,6 +3471,10 @@ def validate_entries(
                 require(
                     release.integration_descends_from_work_integrations is True,
                     f"{entry_id} release does not descend from both work integrations",
+                )
+                require(
+                    release.integration_descends_from_resolution_integrations is True,
+                    f"{entry_id} release does not descend from every resolution integration",
                 )
                 require(
                     release.exact_release_varying_path_diff is True,
@@ -3144,12 +3547,6 @@ def validate_entries(
                         authorized_permissions=reviewer_permissions,
                     )
                 )
-            unresolved = sorted(
-                friction
-                for friction, fact in active["friction"].items()
-                if fact["triage"] == "fix-compatible" and fact["resolved"] is False
-            )
-            require(not unresolved, f"{entry_id} has unresolved friction: {', '.join(unresolved)}")
             require(pending_reset is None, f"{entry_id} cannot sign off before reset")
             if record_pending:
                 return finish_pending("sign-off-pending")
