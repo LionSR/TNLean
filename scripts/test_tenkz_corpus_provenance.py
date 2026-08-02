@@ -1011,6 +1011,19 @@ kz}}
                 f"name={expanded_space_name!r}, "
                 f"occurrences={expanded_space_environment!r}"
             )
+    macro_environment = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\def\tenname{tenkz}"
+        r"\tnarrow{\begin{\tenname}[pitch=112mm]"
+        r"\rule{113mm}{114mm}\end{\tenname}}",
+    )
+    if len(macro_environment) != 3 or any(
+        occurrence.owner is not None for occurrence in macro_environment
+    ):
+        raise AssertionError(
+            "an unresolved expandable environment escaped neutral quarantine: "
+            f"{macro_environment!r}"
+        )
     nested_label_shift = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tnarrow[from=1,to=2]{\tnpic[inline]{"

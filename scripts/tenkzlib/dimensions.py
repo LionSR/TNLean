@@ -203,10 +203,11 @@ _OPTION_ENVIRONMENT_KEYS: Mapping[str, frozenset[str]] = {
 
 @dataclass(frozen=True)
 class _EnvironmentToken:
-    """One active, simple ``\\begin`` or ``\\end`` token."""
+    """One active ``\\begin`` or ``\\end`` token and its pairing key."""
 
     kind: str
-    name: str
+    name: str | None
+    match_name: str
     start: int
     end: int
 
@@ -442,12 +443,16 @@ def _environment_scope_spans(
     openings: dict[str, list[_EnvironmentToken]] = {}
     spans: list[tuple[int, int]] = []
     for token in tokens:
-        if names is not None and token.name not in names:
+        if (
+            names is not None
+            and token.name is not None
+            and token.name not in names
+        ):
             continue
         if token.kind == "begin":
-            openings.setdefault(token.name, []).append(token)
-        elif openings.get(token.name):
-            opening = openings[token.name].pop()
+            openings.setdefault(token.match_name, []).append(token)
+        elif openings.get(token.match_name):
+            opening = openings[token.match_name].pop()
             spans.append((opening.start, token.end))
     for stack in openings.values():
         spans.extend((opening.start, -1) for opening in stack)
@@ -655,16 +660,24 @@ def _environment_tokens(
         closed = match_group(owner_source, position, "{", "}")
         if closed < 0:
             continue
-        # LaTeX dispatch expands the name in ``\csname``; model the canonical
-        # expandable space token as well as ordinary ignored whitespace.
-        name = _csname_spelling(
+        # LaTeX dispatch expands the name in ``\csname``.  Model canonical
+        # spaces exactly; unresolved control sequences cannot safely grant a
+        # public option owner, but matching spellings still form a neutral
+        # quarantine so their bodies cannot inherit an enclosing owner.
+        spelling = _csname_spelling(
             source[position + 1 : closed - 1], expand_space=True
         )
-        if _ENVIRONMENT_NAME_RE.fullmatch(name) is None:
+        if _ENVIRONMENT_NAME_RE.fullmatch(spelling) is not None:
+            name: str | None = spelling
+            match_name = f"static:{spelling}"
+        elif "\\" in spelling:
+            name = None
+            match_name = f"unresolved:{spelling}"
+        else:
             continue
         tokens.append(
             _EnvironmentToken(
-                control.group(1), name, control.start(), closed
+                control.group(1), name, match_name, control.start(), closed
             )
         )
     return tokens
