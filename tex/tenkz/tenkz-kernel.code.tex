@@ -186,13 +186,16 @@
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
 \prop_new:N \l__tenkz_kernel_basis_cell_prop  % "r-c-k" -> basis atom id
 \prop_new:N \l__tenkz_kernel_basis_claim_prop % "r-c-k" -> authored atom id
-\prop_new:N \l__tenkz_kernel_basis_live_prop  % canonical "r-c-k" -> atom id
+\prop_new:N \l__tenkz_kernel_basis_live_prop  % "k/r/c" -> canonical atom id
+\prop_new:N \l__tenkz_kernel_basis_live_count_prop % member -> canonical records
+\prop_new:N \l__tenkz_kernel_basis_live_in_window_count_prop
+\prop_new:N \l__tenkz_kernel_basis_live_record_prop % "k/i" -> "r/c/id"
 \prop_new:N \l__tenkz_kernel_basis_kind_prop  % member -> row kind
 \prop_new:N \l__tenkz_kernel_basis_east_prop  % member -> quarter-pitch east
 \prop_new:N \l__tenkz_kernel_basis_north_prop % member -> quarter-pitch north
 \prop_new:N \l__tenkz_kernel_basis_spacing_east_prop  % member -> local east
 \prop_new:N \l__tenkz_kernel_basis_spacing_north_prop % member -> local north
-\prop_new:N \l__tenkz_kernel_basis_spacing_candidate_prop % keys or `all`
+\prop_new:N \l__tenkz_kernel_basis_spacing_plan_prop % sparse keys / dense pairs
 \prop_new:N \l__tenkz_kernel_basis_spacing_prop % worst distinct-family margin
 \prop_new:N \l__tenkz_kernel_trace_cell_prop  % "interface-col" -> traced segment
 \prop_new:N \l__tenkz_kernel_open_cell_prop   % "interface-col" -> opened segment
@@ -205,9 +208,26 @@
 \bool_new:N \l__tenkz_kernel_basis_valid_bool
 \bool_new:N \l__tenkz_kernel_basis_member_live_bool
 \bool_new:N \l__tenkz_kernel_basis_spacing_bool
+\bool_new:N \l__tenkz_kernel_basis_spacing_realized_bool
 \bool_new:N \l__tenkz_kernel_frame_valid_bool
 \bool_new:N \l__tenkz_kernel_group_keys_bool
 \int_new:N  \l__tenkz_kernel_basis_count_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_a_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_b_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_dr_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_dc_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_a_count_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_b_count_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_a_row_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_a_col_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_b_row_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_b_col_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_translation_count_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_scan_member_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_target_member_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_scan_sign_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_overlap_int
+\int_new:N  \l__tenkz_kernel_basis_spacing_holes_int
 \fp_const:Nn \c__tenkz_kernel_basis_step_fp { 1 / 4 }
 \int_new:N  \g__tenkz_kernel_eq_scope_int     % owner id for pictures/checks
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
@@ -219,12 +239,18 @@
 \tl_new:N   \l__tenkz_kernel_bundle_item_tl
 \tl_new:N   \l__tenkz_kernel_claim_owner_tl
 \tl_new:N   \l__tenkz_kernel_basis_live_id_tl
+\tl_new:N   \l__tenkz_kernel_basis_live_key_tl
+\tl_new:N   \l__tenkz_kernel_basis_live_record_tl
+\tl_new:N   \l__tenkz_kernel_basis_spacing_a_id_tl
+\tl_new:N   \l__tenkz_kernel_basis_spacing_b_id_tl
+\tl_new:N   \l__tenkz_kernel_basis_spacing_target_id_tl
 \tl_new:N   \l__tenkz_kernel_basis_spacing_dist_tl
 \tl_new:N   \l__tenkz_kernel_basis_spacing_floor_tl
 \tl_new:N   \l__tenkz_kernel_basis_spacing_margin_tl
 \seq_new:N  \l__tenkz_kernel_stack_seq        % operand stack (see shelf notes)
 \seq_new:N  \l__tenkz_kernel_bundle_seq
 \seq_new:N  \l__tenkz_kernel_bundle_match_seq
+\seq_new:N  \l__tenkz_kernel_basis_spacing_address_seq
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
 \seq_new:N  \g__tenkz_kernel_rel_gseq         % tenkzeq relation glyphs
@@ -2202,6 +2228,46 @@
 % non-wire row yields one atom per cell the body left unclaimed; a wire row is
 % a rail and populates nothing.
 \int_new:N \l__tenkz_kernel_pop_int
+\cs_new_protected:Npn \__tenkz_kernel_basis_live_register:nnnn #1#2#3#4
+  {
+    \tl_set:Ne \l__tenkz_kernel_basis_live_key_tl {#1/#2/#3}
+    \prop_if_in:NVF \l__tenkz_kernel_basis_live_prop
+      \l__tenkz_kernel_basis_live_key_tl
+      {
+        \prop_put:NVn \l__tenkz_kernel_basis_live_prop
+          \l__tenkz_kernel_basis_live_key_tl {#4}
+        \prop_get:NnNTF \l__tenkz_kernel_basis_live_count_prop {#1}
+          \l_tmpa_tl
+          { \int_set:Nn \l_tmpa_int { \l_tmpa_tl + 1 } }
+          { \int_set:Nn \l_tmpa_int {1} }
+        \prop_put:Nne \l__tenkz_kernel_basis_live_count_prop {#1}
+          { \int_use:N \l_tmpa_int }
+        \prop_put:Nee \l__tenkz_kernel_basis_live_record_prop
+          { #1 / \int_use:N \l_tmpa_int } {#2/#3/#4}
+        \int_compare:nNnT {#2} > {0}
+          {
+            \int_compare:nNnT {#2} < { \__tenkz_kernel_rows: + 1 }
+              {
+                \int_compare:nNnT {#3} > {0}
+                  {
+                    \int_compare:nNnT {#3} < { \__tenkz_kernel_cols: + 1 }
+                      {
+                        \prop_get:NnNTF
+                          \l__tenkz_kernel_basis_live_in_window_count_prop
+                          {#1} \l_tmpa_tl
+                          { \int_set:Nn \l_tmpa_int { \l_tmpa_tl + 1 } }
+                          { \int_set:Nn \l_tmpa_int {1} }
+                        \prop_put:Nne
+                          \l__tenkz_kernel_basis_live_in_window_count_prop
+                          {#1} { \int_use:N \l_tmpa_int }
+                      }
+                  }
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_basis_live_register:nnnn { VVVV }
+
 \cs_new_protected:Npn \__tenkz_kernel_populate_basis_member:nnn #1#2#3
   {
     \bool_set_false:N \l__tenkz_kernel_basis_member_live_bool
@@ -2241,9 +2307,9 @@
           \l__tenkz_kernel_basis_live_id_tl {member} \l_tmpc_tl
         \quark_if_no_value:NF \l_tmpc_tl
           {
-            \prop_put:Nee \l__tenkz_kernel_basis_live_prop
-              { \l_tmpa_tl - \l_tmpb_tl - \l_tmpc_tl }
-              { \l__tenkz_kernel_basis_live_id_tl }
+            \__tenkz_kernel_basis_live_register:VVVV
+              \l_tmpc_tl \l_tmpa_tl \l_tmpb_tl
+              \l__tenkz_kernel_basis_live_id_tl
           }
       }
     \int_compare:nNnT { \l__tenkz_kernel_basis_count_int } = {1}
@@ -4220,15 +4286,118 @@
 % model identity, placement, or connectivity.
 %
 % Population indexes each live record by its canonical member address.  Whole-
-% cell overrides contribute no slot; member-addressed replacements remain
-% live; spanning records contribute only their anchor.  Geometry checks each
-% bounded member-pair/translation candidate against this index directly, so a
-% sparse or nearly complete picture never constructs a live-record square.
+% cell overrides contribute no record; member-addressed replacements remain
+% live; spanning records contribute only their anchor, including anchors just
+% outside the declared window.  For each member pair the plan either enumerates
+% its sparse record product or marks it dense, whichever is bounded by the
+% finite translation window.  Geometry owns the raw support calculation and
+% asks this kernel callback about model realization only for negative margins.
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_sparse_inner:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_basis_live_record_prop
+      { \int_use:N \l__tenkz_kernel_basis_spacing_b_int / #1 }
+      \l__tenkz_kernel_basis_live_record_tl
+    \seq_set_split:NnV \l__tenkz_kernel_basis_spacing_address_seq {/}
+      \l__tenkz_kernel_basis_live_record_tl
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_b_row_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {1} }
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_b_col_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {2} }
+    \tl_set:Ne \l__tenkz_kernel_basis_spacing_b_id_tl
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {3} }
+    \str_if_eq:eeF
+      { \l__tenkz_kernel_basis_spacing_a_id_tl }
+      { \l__tenkz_kernel_basis_spacing_b_id_tl }
+      {
+        \prop_put:Nee \l__tenkz_kernel_basis_spacing_plan_prop
+          {
+            candidate /
+            \int_use:N \l__tenkz_kernel_basis_spacing_a_int /
+            \int_use:N \l__tenkz_kernel_basis_spacing_b_int /
+            \int_eval:n
+              {
+                \l__tenkz_kernel_basis_spacing_b_row_int
+                - \l__tenkz_kernel_basis_spacing_a_row_int
+              } /
+            \int_eval:n
+              {
+                \l__tenkz_kernel_basis_spacing_b_col_int
+                - \l__tenkz_kernel_basis_spacing_a_col_int
+              }
+          }
+          {1}
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_sparse_outer:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_basis_live_record_prop
+      { \int_use:N \l__tenkz_kernel_basis_spacing_a_int / #1 }
+      \l__tenkz_kernel_basis_live_record_tl
+    \seq_set_split:NnV \l__tenkz_kernel_basis_spacing_address_seq {/}
+      \l__tenkz_kernel_basis_live_record_tl
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_row_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {1} }
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_col_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {2} }
+    \tl_set:Ne \l__tenkz_kernel_basis_spacing_a_id_tl
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {3} }
+    \int_step_function:nnN {1}
+      { \l__tenkz_kernel_basis_spacing_b_count_int }
+      \__tenkz_kernel_basis_spacing_sparse_inner:n
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_plan_b:n #1
+  {
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_b_int {#1}
+    \prop_get:NeNTF \l__tenkz_kernel_basis_live_count_prop {#1} \l_tmpa_tl
+      {
+        \int_set:Nn \l__tenkz_kernel_basis_spacing_b_count_int
+          { \l_tmpa_tl }
+      }
+      { \int_zero:N \l__tenkz_kernel_basis_spacing_b_count_int }
+    \int_compare:nNnTF
+      {
+        \l__tenkz_kernel_basis_spacing_a_count_int
+        * \l__tenkz_kernel_basis_spacing_b_count_int
+      }
+      < { \l__tenkz_kernel_basis_spacing_translation_count_int }
+      {
+        \int_step_function:nnN {1}
+          { \l__tenkz_kernel_basis_spacing_a_count_int }
+          \__tenkz_kernel_basis_spacing_sparse_outer:n
+      }
+      {
+        \prop_put:Nee \l__tenkz_kernel_basis_spacing_plan_prop
+          {
+            dense /
+            \int_use:N \l__tenkz_kernel_basis_spacing_a_int /
+            \int_use:N \l__tenkz_kernel_basis_spacing_b_int
+          }
+          {1}
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_plan_a:n #1
+  {
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_int {#1}
+    \prop_get:NeNTF \l__tenkz_kernel_basis_live_count_prop {#1} \l_tmpa_tl
+      {
+        \int_set:Nn \l__tenkz_kernel_basis_spacing_a_count_int
+          { \l_tmpa_tl }
+      }
+      { \int_zero:N \l__tenkz_kernel_basis_spacing_a_count_int }
+    \int_step_function:nnN
+      { \l__tenkz_kernel_basis_spacing_a_int + 1 }
+      { \l__tenkz_kernel_basis_count_int }
+      \__tenkz_kernel_basis_spacing_plan_b:n
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_basis_spacing_candidates:
   {
     \prop_clear:N \l__tenkz_kernel_basis_spacing_east_prop
     \prop_clear:N \l__tenkz_kernel_basis_spacing_north_prop
-    \prop_clear:N \l__tenkz_kernel_basis_spacing_candidate_prop
+    \prop_clear:N \l__tenkz_kernel_basis_spacing_plan_prop
     \prop_map_inline:Nn \l__tenkz_kernel_basis_east_prop
       {
         \prop_put:Nee \l__tenkz_kernel_basis_spacing_east_prop {##1}
@@ -4239,9 +4408,148 @@
         \prop_put:Nee \l__tenkz_kernel_basis_spacing_north_prop {##1}
           { \fp_eval:n { ##2 * \c__tenkz_kernel_basis_step_fp } }
       }
-    \prop_set_eq:NN \l__tenkz_kernel_basis_spacing_candidate_prop
-      \l__tenkz_kernel_basis_live_prop
-    \prop_put:Nnn \l__tenkz_kernel_basis_spacing_candidate_prop {slots} {1}
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_translation_count_int
+      {
+        ( 2 * \__tenkz_kernel_rows: - 1 )
+        * ( 2 * \__tenkz_kernel_cols: - 1 )
+      }
+    \int_step_function:nnN {1}
+      { \l__tenkz_kernel_basis_count_int - 1 }
+      \__tenkz_kernel_basis_spacing_plan_a:n
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_scan:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_basis_live_record_prop
+      { \int_use:N \l__tenkz_kernel_basis_spacing_scan_member_int / #1 }
+      \l__tenkz_kernel_basis_live_record_tl
+    \seq_set_split:NnV \l__tenkz_kernel_basis_spacing_address_seq {/}
+      \l__tenkz_kernel_basis_live_record_tl
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_row_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {1} }
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_col_int
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {2} }
+    \tl_set:Ne \l__tenkz_kernel_basis_spacing_a_id_tl
+      { \seq_item:Nn \l__tenkz_kernel_basis_spacing_address_seq {3} }
+    \prop_get:NeNT \l__tenkz_kernel_basis_live_prop
+      {
+        \int_use:N \l__tenkz_kernel_basis_spacing_target_member_int /
+        \int_eval:n
+          {
+            \l__tenkz_kernel_basis_spacing_a_row_int
+            + \l__tenkz_kernel_basis_spacing_scan_sign_int
+              * \l__tenkz_kernel_basis_spacing_dr_int
+          } /
+        \int_eval:n
+          {
+            \l__tenkz_kernel_basis_spacing_a_col_int
+            + \l__tenkz_kernel_basis_spacing_scan_sign_int
+              * \l__tenkz_kernel_basis_spacing_dc_int
+          }
+      }
+      \l__tenkz_kernel_basis_spacing_target_id_tl
+      {
+        \str_if_eq:eeF
+          { \l__tenkz_kernel_basis_spacing_a_id_tl }
+          { \l__tenkz_kernel_basis_spacing_target_id_tl }
+          {
+            \bool_set_true:N \l__tenkz_kernel_basis_spacing_realized_bool
+            \prg_break:
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_basis_spacing_dense_realized:nnnn
+    #1#2#3#4
+  {
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_a_int {#1}
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_b_int {#2}
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_dr_int {#3}
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_dc_int {#4}
+    \bool_set_false:N \l__tenkz_kernel_basis_spacing_realized_bool
+    \prop_get:NeNTF \l__tenkz_kernel_basis_live_in_window_count_prop {#1}
+      \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_basis_spacing_a_count_int { \l_tmpa_tl } }
+      { \int_zero:N \l__tenkz_kernel_basis_spacing_a_count_int }
+    \prop_get:NeNTF \l__tenkz_kernel_basis_live_in_window_count_prop {#2}
+      \l_tmpa_tl
+      { \int_set:Nn \l__tenkz_kernel_basis_spacing_b_count_int { \l_tmpa_tl } }
+      { \int_zero:N \l__tenkz_kernel_basis_spacing_b_count_int }
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_overlap_int
+      {
+        ( \__tenkz_kernel_rows: - \int_abs:n {#3} )
+        * ( \__tenkz_kernel_cols: - \int_abs:n {#4} )
+      }
+    \int_set:Nn \l__tenkz_kernel_basis_spacing_holes_int
+      {
+        2 * \__tenkz_kernel_rows: * \__tenkz_kernel_cols:
+        - \l__tenkz_kernel_basis_spacing_a_count_int
+        - \l__tenkz_kernel_basis_spacing_b_count_int
+      }
+    \int_compare:nNnTF
+      { \l__tenkz_kernel_basis_spacing_overlap_int }
+      > { \l__tenkz_kernel_basis_spacing_holes_int }
+      { \bool_set_true:N \l__tenkz_kernel_basis_spacing_realized_bool }
+      {
+        \prop_get:NeN \l__tenkz_kernel_basis_live_count_prop {#1} \l_tmpa_tl
+        \int_set:Nn \l__tenkz_kernel_basis_spacing_a_count_int { \l_tmpa_tl }
+        \prop_get:NeN \l__tenkz_kernel_basis_live_count_prop {#2} \l_tmpa_tl
+        \int_set:Nn \l__tenkz_kernel_basis_spacing_b_count_int { \l_tmpa_tl }
+        \int_compare:nNnTF
+          { \l__tenkz_kernel_basis_spacing_a_count_int }
+          < { \l__tenkz_kernel_basis_spacing_b_count_int + 1 }
+          {
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_scan_member_int {#1}
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_target_member_int {#2}
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_scan_sign_int {1}
+            \int_set_eq:NN \l_tmpa_int
+              \l__tenkz_kernel_basis_spacing_a_count_int
+          }
+          {
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_scan_member_int {#2}
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_target_member_int {#1}
+            \int_set:Nn \l__tenkz_kernel_basis_spacing_scan_sign_int {-1}
+            \int_set_eq:NN \l_tmpa_int
+              \l__tenkz_kernel_basis_spacing_b_count_int
+          }
+        \int_step_function:nnN {1} { \l_tmpa_int }
+          \__tenkz_kernel_basis_spacing_scan:n
+      }
+  }
+
+\prg_new_protected_conditional:Npnn
+  \__tenkz_kernel_basis_spacing_query:nnnnn #1#2#3#4#5 { T, F, TF }
+  {
+    \str_if_eq:nnTF {#1} {candidate}
+      {
+        \bool_lazy_or:nnTF
+          {
+            \prop_if_in_p:Ne \l__tenkz_kernel_basis_spacing_plan_prop
+              {dense/#2/#3}
+          }
+          {
+            \prop_if_in_p:Ne \l__tenkz_kernel_basis_spacing_plan_prop
+              {candidate/#2/#3/#4/#5}
+          }
+          { \prg_return_true: }
+          { \prg_return_false: }
+      }
+      {
+        \str_if_eq:nnTF {#1} {realized}
+          {
+            \prop_if_in:NeTF \l__tenkz_kernel_basis_spacing_plan_prop
+              {dense/#2/#3}
+              {
+                \__tenkz_kernel_basis_spacing_dense_realized:nnnn
+                  {#2}{#3}{#4}{#5}
+                \bool_if:NTF \l__tenkz_kernel_basis_spacing_realized_bool
+                  { \prg_return_true: }
+                  { \prg_return_false: }
+              }
+              { \prg_return_true: }
+          }
+          { \prg_return_false: }
+      }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_basis_spacing_report:
@@ -4310,7 +4618,7 @@
               { \__tenkz_metric_default_bead_page_gap: }
               \l__tenkz_kernel_basis_spacing_east_prop
               \l__tenkz_kernel_basis_spacing_north_prop
-              \l__tenkz_kernel_basis_spacing_candidate_prop
+              \__tenkz_kernel_basis_spacing_query:nnnnnTF
               \l__tenkz_kernel_basis_spacing_prop
             \prop_if_empty:NF \l__tenkz_kernel_basis_spacing_prop
               { \__tenkz_kernel_basis_spacing_report: }
@@ -13351,6 +13659,9 @@
     \prop_clear:N \l__tenkz_kernel_basis_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_claim_prop
     \prop_clear:N \l__tenkz_kernel_basis_live_prop
+    \prop_clear:N \l__tenkz_kernel_basis_live_count_prop
+    \prop_clear:N \l__tenkz_kernel_basis_live_in_window_count_prop
+    \prop_clear:N \l__tenkz_kernel_basis_live_record_prop
     \prop_clear:N \l__tenkz_kernel_basis_kind_prop
     \prop_clear:N \l__tenkz_kernel_basis_east_prop
     \prop_clear:N \l__tenkz_kernel_basis_north_prop
