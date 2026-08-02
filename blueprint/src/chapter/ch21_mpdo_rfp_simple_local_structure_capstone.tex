@@ -1,26 +1,5 @@
 \subsection{Local simple-MPDO structure}
 
-\begin{definition}[Local simple-MPDO structure]
-    \label{def:simple_mpdo_local_structure_data}
-    \lean{MPOTensor.SimpleMPDOLocalStructureData}
-    \leanok
-    \uses{thm:sal_implies_eta_structure}
-    This structure records the local ingredients of
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}: a normalized three-site reduced
-    state with equality in strong subadditivity, the resulting Markov
-    decomposition, and a primitive matrix $T$ with trace one and, for every
-    positive integer $m$, equal positive-power traces:
-    \begin{align}
-        \tr(T)&=1, \notag\\
-        \tr(T^m)&=\tr(T), \notag
-    \end{align}
-    together with a rank-one factorization
-    \begin{align}
-        T&=ab^\top, \notag\\
-        a\cdot b&=1. \notag
-    \end{align}
-\end{definition}
-
 % **Refuted:** the source-selected four-sector tensor in
 % thm:mpdo_sal_zcl_rank_one_counterexample is injective and satisfies SAL and
 % ZCL, but its active trace matrix has no rank-one factorization.  The exact
@@ -150,10 +129,11 @@
 % rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
 % SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
 % use in the printed derivation of the source corollary fails, and that
-% corollary remains unformalized under the source hypotheses. A conditional
-% construction of rank-one and local-structure data under positive
-% semidefiniteness or linear independence is given by
-% thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
+% corollary remains unformalized under the source hypotheses. The direct
+% corrected rank-one criteria thm:psd_trace_powers_rank_one_t and
+% thm:pairing_idempotent_rank_one_t require respectively positive
+% semidefiniteness or linear independence and do not establish this
+% corollary. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{corollary}[Local sector structure from SAL and ZCL (open)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
@@ -174,31 +154,6 @@
     derivation combines Lemma~C.4 with the refuted Lemma~C.5, so the conclusion
     remains open under the printed hypotheses.
 \end{corollary}
-
-% **Scope restriction (rank-one trace matrix):** the two constructors below
-% require respectively positive semidefiniteness or linear independence, neither
-% of which is supplied by the source hypotheses of SAL and ZCL. Thus this entry
-% does not formalize Lemma SALZCL, its structural corollary, or Proposition
-% prop2to3 from those hypotheses alone. Documented in
-% docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Conditional local simple-MPDO structure under stronger rank-one hypotheses]
-    \label{thm:simple_mpdo_local_structure_data_of_sal_zcl}
-    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPairingIdempotent}
-    \lean{MPOTensor.SimpleMPDOLocalStructureData.ofSALZCLOfPosSemidef}
-    \leanok
-    \uses{def:simple_mpdo_local_structure_data, thm:sal_implies_eta_structure,
-        thm:psd_trace_powers_rank_one_t, thm:pairing_idempotent_rank_one_t}
-    These are conditional constructions under hypotheses stronger than SAL and
-    ZCL; neither is the printed Lemma~C.5 or its corollary. In the first,
-    $T$ is positive semidefinite, $\tr(T)=1$, and $\tr(T^m)=1$ for every
-    positive integer $m$; the spectral theorem then gives the rank-one
-    factorization $T=ab^\top$ with $a\cdot b=1$. In the second, $T$ is the
-    sector trace matrix of linearly independent sector tensors satisfying the
-    zero-correlation-length pairing identity. This identity implies $T^2=T$,
-    so trace one gives the same rank-one factorization. In this second form the
-    constancy of the positive-power traces is a conclusion rather than an
-    assumption.
-\end{theorem}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
     \label{thm:mpdo_neighboring_sector_positivity}
@@ -803,10 +758,11 @@ This is the calculation in
 % rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
 % SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
 % use in the printed derivation of this proposition fails, and the proposition
-% remains unformalized under the source hypotheses. A conditional construction
-% of rank-one and local-structure data under positive semidefiniteness or linear
-% independence is given by
-% thm:simple_mpdo_local_structure_data_of_sal_zcl. Documented in
+% remains unformalized under the source hypotheses. The direct corrected
+% rank-one criteria thm:psd_trace_powers_rank_one_t and
+% thm:pairing_idempotent_rank_one_t require respectively positive
+% semidefiniteness or linear independence and do not establish this
+% proposition. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[BNT sector structure from SAL and ZCL]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
