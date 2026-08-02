@@ -286,7 +286,7 @@ def _comment_dimension_is_measurement(
         r"(?:\\tn(?:join|wire|edge|arrow)\s+path|"
         r"\b(?:pitch(?:es)?|spacings?|distances?|clearances?|widths?|heights?|"
         r"lengths?|radii|radiuses?|diameters?|offsets?|routes?|strings?))"
-        r"(?:\s+(?:is|was|equals|measures))?\s*$",
+        r"(?:(?:\s+(?:is|was|equals|measures|of))|(?:\s*[:=]))?\s*$",
         prefix,
         flags=re.IGNORECASE,
     ) is not None:

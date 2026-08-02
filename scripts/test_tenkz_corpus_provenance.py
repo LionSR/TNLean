@@ -384,6 +384,21 @@ def test_rmp_dimension_ownership() -> None:
             "a local measurement phrase did not govern a spaced inch: "
             f"{governed_comment_inch!r}"
         )
+    for source, owner in (
+        ("% clearance = 1 in.\n", None),
+        ("% width: 1 in.\n", DimensionOwner.LAYOUT),
+        ("% spacing of 1 in.\n", DimensionOwner.METRIC),
+    ):
+        governed_comment_inch = scan_case_dimensions(Path("synthetic.tex"), source)
+        if (
+            len(governed_comment_inch) != 1
+            or governed_comment_inch[0].owner is not owner
+            or not governed_comment_inch[0].in_comment
+        ):
+            raise AssertionError(
+                "measurement punctuation did not govern a spaced inch: "
+                f"{governed_comment_inch!r}"
+            )
     for source in (
         r"% \tnjoin path is 1 in from the origin" "\n",
         "% routes 2 in long\n",
