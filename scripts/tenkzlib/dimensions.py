@@ -46,8 +46,12 @@ class DimensionReport:
         return Counter(
             occurrence.owner
             for occurrence in self.cases
-            if occurrence.owner is not None
+            if not occurrence.in_comment and occurrence.owner is not None
         )
+
+    @property
+    def case_count(self) -> int:
+        return sum(not occurrence.in_comment for occurrence in self.cases)
 
     @property
     def comment_count(self) -> int:
@@ -68,10 +72,11 @@ class DimensionOwnershipError(ValueError):
 # millimetres.  The one lexical ambiguity, English prose using ``in`` as a
 # preposition, is resolved only while scanning comments below.
 DIMENSION_RE = re.compile(
-    r"(?<![A-Za-z0-9_.])"
+    r"(?<![0-9_.])"
     r"[-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
     r"(?:\s*true)?\s*"
-    r"(?:pt|pc|bp|cm|mm|dd|cc|sp|in)\b"
+    r"(?:pt|pc|bp|cm|mm|dd|cc|sp|in)\b",
+    flags=re.IGNORECASE,
 )
 
 CASE_DIMENSION_CEILING = 926
@@ -96,6 +101,7 @@ _COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
 }
 _COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_OWNERS) + r")\b")
 _OPTION_OWNER_RE = re.compile(
+    r"(?<![A-Za-z0-9_])"
     r"(?P<key>sheet\s+vector|row\s+vector|col\s+vector|pitch)\s*=",
     flags=re.IGNORECASE,
 )
@@ -212,11 +218,7 @@ def _comment_uses_in_as_preposition(
     if re.search(r"in\s*$", occurrence.group(0), flags=re.IGNORECASE) is None:
         return False
     tail = source[occurrence.end() : comment_end]
-    return re.match(
-        r"\s+(?:the|an?|this|that|these|those)\b",
-        tail,
-        flags=re.IGNORECASE,
-    ) is not None
+    return re.match(r"\s+[A-Za-z]", tail) is not None
 
 
 def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, ...]:
@@ -233,9 +235,11 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             None,
         )
         if comment_range is not None:
-            if _comment_uses_in_as_preposition(source, match, comment_range[1]):
-                continue
             owner = _comment_owner(source[comment_range[0] : comment_range[1]])
+            if owner is None and _comment_uses_in_as_preposition(
+                source, match, comment_range[1]
+            ):
+                continue
             in_comment = True
         else:
             owner = next(
@@ -297,15 +301,19 @@ def _location(occurrence: DimensionOccurrence) -> str:
 def validate_dimension_report(report: DimensionReport) -> None:
     """Reject unowned dimensions and any increase above the frozen ratchets."""
     problems: list[str] = []
-    unowned = [occurrence for occurrence in report.cases if occurrence.owner is None]
+    unowned = [
+        occurrence
+        for occurrence in report.cases
+        if not occurrence.in_comment and occurrence.owner is None
+    ]
     if unowned:
         problems.append(
             "unowned case dimension(s): "
             + ", ".join(_location(occurrence) for occurrence in unowned)
         )
-    if len(report.cases) > CASE_DIMENSION_CEILING:
+    if report.case_count > CASE_DIMENSION_CEILING:
         problems.append(
-            f"case dimensions increased to {len(report.cases)} "
+            f"case dimensions increased to {report.case_count} "
             f"(ceiling {CASE_DIMENSION_CEILING})"
         )
     counts = report.case_counts
@@ -342,7 +350,7 @@ def format_dimension_report(report: DimensionReport) -> str:
     """Return the stable one-line ownership summary used by the RMP driver."""
     counts = report.case_counts
     return (
-        f"RMP dimensions: cases {len(report.cases)} | "
+        f"RMP dimensions: cases {report.case_count} | "
         f"metric {counts[DimensionOwner.METRIC]} | "
         f"projection/frame {counts[DimensionOwner.FRAME]} | "
         f"route/string {counts[DimensionOwner.ROUTE]} | "

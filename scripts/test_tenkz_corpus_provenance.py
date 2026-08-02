@@ -214,10 +214,10 @@ def test_rmp_dimension_ownership() -> None:
             DimensionOwner.LAYOUT: 530,
         }
     )
-    if len(report.cases) != 926 or report.case_counts != expected:
+    if report.case_count != 926 or report.case_counts != expected:
         raise AssertionError(
             "RMP dimension ownership baseline drifted: "
-            f"total={len(report.cases)}, owners={report.case_counts!r}"
+            f"total={report.case_count}, owners={report.case_counts!r}"
         )
     if report.comment_count:
         raise AssertionError("RMP case comments regained physical dimensions")
@@ -235,10 +235,12 @@ def test_rmp_dimension_ownership() -> None:
 \end{tenkz}
 """
     occurrences = scan_case_dimensions(Path("synthetic.tex"), synthetic)
-    synthetic_counts = Counter(occurrence.owner for occurrence in occurrences)
+    synthetic_counts = Counter(
+        occurrence.owner for occurrence in occurrences if not occurrence.in_comment
+    )
     if synthetic_counts != Counter(
         {
-            DimensionOwner.METRIC: 2,
+            DimensionOwner.METRIC: 1,
             DimensionOwner.FRAME: 2,
             DimensionOwner.ROUTE: 4,
             DimensionOwner.LAYOUT: 2,
@@ -261,10 +263,39 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"spaced/true absolute dimensions escaped: {absolute_units!r}"
         )
+    command_adjacent_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(\kern1mm,1MM,1Mm)}{}",
+    )
+    if [occurrence.literal for occurrence in command_adjacent_units] != [
+        "1mm",
+        "1MM",
+        "1Mm",
+    ] or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in command_adjacent_units
+    ):
+        raise AssertionError(
+            "command-adjacent/mixed-case dimensions escaped: "
+            f"{command_adjacent_units!r}"
+        )
+    suffix_key = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\begin{tenkz}[narrow vector=1mm]\end{tenkz}",
+    )
+    if len(suffix_key) != 1 or suffix_key[0].owner is not None:
+        raise AssertionError(f"option key suffix gained an owner: {suffix_key!r}")
     if scan_case_dimensions(
         Path("synthetic.tex"), "% at y=-0.75 in the author source\n"
     ):
         raise AssertionError("the English preposition 'in' became an inch unit")
+    for prose in (
+        "% site 3 in Section III\n",
+        "% each of 4 in total\n",
+        "% label 2 in figure 3\n",
+    ):
+        if scan_case_dimensions(Path("synthetic.tex"), prose):
+            raise AssertionError(f"English prose became an inch unit: {prose!r}")
     active_inch = scan_case_dimensions(
         Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"
     )
@@ -275,6 +306,17 @@ def test_rmp_dimension_ownership() -> None:
     )
     if len(comment_inch) != 1 or not comment_inch[0].in_comment:
         raise AssertionError(f"comment inch escaped: {comment_inch!r}")
+    owned_comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% pitch is 1 in the final figure\n"
+    )
+    if (
+        len(owned_comment_inch) != 1
+        or owned_comment_inch[0].owner is not DimensionOwner.METRIC
+        or not owned_comment_inch[0].in_comment
+    ):
+        raise AssertionError(
+            f"owned comment inch escaped: {owned_comment_inch!r}"
+        )
 
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),
