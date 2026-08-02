@@ -21,9 +21,11 @@ in its equal-case strengthening:
   if two non-repeated block families satisfy a supplied periodic-overlap
   hypothesis, their blocks match bijectively up to `RepeatedBlocks`. Source
   theorem `thm:bd` instead assumes proportionality of the assembled MPV
-  families. The deduction of the supplied hypothesis is proved for literal
-  multiplicity-bearing families of normalized periodic blocks; transport from
-  the source's unnormalized blocks remains incomplete.
+  families. The companion module `ProportionalOverlap` proves the deduction
+  for literal multiplicity-bearing families of spectrally periodic blocks,
+  including transport through their sectorwise Perron similarities. A
+  source-labelled matching theorem retaining equality of matched periods
+  remains to be stated.
 
 * **Supporting lemmas for the equal-case theorem `thm:bdequal`**: The equal-case
   strengthening produces per-block Z-gauge data (diagonal Z with Z^m = 1) from the
@@ -101,6 +103,17 @@ theorem HetRepeatedBlocks.of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
     (h : RepeatedBlocks A B) : HetRepeatedBlocks A B :=
   ⟨rfl, h⟩
 
+/-- A pure bond-space similarity is a repeated-block relation with unit phase,
+also in the heterogeneous-dimension formulation.
+
+Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
+lines 276--284; the pure normalization similarities used here occur at
+lines 313--332. -/
+theorem GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) : HetRepeatedBlocks A B :=
+  HetRepeatedBlocks.of_repeatedBlocks
+    ((equivalentBlocks_iff_gaugeEquiv.mpr h).to_repeatedBlocks)
+
 /-! ## Periodic block matching witness -/
 
 /-- Witness for periodic block matching: equal block counts, a bijection, and per-block
@@ -143,6 +156,62 @@ structure PeriodicOverlapHypothesis
   hetRepeatedBlocks_of_nondecaying : ∀ j k,
     ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) Filter.atTop (nhds 0) →
     HetRepeatedBlocks (A j) (B k)
+
+/-- Pure bond-space similarities transport a periodic overlap hypothesis back to the
+original block families.
+
+Every closed-chain matrix-product coefficient is invariant under similarity, so each
+mixed overlap agrees exactly before and after the two gauges. Hence decay, and therefore
+non-decay, is unchanged. The repeated-block conclusion is transported by composing the
+pure-gauge repeated-block relations on its two sides.
+
+Source: arXiv:1708.00029, lines 313--332 (blockwise pure normalization similarities),
+and proposition `equal-or-orthogonal-generalized`, lines 589--609. -/
+theorem PeriodicOverlapHypothesis.of_gaugeEquiv
+    {rA rB : ℕ}
+    {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
+    {A A' : (j : Fin rA) → MPSTensor d (dimA j)}
+    {B B' : (k : Fin rB) → MPSTensor d (dimB k)}
+    (hGaugeA : ∀ j, GaugeEquiv (A j) (A' j))
+    (hGaugeB : ∀ k, GaugeEquiv (B k) (B' k))
+    (hOverlap : PeriodicOverlapHypothesis A' B') :
+    PeriodicOverlapHypothesis A B := by
+  classical
+  have hRepA : ∀ j, HetRepeatedBlocks (A j) (A' j) := fun j =>
+    (hGaugeA j).toHetRepeatedBlocks
+  have hRepB : ∀ k, HetRepeatedBlocks (B k) (B' k) := fun k =>
+    (hGaugeB k).toHetRepeatedBlocks
+  have hOverlapEq : ∀ j k N,
+      mpvOverlap (d := d) (A j) (B k) N = mpvOverlap (d := d) (A' j) (B' k) N := by
+    intro j k N
+    apply Finset.sum_congr rfl
+    intro σ _
+    rw [(hGaugeA j).sameMPV N σ, (hGaugeB k).sameMPV N σ]
+  refine
+    { exists_nondecaying_A := ?_
+      exists_nondecaying_B := ?_
+      hetRepeatedBlocks_of_nondecaying := ?_ }
+  · intro j
+    obtain ⟨k, hNondecay⟩ := hOverlap.exists_nondecaying_A j
+    refine ⟨k, ?_⟩
+    intro hDecay
+    apply hNondecay
+    exact hDecay.congr' (Filter.Eventually.of_forall fun N ↦ hOverlapEq j k N)
+  · intro k
+    obtain ⟨j, hNondecay⟩ := hOverlap.exists_nondecaying_B k
+    refine ⟨j, ?_⟩
+    intro hDecay
+    apply hNondecay
+    exact hDecay.congr' (Filter.Eventually.of_forall fun N ↦ hOverlapEq j k N)
+  · intro j k hNondecay
+    have hNondecay' : ¬ Filter.Tendsto
+        (fun N ↦ mpvOverlap (d := d) (A' j) (B' k) N) Filter.atTop (nhds 0) := by
+      intro hDecay
+      apply hNondecay
+      exact hDecay.congr'
+        (Filter.Eventually.of_forall fun N ↦ (hOverlapEq j k N).symm)
+    exact (hRepA j).trans
+      ((hOverlap.hetRepeatedBlocks_of_nondecaying j k hNondecay').trans (hRepB k).symm)
 
 /-- **Build `PeriodicOverlapHypothesis` from `IsPeriodic` data via the overlap dichotomy.**
 
@@ -316,8 +385,12 @@ conclusion for different bond dimensions. The companion module
 `ProportionalOverlap` supplies the multi-block non-decaying cross-overlap
 hypotheses for literal multiplicity-bearing normalized periodic forms, with
 `PeriodicOverlapHypothesis.ofIsIrreducibleForm` as a scalar-weight
-specialization. Transport from the source's unnormalized blocks remains
-separate, as recorded in
+specialization. Its theorem
+`PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions` performs
+the sectorwise Perron normalization and transports the hypothesis back to the
+original spectral-radius-one blocks. The remaining source-faithfulness gap is
+to package the matching conclusion while retaining equality of matched
+periods, as recorded in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
