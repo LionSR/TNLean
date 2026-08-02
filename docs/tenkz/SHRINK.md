@@ -1310,13 +1310,15 @@ geometry and event regressions.
 
 ### 2026-08-02 — RMP physical dimensions acquire executable owners
 
-The 130-case RMP corpus falls from 931 to 926 absolute dimensions. The anyon
-pair now inherits the shared lattice metric instead of restating one pitch in
-code and two pitches in commentary. The condensation panel uses the existing
-`planes` basis, with explicit sheet bonds, inter-sheet physical contractions,
-open endpoint legs, and one routed path per member; its measured sheet vector
-disappears. No ratio, parser spelling, registry row, or case-specific public
-syntax is added.
+Before this change, the final scanner finds 929 active absolute dimensions and
+2 comment literals in the 130-case RMP corpus. Afterwards it finds 926 active
+dimensions and no comment literals. The active reduction is one metric literal
+and two projection/frame literals; the two removed comment pitches are tracked
+orthogonally. The anyon pair now inherits the shared lattice metric, while the
+condensation panel uses the existing `planes` basis with explicit sheet bonds,
+inter-sheet physical contractions, open endpoint legs, and one routed path per
+member. No ratio, parser spelling, registry row, or case-specific public syntax
+is added.
 
 The RMP driver now classifies every remaining case dimension at its semantic
 boundary: 0 metric, 0 projection/frame, 396 route/string, and 530
