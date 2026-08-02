@@ -3,7 +3,7 @@
 % Ink: Canonical public kernel PEPS star with before-and-after corner paths.
 % Boundary: Five PEPS legs and two MPO string ends remain open on each side.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
-%   lines 501-520; archival output MPOInjPEPSwhite.pdf
+%   lines 501-520; archival output MPOinjnog.pdf
 % Capabilities: kernel, pulling-through, open-string
 \[
   % Author panel (lines 501-518): the virtual MPO corner pulled through the
@@ -15,38 +15,40 @@
   \tndeclare{species}{g}{hue=source:blue}
   \begin{tenkzeq}[size=m]
     \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
-      % the PEPS star: two lattice lines through A, physical leg up
-      \tnwire[kind=string, species=lattice, name=vx]{(2,1)}{(2,3)}
-      \tnwire[kind=string, species=lattice, name=vd,
-              cross={over at crossing of vd and vx}]{(3,1)}{(1,3)}
-      \tn[at=(2,2), name=A, ports={90:physical}]{}
-      \tnwire[name=wp]{A.90}{midway (1,2) and (2,2)}
+      % Four virtual legs end at A; its typed physical port stays source-short.
+      \tn[at=(2,2), name=A,
+        ports={0:virtual,45:virtual,90:physical,180:virtual,225:virtual}]{}
+      \tnwire[kind=index, species=lattice, name=vxw]{(2,1)}{A.180}
+      \tnwire[kind=index, species=lattice, name=vxe]{A.0}{(2,3)}
+      \tnwire[kind=index, species=lattice, name=vdsw]{(3,1)}{A.225}
+      \tnwire[kind=index, species=lattice, name=vdne]{A.45}{(1,3)}
       % the MPO corner crosses the west and back legs, one dot per crossing
       \tnwire[kind=string, species=g, name=g,
               via={midway (1,1) and (2,2), midway (2,2) and (1,3)},
-              cross={over at crossing of g and vx,
-                     over at crossing of g and vd}]
+              cross={over at crossing of g and vxw,
+                     over at crossing of g and vdne}]
         {midway (2,1) and (3,1)}{midway (1,3) and (2,3)}
-      \tn[species=g, at=crossing of g and vx]{}
-      \tn[species=g, at=crossing of g and vd]{}
+      \tn[species=g, at=crossing of g and vxw]{}
+      \tn[species=g, at=crossing of g and vdne]{}
       \tnmark[form=label, label pos=nw]{on g 0.35}{$g$}
       \tnmark[form=label, label pos=se]{A}{$A$}
     \end{tenkz}
     =
     \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
-      \tnwire[kind=string, species=lattice, name=vx]{(2,1)}{(2,3)}
-      \tnwire[kind=string, species=lattice, name=vd,
-              cross={over at crossing of vd and vx}]{(3,1)}{(1,3)}
-      \tn[at=(2,2), name=A, ports={90:physical}]{}
-      \tnwire[name=wp]{A.90}{midway (1,2) and (2,2)}
+      \tn[at=(2,2), name=A,
+        ports={0:virtual,45:virtual,90:physical,180:virtual,225:virtual}]{}
+      \tnwire[kind=index, species=lattice, name=vxw]{(2,1)}{A.180}
+      \tnwire[kind=index, species=lattice, name=vxe]{A.0}{(2,3)}
+      \tnwire[kind=index, species=lattice, name=vdsw]{(3,1)}{A.225}
+      \tnwire[kind=index, species=lattice, name=vdne]{A.45}{(1,3)}
       % the same corner, pulled through to the east and front legs
       \tnwire[kind=string, species=g, name=g,
               via={midway (2,2) and (3,3), midway (2,2) and (3,1)},
-              cross={over at crossing of g and vx,
-                     over at crossing of g and vd}]
+              cross={over at crossing of g and vxe,
+                     over at crossing of g and vdsw}]
         {midway (1,3) and (2,3)}{midway (2,1) and (3,1)}
-      \tn[species=g, at=crossing of g and vx]{}
-      \tn[species=g, at=crossing of g and vd]{}
+      \tn[species=g, at=crossing of g and vxe]{}
+      \tn[species=g, at=crossing of g and vdsw]{}
       \tnmark[form=label, label pos=se]{on g 0.65}{$g$}
       \tnmark[form=label, label pos=nw]{A}{$A$}
     \end{tenkz}
