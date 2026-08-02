@@ -167,13 +167,17 @@ def resolution(
     target: str,
     *,
     attempt: int = 1,
+    fix_pr: str | None = None,
 ) -> str:
+    entry_number = int(entry_id.removeprefix("S1-"))
+    fix_ref = fix_pr or f"#{18_000 + entry_number}"
     return block(
         f'''id = "{entry_id}"
 kind = "resolution"
 record_pr = "{record_pr}"
 attempt = {attempt}
 friction = "{target}"
+fix_pr = "{fix_ref}"
 summary = "compatible repair"
 evidence = "merged repair evidence"'''
     )
@@ -315,6 +319,7 @@ class Context:
     activation_diff: policy.ActivationDiffEvidence
     records: dict[str, policy.RecordDiffEvidence]
     work_diffs: dict[str, policy.WorkDiffEvidence]
+    resolution_diffs: dict[str, policy.ResolutionDiffEvidence]
     release_preps: dict[str, policy.ReleasePrepEvidence]
     payloads: dict[tuple[str, str], policy.ReleasePayloadEvidence]
     tags: dict[str, policy.TagEvidence]
@@ -340,6 +345,9 @@ class Context:
 
     def resolve_replay_work_diff(self, ref: str) -> policy.WorkDiffEvidence:
         return self.work_diffs[ref]
+
+    def resolve_replay_resolution_diff(self, ref: str) -> policy.ResolutionDiffEvidence:
+        return self.resolution_diffs[ref]
 
     def resolve_replay_release_prep(
         self,
@@ -718,6 +726,7 @@ def context() -> Context:
         activation_diff,
         records,
         work_diffs,
+        {},
         release_preps,
         payloads,
         {
@@ -815,6 +824,96 @@ def prepare_reset_receipts(entries: list[dict], facts: Context) -> None:
         )
 
 
+def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
+    """Populate exact fix-PR evidence for scenarios not testing resolutions."""
+
+    by_id = {entry["id"]: entry for entry in entries}
+    for entry in entries:
+        if entry["kind"] != "resolution":
+            continue
+        entry_id = entry["id"]
+        friction_entry = by_id[entry["friction"]]
+        friction_pr = facts.prs[friction_entry["record_pr"]]
+        friction_time = friction_pr.merged_at
+        friction_integration = friction_pr.merge_commit_oid
+        assert friction_time is not None and friction_integration is not None
+        freeze_entry = next(
+            candidate
+            for candidate in reversed(entries[: entries.index(entry)])
+            if candidate["kind"] == "freeze" and candidate["attempt"] == entry["attempt"]
+        )
+        freeze_integration = facts.prs[freeze_entry["record_pr"]].merge_commit_oid
+        assert freeze_integration is not None
+        resolution_record = facts.prs[entry["record_pr"]]
+        fix_ref = entry["fix_pr"]
+        fix_number = int(fix_ref[1:])
+        if fix_ref not in facts.prs:
+            resolution_time = resolution_record.merged_at
+            fix_time = (
+                friction_time + (resolution_time - friction_time) / 2
+                if resolution_time is not None
+                else friction_time + timedelta(seconds=1)
+            )
+            fix_head = oid(fix_number * 10)
+            facts.prs[fix_ref] = merged_pr(
+                fix_number,
+                fix_time,
+                author=f"fix-author-{fix_number}",
+                reviews=(
+                    review(
+                        f"fix-reviewer-{fix_number}",
+                        fix_time - timedelta(microseconds=1),
+                        fix_head,
+                    ),
+                ),
+            )
+        fix_pr = facts.prs[fix_ref]
+        fix_integration = fix_pr.merge_commit_oid
+        assert fix_integration is not None
+        if fix_ref not in facts.resolution_diffs:
+            facts.resolution_diffs[fix_ref] = policy.ResolutionDiffEvidence(
+                validated_pr_ref=fix_ref,
+                validated_head_oid=fix_pr.head_oid,
+                validated_integration_oid=fix_integration,
+                validated_freeze_integration=freeze_integration,
+                validated_friction_integration=friction_integration,
+                complete=True,
+                integration_parent_count=1,
+                unique_merge_base=True,
+                integration_parent_is_ancestor_of_head=True,
+                integration_second_parent_matches_head=True,
+                integration_strict_descendant_of_freeze=True,
+                integration_strict_descendant_of_friction=True,
+                policy_paths_untouched=True,
+                has_added_or_modified_regular_nonledger_blob=True,
+                normalized_token_stream_changed=True,
+                semantic_witness_is_same_regular_nonledger_blob=True,
+                validated_contract=policy.policy_rules(ARMED_POLICY)[4],
+                inventory_commands_complete=True,
+                inventory_commands_passed=True,
+                execution_receipts_exact_and_matching=True,
+            )
+        record_diff = facts.records[entry_id]
+        facts.records[entry_id] = replace(
+            record_diff,
+            candidate_main_tip_descends_from_fix_integration=(
+                True
+                if record_diff.candidate_main_tip_descends_from_fix_integration is None
+                else record_diff.candidate_main_tip_descends_from_fix_integration
+            ),
+            integration_parent_descends_from_fix_integration=(
+                True
+                if record_diff.integration_parent_descends_from_fix_integration is None
+                else record_diff.integration_parent_descends_from_fix_integration
+            ),
+            validated_fix_integration=(
+                fix_integration
+                if record_diff.validated_fix_integration is None
+                else record_diff.validated_fix_integration
+            ),
+        )
+
+
 def set_review_permission(facts: Context, ref: str, permission: str | None) -> None:
     pull_request = facts.prs[ref]
     assert pull_request.reviews is not None
@@ -830,6 +929,7 @@ def set_review_permission(facts: Context, ref: str, permission: str | None) -> N
 def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
     prepare_reset_receipts(entries, facts)
+    prepare_resolution_facts(entries, facts)
     if "audit" not in overrides:
         boundary: str | None = None
         target_oid = facts.prs[ACTIVATION].merge_commit_oid
@@ -851,6 +951,7 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
         "resolve_replay_activation_diff": facts.resolve_replay_activation_diff,
         "resolve_replay_record_diff": facts.resolve_replay_record_diff,
         "resolve_replay_work_diff": facts.resolve_replay_work_diff,
+        "resolve_replay_resolution_diff": facts.resolve_replay_resolution_diff,
         "resolve_replay_release_prep": facts.resolve_replay_release_prep,
         "resolve_replay_release_payload": facts.resolve_replay_release_payload,
         "resolve_replay_freeze_tag": facts.resolve_replay_freeze_tag,
@@ -1361,6 +1462,115 @@ def main() -> int:
     )
     assert validate(complete_log()[:2], cross_bound_work) == (
         "reset-required:S1-0002"
+    )
+
+    missing_fix_pr = resolution("S1-0003", RMP_RECORD, "S1-0002").replace(
+        '\nfix_pr = "#18003"',
+        "",
+    )
+    expect_failure(
+        lambda: policy.validate_entry_shape(
+            parsed_entries(
+                freeze(),
+                friction("S1-0002", FORMAL_RECORD, "fix-compatible"),
+                missing_fix_pr,
+            )[2],
+            3,
+        ),
+        "fields differ from schema",
+    )
+
+    def resolution_case(candidate_record: bool) -> tuple[list[str], Context, str]:
+        blocks = [
+            freeze(),
+            friction("S1-0002", FORMAL_RECORD, "fix-compatible"),
+            resolution("S1-0003", RMP_RECORD, "S1-0002"),
+        ]
+        facts = context()
+        if candidate_record:
+            facts.prs[RMP_RECORD] = candidate_pr(906, author="record-author")
+        entries = parsed_entries(*blocks)
+        prepare_resolution_facts(entries, facts)
+        return blocks, facts, entries[-1]["fix_pr"]
+
+    valid_resolution, valid_resolution_facts, _fix_ref = resolution_case(False)
+    assert validate(valid_resolution, valid_resolution_facts) == "attempt-1-active"
+    pending_resolution, pending_resolution_facts, _fix_ref = resolution_case(True)
+    assert validate(pending_resolution, pending_resolution_facts) == "resolution-pending"
+
+    resolution_diff_failures = (
+        (
+            "has_added_or_modified_regular_nonledger_blob",
+            False,
+            "no added or modified regular non-ledger blob",
+        ),
+        (
+            "normalized_token_stream_changed",
+            False,
+            "no semantic normalized-token change",
+        ),
+        (
+            "semantic_witness_is_same_regular_nonledger_blob",
+            False,
+            "not one qualifying blob",
+        ),
+        ("validated_head_oid", oid(99_980), "not validated at its exact head"),
+        (
+            "integration_strict_descendant_of_friction",
+            False,
+            "does not descend from its friction record",
+        ),
+        ("policy_paths_untouched", False, "changes policy or the soak ledger"),
+        ("inventory_commands_complete", False, "every pinned inventory command"),
+        ("inventory_commands_passed", False, "failed a pinned inventory command"),
+        (
+            "execution_receipts_exact_and_matching",
+            False,
+            "execution receipts are incomplete",
+        ),
+    )
+    for field_name, bad_value, error_fragment in resolution_diff_failures:
+        blocks, facts, fix_ref = resolution_case(True)
+        facts.resolution_diffs[fix_ref] = replace(
+            facts.resolution_diffs[fix_ref],
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda blocks=blocks, facts=facts: validate(blocks, facts),
+            error_fragment,
+        )
+
+    unreviewed_resolution, unreviewed_facts, fix_ref = resolution_case(True)
+    unreviewed_facts.prs[fix_ref] = replace(unreviewed_facts.prs[fix_ref], reviews=())
+    expect_failure(
+        lambda: validate(unreviewed_resolution, unreviewed_facts),
+        "repository-authorized independent exact-head approval",
+    )
+
+    unauthorized_resolution, unauthorized_facts, fix_ref = resolution_case(True)
+    set_review_permission(unauthorized_facts, fix_ref, "pull")
+    expect_failure(
+        lambda: validate(unauthorized_resolution, unauthorized_facts),
+        "repository-authorized independent exact-head approval",
+    )
+
+    stale_resolution_base, stale_resolution_facts, _fix_ref = resolution_case(True)
+    stale_resolution_facts.records["S1-0003"] = replace(
+        stale_resolution_facts.records["S1-0003"],
+        candidate_main_tip_descends_from_fix_integration=False,
+    )
+    expect_failure(
+        lambda: validate(stale_resolution_base, stale_resolution_facts),
+        "resolution candidate does not descend from its fix",
+    )
+
+    wrong_postmerge_ancestry, wrong_postmerge_facts, _fix_ref = resolution_case(False)
+    wrong_postmerge_facts.records["S1-0003"] = replace(
+        wrong_postmerge_facts.records["S1-0003"],
+        integration_parent_descends_from_fix_integration=False,
+    )
+    assert validate(wrong_postmerge_ancestry, wrong_postmerge_facts) == (
+        "reset-required:S1-0003"
     )
 
     candidate = context()
