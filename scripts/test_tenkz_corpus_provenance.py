@@ -41,6 +41,7 @@ from tenkzlib.dimensions import (
     scan_case_dimensions,
     validate_dimension_report,
 )
+from tenkzlib.texcase import strip_comments
 from tenkzlib.tnlog import parse_log
 
 
@@ -207,9 +208,16 @@ def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
 
 
 def test_rmp_dimension_ownership() -> None:
-    registry = (
+    registry_source = (
         ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
     ).read_text(encoding="utf-8")
+    registry = strip_comments(
+        registry_source
+        + "\n% \\__tenkz_language_registry_command:nnnnn "
+        "{commentedcommand}\n"
+        + "% \\__tenkz_language_registry_environment:nnnn "
+        "{commentedenvironment}\n"
+    )
     registered_commands = set(
         re.findall(
             r"__tenkz_language_registry_command:nnnnn \{([^}]+)\}",
@@ -639,6 +647,50 @@ def test_rmp_dimension_ownership() -> None:
             "a declared kernel atom inherited route or compatibility keys: "
             f"{declared_kernel_atom!r}"
         )
+    for invalid_descriptor in (
+        "bogus=x",
+        "skin=triangle",
+        "ports={west:physical}",
+        "skin=dot,ports={up:virtual}",
+    ):
+        rejected_compatibility_atom = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\tnarrow{{\tndeclareatom{{\invalidatom}}"
+            rf"{{{invalid_descriptor}}}"
+            r"\invalidatom[label shift={80mm,81mm}]{A}}",
+        )
+        if len(rejected_compatibility_atom) != 2 or any(
+            occurrence.owner is not None
+            for occurrence in rejected_compatibility_atom
+        ):
+            raise AssertionError(
+                "an invalid compatibility descriptor activated an atom: "
+                f"descriptor={invalid_descriptor!r}, "
+                f"occurrences={rejected_compatibility_atom!r}"
+            )
+    for opener, closer in (
+        ("begingroup", "endgroup"),
+        ("bgroup", "egroup"),
+    ):
+        digit_delimited_group = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\{opener}1\tndeclareatom{{\groupatom}}{{skin=dot}}"
+            rf"\groupatom[label shift={{82mm,83mm}}]{{A}}\{closer}2"
+            r"\tnarrow{\groupatom[label shift={84mm,85mm}]{B}}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in digit_delimited_group
+        ] != [
+            ("82mm", DimensionOwner.LAYOUT),
+            ("83mm", DimensionOwner.LAYOUT),
+            ("84mm", None),
+            ("85mm", None),
+        ]:
+            raise AssertionError(
+                "a digit-delimited TeX group primitive lost its scope: "
+                f"opener={opener!r}, occurrences={digit_delimited_group!r}"
+            )
     atom_before_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tnarrow{\lateatom[label shift={60mm,61mm}]{A}}"
