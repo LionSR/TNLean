@@ -25,6 +25,18 @@
     $|\lambda| = r$.
 \end{definition}
 
+\begin{lemma}[Unit spectral radius forces positive matrix size]
+    \label{lem:spectral_radius_one_matrix_dim_pos}
+    \lean{matrix_dim_ne_zero_of_spectralRadius_eq_one}
+    \leanok
+    Let $T:\MN D\to\MN D$ be a bounded linear map. If its spectral radius is
+    one, then $D\geq1$.
+\end{lemma}
+\begin{proof}\leanok
+    If $D=0$, then the matrix space and its endomorphism algebra contain only
+    zero, so every endomorphism has spectral radius zero.
+\end{proof}
+
 \begin{remark}[Peripheral conventions for channels]%
     \label{rem:peripheral_conventions_channels}
     \leanok

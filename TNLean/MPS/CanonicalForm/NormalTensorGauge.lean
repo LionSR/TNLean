@@ -29,6 +29,8 @@ tensor.
 
 ## Main statements
 
+* `exists_tpGauge_of_irreducible_spectralRadius_one`: an irreducible
+  spectral-radius-one tensor admits a pure trace-preserving Perron gauge.
 * `IsNormalTensor.exists_tpGauge`: a normal tensor admits a pure
   trace-preserving Perron gauge.
 * `IsNormalTensor.isNormal`: spectral normality implies eventual block
@@ -57,37 +59,47 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A normal tensor admits a trace-preserving gauge with no scalar rescaling.
+/-- An irreducible tensor of spectral radius one admits a trace-preserving Perron gauge with no
+scalar rescaling.
 
-The tensor is normal in the sense of arXiv:1606.00608, lines 231--235: its
-transfer map has spectral radius one and unique peripheral eigenvalue one.
-The spectral-radius normalization forces positive bond dimension. The
-positive-definite left Perron eigenvector consequently has eigenvalue one, so
-the usual Perron gauge is a pure similarity of the original tensor. -/
-theorem IsNormalTensor.exists_tpGauge
-    {A : MPSTensor d D} (h : IsNormalTensor A) :
+The positive-definite right and left Perron eigenvectors have the same positive eigenvalue.  The
+spectral-radius-one hypothesis forces this eigenvalue to be one, so the left Perron eigenvector is
+an adjoint fixed point of the original transfer map.  Gauging by its positive square root is
+therefore a pure similarity, is left-canonical, and preserves irreducibility.
+
+Source: arXiv:1708.00029, lines 313--332; Wolf, *Quantum Channels & Operations*, Theorem 6.3. -/
+theorem exists_tpGauge_of_irreducible_spectralRadius_one
+    {A : MPSTensor d D}
+    (hIrr : IsIrreducibleTensor A)
+    (hRadius :
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (transferMap (d := d) (D := D) A)) = 1) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
       transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
       IsLeftCanonical (tpGauge (d := d) (D := D) A σ) ∧
       GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
-      _root_.IsPrimitive
-        (transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) ∧
       IsIrreducibleTensor (tpGauge (d := d) (D := D) A σ) := by
-  letI : NeZero D := ⟨h.bondDim_ne_zero⟩
+  have hD : D ≠ 0 :=
+    matrix_dim_ne_zero_of_spectralRadius_eq_one
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (transferMap (d := d) (D := D) A))
+      hRadius
+  letI : NeZero D := ⟨hD⟩
   have hA : ∃ i, A i ≠ 0 := by
     by_contra hzero
     push Not at hzero
     have hmap : transferMap (d := d) (D := D) A = 0 := by
       ext X a b
       simp [transferMap_apply, hzero]
-    have hspectral := h.spectral_radius_one
+    have hspectral := hRadius
     rw [hmap] at hspectral
     simp at hspectral
   have hIrrMap : IsIrreducibleMap (transferMap (d := d) (D := D) A) :=
-    isIrreducibleCP_transferMap_of_isIrreducibleTensor A h.no_invariant_proj
+    isIrreducibleCP_transferMap_of_isIrreducibleTensor A hIrr
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
-    exists_posDef_transferMap_eigenvector_of_irreducible A h.no_invariant_proj hA
+    exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
   have hradius :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
@@ -99,11 +111,11 @@ theorem IsNormalTensor.exists_tpGauge
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
           (transferMap (d := d) (D := D) A))).toReal = 1 := by
-    rw [h.spectral_radius_one]
+    rw [hRadius]
     simp
   have hr_one : r = 1 := hradius.symm.trans hradius_one
   obtain ⟨σ, t, hσ, ht, hσeig⟩ :=
-    exists_posDef_adjoint_eigenvector A h.no_invariant_proj hA
+    exists_posDef_adjoint_eigenvector A hIrr hA
   have htrace : Matrix.trace (σ * transferMap (d := d) (D := D) A ρ) =
       Matrix.trace
         (transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ * ρ) :=
@@ -135,11 +147,33 @@ theorem IsNormalTensor.exists_tpGauge
     tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint A σ hσ hσfix
   have hGauge : GaugeEquiv A (tpGauge (d := d) (D := D) A σ) :=
     gaugeEquiv_tpGauge A σ hσ
+  have hGaugeIrr : IsIrreducibleTensor (tpGauge (d := d) (D := D) A σ) :=
+    isIrreducibleTensor_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
+  exact ⟨σ, hσ, hσfix, hTP, hGauge, hGaugeIrr⟩
+
+/-- A normal tensor admits a trace-preserving gauge with no scalar rescaling.
+
+The tensor is normal in the sense of arXiv:1606.00608, lines 231--235: its
+transfer map has spectral radius one and unique peripheral eigenvalue one.
+The spectral-radius normalization forces positive bond dimension. The
+positive-definite left Perron eigenvector consequently has eigenvalue one, so
+the usual Perron gauge is a pure similarity of the original tensor. -/
+theorem IsNormalTensor.exists_tpGauge
+    {A : MPSTensor d D} (h : IsNormalTensor A) :
+    ∃ σ : Matrix (Fin D) (Fin D) ℂ,
+      σ.PosDef ∧
+      transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
+      IsLeftCanonical (tpGauge (d := d) (D := D) A σ) ∧
+      GaugeEquiv A (tpGauge (d := d) (D := D) A σ) ∧
+      _root_.IsPrimitive
+        (transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) ∧
+      IsIrreducibleTensor (tpGauge (d := d) (D := D) A σ) := by
+  obtain ⟨σ, hσ, hσfix, hTP, hGauge, hIrr⟩ :=
+    exists_tpGauge_of_irreducible_spectralRadius_one
+      h.no_invariant_proj h.spectral_radius_one
   have hPrim : _root_.IsPrimitive
       (transferMap (d := d) (D := D) (tpGauge (d := d) (D := D) A σ)) :=
     (isPrimitive_transferMap_tpGauge_iff A σ hσ).2 h.primitive_transfer
-  have hIrr : IsIrreducibleTensor (tpGauge (d := d) (D := D) A σ) :=
-    isIrreducibleTensor_tpGauge_of_isIrreducibleMap A σ hσ hIrrMap
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hPrim, hIrr⟩
 
 /-- A normal tensor in the spectral sense of arXiv:1606.00608 is eventually

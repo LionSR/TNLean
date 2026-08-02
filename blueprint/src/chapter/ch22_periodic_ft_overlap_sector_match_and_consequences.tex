@@ -473,9 +473,11 @@
     starts with the normalized basis tensors.  The multiplicity matrices are
     otherwise arbitrary diagonal matrices with nonzero complex entries, the
     displayed direct sums are literal, and proportionality is assumed only at
-    positive lengths.  Transport through the normalizing similarities remains
-    to be proved before applying this result to the unnormalized source
-    statement.  This distinction is recorded in
+    positive lengths.  Theorem~\ref{thm:spectral_periodic_normalization}
+    constructs each normalizing similarity.  Applying these similarities to
+    the whole sector decomposition and transporting the conclusion back remain
+    to be proved before this result applies to the unnormalized source
+    statement.  This remaining distinction is recorded in
     \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex}.
 \end{theorem}
 \begin{proof}\leanok
@@ -587,6 +589,7 @@
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
     % Formalization status: the normalized multiplicity-bearing theorem above
-    % proves the overlap step after the source's Perron similarity. Constructing
-    % and transporting through that similarity remains tracked in issue #5342.
+    % proves the overlap step after the source's Perron similarity. Applying
+    % these similarities sectorwise and transporting back remains tracked in
+    % issue #5342.
 \end{theorem}

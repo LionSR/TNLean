@@ -1,3 +1,85 @@
+\begin{definition}[Spectrally periodic irreducible tensor]
+    \label{def:spectral_periodic_tensor}
+    \lean{MPSTensor.IsSpectrallyPeriodic}
+    \leanok
+    An irreducible MPS tensor $A$ is \emph{spectrally $m$-periodic} if
+    $m\geq1$, the spectral radius of its transfer map is one, and
+    \begin{align}
+        \operatorname{Spec}_{\mathrm{per}}(\E_A)
+          &=\{\mu\in\C:\mu^m=1\}.
+        \notag
+    \end{align}
+    No trace-preserving normalization is imposed.  This is the form of the
+    periodic blocks before the similarity transformation in
+    \cite[lines~248--261 and 313--332]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{theorem}[A spectrally periodic tensor has positive bond dimension]
+    \label{thm:spectral_periodic_bond_dimension_pos}
+    \lean{MPSTensor.IsSpectrallyPeriodic.bondDim_ne_zero}
+    \leanok
+    \uses{def:spectral_periodic_tensor}
+    If $A$ is spectrally periodic, then its bond dimension satisfies $D\geq1$.
+\end{theorem}
+\begin{proof}
+    \uses{lem:spectral_radius_one_matrix_dim_pos}
+    \leanok
+    In bond dimension zero the matrix space and its endomorphism algebra are
+    zero-dimensional, so the transfer map has spectral radius zero.  This
+    contradicts the spectral-radius-one hypothesis.
+\end{proof}
+
+\begin{lemma}[Peripheral spectrum is invariant under bond-space similarity]
+    \label{lem:peripheral_spectrum_similarity}
+    \lean{peripheralEigenvalues_similarityMap_eq}
+    \leanok
+    Let $C\in\MN D$ be invertible and let $E$ be a linear map on $\MN D$.  If
+    \begin{align}
+        E_C(X)&=C^{-1}E(CXC^\dagger)(C^\dagger)^{-1},
+        \notag
+    \end{align}
+    then $E_C$ and $E$ have the same peripheral spectrum.
+\end{lemma}
+\begin{proof}\leanok
+    Conjugation by $X\mapsto CXC^\dagger$ gives a linear equivalence of the
+    matrix space.  Transporting eigenvectors through this equivalence preserves
+    every eigenvalue and hence the unit-circle eigenvalue set.
+\end{proof}
+
+\begin{theorem}[Pure Perron normalization at spectral radius one]
+    \label{thm:pure_perron_tp_gauge}
+    \lean{MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one}
+    \leanok
+    Let $A$ be irreducible and suppose that the spectral radius of $\E_A$ is
+    one.  There is a positive definite matrix $\sigma$ satisfying
+    \begin{align}
+        \sum_i(A^i)^\dagger\sigma A^i&=\sigma.
+        \notag
+    \end{align}
+    The tensor
+    \begin{align}
+        B^i&=\sigma^{1/2}A^i\sigma^{-1/2}
+        \notag
+    \end{align}
+    is left-canonical and irreducible, and $A$ and $B$ are related by a pure
+    invertible similarity.
+\end{theorem}
+\begin{proof}
+    \uses{lem:irreducible_transfer_perron_pair,
+        lem:spectral_radius_one_matrix_dim_pos,
+        thm:posDef_adjoint_eigenvector,
+        thm:spectral_radius_real_pf_irred,
+        thm:tp_gauge_from_adjoint_fixed,
+        lem:tp_gauge_equiv,
+        lem:similarity_irred_iff}
+    \leanok
+    Positive-definite right and left Perron eigenvectors have the same positive
+    eigenvalue by the trace pairing.  The spectral-radius identity makes this
+    eigenvalue equal to one.  Thus the left Perron eigenvector is an adjoint
+    fixed point, so its square-root gauge is trace-preserving.  Similarity
+    preserves irreducibility.
+\end{proof}
+
 \begin{definition}[Left-canonical periodic tensor]
     \label{def:periodic_tensor}
     \lean{MPSTensor.IsPeriodic}
@@ -10,6 +92,29 @@
     A $1$-periodic tensor is exactly an irreducible tensor with
     primitive transfer map (Definition~\ref{def:primitive_channel}).
 \end{definition}
+
+\begin{theorem}[Perron normalization of spectrally periodic tensors]
+    \label{thm:spectral_periodic_normalization}
+    \lean{MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge}
+    \leanok
+    \uses{def:spectral_periodic_tensor, def:periodic_tensor}
+    Let $A$ be spectrally $m$-periodic.  There is a positive definite matrix
+    $\sigma$ such that
+    \begin{align}
+        B^i&=\sigma^{1/2}A^i\sigma^{-1/2}
+        \notag
+    \end{align}
+    is a left-canonical $m$-periodic tensor.  The similarity is pure, so it
+    leaves every matrix-product vector unchanged and introduces no scalar
+    weight into the normalization.
+\end{theorem}
+\begin{proof}
+    \uses{lem:peripheral_spectrum_similarity, thm:pure_perron_tp_gauge}
+    \leanok
+    Apply Theorem~\ref{thm:pure_perron_tp_gauge}.  The transfer map of $B$ is
+    similar to that of $A$, so Lemma~\ref{lem:peripheral_spectrum_similarity}
+    preserves the prescribed set of $m$-th roots of unity.
+\end{proof}
 
 \begin{theorem}[A periodic tensor has positive bond dimension]
     \label{thm:periodic_bond_dimension_pos}

@@ -275,8 +275,10 @@ blocks of spectral radius one and then obtains trace-preserving blocks by a
 block-diagonal similarity at lines 313--332. Here each basis block is already
 `IsPeriodic`, hence left-canonical. The literal multiplicity-bearing
 presentation and positive-length proportionality agree with the source, but
-normalization by similarity and transport back to the original blocks remain
-to be formalized. This theorem constructs the three fields of
+the pure Perron normalization must still be applied sectorwise and the result
+transported back to the original blocks. The normalization of each individual
+block is supplied by the individual pure Perron normalization theorem. This
+theorem constructs the three fields of
 `PeriodicOverlapHypothesis`; it does not assert the unique basis matching in
 source theorem `thm:bd`. This restriction is recorded in
 `docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/

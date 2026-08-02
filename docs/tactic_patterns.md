@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### spectral-radius-one matrix dimension — promoted
+- **Pattern:** exclude zero matrix dimension by observing that every
+  endomorphism of the zero-dimensional square-matrix space has spectral radius
+  zero.
+- **Seen:** three occurrences across `CanonicalForm/Definitions.lean`,
+  `CanonicalForm/NormalTensorGauge.lean`, and `Periodic/Defs.lean` before
+  promotion.
+- **Abstraction:** `matrix_dim_ne_zero_of_spectralRadius_eq_one` in
+  `TNLean/Channel/Peripheral/Spectrum.lean`.
+- **Notes:** the shared lemma is independent of positivity and transfer-map
+  structure; callers supply only the spectral-radius-one identity. Net source
+  delta: 0 lines relative to the unabstracted draft (14 removed, 14 added).
+
 ### positive-semidefinite support congruence — promoted
 - **Pattern:** transport the support projection across an equality of positive
   semidefinite matrices while identifying the two positivity proofs by proof
