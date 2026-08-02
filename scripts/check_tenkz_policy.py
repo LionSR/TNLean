@@ -25,6 +25,7 @@ PR_REF_RE = re.compile(r"#[1-9][0-9]*")
 ISSUE_REF_RE = PR_REF_RE
 IDENTITY_RE = re.compile(r"github:[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?")
 LOGIN_RE = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?")
+TEST_REF_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 
 ENTRY_KINDS = {
     "freeze",
@@ -53,6 +54,8 @@ EXPECTED_POLICY = {
         "work_classes": list(WORK_CLASSES),
         "one_class_per_work_pr": True,
         "work_excluded_paths": ["TNLean/Archive/**"],
+        "tex_api_fix_paths": ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"],
+        "tnlog_fix_paths": ["tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"],
         "event_format_owners": ["#4162", "#4703"],
         "soak_blocker_chain": [
             ["#5086", "#4699", "#4162"],
@@ -275,13 +278,13 @@ class ResolutionDiffEvidence:
     integration_strict_descendant_of_freeze: bool | None
     integration_strict_descendant_of_friction: bool | None
     policy_paths_untouched: bool | None
-    has_added_or_modified_regular_nonledger_blob: bool | None
-    normalized_token_stream_changed: bool | None
-    semantic_witness_is_same_regular_nonledger_blob: bool | None
-    validated_contract: ReleaseContract | None
-    inventory_commands_complete: bool | None
-    inventory_commands_passed: bool | None
-    execution_receipts_exact_and_matching: bool | None
+    validated_base_oid: str | None
+    validated_surface: str | None
+    validated_fix_path_patterns: tuple[str, ...] | None
+    semantic_witness_path: str | None
+    surface_matching_added_or_modified_regular_blob: bool | None
+    tex_comment_stripped_token_stream_changed: bool | None
+    semantic_witness_is_same_surface_regular_blob: bool | None
 
 
 @dataclass(frozen=True)
@@ -300,6 +303,8 @@ class ReleaseContract:
     test_support_root: str
     test_support_tree: str
     test_data_roots: tuple[str, ...]
+    tex_api_fix_paths: tuple[str, ...]
+    tnlog_fix_paths: tuple[str, ...]
     enforcement_workflows: tuple[str, ...]
     workflow_dependency_contract: str
     enforcement_network_contract: str
@@ -318,6 +323,12 @@ class ReleaseContract:
             self.change_record,
             self.event_format,
         )
+
+    def fix_paths(self, surface: str) -> tuple[str, ...]:
+        """Return the closed policy path set for one compatibility surface."""
+
+        require(surface in SURFACES, f"unknown compatibility surface {surface}")
+        return self.tex_api_fix_paths if surface == "tex-api" else self.tnlog_fix_paths
 
 
 @dataclass(frozen=True)
@@ -345,6 +356,45 @@ class ReleasePayloadEvidence:
     test_execution_complete: bool | None
     compatibility_tests_passed: bool | None
     payload_blob_oids: tuple[str, ...] | None
+    inventory_test_surfaces_valid: bool | None
+
+
+@dataclass(frozen=True)
+class ReleaseTestObservationEvidence:
+    """Exact single-test receipt for friction regression observation."""
+
+    validated_tree_oid: str | None
+    validated_tag: str | None
+    validated_test_ref: str | None
+    validated_contract: ReleaseContract | None
+    complete: bool | None
+    manifest_path: str | None
+    regular_distinct_paths: bool | None
+    manifest_contract_valid: bool | None
+    artifact_declarations_agree: bool | None
+    inventory_digest_matches: bool | None
+    inventory_contract_valid: bool | None
+    inventory_test_surfaces_valid: bool | None
+    inventory_test_exists: bool | None
+    inventory_command_exact_and_matching: bool | None
+    test_code_tree_matches: bool | None
+    test_support_tree_matches: bool | None
+    inventory_data_paths_within_mutable_roots: bool | None
+    executable_dependencies_within_code_tree: bool | None
+    acceptance_dependencies_within_support_tree: bool | None
+    subject_data_cannot_reduce_coverage: bool | None
+    hermetic_execution_contract_valid: bool | None
+    tool_fingerprints_match: bool | None
+    inventory_test_surfaces: tuple[str, ...] | None
+    exactly_one_inventory_test_run: bool | None
+    setup_complete_and_matching: bool | None
+    isolation_valid: bool | None
+    execution_receipt_exact_and_matching: bool | None
+    execution_complete: bool | None
+    timed_out: bool | None
+    terminated_by_signal: bool | None
+    clean_process_exit: bool | None
+    exit_code: int | None
 
 
 @dataclass(frozen=True)
@@ -473,6 +523,7 @@ class ActivationDiffEvidence:
     enforcement_workflows_pinned: bool | None
     policy_digest_matches: bool | None
     ledger_prefix_matches: bool | None
+    inventory_test_surfaces_valid: bool | None
 
 
 @dataclass(frozen=True)
@@ -523,6 +574,9 @@ ResolveReplayReleasePrep = Callable[
     [str, tuple[str, ...], tuple[str, ...]], ReleasePrepEvidence
 ]
 ResolveReplayReleasePayload = Callable[[str, str, ReleaseContract], ReleasePayloadEvidence]
+ResolveReplayReleaseTestObservation = Callable[
+    [str, str, str, ReleaseContract], ReleaseTestObservationEvidence
+]
 ResolveReplayFreezeTag = Callable[[str], TagEvidence]
 ResolveCurrentFinalTag = Callable[[str], TagEvidence]
 ResolveReplayIssue = Callable[[str], IssueEvidence]
@@ -721,6 +775,27 @@ def closed_string_list(value: object, field: str, entry_id: str) -> list[str]:
     return value
 
 
+def normalized_repository_path(value: object) -> str | None:
+    """Return a normalized repository-relative path, or ``None``."""
+
+    if not isinstance(value, str) or not value or value.startswith("/") or "\\" in value:
+        return None
+    parts = value.split("/")
+    if any(part in {"", ".", ".."} for part in parts):
+        return None
+    return value
+
+
+def policy_glob_matches(path: str, pattern: str) -> bool:
+    """Match the policy's normalized ``*``/``**`` repository path grammar."""
+
+    expression = re.escape(pattern)
+    expression = expression.replace(r"\*\*/", r"(?:[^/]+/)*")
+    expression = expression.replace(r"\*", r"[^/]*")
+    expression = expression.replace(r"\?", r"[^/]")
+    return re.fullmatch(expression, path) is not None
+
+
 def sha(value: object, field: str, entry_id: str) -> str:
     result = nonempty_string(value, field, entry_id)
     require(SHA_RE.fullmatch(result) is not None, f"{entry_id} has invalid {field}")
@@ -833,6 +908,8 @@ def policy_rules(
         test_support_root=str(root.get("release_test_support_root", "")),
         test_support_tree=str(root.get("release_test_support_tree", "")),
         test_data_roots=tuple(root.get("release_test_data_roots", ())),
+        tex_api_fix_paths=tuple(root.get("tex_api_fix_paths", ())),
+        tnlog_fix_paths=tuple(root.get("tnlog_fix_paths", ())),
         enforcement_workflows=tuple(root.get("release_enforcement_workflows", ())),
         workflow_dependency_contract=str(root.get("release_workflow_dependencies", "")),
         enforcement_network_contract=str(root.get("release_enforcement_network", "")),
@@ -851,6 +928,8 @@ def policy_rules(
             contract.test_code_root,
             contract.test_support_root,
             contract.test_data_roots,
+            contract.tex_api_fix_paths,
+            contract.tnlog_fix_paths,
             contract.enforcement_workflows,
             contract.workflow_dependency_contract,
             contract.enforcement_network_contract,
@@ -868,6 +947,8 @@ def policy_rules(
             "scripts",
             "tests/tenkz/release-support",
             ("tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"),
+            ("tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"),
+            ("tex/tenkz/**/*.tex", "tex/tenkz/**/*.sty"),
             (".github/workflows/tenkz-release-policy.yml",),
             "transitive-content-addressed-no-runtime-downloads",
             "disabled-before-repository-code",
@@ -918,6 +999,8 @@ def validate_entry_shape(entry: dict, index: int) -> tuple[str, str, int, str]:
     kind = nonempty_string(entry.get("kind"), "kind", entry_id)
     require(kind in ENTRY_KINDS, f"{entry_id} has unknown kind {kind}")
     expected_fields = FIELDS_BY_KIND[kind]
+    if kind == "friction" and entry.get("triage") == "fix-compatible":
+        expected_fields = expected_fields | {"regression_tests"}
     if kind == "reset" and entry.get("cause") == "record-invalid":
         expected_fields = expected_fields | {"replay_receipt_pr", "replay_receipt_sha256"}
     require(set(entry) == expected_fields, f"{entry_id} {kind} fields differ from schema")
@@ -1193,6 +1276,10 @@ def validate_release_payload(
         f"{subject} test inventory is invalid",
     )
     require(
+        evidence.inventory_test_surfaces_valid is True,
+        f"{subject} test inventory has invalid surface declarations",
+    )
+    require(
         evidence.test_code_tree_matches is True,
         f"{subject} release-test code tree differs from policy",
     )
@@ -1240,6 +1327,120 @@ def validate_release_payload(
         f"{subject} payload blob identity is missing",
     )
     return blob_oids
+
+
+def validate_release_test_observation(
+    evidence: ReleaseTestObservationEvidence,
+    *,
+    tree_oid: str,
+    tag: str,
+    test_ref: str,
+    surface: str,
+    expect_exit_zero: bool,
+    contract: ReleaseContract,
+    subject: str,
+) -> None:
+    """Validate one exact test observation, including a clean process exit."""
+
+    require(evidence.validated_tree_oid == tree_oid, f"{subject} used another tree")
+    require(evidence.validated_tag == tag, f"{subject} used another freeze tag")
+    require(evidence.validated_test_ref == test_ref, f"{subject} ran another test")
+    require(evidence.validated_contract == contract, f"{subject} used another contract")
+    require(evidence.complete is True, f"{subject} observation is incomplete")
+    require(
+        evidence.manifest_path == contract.manifest_path(tag),
+        f"{subject} used another release manifest",
+    )
+    require(
+        evidence.regular_distinct_paths is True,
+        f"{subject} release paths are not regular and distinct",
+    )
+    require(evidence.manifest_contract_valid is True, f"{subject} manifest is invalid")
+    require(
+        evidence.artifact_declarations_agree is True,
+        f"{subject} release artifacts disagree",
+    )
+    require(
+        evidence.inventory_digest_matches is True,
+        f"{subject} test-inventory digest differs from policy",
+    )
+    require(evidence.inventory_contract_valid is True, f"{subject} inventory is invalid")
+    require(
+        evidence.inventory_test_surfaces_valid is True,
+        f"{subject} inventory has invalid surface declarations",
+    )
+    require(evidence.inventory_test_exists is True, f"{subject} test is absent from inventory")
+    require(
+        evidence.inventory_command_exact_and_matching is True,
+        f"{subject} command differs from the pinned inventory test",
+    )
+    require(
+        evidence.test_code_tree_matches is True,
+        f"{subject} test-code tree differs from policy",
+    )
+    require(
+        evidence.test_support_tree_matches is True,
+        f"{subject} test-support tree differs from policy",
+    )
+    require(
+        evidence.inventory_data_paths_within_mutable_roots is True,
+        f"{subject} data paths escape the mutable subject roots",
+    )
+    require(
+        evidence.executable_dependencies_within_code_tree is True,
+        f"{subject} executable dependency escapes the pinned code tree",
+    )
+    require(
+        evidence.acceptance_dependencies_within_support_tree is True,
+        f"{subject} acceptance dependency escapes the pinned support tree",
+    )
+    require(
+        evidence.subject_data_cannot_reduce_coverage is True,
+        f"{subject} subject data can reduce test coverage",
+    )
+    require(
+        evidence.hermetic_execution_contract_valid is True,
+        f"{subject} hermetic execution contract is invalid",
+    )
+    require(evidence.tool_fingerprints_match is True, f"{subject} tool identity differs")
+    surfaces = evidence.inventory_test_surfaces
+    require(
+        isinstance(surfaces, tuple)
+        and bool(surfaces)
+        and all(isinstance(item, str) for item in surfaces),
+        f"{subject} inventory test surfaces are missing",
+    )
+    require(len(surfaces) == len(set(surfaces)), f"{subject} test surfaces have duplicates")
+    require(set(surfaces) <= SURFACES, f"{subject} test has an unknown surface")
+    require(surface in surfaces, f"{subject} test does not cover surface {surface}")
+    require(
+        evidence.exactly_one_inventory_test_run is True,
+        f"{subject} did not run exactly one inventory test",
+    )
+    require(
+        evidence.setup_complete_and_matching is True,
+        f"{subject} setup is incomplete or mismatched",
+    )
+    require(evidence.isolation_valid is True, f"{subject} isolation failed")
+    require(
+        evidence.execution_receipt_exact_and_matching is True,
+        f"{subject} execution receipt is incomplete or mismatched",
+    )
+    require(evidence.execution_complete is True, f"{subject} execution is incomplete")
+    require(evidence.timed_out is False, f"{subject} timed out")
+    require(evidence.terminated_by_signal is False, f"{subject} ended by signal")
+    require(evidence.clean_process_exit is True, f"{subject} did not exit cleanly")
+    exit_code = evidence.exit_code
+    require(
+        isinstance(exit_code, int)
+        and not isinstance(exit_code, bool)
+        and 0 <= exit_code <= 255,
+        f"{subject} has an invalid process exit code",
+    )
+    if expect_exit_zero:
+        require(exit_code == 0, f"{subject} regression test did not pass")
+    else:
+        require(exit_code != 0, f"{subject} regression test did not reproduce friction")
 
 
 def validate_tag_protection(evidence: TagProtectionEvidence) -> None:
@@ -1356,6 +1557,9 @@ def validate_entries(
     resolve_replay_resolution_diff: ResolveReplayResolutionDiff | None = None,
     resolve_replay_release_prep: ResolveReplayReleasePrep | None = None,
     resolve_replay_release_payload: ResolveReplayReleasePayload | None = None,
+    resolve_replay_release_test_observation: (
+        ResolveReplayReleaseTestObservation | None
+    ) = None,
     resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
     resolve_current_final_tag: ResolveCurrentFinalTag | None = None,
     resolve_replay_issue: ResolveReplayIssue | None = None,
@@ -1436,6 +1640,16 @@ def validate_entries(
         require(
             resolve_replay_resolution_diff is not None,
             "resolution validation requires replay fix-diff evidence",
+        )
+    if any(
+        shape[1] == "friction"
+        and entry.get("triage") == "fix-compatible"
+        and bool(entry.get("regression_tests"))
+        for entry, shape in zip(entries, shaped)
+    ):
+        require(
+            resolve_replay_release_test_observation is not None,
+            "friction validation requires replay single-test evidence",
         )
     require(
         resolve_replay_release_payload is not None,
@@ -1626,6 +1840,10 @@ def validate_entries(
     require(
         activation_diff.inventory_digest_matches is True,
         "activation inventory digest is wrong",
+    )
+    require(
+        activation_diff.inventory_test_surfaces_valid is True,
+        "activation inventory test surfaces are invalid",
     )
     require(
         activation_diff.test_code_tree_matches is True,
@@ -2240,14 +2458,59 @@ def validate_entries(
             triage = nonempty_string(entry["triage"], "triage", entry_id)
             require(surface in SURFACES, f"{entry_id} has invalid friction surface")
             require(triage in TRIAGE, f"{entry_id} has invalid friction triage")
+            regression_tests: tuple[str, ...] = ()
+            if triage == "fix-compatible":
+                listed_tests = closed_string_list(
+                    entry["regression_tests"],
+                    "regression_tests",
+                    entry_id,
+                )
+                for test_ref in listed_tests:
+                    require(
+                        TEST_REF_RE.fullmatch(test_ref) is not None,
+                        f"{entry_id} has invalid regression test {test_ref}",
+                    )
+                regression_tests = tuple(listed_tests)
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
+
+            def friction_observation_facts() -> None:
+                if not regression_tests:
+                    return
+                assert resolve_replay_release_test_observation is not None
+                record_head = record.head_oid
+                assert isinstance(record_head, str)
+                trees = [("head", record_head)]
+                if not record_pending:
+                    assert record_integration is not None
+                    trees.append(("integration", record_integration))
+                for stage, tree_oid in trees:
+                    for test_ref in regression_tests:
+                        validate_release_test_observation(
+                            resolve_replay_release_test_observation(
+                                tree_oid,
+                                active["freeze_tag"],
+                                test_ref,
+                                release_contract,
+                            ),
+                            tree_oid=tree_oid,
+                            tag=active["freeze_tag"],
+                            test_ref=test_ref,
+                            surface=surface,
+                            expect_exit_zero=False,
+                            contract=release_contract,
+                            subject=f"{entry_id} friction {stage} test {test_ref}",
+                        )
+
+            check_external(friction_observation_facts)
             if record_pending:
                 return finish_pending("friction-pending")
             if not entry_is_invalid():
                 assert record_merged_at is not None and record_integration is not None
                 active["friction"][entry_id] = {
+                    "surface": surface,
                     "triage": triage,
+                    "regression_tests": regression_tests,
                     "resolved": False,
                     "merged_at": record_merged_at,
                     "integration": record_integration,
@@ -2263,6 +2526,10 @@ def validate_entries(
             require(fact is not None, f"{entry_id} names no friction in this attempt")
             require(fact["triage"] == "fix-compatible", f"{entry_id} resolves incompatible triage")
             require(fact["resolved"] is False, f"{entry_id} resolves friction twice")
+            require(
+                bool(fact["regression_tests"]),
+                f"{entry_id} cannot resolve an empty regression-test evidence gap",
+            )
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
@@ -2338,33 +2605,84 @@ def validate_entries(
                     fix_diff.policy_paths_untouched is True,
                     f"{entry_id} fix diff changes policy or the soak ledger",
                 )
+                fix_base = fix_diff.validated_base_oid
                 require(
-                    fix_diff.has_added_or_modified_regular_nonledger_blob is True,
-                    f"{entry_id} fix diff has no added or modified regular non-ledger blob",
+                    isinstance(fix_base, str) and SHA_RE.fullmatch(fix_base) is not None,
+                    f"{entry_id} fix merge base is missing or malformed",
                 )
                 require(
-                    fix_diff.normalized_token_stream_changed is True,
-                    f"{entry_id} fix diff has no semantic normalized-token change",
+                    fix_diff.validated_surface == fact["surface"],
+                    f"{entry_id} fix diff used another compatibility surface",
                 )
                 require(
-                    fix_diff.semantic_witness_is_same_regular_nonledger_blob is True,
-                    f"{entry_id} fix semantic witness is not one qualifying blob",
+                    fix_diff.validated_fix_path_patterns
+                    == release_contract.fix_paths(fact["surface"]),
+                    f"{entry_id} fix diff used another surface path set",
+                )
+                witness_path = fix_diff.semantic_witness_path
+                normalized_witness = normalized_repository_path(witness_path)
+                require(
+                    normalized_witness is not None
+                    and any(
+                        policy_glob_matches(normalized_witness, pattern)
+                        for pattern in release_contract.fix_paths(fact["surface"])
+                    ),
+                    f"{entry_id} fix semantic witness path is not surface-owned TeX",
                 )
                 require(
-                    fix_diff.validated_contract == release_contract,
-                    f"{entry_id} fix tests used another release-test contract",
+                    fix_diff.surface_matching_added_or_modified_regular_blob is True,
+                    f"{entry_id} fix has no added or modified surface-owned TeX blob",
                 )
                 require(
-                    fix_diff.inventory_commands_complete is True,
-                    f"{entry_id} fix did not run every pinned inventory command",
+                    fix_diff.tex_comment_stripped_token_stream_changed is True,
+                    f"{entry_id} fix has no TeX-comment-stripped token change",
                 )
                 require(
-                    fix_diff.inventory_commands_passed is True,
-                    f"{entry_id} fix failed a pinned inventory command",
+                    fix_diff.semantic_witness_is_same_surface_regular_blob is True,
+                    f"{entry_id} fix semantic witness is not one surface-owned TeX blob",
                 )
-                require(
-                    fix_diff.execution_receipts_exact_and_matching is True,
-                    f"{entry_id} fix execution receipts are incomplete or mismatched",
+                assert resolve_replay_release_test_observation is not None
+                for test_ref in fact["regression_tests"]:
+                    validate_release_test_observation(
+                        resolve_replay_release_test_observation(
+                            fix_base,
+                            active["freeze_tag"],
+                            test_ref,
+                            release_contract,
+                        ),
+                        tree_oid=fix_base,
+                        tag=active["freeze_tag"],
+                        test_ref=test_ref,
+                        surface=fact["surface"],
+                        expect_exit_zero=False,
+                        contract=release_contract,
+                        subject=f"{entry_id} fix-base test {test_ref}",
+                    )
+                    validate_release_test_observation(
+                        resolve_replay_release_test_observation(
+                            fix_head,
+                            active["freeze_tag"],
+                            test_ref,
+                            release_contract,
+                        ),
+                        tree_oid=fix_head,
+                        tag=active["freeze_tag"],
+                        test_ref=test_ref,
+                        surface=fact["surface"],
+                        expect_exit_zero=True,
+                        contract=release_contract,
+                        subject=f"{entry_id} fix-head test {test_ref}",
+                    )
+                validate_release_payload(
+                    resolve_replay_release_payload(
+                        fix_head,
+                        active["freeze_tag"],
+                        release_contract,
+                    ),
+                    tree_oid=fix_head,
+                    tag=active["freeze_tag"],
+                    contract=release_contract,
+                    subject=f"{entry_id} fix head",
                 )
                 return fix_merged_at, fix_integration
 
