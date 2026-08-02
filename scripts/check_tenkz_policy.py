@@ -149,6 +149,7 @@ FIELDS_BY_KIND = {
         "source_sha",
         "freeze_tag_object",
         "freeze_tag",
+        "freeze_tag_snapshot",
         "prerequisites",
         "evidence",
     },
@@ -469,13 +470,37 @@ class TagEvidence:
     object_type: str | None
     commit: str | None
     candidate_namespace_complete: bool | None = None
-    candidate_patch_exceeds_current_namespace: bool | None = None
+    candidate_matching_tag_names: tuple[str, ...] | None = None
     historical_candidate_check_exact_and_successful: bool | None = None
-    historical_compares_only_earlier_freezes: bool | None = None
+    historical_current_namespace_complete: bool | None = None
+    historical_current_matching_tag_names: tuple[str, ...] | None = None
     exists: bool | None = True
-    validated_entry_id: str | None = None
-    validated_record_pr: str | None = None
-    commit_is_validated_record_integration: bool | None = None
+
+
+@dataclass(frozen=True)
+class FinalTagPublisherEvidence:
+    """Pinned post-merge validation and final-tag publisher job evidence."""
+
+    validated_integration_oid: str | None
+    complete: bool | None
+    pinned_workflow_run_exact: bool | None
+    postmerge_validation_succeeded: bool | None
+    postmerge_validation_network_disabled: bool | None
+    publisher_status: str | None
+    publisher_needs_exact_postmerge_validation: bool | None
+    publisher_started_after_validation_success: bool | None
+    validation_jobs_lack_contents_write: bool | None
+    publisher_has_only_contents_write: bool | None
+    publisher_has_no_checkout_or_repository_execution: bool | None
+    publisher_uses_version_fingerprinted_hosted_gh: bool | None
+    publisher_command_and_inputs_closed: bool | None
+    publisher_uses_only_github_control_plane: bool | None
+    other_networked_steps_absent: bool | None
+    final_ref_absent_before_create: bool | None
+    annotated_tag_object_targets_integration: bool | None
+    ref_created_without_force: bool | None
+    readback_complete_and_matching: bool | None
+    reported_tag_object_oid: str | None
 
 
 @dataclass(frozen=True)
@@ -635,6 +660,7 @@ ResolveReplayReleaseTestObservation = Callable[
 ]
 ResolveReplayFreezeTag = Callable[[str], TagEvidence]
 ResolveCurrentFinalTag = Callable[[str], TagEvidence]
+ResolveFinalTagPublisher = Callable[[str], FinalTagPublisherEvidence]
 ResolveReplayIssue = Callable[[str], IssueEvidence]
 ResolveReplayRecordInvalidReset = Callable[
     [str, str, str, str, str], RecordInvalidResetReplayEvidence
@@ -829,6 +855,27 @@ def closed_string_list(value: object, field: str, entry_id: str) -> list[str]:
     )
     require(len(value) == len(set(value)), f"{entry_id} field {field} has duplicates")
     return value
+
+
+def ordered_freeze_tag_names(value: object, subject: str) -> tuple[str, ...]:
+    """Validate a complete freeze-tag namespace snapshot in numeric order."""
+
+    require(
+        isinstance(value, (list, tuple))
+        and bool(value)
+        and all(
+            isinstance(item, str) and FREEZE_TAG_RE.fullmatch(item) is not None
+            for item in value
+        ),
+        f"{subject} is missing or contains an invalid freeze tag name",
+    )
+    names = tuple(value)
+    require(len(names) == len(set(names)), f"{subject} contains duplicate tag names")
+    require(
+        names == tuple(sorted(names, key=lambda name: int(name.rsplit(".", 1)[1]))),
+        f"{subject} is not in ascending numeric PATCH order",
+    )
+    return names
 
 
 def normalized_repository_path(value: object) -> str | None:
@@ -1756,6 +1803,108 @@ def validate_workflow_evidence(
     )
 
 
+def validate_final_tag_publisher(
+    evidence: FinalTagPublisherEvidence,
+    *,
+    integration_oid: str,
+) -> tuple[str, str | None]:
+    """Validate the pinned publisher state for one sign-off integration."""
+
+    require(
+        evidence.validated_integration_oid == integration_oid,
+        "final-tag publisher evidence used another sign-off integration",
+    )
+    require(evidence.complete is True, "final-tag publisher evidence is incomplete")
+    require(
+        evidence.pinned_workflow_run_exact is True,
+        "final-tag publisher run is not bound to the pinned exact workflow",
+    )
+    require(
+        evidence.postmerge_validation_succeeded is True,
+        "final-tag publisher lacks successful exact post-merge validation",
+    )
+    require(
+        evidence.postmerge_validation_network_disabled is True,
+        "final-tag publisher validation was not network-disabled",
+    )
+    require(
+        evidence.publisher_needs_exact_postmerge_validation is True,
+        "final-tag publisher does not depend on the exact validation job",
+    )
+    require(
+        evidence.validation_jobs_lack_contents_write is True,
+        "a validation job has contents write permission",
+    )
+    require(
+        evidence.publisher_has_only_contents_write is True,
+        "final-tag publisher has missing or excess permissions",
+    )
+    require(
+        evidence.publisher_has_no_checkout_or_repository_execution is True,
+        "final-tag publisher checks out or executes repository content",
+    )
+    require(
+        evidence.publisher_uses_version_fingerprinted_hosted_gh is True,
+        "final-tag publisher uses another executable",
+    )
+    require(
+        evidence.publisher_command_and_inputs_closed is True,
+        "final-tag publisher command or inputs are not closed",
+    )
+    require(
+        evidence.publisher_uses_only_github_control_plane is True,
+        "final-tag publisher uses a non-GitHub network service",
+    )
+    require(
+        evidence.other_networked_steps_absent is True,
+        "release workflow has another networked step",
+    )
+    status = evidence.publisher_status
+    require(
+        status in {"not-run", "success", "failure"},
+        "final-tag publisher has an invalid status",
+    )
+    if status == "not-run":
+        require(
+            evidence.publisher_started_after_validation_success is None
+            and evidence.final_ref_absent_before_create is None
+            and evidence.annotated_tag_object_targets_integration is None
+            and evidence.ref_created_without_force is None
+            and evidence.readback_complete_and_matching is None
+            and evidence.reported_tag_object_oid is None,
+            "publisher that did not run carries creation evidence",
+        )
+        return status, None
+    require(
+        evidence.publisher_started_after_validation_success is True,
+        "final-tag publisher did not start after validation success",
+    )
+    if status == "failure":
+        raise PolicyError("final-tag publisher failed; hard release incident")
+    require(
+        evidence.final_ref_absent_before_create is True,
+        "final tag existed before the publisher create operation",
+    )
+    require(
+        evidence.annotated_tag_object_targets_integration is True,
+        "publisher did not create an annotated tag object for the integration",
+    )
+    require(
+        evidence.ref_created_without_force is True,
+        "publisher did not create the absent final ref without force",
+    )
+    require(
+        evidence.readback_complete_and_matching is True,
+        "publisher final-tag readback is incomplete or mismatched",
+    )
+    object_oid = evidence.reported_tag_object_oid
+    require(
+        isinstance(object_oid, str) and SHA_RE.fullmatch(object_oid) is not None,
+        "publisher did not report a valid final tag-object OID",
+    )
+    return status, object_oid
+
+
 def validate_entries(
     entries: list[dict],
     *,
@@ -1773,6 +1922,7 @@ def validate_entries(
     ) = None,
     resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
     resolve_current_final_tag: ResolveCurrentFinalTag | None = None,
+    resolve_final_tag_publisher: ResolveFinalTagPublisher | None = None,
     resolve_replay_issue: ResolveReplayIssue | None = None,
     resolve_replay_record_invalid_reset: ResolveReplayRecordInvalidReset | None = None,
     resolve_current_workflow: ResolveCurrentWorkflow | None = None,
@@ -1812,6 +1962,10 @@ def validate_entries(
     require(
         resolve_current_final_tag is not None,
         "entry validation requires current final-tag evidence",
+    )
+    require(
+        resolve_final_tag_publisher is not None,
+        "entry validation requires final-tag publisher evidence",
     )
     require(
         resolve_replay_freeze_tag is not None,
@@ -2182,12 +2336,10 @@ def validate_entries(
             and final_tag.object_type is None
             and final_tag.commit is None
             and final_tag.candidate_namespace_complete is None
-            and final_tag.candidate_patch_exceeds_current_namespace is None
+            and final_tag.candidate_matching_tag_names is None
             and final_tag.historical_candidate_check_exact_and_successful is None
-            and final_tag.historical_compares_only_earlier_freezes is None
-            and final_tag.validated_entry_id is None
-            and final_tag.validated_record_pr is None
-            and final_tag.commit_is_validated_record_integration is None,
+            and final_tag.historical_current_namespace_complete is None
+            and final_tag.historical_current_matching_tag_names is None,
             "absent final-tag evidence is inconsistent",
         )
 
@@ -2208,6 +2360,7 @@ def validate_entries(
     deferred_invalid_targets: list[str] = []
     signed = False
     successful_signoff: tuple[str, str, str, str] | None = None
+    observed_signoff: tuple[str, str, str, str] | None = None
     used_source_refs: set[str] = set()
     used_source_shas: set[str] = set()
     used_tag_names: set[str] = set()
@@ -2404,6 +2557,23 @@ def validate_entries(
             )
             patch = int(tag_name.rsplit(".", 1)[1])
             require(patch > prior_patch, f"{entry_id} freeze PATCH must increase")
+            tag_snapshot = ordered_freeze_tag_names(
+                entry["freeze_tag_snapshot"],
+                f"{entry_id} freeze_tag_snapshot",
+            )
+            require(
+                tag_name in tag_snapshot,
+                f"{entry_id} freeze_tag_snapshot omits its freeze tag",
+            )
+            other_snapshot_patches = tuple(
+                int(name.rsplit(".", 1)[1])
+                for name in tag_snapshot
+                if name != tag_name
+            )
+            require(
+                patch > max(other_snapshot_patches, default=-1),
+                f"{entry_id} freeze PATCH is not maximal in its retained snapshot",
+            )
             require(tag_name not in used_tag_names, f"{entry_id} reuses a freeze tag")
             require(tag_object not in used_tag_objects, f"{entry_id} reuses a freeze tag object")
             listed = closed_string_list(entry["prerequisites"], "prerequisites", entry_id)
@@ -2449,8 +2619,12 @@ def validate_entries(
                         f"{entry_id} candidate tag namespace is incompletely paginated",
                     )
                     require(
-                        tag.candidate_patch_exceeds_current_namespace is True,
-                        f"{entry_id} candidate PATCH does not exceed the current namespace",
+                        ordered_freeze_tag_names(
+                            tag.candidate_matching_tag_names,
+                            f"{entry_id} candidate tag namespace",
+                        )
+                        == tag_snapshot,
+                        f"{entry_id} retained snapshot differs from the candidate namespace",
                     )
                 else:
                     require(
@@ -2458,8 +2632,16 @@ def validate_entries(
                         f"{entry_id} lacks its exact successful candidate PATCH check",
                     )
                     require(
-                        tag.historical_compares_only_earlier_freezes is True,
-                        f"{entry_id} historical PATCH check includes a later tag",
+                        tag.historical_current_namespace_complete is True,
+                        f"{entry_id} current tag namespace is incompletely paginated",
+                    )
+                    current_tag_names = ordered_freeze_tag_names(
+                        tag.historical_current_matching_tag_names,
+                        f"{entry_id} current tag namespace",
+                    )
+                    require(
+                        set(tag_snapshot).issubset(current_tag_names),
+                        f"{entry_id} current tag namespace lost a retained name",
                     )
                 payload_blobs = validate_release_payload(
                     resolve_replay_release_payload(source_sha, tag_name, release_contract),
@@ -3351,6 +3533,13 @@ def validate_entries(
             require(source_sha == active["source_sha"], f"{entry_id} names the wrong source SHA")
             require(release_tag == "tenkz-v1.0.0", f"{entry_id} has the wrong release tag")
             require(decision == "release", f"{entry_id} decision must be release")
+            if not record_pending and record_integration is not None:
+                observed_signoff = (
+                    entry_id,
+                    record_ref,
+                    record_integration,
+                    release_tag,
+                )
             require(
                 len(active["work"]) == required_work_count
                 and set(active["work"]) == set(work_classes),
@@ -3620,8 +3809,18 @@ def validate_entries(
     validate_current_controls()
     final_tag = current_final_tag()
     terminal_tag_present = final_tag.exists is True
+    publisher_status: str | None = None
+    published_tag_object: str | None = None
+    if observed_signoff is not None:
+        assert resolve_final_tag_publisher is not None
+        publisher_status, published_tag_object = validate_final_tag_publisher(
+            resolve_final_tag_publisher(observed_signoff[2]),
+            integration_oid=observed_signoff[2],
+        )
     if terminal_tag_present and pending_reset is not None:
         raise PolicyError("final tag exists while release evidence requires reset")
+    if publisher_status == "success" and pending_reset is not None:
+        raise PolicyError("final-tag publisher succeeded while release evidence requires reset")
     if terminal_tag_present and not signed:
         raise PolicyError("final tag exists without a successfully validated sign-off")
     if pending_reset is not None:
@@ -3629,38 +3828,45 @@ def validate_entries(
         return f"reset-required:{pending_reset[1]}"
     if signed:
         assert successful_signoff is not None
-        if terminal_tag_present:
-            require(final_tag.object_type == "tag", "final release tag is not annotated")
+        _signoff_entry, _signoff_record, signoff_integration, signoff_tag = (
+            successful_signoff
+        )
+        require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
+        require(
+            publisher_status in {"not-run", "success"},
+            "final-tag publisher evidence is unavailable after sign-off",
+        )
+        if publisher_status == "not-run":
             require(
-                isinstance(final_tag.object_id, str)
-                and SHA_RE.fullmatch(final_tag.object_id) is not None,
-                "final release tag object is invalid",
+                not terminal_tag_present,
+                "final tag exists without the successful pinned publisher",
             )
-            require(
-                isinstance(final_tag.commit, str)
-                and SHA_RE.fullmatch(final_tag.commit) is not None,
-                "final release tag target is invalid",
-            )
-            signoff_entry, signoff_record, signoff_integration, signoff_tag = (
-                successful_signoff
-            )
-            require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
-            require(
-                final_tag.validated_entry_id == signoff_entry,
-                "final tag was bound to another sign-off entry",
-            )
-            require(
-                final_tag.validated_record_pr == signoff_record,
-                "final tag was bound to another sign-off record PR",
-            )
-            require(
-                final_tag.commit == signoff_integration
-                and final_tag.commit_is_validated_record_integration is True,
-                "final tag does not target the validated sign-off integration",
-            )
-            return "released"
-        validate_absent_final_tag()
-        return "signed-off-awaiting-tag"
+            validate_absent_final_tag()
+            return "signed-off-awaiting-tag"
+        require(
+            terminal_tag_present,
+            "final-tag publisher succeeded but the final ref is absent; hard release incident",
+        )
+        require(final_tag.object_type == "tag", "final release tag is not annotated")
+        require(
+            isinstance(final_tag.object_id, str)
+            and SHA_RE.fullmatch(final_tag.object_id) is not None,
+            "final release tag object is invalid",
+        )
+        require(
+            isinstance(final_tag.commit, str)
+            and SHA_RE.fullmatch(final_tag.commit) is not None,
+            "final release tag target is invalid",
+        )
+        require(
+            final_tag.object_id == published_tag_object,
+            "current final tag object differs from the publisher output",
+        )
+        require(
+            final_tag.commit == signoff_integration,
+            "final tag does not target the validated sign-off integration",
+        )
+        return "released"
     validate_absent_final_tag()
     if active is not None:
         return f"attempt-{active['attempt']}-active"
