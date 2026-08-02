@@ -245,3 +245,57 @@
     the one-site and two-site letters.  Linearity in the virtual matrix gives
     (\ref{eq:mpdo_bnt_completed_physical_map_actions}).
 \end{proof}
+
+\begin{theorem}[Renormalization fixed point from positive-tail reflected
+    sector targets]
+    \label{thm:mpdo_bnt_conditional_rfp_from_reflected_targets}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        isRFPViaTS_of_positive_tail_reflected_target}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.ofPositiveTailReflectedTarget}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:mpdo_bnt_two_site_exact_sector_gauge,
+        def:is_rfp_via_ts}
+    Let the one-site and blocked two-site BNT decompositions have the
+    source-derived exact sector pairing, including the matched multiplicity
+    spectrum, and suppose that $M$ generates matrix product density operators
+    and that its doubled-index tensor is in literal CPSV canonical form.
+    Assume, for every sector $\gamma$, every positive tail length, every pair
+    of open bond indices, and every pair of two-site tail words, that the
+    identity-dressed marked-chain coefficient equals the corresponding
+    reflected-adjoint marked-chain coefficient of $M_\gamma$ in the adjoint
+    two-site blocking, with both tail words reversed on the reflected-adjoint
+    side. This is the additional comparison needed to reproduce the Figure~8
+    argument in
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv} at its
+    invocation in Appendix~C.4, line~2057. Then there are trace-preserving
+    completely positive maps
+    $\mathcal T$ and $\mathcal S$ satisfying
+    \begin{align}
+        \mathcal T[M_1(X)]&=M_2(X),
+        &
+        \mathcal S[M_2(X)]&=M_1(X)
+        \label{eq:mpdo_bnt_reflected_target_rfp}
+    \end{align}
+    for every virtual matrix $X$. Hence $M$ is a renormalization fixed point
+    in the sense of Definition~\ref{def:is_rfp_via_ts}.
+    % Scope restriction (conditional reflected targets): the common target is
+    % assumed in every sector, so this does not prove the unconditional
+    % implication (ii) \Rightarrow (i) of Theorem 4.14. See
+    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy,
+        thm:mpdo_bnt_conditional_physical_channels}
+    For each sector,
+    Theorem~\ref{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    supplies a unitary $U_\gamma$ satisfying
+    (\ref{eq:mpdo_bnt_conditional_unitary_conjugacy}), which is precisely
+    (\ref{eq:mpdo_bnt_physical_channel_unitary_conjugacy}). Choose these
+    unitaries simultaneously over the finite set of sectors.
+    Theorem~\ref{thm:mpdo_bnt_conditional_physical_channels} then gives
+    $\mathcal T$ and $\mathcal S$ together with
+    (\ref{eq:mpdo_bnt_reflected_target_rfp}).
+\end{proof}
