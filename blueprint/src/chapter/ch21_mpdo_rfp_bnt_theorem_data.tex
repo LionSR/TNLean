@@ -893,11 +893,6 @@
     \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
     It does not include the further conclusion on line~2057 that $Z_\gamma$
     may be chosen unitary.
-    % Pull request 5282 proves the common-target Gram step conditionally, and pull
-    % request 5286 proves the ensuing scalar-to-unitary normalization.  Issue 5284,
-    % under issue 4648, tracks the missing identity-dressed realization;
-    % issue 4645 therefore remains open.  See
-    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{definition}
 
 \begin{theorem}[The two-site multiplicity spectrum from the BNT algebra
@@ -946,12 +941,6 @@
     exactly. This is only the invertible-gauge sub-result of
     lines~2053--2057; no unitary choice of $Z_\gamma$ follows from this
     statement.
-
-    % Pull request 5282 proves the common-target Gram step conditionally, and pull
-    % request 5286 proves the ensuing scalar-to-unitary normalization.  Issue 5284,
-    % under issue 4648, tracks the missing identity-dressed realization;
-    % issue 4645 therefore remains open.  See
-    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1012,8 +1001,8 @@
     \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, applied
     to the sector matching of Appendix~C.4, lines~2048--2057.
 
-    \textbf{Scope restriction (gauge-dressed corner):} This theorem constructs
-    only the physical corner in
+    \textbf{Scope restriction (gauge-dressed corner):} This theorem by itself
+    constructs only the physical corner in
     (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}). It does not
     construct a same-sided identity-dressed physical corner for $M_\gamma$
     and does not prove the common-target Gram identity
@@ -1025,10 +1014,8 @@
     \end{align}
     This restriction is documented in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
-    The following theorem nevertheless realizes the identity-dressed
-    horizontal slices by an oblique compression. Its left and right maps need
-    not agree, so it does not supply the missing positive corner or common
-    reflected target.
+    The mixed-prefix comparison below proves the Gram identity without
+    constructing a same-sided raw corner for the two-site blocking.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1043,6 +1030,84 @@
     conjugated on its open indices by $Z_\gamma^\dagger$ and
     $(Z_\gamma^{-1})^\dagger$, gives the stated equality of marked-chain
     coefficients; the gauge factors cancel on the reflected side.
+\end{proof}
+
+\begin{theorem}[Raw physical corner of a matched one-site sector]
+    \label{thm:mpdo_bnt_exact_sector_one_site_raw_corner}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_oneSite_raw_sector_corner}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        def:mpdo_bnt_two_site_exact_sector_gauge}
+    In the setting above, each sector $\gamma$ admits an isometry
+    $W_\gamma\colon\C^{d_\gamma}\to\C^d$ and a scalar
+    $a_\gamma>0$ such that
+    \begin{align}
+        W_\gamma^\dagger\widetilde M^vW_\gamma
+        &=a_\gamma M_\gamma^v
+        \label{eq:mpdo_bnt_exact_sector_one_site_raw_corner}
+    \end{align}
+    for every vertical letter $v$.  Here the bond space of $M_\gamma$ is
+    identified with that of its matched two-site sector.  This is the
+    distinguished positive-weight copy in the one-site vertical
+    decomposition of
+    \cite[Proposition~4.13, statement lines~943--951, and Appendix~C.4,
+    lines~2046--2057]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_retained_product_spectral_family_exists}
+    Select the first copy of $M_\gamma$ in the one-site vertical direct sum.
+    Its inclusion is isometric.  Compressing the reconstruction identity by
+    this inclusion gives
+    (\ref{eq:mpdo_bnt_exact_sector_one_site_raw_corner}), with
+    $a_\gamma$ equal to the positive multiplicity weight of the selected
+    copy.  Transport along the equality of the paired bond dimensions.
+\end{proof}
+
+\begin{theorem}[Reflected marked chains with a two-site initial block]
+    \label{thm:mpdo_two_site_prefix_gram_reflected_marked_chain}
+    \lean{MPOTensor.IsMPDO.%
+        markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}
+    \leanok
+    \uses{def:mpdo, def:vertical_tensor_mpdo,
+        def:mpdo_two_site_blocking}
+    Let $M$ generate matrix product density operators, let $A$ be a vertical
+    tensor, and suppose that an isometry $V$ selects from the two-site
+    blocking a positive multiple of an invertible conjugate of $A$:
+    \begin{align}
+        V^\dagger\widetilde{M^{(2)}}^vV
+        &=b\,X A^vX^{-1},
+        &b&>0.
+        \label{eq:mpdo_two_site_prefix_gauge_corner}
+    \end{align}
+    For every pair of open bond indices and every pair of equal-length words
+    in the original physical alphabet, the marked-chain coefficient of
+    \begin{align}
+        (X^\dagger X)A^v(X^\dagger X)^{-1}
+        \notag
+    \end{align}
+    followed by the corresponding unblocked tail of $M$ equals the
+    reflected-adjoint marked-chain coefficient of $A$ followed by the
+    reversed tail of $M^\dagger$.  Thus the first two sites are compressed
+    jointly, while all later sites remain unblocked.
+
+    \textbf{Local fix (mixed one-site/two-site prefix):} This is the common
+    unblocked-tail comparison needed when
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv} is invoked
+    in \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.  It is
+    recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_reflected_marked_chain}
+    Compress the first two physical sites of the density operator of length
+    $N+2$ by $V$.  Hermiticity exchanges the open bond indices and the two
+    physical words.  Taking adjoints reverses only the remaining $N$ one-site
+    factors.  Finally conjugate the open indices by $X^\dagger$ and
+    $(X^{-1})^\dagger$.  The left side becomes the Gram dressing, while the
+    gauge factors cancel on the reflected side.
 \end{proof}
 
 \begin{theorem}[Oblique physical-letter realization of a matched two-site sector]
@@ -1093,7 +1158,7 @@
         &=\mc{R}(M_\gamma)^{rs}.
         \label{eq:mpdo_bnt_identity_physical_span}
     \end{align}
-    This supplies the physical-letter span needed for the attempted comparison
+    This supplies the physical-letter span needed for the direct comparison
     of the two vertical forms at
     \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
 
@@ -1113,8 +1178,9 @@
         &=M_\gamma^v.
         \notag
     \end{align}
-    The latter remains the unproved step in the direct application of
-    \cite[Proposition~4.13, Figures~7--8]{Cirac2016MPDO_arXiv}.
+    This is the obstruction in the direct two-site argument.  The mixed-prefix
+    theorem below instead compares the one-site raw corner with the two-site
+    gauge corner while retaining the same one-site tail.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1178,17 +1244,15 @@
         \label{eq:mpdo_bnt_conditional_scalar_gram}
     \end{align}
 
-    \textbf{Scope restriction (conditional reflected target):} The preceding
-    theorem derives an identity-dressed physical-letter coefficient family
-    from the exact sector gauge. What remains assumed here is that such a
-    family has the same reflected-adjoint target as the gauge-dressed marked
-    chains at every positive tail length. The oblique construction cannot
-    provide this identity: adjoint reflection, with the required bond-pair and
-    tail reversal, exchanges $L_\gamma$ and $R_\gamma$ and is governed by the
-    Gram-dressed compression
-    (\ref{eq:mpdo_bnt_identity_oblique_opposite}). Thus this theorem does not
-    establish the unconditional conclusion of Appendix~C.4,
-    lines~2048--2057. The remaining gap is recorded in
+    \textbf{Scope restriction (conditional reflected target):} This theorem
+    assumes that the identity-dressed physical-letter family has the same
+    reflected-adjoint target as the gauge-dressed marked chains at every
+    positive tail length. The oblique construction alone cannot provide this
+    identity: adjoint reflection exchanges $L_\gamma$ and $R_\gamma$ and is
+    governed by the Gram-dressed compression
+    (\ref{eq:mpdo_bnt_identity_oblique_opposite}). The mixed-prefix comparison
+    below derives the target under the standing canonical-form and positivity
+    assumptions. This distinction is recorded in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
 \end{theorem}
 
@@ -1245,14 +1309,12 @@
     \textbf{Scope restriction (conditional reflected target):} The
     physical-letter coefficients are supplied by
     Theorem~\ref{thm:mpdo_bnt_exact_sector_identity_oblique_physical_span},
-    but their common positive-tail reflected target remains an assumption.
-    Appendix~C.4, lines~2048--2057, does not establish this star-compatible
-    target for the raw representative. Hence this theorem does not establish
-    the unconditional line-2057 conclusion. The missing target is recorded in
+    while their common positive-tail reflected target is an assumption of
+    this theorem. Appendix~C.4, lines~2048--2057, does not itself spell out
+    the star-compatible comparison for the raw representative. The
+    mixed-prefix theorem below supplies it under the standing assumptions, as
+    recorded in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
-    % Pull request 5282 is the conditional Gram theorem, and pull request 5286
-    % composes it with scalar-to-unitary normalization.  Issue 5284, under issue 4648,
-    % tracks the missing premise; issue 4645 remains open.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1266,6 +1328,89 @@
     $U_\gamma$ equals conjugation by $Z_\gamma$, and the exact sector
     conjugacy gives
     (\ref{eq:mpdo_bnt_conditional_unitary_conjugacy}).
+\end{proof}
+
+\begin{theorem}[Mixed-prefix Gram identity and unitary sector conjugacy]
+    \label{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gramDressing_gauge_eq_one}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        has_identity_positive_tail_reflected_target}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gauge_gram_eq_pos_smul_one}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_unitary_sector_conjugacy}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.ofAlgebraTensorClause}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:mpdo_bnt_two_site_exact_sector_gauge}
+    Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
+    canonical form, and let the one-site and two-site sectors be paired by the
+    exact gauges $Z_\gamma$ above.  Then, for every sector $\gamma$ and every
+    vertical letter $v$,
+    \begin{align}
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}
+        &=M_\gamma^v.
+        \label{eq:mpdo_bnt_mixed_prefix_gram_identity}
+    \end{align}
+    Consequently there is a real number $\omega_\gamma>0$ such that
+    \begin{align}
+        Z_\gamma^\dagger Z_\gamma
+        &=\omega_\gamma\Id,
+        \label{eq:mpdo_bnt_mixed_prefix_scalar_gram}
+    \end{align}
+    and there is a unitary $U_\gamma$ satisfying
+    \begin{align}
+        A_{\sigma(\gamma)}^v
+        &=U_\gamma M_\gamma^vU_\gamma^\dagger.
+        \label{eq:mpdo_bnt_mixed_prefix_unitary_conjugacy}
+    \end{align}
+    The identity-dressed marked chains therefore also have the positive-tail
+    reflected target used in the conditional statements above.
+
+    \textbf{Local fix (mixed one-site/two-site prefix):} The proof compares a
+    one-site raw corner with a two-site gauge corner while retaining the same
+    unblocked tail.  This supplies the common comparison omitted when
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv} is invoked
+    in \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.  The
+    distinction from the unsuccessful direct two-site comparison is recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner,
+        thm:mpdo_bnt_exact_sector_gauge_blocked_corner,
+        thm:mpdo_bnt_exact_sector_identity_oblique_physical_span,
+        thm:mpdo_two_site_prefix_gram_reflected_marked_chain,
+        thm:mpdo_reflected_marked_chain,
+        thm:cpsv_original_coordinate_marked_lemma_l,
+        thm:mpdo_bnt_conditional_identity_marked_gram,
+        thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    Put $G_\gamma=Z_\gamma^\dagger Z_\gamma$.  The two-site initial-block
+    identity applied to the gauge corner identifies the marked chains of
+    $G_\gamma M_\gamma G_\gamma^{-1}$ with the reflected-adjoint chains of
+    $M_\gamma$, followed by an arbitrary unblocked tail of $M^\dagger$.
+    The ordinary one-site reflected identity applied to the raw corner gives
+    exactly the same target for $M_\gamma$.
+
+    Both marked tensors are linear combinations of the one-site physical
+    letters.  Indeed, the raw mark is obtained from the pair
+    $(W_\gamma,W_\gamma)$, whereas the Gram-dressed mark is obtained from
+    \begin{align}
+        \bigl(W_\gamma G_\gamma^\dagger,
+              W_\gamma G_\gamma^{-1}\bigr).
+        \notag
+    \end{align}
+    Their marked traces agree against every positive-length tail.  The
+    original-coordinate form of Lemma~L therefore identifies the two marked
+    tensors and proves
+    (\ref{eq:mpdo_bnt_mixed_prefix_gram_identity}).  Normality of
+    $M_\gamma$ gives
+    (\ref{eq:mpdo_bnt_mixed_prefix_scalar_gram}), and normalizing
+    $Z_\gamma$ by $\omega_\gamma^{-1/2}$ gives the unitary in
+    (\ref{eq:mpdo_bnt_mixed_prefix_unitary_conjugacy}).
 \end{proof}
 
 \begin{lemma}[Idempotence for the canonical chi coefficients]%
