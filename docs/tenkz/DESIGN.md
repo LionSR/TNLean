@@ -8,9 +8,10 @@ implementation boundaries. The earlier file at `history/DESIGN.md` records the
 
 Adopting this policy neither changes the package version nor starts the 1.0
 soak. Automated enforcement is pending under #5352, and no soak entry is valid
-until the policy, repository-evidence checks, and CI wiring are active. The
-clock starts only after every prerequisite below has closed and the frozen
-source has reached `main` through a qualifying pull request.
+until the policy, repository-evidence checks, and CI wiring are armed. The
+enforcement activation pins the ledger prefix but starts no clock. A later,
+self-referential attempt-activation pull request supplies the trusted start
+time after every prerequisite below has closed.
 
 The following block is normative. A later #5352 slice activates its
 machine-checking contract.
@@ -19,6 +20,7 @@ machine-checking contract.
 [policy]
 schema = 1
 enforcement = "pending"
+enforcement_transition = "pending-to-armed"
 tag_namespace = "tenkz-v*"
 repository_tag_namespace = "v*"
 freeze_tag_pattern = "tenkz-v0.9.PATCH"
@@ -182,63 +184,77 @@ date, manual version, change record, event-format declaration, and
 compatibility tests all agree with the tag. A moved or reused release tag is
 invalid.
 
-The soak freeze tag matches `tenkz-v0.9.PATCH`. First merge the frozen source
-through one pull request to `main`; its GitHub `mergedAt` time is the trusted
-clock anchor and its merge commit is the frozen source commit. Then create and
-push the annotated tag on that commit before appending the ledger entry. The
-entry records the pull request, its `mergedAt` time and merge SHA, the tag-object
-SHA, the peeled commit SHA, and the tagger timestamp normalized to UTC. The
-validator checks their agreement and rejects a lightweight, moved, replaced,
-mismatched, or future-dated tag. The tagger timestamp identifies the tag
-object; it is not wall-clock evidence. The ledger therefore lives in a later
-commit and does not ask a tag to contain the entry that records it.
+The soak freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
+non-negative decimal integer and increases strictly between attempts. For each
+attempt, first merge the frozen source through a source pull request targeting
+`main`, then create and push the annotated tag on that pull request's
+integration commit. Only then open the ledger-only attempt-activation pull
+request and append its self-referential `freeze` entry.
 
-The final `tenkz-v1.0.0` annotated tag is created only after the sign-off entry
-has landed on `main`. The sign-off-containing commit already carries the 1.0
-`\ProvidesPackage` metadata, manual version, change record, event-format
-declaration, and compatibility tests. The final tag points to that commit.
-Sign-off records the intended release tag but cannot require that tag to exist
-yet; requiring it earlier would make the ledger and tag circular.
+The entry records its own `activation_pr`, the prior `source_pr` and
+`source_sha`, the tag name and object SHA, the prerequisites, and closure
+evidence. It cannot record its own integration commit or merge time because
+neither exists before merge. Candidate CI validates every fact already known
+and reports `freeze-pending`. After merge, GitHub's verified `mergedAt` is the
+clock anchor `T`; the pull request's external integration commit anchors later
+ancestry. The validator checks the source pull request, source SHA, tag object,
+and peeled commit agree, and rejects a lightweight, moved, replaced, or
+mismatched tag. A tagger timestamp, if transcribed as evidence, is descriptive
+only and never starts the clock.
+
+The final `tenkz-v1.0.0` annotated tag is created only after the self-referential
+sign-off pull request has landed on `main`. Its exact final head already carries
+the 1.0 `\ProvidesPackage` metadata, manual version, change record, event-format
+declaration, compatibility tests, and sign-off entry. The final tag points to
+that pull request's integration commit. Sign-off records the intended release
+tag but cannot require that tag to exist yet; requiring it earlier would make
+the ledger and tag circular.
 
 ## The 1.0 freeze and soak
 
 The dependency chain is ordered:
 
-1. close #5086, #4699, and #4162 for 0.8;
-2. close #4703, #4708, and #4163 for the 0.9 contract freeze;
-3. merge the frozen source through a qualifying pull request to `main`, then
-   create and push an annotated `tenkz-v0.9.PATCH` tag on its merge commit;
-4. append the pull request, its `mergedAt` time and merge SHA, the tag-object
-   SHA, peeled commit SHA, tagger UTC timestamp, and closure evidence to
-   `SOAK-1.0.md` in a later commit;
-5. expose that frozen documented contract to 28 elapsed days of normal
+1. land the checker, repository-evidence resolver, tests, and CI; change both
+   normative enforcement fields from `pending` to `armed` and pin the ledger
+   prefix without starting a clock;
+2. close #5086, #4699, and #4162 for 0.8;
+3. close #4703, #4708, and #4163 for the 0.9 contract freeze;
+4. merge the frozen source through a source pull request to `main`, then create
+   and push an annotated `tenkz-v0.9.PATCH` tag on its integration commit;
+5. open a ledger-only draft pull request, append a self-referential `freeze`
+   entry, observe `freeze-pending` in candidate CI, and merge it to start the
+   attempt at GitHub's verified merge time `T`;
+6. expose that frozen documented contract to 28 elapsed days of normal
    blueprint work on `main`;
-6. land sign-off, then create `tenkz-v1.0.0` on the sign-off-containing commit.
+7. merge the independently approved sign-off pull request, then create
+   `tenkz-v1.0.0` on its integration commit.
 
-Let `T` be GitHub's verified `mergedAt` timestamp for the active freeze pull
-request. Window `i` is the half-open UTC interval
-`[T + 7i days, T + 7(i+1) days)` for `i = 0, 1, 2, 3`; work merged exactly on a
-boundary belongs to the later window. Ordinary-work evidence names at least
-one pull request in each window. The validator checks that GitHub reports the
-pull request merged to `main` in that interval, that its recorded merge SHA is
-reachable from `main`, and that the SHA is a strict descendant of and distinct
-from the freeze SHA. The work must perform normal blueprint or benchmark work.
-The freeze pull request, ledger-only and policy-only changes, synthetic
-exercises, unmerged branches, and invented evidence do not qualify.
+Every prerequisite must be closed, with GitHub `closedAt <= T`. Window `i` is
+the half-open UTC interval `[T + 7i days, T + 7(i+1) days)` for
+`i = 0, 1, 2, 3`; work merged exactly on a boundary belongs to the later
+window, and `T + 28 days` lies outside the fourth window. Ordinary-work
+evidence names at least one pull request in each window. GitHub must report it
+merged to `main` in that interval. Its integration commit must be reachable
+from `main` and a strict descendant of the attempt-activation pull request's
+external integration commit. The work must perform normal blueprint or
+benchmark work. Source, activation, policy-only, ledger-only, synthetic, and
+unmerged work does not qualify.
 
-Interface friction is appended when it is found and triaged as
-`fix-compatible`, `defer-to-2.0`, or `breaking-required`. A breaking need
-appends an immediate reset and ends that attempt; a fresh freeze entry starts
-attempt number one higher. Compatible fixes retain the clock only when both
-public surfaces remain compatible under the rules above. A fresh attempt uses
-a strictly larger non-negative `PATCH`, a new qualifying pull request and merge
-SHA that is a strict descendant of the prior freeze, and a new annotated tag
-name and object. None may be reused.
+Interface friction is appended when found and triaged as `fix-compatible`,
+`defer-to-2.0`, or `breaking-required`. A reset has cause
+`breaking-required` or `record-invalid` and names the entry that caused it. It
+closes the attempt; the next non-correction entry starts attempt number one
+higher with a strictly larger `PATCH`, a new source pull request and SHA, a new
+annotated tag and object, and a new attempt-activation pull request. Compatible
+fixes retain the clock only when both public surfaces remain compatible under
+the rules above. Corrections remain owned by the attempt of their target even
+after a reset and never reopen a closed attempt.
 
-Release sign-off is computed against current UTC and verified GitHub merge
-metadata, not self-declared Git tagger, committer, or ledger dates. It requires
-current UTC to be at least `T + 28 days`, one qualifying normal-work pull
-request in each of the four intervals, no unresolved fix-compatible friction,
-no breaking-required friction in the active attempt, and normalized explicit
-identities for `github:lionsr` and one distinct independent reviewer. The
-append-only entry grammar and reset rules live in `SOAK-1.0.md`.
+The sign-off entry names its own pull request. GitHub's `mergedAt` is the
+sign-off time and must be at least `T + 28 days`; `mergedBy` must be
+`github:lionsr`. The named, distinct reviewer must have a latest effective
+`APPROVED` review on the exact final head, submitted after `T + 28 days`
+and before merge. Sign-off also requires one qualifying work entry in each
+window, no unresolved fix-compatible friction, and no breaking-required or
+record-invalid condition in the active attempt. The exact entry grammar and
+reset rules live in `SOAK-1.0.md`.

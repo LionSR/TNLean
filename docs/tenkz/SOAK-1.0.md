@@ -1,17 +1,15 @@
 # tenkz 1.0 soak log
 
 This is the evidence ledger for the 1.0 compatibility soak. Enforcement is
-pending: no entry is valid, the clock is stopped, and the prefix may still be
+pending: no entry is valid, no clock is running, and the prefix may still be
 corrected through ordinary reviewed pull requests.
 
-After the validator, repository-evidence checks, tests, and CI wiring land, one
-activation pull request changes both normative `enforcement` fields to
-`active`. That activation commit fixes every existing byte as the immutable
-ledger prefix. From then on, add a new entry only at the end; never revise,
-delete, reorder, or insert text. A prose or evidence correction uses a
-`correction` entry. A wrong freeze SHA, pull request, tag, date, attempt number,
-friction triage, or other clock-bearing field requires a `reset` followed by a
-new `freeze`; a correction cannot rewrite history.
+After the checker, repository-evidence resolver, tests, and CI wiring land, one
+enforcement-activation pull request changes both normative `enforcement`
+fields from `pending` to `armed`. That commit pins every byte through the final
+marker as the immutable ledger prefix but starts no clock. While armed, later
+changes append live entry blocks only. A correction adds a new entry; it never
+revises, deletes, reorders, or inserts preceding bytes.
 
 The following schema block is normative. A later #5352 slice activates its
 machine-checking contract.
@@ -21,12 +19,15 @@ machine-checking contract.
 schema = 1
 policy = "docs/tenkz/DESIGN.md"
 enforcement = "pending"
+enforcement_transition = "pending-to-armed"
 append_only = true
+append_only_from = "armed"
 minimum_days = 28
 normal_work_windows = 4
 window_days = 7
 window_interval = "half-open-utc"
-clock_anchor = "freeze-pr-merged-at"
+clock_anchor = "activation-pr-merged-at"
+ancestry_anchor = "activation-pr-integration-commit"
 work_anchor = "work-pr-merged-at"
 required_prerequisites = ["#5086", "#4699", "#4162", "#4703", "#4708", "#4163"]
 freeze_tag_pattern = "tenkz-v0.9.PATCH"
@@ -36,128 +37,203 @@ maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
 ```
 
-## Entry envelope
+## Live block and value grammar
 
-Each entry is one fenced block labelled `toml tenkz-soak-entry-v1`. Blocks are
-the only content allowed after the marker. Every entry has these fields:
+Each live entry is exactly one fenced block labelled
+`toml tenkz-soak-entry-v1`. Its TOML document has the single top-level table
+`[entry]`; no other root key or nested table is legal. An example fence with a
+different label is not live.
 
-| Field | Rule |
+The scalar and reference types are closed:
+
+| Type | Grammar |
 |---|---|
-| `id` | `S1-0001`, `S1-0002`, and so on without gaps |
-| `kind` | `freeze`, `work`, `friction`, `resolution`, `reset`, `correction`, or `sign-off` |
-| `date` | UTC date in `YYYY-MM-DD` form, never earlier than the preceding entry |
-| `author` | normalized `github:lowercase-login` identity |
-| `attempt` | positive integer; starts at 1 and increases only after a reset |
+| `entry-id` | `S1-[0-9]{4}` |
+| `entry-ref` | an earlier live `entry-id` |
+| `pr-ref` | `#[1-9][0-9]*`, naming a pull request in this repository |
+| `issue-ref` | `#[1-9][0-9]*`, naming an issue in this repository |
+| `sha` | exactly 40 lowercase hexadecimal digits |
+| `identity` | `github:lowercase-login` |
+| `tag` | a nonempty tag name in the `tenkz-v*` namespace |
+| `text` | a nonempty TOML string |
+| `attempt` | a positive TOML integer |
 
-The first entry of an attempt is `freeze`. Other entries use the active
-attempt. A `sign-off` is final. The validator resolves every recorded Git
-object against the repository, every pull request against GitHub's merge
-metadata, and elapsed time against current UTC.
+A `list[TYPE]` is a TOML array whose elements all have `TYPE`, in stated order,
+with no duplicates. Every entry has exactly these common fields:
+
+| Field | Type and rule |
+|---|---|
+| `id` | `entry-id`; `S1-0001`, `S1-0002`, and so on without gaps |
+| `kind` | one of `freeze`, `work`, `friction`, `resolution`, `reset`, `correction`, `sign-off` |
+| `author` | `identity` |
+| `attempt` | `attempt`; starts at 1 and increases only after a reset |
+
+For each kind, the common fields plus that kind's fields below are the exact
+allowed set. Missing required fields, fields belonging to another kind,
+unknown fields, wrong scalar or list types, duplicate list values, extra root
+keys, and nested tables are rejected.
 
 ## Entry kinds
 
 ### `freeze`
 
-Required additional fields: `freeze_pr` (`#NNNN`), `freeze_sha` and
-`freeze_tag_object` (both 40 lowercase hexadecimal digits),
-`freeze_merged_utc` and `freeze_tagger_utc` (both `YYYY-MM-DDTHH:MM:SSZ`),
-`freeze_tag` (matching `tenkz-v0.9.PATCH`), `prerequisites` (the exact six issue
-IDs in dependency order), and `evidence` (immutable closure evidence).
+Required additional fields:
 
-`PATCH` is a non-negative decimal integer. GitHub must report `freeze_pr`
-merged to `main`, with merge commit `freeze_sha` at `freeze_merged_utc`; `date`
-is that timestamp's UTC date. The tag must be annotated and peel to that same
-commit. Its object SHA and normalized tagger timestamp must equal the recorded
-values. The tagger timestamp cannot precede the trusted pull-request merge time
-or lie in the future, but it identifies the tag object rather than starting
-the clock. The merge commit must be reachable from `main`. Create and push the
-tag before committing this entry.
+| Field | Type |
+|---|---|
+| `activation_pr` | `pr-ref` |
+| `source_pr` | `pr-ref` |
+| `source_sha` | `sha` |
+| `freeze_tag_object` | `sha` |
+| `freeze_tag` | `tag`, matching `tenkz-v0.9.PATCH` |
+| `prerequisites` | `list[issue-ref]`, exactly the six schema prerequisites |
+| `evidence` | `text` |
+
+`PATCH` is a non-negative decimal integer. It is strictly larger than the
+previous attempt's patch number. Before this entry is proposed, GitHub must
+report `source_pr` merged to `main` with integration commit `source_sha`, and
+the annotated tag must already exist, have object SHA `freeze_tag_object`, and
+peel to `source_sha`.
+
+The entry is appended by a ledger-only draft pull request and names that same
+pull request as `activation_pr`. The candidate cannot record its own merge SHA
+or time because neither exists yet; those fields are forbidden. Candidate CI
+checks the self-reference, append-only diff, source pull request, tag, current
+prerequisite state, and entry grammar, then reports `freeze-pending`. It does
+not claim that a clock is running.
+
+After merge, GitHub's verified `activation_pr.mergedAt` is the attempt start
+`T`, and the pull request's external integration commit is its ancestry anchor.
+The validator requires `activation_pr` to target `main`, contain only the new
+ledger entry, and report every prerequisite closed with `closedAt <= T`. A tag
+timestamp may be quoted inside `evidence`, but it is never clock-bearing.
 
 ### `work`
 
-Required additional fields: `work_pr` (`#NNNN`), `work_sha` (40 lowercase
-hexadecimal digits), `work_merged_utc` (`YYYY-MM-DDTHH:MM:SSZ`), `summary`, and
-`evidence`. GitHub must report `work_pr` merged to `main` with merge commit
-`work_sha` at `work_merged_utc`; `date` is that timestamp's UTC date. The SHA
-must be reachable from `main`, distinct from the freeze SHA, and a strict
-descendant of it. The pull request must perform normal blueprint or benchmark
-work. The freeze pull request, ledger-only and policy-only changes, unmerged
-branches, invented evidence, and synthetic soak exercises do not count.
+Required additional fields:
 
-Let `T` be the active freeze pull request's verified `mergedAt` timestamp.
-Window `i` is `[T + 7i days, T + 7(i+1) days)` for `i = 0, 1, 2, 3`; a pull
-request merged exactly on a boundary belongs to the later window. At sign-off,
-`work_evidence` references at least one verified entry from each window.
+| Field | Type |
+|---|---|
+| `work_pr` | `pr-ref` |
+| `summary` | `text` |
+| `evidence` | `text` |
+
+GitHub supplies the merge SHA and time; neither is copied into the entry. It
+must report `work_pr` merged to `main`, and that integration commit must be a
+strict descendant of the active `activation_pr` integration commit. The work
+must perform normal blueprint or benchmark work. The source pull request,
+attempt-activation pull request, enforcement-activation pull request,
+policy-only pull requests, ledger-only pull requests, synthetic exercises,
+unmerged branches, and a repeated `work_pr` do not qualify.
+
+Let `T` be the active attempt's verified activation merge time. Window `i` is
+the half-open UTC interval `[T + 7i days, T + 7(i+1) days)` for
+`i = 0, 1, 2, 3`. Work merged exactly on a boundary belongs to the later
+window. `T + 28 days` lies outside the fourth window.
 
 ### `friction`
 
 Required additional fields: `surface` (`tex-api` or `tnlog`), `triage`
-(`fix-compatible`, `defer-to-2.0`, or `breaking-required`), `summary`, and
-`evidence`. `fix-compatible` must receive a later `resolution` before sign-off.
-`defer-to-2.0` changes nothing in the active major. `breaking-required` must be
-followed immediately by a `reset` referencing that friction entry.
+(`fix-compatible`, `defer-to-2.0`, or `breaking-required`), `summary` (`text`),
+and `evidence` (`text`). `fix-compatible` must receive a later `resolution`
+before sign-off. `defer-to-2.0` changes nothing in the active major.
+`breaking-required` must be followed by a `reset` as the next non-correction
+entry.
 
 ### `resolution`
 
-Required additional fields: `friction`, `summary`, and `evidence`. It may
-resolve one preceding, unresolved `fix-compatible` friction entry in the same
-attempt. It cannot resolve or reclassify another triage.
+Required additional fields: `friction` (`entry-ref`), `summary` (`text`), and
+`evidence` (`text`). It resolves one preceding, unresolved `fix-compatible`
+friction entry in the same active attempt. It cannot resolve or reclassify
+another triage.
 
 ### `reset`
 
-Required additional fields: `friction`, `reason`, and `evidence`. It references
-the immediately preceding `breaking-required` friction entry and closes the
-attempt. The next non-correction entry is a new `freeze` with attempt number
-increased by one. Its non-negative `PATCH` is strictly larger than the prior
-attempt's; its qualifying pull request, merge SHA, annotated tag name, and tag
-object are new; and its merge SHA is a strict descendant of the prior freeze.
-The 28-day clock begins again from the new pull request's verified `mergedAt`.
+Required additional fields: `cause` (`breaking-required` or `record-invalid`),
+`target` (`entry-ref`), `reason` (`text`), and `evidence` (`text`).
+
+For `cause = "breaking-required"`, `target` names an unresolved friction entry
+with that triage in the same attempt, and the reset is the next non-correction
+entry. For `cause = "record-invalid"`, `target` names the entry in that attempt
+whose externally verified identity, history, or clock-bearing evidence is
+invalid. A correction cannot repair either cause.
+
+The reset closes the attempt. The next non-correction entry is a new `freeze`
+with attempt number increased by one, a strictly larger `PATCH`, a new source
+pull request and SHA, a new annotated tag name and object, and a new
+attempt-activation pull request. Its activation integration commit must be a
+strict descendant of the prior activation integration commit.
 
 ### `correction`
 
-Required additional fields: `target`, `summary`, and `evidence`. It references
-an earlier entry and adds explanatory or evidence text. It cannot alter a
-clock-bearing or compatibility decision.
+Required additional fields: `target` (`entry-ref`), `summary` (`text`), and
+`evidence` (`text`). It adds explanatory or non-clock evidence to an earlier
+entry and cannot alter a compatibility decision, identity, ancestry, merge
+time, or other clock-bearing fact.
+
+A correction's `attempt` must equal its target's attempt, including after that
+attempt has reset. It remains owned by the closed attempt, does not attach to a
+later active attempt, and never reopens the target attempt. Corrections may
+appear between a reset and the next freeze; the next non-correction entry must
+still be that freeze.
 
 ### `sign-off`
 
-Required additional fields: `freeze`, `freeze_sha`, `release_tag`,
-`maintainer`, `reviewer`, `work_evidence`, and `decision = "release"`. The
-freeze ID and SHA must match the active attempt, `release_tag` must be the
-intended `tenkz-v1.0.0`, `maintainer` must be `github:lionsr`, and `reviewer`
-must be a distinct normalized GitHub identity. Current UTC must be at least
-`T + 28 days`, where `T` is the freeze pull request's verified `mergedAt`; the
-entry's `date` cannot be future-dated or claim an earlier sign-off. Each of the
-first four half-open seven-day windows must be represented by a qualifying
-pull request. All compatible friction must be resolved and the attempt must
-contain no breaking need. The sign-off-containing commit already carries the
-1.0 package metadata, manual version, change record, event-format declaration,
-and compatibility tests. Create the final annotated tag only after this entry
-lands on `main`; it points to that commit.
+Required additional fields:
+
+| Field | Type |
+|---|---|
+| `signoff_pr` | `pr-ref` |
+| `freeze` | `entry-ref` |
+| `source_sha` | `sha` |
+| `release_tag` | `tag`, exactly `tenkz-v1.0.0` |
+| `reviewer` | `identity` |
+| `work_evidence` | `list[entry-ref]` |
+| `decision` | the exact string `release` |
+
+`freeze` and `source_sha` must match the active attempt. `work_evidence`
+contains distinct earlier `work` entry IDs from that attempt, at least one in
+each of the four windows; values are entry references, not pull-request
+references.
+
+The entry names its own pull request as `signoff_pr`. Candidate CI validates
+the final head and reports `sign-off-pending`; it cannot invent the future
+merge time or integration commit. The exact final head already carries the 1.0
+package metadata, manual version, change record, event-format declaration,
+compatibility tests, and this sign-off entry.
+
+After merge, GitHub must report that `signoff_pr` targeted `main`, that its
+integration commit descends from the active activation integration commit,
+that `signoff_pr.mergedAt >= T + 28 days`, and that normalized
+`mergedBy = github:lionsr`. The named reviewer is distinct from that
+maintainer. Their latest effective review must be `APPROVED`, target the exact
+final `headRefOid`, and have `submittedAt > T + 28 days` and
+`submittedAt < signoff_pr.mergedAt`. All compatible friction is resolved, and
+the active attempt contains no breaking-required or record-invalid condition.
+The sign-off is final. Only after it merges is the annotated `tenkz-v1.0.0`
+tag created on the sign-off pull request's integration commit.
 
 ## Example shape
 
-The example is not a log entry because its fence has a different label.
+The example is not a live entry because its fence has a different label.
 
 ```toml example-tenkz-soak-entry-v1
 [entry]
 id = "S1-0001"
 kind = "freeze"
-date = "YYYY-MM-DD"
 author = "github:lionsr"
 attempt = 1
-freeze_pr = "#NNNN"
-freeze_sha = "0123456789abcdef0123456789abcdef01234567"
-freeze_merged_utc = "YYYY-MM-DDTHH:MM:SSZ"
+activation_pr = "#NNNN"
+source_pr = "#NNNN"
+source_sha = "0123456789abcdef0123456789abcdef01234567"
 freeze_tag_object = "89abcdef0123456789abcdef0123456789abcdef"
 freeze_tag = "tenkz-v0.9.0"
-freeze_tagger_utc = "YYYY-MM-DDTHH:MM:SSZ"
 prerequisites = ["#5086", "#4699", "#4162", "#4703", "#4708", "#4163"]
-evidence = "immutable issue-closure and tag evidence"
+evidence = "immutable source, tag, and prerequisite evidence"
 ```
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
-under #5352 will add the validation commands after their scripts and CI wiring
-exist on `main`.
+under #5352 will add the validation commands only after their scripts,
+repository-evidence resolver, tests, and CI wiring exist on `main`.
 
-<!-- tenkz-soak-entries: inactive while enforcement=pending -->
+<!-- tenkz-soak-entries: append below only while enforcement=armed -->

@@ -214,7 +214,9 @@ During that state, no soak entry is valid and reviewed follow-up PRs may still
 correct the prefix. The activation slice under #5352 will add the validation
 commands here only after their scripts, repository-evidence checks, tests, and
 CI wiring exist on `main`. It then changes both normative enforcement fields to
-`active`, fixes the ledger prefix, and permits only appended entry blocks.
+`armed`, pins the ledger prefix, and permits only appended entry blocks. Arming
+the checker starts no clock; a later, self-referential attempt-activation pull
+request supplies the verified start time.
 
 The first actual soak entry waits until the blocker chain recorded in the
 policy has closed. Reading or editing these policy documents does not start the
