@@ -277,10 +277,13 @@ Interface friction is appended when found and triaged as `fix-compatible`,
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists
-and otherwise leaves the campaign inactive. Ignoring historical corrections
-and administrative resets, the next freeze is attempt number one higher than
-the most recently opened attempt, with a strictly larger `PATCH`, a new source
-pull request and SHA, a new annotated tag and object, and a new freeze record.
+and otherwise leaves the campaign inactive. It is the first new non-correction
+entry appended after the invalidity is detected; external drift may occur after
+later historical entries already landed, so the reset need not be adjacent to
+its target. Ignoring historical corrections and administrative resets, the
+next freeze is attempt number one higher than the most recently opened attempt,
+with a strictly larger `PATCH`, a new source pull request and SHA, a new
+annotated tag and object, and a new freeze record.
 Compatible fixes retain the active attempt only when both public surfaces remain
 compatible under the rules above. A correction may target any historical
 entry, remains owned by its target's attempt, and never changes attempt state.

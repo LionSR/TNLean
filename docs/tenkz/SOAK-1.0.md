@@ -149,12 +149,15 @@ a sign-off while that sign-off remains successfully validated.
 
 Each attempt has exactly one opening freeze. If a merged entry fails a required
 post-merge identity, ancestry, tree, diff, or ordering check, a `reset` entry
-with `cause = "record-invalid"` is the next non-correction record. Its target
-may belong to any attempt. If an attempt is active, the reset uses and closes
-that attempt. If none is active, it uses the most recently opened attempt and
-leaves the campaign inactive. Until that reset lands, no later work, freeze,
-or sign-off can validate. The next freeze is numbered one higher than the most
-recently opened attempt, independent of how many administrative resets landed.
+with `cause = "record-invalid"` is the first new non-correction record appended
+after detection. Its target may belong to any attempt. External facts may drift
+after later entries already landed; those intervening entries remain historical
+and do not make an adjacent reset possible. If an attempt is active, the reset
+uses and closes that attempt. If none is active, it uses the most recently
+opened attempt and leaves the campaign inactive. Until that reset lands, no new
+work, freeze, or sign-off can validate. The next freeze is numbered one higher
+than the most recently opened attempt, independent of how many administrative
+resets landed.
 
 ## Entry kinds
 
@@ -288,8 +291,9 @@ For `cause = "record-invalid"`, `target` names any earlier entry whose externall
 verified identity, history, ancestry, tree, complete record diff, or ordering
 evidence is invalid. If an attempt is active, the reset uses and closes it. If
 none is active, it uses the most recently opened attempt and leaves the campaign
-inactive. In either case the reset is the next non-correction entry, and a
-correction cannot repair the cause.
+inactive. In either case the reset is the first new non-correction entry after
+detection, not necessarily the entry immediately following its historical
+target, and a correction cannot repair the cause.
 
 The next freeze has attempt number one higher than the most recently opened
 attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new
