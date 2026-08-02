@@ -275,10 +275,9 @@
     (\ref{eq:mpdo_bnt_completed_physical_map_actions}) for every virtual
     matrix $X$. Hence $M$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
-    % Scope restriction (conditional reflected targets): the common target is
-    % assumed in every sector, so this does not prove the unconditional
-    % implication (ii) \Rightarrow (i) of Theorem 4.14. See
-    % docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex.
+    The target is an explicit hypothesis of this theorem.  It is derived from
+    the BNT algebra clause by the mixed-prefix comparison in
+    Theorem~\ref{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -293,4 +292,56 @@
     Theorem~\ref{thm:mpdo_bnt_conditional_physical_channels} then gives
     $\mathcal T$ and $\mathcal S$ together with
     (\ref{eq:mpdo_bnt_completed_physical_map_actions}).
+\end{proof}
+
+\begin{theorem}[BNT algebra clause implies a renormalization fixed point]
+    \label{thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \lean{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}
+    \lean{MPOTensor.HasBNTAlgebraTensorClause.isRFPViaTS}
+    \leanok
+    \uses{def:mpdo, def:cpsv_canonical_form,
+        def:mpdo_bnt_algebra_tensor_clause, def:is_rfp_via_ts}
+    Let $M$ be an MPDO whose doubled-index tensor is in literal CPSV
+    canonical form.  If $M$ has a tensor-attached BNT algebra clause, then
+    there are trace-preserving completely positive maps
+    \begin{align}
+        \mathcal T\colon\MN d&\longrightarrow\MN{d^2},
+        &
+        \mathcal S\colon\MN{d^2}&\longrightarrow\MN d
+        \notag
+    \end{align}
+    such that, for every virtual matrix $X$,
+    \begin{align}
+        \mathcal T[M_1(X)]&=M_2(X),
+        &
+        \mathcal S[M_2(X)]&=M_1(X).
+        \label{eq:mpdo_bnt_algebra_tensor_rfp_maps}
+    \end{align}
+    Thus $M$ is a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.  This is implication
+    (ii)$\Rightarrow$(i) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Local fix (mixed one-site/two-site prefix):} The common marked
+    comparison needed to normalize the exact sector gauges is supplied by
+    Theorem~\ref{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}, as
+    recorded in
+    \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+
+    \textbf{Local fix (zero-sector complement):} The physical maps are
+    completed on the discarded complements as recorded in
+    \path{docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_algebra_tensor_clause_spectrum,
+        thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy,
+        thm:mpdo_bnt_conditional_physical_channels}
+    The tensor-attached algebra clause determines the two-site vertical
+    decomposition, the sector relabelling, and exact invertible gauges.
+    Theorem~\ref{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}
+    normalizes these gauges simultaneously to unitaries.  Apply
+    Theorem~\ref{thm:mpdo_bnt_conditional_physical_channels} to obtain the two
+    trace-preserving completely positive maps and
+    (\ref{eq:mpdo_bnt_algebra_tensor_rfp_maps}).
 \end{proof}

@@ -696,7 +696,8 @@ matched one-site and two-site sectors.
 
 **Scope restriction (supplied unitary sector conjugacies):** This theorem
 assumes the unitary conclusion of Appendix C.4, line 2057.  Its derivation
-from the tensor-attached algebra clause remains open and is documented in
+from the tensor-attached algebra clause is given by the mixed-prefix argument
+documented in
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 **Local fix (zero-sector complement):** The raw maps are completed on the
