@@ -213,14 +213,26 @@ inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no soak entry is valid and reviewed follow-up PRs may still
 correct the prefix. The activation slice under #5352 will add the validation
 commands here only after their scripts, repository-evidence checks, tests, and
-CI wiring exist on `main`. It then changes both normative enforcement fields to
-`armed`, pins the ledger prefix, and permits only appended entry blocks. Arming
-the checker starts no clock; a later, self-referential attempt-activation pull
-request supplies the verified start time.
+CI wiring exist on `main`. One self-referential activation pull request then
+changes both normative enforcement fields to `armed`, replaces
+`policy_sha256 = "pending"` with the SHA-256 of the exact armed `DESIGN.md`
+UTF-8 blob, replaces `armed_by_pr = "pending"` with its own pull-request
+reference, and pins the ledger prefix. Arming the checker starts no clock; a
+later self-referential freeze record supplies the verified start time.
 
 The first actual soak entry waits until the blocker chain recorded in the
-policy has closed. Reading or editing these policy documents does not start the
-clock.
+policy has closed. Its prerequisite list is the pinned policy chain flattened
+in row-major order; `SOAK-1.0.md` does not own a duplicate list. Reading or
+editing these policy documents does not start the clock.
+
+The enforcement workflow must fail closed when GitHub evidence is absent,
+null, incomplete, or inconsistent with the fetched Git objects. Candidate and
+post-merge checks need pull-request open, reopen, synchronize, ready-for-review,
+and close activity; review submission, edit, and dismissal activity; issue
+close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
+namespace. It needs read access to repository contents, pull requests, reviews,
+and issues. No live-entry or release command is available while enforcement is
+pending.
 
 ## Shared parsers
 
