@@ -717,7 +717,13 @@ def _option_spans(
     """Find public option containers without joining split control words."""
     spans: list[_OwnerSpan] = []
     for container in _environment_tokens(source, owner_source):
-        if container.kind != "begin" or container.name not in _OPTION_ENVIRONMENT_KEYS:
+        if (
+            container.kind != "begin"
+            or (
+                container.name is not None
+                and container.name not in _PUBLIC_ENVIRONMENTS
+            )
+        ):
             continue
         position = _skip_space(owner_source, container.end)
         if owner_source[position : position + 1] != "[":
@@ -725,6 +731,8 @@ def _option_spans(
         closed = match_group(owner_source, position, "[", "]")
         if closed < 0:
             spans.append(_OwnerSpan(container.start, len(source), None, True))
+            continue
+        if container.name not in _OPTION_ENVIRONMENT_KEYS:
             continue
         spans.extend(
             _option_group_spans(

@@ -578,18 +578,27 @@ def test_rmp_dimension_ownership() -> None:
                 f"source={malformed_nested_source!r}, "
                 f"occurrences={malformed_nested!r}"
             )
-    unclosed_environment_option = scan_case_dimensions(
-        Path("synthetic.tex"),
+    for unclosed_environment_source in (
         r"\tnarrow{x \begin{tenkz}[pitch=45mm \tnput{x}{(46mm,0)}{} "
         r"\end{tenkz}}",
-    )
-    if len(unclosed_environment_option) != 2 or any(
-        occurrence.owner is not None for occurrence in unclosed_environment_option
+        r"\tnarrow{x \begin{tenkzeq}[check=55mm \tnput{x}{(56mm,0)}{} "
+        r"\end{tenkzeq}}",
+        r"\def\tenname{tenkz}"
+        r"\tnarrow{x \begin{\tenname}[pitch=57mm \tnput{x}{(58mm,0)}{} "
+        r"\end{\tenname}}",
     ):
-        raise AssertionError(
-            "an unclosed environment option exposed nested ownership: "
-            f"{unclosed_environment_option!r}"
+        unclosed_environment_option = scan_case_dimensions(
+            Path("synthetic.tex"), unclosed_environment_source
         )
+        if len(unclosed_environment_option) != 2 or any(
+            occurrence.owner is not None
+            for occurrence in unclosed_environment_option
+        ):
+            raise AssertionError(
+                "an unclosed environment option exposed nested ownership: "
+                f"source={unclosed_environment_source!r}, "
+                f"occurrences={unclosed_environment_option!r}"
+            )
     for case_variant in (
         r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
         r"\tnarrow{x \tn[Label Shift={35mm,36mm}]{A}}",
