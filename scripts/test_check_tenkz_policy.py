@@ -2196,6 +2196,67 @@ def main() -> int:
         "fields differ from schema",
     )
 
+    deferred_friction_facts = context()
+    formal_record_diff = deferred_friction_facts.records["S1-0002"]
+    rmp_record_diff = deferred_friction_facts.records["S1-0003"]
+    signoff_record_diff = deferred_friction_facts.records["S1-0004"]
+    add_record(
+        deferred_friction_facts,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(microseconds=500_000),
+    )
+    deferred_friction_facts.records["S1-0003"] = formal_record_diff
+    deferred_friction_facts.records["S1-0004"] = rmp_record_diff
+    deferred_friction_facts.records["S1-0005"] = signoff_record_diff
+    deferred_friction_log = [
+        freeze(),
+        friction("S1-0002", "#908", "defer-to-2.0"),
+        work(
+            "S1-0003",
+            FORMAL_RECORD,
+            FORMAL_WORK,
+            "formalization-or-blueprint",
+        ),
+        work("S1-0004", RMP_RECORD, RMP_WORK, "rmp-benchmark"),
+        sign_off(
+            "S1-0005",
+            SIGNOFF_RECORD,
+            ["S1-0003", "S1-0004"],
+        ),
+    ]
+    assert validate(deferred_friction_log, deferred_friction_facts) == (
+        "signed-off-awaiting-tag"
+    )
+
+    deferred_resolution_facts = context()
+    add_record(
+        deferred_resolution_facts,
+        "S1-0002",
+        "#908",
+        908,
+        FREEZE_TIME + timedelta(seconds=1),
+    )
+    add_record(
+        deferred_resolution_facts,
+        "S1-0003",
+        "#909",
+        909,
+        FREEZE_TIME + timedelta(seconds=2),
+    )
+    expect_failure(
+        lambda: validate(
+            [
+                freeze(),
+                friction("S1-0002", "#908", "defer-to-2.0"),
+                resolution("S1-0003", "#909", "S1-0002"),
+            ],
+            deferred_resolution_facts,
+        ),
+        "resolves incompatible triage",
+    )
+
     for bad_tests, error_fragment in (
         (("Bad_Test",), "invalid regression test"),
         ((REGRESSION_TEST, REGRESSION_TEST), "has duplicates"),
