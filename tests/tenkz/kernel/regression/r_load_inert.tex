@@ -13,6 +13,8 @@
     \cs_if_exist:cT {#1}
       { \tex_errmessage:D { kernel~public~name~#1~leaked~at~package~load } }
   }
+\cs_if_exist:NT \mpo
+  { \tex_errmessage:D { stock~skin~mpo~leaked~a~public~command } }
 \ExplSyntaxOff
 
 \begin{document}

@@ -1,5 +1,5 @@
 % Input: declarative public vocabulary consumed by the language stage and tools.
-% Output: environment, command, key, alias, and value-type registry records.
+% Output: environment, command, key, alias, prelude, value-type, and example records.
 % Owned state: none; the consumer callbacks own all accumulated registry state.
 % Invariants: one canonical record per concept; aliases are explicitly marked.
 % Next stage: tenkz-language.code.tex installs the declared parser front doors.
@@ -264,6 +264,10 @@
   {Kernel spellings without the switch fall to the 0.7 surface.}
 \__tenkz_language_registry_example:nnn {tnprose}{tex/tenkz/examples/api/tnprose.tex}
   {Prose on a checked relation without an opt-out is a hard error.}
+
+% class, name, declaration descriptor
+\__tenkz_language_registry_prelude:nnn {skin}{mpo}{base=box}
+
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{rows}{row-list}{{wire}}{kernel}{Chain row topology; non-wire rows populate.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{cols}{positive-integer}{3}{kernel}{Cells per row.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{frame}{frame-spec}{flat}{kernel}{Closed flat, plane, or circle frame word.}
