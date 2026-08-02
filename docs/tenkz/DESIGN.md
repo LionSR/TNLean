@@ -279,11 +279,14 @@ canonical grammar `0|[1-9][0-9]*`. When a new freeze is proposed, its patch must
 be strictly larger than every other patch in the complete current
 `tenkz-v0.9.*` tag namespace and every earlier freeze entry. Thus an abandoned
 tag that never obtained a ledger entry still raises the next candidate's floor.
-A tag created by a later attempt does not retroactively invalidate an earlier
-freeze; historical replay checks only its exact protected object and its stable
-ordering above earlier freeze entries. For each attempt, first merge the frozen
-source through a source pull request targeting `main`. A repository-authorized
-reviewer distinct from its author approves its
+The freeze entry retains the complete numerically sorted tag-name snapshot seen
+by that exact successful candidate check. A tag absent from the retained
+snapshot is a later reservation and does not retroactively invalidate the
+earlier freeze; historical replay requires the current namespace to contain the
+entire retained snapshot, checks the freeze's exact protected object, and checks
+its stable ordering above earlier freeze entries. For each attempt, first merge
+the frozen source through a source pull request targeting `main`. A
+repository-authorized reviewer distinct from its author approves its
 exact final head before merge, and its integration tree equals that approved
 tree. The tree must carry
 the tag-derived 0.9 manifest, canonical release artifacts, pinned test

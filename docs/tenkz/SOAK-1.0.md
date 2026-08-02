@@ -419,6 +419,7 @@ Required additional fields:
 | `source_sha` | `sha` |
 | `freeze_tag_object` | `sha` |
 | `freeze_tag` | `tag`, matching `tenkz-v0.9.PATCH` |
+| `freeze_tag_snapshot` | nonempty `list[tag]`, defined below |
 | `prerequisites` | `list[issue-ref]`, defined below |
 | `evidence` | `text` |
 
@@ -426,18 +427,21 @@ Required additional fields:
 flattened row by row. This file owns no second prerequisite list. `PATCH`
 matches the canonical grammar `0|[1-9][0-9]*`. Candidate validation completely
 paginates the current Git tag namespace, parses every name matching
-`tenkz-v0.9.PATCH`, and requires this patch to be strictly larger than every
-matching tag other than this entry's exact `freeze_tag`, and every earlier
-freeze entry's patch. Annotated and lightweight refs both contribute their names
-to this prospective maximum; a wrong tag kind still fails its separate check.
-Thus an abandoned tag with no ledger entry cannot be skipped or followed by a
-smaller patch.
+`tenkz-v0.9.PATCH`, and requires `freeze_tag_snapshot` to equal that complete
+nonempty name set in ascending numeric-patch order. The list includes this
+entry's exact `freeze_tag`; annotated and lightweight refs both contribute their
+names. This patch must be strictly larger than every other patch in the snapshot
+and every earlier freeze entry's patch. A wrong tag kind still fails its separate
+check. Thus an abandoned tag with no ledger entry cannot be skipped or followed
+by a smaller patch.
 
 Historical replay does not compare an earlier freeze with tags created after
 that entry. It requires the successful exact-head candidate check bound to the
-pinned workflow bytes, rechecks that freeze's patch against earlier freeze
-entries, and revalidates its exact protected annotated tag object and peel. A
-later attempt's higher tag therefore cannot make an earlier freeze raw-invalid.
+pinned workflow bytes and the retained `freeze_tag_snapshot`. The complete
+current matching namespace must be a superset of that snapshot. Replay rechecks
+the freeze's patch against its retained names and earlier freeze entries, then
+revalidates its exact protected annotated tag object and peel. A later attempt's
+higher tag therefore cannot make an earlier freeze raw-invalid.
 
 Before the entry is proposed, let `H_S = source_pr.headRefOid`. GitHub must
 report `source_pr` merged to `main` with non-null author, `H_S`, `mergedAt`, and

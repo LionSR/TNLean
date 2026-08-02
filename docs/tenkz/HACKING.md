@@ -267,6 +267,9 @@ tagged source integration and freeze-record
 merge are atomic: `main` must not advance between them, or the unused tag is
 abandoned and the source/tag step repeats with a patch larger than every
 existing `tenkz-v0.9.*` tag, including one with no ledger entry.
+The freeze entry stores the complete sorted tag-name snapshot seen by its exact
+candidate check.  A later tag is a later reservation; it does not change what
+that earlier check observed.
 
 Once the freeze record lands, the evidence gate has no calendar delay.  It
 requires two distinct, independently approved real-work pull requests merged
