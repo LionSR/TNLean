@@ -9,15 +9,15 @@
 \[
   \tenkzkernel
   \tndeclare{species}{gauge}{hue=source:blue}
-  % In each panel the north-east physical exit and marked-string exit are
-  % distinct: one is typed physical, while the other is a virtual open end.
+  % Each unpaired typed physical port draws a short independent stub. The true
+  % plane-transverse bearing remains tracked by #5375; the marked virtual path
+  % has a separate north-east boundary endpoint.
   \begin{tenkz}[
       rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
     \tn[at=(2,2), name=A,
       ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
     \tnwire{A.180}{open w} \tnwire{A.0}{open e}
     \tnwire{A.90}{open n} \tnwire{A.270}{open s}
-    \tnwire{A.45}{open ne}
     \tnwire[kind=string, species=gauge, route=orth, name=gA,
       via={(3,1),(1,1)}]{open sw}{open ne}
     \tn[at=on gA 0.35, skin=dot, species=gauge]{}
@@ -30,7 +30,6 @@
       ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
     \tnwire{B.180}{open w} \tnwire{B.0}{open e}
     \tnwire{B.90}{open n} \tnwire{B.270}{open s}
-    \tnwire{B.45}{open ne}
     \tnwire[kind=string, species=gauge, route=orth, name=gB,
       via={(3,3),(1,3)}]{open sw}{open ne}
     \tn[at=on gB 0.35, skin=dot, species=gauge]{}
