@@ -71,6 +71,7 @@ import TNLean.Channel.SingleKraus
 import TNLean.Channel.SingleKrausPositivity
 import TNLean.Channel.Spectral
 import TNLean.Channel.Stinespring
+import TNLean.Channel.SupportCompletion
 import TNLean.Channel.SupportedMarginalChannel
 import TNLean.Channel.TensorMap
 import TNLean.Channel.TransferMatrix

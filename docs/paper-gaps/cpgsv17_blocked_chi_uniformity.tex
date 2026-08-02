@@ -197,25 +197,29 @@ Only after this trace equality is obtained do the normalizing maps in
     \widetilde R_1\Bigl(\bigoplus_\gamma X_\gamma\Bigr)
       = \bigoplus_\gamma \frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma .
 \]
-These are the maps used in
-$T=\widetilde R_2\widetilde T R_1$ and
-$S=\widetilde R_1\widetilde S R_2$.  The first denominator is normalized by
+These are the maps used in the retained-sector composites
+$T_0=\widetilde R_2\widetilde T R_1$ and
+$S_0=\widetilde R_1\widetilde S R_2$.  The first denominator is normalized by
 $\tr(\nu_\gamma)=m_\gamma$, proved above; the second by the defining equality
-$m_\gamma=\tr(\mu_\gamma)$ for the original block coefficient.
+$m_\gamma=\tr(\mu_\gamma)$ for the original block coefficient.  When a
+vertical canonical form has a discarded zero sector, these composites are
+trace preserving only on the retained physical supports.  Their completion
+to maps on the full physical matrix algebras is described in
+\path{cpgsv17_vertical_isometry_zero_sector.tex}.
 
 The present algebra predicate
 \leanid{MPOTensor.IsRFP_MPDO_via_algebra} does not include these BNT-label
 coefficients, the positive $\chi_{\alpha,\beta,\gamma}$, or the length-one
 idempotent trace identity.  It proves the fixed-point-space equation above, not
 the displayed BNT coefficient comparison.  Thus a source-faithful construction
-must first obtain the BNT-label theorem witness from the MPDO tensor and then use
-the trace identity to construct the physical trace-preserving completely
-positive maps of Appendix~C.4.  The one-site transfer-retract criterion
+must first obtain the BNT-label theorem witness from the MPDO tensor, use the
+trace identity to construct the retained-sector composites, and complete them
+on the discarded physical complements.  The one-site transfer-retract criterion
 \leanid{MPOTensor.transferRetractData_one_iff_isRFP} concerns the separate
 transfer-map idempotence predicate and cannot supply these physical maps.
 
 The scalar normalization step is now isolated independently of the still
-missing channel construction.  The structure
+missing unconditional channel construction.  The structure
 \leanid{MPOTensor.BNTMultiplicitySpectrumComparison} records the one-site
 traces and the sectorwise multiset equality obtained from the vertical BNT
 comparison at lines~2048--2058.  Given this comparison, the BNT algebra
@@ -823,9 +827,12 @@ To eliminate the source-theorem gap, the formalization should instead:
         decompositions used in Appendix~C.4, lines~2048--2058, and prove the
         unitary relabelling and the positive multiset identity for the
         $\nu_{\gamma,k}$;
-    \item deduce $\tr(\nu_\gamma)=m_\gamma$ and construct the maps
-        $T=\widetilde R_2\widetilde T R_1$ and
-        $S=\widetilde R_1\widetilde S R_2$ exactly as in lines~2065--2085;
+    \item deduce $\tr(\nu_\gamma)=m_\gamma$ and construct the retained-sector
+        composites $T_0=\widetilde R_2\widetilde T R_1$ and
+        $S_0=\widetilde R_1\widetilde S R_2$ from lines~2065--2085, then add a
+        trace-preserving completely positive completion on the orthogonal
+        complements as recorded in
+        \path{cpgsv17_vertical_isometry_zero_sector.tex};
     \item conclude the paper's renormalization fixed-point predicate, namely
         the existence of the two trace-preserving completely positive maps in
         Definition~4.1.  Any comparison with the transfer-retract predicate
