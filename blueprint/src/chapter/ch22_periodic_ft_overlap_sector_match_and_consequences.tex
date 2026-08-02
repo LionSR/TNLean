@@ -238,11 +238,36 @@
     repeated-block equivalence between $A$ and $B$.
 \end{proof}
 
+\begin{theorem}[Gram criterion for a periodic family]
+    \label{thm:periodic_family_li_of_cross_overlap_decay}
+    \lean{MPSTensor.%
+        periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $\{A_j\}_{j\in J}$ be a finite family of periodic tensors whose
+    periods divide a common positive integer $p$. If
+    \begin{align}
+        \braket{V^{(N)}(A_i)}{V^{(N)}(A_j)}\longrightarrow0
+        \qquad (i\ne j),
+        \notag
+    \end{align}
+    then the vectors $\{\ket{V^{(pN)}(A_j)}\}_{j\in J}$ are linearly
+    independent for every sufficiently large $N$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_bond_dimension_pos,
+        thm:periodic_self_overlap_tendsto}
+    The Gram matrix converges to the diagonal matrix whose $j$-th diagonal
+    entry is the positive period of $A_j$. Its determinant therefore has a
+    nonzero limit, so the Gram matrix is invertible for every sufficiently
+    large $N$.
+\end{proof}
+
 \begin{theorem}[Eventual linear independence of periodic vectors]%
     \label{thm:periodic_basis_eventually_li}
     \lean{MPSTensor.periodicBasis_eventuallyLinearlyIndependent}
     \leanok
-    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    \uses{def:periodic_tensor}
     For a finite family $\{A_j\}_{j\in J}$ of pairwise non-repeated
     periodic tensors, in the sense that no two are related by a gauge
     transformation and a unit-modulus scalar, whose periods divide a common
@@ -262,8 +287,8 @@
     \cite[lines~589--609]{DeLasCuevas2017Irreducible} states eventual
     independence at every sufficiently large length and also states that, for
     an ambient tensor $A$ in irreducible form having $\{A_j\}_{j\in J}$ as
-    its basis of periodic tensors, the non-zero vectors $\ket{V_N(A_j)}$
-    span the vector $\ket{V_N(A)}$;
+    its basis of periodic tensors, the non-zero vectors $\ket{V^{(N)}(A_j)}$
+    span the vector $\ket{V^{(N)}(A)}$;
     this spanning assertion is what the paper cites as justification for
     the phrase ``basis of periodic vectors''. The theorem recorded here
     proves independence only along the common-multiple subsequence $pN$ and
@@ -274,70 +299,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
-    The sector-match alternative in
-    Theorem~\ref{thm:periodic_overlap_dichotomy} follows the construction in
-    Appendix~A of \cite{DeLasCuevas2017Irreducible}. After choosing inverses
-    $\Omega_u$ for the injective words $F_u$, one proves
-    \begin{align}
-        A_u^{i_1}\otimes A_{u+1}^{i_2}\otimes\cdots
-        \otimes A_{u+m-1}^{i_m}
-        &=
-        e^{i\eta_v}
-        \widetilde B_v^{i_1}\otimes \widetilde B_{v+1}^{i_2}\otimes\cdots
-        \otimes \widetilde B_{v+m-1}^{i_m}.
-        \notag
-    \end{align}
-    Applying the same identity after a cyclic translation gives
-    $e^{i\eta_{v+\ell}}=e^{i\eta_v}$ for
-    $\ell=0,\ldots,m-1$, so we write the common phase as $e^{i\eta}$.
-    The product-tensor identity then gives scalars $\kappa_v$ with
-    \begin{align}
-        A_u^i&=\kappa_v e^{i\eta/m}\widetilde B_v^i,
-        \notag\\
-        \prod_{v=1}^{m}\kappa_v&=1.
-        \notag
-    \end{align}
-    The left-canonical normalization gives $|\kappa_v|=1$; writing
-    $\kappa_v=e^{i(\phi_v-\phi_{v+1})}$ gives, where $q$ is the cyclic
-    offset between the matched sector labels and $v=u+q$,
-    \begin{align}
-        P_u A^i P_{u+1}
-        &=
-        e^{i\eta/m} e^{i\phi_v}
-        U_v Q_v B^i Q_{v+1} U_{v+1}^{\dagger} e^{-i\phi_{v+1}}.
-        \notag
-    \end{align}
-    Hence, for
-    \begin{align}
-        U&=\sum_{u=1}^{m}e^{i\phi_{u+q}}P_uU_{u+q}Q_{u+q},
-        \notag\\
-        \xi&=\eta/m,
-        \notag
-    \end{align}
-    one obtains the global relation $A^i=e^{i\xi}UB^iU^\dagger$.
-    Let
-    $G_N(j,k)=\braket{V^{(pN)}(A_j)}{V^{(pN)}(A_k)}$
-    be the Gram matrix of the periodic vectors. The diagonal entries have
-    positive limits $G_N(j,j)\longrightarrow m_j>0$ by
-    Theorem~\ref{thm:periodic_self_overlap_tendsto}. If $j\ne k$, the
-    second alternative in Theorem~\ref{thm:periodic_overlap_dichotomy} would
-    make $A_j$ and $A_k$ repeated blocks, that is, gauge equivalent up to a
-    unit-modulus scalar. This contradicts the non-repetition hypothesis, and
-    hence $G_N(j,k)\longrightarrow 0$.
-    Hence $G_N\longrightarrow\diag(m_j)_{j\in J}$.
-    Since $m_j>0$ for every $j$, the limit matrix $\diag(m_j)_{j\in J}$ is
-    positive definite. Hence $G_N$ is positive definite for all sufficiently
-    large $N$. Thus
-    \begin{align}
-        \Phi_N(c)=0
-        &\Longrightarrow
-        0=\braket{\Phi_N(c)}{\Phi_N(c)}
-        =c^{*}G_Nc
-        \Longrightarrow c=0,
-        \notag
-    \end{align}
-    and $\ker\Phi_N=\{0\}$.
+    \uses{thm:periodic_bond_dimension_pos,
+        thm:periodic_family_li_of_cross_overlap_decay,
+        thm:periodic_overlap_dichotomy}
+    Periodicity makes every bond dimension positive. For distinct $i,j$, the
+    repeated-block alternative in
+    Theorem~\ref{thm:periodic_overlap_dichotomy} contradicts pairwise
+    non-repetition, so the cross overlap tends to zero.
+    Theorem~\ref{thm:periodic_family_li_of_cross_overlap_decay} now gives the
+    claimed independence along the common-period subsequence.
 \end{proof}
 
 \begin{remark}[Comparison with the blocking approach]\notready
@@ -456,14 +426,125 @@
     repeated blocks, and transitivity gives the claim.
 \end{proof}
 
-\begin{remark}[Proportional periodic FT]\notready
-    \label{rem:periodic_ft_proportional}
-    There is also a proportional periodic Fundamental Theorem
-    \cite[lines~613--623]{DeLasCuevas2017Irreducible}.
-    The former formulation of this theorem assumed externally supplied
-    coefficient arrays with nonzero limits as hypotheses. That is not the
-    hypothesis set of the source theorem.
-    A faithful statement must instead derive the nondecaying cross-overlap
-    witnesses from the proportional MPV hypothesis and the basis of periodic
-    tensors.
-\end{remark}
+\begin{theorem}[Non-decaying mixed overlaps for scalar-weight irreducible-form
+    representations]
+    \label{thm:periodic_scalar_weight_nondecaying_overlap}
+    \lean{MPSTensor.PeriodicOverlapHypothesis.ofIsIrreducibleForm}
+    \leanok
+    \uses{def:irreducible_form, def:nonzero_proportional_mpv}
+    Let $A$ and $B$ each have the same length-$N$ matrix-product vector, for
+    every $N\geq0$, as a scalar-weight block-diagonal tensor formed from a
+    finite, pairwise non-repeated family of
+    left-canonical periodic tensors
+    $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$, with a positive real scalar
+    weight attached to each block. Suppose that for every $N\geq 1$ there is
+    a scalar $c_N\ne0$ such that
+    \begin{align}
+        \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}.
+        \notag
+    \end{align}
+    Then every $A_j$ has an index $k\in K$ for which
+    \begin{align}
+        \braket{V^{(N)}(A_j)}{V^{(N)}(B_k)}
+        \not\longrightarrow 0,
+        \notag
+    \end{align}
+    and, conversely, every $B_k$ has such a partner in the first family.
+    Moreover, whenever the overlap between $A_j$ and $B_k$ does not tend to
+    zero, the two blocks have equal bond dimension and there are an invertible
+    matrix $Y$ and a scalar $\zeta$ with $|\zeta|=1$ such that, for every
+    physical index $i$,
+    \begin{align}
+        A_j^i&=\zeta YB_k^iY^{-1}.
+        \notag
+    \end{align}
+
+    \emph{Scope restriction.} The irreducible forms in
+    \cite[lines~286--332 and 575--585]{DeLasCuevas2017Irreducible} carry
+    multiplicity matrices $R_j$ and $S_k$, use literal block-diagonal tensor
+    equalities, and require only irreducible transfer maps of spectral radius
+    one. The present theorem has one positive real scalar weight per block,
+    records equality of matrix-product-vector families with the corresponding
+    scalar-weight block-diagonal tensors,
+    including equality at the empty word. This forces equality of the
+    corresponding bond-dimension traces, whereas the source physical family is
+    positive-length and allows a lower-dimensional representative. The theorem
+    also assumes left-canonical normalization through periodicity. It therefore
+    supplies the mixed-overlap step only for these witnesses and does not by
+    itself prove the unrestricted proportional Fundamental Theorem. These
+    distinctions are recorded in
+    \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex}.
+    Removing the length and normalization restrictions requires replacing the
+    empty-word equality by a positive-length comparison, applying the source's
+    block-diagonal similarity to trace-preserving form and transport of the
+    conclusion back to the original blocks; that reduction is not part of the
+    present declaration.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:finite_coefficient_isolation,
+        lem:nonzero_proportional_mpv_basic,
+        thm:gauge_phase_mpv_scaling,
+        thm:mpv_decomposition,
+        thm:periodic_bond_dimension_pos,
+        thm:periodic_family_li_of_cross_overlap_decay,
+        thm:periodic_overlap_dichotomy}
+    Fix $j_0\in J$ and suppose that its overlap with every $B_k$ tends to
+    zero. Let $T\subseteq J$ be the set of all indices with this property.
+    For every $j\notin T$, choose $k(j)$ for which the mixed overlap does not
+    decay. The periodic overlap dichotomy identifies $A_j$ with $B_{k(j)}$
+    up to a gauge transformation and a phase; consequently their length-$N$
+    vectors are scalar multiples of one another.
+
+    Choose a common positive multiple $p$ of all periods. Along the lengths
+    $pN$, define the coproduct-indexed family $w_N\colon T\amalg K\to
+    (\mathbb C^d)^{\otimes pN}$ by
+    $w_N(\operatorname{inl}(j))=\ket{V^{(pN)}(A_j)}$ and
+    $w_N(\operatorname{inr}(k))=\ket{V^{(pN)}(B_k)}$. This family is eventually
+    linearly independent. Indeed, distinct vectors within either summand have
+    decaying overlaps by non-repetition and the overlap dichotomy, while the
+    mixed overlaps vanish by the definition of $T$.
+
+    Expand the proportionality relation at length $pN$ in the two block
+    families. Replace each term indexed by $j\notin T$ by its scalar multiple
+    of the corresponding $B_{k(j)}$ term, and collect terms with the same
+    value of $k(j)$. Linear independence then forces
+    $\mu_{j_0}^{pN}=0$ at one sufficiently large positive $N$, contradicting
+    the positivity of $\mu_{j_0}$. Hence $j_0$ has a non-decaying partner.
+    Interchanging $A$ and $B$, inverting the nonzero scalars $c_N$, and using
+    conjugate symmetry of the mixed overlap gives the converse assertion. For
+    any non-decaying pair, the periodic overlap dichotomy excludes its decay
+    alternative and supplies the repeated-block relation.
+\end{proof}
+
+\begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
+    \label{thm:periodic_ft_proportional}
+    \notready
+    \uses{def:nonzero_proportional_mpv}
+    Let $A$ and $B$ have multiplicity-bearing irreducible forms
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag\\
+        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    where $R_j$ and $S_k$ are diagonal with nonzero diagonal entries and the
+    two displayed block families are pairwise non-repeated bases of periodic
+    tensors. Suppose that, for every positive $N$, the vectors
+    $\ket{V^{(N)}(A)}$ and $\ket{V^{(N)}(B)}$ are proportional by a nonzero
+    scalar. Then there is a bijection $\pi\colon J\to K$ such that, for every
+    $j\in J$, the blocks $A_j$ and $B_{\pi(j)}$ have the same period and there
+    are a unit-modulus scalar $\xi_j$ and an invertible matrix $Y_j$ such that,
+    for every physical index $i$,
+    \begin{align}
+        A_j^i&=\xi_jY_jB_{\pi(j)}^iY_j^{-1}.
+        \notag
+    \end{align}
+    Each $B_k$ occurs for exactly one $j$. This is
+    \cite[Theorem~3.4, lines~613--632]{DeLasCuevas2017Irreducible}.
+
+    The theorem relates the two bases of periodic tensors but makes no
+    assertion relating their multiplicity matrices.
+    % Formalization status: the scalar-weight theorem above proves only its
+    % explicitly restricted overlap step. The unrestricted multiplicity-bearing
+    % argument remains tracked in issue #5342.
+\end{theorem}

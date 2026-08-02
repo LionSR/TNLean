@@ -58,6 +58,23 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the shared lemma is polymorphic over the additive commutative monoid,
   so callers retain only their application-specific summand.
 
+### finite-sum coefficient isolation after complement substitution — promoted
+- **Pattern:** split a finite sum into a chosen subfamily and its complement,
+  replace each complementary vector by a scalar multiple of a vector in a
+  second family, collect coefficients along the resulting finite map, and use
+  linear independence of the combined family to isolate a chosen coefficient.
+- **Seen:** three proof sites across
+  `TNLean/MPS/CanonicalForm/BNTCharacterization.lean`,
+  `TNLean/MPS/FundamentalTheorem/SectorBNT/ProportionalMatch/Core.lean`, and
+  `TNLean/MPS/Periodic/ProportionalOverlap.lean` (2026-08-02).
+- **Abstraction:** `MPSTensor.coefficient_eq_zero_of_sum_eq_of_complement_smul`
+  in `TNLean/Algebra/FinSum.lean`.
+- **Notes:** the lemma is polymorphic over the scalar ring and module. The first
+  two callers now retain only their decomposition-specific total-sum and
+  complementary-state identities; the periodic overlap bridge is the third
+  consumer that triggered promotion. The two existing caller files lose 145
+  lines net.
+
 ### suffix marginal sector-block expansion — promoted
 - **Pattern:** reindex a normalized reduced state into physical-sector
   coordinates, change the discarded-site sum to dependent sector fibers, and

@@ -374,6 +374,31 @@ boundary conditions (PBC).
     is the case $c_N = 1$.
 \end{proof}
 
+\begin{lemma}[Coefficient isolation after complementary matching]
+    \label{lem:finite_coefficient_isolation}
+    \lean{MPSTensor.coefficient_eq_zero_of_sum_eq_of_complement_smul}
+    \leanok
+    Let $R$ be a ring, let $V$ be an $R$-module, and let $I$ and $K$ be
+    finite index sets. Let $T\subseteq I$, and let
+    $\{u_i\}_{i\in I}$ and $\{v_k\}_{k\in K}$ be vectors in $V$. Suppose
+    that, for every $i\notin T$, there are a scalar $\alpha_i$ and an index
+    $\phi(i)\in K$ such that $u_i=\alpha_i v_{\phi(i)}$. If
+    \begin{align}
+        \sum_{i\in I}a_i u_i=\sum_{k\in K}b_k v_k
+        \notag
+    \end{align}
+    and the coproduct-indexed family $w\colon T\amalg K\to V$, defined by
+    $w(\operatorname{inl}(i))=u_i$ and
+    $w(\operatorname{inr}(k))=v_k$, is linearly independent, then
+    $a_i=0$ for every $i\in T$.
+\end{lemma}
+\begin{proof}\leanok
+    Substitute $u_i=\alpha_i v_{\phi(i)}$ for $i\notin T$ and collect the
+    resulting coefficients over the fibres of $\phi$. The given equality is
+    then a linear relation in the combined family. Linear independence makes
+    every coefficient vanish, in particular each $a_i$ with $i\in T$.
+\end{proof}
+
 \begin{lemma}[Scaling of word evaluation]\label{lem:eval_word_smul}
     \lean{MPSTensor.evalWord_smul}
     \leanok

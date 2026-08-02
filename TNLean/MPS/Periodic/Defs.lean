@@ -92,6 +92,22 @@ theorem IsPeriodic.primitiveRoot {m : ℕ} {A : MPSTensor d D}
   ⟨Complex.exp (2 * Real.pi * Complex.I / m),
     Complex.isPrimitiveRoot_exp m (Nat.ne_of_gt hA.period_pos)⟩
 
+/-- A periodic tensor has nonzero bond dimension.
+
+Indeed, its prescribed peripheral spectrum contains `1`, whereas an endomorphism
+of the zero-dimensional matrix space has no eigenvalue.
+
+Source: arXiv:1708.00029, lines 248--258. -/
+theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+    (hA : IsPeriodic m A) : D ≠ 0 := by
+  intro hD
+  subst D
+  have hOne :
+      (1 : ℂ) ∈ peripheralEigenvalues (transferMap (d := d) (D := 0) A) := by
+    rw [hA.peripheral_eq]
+    simp
+  exact hOne.1 (Subsingleton.elim _ _)
+
 /-- Repeated blocks: gauge equivalence up to a unit-modulus phase. -/
 def RepeatedBlocks (A B : MPSTensor d D) : Prop :=
   ∃ (ξ : ℂ) (Y : GL (Fin D) ℂ), ‖ξ‖ = 1 ∧
@@ -120,7 +136,25 @@ structure BasisOfPeriodicTensors (r : ℕ) where
   /-- Distinct basis blocks are not repeated versions of one another. -/
   pairwise_nonrepeated : Pairwise fun i j => ¬ RepeatedBlocks (blocks i) (blocks j)
 
-/-- Irreducible-form decomposition by periodic blocks with positive weights. -/
+/-- An MPV-equivalent scalar-weight representation by normalized periodic blocks.
+
+The `sameMPV` field records equality of matrix-product-vector families with the
+scalar-weight direct-sum tensor, not literal equality of the underlying
+tensors. This equality includes the empty word, so it forces equality of the
+corresponding bond-dimension traces. By contrast, the representative in
+arXiv:1708.00029, lines 266--271 is compared at positive physical lengths and
+may have smaller bond dimension.
+Moreover, the local `IsPeriodic` predicate includes left-canonical normalization,
+whereas the periodic blocks in the irreducible form of arXiv:1708.00029,
+lines 238--275, are required only to have irreducible transfer maps of spectral
+radius one. The source obtains trace-preserving normalization by a
+block-diagonal similarity at lines 313--332; that reduction is not part of this
+structure.
+
+**Scope restriction (length, representation, and normalization):** this
+structure is a normalized MPV-level representation of the source irreducible
+form and imposes the additional empty-word equality. Documented in
+`docs/paper-gaps/1708_periodic_overlap_route_alignment.tex`. -/
 structure IsIrreducibleForm (A : MPSTensor d D) where
   /-- Number of blocks. -/
   r : ℕ
@@ -137,7 +171,8 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   /-- Weights are strictly positive real scalars (embedded in `ℂ`).
   arXiv:1708.00029, lines 252--261, convention \(\mu_j>0\). -/
   weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
-  /-- Reassembled block tensor generates the same MPV family. -/
+  /-- The scalar-weight direct-sum tensor generates the same MPV family,
+  including at the empty word. -/
   sameMPV : SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ) blocks)
 
 /-- `ℤ_m`-gauge equivalence for periodic tensors. -/
