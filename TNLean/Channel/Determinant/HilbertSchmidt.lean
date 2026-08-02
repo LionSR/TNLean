@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Determinant.Bound
 import TNLean.Algebra.MatrixAux
-import TNLean.Channel.Peripheral.IrreducibleChannel
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.InnerProductSpace.Trace
@@ -84,7 +83,7 @@ theorem channel_all_eigenvalues_norm_one [NeZero d]
     AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv (matrixSpaceBasis d)) T
   have hroot_le : ∀ μ ∈ A.charpoly.roots, ‖μ‖ ≤ 1 := by
     intro μ hμ
-    exact IsChannel.eigenvalue_norm_le_one hT μ
+    exact hT.cp.isPositiveMap.eigenvalue_norm_le_one_of_tracePreserving hT.tp μ
       (Module.End.hasEigenvalue_iff_mem_spectrum.2
         (hspectrum ▸ Matrix.mem_spectrum_of_isRoot_charpoly
           ((Polynomial.mem_roots A.charpoly_monic.ne_zero).1 hμ)))

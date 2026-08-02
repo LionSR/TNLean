@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MeanErgodic
+import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.FixedPoint.Algebra
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
@@ -47,6 +48,18 @@ formalized / not yet formalized), and the Lean declaration(s) that correspond.
 No new proofs are introduced here; this is a documentation-only index module.
 
 ---
+
+## Section 6.1 Spectral radius and determinant
+
+### Wolf Proposition 6.1 (Spectral radius of positive maps) — PARTIAL
+
+* `IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` — every eigenvalue of a
+  positive trace-preserving map lies in the closed unit disk, in
+  `TNLean.Channel.Determinant.Bound`.
+* `IsChannel.eigenvalue_norm_le_one` — the completely positive specialization.
+
+The general bound `ρ(T) ≤ ‖T(1)‖∞`, existence of the eigenvalue `1`, and the resulting
+spectral-radius equality remain unformalized.
 
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
