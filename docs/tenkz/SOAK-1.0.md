@@ -6,19 +6,25 @@ corrected through ordinary reviewed pull requests.
 
 After the checker, repository-evidence resolver, tests, and CI wiring land, one
 self-referential enforcement-activation pull request changes both normative
-`enforcement` values from `pending` to `armed`. In this file it also replaces
-`policy_sha256 = "pending"` with the SHA-256 of the exact armed `DESIGN.md`
-UTF-8 blob and replaces `armed_by_pr = "pending"` with its own pull-request
-reference. The digest is exactly 64 lowercase hexadecimal digits computed from
-the raw blob bytes without newline normalization. The pull-request reference
-has `pr-ref` form. Let `H` be the activation PR's exact final head. A reviewer
-distinct from both its normalized author and `github:lionsr` must have a latest
-effective `APPROVED` review on `H` before merge. GitHub must then report the PR
-merged to `main`, with normalized `mergedBy = github:lionsr` and
-`armed_by_pr` naming that PR. Its integration tree must equal `H`'s tree, the
-recorded digest must match the exact armed policy blob in that tree, and the
-prefix through the final marker must match `H`. Only that post-validated head
-pins the policy and prefix.
+`enforcement` values from `pending` to `armed`. The closed test inventory must
+already exist on its base. GitHub must also report an active repository ruleset
+covering the complete `tenkz-v*` tag namespace, forbidding tag updates and
+deletions, and granting no bypass actor. In `DESIGN.md` the PR replaces its
+pending inventory digest with that raw blob's SHA-256. In this file it replaces
+`policy_sha256 = "pending"` with the SHA-256 of the resulting exact armed policy
+blob and replaces `armed_by_pr = "pending"` with its own pull-request reference.
+Each digest is exactly 64 lowercase hexadecimal digits computed from raw blob
+bytes without newline normalization. The pull-request reference has `pr-ref`
+form. Let `H` be the activation PR's exact final head. A reviewer distinct from
+both its normalized author and `github:lionsr` must have a latest effective
+`APPROVED` review on `H` before merge. GitHub must then report the PR merged to
+`main`, with normalized `mergedBy = github:lionsr` and `armed_by_pr` naming that
+PR. Its integration tree must equal `H`'s tree; the inventory and policy digests
+must match their exact blobs in that tree; and the prefix through the final
+marker must match `H`. Only that post-validated head pins the inventory, policy,
+and prefix and arms the campaign. Every later validation rechecks the ruleset
+through complete GitHub pagination. Missing, inactive, weaker, ambiguous, or
+bypassable protection fails closed.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -49,7 +55,9 @@ signer_identity_scheme = "github:lowercase-login"
 
 The work count, class set, excluded paths, and one-class-per-pull-request rule
 are read from the exact `DESIGN.md` policy pinned by `policy_sha256`; this
-ledger schema does not duplicate them.
+ledger schema does not duplicate them. Tag immutability and the release
+manifest, canonical-artifact, inventory, and runner configuration are likewise
+read only from that pinned policy.
 
 Once armed, the normative blocks in `DESIGN.md` and this file have closed
 tables and field sets. Unknown tables or fields are rejected. Changing their
@@ -76,6 +84,7 @@ The scalar and reference types are closed:
 | `tag` | a nonempty tag name in the `tenkz-v*` namespace |
 | `text` | a nonempty TOML string |
 | `attempt` | a positive TOML integer |
+| `entry-kind` | one of the seven entry-kind headings below |
 
 A `list[TYPE]` is a TOML array whose elements all have `TYPE`, in stated order,
 with no duplicates. Every entry has exactly these common fields:
@@ -83,7 +92,7 @@ with no duplicates. Every entry has exactly these common fields:
 | Field | Type and rule |
 |---|---|
 | `id` | `entry-id`; `S1-0001`, `S1-0002`, and so on without gaps |
-| `kind` | one of `freeze`, `work`, `friction`, `resolution`, `reset`, `correction`, `sign-off` |
+| `kind` | `entry-kind` |
 | `record_pr` | `pr-ref`; the pull request that first appends this entry |
 | `attempt` | `attempt`; governed by the state sequence below |
 
@@ -121,7 +130,8 @@ keys, and nested tables are rejected.
 Pull-request and issue references are resolved against this repository, not
 against entry prose. GitHub supplies PR authors, bases, targets, final
 `headRefOid` values, `mergedAt`, `mergedBy`, `mergeCommit.oid`, changed-review
-history, and issue `closedAt` state. GitHub timestamps must parse as RFC 3339
+history, issue `closedAt` state, and the complete active repository-ruleset
+configuration for the tag namespace. GitHub timestamps must parse as RFC 3339
 instants and are compared in UTC. A normalized identity is `github:` followed
 by the lowercase GitHub login.
 
@@ -138,6 +148,39 @@ non-dismissed `APPROVED` or `CHANGES_REQUESTED` review by `submittedAt`; it is
 effective for a head only when its commit OID equals the PR's exact final
 `headRefOid`. A later effective review supersedes an earlier one.
 
+## Release payload evidence
+
+For a package tag `Q`, substitute the exact tag name for `TAG` in the pinned
+policy's `release_manifest_pattern`. The resulting manifest is a regular Git
+blob with one `[release]` table and exactly `schema`, `tag`, `version`, `date`,
+and `test_inventory_sha256`. `schema` is integer 1; `tag` equals `Q`; `version`
+is the numeric version suffix of `Q`; `date` is an ISO 8601 calendar date; and
+the inventory digest equals the pinned policy value.
+
+The package metadata, manual, change record, event-format declaration, and
+test-inventory paths come only from the pinned policy, never from the release
+manifest or entry prose. They are distinct normalized repository-relative
+paths naming regular Git blobs. The package metadata and manual declare the
+manifest's version and date. The change record and event-format declaration
+name the exact tag and version. Missing paths, symlinks, submodules, duplicate
+paths, malformed declarations, or disagreement fails closed.
+
+The inventory is a TOML document with `schema = 1` and one or more `[[test]]`
+tables. Each test has exactly `id` (a unique lowercase hyphenated identifier),
+`runner` (exactly `python3` or `bash`), `path` (a normalized regular file below
+`scripts/` with the matching `.py` or `.sh` suffix), `args` (a list of nonempty
+argument strings), and `timeout_seconds` (a positive integer). The evidence
+runner executes `[runner, path, *args]` directly, without a shell expansion or
+added argument, from the repository root in inventory order and kills it at
+its declared timeout. Every command must exit zero. Incomplete execution, a
+signal, timeout, unknown field, path escape, or nonzero exit fails closed. The
+activation validator recomputes the inventory's raw-blob SHA-256 before arming;
+every later payload validation recomputes it and rejects a mismatch.
+
+`validate-release-payload(K, Q)` means checking this complete manifest,
+canonical-artifact, pinned-inventory, and test contract in Git tree `K` for tag
+`Q`.
+
 ## Attempt state sequence
 
 The first live entry is a `freeze` with attempt 1. A `freeze` is legal only
@@ -146,17 +189,22 @@ the most recent reset, with attempt one higher than the most recently opened
 attempt. While an attempt is active, every non-correction entry other than its
 opening freeze uses that attempt. A breaking reset targets and closes only the
 active attempt. A correction may target any earlier entry and uses its target's
-attempt; it never opens, closes, or changes the active attempt. No entry follows
-a sign-off while that sign-off remains successfully validated.
+attempt; it never opens, closes, or changes the active attempt. Before the final
+tag exists, a required `record-invalid` reset may follow a sign-off. No entry
+follows a released sign-off.
 
 Each attempt has exactly one opening freeze. If a merged entry fails a required
 post-merge identity, ancestry, tree, diff, or ordering check, a `reset` entry
 with `cause = "record-invalid"` is the first new non-correction record appended
-after detection. A single audit may detect multiple invalid entries; their
+after the audit boundary. That boundary is not an entry field, timestamp, or
+caller choice: it is the final live entry in the immutable ledger prefix at the
+start of a fail-closed validation against one complete current GitHub/Git
+snapshot and exact candidate target. Historical entries already in that prefix
+remain replayable. A single audit may find multiple invalid entries; their
 targets are reset in ledger order. If a `breaking-required` reset was already
-pending at that detection boundary, it lands first and closes the active
-attempt. The required `record-invalid` resets follow consecutively while the
-campaign is inactive; corrections are the only entries that may interleave.
+pending at that boundary, it lands first and closes the active attempt. The
+required `record-invalid` resets follow consecutively while the campaign is
+inactive; corrections are the only entries that may interleave.
 Their targets may belong to any attempt. External facts may drift after later
 entries already landed; those intervening entries remain historical and do not
 make an adjacent reset possible. A record-invalid reset closes the active
@@ -190,18 +238,19 @@ Before the entry is proposed, GitHub must report `source_pr` merged to `main`
 with `source_pr.mergeCommit.oid = source_sha`. The first attempt's `source_sha`
 is a strict descendant of `armed_by_pr.mergeCommit.oid`; a later attempt's
 `source_sha` is a strict descendant of the preceding reset record's
-`record_pr.mergeCommit.oid`. The annotated tag already exists, has object SHA
-`freeze_tag_object`, and peels to `source_sha`. The target `main` tip `C` from
-the common candidate rule must equal `source_sha`; the source integration is
-therefore the candidate's unique merge base `B`.
+`record_pr.mergeCommit.oid`. Before tag creation,
+`validate-release-payload(source_sha, freeze_tag)` must pass. The annotated tag
+then exists, has object SHA `freeze_tag_object`, and peels to `source_sha`. The
+target `main` tip `C` from the common candidate rule must equal `source_sha`;
+the source integration is therefore the candidate's unique merge base `B`.
 
 The freeze's `record_pr` is its attempt-activation pull request. Let `H` be
 that PR's exact final `headRefOid`. `source_sha` is an ancestor of `H`, and the
 complete Git diff from `source_sha` to `H` is exactly one append to
 `docs/tenkz/SOAK-1.0.md`: this freeze block. Candidate CI checks the
-self-reference, append-only diff, source pull request, tag, current
-prerequisite state, and entry grammar, then reports `freeze-pending`. It cannot
-record the future merge SHA or time.
+self-reference, append-only diff, source pull request, tag, immutable 0.9
+payload, current prerequisite state, and entry grammar, then reports
+`freeze-pending`. It cannot record the future merge SHA or time.
 
 After merge, let `I = record_pr.mergeCommit.oid`. GitHub must report the PR
 merged to `main`; the integration parent `P` from the common rule must equal
@@ -299,7 +348,7 @@ For `cause = "record-invalid"`, `target` names any earlier entry whose externall
 verified identity, history, ancestry, tree, complete record diff, or ordering
 evidence is invalid. If an attempt is active, the reset uses and closes it. If
 none is active, it uses the most recently opened attempt and leaves the campaign
-inactive. In either case it occupies its required position in the detection
+inactive. In either case it occupies its required position in the audit
 batch's reset queue, not necessarily the position immediately following its
 historical target, and a correction cannot repair the cause.
 
@@ -351,39 +400,29 @@ PR, and must satisfy all of these externally checked predicates:
   integrations, and has the same tree as `H_R`.
 - `P_R` is an ancestor of `H_R`; the unique merge base equals `P_R`; and a
   two-parent integration's second parent equals `H_R`.
-- The complete immutable `P_R`-to-`H_R` diff is nonempty, changes neither
-  policy document, and contains no ledger entry.
+- The complete immutable `P_R`-to-`H_R` path set is exactly the 1.0 manifest
+  path and the four canonical release-artifact paths from the pinned policy;
+  all five blobs change.
 - A reviewer distinct from `R`'s author has a latest effective `APPROVED`
   review on `H_R`, submitted before `R.mergedAt`.
-- The release-payload validator checks the tree and complete diff of `H_R`, not
-  entry prose. The diff creates the policy-pinned release manifest and changes
-  every release-varying artifact named by it. The manifest is a closed TOML
-  document with one `[release]` table and exactly the scalar fields `tag`,
-  `version`, `date`, `package_metadata`, `manual_version`, `change_record`, and
-  `event_format`, plus the nonempty string list `compatibility_tests`. `tag` is
-  `tenkz-v1.0.0`, `version` is `1.0.0`, and `date` is an ISO 8601 calendar date.
-  All paths are distinct normalized repository-relative paths, name regular
-  files in `H_R`, and name neither policy document nor the ledger. The four
-  release-varying artifact paths and the manifest itself must occur in the
-  immutable diff; test paths may pre-exist. In `P_R`, the manifest is absent
-  and each release-varying artifact lacks or differs from its final declaration;
-  in `H_R`, the package and manual declare version 1.0.0 and the same release
-  date, all named artifacts agree with `tenkz-v1.0.0`, and every named test
-  passes.
+- `validate-release-payload(H_R, tenkz-v1.0.0)` passes.
 
 The sign-off's `record_pr` is the sign-off pull request. It changes only the
 sign-off append under the common rule. Let `H` be its exact final `headRefOid`.
-The current target tip `C` and `H` must descend from `I_R` and both work
-integrations. Candidate CI validates those facts at `H` and reports
-`sign-off-pending`; it cannot invent the future merge time or integration
-commit. That approved head therefore carries the externally bound release
-preparation and this sign-off entry.
+The current target tip `C` must equal `I_R`; `H` therefore descends from the
+release preparation and both work integrations with `C` as its unique merge
+base. `validate-release-payload(H, tenkz-v1.0.0)` must pass again. Candidate CI
+validates those facts at `H` and reports `sign-off-pending`; it cannot invent
+the future merge time or integration commit. That approved head therefore
+carries the byte-identical externally bound release preparation and this
+sign-off entry.
 
 After merge, GitHub must report that `record_pr` targeted `main`. Let
 `I = record_pr.mergeCommit.oid`; `I` must be a strict descendant of `I_R`, both
-named work integrations, and the active freeze integration, and the Git tree
-of `I` must equal the Git tree of the approved `H`. Let `W` be the latest
-GitHub `mergedAt` among the work PRs named by `work_evidence`. GitHub's
+named work integrations, and the active freeze integration. The common
+integration parent `P` must equal `I_R`, and the Git tree of `I` must equal the
+Git tree of the approved `H`. Let `W` be the latest GitHub `mergedAt` among the
+work PRs named by `work_evidence`. GitHub's
 `record_pr.mergedAt` must be later than both `W` and `R.mergedAt`, and normalized
 `mergedBy` must be `github:lionsr`. The entry's reviewer is distinct from that
 maintainer and from the normalized record-PR author. That reviewer's latest
@@ -397,26 +436,31 @@ All compatible friction must be resolved, every work predicate must still
 hold, and no condition may require a reset. Post-merge validation also
 revalidates the pinned policy hash and ledger prefix and every active-freeze
 fact: its record integration and start time, immutable annotated tag object and
-peel to `source_sha`, source-PR integration, and the current closed state and
-`closedAt <= T` of every derived prerequisite. A reopened or reclosed
-prerequisite, moved or replaced tag, changed source fact, or pinned-byte
-mismatch requires a `record-invalid` reset targeting the active freeze. A
-sign-off tree or sign-off-specific external-fact mismatch requires that reset
+peel to `source_sha`, source-PR integration, valid 0.9 payload at `source_sha`,
+and the current closed state and `closedAt <= T` of every derived prerequisite.
+A reopened or reclosed prerequisite, moved or replaced freeze tag, changed
+source fact, invalid 0.9 payload, or pinned-byte mismatch requires a
+`record-invalid` reset targeting the active freeze. A sign-off tree,
+sign-off-specific external-fact, or
+`validate-release-payload(I, tenkz-v1.0.0)` mismatch requires that reset
 targeting the sign-off. Neither case is a validated sign-off. After post-merge
 validation succeeds, the campaign is `signed-off-awaiting-tag` and the
 annotated `tenkz-v1.0.0` tag may be created on `I`. The tag must not exist
 before that success. Until the exact annotated tag object is observed peeling
-to `I`, all mutable external facts remain subject to revalidation and drift
-requires the ordered reset process above.
+to `I`, an absent final-tag ref leaves the campaign awaiting creation. All
+mutable external facts remain subject to revalidation, and drift while the ref
+is absent requires the ordered reset process above.
 
-The first observed object named `tenkz-v1.0.0` must be annotated and peel to
-the validated sign-off integration `I`. That observation changes the campaign
-to terminal `released` state; no later ledger entry or new sign-off is valid,
-and later review, issue, or pull-request drift does not reopen the release.
-Creating the name with the wrong kind or target is a hard release incident.
-Once released, a missing, moved, or replaced tag is also a hard release
-incident. Neither incident is repaired by deleting, moving, or reusing the
-name, and neither starts another 1.0 attempt.
+The first existing object named `tenkz-v1.0.0` must be annotated and peel to
+the validated sign-off integration `I`. Under the required no-update,
+no-delete, no-bypass ruleset, that observation is monotone and changes the
+campaign to terminal `released` state. No later ledger entry or new sign-off is
+valid, and later review, issue, or pull-request drift does not reopen the
+release. Creating the protected name with the wrong kind or target is a hard
+release incident. After release, missing or weaker protection, or a missing,
+moved, or replaced tag, is also a hard release incident. Neither incident is
+repaired by deleting, moving, or reusing the name, and neither starts another
+1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,

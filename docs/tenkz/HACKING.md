@@ -214,11 +214,15 @@ During that state, no campaign entry is valid and reviewed follow-up PRs may sti
 correct the prefix.  The activation slice under #5352 will add the validation
 commands here only after their scripts, repository-evidence checks, tests, and
 CI wiring exist on `main`.  One self-referential activation pull request then
-changes both normative enforcement fields to `armed`, replaces
+pins the closed release-test inventory, verifies the no-update, no-delete,
+no-bypass `tenkz-v*` ruleset, changes both normative enforcement fields to
+`armed`, replaces `release_test_inventory_sha256 = "pending"` with the
+inventory's raw-blob digest, replaces
 `policy_sha256 = "pending"` with the SHA-256 of the exact armed `DESIGN.md`
 UTF-8 blob, replaces `armed_by_pr = "pending"` with its own pull-request
 reference, and pins the ledger prefix.  A later self-referential freeze record
-supplies the verified attempt-ordering anchor.
+validates the tag-derived 0.9 payload and supplies the verified attempt-ordering
+anchor.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
@@ -234,11 +238,11 @@ benchmark case.  Immutable full pull-request diffs decide eligibility, and one
 pull request fills only one class.  Policy-, checker-, CI-, and ledger-record
 pull requests do not qualify.  Each record pull request changes only its one
 ledger append.  Release preparation lands separately after both work merges;
-its exact diff creates the pinned release manifest and changes every
-release-varying artifact named there.  Exact-head sign-off review follows that
-release merge and may proceed immediately.  A validated sign-off remains live
-until the exact annotated final tag is observed on its integration; that
-observation makes the release terminal.
+its exact diff changes only the tag-derived 1.0 manifest and four canonical
+release artifacts.  Exact-head sign-off review follows immediately on that
+integration; if `main` advances, repeat preparation on the new tip.  A validated
+sign-off remains live until the exact annotated final tag is observed on its
+integration.  The immutable tag ruleset makes that observation terminal.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and
@@ -246,8 +250,8 @@ post-merge checks need pull-request open, reopen, synchronize, ready-for-review,
 and close activity; review submission, edit, and dismissal activity; issue
 close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
 namespace.  It needs read access to repository contents, pull requests, reviews,
-and issues.  No live-entry or release command is available while enforcement is
-pending.
+issues, and repository rulesets.  No live-entry or release command is available
+while enforcement is pending.
 
 ## Shared parsers
 
