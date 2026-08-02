@@ -296,6 +296,7 @@ def validate_entries(
     pending_break: str | None = None
     signed = False
     prior_freeze_sha: str | None = None
+    prior_freeze_utc: datetime | None = None
     used_freeze_tags: set[str] = set()
     used_freeze_objects: set[str] = set()
     used_freeze_shas: set[str] = set()
@@ -364,9 +365,19 @@ def validate_entries(
             require(tag.commit == freeze_sha, f"{entry_id} freeze tag peels to another commit")
             require(tag.tagger_utc is not None, f"{entry_id} annotated tag lacks a tagger date")
             require(
+                tag.tagger_utc.tzinfo is not None
+                and tag.tagger_utc.utcoffset() is not None,
+                f"{entry_id} tagger timestamp must be timezone-aware",
+            )
+            require(
                 tag.tagger_utc.astimezone(timezone.utc) == tagger_utc,
                 f"{entry_id} tagger timestamp differs from the tag object",
             )
+            if prior_freeze_utc is not None:
+                require(
+                    tagger_utc > prior_freeze_utc,
+                    f"{entry_id} tagger timestamp must follow the prior freeze",
+                )
             require(
                 tag.reachable_from_main,
                 f"{entry_id} freeze commit is not reachable from main",
@@ -405,6 +416,7 @@ def validate_entries(
                 "friction": {},
             }
             prior_freeze_sha = freeze_sha
+            prior_freeze_utc = tagger_utc
             used_freeze_tags.add(freeze_tag)
             used_freeze_objects.add(tag_object)
             used_freeze_shas.add(freeze_sha)
@@ -429,13 +441,17 @@ def validate_entries(
                 )
                 require(SHA_RE.fullmatch(work_sha) is not None, f"{entry_id} has invalid work_sha")
                 require(
+                    work_sha != active["freeze_sha"],
+                    f"{entry_id} reuses the freeze commit as work evidence",
+                )
+                require(
                     entry_date == work_utc.date(),
                     f"{entry_id} date differs from the work commit UTC date",
                 )
                 require(work_utc <= current, f"{entry_id} work commit is in the future")
                 require(
-                    work_utc >= active["freeze_utc"],
-                    f"{entry_id} work commit predates the freeze tag",
+                    work_utc > active["freeze_utc"],
+                    f"{entry_id} work commit must postdate the freeze tag",
                 )
                 require(resolve_commit is not None, f"{entry_id} requires Git commit resolution")
                 commit = resolve_commit(work_sha, active["freeze_sha"])
@@ -443,6 +459,11 @@ def validate_entries(
                 require(
                     commit.committed_utc is not None,
                     f"{entry_id} work commit lacks a committer date",
+                )
+                require(
+                    commit.committed_utc.tzinfo is not None
+                    and commit.committed_utc.utcoffset() is not None,
+                    f"{entry_id} work commit timestamp must be timezone-aware",
                 )
                 require(
                     commit.committed_utc.astimezone(timezone.utc) == work_utc,

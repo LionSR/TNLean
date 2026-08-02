@@ -315,6 +315,50 @@ def main() -> int:
         "does not descend from the prior freeze",
     )
 
+    first_reset_freeze_utc = datetime(2026, 9, 1, 12, tzinfo=timezone.utc)
+    for second_reset_freeze_utc in (
+        datetime(2026, 9, 1, 11, tzinfo=timezone.utc),
+        first_reset_freeze_utc,
+    ):
+        nonincreasing_reset_entries = parsed_entries(
+            freeze(tagger_utc=utc_text(first_reset_freeze_utc)),
+            friction("S1-0002", "2026-09-01", "breaking-required"),
+            reset("S1-0003", "2026-09-01", "S1-0002"),
+            freeze(
+                "S1-0004",
+                when="2026-09-01",
+                attempt=2,
+                sha=SECOND_SHA,
+                tag_object=SECOND_TAG_OBJECT,
+                tag="tenkz-v0.9.1",
+                tagger_utc=utc_text(second_reset_freeze_utc),
+            ),
+        )
+        reset_tags = lambda tag, second=second_reset_freeze_utc: {
+            "tenkz-v0.9.0": policy.TagEvidence(
+                TAG_OBJECT, "tag", SHA, first_reset_freeze_utc, True
+            ),
+            "tenkz-v0.9.1": policy.TagEvidence(
+                SECOND_TAG_OBJECT, "tag", SECOND_SHA, second, True
+            ),
+        }[tag]
+        reset_commits = lambda sha, _prior, second=second_reset_freeze_utc: (
+            policy.CommitEvidence(
+                "commit",
+                first_reset_freeze_utc if sha == SHA else second,
+                True,
+                True,
+            )
+        )
+        expect_failure(
+            lambda: validate(
+                nonincreasing_reset_entries,
+                resolve_tag=reset_tags,
+                resolve_commit=reset_commits,
+            ),
+            "must follow the prior freeze",
+        )
+
     expect_failure(
         lambda: policy.validate_policy_text(
             DESIGN_TEXT.replace('tag_namespace = "tenkz-v*"', 'tag_namespace = "v*"')
@@ -395,6 +439,13 @@ def main() -> int:
         lambda: validate(parsed_entries(freeze(when="2026-08-31"))),
         "differs from the tagger UTC date",
     )
+    naive_tag_time = lambda _tag: policy.TagEvidence(
+        TAG_OBJECT, "tag", SHA, datetime(2026, 9, 1), True
+    )
+    expect_failure(
+        lambda: validate(parsed_entries(freeze()), resolve_tag=naive_tag_time),
+        "tagger timestamp must be timezone-aware",
+    )
     missing_freeze_time = lambda _sha, _prior: policy.CommitEvidence(
         "commit", None, True, True
     )
@@ -430,6 +481,16 @@ def main() -> int:
     )
 
     fake_work_entries = parsed_entries(freeze(), work("S1-0002"))
+    freeze_as_work = parsed_entries(
+        freeze(),
+        work("S1-0002", sha=SHA, committed_utc=FREEZE_UTC),
+    )
+    expect_failure(lambda: validate(freeze_as_work), "reuses the freeze commit")
+    simultaneous_work = parsed_entries(
+        freeze(),
+        work("S1-0002", committed_utc=FREEZE_UTC),
+    )
+    expect_failure(lambda: validate(simultaneous_work), "must postdate the freeze tag")
     fake_work = lambda sha, freeze_sha: (
         resolve_commit(sha, freeze_sha)
         if sha == SHA
@@ -471,6 +532,17 @@ def main() -> int:
     expect_failure(
         lambda: validate(fake_work_entries, resolve_commit=wrong_time),
         "differs from the commit object",
+    )
+    naive_work_time = lambda sha, freeze_sha: (
+        resolve_commit(sha, freeze_sha)
+        if sha == SHA
+        else policy.CommitEvidence(
+            "commit", datetime(2026, 9, 2, 12), True, True
+        )
+    )
+    expect_failure(
+        lambda: validate(fake_work_entries, resolve_commit=naive_work_time),
+        "work commit timestamp must be timezone-aware",
     )
 
     too_early = complete_log()
