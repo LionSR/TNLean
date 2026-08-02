@@ -393,6 +393,23 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"a tnset metric option lost ownership: {setting_option!r}"
         )
+    nested_picture_option = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow[from=1,to=2]{\tnpic[pitch=5mm]{x}}",
+    )
+    if (
+        len(nested_picture_option) != 1
+        or nested_picture_option[0].owner is not DimensionOwner.METRIC
+    ):
+        raise AssertionError(
+            "a nested tnpic metric option inherited command ownership: "
+            f"{nested_picture_option!r}"
+        )
+    tree_option = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tntree[pitch=6mm]{a(b,c)}"
+    )
+    if len(tree_option) != 1 or tree_option[0].owner is not DimensionOwner.METRIC:
+        raise AssertionError(f"a tntree metric option lost ownership: {tree_option!r}")
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix

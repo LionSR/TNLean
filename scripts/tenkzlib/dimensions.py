@@ -124,7 +124,8 @@ _OPTION_OWNER_RE = re.compile(
 _OPTION_ENVIRONMENT_RE = re.compile(
     r"\\begin\s*\{\s*tenkz(?:cd|eq|free|lattice|planes)?\s*\}"
 )
-_OPTION_COMMAND_RE = re.compile(r"\\tnset\b")
+_OPTION_BRACKET_COMMAND_RE = re.compile(r"\\(?:tnpic|tntree)\b")
+_OPTION_BRACE_COMMAND_RE = re.compile(r"\\tnset\b")
 _FRAME_KEYS = {"sheet vector", "row vector", "col vector"}
 
 
@@ -286,7 +287,8 @@ def _option_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
     containers = (
         (_OPTION_ENVIRONMENT_RE, "[", "]"),
-        (_OPTION_COMMAND_RE, "{", "}"),
+        (_OPTION_BRACKET_COMMAND_RE, "[", "]"),
+        (_OPTION_BRACE_COMMAND_RE, "{", "}"),
     )
     for pattern, opener, closer in containers:
         for container in pattern.finditer(source):
