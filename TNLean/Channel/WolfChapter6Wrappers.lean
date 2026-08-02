@@ -13,7 +13,7 @@ This module provides stable theorem names that mirror Wolf's numbering for
 results already formalized elsewhere:
 
 * Proposition 6.6 (`isIrreducibleMap_full_similarity`)
-* Proposition 6.8 (`IsChannel.posSemidef_parts_of_hermitian_fixedPoint`)
+* Proposition 6.8 (`IsPositiveMap.wolf_prop_6_8`)
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
@@ -36,21 +36,23 @@ theorem wolf_prop_6_6
 
 end Kraus
 
-namespace IsChannel
+namespace IsPositiveMap
 
 variable {d : ℕ}
 
-/-- Wolf Proposition 6.8: Hermitian fixed points decompose into
-positive-semidefinite fixed points. -/
+/-- Wolf Proposition 6.8: every fixed point is a fixed complex linear combination
+of four positive-semidefinite fixed points. -/
 theorem wolf_prop_6_8
-    [NeZero d]
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ}
-    (hT : IsChannel T)
+    (hT : IsPositiveMap T)
+    (hTP : IsTracePreservingMap T)
     {X : Matrix (Fin d) (Fin d) ℂ}
-    (hXh : X.IsHermitian)
     (hXfix : T X = X) :
-    ∃ A B : Matrix (Fin d) (Fin d) ℂ,
-      A.PosSemidef ∧ B.PosSemidef ∧ X = A - B ∧ T A = A ∧ T B = B :=
-  IsChannel.posSemidef_parts_of_hermitian_fixedPoint T hT hXh hXfix
+    ∃ P₁ P₂ P₃ P₄ : Matrix (Fin d) (Fin d) ℂ,
+      P₁.PosSemidef ∧ P₂.PosSemidef ∧ P₃.PosSemidef ∧ P₄.PosSemidef ∧
+      T P₁ = P₁ ∧ T P₂ = P₂ ∧ T P₃ = P₃ ∧ T P₄ = P₄ ∧
+      X = (2⁻¹ : ℂ) • (P₁ - P₂) - ((2⁻¹ : ℂ) * Complex.I) • (P₃ - P₄) :=
+  IsPositiveMap.exists_posSemidef_fixedPoints_decomposition
+    T hT hTP hXfix
 
-end IsChannel
+end IsPositiveMap
