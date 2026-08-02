@@ -550,6 +550,17 @@ def test_rmp_dimension_ownership() -> None:
                 "a non-public physical option gained ownership: "
                 f"source={malformed_source!r}, occurrences={malformed_options!r}"
             )
+    unclosed_public_argument = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{x \tnpic[pitch=41mm \rule{42mm}{43mm}}",
+    )
+    if len(unclosed_public_argument) != 3 or any(
+        occurrence.owner is not None for occurrence in unclosed_public_argument
+    ):
+        raise AssertionError(
+            "an unclosed public argument exposed dimensions to an enclosing owner: "
+            f"{unclosed_public_argument!r}"
+        )
     for case_variant in (
         r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
         r"\tnarrow{x \tn[Label Shift={35mm,36mm}]{A}}",

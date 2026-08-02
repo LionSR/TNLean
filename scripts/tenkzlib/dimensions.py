@@ -545,6 +545,7 @@ def _command_spans(
             continue
         name = command.group(1)
         grammar = grammars[name]
+        span_owner = grammar.owner
         position = _skip_space(source, command.end())
         if name in dynamic_names:
             # The declaration may have collided with a command of unknown
@@ -560,6 +561,11 @@ def _command_spans(
                 closer = "]" if character == "[" else "}"
                 closed = match_group(source, position, character, closer)
                 if closed < 0:
+                    # A malformed adjacent argument has no trustworthy end.
+                    # Quarantine the remainder rather than exposing it to an
+                    # enclosing owner through a guessed command boundary.
+                    position = len(source)
+                    span_owner = None
                     break
                 position = _skip_space(source, closed)
         else:
@@ -568,18 +574,22 @@ def _command_spans(
             if grammar.accepts_options and source[position : position + 1] == "[":
                 closed = match_group(source, position, "[", "]")
                 if closed < 0:
-                    continue
-                position = _skip_space(source, closed)
+                    position = len(source)
+                    span_owner = None
+                else:
+                    position = _skip_space(source, closed)
             for _ in range(max(grammar.positional_group_counts)):
                 if source[position : position + 1] != "{":
                     break
                 closed = match_group(source, position, "{", "}")
                 if closed < 0:
+                    position = len(source)
+                    span_owner = None
                     break
                 position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
-                command.start(), position, grammar.owner
+                command.start(), position, span_owner
             )
         )
     return spans
