@@ -65,13 +65,13 @@ class DimensionOwnershipError(ValueError):
 # Relative font spacing such as ``1em`` is deliberately outside this physical
 # dimension contract.  Absolute TeX units, their legal whitespace, and TeX's
 # optional ``true`` prefix are caught even when a future case stops using
-# millimetres.  A spaced ``in`` followed by prose is the English preposition,
-# not an inch unit.
+# millimetres.  The one lexical ambiguity, English prose using ``in`` as a
+# preposition, is resolved only while scanning comments below.
 DIMENSION_RE = re.compile(
     r"(?<![A-Za-z0-9_.])"
     r"[-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
     r"(?:\s*true)?\s*"
-    r"(?:pt|pc|bp|cm|mm|dd|cc|sp|in(?!\s+[A-Za-z]))\b"
+    r"(?:pt|pc|bp|cm|mm|dd|cc|sp|in)\b"
 )
 
 CASE_DIMENSION_CEILING = 926
@@ -204,6 +204,21 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     return None
 
 
+def _comment_uses_in_as_preposition(
+    source: str,
+    occurrence: re.Match[str],
+    comment_end: int,
+) -> bool:
+    if re.search(r"in\s*$", occurrence.group(0), flags=re.IGNORECASE) is None:
+        return False
+    tail = source[occurrence.end() : comment_end]
+    return re.match(
+        r"\s+(?:the|an?|this|that|these|those)\b",
+        tail,
+        flags=re.IGNORECASE,
+    ) is not None
+
+
 def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, ...]:
     """Classify every absolute dimension in one case source."""
     active = strip_comments(source)
@@ -218,6 +233,8 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             None,
         )
         if comment_range is not None:
+            if _comment_uses_in_as_preposition(source, match, comment_range[1]):
+                continue
             owner = _comment_owner(source[comment_range[0] : comment_range[1]])
             in_comment = True
         else:

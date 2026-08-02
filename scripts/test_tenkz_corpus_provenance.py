@@ -265,6 +265,16 @@ def test_rmp_dimension_ownership() -> None:
         Path("synthetic.tex"), "% at y=-0.75 in the author source\n"
     ):
         raise AssertionError("the English preposition 'in' became an inch unit")
+    active_inch = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"
+    )
+    if [occurrence.literal for occurrence in active_inch] != ["1 in", "2pt"]:
+        raise AssertionError(f"active spaced inch escaped: {active_inch!r}")
+    comment_inch = scan_case_dimensions(
+        Path("synthetic.tex"), "% layout width is 1 in wide\n"
+    )
+    if len(comment_inch) != 1 or not comment_inch[0].in_comment:
+        raise AssertionError(f"comment inch escaped: {comment_inch!r}")
 
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),
