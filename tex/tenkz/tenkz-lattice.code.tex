@@ -579,16 +579,16 @@
     the~worst~sweep~cell~0.30/0.40~produced~false~5-valent~junctions).~
     Keep~plane~rise~above~#2. }
 \msg_new:nnn { tenkz } { plane-slant-band }
-  { plane~slant=#1~is~outside~the~readable~band~(0.30,~0.65):~at~or~
-    below~0.30~the~depth~bonds~steepen~to~61-67~degrees~and~become~
-    confusable~with~the~vertical~physical~legs;~at~or~above~0.65~a~
-    depth~neighbour~reads~as~a~column~neighbour. }
+  { plane~slant=#1~is~outside~the~readable~band~(#2,~#3).~At~or~
+    below~#2,~depth~bonds~reach~61-67~degrees~in~the~measured~sweep~
+    and~can~be~mistaken~for~vertical~physical~legs;~at~or~above~#3,~
+    a~depth~neighbour~can~be~mistaken~for~a~column~neighbour. }
 \msg_new:nnn { tenkz } { plane-tall-window }
-  { (rows-1)~x~plane~slant~=~#1~exceeds~(cols-1)/2~=~#2:~the~sheared~
-    window~collapses~toward~a~rhombus~staircase~and~the~depth~reads~as~
-    a~rotated~lattice~(plane_sweep1~page~2b,~5x3~drift/width~0.9).~Cap~
-    receding~rows~at~about~4~at~stock~slant,~or~drop~plane~slant~toward~
-    0.30~for~5~or~more~receding~rows. }
+  { (rows-1)~x~plane~slant~=~#1~exceeds~(cols-1)/2~=~#2.~The~sheared~
+    projection~approaches~a~rhombus~staircase~and~can~be~mistaken~for~
+    a~rotated~lattice~(plane_sweep1~page~2b;~5x3~drift/width~0.9).~
+    Reduce~the~row~count,~increase~the~column~count,~or~lower~the~plane~
+    slant~while~keeping~it~above~the~readable~floor~#3. }
 \msg_new:nnn { tenkz } { planes-interleave }
   { sheet~sep=#1~x~lattice~pitch~is~below~(rows-1)~x~the~frame's~row~
     drop~=~#2:~the~sheets~interleave,~and~at~an~integer~multiple~of~the~
@@ -620,7 +620,7 @@
           code=plane-rise-low|rise=#1}
       }
   }
-% set the per-picture slant ratio and guard the (0.30, 0.65) band
+% set the per-picture slant ratio and guard the registry-owned readable band
 \cs_new_protected:Npn \tenkzl_set_slant:n #1
   {
     \cs_set:Npn \tenkz@r@planeslant {#1}
@@ -628,7 +628,8 @@
       { \fp_compare_p:nNn {#1} > {\tenkz@r@slantmin} }
       { \fp_compare_p:nNn {#1} < {\tenkz@r@slantmax} }
       {
-        \msg_warning:nnn { tenkz } { plane-slant-band } {#1}
+        \msg_warning:nneee { tenkz } { plane-slant-band }
+          {#1} { \tenkz@r@slantmin } { \tenkz@r@slantmax }
         \tenkz@event{warning|picture=\the\tenkz@pictureid|%
           code=plane-slant-band|slant=#1}
       }
@@ -651,10 +652,11 @@
           { ( \l__tenkzl_nrows_int - 1 ) * \tenkz@r@planeslant }
           > { 0.5 * ( \l__tenkzl_ncols_int - 1 ) }
           {
-            \msg_warning:nnee { tenkz } { plane-tall-window }
+            \msg_warning:nneee { tenkz } { plane-tall-window }
               { \fp_eval:n
                   { ( \l__tenkzl_nrows_int - 1 ) * \tenkz@r@planeslant } }
               { \fp_eval:n { 0.5 * ( \l__tenkzl_ncols_int - 1 ) } }
+              { \tenkz@r@slantmin }
             \tenkz@event{warning|picture=\the\tenkz@pictureid|%
               code=plane-tall-window|rows=\int_use:N \l__tenkzl_nrows_int|%
               cols=\int_use:N \l__tenkzl_ncols_int}
