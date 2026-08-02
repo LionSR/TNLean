@@ -101,7 +101,11 @@ def _is_dimension(value: str) -> bool:
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
 FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
-    "picture": {"id": _is_picture_id, "lang": _any},
+    "picture": {
+        "id": _is_picture_id,
+        "lang": _any,
+        "scope": _is_positive_int,
+    },
     "surface": {
         "picture": _is_picture_id,
         "name": _enum("tenkzplanes"),
@@ -173,6 +177,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "signature": _anything,
     },
     "check": {
+        "scope": _is_positive_int,
         "relation": _is_positive_int,
         "result": _enum("equal", "mismatch", "off", "malformed"),
         "reason": _any,

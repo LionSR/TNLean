@@ -1515,15 +1515,42 @@ class Audit:
         if not self.tex_linked:
             return
         relation_checks: dict[int, Event] = {}
-        check_events = [
-            event for event in self.log_events if event.kind == "check"
-        ]
-        check_offset = 0
+        # The kernel stamps each equation picture and relation with one scope.
+        # Missing, duplicate, or malformed records therefore fail locally and
+        # can never shift an accepted result onto another equation.
+        picture_indices = {
+            picture.ident: index for index, picture in enumerate(self.pictures)
+        }
+        picture_scopes: dict[int, int] = {}
+        scope_pictures: dict[int, list[int]] = {}
+        for event in self.log_events:
+            if event.kind != "picture":
+                continue
+            scope = event.attrs.get("scope", "")
+            picture = picture_indices.get(event.attrs.get("id", ""))
+            if picture is None or not scope.isdigit():
+                continue
+            scope_index = int(scope)
+            picture_scopes[picture] = scope_index
+            scope_pictures.setdefault(scope_index, []).append(picture)
+
+        relation_events: dict[tuple[int, int], list[Event]] = {}
+        malformed_scopes: set[int] = set()
+        for event in self.log_events:
+            if event.kind != "check":
+                continue
+            scope = event.attrs.get("scope", "")
+            if scope.isdigit() and event.attrs.get("result") == "malformed":
+                malformed_scopes.add(int(scope))
+            relation = event.attrs.get("relation", "")
+            if not scope.isdigit() or not relation.isdigit():
+                continue
+            relation_events.setdefault((int(scope), int(relation)), []).append(event)
+
         equation_tokens = list(re.finditer(
             r"\\(begin|end)\{tenkzeq\}", self._tex_src
         ))
         equation_stack: list[re.Match[str]] = []
-        equation_scopes: list[tuple[int, list[int], bool]] = []
         for token in equation_tokens:
             if token.group(1) == "begin":
                 equation_stack.append(token)
@@ -1540,41 +1567,25 @@ class Audit:
                 continue
             header = self._tex_src[begin.end():first_construct.start]
             checked = re.search(r"\bcheck\s*=", header) is not None
+            if not checked:
+                continue
             members = [
                 index for index, construct in enumerate(self.constructs)
                 if begin.end() <= construct.start and construct.end <= token.start()
             ]
-            relation_pairs = [
-                left for left, right in zip(members, members[1:])
-                if same_equation(
-                    self._tex_src[
-                        self.constructs[left].end:self.constructs[right].start
-                    ]
-                )
-            ]
-            equation_scopes.append((begin.start(), relation_pairs, checked))
-
-        # Every tenkzeq emits one record per relation, even without `check=`.
-        # Some `off` records precede its pictures while ordinary results follow
-        # them, so partition all records by source scope before using the
-        # relation number.  Only explicitly checked scopes may delegate.
-        for _, relation_pairs, checked in sorted(equation_scopes):
-            relation_count = len(relation_pairs)
-            if relation_count == 0:
+            logged_scopes = {picture_scopes.get(member) for member in members}
+            if len(logged_scopes) != 1 or None in logged_scopes:
                 continue
-            scope_events = check_events[
-                check_offset:check_offset + relation_count
-            ]
-            check_offset += relation_count
-            if not checked or len(scope_events) != relation_count:
+            scope = next(
+                value for value in logged_scopes if value is not None
+            )
+            if scope in malformed_scopes or scope_pictures.get(scope) != members:
                 continue
-            for event in scope_events:
-                relation = event.attrs.get("relation", "")
-                if not relation.isdigit():
+            for relation, left in enumerate(members[:-1], 1):
+                events = relation_events.get((scope, relation), [])
+                if len(events) != 1:
                     continue
-                relation_index = int(relation)
-                if 1 <= relation_index <= relation_count:
-                    relation_checks[relation_pairs[relation_index - 1]] = event
+                relation_checks[left] = events[0]
 
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
