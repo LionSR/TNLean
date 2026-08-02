@@ -286,7 +286,10 @@ the coded error `[TKZ-ADDR-CYCLE]`, printed with the cycle.
 Open legs are policy, not objects. An unbonded typed port renders as a stub
 in the direction of its face; a wire endpoint may be `open`, with a direction
 when the end is to sit on the picture margin and without one when it takes
-its place from the route (§5). There are no placeholder atoms.
+its place from the route (§5). Circle frames accept only the station-based
+cardinal directions `n`, `e`, `s`, and `w`; diagonal circle opens are rejected
+with `[TKZ-CIRCLE-OPEN-DIRECTION]` until a station-local or geodesic diagonal
+construction is part of the language. There are no placeholder atoms.
 <!-- Consumers of the open-end policy: every former tenkzfree body; e.g.
      rmp-ii-triangle-network, rmp-ii-mpo-sheet, rmp-iii-b-braid-one. -->
 

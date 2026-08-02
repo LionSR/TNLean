@@ -928,6 +928,35 @@ grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
   exit 1
 }
 
+for circle_open_case in ne:from se:to sw:from nw:to; do
+  direction=${circle_open_case%%:*}
+  endpoint=${circle_open_case#*:}
+  circle_open_negative="$KERNEL/negative/n_circle_open_$direction.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$circle_open_negative" \
+         >"$WORK/n_circle_open_$direction.transcript" 2>&1 ); then
+    echo "FAIL: circle frame accepted diagonal open $direction" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-CIRCLE-OPEN-DIRECTION]' \
+    "$WORK/n_circle_open_$direction.transcript" || {
+    echo "FAIL: diagonal circle open $direction lacked its coded diagnostic" >&2
+    exit 1
+  }
+  grep -Fq "direction '$direction'" \
+    "$WORK/n_circle_open_$direction.transcript" || {
+    echo "FAIL: diagonal circle diagnostic lost bearing $direction" >&2
+    exit 1
+  }
+  grep -Fq "at the $endpoint end" \
+    "$WORK/n_circle_open_$direction.transcript" || {
+    echo "FAIL: diagonal circle diagnostic lost endpoint $endpoint" >&2
+    exit 1
+  }
+done
+
 for basis_case in \
   n_frame_basis_parse n_frame_basis_semicolon n_frame_basis_kind \
   n_frame_basis_member \
