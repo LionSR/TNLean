@@ -115,6 +115,7 @@ The scalar and reference types are closed:
 | `pr-ref` | `#[1-9][0-9]*`, naming a pull request in this repository |
 | `issue-ref` | `#[1-9][0-9]*`, naming an issue in this repository |
 | `sha` | exactly 40 lowercase hexadecimal digits |
+| `sha256` | exactly 64 lowercase hexadecimal digits |
 | `identity` | `github:lowercase-login` |
 | `tag` | a nonempty tag name in the `tenkz-v*` namespace |
 | `text` | a nonempty TOML string |
@@ -291,14 +292,34 @@ live entry in that prefix; reusing an earlier boundary is invalid.
 
 Historical reset placement and prospective drift use separate evidence
 channels. For every merged `record-invalid` reset at or before the boundary,
-the resolver supplies closed replay evidence bound to its entry ID, exact
-record head, integration, and exact pre-reset prefix. The evidence records a
-complete exact-target snapshot and the ledger-ordered raw-invalid queue before
-that reset. The validator reconstructs that historical queue, applies the
-pending-breaking priority below, and requires the reset to name its head. The
-replay result counts only when its exact-head workflow and independent
-supervisor receipts satisfy the pinned enforcement contract. It is not a
-caller-selected audit boundary.
+the resolver reads the reset's named receipt blob from the receipt pull
+request's reachable integration. The blob uses the closed JSON schema at the
+pinned policy's `release_reset_replay_schema`. It binds the reset and target
+entry IDs, exact pre-reset ledger boundary, exact validation-target commit,
+ledger-ordered raw-invalid queue, pending breaking target or null, complete
+normalized resolver inputs, pinned workflow dependency closure, and independent
+supervisor receipts. Unknown or missing data fails closed.
+
+The receipt pull request targets the exact current `main` tip and changes only
+one new regular blob at `docs/tenkz/soak-replay/NUMBER.json`, where `NUMBER` is
+its own decimal pull-request number. Its author is distinct from an exact-head
+approving reviewer; normalized `mergedBy` equals the pinned maintainer. GitHub
+reports it merged to `main`, reachable, with its integration tree equal to its
+approved final-head tree. The reset record's candidate base and later
+integration parent equal that receipt integration. If `main` advances first, a
+new receipt pull request is required; a stale receipt is never overwritten.
+At reset-candidate validation, a complete current snapshot at that exact base
+must reproduce the receipt's queue and still-mutable inputs. A mismatch makes
+the receipt stale and requires another receipt pull request.
+
+The reset entry binds the receipt PR and SHA-256 of the raw receipt blob. The
+validator reconstructs its historical queue, applies the pending-breaking
+priority below, and requires the reset to name its head. The receipt's durable
+provenance is its independent exact-head approval, maintainer merge, tree and
+digest binding, and embedded pinned-supervisor results. Later replay reads that
+reachable Git blob; an expiring workflow artifact, check log, or newly supplied
+historical snapshot cannot replace it. This is not a caller-selected audit
+boundary.
 
 A historically valid reset acknowledges its target while that reset continues
 to pass its own current common, external, and kind-specific checks. The current
@@ -424,8 +445,8 @@ a missing or ambiguous merge base fails closed. `P` must be an ancestor of
   `blueprint/src/appendix/**/*.tex`. The `rmp-benchmark` class matches
   `tests/tenkz/rmp/**/cases/*.tex`. `TNLean/Archive/**` is excluded from every
   work class.
-- `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr`, or a
-  `work_pr` already named by another entry.
+- `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr` or
+  `replay_receipt_pr`, or a `work_pr` already named by another entry.
 - A reviewer distinct from the normalized `work_pr.author.login` has a latest
   effective `APPROVED` review on the exact final `headRefOid`, submitted before
   `work_pr.mergedAt`.
@@ -479,7 +500,10 @@ another triage.
 ### `reset`
 
 Required additional fields: `cause` (`breaking-required` or `record-invalid`),
-`target` (`entry-ref`), `reason` (`text`), and `evidence` (`text`).
+`target` (`entry-ref`), `reason` (`text`), and `evidence` (`text`). A
+`record-invalid` reset additionally requires `replay_receipt_pr` (`pr-ref`) and
+`replay_receipt_sha256` (`sha256`); those fields are forbidden on a
+`breaking-required` reset.
 
 For `cause = "breaking-required"`, `target` names an unresolved friction entry
 with that triage in the active attempt; the reset uses and closes that attempt.
@@ -490,8 +514,9 @@ none is active, it uses the most recently opened attempt and leaves the campaign
 inactive. In either case it occupies its required position in the audit
 batch's reset queue, not necessarily the position immediately following its
 historical target, and a correction cannot repair the cause. Once this reset
-passes its own current post-merge validation, it acknowledges that target under
-the state-sequence rule and prevents the same defect from being queued forever.
+passes its own current post-merge validation, it acknowledges the target only
+when `cause = "record-invalid"`; this prevents the same defect from being queued
+forever. A `breaking-required` reset never acknowledges a raw-invalid entry.
 
 The next freeze has attempt number one higher than the most recently opened
 attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new
@@ -532,8 +557,9 @@ work PRs distinct. Values are entry references, not pull-request references.
 
 Let `R` be the `release_prep_pr` named by the entry, with exact final head `H_R`,
 integration `I_R`, and integration parent `P_R` defined as for a work PR. `R`
-must be distinct from the activation PR, every source, work, and entry-record
-PR, and must satisfy all of these externally checked predicates:
+must be distinct from the activation PR and every source, work, entry-record,
+and replay-receipt PR, and must satisfy all of these externally checked
+predicates:
 
 - GitHub reports `R` merged to `main` after both named work PRs, with non-null
   `headRefOid`, `mergedAt`, and `mergeCommit.oid`.

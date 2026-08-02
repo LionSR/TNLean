@@ -61,6 +61,7 @@ release_test_support_tree = "pending"
 release_test_data_roots = ["tex/tenkz", "docs/tenkz", "tests/tenkz/rmp"]
 release_enforcement_workflows = [".github/workflows/pr-ci.yml"]
 release_workflow_dependencies = "transitive-immutable-git-sha-or-content-digest"
+release_reset_replay_schema = "tests/tenkz/release-support/reset-replay-v1.schema.json"
 release_test_dependency_contract = "pinned-code-support-declared-subject-data"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
@@ -337,10 +338,10 @@ approved final head's tree. `SOAK-1.0.md` defines the immutable complete
 merge-base-to-head diff, the two eligible-path predicates, the exclusion of
 `TNLean/Archive/**`, and the one-class assignment rule. The two classes must be
 filled by distinct pull requests; a pull request can fill only its recorded
-class. The enforcement-activation PR, source PRs, entry record PRs, repeated
-work PRs, unmerged PRs, and any diff touching either policy document do not
-qualify. A policy-, checker-, CI-, or record-only diff has no eligible class
-change and therefore does not qualify.
+class. The enforcement-activation PR, source PRs, entry record PRs, replay
+receipt PRs, repeated work PRs, unmerged PRs, and any diff touching either
+policy document do not qualify. A policy-, checker-, CI-, receipt-, or
+record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A reset has cause
@@ -354,6 +355,14 @@ acknowledging reset itself becomes invalid, its target is uncovered and both
 defects require valid acknowledgements. Exact-head replay evidence proves each
 historical reset's placement against its pre-reset prefix; the current audit
 still uses the actual final-prefix boundary and only queues prospective drift.
+That replay is durable: a separate, independently exact-head-approved receipt
+pull request lands one new canonical receipt blob under
+`docs/tenkz/soak-replay/` immediately before the ledger-only reset record. Its
+closed schema comes from the pinned support tree. The reset entry binds the
+receipt pull request and raw-blob digest; later replay reads the blob from that
+reachable integration, never from an expiring workflow artifact or a newly
+supplied historical snapshot. The trusted approval, maintainer merge, exact
+tree binding, and embedded supervisor receipts establish its provenance.
 When an audit's reset queue is nonempty, its head is the first new
 non-correction entry after the boundary. A
 pending breaking-required reset heads the queue; otherwise the earliest

@@ -260,10 +260,10 @@ eligible source must still exist at the reviewed head, have a changed
 comment-stripped token stream, and pass its class-specific Lean, blueprint, or
 RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
 not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
-and ledger-record pull requests do not qualify.  Each record pull request
-changes only its one ledger append.  Release preparation lands separately after
-both work merges; its exact diff changes only the tag-derived 1.0 manifest and
-four canonical release artifacts.  Exact-head sign-off review follows
+ledger-record, and reset-receipt pull requests do not qualify.  Each record
+pull request changes only its one ledger append.  Release preparation lands
+separately after both work merges; its exact diff changes only the tag-derived
+1.0 manifest and four canonical release artifacts.  Exact-head sign-off review follows
 immediately on that integration; if `main` advances, repeat preparation on the
 new tip.  A validated sign-off remains live until a full replay succeeds and
 the exact annotated final tag is observed under current required protection.
@@ -277,6 +277,11 @@ target is uncovered and both invalid records require later valid resets.
 Historical placement is replayed from exact-head evidence bound to the reset's
 pre-reset prefix.  The current audit always uses the actual final-prefix
 boundary; a stale caller-selected boundary is rejected.
+Before a `record-invalid` ledger append, a separate independently approved
+receipt PR adds one canonical blob under `docs/tenkz/soak-replay/`, using the
+schema in the pinned support tree.  The ledger-only reset names that PR and the
+blob digest.  Later replay reads the receipt from its reachable integration;
+workflow artifacts and newly supplied historical snapshots are not evidence.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and
