@@ -1902,6 +1902,15 @@ def main() -> int:
         "reset-required:S1-0002"
     )
 
+    missing_freeze_merge_time = context()
+    missing_freeze_merge_time.prs[FREEZE_RECORD] = replace(
+        missing_freeze_merge_time.prs[FREEZE_RECORD],
+        merged_at=None,
+    )
+    assert validate(complete_log(), missing_freeze_merge_time) == (
+        "reset-required:S1-0001"
+    )
+
     work_after_record = context()
     work_after_record.prs[FORMAL_RECORD] = replace(
         work_after_record.prs[FORMAL_RECORD],
@@ -2320,6 +2329,20 @@ def main() -> int:
         commit_is_validated_record_integration=True,
     )
     assert validate(complete_log(), released) == "released"
+
+    trailing_correction = context()
+    add_record(
+        trailing_correction,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    trailing_correction.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    assert validate(
+        complete_log() + [correction("S1-0005", "#908", "S1-0002")],
+        trailing_correction,
+    ) == "released"
 
     # The current-validity audit runs forever while replay callbacks retain the
     # integration-time history.  Before the tag, drift enters the reset queue;
