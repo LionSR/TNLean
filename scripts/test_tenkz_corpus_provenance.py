@@ -295,18 +295,60 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"starred command dimensions escaped: {starred_command_units!r}"
         )
-    independent_group_units = scan_case_dimensions(
-        Path("synthetic.tex"),
-        r"\tnedge{(1,1)-(1,2)} {\hspace{1mm}}",
+    command_arity_cases = (
+        (
+            r"\tnput{a}{(3mm,0)}{\rule{4pt}{5pt}}{\hspace{6mm}}",
+            DimensionOwner.LAYOUT,
+            ("3mm", "4pt", "5pt"),
+            "6mm",
+        ),
+        (
+            r"\tnjoin[label={\rule{11pt}{12pt}}]{0mm,0}{13mm,0}"
+            r"{\hspace{14mm}}",
+            DimensionOwner.ROUTE,
+            ("11pt", "12pt", "0mm", "13mm"),
+            "14mm",
+        ),
+        (
+            r"\tnwire{A.e}{B.w}{\hspace{22mm}}",
+            DimensionOwner.ROUTE,
+            (),
+            "22mm",
+        ),
+        (
+            r"\tnedge[label={\rule{31pt}{32pt}}]{(1,1)-(1,2)}"
+            r"{\hspace{33mm}}",
+            DimensionOwner.ROUTE,
+            ("31pt", "32pt"),
+            "33mm",
+        ),
+        (
+            r"\tnarrow[from=1,to=2]{\rule{41pt}{42pt}}{\hspace{43mm}}",
+            DimensionOwner.ROUTE,
+            ("41pt", "42pt"),
+            "43mm",
+        ),
+        (
+            r"\tnarrow*[from=1,to=2]{\rule{51pt}{52pt}}{\hspace{53mm}}",
+            DimensionOwner.ROUTE,
+            ("51pt", "52pt"),
+            "53mm",
+        ),
     )
-    if (
-        len(independent_group_units) != 1
-        or independent_group_units[0].owner is not None
-    ):
-        raise AssertionError(
-            "a group following a complete command gained ownership: "
-            f"{independent_group_units!r}"
+    for source, owner, owned_literals, independent_literal in command_arity_cases:
+        occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+        actual = tuple(
+            (occurrence.literal, occurrence.owner) for occurrence in occurrences
         )
+        expected = (
+            *((literal, owner) for literal in owned_literals),
+            (independent_literal, None),
+        )
+        if actual != expected:
+            raise AssertionError(
+                "a command swallowed an independent following TeX group: "
+                f"source={source!r}, occurrences={occurrences!r}"
+            )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix

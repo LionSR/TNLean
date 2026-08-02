@@ -92,21 +92,31 @@ BOOK_LAYOUT_ALLOWLIST: Mapping[Path, int] = {
     Path("docs/tenkz/tenkzrmpbenchmark.sty"): 24,
 }
 
-_COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
-    "tnput": DimensionOwner.LAYOUT,
-    "tnjoin": DimensionOwner.ROUTE,
-    "tnwire": DimensionOwner.ROUTE,
-    "tnedge": DimensionOwner.ROUTE,
-    "tnarrow": DimensionOwner.ROUTE,
+
+@dataclass(frozen=True)
+class _CommandGrammar:
+    """The public xparse shape relevant to dimension ownership."""
+
+    owner: DimensionOwner
+    positional_group_counts: tuple[int, ...]
+    accepts_star: bool = False
+    accepts_options: bool = True
+
+
+# Keep these arities in lockstep with the public definitions.  "tnwire" is
+# the one conditional grammar: a closed wire takes no ends, while every other
+# wire takes two.  The scanner does not validate invocations, but it must never
+# claim more brace groups than a valid invocation can consume.
+_COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
+    "tnput": _CommandGrammar(DimensionOwner.LAYOUT, (3,)),       # O{} m m m
+    "tnjoin": _CommandGrammar(DimensionOwner.ROUTE, (2,)),      # O{} m m
+    "tnwire": _CommandGrammar(DimensionOwner.ROUTE, (0, 2)),    # O{} or O{} m m
+    "tnedge": _CommandGrammar(DimensionOwner.ROUTE, (1,)),      # O{} m
+    "tnarrow": _CommandGrammar(                                 # s O{} m
+        DimensionOwner.ROUTE, (1,), accepts_star=True
+    ),
 }
-_COMMAND_ARGUMENT_COUNTS: Mapping[str, int] = {
-    "tnput": 3,
-    "tnjoin": 2,
-    "tnwire": 2,
-    "tnedge": 1,
-    "tnarrow": 1,
-}
-_COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_OWNERS) + r")\b")
+_COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_GRAMMARS) + r")\b")
 _OPTION_OWNER_RE = re.compile(
     r"(?<![A-Za-z0-9_])"
     r"(?P<key>sheet\s+vector|row\s+vector|col\s+vector|pitch)\s*=",
@@ -172,18 +182,16 @@ def _skip_space(source: str, position: int) -> int:
 def _command_spans(source: str) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
     for command in _COMMAND_RE.finditer(source):
+        grammar = _COMMAND_GRAMMARS[command.group(1)]
         position = _skip_space(source, command.end())
-        if (
-            command.group(1) == "tnarrow"
-            and source[position : position + 1] == "*"
-        ):
+        if grammar.accepts_star and source[position : position + 1] == "*":
             position = _skip_space(source, position + 1)
-        if source[position : position + 1] == "[":
+        if grammar.accepts_options and source[position : position + 1] == "[":
             closed = match_group(source, position, "[", "]")
             if closed < 0:
                 continue
             position = _skip_space(source, closed)
-        for _ in range(_COMMAND_ARGUMENT_COUNTS[command.group(1)]):
+        for _ in range(max(grammar.positional_group_counts)):
             if source[position : position + 1] != "{":
                 break
             closed = match_group(source, position, "{", "}")
@@ -192,7 +200,7 @@ def _command_spans(source: str) -> list[_OwnerSpan]:
             position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
-                command.start(), position, _COMMAND_OWNERS[command.group(1)]
+                command.start(), position, grammar.owner
             )
         )
     return spans
