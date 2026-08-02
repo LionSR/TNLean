@@ -138,10 +138,9 @@ structure PeriodicOverlapHypothesis
 
 /-- **Build `PeriodicOverlapHypothesis` from `IsPeriodic` data via the overlap dichotomy.**
 
-Given block families with `IsPeriodic` data on each block, the
-`hetRepeatedBlocks_of_nondecaying` field is filled by `periodicOverlapDichotomy`
-for any pair `A j, B k`: the dichotomy returns either overlap decay (contradicting
-non-decay) or `HetRepeatedBlocks (A j) (B k)`.
+For periodic blocks, `periodicOverlapDichotomy` shows that every non-decaying
+cross-family overlap yields `HetRepeatedBlocks`: its decay alternative contradicts
+non-decay, leaving the repeated-block alternative.
 
 The `exists_nondecaying_A/B` fields remain as explicit hypotheses — they encode the
 paper's content that proportional total MPVs force non-vanishing per-block overlaps.

@@ -29,9 +29,10 @@ requires no injectivity or normality input:
   cycle to reach an injective length (eq:Fu).  The junction projector
   `P (u + w₁.length • 1)` is absorbed by idempotency.
 
-These are the `A_u^i`/`F_u` building blocks for the sector-match case. The
-downstream theorem `sectorTensor_proportional_of_blockedMatch` uses their
-right-inverse contraction to obtain the uniform product-tensor identity, applies
+These are the `A_u^i`/`F_u` building blocks for the sector-match case. In
+`TNLean.MPS.Periodic.Overlap.SectorMatch.Contraction`, the theorem
+`sectorTensor_proportional_of_blockedMatch` uses their right-inverse contraction
+to obtain the uniform product-tensor identity, applies
 `PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`,
 and assembles the global gauge.
 
