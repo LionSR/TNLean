@@ -116,6 +116,80 @@
     preserves the prescribed set of $m$-th roots of unity.
 \end{proof}
 
+\begin{definition}[Replacement of the representative family]
+    \label{def:periodic_sector_basis_replacement}
+    \lean{MPSTensor.SectorDecomposition.replaceBasis}
+    \lean{MPSTensor.SectorDecomposition.replaceBasis_basis}
+    \lean{MPSTensor.SectorDecomposition.replaceBasis_coeff}
+    \leanok
+    Let
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i)
+        \notag
+    \end{align}
+    be a multiplicity-bearing sector decomposition.  For tensors $B_j$ with
+    the same bond dimension as $A_j$, its representative replacement is
+    \begin{align}
+        A_B^i&=\bigoplus_{j\in J}(R_j\otimes B_j^i).
+        \notag
+    \end{align}
+    Thus the index set, bond dimensions, multiplicities, and every entry of
+    the diagonal matrices $R_j$ remain unchanged.  In particular, for every
+    length $N$ and every representative $j$, the grouped coefficient remains
+    \begin{align}
+        \operatorname{tr}(R_j^N)&=\sum_q\mu_{j,q}^N.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Assembly of representative similarities]
+    \label{thm:periodic_sector_basis_replacement_gauge}
+    \lean{MPSTensor.SectorDecomposition.gaugeEquiv_toTensor_replaceBasis}
+    \leanok
+    \uses{def:periodic_sector_basis_replacement}
+    Suppose that, for every $j\in J$, there is an invertible matrix $X_j$
+    such that
+    \begin{align}
+        B_j^i&=X_jA_j^iX_j^{-1}.
+        \notag
+    \end{align}
+    Then the two multiplicity-bearing tensors are related by the pure
+    similarity
+    \begin{align}
+        A_B^i&=XA^iX^{-1},&
+        X&=\bigoplus_{j\in J}(I_{r_j}\otimes X_j).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{lem:tensor_from_blocks_globalGauge_conj}
+    \leanok
+    Repeat $X_j$ on every copy indexed by a diagonal entry of $R_j$, and take
+    their block-diagonal direct sum.  On the $(j,q)$ block, conjugation by
+    this matrix sends $\mu_{j,q}A_j^i$ to $\mu_{j,q}B_j^i$.
+\end{proof}
+
+\begin{theorem}[Sectorwise Perron normalization]
+    \label{thm:spectral_periodic_sector_normalization}
+    \lean{MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis}
+    \leanok
+    \uses{def:spectral_periodic_tensor, def:periodic_sector_basis_replacement,
+        def:periodic_tensor}
+    Suppose every representative $A_j$ is spectrally $m_j$-periodic.  There
+    are left-canonical $m_j$-periodic representatives $B_j$, each purely
+    similar to $A_j$, such that the two full multiplicity-bearing tensors are
+    purely similar.  Every multiplicity matrix $R_j$ is unchanged.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spectral_periodic_normalization,
+        thm:periodic_sector_basis_replacement_gauge}
+    \leanok
+    Apply the positive Perron gauge separately to every representative and
+    assemble these gauges with
+    Theorem~\ref{thm:periodic_sector_basis_replacement_gauge}.  Since every
+    spectral radius is already one, no representative is rescaled.
+\end{proof}
+
 \begin{theorem}[A periodic tensor has positive bond dimension]
     \label{thm:periodic_bond_dimension_pos}
     \lean{MPSTensor.IsPeriodic.bondDim_ne_zero}

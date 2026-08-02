@@ -426,6 +426,37 @@
     repeated blocks, and transitivity gives the claim.
 \end{proof}
 
+\begin{lemma}[A pure similarity is a repeated-block relation]
+    \label{lem:pure_gauge_het_repeated_blocks}
+    \lean{MPSTensor.GaugeEquiv.toHetRepeatedBlocks}
+    \leanok
+    If $B^i=XA^iX^{-1}$ for an invertible matrix $X$, then $A$ and $B$ are
+    repeated blocks with equal bond dimension and unit phase.
+\end{lemma}
+\begin{proof}\leanok
+    Invert the pure gauge and take the repeated-block phase to be one.
+\end{proof}
+
+\begin{lemma}[Pure similarities preserve periodic overlap hypotheses]
+    \label{lem:periodic_overlap_hypothesis_gauge_transport}
+    \lean{MPSTensor.PeriodicOverlapHypothesis.of_gaugeEquiv}
+    \leanok
+    Let $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$ be finite tensor
+    families, and suppose that $A_j'$ is purely similar to $A_j$ and $B_k'$ is
+    purely similar to $B_k$ for every $j,k$.  Assume that every tensor in each
+    primed family has a non-decaying mixed-overlap partner in the other primed
+    family, and that every non-decaying primed pair is a repeated pair.  Then
+    the same three assertions hold for the two original families.
+\end{lemma}
+\begin{proof}
+    \uses{lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance}
+    \leanok
+    Cyclicity of the trace makes every closed-chain coefficient, and hence
+    every mixed overlap, invariant under the two similarities.  Thus decay and
+    non-decay are unchanged.  For a non-decaying pair, compose its primed
+    repeated-block relation with the two pure similarities.
+\end{proof}
+
 \begin{theorem}[Non-decaying mixed overlaps for normalized bases of periodic
     tensors]
     \label{thm:periodic_multiplicity_nondecaying_overlap}
@@ -465,7 +496,7 @@
         \notag
     \end{align}
 
-    \emph{Scope restriction.} The source initially assumes that the transfer
+    \emph{Normalization boundary.} The source initially assumes that the transfer
     maps of the basis tensors are irreducible and have spectral radius one,
     and then obtains the trace-preserving normalization by a block-diagonal
     similarity
@@ -474,11 +505,11 @@
     otherwise arbitrary diagonal matrices with nonzero complex entries, the
     displayed direct sums are literal, and proportionality is assumed only at
     positive lengths.  Theorem~\ref{thm:spectral_periodic_normalization}
-    constructs each normalizing similarity.  Applying these similarities to
-    the whole sector decomposition and transporting the conclusion back remain
-    to be proved before this result applies to the unnormalized source
-    statement.  This remaining distinction is recorded in
-    \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex}.
+    constructs each normalizing similarity, while
+    Theorem~\ref{thm:spectral_periodic_sector_normalization} assembles them
+    without changing the multiplicity matrices.  Theorem~\ref{thm:%
+        periodic_spectral_multiplicity_nondecaying_overlap} below applies the
+    present result and returns its conclusion to the unnormalized blocks.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:finite_coefficient_isolation,
@@ -523,6 +554,49 @@
     conjugate symmetry of the mixed overlap gives the converse assertion. For
     any non-decaying pair, the periodic overlap dichotomy excludes its decay
     alternative and supplies the repeated-block relation.
+\end{proof}
+
+\begin{theorem}[Non-decaying mixed overlaps for spectrally periodic bases]
+    \label{thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    \lean{MPSTensor.PeriodicOverlapHypothesis.%
+        ofSpectrallyPeriodicSectorDecompositions}
+    \leanok
+    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
+    Let
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),&
+        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    where the diagonal entries of every $R_j$ and $S_k$ are nonzero.  Suppose
+    that the two representative families are pairwise non-repeated.  Assign
+    positive integers $m_j$ and $n_k$ to their representatives, and suppose
+    that every transfer map is irreducible, has spectral radius one, and has
+    peripheral spectrum respectively
+    $\{z\in\C:z^{m_j}=1\}$ or $\{z\in\C:z^{n_k}=1\}$.  If, for every positive
+    $N$, there is a scalar $c_N\ne0$ such that
+    \begin{align}
+        \ket{V^{(N)}(A)}&=c_N\ket{V^{(N)}(B)},
+        \notag
+    \end{align}
+    then every representative in either family has a representative in the
+    other family whose mixed overlap does not tend to zero.  Every such pair
+    has equal bond dimension and differs by an invertible similarity and a
+    unit-modulus scalar.
+\end{theorem}
+\begin{proof}
+    \uses{lem:periodic_overlap_hypothesis_gauge_transport,
+        lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance,
+        thm:periodic_multiplicity_nondecaying_overlap,
+        thm:spectral_periodic_sector_normalization}
+    \leanok
+    Normalize all representatives by their pure Perron gauges and assemble
+    the gauges block diagonally.  The multiplicity matrices and their grouped
+    coefficients remain unchanged.  Pure similarity preserves the total
+    positive-length proportionality and pairwise non-repetition, so
+    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} applies to the
+    normalized families.  Finally apply
+    Lemma~\ref{lem:periodic_overlap_hypothesis_gauge_transport}.
 \end{proof}
 
 \begin{theorem}[Scalar-weight specialization of the mixed-overlap theorem]
@@ -588,8 +662,10 @@
 
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
-    % Formalization status: the normalized multiplicity-bearing theorem above
-    % proves the overlap step after the source's Perron similarity. Applying
-    % these similarities sectorwise and transporting back remains tracked in
-    % issue #5342.
+    % Formalization status: the spectrally periodic multiplicity-bearing
+    % theorem above proves the complete overlap-hypothesis step for literal
+    % irreducible forms.  A source-labelled theorem retaining equality of the
+    % matched periods is still required before this exact statement can be
+    % marked ready.  Extension from arbitrary tensors through Proposition 2.1
+    % is a separate positive-length representative question.
 \end{theorem}

@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### pure gauge to heterogeneous repeated blocks — promoted
+- **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing
+  through `EquivalentBlocks`, choosing unit phase, and embedding the
+  equal-dimension repeated-block relation.
+- **Seen:** four occurrences across
+  `TNLean/MPS/Periodic/FundamentalTheorem.lean` and
+  `TNLean/MPS/Periodic/ProportionalOverlap.lean` in the sectorwise-normalization
+  draft (2026-08-02).
+- **Abstraction:** `MPSTensor.GaugeEquiv.toHetRepeatedBlocks` in
+  `TNLean/MPS/Periodic/FundamentalTheorem.lean`.
+- **Notes:** the lemma fixes the otherwise easy-to-reverse orientation between
+  pure gauges and `RepeatedBlocks`, while `HetRepeatedBlocks.trans` absorbs all
+  bond-dimension casts. It replaces four explicit conversion chains with
+  one-line calls; the source delta is four added lines after documentation.
+
 ### spectral-radius-one matrix dimension — promoted
 - **Pattern:** exclude zero matrix dimension by observing that every
   endomorphism of the zero-dimensional square-matrix space has spectral radius

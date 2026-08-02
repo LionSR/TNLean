@@ -42,6 +42,7 @@ import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
 import TNLean.MPS.Periodic.SectorIrreducibility.OrbitSum
 import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
 import TNLean.MPS.Periodic.SectorLift
+import TNLean.MPS.Periodic.SectorNormalization
 import TNLean.MPS.Periodic.SectorUnitary
 import TNLean.MPS.Periodic.Symmetry
 import TNLean.MPS.Periodic.Symmetry.Corollary41
