@@ -215,15 +215,58 @@ theorem horizontalSlice_twoSidedCompression
   intro j _
   ring
 
+/-- Coefficients of the physical-letter expansion of a two-sided compression
+`Lᴴ * verticalTensor M v * R`, normalized by a nonzero scalar `c`.
+
+Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and
+lines 1909--1919. -/
+noncomputable def twoSidedCompressionCoefficients
+    (L R : Matrix (Fin d) (Fin n) ℂ) (c : ℂ) :
+    Fin (n * n) → Fin (d * d) → ℂ :=
+  fun u z ↦ c⁻¹ * star (L z.divNat u.divNat) * R z.modNat u.modNat
+
+/-- A two-sided compression by `L` and `R`, scaled by a nonzero scalar, has
+horizontal slices in the span of the physical letters with coefficients
+`twoSidedCompressionCoefficients L R c`.
+
+Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and
+lines 1909--1919. -/
+theorem linearMarkedTensor_twoSidedCompressionCoefficients
+    {M : MPOTensor d D} (A : MPSTensor (D * D) n)
+    (L R : Matrix (Fin d) (Fin n) ℂ) (c : ℂ) (hc : c ≠ 0)
+    (hcompression : ∀ v, Lᴴ * verticalTensor M v * R = c • A v)
+    (u : Fin (n * n)) :
+    MPSTensor.linearMarkedTensor (twoSidedCompressionCoefficients L R c)
+        M.toMPSTensor u =
+      horizontalSlice A u.divNat u.modNat := by
+  have hRecover : A = fun v ↦ c⁻¹ • (Lᴴ * verticalTensor M v * R) := by
+    funext v
+    rw [hcompression v]
+    simp [hc]
+  rw [hRecover, horizontalSlice_smul, horizontalSlice_twoSidedCompression]
+  rw [MPSTensor.linearMarkedTensor]
+  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
+  dsimp only [twoSidedCompressionCoefficients, MPOTensor.toMPSTensor]
+  simp only [MPSTensor.finProdFinEquiv_divNat,
+    MPSTensor.finProdFinEquiv_modNat]
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Finset.smul_sum]
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [smul_smul]
+  congr 1
+  ring
+
 /-- Coefficients expressing a Gram-dressed corner in the physical-letter
 span of the horizontal tensor. -/
 noncomputable def cornerGramCoefficients
     (V : Matrix (Fin d) (Fin n) ℂ) (X : GL (Fin n) ℂ) (c : ℂ) :
     Fin (n * n) → Fin (d * d) → ℂ :=
-  fun u z ↦ c⁻¹ *
-    star ((V * (X : Matrix (Fin n) (Fin n) ℂ)) z.divNat u.divNat) *
-      (V * ((((X)⁻¹ : GL (Fin n) ℂ) :
-        Matrix (Fin n) (Fin n) ℂ))ᴴ) z.modNat u.modNat
+  twoSidedCompressionCoefficients
+    (V * (X : Matrix (Fin n) (Fin n) ℂ))
+    (V * ((↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))ᴴ) c
 
 /-- The coefficients of a grouped corner recover the horizontal slices of
 its Gram-dressed representative. -/
@@ -261,29 +304,10 @@ theorem linearMarkedTensor_cornerGramCoefficients
         rw [Matrix.conjTranspose_mul]
         simp only [Matrix.mul_assoc]
   have hc0 : c ≠ 0 := ne_of_gt hc
-  have hRecover : gramDressing X A = fun v ↦
-      c⁻¹ • ((V * (X : Matrix (Fin n) (Fin n) ℂ))ᴴ *
-        verticalTensor M v * (V * Xiᴴ)) := by
-    funext v
-    rw [← hScaled v]
-    simp [hc0]
-  rw [hRecover, horizontalSlice_smul,
-    horizontalSlice_twoSidedCompression]
-  rw [MPSTensor.linearMarkedTensor]
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
-  dsimp only [cornerGramCoefficients, MPOTensor.toMPSTensor, Xi]
-  simp only [MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
-  rw [Finset.smul_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [Finset.smul_sum]
-  apply Finset.sum_congr rfl
-  intro j _
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
-  rw [smul_smul]
-  congr 1
-  ring
+  have hPhysical := linearMarkedTensor_twoSidedCompressionCoefficients
+    (gramDressing X A) (V * (X : Matrix (Fin n) (Fin n) ℂ))
+    (V * Xiᴴ) c hc0 (fun v ↦ (hScaled v).symm) u
+  simpa [cornerGramCoefficients, Xi] using hPhysical
 
 /-- Evaluating the doubled-index MPS view on paired physical letters is the
 same as evaluating the ket and bra words separately. -/

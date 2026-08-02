@@ -1015,8 +1015,8 @@
     \textbf{Scope restriction (gauge-dressed corner):} This theorem constructs
     only the physical corner in
     (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}). It does not
-    construct an identity-dressed physical corner for $M_\gamma$ and does not
-    prove the common-target Gram identity
+    construct a same-sided identity-dressed physical corner for $M_\gamma$
+    and does not prove the common-target Gram identity
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
         (Z_\gamma^\dagger Z_\gamma)^{-1}
@@ -1025,9 +1025,10 @@
     \end{align}
     This restriction is documented in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
-    % Pull request 5282 proves the common-target Gram identity from a supplied
-    % identity-dressed realization.  Constructing that realization from the
-    % tensor-attached algebra clause is tracked in issue 5284 under issue 4648.
+    The following theorem nevertheless realizes the identity-dressed
+    horizontal slices by an oblique compression. Its left and right maps need
+    not agree, so it does not supply the missing positive corner or common
+    reflected target.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1044,22 +1045,125 @@
     coefficients; the gauge factors cancel on the reflected side.
 \end{proof}
 
-\begin{theorem}[Conditional Gram identity from an identity-dressed marked realization]
+\begin{theorem}[Oblique physical-letter realization of a matched two-site sector]
+    \label{thm:mpdo_bnt_exact_sector_identity_oblique_physical_span}
+    \lean{MPOTensor.twoSidedCompressionCoefficients}
+    \lean{MPOTensor.linearMarkedTensor_twoSidedCompressionCoefficients}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_blockTwo_identity_oblique_compression}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        exists_identity_physical_letter_coefficients}
+    \leanok
+    \uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner}
+    In the setting of the preceding theorem, choose $V_\gamma$ and
+    $c_\gamma>0$ as in
+    (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}), and set
+    \begin{align}
+        L_\gamma
+        &=V_\gamma(Z_\gamma^{-1})^\dagger,
+        &
+        R_\gamma
+        &=V_\gamma Z_\gamma.
+        \label{eq:mpdo_bnt_identity_oblique_maps}
+    \end{align}
+    Then, for every vertical letter $v$,
+    \begin{align}
+        L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
+        &=c_\gamma M_\gamma^v,
+        \label{eq:mpdo_bnt_identity_oblique_compression}\\
+        R_\gamma^\dagger\widetilde{M^{(2)}}^vL_\gamma
+        &=c_\gamma
+          (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+          (Z_\gamma^\dagger Z_\gamma)^{-1}.
+        \label{eq:mpdo_bnt_identity_oblique_opposite}
+    \end{align}
+    Write $\mc{R}(M_\gamma)^{rs}$ for the horizontal slice
+    $v\mapsto(M_\gamma^v)_{rs}$. For open bond indices $r,s$ and blocked
+    physical indices $i,j$, define
+    \begin{align}
+        f^\gamma_{(r,s),(i,j)}
+        &=c_\gamma^{-1}
+          \overline{(L_\gamma)_{ir}}(R_\gamma)_{js}.
+        \label{eq:mpdo_bnt_identity_physical_coefficients}
+    \end{align}
+    These coefficients realize every identity-dressed horizontal slice in
+    the physical-letter span of the two-site blocking:
+    \begin{align}
+        \sum_{i,j}f^\gamma_{(r,s),(i,j)}(M^{[2]})^{ij}
+        &=\mc{R}(M_\gamma)^{rs}.
+        \label{eq:mpdo_bnt_identity_physical_span}
+    \end{align}
+    This supplies the physical-letter span needed for the attempted comparison
+    of the two vertical forms at
+    \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv}.
+
+    \textbf{Scope restriction (oblique realization):} In general
+    $L_\gamma\ne R_\gamma$. Thus
+    (\ref{eq:mpdo_bnt_identity_oblique_compression}) is not a positive
+    same-sided corner. At the marked-chain level, adjoint reflection exchanges
+    the two maps together with the bond-pair and tail reversal. The reflected
+    orientation is therefore governed by the Gram-dressed compression in
+    (\ref{eq:mpdo_bnt_identity_oblique_opposite}), rather than by a second copy
+    of the raw tensor. The theorem supplies the physical-letter realization
+    needed for the identity-dressed mark, but it proves neither a common
+    reflected target nor the Gram identity
+    \begin{align}
+        (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
+        (Z_\gamma^\dagger Z_\gamma)^{-1}
+        &=M_\gamma^v.
+        \notag
+    \end{align}
+    The latter remains the unproved step in the direct application of
+    \cite[Proposition~4.13, Figures~7--8]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Taking adjoints in the left factor of
+    (\ref{eq:mpdo_bnt_identity_oblique_maps}) and substituting
+    (\ref{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}) gives
+    \begin{align}
+        L_\gamma^\dagger\widetilde{M^{(2)}}^vR_\gamma
+        &=Z_\gamma^{-1}
+          \bigl(V_\gamma^\dagger\widetilde{M^{(2)}}^vV_\gamma\bigr)
+          Z_\gamma
+         =c_\gamma M_\gamma^v.
+        \notag
+    \end{align}
+    Reversing the two maps instead gives
+    (\ref{eq:mpdo_bnt_identity_oblique_opposite}). Finally, taking the
+    $(r,s)$ matrix entry of a general two-sided compression yields
+    \begin{align}
+        \bigl[L^\dagger\widetilde{M^{(2)}}^vR\bigr]_{rs}
+        &=\sum_{i,j}\overline{L_{ir}}R_{js}(M^{[2]})^{ij}_v.
+        \notag
+    \end{align}
+    Divide by $c_\gamma$ and use
+    (\ref{eq:mpdo_bnt_identity_oblique_compression}) to obtain
+    (\ref{eq:mpdo_bnt_identity_physical_span}).
+\end{proof}
+
+\begin{theorem}[Conditional Gram identity from the positive-tail reflected target]
     \label{thm:mpdo_bnt_conditional_identity_marked_gram}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        HasIdentityPositiveTailReflectedTarget}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        IdentityMarkedRealization.ofPositiveTailReflectedTarget}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gramDressing_gauge_eq_one_of_identityMarkedRealization}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         gauge_gram_eq_pos_smul_one_of_identityMarkedRealization}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gramDressing_gauge_eq_one_of_positive_tail_reflected_target}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form,
         def:mpdo_bnt_two_site_exact_sector_gauge}
     In the setting of the preceding theorem, suppose in addition that the
-    doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that
-    there is a family of linear combinations of the physical letters of
-    $M^{[2]}$ whose open-bond matrices are the horizontal slices of
-    $M_\gamma$, and that, for every positive tail length, every resulting
-    marked chain equals the reflected-adjoint marked chain of $M_\gamma$ in
-    the adjoint two-site blocking. No equality for the empty tail is assumed.
+    doubled-index tensor of $M$ is in literal CPSV canonical form. Assume that,
+    for every positive tail length, the identity-dressed marked chain equals
+    the reflected-adjoint marked chain of $M_\gamma$ in the adjoint two-site
+    blocking. No equality for the empty tail is assumed.
     Then, for every vertical letter $v$,
     \begin{align}
         (Z_\gamma^\dagger Z_\gamma)M_\gamma^v
@@ -1074,45 +1178,50 @@
         \label{eq:mpdo_bnt_conditional_scalar_gram}
     \end{align}
 
-    \textbf{Scope restriction (conditional identity-dressed marked
-    realization):} The physical-letter realization and common reflected
-    target used here are assumed rather than derived from the algebra clause.
-    Appendix~C.4, lines~2048--2057, gives two independently chosen vertical
-    canonical forms and their closed-chain comparison; it does not construct
-    a common identity-gauge physical corner for $M_\gamma$. Thus this theorem
-    does not establish the unconditional realization or the conclusion of
-    those lines. The remaining gap is recorded in
+    \textbf{Scope restriction (conditional reflected target):} The preceding
+    theorem derives an identity-dressed physical-letter coefficient family
+    from the exact sector gauge. What remains assumed here is that such a
+    family has the same reflected-adjoint target as the gauge-dressed marked
+    chains at every positive tail length. The oblique construction cannot
+    provide this identity: adjoint reflection, with the required bond-pair and
+    tail reversal, exchanges $L_\gamma$ and $R_\gamma$ and is governed by the
+    Gram-dressed compression
+    (\ref{eq:mpdo_bnt_identity_oblique_opposite}). Thus this theorem does not
+    establish the unconditional conclusion of Appendix~C.4,
+    lines~2048--2057. The remaining gap is recorded in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_exact_sector_gauge_blocked_corner,
+        thm:mpdo_bnt_exact_sector_identity_oblique_physical_span,
         thm:mpdo_literal_cpsv_positive_blocking,
         thm:cpsv_original_coordinate_marked_lemma_l,
         thm:eq3_of_dressed_adjoint}
-    The preceding theorem gives a physical-letter coefficient family for the
+    The gauge-dressed corner gives a physical-letter coefficient family for the
     gauge-dressed mark and identifies its marked chains with the reflected
-    target. By hypothesis, the identity-dressed mark has another
-    physical-letter coefficient family with the same target. Their marked
-    traces therefore agree for every positive-length tail word. Literal CPSV
-    canonical form passes to the two-site blocking, and the positive-tail
-    form of the original-coordinate marked separation theorem, corresponding
-    to \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}, identifies
-    the two open-bond matrices. This gives
+    target. The oblique theorem supplies a physical-letter coefficient family
+    for the identity-dressed mark; the remaining hypothesis identifies its
+    marked chains with the same target. Their marked traces therefore agree
+    for every positive-length tail word. Literal CPSV canonical form passes to
+    the two-site blocking, and the positive-tail form of the
+    original-coordinate marked separation theorem, corresponding to
+    \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}, identifies the
+    two open-bond matrices. This gives
     (\ref{eq:mpdo_bnt_conditional_identity_marked_gram}). Normality of
     $M_\gamma$ then makes its commuting Gram matrix a positive real scalar
     multiple of the identity, proving
     (\ref{eq:mpdo_bnt_conditional_scalar_gram}).
 \end{proof}
 
-\begin{theorem}[Conditional unitary conjugacy from an identity-dressed marked
-    realization]
+\begin{theorem}[Conditional unitary conjugacy from the positive-tail reflected
+    target]
     \label{thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     \lean{Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one}
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
-        exists_unitary_sector_conjugacy_of_identityMarkedRealization}
+        exists_unitary_sector_conjugacy_of_positive_tail_reflected_target}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form,
         def:mpdo_bnt_two_site_exact_sector_gauge}
@@ -1133,13 +1242,13 @@
     \cite[Proposition~4.13, lines~1903--1908]{Cirac2016MPDO_arXiv}, applied
     at Appendix~C.4, lines~2053--2057.
 
-    \textbf{Scope restriction (conditional identity-dressed marked
-    realization):} The positive-tail marked realization remains an
-    assumption. Appendix~C.4, lines~2048--2057, does not construct the common
-    identity-gauge physical corner that would supply it. Hence this theorem
-    does not establish the unconditional line-2057 conclusion. Its derivation
-    from the tensor-attached algebra clause is the remaining premise recorded
-    in
+    \textbf{Scope restriction (conditional reflected target):} The
+    physical-letter coefficients are supplied by
+    Theorem~\ref{thm:mpdo_bnt_exact_sector_identity_oblique_physical_span},
+    but their common positive-tail reflected target remains an assumption.
+    Appendix~C.4, lines~2048--2057, does not establish this star-compatible
+    target for the raw representative. Hence this theorem does not establish
+    the unconditional line-2057 conclusion. The missing target is recorded in
     \path{docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex}.
     % Pull request 5282 is the conditional Gram theorem, and pull request 5286
     % composes it with scalar-to-unitary normalization.  Issue 5284, under issue 4648,

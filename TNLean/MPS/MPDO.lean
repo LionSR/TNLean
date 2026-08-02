@@ -23,6 +23,7 @@ import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalUnitary
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseDirectSumUnitary
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseIdentityPhysicalSpan
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseOneSiteAmbientSectorMaps
 import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseSpectrum

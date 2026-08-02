@@ -14,14 +14,16 @@ changing its conjugation action.  Composing this normalization with the
 conditional Gram identity gives unitary conjugacy under an identity-dressed
 marked realization.
 
-The marked realization is assumed here, not constructed from the BNT algebra
-clause.  Thus the final theorem is conditional and does not establish the
-unconditional conclusion of Appendix C.4.
+The physical-letter part of the marked realization is constructed from the
+exact sector gauge.  Its positive-tail reflected target remains assumed.
+Thus the final theorem is conditional and does not establish the unconditional
+conclusion of Appendix C.4.
 
 ## Main results
 
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`
 * `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization`
+* `TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target`
 
 ## References
 
@@ -75,13 +77,15 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
       ((cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
         (H.tensor γ)) i) (S.gauge γ) hω hGram).symm
 
-/-- Under the conditional identity-dressed marked realization, every exact
-two-site sector is unitarily conjugate to its matched one-site tensor.
+/-- A complete identity-dressed marked realization makes every exact two-site
+sector unitarily conjugate to its matched one-site tensor.
 
-**Scope restriction (conditional identity-dressed marked realization):** The
-theorem assumes the physical-letter realization implicit at CPSV16 Appendix
-C.4, line 2048; it is not derived from the algebra clause and does not establish
-the unconditional line-2057 conclusion.  See
+**Scope restriction (packaged conditional form):** This form accepts all three
+parts of the marked realization.  The physical-letter part is now obtained
+unconditionally from the oblique compression, and the target-only theorem
+below gives the sharper hypothesis.  In either form, the reflected target is
+not derived from the algebra clause, so the unconditional line-2057 conclusion
+does not follow.  See
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
@@ -104,6 +108,38 @@ theorem exists_unitary_sector_conjugacy_of_identityMarkedRealization
   obtain ⟨ω, hω, hGram⟩ :=
     S.gauge_gram_eq_pos_smul_one_of_identityMarkedRealization
       hCanonical hM γ R
+  exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
+    γ ω hω hGram
+
+/-- Under the conditional positive-tail reflected target, every exact two-site
+sector is unitarily conjugate to its matched one-site tensor.  The
+physical-letter coefficients are constructed from the exact sector gauge.
+
+**Scope restriction (conditional reflected target):** The target hypothesis is
+not derived from the tensor-attached algebra clause and remains the missing
+step in Appendix C.4.  See
+`docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
+
+Source comparison: arXiv:1606.00608, Proposition 4.13, lines 1903--1908,
+applied at Appendix C.4, lines 2048--2057. -/
+theorem exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
+    (S : TwoSiteExactSectorGauge H)
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) (γ : Fin H.labelCount)
+    (hTarget : HasIdentityPositiveTailReflectedTarget S γ) :
+    ∃ U : Matrix.unitaryGroup
+        (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
+      ∀ i : Fin (D * D),
+        S.decomposition.tensor (S.relabel γ) i =
+          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
+            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
+          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            (H.tensor γ)) i *
+          (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
+            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
+  obtain ⟨ω, hω, hGram⟩ :=
+    S.gauge_gram_eq_pos_smul_one_of_positive_tail_reflected_target
+      hCanonical hM γ hTarget
   exact S.exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
     γ ω hω hGram
 
