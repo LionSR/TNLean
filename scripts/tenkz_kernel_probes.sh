@@ -1448,6 +1448,13 @@ grep -Fq 'result=equal|modulo=bundles' "$WORK/r_bundle_modulo.tnlog" || {
   echo "FAIL: bundle regrouping did not pass modulo bundles" >&2
   exit 1
 }
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_bundle_modulo.tnlog" "$KERNEL/regression/r_bundle_modulo.tex" \
+  >"$WORK/r_bundle_modulo.audit" || {
+  echo "FAIL: bundle modulo regression failed the event audit" >&2
+  cat "$WORK/r_bundle_modulo.audit" >&2
+  exit 1
+}
 
 bundle_modulo_negative="$KERNEL/negative/n_bundle_modulo_mismatch.tex"
 if ( cd "$WORK" &&
@@ -1502,6 +1509,13 @@ grep -Fq 'check|relation=1|result=off|reason=first' \
 grep -Fq 'check|relation=3|result=off|reason=third' \
   "$WORK/r_multiple_off.tnlog" || {
   echo "FAIL: the later equation opt-out was silently dropped" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_multiple_off.tnlog" "$KERNEL/regression/r_multiple_off.tex" \
+  >"$WORK/r_multiple_off.audit" || {
+  echo "FAIL: multiple equation opt-outs failed the event audit" >&2
+  cat "$WORK/r_multiple_off.audit" >&2
   exit 1
 }
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
