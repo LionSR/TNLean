@@ -1,0 +1,9 @@
+%% Negative regression: circle frames do not define diagonal open ends.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, frame=circle, bonds=none]
+  \tnwire{open sw}{(1,1)}
+\end{tenkz}
+\end{document}
