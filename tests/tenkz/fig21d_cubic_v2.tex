@@ -1,13 +1,74 @@
-% Regression: fig21d_cubic_v2 — exercises probe: slant 0.40 de-tunes the sheet/plane near-coincidence.
-% Formula: geometry-only; no tensor identity.
-% probe: slant 0.40 de-tunes the sheet/plane near-coincidence
-% The bead bodies separate at 0.212132 pitch centre distance, but their
-% audited outer ink retains less than named daylight; sheet-coincide warns.
+% Regression: fig21d_cubic_v2 — the event-identical cubic projection twin.
+% Formula: Z = tTr  prod_{r,c,h}  T^{[r,c,h]}_{l r u d f b}
+% The fixed plane frame carries two axes; the ordered basis carries the third.
+% The 54 nearest-neighbour contractions are explicit, with 18 along each axis.
 \documentclass[border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
-\begin{tenkzlattice}[rows=3, cols=3, sheets=3, pairing,
-                     frame=oblique, plane slant=0.40,
-                     sheet vector={0mm, 8.25mm}]
-\end{tenkzlattice}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire,wire}, cols=3, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={
+      wire at (0,0), wire at (-3,5), wire at (-6,10)}}]
+  % Column-axis contractions (18).
+  \tnwire{(1,1,1)}{(1,2,1)}
+  \tnwire{(1,2,1)}{(1,3,1)}
+  \tnwire{(2,1,1)}{(2,2,1)}
+  \tnwire{(2,2,1)}{(2,3,1)}
+  \tnwire{(3,1,1)}{(3,2,1)}
+  \tnwire{(3,2,1)}{(3,3,1)}
+  \tnwire{(1,1,2)}{(1,2,2)}
+  \tnwire{(1,2,2)}{(1,3,2)}
+  \tnwire[species=marked]{(2,1,2)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(2,3,2)}
+  \tnwire{(3,1,2)}{(3,2,2)}
+  \tnwire{(3,2,2)}{(3,3,2)}
+  \tnwire{(1,1,3)}{(1,2,3)}
+  \tnwire{(1,2,3)}{(1,3,3)}
+  \tnwire{(2,1,3)}{(2,2,3)}
+  \tnwire{(2,2,3)}{(2,3,3)}
+  \tnwire{(3,1,3)}{(3,2,3)}
+  \tnwire{(3,2,3)}{(3,3,3)}
+
+  % Row-axis contractions (18).
+  \tnwire{(1,1,1)}{(2,1,1)}
+  \tnwire{(2,1,1)}{(3,1,1)}
+  \tnwire{(1,2,1)}{(2,2,1)}
+  \tnwire{(2,2,1)}{(3,2,1)}
+  \tnwire{(1,3,1)}{(2,3,1)}
+  \tnwire{(2,3,1)}{(3,3,1)}
+  \tnwire{(1,1,2)}{(2,1,2)}
+  \tnwire{(2,1,2)}{(3,1,2)}
+  \tnwire{(1,2,2)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(3,2,2)}
+  \tnwire{(1,3,2)}{(2,3,2)}
+  \tnwire{(2,3,2)}{(3,3,2)}
+  \tnwire{(1,1,3)}{(2,1,3)}
+  \tnwire{(2,1,3)}{(3,1,3)}
+  \tnwire{(1,2,3)}{(2,2,3)}
+  \tnwire{(2,2,3)}{(3,2,3)}
+  \tnwire{(1,3,3)}{(2,3,3)}
+  \tnwire{(2,3,3)}{(3,3,3)}
+
+  % Receding-axis contractions between adjacent basis members (18).
+  \tnwire{(1,1,1)}{(1,1,2)}
+  \tnwire{(1,1,2)}{(1,1,3)}
+  \tnwire{(1,2,1)}{(1,2,2)}
+  \tnwire{(1,2,2)}{(1,2,3)}
+  \tnwire{(1,3,1)}{(1,3,2)}
+  \tnwire{(1,3,2)}{(1,3,3)}
+  \tnwire{(2,1,1)}{(2,1,2)}
+  \tnwire{(2,1,2)}{(2,1,3)}
+  \tnwire{(2,2,1)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(2,2,3)}
+  \tnwire{(2,3,1)}{(2,3,2)}
+  \tnwire{(2,3,2)}{(2,3,3)}
+  \tnwire{(3,1,1)}{(3,1,2)}
+  \tnwire{(3,1,2)}{(3,1,3)}
+  \tnwire{(3,2,1)}{(3,2,2)}
+  \tnwire{(3,2,2)}{(3,2,3)}
+  \tnwire{(3,3,1)}{(3,3,2)}
+  \tnwire{(3,3,2)}{(3,3,3)}
+\end{tenkz}
 \end{document}

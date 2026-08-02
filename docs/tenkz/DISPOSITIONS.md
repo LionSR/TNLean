@@ -142,8 +142,8 @@ top-level-source census so a shared input is not counted multiple times.
 | Disposition | Fixtures |
 |---|---:|
 | preserve | 10 |
-| codemod | 37 |
-| redraw | 217 |
+| codemod | 39 |
+| redraw | 215 |
 | **Total** | **264** |
 
 Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
@@ -155,15 +155,16 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `P-grid`: `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex` · `trace_warn.tex` · `zz_wirescan.tex`
 - `P-none`: `geom.tex` · `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
 
-### Codemod fixtures (37)
+### Codemod fixtures (39)
 
 - `C-declare`: `p_species.tex`
 - `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_d.tex` · `rv4061_ketptrace.tex`
 - `C-policy+C-record`: `g06_stageB.tex` · `hard01_v2.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex`
 - `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `t2_staircase.tex`
+- `C-switch`: `fig21d_cubic.tex` · `fig21d_cubic_v2.tex`
 - `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (217)
+### Redraw fixtures (215)
 
 - `C-declare+C-picture+C-policy+C-record+R-free+R-record`: `adv_leak.tex`
 - `C-declare+C-policy+C-record+C-species+R-free+R-lattice+R-record`: `g06_stageC.tex`
@@ -193,7 +194,7 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `R-free+R-record`: `free.tex` · `free_modes.tex` · `free_test.tex` · `free_typed_joins_ex.tex` · `gr_t4_lasso.tex` · `gr_t7_coset.tex` · `hard11_circuit.tex` · `lpos_probe.tex` · `p3_eq10.tex` · `p3_eq12.tex` · `p_usagefree.tex` · `plane_sweep3.tex` · `t2_eq50_pull.tex` · `t2_eq54_ginj.tex` · `t2_idempotent.tex` · `t2_pentagon2.tex` · `t2_pentagon3.tex` · `t2_pentagon4.tex` · `t2_peps.tex` · `t2_seljbraid.tex` · `t2_sptmpo_cross.tex` · `t2_triangle.tex`
 - `R-lattice`: `fig21d_expect.tex` · `fig21d_pepo.tex` · `sheets_a_role.tex` · `sheets_test.tex` · `sheets_warn_smoke.tex` · `xyz_a_lattice.tex`
 - `R-lattice+R-plane+R-record`: `plane_stress.tex` · `xyz_test.tex`
-- `R-lattice+R-record`: `chain.tex` · `fig21d_cubic.tex` · `fig21d_cubic_v2.tex` · `lattice_test.tex` · `notch.tex` · `p3_erase.tex` · `p3_regions.tex` · `p3_wineq.tex` · `probe.tex` · `rem.tex` · `rgn.tex` · `t2_czx.tex` · `t2_tcdual.tex` · `t2_tcdual_v2.tex` · `t2_tcprimal.tex` · `t2_tcprimal_v2.tex`
+- `R-lattice+R-record`: `chain.tex` · `lattice_test.tex` · `notch.tex` · `p3_erase.tex` · `p3_regions.tex` · `p3_wineq.tex` · `probe.tex` · `rem.tex` · `rgn.tex` · `t2_czx.tex` · `t2_tcdual.tex` · `t2_tcdual_v2.tex` · `t2_tcprimal.tex` · `t2_tcprimal_v2.tex`
 - `R-plane`: `plane_sweep2.tex` · `plane_sweep2_v2.tex` · `t2_wrap9a.tex` · `xyz_a_planes.tex`
 - `R-plane+R-record`: `ease_test.tex`
 - `R-record`: `p3_bisect_c.tex` · `p3_min1.tex` · `p3_min2.tex` · `p3_probe_opmod.tex` · `p3_probe_opop2.tex` · `p_pitch.tex` · `rv4061_vertlabel.tex` · `rv4061_vertonly.tex` · `t2_mpusplit.tex` · `trace_probe.tex` · `zz_vertprune.tex`
@@ -205,10 +206,10 @@ public-surface construct. It does not preserve any 0.7-only alias.
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 467 |
+| `tenkz` | 469 |
 | `tenkzeq` | 0 |
 | `tenkzfree` | 62 |
-| `tenkzlattice` | 106 |
+| `tenkzlattice` | 104 |
 | `tenkzcd` | 15 |
 | `tenkzplanes` | 36 |
 | `tnpic` | 31 |

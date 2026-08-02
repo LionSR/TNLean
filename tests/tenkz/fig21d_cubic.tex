@@ -1,34 +1,74 @@
-% Regression: fig21d_cubic — renders Z = tTr prod_{r,c,h} T^{[r,c,h]}_{l r u d f b}.
+% Regression: fig21d_cubic — a declared 3x3x3 cubic tensor network.
 % Formula: Z = tTr  prod_{r,c,h}  T^{[r,c,h]}_{l r u d f b}
-% fig21d_cubic — a 3x3x3 window of a cubic-lattice tensor network
-% (Orús review genre, Ann. Phys. 349, 117 (2014) / arXiv:1306.2164:
-% 3D PEPS and 3D classical partition functions):
-%
-%   Z = tTr  prod_{r,c,h}  T^{[r,c,h]}_{l r u d f b}
-%
-% one six-leg tensor per site, virtual bonds along the three axes of
-% the cube.  Numeric sheets=3 keeps the bare wire-sheet meaning (no
-% roles, no boxes); pairing supplies the site-wise vertical bonds, so
-% every nearest-neighbour pair of the 3x3x3 patch is joined.  The
-% custom sheet vector {0mm, 8.25mm} sets the vertical cube edge to ONE
-% lattice pitch (0.75 x 11mm), the exact length of the column edge, for
-% the equal-axis cube read; the depth edge foreshortens to 0.72 lp —
-% the cabinet projection of a cube.
-%
-% Near-coincidence arithmetic (why plane slant=0.40, not the stock
-% 0.45): an equal-axis stack interleaves the sheets with the window's
-% own height, so sheet h+1's site (r,c) lands near sheet h's site
-% (r+2,c-1) at offset lp x (|2 slant - 1|, |2 rise - 1|).  At the stock
-% slant 0.45 its centres are 0.167705 pitch apart; slant 0.40 improves
-% that to 0.212132 pitch.  The bead bodies then separate, but their audited
-% outer ink retains less than named daylight, so the stricter readability
-% warning is intentional.  The expert sheet vector bypasses the
-% planes-interleave guard, so this file also probes that independent warning.
+% The fixed plane frame carries two axes; the ordered basis carries the third.
+% The 54 nearest-neighbour contractions are explicit, with 18 along each axis.
 \documentclass[border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
-\begin{tenkzlattice}[rows=3, cols=3, sheets=3, pairing,
-                     frame=oblique, plane slant=0.40,
-                     sheet vector={0mm, 8.25mm}]
-\end{tenkzlattice}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire,wire,wire}, cols=3, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={
+      wire at (0,0), wire at (-3,5), wire at (-6,10)}}]
+  % Column-axis contractions (18).
+  \tnwire{(1,1,1)}{(1,2,1)}
+  \tnwire{(1,2,1)}{(1,3,1)}
+  \tnwire{(2,1,1)}{(2,2,1)}
+  \tnwire{(2,2,1)}{(2,3,1)}
+  \tnwire{(3,1,1)}{(3,2,1)}
+  \tnwire{(3,2,1)}{(3,3,1)}
+  \tnwire{(1,1,2)}{(1,2,2)}
+  \tnwire{(1,2,2)}{(1,3,2)}
+  \tnwire[species=marked]{(2,1,2)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(2,3,2)}
+  \tnwire{(3,1,2)}{(3,2,2)}
+  \tnwire{(3,2,2)}{(3,3,2)}
+  \tnwire{(1,1,3)}{(1,2,3)}
+  \tnwire{(1,2,3)}{(1,3,3)}
+  \tnwire{(2,1,3)}{(2,2,3)}
+  \tnwire{(2,2,3)}{(2,3,3)}
+  \tnwire{(3,1,3)}{(3,2,3)}
+  \tnwire{(3,2,3)}{(3,3,3)}
+
+  % Row-axis contractions (18).
+  \tnwire{(1,1,1)}{(2,1,1)}
+  \tnwire{(2,1,1)}{(3,1,1)}
+  \tnwire{(1,2,1)}{(2,2,1)}
+  \tnwire{(2,2,1)}{(3,2,1)}
+  \tnwire{(1,3,1)}{(2,3,1)}
+  \tnwire{(2,3,1)}{(3,3,1)}
+  \tnwire{(1,1,2)}{(2,1,2)}
+  \tnwire{(2,1,2)}{(3,1,2)}
+  \tnwire{(1,2,2)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(3,2,2)}
+  \tnwire{(1,3,2)}{(2,3,2)}
+  \tnwire{(2,3,2)}{(3,3,2)}
+  \tnwire{(1,1,3)}{(2,1,3)}
+  \tnwire{(2,1,3)}{(3,1,3)}
+  \tnwire{(1,2,3)}{(2,2,3)}
+  \tnwire{(2,2,3)}{(3,2,3)}
+  \tnwire{(1,3,3)}{(2,3,3)}
+  \tnwire{(2,3,3)}{(3,3,3)}
+
+  % Receding-axis contractions between adjacent basis members (18).
+  \tnwire{(1,1,1)}{(1,1,2)}
+  \tnwire{(1,1,2)}{(1,1,3)}
+  \tnwire{(1,2,1)}{(1,2,2)}
+  \tnwire{(1,2,2)}{(1,2,3)}
+  \tnwire{(1,3,1)}{(1,3,2)}
+  \tnwire{(1,3,2)}{(1,3,3)}
+  \tnwire{(2,1,1)}{(2,1,2)}
+  \tnwire{(2,1,2)}{(2,1,3)}
+  \tnwire{(2,2,1)}{(2,2,2)}
+  \tnwire{(2,2,2)}{(2,2,3)}
+  \tnwire{(2,3,1)}{(2,3,2)}
+  \tnwire{(2,3,2)}{(2,3,3)}
+  \tnwire{(3,1,1)}{(3,1,2)}
+  \tnwire{(3,1,2)}{(3,1,3)}
+  \tnwire{(3,2,1)}{(3,2,2)}
+  \tnwire{(3,2,2)}{(3,2,3)}
+  \tnwire{(3,3,1)}{(3,3,2)}
+  \tnwire{(3,3,2)}{(3,3,3)}
+\end{tenkz}
 \end{document}
