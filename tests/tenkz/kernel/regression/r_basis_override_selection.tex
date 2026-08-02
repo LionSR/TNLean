@@ -5,8 +5,9 @@
 %% contributes its canonical anchor rather than aliases at every claimed cell.
 %% A suppressed picture checks that no live-candidate state leaks.  An
 %% out-of-window span defeats count-only completeness without inventing a
-%% candidate.  The final dense picture replaces the sparse callback with a
-%% fatal probe: successful compilation therefore pins the universal-mask path.
+%% candidate.  The final dense and nearly dense pictures replace the old
+%% record-cross-product callback with a fatal probe: successful compilation
+%% therefore pins the bounded live-slot path even after one cell override.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -55,5 +56,9 @@
 \ExplSyntaxOff
 \begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
               frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+\end{tenkz}
+\begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(2,2), name=H]{H}
 \end{tenkz}
 \end{document}

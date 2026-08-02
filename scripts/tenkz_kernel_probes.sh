@@ -337,7 +337,7 @@ basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
 override_selection_atoms=$(
   grep -c '^atom|' "$WORK/r_basis_override_selection.tnlog" || true
 )
-[ "$override_selection_atoms" -eq 26 ] || {
+[ "$override_selection_atoms" -eq 33 ] || {
   echo "FAIL: whole-cell overrides did not suppress their basis members" >&2
   exit 1
 }
@@ -355,7 +355,7 @@ override_spacing_count=$(
   grep -Fc '|code=basis-spacing|' \
     "$WORK/r_basis_override_selection.tnlog" || true
 )
-[ "$override_spacing_count" -eq 4 ] || {
+[ "$override_spacing_count" -eq 5 ] || {
   echo "FAIL: realized and suppressed basis collisions were not distinguished" >&2
   exit 1
 }
@@ -383,6 +383,12 @@ grep -Fxq \
   echo "FAIL: the dense basis fast path changed its deterministic witness" >&2
   exit 1
 }
+grep -Fxq \
+  'warning|picture=k10|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: one override restored the live-record cross product" >&2
+  exit 1
+}
 if grep -Eq '^warning[|]picture=k(1|3|5|7|8)[|]code=basis-spacing[|]' \
     "$WORK/r_basis_override_selection.tnlog"; then
   echo "FAIL: suppressed, aliased, or stale basis state emitted a warning" >&2
@@ -392,7 +398,7 @@ override_spacing_messages=$(
   grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
     "$WORK/r_basis_override_selection.tex.transcript" || true
 )
-[ "$override_spacing_messages" -eq 4 ] || {
+[ "$override_spacing_messages" -eq 5 ] || {
   echo "FAIL: override spacing events and human diagnostics diverged" >&2
   exit 1
 }

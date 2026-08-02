@@ -513,8 +513,7 @@
 % Smallest conservative centre-bearing default-bead support margin between
 % distinct basis-member families in one finite affine cell window.  Geometry
 % owns the exhaustive silhouette calculation, while its caller supplies the
-% sparse realized-candidate mask or universal full-window marker, bead-body
-% radius, and page-owned gap.  Member
+% canonical live-slot index, bead-body radius, and page-owned gap.  Member
 % offsets are already expressed in the caller's local east/north units.  With
 % dr/dc equal to member j's cell minus
 % member i's cell, their local displacement is
@@ -537,6 +536,12 @@
 \int_new:N \l__tenkz_geom_basis_spacing_b_int
 \int_new:N \l__tenkz_geom_basis_spacing_dr_int
 \int_new:N \l__tenkz_geom_basis_spacing_dc_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_row_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_col_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_row_start_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_row_end_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_col_start_int
+\int_new:N \l__tenkz_geom_basis_spacing_slot_col_end_int
 \tl_new:N \l__tenkz_geom_basis_spacing_radius_tl
 \tl_new:N \l__tenkz_geom_basis_spacing_gap_tl
 \tl_new:N \l__tenkz_geom_basis_spacing_ex_tl
@@ -555,7 +560,10 @@
 \tl_new:N \l__tenkz_geom_basis_spacing_dist_tl
 \tl_new:N \l__tenkz_geom_basis_spacing_floor_tl
 \tl_new:N \l__tenkz_geom_basis_spacing_clearance_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_slot_a_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_slot_b_tl
 \bool_new:N \l__tenkz_geom_basis_spacing_kind_ok_bool
+\bool_new:N \l__tenkz_geom_basis_spacing_slot_realized_bool
 
 % Largest stretch of a complete two-dimensional basis.  This is the largest
 % singular value, written from the trace and determinant of M^T M so exact
@@ -683,19 +691,111 @@
       }
   }
 
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_slot_col:n #1
+  {
+    \bool_if:NF \l__tenkz_geom_basis_spacing_slot_realized_bool
+      {
+        \int_set:Nn \l__tenkz_geom_basis_spacing_slot_col_int {#1}
+        \prop_get:NeN \l__tenkz_geom_basis_spacing_candidate_prop
+          {
+            \int_use:N \l__tenkz_geom_basis_spacing_slot_row_int -
+            \int_use:N \l__tenkz_geom_basis_spacing_slot_col_int -
+            \int_use:N \l__tenkz_geom_basis_spacing_a_int
+          }
+          \l__tenkz_geom_basis_spacing_slot_a_tl
+        \quark_if_no_value:NF \l__tenkz_geom_basis_spacing_slot_a_tl
+          {
+            \prop_get:NeN \l__tenkz_geom_basis_spacing_candidate_prop
+              {
+                \int_eval:n
+                  {
+                    \l__tenkz_geom_basis_spacing_slot_row_int
+                    + \l__tenkz_geom_basis_spacing_dr_int
+                  } -
+                \int_eval:n
+                  {
+                    \l__tenkz_geom_basis_spacing_slot_col_int
+                    + \l__tenkz_geom_basis_spacing_dc_int
+                  } -
+                \int_use:N \l__tenkz_geom_basis_spacing_b_int
+              }
+              \l__tenkz_geom_basis_spacing_slot_b_tl
+            \quark_if_no_value:NF \l__tenkz_geom_basis_spacing_slot_b_tl
+              {
+                \str_if_eq:eeF
+                  { \l__tenkz_geom_basis_spacing_slot_a_tl }
+                  { \l__tenkz_geom_basis_spacing_slot_b_tl }
+                  {
+                    \bool_set_true:N
+                      \l__tenkz_geom_basis_spacing_slot_realized_bool
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_slot_row:n #1
+  {
+    \bool_if:NF \l__tenkz_geom_basis_spacing_slot_realized_bool
+      {
+        \int_set:Nn \l__tenkz_geom_basis_spacing_slot_row_int {#1}
+        \int_step_function:nnN
+          { \l__tenkz_geom_basis_spacing_slot_col_start_int }
+          { \l__tenkz_geom_basis_spacing_slot_col_end_int }
+          \__tenkz_geom_basis_spacing_slot_col:n
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_candidate_from_slots:
+  {
+    \bool_set_false:N \l__tenkz_geom_basis_spacing_slot_realized_bool
+    \int_set:Nn \l__tenkz_geom_basis_spacing_slot_row_start_int
+      { \int_max:nn {1} { 1 - \l__tenkz_geom_basis_spacing_dr_int } }
+    \int_set:Nn \l__tenkz_geom_basis_spacing_slot_row_end_int
+      {
+        \int_min:nn
+          { \l__tenkz_geom_basis_spacing_rows_int }
+          {
+            \l__tenkz_geom_basis_spacing_rows_int
+            - \l__tenkz_geom_basis_spacing_dr_int
+          }
+      }
+    \int_set:Nn \l__tenkz_geom_basis_spacing_slot_col_start_int
+      { \int_max:nn {1} { 1 - \l__tenkz_geom_basis_spacing_dc_int } }
+    \int_set:Nn \l__tenkz_geom_basis_spacing_slot_col_end_int
+      {
+        \int_min:nn
+          { \l__tenkz_geom_basis_spacing_cols_int }
+          {
+            \l__tenkz_geom_basis_spacing_cols_int
+            - \l__tenkz_geom_basis_spacing_dc_int
+          }
+      }
+    \int_step_function:nnN
+      { \l__tenkz_geom_basis_spacing_slot_row_start_int }
+      { \l__tenkz_geom_basis_spacing_slot_row_end_int }
+      \__tenkz_geom_basis_spacing_slot_row:n
+    \bool_if:NT \l__tenkz_geom_basis_spacing_slot_realized_bool
+      { \__tenkz_geom_basis_spacing_candidate_realized: }
+  }
+
 \cs_new_protected:Npn \__tenkz_geom_basis_spacing_candidate:
   {
-    \prop_if_in:NnTF \l__tenkz_geom_basis_spacing_candidate_prop {all}
-      { \__tenkz_geom_basis_spacing_candidate_realized: }
+    \prop_if_in:NnTF \l__tenkz_geom_basis_spacing_candidate_prop {slots}
+      { \__tenkz_geom_basis_spacing_candidate_from_slots: }
       {
-        \prop_if_in:NeT \l__tenkz_geom_basis_spacing_candidate_prop
-          {
-            \int_use:N \l__tenkz_geom_basis_spacing_a_int /
-            \int_use:N \l__tenkz_geom_basis_spacing_b_int /
-            \int_use:N \l__tenkz_geom_basis_spacing_dr_int /
-            \int_use:N \l__tenkz_geom_basis_spacing_dc_int
-          }
+        \prop_if_in:NnTF \l__tenkz_geom_basis_spacing_candidate_prop {all}
           { \__tenkz_geom_basis_spacing_candidate_realized: }
+          {
+            \prop_if_in:NeT \l__tenkz_geom_basis_spacing_candidate_prop
+              {
+                \int_use:N \l__tenkz_geom_basis_spacing_a_int /
+                \int_use:N \l__tenkz_geom_basis_spacing_b_int /
+                \int_use:N \l__tenkz_geom_basis_spacing_dr_int /
+                \int_use:N \l__tenkz_geom_basis_spacing_dc_int
+              }
+              { \__tenkz_geom_basis_spacing_candidate_realized: }
+          }
       }
   }
 
