@@ -1042,6 +1042,13 @@
     lattice .code:n  = { \__tenkz_kernel_desugar_lattice:n {#1} },
     ring .code:n     = { \__tenkz_kernel_desugar_ring:n {#1} },
     surface .code:n  = { \__tenkz_kernel_desugar_surface:n {#1} },
+    planes .code:n =
+      {
+        \__tenkz_kernel_sugar:n {planes}
+        \keys_set:nn {tenkz-kernel-picture}
+          {frame={plane,basis={ket~at~(0,0),bra~at~(2,2)}}}
+      },
+    planes .default:n = ,
     physical .code:n = { \__tenkz_kernel_desugar_physical:n {#1} }
   }
 
