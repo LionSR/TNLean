@@ -115,6 +115,39 @@ _OPTION_OWNER_RE = re.compile(
 )
 _FRAME_KEYS = {"sheet vector", "row vector", "col vector"}
 
+_COMMENT_OWNER_PATTERNS: tuple[tuple[DimensionOwner, re.Pattern[str]], ...] = (
+    (
+        DimensionOwner.METRIC,
+        re.compile(
+            r"\b(?:pitch(?:es)?|metrics?|spacings?|distances?)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        DimensionOwner.FRAME,
+        re.compile(
+            r"\b(?:sheet vectors?|row vectors?|col vectors?|projections?|frames?|"
+            r"offsets?|shifts?|shifted|moves?|moved|displacements?|displaced)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        DimensionOwner.ROUTE,
+        re.compile(
+            r"\\tn(?:join|wire|edge|arrow)\b(?:\s+path)?|\b(?:routes?|strings?)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        DimensionOwner.LAYOUT,
+        re.compile(
+            r"\\tnput\b|\b(?:compositions?|layouts?|widths?|heights?|lengths?|"
+            r"radii|radiuses?|diameters?|wide|tall|long|thick)\b",
+            re.IGNORECASE,
+        ),
+    ),
+)
+
 
 @dataclass(frozen=True)
 class _OwnerSpan:
@@ -218,21 +251,9 @@ def _comment_ranges(source: str) -> list[tuple[int, int]]:
 
 def _comment_owner(comment: str) -> DimensionOwner | None:
     lowered = re.sub(r"\s+", " ", comment.lower())
-    if re.search(r"\b(?:pitch|metric|spacing|distance)\b", lowered):
-        return DimensionOwner.METRIC
-    if re.search(
-        r"\b(?:sheet vector|row vector|col vector|projection|frame|offset)\b",
-        lowered,
-    ):
-        return DimensionOwner.FRAME
-    if re.search(r"\\tn(?:join|wire|edge|arrow)\b|\b(?:route|string)\b", lowered):
-        return DimensionOwner.ROUTE
-    if re.search(
-        r"\\tnput\b|\b(?:composition|layout|width|height|length|radius|"
-        r"diameter|wide|tall|long|thick)\b",
-        lowered,
-    ):
-        return DimensionOwner.LAYOUT
+    for owner, pattern in _COMMENT_OWNER_PATTERNS:
+        if pattern.search(lowered):
+            return owner
     return None
 
 
@@ -243,23 +264,10 @@ def _comment_measurement_owner_before(
 ) -> DimensionOwner | None:
     """Return an owner only for a measurement phrase immediately before a value."""
     prefix = re.sub(r"\s+", " ", source[comment_start:occurrence_start].lower())
-    suffix = r"\s*(?:=|is|equals?|measures?)?\s*$"
-    if re.search(r"\b(?:pitch|metric|spacing|distance)" + suffix, prefix):
-        return DimensionOwner.METRIC
-    if re.search(
-        r"\b(?:sheet vector|row vector|col vector|projection|frame|offset|"
-        r"shift(?:ed)?|mov(?:e|ed)|displac(?:e|ed|ement))" + suffix,
-        prefix,
-    ):
-        return DimensionOwner.FRAME
-    if re.search(r"\b(?:route|string)" + suffix, prefix):
-        return DimensionOwner.ROUTE
-    if re.search(
-        r"\b(?:composition|layout|width|height|length|radius|diameter|wide|"
-        r"tall|long|thick)" + suffix,
-        prefix,
-    ):
-        return DimensionOwner.LAYOUT
+    suffix = re.compile(r"\s*(?:=|is|equals?|measures?)?\s*$", re.IGNORECASE)
+    for owner, pattern in _COMMENT_OWNER_PATTERNS:
+        if any(suffix.fullmatch(prefix[match.end() :]) for match in pattern.finditer(prefix)):
+            return owner
     return None
 
 

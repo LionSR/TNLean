@@ -337,6 +337,9 @@ def test_rmp_dimension_ownership() -> None:
     for source, owner in (
         ("% width is 1 in wide\n", DimensionOwner.LAYOUT),
         ("% offset 1 in north\n", DimensionOwner.FRAME),
+        (r"% \tnjoin path is 1 in from the origin" "\n", DimensionOwner.ROUTE),
+        ("% routes 2 in long\n", DimensionOwner.ROUTE),
+        ("% the distances 5 in apart\n", DimensionOwner.METRIC),
     ):
         semantic_comment_inch = scan_case_dimensions(Path("synthetic.tex"), source)
         if (
