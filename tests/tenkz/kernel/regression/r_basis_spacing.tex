@@ -1,0 +1,102 @@
+% Regression: explicit affine bases warn when distinct member families fail
+% the conservative centre-bearing daylight check in the finite cell window.
+% The scan keeps the deterministic worst-margin witness after the complete map.
+% Presets, common basis shifts, pitch-normalized stroke changes, and the strict
+% boundary are covered without introducing another metric.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={flat,basis={wire at (0,0), wire at (1,0)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={wire at (0,0), wire at (0,1)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=2, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={wire at (0,0), wire at (4,0)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire,wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={flat,basis={wire at (0,0), wire at (0,4)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={flat,basis={
+      wire at (0,0), wire at (2,2), wire at (1,0)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    planes]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={wire at (0,0), wire at (-1,2)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={
+      wire at (0,0), wire at (1,-1), wire at (2,-1)}}]
+\end{tenkz}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={
+      wire at (7,5), wire at (8,4), wire at (9,4)}}]
+\end{tenkz}
+{\tnset{pitch=22mm}
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={plane,basis={
+      wire at (0,0), wire at (1,-1), wire at (2,-1)}}]
+\end{tenkz}
+}
+{
+\ExplSyntaxOn
+\tl_set:Ne \l_tmpa_tl
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {daylight}
+        + 0.09 - \__tenkz_metric_default_bead_page_gap:
+      }
+  }
+\prop_put:NnV \g__tenkz_metric_value_prop {daylight} \l_tmpa_tl
+\ExplSyntaxOff
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={flat,basis={wire at (0,0), wire at (1,0)}}]
+\end{tenkz}
+}
+{
+\ExplSyntaxOn
+\tl_set:Ne \l_tmpa_tl
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {daylight}
+        + 0.0900004 - \__tenkz_metric_default_bead_page_gap:
+      }
+  }
+\prop_put:NnV \g__tenkz_metric_value_prop {daylight} \l_tmpa_tl
+\ExplSyntaxOff
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none,
+    west=none, east=none, north=none, south=none,
+    frame={flat,basis={wire at (0,0), wire at (1,0)}}]
+\end{tenkz}
+}
+\end{document}

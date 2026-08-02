@@ -331,6 +331,25 @@ selects every member of a cell, while `(r,c,k)` selects member `k`. Equal
 offsets remain distinct members: coordinate coincidence neither identifies
 records nor creates an edge.
 
+The frame evaluates basis spacing in page space. Over the declared cell
+window, it compares every unordered pair of distinct members under every
+realizable cell translation, using their centres and default-bead silhouettes
+after the complete frame map. Each silhouette is the transformed nominal bead
+body plus its audited page-space half-stroke. For each candidate, the required
+centre separation is the support of both silhouettes on the centre bearing
+plus `daylight`; an exact coincidence uses the maximum affine body support,
+the two half-strokes, and `daylight`. The candidate with the smallest
+separation-minus-requirement margin is reported, and a negative margin emits
+`basis-spacing`. This support test is conservative under shear: a quiet result
+guarantees the named daylight on the centre bearing. In the event, `dist` is
+the centre separation and `floor` is its support requirement (directional
+except at exact coincidence), each displayed to six decimals. `margin` is the
+raw separation minus requirement, displayed independently to nine decimals.
+All three are in pitch units; `dr` and `dc` are member B's cell minus member
+A's cell. The diagnostic does not move a member, identify two records, or
+create an edge. Thus interleaving is one complete-basis check, not a
+plane-specific parameter.
+
 A frame with no explicit basis retains the existing single site at the
 origin, so existing pictures are unchanged. Frame population creates one
 atom per cell per declared member, and the model records both the cell and

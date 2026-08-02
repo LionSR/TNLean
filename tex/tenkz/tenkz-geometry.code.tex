@@ -510,6 +510,266 @@
       }
   }
 
+% Smallest conservative centre-bearing default-bead support margin between
+% distinct basis-member families in one finite affine cell window.  Geometry
+% owns the exhaustive silhouette calculation, while its caller supplies the
+% basis step, bead-body radius, and page-owned gap.  Member offsets share the
+% caller's local east/north units.  With dr/dc equal to member j's cell minus
+% member i's cell, their local displacement is
+%   east  = dc + step (east_j - east_i),
+%   north = -dr + step (north_j - north_i).
+% For a nonzero centre vector, the required separation is the support of both
+% affine-carried beads in that direction plus the page-space gap.  At exact
+% coincidence there is no direction, so the largest affine body support
+% defines a conservative direction-free convention.  The strict minimum
+% margin and fixed traversal order make the reported witness deterministic.
+% The output is empty when fewer than two members are given.
+\prop_new:N \l__tenkz_geom_basis_spacing_east_prop
+\prop_new:N \l__tenkz_geom_basis_spacing_north_prop
+\prop_new:N \l__tenkz_geom_basis_spacing_result_prop
+\int_new:N \l__tenkz_geom_basis_spacing_rows_int
+\int_new:N \l__tenkz_geom_basis_spacing_cols_int
+\int_new:N \l__tenkz_geom_basis_spacing_count_int
+\int_new:N \l__tenkz_geom_basis_spacing_a_int
+\int_new:N \l__tenkz_geom_basis_spacing_b_int
+\int_new:N \l__tenkz_geom_basis_spacing_dr_int
+\int_new:N \l__tenkz_geom_basis_spacing_dc_int
+\tl_new:N \l__tenkz_geom_basis_spacing_step_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_radius_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_gap_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_ex_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_ey_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_nx_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_ny_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_east_a_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_east_b_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_north_a_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_north_b_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_east_delta_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_north_delta_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_x_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_y_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_dist_square_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_dist_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_floor_tl
+\tl_new:N \l__tenkz_geom_basis_spacing_clearance_tl
+\bool_new:N \l__tenkz_geom_basis_spacing_kind_ok_bool
+
+% Largest stretch of a complete two-dimensional basis.  This is the largest
+% singular value, written from the trace and determinant of M^T M so exact
+% centre coincidence has a direction-independent bead support.
+\cs_new:Npn \__tenkz_geom_basis_max_stretch:nnnn #1#2#3#4
+  {
+    sqrt(
+      (
+        (#1)^2 + (#2)^2 + (#3)^2 + (#4)^2
+        + sqrt(
+            max(
+              0,
+              ( (#1)^2 + (#2)^2 + (#3)^2 + (#4)^2 )^2
+              - 4 * ( (#1) * (#4) - (#2) * (#3) )^2 ) )
+      ) / 2 )
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_save:
+  {
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {member-a}
+      { \int_use:N \l__tenkz_geom_basis_spacing_a_int }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {member-b}
+      { \int_use:N \l__tenkz_geom_basis_spacing_b_int }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {dr}
+      { \int_use:N \l__tenkz_geom_basis_spacing_dr_int }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {dc}
+      { \int_use:N \l__tenkz_geom_basis_spacing_dc_int }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {dist}
+      { \l__tenkz_geom_basis_spacing_dist_tl }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {floor}
+      { \l__tenkz_geom_basis_spacing_floor_tl }
+    \prop_put:Nne \l__tenkz_geom_basis_spacing_result_prop {clearance}
+      { \l__tenkz_geom_basis_spacing_clearance_tl }
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_candidate:
+  {
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_geom_basis_spacing_ex_tl }
+      { \l__tenkz_geom_basis_spacing_ey_tl }
+      { \l__tenkz_geom_basis_spacing_nx_tl }
+      { \l__tenkz_geom_basis_spacing_ny_tl }
+      {
+        \l__tenkz_geom_basis_spacing_dc_int
+        + \l__tenkz_geom_basis_spacing_east_delta_tl
+      }
+      {
+        -\l__tenkz_geom_basis_spacing_dr_int
+        + \l__tenkz_geom_basis_spacing_north_delta_tl
+      }
+      \l__tenkz_geom_basis_spacing_x_tl
+      \l__tenkz_geom_basis_spacing_y_tl
+    \tl_set:Ne \l__tenkz_geom_basis_spacing_dist_square_tl
+      {
+        \fp_eval:n
+          {
+            ( \l__tenkz_geom_basis_spacing_x_tl ) ^ 2
+            + ( \l__tenkz_geom_basis_spacing_y_tl ) ^ 2
+          }
+      }
+    \fp_compare:nNnTF
+      { \l__tenkz_geom_basis_spacing_dist_square_tl } = {0}
+      {
+        \tl_set:Nn \l__tenkz_geom_basis_spacing_dist_tl {0}
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_floor_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_geom_basis_spacing_gap_tl
+                + 2 * \l__tenkz_geom_basis_spacing_radius_tl
+                  * \__tenkz_geom_basis_max_stretch:nnnn
+                      { \l__tenkz_geom_basis_spacing_ex_tl }
+                      { \l__tenkz_geom_basis_spacing_ey_tl }
+                      { \l__tenkz_geom_basis_spacing_nx_tl }
+                      { \l__tenkz_geom_basis_spacing_ny_tl }
+              }
+          }
+      }
+      {
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_dist_tl
+          {
+            \fp_eval:n
+              { sqrt(\l__tenkz_geom_basis_spacing_dist_square_tl) }
+          }
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_floor_tl
+          {
+            \fp_eval:n
+              {
+                \l__tenkz_geom_basis_spacing_gap_tl
+                + 2 * \__tenkz_geom_support_basis:nnnnnnnnn
+                    {circle}
+                    { \l__tenkz_geom_basis_spacing_radius_tl }
+                    { \l__tenkz_geom_basis_spacing_radius_tl }
+                    {0}
+                    { \l__tenkz_geom_basis_spacing_ex_tl }
+                    { \l__tenkz_geom_basis_spacing_ey_tl }
+                    { \l__tenkz_geom_basis_spacing_nx_tl }
+                    { \l__tenkz_geom_basis_spacing_ny_tl }
+                    {
+                      atand(
+                        \l__tenkz_geom_basis_spacing_y_tl,
+                        \l__tenkz_geom_basis_spacing_x_tl )
+                    }
+              }
+          }
+      }
+    \tl_set:Ne \l__tenkz_geom_basis_spacing_clearance_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_geom_basis_spacing_dist_tl
+            - \l__tenkz_geom_basis_spacing_floor_tl
+          }
+      }
+    \prop_if_empty:NTF \l__tenkz_geom_basis_spacing_result_prop
+      { \__tenkz_geom_basis_spacing_save: }
+      {
+        \fp_compare:nNnT
+          { \l__tenkz_geom_basis_spacing_clearance_tl } <
+          {
+            \prop_item:Nn
+              \l__tenkz_geom_basis_spacing_result_prop {clearance}
+          }
+          { \__tenkz_geom_basis_spacing_save: }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_dc:n #1
+  {
+    \int_set:Nn \l__tenkz_geom_basis_spacing_dc_int {#1}
+    \__tenkz_geom_basis_spacing_candidate:
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_dr:n #1
+  {
+    \int_set:Nn \l__tenkz_geom_basis_spacing_dr_int {#1}
+    \int_step_function:nnN
+      { 1 - \l__tenkz_geom_basis_spacing_cols_int }
+      { \l__tenkz_geom_basis_spacing_cols_int - 1 }
+      \__tenkz_geom_basis_spacing_dc:n
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_b:n #1
+  {
+    \int_set:Nn \l__tenkz_geom_basis_spacing_b_int {#1}
+    \prop_get:NeN \l__tenkz_geom_basis_spacing_east_prop {#1}
+      \l__tenkz_geom_basis_spacing_east_b_tl
+    \prop_get:NeN \l__tenkz_geom_basis_spacing_north_prop {#1}
+      \l__tenkz_geom_basis_spacing_north_b_tl
+    \tl_set:Ne \l__tenkz_geom_basis_spacing_east_delta_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_geom_basis_spacing_step_tl
+            * ( \l__tenkz_geom_basis_spacing_east_b_tl
+                - \l__tenkz_geom_basis_spacing_east_a_tl )
+          }
+      }
+    \tl_set:Ne \l__tenkz_geom_basis_spacing_north_delta_tl
+      {
+        \fp_eval:n
+          {
+            \l__tenkz_geom_basis_spacing_step_tl
+            * ( \l__tenkz_geom_basis_spacing_north_b_tl
+                - \l__tenkz_geom_basis_spacing_north_a_tl )
+          }
+      }
+    \int_step_function:nnN
+      { 1 - \l__tenkz_geom_basis_spacing_rows_int }
+      { \l__tenkz_geom_basis_spacing_rows_int - 1 }
+      \__tenkz_geom_basis_spacing_dr:n
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing_a:n #1
+  {
+    \int_set:Nn \l__tenkz_geom_basis_spacing_a_int {#1}
+    \prop_get:NeN \l__tenkz_geom_basis_spacing_east_prop {#1}
+      \l__tenkz_geom_basis_spacing_east_a_tl
+    \prop_get:NeN \l__tenkz_geom_basis_spacing_north_prop {#1}
+      \l__tenkz_geom_basis_spacing_north_a_tl
+    \int_step_function:nnN
+      { \l__tenkz_geom_basis_spacing_a_int + 1 }
+      { \l__tenkz_geom_basis_spacing_count_int }
+      \__tenkz_geom_basis_spacing_b:n
+  }
+
+\cs_new_protected:Npn \__tenkz_geom_basis_spacing:nnnnnnNNN
+    #1#2#3#4#5#6#7#8#9
+  {
+    \prop_clear:N #9
+    \prop_clear:N \l__tenkz_geom_basis_spacing_result_prop
+    \__tenkz_geom_require_kind:nnnN {#1} {affine} {basis-spacing}
+      \l__tenkz_geom_basis_spacing_kind_ok_bool
+    \bool_if:NT \l__tenkz_geom_basis_spacing_kind_ok_bool
+      {
+        \int_set:Nn \l__tenkz_geom_basis_spacing_rows_int {#2}
+        \int_set:Nn \l__tenkz_geom_basis_spacing_cols_int {#3}
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_step_tl { \fp_eval:n {#4} }
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_radius_tl { \fp_eval:n {#5} }
+        \tl_set:Ne \l__tenkz_geom_basis_spacing_gap_tl { \fp_eval:n {#6} }
+        \prop_set_eq:NN \l__tenkz_geom_basis_spacing_east_prop #7
+        \prop_set_eq:NN \l__tenkz_geom_basis_spacing_north_prop #8
+        \int_set:Nn \l__tenkz_geom_basis_spacing_count_int
+          { \prop_count:N \l__tenkz_geom_basis_spacing_east_prop }
+        \__tenkz_geom_local_basis:nnnNNNN {#1}{1}{1}
+          \l__tenkz_geom_basis_spacing_ex_tl
+          \l__tenkz_geom_basis_spacing_ey_tl
+          \l__tenkz_geom_basis_spacing_nx_tl
+          \l__tenkz_geom_basis_spacing_ny_tl
+        \int_step_function:nnN {1}
+          { \l__tenkz_geom_basis_spacing_count_int - 1 }
+          \__tenkz_geom_basis_spacing_a:n
+        \prop_set_eq:NN #9 \l__tenkz_geom_basis_spacing_result_prop
+      }
+  }
+
 % The page bearing of one direction in the local east/north axes of a frame
 % address.  Both affine and circular carriers answer through the same complete
 % basis; consumers do not inspect frame kinds or reproduce projection formulae.
@@ -1085,11 +1345,14 @@
 
 % ---------- probes -----------------------------------------------------------
 % Test fixtures assert geometry through the event stream; six decimals keep
-% the hashes stable and the assertions honest.
+% ordinary coordinates stable.  A signed decision margin retains nine so a
+% strict comparison remains visible when its two displayed operands coincide.
 \cs_new_protected:Npn \__tenkz_geom_probe:nn #1#2
   { \tenkz@event{geomprobe|id=#1|#2} }
 \cs_new:Npn \__tenkz_geom_round:n #1
   { \fp_eval:n { round( #1 , 6 ) } }
+\cs_new:Npn \__tenkz_geom_round_margin:n #1
+  { \fp_eval:n { round( #1 , 9 ) } }
 
 \ExplSyntaxOff
 \endinput

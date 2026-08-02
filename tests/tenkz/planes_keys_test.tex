@@ -1,9 +1,10 @@
 % Regression: planes_keys_test — exercises frame and side-policy keys across the documented plane geometries.
-% Formula: (3 x 0.60 = 1.8 >
+% Formula: geometry-only; no tensor identity.
 % planes_keys_test — acceptance for the frame / side-policy
 % key work (sweep-verdict worklist items 1-7).  Every picture cites the
 % worklist item and the sweep measurement that motivated it.  Expected
-% warnings (and ONLY these): planes-interleave (item 1, part 3),
+% warnings (and ONLY these): planes-interleave + sheet-coincide (item 1,
+% part 3),
 % plane-rise-low + plane-slant-band (item 2, part 6), plane-tall-window
 % (item 3, part 8) -- plus plane-tall-window at part 5: the slab preset's
 % own showcase size 4x4 sits above the drift formula (3 x 0.60 = 1.8 >
@@ -18,7 +19,7 @@
 % (1) 3x3 double layer, NO sheet sep: the derived default
 % sep = (rows-1) x planerise + planegap = 2 x 0.45 + 0.70 = 1.60 must
 % reproduce the z_R1-class geometry (no mid-band dot near-merge; the old
-% static 1.4 left 0.85mm of white between 1.76mm dots, plane_sweep2 z_S2).
+% static 1.4 left less than daylight between the default beads).
 % The planes-local ratios are slant 0.40 / rise 0.45 (leg-to-dot
 % clearance 0.2 lp for every pairing leg climbing up to 4 row-levels).
 \textbf{(1) planes, derived sep, 3x3}\par\smallskip
@@ -36,9 +37,10 @@
 \medskip
 % (3) explicit sheet sep=1.65 at 5x5: below (rows-1) x rise = 4 x 0.45
 % = 1.80, so the interleave guard must WARN (the z_X2 catastrophe: sep at
-% an integer multiple of the rise doubles dots side by side) yet still
-% draw what it was told.
-\textbf{(3) planes, sheet sep=1.65 at 5x5 (warns: interleave)}\par\smallskip
+% an integer multiple of the rise leaves less than daylight between the
+% audited outer bead inks) yet still draw what it was told.
+\textbf{(3) planes, sheet sep=1.65 at 5x5 (warns: interleave + spacing)}%
+\par\smallskip
 \begin{tenkzplanes}[rows=5, cols=5, sheets={ket, bra}, sheet sep=1.65]
 \end{tenkzplanes}
 

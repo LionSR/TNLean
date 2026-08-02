@@ -396,6 +396,73 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
   echo "FAIL: a displaced member span did not suppress slot population" >&2
   exit 1
 }
+basis_spacing_count=$(
+  grep -Fc '|code=basis-spacing|' "$WORK/r_basis_spacing.tnlog" || true
+)
+[ "$basis_spacing_count" -eq 9 ] || {
+  echo "FAIL: affine basis spacing did not emit exactly nine warnings" >&2
+  exit 1
+}
+for expected in \
+  'warning|picture=k1|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.25|floor=0.327573|margin=-0.077573094' \
+  'warning|picture=k2|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.1875|floor=0.321248|margin=-0.133748076' \
+  'warning|picture=k3|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=-1|dist=0|floor=0.348706|margin=-0.348705634' \
+  'warning|picture=k4|code=basis-spacing|member-a=1|member-b=2|dr=1|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  'warning|picture=k5|code=basis-spacing|member-a=1|member-b=3|dr=0|dc=0|dist=0.25|floor=0.327573|margin=-0.077573094' \
+  'warning|picture=k8|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.343027|margin=-0.093026792' \
+  'warning|picture=k9|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.343027|margin=-0.093026792' \
+  'warning|picture=k10|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.33424|margin=-0.084240243' \
+  'warning|picture=k12|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.25|floor=0.25|margin=-0.0000004'
+do
+  grep -Fxq "$expected" "$WORK/r_basis_spacing.tnlog" || {
+    echo "FAIL: affine basis spacing lost witness: $expected" >&2
+    exit 1
+  }
+done
+if grep -Eq '^warning[|]picture=k(6|7|11)[|]code=basis-spacing[|]' \
+    "$WORK/r_basis_spacing.tnlog"; then
+  echo "FAIL: a safe or exact-boundary basis emitted a spacing warning" >&2
+  exit 1
+fi
+basis_spacing_message_count=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_spacing.tex.transcript" || true
+)
+[ "$basis_spacing_message_count" -eq 9 ] || {
+  echo "FAIL: basis-spacing events and human diagnostics diverged" >&2
+  exit 1
+}
+if grep -Fq '|code=basis-spacing|' \
+    "$WORK/k_czx.tnlog" "$WORK/s9_sugar.tnlog"; then
+  echo "FAIL: a contracted CZX or planes basis emitted a spacing warning" >&2
+  exit 1
+fi
+awk '
+  /^picture[|]id=/ {
+    id = $0
+    sub(/^picture[|]id=/, "", id)
+    sub(/[|].*$/, "", id)
+    picture[id] = NR
+  }
+  /^warning[|]picture=.*[|]code=basis-spacing[|]/ {
+    id = $0
+    sub(/^warning[|]picture=/, "", id)
+    sub(/[|].*$/, "", id)
+    if (!(id in picture) || picture[id] >= NR)
+      exit 1
+    warnings++
+  }
+  END { if (warnings != 9) exit 1 }
+' "$WORK/r_basis_spacing.tnlog" || {
+  echo "FAIL: a basis-spacing warning preceded its picture header" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_basis_spacing.tnlog" "$KERNEL/regression/r_basis_spacing.tex" \
+  >/dev/null || {
+  echo "FAIL: the basis-spacing stream did not pass the one-pass audit" >&2
+  exit 1
+}
 awk '
   /^picture[|]id=k1[|]/ { picture = NR }
   /^warning[|]picture=k1[|]code=plane-tall-window[|]/ { warning = NR }

@@ -597,11 +597,10 @@
     (side-by-side~doubled~dots,~plane_sweep2~z_X2).~Use~sep~>~#2,~or~
     omit~sheet~sep~for~the~derived~default. }
 \msg_new:nnn { tenkz } { sheet-coincide }
-  { sheet~vector:~adjacent~sheets~nearly~coincide.~Sheet~h+1's~site~
-    (r,c)~lands~#1mm~from~sheet~h's~site~(r+#2,~c+#3),~below~the~#4mm~
-    bead-separation~floor~(\tenkz@r@sheetcoincide~x~the~bead~diameter):~
-    the~stacked~dots~
-    read~as~one~blob~(the~fig21d_cubic~near-coincidence~arithmetic).~
+  { sheet~vector:~adjacent~sheets~nearly~coincide.~Their~nearest~site~
+    centres,~at~relative~cell~translation~(#2,#3),~are~#1~pitch~apart,~
+    below~the~default-bead~spacing~floor~#4~pitch~(outer~bead~ink~plus~
+    daylight),~so~the~sites~lose~the~required~readability~gap.~
     Grow~the~sheet~vector,~or~retune~plane~slant/rise~so~no~lattice~
     translation~of~a~sheet~lands~on~the~sheet~above~it. }
 
@@ -776,17 +775,6 @@
                                 % (independent of row count) near-merged dots
                                 % at 3x3 and interleaved the sheets outright
                                 % at 4x4, which is why sep is derived here.
-\def\tenkz@r@sheetcoincide{1.25}% near-coincidence floor of the expert
-                                % sheet~vector= guard, as a MULTIPLE of the
-                                % bead diameter (so a dot-metric retune moves
-                                % it): two stacked-sheet sites closer than
-                                % 1.25 x dotdia read as one blob.  Calibrated
-                                % on the fig21d_cubic equal-axis cube: at
-                                % plane slant 0.45 the closest pair sits at
-                                % 1.05 x dotdia (doubled-dot blobs, verified
-                                % in ink), at slant 0.40 at 1.32 x dotdia and
-                                % every bead separates -- the floor 1.25 flags
-                                % the former and passes the latter.
 \def\tenkz@r@planetracereach{0.20}% trace= wrap-loop reach (of the base pitch,
                                 % paper frame): how far east of the site axis
                                 % the per-site Tr_s racetrack swings.  It must
@@ -905,7 +893,7 @@
 % sheet h+1's site (r,c) stacks onto sheet h's site (r+dr, c+dc)).  We
 % scan all |dr| <= rows-1, |dc| <= cols-1 -- (0,0) included, the
 % |S|-too-small case -- and warn when the closest pair falls below the
-% sheetcoincide floor.  The scan runs for EVERY sheets>1 picture, not
+% default-bead spacing floor.  The scan runs for EVERY sheets>1 picture, not
 % only the expert sheet~vector= path: a preset stack can coincide too (a
 % flat frame with a tight explicit sheet sep, a degenerate expert C/R
 % frame), and the coefficient form below prices arbitrary frames -- the
@@ -944,17 +932,29 @@
       { \fp_to_dim:n { sqrt( \l__tenkzl_mind_fp ) } }
     \dim_set:Nn \l__tenkzl_y_dim
       { \fp_to_dim:n
-          { \tenkz@r@sheetcoincide * \tenkz@r@dotdia * \tenkz@pitch } }
+          { \__tenkz_metric_round_bead_spacing_floor: * \tenkz@pitch } }
     \dim_compare:nNnT { \l__tenkzl_x_dim } < { \l__tenkzl_y_dim }
       {
         \msg_warning:nneeee { tenkz } { sheet-coincide }
-          { \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm } }
+          {
+            \__tenkz_geom_round:n
+              {
+                \dim_to_fp:n { \l__tenkzl_x_dim }
+                / \dim_to_fp:n { \tenkz@pitch }
+              }
+          }
           { \int_use:N \l__tenkzl_gdr_int }
           { \int_use:N \l__tenkzl_gdc_int }
-          { \dim_to_decimal_in_unit:nn { \l__tenkzl_y_dim } { 1mm } }
+          {
+            \__tenkz_geom_round:n
+              { \__tenkz_metric_round_bead_spacing_floor: }
+          }
         \tenkz@event{warning|picture=\the\tenkz@pictureid|%
-          code=sheet-coincide|dist=%
-          \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm }mm|dr=%
+          code=sheet-coincide|dist=\__tenkz_geom_round:n
+            {\dim_to_fp:n {\l__tenkzl_x_dim}
+              / \dim_to_fp:n {\tenkz@pitch}}|floor=%
+          \__tenkz_geom_round:n
+            {\__tenkz_metric_round_bead_spacing_floor:}|dr=%
           \int_use:N \l__tenkzl_gdr_int|dc=\int_use:N \l__tenkzl_gdc_int}
       }
   }

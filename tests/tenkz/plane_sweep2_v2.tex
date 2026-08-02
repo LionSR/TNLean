@@ -1,10 +1,11 @@
-% Regression: plane_sweep2_v2 — renders sep = (rows-1) x planesrise + planegap. Part W re-adds an explicit.
-% Formula: sep = (rows-1) x planesrise + planegap.  Part W re-adds an explicit
+% Regression: plane_sweep2_v2 — tests derived separation and one explicit stress case.
+% Formula: sep = (rows-1) x planesrise + planegap.
 % plane_sweep2_v2: parts 1 and 3 of plane_sweep2 with the sheet sep
 % overrides DELETED — every double layer takes the derived default
 % sep = (rows-1) x planesrise + planegap.  Part W re-adds an explicit
 % sheet sep=1.65 on a 5x5, which sits below the 5-row interleave
-% threshold (4 x 0.45 = 1.8) and must warn in the log.
+% threshold (4 x 0.45 = 1.8) and must emit both planes-interleave and
+% sheet-coincide in the log.
 \documentclass[varwidth=22cm, border=6pt]{standalone}
 \usepackage{amsmath}
 \usepackage{tenkz}
