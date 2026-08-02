@@ -37,9 +37,6 @@ policy_sha256 = "pending"
 armed_by_pr = "pending"
 append_only = true
 append_only_from = "armed"
-minimum_distinct_work_prs = 2
-work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
-one_class_per_work_pr = true
 ordering_anchor = "freeze-record-pr-merged-at"
 ancestry_anchor = "freeze-record-pr-merge-commit"
 work_anchor = "work-pr-merged-at"
@@ -49,6 +46,10 @@ release_tag = "tenkz-v1.0.0"
 maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
 ```
+
+The work count, class set, and one-class-per-pull-request rule are read from the
+exact `DESIGN.md` policy pinned by `policy_sha256`; this ledger schema does not
+duplicate them.
 
 Once armed, the normative blocks in `DESIGN.md` and this file have closed
 tables and field sets. Unknown tables or fields are rejected. Changing their
@@ -231,6 +232,10 @@ work PR. Therefore the two required classes are necessarily evidenced by two
 distinct post-freeze pull requests. A policy-, checker-, CI-, or record-only
 diff contains no class-eligible change and does not qualify.
 
+An active attempt accepts exactly two `work` entries, one in each policy class.
+After both classes are filled, a third `work` entry is invalid. Other pull
+requests may merge normally; only these two entries are release evidence.
+
 ### `friction`
 
 Required additional fields: `surface` (`tex-api` or `tnlog`), `triage`
@@ -288,11 +293,10 @@ Required additional fields:
 | `decision` | the exact string `release` |
 
 `freeze` and `source_sha` must match the active attempt. `work_evidence`
-contains at least two distinct earlier work-entry IDs from that attempt: at
-least one `formalization-or-blueprint` entry and at least one `rmp-benchmark`
-entry. Each work PR fills only its recorded class, and the work-entry rules make
-the referenced work PRs distinct. Values are entry references, not pull-request
-references.
+contains exactly the active attempt's two work-entry IDs: one
+`formalization-or-blueprint` entry and one `rmp-benchmark` entry. Each work PR
+fills only its recorded class, and the work-entry rules make the referenced
+work PRs distinct. Values are entry references, not pull-request references.
 
 The sign-off's `record_pr` is the sign-off pull request. Let `H` be its exact
 final `headRefOid`. Candidate CI validates `H` and reports
