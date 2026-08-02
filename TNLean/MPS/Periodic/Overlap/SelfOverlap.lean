@@ -165,8 +165,8 @@ decomposition are orthogonal corners, so for `u ≠ v` these corner states canno
 be related by an invertible gauge and nonzero scalar.
 
 The cyclic-sector decomposition supplies the trace formula and projection data. The
-missing mathematical input is orthogonal-corner rigidity: distinct cyclic corners
-cannot be related by an invertible gauge and a nonzero scalar. -/
+key mathematical input is orthogonal-corner rigidity: distinct cyclic corners cannot
+be related by an invertible gauge and a nonzero scalar. -/
 private lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     [NeZero D] (A : MPSTensor d D) {m : ℕ} [NeZero m]
     (hP : IsPeriodic m A)

@@ -61,9 +61,10 @@ theorem periodicOverlapDichotomy
   --                            → `periodicOverlap_tendsto_zero_of_no_sector_match`
   --   * same period/dim, a sector match
   --                            → `periodicOverlap_gaugeEquiv_of_sector_match`
-  -- Each branch theorem is proved; the sector-match branch is proved modulo
-  -- the remaining Case-3 contraction and phase-assembly theorem
-  -- `sectorTensor_proportional_of_blockedMatch`.
+  -- Each branch theorem is proved.  In the sector-match branch,
+  -- `sectorTensor_proportional_of_blockedMatch` supplies the full-cycle contraction
+  -- and phase assembly before `periodicOverlap_gaugeEquiv_of_sector_match` returns
+  -- the repeated-block relation.
   classical
   by_cases hm : m_a = m_b
   · subst hm
