@@ -34,6 +34,7 @@ from tenkzlib.dimensions import (
     DimensionOwner,
     DimensionOwnershipError,
     DimensionReport,
+    case_dimension_inventory,
     collect_dimension_report,
     scan_case_dimensions,
     validate_dimension_report,
@@ -336,6 +337,7 @@ def test_rmp_dimension_ownership() -> None:
         1,
         "1mm",
         DimensionOwner.LAYOUT,
+        "command:tnput",
         False,
         0,
     )
@@ -347,6 +349,42 @@ def test_rmp_dimension_ownership() -> None:
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
         "composition/layout dimensions increased to 531",
     )
+    first_layout = next(
+        occurrence
+        for occurrence in report.cases
+        if occurrence.owner is DimensionOwner.LAYOUT and not occurrence.in_comment
+    )
+    replacement_layout = dataclasses.replace(
+        first_layout,
+        literal="123mm",
+    )
+    balanced_replacement = dataclasses.replace(
+        report,
+        cases=tuple(
+            replacement_layout if occurrence is first_layout else occurrence
+            for occurrence in report.cases
+        ),
+    )
+    _expect_dimension_failure(balanced_replacement, "unapproved case dimension")
+    site_replacement = dataclasses.replace(first_layout, site="command:tnjoin")
+    _expect_dimension_failure(
+        dataclasses.replace(
+            report,
+            cases=tuple(
+                site_replacement if occurrence is first_layout else occurrence
+                for occurrence in report.cases
+            ),
+        ),
+        "unapproved case dimension",
+    )
+    normalized_a = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tnput{x}{(1 true in,0)}{}"
+    )
+    normalized_b = scan_case_dimensions(
+        Path("synthetic.tex"), "\n\n" + r"\tnput{x}{(1truein,0)}{}"
+    )
+    if case_dimension_inventory(normalized_a) != case_dimension_inventory(normalized_b):
+        raise AssertionError("dimension inventory depends on whitespace or line number")
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
         (
@@ -376,6 +414,7 @@ def test_rmp_dimension_ownership() -> None:
         1,
         "1pt",
         DimensionOwner.BOOK_LAYOUT,
+        "benchmark-book",
         False,
         0,
     )
@@ -393,7 +432,17 @@ def test_rmp_dimension_ownership() -> None:
         report,
         cases=report.cases[:first_route] + report.cases[first_route + 1 :],
     )
-    validate_dimension_report(reduced)
+    reduced_inventory = Counter(report.approved_cases)
+    removed = Counter(report.approved_cases) - reduced.case_inventory
+    if sum(removed.values()) != 1:
+        raise AssertionError(f"single deletion changed the wrong inventory: {removed!r}")
+    removed_key = next(iter(removed))
+    reduced_inventory[removed_key] -= 1
+    if reduced_inventory[removed_key] == 0:
+        del reduced_inventory[removed_key]
+    validate_dimension_report(
+        dataclasses.replace(reduced, approved_cases=reduced_inventory)
+    )
 
 
 def test_rmp_author_source_identity() -> None:

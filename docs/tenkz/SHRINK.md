@@ -1320,8 +1320,11 @@ syntax is added.
 
 The RMP driver now classifies every remaining case dimension at its semantic
 boundary: 0 metric, 0 projection/frame, 396 route/string, and 530
-composition/layout, with 0 in comments. Those counts are ceilings, so later
-removals pass while additions fail. The benchmark book's 28 page-layout
+composition/layout, with 0 in comments. Those counts make aggregate changes
+visible immediately. A reviewed per-path, per-site, per-owner literal inventory
+additionally rejects balanced replacements and cross-site moves; intentional
+additions and removals update that inventory in the same review. The benchmark
+book's 28 page-layout
 dimensions are checked by a separate path-specific allowlist rather than
 being mistaken for figure geometry. Synthetic perturbations pin balanced
 options, comment classification, unknown-owner rejection, every ceiling, and

@@ -53,6 +53,14 @@ not count as figure geometry.  Reducing a ceiling is permitted; adding or
 moving a dimension across an ownership boundary requires an intentional
 ratchet review.
 
+The reviewed dimension inventory is
+`tests/tenkz/rmp/dimension-ownership.json`. It records each normalized literal
+by path, semantic site, and owner, rejecting additions, removals, balanced
+replacements, and cross-site moves until the reviewed inventory changes too.
+After reviewing an intentional dimension change, regenerate it with
+`python3 scripts/update_tenkz_dimension_inventory.py` and include the inventory
+diff in the same pull request.
+
 The comparison command requires a separate author-source tree supplied through
 `--source-root`.  The canonical local home is the gitignored
 `References/RMP_TIKZ_SOURCE_CODE/` directory.  It contains the authors'

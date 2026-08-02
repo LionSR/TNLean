@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -30,6 +31,7 @@ class DimensionOccurrence:
     line: int
     literal: str
     owner: DimensionOwner | None
+    site: str | None
     in_comment: bool
     offset: int
 
@@ -40,6 +42,7 @@ class DimensionReport:
 
     cases: tuple[DimensionOccurrence, ...]
     book: tuple[DimensionOccurrence, ...]
+    approved_cases: Mapping[tuple[str, str, str, str], int]
 
     @property
     def case_counts(self) -> Counter[DimensionOwner]:
@@ -56,6 +59,10 @@ class DimensionReport:
     @property
     def comment_count(self) -> int:
         return sum(occurrence.in_comment for occurrence in self.cases)
+
+    @property
+    def case_inventory(self) -> Counter[tuple[str, str, str, str]]:
+        return case_dimension_inventory(self.cases)
 
     @property
     def book_counts(self) -> Counter[Path]:
@@ -91,6 +98,7 @@ BOOK_LAYOUT_ALLOWLIST: Mapping[Path, int] = {
     Path("docs/tenkz/rmp-benchmark.tex"): 4,
     Path("docs/tenkz/tenkzrmpbenchmark.sty"): 24,
 }
+CASE_DIMENSION_INVENTORY = Path("tests/tenkz/rmp/dimension-ownership.json")
 
 _COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
     "tnput": DimensionOwner.LAYOUT,
@@ -113,6 +121,7 @@ class _OwnerSpan:
     start: int
     end: int
     owner: DimensionOwner
+    site: str
 
 
 def _skip_space(source: str, position: int) -> int:
@@ -137,7 +146,10 @@ def _command_spans(source: str) -> list[_OwnerSpan]:
             position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
-                command.start(), position, _COMMAND_OWNERS[command.group(1)]
+                command.start(),
+                position,
+                _COMMAND_OWNERS[command.group(1)],
+                f"command:{command.group(1)}",
             )
         )
     return spans
@@ -176,7 +188,14 @@ def _option_spans(source: str) -> list[_OwnerSpan]:
         owner = (
             DimensionOwner.FRAME if key in _FRAME_KEYS else DimensionOwner.METRIC
         )
-        spans.append(_OwnerSpan(option.end(), _option_value_end(source, option.end()), owner))
+        spans.append(
+            _OwnerSpan(
+                option.end(),
+                _option_value_end(source, option.end()),
+                owner,
+                f"option:{key}",
+            )
+        )
     return spans
 
 
@@ -245,15 +264,18 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             ):
                 continue
             in_comment = True
+            site = "comment"
         else:
-            owner = next(
+            owner_span = next(
                 (
-                    span.owner
+                    span
                     for span in owner_spans
                     if span.start <= match.start() < span.end
                 ),
                 None,
             )
+            owner = None if owner_span is None else owner_span.owner
+            site = None if owner_span is None else owner_span.site
             in_comment = False
         occurrences.append(
             DimensionOccurrence(
@@ -261,6 +283,7 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
                 line=source.count("\n", 0, match.start()) + 1,
                 literal=match.group(0),
                 owner=owner,
+                site=site,
                 in_comment=in_comment,
                 offset=match.start(),
             )
@@ -276,10 +299,72 @@ def scan_book_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             line=source.count("\n", 0, match.start()) + 1,
             literal=match.group(0),
             owner=DimensionOwner.BOOK_LAYOUT,
+            site="benchmark-book",
             in_comment=False,
             offset=match.start(),
         )
         for match in DIMENSION_RE.finditer(strip_comments(source))
+    )
+
+
+def _normalize_literal(literal: str) -> str:
+    return re.sub(r"\s+", "", literal.lower())
+
+
+def case_dimension_inventory(
+    occurrences: Iterable[DimensionOccurrence],
+) -> Counter[tuple[str, str, str, str]]:
+    """Count active dimensions by path, semantic owner, and normalized literal."""
+    return Counter(
+        (
+            occurrence.path.as_posix(),
+            occurrence.owner.value,
+            occurrence.site or "unclassified",
+            _normalize_literal(occurrence.literal),
+        )
+        for occurrence in occurrences
+        if not occurrence.in_comment and occurrence.owner is not None
+    )
+
+
+def read_dimension_inventory(repo: Path) -> Counter[tuple[str, str, str, str]]:
+    """Read the reviewed active-dimension inventory committed with the corpus."""
+    path = repo / CASE_DIMENSION_INVENTORY
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("version") != 1 or not isinstance(payload.get("occurrences"), list):
+        raise DimensionOwnershipError(f"invalid dimension inventory schema: {path}")
+    inventory: Counter[tuple[str, str, str, str]] = Counter()
+    for row in payload["occurrences"]:
+        if (
+            not isinstance(row, list)
+            or len(row) != 5
+            or not all(isinstance(value, str) for value in row[:4])
+            or not isinstance(row[4], int)
+            or row[4] <= 0
+        ):
+            raise DimensionOwnershipError(f"invalid dimension inventory row: {row!r}")
+        key = (row[0], row[1], row[2], row[3])
+        if key in inventory:
+            raise DimensionOwnershipError(f"duplicate dimension inventory row: {key!r}")
+        inventory[key] = row[4]
+    return inventory
+
+
+def write_dimension_inventory(
+    path: Path,
+    inventory: Mapping[tuple[str, str, str, str], int],
+) -> None:
+    """Write a deterministic inventory for intentional ratchet review."""
+    rows = [
+        json.dumps([source, owner, site, literal, count])
+        for (source, owner, site, literal), count in sorted(inventory.items())
+    ]
+    body = ",\n".join(f"    {row}" for row in rows)
+    path.write_text(
+        '{\n  "version": 1,\n  "occurrences": [\n'
+        + body
+        + "\n  ]\n}\n",
+        encoding="utf-8",
     )
 
 
@@ -295,7 +380,11 @@ def collect_dimension_report(
     for relative in BOOK_LAYOUT_ALLOWLIST:
         source = (repo / relative).read_text(encoding="utf-8")
         book.extend(scan_book_dimensions(relative, source))
-    return DimensionReport(tuple(cases), tuple(book))
+    return DimensionReport(
+        tuple(cases),
+        tuple(book),
+        read_dimension_inventory(repo),
+    )
 
 
 def _location(occurrence: DimensionOccurrence) -> str:
@@ -314,6 +403,24 @@ def validate_dimension_report(report: DimensionReport) -> None:
         problems.append(
             "unowned case dimension(s): "
             + ", ".join(_location(occurrence) for occurrence in unowned)
+        )
+    added = report.case_inventory - Counter(report.approved_cases)
+    removed = Counter(report.approved_cases) - report.case_inventory
+    if added:
+        problems.append(
+            "unapproved case dimension(s): "
+            + ", ".join(
+                f"{path}: {literal} ({owner}, {site}, {count})"
+                for (path, owner, site, literal), count in sorted(added.items())
+            )
+        )
+    if removed:
+        problems.append(
+            "dimension inventory retains removed occurrence(s): "
+            + ", ".join(
+                f"{path}: {literal} ({owner}, {site}, {count})"
+                for (path, owner, site, literal), count in sorted(removed.items())
+            )
         )
     if report.case_count > CASE_DIMENSION_CEILING:
         problems.append(
