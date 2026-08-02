@@ -697,15 +697,14 @@ note = "The pull arrow remains outside the PEPS window; the enlarged crossing is
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "e9b9fc0a997ba19f9e7ba210eb66e5aeee974d9434f7d42fc46586345b9465b2"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-27"
-renderer = "fable-residual-batch-2026-07-27-200dpi"
-note = "the string now bends through both intermediate marked sites (the unlabeled one and a), as the source draws its two-dot path"
+case_sha256 = "bee1a130aa0ea83a9c032f4301bf8878e9b948efa78c1ba1721b86249231ed07"
+reviewed = "2026-08-02"
+renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
+note = "the shared lattice metric makes the patch more compact than the author spacing, while the marked two-bend path, physical legs, and three labels remain clear"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
@@ -816,10 +815,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "289161fa519a838e7f4a46f9dfe414ad69e94c6be5320c77e8f1e5adb23d0c36"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "named oblique row frame and source-measured interleaved sheet offset preserve the doubled path; projection remains a cosmetic gap"
+case_sha256 = "b8f87d23e41bbe258cd8ca0414c98bb5bc0fbb50b7783aa392eb05400c80d996"
+reviewed = "2026-08-02"
+renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
+note = "the shared plane basis separates the ket and bra sheets and preserves both marked paths, every inter-sheet physical contraction, and four open endpoint legs; source spacing and stroke remain cosmetic"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"

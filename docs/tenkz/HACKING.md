@@ -44,6 +44,15 @@ python3 scripts/tenkz_rmp.py compare --all \
   --source-root References/RMP_TIKZ_SOURCE_CODE
 ```
 
+Every command first runs the corpus-wide physical-dimension ownership check,
+even when `check --id` selects one target.  Case dimensions are classified as
+metric, projection/frame, route/string, or composition/layout and ratcheted in
+`scripts/tenkzlib/dimensions.py`; comment dimensions fail separately.  The
+benchmark book's page-layout dimensions have a path-specific allowlist and do
+not count as figure geometry.  Reducing a ceiling is permitted; adding or
+moving a dimension across an ownership boundary requires an intentional
+ratchet review.
+
 The comparison command requires a separate author-source tree supplied through
 `--source-root`.  The canonical local home is the gitignored
 `References/RMP_TIKZ_SOURCE_CODE/` directory.  It contains the authors'

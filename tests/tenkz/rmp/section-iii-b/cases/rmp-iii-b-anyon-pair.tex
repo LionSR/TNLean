@@ -6,13 +6,9 @@
 %   III/ImagesReview Section III.tex lines 644-660
 % Capabilities: lattice, path-string, marked-endpoints
 \[
-  % pitch=14mm (default 11mm): the intermediate site (2,2) sits on the a
-  % string with its own physical leg, the row-2 bond and the diagonal edge
-  % all converging nearby; the library's label clearance is a fixed ratio
-  % of pitch while the label glyph is a fixed point size, so the larger
-  % pitch buys the a label real whitespace against all three.
-  \begin{tenkzlattice}[rows=3, cols=3, frame=oblique, physical=up,
-                       pitch=14mm]
+  % The shared lattice metric owns the spacing.  The label station keeps a
+  % clear sector between the physical leg and the distinguished path.
+  \begin{tenkzlattice}[rows=3, cols=3, frame=oblique, physical=up]
     \tnsite{(1,1)} \tnsite{(1,2)}
     \tnsite[role=marked, label={$i$}, label pos=north west]{(1,3)}
     % the intermediate site the string passes through: marked (blue) like
@@ -23,7 +19,7 @@
     % (unlabeled, sized like the a site above) -- the string bends through
     % it on its way from i^* to a, matching the source's two-dot path.
     \tnsite[role=marked]{(2,1)}
-    \tnsite[role=marked, label={$a$}, label pos=north east]{(2,2)}
+    \tnsite[role=marked, label={$a$}, label pos=north]{(2,2)}
     \tnsite{(2,3)}
     \tnsite[role=marked, label={$i^{*}$}, label pos=south east]{(3,1)}
     \tnsite{(3,2)} \tnsite{(3,3)}

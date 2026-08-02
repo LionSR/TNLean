@@ -1307,3 +1307,31 @@ The metric ledger moves by zero. M1--M6, parser identity, raw-ink census, and
 decimal-literal census are unchanged; the removed lattice definition was a
 metric-table line already exempt from the latter. Issue #5331 carries the
 geometry and event regressions.
+
+### 2026-08-02 — RMP physical dimensions acquire executable owners
+
+The 130-case RMP corpus falls from 931 to 926 absolute dimensions. The anyon
+pair now inherits the shared lattice metric instead of restating one pitch in
+code and two pitches in commentary. The condensation panel uses the existing
+`planes` basis, with explicit sheet bonds, inter-sheet physical contractions,
+open endpoint legs, and one routed path per member; its measured sheet vector
+disappears. No ratio, parser spelling, registry row, or case-specific public
+syntax is added.
+
+The RMP driver now classifies every remaining case dimension at its semantic
+boundary: 0 metric, 0 projection/frame, 396 route/string, and 530
+composition/layout, with 0 in comments. Those counts are ceilings, so later
+removals pass while additions fail. The benchmark book's 28 page-layout
+dimensions are checked by a separate path-specific allowlist rather than
+being mistaken for figure geometry. Synthetic perturbations pin balanced
+options, comment classification, unknown-owner rejection, every ceiling, and
+the book allowlist.
+
+M3 falls from 30 to 29 when the last RMP `sheet vector` escape disappears. M4
+rises from 18.60 to 18.88 because condensation now states the complete two-sheet
+grid, physical pairings, open endpoints, and both strings as model incidence
+instead of inheriting hidden topology from the retiring lattice preset.
+
+Census-correction: #5345
+
+No language-ledger row or flag verdict changes.

@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import csv
+import dataclasses
 import os
 import re
 import subprocess
 import tempfile
+from collections import Counter
 from pathlib import Path
 
 import tenkz_rmp
@@ -25,6 +27,16 @@ from tenkz_rmp import (
     sha256,
     structural_capability_problems,
     verify_author_source_tree,
+)
+from tenkzlib.dimensions import (
+    BOOK_LAYOUT_ALLOWLIST,
+    DimensionOccurrence,
+    DimensionOwner,
+    DimensionOwnershipError,
+    DimensionReport,
+    collect_dimension_report,
+    scan_case_dimensions,
+    validate_dimension_report,
 )
 from tenkzlib.tnlog import parse_log
 
@@ -179,6 +191,130 @@ def test_ink_environment_owner() -> None:
         raise AssertionError("compiled kernel owner was omitted")
 
 
+def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
+    try:
+        validate_dimension_report(report)
+    except DimensionOwnershipError as exc:
+        if phrase not in str(exc):
+            raise AssertionError(
+                f"dimension mutation produced the wrong failure: {exc}"
+            ) from exc
+    else:
+        raise AssertionError(f"dimension mutation escaped the {phrase!r} ratchet")
+
+
+def test_rmp_dimension_ownership() -> None:
+    targets = load_manifest(DEFAULT_MANIFEST)
+    report = collect_dimension_report(ROOT, (target.case for target in targets))
+    expected = Counter(
+        {
+            DimensionOwner.METRIC: 0,
+            DimensionOwner.FRAME: 0,
+            DimensionOwner.ROUTE: 396,
+            DimensionOwner.LAYOUT: 530,
+        }
+    )
+    if len(report.cases) != 926 or report.case_counts != expected:
+        raise AssertionError(
+            "RMP dimension ownership baseline drifted: "
+            f"total={len(report.cases)}, owners={report.case_counts!r}"
+        )
+    if report.comment_count:
+        raise AssertionError("RMP case comments regained physical dimensions")
+    if report.book_counts != Counter(BOOK_LAYOUT_ALLOWLIST):
+        raise AssertionError(
+            f"benchmark-book dimension allowlist drifted: {report.book_counts!r}"
+        )
+    validate_dimension_report(report)
+
+    synthetic = r"""% pitch=14mm remains visible to the comment audit
+\begin{tenkz}[pitch=11mm,
+  sheet vector={0mm,2.5mm}]
+  \tnput{a}{(1mm,2mm)}{}
+  \tnjoin[via={(3mm,4mm)}]{a}{5mm,6mm}
+\end{tenkz}
+"""
+    occurrences = scan_case_dimensions(Path("synthetic.tex"), synthetic)
+    synthetic_counts = Counter(occurrence.owner for occurrence in occurrences)
+    if synthetic_counts != Counter(
+        {
+            DimensionOwner.METRIC: 2,
+            DimensionOwner.FRAME: 2,
+            DimensionOwner.ROUTE: 4,
+            DimensionOwner.LAYOUT: 2,
+        }
+    ):
+        raise AssertionError(
+            f"balanced dimension classification failed: {synthetic_counts!r}"
+        )
+    if sum(occurrence.in_comment for occurrence in occurrences) != 1:
+        raise AssertionError("comment dimensions were not counted orthogonally")
+
+    extra_layout = DimensionOccurrence(
+        Path("synthetic.tex"),
+        1,
+        "1mm",
+        DimensionOwner.LAYOUT,
+        False,
+        0,
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, extra_layout)),
+        "case dimensions increased to 927",
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, extra_layout)),
+        "composition/layout dimensions increased to 531",
+    )
+    for source, phrase in (
+        (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
+        (
+            r"\begin{tenkz}[sheet vector={0mm,1mm}]\end{tenkz}",
+            "projection/frame dimensions increased",
+        ),
+        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 397"),
+    ):
+        mutation = scan_case_dimensions(Path("synthetic.tex"), source)
+        _expect_dimension_failure(
+            dataclasses.replace(report, cases=(*report.cases, *mutation)),
+            phrase,
+        )
+    unknown = scan_case_dimensions(Path("synthetic.tex"), r"\foo{1mm}")
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, *unknown)),
+        "unowned case dimension",
+    )
+    comment = scan_case_dimensions(Path("synthetic.tex"), "% pitch=1mm\n")
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, *comment)),
+        "comment dimensions increased",
+    )
+    book_path = next(iter(BOOK_LAYOUT_ALLOWLIST))
+    extra_book = DimensionOccurrence(
+        book_path,
+        1,
+        "1pt",
+        DimensionOwner.BOOK_LAYOUT,
+        False,
+        0,
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, book=(*report.book, extra_book)),
+        "allowlist requires exactly",
+    )
+
+    first_route = next(
+        index
+        for index, occurrence in enumerate(report.cases)
+        if occurrence.owner is DimensionOwner.ROUTE
+    )
+    reduced = dataclasses.replace(
+        report,
+        cases=report.cases[:first_route] + report.cases[first_route + 1 :],
+    )
+    validate_dimension_report(reduced)
+
+
 def test_rmp_author_source_identity() -> None:
     targets = load_manifest(DEFAULT_MANIFEST)
     cited = sorted(
@@ -289,6 +425,7 @@ def test_rmp_pairing_identity() -> None:
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_dimension_ownership()
     test_rmp_author_source_identity()
     test_rmp_pairing_identity()
     with PROVENANCE.open(encoding="utf-8", newline="") as stream:

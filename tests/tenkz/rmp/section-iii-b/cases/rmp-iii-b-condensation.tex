@@ -1,32 +1,69 @@
 % Target: rmp-iii-b-condensation
 % Formula: A doubled anyon string joins paired endpoints on ket and bra sheets.
-% Ink: Canonical public tenkzplanes with the same marked path on both sheets.
+% Ink: Canonical public kernel plane basis with the same marked path on both sheets.
 % Boundary: Both 6x4 sheets are open; paired string endpoints stay uncontracted.
 % Source: paper TN-Review-main.tex line 1697; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 925-953
-% Capabilities: lattice, double-layer-string, marked-endpoints
+% Capabilities: kernel, plane-frame, double-layer-string, marked-endpoints
+\ProvideDocumentCommand{\tncondsite}{O{}mm}{
+  \tn[at=(#2,#3,1), name=k#2#3, ports={45:physical}, #1]{}
+  \tn[at=(#2,#3,2), name=b#2#3, ports={225:physical}, #1]{}
+}
+\ProvideDocumentCommand{\tncondbond}{mmmm}{
+  \tnwire{(#1,#2,1)}{(#3,#4,1)} \tnwire{(#1,#2,2)}{(#3,#4,2)}
+}
+\ProvideDocumentCommand{\tncondpair}{mm}{
+  \tnwire{k#1#2.45}{b#1#2.225}
+}
 \[
-  % The author source repeats one path at y=-0.2 and y=0.2. The named oblique
-  % frame separates the same-x ket/bra markers; the endpoint interfaces remain
-  % open.
-  \begin{tenkzplanes}[rows=6, cols=4,
-                      frame=oblique,
-                      sheet vector={0mm,2.70mm},
-                      open={(1,2),(5,3)}]
-    \tnsite[role=marked, size=l]{(1,2,1)}
-    \tnsite[role=marked,size=s]{(2,2,1)} \tnsite[role=marked,size=s]{(3,2,1)}
-    \tnsite[role=marked,size=s]{(4,2,1)} \tnsite[role=marked,size=l]{(5,3,1)}
-    \tnsite[role=marked, size=l]{(1,2,0)}
-    \tnsite[role=marked,size=s]{(2,2,0)} \tnsite[role=marked,size=s]{(3,2,0)}
-    \tnsite[role=marked, size=s]{(4,2,0)}
-    \tnsite[role=marked, size=l]{(5,3,0)}
-    \tnedge[role=operator]{(1,2,1)-(2,2,1)}
-    \tnedge[role=operator]{(2,2,1)-(3,2,1)}
-    \tnedge[role=operator]{(3,2,1)-(4,2,1)}
-    \tnedge[role=operator]{(4,2,1)-(5,3,1)}
-    \tnedge[role=operator]{(1,2,0)-(2,2,0)}
-    \tnedge[role=operator]{(2,2,0)-(3,2,0)}
-    \tnedge[role=operator]{(3,2,0)-(4,2,0)}
-    \tnedge[role=operator]{(4,2,0)-(5,3,0)}
-  \end{tenkzplanes}_{\ a\leftrightarrow\bar a}
+  \tenkzkernel
+  \tndeclare{species}{operator}{hue=source:red}
+  % One plane frame owns the ket and bra places.  The paired endpoint ports
+  % remain open; every other physical interface is an explicit contraction.
+  \begin{tenkz}[lattice={6x4}, planes, bonds=none,
+                west=none, east=none, north=none, south=none]
+    \tncondsite{1}{1} \tncondsite[role=marked,size=l]{1}{2}
+    \tncondsite{1}{3} \tncondsite{1}{4}
+    \tncondsite{2}{1} \tncondsite[role=marked,size=s]{2}{2}
+    \tncondsite{2}{3} \tncondsite{2}{4}
+    \tncondsite{3}{1} \tncondsite[role=marked,size=s]{3}{2}
+    \tncondsite{3}{3} \tncondsite{3}{4}
+    \tncondsite{4}{1} \tncondsite[role=marked,size=s]{4}{2}
+    \tncondsite{4}{3} \tncondsite{4}{4}
+    \tncondsite{5}{1} \tncondsite{5}{2}
+    \tncondsite[role=marked,size=l]{5}{3} \tncondsite{5}{4}
+    \tncondsite{6}{1} \tncondsite{6}{2}
+    \tncondsite{6}{3} \tncondsite{6}{4}
+    % The two sheet grids have identical nearest-neighbour topology.
+    \tncondbond{1}{1}{1}{2} \tncondbond{1}{2}{1}{3} \tncondbond{1}{3}{1}{4}
+    \tncondbond{2}{1}{2}{2} \tncondbond{2}{2}{2}{3} \tncondbond{2}{3}{2}{4}
+    \tncondbond{3}{1}{3}{2} \tncondbond{3}{2}{3}{3} \tncondbond{3}{3}{3}{4}
+    \tncondbond{4}{1}{4}{2} \tncondbond{4}{2}{4}{3} \tncondbond{4}{3}{4}{4}
+    \tncondbond{5}{1}{5}{2} \tncondbond{5}{2}{5}{3} \tncondbond{5}{3}{5}{4}
+    \tncondbond{6}{1}{6}{2} \tncondbond{6}{2}{6}{3} \tncondbond{6}{3}{6}{4}
+    \tncondbond{1}{1}{2}{1} \tncondbond{1}{2}{2}{2}
+    \tncondbond{1}{3}{2}{3} \tncondbond{1}{4}{2}{4}
+    \tncondbond{2}{1}{3}{1} \tncondbond{2}{2}{3}{2}
+    \tncondbond{2}{3}{3}{3} \tncondbond{2}{4}{3}{4}
+    \tncondbond{3}{1}{4}{1} \tncondbond{3}{2}{4}{2}
+    \tncondbond{3}{3}{4}{3} \tncondbond{3}{4}{4}{4}
+    \tncondbond{4}{1}{5}{1} \tncondbond{4}{2}{5}{2}
+    \tncondbond{4}{3}{5}{3} \tncondbond{4}{4}{5}{4}
+    \tncondbond{5}{1}{6}{1} \tncondbond{5}{2}{6}{2}
+    \tncondbond{5}{3}{6}{3} \tncondbond{5}{4}{6}{4}
+    \tncondpair{1}{1} \tncondpair{1}{3} \tncondpair{1}{4}
+    \tncondpair{2}{1} \tncondpair{2}{2} \tncondpair{2}{3} \tncondpair{2}{4}
+    \tncondpair{3}{1} \tncondpair{3}{2} \tncondpair{3}{3} \tncondpair{3}{4}
+    \tncondpair{4}{1} \tncondpair{4}{2} \tncondpair{4}{3} \tncondpair{4}{4}
+    \tncondpair{5}{1} \tncondpair{5}{2} \tncondpair{5}{4}
+    \tncondpair{6}{1} \tncondpair{6}{2} \tncondpair{6}{3} \tncondpair{6}{4}
+    \tnwire[name=ket-open-start]{k12.45}{open n}
+    \tnwire[name=bra-open-start]{b12.225}{open s}
+    \tnwire[name=ket-open-end]{k53.45}{open n}
+    \tnwire[name=bra-open-end]{b53.225}{open s}
+    \tnwire[kind=string, species=operator, name=ket-string,
+      via={(2,2,1),(3,2,1),(4,2,1)}]{(1,2,1)}{(5,3,1)}
+    \tnwire[kind=string, species=operator, name=bra-string,
+      via={(2,2,2),(3,2,2),(4,2,2)}]{(1,2,2)}{(5,3,2)}
+  \end{tenkz}_{\ a\leftrightarrow\bar a}
 \]
