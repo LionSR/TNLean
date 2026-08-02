@@ -274,6 +274,13 @@ repository code or a validation command runs. GitHub's control plane and hosted
 runner remain inside the stated trust boundary; downloaded mutable executable
 content does not.
 
+The sole networked release step is the dedicated workflow's terminal publisher
+job. It has no checkout and runs no repository code. GitHub starts it only after
+the exact sign-off integration's network-disabled post-merge validator succeeds;
+it uses the GitHub control plane to create the absent annotated
+`tenkz-v1.0.0` tag at that integration. The pinned workflow and job dependency,
+not a tagger timestamp or a manual push, establish this order.
+
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
 canonical grammar `0|[1-9][0-9]*`. When a new freeze is proposed, its patch must
 be strictly larger than every other patch in the complete current
@@ -365,8 +372,8 @@ The dependency chain is ordered:
 8. resolve every `fix-compatible` friction in the active attempt, then merge an
    independently exact-head-approved release-preparation pull request descending
    from both work integrations and all resolution records;
-9. merge and post-merge validate the independently approved sign-off record and
-   create `tenkz-v1.0.0` on its integration commit.
+9. merge the independently approved sign-off record; its pinned post-merge
+   workflow validates it and then creates `tenkz-v1.0.0` on its integration.
 
 Closing #5086 in step 2 means that its plane-basis capability has landed for
 0.8. The `expiry 1.0` values on related SHRINK entries bound the later removal

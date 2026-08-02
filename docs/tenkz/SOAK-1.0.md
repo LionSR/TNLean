@@ -77,6 +77,18 @@ the job disables network access before repository code, the checker, a helper,
 or a validation command runs. GitHub's control plane and hosted runner remain
 trusted; downloaded mutable executable content does not.
 
+The dedicated workflow has one terminal publisher job with job-level
+`contents: write`; validation jobs have no write permission. The publisher has
+no checkout, local action, container, package download, or repository command.
+Its only executable is the hosted runner's version-fingerprinted `gh` client,
+invoked by the pinned workflow's closed inline command. Its `needs` dependency
+names the exact post-merge validation job, so GitHub can start it only after that
+job succeeds for the sign-off integration `I`. It then uses only GitHub's
+control plane to require the final ref absent, create an
+annotated `tenkz-v1.0.0` tag object targeting `I`, create the ref without force,
+and read it back. Its closed check output records the returned tag-object OID.
+Any other networked step or publisher input fails closed.
+
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
 it never revises, deletes, reorders, or inserts preceding bytes.
@@ -741,30 +753,34 @@ source fact, invalid 0.9 payload, or pinned-byte mismatch requires a
 sign-off-specific external-fact, or
 `validate-release-payload(I, tenkz-v1.0.0)` mismatch requires that reset
 targeting the sign-off. Neither case is a validated sign-off. After post-merge
-validation succeeds, the campaign is `signed-off-awaiting-tag` and the
-annotated `tenkz-v1.0.0` tag may be created on `I`. The tag must not exist
-before that success. Until the exact annotated tag object is observed peeling
-to `I`, an absent final-tag ref leaves the campaign awaiting creation. All
-mutable external facts remain subject to revalidation, and drift while the ref
-is absent requires the ordered reset process above.
+validation succeeds, the campaign is `signed-off-awaiting-tag` and only the
+pinned workflow's dependent publisher job may create the annotated
+`tenkz-v1.0.0` tag on `I`. An absent ref leaves the campaign awaiting that job
+or a full-workflow retry. A ref present before the publisher runs, a failed
+create-if-absent operation, or a ref created by another path is a hard release
+incident, not a release. All mutable external facts remain subject to
+revalidation, and drift while the ref is absent requires the ordered reset
+process above.
 
 Every validation, including one whose snapshot already contains the final tag,
 first replays the complete pinned policy, ledger, payload, Git, and GitHub
 evidence through the validated sign-off. A tag lookup may not short-circuit
-that replay. The current object named `tenkz-v1.0.0` must then be annotated and
-peel to the validated sign-off integration `I` under the required current
-no-update, no-delete, no-bypass protection. That observation changes the
-campaign to terminal `released` state. No later ledger entry or new sign-off is
-valid. Every later validation still replays every current mutable fact. A
+that replay. GitHub must report a successful publisher job in the pinned
+workflow run for `I`, ordered after its successful post-merge validation job.
+The current object named `tenkz-v1.0.0` must equal the object that job created,
+be annotated, and peel to `I` under the required current no-update, no-delete,
+no-bypass protection. Only that combined observation changes the campaign to
+terminal `released` state. No later ledger entry or new sign-off is valid. Every
+later validation still replays every current mutable fact. A
 mismatch that requires the ordered reset process while the final-tag ref is
 absent becomes a hard release incident once that ref exists; it never reopens
 the ledger. Creating the protected name with the wrong kind or target is also a
 hard release incident. Weaker current protection, or a moved or replaced
-present tag, is likewise a hard release incident. An absent final-tag ref always
-remains `signed-off-awaiting-tag`: this state-based contract stores no immutable
-prior-observation witness and does not claim to detect deletion by a trusted
-administrator. No incident is repaired by deleting, moving, or reusing the
-name, and none starts another 1.0 attempt.
+present tag, is likewise a hard release incident. An absent final-tag ref
+remains `signed-off-awaiting-tag` only while no successful publisher job exists.
+After that job records the created object, an absent ref is a hard incident.
+No incident is repaired by deleting, moving, or reusing the name, and none
+starts another 1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,

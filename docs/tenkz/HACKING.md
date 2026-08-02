@@ -295,7 +295,10 @@ landed; its exact diff changes only the tag-derived 1.0 manifest and four
 canonical release artifacts.  Exact-head sign-off review follows immediately
 on that integration; if `main` advances, repeat preparation on the new tip.  A
 validated sign-off remains live until a full replay succeeds and
-the exact annotated final tag is observed under current required protection.
+the pinned post-merge workflow's dependent publisher job creates and reads back
+the exact annotated final tag under current required protection.  Do not push
+that tag by hand: a pre-existing or externally created ref is an incident, not
+a release.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
 never reopens the ledger.
