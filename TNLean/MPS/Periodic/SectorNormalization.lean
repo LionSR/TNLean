@@ -77,21 +77,6 @@ theorem replaceBasis_coeff (P : SectorDecomposition d)
     (P.replaceBasis B).coeff N j = P.coeff N j :=
   rfl
 
-/-- Duplicate a representative gauge over every copy of that representative
-in the flattened sector coordinates.
-
-For gauges $X_j$, this is the family whose direct sum is
-$\bigoplus_j (I_{r_j} \otimes X_j)$.
-
-Source: arXiv:1708.00029, equation `eq:bdnr`, lines 286--305, and the
-block-diagonal similarity described at lines 313--332. -/
-private noncomputable def flatGaugeOfBasis (P : SectorDecomposition d)
-    (X : (j : Fin P.basisCount) → GL (Fin (P.basisDim j)) ℂ) :
-    (s : Fin P.totalCopies) → GL (Fin (P.flatDim s)) ℂ :=
-  fun s ↦ by
-    change GL (Fin (P.basisDim (P.flatIndexEquiv.symm s).1)) ℂ
-    exact X (P.flatIndexEquiv.symm s).1
-
 /-- Pure gauges of all representatives assemble to a pure gauge of the full
 multiplicity-bearing tensor, with every multiplicity weight unchanged.
 
@@ -107,7 +92,7 @@ theorem gaugeEquiv_toTensor_replaceBasis (P : SectorDecomposition d)
     GaugeEquiv P.toTensor (P.replaceBasis B).toTensor := by
   classical
   choose X hX using hGauge
-  let Xflat := P.flatGaugeOfBasis X
+  let Xflat := matched_block_gauge (Q := P) X
   have hXflat : ∀ (s : Fin P.totalCopies) (i : Fin d),
       (P.replaceBasis B).flatBasis s i =
         (Xflat s : Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ) *

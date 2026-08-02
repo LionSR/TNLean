@@ -72,16 +72,6 @@ noncomputable def matched_p_basis {P Q : SectorDecomposition d}
   exact cast (congr_arg (MPSTensor d) (hDim (Q.flatIndexEquiv.symm s).1))
     (P.basis (β (Q.flatIndexEquiv.symm s).1))
 
-/-- Duplicate the per-basis gauge matrices over all copies in the flattened `Q` coordinates.
-
-This realizes the `𝟙_{r_k} ⊗ X_k` part of CPSV16 Appendix MPV proof,
-line 1191. -/
-noncomputable def matched_block_gauge {Q : SectorDecomposition d}
-    (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ) :
-    (s : Fin Q.totalCopies) → GL (Fin (Q.flatDim s)) ℂ := fun s => by
-  change GL (Fin (Q.basisDim (Q.flatIndexEquiv.symm s).1)) ℂ
-  exact Xblock (Q.flatIndexEquiv.symm s).1
-
 /-- **Global block gauge from matched sectors and copy weights.**
 
 Assume the sectors of two sector decompositions have already been matched, and
