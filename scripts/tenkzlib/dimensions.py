@@ -701,22 +701,28 @@ def _environment_tokens(
 def _environment_spans(
     source: str, owner_source: str
 ) -> list[_OwnerSpan]:
-    """Return neutral, depth-matched spans for every public environment."""
-    return [
+    """Return neutral barriers for public environments and malformed controls."""
+    tokens = _environment_tokens(source, owner_source)
+    spans = [
         _OwnerSpan(start, len(source) if end < 0 else end, None)
         for start, end in _environment_scope_spans(
-            _environment_tokens(source, owner_source), _PUBLIC_ENVIRONMENTS
+            tokens, _PUBLIC_ENVIRONMENTS
         )
     ]
-
-
-def _option_spans(
-    source: str,
-    owner_source: str,
-) -> list[_OwnerSpan]:
-    """Find public option containers without joining split control words."""
-    spans: list[_OwnerSpan] = []
-    for container in _environment_tokens(source, owner_source):
+    # An unclosed environment-name argument cannot be resolved to a public
+    # name, but it still consumes the remainder as one malformed control.
+    for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
+        if not _is_control_word_start(owner_source, control.start()):
+            continue
+        position = _skip_space(owner_source, control.end())
+        if owner_source[position : position + 1] != "{":
+            continue
+        if match_group(owner_source, position, "{", "}") < 0:
+            spans.append(_OwnerSpan(control.start(), len(source), None, True))
+    # Every environment that already participates in the barrier contract
+    # needs the same fail-closed option boundary, even when its options have
+    # no physical keys or its expandable name remains unresolved.
+    for container in tokens:
         if (
             container.kind != "begin"
             or (
@@ -728,11 +734,28 @@ def _option_spans(
         position = _skip_space(owner_source, container.end)
         if owner_source[position : position + 1] != "[":
             continue
+        if match_group(owner_source, position, "[", "]") < 0:
+            spans.append(_OwnerSpan(container.start, len(source), None, True))
+    return spans
+
+
+def _option_spans(
+    source: str,
+    owner_source: str,
+) -> list[_OwnerSpan]:
+    """Find public option containers without joining split control words."""
+    spans: list[_OwnerSpan] = []
+    for container in _environment_tokens(source, owner_source):
+        if (
+            container.kind != "begin"
+            or container.name not in _OPTION_ENVIRONMENT_KEYS
+        ):
+            continue
+        position = _skip_space(owner_source, container.end)
+        if owner_source[position : position + 1] != "[":
+            continue
         closed = match_group(owner_source, position, "[", "]")
         if closed < 0:
-            spans.append(_OwnerSpan(container.start, len(source), None, True))
-            continue
-        if container.name not in _OPTION_ENVIRONMENT_KEYS:
             continue
         spans.extend(
             _option_group_spans(

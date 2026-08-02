@@ -599,6 +599,22 @@ def test_rmp_dimension_ownership() -> None:
                 f"source={unclosed_environment_source!r}, "
                 f"occurrences={unclosed_environment_option!r}"
             )
+    for malformed_environment_name in (
+        r"\begin{tenkz \tnput{x}{(59mm,0)}{}",
+        r"\end{tenkz \tnput{x}{(60mm,0)}{}",
+    ):
+        malformed_name_dimensions = scan_case_dimensions(
+            Path("synthetic.tex"), malformed_environment_name
+        )
+        if (
+            len(malformed_name_dimensions) != 1
+            or malformed_name_dimensions[0].owner is not None
+        ):
+            raise AssertionError(
+                "an unclosed environment name exposed nested ownership: "
+                f"source={malformed_environment_name!r}, "
+                f"occurrences={malformed_name_dimensions!r}"
+            )
     for case_variant in (
         r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
         r"\tnarrow{x \tn[Label Shift={35mm,36mm}]{A}}",
