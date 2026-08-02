@@ -1,0 +1,102 @@
+% Regression: removed-sheet spacing chooses bounded sparse/dense plans.
+\documentclass{standalone}
+\usepackage{tenkz}
+
+\ExplSyntaxOn
+\int_new:N \l__tenkz_test_sheet_sparse_outer_int
+
+% A 20x20 interface with one live site per sheet must enumerate exactly one
+% sparse record pair and publish its realized origin translation.
+\cs_new_protected:Npn \__tenkz_test_sheet_sparse_plan:
+  {
+    \group_begin:
+    \tenkzl_reset:
+    \int_set:Nn \l__tenkzl_nrows_int {20}
+    \int_set:Nn \l__tenkzl_ncols_int {20}
+    \int_set:Nn \l__tenkzl_sheets_int {2}
+    \int_step_inline:nn {20}
+      {
+        \int_step_inline:nn {20}
+          {
+            \bool_lazy_and:nnF
+              { \int_compare_p:nNn {##1} = {1} }
+              { \int_compare_p:nNn {####1} = {1} }
+              {
+                \prop_put:Nnn \l__tenkzl_removed_prop
+                  { ##1 - ####1 } {1}
+              }
+          }
+      }
+    \int_zero:N \l__tenkz_test_sheet_sparse_outer_int
+    \cs_set_eq:NN \__tenkz_test_sheet_sparse_outer:n
+      \tenkzl_guard_sparse_outer:n
+    \cs_set_protected:Npn \tenkzl_guard_sparse_outer:n ##1
+      {
+        \int_incr:N \l__tenkz_test_sheet_sparse_outer_int
+        \__tenkz_test_sheet_sparse_outer:n {##1}
+      }
+    \cs_set_protected:Npn \tenkzl_guard_dense_realized:n ##1
+      { \errmessage{dense-path-used-in-sparse-sheet-plan} }
+    \tenkzl_guard_sheet_plan:
+    \int_compare:nNnF
+      { \l__tenkz_test_sheet_sparse_outer_int } = {1}
+      { \errmessage{sparse-sheet-pair-count-not-one} }
+    \prop_if_in:NnF \l__tenkzl_guard_plan_prop {candidate/0/0}
+      { \errmessage{sparse-sheet-origin-candidate-missing} }
+    \prop_if_in:NnT \l__tenkzl_guard_plan_prop {dense/0}
+      { \errmessage{sparse-sheet-plan-published-dense-marker} }
+    \int_zero:N \l__tenkzl_guard_dr_int
+    \int_zero:N \l__tenkzl_guard_dc_int
+    \bool_set_false:N \l__tenkzl_guard_realized_bool
+    \tenkzl_guard_sheet_translation_realized:
+    \bool_if:NF \l__tenkzl_guard_realized_bool
+      { \errmessage{sparse-sheet-origin-candidate-not-realized} }
+    \group_end:
+  }
+
+% Removing one site from a 20x20 interface must choose the dense marker; the
+% origin translation is then certified from overlap and holes without a
+% record-product construction or fallback scan.
+\cs_new_protected:Npn \__tenkz_test_sheet_dense_plan:
+  {
+    \group_begin:
+    \tenkzl_reset:
+    \int_set:Nn \l__tenkzl_nrows_int {20}
+    \int_set:Nn \l__tenkzl_ncols_int {20}
+    \int_set:Nn \l__tenkzl_sheets_int {2}
+    \prop_put:Nnn \l__tenkzl_removed_prop {20-20-1} {1}
+    \cs_set_protected:Npn \tenkzl_guard_sparse_outer:n ##1
+      { \errmessage{sparse-path-used-in-dense-sheet-plan} }
+    \cs_set_protected:Npn \tenkzl_guard_dense_scan:n ##1
+      { \errmessage{dense-sheet-certificate-fell-through} }
+    \tenkzl_guard_sheet_plan:
+    \prop_if_in:NnF \l__tenkzl_guard_plan_prop {dense/0}
+      { \errmessage{dense-sheet-plan-marker-missing} }
+    \int_zero:N \l__tenkzl_guard_dr_int
+    \int_zero:N \l__tenkzl_guard_dc_int
+    \bool_set_false:N \l__tenkzl_guard_realized_bool
+    \tenkzl_guard_dense_realized:n {0}
+    \bool_if:NF \l__tenkzl_guard_realized_bool
+      { \errmessage{dense-sheet-certificate-did-not-realize-origin} }
+    \group_end:
+  }
+\ExplSyntaxOff
+
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_sheet_sparse_plan:
+\__tenkz_test_sheet_dense_plan:
+\ExplSyntaxOff
+
+% A nonnegative raw margin must not request model realization.
+{
+\ExplSyntaxOn
+\cs_set_protected:Npn \tenkzl_guard_sheet_translation_realized:
+  { \errmessage{nonnegative-sheet-spacing-requested-realization} }
+\ExplSyntaxOff
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=2, frame=flat, sheet sep=0.5]
+\end{tenkzlattice}
+}
+\end{document}

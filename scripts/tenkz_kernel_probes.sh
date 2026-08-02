@@ -334,6 +334,80 @@ basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
   echo "FAIL: an authored basis member did not override population" >&2
   exit 1
 }
+override_selection_atoms=$(
+  grep -c '^atom|' "$WORK/r_basis_override_selection.tnlog" || true
+)
+[ "$override_selection_atoms" -eq 64 ] || {
+  echo "FAIL: whole-cell overrides did not suppress their basis members" >&2
+  exit 1
+}
+grep -Eq '^atom.*[|]name=X([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: the whole-cell override record disappeared" >&2
+  exit 1
+}
+if grep -E '^atom.*[|]name=X([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" | grep -Fq '|member='; then
+  echo "FAIL: a whole-cell override became a basis-member record" >&2
+  exit 1
+fi
+override_spacing_count=$(
+  grep -Fc '|code=basis-spacing|' \
+    "$WORK/r_basis_override_selection.tnlog" || true
+)
+[ "$override_spacing_count" -eq 6 ] || {
+  echo "FAIL: realized and suppressed basis collisions were not distinguished" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k2|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a realized collision after a partial override was not diagnosed" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k4|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: an authored member replacement left the spacing population" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k6|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=1|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a spanning member lost its canonical-anchor collision" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k9|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=1|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: an outside canonical anchor left the spacing population" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k10|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: the dense basis fast path changed its deterministic witness" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k11|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: one override restored the live-record cross product" >&2
+  exit 1
+}
+if grep -Eq '^warning[|]picture=k(1|3|5|7|8|12)[|]code=basis-spacing[|]' \
+    "$WORK/r_basis_override_selection.tnlog"; then
+  echo "FAIL: suppressed, aliased, or stale basis state emitted a warning" >&2
+  exit 1
+fi
+override_spacing_messages=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_override_selection.tex.transcript" || true
+)
+[ "$override_spacing_messages" -eq 6 ] || {
+  echo "FAIL: override spacing events and human diagnostics diverged" >&2
+  exit 1
+}
 grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
     "$WORK/r_basis_override_selection.tnlog" || {
   echo "FAIL: a whole-cell override was selected more than once" >&2
@@ -344,6 +418,41 @@ if ! grep -F '|addr=(1,1,1)|' "$WORK/r_basis_override.tnlog" |
   echo "FAIL: an authored member lost its normalized basis address" >&2
   exit 1
 fi
+outside_translation_atoms=$(
+  grep -c '^atom|' "$WORK/r_basis_outside_translation.tnlog" || true
+)
+[ "$outside_translation_atoms" -eq 8 ] || {
+  echo "FAIL: the outside-anchor translation fixture lost a basis record" >&2
+  exit 1
+}
+outside_translation_count=$(
+  grep -Fc '|code=basis-spacing|' \
+    "$WORK/r_basis_outside_translation.tnlog" || true
+)
+[ "$outside_translation_count" -eq 1 ] || {
+  echo "FAIL: the complete canonical-anchor translation was not unique" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k1|code=basis-spacing|member-a=1|member-b=2|dr=2|dc=2|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_outside_translation.tnlog" || {
+  echo "FAIL: the row/column-zero anchor collision was not diagnosed" >&2
+  exit 1
+}
+outside_translation_messages=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_outside_translation.tex.transcript" || true
+)
+[ "$outside_translation_messages" -eq 1 ] || {
+  echo "FAIL: outside-anchor event and human diagnostic diverged" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_basis_outside_translation.tnlog" \
+  "$KERNEL/regression/r_basis_outside_translation.tex" >/dev/null || {
+  echo "FAIL: the outside-anchor stream did not pass the one-pass audit" >&2
+  exit 1
+}
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' \
     "$WORK/r_basis_override.tnlog" || {
   echo "FAIL: an explicit origin singleton lost ordinary grid bonds" >&2
@@ -394,6 +503,105 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
 }
 [ "$(grep -c '^atom|' "$WORK/r_basis_member_wide.tnlog" || true)" -eq 1 ] || {
   echo "FAIL: a displaced member span did not suppress slot population" >&2
+  exit 1
+}
+basis_spacing_count=$(
+  grep -Fc '|code=basis-spacing|' "$WORK/r_basis_spacing.tnlog" || true
+)
+[ "$basis_spacing_count" -eq 9 ] || {
+  echo "FAIL: affine basis spacing did not emit exactly nine warnings" >&2
+  exit 1
+}
+for expected in \
+  'warning|picture=k1|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.25|floor=0.327573|margin=-0.077573094' \
+  'warning|picture=k2|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.1875|floor=0.321248|margin=-0.133748076' \
+  'warning|picture=k3|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=-1|dist=0|floor=0.348706|margin=-0.348705634' \
+  'warning|picture=k4|code=basis-spacing|member-a=1|member-b=2|dr=1|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  'warning|picture=k5|code=basis-spacing|member-a=1|member-b=3|dr=0|dc=0|dist=0.25|floor=0.327573|margin=-0.077573094' \
+  'warning|picture=k8|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.343027|margin=-0.093026792' \
+  'warning|picture=k9|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.343027|margin=-0.093026792' \
+  'warning|picture=k10|code=basis-spacing|member-a=2|member-b=3|dr=0|dc=0|dist=0.25|floor=0.33424|margin=-0.084240243' \
+  'warning|picture=k12|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0.25|floor=0.25|margin=-0.0000004'
+do
+  grep -Fxq "$expected" "$WORK/r_basis_spacing.tnlog" || {
+    echo "FAIL: affine basis spacing lost witness: $expected" >&2
+    exit 1
+  }
+done
+if grep -Eq '^warning[|]picture=k(6|7|11)[|]code=basis-spacing[|]' \
+    "$WORK/r_basis_spacing.tnlog"; then
+  echo "FAIL: a safe or exact-boundary basis emitted a spacing warning" >&2
+  exit 1
+fi
+basis_spacing_message_count=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_spacing.tex.transcript" || true
+)
+[ "$basis_spacing_message_count" -eq 9 ] || {
+  echo "FAIL: basis-spacing events and human diagnostics diverged" >&2
+  exit 1
+}
+if grep -Fq '|code=basis-spacing|' \
+    "$WORK/k_czx.tnlog" "$WORK/s9_sugar.tnlog"; then
+  echo "FAIL: a contracted CZX or planes basis emitted a spacing warning" >&2
+  exit 1
+fi
+sheet_coincide_count=$(
+  grep -Fc '|code=sheet-coincide|' \
+    "$WORK/r_sheet_coincide_removed.tnlog" || true
+)
+[ "$sheet_coincide_count" -eq 4 ] || {
+  echo "FAIL: removed sites did not filter realized sheet-spacing pairs" >&2
+  exit 1
+}
+for expected in \
+  'warning|picture=2|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
+  'warning|picture=3|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
+  'warning|picture=5|code=sheet-coincide|dist=0|floor=0.327573|dr=-1|dc=0' \
+  'warning|picture=6|code=sheet-coincide|dist=0.327573|floor=0.327573|dr=0|dc=0'
+do
+  grep -Fxq "$expected" "$WORK/r_sheet_coincide_removed.tnlog" || {
+    echo "FAIL: surviving adjacent sheets lost witness: $expected" >&2
+    exit 1
+  }
+done
+if grep -Eq '^warning[|]picture=(1|4)[|]code=sheet-coincide[|]' \
+    "$WORK/r_sheet_coincide_removed.tnlog"; then
+  echo "FAIL: a removed adjacent-sheet endpoint retained a warning" >&2
+  exit 1
+fi
+sheet_coincide_messages=$(
+  grep -Fc 'Package tenkz Warning: sheet vector:' \
+    "$WORK/r_sheet_coincide_removed.tex.transcript" || true
+)
+[ "$sheet_coincide_messages" -eq 4 ] || {
+  echo "FAIL: sheet-coincide events and human diagnostics diverged" >&2
+  exit 1
+}
+awk '
+  /^picture[|]id=/ {
+    id = $0
+    sub(/^picture[|]id=/, "", id)
+    sub(/[|].*$/, "", id)
+    picture[id] = NR
+  }
+  /^warning[|]picture=.*[|]code=basis-spacing[|]/ {
+    id = $0
+    sub(/^warning[|]picture=/, "", id)
+    sub(/[|].*$/, "", id)
+    if (!(id in picture) || picture[id] >= NR)
+      exit 1
+    warnings++
+  }
+  END { if (warnings != 9) exit 1 }
+' "$WORK/r_basis_spacing.tnlog" || {
+  echo "FAIL: a basis-spacing warning preceded its picture header" >&2
+  exit 1
+}
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_basis_spacing.tnlog" "$KERNEL/regression/r_basis_spacing.tex" \
+  >/dev/null || {
+  echo "FAIL: the basis-spacing stream did not pass the one-pass audit" >&2
   exit 1
 }
 awk '

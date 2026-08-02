@@ -19,11 +19,11 @@
 % 0.45): an equal-axis stack interleaves the sheets with the window's
 % own height, so sheet h+1's site (r,c) lands near sheet h's site
 % (r+2,c-1) at offset lp x (|2 slant - 1|, |2 rise - 1|).  At the stock
-% slant 0.45 that is (0.10, 0.20) lp = 1.85mm, tangent to the 1.76mm
-% bead diameter (doubled-dot blobs, verified in ink); slant 0.40 moves
-% it to (0.20, 0.20) lp = 2.33mm and every bead separates.  The expert
-% sheet vector bypasses the planes-interleave guard, so this file is
-% also the stress probe for the practical equal-axis ceiling.
+% slant 0.45 its centres are 0.167705 pitch apart; slant 0.40 improves
+% that to 0.212132 pitch.  The bead bodies then separate, but their audited
+% outer ink retains less than named daylight, so the stricter readability
+% warning is intentional.  The expert sheet vector bypasses the
+% planes-interleave guard, so this file also probes that independent warning.
 \documentclass[border=6pt]{standalone}
 \usepackage{tenkz}
 \begin{document}
