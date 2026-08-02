@@ -93,6 +93,12 @@ tnlog = "breaking-versioned"
 tenkz has two public surfaces. A release decision names both; compatibility on
 one cannot excuse a break in the other.
 
+During an active attempt, `tex_api_fix_paths` constrains a compatible TeX-surface
+fix and `tnlog_fix_paths` constrains a compatible event-surface fix. Both lists
+name the TeX package tree because its source implements the public API and emits
+the event stream. The pinned canonical reader and release-test code are evidence,
+not mutable fix surfaces.
+
 These classifications govern the 0.9 release candidate from its valid freeze
 through the 1.0 evidence campaign, and every release beginning with 1.0. They do not freeze
 the current v0.7 transitional surface. Before the freeze, the v0.7-to-v0.9
@@ -339,6 +345,10 @@ The dependency chain is ordered:
    descending from both work integrations, then merge and post-merge validate
    the independently approved sign-off record and create `tenkz-v1.0.0` on its
    integration commit.
+
+Closing #5086 in step 2 means that its plane-basis capability has landed for
+0.8. The `expiry 1.0` values on related SHRINK entries bound the later removal
+of downstream migration flags; they do not move #5086 to the 1.0 milestone.
 
 Every prerequisite must be closed, with GitHub `closedAt <= T`. Each qualifying
 work pull request must be merged to `main` strictly after `T`. Its integration
