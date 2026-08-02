@@ -317,6 +317,19 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"owned comment inch escaped: {owned_comment_inch!r}"
         )
+    for source, owner in (
+        ("% width is 1 in wide\n", DimensionOwner.LAYOUT),
+        ("% offset 1 in north\n", DimensionOwner.FRAME),
+    ):
+        semantic_comment_inch = scan_case_dimensions(Path("synthetic.tex"), source)
+        if (
+            len(semantic_comment_inch) != 1
+            or semantic_comment_inch[0].owner is not owner
+            or not semantic_comment_inch[0].in_comment
+        ):
+            raise AssertionError(
+                f"semantic comment inch escaped: {semantic_comment_inch!r}"
+            )
 
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),

@@ -199,13 +199,17 @@ def _comment_ranges(source: str) -> list[tuple[int, int]]:
 
 def _comment_owner(comment: str) -> DimensionOwner | None:
     lowered = re.sub(r"\s+", " ", comment.lower())
-    if "pitch" in lowered or "metric" in lowered:
+    if re.search(r"\b(?:pitch|metric|spacing|distance)\b", lowered):
         return DimensionOwner.METRIC
-    if any(key in lowered for key in (*_FRAME_KEYS, "projection", "frame")):
+    if any(key in lowered for key in (*_FRAME_KEYS, "projection", "frame", "offset")):
         return DimensionOwner.FRAME
     if re.search(r"\\tn(?:join|wire|edge|arrow)\b|\b(?:route|string)\b", lowered):
         return DimensionOwner.ROUTE
-    if re.search(r"\\tnput\b|\b(?:composition|layout)\b", lowered):
+    if re.search(
+        r"\\tnput\b|\b(?:composition|layout|width|height|length|radius|"
+        r"diameter|wide|tall|long|thick)\b",
+        lowered,
+    ):
         return DimensionOwner.LAYOUT
     return None
 
