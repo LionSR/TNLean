@@ -2093,6 +2093,7 @@
           }
       }
     \__tenkz_kernel_commit:
+    \ignorespaces
   }
 \cs_new_protected:Npn \__tenkz_kernel_tnwire:nnn #1#2#3
   { \__tenkz_kernel_tnwire:nnnn {#1} {#2} {#3} {2} }
@@ -2109,6 +2110,7 @@
     \tl_if_blank:nF {#3}
       { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {label} {#3} }
     \__tenkz_kernel_commit:
+    \ignorespaces
   }
 
 % \tngroup[keys]{body}: a scoped sub-frame; names inside stay addressable
@@ -2123,7 +2125,9 @@
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_commit:
+    \ignorespaces
     #2
+    \ignorespaces
   }
 
 % \tnset{keys}: document or group policy.
@@ -2134,6 +2138,7 @@
     \__tenkz_kernel_policy_merge:NN
       \l__tenkz_kernel_stage_prop \g__tenkz_kernel_setup_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
+    \ignorespaces
   }
 
 % \tndeclare{class}{name}{keys}: the one extension door.  A declared atom
@@ -2152,6 +2157,7 @@
         {species} { \__tenkz_kernel_declare_species:nn {#2} {#3} }
       }
       { \msg_error:nnn {tenkz}{kernel-declare-class} {#1} }
+    \ignorespaces
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_species:nn #1#2
   {
@@ -2214,7 +2220,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_declare_atom_aux:nn #1#2
   {
     \exp_args:Nc \NewDocumentCommand {#1} { O{} m }
-      { \__tenkz_kernel_tn:nn { #2 , ##1 } {##2} }
+      { \__tenkz_kernel_tn:nn { #2 , ##1 } {##2} \ignorespaces }
   }
 
 % ---------- side policy normalizes to closure wires ---------------------------------------
