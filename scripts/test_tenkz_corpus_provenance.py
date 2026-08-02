@@ -297,6 +297,8 @@ def test_rmp_dimension_ownership() -> None:
         "% label 2 in figure 3\n",
         "% Figure 3 in the layout shows the path\n",
         "% use site 2 in the frame\n",
+        "% version 3 in the layout uses the old syntax\n",
+        "% equation 2 in the figure shows the route\n",
     ):
         if scan_case_dimensions(Path("synthetic.tex"), prose):
             raise AssertionError(f"English prose became an inch unit: {prose!r}")
@@ -306,6 +308,10 @@ def test_rmp_dimension_ownership() -> None:
     if len(ownerless_comment_inch) != 1 or not ownerless_comment_inch[0].in_comment:
         raise AssertionError(
             f"ownerless comment inch escaped: {ownerless_comment_inch!r}"
+        )
+    if ownerless_comment_inch[0].owner is not DimensionOwner.FRAME:
+        raise AssertionError(
+            f"shift measurement gained the wrong owner: {ownerless_comment_inch!r}"
         )
     active_inch = scan_case_dimensions(
         Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"

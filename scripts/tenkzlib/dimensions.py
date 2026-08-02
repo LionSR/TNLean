@@ -236,19 +236,42 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     return None
 
 
-def _comment_uses_in_as_preposition(
+def _comment_measurement_owner_before(
+    source: str,
+    comment_start: int,
+    occurrence_start: int,
+) -> DimensionOwner | None:
+    """Return an owner only for a measurement phrase immediately before a value."""
+    prefix = re.sub(r"\s+", " ", source[comment_start:occurrence_start].lower())
+    suffix = r"\s*(?:=|is|equals?|measures?)?\s*$"
+    if re.search(r"\b(?:pitch|metric|spacing|distance)" + suffix, prefix):
+        return DimensionOwner.METRIC
+    if re.search(
+        r"\b(?:sheet vector|row vector|col vector|projection|frame|offset|"
+        r"shift(?:ed)?|mov(?:e|ed)|displac(?:e|ed|ement))" + suffix,
+        prefix,
+    ):
+        return DimensionOwner.FRAME
+    if re.search(r"\b(?:route|string)" + suffix, prefix):
+        return DimensionOwner.ROUTE
+    if re.search(
+        r"\b(?:composition|layout|width|height|length|radius|diameter|wide|"
+        r"tall|long|thick)" + suffix,
+        prefix,
+    ):
+        return DimensionOwner.LAYOUT
+    return None
+
+
+def _comment_inch_followed_by_prose(
     source: str,
     occurrence: re.Match[str],
-    comment_start: int,
+    comment_end: int,
 ) -> bool:
     if re.search(r"in\s*$", occurrence.group(0), flags=re.IGNORECASE) is None:
         return False
-    prefix = source[comment_start : occurrence.start()]
-    return re.search(
-        r"(?:\by\s*=\s*|\b(?:site|figure|label|section)\s+|\beach\s+of\s+)$",
-        prefix,
-        flags=re.IGNORECASE,
-    ) is not None
+    tail = source[occurrence.end() : comment_end]
+    return re.match(r"\s+(?!plus\b|minus\b)[A-Za-z]", tail, re.IGNORECASE) is not None
 
 
 def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, ...]:
@@ -268,10 +291,12 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
         if comment_range is not None:
             comment = source[comment_range[0] : comment_range[1]]
             owner = _comment_owner(comment)
-            if _comment_uses_in_as_preposition(source, match, comment_range[0]):
-                # An owner word after the occurrence can belong to ordinary
-                # prose ("3 in the layout"), not to the apparent inch value.
-                owner = _comment_owner(source[comment_range[0] : match.start()])
+            if _comment_inch_followed_by_prose(source, match, comment_range[1]):
+                # A later owner word can belong to prose ("3 in the layout").
+                # Require a local measurement phrase before an ambiguous inch.
+                owner = _comment_measurement_owner_before(
+                    source, comment_range[0], match.start()
+                )
                 if owner is None:
                     continue
             in_comment = True
