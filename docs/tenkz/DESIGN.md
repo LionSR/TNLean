@@ -216,8 +216,8 @@ inventory digest and both tree OIDs so that payload validation binds them at the
 exact candidate tree. Release artifacts and declared benchmark inputs remain
 mutable subject data; they cannot provide executable helpers, coverage
 selection, expected results, allowlists, or thresholds. The freeze validates
-the 0.9 manifest, artifacts, and tests before its tag is
-created. The final release-preparation pull request changes exactly the 1.0
+the 0.9 manifest, artifacts, and tests before its tag is created. The final
+release-preparation pull request changes exactly the 1.0
 manifest and four canonical artifacts. The tests run through the single pinned
 protocol at the exact release head. This binds each payload to its tag and the
 1.0 preparation to the reviewed pull request.
@@ -225,14 +225,15 @@ protocol at the exact release head. This binds each payload to its tag and the
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` starts at any
 non-negative decimal integer and increases strictly between attempts. For each
 attempt, first merge the frozen source through a source pull request targeting
-`main`. Its integration tree must carry the tag-derived 0.9 manifest, canonical
-release artifacts, pinned test inventory, and passing inventory commands. Then
-create and push the annotated tag on GitHub's `source_pr.mergeCommit.oid`. Only
-then open the ledger-entry pull request and append its self-referential `freeze`
-entry. The target branch must remain at that source integration until the
-freeze record merges; an intervening `main` commit invalidates the candidate
-before any attempt starts and requires a new source/tag step with a larger
-unused `PATCH`.
+`main`. A reviewer distinct from its author approves its exact final head before
+merge, and its integration tree equals that approved tree. The tree must carry
+the tag-derived 0.9 manifest, canonical release artifacts, pinned test
+inventory, and passing inventory commands. Then create and push the annotated
+tag on GitHub's `source_pr.mergeCommit.oid`. Only then open the ledger-entry pull
+request and append its self-referential `freeze` entry. The target branch must
+remain at that source integration until the freeze record merges; an
+intervening `main` commit invalidates the candidate before any attempt starts
+and requires a new source/tag step with a larger unused `PATCH`.
 
 Every entry records the pull request that first appends it as `record_pr`;
 GitHub supplies that pull request's author, final head, merge time, and
@@ -291,8 +292,9 @@ The dependency chain is ordered:
    self-referential enforcement-activation pull request to perform only the
    seven permitted scalar replacements and pin the inventory, test-code tree,
    test-support tree, exact armed policy hash, and ledger prefix;
-5. merge the frozen source through a source pull request to `main`, then create
-   and push an annotated `tenkz-v0.9.PATCH` tag on its integration commit;
+5. merge the frozen source through an independently exact-head-approved source
+   pull request to `main`, then create and push an annotated
+   `tenkz-v0.9.PATCH` tag on its integration commit;
 6. open a ledger-entry draft pull request, append a self-referential `freeze`
    entry, observe `freeze-pending` in candidate CI, and merge it to start the
    attempt at GitHub's verified merge time `T`;
@@ -321,15 +323,14 @@ Interface friction is appended when found and triaged as `fix-compatible`,
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists
-and otherwise leaves the campaign inactive. It is the first new non-correction
-entry after the final live entry in the immutable prefix with which a current
-external-evidence audit began. External drift may occur after later historical
-entries already landed, so the reset need not be adjacent to its target. An
-audit batch orders invalid targets by ledger position. If a breaking-required
-reset was already pending at that boundary, it lands first;
-the record-invalid resets then land consecutively in that order, apart from
-corrections. Ignoring historical corrections and administrative resets, the
-next freeze is attempt number one higher than the most recently opened attempt,
+and otherwise leaves the campaign inactive. When an audit's reset queue is
+nonempty, its head is the first new non-correction entry after the boundary. A
+pending breaking-required reset heads the queue; otherwise the earliest invalid
+target's record-invalid reset does. Remaining record-invalid resets follow in
+ledger order, consecutively apart from corrections. External drift may occur after
+later historical entries already landed, so a reset need not be adjacent to its
+target. Ignoring historical corrections and administrative resets, the next
+freeze is attempt number one higher than the most recently opened attempt,
 with a strictly larger `PATCH`, a new source pull request and SHA, a new
 annotated tag and object, and a new freeze record.
 Compatible fixes retain the active attempt only when both public surfaces remain
@@ -339,8 +340,8 @@ entry, remains owned by its target's attempt, and never changes attempt state.
 The sign-off entry's `record_pr` is its own pull request. GitHub's `mergedAt`
 is the sign-off time and must be later than both qualifying work merges;
 normalized `mergedBy` must equal the pinned policy's `maintainer_identity`. The
-named, distinct reviewer's
-latest effective review must be `APPROVED` on the exact final head, submitted
+named, distinct reviewer's latest effective review must be `APPROVED` on the
+exact final head, submitted
 after the later qualifying work merge and the named release-preparation merge,
 and before sign-off merge. The sign-off head and integration must descend from
 all three integrations. The sign-off may proceed immediately once those ordered

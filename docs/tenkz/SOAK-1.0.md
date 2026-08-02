@@ -260,23 +260,24 @@ attempt; it never opens, closes, or changes the active attempt. Before the final
 tag exists, a required `record-invalid` reset may follow a sign-off. No entry
 follows a released sign-off.
 
-Each attempt has exactly one opening freeze. If a merged entry fails a required
-post-merge identity, ancestry, tree, diff, or ordering check, a `reset` entry
-with `cause = "record-invalid"` is the first new non-correction record appended
-after the audit boundary. That boundary is not an entry field, timestamp, or
-caller choice: it is the final live entry in the immutable ledger prefix at the
-start of a fail-closed validation against one complete current GitHub/Git
-snapshot and exact validation target. The resolver supplies a closed
-`AuditEvidence` value containing that `boundary_entry_id`, the ledger-ordered
-`invalid_entries`, and true `snapshot_complete` and `validation_target_exact`
-flags. A caller cannot choose or weaken those fields. Historical entries already
-in that prefix remain replayable. A single audit may find multiple invalid
-entries; their targets are reset in ledger order. If a `breaking-required` reset
-was already
-pending at that boundary, it lands first and closes the active attempt. The
-required `record-invalid` resets follow consecutively while the campaign is
-inactive; corrections are the only entries that may interleave.
-Their targets may belong to any attempt. External facts may drift after later
+Each attempt has exactly one opening freeze. The audit boundary is not an entry
+field, timestamp, or caller choice: it is the final live entry in the immutable
+ledger prefix at the start of a fail-closed validation against one complete
+current GitHub/Git snapshot and exact validation target. The resolver supplies
+a closed `AuditEvidence` value containing that `boundary_entry_id`, the
+ledger-ordered `invalid_entries`, and true `snapshot_complete` and
+`validation_target_exact` flags. A caller cannot choose or weaken those fields.
+Historical entries already in that prefix remain replayable.
+
+When the reset queue is nonempty, the first new non-correction entry after the
+boundary is its head. If a `breaking-required` reset was already pending at the
+boundary, it heads the queue and closes the active attempt; otherwise the queue
+starts with the `record-invalid` reset for the earliest invalid entry. Remaining
+`record-invalid` targets follow in ledger order, consecutively while the
+campaign is inactive; corrections are the only entries that may interleave.
+Such a target is any merged entry that currently fails a required post-merge
+identity, ancestry, tree, diff, or ordering check, and may belong to any
+attempt. External facts may drift after later
 entries already landed; those intervening entries remain historical and do not
 make an adjacent reset possible. A record-invalid reset closes the active
 attempt if one remains and otherwise uses the most recently opened attempt
@@ -305,11 +306,15 @@ flattened row by row. This file owns no second prerequisite list. `PATCH` is a
 non-negative decimal integer and is strictly larger than the previous
 attempt's patch number.
 
-Before the entry is proposed, GitHub must report `source_pr` merged to `main`
-with `source_pr.mergeCommit.oid = source_sha`. The first attempt's `source_sha`
-is a strict descendant of `armed_by_pr.mergeCommit.oid`; a later attempt's
-`source_sha` is a strict descendant of the preceding reset record's
-`record_pr.mergeCommit.oid`. Before tag creation,
+Before the entry is proposed, let `H_S = source_pr.headRefOid`. GitHub must
+report `source_pr` merged to `main` with non-null author, `H_S`, `mergedAt`, and
+`source_pr.mergeCommit.oid = source_sha`. A reviewer distinct from the
+normalized source-PR author must have a latest effective `APPROVED` review on
+the exact `H_S`, submitted before `source_pr.mergedAt`. The Git tree of `source_sha`
+must equal the Git tree of `H_S`. The first attempt's `source_sha` is a strict
+descendant of `armed_by_pr.mergeCommit.oid`; a later attempt's `source_sha` is a
+strict descendant of the preceding reset record's `record_pr.mergeCommit.oid`.
+Before tag creation,
 `validate-release-payload(source_sha, freeze_tag)` must pass. The annotated tag
 then exists, has object SHA `freeze_tag_object`, and peels to `source_sha`. The
 target `main` tip `C` from the common candidate rule must equal `source_sha`;
