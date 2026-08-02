@@ -1,40 +1,58 @@
 % Target: rmp-iii-b-r-tensor-left
-% Formula: The unresolved R move braids an i-string through three b,a,b strands.
-% Ink: Canonical public kernel strands, marked crossings, and open endpoints.
-% Boundary: Two lattice rails and four string ends remain open.
+% Formula: The pre-resolution side of the R move: the i-string crosses the
+%   ordered b,a,b MPO triple.
+% Ink: Canonical public kernel plane with marked strands and crossing order.
+% Boundary: Two horizontal rails and the diagonal transversal are open; the
+%   three b,a,b strings continue below the lower rail.
 % Source: paper TN-Review-main.tex line 1668; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 739-772
-% Capabilities: kernel, multi-strand-braid, crossing-order
+% Capabilities: kernel, plane-frame, multi-strand-braid, crossing-order
 \[
   \tenkzkernel
   \tndeclare{species}{operator}{hue=source:red}
-  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, physical=up]
+  \begin{tenkz}[
+      rows={wire,wire,wire}, cols=4,
+      frame=plane, bonds=none]
     % the anyon i and the plain lattice site below it; each site carries its
     % physical leg
-    \tn[at=(1,2), name=i, role=marked, label pos=nw]{i}
-    \tn[at=(3,1), name=v]{}
-    % lattice rails: two horizontals and the transversal through both sites
-    \tnwire[name=uwest]{1 w of i}{i.w} \tnwire[name=ueast]{i.e}{2 e of i}
-    \tnwire{1 w of v}{v.w} \tnwire[name=lre]{v.e}{3 e of v}
-    \tnwire[name=du]{i.45}{1 n of 1 e of i}
-    \tnwire[name=dm]{i.225}{v.45}
-    \tnwire{v.225}{1 s of 1 w of v}
-    % string tensors: three on the lower rail, four ringing the anyon
-    \tn[at=on lre 0.31, name=bL, role=extra, label pos=s]{b}
-    \tn[at=on lre 0.48, name=aa, role=marked, label pos=s]{a}
-    \tn[at=on lre 0.65, name=bR, role=extra, label pos=s]{b}
-    \tn[at=on dm 0.3, name=rS, role=extra]{}
-    \tn[at=on uwest 0.5, name=rW, role=extra]{}
-    \tn[at=on du 0.5, name=rN, role=extra]{}
-    \tn[at=on ueast 0.25, name=rE, role=extra, label pos=ne]{b}
-    % the b string winds once around the anyon, passing over its physical leg
+    \tn[at=(1,2), name=i, role=marked, label pos=nw, ports={90:physical}]{i}
+    \tn[at=(3,1), name=v, ports={90:physical}]{}
+    \tnwire[name=iphys]{i.90}{open n}
+    \tnwire[name=vphys]{v.90}{open n}
+    % String tensors own named virtual faces on the black rails: three on the
+    % lower rail and four ringing the anyon.  Their placement uses only the
+    % plane basis and named-address constructions.
+    \tn[at=(3,2), name=bL, role=extra, label pos=s,
+      ports={0:virtual,180:virtual}]{b}
+    \tn[at=(3,3), name=bR, role=extra, label pos=se,
+      ports={0:virtual,180:virtual}]{b}
+    \tn[at=midway bL and bR, name=aa, role=marked, label pos=sw,
+      ports={0:virtual,180:virtual}]{a}
+    \tn[at=midway i and v, name=rS, role=extra,
+      ports={45:virtual,225:virtual}]{}
+    \tn[at=midway (1,1) and i, name=rW, role=extra,
+      ports={0:virtual,180:virtual}]{}
+    \tn[at=midway i and 1 n of 1 e of i, name=rN, role=extra,
+      ports={45:virtual,225:virtual}]{}
+    \tn[at=midway i and (1,3), name=rE, role=extra, label pos=ne,
+      ports={0:virtual,180:virtual}]{b}
+    % Two horizontal rails and the diagonal transversal terminate on those
+    % faces, so every black contraction belongs to the semantic graph.
+    \tnwire{open w}{rW.180} \tnwire{rW.0}{i.w}
+    \tnwire{i.e}{rE.180} \tnwire{rE.0}{open e}
+    \tnwire{open w}{v.w} \tnwire{v.e}{bL.180}
+    \tnwire{bL.0}{aa.180} \tnwire{aa.0}{bR.180}
+    \tnwire{bR.0}{open e}
+    \tnwire{i.45}{rN.225} \tnwire{rN.45}{open ne}
+    \tnwire{i.225}{rS.45} \tnwire{rS.225}{v.45}
+    \tnwire{v.225}{open sw}
+    % the b string winds once around the anyon, passing under its physical leg
     \tnwire[kind=string, species=operator, name=s,
-            via={(3,2), on dm 0.3, on uwest 0.5, 0.25 n of i, on du 0.5,
-                 on ueast 0.25, (3,3)},
-            cross={over at crossing of s and leg n of (1,2)}]
-           {1 s of (3,2)}{1 s of (3,3)}
-    % the i string leaves the anyon for the a tensor on the lower rail
+            via={bL, rS, rW, midway i and rN, rN, rE, bR},
+            cross={under at crossing of s and iphys}]
+           {1 s of bL}{1 s of bR}
+    % The i string lands on the a station before continuing below the rail.
     \tnwire[kind=string, species=operator, name=t,
-            via={0.5 e of (3,2)}]{0.15 se of i}{1 s of 0.5 e of (3,2)}
+            via={aa}]{i.315}{open s}
   \end{tenkz}
 \]
