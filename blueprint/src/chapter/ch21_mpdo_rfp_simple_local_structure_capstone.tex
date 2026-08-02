@@ -134,7 +134,7 @@
 % given by thm:psd_trace_powers_rank_one_t and
 % thm:pairing_idempotent_rank_one_t. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{corollary}[Local sector structure from SAL and ZCL (open)]
+\begin{corollary}[Local sector structure from SAL and ZCL (rank-one obstruction)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl, thm:sal_implies_eta_structure,
@@ -150,8 +150,9 @@
     \end{align}
     This is the structural corollary at
     \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
-    derivation combines Lemma~C.4 with the refuted Lemma~C.5, so the conclusion
-    remains open under the printed hypotheses.
+    derivation combines Lemma~C.4 with the refuted rank-one conclusion of
+    Lemma~C.5. Thus the printed route is obstructed; no alternative proof of
+    this corollary from SAL and ZCL alone is known.
 \end{corollary}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
@@ -762,7 +763,7 @@ This is the calculation in
 % thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[BNT sector structure from SAL and ZCL]
+\begin{theorem}[BNT sector structure from SAL and ZCL (rank-one obstruction)]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl,
@@ -785,4 +786,8 @@ This is the calculation in
     the positive neighboring operators in each sector factorization, and the
     unstarred layer identities. The remaining identities specify the local
     factorization and its rank-one normalization.
+    The printed proof obtains that normalization from the structural corollary
+    above, whose derivation invokes the refuted rank-one conclusion of
+    Lemma~C.5. Thus the printed route is obstructed; no alternative proof of the
+    complete sector structure from SAL and ZCL alone is known.
 \end{theorem}
