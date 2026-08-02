@@ -1,46 +1,34 @@
 % Target: rmp-ii-circuit
 % Formula: |psi> = (prod_{layers l} (x)_k U^{(l)}_k) |0>.
-% Ink: Canonical public tenkzfree doubling-tree pyramid; no raw TikZ.
+% Ink: Canonical public kernel doubling-tree pyramid; no raw TikZ.
 % Boundary: The initial state closes the input; eight circuit wires remain open after
 %   the gates.
 % Source: paper TN-Review-main.tex line 518; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 547-571
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  % compact vertical pyramid, whole-step coordinates: four two-output
-  % gates on top, two wider gates in the middle, one root gate at the
-  % bottom, eight open output stubs, |0> hanging below the root
-  \begin{tenkzfree}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {l1}{(-18mm,18mm)}{}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {l2}{(-6mm,18mm)}{}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {l3}{(6mm,18mm)}{}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {l4}{(18mm,18mm)}{}
-    \tnput[boundary,ports={south:physical}]{l1o1}{(-22mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l1o2}{(-14mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l2o1}{(-10mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l2o2}{(-2mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l3o1}{(2mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l3o2}{(10mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l4o1}{(14mm,24mm)}{}
-    \tnput[boundary,ports={south:physical}]{l4o2}{(22mm,24mm)}{}
-    \tnjoin{l1.north west}{l1o1.south} \tnjoin{l1.north east}{l1o2.south}
-    \tnjoin{l2.north west}{l2o1.south} \tnjoin{l2.north east}{l2o2.south}
-    \tnjoin{l3.north west}{l3o1.south} \tnjoin{l3.north east}{l3o2.south}
-    \tnjoin{l4.north west}{l4o1.south} \tnjoin{l4.north east}{l4o2.south}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {m1}{(-12mm,9mm)}{}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {m2}{(12mm,9mm)}{}
-    \tnjoin{m1.north west}{l1.south} \tnjoin{m1.north east}{l2.south}
-    \tnjoin{m2.north west}{l3.south} \tnjoin{m2.north east}{l4.south}
-    \tnput[box,ports={south:physical,north west:physical,north east:physical}]
-      {r}{(0mm,0mm)}{}
-    \tnjoin{r.north west}{m1.south} \tnjoin{r.north east}{m2.south}
-    \tnput[dot,ports={north:physical}]{z}{(0mm,-9mm)}{|0\rangle}
-    \tnjoin{z.north}{r.south}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=7, bonds=none]
+    % Frame addresses express the four-two-one doubling tree.  The unbonded
+    % typed faces on the first row become its eight measured output legs.
+    \tn[at=(1,1), skin=box, name=l1,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(1,3), skin=box, name=l2,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(1,5), skin=box, name=l3,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(1,7), skin=box, name=l4,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(2,2), skin=box, name=m1,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(2,6), skin=box, name=m2,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(3,4), skin=box, name=root,
+      ports={270:physical,135:physical,45:physical}]{}
+    \tn[at=(4,4), name=zero, ports={90:physical}]{\lvert 0\rangle}
+    \tnwire{m1.135}{l1.270} \tnwire{m1.45}{l2.270}
+    \tnwire{m2.135}{l3.270} \tnwire{m2.45}{l4.270}
+    \tnwire{root.135}{m1.270} \tnwire{root.45}{m2.270}
+    \tnwire{zero.90}{root.270}
+  \end{tenkz}
 \]

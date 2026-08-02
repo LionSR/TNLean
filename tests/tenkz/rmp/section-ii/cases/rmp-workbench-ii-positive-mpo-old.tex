@@ -1,45 +1,35 @@
 % Target: rmp-workbench-ii-positive-mpo-old
 % Formula: O = X^-1 (sum_k A^k tensor conjugate(A^k)) X.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Canonical public kernel frames; no raw TikZ.
 % Boundary: O has four open ports; each capsule branches one outer virtual leg into
 %   the two A rails, whose physical legs form one open vertical line.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   317-335; archival output sec2fig6old.pdf
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box,ports={north:physical,south:physical,east:virtual,west:virtual}]
-      {O}{(0mm,0mm)}{O}
-    \tnput[boundary,ports={south:physical}]{n}{(0mm,9mm)}{}
-    \tnput[boundary,ports={north:physical}]{s}{(0mm,-9mm)}{}
-    \tnput[boundary,ports={east:virtual}]{w}{(-9mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{e}{(9mm,0mm)}{}
-    \tnjoin{n.south}{O.north} \tnjoin{O.south}{s.north}
-    \tnjoin{w.east}{O.west} \tnjoin{O.east}{e.west}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), skin=box,
+      ports={90:physical,270:physical,0:virtual,180:virtual}]{O}
+  \end{tenkz}
   \;=\;
-  \begin{tenkzfree}
-    \tnput[pill,ports={west:virtual,north east:virtual,south east:virtual}]
-      {xi}{(-14mm,0mm)}{X^{-1}}
-    \tnput[box,ports={west:virtual,east:virtual,north:physical,south:physical}]
-      {A}{(0mm,5mm)}{A}
-    \tnput[box,ports={west:virtual,east:virtual,north:physical,south:physical}]
-      {Ab}{(0mm,-5mm)}{\bar A}
-    % the X capsule is padded to the width of X^{-1}: an operator and its
-    % inverse carry the same claim, so they carry the same glyph
-    \tnput[pill,ports={north west:virtual,south west:virtual,east:virtual}]
-      {x}{(14mm,0mm)}{\hphantom{{}^{-}}X\hphantom{{}^{1}}}
-    \tnput[boundary,ports={east:virtual}]{w}{(-24mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{e}{(24mm,0mm)}{}
-    \tnput[boundary,ports={south:physical}]{n}{(0mm,13mm)}{}
-    \tnput[boundary,ports={north:physical}]{s}{(0mm,-13mm)}{}
-    \tnjoin{w.east}{xi.west}
-    \tnjoin[route=arc]{xi.north east}{A.west}
-    \tnjoin[route=arc]{xi.south east}{Ab.west}
-    \tnjoin[route=arc]{A.east}{x.north west}
-    \tnjoin[route=arc]{Ab.east}{x.south west}
-    \tnjoin{x.east}{e.west}
-    \tnjoin{n.south}{A.north} \tnjoin{A.south}{Ab.north}
-    \tnjoin{Ab.south}{s.north}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
+    \tn[at=(2,1), skin=box, name=xi,
+      ports={180:virtual,45:virtual,315:virtual}]{X^{-1}}
+    \tn[at=(1,3), skin=box, name=A,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{A}
+    \tn[at=(3,3), skin=box, name=Ab,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{A}}
+    % One size class gives X and X^{-1} the same measured capsule.
+    \tn[at=(2,5), skin=box, name=x,
+      ports={135:virtual,225:virtual,0:virtual}]{X}
+    \tnwire{open w}{xi.180}
+    \tnwire[route=arc]{xi.45}{A.180}
+    \tnwire[route=arc]{xi.315}{Ab.180}
+    \tnwire[route=arc]{A.0}{x.135}
+    \tnwire[route=arc]{Ab.0}{x.225}
+    \tnwire{x.0}{open e}
+    \tnwire{open n}{A.90} \tnwire{A.270}{Ab.90}
+    \tnwire{Ab.270}{open s}
+  \end{tenkz}
 \]

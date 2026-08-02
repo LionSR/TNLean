@@ -18,15 +18,11 @@ note = "the projector layer is drawn: one enclosure per site over the entangled-
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
-status = "faithful"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "df3c7aa56b961c5c79b684a44adc49c12973da14777e0eea732f373c7a3c08a8"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "every label at its spoke tip"
+note = "kernel address migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-mps-marginal"
@@ -87,14 +83,10 @@ note = "X and X^-1 at one reference width"
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
-status = "faithful"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "b3e5d217a433d84880b7ca05113b21ec4887fc47ff2db68a54fbd3831d536c97"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "maintainer: good"
+note = "kernel identity-wire migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-mpu-blocking"
@@ -109,15 +101,11 @@ note = "maintainer: good; a/b spacing explicitly not to pre-optimize"
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
-status = "faithful"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "6267ce542209d4bb59dd29134a3634e27134f2dba7c791e0361fa06a3a7bf972"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "U = u over v = beads; mirrored panel, labels clear"
+note = "kernel address migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
@@ -132,15 +120,11 @@ note = "both sides now expose the same twelve legs; the type advisory (operator 
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
-status = "faithful"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "ad26b067b4ef23535b32f067b1f32b11609531cbafe7d05d283ed0991beb215b"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "square sites and congruent quarter turns are pixel-identical after route migration"
+note = "kernel skin-pairing migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-mpu-two-shift"
@@ -155,14 +139,11 @@ note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two tra
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
-status = "cosmetic-gap"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "117582801bfc89264f61c719eb4e3e0a9f0f4b2d8894a6c1ee922e62a454e0e7"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "heavy solid S-curve vs compact dotted arc (\"graceful strings\")"
+defects = []
+note = "kernel plane-frame migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-reduced-density"
@@ -231,14 +212,11 @@ note = "vertically mirrored vs source; V-glyph aspect"
 
 [[verdict]]
 id = "rmp-ii-circuit"
-status = "cosmetic-gap"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "c4da21fc6103ee2d6be46567f644d06cdd2b8a3da6b7b6fab00138e156314a84"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the doubling tree reaches the source's eight outputs as a compact pyramid: four gates over two over the root, |0> below. Ink and boundary prose realigned with the drift checker"
+note = "kernel address migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-sv17"
@@ -296,14 +274,10 @@ note = "thin wires vs bold source; end of the \"better\" run"
 
 [[verdict]]
 id = "rmp-ii-tangent-projector"
-status = "faithful"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "6a84c0b03e9931405d2b90a41cc88af7338aef278f22a97381db42066ed652ca"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "pairing repaired; topology matches the PT(A) block"
+note = "kernel identity-wire migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-ii-boundary-lasso"
@@ -997,13 +971,10 @@ note = "sites grouped as the source groups them -- four sub-spins per red circle
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"
-status = "cosmetic-gap"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "6adb6ff0a12cce208ea5ebab9bcb06238cc2702572a15acd081b92338c424b08"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "crossing-gadget styling"
+note = "kernel skin-pairing migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-workbench-ii-projector-on-pta"
@@ -1028,13 +999,10 @@ note = "the unitary is asserted as math-mode application U(...) around the plaqu
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"
-status = "cosmetic-gap"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "ca857041cb7cbbbd6c29edd60f54537cb9c3d878406922949b3c4c953a00938e"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "X sizes equal"
+note = "kernel address migration awaits visual countersign"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-old"

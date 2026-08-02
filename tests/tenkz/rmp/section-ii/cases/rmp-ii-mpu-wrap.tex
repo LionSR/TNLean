@@ -1,51 +1,25 @@
 % Target: rmp-ii-mpu-wrap
 % Formula: The MPU implements the left-moving shift operator.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Kernel box skins carry the left-moving local port pairings.
 % Boundary: Four upper and four lower legs are open; the alternating turns leave
 %   one virtual endpoint open at each end.
 % Source: paper TN-Review-main.tex line 391; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 465-472
-% Capabilities: free-graph, typed-ports
-%
-% Every placement is a whole multiple of one step: neighbouring sites two
-% steps apart, every leg one step long, as in the source.  The shift site
-% is a SQUARE there; an unlabelled inscribed glyph here is strut-tall and
-% glyphbox-wide, so its label carries a width pad that squares the site
-% and makes the two quarter turns inside it congruent.
+% Capabilities: kernel, typed-ports, skin-pairings
+\tenkzkernel
+\tndeclare{species}{shift}{hue=source:black}
+\tndeclare{skin}{left-shift}{
+  base=box,
+  pairings={n@1 > e@1 : shift, s@1 > w@1 : shift}
+}
 \[
-  \begin{tenkzfree}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {s1}{(0mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {s2}{(12mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {s3}{(24mm,0mm)}{\hphantom{W}}
-    \tnput[box,ports={north:virtual,south:virtual,east:virtual,west:virtual}]
-      {s4}{(36mm,0mm)}{\hphantom{W}}
-    \tnput[boundary,ports={south:virtual}]{n1}{(0mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{n2}{(12mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{n3}{(24mm,6mm)}{}
-    \tnput[boundary,ports={south:virtual}]{n4}{(36mm,6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b1}{(0mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b2}{(12mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b3}{(24mm,-6mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b4}{(36mm,-6mm)}{}
-    \tnput[boundary,ports={east:virtual}]{w}{(-6mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{e}{(42mm,0mm)}{}
-    \tnjoin{n1.south}{s1.north} \tnjoin{s1.south}{b1.north}
-    \tnjoin{n2.south}{s2.north} \tnjoin{s2.south}{b2.north}
-    \tnjoin{n3.south}{s3.north} \tnjoin{s3.south}{b3.north}
-    \tnjoin{n4.south}{s4.north} \tnjoin{s4.south}{b4.north}
-    \tnjoin[route=arc]{s1.north}{s1.east}
-    \tnjoin[route=arc]{s1.south}{s1.west}
-    \tnjoin[route=arc]{s2.north}{s2.east}
-    \tnjoin[route=arc]{s2.south}{s2.west}
-    \tnjoin[route=arc]{s3.north}{s3.east}
-    \tnjoin[route=arc]{s3.south}{s3.west}
-    \tnjoin[route=arc]{s4.north}{s4.east}
-    \tnjoin[route=arc]{s4.south}{s4.west}
-    \tnjoin{w.east}{s1.west} \tnjoin{s1.east}{s2.west}
-    \tnjoin{s2.east}{s3.west} \tnjoin{s3.east}{s4.west}
-    \tnjoin{s4.east}{e.west}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire}, cols=4, bonds=none, physical=updown]
+    \tn[at=(1,1), skin=left-shift]{}
+    \tn[at=(1,2), skin=left-shift]{}
+    \tn[at=(1,3), skin=left-shift]{}
+    \tn[at=(1,4), skin=left-shift]{}
+    \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)}
+    \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+    \tnwire{(1,4)}{open e}
+  \end{tenkz}
 \]
