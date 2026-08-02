@@ -1,4 +1,13 @@
-%% Regression: a whole-cell override is selected once after basis expansion.
+%% Regression: whole-cell overrides suppress basis members before spacing.
+%% A partially overridden window still diagnoses realized collisions, while a
+%% collision that requires a suppressed member remains quiet.  A
+%% member-addressed replacement remains a live member, and a spanning member
+%% contributes its canonical anchor rather than aliases at every claimed cell.
+%% A suppressed picture checks that no live-candidate state leaks.  An
+%% out-of-window span defeats count-only completeness without inventing a
+%% candidate, while a translated inside member can still collide with that
+%% outside anchor.  The final dense pictures trap sparse-product construction;
+%% an additional half-pitch case traps occupancy scans before a raw violation.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -9,8 +18,60 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={ket}, cols=1, bonds=none,
-              frame={flat,basis={wire at (0,0), wire at (2,0)}}]
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
   \tn[at=(1,1), name=X]{X}
   \tnmark[form=enclosure]{(1,1)}{}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1), name=Y]{Y}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (4,0)}}]
+  \tn[at=(1,1), name=Z]{Z}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1,1), name=M]{M}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (4,0)}}]
+  \tn[at=(1,1,1), wide=2, name=W]{W}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (4,0), wire at (0,0)}}]
+  \tn[at=(1,1,1), wide=2, name=V]{V}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1), name=Q]{Q}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,0,1), wide=2, name=O]{O}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (-4,0)}}]
+  \tn[at=(1,0,1), wide=2, name=P]{P}
+\end{tenkz}
+\begin{tenkz}[rows={ket, ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+\end{tenkz}
+\ExplSyntaxOn
+\cs_set_protected:Npn \__tenkz_kernel_basis_spacing_sparse_outer:n #1
+  { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{dense-plan} }
+\ExplSyntaxOff
+\begin{tenkz}[rows={ket, ket, ket}, cols=3, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(3,3), name=H]{H}
+\end{tenkz}
+\ExplSyntaxOn
+\cs_set_protected:Npn
+  \__tenkz_kernel_basis_spacing_dense_realized:nnnn #1#2#3#4
+  { \msg_fatal:nnn {tenkz}{kernel-frame-basis-parse}{nonnegative-scan} }
+\ExplSyntaxOff
+\begin{tenkz}[rows={ket, ket, ket}, cols=3, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (2,0)}}]
+  \tn[at=(3,3), name=S]{S}
 \end{tenkz}
 \end{document}

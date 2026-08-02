@@ -249,6 +249,32 @@
 \fp_new:N  \l__tenkzl_d_fp
 \int_new:N \l__tenkzl_gdr_int         % argmin row/col offsets
 \int_new:N \l__tenkzl_gdc_int
+\int_new:N \l__tenkzl_guard_dr_int    % candidate row/col offsets
+\int_new:N \l__tenkzl_guard_dc_int
+\int_new:N \l__tenkzl_guard_sheet_int % live-index construction address
+\int_new:N \l__tenkzl_guard_row_int
+\int_new:N \l__tenkzl_guard_col_int
+\int_new:N \l__tenkzl_guard_lower_count_int
+\int_new:N \l__tenkzl_guard_upper_count_int
+\int_new:N \l__tenkzl_guard_lower_row_int
+\int_new:N \l__tenkzl_guard_lower_col_int
+\int_new:N \l__tenkzl_guard_upper_row_int
+\int_new:N \l__tenkzl_guard_upper_col_int
+\int_new:N \l__tenkzl_guard_translation_count_int
+\int_new:N \l__tenkzl_guard_scan_sheet_int
+\int_new:N \l__tenkzl_guard_target_sheet_int
+\int_new:N \l__tenkzl_guard_scan_sign_int
+\int_new:N \l__tenkzl_guard_overlap_int
+\int_new:N \l__tenkzl_guard_holes_int
+\bool_new:N \l__tenkzl_guard_realized_bool
+\bool_new:N \l__tenkzl_guard_min_bool
+\bool_new:N \l__tenkzl_guard_better_bool
+\prop_new:N \l__tenkzl_guard_live_prop      % "h/r/c" -> 1
+\prop_new:N \l__tenkzl_guard_live_count_prop % sheet -> live count
+\prop_new:N \l__tenkzl_guard_live_record_prop % "h/i" -> "r/c"
+\prop_new:N \l__tenkzl_guard_plan_prop % sparse translations / dense sheets
+\seq_new:N \l__tenkzl_guard_address_seq
+\tl_new:N \l__tenkzl_guard_record_tl
 
 % scratch (the expression resolver's own scratch lives with it in
 % tenkz-core; what remains here serves \tenkzl_cell:nNNN and the draw
@@ -597,11 +623,10 @@
     (side-by-side~doubled~dots,~plane_sweep2~z_X2).~Use~sep~>~#2,~or~
     omit~sheet~sep~for~the~derived~default. }
 \msg_new:nnn { tenkz } { sheet-coincide }
-  { sheet~vector:~adjacent~sheets~nearly~coincide.~Sheet~h+1's~site~
-    (r,c)~lands~#1mm~from~sheet~h's~site~(r+#2,~c+#3),~below~the~#4mm~
-    bead-separation~floor~(\tenkz@r@sheetcoincide~x~the~bead~diameter):~
-    the~stacked~dots~
-    read~as~one~blob~(the~fig21d_cubic~near-coincidence~arithmetic).~
+  { sheet~vector:~adjacent~sheets~nearly~coincide.~Their~nearest~site~
+    centres,~at~relative~cell~translation~(#2,#3),~are~#1~pitch~apart,~
+    below~the~default-bead~spacing~floor~#4~pitch~(outer~bead~ink~plus~
+    daylight),~so~the~sites~lose~the~required~readability~gap.~
     Grow~the~sheet~vector,~or~retune~plane~slant/rise~so~no~lattice~
     translation~of~a~sheet~lands~on~the~sheet~above~it. }
 
@@ -776,17 +801,6 @@
                                 % (independent of row count) near-merged dots
                                 % at 3x3 and interleaved the sheets outright
                                 % at 4x4, which is why sep is derived here.
-\def\tenkz@r@sheetcoincide{1.25}% near-coincidence floor of the expert
-                                % sheet~vector= guard, as a MULTIPLE of the
-                                % bead diameter (so a dot-metric retune moves
-                                % it): two stacked-sheet sites closer than
-                                % 1.25 x dotdia read as one blob.  Calibrated
-                                % on the fig21d_cubic equal-axis cube: at
-                                % plane slant 0.45 the closest pair sits at
-                                % 1.05 x dotdia (doubled-dot blobs, verified
-                                % in ink), at slant 0.40 at 1.32 x dotdia and
-                                % every bead separates -- the floor 1.25 flags
-                                % the former and passes the latter.
 \def\tenkz@r@planetracereach{0.20}% trace= wrap-loop reach (of the base pitch,
                                 % paper frame): how far east of the site axis
                                 % the per-site Tr_s racetrack swings.  It must
@@ -904,57 +918,336 @@
 % coincide iff S is close to SOME lattice translation dc C + dr R (then
 % sheet h+1's site (r,c) stacks onto sheet h's site (r+dr, c+dc)).  We
 % scan all |dr| <= rows-1, |dc| <= cols-1 -- (0,0) included, the
-% |S|-too-small case -- and warn when the closest pair falls below the
-% sheetcoincide floor.  The scan runs for EVERY sheets>1 picture, not
-% only the expert sheet~vector= path: a preset stack can coincide too (a
-% flat frame with a tight explicit sheet sep, a degenerate expert C/R
-% frame), and the coefficient form below prices arbitrary frames -- the
-% expert-path-only gating was the fig21d_cubic bead-blob hole's twin.
-% Guarded, not clamped, like every frame guard.
+% |S|-too-small case -- but admit a translation only when at least one pair of
+% surviving sites realizes it on adjacent sheets.  The closest realized pair
+% warns when it falls below the default-bead spacing floor.  The scan runs for
+% EVERY sheets>1 picture, not only the expert sheet~vector= path: a preset
+% stack can coincide too (a flat frame with a tight explicit sheet sep, a
+% degenerate expert C/R frame), and the coefficient form below prices
+% arbitrary frames -- the expert-path-only gating was the fig21d_cubic
+% bead-blob hole's twin.  Guarded, not clamped, like every frame guard.
+% Removed-site stacks use the same bounded sparse/dense choice as affine basis
+% spacing.  Sparse adjacent-sheet populations publish their realized
+% translations once.  Dense populations publish only a sheet marker; a query
+% then uses a hole certificate or scans the smaller live sheet with O(1)
+% translated occupancy lookup.  No-removal pictures bypass this model work.
+\cs_new_protected:Npn \tenkzl_guard_live_col:n #1
+  {
+    \int_set:Nn \l__tenkzl_guard_col_int {#1}
+    \tenkzl_endpoint_exists:nnnT
+      { \int_use:N \l__tenkzl_guard_row_int }
+      { \int_use:N \l__tenkzl_guard_col_int }
+      { \int_use:N \l__tenkzl_guard_sheet_int }
+      {
+        \prop_put:Nee \l__tenkzl_guard_live_prop
+          {
+            \int_use:N \l__tenkzl_guard_sheet_int /
+            \int_use:N \l__tenkzl_guard_row_int /
+            \int_use:N \l__tenkzl_guard_col_int
+          }
+          {1}
+        \prop_get:NeNTF \l__tenkzl_guard_live_count_prop
+          { \int_use:N \l__tenkzl_guard_sheet_int } \l_tmpa_tl
+          { \int_set:Nn \l_tmpa_int { \l_tmpa_tl + 1 } }
+          { \int_set:Nn \l_tmpa_int {1} }
+        \prop_put:Nee \l__tenkzl_guard_live_count_prop
+          { \int_use:N \l__tenkzl_guard_sheet_int }
+          { \int_use:N \l_tmpa_int }
+        \prop_put:Nee \l__tenkzl_guard_live_record_prop
+          {
+            \int_use:N \l__tenkzl_guard_sheet_int /
+            \int_use:N \l_tmpa_int
+          }
+          {
+            \int_use:N \l__tenkzl_guard_row_int /
+            \int_use:N \l__tenkzl_guard_col_int
+          }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_live_row:n #1
+  {
+    \int_set:Nn \l__tenkzl_guard_row_int {#1}
+    \int_step_function:nnN {1} { \l__tenkzl_ncols_int }
+      \tenkzl_guard_live_col:n
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_live_sheet:n #1
+  {
+    \int_set:Nn \l__tenkzl_guard_sheet_int {#1}
+    \int_step_function:nnN {1} { \l__tenkzl_nrows_int }
+      \tenkzl_guard_live_row:n
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_sparse_inner:n #1
+  {
+    \prop_get:NeN \l__tenkzl_guard_live_record_prop
+      { \int_use:N \l__tenkzl_guard_sheet_int / #1 }
+      \l__tenkzl_guard_record_tl
+    \seq_set_split:NnV \l__tenkzl_guard_address_seq {/}
+      \l__tenkzl_guard_record_tl
+    \int_set:Nn \l__tenkzl_guard_lower_row_int
+      { \seq_item:Nn \l__tenkzl_guard_address_seq {1} }
+    \int_set:Nn \l__tenkzl_guard_lower_col_int
+      { \seq_item:Nn \l__tenkzl_guard_address_seq {2} }
+    \prop_put:Nee \l__tenkzl_guard_plan_prop
+      {
+        candidate /
+        \int_eval:n
+          { \l__tenkzl_guard_lower_row_int - \l__tenkzl_guard_upper_row_int } /
+        \int_eval:n
+          { \l__tenkzl_guard_lower_col_int - \l__tenkzl_guard_upper_col_int }
+      }
+      {1}
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_sparse_outer:n #1
+  {
+    \prop_get:NeN \l__tenkzl_guard_live_record_prop
+      { \int_eval:n { \l__tenkzl_guard_sheet_int + 1 } / #1 }
+      \l__tenkzl_guard_record_tl
+    \seq_set_split:NnV \l__tenkzl_guard_address_seq {/}
+      \l__tenkzl_guard_record_tl
+    \int_set:Nn \l__tenkzl_guard_upper_row_int
+      { \seq_item:Nn \l__tenkzl_guard_address_seq {1} }
+    \int_set:Nn \l__tenkzl_guard_upper_col_int
+      { \seq_item:Nn \l__tenkzl_guard_address_seq {2} }
+    \int_step_function:nnN {1}
+      { \l__tenkzl_guard_lower_count_int }
+      \tenkzl_guard_sparse_inner:n
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_plan_sheet:n #1
+  {
+    \int_set:Nn \l__tenkzl_guard_sheet_int {#1}
+    \prop_get:NeNTF \l__tenkzl_guard_live_count_prop {#1} \l_tmpa_tl
+      { \int_set:Nn \l__tenkzl_guard_lower_count_int { \l_tmpa_tl } }
+      { \int_zero:N \l__tenkzl_guard_lower_count_int }
+    \prop_get:NeNTF \l__tenkzl_guard_live_count_prop
+      { \int_eval:n {#1 + 1} } \l_tmpa_tl
+      { \int_set:Nn \l__tenkzl_guard_upper_count_int { \l_tmpa_tl } }
+      { \int_zero:N \l__tenkzl_guard_upper_count_int }
+    \int_compare:nNnTF
+      {
+        \l__tenkzl_guard_lower_count_int
+        * \l__tenkzl_guard_upper_count_int
+      }
+      < { \l__tenkzl_guard_translation_count_int }
+      {
+        \int_step_function:nnN {1}
+          { \l__tenkzl_guard_upper_count_int }
+          \tenkzl_guard_sparse_outer:n
+      }
+      {
+        \prop_put:Nee \l__tenkzl_guard_plan_prop { dense / #1 } {1}
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_sheet_plan:
+  {
+    \prop_clear:N \l__tenkzl_guard_live_prop
+    \prop_clear:N \l__tenkzl_guard_live_count_prop
+    \prop_clear:N \l__tenkzl_guard_live_record_prop
+    \prop_clear:N \l__tenkzl_guard_plan_prop
+    \int_set:Nn \l__tenkzl_guard_translation_count_int
+      {
+        ( 2 * \l__tenkzl_nrows_int - 1 )
+        * ( 2 * \l__tenkzl_ncols_int - 1 )
+      }
+    \int_step_function:nnN {0}
+      { \l__tenkzl_sheets_int - 1 }
+      \tenkzl_guard_live_sheet:n
+    \int_step_function:nnN {0}
+      { \l__tenkzl_sheets_int - 2 }
+      \tenkzl_guard_plan_sheet:n
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_dense_scan:n #1
+  {
+    \bool_if:NF \l__tenkzl_guard_realized_bool
+      {
+        \prop_get:NeN \l__tenkzl_guard_live_record_prop
+          { \int_use:N \l__tenkzl_guard_scan_sheet_int / #1 }
+          \l__tenkzl_guard_record_tl
+        \seq_set_split:NnV \l__tenkzl_guard_address_seq {/}
+          \l__tenkzl_guard_record_tl
+        \int_set:Nn \l__tenkzl_guard_row_int
+          { \seq_item:Nn \l__tenkzl_guard_address_seq {1} }
+        \int_set:Nn \l__tenkzl_guard_col_int
+          { \seq_item:Nn \l__tenkzl_guard_address_seq {2} }
+        \prop_if_in:NeT \l__tenkzl_guard_live_prop
+          {
+            \int_use:N \l__tenkzl_guard_target_sheet_int /
+            \int_eval:n
+              {
+                \l__tenkzl_guard_row_int
+                + \l__tenkzl_guard_scan_sign_int * \l__tenkzl_guard_dr_int
+              } /
+            \int_eval:n
+              {
+                \l__tenkzl_guard_col_int
+                + \l__tenkzl_guard_scan_sign_int * \l__tenkzl_guard_dc_int
+              }
+          }
+          { \bool_set_true:N \l__tenkzl_guard_realized_bool }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_dense_realized:n #1
+  {
+    \prop_get:NeN \l__tenkzl_guard_live_count_prop {#1} \l_tmpa_tl
+    \int_set:Nn \l__tenkzl_guard_lower_count_int { \l_tmpa_tl }
+    \prop_get:NeN \l__tenkzl_guard_live_count_prop
+      { \int_eval:n {#1 + 1} } \l_tmpa_tl
+    \int_set:Nn \l__tenkzl_guard_upper_count_int { \l_tmpa_tl }
+    \int_set:Nn \l__tenkzl_guard_overlap_int
+      {
+        ( \l__tenkzl_nrows_int - \int_abs:n { \l__tenkzl_guard_dr_int } )
+        * ( \l__tenkzl_ncols_int - \int_abs:n { \l__tenkzl_guard_dc_int } )
+      }
+    \int_set:Nn \l__tenkzl_guard_holes_int
+      {
+        2 * \l__tenkzl_nrows_int * \l__tenkzl_ncols_int
+        - \l__tenkzl_guard_lower_count_int
+        - \l__tenkzl_guard_upper_count_int
+      }
+    \int_compare:nNnTF
+      { \l__tenkzl_guard_overlap_int } > { \l__tenkzl_guard_holes_int }
+      { \bool_set_true:N \l__tenkzl_guard_realized_bool }
+      {
+        \int_compare:nNnTF
+          { \l__tenkzl_guard_upper_count_int }
+          < { \l__tenkzl_guard_lower_count_int + 1 }
+          {
+            \int_set:Nn \l__tenkzl_guard_scan_sheet_int {#1 + 1}
+            \int_set:Nn \l__tenkzl_guard_target_sheet_int {#1}
+            \int_set:Nn \l__tenkzl_guard_scan_sign_int {1}
+            \int_set_eq:NN \l_tmpa_int \l__tenkzl_guard_upper_count_int
+          }
+          {
+            \int_set:Nn \l__tenkzl_guard_scan_sheet_int {#1}
+            \int_set:Nn \l__tenkzl_guard_target_sheet_int {#1 + 1}
+            \int_set:Nn \l__tenkzl_guard_scan_sign_int {-1}
+            \int_set_eq:NN \l_tmpa_int \l__tenkzl_guard_lower_count_int
+          }
+        \int_step_function:nnN {1} { \l_tmpa_int }
+          \tenkzl_guard_dense_scan:n
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_dense_sheet:n #1
+  {
+    \bool_if:NF \l__tenkzl_guard_realized_bool
+      {
+        \prop_if_in:NeT \l__tenkzl_guard_plan_prop { dense / #1 }
+          { \tenkzl_guard_dense_realized:n {#1} }
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_sheet_translation_realized:
+  {
+    \prop_if_empty:NTF \l__tenkzl_removed_prop
+      { \bool_set_true:N \l__tenkzl_guard_realized_bool }
+      {
+        \bool_set_false:N \l__tenkzl_guard_realized_bool
+        \prop_if_in:NeT \l__tenkzl_guard_plan_prop
+          {
+            candidate /
+            \int_use:N \l__tenkzl_guard_dr_int /
+            \int_use:N \l__tenkzl_guard_dc_int
+          }
+          { \bool_set_true:N \l__tenkzl_guard_realized_bool }
+        \int_step_function:nnN {0}
+          { \l__tenkzl_sheets_int - 2 }
+          \tenkzl_guard_dense_sheet:n
+      }
+  }
+
+\cs_new_protected:Npn \tenkzl_guard_sheet_candidate:
+  {
+    \bool_set_false:N \l__tenkzl_guard_better_bool
+    \fp_compare:nNnT { \l__tenkzl_d_fp } <
+      { \dim_to_fp:n { \l__tenkzl_y_dim } ^ 2 }
+      {
+        \bool_if:NTF \l__tenkzl_guard_min_bool
+          {
+            \fp_compare:nNnT { \l__tenkzl_d_fp } < { \l__tenkzl_mind_fp }
+              { \bool_set_true:N \l__tenkzl_guard_better_bool }
+          }
+          { \bool_set_true:N \l__tenkzl_guard_better_bool }
+      }
+    \bool_if:NT \l__tenkzl_guard_better_bool
+      {
+        \tenkzl_guard_sheet_translation_realized:
+        \bool_if:NT \l__tenkzl_guard_realized_bool
+          {
+            \bool_set_true:N \l__tenkzl_guard_min_bool
+            \fp_set_eq:NN \l__tenkzl_mind_fp \l__tenkzl_d_fp
+            \int_set_eq:NN \l__tenkzl_gdr_int \l__tenkzl_guard_dr_int
+            \int_set_eq:NN \l__tenkzl_gdc_int \l__tenkzl_guard_dc_int
+          }
+      }
+  }
+
 \cs_new_protected:Npn \tenkzl_guard_sheetvec:
   {
-    \fp_set:Nn \l__tenkzl_mind_fp { inf }
+    \dim_set:Nn \l__tenkzl_y_dim
+      { \fp_to_dim:n
+          { \__tenkz_metric_round_bead_spacing_floor: * \tenkz@pitch } }
+    \prop_if_empty:NF \l__tenkzl_removed_prop
+      { \tenkzl_guard_sheet_plan: }
+    \bool_set_false:N \l__tenkzl_guard_min_bool
     \int_step_inline:nnn { 1 - \l__tenkzl_nrows_int }
       { \l__tenkzl_nrows_int - 1 }
       {
+        \int_set:Nn \l__tenkzl_guard_dr_int {##1}
         \int_step_inline:nnn { 1 - \l__tenkzl_ncols_int }
           { \l__tenkzl_ncols_int - 1 }
           {
+            \int_set:Nn \l__tenkzl_guard_dc_int {####1}
             % Delta = S - dc C - dr R, from the map coefficients
             % (C = (axx, ayx) lp, R = (-axy, -ayy) lp), so the check
             % covers expert col/row frames too
             \fp_set:Nn \l__tenkzl_d_fp
               { ( \l__tenkzl_svx_dim
-                  - (####1) * ( \l__tenkzl_axx_tl ) * \l__tenkzl_lp_dim
-                  + (##1)   * ( \l__tenkzl_axy_tl ) * \l__tenkzl_lp_dim
+                  - \l__tenkzl_guard_dc_int
+                    * ( \l__tenkzl_axx_tl ) * \l__tenkzl_lp_dim
+                  + \l__tenkzl_guard_dr_int
+                    * ( \l__tenkzl_axy_tl ) * \l__tenkzl_lp_dim
                 ) ^ 2
                 + ( \l__tenkzl_svy_dim
-                  - (####1) * ( \l__tenkzl_ayx_tl ) * \l__tenkzl_lp_dim
-                  + (##1)   * ( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
+                  - \l__tenkzl_guard_dc_int
+                    * ( \l__tenkzl_ayx_tl ) * \l__tenkzl_lp_dim
+                  + \l__tenkzl_guard_dr_int
+                    * ( \l__tenkzl_ayy_tl ) * \l__tenkzl_lp_dim
                 ) ^ 2 }
-            \fp_compare:nNnT { \l__tenkzl_d_fp } < { \l__tenkzl_mind_fp }
-              {
-                \fp_set_eq:NN \l__tenkzl_mind_fp \l__tenkzl_d_fp
-                \int_set:Nn \l__tenkzl_gdr_int {##1}
-                \int_set:Nn \l__tenkzl_gdc_int {####1}
-              }
+            \tenkzl_guard_sheet_candidate:
           }
       }
-    \dim_set:Nn \l__tenkzl_x_dim
-      { \fp_to_dim:n { sqrt( \l__tenkzl_mind_fp ) } }
-    \dim_set:Nn \l__tenkzl_y_dim
-      { \fp_to_dim:n
-          { \tenkz@r@sheetcoincide * \tenkz@r@dotdia * \tenkz@pitch } }
-    \dim_compare:nNnT { \l__tenkzl_x_dim } < { \l__tenkzl_y_dim }
+    \bool_if:NT \l__tenkzl_guard_min_bool
       {
+        \dim_set:Nn \l__tenkzl_x_dim
+          { \fp_to_dim:n { sqrt( \l__tenkzl_mind_fp ) } }
         \msg_warning:nneeee { tenkz } { sheet-coincide }
-          { \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm } }
+          {
+            \__tenkz_geom_round:n
+              {
+                \dim_to_fp:n { \l__tenkzl_x_dim }
+                / \dim_to_fp:n { \tenkz@pitch }
+              }
+          }
           { \int_use:N \l__tenkzl_gdr_int }
           { \int_use:N \l__tenkzl_gdc_int }
-          { \dim_to_decimal_in_unit:nn { \l__tenkzl_y_dim } { 1mm } }
+          {
+            \__tenkz_geom_round:n
+              { \__tenkz_metric_round_bead_spacing_floor: }
+          }
         \tenkz@event{warning|picture=\the\tenkz@pictureid|%
-          code=sheet-coincide|dist=%
-          \dim_to_decimal_in_unit:nn { \l__tenkzl_x_dim } { 1mm }mm|dr=%
+          code=sheet-coincide|dist=\__tenkz_geom_round:n
+            {\dim_to_fp:n {\l__tenkzl_x_dim}
+              / \dim_to_fp:n {\tenkz@pitch}}|floor=%
+          \__tenkz_geom_round:n
+            {\__tenkz_metric_round_bead_spacing_floor:}|dr=%
           \int_use:N \l__tenkzl_gdr_int|dc=\int_use:N \l__tenkzl_gdc_int}
       }
   }

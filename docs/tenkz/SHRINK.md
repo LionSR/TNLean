@@ -1289,3 +1289,21 @@ Census-correction: #5086
 | flag | verdict |
 |---|---|
 | flag:consumers:key:kernel-picture:planes | keep-because: `LANGUAGE-1.0` section 9 fixes the bilayer expansion; the kernel equivalence pair lands now and the named bilayer and condensation consumers migrate through #5086; expiry 1.0 |
+
+### 2026-08-02 — basis spacing derives from shared clearance
+
+Distinct basis-member families now receive one finite-window spacing
+diagnostic after the complete affine frame map. Geometry minimizes the
+centre-bearing support margin of the transformed default beads; the warning
+records that member pair and cell translation but changes neither placement,
+identity, nor topology. The kernel derives each directional requirement from
+the existing `dotdia` body diameter, absolute `wirewidth`, and `daylight`.
+The retiring lattice sheet guard draws page-round beads, so those same three
+ingredients reduce to `dotdia + wirewidth / pitch + daylight`. The
+lattice-local `1.25` multiplier and millimetre-facing report therefore
+disappear without minting a replacement ratio.
+
+The metric ledger moves by zero. M1--M6, parser identity, raw-ink census, and
+decimal-literal census are unchanged; the removed lattice definition was a
+metric-table line already exempt from the latter. Issue #5331 carries the
+geometry and event regressions.

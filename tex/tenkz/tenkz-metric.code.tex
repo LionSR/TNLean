@@ -100,6 +100,30 @@
       }
   }
 
+% Two default beads contribute two page-space half-strokes before daylight
+% begins.  Normalize that one full named stroke by the live picture pitch;
+% it is deliberately derived, not another registry row.  Affine carriers add
+% this page-owned term after asking geometry for the transported bead bodies.
+\cs_new:Npn \__tenkz_metric_default_bead_page_gap:
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {daylight}
+        + \dim_to_fp:n { \__tenkz_dim:n {wirewidth} }
+          / \dim_to_fp:n { \tenkz@pitch }
+      }
+  }
+
+% Page-round default beads reduce the two body supports to one diameter.
+\cs_new:Npn \__tenkz_metric_round_bead_spacing_floor:
+  {
+    \fp_eval:n
+      {
+        \__tenkz_metric_ratio:n {dotdia}
+        + \__tenkz_metric_default_bead_page_gap:
+      }
+  }
+
 % ---------- the core table (motivations abridged from tenkz-core) ----------
 \__tenkz_metric_declare:nnn {layersep} {0.80}
   { layers~read~as~layers,~not~as~two~chains }
