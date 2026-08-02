@@ -258,34 +258,35 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     return None
 
 
-def _comment_inch_is_measurement(
+def _comment_dimension_is_measurement(
     source: str,
     occurrence: re.Match[str],
     comment_start: int,
     comment_end: int,
 ) -> bool:
-    """Disambiguate the English word ``in`` from an inch measurement."""
+    """Reject unit-like prefixes in prose and disambiguate the word ``in``."""
     literal = occurrence.group(0).lower().rstrip()
-    if not literal.endswith("in"):
-        return True
     prefix = source[comment_start : occurrence.start()]
     suffix = source[occurrence.end() : comment_end]
-    # In comments, a unit prefix inside an ordinary word (``3 inputs`` or
-    # ``3 insets``) is prose.  Active TeX keeps the prefix interpretation
-    # because TeX itself would consume ``in`` as the unit there.
+    # In comments, a unit prefix inside an ordinary word (``3 special`` or
+    # ``2 pts``) is prose. Active TeX keeps TeX's prefix interpretation.
     if re.match(r"[A-Za-z]", suffix):
         return False
+    if not literal.endswith("in"):
+        return True
     # A compact ``1in`` token or TeX's explicit ``true`` prefix is
     # unambiguously dimensional.  Only the spaced English-looking ``1 in``
     # form needs semantic context.
     if "true" in literal or re.search(r"\s+in$", literal) is None:
         return True
-    # A measurement noun governs the value only when it is local to that
-    # value.  Owner words elsewhere in the sentence must not turn a figure
-    # number in "Figure 3 in the layout" into three inches.
+    # This is intentionally narrower than ``_comment_owner``: it asks whether
+    # a local phrase governs this value, not whether the comment mentions an
+    # owner somewhere. Thus "Figure 3 in the layout" remains prose.
     if re.search(
-        r"\b(?:pitch|spacing|distance|clearance|width|height|length|radius|"
-        r"diameter|offset)(?:\s+(?:is|was|equals|measures))?\s*$",
+        r"(?:\\tn(?:join|wire|edge|arrow)\s+path|"
+        r"\b(?:pitch(?:es)?|spacings?|distances?|clearances?|widths?|heights?|"
+        r"lengths?|radii|radiuses?|diameters?|offsets?|routes?|strings?))"
+        r"(?:\s+(?:is|was|equals|measures))?\s*$",
         prefix,
         flags=re.IGNORECASE,
     ) is not None:
@@ -343,7 +344,7 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             (span for span in comments if span[0] <= match.start() < span[1]),
             None,
         )
-        if comment_range is None or not _comment_inch_is_measurement(
+        if comment_range is None or not _comment_dimension_is_measurement(
             source, match, comment_range[0], comment_range[1]
         ):
             continue

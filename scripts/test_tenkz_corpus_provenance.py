@@ -346,6 +346,10 @@ def test_rmp_dimension_ownership() -> None:
         "% use site 2 in the frame\n",
         "% There are 3 inputs in the panel.\n",
         "% The panel has 3 insets in total.\n",
+        "% 2 points, 1 piece, and 3 special cases remain.\n",
+        "% 2 pts and 1 pcs remain.\n",
+        "% version 3 in the layout uses the old syntax\n",
+        "% equation 2 in the figure shows the route\n",
         "% width of Figure 3 in the layout is fixed\n",
     ):
         if scan_case_dimensions(Path("synthetic.tex"), prose):
@@ -380,6 +384,16 @@ def test_rmp_dimension_ownership() -> None:
             "a local measurement phrase did not govern a spaced inch: "
             f"{governed_comment_inch!r}"
         )
+    for source in (
+        r"% \tnjoin path is 1 in from the origin" "\n",
+        "% routes 2 in long\n",
+        "% the distances 5 in apart\n",
+    ):
+        local_measurement = scan_case_dimensions(Path("synthetic.tex"), source)
+        if len(local_measurement) != 1 or not local_measurement[0].in_comment:
+            raise AssertionError(
+                f"local comment measurement escaped: {local_measurement!r}"
+            )
     ownerless_comment_inch = scan_case_dimensions(
         Path("synthetic.tex"), "% shifted 1 in leftward\n"
     )
