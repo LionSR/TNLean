@@ -97,7 +97,8 @@ is deliberately source-faithful.
   trace-preserving representative. For a multiplicity-bearing sector
   decomposition, `MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis`
   applies these gauges simultaneously and leaves all multiplicities and weights
-  unchanged; `PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions`
+  unchanged;
+  `MPSTensor.PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions`
   is the corresponding overlap-hypothesis bridge.
 - **Caveat:** general invertible similarities do not preserve
   left-canonicality. The bridge is therefore one-way into `IsPeriodic`, not an
