@@ -1272,3 +1272,20 @@ and declared boundary leg is model incidence rather than geometric
 coincidence, without changing the public language.
 
 Census-correction: #5086
+
+### 2026-08-02 — the contract-defined `planes` preset reaches the kernel
+
+The kernel gains the contract-defined `planes` sugar from `LANGUAGE-1.0` section
+9: one plane frame with ket and bra basis members at their declared
+quarter-pitch offsets. The preset owns placement only; callers continue to
+state `bonds=none` when a multi-member basis has explicit connectivity. M1
+sugar rows rise from 12 to 13 and M2 parser leaves rise from 227 to 228.
+Kernel, alias, escape, and overload counts are unchanged.
+
+Extension-gate: #5086
+
+Census-correction: #5086
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-picture:planes | keep-because: `LANGUAGE-1.0` section 9 fixes the bilayer expansion; the kernel equivalence pair lands now and the named bilayer and condensation consumers migrate through #5086; expiry 1.0 |
