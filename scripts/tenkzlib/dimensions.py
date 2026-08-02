@@ -62,6 +62,19 @@ class DimensionReport:
         return Counter(occurrence.path for occurrence in self.book)
 
 
+@dataclass(frozen=True)
+class DimensionOwnerSite:
+    """Active dimensions grouped by their narrowest semantic owner span."""
+
+    path: Path
+    line: int
+    offset: int
+    kind: str
+    source: str
+    owner: DimensionOwner
+    occurrences: tuple[DimensionOccurrence, ...]
+
+
 class DimensionOwnershipError(ValueError):
     """An RMP physical dimension escaped its owner or a ratchet increased."""
 
@@ -302,6 +315,8 @@ class _OwnerSpan:
     start: int
     end: int
     owner: DimensionOwner | None
+    site_start: int
+    kind: str
     is_quarantine: bool = False
 
 
@@ -653,7 +668,12 @@ def _command_spans(
             position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
-                command.start(), position, span_owner, is_quarantine
+                command.start(),
+                position,
+                span_owner,
+                command.start(),
+                "command",
+                is_quarantine,
             )
         )
     return spans
@@ -710,13 +730,19 @@ def _option_group_spans(
             source_start = end
         else:
             source_start = start + active.offsets[option.end()]
+        if option.start("key") >= len(active.offsets):
+            site_start = end
+        else:
+            site_start = start + active.offsets[option.start("key")]
         if value_end <= option.end():
             source_end = source_start
         elif value_end > len(active.offsets):
             source_end = end
         else:
             source_end = start + active.offsets[value_end - 1] + 1
-        spans.append(_OwnerSpan(source_start, source_end, owner))
+        spans.append(
+            _OwnerSpan(source_start, source_end, owner, site_start, "option")
+        )
     return spans
 
 
@@ -957,6 +983,8 @@ def _environment_spans(
             start,
             len(source) if end < 0 else end,
             None,
+            start,
+            "environment",
             end < 0,
         )
         for start, end in _environment_scope_spans(
@@ -975,7 +1003,16 @@ def _environment_spans(
         if owner_source[position : position + 1] != "{":
             continue
         if match_group(owner_source, position, "{", "}") < 0:
-            spans.append(_OwnerSpan(control.start(), len(source), None, True))
+            spans.append(
+                _OwnerSpan(
+                    control.start(),
+                    len(source),
+                    None,
+                    control.start(),
+                    "environment",
+                    True,
+                )
+            )
     # Every environment that already participates in the barrier contract
     # needs the same fail-closed option boundary, even when its options have
     # no physical keys or its expandable name remains unresolved.
@@ -992,7 +1029,16 @@ def _environment_spans(
         if owner_source[position : position + 1] != "[":
             continue
         if match_group(owner_source, position, "[", "]") < 0:
-            spans.append(_OwnerSpan(container.start, len(source), None, True))
+            spans.append(
+                _OwnerSpan(
+                    container.start,
+                    len(source),
+                    None,
+                    container.start,
+                    "environment",
+                    True,
+                )
+            )
     return spans
 
 
@@ -1131,6 +1177,48 @@ def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
     )
 
 
+def _owner_spans(source: str, owner_source: str) -> list[_OwnerSpan]:
+    """Return owner spans in the same narrowest-first matching order everywhere."""
+    context = _execution_context(source, owner_source)
+    spans = (
+        _option_spans(source, owner_source, context.mask_spans)
+        + list(context.command_spans)
+        + _environment_spans(source, owner_source, context.mask_spans)
+        + [
+            _OwnerSpan(start, end, None, True)
+            for start, end in context.replacement_spans
+        ]
+    )
+    # A semantic option value is more specific than its containing command.
+    # A malformed remainder has no trustworthy nested grammar, however, so
+    # its neutral quarantine must win over every shorter span inside it.
+    spans.sort(
+        key=lambda span: (
+            0 if span.is_quarantine else 1,
+            span.end - span.start,
+        )
+    )
+    return spans
+
+
+def _matching_owner_span(
+    spans: Iterable[_OwnerSpan], offset: int
+) -> _OwnerSpan | None:
+    return next(
+        (span for span in spans if span.start <= offset < span.end),
+        None,
+    )
+
+
+def _active_fragment(active: _ActiveSource, start: int, end: int) -> str:
+    """Return active TeX characters whose original offsets occupy one span."""
+    return "".join(
+        character
+        for character, offset in zip(active.text, active.offsets, strict=True)
+        if start <= offset < end
+    )
+
+
 def _comment_ranges(source: str) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     line_start = 0
@@ -1231,39 +1319,13 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     # ``\tn%...\nput``.  Keep ownership on an offset-preserving blanked view
     # while the numeric/unit recognizer uses the collapsed mapped view above.
     owner_source = strip_comments(source)
-    context = _execution_context(source, owner_source)
-    owner_spans = (
-        _option_spans(source, owner_source, context.mask_spans)
-        + list(context.command_spans)
-        + _environment_spans(
-            source, owner_source, context.mask_spans
-        )
-        + [
-            _OwnerSpan(start, end, None, True)
-            for start, end in context.replacement_spans
-        ]
-    )
-    # A semantic option value is more specific than its containing command.
-    # A malformed remainder has no trustworthy nested grammar, however, so
-    # its neutral quarantine must win over every shorter span inside it.
-    owner_spans.sort(
-        key=lambda span: (
-            0 if span.is_quarantine else 1,
-            span.end - span.start,
-        )
-    )
+    owner_spans = _owner_spans(source, owner_source)
     comments = _comment_ranges(source)
     occurrences: list[DimensionOccurrence] = []
     for match in DIMENSION_RE.finditer(active.text):
         offset = active.offsets[match.start()]
-        owner = next(
-            (
-                span.owner
-                for span in owner_spans
-                if span.start <= offset < span.end
-            ),
-            None,
-        )
+        owner_span = _matching_owner_span(owner_spans, offset)
+        owner = owner_span.owner if owner_span is not None else None
         occurrences.append(
             DimensionOccurrence(
                 path=path,
@@ -1295,6 +1357,41 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             )
         )
     return tuple(sorted(occurrences, key=lambda occurrence: occurrence.offset))
+
+
+def scan_case_dimension_sites(
+    path: Path, source: str
+) -> tuple[DimensionOwnerSite, ...]:
+    """Group active dimensions by the exact owner spans used by the classifier."""
+    active = _active_source(source)
+    owner_spans = _owner_spans(source, strip_comments(source))
+    grouped: dict[_OwnerSpan, list[DimensionOccurrence]] = {}
+    for occurrence in scan_case_dimensions(path, source):
+        if occurrence.in_comment:
+            continue
+        span = _matching_owner_span(owner_spans, occurrence.offset)
+        if span is None or occurrence.owner is None:
+            raise DimensionOwnershipError(
+                "cannot inventory unowned case dimension: " + _location(occurrence)
+            )
+        if span.owner is not occurrence.owner:
+            raise DimensionOwnershipError(
+                "dimension owner/site mismatch: " + _location(occurrence)
+            )
+        grouped.setdefault(span, []).append(occurrence)
+    sites = [
+        DimensionOwnerSite(
+            path=path,
+            line=occurrences[0].line,
+            offset=occurrences[0].offset,
+            kind=span.kind,
+            source=_active_fragment(active, span.site_start, span.end),
+            owner=span.owner,
+            occurrences=tuple(occurrences),
+        )
+        for span, occurrences in grouped.items()
+    ]
+    return tuple(sorted(sites, key=lambda site: site.offset))
 
 
 def scan_book_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, ...]:

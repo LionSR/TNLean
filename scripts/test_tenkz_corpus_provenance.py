@@ -31,6 +31,7 @@ from tenkz_rmp import (
     structural_capability_problems,
     verify_author_source_tree,
 )
+from tenkzlib.dimension_inventory import validate_rmp_dimension_gate
 from tenkzlib.dimensions import (
     BOOK_LAYOUT_ALLOWLIST,
     DimensionOccurrence,
@@ -280,7 +281,9 @@ def test_rmp_dimension_ownership() -> None:
             f"{sorted(set(_PUBLIC_ENVIRONMENTS) - registered_environments)!r}"
         )
     targets = load_manifest(DEFAULT_MANIFEST)
-    report = collect_dimension_report(ROOT, (target.case for target in targets))
+    report = validate_rmp_dimension_gate(
+        ROOT, (target.case for target in targets)
+    )
     expected = Counter(
         {
             DimensionOwner.METRIC: 0,
@@ -300,8 +303,6 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"benchmark-book dimension allowlist drifted: {report.book_counts!r}"
         )
-    validate_dimension_report(report)
-
     synthetic = r"""% pitch=14mm remains visible to the comment audit
 \begin{tenkz}[pitch=11mm]
   \tnput{a}{(1mm,2mm)}{}
