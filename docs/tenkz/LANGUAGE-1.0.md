@@ -332,15 +332,22 @@ offsets remain distinct members: coordinate coincidence neither identifies
 records nor creates an edge.
 
 The frame evaluates basis spacing in page space. Over the declared cell
-window, it compares every unordered pair of distinct members under every
-realizable cell translation, using their centres and default-bead silhouettes
-after the complete frame map. Each silhouette is the transformed nominal bead
-body plus its audited page-space half-stroke. For each candidate, the required
+window, it compares every unordered pair of distinct declared member families
+under each live cell translation, using their centres and default-bead
+silhouettes after the complete frame map. A translation is live only when two
+distinct member records survive population at that displacement: a whole-cell
+authored atom suppresses that cell's member sites, while a member-addressed
+replacement remains a member record. A spanning member replacement contributes
+its canonical anchor once, not an alias at every claimed cell. Each silhouette
+is the transformed nominal bead body plus its audited page-space half-stroke.
+For each candidate, the required
 centre separation is the support of both silhouettes on the centre bearing
 plus `daylight`; an exact coincidence uses the maximum affine body support,
 the two half-strokes, and `daylight`. The candidate with the smallest
-separation-minus-requirement margin is reported, and a negative margin emits
-`basis-spacing`. This support test is conservative under shear: a quiet result
+separation-minus-requirement margin is reported. Candidates are visited in
+ascending `(member-a, member-b, dr, dc)` order, and equal margins retain the
+first candidate. A negative margin emits `basis-spacing`. This support test is
+conservative under shear: a quiet result
 guarantees the named daylight on the centre bearing. In the event, `dist` is
 the centre separation and `floor` is its support requirement (directional
 except at exact coincidence), each displayed to six decimals. `margin` is the

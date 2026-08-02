@@ -334,6 +334,62 @@ basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
   echo "FAIL: an authored basis member did not override population" >&2
   exit 1
 }
+override_selection_atoms=$(
+  grep -c '^atom|' "$WORK/r_basis_override_selection.tnlog" || true
+)
+[ "$override_selection_atoms" -eq 16 ] || {
+  echo "FAIL: whole-cell overrides did not suppress their basis members" >&2
+  exit 1
+}
+grep -Eq '^atom.*[|]name=X([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: the whole-cell override record disappeared" >&2
+  exit 1
+}
+if grep -E '^atom.*[|]name=X([|]|$)' \
+    "$WORK/r_basis_override_selection.tnlog" | grep -Fq '|member='; then
+  echo "FAIL: a whole-cell override became a basis-member record" >&2
+  exit 1
+fi
+override_spacing_count=$(
+  grep -Fc '|code=basis-spacing|' \
+    "$WORK/r_basis_override_selection.tnlog" || true
+)
+[ "$override_spacing_count" -eq 3 ] || {
+  echo "FAIL: realized and suppressed basis collisions were not distinguished" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k2|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a realized collision after a partial override was not diagnosed" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k4|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=0|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: an authored member replacement left the spacing population" >&2
+  exit 1
+}
+grep -Fxq \
+  'warning|picture=k6|code=basis-spacing|member-a=1|member-b=2|dr=0|dc=1|dist=0|floor=0.327573|margin=-0.327573094' \
+  "$WORK/r_basis_override_selection.tnlog" || {
+  echo "FAIL: a spanning member lost its canonical-anchor collision" >&2
+  exit 1
+}
+if grep -Eq '^warning[|]picture=k(1|3|5|7)[|]code=basis-spacing[|]' \
+    "$WORK/r_basis_override_selection.tnlog"; then
+  echo "FAIL: suppressed, aliased, or stale basis state emitted a warning" >&2
+  exit 1
+fi
+override_spacing_messages=$(
+  grep -Fc '[TKZ-FRAME-BASIS-SPACING]' \
+    "$WORK/r_basis_override_selection.tex.transcript" || true
+)
+[ "$override_spacing_messages" -eq 3 ] || {
+  echo "FAIL: override spacing events and human diagnostics diverged" >&2
+  exit 1
+}
 grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
     "$WORK/r_basis_override_selection.tnlog" || {
   echo "FAIL: a whole-cell override was selected more than once" >&2

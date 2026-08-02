@@ -1,4 +1,9 @@
-%% Regression: a whole-cell override is selected once after basis expansion.
+%% Regression: whole-cell overrides suppress basis members before spacing.
+%% A partially overridden window still diagnoses realized collisions, while a
+%% collision that requires a suppressed member remains quiet.  A
+%% member-addressed replacement remains a live member, and a spanning member
+%% contributes its canonical anchor rather than aliases at every claimed cell.
+%% A final suppressed picture checks that no live-candidate state leaks.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -9,8 +14,32 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={ket}, cols=1, bonds=none,
-              frame={flat,basis={wire at (0,0), wire at (2,0)}}]
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
   \tn[at=(1,1), name=X]{X}
   \tnmark[form=enclosure]{(1,1)}{}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1), name=Y]{Y}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (4,0)}}]
+  \tn[at=(1,1), name=Z]{Z}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1,1), name=M]{M}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (4,0)}}]
+  \tn[at=(1,1,1), wide=2, name=W]{W}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=2, bonds=none,
+              frame={flat,basis={wire at (4,0), wire at (0,0)}}]
+  \tn[at=(1,1,1), wide=2, name=V]{V}
+\end{tenkz}
+\begin{tenkz}[rows={ket}, cols=1, bonds=none,
+              frame={flat,basis={wire at (0,0), wire at (0,0)}}]
+  \tn[at=(1,1), name=Q]{Q}
 \end{tenkz}
 \end{document}
