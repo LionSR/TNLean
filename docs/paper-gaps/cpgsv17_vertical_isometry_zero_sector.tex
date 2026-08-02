@@ -165,6 +165,73 @@ trace equality on these families.  No global trace-preserving extension,
 complete-positivity assertion for the finite products, or inverse relation is
 asserted.
 
+\section{Ambient completion in the converse construction}
+
+Definition~4.1 requires trace-preserving completely positive maps on the full
+one-site and two-site physical matrix algebras (source lines~638--660).  In the
+converse implication of Theorem~4.14, Appendix~C.4 instead first defines the
+retained-sector compositions
+\begin{equation}
+  T_0=\widetilde R_2\widetilde T R_1,
+  \qquad
+  S_0=\widetilde R_1\widetilde S R_2
+  \label{eq:converse-active-composites}
+\end{equation}
+at source lines~2065--2085.  Here $R_1$ and $R_2$ begin with compression by
+the one-site and two-site coisometries.  Consequently
+\begin{equation}
+  \operatorname{tr}(T_0(X))=\operatorname{tr}(P_1X),
+  \qquad
+  \operatorname{tr}(S_0(Y))=\operatorname{tr}(P_2Y),
+  \label{eq:converse-active-traces}
+\end{equation}
+where, after the canonical relabelling of the two-site indices,
+$P_i=U_i^\dagger U_i$.  These maps preserve trace on matrices supported in
+the retained sectors, but not on arbitrary ambient matrices when
+$P_i\neq I$.
+
+Put $Q_i=I-P_i$.  When $d>0$, choose density matrices $\tau_1$ and $\tau_2$
+on the one-site and two-site physical spaces.  The measure-and-prepare
+completion
+\begin{equation}
+  T(X)=T_0(X)+\operatorname{tr}(Q_1XQ_1)\tau_2,
+  \qquad
+  S(Y)=S_0(Y)+\operatorname{tr}(Q_2YQ_2)\tau_1
+  \label{eq:converse-completed-channels}
+\end{equation}
+is completely positive.  Since $Q_i$ is a projection and
+$\operatorname{tr}(\tau_i)=1$, equations
+\eqref{eq:converse-active-traces} give
+\begin{equation}
+  \operatorname{tr}(T(X))=\operatorname{tr}(X),
+  \qquad
+  \operatorname{tr}(S(Y))=\operatorname{tr}(Y).
+  \label{eq:converse-completed-traces}
+\end{equation}
+When $d=0$, both ambient physical matrix algebras contain only zero; the
+uncompleted maps are already completely positive and trace preserving, and no
+density matrix is required.
+The source does not specify the states $\tau_i$ or any other trace-restoring
+modification of the literal composites on the discarded complements.  This
+choice is immaterial for its conclusion: the reconstruction identities give
+\begin{equation}
+  P_1M_1(Z)P_1=M_1(Z),
+  \qquad
+  P_2M_2(Z)P_2=M_2(Z)
+  \label{eq:converse-source-support}
+\end{equation}
+for every virtual matrix $Z$.  Hence the added terms vanish on the family to
+which the equations at source lines~2074 and~2085 are applied.
+
+This completion is distinct from the transported maps discussed in the
+preceding section.  In the forward implication at source lines~1955--1980,
+the full physical channels are hypotheses and are compressed to retained
+sector coordinates; their possible trace loss is governed by
+\eqref{eq:transported-image-preservation}.  In the converse implication at
+source lines~2065--2085, the sector maps are used to construct full physical
+channels, and equation~\eqref{eq:converse-completed-channels} supplies the
+otherwise unspecified action on the orthogonal complements.
+
 \section{Formal correction}
 
 The vertical canonical-form predicate requires $UU^\dagger=I_s$ in the
@@ -197,6 +264,21 @@ trace consequences are
 \leanid{MPOTensor.transportedVerticalSectorT_trace_of_source_generated} and
 \leanid{MPOTensor.transportedVerticalSectorS_trace_of_source_generated}.}
 
+The general measure-and-prepare completion is recorded in
+\path{TNLean/Channel/SupportCompletion.lean}.\footnote{Formal declaration:
+\leanid{Matrix.supportCompletion\_isKrausCPTP}.}
+Under supplied unitary conjugacies between the paired sectors, the active
+compositions and the completed physical channels are recorded in
+\path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalPhysicalMaps.lean}.%
+\footnote{Formal declaration:
+\leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+UnitarySectorConjugacy.isRFPViaTS}.}
+The existence of these unitary conjugacies is treated separately in
+\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}.
+The complementary terms are choices on the discarded subspaces, not
+additional assertions of Appendix~C.4.  Their action on the source-generated
+family is fixed by \eqref{eq:converse-source-support}.
+
 \paragraph{Verdict.}
 The earlier two-sided-unitary condition was absent from the source and was
 false when the vertically viewed tensor had a zero sector.  Replacing it by
@@ -204,11 +286,16 @@ the coisometry identity $UU^\dagger=I$, while retaining exact reconstruction
 from the nonzero sectors, corrects the conclusion without adding a
 full-support hypothesis.  Literal Proposition~4.13 and the separate stronger
 horizontal theorem now prove this corrected conclusion.  This completion does
-not supply a trace-preserving map on every element of the finite products in
-Appendix~C.4; the support conditions
+not make the forward transported maps trace preserving on every element of the
+finite products in Appendix~C.4; the support conditions
 \eqref{eq:transported-image-preservation} remain necessary there.  It also
-does not prove the renormalization fixed-point characterization of
-Theorem~4.14.
+does not determine a preferred action on the discarded physical complements.
+For the converse implication, the measure-and-prepare terms in
+\eqref{eq:converse-completed-channels} give global physical channels with the
+same action on the source-generated family.  This conclusion remains
+conditional on the unitary sector conjugacies used in
+\eqref{eq:converse-active-composites}; it does not prove their unconditional
+existence in Theorem~4.14.
 
 \bibliographystyle{alpha}
 \bibliography{references}
