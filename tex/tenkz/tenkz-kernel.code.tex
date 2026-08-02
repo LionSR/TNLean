@@ -63,6 +63,9 @@
 \msg_new:nnn {tenkz}{kernel-declare-class}
   { [TKZ-LANG-DECLARE]~'#1'~is~not~a~declaration~class;~
     expected~atom|skin|species. }
+\msg_new:nnn {tenkz}{kernel-prelude-class}
+  { [TKZ-LANG-PRELUDE-CLASS]~stock~prelude~class~'#1'~is~not~supported;~
+    expected~skin. }
 \msg_new:nnn {tenkz}{kernel-signature}
   { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~expose~unequal~boundaries:~
     (#3)~versus~(#4). }
@@ -2253,20 +2256,15 @@
       { \__tenkz_kernel_tn:nn { #2 , ##1 } {##2} \ignorespaces }
   }
 
-% Stock names are ordinary declarations whose descriptors live in the
-% executable registry.  Installing them through the same declaration door
-% keeps their authored name in the atom record while geometry and ink resolve
-% recursively through the declared base.
+% Stock skins live in the executable registry.  Package-load installation is
+% deliberately skin-only: it may populate the shared descriptor table, but it
+% must not mint atom commands or assign document species.
 \cs_new_protected:Npn \__tenkz_kernel_install_prelude:nnn #1#2#3
   {
-    \str_case:nnF {#1}
-      {
-        {atom}    { \__tenkz_kernel_declare_atom:nn {#2} {#3} }
-        {skin}    { \__tenkz_kernel_declare_table:Nnn
-                      \g__tenkz_kernel_skin_prop {#2} {#3} }
-        {species} { \__tenkz_kernel_declare_species:nn {#2} {#3} }
-      }
-      { \msg_error:nnn {tenkz}{kernel-declare-class} {#1} }
+    \str_if_eq:nnTF {#1} {skin}
+      { \__tenkz_kernel_declare_table:Nnn
+          \g__tenkz_kernel_skin_prop {#2} {#3} }
+      { \msg_error:nnn {tenkz}{kernel-prelude-class} {#1} }
   }
 \seq_map_inline:Nn \g__tenkz_language_preludes_seq
   { \__tenkz_kernel_install_prelude:nnn #1 }

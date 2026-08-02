@@ -51,9 +51,10 @@ def compile_event_source(source: str) -> tuple[subprocess.CompletedProcess[str],
 
 def main() -> int:
     run("python3", "scripts/tenkz_language.py", "check")
+    registry = tenkz_language.load_registry()
     mpo_preludes = [
         entry.fields
-        for entry in tenkz_language.load_registry()
+        for entry in registry
         if entry.kind == "prelude" and entry.fields[:2] == ("skin", "mpo")
     ]
     if mpo_preludes != [("skin", "mpo", "base=box")]:
@@ -61,6 +62,59 @@ def main() -> int:
     reference = tenkz_language.REFERENCE.read_text(encoding="utf-8")
     if "Prelude class & Name & Declaration" not in reference or "base=box" not in reference:
         raise SystemExit("the generated language reference omitted the stock MPO declaration")
+    distinct_skin = tenkz_language.Entry(
+        kind="prelude", fields=("skin", "probe", "base=ring")
+    )
+    distinct_errors = tenkz_language.check([*registry, distinct_skin])
+    if distinct_errors:
+        raise SystemExit(
+            "a distinct stock skin was rejected:\n" + "\n".join(distinct_errors)
+        )
+    duplicate_skin = tenkz_language.Entry(
+        kind="prelude", fields=("skin", "mpo", "base=box")
+    )
+    duplicate_errors = tenkz_language.check([*registry, duplicate_skin])
+    if duplicate_errors != ["duplicate prelude records: skin:mpo"]:
+        raise SystemExit(
+            "an exact stock-skin duplicate was not rejected by class:name"
+        )
+    for declaration_class, descriptor in (
+        ("atom", "skin=box"),
+        ("species", "hue=source:red"),
+    ):
+        name = f"invalid-{declaration_class}"
+        invalid = tenkz_language.Entry(
+            kind="prelude", fields=(declaration_class, name, descriptor)
+        )
+        expected = (
+            f"prelude declaration {name!r} has unsupported class "
+            f"{declaration_class!r}; expected 'skin'"
+        )
+        if tenkz_language.check([*registry, invalid]) != [expected]:
+            raise SystemExit(
+                f"the registry validator accepted a {declaration_class} prelude"
+            )
+    for declaration_class, name, descriptor in (
+        ("atom", "mpo-command-leak", "skin=box"),
+        ("species", "mpo-species-leak", "hue=source:red"),
+    ):
+        rejected = compile_source(
+            rf"""\documentclass{{standalone}}
+\usepackage{{tenkz}}
+\ExplSyntaxOn
+\__tenkz_kernel_install_prelude:nnn
+  {{{declaration_class}}}{{{name}}}{{{descriptor}}}
+\ExplSyntaxOff
+\begin{{document}}x\end{{document}}
+"""
+        )
+        if (
+            rejected.returncode == 0
+            or "TKZ-LANG-PRELUDE-CLASS" not in rejected.stdout
+        ):
+            raise SystemExit(
+                f"the runtime installer accepted a {declaration_class} prelude"
+            )
     good = compile_source(r"""\documentclass{standalone}
 \usepackage{tenkz}
 \tndeclareatom{\tnphase}{skin=box, ports={west:virtual,east:virtual}}

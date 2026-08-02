@@ -373,7 +373,10 @@ def check(entries: list[Entry]) -> list[str]:
         for kind in ARITIES
     }
     for kind, rows in by_kind.items():
-        names = [row[0] if kind != "key" else f"{row[0]}:{row[1]}" for row in rows]
+        names = [
+            f"{row[0]}:{row[1]}" if kind in {"key", "prelude"} else row[0]
+            for row in rows
+        ]
         duplicates = sorted(name for name in set(names) if names.count(name) > 1)
         if duplicates:
             errors.append(f"duplicate {kind} records: {', '.join(duplicates)}")
@@ -390,10 +393,10 @@ def check(entries: list[Entry]) -> list[str]:
     if absent_commands:
         errors.append(f"registered commands without declarations: {', '.join(absent_commands)}")
     for declaration_class, name, descriptor in by_kind["prelude"]:
-        if declaration_class not in {"atom", "skin", "species"}:
+        if declaration_class != "skin":
             errors.append(
-                f"prelude declaration {name!r} has unknown class "
-                f"{declaration_class!r}"
+                f"prelude declaration {name!r} has unsupported class "
+                f"{declaration_class!r}; expected 'skin'"
             )
         if not name or not descriptor:
             errors.append(
