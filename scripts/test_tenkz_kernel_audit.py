@@ -6,7 +6,7 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from tenkz_audit import Audit
+from tenkz_audit import Audit, same_equation
 
 
 GOOD_LOG = """\
@@ -48,6 +48,10 @@ def audit_log(log: str, source: str | None = None) -> Audit:
 
 
 def main() -> int:
+    assert not same_equation(r"\def\foo{a=b}")
+    assert not same_equation(r"\text{a=b}")
+    assert same_equation(r"\;=\;\delta_{i,j}\;")
+
     good = audit_log(GOOD_LOG)
     assert not good.findings, good.findings
     assert [event.kind for event in good.pictures[0].content()] == [
@@ -175,39 +179,12 @@ kernel-boundary|signature=phys:up
         finding.rule for finding in rotated_open_equation.findings
     ]
 
-    equivalent_virtual_equation = audit_log(
+    mixed_virtual_equation = audit_log(
         equation_log.replace("phys:up", "edge:e"),
         equation_source,
     )
     assert "eq-boundary-mismatch" not in [
-        finding.rule for finding in equivalent_virtual_equation.findings
-    ]
-
-    checked_equation_source = (
-        "\\begin{tenkzeq}[check={signature, off={1: reason}}]\n"
-        + equation_source
-        + "\\end{tenkzeq}\n"
-    )
-    checked_equation = audit_log(
-        "check|relation=1|result=off|reason=reason\n" + equation_log,
-        checked_equation_source,
-    )
-    assert "eq-boundary-mismatch" not in [
-        finding.rule for finding in checked_equation.findings
-    ]
-    bundled_equation = audit_log(
-        "check|relation=1|result=equal|modulo=bundles\n" + equation_log,
-        checked_equation_source.replace("off={1: reason}", "modulo=bundles"),
-    )
-    assert "eq-boundary-mismatch" not in [
-        finding.rule for finding in bundled_equation.findings
-    ]
-    mismatched_checked_equation = audit_log(
-        "check|relation=1|result=mismatch|reason=boundary\n" + equation_log,
-        checked_equation_source,
-    )
-    assert "kernel-check" in [
-        finding.rule for finding in mismatched_checked_equation.findings
+        finding.rule for finding in mixed_virtual_equation.findings
     ]
 
     weighted_open_equation = audit_log(
@@ -242,6 +219,58 @@ kernel-boundary|signature=phys:up
     assert "eq-boundary-mismatch" in [
         finding.rule for finding in different_bundle_equation.findings
     ]
+
+    checked_equation_source = (
+        "\\begin{tenkzeq}[check={signature, modulo=bundles}]\n"
+        "\\begin{tenkz}\\tn{A}\\end{tenkz}\n"
+        "=\n"
+        "\\begin{tenkz}\\tn{B}\\end{tenkz}\n"
+        "\\end{tenkzeq}\n"
+    )
+    checked_equation_log = (
+        equation_log.replace("open:w", "edge:w:bundle=3").replace(
+            "phys:up", "open:e"
+        )
+        + "check|relation=1|result=equal|modulo=bundles|signature=edge:e\n"
+    )
+    checked_equation = audit_log(checked_equation_log, checked_equation_source)
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in checked_equation.findings
+    ]
+
+    opted_out_equation = audit_log(
+        "check|relation=1|result=off|reason=documented\n" + equation_log,
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}",
+            "check={signature, off={1: documented}}",
+        ),
+    )
+    assert "eq-boundary-mismatch" not in [
+        finding.rule for finding in opted_out_equation.findings
+    ]
+
+    checkless_equation_source = (
+        "\\begin{tenkzeq}[size=m]\n"
+        + equation_source
+        + "\\end{tenkzeq}\n"
+    )
+    checked_mismatch_source = checked_equation_source.replace(
+        "check={signature, modulo=bundles}", "check={signature}"
+    )
+    matching_equation_log = equation_log.replace("phys:up", "open:e")
+    second_equation_log = equation_log.replace("k1", "k3").replace("k2", "k4")
+    mixed_equations = audit_log(
+        matching_equation_log
+        + "check|relation=1|result=equal|signature=open:e, open:w\n"
+        + second_equation_log
+        + "check|relation=1|result=mismatch|reason=boundary\n",
+        checkless_equation_source + checked_mismatch_source,
+    )
+    mixed_boundary_mismatches = [
+        finding for finding in mixed_equations.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(mixed_boundary_mismatches) == 1, mixed_equations.findings
 
     overlap_log = """\
 picture|id=k1|lang=kernel
