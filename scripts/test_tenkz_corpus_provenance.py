@@ -34,6 +34,8 @@ from tenkzlib.dimensions import (
     DimensionOwner,
     DimensionOwnershipError,
     DimensionReport,
+    _COMMAND_GRAMMARS,
+    _PUBLIC_ENVIRONMENTS,
     collect_dimension_report,
     scan_book_dimensions,
     scan_case_dimensions,
@@ -205,6 +207,35 @@ def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
 
 
 def test_rmp_dimension_ownership() -> None:
+    registry = (
+        ROOT / "tex" / "tenkz" / "tenkz-language-registry.tex"
+    ).read_text(encoding="utf-8")
+    registered_commands = set(
+        re.findall(
+            r"__tenkz_language_registry_command:nnnnn \{([^}]+)\}",
+            registry,
+        )
+    )
+    if registered_commands != set(_COMMAND_GRAMMARS):
+        raise AssertionError(
+            "dimension barriers disagree with the public command registry: "
+            f"registry-only={sorted(registered_commands - set(_COMMAND_GRAMMARS))!r}, "
+            f"scanner-only={sorted(set(_COMMAND_GRAMMARS) - registered_commands)!r}"
+        )
+    registered_environments = set(
+        re.findall(
+            r"__tenkz_language_registry_environment:nnnn \{([^}]+)\}",
+            registry,
+        )
+    )
+    if registered_environments != set(_PUBLIC_ENVIRONMENTS):
+        raise AssertionError(
+            "dimension barriers disagree with the public environment registry: "
+            f"registry-only="
+            f"{sorted(registered_environments - set(_PUBLIC_ENVIRONMENTS))!r}, "
+            f"scanner-only="
+            f"{sorted(set(_PUBLIC_ENVIRONMENTS) - registered_environments)!r}"
+        )
     targets = load_manifest(DEFAULT_MANIFEST)
     report = collect_dimension_report(ROOT, (target.case for target in targets))
     expected = Counter(
@@ -229,11 +260,11 @@ def test_rmp_dimension_ownership() -> None:
     validate_dimension_report(report)
 
     synthetic = r"""% pitch=14mm remains visible to the comment audit
-\begin{tenkz}[pitch=11mm,
-  sheet vector={0mm,2.5mm}]
+\begin{tenkz}[pitch=11mm]
   \tnput{a}{(1mm,2mm)}{}
   \tnjoin[via={(3mm,4mm)}]{a}{5mm,6mm}
 \end{tenkz}
+\begin{tenkzlattice}[sheet vector={0mm,2.5mm}]\end{tenkzlattice}
 """
     occurrences = scan_case_dimensions(Path("synthetic.tex"), synthetic)
     synthetic_counts = Counter(
@@ -334,6 +365,18 @@ def test_rmp_dimension_ownership() -> None:
             ("51pt", "52pt"),
             "53mm",
         ),
+        (
+            r"\tnpic{\rule{61pt}{62pt}}{\hspace{63mm}}",
+            None,
+            ("61pt", "62pt"),
+            "63mm",
+        ),
+        (
+            r"\tntree{{\rule{71pt}{72pt}}}{\hspace{73mm}}",
+            None,
+            ("71pt", "72pt"),
+            "73mm",
+        ),
     )
     for source, owner, owned_literals, independent_literal in command_arity_cases:
         occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
@@ -410,6 +453,417 @@ def test_rmp_dimension_ownership() -> None:
     )
     if len(tree_option) != 1 or tree_option[0].owner is not DimensionOwner.METRIC:
         raise AssertionError(f"a tntree metric option lost ownership: {tree_option!r}")
+    public_example = ROOT / "tex" / "tenkz" / "examples" / "api" / "tnarrow.tex"
+    public_example_dimensions = scan_case_dimensions(
+        public_example.relative_to(ROOT), public_example.read_text(encoding="utf-8")
+    )
+    if (
+        len(public_example_dimensions) != 1
+        or public_example_dimensions[0].literal != "18mm"
+        or public_example_dimensions[0].owner is not DimensionOwner.METRIC
+    ):
+        raise AssertionError(
+            "the public tenkzcd polygon radius lost metric ownership: "
+            f"{public_example_dimensions!r}"
+        )
+    physical_picture_options = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\begin{tenkzcd}[column sep=7mm,row sep=8mm]\end{tenkzcd}"
+        r"\begin{tenkzlattice}[col vector={9mm,10mm},"
+        r"row vector={11mm,12mm},sheet vector={13mm,14mm}]"
+        r"\end{tenkzlattice}",
+    )
+    expected_picture_owners = (
+        *((literal, DimensionOwner.METRIC) for literal in ("7mm", "8mm")),
+        *((literal, DimensionOwner.FRAME) for literal in (
+            "9mm", "10mm", "11mm", "12mm", "13mm", "14mm"
+        )),
+    )
+    if tuple(
+        (occurrence.literal, occurrence.owner)
+        for occurrence in physical_picture_options
+    ) != expected_picture_owners:
+        raise AssertionError(
+            "public physical picture keys lost their semantic owners: "
+            f"{physical_picture_options!r}"
+        )
+    ratio_keys = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\begin{tenkzlattice}[plane rise=15mm,plane slant=16mm]"
+        r"\end{tenkzlattice}",
+    )
+    if len(ratio_keys) != 2 or any(
+        occurrence.owner is not None for occurrence in ratio_keys
+    ):
+        raise AssertionError(
+            "dimensionless plane-ratio keys gained physical ownership: "
+            f"{ratio_keys!r}"
+        )
+    direct_label_shift = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tn*[label shift={17mm,18mm}]{A}"
+    )
+    if len(direct_label_shift) != 2 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in direct_label_shift
+    ):
+        raise AssertionError(
+            "a public object label shift lost layout ownership: "
+            f"{direct_label_shift!r}"
+        )
+    for command in ("tnX", "tnfuse"):
+        object_label_shift = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\{command}[label shift={{17mm,18mm}}]{{A}}",
+        )
+        if len(object_label_shift) != 2 or any(
+            occurrence.owner is not DimensionOwner.LAYOUT
+            for occurrence in object_label_shift
+        ):
+            raise AssertionError(
+                f"{command} label shift lost layout ownership: "
+                f"{object_label_shift!r}"
+            )
+    for malformed_source, expected_count in (
+        (r"\tnsite[label shift={23mm,24mm}]{(1,1)}", 2),
+        (r"\tndots[label shift={25mm,26mm}]", 2),
+        (r"\tnarrow[from=1,to=2]{\tn[pitch=27mm]{A}}", 1),
+        (r"\tnpic[label shift={28mm,29mm}]{\tn{A}}", 2),
+        (r"\tnset{radius=30mm}", 1),
+        (r"\begin{tenkz}[radius=31mm]\end{tenkz}", 1),
+        (r"\begin{tenkzcd}[col vector={32mm,33mm}]\end{tenkzcd}", 2),
+    ):
+        malformed_options = scan_case_dimensions(
+            Path("synthetic.tex"), malformed_source
+        )
+        if len(malformed_options) != expected_count or any(
+            occurrence.owner is not None for occurrence in malformed_options
+        ):
+            raise AssertionError(
+                "a non-public physical option gained ownership: "
+                f"source={malformed_source!r}, occurrences={malformed_options!r}"
+            )
+    for case_variant in (
+        r"\tnarrow{x \tnpic[PITCH=34mm]{y}}",
+        r"\tnarrow{x \tn[Label Shift={35mm,36mm}]{A}}",
+        r"\tnarrow{x \begin{tenkzlattice}[COL VECTOR={37mm,38mm}]"
+        r"\end{tenkzlattice}}",
+    ):
+        case_sensitive_options = scan_case_dimensions(
+            Path("synthetic.tex"), case_variant
+        )
+        if not case_sensitive_options or any(
+            occurrence.owner is not None
+            for occurrence in case_sensitive_options
+        ):
+            raise AssertionError(
+                "a case-mismatched PGF key gained ownership: "
+                f"source={case_variant!r}, "
+                f"occurrences={case_sensitive_options!r}"
+            )
+    nested_setup = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{x \tnset{pitch=39mm,radius=40mm}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in nested_setup
+    ] != [
+        ("39mm", DimensionOwner.METRIC),
+        ("40mm", None),
+    ]:
+        raise AssertionError(
+            "a nested setup command leaked its enclosing owner: "
+            f"{nested_setup!r}"
+        )
+    neutral_command_containers = (
+        ("tn", r"\tn{\rule{41mm}{42mm}}"),
+        ("tnX", r"\tnX{\rule{41mm}{42mm}}"),
+        ("tnfuse", r"\tnfuse{\rule{41mm}{42mm}}"),
+        ("tndots", r"\tndots[label shift={41mm,42mm}]"),
+        ("tnghost", r"\tnghost{41mm}"),
+        ("tnspan", r"\tnspan{2}{\rule{41mm}{42mm}}"),
+        ("tncut", r"\tncut{\rule{41mm}{42mm}}"),
+        ("tnregion", r"\tnregion[label={\rule{41mm}{42mm}}]{x}"),
+        ("tnsite", r"\tnsite[label={\rule{41mm}{42mm}}]{(1,1)}"),
+        ("tntree", r"\tntree{{\rule{41mm}{42mm}}}"),
+        ("tnpic", r"\tnpic{\rule{41mm}{42mm}}"),
+        ("tnset", r"\tnset{radius=41mm}"),
+        ("tndeclareatom", r"\tndeclareatom{\foo}{bogus=41mm}"),
+        ("tnmark", r"\tnmark[form=label]{x}{\rule{41mm}{42mm}}"),
+        ("tngroup", r"\tngroup{\rule{41mm}{42mm}}"),
+        ("tndeclare", r"\tndeclare{skin}{x}{bogus=41mm}"),
+        ("tnbond", r"\tnbond{41mm}{x}"),
+        ("tnprose", r"\tnprose{\rule{41mm}{42mm}}"),
+    )
+    for command, container in neutral_command_containers:
+        nested_container = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\tnarrow[from=1,to=2]{{{container}}}",
+        )
+        if not nested_container or any(
+            occurrence.owner is not None for occurrence in nested_container
+        ):
+            raise AssertionError(
+                f"a nested {command} container inherited route ownership: "
+                f"{nested_container!r}"
+            )
+    declared_compatibility_atom = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\myatom}{skin=dot}"
+        r"\tnarrow{\myatom[label shift={52mm,53mm}]"
+        r"{\rule{54mm}{55mm}}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in declared_compatibility_atom
+    ] != [
+        ("52mm", DimensionOwner.LAYOUT),
+        ("53mm", DimensionOwner.LAYOUT),
+        ("54mm", None),
+        ("55mm", None),
+    ]:
+        raise AssertionError(
+            "a declared compatibility atom lost its typed boundary: "
+            f"{declared_compatibility_atom!r}"
+        )
+    declared_kernel_atom = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclare{atom}{kernelatom}{skin=dot}"
+        r"\tnarrow{\kernelatom[label shift={56mm,57mm}]"
+        r"{\rule{58mm}{59mm}}}",
+    )
+    if len(declared_kernel_atom) != 4 or any(
+        occurrence.owner is not None for occurrence in declared_kernel_atom
+    ):
+        raise AssertionError(
+            "a declared kernel atom inherited route or compatibility keys: "
+            f"{declared_kernel_atom!r}"
+        )
+    atom_before_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\lateatom[label shift={60mm,61mm}]{A}}"
+        r"\tndeclareatom{\lateatom}{skin=dot}",
+    )
+    if len(atom_before_declaration) != 2 or any(
+        occurrence.owner is not None for occurrence in atom_before_declaration
+    ):
+        raise AssertionError(
+            "a dynamic atom gained ownership before its declaration: "
+            f"{atom_before_declaration!r}"
+        )
+    colliding_atom_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnjoin}{skin=dot}"
+        r"\tnjoin[label shift={62mm,63mm}]{a}{b}",
+    )
+    if len(colliding_atom_declaration) != 2 or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in colliding_atom_declaration
+    ):
+        raise AssertionError(
+            "a rejected declaration changed a fixed public command owner: "
+            f"{colliding_atom_declaration!r}"
+        )
+    scoped_atom_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{{\tndeclareatom{\localatom}{skin=dot}"
+        r"\localatom[label shift={64mm,65mm}]{A}}"
+        r"\localatom[label shift={66mm,67mm}]{B}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in scoped_atom_declaration
+    ] != [
+        ("64mm", DimensionOwner.LAYOUT),
+        ("65mm", DimensionOwner.LAYOUT),
+        ("66mm", None),
+        ("67mm", None),
+    ]:
+        raise AssertionError(
+            "a local dynamic atom escaped its brace scope: "
+            f"{scoped_atom_declaration!r}"
+        )
+    compatibility_then_duplicate = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\duplicateatom}{skin=dot}"
+        r"\tndeclare{atom}{duplicateatom}{skin=dot}"
+        r"\duplicateatom[label shift={68mm,69mm}]{A}",
+    )
+    if len(compatibility_then_duplicate) != 2 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in compatibility_then_duplicate
+    ):
+        raise AssertionError(
+            "a rejected duplicate replaced an active compatibility atom: "
+            f"{compatibility_then_duplicate!r}"
+        )
+    kernel_then_duplicate = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclare{atom}{otherduplicate}{skin=dot}"
+        r"\tndeclareatom{\otherduplicate}{skin=dot}"
+        r"\otherduplicate[label shift={70mm,71mm}]{A}",
+    )
+    if len(kernel_then_duplicate) != 2 or any(
+        occurrence.owner is not None for occurrence in kernel_then_duplicate
+    ):
+        raise AssertionError(
+            "a rejected duplicate replaced an active kernel atom: "
+            f"{kernel_then_duplicate!r}"
+        )
+    reused_atom_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"{\tndeclareatom{\reusedatom}{skin=dot}"
+        r"\reusedatom[label shift={72mm,73mm}]{A}}"
+        r"{\tndeclare{atom}{reusedatom}{skin=dot}"
+        r"\reusedatom[label shift={74mm,75mm}]{B}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in reused_atom_declaration
+    ] != [
+        ("72mm", DimensionOwner.LAYOUT),
+        ("73mm", DimensionOwner.LAYOUT),
+        ("74mm", None),
+        ("75mm", None),
+    ]:
+        raise AssertionError(
+            "a later scope could not safely reuse a dynamic atom name: "
+            f"{reused_atom_declaration!r}"
+        )
+    environment_scoped_atom = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\begin{tenkzeq}\tndeclareatom{\envatom}{skin=dot}"
+        r"\envatom[label shift={76mm,77mm}]{A}\end{tenkzeq}"
+        r"\tnarrow{\envatom[label shift={78mm,79mm}]{B}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in environment_scoped_atom
+    ] != [
+        ("76mm", DimensionOwner.LAYOUT),
+        ("77mm", DimensionOwner.LAYOUT),
+        ("78mm", None),
+        ("79mm", None),
+    ]:
+        raise AssertionError(
+            "a dynamic atom escaped its environment scope: "
+            f"{environment_scoped_atom!r}"
+        )
+    for environment in (
+        "tenkz",
+        "tenkzcd",
+        "tenkzfree",
+        "tenkzlattice",
+        "tenkzplanes",
+        "tenkzeq",
+    ):
+        nested_environment = scan_case_dimensions(
+            Path("synthetic.tex"),
+            rf"\tnarrow{{\begin{{{environment}}}"
+            rf"\rule{{43mm}}{{44mm}}\end{{{environment}}}}}",
+        )
+        if len(nested_environment) != 2 or any(
+            occurrence.owner is not None for occurrence in nested_environment
+        ):
+            raise AssertionError(
+                f"a nested {environment} environment inherited route ownership: "
+                f"{nested_environment!r}"
+            )
+    unbraced_pgf_pair = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\begin{tenkzlattice}[col vector=(45mm,46mm)]"
+        r"\end{tenkzlattice}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in unbraced_pgf_pair
+    ] != [
+        ("45mm", DimensionOwner.FRAME),
+        ("46mm", None),
+    ]:
+        raise AssertionError(
+            "parentheses incorrectly protected a PGF option comma: "
+            f"{unbraced_pgf_pair!r}"
+        )
+    unbraced_pgf_brackets = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow{\tn[label shift=[47mm,48mm]]{A}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in unbraced_pgf_brackets
+    ] != [
+        ("47mm", DimensionOwner.LAYOUT),
+        ("48mm", None),
+    ]:
+        raise AssertionError(
+            "brackets incorrectly protected a PGF option comma: "
+            f"{unbraced_pgf_brackets!r}"
+        )
+    spliced_environment_source = r"""\tnarrow{
+  \begin{ten% splice an environment name
+kz}[pitch=49mm]\rule{50mm}{51mm}\end{ten% splice the closing name
+kz}}
+"""
+    spliced_environment = scan_case_dimensions(
+        Path("synthetic.tex"), spliced_environment_source
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in spliced_environment
+    ] != [
+        ("49mm", DimensionOwner.METRIC),
+        ("50mm", None),
+        ("51mm", None),
+    ]:
+        raise AssertionError(
+            "a comment-spliced environment lost its neutral boundary: "
+            f"{spliced_environment!r}"
+        )
+    nested_label_shift = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnarrow[from=1,to=2]{\tnpic[inline]{"
+        r"\tn*[label shift={19mm,20mm}]{A}}}",
+    )
+    if len(nested_label_shift) != 2 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in nested_label_shift
+    ):
+        raise AssertionError(
+            "a nested object label shift inherited route ownership: "
+            f"{nested_label_shift!r}"
+        )
+    spliced_picture_key_source = """\\tnarrow[from=1,to=2]{
+  \\tnpic[pit% splice the public option key
+ch=21mm,inline]{\\tn{A}}}
+"""
+    spliced_picture_key = scan_case_dimensions(
+        Path("synthetic.tex"), spliced_picture_key_source
+    )
+    if (
+        len(spliced_picture_key) != 1
+        or spliced_picture_key[0].owner is not DimensionOwner.METRIC
+        or spliced_picture_key[0].line != 3
+        or spliced_picture_key[0].offset
+        != spliced_picture_key_source.index("21mm")
+    ):
+        raise AssertionError(
+            "a comment-spliced picture key inherited route ownership: "
+            f"{spliced_picture_key!r}"
+        )
+    split_picture_source = "\\tn% terminate the control word\npic[pitch=22mm]{x}\n"
+    split_picture = scan_case_dimensions(
+        Path("synthetic.tex"), split_picture_source
+    )
+    if (
+        len(split_picture) != 1
+        or split_picture[0].owner is not None
+        or split_picture[0].line != 2
+    ):
+        raise AssertionError(
+            "a comment-split picture control word gained option ownership: "
+            f"{split_picture!r}"
+        )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix
@@ -599,7 +1053,8 @@ def test_rmp_dimension_ownership() -> None:
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
         (
-            r"\begin{tenkz}[sheet vector={0mm,1mm}]\end{tenkz}",
+            r"\begin{tenkzlattice}[sheet vector={0mm,1mm}]"
+            r"\end{tenkzlattice}",
             "projection/frame dimensions increased",
         ),
         (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 397"),

@@ -97,7 +97,7 @@ BOOK_LAYOUT_ALLOWLIST: Mapping[Path, int] = {
 class _CommandGrammar:
     """The public xparse shape relevant to dimension ownership."""
 
-    owner: DimensionOwner
+    owner: DimensionOwner | None
     positional_group_counts: tuple[int, ...]
     accepts_star: bool = False
     accepts_options: bool = True
@@ -115,25 +115,166 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
     "tnarrow": _CommandGrammar(                                 # s O{} m
         DimensionOwner.ROUTE, (1,), accepts_star=True
     ),
+    # Typed containers below are ownership barriers, not blanket LAYOUT
+    # owners.  Their recognized physical option values receive narrower
+    # spans; arbitrary dimensions in an object label/body remain unowned and
+    # cannot inherit an enclosing route owner.
+    "tnpic": _CommandGrammar(None, (1,)),                        # O{} m
+    "tntree": _CommandGrammar(None, (1,)),                       # O{} m
+    "tn": _CommandGrammar(None, (1,), accepts_star=True),        # s O{} m
+    "tnX": _CommandGrammar(None, (1,)),                          # O{} m
+    "tnfuse": _CommandGrammar(None, (1,)),                       # O{} m
+    "tnsite": _CommandGrammar(None, (1,)),                       # O{} m
+    "tndots": _CommandGrammar(None, (0,)),                       # O{}
+    "tnghost": _CommandGrammar(                                 # m
+        None, (1,), accepts_options=False
+    ),
+    "tnskip": _CommandGrammar(                                  # no arguments
+        None, (0,), accepts_options=False
+    ),
+    "tnspan": _CommandGrammar(None, (2,)),                       # O{} m m
+    "tncut": _CommandGrammar(None, (1,)),                        # O{} m
+    "tnregion": _CommandGrammar(None, (1,)),                     # O{} m
+    "tnset": _CommandGrammar(                                   # m
+        None, (1,), accepts_options=False
+    ),
+    "tndeclareatom": _CommandGrammar(                           # m m
+        None, (2,), accepts_options=False
+    ),
+    "tnmark": _CommandGrammar(None, (2,)),                       # O{} m m
+    "tngroup": _CommandGrammar(None, (1,)),                      # O{} m
+    "tndeclare": _CommandGrammar(                               # m m m
+        None, (3,), accepts_options=False
+    ),
+    # Kernel sugar has no sanctioned physical value.  Keep it neutral rather
+    # than letting its endpoints inherit an enclosing composition owner.
+    "tnbond": _CommandGrammar(None, (2,)),                       # O{} m m
+    "tnprose": _CommandGrammar(                                 # m
+        None, (1,), accepts_options=False
+    ),
+    "tenkzkernel": _CommandGrammar(                             # no arguments
+        None, (0,), accepts_options=False
+    ),
 }
-_COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_GRAMMARS) + r")\b")
+# This is the physical subset of the public option registry, not the current
+# corpus vocabulary.  Plane rise/slant and sheet sep are dimensionless ratios;
+# out/in are angles.  Keeping key spelling and owner in one table prevents a
+# future public length from being recognized lexically but assigned by a
+# second, drifting owner list.
+_PHYSICAL_OPTION_KEY_OWNERS: Mapping[str, DimensionOwner] = {
+    "pitch": DimensionOwner.METRIC,
+    "radius": DimensionOwner.METRIC,
+    "column sep": DimensionOwner.METRIC,
+    "row sep": DimensionOwner.METRIC,
+    "col vector": DimensionOwner.FRAME,
+    "row vector": DimensionOwner.FRAME,
+    "sheet vector": DimensionOwner.FRAME,
+    "label shift": DimensionOwner.LAYOUT,
+}
+
+
+def _option_key_pattern(key: str) -> str:
+    """Return a regex spelling of one space-normalized public option key."""
+    return r"\s+".join(re.escape(word) for word in key.split())
+
+
 _OPTION_OWNER_RE = re.compile(
-    r"\s*(?P<key>sheet\s+vector|row\s+vector|col\s+vector|pitch)\s*=",
-    flags=re.IGNORECASE,
+    r"\s*(?P<key>"
+    + "|".join(
+        _option_key_pattern(key)
+        for key in sorted(_PHYSICAL_OPTION_KEY_OWNERS, key=len, reverse=True)
+    )
+    + r")\s*=",
 )
-_OPTION_ENVIRONMENT_RE = re.compile(
-    r"\\begin\s*\{\s*tenkz(?:cd|eq|free|lattice|planes)?\s*\}"
+_OPTION_ENVIRONMENT_KEYS: Mapping[str, frozenset[str]] = {
+    "tenkz": frozenset({"pitch"}),
+    "tenkzcd": frozenset({"pitch", "radius", "column sep", "row sep"}),
+    "tenkzfree": frozenset({"pitch"}),
+    "tenkzlattice": frozenset(
+        {"pitch", "col vector", "row vector", "sheet vector"}
+    ),
+    "tenkzplanes": frozenset(
+        {"pitch", "col vector", "row vector", "sheet vector"}
+    ),
+}
+
+
+@dataclass(frozen=True)
+class _EnvironmentToken:
+    """One active, simple ``\\begin`` or ``\\end`` token."""
+
+    kind: str
+    name: str
+    start: int
+    end: int
+
+
+_PUBLIC_ENVIRONMENTS = frozenset((*_OPTION_ENVIRONMENT_KEYS, "tenkzeq"))
+_ENVIRONMENT_CONTROL_RE = re.compile(r"\\(begin|end)\b")
+_ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
+_EXPLICIT_GROUP_RE = re.compile(
+    r"\\(begingroup|endgroup|bgroup|egroup)\b"
 )
-_OPTION_BRACKET_COMMAND_RE = re.compile(r"\\(?:tnpic|tntree)\b")
+
+
+@dataclass(frozen=True)
+class _OptionCommandGrammar:
+    """Physical keys accepted by one bracket-option command."""
+
+    accepts_star: bool
+    physical_keys: frozenset[str]
+
+
+_OPTION_BRACKET_COMMANDS: Mapping[str, _OptionCommandGrammar] = {
+    # Picture/tree explicitly forward pitch; the three cell commands consume
+    # label shift through /tenkz/cell.  Do not infer option families from the
+    # registry's broad object scope: /tenkz/site rejects label shift today,
+    # while tndots has no option slot in the public grammar.  Leaving both out
+    # keeps malformed or undocumented dimensions unowned.
+    "tnpic": _OptionCommandGrammar(False, frozenset({"pitch"})),
+    "tntree": _OptionCommandGrammar(False, frozenset({"pitch"})),
+    "tn": _OptionCommandGrammar(True, frozenset({"label shift"})),
+    "tnX": _OptionCommandGrammar(False, frozenset({"label shift"})),
+    "tnfuse": _OptionCommandGrammar(False, frozenset({"label shift"})),
+}
+_OPTION_BRACKET_COMMAND_RE = re.compile(
+    r"\\("
+    + "|".join(
+        sorted(_OPTION_BRACKET_COMMANDS, key=len, reverse=True)
+    )
+    + r")\b"
+)
 _OPTION_BRACE_COMMAND_RE = re.compile(r"\\tnset\b")
-_FRAME_KEYS = {"sheet vector", "row vector", "col vector"}
+_SETUP_PHYSICAL_KEYS = frozenset({"pitch"})
+_DECLARE_ATOM_RE = re.compile(r"\\tndeclareatom\b")
+_KERNEL_DECLARE_RE = re.compile(r"\\tndeclare\b")
 
 
 @dataclass(frozen=True)
 class _OwnerSpan:
     start: int
     end: int
-    owner: DimensionOwner
+    owner: DimensionOwner | None
+
+
+@dataclass(frozen=True)
+class _DeclaredCommand:
+    """One valid dynamic atom binding over its TeX lexical scope."""
+
+    name: str
+    start: int
+    end: int
+    physical_keys: frozenset[str]
+
+
+@dataclass(frozen=True)
+class _DeclarationCandidate:
+    """A parsed declaration before collision and duplicate checks."""
+
+    name: str
+    declaration_start: int
+    binding_start: int
+    physical_keys: frozenset[str]
 
 
 @dataclass(frozen=True)
@@ -191,12 +332,211 @@ def _is_control_word_start(source: str, position: int) -> bool:
     return run_length % 2 == 1
 
 
-def _command_spans(source: str) -> list[_OwnerSpan]:
+def _following_brace_groups(
+    source: str, position: int, count: int
+) -> list[tuple[int, int]] | None:
+    """Return the next exact number of mandatory brace-group spans."""
+    groups: list[tuple[int, int]] = []
+    for _ in range(count):
+        position = _skip_space(source, position)
+        if source[position : position + 1] != "{":
+            return None
+        closed = match_group(source, position, "{", "}")
+        if closed < 0:
+            return None
+        groups.append((position + 1, closed - 1))
+        position = closed
+    return groups
+
+
+def _brace_scope_spans(source: str) -> list[tuple[int, int]]:
+    """Return conservative lexical scopes delimited by unescaped braces."""
+    openings: list[int] = []
+    spans: list[tuple[int, int]] = []
+    index = 0
+    while index < len(source):
+        character = source[index]
+        if character == "\\":
+            index += 2
+            continue
+        if character == "{":
+            openings.append(index)
+        elif character == "}" and openings:
+            spans.append((openings.pop(), index + 1))
+        index += 1
+    spans.extend((opening, len(source)) for opening in openings)
+    return spans
+
+
+def _environment_scope_spans(
+    tokens: Iterable[_EnvironmentToken],
+    names: frozenset[str] | None = None,
+) -> list[tuple[int, int]]:
+    """Depth-match selected environment tokens into lexical scopes."""
+    openings: dict[str, list[_EnvironmentToken]] = {}
+    spans: list[tuple[int, int]] = []
+    for token in tokens:
+        if names is not None and token.name not in names:
+            continue
+        if token.kind == "begin":
+            openings.setdefault(token.name, []).append(token)
+        elif openings.get(token.name):
+            opening = openings[token.name].pop()
+            spans.append((opening.start, token.end))
+    for stack in openings.values():
+        spans.extend((opening.start, -1) for opening in stack)
+    return spans
+
+
+def _explicit_group_scope_spans(source: str) -> list[tuple[int, int]]:
+    """Return scopes made with TeX's word and control-symbol group aliases."""
+    openings: dict[str, list[int]] = {"word": [], "alias": []}
+    spans: list[tuple[int, int]] = []
+    group_kinds = {
+        "begingroup": ("word", True),
+        "endgroup": ("word", False),
+        "bgroup": ("alias", True),
+        "egroup": ("alias", False),
+    }
+    for token in _EXPLICIT_GROUP_RE.finditer(source):
+        if not _is_control_word_start(source, token.start()):
+            continue
+        group_kind, is_opening = group_kinds[token.group(1)]
+        if is_opening:
+            openings[group_kind].append(token.start())
+        elif openings[group_kind]:
+            spans.append((openings[group_kind].pop(), token.end()))
+    for stack in openings.values():
+        spans.extend((opening, len(source)) for opening in stack)
+    return spans
+
+
+def _scope_end(position: int, spans: Iterable[tuple[int, int]], length: int) -> int:
+    """Return the end of the innermost lexical scope containing ``position``."""
+    return min(
+        (
+            length if end < 0 else end
+            for start, end in spans
+            if start < position < (length if end < 0 else end)
+        ),
+        default=length,
+    )
+
+
+def _declared_atom_commands(
+    source: str, owner_source: str
+) -> tuple[_DeclaredCommand, ...]:
+    """Return non-colliding dynamic atoms with position- and scope-bound keys."""
+    candidates: list[_DeclarationCandidate] = []
+    for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
+        if not _is_control_word_start(owner_source, declaration.start()):
+            continue
+        groups = _following_brace_groups(owner_source, declaration.end(), 2)
+        if groups is None:
+            continue
+        name_source = owner_source[groups[0][0] : groups[0][1]].strip()
+        name_match = re.fullmatch(r"\\([A-Za-z]+)", name_source)
+        if name_match is not None:
+            candidates.append(
+                _DeclarationCandidate(
+                    name_match.group(1),
+                    declaration.start(),
+                    groups[-1][1] + 1,
+                    frozenset({"label shift"}),
+                )
+            )
+    for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
+        if not _is_control_word_start(owner_source, declaration.start()):
+            continue
+        groups = _following_brace_groups(owner_source, declaration.end(), 3)
+        if groups is None:
+            continue
+        class_name = _active_source(
+            source[groups[0][0] : groups[0][1]]
+        ).text.strip()
+        if class_name != "atom":
+            continue
+        command_name = _active_source(
+            source[groups[1][0] : groups[1][1]]
+        ).text.strip()
+        if command_name.startswith("\\"):
+            command_name = command_name[1:]
+        if re.fullmatch(r"[A-Za-z]+", command_name) is not None:
+            candidates.append(
+                _DeclarationCandidate(
+                    command_name,
+                    declaration.start(),
+                    groups[-1][1] + 1,
+                    frozenset(),
+                )
+            )
+
+    environment_tokens = _environment_tokens(source, owner_source)
+    scope_spans = (
+        _brace_scope_spans(owner_source)
+        + _environment_scope_spans(environment_tokens)
+        + _explicit_group_scope_spans(owner_source)
+    )
+    commands: list[_DeclaredCommand] = []
+    for candidate in sorted(candidates, key=lambda item: item.declaration_start):
+        # Both declaration mechanisms use NewDocumentCommand.  A fixed public
+        # command or an already-active dynamic binding therefore makes the
+        # declaration invalid; in particular it must not alter option owners.
+        if candidate.name in _COMMAND_GRAMMARS or any(
+            command.name == candidate.name
+            and command.start <= candidate.declaration_start < command.end
+            for command in commands
+        ):
+            continue
+        end = _scope_end(
+            candidate.declaration_start, scope_spans, len(owner_source)
+        )
+        if candidate.binding_start <= end:
+            commands.append(
+                _DeclaredCommand(
+                    candidate.name,
+                    candidate.binding_start,
+                    end,
+                    candidate.physical_keys,
+                )
+            )
+    return tuple(commands)
+
+
+def _active_declaration(
+    declarations: Iterable[_DeclaredCommand], name: str, position: int
+) -> _DeclaredCommand | None:
+    """Return the dynamic binding active at one invocation position."""
+    return next(
+        (
+            declaration
+            for declaration in declarations
+            if declaration.name == name
+            and declaration.start <= position < declaration.end
+        ),
+        None,
+    )
+
+
+def _command_spans(
+    source: str, declared_commands: Iterable[_DeclaredCommand]
+) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
-    for command in _COMMAND_RE.finditer(source):
+    grammars = dict(_COMMAND_GRAMMARS)
+    # Known dynamic names are neutral even before or outside their valid
+    # binding.  This is a fail-closed quarantine, not retroactive activation:
+    # no physical option key is accepted without an active declaration.
+    for declaration in declared_commands:
+        grammars.setdefault(declaration.name, _CommandGrammar(None, (1,)))
+    pattern = re.compile(
+        r"\\("
+        + "|".join(sorted(grammars, key=len, reverse=True))
+        + r")\b"
+    )
+    for command in pattern.finditer(source):
         if not _is_control_word_start(source, command.start()):
             continue
-        grammar = _COMMAND_GRAMMARS[command.group(1)]
+        grammar = grammars[command.group(1)]
         position = _skip_space(source, command.end())
         if grammar.accepts_star and source[position : position + 1] == "*":
             position = _skip_space(source, position + 1)
@@ -225,82 +565,202 @@ def _option_value_end(source: str, position: int) -> int:
     if source[position : position + 1] == "{":
         closed = match_group(source, position, "{", "}")
         return len(source) if closed < 0 else closed
-    depths = {"{": 0, "[": 0, "(": 0}
-    closing = {"}": "{", "]": "[", ")": "("}
+    brace_depth = 0
     index = position
     while index < len(source):
         character = source[index]
         if character == "\\":
             index += 2
             continue
-        if character in depths:
-            depths[character] += 1
-        elif character in closing:
-            opener = closing[character]
-            if depths[opener] == 0:
+        if character == "{":
+            brace_depth += 1
+        elif character == "}":
+            if brace_depth == 0:
                 return index
-            depths[opener] -= 1
-        elif character == "," and not any(depths.values()):
+            brace_depth -= 1
+        elif character == "," and brace_depth == 0:
             return index
         index += 1
     return index
 
 
 def _option_group_spans(
-    source: str, start: int, end: int
+    source: str,
+    start: int,
+    end: int,
+    allowed_keys: frozenset[str] | None = None,
 ) -> list[_OwnerSpan]:
+    """Classify one option group using TeX-spliced tokens and source offsets."""
     spans: list[_OwnerSpan] = []
-    segment_start = start
-    depths = {"{": 0, "[": 0, "(": 0}
-    closing = {"}": "{", "]": "[", ")": "("}
+    active = _active_source(source[start:end])
+    option_source = active.text
+    brace_depth = 0
     segments: list[tuple[int, int]] = []
-    index = start
-    while index < end:
-        character = source[index]
+    segment_start = 0
+    index = 0
+    while index < len(option_source):
+        character = option_source[index]
         if character == "\\":
             index += 2
             continue
-        if character in depths:
-            depths[character] += 1
-        elif character in closing:
-            opener = closing[character]
-            depths[opener] = max(0, depths[opener] - 1)
-        elif character == "," and not any(depths.values()):
+        if character == "{":
+            brace_depth += 1
+        elif character == "}":
+            brace_depth = max(0, brace_depth - 1)
+        elif character == "," and brace_depth == 0:
             segments.append((segment_start, index))
             segment_start = index + 1
         index += 1
-    segments.append((segment_start, end))
+    segments.append((segment_start, len(option_source)))
     for segment_start, segment_end in segments:
-        option = _OPTION_OWNER_RE.match(source, segment_start, segment_end)
+        option = _OPTION_OWNER_RE.match(
+            option_source, segment_start, segment_end
+        )
         if option is None:
             continue
-        key = re.sub(r"\s+", " ", option.group("key").lower())
-        owner = (
-            DimensionOwner.FRAME if key in _FRAME_KEYS else DimensionOwner.METRIC
+        key = re.sub(r"\s+", " ", option.group("key")).strip()
+        if allowed_keys is not None and key not in allowed_keys:
+            continue
+        owner = _PHYSICAL_OPTION_KEY_OWNERS[key]
+        value_end = min(
+            segment_end, _option_value_end(option_source, option.end())
         )
-        value_end = min(segment_end, _option_value_end(source, option.end()))
-        spans.append(_OwnerSpan(option.end(), value_end, owner))
+        if option.end() >= len(active.offsets):
+            source_start = end
+        else:
+            source_start = start + active.offsets[option.end()]
+        if value_end <= option.end():
+            source_end = source_start
+        elif value_end > len(active.offsets):
+            source_end = end
+        else:
+            source_end = start + active.offsets[value_end - 1] + 1
+        spans.append(_OwnerSpan(source_start, source_end, owner))
     return spans
 
 
-def _option_spans(source: str) -> list[_OwnerSpan]:
+def _environment_tokens(
+    source: str, owner_source: str
+) -> list[_EnvironmentToken]:
+    """Parse simple environment names without joining split control words."""
+    tokens: list[_EnvironmentToken] = []
+    for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
+        if not _is_control_word_start(owner_source, control.start()):
+            continue
+        position = _skip_space(owner_source, control.end())
+        if owner_source[position : position + 1] != "{":
+            continue
+        closed = match_group(owner_source, position, "{", "}")
+        if closed < 0:
+            continue
+        active_name = _active_source(source[position + 1 : closed - 1]).text
+        name = re.sub(r"\s+", "", active_name)
+        if _ENVIRONMENT_NAME_RE.fullmatch(name) is None:
+            continue
+        tokens.append(
+            _EnvironmentToken(
+                control.group(1), name, control.start(), closed
+            )
+        )
+    return tokens
+
+
+def _environment_spans(
+    source: str, owner_source: str
+) -> list[_OwnerSpan]:
+    """Return neutral, depth-matched spans for every public environment."""
+    return [
+        _OwnerSpan(start, len(source) if end < 0 else end, None)
+        for start, end in _environment_scope_spans(
+            _environment_tokens(source, owner_source), _PUBLIC_ENVIRONMENTS
+        )
+    ]
+
+
+def _option_spans(
+    source: str,
+    owner_source: str,
+    declared_commands: Iterable[_DeclaredCommand],
+) -> list[_OwnerSpan]:
+    """Find public option containers without joining split control words."""
     spans: list[_OwnerSpan] = []
+    for container in _environment_tokens(source, owner_source):
+        if container.kind != "begin" or container.name not in _OPTION_ENVIRONMENT_KEYS:
+            continue
+        position = _skip_space(owner_source, container.end)
+        if owner_source[position : position + 1] != "[":
+            continue
+        closed = match_group(owner_source, position, "[", "]")
+        if closed < 0:
+            continue
+        spans.extend(
+            _option_group_spans(
+                source,
+                position + 1,
+                closed - 1,
+                _OPTION_ENVIRONMENT_KEYS[container.name],
+            )
+        )
     containers = (
-        (_OPTION_ENVIRONMENT_RE, "[", "]"),
         (_OPTION_BRACKET_COMMAND_RE, "[", "]"),
         (_OPTION_BRACE_COMMAND_RE, "{", "}"),
     )
     for pattern, opener, closer in containers:
-        for container in pattern.finditer(source):
-            if not _is_control_word_start(source, container.start()):
+        for container in pattern.finditer(owner_source):
+            if not _is_control_word_start(owner_source, container.start()):
                 continue
-            position = _skip_space(source, container.end())
-            if source[position : position + 1] != opener:
+            position = _skip_space(owner_source, container.end())
+            allowed_keys: frozenset[str] | None = None
+            if pattern is _OPTION_BRACKET_COMMAND_RE:
+                grammar = _OPTION_BRACKET_COMMANDS[container.group(1)]
+                allowed_keys = grammar.physical_keys
+                if (
+                    grammar.accepts_star
+                    and owner_source[position : position + 1] == "*"
+                ):
+                    position = _skip_space(owner_source, position + 1)
+            elif pattern is _OPTION_BRACE_COMMAND_RE:
+                allowed_keys = _SETUP_PHYSICAL_KEYS
+            if owner_source[position : position + 1] != opener:
                 continue
-            closed = match_group(source, position, opener, closer)
+            closed = match_group(owner_source, position, opener, closer)
             if closed < 0:
                 continue
-            spans.extend(_option_group_spans(source, position + 1, closed - 1))
+            spans.extend(
+                _option_group_spans(
+                    source, position + 1, closed - 1, allowed_keys
+                )
+            )
+    declared_commands = tuple(declared_commands)
+    declared_names = {declaration.name for declaration in declared_commands}
+    if declared_names:
+        declared_pattern = re.compile(
+            r"\\("
+            + "|".join(sorted(declared_names, key=len, reverse=True))
+            + r")\b"
+        )
+        for container in declared_pattern.finditer(owner_source):
+            if not _is_control_word_start(owner_source, container.start()):
+                continue
+            declaration = _active_declaration(
+                declared_commands, container.group(1), container.start()
+            )
+            if declaration is None:
+                continue
+            position = _skip_space(owner_source, container.end())
+            if owner_source[position : position + 1] != "[":
+                continue
+            closed = match_group(owner_source, position, "[", "]")
+            if closed < 0:
+                continue
+            spans.extend(
+                _option_group_spans(
+                    source,
+                    position + 1,
+                    closed - 1,
+                    declaration.physical_keys,
+                )
+            )
     return spans
 
 
@@ -397,7 +857,12 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     # ``\tn%...\nput``.  Keep ownership on an offset-preserving blanked view
     # while the numeric/unit recognizer uses the collapsed mapped view above.
     owner_source = strip_comments(source)
-    owner_spans = _option_spans(owner_source) + _command_spans(owner_source)
+    declared_commands = _declared_atom_commands(source, owner_source)
+    owner_spans = (
+        _option_spans(source, owner_source, declared_commands)
+        + _command_spans(owner_source, declared_commands)
+        + _environment_spans(source, owner_source)
+    )
     # A semantic option value is more specific than its containing command.
     owner_spans.sort(key=lambda span: span.end - span.start)
     comments = _comment_ranges(source)
