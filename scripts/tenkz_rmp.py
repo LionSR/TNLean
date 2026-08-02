@@ -1886,10 +1886,10 @@ def main() -> int:
     try:
         manifest = Path(os.environ.get("TENKZ_RMP_MANIFEST", DEFAULT_MANIFEST))
         targets = load_manifest(manifest)
-        dimension_report = collect_dimension_report(
-            REPO, (target.case for target in targets)
-        )
         try:
+            dimension_report = collect_dimension_report(
+                REPO, (target.case for target in targets)
+            )
             validate_dimension_report(dimension_report)
         except DimensionOwnershipError as exc:
             fail(f"RMP dimension ownership failed:\n{exc}")

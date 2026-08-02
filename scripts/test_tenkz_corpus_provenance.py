@@ -36,6 +36,7 @@ from tenkzlib.dimensions import (
     DimensionReport,
     case_dimension_inventory,
     collect_dimension_report,
+    read_dimension_inventory,
     scan_case_dimensions,
     validate_dimension_report,
 )
@@ -294,6 +295,8 @@ def test_rmp_dimension_ownership() -> None:
         "% site 3 in Section III\n",
         "% each of 4 in total\n",
         "% label 2 in figure 3\n",
+        "% Figure 3 in the layout shows the path\n",
+        "% use site 2 in the frame\n",
     ):
         if scan_case_dimensions(Path("synthetic.tex"), prose):
             raise AssertionError(f"English prose became an inch unit: {prose!r}")
@@ -331,6 +334,22 @@ def test_rmp_dimension_ownership() -> None:
             raise AssertionError(
                 f"semantic comment inch escaped: {semantic_comment_inch!r}"
             )
+
+    with tempfile.TemporaryDirectory(prefix="tenkz-dimension-inventory-") as tmp:
+        inventory = (
+            Path(tmp) / "tests" / "tenkz" / "rmp" / "dimension-ownership.json"
+        )
+        inventory.parent.mkdir(parents=True)
+        inventory.write_text("{not JSON}\n", encoding="utf-8")
+        try:
+            read_dimension_inventory(Path(tmp))
+        except DimensionOwnershipError as exc:
+            if "invalid dimension inventory JSON" not in str(exc):
+                raise AssertionError(
+                    f"malformed inventory produced the wrong failure: {exc}"
+                )
+        else:
+            raise AssertionError("malformed dimension inventory was accepted")
 
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),

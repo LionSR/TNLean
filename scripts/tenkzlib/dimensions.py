@@ -258,11 +258,14 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
             None,
         )
         if comment_range is not None:
-            owner = _comment_owner(source[comment_range[0] : comment_range[1]])
-            if owner is None and _comment_uses_in_as_preposition(
-                source, match, comment_range[1]
-            ):
-                continue
+            comment = source[comment_range[0] : comment_range[1]]
+            owner = _comment_owner(comment)
+            if _comment_uses_in_as_preposition(source, match, comment_range[1]):
+                # An owner word after the occurrence can belong to ordinary
+                # prose ("3 in the layout"), not to the apparent inch value.
+                owner = _comment_owner(source[comment_range[0] : match.start()])
+                if owner is None:
+                    continue
             in_comment = True
             site = "comment"
         else:
@@ -330,7 +333,12 @@ def case_dimension_inventory(
 def read_dimension_inventory(repo: Path) -> Counter[tuple[str, str, str, str]]:
     """Read the reviewed active-dimension inventory committed with the corpus."""
     path = repo / CASE_DIMENSION_INVENTORY
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise DimensionOwnershipError(
+            f"invalid dimension inventory JSON: {path}: {exc}"
+        ) from exc
     if payload.get("version") != 1 or not isinstance(payload.get("occurrences"), list):
         raise DimensionOwnershipError(f"invalid dimension inventory schema: {path}")
     inventory: Counter[tuple[str, str, str, str]] = Counter()
