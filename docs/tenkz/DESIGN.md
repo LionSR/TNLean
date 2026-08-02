@@ -347,7 +347,10 @@ policy document do not qualify. A policy-, checker-, CI-, receipt-, or
 record-only diff has no eligible class change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
-`defer-to-2.0`, or `breaking-required`. A reset has cause
+`defer-to-2.0`, or `breaking-required`. A compatible resolution names the exact
+later fix pull request. Its repository-authorized exact-head approval,
+integration tree, ancestry, semantic non-ledger diff, and complete pinned test
+run are revalidated before the friction is resolved. A reset has cause
 `breaking-required` or `record-invalid` and names the entry that caused it. A
 breaking reset closes the active attempt. A record-invalid reset targets any
 earlier externally invalid entry; it closes the active attempt when one exists

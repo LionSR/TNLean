@@ -262,10 +262,13 @@ comment-stripped token stream, and pass its class-specific Lean, blueprint, or
 RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
 not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
 ledger-record, and reset-receipt pull requests do not qualify.  Each record
-pull request changes only its one ledger append.  Release preparation lands
-separately after both work merges; its exact diff changes only the tag-derived
-1.0 manifest and four canonical release artifacts.  Exact-head sign-off review follows
-immediately on that integration; if `main` advances, repeat preparation on the
+pull request changes only its one ledger append.  A compatible-friction
+resolution names a separate exact-head-approved fix pull request whose
+integration, semantic diff, ancestry, and complete pinned test run all verify.
+Release preparation lands separately after both work merges; its exact diff
+changes only the tag-derived 1.0 manifest and four canonical release artifacts.
+Exact-head sign-off review follows immediately on that integration; if `main`
+advances, repeat preparation on the
 new tip.  A validated sign-off remains live until a full replay succeeds and
 the exact annotated final tag is observed under current required protection.
 Current mutable facts are replayed forever: drift before the final-tag ref uses

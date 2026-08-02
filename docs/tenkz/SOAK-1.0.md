@@ -501,10 +501,39 @@ before sign-off. `defer-to-2.0` changes nothing in the active major.
 
 ### `resolution`
 
-Required additional fields: `friction` (`entry-ref`), `summary` (`text`), and
-`evidence` (`text`). It resolves one preceding, unresolved `fix-compatible`
-friction entry in the same active attempt. It cannot resolve or reclassify
-another triage.
+Required additional fields: `friction` (`entry-ref`), `fix_pr` (`pr-ref`),
+`summary` (`text`), and `evidence` (`text`). It can resolve only one preceding,
+unresolved `fix-compatible` friction entry in the same active attempt. It
+cannot resolve or reclassify another triage.
+
+Let `H_F = fix_pr.headRefOid` and `I_F = fix_pr.mergeCommit.oid`. GitHub must
+report `fix_pr` merged to `main` after the friction record, with non-null author,
+`H_F`, `mergedAt`, and `I_F`. Let `P_F` be `I_F`'s sole parent for a one-parent
+integration or first parent for a two-parent integration, and let `B_F` be the
+unique merge base of `H_F` and `P_F`. A missing object, zero or more than two
+parents, or missing or ambiguous merge base fails closed. `P_F` must be an
+ancestor of `H_F`, hence `B_F = P_F`; for a two-parent integration, the second
+parent must equal `H_F`. `I_F` is reachable from `main`, its tree equals
+`H_F`'s tree, and it is a strict descendant of both the active freeze record
+and the named friction record integrations. It is an ancestor of the resolution
+record's candidate target `C` and, after merge, a strict ancestor of its
+integration `I`.
+
+A repository-authorized reviewer distinct from the normalized fix-PR author
+must have a latest effective `APPROVED` review on the exact `H_F`, submitted before
+`fix_pr.mergedAt`. The complete `B_F`-to-`H_F` diff may not touch `DESIGN.md` or
+this ledger and must add or modify at least one regular non-ledger blob whose
+source-specific normalized token stream changes. The normalizer is the one
+defined for `work` entries; a comment-only, whitespace-only, empty-file,
+deletion-only, policy-only, test-result, title, label, or description is not a
+fix.
+
+Every command in the pinned release-test inventory runs at `H_F` through the
+pinned hermetic protocol and passes with exact execution receipts. Candidate
+validation rechecks the fix PR, review, Git objects, complete diff, ancestry,
+ordering, and test receipts before reporting `resolution-pending`; post-merge
+validation reruns all of them before the friction is resolved. Descriptive
+`summary` or `evidence` text cannot replace any fix fact.
 
 ### `reset`
 
