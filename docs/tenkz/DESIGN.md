@@ -244,6 +244,13 @@ manifest and four canonical artifacts. The tests run through the single pinned
 protocol at the exact release head. This binds each payload to its tag and the
 1.0 preparation to the reviewed pull request.
 
+The inventory and test-tree pins in this policy belong only to the 0.9-to-1.0
+campaign. They validate an active 0.9 freeze or `tenkz-v1.0.0`, not every future
+package tag. After 1.0, a later release may adopt a new versioned policy,
+inventory, and harness without editing or reopening this terminal ledger. The
+public compatibility classifications survive; these particular evidence bytes
+do not become permanent development constraints.
+
 The closed enforcement-workflow list names regular Git blobs. Their exact blob
 OIDs and modes at the activation integration are pinned through the immutable
 `armed_by_pr` identity; they are not additional activation scalars. Every

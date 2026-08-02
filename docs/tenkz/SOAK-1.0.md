@@ -212,7 +212,9 @@ names. Missing, `none`, `read`, or unavailable permission evidence fails closed.
 
 ## Release payload evidence
 
-For a package tag `Q`, substitute the exact tag name for `TAG` in the pinned
+In this ledger, `Q` is either the active attempt's exact 0.9 freeze tag or
+`tenkz-v1.0.0`. No later package tag is validated by this campaign. For such a
+tag `Q`, substitute the exact tag name for `TAG` in the pinned
 policy's `release_manifest_pattern`. The resulting manifest is a regular Git
 blob with one `[release]` table and exactly `schema`, `tag`, `version`, `date`,
 `test_inventory_sha256`, `test_code_tree`, and `test_support_tree`. `schema` is

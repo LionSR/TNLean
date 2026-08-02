@@ -254,6 +254,9 @@ one pinned assertion-failure fingerprint.  Commands run in the hermetic
 repository-shaped view specified by `SOAK-1.0.md`, with a fixed output mount,
 pinned child-tool profile, and no host-checkout or network access.  Symlinks,
 submodules, special entries, and any other in-repository dependency fail closed.
+These exact pins belong to the 0.9-to-1.0 campaign.  A later release gets a new
+versioned policy and harness; it does not reopen this ledger or freeze 1.0 test
+bytes forever.
 
 The first actual campaign entry waits until the blocker chain recorded in the
 policy has closed.  Its prerequisite list is the pinned policy chain flattened
