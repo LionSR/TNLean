@@ -30,6 +30,7 @@ freeze_tag_kind = "annotated"
 required_distinct_work_prs = 2
 work_classes = ["formalization-or-blueprint", "rmp-benchmark"]
 one_class_per_work_pr = true
+work_excluded_paths = ["TNLean/Archive/**"]
 event_format_owners = ["#4162", "#4703"]
 soak_blocker_chain = [["#5086", "#4699", "#4162"], ["#4703", "#4708", "#4163"]]
 deprecation_removal = "not-before-next-major"
@@ -210,17 +211,22 @@ rejects a lightweight, moved, replaced, or mismatched tag. A tagger timestamp,
 if transcribed as evidence, is descriptive only and never determines ordering.
 
 The same record provenance applies to every later entry. Candidate validation
-must run on the declared `record_pr` at its exact final head. Post-merge
-validation requires that pull request to be merged to `main`, with its
-integration commit reachable from `main` and its tree equal to the approved
-head. Copying an entry through another pull request is invalid and requires a
-`record-invalid` reset after merge.
+must run on the declared `record_pr` at its exact final head, whose complete
+pull-request diff is exactly one ledger-entry append and changes no other
+path. Post-merge validation requires that pull request to be merged to `main`,
+with its integration commit reachable from `main` and its tree equal to the
+approved head. Copying an entry through another pull request, or mixing an
+entry with implementation or release-preparation changes, is invalid and
+requires a `record-invalid` reset after merge.
 
 The final `tenkz-v1.0.0` annotated tag is created only after the self-referential
-sign-off record has landed on `main` and passed post-merge validation. Its exact
-approved final head already carries the 1.0 `\ProvidesPackage` metadata, manual
-version, change record, event-format declaration, compatibility tests, and
-sign-off entry. GitHub supplies the record pull request's integration commit,
+sign-off record has landed on `main` and passed post-merge validation. A
+separate release-preparation pull request first lands the 1.0
+`\ProvidesPackage` metadata, manual version, change record, event-format
+declaration, and compatibility tests. The sign-off record pull request then
+changes only its ledger append, so its exact approved final head carries that
+prepared state and the sign-off entry without mixing evidence and
+implementation. GitHub supplies the record pull request's integration commit,
 whose Git tree must equal that approved head's tree. The final tag points to
 that integration commit. Sign-off records the intended release tag but cannot
 require that tag to exist yet; requiring it earlier would make the ledger and
@@ -252,19 +258,23 @@ work pull request must be merged to `main` strictly after `T`. Its integration
 commit must be reachable from `main` and a strict descendant of the freeze
 record's external integration commit, and its tree must equal the independently
 approved final head's tree. `SOAK-1.0.md` defines the immutable complete
-merge-base-to-head diff, the two eligible-path predicates, and the one-class
-assignment rule. The two classes must be filled by distinct pull requests; a
-pull request can fill only its recorded class. The enforcement-activation PR,
-source PRs, entry record PRs, repeated work PRs, unmerged PRs, and any diff
-touching either policy document do not qualify. A policy-, checker-, CI-, or
-record-only diff has no eligible class change and therefore does not qualify.
+merge-base-to-head diff, the two eligible-path predicates, the exclusion of
+`TNLean/Archive/**`, and the one-class assignment rule. The two classes must be
+filled by distinct pull requests; a pull request can fill only its recorded
+class. The enforcement-activation PR, source PRs, entry record PRs, repeated
+work PRs, unmerged PRs, and any diff touching either policy document do not
+qualify. A policy-, checker-, CI-, or record-only diff has no eligible class
+change and therefore does not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A reset has cause
-`breaking-required` or `record-invalid` and names the entry that caused it. It
-closes the active attempt; ignoring historical corrections, the next entry is
-attempt number one higher with a strictly larger `PATCH`, a new source pull
-request and SHA, a new annotated tag and object, and a new freeze record.
+`breaking-required` or `record-invalid` and names the entry that caused it. A
+breaking reset closes the active attempt. A record-invalid reset targets any
+earlier externally invalid entry; it closes the active attempt when one exists
+and otherwise leaves the campaign inactive. Ignoring historical corrections
+and administrative resets, the next freeze is attempt number one higher than
+the most recently opened attempt, with a strictly larger `PATCH`, a new source
+pull request and SHA, a new annotated tag and object, and a new freeze record.
 Compatible fixes retain the active attempt only when both public surfaces remain
 compatible under the rules above. A correction may target any historical
 entry, remains owned by its target's attempt, and never changes attempt state.

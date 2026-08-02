@@ -226,11 +226,14 @@ in row-major order; `SOAK-1.0.md` does not own a duplicate list.
 
 Once the freeze record lands, the evidence gate has no calendar delay.  It
 requires two distinct, independently approved real-work pull requests merged
-after the freeze: one changing a Lean formalization or blueprint chapter or
-appendix, and one changing an RMP benchmark case.  Immutable full pull-request
-diffs decide eligibility, and one pull request fills only one class.  Policy-,
-checker-, CI-, and record-only pull requests do not qualify.  Exact-head
-sign-off review follows the later qualifying merge and may proceed immediately.
+after the freeze: one changing a production Lean formalization (excluding
+`TNLean/Archive/**`) or blueprint chapter or appendix, and one changing an RMP
+benchmark case.  Immutable full pull-request diffs decide eligibility, and one
+pull request fills only one class.  Policy-, checker-, CI-, and ledger-record
+pull requests do not qualify.  Each record pull request changes only its one
+ledger append; release preparation lands separately before the sign-off
+record.  Exact-head sign-off review follows the later qualifying merge and may
+proceed immediately.
 
 The enforcement workflow must fail closed when GitHub evidence is absent,
 null, incomplete, or inconsistent with the fetched Git objects.  Candidate and

@@ -47,9 +47,9 @@ maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
 ```
 
-The work count, class set, and one-class-per-pull-request rule are read from the
-exact `DESIGN.md` policy pinned by `policy_sha256`; this ledger schema does not
-duplicate them.
+The work count, class set, excluded paths, and one-class-per-pull-request rule
+are read from the exact `DESIGN.md` policy pinned by `policy_sha256`; this
+ledger schema does not duplicate them.
 
 Once armed, the normative blocks in `DESIGN.md` and this file have closed
 tables and field sets. Unknown tables or fields are rejected. Changing their
@@ -89,19 +89,25 @@ with no duplicates. Every entry has exactly these common fields:
 
 The `record_pr` targets `main`, is in this repository, and first introduces
 exactly this one entry: its base lacks the entry and its exact final
-`headRefOid` appends the complete block without changing any pinned byte or
-other live entry. GitHub's normalized `record_pr.author.login` must be a valid
+`headRefOid` appends the complete block. Let `H` be that exact head, `C` the
+target `main` tip used by candidate validation, and `B` the unique Git merge
+base of `H` and `C`. The complete `B`-to-`H` path set and diff must be exactly
+that one append to `docs/tenkz/SOAK-1.0.md`: no other file, pinned byte, or live
+entry changes. GitHub's normalized `record_pr.author.login` must be a valid
 lowercase login; authorship is not copied into a self-declared entry field.
-Candidate validation of a newly appended entry must run on that declared pull
-request at that exact head; copying the block into another pull request is
-invalid. Before merge it reports the kind-specific pending state because the
-integration facts do not yet exist.
-After merge,
-GitHub must report `record_pr` merged to `main` with non-null `mergedAt` and
-`mergeCommit.oid`. The integration commit must be reachable from `main`, and
-its Git tree must equal the exact final head's tree. These common post-merge
-rules apply to every entry kind; the kind-specific rules add their ancestry and
-ordering predicates.
+Candidate validation must run on that declared pull request at `H`; copying
+the block into another pull request is invalid. Before merge it reports the
+kind-specific pending state because the integration facts do not yet exist.
+
+After merge, GitHub must report `record_pr` merged to `main` with non-null
+`mergedAt` and `mergeCommit.oid`. Let `I` be that integration commit and `P`
+its sole parent for a one-parent integration or first parent for a two-parent
+integration. Zero or more than two parents, a missing object, or a missing or
+ambiguous merge base fails closed. Recompute `B` as the unique merge base of
+`H` and `P` and revalidate the complete ledger-only `B`-to-`H` diff. `I` must
+be reachable from `main`, and its Git tree must equal `H`'s tree. These common
+post-merge rules apply to every entry kind; the kind-specific rules add their
+ancestry and ordering predicates.
 
 For each kind, the common fields plus that kind's fields below are the exact
 allowed set. Missing required fields, fields belonging to another kind,
@@ -134,18 +140,21 @@ effective for a head only when its commit OID equals the PR's exact final
 
 The first live entry is a `freeze` with attempt 1. A `freeze` is legal only
 when no attempt is active: initially, or as the next non-correction entry after
-the most recent reset, with attempt equal to the reset attempt plus one. While
-an attempt is active, every non-correction entry other than its opening freeze
-uses that attempt. A reset targets and closes only the active attempt. Ignoring
-corrections, the next entry after a reset is the next attempt's freeze. A
-correction may target any earlier entry and uses its target's attempt; it never
-opens, closes, or changes the active attempt. No entry follows a successfully
-validated sign-off.
+the most recent reset, with attempt one higher than the most recently opened
+attempt. While an attempt is active, every non-correction entry other than its
+opening freeze uses that attempt. A breaking reset targets and closes only the
+active attempt. A correction may target any earlier entry and uses its target's
+attempt; it never opens, closes, or changes the active attempt. No entry follows
+a sign-off while that sign-off remains successfully validated.
 
 Each attempt has exactly one opening freeze. If a merged entry fails a required
-post-merge identity, ancestry, tree, or ordering check, a `reset` entry with
-`cause = "record-invalid"` is the next non-correction record; until that reset
-lands, no later work or sign-off can validate.
+post-merge identity, ancestry, tree, diff, or ordering check, a `reset` entry
+with `cause = "record-invalid"` is the next non-correction record. Its target
+may belong to any attempt. If an attempt is active, the reset uses and closes
+that attempt. If none is active, it uses the most recently opened attempt and
+leaves the campaign inactive. Until that reset lands, no later work, freeze,
+or sign-off can validate. The next freeze is numbered one higher than the most
+recently opened attempt, independent of how many administrative resets landed.
 
 ## Entry kinds
 
@@ -223,6 +232,7 @@ when all of these predicates hold:
   `formalization-or-blueprint` class matches `TNLean/**/*.lean`,
   `blueprint/src/chapter/**/*.tex`, or `blueprint/src/appendix/**/*.tex`. The
   `rmp-benchmark` class matches `tests/tenkz/rmp/**/cases/*.tex`.
+  `TNLean/Archive/**` is excluded from every work class.
 - `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr`, or a
   `work_pr` already named by another entry.
 - A reviewer distinct from the normalized `work_pr.author.login` has a latest
@@ -267,16 +277,19 @@ Required additional fields: `cause` (`breaking-required` or `record-invalid`),
 `target` (`entry-ref`), `reason` (`text`), and `evidence` (`text`).
 
 For `cause = "breaking-required"`, `target` names an unresolved friction entry
-with that triage in the active attempt. For `cause = "record-invalid"`,
-`target` names the entry in the active attempt whose externally verified
-identity, history, ancestry, tree, or ordering evidence is invalid. In
-either case the reset is the next non-correction entry, and a correction cannot
-repair the cause.
+with that triage in the active attempt; the reset uses and closes that attempt.
+For `cause = "record-invalid"`, `target` names any earlier entry whose externally
+verified identity, history, ancestry, tree, complete record diff, or ordering
+evidence is invalid. If an attempt is active, the reset uses and closes it. If
+none is active, it uses the most recently opened attempt and leaves the campaign
+inactive. In either case the reset is the next non-correction entry, and a
+correction cannot repair the cause.
 
-The reset closes the active attempt. The next freeze has attempt number one
-higher, a strictly larger `PATCH`, a new source pull request and SHA, a new
+The next freeze has attempt number one higher than the most recently opened
+attempt, a strictly larger `PATCH`, a new source pull request and SHA, a new
 annotated tag name and object, and a new record pull request. Its `source_sha`
-must be a strict descendant of this reset's `record_pr.mergeCommit.oid`.
+must be a strict descendant of the latest reset's
+`record_pr.mergeCommit.oid`.
 
 ### `correction`
 
@@ -308,12 +321,14 @@ contains exactly the active attempt's two work-entry IDs: one
 fills only its recorded class, and the work-entry rules make the referenced
 work PRs distinct. Values are entry references, not pull-request references.
 
-The sign-off's `record_pr` is the sign-off pull request. Let `H` be its exact
-final `headRefOid`. Candidate CI validates `H` and reports
-`sign-off-pending`; it cannot invent the future merge time or integration
-commit. That approved head already carries the 1.0 package metadata, manual
-version, change record, event-format declaration, compatibility tests, and
-this sign-off entry.
+The sign-off's `record_pr` is the sign-off pull request. A separate
+release-preparation pull request must already have landed the 1.0 package
+metadata, manual version, change record, event-format declaration,
+compatibility tests, and no ledger entry. The record pull request changes only
+the sign-off append under the common rule. Let `H` be its exact final
+`headRefOid`. Candidate CI validates `H` and reports `sign-off-pending`; it
+cannot invent the future merge time or integration commit. That approved head
+therefore carries the prepared release state and this sign-off entry.
 
 After merge, GitHub must report that `record_pr` targeted `main`. Let
 `I = record_pr.mergeCommit.oid`; `I` must descend from the active freeze
