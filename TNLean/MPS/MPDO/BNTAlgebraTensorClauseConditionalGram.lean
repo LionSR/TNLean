@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseCorner
+import TNLean.MPS.MPDO.BNTAlgebraTensorClauseIdentityPhysicalSpan
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVFigureEight
 
@@ -15,11 +15,12 @@ same reflected target as the gauge-dressed corner, determines the Gram
 conjugation of an exact two-site sector gauge.  Normality then makes the gauge
 Gram matrix a positive scalar multiple of the identity.
 
-The identity-dressed realization remains conditional.  A constructor reduces
-it to a positive-coefficient two-sided physical realization, but does not
-derive that realization from the BNT algebra clause.  Thus these results
-isolate the remaining implication in Appendix C.4 and do not complete the
-two-site unitary-gauge argument.
+The identity-dressed physical-letter coefficients are supplied unconditionally
+by the oblique two-sided compression.  Its reversed orientation gives the
+Gram-dressed representative, however, so the positive-tail equality with the
+raw reflected target remains conditional.  Thus these results isolate the
+remaining implication in Appendix C.4 and do not complete the two-site
+unitary-gauge argument.
 
 ## Main results
 
@@ -48,10 +49,11 @@ variable {d D : ℕ} {M : MPOTensor d D} {H : BNTAlgebraTensorClause M}
 /-- An identity-dressed marked realization in the physical-letter span, with
 the same reflected target as the gauge-dressed marked chains.
 
-**Scope restriction (conditional identity-dressed marked realization):** This
-structure packages the local realization implicit at CPSV16 Appendix C.4,
-line 2048; it is supplied as data rather than derived from the tensor-attached
-algebra clause.  See
+**Scope restriction (conditional reflected target):** The coefficients and
+their physical-letter identity follow from the exact sector gauge.  The
+positive-tail equality with the raw reflected target is assumed rather than
+derived; the unconditional oblique compression instead has the Gram-dressed
+representative in its reversed orientation.  See
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
@@ -96,17 +98,18 @@ structure IdentityMarkedRealization (S : TwoSiteExactSectorGauge H)
         (adjointTensor (blockTwo M)) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse
 
-/-- A positive-coefficient two-sided physical realization of the algebra-side
+/-- A positive-coefficient same-sided physical realization of the algebra-side
 representative gives an identity-dressed marked realization.
 
 No isometry condition on `V` is needed.  The physical-letter expansion uses
-the positive coefficient and the two-sided realization equation; the reflected
+the positive coefficient and the same-sided realization equation; the reflected
 marked-chain identity additionally uses MPDO positivity of the blocked tensor.
 
-**Scope restriction (conditional physical realization):** The two-sided
-realization is supplied as a hypothesis rather than derived from the
-tensor-attached algebra clause.  Its unconditional construction is one possible
-local identification for completing Appendix C.4; see
+**Scope restriction (same-sided physical realization):** The same-sided
+realization is supplied as a hypothesis.  The unconditional oblique
+compression has distinct left and right maps and supplies the physical-letter
+identity, but its reversed orientation gives the Gram-dressed representative
+rather than the raw reflected target.  See
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
@@ -150,10 +153,11 @@ noncomputable def IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealiza
 reflected target as the exact gauge-dressed corner at every positive tail
 length forces the two Gram dressings to agree.
 
-**Scope restriction (conditional identity-dressed marked realization):** The
-theorem assumes the physical-letter realization implicit at CPSV16 Appendix
-C.4, line 2048; it is not derived from the algebra clause and does not resolve
-the unconditional realization or conclusion of Appendix C.4.  See
+**Scope restriction (conditional reflected target):** The physical-letter
+component is available unconditionally from the oblique compression.  The
+theorem additionally assumes its positive-tail equality with the raw reflected
+target, which is not derived from the algebra clause and remains the missing
+step in Appendix C.4.  See
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
@@ -223,10 +227,11 @@ theorem gramDressing_gauge_eq_one_of_identityMarkedRealization
 matrix of the exact two-site sector gauge is a positive real scalar multiple
 of the identity.
 
-**Scope restriction (conditional identity-dressed marked realization):** The
-theorem assumes the physical-letter realization implicit at CPSV16 Appendix
-C.4, line 2048; it is not derived from the algebra clause and does not establish
-the unconditional realization or conclusion of Appendix C.4.  See
+**Scope restriction (conditional reflected target):** The physical-letter
+component is available unconditionally from the oblique compression.  The
+theorem additionally assumes its positive-tail equality with the raw reflected
+target, which is not derived from the algebra clause and remains the missing
+step in Appendix C.4.  See
 `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex`.
 
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
