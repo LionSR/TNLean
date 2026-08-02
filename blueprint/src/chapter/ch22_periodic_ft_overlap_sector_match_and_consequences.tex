@@ -426,19 +426,25 @@
     repeated blocks, and transitivity gives the claim.
 \end{proof}
 
-\begin{theorem}[Non-decaying mixed overlaps for scalar-weight irreducible-form
-    representations]
-    \label{thm:periodic_scalar_weight_nondecaying_overlap}
-    \lean{MPSTensor.PeriodicOverlapHypothesis.ofIsIrreducibleForm}
+\begin{theorem}[Non-decaying mixed overlaps for normalized bases of periodic
+    tensors]
+    \label{thm:periodic_multiplicity_nondecaying_overlap}
+    \lean{MPSTensor.PeriodicOverlapHypothesis.ofSectorDecompositions}
     \leanok
-    \uses{def:irreducible_form, def:nonzero_proportional_mpv}
-    Let $A$ and $B$ each have the same length-$N$ matrix-product vector, for
-    every $N\geq0$, as a scalar-weight block-diagonal tensor formed from a
-    finite, pairwise non-repeated family of
-    left-canonical periodic tensors
-    $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$, with a positive real scalar
-    weight attached to each block. Suppose that for every $N\geq 1$ there is
-    a scalar $c_N\ne0$ such that
+    \uses{def:nonzero_proportional_mpv}
+    Let
+    \begin{align}
+        A^i&=\bigoplus_{j\in J}(R_j\otimes A_j^i),
+        \notag\\
+        B^i&=\bigoplus_{k\in K}(S_k\otimes B_k^i),
+        \notag
+    \end{align}
+    where $R_j=\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,r_j})$ and
+    $S_k=\operatorname{diag}(\nu_{k,1},\ldots,\nu_{k,s_k})$ have nonzero
+    complex diagonal entries.  Suppose that the finite families
+    $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$ are pairwise non-repeated
+    families of left-canonical periodic tensors.  If, for every positive
+    integer $N$, there is a scalar $c_N\ne0$ such that
     \begin{align}
         \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}.
         \notag
@@ -459,26 +465,18 @@
         \notag
     \end{align}
 
-    \emph{Scope restriction.} The irreducible forms in
-    \cite[lines~286--332 and 575--585]{DeLasCuevas2017Irreducible} carry
-    multiplicity matrices $R_j$ and $S_k$, use literal block-diagonal tensor
-    equalities, and require only irreducible transfer maps of spectral radius
-    one. The present theorem has one positive real scalar weight per block,
-    records equality of matrix-product-vector families with the corresponding
-    scalar-weight block-diagonal tensors,
-    including equality at the empty word. This forces equality of the
-    corresponding bond-dimension traces, whereas the source physical family is
-    positive-length and allows a lower-dimensional representative. The theorem
-    also assumes left-canonical normalization through periodicity. It therefore
-    supplies the mixed-overlap step only for these witnesses and does not by
-    itself prove the unrestricted proportional Fundamental Theorem. These
-    distinctions are recorded in
+    \emph{Scope restriction.} The source initially assumes that the transfer
+    maps of the basis tensors are irreducible and have spectral radius one,
+    and then obtains the trace-preserving normalization by a block-diagonal
+    similarity
+    \cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The present theorem
+    starts with the normalized basis tensors.  The multiplicity matrices are
+    otherwise arbitrary diagonal matrices with nonzero complex entries, the
+    displayed direct sums are literal, and proportionality is assumed only at
+    positive lengths.  Transport through the normalizing similarities remains
+    to be proved before applying this result to the unnormalized source
+    statement.  This distinction is recorded in
     \path{docs/paper-gaps/1708_periodic_overlap_route_alignment.tex}.
-    Removing the length and normalization restrictions requires replacing the
-    empty-word equality by a positive-length comparison, applying the source's
-    block-diagonal similarity to trace-preserving form and transport of the
-    conclusion back to the original blocks; that reduction is not part of the
-    present declaration.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:finite_coefficient_isolation,
@@ -487,7 +485,8 @@
         thm:mpv_decomposition,
         thm:periodic_bond_dimension_pos,
         thm:periodic_family_li_of_cross_overlap_decay,
-        thm:periodic_overlap_dichotomy}
+        thm:periodic_overlap_dichotomy,
+        lem:sector_decomposition_coeff_not_eventually_zero}
     Fix $j_0\in J$ and suppose that its overlap with every $B_k$ tends to
     zero. Let $T\subseteq J$ be the set of all indices with this property.
     For every $j\notin T$, choose $k(j)$ for which the mixed overlap does not
@@ -504,16 +503,59 @@
     decaying overlaps by non-repetition and the overlap dichotomy, while the
     mixed overlaps vanish by the definition of $T$.
 
-    Expand the proportionality relation at length $pN$ in the two block
-    families. Replace each term indexed by $j\notin T$ by its scalar multiple
-    of the corresponding $B_{k(j)}$ term, and collect terms with the same
-    value of $k(j)$. Linear independence then forces
-    $\mu_{j_0}^{pN}=0$ at one sufficiently large positive $N$, contradicting
-    the positivity of $\mu_{j_0}$. Hence $j_0$ has a non-decaying partner.
+    Expand the proportionality relation at length $pN$ using the grouped
+    coefficients
+    \begin{align}
+        \operatorname{tr}(R_j^{pN})&=\sum_q(\mu_{j,q}^{p})^N,&
+        \operatorname{tr}(S_k^{pN})&=\sum_r(\nu_{k,r}^{p})^N.
+        \notag
+    \end{align}
+    Replace each term indexed by $j\notin T$ by its scalar multiple of the
+    corresponding $B_{k(j)}$ term, and collect terms with the same value of
+    $k(j)$. Linear independence forces
+    $\operatorname{tr}(R_{j_0}^{pN})=0$ for every sufficiently large $N$.
+    Since each $\mu_{j_0,q}^p$ is nonzero, geometric extrapolation gives the
+    same identity at exponent zero.  This says $r_{j_0}=0$, contradicting the
+    positive size of $R_{j_0}$. Hence $j_0$ has a non-decaying partner.
     Interchanging $A$ and $B$, inverting the nonzero scalars $c_N$, and using
     conjugate symmetry of the mixed overlap gives the converse assertion. For
     any non-decaying pair, the periodic overlap dichotomy excludes its decay
     alternative and supplies the repeated-block relation.
+\end{proof}
+
+\begin{theorem}[Scalar-weight specialization of the mixed-overlap theorem]
+    \label{thm:periodic_scalar_weight_nondecaying_overlap}
+    \lean{MPSTensor.PeriodicOverlapHypothesis.ofIsIrreducibleForm}
+    \leanok
+    \uses{def:irreducible_form, def:nonzero_proportional_mpv}
+    Let $A$ and $B$ each have the same length-$N$ matrix-product vector, for
+    every $N\geq0$, as a scalar-weight direct sum formed from a finite,
+    pairwise non-repeated family of left-canonical periodic tensors
+    $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$, with a positive real scalar
+    weight attached to each block. Suppose that, for every positive integer
+    $N$, there is a scalar $c_N\ne0$ such that
+    \begin{align}
+        \ket{V^{(N)}(A)}=c_N\ket{V^{(N)}(B)}.
+        \notag
+    \end{align}
+    Then every block in either family has a block in the other family whose
+    mixed overlap does not tend to zero.  Every such non-decaying pair has
+    equal bond dimension and differs by an invertible similarity and a
+    unit-modulus scalar.
+
+    \emph{Scope restriction.} This formulation records one positive scalar
+    per listed block and equality with the corresponding direct sum also at
+    the empty word.  Thus it is a specialization of the preceding
+    multiplicity-bearing theorem and is not itself the unrestricted
+    irreducible-form statement of
+    \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    Repeat the coefficient argument above with the singleton coefficients
+    $\mu_j^N$ and $\nu_k^N$.  Their nonvanishing at every length replaces the
+    geometric-extrapolation step.  Equality with the two scalar-weight direct
+    sums transports the positive-length proportionality relation to the
+    corresponding block-diagonal tensors.
 \end{proof}
 
 \begin{theorem}[Proportional Fundamental Theorem for irreducible-form MPS]
@@ -544,7 +586,7 @@
 
     The theorem relates the two bases of periodic tensors but makes no
     assertion relating their multiplicity matrices.
-    % Formalization status: the scalar-weight theorem above proves only its
-    % explicitly restricted overlap step. The unrestricted multiplicity-bearing
-    % argument remains tracked in issue #5342.
+    % Formalization status: the normalized multiplicity-bearing theorem above
+    % proves the overlap step after the source's Perron similarity. Constructing
+    % and transporting through that similarity remains tracked in issue #5342.
 \end{theorem}
