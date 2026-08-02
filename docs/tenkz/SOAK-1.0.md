@@ -328,7 +328,7 @@ The first live entry is a `freeze` with attempt 1. A `freeze` is legal only
 when no attempt is active: initially, or as the next non-correction entry after
 the most recent reset, with attempt one higher than the most recently opened
 attempt. While an attempt is active, every non-correction entry other than its
-opening freeze uses that attempt. A breaking reset targets and closes only the
+opening freeze uses that attempt. A restart reset targets and closes only the
 active attempt. A correction may target any earlier entry and uses its target's
 attempt; it never opens, closes, or changes the active attempt. Before the final
 tag exists, a required `record-invalid` reset may follow a sign-off. No entry
@@ -351,8 +351,8 @@ the exact current validation tree. The raw bytes must match the reset's digest.
 The blob uses the closed JSON schema at the pinned policy's
 `release_reset_replay_schema`. It binds the reset and target
 entry IDs, exact pre-reset ledger boundary, exact validation-target commit,
-ledger-ordered raw-invalid queue, pending breaking target or null, complete
-normalized resolver inputs, pinned workflow dependency closure, and independent
+ledger-ordered raw-invalid queue, `pending_restart_target` (`entry-id` or null),
+complete normalized resolver inputs, pinned workflow dependency closure, and independent
 supervisor receipts. Unknown or missing data fails closed.
 
 The receipt pull request targets the exact current `main` tip and changes only
@@ -370,7 +370,7 @@ must reproduce the receipt's queue and still-mutable inputs. A mismatch makes
 the receipt stale and requires another receipt pull request.
 
 The reset entry binds the receipt PR and SHA-256 of the raw receipt blob. The
-validator reconstructs its historical queue, applies the pending-breaking
+validator reconstructs its historical queue, applies the pending-restart
 priority below, and requires the reset to name its head. Receipt-PR reachability,
 review, merge, and tree equality are creation predicates rechecked when the
 reset first integrates. Every later entry's candidate target, exact head, and
