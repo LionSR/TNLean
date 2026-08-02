@@ -1261,3 +1261,14 @@ The post-pull SPT panel retains the explicit physical contraction through
 the two-port `U_g` station. No parser row or case-specific metric is added.
 
 Census-correction: #5086
+
+### 2026-08-02 — projected R contractions enter the event graph
+
+M4 rises from 18.51 to 18.60. The left R panel now splits each black lattice
+carrier and each red operator string at typed ports on its seven string
+tensors. Its two horizontal rails, both diagonal ends, and all three lower
+operator continuations are semantic open ends. Thus every source contraction
+and declared boundary leg is model incidence rather than geometric
+coincidence, without changing the public language.
+
+Census-correction: #5086
