@@ -1,54 +1,32 @@
 % Target: rmp-ii-mpu-splitting
 % Formula: U = uv, with the virtual index contracted between u and v.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Canonical public kernel frame; no raw TikZ.
 % Boundary: The U atom has four open legs; each factorization contracts only the
 %   central u-v leg and leaves four external legs open.
 % Source: paper TN-Review-main.tex line 383; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 433-449
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[box,ports={north:physical,south:physical,east:virtual,west:virtual}]
-      {U}{(0mm,0mm)}{U}
-    \tnput[boundary,ports={south:physical}]{n}{(0mm,9mm)}{}
-    \tnput[boundary,ports={north:physical}]{s}{(0mm,-9mm)}{}
-    \tnput[boundary,ports={east:virtual}]{w}{(-9mm,0mm)}{}
-    \tnput[boundary,ports={west:virtual}]{e}{(9mm,0mm)}{}
-    \tnjoin{n.south}{U.north} \tnjoin{U.south}{s.north}
-    \tnjoin{w.east}{U.west} \tnjoin{U.east}{e.west}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), skin=box,
+      ports={90:physical,270:physical,0:virtual,180:virtual}]{U}
+  \end{tenkz}
   \;=\;
-  \begin{tenkzfree}
-    \tnput[box,role=marked,ports={north:physical,south:virtual,east:physical}]
-      {u}{(0mm,4mm)}{u}
-    \tnput[box,role=extra,ports={north:virtual,south:physical,west:physical}]
-      {v}{(0mm,-4mm)}{v}
-    \tnput[boundary,ports={south:physical}]{n}{(0mm,11mm)}{}
-    \tnput[boundary,ports={north:physical}]{s}{(0mm,-11mm)}{}
-    \tnput[boundary,ports={west:physical}]{e}{(9mm,4mm)}{}
-    \tnput[boundary,ports={east:physical}]{w}{(-9mm,-4mm)}{}
-    \tnjoin{n.south}{u.north} \tnjoin{u.south}{v.north}
-    \tnjoin{v.south}{s.north} \tnjoin{u.east}{e.west}
-    \tnjoin{w.east}{v.west}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+    \tn[at=(1,1), skin=box, role=marked, name=u,
+      ports={90:physical,270:virtual,0:virtual}]{u}
+    \tn[at=(2,1), skin=box, role=extra, name=v,
+      ports={90:virtual,270:physical,180:virtual}]{v}
+    \tnwire{u.270}{v.90}
+  \end{tenkz}
   \;=\;
-  % third panel: the MIRRORED splitting, as in the source - u now reaches
-  % WEST and v EAST, so the two factorizations are the even-odd and the
-  % odd-even one.  The bead labels sit on the free side of each bead,
-  % clear of both the vertical wire and the bead's own leg.
-  \begin{tenkzfree}
-    \tnput[dot,role=marked,label pos=east,
-           ports={north:physical,south:virtual,west:physical}]
-      {u}{(0mm,4mm)}{u}
-    \tnput[dot,role=extra,label pos=west,
-           ports={north:virtual,south:physical,east:physical}]
-      {v}{(0mm,-4mm)}{v}
-    \tnput[boundary,ports={south:physical}]{n}{(0mm,11mm)}{}
-    \tnput[boundary,ports={north:physical}]{s}{(0mm,-11mm)}{}
-    \tnput[boundary,ports={east:physical}]{w}{(-9mm,4mm)}{}
-    \tnput[boundary,ports={west:physical}]{e}{(9mm,-4mm)}{}
-    \tnjoin{n.south}{u.north} \tnjoin{u.south}{v.north}
-    \tnjoin{v.south}{s.north} \tnjoin{w.east}{u.west}
-    \tnjoin{v.east}{e.west}
-  \end{tenkzfree}
+  % The final factorization mirrors the free side of each coloured bead.
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+    \tn[at=(1,1), role=marked, label pos=e, name=u,
+      ports={90:physical,270:virtual,180:virtual}]{u}
+    \tn[at=(2,1), role=extra, label pos=w, name=v,
+      ports={90:virtual,270:physical,0:virtual}]{v}
+    \tnwire{u.270}{v.90}
+  \end{tenkz}
 \]
