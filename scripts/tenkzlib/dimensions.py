@@ -63,12 +63,15 @@ class DimensionOwnershipError(ValueError):
 
 
 # Relative font spacing such as ``1em`` is deliberately outside this physical
-# dimension contract.  Absolute TeX units are caught even when a future case
-# stops using millimetres.
+# dimension contract.  Absolute TeX units, their legal whitespace, and TeX's
+# optional ``true`` prefix are caught even when a future case stops using
+# millimetres.  A spaced ``in`` followed by prose is the English preposition,
+# not an inch unit.
 DIMENSION_RE = re.compile(
     r"(?<![A-Za-z0-9_.])"
     r"[-+]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
-    r"(?:\s*(?:pt|pc|bp|cm|mm|dd|cc|sp)|in)\b"
+    r"(?:\s*true)?\s*"
+    r"(?:pt|pc|bp|cm|mm|dd|cc|sp|in(?!\s+[A-Za-z]))\b"
 )
 
 CASE_DIMENSION_CEILING = 926

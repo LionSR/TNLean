@@ -250,6 +250,22 @@ def test_rmp_dimension_ownership() -> None:
     if sum(occurrence.in_comment for occurrence in occurrences) != 1:
         raise AssertionError("comment dimensions were not counted orthogonally")
 
+    absolute_units = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(1 in, 1truept, 1 true pt, 1 true in)}{}",
+    )
+    if len(absolute_units) != 4 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in absolute_units
+    ):
+        raise AssertionError(
+            f"spaced/true absolute dimensions escaped: {absolute_units!r}"
+        )
+    if scan_case_dimensions(
+        Path("synthetic.tex"), "% at y=-0.75 in the author source\n"
+    ):
+        raise AssertionError("the English preposition 'in' became an inch unit")
+
     extra_layout = DimensionOccurrence(
         Path("synthetic.tex"),
         1,
@@ -279,7 +295,7 @@ def test_rmp_dimension_ownership() -> None:
             dataclasses.replace(report, cases=(*report.cases, *mutation)),
             phrase,
         )
-    unknown = scan_case_dimensions(Path("synthetic.tex"), r"\foo{1mm}")
+    unknown = scan_case_dimensions(Path("synthetic.tex"), r"\foo{1 in}")
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, *unknown)),
         "unowned case dimension",
