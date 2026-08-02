@@ -369,6 +369,7 @@ class Event:
     attrs: dict[str, str]
     line: int
     raw: str
+    valid: bool = True  # False when canonical parsing rejects the record.
 
 
 @dataclass
@@ -499,7 +500,7 @@ def parse_log(
                 valid = False
                 continue
             attrs[key] = value.strip()
-        event = Event(kind, attrs, line_number, line)
+        event = Event(kind, attrs, line_number, line, valid)
         events.append(event)
         validators = FIELD_VALIDATORS.get(kind)
         if validators is None:
@@ -522,6 +523,7 @@ def parse_log(
                     f"{kind} event lacks required field(s): {', '.join(missing)}: {line}",
                 )
                 valid = False
+            event.valid = valid
             if kind != "picture" and "picture" not in attrs:
                 if current_kernel is not None and kind in {
                     "atom",
@@ -535,10 +537,11 @@ def parse_log(
                 }:
                     # A kernel record: it belongs to the open kernel picture
                     # by nesting, not by a picture= field.
-                    current_kernel.events.append(event)
+                    if event.valid:
+                        current_kernel.events.append(event)
                     continue
                 if kind == "check":
-                    if check_event is not None:
+                    if check_event is not None and event.valid:
                         check_event(event)
                     continue
                 hard(
@@ -547,8 +550,10 @@ def parse_log(
                     f"{kind} event lacks required picture=: {line}",
                 )
                 valid = False
+                event.valid = False
         if kind == "picture":
             if not valid or "id" not in attrs or not _is_picture_id(attrs["id"]):
+                event.valid = False
                 continue
             # Dialect ids stay integers (every existing consumer indexes with
             # them); kernel ids keep their k-prefixed spelling as strings.
@@ -568,19 +573,20 @@ def parse_log(
                     f"picture id {picture_id} already declared at line "
                     f"{by_id[picture_id].line}",
                 )
+                event.valid = False
                 continue
             picture = Picture(picture_id, lang, line_number)
             by_id[picture_id] = picture
             pictures.append(picture)
             current_kernel = picture if lang == "kernel" else None
             continue
-        if check_event is not None:
-            check_event(event)
         reference = attrs.get("picture", "")
         if not _is_picture_id(reference):
             continue
         picture_id = reference if reference.startswith("k") else int(reference)
         if picture_id == 0 and kind == "tree":
+            if check_event is not None and event.valid:
+                check_event(event)
             continue
         if picture_id not in by_id:
             hard(
@@ -588,6 +594,11 @@ def parse_log(
                 where,
                 f"{kind} references undeclared picture {picture_id}",
             )
+            event.valid = False
             continue
+        if not event.valid:
+            continue
+        if check_event is not None:
+            check_event(event)
         by_id[picture_id].events.append(event)
     return ParsedLog(events, pictures, by_id)

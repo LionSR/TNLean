@@ -287,6 +287,60 @@ kernel-boundary|signature=phys:up
         finding.rule for finding in duplicate_opt_out.findings
     ]
 
+    duplicate_scope = audit_log(
+        "check|scope=1|scope=9|relation=1|result=equal|signature=\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    duplicate_scope_rules = [finding.rule for finding in duplicate_scope.findings]
+    assert "malformed-event" in duplicate_scope_rules
+    assert "eq-boundary-mismatch" in duplicate_scope_rules
+
+    missing_result = audit_log(
+        "check|scope=1|relation=1\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    missing_result_rules = [finding.rule for finding in missing_result.findings]
+    assert "malformed-event" in missing_result_rules
+    assert "eq-boundary-mismatch" in missing_result_rules
+    assert not next(
+        event for event in missing_result.log_events if event.kind == "check"
+    ).valid
+
+    duplicate_result = audit_log(
+        "check|scope=1|relation=1|result=mismatch|result=equal\n"
+    )
+    duplicate_result_rules = [
+        finding.rule for finding in duplicate_result.findings
+    ]
+    assert "malformed-event" in duplicate_result_rules
+    assert "kernel-check" not in duplicate_result_rules
+
+    invalid_picture_scope = audit_log(
+        equation_log.replace(
+            "picture|id=k1|lang=kernel",
+            "picture|id=k1|lang=kernel|scope=9",
+        ).replace(
+            "picture|id=k2|lang=kernel",
+            "picture|id=k1|lang=kernel|scope=1|scope=9\n"
+            "picture|id=k2|lang=kernel|scope=1",
+        )
+        + "check|scope=1|relation=1|result=equal|signature=\n",
+        checked_equation_source.replace(
+            "check={signature, modulo=bundles}", "check={signature}"
+        ),
+    )
+    invalid_picture_rules = [
+        finding.rule for finding in invalid_picture_scope.findings
+    ]
+    assert "malformed-event" in invalid_picture_rules
+    assert "eq-boundary-mismatch" in invalid_picture_rules
+
     checkless_equation_source = (
         "\\begin{tenkzeq}[size=m]\n"
         + equation_source

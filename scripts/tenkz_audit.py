@@ -773,7 +773,7 @@ class Audit:
                     "boundary records; expected exactly one",
                 )
         for event in self.log_events:
-            if event.kind != "check":
+            if event.kind != "check" or not event.valid:
                 continue
             # The canonical parser already reports these record-level fields;
             # keep invalid events out of the semantic checks without emitting
@@ -1535,7 +1535,7 @@ class Audit:
         picture_scopes: dict[int, int] = {}
         scope_pictures: dict[int, list[int]] = {}
         for event in self.log_events:
-            if event.kind != "picture":
+            if event.kind != "picture" or not event.valid:
                 continue
             scope = event.attrs.get("scope", "")
             picture = picture_indices.get(event.attrs.get("id", ""))
@@ -1548,7 +1548,7 @@ class Audit:
         scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
-            if event.kind != "check":
+            if event.kind != "check" or not event.valid:
                 continue
             scope = event.attrs.get("scope", "")
             if not scope.isdigit():

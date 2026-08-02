@@ -40,6 +40,7 @@ def main() -> int:
         "boundary",
         "tree",
     ]
+    assert all(event.valid for event in parsed.events)
     assert len(parsed.pictures) == 1
     picture = parsed.pictures[0]
     assert picture is parsed.by_id[1]
@@ -49,7 +50,7 @@ def main() -> int:
 
     malformed: list[tuple[str, str, str]] = []
     notes: list[tuple[str, str, str]] = []
-    parse_log(
+    malformed_parsed = parse_log(
         "\n".join(
             (
                 "picture|id=1|lang=future",
@@ -79,6 +80,12 @@ def main() -> int:
         for finding in malformed
     )
     assert any("duplicate field 'scope'" in finding[2] for finding in malformed)
+    assert all(
+        not event.valid
+        for event in malformed_parsed.events
+        if event.kind == "check"
+    )
+    assert not malformed_parsed.by_id[1].events
 
     assert AuditEvent is Event
     assert AuditPicture is Picture
