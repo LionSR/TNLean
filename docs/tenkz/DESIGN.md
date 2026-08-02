@@ -246,9 +246,11 @@ window, and `T + 28 days` lies outside the fourth window. Work evidence names
 at least one independently approved pull request in each window. GitHub must
 report it merged to `main` in that interval. Its integration commit must be
 reachable from `main` and a strict descendant of the freeze record's external
-integration commit. The exact eligible-path and exclusion predicate is defined
-in `SOAK-1.0.md`; source, activation, policy, ledger-record, synthetic, and
-unmerged pull requests do not qualify.
+integration commit, and its tree must equal the independently approved final
+head's tree. `SOAK-1.0.md` defines the complete merge-base-to-head diff and
+eligible-path predicate. The enforcement-activation PR, source PRs, entry
+record PRs, repeated work PRs, unmerged PRs, and any diff touching either
+policy document do not qualify.
 
 Interface friction is appended when found and triaged as `fix-compatible`,
 `defer-to-2.0`, or `breaking-required`. A reset has cause

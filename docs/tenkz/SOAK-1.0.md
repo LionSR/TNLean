@@ -11,10 +11,14 @@ self-referential enforcement-activation pull request changes both normative
 UTF-8 blob and replaces `armed_by_pr = "pending"` with its own pull-request
 reference. The digest is exactly 64 lowercase hexadecimal digits computed from
 the raw blob bytes without newline normalization. The pull-request reference
-has `pr-ref` form. Its approved final head pins that policy blob and every byte
-of this file through the final marker. GitHub must report that pull request
-merged to `main` with the recorded number, and its integration tree must equal
-the approved head's tree. Arming starts no clock.
+has `pr-ref` form. Let `H` be the activation PR's exact final head. A reviewer
+distinct from both its normalized author and `github:lionsr` must have a latest
+effective `APPROVED` review on `H` before merge. GitHub must then report the PR
+merged to `main`, with normalized `mergedBy = github:lionsr` and
+`armed_by_pr` naming that PR. Its integration tree must equal `H`'s tree, the
+recorded digest must match the exact armed policy blob in that tree, and the
+prefix through the final marker must match `H`. Only that post-validated head
+pins the policy and prefix. Arming starts no clock.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -187,19 +191,26 @@ Required additional fields:
 | `summary` | `text` |
 | `evidence` | `text` |
 
-Let `I = work_pr.mergeCommit.oid`, as reported by GitHub. The work qualifies
-exactly when all of these predicates hold:
+Let `H = work_pr.headRefOid` and `I = work_pr.mergeCommit.oid`, as reported by
+GitHub. Let `P` be `I`'s sole parent for a one-parent integration or its first
+parent for a two-parent integration, and let `B` be the unique Git merge base
+of `H` and `P`. A missing object, zero or more than two integration parents, or
+a missing or ambiguous merge base fails closed. The work qualifies exactly
+when all of these predicates hold:
 
 - GitHub reports `work_pr` merged to `main`, with non-null final
   `headRefOid`, `mergedAt`, and `mergeCommit.oid`.
 - `I` is reachable from `main` and is a strict descendant of the active
-  freeze record's integration commit.
-- The path set changed from `I`'s first parent to `I` contains at least one
-  path matching `TNLean/**/*.lean`, `blueprint/src/chapter/**/*.tex`,
+  freeze record's integration commit, and the Git tree of `I` equals the Git
+  tree of `H`.
+- The complete path set changed from `B` to `H` contains neither
+  `docs/tenkz/DESIGN.md` nor
+  `docs/tenkz/SOAK-1.0.md`.
+- After whitespace-only changes are ignored, the complete Git diff from `B`
+  to `H` has a nonempty change under at least one path matching
+  `TNLean/**/*.lean`, `blueprint/src/chapter/**/*.tex`,
   `blueprint/src/appendix/**/*.tex`, or
   `tests/tenkz/rmp/**/cases/*.tex`.
-- That path set contains neither `docs/tenkz/DESIGN.md` nor
-  `docs/tenkz/SOAK-1.0.md`.
 - `work_pr` is not `armed_by_pr`, a `source_pr`, any entry's `record_pr`, or a
   `work_pr` already named by another entry.
 - A reviewer distinct from the normalized `work_pr.author.login` has a latest
@@ -207,8 +218,9 @@ exactly when all of these predicates hold:
   `work_pr.mergedAt`.
 
 Glob matching is against slash-separated repository paths; `**` spans zero or
-more complete path components. The Git diff against the first parent, not a
-PR title, label, description, or entry summary, decides path eligibility.
+more complete path components. The immutable `B`-to-`H` Git diff, not an
+integration's final commit alone or a PR title, label, description, or entry
+summary, decides path eligibility.
 
 Let `T` be the active attempt's verified freeze merge time. Window `i` is the
 half-open UTC interval `[T + 7i days, T + 7(i+1) days)` for
@@ -294,11 +306,18 @@ latest effective review must be `APPROVED` on `H`, with
 `submittedAt > T + 28 days` and `submittedAt < record_pr.mergedAt`.
 
 All compatible friction must be resolved, every work predicate must still
-hold, and no condition may require a reset. A tree or external-fact mismatch
-requires a `record-invalid` reset targeting the sign-off; it is not a validated
-sign-off. After post-merge validation succeeds, the sign-off is terminal and
-the annotated `tenkz-v1.0.0` tag may be created on `I`. The tag must not exist
-before that success.
+hold, and no condition may require a reset. Post-merge validation also
+revalidates the pinned policy hash and ledger prefix and every active-freeze
+fact: its record integration and start time, immutable annotated tag object and
+peel to `source_sha`, source-PR integration, and the current closed state and
+`closedAt <= T` of every derived prerequisite. A reopened or reclosed
+prerequisite, moved or replaced tag, changed source fact, or pinned-byte
+mismatch requires a `record-invalid` reset targeting the active freeze. A
+sign-off tree or sign-off-specific external-fact mismatch requires that reset
+targeting the sign-off. Neither case is a validated sign-off. After post-merge
+validation succeeds, the sign-off is terminal and the annotated
+`tenkz-v1.0.0` tag may be created on `I`. The tag must not exist before that
+success.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,
