@@ -1,0 +1,43 @@
+% Regression: sheet-spacing warnings only use surviving adjacent-sheet pairs.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+
+% The only adjacent-sheet pair is broken, so the tight stack is quiet.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=2, frame=flat, sheet sep=0.4]
+  \tnsite[removed]{(1,1,1)}
+\end{tenkzlattice}
+
+% The same geometry with both endpoints live diagnoses the realized collision.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=2, frame=flat, sheet sep=0.4]
+\end{tenkzlattice}
+
+% Removing sheet 2 leaves the surviving sheet-0/sheet-1 pair as a witness.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=3, frame=flat, sheet sep=0.4]
+  \tnsite[removed]{(1,1,2)}
+\end{tenkzlattice}
+
+% A sheetless removal breaks the only coincident translated pair.  The
+% same-row pair that remains is safely one lattice pitch apart.
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets=2, frame=flat, sheet sep=1]
+  \tnsite[removed]{(2,1)}
+\end{tenkzlattice}
+
+% Without that removal, row 2 above coincides with row 1 below at dr=-1.
+\begin{tenkzlattice}[
+    rows=2, cols=1, sheets=2, frame=flat, sheet sep=1]
+\end{tenkzlattice}
+
+% The raw centre distance is about 0.1003sp below the named floor, although
+% both displayed values round equal; the strict raw decision must still warn.
+\begin{tenkzlattice}[
+    rows=1, cols=1, sheets=2, frame=flat,
+    sheet vector={67626sp,668489sp}]
+\end{tenkzlattice}
+
+\end{document}
