@@ -18,8 +18,12 @@ import Mathlib.RingTheory.RootsOfUnity.Complex
 
 This file introduces the basic periodic MPS predicates and equivalence relations
 used by the periodic form theory (arXiv:1708.00029, Section 2.1).
+
+The predicate `IsSpectrallyPeriodic` describes irreducible spectral-radius-one
+blocks before trace-preserving normalization, whereas `IsPeriodic` also includes
+left-canonical normalization.
 -/
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 
@@ -65,6 +69,45 @@ theorem instEquivalenceGaugeEquiv :
   trans := MPSChainTensor.GaugeEquiv.trans
 
 end PeriodicMPSTensor
+
+/-- `IsSpectrallyPeriodic m A` records a periodic irreducible block before
+trace-preserving normalization: its transfer map is irreducible, has spectral
+radius one, and has unit-circle eigenvalues exactly the `m`-th roots of unity.
+
+Unlike `IsPeriodic`, this predicate does not assume that `A` is left-canonical.
+The source passes from this spectral form to trace-preserving form by a pure
+similarity transformation.
+
+Source: arXiv:1708.00029, lines 248--261 and 313--332. -/
+structure IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
+  /-- The transfer map has no nontrivial invariant projection, as required for
+  each irreducible-form block in arXiv:1708.00029, lines 248--261. -/
+  irreducible : IsIrreducibleTensor A
+  /-- The transfer map has spectral radius one, following the rescaling in
+  arXiv:1708.00029, lines 248--255 and the definition at lines 260--261. -/
+  spectral_radius_one :
+    spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (transferMap (d := d) (D := D) A)) = 1
+  /-- The period is positive, as in the periodic-block description of
+  arXiv:1708.00029, lines 257--258. -/
+  period_pos : 0 < m
+  /-- The unit-circle eigenvalues are exactly the `m`-th roots of unity, as in
+  arXiv:1708.00029, lines 257--258. -/
+  peripheral_eq :
+    peripheralEigenvalues (transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
+
+/-- A spectrally periodic block has nonzero bond dimension.
+
+At bond dimension zero its transfer operator acts on the zero-dimensional
+matrix space and therefore has spectral radius zero, contradicting the
+spectral-radius-one normalization of arXiv:1708.00029, lines 248--261. -/
+theorem IsSpectrallyPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+    (hA : IsSpectrallyPeriodic m A) : D ≠ 0 :=
+  matrix_dim_ne_zero_of_spectralRadius_eq_one
+    ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+      (transferMap (d := d) (D := D) A))
+    hA.spectral_radius_one
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
 peripheral spectrum equal to the `m`-th roots of unity, and positivity of `m`.

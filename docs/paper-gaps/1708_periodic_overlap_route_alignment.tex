@@ -288,7 +288,7 @@ lemma is not used. Restoring the spanning clause and routing through
 half is formalized; no unrestricted spanning assertion is presently attributed
 to the source consequence.
 
-\section{Normalized multiplicity theorem and remaining normalization restriction}
+\section{Normalized multiplicity theorem and remaining transport restriction}
 
 \textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, equations
 \emph{bdnr} and \emph{Bbdnr}, lines 286--305 and 575--585; the normalization
@@ -337,18 +337,28 @@ matrix-product-vector equality at the empty word and may describe an ambient
 tensor only through such an equality.  These are restrictions of that older
 formulation, not of the new literal multiplicity-bearing theorem.
 
-\textbf{Remaining normalization restriction.} The basis blocks in the new
-theorem satisfy the local predicate \path{IsPeriodic}, which includes
-left-canonical normalization.  The source initially assumes only that each
-transfer map is irreducible with spectral radius one, then uses the positive
-adjoint Perron eigenmatrix to obtain a trace-preserving block by pure
-similarity \cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The formal
-development does not yet provide this normalization simultaneously for all
-sectors while preserving the displayed multiplicity weights, nor does it yet
-transport the resulting overlap hypothesis back through those blockwise
-similarities.  Applying the theorem to an arbitrary original tensor through a
-lower-dimensional representative also requires a positive-length transport
-statement of the kind allowed at lines~266--271.
+\textbf{Pure normalization theorem.} The predicate
+\path{IsSpectrallyPeriodic} records the source assumptions on a basis block:
+irreducibility, spectral radius one, positive period, and the prescribed
+roots-of-unity peripheral spectrum.  The declaration
+\path{IsSpectrallyPeriodic.exists_isPeriodic_tpGauge} applies the positive
+adjoint Perron eigenmatrix to obtain a left-canonical periodic block by pure
+similarity, exactly as in
+\cite[lines~313--332]{DeLasCuevas2017Irreducible}.  The Perron eigenvalue is
+forced to equal one, so no scalar rescales the block.  The peripheral spectrum
+is preserved by similarity.  Thus this normalization leaves every
+matrix-product vector unchanged and introduces no extra power into the
+multiplicity coefficients.
+
+\textbf{Remaining sectorwise transport restriction.} The normalized overlap
+theorem still takes a literal sector decomposition whose basis blocks already
+satisfy \path{IsPeriodic}.  The formal development does not yet replace every
+basis block by its Perron representative inside a new sector decomposition,
+assemble the individual similarities into a block-diagonal gauge, or transport
+the overlap hypothesis back to the original basis.  Applying the theorem to an
+arbitrary original tensor through a lower-dimensional representative also
+requires a positive-length transport statement of the kind allowed at
+lines~266--271.
 
 The declarations \leanid{fundamentalTheorem_periodic_proportional} and
 \leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} begin after
@@ -356,20 +366,17 @@ this step: they accept the periodic-overlap hypothesis, or its non-decaying
 partner fields, as premises and prove the resulting finite block matching.
 Together with the new normalized overlap theorem they give the block matching for
 literal normalized irreducible forms.  The source theorem itself remains
-unformalized until the preceding normalization and transport step is proved;
+unformalized until the preceding sectorwise transport step is proved;
 the exact source-labelled blueprint statement must therefore remain
 \emph{not ready}.
 
-\textbf{Elimination plan.} Introduce the source predicate consisting of
-irreducibility, spectral radius one, positive period, and the prescribed
-peripheral spectrum.  Extract the pure Perron similarity argument from the
-existing primitive special case, apply it to every basis block without scalar
-rescaling, and assemble the block gauges while leaving all multiplicity
-entries unchanged.  Prove invariance of proportional positive-length MPVs,
-overlap decay, pairwise non-repetition, and the final repeated-block relation
-under these similarities.  A separate positive-length representative
+\textbf{Elimination plan.} Apply the pure Perron normalization to every basis
+block and assemble the block gauges while leaving all multiplicity entries
+unchanged.  Prove invariance of proportional positive-length MPVs, overlap
+decay, pairwise non-repetition, and the final repeated-block relation under
+these similarities.  A separate positive-length representative
 transport then covers the source-allowed lower-dimensional representative.
-The mixed-overlap and normalization work remains tracked by
+The remaining sectorwise transport work is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the subsequent
 multiplicity-power extraction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.

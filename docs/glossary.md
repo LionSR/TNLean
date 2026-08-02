@@ -79,6 +79,38 @@ is deliberately source-faithful.
   eventual block injectivity does not recover spectral-radius-one normalization
   or peripheral-spectrum data. Do not treat the predicates as aliases.
 
+## Periodic irreducible blocks
+
+### `MPSTensor.IsSpectrallyPeriodic`
+
+- **Declaration:**
+  `MPSTensor.IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/Periodic/Defs.lean`.
+- **Meaning:** the transfer map is irreducible, has spectral radius one, and has
+  unit-circle eigenvalues exactly the `m`-th roots of unity, with `m > 0`.
+  No trace-preserving normalization is assumed.
+- **Source:** de las Cuevas--Cirac--Schuch--Pérez-García, arXiv:1708.00029,
+  lines 248--261.
+- **Sanctioned bridge:**
+  `MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge` in
+  `TNLean/MPS/Periodic/Normalization.lean` gives a pure-similarity
+  trace-preserving representative.
+- **Caveat:** general invertible similarities do not preserve
+  left-canonicality. The bridge is therefore one-way into `IsPeriodic`, not an
+  equivalence between the two predicates.
+
+### `MPSTensor.IsPeriodic`
+
+- **Declaration:** `MPSTensor.IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop`.
+- **Defined in:** `TNLean/MPS/Periodic/Defs.lean`.
+- **Meaning:** the tensor is irreducible and left-canonical, `m > 0`, and the
+  peripheral eigenvalues are exactly the `m`-th roots of unity.
+- **Source:** the trace-preserving form obtained in arXiv:1708.00029,
+  lines 313--332.
+- **Caveat:** this predicate is the normalized input to the periodic overlap
+  theory. It must not be substituted for the unnormalized source assumptions
+  without applying the pure Perron normalization theorem.
+
 ## Primitivity
 
 The unqualified canonical predicate is the generic transfer-map predicate

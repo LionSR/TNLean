@@ -121,16 +121,11 @@ endomorphism algebra, is subsingleton. The transfer operator is therefore zero
 and has spectral radius zero, contradicting the spectral-radius-one clause in
 arXiv:1606.00608, lines 233--235. -/
 theorem IsNormalTensor.bondDim_ne_zero {A : MPSTensor d D} (h : IsNormalTensor A) :
-    D ≠ 0 := by
-  intro hD
-  subst D
-  have hMap :
-      ((Module.End.toContinuousLinearMap (Matrix (Fin 0) (Fin 0) ℂ))
-        (transferMap (d := d) (D := 0) A)) = 0 :=
-    Subsingleton.elim _ _
-  have hspectral := h.spectral_radius_one
-  rw [hMap, spectrum.spectralRadius_zero] at hspectral
-  exact zero_ne_one hspectral
+    D ≠ 0 :=
+  matrix_dim_ne_zero_of_spectralRadius_eq_one
+    ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+      (transferMap (d := d) (D := D) A))
+    h.spectral_radius_one
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/

@@ -12,7 +12,9 @@ matching between normal blocks.
     Every normal tensor has positive bond dimension.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
+    \uses{lem:spectral_radius_one_matrix_dim_pos}
+    \leanok
     If the bond dimension were zero, the bond-matrix space and its endomorphism
     algebra would each contain only zero. The transfer operator would therefore
     have spectral radius zero, contradicting the spectral-radius-one clause in
