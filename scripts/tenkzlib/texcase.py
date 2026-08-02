@@ -129,7 +129,9 @@ def _find_env_end(
     source: str, name: str, position: int
 ) -> re.Match[str] | None:
     """Find the depth-matched closing token for a tenkz environment."""
-    token_pattern = re.compile(r"\\(begin|end)\{" + re.escape(name) + r"\}")
+    token_pattern = re.compile(
+        r"\\(begin|end)\s*\{" + re.escape(name) + r"\}"
+    )
     depth = 1
     for token in token_pattern.finditer(source, position):
         depth += 1 if token.group(1) == "begin" else -1
@@ -139,10 +141,16 @@ def _find_env_end(
 
 
 def scan_constructs(source: str) -> list[Construct]:
-    """Return picture-producing constructs in source order."""
+    """Return picture-producing constructs in source order.
+
+    Comments are blanked internally so offsets remain coordinates in the input
+    while TeX-legal comment and whitespace splices around environment groups
+    are recognized consistently by every caller.
+    """
+    source = strip_comments(source)
     constructs: list[Construct] = []
     environment_pattern = re.compile(
-        r"\\begin\{(tenkz(?:cd|lattice|free|planes)?)\}"
+        r"\\begin\s*\{(tenkz(?:cd|lattice|free|planes)?)\}"
     )
     for match in environment_pattern.finditer(source):
         name = match.group(1)

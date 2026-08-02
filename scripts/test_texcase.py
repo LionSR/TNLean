@@ -59,6 +59,17 @@ def main() -> int:
         )
         assert construct.line == source.count("\n", 0, construct.start) + 1
 
+    spliced_source = (
+        "\\begin {tenkzfree}\\tn{}\\end {tenkzfree}\n"
+        "\\begin% legal control-word splice\n"
+        "{tenkzfree}\\tn{}\\end% matching closing splice\n"
+        "{tenkzfree}\n"
+    )
+    spliced = scan_constructs(spliced_source)
+    assert [construct.name for construct in spliced] == ["tenkzfree", "tenkzfree"]
+    assert [construct.line for construct in spliced] == [1, 2]
+    assert all("\\tn{}" in construct.body for construct in spliced)
+
     bodies = scan_bodies(stripped)
     assert [(body.name, body.start, body.text) for body in bodies] == [
         (construct.name, construct.body_start, construct.body)

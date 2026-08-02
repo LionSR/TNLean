@@ -10,14 +10,17 @@ from pathlib import Path, PurePosixPath
 from typing import Iterable, Mapping
 
 from tenkzlib.dimensions import (
+    DIMENSION_COMMAND_OWNERS,
+    DIMENSION_OPTION_OWNERS,
     DIMENSION_RE,
     DimensionOwner,
+    DimensionOwnerSite,
     DimensionReport,
     collect_dimension_report,
     scan_case_dimension_sites,
     validate_dimension_report,
 )
-from tenkzlib.texcase import scan_constructs, strip_comments
+from tenkzlib.texcase import scan_constructs
 
 
 DIMENSION_INVENTORY_SCHEMA_VERSION = 2
@@ -30,10 +33,22 @@ _ACTIVE_OWNERS = {
     DimensionOwner.LAYOUT,
 }
 _SITE_KEY_RE = re.compile(
-    r"(?:tenkz|tenkzcd|tenkzfree|tenkzlattice|tenkzplanes|tnpic)"
-    r"@[1-9][0-9]*/(?:command|option):.+"
+    r"(?P<construct>tenkz|tenkzcd|tenkzfree|tenkzlattice|tenkzplanes|tnpic)"
+    r"@(?P<construct_ordinal>[1-9][0-9]*)/"
+    r"(?P<kind>command|option):(?P<skeleton>.+)"
 )
 _DUPLICATE_SUFFIX_RE = re.compile(r"^(.*)#occurrence=([1-9][0-9]*)$")
+_COMMAND_SITE_RE = re.compile(
+    r"\\(?P<command>" + "|".join(DIMENSION_COMMAND_OWNERS) + r")"
+    r"(?P<star>\*)?(?=[\[{])"
+)
+_OPTION_SITE_OWNERS = {
+    re.sub(r"\s+", "", key): owner
+    for key, owner in DIMENSION_OPTION_OWNERS.items()
+}
+_OPTION_SITE_RE = re.compile(
+    r"(?P<option>" + "|".join(_OPTION_SITE_OWNERS) + r")="
+)
 
 
 class DimensionInventoryError(ValueError):
@@ -94,13 +109,12 @@ def _case_inventory(path: Path, source: str) -> DimensionInventoryCase | None:
     owner_sites = scan_case_dimension_sites(path, source)
     if not owner_sites:
         return None
-    constructs = scan_constructs(strip_comments(source))
-    labelled_constructs = tuple(enumerate(constructs, 1))
-    base_rows: list[tuple[str, DimensionOwner, tuple[str, ...], int]] = []
+    constructs = scan_constructs(source)
+    assigned: list[tuple[DimensionOwnerSite, int]] = []
     for owner_site in owner_sites:
         candidates = [
-            (ordinal, construct)
-            for ordinal, construct in labelled_constructs
+            (index, construct)
+            for index, construct in enumerate(constructs)
             if construct.start <= owner_site.offset < construct.end
         ]
         if not candidates:
@@ -108,9 +122,29 @@ def _case_inventory(path: Path, source: str) -> DimensionInventoryCase | None:
                 f"{path.as_posix()}:{owner_site.line}: dimension owner site is "
                 "outside a tenkz environment"
             )
-        ordinal, construct = min(
-            candidates, key=lambda item: item[1].end - item[1].start
+        construct_index, _construct = min(
+            candidates,
+            key=lambda item: (
+                item[1].end - item[1].start,
+                -item[1].start,
+                item[0],
+            ),
         )
+        assigned.append((owner_site, construct_index))
+
+    dimension_bearing = {construct_index for _site, construct_index in assigned}
+    ordinal_by_index: dict[int, int] = {}
+    per_kind_counts: Counter[str] = Counter()
+    for index, construct in enumerate(constructs):
+        if index not in dimension_bearing:
+            continue
+        per_kind_counts[construct.name] += 1
+        ordinal_by_index[index] = per_kind_counts[construct.name]
+
+    base_rows: list[tuple[str, DimensionOwner, tuple[str, ...], int]] = []
+    for owner_site, construct_index in assigned:
+        construct = constructs[construct_index]
+        ordinal = ordinal_by_index[construct_index]
         skeleton = _site_skeleton(owner_site.source)
         if not skeleton:
             raise DimensionInventoryError(
@@ -142,7 +176,7 @@ def build_dimension_inventory_from_sources(
     canonical_sources: list[tuple[Path, str]] = []
     seen: set[Path] = set()
     for path, source in sources.items():
-        canonical = _canonical_case_path(path.as_posix(), "source path")
+        canonical = _canonical_inventory_case_path(path.as_posix(), "source path")
         if canonical in seen:
             raise DimensionInventoryError(
                 f"duplicate dimension source path: {canonical.as_posix()}"
@@ -176,7 +210,9 @@ def collect_dimension_inventory(
         )
     sources: dict[Path, str] = {}
     for path in paths:
-        canonical = _canonical_case_path(path.as_posix(), "manifest case path")
+        canonical = _canonical_inventory_case_path(
+            path.as_posix(), "manifest case path"
+        )
         try:
             sources[canonical] = (repo / canonical).read_text(encoding="utf-8")
         except (OSError, UnicodeError) as exc:
@@ -202,6 +238,21 @@ def _canonical_case_path(raw: str, field_name: str) -> Path:
     return Path(*pure.parts)
 
 
+def _canonical_inventory_case_path(raw: str, field_name: str) -> Path:
+    """Require the manifest's stable RMP case-root shape in stored rows."""
+    path = _canonical_case_path(raw, field_name)
+    parts = path.parts
+    if (
+        len(parts) != 6
+        or parts[:3] != ("tests", "tenkz", "rmp")
+        or parts[-2] != "cases"
+    ):
+        raise DimensionInventoryError(
+            f"{field_name} must be under tests/tenkz/rmp/<section>/cases/: {raw!r}"
+        )
+    return path
+
+
 def _unique_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
     result: dict[str, object] = {}
     for key, value in pairs:
@@ -223,6 +274,52 @@ def _exact_fields(
             f"found {', '.join(sorted(actual)) or 'none'}"
         )
     return value
+
+
+def _site_contract(
+    site_name: object, where: str
+) -> tuple[DimensionOwner, str, int]:
+    """Validate a site key and return its owner, construct kind, and ordinal."""
+    if not isinstance(site_name, str) or any(
+        character.isspace() for character in site_name
+    ):
+        raise DimensionInventoryError(
+            f"{where}.site must be a normalized semantic site key"
+        )
+    duplicate = _DUPLICATE_SUFFIX_RE.fullmatch(site_name)
+    base = duplicate.group(1) if duplicate is not None else site_name
+    match = _SITE_KEY_RE.fullmatch(base)
+    if match is None:
+        raise DimensionInventoryError(
+            f"{where}.site must be a normalized semantic site key"
+        )
+    skeleton = match.group("skeleton")
+    if (
+        "<dimension>" not in skeleton
+        or "#occurrence=" in skeleton
+        or DIMENSION_RE.search(skeleton) is not None
+    ):
+        raise DimensionInventoryError(
+            f"{where}.site must contain only normalized dimension placeholders"
+        )
+    if match.group("kind") == "command":
+        command = _COMMAND_SITE_RE.match(skeleton)
+        if command is None or (
+            command.group("star") is not None
+            and command.group("command") != "tnarrow"
+        ):
+            raise DimensionInventoryError(
+                f"{where}.site command skeleton is not a dimension owner"
+            )
+        owner = DIMENSION_COMMAND_OWNERS[command.group("command")]
+    else:
+        option = _OPTION_SITE_RE.match(skeleton)
+        if option is None:
+            raise DimensionInventoryError(
+                f"{where}.site option skeleton is not a dimension owner"
+            )
+        owner = _OPTION_SITE_OWNERS[option.group("option")]
+    return owner, match.group("construct"), int(match.group("construct_ordinal"))
 
 
 def _validate_duplicate_ordinals(
@@ -282,25 +379,27 @@ def parse_dimension_inventory(
 
     cases: list[DimensionInventoryCase] = []
     for raw_path, raw_sites in raw_cases.items():
-        path = _canonical_case_path(raw_path, f"{source_name}.cases path")
+        path = _canonical_inventory_case_path(
+            raw_path, f"{source_name}.cases path"
+        )
         if not isinstance(raw_sites, list) or not raw_sites:
             raise DimensionInventoryError(
                 f"{source_name}.cases[{raw_path!r}] must be a nonempty array"
             )
         sites: list[DimensionInventorySite] = []
         site_names: set[str] = set()
+        construct_ordinals: dict[str, set[int]] = {}
         for index, raw_site in enumerate(raw_sites, 1):
             where = f"{source_name}.cases[{raw_path!r}][{index}]"
             fields = _exact_fields(raw_site, _SITE_FIELDS, where)
             site_name = fields["site"]
-            if (
-                not isinstance(site_name, str)
-                or _SITE_KEY_RE.fullmatch(site_name) is None
-                or any(character.isspace() for character in site_name)
-            ):
-                raise DimensionInventoryError(
-                    f"{where}.site must be a normalized semantic site key"
-                )
+            expected_owner, construct_name, construct_ordinal = _site_contract(
+                site_name, where
+            )
+            assert isinstance(site_name, str)
+            construct_ordinals.setdefault(construct_name, set()).add(
+                construct_ordinal
+            )
             if site_name in site_names:
                 raise DimensionInventoryError(f"{where}.site duplicates {site_name!r}")
             site_names.add(site_name)
@@ -314,6 +413,11 @@ def parse_dimension_inventory(
             if owner not in _ACTIVE_OWNERS:
                 raise DimensionInventoryError(
                     f"{where}.owner must describe an active case dimension"
+                )
+            if owner is not expected_owner:
+                raise DimensionInventoryError(
+                    f"{where}.owner must match the owner implied by its site command "
+                    f"or option: expected {expected_owner.value!r}, found {owner.value!r}"
                 )
             raw_literals = fields["literals"]
             if not isinstance(raw_literals, list) or not raw_literals:
@@ -334,6 +438,13 @@ def parse_dimension_inventory(
                 literals.append(literal)
             sites.append(DimensionInventorySite(site_name, owner, tuple(literals)))
         case_sites = tuple(sites)
+        for construct_name, ordinals in construct_ordinals.items():
+            expected_ordinals = set(range(1, max(ordinals) + 1))
+            if ordinals != expected_ordinals:
+                raise DimensionInventoryError(
+                    f"{path.as_posix()}: {construct_name} construct ordinals must be "
+                    f"contiguous from 1 through {max(ordinals)}"
+                )
         _validate_duplicate_ordinals(path, case_sites)
         cases.append(DimensionInventoryCase(path, case_sites))
     return DimensionInventory(tuple(cases))

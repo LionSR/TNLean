@@ -51,8 +51,8 @@ metric, projection/frame, route/string, or composition/layout and ratcheted in
 fixed benchmark-book page-layout files have exact path-specific counts and do
 not count as figure geometry.  These core ceilings are aggregate ratchets:
 net reductions pass and uncompensated count increases fail.  Exact balanced
-replacement and ownership-site moves are the per-occurrence gate supplied by
-#5378; until that lands, they require manual review.
+replacements and ownership-site moves are rejected by the exact per-occurrence
+inventory described below.
 
 The comparison command requires a separate author-source tree supplied through
 `--source-root`.  The canonical local home is the gitignored
@@ -521,11 +521,13 @@ The RMP driver applies two dimension checks before compiling any target.  The
 aggregate ownership ratchets reject increases, unowned or commented case
 dimensions, and benchmark-book allowlist drift.  The version-2 inventory in
 `tests/tenkz/rmp/dimension-ownership.json` additionally freezes every active
-literal at its semantic owner site.  Its per-case rows use the containing
-environment ordinal and a whitespace- and comment-independent command or
-option skeleton.  Only repeated identical skeletons receive a local
-occurrence number.  This catches a balanced replacement or cross-site move
-that leaves all aggregate counts unchanged.
+literal at its semantic owner site.  Its per-case rows use the ordinal among
+dimension-bearing constructs of the same kind and a whitespace- and
+comment-independent command or option skeleton.  A preceding dimension-free
+environment or `\tnpic` therefore cannot renumber a site.  Only repeated
+identical skeletons receive a local occurrence number.  This catches a
+balanced replacement or cross-site move that leaves all aggregate counts
+unchanged.
 
 After an intentional, reviewed migration, update that exact inventory with:
 
