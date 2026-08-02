@@ -209,16 +209,16 @@ machine-readable verdict.
 ## Compatibility policy and 1.0 soak
 
 `DESIGN.md` owns package and event-stream compatibility. `SOAK-1.0.md` is an
-append-only ledger: never edit or insert before its final marker. Validate the
-policy, entry grammar, and immutable prefix with:
-
-```sh
-python3 scripts/test_check_tenkz_policy.py
-python3 scripts/check_tenkz_policy.py --base-ref origin/main
-```
+inactive ledger while its normative block says `enforcement = "pending"`.
+During that state, no soak entry is valid and reviewed follow-up PRs may still
+correct the prefix. The activation slice under #5352 will add the validation
+commands here only after their scripts, repository-evidence checks, tests, and
+CI wiring exist on `main`. It then changes both normative enforcement fields to
+`active`, fixes the ledger prefix, and permits only appended entry blocks.
 
 The first actual soak entry waits until the blocker chain recorded in the
-policy has closed. Running these checks does not start the clock.
+policy has closed. Reading or editing these policy documents does not start the
+clock.
 
 ## Shared parsers
 

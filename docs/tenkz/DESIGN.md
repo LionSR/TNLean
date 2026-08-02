@@ -7,15 +7,18 @@ implementation boundaries. The earlier file at `history/DESIGN.md` records the
 0.6 design campaign; it does not define the released contract.
 
 Adopting this policy neither changes the package version nor starts the 1.0
-soak. The clock starts only with a valid freeze entry appended to
-`SOAK-1.0.md` after every prerequisite below has closed.
+soak. Automated enforcement is pending under #5352, and no soak entry is valid
+until the policy, repository-evidence checks, and CI wiring are active. The
+clock starts only after every prerequisite below has closed and the frozen
+source has reached `main` through a qualifying pull request.
 
-The following block is normative and machine checked by
-`scripts/check_tenkz_policy.py`.
+The following block is normative. A later #5352 slice activates its
+machine-checking contract.
 
 ```toml tenkz-policy-v1
 [policy]
 schema = 1
+enforcement = "pending"
 tag_namespace = "tenkz-v*"
 repository_tag_namespace = "v*"
 freeze_tag_pattern = "tenkz-v0.9.PATCH"
@@ -24,13 +27,19 @@ soak_days = 28
 event_format_implementation = "pending"
 event_format_owners = ["#4162", "#4703"]
 soak_blocker_chain = [["#5086", "#4699", "#4162"], ["#4703", "#4708", "#4163"]]
-deprecation_removal = "next-major"
+deprecation_removal = "not-before-next-major"
 tombstone_reuse = false
-frozen_twin_scope = "library-or-package-entry-point"
+frozen_twin_scope = "library-entry-point-in-same-package"
 frozen_twin_lifetime = "permanent"
 frozen_twin_precedent = "quantikz/quantikz2"
 maintainer_identity = "github:lionsr"
 signer_identity_scheme = "github:lowercase-login"
+
+[event_format]
+reader_accepts = "same-major-any-minor"
+unknown_optional_fields = "ignore"
+unknown_event_kinds = "explicitly-ignorable-only"
+non_ignorable_change = "major"
 
 [compatibility.patch]
 tex_api = "backward-compatible-fix"
@@ -50,6 +59,12 @@ tnlog = "breaking-versioned"
 tenkz has two public surfaces. A release decision names both; compatibility on
 one cannot excuse a break in the other.
 
+These classifications govern the 0.9 release candidate from its valid freeze
+through the 1.0 soak, and every release beginning with 1.0. They do not freeze
+the current v0.7 transitional surface. Before the freeze, the v0.7-to-v0.9
+migration remains governed by `LANGUAGE-1.0.md`, the shrink ledger, and the
+ordered prerequisite issues below.
+
 ### TeX surface
 
 The TeX surface consists of the documented environments, commands, keys,
@@ -67,24 +82,29 @@ and successful compilation of documented valid input are promised.
 
 ### Event surface
 
-Every `.tnlog` is a side contract for audit tools. Its event kinds, field
-names, field meanings, required and forbidden fields, ordering rules,
-escaping, and picture ownership are public. `scripts/tenkzlib/tnlog.py` owns
-the canonical reader; event emitters own the writer; the golden-event ledger
-guards byte stability but is not a substitute for a schema.
+At the 0.9 freeze, every `.tnlog` becomes a side contract for audit tools. Its
+event kinds, field names, field meanings, required and forbidden fields,
+ordering rules, escaping, and picture ownership are public.
+`scripts/tenkzlib/tnlog.py` owns the canonical reader; event emitters own the
+writer; the golden-event ledger guards byte stability but is not a substitute
+for a schema.
 
 Before the 0.9 freeze, every stream must carry one explicit machine-readable
 event-format version. The format has its own `major.minor` number. Writers emit
-one declared version. Readers accept every supported minor revision of their
-current event major and reject an unsupported major with a direct diagnostic.
-The exact header spelling and its implementation remain owned by #4162 and
-#4703. This policy does not implement or pre-empt that change.
+one declared version. A reader accepts every minor revision of its event major
+and rejects a different major with a direct diagnostic. It ignores unknown
+optional fields. It ignores an unknown event kind only when the event schema
+marks that kind explicitly ignorable and skipping it preserves the validity
+and meaning of every recognized record. Any addition that cannot meet those
+conditions increments the event major. The exact header and ignorable-kind
+spellings and their implementation remain owned by #4162 and #4703. This
+policy does not implement or pre-empt that change.
 
 Package and event versions move together when the event surface moves:
 
 - a package patch leaves event bytes and meaning unchanged;
 - an additive event change increments the event minor and requires at least a
-  package minor;
+  package minor; readers of the same event major continue to accept it;
 - a removed field, renamed kind, changed meaning, incompatible ordering, or
   incompatible escaping increments the event major and requires a package
   major;
@@ -126,10 +146,11 @@ major release never reuses a dead spelling for a new meaning.
 
 ## Deprecations, tombstones, and frozen twins
 
-A deprecation starts in a minor release. It names one replacement, the first
+A deprecation starts in a minor release. It names one replacement, the earliest
 major release allowed to remove it, and tests proving that the old spelling
-still has its promised behavior. A warning cannot become a compilation error
-inside the same major series.
+still has its promised behavior. Removal at that major is permitted, not
+mandatory. A warning cannot become a compilation error inside the same major
+series.
 
 When removal occurs, the dead spelling becomes a tombstone. The linter and
 parser reject it with its migration. Tombstones are permanent and their names
@@ -137,40 +158,47 @@ are never recycled, including at a later major release. Pre-1.0 aliases and
 their milestone sunsets remain governed by `LANGUAGE-1.0.md` and the shrink
 ledger; they must be resolved before the freeze.
 
-The frozen-twin escape hatch is a permanent library- or package-entry-point
-split. The owner-approved model is `quantikz` 0.9.8 frozen beside `quantikz2`
-under a new library name in the same package. When a successor cannot preserve
-the released surface, the old entry point remains installable with byte-tested
-TeX and `.tnlog` behavior, while the new language ships beside it under a
-distinct library or package entry point. The old surface receives no new
-features and is never removed by the successor's next major release. The
-release issue must cite the incompatibility, test both surfaces, and publish
-both manuals and tag lines. A per-command alias, a spelling-level twin removed
-at the next major, a compatibility switch, or a silent semantic change is not
-the frozen-twin escape hatch. This policy defines the ownership decision; it
-does not create the successor entry point.
+The frozen-twin escape hatch is a permanent library-entry-point split inside
+one package. The owner-approved model is `quantikz` 0.9.8 frozen beside
+`quantikz2` under a new library name in the same package. When a successor
+cannot preserve the released surface, the old library entry point remains
+installable with byte-tested TeX and `.tnlog` behavior, while the new language
+ships beside it under a distinct library entry point in that package. The old
+surface receives no new features and is never removed by the successor's next
+major release. The release issue must cite the incompatibility, test both
+surfaces, and publish separate manuals and release-tag histories. A separate
+package, a per-command alias, a spelling-level twin removed at the next major,
+a compatibility switch, or a silent semantic change is not the frozen-twin
+escape hatch. This policy defines the ownership decision; it does not create
+the successor entry point.
 
 ## Release tags
 
 Package tags use `tenkz-vMAJOR.MINOR.PATCH`. Repository tags named
 `vMAJOR.MINOR.PATCH` belong to the Lean toolchain and are a distinct
-namespace. A package tag is annotated and points to a commit whose
-`\ProvidesPackage` version and date, manual, change record, event-format
-declaration, and compatibility tests agree. A moved or reused release tag is
+namespace. `PATCH` is a non-negative decimal integer. A package tag is
+annotated and points to a commit at which the `\ProvidesPackage` version and
+date, manual version, change record, event-format declaration, and
+compatibility tests all agree with the tag. A moved or reused release tag is
 invalid.
 
-The soak freeze tag is specifically `tenkz-v0.9.PATCH`. Create and push that
-annotated tag on the frozen source commit before appending the first ledger
-entry. The entry records the tag object's SHA, its peeled commit SHA, and the
-tagger timestamp normalized to UTC; the validator checks all three and rejects
-a lightweight, moved, replaced, future-dated, or backdated tag. The ledger
-therefore lives in a later commit and does not ask a tag to contain the entry
-that records it.
+The soak freeze tag matches `tenkz-v0.9.PATCH`. First merge the frozen source
+through one pull request to `main`; its GitHub `mergedAt` time is the trusted
+clock anchor and its merge commit is the frozen source commit. Then create and
+push the annotated tag on that commit before appending the ledger entry. The
+entry records the pull request, its `mergedAt` time and merge SHA, the tag-object
+SHA, the peeled commit SHA, and the tagger timestamp normalized to UTC. The
+validator checks their agreement and rejects a lightweight, moved, replaced,
+mismatched, or future-dated tag. The tagger timestamp identifies the tag
+object; it is not wall-clock evidence. The ledger therefore lives in a later
+commit and does not ask a tag to contain the entry that records it.
 
 The final `tenkz-v1.0.0` annotated tag is created only after the sign-off entry
-has landed on `main`. It points to the sign-off-containing commit. Sign-off
-records the intended release tag but cannot require that tag to exist yet;
-requiring it earlier would make the ledger and tag circular.
+has landed on `main`. The sign-off-containing commit already carries the 1.0
+`\ProvidesPackage` metadata, manual version, change record, event-format
+declaration, and compatibility tests. The final tag points to that commit.
+Sign-off records the intended release tag but cannot require that tag to exist
+yet; requiring it earlier would make the ledger and tag circular.
 
 ## The 1.0 freeze and soak
 
@@ -178,29 +206,39 @@ The dependency chain is ordered:
 
 1. close #5086, #4699, and #4162 for 0.8;
 2. close #4703, #4708, and #4163 for the 0.9 contract freeze;
-3. create and push an annotated `tenkz-v0.9.PATCH` tag on the frozen source
-   commit;
-4. append its tag-object SHA, peeled commit SHA, tagger UTC timestamp, and
-   closure evidence to `SOAK-1.0.md` in a later commit;
-5. expose that exact frozen surface to 28 consecutive calendar days of normal
+3. merge the frozen source through a qualifying pull request to `main`, then
+   create and push an annotated `tenkz-v0.9.PATCH` tag on its merge commit;
+4. append the pull request, its `mergedAt` time and merge SHA, the tag-object
+   SHA, peeled commit SHA, tagger UTC timestamp, and closure evidence to
+   `SOAK-1.0.md` in a later commit;
+5. expose that frozen documented contract to 28 elapsed days of normal
    blueprint work on `main`;
 6. land sign-off, then create `tenkz-v1.0.0` on the sign-off-containing commit.
 
-Ordinary-work evidence is recorded at least once in each seven-day window. An
-entry records an immutable commit SHA reachable from `main`, its verified
-committer timestamp in UTC, and the blueprint or benchmark work it performed.
-Synthetic tests and unmerged branches do not qualify. Interface friction is
-appended when it is found and triaged as `fix-compatible`, `defer-to-2.0`, or
-`breaking-required`. A breaking need appends an immediate reset and ends that
-attempt; a fresh freeze entry starts attempt number one higher. Compatible
-fixes retain the clock only when both public surfaces remain compatible under
-the rules above. A fresh attempt uses a new annotated tag name, tag object, and
-peeled post-fix commit descending from the prior freeze; none may be reused.
+Let `T` be GitHub's verified `mergedAt` timestamp for the active freeze pull
+request. Window `i` is the half-open UTC interval
+`[T + 7i days, T + 7(i+1) days)` for `i = 0, 1, 2, 3`; work merged exactly on a
+boundary belongs to the later window. Ordinary-work evidence names at least
+one pull request in each window. The validator checks that GitHub reports the
+pull request merged to `main` in that interval, that its recorded merge SHA is
+reachable from `main`, and that the SHA is a strict descendant of and distinct
+from the freeze SHA. The work must perform normal blueprint or benchmark work.
+The freeze pull request, ledger-only and policy-only changes, synthetic
+exercises, unmerged branches, and invented evidence do not qualify.
 
-Release sign-off is computed against current UTC and the verified Git objects,
-not self-declared ledger dates. It requires the latest tagger timestamp to be
-at least 28 days old, one reachable normal-work commit in each of the first
-four weekly windows, no unresolved fix-compatible friction, no
-breaking-required friction in the active attempt, and normalized explicit
+Interface friction is appended when it is found and triaged as
+`fix-compatible`, `defer-to-2.0`, or `breaking-required`. A breaking need
+appends an immediate reset and ends that attempt; a fresh freeze entry starts
+attempt number one higher. Compatible fixes retain the clock only when both
+public surfaces remain compatible under the rules above. A fresh attempt uses
+a strictly larger non-negative `PATCH`, a new qualifying pull request and merge
+SHA that is a strict descendant of the prior freeze, and a new annotated tag
+name and object. None may be reused.
+
+Release sign-off is computed against current UTC and verified GitHub merge
+metadata, not self-declared Git tagger, committer, or ledger dates. It requires
+current UTC to be at least `T + 28 days`, one qualifying normal-work pull
+request in each of the four intervals, no unresolved fix-compatible friction,
+no breaking-required friction in the active attempt, and normalized explicit
 identities for `github:lionsr` and one distinct independent reviewer. The
 append-only entry grammar and reset rules live in `SOAK-1.0.md`.

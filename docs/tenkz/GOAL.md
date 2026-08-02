@@ -55,7 +55,8 @@ lives beside it and always in the `%` comments.
 
 - `docs/tenkz/LANGUAGE.md` — the public mental model and semantic rules.
 - `docs/tenkz/DESIGN.md` — compatibility, version, release-tag, and soak
-  policy; `SOAK-1.0.md` is its append-only release ledger.
+  policy; `SOAK-1.0.md` is its inactive release ledger until enforcement
+  activates.
 - `tex/tenkz/tenkz-language-registry.tex` — the executable vocabulary.
 - `docs/tenkz/manual2.tex` + `chapters2/` — the compact citable manual and
   generated canonical reference.
