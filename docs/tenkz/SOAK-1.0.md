@@ -422,14 +422,20 @@ Required additional fields:
 
 `prerequisites` is the pinned `docs/tenkz/DESIGN.md` policy's `soak_blocker_chain`
 flattened row by row. This file owns no second prerequisite list. `PATCH`
-matches the canonical grammar `0|[1-9][0-9]*`. The resolver completely paginates the current Git
-tag namespace, parses every name matching `tenkz-v0.9.PATCH`, and requires this
-patch to be strictly larger than every matching tag other than this entry's
-exact `freeze_tag`, and every earlier freeze entry's patch. Annotated and
-lightweight refs both contribute their names to this maximum; a wrong tag kind
-still fails its separate validation. Thus an
-abandoned tag with no ledger entry cannot be skipped or followed by a smaller
-patch.
+matches the canonical grammar `0|[1-9][0-9]*`. Candidate validation completely
+paginates the current Git tag namespace, parses every name matching
+`tenkz-v0.9.PATCH`, and requires this patch to be strictly larger than every
+matching tag other than this entry's exact `freeze_tag`, and every earlier
+freeze entry's patch. Annotated and lightweight refs both contribute their names
+to this prospective maximum; a wrong tag kind still fails its separate check.
+Thus an abandoned tag with no ledger entry cannot be skipped or followed by a
+smaller patch.
+
+Historical replay does not compare an earlier freeze with tags created after
+that entry. It requires the successful exact-head candidate check bound to the
+pinned workflow bytes, rechecks that freeze's patch against earlier freeze
+entries, and revalidates its exact protected annotated tag object and peel. A
+later attempt's higher tag therefore cannot make an earlier freeze raw-invalid.
 
 Before the entry is proposed, let `H_S = source_pr.headRefOid`. GitHub must
 report `source_pr` merged to `main` with non-null author, `H_S`, `mergedAt`, and
