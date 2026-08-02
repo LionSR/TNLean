@@ -371,6 +371,28 @@ def test_rmp_dimension_ownership() -> None:
             "an active command after an escaped backslash lost ownership: "
             f"{active_after_escape_units!r}"
         )
+    label_option_text = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tnput{x}{(0,0)}{pitch=1mm, row vector={2mm,3mm}}",
+    )
+    if len(label_option_text) != 3 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in label_option_text
+    ):
+        raise AssertionError(
+            "option-like text inside a command label overrode its owner: "
+            f"{label_option_text!r}"
+        )
+    setting_option = scan_case_dimensions(
+        Path("synthetic.tex"), r"\tnset{physical=up, pitch=4mm}"
+    )
+    if (
+        len(setting_option) != 1
+        or setting_option[0].owner is not DimensionOwner.METRIC
+    ):
+        raise AssertionError(
+            f"a tnset metric option lost ownership: {setting_option!r}"
+        )
     comment_spliced_source = """\\tnput{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix

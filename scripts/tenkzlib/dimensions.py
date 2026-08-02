@@ -118,10 +118,13 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
 }
 _COMMAND_RE = re.compile(r"\\(" + "|".join(_COMMAND_GRAMMARS) + r")\b")
 _OPTION_OWNER_RE = re.compile(
-    r"(?<![A-Za-z0-9_])"
-    r"(?P<key>sheet\s+vector|row\s+vector|col\s+vector|pitch)\s*=",
+    r"\s*(?P<key>sheet\s+vector|row\s+vector|col\s+vector|pitch)\s*=",
     flags=re.IGNORECASE,
 )
+_OPTION_ENVIRONMENT_RE = re.compile(
+    r"\\begin\s*\{\s*tenkz(?:cd|eq|free|lattice|planes)?\s*\}"
+)
+_OPTION_COMMAND_RE = re.compile(r"\\tnset\b")
 _FRAME_KEYS = {"sheet vector", "row vector", "col vector"}
 
 
@@ -242,14 +245,60 @@ def _option_value_end(source: str, position: int) -> int:
     return index
 
 
-def _option_spans(source: str) -> list[_OwnerSpan]:
+def _option_group_spans(
+    source: str, start: int, end: int
+) -> list[_OwnerSpan]:
     spans: list[_OwnerSpan] = []
-    for option in _OPTION_OWNER_RE.finditer(source):
+    segment_start = start
+    depths = {"{": 0, "[": 0, "(": 0}
+    closing = {"}": "{", "]": "[", ")": "("}
+    segments: list[tuple[int, int]] = []
+    index = start
+    while index < end:
+        character = source[index]
+        if character == "\\":
+            index += 2
+            continue
+        if character in depths:
+            depths[character] += 1
+        elif character in closing:
+            opener = closing[character]
+            depths[opener] = max(0, depths[opener] - 1)
+        elif character == "," and not any(depths.values()):
+            segments.append((segment_start, index))
+            segment_start = index + 1
+        index += 1
+    segments.append((segment_start, end))
+    for segment_start, segment_end in segments:
+        option = _OPTION_OWNER_RE.match(source, segment_start, segment_end)
+        if option is None:
+            continue
         key = re.sub(r"\s+", " ", option.group("key").lower())
         owner = (
             DimensionOwner.FRAME if key in _FRAME_KEYS else DimensionOwner.METRIC
         )
-        spans.append(_OwnerSpan(option.end(), _option_value_end(source, option.end()), owner))
+        value_end = min(segment_end, _option_value_end(source, option.end()))
+        spans.append(_OwnerSpan(option.end(), value_end, owner))
+    return spans
+
+
+def _option_spans(source: str) -> list[_OwnerSpan]:
+    spans: list[_OwnerSpan] = []
+    containers = (
+        (_OPTION_ENVIRONMENT_RE, "[", "]"),
+        (_OPTION_COMMAND_RE, "{", "}"),
+    )
+    for pattern, opener, closer in containers:
+        for container in pattern.finditer(source):
+            if not _is_control_word_start(source, container.start()):
+                continue
+            position = _skip_space(source, container.end())
+            if source[position : position + 1] != opener:
+                continue
+            closed = match_group(source, position, opener, closer)
+            if closed < 0:
+                continue
+            spans.extend(_option_group_spans(source, position + 1, closed - 1))
     return spans
 
 
