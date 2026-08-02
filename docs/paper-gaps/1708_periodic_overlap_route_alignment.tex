@@ -5,12 +5,12 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 
 \title{Proof-Route Alignment for the Periodic Overlap Dichotomy
   (de las Cuevas--Cirac--Schuch--P\'erez-Garc\'ia)}
 \author{}
-\date{2026-06-04}
+\date{2026-06-04; revised 2026-08-02}
 
 \begin{document}
 \maketitle
@@ -276,14 +276,86 @@ periodic vectors''.
 \textbf{\Lean{} statement.}\footnote{Formal declaration:
 \leanid{periodicBasis_eventuallyLinearlyIndependent} in \leanid{Dichotomy.lean};
 the matching blueprint entry is in
-\path{blueprint/src/chapter/ch22_periodic_ft.tex}.} Only the independence
-half is stated; the spanning clause is dropped. The basis condition is encoded
-directly as the pairwise non-repetition hypothesis \leanid{hNonrep} together with
+\path{blueprint/src/chapter/ch22_periodic_ft_overlap_sector_match_and_consequences.tex}.}
+Only the independence half is stated; the spanning clause is dropped. The
+basis condition is encoded directly as the pairwise non-repetition hypothesis
+\leanid{hNonrep} together with
 a common-period divisibility \leanid{hDiv}, rather than derived from a basis of
 periodic tensors, and the \emph{Lem1t} almost-orthonormal-implies-independent
 lemma is not used. Restoring the spanning clause and routing through
-\emph{Lem1t} is tracked under
-\href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}.
+\emph{Lem1t} was classified under
+\href{https://github.com/LionSR/TNLean/issues/81}{issue \#81}. The independence
+half is formalized; no unrestricted spanning assertion is presently attributed
+to the source consequence.
+
+\section{Scope restriction: weights, length, representation, and normalization}
+
+\textbf{Source.}\footnote{\cite{DeLasCuevas2017Irreducible}, equations
+\emph{bdnr} and \emph{Bbdnr}, lines 286--305 and 575--585; the normalization
+reduction, lines 313--332; and theorem \emph{thm:bd}, lines 613--632.} The
+irreducible forms used in the proportional Fundamental Theorem are
+\begin{align}
+  A^i&=\bigoplus_j (R_j\otimes A_j^i),&
+  B^i&=\bigoplus_k (S_k\otimes B_k^i),
+\end{align}
+where the diagonal matrices $R_j$ and $S_k$ retain the multiplicities and
+weights of repeated copies of each periodic basis tensor.
+
+\textbf{Restricted theorem.} The declaration
+\path{PeriodicOverlapHypothesis.ofIsIrreducibleForm} treats an irreducible-form
+representation with one positive real scalar weight attached to each block and
+assumes that distinct listed blocks are not repeated. From nonzero
+proportionality at every positive length, with a scalar allowed to depend on the
+length, it derives a non-decaying mixed-overlap partner for every block in both
+families. The proof makes the paper's terse contradiction at line 631 explicit:
+it partitions one family by mixed-overlap decay, passes to a common-period
+subsequence, and compares coefficients in an eventually linearly independent
+coproduct-indexed family.
+
+The local representation also differs from the source irreducible form in
+three further respects. First, its periodic blocks are left-canonical, whereas the
+source assumes only that their transfer maps are irreducible and have spectral
+radius one. This is an additional normalization hypothesis. Second, its
+defining field asserts equality of matrix-product-vector families with the
+scalar-weight direct-sum tensor; it does not assert that the original tensor
+is literally equal to that tensor. The restricted theorem consequently
+concerns the periodic families carried by these witnesses, not a literal
+block-diagonal presentation of the original tensors.
+
+Third, the local equality of matrix-product-vector families includes the empty
+word and therefore forces equality of the associated bond-dimension traces.
+The source compares physical states at positive lengths and explicitly allows
+the irreducible-form representative to have smaller bond dimension
+\cite[lines~266--271]{DeLasCuevas2017Irreducible}. Thus the local witness has an
+additional empty-word restriction absent from the source theorem.
+
+The declarations \leanid{fundamentalTheorem_periodic_proportional} and
+\leanid{fundamentalTheorem_periodic_proportional_of_isPeriodic} begin after
+this step: they accept the periodic-overlap hypothesis, or its non-decaying
+partner fields, as premises and prove the resulting finite block matching.
+They are conditional components toward \emph{thm:bd}, not formalizations of
+the source theorem itself.
+
+This is a mathematically correct restriction, but it is not the full statement
+of \emph{thm:bd}: replacing $R_j$ by a single scalar removes the grouped
+repeated-copy data. Consequently the restricted theorem must not be used to mark
+the unrestricted proportional Fundamental Theorem as complete.
+
+\textbf{Elimination plan.} Formalize a multiplicity-bearing periodic basis, or
+prove a reduction from the matrices $R_j,S_k$ to grouped power-sum coefficients
+without treating repeated copies as linearly independent. Replace the
+MPV-equivalent witness by a literal block-diagonal presentation, or prove a
+transport theorem between the two formulations. Replace the empty-word
+equality by a positive-length comparison so that the representative may have
+the source-allowed smaller bond dimension. Formalize the source's
+block-diagonal similarity to trace-preserving form and transport the overlap
+and repeated-block conclusions back, thereby removing the extra normalization
+hypothesis. Then repeat the coefficient comparison at the grouped level and
+derive the scalar-weight theorem as a corollary. The mixed-overlap step remains
+tracked by
+\href{https://github.com/LionSR/TNLean/issues/5342}{issue \#5342}; the subsequent
+multiplicity-power extraction is tracked by
+\href{https://github.com/LionSR/TNLean/issues/5344}{issue \#5344}.
 
 \begin{thebibliography}{9}
 \bibitem{DeLasCuevas2017Irreducible}

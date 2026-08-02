@@ -11,24 +11,49 @@
     primitive transfer map (Definition~\ref{def:primitive_channel}).
 \end{definition}
 
+\begin{theorem}[A periodic tensor has positive bond dimension]
+    \label{thm:periodic_bond_dimension_pos}
+    \lean{MPSTensor.IsPeriodic.bondDim_ne_zero}
+    \leanok
+    \uses{def:periodic_tensor}
+    If $A$ is periodic, then its bond dimension satisfies $D\geq1$.
+\end{theorem}
+\begin{proof}\leanok
+    The prescribed peripheral spectrum contains the eigenvalue $1$. In bond
+    dimension zero the matrix space is zero-dimensional and admits no
+    eigenvector, which is a contradiction.
+\end{proof}
+
 \begin{definition}[Irreducible form]
     \label{def:irreducible_form}
     \lean{MPSTensor.IsIrreducibleForm}
     \leanok
-    A tensor $A$ is in \emph{irreducible form} if it is block-diagonal,
+    A tensor $A$ admits an \emph{irreducible-form representation} if it
+    generates the same matrix-product-vector family as the block-diagonal
+    tensor
     \begin{align}
-        A^i
+        \widehat A^i
          & =\bigoplus_{j\in J}\mu_j A_j^i,
         \notag
     \end{align}
-    where each block $A_j$ is an $m_j$-periodic tensor. Following
+    where each block $A_j$ is a left-canonical $m_j$-periodic tensor. The
+    defining relation is
+    $\ket{V^{(N)}(A)}=\ket{V^{(N)}(\widehat A)}$ for every $N\geq0$, rather
+    than literal equality of the tensors $A$ and $\widehat A$. In particular,
+    it includes the empty word and hence equality of the bond-dimension traces.
+    The source comparison is at positive physical lengths and permits the
+    irreducible-form representative to have smaller bond dimension
+    \cite[lines~266--271]{DeLasCuevas2017Irreducible}. Following
     \cite[Section~II]{DeLasCuevas2017Irreducible}, the phases are fixed by the
     convention $\mu_j>0$, so the weights are positive real scalars.
     % Source check: arXiv:1708.00029, lines 252--261 define irreducible form
     % with the positive-weight convention. The non-repeated basis of periodic
     % tensors is introduced later, at lines 287--303, and is not part of this
     % definition.
-    It extends the normal canonical form
+    This is a normalized matrix-product-vector representation of the source
+    irreducible form, whose displayed decomposition is a literal tensor
+    equality and whose periodic blocks are only required to have irreducible
+    transfer maps of spectral radius one. It extends the normal canonical form
     (Definition~\ref{def:is_normal_canonical_form}),
     which requires the stronger condition that every block is $1$-periodic.
 \end{definition}

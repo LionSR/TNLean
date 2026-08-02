@@ -151,92 +151,14 @@ lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
         _ = ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
             mpvState (d := d) (Q.basis k) N := by
               simp [Finset.smul_sum, smul_smul]
-    let sumT : MPVSpace d N :=
-      ∑ t : {j : Fin P.basisCount // j ∈ T}, P.coeff N t.1 •
-        mpvState (d := d) (P.basis t.1) N
-    let sumC : MPVSpace d N :=
-      ∑ c' : {j : Fin P.basisCount // j ∉ T}, P.coeff N c'.1 •
-        mpvState (d := d) (P.basis c'.1) N
-    let sumQ : MPVSpace d N :=
-      ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
-        mpvState (d := d) (Q.basis k) N
-    let agg : Fin Q.basisCount → ℂ := fun k =>
-      ∑ c' : {j : Fin P.basisCount // j ∉ T},
-        if kOf c' = k then P.coeff N c'.1 * αOf c' N else 0
-    let sumAgg : MPVSpace d N :=
-      ∑ k : Fin Q.basisCount, agg k • mpvState (d := d) (Q.basis k) N
-    have hSplitP : sumT + sumC = sumQ := by
-      have hsplit :=
-        Fintype.sum_subtype_add_sum_subtype
-          (p := fun j : Fin P.basisCount => j ∈ T)
-          (f := fun j : Fin P.basisCount =>
-            P.coeff N j • mpvState (d := d) (P.basis j) N)
-      change
-        (∑ t : {j : Fin P.basisCount // j ∈ T}, P.coeff N t.1 •
-            mpvState (d := d) (P.basis t.1) N) +
-          (∑ c' : {j : Fin P.basisCount // j ∉ T}, P.coeff N c'.1 •
-            mpvState (d := d) (P.basis c'.1) N) =
-        ∑ k : Fin Q.basisCount, (c * Q.coeff N k) •
-          mpvState (d := d) (Q.basis k) N
-      exact hsplit.trans hPQsum
-    have hC_subst :
-        sumC = ∑ c' : {j : Fin P.basisCount // j ∉ T},
-          (P.coeff N c'.1 * αOf c' N) •
-            mpvState (d := d) (Q.basis (kOf c')) N := by
-      refine Finset.sum_congr rfl ?_
-      intro c' _
-      calc
-        P.coeff N c'.1 • mpvState (d := d) (P.basis c'.1) N
-            = P.coeff N c'.1 •
-                (αOf c' N • mpvState (d := d) (Q.basis (kOf c')) N) := by
-              rw [hStateOf c' N]
-        _ = (P.coeff N c'.1 * αOf c' N) •
-                mpvState (d := d) (Q.basis (kOf c')) N := by
-              rw [smul_smul]
-    have hC_group :
-        (∑ c' : {j : Fin P.basisCount // j ∉ T},
-          (P.coeff N c'.1 * αOf c' N) •
-            mpvState (d := d) (Q.basis (kOf c')) N) = sumAgg := by
-      simpa [sumAgg, agg] using
-        (sum_fiber_smul (φ := kOf)
-          (a := fun c' : {j : Fin P.basisCount // j ∉ T} =>
-            P.coeff N c'.1 * αOf c' N)
-          (v := fun k : Fin Q.basisCount => mpvState (d := d) (Q.basis k) N))
-    have hMain : sumT + sumAgg = sumQ := by
-      calc
-        sumT + sumAgg = sumT + sumC := by
-          rw [← hC_group, ← hC_subst]
-        _ = sumQ := hSplitP
-    let coeff : Sum {j : Fin P.basisCount // j ∈ T} (Fin Q.basisCount) → ℂ :=
-      Sum.elim (fun t => P.coeff N t.1) (fun k => agg k - c * Q.coeff N k)
-    have hZeroCombined :
-        ∑ x : Sum {j : Fin P.basisCount // j ∈ T} (Fin Q.basisCount),
-          coeff x •
-            Sum.elim
-              (fun t : {j : Fin P.basisCount // j ∈ T} =>
-                mpvState (d := d) (P.basis t.1) N)
-              (fun k : Fin Q.basisCount =>
-                mpvState (d := d) (Q.basis k) N) x = 0 := by
-      have hQsub :
-          (∑ k : Fin Q.basisCount, (agg k - c * Q.coeff N k) •
-              mpvState (d := d) (Q.basis k) N)
-            = sumAgg - sumQ := by
-        simp [sumAgg, sumQ, sub_smul, Finset.sum_sub_distrib]
-      have hZero : sumT +
-          (∑ k : Fin Q.basisCount, (agg k - c * Q.coeff N k) •
-              mpvState (d := d) (Q.basis k) N) = 0 := by
-        calc
-          sumT +
-              (∑ k : Fin Q.basisCount, (agg k - c * Q.coeff N k) •
-                mpvState (d := d) (Q.basis k) N)
-              = sumT + (sumAgg - sumQ) := by rw [hQsub]
-          _ = (sumT + sumAgg) - sumQ := by abel
-          _ = 0 := sub_eq_zero.mpr hMain
-      simpa [coeff, sumT] using hZero
-    have hcoeff :=
-      Fintype.linearIndependent_iff.mp hLIN coeff hZeroCombined
-        (Sum.inl ⟨j₀, hj₀T⟩)
-    simpa [coeff] using hcoeff
+    exact coefficient_eq_zero_of_sum_eq_of_complement_smul
+      (T := T) (a := fun j => P.coeff N j)
+      (u := fun j => mpvState (d := d) (P.basis j) N)
+      (b := fun k => c * Q.coeff N k)
+      (v := fun k => mpvState (d := d) (Q.basis k) N)
+      (kOf := kOf) (α := fun c' => αOf c' N)
+      (hComplement := fun c' => hStateOf c' N)
+      (hSum := hPQsum) (hLI := hLIN) (i₀ := j₀) hj₀T
   exact (hP.coeff_not_eventually_zero j₀) hCoeff_eventually_zero
 
 /-- Exact proportional single-block matching without any per-sector unit-modulus

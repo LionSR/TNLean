@@ -14,6 +14,7 @@ This module contains the statement of the source proposition
 ## Main declarations
 
 * `periodicOverlapDichotomy`
+* `periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero`
 * `periodicBasis_eventuallyLinearlyIndependent`
 
 ## References
@@ -116,48 +117,37 @@ theorem periodicOverlapDichotomy
     · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_dim A B hA hB hD)
   · exact Or.inl (periodicOverlap_tendsto_zero_of_ne_period A B hA hB hm)
 
-/-- **Eventual linear independence** (independence half of the consequence of
-Proposition equal-or-orthogonal-generalized):
-Given a family of periodic tensors `{A_j}` whose periods all divide a common
-period `p`, there exists `N₀` such that for all `N ≥ N₀` that are multiples
-of `p`, the vectors {|V_N(A_j)⟩} are linearly independent.
+/-- A finite periodic family is eventually linearly independent along a common
+period when every cross overlap tends to zero.
 
-The common-period restriction ensures all `mpvState (A k) N` are nonzero
-simultaneously (a zero vector would prevent `LinearIndependent` from holding).
-
-**Scope restriction (independence only, no spanning):** the paper's consequence
-(arXiv:1708.00029, lines 604--608) states *both* that the non-zero members of
-{|V_N(A_j)⟩} are linearly independent *and* that they span |V_N(A)⟩ — the
-spanning half is what "justifies the name basis of periodic vectors" (line 611).
-Only the independence half is stated here. In addition the paper derives it from
-Lem1t (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
-the self-overlap limit and the cross-overlap decay; here the basis condition is
-encoded directly as the pairwise non-repetition hypothesis `hNonrep`. The dropped
-spanning clause and the Lem1t route are recorded in
-docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
-theorem periodicBasis_eventuallyLinearlyIndependent
-    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (period : Fin r → ℕ)
+This is the Gram-matrix argument used in the independence consequence of
+arXiv:1708.00029, lines 604--608: the self-overlaps tend to the positive
+periods, while the cross overlaps tend to zero. -/
+theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
+    {ι : Type*} [Finite ι]
+    {dim : ι → ℕ}
+    (A : (k : ι) → MPSTensor d (dim k))
+    (period : ι → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k))
     (p : ℕ) [NeZero p]
     (hDiv : ∀ k, period k ∣ p)
-    (hNonrep : ∀ i j, i ≠ j →
-      ∀ (hdim : dim i = dim j),
-        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+    (hCross : ∀ i j, i ≠ j →
+      Tendsto (fun N => mpvOverlap (A i) (A j) N) atTop (nhds 0)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
   -- Lem1t-style Gram argument (arXiv:1708.00029 lines 511--519, 604--608): the
   -- states `mpvState (A k) (p·N)` have Gram matrix converging to the
   -- nondegenerate diagonal `diag(period k)` — the diagonal from
-  -- `periodicSelfOverlap_tendsto`, the off-diagonal from `periodicOverlapDichotomy`
-  -- with the non-repetition hypothesis `hNonrep` — so they are eventually linearly
-  -- independent by `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
+  -- `periodicSelfOverlap_tendsto`, the off-diagonal from `hCross` — so they are
+  -- eventually linearly independent by
+  -- `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
   classical
+  letI : Fintype ι := Fintype.ofFinite ι
+  letI : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
   set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
-  set v : Fin r → ℕ → V :=
+  set v : ι → ℕ → V :=
     fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
-  set L : Matrix (Fin r) (Fin r) ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
+  set L : Matrix ι ι ℂ := Matrix.diagonal (fun k => (period k : ℂ)) with hLdef
   have hLdet : L.det ≠ 0 := by
     rw [hLdef, Matrix.det_diagonal]
     exact Finset.prod_ne_zero_iff.2 fun k _ => by exact_mod_cast (hPer k).period_pos.ne'
@@ -188,25 +178,60 @@ theorem periodicBasis_eventuallyLinearlyIndependent
       simpa using hcomp.star
     · have hLij : L i j = 0 := by simp [hLdef, Matrix.diagonal_apply_ne _ hij]
       rw [hLij]
-      have hdecay : Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0) := by
-        rcases periodicOverlapDichotomy (A i) (A j) (hPer i) (hPer j) with hd | ⟨hdim, hrep⟩
-        · exact hd
-        · exact absurd hrep (hNonrep i j hij hdim)
       have hmap : Tendsto (fun N : ℕ => p * N) atTop atTop :=
         tendsto_atTop_mono (fun n => le_mul_of_one_le_left (Nat.zero_le n)
           (NeZero.pos p)) tendsto_id
-      simpa using (hdecay.comp hmap).star
-  have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k : Fin r => v k N) :=
+      simpa using ((hCross i j hij).comp hmap).star
+  have hLI : ∀ᶠ N in atTop, LinearIndependent ℂ (fun k : ι => v k N) :=
     eventually_linearIndependent_of_gram_tendsto_nondegenerate (v := v) L hLdet hGram
   rw [Filter.eventually_atTop] at hLI
   obtain ⟨N₀, hN₀⟩ := hLI
   refine ⟨N₀, fun N hN => ?_⟩
   let fN : MPVSpace d (p * N) →ₗ[ℂ] V :=
     lp.lsingle (𝕜 := ℂ) (E := fun N : ℕ => MPVSpace d N) 2 (p * N)
-  have hN' : LinearIndependent ℂ (fun k : Fin r => fN (mpvState (d := d) (A k) (p * N))) := by
+  have hN' : LinearIndependent ℂ (fun k : ι => fN (mpvState (d := d) (A k) (p * N))) := by
     convert hN₀ N hN using 1
     ext k L i
     rfl
   exact LinearIndependent.of_comp fN hN'
+
+/-- **Eventual linear independence** (independence half of the consequence of
+Proposition equal-or-orthogonal-generalized):
+Given a family of periodic tensors `{A_j}` whose periods all divide a common
+period `p`, there exists `N₀` such that for all `N ≥ N₀` that are multiples
+of `p`, the vectors {|V_N(A_j)⟩} are linearly independent.
+
+The common-period restriction ensures all `mpvState (A k) N` are nonzero
+simultaneously (a zero vector would prevent `LinearIndependent` from holding).
+
+**Scope restriction (independence only, no spanning):** the paper's consequence
+(arXiv:1708.00029, lines 604--608) states *both* that the non-zero members of
+{|V_N(A_j)⟩} are linearly independent *and* that they span |V_N(A)⟩ — the
+spanning half is what "justifies the name basis of periodic vectors" (line 611).
+Only the independence half is stated here. In addition the paper derives it from
+Lem1t (the ε-almost-orthonormal ⇒ independent lemma, lines 511--519) applied to
+the self-overlap limit and the cross-overlap decay; here the basis condition is
+encoded directly as the pairwise non-repetition hypothesis `hNonrep`. The dropped
+spanning clause and the Lem1t route are recorded in
+docs/paper-gaps/1708_periodic_overlap_route_alignment.tex. -/
+theorem periodicBasis_eventuallyLinearlyIndependent
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (period : Fin r → ℕ)
+    (hPer : ∀ k, IsPeriodic (period k) (A k))
+    (p : ℕ) [NeZero p]
+    (hDiv : ∀ k, period k ∣ p)
+    (hNonrep : ∀ i j, i ≠ j →
+      ∀ (hdim : dim i = dim j),
+        ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
+    ∃ N₀ : ℕ, ∀ N ≥ N₀,
+      LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
+  letI : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
+  refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
+    A period hPer p hDiv ?_
+  intro i j hij
+  rcases periodicOverlapDichotomy (A i) (A j) (hPer i) (hPer j) with hdecay | ⟨hdim, hrep⟩
+  · exact hdecay
+  · exact absurd hrep (hNonrep i j hij hdim)
 
 end MPSTensor
