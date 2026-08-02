@@ -56,13 +56,14 @@ noncomputable def UnitarySectorConjugacy.ofPositiveTailReflectedTarget
     (hM : IsMPDO M)
     (hTarget : ∀ γ : Fin H.labelCount,
       HasIdentityPositiveTailReflectedTarget S γ) :
-    UnitarySectorConjugacy S where
-  unitary γ := Classical.choose
-    (S.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
-      hCanonical hM γ (hTarget γ))
-  tensor_eq γ i := Classical.choose_spec
-    (S.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
-      hCanonical hM γ (hTarget γ)) i
+    UnitarySectorConjugacy S := by
+  let hUnitary (γ : Fin H.labelCount) :=
+    S.exists_unitary_sector_conjugacy_of_positive_tail_reflected_target
+      hCanonical hM γ (hTarget γ)
+  exact {
+    unitary := fun γ ↦ Classical.choose (hUnitary γ)
+    tensor_eq := fun γ i ↦ Classical.choose_spec (hUnitary γ) i
+  }
 
 /-- Positive-tail reflected-target identities for every sector give the
 trace-preserving completely positive maps and the two renormalization
