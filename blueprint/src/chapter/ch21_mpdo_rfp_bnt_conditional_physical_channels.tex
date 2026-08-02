@@ -1,0 +1,247 @@
+\subsection{Trace-preserving completions and physical channels}
+
+\begin{theorem}[Trace-preserving completion outside a projection]
+    \label{thm:matrix_support_completion_cptp}
+    \lean{Matrix.supportCompletion_isKrausCPTP}
+    \lean{Matrix.tracePrepareMap}
+    \lean{Matrix.tracePrepareMap_apply}
+    \lean{Matrix.tracePrepareMap_trace}
+    \lean{Matrix.tracePrepareMap_isKrausCP}
+    \lean{Matrix.tracePrepareMap_isKrausCPTP}
+    \lean{Matrix.supportComplementMap}
+    \lean{Matrix.supportComplementMap_apply}
+    \lean{Matrix.supportComplementMap_isKrausCP}
+    \lean{Matrix.supportComplementMap_trace}
+    \lean{Matrix.supportCompletion}
+    \lean{Matrix.supportCompletion_apply}
+    \lean{Matrix.supportCompletion_isKrausCP}
+    \lean{Matrix.supportCompletion_trace}
+    \lean{Matrix.supportCompletion_apply_of_supported}
+    \leanok
+    \uses{def:is_kraus_cp, def:is_kraus_cptp,
+        def:mpdo_state_preparation_map,
+        def:mpdo_equiv_reindex_map,
+        def:mpdo_right_partial_trace_map,
+        def:mpdo_single_kraus_map}
+    Let $P\in\MN{m}$ be an orthogonal projection, let
+    $\rho\in\MN{n}$ be positive semidefinite with $\tr(\rho)=1$, and let
+    $\mathcal E\colon\MN{m}\to\MN{n}$ be completely positive.  Define the
+    trace-and-prepare map and its complementary restriction by
+    \begin{align}
+        \mathcal D_\rho(X)
+        &=\tr(X)\rho,
+        &
+        \mathcal C_{P,\rho}(X)
+        &=\mathcal D_\rho\bigl((I-P)X(I-P)^\dagger\bigr).
+        \label{eq:matrix_support_complement_map}
+    \end{align}
+    Both maps are completely positive, and $\mathcal D_\rho$ is
+    trace-preserving.  If
+    \begin{align}
+        \tr(\mathcal E(X))=\tr(PX)
+        \label{eq:matrix_support_map_trace}
+    \end{align}
+    for every $X\in\MN{m}$, then the completion
+    \begin{align}
+        \widehat{\mathcal E}(X)
+        &=\mathcal E(X)+\mathcal C_{P,\rho}(X)
+        \label{eq:matrix_support_completion}
+    \end{align}
+    is trace-preserving and completely positive.  It agrees with
+    $\mathcal E$ on every matrix supported by $P$:
+    \begin{align}
+        PXP=X
+        \quad\Longrightarrow\quad
+        \widehat{\mathcal E}(X)=\mathcal E(X).
+        \label{eq:matrix_support_completion_agreement}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_state_preparation_cp,
+        lem:mpdo_state_preparation_cptp,
+        thm:mpdo_equiv_reindex_cptp,
+        lem:mpdo_right_partial_trace_cptp,
+        lem:mpdo_single_kraus_map_apply,
+        lem:mpdo_single_kraus_map_cp,
+        lem:is_kraus_cp_comp,
+        lem:is_kraus_cptp_comp,
+        lem:is_kraus_cp_add,
+        thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving}
+    The map $\mathcal D_\rho$ factors as state preparation, interchange of
+    the two tensor factors, and partial trace.  The map
+    $X\mapsto(I-P)X(I-P)^\dagger$ has a single Kraus operator.  Thus the two
+    maps in~(\ref{eq:matrix_support_complement_map}) are completely positive.
+    Since $P=P^\dagger=P^2$,
+    \begin{align}
+        \tr\bigl(\mathcal C_{P,\rho}(X)\bigr)
+        &=\tr((I-P)X).
+        \notag
+    \end{align}
+    Adding this identity to~(\ref{eq:matrix_support_map_trace}) gives
+    $\tr(\widehat{\mathcal E}(X))=\tr(X)$.  Finally, $PXP=X$ implies
+    $(I-P)X(I-P)=0$, which proves
+    (\ref{eq:matrix_support_completion_agreement}).
+\end{proof}
+
+\begin{theorem}[Physical channels from unitary sector conjugacies]
+    \label{thm:mpdo_bnt_conditional_physical_channels}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.isRFPViaTS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteRetainedProjection}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteRetainedProjection_isHermitian}
+    \lean{MPOTensor.BNTAlgebraTensorClause.oneSiteRetainedProjection_mul_self}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteRetainedProjection}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteRetainedProjection_isHermitian}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.%
+        twoSiteRetainedProjection_mul_self}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalT}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalT_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalS_isKrausCP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.trace_rawPhysicalT}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.trace_rawPhysicalS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalT_physClose1}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.rawPhysicalS_physClose2}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        oneSiteRetainedProjection_physClose1}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        twoSiteRetainedProjection_physClose2}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalT}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalS}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalT_isKrausCPTP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalS_isKrausCPTP}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalT_physClose1}
+    \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
+        UnitarySectorConjugacy.physicalS_physClose2}
+    \leanok
+    \uses{def:mpdo_bnt_ambient_sector_maps,
+        def:mpdo_bnt_direct_sum_unitary_conjugations,
+        def:mpdo_faithful_uniform_density,
+        def:is_rfp_via_ts}
+    Suppose that the one-site and two-site sector decompositions are paired by
+    a relabelling $\sigma$ and unitaries $U_\gamma$ satisfying
+    \begin{align}
+        A_{\sigma(\gamma)}^i
+        &=U_\gamma M_\gamma^i U_\gamma^\dagger
+        \label{eq:mpdo_bnt_physical_channel_unitary_conjugacy}
+    \end{align}
+    for every sector $\gamma$ and every vertical letter $i$.  With the maps of
+    the preceding two subsections, set
+    \begin{align}
+        \mathcal T_0
+        &=\widetilde R_2\circ\widetilde T\circ R_1,
+        &
+        \mathcal S_0
+        &=\widetilde R_1\circ\widetilde S\circ R_2.
+        \label{eq:mpdo_bnt_active_physical_maps}
+    \end{align}
+    Let
+    \begin{align}
+        P_1&=W_1^\dagger W_1,
+        &
+        P_2&=\kappa_\ast(W_2^\dagger W_2),
+        &
+        Q_i&=I-P_i.
+        \label{eq:mpdo_bnt_physical_active_projections}
+    \end{align}
+    The matrices $P_1$ and $P_2$ are orthogonal projections.  If $d>0$, put
+    $\tau_1=d^{-1}I_d$ and $\tau_2=d^{-2}I_{d^2}$, and define
+    \begin{align}
+        \mathcal T(X)
+        &=\mathcal T_0(X)+\tr(Q_1XQ_1)\tau_2,
+        \notag\\
+        \mathcal S(Y)
+        &=\mathcal S_0(Y)+\tr(Q_2YQ_2)\tau_1.
+        \label{eq:mpdo_bnt_completed_physical_maps}
+    \end{align}
+    If $d=0$, take both maps to be zero; their domain and codomain matrix
+    algebras then consist only of zero.
+    Then $\mathcal T$ and $\mathcal S$ are trace-preserving completely positive
+    maps on the full physical matrix algebras.  For every virtual matrix $Z$,
+    they satisfy
+    \begin{align}
+        \mathcal T[M_1(Z)]&=M_2(Z),
+        &
+        \mathcal S[M_2(Z)]&=M_1(Z).
+        \label{eq:mpdo_bnt_completed_physical_map_actions}
+    \end{align}
+    Hence $M$ is a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.
+
+    The compositions in
+    (\ref{eq:mpdo_bnt_active_physical_maps}) are the formulas of
+    \cite[Appendix~C.4, lines~2065--2085]{Cirac2016MPDO_arXiv}.  Those formulas
+    determine the action after compression to the retained physical sectors.
+    With rectangular coisometries, the literal composites annihilate the
+    discarded zero-sector complements and fail to preserve trace there.
+    Definition~4.1 nevertheless requires maps on the full physical algebras
+    \cite[Definition~4.1, lines~638--660]{Cirac2016MPDO_arXiv}.
+    The source does not specify a trace-restoring modification on the discarded
+    complements.  Formula~(\ref{eq:mpdo_bnt_completed_physical_maps}) makes one
+    such choice when the physical space is nonzero.  Replacing
+    $\tau_1,\tau_2$ by any density matrices gives the same action on the
+    physical operators generated by $M$.  The conclusion is conditional on
+    the unitaries in
+    (\ref{eq:mpdo_bnt_physical_channel_unitary_conjugacy}); their existence is
+    not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_ambient_sector_complete_positivity,
+        thm:mpdo_bnt_ambient_sector_trace,
+        thm:mpdo_bnt_ambient_sector_tensor_letters,
+        thm:mpdo_bnt_direct_sum_unitary_conjugations,
+        thm:matrix_support_completion_cptp,
+        thm:mpdo_faithful_uniform_density,
+        lem:mpdo_coisometric_compression_trace,
+        lem:mpdo_vertical_bond_contraction_phys_close,
+        lem:mpdo_vertical_bond_contraction_reconstruction,
+        thm:mpdo_one_site_closure_two_site_blocking}
+    Complete positivity of the four outer maps and of the two direct-sum
+    conjugations gives complete positivity of $\mathcal T_0$ and
+    $\mathcal S_0$.  Their traces are
+    \begin{align}
+        \tr(\mathcal T_0(X))&=\tr(P_1X),
+        &
+        \tr(\mathcal S_0(Y))&=\tr(P_2Y).
+        \label{eq:mpdo_bnt_active_physical_map_traces}
+    \end{align}
+    Suppose first that $d>0$.  Since $Q_i$ is a projection and $\tau_i$ has
+    trace one, the corresponding complementary term is completely positive
+    and has trace $\tr(Q_iXQ_i)=\tr(Q_iX)$.  Adding
+    (\ref{eq:mpdo_bnt_active_physical_map_traces}) and using $P_i+Q_i=I$
+    proves trace preservation of the completed maps.  If $d=0$, every ambient
+    matrix is zero, so the zero maps are completely positive and trace
+    preserving.
+
+    The reconstruction identities for the two vertical decompositions imply
+    \begin{align}
+        P_1M_1(Z)P_1&=M_1(Z),
+        &
+        P_2M_2(Z)P_2&=M_2(Z).
+        \label{eq:mpdo_bnt_physical_closure_support}
+    \end{align}
+    Thus both complementary terms vanish on the corresponding physical
+    operators.  The retraction formulas extract the families
+    $(m_\gamma M_\gamma^i)_\gamma$ and
+    $(m_\gamma A_{\sigma(\gamma)}^i)_\gamma$; unitary conjugation carries
+    these families into one another, and the normalized restorations recover
+    the one-site and two-site letters.  Linearity in the virtual matrix gives
+    (\ref{eq:mpdo_bnt_completed_physical_map_actions}).
+\end{proof}
