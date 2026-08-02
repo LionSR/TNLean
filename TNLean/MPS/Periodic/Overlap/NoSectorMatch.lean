@@ -268,14 +268,11 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
     (gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
       A B hA hB hGPE_block) hGlobalZero
 
-/-- Compressed-sector uniqueness statement after blocking.
+/-- Existence of a matching pair of compressed sectors after blocking.
 
-Once global gauge-phase equivalence has been transported to the blocked
-tensors, the cyclic sector decompositions of the two blocked tensors should be
-unique up to relabeling of nonzero Wedderburn/cyclic sectors. This statement is
-the precise remaining statement needed for `exists_sector_match_of_gaugePhaseEquiv`:
-it extracts one nonzero compressed sector of `A` and a gauge-phase-equivalent
-compressed sector of `B`. -/
+After transporting global gauge-phase equivalence to the blocked tensors, the
+block-sum overlap gives a non-decaying pair of sectors. Irreducibility then
+forces equal dimensions and gauge-phase equivalence for that pair. -/
 private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
     [NeZero D] (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
