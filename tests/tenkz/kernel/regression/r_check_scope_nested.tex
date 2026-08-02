@@ -1,0 +1,24 @@
+%% Regression: equation checks retain their scope across brace-nested relations.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{A}
+  \end{tenkz}
+  \mbox{a=b}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{B}
+  \end{tenkz}
+\end{tenkzeq}
+\begin{tenkzeq}[check={signature, off={1: documented}}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tnwire{w outside}{e outside}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={}]{C}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

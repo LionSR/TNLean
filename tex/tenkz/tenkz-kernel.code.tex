@@ -189,6 +189,7 @@
 \bool_new:N \l__tenkz_kernel_frame_valid_bool
 \bool_new:N \l__tenkz_kernel_group_keys_bool
 \int_new:N  \l__tenkz_kernel_basis_count_int
+\int_new:N  \g__tenkz_kernel_eq_scope_int     % owner id for pictures/checks
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
@@ -1355,7 +1356,11 @@
     \cs_set:cpe {tenkz@auditpictureid}
       { k \int_use:N \g__tenkz_kernel_picture_int }
     \__tenkz_kernel_event:n
-      { picture|id=k \int_use:N \g__tenkz_kernel_picture_int |lang=kernel }
+      {
+        picture|id=k \int_use:N \g__tenkz_kernel_picture_int |lang=kernel
+        \bool_if:NT \l__tenkz_kernel_ineq_bool
+          { |scope=\int_use:N \g__tenkz_kernel_eq_scope_int }
+      }
     \clist_map_inline:nn { atom, wire, mark, frame }
       {
         \__tenkz_model_map_ids:nn {##1}
@@ -13265,6 +13270,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
     \group_begin:
+    \int_gincr:N \g__tenkz_kernel_eq_scope_int
     \bool_set_true:N \l__tenkz_kernel_ineq_bool
     \seq_gclear:N \g__tenkz_kernel_panel_gseq
     \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
@@ -13293,7 +13299,8 @@
               { \seq_item:Nn \l__tenkz_kernel_match_seq {##1} }
             \__tenkz_kernel_event:n
               {
-                check|relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
+                check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                |relation=\seq_item:Nn \l__tenkz_kernel_match_seq {##1}
                 |result=off
                 |reason=\seq_item:Nn \l__tenkz_kernel_match_seq { ##1 + 1 }
               }
@@ -13325,7 +13332,8 @@
       {
         \__tenkz_kernel_event:n
           {
-            check|result=malformed|reason=relation-count
+            check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+            |result=malformed|reason=relation-count
             |panels=\int_use:N \l_tmpa_int
             |relations=\int_use:N \l_tmpb_int
           }
@@ -13363,7 +13371,8 @@
               {
                 \__tenkz_kernel_event:n
                   {
-                    check|relation=##1|result=mismatch|reason=prose
+                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                    |relation=##1|result=mismatch|reason=prose
                     |left-kind=
                       \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1}
                     |right-kind=
@@ -13378,7 +13387,8 @@
                   {
                     \__tenkz_kernel_event:n
                       {
-                        check|relation=##1|result=equal
+                        check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                        |relation=##1|result=equal
                         \bool_if:NT \l__tenkz_kernel_check_bundles_bool
                           { |modulo=bundles }
                         |signature=\tl_use:N \l_tmpa_tl
@@ -13387,7 +13397,8 @@
                   {
                     \__tenkz_kernel_event:n
                       {
-                        check|relation=##1|result=mismatch
+                        check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                        |relation=##1|result=mismatch
                         \bool_if:NT \l__tenkz_kernel_check_bundles_bool
                           { |modulo=bundles }
                         |left=\tl_use:N \l_tmpa_tl

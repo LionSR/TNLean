@@ -228,10 +228,10 @@ kernel-boundary|signature=phys:up
         "\\end{tenkzeq}\n"
     )
     checked_equation_log = (
-        equation_log.replace("open:w", "edge:w:bundle=3").replace(
-            "phys:up", "open:e"
-        )
-        + "check|relation=1|result=equal|modulo=bundles|signature=edge:e\n"
+        equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
+        .replace("open:w", "edge:w:bundle=3")
+        .replace("phys:up", "open:e")
+        + "check|scope=1|relation=1|result=equal|modulo=bundles|signature=edge:e\n"
     )
     checked_equation = audit_log(checked_equation_log, checked_equation_source)
     assert "eq-boundary-mismatch" not in [
@@ -239,7 +239,8 @@ kernel-boundary|signature=phys:up
     ]
 
     opted_out_equation = audit_log(
-        "check|relation=1|result=off|reason=documented\n" + equation_log,
+        "check|scope=1|relation=1|result=off|reason=documented\n"
+        + equation_log.replace("|lang=kernel", "|lang=kernel|scope=1"),
         checked_equation_source.replace(
             "check={signature, modulo=bundles}",
             "check={signature, off={1: documented}}",
@@ -257,13 +258,18 @@ kernel-boundary|signature=phys:up
     checked_mismatch_source = checked_equation_source.replace(
         "check={signature, modulo=bundles}", "check={signature}"
     )
-    matching_equation_log = equation_log.replace("phys:up", "open:e")
-    second_equation_log = equation_log.replace("k1", "k3").replace("k2", "k4")
+    matching_equation_log = equation_log.replace(
+        "|lang=kernel", "|lang=kernel|scope=1"
+    ).replace("phys:up", "open:e")
+    second_equation_log = (
+        equation_log.replace("k1", "k3").replace("k2", "k4")
+        .replace("|lang=kernel", "|lang=kernel|scope=2")
+    )
     mixed_equations = audit_log(
         matching_equation_log
-        + "check|relation=1|result=equal|signature=open:e, open:w\n"
+        + "check|scope=1|relation=1|result=equal|signature=open:e, open:w\n"
         + second_equation_log
-        + "check|relation=1|result=mismatch|reason=boundary\n",
+        + "check|scope=2|relation=1|result=mismatch|reason=boundary\n",
         checkless_equation_source + checked_mismatch_source,
     )
     mixed_boundary_mismatches = [
@@ -271,6 +277,67 @@ kernel-boundary|signature=phys:up
         if finding.rule == "eq-boundary-mismatch"
     ]
     assert len(mixed_boundary_mismatches) == 1, mixed_equations.findings
+
+    checked_off_source = checked_mismatch_source.replace(
+        "check={signature}", "check={signature, off={1: documented}}"
+    )
+    two_checked_equations_source = checked_mismatch_source + checked_off_source
+    first_scoped_mismatch = equation_log.replace(
+        "|lang=kernel", "|lang=kernel|scope=1"
+    )
+    second_scoped_mismatch = second_equation_log
+    malformed_then_valid = audit_log(
+        first_scoped_mismatch
+        + "check|scope=1|result=malformed|reason=relation-count"
+        "|panels=2|relations=2\n"
+        + "check|scope=1|relation=1|result=equal|signature=open:w\n"
+        + "check|scope=2|relation=1|result=off|reason=documented\n"
+        + second_scoped_mismatch,
+        two_checked_equations_source,
+    )
+    malformed_boundary_mismatches = [
+        finding for finding in malformed_then_valid.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(malformed_boundary_mismatches) == 1, malformed_then_valid.findings
+    assert "pictures k1 and k2" in malformed_boundary_mismatches[0].msg
+    assert "kernel-check" in [
+        finding.rule for finding in malformed_then_valid.findings
+    ]
+
+    truncated_then_valid = audit_log(
+        first_scoped_mismatch
+        + "check|scope=2|relation=1|result=off|reason=documented\n"
+        + second_scoped_mismatch,
+        two_checked_equations_source,
+    )
+    truncated_boundary_mismatches = [
+        finding for finding in truncated_then_valid.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(truncated_boundary_mismatches) == 1, truncated_then_valid.findings
+    assert "pictures k1 and k2" in truncated_boundary_mismatches[0].msg
+
+    brace_nested_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        "\\begin{tenkz}\\tn{A}\\end{tenkz}\n"
+        "\\text{a=b}\n"
+        "\\begin{tenkz}\\tn{B}\\end{tenkz}\n"
+        "\\end{tenkzeq}\n"
+    )
+    nested_then_valid = audit_log(
+        matching_equation_log
+        + "check|scope=1|relation=1|result=equal|signature=open:e, open:w\n"
+        + second_scoped_mismatch
+        + "check|scope=2|relation=1|result=mismatch|reason=boundary\n",
+        brace_nested_source + checked_mismatch_source,
+    )
+    nested_boundary_mismatches = [
+        finding for finding in nested_then_valid.findings
+        if finding.rule == "eq-boundary-mismatch"
+    ]
+    assert len(nested_boundary_mismatches) == 1, nested_then_valid.findings
+    assert "pictures k3 and k4" in nested_boundary_mismatches[0].msg
 
     overlap_log = """\
 picture|id=k1|lang=kernel
