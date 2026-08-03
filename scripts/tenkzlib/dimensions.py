@@ -9,7 +9,15 @@ from enum import Enum
 from pathlib import Path
 from typing import Iterable, Mapping
 
-from tenkzlib.texcase import is_control_word_start, match_group, strip_comments
+from tenkzlib.texcase import (
+    Construct,
+    is_control_word_start,
+    is_static_control_word_letter,
+    is_static_control_word_name,
+    match_group,
+    scan_constructs,
+    strip_comments,
+)
 
 
 class DimensionOwner(str, Enum):
@@ -70,9 +78,32 @@ class DimensionOwnerSite:
     line: int
     offset: int
     kind: str
+    option_container: str | None
+    invocation_offset: int
+    invocation_name: str
     source: str
+    source_offsets: tuple[int, ...]
     owner: DimensionOwner
     occurrences: tuple[DimensionOccurrence, ...]
+
+
+@dataclass(frozen=True)
+class DimensionInvocation:
+    """One executed public command that can anchor a dimension owner site."""
+
+    offset: int
+    end: int
+    name: str
+
+
+@dataclass(frozen=True)
+class DimensionScope:
+    """One executed PICTURE container and the source range of its body."""
+
+    start: int
+    body_start: int
+    body_end: int
+    name: str
 
 
 class DimensionOwnershipError(ValueError):
@@ -113,6 +144,7 @@ class _CommandGrammar:
     positional_group_counts: tuple[int, ...]
     accepts_star: bool = False
     accepts_options: bool = True
+    semantic_body_argument: int | None = None
 
 
 # Keep these arities in lockstep with the public definitions.  "tnwire" is
@@ -154,7 +186,11 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
         None, (2,), accepts_options=False
     ),
     "tnmark": _CommandGrammar(None, (2,)),                       # O{} m m
-    "tngroup": _CommandGrammar(None, (1,)),                      # O{} m
+    # The +m body is a PICTURE scope. This annotation, rather than the shared
+    # O{} m parser shape, controls semantic ancestry.
+    "tngroup": _CommandGrammar(
+        None, (1,), semantic_body_argument=0
+    ),                                                           # O{} +m
     "tndeclare": _CommandGrammar(                               # m m m
         None, (3,), accepts_options=False
     ),
@@ -233,11 +269,6 @@ class _EnvironmentToken:
 
 
 _PUBLIC_ENVIRONMENTS = frozenset((*_OPTION_ENVIRONMENT_KEYS, "tenkzeq"))
-# A source-only scan cannot recover arbitrary catcode changes.  Treat Unicode
-# letters plus LaTeX/expl3's conventional ``@``, ``:``, and ``_`` letters as
-# one conservative control-word alphabet: refusing to split an ambiguous
-# spelling is safer than assigning dimensions to a shorter public command.
-_STATIC_CONTROL_WORD_NAME_RE = re.compile(r"(?:[^\W\d_]|[@:_])+")
 _TEX_CONTROL_WORD_END = r"(?![^\W\d_]|[@:_])"
 _ENVIRONMENT_CONTROL_RE = re.compile(
     r"\\(begin|end)" + _TEX_CONTROL_WORD_END
@@ -295,6 +326,33 @@ _OPTION_BRACKET_COMMAND_RE = re.compile(
 )
 _OPTION_BRACE_COMMAND_RE = re.compile(r"\\tnset" + _TEX_CONTROL_WORD_END)
 _SETUP_PHYSICAL_KEYS = frozenset({"pitch"})
+DIMENSION_OPTION_CONTAINER_KEYS: Mapping[str, frozenset[str]] = {
+    **_OPTION_ENVIRONMENT_KEYS,
+    **{
+        name: grammar.physical_keys
+        for name, grammar in _OPTION_BRACKET_COMMANDS.items()
+    },
+    **{
+        f"{name}*": grammar.physical_keys
+        for name, grammar in _OPTION_BRACKET_COMMANDS.items()
+        if grammar.accepts_star
+    },
+    "tnset": _SETUP_PHYSICAL_KEYS,
+}
+# ``tenkzeq`` is a lexical scope wrapper, not a drawing or public command
+# invocation, so it deliberately remains outside this anchor grammar.
+DIMENSION_INVOCATION_NAMES = frozenset(
+    (*_OPTION_ENVIRONMENT_KEYS, *_COMMAND_GRAMMARS)
+).union(
+    f"{name}*"
+    for name, grammar in _COMMAND_GRAMMARS.items()
+    if grammar.accepts_star
+)
+DIMENSION_SCOPE_NAMES = _PUBLIC_ENVIRONMENTS | frozenset(
+    name
+    for name, grammar in _COMMAND_GRAMMARS.items()
+    if grammar.semantic_body_argument is not None
+)
 _DECLARE_ATOM_RE = re.compile(r"\\tndeclareatom" + _TEX_CONTROL_WORD_END)
 _KERNEL_DECLARE_RE = re.compile(r"\\tndeclare" + _TEX_CONTROL_WORD_END)
 
@@ -325,6 +383,11 @@ class _OwnerSpan:
     site_start: int
     kind: str
     is_quarantine: bool = False
+    option_container: str | None = None
+    invocation_start: int | None = None
+    invocation_name: str | None = None
+    semantic_body_start: int | None = None
+    semantic_body_end: int | None = None
 
 
 @dataclass(frozen=True)
@@ -383,18 +446,13 @@ def _skip_space(source: str, position: int) -> int:
     return position
 
 
-def _is_static_control_word_letter(character: str) -> bool:
-    """Recognize a conservative letter across common LaTeX catcode modes."""
-    return _STATIC_CONTROL_WORD_NAME_RE.fullmatch(character) is not None
-
-
 def _control_sequence_name(source: str) -> str | None:
     """Return one literal control-sequence token, if ``source`` is exactly one."""
     if len(source) < 2 or source[0] != "\\":
         return None
     name = source[1:]
-    if _is_static_control_word_letter(name[0]):
-        if all(_is_static_control_word_letter(character) for character in name):
+    if is_static_control_word_letter(name[0]):
+        if all(is_static_control_word_letter(character) for character in name):
             return name
         return None
     return name if len(name) == 1 else None
@@ -433,8 +491,8 @@ def _following_mandatory_arguments(
             if position + 1 >= len(source):
                 return None
             token_end = position + 2
-            if _is_static_control_word_letter(source[position + 1]):
-                while token_end < len(source) and _is_static_control_word_letter(
+            if is_static_control_word_letter(source[position + 1]):
+                while token_end < len(source) and is_static_control_word_letter(
                     source[token_end]
                 ):
                     token_end += 1
@@ -564,7 +622,7 @@ def _declared_atom_commands(
         if command_name.startswith("\\"):
             command_name = command_name[1:]
         if (
-            _STATIC_CONTROL_WORD_NAME_RE.fullmatch(command_name) is not None
+            is_static_control_word_name(command_name)
             or len(command_name) == 1
         ):
             names.add(command_name)
@@ -589,7 +647,7 @@ def _command_spans(
             re.escape(name)
             + (
                 _TEX_CONTROL_WORD_END
-                if _STATIC_CONTROL_WORD_NAME_RE.fullmatch(name) is not None
+                if is_static_control_word_name(name)
                 else ""
             )
             for name in sorted(command_names, key=len, reverse=True)
@@ -652,7 +710,10 @@ def _command_spans(
         span_owner = grammar.owner
         is_quarantine = False
         position = _skip_space(source, command.end())
-        if grammar.accepts_star and source[position : position + 1] == "*":
+        is_starred = (
+            grammar.accepts_star and source[position : position + 1] == "*"
+        )
+        if is_starred:
             position = _skip_space(source, position + 1)
         if grammar.accepts_options and source[position : position + 1] == "[":
             closed = match_group(source, position, "[", "]")
@@ -662,6 +723,7 @@ def _command_spans(
                 is_quarantine = True
             else:
                 position = _skip_space(source, closed)
+        positional_groups: list[tuple[int, int]] = []
         for _ in range(max(grammar.positional_group_counts)):
             if source[position : position + 1] != "{":
                 break
@@ -671,7 +733,19 @@ def _command_spans(
                 span_owner = None
                 is_quarantine = True
                 break
+            positional_groups.append((position + 1, closed - 1))
             position = _skip_space(source, closed)
+        semantic_body_start: int | None = None
+        semantic_body_end: int | None = None
+        body_argument = grammar.semantic_body_argument
+        if (
+            not is_quarantine
+            and body_argument is not None
+            and body_argument < len(positional_groups)
+        ):
+            semantic_body_start, semantic_body_end = positional_groups[
+                body_argument
+            ]
         spans.append(
             _OwnerSpan(
                 command.start(),
@@ -680,6 +754,10 @@ def _command_spans(
                 command.start(),
                 "command",
                 is_quarantine,
+                invocation_start=command.start(),
+                invocation_name=name + ("*" if is_starred else ""),
+                semantic_body_start=semantic_body_start,
+                semantic_body_end=semantic_body_end,
             )
         )
     return spans
@@ -713,6 +791,8 @@ def _option_group_spans(
     source: str,
     start: int,
     end: int,
+    container: str,
+    container_start: int,
     allowed_keys: frozenset[str] | None = None,
 ) -> list[_OwnerSpan]:
     """Classify one option group using TeX-spliced tokens and source offsets."""
@@ -747,7 +827,16 @@ def _option_group_spans(
         else:
             source_end = start + active.offsets[value_end - 1] + 1
         spans.append(
-            _OwnerSpan(source_start, source_end, owner, site_start, "option")
+            _OwnerSpan(
+                source_start,
+                source_end,
+                owner,
+                site_start,
+                "option",
+                option_container=container,
+                invocation_start=container_start,
+                invocation_name=container,
+            )
         )
     return spans
 
@@ -1077,6 +1166,8 @@ def _option_spans(
                 source,
                 position + 1,
                 closed - 1,
+                container.name,
+                container.start,
                 _OPTION_ENVIRONMENT_KEYS[container.name],
             )
         )
@@ -1096,14 +1187,18 @@ def _option_spans(
             position = _skip_space(owner_source, container.end())
             allowed_keys: frozenset[str] | None = None
             if pattern is _OPTION_BRACKET_COMMAND_RE:
-                grammar = _OPTION_BRACKET_COMMANDS[container.group(1)]
+                container_name = container.group(1)
+                grammar = _OPTION_BRACKET_COMMANDS[container_name]
                 allowed_keys = grammar.physical_keys
-                if (
+                is_starred = (
                     grammar.accepts_star
                     and owner_source[position : position + 1] == "*"
-                ):
+                )
+                if is_starred:
+                    container_name += "*"
                     position = _skip_space(owner_source, position + 1)
             elif pattern is _OPTION_BRACE_COMMAND_RE:
+                container_name = "tnset"
                 allowed_keys = _SETUP_PHYSICAL_KEYS
             if owner_source[position : position + 1] != opener:
                 continue
@@ -1112,7 +1207,12 @@ def _option_spans(
                 continue
             spans.extend(
                 _option_group_spans(
-                    source, position + 1, closed - 1, allowed_keys
+                    source,
+                    position + 1,
+                    closed - 1,
+                    container_name,
+                    container.start(),
+                    allowed_keys,
                 )
             )
     return spans
@@ -1207,6 +1307,78 @@ def _owner_spans(source: str, owner_source: str) -> list[_OwnerSpan]:
     return spans
 
 
+def scan_case_constructs(source: str) -> tuple[Construct, ...]:
+    """Return drawing constructs visible in the dimension execution context."""
+    owner_source = strip_comments(source)
+    context = _execution_context(source, owner_source)
+    return tuple(scan_constructs(source, context.mask_spans))
+
+
+def scan_case_invocations(source: str) -> tuple[DimensionInvocation, ...]:
+    """Return executed static public commands under the ownership masks."""
+    owner_source = strip_comments(source)
+    context = _execution_context(source, owner_source)
+    invocations = (
+        DimensionInvocation(span.start, span.end, span.invocation_name)
+        for span in context.command_spans
+        if (
+            not span.is_quarantine
+            and span.invocation_name in DIMENSION_INVOCATION_NAMES
+        )
+    )
+    return tuple(sorted(invocations, key=lambda invocation: invocation.offset))
+
+
+def scan_case_scopes(source: str) -> tuple[DimensionScope, ...]:
+    """Return execution-aware PICTURE environment and command scopes."""
+    owner_source = strip_comments(source)
+    context = _execution_context(source, owner_source)
+    tokens = _environment_tokens(source, owner_source, context.mask_spans)
+    openings: dict[str, list[_EnvironmentToken]] = {}
+    scopes: list[DimensionScope] = []
+    for token in tokens:
+        if token.name not in _PUBLIC_ENVIRONMENTS:
+            continue
+        if token.kind == "begin":
+            openings.setdefault(token.match_name, []).append(token)
+            continue
+        stack = openings.get(token.match_name)
+        if not stack:
+            continue
+        opening = stack.pop()
+        assert opening.name is not None
+        body_start = _skip_space(owner_source, opening.end)
+        if owner_source[body_start : body_start + 1] == "[":
+            closed = match_group(owner_source, body_start, "[", "]")
+            if closed < 0:
+                continue
+            body_start = _skip_space(owner_source, closed)
+        scopes.append(
+            DimensionScope(
+                opening.start,
+                body_start,
+                token.start,
+                opening.name,
+            )
+        )
+    scopes.extend(
+        DimensionScope(
+            span.start,
+            span.semantic_body_start,
+            span.semantic_body_end,
+            span.invocation_name,
+        )
+        for span in context.command_spans
+        if (
+            not span.is_quarantine
+            and span.invocation_name in DIMENSION_SCOPE_NAMES
+            and span.semantic_body_start is not None
+            and span.semantic_body_end is not None
+        )
+    )
+    return tuple(sorted(scopes, key=lambda scope: scope.start))
+
+
 def _matching_owner_span(
     spans: Iterable[_OwnerSpan], offset: int
 ) -> _OwnerSpan | None:
@@ -1216,13 +1388,41 @@ def _matching_owner_span(
     )
 
 
-def _active_fragment(active: _ActiveSource, start: int, end: int) -> str:
-    """Return active TeX characters whose original offsets occupy one span."""
-    return "".join(
-        character
-        for character, offset in zip(active.text, active.offsets, strict=True)
-        if start <= offset < end
-    )
+def _active_fragment(
+    active: _ActiveSource, start: int, end: int
+) -> _ActiveSource:
+    """Return one active span without merging control words at comments."""
+
+    def ends_in_control_word(characters: list[str]) -> bool:
+        index = len(characters) - 1
+        while index >= 0 and is_static_control_word_letter(characters[index]):
+            index -= 1
+        slash_count = 0
+        while index >= 0 and characters[index] == "\\":
+            slash_count += 1
+            index -= 1
+        return slash_count % 2 == 1
+
+    characters: list[str] = []
+    offsets: list[int] = []
+    previous_offset: int | None = None
+    for character, offset in zip(active.text, active.offsets, strict=True):
+        if not start <= offset < end:
+            continue
+        if (
+            previous_offset is not None
+            and offset > previous_offset + 1
+            and is_static_control_word_letter(character)
+            and ends_in_control_word(characters)
+        ):
+            # A TeX comment terminates the preceding control word even though
+            # its discarded endline leaves no space token in the input stream.
+            characters.append(" ")
+            offsets.append(previous_offset)
+        characters.append(character)
+        offsets.append(offset)
+        previous_offset = offset
+    return _ActiveSource("".join(characters), tuple(offsets))
 
 
 def _comment_ranges(source: str) -> list[tuple[int, int]]:
@@ -1385,18 +1585,33 @@ def scan_case_dimension_sites(
                 "dimension owner/site mismatch: " + _location(occurrence)
             )
         grouped.setdefault(span, []).append(occurrence)
-    sites = [
-        DimensionOwnerSite(
-            path=path,
-            line=occurrences[0].line,
-            offset=occurrences[0].offset,
-            kind=span.kind,
-            source=_active_fragment(active, span.site_start, span.end),
-            owner=span.owner,
-            occurrences=tuple(occurrences),
+    for span, occurrences in grouped.items():
+        if (
+            span.invocation_start is None
+            or span.invocation_name not in DIMENSION_INVOCATION_NAMES
+        ):
+            raise DimensionOwnershipError(
+                "dimension owner site lacks a public invocation: "
+                + _location(occurrences[0])
+            )
+    sites: list[DimensionOwnerSite] = []
+    for span, occurrences in grouped.items():
+        fragment = _active_fragment(active, span.site_start, span.end)
+        sites.append(
+            DimensionOwnerSite(
+                path=path,
+                line=occurrences[0].line,
+                offset=occurrences[0].offset,
+                kind=span.kind,
+                option_container=span.option_container,
+                invocation_offset=span.invocation_start,
+                invocation_name=span.invocation_name,
+                source=fragment.text,
+                source_offsets=fragment.offsets,
+                owner=span.owner,
+                occurrences=tuple(occurrences),
+            )
         )
-        for span, occurrences in grouped.items()
-    ]
     return tuple(sorted(sites, key=lambda site: site.offset))
 
 

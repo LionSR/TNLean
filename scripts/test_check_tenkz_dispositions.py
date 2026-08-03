@@ -192,6 +192,18 @@ def main() -> int:
             for construct in guard.scan_inventory_constructs(equation_source)
         ] == ["tenkzeq", "tenkz"]
 
+        tree = root / "tree.tex"
+        tree.write_text("\\tntree\n[skin=box]{(a,b)}")
+        tree_source = tree.read_text()
+        tree_sources = guard.construct_sources(tree)
+        tree_key = ("tree.tex", 1, "tntree")
+        assert list(tree_sources) == [tree_key]
+        assert tree_sources[tree_key] == [tree_source]
+        assert guard.source_target_codes(tree_source) == frozenset({"C-tree"})
+        assert guard.fragment_target_codes(tree_sources[tree_key][0]) == frozenset(
+            {"C-tree"}
+        )
+
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
     assert len(fixture_inventory) == 264
     assert fixture_inventory["modes_dot_baseline.tex"][0] == "redraw"
