@@ -32,16 +32,18 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \leanok
     \uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
     If two finite families of blocks have asymptotically orthonormal overlaps
-    within each family and their MPV spans agree for every system size $N$,
-    then for all sufficiently large $N$ there exists an invertible matrix
-    $U_N$ expressing the MPV states of one family as linear combinations of
-    the MPV states of the other.
+    within each family, and if their MPV spans agree for all sufficiently large
+    system sizes $N$, then for all sufficiently large $N$ there exists an
+    invertible matrix $U_N$ expressing the MPV states of one family as linear
+    combinations of the MPV states of the other.
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
     By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
-    linearly independent for all sufficiently large $N$. At such an $N$, the
-    span equality lets us apply Lemma~\ref{lem:bnt_invertible_change_basis}.
+    linearly independent for all sufficiently large $N$. Hence, for all
+    sufficiently large $N$, both families are linearly independent and the
+    assumed span equality holds. Lemma~\ref{lem:bnt_invertible_change_basis}
+    applies at each such $N$.
 \end{proof}
 
 \begin{lemma}[Eventual vanishing of a finite geometric sum]

@@ -1,9 +1,10 @@
 \section{Permutation rigidity for bases of normal tensors}
 
-When two bases of normal tensors generate the same MPV subspace at every positive length,
-the blocks must agree up to a permutation and per-block gauge phases. The
-argument turns the equality of spans into an invertible change-of-basis matrix,
-then analyses its asymptotics through the overlaps.
+When two bases of normal tensors generate the same MPV subspace for all
+sufficiently large positive lengths, the blocks must agree up to a permutation
+and per-block gauge phases. The argument turns the eventual equality of spans
+into an invertible change-of-basis matrix, then analyses its asymptotics through
+the overlaps.
 
 The change-of-basis matrix is now used to match the blocks. We first treat
 equal block counts, then remove that restriction.
@@ -13,12 +14,14 @@ equal block counts, then remove that restriction.
     \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
     \leanok
     \uses{def:injective, def:mpv_overlap, def:gauge_phase_equiv}
+    % CPSV16 source boundary: arXiv:1606.00608, local source lines
+    % 522--525 and 1305--1307.
     Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be injective families of positive
     bond dimension satisfying trace-preserving normalization, with self-overlaps tending to~$1$ and
     off-diagonal overlaps tending to~$0$ within each family. If the spans of
-    the MPV states agree for every system size $N$, then there is a permutation
-    $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and $B_{\pi(j)}$ have the
-    same bond dimension and are gauge-phase equivalent.
+    the MPV states agree for all sufficiently large system sizes $N$, then
+    there is a permutation $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and
+    $B_{\pi(j)}$ have the same bond dimension and are gauge-phase equivalent.
 \end{theorem}
 
 \begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
@@ -60,7 +63,7 @@ equal block counts, then remove that restriction.
     $\sum_i (B_k^i)^\dagger B_k^i = \Id$, whose self-overlaps
     converge to~$1$ and whose cross-overlaps within each
     family converge to~$0$.
-    If for every system size~$N$,
+    If, for all sufficiently large system sizes~$N$,
     \begin{align}
         \spn_{\C}\{\ket{V^{(N)}(A_j)} : 1 \le j \le g_A\}
          & =
@@ -73,10 +76,12 @@ equal block counts, then remove that restriction.
 
 \begin{proof}\leanok\uses{lem:bnt_overlap_orthonormal_li, thm:bnt_perm_same_card}
     By Lemma~\ref{lem:bnt_overlap_orthonormal_li}, both families are
-    linearly independent for all sufficiently large $N$. At such an $N$, the
-    common span has the same dimension when computed from the $A$-family or
-    the $B$-family, so $g_A = g_B$. After identifying the two index sets,
-    Theorem~\ref{thm:bnt_perm_same_card} yields the permutation conclusion.
+    linearly independent for all sufficiently large $N$. Choose $N$ large
+    enough that both families are linearly independent and the assumed span
+    equality holds. The common span then has the same dimension when computed
+    from the $A$-family or the $B$-family, so $g_A = g_B$. After identifying
+    the two index sets, Theorem~\ref{thm:bnt_perm_same_card} yields the
+    permutation conclusion.
 \end{proof}
 
 The two preceding results obtain the block matching from the asymptotic
