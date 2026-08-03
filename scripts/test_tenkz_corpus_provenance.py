@@ -1171,7 +1171,7 @@ def test_rmp_dimension_ownership() -> None:
             r"\bar\tndeclareatom{\foo}{skin=dot}"
             r"\foo\tndeclareatom{\bar}{skin=dot}",
         )
-    except RuntimeError as error:
+    except DimensionOwnershipError as error:
         if str(error) != "tenkz execution masks did not converge":
             raise AssertionError(
                 "a cyclic execution mask raised the wrong error: "

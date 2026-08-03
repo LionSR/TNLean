@@ -1113,10 +1113,14 @@ def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
                 next_replacement_spans + command_quarantines,
             )
         if next_state in seen:
-            raise RuntimeError("tenkz execution masks did not converge")
+            raise DimensionOwnershipError(
+                "tenkz execution masks did not converge"
+            )
         seen.add(next_state)
         state = next_state
-    raise RuntimeError("tenkz execution masks exceeded their source bound")
+    raise DimensionOwnershipError(
+        "tenkz execution masks exceeded their source bound"
+    )
 
 
 def _comment_ranges(source: str) -> list[tuple[int, int]]:
