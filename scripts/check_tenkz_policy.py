@@ -537,6 +537,9 @@ class FinalTagPublisherEvidence:
     workflow_jobs_complete_and_paginated: bool | None
     release_validation_runs_complete_and_paginated: bool | None
     prior_released_validation_exact_and_successful: bool | None
+    prior_released_validation_prefix_boundary: str | None
+    prior_released_validation_target_oid: str | None
+    prior_released_validation_target_contains_exact_prefix: bool | None
     pinned_workflow_runs_exact: bool | None
     postmerge_validation_succeeded: bool | None
     postmerge_validation_network_disabled: bool | None
@@ -2067,6 +2070,7 @@ def validate_final_tag_publisher(
     tagger_epoch_seconds: int,
     policy_sha256: str,
     prefix_boundary: str,
+    current_prefix_boundary: str,
     support_tree_oid: str,
 ) -> str:
     """Validate the complete pinned publisher retry history for one sign-off."""
@@ -2123,6 +2127,29 @@ def validate_final_tag_publisher(
         isinstance(evidence.prior_released_validation_exact_and_successful, bool),
         "prior released-validation history is unavailable",
     )
+    if evidence.prior_released_validation_exact_and_successful:
+        require(
+            evidence.prior_released_validation_prefix_boundary
+            == current_prefix_boundary,
+            "prior released validation used another ledger prefix",
+        )
+        require(
+            isinstance(evidence.prior_released_validation_target_oid, str)
+            and SHA_RE.fullmatch(evidence.prior_released_validation_target_oid)
+            is not None,
+            "prior released validation target is missing or malformed",
+        )
+        require(
+            evidence.prior_released_validation_target_contains_exact_prefix is True,
+            "prior released validation target did not contain the exact ledger prefix",
+        )
+    else:
+        require(
+            evidence.prior_released_validation_prefix_boundary is None
+            and evidence.prior_released_validation_target_oid is None
+            and evidence.prior_released_validation_target_contains_exact_prefix is None,
+            "non-released history carries a released-validation binding",
+        )
     require(
         evidence.pinned_workflow_runs_exact is True,
         "final-tag publisher runs are not bound to the pinned exact workflow",
@@ -2966,7 +2993,6 @@ def validate_entries(
     deferred_invalid_targets: list[str] = []
     signed = False
     successful_signoff: tuple[str, str, str, str, int] | None = None
-    observed_signoff: tuple[str, str, str, str, int] | None = None
     used_source_refs: set[str] = set()
     used_source_shas: set[str] = set()
     used_tag_names: set[str] = set()
@@ -3820,23 +3846,46 @@ def validate_entries(
                         subject=f"{entry_id} fix-head test {test_ref}",
                     )
                     )
+                    integration_fingerprint, integration_programs, integration_fixtures = (
+                        validate_release_test_observation(
+                            resolve_replay_release_test_observation(
+                                fix_integration,
+                                active["freeze_tag"],
+                                test_ref,
+                                release_contract,
+                            ),
+                            tree_oid=fix_integration,
+                            tag=active["freeze_tag"],
+                            test_ref=test_ref,
+                            surface=fact["surface"],
+                            expected_result="passed",
+                            expected_failure_fingerprint=fingerprint,
+                            contract=release_contract,
+                            subject=f"{entry_id} fix-integration test {test_ref}",
+                        )
+                    )
                     require(
-                        base_fingerprint == head_fingerprint == fingerprint,
+                        base_fingerprint
+                        == head_fingerprint
+                        == integration_fingerprint
+                        == fingerprint,
                         f"{entry_id} test {test_ref} changed its pinned fingerprint",
                     )
                     require(
                         base_programs
                         == head_programs
+                        == integration_programs
                         == inventory_fact["program_paths"],
                         f"{entry_id} test {test_ref} changed its declared program roles",
                     )
                     require(
                         base_fixtures
                         == head_fixtures
+                        == integration_fixtures
                         == inventory_fact["fixture_paths"],
                         f"{entry_id} test {test_ref} changed its declared fixture roles",
                     )
-                validate_release_payload(
+                head_payload_blobs = validate_release_payload(
                     resolve_replay_release_payload(
                         fix_head,
                         active["freeze_tag"],
@@ -3846,6 +3895,21 @@ def validate_entries(
                     tag=active["freeze_tag"],
                     contract=release_contract,
                     subject=f"{entry_id} fix head",
+                )
+                integration_payload_blobs = validate_release_payload(
+                    resolve_replay_release_payload(
+                        fix_integration,
+                        active["freeze_tag"],
+                        release_contract,
+                    ),
+                    tree_oid=fix_integration,
+                    tag=active["freeze_tag"],
+                    contract=release_contract,
+                    subject=f"{entry_id} fix integration",
+                )
+                require(
+                    integration_payload_blobs == head_payload_blobs,
+                    f"{entry_id} fix integration changed the validated payload blobs",
                 )
                 return fix_merged_at, fix_integration
 
@@ -4149,13 +4213,6 @@ def validate_entries(
                 )
                 if isinstance(tagger_epoch_result, int):
                     tagger_epoch_seconds = tagger_epoch_result
-                    observed_signoff = (
-                        entry_id,
-                        record_ref,
-                        record_integration,
-                        release_tag,
-                        tagger_epoch_seconds,
-                    )
             require(
                 len(active["work"]) == required_work_count
                 and set(active["work"]) == set(work_classes),
@@ -4432,26 +4489,32 @@ def validate_entries(
     terminal_tag_present = final_tag.exists is True
     publisher_status: str | None = None
     publisher_evidence: FinalTagPublisherEvidence | None = None
-    if observed_signoff is not None:
+    if terminal_tag_present and pending_reset is not None:
+        raise PolicyError("final tag exists while release evidence requires reset")
+    if successful_signoff is not None:
         assert resolve_final_tag_publisher is not None
         (
             signoff_entry_id,
             _signoff_record_ref,
-            observed_signoff_integration,
+            successful_signoff_integration,
             _observed_release_tag,
-            observed_tagger_epoch_seconds,
-        ) = observed_signoff
-        publisher_evidence = resolve_final_tag_publisher(observed_signoff_integration)
+            successful_tagger_epoch_seconds,
+        ) = successful_signoff
+        publisher_evidence = resolve_final_tag_publisher(successful_signoff_integration)
+        current_prefix_boundary = audit.boundary_entry_id
+        require(
+            isinstance(current_prefix_boundary, str),
+            "released-validation history requires a nonempty ledger prefix",
+        )
         publisher_status = validate_final_tag_publisher(
             publisher_evidence,
-            integration_oid=observed_signoff_integration,
-            tagger_epoch_seconds=observed_tagger_epoch_seconds,
+            integration_oid=successful_signoff_integration,
+            tagger_epoch_seconds=successful_tagger_epoch_seconds,
             policy_sha256=soak_root["policy_sha256"],
             prefix_boundary=signoff_entry_id,
+            current_prefix_boundary=current_prefix_boundary,
             support_tree_oid=release_contract.test_support_tree,
         )
-    if terminal_tag_present and pending_reset is not None:
-        raise PolicyError("final tag exists while release evidence requires reset")
     if publisher_status == "success" and pending_reset is not None:
         raise PolicyError("final-tag publisher succeeded while release evidence requires reset")
     if terminal_tag_present and not signed:
