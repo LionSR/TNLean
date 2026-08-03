@@ -98,11 +98,14 @@
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={top,bottom}, cols=4, frame=circle, bonds=none]
-  \tn[at=(1,2), skin=slotted, species=warm, wires=2, wide=2]{X}
+  \tn[at=(1,2), name=slotted-host, skin=slotted, species=warm,
+    wires=2, wide=2]{X}
   \tn[at=(1,1), skin=none, void=sealed]{}
   \tn[at=(1,4), skin=none, void=sealed]{}
   \tn[at=(2,1), skin=none, void=sealed]{}
   \tn[at=(2,4), skin=none, void=sealed]{}
+  \tnwire{open w}{slotted-host.w@1}
+  \tnwire{open w}{slotted-host.w@2}
 \end{tenkz}
 \qquad
 \begin{tenkz}[rows={wire}, cols=6, bonds=none]

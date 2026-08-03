@@ -1571,6 +1571,21 @@ grep -Fq '[TKZ-SKIN-PAIRING-SLOT]' \
   exit 1
 }
 
+skin_port_alias_negative="$KERNEL/negative/n_skin_pairing_port_alias.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_port_alias_negative" \
+       >"$WORK/n_skin_pairing_port_alias.transcript" 2>&1 ); then
+  echo "FAIL: distinct skin bearings aliased one cell lane" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-SKIN-PAIRING-PORT-ALIAS]' \
+  "$WORK/n_skin_pairing_port_alias.transcript" || {
+  echo "FAIL: an aliased skin port lacked its dedicated diagnostic" >&2
+  exit 1
+}
+
 skin_cluster_negative="$KERNEL/negative/n_skin_pairing_cluster.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
