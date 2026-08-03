@@ -101,8 +101,9 @@ normalized sign-off `mergedAt`, policy and prefix hashes, prefix boundary, and
 the pinned support-tree, object-schema-blob, and public-key-blob OIDs. The
 publisher accepts no caller-provided substitute. Through `gh`, it fetches those
 exact Git objects by OID and verifies their identities and hashes. A branch
-name, moving path, environment value other than the private key, or unbound
-`workflow_dispatch` input fails closed.
+name, moving path, caller-controlled variable or secret other than the private
+key, or unbound `workflow_dispatch` input fails closed. Trusted `GITHUB_*`
+runner metadata must agree with the closed tuple.
 
 The publisher constructs one byte-deterministic annotated tag object `E`. The
 pinned object schema fixes its tagger identity, normalizes the tagger time to
