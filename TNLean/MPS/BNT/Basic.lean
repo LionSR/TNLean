@@ -391,8 +391,13 @@ satisfying
 
 This converts the equal-MPV-subspace condition into a matrix equation whose
 asymptotics can then be analysed in the permutation-matching step of Theorem 4.4.
-The eventual span hypothesis is the comparison used in CPSV16, arXiv:1606.00608,
-local source lines 522–525 and 1305–1307.
+
+**Local fix (eventual span equality):** The source comparison holds only on a
+finite tail.  Accordingly, this result assumes eventual span equality rather
+than equality at every length.  See
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source context: CPSV16, arXiv:1606.00608, lines 522--525 and 1305--1307.
 -/
 lemma eventually_exists_invertible_changeBasis
     {d g : ℕ} {dimA dimB : Fin g → ℕ}
