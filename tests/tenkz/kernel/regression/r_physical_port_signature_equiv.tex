@@ -1,5 +1,7 @@
-% Regression: physical policy sugar and explicit typed physical ports expose
-% the same canonical boundary bearings, including both legs of updown.
+% Regression: on flat and circular carriers, physical policy sugar and
+% explicit typed physical ports expose the same canonical boundary bearings,
+% including both legs of updown.  A plane policy owns a distinct transverse
+% axis and is covered separately by r_plane_transverse_physical.tex.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -15,16 +17,6 @@
   \end{tenkz}
   =
   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-    \tn[at=(1,1), ports={90:physical}]{}
-  \end{tenkz}
-\end{tenkzeq}
-\begin{tenkzeq}[check={signature}]
-  \begin{tenkz}[
-      rows={wire}, cols=1, frame=plane, bonds=none, physical=up]
-    \tn[at=(1,1)]{}
-  \end{tenkz}
-  =
-  \begin{tenkz}[rows={wire}, cols=1, frame=plane, bonds=none]
     \tn[at=(1,1), ports={90:physical}]{}
   \end{tenkz}
 \end{tenkzeq}

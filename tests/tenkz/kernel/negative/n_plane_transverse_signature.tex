@@ -1,0 +1,17 @@
+% Negative: a plane-transverse physical policy leg is not the projected
+% in-plane north port, even though flat carriers identify those two forms.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[
+      rows={wire}, cols=1, frame=plane, bonds=none, physical=up]
+    \tn[at=(1,1)]{}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, frame=plane, bonds=none]
+    \tn[at=(1,1), ports={90:physical}]{}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

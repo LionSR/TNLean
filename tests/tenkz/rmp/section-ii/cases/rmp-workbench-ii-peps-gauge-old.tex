@@ -10,27 +10,27 @@
   \tenkzkernel
   \tndeclare{species}{gauge}{hue=source:blue}
   \underset{A}{\begin{tenkz}[
-      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane]
+      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane,
+      physical=up]
     \tn[at=(3,3), name=A,
-      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
     \tnwire{A.180}{open w}
     \tnwire{A.0}{open e}
     \tnwire{A.90}{open n}
     \tnwire{A.270}{open s}
-    \tnwire{A.45}{open ne}
     \tnwire[kind=string, species=gauge, name=gA, via={(3,2)}]{open n}{open s}
     \tn[at=on gA 0.5, skin=dot, species=gauge]{}
   \end{tenkz}}
   \;=\;
   \underset{B}{\begin{tenkz}[
-      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane]
+      rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, frame=plane,
+      physical=up]
     \tn[at=(3,3), name=B,
-      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
     \tnwire{B.180}{open w}
     \tnwire{B.0}{open e}
     \tnwire{B.90}{open n}
     \tnwire{B.270}{open s}
-    \tnwire{B.45}{open ne}
     \tn[at=(4,3), name=gS, skin=dot, species=gauge]{}
     \tn[at=(3,4), name=gE, skin=dot, species=gauge]{}
     \tn[at=(2,3), name=gN, skin=dot, species=gauge]{}
