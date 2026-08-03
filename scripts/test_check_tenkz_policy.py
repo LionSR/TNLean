@@ -517,6 +517,7 @@ class Context:
     def resolve_replay_release_prep(
         self,
         ref: str,
+        _integration_oid: str,
         _paths: tuple[str, ...],
         _work_integrations: tuple[str, ...],
         _resolution_integrations: tuple[str, ...],
@@ -1000,6 +1001,7 @@ def context() -> Context:
         RELEASE_PREP: policy.ReleasePrepEvidence(
             validated_pr_ref=RELEASE_PREP,
             validated_head_oid=release_head,
+            validated_integration_oid=prs[RELEASE_PREP].merge_commit_oid,
             validated_manifest_path="docs/tenkz/releases/tenkz-v1.0.0.toml",
             validated_changed_paths=policy.policy_rules(ARMED_POLICY)[4].release_varying_paths(
                 policy.FINAL_TAG
@@ -4335,6 +4337,53 @@ def main() -> int:
     assert (
         validate(complete_log(), failing_integration_payload)
         == "reset-required:S1-0004"
+    )
+
+    release_binding_call = context()
+    observed_release_integrations: list[str] = []
+
+    def resolve_bound_release_prep(
+        ref: str,
+        integration_oid: str,
+        _paths: tuple[str, ...],
+        _work_integrations: tuple[str, ...],
+        _resolution_integrations: tuple[str, ...],
+    ) -> policy.ReleasePrepEvidence:
+        observed_release_integrations.append(integration_oid)
+        return release_binding_call.release_preps[ref]
+
+    assert validate(
+        complete_log(),
+        release_binding_call,
+        resolve_replay_release_prep=resolve_bound_release_prep,
+    ) == "signed-off-awaiting-tag"
+    assert observed_release_integrations == [oid(9201)]
+
+    for invalid_integration in (None, oid(9991)):
+        release_other_integration = context()
+        release_other_integration.release_preps[RELEASE_PREP] = replace(
+            release_other_integration.release_preps[RELEASE_PREP],
+            validated_integration_oid=invalid_integration,
+        )
+        assert validate(complete_log(), release_other_integration) == (
+            "reset-required:S1-0004"
+        )
+
+    release_other_integration_candidate = context()
+    signoff = release_other_integration_candidate.prs[SIGNOFF_RECORD]
+    assert signoff.head_oid is not None
+    release_other_integration_candidate.prs[SIGNOFF_RECORD] = candidate_pr(
+        907,
+        author="release-author",
+        reviews=(review("release-reviewer", SIGNOFF_REVIEW, signoff.head_oid),),
+    )
+    release_other_integration_candidate.release_preps[RELEASE_PREP] = replace(
+        release_other_integration_candidate.release_preps[RELEASE_PREP],
+        validated_integration_oid=oid(9991),
+    )
+    expect_failure(
+        lambda: validate(complete_log(), release_other_integration_candidate),
+        "release preparation used another integration",
     )
 
     unprepared = context()

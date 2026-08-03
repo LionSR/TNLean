@@ -470,6 +470,7 @@ class ReleasePrepEvidence:
 
     validated_pr_ref: str | None
     validated_head_oid: str | None
+    validated_integration_oid: str | None
     validated_manifest_path: str | None
     validated_changed_paths: tuple[str, ...] | None
     validated_work_integrations: tuple[str, ...] | None
@@ -763,7 +764,8 @@ ResolveReplayRecordDiff = Callable[[str, str, str | None], RecordDiffEvidence]
 ResolveReplayWorkDiff = Callable[[str], WorkDiffEvidence]
 ResolveReplayResolutionDiff = Callable[[str], ResolutionDiffEvidence]
 ResolveReplayReleasePrep = Callable[
-    [str, tuple[str, ...], tuple[str, ...], tuple[str, ...]], ReleasePrepEvidence
+    [str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]],
+    ReleasePrepEvidence,
 ]
 ResolveReplayReleasePayload = Callable[[str, str, ReleaseContract], ReleasePayloadEvidence]
 ResolveReplayReleaseTestObservation = Callable[
@@ -4284,6 +4286,7 @@ def validate_entries(
                 )
                 release = resolve_replay_release_prep(
                     release_ref,
+                    release_integration,
                     release_paths,
                     work_integrations,
                     resolution_integrations,
@@ -4295,6 +4298,10 @@ def validate_entries(
                 require(
                     release.validated_head_oid == release_head,
                     f"{entry_id} release preparation was not validated at its exact head",
+                )
+                require(
+                    release.validated_integration_oid == release_integration,
+                    f"{entry_id} release preparation used another integration",
                 )
                 require(
                     release.validated_manifest_path == release_contract.manifest_path(FINAL_TAG),
