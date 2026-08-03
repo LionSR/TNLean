@@ -206,9 +206,9 @@ lifetime.  The alternative execution form must begin exactly
 `executes at the <milestone> freeze`.  Prose outside such a row is not a
 machine-readable verdict.
 
-## Compatibility policy and 1.0 evidence gate
+## Pre-1.0 contract and 1.0 evidence gate
 
-`DESIGN.md` owns package and event-stream compatibility.  `SOAK-1.0.md` is an
+`DESIGN.md` owns the package and event-stream contract.  `SOAK-1.0.md` is an
 inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no campaign entry is valid and reviewed follow-up PRs may still
 correct the prefix.
@@ -218,6 +218,8 @@ exists today.  Move its callers to the clean 1.0 form in the same change, then
 delete it.  Do not add an alias, compatibility reader, dual writer, or temporary
 bridge.  If one pull request is too large, stack small pull requests whose
 integration order keeps every merged tree on the single new contract.
+The shrink ledger's `alias(...)` verdict records debt already present; it is not
+permission to introduce another alias.
 
 The activation slice under #5352 will add the validation commands here only
 after their scripts, repository-evidence checks, tests, and CI wiring exist on
