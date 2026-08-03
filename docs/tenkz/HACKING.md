@@ -206,17 +206,20 @@ lifetime.  The alternative execution form must begin exactly
 `executes at the <milestone> freeze`.  Prose outside such a row is not a
 machine-readable verdict.
 
-## Compatibility policy and 1.0 evidence gate
+## Pre-1.0 contract and 1.0 evidence gate
 
-`DESIGN.md` owns package and event-stream compatibility.  `SOAK-1.0.md` is an
+`DESIGN.md` owns the package and event-stream contract.  `SOAK-1.0.md` is an
 inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no campaign entry is valid and reviewed follow-up PRs may still
 correct the prefix.
 
 Before the 0.9 freeze, do not preserve an obsolete spelling merely because it
 exists today.  Move its callers to the clean 1.0 form in the same change, then
-delete it.  Add a temporary bridge only when a staged migration cannot land
-atomically, and give that bridge an explicit SHRINK expiry.
+delete it.  Do not add an alias, compatibility reader, dual writer, or temporary
+bridge.  If one pull request is too large, stack small pull requests whose
+integration order keeps every merged tree on the single new contract.
+The shrink ledger's `alias(...)` verdict records debt already present; it is not
+permission to introduce another alias.
 
 The activation slice under #5352 will add the validation commands here only
 after their scripts, repository-evidence checks, tests, and CI wiring exist on
@@ -294,11 +297,19 @@ compatible friction in the active attempt is resolved and both work merges have
 landed; its exact diff changes only the tag-derived 1.0 manifest and four
 canonical release artifacts.  Exact-head sign-off review follows immediately
 on that integration; if `main` advances, repeat preparation on the new tip.  A
-validated sign-off remains live until a full replay succeeds and
-the pinned post-merge workflow's dependent publisher job creates and reads back
-the exact annotated final tag under current required protection.  Do not push
-that tag by hand: a pre-existing or externally created ref is an incident, not
-a release.
+validated sign-off remains live until a full replay succeeds.  The dependent
+publisher first reads the final ref.  It either constructs the one signed tag
+object fixed by the release policy and creates an absent ref, or authenticates
+that already-present object without reading the private key.  A retry never
+invents a second object.  Do not push the tag by hand: any other object is an
+incident, not a release.
+Before its first write, the publisher verifies the candidate object's signature,
+schema bytes, object ID, and peel.  A successful job is itself the API-visible
+publication fact; there is no inaccessible job-output receipt.  Remove the
+environment key after that success.  A later validation declares release only
+after it sees the exact object, the historical pinned publisher job, and the
+retired key.  Unrelated workflow files may then evolve without changing that
+historical evidence.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
 never reopens the ledger.
@@ -325,7 +336,9 @@ close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
 namespace.  It performs only read requests.  Its credential principal needs
 read access to repository contents, pull requests, reviews, and issues, plus
 the write-level ruleset visibility GitHub requires to return unredacted rule
-and bypass details.  Missing or redacted details fail closed.  Ruleset
+and bypass details.  It also needs complete name-and-access visibility for
+repository, organization, and environment Actions secrets; secret values are
+never read.  Missing or redacted details fail closed.  Ruleset
 administrators and the GitHub control plane are trusted; this current-state
 check does not claim to detect an administrative protection gap restored before
 the snapshot.  No live-entry or release command is available while enforcement

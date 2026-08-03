@@ -48,7 +48,7 @@ frozen_twin_scope = "library-entry-point-in-same-package"
 frozen_twin_lifetime = "permanent"
 frozen_twin_precedent = "quantikz/quantikz2"
 maintainer_identity = "github:lionsr"
-signer_identity_scheme = "github:lowercase-login"
+github_identity_scheme = "github:lowercase-login"
 reviewer_repository_permissions = ["write", "admin"]
 release_manifest_pattern = "docs/tenkz/releases/TAG.toml"
 release_package_metadata = "tex/tenkz/tenkz.sty"
@@ -71,6 +71,14 @@ release_enforcement_workflows = [".github/workflows/tenkz-release-policy.yml"]
 release_workflow_dependencies = "transitive-content-addressed-no-runtime-downloads"
 release_enforcement_network = "disabled-before-repository-code"
 release_reset_replay_schema = "tests/tenkz/release-support/reset-replay-v1.schema.json"
+release_tag_signature = "ssh-ed25519"
+release_tag_public_key = "tests/tenkz/release-support/final-tag-signing-key.pub"
+release_tag_object_schema = "tests/tenkz/release-support/final-tag-object-v1.schema.json"
+release_publisher_environment = "tenkz-release-publisher"
+release_publisher_secret = "TENKZ_FINAL_TAG_SIGNING_KEY"
+release_publisher_secret_scope = "environment-only-no-shadow"
+release_publisher_key_retirement = "required-before-released"
+release_publisher_workflow_root = ".github/workflows"
 release_test_dependency_contract = "pinned-harness-support-declared-subject-roles"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
@@ -261,6 +269,24 @@ head and executed workflow resolve to those pinned bytes. The independent
 evidence-supervisor result is still required; a workflow status cannot replace
 it. A missing, renamed, non-blob, or changed workflow fails closed.
 
+Key isolation has a wider boundary than the one release workflow. Activation
+also pins the complete Git tree at `release_publisher_workflow_root`. Until a
+validation declares `released`, the current tree must equal that pin and the
+dedicated environment must retain its protected-branch rule. Across that tree,
+the publisher is the only job that may name the environment or private-key
+secret; `secrets: inherit` is forbidden. The configured secret name exists only
+in that environment. The same name in another environment in this repository,
+at repository scope, or at organization scope fails closed, regardless of the
+organization secret's current repository access.
+
+After a successful publisher job, an administrator removes the environment
+secret. The validation that declares `released` requires its absence, and every
+later replay rejects its reintroduction. Released replay checks the successful
+job against the historical workflow tree at the sign-off integration, which
+must equal the activation pin. It does not require unrelated current workflows
+to remain frozen after the key is gone. Environment administrators remain
+inside the explicit GitHub-administration trust boundary.
+
 The resolver also closes the dedicated workflow's executable dependency graph.
 A local action or reusable workflow is pinned by its activation Git object and
 included in later byte-and-mode checks. Every external action or reusable
@@ -276,10 +302,37 @@ content does not.
 
 The sole networked release step is the dedicated workflow's terminal publisher
 job. It has no checkout and runs no repository code. GitHub starts it only after
-the exact sign-off integration's network-disabled post-merge validator succeeds;
-it uses the GitHub control plane to create the absent annotated
-`tenkz-v1.0.0` tag at that integration. The pinned workflow and job dependency,
-not a tagger timestamp or a manual push, establish this order.
+the exact sign-off integration's network-disabled post-merge validator succeeds.
+
+The publisher reads the final ref before deciding whether it needs the private
+key. The pinned support tree supplies the SSH-Ed25519 public key and byte-level
+object schema; only the absent-ref path receives the private key. The schema
+fixes the tagger identity and timezone to `+0000`. The validator converts the
+sign-off pull request's exact UTC `mergedAt` to one integer Unix second and
+passes that `tagger_epoch_seconds` value; a fractional, non-UTC, ambiguous, or
+out-of-range value fails closed. The schema specifies the complete Git
+tag-object byte layout, the `git` SSH-signature namespace and embedding, and the
+repository object-format hash. Its signed message binds the final name,
+sign-off integration, policy hash, and ledger prefix.
+
+The successful validator passes one closed tuple to its dependent job: `I`,
+`tagger_epoch_seconds`, policy and prefix hashes, prefix boundary, and the
+pinned support-tree, schema-blob, and public-key-blob OIDs. The publisher accepts
+no caller-supplied replacement. It fetches those exact Git objects by OID
+through the GitHub control plane and verifies their identities and hashes. When
+construction is required, those checks precede it; the publisher never reads a
+moving branch path.
+
+After validation, the publisher first reads the final ref. If it is absent, the
+publisher constructs `E`, verifies its raw signature against the pinned public
+key, checks every schema byte and its peel, computes its object ID before any
+write, and creates the already-verified object and ref without force. If an
+uncertain earlier write already left the ref at `E`, a retry authenticates the
+stored raw object and adopts it without reading the private key. Any other
+present object is an incident. The job exits successfully only after a final
+readback authenticates `E`; it emits no durable output receipt. Without the
+private key, another actor cannot forge an acceptable object; replaying the
+already-authorized `E` cannot change its name or target.
 
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
 canonical grammar `0|[1-9][0-9]*`. When a new freeze is proposed, its patch must
@@ -373,7 +426,8 @@ The dependency chain is ordered:
    independently exact-head-approved release-preparation pull request descending
    from both work integrations and all resolution records;
 9. merge the independently approved sign-off record; its pinned post-merge
-   workflow validates it and then creates `tenkz-v1.0.0` on its integration.
+   workflow validates it, records the exact tag object, and then creates
+   `tenkz-v1.0.0` on its integration.
 
 Closing #5086 in step 2 means that its plane-basis capability has landed for
 0.8. The `expiry 1.0` values on related SHRINK entries bound the later removal
@@ -451,18 +505,24 @@ and before sign-off merge. The sign-off head and integration must descend from
 all three integrations. The sign-off may proceed immediately once those ordered
 facts hold. It also requires one qualifying work entry in each class, no
 unresolved `fix-compatible` friction in the active attempt, and no condition
-requiring reset. A
-validated sign-off first enters `signed-off-awaiting-tag`; mutable evidence
-remains live until a full replay succeeds and the exact annotated final tag is
-currently observed on its integration under the required no-update, no-delete,
-no-bypass protection. That current-state observation enters terminal
-`released` state, and no entry follows it. Every later validation still replays
-all current mutable facts. Before the final tag exists, drift follows the
-ordered reset process; after the tag exists, the same drift is a hard release
-incident and never reopens the ledger. Ruleset administrators and the GitHub
-control plane are trusted: the validator does not claim to detect drift or a
-protection gap that an administrator restores before its snapshot. A wrong,
-moved, or replaced present tag is never repaired by moving or reusing the name.
-An absent final-tag ref remains `signed-off-awaiting-tag`; this state-based
-contract stores no prior-observation witness. The exact entry grammar, state
+requiring reset. A validated sign-off first enters
+`signed-off-awaiting-tag`; mutable evidence remains live until a full replay
+succeeds. If the exact signed object appears but no publisher job has completed
+successfully, the intermediate state is
+`signed-off-awaiting-publisher-success`; a retry authenticates it. Once the job
+succeeds, the campaign is `signed-off-awaiting-key-retirement` until the
+environment key is removed. A later validation, not the publisher job, declares
+terminal `released` state after observing the exact object, the successful
+historical job, and the retired key; no entry follows it. There is no publisher
+output receipt or compatibility state alias.
+
+Every later validation still replays all current mutable facts. Before the
+final tag exists, drift follows the ordered reset process; after the tag exists,
+the same drift is a hard release incident and never reopens the ledger. Ruleset
+administrators and the GitHub control plane are trusted: the validator does not
+claim to detect drift or a protection gap that an administrator restores before
+its snapshot. A wrong, moved, or replaced present tag is never repaired by
+moving or reusing the name. An absent final-tag ref remains
+`signed-off-awaiting-tag` unless a successful publisher job previously read it
+back; later absence in that case is an incident. The exact entry grammar, state
 transitions, external-fact rules, and reset rules live in `SOAK-1.0.md`.
