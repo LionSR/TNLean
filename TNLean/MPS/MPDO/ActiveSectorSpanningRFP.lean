@@ -10,10 +10,11 @@ import TNLean.MPS.MPDO.RFPViaTSBlocking
 # Renormalization maps for the four-sector classical tensor
 
 The four-sector tensor from `ActiveSectorSpanningCounterexample` satisfies the
-trace-preserving completely positive map definition of a renormalization fixed
-point. Its two-site sector products are stochastic refinements of its one-site
+two trace-preserving completely positive map equations underlying Definition
+4.1. Its two-site sector products are stochastic refinements of its one-site
 sectors. Rectangular Kraus families obtained from those transition weights give
-the two maps in Definition 4.1.
+the two maps. The raw tensor is not in canonical form, so Definition 4.1 does
+not classify this representative itself as a renormalization fixed point.
 
 The source-normalized scalar representative behaves differently: its two-site
 blocking has physical-trace transfer `(16 / 5) P`, where `P` is a nonzero
@@ -30,9 +31,10 @@ still passes through the normalization-sensitive rank-one step of Lemma C.5.
 
 ## Main results
 
-* `tensor_isRFPViaTS`: the explicit four-sector tensor satisfies Definition 4.1.
-* `blockTwo_tensor_isRFPViaTS`: its two-site physical blocking also satisfies
-  Definition 4.1.
+* `tensor_isRFPViaTS`: the explicit four-sector tensor satisfies the bare
+  two-channel equations, without the source's canonical-form hypothesis.
+* `blockTwo_tensor_isRFPViaTS`: its two-site physical blocking satisfies the
+  same bare equations.
 * `blockTwo_normalizedTensor_not_isRFPViaTS`: the two-site blocking of the
   source-normalized representative does not satisfy Definition 4.1.
 
@@ -238,11 +240,19 @@ private lemma refinementMap_physClose1 (X : Matrix (Fin 2) (Fin 2) ℂ) :
     · exact (hpq (hr.1.symm.trans hr.2)).elim
     · rfl
 
-/-- The explicit four-sector tensor satisfies the trace-preserving completely
-positive map definition of a renormalization fixed point. The refinement map
-sends a sector to consecutive sector pairs with the neighboring transition
+/-- The explicit four-sector tensor satisfies the bare trace-preserving
+completely positive map equations represented by `IsRFPViaTS`. The refinement
+map sends a sector to consecutive sector pairs with the neighboring transition
 weights, while the coarse-graining map returns each pair to its represented
 sector.
+
+**Scope restriction (bare predicate, no canonical form):** Definition 4.1
+assumes that the tensor is in canonical form. The raw tensor here does not
+satisfy the global unit-weight canonical normalization, while the Lean
+predicate `IsRFPViaTS` records only the two channel equations. Thus this
+theorem is not an instance of Definition 4.1 for the raw representative.
+Documented in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
 
 This is a classification of this explicit tensor, not a proof of the general
 strong-area-law and zero-correlation-length implication in Theorem 4.9.
@@ -254,12 +264,18 @@ theorem tensor_isRFPViaTS : IsRFPViaTS tensor :=
     refinementMap_isKrausCPTP, coarseningMap_physClose2,
     refinementMap_physClose1⟩
 
-/-- The two-site physical blocking of the explicit four-sector tensor is a
-renormalization fixed point. Its maps are obtained by applying the one-site
+/-- The two-site physical blocking of the explicit four-sector tensor satisfies
+the bare `IsRFPViaTS` equations. Its maps are obtained by applying the one-site
 coarse-graining and refinement maps twice and passing to blocked coordinates.
 
-This proves the renormalization-fixed-point conclusion for this witness only;
-it does not prove the universal implication from the hypotheses of Theorem 4.9.
+**Scope restriction (bare predicate, no canonical form):** This theorem
+inherits the scope restriction of `tensor_isRFPViaTS`. It proves the two channel
+equations after blocking, but does not supply the canonical-form hypothesis of
+Definition 4.1. Documented in
+`docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex`.
+
+This proves the bare channel equations for this witness only; it does not prove
+the universal implication from the hypotheses of Theorem 4.9.
 
 Source: arXiv:1606.00608, Definition 4.1, lines 645--659, and the twice-applied
 channel construction for Theorem 4.9 at lines 1810--1825. -/
