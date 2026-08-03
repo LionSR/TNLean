@@ -63,6 +63,12 @@ Do not add a fifth numeric port to straighten the physical leg.  A numeric
 face always belongs to the sheet; \tnkey{physical=up} belongs to the plane's
 independent transverse axis.
 
+Physical indices belong to sites named by frame addresses.  A mark placed at
+a midpoint, on a wire, or at a crossing is a point constructed from the
+existing geometry, not another site; the picture policy therefore gives it no
+physical index.  If such a mark represents an additional tensor with a
+physical index, declare that port explicitly with \tnkey{ports=}.
+
 \subsection{Compose maps and fusion trees}
 
 Use the \tnenv{tenkzcd} environment with its \tnkey{maps} option when cells
