@@ -304,11 +304,11 @@ The sole networked release step is the dedicated workflow's terminal publisher
 job. It has no checkout and runs no repository code. GitHub starts it only after
 the exact sign-off integration's network-disabled post-merge validator succeeds.
 
-The publisher makes one authenticated tag object that every retry can
-reconstruct. The pinned support tree supplies its SSH-Ed25519 public key and
-byte-level object schema; only the publisher receives the private key. The
-schema fixes the tagger identity and timezone to `+0000`. The validator converts
-the sign-off pull request's exact UTC `mergedAt` to one integer Unix second and
+The publisher reads the final ref before deciding whether it needs the private
+key. The pinned support tree supplies the SSH-Ed25519 public key and byte-level
+object schema; only the absent-ref path receives the private key. The schema
+fixes the tagger identity and timezone to `+0000`. The validator converts the
+sign-off pull request's exact UTC `mergedAt` to one integer Unix second and
 passes that `tagger_epoch_seconds` value; a fractional, non-UTC, ambiguous, or
 out-of-range value fails closed. The schema specifies the complete Git
 tag-object byte layout, the `git` SSH-signature namespace and embedding, and the
@@ -322,16 +322,16 @@ no caller-supplied replacement. It fetches those exact Git objects by OID
 through the GitHub control plane and verifies their identities and hashes before
 constructing `E`; it never reads a moving branch path.
 
-After validation, the publisher constructs that exact object `E`, verifies its
-raw signature against the pinned public key, checks every schema byte and its
-peel, and computes its object ID before any write. If the final ref is absent,
-it creates the already-verified object and ref without force. If an uncertain
-earlier write already left the ref at `E`, a retry repeats the raw verification
-and adopts it. Any other present object is an incident. The job exits
-successfully only after a final readback authenticates `E`; it emits no durable
-output receipt. Without the private key, another actor cannot forge an
-acceptable object; replaying the already-authorized `E` cannot change its name
-or target.
+After validation, the publisher first reads the final ref. If it is absent, the
+publisher constructs `E`, verifies its raw signature against the pinned public
+key, checks every schema byte and its peel, computes its object ID before any
+write, and creates the already-verified object and ref without force. If an
+uncertain earlier write already left the ref at `E`, a retry authenticates the
+stored raw object and adopts it without reading the private key. Any other
+present object is an incident. The job exits successfully only after a final
+readback authenticates `E`; it emits no durable output receipt. Without the
+private key, another actor cannot forge an acceptable object; replaying the
+already-authorized `E` cannot change its name or target.
 
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
 canonical grammar `0|[1-9][0-9]*`. When a new freeze is proposed, its patch must

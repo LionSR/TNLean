@@ -74,8 +74,9 @@ restrict deployment to the protected release branch. The configured private-key
 secret name must exist only in that environment. The resolver exhaustively lists
 every repository environment and its secret names, the repository secret names,
 and the organization secret names and repository access. It rejects the same
-name in any other scope that can reach the repository. Missing, wider, changed,
-shadowed, or incompletely paginated configuration fails closed.
+name in every other environment and at repository or organization scope,
+regardless of the organization secret's current repository access. Missing,
+wider, changed, shadowed, or incompletely paginated configuration fails closed.
 
 After a successful publisher job, an administrator removes the environment
 secret. The validation that declares `released` requires its absence, and every
