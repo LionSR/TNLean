@@ -4,6 +4,14 @@ Date: 2026-04-23; rebased on current `main` on 2026-04-25
 Branch: `feat/826-algebra-to-fusion-v2`
 Target issue: #826
 
+> **Superseded status (2026-08-03).** This report is retained as a historical
+> analysis of the weak implication from adjoint fixed-point support algebras to
+> transfer retracts. Its counterexample boundary is still relevant, but it is
+> not the current status of Theorem 4.14. PR #5364 completed the distinct,
+> source-faithful tensor-attached BNT route; see
+> `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean` and the maintained coverage
+> audit `docs/audits/2026-05-08-mps-ft-paper-coverage.md`.
+
 ## Scope
 
 Issue #826 asks for the converse direction of the MPDO §4.5 equivalence:

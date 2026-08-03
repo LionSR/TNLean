@@ -242,20 +242,22 @@ the geometric-sequence extrapolation already used in the BNT Fundamental
 Theorem with the unequal-cardinality power-sum identity, and therefore proves
 the power-sum step used at lines~2053--2058.
 
-What remains before this constructor can be applied is the tensor-level BNT
-comparison at lines~2048--2058.  The predicate
+The tensor-level BNT comparison at lines~2048--2058 is now supplied by the
+literal two-site spectrum comparison and exact sector-gauge construction
+documented in
+\path{cpsv16_two_site_sector_unitary_gauge_gap.tex}.  The predicate
 \leanid{MPOTensor.BNTAlgebraTensorClause} now chooses the one-site vertical
 canonical decomposition and identifies the operators and trace scalars in the
 abstract BNT algebra clause with
 $O_L(M_\alpha)$ and $m_\alpha=\sum_q\omega_{\alpha,q}$, respectively.  It does
-not choose a vertical canonical decomposition of the two-site blocked tensor,
-nor does it assert the relabelling and unitary identifications of the one-site
-products with the two-site BNT sectors.  These identifications must yield the
-displayed eventual power-sum equality from the same-length algebra law; the
-constructor above then supplies the spectrum comparison without any further
-mathematical hypothesis.
+not itself contain a second vertical canonical decomposition.  Instead, the
+mixed-prefix argument constructs the required relabelling and simultaneous
+unitary identifications from the tensor-attached clause.  The resulting
+positive multiset equality supplies the spectrum comparison without an
+additional mathematical hypothesis; the completion is used by
+\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}.
 
-\section{BNT-label coefficient objects and remaining elimination plan}
+\section{BNT-label coefficient objects}
 
 The same-length coefficient family $c^{(L)}_{\alpha,\beta,\gamma}$, indexed
 by fixed BNT labels, is represented separately from the blocked-basis
@@ -306,15 +308,14 @@ without also assuming the comparison formula.\footnote{%
 \leanid{MPOTensor.BNTBlockedBasisLabelAssignment},
 \leanid{MPOTensor.BNTBlockedBasisLabelAssignment.blockedLabel},
 \leanid{MPOTensor.BNTBlockedBasisCoefficientComparison}.}  This predicate
-inherits the second scope restriction above: its left hand side is expanded in a
-basis of $\mathcal A_{2n}$, while the source theorem's BNT product law is
-same-length. It therefore records the formal blocked-basis comparison
-predicate; constructing the source label maps from an MPDO tensor is still part
-of the Appendix C.3--C.4 witness construction. The predicate is not itself the
-same-length product statement of Theorem~4.14(ii).
-These declarations specify the BNT-label coefficient objects and the comparison
-statement, but they do not yet construct the operators, trace scalars,
-coefficients, comparison maps, or $\chi$-matrices from an MPDO tensor.
+inherits the second scope restriction above: its left hand side is expanded in
+a basis of $\mathcal A_{2n}$, while the source theorem's BNT product law is
+same-length.  It therefore records the formal blocked-basis comparison
+predicate and is not itself the same-length product statement of
+Theorem~4.14(ii).  The generic declarations in this section do not construct
+the tensor-attached objects by themselves.  That construction is now supplied
+by \leanid{MPOTensor.BNTAlgebraTensorClause} and the reflected-target argument
+in \path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean}.
 Once both the same-length BNT product form and a positive BNT-label
 $\chi$-witness are available, the same-length product expansion with
 coefficients written as $\tr(\chi_{\alpha,\beta,\gamma}^L)$
@@ -729,10 +730,11 @@ printed $F$-matrix and pentagon theorem apply to the length-independent source
 BNT fusion family without an additional injectivity, selector, inverse, or
 coisometry hypothesis.
 
-The remaining upstream construction is different: one must obtain the
-labelled fusion-isometry family and its identification with the BNT of the
-vertical canonical form from the RFP tensor itself.  That Appendix
-C.3--C.4 obligation is not supplied by the complete-zipper assembly above.
+The labelled fusion-isometry family and its identification with the BNT of the
+vertical canonical form are now obtained from the RFP tensor by
+\leanid{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}.  This closes the
+corrected active-support form of the Appendix C.3--C.4 implication.  It is
+logically separate from the complete-zipper construction below.
 
 Independently of this positive-diagonal specialization, the source-faithful
 complete zipper fusion structure is now formalized by
@@ -814,31 +816,27 @@ $F$-matrix.  The forward edge matrices in the formalization follow
 forward identity and this inverse, literally indexed form are stated by the
 two matrix equalities and the entrywise theorem above.
 
-To eliminate the source-theorem gap, the formalization should instead:
-\begin{enumerate}
-    \item use the source-faithful predicate
-        \leanid{MPOTensor.BNTAlgebraTensorClause} for Theorem~4.14(ii), which
-        chooses the vertical canonical-form decomposition from
-        Proposition~4.13 and fixes the BNT operators
-        $O_L(M_\alpha)$ and weights $m_\alpha=\tr(\mu_\alpha)$ appearing in the
-        positive chi trace-power law, same-length product law, and length-one
-        idempotent identity;
-    \item relate this predicate to the one-site and two-site vertical
-        decompositions used in Appendix~C.4, lines~2048--2058, and prove the
-        unitary relabelling and the positive multiset identity for the
-        $\nu_{\gamma,k}$;
-    \item deduce $\tr(\nu_\gamma)=m_\gamma$ and construct the retained-sector
-        composites $T_0=\widetilde R_2\widetilde T R_1$ and
-        $S_0=\widetilde R_1\widetilde S R_2$ from lines~2065--2085, then add a
-        trace-preserving completely positive completion on the orthogonal
-        complements as recorded in
-        \path{cpgsv17_vertical_isometry_zero_sector.tex};
-    \item conclude the paper's renormalization fixed-point predicate, namely
-        the existence of the two trace-preserving completely positive maps in
-        Definition~4.1.  Any comparison with the transfer-retract predicate
-        must then be stated separately, because the latter is presently
-        equivalent to transfer-map idempotence rather than Definition~4.1.
-\end{enumerate}
+\section{Completion status for Theorem 4.14}
+
+The tensor-attached BNT route described above is complete.  The mixed
+one-site/two-site prefix argument gives the unitary relabelling and positive
+multiset identity for the $\nu_{\gamma,k}$.  The retained-sector composites
+$T_0=\widetilde R_2\widetilde T R_1$ and
+$S_0=\widetilde R_1\widetilde S R_2$, together with the zero-sector
+measure-and-prepare completion, give the two trace-preserving completely
+positive maps of Definition~4.1.  This implication is
+\leanid{MPOTensor.BNTAlgebraTensorClause.isRFPViaTS}.
+
+Under the literal CPSV canonical-form and MPDO hypotheses, the two directions
+are combined in
+\leanid{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}.  The corresponding
+equivalence
+\leanid{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause} uses the documented
+active-support correction of Theorem~4.14(iii), not its unrestricted printed
+form.  These results do not identify the positive-diagonal family with a
+complete zipper fusion family and do not supply the stronger categorical
+$F$-matrix data discussed above.  The transfer-retract predicate also remains
+separate: it expresses transfer-map idempotence rather than Definition~4.1.
 
 \bibliographystyle{alpha}
 \bibliography{references}
