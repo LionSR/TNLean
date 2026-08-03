@@ -18,11 +18,15 @@ note = "the projector layer is drawn: one enclosure per site over the entangled-
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-note = "kernel address migration awaits visual countersign"
+case_sha256 = "628888613faf7bab778ebdb67bcd7f30d97296786d86b6fe7041490c13339ebe"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "the three physical spokes remain open while alpha, beta, and gamma form the source triangle"
 
 [[verdict]]
 id = "rmp-ii-mps-marginal"
@@ -83,10 +87,15 @@ note = "X and X^-1 at one reference width"
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-note = "kernel identity-wire migration awaits visual countersign"
+defects = []
+case_sha256 = "412acd1582f5592e71e54b20fa04b8c7512fc2406d9f978b472673c229791100"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "the west and east cups close the virtual pair and leave one open physical identity wire"
 
 [[verdict]]
 id = "rmp-ii-mpu-blocking"
@@ -101,11 +110,15 @@ note = "maintainer: good; a/b spacing explicitly not to pre-optimize"
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-note = "kernel address migration awaits visual countersign"
+case_sha256 = "877500cba9fe597123b12687ef0bb56fc5a0fedf3686e053401891d87d08b5a5"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "u and v share only their central virtual index and retain the four source openings"
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
@@ -220,11 +233,15 @@ note = "vertically mirrored vs source; V-glyph aspect"
 
 [[verdict]]
 id = "rmp-ii-circuit"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-note = "kernel address migration awaits visual countersign"
+case_sha256 = "8edd0815fdbc7ad891ca2217023facaf67f25ff7ff5afff4a7b7b9535fda1d6e"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "the four-two-one gate tree closes the prepared input and preserves all eight output wires"
 
 [[verdict]]
 id = "rmp-ii-sv17"
@@ -282,10 +299,15 @@ note = "thin wires vs bold source; end of the \"better\" run"
 
 [[verdict]]
 id = "rmp-ii-tangent-projector"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-note = "kernel identity-wire migration awaits visual countersign"
+defects = []
+case_sha256 = "c432ab1fa80122194c756c236cf2c1674f4873e1b5a6e225e86655535763b63c"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "both projector sums retain the source contractions, identity carrier, and open boundaries"
 
 [[verdict]]
 id = "rmp-ii-boundary-lasso"
@@ -979,10 +1001,15 @@ note = "sites grouped as the source groups them -- four sub-spins per red circle
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-note = "kernel skin-pairing migration awaits visual countersign"
+defects = []
+case_sha256 = "59cfef50343ed9eddd43135ee932adcb87c8acb0d36231405c589508589eba28"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "two slots on every face keep the red and blue shift paths distinct and continuous through all three bricks"
 
 [[verdict]]
 id = "rmp-workbench-ii-projector-on-pta"
@@ -1007,10 +1034,15 @@ note = "the unitary is asserted as math-mode application U(...) around the plaqu
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"
-status = "unreviewed"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-note = "kernel address migration awaits visual countersign"
+defects = []
+case_sha256 = "ac726dd0063e48cfd8e024a310ef51e55c6d884f31f56a9169586c07d4ab6707"
+reviewed = "2026-08-02"
+renderer = "codex-section-ii-author-source-review-2026-08-02-600dpi"
+second_viewer = "codex-independent-section-ii-source-review-2026-08-02"
+note = "both X branches meet the A and conjugate-A rails, and their physical legs form one open vertical line"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-gauge-old"
