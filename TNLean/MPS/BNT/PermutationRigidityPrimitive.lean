@@ -72,8 +72,12 @@ Two finite families of primitive blocks whose MPV overlaps are asymptotically or
 and which eventually span the same MPV subspace must agree blockwise up to a permutation,
 dimension equality, and gauge-phase equivalence.
 
-The eventual span hypothesis is the comparison used in CPSV16, arXiv:1606.00608,
-local source lines 522–525 and 1305–1307.
+**Local fix (eventual span equality):** The source comparison holds only on a
+finite tail.  Accordingly, this result assumes eventual span equality rather
+than equality at every length.  See
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source context: CPSV16, arXiv:1606.00608, lines 522--525 and 1305--1307.
 -/
 theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     {d g : ℕ}
@@ -412,8 +416,12 @@ that are injective, normalised, asymptotically orthonormal, and eventually span
 the same MPV subspace must have `gA = gB` and agree blockwise up to a
 permutation, dimension equality, and gauge-phase equivalence.
 
-The eventual span hypothesis is the comparison used in CPSV16, arXiv:1606.00608,
-local source lines 522–525 and 1305–1307.
+**Local fix (eventual span equality):** The source comparison holds only on a
+finite tail.  Accordingly, this result assumes eventual span equality rather
+than equality at every length.  See
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source context: CPSV16, arXiv:1606.00608, lines 522--525 and 1305--1307.
 -/
 lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     {d gA gB : ℕ}
