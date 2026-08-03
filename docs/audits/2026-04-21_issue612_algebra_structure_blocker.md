@@ -4,6 +4,15 @@ Date: 2026-04-20
 Branch: `feat/612-algebra-structure-coeffs`
 Target issue: #612
 
+> **Superseded status (2026-08-03).** This report is retained as a historical
+> diagnosis of the then-vacuous support-algebra route. It is not the current
+> status of Theorem 4.14. The source-faithful tensor-attached BNT route was
+> completed in PR #5364; see
+> `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean` and the maintained coverage
+> audit `docs/audits/2026-05-08-mps-ft-paper-coverage.md`. The weak
+> support-algebra route described below was not repaired into that theorem and
+> remains a distinct, historically useful obstruction.
+
 ## Outcome
 
 I did **not** change `TNLean/MPS/MPDO/AlgebraStructure.lean`.
