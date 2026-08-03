@@ -538,16 +538,13 @@ def _declared_atom_commands(
 def _command_spans(
     source: str, declared_commands: Iterable[str]
 ) -> list[_OwnerSpan]:
-    spans: list[_OwnerSpan] = []
     grammars = dict(_COMMAND_GRAMMARS)
-    # Dynamic spellings are source-wide neutral barriers.  This deliberately
-    # sacrifices ownership inference rather than guessing whether TeX's
-    # ambient control-sequence collision check accepted a declaration.
+    # Dynamic spellings are source-wide neutral barriers even though a source
+    # scan cannot know whether an ambient-name collision rejected a declaration.
+    # Their invocation extent still follows the declared public ``O{} m`` grammar.
     dynamic_names = frozenset(declared_commands).difference(grammars)
     for name in dynamic_names:
-        grammars[name] = _CommandGrammar(
-            None, (0,), accepts_star=True
-        )
+        grammars[name] = _CommandGrammar(None, (1,))
     pattern = re.compile(
         r"\\("
         + "|".join(
@@ -561,86 +558,72 @@ def _command_spans(
         )
         + r")"
     )
-    for command in pattern.finditer(source):
-        if not _is_control_word_start(source, command.start()):
-            continue
+    commands = [
+        command
+        for command in pattern.finditer(source)
+        if _is_control_word_start(source, command.start())
+    ]
+    # Parse dynamic atoms first. Their exact public grammar is ``O{} m``;
+    # command tokens consumed by the one label must not be rescanned, while a
+    # later brace-delimited sibling remains active input.
+    dynamic_spans: list[_OwnerSpan] = []
+    for command in commands:
         name = command.group(1)
+        if name not in dynamic_names or any(
+            span.start <= command.start() < span.end
+            for span in dynamic_spans
+        ):
+            continue
+        position = _skip_space(source, command.end())
+        if source[position : position + 1] == "[":
+            closed = match_group(source, position, "[", "]")
+            if closed < 0:
+                position = len(source)
+            else:
+                position = _skip_space(source, closed)
+        if position < len(source):
+            arguments = _following_mandatory_arguments(source, position, 1)
+            position = (
+                len(source)
+                if arguments is None
+                else _skip_space(source, arguments[0].end)
+            )
+        dynamic_spans.append(
+            _OwnerSpan(command.start(), position, None, True)
+        )
+
+    spans = list(dynamic_spans)
+    for command in commands:
+        name = command.group(1)
+        if name in dynamic_names or any(
+            span.start <= command.start() < span.end
+            for span in dynamic_spans
+        ):
+            continue
         grammar = grammars[name]
         span_owner = grammar.owner
-        is_quarantine = name in dynamic_names
+        is_quarantine = False
         position = _skip_space(source, command.end())
-        if name in dynamic_names:
-            # The declaration may have collided with a command of unknown
-            # signature.  Quarantine every adjacent syntactic argument rather
-            # than guessing how many stars, options, or groups it accepts.
-            consumed_brace_group = False
-            while position < len(source):
-                character = source[position : position + 1]
-                if character == "*":
-                    position = _skip_space(source, position + 1)
-                    continue
-                if character not in "[{":
-                    break
-                closer = "]" if character == "[" else "}"
-                closed = match_group(source, position, character, closer)
-                if closed < 0:
-                    # A malformed adjacent argument has no trustworthy end.
-                    # Quarantine the remainder rather than exposing it to an
-                    # enclosing owner through a guessed command boundary.
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                    break
-                consumed_brace_group = consumed_brace_group or character == "{"
+        if grammar.accepts_star and source[position : position + 1] == "*":
+            position = _skip_space(source, position + 1)
+        if grammar.accepts_options and source[position : position + 1] == "[":
+            closed = match_group(source, position, "[", "]")
+            if closed < 0:
+                position = len(source)
+                span_owner = None
+                is_quarantine = True
+            else:
                 position = _skip_space(source, closed)
-            if not consumed_brace_group and position < len(source):
-                arguments = _following_mandatory_arguments(source, position, 1)
-                if arguments is not None:
-                    argument = arguments[0]
-                    argument_source = source[
-                        argument.content_start : argument.content_end
-                    ]
-                    position = _skip_space(source, argument.end)
-                    # A control sequence consumed as the atom label is inert.
-                    # Conservatively quarantine its adjacent syntax too, so
-                    # the same token cannot be rescanned as a public command.
-                    if argument_source.startswith("\\"):
-                        while position < len(source):
-                            character = source[position : position + 1]
-                            if character == "*":
-                                position = _skip_space(source, position + 1)
-                                continue
-                            if character not in "[{":
-                                break
-                            closer = "]" if character == "[" else "}"
-                            closed = match_group(
-                                source, position, character, closer
-                            )
-                            if closed < 0:
-                                position = len(source)
-                                break
-                            position = _skip_space(source, closed)
-        else:
-            if grammar.accepts_star and source[position : position + 1] == "*":
-                position = _skip_space(source, position + 1)
-            if grammar.accepts_options and source[position : position + 1] == "[":
-                closed = match_group(source, position, "[", "]")
-                if closed < 0:
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                else:
-                    position = _skip_space(source, closed)
-            for _ in range(max(grammar.positional_group_counts)):
-                if source[position : position + 1] != "{":
-                    break
-                closed = match_group(source, position, "{", "}")
-                if closed < 0:
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                    break
-                position = _skip_space(source, closed)
+        for _ in range(max(grammar.positional_group_counts)):
+            if source[position : position + 1] != "{":
+                break
+            closed = match_group(source, position, "{", "}")
+            if closed < 0:
+                position = len(source)
+                span_owner = None
+                is_quarantine = True
+                break
+            position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
                 command.start(), position, span_owner, is_quarantine
@@ -713,69 +696,98 @@ def _option_group_spans(
 def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
     """Return inert bodies of primitive, LaTeX, and xparse macro definitions."""
     spans: list[tuple[int, int]] = []
-    for definition in _PRIMITIVE_DEFINITION_RE.finditer(source):
-        if not _is_control_word_start(source, definition.start()):
+    definitions = sorted(
+        (
+            *(
+                (definition.start(), "primitive", definition)
+                for definition in _PRIMITIVE_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "latex", definition)
+                for definition in _LATEX_COMMAND_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "xparse", definition)
+                for definition in _DOCUMENT_COMMAND_DEFINITION_RE.finditer(source)
+            ),
+        ),
+        key=lambda candidate: candidate[0],
+    )
+    for _, definition_kind, definition in definitions:
+        if (
+            not _is_control_word_start(source, definition.start())
+            or any(
+                start <= definition.start() < end for start, end in spans
+            )
+        ):
             continue
-        position = definition.end()
-        while position < len(source):
-            character = source[position]
-            if character == "\\":
-                arguments = _following_mandatory_arguments(source, position, 1)
-                if arguments is None:
-                    break
-                position = arguments[0].end
-                continue
-            if (
-                character == "#"
-                and position + 1 < len(source)
-                and (
-                    source[position + 1].isdigit()
-                    or source[position + 1] == "#"
+        if definition_kind == "primitive":
+            position = definition.end()
+            while position < len(source):
+                character = source[position]
+                if character == "\\":
+                    arguments = _following_mandatory_arguments(
+                        source, position, 1
+                    )
+                    if arguments is None:
+                        break
+                    position = arguments[0].end
+                    continue
+                if (
+                    character == "#"
+                    and position + 1 < len(source)
+                    and (
+                        source[position + 1].isdigit()
+                        or source[position + 1] == "#"
+                    )
+                ):
+                    # Parameter markers belong to the definition header.
+                    position += 2
+                    continue
+                if character == "#":
+                    position += 1
+                    continue
+                if character != "{":
+                    position += 1
+                    continue
+                closed = match_group(source, position, "{", "}")
+                spans.append(
+                    (position, len(source) if closed < 0 else closed)
                 )
-            ):
-                # Parameter markers belong to the definition header.
-                position += 2
-                continue
-            if character == "#":
-                position += 1
-                continue
-            if character != "{":
-                position += 1
-                continue
-            closed = match_group(source, position, "{", "}")
-            spans.append((position, len(source) if closed < 0 else closed))
-            break
-    for definition in _LATEX_COMMAND_DEFINITION_RE.finditer(source):
-        if not _is_control_word_start(source, definition.start()):
-            continue
-        position = _skip_space(source, definition.end())
-        if source[position : position + 1] == "*":
-            position = _skip_space(source, position + 1)
-        names = _following_mandatory_arguments(source, position, 1)
-        if names is None:
-            continue
-        position = _skip_space(source, names[0].end)
-        for _ in range(2):
-            if source[position : position + 1] != "[":
                 break
-            closed = match_group(source, position, "[", "]")
-            if closed < 0:
-                position = len(source)
-                break
-            position = _skip_space(source, closed)
-        replacements = _following_mandatory_arguments(source, position, 1)
-        if replacements is not None:
-            replacement = replacements[0]
-            spans.append((replacement.content_start, replacement.content_end))
-    for definition in _DOCUMENT_COMMAND_DEFINITION_RE.finditer(source):
-        if not _is_control_word_start(source, definition.start()):
-            continue
-        arguments = _following_mandatory_arguments(
-            source, definition.end(), 3
-        )
-        if arguments is not None:
-            replacement = arguments[2]
-            spans.append((replacement.content_start, replacement.content_end))
+        elif definition_kind == "latex":
+            position = _skip_space(source, definition.end())
+            if source[position : position + 1] == "*":
+                position = _skip_space(source, position + 1)
+            names = _following_mandatory_arguments(source, position, 1)
+            if names is None:
+                continue
+            position = _skip_space(source, names[0].end)
+            for _ in range(2):
+                if source[position : position + 1] != "[":
+                    break
+                closed = match_group(source, position, "[", "]")
+                if closed < 0:
+                    position = len(source)
+                    break
+                position = _skip_space(source, closed)
+            replacements = _following_mandatory_arguments(
+                source, position, 1
+            )
+            if replacements is not None:
+                replacement = replacements[0]
+                spans.append(
+                    (replacement.content_start, replacement.content_end)
+                )
+        else:
+            arguments = _following_mandatory_arguments(
+                source, definition.end(), 3
+            )
+            if arguments is not None:
+                replacement = arguments[2]
+                spans.append(
+                    (replacement.content_start, replacement.content_end)
+                )
     return spans
 
 

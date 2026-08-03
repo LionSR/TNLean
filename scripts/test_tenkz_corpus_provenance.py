@@ -37,6 +37,7 @@ from tenkzlib.dimensions import (
     _COMMAND_GRAMMARS,
     _PUBLIC_ENVIRONMENTS,
     _environment_spans,
+    _macro_replacement_spans,
     collect_dimension_report,
     scan_book_dimensions,
     scan_case_dimensions,
@@ -708,6 +709,36 @@ def test_rmp_dimension_ownership() -> None:
                 "an inert replacement begin token opened an environment: "
                 f"definition={definition_kind}, occurrences={occurrences!r}"
             )
+    nested_definition_tokens = (
+        ("primitive", r"\def\fake"),
+        ("latex", r"\newcommand{\fake}{stored}"),
+        ("xparse", r"\NewDocumentCommand{\fake}{}{stored}"),
+    )
+    for outer_kind, outer_template in replacement_templates:
+        for inner_kind, inner_definition in nested_definition_tokens:
+            source = outer_template.replace("TOKEN", inner_definition) + (
+                r"\tnarrow{\begin{tenkz}\rule{85mm}{86mm}\end{tenkz}}"
+            )
+            replacement_spans = _macro_replacement_spans(strip_comments(source))
+            active_environment = source.index(r"\begin{tenkz}")
+            if len(replacement_spans) != 1 or any(
+                start <= active_environment < end
+                for start, end in replacement_spans
+            ):
+                raise AssertionError(
+                    "an inert nested definition masked active input: "
+                    f"outer={outer_kind}, inner={inner_kind}, "
+                    f"spans={replacement_spans!r}"
+                )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "an inert nested definition hid an active environment: "
+                    f"outer={outer_kind}, inner={inner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )
@@ -819,11 +850,25 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnarrow{\tnfoo\tnput{x}{(121mm,0)}{}}",
     )
     if len(unbraced_dynamic_label) != 1 or any(
-        occurrence.owner is not None for occurrence in unbraced_dynamic_label
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in unbraced_dynamic_label
     ):
         raise AssertionError(
             "an unbraced dynamic label reactivated a public command: "
             f"{unbraced_dynamic_label!r}"
+        )
+    braced_dynamic_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{A}{\tnput{x}{(124mm,0)}{}}}",
+    )
+    if len(braced_dynamic_sibling) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in braced_dynamic_sibling
+    ):
+        raise AssertionError(
+            "a dynamic braced label consumed its sibling command: "
+            f"{braced_dynamic_sibling!r}"
         )
     later_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
@@ -863,11 +908,11 @@ def test_rmp_dimension_ownership() -> None:
             rf"\tnarrow{{\{atom_name}[label shift={{99mm,100mm}}]"
             r"{101mm}{102mm}}",
         )
-        if len(catcode_atom) != 4 or any(
-            occurrence.owner is not None for occurrence in catcode_atom
-        ):
+        if [
+            occurrence.owner for occurrence in catcode_atom
+        ] != [None, None, None, DimensionOwner.ROUTE]:
             raise AssertionError(
-                "a control-sequence atom name escaped dynamic quarantine: "
+                "a control-sequence atom exceeded its O{} m quarantine: "
                 f"name={atom_name!r}, occurrences={catcode_atom!r}"
             )
     declared_kernel_atom = scan_case_dimensions(
@@ -957,12 +1002,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnarrow{\tndeclareatom\rule{skin=dot}"
         r"\rule[label shift={88mm,89mm}]{95mm}{96mm}}",
     )
-    if len(colliding_latex_declaration) != 4 or any(
-        occurrence.owner is not None
-        for occurrence in colliding_latex_declaration
-    ):
+    if [
+        occurrence.owner for occurrence in colliding_latex_declaration
+    ] != [None, None, None, DimensionOwner.ROUTE]:
         raise AssertionError(
-            "a format command collision activated dynamic ownership: "
+            "a format collision exceeded the declared O{} m barrier: "
             f"{colliding_latex_declaration!r}"
         )
     source_local_collision = scan_case_dimensions(
@@ -971,11 +1015,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnarrow{\tndeclareatom{\tnoccupied}{skin=dot}"
         r"\tnoccupied[label shift={93mm,94mm}]{97mm}{98mm}}",
     )
-    if len(source_local_collision) != 4 or any(
-        occurrence.owner is not None for occurrence in source_local_collision
-    ):
+    if [
+        occurrence.owner for occurrence in source_local_collision
+    ] != [None, None, None, DimensionOwner.ROUTE]:
         raise AssertionError(
-            "a source-local command collision activated dynamic ownership: "
+            "a source-local collision exceeded the declared O{} m barrier: "
             f"{source_local_collision!r}"
         )
     repeated_optional_collision = scan_case_dimensions(
@@ -985,11 +1029,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnoccupied[][103mm]{104mm}}",
     )
     if len(repeated_optional_collision) != 2 or any(
-        occurrence.owner is not None
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in repeated_optional_collision
     ):
         raise AssertionError(
-            "a repeated optional argument escaped unknown-arity quarantine: "
+            "a repeated optional collision exceeded the O{} m barrier: "
             f"{repeated_optional_collision!r}"
         )
     colliding_parbox = scan_case_dimensions(
@@ -998,10 +1042,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\parbox[c][105mm][c]{106mm}{x}}",
     )
     if len(colliding_parbox) != 2 or any(
-        occurrence.owner is not None for occurrence in colliding_parbox
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in colliding_parbox
     ):
         raise AssertionError(
-            "a real multi-option command escaped unknown-arity quarantine: "
+            "a real multi-option collision exceeded the O{} m barrier: "
             f"{colliding_parbox!r}"
         )
     scoped_atom_declaration = scan_case_dimensions(
