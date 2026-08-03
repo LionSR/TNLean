@@ -1,0 +1,20 @@
+% Negative regression: physical=up owns the north centre bearing and cannot
+% silently share that cell lane with a differently angled pairing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{red}{hue=source:red}
+\tndeclare{skin}{paired-north}{
+  base=box,
+  pairings={80@1 > w@1 : red}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[skin=paired-north]{}
+\end{tenkz}
+\end{document}
