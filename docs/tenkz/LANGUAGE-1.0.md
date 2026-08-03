@@ -692,10 +692,17 @@ to physical, but carries no label of its own. In a plane frame the policy leg
 is the independent transverse axis described in Section 4; no numeric
 `ports=` face aliases or consumes it.
 
+Here *eligible* has a precise meaning. The atom must occupy a frame cell
+`(r,c)` or a basis member `(r,c,k)`, and it must be neither a sealed void nor
+a child of a cluster. A relative point, a midpoint, a point on a wire, and a
+crossing are geometric constructions rather than further cells, so the
+picture policy gives them no physical index. Such an atom may still declare
+an independent physical port with `ports=` when the mathematics requires one.
+
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: declares each eligible atom's frame-owned outward centre port physical; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
+| `physical=up\|down\|updown\|none` | expander: declares each frame-cell atom's outward centre port physical; geometric overlay atoms are excluded; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
