@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+import stat
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
@@ -100,9 +101,75 @@ def normalize_dimension_literal(literal: str) -> str:
     return re.sub(r"\s+", "", literal).lower()
 
 
+def _is_control_word_letter(character: str) -> bool:
+    """Recognize the conservative control-word alphabet used by the scanner."""
+    return character.isalpha() or character in "@:_"
+
+
+def _normalize_site_tokens(source: str) -> str:
+    """Serialize TeX tokens without erasing whitespace inside arguments."""
+    output: list[str] = []
+    depth = 0
+    index = 0
+    while index < len(source):
+        character = source[index]
+        if character == "\\":
+            output.append(character)
+            index += 1
+            if index >= len(source):
+                break
+            if not _is_control_word_letter(source[index]):
+                output.append(source[index])
+                index += 1
+                continue
+            while index < len(source) and _is_control_word_letter(source[index]):
+                output.append(source[index])
+                index += 1
+            whitespace_end = index
+            while whitespace_end < len(source) and source[whitespace_end].isspace():
+                whitespace_end += 1
+            # Preserve a canonical separator only when dropping it would merge
+            # the following letter into the control-word token.
+            if (
+                whitespace_end > index
+                and whitespace_end < len(source)
+                and _is_control_word_letter(source[whitespace_end])
+            ):
+                output.append(" ")
+            index = whitespace_end
+            continue
+        if character in "[{":
+            depth += 1
+            output.append(character)
+            index += 1
+            continue
+        if character in "]}":
+            depth = max(0, depth - 1)
+            output.append(character)
+            index += 1
+            continue
+        if character.isspace():
+            whitespace_end = index + 1
+            while (
+                whitespace_end < len(source)
+                and source[whitespace_end].isspace()
+            ):
+                whitespace_end += 1
+            # At top level, command argument separators and option-key spacing
+            # are structural. Inside a token-list argument, one space remains
+            # significant and must distinguish, for example, ``A B`` from ``AB``.
+            if depth > 0 and output and output[-1] != " ":
+                output.append(" ")
+            index = whitespace_end
+            continue
+        output.append(character)
+        index += 1
+    return "".join(output)
+
+
 def _site_skeleton(source: str) -> str:
     replaced = DIMENSION_RE.sub("<dimension>", source)
-    return re.sub(r"\s+", "", replaced)
+    return _normalize_site_tokens(replaced)
 
 
 def _case_inventory(path: Path, source: str) -> DimensionInventoryCase | None:
@@ -132,12 +199,9 @@ def _case_inventory(path: Path, source: str) -> DimensionInventoryCase | None:
         )
         assigned.append((owner_site, construct_index))
 
-    dimension_bearing = {construct_index for _site, construct_index in assigned}
     ordinal_by_index: dict[int, int] = {}
     per_kind_counts: Counter[str] = Counter()
     for index, construct in enumerate(constructs):
-        if index not in dimension_bearing:
-            continue
         per_kind_counts[construct.name] += 1
         ordinal_by_index[index] = per_kind_counts[construct.name]
 
@@ -213,13 +277,44 @@ def collect_dimension_inventory(
         canonical = _canonical_inventory_case_path(
             path.as_posix(), "manifest case path"
         )
-        try:
-            sources[canonical] = (repo / canonical).read_text(encoding="utf-8")
-        except (OSError, UnicodeError) as exc:
-            raise DimensionInventoryError(
-                f"cannot read dimension case {canonical.as_posix()}: {exc}"
-            ) from exc
+        sources[canonical] = _read_inventory_case(repo, canonical)
     return build_dimension_inventory_from_sources(sources)
+
+
+def _read_inventory_case(repo: Path, path: Path) -> str:
+    """Read one exact regular case path without following component symlinks."""
+    try:
+        repo_root = repo.resolve(strict=True)
+        current = repo_root
+        for index, part in enumerate(path.parts):
+            current /= part
+            metadata = current.lstat()
+            if stat.S_ISLNK(metadata.st_mode):
+                raise DimensionInventoryError(
+                    f"dimension case path contains a symlink: {path.as_posix()}"
+                )
+            final = index + 1 == len(path.parts)
+            if final and not stat.S_ISREG(metadata.st_mode):
+                raise DimensionInventoryError(
+                    f"dimension case path must be a regular file: {path.as_posix()}"
+                )
+            if not final and not stat.S_ISDIR(metadata.st_mode):
+                raise DimensionInventoryError(
+                    f"dimension case parent must be a directory: {path.as_posix()}"
+                )
+        resolved = current.resolve(strict=True)
+        required_root = (repo_root / path.parent).resolve(strict=True)
+        if resolved.parent != required_root or not resolved.is_relative_to(repo_root):
+            raise DimensionInventoryError(
+                f"dimension case escapes its required case root: {path.as_posix()}"
+            )
+        return current.read_text(encoding="utf-8")
+    except DimensionInventoryError:
+        raise
+    except (OSError, UnicodeError) as exc:
+        raise DimensionInventoryError(
+            f"cannot read dimension case {path.as_posix()}: {exc}"
+        ) from exc
 
 
 def _canonical_case_path(raw: str, field_name: str) -> Path:
@@ -281,7 +376,7 @@ def _site_contract(
 ) -> tuple[DimensionOwner, str, int]:
     """Validate a site key and return its owner, construct kind, and ordinal."""
     if not isinstance(site_name, str) or any(
-        character.isspace() for character in site_name
+        character.isspace() and character != " " for character in site_name
     ):
         raise DimensionInventoryError(
             f"{where}.site must be a normalized semantic site key"
@@ -301,6 +396,10 @@ def _site_contract(
     ):
         raise DimensionInventoryError(
             f"{where}.site must contain only normalized dimension placeholders"
+        )
+    if _normalize_site_tokens(skeleton) != skeleton:
+        raise DimensionInventoryError(
+            f"{where}.site must be a normalized semantic site key"
         )
     if match.group("kind") == "command":
         command = _COMMAND_SITE_RE.match(skeleton)

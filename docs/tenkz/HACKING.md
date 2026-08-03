@@ -522,12 +522,13 @@ aggregate ownership ratchets reject increases, unowned or commented case
 dimensions, and benchmark-book allowlist drift.  The version-2 inventory in
 `tests/tenkz/rmp/dimension-ownership.json` additionally freezes every active
 literal at its semantic owner site.  Its per-case rows use the ordinal among
-dimension-bearing constructs of the same kind and a whitespace- and
-comment-independent command or option skeleton.  A preceding dimension-free
-environment or `\tnpic` therefore cannot renumber a site.  Only repeated
-identical skeletons receive a local occurrence number.  This catches a
-balanced replacement or cross-site move that leaves all aggregate counts
-unchanged.
+all constructs of the same kind and a comment-independent, TeX-token-normalized
+command or option skeleton.  Structural separators and comment splices do not
+change a skeleton, but significant whitespace inside argument token lists does.
+A preceding construct of the same kind therefore renumbers later sites, even
+when that construct has no dimensions.  Only repeated identical skeletons
+receive a local occurrence number.  This catches a balanced replacement or
+cross-site move that leaves all aggregate counts unchanged.
 
 After an intentional, reviewed migration, update that exact inventory with:
 

@@ -16,6 +16,14 @@ class Construct:
     body_start: int
 
 
+def is_control_word_start(source: str, position: int) -> bool:
+    """Whether this backslash starts a TeX control word rather than ``\\``."""
+    run_length = 1
+    while position >= run_length and source[position - run_length] == "\\":
+        run_length += 1
+    return run_length % 2 == 1
+
+
 def strip_comments(source: str) -> str:
     """Blank unescaped TeX comments while preserving offsets and lines."""
     output: list[str] = []
@@ -134,6 +142,8 @@ def _find_env_end(
     )
     depth = 1
     for token in token_pattern.finditer(source, position):
+        if not is_control_word_start(source, token.start()):
+            continue
         depth += 1 if token.group(1) == "begin" else -1
         if depth == 0:
             return token
@@ -153,6 +163,8 @@ def scan_constructs(source: str) -> list[Construct]:
         r"\\begin\s*\{(tenkz(?:cd|lattice|free|planes)?)\}"
     )
     for match in environment_pattern.finditer(source):
+        if not is_control_word_start(source, match.start()):
+            continue
         name = match.group(1)
         end_match = _find_env_end(source, name, match.end())
         end = end_match.end() if end_match else len(source)
@@ -173,6 +185,8 @@ def scan_constructs(source: str) -> list[Construct]:
             )
         )
     for match in re.finditer(r"\\tnpic\b", source):
+        if not is_control_word_start(source, match.start()):
+            continue
         index = match.end()
         while index < len(source) and source[index] in " \t\n":
             index += 1

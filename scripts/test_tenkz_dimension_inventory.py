@@ -83,10 +83,9 @@ def test_formatting_stability() -> None:
     reformatted = r"""% A comment with an ignored 99mm literal.
 \begin{tenkzfree}
   \tnput % formatting splice
-    [dot] {a} { ( 1 mm , 2truept ) } {}
+    [dot] {a} {(1 mm,2truept)} {}
   \tnjoin{a}{3m% join a dimension unit
-    m,
-    4mm}
+m,4mm}
 \end{tenkzfree}
 """
     first = _build(compact)
@@ -111,6 +110,32 @@ def test_formatting_stability() -> None:
     comment_only = _build("% route length 7mm\n")
     if comment_only.case_count or comment_only.dimension_count:
         raise AssertionError("comment dimensions entered the active inventory")
+
+    spaced_label = _build(
+        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{A B}}"
+        r"\end{tenkzfree}"
+    )
+    joined_label = _build(
+        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{AB}}"
+        r"\end{tenkzfree}"
+    )
+    if spaced_label == joined_label:
+        raise AssertionError("TeX-significant argument whitespace left site identity")
+    _expect_error(
+        lambda: validate_dimension_inventory(spaced_label, joined_label),
+        "dimension owner site changed",
+    )
+
+    separated_control = _build(
+        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\foo α}"
+        r"\end{tenkzfree}"
+    )
+    merged_control = _build(
+        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\fooα}"
+        r"\end{tenkzfree}"
+    )
+    if separated_control == merged_control:
+        raise AssertionError("a Unicode control-word boundary left site identity")
 
 
 def test_owner_span_grouping() -> None:
@@ -140,6 +165,8 @@ def test_owner_span_grouping() -> None:
         raise AssertionError(f"command site lost its semantic key: {sites[1]!r}")
     if not sites[2].site.startswith("tenkzfree@1/option:"):
         raise AssertionError(f"nested option lost its semantic key: {sites[2]!r}")
+    if parse_dimension_inventory(format_dimension_inventory(inventory)) != inventory:
+        raise AssertionError("generated command and option site keys did not round-trip")
 
     _expect_error(
         lambda: _build(r"\tnput{a}{(1mm,2mm)}{}"),
@@ -157,16 +184,43 @@ def test_construct_ordinals_are_semantic() -> None:
 \end{tenkzfree}
 """
     base = _build(base_source)
-    dimension_free_prefixes = (
+    for different_kind_prefix in (
         r"\tnpic{\tn{}}" + "\n",
-        r"\begin{tenkzfree}\tn{}\end{tenkzfree}" + "\n",
         r"\begin{tenkz}\tn{}\end{tenkz}" + "\n",
-    )
-    for prefix in dimension_free_prefixes:
-        if _build(prefix + base_source) != base:
+    ):
+        if _build(different_kind_prefix + base_source) != base:
             raise AssertionError(
-                f"dimension-free construct shifted semantic ordinals: {prefix!r}"
+                "a construct of another kind shifted semantic ordinals: "
+                f"{different_kind_prefix!r}"
             )
+
+    same_kind_prefix = r"\begin{tenkzfree}\tn{}\end{tenkzfree}" + "\n"
+    shifted = _build(same_kind_prefix + base_source)
+    if shifted == base or not shifted.cases[0].sites[0].site.startswith(
+        "tenkzfree@2/"
+    ):
+        raise AssertionError(
+            "a dimension-free construct did not retain its ordinal identity"
+        )
+
+    first_construct = r"""\begin{tenkzfree}
+  \tnput{a}{(1mm,2mm)}{}
+\end{tenkzfree}
+\begin{tenkzfree}\tn{}\end{tenkzfree}
+"""
+    second_construct = r"""\begin{tenkzfree}\tn{}\end{tenkzfree}
+\begin{tenkzfree}
+  \tnput{a}{(1mm,2mm)}{}
+\end{tenkzfree}
+"""
+    first_inventory = _build(first_construct)
+    second_inventory = _build(second_construct)
+    if first_inventory == second_inventory:
+        raise AssertionError("moving dimensions between constructs preserved identity")
+    _expect_error(
+        lambda: validate_dimension_inventory(first_inventory, second_inventory),
+        "dimension owner site changed",
+    )
 
     dimension_free_owner_commands = base_source.replace(
         "  \\tnput{a}",
@@ -186,6 +240,14 @@ def test_construct_ordinals_are_semantic() -> None:
     )
     if _build(spaced) != base or _build(commented) != base:
         raise AssertionError("legal begin spacing or comment splice changed site keys")
+
+    real_tnpic = r"\tnpic{\tnput{a}{(1mm,2mm)}{}}"
+    escaped_tnpic = r"\\tnpic{\tnput{a}{(1mm,2mm)}{}}"
+    _build(real_tnpic)
+    _expect_error(
+        lambda: _build(escaped_tnpic),
+        "outside a tenkz environment",
+    )
 
     multiple = r"""\begin{tenkzfree}
   \tnput{a}{(1mm,2mm)}{}
@@ -415,6 +477,57 @@ def test_invalid_schema_is_rejected() -> None:
         "duplicate site ordinals",
     )
 
+    whitespace_data = _data(
+        _build(
+            r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{A B}}"
+            r"\end{tenkzfree}"
+        )
+    )
+    parse_dimension_inventory(_json(whitespace_data))
+    whitespace_row = next(iter(whitespace_data["cases"].values()))[0]
+    whitespace_row["site"] = str(whitespace_row["site"]).replace("A B", "A  B")
+    _expect_error(
+        lambda: parse_dimension_inventory(_json(whitespace_data)),
+        "normalized semantic site key",
+    )
+
+
+def test_case_paths_are_regular_and_unaliased() -> None:
+    source = r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+    case_path = Path("tests/tenkz/rmp/synthetic/cases/synthetic-case.tex")
+    with tempfile.TemporaryDirectory(prefix="tenkz-dimension-path-") as tmp:
+        tmp_path = Path(tmp)
+        repo = tmp_path / "repo"
+        case = repo / case_path
+        case.parent.mkdir(parents=True)
+        case.write_text(source, encoding="utf-8")
+        if collect_dimension_inventory(repo, (case_path,)).dimension_count != 2:
+            raise AssertionError("a regular exact case path did not inventory")
+
+        outside = tmp_path / "outside.tex"
+        outside.write_text(source, encoding="utf-8")
+        case.unlink()
+        case.symlink_to(outside)
+        _expect_error(
+            lambda: collect_dimension_inventory(repo, (case_path,)),
+            "contains a symlink",
+        )
+
+        parent_repo = tmp_path / "parent-repo"
+        rmp_root = parent_repo / "tests" / "tenkz" / "rmp"
+        rmp_root.mkdir(parents=True)
+        outside_section = tmp_path / "outside-section"
+        outside_case = outside_section / "cases" / case_path.name
+        outside_case.parent.mkdir(parents=True)
+        outside_case.write_text(source, encoding="utf-8")
+        (rmp_root / "synthetic").symlink_to(
+            outside_section, target_is_directory=True
+        )
+        _expect_error(
+            lambda: collect_dimension_inventory(parent_repo, (case_path,)),
+            "contains a symlink",
+        )
+
 
 def test_updater_is_safe_and_idempotent() -> None:
     targets = load_manifest(DEFAULT_MANIFEST)
@@ -558,6 +671,7 @@ def main() -> int:
     test_construct_ordinals_are_semantic()
     test_balanced_changes_are_rejected()
     test_invalid_schema_is_rejected()
+    test_case_paths_are_regular_and_unaliased()
     test_updater_is_safe_and_idempotent()
     print("PASS: exact RMP dimension owner-site inventory")
     return 0
