@@ -21,16 +21,16 @@ diagonal matrix.  Starting from the same-length product law and the idempotent
 condition with natural-number coefficients independent of the length,
 Bultinck, Marien, Williamson, Sahinoglu, Haegeman, and Verstraete
 (arXiv:1511.08090) recover the known non-chiral topologically ordered phases;
-the paper leaves open whether renormalization fixed points with
-length-dependent structure coefficients exist (lines 995--997).
+the paper asks whether renormalization fixed points with length-dependent
+structure coefficients exist (lines 995--997).  The explicit positive answer
+is formalized separately in `TNLean.MPS.MPDO.LengthDependentRFPExample`.
 
 This file defines the length-independence predicate on the BNT-label
 coefficient systems of `TNLean.MPS.MPDO.BNTCoefficients` and proves the
 naturality consequences for a positive chi witness, together with the
-converse.  Every statement stays at the BNT-label level: nothing is
-constructed from an MPDO tensor, since the construction of the coefficient
-objects from a tensor is the separate Appendix C.3--C.4 obligation recorded in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+converse.  Every statement in this file stays at the abstract BNT-label level;
+the tensor-attached construction and the length-dependent RFP example are
+provided by later modules.
 
 The paper derives the $\{0, 1\}$ membership from the power-sum uniqueness
 lemma of its appendix (lines 1155--1163, formalized in
