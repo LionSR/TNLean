@@ -2979,22 +2979,20 @@
   }
 
 \bool_new:N \l__tenkz_kernel_physical_atom_bool
+\tl_new:N \l__tenkz_kernel_physical_row_tl
+\tl_new:N \l__tenkz_kernel_physical_col_tl
 \cs_new_protected:Npn \__tenkz_kernel_set_atom_physical:nn #1#2
   {
-    \bool_set_true:N \l__tenkz_kernel_physical_atom_bool
+    \__tenkz_kernel_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_physical_row_tl
+      \l__tenkz_kernel_physical_col_tl
+      \l__tenkz_kernel_physical_atom_bool
     \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_scratch_tl
     \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {sealed}
       { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
     \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
-    \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_scratch_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
-      {
-        \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_scratch_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
-          { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
-      }
     \bool_if:NT \l__tenkz_kernel_physical_atom_bool
       { \__tenkz_model_complete:nnn {#1} {physical} {#2} }
   }

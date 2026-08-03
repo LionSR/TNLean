@@ -1,4 +1,6 @@
-% Regression: physical sugar skips none, sealed voids, and cluster sub-atoms.
+% Regression: picture physical policy belongs to address-bearing frame atoms.
+% Relative, midpoint, on-wire, and crossing atoms remain geometric overlays;
+% an explicit physical port on an overlay remains independently meaningful.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -11,6 +13,28 @@
 \begin{tenkz}[rows={ket}, cols=1, bonds=none, physical=none]\end{tenkz}
 \begin{tenkz}[rows={ket}, cols=2, bonds=none, physical=up]
   \tn[void=sealed, name=V]{} & \tn[name=C, cluster=1x1]{C}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=up]
+  \tn[at=(1,1), name=A]{A}
+  \tn[at=(1,3), name=B]{B}
+  \tn[at=0.5 s of A, name=R]{R}
+  \tn[at=midway A and B, name=M, ports={90:physical:$m$}]{M}
+  \tnwire[name=carrier]{A}{B}
+  \tn[at=on carrier 0.25, name=O]{O}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=up]
+  \tn[at=(1,1), name=P, void=sealed]{P}
+  \tn[at=(1,2), name=Q, void=sealed]{Q}
+  \tn[at=(2,1), name=S, void=sealed]{S}
+  \tn[at=(2,2), name=T, void=sealed]{T}
+  \tnwire[kind=string, name=diag-a,
+    cross={over at crossing of diag-a and diag-b}]{P}{T}
+  \tnwire[kind=string, name=diag-b]{Q}{S}
+  \tn[at=crossing of diag-a and diag-b, name=X]{X}
+\end{tenkz}
+\begin{tenkz}[lattice={1x1}, bonds=none, physical=up,
+              frame={flat,basis={ket at (0,0)}}]
+  \tn[at=(1,1,1), name=K]{K}
 \end{tenkz}
 \mbox{parsed}
 \end{document}

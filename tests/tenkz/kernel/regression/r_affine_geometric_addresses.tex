@@ -1,0 +1,184 @@
+%% Regression: a projected three-by-three cell complex carries one source-shaped
+%% route through three affine midpoints.  Its two crossings are geometric atoms,
+%% not extra cells.  Physical ownership is exercised separately because the
+%% twelve virtual grid bonds occupy the same four cell faces as picture ports.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+
+\int_new:N \g__tenkz_test_affine_waypoint_int
+\int_new:N \g__tenkz_test_affine_bead_int
+\int_new:N \l__tenkz_test_affine_slot_int
+\fp_new:N \l__tenkz_test_affine_actual_x_fp
+\fp_new:N \l__tenkz_test_affine_actual_y_fp
+\fp_new:N \l__tenkz_test_affine_expect_x_fp
+\fp_new:N \l__tenkz_test_affine_expect_y_fp
+\fp_new:N \l__tenkz_test_affine_row_fp
+\fp_new:N \l__tenkz_test_affine_col_fp
+\tl_new:N \l__tenkz_test_affine_name_tl
+\tl_new:N \l__tenkz_test_affine_geom_x_tl
+\tl_new:N \l__tenkz_test_affine_geom_y_tl
+
+\cs_new_protected:Npn \__tenkz_test_affine_compare:n #1
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN
+      { \l__tenkz_test_affine_row_fp }
+      { \l__tenkz_test_affine_col_fp }
+      \l__tenkz_test_affine_expect_x_fp
+      \l__tenkz_test_affine_expect_y_fp
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_test_affine_actual_x_fp
+          - \l__tenkz_test_affine_expect_x_fp )
+      }
+      < {0.00005}
+      { \errmessage{affine~#1~lost~its~logical~x~coordinate} }
+    \fp_compare:nNnF
+      {
+        abs(
+          \l__tenkz_test_affine_actual_y_fp
+          - \l__tenkz_test_affine_expect_y_fp )
+      }
+      < {0.00005}
+      { \errmessage{affine~#1~lost~its~logical~y~coordinate} }
+  }
+
+\cs_new_eq:NN
+  \__tenkz_test_affine_pts_add:nN
+  \__tenkz_kernel_r_pts_add:nN
+\cs_set_protected:Npn \__tenkz_kernel_r_pts_add:nN #1#2
+  {
+    \__tenkz_test_affine_pts_add:nN {#1} #2
+    \int_gincr:N \g__tenkz_test_affine_waypoint_int
+    \fp_set:Nn \l__tenkz_test_affine_actual_x_fp
+      { \l__tenkz_kernel_r_xc_fp }
+    \fp_set:Nn \l__tenkz_test_affine_actual_y_fp
+      { \l__tenkz_kernel_r_yc_fp }
+    \int_set:Nn \l__tenkz_test_affine_slot_int
+      { 1 + \int_mod:nn { \g__tenkz_test_affine_waypoint_int - 1 } {3} }
+    \int_case:nnF { \l__tenkz_test_affine_slot_int }
+      {
+        {1}
+          {
+            \fp_set:Nn \l__tenkz_test_affine_row_fp {2.5}
+            \fp_set:Nn \l__tenkz_test_affine_col_fp {1.5}
+          }
+        {2}
+          {
+            \fp_set:Nn \l__tenkz_test_affine_row_fp {2.5}
+            \fp_set:Nn \l__tenkz_test_affine_col_fp {2.5}
+          }
+        {3}
+          {
+            \fp_set:Nn \l__tenkz_test_affine_row_fp {1.5}
+            \fp_set:Nn \l__tenkz_test_affine_col_fp {2.5}
+          }
+      }
+      { \errmessage{affine~route~visited~an~unexpected~waypoint} }
+    \__tenkz_test_affine_compare:n {route~waypoint}
+  }
+
+\cs_new_eq:NN \__tenkz_test_affine_atoms: \__tenkz_kernel_r_atoms:
+\cs_set_protected:Npn \__tenkz_kernel_r_atoms:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \__tenkz_model_get:nnN {##1} {name}
+          \l__tenkz_test_affine_name_tl
+        \quark_if_no_value:NF \l__tenkz_test_affine_name_tl
+          {
+            \str_case:Vn \l__tenkz_test_affine_name_tl
+              {
+                {bead-one}
+                  {
+                    \int_gincr:N \g__tenkz_test_affine_bead_int
+                    \fp_set:Nn \l__tenkz_test_affine_row_fp {2.5}
+                    \fp_set:Nn \l__tenkz_test_affine_col_fp {2}
+                    \__tenkz_geom_xy:nNN {##1}
+                      \l__tenkz_test_affine_geom_x_tl
+                      \l__tenkz_test_affine_geom_y_tl
+                    \fp_set:Nn \l__tenkz_test_affine_actual_x_fp
+                      { \l__tenkz_test_affine_geom_x_tl }
+                    \fp_set:Nn \l__tenkz_test_affine_actual_y_fp
+                      { \l__tenkz_test_affine_geom_y_tl }
+                    \__tenkz_test_affine_compare:n {first~crossing}
+                  }
+                {bead-two}
+                  {
+                    \int_gincr:N \g__tenkz_test_affine_bead_int
+                    \fp_set:Nn \l__tenkz_test_affine_row_fp {2}
+                    \fp_set:Nn \l__tenkz_test_affine_col_fp {2.5}
+                    \__tenkz_geom_xy:nNN {##1}
+                      \l__tenkz_test_affine_geom_x_tl
+                      \l__tenkz_test_affine_geom_y_tl
+                    \fp_set:Nn \l__tenkz_test_affine_actual_x_fp
+                      { \l__tenkz_test_affine_geom_x_tl }
+                    \fp_set:Nn \l__tenkz_test_affine_actual_y_fp
+                      { \l__tenkz_test_affine_geom_y_tl }
+                    \__tenkz_test_affine_compare:n {second~crossing}
+                  }
+              }
+          }
+      }
+    \__tenkz_test_affine_atoms:
+  }
+\ExplSyntaxOff
+\makeatother
+
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={ket,bra,ket}, cols=3, frame=plane,
+    bonds=grid, boundary=open, physical=none]
+  \tn[at=(3,1), name=istar, role=marked, size=l]{i*}
+  \tn[at=(1,3), name=i, role=marked, size=l]{i}
+  \tn[at=(2,2), name=c22]{}
+  \tn[at=(3,2), name=c32]{}
+  \tn[at=(2,3), name=c23]{}
+  \tnwire[
+    kind=string,
+    name=anyon,
+    route=orth,
+    via={
+      midway istar and c22,
+      midway c32 and c23,
+      midway c22 and i
+    },
+    cross={
+      over at crossing of anyon and bond-2-2-3-2,
+      over at crossing of anyon and bond-2-2-2-3
+    }
+  ]{istar}{i}
+  \tn[
+    at=crossing of anyon and bond-2-2-3-2,
+    name=bead-one, role=marked, size=s]{}
+  \tn[
+    at=crossing of anyon and bond-2-2-2-3,
+    name=bead-two, role=marked, size=s]{}
+\end{tenkz}
+\begin{tenkz}[
+    rows={ket,ket,ket}, cols=3, frame=plane,
+    bonds=none, physical=up]
+  \tn[at=(3,1), name=policy-istar, role=marked, size=l]{i*}
+  \tn[at=(1,3), name=policy-i, role=marked, size=l]{i}
+  \tn[at=(2,2), name=policy-c22]{}
+  \tn[at=(3,2), name=policy-c32]{}
+  \tn[at=(2,3), name=policy-c23]{}
+  \tn[
+    at=midway policy-c22 and policy-c32,
+    name=policy-bead-one, role=marked, size=s,
+    ports={90:physical:$m$}]{}
+  \tn[
+    at=midway policy-c22 and policy-c23,
+    name=policy-bead-two, role=marked, size=s]{}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkz_test_affine_waypoint_int } = {6}
+  { \errmessage{affine~route~did~not~resolve~its~three~waypoints~twice} }
+\int_compare:nNnF { \g__tenkz_test_affine_bead_int } = {2}
+  { \errmessage{affine~route~did~not~place~both~crossing~beads} }
+\ExplSyntaxOff
+\end{document}
