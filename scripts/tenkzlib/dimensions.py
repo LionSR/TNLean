@@ -229,8 +229,16 @@ _LATEX_COMMAND_DEFINITION_RE = re.compile(
     r"\\(?:newcommand|renewcommand|providecommand|DeclareRobustCommand)"
     + _TEX_CONTROL_WORD_END
 )
+_LATEX_ENVIRONMENT_DEFINITION_RE = re.compile(
+    r"\\(?:newenvironment|renewenvironment|provideenvironment)"
+    + _TEX_CONTROL_WORD_END
+)
 _DOCUMENT_COMMAND_DEFINITION_RE = re.compile(
     r"\\(?:New|Renew|Provide|Declare)(?:Expandable)?DocumentCommand"
+    + _TEX_CONTROL_WORD_END
+)
+_DOCUMENT_ENVIRONMENT_DEFINITION_RE = re.compile(
+    r"\\(?:New|Renew|Provide|Declare)DocumentEnvironment"
     + _TEX_CONTROL_WORD_END
 )
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
@@ -703,12 +711,24 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 for definition in _PRIMITIVE_DEFINITION_RE.finditer(source)
             ),
             *(
-                (definition.start(), "latex", definition)
+                (definition.start(), "latex command", definition)
                 for definition in _LATEX_COMMAND_DEFINITION_RE.finditer(source)
             ),
             *(
-                (definition.start(), "xparse", definition)
+                (definition.start(), "latex environment", definition)
+                for definition in _LATEX_ENVIRONMENT_DEFINITION_RE.finditer(
+                    source
+                )
+            ),
+            *(
+                (definition.start(), "xparse command", definition)
                 for definition in _DOCUMENT_COMMAND_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "xparse environment", definition)
+                for definition in _DOCUMENT_ENVIRONMENT_DEFINITION_RE.finditer(
+                    source
+                )
             ),
         ),
         key=lambda candidate: candidate[0],
@@ -769,7 +789,7 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                     )
                 )
                 break
-        elif definition_kind == "latex":
+        elif definition_kind.startswith("latex"):
             position = _skip_space(source, definition.end())
             if source[position : position + 1] == "*":
                 position = _skip_space(source, position + 1)
@@ -790,20 +810,29 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 position = _skip_space(source, closed)
             if malformed_option:
                 continue
-            replacements = _following_mandatory_arguments(
-                source, position, 1
-            )
-            if replacements is None:
-                quarantine_unclosed_mandatory(position, definition.start())
-                continue
-            replacement = replacements[0]
-            spans.append(
-                (definition.start(), replacement.end)
-            )
+            body_count = 2 if definition_kind.endswith("environment") else 1
+            bodies: list[_MandatoryArgument] = []
+            for _ in range(body_count):
+                following = _following_mandatory_arguments(
+                    source, position, 1
+                )
+                if following is None:
+                    quarantine_unclosed_mandatory(
+                        position, definition.start()
+                    )
+                    break
+                body = following[0]
+                bodies.append(body)
+                position = body.end
+            if len(bodies) == body_count:
+                spans.append((definition.start(), bodies[-1].end))
         else:
             position = definition.end()
             arguments: list[_MandatoryArgument] = []
-            for _ in range(3):
+            argument_count = (
+                4 if definition_kind.endswith("environment") else 3
+            )
+            for _ in range(argument_count):
                 following = _following_mandatory_arguments(
                     source, position, 1
                 )
@@ -815,11 +844,8 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 argument = following[0]
                 arguments.append(argument)
                 position = argument.end
-            if len(arguments) == 3:
-                replacement = arguments[2]
-                spans.append(
-                    (definition.start(), replacement.end)
-                )
+            if len(arguments) == argument_count:
+                spans.append((definition.start(), arguments[-1].end))
     return spans
 
 

@@ -678,6 +678,11 @@ def test_rmp_dimension_ownership() -> None:
             "xparse expandable",
             r"\NewExpandableDocumentCommand{\x}{}{TOKEN}",
         ),
+        ("latex environment", r"\newenvironment{x}{TOKEN}{}"),
+        (
+            "xparse environment",
+            r"\NewDocumentEnvironment{x}{}{TOKEN}{}",
+        ),
     )
     for definition_kind, definition_template in replacement_templates:
         inert_end = definition_template.replace("TOKEN", r"\end{tenkz}")
@@ -723,6 +728,14 @@ def test_rmp_dimension_ownership() -> None:
             "expandable xparse processor",
             r"\NewExpandableDocumentCommand{\x}{>{TOKEN}m}{body}",
         ),
+        (
+            "latex environment default",
+            r"\newenvironment{x}[1][TOKEN]{begin}{end}",
+        ),
+        (
+            "xparse environment processor",
+            r"\NewDocumentEnvironment{x}{>{TOKEN}m}{begin}{end}",
+        ),
     )
     for definition_kind, definition_template in stored_syntax_templates:
         definition = definition_template.replace("TOKEN", r"\end{tenkz}")
@@ -750,6 +763,14 @@ def test_rmp_dimension_ownership() -> None:
         (
             "xparse expandable",
             r"\NewExpandableDocumentCommand{\fake}{}{stored}",
+        ),
+        (
+            "latex environment",
+            r"\newenvironment{fake}{stored}{}",
+        ),
+        (
+            "xparse environment",
+            r"\NewDocumentEnvironment{fake}{}{stored}{}",
         ),
     )
     for outer_kind, outer_template in replacement_templates:
@@ -785,6 +806,19 @@ def test_rmp_dimension_ownership() -> None:
         (
             "expandable xparse body",
             r"\NewExpandableDocumentCommand{\x}{}{",
+        ),
+        ("latex environment begin body", r"\newenvironment{x}{"),
+        (
+            "latex environment end body",
+            r"\newenvironment{x}{begin}{",
+        ),
+        (
+            "xparse environment begin body",
+            r"\NewDocumentEnvironment{x}{}{",
+        ),
+        (
+            "xparse environment end body",
+            r"\NewDocumentEnvironment{x}{}{begin}{",
         ),
     )
     for definition_kind, definition_prefix in unclosed_definition_prefixes:
