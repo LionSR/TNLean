@@ -713,6 +713,36 @@ def test_rmp_dimension_ownership() -> None:
                 "an inert replacement begin token opened an environment: "
                 f"definition={definition_kind}, occurrences={occurrences!r}"
             )
+    stored_syntax_templates = (
+        ("latex default", r"\newcommand{\x}[1][TOKEN]{body}"),
+        (
+            "xparse processor",
+            r"\NewDocumentCommand{\x}{>{TOKEN}m}{body}",
+        ),
+        (
+            "expandable xparse processor",
+            r"\NewExpandableDocumentCommand{\x}{>{TOKEN}m}{body}",
+        ),
+    )
+    for definition_kind, definition_template in stored_syntax_templates:
+        definition = definition_template.replace("TOKEN", r"\end{tenkz}")
+        for owner_kind, outer_open, outer_close, _ in owner_contexts:
+            source = (
+                outer_open
+                + r"\begin{tenkz}"
+                + definition
+                + r"\rule{201mm}{202mm}\end{tenkz}"
+                + outer_close
+            )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "stored definition syntax closed an active environment: "
+                    f"definition={definition_kind}, outer={owner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
     nested_definition_tokens = (
         ("primitive", r"\def\fake"),
         ("latex", r"\newcommand{\fake}{stored}"),

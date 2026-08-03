@@ -694,7 +694,7 @@ def _option_group_spans(
 
 
 def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
-    """Return inert bodies of primitive, LaTeX, and xparse macro definitions."""
+    """Return definition extents whose tokens are inert until invocation."""
     spans: list[tuple[int, int]] = []
     definitions = sorted(
         (
@@ -714,13 +714,15 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
         key=lambda candidate: candidate[0],
     )
 
-    def quarantine_unclosed_mandatory(position: int) -> None:
+    def quarantine_unclosed_mandatory(
+        position: int, definition_start: int
+    ) -> None:
         position = _skip_space(source, position)
         if (
             source[position : position + 1] == "{"
             and match_group(source, position, "{", "}") < 0
         ):
-            spans.append((position, len(source)))
+            spans.append((definition_start, len(source)))
 
     for _, definition_kind, definition in definitions:
         if (
@@ -761,7 +763,10 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                     continue
                 closed = match_group(source, position, "{", "}")
                 spans.append(
-                    (position, len(source) if closed < 0 else closed)
+                    (
+                        definition.start(),
+                        len(source) if closed < 0 else closed,
+                    )
                 )
                 break
         elif definition_kind == "latex":
@@ -770,7 +775,7 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 position = _skip_space(source, position + 1)
             names = _following_mandatory_arguments(source, position, 1)
             if names is None:
-                quarantine_unclosed_mandatory(position)
+                quarantine_unclosed_mandatory(position, definition.start())
                 continue
             position = _skip_space(source, names[0].end)
             malformed_option = False
@@ -779,7 +784,7 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                     break
                 closed = match_group(source, position, "[", "]")
                 if closed < 0:
-                    spans.append((position, len(source)))
+                    spans.append((definition.start(), len(source)))
                     malformed_option = True
                     break
                 position = _skip_space(source, closed)
@@ -789,11 +794,11 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 source, position, 1
             )
             if replacements is None:
-                quarantine_unclosed_mandatory(position)
+                quarantine_unclosed_mandatory(position, definition.start())
                 continue
             replacement = replacements[0]
             spans.append(
-                (replacement.content_start, replacement.content_end)
+                (definition.start(), replacement.end)
             )
         else:
             position = definition.end()
@@ -803,7 +808,9 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                     source, position, 1
                 )
                 if following is None:
-                    quarantine_unclosed_mandatory(position)
+                    quarantine_unclosed_mandatory(
+                        position, definition.start()
+                    )
                     break
                 argument = following[0]
                 arguments.append(argument)
@@ -811,7 +818,7 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
             if len(arguments) == 3:
                 replacement = arguments[2]
                 spans.append(
-                    (replacement.content_start, replacement.content_end)
+                    (definition.start(), replacement.end)
                 )
     return spans
 
