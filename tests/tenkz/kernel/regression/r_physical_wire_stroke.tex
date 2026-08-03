@@ -103,9 +103,11 @@
   \tn[ports={0:physical}]{G} &
   \tn[ports={180:physical}]{H}
 \end{tenkz}
-\begin{tenkz}[rows={wire,wire}, cols=1]
-  \tn[ports={270:physical}]{I} \\
-  \tn[ports={90:physical}]{J}
+% Grid defaults are refinable: updown policy supplies both physical endpoint
+% types without duplicate per-atom descriptors.
+\begin{tenkz}[rows={wire,wire}, cols=1, physical=updown]
+  \tn{I} \\
+  \tn{J}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2]
   \tn{K} & \tn{L}

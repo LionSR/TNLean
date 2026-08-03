@@ -667,10 +667,24 @@ proves sugar and expansion emit identical events; `\tnset{strict}` rejects
 sugar entirely. The model and the event stream contain only kernel records.
 Teaching text uses sugar freely. Twenty-five rows:
 
+Write a physical label on its typed port, once:
+
+```tex
+\begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
+  \tn[name=A, ports={90:physical:$i$}]{A}
+\end{tenkz}
+```
+
+Here the descriptor creates the standard `port-open` leg and suppresses the
+otherwise generated policy leg. If an authored wire consumes `A.90`, the same
+descriptor labels that wire in the final port-label pass. With no descriptor,
+the policy still refines a consumed `A.90` endpoint to physical, but carries
+no label of its own.
+
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: adds the outward physical port to every wire-row atom; an explicit port on that face merges when type and label agree, and conflicting types or token-distinct labels are errors |
+| `physical=up\|down\|updown\|none` | expander: declares each eligible atom's outward centre port physical; a wire endpoint at that port inherits the type, and a matching `ports=` descriptor uses the ordinary wire or `port-open` label owner |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
@@ -691,7 +705,7 @@ Teaching text uses sugar freely. Twenty-five rows:
 | `\tndots` | `\tn[skin=dots]{}` (elision bit read by the audit) |
 | `\tnskip` | `\tn[void=open]{}` |
 | `\tntree[k]{word}` | expander: fuse atoms + wires from the word |
-| `up at= down at= west at= east at=`, `combined=`, `span=`, `up=`, `down=` | `ports=` angle/slot grammar; `span=` folds into `wires=` |
+| `up at= down at= west at= east at=`, `combined=`, `span=` | `ports=` angle/slot grammar; `span=` folds into `wires=` |
 | `role=` | `species=` (the four prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
 

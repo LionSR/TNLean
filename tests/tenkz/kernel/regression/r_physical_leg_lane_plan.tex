@@ -89,13 +89,13 @@
     \__tenkz_test_lp_production_resolve:
   }
 \cs_new_eq:NN
-  \__tenkz_test_lp_production_consume:nnn
-  \__tenkz_kernel_r_leg_consume:nnn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg_consume:nnn #1#2#3
+  \__tenkz_test_lp_production_consume:nn
+  \__tenkz_kernel_r_leg_consume:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_consume:nn #1#2
   {
     \bool_if:NT \l__tenkz_test_lp_production_bool
       {\int_incr:N \l__tenkz_test_lp_consume_count_int}
-    \__tenkz_test_lp_production_consume:nnn {#1}{#2}{#3}
+    \__tenkz_test_lp_production_consume:nn {#1}{#2}
   }
 
 \cs_new_eq:NN \__tenkz_test_lp_msg_error:nne \msg_error:nne
