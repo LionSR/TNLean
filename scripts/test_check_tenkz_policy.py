@@ -3545,6 +3545,290 @@ def main() -> int:
         "publisher succeeded but the final ref is absent",
     )
 
+    # Pending ledger records do not bypass a historical publisher incident.
+    pending_after_signoff = context()
+    add_record(
+        pending_after_signoff,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    pending_after_signoff.prs["#908"] = candidate_pr(
+        908,
+        author="record-author",
+    )
+    pending_after_signoff.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    expect_failure(
+        lambda: validate(
+            complete_log() + [correction("S1-0005", "#908", "S1-0002")],
+            pending_after_signoff,
+        ),
+        "publisher succeeded but the final ref is absent",
+    )
+
+    # A ref created by the publisher during validation is observed after the
+    # successful job, rather than misclassified from an earlier absent read.
+    ref_created_during_validation = context()
+    lookup_order: list[str] = []
+
+    def resolve_successful_publisher(
+        integration_oid: str,
+    ) -> policy.FinalTagPublisherEvidence:
+        lookup_order.append(f"publisher:{integration_oid}")
+        return publisher_evidence(integration_oid, status="success")
+
+    def resolve_ref_after_publisher(tag: str) -> policy.TagEvidence:
+        assert tag == policy.FINAL_TAG
+        publisher_already_observed = bool(lookup_order)
+        lookup_order.append(f"ref:{tag}")
+        if not publisher_already_observed:
+            return policy.TagEvidence(None, None, None, exists=False)
+        return authenticated_final_tag(oid(9071))
+
+    ref_created_during_validation.resolve_final_tag_publisher = (
+        resolve_successful_publisher
+    )
+    ref_created_during_validation.resolve_current_final_tag = resolve_ref_after_publisher
+    assert validate(complete_log(), ref_created_during_validation) == (
+        "signed-off-awaiting-key-retirement"
+    )
+    assert lookup_order == [
+        f"publisher:{oid(9071)}",
+        f"ref:{policy.FINAL_TAG}",
+    ]
+
+    # A replacement sign-off cannot overwrite an older publisher whose
+    # delayed success makes the now-absent final ref a hard incident.
+    replacement_signoff = context()
+    add_record(
+        replacement_signoff,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+        invalid_tree=True,
+    )
+    add_record(
+        replacement_signoff,
+        "S1-0006",
+        "#909",
+        909,
+        SIGNOFF_MERGE + timedelta(seconds=3),
+    )
+    second_source_sha = "6" * 40
+    second_freeze_tag = "tenkz-v0.9.1"
+    add_freeze_facts(
+        replacement_signoff,
+        "S1-0007",
+        source_ref="#910",
+        source_number=910,
+        source_sha=second_source_sha,
+        record_ref="#911",
+        record_number=911,
+        tag=second_freeze_tag,
+        tag_object="7" * 40,
+        merged_at=SIGNOFF_MERGE + timedelta(seconds=5),
+    )
+    second_freeze_integration = replacement_signoff.prs["#911"].merge_commit_oid
+    assert isinstance(second_freeze_integration, str)
+
+    second_formal_merge = SIGNOFF_MERGE + timedelta(seconds=6)
+    replacement_signoff.prs["#912"] = merged_pr(
+        912,
+        second_formal_merge,
+        author="second-formal-author",
+        reviews=(
+            review(
+                "second-formal-reviewer",
+                second_formal_merge - timedelta(microseconds=1),
+                oid(9120),
+            ),
+        ),
+    )
+    second_formal_integration = replacement_signoff.prs["#912"].merge_commit_oid
+    assert isinstance(second_formal_integration, str)
+    replacement_signoff.work_diffs["#912"] = replace(
+        replacement_signoff.work_diffs[FORMAL_WORK],
+        validated_pr_ref="#912",
+        validated_head_oid=oid(9120),
+        validated_integration_oid=second_formal_integration,
+        validated_freeze_integration=second_freeze_integration,
+    )
+    add_record(
+        replacement_signoff,
+        "S1-0008",
+        "#913",
+        913,
+        SIGNOFF_MERGE + timedelta(seconds=7),
+    )
+
+    second_rmp_merge = SIGNOFF_MERGE + timedelta(seconds=8)
+    replacement_signoff.prs["#914"] = merged_pr(
+        914,
+        second_rmp_merge,
+        author="second-rmp-author",
+        reviews=(
+            review(
+                "second-rmp-reviewer",
+                second_rmp_merge - timedelta(microseconds=1),
+                oid(9140),
+            ),
+        ),
+    )
+    second_rmp_integration = replacement_signoff.prs["#914"].merge_commit_oid
+    assert isinstance(second_rmp_integration, str)
+    replacement_signoff.work_diffs["#914"] = replace(
+        replacement_signoff.work_diffs[RMP_WORK],
+        validated_pr_ref="#914",
+        validated_head_oid=oid(9140),
+        validated_integration_oid=second_rmp_integration,
+        validated_freeze_integration=second_freeze_integration,
+    )
+    add_record(
+        replacement_signoff,
+        "S1-0009",
+        "#915",
+        915,
+        SIGNOFF_MERGE + timedelta(seconds=9),
+    )
+
+    second_work_integrations = (
+        second_formal_integration,
+        second_rmp_integration,
+    )
+    second_release_merge = SIGNOFF_MERGE + timedelta(
+        seconds=9,
+        microseconds=500_000,
+    )
+    replacement_signoff.prs["#916"] = merged_pr(
+        916,
+        second_release_merge,
+        author="second-release-prep-author",
+        reviews=(
+            review(
+                "second-release-prep-reviewer",
+                second_release_merge - timedelta(microseconds=1),
+                oid(9160),
+            ),
+        ),
+    )
+    second_release_integration = replacement_signoff.prs["#916"].merge_commit_oid
+    assert isinstance(second_release_integration, str)
+    replacement_signoff.release_preps["#916"] = replace(
+        replacement_signoff.release_preps[RELEASE_PREP],
+        validated_pr_ref="#916",
+        validated_head_oid=oid(9160),
+        validated_integration_oid=second_release_integration,
+        validated_work_integrations=second_work_integrations,
+    )
+    second_payload_blobs = tuple(oid(40_000 + index) for index in range(6))
+    replacement_signoff.payloads[(oid(9160), policy.FINAL_TAG)] = payload_evidence(
+        oid(9160),
+        policy.FINAL_TAG,
+        second_payload_blobs,
+    )
+
+    second_signoff_merge = SIGNOFF_MERGE + timedelta(seconds=11)
+    add_record(
+        replacement_signoff,
+        "S1-0010",
+        "#917",
+        917,
+        second_signoff_merge,
+    )
+    replacement_signoff.prs["#917"] = replace(
+        replacement_signoff.prs["#917"],
+        author_login="second-release-author",
+        reviews=(
+            review(
+                "second-release-reviewer",
+                SIGNOFF_MERGE + timedelta(seconds=10),
+                oid(9170),
+            ),
+        ),
+    )
+    second_signoff_integration = replacement_signoff.prs["#917"].merge_commit_oid
+    assert isinstance(second_signoff_integration, str)
+    replacement_signoff.records["S1-0010"] = replace(
+        replacement_signoff.records["S1-0010"],
+        candidate_main_tip_is_release_integration=True,
+        integration_parent_is_release_integration=True,
+        validated_release_integration=second_release_integration,
+        validated_work_integrations=second_work_integrations,
+    )
+    for tree_oid in (oid(9170), second_signoff_integration):
+        replacement_signoff.payloads[(tree_oid, policy.FINAL_TAG)] = payload_evidence(
+            tree_oid,
+            policy.FINAL_TAG,
+            second_payload_blobs,
+        )
+
+    replacement_signoff_log = complete_log() + [
+        correction("S1-0005", "#908", "S1-0002"),
+        reset("S1-0006", "#909", "record-invalid", "S1-0005"),
+        freeze(
+            "S1-0007",
+            record_pr="#911",
+            attempt=2,
+            source_pr="#910",
+            source_sha=second_source_sha,
+            tag_object="7" * 40,
+            tag=second_freeze_tag,
+        ),
+        work(
+            "S1-0008",
+            "#913",
+            "#912",
+            "formalization-or-blueprint",
+            attempt=2,
+        ),
+        work("S1-0009", "#915", "#914", "rmp-benchmark", attempt=2),
+        sign_off(
+            "S1-0010",
+            "#917",
+            ["S1-0008", "S1-0009"],
+            attempt=2,
+            freeze_id="S1-0007",
+            source_sha=second_source_sha,
+            release_prep_pr="#916",
+            reviewer="github:second-release-reviewer",
+        ),
+    ]
+    replacement_signoff.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    publisher_lookups: list[str] = []
+    resolve_replacement_publisher = replacement_signoff.resolve_final_tag_publisher
+
+    def resolve_all_publishers(
+        integration_oid: str,
+    ) -> policy.FinalTagPublisherEvidence:
+        publisher_lookups.append(integration_oid)
+        return resolve_replacement_publisher(integration_oid)
+
+    replacement_signoff.resolve_final_tag_publisher = resolve_all_publishers
+    expect_failure(
+        lambda: validate(replacement_signoff_log, replacement_signoff),
+        "publisher succeeded but the final ref is absent",
+    )
+    assert publisher_lookups == [oid(9071), second_signoff_integration]
+    publisher_lookups.clear()
+    replacement_signoff.tags[policy.FINAL_TAG] = authenticated_final_tag(
+        second_signoff_integration,
+        tagger_epoch_seconds=SIGNOFF_TAGGER_EPOCH,
+        prefix_boundary="S1-0004",
+    )
+    expect_failure(
+        lambda: validate(replacement_signoff_log, replacement_signoff),
+        "final tag payload names another sign-off integration",
+    )
+    assert publisher_lookups == [oid(9071), second_signoff_integration]
+
     published_then_drifted = context()
     published_then_drifted.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
@@ -3556,7 +3840,7 @@ def main() -> int:
             published_then_drifted,
             audit=audit_evidence("S1-0004", ("S1-0002",)),
         ),
-        "publisher succeeded while release evidence requires reset",
+        "publisher succeeded but the final ref is absent",
     )
 
     independently_authenticated_object = context()
