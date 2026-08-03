@@ -450,7 +450,7 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
   have hB_li :=
     eventually_linearIndependent_of_overlap_tendsto_orthonormal B hB_self hB_off
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- Step 2: Pick N where both are linearly independent.
+  -- Step 2: Pick N where both are linearly independent and their spans agree.
   -- ═══════════════════════════════════════════════════════════════════════════
   have hBoth : ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : Fin gA => mpvState (d := d) (A j) N) ∧

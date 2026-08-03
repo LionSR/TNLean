@@ -417,7 +417,7 @@ lemma eventually_exists_invertible_changeBasis
   -- Both families are eventually LI.
   have hA_li := bntFamilies_eventually_linearIndependent A hA_diag hA_off
   have hB_li := bntFamilies_eventually_linearIndependent B hB_diag hB_off
-  -- Combine the two "eventually" filters.
+  -- Intersect the three eventual conditions.
   filter_upwards [hA_li, hB_li, hspan] with N hA_N hB_N hspanN
   -- Apply the pure linear-algebra change-of-basis lemma.
   exact exists_invertible_changeBasis
