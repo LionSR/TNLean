@@ -1364,3 +1364,14 @@ M3--M6 are unchanged.
 Extension-gate: #5191
 
 Census-correction: #5191
+
+### 2026-08-03 — the affine anyon path states its incidences
+
+M4 rises from 17.87 to 18.02.  The anyon-pair case replaces one coarse
+diagonal edge by the source's nine PEPS sites, twelve interior bonds, twelve
+perimeter openings, nine physical legs, three string turns, and two marked
+crossings.  The additional lines name mathematical incidences that the old
+picture omitted.  They add no parser spelling, alias, escape, overload,
+page-distance constant, or case-specific metric.
+
+Census-correction: #5375
