@@ -674,6 +674,10 @@ def test_rmp_dimension_ownership() -> None:
         ("primitive", r"\def\x{TOKEN}"),
         ("latex", r"\newcommand{\x}{TOKEN}"),
         ("xparse", r"\NewDocumentCommand{\x}{}{TOKEN}"),
+        (
+            "xparse expandable",
+            r"\NewExpandableDocumentCommand{\x}{}{TOKEN}",
+        ),
     )
     for definition_kind, definition_template in replacement_templates:
         inert_end = definition_template.replace("TOKEN", r"\end{tenkz}")
@@ -713,6 +717,10 @@ def test_rmp_dimension_ownership() -> None:
         ("primitive", r"\def\fake"),
         ("latex", r"\newcommand{\fake}{stored}"),
         ("xparse", r"\NewDocumentCommand{\fake}{}{stored}"),
+        (
+            "xparse expandable",
+            r"\NewExpandableDocumentCommand{\fake}{}{stored}",
+        ),
     )
     for outer_kind, outer_template in replacement_templates:
         for inner_kind, inner_definition in nested_definition_tokens:
@@ -739,6 +747,43 @@ def test_rmp_dimension_ownership() -> None:
                     f"outer={outer_kind}, inner={inner_kind}, "
                     f"occurrences={occurrences!r}"
                 )
+    unclosed_definition_prefixes = (
+        ("latex option", r"\newcommand{\x}[1 "),
+        ("latex body", r"\newcommand{\x}{"),
+        ("xparse specification", r"\NewDocumentCommand{\x}{m "),
+        ("xparse body", r"\NewDocumentCommand{\x}{}{"),
+        (
+            "expandable xparse body",
+            r"\NewExpandableDocumentCommand{\x}{}{",
+        ),
+    )
+    for definition_kind, definition_prefix in unclosed_definition_prefixes:
+        source = (
+            r"\begin{tenkz}"
+            + definition_prefix
+            + r"\end{tenkz}\rule{87mm}{88mm}"
+        )
+        replacement_spans = _macro_replacement_spans(strip_comments(source))
+        inert_end = source.index(r"\end{tenkz}")
+        if len(replacement_spans) != 1 or not any(
+            start <= inert_end < end == len(source)
+            for start, end in replacement_spans
+        ):
+            raise AssertionError(
+                "an unclosed definition body lacked an EOF replacement mask: "
+                f"definition={definition_kind}, spans={replacement_spans!r}"
+            )
+        literal_offset = source.index("87mm")
+        environment_spans = _environment_spans(source, strip_comments(source))
+        if not any(
+            span.is_quarantine
+            and span.start <= literal_offset < span.end
+            for span in environment_spans
+        ):
+            raise AssertionError(
+                "an unclosed definition body exposed an inert environment end: "
+                f"definition={definition_kind}, spans={environment_spans!r}"
+            )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )

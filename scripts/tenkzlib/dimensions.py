@@ -230,7 +230,7 @@ _LATEX_COMMAND_DEFINITION_RE = re.compile(
     + _TEX_CONTROL_WORD_END
 )
 _DOCUMENT_COMMAND_DEFINITION_RE = re.compile(
-    r"\\(?:New|Renew|Provide|Declare)DocumentCommand"
+    r"\\(?:New|Renew|Provide|Declare)(?:Expandable)?DocumentCommand"
     + _TEX_CONTROL_WORD_END
 )
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
@@ -713,6 +713,15 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
         ),
         key=lambda candidate: candidate[0],
     )
+
+    def quarantine_unclosed_mandatory(position: int) -> None:
+        position = _skip_space(source, position)
+        if (
+            source[position : position + 1] == "{"
+            and match_group(source, position, "{", "}") < 0
+        ):
+            spans.append((position, len(source)))
+
     for _, definition_kind, definition in definitions:
         if (
             not _is_control_word_start(source, definition.start())
@@ -761,29 +770,45 @@ def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
                 position = _skip_space(source, position + 1)
             names = _following_mandatory_arguments(source, position, 1)
             if names is None:
+                quarantine_unclosed_mandatory(position)
                 continue
             position = _skip_space(source, names[0].end)
+            malformed_option = False
             for _ in range(2):
                 if source[position : position + 1] != "[":
                     break
                 closed = match_group(source, position, "[", "]")
                 if closed < 0:
-                    position = len(source)
+                    spans.append((position, len(source)))
+                    malformed_option = True
                     break
                 position = _skip_space(source, closed)
+            if malformed_option:
+                continue
             replacements = _following_mandatory_arguments(
                 source, position, 1
             )
-            if replacements is not None:
-                replacement = replacements[0]
-                spans.append(
-                    (replacement.content_start, replacement.content_end)
-                )
-        else:
-            arguments = _following_mandatory_arguments(
-                source, definition.end(), 3
+            if replacements is None:
+                quarantine_unclosed_mandatory(position)
+                continue
+            replacement = replacements[0]
+            spans.append(
+                (replacement.content_start, replacement.content_end)
             )
-            if arguments is not None:
+        else:
+            position = definition.end()
+            arguments: list[_MandatoryArgument] = []
+            for _ in range(3):
+                following = _following_mandatory_arguments(
+                    source, position, 1
+                )
+                if following is None:
+                    quarantine_unclosed_mandatory(position)
+                    break
+                argument = following[0]
+                arguments.append(argument)
+                position = argument.end
+            if len(arguments) == 3:
                 replacement = arguments[2]
                 spans.append(
                     (replacement.content_start, replacement.content_end)
