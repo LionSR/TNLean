@@ -222,6 +222,17 @@ _TEX_CONTROL_WORD_END = r"(?![^\W\d_]|[@:_])"
 _ENVIRONMENT_CONTROL_RE = re.compile(
     r"\\(begin|end)" + _TEX_CONTROL_WORD_END
 )
+_PRIMITIVE_DEFINITION_RE = re.compile(
+    r"\\(?:def|gdef|edef|xdef)" + _TEX_CONTROL_WORD_END
+)
+_LATEX_COMMAND_DEFINITION_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand|DeclareRobustCommand)"
+    + _TEX_CONTROL_WORD_END
+)
+_DOCUMENT_COMMAND_DEFINITION_RE = re.compile(
+    r"\\(?:New|Renew|Provide|Declare)DocumentCommand"
+    + _TEX_CONTROL_WORD_END
+)
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
 _CSNAME_SPACE_RE = re.compile(r"\\space" + _TEX_CONTROL_WORD_END)
 
@@ -406,6 +417,15 @@ def _following_mandatory_arguments(
                 ):
                     token_end += 1
             argument = _MandatoryArgument(position, token_end, token_end)
+        elif (
+            source[position] == "#"
+            and position + 1 < len(source)
+            and source[position + 1].isdigit()
+        ):
+            # Inside a macro replacement, ``#1`` denotes the substituted
+            # parameter token list. Keep the marker and parameter number
+            # together so an unbraced expandable argument is fail-closed.
+            argument = _MandatoryArgument(position, position + 2, position + 2)
         else:
             argument = _MandatoryArgument(position, position + 1, position + 1)
         arguments.append(argument)
@@ -547,12 +567,13 @@ def _command_spans(
         name = command.group(1)
         grammar = grammars[name]
         span_owner = grammar.owner
-        is_quarantine = False
+        is_quarantine = name in dynamic_names
         position = _skip_space(source, command.end())
         if name in dynamic_names:
             # The declaration may have collided with a command of unknown
             # signature.  Quarantine every adjacent syntactic argument rather
             # than guessing how many stars, options, or groups it accepts.
+            consumed_brace_group = False
             while position < len(source):
                 character = source[position : position + 1]
                 if character == "*":
@@ -570,7 +591,35 @@ def _command_spans(
                     span_owner = None
                     is_quarantine = True
                     break
+                consumed_brace_group = consumed_brace_group or character == "{"
                 position = _skip_space(source, closed)
+            if not consumed_brace_group and position < len(source):
+                arguments = _following_mandatory_arguments(source, position, 1)
+                if arguments is not None:
+                    argument = arguments[0]
+                    argument_source = source[
+                        argument.content_start : argument.content_end
+                    ]
+                    position = _skip_space(source, argument.end)
+                    # A control sequence consumed as the atom label is inert.
+                    # Conservatively quarantine its adjacent syntax too, so
+                    # the same token cannot be rescanned as a public command.
+                    if argument_source.startswith("\\"):
+                        while position < len(source):
+                            character = source[position : position + 1]
+                            if character == "*":
+                                position = _skip_space(source, position + 1)
+                                continue
+                            if character not in "[{":
+                                break
+                            closer = "]" if character == "[" else "}"
+                            closed = match_group(
+                                source, position, character, closer
+                            )
+                            if closed < 0:
+                                position = len(source)
+                                break
+                            position = _skip_space(source, closed)
         else:
             if grammar.accepts_star and source[position : position + 1] == "*":
                 position = _skip_space(source, position + 1)
@@ -661,26 +710,107 @@ def _option_group_spans(
     return spans
 
 
+def _macro_replacement_spans(source: str) -> list[tuple[int, int]]:
+    """Return inert bodies of primitive, LaTeX, and xparse macro definitions."""
+    spans: list[tuple[int, int]] = []
+    for definition in _PRIMITIVE_DEFINITION_RE.finditer(source):
+        if not _is_control_word_start(source, definition.start()):
+            continue
+        position = definition.end()
+        while position < len(source):
+            character = source[position]
+            if character == "\\":
+                arguments = _following_mandatory_arguments(source, position, 1)
+                if arguments is None:
+                    break
+                position = arguments[0].end
+                continue
+            if (
+                character == "#"
+                and position + 1 < len(source)
+                and (
+                    source[position + 1].isdigit()
+                    or source[position + 1] == "#"
+                )
+            ):
+                # Parameter markers belong to the definition header.
+                position += 2
+                continue
+            if character == "#":
+                position += 1
+                continue
+            if character != "{":
+                position += 1
+                continue
+            closed = match_group(source, position, "{", "}")
+            spans.append((position, len(source) if closed < 0 else closed))
+            break
+    for definition in _LATEX_COMMAND_DEFINITION_RE.finditer(source):
+        if not _is_control_word_start(source, definition.start()):
+            continue
+        position = _skip_space(source, definition.end())
+        if source[position : position + 1] == "*":
+            position = _skip_space(source, position + 1)
+        names = _following_mandatory_arguments(source, position, 1)
+        if names is None:
+            continue
+        position = _skip_space(source, names[0].end)
+        for _ in range(2):
+            if source[position : position + 1] != "[":
+                break
+            closed = match_group(source, position, "[", "]")
+            if closed < 0:
+                position = len(source)
+                break
+            position = _skip_space(source, closed)
+        replacements = _following_mandatory_arguments(source, position, 1)
+        if replacements is not None:
+            replacement = replacements[0]
+            spans.append((replacement.content_start, replacement.content_end))
+    for definition in _DOCUMENT_COMMAND_DEFINITION_RE.finditer(source):
+        if not _is_control_word_start(source, definition.start()):
+            continue
+        arguments = _following_mandatory_arguments(
+            source, definition.end(), 3
+        )
+        if arguments is not None:
+            replacement = arguments[2]
+            spans.append((replacement.content_start, replacement.content_end))
+    return spans
+
+
+def _position_in_spans(
+    position: int, spans: Iterable[tuple[int, int]]
+) -> bool:
+    """Whether a source position lies inside any half-open span."""
+    return any(start <= position < end for start, end in spans)
+
+
 def _environment_tokens(
     source: str, owner_source: str
 ) -> list[_EnvironmentToken]:
     """Parse simple environment names without joining split control words."""
     tokens: list[_EnvironmentToken] = []
+    replacement_spans = _macro_replacement_spans(owner_source)
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, control.start()):
+        if (
+            not _is_control_word_start(owner_source, control.start())
+            or _position_in_spans(control.start(), replacement_spans)
+        ):
             continue
-        position = _skip_space(owner_source, control.end())
-        if owner_source[position : position + 1] != "{":
+        arguments = _following_mandatory_arguments(
+            owner_source, control.end(), 1
+        )
+        if arguments is None:
             continue
-        closed = match_group(owner_source, position, "{", "}")
-        if closed < 0:
-            continue
+        argument = arguments[0]
         # LaTeX dispatch expands the name in ``\csname``.  Model canonical
         # spaces exactly; unresolved control sequences cannot safely grant a
         # public option owner, but matching spellings still form a neutral
         # quarantine so their bodies cannot inherit an enclosing owner.
         spelling = _csname_spelling(
-            source[position + 1 : closed - 1], expand_space=True
+            source[argument.content_start : argument.content_end],
+            expand_space=True,
         )
         if _ENVIRONMENT_NAME_RE.fullmatch(spelling) is not None:
             name: str | None = spelling
@@ -692,7 +822,11 @@ def _environment_tokens(
             continue
         tokens.append(
             _EnvironmentToken(
-                control.group(1), name, match_name, control.start(), closed
+                control.group(1),
+                name,
+                match_name,
+                control.start(),
+                argument.end,
             )
         )
     return tokens
@@ -714,10 +848,14 @@ def _environment_spans(
             tokens, _PUBLIC_ENVIRONMENTS
         )
     ]
+    replacement_spans = _macro_replacement_spans(owner_source)
     # An unclosed environment-name argument cannot be resolved to a public
     # name, but it still consumes the remainder as one malformed control.
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, control.start()):
+        if (
+            not _is_control_word_start(owner_source, control.start())
+            or _position_in_spans(control.start(), replacement_spans)
+        ):
             continue
         position = _skip_space(owner_source, control.end())
         if owner_source[position : position + 1] != "{":

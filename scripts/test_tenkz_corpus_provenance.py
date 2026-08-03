@@ -580,9 +580,23 @@ def test_rmp_dimension_ownership() -> None:
                 f"occurrences={malformed_nested!r}"
             )
     environment_names = (
-        ("static", "tenkz", ""),
-        ("unresolved", r"\tenname", r"\def\tenname{tenkz}"),
-        ("parameterized", "#1", ""),
+        ("static", "{tenkz}", "{tenkz}", "{tenkz ", ""),
+        (
+            "unresolved",
+            r"{\tenname}",
+            r"{\tenname}",
+            r"{\tenname ",
+            r"\def\tenname{tenkz}",
+        ),
+        ("parameterized", "{#1}", "{#1}", "{#1 ", ""),
+        (
+            "unresolved unbraced",
+            r"\tenname",
+            r"\tenname",
+            None,
+            r"\def\tenname{tenkz}",
+        ),
+        ("parameterized unbraced", "#1", "#1", None, ""),
     )
     owner_contexts = (
         (
@@ -600,26 +614,37 @@ def test_rmp_dimension_ownership() -> None:
     )
     malformed_kinds = ("unclosed name", "unclosed option", "missing end")
     literal_index = 61
-    for name_kind, environment_name, prelude in environment_names:
+    for (
+        name_kind,
+        begin_argument,
+        end_argument,
+        unclosed_argument,
+        prelude,
+    ) in environment_names:
         for malformed_kind in malformed_kinds:
+            if malformed_kind == "unclosed name" and unclosed_argument is None:
+                continue
             for owner_kind, outer_open, outer_close, inner_template in owner_contexts:
                 literal = f"{literal_index}mm"
                 literal_index += 1
                 inner_command = inner_template.replace("DIM", literal)
                 if malformed_kind == "unclosed name":
-                    environment = rf"\begin{{{environment_name} " + inner_command
+                    environment = r"\begin" + unclosed_argument + inner_command
                     # Keep the name group genuinely unclosed; the outer owner
                     # is intentionally opened but cannot close across it.
                     suffix = ""
                 elif malformed_kind == "unclosed option":
                     environment = (
-                        rf"\begin{{{environment_name}}}[malformed "
+                        r"\begin"
+                        + begin_argument
+                        + "[malformed "
                         + inner_command
-                        + rf"\end{{{environment_name}}}"
+                        + r"\end"
+                        + end_argument
                     )
                     suffix = outer_close
                 else:
-                    environment = rf"\begin{{{environment_name}}}" + inner_command
+                    environment = r"\begin" + begin_argument + inner_command
                     suffix = outer_close
                 source = prelude + outer_open + environment + suffix
                 owner_source = strip_comments(source)
@@ -644,6 +669,45 @@ def test_rmp_dimension_ownership() -> None:
                         f"outer={owner_kind}, source={source!r}, "
                         f"occurrences={occurrences!r}"
                     )
+    replacement_templates = (
+        ("primitive", r"\def\x{TOKEN}"),
+        ("latex", r"\newcommand{\x}{TOKEN}"),
+        ("xparse", r"\NewDocumentCommand{\x}{}{TOKEN}"),
+    )
+    for definition_kind, definition_template in replacement_templates:
+        inert_end = definition_template.replace("TOKEN", r"\end{tenkz}")
+        for owner_kind, outer_open, outer_close, _ in owner_contexts:
+            source = (
+                outer_open
+                + r"\begin{tenkz}"
+                + inert_end
+                + r"\rule{81mm}{82mm}\end{tenkz}"
+                + outer_close
+            )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "an inert replacement end token closed an environment: "
+                    f"definition={definition_kind}, outer={owner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
+        inert_begin = definition_template.replace("TOKEN", r"\begin{tenkz}")
+        source = (
+            r"\tnarrow{\begin{tenkz}\end{tenkz}"
+            + inert_begin
+            + r"\rule{83mm}{84mm}}"
+        )
+        occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+        if len(occurrences) != 2 or any(
+            occurrence.owner is not DimensionOwner.ROUTE
+            for occurrence in occurrences
+        ):
+            raise AssertionError(
+                "an inert replacement begin token opened an environment: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )
@@ -748,6 +812,43 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             "an unbraced xparse declaration escaped quarantine: "
             f"{unbraced_compatibility_atom!r}"
+        )
+    unbraced_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo\tnput{x}{(121mm,0)}{}}",
+    )
+    if len(unbraced_dynamic_label) != 1 or any(
+        occurrence.owner is not None for occurrence in unbraced_dynamic_label
+    ):
+        raise AssertionError(
+            "an unbraced dynamic label reactivated a public command: "
+            f"{unbraced_dynamic_label!r}"
+        )
+    later_dynamic_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\tnput{x}{(122mm,0)}{}}",
+    )
+    if len(later_dynamic_sibling) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in later_dynamic_sibling
+    ):
+        raise AssertionError(
+            "a dynamic one-token label consumed a later sibling command: "
+            f"{later_dynamic_sibling!r}"
+        )
+    grouped_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(123mm,0)}{}}}",
+    )
+    if len(grouped_dynamic_label) != 1 or any(
+        occurrence.owner is not None for occurrence in grouped_dynamic_label
+    ):
+        raise AssertionError(
+            "a grouped dynamic label reactivated a public command: "
+            f"{grouped_dynamic_label!r}"
         )
     for catcode_prelude, atom_name in (
         (r"\makeatletter", "tn@atom"),
