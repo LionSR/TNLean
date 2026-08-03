@@ -780,6 +780,7 @@ def _macro_replacement_spans(
             continue
         if definition_kind == "primitive":
             position = definition.end()
+            body_found = False
             while position < len(source):
                 character = source[position]
                 if character == "\\":
@@ -814,7 +815,10 @@ def _macro_replacement_spans(
                         len(source) if closed < 0 else closed,
                     )
                 )
+                body_found = True
                 break
+            if not body_found:
+                spans.append((definition.start(), len(source)))
         elif definition_kind.startswith("latex"):
             position = _skip_space(source, definition.end())
             if source[position : position + 1] == "*":

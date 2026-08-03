@@ -919,6 +919,26 @@ def test_rmp_dimension_ownership() -> None:
                 "an unclosed definition body exposed an inert environment end: "
                 f"definition={definition_kind}, spans={environment_spans!r}"
             )
+    for primitive in ("def", "gdef", "edef", "xdef"):
+        source = rf"\tnarrow{{\{primitive}\x 206mm}}"
+        definition_start = source.index(rf"\{primitive}")
+        replacement_spans = _macro_replacement_spans(strip_comments(source))
+        if replacement_spans != [(definition_start, len(source))]:
+            raise AssertionError(
+                "a brace-less primitive definition lacked an EOF mask: "
+                f"primitive={primitive}, spans={replacement_spans!r}"
+            )
+        brace_less_primitive = scan_case_dimensions(
+            Path("synthetic.tex"), source
+        )
+        if len(brace_less_primitive) != 1 or any(
+            occurrence.owner is not None
+            for occurrence in brace_less_primitive
+        ):
+            raise AssertionError(
+                "a brace-less primitive definition exposed enclosing ownership: "
+                f"primitive={primitive}, occurrences={brace_less_primitive!r}"
+            )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )
