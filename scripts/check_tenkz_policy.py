@@ -2568,7 +2568,7 @@ def validate_entries(
             f"release-preparation PR {release_ref} is a replay receipt PR",
         )
 
-    activation = resolver.resolve_replay_pr(activation_ref, None)
+    activation = replay_resolver.resolve_replay_pr(activation_ref, None)
     activation_author, activation_head = validate_pr_core(activation, activation_ref)
     activation_diff = current_resolver.resolve_replay_activation_diff(activation_ref)
     require(
@@ -2739,32 +2739,31 @@ def validate_entries(
         distinct_from={maintainer_login},
         authorized_permissions=reviewer_permissions,
     )
-    if current_resolver is not replay_resolver:
-        snapshot_activation = current_resolver.resolve_replay_pr(activation_ref, None)
-        snapshot_author, snapshot_head = validate_pr_core(
-            snapshot_activation,
-            activation_ref,
-        )
-        snapshot_merged_at, snapshot_integration = validate_merged_pr(
-            snapshot_activation,
-            activation_ref,
-            require_descendant=False,
-            require_tree=True,
-        )
-        require(
-            snapshot_head == activation_head
-            and snapshot_integration == activation_integration
-            and snapshot_merged_at == activation_merged_at,
-            "current activation identity differs from immutable replay",
-        )
-        require_independent_approval(
-            snapshot_activation,
-            activation_ref,
-            author=snapshot_author,
-            before=snapshot_merged_at,
-            distinct_from={maintainer_login},
-            authorized_permissions=reviewer_permissions,
-        )
+    snapshot_activation = current_resolver.resolve_replay_pr(activation_ref, None)
+    snapshot_author, snapshot_head = validate_pr_core(
+        snapshot_activation,
+        activation_ref,
+    )
+    snapshot_merged_at, snapshot_integration = validate_merged_pr(
+        snapshot_activation,
+        activation_ref,
+        require_descendant=False,
+        require_tree=True,
+    )
+    require(
+        snapshot_head == activation_head
+        and snapshot_integration == activation_integration
+        and snapshot_merged_at == activation_merged_at,
+        "current activation identity differs from immutable replay",
+    )
+    require_independent_approval(
+        snapshot_activation,
+        activation_ref,
+        author=snapshot_author,
+        before=snapshot_merged_at,
+        distinct_from={maintainer_login},
+        authorized_permissions=reviewer_permissions,
+    )
 
     publisher_secret_cache: PublisherSecretEvidence | None = None
 
@@ -2957,8 +2956,8 @@ def validate_entries(
         if kind == "freeze":
             source_sha_for_record = sha(entry["source_sha"], "source_sha", entry_id)
             record_anchor = source_sha_for_record
-        record = resolver.resolve_replay_pr(record_ref, record_anchor)
-        diff = resolver.resolve_replay_record_diff(
+        record = replay_resolver.resolve_replay_pr(record_ref, record_anchor)
+        diff = replay_resolver.resolve_replay_record_diff(
             entry_id,
             record_ref,
             source_sha_for_record,
@@ -2976,10 +2975,6 @@ def validate_entries(
         record_integration = inspection.integration
         replay_invalid_reasons = list(inspection.invalid_reasons)
         record_invalid_reasons = replay_invalid_reasons.copy()
-        snapshot_record = record
-        snapshot_diff = diff
-        snapshot_record_merged_at = record_merged_at
-
         def classify_snapshot_failure(message: str) -> None:
             if record_pending:
                 raise PolicyError(message)
@@ -2992,50 +2987,49 @@ def validate_entries(
             if message not in record_invalid_reasons:
                 record_invalid_reasons.append(message)
 
-        if current_resolver is not replay_resolver:
-            snapshot_record = current_resolver.resolve_replay_pr(
-                record_ref,
-                record_anchor,
+        snapshot_record = current_resolver.resolve_replay_pr(
+            record_ref,
+            record_anchor,
+        )
+        snapshot_diff = current_resolver.resolve_replay_record_diff(
+            entry_id,
+            record_ref,
+            source_sha_for_record,
+        )
+        snapshot_inspection = inspect_record_pr(
+            snapshot_record,
+            snapshot_diff,
+            entry_id=entry_id,
+            record_ref=record_ref,
+            require_descendant=True,
+        )
+        snapshot_record_merged_at = snapshot_inspection.merged_at
+        for reason in snapshot_inspection.invalid_reasons:
+            classify_snapshot_failure(reason)
+        replay_identity = (
+            record.in_repository,
+            record.base_ref_name,
+            record.author_login,
+            record.head_oid,
+            record.merged,
+            record.merged_at,
+            record.merged_by_login,
+            record.merge_commit_oid,
+        )
+        snapshot_identity = (
+            snapshot_record.in_repository,
+            snapshot_record.base_ref_name,
+            snapshot_record.author_login,
+            snapshot_record.head_oid,
+            snapshot_record.merged,
+            snapshot_record.merged_at,
+            snapshot_record.merged_by_login,
+            snapshot_record.merge_commit_oid,
+        )
+        if snapshot_identity != replay_identity:
+            classify_snapshot_failure(
+                f"{entry_id} current record identity differs from immutable replay"
             )
-            snapshot_diff = current_resolver.resolve_replay_record_diff(
-                entry_id,
-                record_ref,
-                source_sha_for_record,
-            )
-            snapshot_inspection = inspect_record_pr(
-                snapshot_record,
-                snapshot_diff,
-                entry_id=entry_id,
-                record_ref=record_ref,
-                require_descendant=True,
-            )
-            snapshot_record_merged_at = snapshot_inspection.merged_at
-            for reason in snapshot_inspection.invalid_reasons:
-                classify_snapshot_failure(reason)
-            replay_identity = (
-                record.in_repository,
-                record.base_ref_name,
-                record.author_login,
-                record.head_oid,
-                record.merged,
-                record.merged_at,
-                record.merged_by_login,
-                record.merge_commit_oid,
-            )
-            snapshot_identity = (
-                snapshot_record.in_repository,
-                snapshot_record.base_ref_name,
-                snapshot_record.author_login,
-                snapshot_record.head_oid,
-                snapshot_record.merged,
-                snapshot_record.merged_at,
-                snapshot_record.merged_by_login,
-                snapshot_record.merge_commit_oid,
-            )
-            if snapshot_identity != replay_identity:
-                classify_snapshot_failure(
-                    f"{entry_id} current record identity differs from immutable replay"
-                )
         if index == len(entries):
             expected_boundary = index - 1 if record_pending else index
             require(
@@ -3058,7 +3052,7 @@ def validate_entries(
                     raise PolicyError(message)
                 classify_replay_failure(message)
             current_condition = condition if snapshot_condition is None else snapshot_condition
-            if current_resolver is not replay_resolver and current_condition is not True:
+            if current_condition is not True:
                 classify_snapshot_failure(message)
 
         prior_receipts = tuple(
@@ -3169,11 +3163,10 @@ def validate_entries(
                     raise
                 classify_replay_failure(str(error))
                 return None
-            if current_resolver is not replay_resolver:
-                try:
-                    run(current_resolver)
-                except PolicyError as error:
-                    classify_snapshot_failure(str(error))
+            try:
+                run(current_resolver)
+            except PolicyError as error:
+                classify_snapshot_failure(str(error))
             return replay_result
 
         if kind == "freeze":
@@ -3301,16 +3294,19 @@ def validate_entries(
                         fact.closed is True,
                         f"{entry_id} prerequisite {item} is not closed",
                     )
-                    utc_instant(fact.closed_at, f"{entry_id} prerequisite {item} closedAt")
+                    closed_at = utc_instant(
+                        fact.closed_at,
+                        f"{entry_id} prerequisite {item} closedAt",
+                    )
+                    if record_merged_at is not None:
+                        require(
+                            closed_at <= record_merged_at,
+                            f"{entry_id} prerequisite {item} closed after T",
+                        )
                     facts.append(fact)
                 return facts, payload_blobs
 
             freeze_result = check_external(freeze_external_facts)
-            prerequisite_facts = (
-                freeze_result[0]
-                if isinstance(freeze_result, tuple)
-                else []
-            )
             freeze_payload_blobs = (
                 freeze_result[1]
                 if isinstance(freeze_result, tuple)
@@ -3325,19 +3321,6 @@ def validate_entries(
                 break
             if not replay_entry_is_invalid():
                 assert record_merged_at is not None and record_integration is not None
-
-                def check_prerequisite_times() -> None:
-                    for item, fact in zip(listed, prerequisite_facts):
-                        closed_at = utc_instant(
-                            fact.closed_at,
-                            f"{entry_id} prerequisite {item} closedAt",
-                        )
-                        require(
-                            closed_at <= record_merged_at,
-                            f"{entry_id} prerequisite {item} closed after T",
-                        )
-
-                check_external(check_prerequisite_times)
             active = {
                 "attempt": attempt,
                 "freeze_id": entry_id,
@@ -4462,18 +4445,27 @@ def validate_entries(
             if not replay_entry_is_invalid():
                 assert release_merged_at is not None
                 before = record_merged_at if not record_pending else None
-                check_external(
-                    lambda: require_independent_approval(
-                        record,
+                def signoff_approval_facts() -> None:
+                    approval_record = resolver.resolve_replay_pr(
                         record_ref,
-                        author=record_author,
+                        record_anchor,
+                    )
+                    approval_author, _approval_head = validate_pr_core(
+                        approval_record,
+                        record_ref,
+                    )
+                    require_independent_approval(
+                        approval_record,
+                        record_ref,
+                        author=approval_author,
                         after=max(latest_work_merge, release_merged_at),
                         before=before,
                         named_reviewer=reviewer,
                         distinct_from={maintainer_login},
                         authorized_permissions=reviewer_permissions,
                     )
-                )
+
+                check_external(signoff_approval_facts)
             require(pending_reset is None, f"{entry_id} cannot sign off before reset")
             if record_pending:
                 open_pending_release_attempt(

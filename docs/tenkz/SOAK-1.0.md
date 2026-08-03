@@ -415,12 +415,14 @@ follows a released sign-off.
 Each attempt has exactly one opening freeze. The audit boundary is not an entry
 field, timestamp, or caller choice: it is the final live entry in the immutable
 ledger prefix at the start of a fail-closed validation against one complete
-current GitHub/Git snapshot and exact validation target. The resolver supplies
-a closed `AuditEvidence` value containing that `boundary_entry_id`, the
-ledger-ordered `invalid_entries` not already acknowledged as defined below,
-and true `snapshot_complete` and `validation_target_exact` flags. A caller
-cannot choose or weaken those fields. The boundary must equal the actual final
-live entry in that prefix; reusing an earlier boundary is invalid.
+current GitHub/Git snapshot and exact validation target. The evidence bundle
+supplies a closed `AuditEvidence` value containing that `boundary_entry_id`,
+the exact validation-target object ID, and true `snapshot_complete` and
+`validation_target_exact` flags. The validator itself derives the
+ledger-ordered invalid-entry queue from the current snapshot; no caller
+supplies that queue. A caller cannot choose or weaken the audit fields. The
+boundary must equal the actual final live entry in that prefix; reusing an
+earlier boundary is invalid.
 
 Historical reset placement and prospective drift use separate evidence
 channels. For every merged `record-invalid` reset at or before the boundary,
@@ -462,12 +464,13 @@ restored at the canonical path. This is not a caller-selected audit boundary.
 
 A historically valid reset acknowledges its target while that reset continues
 to pass its own current common, external, and kind-specific checks. The current
-resolver forms `AuditEvidence.invalid_entries` from current raw-invalid entries
-after subtracting those acknowledged targets. If an acknowledging reset later
-fails a current check, its target is uncovered and both the target and reset
-are independently included when invalid. Historical replay never substitutes
-an earlier prefix for the current boundary, and the final `invalid_entries`
-value is not fed back into its own derivation.
+resolver supplies the facts for every live entry, and the validator forms its
+internal queue from current raw-invalid entries after subtracting those
+acknowledged targets. If an acknowledging reset later fails a current check,
+its target is uncovered and both the target and reset are independently
+included when invalid. Historical replay never substitutes an earlier prefix
+for the current boundary, and the derived queue is not fed back into its own
+derivation.
 
 When the reset queue is nonempty, the first new non-correction entry after the
 boundary is its head. If a `restart-required` reset was already pending at the

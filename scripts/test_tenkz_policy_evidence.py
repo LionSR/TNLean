@@ -6,6 +6,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Callable, Mapping
 from pathlib import Path
+from unittest.mock import Mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -95,6 +96,13 @@ def main() -> int:
         lambda: evidence.GitHubRestApiV1(denied).object(pull_url),
         "HTTP 403",
     )
+    partial = FrozenRequest(
+        {pull_url: evidence.RestResponse(206, {}, fixture("pull-request.json"))}
+    )
+    expect_failure(
+        lambda: evidence.GitHubRestApiV1(partial).object(pull_url),
+        "HTTP 206",
+    )
     malformed = FrozenRequest(
         {first_page: evidence.RestResponse(200, {}, b'{"not":"a page"}')}
     )
@@ -135,6 +143,18 @@ def main() -> int:
             api_version=2,
         ),
         "unsupported tenkz policy evidence API version",
+    )
+    shared_resolver = Mock(spec=evidence.PolicyEvidenceResolver)
+    expect_failure(
+        lambda: evidence.PolicyEvidenceBundle(
+            replay=evidence.ImmutableReplayEvidence(shared_resolver),
+            current=evidence.CurrentEvidenceSnapshot(
+                shared_resolver,
+                audit=object(),
+                tag_protection=object(),
+            ),
+        ),
+        "resolvers must be distinct",
     )
     print("PASS: tenkz policy evidence uses one strict API-v1 REST contract")
     return 0
