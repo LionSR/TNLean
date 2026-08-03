@@ -341,9 +341,16 @@ def publisher_evidence(
     tagger_epoch_seconds: int = SIGNOFF_TAGGER_EPOCH,
     prefix_boundary: str = "S1-0004",
     prior_released: bool = False,
+    prior_released_prefix_boundary: str | None = None,
+    prior_released_target_oid: str | None = None,
 ) -> policy.FinalTagPublisherEvidence:
     ran = status in {"incomplete", "failure", "success"}
     succeeded = status == "success"
+    if prior_released:
+        prior_released_prefix_boundary = (
+            prior_released_prefix_boundary or prefix_boundary
+        )
+        prior_released_target_oid = prior_released_target_oid or integration_oid
     return policy.FinalTagPublisherEvidence(
         validated_integration_oid=integration_oid,
         validated_tagger_epoch_seconds=tagger_epoch_seconds,
@@ -358,6 +365,11 @@ def publisher_evidence(
         workflow_jobs_complete_and_paginated=True,
         release_validation_runs_complete_and_paginated=True,
         prior_released_validation_exact_and_successful=prior_released,
+        prior_released_validation_prefix_boundary=prior_released_prefix_boundary,
+        prior_released_validation_target_oid=prior_released_target_oid,
+        prior_released_validation_target_contains_exact_prefix=(
+            True if prior_released else None
+        ),
         pinned_workflow_runs_exact=True,
         postmerge_validation_succeeded=True,
         postmerge_validation_network_disabled=True,
@@ -1359,10 +1371,29 @@ def prepare_resolution_facts(entries: list[dict], facts: Context) -> None:
                         program_paths=(program_path,),
                     ),
                 )
+                facts.observations.setdefault(
+                    (fix_integration, freeze_entry["freeze_tag"], test_ref),
+                    observation_evidence(
+                        fix_integration,
+                        freeze_entry["freeze_tag"],
+                        test_ref,
+                        surface=surface,
+                        result="passed",
+                        program_paths=(program_path,),
+                    ),
+                )
         facts.payloads.setdefault(
             (fix_head, freeze_entry["freeze_tag"]),
             payload_evidence(
                 fix_head,
+                freeze_entry["freeze_tag"],
+                FREEZE_PAYLOAD_BLOBS,
+            ),
+        )
+        facts.payloads.setdefault(
+            (fix_integration, freeze_entry["freeze_tag"]),
+            payload_evidence(
+                fix_integration,
                 freeze_entry["freeze_tag"],
                 FREEZE_PAYLOAD_BLOBS,
             ),
@@ -2898,18 +2929,31 @@ def main() -> int:
     def fix_observation_keys(
         facts: Context,
         fix_ref: str,
-    ) -> tuple[tuple[str, str, str], tuple[str, str, str]]:
+    ) -> tuple[
+        tuple[str, str, str],
+        tuple[str, str, str],
+        tuple[str, str, str],
+    ]:
         fix_base = facts.resolution_diffs[fix_ref].validated_base_oid
         fix_head = facts.prs[fix_ref].head_oid
-        assert isinstance(fix_base, str) and isinstance(fix_head, str)
+        fix_integration = facts.prs[fix_ref].merge_commit_oid
+        assert (
+            isinstance(fix_base, str)
+            and isinstance(fix_head, str)
+            and isinstance(fix_integration, str)
+        )
         tag = "tenkz-v0.9.0"
         return (
             (fix_base, tag, REGRESSION_TEST),
             (fix_head, tag, REGRESSION_TEST),
+            (fix_integration, tag, REGRESSION_TEST),
         )
 
     base_passes, base_passes_facts, fix_ref = resolution_case(True)
-    base_key, _head_key = fix_observation_keys(base_passes_facts, fix_ref)
+    base_key, _head_key, _integration_key = fix_observation_keys(
+        base_passes_facts,
+        fix_ref,
+    )
     base_passes_facts.observations[base_key] = replace(
         base_passes_facts.observations[base_key],
         exit_code=0,
@@ -2920,7 +2964,10 @@ def main() -> int:
     )
 
     head_fails, head_fails_facts, fix_ref = resolution_case(True)
-    _base_key, head_key = fix_observation_keys(head_fails_facts, fix_ref)
+    _base_key, head_key, _integration_key = fix_observation_keys(
+        head_fails_facts,
+        fix_ref,
+    )
     head_fails_facts.observations[head_key] = replace(
         head_fails_facts.observations[head_key],
         exit_code=9,
@@ -2931,7 +2978,10 @@ def main() -> int:
     )
 
     wrong_fix_tag, wrong_fix_tag_facts, fix_ref = resolution_case(True)
-    _base_key, head_key = fix_observation_keys(wrong_fix_tag_facts, fix_ref)
+    _base_key, head_key, _integration_key = fix_observation_keys(
+        wrong_fix_tag_facts,
+        fix_ref,
+    )
     wrong_fix_tag_facts.observations[head_key] = replace(
         wrong_fix_tag_facts.observations[head_key],
         validated_tag="tenkz-v0.9.1",
@@ -2939,6 +2989,20 @@ def main() -> int:
     expect_failure(
         lambda: validate(wrong_fix_tag, wrong_fix_tag_facts),
         "fix-head test tex-api-regression used another freeze tag",
+    )
+
+    integration_fails, integration_fails_facts, fix_ref = resolution_case(True)
+    _base_key, _head_key, integration_key = fix_observation_keys(
+        integration_fails_facts,
+        fix_ref,
+    )
+    integration_fails_facts.observations[integration_key] = replace(
+        integration_fails_facts.observations[integration_key],
+        exit_code=9,
+    )
+    expect_failure(
+        lambda: validate(integration_fails, integration_fails_facts),
+        "fix-integration test tex-api-regression passed result did not exit zero",
     )
 
     incomplete_fix_payload, incomplete_fix_payload_facts, fix_ref = resolution_case(True)
@@ -2952,6 +3016,19 @@ def main() -> int:
     expect_failure(
         lambda: validate(incomplete_fix_payload, incomplete_fix_payload_facts),
         "fix head release compatibility tests did not pass",
+    )
+
+    incomplete_integration_payload, integration_payload_facts, fix_ref = resolution_case(True)
+    fix_integration = integration_payload_facts.prs[fix_ref].merge_commit_oid
+    assert isinstance(fix_integration, str)
+    integration_payload_key = (fix_integration, "tenkz-v0.9.0")
+    integration_payload_facts.payloads[integration_payload_key] = replace(
+        integration_payload_facts.payloads[integration_payload_key],
+        compatibility_tests_passed=False,
+    )
+    expect_failure(
+        lambda: validate(incomplete_integration_payload, integration_payload_facts),
+        "fix integration release compatibility tests did not pass",
     )
 
     invalid_inventory_surfaces, invalid_inventory_facts, fix_ref = resolution_case(True)
@@ -2968,12 +3045,30 @@ def main() -> int:
     )
 
     postmerge_recheck, postmerge_recheck_facts, fix_ref = resolution_case(False)
-    _base_key, head_key = fix_observation_keys(postmerge_recheck_facts, fix_ref)
+    _base_key, head_key, _integration_key = fix_observation_keys(
+        postmerge_recheck_facts,
+        fix_ref,
+    )
     postmerge_recheck_facts.observations[head_key] = replace(
         postmerge_recheck_facts.observations[head_key],
         exit_code=2,
     )
     assert validate(postmerge_recheck, postmerge_recheck_facts) == (
+        "reset-required:S1-0003"
+    )
+
+    integration_postmerge_recheck, integration_postmerge_facts, fix_ref = (
+        resolution_case(False)
+    )
+    _base_key, _head_key, integration_key = fix_observation_keys(
+        integration_postmerge_facts,
+        fix_ref,
+    )
+    integration_postmerge_facts.observations[integration_key] = replace(
+        integration_postmerge_facts.observations[integration_key],
+        exit_code=2,
+    )
+    assert validate(integration_postmerge_recheck, integration_postmerge_facts) == (
         "reset-required:S1-0003"
     )
 
@@ -3215,6 +3310,42 @@ def main() -> int:
     )
     released.publisher_secret_override = publisher_secret_evidence(retired=True)
     assert validate(complete_log(), released) == "released"
+
+    prior_release_binding_failures = (
+        (
+            "prior_released_validation_prefix_boundary",
+            "S1-9999",
+            "prior released validation used another ledger prefix",
+        ),
+        (
+            "prior_released_validation_target_oid",
+            None,
+            "prior released validation target is missing or malformed",
+        ),
+        (
+            "prior_released_validation_target_contains_exact_prefix",
+            False,
+            "did not contain the exact ledger prefix",
+        ),
+    )
+    for field_name, bad_value, error_fragment in prior_release_binding_failures:
+        bad_prior_release = context()
+        bad_prior_release.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+        bad_prior_release.publishers[oid(9071)] = replace(
+            publisher_evidence(
+                oid(9071),
+                status="success",
+                prior_released=True,
+            ),
+            **{field_name: bad_value},
+        )
+        bad_prior_release.publisher_secret_override = publisher_secret_evidence(
+            retired=True
+        )
+        expect_failure(
+            lambda facts=bad_prior_release: validate(complete_log(), facts),
+            error_fragment,
+        )
 
     first_release_declaration = context()
     first_release_declaration.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
@@ -3669,6 +3800,16 @@ def main() -> int:
         "prior released validation lacks a successful publisher job",
     )
 
+    nonreleased_with_prior_binding = context()
+    nonreleased_with_prior_binding.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        prior_released_target_oid=oid(9071),
+    )
+    expect_failure(
+        lambda: validate(complete_log(), nonreleased_with_prior_binding),
+        "non-released history carries a released-validation binding",
+    )
+
     trailing_correction = context()
     add_record(
         trailing_correction,
@@ -3678,12 +3819,54 @@ def main() -> int:
         SIGNOFF_MERGE + timedelta(seconds=1),
     )
     trailing_correction.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
-    trailing_correction.publishers.update(released.publishers)
+    trailing_correction.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
     trailing_correction.publisher_secret_override = publisher_secret_evidence(retired=True)
-    assert validate(
-        complete_log() + [correction("S1-0005", "#908", "S1-0002")],
-        trailing_correction,
-    ) == "released"
+    trailing_correction_log = complete_log() + [
+        correction("S1-0005", "#908", "S1-0002")
+    ]
+    assert validate(trailing_correction_log, trailing_correction) == "released"
+
+    trailing_correction_replay = context()
+    add_record(
+        trailing_correction_replay,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    trailing_correction_replay.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    trailing_correction_replay.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+        prior_released=True,
+        prior_released_prefix_boundary="S1-0005",
+        prior_released_target_oid=oid(9081),
+    )
+    trailing_correction_replay.publisher_secret_override = publisher_secret_evidence(
+        retired=True
+    )
+    assert validate(trailing_correction_log, trailing_correction_replay) == "released"
+
+    appended_after_release = context()
+    add_record(
+        appended_after_release,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    appended_after_release.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    appended_after_release.publishers.update(released.publishers)
+    appended_after_release.publisher_secret_override = publisher_secret_evidence(
+        retired=True
+    )
+    expect_failure(
+        lambda: validate(trailing_correction_log, appended_after_release),
+        "prior released validation used another ledger prefix",
+    )
 
     # The current-validity audit runs forever while replay callbacks retain the
     # integration-time history.  Before the tag, drift enters the reset queue;
@@ -5012,9 +5195,13 @@ def main() -> int:
     )
 
     signoff_common = context()
-    signoff_common.prs[SIGNOFF_RECORD] = replace(
-        signoff_common.prs[SIGNOFF_RECORD],
-        integration_tree_matches_head=False,
+    signoff_common.payloads[(oid(9071), policy.FINAL_TAG)] = replace(
+        signoff_common.payloads[(oid(9071), policy.FINAL_TAG)],
+        test_execution_complete=False,
+    )
+    signoff_common.publishers[oid(9071)] = replace(
+        publisher_evidence(oid(9071)),
+        postmerge_validation_succeeded=False,
     )
     add_record(
         signoff_common,
