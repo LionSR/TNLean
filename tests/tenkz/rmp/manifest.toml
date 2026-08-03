@@ -1610,7 +1610,7 @@ order = 4
 case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-positive-mpo-old.tex"
 formula = "O = X^-1 (sum_k A^k tensor conjugate(A^k)) X."
 ink = "Canonical public kernel frames; no raw TikZ."
-boundary = "O has four open ports; each capsule branches one outer virtual leg into the two A rails, whose physical legs form one open vertical line."
+boundary = "O has four open ports; each X node branches one outer virtual leg into the two A rails, whose physical legs form one open vertical line."
 source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 317-335; archival output sec2fig6old.pdf"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
