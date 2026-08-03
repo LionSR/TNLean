@@ -718,6 +718,44 @@ def test_rmp_dimension_ownership() -> None:
                 "an inert replacement begin token opened an environment: "
                 f"definition={definition_kind}, occurrences={occurrences!r}"
             )
+        inert_owners = definition_template.replace(
+            "TOKEN",
+            r"\tnset{pitch=203mm}\tnput{x}{(204mm,0)}{}",
+        )
+        occurrences = scan_case_dimensions(
+            Path("synthetic.tex"),
+            inert_owners + r"\tnarrow{\tnput{x}{(205mm,0)}{}}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in occurrences
+        ] != [
+            ("203mm", None),
+            ("204mm", None),
+            ("205mm", DimensionOwner.LAYOUT),
+        ]:
+            raise AssertionError(
+                "stored public syntax gained ownership or masked active input: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
+        inert_unclosed_option = definition_template.replace(
+            "TOKEN", r"\tn[label shift=206mm"
+        )
+        occurrences = scan_case_dimensions(
+            Path("synthetic.tex"),
+            inert_unclosed_option + r"\tnarrow{207mm]}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in occurrences
+        ] != [
+            ("206mm", None),
+            ("207mm", DimensionOwner.ROUTE),
+        ]:
+            raise AssertionError(
+                "stored malformed syntax crossed into active input: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
     stored_syntax_templates = (
         ("latex default", r"\newcommand{\x}[1][TOKEN]{body}"),
         (
@@ -965,6 +1003,68 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             "an unbraced dynamic label reactivated a public command: "
             f"{unbraced_dynamic_label!r}"
+        )
+    for consumed_label in (
+        r"\tn[label shift=125mm]{A}",
+        r"\tnset{pitch=126mm}",
+    ):
+        consumed_dynamic_option = scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\tndeclareatom{\tnfoo}{skin=dot}"
+            rf"\tnarrow{{\tnfoo{consumed_label}}}",
+        )
+        if len(consumed_dynamic_option) != 1 or any(
+            occurrence.owner is not DimensionOwner.ROUTE
+            for occurrence in consumed_dynamic_option
+        ):
+            raise AssertionError(
+                "a consumed dynamic label reactivated its option grammar: "
+                f"label={consumed_label!r}, "
+                f"occurrences={consumed_dynamic_option!r}"
+            )
+    for active_sibling, expected_owner in (
+        (r"\tn[label shift=127mm]{A}", DimensionOwner.LAYOUT),
+        (r"\tnset{pitch=128mm}", DimensionOwner.METRIC),
+    ):
+        active_dynamic_option_sibling = scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\tndeclareatom{\tnfoo}{skin=dot}"
+            rf"\tnarrow{{\tnfoo A{active_sibling}}}",
+        )
+        if len(active_dynamic_option_sibling) != 1 or any(
+            occurrence.owner is not expected_owner
+            for occurrence in active_dynamic_option_sibling
+        ):
+            raise AssertionError(
+                "a dynamic label masked a later option-bearing sibling: "
+                f"sibling={active_sibling!r}, "
+                f"occurrences={active_dynamic_option_sibling!r}"
+            )
+    consumed_dynamic_environment = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo\begin{tenkz}129mm\end{tenkz}}",
+    )
+    if len(consumed_dynamic_environment) != 1 or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in consumed_dynamic_environment
+    ):
+        raise AssertionError(
+            "a consumed dynamic label reactivated an environment control: "
+            f"{consumed_dynamic_environment!r}"
+        )
+    active_dynamic_environment_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\begin{tenkz}130mm\end{tenkz}}",
+    )
+    if len(active_dynamic_environment_sibling) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_dynamic_environment_sibling
+    ):
+        raise AssertionError(
+            "a dynamic label masked a later environment sibling: "
+            f"{active_dynamic_environment_sibling!r}"
         )
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),

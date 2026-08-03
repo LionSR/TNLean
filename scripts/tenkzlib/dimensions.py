@@ -489,7 +489,9 @@ def _environment_scope_spans(
 
 
 def _declared_atom_commands(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> frozenset[str]:
     """Return dynamic spellings as neutral, source-wide barriers.
 
@@ -497,9 +499,15 @@ def _declared_atom_commands(
     sequence table, which a source-only scanner cannot reconstruct.  Dynamic
     declarations therefore never grant dimension ownership here.
     """
+    ignored_control_spans = tuple(ignored_control_spans)
     names: set[str] = set()
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), ignored_control_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 2
@@ -513,7 +521,12 @@ def _declared_atom_commands(
         if name is not None:
             names.add(name)
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), ignored_control_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 3
@@ -544,8 +557,11 @@ def _declared_atom_commands(
 
 
 def _command_spans(
-    source: str, declared_commands: Iterable[str]
+    source: str,
+    declared_commands: Iterable[str],
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> list[_OwnerSpan]:
+    ignored_control_spans = tuple(ignored_control_spans)
     grammars = dict(_COMMAND_GRAMMARS)
     # Dynamic spellings are source-wide neutral barriers even though a source
     # scan cannot know whether an ambient-name collision rejected a declaration.
@@ -570,6 +586,9 @@ def _command_spans(
         command
         for command in pattern.finditer(source)
         if _is_control_word_start(source, command.start())
+        and not _position_in_spans(
+            command.start(), ignored_control_spans
+        )
     ]
     # Parse dynamic atoms first. Their exact public grammar is ``O{} m``;
     # command tokens consumed by the one label must not be rescanned, while a
@@ -857,15 +876,19 @@ def _position_in_spans(
 
 
 def _environment_tokens(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> list[_EnvironmentToken]:
     """Parse simple environment names without joining split control words."""
     tokens: list[_EnvironmentToken] = []
     replacement_spans = _macro_replacement_spans(owner_source)
+    ignored_control_spans = tuple(ignored_control_spans)
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
         if (
             not _is_control_word_start(owner_source, control.start())
             or _position_in_spans(control.start(), replacement_spans)
+            or _position_in_spans(control.start(), ignored_control_spans)
         ):
             continue
         arguments = _following_mandatory_arguments(
@@ -903,10 +926,15 @@ def _environment_tokens(
 
 
 def _environment_spans(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> list[_OwnerSpan]:
     """Return neutral barriers for public environments and malformed controls."""
-    tokens = _environment_tokens(source, owner_source)
+    ignored_control_spans = tuple(ignored_control_spans)
+    tokens = _environment_tokens(
+        source, owner_source, ignored_control_spans
+    )
     spans = [
         _OwnerSpan(
             start,
@@ -925,6 +953,7 @@ def _environment_spans(
         if (
             not _is_control_word_start(owner_source, control.start())
             or _position_in_spans(control.start(), replacement_spans)
+            or _position_in_spans(control.start(), ignored_control_spans)
         ):
             continue
         position = _skip_space(owner_source, control.end())
@@ -955,10 +984,14 @@ def _environment_spans(
 def _option_spans(
     source: str,
     owner_source: str,
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> list[_OwnerSpan]:
     """Find public option containers without joining split control words."""
+    ignored_control_spans = tuple(ignored_control_spans)
     spans: list[_OwnerSpan] = []
-    for container in _environment_tokens(source, owner_source):
+    for container in _environment_tokens(
+        source, owner_source, ignored_control_spans
+    ):
         if (
             container.kind != "begin"
             or container.name not in _OPTION_ENVIRONMENT_KEYS
@@ -984,7 +1017,12 @@ def _option_spans(
     )
     for pattern, opener, closer in containers:
         for container in pattern.finditer(owner_source):
-            if not _is_control_word_start(owner_source, container.start()):
+            if (
+                not _is_control_word_start(owner_source, container.start())
+                or _position_in_spans(
+                    container.start(), ignored_control_spans
+                )
+            ):
                 continue
             position = _skip_space(owner_source, container.end())
             allowed_keys: frozenset[str] | None = None
@@ -1111,11 +1149,30 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     # ``\tn%...\nput``.  Keep ownership on an offset-preserving blanked view
     # while the numeric/unit recognizer uses the collapsed mapped view above.
     owner_source = strip_comments(source)
-    declared_commands = _declared_atom_commands(source, owner_source)
+    replacement_spans = _macro_replacement_spans(owner_source)
+    declared_commands = _declared_atom_commands(
+        source, owner_source, replacement_spans
+    )
+    command_spans = _command_spans(
+        owner_source, declared_commands, replacement_spans
+    )
+    # A quarantined command consumes any control token in its parsed extent.
+    # Keep independent option and environment scans from reactivating it.
+    ignored_control_spans = tuple(replacement_spans) + tuple(
+        (span.start, span.end)
+        for span in command_spans
+        if span.is_quarantine
+    )
     owner_spans = (
-        _option_spans(source, owner_source)
-        + _command_spans(owner_source, declared_commands)
-        + _environment_spans(source, owner_source)
+        _option_spans(source, owner_source, ignored_control_spans)
+        + command_spans
+        + _environment_spans(
+            source, owner_source, ignored_control_spans
+        )
+        + [
+            _OwnerSpan(start, end, None, True)
+            for start, end in replacement_spans
+        ]
     )
     # A semantic option value is more specific than its containing command.
     # A malformed remainder has no trustworthy nested grammar, however, so
