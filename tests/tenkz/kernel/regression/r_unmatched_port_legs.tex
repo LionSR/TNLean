@@ -314,6 +314,13 @@
     \__tenkz_test_marks:
     \bool_gset_true:N \g__tenkz_test_marks_done_bool
   }
+\cs_new_eq:NN \__tenkz_test_render: \__tenkz_kernel_render:
+\cs_set_protected:Npn \__tenkz_kernel_render:
+  {
+    \bool_gset_false:N \g__tenkz_test_atoms_done_bool
+    \bool_gset_false:N \g__tenkz_test_marks_done_bool
+    \__tenkz_test_render:
+  }
 \cs_new_eq:NN
   \__tenkz_test_port_open_label:n
   \__tenkz_kernel_r_port_open_label:n
