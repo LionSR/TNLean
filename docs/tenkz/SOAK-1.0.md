@@ -69,12 +69,13 @@ Activation also derives and pins the complete Git tree at the policy's
 current tree must equal that pin. The resolver completely enumerates its
 workflow jobs and requires the terminal publisher to be the sole job naming
 `release_publisher_environment` or `release_publisher_secret`. Workflow-level
-secret inheritance is forbidden. The current environment configuration must restrict
-deployment to the protected release branch. The private key must exist only as
-that environment secret. The resolver exhaustively checks repository and
-organization secret names and access, and rejects any same-named secret that
-can reach the repository. Missing, wider, changed, shadowed, or incompletely
-paginated configuration fails closed.
+secret inheritance is forbidden. The current environment configuration must
+restrict deployment to the protected release branch. The configured private-key
+secret name must exist only in that environment. The resolver exhaustively lists
+every repository environment and its secret names, the repository secret names,
+and the organization secret names and repository access. It rejects the same
+name in any other scope that can reach the repository. Missing, wider, changed,
+shadowed, or incompletely paginated configuration fails closed.
 
 After a successful publisher job, an administrator removes the environment
 secret. The validation that declares `released` requires its absence, and every
@@ -847,9 +848,10 @@ against the same deterministic object.
 
 The current object named `tenkz-v1.0.0` must equal `E`, carry the valid raw
 signature and exact payload, and peel to `I` under the required current
-no-update, no-delete, no-bypass protection. The environment key and any
-same-named repository or organization secret must be absent. Only a validation
-that observes this complete conjunction changes the campaign to terminal
+no-update, no-delete, no-bypass protection. The configured secret name must be
+absent from every repository environment and from repository and organization
+scope. Only a validation that observes this complete conjunction changes the
+campaign to terminal
 `released` state; the publisher job never declares release itself. No later
 ledger entry or new sign-off is valid. Released replay continues to check the
 historical publisher tree, but unrelated current workflows may change after the

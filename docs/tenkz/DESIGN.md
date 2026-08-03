@@ -274,9 +274,10 @@ also pins the complete Git tree at `release_publisher_workflow_root`. Until a
 validation declares `released`, the current tree must equal that pin and the
 dedicated environment must retain its protected-branch rule. Across that tree,
 the publisher is the only job that may name the environment or private-key
-secret; `secrets: inherit` is forbidden. The key exists only as that environment
-secret. An organization or repository secret with the same name and access to
-this repository fails closed.
+secret; `secrets: inherit` is forbidden. The configured secret name exists only
+in that environment. The same name in another environment in this repository,
+at repository scope, or at organization scope with access to this repository
+fails closed.
 
 After a successful publisher job, an administrator removes the environment
 secret. The validation that declares `released` requires its absence, and every

@@ -333,7 +333,9 @@ close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
 namespace.  It performs only read requests.  Its credential principal needs
 read access to repository contents, pull requests, reviews, and issues, plus
 the write-level ruleset visibility GitHub requires to return unredacted rule
-and bypass details.  Missing or redacted details fail closed.  Ruleset
+and bypass details.  It also needs complete name-and-access visibility for
+repository, organization, and environment Actions secrets; secret values are
+never read.  Missing or redacted details fail closed.  Ruleset
 administrators and the GitHub control plane are trusted; this current-state
 check does not claim to detect an administrative protection gap restored before
 the snapshot.  No live-entry or release command is available while enforcement
