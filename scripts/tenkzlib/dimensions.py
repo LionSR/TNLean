@@ -222,6 +222,25 @@ _TEX_CONTROL_WORD_END = r"(?![^\W\d_]|[@:_])"
 _ENVIRONMENT_CONTROL_RE = re.compile(
     r"\\(begin|end)" + _TEX_CONTROL_WORD_END
 )
+_PRIMITIVE_DEFINITION_RE = re.compile(
+    r"\\(?:def|gdef|edef|xdef)" + _TEX_CONTROL_WORD_END
+)
+_LATEX_COMMAND_DEFINITION_RE = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand|DeclareRobustCommand)"
+    + _TEX_CONTROL_WORD_END
+)
+_LATEX_ENVIRONMENT_DEFINITION_RE = re.compile(
+    r"\\(?:newenvironment|renewenvironment|provideenvironment)"
+    + _TEX_CONTROL_WORD_END
+)
+_DOCUMENT_COMMAND_DEFINITION_RE = re.compile(
+    r"\\(?:New|Renew|Provide|Declare)(?:Expandable)?DocumentCommand"
+    + _TEX_CONTROL_WORD_END
+)
+_DOCUMENT_ENVIRONMENT_DEFINITION_RE = re.compile(
+    r"\\(?:New|Renew|Provide|Declare)DocumentEnvironment"
+    + _TEX_CONTROL_WORD_END
+)
 _ENVIRONMENT_NAME_RE = re.compile(r"[A-Za-z@:_][A-Za-z0-9@:_*.-]*")
 _CSNAME_SPACE_RE = re.compile(r"\\space" + _TEX_CONTROL_WORD_END)
 
@@ -406,6 +425,15 @@ def _following_mandatory_arguments(
                 ):
                     token_end += 1
             argument = _MandatoryArgument(position, token_end, token_end)
+        elif (
+            source[position] == "#"
+            and position + 1 < len(source)
+            and source[position + 1].isdigit()
+        ):
+            # Inside a macro replacement, ``#1`` denotes the substituted
+            # parameter token list. Keep the marker and parameter number
+            # together so an unbraced expandable argument is fail-closed.
+            argument = _MandatoryArgument(position, position + 2, position + 2)
         else:
             argument = _MandatoryArgument(position, position + 1, position + 1)
         arguments.append(argument)
@@ -461,17 +489,26 @@ def _environment_scope_spans(
 
 
 def _declared_atom_commands(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    execution_mask_spans: Iterable[tuple[int, int]] = (),
 ) -> frozenset[str]:
     """Return dynamic spellings as neutral, source-wide barriers.
 
     Whether ``NewDocumentCommand`` succeeds depends on TeX's ambient control
     sequence table, which a source-only scanner cannot reconstruct.  Dynamic
-    declarations therefore never grant dimension ownership here.
+    declarations therefore never grant dimension ownership here. Declarations
+    stored inside known execution-mask spans are not executed and are excluded.
     """
+    execution_mask_spans = tuple(execution_mask_spans)
     names: set[str] = set()
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), execution_mask_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 2
@@ -485,7 +522,12 @@ def _declared_atom_commands(
         if name is not None:
             names.add(name)
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), execution_mask_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 3
@@ -516,18 +558,17 @@ def _declared_atom_commands(
 
 
 def _command_spans(
-    source: str, declared_commands: Iterable[str]
+    source: str,
+    declared_commands: Iterable[str],
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
 ) -> list[_OwnerSpan]:
-    spans: list[_OwnerSpan] = []
+    ignored_control_spans = tuple(ignored_control_spans)
     grammars = dict(_COMMAND_GRAMMARS)
-    # Dynamic spellings are source-wide neutral barriers.  This deliberately
-    # sacrifices ownership inference rather than guessing whether TeX's
-    # ambient control-sequence collision check accepted a declaration.
+    # Dynamic spellings are source-wide neutral barriers even though a source
+    # scan cannot know whether an ambient-name collision rejected a declaration.
+    # Their invocation extent still follows the declared public ``O{} m`` grammar.
     dynamic_names = frozenset(declared_commands).difference(grammars)
-    for name in dynamic_names:
-        grammars[name] = _CommandGrammar(
-            None, (0,), accepts_star=True
-        )
+    command_names = frozenset(grammars).union(dynamic_names)
     pattern = re.compile(
         r"\\("
         + "|".join(
@@ -537,61 +578,79 @@ def _command_spans(
                 if _STATIC_CONTROL_WORD_NAME_RE.fullmatch(name) is not None
                 else ""
             )
-            for name in sorted(grammars, key=len, reverse=True)
+            for name in sorted(command_names, key=len, reverse=True)
         )
         + r")"
     )
-    for command in pattern.finditer(source):
-        if not _is_control_word_start(source, command.start()):
-            continue
+    commands = [
+        command
+        for command in pattern.finditer(source)
+        if _is_control_word_start(source, command.start())
+        and not _position_in_spans(
+            command.start(), ignored_control_spans
+        )
+    ]
+    # Parse dynamic atoms first. Their exact public grammar is ``O{} m``;
+    # command tokens consumed by the one label must not be rescanned, while a
+    # later brace-delimited sibling remains active input.
+    dynamic_spans: list[_OwnerSpan] = []
+    for command in commands:
         name = command.group(1)
+        if name not in dynamic_names or any(
+            span.start <= command.start() < span.end
+            for span in dynamic_spans
+        ):
+            continue
+        position = _skip_space(source, command.end())
+        if source[position : position + 1] == "[":
+            closed = match_group(source, position, "[", "]")
+            if closed < 0:
+                position = len(source)
+            else:
+                position = _skip_space(source, closed)
+        if position < len(source):
+            arguments = _following_mandatory_arguments(source, position, 1)
+            position = (
+                len(source)
+                if arguments is None
+                else _skip_space(source, arguments[0].end)
+            )
+        dynamic_spans.append(
+            _OwnerSpan(command.start(), position, None, True)
+        )
+
+    spans = list(dynamic_spans)
+    for command in commands:
+        name = command.group(1)
+        if name in dynamic_names or any(
+            span.start <= command.start() < span.end
+            for span in dynamic_spans
+        ):
+            continue
         grammar = grammars[name]
         span_owner = grammar.owner
         is_quarantine = False
         position = _skip_space(source, command.end())
-        if name in dynamic_names:
-            # The declaration may have collided with a command of unknown
-            # signature.  Quarantine every adjacent syntactic argument rather
-            # than guessing how many stars, options, or groups it accepts.
-            while position < len(source):
-                character = source[position : position + 1]
-                if character == "*":
-                    position = _skip_space(source, position + 1)
-                    continue
-                if character not in "[{":
-                    break
-                closer = "]" if character == "[" else "}"
-                closed = match_group(source, position, character, closer)
-                if closed < 0:
-                    # A malformed adjacent argument has no trustworthy end.
-                    # Quarantine the remainder rather than exposing it to an
-                    # enclosing owner through a guessed command boundary.
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                    break
+        if grammar.accepts_star and source[position : position + 1] == "*":
+            position = _skip_space(source, position + 1)
+        if grammar.accepts_options and source[position : position + 1] == "[":
+            closed = match_group(source, position, "[", "]")
+            if closed < 0:
+                position = len(source)
+                span_owner = None
+                is_quarantine = True
+            else:
                 position = _skip_space(source, closed)
-        else:
-            if grammar.accepts_star and source[position : position + 1] == "*":
-                position = _skip_space(source, position + 1)
-            if grammar.accepts_options and source[position : position + 1] == "[":
-                closed = match_group(source, position, "[", "]")
-                if closed < 0:
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                else:
-                    position = _skip_space(source, closed)
-            for _ in range(max(grammar.positional_group_counts)):
-                if source[position : position + 1] != "{":
-                    break
-                closed = match_group(source, position, "{", "}")
-                if closed < 0:
-                    position = len(source)
-                    span_owner = None
-                    is_quarantine = True
-                    break
-                position = _skip_space(source, closed)
+        for _ in range(max(grammar.positional_group_counts)):
+            if source[position : position + 1] != "{":
+                break
+            closed = match_group(source, position, "{", "}")
+            if closed < 0:
+                position = len(source)
+                span_owner = None
+                is_quarantine = True
+                break
+            position = _skip_space(source, closed)
         spans.append(
             _OwnerSpan(
                 command.start(), position, span_owner, is_quarantine
@@ -661,26 +720,205 @@ def _option_group_spans(
     return spans
 
 
+def _macro_replacement_spans(
+    source: str,
+    ignored_control_spans: Iterable[tuple[int, int]] = (),
+) -> list[tuple[int, int]]:
+    """Return definition extents whose tokens are inert until invocation."""
+    ignored_control_spans = tuple(ignored_control_spans)
+    spans: list[tuple[int, int]] = []
+    definitions = sorted(
+        (
+            *(
+                (definition.start(), "primitive", definition)
+                for definition in _PRIMITIVE_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "latex command", definition)
+                for definition in _LATEX_COMMAND_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "latex environment", definition)
+                for definition in _LATEX_ENVIRONMENT_DEFINITION_RE.finditer(
+                    source
+                )
+            ),
+            *(
+                (definition.start(), "xparse command", definition)
+                for definition in _DOCUMENT_COMMAND_DEFINITION_RE.finditer(source)
+            ),
+            *(
+                (definition.start(), "xparse environment", definition)
+                for definition in _DOCUMENT_ENVIRONMENT_DEFINITION_RE.finditer(
+                    source
+                )
+            ),
+        ),
+        key=lambda candidate: candidate[0],
+    )
+
+    def quarantine_unclosed_mandatory(
+        position: int, definition_start: int
+    ) -> None:
+        position = _skip_space(source, position)
+        if (
+            source[position : position + 1] == "{"
+            and match_group(source, position, "{", "}") < 0
+        ):
+            spans.append((definition_start, len(source)))
+
+    for _, definition_kind, definition in definitions:
+        if (
+            not _is_control_word_start(source, definition.start())
+            or _position_in_spans(
+                definition.start(), ignored_control_spans
+            )
+            or any(
+                start <= definition.start() < end for start, end in spans
+            )
+        ):
+            continue
+        if definition_kind == "primitive":
+            position = definition.end()
+            body_found = False
+            while position < len(source):
+                character = source[position]
+                if character == "\\":
+                    arguments = _following_mandatory_arguments(
+                        source, position, 1
+                    )
+                    if arguments is None:
+                        break
+                    position = arguments[0].end
+                    continue
+                if (
+                    character == "#"
+                    and position + 1 < len(source)
+                    and (
+                        source[position + 1].isdigit()
+                        or source[position + 1] == "#"
+                    )
+                ):
+                    # Parameter markers belong to the definition header.
+                    position += 2
+                    continue
+                if character == "#":
+                    position += 1
+                    continue
+                if character == "}":
+                    spans.append((definition.start(), len(source)))
+                    body_found = True
+                    break
+                if character != "{":
+                    position += 1
+                    continue
+                closed = match_group(source, position, "{", "}")
+                spans.append(
+                    (
+                        definition.start(),
+                        len(source) if closed < 0 else closed,
+                    )
+                )
+                body_found = True
+                break
+            if not body_found:
+                spans.append((definition.start(), len(source)))
+        elif definition_kind.startswith("latex"):
+            position = _skip_space(source, definition.end())
+            if source[position : position + 1] == "*":
+                position = _skip_space(source, position + 1)
+            names = _following_mandatory_arguments(source, position, 1)
+            if names is None:
+                quarantine_unclosed_mandatory(position, definition.start())
+                continue
+            position = _skip_space(source, names[0].end)
+            malformed_option = False
+            for _ in range(2):
+                if source[position : position + 1] != "[":
+                    break
+                closed = match_group(source, position, "[", "]")
+                if closed < 0:
+                    spans.append((definition.start(), len(source)))
+                    malformed_option = True
+                    break
+                position = _skip_space(source, closed)
+            if malformed_option:
+                continue
+            body_count = 2 if definition_kind.endswith("environment") else 1
+            bodies: list[_MandatoryArgument] = []
+            for _ in range(body_count):
+                following = _following_mandatory_arguments(
+                    source, position, 1
+                )
+                if following is None:
+                    quarantine_unclosed_mandatory(
+                        position, definition.start()
+                    )
+                    break
+                body = following[0]
+                bodies.append(body)
+                position = body.end
+            if len(bodies) == body_count:
+                spans.append((definition.start(), bodies[-1].end))
+        else:
+            position = definition.end()
+            arguments: list[_MandatoryArgument] = []
+            argument_count = (
+                4 if definition_kind.endswith("environment") else 3
+            )
+            for _ in range(argument_count):
+                following = _following_mandatory_arguments(
+                    source, position, 1
+                )
+                if following is None:
+                    quarantine_unclosed_mandatory(
+                        position, definition.start()
+                    )
+                    break
+                argument = following[0]
+                arguments.append(argument)
+                position = argument.end
+            if len(arguments) == argument_count:
+                spans.append((definition.start(), arguments[-1].end))
+    return spans
+
+
+def _position_in_spans(
+    position: int, spans: Iterable[tuple[int, int]]
+) -> bool:
+    """Whether a source position lies inside any half-open span."""
+    return any(start <= position < end for start, end in spans)
+
+
 def _environment_tokens(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    execution_mask_spans: Iterable[tuple[int, int]] | None = None,
 ) -> list[_EnvironmentToken]:
     """Parse simple environment names without joining split control words."""
     tokens: list[_EnvironmentToken] = []
+    if execution_mask_spans is None:
+        execution_mask_spans = _macro_replacement_spans(owner_source)
+    execution_mask_spans = tuple(execution_mask_spans)
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, control.start()):
+        if (
+            not _is_control_word_start(owner_source, control.start())
+            or _position_in_spans(control.start(), execution_mask_spans)
+        ):
             continue
-        position = _skip_space(owner_source, control.end())
-        if owner_source[position : position + 1] != "{":
+        arguments = _following_mandatory_arguments(
+            owner_source, control.end(), 1
+        )
+        if arguments is None:
             continue
-        closed = match_group(owner_source, position, "{", "}")
-        if closed < 0:
-            continue
+        argument = arguments[0]
         # LaTeX dispatch expands the name in ``\csname``.  Model canonical
         # spaces exactly; unresolved control sequences cannot safely grant a
         # public option owner, but matching spellings still form a neutral
         # quarantine so their bodies cannot inherit an enclosing owner.
         spelling = _csname_spelling(
-            source[position + 1 : closed - 1], expand_space=True
+            source[argument.content_start : argument.content_end],
+            expand_space=True,
         )
         if _ENVIRONMENT_NAME_RE.fullmatch(spelling) is not None:
             name: str | None = spelling
@@ -692,17 +930,28 @@ def _environment_tokens(
             continue
         tokens.append(
             _EnvironmentToken(
-                control.group(1), name, match_name, control.start(), closed
+                control.group(1),
+                name,
+                match_name,
+                control.start(),
+                argument.end,
             )
         )
     return tokens
 
 
 def _environment_spans(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    execution_mask_spans: Iterable[tuple[int, int]] | None = None,
 ) -> list[_OwnerSpan]:
     """Return neutral barriers for public environments and malformed controls."""
-    tokens = _environment_tokens(source, owner_source)
+    if execution_mask_spans is None:
+        execution_mask_spans = _macro_replacement_spans(owner_source)
+    execution_mask_spans = tuple(execution_mask_spans)
+    tokens = _environment_tokens(
+        source, owner_source, execution_mask_spans
+    )
     spans = [
         _OwnerSpan(
             start,
@@ -717,7 +966,10 @@ def _environment_spans(
     # An unclosed environment-name argument cannot be resolved to a public
     # name, but it still consumes the remainder as one malformed control.
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, control.start()):
+        if (
+            not _is_control_word_start(owner_source, control.start())
+            or _position_in_spans(control.start(), execution_mask_spans)
+        ):
             continue
         position = _skip_space(owner_source, control.end())
         if owner_source[position : position + 1] != "{":
@@ -747,10 +999,16 @@ def _environment_spans(
 def _option_spans(
     source: str,
     owner_source: str,
+    execution_mask_spans: Iterable[tuple[int, int]] | None = None,
 ) -> list[_OwnerSpan]:
     """Find public option containers without joining split control words."""
+    if execution_mask_spans is None:
+        execution_mask_spans = _macro_replacement_spans(owner_source)
+    execution_mask_spans = tuple(execution_mask_spans)
     spans: list[_OwnerSpan] = []
-    for container in _environment_tokens(source, owner_source):
+    for container in _environment_tokens(
+        source, owner_source, execution_mask_spans
+    ):
         if (
             container.kind != "begin"
             or container.name not in _OPTION_ENVIRONMENT_KEYS
@@ -776,7 +1034,12 @@ def _option_spans(
     )
     for pattern, opener, closer in containers:
         for container in pattern.finditer(owner_source):
-            if not _is_control_word_start(owner_source, container.start()):
+            if (
+                not _is_control_word_start(owner_source, container.start())
+                or _position_in_spans(
+                    container.start(), execution_mask_spans
+                )
+            ):
                 continue
             position = _skip_space(owner_source, container.end())
             allowed_keys: frozenset[str] | None = None
@@ -801,6 +1064,71 @@ def _option_spans(
                 )
             )
     return spans
+
+
+@dataclass(frozen=True)
+class _ExecutionContext:
+    """Stable definition, command, and shared execution-mask spans."""
+
+    replacement_spans: tuple[tuple[int, int], ...]
+    command_spans: tuple[_OwnerSpan, ...]
+    mask_spans: tuple[tuple[int, int], ...]
+
+
+def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
+    """Resolve mutually dependent masks by finite-state convergence."""
+    declared_commands = _declared_atom_commands(source, owner_source)
+    state = (declared_commands, (), ())
+    seen = {state}
+    # Every span boundary is a source offset.  The cycle check normally reaches
+    # the fixed point in two or three rounds; this finite bound is a final guard.
+    for _ in range(len(owner_source) + 2):
+        declared_commands, replacement_spans, _ = state
+        command_spans = tuple(
+            _command_spans(
+                owner_source, declared_commands, replacement_spans
+            )
+        )
+        command_quarantines = tuple(
+            (span.start, span.end)
+            for span in command_spans
+            if span.is_quarantine
+        )
+        next_replacement_spans = tuple(
+            _macro_replacement_spans(
+                owner_source, command_quarantines
+            )
+        )
+        visible_declared_commands = _declared_atom_commands(
+            source,
+            owner_source,
+            next_replacement_spans + command_quarantines,
+        )
+        # Recompute exactly: a declaration hidden by a transient replacement
+        # span can become visible after the command quarantine that caused that
+        # span stabilizes. Repeated full states below make genuine cycles fail
+        # closed instead of silently retaining either side of the ambiguity.
+        next_declared_commands = visible_declared_commands
+        next_state = (
+            next_declared_commands,
+            next_replacement_spans,
+            command_quarantines,
+        )
+        if next_state == state:
+            return _ExecutionContext(
+                next_replacement_spans,
+                command_spans,
+                next_replacement_spans + command_quarantines,
+            )
+        if next_state in seen:
+            raise DimensionOwnershipError(
+                "tenkz execution masks did not converge"
+            )
+        seen.add(next_state)
+        state = next_state
+    raise DimensionOwnershipError(
+        "tenkz execution masks exceeded their source bound"
+    )
 
 
 def _comment_ranges(source: str) -> list[tuple[int, int]]:
@@ -903,11 +1231,17 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     # ``\tn%...\nput``.  Keep ownership on an offset-preserving blanked view
     # while the numeric/unit recognizer uses the collapsed mapped view above.
     owner_source = strip_comments(source)
-    declared_commands = _declared_atom_commands(source, owner_source)
+    context = _execution_context(source, owner_source)
     owner_spans = (
-        _option_spans(source, owner_source)
-        + _command_spans(owner_source, declared_commands)
-        + _environment_spans(source, owner_source)
+        _option_spans(source, owner_source, context.mask_spans)
+        + list(context.command_spans)
+        + _environment_spans(
+            source, owner_source, context.mask_spans
+        )
+        + [
+            _OwnerSpan(start, end, None, True)
+            for start, end in context.replacement_spans
+        ]
     )
     # A semantic option value is more specific than its containing command.
     # A malformed remainder has no trustworthy nested grammar, however, so

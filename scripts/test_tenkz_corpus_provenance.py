@@ -3,11 +3,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import csv
 import dataclasses
+import io
 import os
 import re
 import subprocess
+import sys
 import tempfile
 from collections import Counter
 from pathlib import Path
@@ -37,6 +40,7 @@ from tenkzlib.dimensions import (
     _COMMAND_GRAMMARS,
     _PUBLIC_ENVIRONMENTS,
     _environment_spans,
+    _macro_replacement_spans,
     collect_dimension_report,
     scan_book_dimensions,
     scan_case_dimensions,
@@ -206,6 +210,36 @@ def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
             ) from exc
     else:
         raise AssertionError(f"dimension mutation escaped the {phrase!r} ratchet")
+
+
+def test_rmp_dimension_cli_failure() -> None:
+    """Collection-time ownership failures use the concise CLI diagnostic."""
+    original_collect = tenkz_rmp.collect_dimension_report
+    original_argv = sys.argv
+
+    def raise_cycle(*_args: object, **_kwargs: object) -> DimensionReport:
+        raise DimensionOwnershipError(
+            "tenkz execution masks did not converge"
+        )
+
+    tenkz_rmp.collect_dimension_report = raise_cycle
+    sys.argv = [str(ROOT / "scripts" / "tenkz_rmp.py"), "check", "--all"]
+    stderr = io.StringIO()
+    try:
+        with contextlib.redirect_stderr(stderr):
+            status = tenkz_rmp.main()
+    finally:
+        tenkz_rmp.collect_dimension_report = original_collect
+        sys.argv = original_argv
+    expected = (
+        "FAIL: RMP dimension ownership failed:\n"
+        "tenkz execution masks did not converge\n"
+    )
+    if status != 1 or stderr.getvalue() != expected:
+        raise AssertionError(
+            "a collection-time ownership cycle escaped the CLI handler: "
+            f"status={status}, stderr={stderr.getvalue()!r}"
+        )
 
 
 def test_rmp_dimension_ownership() -> None:
@@ -580,9 +614,23 @@ def test_rmp_dimension_ownership() -> None:
                 f"occurrences={malformed_nested!r}"
             )
     environment_names = (
-        ("static", "tenkz", ""),
-        ("unresolved", r"\tenname", r"\def\tenname{tenkz}"),
-        ("parameterized", "#1", ""),
+        ("static", "{tenkz}", "{tenkz}", "{tenkz ", ""),
+        (
+            "unresolved",
+            r"{\tenname}",
+            r"{\tenname}",
+            r"{\tenname ",
+            r"\def\tenname{tenkz}",
+        ),
+        ("parameterized", "{#1}", "{#1}", "{#1 ", ""),
+        (
+            "unresolved unbraced",
+            r"\tenname",
+            r"\tenname",
+            None,
+            r"\def\tenname{tenkz}",
+        ),
+        ("parameterized unbraced", "#1", "#1", None, ""),
     )
     owner_contexts = (
         (
@@ -600,26 +648,37 @@ def test_rmp_dimension_ownership() -> None:
     )
     malformed_kinds = ("unclosed name", "unclosed option", "missing end")
     literal_index = 61
-    for name_kind, environment_name, prelude in environment_names:
+    for (
+        name_kind,
+        begin_argument,
+        end_argument,
+        unclosed_argument,
+        prelude,
+    ) in environment_names:
         for malformed_kind in malformed_kinds:
+            if malformed_kind == "unclosed name" and unclosed_argument is None:
+                continue
             for owner_kind, outer_open, outer_close, inner_template in owner_contexts:
                 literal = f"{literal_index}mm"
                 literal_index += 1
                 inner_command = inner_template.replace("DIM", literal)
                 if malformed_kind == "unclosed name":
-                    environment = rf"\begin{{{environment_name} " + inner_command
+                    environment = r"\begin" + unclosed_argument + inner_command
                     # Keep the name group genuinely unclosed; the outer owner
                     # is intentionally opened but cannot close across it.
                     suffix = ""
                 elif malformed_kind == "unclosed option":
                     environment = (
-                        rf"\begin{{{environment_name}}}[malformed "
+                        r"\begin"
+                        + begin_argument
+                        + "[malformed "
                         + inner_command
-                        + rf"\end{{{environment_name}}}"
+                        + r"\end"
+                        + end_argument
                     )
                     suffix = outer_close
                 else:
-                    environment = rf"\begin{{{environment_name}}}" + inner_command
+                    environment = r"\begin" + begin_argument + inner_command
                     suffix = outer_close
                 source = prelude + outer_open + environment + suffix
                 owner_source = strip_comments(source)
@@ -644,6 +703,266 @@ def test_rmp_dimension_ownership() -> None:
                         f"outer={owner_kind}, source={source!r}, "
                         f"occurrences={occurrences!r}"
                     )
+    replacement_templates = (
+        ("primitive", r"\def\x{TOKEN}"),
+        ("latex", r"\newcommand{\x}{TOKEN}"),
+        ("xparse", r"\NewDocumentCommand{\x}{}{TOKEN}"),
+        (
+            "xparse expandable",
+            r"\NewExpandableDocumentCommand{\x}{}{TOKEN}",
+        ),
+        ("latex environment", r"\newenvironment{x}{TOKEN}{}"),
+        (
+            "xparse environment",
+            r"\NewDocumentEnvironment{x}{}{TOKEN}{}",
+        ),
+    )
+    for definition_kind, definition_template in replacement_templates:
+        inert_end = definition_template.replace("TOKEN", r"\end{tenkz}")
+        for owner_kind, outer_open, outer_close, _ in owner_contexts:
+            source = (
+                outer_open
+                + r"\begin{tenkz}"
+                + inert_end
+                + r"\rule{81mm}{82mm}\end{tenkz}"
+                + outer_close
+            )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "an inert replacement end token closed an environment: "
+                    f"definition={definition_kind}, outer={owner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
+        inert_begin = definition_template.replace("TOKEN", r"\begin{tenkz}")
+        source = (
+            r"\tnarrow{\begin{tenkz}\end{tenkz}"
+            + inert_begin
+            + r"\rule{83mm}{84mm}}"
+        )
+        occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+        if len(occurrences) != 2 or any(
+            occurrence.owner is not DimensionOwner.ROUTE
+            for occurrence in occurrences
+        ):
+            raise AssertionError(
+                "an inert replacement begin token opened an environment: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
+        inert_owners = definition_template.replace(
+            "TOKEN",
+            r"\tnset{pitch=203mm}\tnput{x}{(204mm,0)}{}",
+        )
+        occurrences = scan_case_dimensions(
+            Path("synthetic.tex"),
+            inert_owners + r"\tnarrow{\tnput{x}{(205mm,0)}{}}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in occurrences
+        ] != [
+            ("203mm", None),
+            ("204mm", None),
+            ("205mm", DimensionOwner.LAYOUT),
+        ]:
+            raise AssertionError(
+                "stored public syntax gained ownership or masked active input: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
+        inert_unclosed_option = definition_template.replace(
+            "TOKEN", r"\tn[label shift=206mm"
+        )
+        occurrences = scan_case_dimensions(
+            Path("synthetic.tex"),
+            inert_unclosed_option + r"\tnarrow{207mm]}",
+        )
+        if [
+            (occurrence.literal, occurrence.owner)
+            for occurrence in occurrences
+        ] != [
+            ("206mm", None),
+            ("207mm", DimensionOwner.ROUTE),
+        ]:
+            raise AssertionError(
+                "stored malformed syntax crossed into active input: "
+                f"definition={definition_kind}, occurrences={occurrences!r}"
+            )
+    stored_syntax_templates = (
+        ("latex default", r"\newcommand{\x}[1][TOKEN]{body}"),
+        (
+            "xparse processor",
+            r"\NewDocumentCommand{\x}{>{TOKEN}m}{body}",
+        ),
+        (
+            "expandable xparse processor",
+            r"\NewExpandableDocumentCommand{\x}{>{TOKEN}m}{body}",
+        ),
+        (
+            "latex environment default",
+            r"\newenvironment{x}[1][TOKEN]{begin}{end}",
+        ),
+        (
+            "xparse environment processor",
+            r"\NewDocumentEnvironment{x}{>{TOKEN}m}{begin}{end}",
+        ),
+    )
+    for definition_kind, definition_template in stored_syntax_templates:
+        definition = definition_template.replace("TOKEN", r"\end{tenkz}")
+        for owner_kind, outer_open, outer_close, _ in owner_contexts:
+            source = (
+                outer_open
+                + r"\begin{tenkz}"
+                + definition
+                + r"\rule{201mm}{202mm}\end{tenkz}"
+                + outer_close
+            )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "stored definition syntax closed an active environment: "
+                    f"definition={definition_kind}, outer={owner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
+    nested_definition_tokens = (
+        ("primitive", r"\def\fake"),
+        ("latex", r"\newcommand{\fake}{stored}"),
+        ("xparse", r"\NewDocumentCommand{\fake}{}{stored}"),
+        (
+            "xparse expandable",
+            r"\NewExpandableDocumentCommand{\fake}{}{stored}",
+        ),
+        (
+            "latex environment",
+            r"\newenvironment{fake}{stored}{}",
+        ),
+        (
+            "xparse environment",
+            r"\NewDocumentEnvironment{fake}{}{stored}{}",
+        ),
+    )
+    for outer_kind, outer_template in replacement_templates:
+        for inner_kind, inner_definition in nested_definition_tokens:
+            source = outer_template.replace("TOKEN", inner_definition) + (
+                r"\tnarrow{\begin{tenkz}\rule{85mm}{86mm}\end{tenkz}}"
+            )
+            replacement_spans = _macro_replacement_spans(strip_comments(source))
+            active_environment = source.index(r"\begin{tenkz}")
+            if len(replacement_spans) != 1 or any(
+                start <= active_environment < end
+                for start, end in replacement_spans
+            ):
+                raise AssertionError(
+                    "an inert nested definition masked active input: "
+                    f"outer={outer_kind}, inner={inner_kind}, "
+                    f"spans={replacement_spans!r}"
+                )
+            occurrences = scan_case_dimensions(Path("synthetic.tex"), source)
+            if len(occurrences) != 2 or any(
+                occurrence.owner is not None for occurrence in occurrences
+            ):
+                raise AssertionError(
+                    "an inert nested definition hid an active environment: "
+                    f"outer={outer_kind}, inner={inner_kind}, "
+                    f"occurrences={occurrences!r}"
+                )
+    unclosed_definition_prefixes = (
+        ("latex option", r"\newcommand{\x}[1 "),
+        ("latex body", r"\newcommand{\x}{"),
+        ("xparse specification", r"\NewDocumentCommand{\x}{m "),
+        ("xparse body", r"\NewDocumentCommand{\x}{}{"),
+        (
+            "expandable xparse body",
+            r"\NewExpandableDocumentCommand{\x}{}{",
+        ),
+        ("latex environment begin body", r"\newenvironment{x}{"),
+        (
+            "latex environment end body",
+            r"\newenvironment{x}{begin}{",
+        ),
+        (
+            "xparse environment begin body",
+            r"\NewDocumentEnvironment{x}{}{",
+        ),
+        (
+            "xparse environment end body",
+            r"\NewDocumentEnvironment{x}{}{begin}{",
+        ),
+    )
+    for definition_kind, definition_prefix in unclosed_definition_prefixes:
+        source = (
+            r"\begin{tenkz}"
+            + definition_prefix
+            + r"\end{tenkz}\rule{87mm}{88mm}"
+        )
+        replacement_spans = _macro_replacement_spans(strip_comments(source))
+        inert_end = source.index(r"\end{tenkz}")
+        if len(replacement_spans) != 1 or not any(
+            start <= inert_end < end == len(source)
+            for start, end in replacement_spans
+        ):
+            raise AssertionError(
+                "an unclosed definition body lacked an EOF replacement mask: "
+                f"definition={definition_kind}, spans={replacement_spans!r}"
+            )
+        literal_offset = source.index("87mm")
+        environment_spans = _environment_spans(source, strip_comments(source))
+        if not any(
+            span.is_quarantine
+            and span.start <= literal_offset < span.end
+            for span in environment_spans
+        ):
+            raise AssertionError(
+                "an unclosed definition body exposed an inert environment end: "
+                f"definition={definition_kind}, spans={environment_spans!r}"
+            )
+    for primitive in ("def", "gdef", "edef", "xdef"):
+        source = rf"\tnarrow{{\{primitive}\x 206mm}}"
+        definition_start = source.index(rf"\{primitive}")
+        replacement_spans = _macro_replacement_spans(strip_comments(source))
+        if replacement_spans != [(definition_start, len(source))]:
+            raise AssertionError(
+                "a brace-less primitive definition lacked an EOF mask: "
+                f"primitive={primitive}, spans={replacement_spans!r}"
+            )
+        brace_less_primitive = scan_case_dimensions(
+            Path("synthetic.tex"), source
+        )
+        if len(brace_less_primitive) != 1 or any(
+            occurrence.owner is not None
+            for occurrence in brace_less_primitive
+        ):
+            raise AssertionError(
+                "a brace-less primitive definition exposed enclosing ownership: "
+                f"primitive={primitive}, occurrences={brace_less_primitive!r}"
+            )
+        unmatched_source = (
+            rf"\tnarrow{{{{\{primitive}\x}}"
+            r"\tnput{x}{(207mm,0)}{}}}"
+        )
+        definition_start = unmatched_source.index(rf"\{primitive}")
+        replacement_spans = _macro_replacement_spans(
+            strip_comments(unmatched_source)
+        )
+        if replacement_spans != [(definition_start, len(unmatched_source))]:
+            raise AssertionError(
+                "an unmatched primitive parameter brace lacked an EOF mask: "
+                f"primitive={primitive}, spans={replacement_spans!r}"
+            )
+        unmatched_primitive = scan_case_dimensions(
+            Path("synthetic.tex"), unmatched_source
+        )
+        if len(unmatched_primitive) != 1 or any(
+            occurrence.owner is not None
+            for occurrence in unmatched_primitive
+        ):
+            raise AssertionError(
+                "an unmatched primitive parameter brace stole a sibling body: "
+                f"primitive={primitive}, occurrences={unmatched_primitive!r}"
+            )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )
@@ -749,6 +1068,232 @@ def test_rmp_dimension_ownership() -> None:
             "an unbraced xparse declaration escaped quarantine: "
             f"{unbraced_compatibility_atom!r}"
         )
+    unbraced_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo\tnput{x}{(121mm,0)}{}}",
+    )
+    if len(unbraced_dynamic_label) != 1 or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in unbraced_dynamic_label
+    ):
+        raise AssertionError(
+            "an unbraced dynamic label reactivated a public command: "
+            f"{unbraced_dynamic_label!r}"
+        )
+    for consumed_label in (
+        r"\tn[label shift=125mm]{A}",
+        r"\tnset{pitch=126mm}",
+    ):
+        consumed_dynamic_option = scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\tndeclareatom{\tnfoo}{skin=dot}"
+            rf"\tnarrow{{\tnfoo{consumed_label}}}",
+        )
+        if len(consumed_dynamic_option) != 1 or any(
+            occurrence.owner is not DimensionOwner.ROUTE
+            for occurrence in consumed_dynamic_option
+        ):
+            raise AssertionError(
+                "a consumed dynamic label reactivated its option grammar: "
+                f"label={consumed_label!r}, "
+                f"occurrences={consumed_dynamic_option!r}"
+            )
+    for active_sibling, expected_owner in (
+        (r"\tn[label shift=127mm]{A}", DimensionOwner.LAYOUT),
+        (r"\tnset{pitch=128mm}", DimensionOwner.METRIC),
+    ):
+        active_dynamic_option_sibling = scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\tndeclareatom{\tnfoo}{skin=dot}"
+            rf"\tnarrow{{\tnfoo A{active_sibling}}}",
+        )
+        if len(active_dynamic_option_sibling) != 1 or any(
+            occurrence.owner is not expected_owner
+            for occurrence in active_dynamic_option_sibling
+        ):
+            raise AssertionError(
+                "a dynamic label masked a later option-bearing sibling: "
+                f"sibling={active_sibling!r}, "
+                f"occurrences={active_dynamic_option_sibling!r}"
+            )
+    consumed_dynamic_environment = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo\begin{tenkz}129mm\end{tenkz}}",
+    )
+    if len(consumed_dynamic_environment) != 1 or any(
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in consumed_dynamic_environment
+    ):
+        raise AssertionError(
+            "a consumed dynamic label reactivated an environment control: "
+            f"{consumed_dynamic_environment!r}"
+        )
+    active_dynamic_environment_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\begin{tenkz}130mm\end{tenkz}}",
+    )
+    if len(active_dynamic_environment_sibling) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_dynamic_environment_sibling
+    ):
+        raise AssertionError(
+            "a dynamic label masked a later environment sibling: "
+            f"{active_dynamic_environment_sibling!r}"
+        )
+    definition_in_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\def\x}\tnput{x}{(131mm,0)}{}}",
+    )
+    if len(definition_in_dynamic_label) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in definition_in_dynamic_label
+    ):
+        raise AssertionError(
+            "definition discovery crossed a dynamic label into its sibling: "
+            f"{definition_in_dynamic_label!r}"
+        )
+    active_definition_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\def\x{\tnput{x}{(132mm,0)}{}}"
+        r"\tnput{x}{(133mm,0)}{}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in active_definition_sibling
+    ] != [
+        ("132mm", None),
+        ("133mm", DimensionOwner.LAYOUT),
+    ]:
+        raise AssertionError(
+            "a dynamic label masked a later active definition or command: "
+            f"{active_definition_sibling!r}"
+        )
+    inert_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\def\x{\tndeclareatom{\tnfoo}{skin=dot}}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(201mm,0)}{}}}",
+    )
+    if len(inert_dynamic_declaration) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in inert_dynamic_declaration
+    ):
+        raise AssertionError(
+            "an inert atom declaration created a source-wide quarantine: "
+            f"{inert_dynamic_declaration!r}"
+        )
+    active_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(202mm,0)}{}}}",
+    )
+    if len(active_dynamic_declaration) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_dynamic_declaration
+    ):
+        raise AssertionError(
+            "an active atom declaration lost its dynamic quarantine: "
+            f"{active_dynamic_declaration!r}"
+        )
+    declaration_in_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tndeclareatom{\tnbar}{skin=dot}}"
+        r"\tnbar{\tnput{x}{(203mm,0)}{}}}",
+    )
+    if len(declaration_in_dynamic_label) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in declaration_in_dynamic_label
+    ):
+        raise AssertionError(
+            "a declaration consumed by a dynamic label escaped its mask: "
+            f"{declaration_in_dynamic_label!r}"
+        )
+    active_declaration_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\tndeclareatom{\tnbar}{skin=dot}"
+        r"\tnbar{\tnput{x}{(204mm,0)}{}}}",
+    )
+    if len(active_declaration_sibling) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_declaration_sibling
+    ):
+        raise AssertionError(
+            "an active sibling declaration lost its dynamic quarantine: "
+            f"{active_declaration_sibling!r}"
+        )
+    revived_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\def\holder{\tndeclareatom{\foo}{skin=dot}}"
+        r"\tndeclareatom{\bar}{skin=dot}"
+        r"\foo\bar{\def\x}\tndeclareatom{\baz}{skin=dot}"
+        r"\tnarrow{\baz\tnput{x}{(205mm,0)}{}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in revived_dynamic_declaration
+    ] != [("205mm", DimensionOwner.ROUTE)]:
+        raise AssertionError(
+            "a transient definition mask permanently removed a declaration: "
+            f"{revived_dynamic_declaration!r}"
+        )
+    try:
+        scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\bar\tndeclareatom{\foo}{skin=dot}"
+            r"\foo\tndeclareatom{\bar}{skin=dot}",
+        )
+    except DimensionOwnershipError as error:
+        if str(error) != "tenkz execution masks did not converge":
+            raise AssertionError(
+                "a cyclic execution mask raised the wrong error: "
+                f"{error!r}"
+            ) from error
+    else:
+        raise AssertionError("a cyclic execution mask did not fail closed")
+    braced_dynamic_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{A}{\tnput{x}{(124mm,0)}{}}}",
+    )
+    if len(braced_dynamic_sibling) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in braced_dynamic_sibling
+    ):
+        raise AssertionError(
+            "a dynamic braced label consumed its sibling command: "
+            f"{braced_dynamic_sibling!r}"
+        )
+    later_dynamic_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\tnput{x}{(122mm,0)}{}}",
+    )
+    if len(later_dynamic_sibling) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in later_dynamic_sibling
+    ):
+        raise AssertionError(
+            "a dynamic one-token label consumed a later sibling command: "
+            f"{later_dynamic_sibling!r}"
+        )
+    grouped_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(123mm,0)}{}}}",
+    )
+    if len(grouped_dynamic_label) != 1 or any(
+        occurrence.owner is not None for occurrence in grouped_dynamic_label
+    ):
+        raise AssertionError(
+            "a grouped dynamic label reactivated a public command: "
+            f"{grouped_dynamic_label!r}"
+        )
     for catcode_prelude, atom_name in (
         (r"\makeatletter", "tn@atom"),
         (r"\ExplSyntaxOn", "tn:atom"),
@@ -762,11 +1307,11 @@ def test_rmp_dimension_ownership() -> None:
             rf"\tnarrow{{\{atom_name}[label shift={{99mm,100mm}}]"
             r"{101mm}{102mm}}",
         )
-        if len(catcode_atom) != 4 or any(
-            occurrence.owner is not None for occurrence in catcode_atom
-        ):
+        if [
+            occurrence.owner for occurrence in catcode_atom
+        ] != [None, None, None, DimensionOwner.ROUTE]:
             raise AssertionError(
-                "a control-sequence atom name escaped dynamic quarantine: "
+                "a control-sequence atom exceeded its O{} m quarantine: "
                 f"name={atom_name!r}, occurrences={catcode_atom!r}"
             )
     declared_kernel_atom = scan_case_dimensions(
@@ -856,12 +1401,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnarrow{\tndeclareatom\rule{skin=dot}"
         r"\rule[label shift={88mm,89mm}]{95mm}{96mm}}",
     )
-    if len(colliding_latex_declaration) != 4 or any(
-        occurrence.owner is not None
-        for occurrence in colliding_latex_declaration
-    ):
+    if [
+        occurrence.owner for occurrence in colliding_latex_declaration
+    ] != [None, None, None, DimensionOwner.ROUTE]:
         raise AssertionError(
-            "a format command collision activated dynamic ownership: "
+            "a format collision exceeded the declared O{} m barrier: "
             f"{colliding_latex_declaration!r}"
         )
     source_local_collision = scan_case_dimensions(
@@ -870,11 +1414,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnarrow{\tndeclareatom{\tnoccupied}{skin=dot}"
         r"\tnoccupied[label shift={93mm,94mm}]{97mm}{98mm}}",
     )
-    if len(source_local_collision) != 4 or any(
-        occurrence.owner is not None for occurrence in source_local_collision
-    ):
+    if [
+        occurrence.owner for occurrence in source_local_collision
+    ] != [None, None, None, DimensionOwner.ROUTE]:
         raise AssertionError(
-            "a source-local command collision activated dynamic ownership: "
+            "a source-local collision exceeded the declared O{} m barrier: "
             f"{source_local_collision!r}"
         )
     repeated_optional_collision = scan_case_dimensions(
@@ -884,11 +1428,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\tnoccupied[][103mm]{104mm}}",
     )
     if len(repeated_optional_collision) != 2 or any(
-        occurrence.owner is not None
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in repeated_optional_collision
     ):
         raise AssertionError(
-            "a repeated optional argument escaped unknown-arity quarantine: "
+            "a repeated optional collision exceeded the O{} m barrier: "
             f"{repeated_optional_collision!r}"
         )
     colliding_parbox = scan_case_dimensions(
@@ -897,10 +1441,11 @@ def test_rmp_dimension_ownership() -> None:
         r"\parbox[c][105mm][c]{106mm}{x}}",
     )
     if len(colliding_parbox) != 2 or any(
-        occurrence.owner is not None for occurrence in colliding_parbox
+        occurrence.owner is not DimensionOwner.ROUTE
+        for occurrence in colliding_parbox
     ):
         raise AssertionError(
-            "a real multi-option command escaped unknown-arity quarantine: "
+            "a real multi-option collision exceeded the O{} m barrier: "
             f"{colliding_parbox!r}"
         )
     scoped_atom_declaration = scan_case_dimensions(
@@ -1535,6 +2080,7 @@ def test_rmp_pairing_identity() -> None:
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_dimension_cli_failure()
     test_rmp_dimension_ownership()
     test_rmp_author_source_identity()
     test_rmp_pairing_identity()
