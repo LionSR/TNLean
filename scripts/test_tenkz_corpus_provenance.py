@@ -1066,6 +1066,36 @@ def test_rmp_dimension_ownership() -> None:
             "a dynamic label masked a later environment sibling: "
             f"{active_dynamic_environment_sibling!r}"
         )
+    definition_in_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\def\x}\tnput{x}{(131mm,0)}{}}",
+    )
+    if len(definition_in_dynamic_label) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in definition_in_dynamic_label
+    ):
+        raise AssertionError(
+            "definition discovery crossed a dynamic label into its sibling: "
+            f"{definition_in_dynamic_label!r}"
+        )
+    active_definition_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\def\x{\tnput{x}{(132mm,0)}{}}"
+        r"\tnput{x}{(133mm,0)}{}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in active_definition_sibling
+    ] != [
+        ("132mm", None),
+        ("133mm", DimensionOwner.LAYOUT),
+    ]:
+        raise AssertionError(
+            "a dynamic label masked a later active definition or command: "
+            f"{active_definition_sibling!r}"
+        )
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
