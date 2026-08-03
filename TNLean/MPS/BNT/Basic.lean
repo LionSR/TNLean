@@ -50,9 +50,9 @@ Theorem 4.4 of arXiv:2011.12127 (Cirac–Pérez-García–Schuch–Verstraete, R
   in a form suited to families with per-block bond dimension.
 
 * `MPSTensor.eventually_exists_invertible_changeBasis`: If two BNT-like families produce MPV
-  states that are eventually linearly independent and always span the same subspace, then for all
-  sufficiently large system sizes there is an invertible coefficient matrix `U_N` expressing one
-  family in terms of the other.
+  states that are eventually linearly independent and eventually span the same subspace, then
+  for all sufficiently large system sizes there is an invertible coefficient matrix `U_N`
+  expressing one family in terms of the other.
 
 ## Intended use in Theorem 4.4
 
@@ -383,14 +383,21 @@ lemma bntFamilies_eventually_linearIndependent
 **Eventually invertible change-of-basis matrix from equal spans.**
 
 Given two BNT-like families of MPS tensors whose pairwise overlaps converge to orthonormality
-(so both are eventually linearly independent), and whose MPV state spans agree for every system
-size `N`, there is—for all large enough `N`—an invertible `g × g` coefficient matrix `U_N`
+(so both are eventually linearly independent), and whose MPV state spans eventually agree,
+there is—for all large enough `N`—an invertible `g × g` coefficient matrix `U_N`
 satisfying
 
 `mpvState (B j) N = ∑ i, U_N i j • mpvState (A i) N`.
 
 This converts the equal-MPV-subspace condition into a matrix equation whose
 asymptotics can then be analysed in the permutation-matching step of Theorem 4.4.
+
+**Local fix (eventual span equality):** The source comparison holds only on a
+finite tail.  Accordingly, this result assumes eventual span equality rather
+than equality at every length.  See
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source context: CPSV16, arXiv:1606.00608, lines 522--525 and 1305--1307.
 -/
 lemma eventually_exists_invertible_changeBasis
     {d g : ℕ} {dimA dimB : Fin g → ℕ}
@@ -404,7 +411,7 @@ lemma eventually_exists_invertible_changeBasis
       Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j →
       Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds (0 : ℂ)))
-    (hspan : ∀ N : ℕ,
+    (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (A j) N)) =
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (B j) N))) :
     ∀ᶠ N in atTop, ∃ U : Matrix (Fin g) (Fin g) ℂ,
@@ -415,12 +422,12 @@ lemma eventually_exists_invertible_changeBasis
   -- Both families are eventually LI.
   have hA_li := bntFamilies_eventually_linearIndependent A hA_diag hA_off
   have hB_li := bntFamilies_eventually_linearIndependent B hB_diag hB_off
-  -- Combine the two "eventually" filters.
-  filter_upwards [hA_li, hB_li] with N hA_N hB_N
+  -- Intersect the three eventual conditions.
+  filter_upwards [hA_li, hB_li, hspan] with N hA_N hB_N hspanN
   -- Apply the pure linear-algebra change-of-basis lemma.
   exact exists_invertible_changeBasis
     (fun j => mpvState (d := d) (A j) N)
     (fun j => mpvState (d := d) (B j) N)
-    hA_N hB_N (hspan N)
+    hA_N hB_N hspanN
 
 end MPSTensor
