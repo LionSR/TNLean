@@ -67,6 +67,27 @@ def main() -> int:
     ]
     assert good.pictures[0].kernel_boundary() == ("open:e", "open:w")
 
+    tree_event = (
+        "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
+        "topology=(1,2)|role=none|species=plain\n"
+    )
+    standalone_tree = audit_log(tree_event, r"\tntree{(a\,b)_c}")
+    assert not standalone_tree.findings, standalone_tree.findings
+    assert not standalone_tree.tex_linked
+    assert not standalone_tree.constructs
+
+    mixed_tree = audit_log(
+        GOOD_LOG + tree_event,
+        r"\tntree{(a\,b)_c}"
+        "\n"
+        r"\begin{tenkz}[rows={wire}]\tn{}\end{tenkz}",
+    )
+    assert mixed_tree.tex_linked
+    assert [construct.name for construct in mixed_tree.constructs] == ["tenkz"]
+    assert not {
+        finding.rule for finding in mixed_tree.findings
+    } & {"stale-log", "tex-unlinked"}
+
     pairing_cross = audit_log(
         """\
 picture|id=k1|lang=kernel

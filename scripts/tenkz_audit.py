@@ -73,7 +73,8 @@ Advisories (never affect the exit code):
 
 Source heuristic (documented, deliberately simple): picture-producing
 constructs (`\\begin{tenkz...}` and `\\tnpic`) are matched to log pictures
-in order of appearance; the match is used only when the counts agree.
+in order of appearance; standalone `\\tntree` drawings emit no picture event
+and are excluded.  The match is used only when the counts agree.
 Two consecutive grid pictures are "one displayed equation" when the
 source between them contains `=` and no math-mode boundary (`$`, `\\[`,
 `\\]`), no cell separator `&`, no other environment, and is short.
@@ -98,7 +99,7 @@ from tenkzlib.texcase import (
     Construct,
     following_group,
     following_group_span,
-    scan_constructs,
+    scan_picture_event_constructs,
     strip_comments,
     top_level_options,
 )
@@ -1499,7 +1500,7 @@ class Audit:
         if self.tex_path is None or not self.tex_path.exists():
             return
         src = strip_comments(self.tex_path.read_text(encoding="utf-8"))
-        self.constructs = scan_constructs(src)
+        self.constructs = scan_picture_event_constructs(src)
         if len(self.constructs) == len(self.pictures) and self.pictures:
             self.tex_linked = True
         elif self.constructs and not self.pictures:

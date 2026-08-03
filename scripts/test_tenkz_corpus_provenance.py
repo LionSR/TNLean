@@ -31,6 +31,7 @@ from tenkz_rmp import (
     structural_capability_problems,
     verify_author_source_tree,
 )
+from tenkzlib.dimension_inventory import validate_rmp_dimension_gate
 from tenkzlib.dimensions import (
     BOOK_LAYOUT_ALLOWLIST,
     DimensionOccurrence,
@@ -214,7 +215,7 @@ def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
 
 def test_rmp_dimension_cli_failure() -> None:
     """Collection-time ownership failures use the concise CLI diagnostic."""
-    original_collect = tenkz_rmp.collect_dimension_report
+    original_gate = tenkz_rmp.validate_rmp_dimension_gate
     original_argv = sys.argv
 
     def raise_cycle(*_args: object, **_kwargs: object) -> DimensionReport:
@@ -222,14 +223,14 @@ def test_rmp_dimension_cli_failure() -> None:
             "tenkz execution masks did not converge"
         )
 
-    tenkz_rmp.collect_dimension_report = raise_cycle
+    tenkz_rmp.validate_rmp_dimension_gate = raise_cycle
     sys.argv = [str(ROOT / "scripts" / "tenkz_rmp.py"), "check", "--all"]
     stderr = io.StringIO()
     try:
         with contextlib.redirect_stderr(stderr):
             status = tenkz_rmp.main()
     finally:
-        tenkz_rmp.collect_dimension_report = original_collect
+        tenkz_rmp.validate_rmp_dimension_gate = original_gate
         sys.argv = original_argv
     expected = (
         "FAIL: RMP dimension ownership failed:\n"
@@ -280,7 +281,9 @@ def test_rmp_dimension_ownership() -> None:
             f"{sorted(set(_PUBLIC_ENVIRONMENTS) - registered_environments)!r}"
         )
     targets = load_manifest(DEFAULT_MANIFEST)
-    report = collect_dimension_report(ROOT, (target.case for target in targets))
+    report = validate_rmp_dimension_gate(
+        ROOT, (target.case for target in targets)
+    )
     expected = Counter(
         {
             DimensionOwner.METRIC: 0,
@@ -300,8 +303,6 @@ def test_rmp_dimension_ownership() -> None:
         raise AssertionError(
             f"benchmark-book dimension allowlist drifted: {report.book_counts!r}"
         )
-    validate_dimension_report(report)
-
     synthetic = r"""% pitch=14mm remains visible to the comment audit
 \begin{tenkz}[pitch=11mm]
   \tnput{a}{(1mm,2mm)}{}

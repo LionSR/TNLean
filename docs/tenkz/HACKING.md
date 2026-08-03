@@ -51,8 +51,8 @@ metric, projection/frame, route/string, or composition/layout and ratcheted in
 fixed benchmark-book page-layout files have exact path-specific counts and do
 not count as figure geometry.  These core ceilings are aggregate ratchets:
 net reductions pass and uncompensated count increases fail.  Exact balanced
-replacement and ownership-site moves are the per-occurrence gate supplied by
-#5378; until that lands, they require manual review.
+replacements and ownership-site moves are rejected by the exact per-occurrence
+inventory described below.
 
 The comparison command requires a separate author-source tree supplied through
 `--source-root`.  The canonical local home is the gitignored
@@ -514,6 +514,54 @@ python3 scripts/test_tenkz_enclosures.py
 
 Run the focused test while iterating, then the affected corpus or benchmark
 section, then the repository gates appropriate to the change.
+
+### RMP dimension inventory
+
+The RMP driver applies two dimension checks before compiling any target.  The
+aggregate ownership ratchets reject increases, unowned or commented case
+dimensions, and benchmark-book allowlist drift.  The version-5 inventory in
+`tests/tenkz/rmp/dimension-ownership.json` additionally freezes every active
+literal at its semantic owner site.  Each case first lists its executed PICTURE
+scopes.  Public tenkz environments, `tenkzeq`, and `tngroup` receive
+hierarchical, per-parent source-order anchors even when their bodies contain no
+dimensions.  The construct list records the drawing constructs: picture
+environments, `tnpic`, and `tntree`.  A nested drawing's anchor includes its
+PICTURE ancestry.  Command and drawing-container invocations are anchored
+beneath their owning drawing; dimension-free commands and semantic starred
+variants still receive source-order anchors.  `tenkzeq` is recorded only as a
+scope.  It may precede the first drawing, and therefore has no honest drawing
+owner.  An invocation's identity includes the exact PICTURE scope in which it
+executes.  Dimension-bearing rows reference the exact owning invocation and
+carry a comment-independent, TeX-token-normalized command or option skeleton.
+Every option skeleton also
+includes the registry-validated environment or command that owns it, so moving
+a value between compatible option containers, same-name sibling invocations,
+or PICTURE scopes changes the site identity.  Scopes, constructs, and
+invocations stored in inert macro bodies are excluded by the same execution
+mask as dimension ownership.
+Owned values use `<dimension>` markers one-for-one with their literal vector;
+dimensions belonging to a narrower nested site use `<nested-dimension>` and
+are counted only by that nested owner.
+Structural option separators and comment splices do not change a skeleton, but
+significant whitespace inside argument token lists and option values does,
+including nested bracket values.  Authored marker punctuation is escaped before
+generated dimension placeholders are inserted.  Only repeated identical
+skeletons receive a local occurrence number.  This catches a balanced
+replacement or cross-site move that leaves all aggregate counts unchanged.
+
+After an intentional, reviewed migration, update that exact inventory with:
+
+```sh
+python3 scripts/update_tenkz_dimension_inventory.py
+python3 scripts/test_tenkz_dimension_inventory.py
+```
+
+The updater runs the aggregate ceilings before writing, rejects a malformed
+old inventory, prints the site-level diff and the
+case/scope/construct/invocation/site/dimension totals, and is byte-idempotent.
+Do not edit the inventory to make an unexplained movement pass.  Comment
+literals and the benchmark-book layout allowlist stay under their existing
+orthogonal ratchets and never appear in these case rows.
 
 ## Historical design records
 
