@@ -26,6 +26,8 @@
 \bool_new:N \l__tenkz_test_in_port_label_bool
 \bool_new:N \l__tenkz_test_in_policy_label_bool
 \bool_new:N \l__tenkz_test_in_bonded_label_bool
+\bool_new:N \g__tenkz_test_atoms_done_bool
+\bool_new:N \g__tenkz_test_marks_done_bool
 \int_new:N \g__tenkz_test_bonded_slot_int
 \cs_new:Npn \TenkzPortLabelMode
   {
@@ -300,11 +302,34 @@
           {\errmessage{virtual~port~lost~its~semantic~stroke}}
       }
   }
+\cs_new_eq:NN \__tenkz_test_atoms: \__tenkz_kernel_r_atoms:
+\cs_set_protected:Npn \__tenkz_kernel_r_atoms:
+  {
+    \__tenkz_test_atoms:
+    \bool_gset_true:N \g__tenkz_test_atoms_done_bool
+  }
+\cs_new_eq:NN \__tenkz_test_marks: \__tenkz_kernel_r_marks:
+\cs_set_protected:Npn \__tenkz_kernel_r_marks:
+  {
+    \__tenkz_test_marks:
+    \bool_gset_true:N \g__tenkz_test_marks_done_bool
+  }
+\cs_new_eq:NN \__tenkz_test_render: \__tenkz_kernel_render:
+\cs_set_protected:Npn \__tenkz_kernel_render:
+  {
+    \bool_gset_false:N \g__tenkz_test_atoms_done_bool
+    \bool_gset_false:N \g__tenkz_test_marks_done_bool
+    \__tenkz_test_render:
+  }
 \cs_new_eq:NN
   \__tenkz_test_port_open_label:n
   \__tenkz_kernel_r_port_open_label:n
 \cs_set_protected:Npn \__tenkz_kernel_r_port_open_label:n #1
   {
+    \bool_if:NF \g__tenkz_test_atoms_done_bool
+      {\errmessage{unmatched~port~label~preceded~atom~ink}}
+    \bool_if:NF \g__tenkz_test_marks_done_bool
+      {\errmessage{unmatched~port~label~preceded~mark~ink}}
     \bool_set_true:N \l__tenkz_test_in_port_label_bool
     \__tenkz_test_port_open_label:n {#1}
     \bool_set_false:N \l__tenkz_test_in_port_label_bool
@@ -318,7 +343,8 @@
       ports={0@01:virtual:$a$, 90:physical, 45:physical:$i$}]{A}
   \tn[at=(1,2), name=B, ports={180@001:virtual:$b$}]{B}
   \tnwire{A.0@01}{B.180@001}
-  \tn[skin=dot, at=on port-open-1 0.5]{}
+  % Keep the visual delta on the labelled unmatched port itself.
+  \tn[skin=dot, at=on port-open-2 1]{}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=plane]
   \tn[at=(1,1), name=P,

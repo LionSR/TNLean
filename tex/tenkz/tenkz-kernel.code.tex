@@ -11451,8 +11451,6 @@
           \l__tenkz_kernel_r_sid_tl
           \l__tenkz_kernel_r_wire_ink_tl
       }
-    \seq_map_inline:Nn \l__tenkz_kernel_r_port_label_routes_seq
-      { \__tenkz_kernel_r_port_open_label:n {##1} }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_index_joins:
@@ -13413,6 +13411,8 @@
     % annotated owner only after every wire, pairing, atom, closure, and mark.
     \__tenkz_model_map_ids:nn {wire}
       { \__tenkz_kernel_r_wire_port_labels:n {##1} }
+    \seq_map_inline:Nn \l__tenkz_kernel_r_port_label_routes_seq
+      { \__tenkz_kernel_r_port_open_label:n {##1} }
     \endtikzpicture
   }
 
