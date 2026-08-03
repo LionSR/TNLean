@@ -64,6 +64,15 @@ workflow resolve to the pinned bytes. It cannot replace the independent
 evidence-supervisor result. A missing, renamed, non-blob, or changed workflow
 fails closed.
 
+Activation also derives and pins the complete Git tree at the policy's
+`release_publisher_workflow_root`. Every later validation requires that exact
+tree. It completely enumerates its workflow jobs and requires the terminal
+publisher to be the sole job naming `release_publisher_environment` or
+`release_publisher_secret`. The current environment configuration must restrict
+deployment to the protected release branch. Missing, wider, changed, or
+incompletely paginated configuration fails closed. A transient administrative
+change restored before the snapshot remains inside the stated trust boundary.
+
 The resolver closes the dedicated workflow's transitive executable dependency
 graph. Each local action or reusable workflow is pinned by its activation Git
 object and joins every later byte-and-mode check. Each external action or
@@ -79,14 +88,21 @@ trusted; downloaded mutable executable content does not.
 
 The dedicated workflow has one terminal publisher job with job-level
 `contents: write`; validation jobs have no write permission. The publisher has
-no checkout, local action, container, package download, or repository command.
-It uses only the hosted runner's version-fingerprinted `gh`, `git`, and
-`ssh-keygen` clients and the pinned workflow's closed inline command. Its
+no checkout, local action, container, package download, or repository-supplied
+executable. It uses only the hosted runner's version-fingerprinted `gh`, `git`,
+and `ssh-keygen` clients and the pinned workflow's closed inline command. Its
 `needs` dependency names the exact post-merge validation job, so GitHub can
-start it only after that job succeeds for the sign-off integration `I`. The
-publisher alone receives the private half of the policy's dedicated signing
-key. Any other networked step, executable, key user, or publisher input fails
-closed.
+start it only after that job succeeds for the sign-off integration `I`. The job
+runs in the dedicated environment and receives its private-key secret there.
+Any other networked step, executable, key user, or publisher input fails closed.
+
+The successful validator emits one closed `needs` tuple containing `I`, the
+normalized sign-off `mergedAt`, policy and prefix hashes, prefix boundary, and
+the pinned support-tree, object-schema-blob, and public-key-blob OIDs. The
+publisher accepts no caller-provided substitute. Through `gh`, it fetches those
+exact Git objects by OID and verifies their identities and hashes. A branch
+name, moving path, environment value other than the private key, or unbound
+`workflow_dispatch` input fails closed.
 
 The publisher constructs one byte-deterministic annotated tag object `E`. The
 pinned object schema fixes its tagger identity, normalizes the tagger time to
@@ -134,8 +150,9 @@ are read from the exact `docs/tenkz/DESIGN.md` policy pinned by
 `policy_sha256`; this ledger schema does not duplicate them. Tag immutability
 and the release manifest, canonical-artifact, inventory, runner, and enforcement-workflow
 configuration are likewise read only from that pinned policy, as are the
-maintainer identity, signer identity scheme, and authorized reviewer permission
-set.
+maintainer identity, GitHub identity scheme, and authorized reviewer permission
+set. The GitHub identity scheme normalizes people and bots in repository
+evidence; it is unrelated to the final tag's cryptographic signing key.
 
 Once armed, the normative blocks in `docs/tenkz/DESIGN.md` and this file have
 closed tables and field sets. Unknown tables or fields are rejected. Changing
@@ -799,9 +816,10 @@ the ledger. Creating the protected name with the wrong kind or target is also a
 hard release incident. Weaker current protection, or a moved or replaced
 present tag, is likewise a hard release incident. An absent final-tag ref
 remains `signed-off-awaiting-tag` while no successful publisher job exists. A
-successful job with an absent ref is a hard incident because the job's required
-readback could not have succeeded. No incident is repaired by deleting, moving,
-or reusing the name, and none starts another 1.0 attempt.
+successful job with a later absent ref is a hard incident: the required
+readback succeeded, so the protected ref was subsequently deleted or hidden.
+No incident is repaired by deleting, moving, or reusing the name, and none
+starts another 1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
 under #5352 will add validation commands only after their scripts,
