@@ -50,6 +50,7 @@ jobs:
             test "$(git rev-parse "${oid}^{commit}")" = "$oid"
           }
 
+          python3 scripts/test_tenkz_policy_evidence.py
           python3 scripts/test_check_tenkz_policy.py
 
           if [ "$EVENT_NAME" = "pull_request" ]; then

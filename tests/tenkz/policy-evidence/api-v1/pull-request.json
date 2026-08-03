@@ -1,0 +1,11 @@
+{
+  "number": 42,
+  "state": "closed",
+  "merged": true,
+  "base": {"ref": "main"},
+  "head": {"sha": "1111111111111111111111111111111111111111"},
+  "user": {"login": "author"},
+  "merged_by": {"login": "maintainer"},
+  "merge_commit_sha": "2222222222222222222222222222222222222222",
+  "merged_at": "2026-08-03T10:00:00Z"
+}

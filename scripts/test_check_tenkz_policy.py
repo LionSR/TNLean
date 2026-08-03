@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from copy import deepcopy
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -16,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import check_tenkz_policy as policy  # noqa: E402
+import tenkz_policy_evidence as policy_evidence  # noqa: E402
 
 
 DESIGN_TEXT = (ROOT / "docs/tenkz/DESIGN.md").read_text(encoding="utf-8")
@@ -1081,10 +1083,19 @@ def parsed_entries(*blocks: str) -> list[dict]:
 
 def audit_evidence(
     boundary: str | None,
-    invalid_entries: tuple[str, ...] = (),
     target_oid: str = oid(99_999),
 ) -> policy.AuditEvidence:
-    return policy.AuditEvidence(boundary, invalid_entries, True, True, target_oid)
+    return policy.AuditEvidence(boundary, True, True, target_oid)
+
+
+def invalidate_records(facts: Context, *entry_ids: str) -> None:
+    """Make current replay derive the selected records as invalid."""
+
+    for entry_id in entry_ids:
+        facts.records[entry_id] = replace(
+            facts.records[entry_id],
+            no_other_path_changes=False,
+        )
 
 
 def protected_tags() -> policy.TagProtectionEvidence:
@@ -1455,35 +1466,45 @@ def set_review_permission(facts: Context, ref: str, permission: str | None) -> N
 
 def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
-    for entry in entries:
-        if entry["kind"] != "freeze":
-            continue
-        record = facts.prs.get(entry["record_pr"])
-        if record is None or record.merged is not False:
-            continue
-        tag = facts.tags[entry["freeze_tag"]]
-        facts.tags[entry["freeze_tag"]] = replace(
-            tag,
-            candidate_namespace_complete=(
-                True
-                if tag.candidate_namespace_complete is None
-                else tag.candidate_namespace_complete
-            ),
-            candidate_matching_tag_names=(
-                tuple(entry["freeze_tag_snapshot"])
-                if tag.candidate_matching_tag_names is None
-                else tag.candidate_matching_tag_names
-            ),
-        )
-    prepare_reset_receipts(entries, facts)
-    prepare_friction_observations(entries, facts)
-    prepare_resolution_facts(entries, facts)
-    prepare_receipt_retention(entries, facts)
-    if "audit" not in overrides:
-        boundary: str | None = None
-        target_oid = facts.prs[ACTIVATION].merge_commit_oid
+    current_resolver = overrides.pop("current_resolver", facts)
+    assert isinstance(current_resolver, Context)
+
+    def prepare_context(context: Context) -> None:
         for entry in entries:
-            record = facts.prs.get(entry["record_pr"])
+            if entry["kind"] != "freeze":
+                continue
+            record = context.prs.get(entry["record_pr"])
+            if record is None or record.merged is not False:
+                continue
+            tag = context.tags[entry["freeze_tag"]]
+            context.tags[entry["freeze_tag"]] = replace(
+                tag,
+                candidate_namespace_complete=(
+                    True
+                    if tag.candidate_namespace_complete is None
+                    else tag.candidate_namespace_complete
+                ),
+                candidate_matching_tag_names=(
+                    tuple(entry["freeze_tag_snapshot"])
+                    if tag.candidate_matching_tag_names is None
+                    else tag.candidate_matching_tag_names
+                ),
+            )
+        prepare_reset_receipts(entries, context)
+        prepare_friction_observations(entries, context)
+        prepare_resolution_facts(entries, context)
+        prepare_receipt_retention(entries, context)
+
+    prepare_context(facts)
+    if current_resolver is not facts:
+        prepare_context(current_resolver)
+    audit = overrides.pop("audit", None)
+    tag_protection = overrides.pop("tag_protection", None)
+    if audit is None:
+        boundary: str | None = None
+        target_oid = current_resolver.prs[ACTIVATION].merge_commit_oid
+        for entry in entries:
+            record = current_resolver.prs.get(entry["record_pr"])
             if record is None:
                 break
             target_oid = record.head_oid
@@ -1492,28 +1513,20 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
             boundary = entry["id"]
             target_oid = record.merge_commit_oid
         assert isinstance(target_oid, str)
-        overrides["audit"] = audit_evidence(boundary, target_oid=target_oid)
+        audit = audit_evidence(boundary, target_oid=target_oid)
+    if tag_protection is None:
+        tag_protection = protected_tags()
     arguments = {
         "policy": ARMED_POLICY,
         "soak": ARMED_SOAK,
-        "resolve_replay_pr": facts.resolve_replay_pr,
-        "resolve_replay_activation_diff": facts.resolve_replay_activation_diff,
-        "resolve_replay_record_diff": facts.resolve_replay_record_diff,
-        "resolve_replay_work_diff": facts.resolve_replay_work_diff,
-        "resolve_replay_resolution_diff": facts.resolve_replay_resolution_diff,
-        "resolve_replay_release_prep": facts.resolve_replay_release_prep,
-        "resolve_replay_release_payload": facts.resolve_replay_release_payload,
-        "resolve_replay_release_test_observation": (
-            facts.resolve_replay_release_test_observation
+        "evidence": policy_evidence.PolicyEvidenceBundle(
+            replay=policy_evidence.ImmutableReplayEvidence(facts),
+            current=policy_evidence.CurrentEvidenceSnapshot(
+                resolver=current_resolver,
+                audit=audit,
+                tag_protection=tag_protection,
+            ),
         ),
-        "resolve_replay_freeze_tag": facts.resolve_replay_freeze_tag,
-        "resolve_current_final_tag": facts.resolve_current_final_tag,
-        "resolve_final_tag_publisher": facts.resolve_final_tag_publisher,
-        "resolve_current_publisher_secret": facts.resolve_current_publisher_secret,
-        "resolve_replay_issue": facts.resolve_replay_issue,
-        "resolve_replay_record_invalid_reset": facts.resolve_replay_record_invalid_reset,
-        "resolve_current_workflow": facts.resolve_current_workflow,
-        "tag_protection": protected_tags(),
     }
     arguments.update(overrides)
     return policy.validate_entries(entries, **arguments)
@@ -1540,10 +1553,10 @@ def complete_log() -> list[str]:
 def expect_failure(action, fragment: str) -> None:
     try:
         action()
-    except policy.PolicyError as error:
+    except (policy.PolicyError, policy_evidence.EvidenceUnavailable) as error:
         assert fragment in str(error), (fragment, str(error))
     else:
-        raise AssertionError(f"expected PolicyError containing {fragment!r}")
+        raise AssertionError(f"expected evidence failure containing {fragment!r}")
 
 
 def add_record(
@@ -2051,7 +2064,27 @@ def main() -> int:
     assert armed_schema["soak"]["armed_by_pr"] == ACTIVATION
     assert armed_schema == ARMED_SOAK
     assert armed_empty_entries == []
+    expect_failure(
+        lambda: policy.validate_entries(
+            armed_empty_entries,
+            policy=ARMED_POLICY,
+            soak=ARMED_SOAK,
+        ),
+        "armed entry validation requires policy evidence",
+    )
     assert validate([], context()) == "not-started"
+    unavailable_supervisor = context()
+
+    def unavailable_activation(_ref: str) -> policy.ActivationDiffEvidence:
+        raise policy_evidence.EvidenceUnavailable(
+            "activation supervisor evidence is unavailable"
+        )
+
+    unavailable_supervisor.resolve_replay_activation_diff = unavailable_activation
+    expect_failure(
+        lambda: validate([], unavailable_supervisor),
+        "activation supervisor evidence is unavailable",
+    )
     empty_mixed_activation = context()
     empty_mixed_activation.activation_diff = replace(
         empty_mixed_activation.activation_diff,
@@ -2252,13 +2285,13 @@ def main() -> int:
     prepare_reset_receipts(receipt_entries, denied_receipt)
     receipt_ref = receipt_entries[-1]["replay_receipt_pr"]
     set_review_permission(denied_receipt, receipt_ref, "read")
+    invalidate_records(denied_receipt, "S1-0001")
     expect_failure(
         lambda: validate(
             receipt_log,
             denied_receipt,
             audit=audit_evidence(
                 "S1-0001",
-                ("S1-0001",),
                 target_oid=denied_receipt.prs["#908"].head_oid,
             ),
         ),
@@ -2385,9 +2418,9 @@ def main() -> int:
             receipt_digest,
             candidate_head,
         )
+        invalidate_records(facts, "S1-0001")
         audit = audit_evidence(
             "S1-0001",
-            ("S1-0001",),
             target_oid=candidate_head,
         )
         return blocks, facts, audit, replay
@@ -2523,12 +2556,12 @@ def main() -> int:
         freeze(),
         reset("S1-0002", "#908", "record-invalid", "S1-0001"),
     ]
+    invalidate_records(invalid_acknowledgement, "S1-0001")
     assert validate(
         invalid_ack_log,
         invalid_acknowledgement,
         audit=audit_evidence(
             "S1-0002",
-            ("S1-0001", "S1-0002"),
             target_oid=invalid_acknowledgement.prs["#908"].merge_commit_oid,
         ),
     ) == "reset-required:S1-0001"
@@ -2586,12 +2619,12 @@ def main() -> int:
         replay,
         current_tree_blob_has_exact_path_mode_bytes_and_digest=False,
     )
+    invalidate_records(missing_current_blob_facts, "S1-0001")
     assert validate(
         missing_current_blob,
         missing_current_blob_facts,
         audit=audit_evidence(
             "S1-0002",
-            (),
             target_oid=current_tree_oid,
         ),
     ) == "reset-required:S1-0001"
@@ -2667,6 +2700,7 @@ def main() -> int:
         missing_reset_integration.records["S1-0002"],
         receipt_blob_preserved_in_integration=False,
     )
+    invalidate_records(missing_reset_integration, "S1-0001")
     assert validate(
         [
             freeze(),
@@ -2675,7 +2709,6 @@ def main() -> int:
         missing_reset_integration,
         audit=audit_evidence(
             "S1-0002",
-            ("S1-0001", "S1-0002"),
             target_oid=missing_reset_integration.prs["#908"].merge_commit_oid,
         ),
     ) == "reset-required:S1-0001"
@@ -4319,11 +4352,14 @@ def main() -> int:
         oid(9071),
         status="success",
     )
+    published_replay = deepcopy(published_then_drifted)
+    invalidate_records(published_then_drifted, "S1-0002")
     expect_failure(
         lambda: validate(
             complete_log(),
-            published_then_drifted,
-            audit=audit_evidence("S1-0004", ("S1-0002",)),
+            published_replay,
+            audit=audit_evidence("S1-0004"),
+            current_resolver=published_then_drifted,
         ),
         "publisher succeeded but the final ref is absent",
     )
@@ -4677,17 +4713,21 @@ def main() -> int:
         "prior released validation used another ledger prefix",
     )
 
-    # The current-validity audit runs forever while replay callbacks retain the
-    # integration-time history.  Before the tag, drift enters the reset queue;
-    # once a final-tag ref exists it is a hard incident and never reopens it.
+    # Current replay derives drift in ledger order.  Before the tag it enters
+    # the reset queue; once a final-tag ref exists it is a hard incident.
+    released_replay = deepcopy(released)
+    released_signoff_record = released.records["S1-0004"]
+    invalidate_records(released, "S1-0004")
     expect_failure(
         lambda: validate(
             complete_log(),
-            released,
-            audit=audit_evidence("S1-0004", ("S1-0004",)),
+            released_replay,
+            audit=audit_evidence("S1-0004"),
+            current_resolver=released,
         ),
         "final tag exists while release evidence requires reset",
     )
+    released.records["S1-0004"] = released_signoff_record
     expect_failure(
         lambda: validate(
             complete_log(),
@@ -4898,12 +4938,12 @@ def main() -> int:
         "lacks one work class",
     )
 
-    incomplete_audit = policy.AuditEvidence("S1-0004", (), False, True, oid(99_999))
+    incomplete_audit = policy.AuditEvidence("S1-0004", False, True, oid(99_999))
     expect_failure(
         lambda: validate(complete_log(), context(), audit=incomplete_audit),
         "audit snapshot is incomplete",
     )
-    inexact_target_audit = policy.AuditEvidence("S1-0004", (), True, False, oid(99_999))
+    inexact_target_audit = policy.AuditEvidence("S1-0004", True, False, oid(99_999))
     expect_failure(
         lambda: validate(complete_log(), context(), audit=inexact_target_audit),
         "audit validation target is not exact",
@@ -5159,11 +5199,8 @@ def main() -> int:
         observed_release_integrations.append(integration_oid)
         return release_binding_call.release_preps[ref]
 
-    assert validate(
-        complete_log(),
-        release_binding_call,
-        resolve_replay_release_prep=resolve_bound_release_prep,
-    ) == "signed-off-awaiting-tag"
+    release_binding_call.resolve_replay_release_prep = resolve_bound_release_prep
+    assert validate(complete_log(), release_binding_call) == "signed-off-awaiting-tag"
     assert observed_release_integrations == [oid(9201)]
 
     for invalid_integration in (None, oid(9991)):
@@ -5703,11 +5740,12 @@ def main() -> int:
         integration_second_parent_matches_head=True,
     )
     invalid_log = complete_log()[:2]
+    invalidate_records(invalid_facts, "S1-0002")
     assert (
         validate(
             invalid_log,
             invalid_facts,
-            audit=audit_evidence("S1-0002", ("S1-0002",)),
+            audit=audit_evidence("S1-0002"),
         )
         == "reset-required:S1-0002"
     )
@@ -5719,17 +5757,17 @@ def main() -> int:
         lambda: validate(
             invalid_log,
             invalid_facts,
-            audit=audit_evidence(None, ("S1-0002",)),
+            audit=audit_evidence(None),
         ),
-        "audit with an empty prefix names invalid entries",
+        "audit boundary is stale",
     )
     expect_failure(
         lambda: validate(
             invalid_log,
             invalid_facts,
-            audit=audit_evidence("S1-0001", ("S1-0002",)),
+            audit=audit_evidence("S1-0001"),
         ),
-        "audit boundary precedes an invalid target",
+        "audit boundary is stale",
     )
 
     # Drift is discovered against the current repository, not at the old
@@ -5744,18 +5782,41 @@ def main() -> int:
         908,
         SIGNOFF_MERGE + timedelta(seconds=1),
     )
+    replayed_history = deepcopy(replayed_drift)
+    invalidate_records(replayed_drift, "S1-0002")
     assert (
         validate(
             complete_log(),
-            replayed_drift,
-            audit=audit_evidence("S1-0004", ("S1-0002",)),
+            replayed_history,
+            audit=audit_evidence("S1-0004"),
+            current_resolver=replayed_drift,
         )
         == "reset-required:S1-0002"
     )
     assert validate(
         complete_log() + [reset("S1-0005", "#908", "record-invalid", "S1-0002")],
-        replayed_drift,
+        replayed_history,
+        current_resolver=replayed_drift,
     ) == "reset"
+
+    # A current dismissal schedules a reset of the work record, but immutable
+    # replay still reconstructs the approved work and the later sign-off.
+    immutable_approval = context()
+    current_dismissal = context()
+    formal_pr = current_dismissal.prs[FORMAL_WORK]
+    assert formal_pr.reviews is not None
+    current_dismissal.prs[FORMAL_WORK] = replace(
+        formal_pr,
+        reviews=tuple(
+            replace(item, state="DISMISSED", dismissed=True)
+            for item in formal_pr.reviews
+        ),
+    )
+    assert validate(
+        complete_log(),
+        immutable_approval,
+        current_resolver=current_dismissal,
+    ) == "reset-required:S1-0002"
 
     replayed_freeze_drift = context()
     add_record(
@@ -5825,13 +5886,13 @@ def main() -> int:
         reset("S1-0003", "#909", "restart-required", "S1-0002"),
         reset("S1-0004", "#910", "record-invalid", "S1-0001"),
     ]
+    invalidate_records(ordered_resets, "S1-0001")
     assert (
         validate(
             restart_then_drift[:3],
             ordered_resets,
             audit=audit_evidence(
                 "S1-0003",
-                ("S1-0001",),
                 target_oid=ordered_resets.prs["#909"].merge_commit_oid,
             ),
         )
@@ -5854,30 +5915,29 @@ def main() -> int:
         909,
         SIGNOFF_MERGE + timedelta(seconds=2),
     )
-    unsorted_audit = policy.AuditEvidence(
-        "S1-0004",
-        ("S1-0002", "S1-0001"),
-        True,
-        True,
-        oid(99_999),
-    )
-    expect_failure(
-        lambda: validate(complete_log(), batched_drift, audit=unsorted_audit),
-        "invalid entries are not in ledger order",
-    )
+    batched_history = deepcopy(batched_drift)
+    invalidate_records(batched_drift, "S1-0002", "S1-0001")
+    assert validate(
+        complete_log(),
+        batched_history,
+        current_resolver=batched_drift,
+    ) == "reset-required:S1-0001"
     batched_log = complete_log() + [
         reset("S1-0005", "#908", "record-invalid", "S1-0001"),
         reset("S1-0006", "#909", "record-invalid", "S1-0002"),
     ]
-    first_reset_audit = audit_evidence(
-        "S1-0005",
-        ("S1-0002",),
-        target_oid=batched_drift.prs["#908"].merge_commit_oid,
-    )
-    assert validate(batched_log[:-1], batched_drift, audit=first_reset_audit) == (
+    assert validate(
+        batched_log[:-1],
+        batched_history,
+        current_resolver=batched_drift,
+    ) == (
         "reset-required:S1-0002"
     )
-    assert validate(batched_log, batched_drift) == "reset"
+    assert validate(
+        batched_log,
+        batched_history,
+        current_resolver=batched_drift,
+    ) == "reset"
 
     # The self-referential record rule is common to every entry kind.  A
     # copied or tree-mismatched merged record never supplies usable evidence;
