@@ -8,13 +8,22 @@ stacked integration layer resolves the external facts.
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import re
+import subprocess
+import sys
 import tomllib
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Callable, Collection
 
 
+ROOT = Path(__file__).resolve().parents[1]
+DESIGN_PATH = "docs/tenkz/DESIGN.md"
+SOAK_PATH = "docs/tenkz/SOAK-1.0.md"
+ZERO_SHA = "0" * 40
 SOAK_MARKER = "<!-- tenkz-soak-entries: append below only while enforcement=armed -->"
 FREEZE_TAG_RE = re.compile(r"tenkz-v0\.9\.(?:0|[1-9][0-9]*)")
 FINAL_TAG = "tenkz-v1.0.0"
@@ -4749,3 +4758,489 @@ def check_append_only(previous: str | None, current: str) -> None:
         current.startswith(previous),
         "SOAK-1.0.md changed existing bytes instead of appending",
     )
+
+
+def git_output(root: Path, arguments: list[str]) -> str:
+    """Run a read-only Git query or fail the repository check closed."""
+
+    try:
+        result = subprocess.run(
+            ["git", *arguments],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except OSError as error:
+        raise PolicyError(f"could not execute git: {error}") from error
+    if result.returncode != 0:
+        raise PolicyError(result.stderr.strip() or f"git {' '.join(arguments)} failed")
+    return result.stdout.strip()
+
+
+def git_bytes(root: Path, arguments: list[str]) -> bytes:
+    """Run a read-only Git query whose exact stdout bytes are evidence."""
+
+    try:
+        result = subprocess.run(
+            ["git", *arguments],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except OSError as error:
+        raise PolicyError(f"could not execute git: {error}") from error
+    if result.returncode != 0:
+        message = result.stderr.decode("utf-8", errors="replace").strip()
+        raise PolicyError(message or f"git {' '.join(arguments)} failed")
+    return result.stdout
+
+
+def resolve_commit_oid(root: Path, ref: str, subject: str) -> str:
+    """Resolve one ref to an immutable commit OID."""
+
+    require(isinstance(ref, str) and bool(ref), f"{subject} is missing")
+    oid = git_output(
+        root,
+        ["rev-parse", "--verify", "--end-of-options", f"{ref}^{{commit}}"],
+    )
+    require(SHA_RE.fullmatch(oid) is not None, f"{subject} did not resolve to a SHA-1 OID")
+    require(
+        git_output(root, ["cat-file", "-t", oid]) == "commit",
+        f"{subject} did not resolve to a commit",
+    )
+    return oid
+
+
+def require_exact_commit_oid(root: Path, oid: str | None, subject: str) -> str:
+    """Require an immutable commit OID rather than accepting a mutable ref."""
+
+    require(
+        isinstance(oid, str) and SHA_RE.fullmatch(oid) is not None,
+        f"{subject} is not an exact commit OID",
+    )
+    require(
+        git_output(root, ["cat-file", "-t", oid]) == "commit",
+        f"{subject} is not a commit",
+    )
+    return oid
+
+
+def git_is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
+    """Check ancestry while distinguishing false from an unavailable query."""
+
+    try:
+        result = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except OSError as error:
+        raise PolicyError(f"could not execute git: {error}") from error
+    if result.returncode == 0:
+        return True
+    if result.returncode == 1:
+        return False
+    raise PolicyError(result.stderr.strip() or "git ancestry check failed")
+
+
+def verified_git_object_bytes(
+    root: Path,
+    object_id: str,
+    object_type: str,
+) -> bytes:
+    """Read exact object bytes and bind them back to their SHA-1 object ID."""
+
+    require(SHA_RE.fullmatch(object_id) is not None, "Git object ID is invalid")
+    require(
+        git_output(root, ["rev-parse", "--show-object-format"]) == "sha1",
+        "repository object format is not SHA-1",
+    )
+    require(
+        git_output(root, ["cat-file", "-t", object_id]) == object_type,
+        f"Git object {object_id} is not a {object_type}",
+    )
+    raw = git_bytes(root, ["cat-file", object_type, object_id])
+    size = git_output(root, ["cat-file", "-s", object_id])
+    require(size.isdigit() and int(size) == len(raw), "Git object size is inconsistent")
+    framed = f"{object_type} {len(raw)}\0".encode() + raw
+    recomputed = hashlib.sha1(framed, usedforsecurity=False).hexdigest()
+    require(recomputed == object_id, "Git object bytes do not match their object ID")
+    return raw
+
+
+def freeze_tag_git_evidence(root: Path, tag: str, main_ref: str) -> TagEvidence:
+    """Resolve Git-only freeze-tag facts without claiming signature verification.
+
+    The final-tag signature, pinned public key, object schema, and historical
+    GitHub check are separate evidence boundaries.  This resolver deliberately
+    leaves all of those fields unset.
+    """
+
+    require(FREEZE_TAG_RE.fullmatch(tag) is not None, f"freeze tag {tag} is invalid")
+    output = git_output(
+        root,
+        [
+            "for-each-ref",
+            "--format=%(objectname)%09%(objecttype)%09END",
+            f"refs/tags/{tag}",
+        ],
+    )
+    lines = output.splitlines()
+    require(len(lines) == 1, f"freeze tag {tag} does not exist uniquely")
+    fields = lines[0].split("\t")
+    require(len(fields) == 3 and fields[-1] == "END", f"could not inspect {tag}")
+    object_id, object_type, _sentinel = fields
+    require(SHA_RE.fullmatch(object_id) is not None, f"freeze tag {tag} has an invalid OID")
+    require(object_type in {"tag", "commit"}, f"freeze tag {tag} has an invalid object kind")
+    if object_type == "tag":
+        verified_git_object_bytes(root, object_id, "tag")
+    else:
+        require_exact_commit_oid(root, object_id, f"freeze tag {tag} object")
+
+    commit = resolve_commit_oid(root, f"refs/tags/{tag}", f"freeze tag {tag}")
+    main_oid = resolve_commit_oid(root, main_ref, "main ref")
+    require(
+        git_is_ancestor(root, commit, main_oid),
+        f"freeze tag {tag} commit is not reachable from main",
+    )
+    namespace = tuple(
+        sorted(
+            (
+                name
+                for name in git_output(
+                    root,
+                    ["for-each-ref", "--format=%(refname:strip=2)", "refs/tags"],
+                ).splitlines()
+                if FREEZE_TAG_RE.fullmatch(name) is not None
+            ),
+            key=lambda name: int(name.rsplit(".", 1)[1]),
+        )
+    )
+    return TagEvidence(
+        object_id=object_id,
+        object_type=object_type,
+        commit=commit,
+        candidate_namespace_complete=True,
+        candidate_matching_tag_names=namespace,
+        historical_current_namespace_complete=True,
+        historical_current_matching_tag_names=namespace,
+    )
+
+
+def bind_merged_pull_request_git_evidence(
+    root: Path,
+    evidence: PullRequestEvidence,
+    *,
+    anchor_oid: str,
+    main_ref: str,
+) -> PullRequestEvidence:
+    """Bind GitHub PR identity to exact local integration-tree facts."""
+
+    require(evidence.merged is True, "Git integration evidence requires a merged PR")
+    head_oid = require_exact_commit_oid(root, evidence.head_oid, "PR head")
+    integration_oid = require_exact_commit_oid(
+        root,
+        evidence.merge_commit_oid,
+        "PR integration",
+    )
+    anchor = require_exact_commit_oid(root, anchor_oid, "PR ancestry anchor")
+    main_oid = resolve_commit_oid(root, main_ref, "main ref")
+    integration_tree = git_output(root, ["rev-parse", f"{integration_oid}^{{tree}}"])
+    head_tree = git_output(root, ["rev-parse", f"{head_oid}^{{tree}}"])
+    return replace(
+        evidence,
+        integration_reachable_from_main=git_is_ancestor(
+            root,
+            integration_oid,
+            main_oid,
+        ),
+        integration_tree_matches_head=integration_tree == head_tree,
+        integration_strict_descendant_of_anchor=(
+            integration_oid != anchor
+            and git_is_ancestor(root, anchor, integration_oid)
+        ),
+    )
+
+
+def file_bytes_at_ref(root: Path, ref: str, path: str) -> bytes | None:
+    """Read one regular non-executable blob at a commit, preserving exact bytes."""
+
+    commit = resolve_commit_oid(root, ref, f"ref {ref}")
+    output = git_output(
+        root,
+        [
+            "ls-tree",
+            "--format=%(objectmode)%x09%(objecttype)%x09%(objectname)%x09%(path)%x09END",
+            commit,
+            "--",
+            path,
+        ],
+    )
+    if not output:
+        return None
+    lines = output.splitlines()
+    require(len(lines) == 1, f"could not locate {path} uniquely at {ref}")
+    fields = lines[0].split("\t")
+    require(
+        len(fields) == 5 and fields[-1] == "END" and fields[3] == path,
+        f"could not inspect {path} at {ref}",
+    )
+    mode, object_type, object_id, _path, _sentinel = fields
+    require(
+        mode == "100644" and object_type == "blob",
+        f"{path} is not a regular non-executable blob at {ref}",
+    )
+    return verified_git_object_bytes(root, object_id, "blob")
+
+
+def required_text_at_ref(root: Path, ref: str, path: str) -> str:
+    raw = file_bytes_at_ref(root, ref, path)
+    require(raw is not None, f"{path} is absent at {ref}")
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise PolicyError(f"{path} is not UTF-8 at {ref}") from error
+
+
+def soak_bytes_at_ref(root: Path, ref: str) -> bytes | None:
+    return file_bytes_at_ref(root, ref, SOAK_PATH)
+
+
+def soak_enforcement(raw: bytes, subject: str) -> str:
+    """Parse one exact ledger revision and return its enforcement state."""
+
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise PolicyError(f"{SOAK_PATH} is not UTF-8 at {subject}") from error
+    try:
+        soak, _entries = parse_soak_text(text)
+    except PolicyError as error:
+        raise PolicyError(f"{SOAK_PATH} is invalid at {subject}: {error}") from error
+    enforcement = soak["soak"]["enforcement"]
+    assert enforcement in {"pending", "armed"}
+    return enforcement
+
+
+def check_soak_transition(
+    previous: bytes | None,
+    current: bytes | None,
+    *,
+    previous_subject: str,
+    current_subject: str,
+) -> None:
+    """Validate one ledger edge using the predecessor's enforcement state."""
+
+    if previous is None:
+        if current is not None:
+            soak_enforcement(current, current_subject)
+        return
+
+    previous_enforcement = soak_enforcement(previous, previous_subject)
+    require(current is not None, f"{SOAK_PATH} was removed at {current_subject}")
+    current_enforcement = soak_enforcement(current, current_subject)
+    if previous_enforcement == "pending":
+        return
+    require(
+        current_enforcement == "armed",
+        f"{SOAK_PATH} returned to pending after being armed at {previous_subject}",
+    )
+    require(
+        current.startswith(previous),
+        "SOAK-1.0.md changed existing armed bytes instead of appending",
+    )
+
+
+def first_parent_range_base(root: Path, base_oid: str, head_oid: str) -> str:
+    """Find the PR fork boundary on the head's first-parent lineage."""
+
+    base = require_exact_commit_oid(root, base_oid, "pull-request base")
+    head = require_exact_commit_oid(root, head_oid, "pull-request head")
+    exclusive = git_output(
+        root,
+        ["rev-list", "--first-parent", "--reverse", head, f"^{base}"],
+    ).splitlines()
+    if not exclusive:
+        require(
+            git_is_ancestor(root, head, base),
+            "pull-request head has no shared first-parent boundary with its base",
+        )
+        return head
+
+    first = exclusive[0]
+    parents = git_output(root, ["show", "-s", "--format=%P", first]).split()
+    require(
+        bool(parents) and git_is_ancestor(root, parents[0], base),
+        "pull-request head has no shared first-parent boundary with its base",
+    )
+    return parents[0]
+
+
+def check_append_only_history(root: Path, base_ref: str, head_ref: str) -> None:
+    """Check every first-parent ledger transition in one exact Git range."""
+
+    head = resolve_commit_oid(root, head_ref, "history head")
+    lineage = git_output(
+        root,
+        ["rev-list", "--first-parent", "--reverse", head],
+    ).splitlines()
+    require(bool(lineage) and lineage[-1] == head, f"could not inspect history to {head}")
+
+    if base_ref == ZERO_SHA:
+        commits = lineage
+        previous_commit: str | None = None
+        previous_bytes: bytes | None = None
+    else:
+        base = resolve_commit_oid(root, base_ref, "history base")
+        require(base in lineage, f"{base} is not on the first-parent path to {head}")
+        base_index = lineage.index(base)
+        commits = lineage[base_index + 1 :]
+        previous_commit = base
+        previous_bytes = soak_bytes_at_ref(root, base)
+
+    for commit in commits:
+        parents = git_output(root, ["show", "-s", "--format=%P", commit]).split()
+        if previous_commit is None:
+            require(not parents, f"push history does not begin at root commit {commit}")
+        else:
+            require(
+                bool(parents) and parents[0] == previous_commit,
+                f"{previous_commit} is not the first parent of {commit}",
+            )
+        current_bytes = soak_bytes_at_ref(root, commit)
+        check_soak_transition(
+            previous_bytes,
+            current_bytes,
+            previous_subject=previous_commit or "history start",
+            current_subject=commit,
+        )
+        previous_commit = commit
+        previous_bytes = current_bytes
+
+    require(previous_commit == head, f"{base_ref} is not on the first-parent path to {head}")
+
+
+def validate_repository(
+    root: Path = ROOT,
+    *,
+    target_ref: str = "HEAD",
+    base_ref: str | None = None,
+    pull_request_base_ref: str | None = None,
+    history_base_ref: str | None = None,
+    history_head_ref: str | None = None,
+    main_ref: str = "origin/main",
+) -> tuple[int, str]:
+    """Validate the exact target and fail closed if armed evidence lacks resolvers."""
+
+    range_modes = sum(
+        (
+            base_ref is not None,
+            pull_request_base_ref is not None,
+            history_base_ref is not None or history_head_ref is not None,
+        )
+    )
+    require(range_modes <= 1, "repository range modes are mutually exclusive")
+    require(
+        history_head_ref is None or history_base_ref is not None,
+        "history head requires a history base",
+    )
+    target_oid = resolve_commit_oid(root, target_ref, "validation target")
+    resolve_commit_oid(root, main_ref, "main ref")
+    design_text = required_text_at_ref(root, target_oid, DESIGN_PATH)
+    soak_raw = soak_bytes_at_ref(root, target_oid)
+    require(soak_raw is not None, f"{SOAK_PATH} is absent at {target_ref}")
+    try:
+        soak_text = soak_raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise PolicyError(f"{SOAK_PATH} is not UTF-8 at {target_ref}") from error
+
+    policy_mapping = validate_policy_text(design_text)
+    soak_mapping, entries = parse_soak_text(soak_text)
+    if base_ref is not None:
+        base_oid = resolve_commit_oid(root, base_ref, "comparison base")
+        check_soak_transition(
+            soak_bytes_at_ref(root, base_oid),
+            soak_raw,
+            previous_subject=base_oid,
+            current_subject=target_oid,
+        )
+    if pull_request_base_ref is not None:
+        pr_base = require_exact_commit_oid(
+            root,
+            pull_request_base_ref,
+            "pull-request base",
+        )
+        check_soak_transition(
+            soak_bytes_at_ref(root, pr_base),
+            soak_raw,
+            previous_subject=pr_base,
+            current_subject=target_oid,
+        )
+        range_base = first_parent_range_base(root, pr_base, target_oid)
+        check_append_only_history(root, range_base, target_oid)
+    if history_base_ref is not None:
+        history_head = history_head_ref or target_oid
+        require(
+            resolve_commit_oid(root, history_head, "history head") == target_oid,
+            "history head differs from the exact validation target",
+        )
+        check_append_only_history(root, history_base_ref, history_head)
+
+    state = validate_entries(entries, policy=policy_mapping, soak=soak_mapping)
+    return len(entries), state
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Validate exact tenkz policy and append-only Git evidence",
+    )
+    parser.add_argument("--root", type=Path, default=ROOT, help=argparse.SUPPRESS)
+    parser.add_argument(
+        "--target-ref",
+        default="HEAD",
+        help="exact commit whose policy and ledger are validated",
+    )
+    parser.add_argument(
+        "--base-ref",
+        help="Git ref whose ledger transition to the target is validated",
+    )
+    parser.add_argument(
+        "--pull-request-base-ref",
+        help="exact PR base OID used to derive and validate its first-parent range",
+    )
+    parser.add_argument(
+        "--history-base-ref",
+        help="pre-change Git ref whose first-parent range must be append-only",
+    )
+    parser.add_argument(
+        "--history-head-ref",
+        help="post-change Git ref; defaults to --target-ref",
+    )
+    parser.add_argument(
+        "--main-ref",
+        default="origin/main",
+        help="current main ref used by repository evidence",
+    )
+    args = parser.parse_args()
+    try:
+        count, state = validate_repository(
+            args.root.resolve(),
+            target_ref=args.target_ref,
+            base_ref=args.base_ref,
+            pull_request_base_ref=args.pull_request_base_ref,
+            history_base_ref=args.history_base_ref,
+            history_head_ref=args.history_head_ref,
+            main_ref=args.main_ref,
+        )
+    except (OSError, PolicyError, UnicodeError, ValueError) as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        return 1
+    print(f"PASS: tenkz compatibility policy valid; evidence {state} ({count} entries)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
