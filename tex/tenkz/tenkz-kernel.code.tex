@@ -2572,8 +2572,10 @@
 \tl_new:N \l__tenkz_kernel_cell_void_tl
 \tl_new:N \l__tenkz_kernel_grid_host_row_tl
 \tl_new:N \l__tenkz_kernel_grid_host_col_tl
+% Grid bonds contribute refinable defaults.  Policy endpoints call the
+% required wrapper below when their topology fixes a type.
 \cs_new_protected:Npn
-  \__tenkz_kernel_generated_port_end:nnnnnn #1#2#3#4#5#6
+  \__tenkz_kernel_default_port_end:nnnnnn #1#2#3#4#5#6
   {
     \prop_get:NeN \l__tenkz_kernel_cell_prop {#3-#4}
       \l__tenkz_kernel_cell_atom_tl
@@ -2636,6 +2638,15 @@
           \l__tenkz_kernel_port_slot_tl
         \__tenkz_kernel_node_put:Nnn
           \l__tenkz_kernel_port_node_tl {port-type} {#6}
+      }
+  }
+\cs_new_protected:Npn
+  \__tenkz_kernel_required_port_end:nnnnnn #1#2#3#4#5#6
+  {
+    \__tenkz_kernel_default_port_end:nnnnnn
+      {#1}{#2}{#3}{#4}{#5}{#6}
+    \quark_if_no_value:NF \l__tenkz_kernel_cell_atom_tl
+      {
         \__tenkz_kernel_node_put:Nnn
           \l__tenkz_kernel_port_node_tl {port-required-type} {#6}
       }
@@ -2673,12 +2684,12 @@
     \__tenkz_kernel_wire_end:ne {#1} {(#2,#3)}
     \int_compare:nNnTF {#2} = {#4}
       {
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_default_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {#1} {#2} {#3}
           { \int_compare:nNnTF {#3} < {#5} {0} {180} } {virtual}
       }
       {
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_default_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {#1} {#2} {#3}
           { \int_compare:nNnTF {#2} < {#4} {270} {90} } {virtual}
       }
@@ -2894,9 +2905,9 @@
         \__tenkz_kernel_closure_wire:nnnn
           {trace}{physical}{mode = physical , col = #2}
           {trace-physical-#2}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {from} {1} {#2} {90} {physical}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {to}
           { \__tenkz_kernel_rows: } {#2} {270} {physical}
       }
@@ -2904,9 +2915,9 @@
         \__tenkz_kernel_closure_wire:nnnn
           {trace}{interface}{interface = #1 , col = #2}
           {trace-#1-#2}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {from} {#1} {#2} {270} {virtual}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {to}
           { \int_eval:n {#1 + 1} } {#2} {90} {virtual}
       }
@@ -2920,7 +2931,7 @@
             kind = index , origin = open , mode = physical , col = #2 ,
             name = open-physical-#2 , to-open = n
           }
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {from} {1} {#2} {90} {physical}
         \__tenkz_kernel_register_last_wire:n {open-physical-#2}
       }
@@ -2931,7 +2942,7 @@
             face = upper , name = open-#1-#2-upper
           }
         \__tenkz_kernel_wire_end:ne {from} {(#1,#2)}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {from} {#1} {#2} {270} {virtual}
         \__tenkz_model_complete:nnn
           { \l__tenkz_model_last_tl } {to-open} {s}
@@ -2945,7 +2956,7 @@
           { \l__tenkz_model_last_tl } {from-open} {n}
         \__tenkz_kernel_wire_end:ne
           {to} {(\int_eval:n {#1 + 1},#2)}
-        \__tenkz_kernel_generated_port_end:nnnnnn
+        \__tenkz_kernel_required_port_end:nnnnnn
           { \l__tenkz_model_last_tl } {to}
           { \int_eval:n {#1 + 1} } {#2} {90} {virtual}
         \__tenkz_kernel_register_last_wire:n {open-#1-#2-lower}
@@ -2960,9 +2971,9 @@
             \__tenkz_kernel_closure_wire:nnnn
               {trace}{physical}{mode = physical , col = ##1}
               {trace-physical-##1}
-            \__tenkz_kernel_generated_port_end:nnnnnn
+            \__tenkz_kernel_required_port_end:nnnnnn
               { \l__tenkz_model_last_tl } {from} {1} {##1} {90} {physical}
-            \__tenkz_kernel_generated_port_end:nnnnnn
+            \__tenkz_kernel_required_port_end:nnnnnn
               { \l__tenkz_model_last_tl } {to}
               { \__tenkz_kernel_rows: } {##1} {270} {physical}
           }
@@ -3225,7 +3236,7 @@
               }
             \tl_if_blank:VF \l__tenkz_kernel_port_policy_field_tl
               {
-                \__tenkz_kernel_generated_port_end:nnnnnn
+                \__tenkz_kernel_required_port_end:nnnnnn
                   {#4}
                   { \l__tenkz_kernel_port_policy_field_tl }
                   {#1}{#2}{#3}{virtual}

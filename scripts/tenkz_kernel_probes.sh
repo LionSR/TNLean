@@ -1410,6 +1410,7 @@ for contract_negative in \
   n_interface_open_port_type \
   n_physical_trace_required_type \
   n_grid_port_type_implicit \
+  n_grid_port_type_explicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
   n_policy_label_token_identity \
@@ -1477,6 +1478,8 @@ do
   [ "$contract_negative" = n_physical_trace_required_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_grid_port_type_implicit ] &&
+    expected='[TKZ-PORT-TYPE]'
+  [ "$contract_negative" = n_grid_port_type_explicit ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_port_type_multiple_consumers ] &&
     expected='[TKZ-PORT-CONSUMED]'
