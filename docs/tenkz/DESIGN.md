@@ -71,6 +71,9 @@ release_enforcement_workflows = [".github/workflows/tenkz-release-policy.yml"]
 release_workflow_dependencies = "transitive-content-addressed-no-runtime-downloads"
 release_enforcement_network = "disabled-before-repository-code"
 release_reset_replay_schema = "tests/tenkz/release-support/reset-replay-v1.schema.json"
+release_tag_signature = "ssh-ed25519"
+release_tag_public_key = "tests/tenkz/release-support/final-tag-signing-key.pub"
+release_tag_object_schema = "tests/tenkz/release-support/final-tag-object-v1.schema.json"
 release_test_dependency_contract = "pinned-harness-support-declared-subject-roles"
 release_test_protocol = "hermetic-repository-view-no-shell-or-network"
 
@@ -276,10 +279,22 @@ content does not.
 
 The sole networked release step is the dedicated workflow's terminal publisher
 job. It has no checkout and runs no repository code. GitHub starts it only after
-the exact sign-off integration's network-disabled post-merge validator succeeds;
-it uses the GitHub control plane to create the absent annotated
-`tenkz-v1.0.0` tag at that integration. The pinned workflow and job dependency,
-not a tagger timestamp or a manual push, establish this order.
+the exact sign-off integration's network-disabled post-merge validator succeeds.
+
+The publisher makes one authenticated tag object that every retry can
+reconstruct. The pinned support tree supplies its SSH-Ed25519 public key and
+byte-level object schema; only the publisher receives the private key. The
+schema fixes the tagger identity and uses the sign-off merge time rather than a
+runner clock. Its signed message binds the final name, sign-off integration,
+policy hash, and ledger prefix.
+
+After validation, the publisher constructs that exact object `E`. If the final
+ref is absent, it creates `E` and the ref without force. If an uncertain earlier
+write already left the ref at `E`, a retry verifies the raw signature, payload,
+and peel and adopts it. Any other present object is an incident. A successful
+publisher job records `E`'s OID after readback. Without the private key, another
+actor cannot forge an acceptable object; replaying the already-authorized `E`
+cannot change its name or target.
 
 The evidence-campaign freeze tag matches `tenkz-v0.9.PATCH`. `PATCH` has the
 canonical grammar `0|[1-9][0-9]*`. When a new freeze is proposed, its patch must
@@ -373,7 +388,8 @@ The dependency chain is ordered:
    independently exact-head-approved release-preparation pull request descending
    from both work integrations and all resolution records;
 9. merge the independently approved sign-off record; its pinned post-merge
-   workflow validates it and then creates `tenkz-v1.0.0` on its integration.
+   workflow validates it, records the exact tag object, and then creates
+   `tenkz-v1.0.0` on its integration.
 
 Closing #5086 in step 2 means that its plane-basis capability has landed for
 0.8. The `expiry 1.0` values on related SHRINK entries bound the later removal
@@ -453,9 +469,10 @@ facts hold. It also requires one qualifying work entry in each class, no
 unresolved `fix-compatible` friction in the active attempt, and no condition
 requiring reset. A
 validated sign-off first enters `signed-off-awaiting-tag`; mutable evidence
-remains live until a full replay succeeds and the exact annotated final tag is
-currently observed on its integration under the required no-update, no-delete,
-no-bypass protection. That current-state observation enters terminal
+remains live until a full replay succeeds, a successful publisher job has
+created or authenticated the exact signed final-tag object, and that object is
+observed on its integration under the required no-update, no-delete, no-bypass
+protection. That combined observation enters terminal
 `released` state, and no entry follows it. Every later validation still replays
 all current mutable facts. Before the final tag exists, drift follows the
 ordered reset process; after the tag exists, the same drift is a hard release

@@ -294,11 +294,11 @@ compatible friction in the active attempt is resolved and both work merges have
 landed; its exact diff changes only the tag-derived 1.0 manifest and four
 canonical release artifacts.  Exact-head sign-off review follows immediately
 on that integration; if `main` advances, repeat preparation on the new tip.  A
-validated sign-off remains live until a full replay succeeds and
-the pinned post-merge workflow's dependent publisher job creates and reads back
-the exact annotated final tag under current required protection.  Do not push
-that tag by hand: a pre-existing or externally created ref is an incident, not
-a release.
+validated sign-off remains live until a full replay succeeds.  The dependent
+publisher then constructs the one signed tag object fixed by the release policy
+and creates the final ref.  A stopped runner can retry by authenticating that
+same object; it never invents a second one.  Do not push the tag by hand: an
+object other than the exact authenticated one is an incident, not a release.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
 never reopens the ledger.
