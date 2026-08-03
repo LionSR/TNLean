@@ -238,6 +238,7 @@ import TNLean.MPS.MPDO.PostBlockedRepresentativeSpan
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.PureRFPSAL
 import TNLean.MPS.MPDO.PureRecovery
+import TNLean.MPS.MPDO.Purity
 import TNLean.MPS.MPDO.RFP
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.RFPSubspinMaps
