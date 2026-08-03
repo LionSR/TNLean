@@ -3,11 +3,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import csv
 import dataclasses
+import io
 import os
 import re
 import subprocess
+import sys
 import tempfile
 from collections import Counter
 from pathlib import Path
@@ -207,6 +210,36 @@ def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:
             ) from exc
     else:
         raise AssertionError(f"dimension mutation escaped the {phrase!r} ratchet")
+
+
+def test_rmp_dimension_cli_failure() -> None:
+    """Collection-time ownership failures use the concise CLI diagnostic."""
+    original_collect = tenkz_rmp.collect_dimension_report
+    original_argv = sys.argv
+
+    def raise_cycle(*_args: object, **_kwargs: object) -> DimensionReport:
+        raise DimensionOwnershipError(
+            "tenkz execution masks did not converge"
+        )
+
+    tenkz_rmp.collect_dimension_report = raise_cycle
+    sys.argv = [str(ROOT / "scripts" / "tenkz_rmp.py"), "check", "--all"]
+    stderr = io.StringIO()
+    try:
+        with contextlib.redirect_stderr(stderr):
+            status = tenkz_rmp.main()
+    finally:
+        tenkz_rmp.collect_dimension_report = original_collect
+        sys.argv = original_argv
+    expected = (
+        "FAIL: RMP dimension ownership failed:\n"
+        "tenkz execution masks did not converge\n"
+    )
+    if status != 1 or stderr.getvalue() != expected:
+        raise AssertionError(
+            "a collection-time ownership cycle escaped the CLI handler: "
+            f"status={status}, stderr={stderr.getvalue()!r}"
+        )
 
 
 def test_rmp_dimension_ownership() -> None:
@@ -2003,6 +2036,7 @@ def test_rmp_pairing_identity() -> None:
 def main() -> int:
     test_kernel_capability_owner()
     test_ink_environment_owner()
+    test_rmp_dimension_cli_failure()
     test_rmp_dimension_ownership()
     test_rmp_author_source_identity()
     test_rmp_pairing_identity()
