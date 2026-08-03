@@ -3156,17 +3156,23 @@ def validate_entries(
                 finally:
                     resolver = previous
 
+            replay_result: object | None = None
+            replay_error: PolicyError | None = None
             try:
                 replay_result = run(replay_resolver)
             except PolicyError as error:
-                if record_pending:
-                    raise
-                classify_replay_failure(str(error))
-                return None
+                replay_error = error
+            current_error: PolicyError | None = None
             try:
                 run(current_resolver)
             except PolicyError as error:
-                classify_snapshot_failure(str(error))
+                current_error = error
+            if replay_error is not None:
+                if record_pending:
+                    raise replay_error
+                classify_replay_failure(str(replay_error))
+            if current_error is not None:
+                classify_snapshot_failure(str(current_error))
             return replay_result
 
         if kind == "freeze":

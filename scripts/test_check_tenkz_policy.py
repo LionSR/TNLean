@@ -5856,6 +5856,36 @@ def main() -> int:
         current_resolver=current_reclosed_prerequisite,
     ) == "reset-required:S1-0001"
 
+    # Replay drift cannot hide an unavailable current fact.  Both channels
+    # must run before the merged record is classified for reset.
+    immutable_late_prerequisite = context()
+    immutable_freeze_record = immutable_late_prerequisite.prs[FREEZE_RECORD]
+    assert immutable_freeze_record.merged_at is not None
+    immutable_issue = immutable_late_prerequisite.issues["#5086"]
+    immutable_late_prerequisite.issues["#5086"] = replace(
+        immutable_issue,
+        closed_at=immutable_freeze_record.merged_at + timedelta(seconds=1),
+    )
+    unavailable_current_prerequisite = context()
+    current_issue_calls: list[str] = []
+
+    def unavailable_current_issue(ref: str) -> policy.IssueEvidence:
+        current_issue_calls.append(ref)
+        raise policy_evidence.EvidenceUnavailable(
+            "current prerequisite evidence is unavailable"
+        )
+
+    unavailable_current_prerequisite.resolve_replay_issue = unavailable_current_issue
+    expect_failure(
+        lambda: validate(
+            [freeze()],
+            immutable_late_prerequisite,
+            current_resolver=unavailable_current_prerequisite,
+        ),
+        "current prerequisite evidence is unavailable",
+    )
+    assert current_issue_calls == ["#5086"]
+
     replayed_freeze_drift = context()
     add_record(
         replayed_freeze_drift,
