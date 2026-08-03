@@ -1344,3 +1344,23 @@ missing projected physical axis remains explicit in #5375.
 Census-correction: #5345
 
 No language-ledger row or flag verdict changes.
+
+### 2026-08-03 — physical labels have one typed-port owner
+
+The canonical kernel retires the atom keys `up=` and `down=`. Physical policy
+now registers the outward centre identity and refines any consumed endpoint to
+physical; registration itself consumes no port. An explicit matching `ports=`
+descriptor therefore follows the ordinary contract: it labels an authored
+wire when that identity is consumed, or creates one standard `port-open` leg
+and suppresses the duplicate generated policy leg when it is not.
+
+The five canonical fixtures containing the eight retired atom-key uses move
+their labels to typed ports. Compatibility examples are intentionally outside
+this kernel-only migration. M1 kernel rows fall from 140 to 138 and M2 parser
+leaves fall from 228 to 226. The parser identity becomes
+`cf87f98fe9af37edd780303541fa1b5cdc35a6a2332c8975678e24bf9fb8f22c`;
+M3--M6 are unchanged.
+
+Extension-gate: #5191
+
+Census-correction: #5191

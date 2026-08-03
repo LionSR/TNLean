@@ -287,8 +287,8 @@ do
   }
 done
 [ "$(grep -c '|origin=port-open|' \
-      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 8 ] || {
-  echo "FAIL: unmatched typed ports did not materialize exactly eight open legs" >&2
+      "$WORK/r_unmatched_port_legs.tnlog" || true)" -eq 10 ] || {
+  echo "FAIL: unmatched typed ports did not materialize exactly ten open legs" >&2
   exit 1
 }
 [ "$(grep -c '|origin=port-open|' \
@@ -1413,7 +1413,7 @@ for contract_negative in \
   n_grid_port_type_explicit \
   n_port_type_multiple_consumers \
   n_port_policy_type \
-  n_policy_label_token_identity \
+  n_atom_up_key \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
   n_port_slot \
@@ -1421,7 +1421,7 @@ for contract_negative in \
   n_port_open_name \
   n_padded_duplicate_port \
   n_rounding_duplicate_port \
-  n_bonded_policy_label_conflict \
+  n_atom_down_key \
   n_malformed_via \
   n_malformed_cross \
   n_malformed_mark_target \
@@ -1485,8 +1485,8 @@ do
     expected='[TKZ-PORT-CONSUMED]'
   [ "$contract_negative" = n_port_policy_type ] &&
     expected='[TKZ-PORT-POLICY-TYPE]'
-  [ "$contract_negative" = n_policy_label_token_identity ] &&
-    expected='[TKZ-PORT-LABEL-CONFLICT]'
+  [ "$contract_negative" = n_atom_up_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_sealed_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_sealed_malformed_port ] &&
@@ -1501,8 +1501,8 @@ do
     expected='[TKZ-PORT-DUPLICATE]'
   [ "$contract_negative" = n_rounding_duplicate_port ] &&
     expected='[TKZ-PORT-DUPLICATE]'
-  [ "$contract_negative" = n_bonded_policy_label_conflict ] &&
-    expected='[TKZ-PORT-LABEL-CONFLICT]'
+  [ "$contract_negative" = n_atom_down_key ] &&
+    expected='[TKZ-LANG-UNKNOWN-KEY]'
   [ "$contract_negative" = n_signature_carrier_port ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   grep -Fq "$expected" "$WORK/$contract_negative.transcript" || {
