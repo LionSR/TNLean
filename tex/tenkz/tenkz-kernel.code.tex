@@ -1504,12 +1504,13 @@
       }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_signature_physical_bearing:nn #1#2
+\cs_new_protected:Npn \__tenkz_kernel_signature_physical_axis:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1} {#2}
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
       {
-        \__tenkz_kernel_r_page_face:nnN {#1} {#2}
-          \l__tenkz_kernel_r_leg_turn_tl
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_r_leg_turn_tl \l_tmpa_tl
         \exp_args:NV \__tenkz_kernel_signature_bearing:nN
           \l__tenkz_kernel_r_leg_turn_tl
           \l__tenkz_kernel_port_face_tl
@@ -1523,13 +1524,13 @@
     \str_case:nn {#2}
       {
         {up}
-          { \__tenkz_kernel_signature_physical_bearing:nn {#1} {90} }
+          { \__tenkz_kernel_signature_physical_axis:nn {#1} {n} }
         {down}
-          { \__tenkz_kernel_signature_physical_bearing:nn {#1} {270} }
+          { \__tenkz_kernel_signature_physical_axis:nn {#1} {s} }
         {updown}
           {
-            \__tenkz_kernel_signature_physical_bearing:nn {#1} {90}
-            \__tenkz_kernel_signature_physical_bearing:nn {#1} {270}
+            \__tenkz_kernel_signature_physical_axis:nn {#1} {n}
+            \__tenkz_kernel_signature_physical_axis:nn {#1} {s}
           }
       }
   }
@@ -3443,20 +3444,24 @@
   {
     \__tenkz_kernel_policy_leg_renders:nTF {#1}
       {
-        \__tenkz_kernel_policy_leg_port_slot:nN {#1}
-          \l__tenkz_kernel_port_slot_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
+        \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+          { \prg_return_true: }
           {
-            % An even-width centre lies between numbered slots, so no
-            % authored port endpoint can consume this policy leg.
-            \prg_return_true:
-          }
-          {
-            \prop_if_in:NeTF
-              \l__tenkz_kernel_port_external_consumer_prop
-              {#1/#2/\l__tenkz_kernel_port_slot_tl}
-              { \prg_return_false: }
-              { \prg_return_true: }
+            \__tenkz_kernel_policy_leg_port_slot:nN {#1}
+              \l__tenkz_kernel_port_slot_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
+              {
+                % An even-width centre lies between numbered slots, so no
+                % authored port endpoint can consume this policy leg.
+                \prg_return_true:
+              }
+              {
+                \prop_if_in:NeTF
+                  \l__tenkz_kernel_port_external_consumer_prop
+                  {#1/#2/\l__tenkz_kernel_port_slot_tl}
+                  { \prg_return_false: }
+                  { \prg_return_true: }
+              }
           }
       }
       { \prg_return_false: }
@@ -3679,37 +3684,40 @@
               }
           }
       }
-    % `physical=` owns the transverse centre identity of an odd-width host.
-    % Registration refines every existing endpoint but consumes nothing; an
-    % even-width centre lies between numbered slots and owns no identity.
-    \__tenkz_model_map_ids:nn {atom}
+    % A flat or circular policy owns the centre slot of its local north/south
+    % face.  A plane policy instead owns the frame's independent transverse
+    % axis; no authored in-plane port can consume or refine that third axis.
+    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {plane}
       {
-        \__tenkz_kernel_policy_leg_port_slot:nN {##1}
-          \l__tenkz_kernel_port_slot_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
+        \__tenkz_model_map_ids:nn {atom}
           {
-            \__tenkz_model_get:nnN {##1} {physical}
-              \l__tenkz_kernel_scratch_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+            \__tenkz_kernel_policy_leg_port_slot:nN {##1}
+              \l__tenkz_kernel_port_slot_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
               {
-                \str_case:Vn \l__tenkz_kernel_scratch_tl
+                \__tenkz_model_get:nnN {##1} {physical}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
                   {
-                    {up}
+                    \str_case:Vn \l__tenkz_kernel_scratch_tl
                       {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                      }
-                    {down}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {270} {\l__tenkz_kernel_port_slot_tl}
-                      }
-                    {updown}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                        {up}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
+                          }
+                        {down}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                          }
+                        {updown}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                          }
                       }
                   }
               }
@@ -4322,7 +4330,11 @@
             a = -\__tenkz_metric_ratio:n {planeslant} , b = 1 ,
             c = -\__tenkz_metric_ratio:n {planerise} , d = 0 ,
             dx = \fp_eval:n { \__tenkz_metric_ratio:n {planeslant} - 1 } ,
-            dy = \__tenkz_metric_ratio:n {planerise}
+            dy = \__tenkz_metric_ratio:n {planerise} ,
+            transverse-x =
+              \fp_use:N \c__tenkz_geom_plane_transverse_x_fp ,
+            transverse-y =
+              \fp_use:N \c__tenkz_geom_plane_transverse_y_fp
           }
         \fp_compare:nNnF
           { \__tenkz_metric_ratio:n {planerise} }
@@ -4913,6 +4925,59 @@
         \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
         \tl_set:Ne #3
           { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
+      }
+  }
+
+% The physical policy follows the carrier's physical axis, not an authored
+% in-plane face.  A projected plane owns a third, page-space transverse
+% vector.  Its glyph exit is the ray intersection obtained by pulling that
+% vector back through the atom's complete carrier basis.  Flat and circular
+% carriers retain their ordinary local north/south faces.
+\tl_new:N \l__tenkz_kernel_r_physical_x_tl
+\tl_new:N \l__tenkz_kernel_r_physical_y_tl
+\tl_new:N \l__tenkz_kernel_r_physical_u_tl
+\tl_new:N \l__tenkz_kernel_r_physical_v_tl
+\tl_new:N \l__tenkz_kernel_r_physical_anchor_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_axis:nnNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
+      {
+        \__tenkz_geom_frame_transverse:nnNN {kpic} {#2}
+          \l__tenkz_kernel_r_physical_x_tl
+          \l__tenkz_kernel_r_physical_y_tl
+        \tl_set:Ne #3
+          {
+            \fp_eval:n
+              {
+                atand(
+                  \l__tenkz_kernel_r_physical_y_tl ,
+                  \l__tenkz_kernel_r_physical_x_tl )
+              }
+          }
+        \__tenkz_geom_basis_unapply:nnnnnnNN
+          { \l__tenkz_kernel_r_basis_ex_tl }
+          { \l__tenkz_kernel_r_basis_ey_tl }
+          { \l__tenkz_kernel_r_basis_nx_tl }
+          { \l__tenkz_kernel_r_basis_ny_tl }
+          { \l__tenkz_kernel_r_physical_x_tl }
+          { \l__tenkz_kernel_r_physical_y_tl }
+          \l__tenkz_kernel_r_physical_u_tl
+          \l__tenkz_kernel_r_physical_v_tl
+        \tl_set:Ne #4
+          {
+            \fp_eval:n
+              {
+                atand(
+                  \l__tenkz_kernel_r_physical_v_tl ,
+                  \l__tenkz_kernel_r_physical_u_tl )
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_r_page_face:nnN {#1}
+          { \str_if_eq:nnTF {#2} {n} {90} {270} } #3
+        \tl_set:Ne #4 { \str_if_eq:nnTF {#2} {n} {90} {270} }
       }
   }
 
@@ -7291,14 +7356,12 @@
           }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_route_host_face_side:nnN #1#2#3
+\cs_new_protected:Npn \__tenkz_kernel_route_page_bearing_side:nN #1#2
   {
-    \__tenkz_kernel_r_page_face:nnN {#1} {#2}
-      \l__tenkz_kernel_port_face_tl
     \fp_set:Nn \l__tenkz_kernel_ro_x_fp
-      { cosd( \l__tenkz_kernel_port_face_tl ) }
+      { cosd( #1 ) }
     \fp_set:Nn \l__tenkz_kernel_ro_y_fp
-      { sind( \l__tenkz_kernel_port_face_tl ) }
+      { sind( #1 ) }
     \__tenkz_kernel_ro_basis_unapply:NN
       \l__tenkz_kernel_ro_x_fp \l__tenkz_kernel_ro_y_fp
     \tl_set:Ne \l__tenkz_kernel_port_face_tl
@@ -7313,15 +7376,28 @@
       }
     \exp_args:NV \__tenkz_kernel_r_face_side:n
       \l__tenkz_kernel_port_face_tl
-    \tl_set_eq:NN #3 \l__tenkz_kernel_r_face_side_tl
+    \tl_set_eq:NN #2 \l__tenkz_kernel_r_face_side_tl
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_route_host_face_side:nnN #1#2#3
+  {
+    \__tenkz_kernel_r_page_face:nnN {#1} {#2}
+      \l__tenkz_kernel_port_face_tl
+    \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+      \l__tenkz_kernel_port_face_tl #3
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_route_policy_face_add:nnn #1#2#3
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1} {#2}
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
       {
-        \__tenkz_kernel_route_host_face_side:nnN
-          {#1} {#2} \l__tenkz_kernel_port_face_tl
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
+        \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_port_face_tl
         \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
           { \__tenkz_kernel_route_face_add:nn {#1} {#3} }
       }
@@ -7340,16 +7416,16 @@
                 {up}
                   {
                     \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {90} {#1}
+                      {##1} {n} {#1}
                   }
                 {down}
                   {
                     \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {270} {#1}
+                      {##1} {s} {#1}
                   }
                 {updown}
                   {
-                    \clist_map_inline:nn {90,270}
+                    \clist_map_inline:nn {n,s}
                       {
                         \__tenkz_kernel_route_policy_face_add:nnn
                           {##1} {####1} {#1}
@@ -9756,9 +9832,9 @@
   }
 
 % Extend a physical ray through every declared enclosure containing its host.
-% Cardinal policy legs use the affine chart's dual basis exactly; arbitrary
-% typed faces use the shared orthogonal support fold, which remains valid for
-% rotated, sheared, and mixed-carrier contours.
+% In-plane cardinal policy legs use the affine chart's dual basis exactly.
+% The plane frame's independent transverse ray, and mixed-carrier contours,
+% use the page-direction support fold instead.
 \cs_new_protected:Npn \__tenkz_kernel_r_physical_enclosure:nn #1#2
   {
     \__tenkz_model_map_ids:nn {mark}
@@ -9787,35 +9863,42 @@
                       \l__tenkz_kernel_hull_ny_tl
                     \__tenkz_geom_frame_if_affine:nTF {kpic}
                       {
-                        \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
-                          {
-                            \__tenkz_kernel_hull_basis_dual:
-                            \str_case:nnF {#2}
-                              {
-                                {n}
-                                  {
-                                    \tl_set_eq:NN
-                                      \l__tenkz_kernel_leg_gx_tl
-                                      \l__tenkz_kernel_hull_vx_tl
-                                    \tl_set_eq:NN
-                                      \l__tenkz_kernel_leg_gy_tl
-                                      \l__tenkz_kernel_hull_vy_tl
-                                    \__tenkz_kernel_r_physical_enclosure_affine:
-                                  }
-                                {s}
-                                  {
-                                    \tl_set:Ne \l__tenkz_kernel_leg_gx_tl
-                                      { -\l__tenkz_kernel_hull_vx_tl }
-                                    \tl_set:Ne \l__tenkz_kernel_leg_gy_tl
-                                      { -\l__tenkz_kernel_hull_vy_tl }
-                                    \__tenkz_kernel_r_physical_enclosure_affine:
-                                  }
-                              }
-                              {
-                                \__tenkz_kernel_r_leg_enclosure_orthogonal:
-                              }
-                          }
+                        \str_if_eq:eeTF
+                          { \__tenkz_kernel_r_frame_word: } {plane}
                           { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+                          {
+                            \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+                              {
+                                \__tenkz_kernel_hull_basis_dual:
+                                \str_case:nnF {#2}
+                                  {
+                                    {n}
+                                      {
+                                        \tl_set_eq:NN
+                                          \l__tenkz_kernel_leg_gx_tl
+                                          \l__tenkz_kernel_hull_vx_tl
+                                        \tl_set_eq:NN
+                                          \l__tenkz_kernel_leg_gy_tl
+                                          \l__tenkz_kernel_hull_vy_tl
+                                        \__tenkz_kernel_r_physical_enclosure_affine:
+                                      }
+                                    {s}
+                                      {
+                                        \tl_set:Ne
+                                          \l__tenkz_kernel_leg_gx_tl
+                                          { -\l__tenkz_kernel_hull_vx_tl }
+                                        \tl_set:Ne
+                                          \l__tenkz_kernel_leg_gy_tl
+                                          { -\l__tenkz_kernel_hull_vy_tl }
+                                        \__tenkz_kernel_r_physical_enclosure_affine:
+                                      }
+                                  }
+                                  {
+                                    \__tenkz_kernel_r_leg_enclosure_orthogonal:
+                                  }
+                              }
+                              { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+                          }
                       }
                       { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
                   }
@@ -9830,7 +9913,9 @@
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
-        \__tenkz_kernel_r_carrier_basis:n {#1}
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_leg_dir_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
         \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
         \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
           {
@@ -9848,8 +9933,8 @@
           }
         \bool_if:NTF \l__tenkz_kernel_leg_planned_bool
           {
-            \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
-              { \str_if_eq:nnTF {#2} {n} {north} {south} }
+            \exp_args:NnV \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
+              \l__tenkz_kernel_r_physical_anchor_tl
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \bool_if:NF \l__tenkz_kernel_hull_measure_valid_bool
               {
@@ -9862,10 +9947,6 @@
             \__tenkz_kernel_r_xy:nNN {#1}
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
           }
-        % the leg's outward direction: its face read in the atom's own axes
-        \__tenkz_kernel_r_page_face:nnN {#1}
-          { \str_if_eq:nnTF {#2} {n} {90} {270} }
-          \l__tenkz_kernel_leg_dir_tl
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {physleg} }
         % A reach is the maximum over everything declared to meet it.  A leg
@@ -9914,9 +9995,10 @@
       }
   }
 
-% Enrol one plane-carried physical leg in a discrete topology corridor.
-% Rows in the same basis member, face, and logical column share a corridor;
-% no page coordinate is rounded or clustered to invent that identity.
+% Enrol one plane-carried physical leg in a discrete topology corridor.  The
+% independent transverse line belongs to one exact basis member and cell; it
+% is parallel to, but not identified with, the transverse line at any other
+% PEPS site.  No page coordinate is rounded or clustered to invent identity.
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_enrol:nn #1#2
   {
     \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
@@ -9925,29 +10007,19 @@
     \tl_set:Ne \l__tenkz_kernel_leg_plan_cid_tl
       {
         member-\tl_use:N \l__tenkz_kernel_leg_member_tl /
-        \str_if_eq:nnTF {#2}{n}{north}{south} /
+        transverse-#2 /
+        row-\tl_use:N \l__tenkz_kernel_leg_row_tl /
         col-\tl_use:N \l__tenkz_kernel_leg_col_tl
       }
     % Reach computation may have used hull services with the same scratch
     % registers, so reload the record basis immediately before declaration.
     \__tenkz_kernel_r_carrier_basis:n {#1}
-    \str_if_eq:nnTF {#2}{n}
-      {
-        \__tenkz_kernel_leg_plan_corridor:nnnnn
-          { \l__tenkz_kernel_leg_plan_cid_tl }
-          { \l__tenkz_kernel_r_basis_nx_tl }
-          { \l__tenkz_kernel_r_basis_ny_tl }
-          { \l__tenkz_kernel_r_basis_ex_tl }
-          { \l__tenkz_kernel_r_basis_ey_tl }
-      }
-      {
-        \__tenkz_kernel_leg_plan_corridor:nnnnn
-          { \l__tenkz_kernel_leg_plan_cid_tl }
-          { -\l__tenkz_kernel_r_basis_nx_tl }
-          { -\l__tenkz_kernel_r_basis_ny_tl }
-          { \l__tenkz_kernel_r_basis_ex_tl }
-          { \l__tenkz_kernel_r_basis_ey_tl }
-      }
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      { \l__tenkz_kernel_leg_plan_cid_tl }
+      { cosd( \l__tenkz_kernel_leg_dir_tl ) }
+      { sind( \l__tenkz_kernel_leg_dir_tl ) }
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
     \__tenkz_kernel_leg_plan_enrol:nnnnn
       {
         leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
@@ -10094,10 +10166,10 @@
       }
   }
 % #3 empty: plain ink now; #3 a path id: save as an engine string instead
-% A physical leg leaves its atom along the atom's own north: the outward
-% physical face is the row's normal, and on a turned carrier that normal
-% turns with it -- which is how four tensors on a ring point their physical
-% faces radially outward without any of them saying so.
+% A flat or circular physical leg leaves along the atom's local north/south;
+% this makes circle-frame legs radial without an authored turn.  A plane
+% physical leg instead follows the frame-owned transverse page axis resolved
+% before this ink pass.
 \fp_new:N \l__tenkz_kernel_r_tipx_fp
 \fp_new:N \l__tenkz_kernel_r_tipy_fp
 \tl_new:N \l__tenkz_kernel_r_leg_turn_tl
@@ -10108,20 +10180,17 @@
       {
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp
           { \l__tenkz_kernel_r_reach_fp }
-        \__tenkz_kernel_r_page_face:nnN {#1}
-          { \str_if_eq:nnTF {#2} {n} {90} {270} }
-          \l__tenkz_kernel_r_leg_turn_tl
         \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
           {
             \l__tenkz_kernel_r_x_fp
             + \l__tenkz_kernel_r_yc_fp
-              * cosd( \l__tenkz_kernel_r_leg_turn_tl )
+              * cosd( \l__tenkz_kernel_leg_dir_tl )
           }
         \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
           {
             \l__tenkz_kernel_r_y_fp
             + \l__tenkz_kernel_r_yc_fp
-              * sind( \l__tenkz_kernel_r_leg_turn_tl )
+              * sind( \l__tenkz_kernel_leg_dir_tl )
           }
       }
     \tl_set:Ne \l__tenkz_kernel_r_leg_path_tl

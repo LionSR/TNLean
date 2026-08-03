@@ -270,7 +270,7 @@ plane_frame_canonical=$(
     sed -E 's/^frame\|id=frame-[0-9]+\|/frame|/'
 )
 [ "$plane_frame_canonical" = \
-  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture' ] || {
+  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture|transverse-x=0|transverse-y=1' ] || {
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
@@ -313,8 +313,29 @@ python3 "$REPO/scripts/tenkz_audit.py" \
   exit 1
 }
 [ "$(grep -Ec 'check\|scope=[0-9]+\|relation=1\|result=equal' \
-      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 7 ] || {
-  echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 6 ] || {
+  echo "FAIL: in-plane physical policy sugar diverged from explicit typed ports" >&2
+  exit 1
+}
+[ "$(grep -c '^frame|.*|transverse-x=0|transverse-y=1$' \
+      "$WORK/r_plane_transverse_physical.tnlog" || true)" -eq 3 ] || {
+  echo "FAIL: plane frames did not expose their transverse physical axis" >&2
+  exit 1
+}
+for signature in \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:n' \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:s' \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:n, phys:s'
+do
+  grep -Fq "kernel-boundary|signature=$signature" \
+      "$WORK/r_plane_transverse_physical.tnlog" || {
+    echo "FAIL: plane transverse policy lost boundary $signature" >&2
+    exit 1
+  }
+done
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_plane_transverse_physical.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: plane transverse policy consumed an in-plane virtual port" >&2
   exit 1
 }
 [ "$(grep -c 'kernel-boundary|signature=$' \
@@ -1257,6 +1278,36 @@ if grep -Fq 'result=equal' "$WORK/n_signature_mismatch.tnlog"; then
   echo "FAIL: signature mismatch emitted a false equal verdict" >&2
   exit 1
 fi
+
+plane_transverse_signature="$KERNEL/negative/n_plane_transverse_signature.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$plane_transverse_signature" \
+       >"$WORK/n_plane_transverse_signature.transcript" 2>&1 ); then
+  echo "FAIL: a plane transverse leg was identified with an in-plane port" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' \
+    "$WORK/n_plane_transverse_signature.transcript" || {
+  echo "FAIL: plane transverse mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'signature=phys:n' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: plane policy did not expose its transverse north bearing" >&2
+  exit 1
+}
+grep -Fq 'signature=phys:53.130102' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: authored plane port lost its projected in-plane bearing" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: plane transverse mismatch was not recorded" >&2
+  exit 1
+}
 
 prose_negative="$KERNEL/negative/n_prose_signature.tex"
 if ( cd "$WORK" &&

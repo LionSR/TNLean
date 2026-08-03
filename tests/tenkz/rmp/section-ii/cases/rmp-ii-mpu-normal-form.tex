@@ -9,13 +9,10 @@
 \[
   \tenkzkernel
   \tndeclare{species}{gauge}{hue=source:blue}
-  % Each unpaired typed physical port draws a short independent stub. The true
-  % plane-transverse bearing remains tracked by #5375; the marked virtual path
-  % has a separate north-east boundary endpoint.
   \begin{tenkz}[
-      rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
+      rows={wire,wire,wire}, cols=3, frame=plane, bonds=none, physical=up]
     \tn[at=(2,2), name=A,
-      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
     \tnwire{A.180}{open w} \tnwire{A.0}{open e}
     \tnwire{A.90}{open n} \tnwire{A.270}{open s}
     \tnwire[kind=string, species=gauge, route=orth, name=gA,
@@ -25,9 +22,9 @@
   \end{tenkz}
   \;=\;
   \begin{tenkz}[
-      rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
+      rows={wire,wire,wire}, cols=3, frame=plane, bonds=none, physical=up]
     \tn[at=(2,2), name=B,
-      ports={0:virtual,90:virtual,180:virtual,270:virtual,45:physical}]{}
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
     \tnwire{B.180}{open w} \tnwire{B.0}{open e}
     \tnwire{B.90}{open n} \tnwire{B.270}{open s}
     \tnwire[kind=string, species=gauge, route=orth, name=gB,
