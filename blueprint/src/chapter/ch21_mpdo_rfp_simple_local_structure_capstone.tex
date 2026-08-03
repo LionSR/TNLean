@@ -1,12 +1,12 @@
 \subsection{Local simple-MPDO structure}
 
-% **Refuted:** the source-selected four-sector tensor in
-% thm:mpdo_sal_zcl_rank_one_counterexample is injective and satisfies SAL and
-% ZCL, but its active trace matrix has no rank-one factorization.  The exact
-% failed conclusion is T_{k,h}=a_k b_h from equation Apptralktrrk.  Documented
-% in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{remark}[Printed Lemma C.5 is refuted]
-    \label{rem:mpdo_sal_zcl_rank_one_trace_matrix}
+% **Normalization boundary:** the raw four-sector tensor in
+% thm:mpdo_sal_zcl_rank_one_normalization_obstruction has SAL, literal ZCL, and
+% a non-rank-one active trace matrix, but it is not the injective normal tensor
+% assumed in Case I. Its normalized representative loses literal ZCL.
+% Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+\begin{remark}[Normalization boundary in Lemma C.5]
+    \label{rem:mpdo_sal_zcl_rank_one_normalization_boundary}
     Lemma~C.5 of
     \cite[Appendix~C.2, lines~1484--1499]{Cirac2016MPDO_arXiv} claims that an
     injective matrix product density operator tensor satisfying the strong area
@@ -15,18 +15,26 @@
         T_{k,h}=\tr(\eta_{k,h})&=a_kb_h, \notag\\
         \sum_k a_kb_k&=1. \notag
     \end{align}
-    This claim is false under the printed hypotheses. Theorem~\ref{thm:mpdo_sal_zcl_rank_one_counterexample}
-    gives a four-sector counterexample with the source inverse-map
-    factorization and with no such families $a,b$.
+    The lemma is proved inside Case~I, where the tensor is also assumed to be
+    an injective normal tensor. The raw four-sector tensor below has the source
+    inverse-map factorization and no such families $a,b$, but it is not the
+    normalized tensor of Case~I: its doubled-index transfer satisfies
+    $\mathcal E_{\mathcal K}^2=(5/16)\mathcal E_{\mathcal K}$. Its normalized
+    representative $A=(4/\sqrt5)\mathcal K$ satisfies
+    $\mathcal B_A^2=(4/\sqrt5)\mathcal B_A\ne\mathcal B_A$ and therefore fails
+    the paper's literal zero-correlation-length diagram. Thus the matrix
+    inference is obstructed, while the exact source lemma remains unsettled.
 \end{remark}
 
-\begin{theorem}[Counterexample to the printed SAL--ZCL rank-one inference]
-    \label{thm:mpdo_sal_zcl_rank_one_counterexample}
+\begin{theorem}[SAL--ZCL rank-one normalization obstruction]
+    \label{thm:mpdo_sal_zcl_rank_one_normalization_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isSAL}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      physTraceTransfer_tensor_idempotent}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       activeSectorTraceMatrix_not_rankOne}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
-      tensor_refutes_printed_sal_zcl_rank_one_inference}
+      tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
       rectangular_remainder_eq_mul_sub_sq}
     \leanok
@@ -40,7 +48,9 @@
     but for which there are no families $a,b$ satisfying
     $T_{k,h}=a_kb_h$ for all $k,h$. Equivalently, for the corresponding closed
     sector tensors $L,Q$, one has $Q(1-LQ)L=T-T^2\ne0$. Thus the rank-one
-    conclusion in Lemma~C.5 is false under its printed hypotheses.
+    conclusion in Lemma~C.5 fails for this raw representative. The
+    normal-tensor hypothesis imposed in Case~I at source lines~1374--1381 is
+    not included in this statement.
 \end{theorem}
 
 \begin{proof}
@@ -68,6 +78,111 @@
     \end{align}
     where the last equality uses $\tr(T)=1$. Hence $T$ has no rank-one
     factorization.
+\end{proof}
+
+\begin{theorem}[Two-site blocking preserves renormalization maps]
+    \label{thm:mpdo_rfp_via_ts_block_two}
+    \lean{MPOTensor.IsRFPViaTS.blockTwo}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking}
+    Suppose that a tensor $K$ has trace-preserving completely positive maps
+    $S,T$ satisfying
+    \begin{align}
+        S[\mathcal K_2(X)]&=\mathcal K_1(X), &
+        T[\mathcal K_1(X)]&=\mathcal K_2(X) \notag
+    \end{align}
+    for every virtual matrix $X$. Then the two-site physical blocking
+    $K^{[2]}$ has maps satisfying the same two identities and is therefore a
+    renormalization fixed point.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply $T$ twice to the first physical site, first passing from two sites to
+    three and then from three sites to four. This gives a trace-preserving
+    completely positive map from the two-site closure to the four-site closure.
+    Applying $S$ twice to the first two physical sites in the reverse direction
+    gives the coarse-graining map. The canonical identifications of two
+    neighboring sites with one blocked site are permutations of orthonormal
+    coordinates and preserve both complete positivity and trace preservation.
+\end{proof}
+
+\begin{theorem}[Renormalization maps and normalization obstruction for the
+    four-sector witness]
+    \label{thm:mpdo_four_sector_witness_rfp}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedTensor}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isRFPViaTS}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      blockTwo_tensor_isRFPViaTS}
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      blockTwo_normalizedTensor_not_isRFPViaTS}
+    \leanok
+    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking,
+      thm:mpdo_sal_zcl_rank_one_normalization_obstruction,
+      thm:mpdo_rfp_via_ts_block_two}
+    The four-sector tensor in
+    Theorem~\ref{thm:mpdo_sal_zcl_rank_one_normalization_obstruction} has
+    trace-preserving completely positive maps $S,T$ such that, for every
+    virtual matrix $X$,
+    \begin{align}
+        S[\mathcal K_2(X)]&=\mathcal K_1(X), &
+        T[\mathcal K_1(X)]&=\mathcal K_2(X). \notag
+    \end{align}
+    Its two-site physical blocking has maps satisfying the same two identities
+    and is therefore also a renormalization fixed point. On the other hand,
+    for the source-normalized scalar representative
+    \begin{align}
+        A&=\frac4{\sqrt5}\mathcal K, \notag
+    \end{align}
+    the two-site blocking $A^{[2]}$ is not a renormalization fixed point.
+
+    The last assertion concerns literal trace-preserving diagrammatic
+    renormalization. The rescaled tensor obeys an idempotence relation up to a
+    positive scalar, but it does not satisfy the paper's literal
+    zero-correlation-length diagram. Consequently it is not, by itself, a
+    counterexample to Theorem~4.9 of
+    \cite{Cirac2016MPDO_arXiv}. The simple-biCF-BNT hypotheses of that theorem
+    are not part of this theorem's statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\tau=QL$ be the neighboring transition matrix and set
+    \begin{align}
+        f(i,j)&=(i\bmod 2)+2\left\lfloor\frac j2\right\rfloor. \notag
+    \end{align}
+    Direct multiplication of the sector matrices gives
+    \begin{align}
+        S_iS_j&=\tau_{ij}S_{f(i,j)}. \notag
+    \end{align}
+    For each $k$, the transition weights on the fibre of $f$ satisfy
+    \begin{align}
+        \sum_{(i,j):f(i,j)=k}\tau_{ij}&=1. \notag
+    \end{align}
+    The refinement channel has Kraus operators
+    $\sqrt{\tau_{ij}}\lvert i,j\rangle\langle f(i,j)\rvert$; the
+    coarse-graining channel has Kraus operators
+    $\lvert f(i,j)\rangle\langle i,j\rvert$. Their identity resolutions give
+    trace preservation, and the two displayed sector identities give the two
+    required physical-closure identities. Applying each channel twice and
+    regrouping two neighboring physical sites gives the maps for the blocked
+    tensor, as in
+    Theorem~\ref{thm:mpdo_rfp_via_ts_block_two}.
+
+    Let $P=\operatorname{diag}(1,0)$. The physical-trace transfer of the
+    normalized representative is $(4/\sqrt5)P$, while that of its two-site
+    blocking is
+    \begin{align}
+        \mathcal B_{A^{[2]}}&=\frac{16}{5}P. \notag
+    \end{align}
+    If $A^{[2]}$ admitted the two trace-preserving maps of Definition~4.1,
+    trace preservation of the refinement identity would force
+    $\mathcal B_{A^{[2]}}^2=\mathcal B_{A^{[2]}}$. This is impossible because
+    $P^2=P$ and $16/5\ne1$. The relation
+    $\mathcal B_A^2=(4/\sqrt5)\mathcal B_A$ is unchanged in form by a scalar
+    normalization when its positive coefficient is allowed to vary. The
+    literal diagram in the paper fixes that coefficient to one and is not
+    unchanged.
 \end{proof}
 
 \begin{theorem}[Inverse-map factorization with a nonzero rectangular remainder]
@@ -125,22 +240,23 @@
     $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
 \end{proof}
 
-% **Refuted prerequisite (Lemma C.5):**
-% rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
-% SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
-% use in the printed derivation of the source corollary fails, and that
-% corollary remains unformalized under the source hypotheses. Corrected
-% rank-one criteria under positive semidefiniteness or linear independence are
-% given by thm:psd_trace_powers_rank_one_t and
-% thm:pairing_idempotent_rank_one_t. Documented in
+% **Normalization obstruction (Lemma C.5):**
+% rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
+% has the displayed SAL, ZCL, and inverse-map data but is not the normal tensor
+% assumed in Case I; its normal representative loses literal ZCL. Thus the
+% source corollary remains unresolved. Corrected rank-one criteria under
+% positive semidefiniteness or linear independence are given by
+% thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t.
+% Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{corollary}[Local sector structure from SAL and ZCL (rank-one obstruction)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl, thm:sal_implies_eta_structure,
         thm:mpdo_active_trace_matrix_zcl_relations}
-    Let $\mathcal K$ be an injective matrix product density operator tensor
-    satisfying the strong area law and zero correlation length. Then there are
+    Let $\mathcal K$ be an injective normal matrix product density operator
+    tensor satisfying the strong area law and zero correlation length. Then
+    there are
     an isometry, closed sector tensors, positive neighboring operators
     $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ such that the inverse-map
     sector decomposition holds and
@@ -150,9 +266,11 @@
     \end{align}
     This is the structural corollary at
     \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
-    derivation combines Lemma~C.4 with the refuted rank-one conclusion of
-    Lemma~C.5. Thus the printed route is obstructed; no alternative proof of
-    this corollary from SAL and ZCL alone is known.
+    derivation combines Lemma~C.4 with the rank-one matrix step in Lemma~C.5.
+    The raw obstruction above does not satisfy the normal-tensor standing
+    hypothesis, while its normal representative loses literal ZCL. Thus the
+    printed route remains unresolved at this normalization boundary; no
+    alternative proof under the exact source hypotheses is known.
 \end{corollary}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
@@ -754,13 +872,14 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
-% **Refuted prerequisite (Lemma C.5):**
-% rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
-% SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence its
-% use in the printed derivation of this proposition fails, and the proposition
-% remains unformalized under the source hypotheses. Corrected rank-one criteria
-% under positive semidefiniteness or linear independence are given by
-% thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t.
+% **Normalization obstruction (Lemma C.5):**
+% rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
+% has the displayed SAL, ZCL, and inverse-map data but is not the normal tensor
+% assumed in Case I; its normal representative loses literal ZCL. Hence the
+% proposition remains unresolved under the exact source hypotheses. Corrected
+% rank-one criteria under positive semidefiniteness or linear independence are
+% given by thm:psd_trace_powers_rank_one_t and
+% thm:pairing_idempotent_rank_one_t.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[BNT sector structure from SAL and ZCL (rank-one obstruction)]
@@ -787,7 +906,9 @@ This is the calculation in
     unstarred layer identities. The remaining identities specify the local
     factorization and its rank-one normalization.
     The printed proof obtains that normalization from the structural corollary
-    above, whose derivation invokes the refuted rank-one conclusion of
-    Lemma~C.5. Thus the printed route is obstructed; no alternative proof of the
-    complete sector structure from SAL and ZCL alone is known.
+    above, whose derivation invokes the unresolved rank-one step of Lemma~C.5.
+    The available raw witness lies outside its normal-tensor standing
+    hypothesis, and its normal representative loses literal ZCL. Thus no
+    alternative proof of the complete sector structure under the exact source
+    hypotheses is known.
 \end{theorem}

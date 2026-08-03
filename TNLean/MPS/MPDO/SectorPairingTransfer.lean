@@ -148,16 +148,16 @@ theorem concrete_physTraceTransfer_eq_sum_closedSector
       (sectorTensorR K hK hη β₃)
   exact physicalSlice_sector_factorization K hK R ρ hρ hη hm
 
-/-- Source zero correlation length makes the concrete closed-sector pairing
-operator quasi-idempotent:
+/-- The positive-real up-to-scalar physical-trace relation makes the concrete
+closed-sector pairing operator quasi-idempotent:
 \[
   S^2=\lambda S,\qquad \lambda>0,
   \qquad S=\sum_k |l_k)(r_k|.
 \]
-The scalar is present because the source zero-correlation-length condition is
-scale-invariant;
-the paper uses the canonically normalized representative in the display at
-arXiv:1606.00608, Appendix C.2, lines 1489--1493. -/
+The scalar is present because this development's relation is invariant under
+positive real rescaling. The paper's source zero-correlation-length display at
+arXiv:1606.00608, Appendix C.2, lines 1489--1493, is instead the literal
+`λ = 1` specialization. -/
 theorem closedSector_operator_quasi_idempotent
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -171,10 +171,10 @@ theorem closedSector_operator_quasi_idempotent
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hmul
 
-/-- After the positive source normalization, the concrete closed-sector
-pairing operator is idempotent.  This is the normalized form of the displayed
-zero-correlation-length identity in arXiv:1606.00608, Appendix C.2,
-lines 1489--1493. -/
+/-- After the positive physical-trace normalization allowed by the up-to-scalar
+relation, the concrete closed-sector pairing operator is idempotent. The
+paper's source zero-correlation-length identity at arXiv:1606.00608,
+Appendix C.2, lines 1489--1493, is already the literal `λ = 1` specialization. -/
 theorem closedSector_operator_normalized_idempotent
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -188,8 +188,9 @@ theorem closedSector_operator_normalized_idempotent
   rw [← concrete_physTraceTransfer_eq_sum_closedSector K hK hη R hρ α₁ β₃ hm]
   exact hidem
 
-/-- Source zero correlation length supplies one positive normalization for
-which the normalized concrete closed-sector trace matrix satisfies both
+/-- The positive-real up-to-scalar physical-trace relation supplies one
+positive normalization for which the normalized concrete closed-sector trace
+matrix satisfies both
 \[
   \widehat T^2=\widehat T^3
 \]
@@ -197,9 +198,11 @@ and, for every positive integer `N`,
 \[
   \operatorname{tr}(\widehat T^N)=\operatorname{tr}(\widehat T).
 \]
-These are the source-faithful consequences of the rectangular pairing identity
-in arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497. They do
-not assert that the trace matrix is idempotent or has rank one. -/
+These are consequences of this development's broadened relation. The analogous
+display in arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1490--1497,
+uses the paper's literal source zero correlation length, namely the `λ = 1`
+specialization. The conclusions do not assert that the trace matrix is
+idempotent or has rank one. -/
 theorem closedSectorTraceMatrix_normalized_relations
     (hZCL : IsSourceZCL K) :
     ∃ lam : ℝ, 0 < lam ∧

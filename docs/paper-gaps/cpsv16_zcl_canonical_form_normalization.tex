@@ -63,9 +63,10 @@ the doubled-index MPS transfer rather than by the MPDO ZCL diagram.
 \paragraph{Classification.} This is a wrong-transfer-object gap: the current
 formal predicate records doubled-index CP-transfer idempotence, while the source
 definition uses the physical-trace transfer. The latter is now formalized as
-\texttt{MPOTensor.physTraceTransfer}, with source ZCL recorded by
-\texttt{MPOTensor.IsSourceZCL}; no identification with the doubled-index
-predicate is asserted.
+\texttt{MPOTensor.physTraceTransfer}. The predicate
+\texttt{MPOTensor.IsSourceZCL} records this development's scale-invariant
+up-to-scalar repair; it is distinct from the paper's literal diagram and from
+the doubled-index predicate.
 
 This deviation is witnessed in the development by
 \texttt{MPOTensor.exists\_isLocalPurificationRFP\_not\_isZCL}. Take $d=d_K=2$,
@@ -88,15 +89,16 @@ not only a missing scalar normalization.
 The source's $\text{PRFP}\Rightarrow\text{ZCL}$ implication
 (\path{Papers/1606.00608/MPDO-22-12-17-2.tex:777}) is therefore not provable
 against \texttt{IsZCL} as literally stated: the source implication controls
-$\mathcal T_M$, whereas the Lean predicate controls $\mathcal E_M$. Two faithful
-options:
+$\mathcal T_M$, whereas the Lean predicate controls $\mathcal E_M$. Two
+possible repairs are:
 
 \begin{enumerate}
   \item \textbf{Source ZCL transfer.} Introduce the physical-trace transfer
   $\mathcal T_M=\sum_iM^{ii}$ and state ZCL as idempotence of this transfer,
-  with scalar normalization allowed before canonical form:
+  with scalar normalization allowed at the level of the generated state family:
   $\mathcal T_M\ne0$ and $\mathcal T_M^2=\lambda\mathcal T_M$ for some
-  $\lambda>0$. The canonical representative is the case $\lambda=1$.
+  $\lambda>0$. The physical-trace-normalized representative is the case
+  $\lambda=1$.
   \item \textbf{Canonical physical-trace hypothesis.} Keep exact idempotence
   $\mathcal T_M^2=\mathcal T_M$ only for source-labelled theorems whose
   hypotheses include the required canonical normalization. The doubled-index map
@@ -104,9 +106,11 @@ options:
   fusion and algebra statements, not the source's ZCL transfer.
 \end{enumerate}
 
-Option~1 is now in place. The predicate \texttt{IsZCL} remains documented as a
-doubled-index CP-transfer idempotence condition, while
-\texttt{IsSourceZCL} records Definition~4.2. For the renormalization condition
+The scale-invariant repair described in Option~1 is now in place. The predicate
+\texttt{IsZCL} remains documented as a doubled-index CP-transfer idempotence
+condition, while \texttt{IsSourceZCL} records the up-to-scalar physical-trace
+interpretation. It must not be identified with the paper's literal diagram for
+a fixed tensor. For the renormalization condition
 of Definition~4.1, Proposition \texttt{propsimple} is now proved at the explicit
 normalization boundary: every positive-length ring is positive semidefinite and
 has nonzero trace.  The primary declarations are
@@ -119,10 +123,32 @@ derive positive-length nonvanishing.  Positivity by itself admits the zero
 tensor, so the trace condition cannot be omitted.  The PRFP equivalence and the
 reverse implications in Theorem~4.9 remain open.
 
-\section{The faithful definition and its consequences}
+\paragraph{Amendment for the fixed-tensor implication in Theorem~4.9.}
+Option~1 is scale-invariant at the level of the generated state family, but it
+cannot be substituted unchanged into Theorem~4.9's implication to the exact
+trace-preserving maps of Definition~4.1. The four-sector audit in
+\path{docs/paper-gaps/cpgsv17_pf_rank_one.tex} exhibits the distinction. Its raw
+tensor $\mathcal K$ satisfies the literal diagram
+$\mathcal T_{\mathcal K}^2=\mathcal T_{\mathcal K}$ and has explicit
+renormalization maps, but its singleton BNT coefficient is strictly subunit.
+The globally unit-weight representative $A=(4/\sqrt5)\mathcal K$ satisfies
+\texttt{IsSourceZCL} only in the up-to-scalar sense:
+\[
+  \mathcal T_A^2=\frac4{\sqrt5}\mathcal T_A
+  \ne\mathcal T_A.
+\]
+Its two-site blocking consequently fails Definition~4.1. The scalar absorption
+at source line~1660 is performed only after literal ZCL has been assumed and
+does not transport literal ZCL or the renormalization maps across the rescaling.
+Thus Option~1 is the scale-invariant interpretation used by TNLean, whereas the
+paper's fixed representative still carries a separate literal diagrammatic
+condition. Neither representative currently settles the exact conjunction of
+that condition with the global BNT normalization in Theorem~4.9.
 
-The faithful reading is Option~1 (source ZCL transfer). Writing $\mathcal T_M$
-for the physical-trace transfer, the normalized condition is
+\section{The scale-invariant repaired interpretation and its consequences}
+
+The repaired interpretation used in this development is Option~1. Writing
+$\mathcal T_M$ for the physical-trace transfer, its condition is
 \[
   \texttt{IsSourceZCL}\ M\ :=\ \mathcal T_M\ne 0\ \wedge\
   \exists\, \lambda\in\mathbb R,\ 0<\lambda
@@ -135,9 +161,10 @@ $\mathcal T_M^2=\lambda\mathcal T_M$ with $\lambda>0$ and
 $\mathcal T_M\ne0$, the minimal polynomial of $\mathcal T_M$ divides
 $x(x-\lambda)$, so its eigenvalues lie in $\{0,\lambda\}$ and $\lambda$ is the
 leading eigenvalue. Literal idempotence $\mathcal T_M^2=\mathcal T_M$ is exactly
-the $\lambda=1$ case, the canonical-form representative. The maximally mixed
-witness has $\mathcal T_M=1$ and is therefore classified as ZCL by the source
-transfer, whereas the current doubled-index condition wrongly excludes it.
+the $\lambda=1$ case, the physical-trace-normalized representative. The
+maximally mixed witness has $\mathcal T_M=1$ and is therefore classified as ZCL
+by the source transfer, whereas the current doubled-index condition wrongly
+excludes it.
 
 \paragraph{The correction is to ZCL, not to the doubled-index RFP predicate.}
 The doubled-index transfer map $\mathcal E_M$ remains the object used by the
@@ -183,9 +210,10 @@ MPDO assumptions.
 Section~3 has $\mathcal T_M=1$, hence satisfies the source ZCL equation already.
 The earlier reading, that this witness fails zero correlation length, was an
 artifact of using $\mathcal E_M=\tfrac12\,\mathrm{id}$ in place of the
-physical-trace transfer. Under the faithful reading it is a positive example
-showing that ZCL captures the maximally mixed product state, as the source
-intends.
+physical-trace transfer. Under the scale-invariant repaired interpretation it
+is a positive example showing that the up-to-scalar condition captures the
+maximally mixed product state. This does not identify that condition with the
+paper's literal fixed-representative diagram.
 
 \paragraph{Finding (classification: unfaithful theorem).} The simple-MPDO
 direction of Theorem~4.9 (paper label \texttt{thm:main-simple},
@@ -195,8 +223,9 @@ $\mathrm{(i)}\Rightarrow\mathrm{(ii)}\Leftrightarrow\mathrm{(iii)}
 treating a zero-correlation-length hypothesis \emph{as if} it were literal
 idempotence of the doubled-index transfer, in order to build the blocked fusion
 isometry. This identification is valid only while the two notions coincide
-definitionally; under the faithful physical-trace ZCL it is no longer available,
-and the source does not supply the missing step. Two facts pin this down.
+definitionally; under the scale-invariant up-to-scalar physical-trace repair it
+is no longer available, and the source does not supply the missing step. Two
+facts pin this down.
 
 First, the source's conclusion is not literal transfer-map idempotence.
 Hypothesis (ii) is ``$K$ has ZCL and SAL'' (line~862), and the terminal
@@ -220,7 +249,8 @@ So the strong area law and zero correlation length together do \emph{not} imply
 literal idempotence of the doubled-index transfer; the missing passage cannot be
 obtained by definitional coercion.
 
-The faithful obligation discharged by the simple-MPDO direction is therefore:
+The source-facing obligation discharged by the simple-MPDO direction is
+therefore:
 from zero correlation length \emph{together with} the strong area law, derive
 condition~(iv), the BNT support, positivity, and fusion data of equations
 \texttt{KxKy=0}--\texttt{PsiPhi}; then use the source implication
@@ -239,7 +269,7 @@ coercion --- the pattern in the simple-MPDO chain that uses an
 source does not provide, and is \emph{unfaithful} in the sense of the project's
 faithfulness policy. Under the realignment each such theorem must carry an
 in-source \texttt{**Unfaithful:**} marker pointing to this note and naming
-\texttt{IsRFPViaTS}, reached through condition~(iv), as the faithful target that
+\texttt{IsRFPViaTS}, reached through condition~(iv), as the source target that
 the realignment must instead establish.
 
 \end{document}

@@ -138,19 +138,20 @@
     closure of ${\cal K}$, choose a Hayashi decomposition of $\rho$, and fix
     virtual indices $\alpha_1,\beta_3$ such that
     $R_{\beta_3,\alpha_1}\ne0$. Form the corresponding closed sector
-    tensors $|l_k)$ and $(r_k|$. If ${\cal K}$ has source zero correlation
-    length, set $S:=\sum_k |l_k)(r_k|$. Then there is a real number
-    $\lambda>0$ such that
+    tensors $|l_k)$ and $(r_k|$. If ${\cal K}$ satisfies the positive-real
+    up-to-scalar physical-trace relation, set
+    $S:=\sum_k |l_k)(r_k|$. Then there is a real number $\lambda>0$ such that
     \begin{align}
         S^2&=\lambda S, \label{eq:rfp_pairing_quasi_idempotent}\\
         (\lambda^{-1}S)^2&=\lambda^{-1}S. \notag
     \end{align}
-    If ${\cal K}$ is the canonically normalized representative satisfying
-    $\mathcal T_{\cal K}^2=\mathcal T_{\cal K}$, then the raw pairing
+    If ${\cal K}$ satisfies the paper's literal source zero-correlation-length
+    identity $\mathcal T_{\cal K}^2=\mathcal T_{\cal K}$, then the raw pairing
     operator itself satisfies $S^2=S$. This is the display preceding
-    \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}; the first identity
-    records the rescaling-invariant form of the same zero-correlation-length
-    condition.
+    \cite[Appendix~C.2, Lemma~C.5]{Cirac2016MPDO_arXiv}. The first identity
+    records the broader relation used in this development, which is invariant
+    under positive real rescaling; the paper's identity is its $\lambda=1$
+    specialization.
 \end{theorem}
 
 \begin{proof}
@@ -175,8 +176,8 @@
         thm:mpdo_closed_sector_pairing_normalized_idempotent}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_closed_sector_pairing_normalized_idempotent},
-    suppose that ${\cal K}$ has source zero correlation length. There is a
-    real number $\lambda>0$ such that, for
+    suppose that ${\cal K}$ satisfies the positive-real up-to-scalar
+    physical-trace relation. There is a real number $\lambda>0$ such that, for
     $\widehat T:=\lambda^{-1}T$, one has
     \begin{align}
         \widehat T^2&=\widehat T^3. \label{eq:rfp_trace_square_cube}
@@ -185,9 +186,10 @@
     \begin{align}
         \tr(\widehat T^N)&=\tr(\widehat T). \label{eq:rfp_trace_powers}
     \end{align}
-    This is the valid trace-power display in
-    \cite[Appendix~C.2, lines~1490--1497]{Cirac2016MPDO_arXiv}.
-    No idempotence or rank-one conclusion for $\widehat T$ is asserted.
+    For the literal $\lambda=1$ source zero-correlation-length identity, this
+    specializes to the trace-power display in
+    \cite[Appendix~C.2, lines~1490--1497]{Cirac2016MPDO_arXiv}. No idempotence
+    or rank-one conclusion for $\widehat T$ is asserted.
 \end{theorem}
 
 \begin{proof}
