@@ -172,7 +172,7 @@ class GitHubRestApiV1:
         if (
             not isinstance(response.status, int)
             or isinstance(response.status, bool)
-            or not 200 <= response.status < 300
+            or response.status != 200
         ):
             raise EvidenceUnavailable(
                 f"GitHub REST evidence is unavailable (HTTP {response.status!r})"
@@ -332,3 +332,7 @@ class PolicyEvidenceBundle:
             raise EvidenceContractError("immutable replay evidence is malformed")
         if not isinstance(self.current, CurrentEvidenceSnapshot):
             raise EvidenceContractError("current policy evidence snapshot is malformed")
+        if self.replay.resolver is self.current.resolver:
+            raise EvidenceContractError(
+                "immutable replay and current snapshot resolvers must be distinct"
+            )

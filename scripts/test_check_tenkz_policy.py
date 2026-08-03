@@ -1466,8 +1466,11 @@ def set_review_permission(facts: Context, ref: str, permission: str | None) -> N
 
 def validate(blocks: list[str], facts: Context, **overrides) -> str:
     entries = parsed_entries(*blocks)
-    current_resolver = overrides.pop("current_resolver", facts)
+    current_resolver = overrides.pop("current_resolver", None)
+    if current_resolver is None:
+        current_resolver = deepcopy(facts)
     assert isinstance(current_resolver, Context)
+    assert current_resolver is not facts
 
     def prepare_context(context: Context) -> None:
         for entry in entries:
@@ -1496,8 +1499,7 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
         prepare_receipt_retention(entries, context)
 
     prepare_context(facts)
-    if current_resolver is not facts:
-        prepare_context(current_resolver)
+    prepare_context(current_resolver)
     audit = overrides.pop("audit", None)
     tag_protection = overrides.pop("tag_protection", None)
     if audit is None:
@@ -5201,7 +5203,7 @@ def main() -> int:
 
     release_binding_call.resolve_replay_release_prep = resolve_bound_release_prep
     assert validate(complete_log(), release_binding_call) == "signed-off-awaiting-tag"
-    assert observed_release_integrations == [oid(9201)]
+    assert observed_release_integrations == [oid(9201), oid(9201)]
 
     for invalid_integration in (None, oid(9991)):
         release_other_integration = context()
@@ -5817,6 +5819,42 @@ def main() -> int:
         immutable_approval,
         current_resolver=current_dismissal,
     ) == "reset-required:S1-0002"
+
+    # Sign-off approval is also mutable.  The current channel must inspect the
+    # current record rather than reusing the approved immutable record.
+    immutable_signoff = context()
+    current_signoff_dismissal = context()
+    signoff_pr = current_signoff_dismissal.prs[SIGNOFF_RECORD]
+    assert signoff_pr.reviews is not None
+    current_signoff_dismissal.prs[SIGNOFF_RECORD] = replace(
+        signoff_pr,
+        reviews=tuple(
+            replace(item, state="DISMISSED", dismissed=True)
+            for item in signoff_pr.reviews
+        ),
+    )
+    assert validate(
+        complete_log(),
+        immutable_signoff,
+        current_resolver=current_signoff_dismissal,
+    ) == "reset-required:S1-0004"
+
+    # Re-closing a prerequisite after the freeze time invalidates the current
+    # freeze without changing its immutable integration-time issue receipt.
+    immutable_prerequisites = context()
+    current_reclosed_prerequisite = context()
+    freeze_record = current_reclosed_prerequisite.prs[FREEZE_RECORD]
+    assert freeze_record.merged_at is not None
+    prerequisite = current_reclosed_prerequisite.issues["#5086"]
+    current_reclosed_prerequisite.issues["#5086"] = replace(
+        prerequisite,
+        closed_at=freeze_record.merged_at + timedelta(seconds=1),
+    )
+    assert validate(
+        [freeze()],
+        immutable_prerequisites,
+        current_resolver=current_reclosed_prerequisite,
+    ) == "reset-required:S1-0001"
 
     replayed_freeze_drift = context()
     add_record(
