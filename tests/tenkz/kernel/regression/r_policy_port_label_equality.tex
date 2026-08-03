@@ -1,11 +1,13 @@
-% Regression: comparing a typed-port label with its policy-owned spelling
-% preserves author tokens until audited math typesetting.
+% Regression: a descriptor on a physical-policy identity becomes the standard
+% port-open consumer, renders its deferred label once, and suppresses the
+% duplicate generated policy leg.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
 \int_new:N \g__tenkz_test_policy_equal_label_int
+\int_new:N \g__tenkz_test_policy_equal_leg_int
 \cs_new:Npn \TenkzPolicyLabelProbe
   {
     \mode_if_math:TF
@@ -20,13 +22,24 @@
     \int_gincr:N \g__tenkz_test_policy_equal_label_int
     \__tenkz_test_policy_equal_labelnode:nnn {#1}{#2}{#3}
   }
+\cs_new_eq:NN
+  \__tenkz_test_policy_equal_leg:nn
+  \__tenkz_kernel_r_leg:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
+  {
+    \int_gincr:N \g__tenkz_test_policy_equal_leg_int
+    \__tenkz_test_policy_equal_leg:nn {#1}{#2}
+  }
 \AtEndDocument
   {
     \cs_if_exist:NT \g__tenkz_test_policy_label_premature_cs
-      {\errmessage{matching~policy~labels~expanded~during~model~close}}
+      {\errmessage{policy-owned~port~label~expanded~during~model~close}}
     \int_compare:nNnF
       { \g__tenkz_test_policy_equal_label_int } = {1}
-      {\errmessage{matching~policy~label~did~not~render~exactly~once}}
+      {\errmessage{policy-owned~port~label~did~not~render~exactly~once}}
+    \int_compare:nNnF
+      { \g__tenkz_test_policy_equal_leg_int } = {0}
+      {\errmessage{policy-owned~port~grew~a~duplicate~generated~leg}}
   }
 \ExplSyntaxOff
 \makeatother
@@ -34,7 +47,6 @@
 \tenkzkernel
 \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
   \tn[
-    up=$\TenkzPolicyLabelProbe$,
     ports={90:physical:$\TenkzPolicyLabelProbe$}
   ]{}
 \end{tenkz}

@@ -6,14 +6,14 @@
       "commands": 25,
       "environments": 6,
       "escape": 11,
-      "kernel": 140,
+      "kernel": 138,
       "sugar": 13
     }
   },
   "m2_parser_paths": {
     "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
-    "identity_sha256": "4a08c61b901632a53081549e14f504335f1728d442c9cb3709735d6cb8b70a40",
-    "value": 228
+    "identity_sha256": "cf87f98fe9af37edd780303541fa1b5cdc35a6a2332c8975678e24bf9fb8f22c",
+    "value": 226
   },
   "m3_escape_usage": {
     "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",

@@ -1,10 +1,12 @@
-% Negative: a virtual interface open policy cannot consume a physical port.
+% Negative: physical policy cannot refine a hard virtual interface endpoint.
 \documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, open={(1,1)}]
-  \tn[ports={270:physical}]{} \\
+\begin{tenkz}[
+  rows={wire,wire}, cols=1, bonds=none, open={(1,1)}, physical=down
+]
+  \tn{} \\
   \tn{}
 \end{tenkz}
 \end{document}
