@@ -1068,7 +1068,7 @@ class _ExecutionContext:
 
 
 def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
-    """Resolve mutually dependent declaration and replacement masks."""
+    """Resolve mutually dependent masks by finite-state convergence."""
     declared_commands = _declared_atom_commands(source, owner_source)
     state = (declared_commands, (), ())
     seen = {state}
@@ -1096,11 +1096,11 @@ def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
             owner_source,
             next_replacement_spans + command_quarantines,
         )
-        # Begin with the raw source-wide superset and only remove declarations
-        # proven inert; an ambiguous self-reference therefore fails closed.
-        next_declared_commands = declared_commands.intersection(
-            visible_declared_commands
-        )
+        # Recompute exactly: a declaration hidden by a transient replacement
+        # span can become visible after the command quarantine that caused that
+        # span stabilizes. Repeated full states below make genuine cycles fail
+        # closed instead of silently retaining either side of the ambiguity.
+        next_declared_commands = visible_declared_commands
         next_state = (
             next_declared_commands,
             next_replacement_spans,

@@ -1150,6 +1150,35 @@ def test_rmp_dimension_ownership() -> None:
             "an active sibling declaration lost its dynamic quarantine: "
             f"{active_declaration_sibling!r}"
         )
+    revived_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\def\holder{\tndeclareatom{\foo}{skin=dot}}"
+        r"\tndeclareatom{\bar}{skin=dot}"
+        r"\foo\bar{\def\x}\tndeclareatom{\baz}{skin=dot}"
+        r"\tnarrow{\baz\tnput{x}{(205mm,0)}{}}",
+    )
+    if [
+        (occurrence.literal, occurrence.owner)
+        for occurrence in revived_dynamic_declaration
+    ] != [("205mm", DimensionOwner.ROUTE)]:
+        raise AssertionError(
+            "a transient definition mask permanently removed a declaration: "
+            f"{revived_dynamic_declaration!r}"
+        )
+    try:
+        scan_case_dimensions(
+            Path("synthetic.tex"),
+            r"\bar\tndeclareatom{\foo}{skin=dot}"
+            r"\foo\tndeclareatom{\bar}{skin=dot}",
+        )
+    except RuntimeError as error:
+        if str(error) != "tenkz execution masks did not converge":
+            raise AssertionError(
+                "a cyclic execution mask raised the wrong error: "
+                f"{error!r}"
+            ) from error
+    else:
+        raise AssertionError("a cyclic execution mask did not fail closed")
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
