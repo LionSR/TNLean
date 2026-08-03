@@ -1,57 +1,50 @@
 % Target: rmp-workbench-ii-newfig7
-% Formula: The red left shift and blue right shift form a two-layer MPU.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
-% Boundary: Three bricks expose separate red and blue shifted virtual paths, with
-%   their four outer endpoints open.
+% Formula: The red and blue interleaved paths form a two-layer MPU.
+% Ink: Kernel box skins carry the red and blue shifted port pairings.
+% Boundary: Each brick contributes one upper and lower endpoint to each path;
+%   four lateral endpoints are also open.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   156-170; archival output newfig7.pdf
-% Capabilities: free-graph, typed-ports
-\begingroup
-\tnset{species={right,left}}
+% Capabilities: kernel, typed-ports, skin-pairings
+\tenkzkernel
+\tndeclare{species}{blue}{hue=source:blue}
+\tndeclare{species}{red}{hue=source:red}
+\tndeclare{skin}{two-shift}{
+  base=box,
+  pairings={
+    n@2 > w@2 : red,
+    e@2 > s@2 : red,
+    w@1 > s@1 : blue,
+    n@1 > e@1 : blue
+  }
+}
 \[
-  \begin{tenkzfree}
-    \tnput[box,ports={north east:virtual,south east:virtual,
-      north west:virtual,south west:virtual}]{c1}{(0mm,0mm)}{}
-    \tnput[box,ports={north east:virtual,south east:virtual,
-      north west:virtual,south west:virtual}]{c2}{(16mm,0mm)}{}
-    \tnput[box,ports={north east:virtual,south east:virtual,
-      north west:virtual,south west:virtual}]{c3}{(32mm,0mm)}{}
-    \tnput[boundary,ports={south:virtual}]{r1n}{(2mm,10mm)}{}
-    \tnput[boundary,ports={south:virtual}]{r2n}{(18mm,10mm)}{}
-    \tnput[boundary,ports={south:virtual}]{r3n}{(34mm,10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{r1s}{(2mm,-10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{r2s}{(18mm,-10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{r3s}{(34mm,-10mm)}{}
-    \tnput[boundary,ports={south:virtual}]{b1n}{(-2mm,10mm)}{}
-    \tnput[boundary,ports={south:virtual}]{b2n}{(14mm,10mm)}{}
-    \tnput[boundary,ports={south:virtual}]{b3n}{(30mm,10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b1s}{(-2mm,-10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b2s}{(14mm,-10mm)}{}
-    \tnput[boundary,ports={north:virtual}]{b3s}{(30mm,-10mm)}{}
-    \tnput[boundary,ports={east:virtual}]{rw}{(-10mm,-2mm)}{}
-    \tnput[boundary,ports={west:virtual}]{re}{(42mm,-2mm)}{}
-    \tnput[boundary,ports={east:virtual}]{bw}{(-10mm,2mm)}{}
-    \tnput[boundary,ports={west:virtual}]{be}{(42mm,2mm)}{}
-    \tnjoin[species=left]{r1n.south}{c1.north east}
-    \tnjoin[species=left]{r2n.south}{c2.north east}
-    \tnjoin[species=left]{r3n.south}{c3.north east}
-    \tnjoin[species=left]{c1.south east}{r1s.north}
-    \tnjoin[species=left]{c2.south east}{r2s.north}
-    \tnjoin[species=left]{c3.south east}{r3s.north}
-    \tnjoin[species=left,route=vh]{c1.north east}{rw.east}
-    \tnjoin[species=left,route=vh]{c2.north east}{c1.south east}
-    \tnjoin[species=left,route=vh]{c3.north east}{c2.south east}
-    \tnjoin[species=left,route=hv]{re.west}{c3.south east}
-    \tnjoin[species=right]{b1n.south}{c1.north west}
-    \tnjoin[species=right]{b2n.south}{c2.north west}
-    \tnjoin[species=right]{b3n.south}{c3.north west}
-    \tnjoin[species=right]{c1.south west}{b1s.north}
-    \tnjoin[species=right]{c2.south west}{b2s.north}
-    \tnjoin[species=right]{c3.south west}{b3s.north}
-    \tnjoin[species=right,route=hv]{bw.east}{c1.south west}
-    \tnjoin[species=right,route=vh]{c1.north west}{c2.south west}
-    \tnjoin[species=right,route=vh]{c2.north west}{c3.south west}
-    \tnjoin[species=right,route=vh]{c3.north west}{be.west}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire}, cols=8, bonds=none]
+    \tn[at=(1,1), name=c1, skin=two-shift, wide=2, wires=2]{}
+    \tn[at=(1,4), name=c2, skin=two-shift, wide=2, wires=2]{}
+    \tn[at=(1,7), name=c3, skin=two-shift, wide=2, wires=2]{}
+    % The red north-to-west and east-to-south turns belong to the brick skin;
+    % the commands below attach the open tails and join neighboring bricks.
+    \tnwire[species=red]{open n}{c1.n@2}
+    \tnwire[species=red]{open n}{c2.n@2}
+    \tnwire[species=red]{open n}{c3.n@2}
+    \tnwire[species=red]{c1.s@2}{open s}
+    \tnwire[species=red]{c2.s@2}{open s}
+    \tnwire[species=red]{c3.s@2}{open s}
+    \tnwire[species=red]{open w}{c1.w@2}
+    \tnwire[species=red]{c1.e@2}{c2.w@2}
+    \tnwire[species=red]{c2.e@2}{c3.w@2}
+    \tnwire[species=red]{c3.e@2}{open e}
+    % The blue path uses the complementary slot on every face.
+    \tnwire[species=blue]{open n}{c1.n@1}
+    \tnwire[species=blue]{open n}{c2.n@1}
+    \tnwire[species=blue]{open n}{c3.n@1}
+    \tnwire[species=blue]{c1.s@1}{open s}
+    \tnwire[species=blue]{c2.s@1}{open s}
+    \tnwire[species=blue]{c3.s@1}{open s}
+    \tnwire[species=blue]{open w}{c1.w@1}
+    \tnwire[species=blue]{c1.e@1}{c2.w@1}
+    \tnwire[species=blue]{c2.e@1}{c3.w@1}
+    \tnwire[species=blue]{c3.e@1}{open e}
+  \end{tenkz}
 \]
-\endgroup

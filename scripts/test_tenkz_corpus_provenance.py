@@ -289,10 +289,10 @@ def test_rmp_dimension_ownership() -> None:
             DimensionOwner.METRIC: 0,
             DimensionOwner.FRAME: 0,
             DimensionOwner.ROUTE: 396,
-            DimensionOwner.LAYOUT: 530,
+            DimensionOwner.LAYOUT: 312,
         }
     )
-    if report.case_count != 926 or report.case_counts != expected:
+    if report.case_count != 708 or report.case_counts != expected:
         raise AssertionError(
             "RMP dimension ownership baseline drifted: "
             f"total={report.case_count}, owners={report.case_counts!r}"
@@ -1915,11 +1915,11 @@ ch=21mm,inline]{\\tn{A}}}
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "case dimensions increased to 927",
+        "case dimensions increased to 709",
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "composition/layout dimensions increased to 531",
+        "composition/layout dimensions increased to 313",
     )
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),

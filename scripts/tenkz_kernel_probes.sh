@@ -1571,6 +1571,45 @@ grep -Fq '[TKZ-SKIN-PAIRING-SLOT]' \
   exit 1
 }
 
+for cell_port_alias_case in \
+  n_skin_pairing_port_alias \
+  n_cell_port_alias_skin_wire \
+  n_cell_port_alias_skin_declared \
+  n_cell_port_alias_skin_physical; do
+  cell_port_alias_negative="$KERNEL/negative/$cell_port_alias_case.tex"
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$cell_port_alias_negative" \
+         >"$WORK/$cell_port_alias_case.transcript" 2>&1 ); then
+    echo "FAIL: $cell_port_alias_case aliased one paired cell lane" >&2
+    exit 1
+  fi
+  grep -Fq '[TKZ-CELL-PORT-BEARING-ALIAS]' \
+    "$WORK/$cell_port_alias_case.transcript" || {
+    echo "FAIL: $cell_port_alias_case lacked its cell-port diagnostic" >&2
+    exit 1
+  }
+  grep -Fq 'atom-1.n@1 receives pairing bearing 80 and bearing' \
+    "$WORK/$cell_port_alias_case.transcript" || {
+    echo "FAIL: $cell_port_alias_case lost its lane or bearing context" >&2
+    exit 1
+  }
+done
+for alias_context in \
+  'n_skin_pairing_port_alias|100 from skin aliased-face' \
+  'n_cell_port_alias_skin_wire|100 from wire wire-2/to' \
+  'n_cell_port_alias_skin_declared|100 from ports=' \
+  'n_cell_port_alias_skin_physical|bearing 90' \
+  'n_cell_port_alias_skin_physical|from physical policy'; do
+  alias_case=${alias_context%%|*}
+  alias_detail=${alias_context#*|}
+  grep -Fq "$alias_detail" "$WORK/$alias_case.transcript" || {
+    echo "FAIL: $alias_case lost diagnostic context '$alias_detail'" >&2
+    exit 1
+  }
+done
+
 skin_cluster_negative="$KERNEL/negative/n_skin_pairing_cluster.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \

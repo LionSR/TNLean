@@ -1,0 +1,33 @@
+% Positive regression: a pairing may share one exact bearing with an authored
+% endpoint, and one face may carry distinct bearings when they use distinct
+% slots.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{red}{hue=source:red}
+\tndeclare{species}{blue}{hue=source:blue}
+\tndeclare{skin}{exact-bearing}{
+  base=box,
+  pairings={80@1 > w@1 : red}
+}
+\tndeclare{skin}{distinct-slots}{
+  base=box,
+  pairings={80@1 > w@1 : red, 100@2 > e@1 : blue}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[name=exact, skin=exact-bearing]{}
+  \tnwire{open n}{exact.80@1}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=slotted, skin=distinct-slots, wide=2]{}
+  \tnwire{open n}{slotted.80@1}
+  \tnwire{open n}{slotted.100@2}
+\end{tenkz}
+\end{document}

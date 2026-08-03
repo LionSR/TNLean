@@ -1,32 +1,29 @@
 % Target: rmp-ii-triangle-network
 % Formula: psi_ijk = sum_{alpha,beta,gamma} A^i_{gamma alpha} B^j_{alpha beta}
 %   C^k_{beta gamma}.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Canonical public kernel circle frame; no raw TikZ.
 % Boundary: The three physical spokes are open; alpha, beta, and gamma form the
 %   contracted triangle.
 % Source: paper TN-Review-main.tex line 322; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 258-268
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, circle-frame, typed-ports
 \[
   \psi_{ijk} \;=\;
-  \begin{tenkzfree}
-    % the three tensors at the triangle corners
-    \tnput[dot]{t}{(0mm,8mm)}{}
-    \tnput[dot]{r}{(7mm,-4mm)}{}
-    \tnput[dot]{l}{(-7mm,-4mm)}{}
-    % the open physical indices end in named tips, so i, j and k are read
-    % at the tips as in the source; a join sets its label at mid-wire and
-    % on the vertical spoke that would put i ON the spoke
-    \tnput[boundary, label pos=north, ports={south:physical}]{ti}{(0mm,15mm)}{i}
-    \tnput[boundary, label pos=south, ports={north:physical}]{rj}{(13mm,-9mm)}{j}
-    \tnput[boundary, label pos=south, ports={north:physical}]{lk}{(-13mm,-9mm)}{k}
-    % contracted virtual loop: alpha, beta, gamma
-    \tnjoin[label=\alpha]{t}{r}
-    \tnjoin[label=\beta]{r}{l}
-    \tnjoin[label=\gamma]{l}{t}
-    % open physical indices i, j, k, radially outward
-    \tnjoin{ti.south}{t}
-    \tnjoin{r}{rj.north}
-    \tnjoin{l}{lk.north}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=3, frame=circle, bonds=none]
+    % The circle frame gives the three sites their equilateral placement and
+    % transports each physical port along the station's outward radius.
+    \tn[at=(1,1), name=t,
+      ports={0:virtual,180:virtual,90:physical:$i$}]{}
+    \tn[at=(1,2), name=r,
+      ports={0:virtual,180:virtual,90:physical:$j$}]{}
+    \tn[at=(1,3), name=l,
+      ports={0:virtual,180:virtual,90:physical:$k$}]{}
+    \tnwire[name=alpha]{t.0}{r.180}
+    \tnwire[name=beta]{r.0}{l.180}
+    \tnwire[name=gamma]{l.0}{t.180}
+    \tnmark[form=label, label pos=e]{on alpha 0.5}{$\alpha$}
+    \tnmark[form=label, label pos=s]{on beta 0.5}{$\beta$}
+    \tnmark[form=label, label pos=w]{on gamma 0.5}{$\gamma$}
+  \end{tenkz}
 \]
