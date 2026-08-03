@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1002,
+    "state": "DISMISSED",
+    "commit_id": "0000000000000000000000000000000000000000",
+    "submitted_at": "2026-08-03T09:40:00Z",
+    "user": {"login": "reviewer-two"}
+  }
+]
