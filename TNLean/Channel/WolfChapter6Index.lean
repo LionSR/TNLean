@@ -271,13 +271,44 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 ### Wolf Theorem 6.10 (Brouwer's fixed point theorem)
 
 * `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPoint`
+  (density-matrix specialization; kernel-checked).
+* `Gametheory.Brouwer.Brouwer` — exact import citation: Brouwer for the
+  standard simplex (LionSR/Brouwer library).
+* `exists_fixedPoint_closedCube` — `TNLean.Topology.BrouwerProduct`;
+  extends Brouwer to closed cubes.
+* `fixedPoint_of_compact_retract` — `TNLean.Topology.CompactRetractFixedPoint`;
+  extends Brouwer to compact retracts of finite-dimensional real normed spaces.
+* The general compact-convex statement (Wolf's formulation) is not yet proved;
+  see `docs/paper-gaps/brouwer_general_compact_convex.tex`.
 
-### Wolf Theorem 6.11 (Stationary states)
+### Wolf Theorem 6.11 (Stationary states) — FORMALIZED
 
-* Via Brouwer: `exists_posSemidef_eigenvector` (for general positive maps)
-* Via Cesàro: `IsChannel.exists_posSemidef_fixedPoint` — `TNLean.Channel.FixedPoint.Cesaro`
+The theorem is formalized for continuous (not necessarily linear) maps, exactly
+matching Wolf's statement ("continuous, trace-preserving, positive (not
+necessarily linear)").  The linear specializations are also provided.
 
-### Wolf Proposition 6.8 (Positive fixed-points)
+In `TNLean.Channel.FixedPoint.StationaryStates`:
+
+* `IsPositive` — positivity predicate for arbitrary (nonlinear) maps.
+* `IsTracePreserving` — trace-preservation predicate for arbitrary maps.
+* `IsStationaryMap` — conjunction of continuity, positivity, trace preservation.
+* `IsStationaryMap.exists_stationaryState` — Wolf Theorem 6.11: existence of a
+  density-matrix fixed point for a stationary map.  The proof uses
+  `brouwer_fixedPoint_densityMatrices`.
+* `IsStationaryMap.exists_stationaryState_of_linear` — specialization to linear
+  positive trace-preserving maps.
+* `IsStationaryMap.exists_stationaryState_of_channel` — specialization to
+  quantum channels (linear CPTP maps).  This recovers the existence result
+  already proved by Cesàro means in `Cesaro.lean`, but now via Brouwer.
+
+Additionally:
+
+* Via Cesàro: `IsChannel.exists_posSemidef_fixedPoint` —
+  `TNLean.Channel.FixedPoint.Cesaro`.
+* Via Brouwer (linear): `exists_posSemidef_eigenvector` —
+  `TNLean.Channel.PerronFrobenius.Existence`.
+
+### Wolf Proposition 6.8 (Positive fixed-points) — FORMALIZED
 
 * `IsPositiveMap.posPart_negPart_fixed_of_fixedPoint` — the source-faithful positive
   trace-preserving statement for the four canonical positive parts in
@@ -289,6 +320,20 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 * `IsChannel.posSemidef_parts_of_hermitian_fixedPoint` — the channel specialization.
 * Numbered theorem: `IsPositiveMap.wolf_prop_6_8` —
   `TNLean.Channel.WolfChapter6Wrappers`.
+
+### Wolf Corollary 6.8 (Linearly independent stationary states) — FORMALIZED
+
+In `TNLean.Channel.FixedPoint.StationarySpan`:
+
+* `IsStationaryDensity` — predicate for a stationary density matrix (PSD,
+  trace 1, fixed by the map).
+* `IsPositiveMap.fixedPointsSubmodule` — the fixed-point subspace as a
+  `Submodule ℂ M_D(ℂ)`.
+* `IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef` — the fixed-point
+  subspace is spanned (over ℂ) by its positive semidefinite elements (this is
+  the key lemma for the corollary).
+* The corollary's full statement with basis and dimension (Wolf's form) remains
+  to be proved; the spanning lemma is the load-bearing step.
 
 ### Wolf Corollary 6.6 (projected support corner) — FORMALIZED (Kraus case)
 
