@@ -296,10 +296,11 @@ landed; its exact diff changes only the tag-derived 1.0 manifest and four
 canonical release artifacts.  Exact-head sign-off review follows immediately
 on that integration; if `main` advances, repeat preparation on the new tip.  A
 validated sign-off remains live until a full replay succeeds.  The dependent
-publisher then constructs the one signed tag object fixed by the release policy
-and creates the final ref.  A stopped runner can retry by authenticating that
-same object; it never invents a second one.  Do not push the tag by hand: an
-object other than the exact authenticated one is an incident, not a release.
+publisher first reads the final ref.  It either constructs the one signed tag
+object fixed by the release policy and creates an absent ref, or authenticates
+that already-present object without reading the private key.  A retry never
+invents a second object.  Do not push the tag by hand: any other object is an
+incident, not a release.
 Before its first write, the publisher verifies the candidate object's signature,
 schema bytes, object ID, and peel.  A successful job is itself the API-visible
 publication fact; there is no inaccessible job-output receipt.  Remove the

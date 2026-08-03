@@ -123,14 +123,14 @@ name, moving path, caller-controlled variable or secret other than the private
 key, or unbound `workflow_dispatch` input fails closed. Trusted `GITHUB_*`
 runner metadata must agree with the closed tuple.
 
-The publisher constructs one byte-deterministic annotated tag object `E`. The
-pinned object schema fixes its tagger identity, the `+0000` timezone, and the
-tagger time from the tuple's `tagger_epoch_seconds`. It fixes every byte from
-the `object` header through the message, the Git SSH-signature embedding, and
-the repository object-format hash. The publisher signs the exact unsigned tag
-payload with SSH-Ed25519 under namespace `git`; the deterministic signature
-completes `E`. The message binds `tenkz-v1.0.0`, `I`, the armed policy hash, and
-the validated ledger prefix.
+On the absent-ref path, the publisher constructs one byte-deterministic
+annotated tag object `E`. The pinned object schema fixes its tagger identity,
+the `+0000` timezone, and the tagger time from the tuple's
+`tagger_epoch_seconds`. It fixes every byte from the `object` header through the
+message, the Git SSH-signature embedding, and the repository object-format
+hash. The publisher signs the exact unsigned tag payload with SSH-Ed25519 under
+namespace `git`; the deterministic signature completes `E`. The message binds
+`tenkz-v1.0.0`, `I`, the armed policy hash, and the validated ledger prefix.
 
 The publisher reads the final ref before and after every uncertain write. If it
 is absent, the job constructs `E`, verifies its raw signature against the pinned

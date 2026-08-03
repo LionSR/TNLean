@@ -276,8 +276,8 @@ dedicated environment must retain its protected-branch rule. Across that tree,
 the publisher is the only job that may name the environment or private-key
 secret; `secrets: inherit` is forbidden. The configured secret name exists only
 in that environment. The same name in another environment in this repository,
-at repository scope, or at organization scope with access to this repository
-fails closed.
+at repository scope, or at organization scope fails closed, regardless of the
+organization secret's current repository access.
 
 After a successful publisher job, an administrator removes the environment
 secret. The validation that declares `released` requires its absence, and every
@@ -319,8 +319,9 @@ The successful validator passes one closed tuple to its dependent job: `I`,
 `tagger_epoch_seconds`, policy and prefix hashes, prefix boundary, and the
 pinned support-tree, schema-blob, and public-key-blob OIDs. The publisher accepts
 no caller-supplied replacement. It fetches those exact Git objects by OID
-through the GitHub control plane and verifies their identities and hashes before
-constructing `E`; it never reads a moving branch path.
+through the GitHub control plane and verifies their identities and hashes. When
+construction is required, those checks precede it; the publisher never reads a
+moving branch path.
 
 After validation, the publisher first reads the final ref. If it is absent, the
 publisher constructs `E`, verifies its raw signature against the pinned public
