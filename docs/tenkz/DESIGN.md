@@ -295,9 +295,11 @@ the exact sign-off integration's network-disabled post-merge validator succeeds.
 The publisher makes one authenticated tag object that every retry can
 reconstruct. The pinned support tree supplies its SSH-Ed25519 public key and
 byte-level object schema; only the publisher receives the private key. The
-schema fixes the tagger identity and uses the sign-off merge time rather than a
-runner clock. Its signed message binds the final name, sign-off integration,
-policy hash, and ledger prefix.
+schema fixes the tagger identity, fixes its timezone to `+0000`, and uses the
+sign-off merge time rather than a runner clock. It specifies the complete Git
+tag-object byte layout, the `git` SSH-signature namespace and embedding, and the
+repository object-format hash. Its signed message binds the final name,
+sign-off integration, policy hash, and ledger prefix.
 
 The successful validator passes one closed tuple to its dependent job: `I`, the
 normalized sign-off merge time, policy and prefix hashes, prefix boundary, and

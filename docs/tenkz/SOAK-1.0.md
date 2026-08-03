@@ -106,12 +106,15 @@ key, or unbound `workflow_dispatch` input fails closed. Trusted `GITHUB_*`
 runner metadata must agree with the closed tuple.
 
 The publisher constructs one byte-deterministic annotated tag object `E`. The
-pinned object schema fixes its tagger identity, normalizes the tagger time to
-the sign-off pull request's exact `mergedAt`, and fixes the signed-message
-serialization. That message binds `tenkz-v1.0.0`, `I`, the armed policy hash,
-and the validated ledger prefix. `E` carries an SSH-Ed25519 signature under the
-public key in the pinned support tree. The validator checks the raw signature
-and payload itself; GitHub's displayed `verified` value is not a substitute.
+pinned object schema fixes its tagger identity, the `+0000` timezone, and the
+tagger time obtained from the sign-off pull request's exact `mergedAt`. It fixes
+every byte from the `object` header through the message, the Git SSH-signature
+embedding, and the repository object-format hash. The publisher signs the exact
+unsigned tag payload with SSH-Ed25519 under namespace `git`; the deterministic
+signature completes `E`. The message binds `tenkz-v1.0.0`, `I`, the armed policy
+hash, and the validated ledger prefix. The validator checks the raw signature
+and payload against the pinned public key; GitHub's displayed `verified` value
+is not a substitute.
 
 The publisher reads the final ref before and after every uncertain write. If it
 is absent, the job creates or re-creates content-addressed object `E`, creates
@@ -120,6 +123,13 @@ authenticates its exact bytes, signature, and peel to `I` and succeeds without
 another mutation. An absent ref remains retryable. Any present non-`E` object,
 bad signature, wrong payload, or wrong peel is a hard release incident. A
 successful publisher job records `E`'s OID after the final readback.
+
+When the final ref exists, the trusted evidence-collection phase resolves it,
+fetches that exact annotated object into an isolated Git object database, and
+resolves the ref again; a changed lookup fails closed. Network access is then
+removed. The validator reads the stored object bytes with the
+version-fingerprinted Git client, recomputes their OID, and verifies the payload
+and signature. Parsed REST fields alone are insufficient evidence.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -802,10 +812,12 @@ the ordered reset process above.
 Every validation, including one whose snapshot already contains the final tag,
 first replays the complete pinned policy, ledger, payload, Git, and GitHub
 evidence through the validated sign-off. A tag lookup may not short-circuit
-that replay. GitHub must report a successful publisher job in the pinned
-workflow run for `I`, ordered after its successful post-merge validation job.
-Its closed output names `E`'s OID and reports that the final readback either
-created or authenticated that same object. The current object named
+that replay. The resolver completely paginates workflow runs and jobs for `I`.
+It accepts any successful publisher job using the exact pinned workflow bytes
+and ordered after that run's successful post-merge validation job. Its closed
+output names `E`'s OID and reports that the final readback either created or
+authenticated that same object. Distinct successful OIDs fail closed. The
+current object named
 `tenkz-v1.0.0` must equal `E`, carry the valid raw signature and exact payload,
 and peel to `I` under the required current no-update, no-delete, no-bypass
 protection. Only that combined observation changes the campaign to terminal
@@ -819,6 +831,9 @@ present tag, is likewise a hard release incident. An absent final-tag ref
 remains `signed-off-awaiting-tag` while no successful publisher job exists. A
 successful job with a later absent ref is a hard incident: the required
 readback succeeded, so the protected ref was subsequently deleted or hidden.
+If history rewriting makes `I` unreachable from current `main`, the ordinary
+replay fails; once the final ref exists, that failure is likewise a hard
+incident.
 No incident is repaired by deleting, moving, or reusing the name, and none
 starts another 1.0 attempt.
 
