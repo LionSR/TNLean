@@ -206,6 +206,131 @@ lifetime.  The alternative execution form must begin exactly
 `executes at the <milestone> freeze`.  Prose outside such a row is not a
 machine-readable verdict.
 
+## Compatibility policy and 1.0 evidence gate
+
+`DESIGN.md` owns package and event-stream compatibility.  `SOAK-1.0.md` is an
+inactive ledger while its normative block says `enforcement = "pending"`.
+During that state, no campaign entry is valid and reviewed follow-up PRs may still
+correct the prefix.
+
+Before the 0.9 freeze, do not preserve an obsolete spelling merely because it
+exists today.  Move its callers to the clean 1.0 form in the same change, then
+delete it.  Add a temporary bridge only when a staged migration cannot land
+atomically, and give that bridge an explicit SHRINK expiry.
+
+The activation slice under #5352 will add the validation commands here only
+after their scripts, repository-evidence checks, tests, and CI wiring exist on
+`main`.  Close both blocker groups before activation.  One
+self-referential activation pull request then verifies the current no-update,
+no-delete, no-bypass `tenkz-v*` protection and changes exactly seven scalars:
+both normative enforcement values, the inventory's raw-blob digest, the Git
+tree OIDs of `tests/tenkz/release-harness/` and
+`tests/tenkz/release-support/`, the SHA-256 of the exact armed `DESIGN.md` UTF-8
+blob, and its own pull-request reference.  It
+cannot change the checker, workflow, inventory, either pinned tree, policy
+prose, or any other byte.  A later self-referential freeze record validates the
+tag-derived 0.9 payload and supplies the verified attempt-ordering anchor.
+
+The policy's dedicated closed workflow list is pinned indirectly by the
+activation integration.  Every later candidate and post-merge check requires
+those exact workflow blobs and modes at its exact target, rejects a candidate
+diff touching them, and binds an accepted GitHub run to the pinned workflow
+bytes and head.  Local actions and reusable workflows join that
+activation-derived object set.  External actions and called workflows use full
+commit SHAs, containers use content digests, and interpreters, helpers,
+packages, and runtime downloads join the recursive closure.  Package-manager or
+downloader execution, an unhashed lock, a tag, branch, missing object, or
+incomplete closure fails closed.  Network access is disabled before any
+repository code or validation command runs.
+
+Release-test code and imported or sourced helpers live under the dedicated
+`tests/tenkz/release-harness/` tree.
+Expected outputs, baselines, allowlists, thresholds, and other immutable
+acceptance configuration live under `tests/tenkz/release-support/`.  The closed
+inventory separates mutable product-program paths from non-executable fixtures; the
+program may be run only through the pinned harness, and neither role can select
+coverage or supply runner, helper, or acceptance logic.  Each atomic test owns
+one pinned assertion-failure fingerprint.  Commands run in the hermetic
+repository-shaped view specified by `SOAK-1.0.md`, with a fixed output mount,
+pinned child-tool profile, and no host-checkout or network access.  Symlinks,
+submodules, special entries, and any other in-repository dependency fail closed.
+These exact pins belong to the 0.9-to-1.0 campaign.  A later release gets a new
+versioned policy and harness; it does not reopen this ledger or freeze 1.0 test
+bytes forever.
+
+The first actual campaign entry waits until the blocker chain recorded in the
+policy has closed.  Its prerequisite list is the pinned policy chain flattened
+in row-major order; `SOAK-1.0.md` does not own a duplicate list.  The source PR
+needs an approval from a repository-authorized independent reviewer on its
+exact final head and an integration tree equal to that approved tree.  The
+tagged source integration and freeze-record
+merge are atomic: `main` must not advance between them, or the unused tag is
+abandoned and the source/tag step repeats with a patch larger than every
+existing `tenkz-v0.9.*` tag, including one with no ledger entry.
+The freeze entry stores the complete sorted tag-name snapshot seen by its exact
+candidate check.  A later tag is a later reservation; it does not change what
+that earlier check observed.
+
+Once the freeze record lands, the evidence gate has no calendar delay.  It
+requires two distinct, independently approved real-work pull requests merged
+after the freeze: one changing a production Lean formalization (excluding
+`TNLean/Archive/**`) or blueprint chapter or appendix, and one changing an RMP
+benchmark case.  Immutable full pull-request diffs decide eligibility.  The
+eligible source must still exist at the reviewed head, have a changed
+comment-stripped token stream, and pass its class-specific Lean, blueprint, or
+RMP validation.  Comment-only, whitespace-only, and deletion-only changes do
+not qualify, and one pull request fills only one class.  Policy-, checker-, CI-,
+ledger-record, and reset-receipt pull requests do not qualify.  Each record
+pull request changes only its one ledger append.  A compatible-friction entry
+records a nonempty list of pinned atomic tests for its public surface.  A
+resolution names a separate exact-head-approved fix pull request: every test
+reports its exact fingerprint at the friction and fix-parent trees, its fixtures
+remain byte-identical, a declared surface-owned program changes, and the tests
+plus full active-freeze payload pass at the fix head.
+If no pinned atomic test witnesses a finding, or the frozen surface must break,
+record `restart-required` and reset the attempt; do not disguise a broad failure
+as compatibility evidence.  Release preparation lands only after every
+compatible friction in the active attempt is resolved and both work merges have
+landed; its exact diff changes only the tag-derived 1.0 manifest and four
+canonical release artifacts.  Exact-head sign-off review follows immediately
+on that integration; if `main` advances, repeat preparation on the new tip.  A
+validated sign-off remains live until a full replay succeeds and
+the pinned post-merge workflow's dependent publisher job creates and reads back
+the exact annotated final tag under current required protection.  Do not push
+that tag by hand: a pre-existing or externally created ref is an incident, not
+a release.
+Current mutable facts are replayed forever: drift before the final-tag ref uses
+the reset process, while drift after that ref exists is a hard incident and
+never reopens the ledger.
+
+A valid `record-invalid` reset acknowledges its historical target, so the same
+failed fact is not queued forever.  If that reset later becomes invalid, its
+target is uncovered and both invalid records require later valid resets.
+Historical placement is replayed from exact-head evidence bound to the reset's
+pre-reset prefix.  The current audit always uses the actual final-prefix
+boundary; a stale caller-selected boundary is rejected.
+Before a `record-invalid` ledger append, a separate independently approved
+receipt PR adds one canonical blob under `docs/tenkz/soak-replay/`, using the
+schema in the pinned support tree.  The ledger-only reset names that PR and the
+blob digest.  The reset and every later validation tree retain the exact blob.
+Later replay reads that current-tree copy, so a rewritten old integration is
+recoverable by restoring the same bytes; workflow artifacts and newly supplied
+historical snapshots are not evidence.
+
+The enforcement workflow must fail closed when GitHub evidence is absent,
+null, incomplete, or inconsistent with the fetched Git objects.  Candidate and
+post-merge checks need pull-request open, reopen, synchronize, ready-for-review,
+and close activity; review submission, edit, and dismissal activity; issue
+close and reopen activity; and pushes to `main` and the `tenkz-v*` tag
+namespace.  It performs only read requests.  Its credential principal needs
+read access to repository contents, pull requests, reviews, and issues, plus
+the write-level ruleset visibility GitHub requires to return unredacted rule
+and bypass details.  Missing or redacted details fail closed.  Ruleset
+administrators and the GitHub control plane are trusted; this current-state
+check does not claim to detect an administrative protection gap restored before
+the snapshot.  No live-entry or release command is available while enforcement
+is pending.
+
 ## Shared parsers
 
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
