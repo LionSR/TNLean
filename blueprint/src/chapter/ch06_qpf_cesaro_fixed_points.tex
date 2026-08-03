@@ -31,6 +31,23 @@
     (\ref{eq:channel_cesaro_telescope}).
 \end{proof}
 
+
+\begin{lemma}[Dirichlet's simultaneous approximation]
+    \label{lem:dirichlet_simultaneous}
+    \lean{Dirichlet.exists_int_near_mul_simultaneous}\leanok
+    \uses{}
+    Let $x_1,\dots,x_m$ be $m$ real numbers and $q>1$ any integer.
+    Then there exist integers $n,p_1,\dots,p_m$ such that
+    $1\le n\le q^m$ and $|x_k n-p_k|\le 1/q$ for all $k$.
+    This is \cite[Lemma~6.1]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Pigeonhole principle on the integer lattice of side $q^m$: the
+    $q^m+1$ points $(\{nx_1\},\dots,\{nx_m\})$ for $n=0,\dots,q^m$
+    lie in $q^m$ cells; two share a cell, and their difference yields $n$.
+\end{proof}
+
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
     \lean{IsChannel.exists_posSemidef_fixedPoint}
     \leanok

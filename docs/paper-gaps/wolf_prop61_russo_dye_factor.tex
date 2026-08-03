@@ -1,0 +1,32 @@
+\documentclass{article}
+\begin{document}
+\section*{Wolf Proposition 6.1 --- Russo--Dye constant}
+
+\paragraph{Source statement.}
+Wolf, \textit{Quantum Channels \& Operations}, Proposition~6.1:
+``If $T$ is a positive map on $\mathcal M_d(\mathbb C)$, then
+$\varrho(T)\le \|T(\mathbf 1)\|_\infty$.''
+
+\paragraph{Deviation.}
+The source proof invokes the Russo--Dye theorem $\|T(X)\|_\infty\le \|T(\mathbf 1)\|_\infty\,\|X\|_\infty$
+to bound every eigenvalue by $\|T(\mathbf 1)\|_\infty$ and thus the spectral
+radius.  The present formalization (Mathlib) provides
+\texttt{PositiveLinearMap.norm\_apply\_le\_of\_nonneg} for PSD inputs
+and the four-part decomposition for general inputs, which yields the weaker
+bound $\varrho(T)\le 4\,\|T(\mathbf 1)\|_\infty$ (factor~$4$ instead of~$1$).
+
+The trace-preserving and unital cases circumvent this because the eigenvalue
+bound $|\lambda|\le 1$ is obtained directly from the orbit argument in
+\texttt{IsPositiveMap.eigenvalue\_norm\_le\_one\_of\_tracePreserving}
+(\texttt{TNLean/Channel/Determinant/Bound.lean}) and eigenvalue~$1$ existence
+from the Perron--Frobenius theorem (\texttt{TNLean/Channel/Peripheral/SpectralRadius.lean}).
+
+\paragraph{Elimination plan.}
+Formalize the Russo--Dye theorem for matrix algebras (either by importing the
+general C$^\ast$-algebra result from Mathlib once available, or by a direct
+matrix argument using the Russo--Dye theorem for the special case of
+$\mathcal B(\mathcal H)$).  Until then the trace-preserving/unital cases
+are fully covered; the general positive-map case remains with factor~$4$.
+
+\paragraph{Tracking.} Issue \#3984.
+\end{document}

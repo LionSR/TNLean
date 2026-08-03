@@ -24,5 +24,6 @@ import TNLean.Channel.Peripheral.IrreducibleChannel
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Powers
+import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.UnitalKraus

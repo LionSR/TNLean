@@ -1,0 +1,35 @@
+\documentclass{article}
+\begin{document}
+\section*{Wolf Proposition 6.2 --- Trivial Jordan blocks for peripheral eigenvalues}
+
+\paragraph{Source statement.}
+Wolf, \textit{Quantum Channels \& Operations}, Proposition~6.2:
+``Let $T:\mathcal M_d(\mathbb C)\to\mathcal M_d(\mathbb C)$ be a trace-preserving
+(or unital) positive linear map.  If $\lambda$ is an eigenvalue of $T$ with
+$|\lambda|=1$, then its geometric multiplicity equals its algebraic multiplicity,
+i.e., all Jordan blocks for $\lambda$ are one-dimensional.''
+
+\paragraph{Deviation.}
+This proposition is not yet formalized in Lean.  The mathematical proof
+strategy is clear: the uniform boundedness of $\{T^n\}$ (from positivity
+and trace preservation, already formalized as
+\texttt{IsPositiveMap.hasBoundedOrbits\_of\_tracePreserving}) contradicts
+the polynomial growth of entries in powers of a nontrivial Jordan block.
+The binomial expansion of $(\lambda I+N)^n$ for a nilpotent $N$ with
+$N^k=0$ gives a term $\binom{n}{k-1}$, whose $\ell^\infty$-norm grows
+without bound when $k>1$ and $|\lambda|=1$.
+
+\paragraph{Elimination plan.}
+Formalize the binomial expansion \texttt{Commute.add\_pow} in the semiring of
+linear endomorphisms, prove that the norm of $\binom{n}{k-1}N^{k-1}$ grows
+unboundedly when $k>1$, and combine with
+\texttt{IsPositiveMap.hasBoundedOrbits\_of\_tracePreserving} to obtain a
+contradiction.  The key missing piece is the formal generalized-eigenspace /
+Jordan-block infrastructure.
+
+\paragraph{Scope.} Rank-2 case (no $(T-\lambda)X\neq0$ with $(T-\lambda)^2X=0$)
+is sufficient for most downstream applications including the peripheral-spectrum
+theory of Theorem~6.6.
+
+\paragraph{Tracking.} Issue \#3984.
+\end{document}
