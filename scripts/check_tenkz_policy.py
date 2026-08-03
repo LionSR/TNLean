@@ -71,7 +71,7 @@ EXPECTED_POLICY = {
         "frozen_twin_lifetime": "permanent",
         "frozen_twin_precedent": "quantikz/quantikz2",
         "maintainer_identity": "github:lionsr",
-        "signer_identity_scheme": "github:lowercase-login",
+        "github_identity_scheme": "github:lowercase-login",
         "reviewer_repository_permissions": ["write", "admin"],
         "tag_immutability": "github-ruleset-no-update-delete-or-bypass",
         "release_manifest_pattern": "docs/tenkz/releases/TAG.toml",
@@ -101,6 +101,18 @@ EXPECTED_POLICY = {
         "release_reset_replay_schema": (
             "tests/tenkz/release-support/reset-replay-v1.schema.json"
         ),
+        "release_tag_signature": "ssh-ed25519",
+        "release_tag_public_key": (
+            "tests/tenkz/release-support/final-tag-signing-key.pub"
+        ),
+        "release_tag_object_schema": (
+            "tests/tenkz/release-support/final-tag-object-v1.schema.json"
+        ),
+        "release_publisher_environment": "tenkz-release-publisher",
+        "release_publisher_secret": "TENKZ_FINAL_TAG_SIGNING_KEY",
+        "release_publisher_secret_scope": "environment-only-no-shadow",
+        "release_publisher_key_retirement": "required-before-released",
+        "release_publisher_workflow_root": ".github/workflows",
         "release_test_dependency_contract": (
             "pinned-harness-support-declared-subject-roles"
         ),
@@ -335,6 +347,14 @@ class ReleaseContract:
     workflow_dependency_contract: str
     enforcement_network_contract: str
     reset_replay_schema: str
+    tag_signature: str
+    tag_public_key: str
+    tag_object_schema: str
+    publisher_environment: str
+    publisher_secret: str
+    publisher_secret_scope: str
+    publisher_key_retirement: str
+    publisher_workflow_root: str
     test_dependency_contract: str
     test_protocol: str
 
@@ -475,15 +495,49 @@ class TagEvidence:
     historical_current_namespace_complete: bool | None = None
     historical_current_matching_tag_names: tuple[str, ...] | None = None
     exists: bool | None = True
+    final_lookup_before_fetch_object_id: str | None = None
+    final_fetched_object_id: str | None = None
+    final_lookup_after_fetch_object_id: str | None = None
+    final_network_disabled_before_object_read: bool | None = None
+    final_raw_object_bytes_complete: bool | None = None
+    final_object_schema_valid: bool | None = None
+    final_recomputed_object_id: str | None = None
+    final_signature_algorithm: str | None = None
+    final_signature_namespace: str | None = None
+    final_raw_signature_valid: bool | None = None
+    final_public_key_blob_oid: str | None = None
+    final_public_key_from_pinned_support_tree: bool | None = None
+    final_schema_blob_oid: str | None = None
+    final_schema_from_pinned_support_tree: bool | None = None
+    final_tagger_identity_matches_schema: bool | None = None
+    final_tagger_epoch_seconds: int | None = None
+    final_tagger_timezone: str | None = None
+    final_message_tag: str | None = None
+    final_message_integration_oid: str | None = None
+    final_message_policy_sha256: str | None = None
+    final_message_prefix_sha256: str | None = None
+    final_message_prefix_boundary: str | None = None
+    final_commit_reachable_from_main: bool | None = None
 
 
 @dataclass(frozen=True)
 class FinalTagPublisherEvidence:
-    """Pinned post-merge validation and final-tag publisher job evidence."""
+    """Complete pinned publisher and terminal release-validation history."""
 
     validated_integration_oid: str | None
+    validated_tagger_epoch_seconds: int | None
+    validated_policy_sha256: str | None
+    validated_prefix_sha256: str | None
+    validated_prefix_boundary: str | None
+    validated_support_tree_oid: str | None
+    validated_schema_blob_oid: str | None
+    validated_public_key_blob_oid: str | None
     complete: bool | None
-    pinned_workflow_run_exact: bool | None
+    workflow_runs_complete_and_paginated: bool | None
+    workflow_jobs_complete_and_paginated: bool | None
+    release_validation_runs_complete_and_paginated: bool | None
+    prior_released_validation_exact_and_successful: bool | None
+    pinned_workflow_runs_exact: bool | None
     postmerge_validation_succeeded: bool | None
     postmerge_validation_network_disabled: bool | None
     publisher_status: str | None
@@ -492,15 +546,50 @@ class FinalTagPublisherEvidence:
     validation_jobs_lack_contents_write: bool | None
     publisher_has_only_contents_write: bool | None
     publisher_has_no_checkout_or_repository_execution: bool | None
-    publisher_uses_version_fingerprinted_hosted_gh: bool | None
+    publisher_has_no_uses_or_inherited_secrets: bool | None
+    publisher_uses_only_version_fingerprinted_hosted_gh_git_ssh_keygen: bool | None
     publisher_command_and_inputs_closed: bool | None
     publisher_uses_only_github_control_plane: bool | None
     other_networked_steps_absent: bool | None
-    final_ref_absent_before_create: bool | None
-    annotated_tag_object_targets_integration: bool | None
-    ref_created_without_force: bool | None
-    readback_complete_and_matching: bool | None
-    reported_tag_object_oid: str | None
+    closed_needs_tuple_complete_and_matching: bool | None
+    closed_needs_has_no_caller_substitute: bool | None
+    github_metadata_matches_closed_needs: bool | None
+    caller_controlled_inputs_absent: bool | None
+    exact_git_objects_fetched_by_oid_and_verified: bool | None
+    publisher_environment_and_secret_exact: bool | None
+    publisher_is_only_private_key_consumer: bool | None
+    deterministic_signed_tag_object_contract: bool | None
+    signature_algorithm_and_namespace_exact: bool | None
+    tagger_epoch_exact_canonical_and_in_range: bool | None
+    publisher_reads_ref_before_private_key_access: bool | None
+    private_key_available_only_to_absent_ref_path: bool | None
+    existing_ref_path_cannot_access_private_key: bool | None
+    absent_ref_candidate_authenticated_before_write: bool | None
+    existing_ref_object_authenticated_without_mutation: bool | None
+    publisher_success_requires_authenticated_final_readback: bool | None
+    publisher_emits_no_durable_output_receipt: bool | None
+    successful_job_head_matches_integration: bool | None
+    successful_job_historical_workflow_tree_matches_activation: bool | None
+    successful_job_follows_successful_postmerge_validation: bool | None
+    successful_job_conclusion_api_visible: bool | None
+
+
+@dataclass(frozen=True)
+class PublisherSecretEvidence:
+    """Exhaustive current locations for the publisher signing-key name."""
+
+    validated_environment: str | None
+    validated_secret_name: str | None
+    validated_secret_scope: str | None
+    validated_key_retirement: str | None
+    complete: bool | None
+    repository_environments_complete_and_paginated: bool | None
+    all_environment_secret_names_complete_and_paginated: bool | None
+    repository_secret_names_complete_and_paginated: bool | None
+    organization_secret_names_and_access_complete_and_paginated: bool | None
+    configured_secret_locations: tuple[str, ...] | None
+    dedicated_environment_configuration_complete: bool | None
+    dedicated_environment_restricts_protected_release_branch: bool | None
 
 
 @dataclass(frozen=True)
@@ -558,6 +647,7 @@ class WorkflowEvidence:
     validated_activation_integration: str | None
     validated_target_oid: str | None
     validated_paths: tuple[str, ...] | None
+    validated_publisher_workflow_root: str | None
     complete: bool | None
     activation_paths_are_regular_blobs: bool | None
     target_blobs_and_modes_match_activation: bool | None
@@ -573,6 +663,12 @@ class WorkflowEvidence:
     candidate_diff_untouched: bool | None
     github_checks_bind_exact_head_and_workflows: bool | None
     supervisor_receipt_complete_and_matching: bool | None
+    activation_publisher_workflow_tree_complete: bool | None
+    target_publisher_workflow_tree_matches_activation: bool | None
+    workflow_jobs_complete_and_paginated: bool | None
+    publisher_is_sole_environment_consumer: bool | None
+    publisher_is_sole_secret_consumer: bool | None
+    workflow_secret_inheritance_absent: bool | None
 
 
 @dataclass(frozen=True)
@@ -603,6 +699,18 @@ class ActivationDiffEvidence:
     hermetic_execution_contract_valid: bool | None
     supervisor_self_test_receipt_valid: bool | None
     enforcement_workflows_pinned: bool | None
+    publisher_workflow_tree_pinned: bool | None
+    publisher_workflow_jobs_complete_and_paginated: bool | None
+    publisher_is_sole_environment_consumer: bool | None
+    publisher_is_sole_secret_consumer: bool | None
+    workflow_secret_inheritance_absent: bool | None
+    publisher_environment_configuration_complete: bool | None
+    publisher_environment_restricts_protected_release_branch: bool | None
+    repository_environments_complete_and_paginated: bool | None
+    all_environment_secret_names_complete_and_paginated: bool | None
+    repository_secret_names_complete_and_paginated: bool | None
+    organization_secret_names_and_access_complete_and_paginated: bool | None
+    configured_secret_only_in_dedicated_environment: bool | None
     policy_digest_matches: bool | None
     ledger_prefix_matches: bool | None
 
@@ -661,11 +769,18 @@ ResolveReplayReleaseTestObservation = Callable[
 ResolveReplayFreezeTag = Callable[[str], TagEvidence]
 ResolveCurrentFinalTag = Callable[[str], TagEvidence]
 ResolveFinalTagPublisher = Callable[[str], FinalTagPublisherEvidence]
+ResolveCurrentPublisherSecret = Callable[
+    [str, str, str, str],
+    PublisherSecretEvidence,
+]
 ResolveReplayIssue = Callable[[str], IssueEvidence]
 ResolveReplayRecordInvalidReset = Callable[
     [str, str, str, str, str], RecordInvalidResetReplayEvidence
 ]
-ResolveCurrentWorkflow = Callable[[str, str, tuple[str, ...]], WorkflowEvidence]
+ResolveCurrentWorkflow = Callable[
+    [str, str, tuple[str, ...], str],
+    WorkflowEvidence,
+]
 
 
 def require(condition: bool, message: str) -> None:
@@ -954,6 +1069,25 @@ def utc_instant(value: object, field: str) -> datetime:
     return value.astimezone(timezone.utc)
 
 
+def canonical_tagger_epoch_seconds(value: object, field: str) -> int:
+    """Convert one exact integral UTC instant to the closed tagger scalar."""
+
+    require(isinstance(value, datetime), f"{field} is missing or malformed")
+    require(
+        value.tzinfo is not None
+        and value.utcoffset() == timezone.utc.utcoffset(value)
+        and value.microsecond == 0,
+        f"{field} is not an unambiguous integral UTC instant",
+    )
+    seconds = int(value.timestamp())
+    require(0 <= seconds < 2**63, f"{field} is outside the tagger epoch range")
+    require(
+        datetime.fromtimestamp(seconds, timezone.utc) == value.astimezone(timezone.utc),
+        f"{field} does not have a canonical tagger epoch",
+    )
+    return seconds
+
+
 def policy_rules(
     policy: dict,
 ) -> tuple[
@@ -992,8 +1126,8 @@ def policy_rules(
         "policy",
     )
     require(
-        root.get("signer_identity_scheme") == "github:lowercase-login",
-        "policy has the wrong signer identity scheme",
+        root.get("github_identity_scheme") == "github:lowercase-login",
+        "policy has the wrong GitHub identity scheme",
     )
     reviewer_permissions = root.get("reviewer_repository_permissions")
     require(
@@ -1023,6 +1157,14 @@ def policy_rules(
         workflow_dependency_contract=str(root.get("release_workflow_dependencies", "")),
         enforcement_network_contract=str(root.get("release_enforcement_network", "")),
         reset_replay_schema=str(root.get("release_reset_replay_schema", "")),
+        tag_signature=str(root.get("release_tag_signature", "")),
+        tag_public_key=str(root.get("release_tag_public_key", "")),
+        tag_object_schema=str(root.get("release_tag_object_schema", "")),
+        publisher_environment=str(root.get("release_publisher_environment", "")),
+        publisher_secret=str(root.get("release_publisher_secret", "")),
+        publisher_secret_scope=str(root.get("release_publisher_secret_scope", "")),
+        publisher_key_retirement=str(root.get("release_publisher_key_retirement", "")),
+        publisher_workflow_root=str(root.get("release_publisher_workflow_root", "")),
         test_dependency_contract=str(root.get("release_test_dependency_contract", "")),
         test_protocol=str(root.get("release_test_protocol", "")),
     )
@@ -1043,6 +1185,14 @@ def policy_rules(
             contract.workflow_dependency_contract,
             contract.enforcement_network_contract,
             contract.reset_replay_schema,
+            contract.tag_signature,
+            contract.tag_public_key,
+            contract.tag_object_schema,
+            contract.publisher_environment,
+            contract.publisher_secret,
+            contract.publisher_secret_scope,
+            contract.publisher_key_retirement,
+            contract.publisher_workflow_root,
             contract.test_dependency_contract,
             contract.test_protocol,
         )
@@ -1071,6 +1221,14 @@ def policy_rules(
             "transitive-content-addressed-no-runtime-downloads",
             "disabled-before-repository-code",
             "tests/tenkz/release-support/reset-replay-v1.schema.json",
+            "ssh-ed25519",
+            "tests/tenkz/release-support/final-tag-signing-key.pub",
+            "tests/tenkz/release-support/final-tag-object-v1.schema.json",
+            "tenkz-release-publisher",
+            "TENKZ_FINAL_TAG_SIGNING_KEY",
+            "environment-only-no-shadow",
+            "required-before-released",
+            ".github/workflows",
             "pinned-harness-support-declared-subject-roles",
             "hermetic-repository-view-no-shell-or-network",
         ),
@@ -1738,6 +1896,7 @@ def validate_workflow_evidence(
     activation_integration: str,
     target_oid: str,
     workflow_paths: tuple[str, ...],
+    publisher_workflow_root: str,
 ) -> None:
     """Bind enforcement results to pinned workflow bytes and dependencies."""
 
@@ -1747,6 +1906,10 @@ def validate_workflow_evidence(
     )
     require(evidence.validated_target_oid == target_oid, "workflow evidence used another target")
     require(evidence.validated_paths == workflow_paths, "workflow evidence used another path set")
+    require(
+        evidence.validated_publisher_workflow_root == publisher_workflow_root,
+        "workflow evidence used another publisher workflow root",
+    )
     require(evidence.complete is True, "workflow evidence is incomplete")
     require(
         evidence.activation_paths_are_regular_blobs is True,
@@ -1801,23 +1964,168 @@ def validate_workflow_evidence(
         evidence.supervisor_receipt_complete_and_matching is True,
         "independent evidence-supervisor receipt is incomplete or mismatched",
     )
+    require(
+        evidence.activation_publisher_workflow_tree_complete is True,
+        "activation publisher workflow tree is incomplete",
+    )
+    require(
+        evidence.target_publisher_workflow_tree_matches_activation is True,
+        "publisher workflow tree differs from activation",
+    )
+    require(
+        evidence.workflow_jobs_complete_and_paginated is True,
+        "publisher workflow job enumeration is incomplete",
+    )
+    require(
+        evidence.publisher_is_sole_environment_consumer is True,
+        "another workflow job names the publisher environment",
+    )
+    require(
+        evidence.publisher_is_sole_secret_consumer is True,
+        "another workflow job names the publisher secret",
+    )
+    require(
+        evidence.workflow_secret_inheritance_absent is True,
+        "publisher workflow permits inherited secrets",
+    )
+
+
+def validate_publisher_secret(
+    evidence: PublisherSecretEvidence,
+    *,
+    contract: ReleaseContract,
+    retired: bool,
+    require_environment_configuration: bool,
+) -> None:
+    """Require exhaustive secret-name visibility and the exact lifecycle state."""
+
+    require(
+        evidence.validated_environment == contract.publisher_environment,
+        "publisher secret evidence used another environment",
+    )
+    require(
+        evidence.validated_secret_name == contract.publisher_secret,
+        "publisher secret evidence used another secret name",
+    )
+    require(
+        evidence.validated_secret_scope == contract.publisher_secret_scope,
+        "publisher secret evidence used another scope contract",
+    )
+    require(
+        evidence.validated_key_retirement == contract.publisher_key_retirement,
+        "publisher secret evidence used another retirement contract",
+    )
+    require(evidence.complete is True, "publisher secret evidence is incomplete")
+    require(
+        evidence.repository_environments_complete_and_paginated is True,
+        "repository environment pagination is incomplete",
+    )
+    require(
+        evidence.all_environment_secret_names_complete_and_paginated is True,
+        "environment secret-name pagination is incomplete",
+    )
+    require(
+        evidence.repository_secret_names_complete_and_paginated is True,
+        "repository secret-name pagination is incomplete",
+    )
+    require(
+        evidence.organization_secret_names_and_access_complete_and_paginated is True,
+        "organization secret-name or access pagination is incomplete",
+    )
+    locations = evidence.configured_secret_locations
+    require(
+        isinstance(locations, tuple)
+        and all(isinstance(location, str) and location for location in locations)
+        and len(locations) == len(set(locations)),
+        "publisher secret locations are incomplete or malformed",
+    )
+    if retired:
+        require(
+            not locations,
+            "publisher signing-key name was reintroduced after retirement",
+        )
+    else:
+        require(
+            locations == (f"environment:{contract.publisher_environment}",),
+            "publisher signing-key name is missing, shadowed, or outside its environment",
+        )
+    if require_environment_configuration:
+        require(
+            evidence.dedicated_environment_configuration_complete is True,
+            "publisher environment configuration is incomplete",
+        )
+        require(
+            evidence.dedicated_environment_restricts_protected_release_branch is True,
+            "publisher environment does not restrict the protected release branch",
+        )
 
 
 def validate_final_tag_publisher(
     evidence: FinalTagPublisherEvidence,
     *,
     integration_oid: str,
-) -> tuple[str, str | None]:
-    """Validate the pinned publisher state for one sign-off integration."""
+    tagger_epoch_seconds: int,
+    policy_sha256: str,
+    prefix_boundary: str,
+    support_tree_oid: str,
+) -> str:
+    """Validate the complete pinned publisher retry history for one sign-off."""
 
     require(
         evidence.validated_integration_oid == integration_oid,
         "final-tag publisher evidence used another sign-off integration",
     )
+    require(
+        evidence.validated_tagger_epoch_seconds == tagger_epoch_seconds,
+        "final-tag publisher evidence used another tagger epoch",
+    )
+    require(
+        evidence.validated_policy_sha256 == policy_sha256,
+        "final-tag publisher evidence used another policy hash",
+    )
+    require(
+        isinstance(evidence.validated_prefix_sha256, str)
+        and SHA256_RE.fullmatch(evidence.validated_prefix_sha256) is not None,
+        "final-tag publisher evidence has an invalid ledger-prefix hash",
+    )
+    require(
+        evidence.validated_prefix_boundary == prefix_boundary,
+        "final-tag publisher evidence used another ledger-prefix boundary",
+    )
+    require(
+        evidence.validated_support_tree_oid == support_tree_oid,
+        "final-tag publisher evidence used another support tree",
+    )
+    require(
+        isinstance(evidence.validated_schema_blob_oid, str)
+        and SHA_RE.fullmatch(evidence.validated_schema_blob_oid) is not None,
+        "final-tag publisher evidence has an invalid object-schema blob OID",
+    )
+    require(
+        isinstance(evidence.validated_public_key_blob_oid, str)
+        and SHA_RE.fullmatch(evidence.validated_public_key_blob_oid) is not None,
+        "final-tag publisher evidence has an invalid public-key blob OID",
+    )
     require(evidence.complete is True, "final-tag publisher evidence is incomplete")
     require(
-        evidence.pinned_workflow_run_exact is True,
-        "final-tag publisher run is not bound to the pinned exact workflow",
+        evidence.workflow_runs_complete_and_paginated is True,
+        "final-tag publisher run pagination is incomplete",
+    )
+    require(
+        evidence.workflow_jobs_complete_and_paginated is True,
+        "final-tag publisher job pagination is incomplete",
+    )
+    require(
+        evidence.release_validation_runs_complete_and_paginated is True,
+        "release-validation run pagination is incomplete",
+    )
+    require(
+        isinstance(evidence.prior_released_validation_exact_and_successful, bool),
+        "prior released-validation history is unavailable",
+    )
+    require(
+        evidence.pinned_workflow_runs_exact is True,
+        "final-tag publisher runs are not bound to the pinned exact workflow",
     )
     require(
         evidence.postmerge_validation_succeeded is True,
@@ -1844,8 +2152,12 @@ def validate_final_tag_publisher(
         "final-tag publisher checks out or executes repository content",
     )
     require(
-        evidence.publisher_uses_version_fingerprinted_hosted_gh is True,
-        "final-tag publisher uses another executable",
+        evidence.publisher_has_no_uses_or_inherited_secrets is True,
+        "final-tag publisher uses an action, called workflow, or inherited secret",
+    )
+    require(
+        evidence.publisher_uses_only_version_fingerprinted_hosted_gh_git_ssh_keygen is True,
+        "final-tag publisher uses an unpinned or unapproved executable",
     )
     require(
         evidence.publisher_command_and_inputs_closed is True,
@@ -1859,50 +2171,222 @@ def validate_final_tag_publisher(
         evidence.other_networked_steps_absent is True,
         "release workflow has another networked step",
     )
+    require(
+        evidence.closed_needs_tuple_complete_and_matching is True,
+        "final-tag publisher closed needs tuple is incomplete or mismatched",
+    )
+    require(
+        evidence.closed_needs_has_no_caller_substitute is True,
+        "final-tag publisher accepts a caller substitute for closed needs",
+    )
+    require(
+        evidence.github_metadata_matches_closed_needs is True,
+        "trusted GitHub metadata differs from the closed needs tuple",
+    )
+    require(
+        evidence.caller_controlled_inputs_absent is True,
+        "final-tag publisher accepts a caller-controlled input",
+    )
+    require(
+        evidence.exact_git_objects_fetched_by_oid_and_verified is True,
+        "final-tag publisher did not fetch and verify the exact Git objects by OID",
+    )
+    require(
+        evidence.publisher_environment_and_secret_exact is True,
+        "final-tag publisher uses another environment or secret",
+    )
+    require(
+        evidence.publisher_is_only_private_key_consumer is True,
+        "another job can consume the final-tag private key",
+    )
+    require(
+        evidence.deterministic_signed_tag_object_contract is True,
+        "final-tag publisher does not construct the deterministic signed object",
+    )
+    require(
+        evidence.signature_algorithm_and_namespace_exact is True,
+        "final-tag publisher uses another signature algorithm or namespace",
+    )
+    require(
+        evidence.tagger_epoch_exact_canonical_and_in_range is True,
+        "final-tag publisher tagger epoch is not canonical or in range",
+    )
+    require(
+        evidence.publisher_reads_ref_before_private_key_access is True,
+        "final-tag publisher accesses the private key before reading the ref",
+    )
+    require(
+        evidence.private_key_available_only_to_absent_ref_path is True,
+        "final-tag private key is available outside absent-ref construction",
+    )
+    require(
+        evidence.existing_ref_path_cannot_access_private_key is True,
+        "existing-ref retry can access the private key",
+    )
+    require(
+        evidence.absent_ref_candidate_authenticated_before_write is True,
+        "publisher does not authenticate the candidate object before its first write",
+    )
+    require(
+        evidence.existing_ref_object_authenticated_without_mutation is True,
+        "publisher does not authenticate an existing exact object without mutation",
+    )
+    require(
+        evidence.publisher_success_requires_authenticated_final_readback is True,
+        "publisher can succeed without an authenticated final readback",
+    )
+    require(
+        evidence.publisher_emits_no_durable_output_receipt is True,
+        "final-tag publisher relies on a durable job-output receipt",
+    )
     status = evidence.publisher_status
     require(
-        status in {"not-run", "success", "failure"},
+        status in {"not-run", "incomplete", "failure", "success"},
         "final-tag publisher has an invalid status",
+    )
+    if status != "success":
+        require(
+            evidence.prior_released_validation_exact_and_successful is False,
+            "prior released validation lacks a successful publisher job",
+        )
+    successful_job_evidence = (
+        evidence.successful_job_head_matches_integration,
+        evidence.successful_job_historical_workflow_tree_matches_activation,
+        evidence.successful_job_follows_successful_postmerge_validation,
+        evidence.successful_job_conclusion_api_visible,
     )
     if status == "not-run":
         require(
             evidence.publisher_started_after_validation_success is None
-            and evidence.final_ref_absent_before_create is None
-            and evidence.annotated_tag_object_targets_integration is None
-            and evidence.ref_created_without_force is None
-            and evidence.readback_complete_and_matching is None
-            and evidence.reported_tag_object_oid is None,
-            "publisher that did not run carries creation evidence",
+            and successful_job_evidence == (None, None, None, None),
+            "publisher that did not run carries successful-job evidence",
         )
-        return status, None
+        return status
     require(
         evidence.publisher_started_after_validation_success is True,
         "final-tag publisher did not start after validation success",
     )
-    if status == "failure":
-        raise PolicyError("final-tag publisher failed; hard release incident")
+    if status in {"incomplete", "failure"}:
+        require(
+            successful_job_evidence == (None, None, None, None),
+            "unsuccessful publisher history carries successful-job evidence",
+        )
+        return status
     require(
-        evidence.final_ref_absent_before_create is True,
-        "final tag existed before the publisher create operation",
+        evidence.successful_job_head_matches_integration is True,
+        "successful publisher job used another head",
     )
     require(
-        evidence.annotated_tag_object_targets_integration is True,
-        "publisher did not create an annotated tag object for the integration",
+        evidence.successful_job_historical_workflow_tree_matches_activation is True,
+        "successful publisher job used another historical workflow tree",
     )
     require(
-        evidence.ref_created_without_force is True,
-        "publisher did not create the absent final ref without force",
+        evidence.successful_job_follows_successful_postmerge_validation is True,
+        "successful publisher job did not follow its successful validation job",
     )
     require(
-        evidence.readback_complete_and_matching is True,
-        "publisher final-tag readback is incomplete or mismatched",
+        evidence.successful_job_conclusion_api_visible is True,
+        "successful publisher job conclusion is not API-visible",
     )
-    object_oid = evidence.reported_tag_object_oid
+    return status
+
+
+def validate_authenticated_final_tag(
+    evidence: TagEvidence,
+    *,
+    integration_oid: str,
+    tagger_epoch_seconds: int,
+    policy_sha256: str,
+    prefix_boundary: str,
+    publisher: FinalTagPublisherEvidence,
+    contract: ReleaseContract,
+) -> str:
+    """Authenticate the exact current annotated object after a stable double lookup."""
+
+    require(evidence.exists is True, "final tag is absent")
+    require(evidence.object_type == "tag", "final release tag is not annotated")
+    object_id = evidence.object_id
     require(
-        isinstance(object_oid, str) and SHA_RE.fullmatch(object_oid) is not None,
-        "publisher did not report a valid final tag-object OID",
+        isinstance(object_id, str) and SHA_RE.fullmatch(object_id) is not None,
+        "final release tag object is invalid",
     )
-    return status, object_oid
+    require(
+        evidence.final_lookup_before_fetch_object_id
+        == evidence.final_fetched_object_id
+        == evidence.final_lookup_after_fetch_object_id
+        == object_id,
+        "final tag changed across exact-object fetch and double resolution",
+    )
+    require(
+        evidence.final_network_disabled_before_object_read is True,
+        "final tag object was read before network removal",
+    )
+    require(
+        evidence.final_raw_object_bytes_complete is True,
+        "final tag raw object bytes are incomplete",
+    )
+    require(
+        evidence.final_object_schema_valid is True,
+        "final tag object does not satisfy the pinned byte schema",
+    )
+    require(
+        evidence.final_recomputed_object_id == object_id,
+        "final tag raw object hash does not match its OID",
+    )
+    require(
+        evidence.final_signature_algorithm == contract.tag_signature,
+        "final tag uses another signature algorithm",
+    )
+    require(
+        evidence.final_signature_namespace == "git",
+        "final tag SSH signature uses another namespace",
+    )
+    require(evidence.final_raw_signature_valid is True, "final tag raw signature is invalid")
+    require(
+        evidence.final_public_key_blob_oid == publisher.validated_public_key_blob_oid
+        and evidence.final_public_key_from_pinned_support_tree is True,
+        "final tag verification used another public key",
+    )
+    require(
+        evidence.final_schema_blob_oid == publisher.validated_schema_blob_oid
+        and evidence.final_schema_from_pinned_support_tree is True,
+        "final tag verification used another object schema",
+    )
+    require(
+        evidence.final_tagger_identity_matches_schema is True,
+        "final tag tagger identity differs from the pinned schema",
+    )
+    require(
+        evidence.final_tagger_epoch_seconds == tagger_epoch_seconds,
+        "final tag tagger epoch differs from the closed publisher tuple",
+    )
+    require(evidence.final_tagger_timezone == "+0000", "final tag timezone is not +0000")
+    require(evidence.final_message_tag == FINAL_TAG, "final tag payload names another tag")
+    require(
+        evidence.final_message_integration_oid == integration_oid,
+        "final tag payload names another sign-off integration",
+    )
+    require(
+        evidence.final_message_policy_sha256 == policy_sha256,
+        "final tag payload names another policy hash",
+    )
+    require(
+        evidence.final_message_prefix_sha256 == publisher.validated_prefix_sha256,
+        "final tag payload names another ledger-prefix hash",
+    )
+    require(
+        evidence.final_message_prefix_boundary == prefix_boundary,
+        "final tag payload names another ledger-prefix boundary",
+    )
+    require(
+        evidence.commit == integration_oid,
+        "final tag does not peel to the validated sign-off integration",
+    )
+    require(
+        evidence.final_commit_reachable_from_main is True,
+        "final tag integration is not reachable from current main",
+    )
+    return object_id
 
 
 def validate_entries(
@@ -1923,6 +2407,7 @@ def validate_entries(
     resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
     resolve_current_final_tag: ResolveCurrentFinalTag | None = None,
     resolve_final_tag_publisher: ResolveFinalTagPublisher | None = None,
+    resolve_current_publisher_secret: ResolveCurrentPublisherSecret | None = None,
     resolve_replay_issue: ResolveReplayIssue | None = None,
     resolve_replay_record_invalid_reset: ResolveReplayRecordInvalidReset | None = None,
     resolve_current_workflow: ResolveCurrentWorkflow | None = None,
@@ -1966,6 +2451,10 @@ def validate_entries(
     require(
         resolve_final_tag_publisher is not None,
         "entry validation requires final-tag publisher evidence",
+    )
+    require(
+        resolve_current_publisher_secret is not None,
+        "entry validation requires publisher secret evidence",
     )
     require(
         resolve_replay_freeze_tag is not None,
@@ -2275,6 +2764,54 @@ def validate_entries(
         "activation enforcement workflows or dependencies are not pinned",
     )
     require(
+        activation_diff.publisher_workflow_tree_pinned is True,
+        "activation publisher workflow tree is not pinned",
+    )
+    require(
+        activation_diff.publisher_workflow_jobs_complete_and_paginated is True,
+        "activation publisher workflow job enumeration is incomplete",
+    )
+    require(
+        activation_diff.publisher_is_sole_environment_consumer is True,
+        "another activation workflow job names the publisher environment",
+    )
+    require(
+        activation_diff.publisher_is_sole_secret_consumer is True,
+        "another activation workflow job names the publisher secret",
+    )
+    require(
+        activation_diff.workflow_secret_inheritance_absent is True,
+        "activation publisher workflow permits inherited secrets",
+    )
+    require(
+        activation_diff.publisher_environment_configuration_complete is True,
+        "activation publisher environment configuration is incomplete",
+    )
+    require(
+        activation_diff.publisher_environment_restricts_protected_release_branch is True,
+        "activation publisher environment does not restrict the protected release branch",
+    )
+    require(
+        activation_diff.repository_environments_complete_and_paginated is True,
+        "activation repository environment pagination is incomplete",
+    )
+    require(
+        activation_diff.all_environment_secret_names_complete_and_paginated is True,
+        "activation environment secret-name pagination is incomplete",
+    )
+    require(
+        activation_diff.repository_secret_names_complete_and_paginated is True,
+        "activation repository secret-name pagination is incomplete",
+    )
+    require(
+        activation_diff.organization_secret_names_and_access_complete_and_paginated is True,
+        "activation organization secret-name or access pagination is incomplete",
+    )
+    require(
+        activation_diff.configured_secret_only_in_dedicated_environment is True,
+        "activation publisher secret is missing, shadowed, or outside its environment",
+    )
+    require(
         activation_diff.policy_digest_matches is True,
         "activation policy digest is wrong",
     )
@@ -2303,6 +2840,7 @@ def validate_entries(
     )
 
     final_tag_cache: TagEvidence | None = None
+    publisher_secret_cache: PublisherSecretEvidence | None = None
 
     def current_final_tag() -> TagEvidence:
         nonlocal final_tag_cache
@@ -2314,19 +2852,64 @@ def validate_entries(
             )
         return final_tag_cache
 
-    def validate_current_controls() -> None:
-        assert tag_protection is not None and resolve_current_workflow is not None
+    def current_publisher_secret() -> PublisherSecretEvidence:
+        nonlocal publisher_secret_cache
+        assert resolve_current_publisher_secret is not None
+        if publisher_secret_cache is None:
+            publisher_secret_cache = resolve_current_publisher_secret(
+                release_contract.publisher_environment,
+                release_contract.publisher_secret,
+                release_contract.publisher_secret_scope,
+                release_contract.publisher_key_retirement,
+            )
+        return publisher_secret_cache
+
+    def validate_pinned_current_workflow() -> None:
+        assert resolve_current_workflow is not None
         validate_workflow_evidence(
             resolve_current_workflow(
                 activation_integration,
                 validation_target_oid,
                 release_contract.enforcement_workflows,
+                release_contract.publisher_workflow_root,
             ),
             activation_integration=activation_integration,
             target_oid=validation_target_oid,
             workflow_paths=release_contract.enforcement_workflows,
+            publisher_workflow_root=release_contract.publisher_workflow_root,
         )
+
+    def validate_pre_release_controls() -> None:
+        assert tag_protection is not None
+        validate_pinned_current_workflow()
         validate_tag_protection(tag_protection)
+        validate_publisher_secret(
+            current_publisher_secret(),
+            contract=release_contract,
+            retired=False,
+            require_environment_configuration=True,
+        )
+
+    def validate_release_transition_controls() -> None:
+        assert tag_protection is not None
+        validate_pinned_current_workflow()
+        validate_tag_protection(tag_protection)
+        validate_publisher_secret(
+            current_publisher_secret(),
+            contract=release_contract,
+            retired=True,
+            require_environment_configuration=True,
+        )
+
+    def validate_released_controls() -> None:
+        assert tag_protection is not None
+        validate_tag_protection(tag_protection)
+        validate_publisher_secret(
+            current_publisher_secret(),
+            contract=release_contract,
+            retired=True,
+            require_environment_configuration=False,
+        )
 
     def validate_absent_final_tag() -> None:
         final_tag = current_final_tag()
@@ -2339,12 +2922,35 @@ def validate_entries(
             and final_tag.candidate_matching_tag_names is None
             and final_tag.historical_candidate_check_exact_and_successful is None
             and final_tag.historical_current_namespace_complete is None
-            and final_tag.historical_current_matching_tag_names is None,
+            and final_tag.historical_current_matching_tag_names is None
+            and final_tag.final_lookup_before_fetch_object_id is None
+            and final_tag.final_fetched_object_id is None
+            and final_tag.final_lookup_after_fetch_object_id is None
+            and final_tag.final_network_disabled_before_object_read is None
+            and final_tag.final_raw_object_bytes_complete is None
+            and final_tag.final_object_schema_valid is None
+            and final_tag.final_recomputed_object_id is None
+            and final_tag.final_signature_algorithm is None
+            and final_tag.final_signature_namespace is None
+            and final_tag.final_raw_signature_valid is None
+            and final_tag.final_public_key_blob_oid is None
+            and final_tag.final_public_key_from_pinned_support_tree is None
+            and final_tag.final_schema_blob_oid is None
+            and final_tag.final_schema_from_pinned_support_tree is None
+            and final_tag.final_tagger_identity_matches_schema is None
+            and final_tag.final_tagger_epoch_seconds is None
+            and final_tag.final_tagger_timezone is None
+            and final_tag.final_message_tag is None
+            and final_tag.final_message_integration_oid is None
+            and final_tag.final_message_policy_sha256 is None
+            and final_tag.final_message_prefix_sha256 is None
+            and final_tag.final_message_prefix_boundary is None
+            and final_tag.final_commit_reachable_from_main is None,
             "absent final-tag evidence is inconsistent",
         )
 
     def finish_pending(state: str) -> str:
-        validate_current_controls()
+        validate_pre_release_controls()
         validate_absent_final_tag()
         return state
 
@@ -2359,8 +2965,8 @@ def validate_entries(
     pending_reset: tuple[str, str] | None = None
     deferred_invalid_targets: list[str] = []
     signed = False
-    successful_signoff: tuple[str, str, str, str] | None = None
-    observed_signoff: tuple[str, str, str, str] | None = None
+    successful_signoff: tuple[str, str, str, str, int] | None = None
+    observed_signoff: tuple[str, str, str, str, int] | None = None
     used_source_refs: set[str] = set()
     used_source_shas: set[str] = set()
     used_tag_names: set[str] = set()
@@ -3533,13 +4139,23 @@ def validate_entries(
             require(source_sha == active["source_sha"], f"{entry_id} names the wrong source SHA")
             require(release_tag == "tenkz-v1.0.0", f"{entry_id} has the wrong release tag")
             require(decision == "release", f"{entry_id} decision must be release")
+            tagger_epoch_seconds: int | None = None
             if not record_pending and record_integration is not None:
-                observed_signoff = (
-                    entry_id,
-                    record_ref,
-                    record_integration,
-                    release_tag,
+                tagger_epoch_result = check_external(
+                    lambda: canonical_tagger_epoch_seconds(
+                        record.merged_at,
+                        f"{record_ref} mergedAt",
+                    )
                 )
+                if isinstance(tagger_epoch_result, int):
+                    tagger_epoch_seconds = tagger_epoch_result
+                    observed_signoff = (
+                        entry_id,
+                        record_ref,
+                        record_integration,
+                        release_tag,
+                        tagger_epoch_seconds,
+                    )
             require(
                 len(active["work"]) == required_work_count
                 and set(active["work"]) == set(work_classes),
@@ -3776,7 +4392,12 @@ def validate_entries(
 
                 check_external(signoff_postmerge_facts)
                 if not entry_is_invalid():
-                    assert record_integration is not None and release_integration is not None
+                    assert (
+                        record_integration is not None
+                        and release_integration is not None
+                        and record_merged_at is not None
+                        and tagger_epoch_seconds is not None
+                    )
                     active = None
                     signed = True
                     successful_signoff = (
@@ -3784,6 +4405,7 @@ def validate_entries(
                         record_ref,
                         record_integration,
                         release_tag,
+                        tagger_epoch_seconds,
                     )
 
         if record_integration is not None and not entry_is_invalid():
@@ -3806,16 +4428,27 @@ def validate_entries(
             deferred_invalid_targets.sort(key=entry_positions.__getitem__)
 
     activate_current_record_queue()
-    validate_current_controls()
     final_tag = current_final_tag()
     terminal_tag_present = final_tag.exists is True
     publisher_status: str | None = None
-    published_tag_object: str | None = None
+    publisher_evidence: FinalTagPublisherEvidence | None = None
     if observed_signoff is not None:
         assert resolve_final_tag_publisher is not None
-        publisher_status, published_tag_object = validate_final_tag_publisher(
-            resolve_final_tag_publisher(observed_signoff[2]),
-            integration_oid=observed_signoff[2],
+        (
+            signoff_entry_id,
+            _signoff_record_ref,
+            observed_signoff_integration,
+            _observed_release_tag,
+            observed_tagger_epoch_seconds,
+        ) = observed_signoff
+        publisher_evidence = resolve_final_tag_publisher(observed_signoff_integration)
+        publisher_status = validate_final_tag_publisher(
+            publisher_evidence,
+            integration_oid=observed_signoff_integration,
+            tagger_epoch_seconds=observed_tagger_epoch_seconds,
+            policy_sha256=soak_root["policy_sha256"],
+            prefix_boundary=signoff_entry_id,
+            support_tree_oid=release_contract.test_support_tree,
         )
     if terminal_tag_present and pending_reset is not None:
         raise PolicyError("final tag exists while release evidence requires reset")
@@ -3824,49 +4457,56 @@ def validate_entries(
     if terminal_tag_present and not signed:
         raise PolicyError("final tag exists without a successfully validated sign-off")
     if pending_reset is not None:
+        validate_pre_release_controls()
         validate_absent_final_tag()
         return f"reset-required:{pending_reset[1]}"
     if signed:
         assert successful_signoff is not None
-        _signoff_entry, _signoff_record, signoff_integration, signoff_tag = (
-            successful_signoff
-        )
+        (
+            signoff_entry,
+            _signoff_record,
+            signoff_integration,
+            signoff_tag,
+            tagger_epoch_seconds,
+        ) = successful_signoff
         require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
         require(
-            publisher_status in {"not-run", "success"},
+            publisher_status in {"not-run", "incomplete", "failure", "success"},
             "final-tag publisher evidence is unavailable after sign-off",
         )
-        if publisher_status == "not-run":
-            require(
-                not terminal_tag_present,
-                "final tag exists without the successful pinned publisher",
-            )
+        assert publisher_evidence is not None
+        if not terminal_tag_present:
+            if publisher_status == "success":
+                raise PolicyError(
+                    "final-tag publisher succeeded but the final ref is absent; "
+                    "hard release incident"
+                )
+            validate_pre_release_controls()
             validate_absent_final_tag()
             return "signed-off-awaiting-tag"
-        require(
-            terminal_tag_present,
-            "final-tag publisher succeeded but the final ref is absent; hard release incident",
+        validate_authenticated_final_tag(
+            final_tag,
+            integration_oid=signoff_integration,
+            tagger_epoch_seconds=tagger_epoch_seconds,
+            policy_sha256=soak_root["policy_sha256"],
+            prefix_boundary=signoff_entry,
+            publisher=publisher_evidence,
+            contract=release_contract,
         )
-        require(final_tag.object_type == "tag", "final release tag is not annotated")
-        require(
-            isinstance(final_tag.object_id, str)
-            and SHA_RE.fullmatch(final_tag.object_id) is not None,
-            "final release tag object is invalid",
-        )
-        require(
-            isinstance(final_tag.commit, str)
-            and SHA_RE.fullmatch(final_tag.commit) is not None,
-            "final release tag target is invalid",
-        )
-        require(
-            final_tag.object_id == published_tag_object,
-            "current final tag object differs from the publisher output",
-        )
-        require(
-            final_tag.commit == signoff_integration,
-            "final tag does not target the validated sign-off integration",
-        )
+        if publisher_status != "success":
+            validate_pre_release_controls()
+            return "signed-off-awaiting-publisher-success"
+        publisher_secret = current_publisher_secret()
+        if publisher_evidence.prior_released_validation_exact_and_successful is True:
+            validate_released_controls()
+            return "released"
+        secret_locations = publisher_secret.configured_secret_locations
+        if secret_locations:
+            validate_pre_release_controls()
+            return "signed-off-awaiting-key-retirement"
+        validate_release_transition_controls()
         return "released"
+    validate_pre_release_controls()
     validate_absent_final_tag()
     if active is not None:
         return f"attempt-{active['attempt']}-active"

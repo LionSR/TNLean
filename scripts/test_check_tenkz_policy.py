@@ -35,11 +35,15 @@ RMP_MERGE = FREEZE_TIME + timedelta(seconds=2)
 RELEASE_MERGE = FREEZE_TIME + timedelta(seconds=2, microseconds=500_000)
 SIGNOFF_REVIEW = FREEZE_TIME + timedelta(seconds=3)
 SIGNOFF_MERGE = FREEZE_TIME + timedelta(seconds=11)
+SIGNOFF_TAGGER_EPOCH = int(SIGNOFF_MERGE.timestamp())
 PREREQUISITES = '["#5086", "#4699", "#4162", "#4703", "#4708", "#4163"]'
 INVENTORY_DIGEST = "d" * 64
 TEST_CODE_TREE = "e" * 40
 TEST_SUPPORT_TREE = "1" * 40
 POLICY_DIGEST = "f" * 64
+PREFIX_DIGEST = "3" * 64
+FINAL_TAG_SCHEMA_BLOB = "4" * 40
+FINAL_TAG_PUBLIC_KEY_BLOB = "5" * 40
 REGRESSION_TEST = "tex-api-regression"
 FAILURE_FINGERPRINT = "2" * 64
 
@@ -334,14 +338,27 @@ def publisher_evidence(
     integration_oid: str,
     *,
     status: str = "not-run",
-    object_oid: str = FINAL_TAG_OBJECT,
+    tagger_epoch_seconds: int = SIGNOFF_TAGGER_EPOCH,
+    prefix_boundary: str = "S1-0004",
+    prior_released: bool = False,
 ) -> policy.FinalTagPublisherEvidence:
-    ran = status in {"success", "failure"}
+    ran = status in {"incomplete", "failure", "success"}
     succeeded = status == "success"
     return policy.FinalTagPublisherEvidence(
         validated_integration_oid=integration_oid,
+        validated_tagger_epoch_seconds=tagger_epoch_seconds,
+        validated_policy_sha256=POLICY_DIGEST,
+        validated_prefix_sha256=PREFIX_DIGEST,
+        validated_prefix_boundary=prefix_boundary,
+        validated_support_tree_oid=TEST_SUPPORT_TREE,
+        validated_schema_blob_oid=FINAL_TAG_SCHEMA_BLOB,
+        validated_public_key_blob_oid=FINAL_TAG_PUBLIC_KEY_BLOB,
         complete=True,
-        pinned_workflow_run_exact=True,
+        workflow_runs_complete_and_paginated=True,
+        workflow_jobs_complete_and_paginated=True,
+        release_validation_runs_complete_and_paginated=True,
+        prior_released_validation_exact_and_successful=prior_released,
+        pinned_workflow_runs_exact=True,
         postmerge_validation_succeeded=True,
         postmerge_validation_network_disabled=True,
         publisher_status=status,
@@ -350,15 +367,97 @@ def publisher_evidence(
         validation_jobs_lack_contents_write=True,
         publisher_has_only_contents_write=True,
         publisher_has_no_checkout_or_repository_execution=True,
-        publisher_uses_version_fingerprinted_hosted_gh=True,
+        publisher_has_no_uses_or_inherited_secrets=True,
+        publisher_uses_only_version_fingerprinted_hosted_gh_git_ssh_keygen=True,
         publisher_command_and_inputs_closed=True,
         publisher_uses_only_github_control_plane=True,
         other_networked_steps_absent=True,
-        final_ref_absent_before_create=True if succeeded else None,
-        annotated_tag_object_targets_integration=True if succeeded else None,
-        ref_created_without_force=True if succeeded else None,
-        readback_complete_and_matching=True if succeeded else None,
-        reported_tag_object_oid=object_oid if succeeded else None,
+        closed_needs_tuple_complete_and_matching=True,
+        closed_needs_has_no_caller_substitute=True,
+        github_metadata_matches_closed_needs=True,
+        caller_controlled_inputs_absent=True,
+        exact_git_objects_fetched_by_oid_and_verified=True,
+        publisher_environment_and_secret_exact=True,
+        publisher_is_only_private_key_consumer=True,
+        deterministic_signed_tag_object_contract=True,
+        signature_algorithm_and_namespace_exact=True,
+        tagger_epoch_exact_canonical_and_in_range=True,
+        publisher_reads_ref_before_private_key_access=True,
+        private_key_available_only_to_absent_ref_path=True,
+        existing_ref_path_cannot_access_private_key=True,
+        absent_ref_candidate_authenticated_before_write=True,
+        existing_ref_object_authenticated_without_mutation=True,
+        publisher_success_requires_authenticated_final_readback=True,
+        publisher_emits_no_durable_output_receipt=True,
+        successful_job_head_matches_integration=True if succeeded else None,
+        successful_job_historical_workflow_tree_matches_activation=(
+            True if succeeded else None
+        ),
+        successful_job_follows_successful_postmerge_validation=(
+            True if succeeded else None
+        ),
+        successful_job_conclusion_api_visible=True if succeeded else None,
+    )
+
+
+def authenticated_final_tag(
+    integration_oid: str,
+    *,
+    object_oid: str = FINAL_TAG_OBJECT,
+    tagger_epoch_seconds: int = SIGNOFF_TAGGER_EPOCH,
+    prefix_boundary: str = "S1-0004",
+) -> policy.TagEvidence:
+    return policy.TagEvidence(
+        object_oid,
+        "tag",
+        integration_oid,
+        exists=True,
+        final_lookup_before_fetch_object_id=object_oid,
+        final_fetched_object_id=object_oid,
+        final_lookup_after_fetch_object_id=object_oid,
+        final_network_disabled_before_object_read=True,
+        final_raw_object_bytes_complete=True,
+        final_object_schema_valid=True,
+        final_recomputed_object_id=object_oid,
+        final_signature_algorithm="ssh-ed25519",
+        final_signature_namespace="git",
+        final_raw_signature_valid=True,
+        final_public_key_blob_oid=FINAL_TAG_PUBLIC_KEY_BLOB,
+        final_public_key_from_pinned_support_tree=True,
+        final_schema_blob_oid=FINAL_TAG_SCHEMA_BLOB,
+        final_schema_from_pinned_support_tree=True,
+        final_tagger_identity_matches_schema=True,
+        final_tagger_epoch_seconds=tagger_epoch_seconds,
+        final_tagger_timezone="+0000",
+        final_message_tag=policy.FINAL_TAG,
+        final_message_integration_oid=integration_oid,
+        final_message_policy_sha256=POLICY_DIGEST,
+        final_message_prefix_sha256=PREFIX_DIGEST,
+        final_message_prefix_boundary=prefix_boundary,
+        final_commit_reachable_from_main=True,
+    )
+
+
+def publisher_secret_evidence(
+    *,
+    retired: bool = False,
+    locations: tuple[str, ...] | None = None,
+) -> policy.PublisherSecretEvidence:
+    if locations is None:
+        locations = () if retired else ("environment:tenkz-release-publisher",)
+    return policy.PublisherSecretEvidence(
+        validated_environment="tenkz-release-publisher",
+        validated_secret_name="TENKZ_FINAL_TAG_SIGNING_KEY",
+        validated_secret_scope="environment-only-no-shadow",
+        validated_key_retirement="required-before-released",
+        complete=True,
+        repository_environments_complete_and_paginated=True,
+        all_environment_secret_names_complete_and_paginated=True,
+        repository_secret_names_complete_and_paginated=True,
+        organization_secret_names_and_access_complete_and_paginated=True,
+        configured_secret_locations=locations,
+        dedicated_environment_configuration_complete=True,
+        dedicated_environment_restricts_protected_release_branch=True,
     )
 
 
@@ -381,6 +480,7 @@ class Context:
         default_factory=dict
     )
     workflow_override: policy.WorkflowEvidence | None = None
+    publisher_secret_override: policy.PublisherSecretEvidence | None = None
 
     def resolve_replay_activation_diff(self, _ref: str) -> policy.ActivationDiffEvidence:
         return self.activation_diff
@@ -440,10 +540,34 @@ class Context:
         self,
         integration_oid: str,
     ) -> policy.FinalTagPublisherEvidence:
-        return self.publishers.get(
-            integration_oid,
-            publisher_evidence(integration_oid),
-        )
+        override = self.publishers.get(integration_oid)
+        if override is not None:
+            return override
+        for entry_id, record_diff in self.records.items():
+            record_ref = record_diff.validated_pr_ref
+            if record_ref is None:
+                continue
+            record = self.prs.get(record_ref)
+            if record is not None and record.merge_commit_oid == integration_oid:
+                assert record.merged_at is not None
+                return publisher_evidence(
+                    integration_oid,
+                    tagger_epoch_seconds=policy.canonical_tagger_epoch_seconds(
+                        record.merged_at,
+                        f"{record_ref} mergedAt",
+                    ),
+                    prefix_boundary=entry_id,
+                )
+        raise AssertionError(f"no sign-off record resolves to {integration_oid}")
+
+    def resolve_current_publisher_secret(
+        self,
+        _environment: str,
+        _secret_name: str,
+        _secret_scope: str,
+        _key_retirement: str,
+    ) -> policy.PublisherSecretEvidence:
+        return self.publisher_secret_override or publisher_secret_evidence()
 
     def resolve_replay_issue(self, issue: str) -> policy.IssueEvidence:
         return self.issues[issue]
@@ -494,6 +618,7 @@ class Context:
         activation_integration: str,
         target_oid: str,
         paths: tuple[str, ...],
+        publisher_workflow_root: str,
     ) -> policy.WorkflowEvidence:
         if self.workflow_override is not None:
             return self.workflow_override
@@ -501,6 +626,7 @@ class Context:
             validated_activation_integration=activation_integration,
             validated_target_oid=target_oid,
             validated_paths=paths,
+            validated_publisher_workflow_root=publisher_workflow_root,
             complete=True,
             activation_paths_are_regular_blobs=True,
             target_blobs_and_modes_match_activation=True,
@@ -516,6 +642,12 @@ class Context:
             candidate_diff_untouched=True,
             github_checks_bind_exact_head_and_workflows=True,
             supervisor_receipt_complete_and_matching=True,
+            activation_publisher_workflow_tree_complete=True,
+            target_publisher_workflow_tree_matches_activation=True,
+            workflow_jobs_complete_and_paginated=True,
+            publisher_is_sole_environment_consumer=True,
+            publisher_is_sole_secret_consumer=True,
+            workflow_secret_inheritance_absent=True,
         )
 
 
@@ -748,6 +880,18 @@ def context() -> Context:
         hermetic_execution_contract_valid=True,
         supervisor_self_test_receipt_valid=True,
         enforcement_workflows_pinned=True,
+        publisher_workflow_tree_pinned=True,
+        publisher_workflow_jobs_complete_and_paginated=True,
+        publisher_is_sole_environment_consumer=True,
+        publisher_is_sole_secret_consumer=True,
+        workflow_secret_inheritance_absent=True,
+        publisher_environment_configuration_complete=True,
+        publisher_environment_restricts_protected_release_branch=True,
+        repository_environments_complete_and_paginated=True,
+        all_environment_secret_names_complete_and_paginated=True,
+        repository_secret_names_complete_and_paginated=True,
+        organization_secret_names_and_access_complete_and_paginated=True,
+        configured_secret_only_in_dedicated_environment=True,
         policy_digest_matches=True,
         ledger_prefix_matches=True,
     )
@@ -1329,6 +1473,7 @@ def validate(blocks: list[str], facts: Context, **overrides) -> str:
         "resolve_replay_freeze_tag": facts.resolve_replay_freeze_tag,
         "resolve_current_final_tag": facts.resolve_current_final_tag,
         "resolve_final_tag_publisher": facts.resolve_final_tag_publisher,
+        "resolve_current_publisher_secret": facts.resolve_current_publisher_secret,
         "resolve_replay_issue": facts.resolve_replay_issue,
         "resolve_replay_record_invalid_reset": facts.resolve_replay_record_invalid_reset,
         "resolve_current_workflow": facts.resolve_current_workflow,
@@ -1528,6 +1673,41 @@ def main() -> int:
         "TNLean/Fix.lean",
         contract.fix_paths("tex-api")[0],
     )
+    assert contract.tag_signature == "ssh-ed25519"
+    assert contract.tag_public_key.endswith("final-tag-signing-key.pub")
+    assert contract.tag_object_schema.endswith("final-tag-object-v1.schema.json")
+    assert contract.publisher_environment == "tenkz-release-publisher"
+    assert contract.publisher_secret == "TENKZ_FINAL_TAG_SIGNING_KEY"
+    assert contract.publisher_secret_scope == "environment-only-no-shadow"
+    assert contract.publisher_key_retirement == "required-before-released"
+    assert contract.publisher_workflow_root == ".github/workflows"
+    assert {
+        "validated_signoff_merged_at",
+        "successful_publisher_object_oids",
+        "publisher_operation",
+        "reported_tag_object_oid",
+        "ref_created_without_force",
+        "readback_complete_and_matching",
+    }.isdisjoint(policy.FinalTagPublisherEvidence.__dataclass_fields__)
+    assert "final_tagger_merged_at" not in policy.TagEvidence.__dataclass_fields__
+    assert (
+        policy.canonical_tagger_epoch_seconds(SIGNOFF_MERGE, "sign-off mergedAt")
+        == SIGNOFF_TAGGER_EPOCH
+    )
+    expect_failure(
+        lambda: policy.canonical_tagger_epoch_seconds(
+            SIGNOFF_MERGE + timedelta(microseconds=1),
+            "sign-off mergedAt",
+        ),
+        "not an unambiguous integral UTC instant",
+    )
+    expect_failure(
+        lambda: policy.canonical_tagger_epoch_seconds(
+            SIGNOFF_MERGE.astimezone(timezone(timedelta(hours=1))),
+            "sign-off mergedAt",
+        ),
+        "not an unambiguous integral UTC instant",
+    )
     wrong_fix_paths = {
         **ARMED_POLICY,
         "policy": {
@@ -1539,6 +1719,21 @@ def main() -> int:
         lambda: policy.policy_rules(wrong_fix_paths),
         "differs from the signed policy",
     )
+    legacy_identity_root = {
+        key: value
+        for key, value in ARMED_POLICY["policy"].items()
+        if key != "github_identity_scheme"
+    }
+    legacy_identity_root["signer_identity_scheme"] = "github:lowercase-login"
+    legacy_identity_policy = {
+        **ARMED_POLICY,
+        "policy": legacy_identity_root,
+    }
+    expect_failure(
+        lambda: policy.policy_rules(legacy_identity_policy),
+        "differs from the signed policy",
+    )
+    assert "signer_identity_scheme" not in policy.EXPECTED_POLICY["policy"]
     assert "event_format_implementation" not in policy.EXPECTED_POLICY["policy"]
 
     # Both qualifying merges, the sign-off review, and sign-off merge occur in
@@ -2079,6 +2274,7 @@ def main() -> int:
         activation_integration,
         target_oid,
         (".github/workflows/tenkz-release-policy.yml",),
+        ".github/workflows",
     )
     mutable_workflow.workflow_override = replace(
         workflow,
@@ -2089,6 +2285,11 @@ def main() -> int:
         "external workflow dependency uses a mutable ref",
     )
     workflow_failures = (
+        (
+            "validated_publisher_workflow_root",
+            ".github/other-workflows",
+            "another publisher workflow root",
+        ),
         ("package_managers_absent", False, "invokes a package manager"),
         ("downloaders_absent", False, "invokes a downloader"),
         (
@@ -2106,6 +2307,36 @@ def main() -> int:
             False,
             "does not disable network before repository code",
         ),
+        (
+            "activation_publisher_workflow_tree_complete",
+            False,
+            "activation publisher workflow tree is incomplete",
+        ),
+        (
+            "target_publisher_workflow_tree_matches_activation",
+            False,
+            "publisher workflow tree differs from activation",
+        ),
+        (
+            "workflow_jobs_complete_and_paginated",
+            False,
+            "workflow job enumeration is incomplete",
+        ),
+        (
+            "publisher_is_sole_environment_consumer",
+            False,
+            "another workflow job names the publisher environment",
+        ),
+        (
+            "publisher_is_sole_secret_consumer",
+            False,
+            "another workflow job names the publisher secret",
+        ),
+        (
+            "workflow_secret_inheritance_absent",
+            False,
+            "permits inherited secrets",
+        ),
     )
     for field_name, bad_value, error_fragment in workflow_failures:
         workflow_facts = context()
@@ -2116,6 +2347,7 @@ def main() -> int:
             activation_integration,
             target_oid,
             (".github/workflows/tenkz-release-policy.yml",),
+            ".github/workflows",
         )
         workflow_facts.workflow_override = replace(
             workflow,
@@ -2125,6 +2357,86 @@ def main() -> int:
             lambda facts=workflow_facts: validate(complete_log(), facts),
             error_fragment,
         )
+
+    publisher_secret_failures = (
+        ("validated_environment", "another-environment", "another environment"),
+        ("validated_secret_name", "ANOTHER_KEY", "another secret name"),
+        ("validated_secret_scope", "repository", "another scope contract"),
+        ("validated_key_retirement", "optional", "another retirement contract"),
+        ("complete", False, "publisher secret evidence is incomplete"),
+        (
+            "repository_environments_complete_and_paginated",
+            False,
+            "repository environment pagination is incomplete",
+        ),
+        (
+            "all_environment_secret_names_complete_and_paginated",
+            False,
+            "environment secret-name pagination is incomplete",
+        ),
+        (
+            "repository_secret_names_complete_and_paginated",
+            False,
+            "repository secret-name pagination is incomplete",
+        ),
+        (
+            "organization_secret_names_and_access_complete_and_paginated",
+            False,
+            "organization secret-name or access pagination is incomplete",
+        ),
+        (
+            "dedicated_environment_configuration_complete",
+            False,
+            "publisher environment configuration is incomplete",
+        ),
+        (
+            "dedicated_environment_restricts_protected_release_branch",
+            False,
+            "does not restrict the protected release branch",
+        ),
+    )
+    for field_name, bad_value, error_fragment in publisher_secret_failures:
+        secret_facts = context()
+        secret_facts.publisher_secret_override = replace(
+            publisher_secret_evidence(),
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda facts=secret_facts: validate([], facts),
+            error_fragment,
+        )
+
+    for locations in (
+        (),
+        ("environment:another-environment",),
+        ("repository:TENKZ_FINAL_TAG_SIGNING_KEY",),
+        ("organization:TNLean-org:access-none",),
+        ("organization:TNLean-org:access-selected",),
+        (
+            "environment:tenkz-release-publisher",
+            "repository:TENKZ_FINAL_TAG_SIGNING_KEY",
+        ),
+    ):
+        shadowed_secret = context()
+        shadowed_secret.publisher_secret_override = publisher_secret_evidence(
+            locations=locations,
+        )
+        expect_failure(
+            lambda facts=shadowed_secret: validate([], facts),
+            "publisher signing-key name is missing, shadowed, or outside its environment",
+        )
+
+    malformed_secret_locations = context()
+    malformed_secret_locations.publisher_secret_override = publisher_secret_evidence(
+        locations=(
+            "environment:tenkz-release-publisher",
+            "environment:tenkz-release-publisher",
+        ),
+    )
+    expect_failure(
+        lambda: validate([], malformed_secret_locations),
+        "publisher secret locations are incomplete or malformed",
+    )
 
     boolean_record_parent = context()
     boolean_record_parent.records["S1-0001"] = replace(
@@ -2895,23 +3207,124 @@ def main() -> int:
     assert validate(complete_log(), candidate) == "sign-off-pending"
 
     released = context()
-    released.tags[policy.FINAL_TAG] = policy.TagEvidence(
-        FINAL_TAG_OBJECT,
-        "tag",
-        oid(9071),
-        exists=True,
-    )
+    released.tags[policy.FINAL_TAG] = authenticated_final_tag(oid(9071))
     released.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
         status="success",
+        prior_released=True,
     )
+    released.publisher_secret_override = publisher_secret_evidence(retired=True)
     assert validate(complete_log(), released) == "released"
+
+    first_release_declaration = context()
+    first_release_declaration.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    first_release_declaration.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    first_release_declaration.publisher_secret_override = publisher_secret_evidence(
+        retired=True,
+    )
+    assert validate(complete_log(), first_release_declaration) == "released"
+
+    first_release_with_workflow_drift = context()
+    first_release_with_workflow_drift.tags[policy.FINAL_TAG] = released.tags[
+        policy.FINAL_TAG
+    ]
+    first_release_with_workflow_drift.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    first_release_with_workflow_drift.publisher_secret_override = (
+        publisher_secret_evidence(retired=True)
+    )
+    activation_integration = first_release_with_workflow_drift.prs[
+        ACTIVATION
+    ].merge_commit_oid
+    target_oid = first_release_with_workflow_drift.prs[
+        SIGNOFF_RECORD
+    ].merge_commit_oid
+    assert isinstance(activation_integration, str) and isinstance(target_oid, str)
+    transition_workflow = first_release_with_workflow_drift.resolve_current_workflow(
+        activation_integration,
+        target_oid,
+        (".github/workflows/tenkz-release-policy.yml",),
+        ".github/workflows",
+    )
+    first_release_with_workflow_drift.workflow_override = replace(
+        transition_workflow,
+        target_publisher_workflow_tree_matches_activation=False,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), first_release_with_workflow_drift),
+        "publisher workflow tree differs from activation",
+    )
+
+    first_release_with_environment_drift = context()
+    first_release_with_environment_drift.tags[policy.FINAL_TAG] = released.tags[
+        policy.FINAL_TAG
+    ]
+    first_release_with_environment_drift.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    first_release_with_environment_drift.publisher_secret_override = replace(
+        publisher_secret_evidence(retired=True),
+        dedicated_environment_configuration_complete=False,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), first_release_with_environment_drift),
+        "publisher environment configuration is incomplete",
+    )
+
+    released_with_current_workflow_drift = context()
+    released_with_current_workflow_drift.tags[policy.FINAL_TAG] = released.tags[
+        policy.FINAL_TAG
+    ]
+    released_with_current_workflow_drift.publishers.update(released.publishers)
+    released_with_current_workflow_drift.publisher_secret_override = (
+        replace(
+            publisher_secret_evidence(retired=True),
+            dedicated_environment_configuration_complete=False,
+            dedicated_environment_restricts_protected_release_branch=False,
+        )
+    )
+    activation_integration = released_with_current_workflow_drift.prs[
+        ACTIVATION
+    ].merge_commit_oid
+    target_oid = released_with_current_workflow_drift.prs[
+        SIGNOFF_RECORD
+    ].merge_commit_oid
+    assert isinstance(activation_integration, str) and isinstance(target_oid, str)
+    released_workflow = released_with_current_workflow_drift.resolve_current_workflow(
+        activation_integration,
+        target_oid,
+        (".github/workflows/tenkz-release-policy.yml",),
+        ".github/workflows",
+    )
+    released_with_current_workflow_drift.workflow_override = replace(
+        released_workflow,
+        target_publisher_workflow_tree_matches_activation=False,
+    )
+    assert validate(complete_log(), released_with_current_workflow_drift) == "released"
+
+    reintroduced_after_release = context()
+    reintroduced_after_release.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    reintroduced_after_release.publishers.update(released.publishers)
+    reintroduced_after_release.publisher_secret_override = publisher_secret_evidence()
+    reintroduced_after_release.workflow_override = replace(
+        released_workflow,
+        target_publisher_workflow_tree_matches_activation=False,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), reintroduced_after_release),
+        "publisher signing-key name was reintroduced after retirement",
+    )
 
     manual_final = context()
     manual_final.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
-    expect_failure(
-        lambda: validate(complete_log(), manual_final),
-        "without the successful pinned publisher",
+    assert validate(complete_log(), manual_final) == (
+        "signed-off-awaiting-publisher-success"
     )
 
     failed_publisher = context()
@@ -2919,9 +3332,36 @@ def main() -> int:
         oid(9071),
         status="failure",
     )
-    expect_failure(
-        lambda: validate(complete_log(), failed_publisher),
-        "publisher failed; hard release incident",
+    assert validate(complete_log(), failed_publisher) == "signed-off-awaiting-tag"
+
+    failed_after_write = context()
+    failed_after_write.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    failed_after_write.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="failure",
+    )
+    assert validate(complete_log(), failed_after_write) == (
+        "signed-off-awaiting-publisher-success"
+    )
+
+    incomplete_after_write = context()
+    incomplete_after_write.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    incomplete_after_write.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="incomplete",
+    )
+    assert validate(complete_log(), incomplete_after_write) == (
+        "signed-off-awaiting-publisher-success"
+    )
+
+    key_retirement_pending = context()
+    key_retirement_pending.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+    key_retirement_pending.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    assert validate(complete_log(), key_retirement_pending) == (
+        "signed-off-awaiting-key-retirement"
     )
 
     lost_published_ref = context()
@@ -2948,23 +3388,51 @@ def main() -> int:
         "publisher succeeded while release evidence requires reset",
     )
 
-    replaced_published_object = context()
-    replaced_published_object.tags[policy.FINAL_TAG] = policy.TagEvidence(
-        "d" * 40,
-        "tag",
+    independently_authenticated_object = context()
+    independently_authenticated_object.tags[policy.FINAL_TAG] = authenticated_final_tag(
         oid(9071),
-        exists=True,
+        object_oid="d" * 40,
     )
-    replaced_published_object.publishers[oid(9071)] = publisher_evidence(
+    independently_authenticated_object.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
         status="success",
     )
-    expect_failure(
-        lambda: validate(complete_log(), replaced_published_object),
-        "current final tag object differs from the publisher output",
+    independently_authenticated_object.publisher_secret_override = (
+        publisher_secret_evidence(retired=True)
     )
+    assert validate(complete_log(), independently_authenticated_object) == "released"
 
     publisher_contract_failures = (
+        (
+            "workflow_runs_complete_and_paginated",
+            False,
+            "run pagination is incomplete",
+        ),
+        (
+            "workflow_jobs_complete_and_paginated",
+            False,
+            "job pagination is incomplete",
+        ),
+        (
+            "release_validation_runs_complete_and_paginated",
+            False,
+            "release-validation run pagination is incomplete",
+        ),
+        (
+            "prior_released_validation_exact_and_successful",
+            None,
+            "prior released-validation history is unavailable",
+        ),
+        (
+            "pinned_workflow_runs_exact",
+            False,
+            "not bound to the pinned exact workflow",
+        ),
+        (
+            "postmerge_validation_succeeded",
+            False,
+            "lacks successful exact post-merge validation",
+        ),
         (
             "postmerge_validation_network_disabled",
             False,
@@ -2991,9 +3459,14 @@ def main() -> int:
             "checks out or executes repository content",
         ),
         (
-            "publisher_uses_version_fingerprinted_hosted_gh",
+            "publisher_has_no_uses_or_inherited_secrets",
             False,
-            "uses another executable",
+            "uses an action, called workflow, or inherited secret",
+        ),
+        (
+            "publisher_uses_only_version_fingerprinted_hosted_gh_git_ssh_keygen",
+            False,
+            "unpinned or unapproved executable",
         ),
         (
             "publisher_command_and_inputs_closed",
@@ -3007,18 +3480,115 @@ def main() -> int:
         ),
         ("other_networked_steps_absent", False, "another networked step"),
         (
+            "closed_needs_tuple_complete_and_matching",
+            False,
+            "closed needs tuple is incomplete or mismatched",
+        ),
+        (
+            "closed_needs_has_no_caller_substitute",
+            False,
+            "accepts a caller substitute",
+        ),
+        (
+            "github_metadata_matches_closed_needs",
+            False,
+            "GitHub metadata differs",
+        ),
+        (
+            "caller_controlled_inputs_absent",
+            False,
+            "caller-controlled input",
+        ),
+        (
+            "exact_git_objects_fetched_by_oid_and_verified",
+            False,
+            "exact Git objects by OID",
+        ),
+        (
+            "publisher_environment_and_secret_exact",
+            False,
+            "another environment or secret",
+        ),
+        (
+            "publisher_is_only_private_key_consumer",
+            False,
+            "another job can consume",
+        ),
+        (
+            "deterministic_signed_tag_object_contract",
+            False,
+            "deterministic signed object",
+        ),
+        (
+            "signature_algorithm_and_namespace_exact",
+            False,
+            "another signature algorithm or namespace",
+        ),
+        (
+            "tagger_epoch_exact_canonical_and_in_range",
+            False,
+            "tagger epoch is not canonical or in range",
+        ),
+        (
+            "publisher_reads_ref_before_private_key_access",
+            False,
+            "accesses the private key before reading the ref",
+        ),
+        (
+            "private_key_available_only_to_absent_ref_path",
+            False,
+            "private key is available outside absent-ref construction",
+        ),
+        (
+            "existing_ref_path_cannot_access_private_key",
+            False,
+            "existing-ref retry can access the private key",
+        ),
+        (
+            "absent_ref_candidate_authenticated_before_write",
+            False,
+            "does not authenticate the candidate object before its first write",
+        ),
+        (
+            "existing_ref_object_authenticated_without_mutation",
+            False,
+            "does not authenticate an existing exact object without mutation",
+        ),
+        (
+            "publisher_success_requires_authenticated_final_readback",
+            False,
+            "can succeed without an authenticated final readback",
+        ),
+        (
+            "publisher_emits_no_durable_output_receipt",
+            False,
+            "relies on a durable job-output receipt",
+        ),
+        (
             "publisher_started_after_validation_success",
             False,
             "did not start after validation success",
         ),
-        ("final_ref_absent_before_create", False, "existed before the publisher"),
         (
-            "annotated_tag_object_targets_integration",
+            "successful_job_head_matches_integration",
             False,
-            "annotated tag object for the integration",
+            "used another head",
         ),
-        ("ref_created_without_force", False, "without force"),
-        ("readback_complete_and_matching", False, "readback is incomplete"),
+        (
+            "successful_job_historical_workflow_tree_matches_activation",
+            False,
+            "used another historical workflow tree",
+        ),
+        (
+            "successful_job_follows_successful_postmerge_validation",
+            False,
+            "did not follow its successful validation job",
+        ),
+        (
+            "successful_job_conclusion_api_visible",
+            False,
+            "conclusion is not API-visible",
+        ),
     )
     for field_name, bad_value, error_fragment in publisher_contract_failures:
         bad_publisher = context()
@@ -3043,14 +3613,60 @@ def main() -> int:
         "used another sign-off integration",
     )
 
-    premature_publisher_output = context()
-    premature_publisher_output.publishers[oid(9071)] = replace(
+    publisher_binding_failures = (
+        (
+            "validated_tagger_epoch_seconds",
+            SIGNOFF_TAGGER_EPOCH + 1,
+            "another tagger epoch",
+        ),
+        ("validated_policy_sha256", "0" * 64, "another policy hash"),
+        ("validated_prefix_sha256", "invalid", "invalid ledger-prefix hash"),
+        ("validated_prefix_boundary", "S1-9999", "another ledger-prefix boundary"),
+        ("validated_support_tree_oid", oid(9992), "another support tree"),
+        ("validated_schema_blob_oid", None, "invalid object-schema blob OID"),
+        ("validated_public_key_blob_oid", None, "invalid public-key blob OID"),
+    )
+    for field_name, bad_value, error_fragment in publisher_binding_failures:
+        bad_publisher = context()
+        bad_publisher.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
+        bad_publisher.publishers[oid(9071)] = replace(
+            publisher_evidence(oid(9071), status="success"),
+            **{field_name: bad_value},
+        )
+        expect_failure(
+            lambda facts=bad_publisher: validate(complete_log(), facts),
+            error_fragment,
+        )
+
+    premature_successful_job_evidence = context()
+    premature_successful_job_evidence.publishers[oid(9071)] = replace(
         publisher_evidence(oid(9071)),
-        reported_tag_object_oid=FINAL_TAG_OBJECT,
+        successful_job_conclusion_api_visible=True,
     )
     expect_failure(
-        lambda: validate(complete_log(), premature_publisher_output),
-        "publisher that did not run carries creation evidence",
+        lambda: validate(complete_log(), premature_successful_job_evidence),
+        "publisher that did not run carries successful-job evidence",
+    )
+
+    failed_with_successful_job_evidence = context()
+    failed_with_successful_job_evidence.publishers[oid(9071)] = replace(
+        publisher_evidence(oid(9071), status="failure"),
+        successful_job_head_matches_integration=True,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), failed_with_successful_job_evidence),
+        "unsuccessful publisher history carries successful-job evidence",
+    )
+
+    failed_with_prior_release = context()
+    failed_with_prior_release.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="failure",
+        prior_released=True,
+    )
+    expect_failure(
+        lambda: validate(complete_log(), failed_with_prior_release),
+        "prior released validation lacks a successful publisher job",
     )
 
     trailing_correction = context()
@@ -3063,6 +3679,7 @@ def main() -> int:
     )
     trailing_correction.tags[policy.FINAL_TAG] = released.tags[policy.FINAL_TAG]
     trailing_correction.publishers.update(released.publishers)
+    trailing_correction.publisher_secret_override = publisher_secret_evidence(retired=True)
     assert validate(
         complete_log() + [correction("S1-0005", "#908", "S1-0002")],
         trailing_correction,
@@ -3132,11 +3749,9 @@ def main() -> int:
     )
 
     lightweight_final = context()
-    lightweight_final.tags[policy.FINAL_TAG] = policy.TagEvidence(
-        FINAL_TAG_OBJECT,
-        "commit",
-        oid(9071),
-        exists=True,
+    lightweight_final.tags[policy.FINAL_TAG] = replace(
+        authenticated_final_tag(oid(9071)),
+        object_type="commit",
     )
     lightweight_final.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
@@ -3158,11 +3773,9 @@ def main() -> int:
     )
 
     wrong_final_target = context()
-    wrong_final_target.tags[policy.FINAL_TAG] = policy.TagEvidence(
-        FINAL_TAG_OBJECT,
-        "tag",
-        oid(9991),
-        exists=True,
+    wrong_final_target.tags[policy.FINAL_TAG] = replace(
+        authenticated_final_tag(oid(9071)),
+        commit=oid(9991),
     )
     wrong_final_target.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
@@ -3170,16 +3783,93 @@ def main() -> int:
     )
     expect_failure(
         lambda: validate(complete_log(), wrong_final_target),
-        "does not target the validated sign-off integration",
+        "does not peel to the validated sign-off integration",
     )
 
-    premature_final = context()
-    premature_final.tags[policy.FINAL_TAG] = policy.TagEvidence(
-        FINAL_TAG_OBJECT,
-        "tag",
-        oid(9071),
-        exists=True,
+    final_tag_authentication_failures = (
+        (
+            "final_lookup_after_fetch_object_id",
+            "d" * 40,
+            "changed across exact-object fetch and double resolution",
+        ),
+        (
+            "final_network_disabled_before_object_read",
+            False,
+            "read before network removal",
+        ),
+        ("final_raw_object_bytes_complete", False, "raw object bytes are incomplete"),
+        ("final_object_schema_valid", False, "pinned byte schema"),
+        ("final_recomputed_object_id", "d" * 40, "raw object hash"),
+        ("final_signature_algorithm", "rsa", "another signature algorithm"),
+        ("final_signature_namespace", "file", "another namespace"),
+        ("final_raw_signature_valid", False, "raw signature is invalid"),
+        ("final_public_key_blob_oid", "d" * 40, "another public key"),
+        (
+            "final_public_key_from_pinned_support_tree",
+            False,
+            "another public key",
+        ),
+        ("final_schema_blob_oid", "d" * 40, "another object schema"),
+        (
+            "final_schema_from_pinned_support_tree",
+            False,
+            "another object schema",
+        ),
+        (
+            "final_tagger_identity_matches_schema",
+            False,
+            "tagger identity differs",
+        ),
+        (
+            "final_tagger_epoch_seconds",
+            SIGNOFF_TAGGER_EPOCH + 1,
+            "tagger epoch differs",
+        ),
+        ("final_tagger_timezone", "+0100", "timezone is not +0000"),
+        ("final_message_tag", "tenkz-v1.0.1", "payload names another tag"),
+        (
+            "final_message_integration_oid",
+            oid(9991),
+            "payload names another sign-off integration",
+        ),
+        (
+            "final_message_policy_sha256",
+            "0" * 64,
+            "payload names another policy hash",
+        ),
+        (
+            "final_message_prefix_sha256",
+            "0" * 64,
+            "payload names another ledger-prefix hash",
+        ),
+        (
+            "final_message_prefix_boundary",
+            "S1-0003",
+            "payload names another ledger-prefix boundary",
+        ),
+        (
+            "final_commit_reachable_from_main",
+            False,
+            "not reachable from current main",
+        ),
     )
+    for field_name, bad_value, error_fragment in final_tag_authentication_failures:
+        bad_tag = context()
+        bad_tag.tags[policy.FINAL_TAG] = replace(
+            authenticated_final_tag(oid(9071)),
+            **{field_name: bad_value},
+        )
+        bad_tag.publishers[oid(9071)] = publisher_evidence(
+            oid(9071),
+            status="success",
+        )
+        expect_failure(
+            lambda facts=bad_tag: validate(complete_log(), facts),
+            error_fragment,
+        )
+
+    premature_final = context()
+    premature_final.tags[policy.FINAL_TAG] = authenticated_final_tag(oid(9071))
     expect_failure(
         lambda: validate(complete_log()[:3], premature_final),
         "without a successfully validated sign-off",
@@ -3282,6 +3972,66 @@ def main() -> int:
         lambda: validate([freeze()], invalid_supervisor_receipt),
         "supervisor self-test receipt is invalid",
     )
+    activation_publisher_failures = (
+        (
+            "publisher_workflow_tree_pinned",
+            "activation publisher workflow tree is not pinned",
+        ),
+        (
+            "publisher_workflow_jobs_complete_and_paginated",
+            "activation publisher workflow job enumeration is incomplete",
+        ),
+        (
+            "publisher_is_sole_environment_consumer",
+            "another activation workflow job names the publisher environment",
+        ),
+        (
+            "publisher_is_sole_secret_consumer",
+            "another activation workflow job names the publisher secret",
+        ),
+        (
+            "workflow_secret_inheritance_absent",
+            "activation publisher workflow permits inherited secrets",
+        ),
+        (
+            "publisher_environment_configuration_complete",
+            "activation publisher environment configuration is incomplete",
+        ),
+        (
+            "publisher_environment_restricts_protected_release_branch",
+            "does not restrict the protected release branch",
+        ),
+        (
+            "repository_environments_complete_and_paginated",
+            "activation repository environment pagination is incomplete",
+        ),
+        (
+            "all_environment_secret_names_complete_and_paginated",
+            "activation environment secret-name pagination is incomplete",
+        ),
+        (
+            "repository_secret_names_complete_and_paginated",
+            "activation repository secret-name pagination is incomplete",
+        ),
+        (
+            "organization_secret_names_and_access_complete_and_paginated",
+            "activation organization secret-name or access pagination is incomplete",
+        ),
+        (
+            "configured_secret_only_in_dedicated_environment",
+            "activation publisher secret is missing, shadowed, or outside its environment",
+        ),
+    )
+    for field_name, error_fragment in activation_publisher_failures:
+        bad_activation = context()
+        bad_activation.activation_diff = replace(
+            bad_activation.activation_diff,
+            **{field_name: False},
+        )
+        expect_failure(
+            lambda facts=bad_activation: validate([freeze()], facts),
+            error_fragment,
+        )
 
     unapproved_source = context()
     unapproved_source.prs[SOURCE] = replace(
@@ -3481,6 +4231,19 @@ def main() -> int:
         validate(complete_log(), release_wrong_paths)
         == "reset-required:S1-0004"
     )
+
+    for noncanonical_merge_time in (
+        SIGNOFF_MERGE + timedelta(microseconds=1),
+        SIGNOFF_MERGE.astimezone(timezone(timedelta(hours=1))),
+    ):
+        noncanonical_tagger_epoch = context()
+        noncanonical_tagger_epoch.prs[SIGNOFF_RECORD] = replace(
+            noncanonical_tagger_epoch.prs[SIGNOFF_RECORD],
+            merged_at=noncanonical_merge_time,
+        )
+        assert validate(complete_log(), noncanonical_tagger_epoch) == (
+            "reset-required:S1-0004"
+        )
 
     for submitted in (RMP_MERGE, RMP_MERGE - timedelta(microseconds=1)):
         too_early = context()
@@ -3805,6 +4568,41 @@ def main() -> int:
         reset("S1-0004", "#910", "restart-required", "S1-0002"),
     ]
     assert validate(reset_log, reset_facts) == "reset"
+
+    invalid_correction_behind_restart = context()
+    for entry_id, record_ref, number, merged_at, invalid_tree in (
+        ("S1-0002", "#908", 908, FREEZE_TIME + timedelta(seconds=3), False),
+        ("S1-0003", "#909", 909, FREEZE_TIME + timedelta(seconds=4), True),
+        ("S1-0004", "#910", 910, FREEZE_TIME + timedelta(seconds=5), False),
+        ("S1-0005", "#911", 911, FREEZE_TIME + timedelta(seconds=6), False),
+    ):
+        add_record(
+            invalid_correction_behind_restart,
+            entry_id,
+            record_ref,
+            number,
+            merged_at,
+            invalid_tree=invalid_tree,
+        )
+    restart_then_invalid_correction = [
+        freeze(),
+        friction("S1-0002", "#908", "restart-required"),
+        correction("S1-0003", "#909", "S1-0002"),
+        reset("S1-0004", "#910", "restart-required", "S1-0002"),
+        reset("S1-0005", "#911", "record-invalid", "S1-0003"),
+    ]
+    assert validate(
+        restart_then_invalid_correction[:3],
+        invalid_correction_behind_restart,
+    ) == "reset-required:S1-0002"
+    assert validate(
+        restart_then_invalid_correction[:4],
+        invalid_correction_behind_restart,
+    ) == "reset-required:S1-0003"
+    assert validate(
+        restart_then_invalid_correction,
+        invalid_correction_behind_restart,
+    ) == "reset"
 
     missing_reset = reset_log[:2] + [
         work("S1-0003", FORMAL_RECORD, FORMAL_WORK, "formalization-or-blueprint")
