@@ -701,14 +701,11 @@ note = "The pull arrow remains outside the PEPS window; the enlarged crossing is
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
-status = "structural-gap"
+status = "unreviewed"
 pairing = "verified"
 pairing_by = "codex-source-topology-review-2026-08-02"
-defects = ["missing-element"]
-case_sha256 = "50913504e8d89b73b05ea18f0bdebdc52db2750810953974780233f16ff1766c"
-reviewed = "2026-08-02"
-renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
-note = "the shared lattice preserves nine PEPS sites, twelve cut virtual bonds, and page-vertical physical legs, but its integer-cell address surface cannot place the two blue half-grid insertions or the source's five-position curved string; tracked in #5375"
+case_sha256 = "b0bcb63539c87dbf383b60af1b224b8d7de6eebbe248f2ed63573dbd1621bb13"
+note = "migrated to the kernel plane frame with typed open-side boundary ports, affine midpoint addresses, and a named string route placing both half-grid insertions; awaits re-review"
 
 [[verdict]]
 id = "rmp-iii-b-idempotent"
@@ -815,14 +812,15 @@ note = "the plane projection restores upper i, lower j, upper R_{i,b}, lower R_{
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "cosmetic-gap"
+status = "structural-gap"
 pairing = "verified"
 pairing_by = "codex-source-topology-review-2026-08-02"
-defects = []
+defects = ["missing-element"]
+missing = ["shared-doubled-plane-basis-scaffold"]
 case_sha256 = "392ec0951645c9a41dc7878b8e13a0b98224a53c43b5699bdc73199c4e941198"
-reviewed = "2026-08-02"
-renderer = "codex-dimension-owner-source-review-2026-08-02-200dpi"
-note = "the shared oblique lattice preserves both 6x4 grids, all 40 perimeter virtual openings, both marked paths, and all 24 inter-sheet physical contractions; projection and stroke remain cosmetic"
+reviewed = "2026-08-03"
+renderer = "codex-doubled-plane-source-review-2026-08-03-200dpi"
+note = "the legacy render preserves both 6x4 grids, all 40 perimeter openings, and all 24 inter-sheet contractions, but its six interior path marks are PEPS sites rather than portless affine beads; a faithful migration needs the shared doubled-plane basis scaffold tracked in #5348 and #5086"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
