@@ -33,8 +33,6 @@ BNT presentation of the same tensor.
   Theorem 4.14 and lines 995--1010
 -/
 
-open scoped ComplexOrder
-
 namespace MPOTensor.BondTwoSingletonBaseModel
 
 /-- The one-label BNT coefficient of the singleton model differs between
