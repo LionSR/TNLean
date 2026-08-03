@@ -534,10 +534,15 @@ matrix-product-vector spans at every length.  Only eventual span equality is
 used in their proofs: one chooses a sufficiently large length at which both
 families are linearly independent, and all subsequent overlap comparisons are
 asymptotic.  The comparison is therefore now stated under eventual span
-equality.  This gives exactly the $N>2$ boundary needed at CPSV16, source
-lines 522--525 together with lines 1305--1307; once normal representatives
-have been matched, the resulting gauge--phase relation determines their
-vectors at every positive length.
+equality.  CPSV16 supplies this hypothesis on the concrete tail $N>2$, at
+source lines 522--525 together with lines 1305--1307.  The general comparison
+lemmas assert only the existence of a finite tail: the selected length must
+also lie beyond the independent linear-independence thresholds, so no common
+numerical threshold of $2$ is asserted.  This is a local correction, replacing
+an unnecessary all-length hypothesis by the finite-tail hypothesis used in the
+proof and supplied by CPSV16.  Once normal representatives have been matched,
+the resulting gauge--phase relation determines their vectors at every positive
+length.
 
 The auxiliary declaration
 \leanid{MPSTensor.BeigiSectorGraphData.}
