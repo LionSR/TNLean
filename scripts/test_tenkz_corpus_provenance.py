@@ -939,6 +939,30 @@ def test_rmp_dimension_ownership() -> None:
                 "a brace-less primitive definition exposed enclosing ownership: "
                 f"primitive={primitive}, occurrences={brace_less_primitive!r}"
             )
+        unmatched_source = (
+            rf"\tnarrow{{{{\{primitive}\x}}"
+            r"\tnput{x}{(207mm,0)}{}}}"
+        )
+        definition_start = unmatched_source.index(rf"\{primitive}")
+        replacement_spans = _macro_replacement_spans(
+            strip_comments(unmatched_source)
+        )
+        if replacement_spans != [(definition_start, len(unmatched_source))]:
+            raise AssertionError(
+                "an unmatched primitive parameter brace lacked an EOF mask: "
+                f"primitive={primitive}, spans={replacement_spans!r}"
+            )
+        unmatched_primitive = scan_case_dimensions(
+            Path("synthetic.tex"), unmatched_source
+        )
+        if len(unmatched_primitive) != 1 or any(
+            occurrence.owner is not None
+            for occurrence in unmatched_primitive
+        ):
+            raise AssertionError(
+                "an unmatched primitive parameter brace stole a sibling body: "
+                f"primitive={primitive}, occurrences={unmatched_primitive!r}"
+            )
     unclosed_environment_end = scan_case_dimensions(
         Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
     )

@@ -805,6 +805,10 @@ def _macro_replacement_spans(
                 if character == "#":
                     position += 1
                     continue
+                if character == "}":
+                    spans.append((definition.start(), len(source)))
+                    body_found = True
+                    break
                 if character != "{":
                     position += 1
                     continue
