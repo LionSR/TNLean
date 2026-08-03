@@ -70,6 +70,15 @@ def main() -> int:
     assert [construct.line for construct in spliced] == [1, 2]
     assert all("\\tn{}" in construct.body for construct in spliced)
 
+    control_boundaries = (
+        r"\\begin{tenkzfree}\tn{}\\end{tenkzfree}" "\n"
+        r"\\tnpic{\tn{}}" "\n"
+        r"\begin{tenkzfree}\\end{tenkzfree}\tn{}\end{tenkzfree}" "\n"
+    )
+    real_controls = scan_constructs(control_boundaries)
+    assert [construct.name for construct in real_controls] == ["tenkzfree"]
+    assert r"\\end{tenkzfree}\tn{}" in real_controls[0].body
+
     bodies = scan_bodies(stripped)
     assert [(body.name, body.start, body.text) for body in bodies] == [
         (construct.name, construct.body_start, construct.body)

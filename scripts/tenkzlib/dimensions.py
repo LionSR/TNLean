@@ -9,7 +9,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Iterable, Mapping
 
-from tenkzlib.texcase import match_group, strip_comments
+from tenkzlib.texcase import is_control_word_start, match_group, strip_comments
 
 
 class DimensionOwner(str, Enum):
@@ -383,14 +383,6 @@ def _skip_space(source: str, position: int) -> int:
     return position
 
 
-def _is_control_word_start(source: str, position: int) -> bool:
-    """Whether this backslash starts a TeX control word rather than ``\\``."""
-    run_length = 1
-    while position >= run_length and source[position - run_length] == "\\":
-        run_length += 1
-    return run_length % 2 == 1
-
-
 def _is_static_control_word_letter(character: str) -> bool:
     """Recognize a conservative letter across common LaTeX catcode modes."""
     return _STATIC_CONTROL_WORD_NAME_RE.fullmatch(character) is not None
@@ -526,7 +518,7 @@ def _declared_atom_commands(
     names: set[str] = set()
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
         if (
-            not _is_control_word_start(owner_source, declaration.start())
+            not is_control_word_start(owner_source, declaration.start())
             or _position_in_spans(
                 declaration.start(), execution_mask_spans
             )
@@ -545,7 +537,7 @@ def _declared_atom_commands(
             names.add(name)
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
         if (
-            not _is_control_word_start(owner_source, declaration.start())
+            not is_control_word_start(owner_source, declaration.start())
             or _position_in_spans(
                 declaration.start(), execution_mask_spans
             )
@@ -607,7 +599,7 @@ def _command_spans(
     commands = [
         command
         for command in pattern.finditer(source)
-        if _is_control_word_start(source, command.start())
+        if is_control_word_start(source, command.start())
         and not _position_in_spans(
             command.start(), ignored_control_spans
         )
@@ -809,7 +801,7 @@ def _macro_replacement_spans(
 
     for _, definition_kind, definition in definitions:
         if (
-            not _is_control_word_start(source, definition.start())
+            not is_control_word_start(source, definition.start())
             or _position_in_spans(
                 definition.start(), ignored_control_spans
             )
@@ -942,7 +934,7 @@ def _environment_tokens(
     execution_mask_spans = tuple(execution_mask_spans)
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
         if (
-            not _is_control_word_start(owner_source, control.start())
+            not is_control_word_start(owner_source, control.start())
             or _position_in_spans(control.start(), execution_mask_spans)
         ):
             continue
@@ -1009,7 +1001,7 @@ def _environment_spans(
     # name, but it still consumes the remainder as one malformed control.
     for control in _ENVIRONMENT_CONTROL_RE.finditer(owner_source):
         if (
-            not _is_control_word_start(owner_source, control.start())
+            not is_control_word_start(owner_source, control.start())
             or _position_in_spans(control.start(), execution_mask_spans)
         ):
             continue
@@ -1095,7 +1087,7 @@ def _option_spans(
     for pattern, opener, closer in containers:
         for container in pattern.finditer(owner_source):
             if (
-                not _is_control_word_start(owner_source, container.start())
+                not is_control_word_start(owner_source, container.start())
                 or _position_in_spans(
                     container.start(), execution_mask_spans
                 )
@@ -1199,7 +1191,7 @@ def _owner_spans(source: str, owner_source: str) -> list[_OwnerSpan]:
         + list(context.command_spans)
         + _environment_spans(source, owner_source, context.mask_spans)
         + [
-            _OwnerSpan(start, end, None, True)
+            _OwnerSpan(start, end, None, start, "definition", True)
             for start, end in context.replacement_spans
         ]
     )
