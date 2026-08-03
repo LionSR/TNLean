@@ -51,8 +51,6 @@ theorem normalizedSingletonCoeffs_coeff_one_ne_coeff_two :
     exact_mod_cast h
   have hReal : singletonScale = singletonScale ^ 2 := by
     simpa using hReal'
-  have hsq : singletonScale ^ 2 = (1 / 2 : ℝ) := by
-    simp [singletonScale]
   have hsqrt_sq : (Real.sqrt (1 / 2 : ℝ)) ^ 2 = 1 / 2 := by
     rw [Real.sq_sqrt]
     norm_num
