@@ -12,39 +12,39 @@
 \tndeclare{skin}{two-shift}{
   base=box,
   pairings={
-    80@1 > 190@1 : red,
-    350@1 > 280@1 : red,
-    170@1 > 260@1 : blue,
-    100@1 > 10@1 : blue
+    n@2 > w@2 : red,
+    e@2 > s@2 : red,
+    w@1 > s@1 : blue,
+    n@1 > e@1 : blue
   }
 }
 \[
-  \begin{tenkz}[rows={wire}, cols=3, bonds=none]
-    \tn[at=(1,1), name=c1, skin=two-shift]{}
-    \tn[at=(1,2), name=c2, skin=two-shift]{}
-    \tn[at=(1,3), name=c3, skin=two-shift]{}
+  \begin{tenkz}[rows={wire,wire}, cols=8, bonds=none]
+    \tn[at=(1,1), name=c1, skin=two-shift, wide=2, wires=2]{}
+    \tn[at=(1,4), name=c2, skin=two-shift, wide=2, wires=2]{}
+    \tn[at=(1,7), name=c3, skin=two-shift, wide=2, wires=2]{}
     % The red north-to-west and east-to-south turns belong to the brick skin;
-    % only contractions between bricks are written here.
-    \tnwire[species=red]{open n}{c1.80}
-    \tnwire[species=red]{open n}{c2.80}
-    \tnwire[species=red]{open n}{c3.80}
-    \tnwire[species=red]{c1.280}{open s}
-    \tnwire[species=red]{c2.280}{open s}
-    \tnwire[species=red]{c3.280}{open s}
-    \tnwire[species=red]{open w}{c1.190}
-    \tnwire[species=red]{c1.350}{c2.190}
-    \tnwire[species=red]{c2.350}{c3.190}
-    \tnwire[species=red]{c3.350}{open e}
-    % The blue path uses the complementary bearing on every face.
-    \tnwire[species=blue]{open n}{c1.100}
-    \tnwire[species=blue]{open n}{c2.100}
-    \tnwire[species=blue]{open n}{c3.100}
-    \tnwire[species=blue]{c1.260}{open s}
-    \tnwire[species=blue]{c2.260}{open s}
-    \tnwire[species=blue]{c3.260}{open s}
-    \tnwire[species=blue]{open w}{c1.170}
-    \tnwire[species=blue]{c1.10}{c2.170}
-    \tnwire[species=blue]{c2.10}{c3.170}
-    \tnwire[species=blue]{c3.10}{open e}
+    % the commands below attach the open tails and join neighboring bricks.
+    \tnwire[species=red]{open n}{c1.n@2}
+    \tnwire[species=red]{open n}{c2.n@2}
+    \tnwire[species=red]{open n}{c3.n@2}
+    \tnwire[species=red]{c1.s@2}{open s}
+    \tnwire[species=red]{c2.s@2}{open s}
+    \tnwire[species=red]{c3.s@2}{open s}
+    \tnwire[species=red]{open w}{c1.w@2}
+    \tnwire[species=red]{c1.e@2}{c2.w@2}
+    \tnwire[species=red]{c2.e@2}{c3.w@2}
+    \tnwire[species=red]{c3.e@2}{open e}
+    % The blue path uses the complementary slot on every face.
+    \tnwire[species=blue]{open n}{c1.n@1}
+    \tnwire[species=blue]{open n}{c2.n@1}
+    \tnwire[species=blue]{open n}{c3.n@1}
+    \tnwire[species=blue]{c1.s@1}{open s}
+    \tnwire[species=blue]{c2.s@1}{open s}
+    \tnwire[species=blue]{c3.s@1}{open s}
+    \tnwire[species=blue]{open w}{c1.w@1}
+    \tnwire[species=blue]{c1.e@1}{c2.w@1}
+    \tnwire[species=blue]{c2.e@1}{c3.w@1}
+    \tnwire[species=blue]{c3.e@1}{open e}
   \end{tenkz}
 \]
