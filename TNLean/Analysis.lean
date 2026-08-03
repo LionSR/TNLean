@@ -13,6 +13,7 @@ import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.CfcLogAdditive
 import TNLean.Analysis.CoisometricCompression
 import TNLean.Analysis.ConvexHullCompact
+import TNLean.Analysis.Dirichlet
 import TNLean.Analysis.Entropy
 import TNLean.Analysis.EntropyDecomposition
 import TNLean.Analysis.EntropyMarkovForward

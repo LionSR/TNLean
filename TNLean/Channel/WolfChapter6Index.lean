@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.MeanErgodic
+import TNLean.Analysis.Dirichlet
 import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
@@ -51,14 +53,32 @@ No new proofs are introduced here; this is a documentation-only index module.
 
 ## Section 6.1 Spectral radius and determinant
 
-### Wolf Proposition 6.1 (Spectral radius of positive maps) — PARTIAL
+### Wolf Proposition 6.1 (Spectral radius of positive maps) — TRACE-PRESERVING CASE FORMALIZED
 
 * `IsPositiveMap.eigenvalue_norm_le_one_of_tracePreserving` — every eigenvalue of a
   positive trace-preserving map lies in the closed unit disk, in
   `TNLean.Channel.Determinant.Bound`.
+* `IsPositiveMap.eigenvalue_one_exists_of_tracePreserving` — eigenvalue $1$ exists
+  (nonzero PSD fixed point), in `TNLean.Channel.Peripheral.SpectralRadius`.
 
-The general bound `ρ(T) ≤ ‖T(1)‖∞`, existence of the eigenvalue `1`, and the resulting
-spectral-radius equality remain unformalized.
+The general bound `ρ(T) ≤ ‖T(1)‖∞` for arbitrary positive maps relies on the
+Russo--Dye theorem, which yields factor $1$; the current formalization has
+factor $4$ via the PSD decomposition.  Documented in
+`docs/paper-gaps/wolf_prop61_russo_dye_factor.tex`.
+
+
+### Wolf Lemma 6.1 (Dirichlet's simultaneous approximation) — FORMALIZED
+
+* `Dirichlet.exists_int_near_mul_simultaneous` — the $m$-variable simultaneous
+  approximation $1\le n\le q^m$ with $|x_k n-p_k|\le 1/q$ for all $k$, in
+  `TNLean.Analysis.Dirichlet`.
+
+### Wolf Proposition 6.2 (Trivial Jordan blocks for peripheral spectrum) — NOT FORMALIZED
+
+Documented in `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`.
+The bounded-orbit lemma (`IsPositiveMap.hasBoundedOrbits_of_tracePreserving`)
+is already formalized; the binomial-expansion growth argument for nontrivial
+Jordan blocks remains to be formalized.
 
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
