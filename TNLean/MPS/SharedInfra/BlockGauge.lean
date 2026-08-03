@@ -106,6 +106,13 @@ noncomputable def globalGaugeOfBlocks (X : (k : Fin r) → GL (Fin (dim k)) ℂ)
     (Matrix.reindexAlgEquiv ℂ ℂ (finSigmaFinEquiv (n := dim))).toRingEquiv.toMonoidHom
     (blockDiagonalGL X)
 
+/-- The block-diagonal gauge assembled from identity blocks is the identity. -/
+@[simp]
+theorem globalGaugeOfBlocks_one :
+    globalGaugeOfBlocks (dim := dim) (fun _ ↦ 1) = 1 := by
+  change Units.map _ (Units.map _ ((MulEquiv.piUnits).symm 1)) = 1
+  rw [map_one, map_one, map_one]
+
 /-- A block-diagonal gauge assembled from unitary blocks is unitary. -/
 theorem globalGaugeOfBlocks_unitaryGL_mem
     (U : (k : Fin r) → Matrix.unitaryGroup (Fin (dim k)) ℂ) :

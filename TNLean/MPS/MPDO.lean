@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPDO
 
+import TNLean.MPS.MPDO.ActiveSectorBlockingBoundary
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample

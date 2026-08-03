@@ -193,6 +193,15 @@ noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
     M (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1 *
       M (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2
 
+/-- The physical-trace transfer of a two-site block is the square of the
+original physical-trace transfer. -/
+theorem physTraceTransfer_blockTwo (M : MPOTensor d D) :
+    physTraceTransfer (blockTwo M) =
+      physTraceTransfer M * physTraceTransfer M := by
+  rw [physTraceTransfer, ← finProdFinEquiv.sum_comp, Fintype.sum_prod_type,
+    physTraceTransfer, Finset.sum_mul_sum]
+  simp [blockTwo]
+
 /-- Identify the standard two-site index `Fin (d * d)` with the general
 length-two blocked alphabet.
 

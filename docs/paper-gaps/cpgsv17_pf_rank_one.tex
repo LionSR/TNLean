@@ -519,6 +519,62 @@ is a formal counterexample to the rank-one conclusion of the printed
 Lemma~C.5, not merely to an intermediate matrix argument.  This closes the
 verification tracked in \ghissue{4270}.
 
+\section{Canonical normalization refutes the blocking implication}
+
+The same four-sector tensor decides the downstream implication
+(ii)$\Rightarrow$(v) of Theorem~4.9.  The printed theorem assumes that the
+simple tensor has already been put in block-injective canonical form and in a
+basis-of-normal-tensors presentation.  For the matrices $L,Q$ above, set
+\[
+  c=\frac4{\sqrt5},
+  \qquad
+  G=\begin{pmatrix}8&0\\0&1\end{pmatrix},
+  \qquad
+  K^{ij}=\delta_{ij}\,cG(l_ir_i)G^{-1}.
+\]
+The scalar $c$ normalizes the horizontal transfer radius, and the bond gauge
+$G$ makes the unique normal block left canonical.  The four nonzero physical
+slices span $\MN{2}$, so this one-sector presentation is a literal canonical
+representative, is block-injective at length one, and satisfies the standing
+simple, biCF, and BNT hypotheses of Theorem~4.9.  Scalar multiplication by the
+positive number $c$ and bond conjugation leave every normalized periodic state
+unchanged.  Thus the strong area law proved for the original tensor also holds
+for $K$.  Its physical-trace transfer is a nonzero scalar multiple of the same
+rank-one projection,
+\[
+  \mathcal T_K=cP,
+  \qquad
+  P=LQ=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+\]
+and therefore $K$ satisfies source zero correlation length.
+
+Physical blocking squares this transfer:
+\[
+  \mathcal T_{K^{[2]}}=\mathcal T_K^2
+    =c^2P=\frac{16}{5}P.
+\]
+Definition~4.1 implies that the physical-trace transfer of every
+renormalization fixed point via trace-preserving maps is idempotent.  Here
+\[
+  \mathcal T_{K^{[2]}}^2
+    =\left(\frac{16}{5}\right)^2P
+    \ne\frac{16}{5}P
+    =\mathcal T_{K^{[2]}}.
+\]
+Consequently $K^{[2]}$ is not a renormalization fixed point in the sense of
+Definition~4.1.  The tensor $K$ satisfies every printed standing hypothesis
+and condition~(ii), while condition~(v) fails.  Thus Theorem~4.9
+(ii)$\Rightarrow$(v) is false under its printed hypotheses, rather than merely
+unsupported by the proof through Lemma~C.5.
+
+The canonical representative, its simple, biCF, BNT, SAL, and ZCL properties,
+and the non-RFP conclusion are formalized in
+\path{TNLean/MPS/MPDO/ActiveSectorBlockingBoundary.lean}.  The combined
+declaration is
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+canonicalRepresentative_refutes_theorem4_9_ii_to_v}.  This classification is
+tracked in \ghissue{5388}.
+
 \section{A positive-semidefinite route}
 
 The formal development proves a corrected sufficient matrix theorem. Let $T$
@@ -577,21 +633,25 @@ has not been identified with the inverse-map family constructed in lines
 1413--1455, and the trace of its all-ones matrix is the number of sectors, not
 one unless there is a single sector.
 
-The positive-semidefinite route must therefore use more of the matrix product
-density operator construction than the separate inequalities
-$\eta_{k,h}\geq 0$. One possible completion is to derive an adjoint or Gram
-relation from the inverse-map tensors. Positive semidefiniteness of the source
-trace matrix is not presently established by the cited passage.
+The positive-semidefinite route is therefore a corrected strengthening, not a
+consequence of the printed hypotheses.  It must assume an adjoint or Gram
+relation beyond the separate inequalities $\eta_{k,h}\geq 0$.  In fact, the
+source-selected trace matrix of the four-sector example above is non-Hermitian:
+its $(0,2)$ entry is $3/8$, whereas its $(2,0)$ entry is $1/8$.  Thus SAL and
+ZCL do not force the Hermitian, and hence do not force the positive
+semidefinite, matrix hypothesis used by the corrected theorem.
 
-This corrected theorem does not refute the intended matrix product density
-operator result; it supplies one sufficient matrix-level hypothesis. For this
-route, the open question is whether the trace matrix
-$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ is Hermitian or positive semidefinite.
-The pairing-idempotence route of Section~3.1 avoids that hypothesis, but instead
-requires the concrete sector pairing, the zero-correlation-length operator
-identity, and linear independence. Positivity of each $\eta_{k,h}$ gives only
-$T_{k,h}\geq 0$ entry by entry, which implies neither matrix-level positive
-semidefiniteness nor Hermitian symmetry.
+This corrected theorem supplies one sufficient matrix-level hypothesis; by
+itself it neither proves nor refutes a tensor-level statement.  The canonical
+four-sector representative above independently refutes the printed blocking
+implication.  The positive-semidefinite route remains valid when Hermitian
+positive semidefiniteness of
+$T_{k,h}=\operatorname{tr}(\eta_{k,h})$ is supplied as an additional
+hypothesis. The pairing-idempotence route of Section~3.1 avoids that hypothesis,
+but instead requires the concrete sector pairing, the zero-correlation-length
+operator identity, and linear independence. Positivity of each $\eta_{k,h}$
+gives only $T_{k,h}\geq 0$ entry by entry, which implies neither matrix-level
+positive semidefiniteness nor Hermitian symmetry.
 \footnote{The entrywise nonnegativity result is
 {\scriptsize\leanid{MPOTensor.ExplicitEtaOperators.traceMatrixRe_nonneg}}. The
 positive-semidefinite reformulation for the rank-one conclusion is
@@ -657,10 +717,13 @@ This obstruction propagates to every source statement whose proof invokes the
 rank-one factorization from Lemma~C.5.  In particular, the structural
 corollary at lines~1501--1505, the proposition proving Theorem~4.9
 (ii)$\Rightarrow$(iv) at lines~1740--1788, and the proposition proving
-Theorem~4.9 (ii)$\Rightarrow$(v) at lines~1810--1825 are not formalized from
-their stated SAL and ZCL hypotheses.  The constructions from an explicitly
-supplied rank-one neighboring trace factorization remain valid restricted
-results, but they do not establish these three source statements.
+Theorem~4.9 (ii)$\Rightarrow$(v) at lines~1810--1825 are not established by
+the printed argument.  The canonical normalization above goes further for the
+last implication: it supplies a counterexample satisfying the theorem's
+standing hypotheses.  The constructions from an explicitly supplied rank-one
+neighboring trace factorization remain valid restricted results, but they do
+not establish the structural corollary or implication (ii)$\Rightarrow$(iv)
+from SAL and ZCL alone.
 
 \section{Conclusion}
 
@@ -680,15 +743,19 @@ Markov witness with an independently supplied trace matrix has been retired:
 it imposed no relation between the state, the matrix, and an MPO tensor, and
 therefore added no consequence to either criterion.
 
-The all-cut Markov proof and the source-selected inverse-map calculation now
-show that Lemma~C.5 is false as printed: its injective four-sector witness
+The all-cut Markov proof and the source-selected inverse-map calculation show
+that Lemma~C.5 is false as printed: its injective four-sector witness
 satisfies SAL and source ZCL, while the asserted factorization
 $T_{k,h}=a_kb_h$ does not exist.  Consequently its structural corollary and
-the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
-Theorem~4.9 cannot be obtained by the printed argument.  The direct matrix
-conclusions remain available under positive semidefiniteness or the appropriate
-linear-independence hypothesis, but those additional conditions do not supply
-the source's structural corollary and must not be attributed to it.
+the source implication (ii)$\Rightarrow$(iv) of Theorem~4.9 cannot be obtained
+by the printed argument.  After canonical normalization and gauge fixing, the
+same witness also satisfies the theorem's standing simple, biCF, and BNT
+hypotheses while its two-site block is not an RFP via trace-preserving maps.
+It therefore refutes implication (ii)$\Rightarrow$(v) itself.  The direct
+matrix conclusions remain available under positive semidefiniteness or the
+appropriate linear-independence hypothesis, but those additional conditions
+do not supply the source's structural corollary and must not be attributed to
+it.
 
 \bibliographystyle{alpha}
 \bibliography{references}

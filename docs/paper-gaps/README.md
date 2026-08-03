@@ -84,13 +84,21 @@ For MPDO renormalization fixed points:
   multiplicity. This chainwise proof requires no copy independence. The note
   also records that the printed invocation of `lemmus` is invalid because its
   source-ZCL hypothesis is absent from the proposition.
-- `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` records the missing
-  coherent positive choice for the inverse-map neighboring operators in
-  Appendix C.2. The comparison with the conjugated Hayashi decomposition,
-  the tensors $l_k,r_k$, the resulting physical-sector factorization,
-  and the exact finite-chain bond product are formalized. Deriving recurrence
-  from injectivity and choosing positive representatives coherently across
-  the sector graph remain open.
+- `cpgsv17_mpdo_sal_zcl_eta_local_structure.tex` is the closure record for the
+  coherent positive choice in Appendix C.2. Recurrence is derived from
+  injectivity after zero-weight sectors are normalized, the inverse-map
+  tensors are coherently rephased, and the active-sector trace matrix is
+  primitive. The resulting positive commuting bond and its exact finite-chain
+  product now give the eta-local structure from the printed SAL hypotheses.
+- `cpgsv17_pf_rank_one.tex` records that Lemma C.5's primitive-matrix
+  rank-one inference is false, and realizes its nilpotent obstruction in an
+  injective four-sector MPDO satisfying the printed SAL and source-ZCL
+  hypotheses. Canonical normalization gives the simple, biCF, and BNT
+  standing hypotheses of Theorem 4.9 while the two-site block fails the
+  trace-preserving RFP condition, refuting implication
+  $\mathrm{(ii)}\Rightarrow\mathrm{(v)}$. The structural implication
+  $\mathrm{(ii)}\Rightarrow\mathrm{(iv)}$ remains unresolved rather than
+  formalized by the invalid rank-one step.
 - `cpsv16_purification_rfp_definition.tex` records why the former
   local-purification PRFP predicate was removed: it required a generic
   pure-state RFP witness, but did not enforce the source's positive-length
@@ -130,7 +138,11 @@ For MPDO renormalization fixed points:
   Definition 4.1 local renormalization equations. Positivity alone admits the
   zero tensor. The horizontal-form theorems are stronger specializations that
   derive the required nonvanishing. This closes only implication
-  $\mathrm{(i)}\Rightarrow\mathrm{(ii)}$; Theorem 4.9 remains partial.
+  $\mathrm{(i)}\Rightarrow\mathrm{(ii)}$. Theorem 4.9 is not an equivalence
+  as printed: implication $\mathrm{(ii)}\Rightarrow\mathrm{(v)}$ is refuted
+  by the canonical four-sector example recorded in
+  `cpgsv17_pf_rank_one.tex`, while
+  $\mathrm{(ii)}\Rightarrow\mathrm{(iv)}$ remains unresolved.
 - `hjpw04_ssa_product_marginal_reference.tex` records the singular
   product-marginal evaluation in the relative-entropy form of strong
   subadditivity. The support-compressed tensor logarithm, the bipartite entropy

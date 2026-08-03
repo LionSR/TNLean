@@ -251,6 +251,29 @@ def HasBiCF
         (∑ k : Fin r, Matrix.trace (Δ k * evalWord (A k) (List.ofFn w))) = 0) →
     ∀ k, Δ k = 0
 
+/-- An injective tensor gives a one-block `HasBiCF` family at word length one. -/
+theorem IsInjective.hasBiCF_fin_one {D : ℕ} {A : MPSTensor d D}
+    (hA : IsInjective A) : HasBiCF (fun _ : Fin 1 ↦ A) := by
+  refine ⟨1, ?_⟩
+  intro Δ hΔ k
+  fin_cases k
+  have hletters : ∀ i, Matrix.trace (Δ 0 * A i) = 0 := by
+    intro i
+    let w : Fin 1 → Fin d := fun _ ↦ i
+    simpa [w, List.ofFn_succ, List.ofFn_zero, evalWord] using hΔ w
+  apply (Matrix.trace_mul_right_eq_zero_iff (Δ 0)).mp
+  intro N
+  have hN : N ∈ Submodule.span ℂ (Set.range A) := by
+    rw [hA]
+    exact Submodule.mem_top
+  induction hN using Submodule.span_induction with
+  | mem N hN =>
+      obtain ⟨i, rfl⟩ := hN
+      exact hletters i
+  | zero => simp
+  | add M N _ _ hM hN => simp [Matrix.mul_add, Matrix.trace_add, hM, hN]
+  | smul c M _ hM => simp [Matrix.trace_smul, hM]
+
 /-- If simultaneous word evaluations span the product algebra, then a block
 matrix family whose trace pairing vanishes on those word evaluations is zero. -/
 theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace

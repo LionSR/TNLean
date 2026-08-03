@@ -29,7 +29,24 @@ noncomputable def toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) :
     MPSTensor d (∑ k : Fin r, dim k) := fun i =>
   (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
-    (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
+  (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
+
+/-- A `Fin 1` block sum with unit weight is the original tensor. -/
+@[simp]
+theorem toTensorFromBlocks_fin_one {D : ℕ} (A : MPSTensor d D) :
+    toTensorFromBlocks (fun _ : Fin 1 ↦ (1 : ℂ)) (fun _ : Fin 1 ↦ A) = A := by
+  let e : (Σ _k : Fin 1, Fin D) ≃ Fin D := finSigmaFinEquiv
+  have hsymm (i : Fin D) : e.symm i = ⟨0, i⟩ := by
+    apply e.injective
+    rw [e.apply_symm_apply]
+    ext
+    exact (@finSigmaFinEquiv_one (fun _ : Fin 1 ↦ D) ⟨(0 : Fin 1), i⟩).symm
+  funext i
+  ext x y
+  simp only [toTensorFromBlocks, Matrix.reindex_apply]
+  change (Matrix.reindex e e
+    (Matrix.blockDiagonal' (fun _k : Fin 1 ↦ (1 : ℂ) • A i))) x y = A i x y
+  simp [Matrix.reindex_apply, hsymm]
 
 /-- Flatten the dependent block coordinates after reindexing the block family by an
 equivalence. -/

@@ -413,8 +413,8 @@
 % **Scope restriction (SAL and ZCL):** the theorem starts from a neighboring
 % trace factorization, including the rank-one identity
 % tr(eta_{k,h}) = a_k b_h. It proves the conditional implication (iv) => (v),
-% not Proposition prop2to5 from SAL and ZCL alone. The missing rank-one step is
-% documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
+% not Proposition prop2to5 from SAL and ZCL alone. The refuted rank-one
+% inference is documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[Conditional two-site blocking theorem from neighboring trace factorization]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
@@ -440,38 +440,57 @@
     $\mathcal K^{[2]}$.
 \end{proof}
 
-% **Refuted prerequisite (Lemma C.5):**
-% rem:mpdo_sal_zcl_rank_one_trace_matrix is formally refuted under its printed
-% SAL and ZCL hypotheses by thm:mpdo_sal_zcl_rank_one_counterexample. Hence the
-% printed proof through prop2to3 does not establish implication (ii) => (v),
-% which remains unformalized rather than refuted. Corrected rank-one criteria
-% under positive semidefiniteness or linear independence are given by
-% thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t. The
-% conditional blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts
-% instead assumes a neighboring trace factorization.
+% **Refuted:** the source-selected four-sector tensor from
+% thm:mpdo_sal_zcl_rank_one_counterexample, after the scalar normalization and
+% bond gauge required by the printed canonical-form hypotheses, satisfies the
+% standing simple, biCF, BNT, SAL, and ZCL assumptions but its two-site block
+% is not RFP via trace-preserving maps.  Thus Theorem 4.9 (ii) => (v) is false
+% under the printed hypotheses, not merely unsupported by the refuted Lemma
+% C.5.  The conditional blocking theorem
+% thm:mpdo_blocked_original_tensor_is_rfp_via_ts remains valid when a rank-one
+% neighboring trace factorization is supplied separately.
 % Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Blocking channels from SAL and ZCL (rank-one obstruction)]
+\begin{theorem}[Counterexample to blocking from strong area law and zero correlation length]
     \label{thm:mpdo_sal_zcl_blocking_channels}
-    \notready
+    \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
+      canonicalRepresentative_refutes_theorem4_9_ii_to_v}
+    \leanok
     \uses{def:is_sal, def:mpo_source_zcl, def:is_rfp_via_ts,
-        def:mpdo_two_site_blocking}
-    Let $K$ be a simple tensor in block-injective canonical form (biCF),
-    equipped with a basis-of-normal-tensors decomposition and satisfying the
-    strong area law and zero correlation length. Let $M=K^{[2]}$ be its
-    two-site blocking. Then
-    there are trace-preserving completely positive maps in both directions
-    between the one-site and two-site closures of $M$. Equivalently, $M$ is a
-    renormalization fixed point via these two maps. This is implication
-    (ii)$\Rightarrow$(v) of
+        def:mpdo_two_site_blocking,
+        thm:mpdo_sal_zcl_rank_one_counterexample}
+    Let $l_i$ be the columns of
+    $L=\left(\begin{smallmatrix}1/4&1/4&1/4&1/4\\
+    1&-1&1&-1\end{smallmatrix}\right)$ and let $r_i$ be the rows of
+    $Q=\left(\begin{smallmatrix}1&1/8\\1&1/8\\1&-1/8\\1&-1/8
+    \end{smallmatrix}\right)$. Put $c=4/\sqrt5$, $G=\operatorname{diag}(8,1)$,
+    and
+    $K^{ij}=\delta_{ij}cG(l_ir_i)G^{-1}$. Then $K$ is a simple matrix product
+    density operator tensor in canonical form; its one-sector
+    basis-of-normal-tensors presentation is in block-injective canonical form.
+    It satisfies the strong area law and source zero correlation length, but
+    $K^{[2]}$ is not a renormalization fixed point via trace-preserving
+    completely positive maps. Hence implication (ii)$\Rightarrow$(v) of
     \cite[Theorem~4.9 and Appendix~C.2, lines~1810--1825]
-      {Cirac2016MPDO_arXiv}. The separate standing biCF and BNT hypotheses are
-    imposed at lines~849--850 and restated at line~1628 of the same source.
-    The printed proof of implication (ii)$\Rightarrow$(v) refers back to the
-    construction of Proposition~C.7 after projection to each local sector.
-    That construction requires the rank-one neighboring-trace factorization
-    supplied in the printed argument by the refuted Lemma~C.5. Thus the printed
-    route is obstructed; no alternative proof under SAL and ZCL alone is known.
+      {Cirac2016MPDO_arXiv} is false under its printed hypotheses.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:rfp_via_ts_physical_trace_idempotent}
+    The gauge $G$ makes the unique normal block left canonical, and its four
+    nonzero physical slices span $\MN{2}$. The one-sector presentation is
+    therefore both a basis-of-normal-tensors canonical form and block-injective
+    at length one. Scalar normalization and bond conjugation preserve the
+    normalized periodic states of the four-sector tensor in
+    Theorem~\ref{thm:mpdo_sal_zcl_rank_one_counterexample}; consequently $K$
+    satisfies the strong area law. Since
+    $LQ=\operatorname{diag}(1,0)=P$, its physical-trace transfer and that of its
+    two-site block are
+    $\mathcal T_K=cP$ and $\mathcal T_{K^{[2]}}=c^2P=(16/5)P$, respectively.
+    If $K^{[2]}$ were a renormalization fixed point via trace-preserving maps,
+    Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent} would give
+    $(c^2P)^2=c^2P$, contrary to $c^2=16/5$ and $P\ne0$.
+\end{proof}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
 % channel MPDO_TSKKK.png after explicitly suppressing U, but it does not draw
