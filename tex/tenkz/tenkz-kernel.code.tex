@@ -2978,6 +2978,122 @@
       { \__tenkz_kernel_open_cell:w ##1 \q_stop }
   }
 
+% An explicitly open picture side is topology: each live boundary cell owns
+% one virtual wire from its boundary port to the exterior.  The ordinary
+% endpoint and port machinery supplies the shared open-ray geometry and also
+% rejects a second consumer of the same port.
+\tl_new:N \l__tenkz_kernel_side_open_atom_tl
+\tl_new:N \l__tenkz_kernel_side_open_wire_tl
+\cs_new_protected:Npn \__tenkz_kernel_side_open_cell:nnn #1#2#3
+  {
+    \__tenkz_kernel_select_cell:nnN {#2}{#3}
+      \l__tenkz_kernel_side_open_atom_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_side_open_atom_tl
+      {
+        % Frame population is addressable even when no body atom claimed the
+        % cell.  Register that live carrier before the ordinary port service
+        % attaches this boundary wire.
+        \prop_put:Nee \l__tenkz_kernel_cell_prop {#2-#3}
+          { \tl_use:N \l__tenkz_kernel_side_open_atom_tl }
+        \__tenkz_kernel_cell_sealed:nnF {#2}{#3}
+          {
+            \str_case:nn {#1}
+              {
+                {west}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = west , row = #2 ,
+                        name = open-west-#2 , from-open = w
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-west-#2}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {to}
+                      {#2}{#3}{180}{virtual}
+                  }
+                {east}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = east , row = #2 ,
+                        name = open-east-#2 , to-open = e
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-east-#2}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {from}
+                      {#2}{#3}{0}{virtual}
+                  }
+                {north}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = north , col = #3 ,
+                        name = open-north-col-#3 , from-open = n
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-north-col-#3}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {to}
+                      {#2}{#3}{90}{virtual}
+                  }
+                {south}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = south , col = #3 ,
+                        name = open-south-col-#3 , to-open = s
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-south-col-#3}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {from}
+                      {#2}{#3}{270}{virtual}
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_side_opens:
+  {
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_rows: }
+          { \__tenkz_kernel_side_open_cell:nnn {west}{##1}{1} }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_rows: }
+          {
+            \__tenkz_kernel_side_open_cell:nnn
+              {east}{##1}{ \__tenkz_kernel_cols: }
+          }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {north} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_cols: }
+          { \__tenkz_kernel_side_open_cell:nnn {north}{1}{##1} }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {south} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_cols: }
+          {
+            \__tenkz_kernel_side_open_cell:nnn
+              {south}{ \__tenkz_kernel_rows: }{##1}
+          }
+      }
+  }
+
 \bool_new:N \l__tenkz_kernel_physical_atom_bool
 \tl_new:N \l__tenkz_kernel_physical_row_tl
 \tl_new:N \l__tenkz_kernel_physical_col_tl
@@ -3000,6 +3116,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_closures:
   {
     \__tenkz_kernel_cell_closures:
+    \__tenkz_kernel_side_opens:
     \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpa_tl
     \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpb_tl
     \str_if_eq:VnTF \l_tmpa_tl {trace}
