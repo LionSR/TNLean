@@ -163,6 +163,7 @@ import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
 import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
 import TNLean.MPS.MPDO.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.MPDO.IsometricAdjacentBondTransport
+import TNLean.MPS.MPDO.KatoDeformedRFPObstruction
 import TNLean.MPS.MPDO.LengthDependentRFPExample
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 import TNLean.MPS.MPDO.LinearMarkedTensor

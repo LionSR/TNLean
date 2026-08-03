@@ -192,6 +192,103 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\mathcal T_M^2=\mathcal T_M$.
 \end{proof}
 
+\begin{theorem}[An idempotent physical-trace transfer without fixed-tensor
+    renormalization maps]
+    \label{thm:kato_deformed_mpdo_fixed_tensor_obstruction}
+    \lean{MPOTensor.KatoDeformedRFPObstruction.pauliZ,
+      MPOTensor.KatoDeformedRFPObstruction.siteSign,
+      MPOTensor.KatoDeformedRFPObstruction.tensor,
+      MPOTensor.KatoDeformedRFPObstruction.configurationSign,
+      MPOTensor.KatoDeformedRFPObstruction.mpo_tensor_eq_diagonal,
+      MPOTensor.KatoDeformedRFPObstruction.tensor_isMPDO,
+      MPOTensor.KatoDeformedRFPObstruction.trace_mpo_tensor,
+      MPOTensor.KatoDeformedRFPObstruction.physTraceTransfer_tensor,
+      MPOTensor.KatoDeformedRFPObstruction.%
+        physTraceTransfer_tensor_idempotent,
+      MPOTensor.KatoDeformedRFPObstruction.physClose1_tensor,
+      MPOTensor.KatoDeformedRFPObstruction.physClose2_tensor,
+      MPOTensor.KatoDeformedRFPObstruction.obstructionBoundary,
+      MPOTensor.KatoDeformedRFPObstruction.%
+        physClose1_obstructionBoundary,
+      MPOTensor.KatoDeformedRFPObstruction.%
+        physClose2_obstructionBoundary,
+      MPOTensor.KatoDeformedRFPObstruction.%
+        physClose2_obstructionBoundary_posSemidef,
+      MPOTensor.KatoDeformedRFPObstruction.%
+        physClose1_obstructionBoundary_not_posSemidef,
+      MPOTensor.KatoDeformedRFPObstruction.tensor_not_isRFPViaTS}
+    \leanok
+    \uses{def:mpdo, def:phys_close, def:mpo_physical_trace_transfer,
+      def:is_rfp_via_ts}
+    Let $Z=\operatorname{diag}(1,-1)$ and let $K$ be the bond-two MPO tensor
+    whose nonzero physical letters are
+    \begin{align}
+        K^{00}&=\operatorname{diag}(1/2,1/4), &
+        K^{11}&=\operatorname{diag}(1/2,-1/4).
+        \notag
+    \end{align}
+    For every $N\geq1$, its closed operator is
+    \begin{align}
+        \rho_N(K)&=2^{-N}I+4^{-N}Z^{\otimes N}\geq0, &
+        \tr\rho_N(K)&=1.
+        \notag
+    \end{align}
+    Its physical-trace transfer is
+    \begin{align}
+        \mathcal T_K&=\operatorname{diag}(1,0), &
+        \mathcal T_K^2&=\mathcal T_K.
+        \notag
+    \end{align}
+    For every virtual matrix $X$, the physical closures satisfy
+    \begin{align}
+        K_1(X)&=\frac{X_{00}}2I+\frac{X_{11}}4Z,
+        \notag\\
+        K_2(X)&=\frac{X_{00}}4I\otimes I
+          +\frac{X_{11}}{16}Z\otimes Z.
+        \notag
+    \end{align}
+    Nevertheless, $K$ is not a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.
+
+    The tensor is the $p=1/2$ example of
+    \cite[lines~709--838]{Kato2024Exact}, after conjugating every physical site
+    by the Hadamard matrix. Kato's exact renormalization changes the tensor
+    along the flow and the source explicitly states that this example is not a
+    fixed point. The fixed-tensor-channel obstruction follows directly from
+    the one- and two-site closure identities; it is not asserted as a theorem
+    in that source. No canonical-form or strong-area-law conclusion is part of
+    this statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_trace_loop_chain, lem:is_kraus_cptp_map_pos}
+    Since the two virtual sectors are diagonal, set $z_0=1$ and $z_1=-1$.
+    A physical configuration $\sigma$ has weight
+    \begin{align}
+        2^{-N}+4^{-N}\prod_{k=0}^{N-1}z_{\sigma_k}.
+        \notag
+    \end{align}
+    This proves the closed-operator formula. Each diagonal entry is either
+    $2^{-N}+4^{-N}$ or $2^{-N}-4^{-N}$ and is nonnegative. Contracting the
+    physical indices gives $\mathcal T_K=\operatorname{diag}(1,0)$, whence
+    $\tr\rho_N(K)=\tr(\mathcal T_K^N)=1$ for $N\geq1$ and
+    $\mathcal T_K^2=\mathcal T_K$.
+
+    Direct contraction with a virtual matrix $X$ gives the two closure
+    formulas. Set $X_* = \operatorname{diag}(2,8)$. Then
+    \begin{align}
+        K_2(X_*)&=\frac12(I\otimes I+Z\otimes Z)\geq0,
+        \notag\\
+        K_1(X_*)&=I+2Z=\operatorname{diag}(3,-1)\not\geq0.
+        \notag
+    \end{align}
+    If the coarse-graining channel $\mathcal S$ of
+    Definition~\ref{def:is_rfp_via_ts} existed, complete positivity would give
+    $\mathcal S[K_2(X_*)]\geq0$, whereas its intertwining identity would give
+    $\mathcal S[K_2(X_*)]=K_1(X_*)$. This is a contradiction.
+\end{proof}
+
 \begin{theorem}[Renormalization fixed points satisfy the up-to-scalar
     physical-trace relation]
     \label{thm:rfp_via_ts_source_zcl}
