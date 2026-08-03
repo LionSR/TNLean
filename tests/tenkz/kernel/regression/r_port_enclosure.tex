@@ -21,11 +21,11 @@
           )
       }
   }
-\cs_new_eq:NN \__tenkz_test_enclosure_leg:nnn
-  \__tenkz_kernel_r_leg:nnn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
+\cs_new_eq:NN \__tenkz_test_enclosure_leg:nn
+  \__tenkz_kernel_r_leg:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
   {
-    \__tenkz_test_enclosure_leg:nnn {#1}{#2}{#3}
+    \__tenkz_test_enclosure_leg:nn {#1}{#2}
     \__tenkz_model_get:nnN {#1} {label} \l_tmpa_tl
     \str_if_eq:VnT \l_tmpa_tl {A}
       {

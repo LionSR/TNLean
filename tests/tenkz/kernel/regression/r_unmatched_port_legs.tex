@@ -11,7 +11,6 @@
 \int_new:N \g__tenkz_test_port_open_plane_int
 \int_new:N \g__tenkz_test_port_open_wired_int
 \int_new:N \g__tenkz_test_port_label_int
-\int_new:N \g__tenkz_test_policy_port_label_int
 \int_new:N \g__tenkz_test_bonded_port_label_int
 \int_new:N \g__tenkz_test_string_port_label_int
 \int_new:N \g__tenkz_test_consumed_policy_leg_int
@@ -24,7 +23,6 @@
 \tl_new:N \l__tenkz_test_port_label_style_tl
 \tl_new:N \l__tenkz_test_port_label_clear_tl
 \bool_new:N \l__tenkz_test_in_port_label_bool
-\bool_new:N \l__tenkz_test_in_policy_label_bool
 \bool_new:N \l__tenkz_test_in_bonded_label_bool
 \bool_new:N \g__tenkz_test_atoms_done_bool
 \bool_new:N \g__tenkz_test_marks_done_bool
@@ -57,11 +55,6 @@
         \int_gincr:N \g__tenkz_test_port_label_int
         \__tenkz_test_port_label_style:n {#1}
       }
-    \bool_if:NT \l__tenkz_test_in_policy_label_bool
-      {
-        \int_gincr:N \g__tenkz_test_policy_port_label_int
-        \__tenkz_test_port_label_style:n {#1}
-      }
     \bool_if:NT \l__tenkz_test_in_bonded_label_bool
       {
         \int_gincr:N \g__tenkz_test_bonded_port_label_int
@@ -79,9 +72,9 @@
     \__tenkz_test_port_stroke:nn {#1}{#2}
   }
 \cs_new_eq:NN
-  \__tenkz_test_policy_port_leg:nnn
-  \__tenkz_kernel_r_leg:nnn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg:nnn #1#2#3
+  \__tenkz_test_policy_port_leg:nn
+  \__tenkz_kernel_r_leg:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
   {
     \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
     \str_case:Vn \l_tmpa_tl
@@ -89,9 +82,7 @@
         {H}{ \int_gincr:N \g__tenkz_test_consumed_policy_leg_int }
         {J}{ \int_gincr:N \g__tenkz_test_consumed_policy_leg_int }
       }
-    \bool_set_true:N \l__tenkz_test_in_policy_label_bool
-    \__tenkz_test_policy_port_leg:nnn {#1}{#2}{#3}
-    \bool_set_false:N \l__tenkz_test_in_policy_label_bool
+    \__tenkz_test_policy_port_leg:nn {#1}{#2}
   }
 \cs_new_eq:NN
   \__tenkz_test_bonded_port_label:nn
@@ -358,12 +349,12 @@
   \tnwire[kind=string]{F.90}{G.180}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=up]
-  \tn[at=(1,1), name=H, up=$q$, ports={90:physical:$q$}]{H}
+  \tn[at=(1,1), name=H, ports={90:physical:$q$}]{H}
   \tn[at=(1,2), name=I, ports={180:physical}]{I}
   \tnwire{H.90}{I.180}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=up]
-  \tn[name=J, up=$r$, ports={90:physical,180:physical}]{J}
+  \tn[name=J, ports={90:physical:$r$,180:physical}]{J}
   \tnwire{J.90}{J.180}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=3, bonds=none]
@@ -431,13 +422,13 @@
   \tnwire{X.0}{Y.180}
 \end{tenkz}
 \ExplSyntaxOn
-\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {6}
+\int_compare:nNnF {\g__tenkz_test_port_open_flat_int} = {8}
   {\errmessage{flat~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_plane_int} = {2}
   {\errmessage{plane~unmatched-port~count~changed}}
 \int_compare:nNnF {\g__tenkz_test_port_open_wired_int} = {0}
   {\errmessage{an~explicitly~wired~port~grew~a~duplicate~stub}}
-\int_compare:nNnF {\g__tenkz_test_port_label_int} = {6}
+\int_compare:nNnF {\g__tenkz_test_port_label_int} = {8}
   {
     \errmessage
       {
@@ -445,8 +436,6 @@
         \int_use:N \g__tenkz_test_port_label_int
       }
   }
-\int_compare:nNnF {\g__tenkz_test_policy_port_label_int} = {2}
-  {\errmessage{physical-policy~port~label~ownership~changed}}
 \int_compare:nNnF {\g__tenkz_test_bonded_port_label_int} = {11}
   {\errmessage{bonded~typed~ports~lost~their~labels}}
 \int_compare:nNnF {\g__tenkz_test_string_port_label_int} = {2}

@@ -11,7 +11,10 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={ket}, cols=4, physical=up]
-  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[skin=dots]{} & \tn[up=$i_L$]{A}
+  \tn[ports={90:physical:$i_1$}]{A} &
+  \tn[ports={90:physical:$i_2$}]{A} &
+  \tn[skin=dots]{} &
+  \tn[ports={90:physical:$i_L$}]{A}
   \tnmark[form=enclosure, label pos=w]{(1,1) .. (1,4)}{$A^{[L]}$}
 \end{tenkz}
 \end{document}
