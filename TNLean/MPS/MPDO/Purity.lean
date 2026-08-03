@@ -29,7 +29,9 @@ entry formula `MPSTensor.mpv_toMPSTensor_pairConfig`.
 
 **Naming.**  The codebase has no separate purity predicate, so the results are
 stated in trace form and in the Frobenius-norm vocabulary of
-`TNLean.Algebra.MatrixAux`.  Following the convention of issue #5404, the
+`TNLean.Algebra.MatrixAux`.  Following the convention of the eta-local
+structure paper-gap note
+(`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`), the
 unnormalized quantity `Matrix.trace (mpo K N * (mpo K N)ᴴ)` is called the
 *raw squared Hilbert--Schmidt norm* of the MPO family; it is not a
 normalized-state purity, which would require the trace normalization that has
@@ -49,7 +51,9 @@ not been established here.
 ## Source fidelity
 
 These identities are project infrastructure preparing the Lemma C.5 route of
-issue #5404 (arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines
+the eta-local structure paper-gap note
+(`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`)
+(arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines
 1473--1499; Case-I assumptions at lines 1374--1381; cyclic direct-sum form at
 lines 1580--1593).  They are not statements from CPSV16, and no Lemma C.5
 conclusion is claimed here.
@@ -89,7 +93,9 @@ The proof is a finite reindexing: the left side sums over doubled-index words
 configurations, and `MPSTensor.mpv_toMPSTensor_pairConfig` identifies the
 summands along `pairCfgEquiv`.
 
-This is a project derivation preparing the Lemma C.5 route of issue #5404
+This is a project derivation preparing the Lemma C.5 route of the eta-local
+structure paper-gap note
+(`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`)
 (arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1473--1499); it is not
 a claim from CPSV16.  Before trace normalization is established, the right
 side is the raw squared Hilbert--Schmidt norm of the MPO family, not a
@@ -124,7 +130,9 @@ MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
   = Matrix.trace (mpo K N * mpo K N).
 ```
 
-This is a project derivation preparing the Lemma C.5 route of issue #5404
+This is a project derivation preparing the Lemma C.5 route of the eta-local
+structure paper-gap note
+(`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`)
 (arXiv:1606.00608, Appendix C.2, Lemma `SALZCL`, lines 1473--1499); it is not
 a claim from CPSV16. -/
 theorem mpvOverlap_toMPSTensor_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO K)
@@ -137,7 +145,9 @@ theorem mpvOverlap_toMPSTensor_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO
 is the squared Frobenius norm of the MPO, that is, its raw squared
 Hilbert--Schmidt norm in the vocabulary of `TNLean.Algebra.MatrixAux`.
 
-This is a project derivation preparing the Lemma C.5 route of issue #5404; it
+This is a project derivation preparing the Lemma C.5 route of the eta-local
+structure paper-gap note
+(`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`); it
 is not a claim from CPSV16. -/
 theorem mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq (K : MPOTensor d D) (N : ℕ) :
     (MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re = ‖mpo K N‖ ^ 2 := by
