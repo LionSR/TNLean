@@ -1,11 +1,11 @@
 % Target: rmp-ii-mpu-unitarity
 % Formula: U^\dagger U = I for the blocked two-site MPU tensor.
-% Ink: Canonical public tenkz and tenkzfree environments; no raw TikZ.
+% Ink: Canonical public tenkz and kernel environments; no raw TikZ.
 % Boundary: The west and east cups contract a and b; the remaining physical pair is the
 %   identity.
 % Source: paper TN-Review-main.tex line 378; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 393-404
-% Capabilities: grid, free-graph, typed-ports
+% Capabilities: kernel, typed-ports
 \[
   % LHS: a (west cup) [U over conj(U), physical pair contracted] b (east cup)
   \begin{tenkz}[rows={op,op},
@@ -14,9 +14,10 @@
     \tn*[box]{U}
   \end{tenkz}
   \;=\;
-  \begin{tenkzfree}
-    \tnput[boundary,ports={south:physical}]{it}{(0mm,7mm)}{}
-    \tnput[boundary,ports={north:physical}]{ib}{(0mm,-7mm)}{}
-    \tnjoin{it.south}{ib.north}
-  \end{tenkzfree}
+  {\tenkzkernel
+   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+     % A glyphless typed carrier makes one open physical identity wire through
+     % the centre, without either endpoint becoming an atom.
+     \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
+   \end{tenkz}}
 \]

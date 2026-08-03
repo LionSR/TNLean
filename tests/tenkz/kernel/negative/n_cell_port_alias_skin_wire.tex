@@ -1,0 +1,21 @@
+% Negative regression: an authored endpoint cannot change a paired cell lane's
+% bearing.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{red}{hue=source:red}
+\tndeclare{skin}{paired-north}{
+  base=box,
+  pairings={80@1 > w@1 : red}
+}
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[name=host, skin=paired-north]{}
+  \tnwire{open n}{host.100@1}
+\end{tenkz}
+\end{document}

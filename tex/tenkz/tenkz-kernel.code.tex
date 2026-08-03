@@ -167,6 +167,9 @@
 \msg_new:nnn {tenkz}{kernel-skin-pairings-parse}
   { [TKZ-SKIN-PAIRING-PARSE]~pairings~on~declared~skin~'#1'~must~be~
     one~braced~port-pair-list. }
+\msg_new:nnn {tenkz}{kernel-cell-port-bearing-alias}
+  { [TKZ-CELL-PORT-BEARING-ALIAS]~paired~cell~port~#1~receives~#2~and~#3;~
+    one~cell~lane~cannot~represent~both~bearings. }
 \msg_new:nnn {tenkz}{kernel-skin-pairing-cross-parse}
   { [TKZ-SKIN-PAIRING-CROSS-PARSE]~pairing~cross~item~'#1'~on~atom~#2~
     must~be~'<pairing-number>:~<crossing-declaration>'. }
@@ -187,6 +190,7 @@
 % Atoms whose labels need the silhouette / pairing / label render split.
 \prop_new:N \l__tenkz_kernel_skin_pairing_host_prop
 \prop_new:N \l__tenkz_kernel_skin_pairing_cross_prop
+\prop_new:N \l__tenkz_kernel_cell_port_pairing_bearing_prop
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
@@ -3345,6 +3349,64 @@
       { \prg_return_true: }
   }
 
+% A skin pairing begins on the visible hull, so it fixes the bearing of its
+% cell-backed face lane.  Ordinary endpoints may share that lane only at the
+% same bearing; unrelated star rays remain free to cross below an opaque glyph.
+\tl_new:N \l__tenkz_kernel_cell_port_key_tl
+\tl_new:N \l__tenkz_kernel_cell_port_bearing_tl
+\tl_new:N \l__tenkz_kernel_cell_port_side_tl
+\tl_new:N \l__tenkz_kernel_cell_port_existing_tl
+\cs_new_protected:Npn
+  \__tenkz_kernel_cell_port_bearing_visit:nnnnn #1#2#3#4#5
+  {
+    \__tenkz_kernel_atom_cell_placed:nT {#1}
+      {
+        \__tenkz_kernel_bearing_normalize:nN {#2}
+          \l__tenkz_kernel_cell_port_bearing_tl
+        \exp_args:NV \__tenkz_kernel_r_face_side:n
+          \l__tenkz_kernel_cell_port_bearing_tl
+        \tl_set_eq:NN \l__tenkz_kernel_cell_port_side_tl
+          \l__tenkz_kernel_r_face_side_tl
+        \tl_set:Ne \l__tenkz_kernel_cell_port_key_tl
+          {
+            #1 / \tl_use:N \l__tenkz_kernel_cell_port_side_tl /
+            \int_eval:n {#3}
+          }
+        \prop_get:NVN \l__tenkz_kernel_cell_port_pairing_bearing_prop
+          \l__tenkz_kernel_cell_port_key_tl
+          \l__tenkz_kernel_cell_port_existing_tl
+        \quark_if_no_value:NTF \l__tenkz_kernel_cell_port_existing_tl
+          {
+            \str_if_eq:nnT {#5} {claim}
+              {
+                \prop_put:NVV
+                  \l__tenkz_kernel_cell_port_pairing_bearing_prop
+                  \l__tenkz_kernel_cell_port_key_tl
+                  \l__tenkz_kernel_cell_port_bearing_tl
+              }
+          }
+          {
+            \fp_compare:nNnF
+              { \l__tenkz_kernel_cell_port_existing_tl }
+              = { \l__tenkz_kernel_cell_port_bearing_tl }
+              {
+                \msg_error:nneee {tenkz}{kernel-cell-port-bearing-alias}
+                  {
+                    #1.\tl_use:N \l__tenkz_kernel_cell_port_side_tl
+                    @\int_eval:n {#3}
+                  }
+                  {
+                    pairing~bearing~
+                    \tl_use:N \l__tenkz_kernel_cell_port_existing_tl
+                  }
+                  {
+                    bearing~\tl_use:N \l__tenkz_kernel_cell_port_bearing_tl
+                    \c_space_tl from~#4
+                  }
+              }
+          }
+      }
+  }
 \prg_new_protected_conditional:Npnn
   \__tenkz_kernel_policy_leg_renders:n #1 { T, F, TF }
   {
@@ -3447,6 +3509,8 @@
 \cs_new_protected:Npn
   \__tenkz_kernel_port_policy_register:nnn #1#2#3
   {
+    \__tenkz_kernel_cell_port_bearing_visit:nnnnn
+      {#1} {#2} {#3} {physical~policy} {check}
     \tl_set:Ne \l__tenkz_kernel_scratch_tl {#1/#2/#3}
     \prop_put:NVn
       \l__tenkz_kernel_port_policy_prop
@@ -3531,6 +3595,19 @@
                       \l__tenkz_kernel_scratch_tl
                     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
                       {
+                        \use:e
+                          {
+                            \exp_not:N
+                              \__tenkz_kernel_cell_port_bearing_visit:nnnnn
+                              { \tl_use:N \l__tenkz_kernel_port_record_tl }
+                              { \tl_use:N \l__tenkz_kernel_port_face_tl }
+                              {
+                                \__tenkz_kernel_node_item:Nn
+                                  \l__tenkz_kernel_port_node_tl {slot}
+                              }
+                              { wire~##1/####1 }
+                              {check}
+                          }
                         \bool_if:NT \l_tmpa_bool
                           {
                             \prop_get:NVN
@@ -3706,6 +3783,12 @@
               { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
           }
         \__tenkz_kernel_port_validate_slot:n {#1}
+        \__tenkz_kernel_cell_port_bearing_visit:nnnnn
+          {#1}
+          {\l__tenkz_kernel_port_face_tl}
+          {\l__tenkz_kernel_port_slot_tl}
+          {ports=}
+          {check}
         \tl_set:Ne \l__tenkz_kernel_scratch_tl
           {
             #1 / \tl_use:N \l__tenkz_kernel_port_face_tl /
@@ -4948,9 +5031,16 @@
           }
           {
             \tl_set:NV \l__tenkz_kernel_r_node_tl \l__tenkz_kernel_r_tl
-            \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
-            \__tenkz_geom_place_rel:nVee {#1}
-              \l__tenkz_kernel_r_node_tl {0} {0}
+            \__tenkz_kernel_r_atom_rc:nNNN {#1}
+              \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+              \l_tmpa_bool
+            \bool_if:NTF \l_tmpa_bool
+              { \__tenkz_kernel_r_atom_place_span:n {#1} }
+              {
+                \__tenkz_kernel_r_node:V \l__tenkz_kernel_r_node_tl
+                \__tenkz_geom_place_rel:nVee {#1}
+                  \l__tenkz_kernel_r_node_tl {0} {0}
+              }
           }
       }
       {
@@ -13608,6 +13698,12 @@
           {#2}
           { \tl_use:N \l__tenkz_kernel_r_b_tl }
       }
+    \__tenkz_kernel_cell_port_bearing_visit:nnnnn
+      {#2}
+      {\l__tenkz_kernel_r_face_angle_tl}
+      {\l__tenkz_kernel_slot_tl}
+      {skin~\l__tenkz_kernel_r_skin_declared_tl}
+      {claim}
     \exp_args:Ne \__tenkz_kernel_node_new:nN
       {#2.\l__tenkz_kernel_r_face_angle_tl @\l__tenkz_kernel_slot_tl}
       \l__tenkz_kernel_scratch_tl
@@ -13641,6 +13737,7 @@
     \prop_clear:N \l__tenkz_kernel_named_prop
     \prop_clear:N \l__tenkz_kernel_skin_pairing_host_prop
     \prop_clear:N \l__tenkz_kernel_skin_pairing_cross_prop
+    \prop_clear:N \l__tenkz_kernel_cell_port_pairing_bearing_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_cell_prop
