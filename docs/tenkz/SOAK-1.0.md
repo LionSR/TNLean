@@ -65,13 +65,24 @@ evidence-supervisor result. A missing, renamed, non-blob, or changed workflow
 fails closed.
 
 Activation also derives and pins the complete Git tree at the policy's
-`release_publisher_workflow_root`. Every later validation requires that exact
-tree. It completely enumerates its workflow jobs and requires the terminal
-publisher to be the sole job naming `release_publisher_environment` or
-`release_publisher_secret`. The current environment configuration must restrict
-deployment to the protected release branch. Missing, wider, changed, or
-incompletely paginated configuration fails closed. A transient administrative
-change restored before the snapshot remains inside the stated trust boundary.
+`release_publisher_workflow_root`. Until a validation declares `released`, the
+current tree must equal that pin. The resolver completely enumerates its
+workflow jobs and requires the terminal publisher to be the sole job naming
+`release_publisher_environment` or `release_publisher_secret`. Workflow-level
+secret inheritance is forbidden. The current environment configuration must restrict
+deployment to the protected release branch. The private key must exist only as
+that environment secret. The resolver exhaustively checks repository and
+organization secret names and access, and rejects any same-named secret that
+can reach the repository. Missing, wider, changed, shadowed, or incompletely
+paginated configuration fails closed.
+
+After a successful publisher job, an administrator removes the environment
+secret. The validation that declares `released` requires its absence, and every
+later replay rejects its reintroduction. Released replay resolves the successful
+job's historical workflow tree at `I` and requires that tree to equal the
+activation pin; unrelated current workflows need not retain those old bytes
+after the key is gone. A transient administrative change restored before a
+snapshot remains inside the stated trust boundary.
 
 The resolver closes the dedicated workflow's transitive executable dependency
 graph. Each local action or reusable workflow is pinned by its activation Git
@@ -90,14 +101,19 @@ The dedicated workflow has one terminal publisher job with job-level
 `contents: write`; validation jobs have no write permission. The publisher has
 no checkout, local action, container, package download, or repository-supplied
 executable. It uses only the hosted runner's version-fingerprinted `gh`, `git`,
-and `ssh-keygen` clients and the pinned workflow's closed inline command. Its
-`needs` dependency names the exact post-merge validation job, so GitHub can
+and `ssh-keygen` clients through the pinned workflow's closed inline command.
+It has no `uses` step, called workflow, composite action, or inherited secret.
+Its `needs` dependency names the exact post-merge validation job, so GitHub can
 start it only after that job succeeds for the sign-off integration `I`. The job
-runs in the dedicated environment and receives its private-key secret there.
-Any other networked step, executable, key user, or publisher input fails closed.
+runs in the dedicated environment; only the absent-ref construction path reads
+the private-key secret. Any other networked step, executable, key user, or
+publisher input fails closed.
 
-The successful validator emits one closed `needs` tuple containing `I`, the
-normalized sign-off `mergedAt`, policy and prefix hashes, prefix boundary, and
+The successful validator requires the sign-off pull request's exact `mergedAt`
+to be an unambiguous UTC instant with integral seconds. It converts that instant
+once to an integer Unix second; a fractional, non-UTC, ambiguous, or out-of-range
+value fails closed. Its closed `needs` tuple contains `I`, that
+`tagger_epoch_seconds` integer, policy and prefix hashes, prefix boundary, and
 the pinned support-tree, object-schema-blob, and public-key-blob OIDs. The
 publisher accepts no caller-provided substitute. Through `gh`, it fetches those
 exact Git objects by OID and verifies their identities and hashes. A branch
@@ -107,29 +123,34 @@ runner metadata must agree with the closed tuple.
 
 The publisher constructs one byte-deterministic annotated tag object `E`. The
 pinned object schema fixes its tagger identity, the `+0000` timezone, and the
-tagger time obtained from the sign-off pull request's exact `mergedAt`. It fixes
-every byte from the `object` header through the message, the Git SSH-signature
-embedding, and the repository object-format hash. The publisher signs the exact
-unsigned tag payload with SSH-Ed25519 under namespace `git`; the deterministic
-signature completes `E`. The message binds `tenkz-v1.0.0`, `I`, the armed policy
-hash, and the validated ledger prefix. The validator checks the raw signature
-and payload against the pinned public key; GitHub's displayed `verified` value
-is not a substitute.
+tagger time from the tuple's `tagger_epoch_seconds`. It fixes every byte from
+the `object` header through the message, the Git SSH-signature embedding, and
+the repository object-format hash. The publisher signs the exact unsigned tag
+payload with SSH-Ed25519 under namespace `git`; the deterministic signature
+completes `E`. The message binds `tenkz-v1.0.0`, `I`, the armed policy hash, and
+the validated ledger prefix.
 
 The publisher reads the final ref before and after every uncertain write. If it
-is absent, the job creates or re-creates content-addressed object `E`, creates
-the ref without force, and reads it back. If the ref already names `E`, the job
-authenticates its exact bytes, signature, and peel to `I` and succeeds without
-another mutation. An absent ref remains retryable. Any present non-`E` object,
-bad signature, wrong payload, or wrong peel is a hard release incident. A
-successful publisher job records `E`'s OID after the final readback.
+is absent, the job constructs `E`, verifies its raw signature against the pinned
+public key, checks every schema byte and its peel to `I`, and recomputes its
+object ID before the first mutation. It then writes that already-verified object,
+creates the ref without force, and reads it back. If the ref already names `E`,
+the job repeats the same raw authentication and succeeds without another
+mutation or private-key read. An absent ref remains retryable. Any present
+non-`E` object, bad signature, wrong payload, or wrong peel is a hard release
+incident. The job exits successfully only after the final readback authenticates
+`E`. It emits no durable output receipt; GitHub's API-visible successful job
+conclusion and the independently fetched current object are the evidence.
 
 When the final ref exists, the trusted evidence-collection phase resolves it,
 fetches that exact annotated object into an isolated Git object database, and
 resolves the ref again; a changed lookup fails closed. Network access is then
 removed. The validator reads the stored object bytes with the
 version-fingerprinted Git client, recomputes their OID, and verifies the payload
-and signature. Parsed REST fields alone are insufficient evidence.
+and raw signature against the pinned public key. GitHub's displayed `verified`
+value and parsed REST fields are insufficient evidence. This collection occurs
+in a validation run after the publisher run that first created or adopted the
+object.
 
 While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
@@ -802,27 +823,38 @@ targeting the sign-off. Neither case is a validated sign-off. After post-merge
 validation succeeds, the campaign is `signed-off-awaiting-tag`. The pinned
 workflow's dependent publisher job may create the exact authenticated object
 `E` and the `tenkz-v1.0.0` ref on `I`. An absent ref leaves the campaign awaiting
-that job or a full-workflow retry. If `E` is present but the job stopped before
-recording success, the campaign is `signed-off-awaiting-publisher-receipt`; a
-retry authenticates and adopts `E`. A different present object or failed
-authentication is a hard release incident, not a release. All mutable external
-facts remain subject to revalidation, and drift while the ref is absent requires
-the ordered reset process above.
+that job or a full-workflow retry. If `E` is present but no publisher job has
+completed successfully, the campaign is
+`signed-off-awaiting-publisher-success`; a retry authenticates and adopts `E`
+without reading the private key. After a successful job, the campaign is
+`signed-off-awaiting-key-retirement` until an administrator removes the
+environment secret. These names replace the provisional receipt state; there
+is no compatibility alias. A different present object or failed authentication
+is a hard release incident, not a release. All mutable external facts remain
+subject to revalidation, and drift while the ref is absent requires the ordered
+reset process above.
 
 Every validation, including one whose snapshot already contains the final tag,
 first replays the complete pinned policy, ledger, payload, Git, and GitHub
 evidence through the validated sign-off. A tag lookup may not short-circuit
 that replay. The resolver completely paginates workflow runs and jobs for `I`.
-It accepts any successful publisher job using the exact pinned workflow bytes
-and ordered after that run's successful post-merge validation job. Its closed
-output names `E`'s OID and reports that the final readback either created or
-authenticated that same object. Distinct successful OIDs fail closed. The
-current object named
-`tenkz-v1.0.0` must equal `E`, carry the valid raw signature and exact payload,
-and peel to `I` under the required current no-update, no-delete, no-bypass
-protection. Only that combined observation changes the campaign to terminal
-`released` state. No later ledger entry or new sign-off is valid. Every later
-validation still replays every current mutable fact. A
+It accepts any successful publisher job whose head is `I`, whose historical
+workflow tree equals the activation pin, and which follows that run's successful
+post-merge validation job. The resolver does not read job outputs: by contract,
+that exact job can succeed only after authenticating the final readback of `E`.
+Several successful retries are harmless because each ran the same pinned bytes
+against the same deterministic object.
+
+The current object named `tenkz-v1.0.0` must equal `E`, carry the valid raw
+signature and exact payload, and peel to `I` under the required current
+no-update, no-delete, no-bypass protection. The environment key and any
+same-named repository or organization secret must be absent. Only a validation
+that observes this complete conjunction changes the campaign to terminal
+`released` state; the publisher job never declares release itself. No later
+ledger entry or new sign-off is valid. Released replay continues to check the
+historical publisher tree, but unrelated current workflows may change after the
+key is retired. Every later validation still replays every current mutable fact.
+A
 mismatch that requires the ordered reset process while the final-tag ref is
 absent becomes a hard release incident once that ref exists; it never reopens
 the ledger. Creating the protected name with the wrong kind or target is also a

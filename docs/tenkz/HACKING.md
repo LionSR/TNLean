@@ -215,8 +215,9 @@ correct the prefix.
 
 Before the 0.9 freeze, do not preserve an obsolete spelling merely because it
 exists today.  Move its callers to the clean 1.0 form in the same change, then
-delete it.  Add a temporary bridge only when a staged migration cannot land
-atomically, and give that bridge an explicit SHRINK expiry.
+delete it.  Do not add an alias, compatibility reader, dual writer, or temporary
+bridge.  If one pull request is too large, stack small pull requests whose
+integration order keeps every merged tree on the single new contract.
 
 The activation slice under #5352 will add the validation commands here only
 after their scripts, repository-evidence checks, tests, and CI wiring exist on
@@ -299,6 +300,13 @@ publisher then constructs the one signed tag object fixed by the release policy
 and creates the final ref.  A stopped runner can retry by authenticating that
 same object; it never invents a second one.  Do not push the tag by hand: an
 object other than the exact authenticated one is an incident, not a release.
+Before its first write, the publisher verifies the candidate object's signature,
+schema bytes, object ID, and peel.  A successful job is itself the API-visible
+publication fact; there is no inaccessible job-output receipt.  Remove the
+environment key after that success.  A later validation declares release only
+after it sees the exact object, the historical pinned publisher job, and the
+retired key.  Unrelated workflow files may then evolve without changing that
+historical evidence.
 Current mutable facts are replayed forever: drift before the final-tag ref uses
 the reset process, while drift after that ref exists is a hard incident and
 never reopens the ledger.
