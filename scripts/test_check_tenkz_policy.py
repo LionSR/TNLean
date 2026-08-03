@@ -3,7 +3,10 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -1639,11 +1642,408 @@ def add_freeze_facts(
     )
 
 
+def git(root: Path, *arguments: str, env: dict[str, str] | None = None) -> str:
+    process_env = os.environ.copy()
+    if env is not None:
+        process_env.update(env)
+    return subprocess.check_output(
+        ["git", *arguments],
+        cwd=root,
+        env=process_env,
+        text=True,
+        stderr=subprocess.DEVNULL,
+    ).strip()
+
+
+def initialize_repository(root: Path) -> None:
+    git(root, "init", "-q", "--initial-branch=main")
+    git(root, "config", "user.name", "Policy Test")
+    git(root, "config", "user.email", "policy@example.test")
+    git(root, "config", "commit.gpgsign", "false")
+    git(root, "config", "tag.gpgsign", "false")
+
+
+def git_pr_evidence(head_oid: str, integration_oid: str) -> policy.PullRequestEvidence:
+    return policy.PullRequestEvidence(
+        in_repository=True,
+        base_ref_name="main",
+        author_login="author",
+        head_oid=head_oid,
+        merged=True,
+        merge_commit_oid=integration_oid,
+    )
+
+
+def test_git_evidence_resolvers() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        initialize_repository(root)
+        (root / "surface.txt").write_text("freeze\n", encoding="utf-8")
+        git(root, "add", "surface.txt")
+        freeze_env = {
+            "GIT_AUTHOR_DATE": "2026-09-01T00:00:00Z",
+            "GIT_COMMITTER_DATE": "2026-09-01T00:00:00Z",
+        }
+        git(root, "commit", "-q", "-m", "freeze", env=freeze_env)
+        freeze_sha = git(root, "rev-parse", "HEAD")
+        tag_env = {"GIT_COMMITTER_DATE": "2026-09-01T01:00:00Z"}
+        git(root, "tag", "-a", "tenkz-v0.9.0", "-m", "freeze", env=tag_env)
+
+        annotated = policy.freeze_tag_git_evidence(root, "tenkz-v0.9.0", "main")
+        assert annotated.object_type == "tag"
+        assert annotated.commit == freeze_sha
+        assert annotated.candidate_matching_tag_names == ("tenkz-v0.9.0",)
+        assert annotated.historical_current_matching_tag_names == ("tenkz-v0.9.0",)
+        assert annotated.historical_candidate_check_exact_and_successful is None
+        assert annotated.final_raw_signature_valid is None
+        assert annotated.final_public_key_blob_oid is None
+        assert annotated.final_schema_blob_oid is None
+
+        recorded_object = annotated.object_id
+        assert isinstance(recorded_object, str)
+        raw_tag = policy.verified_git_object_bytes(root, recorded_object, "tag")
+        assert raw_tag.startswith(b"object " + freeze_sha.encode() + b"\n")
+
+        git(root, "tag", "-d", "tenkz-v0.9.0")
+        git(root, "tag", "tenkz-v0.9.0")
+        lightweight = policy.freeze_tag_git_evidence(root, "tenkz-v0.9.0", "main")
+        assert lightweight.object_type == "commit"
+        assert lightweight.object_id == freeze_sha
+
+        git(root, "tag", "-d", "tenkz-v0.9.0")
+        replacement_env = {"GIT_COMMITTER_DATE": "2026-09-01T02:00:00Z"}
+        git(
+            root,
+            "tag",
+            "-a",
+            "tenkz-v0.9.0",
+            "-m",
+            "replacement",
+            env=replacement_env,
+        )
+        replacement = policy.freeze_tag_git_evidence(root, "tenkz-v0.9.0", "main")
+        assert replacement.object_id != recorded_object
+
+        git(root, "switch", "-q", "-c", "work")
+        (root / "surface.txt").write_text("freeze\nwork\n", encoding="utf-8")
+        git(root, "add", "surface.txt")
+        git(root, "commit", "-q", "-m", "work")
+        work_head = git(root, "rev-parse", "HEAD")
+        git(root, "switch", "-q", "main")
+        git(root, "merge", "-q", "--no-ff", "work", "-m", "integrate work")
+        integration = git(root, "rev-parse", "HEAD")
+        bound = policy.bind_merged_pull_request_git_evidence(
+            root,
+            git_pr_evidence(work_head, integration),
+            anchor_oid=freeze_sha,
+            main_ref="main",
+        )
+        assert bound.integration_reachable_from_main
+        assert bound.integration_tree_matches_head
+        assert bound.integration_strict_descendant_of_anchor
+
+        mutable_integration = replace(
+            git_pr_evidence(work_head, integration),
+            merge_commit_oid="main",
+        )
+        expect_failure(
+            lambda: policy.bind_merged_pull_request_git_evidence(
+                root,
+                mutable_integration,
+                anchor_oid=freeze_sha,
+                main_ref="main",
+            ),
+            "is not an exact commit OID",
+        )
+
+        git(root, "switch", "-q", "-c", "unmerged", integration)
+        (root / "unmerged.txt").write_text("not on main\n", encoding="utf-8")
+        git(root, "add", "unmerged.txt")
+        git(root, "commit", "-q", "-m", "unmerged work")
+        unmerged = git(root, "rev-parse", "HEAD")
+        git(root, "tag", "-a", "tenkz-v0.9.1", "-m", "unreachable")
+        git(root, "switch", "-q", "main")
+        unmerged_bound = policy.bind_merged_pull_request_git_evidence(
+            root,
+            git_pr_evidence(unmerged, unmerged),
+            anchor_oid=integration,
+            main_ref="main",
+        )
+        assert not unmerged_bound.integration_reachable_from_main
+        assert unmerged_bound.integration_tree_matches_head
+        assert unmerged_bound.integration_strict_descendant_of_anchor
+        expect_failure(
+            lambda: policy.freeze_tag_git_evidence(root, "tenkz-v0.9.1", "main"),
+            "is not reachable from main",
+        )
+
+
+def run_policy_cli(
+    root: Path,
+    *arguments: str,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    process_env = os.environ.copy()
+    if env is not None:
+        process_env.update(env)
+    return subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/check_tenkz_policy.py"),
+            "--root",
+            str(root),
+            *arguments,
+        ],
+        cwd=root,
+        env=process_env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def test_append_only_git_ranges_and_cli() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        initialize_repository(root)
+        design = root / policy.DESIGN_PATH
+        soak = root / policy.SOAK_PATH
+
+        def commit_soak(text: str, message: str) -> str:
+            soak.write_text(text, encoding="utf-8")
+            git(root, "add", policy.SOAK_PATH)
+            git(root, "commit", "-q", "-m", message)
+            return git(root, "rev-parse", "HEAD")
+
+        soak.parent.mkdir(parents=True)
+        design.write_text(DESIGN_TEXT, encoding="utf-8")
+        soak.write_text(SOAK_TEXT, encoding="utf-8")
+        git(root, "add", policy.DESIGN_PATH, policy.SOAK_PATH)
+        git(root, "commit", "-q", "-m", "land append-only policy")
+        before = git(root, "rev-parse", "HEAD")
+        assert policy.validate_repository(
+            root,
+            target_ref=before,
+            main_ref=before,
+        ) == (0, "not-started")
+        policy.check_append_only_history(root, policy.ZERO_SHA, before)
+
+        pending_text = SOAK_TEXT.replace("release-evidence log", "corrected evidence log")
+        assert pending_text != SOAK_TEXT
+        pending_rewrite = commit_soak(pending_text, "correct pending ledger prose")
+        policy.check_append_only_history(root, before, pending_rewrite)
+        policy.check_append_only_history(root, policy.ZERO_SHA, pending_rewrite)
+        assert policy.validate_repository(
+            root,
+            target_ref=pending_rewrite,
+            base_ref=before,
+            main_ref=pending_rewrite,
+        ) == (0, "not-started")
+        assert policy.validate_repository(
+            root,
+            target_ref=pending_rewrite,
+            history_base_ref=before,
+            history_head_ref=pending_rewrite,
+            main_ref=pending_rewrite,
+        ) == (0, "not-started")
+        expect_failure(
+            lambda: policy.validate_repository(
+                root,
+                target_ref=pending_rewrite,
+                base_ref=before,
+                history_base_ref=before,
+                main_ref=pending_rewrite,
+            ),
+            "range modes are mutually exclusive",
+        )
+
+        successful_cli = run_policy_cli(
+            root,
+            "--target-ref",
+            pending_rewrite,
+            "--history-base-ref",
+            before,
+            "--history-head-ref",
+            pending_rewrite,
+            "--main-ref",
+            pending_rewrite,
+        )
+        assert successful_cli.returncode == 0, successful_cli.stderr
+        assert successful_cli.stdout.startswith("PASS:")
+
+        git(root, "switch", "-q", "-c", "malformed", pending_rewrite)
+        malformed_text = pending_text.replace(
+            'enforcement = "pending"',
+            'enforcement = "invalid"',
+            1,
+        )
+        malformed = commit_soak(malformed_text, "malform pending ledger state")
+        malformed_restored = commit_soak(pending_text, "restore pending ledger state")
+        assert git(root, "rev-parse", f"{malformed_restored}^{{tree}}") == git(
+            root,
+            "rev-parse",
+            f"{pending_rewrite}^{{tree}}",
+        )
+        expect_failure(
+            lambda: policy.check_append_only_history(
+                root,
+                pending_rewrite,
+                malformed_restored,
+            ),
+            f"is invalid at {malformed}",
+        )
+
+        git(root, "switch", "-q", "main")
+        git(root, "switch", "-q", "-c", "updated-branch", before)
+        git(root, "commit", "-q", "--allow-empty", "-m", "pull-request work")
+        git(root, "switch", "-q", "main")
+        git(root, "commit", "-q", "--allow-empty", "-m", "advance pull-request base")
+        advanced_base = git(root, "rev-parse", "HEAD")
+        git(root, "switch", "-q", "updated-branch")
+        git(root, "merge", "-q", "--no-ff", "main", "-m", "update pull-request branch")
+        updated_head = git(root, "rev-parse", "HEAD")
+        ordinary_merge_base = git(root, "merge-base", advanced_base, updated_head)
+        assert ordinary_merge_base == advanced_base
+        expect_failure(
+            lambda: policy.check_append_only_history(
+                root,
+                ordinary_merge_base,
+                updated_head,
+            ),
+            "not on the first-parent path",
+        )
+        derived_base = policy.first_parent_range_base(root, advanced_base, updated_head)
+        assert derived_base == before
+        policy.check_append_only_history(root, derived_base, updated_head)
+        assert policy.validate_repository(
+            root,
+            target_ref=updated_head,
+            pull_request_base_ref=advanced_base,
+            main_ref=advanced_base,
+        ) == (0, "not-started")
+        updated_cli = run_policy_cli(
+            root,
+            "--target-ref",
+            updated_head,
+            "--pull-request-base-ref",
+            advanced_base,
+            "--main-ref",
+            advanced_base,
+        )
+        assert updated_cli.returncode == 0, updated_cli.stderr
+        assert updated_cli.stdout.startswith("PASS:")
+
+        expect_failure(
+            lambda: policy.check_append_only_history(root, malformed_restored, advanced_base),
+            "not on the first-parent path",
+        )
+
+        git(root, "switch", "-q", "main")
+        activation_text = ARMED_SOAK_TEXT.replace(
+            "release-evidence log",
+            "activation evidence log",
+        )
+        assert activation_text != pending_text
+        activation = commit_soak(activation_text, "activate append-only ledger")
+        policy.check_append_only_history(root, advanced_base, activation)
+        policy.check_soak_transition(
+            policy.soak_bytes_at_ref(root, advanced_base),
+            policy.soak_bytes_at_ref(root, activation),
+            previous_subject=advanced_base,
+            current_subject=activation,
+        )
+
+        armed_text = activation_text + "\n"
+        armed_append = commit_soak(armed_text, "append armed ledger bytes")
+        policy.check_append_only_history(root, activation, armed_append)
+        policy.check_append_only_history(root, policy.ZERO_SHA, armed_append)
+
+        git(root, "switch", "-q", "-c", "downgrade", armed_append)
+        downgrade = commit_soak(pending_text, "attempt armed downgrade")
+        expect_failure(
+            lambda: policy.check_append_only_history(root, armed_append, downgrade),
+            "returned to pending after being armed",
+        )
+
+        git(root, "switch", "-q", "main")
+        armed_rewrite = armed_text.replace(
+            "activation evidence log",
+            "rewritten evidence log",
+        )
+        assert armed_rewrite != armed_text
+        commit_soak(armed_rewrite, "rewrite immutable armed prefix")
+        bad_head = commit_soak(armed_text, "restore final armed ledger bytes")
+
+        assert git(root, "rev-parse", f"{bad_head}^{{tree}}") == git(
+            root,
+            "rev-parse",
+            f"{armed_append}^{{tree}}",
+        )
+        assert policy.soak_bytes_at_ref(root, bad_head) == policy.soak_bytes_at_ref(
+            root,
+            armed_append,
+        )
+        policy.check_soak_transition(
+            policy.soak_bytes_at_ref(root, armed_append),
+            policy.soak_bytes_at_ref(root, bad_head),
+            previous_subject=armed_append,
+            current_subject=bad_head,
+        )
+        expect_failure(
+            lambda: policy.check_append_only_history(root, armed_append, bad_head),
+            "changed existing armed bytes",
+        )
+        expect_failure(
+            lambda: policy.check_append_only_history(root, policy.ZERO_SHA, bad_head),
+            "changed existing armed bytes",
+        )
+        expect_failure(
+            lambda: policy.validate_repository(
+                root,
+                target_ref=armed_append,
+                history_base_ref=before,
+                history_head_ref=bad_head,
+                main_ref=armed_append,
+            ),
+            "history head differs from the exact validation target",
+        )
+
+        failed_cli = run_policy_cli(
+            root,
+            "--target-ref",
+            bad_head,
+            "--history-base-ref",
+            armed_append,
+            "--history-head-ref",
+            bad_head,
+            "--main-ref",
+            bad_head,
+        )
+        assert failed_cli.returncode == 1
+        assert failed_cli.stderr.startswith("FAIL:")
+        assert "Traceback" not in failed_cli.stderr
+
+        missing_git_cli = run_policy_cli(
+            root,
+            "--target-ref",
+            pending_rewrite,
+            "--main-ref",
+            pending_rewrite,
+            env={"PATH": ""},
+        )
+        assert missing_git_cli.returncode == 1
+        assert missing_git_cli.stderr.startswith("FAIL: could not execute git:")
+        assert "Traceback" not in missing_git_cli.stderr
+
+
 def main() -> int:
     assert policy.validate_policy_text(DESIGN_TEXT) == policy.EXPECTED_POLICY
     schema, empty_entries = policy.parse_soak_text(SOAK_TEXT)
     assert schema == policy.EXPECTED_SOAK
     assert policy.validate_entries(empty_entries) == "not-started"
+    assert policy.validate_repository(ROOT) == (0, "not-started")
+    test_git_evidence_resolvers()
+    test_append_only_git_ranges_and_cli()
     assert policy.validate_policy_text(ARMED_DESIGN_TEXT) == ARMED_POLICY
     armed_schema, armed_empty_entries = policy.parse_soak_text(ARMED_SOAK_TEXT)
     assert armed_schema["soak"]["enforcement"] == "armed"
