@@ -789,3 +789,104 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{proof}
 
 
+
+\section{General Brouwer and stationary states}
+
+\begin{theorem}[Brouwer's fixed point theorem (simplex)]
+    \label{thm:brouwer_simplex}
+    \lean{Gametheory.Brouwer.Brouwer}
+    \leanok
+    Let $f\colon\Delta^n\to\Delta^n$ be a continuous map from the standard
+    $n$-simplex to itself. Then there exists $x\in\Delta^n$ such that
+    $f(x)=x$.
+
+    This theorem is proved in the vendored Gametheory library
+    (LionSR/Brouwer).  Its extensions to products of simplices, closed cubes,
+    and compact retracts are available in
+    \texttt{TNLean.Topology.BrouwerProduct} and
+    \texttt{TNLean.Topology.CompactRetractFixedPoint}.  The density-matrix
+    specialization is Theorem~\ref{thm:brouwer_density_matrices}.
+    The general compact-convex form stated by Wolf is not yet proved; see
+    \texttt{docs/paper-gaps/brouwer\_general\_compact\_convex.tex}.
+\end{theorem}
+
+\begin{theorem}[Stationary states --- nonlinear]\label{thm:stationary_states}
+    \lean{IsStationaryMap.exists_stationaryState}
+    \lean{IsStationaryMap, IsPositive, IsTracePreserving}
+    \leanok
+    \uses{def:density_matrices, thm:brouwer_density_matrices}
+    Let $T\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a continuous,
+    trace-preserving, positive (not necessarily linear) map.
+    Then $T$ has at least one stationary state: a density matrix $\rho$
+    such that $T(\rho)=\rho$.
+
+    This matches Wolf Theorem~6.11 exactly: the hypotheses are continuity,
+    positivity ($X\geq0\Rightarrow T(X)\geq0$), and trace preservation
+    ($\tr(T(X))=\tr(X)$).  Linearity is not assumed.
+
+    The proof is Wolf's argument: positivity and trace preservation imply that
+    $T$ restricts to a continuous self-map of the compact convex set of
+    density matrices; the density-matrix version of Brouwer
+    (Theorem~\ref{thm:brouwer_density_matrices}) then yields a fixed point.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:brouwer_density_matrices}
+    Positivity and trace preservation give $T(\rho)\in\mathcal D_D$ for every
+    $\rho\in\mathcal D_D$; continuity of $T$ gives continuity on $\mathcal D_D$.
+    Theorem~\ref{thm:brouwer_density_matrices} applied to the restriction
+    $T|_{\mathcal D_D}$ yields $\rho\in\mathcal D_D$ with $T(\rho)=\rho$.
+\end{proof}
+
+\section{Fixed-point decomposition and span}
+
+\begin{theorem}[Positive fixed-point decomposition]\label{thm:positive_fixedpoint_decomp}
+    \lean{IsPositiveMap.posPart_negPart_fixed_of_fixedPoint}
+    \lean{IsPositiveMap.exists_posSemidef_fixedPoints_decomposition}
+    \leanok
+    \uses{def:positive_map, thm:stationary_states}
+    Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
+    trace-preserving linear map and $X=E(X)$ a fixed point.
+    Decompose $X$ into Hermitian and anti-Hermitian parts and then each into
+    orthogonal positive and negative parts, yielding four positive
+    semidefinite operators $P_1,\dots,P_4$.
+    Then $E(P_j)=P_j$ for $j=1,\dots,4$;
+    in other words, every fixed point is a $\mathbb C$-linear combination
+    of four positive-semidefinite fixed points.
+
+    This is Wolf Proposition~6.8.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:positive_map}
+    The proof follows Wolf: first handle Hermitian fixed points by the
+    orthogonality argument using the support projection (equation~(6.46)--(6.47)
+    in the source), then decompose an arbitrary fixed point into Hermitian
+    and skew-Hermitian parts and apply the Hermitian case to each.
+\end{proof}
+
+\begin{corollary}[Spanning by stationary density matrices]\label{cor:stationary_density_span}
+    \lean{IsPositiveMap.fixedPointsSubmodule}
+    \lean{IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef}
+    \lean{IsStationaryDensity}
+    \uses{thm:positive_fixedpoint_decomp}
+    Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
+    trace-preserving linear map.  The fixed-point subspace
+    $\mathcal F_E=\{X\mid E(X)=X\}$ is spanned (over $\mathbb C$) by its
+    positive-semidefinite elements.  Each nonzero positive-semidefinite fixed
+    point can be scaled to a stationary density matrix (positive semidefinite,
+    trace~1, fixed by~$E$).
+
+    This is the key lemma for Wolf Corollary~6.8.
+\end{corollary}
+
+\begin{proof}
+    \uses{thm:positive_fixedpoint_decomp}
+    By Theorem~\ref{thm:positive_fixedpoint_decomp}, every fixed point is a
+    $\mathbb C$-linear combination of four positive-semidefinite fixed points,
+    hence lies in the span of the set of all positive-semidefinite fixed
+    points.  Thus the span of the positive-semidefinite fixed points equals the
+    whole fixed-point subspace.  For the scaling: if $\rho$ is a nonzero
+    positive-semidefinite fixed point, its trace is a positive real number, and
+    $\rho/\tr(\rho)$ is a stationary density matrix.
+\end{proof}
