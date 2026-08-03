@@ -1,0 +1,11 @@
+% Regression: four explicit open-side policies materialize the whole perimeter
+% of a plane-carried 3x3 grid without duplicating its interior bonds.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[
+    rows={ket,ket,ket}, cols=3, frame=plane,
+    west=open, east=open, north=open, south=open]
+\end{tenkz}
+\end{document}

@@ -55,6 +55,46 @@ grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
 }
+[ "$(grep -c '|origin=open|' \
+      "$WORK/r_plane_open_perimeter.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: four open plane sides did not materialize 12 perimeter wires" >&2
+  exit 1
+}
+[ "$(grep -c '|origin=grid|' \
+      "$WORK/r_plane_open_perimeter.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: the open 3x3 plane did not retain 12 interior grid bonds" >&2
+  exit 1
+}
+for side in west east north south; do
+  [ "$(grep -F '|origin=open|' "$WORK/r_plane_open_perimeter.tnlog" | \
+        grep -c "|side=$side|" || true)" -eq 3 ] || {
+    echo "FAIL: plane side $side did not own three open wires" >&2
+    exit 1
+  }
+done
+open_perimeter=$(grep -F '|origin=open|' \
+  "$WORK/r_plane_open_perimeter.tnlog")
+[ "$(printf '%s\n' "$open_perimeter" | \
+      grep -Ec '\|(from|to)=addr-[0-9]+' || true)" -eq 12 ] || {
+  echo "FAIL: a plane-side opening lost its boundary-cell endpoint" >&2
+  exit 1
+}
+[ "$(printf '%s\n' "$open_perimeter" | \
+      grep -Ec '\|(from|to)-open=[nesw](\||$)' || true)" -eq 12 ] || {
+  echo "FAIL: a plane-side opening lost its exterior endpoint" >&2
+  exit 1
+}
+grep -Fxq \
+  'kernel-boundary|signature=open:e, open:e, open:e, open:n, open:n, open:n, open:s, open:s, open:s, open:w, open:w, open:w' \
+  "$WORK/r_plane_open_perimeter.tnlog" || {
+  echo "FAIL: the open 3x3 plane did not expose its twelve perimeter indices" >&2
+  exit 1
+}
+if grep -Fq '|origin=port-open|' \
+    "$WORK/r_plane_open_perimeter.tnlog"; then
+  echo "FAIL: explicit open sides left duplicate typed-port stubs" >&2
+  exit 1
+fi
 grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
