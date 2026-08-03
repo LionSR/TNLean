@@ -1,7 +1,7 @@
 % Target: rmp-workbench-ii-positive-mpo-old
 % Formula: O = X^-1 (sum_k A^k tensor conjugate(A^k)) X.
 % Ink: Canonical public kernel frames; no raw TikZ.
-% Boundary: O has four open ports; each capsule branches one outer virtual leg into
+% Boundary: O has four open ports; each X node branches one outer virtual leg into
 %   the two A rails, whose physical legs form one open vertical line.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   317-335; archival output sec2fig6old.pdf
@@ -20,7 +20,7 @@
       ports={180:virtual,0:virtual,90:physical,270:physical}]{A}
     \tn[at=(3,3), skin=box, name=Ab,
       ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{A}}
-    % One size class gives X and X^{-1} the same measured capsule.
+    % One shared size gives the X and X^{-1} nodes the same box.
     \tn[at=(2,5), skin=box, name=x,
       ports={135:virtual,225:virtual,0:virtual}]{X}
     \tnwire{open w}{xi.180}
