@@ -252,21 +252,6 @@ def unrecognized_option_keys(source: str) -> set[str]:
     return unknown
 
 
-def tntree_invocations(source: str) -> list[tuple[int, int, str]]:
-    """Return complete tntree calls, including multiline options and argument."""
-    invocations: list[tuple[int, int, str]] = []
-    for match in re.finditer(r"\\tntree\b", source):
-        position = match.end()
-        options = following_group_span(source, position, "[", "]")
-        if options is not None:
-            _contents, position = options
-        argument = following_group_span(source, position, "{", "}")
-        if argument is not None:
-            _contents, position = argument
-        invocations.append((match.start(), position, source[match.start() : position]))
-    return invocations
-
-
 def scan_inventory_constructs(source: str) -> list[Construct]:
     """Scan picture constructs plus the non-picture `tenkzeq` wrapper."""
     constructs = scan_constructs(source)
@@ -308,9 +293,6 @@ def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
     for construct in scan_inventory_constructs(source):
         key = (path.name, construct.line, construct.name)
         result[key].append(source[construct.start : construct.end])
-    for start, _end, invocation in tntree_invocations(source):
-        line = source.count("\n", 0, start) + 1
-        result[(path.name, line, "tntree")].append(invocation)
     return result
 
 
@@ -528,10 +510,6 @@ def source_target_codes(source: str) -> frozenset[str]:
         for index in range(construct.start, construct.end):
             if masked[index] != "\n":
                 masked[index] = " "
-    for start, end, invocation in tntree_invocations(source):
-        codes.update(fragment_target_codes(invocation))
-        for index in range(start, end):
-            masked[index] = " "
     codes.update(fragment_target_codes("".join(masked)))
     if any(not code.startswith("P-") for code in codes):
         codes = {code for code in codes if not code.startswith("P-")}

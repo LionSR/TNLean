@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Focused contract tests for the shared tenkz TeX case reader."""
 
-from tenkz_audit import scan_constructs as audit_scan_constructs
 from tenkz_audit import strip_comments as audit_strip_comments
 from tenkz_lint import scan_bodies
 from tenkzlib.texcase import (
     following_group,
     following_group_span,
     scan_constructs,
+    scan_picture_event_constructs,
     strip_comments,
     top_level_options,
 )
@@ -23,6 +23,7 @@ def main() -> int:
         "  \\begin{tenkz}\\tn{B}\\end{tenkz}\n"
         "\\end{tenkz}\n"
         "\\tnpic[label={x]y}]{\\tn{C}}\n"
+        "\\tntree[label={x]y}]{({}{})}\n"
     )
     stripped = strip_comments(source)
     assert len(stripped) == len(source)
@@ -48,16 +49,44 @@ def main() -> int:
         "tenkz",
         "tenkz",
         "tnpic",
+        "tntree",
     ]
-    outer, inner, inline = constructs
+    outer, inner, inline, tree = constructs
     assert "\\tn{A}" in outer.body
     assert "\\tn{B}" in inner.body
     assert inline.body == "\\tn{C}"
+    assert tree.body == "({}{})"
     for construct in constructs:
         assert stripped[construct.body_start : construct.body_start + len(construct.body)] == (
             construct.body
         )
         assert construct.line == source.count("\n", 0, construct.start) + 1
+    assert [
+        construct.name for construct in scan_picture_event_constructs(stripped)
+    ] == ["tenkz", "tenkz", "tnpic"]
+
+    spliced_source = (
+        "\\begin {tenkzfree}\\tn{}\\end {tenkzfree}\n"
+        "\\begin% legal control-word splice\n"
+        "{tenkzfree}\\tn{}\\end% matching closing splice\n"
+        "{tenkzfree}\n"
+    )
+    spliced = scan_constructs(spliced_source)
+    assert [construct.name for construct in spliced] == ["tenkzfree", "tenkzfree"]
+    assert [construct.line for construct in spliced] == [1, 2]
+    assert all("\\tn{}" in construct.body for construct in spliced)
+
+    control_boundaries = (
+        r"\\begin{tenkzfree}\tn{}\\end{tenkzfree}" "\n"
+        r"\\tnpic{\tn{}}" "\n"
+        r"\\tntree{({}{})}" "\n"
+        r"\tnpicⅣ{\tn{}}" "\n"
+        r"\tntreeⅣ{({}{})}" "\n"
+        r"\begin{tenkzfree}\\end{tenkzfree}\tn{}\end{tenkzfree}" "\n"
+    )
+    real_controls = scan_constructs(control_boundaries)
+    assert [construct.name for construct in real_controls] == ["tenkzfree"]
+    assert r"\\end{tenkzfree}\tn{}" in real_controls[0].body
 
     bodies = scan_bodies(stripped)
     assert [(body.name, body.start, body.text) for body in bodies] == [
@@ -65,8 +94,9 @@ def main() -> int:
         for construct in constructs
     ]
     assert audit_strip_comments is strip_comments
-    assert audit_scan_constructs is scan_constructs
-    print("texcase: comment parity, nested constructs, offsets, and shims passed")
+    print(
+        "texcase: comment parity, nested constructs, offsets, and shared scanners passed"
+    )
     return 0
 
 
