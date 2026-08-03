@@ -32,12 +32,16 @@ need not have sum below one.
 
 ## Main results
 
+* `Matrix.pow_apply_le_pow_apply_of_nonneg_of_le`: entrywise domination is
+  preserved by matrix powers.
 * `Matrix.pow_hadamard_self_apply_le_sq_pow_apply`: the entrywise power estimate.
 * `Matrix.IsPrimitive.hadamard_self`: the Hadamard square of a primitive
   nonnegative matrix is primitive.
 * `Matrix.exists_hadamard_self_pow_sum_row_lt_one`: some positive power has all
   row sums strictly below one.
 * `Matrix.hadamard_self_pow_tendsto_zero`: all powers converge to zero.
+* `Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`: an entrywise
+  dominated nonnegative matrix has trace powers converging to zero.
 -/
 
 open scoped BigOperators Matrix Matrix.Norms.Operator
@@ -45,6 +49,23 @@ open scoped BigOperators Matrix Matrix.Norms.Operator
 namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- If two nonnegative real square matrices satisfy `S i j ≤ H i j` for every
+entry, then the same entrywise inequality holds for every pair of corresponding
+matrix powers. -/
+theorem pow_apply_le_pow_apply_of_nonneg_of_le
+    {S H : Matrix n n ℝ} (hS : ∀ i j, 0 ≤ S i j)
+    (hSH : ∀ i j, S i j ≤ H i j) (k : ℕ) (i j : n) :
+    (S ^ k) i j ≤ (H ^ k) i j := by
+  have hH : ∀ i j, 0 ≤ H i j := fun i j ↦ (hS i j).trans (hSH i j)
+  induction k generalizing i j with
+  | zero => simp
+  | succ k ih =>
+    rw [pow_succ, pow_succ, Matrix.mul_apply, Matrix.mul_apply]
+    apply Finset.sum_le_sum
+    intro x _hx
+    exact mul_le_mul (ih i x) (hSH x j) (hS x j)
+      (Matrix.pow_apply_nonneg hH k i x)
 
 /-- For a nonnegative real matrix `P`, every entry of `(P ⊙ P) ^ k` is at
 most the square of the corresponding entry of `P ^ k`.
@@ -266,5 +287,24 @@ theorem trace_hadamard_self_pow_tendsto_zero [Nontrivial n]
   simp only [Matrix.trace]
   simpa using tendsto_finsetSum Finset.univ fun i _ ↦
     hadamard_self_pow_apply_tendsto_zero hStoch hPrim i i
+
+/-- Let `P` be a primitive row-stochastic real matrix on at least two indices.
+If a nonnegative matrix `S` is entrywise bounded above by `P ⊙ P`, then the
+traces of the powers of `S` converge to zero. -/
+theorem trace_pow_tendsto_zero_of_nonneg_le_hadamard_self [Nontrivial n]
+    {P S : Matrix n n ℝ} (hStoch : P ∈ Matrix.rowStochastic ℝ n)
+    (hPrim : P.IsPrimitive) (hS : ∀ i j, 0 ≤ S i j)
+    (hSP : ∀ i j, S i j ≤ (P ⊙ P) i j) :
+    Filter.Tendsto (fun k ↦ Matrix.trace (S ^ k)) Filter.atTop (nhds 0) := by
+  apply squeeze_zero (g := fun k ↦ Matrix.trace ((P ⊙ P) ^ k))
+  · intro k
+    simp only [Matrix.trace]
+    exact Finset.sum_nonneg fun i _hi ↦ Matrix.pow_apply_nonneg hS k i i
+  · intro k
+    simp only [Matrix.trace]
+    apply Finset.sum_le_sum
+    intro i _hi
+    exact pow_apply_le_pow_apply_of_nonneg_of_le hS hSP k i i
+  · exact trace_hadamard_self_pow_tendsto_zero hStoch hPrim
 
 end Matrix
