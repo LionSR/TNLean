@@ -1,21 +1,43 @@
 % Target: rmp-iii-b-anyon-pair
 % Formula: |psi(a,a^*)> is an open anyon string with endpoints i and i^*.
-% Ink: Canonical public tenkzlattice with a distinguished endpoint path.
-% Boundary: The 3x3 PEPS patch retains all twelve perimeter virtual stubs and
-%   nine physical legs; both anyon string endpoints remain marked.
+% Ink: Kernel plane frame with typed virtual ports, affine midpoint addresses,
+%   and a named string route.
+% Boundary: The 3x3 PEPS patch retains all twelve perimeter virtual openings and
+%   nine physical legs; both anyon endpoints and both interior insertions remain
+%   marked.
 % Source: paper TN-Review-main.tex line 1645; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 644-660
-% Capabilities: lattice, path-string, marked-endpoints
+% Capabilities: kernel, plane-frame, typed-ports, affine-addresses, path-string,
+%   marked-endpoints
+\tenkzkernel
+\tndeclare{species}{anyon}{hue=source:blue}
+\tndeclare{species}{anyon-string}{hue=source:red}
+\tndeclare{atom}{tnanyonsite}
+  {skin=dot, ports={n:virtual,e:virtual,s:virtual,w:virtual}}
 \[
-  % The lattice owns the projected sheet and keeps every physical carrier
-  % vertical in the paper frame.  The public integer-cell surface cannot yet
-  % place the source's two half-grid beads, so the endpoint path stays coarse.
-  \begin{tenkzlattice}[rows=3, cols=3, frame=oblique,
-                       physical=up, boundary=open]
-    \tnsite[role=marked, size=l, label={$i$},
-            label pos=north west]{(1,3)}
-    \tnsite[role=marked, size=l, label={$i^{*}$},
-            label pos=south east]{(3,1)}
-    \tnedge[role=operator, label={$a$}]{(3,1)-(1,3)}
-  \end{tenkzlattice}
+  % The plane carries the PEPS grid.  The red string's three turns and its
+  % two blue insertions are fixed by lattice incidences, not page distances.
+  \begin{tenkz}[
+      lattice={3x3}, frame=plane, physical=up,
+      west=open, east=open, north=open, south=open]
+    \tnanyonsite{} &
+    \tnanyonsite{} &
+    \tnanyonsite[name=i, species=anyon, size=l, label pos=ne]{i} \\
+    \tnanyonsite{} &
+    \tnanyonsite[name=c22]{} &
+    \tnanyonsite[name=c23]{} \\
+    \tnanyonsite[name=istar, species=anyon, size=l, label pos=sw]{i^{*}} &
+    \tnanyonsite[name=c32]{} &
+    \tnanyonsite{}
+    \tnwire[
+      kind=string, species=anyon-string, name=anyon-path,
+      via={midway istar and c22, midway c32 and c23, midway c22 and i},
+      cross={over at crossing of anyon-path and bond-2-2-3-2,
+             over at crossing of anyon-path and bond-2-2-2-3}
+    ]{istar}{i}
+    \tn[at=crossing of anyon-path and bond-2-2-3-2,
+        skin=dot, species=anyon, size=s]{}
+    \tn[at=crossing of anyon-path and bond-2-2-2-3,
+        skin=dot, species=anyon, size=s, label pos=nw]{a}
+  \end{tenkz}
 \]

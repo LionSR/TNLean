@@ -44,6 +44,31 @@ finite family whose members keep one hue across figures.  Labels distinguish
 objects of the same kind; color does not encode identity.  A role may change
 style, never topology.
 
+\subsection{Keep a physical index out of a projected sheet}
+
+There are five directions at a PEPS tensor, but only four lie in the sheet.
+The four numeric ports below follow the projected axes.  The picture policy
+supplies the remaining, page-vertical direction.
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3,
+               frame=plane, bonds=none, physical=up]
+  \tn[at=(2,2),
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+\end{tenkz}
+\end{Verbatim}
+
+Do not add a fifth numeric port to straighten the physical leg.  A numeric
+face always belongs to the sheet; \tnkey{physical=up} belongs to the plane's
+independent transverse axis.
+
+Physical indices belong to sites named by frame addresses.  A mark placed at
+a midpoint, on a wire, or at a crossing is a point constructed from the
+existing geometry, not another site; the picture policy therefore gives it no
+physical index.  If such a mark represents an additional tensor with a
+physical index, declare that port explicitly with \tnkey{ports=}.
+
 \subsection{Compose maps and fusion trees}
 
 Use the \tnenv{tenkzcd} environment with its \tnkey{maps} option when cells

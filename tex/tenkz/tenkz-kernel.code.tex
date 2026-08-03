@@ -116,6 +116,9 @@
 \msg_new:nnn {tenkz}{kernel-frame-basis-policy}
   { [TKZ-FRAME-BASIS-POLICY]~displaced~or~multi-member~bases~require~
     explicit~wires;~picture~policy~'#1'~has~no~member-level~meaning. }
+\msg_new:nnn {tenkz}{kernel-physical-axis-host}
+  { [TKZ-PHYSICAL-AXIS-HOST]~physical~#1~at~cell~(#2,#3)~has~no~
+    live~frame~atom. }
 \msg_new:nnnn {tenkz}{kernel-frame-basis-spacing}
   { [TKZ-FRAME-BASIS-SPACING]~basis-member~#1~has~centre~separation~
     #2~pitch;~the~conservative~default-bead~support~requirement~is~#3~
@@ -209,6 +212,9 @@
 \prop_new:N \l__tenkz_kernel_basis_spacing_prop % worst distinct-family margin
 \prop_new:N \l__tenkz_kernel_trace_cell_prop  % "interface-col" -> traced segment
 \prop_new:N \l__tenkz_kernel_open_cell_prop   % "interface-col" -> opened segment
+% A plane's physical axis is not one of its authored numeric ports.  Closure
+% topology therefore owns the exact host/direction identity directly.
+\prop_new:N \l__tenkz_kernel_physical_axis_consumer_prop % "atom/n|s" -> wire
 \prop_new:N \g__tenkz_kernel_setup_prop       % setup inherited by later pictures
 \bool_new:N \l__tenkz_kernel_trace_physical_bool
 \bool_new:N \l__tenkz_kernel_strict_bool
@@ -1504,12 +1510,13 @@
       }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_signature_physical_bearing:nn #1#2
+\cs_new_protected:Npn \__tenkz_kernel_signature_physical_axis:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1} {#2}
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
       {
-        \__tenkz_kernel_r_page_face:nnN {#1} {#2}
-          \l__tenkz_kernel_r_leg_turn_tl
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_r_leg_turn_tl \l_tmpa_tl
         \exp_args:NV \__tenkz_kernel_signature_bearing:nN
           \l__tenkz_kernel_r_leg_turn_tl
           \l__tenkz_kernel_port_face_tl
@@ -1523,13 +1530,13 @@
     \str_case:nn {#2}
       {
         {up}
-          { \__tenkz_kernel_signature_physical_bearing:nn {#1} {90} }
+          { \__tenkz_kernel_signature_physical_axis:nn {#1} {n} }
         {down}
-          { \__tenkz_kernel_signature_physical_bearing:nn {#1} {270} }
+          { \__tenkz_kernel_signature_physical_axis:nn {#1} {s} }
         {updown}
           {
-            \__tenkz_kernel_signature_physical_bearing:nn {#1} {90}
-            \__tenkz_kernel_signature_physical_bearing:nn {#1} {270}
+            \__tenkz_kernel_signature_physical_axis:nn {#1} {n}
+            \__tenkz_kernel_signature_physical_axis:nn {#1} {s}
           }
       }
   }
@@ -2536,6 +2543,7 @@
   {
     \prop_clear:N \l__tenkz_kernel_trace_cell_prop
     \prop_clear:N \l__tenkz_kernel_open_cell_prop
+    \prop_clear:N \l__tenkz_kernel_physical_axis_consumer_prop
     \bool_set_false:N \l__tenkz_kernel_trace_physical_bool
     \prop_get:NnN \l__tenkz_kernel_policy_prop {trace}
       \l__tenkz_kernel_scratch_tl
@@ -2891,19 +2899,125 @@
     \prop_put:Nee \l__tenkz_kernel_named_prop
       {#1} { \tl_use:N \l__tenkz_model_last_tl }
   }
+
+% A projected plane owns a third, transverse physical identity at each live
+% cell.  Unlike an authored numeric port, that identity is keyed by its host
+% and signed axis.  Exactly one closure or opening may consume it.
+\tl_new:N \l__tenkz_kernel_physical_axis_host_tl
+\tl_new:N \l__tenkz_kernel_physical_axis_other_host_tl
+\tl_new:N \l__tenkz_kernel_physical_axis_wire_tl
+\tl_new:N \l__tenkz_kernel_physical_axis_consumer_tl
+\cs_new_protected:Npn
+  \__tenkz_kernel_physical_axis_consume:nnn #1#2#3
+  {
+    \tl_set:Ne \l__tenkz_kernel_scratch_tl {#1/#2}
+    \prop_get:NVN
+      \l__tenkz_kernel_physical_axis_consumer_prop
+      \l__tenkz_kernel_scratch_tl
+      \l__tenkz_kernel_physical_axis_consumer_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_physical_axis_consumer_tl
+      {
+        \prop_put:NVn
+          \l__tenkz_kernel_physical_axis_consumer_prop
+          \l__tenkz_kernel_scratch_tl {#3}
+      }
+      {
+        \msg_error:nneee {tenkz}{kernel-port-consumed}
+          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+          { \tl_use:N \l__tenkz_kernel_physical_axis_consumer_tl }
+          {#3}
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_physical_axis_consume:nnn { VnV }
+
+\cs_new_protected:Npn \__tenkz_kernel_plane_physical_trace:n #1
+  {
+    \__tenkz_kernel_closure_wire:nnnn
+      {trace}{physical}
+      {mode = physical , col = #1 , physical-axis = transverse}
+      {trace-physical-#1}
+    \tl_set:NV \l__tenkz_kernel_physical_axis_wire_tl
+      \l__tenkz_model_last_tl
+    \__tenkz_kernel_select_cell:nnN {1}{#1}
+      \l__tenkz_kernel_physical_axis_host_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_physical_axis_host_tl
+      { \msg_error:nnnnn {tenkz}{kernel-physical-axis-host} {trace}{1}{#1} }
+      {
+        \__tenkz_model_complete:nnn
+          { \l__tenkz_kernel_physical_axis_wire_tl } {from-host}
+          { \l__tenkz_kernel_physical_axis_host_tl }
+        \__tenkz_model_complete:nnn
+          { \l__tenkz_kernel_physical_axis_wire_tl } {from-axis} {n}
+        \__tenkz_kernel_physical_axis_consume:VnV
+          \l__tenkz_kernel_physical_axis_host_tl {n}
+          \l__tenkz_kernel_physical_axis_wire_tl
+      }
+    \__tenkz_kernel_select_cell:nnN
+      { \__tenkz_kernel_rows: }{#1}
+      \l__tenkz_kernel_physical_axis_other_host_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_physical_axis_other_host_tl
+      {
+        \msg_error:nnnne {tenkz}{kernel-physical-axis-host} {trace}
+          { \__tenkz_kernel_rows: } {#1}
+      }
+      {
+        \__tenkz_model_complete:nnn
+          { \l__tenkz_kernel_physical_axis_wire_tl } {to-host}
+          { \l__tenkz_kernel_physical_axis_other_host_tl }
+        \__tenkz_model_complete:nnn
+          { \l__tenkz_kernel_physical_axis_wire_tl } {to-axis} {s}
+        \__tenkz_kernel_physical_axis_consume:VnV
+          \l__tenkz_kernel_physical_axis_other_host_tl {s}
+          \l__tenkz_kernel_physical_axis_wire_tl
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_physical_trace:n #1
+  {
+    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+      { \__tenkz_kernel_plane_physical_trace:n {#1} }
+      {
+        \__tenkz_kernel_closure_wire:nnnn
+          {trace}{physical}{mode = physical , col = #1}
+          {trace-physical-#1}
+        \__tenkz_kernel_required_port_end:nnnnnn
+          { \l__tenkz_model_last_tl } {from} {1} {#1} {90} {physical}
+        \__tenkz_kernel_required_port_end:nnnnnn
+          { \l__tenkz_model_last_tl } {to}
+          { \__tenkz_kernel_rows: } {#1} {270} {physical}
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_plane_physical_open:n #1
+  {
+    \__tenkz_model_record_wire:e
+      {
+        kind = index , origin = open , mode = physical , col = #1 ,
+        name = open-physical-#1 , physical-axis = transverse ,
+        from-axis = n , to-open = n , port-type = physical ,
+        to-open-type = physical
+      }
+    \tl_set:NV \l__tenkz_kernel_physical_axis_wire_tl
+      \l__tenkz_model_last_tl
+    \__tenkz_kernel_select_cell:nnN {1}{#1}
+      \l__tenkz_kernel_physical_axis_host_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_physical_axis_host_tl
+      { \msg_error:nnnnn {tenkz}{kernel-physical-axis-host} {open}{1}{#1} }
+      {
+        \__tenkz_model_complete:nnn
+          { \l__tenkz_kernel_physical_axis_wire_tl } {from-host}
+          { \l__tenkz_kernel_physical_axis_host_tl }
+        \__tenkz_kernel_physical_axis_consume:VnV
+          \l__tenkz_kernel_physical_axis_host_tl {n}
+          \l__tenkz_kernel_physical_axis_wire_tl
+      }
+    \__tenkz_kernel_register_last_wire:n {open-physical-#1}
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_trace_cell:w #1-#2 \q_stop
   {
     \int_compare:nNnTF {#1} = {0}
-      {
-        \__tenkz_kernel_closure_wire:nnnn
-          {trace}{physical}{mode = physical , col = #2}
-          {trace-physical-#2}
-        \__tenkz_kernel_required_port_end:nnnnnn
-          { \l__tenkz_model_last_tl } {from} {1} {#2} {90} {physical}
-        \__tenkz_kernel_required_port_end:nnnnnn
-          { \l__tenkz_model_last_tl } {to}
-          { \__tenkz_kernel_rows: } {#2} {270} {physical}
-      }
+      { \__tenkz_kernel_physical_trace:n {#2} }
       {
         \__tenkz_kernel_closure_wire:nnnn
           {trace}{interface}{interface = #1 , col = #2}
@@ -2919,14 +3033,18 @@
   {
     \int_compare:nNnTF {#1} = {0}
       {
-        \__tenkz_model_record_wire:e
+        \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+          { \__tenkz_kernel_plane_physical_open:n {#2} }
           {
-            kind = index , origin = open , mode = physical , col = #2 ,
-            name = open-physical-#2 , to-open = n
+            \__tenkz_model_record_wire:e
+              {
+                kind = index , origin = open , mode = physical , col = #2 ,
+                name = open-physical-#2 , to-open = n
+              }
+            \__tenkz_kernel_required_port_end:nnnnnn
+              { \l__tenkz_model_last_tl } {from} {1} {#2} {90} {physical}
+            \__tenkz_kernel_register_last_wire:n {open-physical-#2}
           }
-        \__tenkz_kernel_required_port_end:nnnnnn
-          { \l__tenkz_model_last_tl } {from} {1} {#2} {90} {physical}
-        \__tenkz_kernel_register_last_wire:n {open-physical-#2}
       }
       {
         \__tenkz_model_record_wire:e
@@ -2960,16 +3078,7 @@
     \bool_if:NT \l__tenkz_kernel_trace_physical_bool
       {
         \int_step_inline:nn { \__tenkz_kernel_cols: }
-          {
-            \__tenkz_kernel_closure_wire:nnnn
-              {trace}{physical}{mode = physical , col = ##1}
-              {trace-physical-##1}
-            \__tenkz_kernel_required_port_end:nnnnnn
-              { \l__tenkz_model_last_tl } {from} {1} {##1} {90} {physical}
-            \__tenkz_kernel_required_port_end:nnnnnn
-              { \l__tenkz_model_last_tl } {to}
-              { \__tenkz_kernel_rows: } {##1} {270} {physical}
-          }
+          { \__tenkz_kernel_physical_trace:n {##1} }
       }
     \prop_map_inline:Nn \l__tenkz_kernel_trace_cell_prop
       { \__tenkz_kernel_trace_cell:w ##1 \q_stop }
@@ -2977,23 +3086,137 @@
       { \__tenkz_kernel_open_cell:w ##1 \q_stop }
   }
 
+% An explicitly open picture side is topology: each live boundary cell owns
+% one virtual wire from its boundary port to the exterior.  The ordinary
+% endpoint and port machinery supplies the shared open-ray geometry and also
+% rejects a second consumer of the same port.
+\tl_new:N \l__tenkz_kernel_side_open_atom_tl
+\tl_new:N \l__tenkz_kernel_side_open_wire_tl
+\cs_new_protected:Npn \__tenkz_kernel_side_open_cell:nnn #1#2#3
+  {
+    \__tenkz_kernel_select_cell:nnN {#2}{#3}
+      \l__tenkz_kernel_side_open_atom_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_side_open_atom_tl
+      {
+        % Frame population is addressable even when no body atom claimed the
+        % cell.  Register that live carrier before the ordinary port service
+        % attaches this boundary wire.
+        \prop_put:Nee \l__tenkz_kernel_cell_prop {#2-#3}
+          { \tl_use:N \l__tenkz_kernel_side_open_atom_tl }
+        \__tenkz_kernel_cell_sealed:nnF {#2}{#3}
+          {
+            \str_case:nn {#1}
+              {
+                {west}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = west , row = #2 ,
+                        name = open-west-#2 , from-open = w
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-west-#2}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {to}
+                      {#2}{#3}{180}{virtual}
+                  }
+                {east}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = east , row = #2 ,
+                        name = open-east-#2 , to-open = e
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-east-#2}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {from}
+                      {#2}{#3}{0}{virtual}
+                  }
+                {north}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = north , col = #3 ,
+                        name = open-north-col-#3 , from-open = n
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-north-col-#3}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {to}
+                      {#2}{#3}{90}{virtual}
+                  }
+                {south}
+                  {
+                    \__tenkz_model_record_wire:e
+                      {
+                        kind = index , origin = open , side = south , col = #3 ,
+                        name = open-south-col-#3 , to-open = s
+                      }
+                    \tl_set:NV \l__tenkz_kernel_side_open_wire_tl
+                      \l__tenkz_model_last_tl
+                    \__tenkz_kernel_register_last_wire:n {open-south-col-#3}
+                    \__tenkz_kernel_required_port_end:nnnnnn
+                      { \l__tenkz_kernel_side_open_wire_tl } {from}
+                      {#2}{#3}{270}{virtual}
+                  }
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_side_opens:
+  {
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_rows: }
+          { \__tenkz_kernel_side_open_cell:nnn {west}{##1}{1} }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_rows: }
+          {
+            \__tenkz_kernel_side_open_cell:nnn
+              {east}{##1}{ \__tenkz_kernel_cols: }
+          }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {north} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_cols: }
+          { \__tenkz_kernel_side_open_cell:nnn {north}{1}{##1} }
+      }
+    \prop_get:NnN \l__tenkz_kernel_policy_prop {south} \l_tmpa_tl
+    \str_if_eq:VnT \l_tmpa_tl {open}
+      {
+        \int_step_inline:nn { \__tenkz_kernel_cols: }
+          {
+            \__tenkz_kernel_side_open_cell:nnn
+              {south}{ \__tenkz_kernel_rows: }{##1}
+          }
+      }
+  }
+
 \bool_new:N \l__tenkz_kernel_physical_atom_bool
+\tl_new:N \l__tenkz_kernel_physical_row_tl
+\tl_new:N \l__tenkz_kernel_physical_col_tl
 \cs_new_protected:Npn \__tenkz_kernel_set_atom_physical:nn #1#2
   {
-    \bool_set_true:N \l__tenkz_kernel_physical_atom_bool
+    \__tenkz_kernel_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_physical_row_tl
+      \l__tenkz_kernel_physical_col_tl
+      \l__tenkz_kernel_physical_atom_bool
     \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_scratch_tl
     \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {sealed}
       { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
     \__tenkz_model_get:nnN {#1} {cluster-of} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
-    \__tenkz_model_get:nnN {#1} {addr} \l__tenkz_kernel_scratch_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
-      {
-        \__tenkz_model_get:nnN {#1} {node} \l__tenkz_kernel_scratch_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
-          { \bool_set_false:N \l__tenkz_kernel_physical_atom_bool }
-      }
     \bool_if:NT \l__tenkz_kernel_physical_atom_bool
       { \__tenkz_model_complete:nnn {#1} {physical} {#2} }
   }
@@ -3001,6 +3224,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_closures:
   {
     \__tenkz_kernel_cell_closures:
+    \__tenkz_kernel_side_opens:
     \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpa_tl
     \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpb_tl
     \str_if_eq:VnTF \l_tmpa_tl {trace}
@@ -3443,20 +3667,35 @@
   {
     \__tenkz_kernel_policy_leg_renders:nTF {#1}
       {
-        \__tenkz_kernel_policy_leg_port_slot:nN {#1}
-          \l__tenkz_kernel_port_slot_tl
-        \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
+        \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
           {
-            % An even-width centre lies between numbered slots, so no
-            % authored port endpoint can consume this policy leg.
-            \prg_return_true:
-          }
-          {
-            \prop_if_in:NeTF
-              \l__tenkz_kernel_port_external_consumer_prop
-              {#1/#2/\l__tenkz_kernel_port_slot_tl}
+            % Callers may pass the bearing as an unevaluated conditional, so
+            % derive the signed axis from its expansion, as the port branch
+            % below does with its Ne lookup.
+            \tl_set:Ne \l__tenkz_kernel_scratch_tl
+              {#1/\str_if_eq:eeTF {#2} {90} {n} {s}}
+            \prop_if_in:NVTF
+              \l__tenkz_kernel_physical_axis_consumer_prop
+              \l__tenkz_kernel_scratch_tl
               { \prg_return_false: }
               { \prg_return_true: }
+          }
+          {
+            \__tenkz_kernel_policy_leg_port_slot:nN {#1}
+              \l__tenkz_kernel_port_slot_tl
+            \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
+              {
+                % An even-width centre lies between numbered slots, so no
+                % authored port endpoint can consume this policy leg.
+                \prg_return_true:
+              }
+              {
+                \prop_if_in:NeTF
+                  \l__tenkz_kernel_port_external_consumer_prop
+                  {#1/#2/\l__tenkz_kernel_port_slot_tl}
+                  { \prg_return_false: }
+                  { \prg_return_true: }
+              }
           }
       }
       { \prg_return_false: }
@@ -3679,37 +3918,40 @@
               }
           }
       }
-    % `physical=` owns the transverse centre identity of an odd-width host.
-    % Registration refines every existing endpoint but consumes nothing; an
-    % even-width centre lies between numbered slots and owns no identity.
-    \__tenkz_model_map_ids:nn {atom}
+    % A flat or circular policy owns the centre slot of its local north/south
+    % face.  A plane policy instead owns the frame's independent transverse
+    % axis; no authored in-plane port can consume or refine that third axis.
+    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {plane}
       {
-        \__tenkz_kernel_policy_leg_port_slot:nN {##1}
-          \l__tenkz_kernel_port_slot_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
+        \__tenkz_model_map_ids:nn {atom}
           {
-            \__tenkz_model_get:nnN {##1} {physical}
-              \l__tenkz_kernel_scratch_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+            \__tenkz_kernel_policy_leg_port_slot:nN {##1}
+              \l__tenkz_kernel_port_slot_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
               {
-                \str_case:Vn \l__tenkz_kernel_scratch_tl
+                \__tenkz_model_get:nnN {##1} {physical}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
                   {
-                    {up}
+                    \str_case:Vn \l__tenkz_kernel_scratch_tl
                       {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                      }
-                    {down}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {270} {\l__tenkz_kernel_port_slot_tl}
-                      }
-                    {updown}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                        {up}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
+                          }
+                        {down}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                          }
+                        {updown}
+                          {
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
+                            \__tenkz_kernel_port_policy_register:nnn
+                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
+                          }
                       }
                   }
               }
@@ -4322,7 +4564,11 @@
             a = -\__tenkz_metric_ratio:n {planeslant} , b = 1 ,
             c = -\__tenkz_metric_ratio:n {planerise} , d = 0 ,
             dx = \fp_eval:n { \__tenkz_metric_ratio:n {planeslant} - 1 } ,
-            dy = \__tenkz_metric_ratio:n {planerise}
+            dy = \__tenkz_metric_ratio:n {planerise} ,
+            transverse-x =
+              \fp_use:N \c__tenkz_geom_plane_transverse_x_fp ,
+            transverse-y =
+              \fp_use:N \c__tenkz_geom_plane_transverse_y_fp
           }
         \fp_compare:nNnF
           { \__tenkz_metric_ratio:n {planerise} }
@@ -4913,6 +5159,59 @@
         \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_turn_tl
         \tl_set:Ne #3
           { \fp_eval:n { (#2) + \l__tenkz_kernel_turn_tl } }
+      }
+  }
+
+% The physical policy follows the carrier's physical axis, not an authored
+% in-plane face.  A projected plane owns a third, page-space transverse
+% vector.  Its glyph exit is the ray intersection obtained by pulling that
+% vector back through the atom's complete carrier basis.  Flat and circular
+% carriers retain their ordinary local north/south faces.
+\tl_new:N \l__tenkz_kernel_r_physical_x_tl
+\tl_new:N \l__tenkz_kernel_r_physical_y_tl
+\tl_new:N \l__tenkz_kernel_r_physical_u_tl
+\tl_new:N \l__tenkz_kernel_r_physical_v_tl
+\tl_new:N \l__tenkz_kernel_r_physical_anchor_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_axis:nnNN #1#2#3#4
+  {
+    \__tenkz_kernel_r_carrier_basis:n {#1}
+    \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
+      {
+        \__tenkz_geom_frame_transverse:nnNN {kpic} {#2}
+          \l__tenkz_kernel_r_physical_x_tl
+          \l__tenkz_kernel_r_physical_y_tl
+        \tl_set:Ne #3
+          {
+            \fp_eval:n
+              {
+                atand(
+                  \l__tenkz_kernel_r_physical_y_tl ,
+                  \l__tenkz_kernel_r_physical_x_tl )
+              }
+          }
+        \__tenkz_geom_basis_unapply:nnnnnnNN
+          { \l__tenkz_kernel_r_basis_ex_tl }
+          { \l__tenkz_kernel_r_basis_ey_tl }
+          { \l__tenkz_kernel_r_basis_nx_tl }
+          { \l__tenkz_kernel_r_basis_ny_tl }
+          { \l__tenkz_kernel_r_physical_x_tl }
+          { \l__tenkz_kernel_r_physical_y_tl }
+          \l__tenkz_kernel_r_physical_u_tl
+          \l__tenkz_kernel_r_physical_v_tl
+        \tl_set:Ne #4
+          {
+            \fp_eval:n
+              {
+                atand(
+                  \l__tenkz_kernel_r_physical_v_tl ,
+                  \l__tenkz_kernel_r_physical_u_tl )
+              }
+          }
+      }
+      {
+        \__tenkz_kernel_r_page_face:nnN {#1}
+          { \str_if_eq:nnTF {#2} {n} {90} {270} } #3
+        \tl_set:Ne #4 { \str_if_eq:nnTF {#2} {n} {90} {270} }
       }
   }
 
@@ -7291,14 +7590,12 @@
           }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_route_host_face_side:nnN #1#2#3
+\cs_new_protected:Npn \__tenkz_kernel_route_page_bearing_side:nN #1#2
   {
-    \__tenkz_kernel_r_page_face:nnN {#1} {#2}
-      \l__tenkz_kernel_port_face_tl
     \fp_set:Nn \l__tenkz_kernel_ro_x_fp
-      { cosd( \l__tenkz_kernel_port_face_tl ) }
+      { cosd( #1 ) }
     \fp_set:Nn \l__tenkz_kernel_ro_y_fp
-      { sind( \l__tenkz_kernel_port_face_tl ) }
+      { sind( #1 ) }
     \__tenkz_kernel_ro_basis_unapply:NN
       \l__tenkz_kernel_ro_x_fp \l__tenkz_kernel_ro_y_fp
     \tl_set:Ne \l__tenkz_kernel_port_face_tl
@@ -7313,15 +7610,28 @@
       }
     \exp_args:NV \__tenkz_kernel_r_face_side:n
       \l__tenkz_kernel_port_face_tl
-    \tl_set_eq:NN #3 \l__tenkz_kernel_r_face_side_tl
+    \tl_set_eq:NN #2 \l__tenkz_kernel_r_face_side_tl
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_route_host_face_side:nnN #1#2#3
+  {
+    \__tenkz_kernel_r_page_face:nnN {#1} {#2}
+      \l__tenkz_kernel_port_face_tl
+    \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+      \l__tenkz_kernel_port_face_tl #3
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_route_policy_face_add:nnn #1#2#3
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1} {#2}
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
       {
-        \__tenkz_kernel_route_host_face_side:nnN
-          {#1} {#2} \l__tenkz_kernel_port_face_tl
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
+        \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_port_face_tl
         \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
           { \__tenkz_kernel_route_face_add:nn {#1} {#3} }
       }
@@ -7340,16 +7650,16 @@
                 {up}
                   {
                     \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {90} {#1}
+                      {##1} {n} {#1}
                   }
                 {down}
                   {
                     \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {270} {#1}
+                      {##1} {s} {#1}
                   }
                 {updown}
                   {
-                    \clist_map_inline:nn {90,270}
+                    \clist_map_inline:nn {n,s}
                       {
                         \__tenkz_kernel_route_policy_face_add:nnn
                           {##1} {####1} {#1}
@@ -8849,7 +9159,14 @@
             \str_case:VnF \l__tenkz_kernel_r_tl
               {
                 {grid}  { \__tenkz_kernel_r_wire_grid:n {#1} }
-                {open}  { \__tenkz_kernel_r_wire_ends:n {#1} }
+                {open}
+                  {
+                    \__tenkz_model_get:nnN {#1} {physical-axis}
+                      \l__tenkz_kernel_r_tl
+                    \str_if_eq:VnTF \l__tenkz_kernel_r_tl {transverse}
+                      { \__tenkz_kernel_r_wire_physical_axis_open:n {#1} }
+                      { \__tenkz_kernel_r_wire_ends:n {#1} }
+                  }
                 {port-open} { \__tenkz_kernel_r_wire_port_open:n {#1} }
                 {trace} { \__tenkz_kernel_r_wire_trace:n {#1} }
                 {cup}   { \__tenkz_kernel_r_wire_cup:n {#1} }
@@ -8861,6 +9178,54 @@
                 \msg_error:nnee {tenkz}{kernel-render-todo}
                   { origin = \tl_use:N \l__tenkz_kernel_r_tl } {#1}
               }
+          }
+      }
+  }
+
+% A row-zero physical opening on a plane consumes the same frame-owned axis
+% as picture physical policy.  It therefore starts at the glyph's transverse
+% support point rather than inventing an authored numeric port.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_physical_axis_open:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {from-host}
+      \l__tenkz_kernel_physical_axis_host_tl
+    \__tenkz_model_get:nnN {#1} {from-axis}
+      \l__tenkz_kernel_r_b_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_physical_axis_host_tl
+      {
+        \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
+          \l__tenkz_kernel_physical_axis_host_tl
+          \l__tenkz_kernel_r_b_tl
+          \l__tenkz_kernel_leg_dir_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
+        \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+          \l__tenkz_kernel_physical_axis_host_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
+          \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+        \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+          { \__tenkz_metric_ratio:n {physleg} }
+        \exp_args:NVV \__tenkz_kernel_r_physical_enclosure:nn
+          \l__tenkz_kernel_physical_axis_host_tl
+          \l__tenkz_kernel_r_b_tl
+        \fp_set:Nn \l__tenkz_kernel_r_xb_fp
+          {
+            \l__tenkz_kernel_r_x_fp
+            + \l__tenkz_kernel_r_reach_fp
+              * cosd( \l__tenkz_kernel_leg_dir_tl )
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_yb_fp
+          {
+            \l__tenkz_kernel_r_y_fp
+            + \l__tenkz_kernel_r_reach_fp
+              * sind( \l__tenkz_kernel_leg_dir_tl )
+          }
+        \__tenkz_kernel_r_wire_stroke:nn { physical~leg }
+          {
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_x_fp } { \l__tenkz_kernel_r_y_fp }
+            --
+            \__tenkz_kernel_r_pair:nn
+              { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
           }
       }
   }
@@ -9609,9 +9974,15 @@
           }
         {physical}
           {
-            \int_compare:nNnTF { \l__tenkz_kernel_r_rows_int } = {1}
+            \__tenkz_model_get:nnN {#1} {physical-axis}
+              \l__tenkz_kernel_r_b_tl
+            \str_if_eq:VnTF \l__tenkz_kernel_r_b_tl {transverse}
               { \seq_put_right:Nn \l__tenkz_kernel_r_after_atom_seq {#1} }
-              { \__tenkz_kernel_r_wire_pair_trace:n {#1} }
+              {
+                \int_compare:nNnTF { \l__tenkz_kernel_r_rows_int } = {1}
+                  { \seq_put_right:Nn \l__tenkz_kernel_r_after_atom_seq {#1} }
+                  { \__tenkz_kernel_r_wire_pair_trace:n {#1} }
+              }
           }
         % A trace needs two opposing sides.  The model retains a one-sided
         % request as an auditable sealed-boundary record, but it owns no ink.
@@ -9756,9 +10127,9 @@
   }
 
 % Extend a physical ray through every declared enclosure containing its host.
-% Cardinal policy legs use the affine chart's dual basis exactly; arbitrary
-% typed faces use the shared orthogonal support fold, which remains valid for
-% rotated, sheared, and mixed-carrier contours.
+% In-plane cardinal policy legs use the affine chart's dual basis exactly.
+% The plane frame's independent transverse ray, and mixed-carrier contours,
+% use the page-direction support fold instead.
 \cs_new_protected:Npn \__tenkz_kernel_r_physical_enclosure:nn #1#2
   {
     \__tenkz_model_map_ids:nn {mark}
@@ -9787,35 +10158,42 @@
                       \l__tenkz_kernel_hull_ny_tl
                     \__tenkz_geom_frame_if_affine:nTF {kpic}
                       {
-                        \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
-                          {
-                            \__tenkz_kernel_hull_basis_dual:
-                            \str_case:nnF {#2}
-                              {
-                                {n}
-                                  {
-                                    \tl_set_eq:NN
-                                      \l__tenkz_kernel_leg_gx_tl
-                                      \l__tenkz_kernel_hull_vx_tl
-                                    \tl_set_eq:NN
-                                      \l__tenkz_kernel_leg_gy_tl
-                                      \l__tenkz_kernel_hull_vy_tl
-                                    \__tenkz_kernel_r_physical_enclosure_affine:
-                                  }
-                                {s}
-                                  {
-                                    \tl_set:Ne \l__tenkz_kernel_leg_gx_tl
-                                      { -\l__tenkz_kernel_hull_vx_tl }
-                                    \tl_set:Ne \l__tenkz_kernel_leg_gy_tl
-                                      { -\l__tenkz_kernel_hull_vy_tl }
-                                    \__tenkz_kernel_r_physical_enclosure_affine:
-                                  }
-                              }
-                              {
-                                \__tenkz_kernel_r_leg_enclosure_orthogonal:
-                              }
-                          }
+                        \str_if_eq:eeTF
+                          { \__tenkz_kernel_r_frame_word: } {plane}
                           { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+                          {
+                            \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+                              {
+                                \__tenkz_kernel_hull_basis_dual:
+                                \str_case:nnF {#2}
+                                  {
+                                    {n}
+                                      {
+                                        \tl_set_eq:NN
+                                          \l__tenkz_kernel_leg_gx_tl
+                                          \l__tenkz_kernel_hull_vx_tl
+                                        \tl_set_eq:NN
+                                          \l__tenkz_kernel_leg_gy_tl
+                                          \l__tenkz_kernel_hull_vy_tl
+                                        \__tenkz_kernel_r_physical_enclosure_affine:
+                                      }
+                                    {s}
+                                      {
+                                        \tl_set:Ne
+                                          \l__tenkz_kernel_leg_gx_tl
+                                          { -\l__tenkz_kernel_hull_vx_tl }
+                                        \tl_set:Ne
+                                          \l__tenkz_kernel_leg_gy_tl
+                                          { -\l__tenkz_kernel_hull_vy_tl }
+                                        \__tenkz_kernel_r_physical_enclosure_affine:
+                                      }
+                                  }
+                                  {
+                                    \__tenkz_kernel_r_leg_enclosure_orthogonal:
+                                  }
+                              }
+                              { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+                          }
                       }
                       { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
                   }
@@ -9830,7 +10208,9 @@
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
-        \__tenkz_kernel_r_carrier_basis:n {#1}
+        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+          \l__tenkz_kernel_leg_dir_tl
+          \l__tenkz_kernel_r_physical_anchor_tl
         \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
         \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
           {
@@ -9848,8 +10228,8 @@
           }
         \bool_if:NTF \l__tenkz_kernel_leg_planned_bool
           {
-            \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
-              { \str_if_eq:nnTF {#2} {n} {north} {south} }
+            \exp_args:NnV \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}
+              \l__tenkz_kernel_r_physical_anchor_tl
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
             \bool_if:NF \l__tenkz_kernel_hull_measure_valid_bool
               {
@@ -9862,10 +10242,6 @@
             \__tenkz_kernel_r_xy:nNN {#1}
               \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
           }
-        % the leg's outward direction: its face read in the atom's own axes
-        \__tenkz_kernel_r_page_face:nnN {#1}
-          { \str_if_eq:nnTF {#2} {n} {90} {270} }
-          \l__tenkz_kernel_leg_dir_tl
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {physleg} }
         % A reach is the maximum over everything declared to meet it.  A leg
@@ -9914,9 +10290,10 @@
       }
   }
 
-% Enrol one plane-carried physical leg in a discrete topology corridor.
-% Rows in the same basis member, face, and logical column share a corridor;
-% no page coordinate is rounded or clustered to invent that identity.
+% Enrol one plane-carried physical leg in a discrete topology corridor.  The
+% independent transverse line belongs to one exact basis member and cell; it
+% is parallel to, but not identified with, the transverse line at any other
+% PEPS site.  No page coordinate is rounded or clustered to invent identity.
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_plan_enrol:nn #1#2
   {
     \__tenkz_model_get:nnN {#1} {member} \l__tenkz_kernel_leg_member_tl
@@ -9925,29 +10302,19 @@
     \tl_set:Ne \l__tenkz_kernel_leg_plan_cid_tl
       {
         member-\tl_use:N \l__tenkz_kernel_leg_member_tl /
-        \str_if_eq:nnTF {#2}{n}{north}{south} /
+        transverse-#2 /
+        row-\tl_use:N \l__tenkz_kernel_leg_row_tl /
         col-\tl_use:N \l__tenkz_kernel_leg_col_tl
       }
     % Reach computation may have used hull services with the same scratch
     % registers, so reload the record basis immediately before declaration.
     \__tenkz_kernel_r_carrier_basis:n {#1}
-    \str_if_eq:nnTF {#2}{n}
-      {
-        \__tenkz_kernel_leg_plan_corridor:nnnnn
-          { \l__tenkz_kernel_leg_plan_cid_tl }
-          { \l__tenkz_kernel_r_basis_nx_tl }
-          { \l__tenkz_kernel_r_basis_ny_tl }
-          { \l__tenkz_kernel_r_basis_ex_tl }
-          { \l__tenkz_kernel_r_basis_ey_tl }
-      }
-      {
-        \__tenkz_kernel_leg_plan_corridor:nnnnn
-          { \l__tenkz_kernel_leg_plan_cid_tl }
-          { -\l__tenkz_kernel_r_basis_nx_tl }
-          { -\l__tenkz_kernel_r_basis_ny_tl }
-          { \l__tenkz_kernel_r_basis_ex_tl }
-          { \l__tenkz_kernel_r_basis_ey_tl }
-      }
+    \__tenkz_kernel_leg_plan_corridor:nnnnn
+      { \l__tenkz_kernel_leg_plan_cid_tl }
+      { cosd( \l__tenkz_kernel_leg_dir_tl ) }
+      { sind( \l__tenkz_kernel_leg_dir_tl ) }
+      { \l__tenkz_kernel_r_basis_ex_tl }
+      { \l__tenkz_kernel_r_basis_ey_tl }
     \__tenkz_kernel_leg_plan_enrol:nnnnn
       {
         leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
@@ -10094,10 +10461,10 @@
       }
   }
 % #3 empty: plain ink now; #3 a path id: save as an engine string instead
-% A physical leg leaves its atom along the atom's own north: the outward
-% physical face is the row's normal, and on a turned carrier that normal
-% turns with it -- which is how four tensors on a ring point their physical
-% faces radially outward without any of them saying so.
+% A flat or circular physical leg leaves along the atom's local north/south;
+% this makes circle-frame legs radial without an authored turn.  A plane
+% physical leg instead follows the frame-owned transverse page axis resolved
+% before this ink pass.
 \fp_new:N \l__tenkz_kernel_r_tipx_fp
 \fp_new:N \l__tenkz_kernel_r_tipy_fp
 \tl_new:N \l__tenkz_kernel_r_leg_turn_tl
@@ -10108,20 +10475,17 @@
       {
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp
           { \l__tenkz_kernel_r_reach_fp }
-        \__tenkz_kernel_r_page_face:nnN {#1}
-          { \str_if_eq:nnTF {#2} {n} {90} {270} }
-          \l__tenkz_kernel_r_leg_turn_tl
         \fp_set:Nn \l__tenkz_kernel_r_tipx_fp
           {
             \l__tenkz_kernel_r_x_fp
             + \l__tenkz_kernel_r_yc_fp
-              * cosd( \l__tenkz_kernel_r_leg_turn_tl )
+              * cosd( \l__tenkz_kernel_leg_dir_tl )
           }
         \fp_set:Nn \l__tenkz_kernel_r_tipy_fp
           {
             \l__tenkz_kernel_r_y_fp
             + \l__tenkz_kernel_r_yc_fp
-              * sind( \l__tenkz_kernel_r_leg_turn_tl )
+              * sind( \l__tenkz_kernel_leg_dir_tl )
           }
       }
     \tl_set:Ne \l__tenkz_kernel_r_leg_path_tl
@@ -11711,120 +12075,141 @@
   {
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_ink:n {##1} }
   }
-% The physical closure clears the live glyph, including label- and span-grown
-% silhouettes.  Find the atom at the traced column, then read its border.
-\fp_new:N \l__tenkz_kernel_phtrace_nu_fp
-\fp_new:N \l__tenkz_kernel_phtrace_nv_fp
-\fp_new:N \l__tenkz_kernel_phtrace_su_fp
-\fp_new:N \l__tenkz_kernel_phtrace_sv_fp
-\fp_new:N \l__tenkz_kernel_phtrace_eu_fp
-\fp_new:N \l__tenkz_kernel_phtrace_ev_fp
-\fp_new:N \l__tenkz_kernel_phtrace_ur_fp
-\fp_new:N \l__tenkz_kernel_phtrace_vt_fp
-\fp_new:N \l__tenkz_kernel_phtrace_vb_fp
-\fp_new:N \l__tenkz_kernel_phtrace_xb_fp
-\fp_new:N \l__tenkz_kernel_phtrace_yb_fp
-\fp_new:N \l__tenkz_kernel_phtrace_xs_fp
-\fp_new:N \l__tenkz_kernel_phtrace_ys_fp
-\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_xy:nnNN #1#2#3#4
+% A plane physical closure reads the two semantic transverse endpoints stored
+% on its wire record.  The glyph supplies their exact support points, while
+% the named physical-leg and trace-reach metrics determine only how far the
+% closure clears that ink.  No in-plane numeric port participates.
+\tl_new:N \l__tenkz_kernel_phtrace_from_axis_tl
+\tl_new:N \l__tenkz_kernel_phtrace_to_axis_tl
+\tl_new:N \l__tenkz_kernel_phtrace_from_dir_tl
+\tl_new:N \l__tenkz_kernel_phtrace_to_dir_tl
+\tl_new:N \l__tenkz_kernel_phtrace_from_anchor_tl
+\tl_new:N \l__tenkz_kernel_phtrace_to_anchor_tl
+\fp_new:N \l__tenkz_kernel_phtrace_from_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_from_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_from_tip_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_from_tip_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_tip_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_tip_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_from_east_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_from_east_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_east_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_to_east_y_fp
+\fp_new:N \l__tenkz_kernel_phtrace_outer_x_fp
+\fp_new:N \l__tenkz_kernel_phtrace_reach_fp
+\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_plane:n #1
   {
-    \__tenkz_geom_basis_apply:nnnnnnNN
-      { \l__tenkz_kernel_r_basis_ex_tl }
-      { \l__tenkz_kernel_r_basis_ey_tl }
-      { \l__tenkz_kernel_r_basis_nx_tl }
-      { \l__tenkz_kernel_r_basis_ny_tl }
-      {#1}{#2}
-      \l__tenkz_kernel_r_face_du_tl \l__tenkz_kernel_r_face_dv_tl
-    \fp_set:Nn #3
-      { \l__tenkz_kernel_r_x_fp + \l__tenkz_kernel_r_face_du_tl }
-    \fp_set:Nn #4
-      { \l__tenkz_kernel_r_y_fp + \l__tenkz_kernel_r_face_dv_tl }
-  }
-\cs_new_protected:Npn \__tenkz_kernel_r_physical_trace_affine:n #1
-  {
-    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{north}
-      \l__tenkz_kernel_phtrace_nu_fp \l__tenkz_kernel_phtrace_nv_fp
-    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{south}
-      \l__tenkz_kernel_phtrace_su_fp \l__tenkz_kernel_phtrace_sv_fp
-    \__tenkz_kernel_r_glyph_anchor_local:nnNN {#1}{east}
-      \l__tenkz_kernel_phtrace_eu_fp \l__tenkz_kernel_phtrace_ev_fp
-    \__tenkz_geom_xy:nNN {#1}
-      \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
-    \fp_set:Nn \l_tmpa_fp
+    \__tenkz_model_get:nnN {#1} {from-host}
+      \l__tenkz_kernel_physical_axis_host_tl
+    \__tenkz_model_get:nnN {#1} {to-host}
+      \l__tenkz_kernel_physical_axis_other_host_tl
+    \__tenkz_model_get:nnN {#1} {from-axis}
+      \l__tenkz_kernel_phtrace_from_axis_tl
+    \__tenkz_model_get:nnN {#1} {to-axis}
+      \l__tenkz_kernel_phtrace_to_axis_tl
+    \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_kernel_phtrace_from_axis_tl
+      \l__tenkz_kernel_phtrace_from_dir_tl
+      \l__tenkz_kernel_phtrace_from_anchor_tl
+    \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
+      \l__tenkz_kernel_physical_axis_other_host_tl
+      \l__tenkz_kernel_phtrace_to_axis_tl
+      \l__tenkz_kernel_phtrace_to_dir_tl
+      \l__tenkz_kernel_phtrace_to_anchor_tl
+    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_kernel_phtrace_from_anchor_tl
+      \l__tenkz_kernel_phtrace_from_x_fp
+      \l__tenkz_kernel_phtrace_from_y_fp
+    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_kernel_physical_axis_other_host_tl
+      \l__tenkz_kernel_phtrace_to_anchor_tl
+      \l__tenkz_kernel_phtrace_to_x_fp
+      \l__tenkz_kernel_phtrace_to_y_fp
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_kernel_physical_axis_host_tl {east}
+      \l__tenkz_kernel_phtrace_from_east_x_fp
+      \l__tenkz_kernel_phtrace_from_east_y_fp
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+      \l__tenkz_kernel_physical_axis_other_host_tl {east}
+      \l__tenkz_kernel_phtrace_to_east_x_fp
+      \l__tenkz_kernel_phtrace_to_east_y_fp
+    \str_if_eq:VVTF
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_kernel_physical_axis_other_host_tl
       {
-        sqrt(
-          \l__tenkz_kernel_r_basis_ex_tl ^ 2
-          + \l__tenkz_kernel_r_basis_ey_tl ^ 2 )
+        \fp_set:Nn \l__tenkz_kernel_phtrace_reach_fp
+          { \__tenkz_metric_ratio:n {phtracereach} }
       }
-    \fp_set:Nn \l_tmpb_fp
       {
-        sqrt(
-          \l__tenkz_kernel_r_basis_nx_tl ^ 2
-          + \l__tenkz_kernel_r_basis_ny_tl ^ 2 )
+        \fp_set:Nn \l__tenkz_kernel_phtrace_reach_fp
+          { \__tenkz_metric_ratio:n {pairtracereach} }
       }
-    \fp_set:Nn \l__tenkz_kernel_phtrace_ur_fp
+    \fp_set:Nn \l__tenkz_kernel_phtrace_from_tip_x_fp
+      {
+        \l__tenkz_kernel_phtrace_from_x_fp
+        + \__tenkz_metric_ratio:n {physleg}
+          * cosd( \l__tenkz_kernel_phtrace_from_dir_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_from_tip_y_fp
+      {
+        \l__tenkz_kernel_phtrace_from_y_fp
+        + \__tenkz_metric_ratio:n {physleg}
+          * sind( \l__tenkz_kernel_phtrace_from_dir_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_to_tip_x_fp
+      {
+        \l__tenkz_kernel_phtrace_to_x_fp
+        + \__tenkz_metric_ratio:n {physleg}
+          * cosd( \l__tenkz_kernel_phtrace_to_dir_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_to_tip_y_fp
+      {
+        \l__tenkz_kernel_phtrace_to_y_fp
+        + \__tenkz_metric_ratio:n {physleg}
+          * sind( \l__tenkz_kernel_phtrace_to_dir_tl )
+      }
+    \fp_set:Nn \l__tenkz_kernel_phtrace_outer_x_fp
       {
         max(
-          \l__tenkz_kernel_phtrace_nu_fp,
-          \l__tenkz_kernel_phtrace_su_fp,
-          \l__tenkz_kernel_phtrace_eu_fp )
-        + \__tenkz_metric_ratio:n {phtracereach} / \l_tmpa_fp
+          \l__tenkz_kernel_phtrace_from_east_x_fp,
+          \l__tenkz_kernel_phtrace_to_east_x_fp,
+          \l__tenkz_kernel_phtrace_from_tip_x_fp,
+          \l__tenkz_kernel_phtrace_to_tip_x_fp )
+        + \l__tenkz_kernel_phtrace_reach_fp
       }
-    \fp_set:Nn \l__tenkz_kernel_phtrace_vt_fp
-      {
-        \l__tenkz_kernel_phtrace_nv_fp
-        + \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
-      }
-    \fp_set:Nn \l__tenkz_kernel_phtrace_vb_fp
-      {
-        \l__tenkz_kernel_phtrace_sv_fp
-        - \__tenkz_metric_ratio:n {physleg} / \l_tmpb_fp
-      }
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_nu_fp }
-      { \l__tenkz_kernel_phtrace_nv_fp }
-      \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_nu_fp }
-      { \l__tenkz_kernel_phtrace_vt_fp }
-      \l__tenkz_kernel_r_xc_fp \l__tenkz_kernel_r_yc_fp
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_ur_fp }
-      { \l__tenkz_kernel_phtrace_vt_fp }
-      \l__tenkz_kernel_r_tipx_fp \l__tenkz_kernel_r_tipy_fp
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_ur_fp }
-      { \l__tenkz_kernel_phtrace_vb_fp }
-      \l__tenkz_kernel_leg_bendx_fp \l__tenkz_kernel_leg_bendy_fp
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_su_fp }
-      { \l__tenkz_kernel_phtrace_vb_fp }
-      \l__tenkz_kernel_phtrace_xb_fp \l__tenkz_kernel_phtrace_yb_fp
-    \__tenkz_kernel_r_physical_trace_xy:nnNN
-      { \l__tenkz_kernel_phtrace_su_fp }
-      { \l__tenkz_kernel_phtrace_sv_fp }
-      \l__tenkz_kernel_phtrace_xs_fp \l__tenkz_kernel_phtrace_ys_fp
     \__tenkz_render_stroke:nn { trace }
       {
         \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_xb_fp } { \l__tenkz_kernel_r_yb_fp }
+          { \l__tenkz_kernel_phtrace_from_x_fp }
+          { \l__tenkz_kernel_phtrace_from_y_fp }
         -- \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+          { \l__tenkz_kernel_phtrace_from_tip_x_fp }
+          { \l__tenkz_kernel_phtrace_from_tip_y_fp }
         -- \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_r_tipx_fp } { \l__tenkz_kernel_r_tipy_fp }
+          { \l__tenkz_kernel_phtrace_outer_x_fp }
+          { \l__tenkz_kernel_phtrace_from_tip_y_fp }
         -- \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_leg_bendx_fp }
-          { \l__tenkz_kernel_leg_bendy_fp }
+          { \l__tenkz_kernel_phtrace_outer_x_fp }
+          { \l__tenkz_kernel_phtrace_to_tip_y_fp }
         -- \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_phtrace_xb_fp }
-          { \l__tenkz_kernel_phtrace_yb_fp }
+          { \l__tenkz_kernel_phtrace_to_tip_x_fp }
+          { \l__tenkz_kernel_phtrace_to_tip_y_fp }
         -- \__tenkz_kernel_r_pair:nn
-          { \l__tenkz_kernel_phtrace_xs_fp }
-          { \l__tenkz_kernel_phtrace_ys_fp }
+          { \l__tenkz_kernel_phtrace_to_x_fp }
+          { \l__tenkz_kernel_phtrace_to_y_fp }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_physical_trace:n #1
   {
+    \__tenkz_model_get:nnN {#1} {physical-axis}
+      \l__tenkz_kernel_r_b_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_r_b_tl {transverse}
+      { \__tenkz_kernel_r_physical_trace_plane:n {#1} }
+      {
     \__tenkz_model_get:nnN {#1} {col} \l__tenkz_kernel_r_col_tl
     \prop_get:NeN \l__tenkz_kernel_cell_prop
       { 1-\tl_use:N \l__tenkz_kernel_r_col_tl }
@@ -11859,14 +12244,6 @@
       }
     \bool_if:NTF \l_tmpa_bool
       {
-        \exp_args:NV \__tenkz_kernel_r_carrier_basis:n
-          \l__tenkz_kernel_r_tl
-        \bool_if:NTF \l__tenkz_kernel_r_basis_plane_bool
-          {
-            \exp_args:NV \__tenkz_kernel_r_physical_trace_affine:n
-              \l__tenkz_kernel_r_tl
-          }
-          {
             \pgfextractx \l__tenkz_kernel_r_north_x_dim
               { \pgfpointanchor{\tl_use:N \l__tenkz_kernel_r_tl}{north} }
             \pgfextracty \l__tenkz_kernel_r_north_y_dim
@@ -11888,11 +12265,11 @@
                 -| ( \l__tenkz_kernel_r_north_x_dim ,
                      \l__tenkz_kernel_r_south_y_dim )
               }
-          }
       }
       {
         \msg_error:nnee {tenkz}{kernel-render-phtrace}
           {#1} { \tl_use:N \l__tenkz_kernel_r_col_tl }
+      }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_ink:n #1
