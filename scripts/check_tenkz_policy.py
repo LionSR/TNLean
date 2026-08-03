@@ -4524,6 +4524,11 @@ def validate_entries(
         )
     if publisher_status == "success" and pending_reset is not None:
         raise PolicyError("final-tag publisher succeeded while release evidence requires reset")
+    if publisher_status == "success" and not terminal_tag_present:
+        raise PolicyError(
+            "final-tag publisher succeeded but the final ref is absent; "
+            "hard release incident"
+        )
     if terminal_tag_present and not signed:
         raise PolicyError("final tag exists without a successfully validated sign-off")
     if pending_reset is not None:
@@ -4546,11 +4551,6 @@ def validate_entries(
         )
         assert publisher_evidence is not None
         if not terminal_tag_present:
-            if publisher_status == "success":
-                raise PolicyError(
-                    "final-tag publisher succeeded but the final ref is absent; "
-                    "hard release incident"
-                )
             validate_pre_release_controls()
             validate_absent_final_tag()
             return "signed-off-awaiting-tag"

@@ -3507,6 +3507,44 @@ def main() -> int:
         "publisher succeeded but the final ref is absent",
     )
 
+    # A later record-invalid reset supersedes the live sign-off state, but it
+    # cannot erase the publisher's authenticated success history.  Delayed
+    # success with no final ref remains a hard release incident after reset.
+    post_signoff_reset = context()
+    add_record(
+        post_signoff_reset,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+        invalid_tree=True,
+    )
+    add_record(
+        post_signoff_reset,
+        "S1-0006",
+        "#909",
+        909,
+        SIGNOFF_MERGE + timedelta(seconds=3),
+    )
+    post_signoff_reset_log = complete_log() + [
+        correction("S1-0005", "#908", "S1-0002"),
+        reset("S1-0006", "#909", "record-invalid", "S1-0005"),
+    ]
+    assert validate(post_signoff_reset_log, post_signoff_reset) == "reset"
+    post_signoff_reset.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="failure",
+    )
+    assert validate(post_signoff_reset_log, post_signoff_reset) == "reset"
+    post_signoff_reset.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    expect_failure(
+        lambda: validate(post_signoff_reset_log, post_signoff_reset),
+        "publisher succeeded but the final ref is absent",
+    )
+
     published_then_drifted = context()
     published_then_drifted.publishers[oid(9071)] = publisher_evidence(
         oid(9071),
