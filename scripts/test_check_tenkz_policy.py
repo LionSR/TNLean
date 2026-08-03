@@ -3570,6 +3570,72 @@ def main() -> int:
         "publisher succeeded but the final ref is absent",
     )
 
+    # A permitted candidate correction is a new current release epoch.  The
+    # predecessor sign-off keeps ownership of its authenticated published ref
+    # while the candidate reports its own pending state.
+    pending_published_correction = context()
+    add_record(
+        pending_published_correction,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    pending_published_correction.prs["#908"] = candidate_pr(
+        908,
+        author="record-author",
+    )
+    pending_published_correction.tags[policy.FINAL_TAG] = authenticated_final_tag(
+        oid(9071)
+    )
+    pending_published_correction.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+    )
+    pending_published_correction_log = complete_log() + [
+        correction("S1-0005", "#908", "S1-0002")
+    ]
+    assert validate(
+        pending_published_correction_log,
+        pending_published_correction,
+    ) == "correction-pending"
+
+    pending_tag_without_publisher_success = context()
+    add_record(
+        pending_tag_without_publisher_success,
+        "S1-0005",
+        "#908",
+        908,
+        SIGNOFF_MERGE + timedelta(seconds=1),
+    )
+    pending_tag_without_publisher_success.prs["#908"] = candidate_pr(
+        908,
+        author="record-author",
+    )
+    pending_tag_without_publisher_success.tags[policy.FINAL_TAG] = (
+        authenticated_final_tag(oid(9071))
+    )
+    pending_tag_without_publisher_success.publishers[oid(9071)] = (
+        publisher_evidence(oid(9071), status="failure")
+    )
+    assert validate(
+        pending_published_correction_log,
+        pending_tag_without_publisher_success,
+    ) == "correction-pending"
+
+    pending_published_correction.publishers[oid(9071)] = publisher_evidence(
+        oid(9071),
+        status="success",
+        prior_released=True,
+    )
+    expect_failure(
+        lambda: validate(
+            pending_published_correction_log,
+            pending_published_correction,
+        ),
+        "appears after a prior released validation",
+    )
+
     # A ref created by the publisher during validation is observed after the
     # successful job, rather than misclassified from an earlier absent read.
     ref_created_during_validation = context()
@@ -3818,14 +3884,33 @@ def main() -> int:
     )
     assert publisher_lookups == [oid(9071), second_signoff_integration]
     publisher_lookups.clear()
+    # A forged current-attempt object cannot erase an older attempt's
+    # successful publisher claim, even when every current-attempt field is
+    # otherwise exact.
+    second_tagger_epoch = policy.canonical_tagger_epoch_seconds(
+        second_signoff_merge,
+        "second sign-off mergedAt",
+    )
     replacement_signoff.tags[policy.FINAL_TAG] = authenticated_final_tag(
         second_signoff_integration,
-        tagger_epoch_seconds=SIGNOFF_TAGGER_EPOCH,
-        prefix_boundary="S1-0004",
+        tagger_epoch_seconds=second_tagger_epoch,
+        prefix_boundary="S1-0010",
     )
     expect_failure(
         lambda: validate(replacement_signoff_log, replacement_signoff),
-        "final tag payload names another sign-off integration",
+        "final tag tagger epoch differs from the closed publisher tuple",
+    )
+    assert publisher_lookups == [oid(9071), second_signoff_integration]
+
+    # Conversely, a stale object authenticated for the old attempt cannot be
+    # adopted by the replacement attempt merely because the old publisher did
+    # not succeed.
+    publisher_lookups.clear()
+    replacement_signoff.publishers[oid(9071)] = publisher_evidence(oid(9071))
+    replacement_signoff.tags[policy.FINAL_TAG] = authenticated_final_tag(oid(9071))
+    expect_failure(
+        lambda: validate(replacement_signoff_log, replacement_signoff),
+        "final tag tagger epoch differs from the closed publisher tuple",
     )
     assert publisher_lookups == [oid(9071), second_signoff_integration]
 
@@ -4990,6 +5075,40 @@ def main() -> int:
     assert (
         validate(complete_log()[:2], comment_only_work)
         == "reset-required:S1-0002"
+    )
+
+    # A mixed eligible diff still fills only the class recorded by its entry.
+    # The separate RMP work entry remains necessary and completes the two-PR
+    # evidence set.
+    mixed_class_work = context()
+    mixed_class_work.work_diffs[FORMAL_WORK] = replace(
+        mixed_class_work.work_diffs[FORMAL_WORK],
+        semantic_add_or_modify_classes=(
+            "formalization-or-blueprint",
+            "rmp-benchmark",
+        ),
+        semantic_rmp_changed=True,
+    )
+    assert validate(complete_log()[:2], mixed_class_work) == "attempt-1-active"
+    assert validate(complete_log(), mixed_class_work) == "signed-off-awaiting-tag"
+
+    inconsistent_mixed_class_work = context()
+    inconsistent_mixed_class_work.work_diffs[RMP_WORK] = replace(
+        inconsistent_mixed_class_work.work_diffs[RMP_WORK],
+        semantic_add_or_modify_classes=(
+            "formalization-or-blueprint",
+            "rmp-benchmark",
+        ),
+        semantic_lean_changed=True,
+        semantic_rmp_changed=False,
+    )
+    inconsistent_mixed_class_work.prs[RMP_RECORD] = candidate_pr(
+        906,
+        author="record-author",
+    )
+    expect_failure(
+        lambda: validate(complete_log()[:3], inconsistent_mixed_class_work),
+        "semantic work-class evidence is inconsistent",
     )
 
     failing_lean_work = context()

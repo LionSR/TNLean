@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import re
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from typing import Callable, Collection
 
@@ -576,6 +576,29 @@ class FinalTagPublisherEvidence:
     successful_job_historical_workflow_tree_matches_activation: bool | None
     successful_job_follows_successful_postmerge_validation: bool | None
     successful_job_conclusion_api_visible: bool | None
+
+
+@dataclass(frozen=True)
+class ReleaseSignoff:
+    """One validated sign-off and the immutable tuple owned by its publisher."""
+
+    entry_id: str
+    integration_oid: str
+    release_tag: str
+    tagger_epoch_seconds: int
+
+
+@dataclass(frozen=True)
+class ReleaseAttempt:
+    """One release epoch with attempt-local publisher and final-ref evidence."""
+
+    epoch_entry_id: str
+    signoff: ReleaseSignoff | None = None
+    pending_state: str | None = None
+    predecessor_signoff: ReleaseSignoff | None = None
+    publisher_evidence: FinalTagPublisherEvidence | None = None
+    publisher_status: str | None = None
+    final_ref_observation: TagEvidence | None = None
 
 
 @dataclass(frozen=True)
@@ -2980,17 +3003,16 @@ def validate_entries(
     last_reset_integration: str | None = None
     prior_patch = -1
     pending_reset: tuple[str, str] | None = None
-    pending_state: str | None = None
     deferred_invalid_targets: list[str] = []
-    signed = False
-    successful_signoffs: list[tuple[str, str, str, str, int]] = []
+    release_attempts: list[ReleaseAttempt] = []
+    current_release_attempt: ReleaseAttempt | None = None
     used_source_refs: set[str] = set()
     used_source_shas: set[str] = set()
     used_tag_names: set[str] = set()
     used_tag_objects: set[str] = set()
 
     def activate_current_record_queue() -> None:
-        nonlocal pending_reset, signed
+        nonlocal pending_reset, current_release_attempt
         if pending_reset is not None:
             return
         if drift_targets:
@@ -2998,20 +3020,39 @@ def validate_entries(
         elif deferred_invalid_targets:
             pending_reset = ("record-invalid", deferred_invalid_targets[0])
         if pending_reset is not None:
-            signed = False
+            current_release_attempt = None
+
+    def open_pending_release_attempt(*, entry_id: str, state: str) -> None:
+        """Open the current candidate epoch without mutating prior release evidence."""
+
+        nonlocal current_release_attempt
+        predecessor_signoff = (
+            current_release_attempt.signoff
+            if current_release_attempt is not None
+            else None
+        )
+        current_release_attempt = ReleaseAttempt(
+            epoch_entry_id=entry_id,
+            pending_state=state,
+            predecessor_signoff=predecessor_signoff,
+        )
+        release_attempts.append(current_release_attempt)
 
     for index, (entry, shape) in enumerate(zip(entries, shaped), start=1):
         entry_id, kind, attempt, record_ref = shape
         if index > drift_boundary:
             activate_current_record_queue()
-        if signed:
+        if (
+            current_release_attempt is not None
+            and current_release_attempt.signoff is not None
+        ):
             require(
                 kind == "correction"
                 or (kind == "reset" and entry.get("cause") == "record-invalid"),
                 f"{entry_id} appears after final sign-off",
             )
             if kind == "reset":
-                signed = False
+                current_release_attempt = None
         if pending_reset is not None and kind != "correction":
             require(kind == "reset", f"{pending_reset[1]} must be followed by its reset")
 
@@ -3301,7 +3342,10 @@ def validate_entries(
             )
 
             if record_pending:
-                pending_state = "freeze-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="freeze-pending",
+                )
                 break
             if not entry_is_invalid():
                 assert record_merged_at is not None and record_integration is not None
@@ -3491,7 +3535,10 @@ def validate_entries(
 
             work_result = check_external(work_external_facts)
             if record_pending:
-                pending_state = "work-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="work-pending",
+                )
                 break
             if not entry_is_invalid():
                 assert isinstance(work_result, tuple)
@@ -3599,7 +3646,10 @@ def validate_entries(
 
             friction_result = check_external(friction_observation_facts)
             if record_pending:
-                pending_state = "friction-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="friction-pending",
+                )
                 break
             if not entry_is_invalid():
                 assert record_merged_at is not None and record_integration is not None
@@ -3929,7 +3979,10 @@ def validate_entries(
                         f"{entry_id} resolution record did not merge after its fix PR",
                     )
             if record_pending:
-                pending_state = "resolution-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="resolution-pending",
+                )
                 break
             if not entry_is_invalid():
                 assert record_integration is not None
@@ -4168,7 +4221,10 @@ def validate_entries(
             nonempty_string(entry["reason"], "reason", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
             if record_pending:
-                pending_state = "reset-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="reset-pending",
+                )
                 break
             if not entry_is_invalid():
                 if cause == "record-invalid":
@@ -4184,7 +4240,10 @@ def validate_entries(
             nonempty_string(entry["summary"], "summary", entry_id)
             nonempty_string(entry["evidence"], "evidence", entry_id)
             if record_pending:
-                pending_state = "correction-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="correction-pending",
+                )
                 break
 
         elif kind == "sign-off":
@@ -4413,7 +4472,10 @@ def validate_entries(
                 )
             require(pending_reset is None, f"{entry_id} cannot sign off before reset")
             if record_pending:
-                pending_state = "sign-off-pending"
+                open_pending_release_attempt(
+                    entry_id=entry_id,
+                    state="sign-off-pending",
+                )
                 break
             if not entry_is_invalid():
                 def signoff_postmerge_facts() -> None:
@@ -4459,16 +4521,17 @@ def validate_entries(
                         and tagger_epoch_seconds is not None
                     )
                     active = None
-                    signed = True
-                    successful_signoffs.append(
-                        (
-                            entry_id,
-                            record_ref,
-                            record_integration,
-                            release_tag,
-                            tagger_epoch_seconds,
-                        )
+                    signoff = ReleaseSignoff(
+                        entry_id=entry_id,
+                        integration_oid=record_integration,
+                        release_tag=release_tag,
+                        tagger_epoch_seconds=tagger_epoch_seconds,
                     )
+                    current_release_attempt = ReleaseAttempt(
+                        epoch_entry_id=entry_id,
+                        signoff=signoff,
+                    )
+                    release_attempts.append(current_release_attempt)
 
         if record_integration is not None and not entry_is_invalid():
             last_record_integration = record_integration
@@ -4489,25 +4552,25 @@ def validate_entries(
                 deferred_invalid_targets.append(entry_id)
             deferred_invalid_targets.sort(key=entry_positions.__getitem__)
 
-    if pending_state is None:
+    if (
+        current_release_attempt is None
+        or current_release_attempt.pending_state is None
+    ):
         activate_current_record_queue()
-    publisher_history: list[
-        tuple[
-            tuple[str, str, str, str, int],
-            FinalTagPublisherEvidence,
-            str,
-        ]
-    ] = []
-    for successful_signoff in successful_signoffs:
+
+    current_epoch_entry_id = (
+        current_release_attempt.epoch_entry_id
+        if current_release_attempt is not None
+        else None
+    )
+    audited_release_attempts: list[ReleaseAttempt] = []
+    for release_attempt in release_attempts:
+        signoff = release_attempt.signoff
+        if signoff is None:
+            audited_release_attempts.append(release_attempt)
+            continue
         assert resolve_final_tag_publisher is not None
-        (
-            signoff_entry_id,
-            _signoff_record_ref,
-            successful_signoff_integration,
-            _observed_release_tag,
-            successful_tagger_epoch_seconds,
-        ) = successful_signoff
-        publisher_evidence = resolve_final_tag_publisher(successful_signoff_integration)
+        publisher_evidence = resolve_final_tag_publisher(signoff.integration_oid)
         current_prefix_boundary = audit.boundary_entry_id
         require(
             isinstance(current_prefix_boundary, str),
@@ -4515,77 +4578,138 @@ def validate_entries(
         )
         publisher_status = validate_final_tag_publisher(
             publisher_evidence,
-            integration_oid=successful_signoff_integration,
-            tagger_epoch_seconds=successful_tagger_epoch_seconds,
+            integration_oid=signoff.integration_oid,
+            tagger_epoch_seconds=signoff.tagger_epoch_seconds,
             policy_sha256=soak_root["policy_sha256"],
-            prefix_boundary=signoff_entry_id,
+            prefix_boundary=signoff.entry_id,
             current_prefix_boundary=current_prefix_boundary,
             support_tree_oid=release_contract.test_support_tree,
         )
-        publisher_history.append(
-            (successful_signoff, publisher_evidence, publisher_status)
+        audited_release_attempts.append(
+            replace(
+                release_attempt,
+                publisher_evidence=publisher_evidence,
+                publisher_status=publisher_status,
+            )
         )
 
-    # Resolve the current ref only after every historical publisher status.
+    # Resolve the current ref only after every attempt-local publisher status.
     # Thus an absent snapshot combined with publisher success is necessarily a
     # post-success observation, never a pre-publication race.
     final_tag = resolve_terminal_final_tag()
     terminal_tag_present = final_tag.exists is True
-    any_publisher_succeeded = any(
-        publisher_status == "success"
-        for _signoff, _evidence, publisher_status in publisher_history
-    )
-    if any_publisher_succeeded and not terminal_tag_present:
-        raise PolicyError(
-            "final-tag publisher succeeded but the final ref is absent; "
-            "hard release incident"
-        )
+    for release_attempt in audited_release_attempts:
+        if release_attempt.publisher_status == "success" and not terminal_tag_present:
+            assert release_attempt.signoff is not None
+            raise PolicyError(
+                "final-tag publisher succeeded but the final ref is absent; "
+                "hard release incident for "
+                f"{release_attempt.signoff.entry_id} at "
+                f"{release_attempt.signoff.integration_oid}"
+            )
     if terminal_tag_present and pending_reset is not None:
         raise PolicyError("final tag exists while release evidence requires reset")
-    if terminal_tag_present and not signed:
-        raise PolicyError("final tag exists without a successfully validated sign-off")
-    for successful_signoff, publisher_evidence, publisher_status in publisher_history:
-        if publisher_status != "success":
-            continue
+
+    current_attempt = next(
         (
-            signoff_entry,
-            _signoff_record,
-            signoff_integration,
-            signoff_tag,
-            tagger_epoch_seconds,
-        ) = successful_signoff
-        require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
-        validate_authenticated_final_tag(
-            final_tag,
-            integration_oid=signoff_integration,
-            tagger_epoch_seconds=tagger_epoch_seconds,
-            policy_sha256=soak_root["policy_sha256"],
-            prefix_boundary=signoff_entry,
-            publisher=publisher_evidence,
-            contract=release_contract,
+            release_attempt
+            for release_attempt in audited_release_attempts
+            if release_attempt.epoch_entry_id == current_epoch_entry_id
+        ),
+        None,
+    )
+    current_ref_signoff = (
+        current_attempt.signoff
+        if current_attempt is not None and current_attempt.signoff is not None
+        else (
+            current_attempt.predecessor_signoff
+            if current_attempt is not None
+            and current_attempt.pending_state == "correction-pending"
+            else None
         )
-    if pending_state is not None:
+    )
+    claimed_signoff_entries = {
+        release_attempt.signoff.entry_id
+        for release_attempt in audited_release_attempts
+        if release_attempt.signoff is not None
+        and release_attempt.publisher_status == "success"
+    }
+    # Ref authentication is independent of whether publication has reported success.
+    if terminal_tag_present and current_ref_signoff is not None:
+        claimed_signoff_entries.add(current_ref_signoff.entry_id)
+    if terminal_tag_present and not claimed_signoff_entries:
+        raise PolicyError(
+            "final tag exists without a successfully validated sign-off claim"
+        )
+
+    if terminal_tag_present:
+        authenticated_attempts: list[ReleaseAttempt] = []
+        for release_attempt in audited_release_attempts:
+            signoff = release_attempt.signoff
+            if signoff is None or signoff.entry_id not in claimed_signoff_entries:
+                authenticated_attempts.append(release_attempt)
+                continue
+            publisher_evidence = release_attempt.publisher_evidence
+            assert publisher_evidence is not None
+            require(
+                signoff.release_tag == FINAL_TAG,
+                "released sign-off names another tag",
+            )
+            validate_authenticated_final_tag(
+                final_tag,
+                integration_oid=signoff.integration_oid,
+                tagger_epoch_seconds=signoff.tagger_epoch_seconds,
+                policy_sha256=soak_root["policy_sha256"],
+                prefix_boundary=signoff.entry_id,
+                publisher=publisher_evidence,
+                contract=release_contract,
+            )
+            authenticated_attempts.append(
+                replace(release_attempt, final_ref_observation=final_tag)
+            )
+        audited_release_attempts = authenticated_attempts
+        current_attempt = next(
+            (
+                release_attempt
+                for release_attempt in audited_release_attempts
+                if release_attempt.epoch_entry_id == current_epoch_entry_id
+            ),
+            None,
+        )
+
+    if terminal_tag_present and current_ref_signoff is None:
+        raise PolicyError(
+            "final tag exists without a successfully validated sign-off "
+            "for the current release attempt"
+        )
+
+    if current_attempt is not None and current_attempt.pending_state is not None:
+        prior_release_exists = any(
+            release_attempt.publisher_evidence is not None
+            and (
+                release_attempt.publisher_evidence
+                .prior_released_validation_exact_and_successful
+                is True
+            )
+            for release_attempt in audited_release_attempts
+        )
+        require(
+            not prior_release_exists,
+            f"{current_attempt.epoch_entry_id} appears after a prior released validation",
+        )
         validate_pre_release_controls()
-        validate_absent_final_tag(final_tag)
-        return pending_state
+        if not terminal_tag_present:
+            validate_absent_final_tag(final_tag)
+        return current_attempt.pending_state
     if pending_reset is not None:
         validate_pre_release_controls()
         validate_absent_final_tag(final_tag)
         return f"reset-required:{pending_reset[1]}"
-    if signed:
-        assert publisher_history
-        (
-            (
-                signoff_entry,
-                _signoff_record,
-                signoff_integration,
-                signoff_tag,
-                tagger_epoch_seconds,
-            ),
-            publisher_evidence,
-            publisher_status,
-        ) = publisher_history[-1]
-        require(signoff_tag == FINAL_TAG, "released sign-off names another tag")
+    if current_attempt is not None and current_attempt.signoff is not None:
+        signoff = current_attempt.signoff
+        publisher_evidence = current_attempt.publisher_evidence
+        publisher_status = current_attempt.publisher_status
+        require(signoff.release_tag == FINAL_TAG, "released sign-off names another tag")
         require(
             publisher_status in {"not-run", "incomplete", "failure", "success"},
             "final-tag publisher evidence is unavailable after sign-off",
@@ -4596,15 +4720,7 @@ def validate_entries(
             validate_absent_final_tag(final_tag)
             return "signed-off-awaiting-tag"
         if publisher_status != "success":
-            validate_authenticated_final_tag(
-                final_tag,
-                integration_oid=signoff_integration,
-                tagger_epoch_seconds=tagger_epoch_seconds,
-                policy_sha256=soak_root["policy_sha256"],
-                prefix_boundary=signoff_entry,
-                publisher=publisher_evidence,
-                contract=release_contract,
-            )
+            assert current_attempt.final_ref_observation is not None
             validate_pre_release_controls()
             return "signed-off-awaiting-publisher-success"
         publisher_secret = current_publisher_secret()
