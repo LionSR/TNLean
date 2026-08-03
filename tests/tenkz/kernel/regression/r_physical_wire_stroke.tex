@@ -1,5 +1,5 @@
-% Regression: a closed index wire uses the stroke selected by its resolved
-% endpoint type; virtual direction marks remain valid.
+% Regression: closed index wires, including refinable grid bonds, use the
+% stroke selected by their resolved endpoint type; virtual directions remain.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -9,6 +9,8 @@
 \int_new:N \g__tenkz_test_physical_open_stroke_int
 \int_new:N \g__tenkz_test_physical_policy_stroke_int
 \int_new:N \g__tenkz_test_virtual_stroke_int
+\int_new:N \g__tenkz_test_grid_physical_stroke_int
+\int_new:N \g__tenkz_test_grid_virtual_stroke_int
 \cs_new_eq:NN
   \__tenkz_test_wire_stroke:nn
   \__tenkz_kernel_r_wire_stroke:nn
@@ -39,6 +41,16 @@
       }
     \__tenkz_model_get:nnN
       { \l__tenkz_kernel_r_wire_record_tl } {origin} \l_tmpb_tl
+    \str_if_eq:VnT \l_tmpb_tl {grid}
+      {
+        \str_if_eq:eeTF {#1} {physical~leg}
+          { \int_gincr:N \g__tenkz_test_grid_physical_stroke_int }
+          {
+            \str_if_eq:eeTF {#1} {bond}
+              { \int_gincr:N \g__tenkz_test_grid_virtual_stroke_int }
+              { \errmessage{grid~wire~used~an~unknown~stroke} }
+          }
+      }
     \__tenkz_model_get:nnN
       { \l__tenkz_kernel_r_wire_record_tl } {mode} \l_tmpc_tl
     \bool_lazy_and:nnT
@@ -61,6 +73,10 @@
       {\errmessage{physical~open~policy~stroke~count~changed}}
     \int_compare:nNnF { \g__tenkz_test_virtual_stroke_int } = {1}
       {\errmessage{virtual~wire~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_grid_physical_stroke_int } = {2}
+      {\errmessage{physical~grid~wire~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_grid_virtual_stroke_int } = {2}
+      {\errmessage{virtual~grid~wire~stroke~count~changed}}
   }
 \ExplSyntaxOff
 \makeatother
@@ -82,5 +98,20 @@
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=1, bonds=none, open={(physical,1)}]
   \tn[ports={90:physical}]{F}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[ports={0:physical}]{G} &
+  \tn[ports={180:physical}]{H}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1]
+  \tn[ports={270:physical}]{I} \\
+  \tn[ports={90:physical}]{J}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn{K} & \tn{L}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=1]
+  \tn[ports={270:virtual}]{M} \\
+  \tn[ports={90:virtual}]{N}
 \end{tenkz}
 \end{document}
