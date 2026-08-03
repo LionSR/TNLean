@@ -513,11 +513,140 @@ These statements are proved in
 inverseMap_provenance_preserves_rectangular_remainder}.  Together with SAL,
 injectivity, and source ZCL, these facts are assembled in
 \leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
-tensor_refutes_printed_sal_zcl_rank_one_inference}.  The active trace matrix
+tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix}.  The active trace matrix
 has no factorization $T_{k,h}=a_kb_h$, while $Q(1-LQ)L\ne0$.  Hence the example
-is a formal counterexample to the rank-one conclusion of the printed
-Lemma~C.5, not merely to an intermediate matrix argument.  This closes the
-verification tracked in \ghissue{4270}.
+proves the full raw-tensor conjunction, including inverse-map provenance. It
+does not refute Lemma~C.5 under its complete standing hypotheses: the lemma is
+inside Case~I at source lines~1374--1381, where $\mathcal K$ is assumed to be an
+injective normal tensor. The raw witness is not transfer-normalized, while its
+normal representative loses the literal ZCL identity. This normalization
+qualification corrects the earlier verdict tracked in \ghissue{4270}.
+
+\section{Renormalization maps and the global normalization boundary}
+
+The standing hypotheses of Theorem~4.9 require a simple tensor in biCF with a
+basis of normal tensors; they are imposed at source lines~849--893 and restated
+at line~1628. They also inherit the global canonical-form convention at source
+line~246: every BNT coefficient has modulus at most one, and at least one has
+modulus one. The distinction between this single global unit witness and a
+stronger sectorwise convention is recorded in
+\path{docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex}.
+
+Write $\mathcal K$ for the four-sector witness and regard its doubled physical
+index as an MPS index. Its four nonzero physical matrices span $\MN{2}$, so the
+doubled tensor is injective at one site. Its raw transfer map is
+\[
+  \mathcal E_{\mathcal K}(X)
+  =\left(2X_{00}+\frac1{32}X_{11}\right)
+    \begin{pmatrix}\frac18&0\\0&2\end{pmatrix},
+  \qquad
+  \mathcal E_{\mathcal K}^{2}=\frac5{16}\mathcal E_{\mathcal K}.
+\]
+Thus the raw doubled tensor has spectral radius $5/16$. Set
+\[
+  A=\frac4{\sqrt5}\mathcal K,
+  \qquad
+  \mu=\frac{\sqrt5}{4}.
+\]
+Then $\mathcal K=\mu A$, and $\mathcal E_A$ has spectrum
+$\{1,0,0,0\}$ and is idempotent. The singleton family $\{A\}$ is the normal
+basis for $\mathcal K$, but its only coefficient is $\mu<1$. Consequently the
+raw tensor $\mathcal K$ does not meet the source's global unit-weight
+convention. The normalized representative $A$ does: it is injective, hence
+normal; its singleton BNT has coefficient one; and the same one-site spanning
+identity gives biCF with blocking length one. Moreover,
+\[
+  \mathcal B_A=\frac4{\sqrt5}LQ
+  =\frac4{\sqrt5}\begin{pmatrix}1&0\\0&0\end{pmatrix}
+\]
+is not nilpotent, so the sole BNT element is simple in the sense used in
+Theorem~4.9.
+
+These two representatives lie on opposite sides of the source's two literal
+normalizations. The raw tensor has
+$\mathcal B_{\mathcal K}=LQ=P$, so it satisfies the literal diagram
+$\mathcal B_{\mathcal K}^2=\mathcal B_{\mathcal K}$, but it lacks a global
+unit-modulus BNT coefficient. The representative $A$ has the required unit BNT
+coefficient, but
+\[
+  \mathcal B_A^2=\frac4{\sqrt5}\mathcal B_A
+  \ne\mathcal B_A,
+\]
+so it fails the paper's literal zero-correlation-length diagram. The scalar
+absorption at source line~1660 occurs only after that literal ZCL identity has
+already been assumed; it does not transport either literal ZCL or the
+renormalization maps across a scalar rescaling.
+
+The raw tensor nevertheless gives a useful positive calculation for the
+trace-preserving completely positive map condition. Let $\tau=QL$ and define
+\[
+  f(i,j)=(i\bmod2)+2\left\lfloor\frac j2\right\rfloor.
+\]
+The sector matrices obey
+\[
+  S_iS_j=\tau_{ij}S_{f(i,j)},
+  \qquad
+  \sum_{(i,j):f(i,j)=k}\tau_{ij}=1
+\]
+for each $k\in\{0,1,2,3\}$. Consequently the refinement and coarse-graining
+Kraus operators
+\[
+  R_{ij}=\sqrt{\tau_{ij}}\lvert i,j\rangle\langle f(i,j)\rvert,
+  \qquad
+  C_{ij}=\lvert f(i,j)\rangle\langle i,j\rvert
+\]
+resolve the respective input identities. Their maps are trace-preserving and
+completely positive, and direct substitution gives
+\[
+  \mathsf C[\mathcal K_2(X)]=\mathcal K_1(X),
+  \qquad
+  \mathsf R[\mathcal K_1(X)]=\mathcal K_2(X)
+\]
+for every virtual matrix $X$. Applying each map twice and passing to the
+canonical blocked coordinates gives the same two identities for
+$\mathcal K^{[2]}$. These statements are proved by
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isRFPViaTS},
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+blockTwo_tensor_isRFPViaTS}, and the general blocking theorem
+\leanid{MPOTensor.IsRFPViaTS.blockTwo}.
+
+This positive result is not invariant under the normalization above. Put
+$P=\operatorname{diag}(1,0)$. The physical-trace transfer of the normalized
+representative and that of its two-site blocking are
+\[
+  \mathcal B_A=\frac4{\sqrt5}P,
+  \qquad
+  \mathcal B_{A^{[2]}}=\mathcal B_A^2=\frac{16}{5}P.
+\]
+Definition~4.1 would force $\mathcal B_{A^{[2]}}$ to be literally idempotent,
+because trace preservation identifies the traces of its one-site and two-site
+closures for every virtual boundary matrix. But
+$(16P/5)^2\ne16P/5$. Hence $A^{[2]}$ is not a renormalization fixed point. This
+is proved by
+\leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
+blockTwo_normalizedTensor_not_isRFPViaTS}.
+\footnote{The source-hypothesis and normalization-sensitive obstruction are
+tracked in \ghissue{5388}.}
+
+There are two different zero-correlation-length statements here. TNLean's
+\leanid{MPOTensor.IsSourceZCL} interpretation is scale-invariant: it asks for
+$\mathcal B_A^2=\lambda\mathcal B_A$ with some $\lambda>0$. The paper's
+diagrammatic identity is literal and selects a fixed scalar representative.
+Both the strong area law and TNLean's up-to-scalar predicate are unchanged by
+multiplying the tensor by $4/\sqrt5$, but the paper's diagram is not. Hence $A$
+is a counterexample only to the broadened implication obtained by replacing
+the literal diagram with \leanid{MPOTensor.IsSourceZCL}; it is not an
+unqualified counterexample to Theorem~4.9.
+
+The scalar identities, the raw renormalization maps, and the failure of
+Definition~4.1 for $A^{[2]}$ are kernel-checked. The exact source boundary
+remains unsettled: $\mathcal K$ satisfies literal ZCL but not the global
+unit-weight convention, while $A$ satisfies the global convention but not
+literal ZCL. Resolving Theorem~4.9 requires either a representative satisfying
+both normalizations or a source-faithful explanation of how the two
+normalizations are meant to coexist. Packaging the normality, singleton BNT,
+biCF, simplicity, and SAL facts for $A$ remains useful, but cannot turn its
+up-to-scalar ZCL relation into the paper's literal diagram.
 
 \section{A positive-semidefinite route}
 
@@ -625,8 +754,10 @@ $T_{k,h}=(r_k\mid l_h)$.
 The proof of Lemma~C.5, at lines~1489--1499, then uses zero
 correlation length to obtain the pairing-operator identity and its trace-power
 consequence.  No further property of the inverse map occurs between this
-identity and the rank-one conclusion.  Thus the printed proof has precisely
-the matrix gap described above.
+identity and the rank-one conclusion.  At the common-matrix level this leaves
+the gap described above.  The source's separate Case~I assumption that
+$\mathcal K$ is an injective normal tensor must nevertheless be retained when
+judging the full lemma.
 
 The cyclic finite-chain form at lines~1581--1593 does not repair this step. It
 is obtained later from the same positive neighboring family and states a
@@ -637,7 +768,7 @@ nor this theorem asserts independence, a Gram relation, kernel stabilization,
 or rectangular vanishing for the closed tensors.  Taking traces of cyclic
 products returns the already established positive-power trace identities.
 
-Consequently the strongest source-faithful common-matrix conclusion remains
+Consequently the strongest explicit common-matrix conclusion remains
 \[
     T^2=T^3,
     \qquad
@@ -649,18 +780,24 @@ full virtual spanning, and positivity of every neighboring operator, do not
 imply the missing vanishing.  The explicit Hayashi decomposition and inverse-map
 calculation now show that the same nonzero nilpotent remainder occurs for the
 source-selected factorization.  The all-cut Markov decomposition proves the
-strong area law for the same tensor.  Thus the example satisfies the printed
-SAL and ZCL hypotheses and refutes the asserted conclusion
-$T_{k,h}=a_kb_h$ of Lemma~C.5.
+strong area law for the same raw tensor.  This tensor satisfies the displayed
+SAL and literal ZCL relations, but it is not the injective normal tensor assumed
+in Case~I. Its normal representative loses literal ZCL. Thus the example
+isolates the normalization-sensitive step needed for
+$T_{k,h}=a_kb_h$; it does not refute Lemma~C.5 under all standing hypotheses.
 
 This obstruction propagates to every source statement whose proof invokes the
 rank-one factorization from Lemma~C.5.  In particular, the structural
-corollary at lines~1501--1505, the proposition proving Theorem~4.9
-(ii)$\Rightarrow$(iv) at lines~1740--1788, and the proposition proving
-Theorem~4.9 (ii)$\Rightarrow$(v) at lines~1810--1825 are not formalized from
-their stated SAL and ZCL hypotheses.  The constructions from an explicitly
-supplied rank-one neighboring trace factorization remain valid restricted
-results, but they do not establish these three source statements.
+corollary at lines~1501--1505 and the proposition proving Theorem~4.9
+(ii)$\Rightarrow$(iv) at lines~1740--1788 are not formalized from their stated
+SAL and ZCL hypotheses.  The proof of Theorem~4.9
+(ii)$\Rightarrow$(v) at lines~1810--1825 is likewise invalid. The normalized
+representative above shows that the broadened implication formed with TNLean's
+up-to-scalar \leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet
+the paper's literal ZCL diagram and therefore does not settle the exact source
+statement. The constructions from an explicitly supplied rank-one neighboring
+trace factorization remain valid restricted results, but they do not establish
+the three source statements.
 
 \section{Conclusion}
 
@@ -680,15 +817,28 @@ Markov witness with an independently supplied trace matrix has been retired:
 it imposed no relation between the state, the matrix, and an MPO tensor, and
 therefore added no consequence to either criterion.
 
-The all-cut Markov proof and the source-selected inverse-map calculation now
-show that Lemma~C.5 is false as printed: its injective four-sector witness
-satisfies SAL and source ZCL, while the asserted factorization
-$T_{k,h}=a_kb_h$ does not exist.  Consequently its structural corollary and
-the source implications (ii)$\Rightarrow$(iv) and (ii)$\Rightarrow$(v) of
-Theorem~4.9 cannot be obtained by the printed argument.  The direct matrix
-conclusions remain available under positive semidefiniteness or the appropriate
-linear-independence hypothesis, but those additional conditions do not supply
-the source's structural corollary and must not be attributed to it.
+The all-cut Markov proof and the source-selected inverse-map calculation show
+that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
+inverse-map relations while the asserted factorization
+$T_{k,h}=a_kb_h$ does not exist. However, that tensor is not the injective
+normal tensor assumed in Case~I, and its normal representative loses literal
+ZCL. Consequently Lemma~C.5 and the downstream source implications remain
+unsettled at this normalization boundary; the raw example does not refute them
+under their complete standing hypotheses. The direct matrix conclusions remain
+available under positive semidefiniteness or the appropriate linear-independence
+hypothesis, but those additional conditions do not supply the source's
+structural corollary and must not be attributed to it.
+
+The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
+completely positive renormalization maps, both before and after two-site
+blocking, but its sole BNT coefficient is strictly subunit. Its globally
+normalized representative $A=(4/\sqrt5)\mathcal K$ retains SAL and TNLean's
+scale-invariant \leanid{MPOTensor.IsSourceZCL} relation, while $A^{[2]}$ fails
+the literal idempotence forced by conclusion~(v). The normalized representative
+therefore refutes the broadened implication using that up-to-scalar predicate,
+but it is not an unqualified counterexample to Theorem~4.9 because it fails the
+paper's literal ZCL diagram. The exact source implication remains open at this
+normalization boundary.
 
 \bibliographystyle{alpha}
 \bibliography{references}

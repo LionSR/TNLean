@@ -17,13 +17,13 @@
     condition of \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Source zero correlation length for MPO tensors]
+\begin{definition}[Nonzero up-to-scalar physical-trace relation]
     \label{def:mpo_source_zcl}
     \lean{MPOTensor.IsSourceZCL}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
-    An MPO tensor has source zero correlation length when, for some real number
-    $\lambda>0$, the following conditions hold:
+    An MPO tensor satisfies the nonzero up-to-scalar physical-trace relation
+    when, for some real number $\lambda>0$, the following conditions hold:
     \begin{align}
         \mathcal T_M&\ne 0,
         \notag\\
@@ -31,16 +31,23 @@
         \notag
     \end{align}
     The nonzero condition excludes the degenerate zero transfer, and the
-    positive scalar makes the condition invariant under rescaling of $M$.
+    positive scalar makes the condition invariant under positive real
+    rescaling of $M$.
+    This is a scale-invariant relation at the level of the generated state
+    family. It is broader than the paper's literal diagram, which fixes
+    $\lambda=1$ for the displayed tensor.
+    % **Scope restriction (up-to-scalar interpretation):** documented in
+    % docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
 \end{definition}
 
-\begin{theorem}[Source zero correlation length requires a nonzero bond space]
+\begin{theorem}[The nonzero physical-trace relation requires a nonzero bond
+    space]
     \label{thm:mpo_source_zcl_bond_dim_ne_zero}
     \lean{MPOTensor.IsSourceZCL.bondDim_ne_zero}
     \leanok
     \uses{def:mpo_source_zcl}
-    If an MPO tensor has source zero correlation length, then its bond
-    dimension is positive.
+    If an MPO tensor satisfies the nonzero up-to-scalar physical-trace
+    relation, then its bond dimension is positive.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -49,13 +56,14 @@
     Definition~\ref{def:mpo_source_zcl}.
 \end{proof}
 
-\begin{theorem}[Literal physical-trace idempotence gives source ZCL]
+\begin{theorem}[Literal idempotence gives the up-to-scalar physical-trace
+    relation]
     \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
     \lean{MPOTensor.isSourceZCL_of_physTraceTransfer_sq}
     \leanok
     \uses{def:mpo_source_zcl, def:mpo_physical_trace_transfer}
-    If $\mathcal T_M\ne0$ and $\mathcal T_M^2=\mathcal T_M$, then $M$ has
-    source zero correlation length.
+    If $\mathcal T_M\ne0$ and $\mathcal T_M^2=\mathcal T_M$, then $M$
+    satisfies the nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
 \begin{proof}
@@ -83,22 +91,23 @@
         \tn[mpo]{M} & \tn[mpo]{M}
     \end{tenkz}
 \end{center}
-This is the normalized identity in
+This is the literal identity in
 \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv};
 Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
-\begin{lemma}[Normalized transfer is idempotent under source zero correlation length]
+\begin{lemma}[Physical-trace normalization gives an idempotent transfer]
     \label{lem:mpo_source_zcl_normalized_idempotent}
     \lean{MPOTensor.IsSourceZCL.normalized_idempotent}
     \leanok
     \uses{def:mpo_source_zcl}
-    If $M$ has source zero correlation length, then there exists $\lambda>0$
-    such that $\lambda^{-1}\mathcal T_M$ is idempotent.
+    If $M$ satisfies the nonzero up-to-scalar physical-trace relation, then
+    there exists $\lambda>0$ such that
+    $\lambda^{-1}\mathcal T_M$ is idempotent.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    From source zero correlation length, choose $\lambda>0$ with
+    Choose $\lambda>0$ from the up-to-scalar relation, so that
     $\mathcal T_M^2=\lambda\,\mathcal T_M$. Then
     \begin{align}
         (\lambda^{-1}\mathcal T_M)^2
@@ -183,14 +192,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\mathcal T_M^2=\mathcal T_M$.
 \end{proof}
 
-\begin{theorem}[Renormalization fixed points have source zero correlation length]
+\begin{theorem}[Renormalization fixed points satisfy the up-to-scalar
+    physical-trace relation]
     \label{thm:rfp_via_ts_source_zcl}
     \lean{MPOTensor.isSourceZCL_of_isRFPViaTS}
     \leanok
     \uses{thm:rfp_via_ts_physical_trace_idempotent,
       thm:mpo_source_zcl_of_physical_trace_idempotent}
     If $M$ is a renormalization fixed point via trace-preserving maps and
-    $\mathcal T_M\ne0$, then $M$ has source zero correlation length.
+    $\mathcal T_M\ne0$, then $M$ satisfies the nonzero up-to-scalar
+    physical-trace relation.
 \end{theorem}
 
 \begin{proof}
@@ -488,9 +499,10 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     gives the scalar entries $M^{00}=M^{11}=\tfrac12$ (off-diagonal $0$), so the
     induced transfer map is $\tfrac12\cdot\id$ and
     $\E_M\circ\E_M=\tfrac14\cdot\id\neq\E_M$. The trace contraction has
-    dropped the leading eigenvalue from $1$ to $\tfrac12$; the literal
-    zero-correlation-length condition is therefore strictly stronger than the
-    source's normalized one.
+    dropped the leading eigenvalue from $1$ to $\tfrac12$. By contrast, the
+    physical-trace transfer is $1$ and hence is literally idempotent. Thus this
+    example separates doubled-index idempotence from the paper's
+    physical-trace condition.
 \end{proof}
 
 \begin{lemma}[Physical-trace transfer of the maximally mixed witness]
@@ -511,20 +523,21 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     witness tensor.
 \end{proof}
 
-\begin{theorem}[The maximally mixed witness has source zero correlation length]
+\begin{theorem}[The maximally mixed witness satisfies the nonzero
+    physical-trace relation]
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
     \uses{def:mpo_source_zcl, thm:local_purification_rfp_not_zcl}
-    The maximally mixed witness $M_{\mathrm w}$ has source zero correlation
-    length.
+    The maximally mixed witness $M_{\mathrm w}$ satisfies the nonzero
+    up-to-scalar physical-trace relation.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:phys_trace_transfer_witnessM,
         thm:mpo_source_zcl_of_physical_trace_idempotent}
     Lemma~\ref{lem:phys_trace_transfer_witnessM} gives
     $\mathcal T_{M_{\mathrm w}}=1$. The identity is nonzero and idempotent, so
-    source zero correlation length holds with $\lambda=1$.
+    the relation holds with $\lambda=1$.
 \end{proof}
 
 \begin{theorem}[Fixed local purification: pure RFP iff normalized physical-trace idempotence]
@@ -647,7 +660,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Definition~\ref{def:is_nondegenerate_prfp}.
 \end{proof}
 
-\begin{theorem}[Local purification RFP with nonzero physical-trace transfer has source ZCL]
+\begin{theorem}[Local purification RFP with nonzero physical-trace transfer
+    satisfies the up-to-scalar relation]
     \label{thm:source_zcl_of_local_purification_rfp}
     \lean{MPOTensor.isSourceZCL_of_isLocalPurificationRFP}
     \leanok
@@ -655,7 +669,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Let $M$ be the ancilla contraction of a pure-state renormalization fixed
     point, satisfying the local purification renormalization fixed point
     condition. If the physical-trace transfer $\mathcal T_M=\sum_i M^{ii}$ is
-    nonzero, then $M$ has source zero correlation length.
+    nonzero, then $M$ satisfies the nonzero up-to-scalar physical-trace
+    relation.
 % Scope restriction: this is a local analogue (predicate
 % \ref{def:is_local_purification_rfp}) of the forward implication of the source
 % theorem (arXiv:1606.00608, lines 775--786), not that implication itself; it
@@ -674,18 +689,19 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         thm:mpo_source_zcl_of_physical_trace_idempotent}
     Theorem~\ref{thm:phys_trace_transfer_sq_of_local_purification_rfp} gives
     idempotence of the physical-trace transfer, and the nonzero hypothesis lets
-    Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude source
-    zero correlation length with $\lambda=1$.
+    Theorem~\ref{thm:mpo_source_zcl_of_physical_trace_idempotent} conclude the
+    up-to-scalar relation with $\lambda=1$.
 \end{proof}
 
-\begin{theorem}[A nondegenerate purification RFP has source ZCL]
+\begin{theorem}[A nondegenerate purification RFP satisfies the nonzero
+    physical-trace relation]
     \label{thm:nondegenerate_prfp_source_zcl}
     \lean{MPOTensor.IsNondegeneratePRFP.isSourceZCL}
     \leanok
     \uses{def:is_nondegenerate_prfp,
         thm:source_zcl_of_local_purification_rfp}
-    Every nondegenerate purification renormalization fixed point has source zero
-    correlation length.
+    Every nondegenerate purification renormalization fixed point satisfies the
+    nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
 \begin{proof}
@@ -779,7 +795,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Theorem~\ref{thm:is_prfp_of_local_purification_rfp}.
 \end{proof}
 
-\begin{theorem}[The bare global PRFP predicate does not imply source ZCL]
+\begin{theorem}[The bare global PRFP predicate does not imply the nonzero
+    physical-trace relation]
     \label{thm:global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_not_isSourceZCL}
     \leanok
@@ -787,8 +804,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         def:is_local_purification_rfp,
         thm:is_prfp_of_local_purification_rfp}
     There is an MPO tensor satisfying the bare positive-length global
-    purification RFP predicate which does not have source zero correlation
-    length.
+    purification RFP predicate which does not satisfy the nonzero up-to-scalar
+    physical-trace relation.
 \end{theorem}
 
 \begin{proof}
@@ -797,10 +814,11 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     by the zero spin--ancilla tensor. Its transfer map is idempotent and every
     positive-length density operator is zero, so the global purification
     equation holds. Its physical-trace transfer is zero, which is excluded by
-    source zero correlation length.
+    the nonzero up-to-scalar physical-trace relation.
 \end{proof}
 
-\begin{theorem}[A nonzero global PRFP need not have source ZCL]
+\begin{theorem}[A nonzero global PRFP need not satisfy the up-to-scalar
+    physical-trace relation]
     \label{thm:nonzero_global_prfp_not_source_zcl}
     \lean{MPOTensor.exists_isPRFP_isMPDO_physTraceTransfer_ne_zero_not_isSourceZCL}
     \leanok
@@ -808,7 +826,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         def:mpo_source_zcl}
     There is an MPO tensor which is an MPDO, satisfies the positive-length
     global purification RFP predicate, and has nonzero physical-trace transfer,
-    but does not have source zero correlation length.
+    but does not satisfy the nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
 \begin{proof}
@@ -829,6 +847,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $3$, so the tensor is an MPDO at every length. Its physical-trace transfer
     is the nonzero matrix $Q$. However,
     $Q^2=\diag(1,0,0)$ is not a positive scalar multiple of $Q$,
-    because the $(2,3)$ entry is lost on squaring. Thus source ZCL fails. The
-    global equation cannot detect this nilpotent bond sector.
+    because the $(2,3)$ entry is lost on squaring. Thus the up-to-scalar
+    physical-trace relation fails. The global equation cannot detect this
+    nilpotent bond sector.
 \end{proof}

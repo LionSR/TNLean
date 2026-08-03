@@ -23,7 +23,8 @@ mathematical obstruction.
 - Location:
   `TNLean/Archive/PerronFrobeniusVirtualSpanningCounterexample.lean`
 - Active physical-sector realization:
-  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean`
+  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean` and
+  `TNLean/MPS/MPDO/ActiveSectorSpanningRFP.lean`
 - Main declaration:
   `TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing`
 - Strengthened declaration with scalar positive semidefinite neighboring operators:
@@ -38,10 +39,27 @@ mathematical obstruction.
   primitive, but $Q(1-LQ)L=T-T^2\ne0$. The matrices $l_k r_k$ span
   $M_2(\mathbb R)$ and occur as the diagonal slices of an injective
   source-ZCL MPO tensor.
-- Boundary: the witness is not identified with the factors selected by the
-  SAL inverse-map construction. It therefore isolates the missing
-  SAL/provenance consequence but does not refute the full statement of
-  Lemma C.5.
+- The all-cut Markov decomposition and inverse-map calculation identify this
+  witness with the source-selected SAL factorization, so it proves the complete
+  raw-tensor obstruction to the rank-one step. It does not refute Lemma C.5
+  under all standing hypotheses: the raw tensor is not the injective normal
+  tensor assumed in Case I, while its normal representative loses the paper's
+  literal ZCL identity.
+- Normalization boundary: explicit trace-preserving completely positive maps
+  show that the raw witness $\mathcal K$, and its two-site blocking, are
+  renormalization fixed points. However, its singleton BNT coefficient is
+  $\sqrt5/4<1$, so it does not satisfy the source's global unit-weight
+  convention. The normalized representative
+  $A=(4/\sqrt5)\mathcal K$ retains SAL and the scale-invariant `IsSourceZCL`
+  relation, but the physical-trace transfer of $A^{[2]}$ is
+  $(16/5)\operatorname{diag}(1,0)$ and is not idempotent. Hence
+  `blockTwo_normalizedTensor_not_isRFPViaTS` rules out Definition 4.1 for the
+  blocked normalized tensor. This refutes the broadened implication obtained
+  by replacing the paper's literal ZCL diagram with `IsSourceZCL`; it is not an
+  unqualified counterexample to Theorem 4.9, because $A$ fails the literal
+  diagram. Thus the exact source implication remains unsettled at the boundary
+  between global BNT normalization and literal physical-trace-transfer
+  normalization.
 
 ### BiCF does not follow from the other per-copy `HorizontalCFData` fields
 

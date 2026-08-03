@@ -369,13 +369,15 @@ satisfies the recorded
 positivity, primitivity, trace-one, and spanning conditions while its trace
 matrix is not idempotent.  The capstone theorem
 \leanid{MPOTensor.ActiveSectorSpanningCounterexample.%
-tensor_refutes_printed_sal_zcl_rank_one_inference}
-adds SAL, source ZCL, and the source-selected inverse-map factorization, and
-proves that its active trace matrix is not rank one.  Thus neither inverse-map
-provenance nor the finite-chain cyclic form supplies the rectangular
-vanishing asserted by that one-step inference.  This conclusion is unavailable
-and is not used in the completed proof, which instead obtains a positive
-rank-one factorization of the two-step coefficient.
+tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix}
+adds SAL, TNLean's up-to-scalar source-ZCL predicate, and the source-selected
+inverse-map factorization, and proves that its active trace matrix is not rank
+one. The raw tensor is not the normal tensor assumed in Appendix~C.2 Case~I;
+its normal representative fails the paper's literal ZCL diagram. Thus the
+example isolates a normalization obstruction rather than refuting Lemma~C.5
+under its complete standing hypotheses. This conclusion is unavailable and is
+not used in the completed proof, which instead obtains a positive rank-one
+factorization of the two-step coefficient.
 
 Primitivity cannot be assumed for an arbitrary selected Beigi factorization.
 The theorem
