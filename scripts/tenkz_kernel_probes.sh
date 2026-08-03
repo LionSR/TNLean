@@ -59,6 +59,14 @@ grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
 }
+grep -Fq '|origin=trace|' "$WORK/r_closure_typed_ports.tnlog" || {
+  echo "FAIL: typed-port trace closure emitted no trace record" >&2
+  exit 1
+}
+grep -Fq '|origin=cup|' "$WORK/r_closure_typed_ports.tnlog" || {
+  echo "FAIL: typed-port cup closure emitted no cup record" >&2
+  exit 1
+}
 if grep -Fq '|origin=port-open|' "$WORK/r_closure_typed_ports.tnlog"; then
   echo "FAIL: trace/cup closure left duplicate typed-port stubs" >&2
   exit 1
