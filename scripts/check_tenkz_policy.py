@@ -2,8 +2,8 @@
 """Pure validation for the tenkz compatibility policy and 1.0 evidence log.
 
 Repository and GitHub access are deliberately injected.  This module owns the
-closed grammar, immutable-evidence contracts, and attempt state machine; a
-stacked integration layer resolves the external facts.
+closed grammar, immutable-evidence contracts, and attempt state machine; the
+evidence bundle supplies external facts.
 """
 
 from __future__ import annotations
@@ -18,6 +18,8 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Collection
+
+from tenkz_policy_evidence import PolicyEvidenceBundle, PolicyEvidenceResolver
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -630,16 +632,14 @@ class PublisherSecretEvidence:
 
 @dataclass(frozen=True)
 class AuditEvidence:
-    """Complete current-validity result and its immutable-ledger boundary.
+    """Exact current-validity snapshot and its immutable-ledger boundary.
 
-    Replay callbacks reconstruct integration-time history (or the exact final
-    unmerged candidate).  This separate channel records every entry that fails
-    the current snapshot, so later drift is queued only after the fixed audit
-    boundary and cannot block intervening history.
+    Replay derives the invalid-entry inventory from the resolver.  The boundary
+    places that ordered inventory after the immutable prefix, so current drift
+    cannot block intervening history.
     """
 
     boundary_entry_id: str | None
-    invalid_entries: tuple[str, ...] | None
     snapshot_complete: bool | None
     validation_target_exact: bool | None
     validation_target_oid: str | None
@@ -788,36 +788,6 @@ class RecordInspection:
     merged_at: datetime | None
     integration: str | None
     invalid_reasons: tuple[str, ...]
-
-
-ResolveReplayPullRequest = Callable[[str, str | None], PullRequestEvidence]
-ResolveReplayActivationDiff = Callable[[str], ActivationDiffEvidence]
-ResolveReplayRecordDiff = Callable[[str, str, str | None], RecordDiffEvidence]
-ResolveReplayWorkDiff = Callable[[str], WorkDiffEvidence]
-ResolveReplayResolutionDiff = Callable[[str], ResolutionDiffEvidence]
-ResolveReplayReleasePrep = Callable[
-    [str, str, tuple[str, ...], tuple[str, ...], tuple[str, ...]],
-    ReleasePrepEvidence,
-]
-ResolveReplayReleasePayload = Callable[[str, str, ReleaseContract], ReleasePayloadEvidence]
-ResolveReplayReleaseTestObservation = Callable[
-    [str, str, str, ReleaseContract], ReleaseTestObservationEvidence
-]
-ResolveReplayFreezeTag = Callable[[str], TagEvidence]
-ResolveCurrentFinalTag = Callable[[str], TagEvidence]
-ResolveFinalTagPublisher = Callable[[str], FinalTagPublisherEvidence]
-ResolveCurrentPublisherSecret = Callable[
-    [str, str, str, str],
-    PublisherSecretEvidence,
-]
-ResolveReplayIssue = Callable[[str], IssueEvidence]
-ResolveReplayRecordInvalidReset = Callable[
-    [str, str, str, str, str], RecordInvalidResetReplayEvidence
-]
-ResolveCurrentWorkflow = Callable[
-    [str, str, tuple[str, ...], str],
-    WorkflowEvidence,
-]
 
 
 def require(condition: bool, message: str) -> None:
@@ -2455,34 +2425,14 @@ def validate_entries(
     *,
     policy: dict = EXPECTED_POLICY,
     soak: dict = EXPECTED_SOAK,
-    resolve_replay_pr: ResolveReplayPullRequest | None = None,
-    resolve_replay_activation_diff: ResolveReplayActivationDiff | None = None,
-    resolve_replay_record_diff: ResolveReplayRecordDiff | None = None,
-    resolve_replay_work_diff: ResolveReplayWorkDiff | None = None,
-    resolve_replay_resolution_diff: ResolveReplayResolutionDiff | None = None,
-    resolve_replay_release_prep: ResolveReplayReleasePrep | None = None,
-    resolve_replay_release_payload: ResolveReplayReleasePayload | None = None,
-    resolve_replay_release_test_observation: (
-        ResolveReplayReleaseTestObservation | None
-    ) = None,
-    resolve_replay_freeze_tag: ResolveReplayFreezeTag | None = None,
-    resolve_current_final_tag: ResolveCurrentFinalTag | None = None,
-    resolve_final_tag_publisher: ResolveFinalTagPublisher | None = None,
-    resolve_current_publisher_secret: ResolveCurrentPublisherSecret | None = None,
-    resolve_replay_issue: ResolveReplayIssue | None = None,
-    resolve_replay_record_invalid_reset: ResolveReplayRecordInvalidReset | None = None,
-    resolve_current_workflow: ResolveCurrentWorkflow | None = None,
-    audit: AuditEvidence | None = None,
-    tag_protection: TagProtectionEvidence | None = None,
+    evidence: PolicyEvidenceBundle | None = None,
 ) -> str:
-    """Validate entry grammar, injected immutable facts, and attempt state.
+    """Validate entry grammar, one exact evidence snapshot, and attempt state.
 
-    Every ``resolve_replay_*`` callback supplies integration-time evidence, or
-    exact candidate evidence for the final unmerged record.  ``audit`` is the
-    separate complete current-validity snapshot, including the final entry in
-    the immutable prefix that existed when it started.  Current drift is never
-    substituted into replay callbacks; its ordered targets enter the state only
-    after that boundary.
+    The immutable resolver supplies integration-time evidence, or exact
+    candidate evidence for the final unmerged record.  The current resolver
+    derives drift from the exact snapshot and queues affected entries only
+    after that snapshot's immutable boundary.
     """
 
     (
@@ -2503,26 +2453,14 @@ def validate_entries(
     )
     if enforcement == "pending":
         require(not entries, "evidence entries require armed policy enforcement")
-        require(audit is None, "audit evidence has no entries")
+        require(evidence is None, "policy evidence has no pending entries")
         return "not-started"
-    require(
-        resolve_current_final_tag is not None,
-        "entry validation requires current final-tag evidence",
-    )
-    require(
-        resolve_final_tag_publisher is not None,
-        "entry validation requires final-tag publisher evidence",
-    )
-    require(
-        resolve_current_publisher_secret is not None,
-        "entry validation requires publisher secret evidence",
-    )
-    require(
-        resolve_replay_freeze_tag is not None,
-        "entry validation requires replay freeze-tag evidence",
-    )
-    require(tag_protection is not None, "tag-protection evidence is missing")
-    require(audit is not None, "entry validation requires complete audit evidence")
+    require(evidence is not None, "armed entry validation requires policy evidence")
+    replay_resolver = evidence.replay.resolver
+    current_resolver = evidence.current.resolver
+    resolver = replay_resolver
+    audit = evidence.current.audit
+    tag_protection = evidence.current.tag_protection
     require(audit.snapshot_complete is True, "audit snapshot is incomplete")
     require(audit.validation_target_exact is True, "audit validation target is not exact")
     validation_target_oid = audit.validation_target_oid
@@ -2538,77 +2476,9 @@ def validate_entries(
     require(len(record_refs) == len(set(record_refs)), "record_pr values must be distinct")
     record_ref_set = set(record_refs)
 
-    require(resolve_replay_pr is not None, "entry validation requires replay PR evidence")
-    require(
-        resolve_replay_activation_diff is not None,
-        "entry validation requires replay activation-diff evidence",
-    )
-    require(
-        resolve_replay_record_diff is not None,
-        "entry validation requires replay record-diff evidence",
-    )
-    require(
-        resolve_replay_work_diff is not None,
-        "entry validation requires replay work-diff evidence",
-    )
-    if any(shape[1] == "resolution" for shape in shaped):
-        require(
-            resolve_replay_resolution_diff is not None,
-            "resolution validation requires replay fix-diff evidence",
-        )
-    if any(
-        shape[1] == "friction"
-        and entry.get("triage") == "fix-compatible"
-        and bool(entry.get("regression_tests"))
-        for entry, shape in zip(entries, shaped)
-    ):
-        require(
-            resolve_replay_release_test_observation is not None,
-            "friction validation requires replay single-test evidence",
-        )
-    require(
-        resolve_replay_release_payload is not None,
-        "entry validation requires replay release-payload evidence",
-    )
-    require(
-        resolve_replay_issue is not None,
-        "entry validation requires replay issue evidence",
-    )
-    require(
-        resolve_current_workflow is not None,
-        "entry validation requires current workflow evidence",
-    )
-    if any(
-        shape[1] == "reset" and entry.get("cause") == "record-invalid"
-        for entry, shape in zip(entries, shaped)
-    ):
-        require(
-            resolve_replay_record_invalid_reset is not None,
-            "record-invalid reset validation requires historical placement evidence",
-        )
-    if any(shape[1] == "sign-off" for shape in shaped):
-        require(
-            resolve_replay_release_prep is not None,
-            "sign-off validation requires replay release-preparation evidence",
-        )
-
-    require(
-        isinstance(audit.invalid_entries, tuple)
-        and all(isinstance(item, str) for item in audit.invalid_entries),
-        "audit invalid-entry inventory is missing",
-    )
-    invalid_list = list(audit.invalid_entries)
-    invalid_set = set(invalid_list)
-    require(len(invalid_list) == len(invalid_set), "audit invalid entries contain duplicates")
     entry_ids = {shape[0] for shape in shaped}
-    require(invalid_set <= entry_ids, "record-invalid evidence names an unknown entry")
     entry_positions = {shape[0]: index for index, shape in enumerate(shaped, start=1)}
-    require(
-        invalid_list == sorted(invalid_list, key=entry_positions.__getitem__),
-        "audit invalid entries are not in ledger order",
-    )
     if audit.boundary_entry_id is None:
-        require(not invalid_list, "audit with an empty prefix names invalid entries")
         drift_boundary = 0
     else:
         require(
@@ -2616,40 +2486,10 @@ def validate_entries(
             "audit boundary is not a live entry",
         )
         drift_boundary = entry_positions[audit.boundary_entry_id]
-        require(
-            all(entry_positions[target] <= drift_boundary for target in invalid_set),
-            "audit boundary precedes an invalid target",
-        )
     require(
         drift_boundary in {len(shaped), max(0, len(shaped) - 1)},
         "audit boundary is stale rather than the actual final live prefix",
     )
-    for reset_index, (entry, shape) in enumerate(zip(entries, shaped)):
-        entry_id, kind, _attempt, _record_ref = shape
-        if kind != "reset" or entry.get("cause") != "record-invalid":
-            continue
-        if entry_id not in invalid_set:
-            continue
-        target = nonempty_string(entry.get("target"), "target", entry_id)
-        later_valid_acknowledgement = any(
-            later_shape[1] == "reset"
-            and later_entry.get("cause") == "record-invalid"
-            and later_entry.get("target") == target
-            and later_shape[0] not in invalid_set
-            for later_entry, later_shape in zip(
-                entries[reset_index + 1 :],
-                shaped[reset_index + 1 :],
-            )
-        )
-        require(
-            later_valid_acknowledgement or target in invalid_set,
-            f"{entry_id} invalid acknowledgement does not uncover {target}",
-        )
-    # The audit channel has replayed every current mutable fact.  Before tag
-    # creation, its classified drift enters the ordered reset queue.  Once any
-    # final-tag ref exists, the same drift is a hard release incident and never
-    # reopens the append-only ledger reconstructed above.
-    drift_targets = invalid_list.copy()
 
     source_ref_set = {
         pr_ref(entry["source_pr"], "source_pr", shape[0])
@@ -2728,9 +2568,9 @@ def validate_entries(
             f"release-preparation PR {release_ref} is a replay receipt PR",
         )
 
-    activation = resolve_replay_pr(activation_ref, None)
+    activation = replay_resolver.resolve_replay_pr(activation_ref, None)
     activation_author, activation_head = validate_pr_core(activation, activation_ref)
-    activation_diff = resolve_replay_activation_diff(activation_ref)
+    activation_diff = current_resolver.resolve_replay_activation_diff(activation_ref)
     require(
         activation_diff.validated_pr_ref == activation_ref,
         "activation diff was validated on another PR",
@@ -2899,19 +2739,43 @@ def validate_entries(
         distinct_from={maintainer_login},
         authorized_permissions=reviewer_permissions,
     )
+    snapshot_activation = current_resolver.resolve_replay_pr(activation_ref, None)
+    snapshot_author, snapshot_head = validate_pr_core(
+        snapshot_activation,
+        activation_ref,
+    )
+    snapshot_merged_at, snapshot_integration = validate_merged_pr(
+        snapshot_activation,
+        activation_ref,
+        require_descendant=False,
+        require_tree=True,
+    )
+    require(
+        snapshot_head == activation_head
+        and snapshot_integration == activation_integration
+        and snapshot_merged_at == activation_merged_at,
+        "current activation identity differs from immutable replay",
+    )
+    require_independent_approval(
+        snapshot_activation,
+        activation_ref,
+        author=snapshot_author,
+        before=snapshot_merged_at,
+        distinct_from={maintainer_login},
+        authorized_permissions=reviewer_permissions,
+    )
 
     publisher_secret_cache: PublisherSecretEvidence | None = None
 
     def resolve_terminal_final_tag() -> TagEvidence:
-        final_tag = resolve_current_final_tag(FINAL_TAG)
+        final_tag = current_resolver.resolve_current_final_tag(FINAL_TAG)
         require(isinstance(final_tag.exists, bool), "final-tag existence is unavailable")
         return final_tag
 
     def current_publisher_secret() -> PublisherSecretEvidence:
         nonlocal publisher_secret_cache
-        assert resolve_current_publisher_secret is not None
         if publisher_secret_cache is None:
-            publisher_secret_cache = resolve_current_publisher_secret(
+            publisher_secret_cache = current_resolver.resolve_current_publisher_secret(
                 release_contract.publisher_environment,
                 release_contract.publisher_secret,
                 release_contract.publisher_secret_scope,
@@ -2920,9 +2784,8 @@ def validate_entries(
         return publisher_secret_cache
 
     def validate_pinned_current_workflow() -> None:
-        assert resolve_current_workflow is not None
         validate_workflow_evidence(
-            resolve_current_workflow(
+            current_resolver.resolve_current_workflow(
                 activation_integration,
                 validation_target_oid,
                 release_contract.enforcement_workflows,
@@ -3024,9 +2887,7 @@ def validate_entries(
         nonlocal pending_reset, current_release_attempt
         if pending_reset is not None:
             return
-        if drift_targets:
-            pending_reset = ("record-invalid", drift_targets[0])
-        elif deferred_invalid_targets:
+        if deferred_invalid_targets:
             pending_reset = ("record-invalid", deferred_invalid_targets[0])
         if pending_reset is not None:
             current_release_attempt = None
@@ -3095,8 +2956,12 @@ def validate_entries(
         if kind == "freeze":
             source_sha_for_record = sha(entry["source_sha"], "source_sha", entry_id)
             record_anchor = source_sha_for_record
-        record = resolve_replay_pr(record_ref, record_anchor)
-        diff = resolve_replay_record_diff(entry_id, record_ref, source_sha_for_record)
+        record = replay_resolver.resolve_replay_pr(record_ref, record_anchor)
+        diff = replay_resolver.resolve_replay_record_diff(
+            entry_id,
+            record_ref,
+            source_sha_for_record,
+        )
         inspection = inspect_record_pr(
             record,
             diff,
@@ -3108,7 +2973,63 @@ def validate_entries(
         record_pending = inspection.pending
         record_merged_at = inspection.merged_at
         record_integration = inspection.integration
-        record_invalid_reasons = list(inspection.invalid_reasons)
+        replay_invalid_reasons = list(inspection.invalid_reasons)
+        record_invalid_reasons = replay_invalid_reasons.copy()
+        def classify_snapshot_failure(message: str) -> None:
+            if record_pending:
+                raise PolicyError(message)
+            if message not in record_invalid_reasons:
+                record_invalid_reasons.append(message)
+
+        def classify_replay_failure(message: str) -> None:
+            if message not in replay_invalid_reasons:
+                replay_invalid_reasons.append(message)
+            if message not in record_invalid_reasons:
+                record_invalid_reasons.append(message)
+
+        snapshot_record = current_resolver.resolve_replay_pr(
+            record_ref,
+            record_anchor,
+        )
+        snapshot_diff = current_resolver.resolve_replay_record_diff(
+            entry_id,
+            record_ref,
+            source_sha_for_record,
+        )
+        snapshot_inspection = inspect_record_pr(
+            snapshot_record,
+            snapshot_diff,
+            entry_id=entry_id,
+            record_ref=record_ref,
+            require_descendant=True,
+        )
+        snapshot_record_merged_at = snapshot_inspection.merged_at
+        for reason in snapshot_inspection.invalid_reasons:
+            classify_snapshot_failure(reason)
+        replay_identity = (
+            record.in_repository,
+            record.base_ref_name,
+            record.author_login,
+            record.head_oid,
+            record.merged,
+            record.merged_at,
+            record.merged_by_login,
+            record.merge_commit_oid,
+        )
+        snapshot_identity = (
+            snapshot_record.in_repository,
+            snapshot_record.base_ref_name,
+            snapshot_record.author_login,
+            snapshot_record.head_oid,
+            snapshot_record.merged,
+            snapshot_record.merged_at,
+            snapshot_record.merged_by_login,
+            snapshot_record.merge_commit_oid,
+        )
+        if snapshot_identity != replay_identity:
+            classify_snapshot_failure(
+                f"{entry_id} current record identity differs from immutable replay"
+            )
         if index == len(entries):
             expected_boundary = index - 1 if record_pending else index
             require(
@@ -3121,12 +3042,18 @@ def validate_entries(
                     f"{entry_id} candidate audit targets another head",
                 )
 
-        def check_kind_record_fact(condition: bool, message: str) -> None:
-            if condition:
-                return
-            if record_pending:
-                raise PolicyError(message)
-            record_invalid_reasons.append(message)
+        def check_kind_record_fact(
+            condition: bool,
+            message: str,
+            snapshot_condition: bool | None = None,
+        ) -> None:
+            if not condition:
+                if record_pending:
+                    raise PolicyError(message)
+                classify_replay_failure(message)
+            current_condition = condition if snapshot_condition is None else snapshot_condition
+            if current_condition is not True:
+                classify_snapshot_failure(message)
 
         prior_receipts = tuple(
             (
@@ -3150,68 +3077,103 @@ def validate_entries(
             check_kind_record_fact(
                 diff.validated_prior_receipts == prior_receipts,
                 f"{entry_id} retention evidence used another prior-receipt set",
+                snapshot_diff.validated_prior_receipts == prior_receipts,
             )
             check_kind_record_fact(
                 diff.candidate_target_preserves_prior_receipts is True,
                 f"{entry_id} candidate target does not retain every prior receipt",
+                snapshot_diff.candidate_target_preserves_prior_receipts is True,
             )
             check_kind_record_fact(
                 diff.head_preserves_prior_receipts is True,
                 f"{entry_id} exact head does not retain every prior receipt",
+                snapshot_diff.head_preserves_prior_receipts is True,
             )
             check_kind_record_fact(
                 diff.entry_diff_untouched_prior_receipts is True,
                 f"{entry_id} diff changes a prior receipt path",
+                snapshot_diff.entry_diff_untouched_prior_receipts is True,
             )
             if not record_pending:
                 check_kind_record_fact(
                     diff.integration_preserves_prior_receipts is True,
                     f"{entry_id} integration does not retain every prior receipt",
+                    snapshot_diff.integration_preserves_prior_receipts is True,
                 )
 
         if kind == "freeze":
             check_kind_record_fact(
                 diff.source_to_head_is_exact_freeze_append is True,
                 f"{entry_id} source-to-head diff is not exactly the freeze append",
+                snapshot_diff.source_to_head_is_exact_freeze_append is True,
             )
             check_kind_record_fact(
                 diff.candidate_main_tip_is_source is True,
                 f"{entry_id} candidate main tip differs from source_sha",
+                snapshot_diff.candidate_main_tip_is_source is True,
             )
             if not record_pending:
                 check_kind_record_fact(
                     diff.integration_parent_is_source is True,
                     f"{entry_id} integration parent differs from source_sha",
+                    snapshot_diff.integration_parent_is_source is True,
                 )
         if kind == "sign-off":
             check_kind_record_fact(
                 diff.candidate_main_tip_is_release_integration is True,
                 f"{entry_id} candidate main tip differs from release integration",
+                snapshot_diff.candidate_main_tip_is_release_integration is True,
             )
             if not record_pending:
                 check_kind_record_fact(
                     diff.integration_parent_is_release_integration is True,
                     f"{entry_id} integration parent differs from release integration",
+                    snapshot_diff.integration_parent_is_release_integration is True,
                 )
         if record_pending:
             require(index == len(entries), f"{entry_id} unmerged record is not the final entry")
 
         def entry_is_invalid() -> bool:
             # Resolver failures are current mutable drift or intrinsic
-            # immutable-fact failures.  The audit inventory independently
-            # schedules them in ledger order at its immutable boundary.
+            # immutable-fact failures.  Replay schedules them in ledger order
+            # after the audit boundary.
             return bool(record_invalid_reasons)
 
-        def check_external(action: Callable[[], object]) -> object | None:
-            """Turn a merged entry's drifted external fact into reset state."""
+        def replay_entry_is_invalid() -> bool:
+            return bool(replay_invalid_reasons)
 
+        def check_external(action: Callable[[], object]) -> object | None:
+            """Replay immutable facts, then classify the exact current snapshot."""
+
+            nonlocal resolver
+
+            def run(selected: PolicyEvidenceResolver) -> object:
+                nonlocal resolver
+                previous = resolver
+                resolver = selected
+                try:
+                    return action()
+                finally:
+                    resolver = previous
+
+            replay_result: object | None = None
+            replay_error: PolicyError | None = None
             try:
-                return action()
+                replay_result = run(replay_resolver)
             except PolicyError as error:
+                replay_error = error
+            current_error: PolicyError | None = None
+            try:
+                run(current_resolver)
+            except PolicyError as error:
+                current_error = error
+            if replay_error is not None:
                 if record_pending:
-                    raise
-                record_invalid_reasons.append(str(error))
-                return None
+                    raise replay_error
+                classify_replay_failure(str(replay_error))
+            if current_error is not None:
+                classify_snapshot_failure(str(current_error))
+            return replay_result
 
         if kind == "freeze":
             source_ref = pr_ref(entry["source_pr"], "source_pr", entry_id)
@@ -3256,7 +3218,7 @@ def validate_entries(
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
             def freeze_external_facts() -> tuple[list[IssueEvidence], tuple[str, ...]]:
-                source = resolve_replay_pr(source_ref, source_anchor)
+                source = resolver.resolve_replay_pr(source_ref, source_anchor)
                 source_author, _source_head = validate_pr_core(source, source_ref)
                 source_time, source_integration = validate_merged_pr(
                     source,
@@ -3275,7 +3237,7 @@ def validate_entries(
                     source_integration == source_sha,
                     f"{entry_id} source SHA differs from source PR",
                 )
-                tag = resolve_replay_freeze_tag(tag_name)
+                tag = resolver.resolve_replay_freeze_tag(tag_name)
                 require(tag.exists is True, f"{entry_id} freeze tag is missing")
                 require(tag.object_type == "tag", f"{entry_id} freeze tag is not annotated")
                 require(
@@ -3317,7 +3279,11 @@ def validate_entries(
                         f"{entry_id} current tag namespace lost a retained name",
                     )
                 payload_blobs = validate_release_payload(
-                    resolve_replay_release_payload(source_sha, tag_name, release_contract),
+                    resolver.resolve_replay_release_payload(
+                        source_sha,
+                        tag_name,
+                        release_contract,
+                    ),
                     tree_oid=source_sha,
                     tag=tag_name,
                     contract=release_contract,
@@ -3325,7 +3291,7 @@ def validate_entries(
                 )
                 facts: list[IssueEvidence] = []
                 for item in listed:
-                    fact = resolve_replay_issue(item)
+                    fact = resolver.resolve_replay_issue(item)
                     require(
                         fact.in_repository is True,
                         f"{entry_id} prerequisite {item} is external",
@@ -3334,16 +3300,19 @@ def validate_entries(
                         fact.closed is True,
                         f"{entry_id} prerequisite {item} is not closed",
                     )
-                    utc_instant(fact.closed_at, f"{entry_id} prerequisite {item} closedAt")
+                    closed_at = utc_instant(
+                        fact.closed_at,
+                        f"{entry_id} prerequisite {item} closedAt",
+                    )
+                    if record_merged_at is not None:
+                        require(
+                            closed_at <= record_merged_at,
+                            f"{entry_id} prerequisite {item} closed after T",
+                        )
                     facts.append(fact)
                 return facts, payload_blobs
 
             freeze_result = check_external(freeze_external_facts)
-            prerequisite_facts = (
-                freeze_result[0]
-                if isinstance(freeze_result, tuple)
-                else []
-            )
             freeze_payload_blobs = (
                 freeze_result[1]
                 if isinstance(freeze_result, tuple)
@@ -3356,28 +3325,15 @@ def validate_entries(
                     state="freeze-pending",
                 )
                 break
-            if not entry_is_invalid():
+            if not replay_entry_is_invalid():
                 assert record_merged_at is not None and record_integration is not None
-
-                def check_prerequisite_times() -> None:
-                    for item, fact in zip(listed, prerequisite_facts):
-                        closed_at = utc_instant(
-                            fact.closed_at,
-                            f"{entry_id} prerequisite {item} closedAt",
-                        )
-                        require(
-                            closed_at <= record_merged_at,
-                            f"{entry_id} prerequisite {item} closed after T",
-                        )
-
-                check_external(check_prerequisite_times)
             active = {
                 "attempt": attempt,
                 "freeze_id": entry_id,
                 "source_sha": source_sha,
                 "freeze_tag": tag_name,
                 "freeze_time": record_merged_at,
-                "freeze_valid": not entry_is_invalid(),
+                "freeze_valid": not replay_entry_is_invalid(),
                 "freeze_integration": record_integration or source_sha,
                 "freeze_payload_blobs": freeze_payload_blobs,
                 "work": {},
@@ -3401,7 +3357,10 @@ def validate_entries(
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
             def work_external_facts() -> tuple[datetime, str]:
-                work_pr = resolve_replay_pr(work_ref, active["freeze_integration"])
+                work_pr = resolver.resolve_replay_pr(
+                    work_ref,
+                    active["freeze_integration"],
+                )
                 work_author, work_head = validate_pr_core(work_pr, work_ref)
                 work_merged_at, work_integration = validate_merged_pr(
                     work_pr,
@@ -3426,7 +3385,7 @@ def validate_entries(
                     before=work_merged_at,
                     authorized_permissions=reviewer_permissions,
                 )
-                work_diff = resolve_replay_work_diff(work_ref)
+                work_diff = resolver.resolve_replay_work_diff(work_ref)
                 require(
                     work_diff.validated_pr_ref == work_ref,
                     f"{entry_id} work diff was validated on another PR",
@@ -3549,16 +3508,16 @@ def validate_entries(
                     state="work-pending",
                 )
                 break
-            if not entry_is_invalid():
-                assert isinstance(work_result, tuple)
+            if isinstance(work_result, tuple) and not replay_entry_is_invalid():
                 work_merged_at, work_integration = work_result
                 assert record_merged_at is not None
                 check_kind_record_fact(
                     record_merged_at > work_merged_at,
                     f"{entry_id} evidence record did not merge after its work PR",
+                    snapshot_record_merged_at is not None
+                    and snapshot_record_merged_at > work_merged_at,
                 )
-            if not entry_is_invalid():
-                assert isinstance(work_result, tuple)
+            if isinstance(work_result, tuple) and not replay_entry_is_invalid():
                 work_merged_at, work_integration = work_result
                 active["work"][work_class] = {
                     "entry_id": entry_id,
@@ -3596,7 +3555,6 @@ def validate_entries(
             def friction_observation_facts() -> dict[str, dict[str, object]]:
                 if not regression_tests:
                     return {}
-                assert resolve_replay_release_test_observation is not None
                 record_head = record.head_oid
                 assert isinstance(record_head, str)
                 observations: dict[str, dict[str, object]] = {}
@@ -3611,7 +3569,7 @@ def validate_entries(
                         expected_test = expected.get(test_ref) if expected is not None else None
                         fingerprint, program_paths, fixture_paths = (
                             validate_release_test_observation(
-                            resolve_replay_release_test_observation(
+                            resolver.resolve_replay_release_test_observation(
                                 tree_oid,
                                 active["freeze_tag"],
                                 test_ref,
@@ -3660,8 +3618,12 @@ def validate_entries(
                     state="friction-pending",
                 )
                 break
-            if not entry_is_invalid():
-                assert record_merged_at is not None and record_integration is not None
+            if (
+                isinstance(friction_result, dict)
+                and not replay_entry_is_invalid()
+                and record_merged_at is not None
+                and record_integration is not None
+            ):
                 active["friction"][entry_id] = {
                     "surface": surface,
                     "triage": triage,
@@ -3687,8 +3649,10 @@ def validate_entries(
             nonempty_string(entry["evidence"], "evidence", entry_id)
 
             def resolution_external_facts() -> tuple[datetime, str]:
-                assert resolve_replay_resolution_diff is not None
-                fix_pr = resolve_replay_pr(fix_ref, active["freeze_integration"])
+                fix_pr = resolver.resolve_replay_pr(
+                    fix_ref,
+                    active["freeze_integration"],
+                )
                 fix_author, fix_head = validate_pr_core(fix_pr, fix_ref)
                 fix_merged_at, fix_integration = validate_merged_pr(
                     fix_pr,
@@ -3707,7 +3671,7 @@ def validate_entries(
                     before=fix_merged_at,
                     authorized_permissions=reviewer_permissions,
                 )
-                fix_diff = resolve_replay_resolution_diff(fix_ref)
+                fix_diff = resolver.resolve_replay_resolution_diff(fix_ref)
                 require(
                     fix_diff.validated_pr_ref == fix_ref,
                     f"{entry_id} fix diff was validated on another PR",
@@ -3858,14 +3822,13 @@ def validate_entries(
                     fix_diff.freeze_manifest_blob_identical is True,
                     f"{entry_id} fix changes the active-freeze manifest identity",
                 )
-                assert resolve_replay_release_test_observation is not None
                 for test_ref in regression_tests:
                     inventory_fact = test_facts[test_ref]
                     assert isinstance(inventory_fact, dict)
                     fingerprint = str(inventory_fact["fingerprint"])
                     base_fingerprint, base_programs, base_fixtures = (
                         validate_release_test_observation(
-                        resolve_replay_release_test_observation(
+                        resolver.resolve_replay_release_test_observation(
                             fix_base,
                             active["freeze_tag"],
                             test_ref,
@@ -3883,7 +3846,7 @@ def validate_entries(
                     )
                     head_fingerprint, head_programs, head_fixtures = (
                         validate_release_test_observation(
-                        resolve_replay_release_test_observation(
+                        resolver.resolve_replay_release_test_observation(
                             fix_head,
                             active["freeze_tag"],
                             test_ref,
@@ -3901,7 +3864,7 @@ def validate_entries(
                     )
                     integration_fingerprint, integration_programs, integration_fixtures = (
                         validate_release_test_observation(
-                            resolve_replay_release_test_observation(
+                            resolver.resolve_replay_release_test_observation(
                                 fix_integration,
                                 active["freeze_tag"],
                                 test_ref,
@@ -3939,7 +3902,7 @@ def validate_entries(
                         f"{entry_id} test {test_ref} changed its declared fixture roles",
                     )
                 head_payload_blobs = validate_release_payload(
-                    resolve_replay_release_payload(
+                    resolver.resolve_replay_release_payload(
                         fix_head,
                         active["freeze_tag"],
                         release_contract,
@@ -3950,7 +3913,7 @@ def validate_entries(
                     subject=f"{entry_id} fix head",
                 )
                 integration_payload_blobs = validate_release_payload(
-                    resolve_replay_release_payload(
+                    resolver.resolve_replay_release_payload(
                         fix_integration,
                         active["freeze_tag"],
                         release_contract,
@@ -3972,20 +3935,25 @@ def validate_entries(
                 check_kind_record_fact(
                     diff.validated_fix_integration == fix_integration,
                     f"{entry_id} resolution record used another fix integration",
+                    snapshot_diff.validated_fix_integration == fix_integration,
                 )
                 check_kind_record_fact(
                     diff.candidate_main_tip_descends_from_fix_integration is True,
                     f"{entry_id} resolution candidate does not descend from its fix",
+                    snapshot_diff.candidate_main_tip_descends_from_fix_integration is True,
                 )
                 if not record_pending:
                     check_kind_record_fact(
                         diff.integration_parent_descends_from_fix_integration is True,
                         f"{entry_id} resolution integration parent does not descend from its fix",
+                        snapshot_diff.integration_parent_descends_from_fix_integration is True,
                     )
                     assert record_merged_at is not None
                     check_kind_record_fact(
                         record_merged_at > fix_merged_at,
                         f"{entry_id} resolution record did not merge after its fix PR",
+                        snapshot_record_merged_at is not None
+                        and snapshot_record_merged_at > fix_merged_at,
                     )
             if record_pending:
                 open_pending_release_attempt(
@@ -3993,9 +3961,12 @@ def validate_entries(
                     state="resolution-pending",
                 )
                 break
-            if not entry_is_invalid():
-                assert record_integration is not None
-                assert record_merged_at is not None
+            if (
+                isinstance(resolution_result, tuple)
+                and not replay_entry_is_invalid()
+                and record_integration is not None
+                and record_merged_at is not None
+            ):
                 fact["resolved"] = True
                 fact["resolution_integration"] = record_integration
                 fact["resolution_merged_at"] = record_merged_at
@@ -4012,7 +3983,6 @@ def validate_entries(
                 )
             historical_record_reset = cause == "record-invalid" and index <= drift_boundary
             if cause == "record-invalid":
-                assert resolve_replay_record_invalid_reset is not None
                 receipt_ref = pr_ref(entry["replay_receipt_pr"], "replay_receipt_pr", entry_id)
                 receipt_digest = sha256(
                     entry["replay_receipt_sha256"],
@@ -4021,7 +3991,10 @@ def validate_entries(
                 )
 
                 def replay_receipt_facts() -> tuple[list[str], str | None, str]:
-                    receipt_pr = resolve_replay_pr(receipt_ref, last_record_integration)
+                    receipt_pr = resolver.resolve_replay_pr(
+                        receipt_ref,
+                        last_record_integration,
+                    )
                     receipt_author, receipt_head = validate_pr_core(receipt_pr, receipt_ref)
                     receipt_time, receipt_integration = validate_merged_pr(
                         receipt_pr,
@@ -4053,7 +4026,7 @@ def validate_entries(
                         and receipt_time > last_ledger_record_merged_at,
                         f"{entry_id} receipt PR did not merge after its ledger boundary",
                     )
-                    replay = resolve_replay_record_invalid_reset(
+                    replay = resolver.resolve_replay_record_invalid_reset(
                         entry_id,
                         target,
                         receipt_ref,
@@ -4189,23 +4162,29 @@ def validate_entries(
                     check_kind_record_fact(
                         diff.validated_receipt_integration == receipt_integration,
                         f"{entry_id} record diff used another receipt integration",
+                        snapshot_diff.validated_receipt_integration == receipt_integration,
                     )
                     check_kind_record_fact(
                         diff.candidate_main_tip_is_receipt_integration is True,
                         f"{entry_id} candidate base differs from receipt integration",
+                        snapshot_diff.candidate_main_tip_is_receipt_integration is True,
                     )
                     check_kind_record_fact(
                         diff.receipt_blob_preserved_from_candidate_base_to_head is True,
                         f"{entry_id} reset head does not preserve its receipt blob",
+                        snapshot_diff.receipt_blob_preserved_from_candidate_base_to_head
+                        is True,
                     )
                     if not record_pending:
                         check_kind_record_fact(
                             diff.integration_parent_is_receipt_integration is True,
                             f"{entry_id} integration parent differs from receipt integration",
+                            snapshot_diff.integration_parent_is_receipt_integration is True,
                         )
                         check_kind_record_fact(
                             diff.receipt_blob_preserved_in_integration is True,
                             f"{entry_id} reset integration does not preserve its receipt blob",
+                            snapshot_diff.receipt_blob_preserved_in_integration is True,
                         )
                     receipt_required = (
                         ("restart-required", restart_target)
@@ -4235,10 +4214,8 @@ def validate_entries(
                     state="reset-pending",
                 )
                 break
-            if not entry_is_invalid():
+            if not replay_entry_is_invalid():
                 if cause == "record-invalid":
-                    if drift_targets and target == drift_targets[0]:
-                        drift_targets.pop(0)
                     if target in deferred_invalid_targets:
                         deferred_invalid_targets.remove(target)
                 pending_reset = None
@@ -4323,12 +4300,13 @@ def validate_entries(
                 "release_prep_pr",
                 entry_id,
             )
-            assert resolve_replay_release_prep is not None
-
             release_paths = release_contract.release_varying_paths(FINAL_TAG)
 
             def release_external_facts() -> tuple[datetime, str, tuple[str, ...]]:
-                release_pr = resolve_replay_pr(release_ref, active["freeze_integration"])
+                release_pr = resolver.resolve_replay_pr(
+                    release_ref,
+                    active["freeze_integration"],
+                )
                 release_author, release_head = validate_pr_core(release_pr, release_ref)
                 release_merged_at, release_integration = validate_merged_pr(
                     release_pr,
@@ -4347,7 +4325,7 @@ def validate_entries(
                     before=release_merged_at,
                     authorized_permissions=reviewer_permissions,
                 )
-                release = resolve_replay_release_prep(
+                release = resolver.resolve_replay_release_prep(
                     release_ref,
                     release_integration,
                     release_paths,
@@ -4413,7 +4391,11 @@ def validate_entries(
                     f"{entry_id} release diff is not exactly the policy-owned payload",
                 )
                 payload_blobs = validate_release_payload(
-                    resolve_replay_release_payload(release_head, FINAL_TAG, release_contract),
+                    resolver.resolve_replay_release_payload(
+                        release_head,
+                        FINAL_TAG,
+                        release_contract,
+                    ),
                     tree_oid=release_head,
                     tag=FINAL_TAG,
                     contract=release_contract,
@@ -4430,16 +4412,18 @@ def validate_entries(
                 check_kind_record_fact(
                     diff.validated_release_integration == release_integration,
                     f"{entry_id} ancestry used another release integration",
+                    snapshot_diff.validated_release_integration == release_integration,
                 )
                 check_kind_record_fact(
                     diff.validated_work_integrations == work_integrations,
                     f"{entry_id} ancestry used other work integrations",
+                    snapshot_diff.validated_work_integrations == work_integrations,
                 )
 
                 def signoff_payload_facts() -> None:
                     assert isinstance(record.head_oid, str)
                     head_blobs = validate_release_payload(
-                        resolve_replay_release_payload(
+                        resolver.resolve_replay_release_payload(
                             record.head_oid,
                             FINAL_TAG,
                             release_contract,
@@ -4464,21 +4448,30 @@ def validate_entries(
                     reviewer != record_author,
                     f"{entry_id} reviewer must differ from record author",
                 )
-            if not entry_is_invalid():
+            if not replay_entry_is_invalid():
                 assert release_merged_at is not None
                 before = record_merged_at if not record_pending else None
-                check_external(
-                    lambda: require_independent_approval(
-                        record,
+                def signoff_approval_facts() -> None:
+                    approval_record = resolver.resolve_replay_pr(
                         record_ref,
-                        author=record_author,
+                        record_anchor,
+                    )
+                    approval_author, _approval_head = validate_pr_core(
+                        approval_record,
+                        record_ref,
+                    )
+                    require_independent_approval(
+                        approval_record,
+                        record_ref,
+                        author=approval_author,
                         after=max(latest_work_merge, release_merged_at),
                         before=before,
                         named_reviewer=reviewer,
                         distinct_from={maintainer_login},
                         authorized_permissions=reviewer_permissions,
                     )
-                )
+
+                check_external(signoff_approval_facts)
             require(pending_reset is None, f"{entry_id} cannot sign off before reset")
             if record_pending:
                 open_pending_release_attempt(
@@ -4486,7 +4479,7 @@ def validate_entries(
                     state="sign-off-pending",
                 )
                 break
-            if not entry_is_invalid():
+            if not replay_entry_is_invalid():
                 def signoff_postmerge_facts() -> None:
                     assert (
                         record_merged_at is not None
@@ -4506,7 +4499,7 @@ def validate_entries(
                         f"{entry_id} was not merged by github:{maintainer_login}",
                     )
                     integration_blobs = validate_release_payload(
-                        resolve_replay_release_payload(
+                        resolver.resolve_replay_release_payload(
                             record_integration,
                             FINAL_TAG,
                             release_contract,
@@ -4522,7 +4515,7 @@ def validate_entries(
                     )
 
                 check_external(signoff_postmerge_facts)
-                if not entry_is_invalid():
+                if not replay_entry_is_invalid():
                     assert (
                         record_integration is not None
                         and release_integration is not None
@@ -4542,7 +4535,7 @@ def validate_entries(
                     )
                     release_attempts.append(current_release_attempt)
 
-        if record_integration is not None and not entry_is_invalid():
+        if record_integration is not None and not replay_entry_is_invalid():
             last_record_integration = record_integration
         if record_merged_at is not None:
             last_ledger_record_merged_at = record_merged_at
@@ -4552,10 +4545,7 @@ def validate_entries(
             require(not record_pending, f"{entry_id} cannot be invalid before merge")
             if kind == "reset" and entry.get("cause") == "record-invalid":
                 uncovered_target = nonempty_string(entry["target"], "target", entry_id)
-                if (
-                    uncovered_target not in drift_targets
-                    and uncovered_target not in deferred_invalid_targets
-                ):
+                if uncovered_target not in deferred_invalid_targets:
                     deferred_invalid_targets.append(uncovered_target)
             if entry_id not in deferred_invalid_targets:
                 deferred_invalid_targets.append(entry_id)
@@ -4578,8 +4568,9 @@ def validate_entries(
         if signoff is None:
             audited_release_attempts.append(release_attempt)
             continue
-        assert resolve_final_tag_publisher is not None
-        publisher_evidence = resolve_final_tag_publisher(signoff.integration_oid)
+        publisher_evidence = current_resolver.resolve_final_tag_publisher(
+            signoff.integration_oid
+        )
         current_prefix_boundary = audit.boundary_entry_id
         require(
             isinstance(current_prefix_boundary, str),
