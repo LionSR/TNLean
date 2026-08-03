@@ -343,6 +343,7 @@
       ports={0@01:virtual:$a$, 90:physical, 45:physical:$i$}]{A}
   \tn[at=(1,2), name=B, ports={180@001:virtual:$b$}]{B}
   \tnwire{A.0@01}{B.180@001}
+  % Keep the visual delta on the labelled unmatched port itself.
   \tn[skin=dot, at=on port-open-2 1]{}
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, bonds=none, frame=plane]

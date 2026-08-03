@@ -4,7 +4,43 @@
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
 \bool_new:N \g__tenkz_test_port_route_stroked_bool
+\bool_new:N \g__tenkz_test_late_hull_missing_bool
+\bool_new:N \g__tenkz_test_late_hull_live_bool
 \bool_new:N \l__tenkz_test_in_port_open_label_bool
+\bool_new:N \l__tenkz_test_in_port_open_stroke_bool
+\fp_new:N \g__tenkz_test_port_tip_x_fp
+\fp_new:N \g__tenkz_test_port_tip_y_fp
+\cs_new_eq:NN
+  \__tenkz_test_wire_port_open:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l_tmpa_tl
+    \prop_if_in:NeTF \l__tenkz_kernel_hull_live_prop {\l_tmpa_tl/xmin}
+      {\errmessage{wire-carried~port~host~was~measured~too~early}}
+      {\bool_gset_true:N \g__tenkz_test_late_hull_missing_bool}
+    \bool_set_true:N \l__tenkz_test_in_port_open_stroke_bool
+    \__tenkz_test_wire_port_open:n {#1}
+    \bool_set_false:N \l__tenkz_test_in_port_open_stroke_bool
+  }
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \bool_if:NT \l__tenkz_test_in_port_open_stroke_bool
+      {
+        \prop_if_in:NeTF \l__tenkz_kernel_hull_live_prop
+          {\l__tenkz_kernel_port_record_tl/xmin}
+          {\bool_gset_true:N \g__tenkz_test_late_hull_live_bool}
+          {\errmessage{port~geometry~did~not~materialize~its~late~host}}
+        \fp_gset_eq:NN \g__tenkz_test_port_tip_x_fp
+          \l__tenkz_kernel_r_port_tip_x_fp
+        \fp_gset_eq:NN \g__tenkz_test_port_tip_y_fp
+          \l__tenkz_kernel_r_port_tip_y_fp
+      }
+    \__tenkz_test_wire_stroke:nn {#1}{#2}
+  }
 \cs_new_eq:NN
   \__tenkz_test_index_route:n
   \__tenkz_kernel_r_index_route:n
@@ -40,14 +76,46 @@
           }
         \tl_if_eq:NNF \l_tmpa_tl \l_tmpb_tl
           {\errmessage{deferred~port-open~label~missed~its~tip}}
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \g__tenkz_test_port_tip_x_fp
+                - \l__tenkz_kernel_r_port_tip_x_fp
+              )
+          }
+          < {0.000001}
+          {\errmessage{deferred~port-open~label~left~its~stroked~tip~in~x}}
+        \fp_compare:nNnF
+          {
+            abs
+              (
+                \g__tenkz_test_port_tip_y_fp
+                - \l__tenkz_kernel_r_port_tip_y_fp
+              )
+          }
+          < {0.000001}
+          {\errmessage{deferred~port-open~label~left~its~stroked~tip~in~y}}
       }
     \__tenkz_test_port_labelnode:nnn {#1}{#2}{#3}
+  }
+\AtEndDocument
+  {
+    \bool_if:NF \g__tenkz_test_late_hull_missing_bool
+      {\errmessage{late-host~absence~probe~did~not~run}}
+    \bool_if:NF \g__tenkz_test_late_hull_live_bool
+      {\errmessage{late-host~materialization~probe~did~not~run}}
   }
 \ExplSyntaxOff
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire}, cols=1, bonds=none]
-  \tn[ports={90:physical:$i$}]{}
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=A]{A}
+  \tn[at=(1,3), name=B]{B}
+  \tnwire[kind=string, name=carrier]{A.0}{B.180}
+  \tn[at=on carrier 0.5, name=O, skin=box,
+      ports={0:physical:$i$}]{WIDELABEL123456789}
+  \tnmark[form=enclosure]{O}{}
 \end{tenkz}
 \end{document}
