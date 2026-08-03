@@ -489,17 +489,26 @@ def _environment_scope_spans(
 
 
 def _declared_atom_commands(
-    source: str, owner_source: str
+    source: str,
+    owner_source: str,
+    execution_mask_spans: Iterable[tuple[int, int]] = (),
 ) -> frozenset[str]:
     """Return dynamic spellings as neutral, source-wide barriers.
 
     Whether ``NewDocumentCommand`` succeeds depends on TeX's ambient control
     sequence table, which a source-only scanner cannot reconstruct.  Dynamic
-    declarations therefore never grant dimension ownership here.
+    declarations therefore never grant dimension ownership here. Declarations
+    stored inside known execution-mask spans are not executed and are excluded.
     """
+    execution_mask_spans = tuple(execution_mask_spans)
     names: set[str] = set()
     for declaration in _DECLARE_ATOM_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), execution_mask_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 2
@@ -513,7 +522,12 @@ def _declared_atom_commands(
         if name is not None:
             names.add(name)
     for declaration in _KERNEL_DECLARE_RE.finditer(owner_source):
-        if not _is_control_word_start(owner_source, declaration.start()):
+        if (
+            not _is_control_word_start(owner_source, declaration.start())
+            or _position_in_spans(
+                declaration.start(), execution_mask_spans
+            )
+        ):
             continue
         arguments = _following_mandatory_arguments(
             owner_source, declaration.end(), 3
@@ -1044,6 +1058,67 @@ def _option_spans(
     return spans
 
 
+@dataclass(frozen=True)
+class _ExecutionContext:
+    """Stable definition, command, and shared execution-mask spans."""
+
+    replacement_spans: tuple[tuple[int, int], ...]
+    command_spans: tuple[_OwnerSpan, ...]
+    mask_spans: tuple[tuple[int, int], ...]
+
+
+def _execution_context(source: str, owner_source: str) -> _ExecutionContext:
+    """Resolve mutually dependent declaration and replacement masks."""
+    declared_commands = _declared_atom_commands(source, owner_source)
+    state = (declared_commands, (), ())
+    seen = {state}
+    # Every span boundary is a source offset.  The cycle check normally reaches
+    # the fixed point in two or three rounds; this finite bound is a final guard.
+    for _ in range(len(owner_source) + 2):
+        declared_commands, replacement_spans, _ = state
+        command_spans = tuple(
+            _command_spans(
+                owner_source, declared_commands, replacement_spans
+            )
+        )
+        command_quarantines = tuple(
+            (span.start, span.end)
+            for span in command_spans
+            if span.is_quarantine
+        )
+        next_replacement_spans = tuple(
+            _macro_replacement_spans(
+                owner_source, command_quarantines
+            )
+        )
+        visible_declared_commands = _declared_atom_commands(
+            source,
+            owner_source,
+            next_replacement_spans + command_quarantines,
+        )
+        # Begin with the raw source-wide superset and only remove declarations
+        # proven inert; an ambiguous self-reference therefore fails closed.
+        next_declared_commands = declared_commands.intersection(
+            visible_declared_commands
+        )
+        next_state = (
+            next_declared_commands,
+            next_replacement_spans,
+            command_quarantines,
+        )
+        if next_state == state:
+            return _ExecutionContext(
+                next_replacement_spans,
+                command_spans,
+                next_replacement_spans + command_quarantines,
+            )
+        if next_state in seen:
+            raise RuntimeError("tenkz execution masks did not converge")
+        seen.add(next_state)
+        state = next_state
+    raise RuntimeError("tenkz execution masks exceeded their source bound")
+
+
 def _comment_ranges(source: str) -> list[tuple[int, int]]:
     ranges: list[tuple[int, int]] = []
     line_start = 0
@@ -1144,38 +1219,16 @@ def scan_case_dimensions(path: Path, source: str) -> tuple[DimensionOccurrence, 
     # ``\tn%...\nput``.  Keep ownership on an offset-preserving blanked view
     # while the numeric/unit recognizer uses the collapsed mapped view above.
     owner_source = strip_comments(source)
-    declared_commands = _declared_atom_commands(source, owner_source)
-    # Definition-shaped tokens consumed by a dynamic label are inert. Discover
-    # command quarantines first so such a token cannot claim a later sibling as
-    # its replacement body; then recompute commands against the resulting mask.
-    command_prepass = _command_spans(owner_source, declared_commands)
-    command_quarantines = tuple(
-        (span.start, span.end)
-        for span in command_prepass
-        if span.is_quarantine
-    )
-    replacement_spans = _macro_replacement_spans(
-        owner_source, command_quarantines
-    )
-    command_spans = _command_spans(
-        owner_source, declared_commands, replacement_spans
-    )
-    # A quarantined command consumes any control token in its parsed extent.
-    # Keep independent option and environment scans from reactivating it.
-    execution_mask_spans = tuple(replacement_spans) + tuple(
-        (span.start, span.end)
-        for span in command_spans
-        if span.is_quarantine
-    )
+    context = _execution_context(source, owner_source)
     owner_spans = (
-        _option_spans(source, owner_source, execution_mask_spans)
-        + command_spans
+        _option_spans(source, owner_source, context.mask_spans)
+        + list(context.command_spans)
         + _environment_spans(
-            source, owner_source, execution_mask_spans
+            source, owner_source, context.mask_spans
         )
         + [
             _OwnerSpan(start, end, None, True)
-            for start, end in replacement_spans
+            for start, end in context.replacement_spans
         ]
     )
     # A semantic option value is more specific than its containing command.

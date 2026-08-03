@@ -1096,6 +1096,60 @@ def test_rmp_dimension_ownership() -> None:
             "a dynamic label masked a later active definition or command: "
             f"{active_definition_sibling!r}"
         )
+    inert_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\def\x{\tndeclareatom{\tnfoo}{skin=dot}}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(201mm,0)}{}}}",
+    )
+    if len(inert_dynamic_declaration) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in inert_dynamic_declaration
+    ):
+        raise AssertionError(
+            "an inert atom declaration created a source-wide quarantine: "
+            f"{inert_dynamic_declaration!r}"
+        )
+    active_dynamic_declaration = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tnput{x}{(202mm,0)}{}}}",
+    )
+    if len(active_dynamic_declaration) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_dynamic_declaration
+    ):
+        raise AssertionError(
+            "an active atom declaration lost its dynamic quarantine: "
+            f"{active_dynamic_declaration!r}"
+        )
+    declaration_in_dynamic_label = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo{\tndeclareatom{\tnbar}{skin=dot}}"
+        r"\tnbar{\tnput{x}{(203mm,0)}{}}}",
+    )
+    if len(declaration_in_dynamic_label) != 1 or any(
+        occurrence.owner is not DimensionOwner.LAYOUT
+        for occurrence in declaration_in_dynamic_label
+    ):
+        raise AssertionError(
+            "a declaration consumed by a dynamic label escaped its mask: "
+            f"{declaration_in_dynamic_label!r}"
+        )
+    active_declaration_sibling = scan_case_dimensions(
+        Path("synthetic.tex"),
+        r"\tndeclareatom{\tnfoo}{skin=dot}"
+        r"\tnarrow{\tnfoo A\tndeclareatom{\tnbar}{skin=dot}"
+        r"\tnbar{\tnput{x}{(204mm,0)}{}}}",
+    )
+    if len(active_declaration_sibling) != 1 or any(
+        occurrence.owner is not None
+        for occurrence in active_declaration_sibling
+    ):
+        raise AssertionError(
+            "an active sibling declaration lost its dynamic quarantine: "
+            f"{active_declaration_sibling!r}"
+        )
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
