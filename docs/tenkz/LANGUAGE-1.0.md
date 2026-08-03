@@ -30,9 +30,10 @@ table below is checked against the registry by the census.
 
 > A picture draws one typed tensor network in one frame. Frames — flat,
 > projected, circular, each with a basis, at picture, group, or atom position
-> — give every address a place and a pair of axes, so an author writes
-> addresses and never measures, and orientation is a consequence of where a
-> record sits. The body declares atoms, wires, and marks. Every index ends
+> — give every address a place and local axes. A projected sheet also owns its
+> page-transverse physical axis. Thus an author writes addresses and never
+> measures, and orientation is a consequence of where a record sits. The body
+> declares atoms, wires, and marks. Every index ends
 > in exactly one of a bond, a closure, or a declared open leg. Equations
 > compose whole pictures under one shared metric and must expose equal
 > boundaries. The language grows by declaration, never by drawing.
@@ -305,6 +306,14 @@ to three words with no parameters — `flat`, `plane`, `circle`. For `flat` and
 `circle` they are the tangent and the outward radius and they vary by
 station. An address on a carrier — a wire, a leg, a hull — takes the
 carrier's axes.
+
+A plane has one further direction. Its two local axes lie in the projected
+sheet; its physical axis points vertically on the page and belongs to the
+frame itself. Thus `physical=up` leaves a site along that third axis, whereas
+`ports={90:physical}` still means the in-plane north face. The two statements
+are deliberately different. A plane tensor with four virtual faces and one
+physical face is therefore written with four numeric ports and the physical
+policy; no fifth angle compensates for the projection.
 
 The numeric page angle and the general matrix retire together, and the
 transposed projection with them. Of the four rotation consumers the contract
@@ -675,16 +684,18 @@ Write a physical label on its typed port, once:
 \end{tenkz}
 ```
 
-Here the descriptor creates the standard `port-open` leg and suppresses the
-otherwise generated policy leg. If an authored wire consumes `A.90`, the same
-descriptor labels that wire in the final port-label pass. With no descriptor,
-the policy still refines a consumed `A.90` endpoint to physical, but carries
-no label of its own.
+Here, in the flat frame, the descriptor creates the standard `port-open` leg
+and suppresses the otherwise generated policy leg. If an authored wire
+consumes `A.90`, the same descriptor labels that wire in the final port-label
+pass. With no descriptor, the policy still refines a consumed `A.90` endpoint
+to physical, but carries no label of its own. In a plane frame the policy leg
+is the independent transverse axis described in Section 4; no numeric
+`ports=` face aliases or consumes it.
 
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: declares each eligible atom's outward centre port physical; a wire endpoint at that port inherits the type, and a matching `ports=` descriptor uses the ordinary wire or `port-open` label owner |
+| `physical=up\|down\|updown\|none` | expander: declares each eligible atom's frame-owned outward centre port physical; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
