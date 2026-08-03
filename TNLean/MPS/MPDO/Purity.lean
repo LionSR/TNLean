@@ -20,7 +20,7 @@ MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N
   = Matrix.trace (mpo K N * (mpo K N)ᴴ)
 ```
 
-Both sides are sums over physical data: the left side runs over doubled-index
+Both sides are sums over physical configurations: the left side runs over doubled-index
 words `Fin N → Fin (d * d)`, while the right side expands to the Frobenius
 inner product `∑_{σ,τ} mpo K N σ τ * star (mpo K N σ τ)` over pairs `(σ, τ)`
 of ket/bra configurations.  The proof is a finite reindexing along the
