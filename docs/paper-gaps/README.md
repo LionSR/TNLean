@@ -51,17 +51,16 @@ For MPDO renormalization fixed points:
   this restriction from the generic physical-coordinate transport identities,
   which make explicit a basis change that the source uses without stating the
   corresponding two-site and four-site congruences.
-- `cpsv16_vertical_sector_invertibility.tex` separates the proved fixed
-  contraction families and product-generation theorem from the remaining
-  density-weighted fixed-point argument in Appendix C.4. Wolf's full
-  fixed-point theorem, including maximal-support reduction and the
-  complementary zero summand, and its full-support direct-sum consequence are
-  now formalized.  The two transported square composites are proved trace
-  preserving on the full sector algebras by a maximal-support argument, and a
-  trace sandwich gives the same conclusion for each transported map; the
-  complete-positivity and adjoint Schwarz hypotheses remain.  The note also
-  records that sector relabelling follows from mutually inverse positive
-  trace-preserving maps, not from a bare linear equivalence.
+- `cpsv16_vertical_sector_invertibility.tex` records the fixed contraction
+  families and product-generation theorem used in Appendix C.4. The later
+  mixed one-site/two-site comparison and zero-sector completion close the
+  density-weighted argument: Theorem 4.14(i)--(ii) is formalized under the
+  source's literal canonical-form and MPDO hypotheses, and the corresponding
+  (i)--(iii) equivalence is formalized for the documented active-support
+  correction of the printed fusion clause. See
+  `cpsv16_two_site_sector_unitary_gauge_gap.tex` and
+  `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean`. The unrestricted printed
+  statement (iii), including inactive product sectors, is not claimed.
 - `cpsv16_simple_tensor_nilpotency.tex` identifies the source's nilpotent BNT
   elements with nilpotent physical-trace transfer matrices and records the
   positive physical blocking and chosen-BNT interpretation of the
