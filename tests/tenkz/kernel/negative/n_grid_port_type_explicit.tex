@@ -1,0 +1,10 @@
+% Negative: matching grid endpoints must have the same explicit port type.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn[ports={0:physical}]{A} &
+  \tn[ports={180:virtual}]{B}
+\end{tenkz}
+\end{document}
