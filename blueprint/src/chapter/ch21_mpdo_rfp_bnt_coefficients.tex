@@ -567,7 +567,7 @@
     The power sums of a family of ones do not depend on the exponent.
 \end{proof}
 
-\begin{remark}[Topological order and an open question]%
+\begin{remark}[Topological order and length dependence]%
     \label{rem:mpdo_bnt_label_length_independent_topological}
     Starting from the same-length product law and the idempotent condition,
     in the particular case of natural-number structure coefficients
@@ -576,10 +576,48 @@
     excitations \cite{Bultinck2017Anyons}. The renormalization fixed-point
     density operators correspond to the boundary theories of the
     renormalization fixed-point representatives of those phases, which
-    yields a large family of non-trivial examples. Whether there exist
-    renormalization fixed points whose structure coefficients depend on the
-    length is left open in \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
+    yields a large family of non-trivial examples. The source asks whether
+    there exist renormalization fixed points whose structure coefficients
+    depend on the length \cite[Section~4.5]{Cirac2016MPDO_arXiv}. The example
+    below answers this existential question affirmatively for its displayed
+    BNT presentation.
 \end{remark}
+
+\begin{theorem}[An RFP with length-dependent BNT coefficients]%
+    \label{thm:mpdo_length_dependent_rfp_example}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        normalizedSingletonCoeffs_coeff_one_ne_coeff_two}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        normalizedSingletonCoeffs_not_lengthIndependent}
+    \lean{MPOTensor.BondTwoSingletonBaseModel.%
+        exists_isRFPViaTS_not_lengthIndependent_bntCoefficients}
+    \leanok
+    \uses{def:mpdo_bnt_label_length_independent,
+        thm:mpdo_bnt_algebra_tensor_to_rfp}
+    There is an MPDO $M$ in literal CPSV canonical form that is a
+    renormalization fixed point and has a tensor-attached BNT presentation
+    with one label and
+    \begin{align}
+        c^{(L)}=\left(\sqrt{\frac12}\right)^L.
+        \notag
+    \end{align}
+    In particular, $c^{(1)}\ne c^{(2)}$, so the displayed coefficient system
+    depends on the chain length. This is an existential statement about the
+    exhibited BNT presentation; it does not assert that length dependence is
+    invariant under every possible presentation of $M$.
+\end{theorem}
+\begin{proof}\leanok
+    The bond-two singleton tensor is positive on every nonempty chain, is in
+    literal canonical form, and carries the displayed one-label BNT algebra
+    clause. The reverse implication of Theorem~4.14 supplies the two
+    trace-preserving completely positive renormalization maps. Finally,
+    \begin{align}
+        \sqrt{\frac12}\ne\frac12
+        =\left(\sqrt{\frac12}\right)^2,
+        \notag
+    \end{align}
+    which proves the length dependence.
+\end{proof}
 
 \begin{definition}[Linearly independent operator family]%
     \label{def:mpdo_bnt_label_linear_independent}
