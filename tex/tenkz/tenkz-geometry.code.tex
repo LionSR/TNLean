@@ -38,12 +38,21 @@
 % ---------- frames ----------------------------------------------------------
 % A frame record is six fp fields (row-major matrix a b / c d, offset dx dy)
 % for kind=affine, or fields n (stations), r (radius), start (degrees) for
-% kind=circle.  Frames are picture-local.
+% kind=circle.  A projected plane additionally owns one page-space transverse
+% vector.  Frames are picture-local.
 \prop_new:N \l__tenkz_geom_frame_prop     % "name/field" -> fp literal
 \prop_new:N \l__tenkz_geom_framekind_prop % "name" -> affine | circle
+\fp_const:Nn \c__tenkz_geom_plane_transverse_x_fp {0}
+\fp_const:Nn \c__tenkz_geom_plane_transverse_y_fp {1}
 
 \cs_new_protected:Npn \__tenkz_geom_frame_put:nnn #1#2#3
   { \prop_put:Nen \l__tenkz_geom_frame_prop { #1 / #2 } { \fp_eval:n {#3} } }
+
+\cs_new_protected:Npn \__tenkz_geom_frame_declare_transverse:nnn #1#2#3
+  {
+    \__tenkz_geom_frame_put:nnn {#1} {transverse-x} {#2}
+    \__tenkz_geom_frame_put:nnn {#1} {transverse-y} {#3}
+  }
 
 \cs_new_protected:Npn \__tenkz_geom_frame_declare_affine:nnnnnnn #1#2#3#4#5#6#7
   {
@@ -67,6 +76,11 @@
       { -\__tenkz_metric_ratio:n {planerise} } {0}
       { \__tenkz_metric_ratio:n {planeslant} - 1 }
       { \__tenkz_metric_ratio:n {planerise} }
+    % The projected carrier is the zx plane; its physical y axis stays
+    % vertical on the page and is not a direction in the affine plane basis.
+    \__tenkz_geom_frame_declare_transverse:nnn {#1}
+      { \c__tenkz_geom_plane_transverse_x_fp }
+      { \c__tenkz_geom_plane_transverse_y_fp }
   }
 % flat is the identity; a rotation frame is one call with cosd/sind
 \cs_new_protected:Npn \__tenkz_geom_frame_declare_rotation:nnnn #1#2#3#4
@@ -84,6 +98,22 @@
 
 \cs_new:Npn \__tenkz_geom_field:nn #1#2
   { \prop_item:Nn \l__tenkz_geom_frame_prop { #1 / #2 } }
+
+% Return the signed page vector on the independent transverse axis.  Only a
+% frame which declares that third carrier direction may call this service;
+% flat and circular physical directions continue through their local bases.
+\cs_new_protected:Npn \__tenkz_geom_frame_transverse:nnNN #1#2#3#4
+  {
+    \str_if_eq:nnTF {#2} {n}
+      {
+        \tl_set:Ne #3 { \__tenkz_geom_field:nn {#1} {transverse-x} }
+        \tl_set:Ne #4 { \__tenkz_geom_field:nn {#1} {transverse-y} }
+      }
+      {
+        \tl_set:Ne #3 { -\__tenkz_geom_field:nn {#1} {transverse-x} }
+        \tl_set:Ne #4 { -\__tenkz_geom_field:nn {#1} {transverse-y} }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_geom_require_kind:nnnN #1#2#3#4
   {
     \bool_set_false:N #4

@@ -55,6 +55,46 @@ grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
 }
+[ "$(grep -c '|origin=open|' \
+      "$WORK/r_plane_open_perimeter.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: four open plane sides did not materialize 12 perimeter wires" >&2
+  exit 1
+}
+[ "$(grep -c '|origin=grid|' \
+      "$WORK/r_plane_open_perimeter.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: the open 3x3 plane did not retain 12 interior grid bonds" >&2
+  exit 1
+}
+for side in west east north south; do
+  [ "$(grep -F '|origin=open|' "$WORK/r_plane_open_perimeter.tnlog" | \
+        grep -c "|side=$side|" || true)" -eq 3 ] || {
+    echo "FAIL: plane side $side did not own three open wires" >&2
+    exit 1
+  }
+done
+open_perimeter=$(grep -F '|origin=open|' \
+  "$WORK/r_plane_open_perimeter.tnlog")
+[ "$(printf '%s\n' "$open_perimeter" | \
+      grep -Ec '\|(from|to)=addr-[0-9]+' || true)" -eq 12 ] || {
+  echo "FAIL: a plane-side opening lost its boundary-cell endpoint" >&2
+  exit 1
+}
+[ "$(printf '%s\n' "$open_perimeter" | \
+      grep -Ec '\|(from|to)-open=[nesw](\||$)' || true)" -eq 12 ] || {
+  echo "FAIL: a plane-side opening lost its exterior endpoint" >&2
+  exit 1
+}
+grep -Fxq \
+  'kernel-boundary|signature=open:e, open:e, open:e, open:n, open:n, open:n, open:s, open:s, open:s, open:w, open:w, open:w' \
+  "$WORK/r_plane_open_perimeter.tnlog" || {
+  echo "FAIL: the open 3x3 plane did not expose its twelve perimeter indices" >&2
+  exit 1
+}
+if grep -Fq '|origin=port-open|' \
+    "$WORK/r_plane_open_perimeter.tnlog"; then
+  echo "FAIL: explicit open sides left duplicate typed-port stubs" >&2
+  exit 1
+fi
 grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1
@@ -270,7 +310,7 @@ plane_frame_canonical=$(
     sed -E 's/^frame\|id=frame-[0-9]+\|/frame|/'
 )
 [ "$plane_frame_canonical" = \
-  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture' ] || {
+  'frame|a=-0.45|b=1|c=-0.60|d=0|dx=-0.55|dy=0.60|map=plane|scope=picture|transverse-x=0|transverse-y=1' ] || {
   echo "FAIL: frame=plane did not record the fixed projected basis" >&2
   exit 1
 }
@@ -313,8 +353,29 @@ python3 "$REPO/scripts/tenkz_audit.py" \
   exit 1
 }
 [ "$(grep -Ec 'check\|scope=[0-9]+\|relation=1\|result=equal' \
-      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 7 ] || {
-  echo "FAIL: physical policy sugar diverged from explicit typed ports" >&2
+      "$WORK/r_physical_port_signature_equiv.tnlog" || true)" -eq 6 ] || {
+  echo "FAIL: in-plane physical policy sugar diverged from explicit typed ports" >&2
+  exit 1
+}
+[ "$(grep -c '^frame|.*|transverse-x=0|transverse-y=1$' \
+      "$WORK/r_plane_transverse_physical.tnlog" || true)" -eq 3 ] || {
+  echo "FAIL: plane frames did not expose their transverse physical axis" >&2
+  exit 1
+}
+for signature in \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:n' \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:s' \
+  'open:233.130102, open:53.130102, open:e, open:w, phys:n, phys:s'
+do
+  grep -Fq "kernel-boundary|signature=$signature" \
+      "$WORK/r_plane_transverse_physical.tnlog" || {
+    echo "FAIL: plane transverse policy lost boundary $signature" >&2
+    exit 1
+  }
+done
+[ "$(grep -c '|origin=port-open|' \
+      "$WORK/r_plane_transverse_physical.tnlog" || true)" -eq 12 ] || {
+  echo "FAIL: plane transverse policy consumed an in-plane virtual port" >&2
   exit 1
 }
 [ "$(grep -c 'kernel-boundary|signature=$' \
@@ -750,6 +811,111 @@ grep -Fq '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" || {
 if grep -F '|cluster-of=C|' "$WORK/r_physical_policy.tnlog" |
    grep -Fq '|physical='; then
   echo "FAIL: physical policy reached a cluster sub-atom" >&2
+  exit 1
+fi
+for carrier in A B K; do
+  if ! grep -F "|name=$carrier|" "$WORK/r_physical_policy.tnlog" |
+       grep -Fq '|physical=up'; then
+    echo "FAIL: physical policy missed address-bearing atom $carrier" >&2
+    exit 1
+  fi
+done
+for overlay in R M O X; do
+  overlay_record=$(grep -F "|name=$overlay|" "$WORK/r_physical_policy.tnlog") || {
+    echo "FAIL: geometric overlay $overlay disappeared from the model" >&2
+    exit 1
+  }
+  if printf '%s\n' "$overlay_record" | grep -Fq '|physical='; then
+    echo "FAIL: physical policy leaked onto geometric overlay $overlay" >&2
+    exit 1
+  fi
+done
+if ! grep -F '|origin=port-open|' "$WORK/r_physical_policy.tnlog" |
+     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+  echo "FAIL: an overlay's explicit physical port depended on picture policy" >&2
+  exit 1
+fi
+grep -Fq 'kernel-boundary|signature=phys:n, phys:n, phys:n' \
+    "$WORK/r_physical_policy.tnlog" || {
+  echo "FAIL: overlay explicit-port boundary diverged from two policy ports" >&2
+  exit 1
+}
+
+affine_log="$WORK/r_affine_geometric_addresses.tnlog"
+affine_topology_atoms=$(
+  awk '
+    /^picture\|id=k1\|/ { inside=1; next }
+    /^picture\|/ { inside=0 }
+    inside && /^atom\|/ { count++ }
+    END { print count + 0 }
+  ' "$affine_log"
+)
+[ "$affine_topology_atoms" -eq 11 ] || {
+  echo "FAIL: affine route topology did not contain nine cells and two beads" >&2
+  exit 1
+}
+affine_policy_atoms=$(
+  awk '
+    /^picture\|id=k2\|/ { inside=1; next }
+    /^picture\|/ { inside=0 }
+    inside && /^atom\|/ { count++ }
+    END { print count + 0 }
+  ' "$affine_log"
+)
+[ "$affine_policy_atoms" -eq 11 ] || {
+  echo "FAIL: affine ownership picture did not contain eleven atoms" >&2
+  exit 1
+}
+affine_policy_fields=$(
+  awk '
+    /^picture\|id=k2\|/ { inside=1; next }
+    /^picture\|/ { inside=0 }
+    inside && /^atom\|/ && /\|physical=up/ { count++ }
+    END { print count + 0 }
+  ' "$affine_log"
+)
+[ "$affine_policy_fields" -eq 9 ] || {
+  echo "FAIL: affine physical policy was not owned by exactly nine cells" >&2
+  exit 1
+}
+for overlay in policy-bead-one policy-bead-two; do
+  overlay_record=$(grep -F "|name=$overlay|" "$affine_log") || {
+    echo "FAIL: affine ownership overlay $overlay disappeared" >&2
+    exit 1
+  }
+  if printf '%s\n' "$overlay_record" | grep -Fq '|physical='; then
+    echo "FAIL: affine physical policy leaked onto $overlay" >&2
+    exit 1
+  fi
+done
+affine_grid_bonds=$(grep -c '|origin=grid|' "$affine_log" || true)
+[ "$affine_grid_bonds" -eq 12 ] || {
+  echo "FAIL: affine three-by-three topology did not retain twelve grid bonds" >&2
+  exit 1
+}
+grep -Fq \
+  'stringcross|under=bond-2-2-3-2|over=anyon|hits=1' "$affine_log" || {
+  echo "FAIL: affine route missed its vertical grid crossing" >&2
+  exit 1
+}
+grep -Fq \
+  'stringcross|under=bond-2-2-2-3|over=anyon|hits=1' "$affine_log" || {
+  echo "FAIL: affine route missed its horizontal grid crossing" >&2
+  exit 1
+}
+if ! grep -F '|name=anyon|' "$affine_log" |
+     grep -Fq '|route=orth|'; then
+  echo "FAIL: affine route lost its source-shaped polyline" >&2
+  exit 1
+fi
+if ! grep -F '|name=anyon|' "$affine_log" |
+     grep -Fq 'midway istar and c22, midway c32 and c23, midway c22 and i'; then
+  echo "FAIL: affine route lost its three logical waypoints" >&2
+  exit 1
+fi
+if ! grep -F '|origin=port-open|' "$affine_log" |
+     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+  echo "FAIL: affine overlay explicit port depended on inherited policy" >&2
   exit 1
 fi
 grep -Fq '|weight=bundle=3' "$WORK/r_bundle_weight.tnlog" || {
@@ -1257,6 +1423,36 @@ if grep -Fq 'result=equal' "$WORK/n_signature_mismatch.tnlog"; then
   echo "FAIL: signature mismatch emitted a false equal verdict" >&2
   exit 1
 fi
+
+plane_transverse_signature="$KERNEL/negative/n_plane_transverse_signature.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$plane_transverse_signature" \
+       >"$WORK/n_plane_transverse_signature.transcript" 2>&1 ); then
+  echo "FAIL: a plane transverse leg was identified with an in-plane port" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' \
+    "$WORK/n_plane_transverse_signature.transcript" || {
+  echo "FAIL: plane transverse mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'signature=phys:n' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: plane policy did not expose its transverse north bearing" >&2
+  exit 1
+}
+grep -Fq 'signature=phys:53.130102' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: authored plane port lost its projected in-plane bearing" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch' \
+    "$WORK/n_plane_transverse_signature.tnlog" || {
+  echo "FAIL: plane transverse mismatch was not recorded" >&2
+  exit 1
+}
 
 prose_negative="$KERNEL/negative/n_prose_signature.tex"
 if ( cd "$WORK" &&
