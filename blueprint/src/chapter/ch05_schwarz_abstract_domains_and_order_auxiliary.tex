@@ -386,3 +386,66 @@ positivity.
     The resulting expectation value is negative, so the Choi matrix is not
     positive semidefinite.
 \end{proof}
+
+\subsection{Two-variable operator Schwarz inequality}
+
+\begin{lemma}[Two-variable operator Schwarz inequality, conditional form]
+    \label{lem:two_variable_operator_schwarz_conditional}
+    \lean{SchwarzTwoVariable.schwarz_two_variable}
+    \leanok
+    \uses{def:2positive_map}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
+    For every $A,B\in\MN{D}$ and all vectors $v,w$ such that
+    $E(B^\dagger B)\,w = E(B^\dagger A)\,v$, we have
+    \begin{align}
+        v^\dagger\,E(A^\dagger A)\,v
+         & \ge v^\dagger\,E(A^\dagger B)\,w.
+        \notag
+    \end{align}
+    This is the pseudoinverse-free form of
+    \cite[Eq.~(5.4)]{Wolf2012Quantum}: the usual statement
+    $E(A^\dagger B)\,E(B^\dagger B)^{-1}E(B^\dagger A)\le E(A^\dagger A)$
+    (with inverse taken on the range) follows by taking
+    $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+
+    Write $C$ for the horizontal concatenation $[A\;B]$.
+    The block matrix $C^\dagger C$ is positive semidefinite.
+    Applying the $2$-positive ampliation entrywise yields the PSD block matrix
+    $\bigl[\begin{smallmatrix}
+        E(A^\dagger A) & E(A^\dagger B)\\
+        E(B^\dagger A) & E(B^\dagger B)
+    \end{smallmatrix}\bigr]$.
+    Evaluating the PSD quadratic form on the vector $(v,-w)$ and using
+    the side condition $E(B^\dagger B)w = E(B^\dagger A)v$ to cancel the
+    off-diagonal and diagonal terms yields
+    $v^\dagger E(A^\dagger A)v - v^\dagger E(A^\dagger B)w \ge 0$.
+\end{proof}
+
+\begin{theorem}[Two-variable operator Schwarz inequality]
+    \label{thm:two_variable_operator_schwarz}
+    % (lean target: schwarz_two_variable_unconditional — not yet defined)
+    \uses{def:2positive_map}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
+    For every $A,B\in\MN{D}$ and every vector $v$,
+    \begin{align}
+        v^\dagger\,E(A^\dagger A)\,v
+         & \ge \sup_{w\,:\,E(B^\dagger B)w=E(B^\dagger A)v}
+            v^\dagger\,E(A^\dagger B)\,w,
+        \notag
+    \end{align}
+    where the supremum is taken over all $w$ satisfying the side condition.
+    Equivalently, for every $v$ there exists a vector $w$ with
+    $E(B^\dagger B)w = E(B^\dagger A)v$ such that
+    $v^\dagger E(A^\dagger A)v \ge v^\dagger E(A^\dagger B)w$,
+    and the value $v^\dagger E(A^\dagger B)w$ is independent of the choice
+    of such $w$.
+    This is \cite[Eq.~(5.4)]{Wolf2012Quantum}.
+    \notready
+    % Missing: existence of w via ran(E(B†B)) = ker(E(B†B))⊥.
+    % The conditional form (Lemma~\ref{lem:two_variable_operator_schwarz_conditional})
+    % is formalized; the unconditional form needs EuclideanSpace range/ker duality.
+\end{theorem}

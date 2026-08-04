@@ -76,7 +76,14 @@ Source: Wolf, local source
 def multiplicativeDomain (E : Mat →ₗ[ℂ] Mat) : Set Mat :=
   rightMultiplicativeDomain E ∩ leftMultiplicativeDomain E
 
-private theorem linear_eq_zero_of_quadratic_nonneg
+/-- If a real quadratic form `t ↦ t * b + t ^ 2 * d` is nonnegative for every
+`t : ℝ`, then its linear coefficient `b` vanishes (evaluate at small positive
+and negative `t`).
+
+Source: Wolf, *Quantum Channels & Operations*, Chapter 5, the quadratic-form
+step of the multiplicative-domain argument, local source
+`Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`, lines 391--392. -/
+theorem linear_eq_zero_of_quadratic_nonneg
     (b d : ℝ) (h : ∀ t : ℝ, 0 ≤ t * b + t ^ 2 * d) :
     b = 0 := by
   have hd : 0 ≤ d := by
