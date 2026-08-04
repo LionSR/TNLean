@@ -1436,3 +1436,25 @@ for the four added open-wire lines. No parser spelling, registry row,
 alias, escape, or overload changes.
 
 Census-correction: #5477
+
+### 2026-08-05 — the condensation panel derives its doubled plane from the frame
+
+The condensation panel (`rmp-iii-b-condensation`) leaves the lattice tier
+for the kernel: one plane frame with the contract bilayer basis (the
+`planes` preset) owns both 6x4 sheets, and every site pair, in-sheet bond,
+inter-sheet contraction, and perimeter opening is a member-addressed
+declaration.  The six interior path marks become portless affine beads --
+atoms one fractional pitch step east of their member sites -- and each
+sheet's marked string routes through its beads, which closes the
+structural gap the 2026-08-03 review recorded against the shared
+doubled-plane basis scaffold.  M4 rises from 18.72 to 19.15 because the
+kernel case names the 142 incidences the retiring preset implied.  The
+scaffold rides the existing frame, basis, and address machinery: no
+parser spelling, registry row, alias, escape, overload, page-distance
+constant, or case-specific metric is added, and the dimension census is
+unchanged.  The regression
+`tests/tenkz/kernel/regression/r_planes_doubled_scaffold.tex` pins the
+two-sheet population, the claimed member, the per-sheet bead offsets
+through the plane map, and the via-routed sheet strings.
+
+Census-correction: #5348

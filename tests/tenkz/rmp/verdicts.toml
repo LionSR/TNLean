@@ -834,15 +834,14 @@ note = "the plane projection restores upper i, lower j, upper R_{i,b}, lower R_{
 
 [[verdict]]
 id = "rmp-iii-b-condensation"
-status = "structural-gap"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-source-topology-review-2026-08-02"
-defects = ["missing-element"]
-missing = ["shared-doubled-plane-basis-scaffold"]
-case_sha256 = "392ec0951645c9a41dc7878b8e13a0b98224a53c43b5699bdc73199c4e941198"
-reviewed = "2026-08-03"
-renderer = "codex-doubled-plane-source-review-2026-08-03-200dpi"
-note = "the legacy render preserves both 6x4 grids, all 40 perimeter openings, and all 24 inter-sheet contractions, but its six interior path marks are PEPS sites rather than portless affine beads; a faithful migration needs the shared doubled-plane basis scaffold tracked in #5348 and #5086"
+defects = []
+case_sha256 = "1344b6356d4b7a8d4b26860e68d7286603d24429c7de64beca30f819a94f0a10"
+reviewed = "2026-08-05"
+renderer = "fable-doubled-plane-migration-review-2026-08-05-200dpi"
+note = "the kernel plane bilayer keeps both 6x4 sheets, all 40 perimeter openings, all 24 inter-sheet contractions, and both marked strings, whose six interior marks are now portless affine beads dressing the crossed bonds; residues: the string bows between beads where the source runs taut, and the contract bilayer basis ties each sheet pair along the in-plane diagonal rather than the source's vertical drop"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
