@@ -48,13 +48,13 @@ where `(p,q)` are physical indices and `(a,b)` are bond indices.
   letters entangle bra- and ket-side labels, so no purification tensor
   exists.  Verified numerically (N = 1, 2, 3: PSD, trace 1).
 * The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
-with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
+with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
 renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
 The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
 the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
 unital and having eigenvalues `{1, 7/25, 0, 0}`, hence primitive with
 spectral radius 1.  Completing the normality verification and the
-tpCP‑map construction yields `IsRFPViaTS R` via Theorem 4.14.
+tpCP‑map construction yields `IsRFPViaTS R` via Theorem 4.14.
 
 ## References
 
