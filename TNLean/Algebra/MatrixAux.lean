@@ -70,6 +70,31 @@ namespace Matrix
 
 /-! ## Hermitian matrix action -/
 
+/-- A Hermitian matrix may be moved between the two arguments of the complex
+dot product. -/
+theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
+    {S : Matrix n n ℂ} (hS : S.IsHermitian) (x y : n → ℂ) :
+    star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
+  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
+
+/-- A matrix factor moves across the complex dot product as its conjugate
+transpose. -/
+theorem star_dotProduct_mulVec {m n : Type*} [Fintype m] [Fintype n]
+    (A : Matrix m n ℂ) (x : m → ℂ) (y : n → ℂ) :
+    star x ⬝ᵥ (A *ᵥ y) = star (Aᴴ *ᵥ x) ⬝ᵥ y := by
+  rw [star_mulVec, conjTranspose_conjTranspose, ← Matrix.dotProduct_mulVec]
+
+/-! ## Euclidean norms and the L² operator norm -/
+
+open scoped Matrix.Norms.L2Operator InnerProductSpace
+
+/-- The squared Euclidean norm of a complex vector is the real part of its
+standard sesquilinear self-pairing. -/
+theorem re_star_dotProduct_self_eq_norm_sq {n : Type*} [Fintype n] (v : n → ℂ) :
+    RCLike.re (star v ⬝ᵥ v) = ‖(EuclideanSpace.equiv n ℂ).symm v‖ ^ 2 := by
+  rw [norm_sq_eq_re_inner (𝕜 := ℂ), EuclideanSpace.inner_eq_star_dotProduct,
+    PiLp.coe_symm_continuousLinearEquiv, WithLp.ofLp_toLp, dotProduct_comm]
+
 /-- Vectorwise bounds give a bound on the L² operator norm of a matrix. -/
 theorem l2_opNorm_le_of_forall {m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
     {A : Matrix m n ℂ} {r : ℝ} (hr : 0 ≤ r)
