@@ -3,57 +3,61 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.Purity
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
-import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.Analysis.MatrixTraceInequalities
-import TNLean.Algebra.PerronFrobenius.Substochastic
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Algebra.PerronFrobenius.RankOne
 
 /-!
-# Lemma C.5 Case I: singleton active-sector consequence
+# Lemma C.5 Case I: active-sector trace matrix components
 
-For an MPO tensor `K` whose doubled-index MPS tensor is normal in the sense of
-`MPSTensor.IsNormalTensor` (lines 219–235) and whose physical-trace transfer
-satisfies the literal zero-correlation-length identity
-`physTraceTransfer K * physTraceTransfer K = physTraceTransfer K` (lines
-735–741), under the Case-I positivity and zero-weight-vanishing hypotheses of
-Lemma C.4 (lines 1406–1471), the active sector set is a singleton.
-Consequently the Case-I relations `T² = T` and `Q(1−LQ)L = 0` of Lemma `SALZCL`
-(lines 1473–1499) hold.
+This file provides the matrix-algebra components of the Case-I argument in
+the proof of Lemma `SALZCL` (arXiv:1606.00608, Appendix C.2, lines
+1473–1499), which states that a zero-correlation-length (ZCL) source yields
+a structured active-level (SAL) decomposition for simple MPO tensors.  The
+Case-I content carried here is the C.4–C.5 argument that the active-sector
+trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
+is positive.
 
-The proof follows the route outlined in the paper-gap note
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` (arXiv:1606.00608,
-Appendix C.2, Lemma `SALZCL`, lines 1473--1499).
+The file does **not** assemble the full singleton-sector consequence
+(`card(ActiveSector p) = 1`).  That assembly depends on two further pieces
+documented at the end of the file:
+
+* trace similarity `tr(Ŝ^N) = tr(S^N)` under diagonal scaling,
+* the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))` connecting
+  the doubled-index MPS self-overlap to the active-sector trace-squared
+  matrix `S_{kh} = Re(tr(η_{kh}²))`.
+
+With those, the route sketched in the paper-gap note
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` completes the Case-I
+singleton conclusion.
+
 ## Main declarations
 
 * `activeSectorTraceSqMatrix`: the matrix `S_{kh} = Re(tr(η_{kh}²))`
 * `activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq`:
   `S_{kh} ≤ T_{kh}²` entrywise
-* `lemmaC5_caseI_singleton`: under the Case-I hypotheses, the active sector
-  set is a singleton; consequently `T² = T` and `Q(1−LQ)L = 0`.
+* `activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`:
+  literal ZCL `physTraceTransfer² = physTraceTransfer` forces `T² = T³`
+* `activeSectorTraceMatrix_primitive`:
+  the active trace matrix `T` is primitive under the Case-I hypotheses
+* `activeSectorTraceMatrix_pow_two_pos`:
+  every entry of `T²` is strictly positive
 
 ## Source fidelity
 
-* Normal tensor: arXiv:1606.00608, lines 219–235
-* `equalMPS`: lines 1080–1100
-* `DefinitionZCL`: lines 735–741
-* Case-I assumptions: lines 1374–1381
-* Lemma C.4: lines 1406–1471
+* Lemma C.4 (`propSN`): arXiv:1606.00608, Appendix C.2, lines 1406–1471
 * Lemma C.5 (`SALZCL`): lines 1473–1499
 * Cyclic direct-sum form: lines 1580–1593
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-open Filter
 
 namespace MPOTensor
 
@@ -64,7 +68,7 @@ variable {d D : ℕ} (K : MPOTensor d D)
 /-- The active-sector trace-**squared** matrix:
 `S_{kh} = Re(tr(η_{kh}²))`.
 
-This is the matrix `S` defined in the Lemma C.5 Case-I proof.Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
+This is the matrix `S` defined in the Lemma C.5 Case-I proof.  Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
 matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
@@ -215,29 +219,6 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
 -- two additional pieces that are documented below.
 -- ====================================================================
 
-/-- Under the Case-I hypotheses on `K`, `F`, `hpos`, the squared
-active-sector trace matrix `S_{kh} = Re(tr(η_{kh}²))` satisfies
-`S_{kh} ≤ T_{kh}²` entrywise, where `T` is the active-sector trace matrix.
-
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1474--1476. -/
-theorem activeSectorTraceSqMatrix_entrywise_le (F : PhysicalSectorFactorization K)
-    (p : Fin F.sectorCount → ℝ) (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
-    (k h : F.ActiveSector p) :
-    activeSectorTraceSqMatrix K F p k h ≤ ((F.activeSectorTraceMatrix p) k h) ^ 2 :=
-  activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos k h
-
-/-- Literal ZCL `physTraceTransfer² = physTraceTransfer` forces `T² = T³`
-for the active-sector trace matrix, with no scalar normalization.
-
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
-theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL'
-    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
-    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
-    (F.activeSectorTraceMatrix p) ^ 2 = (F.activeSectorTraceMatrix p) ^ 3 :=
-  activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
-
 /-- Under the Case-I spanning/nonzero/triangle hypotheses, the active
 trace matrix `T` is primitive.  Consequently every entry of `T²` is strictly
 positive under the additional hypothesis `T² = T³`.
@@ -283,11 +264,11 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
 --
 -- 2. Overlap formula: mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
 --    = Complex.ofReal(tr(S^N)) for N > 0.  Requires physical-isometry
---    bridge, block-diagonal decomposition, squared-trace lemma, and
+--    conjugation, block-diagonal decomposition, squared-trace lemma, and
 --    trace-cycle identity.
 --
--- With these, the proof of lemmaC5_caseI_singleton is complete;
--- all other components are proved in this file.
+-- With these, the full Case-I singleton-consequence argument
+-- is complete; all matrix-algebra components are proved above.
 --
 -- Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (SALZCL), lines 1473--1499.
 -- ====================================================================
