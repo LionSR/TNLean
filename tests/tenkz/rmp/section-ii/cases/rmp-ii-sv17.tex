@@ -1,31 +1,56 @@
 % Target: rmp-ii-sv17
 % Formula: A many-body state is approximated by a blocked MPS, whose k-site marginal is
 %   rho_k.
-% Ink: Canonical public tenkz environment; no raw TikZ.
-% Boundary: The state panels expose physical legs; rho_k closes both virtual ends of
-%   the ket-bra word.
+% Ink: Kernel flat frame; two wide state atoms and a ket-bra racetrack closed by
+%   unlabelled cups.
+% Boundary: The state panels expose physical legs; rho_k contracts every physical
+%   index (the sandwich's implicit op row) and closes both virtual ends.
 % Source: paper TN-Review-main.tex line 621; paper-context-only; no author drawing
 %   source
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   % |Phi>: one 9-leg state tensor
   \underset{\lvert\Phi\rangle}{
-  \begin{tenkz}[physical=up, boundary=none]
-    \tn[pill, wide=9, up at={1,2,3,4,5,6,7,8,9}]{} & & & & & & & &
+  \begin{tenkz}[cols=9, bonds=none, west=none, east=none]
+    \tn[at=(1,1), skin=pill, wide=9,
+      ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical,
+             90@5:physical, 90@6:physical, 90@7:physical, 90@8:physical,
+             90@9:physical}]{}
   \end{tenkz}}
   \;\longrightarrow\;
   % |phi_D>: blocked MPS of bond dimension D, middle elided
   \underset{\lvert\phi_D\rangle}{
-  \begin{tenkz}[physical=up, boundary=none]
-    \tn[pill, wide=4, up at={1,2,3,4}]{} & & & & \tndots &
-    \tn[pill, wide=4, up at={1,2,3,4}]{} & & &
+  \begin{tenkz}[cols=9, bonds=none, west=none, east=none]
+    \tn[at=(1,1), skin=pill, wide=4,
+      ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical}]{}
+    \tn[at=(1,5), skin=dots]{}
+    \tn[at=(1,6), skin=pill, wide=4,
+      ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical}]{}
   \end{tenkz}}
   \;\longrightarrow\;
-  % rho_k: k-site racetrack closed on the environment matrices
+  % rho_k: k-site racetrack, the sandwich's implicit op row contracting
+  % every physical index, closed on the environment matrices
   \underset{\rho_k}{
-  \begin{tenkz}[sandwich, west={cup=$\vphantom{\rho}$},
-                east={cup=$\vphantom{\rho}$}]
-    \tn{} & \tn{} & \tn{}\\
-    \tn*{} & \tn*{} & \tn*{}
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, west=cup, east=cup]
+    \tn[at=(1,1), name=a1, ports={180:virtual, 0:virtual, 270:physical}]{}
+    \tn[at=(1,2), name=a2, ports={180:virtual, 0:virtual, 270:physical}]{}
+    \tn[at=(1,3), name=a3, ports={180:virtual, 0:virtual, 270:physical}]{}
+    \tn[at=(2,1), name=b1, conjugate,
+      ports={180:virtual, 0:virtual, 90:physical}]{}
+    \tn[at=(2,2), name=b2, conjugate,
+      ports={180:virtual, 0:virtual, 90:physical}]{}
+    \tn[at=(2,3), name=b3, conjugate,
+      ports={180:virtual, 0:virtual, 90:physical}]{}
+    \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)}
+    \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)}
+    \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a3.270}{b3.90}
+    % west={cup=$m$}/east={cup=$m$} bracket sugar is not implemented yet
+    % (K1); a hand-placed unlabelled bead on the canonical cup wire draws
+    % the same on-bend closure the source leaves nameless here.
+    % \vphantom in an atom label crashes the kernel's label pass (K1); a
+    % blank label reproduces the source's unnamed bead without it.
+    \tn[skin=ring, at=on cup-west-1-2 0.5]{}
+    \tn[skin=ring, at=on cup-east-1-2 0.5]{}
   \end{tenkz}}
 \]
