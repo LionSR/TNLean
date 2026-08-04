@@ -1,30 +1,98 @@
 % Target: rmp-iii-b-condensation
 % Formula: A doubled anyon string joins paired endpoints on ket and bra sheets.
-% Ink: Canonical public tenkzplanes with the same marked path on both sheets.
+% Ink: Kernel plane frame with the contract bilayer basis (planes preset); the
+%   same marked path repeats on both sheets.
 % Boundary: Both 6x4 sheets retain every perimeter virtual stub; all 24
 %   inter-sheet physical pairs are contracted.
 % Source: paper TN-Review-main.tex line 1697; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 925-953
-% Capabilities: lattice, double-layer-string, marked-endpoints
+% Capabilities: kernel, plane-frame, double-layer-string, marked-endpoints
 \[
-  % The shared oblique frame owns the sheet separation.  The lattice owner
-  % retains all four perimeter sides and contracts every physical sheet pair.
-  \begin{tenkzplanes}[rows=6, cols=4, frame=oblique,
-                      boundary=open]
-    \tnsite[role=marked, size=l]{(1,2,1)}
-    \tnsite[role=marked,size=s]{(2,2,1)} \tnsite[role=marked,size=s]{(3,2,1)}
-    \tnsite[role=marked,size=s]{(4,2,1)} \tnsite[role=marked,size=l]{(5,3,1)}
-    \tnsite[role=marked, size=l]{(1,2,0)}
-    \tnsite[role=marked,size=s]{(2,2,0)} \tnsite[role=marked,size=s]{(3,2,0)}
-    \tnsite[role=marked, size=s]{(4,2,0)}
-    \tnsite[role=marked, size=l]{(5,3,0)}
-    \tnedge[role=operator]{(1,2,1)-(2,2,1)}
-    \tnedge[role=operator]{(2,2,1)-(3,2,1)}
-    \tnedge[role=operator]{(3,2,1)-(4,2,1)}
-    \tnedge[role=operator]{(4,2,1)-(5,3,1)}
-    \tnedge[role=operator]{(1,2,0)-(2,2,0)}
-    \tnedge[role=operator]{(2,2,0)-(3,2,0)}
-    \tnedge[role=operator]{(3,2,0)-(4,2,0)}
-    \tnedge[role=operator]{(4,2,0)-(5,3,0)}
-  \end{tenkzplanes}_{\ a\leftrightarrow\bar a}
+  \tenkzkernel
+  % The plane frame owns both sheets through the declared bilayer basis; every
+  % site pair, bond, and stub below is a member-addressed declaration.  The
+  % priced plane-tall-window warning is expected for this 6-row window.
+  \begin{tenkz}[lattice={6x4}, planes, bonds=none]
+    % anyon endpoints: marked member replacements on both sheets
+    \tn[at=(1,2,1), skin=dot, size=l, species=marked, name=aK]{}
+    \tn[at=(5,3,1), skin=dot, size=l, species=marked, name=cK]{}
+    \tn[at=(1,2,2), skin=dot, size=l, species=marked, name=aB]{}
+    \tn[at=(5,3,2), skin=dot, size=l, species=marked, name=cB]{}
+    % portless affine beads dress the crossed bonds, as the source places
+    % them between the second and third columns of rows two through four
+    \tn[at=0.6875 e of (2,2,1), skin=dot, size=s, species=marked, name=m1K]{}
+    \tn[at=0.6875 e of (3,2,1), skin=dot, size=s, species=marked, name=m2K]{}
+    \tn[at=0.6875 e of (4,2,1), skin=dot, size=s, species=marked, name=m3K]{}
+    \tn[at=0.6875 e of (2,2,2), skin=dot, size=s, species=marked, name=m1B]{}
+    \tn[at=0.6875 e of (3,2,2), skin=dot, size=s, species=marked, name=m2B]{}
+    \tn[at=0.6875 e of (4,2,2), skin=dot, size=s, species=marked, name=m3B]{}
+    % one marked string per sheet through its beads
+    \tnwire[kind=string, species=operator, name=strK,
+            via={m1K, m2K, m3K}]{aK}{cK}
+    \tnwire[kind=string, species=operator, name=strB,
+            via={m1B, m2B, m3B}]{aB}{cB}
+    % ket-sheet east-west bonds
+    \tnwire{(1,1,1)}{(1,2,1)} \tnwire{(1,2,1)}{(1,3,1)} \tnwire{(1,3,1)}{(1,4,1)}
+    \tnwire{(2,1,1)}{(2,2,1)} \tnwire{(2,2,1)}{(2,3,1)} \tnwire{(2,3,1)}{(2,4,1)}
+    \tnwire{(3,1,1)}{(3,2,1)} \tnwire{(3,2,1)}{(3,3,1)} \tnwire{(3,3,1)}{(3,4,1)}
+    \tnwire{(4,1,1)}{(4,2,1)} \tnwire{(4,2,1)}{(4,3,1)} \tnwire{(4,3,1)}{(4,4,1)}
+    \tnwire{(5,1,1)}{(5,2,1)} \tnwire{(5,2,1)}{(5,3,1)} \tnwire{(5,3,1)}{(5,4,1)}
+    \tnwire{(6,1,1)}{(6,2,1)} \tnwire{(6,2,1)}{(6,3,1)} \tnwire{(6,3,1)}{(6,4,1)}
+    % ket-sheet north-south bonds
+    \tnwire{(1,1,1)}{(2,1,1)} \tnwire{(2,1,1)}{(3,1,1)} \tnwire{(3,1,1)}{(4,1,1)}
+    \tnwire{(4,1,1)}{(5,1,1)} \tnwire{(5,1,1)}{(6,1,1)}
+    \tnwire{(1,2,1)}{(2,2,1)} \tnwire{(2,2,1)}{(3,2,1)} \tnwire{(3,2,1)}{(4,2,1)}
+    \tnwire{(4,2,1)}{(5,2,1)} \tnwire{(5,2,1)}{(6,2,1)}
+    \tnwire{(1,3,1)}{(2,3,1)} \tnwire{(2,3,1)}{(3,3,1)} \tnwire{(3,3,1)}{(4,3,1)}
+    \tnwire{(4,3,1)}{(5,3,1)} \tnwire{(5,3,1)}{(6,3,1)}
+    \tnwire{(1,4,1)}{(2,4,1)} \tnwire{(2,4,1)}{(3,4,1)} \tnwire{(3,4,1)}{(4,4,1)}
+    \tnwire{(4,4,1)}{(5,4,1)} \tnwire{(5,4,1)}{(6,4,1)}
+    % bra-sheet east-west bonds
+    \tnwire{(1,1,2)}{(1,2,2)} \tnwire{(1,2,2)}{(1,3,2)} \tnwire{(1,3,2)}{(1,4,2)}
+    \tnwire{(2,1,2)}{(2,2,2)} \tnwire{(2,2,2)}{(2,3,2)} \tnwire{(2,3,2)}{(2,4,2)}
+    \tnwire{(3,1,2)}{(3,2,2)} \tnwire{(3,2,2)}{(3,3,2)} \tnwire{(3,3,2)}{(3,4,2)}
+    \tnwire{(4,1,2)}{(4,2,2)} \tnwire{(4,2,2)}{(4,3,2)} \tnwire{(4,3,2)}{(4,4,2)}
+    \tnwire{(5,1,2)}{(5,2,2)} \tnwire{(5,2,2)}{(5,3,2)} \tnwire{(5,3,2)}{(5,4,2)}
+    \tnwire{(6,1,2)}{(6,2,2)} \tnwire{(6,2,2)}{(6,3,2)} \tnwire{(6,3,2)}{(6,4,2)}
+    % bra-sheet north-south bonds
+    \tnwire{(1,1,2)}{(2,1,2)} \tnwire{(2,1,2)}{(3,1,2)} \tnwire{(3,1,2)}{(4,1,2)}
+    \tnwire{(4,1,2)}{(5,1,2)} \tnwire{(5,1,2)}{(6,1,2)}
+    \tnwire{(1,2,2)}{(2,2,2)} \tnwire{(2,2,2)}{(3,2,2)} \tnwire{(3,2,2)}{(4,2,2)}
+    \tnwire{(4,2,2)}{(5,2,2)} \tnwire{(5,2,2)}{(6,2,2)}
+    \tnwire{(1,3,2)}{(2,3,2)} \tnwire{(2,3,2)}{(3,3,2)} \tnwire{(3,3,2)}{(4,3,2)}
+    \tnwire{(4,3,2)}{(5,3,2)} \tnwire{(5,3,2)}{(6,3,2)}
+    \tnwire{(1,4,2)}{(2,4,2)} \tnwire{(2,4,2)}{(3,4,2)} \tnwire{(3,4,2)}{(4,4,2)}
+    \tnwire{(4,4,2)}{(5,4,2)} \tnwire{(5,4,2)}{(6,4,2)}
+    % the 24 contracted physical pairs
+    \tnwire{(1,1,1)}{(1,1,2)} \tnwire{(1,2,1)}{(1,2,2)}
+    \tnwire{(1,3,1)}{(1,3,2)} \tnwire{(1,4,1)}{(1,4,2)}
+    \tnwire{(2,1,1)}{(2,1,2)} \tnwire{(2,2,1)}{(2,2,2)}
+    \tnwire{(2,3,1)}{(2,3,2)} \tnwire{(2,4,1)}{(2,4,2)}
+    \tnwire{(3,1,1)}{(3,1,2)} \tnwire{(3,2,1)}{(3,2,2)}
+    \tnwire{(3,3,1)}{(3,3,2)} \tnwire{(3,4,1)}{(3,4,2)}
+    \tnwire{(4,1,1)}{(4,1,2)} \tnwire{(4,2,1)}{(4,2,2)}
+    \tnwire{(4,3,1)}{(4,3,2)} \tnwire{(4,4,1)}{(4,4,2)}
+    \tnwire{(5,1,1)}{(5,1,2)} \tnwire{(5,2,1)}{(5,2,2)}
+    \tnwire{(5,3,1)}{(5,3,2)} \tnwire{(5,4,1)}{(5,4,2)}
+    \tnwire{(6,1,1)}{(6,1,2)} \tnwire{(6,2,1)}{(6,2,2)}
+    \tnwire{(6,3,1)}{(6,3,2)} \tnwire{(6,4,1)}{(6,4,2)}
+    % ket-sheet perimeter openings
+    \tnwire{(1,1,1)}{open n} \tnwire{(1,2,1)}{open n}
+    \tnwire{(1,3,1)}{open n} \tnwire{(1,4,1)}{open n}
+    \tnwire{(6,1,1)}{open s} \tnwire{(6,2,1)}{open s}
+    \tnwire{(6,3,1)}{open s} \tnwire{(6,4,1)}{open s}
+    \tnwire{(1,1,1)}{open w} \tnwire{(2,1,1)}{open w} \tnwire{(3,1,1)}{open w}
+    \tnwire{(4,1,1)}{open w} \tnwire{(5,1,1)}{open w} \tnwire{(6,1,1)}{open w}
+    \tnwire{(1,4,1)}{open e} \tnwire{(2,4,1)}{open e} \tnwire{(3,4,1)}{open e}
+    \tnwire{(4,4,1)}{open e} \tnwire{(5,4,1)}{open e} \tnwire{(6,4,1)}{open e}
+    % bra-sheet perimeter openings
+    \tnwire{(1,1,2)}{open n} \tnwire{(1,2,2)}{open n}
+    \tnwire{(1,3,2)}{open n} \tnwire{(1,4,2)}{open n}
+    \tnwire{(6,1,2)}{open s} \tnwire{(6,2,2)}{open s}
+    \tnwire{(6,3,2)}{open s} \tnwire{(6,4,2)}{open s}
+    \tnwire{(1,1,2)}{open w} \tnwire{(2,1,2)}{open w} \tnwire{(3,1,2)}{open w}
+    \tnwire{(4,1,2)}{open w} \tnwire{(5,1,2)}{open w} \tnwire{(6,1,2)}{open w}
+    \tnwire{(1,4,2)}{open e} \tnwire{(2,4,2)}{open e} \tnwire{(3,4,2)}{open e}
+    \tnwire{(4,4,2)}{open e} \tnwire{(5,4,2)}{open e} \tnwire{(6,4,2)}{open e}
+  \end{tenkz}_{\ a\leftrightarrow\bar a}
 \]
