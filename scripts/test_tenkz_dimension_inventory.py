@@ -339,7 +339,9 @@ def test_owner_span_grouping() -> None:
 def test_comment_terminated_control_word() -> None:
     # A `%` comment terminates a control word mid-name even though its
     # discarded endline leaves no space token in the input stream
-    # (`dimensions.py`, `_command_spans`).  TeX reads a backslash-name
+    # (`dimensions.py`: `scan_case_dimensions` works on an offset-preserving
+    # comment-stripped view and `_active_fragment` inserts a space across
+    # comment gaps so control words cannot merge).  TeX reads a backslash-name
     # interrupted by a comment as the control word `\tn` followed by the
     # letters p, u, t on the next line, never as the merged command
     # `\tnput`; the scanner must reproduce that reading on raw,
