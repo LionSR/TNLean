@@ -55,10 +55,14 @@ theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix 
     dotProduct (star x) (mulVec P x) + dotProduct (star x) (mulVec Q y) +
     dotProduct (star y) (mulVec (Qᴴ) x) + dotProduct (star y) (mulVec R y) := by
   rw [blockMatrix, Matrix.fromBlocks_mulVec P Q (Qᴴ) R (Sum.elim x y)]
-  simp only [dotProduct, Matrix.mulVec, Finset.sum_add_distrib, mul_add, add_comm, add_left_comm,
-    add_assoc]
-
-/-! ### `supportProj(R²) = supportProj(R)` -/
+  calc
+    star (Sum.elim x y) ⬝ᵥ (Sum.elim (P *ᵥ x + Q *ᵥ y) (Qᴴ *ᵥ x + R *ᵥ y)) =
+      star x ⬝ᵥ (P *ᵥ x + Q *ᵥ y) + star y ⬝ᵥ (Qᴴ *ᵥ x + R *ᵥ y) := by
+      simp [dotProduct]
+    _ = (star x ⬝ᵥ (P *ᵥ x) + star x ⬝ᵥ (Q *ᵥ y)) +
+        (star y ⬝ᵥ (Qᴴ *ᵥ x) + star y ⬝ᵥ (R *ᵥ y)) := by simp [dotProduct_add]
+    _ = star x ⬝ᵥ (P *ᵥ x) + star x ⬝ᵥ (Q *ᵥ y) +
+        star y ⬝ᵥ (Qᴴ *ᵥ x) + star y ⬝ᵥ (R *ᵥ y) := by ring
 
 theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     (posSemidef_self_mul_conjTranspose R).supportProj = hR.supportProj := by
