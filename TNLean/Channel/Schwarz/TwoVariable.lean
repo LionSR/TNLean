@@ -171,11 +171,14 @@ private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
       rw [fromBlocks_mulVec (A := A) (B := B) (C := C) (D := D) (x := Sum.elim v w)]
       simp
     _ = star v ⬝ᵥ (A.mulVec v + B.mulVec w) + star w ⬝ᵥ (C.mulVec v + D.mulVec w) := by
-      simp [Pi.star_apply, sumElim_dotProduct_sumElim]
-    _ = star v ⬝ᵥ (A.mulVec v) + star v ⬝ᵥ (B.mulVec w) +
-        star w ⬝ᵥ (C.mulVec v) + star w ⬝ᵥ (D.mulVec w) := by
+      have h_star_elim : star (Sum.elim v w) = Sum.elim (star v) (star w) := by
+        ext x; cases x <;> simp
+      rw [h_star_elim, sumElim_dotProduct_sumElim]
+    _ = (star v ⬝ᵥ (A.mulVec v) + star v ⬝ᵥ (B.mulVec w)) +
+        (star w ⬝ᵥ (C.mulVec v) + star w ⬝ᵥ (D.mulVec w)) := by
       simp [dotProduct_add]
-      ring
+    _ = star v ⬝ᵥ (A.mulVec v) + star v ⬝ᵥ (B.mulVec w) +
+        star w ⬝ᵥ (C.mulVec v) + star w ⬝ᵥ (D.mulVec w) := by ring
 
 /-! ### Schur complement lemmas (singular-block case) -/
 
@@ -229,13 +232,32 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
       2 * t * ((star z ⬝ᵥ z).re : ℝ) := by
     have h_nonneg := h_quad_nonneg t
     have h_real := (Complex.nonneg_iff.mp h_nonneg).1
-    have hexpr : (((t : ℂ) ^ 2) * (star z ⬝ᵥ (A.mulVec z)) +
-        (2 : ℂ) * (t : ℂ) * (star z ⬝ᵥ z)).re =
-        t ^ 2 * ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) +
-        2 * t * ((star z ⬝ᵥ z).re : ℝ) := by
-      simp [ha_real, hb_real, Complex.add_re, Complex.mul_re, Complex.ofReal_re,
-        Complex.ofReal_im]
+    have ha_eq : (star z ⬝ᵥ (A.mulVec z) : ℂ) =
+        ((star z ⬝ᵥ (A.mulVec z)).re : ℂ) := by
+      calc
+        (star z ⬝ᵥ (A.mulVec z) : ℂ) =
+            ((star z ⬝ᵥ (A.mulVec z)).re : ℂ) +
+            ((star z ⬝ᵥ (A.mulVec z)).im : ℂ) * I := (Complex.re_add_im _).symm
+        _ = ((star z ⬝ᵥ (A.mulVec z)).re : ℂ) + (0 : ℂ) * I := by simp [ha_real]
+        _ = ((star z ⬝ᵥ (A.mulVec z)).re : ℂ) := by simp
+    have hb_eq : (star z ⬝ᵥ z : ℂ) = ((star z ⬝ᵥ z).re : ℂ) := by
+      calc
+        (star z ⬝ᵥ z : ℂ) = ((star z ⬝ᵥ z).re : ℂ) + ((star z ⬝ᵥ z).im : ℂ) * I :=
+          (Complex.re_add_im _).symm
+        _ = ((star z ⬝ᵥ z).re : ℂ) + (0 : ℂ) * I := by simp [hb_real]
+        _ = ((star z ⬝ᵥ z).re : ℂ) := by simp
+    set X : ℝ := t ^ 2 * ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) +
+        2 * t * ((star z ⬝ᵥ z).re : ℝ) with hX
+    have h_expr_eq : ((t : ℂ) ^ 2) * (star z ⬝ᵥ (A.mulVec z)) +
+        (2 : ℂ) * (t : ℂ) * (star z ⬝ᵥ z) = (X : ℂ) := by
+      rw [ha_eq, hb_eq]
+      dsimp [X]
+      push_cast
       ring
+    have hexpr : (((t : ℂ) ^ 2) * (star z ⬝ᵥ (A.mulVec z)) +
+        (2 : ℂ) * (t : ℂ) * (star z ⬝ᵥ z)).re = X := by
+      rw [h_expr_eq]
+      simp
     rw [hexpr] at h_real
     exact h_real
   have ha_re_nonneg : 0 ≤ (star z ⬝ᵥ (A.mulVec z)).re :=
@@ -253,16 +275,34 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
   rw [hb_zero] at hz_norm_sq_pos
   exact lt_irrefl 0 hz_norm_sq_pos
 
-lemma schwarz_inequality_of_fromBlocks_posSemidef {A C B : Mat}
-    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
-    (v w : n → ℂ) (hwB : B.mulVec w = Cᴴ.mulVec v) :
-    star v ⬝ᵥ (A.mulVec v) ≥ star v ⬝ᵥ (C.mulVec w) := by
+/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then for all `v, w` with
+`B w = C† v`, we have `v† A v ≥ v† C w`.
+
+Explicit four-block version. -/
+lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat}
+    (h : (Matrix.fromBlocks Amat Cmat CstarMat Bmat :
+      Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
+    (v w : n → ℂ) (hwB : Bmat.mulVec w = CstarMat.mulVec v) :
+    star v ⬝ᵥ (Amat.mulVec v) ≥ star v ⬝ᵥ (Cmat.mulVec w) := by
   let x : (n ⊕ n) → ℂ := Sum.elim v (-w)
   have hx_nonneg := h.dotProduct_mulVec_nonneg x
-  rw [fromBlocks_mulVec (A := A) (B := C) (C := Cᴴ) (D := B) (x := x)] at hx_nonneg
-  simp [x, hwB, Matrix.mulVec_neg, dotProduct_add, dotProduct_sub, dotProduct_neg] at hx_nonneg
+  dsimp [x] at hx_nonneg
+  rw [fromBlocks_mulVec (A := Amat) (B := Cmat)
+    (C := CstarMat) (D := Bmat) (x := Sum.elim v (-w))] at hx_nonneg
+  -- Now: 0 ≤ star (Sum.elim v (-w)) ⬝ᵥ
+  --   Sum.elim (Amat.mulVec v + Cmat.mulVec (-w)) (CstarMat.mulVec v + Bmat.mulVec (-w))
+  have h_star_elim : star (Sum.elim v (-w)) = Sum.elim (star v) (star (-w)) := by
+    ext i; cases i <;> simp
+  rw [h_star_elim] at hx_nonneg
+  -- 0 ≤ Sum.elim (star v) (-star w) ⬝ᵥ Sum.elim (Amat.mulVec v - Cmat.mulVec w) (CstarMat.mulVec v - Bmat.mulVec w)
+  rw [sumElim_dotProduct_sumElim] at hx_nonneg
+  -- 0 ≤ (star v ⬝ᵥ (Amat.mulVec v - Cmat.mulVec w)) + (-star w ⬝ᵥ (CstarMat.mulVec v - Bmat.mulVec w))
+  simp [Matrix.mulVec_neg, dotProduct_sub, dotProduct_neg, dotProduct_add] at hx_nonneg
+  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ Bmat.mulVec w
+  rw [hwB] at hx_nonneg
+  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ CstarMat.mulVec v
   ring_nf at hx_nonneg
-  exact hx_nonneg
+  simpa using hx_nonneg
 
 /-! ### Main theorem -/
 
@@ -273,6 +313,7 @@ with `E(B†B) w = E(B†A) v`, we have `v† E(A†A) v ≥ v† E(A†B) w`.
 
 This is the pseudoinverse-free formulation of Wolf's Eq. (5.4):
 `E(A†B) E(B†B)⁻¹ E(B†A) ≤ E(A†A)` where the inverse is taken on the range. -/
+omit [DecidableEq n] in
 theorem schwarz_two_variable (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
     (A B : Mat) (v w : n → ℂ) (hw : (E (Bᴴ * B)).mulVec w = (E (Bᴴ * A)).mulVec v) :
     star v ⬝ᵥ ((E (Aᴴ * A)).mulVec v) ≥ star v ⬝ᵥ ((E (Aᴴ * B)).mulVec w) := by
