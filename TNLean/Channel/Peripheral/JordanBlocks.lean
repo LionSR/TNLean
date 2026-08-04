@@ -34,7 +34,7 @@ for positive trace-preserving maps.
 -/
 
 open scoped Matrix ComplexOrder Matrix.Norms.Frobenius
-open Matrix Filter
+open Matrix
 
 variable {D : ℕ}
 
@@ -232,7 +232,7 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
     simp [hX_zero]
   | succ m ih =>
     set N := T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
-      with hN_def
+
     by_cases hm : m = 0
     · subst hm; simpa using hNk
     · -- m ≥ 1, rank-2 reduction
