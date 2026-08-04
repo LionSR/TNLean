@@ -55,11 +55,20 @@ binomial term $\binom{n}{k-1}$ growing like $n^{k-1}$.
 
 \section{Verdict}
 
-This is an \emph{open gap}.  The bounded-orbit lemma supplies the analytic
-hypothesis; the algebraic step (binomial expansion for the power of a linear
-endomorphism with nilpotent perturbation) is mathematically clear but not
-yet formalized.  The rank-$2$ case suffices for the peripheral-spectrum
-applications in Theorem~6.6 of the source.\footnote{Tracking: \ghissue{3984}.}
+The trace-preserving case is \emph{closed}.  The rank-2 binomial expansion
+(\leanid{IsPositiveMap.pow\_apply\_rank\_two\_genEig}),
+the rank-2 generalized-eigenvector prohibition
+(\leanid{IsPositiveMap.no\_rank\_two\_genEigenvector\_of\_tracePreserving}),
+and the full $k$-step reduction
+(\leanid{IsPositiveMap.peripheral\_Jordan\_trivial\_of\_tracePreserving})
+are all formalized in \doclink{TNLean/Channel/Peripheral/JordanBlocks}.
+
+The unital case remains as a \emph{scope restriction}: the source
+Proposition~6.2 is stated for trace-preserving \emph{or} unital positive maps.
+The unital case follows by duality (the trace adjoint $T^*$ is trace-preserving
+and positive, and the generalized-eigenspace structure transfers), but the
+formal dual-transport proof is not yet formalized.
+See \ghissue{3984}.\footnote{Tracking: \ghissue{3984}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}
