@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf Proposition~6.2 --- Trivial Jordan Blocks for Peripheral Eigenvalues}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf, \emph{Quantum Channels \& Operations}, Proposition~6.2:
+``Let $T:\mathcal M_d(\mathbb C)\to\mathcal M_d(\mathbb C)$ be a
+trace-preserving (or unital) positive linear map.  If $\lambda$ is an
+eigenvalue of $T$ with $|\lambda|=1$, then its geometric multiplicity
+equals its algebraic multiplicity, i.e., all Jordan blocks for $\lambda$
+are one-dimensional.''
+
+The proof observes that the iterates $T^n$ are uniformly bounded in
+operator norm (positivity and trace preservation keep every forward orbit
+bounded) and that powers of a nontrivial Jordan block grow without bound
+when the eigenvalue has modulus~$1$, giving a contradiction.
+
+\section{The formalization}
+
+The bounded-orbit lemma is already formalized:
+\leanid{IsPositiveMap.hasBoundedOrbits\_of\_tracePreserving} in
+\doclink{TNLean/Channel/FixedPoint/MeanErgodicProjection} proves
+that every forward orbit $\{T^n X\}_{n\in\mathbb N}$ is bounded in norm
+for a positive trace-preserving $T$.
+
+The binomial-expansion ingredient has not been formalized.  A rank-$2$
+generalized eigenvector $(T-\lambda)X=Y\neq0$ with $(T-\lambda)Y=0$
+would give, by \leanid{Commute.add\_pow} applied to the decomposition
+$T=\lambda I+(T-\lambda I)$,
+\[
+    T^n X = \lambda^n X + n\lambda^{n-1}Y,
+\]
+whose norm grows linearly with $n$, contradicting bounded orbits.
+
+The missing work consists in (i) packaging \leanid{Commute.add\_pow}
+for the semiring of linear endomorphisms to obtain this identity,
+(ii) extracting a norm bound $\|T^n X\|\ge n\|Y\|-\|X\|$ from it, and
+(iii) applying the bounded-orbit lemma to reach a contradiction.
+The full statement for higher-rank generalized eigenvectors
+($(T-\lambda)^k X=0$ with $k>1$) would additionally require the
+binomial term $\binom{n}{k-1}$ growing like $n^{k-1}$.
+
+\section{Verdict}
+
+This is an \emph{open gap}.  The bounded-orbit lemma supplies the analytic
+hypothesis; the algebraic step (binomial expansion for the power of a linear
+endomorphism with nilpotent perturbation) is mathematically clear but not
+yet formalized.  The rank-$2$ case suffices for the peripheral-spectrum
+applications in Theorem~6.6 of the source.\footnote{Tracking: \ghissue{3984}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
