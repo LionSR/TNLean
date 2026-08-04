@@ -32,6 +32,8 @@ import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
 import TNLean.Channel.FixedPoint.StationaryProjection
+import TNLean.Channel.FixedPoint.StationarySpan
+import TNLean.Channel.FixedPoint.StationaryStates
 import TNLean.Channel.FixedPoint.StationarySupport
 import TNLean.Channel.FixedPoint.StationarySupportRestriction
 import TNLean.Channel.FixedPoint.SupportCompressedDensityBlocks
