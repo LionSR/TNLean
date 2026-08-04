@@ -62,8 +62,9 @@ No new proofs are introduced here; this is a documentation-only index module.
   (nonzero PSD fixed point), in `TNLean.Channel.Peripheral.SpectralRadius`.
 
 The general bound `ρ(T) ≤ ‖T(1)‖∞` for arbitrary positive maps relies on the
-Russo--Dye theorem, which yields factor $1$; the current formalization has
-factor $4$ via the PSD decomposition.  Documented in
+Russo--Dye theorem, which yields factor $1$; this general bound is not yet
+formalized.  A factor-$4$ route via the PSD decomposition is a possible
+elimination plan.  Documented in
 `docs/paper-gaps/wolf_prop61_russo_dye_factor.tex`.
 
 
