@@ -105,6 +105,62 @@ theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R
   rw [Douglas.mul_pinv_eq_supportProj R]
   exact supportProj_sq_eq_supportProj R hR
 
+/-- The Moore–Penrose pseudoinverse of a PSD matrix is Hermitian.
+
+The proof rewrites `pinv Rᴴ` into `supportInv(R Rᴴ) * R` and then uses that
+`supportInv(R Rᴴ)` is a continuous-function-calculus element of `R Rᴴ`, hence
+commutes with `R` (`IsSelfAdjoint.commute_cfc`). -/
+theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
+    (Douglas.pinv R).IsHermitian := by
+  classical
+  have hS : (R * Rᴴ).PosSemidef := Matrix.posSemidef_self_mul_conjTranspose R
+  have hInvHerm : hS.supportInvᴴ = hS.supportInv := by
+    rw [Matrix.PosSemidef.supportInv, Matrix.conjTranspose_mul,
+        hS.supportInvSqrt_isHermitian.eq]
+  have hcomm1 : Commute R (R * Rᴴ) := by
+    simp only [Commute, SemiconjBy, hR.isHermitian.eq]
+    exact (Matrix.mul_assoc R R R).symm
+  have hcomm2 : Commute R hS.supportInvSqrt := by
+    rw [Matrix.PosSemidef.supportInvSqrt, ← hS.isHermitian.cfc_eq]
+    exact (IsSelfAdjoint.commute_cfc
+      (Matrix.isHermitian_iff_isSelfAdjoint.mp hS.isHermitian) hcomm1.symm
+      (fun x : ℝ => if x ≠ 0 then (Real.sqrt x)⁻¹ else 0)).symm
+  have hcommInv : hS.supportInv * R = R * hS.supportInv := by
+    calc hS.supportInvSqrt * hS.supportInvSqrt * R
+        = hS.supportInvSqrt * (hS.supportInvSqrt * R) := Matrix.mul_assoc _ _ _
+      _ = hS.supportInvSqrt * (R * hS.supportInvSqrt) := by rw [hcomm2.symm.eq]
+      _ = (hS.supportInvSqrt * R) * hS.supportInvSqrt := (Matrix.mul_assoc _ _ _).symm
+      _ = (R * hS.supportInvSqrt) * hS.supportInvSqrt := by rw [hcomm2.symm.eq]
+      _ = R * (hS.supportInvSqrt * hS.supportInvSqrt) := Matrix.mul_assoc _ _ _
+  have hcommInv' : hS.supportInv * R = R * hS.supportInv := by
+    rw [Matrix.PosSemidef.supportInv]
+    exact hcommInv
+  calc (Douglas.pinv R)ᴴ = hS.supportInvᴴ * Rᴴᴴ := by
+        rw [Douglas.pinv, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+    _ = hS.supportInv * R := by rw [hInvHerm, Matrix.conjTranspose_conjTranspose]
+    _ = R * hS.supportInv := hcommInv'
+    _ = Rᴴ * hS.supportInv := by
+        exact (congrArg (HMul.hMul · hS.supportInv) hR.isHermitian.eq).symm
+    _ = Douglas.pinv R := rfl
+
+/-- For PSD `R`, `pinv R * R = supportProj R`: the pseudoinverse is a left
+support-inverse. Proved by conjugate-transposing `R * pinv R = supportProj R`
+(`R_mul_pinv_eq_supportProj`) using `pinv_isHermitian`. -/
+theorem pinv_mul_self_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ)
+    (hR : R.PosSemidef) :
+    Douglas.pinv R * R = hR.supportProj := by
+  classical
+  have h2 : Rᴴ * (Douglas.pinv R)ᴴ = hR.supportProj := by
+    rw [(pinv_isHermitian R hR).eq,
+        show Rᴴ * Douglas.pinv R = R * Douglas.pinv R from
+          congrArg (· * Douglas.pinv R) hR.isHermitian.eq]
+    exact R_mul_pinv_eq_supportProj R hR
+  calc Douglas.pinv R * R = (Rᴴ * (Douglas.pinv R)ᴴ)ᴴ := by
+        rw [← Matrix.conjTranspose_conjTranspose (Douglas.pinv R * R),
+            Matrix.conjTranspose_mul]
+    _ = hR.supportProjᴴ := by rw [h2]
+    _ = hR.supportProj := hR.supportProj_isHermitian.eq
+
 /-- Support-projection absorption on the pseudoinverse of a PSD matrix:
 `supportProj R * pinv R = pinv R`.
 
