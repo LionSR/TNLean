@@ -272,7 +272,7 @@ In `TNLean.Channel.FixedPoint.Algebra`:
 
 * `brouwer_fixedPoint_densityMatrices` — `TNLean.Axioms.BrouwerFixedPoint`
   (density-matrix specialization; kernel-checked).
-* `Gametheory.Brouwer.Brouwer` — exact import citation: Brouwer for the
+* `Brouwer (vendored Gametheory library)` — exact import citation: Brouwer for the
   standard simplex (LionSR/Brouwer library).
 * `exists_fixedPoint_closedCube` — `TNLean.Topology.BrouwerProduct`;
   extends Brouwer to closed cubes.
@@ -329,7 +329,7 @@ In `TNLean.Channel.FixedPoint.StationarySpan`:
   trace 1, fixed by the map).
 * `IsPositiveMap.fixedPointsSubmodule` — the fixed-point subspace as a
   `Submodule ℂ M_D(ℂ)`.
-* `IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef` — the fixed-point
+* `IsPositiveMap.span_posSemidefFixedPointsSet_eq_fixedPointsSubmodule` — the fixed-point
   subspace is spanned (over ℂ) by its positive semidefinite elements (this is
   the key lemma for the corollary).
 * The corollary's full statement with basis and dimension (Wolf's form) remains
