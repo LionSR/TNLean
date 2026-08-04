@@ -99,6 +99,14 @@ theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR
 
 /-! ### Forward: block PSD → ker inclusion -/
 
+
+/-! ### Algebraic identities for `Douglas.pinv` on PSD `R` -/
+
+theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
+    R * (Douglas.pinv R) = hR.supportProj := by
+  rw [Douglas.mul_pinv_eq_supportProj R]
+  exact supportProj_sq_eq_supportProj R hR
+
 theorem ker_subset_of_block_psd (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hM : (blockMatrix P Q R).PosSemidef) (y : Fin D₂ → ℂ) (hRy : mulVec R y = 0) :
