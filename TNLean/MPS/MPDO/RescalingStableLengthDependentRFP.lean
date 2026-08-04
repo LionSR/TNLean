@@ -273,37 +273,15 @@ theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent (s : ℝ)
   norm_num at key
 
 
-/-! ### IsMPDO — Hadamard product proof
-
-The MPO trace has a closed entrywise formula
-`mpo R N p q = (25/32)^N · c(p)·c(q) · ∏ Wmat(bit₁(pₙ), bit₁(qₙ))`
-where `c(p) = 1` if the virtual bits match along the chain (else 0).
-The indicator matrix `C(p,q) = c(p)·c(q)` is rank‑1 PSD; the weight
-matrix `M(p,q) = ∏ Wmat(…,…)` is PSD (pullback of the Kronecker power
-of PSD `Wmat`).  Their Hadamard (entrywise) product is PSD by the
-
 /-! ### IsMPDO — positivity of the MPO family
 
-The strategy: factor  where  is the
-chain‑OK indicator (rank‑1 PSD) and  is the pullback of
-the Kronecker power of 13:34  up 22 days,  4:09, 12 users, load averages: 7.55 4.42 4.25
-USER       TTY      FROM    LOGIN@  IDLE WHAT
-siruilu    console  -      13Jul26 22days -
-siruilu    s012     -      Mon00    2:26 kimi
-siruilu    s023     -       0:07    2:53 lean
-siruilu    s031     -      11:08    2:25 kimi
-siruilu    s032     -      11:08    2:26 -/bin/zsh
-siruilu    s027     -      11:05    2:05 kimi
-siruilu    s003     -      Mon13    2:52 kimi
-siruilu    s011     -      11:03    2:30 kimi
-siruilu    s014     -      28Jul26  2:30 codex
-siruilu    s018     -       0:06   13:18 lean
-siruilu    s026     -       0:58    2:29 kimi
-siruilu    s029     -      11:08    2:26 kimi (PSD by congruence).  Their Hadamard product
-is PSD by the Schur product theorem [],
-and scaling by  preserves PSD.
+The strategy: factor `mpo R N = (25/32)^N · C ⊙ M` where `C` is the
+chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of the Kronecker
+power `W_N` of `W` (PSD by congruence).  Their Hadamard product is PSD
+by the Schur product theorem [`Matrix.PosSemidef.hadamard`], and scaling
+by `(25/32)^N ≥ 0` preserves PSD.
 
-The entrywise formula for  (the only remaining gap) is verified
+The entrywise formula for `mpo R N` (the only remaining gap) is verified
 by direct analysis of the cyclic sum; the bond‑chain constraints collapse
 the sum to at most one term.  A fully formal proof of this formula is
 in progress. -/
@@ -318,14 +296,21 @@ def chainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
 def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
   Matrix.of fun p q => if chainOK N p ∧ chainOK N q then (1 : ℂ) else 0
 
+open Classical in
 lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
-  have : chainIndicator N = Matrix.vecMulVec
-    (fun p => if chainOK N p then (1 : ℂ) else 0)
-    (star (fun p => if chainOK N p then (1 : ℂ) else 0)) := by
+  let c : (Fin N → Fin 4) → ℂ := fun p => if chainOK N p then (1 : ℂ) else 0
+  have h_eq : chainIndicator N = Matrix.vecMulVec c (star c) := by
     ext p q
-    simp [chainIndicator, Matrix.vecMulVec, star, Matrix.mul_apply, Matrix.of_apply]
-  rw [this]
-  exact Matrix.posSemidef_vecMulVec_self_star (fun p => if chainOK N p then (1 : ℂ) else 0)
+    dsimp [chainIndicator, c, Matrix.vecMulVec, Matrix.mul_apply, Matrix.of_apply]
+    by_cases hp : chainOK N p <;> by_cases hq : chainOK N q
+    · rw [hp, hq]; simp
+    · rw [hp]; simp [hq]
+    · rw [hq]; simp [hp]
+    · have h_and : ¬ (chainOK N p ∧ chainOK N q) := by
+        intro h; exact hp h.1
+      rw [if_neg hp, if_neg hq, if_neg h_and]; simp
+  rw [h_eq]
+  exact Matrix.posSemidef_vecMulVec_self_star c
 
 def Wmat : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(4/5 : ℂ)^2, (3/5 : ℂ)^2; (3/5 : ℂ)^2, (4/5 : ℂ)^2]
@@ -333,36 +318,62 @@ def Wmat : Matrix (Fin 2) (Fin 2) ℂ :=
 def WN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   Matrix.of fun a b => ∏ n : Fin N, Wmat (a n) (b n)
 
+open Classical in
 lemma wMat_posSemidef : Wmat.PosSemidef := by
+  classical
   let J : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), (1 : ℂ); (1 : ℂ), (1 : ℂ)]
   have hJ : J.PosSemidef := by
     have hJ_eq : J = Matrix.vecMulVec (fun (_ : Fin 2) => (1 : ℂ)) (star (fun (_ : Fin 2) => (1 : ℂ))) := by
-      ext i j; fin_cases i <;> fin_cases j <;> norm_num [J, Matrix.vecMulVec, star]
+      ext i j; fin_cases i <;> fin_cases j <;> dsimp [J, Matrix.vecMulVec, star] <;> norm_num
     rw [hJ_eq]; exact Matrix.posSemidef_vecMulVec_self_star _
-  have hI : ((1 : Matrix (Fin 2) (Fin 2) ℂ)).PosSemidef :=
-    Matrix.PosSemidef.one
+  have hI : ((1 : Matrix (Fin 2) (Fin 2) ℂ)).PosSemidef := by
+    rw [Matrix.posSemidef_iff]
+    refine ⟨?_, ?_⟩
+    · intro i j; simp
+    · intro v
+      have hcalc : 0 ≤ ∑ i : Fin 2, Complex.normSq (v i) :=
+        Finset.sum_nonneg (fun i _ => Complex.normSq_nonneg (v i))
+      simpa [Matrix.dotProduct, star, Matrix.one_apply, Complex.normSq,
+        Finset.sum_ite_eq, Finset.mem_univ] using hcalc
   have h_eq : Wmat = ((7 : ℂ)/25) • (1 : Matrix (Fin 2) (Fin 2) ℂ) + ((9 : ℂ)/25) • J := by
     ext i j; fin_cases i <;> fin_cases j <;> norm_num [Wmat, J]
   rw [h_eq]
   refine Matrix.PosSemidef.add ?_ ?_
-  · refine Matrix.PosSemidef.smul hI (by positivity : (0 : ℂ) ≤ (7/25 : ℂ))
-  · refine Matrix.PosSemidef.smul hJ (by positivity : (0 : ℂ) ≤ (9/25 : ℂ))
+  · have h7 : (0 : ℂ) ≤ (7/25 : ℂ) := by positivity
+    refine Matrix.PosSemidef.smul hI h7
+  · have h9 : (0 : ℂ) ≤ (9/25 : ℂ) := by positivity
+    refine Matrix.PosSemidef.smul hJ h9
 
+open Classical in
 lemma wN_posSemidef (N : ℕ) : (WN N).PosSemidef := by
+  classical
   induction N with
   | zero =>
-      have : WN 0 = 1 := by ext a b; simp [WN, Matrix.of_apply]
-      rw [this]
-      have : DecidableEq (Fin 0 → Fin 2) := by
-        -- Fintype gives DecidableEq
-        infer_instance
-      exact Matrix.PosSemidef.one
+      classical
+      have h_one : WN 0 = (1 : Matrix (Fin 0 → Fin 2) (Fin 0 → Fin 2) ℂ) := by
+        ext a b
+        have h_eq : a = b := Subsingleton.elim _ _
+        subst h_eq; simp [WN, Matrix.of_apply, Matrix.one_apply]
+      rw [h_one]
+      rw [Matrix.posSemidef_iff]
+      constructor
+      · intro i j; simp
+      · intro v; simp [Matrix.dotProduct, star, Matrix.one_apply, Finset.sum_ite_eq, Finset.mem_univ]
+      · intro v; simp [Matrix.dotProduct, Matrix.mulVec, star, Matrix.one_apply]
   | succ N ih =>
-      let e : (Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2 := (finSuccEquiv (Fin 2)).symm
+      let e : (Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2 :=
+      { toFun := fun f => (f ∘ Fin.succ, f 0)
+        invFun := fun (g, x) i => Fin.cases x g i
+        left_inv := by
+          intro f; ext i
+          cases i using Fin.cases with
+          | zero => rfl
+          | succ i => rfl
+        right_inv := by intro ⟨g, x⟩; rfl }
       have h_submatrix : (WN (N + 1)) = (Matrix.kroneckerMap (· * ·) (WN N) Wmat).submatrix e e := by
         ext a b
         simp [WN, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.of_apply,
-          e, Equiv.apply_symm_apply, finSuccEquiv, Fin.prod_univ_succ]
+          e, Fin.prod_univ_succ, Function.comp, mul_comm]
       rw [h_submatrix]
       exact Matrix.PosSemidef.submatrix (Matrix.PosSemidef.kronecker ih wMat_posSemidef) e
 
@@ -371,44 +382,60 @@ def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bit1 (p n)
 def pullbackWN (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
   Matrix.of fun p q => (WN N) (φ N p) (φ N q)
 
+open Classical in
 lemma pullbackWN_posSemidef (N : ℕ) : (pullbackWN N).PosSemidef := by
   -- pullbackWN = B * WN N * Bᴴ where B is the boundary map
   let B : Matrix (Fin N → Fin 4) (Fin N → Fin 2) ℂ :=
     Matrix.of fun p a => if (∀ n, bit1 (p n) = a n) then (1 : ℂ) else 0
   have h_eq : pullbackWN N = B * WN N * Bᴴ := by
+    classical
     ext p q
-    dsimp [pullbackWN, B, φ]
-    simp [WN, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply,
-      star, Finset.sum_ite_eq, Finset.mem_univ]
+    calc
+      pullbackWN N p q = (WN N) (φ N p) (φ N q) := rfl
+      _ = (∑ a : Fin N → Fin 2, (if a = (φ N p) then (1 : ℂ) else 0) * (WN N a (φ N q))) := by
+        classical
+        simp [Finset.sum_ite_eq, Finset.mem_univ]
+      _ = (∑ a : Fin N → Fin 2, (if a = (φ N p) then (1 : ℂ) else 0) *
+          (∑ b : Fin N → Fin 2, (if b = (φ N q) then (1 : ℂ) else 0) * (WN N a b))) := by
+        classical
+        simp [Finset.sum_ite_eq, Finset.mem_univ]
+      _ = (B * WN N * Bᴴ) p q := by
+        classical
+        simp [B, WN, φ, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply,
+          star, star_ite, star_one, star_zero]
   rw [h_eq]
-  -- B has type (Fin N → Fin 4) → (Fin N → Fin 2)
-  -- WN N has type (Fin N → Fin 2) → (Fin N → Fin 2)  
-  -- Bᴴ has type (Fin N → Fin 2) → (Fin N → Fin 4)
-  -- So B * WN N * Bᴴ is PSD by the congruence lemma
-  -- The lemma expects `[Fintype n] [Finite m]` which should be available
-  simpa using Matrix.PosSemidef.mul_mul_conjTranspose_same (wN_posSemidef N) B
+  -- The congruence lemma: (B * A * Bᴴ).PosSemidef if A.PosSemidef
+  haveI : Fintype (Fin N → Fin 4) := Pi.fintype
+  haveI : Fintype (Fin N → Fin 2) := Pi.fintype
+  haveI : Finite (Fin N → Fin 4) := inferInstance
+  haveI : Finite (Fin N → Fin 2) := inferInstance
+  have h_psd : (WN N).PosSemidef := wN_posSemidef N
+  exact Matrix.PosSemidef.mul_mul_conjTranspose_same h_psd B
 
 lemma coeff_sq_eq_Wmat (i j : Fin 2) : (coeff' i j)^2 = Wmat i j := by
   fin_cases i <;> fin_cases j <;> norm_num [coeff', Wmat]
 
--- ENTRYWISE FORMULA (remaining gap — verified numerically for N = 1, 2, 3)
 lemma mpo_R_entry_formula (N : ℕ) [NeZero N] (p q : Fin N → Fin 4) :
     mpo R N p q = ((25/32 : ℂ)^N) *
     (if chainOK N p ∧ chainOK N q then
       ∏ n : Fin N, ((coeff' (bit1 (p n)) (bit1 (q n)))^2) else 0) := by
+  classical
   sorry
 
-/-- The rescaling‑stable MPO tensor  is an MPDO.
+/-- The rescaling‑stable MPO tensor `R` is an MPDO.
 
-The proof factorizes  where  is the
-chain‑OK indicator (rank‑1 PSD) and  is the pullback of  (PSD
+The proof factorizes `mpo R N = (25/32)^N · C ⊙ M` where `C` is the
+chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of `W_N` (PSD
 by congruence).  Their Hadamard product is PSD by the Schur product
 theorem.  The entrywise formula is the only remaining formal gap.
 
 See arXiv:1606.00608, Theorem 4.14 and lines 995–1010 (project example). -/
 theorem R_isMPDO : IsMPDO R := by
+  classical
   intro N hN
   haveI : NeZero N := ⟨Nat.ne_of_gt hN⟩
+  haveI : Fintype (Fin N → Fin 4) := Pi.fintype
+  haveI : Finite (Fin N → Fin 4) := inferInstance
   have hNpos : (0 : ℂ) ≤ ((25/32 : ℂ)^N) := by
     have hpos : (0 : ℂ) ≤ (25/32 : ℂ) := by norm_num
     exact pow_nonneg hpos N
@@ -418,13 +445,14 @@ theorem R_isMPDO : IsMPDO R := by
     ext p q
     rw [Matrix.smul_apply, mpo_R_entry_formula N p q, Matrix.hadamard_apply,
       chainIndicator, pullbackWN, Matrix.of_apply, Matrix.of_apply]
-    dsimp [φ]
-    simp [WN, Matrix.of_apply, coeff_sq_eq_Wmat]
+    dsimp [φ, WN]
+    simp only [Matrix.of_apply, coeff_sq_eq_Wmat]
     by_cases hchain : chainOK N p ∧ chainOK N q
-    · simp [hchain]
-    · simp [hchain]
+    · simp [hchain, coeff_sq_eq_Wmat]
+    · simp [hchain, coeff_sq_eq_Wmat]
   rw [h_factor]
   refine Matrix.PosSemidef.smul
     (Matrix.PosSemidef.hadamard h_chain_psd h_pullback_psd) hNpos
 
 end MPOTensor.RescalingStableLengthDependentRFP
+
