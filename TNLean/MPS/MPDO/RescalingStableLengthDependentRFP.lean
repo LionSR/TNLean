@@ -379,80 +379,24 @@ lemma wN_posSemidef (N : ℕ) : (WN N).PosSemidef := by
 
 def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bit1 (p n)
 
+/-
+-- Remaining gap: pullbackWN_posSemidef needs the equality pullbackWN N = B * WN N * Bᴴ
 def pullbackWN (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
   Matrix.of fun p q => (WN N) (φ N p) (φ N q)
+-/
 
-open Classical in
-lemma pullbackWN_posSemidef (N : ℕ) : (pullbackWN N).PosSemidef := by
-  -- pullbackWN = B * WN N * Bᴴ where B is the boundary map
-  let B : Matrix (Fin N → Fin 4) (Fin N → Fin 2) ℂ :=
-    Matrix.of fun p a => if (∀ n, bit1 (p n) = a n) then (1 : ℂ) else 0
-  have h_eq : pullbackWN N = B * WN N * Bᴴ := by
-    classical
-    ext p q
-    calc
-      pullbackWN N p q = (WN N) (φ N p) (φ N q) := rfl
-      _ = (∑ a : Fin N → Fin 2, (if a = (φ N p) then (1 : ℂ) else 0) * (WN N a (φ N q))) := by
-        classical
-        simp [Finset.sum_ite_eq, Finset.mem_univ]
-      _ = (∑ a : Fin N → Fin 2, (if a = (φ N p) then (1 : ℂ) else 0) *
-          (∑ b : Fin N → Fin 2, (if b = (φ N q) then (1 : ℂ) else 0) * (WN N a b))) := by
-        classical
-        simp [Finset.sum_ite_eq, Finset.mem_univ]
-      _ = (B * WN N * Bᴴ) p q := by
-        classical
-        simp [B, WN, φ, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.of_apply,
-          star, star_ite, star_one, star_zero]
-  rw [h_eq]
-  -- The congruence lemma: (B * A * Bᴴ).PosSemidef if A.PosSemidef
-  haveI : Fintype (Fin N → Fin 4) := Pi.fintype
-  haveI : Fintype (Fin N → Fin 2) := Pi.fintype
-  haveI : Finite (Fin N → Fin 4) := inferInstance
-  haveI : Finite (Fin N → Fin 2) := inferInstance
-  have h_psd : (WN N).PosSemidef := wN_posSemidef N
-  exact Matrix.PosSemidef.mul_mul_conjTranspose_same h_psd B
+-- WORK IN PROGRESS: pullbackWN_posSemidef
+-- requires proving pullbackWN N = B * WN N * Bᴴ for B defined as the boundary map.
+-- When completed, R_isMPDO follows by the Hadamard product argument.
 
 lemma coeff_sq_eq_Wmat (i j : Fin 2) : (coeff' i j)^2 = Wmat i j := by
   fin_cases i <;> fin_cases j <;> norm_num [coeff', Wmat]
 
-lemma mpo_R_entry_formula (N : ℕ) [NeZero N] (p q : Fin N → Fin 4) :
-    mpo R N p q = ((25/32 : ℂ)^N) *
-    (if chainOK N p ∧ chainOK N q then
-      ∏ n : Fin N, ((coeff' (bit1 (p n)) (bit1 (q n)))^2) else 0) := by
-  classical
-  sorry
+/-! ### Remaining gap
 
-/-- The rescaling‑stable MPO tensor `R` is an MPDO.
-
-The proof factorizes `mpo R N = (25/32)^N · C ⊙ M` where `C` is the
-chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of `W_N` (PSD
-by congruence).  Their Hadamard product is PSD by the Schur product
-theorem.  The entrywise formula is the only remaining formal gap.
-
-See arXiv:1606.00608, Theorem 4.14 and lines 995–1010 (project example). -/
-theorem R_isMPDO : IsMPDO R := by
-  classical
-  intro N hN
-  haveI : NeZero N := ⟨Nat.ne_of_gt hN⟩
-  haveI : Fintype (Fin N → Fin 4) := Pi.fintype
-  haveI : Finite (Fin N → Fin 4) := inferInstance
-  have hNpos : (0 : ℂ) ≤ ((25/32 : ℂ)^N) := by
-    have hpos : (0 : ℂ) ≤ (25/32 : ℂ) := by norm_num
-    exact pow_nonneg hpos N
-  have h_chain_psd : (chainIndicator N).PosSemidef := chainIndicator_posSemidef N
-  have h_pullback_psd : (pullbackWN N).PosSemidef := pullbackWN_posSemidef N
-  have h_factor : mpo R N = ((25/32 : ℂ)^N) • ((chainIndicator N).hadamard (pullbackWN N)) := by
-    ext p q
-    rw [Matrix.smul_apply, mpo_R_entry_formula N p q, Matrix.hadamard_apply,
-      chainIndicator, pullbackWN, Matrix.of_apply, Matrix.of_apply]
-    dsimp [φ, WN]
-    simp only [Matrix.of_apply, coeff_sq_eq_Wmat]
-    by_cases hchain : chainOK N p ∧ chainOK N q
-    · simp [hchain, coeff_sq_eq_Wmat]
-    · simp [hchain, coeff_sq_eq_Wmat]
-  rw [h_factor]
-  refine Matrix.PosSemidef.smul
-    (Matrix.PosSemidef.hadamard h_chain_psd h_pullback_psd) hNpos
+The entrywise formula `mpo_R_entry_formula` and the pullback equality
+`pullbackWN N = B * WN N * Bᴴ` are a work in progress.  When completed,
+the main theorem `R_isMPDO` follows by the Hadamard (Schur) product
+argument via `Matrix.PosSemidef.hadamard`. -/
 
 end MPOTensor.RescalingStableLengthDependentRFP
-
