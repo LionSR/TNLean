@@ -245,4 +245,116 @@ theorem factorization_pinv (A B : Mat) (hAB : A.mulVecLin.range ≤ B.mulVecLin.
     _ = (posSemidefBB B).supportProj * A := by rw [mul_pinv_eq_supportProj B]
     _ = A := hSPA
 
+
+/-! ## Wolf moreover clauses -/
+
+/-- `(pinv B * B)` is idempotent. -/
+theorem pinv_mul_B_idem (B : Mat) : (pinv B * B) * (pinv B * B) = pinv B * B := by
+  have h := Matrix.supportProj_mul_conjTranspose_mul_self B
+  calc
+    (pinv B * B) * (pinv B * B) = pinv B * (B * pinv B) * B := by simp [Matrix.mul_assoc]
+    _ = pinv B * (posSemidefBB B).supportProj * B := by rw [mul_pinv_eq_supportProj B]
+    _ = pinv B * ((posSemidefBB B).supportProj * B) := by simp [Matrix.mul_assoc]
+    _ = pinv B * B := by
+      simpa [posSemidefBB, Matrix.PosSemidef.supportProj] using congrArg (fun (M : Mat) => pinv B * M) h
+
+/-- `(pinv B * B)` is Hermitian. -/
+theorem pinv_mul_B_herm (B : Mat) : (pinv B * B)ᴴ = pinv B * B := by
+  unfold pinv
+  have hS_herm : ((posSemidefBB B).supportInv)ᴴ = (posSemidefBB B).supportInv := by
+    have hSqrt := Matrix.PosSemidef.supportInvSqrt_isHermitian (posSemidefBB B)
+    unfold Matrix.PosSemidef.supportInv
+    simp [Matrix.conjTranspose_mul, hSqrt.eq]
+  simp [Matrix.conjTranspose_mul, Matrix.mul_assoc, hS_herm]
+
+/-! ### EDIT 1: norm_pinv_mul_B_le_one -/
+
+theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
+  let P := pinv B * B
+  have hP_idem : P * P = P := pinv_mul_B_idem B
+  have hP_herm : Pᴴ = P := pinv_mul_B_herm B
+  -- Projection: ⟨y,P·y⟩ = ⟨P·y,P·y⟩
+  have h_proj (y : Fin D → ℂ) : dotProduct (star y) (mulVec P y) =
+      dotProduct (star (mulVec P y)) (mulVec P y) := by
+    calc
+      dotProduct (star y) (mulVec P y) = dotProduct (star y) (mulVec (P * P) y) := by rw [hP_idem]
+      _ = dotProduct (star y) (mulVec P (mulVec P y)) := by rw [Matrix.mulVec_mulVec]
+      _ = dotProduct (star (mulVec (Pᴴ) y)) (mulVec P y) := by rw [star_dotProduct_mulVec P y (mulVec P y)]
+      _ = dotProduct (star (mulVec P y)) (mulVec P y) := by rw [hP_herm]
+  -- I-P is also a projection
+  let IP := 1 - P
+  have hIP_idem : IP * IP = IP := by
+    calc
+      (1 - P) * (1 - P) = 1 - P - P + P * P := by noncomm_ring
+      _ = 1 - P := by rw [hP_idem]; abel
+  have hIP_herm : IPᴴ = IP := by dsimp [IP]; simp [hP_herm]
+  -- ‖P·y‖² ≤ ‖y‖² via 0 ≤ ⟨y,(I-P)·y⟩ = ⟨y,y⟩−⟨y,P·y⟩
+  have h_contract (y : Fin D → ℂ) :
+      RCLike.re (dotProduct (star (mulVec P y)) (mulVec P y)) ≤
+      RCLike.re (dotProduct (star y) y) := by
+    -- 0 ≤ ⟨y,(I-P)·y⟩ = ⟨(I-P)·y,(I-P)·y⟩
+    have h_nonneg_IP : 0 ≤ dotProduct (star y) (mulVec IP y) := by
+      calc
+        dotProduct (star y) (mulVec IP y) =
+            dotProduct (star y) (mulVec (IP * IP) y) := by rw [hIP_idem]
+        _ = dotProduct (star y) (mulVec IP (mulVec IP y)) := by rw [Matrix.mulVec_mulVec]
+        _ = dotProduct (star (mulVec (IPᴴ) y)) (mulVec IP y) := by
+          rw [star_dotProduct_mulVec IP y (mulVec IP y)]
+        _ = dotProduct (star (mulVec IP y)) (mulVec IP y) := by rw [hIP_herm]
+        _ ≥ 0 := dotProduct_star_self_nonneg _
+    -- ⟨y,(I-P)·y⟩ = ⟨y,y⟩ − ⟨y,P·y⟩
+    have dot_sub_right (a b c : Fin D → ℂ) : dotProduct a (b - c) = dotProduct a b - dotProduct a c := by
+      simp [dotProduct, Finset.sum_sub_distrib, mul_sub]
+    have h_expand : dotProduct (star y) (mulVec IP y) =
+        dotProduct (star y) y - dotProduct (star y) (mulVec P y) := by
+      calc
+        dotProduct (star y) (mulVec IP y) = dotProduct (star y) (mulVec (1 - P) y) := rfl
+        _ = dotProduct (star y) (mulVec 1 y - mulVec P y) := by rw [Matrix.sub_mulVec]
+        _ = dotProduct (star y) (y - mulVec P y) := by simp
+        _ = dotProduct (star y) y - dotProduct (star y) (mulVec P y) :=
+          dot_sub_right (star y) y (mulVec P y)
+    rw [h_expand] at h_nonneg_IP
+    -- h_nonneg_IP: 0 ≤ star y·y - star y·(P·y) in ℂ order
+    -- Extract real parts: 0 ≤ re(star y·y) - re(star y·(P·y))
+    have h_re : 0 ≤ RCLike.re (dotProduct (star y) y) -
+        RCLike.re (dotProduct (star y) (mulVec P y)) := by
+      -- From 0 ≤ a - b in ℂ, we get 0 ≤ re(a) - re(b)
+      have h := (Complex.nonneg_iff.mp h_nonneg_IP).1
+      -- h: 0 ≤ RCLike.re (star y·y - star y·(P·y))
+      -- But RCLike.re (a-b) = RCLike.re a - RCLike.re b (for a,b real? Actually always for ℂ: re(a-b) = re(a)-re(b))
+      -- Use Complex.sub_re: (a - b).re = a.re - b.re
+      -- RCLike.re = .re, so this works
+      simpa [Complex.sub_re] using h
+    -- re(star y·(P·y)) = re(star(P·y)·(P·y)) [by h_proj]
+    rw [h_proj y] at h_re
+    linarith
+  apply l2_opNorm_le_of_forall (by norm_num : (0 : ℝ) ≤ 1)
+  intro x
+  have h_bound : RCLike.re (dotProduct (star (mulVec P x)) (mulVec P x)) ≤
+      RCLike.re (dotProduct (star x) x) := h_contract x
+  have h_norm_sq_Px : RCLike.re (dotProduct (star (mulVec P x)) (mulVec P x)) =
+      ‖(EuclideanSpace.equiv (Fin D) ℂ).symm (mulVec P x)‖ ^ 2 :=
+    re_star_dotProduct_self_eq_norm_sq (mulVec P x)
+  have h_norm_sq_x : RCLike.re (dotProduct (star x) x) =
+      ‖(EuclideanSpace.equiv (Fin D) ℂ).symm x‖ ^ 2 :=
+    re_star_dotProduct_self_eq_norm_sq x
+  rw [h_norm_sq_Px, h_norm_sq_x] at h_bound
+  nlinarith [norm_nonneg ((EuclideanSpace.equiv (Fin D) ℂ).symm x)]
+
+/-! ### EDIT 3: pinv_norm_minimal -/
+
+theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ ‖C‖ := by
+  by_cases hCzero : ‖C‖ = 0
+  · have hC : C = 0 := norm_eq_zero.mp hCzero
+    rw [hC, mul_zero] at hA
+    rw [hA, mul_zero]
+    simp
+  · have hpos : 0 < ‖C‖ := lt_of_le_of_ne (norm_nonneg C) (Ne.symm hCzero)
+    rw [hA]
+    calc
+      ‖pinv B * (B * C)‖ = ‖(pinv B * B) * C‖ := by simp [Matrix.mul_assoc]
+      _ ≤ ‖pinv B * B‖ * ‖C‖ := Matrix.l2_opNorm_mul _ _
+      _ ≤ 1 * ‖C‖ := by nlinarith [norm_pinv_mul_B_le_one B]
+      _ = ‖C‖ := by simp
+
 end Douglas
