@@ -169,10 +169,12 @@ section GenericNormalForm
 
 variable {D : ℕ}
 
-/-- **Key lemma.**  For a positive-definite Choi matrix τ, the infimum of
-`tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` over `S₁, S₂` with `det = 1` is attained.  That
-is, the continuous function `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` achieves
-its minimum on the domain of SL(n, ℂ) × SL(n, ℂ).
+/-- **Key lemma.**  For a positive-definite Choi matrix τ on
+`ℂ^{d₂} ⊗ ℂ^{d₁}`, the infimum of `tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` over
+`S₁ ∈ SL(d₁, ℂ)`, `S₂ ∈ SL(d₂, ℂ)` is attained.  That is, the continuous
+function `(S₁, S₂) ↦ tr[(S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†]` achieves its minimum on
+the domain SL(d₁, ℂ) × SL(d₂, ℂ) — the two factors may have different
+dimensions (Wolf, Section 2.3, Equation (2.36)).
 
 **Proof** (Wolf Section 2.3).  Throughout, `‖·‖` denotes the Frobenius
 (Hilbert–Schmidt) norm `‖M‖² = tr[M M†]`; the coercivity bounds below are false
@@ -180,44 +182,55 @@ for the operator norm (e.g. `‖I‖_op² = 1 < n`).  Writing `X = S₂ ⊗ₖ S
 smallest-eigenvalue bound for a positive-definite matrix gives
 `λ_min(τ) · tr[Xᴴ X] ≤ tr[X τ Xᴴ]`, Hilbert–Schmidt multiplicativity of the
 Kronecker product gives `tr[Xᴴ X] = tr[S₂ᴴ S₂] · tr[S₁ᴴ S₁]`, and the determinant
-AM–GM estimate gives `tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ n` whenever `det Sᵢ = 1`.  Combining
-these, `tr[X τ Xᴴ] ≥ λ_min(τ) · n · ‖Sᵢ‖²` for each factor, so any minimiser is
-confined to the bounded set `{S | ‖S‖ ≤ C}`.  Intersecting with the closed set
+AM–GM estimate gives `tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ dᵢ` whenever `det Sᵢ = 1`.  Combining
+these, `tr[X τ Xᴴ] ≥ λ_min(τ) · d₂ · ‖S₁‖²` and
+`tr[X τ Xᴴ] ≥ λ_min(τ) · d₁ · ‖S₂‖²`, so any minimiser is
+confined to bounded sets `{S₁ | ‖S₁‖ ≤ C₁}`, `{S₂ | ‖S₂‖ ≤ C₂}`.  Intersecting with the closed set
 `det S = 1` gives a compact set on which the continuous trace functional attains
 its minimum by the extreme value theorem; a value outside the sublevel set is
 automatically larger than the value at the identity, so this minimiser is
 global. -/
 lemma infimum_is_attained
-    {τ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ}
+    {d₁ d₂ : ℕ} {τ : Matrix (Fin d₂ × Fin d₁) (Fin d₂ × Fin d₁) ℂ}
     (hτ_posDef : τ.PosDef) :
-    ∃ (S₁ S₂ : Matrix (Fin D) (Fin D) ℂ),
+    ∃ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
       S₁.det = 1 ∧ S₂.det = 1 ∧
-      ∀ (T₁ T₂ : Matrix (Fin D) (Fin D) ℂ),
+      ∀ (T₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (T₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
         T₁.det = 1 → T₂.det = 1 →
         (Matrix.trace (((T₂ ⊗ₖ T₁) * τ * ((T₂ ⊗ₖ T₁)ᴴ)))).re ≥
           (Matrix.trace (((S₂ ⊗ₖ S₁) * τ * ((S₂ ⊗ₖ S₁)ᴴ)))).re := by
   classical
-  -- The degenerate case `D = 0`: all matrices are `0 × 0`, every trace vanishes.
-  rcases Nat.eq_zero_or_pos D with hD | hD
-  · subst hD
+  -- The degenerate cases: if either dimension is zero, the matrices live on an
+  -- empty index type and every trace vanishes.
+  rcases Nat.eq_zero_or_pos d₁ with hD₁ | hD₁
+  · subst hD₁
     refine ⟨1, 1, Matrix.det_one, Matrix.det_one, ?_⟩
     intro T₁ T₂ _ _
     simp [Matrix.trace, Matrix.diag]
-  haveI : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
-  haveI : Nonempty (Fin D × Fin D) := ⟨(⟨0, hD⟩, ⟨0, hD⟩)⟩
+  rcases Nat.eq_zero_or_pos d₂ with hD₂ | hD₂
+  · subst hD₂
+    refine ⟨1, 1, Matrix.det_one, Matrix.det_one, ?_⟩
+    intro T₁ T₂ _ _
+    simp [Matrix.trace, Matrix.diag]
+  haveI : Nonempty (Fin d₁) := ⟨⟨0, hD₁⟩⟩
+  haveI : Nonempty (Fin d₂) := ⟨⟨0, hD₂⟩⟩
+  haveI : Nonempty (Fin d₂ × Fin d₁) := ⟨(⟨0, hD₂⟩, ⟨0, hD₁⟩)⟩
   haveI : ProperSpace
-      (Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ) :=
+      (Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ) :=
     FiniteDimensional.proper_rclike ℂ _
   -- The functional to minimise, as a function of the pair `(S₁, S₂)`.
-  let g : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ → ℝ :=
+  let g : Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ → ℝ :=
     fun p => (Matrix.trace ((p.2 ⊗ₖ p.1) * τ * ((p.2 ⊗ₖ p.1)ᴴ))).re
   set lam : ℝ := minEigenvalue hτ_posDef.isHermitian with hlam_def
   have hlam : 0 < lam := minEigenvalue_pos_of_posDef hτ_posDef.isHermitian hτ_posDef
-  set cardR : ℝ := (Fintype.card (Fin D) : ℝ) with hcardR
-  have hcardR_pos : 0 < cardR := by
-    rw [hcardR]; exact_mod_cast Fintype.card_pos
+  set cardR₁ : ℝ := (Fintype.card (Fin d₁) : ℝ) with hcardR₁
+  set cardR₂ : ℝ := (Fintype.card (Fin d₂) : ℝ) with hcardR₂
+  have hcardR₁_pos : 0 < cardR₁ := by
+    rw [hcardR₁]; exact_mod_cast Fintype.card_pos
+  have hcardR₂_pos : 0 < cardR₂ := by
+    rw [hcardR₂]; exact_mod_cast Fintype.card_pos
   -- Coercivity: the value dominates `λ · ‖S₂‖² · ‖S₁‖²`.
-  have key : ∀ S₁ S₂ : Matrix (Fin D) (Fin D) ℂ,
+  have key : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
       lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) ≤
         g (S₁, S₂) := by
     intro S₁ S₂
@@ -225,76 +238,86 @@ lemma infimum_is_attained
       (posDef_minEigenvalue_mul_trace_conjTranspose_mul_self_le hτ_posDef (S₂ ⊗ₖ S₁))).1
     rw [Complex.re_ofReal_mul, trace_conjTranspose_mul_self_re_kronecker] at hle
     exact hle
-  -- The bound at the identity confines minimisers to a Frobenius ball.
+  -- The bound at the identity confines minimisers to Frobenius balls (one per
+  -- factor, since the two dimensions may differ).
   set B : ℝ := g (1, 1) with hB
-  set C : ℝ := Real.sqrt (B / (lam * cardR)) with hC
-  have hbound : ∀ S₁ S₂ : Matrix (Fin D) (Fin D) ℂ, S₁.det = 1 → S₂.det = 1 →
-      g (S₁, S₂) ≤ B → ‖S₁‖ ≤ C ∧ ‖S₂‖ ≤ C := by
+  set C₁ : ℝ := Real.sqrt (B / (lam * cardR₂)) with hC₁
+  set C₂ : ℝ := Real.sqrt (B / (lam * cardR₁)) with hC₂
+  have hbound : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
+      S₁.det = 1 → S₂.det = 1 →
+      g (S₁, S₂) ≤ B → ‖S₁‖ ≤ C₁ ∧ ‖S₂‖ ≤ C₂ := by
     intro S₁ S₂ h1 h2 hgB
     have hd1 : ‖S₁.det‖ = 1 := by rw [h1]; simp
     have hd2 : ‖S₂.det‖ = 1 := by rw [h2]; simp
-    have hn1 : cardR ≤ (Matrix.trace (S₁ᴴ * S₁)).re :=
+    have hn1 : cardR₁ ≤ (Matrix.trace (S₁ᴴ * S₁)).re :=
       card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one S₁ hd1
-    have hn2 : cardR ≤ (Matrix.trace (S₂ᴴ * S₂)).re :=
+    have hn2 : cardR₂ ≤ (Matrix.trace (S₂ᴴ * S₂)).re :=
       card_le_trace_conjTranspose_mul_self_re_of_det_norm_eq_one S₂ hd2
-    have ht1 : 0 ≤ (Matrix.trace (S₁ᴴ * S₁)).re := hcardR_pos.le.trans hn1
-    have ht2 : 0 ≤ (Matrix.trace (S₂ᴴ * S₂)).re := hcardR_pos.le.trans hn2
-    have hδ : 0 < lam * cardR := mul_pos hlam hcardR_pos
+    have ht1 : 0 ≤ (Matrix.trace (S₁ᴴ * S₁)).re := hcardR₁_pos.le.trans hn1
+    have ht2 : 0 ≤ (Matrix.trace (S₂ᴴ * S₂)).re := hcardR₂_pos.le.trans hn2
+    have hδ₁ : 0 < lam * cardR₂ := mul_pos hlam hcardR₂_pos
+    have hδ₂ : 0 < lam * cardR₁ := mul_pos hlam hcardR₁_pos
     -- Bound on `‖S₁‖`.
-    have hsq1 : ‖S₁‖ ^ 2 ≤ B / (lam * cardR) := by
-      have hchain : (lam * cardR) * (Matrix.trace (S₁ᴴ * S₁)).re ≤ B := by
-        calc (lam * cardR) * (Matrix.trace (S₁ᴴ * S₁)).re
-            = lam * (cardR * (Matrix.trace (S₁ᴴ * S₁)).re) := by ring
+    have hsq1 : ‖S₁‖ ^ 2 ≤ B / (lam * cardR₂) := by
+      have hchain : (lam * cardR₂) * (Matrix.trace (S₁ᴴ * S₁)).re ≤ B := by
+        calc (lam * cardR₂) * (Matrix.trace (S₁ᴴ * S₁)).re
+            = lam * (cardR₂ * (Matrix.trace (S₁ᴴ * S₁)).re) := by ring
           _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
                 exact mul_le_mul_of_nonneg_left
                   (mul_le_mul_of_nonneg_right hn2 ht1) hlam.le
           _ ≤ g (S₁, S₂) := key S₁ S₂
           _ ≤ B := hgB
-      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ, mul_comm]
+      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ₁, mul_comm]
       exact hchain
-    have hsq2 : ‖S₂‖ ^ 2 ≤ B / (lam * cardR) := by
-      have hchain : (lam * cardR) * (Matrix.trace (S₂ᴴ * S₂)).re ≤ B := by
-        calc (lam * cardR) * (Matrix.trace (S₂ᴴ * S₂)).re
-            = lam * ((Matrix.trace (S₂ᴴ * S₂)).re * cardR) := by ring
+    have hsq2 : ‖S₂‖ ^ 2 ≤ B / (lam * cardR₁) := by
+      have hchain : (lam * cardR₁) * (Matrix.trace (S₂ᴴ * S₂)).re ≤ B := by
+        calc (lam * cardR₁) * (Matrix.trace (S₂ᴴ * S₂)).re
+            = lam * ((Matrix.trace (S₂ᴴ * S₂)).re * cardR₁) := by ring
           _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
                 exact mul_le_mul_of_nonneg_left
                   (mul_le_mul_of_nonneg_left hn1 ht2) hlam.le
           _ ≤ g (S₁, S₂) := key S₁ S₂
           _ ≤ B := hgB
-      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ, mul_comm]
+      rw [← trace_conjTranspose_mul_self_re_eq_frobenius_norm_sq, le_div_iff₀ hδ₂, mul_comm]
       exact hchain
     refine ⟨?_, ?_⟩
-    · rw [hC, ← Real.sqrt_sq (norm_nonneg S₁)]; exact Real.sqrt_le_sqrt hsq1
-    · rw [hC, ← Real.sqrt_sq (norm_nonneg S₂)]; exact Real.sqrt_le_sqrt hsq2
+    · rw [hC₁, ← Real.sqrt_sq (norm_nonneg S₁)]; exact Real.sqrt_le_sqrt hsq1
+    · rw [hC₂, ← Real.sqrt_sq (norm_nonneg S₂)]; exact Real.sqrt_le_sqrt hsq2
   -- The compact constraint set.
-  set Kc : Set (Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ) :=
-    {p | p.1.det = 1 ∧ p.2.det = 1 ∧ ‖p.1‖ ≤ C ∧ ‖p.2‖ ≤ C} with hKc
+  set Kc : Set (Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ) :=
+    {p | p.1.det = 1 ∧ p.2.det = 1 ∧ ‖p.1‖ ≤ C₁ ∧ ‖p.2‖ ≤ C₂} with hKc
   have hgcont : Continuous g := by
-    have hk : Continuous fun p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ =>
+    have hk : Continuous fun p : Matrix (Fin d₁) (Fin d₁) ℂ ×
+        Matrix (Fin d₂) (Fin d₂) ℂ =>
         p.2 ⊗ₖ p.1 := Continuous.matrix_kronecker continuous_snd continuous_fst
     exact Complex.continuous_re.comp
       ((hk.matrix_mul continuous_const).matrix_mul hk.matrix_conjTranspose).matrix_trace
   have hclosed : IsClosed Kc := by
-    have c1 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | p.1.det = 1} :=
+    have c1 : IsClosed {p : Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ |
+        p.1.det = 1} :=
       isClosed_eq continuous_fst.matrix_det continuous_const
-    have c2 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | p.2.det = 1} :=
+    have c2 : IsClosed {p : Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ |
+        p.2.det = 1} :=
       isClosed_eq continuous_snd.matrix_det continuous_const
-    have c3 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | ‖p.1‖ ≤ C} :=
+    have c3 : IsClosed {p : Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ |
+        ‖p.1‖ ≤ C₁} :=
       isClosed_le (continuous_norm.comp continuous_fst) continuous_const
-    have c4 : IsClosed {p : Matrix (Fin D) (Fin D) ℂ × Matrix (Fin D) (Fin D) ℂ | ‖p.2‖ ≤ C} :=
+    have c4 : IsClosed {p : Matrix (Fin d₁) (Fin d₁) ℂ × Matrix (Fin d₂) (Fin d₂) ℂ |
+        ‖p.2‖ ≤ C₂} :=
       isClosed_le (continuous_norm.comp continuous_snd) continuous_const
-    have hset : Kc = {p | p.1.det = 1} ∩ {p | p.2.det = 1} ∩ {p | ‖p.1‖ ≤ C} ∩ {p | ‖p.2‖ ≤ C} := by
+    have hset : Kc = {p | p.1.det = 1} ∩ {p | p.2.det = 1} ∩
+        {p | ‖p.1‖ ≤ C₁} ∩ {p | ‖p.2‖ ≤ C₂} := by
       rw [hKc]; ext p; simp only [Set.mem_inter_iff, Set.mem_setOf_eq]; tauto
     rw [hset]; exact ((c1.inter c2).inter c3).inter c4
   have hbdd : Bornology.IsBounded Kc := by
-    refine (Metric.isBounded_closedBall (x := (0 : Matrix (Fin D) (Fin D) ℂ ×
-      Matrix (Fin D) (Fin D) ℂ)) (r := C)).subset ?_
+    refine (Metric.isBounded_closedBall (x := (0 : Matrix (Fin d₁) (Fin d₁) ℂ ×
+      Matrix (Fin d₂) (Fin d₂) ℂ)) (r := max C₁ C₂)).subset ?_
     intro p hp
     rw [hKc, Set.mem_setOf_eq] at hp
     rw [Metric.mem_closedBall]
     calc dist p 0 = max (dist p.1 0) (dist p.2 0) := Prod.dist_eq
       _ = max ‖p.1‖ ‖p.2‖ := by rw [dist_zero_right, dist_zero_right]
-      _ ≤ C := max_le hp.2.2.1 hp.2.2.2
+      _ ≤ max C₁ C₂ := max_le_max hp.2.2.1 hp.2.2.2
   have hKcompact : IsCompact Kc := Metric.isCompact_of_isClosed_isBounded hclosed hbdd
   have h11mem : (1, 1) ∈ Kc := by
     rw [hKc, Set.mem_setOf_eq]
@@ -314,14 +337,16 @@ lemma infimum_is_attained
   · have hpB : g pmin ≤ B := isMinOn_iff.mp hpmin_min (1, 1) h11mem
     exact le_trans hpB (le_of_lt (not_le.mp hcase))
 
-/-- Entry formula for conjugation by `A ⊗ₖ 1` (identity on the second factor). -/
-private lemma kron_one_conj_entry (A : Matrix (Fin D) (Fin D) ℂ)
-    (M : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (i₁ i₂ j₁ j₂ : Fin D) :
-    ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M *
-        (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
+/-- Entry formula for conjugation by `A ⊗ₖ 1` (identity on the second factor).
+The two tensor factors may have different dimensions. -/
+private lemma kron_one_conj_entry {dOut dIn : ℕ} (A : Matrix (Fin dOut) (Fin dOut) ℂ)
+    (M : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ)
+    (i₁ : Fin dOut) (i₂ : Fin dIn) (j₁ : Fin dOut) (j₂ : Fin dIn) :
+    ((A ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ)) * M *
+        (A ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
       = ∑ c, ∑ d, A i₁ c * M (c, i₂) (d, j₂) * star (A j₁ d) := by
-  have L : ∀ s : Fin D × Fin D,
-      ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M) (i₁, i₂) s
+  have L : ∀ s : Fin dOut × Fin dIn,
+      ((A ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ)) * M) (i₁, i₂) s
         = ∑ c, A i₁ c * M (c, i₂) s := by
     intro s
     rw [Matrix.mul_apply, Fintype.sum_prod_type]
@@ -330,8 +355,8 @@ private lemma kron_one_conj_entry (A : Matrix (Fin D) (Fin D) ℂ)
       mul_zero, ite_mul, zero_mul]
     rw [Finset.sum_ite_eq Finset.univ i₂ (fun w₂ => A i₁ c * M (c, w₂) s)]
     simp
-  have key : ((A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * M *
-        (A ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
+  have key : ((A ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ)) * M *
+        (A ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ))ᴴ) (i₁, i₂) (j₁, j₂)
       = ∑ d, ∑ c, A i₁ c * M (c, i₂) (d, j₂) * star (A j₁ d) := by
     rw [Matrix.mul_apply, Fintype.sum_prod_type]
     refine Finset.sum_congr rfl fun d _ => ?_
@@ -345,14 +370,16 @@ private lemma kron_one_conj_entry (A : Matrix (Fin D) (Fin D) ℂ)
     · intro h; exact absurd (Finset.mem_univ j₂) h
   rw [key, Finset.sum_comm]
 
-/-- Entry formula for conjugation by `1 ⊗ₖ B` (identity on the first factor). -/
-private lemma one_kron_conj_entry (B : Matrix (Fin D) (Fin D) ℂ)
-    (M : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (i₁ i₂ j₁ j₂ : Fin D) :
-    (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M *
-        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
+/-- Entry formula for conjugation by `1 ⊗ₖ B` (identity on the first factor).
+The two tensor factors may have different dimensions. -/
+private lemma one_kron_conj_entry {dOut dIn : ℕ} (B : Matrix (Fin dIn) (Fin dIn) ℂ)
+    (M : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ)
+    (i₁ : Fin dOut) (i₂ : Fin dIn) (j₁ : Fin dOut) (j₂ : Fin dIn) :
+    (((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ B) * M *
+        ((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
       = ∑ a, ∑ b, B i₂ a * M (i₁, a) (j₁, b) * star (B j₂ b) := by
-  have L : ∀ s : Fin D × Fin D,
-      (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M) (i₁, i₂) s
+  have L : ∀ s : Fin dOut × Fin dIn,
+      (((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ B) * M) (i₁, i₂) s
         = ∑ a, B i₂ a * M (i₁, a) s := by
     intro s
     rw [Matrix.mul_apply, Fintype.sum_prod_type, Finset.sum_comm]
@@ -360,8 +387,8 @@ private lemma one_kron_conj_entry (B : Matrix (Fin D) (Fin D) ℂ)
     simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, ite_mul, one_mul, zero_mul]
     rw [Finset.sum_ite_eq Finset.univ i₁ (fun w₁ => B i₂ a * M (w₁, a) s)]
     simp
-  have key : (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B) * M *
-        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
+  have key : (((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ B) * M *
+        ((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ B)ᴴ) (i₁, i₂) (j₁, j₂)
       = ∑ b, ∑ a, B i₂ a * M (i₁, a) (j₁, b) * star (B j₂ b) := by
     rw [Matrix.mul_apply, Fintype.sum_prod_type, Finset.sum_eq_single j₁]
     · refine Finset.sum_congr rfl fun b _ => ?_
@@ -378,10 +405,10 @@ private lemma one_kron_conj_entry (B : Matrix (Fin D) (Fin D) ℂ)
 
 /-- `tr_A` commutes with conjugation by `1 ⊗ₖ X` (acting on the second factor):
 `tr_A((1 ⊗ X) ρ (1 ⊗ X)†) = X (tr_A ρ) X†`. -/
-private lemma traceLeft_one_kron_conj (X : Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
-    Matrix.traceLeft (((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X) * ρ *
-        ((1 : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ X)ᴴ)
+private lemma traceLeft_one_kron_conj {dOut dIn : ℕ} (X : Matrix (Fin dIn) (Fin dIn) ℂ)
+    (ρ : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
+    Matrix.traceLeft (((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ X) * ρ *
+        ((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ X)ᴴ)
       = X * Matrix.traceLeft ρ * Xᴴ := by
   ext i j
   rw [Matrix.traceLeft_apply]
@@ -400,10 +427,10 @@ private lemma traceLeft_one_kron_conj (X : Matrix (Fin D) (Fin D) ℂ)
 
 /-- `tr_B` commutes with conjugation by `X ⊗ₖ 1` (acting on the first factor):
 `tr_B((X ⊗ 1) ρ (X ⊗ 1)†) = X (tr_B ρ) X†`. -/
-private lemma traceRight_kron_one_conj (X : Matrix (Fin D) (Fin D) ℂ)
-    (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
-    Matrix.traceRight ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * ρ *
-        (X ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))ᴴ)
+private lemma traceRight_kron_one_conj {dOut dIn : ℕ} (X : Matrix (Fin dOut) (Fin dOut) ℂ)
+    (ρ : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
+    Matrix.traceRight ((X ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ)) * ρ *
+        (X ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ))ᴴ)
       = X * Matrix.traceRight ρ * Xᴴ := by
   ext i j
   rw [Matrix.traceRight_apply]
@@ -422,7 +449,8 @@ private lemma traceRight_kron_one_conj (X : Matrix (Fin D) (Fin D) ℂ)
 
 /-- Conjugating a matrix unit by `B` spreads it over all matrix units:
 `B (single i₂ j₂ c) B† = ∑ a b, (B a i₂ · conj(B b j₂)) (single a b c)`. -/
-private lemma single_conj_spread (B : Matrix (Fin D) (Fin D) ℂ) (i₂ j₂ : Fin D) (c : ℂ) :
+private lemma single_conj_spread {n : ℕ} (B : Matrix (Fin n) (Fin n) ℂ)
+    (i₂ j₂ : Fin n) (c : ℂ) :
     B * Matrix.single i₂ j₂ c * Bᴴ
       = ∑ a, ∑ b, (B a i₂ * star (B b j₂)) • Matrix.single a b c := by
   ext p q
@@ -484,7 +512,8 @@ private lemma traceLeft_eq_traceLeftA (ρ : Matrix (Fin D × Fin D) (Fin D × Fi
     Matrix.traceLeft ρ = Matrix.traceLeftA ρ := rfl
 
 /-- The full trace equals the trace of the right partial trace: `tr(X) = tr(tr_B(X))`. -/
-private lemma trace_eq_trace_traceRight (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+private lemma trace_eq_trace_traceRight {dOut dIn : ℕ}
+    (X : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
     X.trace = (Matrix.traceRight X).trace := by
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.traceRight_apply]
   exact Fintype.sum_prod_type _
@@ -492,7 +521,7 @@ private lemma trace_eq_trace_traceRight (X : Matrix (Fin D × Fin D) (Fin D × F
 /-- A positive-definite matrix can be normalized to a scalar matrix by an
 `SL(D, ℂ)` congruence: there exists `S` with `det S = 1` and
 `S M S† = r • 1` for some `r ≥ 0`.  Take `S = c · √M⁻¹` with `cᴰ = det √M`. -/
-private lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
+lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
     (hM : M.PosDef) :
     ∃ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 ∧
       ∃ r : ℝ, 0 ≤ r ∧ S * M * Sᴴ = (r : ℂ) • 1 := by
@@ -521,7 +550,7 @@ private lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
 with the same determinant as a positive-definite `M`, and `tr N` is the minimum
 of `tr (S M S†)` over `det S = 1`, then `N` is a scalar matrix.  This is the
 AM–GM equality argument: the minimum saturates `Dᴰ det = (tr)ᴰ`. -/
-private lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D) ℂ}
+lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D) ℂ}
     (hM : M.PosDef) (hN : N.PosSemidef) (hdet : N.det = M.det)
     (hmin : ∀ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 →
       (Matrix.trace N).re ≤ (Matrix.trace (S * M * Sᴴ)).re) :
