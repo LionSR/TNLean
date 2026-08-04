@@ -7,9 +7,10 @@
 
 \input{command}
 
-\title{The Square-Dimensional Scope of the Choi--Jamiolkowski Correspondence}
+\title{The Rectangular Choi--Jamiolkowski Correspondence:\\
+Resolution of the Square-Dimensional Scope Restriction}
 \author{}
-\date{2026-07-30}
+\date{2026-08-04}
 
 \begin{document}
 \maketitle
@@ -53,73 +54,98 @@ More generally, without assuming trace preservation, the source gives
 It also gives the corresponding proportional-identity criterion for a
 doubly-stochastic map \cite[Proposition~2.1]{Wolf2012Quantum}.
 
-\section{The square specialization}
-
-The present Choi matrix takes a linear endomorphism
-$T:\MN{D}\to\MN{D}$ and produces an operator on
-$\C^D\otimes\C^D$.\footnote{Formal definition:
-\leanid{ChoiJamiolkowski.choiMatrix} in
-\doclink{TNLean/Channel/ChoiJamiolkowski}.}
-Within this specialization, the development proves the complete-positivity
-equivalence, the Hermiticity-preservation equivalence, and the implication
-from trace preservation to
-\begin{align}
-    \tr_A(\tau_T)&=\frac{\Id_D}{D}.
-\end{align}
-It consequently proves $\tr(\tau_T)=1$ for trace-preserving maps.  It does not
-yet prove the general adjoint partial-trace identity or the general trace
-normalization identity displayed above.
-Thus these results agree with Wolf Proposition~2.1 after imposing $d=d'$,
-but they do not constitute its different-dimension statement.
-
-\section{Missing clauses}
-
-For arbitrary $d$ and $d'$, the remaining work is to construct both directions
-of the correspondence, prove the trace-pairing formula, and derive the
-Hermiticity, complete-positivity, unitality, trace-preservation, and
-doubly-stochastic equivalences.  In particular, the converse partial-trace
-implications, the general adjoint partial-trace identity, the general trace
-normalization identity, and the proportional-identity clauses should be
-established rather than inferred from the square specialization.
-
-The natural complete-positivity predicate is the existence of rectangular
-Kraus operators $A_i\in M_{d'\times d}(\C)$ satisfying
-\begin{align}
-    T(X)&=\sum_i A_i X A_i^\dagger.
-\end{align}
-Using this predicate keeps the Choi correspondence compatible with the
-rectangular Kraus representation already used elsewhere in the development.
-
-\section{The related Kraus-representation restriction}
-
-Wolf Theorem~2.1 states that a map
-$T:\MN{d}\to\MN{d'}$ is completely positive if and only if it has a
-rectangular Kraus representation
+Wolf Theorem~2.1 states that $T$ is completely positive if and only if it
+has a rectangular Kraus representation
 \begin{align}
     T(X)&=\sum_{j=1}^{r}K_jXK_j^\dagger,
-    &K_j&\in M_{d'\times d}(\C).
+    &K_j&\in M_{d'\times d}(\C),
     \tag{Wolf 2.8}
 \end{align}
-It further identifies the trace-preserving and unital normalizations, the
-minimal value $r=\operatorname{rank}(\tau_T)\leq dd'$, an orthogonal minimal
-family, and the unitary freedom after padding the smaller family with zero
+and identifies the trace-preserving and unital normalizations, the minimal
+value $r=\operatorname{rank}(\tau_T)\leq dd'$, an orthogonal minimal family,
+and the unitary freedom after padding the smaller family with zero
 operators \cite[Theorem~2.1]{Wolf2012Quantum}.
 
-The present development contains rectangular Kraus predicates and several
-normalization and freedom results, but not this full arbitrary-dimensional
-package.  The missing work is the rectangular existence equivalence together
-with the minimal-rank and orthogonal-family conclusions, followed by the
-padded-unitary classification in the source's stated generality.
+\section{Resolution}
+
+The different-dimension statements are now formalized.  The rectangular
+Choi development\footnote{Formal module:
+\doclink{TNLean/Channel/ChoiRectangular}; namespace
+\leanid{ChoiRectangular}.} defines the Choi matrix
+\leanid{choiMatrix} on $\C^{d'}\otimes\C^{d}$ and proves
+\begin{itemize}
+    \item the mutual-inverse pair \leanid{mapOfChoiMatrix_choiMatrix} and
+        \leanid{choiMatrix_mapOfChoiMatrix};
+    \item the trace-pairing formula \leanid{trace_pairing};
+    \item the Hermiticity clause
+        \leanid{choiMatrix_isHermitian_iff_hermiticityPreserving};
+    \item the complete-positivity clause
+        \leanid{isKrausCP_iff_choiMatrix_posSemidef};
+    \item the unitality clause
+        \leanid{unital_iff_traceRight_choiMatrix}, from the identity
+        \leanid{traceRight_choiMatrix} ($\tr_B(\tau_T)=T(\Id)/d$);
+    \item the trace-preservation clause
+        \leanid{tracePreserving_iff_traceLeft_choiMatrix}, from the identity
+        \leanid{traceLeft_choiMatrix}
+        ($\tr_A(\tau_T)=(T^*(\Id))^{T}/d$);
+    \item the normalization clause \leanid{trace_choiMatrix}
+        ($\tr(\tau_T)=\tr(T^*(\Id))/d$);
+    \item the doubly-stochastic clause
+        \leanid{doublyStochastic_iff_partialTraces_proportional}.
+\end{itemize}
+The rectangular Kraus development\footnote{Formal module:
+\doclink{TNLean/Channel/KrausRectangular}; same namespace.} proves the
+normalization equivalences \leanid{kraus_tp_iff_sum_conjTranspose_mul} and
+\leanid{kraus_unital_iff_sum_mul_conjTranspose}, the minimality of the
+Kraus rank \leanid{choiRank_isLeast_hasKrausCard_of_isKrausCP} with bound
+\leanid{choiRank_le_mul} ($r=\operatorname{rank}(\tau_T)\leq dd'$), the
+orthogonal minimal family \leanid{exists_kraus_orthogonal_of_isKrausCP},
+and the padded unitary freedom \leanid{kraus_isometry_freedom_iff} and
+\leanid{kraus_unitary_freedom_iff}.
+
+The complete-positivity predicate is \leanid{IsKrausCP}, the existence of
+rectangular Kraus operators, which is the notion used elsewhere in the
+development; the Choi correspondence is phrased relative to it.
+
+\section{Surviving square-only declarations}
+
+The following declarations remain square-only.  Each is the $d=d'$
+specialization of a rectangular result proved above, not an independent
+scope gap; they are retained because existing callers use them.
+
+\begin{itemize}
+    \item \leanid{ChoiJamiolkowski.choiMatrix} and its correspondence
+        clauses.  The square Choi matrix is definitionally the rectangular
+        one at $d=d'$ (\leanid{ChoiRectangular.choiMatrix_eq_choiJamiolkowski}),
+        and each square clause is the specialization of the rectangular
+        clause with the same name.
+    \item \leanid{IsTracePreservingMap} and \leanid{IsChannel}.  These
+        predicates are stated for endomorphisms of a single matrix algebra.
+        The rectangular development states trace preservation pointwise,
+        $\tr(T(X))=\tr(X)$; the channel structure (complete positivity
+        plus trace preservation) is covered for rectangular maps by
+        \leanid{IsKrausCPTP}.
+    \item \leanid{Channel.HasKrausCard}, \leanid{Channel.HasKrausRankLE},
+        and \leanid{Channel.choiRank}.  The square cardinality and rank
+        predicates specialize \leanid{ChoiRectangular.HasKrausCard},
+        \leanid{ChoiRectangular.HasKrausRankLE}, and
+        \leanid{ChoiRectangular.choiRank}.
+    \item The square Kraus-freedom theorems
+        \leanid{kraus_isometry_freedom_iff} and
+        \leanid{kraus_unitary_freedom_iff} in
+        \doclink{TNLean/Channel/KrausUnitaryFreedom}.  The rectangular
+        namespace carries the general-dimension forms
+        \leanid{ChoiRectangular.kraus_isometry_freedom_iff} and
+        \leanid{ChoiRectangular.kraus_unitary_freedom_iff}.
+\end{itemize}
 
 \section{Verdict}
 
-These are \emph{scope restrictions}: the proved Choi and Kraus results are
-mathematically correct in their stated settings, while Wolf Proposition~2.1
-and Theorem~2.1 allow independent input and output dimensions and include the
-additional clauses above.  The source-labelled blueprint entries therefore
-state the restrictions explicitly.  The restrictions can be removed once the
-different-dimension statements have been proved.\footnote{Formal follow-up:
-\ghissue{3987}.}
+The scope restriction recorded here on 2026-07-30 is \emph{lifted}: Wolf
+Proposition~2.1 and Theorem~2.1 are formalized at the source's generality,
+with independent input and output dimensions and all displayed clauses.
+No hypothesis strengthening remains, and no source-level gap survives in
+this area.  Resolved in \ghissue{3987}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
