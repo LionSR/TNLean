@@ -8,11 +8,14 @@ import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Dimension.Finite
 
 /-!
-# Spanning by stationary density matrices
+# Fixed-point subspace spanned by positive-semidefinite fixed points
 
-This file proves Wolf Corollary 6.8 (Linearly independent stationary states):
-the fixed-point space of a positive trace-preserving linear map is spanned by
-stationary density matrices.
+This file proves that the fixed-point subspace of a positive trace-preserving
+linear map is spanned (over ℂ) by its positive-semidefinite elements, and then
+by stationary density matrices.  This is the key spectral lemma for Wolf
+Corollary~6.8 (Linearly independent stationary states).  The dimension/basis
+statement with exactly `r` linearly independent stationary density matrices is
+tracked for follow-up work.
 
 ## Source
 
@@ -93,5 +96,110 @@ lemma fixedPointsSubmodule_top_span_by_posSemidef
   · intro X hX
     rcases (IsPositiveMap.mem_fixedPointsSubmodule (E := E)).mp hX with hX_fix
     exact fixedPoint_mem_span_posSemidef E hE hTP hX_fix
+
+/-- For a nonzero PSD matrix, its trace has strictly positive real part.
+
+Follows from `trace_nonneg` (re ≥ 0, im = 0) and `trace_eq_zero_iff`
+(nonzero ⇒ nonzero trace). -/
+lemma trace_re_pos_of_posSemidef_ne_zero
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ_psd : ρ.PosSemidef) (hρ_ne : ρ ≠ 0) :
+    0 < (Matrix.trace ρ).re := by
+  have h_re_nonneg : 0 ≤ (Matrix.trace ρ).re :=
+    ((RCLike.nonneg_iff (K := ℂ)).mp hρ_psd.trace_nonneg).1
+  have h_ne_zero : Matrix.trace ρ ≠ 0 :=
+    mt (hρ_psd.trace_eq_zero_iff.mp ·) hρ_ne
+  by_contra! hle
+  have him_zero : (Matrix.trace ρ).im = 0 :=
+    ((RCLike.nonneg_iff (K := ℂ)).mp hρ_psd.trace_nonneg).2
+  have hzero : Matrix.trace ρ = 0 :=
+    Complex.ext (le_antisymm hle h_re_nonneg) him_zero
+  exact h_ne_zero hzero
+
+/-- A nonzero PSD fixed point, scaled by the inverse of its trace, yields a
+stationary density matrix. -/
+lemma stationaryDensity_of_posSemidef_fixedPoint
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ_psd : ρ.PosSemidef)
+    (hρ_fix : E ρ = ρ) (hρ_ne : ρ ≠ 0) :
+    IsStationaryDensity E ((Matrix.trace ρ)⁻¹ • ρ) := by
+  have htr_pos : 0 < (Matrix.trace ρ).re :=
+    trace_re_pos_of_posSemidef_ne_zero hρ_psd hρ_ne
+  have him_zero : (Matrix.trace ρ).im = 0 :=
+    ((RCLike.nonneg_iff (K := ℂ)).mp hρ_psd.trace_nonneg).2
+  have hinv_nonneg_ℂ : 0 ≤ ((Matrix.trace ρ)⁻¹ : ℂ) := by
+    have htr_nonneg : 0 ≤ (Matrix.trace ρ : ℂ) := hρ_psd.trace_nonneg
+    have htr_ne_zero : Matrix.trace ρ ≠ 0 :=
+      mt (hρ_psd.trace_eq_zero_iff.mp ·) hρ_ne
+    -- In a StarOrderedRing, if 0 ≤ a and a ≠ 0, then 0 ≤ a⁻¹.
+    -- For ℂ specifically, this holds because the positive cone is ℝ≥0.
+    -- Use the fact that trace ρ is a real positive number.
+    have htr_real : (Matrix.trace ρ : ℂ) = ((Matrix.trace ρ).re : ℂ) :=
+      Complex.ext rfl him_zero
+    rw [htr_real]
+    -- Now we need 0 ≤ ((re : ℂ)⁻¹). Since re > 0, its inverse is ≥ 0.
+    have hrepos : (0 : ℝ) ≤ ((Matrix.trace ρ).re)⁻¹ := by
+      positivity
+    have hpos_ℂ : (0 : ℂ) ≤ (((Matrix.trace ρ).re : ℝ)⁻¹ : ℂ) := by
+      exact_mod_cast hrepos
+    simpa [map_inv₀ (algebraMap ℝ ℂ)] using hpos_ℂ
+  have h_psd : ((Matrix.trace ρ)⁻¹ • ρ).PosSemidef :=
+    hρ_psd.smul hinv_nonneg_ℂ
+  have h_trace_one : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) = (1 : ℂ) := by
+    rw [Matrix.trace_smul, smul_eq_mul]
+    field_simp [mt (hρ_psd.trace_eq_zero_iff.mp ·) hρ_ne]
+  have h_fix : E ((Matrix.trace ρ)⁻¹ • ρ) = (Matrix.trace ρ)⁻¹ • ρ := by
+    rw [LinearMap.map_smul, hρ_fix]
+  exact {
+    posSemidef := h_psd
+    trace_one := h_trace_one
+    fixed_point := h_fix
+  }
+
+/-- **Wolf Corollary 6.8, spanning statement.**
+
+The fixed-point subspace of a positive trace-preserving linear map is spanned
+(over ℂ) by stationary density matrices (PSD, trace 1, fixed by `E`).
+
+The dimension/basis statement with exactly `r` linearly independent stationary
+density matrices is tracked for follow-up work. -/
+theorem fixedPointsSubmodule_spanned_by_stationaryDensities
+    [NeZero D] (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
+    Submodule.span ℂ {ρ | IsStationaryDensity E ρ} = fixedPointsSubmodule E := by
+  set P := posSemidefFixedPointsSet E
+  set S : Set (Matrix (Fin D) (Fin D) ℂ) := {ρ | IsStationaryDensity E ρ}
+  apply le_antisymm
+  · -- span(stationary) ⊆ fixedPointsSubmodule
+    refine Submodule.span_le.mpr ?_
+    rintro ρ hρ
+    have hρ_sd : IsStationaryDensity E ρ := hρ
+    have hmem : E ρ = ρ := hρ_sd.fixed_point
+    simpa [IsPositiveMap.mem_fixedPointsSubmodule] using hmem
+  · -- fixedPointsSubmodule ⊆ span(stationary)
+    have h_span_P : Submodule.span ℂ P = fixedPointsSubmodule E :=
+      fixedPointsSubmodule_top_span_by_posSemidef E hE hTP
+    have h_P_sub_span_S : P ⊆ Submodule.span ℂ S := by
+      intro X hX
+      rw [mem_posSemidefFixedPointsSet] at hX
+      rcases hX with ⟨hX_fix, hX_psd⟩
+      by_cases hX_zero : X = 0
+      · rw [hX_zero]
+        exact Submodule.zero_mem _
+      · have hstat : IsStationaryDensity E ((Matrix.trace X)⁻¹ • X) :=
+          stationaryDensity_of_posSemidef_fixedPoint E hE hTP hX_psd hX_fix hX_zero
+        -- X = (tr X) • ((tr X)⁻¹ • X), so X is in the span of stationary densities
+        have hX_eq : X = (Matrix.trace X) • ((Matrix.trace X)⁻¹ • X) := by
+          calc
+            X = (1 : ℂ) • X := by simp
+            _ = ((Matrix.trace X) * (Matrix.trace X)⁻¹) • X := by
+              field_simp [mt (hX_psd.trace_eq_zero_iff.mp ·) hX_zero]
+            _ = (Matrix.trace X) • ((Matrix.trace X)⁻¹ • X) := by simp [mul_smul]
+        rw [hX_eq]
+        have hmem : ((Matrix.trace X)⁻¹ • X) ∈ Submodule.span ℂ S :=
+          Submodule.subset_span (show ((Matrix.trace X)⁻¹ • X) ∈ S from hstat)
+        exact Submodule.smul_mem _ (Matrix.trace X) hmem
+    have h_span_le : Submodule.span ℂ P ≤ Submodule.span ℂ S :=
+      Submodule.span_le.mpr h_P_sub_span_S
+    rw [h_span_P] at h_span_le
+    exact h_span_le
 
 end IsPositiveMap
