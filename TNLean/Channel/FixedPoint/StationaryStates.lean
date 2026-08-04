@@ -15,9 +15,12 @@ Wolf Theorem 6.11 (Stationary states).
 
 ## Main definitions
 
-* `IsPositive` — a map (not necessarily linear) that sends PSD matrices to PSD matrices.
-* `IsTracePreserving` — a map (not necessarily linear) that preserves the trace.
-* `IsStationaryMap` — the conjunction of continuity, positivity, and trace preservation.
+* `IsStationaryMap.IsPositive` — a map (not necessarily linear) that sends
+  PSD matrices to PSD matrices.
+* `IsStationaryMap.IsTracePreserving` — a map (not necessarily linear) that
+  preserves the trace.
+* `IsStationaryMap` — the conjunction of continuity, positivity, and trace
+  preservation.
 
 ## Main results
 
@@ -39,6 +42,8 @@ open Matrix
 
 variable {D : ℕ}
 
+namespace IsStationaryMap
+
 /-- A map `T : M_D(ℂ) → M_D(ℂ)` is **positive** if it sends positive semidefinite
 matrices to positive semidefinite matrices.  This predicate is independent of
 linearity. -/
@@ -50,6 +55,8 @@ trace of every matrix.  This predicate is independent of linearity. -/
 def IsTracePreserving (T : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ) : Prop :=
   ∀ X : Matrix (Fin D) (Fin D) ℂ, Matrix.trace (T X) = Matrix.trace X
 
+end IsStationaryMap
+
 /-- A map is a **stationary map** (terminology of Wolf Theorem 6.11) if it is
 continuous, positive, and trace-preserving.  Linearity is not required; this
 matches the source statement that T is ``continuous, trace-preserving, positive
@@ -60,8 +67,8 @@ source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1152--1159.
 structure IsStationaryMap
     (T : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ) : Prop where
   continuous : Continuous T
-  positive : IsPositive T
-  trace_preserving : IsTracePreserving T
+  positive : IsStationaryMap.IsPositive T
+  trace_preserving : IsStationaryMap.IsTracePreserving T
 
 namespace IsStationaryMap
 
@@ -117,9 +124,7 @@ lemma of_linear (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin 
     (hPos : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
     IsStationaryMap (fun X => E X) := by
   refine
-    { continuous := by
-        -- Linear maps on finite-dimensional spaces are continuous
-        exact LinearMap.continuous_of_finiteDimensional E
+    { continuous := LinearMap.continuous_of_finiteDimensional E
       positive := hPos
       trace_preserving := hTP }
 
@@ -142,17 +147,17 @@ theorem exists_stationaryState_of_channel [NeZero D]
 
 end IsStationaryMap
 
-/-! ### Compatibility bridges with the existing linear-map definitions
+/-! ### Compatibility with the existing linear-map definitions
 
 The predicates defined above for arbitrary functions coincide with the existing
 linear-map predicates when applied to linear maps. -/
 
-theorem IsPositive.eq_of_linear
+theorem IsStationaryMap.isPositive_eq_of_linear
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    IsPositive (fun X => E X) ↔ IsPositiveMap E := by
-  simp [IsPositive, IsPositiveMap]
+    IsStationaryMap.IsPositive (fun X => E X) ↔ IsPositiveMap E := by
+  simp [IsStationaryMap.IsPositive, IsPositiveMap]
 
-theorem IsTracePreserving.eq_of_linear
+theorem IsStationaryMap.isTracePreserving_eq_of_linear
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    IsTracePreserving (fun X => E X) ↔ IsTracePreservingMap E := by
-  simp [IsTracePreserving, IsTracePreservingMap]
+    IsStationaryMap.IsTracePreserving (fun X => E X) ↔ IsTracePreservingMap E := by
+  simp [IsStationaryMap.IsTracePreserving, IsTracePreservingMap]

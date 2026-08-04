@@ -809,11 +809,11 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Stationary states --- nonlinear]\label{thm:stationary_states}
     \lean{IsStationaryMap.exists_stationaryState}
-    \lean{IsStationaryMap, IsPositive, IsTracePreserving}
+    \lean{IsStationaryMap, IsStationaryMap.IsPositive, IsStationaryMap.IsTracePreserving}
     \leanok
     \uses{def:density_matrices, thm:brouwer_density_matrices}
-    Let $T\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a continuous,
-    trace-preserving, positive (not necessarily linear) map.
+    Let $D\ge 1$ and let $T\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a
+    continuous, trace-preserving, positive (not necessarily linear) map.
     Then $T$ has at least one stationary state: a density matrix $\rho$
     such that $T(\rho)=\rho$.
 
@@ -867,24 +867,24 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \lean{IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef}
     \lean{IsPositiveMap.fixedPointsSubmodule_spanned_by_stationaryDensities}
     \lean{IsStationaryDensity}
+    \leanok
     \uses{thm:positive_fixedpoint_decomp}
     Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
     trace-preserving linear map with $D>0$.  The fixed-point subspace
     $\mathcal F_E=\{X\mid E(X)=X\}$ is spanned (over $\mathbb C$) by
     stationary density matrices (positive semidefinite, trace~1, fixed by~$E$).
+    \lean{IsPositiveMap.stationaryDensity_of_posSemidef_fixedPoint}
     Each nonzero positive-semidefinite fixed point can be scaled to a stationary
     density matrix.
 \end{corollary}
 
-\begin{proof}
-    \uses{thm:positive_fixedpoint_decomp,
-    thm:positive_fixedpoint_decomp}
+\begin{proof}\leanok
+    \uses{thm:positive_fixedpoint_decomp}
     By Theorem~\ref{thm:positive_fixedpoint_decomp}, every fixed point is a
     $\mathbb C$-linear combination of four positive-semidefinite fixed points.
-    For each nonzero positive-semidefinite fixed point $\rho$, the trace of a
-    positive-semidefinite matrix is zero only for the zero matrix
-    (Theorem~\ref{thm:positive_fixedpoint_decomp}), so $\tr(\rho)$ is a positive
-    real number.  Hence $\rho/\tr(\rho)$ is a stationary density matrix, and
+    For each nonzero positive-semidefinite fixed point $\rho$, a
+    positive-semidefinite matrix has zero trace only if it is the zero matrix,
+    so $\tr(\rho)$ is a positive real number.  Hence $\rho/\tr(\rho)$ is a stationary density matrix, and
     $\rho = \tr(\rho) \cdot (\rho/\tr(\rho))$ is in the span of the stationary
     density matrices.  The span of all positive-semidefinite fixed points
     therefore equals the span of the stationary density matrices, which

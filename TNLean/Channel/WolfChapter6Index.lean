@@ -289,8 +289,8 @@ necessarily linear)").  The linear specializations are also provided.
 
 In `TNLean.Channel.FixedPoint.StationaryStates`:
 
-* `IsPositive` — positivity predicate for arbitrary (nonlinear) maps.
-* `IsTracePreserving` — trace-preservation predicate for arbitrary maps.
+* `IsStationaryMap.IsPositive` — positivity predicate for arbitrary (nonlinear) maps.
+* `IsStationaryMap.IsTracePreserving` — trace-preservation predicate for arbitrary maps.
 * `IsStationaryMap` — conjunction of continuity, positivity, trace preservation.
 * `IsStationaryMap.exists_stationaryState` — Wolf Theorem 6.11: existence of a
   density-matrix fixed point for a stationary map.  The proof uses
