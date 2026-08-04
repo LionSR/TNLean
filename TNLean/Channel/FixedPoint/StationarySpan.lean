@@ -40,22 +40,17 @@ namespace IsPositiveMap
 
 variable (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
 
-/-- The fixed-point subspace of `E`. -/
+/-- The fixed-point subspace of `E`, realized as the kernel of `E - 1`.
+
+Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Equation (6.48);
+local source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, line 1197. -/
 def fixedPointsSubmodule (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
-    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) where
-  carrier := {X | E X = X}
-  add_mem' {a b} ha hb := by
-    simp at ha hb
-    show E (a + b) = a + b
-    rw [LinearMap.map_add, ha, hb]
-  zero_mem' := by simp
-  smul_mem' c {a} ha := by
-    simp at ha
-    show E (c • a) = c • a
-    rw [LinearMap.map_smul, ha]
+    Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+  LinearMap.ker (E - 1)
 
 lemma mem_fixedPointsSubmodule {X : Matrix (Fin D) (Fin D) ℂ} :
-    X ∈ fixedPointsSubmodule E ↔ E X = X := Iff.rfl
+    X ∈ fixedPointsSubmodule E ↔ E X = X := by
+  simp [fixedPointsSubmodule, LinearMap.mem_ker, sub_eq_zero]
 
 /-- The set of PSD fixed points. -/
 def posSemidefFixedPointsSet (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
@@ -64,7 +59,7 @@ def posSemidefFixedPointsSet (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix 
 
 lemma mem_posSemidefFixedPointsSet {X : Matrix (Fin D) (Fin D) ℂ} :
     X ∈ posSemidefFixedPointsSet E ↔ E X = X ∧ X.PosSemidef := by
-  simp [posSemidefFixedPointsSet, IsPositiveMap.mem_fixedPointsSubmodule]
+  simp [posSemidefFixedPointsSet, mem_fixedPointsSubmodule]
 
 /-- Every fixed point is a ℂ-linear combination of PSD fixed points
 (by Wolf Proposition 6.8). -/
@@ -77,7 +72,7 @@ lemma fixedPoint_mem_span_posSemidef
   have mem (P : Matrix (Fin D) (Fin D) ℂ) (hPf : E P = P) (hPp : P.PosSemidef) :
       P ∈ Submodule.span ℂ (posSemidefFixedPointsSet E) :=
     Submodule.subset_span (by
-      rw [IsPositiveMap.mem_posSemidefFixedPointsSet]
+      rw [mem_posSemidefFixedPointsSet]
       exact ⟨hPf, hPp⟩)
   rw [h_decomp]
   refine Submodule.sub_mem _ (Submodule.smul_mem _ _ (Submodule.sub_mem _
@@ -86,7 +81,7 @@ lemma fixedPoint_mem_span_posSemidef
       (mem P₃ hFP₃ hP₃) (mem P₄ hFP₄ hP₄)))
 
 /-- The fixed-point subspace is spanned by its PSD elements. -/
-lemma fixedPointsSubmodule_top_span_by_posSemidef
+lemma span_posSemidefFixedPointsSet_eq_fixedPointsSubmodule
     (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
     Submodule.span ℂ (posSemidefFixedPointsSet E) = fixedPointsSubmodule E := by
   apply le_antisymm
@@ -94,7 +89,7 @@ lemma fixedPointsSubmodule_top_span_by_posSemidef
     rintro X ⟨hX_mem, -⟩
     exact hX_mem
   · intro X hX
-    rcases (IsPositiveMap.mem_fixedPointsSubmodule (E := E)).mp hX with hX_fix
+    have hX_fix : E X = X := (mem_fixedPointsSubmodule (E := E)).mp hX
     exact fixedPoint_mem_span_posSemidef E hE hTP hX_fix
 
 /-- For a nonzero PSD matrix, its trace has strictly positive real part.
@@ -127,21 +122,12 @@ lemma stationaryDensity_of_posSemidef_fixedPoint
   have him_zero : (Matrix.trace ρ).im = 0 :=
     ((RCLike.nonneg_iff (K := ℂ)).mp hρ_psd.trace_nonneg).2
   have hinv_nonneg_ℂ : 0 ≤ ((Matrix.trace ρ)⁻¹ : ℂ) := by
-    have htr_nonneg : 0 ≤ (Matrix.trace ρ : ℂ) := hρ_psd.trace_nonneg
-    have htr_ne_zero : Matrix.trace ρ ≠ 0 :=
-      mt (hρ_psd.trace_eq_zero_iff.mp ·) hρ_ne
-    -- In a StarOrderedRing, if 0 ≤ a and a ≠ 0, then 0 ≤ a⁻¹.
-    -- For ℂ specifically, this holds because the positive cone is ℝ≥0.
-    -- Use the fact that trace ρ is a real positive number.
-    have htr_real : (Matrix.trace ρ : ℂ) = ((Matrix.trace ρ).re : ℂ) :=
+    have htrace_eq : (Matrix.trace ρ : ℂ) = ((Matrix.trace ρ).re : ℂ) :=
       Complex.ext rfl him_zero
-    rw [htr_real]
-    -- Now we need 0 ≤ ((re : ℂ)⁻¹). Since re > 0, its inverse is ≥ 0.
-    have hrepos : (0 : ℝ) ≤ ((Matrix.trace ρ).re)⁻¹ := by
+    rw [htrace_eq]
+    have hre_inv_nonneg : (0 : ℝ) ≤ ((Matrix.trace ρ).re)⁻¹ := by
       positivity
-    have hpos_ℂ : (0 : ℂ) ≤ (((Matrix.trace ρ).re : ℝ)⁻¹ : ℂ) := by
-      exact_mod_cast hrepos
-    simpa [map_inv₀ (algebraMap ℝ ℂ)] using hpos_ℂ
+    exact mod_cast hre_inv_nonneg
   have h_psd : ((Matrix.trace ρ)⁻¹ • ρ).PosSemidef :=
     hρ_psd.smul hinv_nonneg_ℂ
   have h_trace_one : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) = (1 : ℂ) := by
@@ -163,7 +149,7 @@ The fixed-point subspace of a positive trace-preserving linear map is spanned
 The dimension/basis statement with exactly `r` linearly independent stationary
 density matrices is tracked for follow-up work. -/
 theorem fixedPointsSubmodule_spanned_by_stationaryDensities
-    [NeZero D] (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
     Submodule.span ℂ {ρ | IsStationaryDensity E ρ} = fixedPointsSubmodule E := by
   set P := posSemidefFixedPointsSet E
   set S : Set (Matrix (Fin D) (Fin D) ℂ) := {ρ | IsStationaryDensity E ρ}
@@ -173,10 +159,10 @@ theorem fixedPointsSubmodule_spanned_by_stationaryDensities
     rintro ρ hρ
     have hρ_sd : IsStationaryDensity E ρ := hρ
     have hmem : E ρ = ρ := hρ_sd.fixed_point
-    simpa [IsPositiveMap.mem_fixedPointsSubmodule] using hmem
+    simpa [mem_fixedPointsSubmodule] using hmem
   · -- fixedPointsSubmodule ⊆ span(stationary)
     have h_span_P : Submodule.span ℂ P = fixedPointsSubmodule E :=
-      fixedPointsSubmodule_top_span_by_posSemidef E hE hTP
+      span_posSemidefFixedPointsSet_eq_fixedPointsSubmodule E hE hTP
     have h_P_sub_span_S : P ⊆ Submodule.span ℂ S := by
       intro X hX
       rw [mem_posSemidefFixedPointsSet] at hX

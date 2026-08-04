@@ -798,13 +798,10 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     $n$-simplex to itself. Then there exists $x\in\Delta^n$ such that
     $f(x)=x$.
 
-    The general compact-convex form stated by \cite[Theorem~6.10]{Wolf2012Quantum}
-    (continuous self-map of a nonempty compact convex subset of~$\mathbb{R}^n$
-    has a fixed point) is not yet proved.
-    The simplex version, its extension to products of simplices, closed cubes,
-    compact retracts, and the density-matrix specialization
-    (Theorem~\ref{thm:brouwer_density_matrices}) are formalized and suffice for
-    all current applications.
+    % The general compact-convex form stated by \cite[Theorem~6.10]{Wolf2012Quantum}
+    % is not yet proved.  The simplex version and its extensions (products of
+    % simplices, closed cubes, compact retracts, density-matrix specialization)
+    % are formalized and suffice for all current applications.
 \end{theorem}
 
 \begin{theorem}[Stationary states --- nonlinear]\label{thm:stationary_states}
@@ -864,7 +861,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{corollary}[Spanning by stationary density matrices]\label{cor:stationary_density_span}
     \lean{IsPositiveMap.fixedPointsSubmodule}
-    \lean{IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef}
+    \lean{IsPositiveMap.span_posSemidefFixedPointsSet_eq_fixedPointsSubmodule}
     \lean{IsPositiveMap.fixedPointsSubmodule_spanned_by_stationaryDensities}
     \lean{IsStationaryDensity}
     \leanok
@@ -890,8 +887,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     therefore equals the span of the stationary density matrices, which
     equals~$\mathcal F_E$.
 
-    The dimension statement of Wolf Corollary~6.8 (a basis of exactly~$r$
-    linearly independent stationary density matrices, where~$r$ is the dimension
-    of~$\mathcal F_E$) follows from the spanning result and finite dimensionality
-    but is not yet formalized.
+    % The dimension statement of Wolf Corollary~6.8 (a basis of exactly~r
+    % linearly independent stationary density matrices) follows from the spanning
+    % result and finite dimensionality but is not yet formalized.
 \end{proof}
