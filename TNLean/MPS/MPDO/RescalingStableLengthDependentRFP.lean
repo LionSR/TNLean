@@ -12,8 +12,6 @@ import TNLean.MPS.MPDO.LengthIndependentCoefficients
 of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 995--1010 (NOT a tensor stated in CPSV16).  It proves:
 
-* `R_isMPDO` — `R` is a matrix product density operator (`IsMPDO`), via the
-  local purification / LPDO structure;
 * `physTraceTransfer_R_idempotent` — the physical-trace transfer of `R` is
   idempotent (rank‑1 projector `(25/32)·|t⟩⟨t|` with `t_a = tr(A^a)`);
 * `oneLabelCoeffs_not_lengthIndependent` — the one-label BNT coefficient
@@ -39,7 +37,17 @@ where `(p,q)` are physical indices and `(a,b)` are bond indices.
 
 ## Remaining gap
 
-The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
+* `IsMPDO R`: the closed operator factors exactly as
+  `mpo R N = (25/32)^N · B · W_N · Bᵀ`, where `B` is the boundary partial
+  isometry (`BᵀB = 1`) and `W_N(a,b) = ∏_n W (a n) (b n)` with
+  `W = !![16/25, 9/25; 9/25, 16/25]`; `W` has eigenvalues `{1, 7/25}` —
+  the `χ = diag(1, 7/25)` of the coefficient family.  Positivity follows
+  from `W_N = Σ_s (∏_n λ_{s n}) • vecMulVec (e_s) (star (e_s))`
+  (Walsh–Hadamard basis, `λ ∈ {1, 7/25}`) and the `B`-congruence.  The
+  local-purification (LPDO) route does NOT apply: the undone-vertical
+  letters entangle bra- and ket-side labels, so no purification tensor
+  exists.  Verified numerically (N = 1, 2, 3: PSD, trace 1).
+* The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
 with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
 renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
 The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
