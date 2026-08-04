@@ -642,8 +642,7 @@
     \leanok
     \uses{def:mpdo_bnt_label_coefficient_family,
         def:mpdo_bnt_label_length_independent,
-        def:mpo_physical_trace_transfer,
-        thm:mpdo_length_dependent_rfp_example}
+        def:mpo_physical_trace_transfer}
     Theorem~\ref{thm:mpdo_length_dependent_rfp_example} answers the
     question of \cite[lines~995--999]{Cirac2016MPDO_arXiv} affirmatively,
     but its one-label block has a single diagonal entry $\sqrt{1/2}$, and
@@ -692,8 +691,12 @@
             =s^L\left(1+\left(\frac{7}{25}\right)^L\right),
         \notag
     \end{align}
-    which is again not length independent: no uniform rescaling makes both
-    diagonal entries equal to one.
+    which is again not length independent: if $c_s$ were constant in
+    $L$, comparing the lengths $1$, $2$, and $3$ would force
+    $(1+\lambda)(1+\lambda^3)=(1+\lambda^2)^2$ with
+    $\lambda=\frac{7}{25}$, which is false. Unlike the single-entry
+    block of Theorem~\ref{thm:mpdo_length_dependent_rfp_example}, no
+    uniform rescaling makes both diagonal entries equal to one.
 
     Positivity of the closed operators of $R$ on every nonempty chain, the
     literal CPSV canonical form of $R$, and the renormalization fixed-point
