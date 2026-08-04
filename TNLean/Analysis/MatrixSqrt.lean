@@ -632,6 +632,40 @@ theorem PosSemidef.self_mul_supportInv
     ρ * hρ.supportInv = hρ.isHermitian.supportProj := by
   simpa only [PosSemidef.supportInv] using hρ.self_mul_supportInvSqrt_sq
 
+/-- The generalized inverse on the support is Hermitian. -/
+theorem PosSemidef.supportInv_isHermitian {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInv.IsHermitian := by
+  unfold PosSemidef.supportInv
+  rw [Matrix.IsHermitian, Matrix.conjTranspose_mul, hρ.supportInvSqrt_isHermitian.eq]
+
+/-- The generalized inverse on the support is positive semidefinite. -/
+theorem PosSemidef.supportInv_posSemidef {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInv.PosSemidef := by
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hρ.supportInv_isHermitian
+    fun x ↦ ?_
+  rw [PosSemidef.supportInv, ← Matrix.mulVec_mulVec,
+    ← hρ.supportInvSqrt_isHermitian.star_mulVec_dotProduct]
+  exact dotProduct_star_self_nonneg _
+
+/-- The support projection absorbs the generalized inverse on the left. -/
+theorem PosSemidef.supportProj_mul_supportInv {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportProj * hρ.supportInv = hρ.supportInv := by
+  rw [PosSemidef.supportInv, ← Matrix.mul_assoc, hρ.supportProj_mul_supportInvSqrt]
+
+/-- The support projection absorbs the generalized inverse on the right. -/
+theorem PosSemidef.supportInv_mul_supportProj {ρ : Matrix n n ℂ} (hρ : ρ.PosSemidef) :
+    hρ.supportInv * hρ.supportProj = hρ.supportInv := by
+  rw [PosSemidef.supportInv, Matrix.mul_assoc, hρ.supportInvSqrt_mul_supportProj]
+
+/-- On a positive-definite matrix, the generalized inverse on the support is
+the ordinary inverse. -/
+theorem PosDef.supportInv_eq_inv {ρ : Matrix n n ℂ} (hρ : ρ.PosDef) :
+    hρ.posSemidef.supportInv = ρ⁻¹ := by
+  have h : hρ.posSemidef.supportInv * ρ = 1 := by
+    rw [hρ.posSemidef.supportInv_mul_self]
+    exact hρ.supportProj_eq_one
+  exact (Matrix.inv_eq_left_inv h).symm
+
 /-- If \(Sx=b\) for a positive-semidefinite matrix \(S\), then pairing \(b\)
 with the support-generalized-inverse solution gives the pairing with \(x\):
 \[
