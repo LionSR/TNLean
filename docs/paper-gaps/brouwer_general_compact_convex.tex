@@ -1,0 +1,91 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The General Compact-Convex Brouwer Fixed-Point Theorem}
+\author{}
+\date{2026-08-04}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf's Theorem~6.10 states the Brouwer fixed-point theorem in its general
+compact-convex form:\footnote{\cite[Theorem~6.10]{Wolf2012Quantum}; local source
+\path{Notes/WolfNoteTexSource/ch06\_spectral\_properties.tex},
+lines~1143--1151.}
+\begin{align}
+  T : S \to S,\qquad
+  S \subset \mathbb{R}^n \text{ nonempty, compact, convex},\qquad
+  T \text{ continuous}
+  \ \Longrightarrow\
+  \exists\, x \in S,\ T(x) = x.
+\end{align}
+
+\section{What is formalized}
+
+The vendored Gametheory library (LionSR/Brouwer) proves the Brouwer fixed-point
+theorem for the standard simplex~$\Delta^n$:
+\leanid{Brouwer}.
+TNLean extends this to products of simplices, closed cubes, and compact retracts
+of finite-dimensional real normed spaces.\footnote{Formal declarations:
+\leanid{exists\_fixedPoint\_closedCube} in
+\doclink{TNLean/Topology/BrouwerProduct},
+\leanid{fixedPoint\_of\_compact\_retract} in
+\doclink{TNLean/Topology/CompactRetractFixedPoint},
+and \leanid{brouwer\_fixedPoint\_densityMatrices} in
+\doclink{TNLean/Axioms/BrouwerFixedPoint}.}  The density-matrix specialization
+is the only form used in the existing formalization of Wolf Theorem~6.11
+(Stationary states).
+
+\section{What is missing}
+
+The general statement with an \emph{arbitrary} nonempty compact convex subset
+\(S \subset \mathbb{R}^n\) is not yet proved.  Three natural routes would close
+this gap:
+
+\begin{enumerate}
+  \item \textbf{Metric projection.}  For a nonempty closed convex set~\(K\) in a
+    finite-dimensional Euclidean space, the nearest-point map
+    \(\operatorname{proj}_K(x) = \argmin_{p \in K} \lVert x-p\rVert\) is unique,
+    1-Lipschitz, and restricts to the identity on~\(K\).  This provides the
+    retraction required by the existing retract-based fixed-point theorem.  The
+    existence, uniqueness, and continuity of the metric projection for convex
+    sets in Euclidean space is not yet in Mathlib.
+
+  \item \textbf{Convex-body homeomorphism.}  A nonempty compact convex~\(K\)
+    with nonempty interior in its affine hull is homeomorphic to the closed
+    unit ball, which is homeomorphic to a simplex.
+
+  \item \textbf{Triangulation.}  Refine \(K\) into a simplicial complex and
+    apply the Sperner-lemma / simplicial Brouwer argument directly (the route
+    taken by the Gametheory library for the standard simplex).
+\end{enumerate}
+
+\section{Impact}
+
+The missing general statement does \emph{not} block the formalization of Wolf
+Theorem~6.11 (Stationary states), Proposition~6.8 (Positive fixed-points), or
+Corollary~6.8 (spanning by stationary density matrices).  These results rely
+only on the density-matrix version of Brouwer, which is already proved.
+The general compact-convex Brouwer is not used anywhere in the current
+formalization.
+
+\section{Verdict}
+
+\textbf{Open gap.}  The general compact-convex Brouwer theorem (Wolf's
+formulation) remains unformalized.  The simplex specialization and its
+extensions to closed cubes, compact retracts, and density matrices are formalized
+and suffice for the current applications.  The metric-projection route is the
+most natural starting point and would be reusable beyond this theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
