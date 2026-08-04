@@ -69,6 +69,8 @@ open scoped Matrix BigOperators ComplexOrder Kronecker
 
 noncomputable section
 
+open scoped Classical
+
 namespace MPOTensor.RescalingStableLengthDependentRFP
 
 /-! ### The four letter matrices -/
@@ -291,24 +293,24 @@ def bit2 : Fin 4 → Fin 2 | 0 => 0 | 1 => 1 | 2 => 0 | 3 => 1
 def coeff' : Fin 2 → Fin 2 → ℂ | 0, 0 => 4/5 | 0, 1 => 3/5 | 1, 0 => 3/5 | 1, 1 => 4/5
 
 def chainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
-  ∀ n : Fin N, bit2 (p n) = bit1 (p (n + 1 : Fin N))
+  ∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))
 
-def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
-  Matrix.of fun p q => if chainOK N p ∧ chainOK N q then (1 : ℂ) else 0
+noncomputable def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
+  Matrix.of fun p q => by
+    classical
+    exact if chainOK N p ∧ chainOK N q then (1 : ℂ) else 0
 
-open Classical in
 lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
+  classical
   let c : (Fin N → Fin 4) → ℂ := fun p => if chainOK N p then (1 : ℂ) else 0
   have h_eq : chainIndicator N = Matrix.vecMulVec c (star c) := by
     ext p q
     dsimp [chainIndicator, c, Matrix.vecMulVec, Matrix.mul_apply, Matrix.of_apply]
     by_cases hp : chainOK N p <;> by_cases hq : chainOK N q
-    · rw [hp, hq]; simp
-    · rw [hp]; simp [hq]
-    · rw [hq]; simp [hp]
-    · have h_and : ¬ (chainOK N p ∧ chainOK N q) := by
-        intro h; exact hp h.1
-      rw [if_neg hp, if_neg hq, if_neg h_and]; simp
+    · simp [hp, hq]
+    · simp [hp, hq]
+    · simp [hp, hq]
+    · simp [hp, hq]
   rw [h_eq]
   exact Matrix.posSemidef_vecMulVec_self_star c
 
@@ -318,7 +320,7 @@ def Wmat : Matrix (Fin 2) (Fin 2) ℂ :=
 def WN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   Matrix.of fun a b => ∏ n : Fin N, Wmat (a n) (b n)
 
-open Classical in
+open scoped Classical in
 lemma wMat_posSemidef : Wmat.PosSemidef := by
   classical
   let J : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), (1 : ℂ); (1 : ℂ), (1 : ℂ)]
@@ -326,15 +328,8 @@ lemma wMat_posSemidef : Wmat.PosSemidef := by
     have hJ_eq : J = Matrix.vecMulVec (fun (_ : Fin 2) => (1 : ℂ)) (star (fun (_ : Fin 2) => (1 : ℂ))) := by
       ext i j; fin_cases i <;> fin_cases j <;> dsimp [J, Matrix.vecMulVec, star] <;> norm_num
     rw [hJ_eq]; exact Matrix.posSemidef_vecMulVec_self_star _
-  have hI : ((1 : Matrix (Fin 2) (Fin 2) ℂ)).PosSemidef := by
-    rw [Matrix.posSemidef_iff]
-    refine ⟨?_, ?_⟩
-    · intro i j; simp
-    · intro v
-      have hcalc : 0 ≤ ∑ i : Fin 2, Complex.normSq (v i) :=
-        Finset.sum_nonneg (fun i _ => Complex.normSq_nonneg (v i))
-      simpa [Matrix.dotProduct, star, Matrix.one_apply, Complex.normSq,
-        Finset.sum_ite_eq, Finset.mem_univ] using hcalc
+  have hI : ((1 : Matrix (Fin 2) (Fin 2) ℂ)).PosSemidef :=
+    Matrix.PosSemidef.one
   have h_eq : Wmat = ((7 : ℂ)/25) • (1 : Matrix (Fin 2) (Fin 2) ℂ) + ((9 : ℂ)/25) • J := by
     ext i j; fin_cases i <;> fin_cases j <;> norm_num [Wmat, J]
   rw [h_eq]
@@ -344,7 +339,7 @@ lemma wMat_posSemidef : Wmat.PosSemidef := by
   · have h9 : (0 : ℂ) ≤ (9/25 : ℂ) := by positivity
     refine Matrix.PosSemidef.smul hJ h9
 
-open Classical in
+open scoped Classical in
 lemma wN_posSemidef (N : ℕ) : (WN N).PosSemidef := by
   classical
   induction N with
@@ -355,11 +350,7 @@ lemma wN_posSemidef (N : ℕ) : (WN N).PosSemidef := by
         have h_eq : a = b := Subsingleton.elim _ _
         subst h_eq; simp [WN, Matrix.of_apply, Matrix.one_apply]
       rw [h_one]
-      rw [Matrix.posSemidef_iff]
-      constructor
-      · intro i j; simp
-      · intro v; simp [Matrix.dotProduct, star, Matrix.one_apply, Finset.sum_ite_eq, Finset.mem_univ]
-      · intro v; simp [Matrix.dotProduct, Matrix.mulVec, star, Matrix.one_apply]
+      exact Matrix.PosSemidef.one
   | succ N ih =>
       let e : (Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2 :=
       { toFun := fun f => (f ∘ Fin.succ, f 0)
