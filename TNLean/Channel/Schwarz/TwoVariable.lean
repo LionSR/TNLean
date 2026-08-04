@@ -4,9 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.TwoPositive
+import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import Mathlib.Data.Matrix.Block
 
-set_option maxHeartbeats 2000000  -- needed for ker_inclusion (heavy dot-product calc) and schwarz_two_variable (ampliation typechecking)
+set_option maxHeartbeats 2000000
+-- needed for ker_inclusion (heavy dot-product calc)
+-- and schwarz_two_variable (ampliation typechecking)
 
 /-!
 # Two-variable operator Schwarz inequality
@@ -98,19 +101,7 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
 
 /-! ### Real-valued auxiliary lemmas -/
 
-/-- If `t²·d + 2·t·b ≥ 0` for all real `t`, with `d ≥ 0`, then `b = 0`. -/
-private lemma real_linear_eq_zero_of_quadratic_two_coeff
-    (b d : ℝ) (hd : 0 ≤ d) (h : ∀ t : ℝ, 0 ≤ t ^ 2 * d + 2 * t * b) :
-    b = 0 := by
-  by_contra! hbn
-  have hb_sq_pos : 0 < b ^ 2 := sq_pos_iff.mpr hbn
-  have hd1 : 0 < d + 1 := by linarith
-  have h_neg : (-b / (d + 1)) ^ 2 * d + 2 * (-b / (d + 1)) * b < 0 := by
-    field_simp [hd1.ne']
-    nlinarith
-  have h_nonneg := h (-b / (d + 1))
-  linarith
-
+-- (Uses `linear_eq_zero_of_quadratic_nonneg` from AbstractMultiplicativeDomain)
 /-- A complex number `z† A z` for a PSD matrix `A` is nonnegative. -/
 private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef) (z : n → ℂ) :
@@ -123,19 +114,7 @@ private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
     simpa [Matrix.submatrix_submatrix, Matrix.submatrix_apply, hA_sub] using hsub
   exact hA_psd.dotProduct_mulVec_nonneg z
 
-/-- For a vector `z : n → ℂ`, `star z ⬝ᵥ z = 0` implies `z = 0`. -/
-private lemma eq_zero_of_dotProduct_self_eq_zero (z : n → ℂ) (hz : star z ⬝ᵥ z = 0) : z = 0 := by
-  have hcomp (i : n) : star (z i) * (z i) = 0 := by
-    have hsum : (∑ j : n, star (z j) * (z j)) = 0 := by
-      simpa [dotProduct] using hz
-    have hpos : ∀ j, 0 ≤ star (z j) * (z j) := fun j => star_mul_self_nonneg _
-    have h_all := (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hpos i)).mp hsum
-    exact h_all i (Finset.mem_univ i)
-  ext i
-  have hnormSq : Complex.normSq (z i) = 0 := by
-    simpa [Complex.normSq_eq_conj_mul_self] using hcomp i
-  simpa [Complex.normSq_eq_zero] using hnormSq
-
+-- (Uses `dotProduct_star_self_eq_zero` from Mathlib)
 
 /-- The quadratic form of a `fromBlocks` matrix on a `Sum`-type vector.
 
@@ -180,7 +159,7 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
     have h_ne_zero : star z ⬝ᵥ z ≠ 0 := by
       intro hzero
       apply hz_ne
-      exact eq_zero_of_dotProduct_self_eq_zero z hzero
+      exact (dotProduct_star_self_eq_zero.mp hzero)
     exact h_nonneg.lt_of_ne h_ne_zero.symm
   have ha_nonneg : 0 ≤ star z ⬝ᵥ (A.mulVec z) :=
     dotProduct_mulVec_nonneg_of_posSemidef_block h z
@@ -248,9 +227,16 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
     exact h_real
   have ha_re_nonneg : 0 ≤ (star z ⬝ᵥ (A.mulVec z)).re :=
     (Complex.nonneg_iff.mp ha_nonneg).1
-  have hb_re_zero : ((star z ⬝ᵥ z).re : ℝ) = 0 :=
-    real_linear_eq_zero_of_quadratic_two_coeff
-      ((star z ⬝ᵥ z).re : ℝ) ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) ha_re_nonneg h_quad_real
+  have hb_re_zero : ((star z ⬝ᵥ z).re : ℝ) = 0 := by
+    have h_quad' : ∀ t : ℝ, 0 ≤ t * (2 * ((star z ⬝ᵥ z).re : ℝ)) +
+      t ^ 2 * ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) := by
+      intro t
+      -- h_quad_real t gives 0 ≤ t^2*(a.re) + 2*t*(b.re)
+      -- which is the same as 0 ≤ t*(2*b.re) + t^2*(a.re)
+      simpa [mul_comm, add_comm, mul_left_comm, add_left_comm, mul_assoc] using h_quad_real t
+    have h_two_b_zero := SchwarzMap.linear_eq_zero_of_quadratic_nonneg
+      (2 * ((star z ⬝ᵥ z).re : ℝ)) ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) h_quad'
+    linarith
   have hb_zero : star z ⬝ᵥ z = 0 := by
     calc
       star z ⬝ᵥ z = ((star z ⬝ᵥ z).re : ℂ) + ((star z ⬝ᵥ z).im : ℂ) * I :=
@@ -287,9 +273,11 @@ lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat
   rw [sumElim_dotProduct_sumElim] at hx_nonneg
   -- 0 ≤ (star v ⬝ᵥ (Amat.mulVec v - Cmat.mulVec w)) + (-star w ⬝ᵥ (CstarMat.mulVec v - Bmat.mulVec w))
   simp [Matrix.mulVec_neg, dotProduct_sub, dotProduct_neg, dotProduct_add] at hx_nonneg
-  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ Bmat.mulVec w
+  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w
+  --   - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ Bmat.mulVec w
   rw [hwB] at hx_nonneg
-  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ CstarMat.mulVec v
+  -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w
+  --   - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ CstarMat.mulVec v
   ring_nf at hx_nonneg
   simpa using hx_nonneg
 
