@@ -12,24 +12,25 @@
 \tenkzkernel
 \tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none]
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, frame=plane, bonds=none, physical=up]
     % The plane frame is the source's XZ canvas.  Addressed stations, rather
     % than page coordinates, give the loop its projected compass order.  The
-    % picture-level physical policy would assign a transverse leg to every
-    % frame-cell atom, including the five legless MPO stations, so the
-    % central tensor keeps its typed physical port until the kernel grows a
-    % per-atom policy exclusion.
-    \tn[at=(2,2), name=i, role=marked, ports={90:physical}]{}
+    % picture-level physical=up policy would assign a transverse leg to every
+    % frame-cell atom, including the five legless MPO stations; void=sealed
+    % is the kernel's per-atom exclusion, so only the central tensor takes
+    % the policy leg while the sealed stations keep their typed virtual
+    % ports and their wiring.
+    \tn[at=(2,2), name=i, role=marked]{}
     \tnmark[form=label, label pos=nw]{i}{$i$}
-    \tn[skin=box, at=(1,3), name=N,
+    \tn[skin=box, at=(1,3), name=N, void=sealed,
       ports={0:virtual,45:virtual,180:virtual,225:virtual}]{}
-    \tn[skin=box, at=(2,3), name=E,
+    \tn[skin=box, at=(2,3), name=E, void=sealed,
       ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
-    \tn[skin=box, at=(3,1), name=S,
+    \tn[skin=box, at=(3,1), name=S, void=sealed,
       ports={0:virtual,45:virtual,180:virtual,225:virtual}]{}
-    \tn[skin=box, at=(2,1), name=W,
+    \tn[skin=box, at=(2,1), name=W, void=sealed,
       ports={0:virtual,90:virtual,180:virtual,270:virtual}]{}
-    \tn[skin=box, at=(3,3), name=J, role=marked,
+    \tn[skin=box, at=(3,3), name=J, void=sealed, role=marked,
       ports={45:virtual,135:virtual,225:virtual,315:virtual}]{}
     \tnmark[form=label, label pos=s]{J}{$j$}
     % The four unmarked MPO stations split the source's virtual rails.  The
