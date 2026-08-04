@@ -798,14 +798,13 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     $n$-simplex to itself. Then there exists $x\in\Delta^n$ such that
     $f(x)=x$.
 
-    This theorem is proved in the vendored Gametheory library
-    (LionSR/Brouwer).  Its extensions to products of simplices, closed cubes,
-    and compact retracts are available in
-    \texttt{TNLean.Topology.BrouwerProduct} and
-    \texttt{TNLean.Topology.CompactRetractFixedPoint}.  The density-matrix
-    specialization is Theorem~\ref{thm:brouwer_density_matrices}.
-    The general compact-convex form stated by Wolf is not yet proved; see
-    \texttt{docs/paper-gaps/brouwer\_general\_compact\_convex.tex}.
+    The general compact-convex form stated by \cite[Theorem~6.10]{Wolf2012Quantum}
+    (continuous self-map of a nonempty compact convex subset of~$\mathbb{R}^n$
+    has a fixed point) is not yet proved.
+    The simplex version, its extension to products of simplices, closed cubes,
+    compact retracts, and the density-matrix specialization
+    (Theorem~\ref{thm:brouwer_density_matrices}) are formalized and suffice for
+    all current applications.
 \end{theorem}
 
 \begin{theorem}[Stationary states --- nonlinear]\label{thm:stationary_states}
@@ -866,25 +865,33 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \begin{corollary}[Spanning by stationary density matrices]\label{cor:stationary_density_span}
     \lean{IsPositiveMap.fixedPointsSubmodule}
     \lean{IsPositiveMap.fixedPointsSubmodule_top_span_by_posSemidef}
+    \lean{IsPositiveMap.fixedPointsSubmodule_spanned_by_stationaryDensities}
     \lean{IsStationaryDensity}
     \uses{thm:positive_fixedpoint_decomp}
     Let $E\colon M_D(\mathbb C)\to M_D(\mathbb C)$ be a positive,
-    trace-preserving linear map.  The fixed-point subspace
-    $\mathcal F_E=\{X\mid E(X)=X\}$ is spanned (over $\mathbb C$) by its
-    positive-semidefinite elements.  Each nonzero positive-semidefinite fixed
-    point can be scaled to a stationary density matrix (positive semidefinite,
-    trace~1, fixed by~$E$).
-
-    This is the key lemma for Wolf Corollary~6.8.
+    trace-preserving linear map with $D>0$.  The fixed-point subspace
+    $\mathcal F_E=\{X\mid E(X)=X\}$ is spanned (over $\mathbb C$) by
+    stationary density matrices (positive semidefinite, trace~1, fixed by~$E$).
+    Each nonzero positive-semidefinite fixed point can be scaled to a stationary
+    density matrix.
 \end{corollary}
 
 \begin{proof}
-    \uses{thm:positive_fixedpoint_decomp}
+    \uses{thm:positive_fixedpoint_decomp,
+    thm:positive_fixedpoint_decomp}
     By Theorem~\ref{thm:positive_fixedpoint_decomp}, every fixed point is a
-    $\mathbb C$-linear combination of four positive-semidefinite fixed points,
-    hence lies in the span of the set of all positive-semidefinite fixed
-    points.  Thus the span of the positive-semidefinite fixed points equals the
-    whole fixed-point subspace.  For the scaling: if $\rho$ is a nonzero
-    positive-semidefinite fixed point, its trace is a positive real number, and
-    $\rho/\tr(\rho)$ is a stationary density matrix.
+    $\mathbb C$-linear combination of four positive-semidefinite fixed points.
+    For each nonzero positive-semidefinite fixed point $\rho$, the trace of a
+    positive-semidefinite matrix is zero only for the zero matrix
+    (Theorem~\ref{thm:positive_fixedpoint_decomp}), so $\tr(\rho)$ is a positive
+    real number.  Hence $\rho/\tr(\rho)$ is a stationary density matrix, and
+    $\rho = \tr(\rho) \cdot (\rho/\tr(\rho))$ is in the span of the stationary
+    density matrices.  The span of all positive-semidefinite fixed points
+    therefore equals the span of the stationary density matrices, which
+    equals~$\mathcal F_E$.
+
+    The dimension statement of Wolf Corollary~6.8 (a basis of exactly~$r$
+    linearly independent stationary density matrices, where~$r$ is the dimension
+    of~$\mathcal F_E$) follows from the spanning result and finite dimensionality
+    but is not yet formalized.
 \end{proof}

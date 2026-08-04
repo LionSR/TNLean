@@ -99,21 +99,8 @@ proved for density matrices) yields a fixed point.
 Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Theorem 6.11; local
 source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 1152--1159. -/
 theorem exists_stationaryState [NeZero D] (hT : IsStationaryMap T) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ ∈ densityMatrices D ∧ T ρ = ρ := by
-  have h_nonempty : (densityMatrices D).Nonempty :=
-    densityMatrices_nonempty (NeZero.pos D)
-  have h_compact : IsCompact (densityMatrices D) :=
-    densityMatrices_isCompact
-  have h_convex : Convex ℝ (densityMatrices D) :=
-    densityMatrices_isConvex
-  have h_maps : Set.MapsTo T (densityMatrices D) (densityMatrices D) :=
-    hT.maps_densityMatrices
-  have h_cont : ContinuousOn T (densityMatrices D) :=
-    hT.continuousOn_densityMatrices
-  have h_exists : ∃ ρ ∈ densityMatrices D, T ρ = ρ :=
-    brouwer_fixedPoint_densityMatrices h_cont h_maps
-  obtain ⟨ρ, hρ, hTx⟩ := h_exists
-  exact ⟨ρ, hρ, hTx⟩
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ ∈ densityMatrices D ∧ T ρ = ρ :=
+  brouwer_fixedPoint_densityMatrices (hT.continuousOn_densityMatrices) (hT.maps_densityMatrices)
 
 /-- **Wolf Theorem 6.11**, alternative formulation: the fixed point is a
 density matrix (PSD, trace 1) satisfying `T ρ = ρ`. -/

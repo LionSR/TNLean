@@ -321,7 +321,7 @@ Additionally:
 * Numbered theorem: `IsPositiveMap.wolf_prop_6_8` —
   `TNLean.Channel.WolfChapter6Wrappers`.
 
-### Wolf Corollary 6.8 (Linearly independent stationary states) — FORMALIZED
+### Wolf Corollary 6.8 (Linearly independent stationary states) — KEY LEMMA FORMALIZED (basis/dimension statement open)
 
 In `TNLean.Channel.FixedPoint.StationarySpan`:
 
