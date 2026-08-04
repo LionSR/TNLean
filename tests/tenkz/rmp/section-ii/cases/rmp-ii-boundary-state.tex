@@ -1,25 +1,39 @@
 % Target: rmp-ii-boundary-state
 % Formula: rho_R factorizes through the A and B boundary lassos and sigma_partial R.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame.
 % Boundary: The east cup closes the virtual pair, the west side is sealed, and physical
 %   legs stay open.
 % Source: paper TN-Review-main.tex line 807; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 650-684
-% Capabilities: grid, typed-ports
-%
-% west=none seals the west side on its own; boundary=none silently
-% outranked the east cup word beside it, so the pair drew unclosed.
+% Capabilities: kernel, typed-ports
 \[
   \rho_R \;=\;
-  \begin{tenkz}[rows={ket:nopair, bra}, west=none, east=cup]
-    \tn{} & \tnX{B^{\bar I}}\\
-    \tn*{} & \tnX{B^{\bar I}}
+  \tenkzkernel
+  % LHS: each row is an unlabelled site feeding the B lasso; east=cup
+  % contracts the shared virtual pair, and the two physical legs stay
+  % independent (no ket-bra pairing at this stage).
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, west=none, east=cup]
+    \tn[at=(1,1), name=d1, ports={0:virtual, 90:physical}]{}
+    \tn[at=(1,2), skin=ring, name=r1,
+      ports={180:virtual, 0:virtual}]{B^{\overline{I}}}
+    \tn[at=(2,1), name=d2, ports={0:virtual, 270:physical}]{}
+    \tn[at=(2,2), skin=ring, name=r2,
+      ports={180:virtual, 0:virtual}]{B^{\overline{I}}}
+    \tnwire{d1.0}{r1.180} \tnwire{d2.0}{r2.180}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[rows={ket:nopair, bra}, west=none, east=cup]
-    \tn[box]{U^{A}_{I}} &
-      \tnX{\sigma^{A}}\tnspan[brace above]{2}{\sigma_{\partial R}} &
-      \tnX{\sigma^{B}}\\
-    \tn*[box]{U^{A}_{I}} & \tnX{\sigma^{A}} & \tnX{\sigma^{B}}
+  % RHS: U^A_I feeds sigma^A then sigma^B on each row; the brace names the
+  % sigma_{partial R} span and east=cup closes the shared virtual pair.
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, west=none, east=cup]
+    \tn[at=(1,1), skin=box, name=u1, ports={0:virtual, 90:physical}]{U^{A}_{I}}
+    \tn[at=(1,2), skin=ring, name=sa1, ports={180:virtual, 0:virtual}]{\sigma^{A}}
+    \tn[at=(1,3), skin=ring, name=sb1, ports={180:virtual, 0:virtual}]{\sigma^{B}}
+    \tnmark[form=label, label pos=90]{midway sa1 and sb1}{$\sigma_{\partial R}$}
+    \tn[at=(2,1), skin=box, name=u2,
+      ports={0:virtual, 270:physical}]{\overline{U^{A}_{I}}}
+    \tn[at=(2,2), skin=ring, name=sa2, ports={180:virtual, 0:virtual}]{\sigma^{A}}
+    \tn[at=(2,3), skin=ring, name=sb2, ports={180:virtual, 0:virtual}]{\sigma^{B}}
+    \tnwire{u1.0}{sa1.180} \tnwire{sa1.0}{sb1.180}
+    \tnwire{u2.0}{sa2.180} \tnwire{sa2.0}{sb2.180}
   \end{tenkz}
 \]
