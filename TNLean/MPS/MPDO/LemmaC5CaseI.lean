@@ -25,18 +25,19 @@ Case-I content carried here is the C.4–C.5 argument that the active-sector
 trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
 is positive.
 
-The file does **not** assemble the full singleton-sector consequence
-(`card(ActiveSector p) = 1`).  That assembly depends on two further pieces
-documented at the end of the file:
+Two further pieces remain to complete the Case-I argument that the
+active sector set reduces to a singleton (`card(ActiveSector p) = 1`), from
+which the Case-I relations `T² = T` and `Q(1−LQ)L = 0` follow; these
+relations are the Case-I input to the proof of Lemma `SALZCL`
+(arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the lemma's
+headline statement.  The deferred pieces are documented at the end of the
+file:
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling,
-* the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))` connecting
-  the doubled-index MPS self-overlap to the active-sector trace-squared
-  matrix `S_{kh} = Re(tr(η_{kh}²))`.
+* the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`.
 
-With those, the route sketched in the paper-gap note
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` completes the Case-I
-singleton conclusion.
+The route to assemble them is sketched in the paper-gap note
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 ## Main declarations
 
@@ -45,10 +46,9 @@ singleton conclusion.
   `S_{kh} ≤ T_{kh}²` entrywise
 * `activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`:
   literal ZCL `physTraceTransfer² = physTraceTransfer` forces `T² = T³`
-* `activeSectorTraceMatrix_primitive`:
-  the active trace matrix `T` is primitive under the Case-I hypotheses
 * `activeSectorTraceMatrix_pow_two_pos`:
-  every entry of `T²` is strictly positive
+  every entry of `T²` is strictly positive (derived from
+  `activeSectorTraceMatrix_isPrimitive` in `PhysicalSectorTraceMatrix`)
 
 ## Source fidelity
 
@@ -68,8 +68,9 @@ variable {d D : ℕ} (K : MPOTensor d D)
 /-- The active-sector trace-**squared** matrix:
 `S_{kh} = Re(tr(η_{kh}²))`.
 
-This is the matrix `S` defined in the Lemma C.5 Case-I proof.  Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
-matrix.
+This is the matrix `S` defined in the Lemma C.5 Case-I proof.
+Each entry is bounded above by `T_{kh}²`, where `T` is the
+active-sector trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 noncomputable def activeSectorTraceSqMatrix
@@ -212,26 +213,14 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
       _ = (T ^ 3).map Complex.ofReal := h2
   exact hT_sq_cu
 
--- ====================================================================
--- The following standalone theorems capture the proved components of
--- the Lemma C.5 Case-I argument.  The final singleton-consequence
--- theorem `lemmaC5_caseI_singleton` is deferred; its proof requires
--- two additional pieces that are documented below.
--- ====================================================================
+/-! ## Proved components
 
-/-- Under the Case-I spanning/nonzero/triangle hypotheses, the active
-trace matrix `T` is primitive.  Consequently every entry of `T²` is strictly
-positive under the additional hypothesis `T² = T³`.
+The following theorems capture the proved matrix-algebra components of the
+Lemma C.5 Case-I argument.  The final singleton-consequence theorem
+`lemmaC5_caseI_singleton` is deferred (see the remaining-gap section
+below for the two missing pieces).
+-/
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines 1451--1471. -/
-theorem activeSectorTraceMatrix_primitive (F : PhysicalSectorFactorization K)
-    (p : Fin F.sectorCount → ℝ) (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
-    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
-    (hnonzero : ∀ k : F.ActiveSector p, ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
-    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
-      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0) :
-    Matrix.IsPrimitive (F.activeSectorTraceMatrix p) :=
-  F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
 
 /-- If `T² = T³` and `T` is primitive, then every entry of `T²` is positive.
 This is the Perron-projection lemma used in the Case-I route.
@@ -252,26 +241,27 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
   have hTprim := F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
   exact hTprim.pow_two_pos_of_pow_two_eq_pow_three hTsq_eq_Tcu
 
--- ====================================================================
--- Remaining gap for Lemma C.5 Case I.
---
--- The singleton-consequence theorem requires two additional pieces:
---
--- 1. Trace similarity: tr(S_tilde^N) = tr(S^N) where
---    (S_tilde)_{ij} = S_{ij} * v_j² / v_i².  This follows from
---    diagonal similarity S_tilde = D_{v²}^{-1} S D_{v²} and
---    the telescoping product argument (S_tilde^N)_{ii} = (S^N)_{ii}.
---
--- 2. Overlap formula: mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
---    = Complex.ofReal(tr(S^N)) for N > 0.  Requires physical-isometry
---    conjugation, block-diagonal decomposition, squared-trace lemma, and
---    trace-cycle identity.
---
--- With these, the full Case-I singleton-consequence argument
--- is complete; all matrix-algebra components are proved above.
---
--- Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (SALZCL), lines 1473--1499.
--- ====================================================================
+/-! ## Remaining gap for Lemma C.5 Case I
+
+The singleton-consequence theorem requires two additional pieces:
+
+1. **Trace similarity** `tr(S_hat^N) = tr(S^N)` where
+   `(S_hat)_{ij} = S_{ij} * v_j² / v_i²`.  This follows from
+   diagonal similarity `S_hat = D_{v²}^{-1} S D_{v²}` and the
+   telescoping product argument `(S_hat^N)_{ii} = (S^N)_{ii}`.
+
+2. **Overlap formula** `mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
+   = Complex.ofReal(tr(S^N))` for `N > 0`.  Requires the
+   physical-isometry conjugation, block-diagonal decomposition,
+   squared-trace lemma, and trace-cycle identity.
+
+With these, the full Case-I singleton-consequence argument
+is complete; all matrix-algebra components are proved above.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
+1473--1499.
+-/
+
 
 
 end caseI
