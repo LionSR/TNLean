@@ -269,9 +269,11 @@ lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat
   have h_star_elim : star (Sum.elim v (-w)) = Sum.elim (star v) (star (-w)) := by
     ext i; cases i <;> simp
   rw [h_star_elim] at hx_nonneg
-  -- 0 ≤ Sum.elim (star v) (-star w) ⬝ᵥ Sum.elim (Amat.mulVec v - Cmat.mulVec w) (CstarMat.mulVec v - Bmat.mulVec w)
+  -- 0 ≤ Sum.elim (star v) (-star w) ⬝ᵥ
+  --   Sum.elim (Amat.mulVec v - Cmat.mulVec w) (CstarMat.mulVec v - Bmat.mulVec w)
   rw [sumElim_dotProduct_sumElim] at hx_nonneg
-  -- 0 ≤ (star v ⬝ᵥ (Amat.mulVec v - Cmat.mulVec w)) + (-star w ⬝ᵥ (CstarMat.mulVec v - Bmat.mulVec w))
+  -- 0 ≤ (star v ⬝ᵥ (Amat.mulVec v - Cmat.mulVec w))
+  --   + (-star w ⬝ᵥ (CstarMat.mulVec v - Bmat.mulVec w))
   simp [Matrix.mulVec_neg, dotProduct_sub, dotProduct_neg, dotProduct_add] at hx_nonneg
   -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w
   --   - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ Bmat.mulVec w
