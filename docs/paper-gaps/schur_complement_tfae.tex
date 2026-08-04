@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{Schur Complement TFAE — Partial Proof}
+\title{Schur Complement TFAE — Open Gap}
 \author{}
 \date{2026-08-04}
 
@@ -18,9 +18,12 @@
 Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and Schur complements).
 
 \section{Gap}
-The TFAE equivalence for the block Schur complement (\lean{SchurComplement.schur_tfae})
-is stated but the three-way proof is not yet completely formalised.
-The remaining subgoals are:
+The TFAE equivalence for the block Schur complement is not yet formalised in
+this branch: the definitions \leanid{SchurComplement.blockMatrix},
+\leanid{SchurComplement.blockMatrix_isHermitian}, and
+\leanid{SchurComplement.schurComplement} are present, but no direction of the
+equivalence has a Lean statement or proof here. The proof is under development
+on the stacked follow-up branch for PR \#5442. The remaining subgoals are:
 
 \begin{enumerate}
   \item[(1)$\Rightarrow$(2)] Quadratic-form minimisation: for the block matrix
@@ -37,14 +40,16 @@ The remaining subgoals are:
 \end{enumerate}
 
 \section{Verdict}
-\textbf{Partially resolved}. The core equivalence (1)$\Longleftrightarrow$(2) is proved:
-\begin{itemize}
-  \item (1)$\Longrightarrow$(2): kernel inclusion via \texttt{dotProduct\_mulVec\_zero\_iff}
-    and Schur complement PSD via quadratic-form minimisation;
-  \item (2)$\Longrightarrow$(1): completing the square using the algebraic identity
-    $R^+ = \operatorname{supportInv}(R)$.
-\end{itemize}
-The contraction characterisation (2)$\Longleftrightarrow$(3) (including the operator-norm
-lemma $\|L\|\le 1 \iff L L^\dagger \le I$) is deferred to a follow-up PR.
+\textbf{Open gap}. Only \leanid{SchurComplement.blockMatrix},
+\leanid{SchurComplement.blockMatrix_isHermitian}, and
+\leanid{SchurComplement.schurComplement} are formalised (and carry \texttt{\textbackslash leanok}
+in the blueprint); the TFAE theorem itself is an open gap with no Lean
+statement on this branch, tracked by a \texttt{\textbackslash notready} blueprint entry.
+The proof in progress on the stacked branch currently has: the block quadratic
+form expansion, kernel inclusion (1)$\Rightarrow$(2) part one, and
+pseudoinverse-support algebra; the Schur-complement minimisation, the converse
+direction, and the contraction characterisation (2)$\Longleftrightarrow$(3)
+(including the operator-norm lemma $\|L\|\le 1 \iff L L^\dagger \le I$)
+remain to be integrated.
 
 \end{document}
