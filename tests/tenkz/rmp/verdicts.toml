@@ -716,11 +716,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "1532a9c8576d40e76639d67d8cca06802cda3f14b04f8bd135efea30d8ca1447"
+case_sha256 = "c37b061e3fed6baaa8d49b443fac1070a86f3883ef2d0e7b3a678d6d3e28f49e"
 second_viewer = "codex-independent-source-topology-review-2026-08-01"
 reviewed = "2026-08-01"
 renderer = "codex-explicit-four-port-j-source-review-2026-08-01-300dpi"
-note = "the exact hash renders one central physical leg, four split virtual rails, and five explicit MPO stations; the marked four-port j tensor owns both loop bonds and both radial bonds, with no braid crossing"
+note = "the exact hash renders one central physical leg per side, four split virtual rails, and five explicit MPO stations; the marked four-port j tensor owns both loop bonds and both radial bonds, with no braid crossing; the bare side takes its leg from the plane physical policy, and the five station boxes opt out of that policy through the kernel per-atom exclusion void=sealed, so no typed physical port workaround remains"
 
 [[verdict]]
 id = "rmp-iii-b-dyon"

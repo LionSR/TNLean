@@ -1375,3 +1375,18 @@ picture omitted.  They add no parser spelling, alias, escape, overload,
 page-distance constant, or case-specific metric.
 
 Census-correction: #5375
+
+### 2026-08-04 — the idempotent panel takes the plane physical axis
+
+M4 rises from 18.02 to 18.03.  The idempotent panel
+(`rmp-iii-b-idempotent`) migrates off the `ports={90:physical}` workaround
+onto the plane `physical=up` axis introduced under #5375, while keeping
+the four ported MPO station declarations and the explicit port-bond rail
+structure.  The bare side now takes its leg from the plane physical
+policy; the loop side keeps a typed physical port because the picture
+policy would also leg the five station boxes.  The additional lines name
+mathematical incidences that the workaround hid, and they add no parser
+spelling, alias, escape, overload, page-distance constant, or
+case-specific metric.
+
+Census-correction: #5375
