@@ -253,14 +253,16 @@ This section states the existence theorems from
     \lean{Wolf.infimum_is_attained}\leanok
     \uses{lem:posdef_trace_lower_bound, lem:det_amgm_hilbert_schmidt_bound,
     lem:kronecker_hilbert_schmidt_trace}
-    For a positive-definite Choi matrix $\tau$, the infimum of
+    For a positive-definite operator $\tau$ on $\C^{d_2}\otimes\C^{d_1}$,
+    the infimum of
     \begin{align}
         \tr\!\left[(S_{2}\otimes_{k}S_{1})\tau
             (S_{2}\otimes_{k}S_{1})^{\dagger}\right]
         \notag
     \end{align}
-    over $S_{1},S_{2}\in\MN{D}$ with
-    $\det S_{1}=\det S_{2}=1$ is attained.
+    over $S_{1}\in\MN{d_1}$ and $S_{2}\in\MN{d_2}$ with
+    $\det S_{1}=\det S_{2}=1$ is attained.  The two tensor factors may have
+    different dimensions.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -274,7 +276,7 @@ This section states the existence theorems from
     Together,
     \begin{align}
         \tr(S_i^\dagger S_i)
-        &=\|S_i\|^2\geq D,
+        &=\|S_i\|^2\geq d_i,
         \notag\\
         \tr(X\tau X^\dagger)
         &\geq\lambda_{\min}(\tau)\tr(X^\dagger X)
@@ -282,7 +284,8 @@ This section states the existence theorems from
         &=\lambda_{\min}(\tau)
           \tr(S_2^\dagger S_2)\tr(S_1^\dagger S_1)
         \notag\\
-        &\geq\lambda_{\min}(\tau)D\|S_i\|^2.
+        &\geq\lambda_{\min}(\tau)\,d_j\,\|S_i\|^2
+          \qquad (j\neq i).
         \notag
     \end{align}
     Hence any point
@@ -356,11 +359,11 @@ This section states the existence theorems from
     exist SL-filterings $\Phi_{1},\Phi_{2}$ such that
     $\Phi_{2}\circ T\circ\Phi_{1}$ is doubly-stochastic.
 
-    This is the equal-dimension (square) case $T : \MN{D} \to \MN{D}$; the
-    source \cite[Proposition~2.9]{Wolf2012Quantum} states the proposition for a
-    general $T : \mathcal{M}_{d_1} \to \mathcal{M}_{d_2}$ with separate filterings
-    on each factor.
-    % See docs/paper-gaps/wolf_prop28_square_case.tex
+    This is the equal-dimension (square) case $T : \MN{D} \to \MN{D}$ of
+    \cite[Proposition~2.9]{Wolf2012Quantum}; the rectangular form with
+    independent dimensions is
+    Theorem~\ref{thm:exists_normal_form_generic_rect}.
+    % See docs/paper-gaps/wolf_prop28_square_case.tex (restriction resolved)
 \end{theorem}
 
 \begin{proof}\leanok
@@ -385,6 +388,50 @@ This section states the existence theorems from
     by the equality case of Lemma~\ref{lem:trace_det_amgm}, this forces
     $SMS^{\dagger}\propto\Id$, hence both partial traces are proportional to
     the identity, which is exactly the doubly-stochastic condition.
+\end{proof}
+
+\begin{definition}[Doubly-stochastic map between matrix algebras]
+    \label{def:doubly_stochastic_rect}
+    \lean{Wolf.DoublyStochasticRect}\leanok
+    A linear map $T : \MN{d_1} \to \MN{d_2}$ between matrix algebras of
+    possibly different dimensions is \emph{doubly-stochastic} if
+    $T(\Id)\propto\Id$ and $T^{*}(\Id)\propto\Id$, where $T^{*}$ is the
+    trace-pairing adjoint.  This is the normal-form condition of
+    \cite[Proposition~2.9]{Wolf2012Quantum}; by the rectangular
+    Choi--Jamiolkowski correspondence it is equivalent to both partial traces
+    of the Choi matrix being proportional to the identity.
+\end{definition}
+
+\begin{theorem}[Generic normal form for rectangular CP maps]
+    \label{thm:exists_normal_form_generic_rect}
+    \lean{Wolf.exists_normal_form_generic_rect}
+    \leanok
+    \uses{def:sl_filtering, def:doubly_stochastic_rect,
+    lem:infimum_is_attained, lem:trace_det_amgm, def:choi_matrix_rect,
+    def:is_kraus_cp}
+    Let $T : \MN{d_1} \to \MN{d_2}$ be a completely positive map whose
+    Choi matrix is positive-definite (equivalently, $T$ has full Kraus
+    rank). Then there exist SL-filterings $\Phi_{1}$ on $\MN{d_1}$ and
+    $\Phi_{2}$ on $\MN{d_2}$ such that $\Phi_{2}\circ T\circ\Phi_{1}$
+    is doubly-stochastic.  This is
+    \cite[Proposition~2.9]{Wolf2012Quantum} at the source's generality.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:infimum_is_attained, lem:trace_det_amgm}
+    The argument is the one of Theorem~\ref{thm:exists_normal_form_generic}
+    with the two dimensions tracked separately: take the minimiser
+    $(S_{1},S_{2})\in\mathrm{SL}(d_1,\C)\times\mathrm{SL}(d_2,\C)$ of
+    $\tr[(S_{2}\otimes_{k}S_{1})\tau(S_{2}\otimes_{k}S_{1})^{\dagger}]$
+    from Lemma~\ref{lem:infimum_is_attained} and set $\Phi_{1},\Phi_{2}$ to
+    be the filterings with matrices $S_{1}^{\mathsf T}$ and $S_{2}$.  Each
+    partial trace of the filtered Choi matrix minimises a functional
+    $\tr(SMS^{\dagger})$ over $\det S=1$, which saturates the
+    trace--determinant AM--GM bound of Lemma~\ref{lem:trace_det_amgm}; the
+    equality case forces both partial traces to be proportional to the
+    identity, and the partial-trace identities
+    $\tr_B(\tau)=T(\Id)/d_1$ and $\tr_A(\tau)=(T^{*}(\Id))^{\mathsf T}/d_1$
+    give the doubly-stochastic condition.
 \end{proof}
 
 \begin{definition}[Diagonal Lorentz normal form]\label{def:lorentz_diagonal}

@@ -152,7 +152,8 @@ end DoublyStochastic
 
 The proof idea (see Wolf Section 2.3):
 1. Work at the level of the Choi matrix τ = (T ⊗ id)(|Ω⟩⟨Ω|).
-2. Under SL-filterings Φ(X) = S X S†, τ transforms as τ → (S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†.
+2. Under SL-filterings Φ(X) = S X S†, τ transforms as
+   τ → (S₂ ⊗ₖ S₁) τ (S₂ ⊗ₖ S₁)†.
 3. Minimize tr[τ'] over S₁, S₂ with det = 1.
 4. The infimum is attained (compactness of the bounded subset of SL(n, ℂ)).
 5. At the optimum, both partial traces of τ' are proportional to identity,
@@ -183,10 +184,11 @@ for the operator norm (e.g. `‖I‖_op² = 1 < n`).  Writing `X = S₂ ⊗ₖ S
 smallest-eigenvalue bound for a positive-definite matrix gives
 `λ_min(τ) · tr[Xᴴ X] ≤ tr[X τ Xᴴ]`, Hilbert–Schmidt multiplicativity of the
 Kronecker product gives `tr[Xᴴ X] = tr[S₂ᴴ S₂] · tr[S₁ᴴ S₁]`, and the determinant
-AM–GM estimate gives `tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ dᵢ` whenever `det Sᵢ = 1`.  Combining
-these, `tr[X τ Xᴴ] ≥ λ_min(τ) · d₂ · ‖S₁‖²` and
-`tr[X τ Xᴴ] ≥ λ_min(τ) · d₁ · ‖S₂‖²`, so any minimiser is
-confined to bounded sets `{S₁ | ‖S₁‖ ≤ C₁}`, `{S₂ | ‖S₂‖ ≤ C₂}`.  Intersecting with the closed set
+AM–GM estimate gives `tr[Sᵢᴴ Sᵢ] = ‖Sᵢ‖² ≥ dᵢ` whenever `det Sᵢ = 1`.
+Combining these, `tr[X τ Xᴴ] ≥ λ_min(τ) · d₂ · ‖S₁‖²` and
+`tr[X τ Xᴴ] ≥ λ_min(τ) · d₁ · ‖S₂‖²`, so any minimiser is confined to bounded
+sets `{S₁ | ‖S₁‖ ≤ C₁}`, `{S₂ | ‖S₂‖ ≤ C₂}`.  Intersecting with the closed
+set
 `det S = 1` gives a compact set on which the continuous trace functional attains
 its minimum by the extreme value theorem; a value outside the sublevel set is
 automatically larger than the value at the identity, so this minimiser is
@@ -231,7 +233,8 @@ lemma infimum_is_attained
   have hcardR₂_pos : 0 < cardR₂ := by
     rw [hcardR₂]; exact_mod_cast Fintype.card_pos
   -- Coercivity: the value dominates `λ · ‖S₂‖² · ‖S₁‖²`.
-  have key : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
+  have key : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ)
+      (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
       lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) ≤
         g (S₁, S₂) := by
     intro S₁ S₂
@@ -244,8 +247,8 @@ lemma infimum_is_attained
   set B : ℝ := g (1, 1) with hB
   set C₁ : ℝ := Real.sqrt (B / (lam * cardR₂)) with hC₁
   set C₂ : ℝ := Real.sqrt (B / (lam * cardR₁)) with hC₂
-  have hbound : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ) (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ),
-      S₁.det = 1 → S₂.det = 1 →
+  have hbound : ∀ (S₁ : Matrix (Fin d₁) (Fin d₁) ℂ)
+      (S₂ : Matrix (Fin d₂) (Fin d₂) ℂ), S₁.det = 1 → S₂.det = 1 →
       g (S₁, S₂) ≤ B → ‖S₁‖ ≤ C₁ ∧ ‖S₂‖ ≤ C₂ := by
     intro S₁ S₂ h1 h2 hgB
     have hd1 : ‖S₁.det‖ = 1 := by rw [h1]; simp
@@ -263,7 +266,8 @@ lemma infimum_is_attained
       have hchain : (lam * cardR₂) * (Matrix.trace (S₁ᴴ * S₁)).re ≤ B := by
         calc (lam * cardR₂) * (Matrix.trace (S₁ᴴ * S₁)).re
             = lam * (cardR₂ * (Matrix.trace (S₁ᴴ * S₁)).re) := by ring
-          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
+          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re *
+              (Matrix.trace (S₁ᴴ * S₁)).re) := by
                 exact mul_le_mul_of_nonneg_left
                   (mul_le_mul_of_nonneg_right hn2 ht1) hlam.le
           _ ≤ g (S₁, S₂) := key S₁ S₂
@@ -274,7 +278,8 @@ lemma infimum_is_attained
       have hchain : (lam * cardR₁) * (Matrix.trace (S₂ᴴ * S₂)).re ≤ B := by
         calc (lam * cardR₁) * (Matrix.trace (S₂ᴴ * S₂)).re
             = lam * ((Matrix.trace (S₂ᴴ * S₂)).re * cardR₁) := by ring
-          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re * (Matrix.trace (S₁ᴴ * S₁)).re) := by
+          _ ≤ lam * ((Matrix.trace (S₂ᴴ * S₂)).re *
+              (Matrix.trace (S₁ᴴ * S₁)).re) := by
                 exact mul_le_mul_of_nonneg_left
                   (mul_le_mul_of_nonneg_left hn1 ht2) hlam.le
           _ ≤ g (S₁, S₂) := key S₁ S₂
@@ -585,8 +590,10 @@ lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D) ℂ}
 private lemma traceRight_choiMatrix
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Matrix.traceRight (choiMatrix T)
-      = (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) • T 1 := by
-  set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
+      = (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
+          star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) • T 1 := by
+  set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
+    star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
   ext i j
   rw [Matrix.traceRight_apply, Matrix.smul_apply, smul_eq_mul]
   have h1 : ∀ k : Fin D, choiMatrix T (i, k) (j, k) = cc * T (Matrix.single k k 1) i j := by
@@ -637,7 +644,8 @@ theorem exists_normal_form_generic
     exact ⟨SLFiltering.id 0, SLFiltering.id 0,
       ⟨0, Subsingleton.elim _ _⟩, ⟨0, Subsingleton.elim _ _⟩⟩
   haveI : NeZero D := ⟨hDpos.ne'⟩
-  obtain ⟨S₁, S₂, hS₁det, hS₂det, hmin⟩ := infimum_is_attained (τ := choiMatrix T) _hFullRank
+  obtain ⟨S₁, S₂, hS₁det, hS₂det, hmin⟩ :=
+    infimum_is_attained (τ := choiMatrix T) _hFullRank
   let Φ₁ : SLFiltering D :=
     { S := S₁ᵀ
       det_eq_one := by rw [Matrix.det_transpose, hS₁det]
@@ -714,7 +722,8 @@ theorem exists_normal_form_generic
       · rw [hC, hY S₂, Matrix.det_mul, Matrix.det_mul, hS₂det, Matrix.det_conjTranspose,
           hS₂det]; simp
       · intro S hS
-        have e1 : (Matrix.trace (Matrix.traceRight (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
+        have e1 : (Matrix.trace (Matrix.traceRight (choiMatrix
+            (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
             = (Matrix.trace ((S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ)).re := by
           rw [hC, ← trace_eq_trace_traceRight]
         have e2 : (Matrix.trace (S * Matrix.traceRight ρ₁ * Sᴴ)).re
@@ -724,7 +733,8 @@ theorem exists_normal_form_generic
         exact hmin S₁ S hS₁det hS
     obtain ⟨κ, hκ⟩ := hN₂
     rw [traceRight_choiMatrix] at hκ
-    set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
+    set cc : ℂ := ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
+    star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) with hcc
     have hcc_ne : cc ≠ 0 := by rw [hcc]; exact omega_coeff_ne_zero hDpos
     refine ⟨cc⁻¹ * κ, ?_⟩
     have h := congrArg (fun M => cc⁻¹ • M) hκ
@@ -737,7 +747,8 @@ theorem exists_normal_form_generic
     · rw [hC, hX S₁, Matrix.det_mul, Matrix.det_mul, hS₁det, Matrix.det_conjTranspose,
         hS₁det]; simp
     · intro S hS
-      have e1 : (Matrix.trace (Matrix.traceLeft (choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
+      have e1 : (Matrix.trace (Matrix.traceLeft (choiMatrix
+          (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)))).re
           = (Matrix.trace ((S₂ ⊗ₖ S₁) * choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ)).re := by
         rw [hC, ← Matrix.trace_eq_trace_traceLeft]
       have e2 : (Matrix.trace (S * Matrix.traceLeft ρ₂ * Sᴴ)).re
@@ -848,7 +859,8 @@ theorem exists_normal_form_generic_rect [NeZero d₁] [NeZero d₂]
   -- The Choi matrix of the filtered map is the minimised operator.
   have hC : ChoiRectangular.choiMatrix (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map)
       = (S₂ ⊗ₖ S₁) * ChoiRectangular.choiMatrix T * (S₂ ⊗ₖ S₁)ᴴ := by
-    change ChoiRectangular.choiMatrix (unitaryConjLM S₂ ∘ₗ (T ∘ₗ unitaryConjLM S₁ᵀ)) = _
+    change ChoiRectangular.choiMatrix (unitaryConjLM S₂ ∘ₗ (T ∘ₗ unitaryConjLM S₁ᵀ))
+        = _
     rw [choiMatrixRect_unitaryConj_comp, choiMatrixRect_comp_unitaryConj,
       Matrix.transpose_transpose,
       show (S₂ ⊗ₖ S₁) = (S₂ ⊗ₖ (1 : Matrix (Fin d₁) (Fin d₁) ℂ)) *
@@ -960,7 +972,8 @@ theorem exists_normal_form_generic_rect [NeZero d₁] [NeZero d₂]
     have hT : (Matrix.traceAdjointMap (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) 1).transpose =
         ((d₁ : ℂ) * κ) • (1 : Matrix (Fin d₁) (Fin d₁) ℂ) := by
       calc (Matrix.traceAdjointMap (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) 1).transpose
-          = (1 : ℂ) • (Matrix.traceAdjointMap (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) 1).transpose := by
+          = (1 : ℂ) •
+              (Matrix.traceAdjointMap (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) 1).transpose := by
             rw [one_smul]
         _ = ((d₁ : ℂ) * (1 / (d₁ : ℂ))) •
               (Matrix.traceAdjointMap (Φ₂.map ∘ₗ T ∘ₗ Φ₁.map) 1).transpose := by
