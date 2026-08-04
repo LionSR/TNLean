@@ -1390,3 +1390,24 @@ spelling, alias, escape, overload, page-distance constant, or
 case-specific metric.
 
 Census-correction: #5375
+
+### 2026-08-04 — nine RMP cases enter the kernel with declared species
+
+The boundary-lasso, two-shift, staircase, ZCL-MPDO, MPO-injective,
+torus-crossing, G-injective-MPO, MPO-on-PEPS, and dyon cases leave the grid
+and free tiers. Each now states its model on the kernel: a flat frame with
+canonical addresses, palettes recorded as declared species, and skin
+pairings for the two opposite mover rows. The staircase ascends as in the
+source after the mirror re-audit; the lasso hues are model species, not
+case ink.
+
+The retired spellings take their owned physical dimensions with them: the
+census falls from 708 to 478 sites (route/string 396 to 260,
+composition/layout 312 to 218), with metric and frame ownership remaining
+zero. M4 rises from 18.03 to 18.71 because the kernel cases name the
+species, pairings, and bases that the retired tiers implied. No parser
+spelling, registry row, alias, escape, or overload is added; the
+labelled-mark ink repair expands an existing style before its node reads
+it.
+
+Census-correction: #5350

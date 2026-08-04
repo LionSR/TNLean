@@ -301,7 +301,10 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{label~pos}{angle}{auto}{kernel}{Label quadrant.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Conjugate glyph orientation.}
+% Issue 5383: stored but never read by ink passes or the signature fold.
+% Marked reserved until the directed-signatures design (issue 4162)
+% decides whether duality rides dir= or a real glyph flip is implemented.
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Reserved; currently inert (stored, unread).}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{cluster}{pair}{empty}{sugar(name=, skin=)}{Expander: RxC addressable sub-atom group.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.}

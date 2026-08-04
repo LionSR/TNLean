@@ -1,19 +1,22 @@
 % Target: rmp-workbench-iii-mpo-on-peps-definition
 % Formula: MPO(A) is the four-site virtual ring surrounding one PEPS tensor A.
-% Ink: Canonical public tenkzfree central atom and four-site MPO ring.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362).
 % Boundary: The MPO is closed; the PEPS tensor retains five open legs.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 521-537; archival output DefofMPOonjPEPSten.pdf
-% Capabilities: free-graph, ring-closure, definition
+% Capabilities: kernel, typed-ports
 \[
   \operatorname{MPO}(A):=
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[mpo]{w}{(-10mm,0mm)}{} \tnput[mpo]{n}{(0mm,10mm)}{}
-    \tnput[mpo]{e}{(10mm,0mm)}{} \tnput[mpo]{s}{(0mm,-10mm)}{}
-    \tnjoin[route=arc]{w.north}{n.west}
-    \tnjoin[route=arc]{n.east}{e.north}
-    \tnjoin[route=arc]{e.south}{s.east}
-    \tnjoin[route=arc]{s.west}{w.south}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+    \tn[skin=dot, at=(2,2), name=A, label pos=270]{A}
+    \tn[skin=mpo, at=(2,1), name=w, ports={90:virtual, 270:virtual}]{}
+    \tn[skin=mpo, at=(1,2), name=n, ports={0:virtual, 180:virtual}]{}
+    \tn[skin=mpo, at=(2,3), name=e, ports={90:virtual, 270:virtual}]{}
+    \tn[skin=mpo, at=(3,2), name=s, ports={0:virtual, 180:virtual}]{}
+    \tnwire[route=arc]{w.90}{n.180}
+    \tnwire[route=arc]{n.0}{e.90}
+    \tnwire[route=arc]{e.270}{s.0}
+    \tnwire[route=arc]{s.180}{w.270}
+  \end{tenkz}.
 \]

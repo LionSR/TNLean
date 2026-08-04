@@ -123,12 +123,12 @@ DIMENSION_RE = re.compile(
     flags=re.IGNORECASE,
 )
 
-CASE_DIMENSION_CEILING = 708
+CASE_DIMENSION_CEILING = 478
 CASE_OWNER_CEILINGS: Mapping[DimensionOwner, int] = {
     DimensionOwner.METRIC: 0,
     DimensionOwner.FRAME: 0,
-    DimensionOwner.ROUTE: 396,
-    DimensionOwner.LAYOUT: 312,
+    DimensionOwner.ROUTE: 260,
+    DimensionOwner.LAYOUT: 218,
 }
 CASE_COMMENT_CEILING = 0
 BOOK_LAYOUT_ALLOWLIST: Mapping[Path, int] = {

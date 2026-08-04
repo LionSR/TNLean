@@ -1,22 +1,24 @@
 % Target: rmp-iii-b-dyon
 % Formula: A dyon carries charge alpha inside a flux disk with string h.
-% Ink: Canonical public tenkzfree charge, flux region, and open string records.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362).
 % Boundary: Four lattice legs, one physical leg, and one h-string tail are open.
 % Source: paper TN-Review-main.tex line 1655; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 688-703
-% Capabilities: free-graph, marked-region, open-string
+% Capabilities: kernel, marked-region, open-string
 \[
-  \begin{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
     % the PEPS site inside the flux disk, with the charge on its east leg
-    \tnput[dot]{P}{(0mm,0mm)}{}
-    \tnput[mpo, role=extra]{c}{(8mm,0mm)}{\alpha}
-    \tnput[dot, role=operator]{f}{(14mm,0mm)}{}
-    \tnjoin{-11mm,0mm}{P.west} \tnjoin{P.east}{c.west}
-    \tnjoin{c.east}{f.west} \tnjoin{f.east}{20mm,0mm}
-    \tnjoin{-6mm,-8mm}{P.south west} \tnjoin{P.north east}{6mm,8mm}
-    \tnjoin{P.north}{0mm,9mm}
-    \tnregion[slot=secondary]{P, c}
+    \tn[at=(2,2), name=P, skin=dot]{}
+    \tn[at=(2,3), name=c, skin=mpo, role=extra]{\alpha}
+    \tn[at=(2,4), name=f, skin=dot, role=operator]{}
+    \tnwire{open w}{P.w} \tnwire{P.e}{c.w}
+    \tnwire{c.e}{f.w} \tnwire{f.e}{open e}
+    \tnwire{open sw}{P.225} \tnwire{P.45}{open ne}
+    \tnwire{P.n}{open n}
+    \tnmark[form=enclosure, slot=secondary]{(2,2) .. (2,3)}{}
     % the flux string leaving the disk
-    \tnjoin[role=operator, route=arc, label=h]{f.south}{22mm,-11mm}
-  \end{tenkzfree}
+    \tnwire[kind=string, route=arc, species=operator, name=hstr]{f.s}{open se}
+    \tnmark[form=label]{on hstr 0.5}{h}
+  \end{tenkz}
 \]

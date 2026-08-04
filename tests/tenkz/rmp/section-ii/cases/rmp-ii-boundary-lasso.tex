@@ -1,26 +1,47 @@
 % Target: rmp-ii-boundary-lasso
 % Formula: A^I = U^A_I sigma^A and B^Ibar = sigma^B U^B_Ibar.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the singular-value decompositions carry the source
+%   palette as declared species (the bar's X row on this target).
 % Boundary: The A lasso seals its west side; the B lasso seals its east side; physical
 %   legs stay open.
 % Source: paper TN-Review-main.tex line 804; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 618-649
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
+\tndeclare{species}{charge}{hue=source:red}
+\tndeclare{species}{flux}{hue=source:gray}
 \[
-  \begin{tenkz}[physical=up, west=none]
-    \tn{}
-  \end{tenkz}
-  \;=\;
-  \begin{tenkz}[physical=up, west=none]
-    \tn[box]{U^{A}_{I}} & \tnX[label pos=north]{\sigma^{A}}
-  \end{tenkz}
+  \begin{tenkzeq}
+    \begin{tenkz}[cols=1, bonds=none, west=none]
+      \tn[name=A, species=charge, ports={0:virtual, 90:physical}]{}
+      \tnwire[species=charge]{A.0}{open e}
+    \end{tenkz}
+    =
+    \begin{tenkz}[cols=2, bonds=none, west=none]
+      % Only U carries the physical leg, as in the author panel.
+      \tn[skin=box, species=charge, name=U,
+        ports={0:virtual, 90:physical}]{U^{A}_{I}} &
+      \tn[skin=ring, species=charge, name=sig, label pos=90,
+        ports={180:virtual, 0:virtual}]{\sigma^{A}}
+      \tnwire[species=charge]{U.0}{sig.180}
+      \tnwire[species=charge]{sig.0}{open e}
+    \end{tenkz}
+  \end{tenkzeq}
 \]
 \[
-  \begin{tenkz}[physical=up, east=none]
-    \tn{}
-  \end{tenkz}
-  \;=\;
-  \begin{tenkz}[physical=up, east=none]
-    \tnX[label pos=south]{\sigma^{B}} & \tn[box]{U^{B}_{\bar{I}}}
-  \end{tenkz}
+  \begin{tenkzeq}
+    \begin{tenkz}[cols=1, bonds=none, east=none]
+      \tn[name=B, species=flux, ports={180:virtual, 90:physical}]{}
+      \tnwire[species=flux]{open w}{B.180}
+    \end{tenkz}
+    =
+    \begin{tenkz}[cols=2, bonds=none, east=none]
+      \tn[skin=ring, species=flux, name=sig, label pos=270,
+        ports={180:virtual, 0:virtual}]{\sigma^{B}} &
+      \tn[skin=box, species=flux, name=U,
+        ports={180:virtual, 90:physical}]{U^{B}_{\overline{I}}}
+      \tnwire[species=flux]{open w}{sig.180}
+      \tnwire[species=flux]{sig.0}{U.180}
+    \end{tenkz}
+  \end{tenkzeq}
 \]

@@ -1,0 +1,23 @@
+% Regression: a labelled mark carrying species= must reach the node with its
+% text hue expanded into the option list; the unexpanded ink variable made
+% pgfkeys read "text=<hue>,inner sep" as one opaque key (the section 12.5
+% contract sketch failed to compile verbatim; issue 5086 acceptance).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={2x2}, bonds=none,
+    frame={flat, basis={wire at (-1,1), wire at (1,1),
+                        wire at (-1,-1), wire at (1,-1)}}]
+  % the section 12.5 CZX sketch: a marked enclosure over four members
+  \tnmark[form=enclosure, species=marked]
+    {{(1,1,4), (1,2,3), (2,1,2), (2,2,1)}}{$X$}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+  % the same ink doctrine on an anchored edge label and a bare enclosure
+  \tn[at=(1,1), name=L]{L} \tn[at=(2,2), name=R, species=operator]{R}
+  \tnmark[form=label, species=marked, label pos=ne]{L}{$g$}
+  \tnmark[form=enclosure, species=passive]{(1,1) .. (2,2)}{}
+\end{tenkz}
+\end{document}
