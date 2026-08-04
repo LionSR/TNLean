@@ -76,7 +76,7 @@ Source: Wolf, local source
 def multiplicativeDomain (E : Mat →ₗ[ℂ] Mat) : Set Mat :=
   rightMultiplicativeDomain E ∩ leftMultiplicativeDomain E
 
-private theorem linear_eq_zero_of_quadratic_nonneg
+theorem linear_eq_zero_of_quadratic_nonneg
     (b d : ℝ) (h : ∀ t : ℝ, 0 ≤ t * b + t ^ 2 * d) :
     b = 0 := by
   have hd : 0 ≤ d := by
