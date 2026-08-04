@@ -336,6 +336,71 @@ def test_owner_span_grouping() -> None:
     )
 
 
+def test_comment_terminated_control_word() -> None:
+    # A `%` comment terminates a control word mid-name even though its
+    # discarded endline leaves no space token in the input stream
+    # (`dimensions.py`, `_command_spans`).  TeX reads a backslash-name
+    # interrupted by a comment as the control word `\tn` followed by the
+    # letters p, u, t on the next line, never as the merged command
+    # `\tnput`; the scanner must reproduce that reading on raw,
+    # non-comment-stripped source.
+    comment_terminated = (
+        "\\begin{tenkzfree}[pitch=1mm]\n"
+        "  \\tn% mid-name comment\n"
+        "put{a}{(3mm,4mm)}{}\n"
+        "\\end{tenkzfree}\n"
+    )
+    space_terminated = (
+        "\\begin{tenkzfree}[pitch=1mm]\n"
+        "  \\tn put{a}{(3mm,4mm)}{}\n"
+        "\\end{tenkzfree}\n"
+    )
+    merged = (
+        "\\begin{tenkzfree}[pitch=1mm]\n"
+        "  \\tnput{a}{(3mm,4mm)}{}\n"
+        "\\end{tenkzfree}\n"
+    )
+
+    # The comment-terminated and space-terminated forms both leave the
+    # (3mm,4mm) dimensions unowned (no `\tnput` command is formed) ...
+    comment_message = _expect_error(
+        lambda: _build(comment_terminated),
+        "cannot inventory unowned case dimension",
+    )
+    space_message = _expect_error(
+        lambda: _build(space_terminated),
+        "cannot inventory unowned case dimension",
+    )
+    # ... and the comment form reports the dimensions at their true source
+    # line after the discarded comment endline, proving that offsets survive
+    # the comment rather than collapsing into the preceding line.
+    if ":3: 3mm" not in comment_message:
+        raise AssertionError(
+            f"comment-terminated control word lost its source line: {comment_message!r}"
+        )
+    if ":2: 3mm" not in space_message:
+        raise AssertionError(
+            f"space-terminated control word lost its source line: {space_message!r}"
+        )
+
+    # The merged control word is a genuinely different, dimension-bearing
+    # command: the comment form must not spuriously merge into it.
+    merged_inventory = _build(merged)
+    merged_sites = merged_inventory.cases[0].sites
+    if tuple(site.owner for site in merged_sites) != (
+        DimensionOwner.METRIC,
+        DimensionOwner.LAYOUT,
+    ):
+        raise AssertionError(f"merged control word lost its owners: {merged_sites!r}")
+    if not any(
+        site.site.endswith("tnput@1/command:\\tnput{a}{(<dimension>,<dimension>)}{}")
+        for site in merged_sites
+    ):
+        raise AssertionError(
+            f"merged control word lost its dimension owner identity: {merged_sites!r}"
+        )
+
+
 def test_construct_ordinals_are_semantic() -> None:
     base_source = r"""\begin{tenkzfree}
   \tnput{a}{(1mm,2mm)}{}
@@ -1545,6 +1610,7 @@ def main() -> int:
     test_repository_inventory()
     test_formatting_stability()
     test_owner_span_grouping()
+    test_comment_terminated_control_word()
     test_construct_ordinals_are_semantic()
     test_picture_scope_ancestry_is_semantic()
     test_balanced_changes_are_rejected()
