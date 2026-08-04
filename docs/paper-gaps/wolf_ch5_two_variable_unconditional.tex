@@ -1,0 +1,63 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\section{Two-variable operator Schwarz inequality --- unconditional form}
+\label{sec:gap_two_variable_unconditional}
+
+\subsection{Source}
+M.~Wolf, \emph{Quantum Channels \& Operations: Guided Tour}, Chapter~5,
+Theorem~5.3 (Eq.~5.4), local source
+\verb|Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex|, lines~180--190.
+
+\subsection{What is formalized}
+The conditional form \texttt{SchwarzTwoVariable.schwarz\_two\_variable}
+(Lean lemma \texttt{lem:two\_variable\_operator\_schwarz\_conditional}) is
+proved: for a 2-positive map $E$, for all $A,B$ and all vectors $v,w$ with
+$E(B^\dagger B)w = E(B^\dagger A)v$, we have
+$v^\dagger E(A^\dagger A)v \ge v^\dagger E(A^\dagger B)w$.
+This captures Wolf's Eq.~(5.4) in the sense that $w$ plays the role of
+$E(B^\dagger B)^{-1}E(B^\dagger A)v$ (the ``inverse on the range'' is
+exactly the condition $E(B^\dagger B)w = E(B^\dagger A)v$).
+
+\subsection{What is missing}
+The unconditional form (Theorem~5.3 as stated by Wolf) asserts that
+for every $v$, such a $w$ \emph{exists}.  Proving existence requires the
+finite-dimensional range/ker duality:
+\begin{align}
+    \operatorname{ran}(E(B^\dagger B))
+    = \ker(E(B^\dagger B))^\perp,
+    \notag
+\end{align}
+where $\perp$ is the Hermitian dot-product orthogonal complement.
+The inclusion $\supseteq$ is equivalent to: for any $y$ orthogonal to the
+kernel, $y$ belongs to the range.  With this, the kernel inclusion
+$\ker(E(B^\dagger B)) \subseteq \ker(E(A^\dagger B))$ (which is already proved
+via the Schur-complement argument) implies
+$\operatorname{ran}(E(B^\dagger A)) \subseteq \operatorname{ran}(E(B^\dagger B))$,
+giving existence of $w$.
+
+The range/ker duality is a standard finite-dimensional linear-algebra fact
+(for Hermitian matrices the column space equals the orthogonal complement of
+the nullspace).  Formalizing it requires the Euclidean-space inner-product
+structure on $\mathbb C^n$ ($\texttt{EuclideanSpace}$ or $\texttt{PiLp}$)
+and the adjoint/orthogonal-complement lemmas
+($\texttt{LinearMap.orthogonal\_ker}$,
+$\texttt{LinearMap.adjoint\_adjoint}$).
+Initial attempts to use these lemmas caused $\texttt{whnf}$ timeouts during
+typechecking of the proof body, likely due to the complexity of the
+$\texttt{PiLp}$ typeclass resolution.
+
+\subsection{Elimination plan}
+The range/ker duality is being formalized in a separate module as part of
+the $\texttt{EuclideanSpace}$ inner-product infrastructure (tracked in a
+follow-up issue).  Once available, the unconditional theorem
+\texttt{schwarz\_two\_variable\_unconditional} will be proved as a corollary
+of the conditional lemma, and the $\texttt{\\leanok}$ tag will be restored
+on the theorem entry in the blueprint.
+
+\subsection{Verdict}
+The two-variable operator Schwarz inequality is partially formalized:
+the pseudoinverse-free inequality (conditional on a witness $w$) is complete;
+the unconditional existence of the witness requires Euclidean-space
+range/ker duality, which is tracked as a gap.
+\end{document}
