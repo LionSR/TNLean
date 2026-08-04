@@ -257,7 +257,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     fixed point. The fixed-tensor-channel obstruction follows directly from
     the one- and two-site closure identities; it is not asserted as a theorem
     in that source. No canonical-form or strong-area-law conclusion is part of
-    this statement.
+    this statement. Theorem~\ref{thm:kato_deformed_mpdo_cf_sal_capstone}
+    establishes both conclusions for the same tensor.
 \end{theorem}
 
 \begin{proof}
@@ -287,6 +288,97 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Definition~\ref{def:is_rfp_via_ts} existed, complete positivity would give
     $\mathcal S[K_2(X_*)]\geq0$, whereas its intertwining identity would give
     $\mathcal S[K_2(X_*)]=K_1(X_*)$. This is a contradiction.
+\end{proof}
+
+\begin{theorem}[A canonical-form, area-law-saturating MPDO without
+    fixed-tensor renormalization maps]
+    \label{thm:kato_deformed_mpdo_cf_sal_capstone}
+    \lean{MPOTensor.KatoDeformedRFPObstruction.%
+      tensor_toMPSTensor_isCPSVCanonicalForm,
+      MPOTensor.KatoDeformedRFPObstruction.tensor_isSAL,
+      MPOTensor.KatoDeformedRFPObstruction.%
+      exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS}
+    \leanok
+    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction, def:mpdo,
+      def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal,
+      def:cpsv_canonical_form}
+    Let $K$ be the bond-two MPO tensor of
+    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction}, and let
+    $A_K$ be its doubled-index MPS tensor, an MPS tensor with four physical
+    symbols. Then $A_K$ is in literal CPSV canonical form: every letter is
+    the weighted direct sum
+    $A_K^{(i,j)}=\mu_0A_0^{(i,j)}\oplus\mu_1A_1^{(i,j)}$ for
+    $i,j\in\{0,1\}$, with weights and bond-one normal tensors
+    \begin{align}
+        \mu_0&=\frac1{\sqrt2}, &
+        \mu_1&=\frac1{2\sqrt2},
+        \notag\\
+        A_0^{(i,j)}&=\frac{\delta_{ij}}{\sqrt2}, &
+        A_1^{(i,j)}&=(-1)^i\,\frac{\delta_{ij}}{\sqrt2}.
+        \notag
+    \end{align}
+    Moreover, $K$ saturates the area law: for every $N\geq2$ and every
+    $1\leq L<N$, the reduced state of the first $L$ sites is maximally
+    mixed,
+    \begin{align}
+        \rho_L^{(N)}(K)&=2^{-L}I, &
+        S_L^{(N)}(K)&=L\log2.
+        \notag
+    \end{align}
+    Hence the mutual information
+    $I_L^{(N)}=S_L^{(N)}(K)+S_{N-L}^{(N)}(K)-S_N^{(N)}(K)
+    =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
+    $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
+    Consequently, there is a bond-two MPO tensor whose doubled-index MPS
+    tensor is in literal CPSV canonical form, which generates an MPDO, whose
+    physical-trace transfer is idempotent, which saturates the area law, and
+    which is not a renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}.
+
+    The canonical-form decomposition follows the construction of
+    \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}. The
+    decomposition and the entropy evaluation are project derivations;
+    neither is asserted for this tensor in \cite{Kato2024Exact} or in
+    \cite{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kato_deformed_mpdo_fixed_tensor_obstruction,
+      def:cpsv_canonical_form, def:is_sal,
+      lem:bond_dimension_one_identity_transfer_normal}
+    Every letter of $A_K$ is diagonal and the block letters are scalars, so
+    the weighted direct sum is the entrywise check
+    \begin{align}
+        \mu_0A_0^{(i,i)}&=\frac12, &
+        \mu_1A_1^{(i,i)}&=\frac{(-1)^i}4,
+        \notag
+    \end{align}
+    whose right-hand sides are the two virtual diagonal entries of $K^{ii}$;
+    the letters with $i\ne j$ vanish on both sides. Each block satisfies
+    $\sum_{i,j}A_k^{(i,j)}\,\overline{A_k^{(i,j)}}=1$, hence has identity
+    transfer map and is a normal tensor by
+    Lemma~\ref{lem:bond_dimension_one_identity_transfer_normal}. The
+    weighted direct sum of positive-dimensional normal blocks is in literal
+    CPSV canonical form by Definition~\ref{def:cpsv_canonical_form}.
+
+    Since $\tr\rho_N(K)=1$, the normalized state is $\rho_N(K)$ itself.
+    For $1\leq L<N$, the partial trace over the complementary $N-L$ sites
+    annihilates the summand $4^{-N}Z^{\otimes N}$ of
+    $\rho_N(K)=2^{-N}I+4^{-N}Z^{\otimes N}$, since $\tr Z=0$, and
+    contracts the remaining summand to $2^{-L}I$. Hence
+    $\rho_L^{(N)}(K)=2^{-L}I$ and $S_L^{(N)}(K)=L\log2$. Substitution in
+    $I_L^{(N)}=S_L^{(N)}(K)+S_{N-L}^{(N)}(K)-S_N^{(N)}(K)$ gives
+    $I_L^{(N)}=N\log2-S_N^{(N)}(K)$, which is independent of
+    $L$; in particular $I_L=I_{L+1}$ whenever
+    $1\leq L<\lfloor N/2\rfloor$, so $K$ saturates the area law by
+    Definition~\ref{def:is_sal}.
+
+    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} supplies
+    the remaining three properties: $K$ generates an MPDO, its
+    physical-trace transfer is idempotent, and it is not a renormalization
+    fixed point. Together with the two properties above, this gives the
+    existential.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points satisfy the up-to-scalar
