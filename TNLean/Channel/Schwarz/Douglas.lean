@@ -130,8 +130,27 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
           simp [smul_mulVec]
         _ = ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - star z ⬝ᵥ z := by rw [h_BBstar]
     rw [h_val]
+    have h_sq_re : ((‖C‖ : ℂ) ^ 2).re = ‖C‖ ^ 2 := by
+      simp [sq]
+    have h_sq_im : ((‖C‖ : ℂ) ^ 2).im = 0 := by
+      simp [sq]
     have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by
-    have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by      calc        ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (((‖C‖ ^ 2 : ℝ) : ℂ) * (star y ⬝ᵥ y)).re := by simp        _ = ((‖C‖ ^ 2 : ℂ)).re * (star y ⬝ᵥ y).re - ((‖C‖ ^ 2 : ℂ)).im * (star y ⬝ᵥ y).im := by rw [Complex.mul_re]        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re - 0 * (star y ⬝ᵥ y).im := by simp        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by ring    have h_smul_im : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by      calc        ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (((‖C‖ ^ 2 : ℝ) : ℂ) * (star y ⬝ᵥ y)).im := by simp        _ = ((‖C‖ ^ 2 : ℂ)).re * (star y ⬝ᵥ y).im + ((‖C‖ ^ 2 : ℂ)).im * (star y ⬝ᵥ y).re := by rw [Complex.mul_im]        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im + 0 * (star y ⬝ᵥ y).re := by simp        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by ring      rw [Complex.sub_im, h_smul_im, hy_im_zero, hz_im_zero]
+      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) = ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
+        simp [sq, mul_assoc]
+      rw [h_eq, Complex.mul_re, Complex.mul_re]
+      simp [sq]
+      ring
+    have h_smul_im : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by
+      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) = ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
+        simp [sq, mul_assoc]
+      rw [h_eq, Complex.mul_im, Complex.mul_im]
+      simp [sq]
+      ring
+    have h_re : (((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - (star z ⬝ᵥ z)).re =
+        (‖C‖ ^ 2) * (star y ⬝ᵥ y).re - (star z ⬝ᵥ z).re := by
+      rw [Complex.sub_re, h_smul_re]
+    have h_im : (((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - (star z ⬝ᵥ z)).im = 0 := by
+      rw [Complex.sub_im, h_smul_im, hy_im_zero, hz_im_zero]
       ring
     rw [Complex.nonneg_iff]
     constructor
