@@ -70,7 +70,7 @@ theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix 
 /-! ### supportProj(R²) = supportProj(R) -/
 
 theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
-    (hR.mul hR).supportProj = hR.supportProj := by
+    (hR2).supportProj = hR.supportProj := by
   have hR2 : (R * R).PosSemidef := hR.mul hR
   have hkerR_R2 (v : Fin D₂ → ℂ) (hv : R *ᵥ v = 0) : (R * R) *ᵥ v = 0 := by
     rw [← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero]
@@ -108,9 +108,9 @@ theorem supportProj_mul_pinv_eq_pinv : hR.supportProj * (Douglas.pinv R) = Dougl
   unfold Douglas.pinv
   rw [hR.isHermitian.eq]
   calc
-    hR.supportProj * (R * (hR.mul hR).supportInv) =
-        (hR.supportProj * R) * (hR.mul hR).supportInv := by simp [Matrix.mul_assoc]
-    _ = R * (hR.mul hR).supportInv := by rw [hR.supportProj_mul_self]
+    hR.supportProj * (R * (hR2).supportInv) =
+        (hR.supportProj * R) * (hR2).supportInv := by simp [Matrix.mul_assoc]
+    _ = R * (hR2).supportInv := by rw [hR.supportProj_mul_self]
 
 theorem pinv_eq_supportInv : Douglas.pinv R = hR.supportInv := by
   calc
