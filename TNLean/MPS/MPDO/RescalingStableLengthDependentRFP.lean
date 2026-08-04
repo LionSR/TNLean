@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.LengthIndependentCoefficients
 /-!
 # A rescaling-stable length-dependent coefficient family
 
-**Scope: partial deliverable.** This file constructs the explicit MPO tensor `R`
+**Scope: partial formalization.** This file constructs the explicit MPO tensor `R`
 of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 995--1010 (NOT a tensor stated in CPSV16).  It proves:
 
@@ -18,8 +18,10 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   family `c^{(L)} = 1 + (7/25)^L` (on `χ = diag(1, 7/25)`) is not
   length-independent;
 * `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` — the length
-  dependence survives every uniform positive rescaling of the displayed
-  BNT block.
+  dependence survives every uniform positive rescaling `s` of the displayed
+  `\chi` block: the rescaled roots `\{s, 7s/25\}` give the family
+  `c_s^{(L)} = s^L·(1 + (7/25)^L)`, which is not length-independent
+  for any `s > 0`.
 
 ## Tensor definition
 
@@ -86,7 +88,6 @@ lemma A_trace (k : Fin 4) : Matrix.trace (A k) = if k = 0 ∨ k = 1 then (4/5 : 
 /-! ### The MPO tensor (undone-vertical reading) -/
 
 def bondEquiv : Fin 2 × Fin 2 ≃ Fin 4 := finProdFinEquiv
-def bondEquivSymm : Fin 4 ≃ Fin 2 × Fin 2 := bondEquiv.symm
 
 /-- The rescaling-stable length-dependent example.
 
@@ -126,6 +127,10 @@ lemma physTraceTransfer_R_entry (a b : Fin 4) : physTraceTransfer R a b =
       A_map_star, Matrix.map_apply, starRingEnd_apply,
       A, Matrix.trace, bondEquiv_symm_val] <;> norm_num
 
+/-- The physical-trace transfer of `R` is idempotent: it is the rank-one
+projector `(25/32)·|t⟩⟨t|` with `t_a = tr(A^a) = (4/5, 4/5, 0, 0)`.  This is
+the literal zero-correlation-length identity of arXiv:1606.00608,
+Definition 4.2, lines 735--741 (project example). -/
 theorem physTraceTransfer_R_idempotent :
     physTraceTransfer R * physTraceTransfer R = physTraceTransfer R := by
   ext a b
@@ -180,31 +185,91 @@ theorem oneLabelCoeffs_coeff_one_ne_coeff_two :
   rw [hlambda]
   norm_num
 
+/-- The one-label BNT coefficient family `c^{(L)} = 1 + (7/25)^L` is not
+independent of the chain length (`c^{(1)} ≠ c^{(2)}`).
+
+Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (the
+length-dependence question; project example). -/
 theorem oneLabelCoeffs_not_lengthIndependent :
     ¬ oneLabelCoeffs.LengthIndependent := by
   intro h
   exact oneLabelCoeffs_coeff_one_ne_coeff_two
     (h.coeff_eq one_pos (by norm_num) 0 0 0)
 
-theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent :
-    ∀ s : ℝ, 0 < s →
-      ¬ (∃ (c : BNTLabelCoefficientFamily (Fin 1)),
-        (∀ L : ℕ, 0 < L → c.coeff L 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff L 0 0 0) ∧
-        c.LengthIndependent) := by
-  intro s hs
-  intro ⟨c, hcoeff, hLI⟩
-  have h1 : c.coeff 1 0 0 0 = c.coeff 2 0 0 0 :=
+/-- The uniform positive rescaling of the displayed one-label `\chi` block:
+the roots `\{1, 7/25\}` become `\{s, 7s/25\}`.
+
+Source: arXiv:1606.00608, lines 995--1010 (the rescaling question after
+Theorem 4.14; the tensor is a project example). -/
+def oneLabelChiScaled (s : ℝ) : DiagonalChiFamily (Fin 1) where
+  dim _ _ _ := 2
+  entry _ _ _ k :=
+    if k = (0 : Fin 2) then (s : ℂ) else (s : ℂ) * (lambda : ℂ)
+
+/-- The rescaled `\chi` block has positive entries for `s > 0`. -/
+lemma oneLabelChiScaled_posEntries {s : ℝ} (hs : 0 < s) :
+    (oneLabelChiScaled s).PosEntries := by
+  intro _ _ _ k
+  fin_cases k
+  · simp [oneLabelChiScaled, hs]
+  · have hlam : (0 : ℝ) < lambda := by norm_num [lambda]
+    simp [oneLabelChiScaled]
+    rw [show (s : ℂ) * (lambda : ℂ) = ((s * lambda : ℝ) : ℂ) by norm_cast]
+    exact_mod_cast mul_pos hs hlam
+
+/-- The coefficient family of the rescaled `\chi` block. -/
+noncomputable def rescaledCoeffs (s : ℝ) : BNTLabelCoefficientFamily (Fin 1) :=
+  BNTLabelCoefficientFamily.ofChi (oneLabelChiScaled s)
+
+/-- The one-label coefficient of the rescaled family is
+`s^L + (7s/25)^L = s^L·(1 + (7/25)^L)`. -/
+theorem rescaledCoeffs_coeff (s : ℝ) (L : ℕ) :
+    (rescaledCoeffs s).coeff L (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) =
+      (s : ℂ) ^ L * ((1 : ℂ) + ((lambda : ℂ) ^ L)) := by
+  dsimp [rescaledCoeffs, BNTLabelCoefficientFamily.ofChi,
+    DiagonalChiFamily.tracePowerCoeff, oneLabelChiScaled]
+  simp [Fin.sum_univ_two, mul_pow]
+  ring
+
+/-- The length dependence of the displayed one-label coefficient family
+survives every uniform positive rescaling of its `\chi` block: the
+rescaled roots `\{s, 7s/25\}` cannot both equal one, and the rescaled
+family `s^L·(1 + (7/25)^L)` is not length-independent.
+
+Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (the
+rescaling-stability question; the tensor is a project example, not a
+tensor stated in CPSV16). -/
+theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent (s : ℝ)
+    (hs : 0 < s) : ¬ (rescaledCoeffs s).LengthIndependent := by
+  intro hLI
+  have e12 : (rescaledCoeffs s).coeff 1 (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) =
+      (rescaledCoeffs s).coeff 2 (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) :=
     hLI.coeff_eq one_pos (by norm_num) 0 0 0
-  have hcoeff1 : c.coeff 1 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff 1 0 0 0 := hcoeff 1 one_pos
-  have hcoeff2 : c.coeff 2 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff 2 0 0 0 := hcoeff 2 (by norm_num)
-  rw [hcoeff1, hcoeff2] at h1
-  rw [oneLabelCoeffs_coeff 1, oneLabelCoeffs_coeff 2] at h1
-  have hlambda : (lambda : ℂ) = (7/25 : ℂ) := by norm_num [lambda]
-  rw [hlambda] at h1
-  have hs_nonzero : (s : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hs
-  have h_contr : (1 : ℂ) + (7/25 : ℂ) = (1 : ℂ) + ((7/25 : ℂ) ^ 2) := by
-    apply mul_right_cancel₀ hs_nonzero
-    simpa [pow_one] using h1
-  norm_num at h_contr
+  have e23 : (rescaledCoeffs s).coeff 2 (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) =
+      (rescaledCoeffs s).coeff 3 (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) :=
+    hLI.coeff_eq (show (0 : ℕ) < 2 by norm_num) (by norm_num) 0 0 0
+  rw [rescaledCoeffs_coeff, rescaledCoeffs_coeff] at e12
+  rw [rescaledCoeffs_coeff, rescaledCoeffs_coeff] at e23
+  have hsne : (s : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hs
+  have h1 : (1 : ℂ) + (lambda : ℂ) = (s : ℂ) * ((1 : ℂ) + (lambda : ℂ) ^ 2) :=
+    mul_left_cancel₀ hsne (by linear_combination e12)
+  have h2 : (1 : ℂ) + (lambda : ℂ) ^ 2 =
+      (s : ℂ) * ((1 : ℂ) + (lambda : ℂ) ^ 3) :=
+    mul_left_cancel₀ (mul_ne_zero hsne hsne) (by linear_combination e23)
+  have key : ((1 : ℂ) + (lambda : ℂ) ^ 2) ^ 2 =
+      ((1 : ℂ) + (lambda : ℂ)) * ((1 : ℂ) + (lambda : ℂ) ^ 3) := by
+    have m1 := congrArg (fun x => ((1 : ℂ) + (lambda : ℂ) ^ 2) * x) h2
+    calc ((1 : ℂ) + (lambda : ℂ) ^ 2) ^ 2
+        = ((1 : ℂ) + (lambda : ℂ) ^ 2) * ((1 : ℂ) + (lambda : ℂ) ^ 2) := by ring
+      _ = ((1 : ℂ) + (lambda : ℂ) ^ 2) *
+            ((s : ℂ) * ((1 : ℂ) + (lambda : ℂ) ^ 3)) := m1
+      _ = (s : ℂ) * ((1 : ℂ) + (lambda : ℂ) ^ 2) * ((1 : ℂ) + (lambda : ℂ) ^ 3) := by
+          ring
+      _ = ((1 : ℂ) + (lambda : ℂ)) * ((1 : ℂ) + (lambda : ℂ) ^ 3) := by
+          rw [h1]
+  have hlambda : (lambda : ℂ) = (7 / 25 : ℂ) := by norm_num [lambda]
+  rw [hlambda] at key
+  norm_num at key
 
 end MPOTensor.RescalingStableLengthDependentRFP
+
