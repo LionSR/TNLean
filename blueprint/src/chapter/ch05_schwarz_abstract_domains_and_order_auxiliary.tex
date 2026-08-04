@@ -386,3 +386,40 @@ positivity.
     The resulting expectation value is negative, so the Choi matrix is not
     positive semidefinite.
 \end{proof}
+
+\subsection{Two-variable operator Schwarz inequality}
+
+\begin{theorem}[Two-variable operator Schwarz inequality]
+    \label{thm:two_variable_operator_schwarz}
+    \lean{SchwarzTwoVariable.schwarz_two_variable}
+    \uses{def:2positive_map}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
+    For every $A,B\in\MN{D}$ and all vectors $v,w$ such that
+    $E(B^\dagger B)\,w = E(B^\dagger A)\,v$, we have
+    \begin{align}
+        v^\dagger\,E(A^\dagger A)\,v
+         & \ge v^\dagger\,E(A^\dagger B)\,w.
+        \notag
+    \end{align}
+    This is the pseudoinverse-free form of
+    \cite[Eq.~(5.4)]{Wolf2012Quantum}: the usual statement
+    $E(A^\dagger B)\,E(B^\dagger B)^{-1}E(B^\dagger A)\le E(A^\dagger A)$
+    (with inverse taken on the range) follows by taking
+    $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:2positive_map, thm:block_matrix_schur_complement}
+    Write $C$ for the horizontal concatenation $[A\;B]$.
+    The block matrix $C^\dagger C$ is positive semidefinite.
+    Applying the $2$-positive ampliation entrywise yields the PSD block matrix
+    $\bigl[\begin{smallmatrix}
+        E(A^\dagger A) & E(A^\dagger B)\\
+        E(B^\dagger A) & E(B^\dagger B)
+    \end{smallmatrix}\bigr]$.
+    By the Schur complement characterization (Theorem~5.2),
+    the kernel of the bottom-right block is contained in the kernel of the
+    top-right block, and the quadratic form of the vector $(v,-w)$ gives
+    $v^\dagger E(A^\dagger A)v - v^\dagger E(A^\dagger B)w \ge 0$.
+\end{proof}

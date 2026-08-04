@@ -1,0 +1,259 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Channel.Schwarz.TwoPositive
+import Mathlib.Data.Matrix.Block
+
+/-!
+# Two-variable operator Schwarz inequality
+
+This file proves the two-variable operator Schwarz inequality for 2-positive
+linear maps (Wolf, Theorem 5.3).
+
+## Main results
+
+* `schwarz_two_variable`: The two-variable operator Schwarz inequality: for a
+  2-positive map `E` and all matrices `A, B`, for all vectors `v, w` with
+  `E(B†B) w = E(B†A) v`, we have `v† E(A†A) v ≥ v† E(A†B) w`.  This is the
+  pseudoinverse-free formulation of Wolf's Eq. (5.4).
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 5,
+  Theorems 5.3][Wolf2012QChannels]
+* Local source: `Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex`,
+  lines 180--190.
+-/
+
+open scoped Matrix ComplexOrder MatrixOrder
+open Matrix Finset Complex
+
+namespace SchwarzTwoVariable
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+local notation "Mat" => Matrix n n ℂ
+
+/-- The block matrix `C†C` for `C = [A B]` (horizontal concatenation) is PSD. -/
+lemma blockMatrix_CtC_posSemidef (A B : Mat) :
+    (Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
+  let C : Matrix n (n ⊕ n) ℂ := fun i j =>
+    match j with
+    | Sum.inl a => A i a
+    | Sum.inr b => B i b
+  have hC_sq : Cᴴ * C = Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) := by
+    ext i j
+    rcases i with (i | i) <;> rcases j with (j | j) <;>
+      simp [C, Matrix.fromBlocks_apply₁₁, Matrix.fromBlocks_apply₁₂,
+        Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
+        Matrix.mul_apply, Matrix.conjTranspose_apply]
+  rw [← hC_sq]
+  exact Matrix.posSemidef_conjTranspose_mul_self C
+
+-- Re-define `finTwoSumEquiv` from `TwoPositive.lean` (it is private there).
+private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
+  ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
+    (Equiv.boolProdEquivSum α)
+
+@[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
+    finTwoSumEquiv α (a, 0) = Sum.inl a := by
+  simp [finTwoSumEquiv, finTwoEquiv]
+
+@[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
+    finTwoSumEquiv α (a, 1) = Sum.inr a := by
+  simp [finTwoSumEquiv, finTwoEquiv]
+
+@[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
+  rw [Equiv.symm_apply_eq, finTwoSumEquiv_apply_zero]
+
+@[simp] private theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
+    (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
+  rw [Equiv.symm_apply_eq, finTwoSumEquiv_apply_one]
+
+/-! ### 2-positivity ampliation of the block matrix -/
+
+/-- The 2-positivity ampliation applied to the block matrix `C†C` yields a PSD
+`2×2` block matrix of the form `[[E(A†A), E(A†B)], [E(B†A), E(B†B)]]`. -/
+lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
+    (A B : Mat) :
+    (Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) :
+      Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
+  let P : Matrix (n ⊕ n) (n ⊕ n) ℂ :=
+    Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B)
+  have hP : P.PosSemidef := blockMatrix_CtC_posSemidef A B
+  let e : n × Fin 2 ≃ n ⊕ n := finTwoSumEquiv n
+  let P' : Matrix (n × Fin 2) (n × Fin 2) ℂ := Matrix.reindex e.symm e.symm P
+  have hP' : P'.PosSemidef := by
+    simpa [P', Matrix.reindex_apply] using hP.submatrix e
+  have hY' := h2pos P' hP'
+  set Y : Matrix (n × Fin 2) (n × Fin 2) ℂ :=
+    Matrix.of fun (ip : n × Fin 2) (jq : n × Fin 2) =>
+      (E (Matrix.of fun i j => P' (i, ip.2) (j, jq.2))) ip.1 jq.1
+    with hY_def
+  have hY_psd : Y.PosSemidef := hY'
+  let Q : Matrix (n ⊕ n) (n ⊕ n) ℂ := Matrix.reindex e e Y
+  have hQ_psd : Q.PosSemidef := by
+    have hsub := hY_psd.submatrix e.symm
+    simpa [Q, Matrix.reindex_apply, Matrix.submatrix_apply] using hsub
+  have hP'Block (p q : Fin 2) :
+      Matrix.of (fun i j => P' (i, p) (j, q)) =
+        match p, q with
+        | 0, 0 => Aᴴ * A
+        | 0, 1 => Aᴴ * B
+        | 1, 0 => Bᴴ * A
+        | 1, 1 => Bᴴ * B := by
+    fin_cases p <;> fin_cases q <;>
+      ext i j <;> simp [P', Matrix.reindex_apply, P, e, finTwoSumEquiv, finTwoEquiv]
+  have hQ_eq : Q = Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) := by
+    ext i j
+    rcases i with (i | i) <;> rcases j with (j | j) <;>
+      simp [Q, Y, hP'Block, e, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.of_apply]
+  rw [hQ_eq] at hQ_psd
+  exact hQ_psd
+
+/-! ### Real-valued helper lemmas -/
+
+/-- If `t²·d + 2·t·b ≥ 0` for all real `t`, with `d ≥ 0`, then `b = 0`. -/
+private lemma real_linear_eq_zero_of_quadratic_two_coeff
+    (b d : ℝ) (hd : 0 ≤ d) (h : ∀ t : ℝ, 0 ≤ t ^ 2 * d + 2 * t * b) :
+    b = 0 := by
+  by_contra! hbn
+  have hb_sq_pos : 0 < b ^ 2 := sq_pos_iff.mpr hbn
+  have hd1 : 0 < d + 1 := by linarith
+  have h_neg : (-b / (d + 1)) ^ 2 * d + 2 * (-b / (d + 1)) * b < 0 := by
+    field_simp [hd1.ne']
+    nlinarith
+  have h_nonneg := h (-b / (d + 1))
+  linarith
+
+/-- A complex number `z† A z` for a PSD matrix `A` is nonnegative. -/
+private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
+    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef) (z : n → ℂ) :
+    0 ≤ star z ⬝ᵥ (A.mulVec z) := by
+  have hA_sub : (Matrix.fromBlocks A C Cᴴ B).submatrix Sum.inl Sum.inl = A := by
+    ext i j
+    simp [Matrix.submatrix_apply, Matrix.fromBlocks_apply₁₁]
+  have hA_psd : A.PosSemidef := by
+    have hsub := h.submatrix (Sum.inl : n → n ⊕ n)
+    simpa [Matrix.submatrix_submatrix, Matrix.submatrix_apply, hA_sub] using hsub
+  exact hA_psd.dotProduct_mulVec_nonneg z
+
+/-- For a vector `z : n → ℂ`, `star z ⬝ᵥ z = 0` implies `z = 0`. -/
+private lemma eq_zero_of_dotProduct_self_eq_zero (z : n → ℂ) (hz : star z ⬝ᵥ z = 0) : z = 0 := by
+  have hcomp (i : n) : star (z i) * (z i) = 0 := by
+    have hsum : (∑ j : n, star (z j) * (z j)) = 0 := by
+      simpa [dotProduct] using hz
+    have hpos : ∀ j, 0 ≤ star (z j) * (z j) := fun j => star_mul_self_nonneg _
+    have h_all := (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => hpos i)).mp hsum
+    exact h_all i (Finset.mem_univ i)
+  ext i
+  have hnormSq : Complex.normSq (z i) = 0 := by
+    simpa [Complex.normSq_eq_conj_mul_self] using hcomp i
+  simpa [Complex.normSq_eq_zero] using hnormSq
+
+/-! ### Schur complement lemmas (singular-block case) -/
+
+/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then `ker(B) ≤ ker(C)`. -/
+lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
+    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
+    (y : n → ℂ) (hy : B.mulVec y = 0) : C.mulVec y = 0 := by
+  set z := C.mulVec y with hz_def
+  by_contra! hz_ne
+  have hz_norm_sq_pos : 0 < star z ⬝ᵥ z := by
+    have h_nonneg : 0 ≤ star z ⬝ᵥ z := by
+      simpa [dotProduct] using Finset.sum_nonneg (fun i _ => star_mul_self_nonneg (z i))
+    have h_ne_zero : star z ⬝ᵥ z ≠ 0 := by
+      intro hzero
+      apply hz_ne
+      exact eq_zero_of_dotProduct_self_eq_zero z hzero
+    exact h_nonneg.lt_of_ne h_ne_zero.symm
+  let a := star z ⬝ᵥ (A.mulVec z)
+  let b := star z ⬝ᵥ z
+  have ha_nonneg : 0 ≤ a := dotProduct_mulVec_nonneg_of_posSemidef_block h z
+  have ha_real : a.im = 0 := ((Complex.nonneg_iff.mp ha_nonneg).2).symm
+  have hb_real : b.im = 0 := by
+    dsimp [b, dotProduct]
+    rw [Complex.im_sum]
+    refine Finset.sum_eq_zero (fun i _ => ?_)
+    simp [mul_comm]
+  -- Key adjoint identity: star y ⬝ᵥ Cᴴ.mulVec z = star z ⬝ᵥ z = b
+  have hyCz_eq_b : star y ⬝ᵥ (Cᴴ.mulVec z) = b := by
+    calc
+      star y ⬝ᵥ (Cᴴ.mulVec z) = (star y ᵥ* Cᴴ) ⬝ᵥ z := by rw [dotProduct_mulVec]
+      _ = (star (C.mulVec y)) ⬝ᵥ z := by
+        have h_vec_eq : (star y ᵥ* Cᴴ) = star (C.mulVec y) := by
+          funext j
+          simp [Matrix.vecMul, Matrix.mulVec, dotProduct, mul_comm]
+        rw [h_vec_eq]
+      _ = star z ⬝ᵥ z := by rw [hz_def]
+      _ = b := rfl
+  have h_quad_eq (t : ℝ) : star (Sum.elim ((t : ℂ) • z) y) ⬝ᵥ
+      ((Matrix.fromBlocks A C Cᴴ B).mulVec (Sum.elim ((t : ℂ) • z) y)) =
+    ((t : ℂ) ^ 2) * a + (2 : ℂ) * (t : ℂ) * b := by
+    have hMv : (Matrix.fromBlocks A C Cᴴ B).mulVec (Sum.elim ((t : ℂ) • z) y) =
+      Sum.elim (A.mulVec ((t : ℂ) • z) + C.mulVec y)
+               (Cᴴ.mulVec ((t : ℂ) • z) + B.mulVec y) := by
+      rw [fromBlocks_mulVec]
+      simp
+    rw [hMv]
+    rw [sumElim_dotProduct_sumElim]
+    rw [hy, ← hz_def]
+    simp [Matrix.mulVec_smul, dotProduct_add, dotProduct_smul, star_smul, smul_eq_mul, add_zero]
+    rw [hyCz_eq_b]
+    dsimp [a]
+    ring
+  have h_quad_nonneg (t : ℝ) : 0 ≤ ((t : ℂ) ^ 2) * a + (2 : ℂ) * (t : ℂ) * b := by
+    rw [← h_quad_eq t]
+    let x : (n ⊕ n) → ℂ := Sum.elim ((t : ℂ) • z) y
+    exact h.dotProduct_mulVec_nonneg x
+  have h_quad_real (t : ℝ) : 0 ≤ t ^ 2 * (a.re : ℝ) + 2 * t * (b.re : ℝ) := by
+    have h_nonneg := h_quad_nonneg t
+    have h_real := (Complex.nonneg_iff.mp h_nonneg).1
+    have hexpr : (((t : ℂ) ^ 2) * a + (2 : ℂ) * (t : ℂ) * b).re =
+        t ^ 2 * (a.re : ℝ) + 2 * t * (b.re : ℝ) := by
+      simp [ha_real, hb_real, Complex.add_re, Complex.mul_re, Complex.ofReal_re,
+        Complex.ofReal_im]
+      ring
+    rw [hexpr] at h_real
+    exact h_real
+  have ha_re_nonneg : 0 ≤ (a.re : ℝ) := (Complex.nonneg_iff.mp ha_nonneg).1
+  have hb_re_zero : (b.re : ℝ) = 0 :=
+    real_linear_eq_zero_of_quadratic_two_coeff (b.re : ℝ) (a.re : ℝ) ha_re_nonneg h_quad_real
+  have hb_zero : b = 0 := by
+    rw [Complex.eq_of_im_eq_zero hb_real, hb_re_zero]
+    simp
+  rw [hb_zero] at hz_norm_sq_pos
+  exact lt_irrefl 0 hz_norm_sq_pos
+
+/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then for all `v, w` with
+`B w = C† v`, we have `v† A v ≥ v† C w`. -/
+lemma schwarz_inequality_of_fromBlocks_posSemidef {A C B : Mat}
+    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
+    (v w : n → ℂ) (hwB : B.mulVec w = Cᴴ.mulVec v) :
+    star v ⬝ᵥ (A.mulVec v) ≥ star v ⬝ᵥ (C.mulVec w) := by
+  let x : (n ⊕ n) → ℂ := Sum.elim v (-w)
+  have hx_nonneg := h.dotProduct_mulVec_nonneg x
+  rw [fromBlocks_mulVec (A := A) (B := C) (C := Cᴴ) (D := B) (x := x)] at hx_nonneg
+  simp [x, hwB, Matrix.mulVec_neg, dotProduct_add, dotProduct_sub, dotProduct_neg_right] at hx_nonneg
+  ring_nf at hx_nonneg
+  exact hx_nonneg
+
+/-! ### Main theorem -/
+
+/-- **Two-variable operator Schwarz inequality** (Wolf, Theorem 5.3).
+
+For a 2-positive linear map `E` and all matrices `A, B`, for all vectors `v, w`
+with `E(B†B) w = E(B†A) v`, we have `v† E(A†A) v ≥ v† E(A†B) w`.
+
+This is the pseudoinverse-free formulation of Wolf's Eq. (5.4):
+`E(A†B) E(B†B)⁻¹ E(B†A) ≤ E(A†A)` where the inverse is taken on the range. -/
+theorem schwarz_two_variable (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
+    (A B : Mat) (v w : n → ℂ) (hw : (E (Bᴴ * B)).mulVec w = (E (Bᴴ * A)).mulVec v) :
+    star v ⬝ᵥ ((E (Aᴴ * A)).mulVec v) ≥ star v ⬝ᵥ ((E (Aᴴ * B)).mulVec w) := by
+  have h_block_psd := ampliated_block_matrix_posSemidef E h2pos A B
+  exact schwarz_inequality_of_fromBlocks_posSemidef h_block_psd v w hw
+
+end SchwarzTwoVariable
