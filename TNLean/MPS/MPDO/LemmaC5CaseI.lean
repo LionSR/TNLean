@@ -30,7 +30,7 @@ Lemma C.4 (lines 1406–1471), the active sector set is a singleton.
 Consequently the Case-I relations `T² = T` and `Q(1−LQ)L = 0` of Lemma `SALZCL`
 (lines 1473–1499) hold.
 
-The proof follows the refined route of issue #5404.
+The proof follows the refined route of the Lemma C.5 Case-I argument.
 
 ## Main declarations
 
@@ -63,7 +63,7 @@ variable {d D : ℕ} (K : MPOTensor d D)
 /-- The active-sector trace-**squared** matrix:
 `S_{kh} = Re(tr(η_{kh}²))`.
 
-This is the matrix `S` of step 2 of the Lemma C.5 Case-I route (issue #5404).
+This is the matrix `S` of step 2 of the Lemma C.5 Case-I route.
 Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
 matrix.
 
@@ -276,9 +276,10 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
 --
 -- The singleton-consequence theorem requires two additional pieces:
 --
--- 1. Trace similarity: tr(Ŝ^N) = tr(S^N) where Ŝ_{ij} = S_{ij} * v_j² / v_i².
---    This follows from diagonal similarity Ŝ = D_{v²}^{-1} S D_{v²} and
---    the telescoping product argument (Ŝ^N)_{ii} = (S^N)_{ii}.
+-- 1. Trace similarity: tr(S_tilde^N) = tr(S^N) where
+--    (S_tilde)_{ij} = S_{ij} * v_j² / v_i².  This follows from
+--    diagonal similarity S_tilde = D_{v²}^{-1} S D_{v²} and
+--    the telescoping product argument (S_tilde^N)_{ii} = (S^N)_{ii}.
 --
 -- 2. Overlap formula: mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
 --    = Complex.ofReal(tr(S^N)) for N > 0.  Requires physical-isometry
