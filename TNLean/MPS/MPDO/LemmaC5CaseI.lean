@@ -119,7 +119,6 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hZCL_ne : physTraceTransfer K ≠ 0)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     let T := F.activeSectorTraceMatrix p
@@ -248,7 +247,7 @@ theorem lemmaC5_caseI_singleton
     F.activeSectorTraceMatrix p
   have hTsq_eq_Tcu : T ^ 2 = T ^ 3 :=
     activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
-      K F p hZCL_sq hZCL_ne hinactive hpos
+      K F p hZCL_sq hinactive hpos
   -- ====================================================================
   -- Step 2: T is primitive (from Case-I spanning/nonzero/triangle)
   -- ====================================================================
@@ -271,7 +270,7 @@ theorem lemmaC5_caseI_singleton
       T * (T ^ 2) = T * (T * T) := by rw [pow_two]
       _ = (T * T) * T := by rw [Matrix.mul_assoc]
       _ = T ^ 2 * T := by rw [pow_two]
-      _ = T ^ 3 := by rw [pow_succ]
+      _ = T ^ 3 := by rw [← pow_succ]
   have hTv_eq_v : T.mulVec v = v := by
     ext i
     dsimp [v]
@@ -279,90 +278,145 @@ theorem lemmaC5_caseI_singleton
     calc
       (∑ j : F.ActiveSector p, T i j * (T ^ 2) j j₀)
           = (T * (T ^ 2)) i j₀ := by rw [Matrix.mul_apply]
-      _ = (T ^ 3) i j₀ := by rw [h_T_mul_Tsq_eq_Tcu]
-      _ = (T ^ 2) i j₀ := by rw [hTsq_eq_Tcu]
+      _ = (T ^ 3) i j₀ := by
+        rw [show (T * (T ^ 2)) i j₀ = (T ^ 3) i j₀ from by rw [h_T_mul_Tsq_eq_Tcu]]
+      _ = (T ^ 2) i j₀ := by
+        rw [show (T ^ 3) i j₀ = (T ^ 2) i j₀ from by rw [hTsq_eq_Tcu]]
     -- ================================================================
     -- Step 5: Construct P = D_v^{-1} T D_v (row-stochastic and primitive)
-    -- ================================================================
-    have hv_pos' : 0 < v j₀ := hv_pos j₀
-    -- P_{ij} = T_{ij} * v_j / v_i
-    let P : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
-      fun i j ↦ T i j * v j / v i
-    have hP_row_stoch : P ∈ Matrix.rowStochastic ℝ (F.ActiveSector p) := by
-      rw [Matrix.mem_rowStochastic_iff]
-      constructor
-      · -- Nonnegativity
-        intro i j
-        dsimp [P]
-        have hT_nonneg : 0 ≤ T i j := hTprim.nonneg i j
-        have hv_nonneg : 0 ≤ v i := le_of_lt (hv_pos i)
-        have hvj_nonneg : 0 ≤ v j := le_of_lt (hv_pos j)
-        positivity
-      · -- Row sums to 1
-        intro i
-        dsimp [P]
-        calc
-          ∑ j : F.ActiveSector p, T i j * v j / v i
-              = (∑ j : F.ActiveSector p, T i j * v j) / v i := by
-            simp [Finset.sum_div]
-          _ = (T.mulVec v) i / v i := by simp [Matrix.mulVec_apply]
-          _ = v i / v i := by rw [hTv_eq_v]
-          _ = 1 := div_self (ne_of_gt (hv_pos i))
-    -- ================================================================
-    -- Step 6: Primitivity of P (inherited from T via positive diagonal similarity)
-    -- ================================================================
-    -- P = D_v^{-1} * T * D_v, and primitivity is preserved under positive
-    -- diagonal similarity.  We need a lemma for this; for now we state
-    -- it as a hypothesis we will return to.
-    -- hP_prim : P.IsPrimitive
-    -- ================================================================
-    -- Step 7: Define S and scale to Ŝ
-    -- ================================================================
-    let S : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
-      activeSectorTraceSqMatrix K F p
-    have hS_nonneg : ∀ i j, 0 ≤ S i j :=
-      activeSectorTraceSqMatrix_nonneg K F p hpos
-    have hS_le_Tsq : ∀ i j, S i j ≤ (T i j) ^ 2 := by
-      intro i j
-      simpa [S, T] using activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos i j
-    -- Ŝ_{ij} = S_{ij} * v_j^2 / v_i^2 (positive diagonal similarity)
-    let Ŝ : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
-      fun i j ↦ S i j * (v j ^ 2) / (v i ^ 2)
-    have hŜ_nonneg : ∀ i j, 0 ≤ Ŝ i j := by
-      intro i j
-      dsimp [Ŝ]
-      positivity
-    have hŜ_le_Phadamard : ∀ i j, Ŝ i j ≤ (P ⊙ P) i j := by
-      intro i j
-      dsimp [Ŝ, P, Matrix.hadamard]
-      -- Need: S_{ij} * v_j^2 / v_i^2 ≤ (T_{ij} * v_j / v_i)^2
-      have hS_le : S i j ≤ (T i j) ^ 2 := hS_le_Tsq i j
-      have hfrac_nonneg : 0 ≤ v j ^ 2 / v i ^ 2 := by positivity
-      have hfrac_eq : (T i j * v j / v i) ^ 2 = (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) := by
+  -- ================================================================
+  -- Step 5: Construct P = D_v^{-1} T D_v and prove primitive row-stochastic
+  -- ================================================================
+  let P : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
+    fun i j ↦ T i j * v j / v i
+  have hP_nonneg : ∀ i j, 0 ≤ P i j := by
+    intro i j; dsimp [P]
+    have hT_nonneg : 0 ≤ T i j := hTprim.nonneg i j
+    have hvj_nonneg : 0 ≤ v j := le_of_lt (hv_pos j)
+    have hvi_pos : 0 < v i := hv_pos i
+    exact div_nonneg (mul_nonneg hT_nonneg hvj_nonneg) (le_of_lt hvi_pos)
+  have hP_row_stoch : P ∈ Matrix.rowStochastic ℝ (F.ActiveSector p) := by
+    rw [Matrix.mem_rowStochastic_iff_sum]
+    refine ⟨hP_nonneg, fun i => ?_⟩
+    dsimp [P]
+    calc
+      ∑ j : F.ActiveSector p, T i j * v j / v i = (∑ j, T i j * v j) / v i := by
+        simp [Finset.sum_div]
+      _ = (T.mulVec v) i / v i := by rw [Matrix.mulVec_apply]
+      _ = v i / v i := by rw [hTv_eq_v]
+      _ = 1 := div_self (ne_of_gt (hv_pos i))
+  have hP_prim : P.IsPrimitive := by
+    obtain ⟨k, hk_pos, hk_all⟩ := hTprim.exists_pos_pow
+    -- Use the fact that P = D^{-1} T D where D = diag(v)
+    -- Then P^k = D^{-1} T^k D, so P^k_{ij} = T^k_{ij} * v_j / v_i
+    -- We prove this formula entrywise by induction
+    have hP_pow_entry (n : ℕ) (i j) : (P ^ n) i j = (T ^ n) i j * v j / v i := by
+      induction n with
+      | zero =>
+        -- Goal: (1 : Matrix ...) i j = (1 : Matrix ...) i j * v j / v i
+        simp [Matrix.one_apply, pow_zero]
+        split_ifs with hij
+        · -- i = j case: 1 = 1 * v_i / v_i
+          subst hij
+          field_simp [ne_of_gt (hv_pos i)]
+        · -- i ≠ j case: 0 = 0 * v_j / v_i
+          simp
+      | succ n ih =>
+        rw [pow_succ, Matrix.mul_apply]
+        simp only [ih, P]
+        -- Goal: ∑_l (T^n_{il} * v_l / v_i) * (T_{lj} * v_j / v_l) = T^{n+1}_{ij} * v_j / v_i
+        -- Simplify by factoring out v_j/v_i and canceling v_l
+        have h_eq (l : F.ActiveSector p) : ((T ^ n) i l * v l / v i) * (T l j * v j / v l) =
+            ((T ^ n) i l * T l j) * (v j / v i) := by
+          have hvl_ne : v l ≠ 0 := (hv_pos l).ne'
+          field_simp [hvl_ne]
+          ring
+        simp_rw [h_eq]
+        simp [Finset.mul_sum, Matrix.mul_apply, pow_succ]
         ring
-      rw [hfrac_eq]
-      nlinarith
-    -- ================================================================
-    -- Step 8: Cardinality argument
-    -- ================================================================
-    -- If the active sector set has cardinality > 1, then Nontrivial holds,
-    -- and trace_pow_tendsto_zero gives tr(Ŝ^N) → 0.
-    -- But selfOverlap_tendsto_one + overlap formula gives tr(S^N) → 1.
-    -- Similarity of S and Ŝ gives tr(S^N) = tr(Ŝ^N), contradiction.
-    -- Therefore card = 1.
-    by_cases hcard_gt_one : 1 < Fintype.card (F.ActiveSector p)
-    · haveI : Nontrivial (F.ActiveSector p) :=
-        Fintype.one_lt_card_iff_nontrivial.mp hcard_gt_one
-      -- This part requires hP_prim (not yet proved) and the similarity
-      -- argument for trace powers, plus the overlap formula
-      sorry
-    · -- Then card ≤ 1.  Since nonempty, card = 1.
-      have hcard1 : Fintype.card (F.ActiveSector p) = 1 := by
-        have hpos_card : 0 < Fintype.card (F.ActiveSector p) :=
-          Fintype.card_pos_iff.mpr ⟨by infer_instance⟩
+    refine ⟨hP_nonneg, k, hk_pos, fun i j => ?_⟩
+    rw [hP_pow_entry k i j]; positivity
+  -- ================================================================
+  -- Step 6: S, Ŝ, bounds, trace similarity
+  -- ================================================================
+  let S : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ := activeSectorTraceSqMatrix K F p
+  have hS_nonneg : ∀ i j, 0 ≤ S i j := activeSectorTraceSqMatrix_nonneg K F p hpos
+  have hS_le_Tsq : ∀ i j, S i j ≤ (T i j) ^ 2 := by
+    intro i j; simpa [S, T] using activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos i j
+  let Ŝ : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ := fun i j ↦ S i j * (v j ^ 2) / (v i ^ 2)
+  have hŜ_nonneg : ∀ i j, 0 ≤ Ŝ i j := by
+    intro i j; dsimp [Ŝ]
+    exact div_nonneg (mul_nonneg (hS_nonneg i j) (sq_nonneg (v j))) (sq_nonneg (v i))
+  have hŜ_le_Phadamard : ∀ i j, Ŝ i j ≤ (P ⊙ P) i j := by
+    intro i j; dsimp [Ŝ, P, Matrix.hadamard]
+    have hS_le : S i j ≤ (T i j) ^ 2 := hS_le_Tsq i j
+    have h_frac : (T i j * v j / v i) ^ 2 = (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) := by ring
+    rw [h_frac]
+    have h_div_nonneg : 0 ≤ v j ^ 2 / v i ^ 2 := div_nonneg (sq_nonneg _) (sq_nonneg _)
+    nlinarith
+  have h_trace_sim (N : ℕ) : Matrix.trace (Ŝ ^ N) = Matrix.trace (S ^ N) := by
+    have h_pow_entry (n : ℕ) (i j) : (Ŝ ^ n) i j = (S ^ n) i j * (v j ^ 2) / (v i ^ 2) := by
+      induction n with
+      | zero => simp [Ŝ]
+      | succ n ih =>
+        simp only [pow_succ, Matrix.mul_apply]
+        calc
+          (∑ l, (Ŝ ^ n) i l * Ŝ l j) =
+              (∑ l, ((S ^ n) i l * (v l ^ 2) / (v i ^ 2)) * (S l j * (v j ^ 2) / (v l ^ 2))) := by
+            simp [ih, Ŝ]
+          _ = (∑ l, (S ^ n) i l * S l j * (v j ^ 2) / (v i ^ 2)) := by
+            refine Finset.sum_congr rfl fun l _ => ?_
+            field_simp [ne_of_gt (by positivity : 0 < v l ^ 2)]; ring
+          _ = (∑ l, (S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2) := by
+            simp [Finset.sum_div, Finset.mul_sum]
+          _ = ((S ^ n) * S) i j * (v j ^ 2) / (v i ^ 2) := by simp [Matrix.mul_apply]
+          _ = (S ^ (n + 1)) i j * (v j ^ 2) / (v i ^ 2) := by rw [pow_succ]
+    rw [Matrix.trace]; simp only [Matrix.diag_apply]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [h_pow_entry N i i]
+    field_simp [ne_of_gt (by positivity : 0 < v i ^ 2)]
+  -- ================================================================
+  -- Step 7: Overlap formula (requires physical-isometry bridge, documented gap)
+  -- ================================================================
+  have h_overlap_formula (N : ℕ) [NeZero N] :
+      MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N = (Matrix.trace (S ^ N) : ℂ) := by
+    have hMPDO : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
+    have hNpos : 0 < N := NeZero.pos N
+    rw [mpvOverlap_toMPSTensor_self_eq_trace_sq K hMPDO hNpos]
+    -- Remaining gap: tr(mpo(K,N)²) = (tr(S^N) : ℂ)
+    -- Requires: unitary invariance under physicalIsometry, block-diagonal
+    -- decomposition via reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal,
+    -- trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq, and the
+    -- trace-cycle identity tr(S^N) = Σ_c Π_n S_{c_n,c_{n+1}}.
+    sorry
+  -- ================================================================
+  -- Step 8: Cardinality contradiction
+  -- ================================================================
+  by_cases hcard_gt_one : 1 < Fintype.card (F.ActiveSector p)
+  · haveI : Nontrivial (F.ActiveSector p) := Fintype.one_lt_card_iff_nontrivial.mp hcard_gt_one
+    have h_tendsto_zero : Tendsto (fun N : ℕ ↦ Matrix.trace (Ŝ ^ N)) atTop (nhds (0 : ℝ)) :=
+      Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self
+        hP_row_stoch hP_prim hŜ_nonneg hŜ_le_Phadamard
+    have h_tendsto_zero' : Tendsto (fun N : ℕ ↦ Matrix.trace (S ^ N)) atTop (nhds (0 : ℝ)) :=
+      h_tendsto_zero.congr h_trace_sim
+    have h_self_one : Tendsto (fun N : ℕ ↦ MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
+        atTop (nhds (1 : ℂ)) := hNT.selfOverlap_tendsto_one
+    have h_tendsto_one : Tendsto (fun N : ℕ ↦ Matrix.trace (S ^ N)) atTop (nhds (1 : ℝ)) := by
+      have h_self_one_re : Tendsto (fun N : ℕ ↦ (MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re)
+          atTop (nhds (1 : ℝ)) := by
+        simpa [Complex.one_re] using h_self_one.re
+      have h_eventually_pos : ∀ᶠ (N : ℕ) in atTop, 0 < N := by
+        refine eventually_atTop.mpr ⟨1, fun n hn => ?_⟩
         omega
-      exact hcard1
-
+      refine h_self_one_re.congr ?_
+      filter_upwards [h_eventually_pos] with n hn
+      haveI : NeZero n := ⟨hn.ne'⟩
+      rw [h_overlap_formula n, Complex.ofReal_re]
+    have h_contra : (0 : ℝ) = 1 := tendsto_nhds_unique h_tendsto_zero' h_tendsto_one
+    linarith
+  · have hpos_card : 0 < Fintype.card (F.ActiveSector p) :=
+      Fintype.card_pos_iff.mpr ⟨by infer_instance⟩
+    omega
 
 end caseI
 
