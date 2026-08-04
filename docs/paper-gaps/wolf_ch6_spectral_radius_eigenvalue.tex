@@ -1,55 +1,110 @@
-\documentclass[11pt]{article}
+\documentclass{article}
+
 \usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Spectral-Radius Identification in Wolf Theorem 6.5}
+\author{}
+\date{2026-08-04}
+
 \begin{document}
-\section{Wolf Theorem 6.5 --- spectral radius as eigenvalue with PSD eigenvector}
-\label{sec:gap_ch6_thm65}
+\maketitle
 
-\subsection{Source}
-M.~Wolf, \emph{Quantum Channels \& Operations: Guided Tour}, Chapter~6,
-Theorem~6.5, local source
-\verb|Notes/WolfNoteTexSource/ch06_spectral_properties.tex|, lines~743--745.
+\section{Source statement}
 
-\subsection{Statement}
-Let $T:\mathcal{M}_d(\mathbb{C})\to\mathcal{M}_d(\mathbb{C})$ be a positive map
-with spectral radius $\varrho$. Then $\varrho$ is an eigenvalue and there is a
-positive semidefinite $X\in\mathcal{M}_d(\mathbb{C})$ such that $T(X)=\varrho X$.
+Wolf's Theorem~6.5 asserts that the spectral radius of a positive map is
+itself an eigenvalue, attained on a positive semidefinite eigenvector. We
+write $X\succeq0$ for positive semidefinite, $X\succ0$ for positive definite,
+and $\varrho(T)$ for the spectral radius. The theorem states: for every
+positive linear map $T:\MN{d}\to\MN{d}$,
+\begin{align}
+  T(X)&=\varrho(T)\,X
+  \qquad\text{for some }X\succeq0,\ X\neq0.
+  \tag{Wolf Thm.~6.5}
+\end{align}
+The local source is
+\path{Notes/WolfNoteTexSource/ch06_spectral_properties.tex}, lines~743--747
+\cite{Wolf2012Quantum}.
 
-\subsection{What is formalized}
-\begin{itemize}
-\item \texttt{exists\_posSemidef\_eigenvector\_general} (in
-  \texttt{TNLean/Channel/PerronFrobenius/Existence.lean}) proves that every
-  positive map has SOME nonnegative eigenvalue $r\ge 0$ with PSD eigenvector.
-\item \texttt{spectralRadius\_eq\_of\_posDef\_eigenvector\_of\_irreducible\_cp}
-  (in \texttt{TNLean/Channel/Irreducible/SpectralRadius.lean}) proves that for
-  \emph{irreducible CP} maps, a positive eigenvalue with PosDef eigenvector equals
-  the spectral radius. This is Wolf Theorem~6.3(4) but restricted to CP maps.
-\end{itemize}
+\section{What is formalized}
 
-\subsection{What is missing}
-\texttt{exists\_posSemidef\_eigenvector\_general} does not identify its eigenvalue
-with the spectral radius (it may return a suboptimal eigenvalue, e.g.\ $r=0$ when
-the map has a nontrivial kernel). The existing spectral-radius identity is
-restricted to irreducible CP maps.
+Two formal statements cover separate parts of the assertion. First, every
+positive linear map $E:\MN{D}\to\MN{D}$ has some nonnegative eigenvalue with
+a positive semidefinite eigenvector:
+\begin{align}
+  E(\rho)&=r\rho,
+  \qquad \rho\succeq0,\ \rho\neq0,\ r\ge0.
+  \tag{formal existence}
+\end{align}
+\footnote{Formal declaration:
+  \leanid{exists_posSemidef_eigenvector_general} in
+  \doclink{TNLean/Channel/PerronFrobenius/Existence}. The stronger variant
+  \leanid{exists_posSemidef_eigenvector} assumes that $E$ does not annihilate
+  any nonzero positive semidefinite matrix and returns $r>0$.}
+Second, for an irreducible completely positive map, any positive eigenvalue
+with a positive definite eigenvector equals the spectral radius:
+\begin{align}
+  E(\rho)=r\rho,\quad \rho\succ0,\ r>0
+  \quad\Longrightarrow\quad
+  \varrho(E)=r,
+  \tag{formal identification}
+\end{align}
+provided $E$ is irreducible and completely positive.\footnote{Formal
+  declaration:
+  \leanid{spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp} in
+  \doclink{TNLean/Channel/Irreducible/SpectralRadius}. This is the
+  irreducible-map statement of Wolf Theorem~6.3(4), formalized in the
+  completely positive case.}
 
-Proving the general positive-map case requires one of:
+\section{Comparison}
+
+The existence statement does not identify its eigenvalue with the spectral
+radius, and no such conclusion is possible for an arbitrary nonnegative
+eigenvalue of a positive map. On $\MN{2}$, the completely positive map
+\begin{align}
+  E(X)&=X_{11} \one
+\end{align}
+satisfies $E(\one)=\one$, so $\varrho(E)=1$; yet the nonzero positive
+semidefinite matrix $X=\ketbra{2}{2}$ lies in the kernel of $E$, so an
+existence theorem may return $r=0<\varrho(E)$. Conversely, the
+identification statement assumes irreducibility and complete positivity, both
+absent from Wolf Theorem~6.5, and requires a positive definite eigenvector.
+
+Closing the general positive-map case requires one of the following:
 \begin{enumerate}
-\item A direct resolvent/pole argument: for $\lambda>\varrho$, the resolvent
-  $R(\lambda)=(\lambda-T)^{-1}$ preserves positivity; as $\lambda\downarrow\varrho$,
-  the residue gives a PSD eigenvector for $\varrho$. Formalizing this needs
-  holomorphic functional calculus and spectral projections.
-\item Lifting from the irreducible case: decompose the PSD cone into invariant
-  faces, apply the Perron--Frobenius theorem to each irreducible component, and
-  select the component with maximal spectral radius. Requires formalizing the
-  invariant-face decomposition of positive maps.
+\item a resolvent argument: for $\lambda>\varrho(T)$ the resolvent
+  $(\lambda-T)^{-1}$ preserves positivity, and the pole at
+  $\lambda=\varrho(T)$ produces a positive semidefinite eigenvector; this
+  route needs holomorphic functional calculus and spectral projections;
+\item lifting from the irreducible case through the invariant-face
+  decomposition of the positive cone: apply the Perron--Frobenius theorem to
+  each irreducible component and select the component of maximal spectral
+  radius; this route needs the invariant-face decomposition of positive maps.
 \end{enumerate}
 
-\subsection{Elimination plan}
-The extremal-quantity approach (issue \#3976 M3) will first prove Theorem~6.3
-for irreducible positive maps directly (without CP/Kraus assumptions). Then the
-invariant-face decomposition (a separate project) will lift to the general case.
-If the resolvent argument is more tractable, it may be used as a shortcut.
+The planned first step is Wolf Theorem~6.3 for irreducible positive maps
+without complete-positivity hypotheses, via the extremal functionals of Wolf
+Equations~(6.29)--(6.30).\footnote{Formal declarations:
+  \leanid{PerronFrobeniusExtremal.r},
+  \leanid{PerronFrobeniusExtremal.rTilde},
+  \leanid{PerronFrobeniusExtremal.rMax}, and
+  \leanid{PerronFrobeniusExtremal.rTildeMax} in
+  \doclink{TNLean/Channel/PerronFrobenius/ExtremalQuantities}; tracked in
+  \ghissue{3976} (milestone M3).}
 
-\subsection{Verdict}
-Wolf Theorem~6.5 is partially formalized: existence of a nonnegative PSD
-eigenvalue is proved, but the identification with the spectral radius is missing.
+\section{Verdict}
+
+Wolf Theorem~6.5 is an \emph{open gap}: the existence of a nonnegative
+eigenvalue with a positive semidefinite eigenvector is formalized for every
+positive map, but the identification of that eigenvalue with the spectral
+radius is available only as a \emph{scope restriction} to irreducible
+completely positive maps with a positive definite eigenvector.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
 \end{document}

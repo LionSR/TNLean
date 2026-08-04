@@ -159,7 +159,7 @@ In `TNLean.Channel.Irreducible.FromSpectral`:
   TP gauge reduction + channel fixed-point contradiction.
 * `isIrreducibleMap_iff_spectral_properties` — the final iff statement.
 
-### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — PARTIAL
+### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — PARTIALLY FORMALIZED
 
 * `exists_posSemidef_eigenvector` — `TNLean.Channel.PerronFrobenius.Existence`
 * `exists_posSemidef_eigenvector_general` — gives SOME nonnegative eigenvalue with
