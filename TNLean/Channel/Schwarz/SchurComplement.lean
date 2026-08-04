@@ -25,14 +25,6 @@ with `P, R` PSD, the following are equivalent:
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open Matrix
 
-
-/-- Equal matrices have equal supportInvs (proof-irrelevant after substitution). -/
-theorem Matrix.PosSemidef.supportInv_congr {n : Type*} [Fintype n] [DecidableEq n]
-    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) (hAB : A = B) :
-    hA.supportInv = hB.supportInv := by
-  cases hAB; rfl
-
-
 namespace SchurComplement
 
 variable {D₁ D₂ : ℕ}
@@ -43,8 +35,6 @@ def blockMatrix (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (F
     Matrix ((Fin D₁) ⊕ (Fin D₂)) ((Fin D₁) ⊕ (Fin D₂)) ℂ :=
   Matrix.fromBlocks P Q (Qᴴ) R
 
-/-- The block matrix `[[P, Q], [Q†, R]]` is Hermitian when its diagonal
-blocks `P` and `R` are Hermitian. -/
 theorem blockMatrix_isHermitian (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hP : P.IsHermitian) (hR : R.IsHermitian) : (blockMatrix P Q R).IsHermitian := by
