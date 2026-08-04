@@ -374,7 +374,7 @@ private lemma sqrt2_sq_complex : ((Real.sqrt 2 : ℂ) ^ 2) = (2 : ℂ) := by
     _ = ((2 : ℝ) : ℂ) := by rw [hsq_real]
     _ = (2 : ℂ) := rfl
 
-noncomputable def blockLetterAmplitude : ℂ := (1 : ℂ) / Real.sqrt 2
+private noncomputable def blockLetterAmplitude : ℂ := (1 : ℂ) / Real.sqrt 2
 
 private lemma blockLetterAmplitude_sq : blockLetterAmplitude ^ 2 = (1 / 2 : ℂ) := by
   calc
@@ -383,9 +383,9 @@ private lemma blockLetterAmplitude_sq : blockLetterAmplitude ^ 2 = (1 / 2 : ℂ)
     _ = 1 / (2 : ℂ) := by rw [sqrt2_sq_complex]
     _ = (1 / 2 : ℂ) := by norm_num
 
-noncomputable def block0Weight : ℂ := (1 : ℂ) / Real.sqrt 2
-noncomputable def block1Weight : ℂ := (1 : ℂ) / (2 * Real.sqrt 2)
-noncomputable def katoCFWeights : Fin 2 → ℂ :=
+private noncomputable def block0Weight : ℂ := (1 : ℂ) / Real.sqrt 2
+private noncomputable def block1Weight : ℂ := (1 : ℂ) / (2 * Real.sqrt 2)
+private noncomputable def katoCFWeights : Fin 2 → ℂ :=
   fun k => match k with | 0 => block0Weight | 1 => block1Weight
 
 private lemma block0Weight_times_amplitude :
@@ -406,16 +406,16 @@ private lemma block1Weight_times_amplitude :
     _ = 1 / (2 * (2 : ℂ)) := by rw [sqrt2_sq_complex]
     _ = (1 / 4 : ℂ) := by ring
 
-noncomputable def katoCFBlock0 : MPSTensor 4 1 :=
+private noncomputable def katoCFBlock0 : MPSTensor 4 1 :=
   fun p => if p = 0 ∨ p = 3 then !![blockLetterAmplitude] else 0
 
-noncomputable def katoCFBlock1 : MPSTensor 4 1 :=
+private noncomputable def katoCFBlock1 : MPSTensor 4 1 :=
   fun p =>
     if p = 0 then !![blockLetterAmplitude]
     else if p = 3 then !![-blockLetterAmplitude]
     else 0
 
-noncomputable def katoCFBlocks : Fin 2 → MPSTensor 4 1 :=
+private noncomputable def katoCFBlocks : Fin 2 → MPSTensor 4 1 :=
   fun k => match k with | 0 => katoCFBlock0 | 1 => katoCFBlock1
 
 private lemma one_by_one_mul_apply (A B : Matrix (Fin 1) (Fin 1) ℂ) :
