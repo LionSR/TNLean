@@ -313,7 +313,6 @@ with `E(B†B) w = E(B†A) v`, we have `v† E(A†A) v ≥ v† E(A†B) w`.
 
 This is the pseudoinverse-free formulation of Wolf's Eq. (5.4):
 `E(A†B) E(B†B)⁻¹ E(B†A) ≤ E(A†A)` where the inverse is taken on the range. -/
-omit [DecidableEq n] in
 theorem schwarz_two_variable (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
     (A B : Mat) (v w : n → ℂ) (hw : (E (Bᴴ * B)).mulVec w = (E (Bᴴ * A)).mulVec v) :
     star v ⬝ᵥ ((E (Aᴴ * A)).mulVec v) ≥ star v ⬝ᵥ ((E (Aᴴ * B)).mulVec w) := by
