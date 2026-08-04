@@ -788,4 +788,23 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     scalar rescaling gives $\rho_{\spec}(E)=r$.
 \end{proof}
 
+\begin{theorem}[Eigenvalue $1$ for positive trace-preserving maps]
+    \label{thm:eigenvalue_one_tp}
+    \lean{IsPositiveMap.eigenvalue_one_exists_of_tracePreserving}\leanok
+    \uses{def:positive_map, def:trace_preserving}
+    Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
+    with $D>0$.  Then there exists a nonzero positive semidefinite matrix
+    $\rho$ such that $T(\rho)=\rho$.
+    This is the eigenvalue-$1$ assertion of \cite[Proposition~6.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:pf_eigenvector_existence}
+    The Perron--Frobenius theorem
+    (Theorem~\ref{thm:pf_eigenvector_existence}) gives a PSD
+    eigenvector $T(\rho)=r\rho$ with $r>0$.  Trace preservation forces
+    $r=1$ because $\tr(T(\rho))=\tr(\rho)$.
+\end{proof}
+
+
 

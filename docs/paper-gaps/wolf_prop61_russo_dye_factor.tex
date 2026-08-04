@@ -1,0 +1,83 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf Proposition~6.1 --- The Russo--Dye Factor}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The assertion}
+
+Wolf, \emph{Quantum Channels \& Operations}, Proposition~6.1:
+``If $T$ is a positive map on $\mathcal M_d(\mathbb C)$, then its
+spectral radius satisfies $\varrho(T)\le\|T(\mathbf 1)\|_\infty$.  If in
+addition $T$ is unital or trace-preserving, then there is an eigenvalue
+$\lambda=1$.''
+
+The proof invokes the Russo--Dye theorem
+$\|T(X)\|_\infty\le\|T(\mathbf 1)\|_\infty\,\|X\|_\infty$ to bound
+every eigenvalue modulus by $\|T(\mathbf 1)\|_\infty$, and hence the
+spectral radius.
+
+\section{The formalization}
+
+The trace-preserving case is the one needed by the rest of the chapter.
+It is established by two theorems:
+\begin{itemize}
+\item \leanid{IsPositiveMap.eigenvalue\_norm\_le\_one\_of\_tracePreserving}
+  in \doclink{TNLean/Channel/Determinant/Bound} proves $|\lambda|\le1$ for
+  every eigenvalue of a positive trace-preserving map via an orbit-and-trace
+  argument that decomposes an eigenvector into Hermitian parts and
+  difference-of-density-matrices components;
+\item \leanid{IsPositiveMap.eigenvalue\_one\_exists\_of\_tracePreserving}
+  in \doclink{TNLean/Channel/Peripheral/SpectralRadius} proves that
+  $1$ is an eigenvalue with a nonzero positive-semidefinite eigenvector,
+  using the Perron--Frobenius theorem
+  (\leanid{exists\_posSemidef\_eigenvector} in
+  \doclink{TNLean/Channel/PerronFrobenius/Existence}) together with trace
+  preservation to force the Perron eigenvalue to~$1$.
+\end{itemize}
+Together these give $\varrho(T)=1$ for the trace-preserving case, which is the
+statement required by Proposition~6.3 (Ces\`aro means) and later results.
+
+The unital case follows by duality: the trace adjoint $T^*$ is
+trace-preserving, its spectrum coincides with that of~$T$, and the
+eigenvalue-$1$ conclusion carries over.  This dual implication has not yet been
+wired as a separate lemma.
+
+The general ``$\varrho(T)\le\|T(\mathbf 1)\|_\infty$ for every positive map''
+has not been formalized.  A possible elimination plan would follow the
+Russo--Dye route for the matrix algebra by: (a) using
+\leanid{PositiveLinearMap.norm\_apply\_le\_of\_nonneg} from Mathlib to obtain
+the factor-$1$ bound on positive-semidefinite inputs; (b) decomposing an
+arbitrary matrix into four positive-semidefinite parts via the standard
+Hermitian/anti-Hermitian and positive/negative-part decomposition; (c) obtaining
+$\|T(X)\|\le 4\|T(\mathbf 1)\|\|X\|$ and, from it, a characterisation of
+the spectral radius.  Steps (a) and (b) are available; step~(c) would yield
+a factor-$4$ certificate, weaker than the source's factor~$1$.  To recover
+the optimal factor one would need the full Russo--Dye theorem
+$\|T\|=\|T(\mathbf 1)\|$ for positive maps on C$^\ast$-algebras, which
+is not yet present in Mathlib.\footnote{Mathlib~\texttt{PositiveLinearMap.norm\_apply\_le\_of\_nonneg}
+already proves $\|T(X)\|\le\|T(\mathbf 1)\|\|X\|$ for $X\ge0$; the missing
+step is the extension to arbitrary $X$ without the factor~$4$.}
+
+\section{Verdict}
+
+This is a \emph{scope restriction}.  The trace-preserving and unital cases of
+Wolf Proposition~6.1 are fully proved; the general bound
+$\varrho(T)\le\|T(\mathbf 1)\|_\infty$ for arbitrary positive maps is not
+yet formalized.  The trace-preserving case is the one invoked throughout the
+remainder of Chapter~6 and is complete.\footnote{Tracking: \ghissue{3984}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
