@@ -300,42 +300,49 @@ theorem lemmaC5_caseI_singleton
     refine ⟨hP_nonneg, fun i => ?_⟩
     dsimp [P]
     calc
-      ∑ j : F.ActiveSector p, T i j * v j / v i = (∑ j, T i j * v j) / v i := by
-        simp [Finset.sum_div]
-      _ = (T.mulVec v) i / v i := by rw [Matrix.mulVec_apply]
-      _ = v i / v i := by rw [hTv_eq_v]
+      (∑ j : F.ActiveSector p, T i j * v j / v i) = ((∑ j : F.ActiveSector p, T i j * v j) / v i) := by
+        rw [Finset.sum_div]
+      _ = ((T.mulVec v) i / v i) := by
+        rw [Matrix.mulVec_apply_eq_sum]
+      _ = (v i / v i) := by rw [hTv_eq_v]
       _ = 1 := div_self (ne_of_gt (hv_pos i))
   have hP_prim : P.IsPrimitive := by
     obtain ⟨k, hk_pos, hk_all⟩ := hTprim.exists_pos_pow
-    -- Use the fact that P = D^{-1} T D where D = diag(v)
-    -- Then P^k = D^{-1} T^k D, so P^k_{ij} = T^k_{ij} * v_j / v_i
-    -- We prove this formula entrywise by induction
+    -- P = D_v^{-1} * T * D_v, hence P^k = D_v^{-1} * T^k * D_v
+    -- Entrywise: P^k_{ij} = T^k_{ij} * v_j / v_i
     have hP_pow_entry (n : ℕ) (i j) : (P ^ n) i j = (T ^ n) i j * v j / v i := by
-      induction n with
+      induction n generalizing i j with
       | zero =>
-        -- Goal: (1 : Matrix ...) i j = (1 : Matrix ...) i j * v j / v i
+        -- P^0 = 1, T^0 = 1: 1_{ij} = 1_{ij} * v_j / v_i
         simp [Matrix.one_apply, pow_zero]
         split_ifs with hij
-        · -- i = j case: 1 = 1 * v_i / v_i
-          subst hij
+        · subst hij
           field_simp [ne_of_gt (hv_pos i)]
-        · -- i ≠ j case: 0 = 0 * v_j / v_i
-          simp
+        · simp
       | succ n ih =>
         rw [pow_succ, Matrix.mul_apply]
-        simp only [ih, P]
-        -- Goal: ∑_l (T^n_{il} * v_l / v_i) * (T_{lj} * v_j / v_l) = T^{n+1}_{ij} * v_j / v_i
-        -- Simplify by factoring out v_j/v_i and canceling v_l
-        have h_eq (l : F.ActiveSector p) : ((T ^ n) i l * v l / v i) * (T l j * v j / v l) =
-            ((T ^ n) i l * T l j) * (v j / v i) := by
-          have hvl_ne : v l ≠ 0 := (hv_pos l).ne'
-          field_simp [hvl_ne]
-          ring
-        simp_rw [h_eq]
-        simp [Finset.mul_sum, Matrix.mul_apply, pow_succ]
-        ring
+        rw [ih i l, P]
+        -- Goal: Σ_l (T^n_{il} * v_l / v_i) * (T_{lj} * v_j / v_l) = T^{n+1}_{ij} * v_j / v_i
+        -- Prove by direct calculation
+        calc
+          (∑ l : F.ActiveSector p, ((T ^ n) i l * v l / v i) * (T l j * v j / v l)) =
+              (∑ l : F.ActiveSector p, ((T ^ n) i l * T l j) * (v j / v_i)) := by
+            refine Finset.sum_congr rfl fun l _ => ?_
+            have hvl_ne : v l ≠ 0 := (hv_pos l).ne'
+            field_simp [hvl_ne]
+            ring
+          _ = (∑ l : F.ActiveSector p, (T ^ n) i l * T l j) * (v j / v_i) := by
+            rw [Finset.sum_mul]
+          _ = ((T ^ n * T) i j) * (v j / v_i) := by rw [Matrix.mul_apply]
+          _ = (T ^ n * T) i j * v j / v_i := by ring
+          _ = (T ^ (n + 1)) i j * v j / v_i := by rw [pow_succ]
     refine ⟨hP_nonneg, k, hk_pos, fun i j => ?_⟩
-    rw [hP_pow_entry k i j]; positivity
+    rw [hP_pow_entry k i j]
+    have hTk_pos : 0 < (T ^ k) i j := hk_all i j
+    have hvj_pos : 0 < v j := hv_pos j
+    have hvi_pos : 0 < v i := hv_pos i
+    positivity
+
   -- ================================================================
   -- Step 6: S, Ŝ, bounds, trace similarity
   -- ================================================================
@@ -350,31 +357,49 @@ theorem lemmaC5_caseI_singleton
   have hŜ_le_Phadamard : ∀ i j, Ŝ i j ≤ (P ⊙ P) i j := by
     intro i j; dsimp [Ŝ, P, Matrix.hadamard]
     have hS_le : S i j ≤ (T i j) ^ 2 := hS_le_Tsq i j
+    -- Target: S_ij * v_j² / v_i² ≤ (T_ij * v_j / v_i) * (T_ij * v_j / v_i)
+    -- RHS = (T_ij * v_j / v_i)^2 = T_ij^2 * (v_j^2 / v_i^2)
+    rw [← sq]
     have h_frac : (T i j * v j / v i) ^ 2 = (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) := by ring
     rw [h_frac]
     have h_div_nonneg : 0 ≤ v j ^ 2 / v i ^ 2 := div_nonneg (sq_nonneg _) (sq_nonneg _)
-    nlinarith
+    -- Need: S_ij * (v_j² / v_i²) ≤ (T_ij)² * (v_j² / v_i²)
+    -- Since S_ij ≤ (T_ij)² and (v_j² / v_i²) ≥ 0, multiply both sides
+    have h_ineq : S i j * (v j ^ 2 / v i ^ 2) ≤ (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) :=
+      mul_le_mul_of_nonneg_right hS_le h_div_nonneg
+    -- Target: S_ij * v_j² / v_i² ≤ (T_ij)² * (v_j² / v_i²)
+    -- Note: S_ij * v_j² / v_i² = S_ij * (v_j² / v_i²)
+    -- So the target is exactly h_ineq
+    simpa [div_eq_mul_inv, mul_assoc] using h_ineq
   have h_trace_sim (N : ℕ) : Matrix.trace (Ŝ ^ N) = Matrix.trace (S ^ N) := by
     have h_pow_entry (n : ℕ) (i j) : (Ŝ ^ n) i j = (S ^ n) i j * (v j ^ 2) / (v i ^ 2) := by
-      induction n with
-      | zero => simp [Ŝ]
+      induction n generalizing i j with
+      | zero =>
+        simp [Ŝ, Matrix.one_apply, pow_zero]
+        split_ifs with hij
+        · subst hij; field_simp [ne_of_gt (hv_pos i)]
+        · simp
       | succ n ih =>
-        simp only [pow_succ, Matrix.mul_apply]
+        rw [pow_succ, Matrix.mul_apply]
+        dsimp [Ŝ]
+        rw [ih i l]
         calc
-          (∑ l, (Ŝ ^ n) i l * Ŝ l j) =
-              (∑ l, ((S ^ n) i l * (v l ^ 2) / (v i ^ 2)) * (S l j * (v j ^ 2) / (v l ^ 2))) := by
-            simp [ih, Ŝ]
-          _ = (∑ l, (S ^ n) i l * S l j * (v j ^ 2) / (v i ^ 2)) := by
+          (∑ l : F.ActiveSector p, ((S ^ n) i l * (v l ^ 2) / (v i ^ 2)) * (S l j * (v j ^ 2) / (v l ^ 2))) =
+              (∑ l : F.ActiveSector p, ((S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2)) := by
             refine Finset.sum_congr rfl fun l _ => ?_
-            field_simp [ne_of_gt (by positivity : 0 < v l ^ 2)]; ring
-          _ = (∑ l, (S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2) := by
+            have hvl_sq_pos : v l ^ 2 ≠ 0 := pow_ne_zero 2 (ne_of_gt (hv_pos l))
+            field_simp [hvl_sq_pos]
+            ring
+          _ = (∑ l : F.ActiveSector p, (S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2) := by
             simp [Finset.sum_div, Finset.mul_sum]
-          _ = ((S ^ n) * S) i j * (v j ^ 2) / (v i ^ 2) := by simp [Matrix.mul_apply]
+          _ = ((S ^ n * S) i j) * (v j ^ 2) / (v i ^ 2) := by simp [Matrix.mul_apply]
           _ = (S ^ (n + 1)) i j * (v j ^ 2) / (v i ^ 2) := by rw [pow_succ]
     rw [Matrix.trace]; simp only [Matrix.diag_apply]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [h_pow_entry N i i]
-    field_simp [ne_of_gt (by positivity : 0 < v i ^ 2)]
+    have hvi_sq_pos : v i ^ 2 ≠ 0 := pow_ne_zero 2 (ne_of_gt (hv_pos i))
+    field_simp [hvi_sq_pos]
+    ring
   -- ================================================================
   -- Step 7: Overlap formula (requires physical-isometry bridge, documented gap)
   -- ================================================================
