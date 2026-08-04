@@ -557,5 +557,304 @@ theorem tensor_toMPSTensor_isCPSVCanonicalForm :
     (fun _ => by norm_num) katoCFWeights katoCFBlocks
     katoCFBlocks_normal).isCPSVCanonicalForm
 
+/-! ### Strong Area Law (SAL)
+
+The saturation of the area law (arXiv:1606.00608, Definition 4.6, line 811)
+requires the mutual information chain $I_1 = I_2 = \dots$ with
+$I_L = S_L + S_{N-L} - S_N$ (line 797).  For Kato's $p=1/2$ tensor
+the block reduced states are maximally mixed for non‑full blocks,
+which forces $S_L = L \log 2$ and cancels the $N$‑dependence.
+**All entropy computations in this section are project derivations,
+not stated by Kato or CPSV16.** -/
+
+/-- When the unnormalized MPO has unit trace the normalized MPO collapses
+to the bare MPO.  This relies on `trace_mpo_tensor` giving trace 1. -/
+private lemma normalizedMPO_tensor_eq_mpo (N : ℕ) (hN : 0 < N) :
+    normalizedMPO tensor N = mpo tensor N := by
+  rw [normalizedMPO, trace_mpo_tensor N hN, inv_one, one_smul]
+
+/-- The site-sum vanishes: $\sum_{a=0,1} \operatorname{siteSign} a = 1+(-1)=0$. -/
+private lemma sum_siteSign_eq_zero : (∑ a : Fin 2, siteSign a) = (0 : ℂ) := by
+  calc
+    (∑ a : Fin 2, siteSign a) = siteSign 0 + siteSign 1 := Fin.sum_univ_two _
+    _ = (1 : ℂ) + (-1 : ℂ) := by simp [siteSign, pauliZ]
+    _ = 0 := by ring
+
+/-- Sum of `configurationSign` over all functions `Fin n → Fin 2` vanishes
+when the domain is nonempty.  This is the distributive‑law identity
+$\sum_{w} \prod_k \operatorname{siteSign}(w_k)
+  = \prod_k \sum_{a} \operatorname{siteSign}(a) = 0^n$.
+(project derivation) -/
+private lemma sum_configurationSign_eq_zero {n : ℕ} (hn : 0 < n) :
+    ∑ w : Fin n → Fin 2, configurationSign w = 0 := by
+  have hcard : Fintype.card (Fin n) = n := Fintype.card_fin n
+  calc
+    ∑ w : Fin n → Fin 2, configurationSign w
+        = ∑ w : Fin n → Fin 2, (∏ k : Fin n, siteSign (w k)) := rfl
+    _ = ∑ w ∈ (Fintype.piFinset fun (_ : Fin n) => (Finset.univ : Finset (Fin 2))),
+        (∏ k : Fin n, siteSign (w k)) := by simp [Fintype.piFinset_univ]
+    _ = ∏ k : Fin n, (∑ a ∈ (Finset.univ : Finset (Fin 2)), siteSign a) := by
+      rw [← Finset.prod_univ_sum (fun (_ : Fin n) => (Finset.univ : Finset (Fin 2)))
+        (fun (_ : Fin n) a => siteSign a)]
+    _ = ∏ k : Fin n, (∑ a : Fin 2, siteSign a) := by simp
+    _ = ∏ k : Fin n, (0 : ℂ) := by rw [sum_siteSign_eq_zero]
+    _ = 0 := by
+      rw [Finset.prod_const, Finset.card_univ, hcard]
+      exact zero_pow hn.ne'
+
+/-- `configurationSign` factorises through `Fin.append`.
+For $u : \operatorname{Fin} L \to \operatorname{Fin} 2$ and
+$w : \operatorname{Fin} M \to \operatorname{Fin} 2$,
+$\operatorname{configurationSign}(u \mathbin{+\!\!+} w)
+  = \operatorname{configurationSign}(u) \cdot \operatorname{configurationSign}(w)$.
+(project derivation) -/
+private lemma configurationSign_append {L M : ℕ}
+    (u : Fin L → Fin 2) (w : Fin M → Fin 2) :
+    configurationSign (Fin.append u w) = configurationSign u * configurationSign w := by
+  rw [configurationSign, configurationSign, configurationSign]
+  rw [Fin.prod_univ_add]
+  simp [Fin.append_left, Fin.append_right]
+
+/-- `configurationSign` is conjugation‑invariant under the length‑cast:
+for $h_N : N = L + M$ we have
+$\operatorname{configurationSign}(u \mathbin{+\!\!+} w \circ \mathrm{cast}\,h_N)
+  = \operatorname{configurationSign}(u) \cdot \operatorname{configurationSign}(w)$.
+(project derivation) -/
+private lemma configurationSign_append_cast {L M N : ℕ} (hN : N = L + M)
+    (u : Fin L → Fin 2) (w : Fin M → Fin 2) :
+    configurationSign (Fin.append u w ∘ Fin.cast hN) =
+      configurationSign u * configurationSign w := by
+  subst hN
+  simp [configurationSign_append]
+
+/-- The $(u,v)$ entry of the reduced block state of the Kato tensor.
+
+When $u = v$ the entry is the constant $(1/2)^L$ plus the sign term
+(which vanishes when the complement is nonempty, i.e. $L < N$).
+When $u \neq v$ the entry is zero because the MPO is diagonal.
+
+(project derivation) -/
+private lemma reducedBlockState_tensor_apply_eq {N L : ℕ} (hL : L ≤ N) (hNpos : 0 < N)
+    (u v : Fin L → Fin 2) :
+    reducedBlockState tensor N L hL u v =
+      if u = v then ((1 / 2 : ℂ) ^ L)
+                   + ((1 / 4 : ℂ) ^ N) * (configurationSign u) *
+                       (∑ w : Fin (N - L) → Fin 2, configurationSign w)
+      else 0 := by
+  set M := N - L with hM
+  have hNM : N = L + M := by omega
+  have hcard_fun : Fintype.card (Fin M → Fin 2) = 2 ^ M := by
+    simp
+  rw [reducedBlockState_eq_sum tensor hL u v,
+    normalizedMPO_tensor_eq_mpo N hNpos,
+    mpo_tensor_eq_diagonal N]
+  by_cases huv : u = v
+  · subst huv
+    simp only [Matrix.diagonal_apply_eq]
+    -- ∑ w, ((1/2)^N + (1/4)^N * configurationSign (Fin.append u w ∘ Fin.cast hNM))
+    rw [Finset.sum_add_distrib]
+    congr 1
+    · -- ∑ w, (1/2)^N = (1/2)^L
+      rw [Finset.sum_const, Finset.card_univ, hcard_fun, hNM]
+      -- Goal: (2 ^ M : ℕ) • ((1 / 2 : ℂ) ^ (L + M)) = (1 / 2 : ℂ) ^ L
+      -- Convert ℕ-scalar multiplication to ℂ multiplication
+      simpa [nsmul_eq_mul] using calc
+        ((2 : ℂ) ^ M) * (((1 : ℂ) / 2) ^ (L + M))
+            = ((2 : ℂ) ^ M) * (((1 : ℂ) / 2) ^ L * ((1 : ℂ) / 2) ^ M) := by rw [pow_add]
+        _ = (((2 : ℂ) ^ M) * ((1 / 2 : ℂ) ^ M)) * ((1 / 2 : ℂ) ^ L) := by ring
+        _ = (((2 : ℂ) * (1 / 2 : ℂ)) ^ M) * ((1 / 2 : ℂ) ^ L) := by rw [mul_pow]
+        _ = (1 ^ M) * ((1 / 2 : ℂ) ^ L) := by ring
+        _ = (1 : ℂ) * ((1 / 2 : ℂ) ^ L) := by simp
+        _ = (1 / 2 : ℂ) ^ L := by simp
+    · -- ∑ w, (1/4)^N * configurationSign (Fin.append u w ∘ Fin.cast hNM)
+      -- = (1/4)^N * configurationSign u * (∑ w, configurationSign w)
+      calc
+        (∑ w : Fin M → Fin 2, ((1 / 4 : ℂ) ^ N * configurationSign (Fin.append u w ∘ Fin.cast hNM)))
+            = (∑ w : Fin M → Fin 2, ((1 / 4 : ℂ) ^ N * (configurationSign u * configurationSign w))) := by
+          refine Finset.sum_congr rfl (fun w _ => ?_)
+          rw [configurationSign_append_cast hNM u w]
+        _ = ((1 / 4 : ℂ) ^ N) * (configurationSign u) * (∑ w : Fin M → Fin 2, configurationSign w) := by
+          simp [Finset.mul_sum, mul_assoc]
+  · -- u ≠ v: each term in the sum is zero because the MPO is diagonal
+    have hterm_zero : ∀ w : Fin M → Fin 2,
+        (Matrix.diagonal fun σ : Fin N → Fin 2 =>
+          (1 / 2 : ℂ) ^ N + (1 / 4 : ℂ) ^ N * configurationSign σ)
+        (Fin.append u w ∘ Fin.cast hNM) (Fin.append v w ∘ Fin.cast hNM) = 0 := by
+      intro w
+      have hne : Fin.append u w ∘ Fin.cast hNM ≠ Fin.append v w ∘ Fin.cast hNM := by
+        intro heq
+        apply huv
+        -- Cancelling Fin.cast hNM (which is an Equiv, hence surjective)
+        have hcast_eq_fun : (Fin.cast hNM : Fin N → Fin (L + M)) = (finCongr hNM) := by
+          ext i; simp
+        have heq' : Fin.append u w = Fin.append v w := by
+          ext i
+          have h_eq_val : Fin.append u w i = Fin.append v w i := by
+            obtain ⟨j, hj⟩ := (finCongr hNM).surjective i
+            calc
+              Fin.append u w i = Fin.append u w ((finCongr hNM) j) := by rw [hj]
+              _ = Fin.append u w ((Fin.cast hNM) j) := by rw [hcast_eq_fun]
+              _ = (Fin.append u w ∘ Fin.cast hNM) j := rfl
+              _ = (Fin.append v w ∘ Fin.cast hNM) j := by rw [heq]
+              _ = Fin.append v w ((Fin.cast hNM) j) := rfl
+              _ = Fin.append v w ((finCongr hNM) j) := by rw [hcast_eq_fun]
+              _ = Fin.append v w i := by rw [hj]
+          exact congrArg Fin.val h_eq_val
+        funext i
+        have hi := congrArg (fun f : Fin (L + M) → Fin 2 => f (Fin.castAdd M i)) heq'
+        simpa [Fin.append_left] using hi
+      rw [Matrix.diagonal_apply_ne _ hne]
+    have hsum : (∑ w : Fin M → Fin 2,
+        (Matrix.diagonal fun σ : Fin N → Fin 2 =>
+          (1 / 2 : ℂ) ^ N + (1 / 4 : ℂ) ^ N * configurationSign σ)
+        (Fin.append u w ∘ Fin.cast hNM) (Fin.append v w ∘ Fin.cast hNM)) = 0 := by
+      apply Finset.sum_eq_zero
+      intro w _
+      rw [hterm_zero w]
+    rw [hsum]
+    simp [huv]
+
+/-- When $1 \le L < N$ the reduced block state of the Kato tensor on
+$L$ spins is maximally mixed:
+$\rho_L = 2^{-L} \cdot \mathbf{1}$.
+(project derivation) -/
+private lemma reducedBlockState_tensor_eq_scaled_one {N L : ℕ}
+    (hLpos : 1 ≤ L) (hLN : L < N) (hL : L ≤ N := Nat.le_of_lt hLN) :
+    reducedBlockState tensor N L hL = ((2 : ℂ)⁻¹ ^ L : ℂ) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) := by
+  ext u v
+  rw [reducedBlockState_tensor_apply_eq hL (by omega) u v]
+  by_cases huv : u = v
+  · subst huv
+    have hsum_zero : (∑ w : Fin (N - L) → Fin 2, configurationSign w) = 0 :=
+      sum_configurationSign_eq_zero (Nat.sub_pos_of_lt hLN)
+    simp [hsum_zero, Matrix.one_apply_eq, smul_apply, show ((1 : ℂ) / 2) = (2 : ℂ)⁻¹ by norm_num]
+  · simp [huv, Matrix.one_apply_ne huv, smul_apply]
+
+/-- Scalar helper: $d \cdot \operatorname{negMulLog}(d^{-1}) = \log d$ for $d \neq 0$.
+(project derivation) -/
+private lemma negMulLog_pow_inv_mul (d : ℝ) (hd : d ≠ 0) : d * Real.negMulLog (d⁻¹) = Real.log d := by
+  rw [Real.negMulLog]
+  calc
+    d * (-(d⁻¹) * Real.log (d⁻¹)) = -(d * d⁻¹ * Real.log (d⁻¹)) := by ring
+    _ = -(1 * Real.log (d⁻¹)) := by
+      field_simp [hd]
+    _ = -Real.log (d⁻¹) := by simp
+    _ = Real.log d := by rw [Real.log_inv, neg_neg]
+
+/-- The block entropy $S_L$ for the Kato tensor equals $L \log 2$
+whenever $1 \le L < N$ (so the block is a proper subsystem).
+(project derivation; the maximally‑mixed computation above
+and the entropy of a scalar matrix are not in Kato or CPSV16.) -/
+private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
+    (hL : L ≤ N) (hM : (mpo tensor N).PosSemidef) :
+    blockEntropy tensor N L hL hM = L * Real.log 2 := by
+  rw [blockEntropy]
+  have hrho_herm : (reducedBlockState tensor N L hL).IsHermitian :=
+    reducedBlockState_isHermitian tensor N L hL hM
+  have hrho_eq : reducedBlockState tensor N L hL =
+      ((2 : ℂ)⁻¹ ^ L : ℂ) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :=
+    reducedBlockState_tensor_eq_scaled_one hLpos hLN
+  -- Hermitian proof for the scaled identity
+  have hc_selfadj : IsSelfAdjoint ((2 : ℂ)⁻¹ ^ L : ℂ) := by
+    simp [IsSelfAdjoint]
+  have h_scaled_herm : (((2 : ℂ)⁻¹ ^ L : ℂ) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).IsHermitian :=
+    (Matrix.isHermitian_one (n := Fin L → Fin 2) (α := ℂ)).smul hc_selfadj
+  rw [vonNeumannEntropy_congr hrho_eq hrho_herm h_scaled_herm]
+  -- Now compute von Neumann entropy of c • 1 via charpoly
+  rw [vonNeumannEntropy_eq_charpoly_roots _ h_scaled_herm]
+  have h_card : Fintype.card (Fin L → Fin 2) = 2 ^ L := by
+    simp [Fintype.card_fun, Fintype.card_fin]
+  have h_charpoly : (((2 : ℂ)⁻¹ ^ L : ℂ) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).charpoly =
+      (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^ (Fintype.card (Fin L → Fin 2)) := by
+    calc
+      _ = (Matrix.diagonal fun _ : Fin L → Fin 2 => ((2 : ℂ)⁻¹ ^ L : ℂ)).charpoly := by
+        rw [Matrix.smul_one_eq_diagonal]
+      _ = ∏ _i : Fin L → Fin 2, (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) :=
+        Matrix.charpoly_diagonal (fun _ : Fin L → Fin 2 => ((2 : ℂ)⁻¹ ^ L : ℂ))
+      _ = (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^ (Fintype.card (Fin L → Fin 2)) := by
+        simp
+  rw [h_charpoly, Polynomial.roots_pow, Polynomial.roots_X_sub_C]
+  simp only [Multiset.map_nsmul, Multiset.sum_nsmul, Multiset.map_singleton,
+    Multiset.sum_singleton]
+  -- Now we have: (Fintype.card ... : ℝ) • Real.negMulLog (...) = ...
+  -- where • is nsmul; convert to multiplication
+  rw [nsmul_eq_mul]
+  rw [h_card]
+  have h_re : (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) = ((2⁻¹ : ℝ) ^ L) := by
+    calc
+      (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) = ((((2⁻¹ : ℝ) : ℂ) ^ L : ℂ).re : ℝ) := by norm_num
+      _ = ((((2⁻¹ : ℝ) ^ L : ℝ) : ℂ).re : ℝ) := by rw [Complex.ofReal_pow]
+      _ = ((2⁻¹ : ℝ) ^ L : ℝ) := by rw [Complex.ofReal_re]
+  rw [h_re]
+  -- Now: (2^L : ℝ) * Real.negMulLog (((2⁻¹ : ℝ) ^ L)) = L * Real.log 2
+  have h_inv : ((2⁻¹ : ℝ) ^ L) = ((2 ^ L : ℝ)⁻¹) := by
+    simp [inv_pow]
+  rw [h_inv]
+  -- Goal: ↑(2 ^ L) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = ↑L * Real.log 2
+  -- Push the Nat.cast through
+  push_cast
+  -- Goal: (2 ^ L : ℝ) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = (L : ℝ) * Real.log 2
+  rw [negMulLog_pow_inv_mul ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
+  rw [Real.log_pow]
+
+/-- Kato's $p=1/2$ tensor saturates the area law (arXiv:1606.00608,
+Definition 4.6, line 811): the mutual information $I_L$ is constant
+in the block size $L$ for $1 \le L < \lfloor N/2\rfloor$.
+
+The proof: for a proper subsystem, the reduced state is maximally mixed,
+so $S_L = L \log 2$ (project derivation).  Therefore
+$I_L = L\log 2 + (N-L)\log 2 - c_N = N\log 2 - c_N$
+which is independent of $L$. -/
+theorem tensor_isSAL : IsSAL tensor := by
+  refine ⟨tensor_isMPDO, ?_, ?_⟩
+  · -- ∀ N, 0 < N → (mpo tensor N).trace ≠ 0
+    intro N hN
+    rw [trace_mpo_tensor N hN]
+    norm_num
+  · -- ∀ N L, 1 ≤ L → (hL : L < N / 2) → mutualInfoChain ... L ... = mutualInfoChain ... (L+1) ...
+    intro N L hLpos hL_lt_half
+    have hM : (mpo tensor N).PosSemidef := tensor_isMPDO N (by
+      have : 1 ≤ N := by
+        have := Nat.div_pos (by omega) (by norm_num)
+        omega
+      omega)
+    -- mutualInfoChain expands to blockEntropy with specific hL proofs.
+    -- We use `apply` with blockEntropy_tensor_eq so Lean unifies the proof terms.
+    simp only [mutualInfoChain]
+    have hL_val : blockEntropy tensor N L (Nat.le_of_lt (hL_lt_half.trans_le (Nat.div_le_self N 2))) hM = (L : ℝ) * Real.log 2 := by
+      apply blockEntropy_tensor_eq hLpos (by omega) _ hM
+    have hNL_val : blockEntropy tensor N (N - L) (Nat.sub_le N L) hM = ((N - L : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_tensor_eq (by omega) (by omega) _ hM
+    have hLp1_val : blockEntropy tensor N (L + 1) (hL_lt_half.trans_le (Nat.div_le_self N 2)) hM = ((L + 1 : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_tensor_eq (by omega) (by omega) _ hM
+    have hNLp1_val : blockEntropy tensor N (N - (L + 1)) (Nat.sub_le N (L + 1)) hM = ((N - (L + 1) : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_tensor_eq (by omega) (by omega) _ hM
+    rw [hL_val, hNL_val, hLp1_val, hNLp1_val]
+    -- Cancel the S_N term (blockEntropy N N) from both sides
+    -- Then simplify L*log2 + (N-L)*log2 = (L+1)*log2 + (N-(L+1))*log2
+    -- Both sides equal N*log2
+    have hcast1 : ((N - L : ℕ) : ℝ) = (N : ℝ) - (L : ℝ) := Nat.cast_sub (by omega)
+    have hcast2 : ((N - (L + 1) : ℕ) : ℝ) = (N : ℝ) - (((L + 1 : ℕ) : ℝ)) := Nat.cast_sub (by omega)
+    have hcast3 : ((L + 1 : ℕ) : ℝ) = (L : ℝ) + 1 := by simp
+    rw [hcast1, hcast2, hcast3]
+    ring
+
+/-- **Kato's $p=1/2$ tensor as a five‑property capstone.**
+The tensor is in CPSV canonical form, generates an MPDO, has an
+idempotent physical‑trace transfer, saturates the area law, yet
+admits no fixed‑scale renormalisation à la arXiv:1606.00608
+Definition 4.1. -/
+theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
+    ∃ K : MPOTensor 2 2,
+      MPSTensor.IsCPSVCanonicalForm K.toMPSTensor ∧
+      IsMPDO K ∧
+      (physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) ∧
+      IsSAL K ∧
+      ¬ IsRFPViaTS K := by
+  refine ⟨tensor, ?_, tensor_isMPDO, physTraceTransfer_tensor_idempotent, tensor_isSAL,
+    tensor_not_isRFPViaTS⟩
+  -- The canonical form is stated for the MPSTensor, not MPOTensor.toMPSTensor
+  -- But the theorem `tensor_toMPSTensor_isCPSVCanonicalForm` gives exactly this
+  exact tensor_toMPSTensor_isCPSVCanonicalForm
 
 end MPOTensor.KatoDeformedRFPObstruction
