@@ -496,8 +496,8 @@
 % Project derivation preparing the Lemma C.5 route of the eta-local
 % structure note; no CPSV16 statement is claimed.  See
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
-\begin{lemma}[Doubled-index self-overlap is the Hilbert--Schmidt trace]
-    \label{lem:mpdo_doubled_overlap_hilbert_schmidt}
+\begin{theorem}[Doubled-index self-overlap is the Hilbert--Schmidt trace]
+    \label{thm:mpdo_doubled_overlap_hilbert_schmidt}
     \lean{MPOTensor.pairCfgEquiv,
       MPOTensor.mpvOverlap_toMPSTensor_self}
     \leanok
@@ -517,7 +517,7 @@
     of that source. Until a trace normalization is established, the
     right-hand side is the raw squared Hilbert--Schmidt norm of the MPO
     family, not a normalized-state purity.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -547,7 +547,7 @@
     \label{cor:mpdo_doubled_overlap_trace_sq}
     \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_trace_sq}
     \leanok
-    \uses{lem:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
     If $K$ generates MPDOs and $N\geq1$, then
     \begin{align}
         O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
@@ -558,11 +558,11 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
     Positivity on the nonempty chain makes $\rho^{(N)}(K)$ positive
     semidefinite, hence Hermitian. Substituting
     $\rho^{(N)}(K)^\dagger=\rho^{(N)}(K)$ into
-    Lemma~\ref{lem:mpdo_doubled_overlap_hilbert_schmidt} gives the
+    Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt} gives the
     identity.
 \end{proof}
 
@@ -571,7 +571,7 @@
     \label{cor:mpdo_doubled_overlap_frobenius}
     \lean{MPOTensor.mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq}
     \leanok
-    \uses{lem:mpdo_doubled_overlap_hilbert_schmidt}
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt}
     For every MPO tensor $K$ and every chain length $N$,
     \begin{align}
         \re O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
@@ -584,14 +584,14 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_doubled_overlap_hilbert_schmidt}
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt}
     Cyclicity of the trace rewrites the Hilbert--Schmidt trace as
     $\tr\!\left(\rho^{(N)}(K)^\dagger\rho^{(N)}(K)\right)$, whose real
     part is the sum of the squared absolute entries.
 \end{proof}
 
-\begin{lemma}[Trace factorization of the cyclic neighboring product]
-    \label{lem:mpdo_cyclic_neighboring_trace_products}
+\begin{theorem}[Trace factorization of the cyclic neighboring product]
+    \label{thm:mpdo_cyclic_neighboring_trace_products}
     \lean{MPOTensor.PhysicalSectorFactorization.%
       trace_cyclicNeighboringProduct_eq_prod_trace,
       MPOTensor.PhysicalSectorFactorization.%
@@ -614,7 +614,7 @@
     with site labels read modulo $N$. These are the
     coefficient-extraction identities for the cyclic direct-sum form of
     \cite[Appendix~C.2, lines~1580--1593]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -680,9 +680,16 @@
     to $\eta_{k,h}$.
 \end{proof}
 
-% Proved Case-I components.  The singleton-sector assembly (trace
-% similarity, the overlap formula, and the Case-I relations) is not yet
-% formalized; the route is sketched in
+% Proved Case-I components.  The remaining singleton-sector assembly
+% is not yet formalized: the trace similarity
+% $\tr(\widehat S^N)=\tr((S^*)^N)$ under a diagonal rescaling of the
+% trace-squared matrix of the preceding lemma, the overlap formula
+% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
+% =\tr((S^*)^N)$, and the Case-I relations $(T^*)^2=T^*$ and
+% $Q(1-LQ)L=0$ in the rectangular decomposition
+% $\mathcal T_{\cal K}=LQ$.  The virtual-spanning counterexample above
+% shows that the last relation does not follow from virtual spanning
+% alone.  The route is sketched in
 % docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{theorem}[Literal zero correlation length stabilizes the active
     trace matrix]
@@ -721,19 +728,7 @@
     \cite[Appendix~C.2, Lemma~C.4, lines~1406--1471]{Cirac2016MPDO_arXiv}
     and the zero-correlation-length step of
     \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv}.
-    They are project derivations, not statements of that source. The
-    remaining singleton-sector assembly is not yet formalized: the
-    trace similarity $\tr(\widehat S^N)=\tr\!\left((S^*)^N\right)$
-    under a diagonal rescaling of the trace-squared matrix of
-    Lemma~\ref{lem:mpdo_active_sector_trace_sq_matrix}, the overlap
-    formula
-    $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
-    =\tr\!\left((S^*)^N\right)$, and the Case-I relations
-    $(T^*)^2=T^*$ and $Q(1-LQ)L=0$ in the rectangular decomposition
-    $\mathcal T_{\cal K}=LQ$.
-    Theorem~\ref{thm:mpdo_virtual_spanning_active_trace_counterexample}
-    shows that the last relation does not follow from virtual spanning
-    alone.
+    They are project derivations, not statements of that source.
 \end{theorem}
 
 \begin{proof}
