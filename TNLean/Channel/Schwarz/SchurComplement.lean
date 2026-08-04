@@ -46,24 +46,6 @@ noncomputable def schurComplement (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     Matrix (Fin D₁) (Fin D₁) ℂ :=
   P - Q * (Douglas.pinv R) * (Qᴴ)
 
-/-- **Schur complement theorem** (Wolf Theorem 5.2).
-For PSD blocks P and R, the following are equivalent:
-1. The block matrix [[P, Q], [Q†, R]] is PSD
-2. ker(R) ⊆ ker(Q) and the pseudoinverse Schur complement P − Q·R⁺·Q† is PSD
-3. ker(R) ⊆ ker(Q) and ‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1 (contraction)
 
-Proof follows Wolf: (1)→(2) via quadratic-form minimization,
-(2)→(3) via algebraic manipulation with P^{1/2} and R^{1/2},
-(3)→(1) via the representation with contraction K. -/
-theorem schur_tfae (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hP : P.PosSemidef) (hR : R.PosSemidef) :
-    List.TFAE [
-      (blockMatrix P Q R).PosSemidef,
-      (∀ (y : Fin D₂ → ℂ), mulVec R y = 0 → mulVec Q y = 0) ∧
-        (schurComplement P Q R).PosSemidef,
-      (∀ (y : Fin D₂ → ℂ), mulVec R y = 0 → mulVec Q y = 0) ∧
-        (‖(CFC.sqrt P)⁻¹ * Q * (CFC.sqrt R)⁻¹‖ ≤ 1)
-    ] := by
-  sorry
 
 end SchurComplement
