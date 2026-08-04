@@ -75,24 +75,24 @@ open Matrix Finset
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
+noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
   ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
     (Equiv.boolProdEquivSum α)
 
-@[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
+@[simp] theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 0) = Sum.inl a := by
   simp [finTwoSumEquiv, finTwoEquiv]
 
-@[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
+@[simp] theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 1) = Sum.inr a := by
   simp [finTwoSumEquiv, finTwoEquiv]
 
-@[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
+@[simp] theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
     (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
   rw [Equiv.symm_apply_eq]
   exact finTwoSumEquiv_apply_zero a
 
-@[simp] private theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
+@[simp] theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
     (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
   rw [Equiv.symm_apply_eq]
   exact finTwoSumEquiv_apply_one a

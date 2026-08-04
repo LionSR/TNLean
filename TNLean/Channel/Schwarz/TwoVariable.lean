@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Schwarz.TwoPositive
 import Mathlib.Data.Matrix.Block
 
-set_option maxHeartbeats 2000000
+set_option maxHeartbeats 2000000  -- needed for ker_inclusion (heavy dot-product calc) and schwarz_two_variable (ampliation typechecking)
 
 /-!
 # Two-variable operator Schwarz inequality
@@ -40,7 +40,8 @@ local notation "Mat" => Matrix n n ℂ
 
 /-- The block matrix `C†C` for `C = [A B]` (horizontal concatenation) is PSD. -/
 lemma blockMatrix_CtC_posSemidef (A B : Mat) :
-    (Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
+    (Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) :
+      Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef := by
   let C : Matrix n (n ⊕ n) ℂ := fun i j =>
     match j with
     | Sum.inl a => A i a
@@ -53,27 +54,6 @@ lemma blockMatrix_CtC_posSemidef (A B : Mat) :
         Matrix.mul_apply, Matrix.conjTranspose_apply]
   rw [← hC_sq]
   exact Matrix.posSemidef_conjTranspose_mul_self C
-
--- Re-define `finTwoSumEquiv` from `TwoPositive.lean` (it is private there).
-private noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
-  ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
-    (Equiv.boolProdEquivSum α)
-
-@[simp] private theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
-    finTwoSumEquiv α (a, 0) = Sum.inl a := by
-  simp [finTwoSumEquiv, finTwoEquiv]
-
-@[simp] private theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
-    finTwoSumEquiv α (a, 1) = Sum.inr a := by
-  simp [finTwoSumEquiv, finTwoEquiv]
-
-@[simp] private theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
-    (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
-  rw [Equiv.symm_apply_eq, finTwoSumEquiv_apply_zero]
-
-@[simp] private theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
-    (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
-  rw [Equiv.symm_apply_eq, finTwoSumEquiv_apply_one]
 
 /-! ### 2-positivity ampliation of the block matrix -/
 
@@ -182,7 +162,13 @@ private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
 
 /-! ### Schur complement lemmas (singular-block case) -/
 
-/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then `ker(B) ≤ ker(C)`. -/
+/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then `ker(B) ≤ ker(C)`.
+
+This is the kernel-inclusion half of Wolf's Theorem 5.2 (block matrices and
+Schur complements).  This lemma has no local callers but is retained because it
+formalizes a clause of Wolf's block-matrix characterization that the
+two-variable Schwarz inequality proof depends on mathematically (via the
+Schur-complement direction of Theorem 5.2). -/
 lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
     (y : n → ℂ) (hy : B.mulVec y = 0) : C.mulVec y = 0 := by
@@ -275,10 +261,13 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
   rw [hb_zero] at hz_norm_sq_pos
   exact lt_irrefl 0 hz_norm_sq_pos
 
-/-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then for all `v, w` with
-`B w = C† v`, we have `v† A v ≥ v† C w`.
+/-- Schur-complement quadratic-form inequality for a PSD block matrix.
 
-Explicit four-block version. -/
+Given a PSD block matrix `[[Amat, Cmat], [CstarMat, Bmat]]` and vectors `v, w`
+satisfying `Bmat * w = CstarMat * v`, the quadratic form yields
+`v† Amat v ≥ v† Cmat w`.  When the block matrix is Hermitian (as it is when PSD),
+`CstarMat = Cmat†` and this specializes to Wolf's Schur complement
+characterization (Theorem 5.2). -/
 lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat}
     (h : (Matrix.fromBlocks Amat Cmat CstarMat Bmat :
       Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
