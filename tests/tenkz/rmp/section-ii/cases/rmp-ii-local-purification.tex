@@ -1,24 +1,41 @@
 % Target: rmp-ii-local-purification
 % Formula: O = X^-1 (sum_k A^k tensor conjugate(A^k)) X.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; explicit typed ports carry the doubled rail past the
+%   X capsules and the A pair.
 % Boundary: The outer doubled virtual rails and O's four indices are open; the A pair
 %   is contracted.
 % Source: paper TN-Review-main.tex line 369; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 317-338
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
+\begin{tenkzeq}[check={off={1: O's own west/east legs are the composite's
+  doubled rail after X changes the bond dimension; the definition does not
+  claim a literal leg-count match}}]
   % LHS: the 4-leg MPDO tensor O
-  \begin{tenkz}[physical=updown]
-    \tn[box]{O}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none, physical=updown]
+    \tn[name=O, skin=box, ports={180:virtual,0:virtual}]{O}
+    \tnwire{open w}{O.180} \tnwire{O.0}{open e}
   \end{tenkz}
   \;=\;
-  % RHS: X^{-1} capsule | A over conj(A) | X capsule.  A gauge transform
-  % and its inverse are one operator and its inverse: the two capsules
-  % carry the same claim on the page, so the X label is padded to the
-  % width of X^{-1} and both capsules come out the same size.
-  \begin{tenkz}[rows={op, op}]
-    \tnX[wires=2]{X^{-1}} & \tn[box]{A} &
-      \tnX[wires=2]{\hphantom{{}^{-}}X\hphantom{{}^{1}}}\\
-    & \tn*[box]{A} &
+  % RHS: X^{-1} capsule | A over conj(A) | X capsule.  A gauge transform and
+  % its inverse are one operator and its inverse: the kernel size class
+  % gives both capsules the same glyph regardless of label width.
+  \begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+    \tn[at=(1,1), name=Xi, skin=ring, wires=2,
+      ports={180@1:virtual,180@2:virtual,0@1:virtual,0@2:virtual}]
+      {X^{-1}}
+    \tn[at=(1,2), name=A, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:virtual}]{A}
+    \tn[at=(2,2), name=Ac, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:virtual,270:physical}]{\overline{A}}
+    \tn[at=(1,3), name=X, skin=ring, wires=2,
+      ports={180@1:virtual,180@2:virtual,0@1:virtual,0@2:virtual}]{X}
+    \tnwire{open w}{Xi.180@1} \tnwire{open w}{Xi.180@2}
+    \tnwire{Xi.0@1}{A.180} \tnwire{Xi.0@2}{Ac.180}
+    \tnwire{A.270}{Ac.90}
+    \tnwire{A.0}{X.180@1} \tnwire{Ac.0}{X.180@2}
+    \tnwire{X.0@1}{open e} \tnwire{X.0@2}{open e}
   \end{tenkz}
+\end{tenkzeq}
 \]

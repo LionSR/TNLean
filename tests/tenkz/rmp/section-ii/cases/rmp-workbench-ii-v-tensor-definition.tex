@@ -1,17 +1,23 @@
 % Target: rmp-workbench-ii-v-tensor-definition
 % Formula: V is the tangent-space tensor orthogonal to the MPS tensor A.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; explicit typed ports carry the V-A physical bond
+%   and the weighted west cup.
 % Boundary: The physical pair is contracted; a west cup weighted by l^(1/2)
 %   closes the virtual pair, while both east legs remain open.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   590-596; archival output DefV.pdf
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  % The sandwich contracts the physical index; the west cup is the weighted
+  % The physical index is the direct V-A bond; the west cup is the weighted
   % virtual contraction, and the east legs are the two open virtual indices.
-  \begin{tenkz}[sandwich, west={cup=$l^{1/2}$}, east=open]
-    \tn[box]{V}\\
-    \tn*[box]{A}
+  \begin{tenkz}[rows={op,op}, cols=1, bonds=none, west=cup, east=open]
+    \tn[at=(1,1), name=V, skin=box,
+      ports={180:virtual,0:virtual,270:physical}]{V}
+    \tn[at=(2,1), name=A, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:physical}]{A}
+    \tnwire{V.270}{A.90}
+    \tn[skin=ring, at=on cup-1-2 0.5]{l^{1/2}}
   \end{tenkz}
   \;=\;0
 \]

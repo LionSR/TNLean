@@ -1,27 +1,47 @@
 % Target: rmp-ii-mpu-blocking
 % Formula: The blocked two-site sandwich factors through cup contractions a and b.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; explicit typed ports carry the U-over-U vertical
+%   bond at each column.
 % Boundary: The blocked sandwich and cup factors expose the same unmatched outer
 %   virtual rails.
 % Source: paper TN-Review-main.tex line 379; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 405-432
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   % LHS: the blocked two-column sandwich, everything open
-  \begin{tenkz}[rows={op,op}]
-    \tn[box]{U} & \tn[box]{U} \\
-    \tn*[box]{U} & \tn*[box]{U}
+  \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+    \tn[at=(1,1), name=u1, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:virtual}]{U}
+    \tn[at=(1,2), name=u2, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:virtual}]{U}
+    \tn[at=(2,1), name=ub1, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:virtual,270:physical}]{U}
+    \tn[at=(2,2), name=ub2, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:virtual,270:physical}]{U}
+    \tnwire{open w}{u1.180} \tnwire{u1.0}{u2.180} \tnwire{u2.0}{open e}
+    \tnwire{open w}{ub1.180} \tnwire{ub1.0}{ub2.180} \tnwire{ub2.0}{open e}
+    \tnwire{u1.270}{ub1.90} \tnwire{u2.270}{ub2.90}
   \end{tenkz}
   \;=\;
-  % RHS, factor 1: left column, east side closed through b
-  \begin{tenkz}[rows={op,op}, east={cup=$b$}]
-    \tn[box]{U} \\
-    \tn*[box]{U}
-  \end{tenkz}
-  \;
-  % RHS, factor 2: right column, west side closed through a
-  \begin{tenkz}[rows={op,op}, west={cup=$a$}]
-    \tn[box]{U} \\
-    \tn*[box]{U}
+  % RHS: two disjoint closed factors in one frame -- factor 1 (left) closes
+  % its own east side through bead b, factor 2 (right) closes its own west
+  % side through bead a; no wire crosses between the two factors.
+  \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+    \tn[at=(1,1), name=u1, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:virtual}]{U}
+    \tn[at=(2,1), name=ub1, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:virtual,270:physical}]{U}
+    \tn[at=(1,2), name=u2, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:virtual}]{U}
+    \tn[at=(2,2), name=ub2, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:virtual,270:physical}]{U}
+    \tnwire{u1.270}{ub1.90} \tnwire{u2.270}{ub2.90}
+    \tnwire{open w}{u1.180} \tnwire{open w}{ub1.180}
+    \tnwire{u2.0}{open e} \tnwire{ub2.0}{open e}
+    \tnwire[name=cupb, route={e of {u1, ub1}}]{u1.0}{ub1.0}
+    \tnwire[name=cupa, route={w of {u2, ub2}}]{u2.180}{ub2.180}
+    \tn[skin=ring, at=on cupb 0.5]{b}
+    \tn[skin=ring, at=on cupa 0.5]{a}
   \end{tenkz}
 \]
