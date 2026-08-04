@@ -69,6 +69,7 @@ set
 its minimum by the extreme value theorem; a value outside the sublevel set is
 automatically larger than the value at the identity, so this minimiser is
 global. -/
+
 lemma infimum_is_attained
     {d₁ d₂ : ℕ} {τ : Matrix (Fin d₂ × Fin d₁) (Fin d₂ × Fin d₁) ℂ}
     (hτ_posDef : τ.PosDef) :
@@ -227,6 +228,7 @@ variable {D : ℕ}
 /-- A positive-definite matrix can be normalized to a scalar matrix by an
 `SL(D, ℂ)` congruence: there exists `S` with `det S = 1` and
 `S M S† = r • 1` for some `r ≥ 0`.  Take `S = c · √M⁻¹` with `cᴰ = det √M`. -/
+
 lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
     (hM : M.PosDef) :
     ∃ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 ∧
@@ -256,6 +258,7 @@ lemma exists_sl_normalize [NeZero D] {M : Matrix (Fin D) (Fin D) ℂ}
 with the same determinant as a positive-definite `M`, and `tr N` is the minimum
 of `tr (S M S†)` over `det S = 1`, then `N` is a scalar matrix.  This is the
 AM–GM equality argument: the minimum saturates `Dᴰ det = (tr)ᴰ`. -/
+
 lemma posDef_orbit_min_isScalar [NeZero D] {M N : Matrix (Fin D) (Fin D) ℂ}
     (hM : M.PosDef) (hN : N.PosSemidef) (hdet : N.det = M.det)
     (hmin : ∀ S : Matrix (Fin D) (Fin D) ℂ, S.det = 1 →

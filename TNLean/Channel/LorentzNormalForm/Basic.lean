@@ -54,6 +54,7 @@ section FilteringOperations
 /-- An `SLFiltering` for `D × D` matrices bundles a matrix `S` with
 `det S = 1` (and `S` invertible) together with its associated CP map
 `Φ(X) = S X S†`.  Such maps are called *filtering operations* in Wolf Section 2.3. -/
+
 structure SLFiltering (D : ℕ) where
   /-- The filtering matrix, with determinant 1. -/
   S : Matrix (Fin D) (Fin D) ℂ
@@ -67,6 +68,7 @@ structure SLFiltering (D : ℕ) where
   cp : IsCPMap map
 
 /-- The matrix `S` of an SL-filtering is invertible (follows from `det_eq_one`). -/
+
 lemma SLFiltering.S_isUnit {D : ℕ} (Φ : SLFiltering D) : IsUnit Φ.S := by
   have h : Φ.S.det = 1 := Φ.det_eq_one
   have hdet : IsUnit (Φ.S.det) := by rw [h]; exact isUnit_one
@@ -74,6 +76,7 @@ lemma SLFiltering.S_isUnit {D : ℕ} (Φ : SLFiltering D) : IsUnit Φ.S := by
   refine (Matrix.isUnit_iff_isUnit_det Φ.S).mpr hdet
 
 /-- The identity map is an SL-filtering (S = 1). -/
+
 noncomputable def SLFiltering.id (D : ℕ) : SLFiltering D where
   S := 1
   det_eq_one := by simp
@@ -82,6 +85,7 @@ noncomputable def SLFiltering.id (D : ℕ) : SLFiltering D where
   cp := unitaryConjLM_isCPMap (D := D) 1
 
 /-- Composition of two SL-filterings is an SL-filtering. -/
+
 noncomputable def SLFiltering.comp {D : ℕ} (Φ Ψ : SLFiltering D) : SLFiltering D where
   S := Φ.S * Ψ.S
   det_eq_one := by
@@ -91,6 +95,7 @@ noncomputable def SLFiltering.comp {D : ℕ} (Φ Ψ : SLFiltering D) : SLFilteri
   cp := unitaryConjLM_isCPMap (D := D) (Φ.S * Ψ.S)
 
 /-- `unitaryConjLM A ∘ₗ unitaryConjLM B = unitaryConjLM (A * B)`. -/
+
 lemma unitaryConjLM_comp {D : ℕ} (A B : Matrix (Fin D) (Fin D) ℂ) :
     unitaryConjLM (D := D) A ∘ₗ unitaryConjLM (D := D) B =
     unitaryConjLM (D := D) (A * B) := by
@@ -112,16 +117,19 @@ Wolf Proposition 2.9.
 
 We use the partial-trace formulation to avoid depending on the adjoint of `T`
 as a Hilbert–Schmidt operator. -/
+
 def DoublyStochastic : Prop :=
   (∃ c₁ : ℂ, T 1 = c₁ • (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
   (∃ c₂ : ℂ, Matrix.traceLeft (choiMatrix T) = c₂ • (1 : Matrix (Fin D) (Fin D) ℂ))
 
 /-- Doubly-stochastic implies T(1) ∝ 1. -/
+
 lemma DoublyStochastic.unital (hT : DoublyStochastic T) :
     ∃ c : ℂ, T 1 = c • (1 : Matrix (Fin D) (Fin D) ℂ) := hT.1
 
 /-- Doubly-stochastic implies the partial trace of the Choi matrix is ∝ 1
 (equivalently, T*(1) ∝ 1). -/
+
 lemma DoublyStochastic.tracePreserving (hT : DoublyStochastic T) :
     ∃ c : ℂ, Matrix.traceLeft (choiMatrix T) =
       c • (1 : Matrix (Fin D) (Fin D) ℂ) := hT.2
@@ -136,6 +144,7 @@ variable {D : ℕ}
 
 /-- Entry formula for conjugation by `A ⊗ₖ 1` (identity on the second factor).
 The two tensor factors may have different dimensions. -/
+
 lemma kron_one_conj_entry {dOut dIn : ℕ} (A : Matrix (Fin dOut) (Fin dOut) ℂ)
     (M : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ)
     (i₁ : Fin dOut) (i₂ : Fin dIn) (j₁ : Fin dOut) (j₂ : Fin dIn) :
@@ -169,6 +178,7 @@ lemma kron_one_conj_entry {dOut dIn : ℕ} (A : Matrix (Fin dOut) (Fin dOut) ℂ
 
 /-- Entry formula for conjugation by `1 ⊗ₖ B` (identity on the first factor).
 The two tensor factors may have different dimensions. -/
+
 lemma one_kron_conj_entry {dOut dIn : ℕ} (B : Matrix (Fin dIn) (Fin dIn) ℂ)
     (M : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ)
     (i₁ : Fin dOut) (i₂ : Fin dIn) (j₁ : Fin dOut) (j₂ : Fin dIn) :
@@ -202,6 +212,7 @@ lemma one_kron_conj_entry {dOut dIn : ℕ} (B : Matrix (Fin dIn) (Fin dIn) ℂ)
 
 /-- `tr_A` commutes with conjugation by `1 ⊗ₖ X` (acting on the second factor):
 `tr_A((1 ⊗ X) ρ (1 ⊗ X)†) = X (tr_A ρ) X†`. -/
+
 lemma traceLeft_one_kron_conj {dOut dIn : ℕ} (X : Matrix (Fin dIn) (Fin dIn) ℂ)
     (ρ : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
     Matrix.traceLeft (((1 : Matrix (Fin dOut) (Fin dOut) ℂ) ⊗ₖ X) * ρ *
@@ -224,6 +235,7 @@ lemma traceLeft_one_kron_conj {dOut dIn : ℕ} (X : Matrix (Fin dIn) (Fin dIn) �
 
 /-- `tr_B` commutes with conjugation by `X ⊗ₖ 1` (acting on the first factor):
 `tr_B((X ⊗ 1) ρ (X ⊗ 1)†) = X (tr_B ρ) X†`. -/
+
 lemma traceRight_kron_one_conj {dOut dIn : ℕ} (X : Matrix (Fin dOut) (Fin dOut) ℂ)
     (ρ : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
     Matrix.traceRight ((X ⊗ₖ (1 : Matrix (Fin dIn) (Fin dIn) ℂ)) * ρ *
@@ -246,6 +258,7 @@ lemma traceRight_kron_one_conj {dOut dIn : ℕ} (X : Matrix (Fin dOut) (Fin dOut
 
 /-- Conjugating a matrix unit by `B` spreads it over all matrix units:
 `B (single i₂ j₂ c) B† = ∑ a b, (B a i₂ · conj(B b j₂)) (single a b c)`. -/
+
 lemma single_conj_spread {n : ℕ} (B : Matrix (Fin n) (Fin n) ℂ)
     (i₂ j₂ : Fin n) (c : ℂ) :
     B * Matrix.single i₂ j₂ c * Bᴴ
@@ -273,6 +286,7 @@ lemma single_conj_spread {n : ℕ} (B : Matrix (Fin n) (Fin n) ℂ)
 
 /-- Choi matrix of post-composition with conjugation by `A`:
 `choi(Ad_A ∘ T) = (A ⊗ 1) choi(T) (A ⊗ 1)†`. -/
+
 lemma choiMatrix_unitaryConj_comp (A : Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     choiMatrix (unitaryConjLM A ∘ₗ T)
@@ -289,6 +303,7 @@ lemma choiMatrix_unitaryConj_comp (A : Matrix (Fin D) (Fin D) ℂ)
 
 /-- Choi matrix of pre-composition with conjugation by `B`:
 `choi(T ∘ Ad_B) = (1 ⊗ Bᵀ) choi(T) (1 ⊗ Bᵀ)†`. -/
+
 lemma choiMatrix_comp_unitaryConj (B : Matrix (Fin D) (Fin D) ℂ)
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     choiMatrix (T ∘ₗ unitaryConjLM B)
@@ -305,16 +320,20 @@ lemma choiMatrix_comp_unitaryConj (B : Matrix (Fin D) (Fin D) ℂ)
   ring
 
 /-- `Matrix.traceLeft` agrees with `Matrix.traceLeftA`. -/
+
 lemma traceLeft_eq_traceLeftA (ρ : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
     Matrix.traceLeft ρ = Matrix.traceLeftA ρ := rfl
 
 /-- The full trace equals the trace of the right partial trace: `tr(X) = tr(tr_B(X))`. -/
+
 lemma trace_eq_trace_traceRight {dOut dIn : ℕ}
     (X : Matrix (Fin dOut × Fin dIn) (Fin dOut × Fin dIn) ℂ) :
     X.trace = (Matrix.traceRight X).trace := by
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.traceRight_apply]
   exact Fintype.sum_prod_type _
+
 /-- The reduced state `tr_B(choi T)` equals (up to the `|Ω⟩` normalization) `T 1`. -/
+
 lemma traceRight_choiMatrix
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Matrix.traceRight (choiMatrix T)
@@ -335,6 +354,7 @@ lemma traceRight_choiMatrix
   rw [← Matrix.sum_apply, ← map_sum, Matrix.sum_single_one]
 
 /-- The `|Ω⟩` normalization constant is nonzero. -/
+
 lemma omega_coeff_ne_zero (hD : 0 < D) :
     (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) * star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) ≠ 0 := by
   have hsqrt : ((D : ℝ).sqrt : ℂ) ≠ 0 := by
@@ -352,6 +372,7 @@ variable {d₁ d₂ : ℕ}
 
 /-- Choi matrix of post-composition with conjugation by `A`, rectangular form:
 `choi(Ad_A ∘ T) = (A ⊗ 1) choi(T) (A ⊗ 1)†` for `A` on the output factor. -/
+
 lemma choiMatrixRect_unitaryConj_comp (A : Matrix (Fin d₂) (Fin d₂) ℂ)
     (T : Matrix (Fin d₁) (Fin d₁) ℂ →ₗ[ℂ] Matrix (Fin d₂) (Fin d₂) ℂ) :
     ChoiRectangular.choiMatrix (unitaryConjLM A ∘ₗ T)
@@ -370,6 +391,7 @@ lemma choiMatrixRect_unitaryConj_comp (A : Matrix (Fin d₂) (Fin d₂) ℂ)
 /-- Choi matrix of pre-composition with conjugation by `B`, rectangular form:
 `choi(T ∘ Ad_B) = (1 ⊗ Bᵀ) choi(T) (1 ⊗ Bᵀ)†` for `B` on the input factor.
 This is Wolf's "irrelevant transposition" of the first filtering factor. -/
+
 lemma choiMatrixRect_comp_unitaryConj (B : Matrix (Fin d₁) (Fin d₁) ℂ)
     (T : Matrix (Fin d₁) (Fin d₁) ℂ →ₗ[ℂ] Matrix (Fin d₂) (Fin d₂) ℂ) :
     ChoiRectangular.choiMatrix (T ∘ₗ unitaryConjLM B)
@@ -385,11 +407,13 @@ lemma choiMatrixRect_comp_unitaryConj (B : Matrix (Fin d₁) (Fin d₁) ℂ)
   rw [ChoiRectangular.choiMatrix_apply, ChoiJamiolkowski.omegaSlice_eq_single,
     Matrix.transpose_apply, Matrix.transpose_apply]
   ring
+
 /-- A linear map `T : M_{d₁}(ℂ) → M_{d₂}(ℂ)` between possibly different matrix
 algebras is **doubly-stochastic** if `T(𝟙)` and `T*(𝟙)` are both proportional
 to the identity matrix, where `T*` is the trace-pairing adjoint.  This is the
 rectangular normal-form condition of Wolf Proposition 2.9
 (`Notes/WolfNoteTexSource/ch02_representations.tex`, lines 923–929). -/
+
 def DoublyStochasticRect
     (T : Matrix (Fin d₁) (Fin d₁) ℂ →ₗ[ℂ] Matrix (Fin d₂) (Fin d₂) ℂ) : Prop :=
   (∃ c₁ : ℂ, T 1 = c₁ • (1 : Matrix (Fin d₂) (Fin d₂) ℂ)) ∧
