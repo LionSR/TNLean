@@ -63,47 +63,6 @@ private def cyclicActiveSectorSubtypeEquiv
   left_inv q := by ext; rfl
   right_inv q := by ext; rfl
 
-<<<<<<< HEAD
-/-- The trace of the cyclic tensor product of neighboring operators equals
-the product of their individual traces.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
-1586--1589. -/
-theorem trace_cyclicNeighboringProduct_eq_prod_trace
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (k : Fin N → Fin F.sectorCount) :
-    Matrix.trace (F.cyclicNeighboringProduct k) =
-      ∏ i : Fin N, Matrix.trace (F.neighboringOperator (k i) (k (i + 1))) := by
-  classical
-  rw [Matrix.trace]
-  calc
-    (∑ x : F.SectorChainFiber k, Matrix.diag (F.cyclicNeighboringProduct k) x) =
-        ∑ x : (i : Fin N) → F.NeighborIndex (k i) (k (i + 1)),
-          Matrix.diag (F.cyclicNeighboringProduct k)
-            ((F.cyclicEdgeEquiv k).symm x) := by
-      apply Fintype.sum_equiv (F.cyclicEdgeEquiv k)
-      intro x
-      rw [Equiv.symm_apply_apply]
-    _ = ∑ x : (i : Fin N) → F.NeighborIndex (k i) (k (i + 1)),
-          ∏ i : Fin N, F.neighboringOperator (k i) (k (i + 1)) (x i) (x i) := by
-      apply Finset.sum_congr rfl
-      intro x _
-      simp only [Matrix.diag_apply, cyclicNeighboringProduct]
-      apply Finset.prod_congr rfl
-      intro i _
-      have hx := congrFun ((F.cyclicEdgeEquiv k).apply_symm_apply x) i
-      simpa only [cyclicEdgeEquiv_apply] using
-        congrArg₂ (F.neighboringOperator (k i) (k (i + 1))) hx hx
-    _ = _ := by
-      simp_rw [Matrix.trace, Matrix.diag_apply]
-      rw [Finset.prod_univ_sum
-        (fun i : Fin N ↦
-          (Finset.univ : Finset (F.NeighborIndex (k i) (k (i + 1)))))
-        (fun i x ↦ F.neighboringOperator (k i) (k (i + 1)) x x)]
-      simp only [Fintype.piFinset_univ]
-
-=======
->>>>>>> 17724c7ed (refactor(MPS/MPDO): split cyclic-active trace identities and cite source notes)
 
 private def appendSectorFiberEquiv
     (F : PhysicalSectorFactorization K)
