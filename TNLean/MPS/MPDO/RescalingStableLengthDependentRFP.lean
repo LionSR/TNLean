@@ -103,7 +103,7 @@ Source: arXiv:1606.00608, lines 995--1010 (project example). -/
     | 1 => ((0 : Fin 2), (1 : Fin 2))
     | 2 => ((1 : Fin 2), (0 : Fin 2))
     | 3 => ((1 : Fin 2), (1 : Fin 2)) := by
-  fin_cases k <;> native_decide
+  fin_cases k <;> rfl
 
 def R : MPOTensor 4 4 :=
   fun p q a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
