@@ -13,15 +13,15 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 995--1010 (NOT a tensor stated in CPSV16).  It proves:
 
 * `physTraceTransfer_R_idempotent` — the physical-trace transfer of `R` is
-  idempotent (rank‑1 projector `(25/32)·|t⟩⟨t|` with `t_a = tr(A^a)`);
+  idempotent (rank‑1 projector $(25/32)\,|t\rangle\langle t|$ with $t_a = \operatorname{tr}(A^a)$);
 * `oneLabelCoeffs_not_lengthIndependent` — the one-label BNT coefficient
   family `c^{(L)} = 1 + (7/25)^L` (on `χ = diag(1, 7/25)`) is not
   length-independent;
 * `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` — the length
   dependence survives every uniform positive rescaling `s` of the displayed
-  `\chi` block: the rescaled roots `\{s, 7s/25\}` give the family
-  `c_s^{(L)} = s^L·(1 + (7/25)^L)`, which is not length-independent
-  for any `s > 0`.
+  $\chi$ block: the rescaled roots $\{s, 7s/25\}$ give the family
+  $c_s^{(L)} = s^L(1 + (7/25)^L)$, which is not length-independent
+  for any $s > 0$.
 
 ## Tensor definition
 
@@ -128,7 +128,7 @@ lemma physTraceTransfer_R_entry (a b : Fin 4) : physTraceTransfer R a b =
       A, Matrix.trace, bondEquiv_symm_val] <;> norm_num
 
 /-- The physical-trace transfer of `R` is idempotent: it is the rank-one
-projector `(25/32)·|t⟩⟨t|` with `t_a = tr(A^a) = (4/5, 4/5, 0, 0)`.  This is
+projector $(25/32)\,|t\rangle\langle t|$ with $t_a = \operatorname{tr}(A^a) = (4/5, 4/5, 0, 0)$.  This is
 the literal zero-correlation-length identity of arXiv:1606.00608,
 Definition 4.2, lines 735--741 (project example). -/
 theorem physTraceTransfer_R_idempotent :
@@ -196,8 +196,8 @@ theorem oneLabelCoeffs_not_lengthIndependent :
   exact oneLabelCoeffs_coeff_one_ne_coeff_two
     (h.coeff_eq one_pos (by norm_num) 0 0 0)
 
-/-- The uniform positive rescaling of the displayed one-label `\chi` block:
-the roots `\{1, 7/25\}` become `\{s, 7s/25\}`.
+/-- The uniform positive rescaling of the displayed one-label $\chi$ block:
+the roots $\{1, 7/25\}$ become $\{s, 7s/25\}$.
 
 Source: arXiv:1606.00608, lines 995--1010 (the rescaling question after
 Theorem 4.14; the tensor is a project example). -/
@@ -206,7 +206,7 @@ def oneLabelChiScaled (s : ℝ) : DiagonalChiFamily (Fin 1) where
   entry _ _ _ k :=
     if k = (0 : Fin 2) then (s : ℂ) else (s : ℂ) * (lambda : ℂ)
 
-/-- The rescaled `\chi` block has positive entries for `s > 0`. -/
+/-- The rescaled $\chi$ block has positive entries for $s > 0$. -/
 lemma oneLabelChiScaled_posEntries {s : ℝ} (hs : 0 < s) :
     (oneLabelChiScaled s).PosEntries := by
   intro _ _ _ k
@@ -217,12 +217,12 @@ lemma oneLabelChiScaled_posEntries {s : ℝ} (hs : 0 < s) :
     rw [show (s : ℂ) * (lambda : ℂ) = ((s * lambda : ℝ) : ℂ) by norm_cast]
     exact_mod_cast mul_pos hs hlam
 
-/-- The coefficient family of the rescaled `\chi` block. -/
+/-- The coefficient family of the rescaled $\chi$ block. -/
 noncomputable def rescaledCoeffs (s : ℝ) : BNTLabelCoefficientFamily (Fin 1) :=
   BNTLabelCoefficientFamily.ofChi (oneLabelChiScaled s)
 
 /-- The one-label coefficient of the rescaled family is
-`s^L + (7s/25)^L = s^L·(1 + (7/25)^L)`. -/
+$s^L + (7s/25)^L = s^L(1 + (7/25)^L)$. -/
 theorem rescaledCoeffs_coeff (s : ℝ) (L : ℕ) :
     (rescaledCoeffs s).coeff L (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) =
       (s : ℂ) ^ L * ((1 : ℂ) + ((lambda : ℂ) ^ L)) := by
@@ -232,9 +232,9 @@ theorem rescaledCoeffs_coeff (s : ℝ) (L : ℕ) :
   ring
 
 /-- The length dependence of the displayed one-label coefficient family
-survives every uniform positive rescaling of its `\chi` block: the
-rescaled roots `\{s, 7s/25\}` cannot both equal one, and the rescaled
-family `s^L·(1 + (7/25)^L)` is not length-independent.
+survives every uniform positive rescaling of its $\chi$ block: the
+rescaled roots $\{s, 7s/25\}$ cannot both equal one, and the rescaled
+family $s^L(1 + (7/25)^L)$ is not length-independent.
 
 Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (the
 rescaling-stability question; the tensor is a project example, not a
