@@ -326,7 +326,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \notag
     \end{align}
     Hence the mutual information
-    $I_L=S_L+S_{N-L}-S_N=N\log2-S_N$ is constant in $L$, giving
+    $I_L^{(N)}=S_L^{(N)}(K)+S_{N-L}^{(N)}(K)-S_N^{(N)}(K)
+    =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
     $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
     Consequently, there is a bond-two MPO tensor whose doubled-index MPS
     tensor is in literal CPSV canonical form, which generates an MPDO, whose
@@ -366,8 +367,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     annihilates the summand $4^{-N}Z^{\otimes N}$ of
     $\rho_N(K)=2^{-N}I+4^{-N}Z^{\otimes N}$, since $\tr Z=0$, and
     contracts the remaining summand to $2^{-L}I$. Hence
-    $\rho_L^{(N)}(K)=2^{-L}I$ and $S_L=L\log2$. Substitution in
-    $I_L=S_L+S_{N-L}-S_N$ gives $I_L=N\log2-S_N$, which is independent of
+    $\rho_L^{(N)}(K)=2^{-L}I$ and $S_L^{(N)}(K)=L\log2$. Substitution in
+    $I_L^{(N)}=S_L^{(N)}(K)+S_{N-L}^{(N)}(K)-S_N^{(N)}(K)$ gives
+    $I_L^{(N)}=N\log2-S_N^{(N)}(K)$, which is independent of
     $L$; in particular $I_L=I_{L+1}$ whenever
     $1\leq L<\lfloor N/2\rfloor$, so $K$ saturates the area law by
     Definition~\ref{def:is_sal}.
