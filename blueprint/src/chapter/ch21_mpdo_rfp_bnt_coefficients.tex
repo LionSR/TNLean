@@ -620,6 +620,113 @@
     which proves the length dependence.
 \end{proof}
 
+\begin{theorem}[A length-dependent coefficient family stable under every
+    uniform block rescaling]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.A}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        physTraceTransfer_R_idempotent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs_coeff}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        oneLabelCoeffs_coeff_one_ne_coeff_two}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        oneLabelCoeffs_not_lengthIndependent}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiScaled}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.rescaledCoeffs}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.rescaledCoeffs_coeff}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        oneLabelCoeffs_rescaling_stable_not_lengthIndependent}
+    \leanok
+    \uses{def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_length_independent,
+        def:mpo_physical_trace_transfer}
+    Theorem~\ref{thm:mpdo_length_dependent_rfp_example} answers the
+    question of \cite[lines~995--999]{Cirac2016MPDO_arXiv} affirmatively,
+    but its one-label block has a single diagonal entry $\sqrt{1/2}$, and
+    rescaling that entry to $1$ makes the displayed coefficient constant.
+    The family constructed here has a block with two distinct positive
+    diagonal entries, and its length dependence survives every uniform
+    positive rescaling of the block. The four letter matrices are the
+    scaled matrix units of $\MN{2}$
+    \begin{align}
+        A^0&=\frac45E_{00}, &
+        A^1&=\frac45E_{11}, &
+        A^2&=\frac35E_{01}, &
+        A^3&=\frac35E_{10}.
+        \notag
+    \end{align}
+    Identify the physical index set $\{0,1,2,3\}$ with
+    $\{0,1\}\times\{0,1\}$ and let $R$ be the bond-four MPO tensor
+    obtained by undoing the vertical reading of the letters
+    $B^{ab}=A^a\otimes\overline{A^b}$:
+    \begin{align}
+        R^{pq}_{ab}&=\frac{25}{32}
+            \left(A^a\otimes\overline{A^b}\right)_{p,q},
+        \notag
+    \end{align}
+    with $(p,q)$ the physical indices and $(a,b)$ the bond indices. Its
+    physical-trace transfer is the rank-one projection
+    \begin{align}
+        \mathcal T_R&=\frac{25}{32}\ketbra{t}{t}, &
+        t&=\left(\frac45,\frac45,0,0\right),
+        \notag
+    \end{align}
+    where $t_a=\tr(A^a)$; it satisfies $\mathcal T_R^2=\mathcal T_R$,
+    the literal zero-correlation-length condition of
+    \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}. The
+    attached one-label coefficient family is in trace-power form with
+    $\chi=\operatorname{diag}(1,\frac{7}{25})$:
+    \begin{align}
+        c^{(L)}&=\tr(\chi^L)=1+\left(\frac{7}{25}\right)^L.
+        \notag
+    \end{align}
+    Hence $c^{(1)}\ne c^{(2)}$, so the family is not length independent.
+    For every real number $s>0$, the rescaled block
+    $s\chi=\operatorname{diag}(s,\frac{7s}{25})$ has coefficient
+    \begin{align}
+        c_s^{(L)}&=\tr\!\left((s\chi)^L\right)
+            =s^L\left(1+\left(\frac{7}{25}\right)^L\right),
+        \notag
+    \end{align}
+    which is again not length independent: if $c_s$ were constant in
+    $L$, comparing the lengths $1$, $2$, and $3$ would force
+    $(1+\lambda)(1+\lambda^3)=(1+\lambda^2)^2$ with
+    $\lambda=\frac{7}{25}$, which is false. Unlike the single-entry
+    block of Theorem~\ref{thm:mpdo_length_dependent_rfp_example}, no
+    uniform rescaling makes both diagonal entries equal to one.
+
+    Positivity of the closed operators of $R$ on every nonempty chain, the
+    literal CPSV canonical form of $R$, and the renormalization fixed-point
+    property of Definition~\ref{def:is_rfp_via_ts} are not part of this
+    statement: the theorem establishes the coefficient-level obstruction
+    for the explicit family attached to the displayed tensor, not the full
+    fixed-point example. The tensor is a project example motivated by the
+    discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
+    tensor stated there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpo_physical_trace_transfer,
+        def:mpdo_bnt_label_coefficient_family,
+        def:mpdo_bnt_label_length_independent}
+    The $(a,b)$ entry of $\mathcal T_R$ is
+    $\frac{25}{32}\tr(A^a)\,\tr(A^b)$, and
+    $\sum_a\tr(A^a)^2=2\cdot\left(\frac45\right)^2=\frac{32}{25}$,
+    so $\mathcal T_R^2=\mathcal T_R$. The two coefficient displays are
+    the power sums of the diagonal entries of $\chi^L$ and $(s\chi)^L$.
+    Write $\lambda=\frac{7}{25}$. If $c_s$ were length independent,
+    comparing lengths one and two and lengths two and three would give
+    \begin{align}
+        s&=\frac{1+\lambda}{1+\lambda^2}, &
+        s&=\frac{1+\lambda^2}{1+\lambda^3},
+        \notag
+    \end{align}
+    hence $(1+\lambda)(1+\lambda^3)=(1+\lambda^2)^2$, that is,
+    $\lambda(1-\lambda)^2=0$. This fails at $\lambda=\frac{7}{25}$.
+\end{proof}
+
 \begin{definition}[Linearly independent operator family]%
     \label{def:mpdo_bnt_label_linear_independent}
     \lean{MPOTensor.BNTLabelOperatorFamily.LinearIndependentAt}
