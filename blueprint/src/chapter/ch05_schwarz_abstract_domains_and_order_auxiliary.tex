@@ -392,6 +392,7 @@ positivity.
 \begin{theorem}[Two-variable operator Schwarz inequality]
     \label{thm:two_variable_operator_schwarz}
     \lean{SchwarzTwoVariable.schwarz_two_variable}
+    \leanok
     \uses{def:2positive_map}
     Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
     For every $A,B\in\MN{D}$ and all vectors $v,w$ such that
@@ -418,8 +419,8 @@ positivity.
         E(A^\dagger A) & E(A^\dagger B)\\
         E(B^\dagger A) & E(B^\dagger B)
     \end{smallmatrix}\bigr]$.
-    By the Schur complement characterization (Theorem~5.2),
-    the kernel of the bottom-right block is contained in the kernel of the
-    top-right block, and the quadratic form of the vector $(v,-w)$ gives
+    Evaluating the PSD quadratic form on the vector $(v,-w)$ and using
+    the side condition $E(B^\dagger B)w = E(B^\dagger A)v$ to cancel the
+    off-diagonal and diagonal terms yields
     $v^\dagger E(A^\dagger A)v - v^\dagger E(A^\dagger B)w \ge 0$.
 \end{proof}

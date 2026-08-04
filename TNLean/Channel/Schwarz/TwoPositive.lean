@@ -75,24 +75,35 @@ open Matrix Finset
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
+/-- The equivalence `α × Fin 2 ≃ α ⊕ α` that sends `(a, 0)` to `Sum.inl a`
+and `(a, 1)` to `Sum.inr a`.  Used to reindex block matrices between the
+`n × Fin 2` and `n ⊕ n` index conventions in the 2-positivity ampliation. -/
 noncomputable def finTwoSumEquiv (α : Type*) : α × Fin 2 ≃ α ⊕ α :=
   ((Equiv.prodCongr (Equiv.refl α) finTwoEquiv).trans (Equiv.prodComm α Bool)).trans
     (Equiv.boolProdEquivSum α)
 
-@[simp] theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
+/-- `finTwoSumEquiv` sends `(a, 0)` to `Sum.inl a`. -/
+@[simp]
+theorem finTwoSumEquiv_apply_zero {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 0) = Sum.inl a := by
   simp [finTwoSumEquiv, finTwoEquiv]
 
-@[simp] theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
+/-- `finTwoSumEquiv` sends `(a, 1)` to `Sum.inr a`. -/
+@[simp]
+theorem finTwoSumEquiv_apply_one {α : Type*} (a : α) :
     finTwoSumEquiv α (a, 1) = Sum.inr a := by
   simp [finTwoSumEquiv, finTwoEquiv]
 
-@[simp] theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
+/-- The inverse of `finTwoSumEquiv` sends `Sum.inl a` to `(a, 0)`. -/
+@[simp]
+theorem finTwoSumEquiv_symm_inl {α : Type*} (a : α) :
     (finTwoSumEquiv α).symm (Sum.inl a) = (a, 0) := by
   rw [Equiv.symm_apply_eq]
   exact finTwoSumEquiv_apply_zero a
 
-@[simp] theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
+/-- The inverse of `finTwoSumEquiv` sends `Sum.inr a` to `(a, 1)`. -/
+@[simp]
+theorem finTwoSumEquiv_symm_inr {α : Type*} (a : α) :
     (finTwoSumEquiv α).symm (Sum.inr a) = (a, 1) := by
   rw [Equiv.symm_apply_eq]
   exact finTwoSumEquiv_apply_one a

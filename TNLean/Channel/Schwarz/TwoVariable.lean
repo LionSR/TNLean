@@ -96,7 +96,7 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
   rw [hQ_eq] at hQ_psd
   exact hQ_psd
 
-/-! ### Real-valued helper lemmas -/
+/-! ### Real-valued auxiliary lemmas -/
 
 /-- If `t²·d + 2·t·b ≥ 0` for all real `t`, with `d ≥ 0`, then `b = 0`. -/
 private lemma real_linear_eq_zero_of_quadratic_two_coeff
