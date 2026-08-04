@@ -1,0 +1,32 @@
+\section{Block Schur Complements}\label{sec:schur_complement}
+
+\begin{theorem}[Block Schur complement]\label{thm:schur_tfae}
+  \lean{SchurComplement.schur_tfae}
+  \uses{def:schurComplement, def:blockMatrix}
+  Let $P \in \MN{D_1}$, $R \in \MN{D_2}$ be positive semi-definite
+  and $Q \in \MN{D_1,D_2}$. The following are equivalent:
+  \begin{enumerate}
+    \item The block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is PSD,
+    \item $\ker(R) \subseteq \ker(Q)$ and $P \ge Q R^+ Q^\dagger$,
+    \item $\ker(R) \subseteq \ker(Q)$ and $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+  \end{enumerate}
+  Here $R^+$ denotes the pseudoinverse (inverse on the support).
+  The equivalence (1)$\Leftrightarrow$(2) is the pseudoinverse Schur complement;
+  (1)$\Leftrightarrow$(3) is the contraction characterisation.
+  The full TFAE is stated but the proof uses quadratic-form expansions
+  deferred to a follow-up PR (paper-gap \texttt{schur\_complement\_tfae}).
+\end{theorem}
+
+\begin{definition}[Block matrix]\label{def:blockMatrix}
+  \lean{SchurComplement.blockMatrix}
+  \leanok
+  A $2 \times 2$ block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
+  indexed by $\Fin{D_1} \oplus \Fin{D_2}$.
+\end{definition}
+
+\begin{definition}[Schur complement]\label{def:schurComplement}
+  \lean{SchurComplement.schurComplement}
+  \leanok
+  \uses{def:pinv}
+  The pseudoinverse Schur complement $P - Q R^+ Q^\dagger$.
+\end{definition}

@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Schur Complement TFAE — Partial Proof}
+\author{}
+\date{2026-08-04}
+
+\begin{document}
+\maketitle
+
+\section{Source}
+Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and Schur complements).
+
+\section{Gap}
+The TFAE equivalence for the block Schur complement (\lean{SchurComplement.schur_tfae})
+is stated but the three-way proof is not yet completely formalised.
+The remaining subgoals are:
+
+\begin{enumerate}
+  \item[(1)$\Rightarrow$(2)] Quadratic-form minimisation: for the block matrix
+    $\bigl[\begin{smallmatrix} P & Q \\ Q^\dagger & R \end{smallmatrix}\bigr]$,
+    the optimal choice $y = -R^+ Q^\dagger x$ gives
+    $x^\dagger(P - Q R^+ Q^\dagger)x \ge 0$ for all~$x$.
+
+  \item[(2)$\Rightarrow$(3)] Algebraic manipulation with $P^{1/2}$ and $R^{1/2}$
+    to rewrite $P \ge Q R^+ Q^\dagger$ as
+    $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+
+  \item[(3)$\Rightarrow$(1)] The contraction form gives the block PSD decomposition
+    via $K = P^{-1/2} Q R^{-1/2}$ with $\|K\| \le 1$.
+\end{enumerate}
+
+\section{Verdict}
+\textbf{Partial}. The theorem statement, block-matrix definition, and pseudoinverse
+Schur complement are formalised. The TFAE proof is deferred to a future PR.
+
+\end{document}
