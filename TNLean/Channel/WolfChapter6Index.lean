@@ -7,6 +7,7 @@ import TNLean.Analysis.MeanErgodic
 import TNLean.Analysis.Dirichlet
 import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.FixedPoint.Algebra
+import TNLean.Channel.Peripheral.JordanBlocks
 import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
@@ -74,12 +75,19 @@ elimination plan.  Documented in
   approximation $1\le n\le q^m$ with $|x_k n-p_k|\le 1/q$ for all $k$, in
   `TNLean.Analysis.Dirichlet`.
 
-### Wolf Proposition 6.2 (Trivial Jordan blocks for peripheral spectrum) — NOT FORMALIZED
+### Wolf Proposition 6.2 (Trivial Jordan blocks for peripheral spectrum) — TRACE-PRESERVING CASE FORMALIZED
 
-Documented in `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`.
-The bounded-orbit lemma (`IsPositiveMap.hasBoundedOrbits_of_tracePreserving`)
-is already formalized; the binomial-expansion growth argument for nontrivial
-Jordan blocks remains to be formalized.
+* `IsPositiveMap.no_rank_two_genEigenvector_of_tracePreserving` — rank-2
+  generalized eigenvectors do not exist at peripheral eigenvalues, in
+  `TNLean.Channel.Peripheral.JordanBlocks`.
+* `IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving` —
+  $\ker(T-\lambda)^k = \ker(T-\lambda)$ for all $k$ when $|\lambda| = 1$, in
+  `TNLean.Channel.Peripheral.JordanBlocks`.
+* `IsPositiveMap.pow_apply_rank_two_genEig` — binomial expansion:
+  $T^n X = \lambda^n X + n \lambda^{n-1} (T-\lambda)X$ when $(T-\lambda)^2 X = 0$.
+
+The unital case follows by duality (adjoint is trace-preserving) but is not
+yet formally wired. Documented in `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`.
 
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 

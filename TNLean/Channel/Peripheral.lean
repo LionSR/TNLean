@@ -21,6 +21,7 @@ import TNLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.Channel.Peripheral.GroupStructure
 import TNLean.Channel.Peripheral.IrreducibleChannel
+import TNLean.Channel.Peripheral.JordanBlocks
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Powers
