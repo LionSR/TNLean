@@ -1119,6 +1119,61 @@
 \cs_new:Npn \__tenkz_geom_rr:nnn #1#2#3
   { min( (#1) , (#2) , (#3) ) }
 
+% Radial reach of a rounded rectangle from its centre along bearing #4: the
+% distance at which the outgoing ray meets the boundary.  This is the
+% port-trim query, distinct from the support fold above -- a support in a
+% direction is attained off-ray at a corner, while a wire endpoint stands ON
+% the ray.  A flat-side hit divides the half-extent by its direction cosine;
+% a cap hit solves the ray's quadratic against the corner disc.  Half-extents
+% #1, #2 and corner radius #3 share one unit; the reach lands in #5 in that
+% unit.  The side tests keep every division away from a vanishing cosine: a
+% ray parallel to a side can only leave through the other pair of sides or a
+% cap.
+\fp_new:N \l__tenkz_geom_ray_u_fp
+\fp_new:N \l__tenkz_geom_ray_v_fp
+\fp_new:N \l__tenkz_geom_ray_r_fp
+\fp_new:N \l__tenkz_geom_ray_cx_fp
+\fp_new:N \l__tenkz_geom_ray_cy_fp
+\fp_new:N \l__tenkz_geom_ray_b_fp
+\cs_new_protected:Npn \__tenkz_geom_roundrect_ray:nnnnN #1#2#3#4#5
+  {
+    \fp_set:Nn \l__tenkz_geom_ray_u_fp { abs( cosd(#4) ) }
+    \fp_set:Nn \l__tenkz_geom_ray_v_fp { abs( sind(#4) ) }
+    \fp_set:Nn \l__tenkz_geom_ray_r_fp { \__tenkz_geom_rr:nnn {#3}{#1}{#2} }
+    \fp_set:Nn \l__tenkz_geom_ray_cx_fp
+      { (#1) - \l__tenkz_geom_ray_r_fp }
+    \fp_set:Nn \l__tenkz_geom_ray_cy_fp
+      { (#2) - \l__tenkz_geom_ray_r_fp }
+    \fp_compare:nNnTF
+      { (#1) * \l__tenkz_geom_ray_v_fp }
+      >
+      { \l__tenkz_geom_ray_cy_fp * \l__tenkz_geom_ray_u_fp }
+      {
+        \fp_compare:nNnTF
+          { (#2) * \l__tenkz_geom_ray_u_fp }
+          >
+          { \l__tenkz_geom_ray_cx_fp * \l__tenkz_geom_ray_v_fp }
+          {
+            \fp_set:Nn \l__tenkz_geom_ray_b_fp
+              {
+                \l__tenkz_geom_ray_cx_fp * \l__tenkz_geom_ray_u_fp
+                + \l__tenkz_geom_ray_cy_fp * \l__tenkz_geom_ray_v_fp
+              }
+            \fp_set:Nn #5
+              {
+                \l__tenkz_geom_ray_b_fp
+                + sqrt( max( 0 ,
+                    \l__tenkz_geom_ray_b_fp ^ 2
+                    - \l__tenkz_geom_ray_cx_fp ^ 2
+                    - \l__tenkz_geom_ray_cy_fp ^ 2
+                    + \l__tenkz_geom_ray_r_fp ^ 2 ) )
+              }
+          }
+          { \fp_set:Nn #5 { (#2) / \l__tenkz_geom_ray_v_fp } }
+      }
+      { \fp_set:Nn #5 { (#1) / \l__tenkz_geom_ray_u_fp } }
+  }
+
 % Support of one primitive transported through a complete east/north basis.
 % This is a distinct contract from the scalar-turn function above: an affine
 % support record is

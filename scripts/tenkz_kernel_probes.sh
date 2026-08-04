@@ -1035,13 +1035,59 @@ cmp -s "$WORK/r_mpo_skin_box.tnlog" \
     "$WORK/r_mpo_skin_prelude.normalized.tnlog" >&2 || true
   exit 1
 }
+pill_atoms=$(grep -Ec '^atom.*[|]skin=pill([|]|$)' \
+  "$WORK/r_pill_skin_prelude.tnlog" || true)
+[ "$pill_atoms" -eq 3 ] || {
+  echo "FAIL: the stock pill name did not remain in all three atom records" >&2
+  exit 1
+}
+pill_glyphs=$(grep -Ec '^ink-use\|.*\|class=glyph\|.*\|shape=roundrect' \
+  "$WORK/r_pill_skin_prelude.tnlog" || true)
+[ "$pill_glyphs" -eq 3 ] || {
+  echo "FAIL: the stock pill did not ink three rounded silhouettes" >&2
+  exit 1
+}
+pill_hulls=$(grep -Ec \
+  '^glyph-geometry\|.*\|shape=roundrect\|.*\|radius=[1-9][0-9]*\|' \
+  "$WORK/r_pill_skin_prelude.tnlog" || true)
+[ "$pill_hulls" -eq 3 ] || {
+  echo "FAIL: a pill hull lost the roundrect family or its cap radius" >&2
+  exit 1
+}
+sed 's/skin=pill/skin=roundrect/g' "$WORK/r_pill_skin_prelude.tnlog" \
+  >"$WORK/r_pill_skin_prelude.normalized.tnlog"
+cmp -s "$WORK/r_pill_skin_roundrect.tnlog" \
+  "$WORK/r_pill_skin_prelude.normalized.tnlog" || {
+  echo "FAIL: the stock pill declaration changed roundrect geometry or events" >&2
+  diff -u "$WORK/r_pill_skin_roundrect.tnlog" \
+    "$WORK/r_pill_skin_prelude.normalized.tnlog" >&2 || true
+  exit 1
+}
+cap_port_glyphs=$(grep -Ec \
+  '^glyph-geometry\|.*\|shape=roundrect\|.*\|radius=[1-9][0-9]*\|' \
+  "$WORK/r_pill_skin_cap_ports.tnlog" || true)
+[ "$cap_port_glyphs" -eq 2 ] || {
+  echo "FAIL: a near-cap ported pill fell back to a sharp hull family" >&2
+  exit 1
+}
+grep -Fq '|origin=port-open|port-face=168|port-slot=1|port-type=virtual' \
+  "$WORK/r_pill_skin_cap_ports.tnlog" || {
+  echo "FAIL: an unconsumed pill port did not materialize its open leg" >&2
+  exit 1
+}
+grep -Fq '|origin=port-open|port-face=230|port-slot=1|port-type=physical' \
+  "$WORK/r_pill_skin_cap_ports.tnlog" || {
+  echo "FAIL: a physical pill port lost its type on materialization" >&2
+  exit 1
+}
 command -v pdftoppm >/dev/null 2>&1 || {
   echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
 }
 for pixel_fixture in \
     k_plane k_skin_pairings r_hull_live r_ink_semantics r_label_turn \
-    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_ring_closure; do
+    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
+    r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -1054,6 +1100,10 @@ for pixel_fixture in \
 done
 cmp -s "$WORK/r_mpo_skin_box.png" "$WORK/r_mpo_skin_prelude.png" || {
   echo "FAIL: the stock MPO declaration changed box pixels" >&2
+  exit 1
+}
+cmp -s "$WORK/r_pill_skin_roundrect.png" "$WORK/r_pill_skin_prelude.png" || {
+  echo "FAIL: the stock pill declaration changed roundrect pixels" >&2
   exit 1
 }
 grep -Eq '^atom.*\|size=s\|.*\|species=warm($|\|)' \
@@ -1124,6 +1174,19 @@ if ( cd "$WORK" &&
 fi
 grep -Fq '[TKZ-FRAME-WORD]' "$WORK/n_frame_word.transcript" || {
   echo "FAIL: unknown frame word lacked TKZ-FRAME-WORD" >&2
+  exit 1
+}
+
+skin_negative="$KERNEL/negative/n_unknown_skin.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$skin_negative" >"$WORK/n_unknown_skin.transcript" 2>&1 ); then
+  echo "FAIL: a skin word outside the primitive and declared sets was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-KERNEL-SKIN]' "$WORK/n_unknown_skin.transcript" || {
+  echo "FAIL: unknown skin lacked TKZ-KERNEL-SKIN" >&2
   exit 1
 }
 

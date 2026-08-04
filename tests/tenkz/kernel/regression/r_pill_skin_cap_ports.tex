@@ -1,0 +1,24 @@
+% Regression: typed ports on the measured pill meet the rounded boundary on
+% both sides of a cap transition.  The bearings straddle the flat-to-cap
+% changeover of the medium pill, the labelled ports stand their labels on
+% the trimmed boundary points, and the unconsumed ports materialize
+% ordinary open legs.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=m]
+  \tn[skin=pill, at=(2,2), name=flatcap,
+    ports={12:virtual:$a$, 28:virtual:$b$, 168:virtual, 192:virtual}]{P}
+  \tnwire{flatcap.12}{open e} \tnwire{flatcap.28}{open ne}
+  \tnwire{open w}{flatcap.192}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, size=m]
+  \tn[skin=pill, at=(2,2), name=widecap, wide=2,
+    ports={50:virtual:$c$, 130:virtual, 230:physical, 310:virtual}]
+    {P_{\alpha\beta\gamma}}
+  \tnwire{widecap.50}{open ne} \tnwire{open nw}{widecap.130}
+  \tnwire{widecap.310}{open se}
+\end{tenkz}
+\end{document}
