@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\section{Wolf Theorem 6.5 --- spectral radius as eigenvalue with PSD eigenvector}
+\label{sec:gap_ch6_thm65}
+
+\subsection{Source}
+M.~Wolf, \emph{Quantum Channels \& Operations: Guided Tour}, Chapter~6,
+Theorem~6.5, local source
+\verb|Notes/WolfNoteTexSource/ch06_spectral_properties.tex|, lines~743--745.
+
+\subsection{Statement}
+Let $T:\mathcal{M}_d(\mathbb{C})\to\mathcal{M}_d(\mathbb{C})$ be a positive map
+with spectral radius $\varrho$. Then $\varrho$ is an eigenvalue and there is a
+positive semidefinite $X\in\mathcal{M}_d(\mathbb{C})$ such that $T(X)=\varrho X$.
+
+\subsection{What is formalized}
+\begin{itemize}
+\item \texttt{exists\_posSemidef\_eigenvector\_general} (in
+  \texttt{TNLean/Channel/PerronFrobenius/Existence.lean}) proves that every
+  positive map has SOME nonnegative eigenvalue $r\ge 0$ with PSD eigenvector.
+\item \texttt{spectralRadius\_eq\_of\_posDef\_eigenvector\_of\_irreducible\_cp}
+  (in \texttt{TNLean/Channel/Irreducible/SpectralRadius.lean}) proves that for
+  \emph{irreducible CP} maps, a positive eigenvalue with PosDef eigenvector equals
+  the spectral radius. This is Wolf Theorem~6.3(4) but restricted to CP maps.
+\end{itemize}
+
+\subsection{What is missing}
+\texttt{exists\_posSemidef\_eigenvector\_general} does not identify its eigenvalue
+with the spectral radius (it may return a suboptimal eigenvalue, e.g.\ $r=0$ when
+the map has a nontrivial kernel). The existing spectral-radius identity is
+restricted to irreducible CP maps.
+
+Proving the general positive-map case requires one of:
+\begin{enumerate}
+\item A direct resolvent/pole argument: for $\lambda>\varrho$, the resolvent
+  $R(\lambda)=(\lambda-T)^{-1}$ preserves positivity; as $\lambda\downarrow\varrho$,
+  the residue gives a PSD eigenvector for $\varrho$. Formalizing this needs
+  holomorphic functional calculus and spectral projections.
+\item Lifting from the irreducible case: decompose the PSD cone into invariant
+  faces, apply the Perron--Frobenius theorem to each irreducible component, and
+  select the component with maximal spectral radius. Requires formalizing the
+  invariant-face decomposition of positive maps.
+\end{enumerate}
+
+\subsection{Elimination plan}
+The extremal-quantity approach (issue \#3976 M3) will first prove Theorem~6.3
+for irreducible positive maps directly (without CP/Kraus assumptions). Then the
+invariant-face decomposition (a separate project) will lift to the general case.
+If the resolvent argument is more tractable, it may be used as a shortcut.
+
+\subsection{Verdict}
+Wolf Theorem~6.5 is partially formalized: existence of a nonnegative PSD
+eigenvalue is proved, but the identification with the spectral radius is missing.
+\end{document}

@@ -159,9 +159,12 @@ In `TNLean.Channel.Irreducible.FromSpectral`:
   TP gauge reduction + channel fixed-point contradiction.
 * `isIrreducibleMap_iff_spectral_properties` — the final iff statement.
 
-### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — FORMALIZED
+### Wolf Theorem 6.5 (Spectral radius and positive eigenvectors) — PARTIAL
 
 * `exists_posSemidef_eigenvector` — `TNLean.Channel.PerronFrobenius.Existence`
+* `exists_posSemidef_eigenvector_general` — gives SOME nonnegative eigenvalue with
+  PSD eigenvector, but does NOT identify it with the spectral radius.
+* Paper-gap: `docs/paper-gaps/wolf_ch6_spectral_radius_eigenvalue.tex`
 
 Uses Brouwer's fixed-point theorem on density matrices (proved in
 `TNLean.Axioms.BrouwerFixedPoint`).
