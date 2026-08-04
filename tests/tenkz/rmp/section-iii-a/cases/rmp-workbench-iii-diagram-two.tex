@@ -1,14 +1,16 @@
 % Target: rmp-workbench-iii-diagram-two
 % Formula: Closing the virtual boundary of Y followed by A gives Y.
-% Ink: Canonical public tenkz Y insertion followed by an A tensor with two
-%   physical legs.
+% Ink: Kernel two-row flat frame; the Y ring stands over the A atom and the
+%   column closes on the traced north and south sides.
 % Boundary: The virtual word is traced; the two physical indices of A are open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 164-169; archival output Dia2.pdf
-% Capabilities: grid, periodic-closure, boundary-insertion
+% Capabilities: kernel, periodic-closure, boundary-insertion
 \[
-  \begin{tenkz}[frame=vertical, tensor style=box, trace style=racetrack,
-      boundary=periodic]
-    \tnX{Y} & \tn[physical=updown]{A}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire}, cols=1, north=trace, south=trace]
+    \tn[at=(1,1), skin=ring]{Y}
+    \tn[at=(2,1), skin=mpo, ports={0:physical, 90:virtual, 180:physical,
+      270:virtual}]{A}
   \end{tenkz} \;:\;Y
 \]
