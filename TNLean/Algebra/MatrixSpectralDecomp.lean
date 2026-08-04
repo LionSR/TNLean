@@ -28,13 +28,14 @@ open Matrix Finset BigOperators
 namespace Matrix
 
 /-- `K * (c * c' · E_{i,j}) * K† = c · K_col(i) ⊗ c' · K_col(j)†` as an outer
-product. -/
+product. The operator `K` may be rectangular: the conjugated matrix unit acts
+on the column index type of `K`. -/
 theorem mul_single_mul_conjTranspose_eq_vecMulVec
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (K : Matrix n n ℂ) (c : ℂ) (i₂ j₂ : n) :
+    {m n : Type*} [Fintype n] [DecidableEq n]
+    (K : Matrix m n ℂ) (c : ℂ) (i₂ j₂ : n) :
     K * Matrix.single i₂ j₂ (c * star c) * Kᴴ =
-      Matrix.vecMulVec (fun i₁ : n => c * K i₁ i₂)
-        (fun j₁ : n => star (c * K j₁ j₂)) := by
+      Matrix.vecMulVec (fun i₁ : m => c * K i₁ i₂)
+        (fun j₁ : m => star (c * K j₁ j₂)) := by
   rw [show Matrix.single i₂ j₂ (c * star c) =
       (c * star c) • Matrix.vecMulVec (Pi.single i₂ (1 : ℂ)) (Pi.single j₂ 1) by
     rw [← Matrix.single_eq_single_vecMulVec_single i₂ j₂]
