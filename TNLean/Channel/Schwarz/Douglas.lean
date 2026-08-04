@@ -11,7 +11,7 @@ import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.Order
 
 /-!
-# Douglas' theorem (Wolf Ch5, Theorem at line 88)
+# Douglas factorization theorem
 
 Douglas' theorem for finite matrices: the range inclusion
 `ran A ⊆ ran B` is equivalent to a factorization `A = BC`
@@ -204,7 +204,7 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
     · rw [h_im]
   exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg h_herm h_nonneg
 
-theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ) (_hμ : 0 ≤ μ)
+theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ)
     (hle : A * Aᴴ ≤ μ • (B * Bᴴ)) :
     (posSemidefBB B).supportProj * A = A := by
   let P := (posSemidefBB B).supportProj
@@ -271,9 +271,9 @@ theorem douglas_tfae (A B : Mat) : List.TFAE [
     rcases factorization_of_range_mulVecLin_le hAB with ⟨C, hC⟩
     exact ⟨‖C‖ ^ 2, pow_two_nonneg _, le_norm_sq_mul_of_factorization A B C hC⟩
   tfae_have h23 : 2 → 3 := by
-    intro h; rcases h with ⟨μ, hμ, hle⟩
+    intro h; rcases h with ⟨μ, _hμ, hle⟩
     have hSPA : (posSemidefBB B).supportProj * A = A :=
-      supportProj_mul_eq_of_conjTranspose_le A B μ hμ hle
+      supportProj_mul_eq_of_conjTranspose_le A B μ hle
     let C := pinv B * A
     have hBC : A = B * C := by
       calc
@@ -288,13 +288,12 @@ theorem factorization_pinv (A B : Mat) (hAB : A.mulVecLin.range ≤ B.mulVecLin.
     B * (pinv B * A) = A := by
   have hSPA : (posSemidefBB B).supportProj * A = A := by
     have hle := ((douglas_tfae A B).out 0 1 (by rfl) (by rfl)).mp hAB
-    rcases hle with ⟨μ, hμ, hle'⟩
-    exact supportProj_mul_eq_of_conjTranspose_le A B μ hμ hle'
+    rcases hle with ⟨μ, _hμ, hle'⟩
+    exact supportProj_mul_eq_of_conjTranspose_le A B μ hle'
   calc
     B * (pinv B * A) = (B * pinv B) * A := by simp [Matrix.mul_assoc]
     _ = (posSemidefBB B).supportProj * A := by rw [mul_pinv_eq_supportProj B]
     _ = A := hSPA
-
 
 /-! ## Moreover clauses of Douglas' theorem -/
 
@@ -403,7 +402,6 @@ theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ 
       _ ≤ ‖pinv B * B‖ * ‖C‖ := Matrix.l2_opNorm_mul _ _
       _ ≤ 1 * ‖C‖ := by nlinarith [norm_pinv_mul_B_le_one B]
       _ = ‖C‖ := by simp
-
 
 /-! ## Uniqueness of the factorization under the support constraint -/
 

@@ -7,49 +7,57 @@
 
 \input{command}
 
-\title{Schur Complement TFAE — Open Gap}
+\title{Schur Complement TFAE --- Open Gap}
 \author{}
 \date{2026-08-04}
 
 \begin{document}
 \maketitle
 
-\section{Source}
-Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and Schur complements).
+\section{Source statement}
+Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and
+Schur complements). Let $P$, $R$ be positive semi-definite complex matrices
+and $Q$ a complex matrix of compatible dimensions. Then the following are
+equivalent:
+\begin{enumerate}
+  \item the block matrix
+    $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
+    is positive semi-definite;
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    \begin{align}
+      P \ge Q R^{+} Q^\dagger,
+      \tag{Wolf, Theorem 5.2 (2)}
+    \end{align}
+    where $R^{+}$ is the pseudo-inverse (the inverse on the support);
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+\end{enumerate}
 
 \section{Gap}
-The TFAE equivalence for the block Schur complement is not yet formalised in
-this branch: the definitions \leanid{SchurComplement.blockMatrix},
+Only the objects entering the statement are formalised: the block matrix
+itself, its self-adjointness for Hermitian diagonal blocks, and the
+pseudoinverse Schur complement $P - Q R^{+} Q^\dagger$.\footnote{Formal
+declarations: \leanid{SchurComplement.blockMatrix},
 \leanid{SchurComplement.blockMatrix_isHermitian}, and
-\leanid{SchurComplement.schurComplement} are present, but no direction of the
-equivalence has a Lean statement or proof here. The proof is under development
-on the stacked follow-up branch for PR \#5442. The remaining subgoals are:
-
+\leanid{SchurComplement.schurComplement} in
+\doclink{TNLean/Channel/Schwarz/SchurComplement}.}
+No direction of the equivalence has a formal statement yet. The standard
+argument has three steps:
 \begin{enumerate}
   \item[(1)$\Rightarrow$(2)] Quadratic-form minimisation: for the block matrix
     $\bigl[\begin{smallmatrix} P & Q \\ Q^\dagger & R \end{smallmatrix}\bigr]$,
-    the optimal choice $y = -R^+ Q^\dagger x$ gives
-    $x^\dagger(P - Q R^+ Q^\dagger)x \ge 0$ for all~$x$.
-
-  \item[(2)$\Rightarrow$(3)] Algebraic manipulation with $P^{1/2}$ and $R^{1/2}$
-    to rewrite $P \ge Q R^+ Q^\dagger$ as
+    the optimal choice $y = -R^{+} Q^\dagger x$ gives
+    $x^\dagger (P - Q R^{+} Q^\dagger) x \ge 0$ for all~$x$.
+  \item[(2)$\Rightarrow$(3)] Algebraic manipulation with $P^{1/2}$ and
+    $R^{1/2}$ rewrites $P \ge Q R^{+} Q^\dagger$ as
     $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
-
-  \item[(3)$\Rightarrow$(1)] The contraction form gives the block PSD decomposition
-    via $K = P^{-1/2} Q R^{-1/2}$ with $\|K\| \le 1$.
+  \item[(3)$\Rightarrow$(1)] The contraction form gives the block PSD
+    decomposition via $K = P^{-1/2} Q R^{-1/2}$ with $\|K\| \le 1$, using the
+    operator-norm characterisation $\|L\| \le 1 \iff L L^\dagger \le I$.
 \end{enumerate}
 
 \section{Verdict}
-\textbf{Open gap}. Only \leanid{SchurComplement.blockMatrix},
-\leanid{SchurComplement.blockMatrix_isHermitian}, and
-\leanid{SchurComplement.schurComplement} are formalised (and carry \texttt{\textbackslash leanok}
-in the blueprint); the TFAE theorem itself is an open gap with no Lean
-statement on this branch, tracked by a \texttt{\textbackslash notready} blueprint entry.
-The proof in progress on the stacked branch currently has: the block quadratic
-form expansion, kernel inclusion (1)$\Rightarrow$(2) part one, and
-pseudoinverse-support algebra; the Schur-complement minimisation, the converse
-direction, and the contraction characterisation (2)$\Longleftrightarrow$(3)
-(including the operator-norm lemma $\|L\|\le 1 \iff L L^\dagger \le I$)
-remain to be integrated.
+\textbf{Open gap}. The cited equivalence has no formal statement; only the
+block-matrix definitions it involves are formalised.
 
 \end{document}
