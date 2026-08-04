@@ -34,6 +34,8 @@ def blockMatrix (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (F
     (R : Matrix (Fin D₂) (Fin D₂) ℂ) : Matrix ((Fin D₁) ⊕ (Fin D₂)) ((Fin D₁) ⊕ (Fin D₂)) ℂ :=
   Matrix.fromBlocks P Q (Qᴴ) R
 
+/-- The block matrix `[[P, Q], [Q†, R]]` is Hermitian when its diagonal
+blocks `P` and `R` are Hermitian. -/
 theorem blockMatrix_isHermitian (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hP : P.IsHermitian) (hR : R.IsHermitian) : (blockMatrix P Q R).IsHermitian := by
@@ -45,7 +47,5 @@ noncomputable def schurComplement (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ) :
     Matrix (Fin D₁) (Fin D₁) ℂ :=
   P - Q * (Douglas.pinv R) * (Qᴴ)
-
-
 
 end SchurComplement

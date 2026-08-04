@@ -47,6 +47,9 @@ namespace Douglas
 variable {D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+/-- Finite-dimensional factorization form of the easy direction of Douglas'
+theorem: range inclusion for `mulVec` implies a right factorization
+`A = B * C` (columnwise construction). -/
 theorem factorization_of_range_mulVecLin_le
     {A B : Mat} (hAB : A.mulVecLin.range ≤ B.mulVecLin.range) :
     ∃ C : Mat, A = B * C := by
@@ -82,9 +85,15 @@ theorem factorization_of_forall_mulVec_mem_range
   intro w hw; rcases hw with ⟨v, rfl⟩
   simpa [Matrix.mulVecLin_apply] using hAB v
 
+/-- The **Moore–Penrose pseudoinverse** `B⁺ := Bᴴ (B Bᴴ)⁻¹_supp`, with the
+support inverse from `Matrix.PosSemidef.supportInv`. This is Wolf's
+"inverse on the range": `B * B⁺` is the support projection of `B Bᴴ`
+(`mul_pinv_eq_supportProj`). -/
 noncomputable def pinv (B : Mat) : Mat :=
   Bᴴ * (Matrix.PosSemidef.supportInv (Matrix.posSemidef_self_mul_conjTranspose B))
 
+/-- The matrix `B * Bᴴ` is positive semidefinite (the PSD certificate used
+throughout the Douglas development for the support-inverse `(B Bᴴ)⁻¹_supp`). -/
 abbrev posSemidefBB (B : Mat) : (B * Bᴴ).PosSemidef :=
   Matrix.posSemidef_self_mul_conjTranspose B
 
@@ -241,6 +250,12 @@ theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ) (_hμ : 0 
   rw [Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at h_QA_zero
   exact h_QA_zero.symm
 
+/-- **Douglas' theorem** (Wolf, *Quantum Channels & Operations*, Ch. 5,
+Theorem at `Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex` line 88).
+
+For finite matrices `A`, `B` the following are equivalent: (i) the range
+inclusion `ran A ⊆ ran B`, (ii) the factorization `A = B C` for some `C`, and
+(iii) the quadratic domination `AA† ≤ λ² · BB†` for some `λ ≥ 0`. -/
 theorem douglas_tfae (A B : Mat) : List.TFAE [
     A.mulVecLin.range ≤ B.mulVecLin.range,
     ∃ (μ : ℝ), 0 ≤ μ ∧ A * Aᴴ ≤ μ • (B * Bᴴ),
