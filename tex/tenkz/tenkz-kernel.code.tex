@@ -4377,6 +4377,7 @@
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
 \tl_new:N   \l__tenkz_kernel_r_mark_ink_tl
+\tl_new:N   \l__tenkz_kernel_r_mark_style_tl
 \tl_new:N   \l__tenkz_kernel_r_wire_ink_tl
 \tl_new:N   \l__tenkz_kernel_r_wire_style_tl
 \tl_new:N   \l__tenkz_kernel_r_atom_style_tl
@@ -13355,14 +13356,19 @@
       {
         \__tenkz_kernel_r_mark_text_ink:nN {#1}
           \l__tenkz_kernel_r_mark_ink_tl
-        \__tenkz_render_labelnode:nnn
+        % pgfkeys splits its option list on the commas it can see; an
+        % unexpanded variable is one opaque key, so the style reaches the
+        % node expanded (the atom paths' doctrine).
+        \tl_set:Ne \l__tenkz_kernel_r_mark_style_tl
           {
             tenkz~audited~label ,
             \tl_use:N \l__tenkz_kernel_r_mark_ink_tl
-            anchor = \exp_args:NV \__tenkz_render_label_anchor:n
-              \l__tenkz_kernel_r_c_tl ,
+            anchor = \__tenkz_render_label_anchor:n
+              { \l__tenkz_kernel_r_c_tl } ,
             inner~sep = \__tenkz_dim:n {labelclear}
           }
+        \exp_args:NV \__tenkz_render_labelnode:nnn
+          \l__tenkz_kernel_r_mark_style_tl
           {
             (
               \__tenkz_kernel_r_pt:n
@@ -13643,12 +13649,14 @@
       {
         \__tenkz_kernel_r_mark_text_ink:nN {#1}
           \l__tenkz_kernel_r_mark_ink_tl
-        \__tenkz_render_labelnode:nnn
+        \tl_set:Ne \l__tenkz_kernel_r_mark_style_tl
           {
             tenkz~audited~label ,
             \tl_use:N \l__tenkz_kernel_r_mark_ink_tl
             inner~sep = \__tenkz_dim:n {labelclear}
           }
+        \exp_args:NV \__tenkz_render_labelnode:nnn
+          \l__tenkz_kernel_r_mark_style_tl
           {
             (
               \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_x_fp } ,
