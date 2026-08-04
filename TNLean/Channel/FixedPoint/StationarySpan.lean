@@ -189,7 +189,6 @@ theorem fixedPointsSubmodule_spanned_by_stationaryDensities
     rw [h_span_P] at h_span_le
     exact h_span_le
 
-
 /-- **Wolf Corollary 6.8 (Linearly independent stationary states).**
 
 Let `E` be a positive trace-preserving linear map on `M_D(ℂ)`.  The fixed-point
@@ -203,34 +202,30 @@ stationary density matrices.
 
 Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.8;
 local source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`,
-lines 1204--1215. -/
+lines 1204--1212. -/
 theorem exists_stationaryDensity_basis_of_fixedPointsSubmodule
     (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
-    ∃ (r : ℕ) (ρ : Fin r → Matrix (Fin D) (Fin D) ℂ),
+    ∃ ρ : Fin (Module.finrank ℂ (fixedPointsSubmodule E)) →
+      Matrix (Fin D) (Fin D) ℂ,
       (∀ i, IsStationaryDensity E (ρ i)) ∧
       LinearIndependent ℂ ρ ∧
       Submodule.span ℂ (Set.range ρ) = fixedPointsSubmodule E := by
   set S : Set (Matrix (Fin D) (Fin D) ℂ) := {ρ | IsStationaryDensity E ρ}
     with hS
-  set V := fixedPointsSubmodule E with hV
-  have h_span : Submodule.span ℂ S = V :=
+  have h_span : Submodule.span ℂ S = fixedPointsSubmodule E :=
     fixedPointsSubmodule_spanned_by_stationaryDensities E hE hTP
-  -- V is a submodule of a finite-dimensional space, so span ℂ S is finite
-  have h_fin : Module.Finite ℂ (Submodule.span ℂ S) := by
-    rw [h_span]
-    infer_instance
   -- Extract a basis from the spanning set
+  -- Rewrite the goal's index type using h_span so it matches f's type
+  rw [show Module.finrank ℂ (fixedPointsSubmodule E) =
+    Module.finrank ℂ (Submodule.span ℂ S) from by rw [h_span]]
   rcases Submodule.exists_fun_fin_finrank_span_eq ℂ S with ⟨f, hf_mem, hf_span, hf_indep⟩
-  -- f is indexed by Fin r where r = Module.finrank ℂ (span ℂ S).
-  -- Since span ℂ S = V, this r equals the finrank of V.
   have h_stationary : ∀ i, IsStationaryDensity E (f i) := by
     intro i
     have : f i ∈ S := hf_mem i
     rw [hS, Set.mem_setOf_eq] at this
     exact this
-  have h_finrank_eq : Module.finrank ℂ (Submodule.span ℂ S) =
-      Module.finrank ℂ V := by rw [h_span]
-  refine ⟨Module.finrank ℂ (Submodule.span ℂ S), f, h_stationary, hf_indep, ?_⟩
-  rw [hf_span, h_span]
+  -- Also rewrite the span goal using h_span
+  rw [← h_span]
+  exact ⟨f, h_stationary, hf_indep, hf_span⟩
 
 end IsPositiveMap
