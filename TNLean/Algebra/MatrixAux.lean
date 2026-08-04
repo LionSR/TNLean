@@ -75,7 +75,7 @@ dot product. -/
 theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
     {S : Matrix n n ℂ} (hS : S.IsHermitian) (x y : n → ℂ) :
     star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
-  rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
+  rw [star_mulVec, ← Matrix.dotProduct_mulVec]
 
 /-- A matrix factor moves across the complex dot product as its conjugate
 transpose. -/
