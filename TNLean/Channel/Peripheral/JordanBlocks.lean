@@ -53,20 +53,25 @@ lemma pow_apply_rank_two_genEig
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (T : V →ₗ[ℂ] V) (μ : ℂ) (n : ℕ) (X : V)
     (hN2 : ((T - μ • (1 : V →ₗ[ℂ] V)) ^ 2) X = 0) :
-    (T ^ n) X = (μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
+    (T ^ n) X = (μ ^ n) • X +
+      ((n : ℂ) * μ ^ (n - 1)) • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
   induction n with
   | zero => simp
   | succ n ih =>
     rw [pow_succ', show (T * T ^ n) X = T ((T ^ n) X) from rfl, ih]
     rw [map_add, map_smul, map_smul]
-    have h_TTX : T ((T - μ • (1 : V →ₗ[ℂ] V)) X) = μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
+    have h_TTX : T ((T - μ • (1 : V →ₗ[ℂ] V)) X) =
+        μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
       -- T = (T-μ) + μ, so T((T-μ)X) = (T-μ)^2 X + μ(T-μ)X = μ(T-μ)X (since (T-μ)^2 X = 0)
       calc
         T ((T - μ • (1 : V →ₗ[ℂ] V)) X)
-            = ((T - μ • (1 : V →ₗ[ℂ] V)) + μ • (1 : V →ₗ[ℂ] V)) ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by simp
+            = ((T - μ • (1 : V →ₗ[ℂ] V)) + μ • (1 : V →ₗ[ℂ] V))
+                ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by simp
         _ = (T - μ • (1 : V →ₗ[ℂ] V)) ((T - μ • (1 : V →ₗ[ℂ] V)) X) +
-            (μ • (1 : V →ₗ[ℂ] V)) ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by rw [LinearMap.add_apply]
-        _ = ((T - μ • (1 : V →ₗ[ℂ] V)) ^ 2) X + μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
+            (μ • (1 : V →ₗ[ℂ] V)) ((T - μ • (1 : V →ₗ[ℂ] V)) X) :=
+          by rw [LinearMap.add_apply]
+        _ = ((T - μ • (1 : V →ₗ[ℂ] V)) ^ 2) X +
+            μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
           simp [pow_two, LinearMap.smul_apply]
         _ = 0 + μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by rw [hN2]
         _ = μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by simp
@@ -76,7 +81,8 @@ lemma pow_apply_rank_two_genEig
     have h_TX : T X = μ • X + (T - μ • (1 : V →ₗ[ℂ] V)) X := by
       calc
         T X = ((T - μ • (1 : V →ₗ[ℂ] V)) + μ • (1 : V →ₗ[ℂ] V)) X := by simp
-        _ = (T - μ • (1 : V →ₗ[ℂ] V)) X + (μ • (1 : V →ₗ[ℂ] V)) X := by rw [LinearMap.add_apply]
+        _ = (T - μ • (1 : V →ₗ[ℂ] V)) X + (μ • (1 : V →ₗ[ℂ] V)) X :=
+          by rw [LinearMap.add_apply]
         _ = (T - μ • (1 : V →ₗ[ℂ] V)) X + μ • X := by simp
         _ = μ • X + (T - μ • (1 : V →ₗ[ℂ] V)) X := add_comm _ _
     rw [h_TX]
@@ -89,7 +95,8 @@ lemma pow_apply_rank_two_genEig
     simp only [smul_add, smul_smul]
     have hX : (μ ^ n : ℂ) * μ = μ ^ (n + 1) := by ring
     -- Simplify (T-μ)X-term: μ^n + μ*n*μ^(n-1) = (n+1)*μ^n = ↑(n+1)*μ^{(n+1)-1}
-    have hV : (μ ^ n : ℂ) + (μ : ℂ) * ((n : ℂ) * (μ ^ (n - 1) : ℂ)) = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
+    have hV : (μ ^ n : ℂ) + (μ : ℂ) * ((n : ℂ) * (μ ^ (n - 1) : ℂ))
+        = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
       have h_pow : (μ : ℂ) ^ (n + 1 - 1) = (μ : ℂ) ^ n := by
         rw [show (n : ℕ) + 1 - 1 = n by omega]
       rw [h_pow]
@@ -104,7 +111,8 @@ lemma pow_apply_rank_two_genEig
               = (μ ^ n : ℂ) + ((n : ℂ) * ((μ : ℂ) * (μ : ℂ) ^ (n - 1))) := by ring
           _ = (μ ^ n : ℂ) + ((n : ℂ) * (μ : ℂ) ^ n) := by rw [h_mul_pow]
           _ = ((n : ℂ) + 1) * (μ ^ n : ℂ) := by ring
-    have h_v_coeff : (μ ^ n : ℂ) + ((n : ℂ) * (μ ^ (n - 1) : ℂ) * μ) = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
+    have h_v_coeff : (μ ^ n : ℂ) + ((n : ℂ) * (μ ^ (n - 1) : ℂ) * μ)
+        = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
       -- hV LHS is μ^n + μ*(n*μ^(n-1)) which equals μ^n + n*μ^(n-1)*μ by commutativity
       simpa [mul_comm, mul_left_comm, mul_assoc] using hV
     rw [hX]
@@ -143,7 +151,8 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
   have hbounded : T.HasBoundedOrbits :=
     hPos.hasBoundedOrbits_of_tracePreserving hTP
   -- Binomial expansion: T^n X = μ^n X + n μ^{n-1} (N X)
-  have h_pow_formula (n : ℕ) : (T ^ n) X = (μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • (N X) :=
+  have h_pow_formula (n : ℕ) :
+      (T ^ n) X = (μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • (N X) :=
     pow_apply_rank_two_genEig T μ n X hN2
   -- Norm lower bound: ‖T^n X‖ ≥ n ‖N X‖ - ‖X‖
   -- Uses: ‖a + b‖ ≥ ‖b‖ - ‖a‖, and ‖μ^k‖ = 1 for all k
@@ -168,7 +177,8 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
     rw [h_norm_a, h_norm_b] at h_rev_triangle
     -- Rearranged: (n)*‖NX‖ - ‖X‖ ≤ ‖...‖
     -- Using a - b ≤ c ↔ a ≤ c + b
-    have h_goal : (n : ℝ) * ‖N X‖ - ‖X‖ ≤ ‖(μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • (N X)‖ := by
+    have h_goal : (n : ℝ) * ‖N X‖ - ‖X‖ ≤
+        ‖(μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • (N X)‖ := by
       rw [sub_le_iff_le_add]
       simpa [add_comm] using h_rev_triangle
     simpa [add_comm] using h_goal
@@ -190,7 +200,7 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
   -- Now h_bound_n: (n:ℝ)*‖NX‖ - ‖X‖ ≤ ‖(T^[n])X‖
   -- hC_n: ‖(T^[n])X‖ ≤ C
   -- hn: C + ‖X‖ < (n:ℝ)*‖NX‖
-  -- Combine: C + ‖X‖ < (n:ℝ)*‖NX‖, so C < (n:ℝ)*‖NX‖ - ‖X‖ ≤ ‖(T^[n])X‖ ≤ C
+  -- Combine: C + ‖X‖ < n*‖NX‖, so C < n*‖NX‖ - ‖X‖ ≤ ‖(T^[n])X‖ ≤ C
   have h_ineq : C < (n : ℝ) * ‖N X‖ - ‖X‖ := by linarith
   have h_chain : (n : ℝ) * ‖N X‖ - ‖X‖ ≤ C := by
     -- from h_bound_n and hC_n
@@ -221,45 +231,47 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
     have hX_zero : X = 0 := by simpa using hNk
     simp [hX_zero]
   | succ m ih =>
+    set N := T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+      with hN_def
     by_cases hm : m = 0
     · subst hm; simpa using hNk
     · -- m ≥ 1, rank-2 reduction
-      set Y := ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1)) X
-      have hN2_Y : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) Y = 0 := by
+      set Y := (N ^ (m - 1)) X
+      have hN2_Y : (N ^ 2) Y = 0 := by
         dsimp [Y]
-        -- (T-μ)^2 ((T-μ)^{m-1} X) = ((T-μ)^2 * (T-μ)^{m-1}) X = (T-μ)^{2+(m-1)} X = (T-μ)^{m+1} X
-        have : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) Y =
-            ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (2 + (m - 1))) X := by
+        -- (T-μ)^2((T-μ)^{m-1}X) = ((T-μ)^2*(T-μ)^{m-1})X = (T-μ)^{m+1}X
+        have : (N ^ 2) Y =
+            (N ^ (2 + (m - 1))) X := by
           dsimp [Y]
           calc
-            ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2)
-                (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1)) X)
-                = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) *
-                   ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := rfl
-            _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (2 + (m - 1))) X := by
+            (N ^ 2)
+                ((N ^ (m - 1)) X)
+                = ((N ^ 2) *
+                   (N ^ (m - 1))) X := rfl
+            _ = (N ^ (2 + (m - 1))) X := by
               rw [pow_add]
         rw [this, show (2 : ℕ) + (m - 1) = m + 1 by omega]
         exact hNk
-      have hN1_Y : (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) Y = 0 :=
+      have hN1_Y : N Y = 0 :=
         hPos.no_rank_two_genEigenvector_of_tracePreserving hTP μ hμ_norm Y hN2_Y
       -- hN1_Y: (T - μ•1) Y = 0  where Y = (T-μ•1)^(m-1) X
       -- We need: ((T-μ•1)^m) X = 0 for the induction hypothesis ih
       -- Compute: (T-μ•1) Y = (T-μ•1) ((T-μ•1)^(m-1) X) = ((T-μ•1)^m) X
       -- because (T-μ•1) ∘ (T-μ•1)^(m-1) = (T-μ•1)^m in the endomorphism ring
-      have h_pow_eq : (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) Y
-          = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ m) X := by
+      have h_pow_eq : N Y
+          = (N ^ m) X := by
         dsimp [Y]
         calc
-          (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))
-              (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1)) X)
-              = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))) *
-                 ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := rfl
-          _ = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (1 : ℕ)) *
-               ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := by
+          N
+              ((N ^ (m - 1)) X)
+              = ((N) *
+                 (N ^ (m - 1))) X := rfl
+          _ = ((N ^ (1 : ℕ)) *
+               (N ^ (m - 1))) X := by
             simp
-          _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ ((1 : ℕ) + (m - 1))) X := by
+          _ = (N ^ ((1 : ℕ) + (m - 1))) X := by
             rw [← pow_add]
-          _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ m) X := by
+          _ = (N ^ m) X := by
             rw [show (1 : ℕ) + (m - 1) = m by omega]
       -- Now rewrite hN1_Y using h_pow_eq
       rw [h_pow_eq] at hN1_Y
