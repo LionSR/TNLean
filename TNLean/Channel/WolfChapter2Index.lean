@@ -7,6 +7,8 @@ import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.ChoiRectangular
+import TNLean.Channel.KrausRectangular
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
@@ -55,11 +57,24 @@ project import.
     `Channel.hasKrausRankLE_choiRank_of_cp` /
     `Channel.hasKrausRankLE_choiRank_of_cptp`
     — minimal Kraus constructions from the Choi spectral decomposition ✓
-  - The different-dimension Choi correspondence, general adjoint
-    partial-trace and trace-normalization identities, converse partial-trace
-    clauses, and doubly-stochastic clause are not yet formalized, so
-    Proposition 2.1 is not marked complete; see
-    `docs/paper-gaps/choi_rectangular_scope.tex`.
+  - **Rectangular (different-dimension) form** in
+    `TNLean/Channel/ChoiRectangular.lean` (namespace `ChoiRectangular`):
+    `choiMatrix` — `τ = (T ⊗ id_d)(|Ω⟩⟨Ω|)` on `ℂ^{d'} ⊗ ℂ^d` ✓
+    `mapOfChoiMatrix_choiMatrix` / `choiMatrix_mapOfChoiMatrix` — mutual
+    inverses ✓ `trace_pairing` — `tr[A T(B)] = d·tr[τ (A ⊗ Bᵀ)]` ✓
+    `choiMatrix_isHermitian_iff_hermiticityPreserving` — Hermiticity clause ✓
+    `isKrausCP_iff_choiMatrix_posSemidef` — CP clause ✓
+    `unital_iff_traceRight_choiMatrix` — unitality clause ✓
+    `traceLeft_choiMatrix` (`tr_A(τ) = (T*(𝟙))ᵀ/d`) and
+    `tracePreserving_iff_traceLeft_choiMatrix` — trace-preservation clause ✓
+    `trace_choiMatrix` (`tr(τ) = tr(T*(𝟙))/d`) — normalization clause ✓
+    `doublyStochastic_iff_partialTraces_proportional` — doubly-stochastic
+    clause ✓
+  - `ChoiRectangular.choiMatrix_eq_choiJamiolkowski` — the square development
+    is the specialization `d = d'` ✓
+  - Remaining square-only declarations (the `ChoiJamiolkowski.choiMatrix`
+    API, `IsTracePreservingMap`, `IsChannel`) are documented as specializations
+    in `docs/paper-gaps/choi_rectangular_scope.tex`.
 
 * **Theorem 2.1** (Kraus representation, square development):
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✓
@@ -78,9 +93,19 @@ project import.
     — Wolf Theorem 2.18 in isometric form, including zero-padding of the smaller family ✓
   - `kraus_unitary_freedom_iff`
     — Wolf Theorem 2.18 in same-size unitary form ✓
-  - The full rectangular existence, minimal-rank, orthogonal-family, and
-    padded-unitary statement is not yet formalized; see
-    `docs/paper-gaps/choi_rectangular_scope.tex`.
+  - **Rectangular form** in `TNLean/Channel/KrausRectangular.lean`
+    (namespace `ChoiRectangular`):
+    `kraus_tp_iff_sum_conjTranspose_mul` / `kraus_unital_iff_sum_mul_conjTranspose`
+    — normalization item 1 in both directions ✓
+    `choiRank` / `choiRank_le_of_hasKrausCard` /
+    `hasKrausCard_choiRank_of_isKrausCP` /
+    `choiRank_isLeast_hasKrausCard_of_isKrausCP` / `choiRank_le_mul`
+    — minimal Kraus number `r = rank(τ) ≤ d·d'` ✓
+    `exists_kraus_orthogonal_of_isKrausCP`
+    — Hilbert–Schmidt orthogonal minimal family (`tr[Kᵢ†Kⱼ] ∝ δᵢⱼ`) ✓
+    `kraus_isometry_freedom` / `kraus_isometry_freedom_iff` /
+    `kraus_unitary_freedom_iff`
+    — padded isometric/unitary freedom (item 4) ✓
 
 * **Theorem 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✓
@@ -235,6 +260,8 @@ project import.
 | SWAP operator F | `MaximallyEntangled.lean` | `Matrix.swapMatrix` |
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
+| Rectangular Choi matrix | `ChoiRectangular.lean` | `ChoiRectangular.choiMatrix` |
+| Rectangular Kraus rank | `KrausRectangular.lean` | `ChoiRectangular.choiRank` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
 | POVM | `POVM.lean` | `POVM` |
 | Naimark isometry | `POVM.lean` | `POVM.naimarkIsometry` |

@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Basic
 import TNLean.Channel.BreuerHallMap
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.ChoiTypeMap
 import TNLean.Channel.CompletelyPositiveBridge
 import TNLean.Channel.DensityRetract
@@ -29,6 +30,7 @@ import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausFreedom
 import TNLean.Channel.KrausRank
+import TNLean.Channel.KrausRectangular
 import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.LocalizedKrausCPTP
