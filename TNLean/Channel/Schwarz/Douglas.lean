@@ -69,8 +69,6 @@ theorem mul_pinv_eq_supportProj (B : Mat) :
     _ = (posSemidefBB B).isHermitian.supportProj := h
     _ = (posSemidefBB B).supportProj := rfl
 
-/-! ### Lemma: If A = B·C then AA† ≤ ‖C‖²·BB† -/
-
 theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
     A * Aᴴ ≤ (‖C‖ ^ 2 : ℝ) • (B * Bᴴ) := by
   rw [hA]
@@ -78,78 +76,70 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
   have h_BCstar : (B * C) * (B * C)ᴴ = B * (C * Cᴴ) * Bᴴ := by
     simp [Matrix.mul_assoc, Matrix.conjTranspose_mul]
   rw [h_BCstar]
-  let s : ℂ := (‖C‖ ^ 2 : ℝ)
-  let D := s • (B * Bᴴ) - (B * (C * Cᴴ) * Bᴴ)
-  have hD_herm : D.IsHermitian := by
-    have hBB_herm : (B * Bᴴ).IsHermitian := (posSemidefBB B).isHermitian
-    have h_CC_herm : (C * Cᴴ).IsHermitian := (posSemidefBB C).isHermitian
-    have h_s : IsSelfAdjoint s := by
-      dsimp [s, IsSelfAdjoint]
-      simp
-    have h1 : (s • (B * Bᴴ)).IsHermitian := hBB_herm.smul h_s
+  have h_herm : ((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ).IsHermitian := by
+    have hBB : (B * Bᴴ).IsHermitian := (posSemidefBB B).isHermitian
+    have hCC : (C * Cᴴ).IsHermitian := (posSemidefBB C).isHermitian
+    have h_s : IsSelfAdjoint (‖C‖ ^ 2 : ℝ) := IsSelfAdjoint.all _
+    have h1 : ((‖C‖ ^ 2 : ℝ) • (B * Bᴴ)).IsHermitian := hBB.smul h_s
     have h2 : (B * (C * Cᴴ) * Bᴴ).IsHermitian := by
       have h2' : (B * (C * Cᴴ) * Bᴴ)ᴴ = B * (C * Cᴴ) * Bᴴ := by
-        simp [h_CC_herm.eq]
+        simp [Matrix.mul_assoc]
       simpa [Matrix.IsHermitian] using h2'
     exact h1.sub h2
-  have hD_nonneg : ∀ x, 0 ≤ star x ⬝ᵥ (D *ᵥ x) := by
+  have h_nonneg : ∀ x, 0 ≤ star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) := by
     intro x
     set y := Bᴴ *ᵥ x
     set z := Cᴴ *ᵥ y
-    have h_alpha : star x ⬝ᵥ ((B * Bᴴ) *ᵥ x) = star y ⬝ᵥ y := by
-      calc
-        star x ⬝ᵥ ((B * Bᴴ) *ᵥ x) = star x ⬝ᵥ (B *ᵥ (Bᴴ *ᵥ x)) := by
-          rw [Matrix.mulVec_mulVec]
-        _ = star (Bᴴ *ᵥ x) ⬝ᵥ (Bᴴ *ᵥ x) := star_dotProduct_mulVec B x (Bᴴ *ᵥ x)
-        _ = star y ⬝ᵥ y := rfl
-    have h_beta : star x ⬝ᵥ ((B * (C * Cᴴ) * Bᴴ) *ᵥ x) = star z ⬝ᵥ z := by
+    have hy_nonneg : 0 ≤ star y ⬝ᵥ y := dotProduct_star_self_nonneg y
+    have hz_nonneg : 0 ≤ star z ⬝ᵥ z := dotProduct_star_self_nonneg z
+    have hy_im_zero : (star y ⬝ᵥ y).im = 0 :=
+      (Complex.nonneg_iff.mp hy_nonneg).2.symm
+    have hz_im_zero : (star z ⬝ᵥ z).im = 0 :=
+      (Complex.nonneg_iff.mp hz_nonneg).2.symm
+    have h_BBstar : star x ⬝ᵥ ((B * Bᴴ) *ᵥ x) = star y ⬝ᵥ y := by
+      rw [← Matrix.mulVec_mulVec x B Bᴴ]
+      exact star_dotProduct_mulVec B x (Bᴴ *ᵥ x)
+    have h_BCCBstar : star x ⬝ᵥ ((B * (C * Cᴴ) * Bᴴ) *ᵥ x) = star z ⬝ᵥ z := by
       calc
         star x ⬝ᵥ ((B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
             star x ⬝ᵥ (B *ᵥ ((C * Cᴴ) *ᵥ (Bᴴ *ᵥ x))) := by
-          simp [Matrix.mulVec_mulVec, Matrix.mul_assoc]
+          simp [← Matrix.mulVec_mulVec, Matrix.mul_assoc]
         _ = star (Bᴴ *ᵥ x) ⬝ᵥ ((C * Cᴴ) *ᵥ (Bᴴ *ᵥ x)) :=
           star_dotProduct_mulVec B x _
         _ = star (Bᴴ *ᵥ x) ⬝ᵥ (C *ᵥ (Cᴴ *ᵥ (Bᴴ *ᵥ x))) := by
-          rw [Matrix.mulVec_mulVec]
+          rw [← Matrix.mulVec_mulVec (Bᴴ *ᵥ x) C Cᴴ]
         _ = star (Cᴴ *ᵥ (Bᴴ *ᵥ x)) ⬝ᵥ (Cᴴ *ᵥ (Bᴴ *ᵥ x)) :=
           star_dotProduct_mulVec C (Bᴴ *ᵥ x) _
-        _ = star z ⬝ᵥ z := rfl
-    have h_Dx_split : D *ᵥ x = (s • (B * Bᴴ)) *ᵥ x - (B * (C * Cᴴ) * Bᴴ) *ᵥ x := by
-      rw [sub_mulVec]
-    have h_dot_sub (u v : Fin D → ℂ) : star x ⬝ᵥ (u - v) = star x ⬝ᵥ u - star x ⬝ᵥ v := by
-      simp only [dotProduct, Finset.sum_sub_distrib, mul_sub, Pi.sub_apply]
-    have h_dot : star x ⬝ᵥ (D *ᵥ x) =
-        star x ⬝ᵥ ((s • (B * Bᴴ)) *ᵥ x) -
-        star x ⬝ᵥ ((B * (C * Cᴴ) * Bᴴ) *ᵥ x) := by
-      rw [h_Dx_split, h_dot_sub]
-    have h_first : star x ⬝ᵥ ((s • (B * Bᴴ)) *ᵥ x) = s • (star y ⬝ᵥ y) := by
-      simp [smul_mulVec, h_alpha, s]
-    rw [h_first, h_beta] at h_dot
-    rw [h_dot]
-    have hy_nonneg : 0 ≤ star y ⬝ᵥ y := dotProduct_star_self_nonneg y
-    have hz_nonneg : 0 ≤ star z ⬝ᵥ z := dotProduct_star_self_nonneg z
-    have h_norm_bound : RCLike.re (star z ⬝ᵥ z) ≤
-        ‖C‖ ^ 2 * RCLike.re (star y ⬝ᵥ y) := by
+    have h_norm_bound : (star z ⬝ᵥ z).re ≤ ‖C‖ ^ 2 * (star y ⬝ᵥ y).re := by
       have h := re_star_dotProduct_mulVec_le_opNorm_sq Cᴴ y
       have h_norm_Cstar : ‖Cᴴ‖ = ‖C‖ := Matrix.l2_opNorm_conjTranspose C
       rw [h_norm_Cstar] at h
       simpa [z] using h
+    have h_val : star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
+        ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - (star z ⬝ᵥ z) := by
+      calc
+        star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
+            star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ)) *ᵥ x -
+              (B * (C * Cᴴ) * Bᴴ) *ᵥ x) := by rw [sub_mulVec]
+        _ = (star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ)) *ᵥ x)) -
+            (star x ⬝ᵥ ((B * (C * Cᴴ) * Bᴴ) *ᵥ x)) := by
+          simp [dotProduct, Finset.sum_sub_distrib, mul_sub]
+        _ = (star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ)) *ᵥ x)) - star z ⬝ᵥ z := by
+          rw [h_BCCBstar]
+        _ = ((‖C‖ ^ 2 : ℝ) • (star x ⬝ᵥ ((B * Bᴴ) *ᵥ x))) - star z ⬝ᵥ z := by
+          simp [smul_mulVec]
+        _ = ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - star z ⬝ᵥ z := by rw [h_BBstar]
+    rw [h_val]
+    have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by
+    have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by      calc        ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (((‖C‖ ^ 2 : ℝ) : ℂ) * (star y ⬝ᵥ y)).re := by simp        _ = ((‖C‖ ^ 2 : ℂ)).re * (star y ⬝ᵥ y).re - ((‖C‖ ^ 2 : ℂ)).im * (star y ⬝ᵥ y).im := by rw [Complex.mul_re]        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re - 0 * (star y ⬝ᵥ y).im := by simp        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by ring    have h_smul_im : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by      calc        ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (((‖C‖ ^ 2 : ℝ) : ℂ) * (star y ⬝ᵥ y)).im := by simp        _ = ((‖C‖ ^ 2 : ℂ)).re * (star y ⬝ᵥ y).im + ((‖C‖ ^ 2 : ℂ)).im * (star y ⬝ᵥ y).re := by rw [Complex.mul_im]        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im + 0 * (star y ⬝ᵥ y).re := by simp        _ = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by ring      rw [Complex.sub_im, h_smul_im, hy_im_zero, hz_im_zero]
+      ring
     rw [Complex.nonneg_iff]
     constructor
-    · have hy_re_nonneg : 0 ≤ RCLike.re (star y ⬝ᵥ y) :=
-        (Complex.nonneg_iff.mp hy_nonneg).1
-      have hs_real : RCLike.re s = ‖C‖ ^ 2 := by
-        simp [s]
-      simp [RCLike.re_sub, RCLike.re_smul_ofReal, s, hs_real]
-      nlinarith
-    · have hy_im_zero : RCLike.im (star y ⬝ᵥ y) = 0 :=
-        (Complex.nonneg_iff.mp hy_nonneg).2
-      have hz_im_zero : RCLike.im (star z ⬝ᵥ z) = 0 :=
-        (Complex.nonneg_iff.mp hz_nonneg).2
-      simp [RCLike.im_sub, RCLike.im_smul, s, hy_im_zero, hz_im_zero]
-  have h_s_eq : s • (B * Bᴴ) = (‖C‖ ^ 2 : ℝ) • (B * Bᴴ) := by simp [s]
-  rw [h_s_eq]
-  exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hD_herm hD_nonneg
+    · rw [h_re]
+      nlinarith [h_norm_bound, (Complex.nonneg_iff.mp hy_nonneg).1,
+        (Complex.nonneg_iff.mp hz_nonneg).1]
+    · rw [h_im]
+  exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg h_herm h_nonneg
 
 theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ) (_hμ : 0 ≤ μ)
     (hle : A * Aᴴ ≤ μ • (B * Bᴴ)) :
@@ -206,7 +196,7 @@ theorem douglas_tfae (A B : Mat) : List.TFAE [
     intro h; rcases h with ⟨C, hC⟩; subst hC
     intro x hx; rcases hx with ⟨v, rfl⟩
     refine ⟨C *ᵥ v, ?_⟩
-    simp [Matrix.mulVecLin_apply, Matrix.mulVec_mulVec]
+    rw [Matrix.mulVecLin_apply, Matrix.mulVec_mulVec, Matrix.mulVecLin_apply]
   tfae_have h12 : 1 → 2 := by
     intro hAB
     rcases factorization_of_range_mulVecLin_le hAB with ⟨C, hC⟩
@@ -228,8 +218,9 @@ theorem douglas_tfae (A B : Mat) : List.TFAE [
 theorem factorization_pinv (A B : Mat) (hAB : A.mulVecLin.range ≤ B.mulVecLin.range) :
     B * (pinv B * A) = A := by
   have hSPA : (posSemidefBB B).supportProj * A = A := by
-    rcases (douglas_tfae A B).out 0 1 hAB with ⟨μ, hμ, hle⟩
-    exact supportProj_mul_eq_of_conjTranspose_le A B μ hμ hle
+    have hle := ((douglas_tfae A B).out 0 1 (by rfl) (by rfl)).mp hAB
+    rcases hle with ⟨μ, hμ, hle'⟩
+    exact supportProj_mul_eq_of_conjTranspose_le A B μ hμ hle'
   calc
     B * (pinv B * A) = (B * pinv B) * A := by simp [Matrix.mul_assoc]
     _ = (posSemidefBB B).supportProj * A := by rw [mul_pinv_eq_supportProj B]
