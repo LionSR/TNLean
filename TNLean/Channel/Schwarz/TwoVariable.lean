@@ -92,7 +92,8 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
         | 1, 1 => Bᴴ * B := by
     fin_cases p <;> fin_cases q <;>
       ext i j <;> simp [P', Matrix.reindex_apply, P, e, finTwoSumEquiv, finTwoEquiv]
-  have hQ_eq : Q = Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) := by
+  have hQ_eq : Q =
+      Matrix.fromBlocks (E (Aᴴ * A)) (E (Aᴴ * B)) (E (Bᴴ * A)) (E (Bᴴ * B)) := by
     ext i j
     rcases i with (i | i) <;> rcases j with (j | j) <;>
       simp [Q, Y, hP'Block, e, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.of_apply]
@@ -104,7 +105,8 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
 -- (Uses `linear_eq_zero_of_quadratic_nonneg` from AbstractMultiplicativeDomain)
 /-- A complex number `z† A z` for a PSD matrix `A` is nonnegative. -/
 private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
-    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef) (z : n → ℂ) :
+    (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
+    (z : n → ℂ) :
     0 ≤ star z ⬝ᵥ (A.mulVec z) := by
   have hA_sub : (Matrix.fromBlocks A C Cᴴ B).submatrix Sum.inl Sum.inl = A := by
     ext i j
@@ -118,7 +120,8 @@ private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
 
 /-- The quadratic form of a `fromBlocks` matrix on a `Sum`-type vector.
 
-For M = [[A, B], [C, D]] and x = (v, w), we have x† M x = v†A v + v†B w + w†C v + w†D w. -/
+For M = [[A, B], [C, D]] and x = (v, w), we have
+x† M x = v†A v + v†B w + w†C v + w†D w. -/
 private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
     star (Sum.elim v w) ⬝ᵥ ((Matrix.fromBlocks A B C D).mulVec (Sum.elim v w)) =
     star v ⬝ᵥ (A.mulVec v) + star v ⬝ᵥ (B.mulVec w) +
