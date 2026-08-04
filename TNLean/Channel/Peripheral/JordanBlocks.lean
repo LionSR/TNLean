@@ -49,7 +49,7 @@ and $N^2 X = 0$.
 
 Source: Wolf, Proposition 6.2 proof, Eq. (6.10); local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
-private lemma pow_apply_rank_two_genEig
+lemma pow_apply_rank_two_genEig
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (T : V →ₗ[ℂ] V) (μ : ℂ) (n : ℕ) (X : V)
     (hN2 : ((T - μ • (1 : V →ₗ[ℂ] V)) ^ 2) X = 0) :
@@ -57,14 +57,8 @@ private lemma pow_apply_rank_two_genEig
   induction n with
   | zero => simp
   | succ n ih =>
-    -- T^{n+1} X = T (T^n) X
     rw [pow_succ', show (T * T ^ n) X = T ((T ^ n) X) from rfl, ih]
-    -- Now T (μ^n X + n μ^{n-1} (T-μ) X)
-    -- = μ^n T X + n μ^{n-1} T ((T-μ) X)
     rw [map_add, map_smul, map_smul]
-    -- Compute T X = T X (trivial)
-    -- Compute T ((T-μ) X) = (T-μ+μ)(T-μ)X = (T-μ)^2 X + μ (T-μ) X = μ (T-μ) X
-    -- Because (T-μ)^2 X = 0
     have h_TTX : T ((T - μ • (1 : V →ₗ[ℂ] V)) X) = μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
       -- T = (T-μ) + μ, so T((T-μ)X) = (T-μ)^2 X + μ(T-μ)X = μ(T-μ)X (since (T-μ)^2 X = 0)
       calc
@@ -78,9 +72,7 @@ private lemma pow_apply_rank_two_genEig
         _ = μ • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by simp
     -- Substitute into the expression
     rw [h_TTX]
-    -- Now we have: μ^n (T X) + n μ^{n-1} (μ (T-μ) X)
-    -- = μ^n (T X) + n μ^n (T-μ) X
-    -- But T X = μ X + (T-μ) X
+
     have h_TX : T X = μ • X + (T - μ • (1 : V →ₗ[ℂ] V)) X := by
       calc
         T X = ((T - μ • (1 : V →ₗ[ℂ] V)) + μ • (1 : V →ₗ[ℂ] V)) X := by simp
@@ -91,15 +83,10 @@ private lemma pow_apply_rank_two_genEig
     -- = μ^n (μ X + (T-μ) X) + n μ^n (T-μ) X
     -- = μ^{n+1} X + μ^n (T-μ) X + n μ^n (T-μ) X
     -- = μ^{n+1} X + (n+1) μ^n (T-μ) X
-    -- After rw [h_TTX], the LHS has:
-    -- μ^n • (T X) + (n * μ^{n-1}) • μ • ((T-μ)X)
+
     -- Replace T X by μ X + (T-μ)X
     -- T X was already rewritten above
-    -- Goal: μ^n • (μ X + (T-μ)X) + (n*μ^(n-1)) • μ • ((T-μ)X) = RHS
-    -- Simplify smul: combine scalars
     simp only [smul_add, smul_smul]
-    -- Goal: (μ^n * μ) • X + (μ^n + (μ * (↑n * μ^(n-1)))) • (T-μ)X = μ^(n+1) • X + (↑(n+1) * μ^(n+1-1)) • (T-μ)X
-    -- Simplify X-term: (μ^n * μ) = μ^(n+1) by ring
     have hX : (μ ^ n : ℂ) * μ = μ ^ (n + 1) := by ring
     -- Simplify (T-μ)X-term: μ^n + μ*n*μ^(n-1) = (n+1)*μ^n = ↑(n+1)*μ^{(n+1)-1}
     have hV : (μ ^ n : ℂ) + (μ : ℂ) * ((n : ℂ) * (μ ^ (n - 1) : ℂ)) = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
@@ -107,34 +94,20 @@ private lemma pow_apply_rank_two_genEig
         rw [show (n : ℕ) + 1 - 1 = n by omega]
       rw [h_pow]
       push_cast
-      -- Goal: μ^n + μ * (n : ℂ) * μ^(n-1) = ((n : ℂ) + 1) * μ^n
-      -- Case split on n=0 vs n≥1
       rcases Nat.eq_zero_or_pos n with (rfl | hn)
       · simp
       · -- n ≥ 1: then μ * μ^(n-1) = μ^n
         have h_mul_pow : (μ : ℂ) * (μ : ℂ) ^ (n - 1) = (μ : ℂ) ^ n := by
           rw [← pow_succ', Nat.sub_add_cancel hn]
-        -- Goal: μ^n + μ * (↑n * μ^(n-1)) = (↑n + 1) * μ^n
-        -- Rewrite μ * (↑n * μ^(n-1)) = ↑n * (μ * μ^(n-1)) = ↑n * μ^n
         calc
           (μ ^ n : ℂ) + (μ : ℂ) * ((n : ℂ) * (μ : ℂ) ^ (n - 1))
               = (μ ^ n : ℂ) + ((n : ℂ) * ((μ : ℂ) * (μ : ℂ) ^ (n - 1))) := by ring
           _ = (μ ^ n : ℂ) + ((n : ℂ) * (μ : ℂ) ^ n) := by rw [h_mul_pow]
           _ = ((n : ℂ) + 1) * (μ ^ n : ℂ) := by ring
-    -- Goal: μ^(n+1) • X + μ^n • v + (n*μ^(n-1)*μ) • v = μ^(n+1) • X + ((n+1)*μ^(n+1-1)) • v
-    -- where v = (T-μ)X
-    -- Use add_smul to combine the v-terms
-    -- c₁ = μ^n, c₂ = n*μ^(n-1)*μ
-    -- c₁ + c₂ = μ^n + μ*n*μ^(n-1) = (n+1)*μ^n (by hV)
-    -- And μ^(n+1-1) = μ^n
-    -- So the RHS v-coefficient matches the sum
     have h_v_coeff : (μ ^ n : ℂ) + ((n : ℂ) * (μ ^ (n - 1) : ℂ) * μ) = (↑(n + 1) : ℂ) * (μ ^ (n + 1 - 1) : ℂ) := by
       -- hV LHS is μ^n + μ*(n*μ^(n-1)) which equals μ^n + n*μ^(n-1)*μ by commutativity
       simpa [mul_comm, mul_left_comm, mul_assoc] using hV
-    -- The X-term matches by hX
     rw [hX]
-    -- Now combine v-terms on LHS: μ^n • v + c • v = (μ^n + c) • v = d • v
-    -- Use add_smul in reverse, then h_v_coeff
     have h_combine : (μ ^ n : ℂ) • ((T - μ • (1 : V →ₗ[ℂ] V)) X) +
         ((n : ℂ) * (μ ^ (n - 1) : ℂ) * μ) • ((T - μ • (1 : V →ₗ[ℂ] V)) X) =
         (↑(n + 1) * (μ ^ (n + 1 - 1) : ℂ)) • ((T - μ • (1 : V →ₗ[ℂ] V)) X) := by
