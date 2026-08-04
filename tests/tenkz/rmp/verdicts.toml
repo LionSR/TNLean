@@ -173,45 +173,46 @@ id = "rmp-ii-reduced-density"
 status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "46e0d1506636989ff39e5db2b9eb98914a080ad9f45d368b4a0565c44b16dd0e"
-reviewed = "2026-08-04"
+case_sha256 = "dd59c319a706690a7b09c39bb536f4265b934e2e58cc5c9edcac611b2041b595"
+reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "Kernel migration (wave 1B): the four-column ket-bra racetrack with the west rho^R and east rho^L cup beads matches the author panel site for site; the labelled cup sugar does not expand yet (K1), so the bead is hand-placed on the canonical cup wire; the workbench wraps the same band in eig(...) where the case names it rho_n -- identical network."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the author panel: the four-column ket-bra racetrack with all ket legs open upward, all bra legs open downward, and the west rho^R / east rho^L cup beads matches the author panel site for site; the rails are hand-written under bonds=none because bonds=grid also bonds each vertical pair, which had contracted the physical legs the source leaves open -- fixed in this verification pass; the labelled cup sugar does not expand yet (K1, #5482), so the bead is hand-placed on the canonical cup wire; the workbench wraps the same band in eig(...) where the case names it rho_n -- identical network."
 
 [[verdict]]
 id = "rmp-ii-spectrum-rho"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "2c3a3802c4f1c997af672c8c79d01de394f80e5ece378ac94e75ff65524c0be5"
-reviewed = "2026-08-04"
+case_sha256 = "e37fd2fd76ca6aa04b3444defc59c8219f9ee5752acc06305c1e4a3a426ddca4"
+reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "Kernel migration (wave 1B): the shared racetrack of rmp-ii-reduced-density inside eig(...); the labelled cup sugar does not expand yet (K1), so the bead is hand-placed on the canonical cup wire."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the author panel: the shared racetrack of rmp-ii-reduced-density inside eig(...), with the same bonds=none fix keeping all physical legs open as in the source; the labelled cup sugar does not expand yet (K1, #5482), so the bead is hand-placed on the canonical cup wire."
 
 [[verdict]]
 id = "rmp-ii-spectrum-transfer"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "98680bd88af52b93a14bf756a3cd93dd99e3375d0f1aee011dedba4656f70b19"
-reviewed = "2026-08-04"
+defects = ["text-substitution"]
+case_sha256 = "22b1f73f1f762e7d6fe618610d94368d1f33ab0f6a05ee0bfc4ae884a809234a"
+reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-note = "Kernel migration (wave 1B): each column's physical index is contracted into a ladder rung, matching the source's transfer-operator topology exactly; rho^R and rho^L are now the same construction -- a small ring atom terminating its own rail's open end -- resolving the K3 gap-bar residue's shared tail idiom; only form=label and form=enclosure draw in the executable kernel, and neither a .. range nor a braced list draws as a mark target yet (both K1), so the n annotation is a south label at the midpoint of the four-bead span rather than a brace under a range; the rung bonds render at the same weight as the virtual rail instead of the source's bold rung, so weight-mismatch stands and the verdict stays cosmetic-gap."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the author panel: each column's physical index is contracted into a ladder rung, matching the source's transfer-operator topology exactly, with the four virtual ends open around the ladder; rho^R and rho^L are the same construction -- a small ring atom in-line on its own rail -- resolving the K3 gap-bar residue's shared tail idiom; the source's dashed red cut rectangle is drawn as the house secondary enclosure around the four contracted columns; measured at 600dpi the rung and rail weights match the source's same-weight ladder, so the stale weight-mismatch tag is dropped; the bracket mark form still does not draw (K1, #5482), so the n annotation is a south label at the midpoint of the span rather than a brace under a range -- that visible substitute keeps the verdict cosmetic-gap."
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-defects = []
+defects = ["open-closure"]
 case_sha256 = "850c3bb9e1c7765b4f3dba0d136d0d6733920bec0b0635919c5425b1e393de1f"
-reviewed = "2026-08-04"
+reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "Kernel migration (wave 1B): each side carries both fixed-point factors as one wires=2 ring atom in the source order, each closed on its own doubled port pair, with two open virtual ends on the far side; matches the K2 promotion's topology. The self-loop wire between an atom's own two slots draws flush with the glyph boundary rather than the source's protruding cup arc -- a rendering residue, not a topology change."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
+note = "Kernel migration (wave 1B), Fable-verified: each side carries both fixed-point factors as one wires=2 ring atom in the source order, each closed on its own doubled port pair, with two open virtual ends on the far side; matches the K2 promotion's topology. The self-loop wire between an atom's own two slots draws flush with the glyph boundary, so the fold the K2-verified grid render inked as a protruding cup arc is not visible at all (index wires draw straight-only; via and route=arc are recorded but not inked -- K1); until the renderer inks that fold, the closed side is indistinguishable from a portless side, so the verdict is cosmetic-gap, not faithful."
 
 [[verdict]]
 id = "rmp-ii-blocking"
@@ -222,8 +223,8 @@ defects = []
 case_sha256 = "2e6bed4864a7b91f94c6b32b58ec821ae92160a7429329884caaf32aefff52fc"
 reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-05-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "Kernel migration (wave 1B): the wide=2 pill's two typed north ports (i, beta) and one south port (alpha) reproduce the source panel's topology, boundary, labels, and orientation unchanged, now with the stock pill silhouette (#5480) matching the source glyph exactly."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-600dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the published panel: the wide=2 pill's two typed north ports (i, beta) and one south port (alpha, under i as in the source) reproduce the source panel's topology, boundary, labels, and orientation unchanged; the stock pill silhouette (#5480) gives the source's rounded glyph form, but the pill remains markedly wider than the source's compact glyph (about 6:1 against the source's 1.75:1) -- intentional house styling, as recorded at the K2 promotion."
 
 [[verdict]]
 id = "rmp-ii-staircase"
@@ -251,11 +252,11 @@ note = "the four-two-one gate tree closes the prepared input and preserves all e
 id = "rmp-ii-sv17"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "9feafe0e86a7cede6fdd44f8b8b749d121f6c1f6c73dd9779a35b0651bee0fd4"
+case_sha256 = "aeb28edc1dfd7e1a11d185e498085e01522bca27a2d048ebf5cc7dca83b76731"
 reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-05-200dpi"
-second_viewer = "visual-referee-2026-07-23"
-note = "Kernel migration (wave 1B): context-only; the 9-leg and two 4-leg wide state atoms now use the stock pill silhouette (#5480) matching the source glyph, and rho_k's three physical indices are contracted into vertical rungs (the sandwich's implicit op row), matching the prior render exactly; \\vphantom in an atom label crashes the kernel's label pass (K1), so the cup beads carry a blank label instead of the source's invisible spacer."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-400dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the paper panel: rho_k is the k-site marginal operator, so its three ket legs stay open upward and its three bra legs open downward with only the virtual ends closed on unlabelled cup beads, exactly as the paper panel draws it -- the migration's ket-bra rungs contracted those legs and were removed in this verification pass; the 9-leg and two 4-leg wide state atoms use the stock pill silhouette (#5480) where the paper panel draws sharp-cornered blocks, and the dots atom elides the intermediate sites the panel draws explicitly -- house presentation carried over from the reviewed grid tier; \\vphantom in an atom label crashes the kernel's label pass (K1), so the cup beads carry a blank label instead of the source's invisible spacer."
 
 [[verdict]]
 id = "rmp-ii-canonical-left"
@@ -263,10 +264,10 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 case_sha256 = "51389649d5d82dd7916b550039f079fd6a9d78b86ac82550725a08a6333f0d1b"
-reviewed = "2026-08-04"
+reviewed = "2026-08-05"
 renderer = "kernel-migration-wave1b-source-review-2026-08-04-200dpi"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "Kernel migration (wave 1B): the triangle atom's three typed ports (alpha west, beta east, s south) reproduce the source panel's open boundary, labels, and rightward-pointing orientation exactly; the A_L label now sits inscribed in the glyph rather than above it, which is house label placement."
+second_viewer = "fable-w1b-vision-verification-2026-08-05-200dpi"
+note = "Kernel migration (wave 1B), Fable-verified against the author panel: the triangle atom's three typed ports (alpha west, beta east, s south) reproduce the source panel's open boundary, labels, and rightward-pointing orientation; the source curls the s leg southwest off the triangle base where the house port drops it straight south -- equivalent routing of the same open leg; the A_L label sits inscribed in the glyph rather than above it, which is house label placement."
 
 [[verdict]]
 id = "rmp-ii-canonical-right"
