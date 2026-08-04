@@ -1,0 +1,10 @@
+% Negative: a skin word that is neither primitive nor declared is rejected
+% with the coded skin diagnostic.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[skin=capsule, at=(1,2), name=bad]{X}
+\end{tenkz}
+\end{document}
