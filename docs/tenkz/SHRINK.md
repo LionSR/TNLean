@@ -1411,3 +1411,17 @@ labelled-mark ink repair expands an existing style before its node reads
 it.
 
 Census-correction: #5350
+
+### 2026-08-04 — correction: the idempotent panel's loop side uses the plane physical policy
+
+The idempotent-panel entry of 2026-08-04 describes an intermediate commit
+of that migration.  In the merged state, both the loop side and the bare
+side of `rmp-iii-b-idempotent` take their upward leg from the plane
+`physical=up` policy; no typed physical-port workaround remains on either
+side.  The loop side's five station boxes -- `N`, `E`, `S`, `W`, and `J`
+-- seal off that policy leg with `void=sealed` and keep their own typed
+virtual ports instead
+(`tests/tenkz/rmp/section-iii-b/cases/rmp-iii-b-idempotent.tex`, lines 15,
+25-33, and 53-54).  The plane `physical=up` axis was introduced under
+#5405; #5375 remains the census-correction tag for the migration, not the
+axis's origin.  M4 and every other meter are unchanged by this correction.
