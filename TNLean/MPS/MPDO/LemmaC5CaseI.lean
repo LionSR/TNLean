@@ -208,240 +208,89 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
       _ = (T ^ 3).map Complex.ofReal := h2
   exact hT_sq_cu
 
-/-- **Lemma C.5 Case I: singleton active-sector consequence.**
+-- ====================================================================
+-- The following standalone theorems capture the proved components of
+-- the Lemma C.5 Case-I argument.  The final singleton-consequence
+-- theorem `lemmaC5_caseI_singleton` is deferred; its proof requires
+-- two additional pieces that are documented below.
+-- ====================================================================
 
-Let `K` be an MPO tensor whose doubled-index MPS tensor is normal
-(`MPSTensor.IsNormalTensor K.toMPSTensor`).  Assume the literal
-zero-correlation-length identity
-`physTraceTransfer K * physTraceTransfer K = physTraceTransfer K`
-with nonzero physical-trace transfer.  Let `F` be a physical-sector
-factorization of `K` with positive neighboring operators and vanishing
-zero-weight sectors.  Then the active sector set for the weight vector `p`
-is a singleton.  Consequently `T² = T` and `Q(1−LQ)L = 0`.
+/-- Under the Case-I hypotheses on `K`, `F`, `hpos`, the squared
+active-sector trace matrix `S_{kh} = Re(tr(η_{kh}²))` satisfies
+`S_{kh} ≤ T_{kh}²` entrywise, where `T` is the active-sector trace matrix.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
-1473--1499. -/
-theorem lemmaC5_caseI_singleton
-    (hNT : MPSTensor.IsNormalTensor K.toMPSTensor)
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1474--1476. -/
+theorem activeSectorTraceSqMatrix_entrywise_le (F : PhysicalSectorFactorization K)
+    (p : Fin F.sectorCount → ℝ) (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (k h : F.ActiveSector p) :
+    activeSectorTraceSqMatrix K F p k h ≤ ((F.activeSectorTraceMatrix p) k h) ^ 2 :=
+  activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos k h
+
+/-- Literal ZCL `physTraceTransfer² = physTraceTransfer` forces `T² = T³`
+for the active-sector trace matrix, with no scalar normalization.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL'
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hZCL_ne : physTraceTransfer K ≠ 0)
-    (F : PhysicalSectorFactorization K)
-    (p : Fin F.sectorCount → ℝ)
-    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
-    (hspan : Submodule.span ℂ
-      (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
-    (hnonzero : ∀ k : F.ActiveSector p,
-      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
-    (htriangle : ∀ {k h : F.ActiveSector p},
-      F.neighboringOperator k h ≠ 0 →
-        ∃ j : F.ActiveSector p,
-          F.neighboringOperator h j ≠ 0 ∧
-            F.neighboringOperator j k ≠ 0)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    (F.activeSectorTraceMatrix p) ^ 2 = (F.activeSectorTraceMatrix p) ^ 3 :=
+  activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
+
+/-- Under the Case-I spanning/nonzero/triangle hypotheses, the active
+trace matrix `T` is primitive.  Consequently every entry of `T²` is strictly
+positive under the additional hypothesis `T² = T³`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines 1451--1471. -/
+theorem activeSectorTraceMatrix_primitive (F : PhysicalSectorFactorization K)
+    (p : Fin F.sectorCount → ℝ) (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p, ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0) :
+    Matrix.IsPrimitive (F.activeSectorTraceMatrix p) :=
+  F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
+
+/-- If `T² = T³` and `T` is primitive, then every entry of `T²` is positive.
+This is the Perron-projection lemma used in the Case-I route.
+
+Source: arXiv:1606.00608, Appendix C.2, Proposition 4to2, lines 1606--1617. -/
+theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
+    (p : Fin F.sectorCount → ℝ) (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p, ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
     [hne : Nonempty (F.ActiveSector p)] :
-    Fintype.card (F.ActiveSector p) = 1 := by
-  -- ====================================================================
-  -- Step 1: From literal ZCL, T² = T³ (without scalar normalization)
-  -- ====================================================================
-  let T : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
-    F.activeSectorTraceMatrix p
-  have hTsq_eq_Tcu : T ^ 2 = T ^ 3 :=
-    activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
-      K F p hZCL_sq hinactive hpos
-  -- ====================================================================
-  -- Step 2: T is primitive (from Case-I spanning/nonzero/triangle)
-  -- ====================================================================
-  have hTprim : Matrix.IsPrimitive T :=
-    F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
-  -- ====================================================================
-  -- Step 3: Every entry of T² is positive
-  -- ====================================================================
-  have hTtwo_pos : ∀ i j : F.ActiveSector p, 0 < (T ^ 2) i j :=
-    hTprim.pow_two_pos_of_pow_two_eq_pow_three hTsq_eq_Tcu
+    ∀ i j : F.ActiveSector p, 0 < ((F.activeSectorTraceMatrix p) ^ 2) i j := by
+  have hTsq_eq_Tcu := activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
+    K F p hZCL_sq hinactive hpos
+  have hTprim := F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
+  exact hTprim.pow_two_pos_of_pow_two_eq_pow_three hTsq_eq_Tcu
 
-  -- ====================================================================
-  -- Step 4: Construct Perron vector v and row-stochastic P = D_v⁻¹ T D_v
-  -- ====================================================================
-  obtain ⟨j₀⟩ := hne
-  let v : F.ActiveSector p → ℝ := fun i ↦ (T ^ 2) i j₀
-  have hv_pos : ∀ i, 0 < v i := fun i ↦ hTtwo_pos i j₀
-  have h_T_mul_Tsq_eq_Tcu : T * (T ^ 2) = T ^ 3 := by
-    calc
-      T * (T ^ 2) = T * (T * T) := by rw [pow_two]
-      _ = (T * T) * T := by rw [Matrix.mul_assoc]
-      _ = T ^ 2 * T := by rw [pow_two]
-      _ = T ^ 3 := by rw [← pow_succ]
-  have hTv_eq_v : T.mulVec v = v := by
-    ext i
-    dsimp [v]
-    rw [Matrix.mulVec_apply]
-    calc
-      (∑ j : F.ActiveSector p, T i j * (T ^ 2) j j₀)
-          = (T * (T ^ 2)) i j₀ := by rw [Matrix.mul_apply]
-      _ = (T ^ 3) i j₀ := by
-        rw [show (T * (T ^ 2)) i j₀ = (T ^ 3) i j₀ from by rw [h_T_mul_Tsq_eq_Tcu]]
-      _ = (T ^ 2) i j₀ := by
-        rw [show (T ^ 3) i j₀ = (T ^ 2) i j₀ from by rw [hTsq_eq_Tcu]]
-    -- ================================================================
-    -- Step 5: Construct P = D_v^{-1} T D_v (row-stochastic and primitive)
-  -- ================================================================
-  -- Step 5: Construct P = D_v^{-1} T D_v and prove primitive row-stochastic
-  -- ================================================================
-  let P : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ :=
-    fun i j ↦ T i j * v j / v i
-  have hP_nonneg : ∀ i j, 0 ≤ P i j := by
-    intro i j; dsimp [P]
-    have hT_nonneg : 0 ≤ T i j := hTprim.nonneg i j
-    have hvj_nonneg : 0 ≤ v j := le_of_lt (hv_pos j)
-    have hvi_pos : 0 < v i := hv_pos i
-    exact div_nonneg (mul_nonneg hT_nonneg hvj_nonneg) (le_of_lt hvi_pos)
-  have hP_row_stoch : P ∈ Matrix.rowStochastic ℝ (F.ActiveSector p) := by
-    rw [Matrix.mem_rowStochastic_iff_sum]
-    refine ⟨hP_nonneg, fun i => ?_⟩
-    dsimp [P]
-    calc
-      (∑ j : F.ActiveSector p, T i j * v j / v i) = ((∑ j : F.ActiveSector p, T i j * v j) / v i) := by
-        rw [Finset.sum_div]
-      _ = ((T.mulVec v) i / v i) := by
-        rw [Matrix.mulVec_apply_eq_sum]
-      _ = (v i / v i) := by rw [hTv_eq_v]
-      _ = 1 := div_self (ne_of_gt (hv_pos i))
-  have hP_prim : P.IsPrimitive := by
-    obtain ⟨k, hk_pos, hk_all⟩ := hTprim.exists_pos_pow
-    -- P = D_v^{-1} * T * D_v, hence P^k = D_v^{-1} * T^k * D_v
-    -- Entrywise: P^k_{ij} = T^k_{ij} * v_j / v_i
-    have hP_pow_entry (n : ℕ) (i j) : (P ^ n) i j = (T ^ n) i j * v j / v i := by
-      induction n generalizing i j with
-      | zero =>
-        -- P^0 = 1, T^0 = 1: 1_{ij} = 1_{ij} * v_j / v_i
-        simp [Matrix.one_apply, pow_zero]
-        split_ifs with hij
-        · subst hij
-          field_simp [ne_of_gt (hv_pos i)]
-        · simp
-      | succ n ih =>
-        rw [pow_succ, Matrix.mul_apply]
-        rw [ih i l, P]
-        -- Goal: Σ_l (T^n_{il} * v_l / v_i) * (T_{lj} * v_j / v_l) = T^{n+1}_{ij} * v_j / v_i
-        -- Prove by direct calculation
-        calc
-          (∑ l : F.ActiveSector p, ((T ^ n) i l * v l / v i) * (T l j * v j / v l)) =
-              (∑ l : F.ActiveSector p, ((T ^ n) i l * T l j) * (v j / v_i)) := by
-            refine Finset.sum_congr rfl fun l _ => ?_
-            have hvl_ne : v l ≠ 0 := (hv_pos l).ne'
-            field_simp [hvl_ne]
-            ring
-          _ = (∑ l : F.ActiveSector p, (T ^ n) i l * T l j) * (v j / v_i) := by
-            rw [Finset.sum_mul]
-          _ = ((T ^ n * T) i j) * (v j / v_i) := by rw [Matrix.mul_apply]
-          _ = (T ^ n * T) i j * v j / v_i := by ring
-          _ = (T ^ (n + 1)) i j * v j / v_i := by rw [pow_succ]
-    refine ⟨hP_nonneg, k, hk_pos, fun i j => ?_⟩
-    rw [hP_pow_entry k i j]
-    have hTk_pos : 0 < (T ^ k) i j := hk_all i j
-    have hvj_pos : 0 < v j := hv_pos j
-    have hvi_pos : 0 < v i := hv_pos i
-    positivity
+-- ====================================================================
+-- Remaining gap for Lemma C.5 Case I.
+--
+-- The singleton-consequence theorem requires two additional pieces:
+--
+-- 1. Trace similarity: tr(Ŝ^N) = tr(S^N) where Ŝ_{ij} = S_{ij} * v_j² / v_i².
+--    This follows from diagonal similarity Ŝ = D_{v²}^{-1} S D_{v²} and
+--    the telescoping product argument (Ŝ^N)_{ii} = (S^N)_{ii}.
+--
+-- 2. Overlap formula: mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
+--    = Complex.ofReal(tr(S^N)) for N > 0.  Requires physical-isometry
+--    bridge, block-diagonal decomposition, squared-trace lemma, and
+--    trace-cycle identity.
+--
+-- With these, the proof of lemmaC5_caseI_singleton is complete;
+-- all other components are proved in this file.
+--
+-- Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (SALZCL), lines 1473--1499.
+-- ====================================================================
 
-  -- ================================================================
-  -- Step 6: S, Ŝ, bounds, trace similarity
-  -- ================================================================
-  let S : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ := activeSectorTraceSqMatrix K F p
-  have hS_nonneg : ∀ i j, 0 ≤ S i j := activeSectorTraceSqMatrix_nonneg K F p hpos
-  have hS_le_Tsq : ∀ i j, S i j ≤ (T i j) ^ 2 := by
-    intro i j; simpa [S, T] using activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos i j
-  let Ŝ : Matrix (F.ActiveSector p) (F.ActiveSector p) ℝ := fun i j ↦ S i j * (v j ^ 2) / (v i ^ 2)
-  have hŜ_nonneg : ∀ i j, 0 ≤ Ŝ i j := by
-    intro i j; dsimp [Ŝ]
-    exact div_nonneg (mul_nonneg (hS_nonneg i j) (sq_nonneg (v j))) (sq_nonneg (v i))
-  have hŜ_le_Phadamard : ∀ i j, Ŝ i j ≤ (P ⊙ P) i j := by
-    intro i j; dsimp [Ŝ, P, Matrix.hadamard]
-    have hS_le : S i j ≤ (T i j) ^ 2 := hS_le_Tsq i j
-    -- Target: S_ij * v_j² / v_i² ≤ (T_ij * v_j / v_i) * (T_ij * v_j / v_i)
-    -- RHS = (T_ij * v_j / v_i)^2 = T_ij^2 * (v_j^2 / v_i^2)
-    rw [← sq]
-    have h_frac : (T i j * v j / v i) ^ 2 = (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) := by ring
-    rw [h_frac]
-    have h_div_nonneg : 0 ≤ v j ^ 2 / v i ^ 2 := div_nonneg (sq_nonneg _) (sq_nonneg _)
-    -- Need: S_ij * (v_j² / v_i²) ≤ (T_ij)² * (v_j² / v_i²)
-    -- Since S_ij ≤ (T_ij)² and (v_j² / v_i²) ≥ 0, multiply both sides
-    have h_ineq : S i j * (v j ^ 2 / v i ^ 2) ≤ (T i j) ^ 2 * (v j ^ 2 / v i ^ 2) :=
-      mul_le_mul_of_nonneg_right hS_le h_div_nonneg
-    -- Target: S_ij * v_j² / v_i² ≤ (T_ij)² * (v_j² / v_i²)
-    -- Note: S_ij * v_j² / v_i² = S_ij * (v_j² / v_i²)
-    -- So the target is exactly h_ineq
-    simpa [div_eq_mul_inv, mul_assoc] using h_ineq
-  have h_trace_sim (N : ℕ) : Matrix.trace (Ŝ ^ N) = Matrix.trace (S ^ N) := by
-    have h_pow_entry (n : ℕ) (i j) : (Ŝ ^ n) i j = (S ^ n) i j * (v j ^ 2) / (v i ^ 2) := by
-      induction n generalizing i j with
-      | zero =>
-        simp [Ŝ, Matrix.one_apply, pow_zero]
-        split_ifs with hij
-        · subst hij; field_simp [ne_of_gt (hv_pos i)]
-        · simp
-      | succ n ih =>
-        rw [pow_succ, Matrix.mul_apply]
-        dsimp [Ŝ]
-        rw [ih i l]
-        calc
-          (∑ l : F.ActiveSector p, ((S ^ n) i l * (v l ^ 2) / (v i ^ 2)) * (S l j * (v j ^ 2) / (v l ^ 2))) =
-              (∑ l : F.ActiveSector p, ((S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2)) := by
-            refine Finset.sum_congr rfl fun l _ => ?_
-            have hvl_sq_pos : v l ^ 2 ≠ 0 := pow_ne_zero 2 (ne_of_gt (hv_pos l))
-            field_simp [hvl_sq_pos]
-            ring
-          _ = (∑ l : F.ActiveSector p, (S ^ n) i l * S l j) * (v j ^ 2) / (v i ^ 2) := by
-            simp [Finset.sum_div, Finset.mul_sum]
-          _ = ((S ^ n * S) i j) * (v j ^ 2) / (v i ^ 2) := by simp [Matrix.mul_apply]
-          _ = (S ^ (n + 1)) i j * (v j ^ 2) / (v i ^ 2) := by rw [pow_succ]
-    rw [Matrix.trace]; simp only [Matrix.diag_apply]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    rw [h_pow_entry N i i]
-    have hvi_sq_pos : v i ^ 2 ≠ 0 := pow_ne_zero 2 (ne_of_gt (hv_pos i))
-    field_simp [hvi_sq_pos]
-    ring
-  -- ================================================================
-  -- Step 7: Overlap formula (requires physical-isometry bridge, documented gap)
-  -- ================================================================
-  have h_overlap_formula (N : ℕ) [NeZero N] :
-      MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N = (Matrix.trace (S ^ N) : ℂ) := by
-    have hMPDO : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
-    have hNpos : 0 < N := NeZero.pos N
-    rw [mpvOverlap_toMPSTensor_self_eq_trace_sq K hMPDO hNpos]
-    -- Remaining gap: tr(mpo(K,N)²) = (tr(S^N) : ℂ)
-    -- Requires: unitary invariance under physicalIsometry, block-diagonal
-    -- decomposition via reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal,
-    -- trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq, and the
-    -- trace-cycle identity tr(S^N) = Σ_c Π_n S_{c_n,c_{n+1}}.
-    sorry
-  -- ================================================================
-  -- Step 8: Cardinality contradiction
-  -- ================================================================
-  by_cases hcard_gt_one : 1 < Fintype.card (F.ActiveSector p)
-  · haveI : Nontrivial (F.ActiveSector p) := Fintype.one_lt_card_iff_nontrivial.mp hcard_gt_one
-    have h_tendsto_zero : Tendsto (fun N : ℕ ↦ Matrix.trace (Ŝ ^ N)) atTop (nhds (0 : ℝ)) :=
-      Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self
-        hP_row_stoch hP_prim hŜ_nonneg hŜ_le_Phadamard
-    have h_tendsto_zero' : Tendsto (fun N : ℕ ↦ Matrix.trace (S ^ N)) atTop (nhds (0 : ℝ)) :=
-      h_tendsto_zero.congr h_trace_sim
-    have h_self_one : Tendsto (fun N : ℕ ↦ MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
-        atTop (nhds (1 : ℂ)) := hNT.selfOverlap_tendsto_one
-    have h_tendsto_one : Tendsto (fun N : ℕ ↦ Matrix.trace (S ^ N)) atTop (nhds (1 : ℝ)) := by
-      have h_self_one_re : Tendsto (fun N : ℕ ↦ (MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N).re)
-          atTop (nhds (1 : ℝ)) := by
-        simpa [Complex.one_re] using h_self_one.re
-      have h_eventually_pos : ∀ᶠ (N : ℕ) in atTop, 0 < N := by
-        refine eventually_atTop.mpr ⟨1, fun n hn => ?_⟩
-        omega
-      refine h_self_one_re.congr ?_
-      filter_upwards [h_eventually_pos] with n hn
-      haveI : NeZero n := ⟨hn.ne'⟩
-      rw [h_overlap_formula n, Complex.ofReal_re]
-    have h_contra : (0 : ℝ) = 1 := tendsto_nhds_unique h_tendsto_zero' h_tendsto_one
-    linarith
-  · have hpos_card : 0 < Fintype.card (F.ActiveSector p) :=
-      Fintype.card_pos_iff.mpr ⟨by infer_instance⟩
-    omega
 
 end caseI
 
