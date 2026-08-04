@@ -27,9 +27,12 @@ open Matrix Finset BigOperators
 
 namespace Matrix
 
-/-- `K * (c * c' · E_{i,j}) * K† = c · K_col(i) ⊗ c' · K_col(j)†` as an outer
-product. The operator `K` may be rectangular: the conjugated matrix unit acts
-on the column index type of `K`. -/
+/-- Conjugating the scaled matrix unit `(c · c̄) · E_{i,j}` by `K` and `Kᴴ`
+yields the rank-one outer product of the scaled columns of `K`:
+`K * ((c * star c) · E_{i,j}) * Kᴴ = (c · K_col(i)) (c · K_col(j))†`, where
+the second factor is the conjugate-scaled column. The operator `K` may be
+rectangular: the conjugated matrix unit acts on the column index type of
+`K`. -/
 theorem mul_single_mul_conjTranspose_eq_vecMulVec
     {m n : Type*} [Fintype n] [DecidableEq n]
     (K : Matrix m n ℂ) (c : ℂ) (i₂ j₂ : n) :

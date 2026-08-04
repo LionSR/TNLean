@@ -156,21 +156,6 @@ noncomputable def mapOfChoiMatrix
 
 /-! ### The omega slice -/
 
-/-- The squared modulus of the maximally-entangled normalization constant:
-`(1/√d)·conj(1/√d) = 1/d`. -/
-theorem omegaCoeff_eq_inv (hd : 0 < d) :
-    (((1 : ℂ) / ((d : ℝ).sqrt : ℂ)) *
-      star ((1 : ℂ) / ((d : ℝ).sqrt : ℂ))) = 1 / (d : ℂ) := by
-  have hdr : (0 : ℝ) < (d : ℝ) := Nat.cast_pos.mpr hd
-  rw [show star ((1 : ℂ) / ((d : ℝ).sqrt : ℂ)) =
-      1 / ((d : ℝ).sqrt : ℂ) from by simp [Complex.conj_ofReal]]
-  rw [show (1 : ℂ) / ((d : ℝ).sqrt : ℂ) *
-      (1 / ((d : ℝ).sqrt : ℂ)) =
-      1 / (((d : ℝ).sqrt : ℂ) ^ 2) from by ring]
-  rw [show (((d : ℝ).sqrt : ℂ) ^ 2) = (((d : ℝ).sqrt ^ 2 : ℝ) : ℂ) from by push_cast; ring]
-  rw [Real.sq_sqrt hdr.le]
-  simp
-
 /-- The `(i₂, j₂)`-slice of `|Ω⟩⟨Ω|` is `(1/d) · E_{i₂,j₂}` for `d > 0`:
 the matrix unit scaled by `1/d`. This is the identity
 `d |Ω⟩⟨Ω| = F^{T_B}` of Wolf, Example 1.2, used in the proof of
@@ -178,8 +163,8 @@ Proposition 2.1. -/
 private theorem omegaSlice_eq_single (hd : 0 < d) (i₂ j₂ : Fin d) :
     Matrix.bipartiteSlice (Matrix.omegaProj d) i₂ j₂ =
       (1 / (d : ℂ)) • Matrix.single i₂ j₂ (1 : ℂ) := by
-  rw [ChoiJamiolkowski.omegaSlice_eq_single (D := d) i₂ j₂, omegaCoeff_eq_inv hd,
-    Matrix.smul_single, smul_eq_mul, mul_one]
+  rw [ChoiJamiolkowski.omegaSlice_eq_single (D := d) i₂ j₂,
+    ChoiJamiolkowski.omegaCoeff_eq_inv hd, Matrix.smul_single, smul_eq_mul, mul_one]
 
 /-! ### Mutual inverses -/
 
@@ -734,7 +719,7 @@ theorem doublyStochastic_iff_partialTraces_proportional
 
 end PartialTraceClauses
 
-/-! ### Bridge to the square development -/
+/-! ### Specialization to equal dimensions -/
 
 /-- The rectangular Choi matrix at `d = d' = D` is definitionally the square
 Choi matrix `ChoiJamiolkowski.choiMatrix`: the existing square development is

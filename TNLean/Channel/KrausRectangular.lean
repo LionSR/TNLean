@@ -241,7 +241,7 @@ theorem exists_kraus_orthogonal_of_isKrausCP [NeZero d]
   let c : ℂ := (1 : ℂ) / ((d : ℝ).sqrt : ℂ)
   have hstarc : star c = c := by simp [c]
   have hcc : c * star c = 1 / (d : ℂ) := by
-    simpa [c, hstarc] using omegaCoeff_eq_inv (d := d) hdpos
+    simpa [c, hstarc] using ChoiJamiolkowski.omegaCoeff_eq_inv (D := d) hdpos
   have hcne : c ≠ 0 := by
     dsimp [c]
     have hsqrt : (((d : ℝ).sqrt : ℂ)) ≠ 0 :=
