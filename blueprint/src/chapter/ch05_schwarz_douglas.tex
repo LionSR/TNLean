@@ -14,7 +14,6 @@
 \begin{definition}[Pseudoinverse]\label{def:pinv}
   \lean{Douglas.pinv}
   \leanok
-  \uses{def:posSemidefBB}
   The \emph{Moore-Penrose pseudoinverse} $B^+$ is defined via the support-generalised
   inverse of $B B^\dagger$:
   $B^+ := B^\dagger \cdot (B B^\dagger)^{-1}_{\mathrm{supp}}$.
@@ -23,7 +22,7 @@
 \begin{lemma}[Pseudoinverse-factorization identity]\label{lem:mul_pinv_eq_supportProj}
   \lean{Douglas.mul_pinv_eq_supportProj}
   \leanok
-  \uses{def:pinv, def:posSemidefBB}
+  \uses{def:pinv}
   $B \cdot B^+ = \operatorname{supportProj}(B B^\dagger)$.
 \end{lemma}
 
