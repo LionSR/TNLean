@@ -42,9 +42,10 @@ hash-pinned visual check required before changing a verdict.
 | Target | Kind | Reason / next action |
 |---|---:|---|
 | `rmp-ii-peps-projection` | — | Promoted to `faithful` 2026-08-04: projector layer, named A site, named bond, and boundary all present; tint and leg colour are house style. |
-| `rmp-ii-mps-marginal` | K3 | Replace the heavy trace closure through the shared minimal closure idiom. |
+| `rmp-ii-mps-marginal` | — | Promoted to `faithful` 2026-08-05: the kernel migration replaced the heavy racetrack with minimal straight trace closures, and the state row regained its upward legs and open chain stubs; verified against the author panel at 200/400dpi. |
 | `rmp-ii-peps-marginal` | K3 | Reduce excessive trace-loop height through the closure metric. |
 | `rmp-ii-mpu-brickwork` | — | Promoted to `faithful` 2026-08-04: twelve legs, alternating layers, and labels match; labelled boxes for dotted gate pairs are the inherent circuit presentation. |
+| `rmp-ii-mpu-blocking` | K1 | New 2026-08-05 with the kernel migration: the model records hull-routed side closures for the a/b beads, but the renderer does not yet ink a hull route on an endpoint index wire, so each closure draws along its column axis over the U-Ubar bond. Ink the contracted face-departure arc (LANGUAGE-1.0 s5) in the shared renderer, then re-review; the grid-tier predecessor's side-cup policy inked this correctly. |
 | `rmp-ii-mpu-two-shift` | K1 | Resolved 2026-08-04: the case now carries the workbench-twin skin-pairings model with the published palette; the row channels keep house ink where the panel colours the movers. |
 | `rmp-ii-mpu-normal-form` | K3 | The solid S-route is heavier and less compact than the graceful default should be. |
 | `rmp-ii-spectrum-transfer` | K1 | Tail idiom resolved 2026-08-05 (wave 1B, Fable-verified): both fixed points are the same in-line ring construction, the cut is drawn as the house enclosure, and measured rung/rail weights match the source, dropping the stale weight tag. Residue: the `n` annotation is a south label because the bracket mark form does not draw (#5482). |
@@ -107,7 +108,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-ii-peps-gauge-without-a` | K3 | Apply the same shared gauge-family geometry correction. |
 | `rmp-workbench-ii-mpu-wrap-second` | K2 | Both source-directed pairing rows are now in the correct order. |
 | `rmp-workbench-ii-boundary-a-old` | K4 | Restore the finite arrow and R-bar label details, then re-review the region. |
-| `rmp-workbench-ii-boundary-b-old` | X | The case does not record `species=`; migrate the semantic colour coding into the model first. |
+| `rmp-workbench-ii-boundary-b-old` | K1 | Resolved 2026-08-05: the source palette (red A row, gray B row, explicit in the author code at lines 618-649) is model-recorded as declared charge/flux species, matching `rmp-ii-boundary-lasso`; as there, the physical policy legs stay house-ink because the policy stub does not read the host species. |
 | `rmp-workbench-ii-peps-fine-graining` | K2 | The structured-grid redraw already contains the required panel. |
 | `rmp-workbench-ii-historical-composite` | K2 | A flat tilted grid is the house equivalent of the source 3D cube. |
 | `rmp-workbench-iii-eq50` | — | Kernel migration 2026-08-05: all four legs verified against Eq50.pdf; the wide stock mpo glyph is house style. |

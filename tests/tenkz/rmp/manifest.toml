@@ -117,8 +117,8 @@ section = "section-ii"
 order = 7
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-local-purification.tex"
 formula = "O = X^-1 (sum_k A^k tensor conjugate(A^k)) X."
-ink = "Kernel flat frame; explicit typed ports carry the doubled rail past the X capsules and the A pair."
-boundary = "The outer doubled virtual rails and O's four indices are open; the A pair is contracted."
+ink = "Kernel flat frame; explicit typed ports carry the doubled rail between the X capsules and the A pair."
+boundary = "One virtual rail is open on each outer side of the composite, matching O's own pair; both physical legs are open; the A pair is contracted."
 source = "paper TN-Review-main.tex line 369; author source ImagesReview Section II/ImagesReview Section II.tex lines 317-338"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
@@ -1705,7 +1705,7 @@ section = "section-ii"
 order = 10
 case = "tests/tenkz/rmp/section-ii/cases/rmp-workbench-ii-boundary-b-old.tex"
 formula = "B^Ibar = sigma^B U^B_Ibar on the complementary boundary."
-ink = "Kernel flat frame; explicit typed ports respell the A and B factorizations without raw TikZ."
+ink = "Kernel flat frame; explicit typed ports respell the A and B factorizations without raw TikZ, with the source palette as declared species (red A row, gray B row)."
 boundary = "The A factorization opens east; the B factorization opens west; physical legs stay open."
 source = "author source ImagesReview Section II/ImagesReview Section II.tex lines 618-649; archival output Figboundary-theory (b)old.pdf"
 capabilities = ["kernel", "typed-ports"]

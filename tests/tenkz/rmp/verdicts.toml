@@ -35,11 +35,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "6bdfc1d838f7a95d064ec216040ff10812bdd6821009c9db74017c0d4ad28cf3"
+case_sha256 = "ad1cf1756c3785e84c52538a72ce5bcdf951a60e6b226e15786ec1fc78b0d8a8"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
-note = "Kernel migration resolves the weight-mismatch: explicit typed ports give the traced columns a minimal straight closure in place of the old heavy racetrack, with columns 1-3 keeping separate open ket/bra stubs."
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel migration resolves the weight-mismatch: the traced columns close through minimal straight verticals in place of the old heavy racetrack, columns 1-3 keep separate open ket/bra stubs, and the state row now points its five physical legs up over an open chain, as in the author panel."
 
 [[verdict]]
 id = "rmp-ii-peps-marginal"
@@ -58,11 +58,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "22cd9a5d94ce37bf802d10e0996736452a1ccbec3cbeea3cf61f502e772d690f"
+case_sha256 = "ce006b8f13e43dd2d70a5378454d2aaeba215c61344fb279b6bb7177c7eefe1f"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
-note = "Kernel flat frame keeps the five-dot row site for site: the paper defines the MPO by the row network (sec2fig5MPO), each site a dot tensor with two open physical legs on an open virtual chain."
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel flat frame keeps the five-dot row site for site: the paper defines the MPO by the row network (sec2fig5MPO), each site a dot tensor with two open physical legs, and the virtual chain now shows its open west and east stubs as in the author panel."
 
 [[verdict]]
 id = "rmp-ii-pepo-sheet"
@@ -81,11 +81,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "8b0489fd43d1f92482d7defc11c96878f9ab9b4fbb3c8a14bc563be619bff169"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
+case_sha256 = "3990374fae600d60455883f726f20186432d5f9130b169744b453f45a423a7ad"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-note = "X and X^-1 match at one reference width by the kernel size class, with no label-padding trick needed; the doubled rail, the A pair's direct bond, and O's four indices all match the source. The equation's leg-count mismatch (O's single rail vs the composite's doubled rail) is a declared tenkzeq check off, since O is defined by a dimension-changing composite, not asserted as a literal boundary match."
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "X and X^-1 match at one reference width by the kernel size class. As in the source, each capsule absorbs the doubling: one virtual rail is open on each outer side, the doubled rail runs only between the capsules and the A pair, and the boundary matches O's four indices outright, so no tenkzeq check off is needed. The single outer rail leaves each capsule at the upper wire-row rather than mid-height (house port placement)."
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
@@ -101,14 +101,15 @@ note = "the west and east cups close the virtual pair and leave one open physica
 
 [[verdict]]
 id = "rmp-ii-mpu-blocking"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "0afc534d2923e945d4622d2b1305bdcf664dc9ee0a5058d752a297d3b90f22f2"
+defects = ["placement-illegible"]
+case_sha256 = "afdac2f68d36447256f0af03c05dbd35d7f7e321494f96f549c7659ba6356301"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
-note = "Kernel flat frame keeps the 2x2 blocked sandwich and the two cup factors, drawn as two disjoint closed islands in one RHS frame since tenkzeq's arity rule does not admit a bare product of two picture panels; explicit typed ports carry the U-over-U vertical bond, and the a/b beads sit on explicit hull-routed cup wires."
+renderer = "fable-w1a-vision-review-2026-08-05-300dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "The model matches the author panel: the 2x2 blocked sandwich, two disjoint RHS factors, the a/b beads anchored to hull-routed side closures (route={e of ...}/{w of ...}), and the conjugate row's overline. The residue is K1: the renderer does not yet ink a hull route on an endpoint index wire, so each closure currently draws along its column axis over the U-Ubar bond instead of arcing off the east/west faces the contract names (LANGUAGE-1.0 s5, bend= retirement row); the grid-tier predecessor inked this closure correctly through its side-cup policy."
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
@@ -131,8 +132,8 @@ defects = []
 case_sha256 = "8358866a3a190627e3bc9b3ca394c09798e5859a20574e316bd03b67ca8402cf"
 reviewed = "2026-08-05"
 renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
-note = "Kernel flat frame keeps the six-tensor U word and the alternating three-u two-v brick layers, now a genuine two-column-wide circuit gate rather than a rotated frame; all six circuit wires stay open at both ends."
+second_viewer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "Kernel flat frame keeps the six-tensor U word and the alternating three-u two-v brick layers as two-column-wide gates on wire pairs (1,2)(3,4)(5,6) over (2,3)(4,5), matching the author's vertical-wire uv units; all six circuit wires stay open at both ends, and labelled boxes stand in for the source's red/blue square-circle gate pairs (the recorded circuit presentation)."
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
@@ -1124,11 +1125,11 @@ id = "rmp-workbench-ii-v-tensor-definition"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "f534090eebadd55be4466a230ee61bb42d314adcb2186ac00cf1adcfd7f60e31"
+case_sha256 = "ad3728511380925a473769fda2cf9d77d16ec6475e48724dc54f68f350ea4e9f"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-second_viewer = "claude-kernel-w1a-recheck-2026-08-05-400dpi"
-note = "Kernel flat frame keeps the direct V-A physical bond and the l^(1/2)-weighted west cup; both east legs stay open, matching the source panel."
+renderer = "fable-w1a-vision-review-2026-08-05-300dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel flat frame keeps the direct V-A physical bond and the west cup, with the l^(1/2) dot bead sitting on the cup arc and its label alongside as in DefV; the conjugate carries the source's overline, and both east legs stay open."
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-a-old"
@@ -1145,10 +1146,10 @@ id = "rmp-workbench-ii-boundary-b-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "dbdd752f87dbd80a29e50b7e0140c90bc1e411d04498024f98e2dc71328ec412"
+case_sha256 = "326373a0ea708fa1397c87b7ed794b467c0ff4db0eba9dbc577bd3c686cd63f3"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
-note = "Kernel flat frame keeps the A and B factorizations topology-for-topology (A opens east, B opens west, physical legs stay open); the source's colour coding is still lost under house ink, unresolved by this respelling."
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "The source colour coding is recovered from the author code (the red A row and the gray B row are explicit fill colours at lines 618-649, matching the published twin's charge/flux palette) and is now model-recorded as declared species; as on rmp-ii-boundary-lasso, the physical policy legs stay house-ink because the policy stub does not read the host species (K1)."
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-fine-graining"
