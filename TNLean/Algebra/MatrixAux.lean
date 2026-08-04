@@ -109,7 +109,8 @@ theorem l2_opNorm_le_of_forall {m n : Type*} [Fintype m] [Fintype n] [DecidableE
 of `K` times the self-pairing. -/
 theorem re_star_dotProduct_mulVec_le_opNorm_sq {m n : Type*} [Fintype m] [Fintype n]
     [DecidableEq n] (K : Matrix m n ℂ) (v : n → ℂ) :
-    RCLike.re (star (K *ᵥ v) ⬝ᵥ (K *ᵥ v)) ≤ ‖K‖ ^ 2 * RCLike.re (star v ⬝ᵥ v) := by
+    RCLike.re (star (K *ᵥ v) ⬝ᵥ (K *ᵥ v)) ≤
+      ‖K‖ ^ 2 * RCLike.re (star v ⬝ᵥ v) := by
   rw [re_star_dotProduct_self_eq_norm_sq, re_star_dotProduct_self_eq_norm_sq]
   have h := l2_opNorm_mulVec K ((EuclideanSpace.equiv n ℂ).symm v)
   rw [PiLp.coe_symm_continuousLinearEquiv, WithLp.ofLp_toLp] at h

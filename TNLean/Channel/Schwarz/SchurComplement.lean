@@ -8,7 +8,7 @@ import TNLean.Analysis.MatrixSqrt
 import Mathlib.Data.Matrix.Block
 
 /-!
-# Block Schur complements (Wolf Theorem 5.2)
+# Block Schur complements
 
 For a self-adjoint 2×2 block matrix `M = [[P, Q], [Q†, R]]`
 with `P, R` PSD, the following are equivalent:
@@ -31,7 +31,8 @@ variable {D₁ D₂ : ℕ}
 
 /-- A 2×2 block matrix: [[P, Q], [Q†, R]]. -/
 def blockMatrix (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
-    (R : Matrix (Fin D₂) (Fin D₂) ℂ) : Matrix ((Fin D₁) ⊕ (Fin D₂)) ((Fin D₁) ⊕ (Fin D₂)) ℂ :=
+    (R : Matrix (Fin D₂) (Fin D₂) ℂ) :
+    Matrix ((Fin D₁) ⊕ (Fin D₂)) ((Fin D₁) ⊕ (Fin D₂)) ℂ :=
   Matrix.fromBlocks P Q (Qᴴ) R
 
 /-- The block matrix `[[P, Q], [Q†, R]]` is Hermitian when its diagonal
