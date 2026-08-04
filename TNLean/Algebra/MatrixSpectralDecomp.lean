@@ -27,7 +27,7 @@ open Matrix Finset BigOperators
 
 namespace Matrix
 
-/-- Conjugating the scaled matrix unit `(c · c̄) · E_{i,j}` by `K` and `Kᴴ`
+/-- Conjugating the scaled matrix unit `(c · star c) · E_{i,j}` by `K` and `Kᴴ`
 yields the rank-one outer product of the scaled columns of `K`:
 `K * ((c * star c) · E_{i,j}) * Kᴴ = (c · K_col(i)) (c · K_col(j))†`, where
 the second factor is the conjugate-scaled column. The operator `K` may be
