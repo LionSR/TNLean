@@ -113,7 +113,6 @@ lemma trace_re_pos_of_posSemidef_ne_zero
 /-- A nonzero PSD fixed point, scaled by the inverse of its trace, yields a
 stationary density matrix. -/
 lemma stationaryDensity_of_posSemidef_fixedPoint
-    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ_psd : ρ.PosSemidef)
     (hρ_fix : E ρ = ρ) (hρ_ne : ρ ≠ 0) :
     IsStationaryDensity E ((Matrix.trace ρ)⁻¹ • ρ) := by
@@ -171,7 +170,7 @@ theorem fixedPointsSubmodule_spanned_by_stationaryDensities
       · rw [hX_zero]
         exact Submodule.zero_mem _
       · have hstat : IsStationaryDensity E ((Matrix.trace X)⁻¹ • X) :=
-          stationaryDensity_of_posSemidef_fixedPoint E hE hTP hX_psd hX_fix hX_zero
+          stationaryDensity_of_posSemidef_fixedPoint E hX_psd hX_fix hX_zero
         -- X = (tr X) • ((tr X)⁻¹ • X), so X is in the span of stationary densities
         have hX_eq : X = (Matrix.trace X) • ((Matrix.trace X)⁻¹ • X) := by
           calc
