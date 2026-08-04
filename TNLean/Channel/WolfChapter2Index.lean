@@ -239,11 +239,21 @@ project import.
 * `IsLorentzNonDiagonal` — non-diagonal Lorentz normal form (case 2) ✓
 * `IsLorentzSingular` — singular Lorentz normal form (case 3) ✓
 * `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
-  over SL(d, ℂ) filterings attains its infimum ✓
-* `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9 (generic normal form)**:
-  every CP map with full Kraus rank admits SL-filterings making it
-  doubly-stochastic ✓ (proved via the AGM/first-order optimality argument at the
-  minimiser, using the trace-determinant AM-GM equality characterisation)
+  over SL(d₁, ℂ) × SL(d₂, ℂ) filterings of a positive-definite operator on
+  ℂ^{d₂} ⊗ ℂ^{d₁} attains its infimum ✓ (rectangular form)
+* `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9, square case**:
+  every CP map `T : M_D → M_D` with full Kraus rank admits SL-filterings
+  making it doubly-stochastic ✓ (proved via the AGM/first-order optimality
+  argument at the minimiser, using the trace-determinant AM-GM equality
+  characterisation). This is the equal-dimension specialization; the general
+  rectangular statement is `Wolf.exists_normal_form_generic_rect` below
+* `Wolf.DoublyStochasticRect` — rectangular doubly-stochastic condition:
+  `T(𝟙) ∝ 𝟙` and `T*(𝟙) ∝ 𝟙` ✓ (definitional)
+* `Wolf.exists_normal_form_generic_rect` — **Wolf Proposition 2.9, rectangular
+  form**: every CP map `T : M_{d₁} → M_{d₂}` with full Kraus rank
+  (positive-definite `ChoiRectangular.choiMatrix T`) admits SL-filterings
+  `Φ₁ : SLFiltering d₁`, `Φ₂ : SLFiltering d₂` making `Φ₂ ∘ T ∘ Φ₁`
+  doubly-stochastic ✓
 * **Wolf Proposition 2.11 (Lorentz normal form for qubit channels)** remains
   pending. Wolf requires general invertible Kraus-rank-one CP filters, including
   scalar freedom. The former determinant-one `SLFiltering` formulation was false
@@ -274,6 +284,9 @@ project import.
 | SL-filtering | `LorentzNormalForm.lean` | `Wolf.SLFiltering` |
 | SL-filtering composition | `LorentzNormalForm.lean` | `Wolf.SLFiltering.comp` |
 | Doubly-stochastic | `LorentzNormalForm.lean` | `Wolf.DoublyStochastic` |
+| Rectangular doubly-stochastic | `LorentzNormalForm.lean` | `Wolf.DoublyStochasticRect` |
+| Rectangular generic normal form | `LorentzNormalForm.lean` |
+  `Wolf.exists_normal_form_generic_rect` |
 | Pauli matrices | `LorentzNormalForm.lean` | `pauliMatrices` |
 | Pauli transfer entry | `LorentzNormalForm.lean` | `pauliTransferEntry` |
 | Diagonal Lorentz form | `LorentzNormalForm.lean` | `IsLorentzDiagonal` |
@@ -288,10 +301,6 @@ project import.
   statement and proof remain pending. Wolf uses general invertible Kraus-rank-one
   CP filters with scalar freedom; the former determinant-one formulation was
   false and was removed. The proof also needs the Lorentz-orbit classification. |
-| Section 2.3 Generic normal form (full proof) | Statement formalised
-  (`exists_normal_form_generic`);
-  compactness/minimisation is proved; proof still needs the AGM/first-order
-  optimality argument showing the minimiser is doubly-stochastic |
 | Section 2.3 Sorted singular values | Current SVD is unsorted; later uses want sorted values |
 
 ## References

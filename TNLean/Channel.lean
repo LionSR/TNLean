@@ -35,6 +35,10 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.KrausUnitaryFreedom
 import TNLean.Channel.LocalizedKrausCPTP
 import TNLean.Channel.LorentzNormalForm
+import TNLean.Channel.LorentzNormalForm.Basic
+import TNLean.Channel.LorentzNormalForm.Infimum
+import TNLean.Channel.LorentzNormalForm.NormalForm
+import TNLean.Channel.LorentzNormalForm.QubitNormalForm
 import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.MarginalSupportWhitenedChoi
 import TNLean.Channel.MaximalOverlap
