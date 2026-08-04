@@ -308,15 +308,17 @@ injectivity. The datum feeds `exists_regionEdgeGauge_of_transfer`
 (`TNLean.PEPS.RegionBlock.Algebra`) to read off the per-edge gauge with no
 single-vertex injectivity.
 
-**Scope (multiplicativity hypothesis):** the forward-transfer multiplicativity `hmul`
-is the only field not yet derived region-injectively. The source derives it from the
-homomorphism property of the physical realization
-(`Papers/1804.04964/paper_normal.tex`, eq. `X->O`), whose region port reads the
-recovered matrix off the single-vertex virtual pullback and so currently needs the
-in-region endpoint spanning. The block-endpoint inversions above
-(`coeffTransfer_of_endpointOp_eq`, `regionInsertedCoeff_eq_of_regionRow_eq`) supply
-the coefficient transfers `htransferAB`/`htransferBA`; the residual single-vertex
-read-off is documented in `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
+**Scope (multiplicativity hypothesis):** the datum is parametric in the
+forward-transfer multiplicativity `hmul`. The hypothesis is discharged by the
+coherent-frame route: `exists_regionEdgeGauge_of_blockingData`
+(`TNLean.PEPS.CoherentFrameInstance2`) derives both coefficient transfers and the
+forward multiplicativity existentially from one-edge blocking data, with no
+single-vertex injectivity of the original tensors (this resolved issue #2470). The
+block-endpoint inversions above (`coeffTransfer_of_endpointOp_eq`,
+`regionInsertedCoeff_eq_of_regionRow_eq`) supply the coefficient transfers
+`htransferAB`/`htransferBA` on the direct region route; the remaining Section-3
+route hypotheses are tracked in
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
