@@ -29,7 +29,7 @@ The file does **not** assemble the full singleton-sector consequence
 (`card(ActiveSector p) = 1`).  That assembly depends on two further pieces
 documented at the end of the file:
 
-* trace similarity `tr(Ŝ^N) = tr(S^N)` under diagonal scaling,
+* trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling,
 * the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))` connecting
   the doubled-index MPS self-overlap to the active-sector trace-squared
   matrix `S_{kh} = Re(tr(η_{kh}²))`.
