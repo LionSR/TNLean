@@ -77,6 +77,65 @@ theorem IsHermitian.star_mulVec_dotProduct {n : Type*} [Fintype n]
     star (S *ᵥ x) ⬝ᵥ y = star x ⬝ᵥ (S *ᵥ y) := by
   rw [star_mulVec, ← Matrix.dotProduct_mulVec, hS.eq]
 
+/-- A matrix factor moves across the complex dot product as its conjugate
+transpose. -/
+theorem star_dotProduct_mulVec {m n : Type*} [Fintype m] [Fintype n]
+    (A : Matrix m n ℂ) (x : m → ℂ) (y : n → ℂ) :
+    star x ⬝ᵥ (A *ᵥ y) = star (Aᴴ *ᵥ x) ⬝ᵥ y := by
+  rw [star_mulVec, conjTranspose_conjTranspose, ← Matrix.dotProduct_mulVec]
+
+/-! ## Euclidean norms and the L² operator norm -/
+
+open scoped Matrix.Norms.L2Operator InnerProductSpace
+
+/-- The squared Euclidean norm of a complex vector is the real part of its
+standard sesquilinear self-pairing. -/
+theorem re_star_dotProduct_self_eq_norm_sq {n : Type*} [Fintype n] (v : n → ℂ) :
+    RCLike.re (star v ⬝ᵥ v) = ‖(EuclideanSpace.equiv n ℂ).symm v‖ ^ 2 := by
+  rw [norm_sq_eq_re_inner (𝕜 := ℂ), EuclideanSpace.inner_eq_star_dotProduct,
+    PiLp.coe_symm_continuousLinearEquiv, WithLp.ofLp_toLp, dotProduct_comm]
+
+/-- The squared Euclidean norm of a matrix applied to a vector, as the real
+part of the associated sesquilinear quadratic form. -/
+theorem norm_sq_mulVec_eq_re_star_dotProduct {m n : Type*} [Fintype m] [Fintype n]
+    (A : Matrix m n ℂ) (v : n → ℂ) :
+    ‖(EuclideanSpace.equiv m ℂ).symm (A *ᵥ v)‖ ^ 2 =
+      RCLike.re (star (A *ᵥ v) ⬝ᵥ (A *ᵥ v)) :=
+  (re_star_dotProduct_self_eq_norm_sq (A *ᵥ v)).symm
+
+/-- The standard sesquilinear pairing with a matrix applied on the right is a
+Euclidean inner product against the induced map. -/
+theorem star_dotProduct_mulVec_eq_inner {n : Type*} [Fintype n] [DecidableEq n]
+    (A : Matrix n n ℂ) (x y : n → ℂ) :
+    star x ⬝ᵥ (A *ᵥ y) =
+      ⟪(EuclideanSpace.equiv n ℂ).symm x,
+        (toEuclideanLin A) ((EuclideanSpace.equiv n ℂ).symm y)⟫_ℂ := by
+  show star x ⬝ᵥ (A *ᵥ y) = ⟪WithLp.toLp 2 x, WithLp.toLp 2 (A *ᵥ y)⟫_ℂ
+  rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm]
+
+/-- Vectorwise bounds give a bound on the L² operator norm of a matrix. -/
+theorem l2_opNorm_le_of_forall {m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
+    {A : Matrix m n ℂ} {r : ℝ} (hr : 0 ≤ r)
+    (h : ∀ v : n → ℂ, ‖(EuclideanSpace.equiv m ℂ).symm (A *ᵥ v)‖ ≤
+      r * ‖(EuclideanSpace.equiv n ℂ).symm v‖) :
+    ‖A‖ ≤ r := by
+  rw [l2_opNorm_def]
+  refine ContinuousLinearMap.opNorm_le_bound _ hr fun x ↦ ?_
+  exact h x.ofLp
+
+/-- The quadratic form of `Kᴴ * K` is bounded by the squared L² operator norm
+of `K` times the self-pairing. -/
+theorem re_star_dotProduct_mulVec_le_opNorm_sq {m n : Type*} [Fintype m] [Fintype n]
+    [DecidableEq n] (K : Matrix m n ℂ) (v : n → ℂ) :
+    RCLike.re (star (K *ᵥ v) ⬝ᵥ (K *ᵥ v)) ≤ ‖K‖ ^ 2 * RCLike.re (star v ⬝ᵥ v) := by
+  rw [re_star_dotProduct_self_eq_norm_sq, re_star_dotProduct_self_eq_norm_sq]
+  have h := l2_opNorm_mulVec K ((EuclideanSpace.equiv n ℂ).symm v)
+  rw [PiLp.coe_symm_continuousLinearEquiv, WithLp.ofLp_toLp] at h
+  calc ‖(EuclideanSpace.equiv m ℂ).symm (K *ᵥ v)‖ ^ 2
+      ≤ (‖K‖ * ‖(EuclideanSpace.equiv n ℂ).symm v‖) ^ 2 :=
+        pow_le_pow_left₀ (norm_nonneg _) h _
+    _ = ‖K‖ ^ 2 * ‖(EuclideanSpace.equiv n ℂ).symm v‖ ^ 2 := mul_pow _ _ _
+
 /-! ## Matrix action on product vectors -/
 
 /-- A dependent product of matrices acts componentwise on a pure tensor. -/
