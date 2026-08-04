@@ -132,7 +132,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-eq60-now` | K2 | Daggered insertions and genuinely diagonal legs are present. |
 | `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
-| `rmp-workbench-iii-g-injective-mpo` | K3 | Resolved 2026-08-04: the eight labelled half-edges and plaquette bonds are drawn with source-stacked sector labels. Residue: house box for the source circle glyph. |
+| `rmp-workbench-iii-g-injective-mpo` | K3 | Resolved 2026-08-04: the eight sector labels sit on genuine open boundary half-edges, each with its own open wire; the four plaquette bonds stay internal and unlabelled. Residue: house box for the source circle glyph. |
 | `rmp-workbench-iii-peps-renormalization-one` | X | The manifest requires four edge-centred PEPS atoms that the case omits; reconcile the contract before hatch review. |
 | `rmp-workbench-iii-peps-renormalization-two` | K2 | Effective tensor, corner blocks, and fused legs are complete. |
 
