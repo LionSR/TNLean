@@ -1915,11 +1915,11 @@ ch=21mm,inline]{\\tn{A}}}
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "case dimensions increased to 709",
+        "case dimensions increased to 479",
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "composition/layout dimensions increased to 313",
+        "composition/layout dimensions increased to 219",
     )
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
@@ -1928,7 +1928,7 @@ ch=21mm,inline]{\\tn{A}}}
             r"\end{tenkzlattice}",
             "projection/frame dimensions increased",
         ),
-        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 397"),
+        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 261"),
     ):
         mutation = scan_case_dimensions(Path("synthetic.tex"), source)
         _expect_dimension_failure(
