@@ -210,11 +210,24 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
     refine ⟨n, (div_lt_iff₀ hpos).mp hn⟩
   have hC_n := hC ((T^[n]) X) ⟨n, rfl⟩
   have h_bound_n := h_norm_bound n
-  -- h_bound_n: (n:ℝ)*‖NX‖ - ‖X‖ ≤ ‖(T^n)X‖ = ‖(T^[n])X‖
+  -- h_bound_n gives bound on ‖(T^n)X‖, but hC_n is about ‖(T^[n])X‖
+  -- Use Module.End.pow_apply to connect them: (T^n)X = (T^[n])X
+  have h_pow_eq : (T ^ n) X = (T^[n]) X := by simpa using Module.End.pow_apply T n X
+  rw [h_pow_eq] at h_bound_n
+  -- Now h_bound_n: (n:ℝ)*‖NX‖ - ‖X‖ ≤ ‖(T^[n])X‖
   -- hC_n: ‖(T^[n])X‖ ≤ C
   -- hn: C + ‖X‖ < (n:ℝ)*‖NX‖
-  -- Therefore C < (n:ℝ)*‖NX‖ - ‖X‖ ≤ C, contradiction
-  nlinarith
+  -- Combine: C + ‖X‖ < (n:ℝ)*‖NX‖, so C < (n:ℝ)*‖NX‖ - ‖X‖ ≤ ‖(T^[n])X‖ ≤ C
+  have h_ineq : C < (n : ℝ) * ‖N X‖ - ‖X‖ := by linarith
+  have h_chain : (n : ℝ) * ‖N X‖ - ‖X‖ ≤ C := by
+    -- from h_bound_n and hC_n
+    -- Actually: h_bound_n: A ≤ B, hC_n: B ≤ C → A ≤ C
+    -- Wait: h_bound_n: A - ‖X‖ ≤ B where A = n*‖NX‖, B = ‖(T^[n])X‖
+    -- hC_n: B ≤ C
+    -- So A - ‖X‖ ≤ B ≤ C → A - ‖X‖ ≤ C
+    -- But we need A - ‖X‖ ≤ C which follows from h_bound_n and hC_n
+    linarith
+  linarith
 
 /-- **Wolf Proposition 6.2** (full statement): For a positive trace-preserving map,
 the generalized eigenspace for any peripheral eigenvalue $\lambda$ equals
@@ -259,22 +272,28 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
         exact hNk
       have hN1_Y : (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) Y = 0 :=
         hPos.no_rank_two_genEigenvector_of_tracePreserving hTP μ hμ_norm Y hN2_Y
-      dsimp [Y] at hN1_Y
-      -- hN1_Y: (T - μ•1) ((T - μ•1)^(m-1) X) = 0
-      -- We need: ((T - μ•1)^m) X = 0
-      -- Since (T-μ•1) ∘ (T-μ•1)^(m-1) = (T-μ•1)^m when m ≥ 1
-      have hm_pos : 0 < m := Nat.pos_of_ne_zero hm
-      rw [show (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))
-          ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1) X)
-          = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ m) X by
+      -- hN1_Y: (T - μ•1) Y = 0  where Y = (T-μ•1)^(m-1) X
+      -- We need: ((T-μ•1)^m) X = 0 for the induction hypothesis ih
+      -- Compute: (T-μ•1) Y = (T-μ•1) ((T-μ•1)^(m-1) X) = ((T-μ•1)^m) X
+      -- because (T-μ•1) ∘ (T-μ•1)^(m-1) = (T-μ•1)^m in the endomorphism ring
+      have h_pow_eq : (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) Y
+          = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ m) X := by
+        dsimp [Y]
         calc
-          _ = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))) *
-               ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := rfl
-          _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (1 + (m - 1))) X := by
-            rw [pow_add]
+          (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))
+              (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1)) X)
+              = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ))) *
+                 ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := rfl
+          _ = (((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (1 : ℕ)) *
+               ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1))) X := by
+            simp
+          _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ ((1 : ℕ) + (m - 1))) X := by
+            rw [← pow_add]
           _ = ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ m) X := by
             rw [show (1 : ℕ) + (m - 1) = m by omega]
-      ] at hN1_Y
+      -- Now rewrite hN1_Y using h_pow_eq
+      rw [h_pow_eq] at hN1_Y
       exact ih hN1_Y
+
 
 end IsPositiveMap
