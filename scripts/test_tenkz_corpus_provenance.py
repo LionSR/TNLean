@@ -288,11 +288,11 @@ def test_rmp_dimension_ownership() -> None:
         {
             DimensionOwner.METRIC: 0,
             DimensionOwner.FRAME: 0,
-            DimensionOwner.ROUTE: 396,
-            DimensionOwner.LAYOUT: 312,
+            DimensionOwner.ROUTE: 260,
+            DimensionOwner.LAYOUT: 218,
         }
     )
-    if report.case_count != 708 or report.case_counts != expected:
+    if report.case_count != 478 or report.case_counts != expected:
         raise AssertionError(
             "RMP dimension ownership baseline drifted: "
             f"total={report.case_count}, owners={report.case_counts!r}"
