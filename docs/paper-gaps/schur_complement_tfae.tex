@@ -37,7 +37,14 @@ The remaining subgoals are:
 \end{enumerate}
 
 \section{Verdict}
-\textbf{Partial}. The theorem statement, block-matrix definition, and pseudoinverse
-Schur complement are formalised. The TFAE proof is deferred to a future PR.
+\textbf{Partially resolved}. The core equivalence (1)$\Longleftrightarrow$(2) is proved:
+\begin{itemize}
+  \item (1)$\Longrightarrow$(2): kernel inclusion via \texttt{dotProduct\_mulVec\_zero\_iff}
+    and Schur complement PSD via quadratic-form minimisation;
+  \item (2)$\Longrightarrow$(1): completing the square using the algebraic identity
+    $R^+ = \operatorname{supportInv}(R)$.
+\end{itemize}
+The contraction characterisation (2)$\Longleftrightarrow$(3) (including the operator-norm
+lemma $\|L\|\le 1 \iff L L^\dagger \le I$) is deferred to a follow-up PR.
 
 \end{document}
