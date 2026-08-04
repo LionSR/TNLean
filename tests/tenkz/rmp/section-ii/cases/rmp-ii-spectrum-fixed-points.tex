@@ -1,27 +1,44 @@
 % Target: rmp-ii-spectrum-fixed-points
 % Formula: eig(rho^L rho^R) = eig(rho^R rho^L).
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; each fixed point is one wires=2 ring atom closed on its own
+%   pair of ports.
 % Boundary: Each fixed-point factor has one cup closure and two virtual ends open on
 %   the other side.
 % Source: paper TN-Review-main.tex line 429; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 519-534
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   % Both fixed points ride the doubled virtual wire: the product is the
   % object whose spectrum is taken, and the cup is the fold at which the
-  % two orders differ.  boundary=none silently outranked the cup word, so
-  % each side used to draw one capsule and no closure at all.
+  % two orders differ.  Each factor is one wires=2 atom, closed on its own
+  % west (or east) pair of ports by a hand-written wire between its own
+  % two slots -- the same construction on both sides.
   \mathrm{eig}\left(
-  \begin{tenkz}[rows={ket:nopair,bra}, west=cup]
-    \tnX[wires=2]{\rho^R} & \tnX[wires=2]{\rho^L}\\
-    &
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+    \tn[name=R, skin=ring, wires=2,
+      ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^R} &
+    \tn[name=L, skin=ring, wires=2,
+      ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^L}
+    \tnwire{R.180@1}{R.180@2}
+    \tnwire{R.0@1}{L.180@1}
+    \tnwire{R.0@2}{L.180@2}
+    \tnwire{L.0@1}{open e}
+    \tnwire{L.0@2}{open e}
   \end{tenkz}
   \right)
   \;=\;
   \mathrm{eig}\left(
-  \begin{tenkz}[rows={ket:nopair,bra}, east=cup]
-    \tnX[wires=2]{\rho^L} & \tnX[wires=2]{\rho^R}\\
-    &
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+    \tn[name=L, skin=ring, wires=2,
+      ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^L} &
+    \tn[name=R, skin=ring, wires=2,
+      ports={180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\rho^R}
+    \tnwire{open w}{L.180@1}
+    \tnwire{open w}{L.180@2}
+    \tnwire{L.0@1}{R.180@1}
+    \tnwire{L.0@2}{R.180@2}
+    \tnwire{R.0@1}{R.0@2}
   \end{tenkz}
   \right)
 \]
