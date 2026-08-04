@@ -59,6 +59,7 @@ classification of the possible doubly-stochastic normal forms.
 (Wolf, *Quantum Channels & Operations*, Section 2.3) states it for a general
 `T : M_{d₁}(ℂ) → M_{d₂}(ℂ)` with separate filterings on each factor.  Documented
 in `docs/paper-gaps/wolf_prop28_square_case.tex`. -/
+
 theorem exists_normal_form_generic
     (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (_hCP : IsCPMap T)
@@ -207,6 +208,7 @@ The proof follows the source: the infimum of
 trace–determinant AM–GM bound, so both reduced operators are scalar
 (`posDef_orbit_min_isScalar`).  The square case `d₁ = d₂` is
 `exists_normal_form_generic` above. -/
+
 theorem exists_normal_form_generic_rect [NeZero d₁] [NeZero d₂]
     (T : Matrix (Fin d₁) (Fin d₁) ℂ →ₗ[ℂ] Matrix (Fin d₂) (Fin d₂) ℂ)
     (_hCP : IsKrausCP T)

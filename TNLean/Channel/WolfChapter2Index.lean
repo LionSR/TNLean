@@ -241,10 +241,12 @@ project import.
 * `Wolf.infimum_is_attained` — **key compactness lemma**: trace minimisation
   over SL(d₁, ℂ) × SL(d₂, ℂ) filterings of a positive-definite operator on
   ℂ^{d₂} ⊗ ℂ^{d₁} attains its infimum ✓ (rectangular form)
-* `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9 (generic normal form)**:
-  every CP map with full Kraus rank admits SL-filterings making it
-  doubly-stochastic ✓ (proved via the AGM/first-order optimality argument at the
-  minimiser, using the trace-determinant AM-GM equality characterisation)
+* `Wolf.exists_normal_form_generic` — **Wolf Proposition 2.9, square case**:
+  every CP map `T : M_D → M_D` with full Kraus rank admits SL-filterings
+  making it doubly-stochastic ✓ (proved via the AGM/first-order optimality
+  argument at the minimiser, using the trace-determinant AM-GM equality
+  characterisation). This is the equal-dimension specialization; the general
+  rectangular statement is `Wolf.exists_normal_form_generic_rect` below
 * `Wolf.DoublyStochasticRect` — rectangular doubly-stochastic condition:
   `T(𝟙) ∝ 𝟙` and `T*(𝟙) ∝ 𝟙` ✓ (definitional)
 * `Wolf.exists_normal_form_generic_rect` — **Wolf Proposition 2.9, rectangular

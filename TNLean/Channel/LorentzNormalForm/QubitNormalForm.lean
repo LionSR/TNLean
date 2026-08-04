@@ -12,6 +12,7 @@ This module collects the Pauli-basis definitions and the three canonical-form
 predicates for qubit channels of Wolf Proposition 2.11
 (`Notes/WolfNoteTexSource/ch02_representations.tex`, Section 2.3): the
 diagonal, non-diagonal, and singular Lorentz normal forms.  The existence
+
 theorem is pending; see
 `docs/paper-gaps/wolf_prop2_11_lorentz_scalar_filtering_gap.tex`.
 
@@ -70,6 +71,7 @@ section LorentzNormalFormQubit
 /-- The four Pauli matrices as 2×2 complex matrices, indexed by `Fin 4`:
 `σ₀ = [[1,0],[0,1]]`, `σ₁ = [[0,1],[1,0]]`, `σ₂ = [[0,-I],[I,0]]`,
 `σ₃ = [[1,0],[0,-1]]`. -/
+
 def pauliMatrices : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ
   | 0 => !![1, 0; 0, 1]
   | 1 => !![0, 1; 1, 0]
@@ -83,6 +85,7 @@ def pauliMatrices : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ
 This is the `4×4` matrix representing `T` in the Pauli basis
 `{σ₀/√2, σ₁/√2, σ₂/√2, σ₃/√2}`, so that `T̂` has real entries for
 Hermiticity-preserving `T`. -/
+
 noncomputable def pauliTransferEntry
     (T : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ)
     (i j : Fin 4) : ℂ :=
@@ -95,6 +98,7 @@ form** (Wolf Proposition 2.11, case 1) if its Pauli-basis transfer matrix is dia
 
 Furthermore, the singular values satisfy the complete-positivity condition
 `λ₁ + λ₂ ≤ 1 + λ₃` (not checked here; future refinement). -/
+
 def IsLorentzDiagonal
     (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   IsChannel T' ∧ T' 1 = (1 : Matrix (Fin 2) (Fin 2) ℂ) ∧
@@ -107,6 +111,7 @@ normal form** (Wolf Proposition 2.11, case 2) if its Pauli-basis transfer matrix
 The channel condition supplies the trace-preserving first row. The predicate
 records the non-trivial translation entry, the three diagonal entries, and the
 vanishing of all off-diagonal entries except the allowed translation. -/
+
 def IsLorentzNonDiagonal
     (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   IsChannel T' ∧
@@ -123,6 +128,7 @@ form** (Wolf Proposition 2.11, case 3) if its Pauli-basis transfer matrix has
 `Δ = 0` and `v = (0, 0, 1)`.  That is, only `T̂_{00} = 1` and
 `T̂_{30} = 1` are nonzero; the channel maps every input to the pure state
 `(1 + σ_z)/2`. -/
+
 def IsLorentzSingular
     (T' : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
   IsChannel T' ∧
