@@ -1,21 +1,36 @@
 % Target: rmp-ii-mpu-two-shift
 % Formula: The MPU combines one left-moving and one right-moving shift.
-% Ink: Canonical public kernel environment; no raw TikZ.
+% Ink: Kernel box skins carry the two opposite local port pairings in the
+%   published palette (the bar's X row on this target: the workbench-twin model).
 % Boundary: Each row has four upper and four lower open legs and two open virtual
 %   endpoints; the turn orientation reverses between rows.
 % Source: paper TN-Review-main.tex line 395; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 473-483
-% Capabilities: kernel, typed-ports
+% Capabilities: kernel, typed-ports, skin-pairings
+\tenkzkernel
+\tndeclare{species}{right}{hue=source:blue}
+\tndeclare{species}{left}{hue=source:red}
+\tndeclare{skin}{shift-right}{
+  base=box,
+  pairings={n@1 > e@1 : right, s@1 > w@1 : left}
+}
+\tndeclare{skin}{shift-left}{
+  base=box,
+  pairings={n@1 > w@1 : left, s@1 > e@1 : right}
+}
 \[
-  \tenkzkernel
-  \tndeclare{species}{right}{hue=source:blue}
-  \tndeclare{species}{left}{hue=source:red}
-  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, west=trace, east=trace]
-    \tnwire[kind=string, species=right, name=r1]{(1,1)}{(2,2)}
-    \tnwire[kind=string, species=right, name=r2]{(1,3)}{(2,4)}
-    \tnwire[kind=string, species=left, name=l1,
-            cross={under at crossing of l1 and r1}]{(1,2)}{(2,1)}
-    \tnwire[kind=string, species=left, name=l2,
-            cross={under at crossing of l2 and r2}]{(1,4)}{(2,3)}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
+    % The upper row turns right (blue) and its lower legs turn left (red);
+    % the lower row reverses both, as in the published panel.
+    \tn[at=(1,1), skin=shift-right]{} \tn[at=(1,2), skin=shift-right]{}
+    \tn[at=(1,3), skin=shift-right]{} \tn[at=(1,4), skin=shift-right]{}
+    \tn[at=(2,1), skin=shift-left]{} \tn[at=(2,2), skin=shift-left]{}
+    \tn[at=(2,3), skin=shift-left]{} \tn[at=(2,4), skin=shift-left]{}
+    \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)}
+    \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+    \tnwire{(1,4)}{open e}
+    \tnwire{open w}{(2,1)} \tnwire{(2,1)}{(2,2)}
+    \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+    \tnwire{(2,4)}{open e}
   \end{tenkz}
 \]

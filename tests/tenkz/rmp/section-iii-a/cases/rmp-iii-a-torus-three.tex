@@ -1,82 +1,99 @@
 % Target: rmp-iii-a-torus-three
 % Formula: Moving O_g through the PEPS past O_h inserts the rails g^{-1} and g.
-% Ink: Canonical public tenkzfree rendering of the two 5x5 PEPS windows.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362).
 % Boundary: The PEPS bonds and both MPO strings remain open at the window.
 % Source: arXiv:2011.12127, TN-Review-main.tex lines 1602-1606; author source
 %   ImagesReview Section III/ImagesReview Section III.tex lines 572-603.
-% Capabilities: free-graph, peps-window, crossing-tensor, string-slide
+% Capabilities: kernel, peps-window, crossing-tensor, string-slide
 \[
-  \begin{tenkzfree}
-    % The black bonds form the open 5x5 PEPS window.
-    \tnjoin{-19mm,16mm}{19mm,16mm} \tnjoin{-19mm,8mm}{19mm,8mm}
-    \tnjoin{-19mm,0mm}{19mm,0mm}
-    \tnjoin{-19mm,-8mm}{19mm,-8mm}
-    \tnjoin{-19mm,-16mm}{19mm,-16mm}
-    \tnjoin{-16mm,19mm}{-16mm,-19mm} \tnjoin{-8mm,19mm}{-8mm,-19mm}
-    \tnjoin{0mm,19mm}{0mm,-19mm}
-    \tnjoin{8mm,19mm}{8mm,-19mm}
-    \tnjoin{16mm,19mm}{16mm,-19mm}
-
-    % Initially O_g lies above the PEPS, while O_h crosses the window.
-    \tnjoin[role=operator]{-19mm,18mm}{19mm,18mm}
-    \tnput[dot,role=operator]{g1}{(-16mm,18mm)}{}
-    \tnput[dot,role=operator]{g2}{(-8mm,18mm)}{}
-    \tnput[dot,role=operator]{g3}{(0mm,18mm)}{}
-    \tnput[dot,role=operator]{g4}{(8mm,18mm)}{}
-    \tnput[dot,role=operator,label pos=east]{g5}{(16mm,18mm)}{O_g}
-
-    \tnjoin[role=passive]{4mm,19mm}{4mm,-19mm}
-    \tnput[dot,role=passive]{h1}{(4mm,16mm)}{}
-    \tnput[dot,role=passive]{h2}{(4mm,8mm)}{}
-    \tnput[dot,role=passive]{h3}{(4mm,0mm)}{}
-    \tnput[dot,role=passive]{h4}{(4mm,-8mm)}{}
-    \tnput[dot,role=passive,label pos=south]{h5}{(4mm,-16mm)}{O_h}
-
-    % This arrow records the downward pull of the horizontal MPO.
-    \tnput[boundary,ports={255:virtual}]{pullTop}{(-22mm,18mm)}{}
-    \tnput[boundary,ports={105:virtual}]{pullBottom}{(-22mm,-8mm)}{}
-    \tnjoin[dir,route=arc]{pullTop.255}{pullBottom.105}
-  \end{tenkzfree}
-  =
-  \begin{tenkzfree}
-    % The black bonds form the same open 5x5 PEPS window.
-    \tnjoin{-19mm,16mm}{19mm,16mm}
-    \tnjoin{-19mm,8mm}{19mm,8mm}
-    \tnjoin{-19mm,0mm}{19mm,0mm}
-    \tnjoin{-19mm,-8mm}{19mm,-8mm}
-    \tnjoin{-19mm,-16mm}{19mm,-16mm}
-    \tnjoin{-16mm,19mm}{-16mm,-19mm}
-    \tnjoin{-8mm,19mm}{-8mm,-19mm}
-    \tnjoin{0mm,19mm}{0mm,-19mm}
-    \tnjoin{8mm,19mm}{8mm,-19mm}
-    \tnjoin{16mm,19mm}{16mm,-19mm}
-
-    % After the pull, O_g runs below the crossing tensor.
-    \tnjoin[role=operator]{-19mm,-4mm}{19mm,-4mm}
-    \tnput[dot,role=operator]{gr1}{(-16mm,-4mm)}{}
-    \tnput[dot,role=operator]{gr2}{(-8mm,-4mm)}{}
-    \tnput[dot,role=operator]{gr3}{(0mm,-4mm)}{}
-    \tnput[dot,role=operator]{gr4}{(8mm,-4mm)}{}
-    \tnput[dot,role=operator,label pos=east]{gr5}{(16mm,-4mm)}{O_g}
-
-    % O_h remains vertical.  The crossing is the enlarged MPO tensor.
-    \tnjoin[role=passive]{4mm,19mm}{4mm,-19mm}
-    \tnput[dot,role=passive]{hr1}{(4mm,16mm)}{}
-    \tnput[dot,role=passive]{hr2}{(4mm,8mm)}{}
-    \tnput[dot,role=passive]{hr3}{(4mm,0mm)}{}
-    \tnput[mpo,role=marked]{x}{(4mm,-4mm)}{}
-    \tnput[dot,role=passive]{hr4}{(4mm,-8mm)}{}
-    \tnput[dot,role=passive,label pos=south]{hr5}{(4mm,-16mm)}{O_h}
-
-    % The two auxiliary rails encode the conjugation of h by g above the crossing.
-    \tnjoin[role=operator]{1.5mm,19mm}{1.5mm,0mm}
-    \tnjoin[role=operator]{6.5mm,19mm}{6.5mm,0mm}
-    \tnput[dot,role=operator,label pos=north]{l1}{(1.5mm,16mm)}{g^{-1}}
-    \tnput[dot,role=operator]{l2}{(1.5mm,8mm)}{}
-    \tnput[dot,role=operator]{l3}{(1.5mm,0mm)}{}
-    \tnput[dot,role=operator,label pos=north]{r1}{(6.5mm,16mm)}{g}
-    \tnput[dot,role=operator]{r2}{(6.5mm,8mm)}{}
-    \tnput[dot,role=operator]{r3}{(6.5mm,0mm)}{}
-    \tnjoin[role=operator,route=arc]{l3.south}{r3.south}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkzeq}
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      % The black bonds form the open 5x5 PEPS window.
+      \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
+      \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
+      \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
+      \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
+      \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
+      % Initially O_g lies above the PEPS, while O_h crosses the window.
+      \tnwire[kind=string, species=operator, name=g,
+              via={(1,1), (1,2), (1,3), (1,4), (1,5)},
+              cross={over at crossing of g and v1, over at crossing of g and v2,
+                     over at crossing of g and v3, over at crossing of g and v4,
+                     over at crossing of g and v5, over at crossing of g and h}]
+        {0.2 w of (1,1)}{0.2 e of (1,5)}
+      \tn[species=operator, at=crossing of g and v1]{}
+      \tn[species=operator, at=crossing of g and v2]{}
+      \tn[species=operator, at=crossing of g and v3]{}
+      \tn[species=operator, at=crossing of g and v4]{}
+      \tn[species=operator, at=crossing of g and v5, label pos=0]{O_g}
+      \tnwire[kind=string, species=passive, name=h,
+              via={midway (2,3) and (2,4), midway (3,3) and (3,4),
+                   midway (4,3) and (4,4), midway (5,3) and (5,4)},
+              cross={over at crossing of h and h1, over at crossing of h and h2,
+                     over at crossing of h and h3, over at crossing of h and h4,
+                     over at crossing of h and h5}]
+        {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
+      \tn[species=passive, at=crossing of h and h1]{}
+      \tn[species=passive, at=crossing of h and h2]{}
+      \tn[species=passive, at=crossing of h and h3]{}
+      \tn[species=passive, at=crossing of h and h4]{}
+      \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
+      % This arrow records the downward pull of the horizontal MPO.
+      \tnwire[kind=string, route=arc, dir=to, name=pull,
+              via={0.6 w of (2,1), 0.6 w of (3,1)}]{0.4 w of (1,1)}{0.4 w of (4,1)}
+    \end{tenkz} =
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      \tnwire[name=h1]{(2,1)}{(2,5)} \tnwire[name=h2]{(3,1)}{(3,5)}
+      \tnwire[name=h3]{(4,1)}{(4,5)} \tnwire[name=h4]{(5,1)}{(5,5)}
+      \tnwire[name=h5]{(6,1)}{(6,5)} \tnwire[name=v1]{(1,1)}{(6,1)}
+      \tnwire[name=v2]{(1,2)}{(6,2)} \tnwire[name=v3]{(1,3)}{(6,3)}
+      \tnwire[name=v4]{(1,4)}{(6,4)} \tnwire[name=v5]{(1,5)}{(6,5)}
+      % After the pull, O_g runs below the crossing tensor.
+      \tnwire[kind=string, species=operator, name=g,
+              via={midway (4,2) and (5,2), midway (4,4) and (5,4)},
+              cross={over at crossing of g and v2, over at crossing of g and v3,
+                     over at crossing of g and v4, over at crossing of g and h}]
+        {midway (4,1) and (5,1)}{midway (4,5) and (5,5)}
+      \tn[species=operator, at=midway (4,1) and (5,1)]{}
+      \tn[species=operator, at=crossing of g and v2]{}
+      \tn[species=operator, at=crossing of g and v3]{}
+      \tn[species=operator, at=crossing of g and v4]{}
+      \tn[species=operator, at=midway (4,5) and (5,5), label pos=0]{O_g}
+      % O_h remains vertical.  The crossing is the enlarged MPO tensor.
+      \tnwire[kind=string, species=passive, name=h,
+              via={midway (2,3) and (2,4), midway (3,3) and (3,4),
+                   midway (4,3) and (4,4), midway (5,3) and (5,4)},
+              cross={over at crossing of h and h1, over at crossing of h and h2,
+                     over at crossing of h and h3, over at crossing of h and h4,
+                     over at crossing of h and h5}]
+        {midway (1,3) and (1,4)}{midway (6,3) and (6,4)}
+      \tn[species=passive, at=crossing of h and h1]{}
+      \tn[species=passive, at=crossing of h and h2]{}
+      \tn[species=passive, at=crossing of h and h3]{}
+      \tn[skin=mpo, role=marked, at=crossing of g and h]{}
+      \tn[species=passive, at=crossing of h and h4]{}
+      \tn[species=passive, at=crossing of h and h5, label pos=270]{O_h}
+      % The two auxiliary rails encode the conjugation of h by g.
+      \tnwire[kind=string, species=operator, name=ginv,
+              via={0.2 e of (2,3), 0.2 e of (3,3)},
+              cross={over at crossing of ginv and h1,
+                     over at crossing of ginv and h2, over at crossing of ginv and h3}]
+        {0.2 e of (1,3)}{0.2 e of (4,3)}
+      \tnwire[kind=string, species=operator, name=gr,
+              via={0.2 w of (2,4), 0.2 w of (3,4)},
+              cross={over at crossing of gr and h1,
+                     over at crossing of gr and h2, over at crossing of gr and h3}]
+        {0.2 w of (1,4)}{0.2 w of (4,4)}
+      \tn[species=operator, at=crossing of ginv and h1, label pos=90]{g^{-1}}
+      \tn[species=operator, at=crossing of ginv and h2]{}
+      \tn[species=operator, name=l3, at=crossing of ginv and h3]{}
+      \tn[species=operator, at=crossing of gr and h1, label pos=90]{g}
+      \tn[species=operator, at=crossing of gr and h2]{}
+      \tn[species=operator, name=r3, at=crossing of gr and h3]{}
+      \tnwire[kind=string, route=arc, species=operator, name=cup,
+              via={on h 0.65}, cross={over at crossing of cup and h,
+                     over at crossing of cup and gr}] {0.2 e of (4,3)}{0.2 w of (4,4)}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

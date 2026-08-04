@@ -1,19 +1,32 @@
 % Target: rmp-ii-staircase
 % Formula: |psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the staircase ascends as in the source (the bar's X row
+%   on this target: the 0.7 case was vertically mirrored).
 % Boundary: The initial state closes the input; each isometry exposes one output and
 %   the final bond.
 % Source: paper TN-Review-main.tex line 514; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 541-546
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
   \lvert\psi\rangle \;=\;
-  % rows = wires; V_k spans wires (k, k+1) at column k+1; |0> feeds wire 1
-  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, west=none]
-    \tn[dot]{\lvert 0\rangle} & \tn[box, wires=2]{V} & & & \\
-    & & \tn[box, wires=2]{V} & & \\
-    & & & \tn[box, wires=2]{V} & \\
-    & & & & \tn[box, wires=2]{V}\\
-    & & & &
+  \tenkzkernel
+  % V_k takes the bond from below-left, exposes its output above, and passes
+  % the bond above-right; the initial state closes the chain from below-left.
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, west=none]
+    \tn[skin=box, at=(1,5), name=v4,
+      ports={90:physical, 225:virtual, 45:virtual}]{V}
+    \tn[skin=box, at=(2,4), name=v3,
+      ports={90:physical, 225:virtual, 45:virtual}]{V}
+    \tn[skin=box, at=(3,3), name=v2,
+      ports={90:physical, 225:virtual, 45:virtual}]{V}
+    \tn[skin=box, at=(4,2), name=v1,
+      ports={90:physical, 225:virtual, 45:virtual}]{V}
+    \tn[skin=dot, at=(5,1), name=z, label pos=270,
+      ports={45:virtual}]{\lvert 0\rangle}
+    \tnwire{z.45}{v1.225}
+    \tnwire{v1.45}{v2.225}
+    \tnwire{v2.45}{v3.225}
+    \tnwire{v3.45}{v4.225}
+    \tnwire{v4.45}{open ne}
   \end{tenkz}
 \]

@@ -41,42 +41,42 @@ hash-pinned visual check required before changing a verdict.
 
 | Target | Kind | Reason / next action |
 |---|---:|---|
-| `rmp-ii-peps-projection` | K2 | Projector layer and named bond are already present; re-review as faithful. |
+| `rmp-ii-peps-projection` | — | Promoted to `faithful` 2026-08-04: projector layer, named A site, named bond, and boundary all present; tint and leg colour are house style. |
 | `rmp-ii-mps-marginal` | K3 | Replace the heavy trace closure through the shared minimal closure idiom. |
 | `rmp-ii-peps-marginal` | K3 | Reduce excessive trace-loop height through the closure metric. |
-| `rmp-ii-mpu-brickwork` | K2 | Operator-word versus circuit presentation is inherent to the identity. |
-| `rmp-ii-mpu-two-shift` | X | The case does not record the source pairing boxes or required open legs; migrate it to the complete workbench-twin model before review. |
+| `rmp-ii-mpu-brickwork` | — | Promoted to `faithful` 2026-08-04: twelve legs, alternating layers, and labels match; labelled boxes for dotted gate pairs are the inherent circuit presentation. |
+| `rmp-ii-mpu-two-shift` | K1 | Resolved 2026-08-04: the case now carries the workbench-twin skin-pairings model with the published palette; the row channels keep house ink where the panel colours the movers. |
 | `rmp-ii-mpu-normal-form` | K3 | The solid S-route is heavier and less compact than the graceful default should be. |
 | `rmp-ii-spectrum-transfer` | K3 | Supply the shared designed tail idiom for the two fixed-point tails. |
-| `rmp-ii-spectrum-fixed-points` | K2 | The relation is recorded as corrected; re-review as faithful. |
-| `rmp-ii-blocking` | K2 | Case, manifest, and fixture metadata now agree; no residue is named. |
-| `rmp-ii-staircase` | X | Re-audit the vertically mirrored source orientation before treating the V-glyph aspect as cosmetic. |
-| `rmp-ii-circuit` | K2 | The compact doubling tree carries the complete eight-output identity. |
-| `rmp-ii-ortho-left` | K2 | Thin house wires versus bold source wires are intentional styling. |
-| `rmp-ii-boundary-lasso` | X | The case does not record `species=`; migrate the semantic hue into the model before theme review. |
+| `rmp-ii-spectrum-fixed-points` | — | Promoted to `faithful` 2026-08-04: fold side, factor order, and open ends match; capsule glyphs are equivalent house routing. |
+| `rmp-ii-blocking` | — | Promoted to `faithful` 2026-08-04: re-review and oracle pass confirmed the one-site isometry matches the source panel; the wider house pill is intentional styling. |
+| `rmp-ii-staircase` | K3 | Resolved 2026-08-04: the re-audit confirmed the vertical mirror; the case now ascends as in the source. Residue: house box for the rounded V glyph (#5363). |
+| `rmp-ii-circuit` | — | Already `faithful` (2026-08-02 two-viewer review); the doubling tree carries the complete eight-output identity. |
+| `rmp-ii-ortho-left` | — | Promoted to `faithful` 2026-08-04: cup topology, glyph orientation, and labels match; thin house wires are intentional styling. |
+| `rmp-ii-boundary-lasso` | K1 | Resolved 2026-08-04: the palette is model-recorded as declared species; the physical policy legs stay house-ink because the policy stub does not read the host species. |
 | `rmp-ii-boundary-region` | K2 | The boundary is recorded as repaired; no residue is named. |
 | `rmp-ii-boundary-state` | K2 | A brace versus a box is an equivalent house mark for the same region. |
 | `rmp-ii-zcl-mpdo` | K3 | Make the shared trace closure more compact than the current racetrack. |
-| `rmp-ii-channels-ts` | K2 | Straight double arrows versus curved source arcs are equivalent house routing. |
+| `rmp-ii-channels-ts` | — | Promoted to `faithful` 2026-08-04: legs and channel directions match; the straight double arrow is equivalent house routing. |
 | `rmp-ii-mpdo-ol` | K4 | Reconcile the ledger's finite `extra-element` defect with the note saying the contrast panel is gone, then re-review the hook spacing. |
 | `rmp-ii-peps-rg` | X | The current hooks cross where the source keeps them separated; restore the source crossing topology. |
 | `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
-| `rmp-iii-a-f-symbol` | K2 | Crossing order, directions, sectors, and all six labels are present. |
+| `rmp-iii-a-f-symbol` | — | Promoted to `faithful` 2026-08-04: crossing order, directions, sectors, and all six labels verified against the author figure. |
 | `rmp-iii-a-pulling-through` | K3 | Normalize curve weight and panel spacing. |
-| `rmp-iii-a-commuting-hamiltonian` | K2 | The h-glyph difference is house typography. |
-| `rmp-iii-a-proof-one` | K2 | The invented boxes are gone and the copy dot is restored. |
-| `rmp-iii-a-proof-two` | K2 | Bond hue and box size are public-theme choices. |
-| `rmp-iii-a-proof-three` | K2 | The full fusion stack is present; red operator rails are the house semantic hue. |
-| `rmp-iii-a-ghz-state` | X | The free-form case records no lattice genre or truncation property; migrate it to the carrier-axis/lattice model first. |
-| `rmp-iii-a-ghz-tensor` | K2 | Copy dot versus labelled box and diagonal angle are equivalent house forms. |
+| `rmp-iii-a-commuting-hamiltonian` | — | Promoted to `faithful` 2026-08-04: gate span and contractions match; the labelled white pill is house typography. |
+| `rmp-iii-a-proof-one` | — | Promoted to `faithful` 2026-08-04: alpha-dot contraction and reduced tensor match; the rounded pill is a house glyph form. |
+| `rmp-iii-a-proof-two` | — | Promoted to `faithful` 2026-08-04: stacked fusion matches wire for wire; bond hue and box size are theme choices. |
+| `rmp-iii-a-proof-three` | — | Promoted to `faithful` 2026-08-04: the full fusion stack and the up stub above beta match; red operator rails are the house semantic hue. |
+| `rmp-iii-a-ghz-state` | K1 | Resolved: the case now records the full six-by-eight staggered model on the kernel (all junctions, bonds, and legs verified present 2026-07-30); only the shared kernel spacing and stroke profile differ. |
+| `rmp-iii-a-ghz-tensor` | — | Promoted to `faithful` 2026-08-04: four open indices and equation match; labelled box and orthogonal legs are house forms. |
 | `rmp-iii-a-hadamard` | X | Promoted to `structural-gap`: its pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
-| `rmp-iii-a-spt-mpo` | K2 | The string, action boxes, and measured-leg crossings are complete. |
+| `rmp-iii-a-spt-mpo` | — | Promoted to `faithful` 2026-08-04: string pull, both crossings, action boxes, and the U_g insertion verified under the boundary audit. |
 | `rmp-iii-a-spt-intertwiner` | X | The open fusion map has no trace cyclicity; restore the source factor order before reviewing glyph scale. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
 | `rmp-iii-a-mpo-action` | K3 | Restore a graceful diagonal physical-leg route. |
 | `rmp-iii-a-mpo-injective` | K2 | Ring topology is preserved; unrecorded hatching and hue require house-style re-review, not a renderer promise. |
-| `rmp-iii-a-torus-one` | K2 | Wound cycles and inner bends are explicit; line weight is house style. |
-| `rmp-iii-a-torus-two` | K2 | Public-theme colour replaces vivid source ink without changing meaning. |
+| `rmp-iii-a-torus-one` | — | Promoted to `faithful` 2026-08-04: both wound cycles, the inner bends, and the crossing at i verified; outlined box and weight are house style. |
+| `rmp-iii-a-torus-two` | — | Promoted to `faithful` 2026-08-04: periodic word, marked fourth tensor, and ten open legs match; public theme replaces vivid source ink. |
 | `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |
@@ -86,19 +86,19 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-b-condensation` | K4 | Add the finite projection mark named by the verdict note. |
 | `rmp-iv-ground-space-1d` | K3 | Improve the small X glyph and overly tight placement. |
 | `rmp-iv-ground-space-2d` | X | `physical=up` creates ports but records no wire direction; model the source arrowed legs before theme review. |
-| `rmp-iv-intersection-lhs-one` | K2 | Sideways virtual ends preserve the same boundary and contraction. |
-| `rmp-iv-intersection-rhs-one` | K2 | Sideways virtual ends preserve the same boundary and contraction. |
-| `rmp-iv-intersection-lhs-two` | K2 | Sideways virtual openings preserve the source boundary. |
-| `rmp-iv-intersection-rhs-two` | K2 | The crossing is removed; sideways virtual ends are equivalent routing. |
-| `rmp-iv-intersection-lhs-three` | K2 | The crossing is removed; sideways virtual ends are equivalent routing. |
-| `rmp-iv-intersection-rhs-three` | K2 | Boundary and contraction match; routing is a house choice. |
-| `rmp-iv-intersection-lhs-four` | K2 | A horizontal free identity wire is equivalent to the source U-route. |
-| `rmp-iv-intersection-rhs-four` | K2 | The five open ends match and the spurious crossing is absent. |
-| `rmp-iv-intersection-lhs-five` | K2 | Sideways stubs preserve the restored three-leg boundary. |
+| `rmp-iv-intersection-lhs-one` | — | Promoted to `faithful` 2026-08-04: both virtual ends close into L with matching physical legs; sideways cups are equivalent routing. |
+| `rmp-iv-intersection-rhs-one` | — | Promoted to `faithful` 2026-08-04: uncovered wire and B--C close into R; sideways cups are equivalent routing. |
+| `rmp-iv-intersection-lhs-two` | — | Promoted to `faithful` 2026-08-04: west cup closure and both openings match; sideways routing preserves the boundary. |
+| `rmp-iv-intersection-rhs-two` | — | Promoted to `faithful` 2026-08-04: east cup closure, no crossing, sideways ends equivalent. |
+| `rmp-iv-intersection-lhs-three` | — | Promoted to `faithful` 2026-08-04: two virtual and three physical openings match; sideways ends equivalent. |
+| `rmp-iv-intersection-rhs-three` | — | Promoted to `faithful` 2026-08-04: both closures and openings match; routing is a house choice. |
+| `rmp-iv-intersection-lhs-four` | — | Promoted to `faithful` 2026-08-04: five openings match; the horizontal identity wire is equivalent to the U-route. |
+| `rmp-iv-intersection-rhs-four` | — | Promoted to `faithful` 2026-08-04: five open ends match Rtensor4; no spurious crossing. |
+| `rmp-iv-intersection-lhs-five` | — | Promoted to `faithful` 2026-08-04: the restored three-index boundary matches; sideways stubs preserve it. |
 | `rmp-iv-intersection-rhs-five` | X | Re-audit the mirrored open C--X contraction before accepting it as equivalent routing. |
 | `rmp-iv-intersection-lhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
 | `rmp-iv-intersection-rhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
-| `rmp-app-czx-state` | K2 | Lighter enclosure fill is a public-theme choice. |
+| `rmp-app-czx-state` | — | Promoted to `faithful` 2026-08-04: source grouping and lattice wiring verified; lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
 | `rmp-workbench-ii-projector-on-pta` | X | Promoted to `structural-gap`: omitting two of four source triangles changes the multiplicity of the sandwich sum. |
 | `rmp-workbench-ii-peps-rg-workbench` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the U-application idiom. |
@@ -132,7 +132,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-eq60-now` | K2 | Daggered insertions and genuinely diagonal legs are present. |
 | `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
-| `rmp-workbench-iii-g-injective-mpo` | X | The dropped eight half-edges are the complete declared boundary, not a cosmetic omission. |
+| `rmp-workbench-iii-g-injective-mpo` | K3 | Resolved 2026-08-04: the eight labelled half-edges and plaquette bonds are drawn with source-stacked sector labels. Residue: house box for the source circle glyph. |
 | `rmp-workbench-iii-peps-renormalization-one` | X | The manifest requires four edge-centred PEPS atoms that the case omits; reconcile the contract before hatch review. |
 | `rmp-workbench-iii-peps-renormalization-two` | K2 | Effective tensor, corner blocks, and fused legs are complete. |
 
