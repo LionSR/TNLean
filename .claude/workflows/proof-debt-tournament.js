@@ -10,7 +10,7 @@ export const meta = {
   ],
 }
 
-const ROOT = '/Users/siruilu/Local/agentFormalization/TNLean'
+const ROOT = process.env.TNLEAN_ROOT || process.cwd()
 
 const CTX = `You are auditing TNLean, a Lean 4 / Mathlib formalization of the Fundamental Theorem of
 Matrix Product States, Quantum Wielandt theory, and quantum-channel theory (Wolf's book).
@@ -234,8 +234,8 @@ const found = await parallel(LENSES.map(l => () =>
   agent(`${CTX}\n\n${l.prompt}\n\nReturn your 3-6 largest findings for this lens.`,
     { label: `find:${l.key}`, phase: 'Find', schema: FINDINGS_SCHEMA })
 ))
-const allFindings = found.filter(Boolean).flatMap((r, i) =>
-  r.findings.map(f => ({ ...f, lens: LENSES[i] ? LENSES[i].key : 'unknown' })))
+const allFindings = found.flatMap((r, i) =>
+  (r ? r.findings : []).map(f => ({ ...f, lens: LENSES[i] ? LENSES[i].key : 'unknown' })))
 log(`Collected ${allFindings.length} raw findings across ${found.filter(Boolean).length} lenses`)
 
 phase('Merge')
@@ -251,6 +251,8 @@ understand it). You may spot-check evidence in the repo with rg/Read if two find
 
 RAW FINDINGS (JSON):\n${JSON.stringify(allFindings, null, 1)}`,
   { label: 'merge-judge', phase: 'Merge', schema: MERGE_SCHEMA })
+if (!merged || !Array.isArray(merged.debts))
+  throw new Error('merge judge returned no debts; aborting tournament')
 const debts = merged.debts
 log(`Merged into ${debts.length} distinct debt items`)
 
@@ -343,7 +345,9 @@ starts the burn-down, sized for one week or less). Use impact/effort scores give
 DATA:\n${JSON.stringify(fullTop, null, 1)}`,
   { label: 'synthesizer', phase: 'Synthesize', schema: FINAL_SCHEMA })
 
+if (!final || !Array.isArray(final.top10))
+  throw new Error('synthesizer returned no top10; aborting tournament')
 return { top10: final.top10, honorable_mentions: final.honorable_mentions || [],
-  judge_rationales: rankings.filter(Boolean).map((r, i) => ({ judge: JUDGE_ANGLES[i].key, rationale: r.rationale })),
+  judge_rationales: rankings.flatMap((r, i) => r ? [{ judge: JUDGE_ANGLES[i].key, rationale: r.rationale }] : []),
   surviving_count: surviving.length, raw_findings_count: allFindings.length,
   eliminated: verified.filter(Boolean).filter(v => !surviving.includes(v)).map(v => ({ id: v.id, title: v.title, why: (v.evCheck && !v.evCheck.confirmed) ? v.evCheck.notes : (v.imCheck ? v.imCheck.notes : 'verifier failed') })) }
