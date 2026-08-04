@@ -492,3 +492,281 @@
     $QL$ is $1/8$. Hence $QL$ is not idempotent, and associativity gives
     $Q(1-LQ)L=QL-(QL)^2\ne0$.
 \end{proof}
+
+% Project derivation preparing the Lemma C.5 route of the eta-local
+% structure note; no CPSV16 statement is claimed.  See
+% docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
+\begin{theorem}[Doubled-index self-overlap is the Hilbert--Schmidt trace]
+    \label{thm:mpdo_doubled_overlap_hilbert_schmidt}
+    \lean{MPOTensor.pairCfgEquiv,
+      MPOTensor.mpvOverlap_toMPSTensor_self}
+    \leanok
+    \uses{def:mpv_overlap, def:mpo_to_mps, def:mpo_family}
+    Let $K$ be an MPO tensor. For every chain length $N$, the
+    self-overlap of the doubled-index MPS family equals the
+    Hilbert--Schmidt trace of the closed operator:
+    \begin{align}
+        O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
+        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)^\dagger\right).
+        \notag
+    \end{align}
+    This is a project derivation preparing the Lemma~C.5 route of
+    \cite[Appendix~C.2, lines~1473--1499]{Cirac2016MPDO_arXiv}; the
+    pure-state analogue is the normalized-MPV self-overlap lemma of
+    \cite[lines~1080--1100]{Cirac2016MPDO_arXiv}. It is not a statement
+    of that source. Until a trace normalization is established, the
+    right-hand side is the raw squared Hilbert--Schmidt norm of the MPO
+    family, not a normalized-state purity.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpv_overlap, def:mpo_to_mps, def:mpo_family}
+    Both sides are sums over physical configurations. Expanding the
+    trace of the product gives the Frobenius inner product
+    \begin{align}
+        \tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)^\dagger\right)
+        &=\sum_{\sigma,\tau}
+          \rho^{(N)}(K)_{\sigma,\tau}\,
+          \overline{\rho^{(N)}(K)_{\sigma,\tau}}
+        \notag
+    \end{align}
+    over pairs $(\sigma,\tau)$ of ket and bra configurations, while the
+    overlap sums
+    $V^{(N)}(K^{\mathrm{MPS}})_\rho\,
+    \overline{V^{(N)}(K^{\mathrm{MPS}})_\rho}$ over doubled-index words
+    $\rho$. The product encoding of Definition~\ref{def:mpo_to_mps}
+    reindexes each configuration pair $(\sigma,\tau)$ as the
+    doubled-index word $n\mapsto(\sigma_n,\tau_n)$, and decoding each
+    doubled index as a ket--bra pair identifies the summands:
+    $V^{(N)}(K^{\mathrm{MPS}})_{(\sigma,\tau)}
+    =\rho^{(N)}(K)_{\sigma,\tau}$.
+\end{proof}
+
+\begin{corollary}[Self-overlap as the trace of the square for an MPDO]
+    \label{cor:mpdo_doubled_overlap_trace_sq}
+    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_trace_sq}
+    \leanok
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
+    If $K$ generates MPDOs and $N\geq1$, then
+    \begin{align}
+        O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
+        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right).
+        \notag
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt, def:mpdo}
+    Positivity on the nonempty chain makes $\rho^{(N)}(K)$ positive
+    semidefinite, hence Hermitian. Substituting
+    $\rho^{(N)}(K)^\dagger=\rho^{(N)}(K)$ into
+    Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt} gives the
+    identity.
+\end{proof}
+
+\begin{corollary}[Real part of the self-overlap is the squared Frobenius
+    norm]
+    \label{cor:mpdo_doubled_overlap_frobenius}
+    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_re_eq_frobenius_norm_sq}
+    \leanok
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt}
+    For every MPO tensor $K$ and every chain length $N$,
+    \begin{align}
+        \re O_{K^{\mathrm{MPS}}K^{\mathrm{MPS}}}(N)
+        &=\|\rho^{(N)}(K)\|_F^2
+          =\sum_{\sigma,\tau}
+          \left|\rho^{(N)}(K)_{\sigma,\tau}\right|^2.
+        \notag
+    \end{align}
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_doubled_overlap_hilbert_schmidt}
+    Cyclicity of the trace rewrites the Hilbert--Schmidt trace as
+    $\tr\!\left(\rho^{(N)}(K)^\dagger\rho^{(N)}(K)\right)$, whose real
+    part is the sum of the squared absolute entries.
+\end{proof}
+
+\begin{theorem}[Trace factorization of the cyclic neighboring product]
+    \label{thm:mpdo_cyclic_neighboring_trace_products}
+    \lean{MPOTensor.PhysicalSectorFactorization.%
+      trace_cyclicNeighboringProduct_eq_prod_trace,
+      MPOTensor.PhysicalSectorFactorization.%
+      trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq}
+    \leanok
+    \uses{def:mpdo_physical_sector_chain_coordinates}
+    Let $N\geq1$ and let $k=(k_0,\ldots,k_{N-1})$ be a cyclic sector
+    configuration of a physical-sector factorization. The trace of the
+    cyclic neighboring product factors into the product of the
+    neighboring traces, and so does the trace of its square:
+    \begin{align}
+        \tr(\Omega_k)
+        &=\prod_{n=0}^{N-1}\tr\!\left(\eta_{k_n,k_{n+1}}\right),
+        \notag\\
+        \tr\!\left(\Omega_k^2\right)
+        &=\prod_{n=0}^{N-1}
+          \tr\!\left(\eta_{k_n,k_{n+1}}^2\right),
+        \notag
+    \end{align}
+    with site labels read modulo $N$. These are the
+    coefficient-extraction identities for the cyclic direct-sum form of
+    \cite[Appendix~C.2, lines~1580--1593]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_physical_sector_chain_coordinates}
+    The fiber bijection of
+    Definition~\ref{def:mpdo_physical_sector_chain_coordinates}
+    identifies the diagonal entries of $\Omega_k$ with tuples of
+    diagonal entries of the neighboring factors. Hence
+    \begin{align}
+        \tr(\Omega_k)
+        &=\sum_x\prod_{n=0}^{N-1}
+          \eta_{k_n,k_{n+1}}(x_n,x_n)
+          =\prod_{n=0}^{N-1}\sum_{x_n}
+          \eta_{k_n,k_{n+1}}(x_n,x_n),
+        \notag
+    \end{align}
+    expanding the product of sums. For the square, write
+    $\tr(\Omega_k^2)=\sum_{x,y}\Omega_k(x,y)\,\Omega_k(y,x)$; the same
+    reindexing and expansion turn the inner sums into the diagonal
+    entries of $\eta_{k_n,k_{n+1}}^2$.
+\end{proof}
+
+% Proved Case-I components; the singleton-sector assembly (trace
+% similarity, the overlap formula, and the Case-I relations) is not yet
+% formalized.  The route is sketched in
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{lemma}[Trace-squared matrix of the neighboring operators]
+    \label{lem:mpdo_active_sector_trace_sq_matrix}
+    \lean{MPOTensor.activeSectorTraceSqMatrix,
+      MPOTensor.activeSectorTraceSqMatrix_nonneg,
+      MPOTensor.activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix}
+    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
+    and sector weights $p_k$, and suppose that every neighboring
+    operator $\eta_{k,h}$ is positive semidefinite. On the active
+    sector set $I_*$, define the trace-squared matrix
+    \begin{align}
+        S^*_{k,h}
+        &:=\re\tr\!\left(\eta_{k,h}^2\right),
+        \qquad k,h\in I_*.
+        \notag
+    \end{align}
+    Then, entrywise,
+    \begin{align}
+        0&\leq S^*_{k,h}\leq\left(T^*_{k,h}\right)^2.
+        \notag
+    \end{align}
+    This matrix is a project derivation preparing the Case-I route
+    toward
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv};
+    it is not a matrix defined in that source.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      thm:psd_trace_square_le_square_trace}
+    Hermiticity of $\eta_{k,h}$ gives
+    $\eta_{k,h}^2=\eta_{k,h}\,\eta_{k,h}^\dagger$, which is positive
+    semidefinite, so its trace is a non-negative real number. The upper
+    bound is Theorem~\ref{thm:psd_trace_square_le_square_trace} applied
+    to $\eta_{k,h}$.
+\end{proof}
+
+% Proved Case-I components.  The remaining singleton-sector assembly
+% is not yet formalized: the trace similarity
+% $\tr(\widehat S^N)=\tr((S^*)^N)$ under a diagonal rescaling of the
+% trace-squared matrix of the preceding lemma, the overlap formula
+% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
+% =\tr((S^*)^N)$, and the Case-I relations $(T^*)^2=T^*$ and
+% $Q(1-LQ)L=0$ in the rectangular decomposition
+% $\mathcal T_{\cal K}=LQ$.  The virtual-spanning counterexample above
+% shows that the last relation does not follow from virtual spanning
+% alone.  The route is sketched in
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{theorem}[Literal zero correlation length stabilizes the active
+    trace matrix]
+    \label{thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    \lean{MPOTensor.%
+      activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL,
+      MPOTensor.activeSectorTraceMatrix_pow_two_pos}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      def:mpo_physical_trace_transfer}
+    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
+    and sector weights $p_k$. Suppose that every neighboring operator
+    is positive semidefinite, that the physical-trace transfer is
+    literally idempotent,
+    \begin{align}
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \notag
+    \end{align}
+    as in \cite[Definition~4.2, lines~735--741]{Cirac2016MPDO_arXiv},
+    and that the left tensor of every zero-weight sector vanishes. Then
+    the active trace matrix stabilizes after the second power:
+    \begin{align}
+        \left(T^*\right)^2&=\left(T^*\right)^3.
+        \notag
+    \end{align}
+    If, in addition, the active one-site matrices span $\MN{D}$, each
+    active sector contains a nonzero such matrix, every nonzero
+    neighboring operator closes through a third active sector, and
+    there is at least one active sector, then $(T^*)^2$ is strictly
+    positive entrywise.
+
+    These are matrix-algebra components of the Case-I argument under
+    the assumptions of
+    \cite[Appendix~C.2, lines~1374--1381]{Cirac2016MPDO_arXiv}, for the
+    factorization supplied by
+    \cite[Appendix~C.2, Lemma~C.4, lines~1406--1471]{Cirac2016MPDO_arXiv}
+    and the zero-correlation-length step of
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv}.
+    They are project derivations, not statements of that source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      thm:mpdo_active_sector_three_step_return_and_primitivity,
+      thm:matrix_primitive_pow_two_rank_one}
+    On the active sectors, collect the left and right sector-tensor
+    traces into rectangular matrices $L$ and $Q$ with
+    \begin{align}
+        L_{\beta,h}&=\tr\!\left((l_h)_\beta\right),
+        &
+        Q_{k,\alpha}&=\tr\!\left((r_k)_\alpha\right).
+        \notag
+    \end{align}
+    The left tensor vanishes on every zero-weight sector, so the
+    rectangular product $LQ$ is the full physical-trace transfer, and
+    literal zero correlation length makes $LQ$ idempotent.
+    Associativity then gives
+    \begin{align}
+        (QL)^2&=Q(LQ)L=Q(LQ)(LQ)L=(QL)^3.
+        \notag
+    \end{align}
+    Positivity of the neighboring operators makes their traces real,
+    and expanding the products identifies $QL$ with the
+    complexification of $T^*$; injectivity of the real-to-complex
+    inclusion gives $(T^*)^2=(T^*)^3$.
+
+    Under the additional hypotheses,
+    Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity}
+    makes $T^*$ primitive: some power $m\geq1$ has strictly positive
+    entries. Stabilization gives $(T^*)^{2m}=(T^*)^2$, so
+    \begin{align}
+        \left((T^*)^2\right)_{k,h}
+        &=\sum_j\left((T^*)^m\right)_{k,j}
+          \left((T^*)^m\right)_{j,h}>0,
+        \notag
+    \end{align}
+    which is the positivity argument of
+    Theorem~\ref{thm:matrix_primitive_pow_two_rank_one}.
+\end{proof}
