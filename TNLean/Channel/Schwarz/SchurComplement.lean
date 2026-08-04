@@ -107,6 +107,34 @@ theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R
   rw [Douglas.mul_pinv_eq_supportProj R]
   exact supportProj_sq_eq_supportProj R hR
 
+/-- Support-projection absorption on the pseudoinverse of a PSD matrix:
+`supportProj R * pinv R = pinv R`.
+
+The proof avoids rewriting `Rᴴ = R` inside dependent positions (which breaks
+the `rw` motive because `hR : R.PosSemidef` mentions `R`): all conversions are
+done in term mode via `congrArg` transitivity chains, factoring `R` as
+`√R * √R` and using the support absorption `supportProj R * √R = √R`. -/
+theorem supportProj_mul_pinv_eq_pinv (R : Matrix (Fin D₂) (Fin D₂) ℂ)
+    (hR : R.PosSemidef) :
+    hR.supportProj * Douglas.pinv R = Douglas.pinv R := by
+  have hsqrt : hR.supportProj * hR.isHermitian.cfc Real.sqrt =
+      hR.isHermitian.cfc Real.sqrt := hR.supportProj_mul_cfc_sqrt
+  have hRR : hR.isHermitian.cfc Real.sqrt * hR.isHermitian.cfc Real.sqrt = R :=
+    hR.cfc_sqrt_mul_self
+  have e2 : hR.supportProj * (hR.isHermitian.cfc Real.sqrt * hR.isHermitian.cfc Real.sqrt) =
+      hR.isHermitian.cfc Real.sqrt * hR.isHermitian.cfc Real.sqrt := by
+    rw [← Matrix.mul_assoc, hsqrt]
+  have e1 : hR.supportProj * R = R :=
+    (congrArg (fun X => hR.supportProj * X) hRR).symm.trans (e2.trans hRR)
+  have key : hR.supportProj * Rᴴ = Rᴴ :=
+    (congrArg (HMul.hMul hR.supportProj) hR.isHermitian.eq).trans
+      (e1.trans hR.isHermitian.eq.symm)
+  calc hR.supportProj * Douglas.pinv R
+      = (hR.supportProj * Rᴴ) * (Matrix.posSemidef_self_mul_conjTranspose R).supportInv := by
+        rw [Douglas.pinv, Matrix.mul_assoc]
+    _ = Rᴴ * (Matrix.posSemidef_self_mul_conjTranspose R).supportInv := by rw [key]
+    _ = Douglas.pinv R := by rw [Douglas.pinv]
+
 theorem ker_subset_of_block_psd (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hM : (blockMatrix P Q R).PosSemidef) (y : Fin D₂ → ℂ) (hRy : mulVec R y = 0) :
