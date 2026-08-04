@@ -146,11 +146,11 @@ private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
 
 /-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then `ker(B) ≤ ker(C)`.
 
-This is the kernel-inclusion half of Wolf's Theorem 5.2 (block matrices and
-Schur complements).  This lemma has no local callers but is retained because it
-formalizes a clause of Wolf's block-matrix characterization that the
-two-variable Schwarz inequality proof depends on mathematically (via the
-Schur-complement direction of Theorem 5.2). -/
+This is the kernel-absorption clause of Wolf's Theorem 5.2 (block matrices
+and Schur complements): the kernel of the bottom-right block is contained in
+the kernel of the off-diagonal block. It is the Schur-complement fact
+underlying the range-inclusion and well-definedness steps of the two-variable
+Schwarz inequality. -/
 lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
     (y : n → ℂ) (hy : B.mulVec y = 0) : C.mulVec y = 0 := by
