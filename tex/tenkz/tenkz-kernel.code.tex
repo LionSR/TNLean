@@ -4319,6 +4319,8 @@
 
 \msg_new:nnn {tenkz}{kernel-render-todo}
   { [TKZ-KERNEL-RENDER-TODO]~'#1'~does~not~draw~yet~(record~#2) }
+\msg_new:nnn {tenkz}{kernel-skin}
+  { [TKZ-KERNEL-SKIN]~no~skin~named~'#1'~is~primitive~or~declared }
 \msg_new:nnn {tenkz}{kernel-render-unplaced}
   { [TKZ-KERNEL-RENDER-UNPLACED]~record~'#1'~has~no~address,~node,~or~
     cluster~parent~to~resolve }
@@ -6489,7 +6491,7 @@
         \prop_if_in:NnF \l__tenkz_kernel_glyph_face_probe_prop {#1}
           {
             \__tenkz_kernel_hull_measure_glyph:n {#1}
-            \clist_map_inline:nn {box,family,xmin,xmax,ymin,ymax}
+            \clist_map_inline:nn {box,family,radius,xmin,xmax,ymin,ymax}
               {
                 \prop_remove:Nn \l__tenkz_kernel_hull_live_prop
                   {#1/##1}
@@ -6734,7 +6736,28 @@
           }
       }
       {
-        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family} {rect}
+        % The measured pill publishes the roundrect family with the live
+        % named pill-cap radius, in the anchors' outer envelope: the path
+        % radius plus the half-stroke the border anchors already include.
+        % No box-shaped record may stand in for pill ink.
+        \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {roundrect}
+          {
+            \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+              {roundrect}
+            \prop_put:Nne \l__tenkz_kernel_hull_live_prop {#1/radius}
+              {
+                \fp_eval:n
+                  {
+                    ( \dim_to_fp:n { \__tenkz_dim:n {pillcap} }
+                      + \dim_to_fp:n { \__tenkz_dim:n {wirewidth} } / 2 )
+                    / \dim_to_fp:n { \use:c {tenkz@pitch} }
+                  }
+              }
+          }
+          {
+            \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+              {rect}
+          }
         \pgfextractx \l__tenkz_kernel_hull_west_dim
           {
             \pgfpointanchor
@@ -6810,6 +6833,12 @@
               \l__tenkz_kernel_hull_shape_tl
             \quark_if_no_value:NT \l__tenkz_kernel_hull_shape_tl
               { \tl_set:Nn \l__tenkz_kernel_hull_shape_tl {rect} }
+            % Only the roundrect family publishes a corner radius; every
+            % other measured family folds with a sharp record.
+            \prop_get:NnN \l__tenkz_kernel_hull_live_prop {##1/radius}
+              \l__tenkz_kernel_hull_radius_tl
+            \quark_if_no_value:NT \l__tenkz_kernel_hull_radius_tl
+              { \tl_set:Nn \l__tenkz_kernel_hull_radius_tl {0} }
             \fp_set:Nn \l__tenkz_kernel_hull_xoff_fp
               {
                 ( \l__tenkz_kernel_hull_xmin_tl
@@ -6839,7 +6868,7 @@
                         - \l__tenkz_kernel_hull_xmin_tl ) / 2 } }
                     { \fp_eval:n { ( \l__tenkz_kernel_hull_ymax_tl
                         - \l__tenkz_kernel_hull_ymin_tl ) / 2 } }
-                    {0}
+                    { \tl_use:N \l__tenkz_kernel_hull_radius_tl }
                     { \l__tenkz_kernel_r_basis_ex_tl }
                     { \l__tenkz_kernel_r_basis_ey_tl }
                     { \l__tenkz_kernel_r_basis_nx_tl }
@@ -6874,7 +6903,7 @@
                         - \l__tenkz_kernel_hull_xmin_tl ) / 2 } }
                     { \fp_eval:n { ( \l__tenkz_kernel_hull_ymax_tl
                         - \l__tenkz_kernel_hull_ymin_tl ) / 2 } }
-                    {0}
+                    { \tl_use:N \l__tenkz_kernel_hull_radius_tl }
                     { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
                     { \fp_eval:n { \l__tenkz_kernel_hull_x_fp
                         + \l__tenkz_kernel_hull_xrot_fp } }
@@ -6973,6 +7002,31 @@
           }
         {dots}  { \tl_set:Nn #2 { {circle}{0}{0}{0}{0} } }
         {none}  { \tl_set:Nn #2 { {circle}{0}{0}{0}{0} } }
+        {roundrect}
+          {
+            % An unmeasured pill folds like the generic spanned glyph below,
+            % but under its own family: the caps subtract the live named
+            % pill-cap radius from the sharp corners.
+            \__tenkz_kernel_hull_half:nnN {#1} {wide}
+              \l__tenkz_kernel_hull_a_tl
+            \__tenkz_kernel_hull_half:nnN {#1} {wires}
+              \l__tenkz_kernel_hull_b_tl
+            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
+            \tl_set:Ne #2
+              {
+                {roundrect}
+                { \tl_use:N \l__tenkz_kernel_hull_a_tl }
+                { \tl_use:N \l__tenkz_kernel_hull_b_tl }
+                {
+                  \fp_eval:n
+                    {
+                      \dim_to_fp:n { \__tenkz_dim:n {pillcap} }
+                      / \dim_to_fp:n { \use:c {tenkz@pitch} }
+                    }
+                }
+                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+              }
+          }
         {tri}
           {
             \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
@@ -8394,6 +8448,100 @@
       }
   }
 
+% pgf border anchors answer on the measurement node's sharp rectangle, so a
+% numeric-bearing anchor on a measured pill overshoots the caps.  Re-meet the
+% rounded silhouette at the same bearing: the measurement node's own anchors
+% supply the centre and half-extents, the live named pill-cap radius plus the
+% half-stroke those anchors already include supplies the caps, and the shared
+% roundrect ray query supplies the reach.  Named anchors (north, east, ...)
+% stand on the flat sides, which the caps never touch, and pass unchanged.
+% The two dim registers below are the readers' anchor outputs, adjusted in
+% place after every measurement-node read.
+\fp_new:N \l__tenkz_kernel_pill_hx_fp
+\fp_new:N \l__tenkz_kernel_pill_hy_fp
+\fp_new:N \l__tenkz_kernel_pill_cx_fp
+\fp_new:N \l__tenkz_kernel_pill_cy_fp
+\fp_new:N \l__tenkz_kernel_pill_t_fp
+\cs_new_protected:Npn \__tenkz_kernel_r_pill_trim_anchor:nn #1#2
+  {
+    \__tenkz_kernel_hull_resolve_skin:n {#1}
+    \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {roundrect}
+      {
+        \regex_match:nnT { \A \-? [0-9]+ ( \. [0-9]* )? \Z } {#2}
+          { \__tenkz_kernel_r_pill_trim_anchor_aux:nn {#1} {#2} }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_pill_trim_anchor_aux:nn #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_hull_measure_name_tl
+      { tenkz_hull_\int_use:N \g__tenkz_kernel_picture_int _#1 }
+    \pgfextractx \l__tenkz_kernel_hull_west_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{west}
+      }
+    \pgfextractx \l__tenkz_kernel_hull_east_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{east}
+      }
+    \pgfextracty \l__tenkz_kernel_hull_south_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{south}
+      }
+    \pgfextracty \l__tenkz_kernel_hull_north_dim
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{north}
+      }
+    \fp_set:Nn \l__tenkz_kernel_pill_hx_fp
+      {
+        ( \dim_to_fp:n { \l__tenkz_kernel_hull_east_dim }
+          - \dim_to_fp:n { \l__tenkz_kernel_hull_west_dim } ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_pill_hy_fp
+      {
+        ( \dim_to_fp:n { \l__tenkz_kernel_hull_north_dim }
+          - \dim_to_fp:n { \l__tenkz_kernel_hull_south_dim } ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_pill_cx_fp
+      {
+        ( \dim_to_fp:n { \l__tenkz_kernel_hull_east_dim }
+          + \dim_to_fp:n { \l__tenkz_kernel_hull_west_dim } ) / 2
+      }
+    \fp_set:Nn \l__tenkz_kernel_pill_cy_fp
+      {
+        ( \dim_to_fp:n { \l__tenkz_kernel_hull_north_dim }
+          + \dim_to_fp:n { \l__tenkz_kernel_hull_south_dim } ) / 2
+      }
+    \__tenkz_geom_roundrect_ray:nnnnN
+      { \l__tenkz_kernel_pill_hx_fp }
+      { \l__tenkz_kernel_pill_hy_fp }
+      {
+        \dim_to_fp:n { \__tenkz_dim:n {pillcap} }
+        + \dim_to_fp:n { \__tenkz_dim:n {wirewidth} } / 2
+      }
+      {#2}
+      \l__tenkz_kernel_pill_t_fp
+    \dim_set:Nn \l__tenkz_kernel_r_north_x_dim
+      {
+        \fp_to_dim:n
+          {
+            \l__tenkz_kernel_pill_cx_fp
+            + \l__tenkz_kernel_pill_t_fp * cosd(#2)
+          }
+      }
+    \dim_set:Nn \l__tenkz_kernel_r_north_y_dim
+      {
+        \fp_to_dim:n
+          {
+            \l__tenkz_kernel_pill_cy_fp
+            + \l__tenkz_kernel_pill_t_fp * sind(#2)
+          }
+      }
+  }
+
 % Read one measurement-node anchor in the glyph's own east/north axes.  A live
 % hull measurement is reused when present; an unscheduled ordinary dot instead
 % gets a private face node so the query cannot replace its label-aware fallback
@@ -8456,6 +8604,7 @@
         \pgfpointanchor
           {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{#2}
       }
+    \__tenkz_kernel_r_pill_trim_anchor:nn {#1} {#2}
     \fp_set:Nn #3
       {
         \dim_to_fp:n { \l__tenkz_kernel_r_north_x_dim }
@@ -8963,6 +9112,8 @@
           {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}
           {\tl_use:N \l__tenkz_kernel_r_b_tl}
       }
+    \exp_args:NnV \__tenkz_kernel_r_pill_trim_anchor:nn {#2}
+      \l__tenkz_kernel_r_b_tl
     \fp_set:Nn \l__tenkz_kernel_r_xc_fp
       {
         \dim_to_fp:n { \l__tenkz_kernel_r_north_x_dim }
@@ -12591,6 +12742,7 @@
         {box}  { \tl_set:Nn #3 { box~tensor } }
         {ring} { \tl_set:Nn #3 { on-wire~matrix } }
         {tri}  { \tl_set:Nn #3 { left~canonical~tensor } }
+        {roundrect} { \tl_set:Nn #3 { pill~tensor } }
         {dots}
           {
             \tl_set:Nn #3
@@ -12633,15 +12785,28 @@
     \__tenkz_model_get:nnN {#1} {size} \l__tenkz_kernel_r_x_tl
     % An absent size keeps the established per-skin geometry.  Dot sizing
     % precedes the span minima below, so a multi-slot pairing host retains its
-    % support.  Other canonical skins use their shared reference on both axes.
+    % support.  A pill scales both of its own named floors, keeping its flat
+    % proportion; other canonical skins use their shared reference on both
+    % axes.
     \quark_if_no_value:NF \l__tenkz_kernel_r_x_tl
       {
-        \str_if_eq:VnTF \l__tenkz_kernel_r_skin_base_tl {dot}
+        \str_case:VnF \l__tenkz_kernel_r_skin_base_tl
           {
-            \tl_put_right:Ne #2
+            {dot}
               {
-                , tenkz~dot~size~
-                    \tl_use:N \l__tenkz_kernel_r_x_tl
+                \tl_put_right:Ne #2
+                  {
+                    , tenkz~dot~size~
+                        \tl_use:N \l__tenkz_kernel_r_x_tl
+                  }
+              }
+            {roundrect}
+              {
+                \tl_put_right:Ne #2
+                  {
+                    , tenkz~pill~size~
+                        \tl_use:N \l__tenkz_kernel_r_x_tl
+                  }
               }
           }
           {
@@ -12696,7 +12861,7 @@
 \int_new:N \l__tenkz_kernel_r_skin_crossings_int
 \seq_new:N \l__tenkz_kernel_skin_base_seq
 
-% Resolve a declaration chain to one of the six primitive skins.  Resolution
+% Resolve a declaration chain to one of the seven primitive skins.  Resolution
 % is shared by hull measurement and ink, so a declared alias cannot acquire
 % the geometry of one primitive and the rendering of another.
 \cs_new_protected:Npn \__tenkz_kernel_skin_base:nN #1#2
@@ -12712,6 +12877,7 @@
         {box}  { \tl_set:Nn #2 {box} }
         {ring} { \tl_set:Nn #2 {ring} }
         {tri}  { \tl_set:Nn #2 {tri} }
+        {roundrect} { \tl_set:Nn #2 {roundrect} }
         {dots} { \tl_set:Nn #2 {dots} }
         {none} { \tl_set:Nn #2 {none} }
       }
@@ -12745,8 +12911,7 @@
                   }
               }
               {
-                \msg_error:nnee {tenkz}{kernel-render-todo}
-                  { unknown~skin~'#1' } {skin}
+                \msg_error:nnn {tenkz}{kernel-skin} {#1}
                 \tl_set:Nn #2 {box}
               }
           }
@@ -12914,6 +13079,8 @@
           {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}
           {\tl_use:N #3}
       }
+    \exp_args:NVV \__tenkz_kernel_r_pill_trim_anchor:nn
+      \l__tenkz_kernel_r_skin_wire_host_tl #3
     \fp_set:Nn \l__tenkz_kernel_r_xc_fp
       {
         \dim_to_fp:n { \l__tenkz_kernel_r_north_x_dim }

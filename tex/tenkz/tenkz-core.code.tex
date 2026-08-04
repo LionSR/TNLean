@@ -324,6 +324,22 @@
         \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax,
       minimum height=\dimexpr
         \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax},
+  % A pill scales BOTH of its named floors by the class factor, so every
+  % size keeps the pill's flat proportion; the canonical square styles
+  % above would swallow it into a box.
+  tenkz pill size s/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 3 / 4\relax,
+      minimum height=\dimexpr
+        \tenkz@r@glyphbox\tenkz@pitch * 3 / 4\relax},
+  tenkz pill size m/.style={
+      minimum width=\tenkz@dim{\tenkz@r@glyphref},
+      minimum height=\tenkz@dim{\tenkz@r@glyphbox}},
+  tenkz pill size l/.style={
+      minimum width=\dimexpr
+        \tenkz@r@glyphref\tenkz@pitch * 5 / 4\relax,
+      minimum height=\dimexpr
+        \tenkz@r@glyphbox\tenkz@pitch * 5 / 4\relax},
   tenkz dot size s/.style={
       minimum size=\tenkz@dim{\tenkz@r@clusterdot}},
   tenkz dot size m/.style={

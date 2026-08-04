@@ -87,7 +87,7 @@
   }
 
 % ---------- skins ------------------------------------------------------------
-% The six kernel base skins resolve to the calibrated styles of tenkz-core.
+% The seven kernel base skins resolve to the calibrated styles of tenkz-core.
 % A declared skin adds only the own-port pairing primitive below.
 \cs_new:Npn \__tenkz_render_skin_style:n #1
   {
@@ -97,6 +97,7 @@
         {box}  { box~tensor }
         {ring} { on-wire~matrix }
         {tri}  { left~canonical~tensor }
+        {roundrect} { pill~tensor }
         {dots} { draw = none , fill = none }
         {none} { draw = none , fill = none , inner~sep = 0pt , minimum~size = 0pt }
       }

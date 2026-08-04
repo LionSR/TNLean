@@ -207,7 +207,7 @@ overload census (§11, meter M6) never rises.
 |---|---|
 | side policy | `open` `none` `trace` `cup` |
 | routes | `straight` `orth` `arc` |
-| default skins | `dot` `box` `ring` `tri` `dots` `none` |
+| default skins | `dot` `box` `ring` `tri` `roundrect` `dots` `none` |
 | mark forms | `bracket` `enclosure` `label` |
 
 Two whole rows retired. The atom faces retired because a face is an angle in
