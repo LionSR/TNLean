@@ -194,8 +194,6 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
   have h_ineq : C < (n : ℝ) * ‖N X‖ - ‖X‖ := by linarith
   have h_chain : (n : ℝ) * ‖N X‖ - ‖X‖ ≤ C := by
     -- from h_bound_n and hC_n
-    -- Actually: h_bound_n: A ≤ B, hC_n: B ≤ C → A ≤ C
-    -- Wait: h_bound_n: A - ‖X‖ ≤ B where A = n*‖NX‖, B = ‖(T^[n])X‖
     -- hC_n: B ≤ C
     -- So A - ‖X‖ ≤ B ≤ C → A - ‖X‖ ≤ C
     -- But we need A - ‖X‖ ≤ C which follows from h_bound_n and hC_n
@@ -226,7 +224,6 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
     by_cases hm : m = 0
     · subst hm; simpa using hNk
     · -- m ≥ 1, rank-2 reduction
-      have hm_pos : 0 < m := Nat.pos_of_ne_zero hm
       set Y := ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ (m - 1)) X
       have hN2_Y : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) Y = 0 := by
         dsimp [Y]

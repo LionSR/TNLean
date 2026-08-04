@@ -87,7 +87,7 @@ elimination plan.  Documented in
   $T^n X = \lambda^n X + n \lambda^{n-1} (T-\lambda)X$ when $(T-\lambda)^2 X = 0$.
 
 The unital case follows by duality (adjoint is trace-preserving) but is not
-yet formally wired. Documented in `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`.
+yet proved via this dual route. Documented in `docs/paper-gaps/wolf_prop62_jordan_blocks.tex`.
 
 ## Section 6.2 Irreducible maps and Perron–Frobenius theory
 
