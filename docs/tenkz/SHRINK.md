@@ -1425,3 +1425,14 @@ virtual ports instead
 25-33, and 53-54).  The plane `physical=up` axis was introduced under
 #5405; #5375 remains the census-correction tag for the migration, not the
 axis's origin.  M4 and every other meter are unchanged by this correction.
+
+### 2026-08-04 — the g-injective plaquette turns its labels outward
+
+The g-injective-mpo case corrects its port assignment: the eight sector
+labels move onto genuine open boundary half-edges with explicit west and
+east open wires, and the four plaquette bonds ride unlabelled inward
+ports, as the author plaquette draws them. M4 rises from 18.71 to 18.72
+for the four added open-wire lines. No parser spelling, registry row,
+alias, escape, or overload changes.
+
+Census-correction: #5477
