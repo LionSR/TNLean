@@ -357,4 +357,53 @@ theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ 
       _ ≤ 1 * ‖C‖ := by nlinarith [norm_pinv_mul_B_le_one B]
       _ = ‖C‖ := by simp
 
+
+/-! ## Uniqueness (Wolf moreover (i)+(ii)) -/
+
+theorem pinv_mul_B_mul_conjTranspose (B : Mat) : pinv B * B * Bᴴ = Bᴴ := by
+  unfold pinv
+  have hS : (posSemidefBB B).supportInv * (B * Bᴴ) = (posSemidefBB B).supportProj :=
+    (posSemidefBB B).supportInv_mul_self
+  have hP : (posSemidefBB B).supportProj * B = B :=
+    Matrix.supportProj_mul_conjTranspose_mul_self B
+  calc
+    (Bᴴ * (posSemidefBB B).supportInv * B) * Bᴴ = Bᴴ * (posSemidefBB B).supportInv * (B * Bᴴ) := by
+      simp [Matrix.mul_assoc]
+    _ = Bᴴ * ((posSemidefBB B).supportInv * (B * Bᴴ)) := by simp [Matrix.mul_assoc]
+    _ = Bᴴ * (posSemidefBB B).supportProj := by rw [hS]
+    _ = ((posSemidefBB B).supportProj * B)ᴴ := by simp [Matrix.conjTranspose_mul, (posSemidefBB B).supportProj_isHermitian.eq]
+    _ = Bᴴ := by rw [hP]
+
+theorem pinv_mul_B_mul_C_eq_C (C B : Mat) (hC : C.mulVecLin.range ≤ Bᴴ.mulVecLin.range) :
+    (pinv B * B) * C = C := by
+  apply Matrix.ext; intro i j
+  let c := mulVec C (Pi.single j (1 : ℂ))
+  have hc : c ∈ Bᴴ.mulVecLin.range := hC ⟨Pi.single j (1 : ℂ), rfl⟩
+  rcases hc with ⟨w, hw⟩; rw [Matrix.mulVecLin_apply] at hw
+  have h_eq : mulVec (pinv B * B) c = c := by
+    calc
+      mulVec (pinv B * B) c = mulVec (pinv B * B) (mulVec (Bᴴ) w) := by rw [← hw]
+      _ = mulVec ((pinv B * B) * Bᴴ) w := by rw [Matrix.mulVec_mulVec]
+      _ = mulVec (pinv B * B * Bᴴ) w := by simp [Matrix.mul_assoc]
+      _ = mulVec (Bᴴ) w := by rw [pinv_mul_B_mul_conjTranspose B]
+      _ = c := by rw [hw]
+  calc
+    ((pinv B * B) * C) i j = (mulVec ((pinv B * B) * C) (Pi.single j (1 : ℂ))) i := by simp
+    _ = (mulVec (pinv B * B) (mulVec C (Pi.single j (1 : ℂ)))) i := by rw [Matrix.mulVec_mulVec]
+    _ = (mulVec (pinv B * B) c) i := rfl
+    _ = (c i) := by rw [h_eq]
+    _ = (mulVec C (Pi.single j (1 : ℂ))) i := rfl
+    _ = C i j := by simp
+
+theorem factorization_unique (A B C₁ C₂ : Mat) (hA₁ : A = B * C₁) (hA₂ : A = B * C₂)
+    (hC₁_range : C₁.mulVecLin.range ≤ Bᴴ.mulVecLin.range)
+    (hC₂_range : C₂.mulVecLin.range ≤ Bᴴ.mulVecLin.range) : C₁ = C₂ := by
+  calc
+    C₁ = (pinv B * B) * C₁ := (pinv_mul_B_mul_C_eq_C C₁ B hC₁_range).symm
+    _ = pinv B * (B * C₁) := by simp [Matrix.mul_assoc]
+    _ = pinv B * A := by rw [hA₁]
+    _ = pinv B * (B * C₂) := by rw [hA₂]
+    _ = (pinv B * B) * C₂ := by simp [Matrix.mul_assoc]
+    _ = C₂ := pinv_mul_B_mul_C_eq_C C₂ B hC₂_range
+
 end Douglas
