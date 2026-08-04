@@ -1,22 +1,31 @@
 % Target: rmp-ii-rfp-isometry
 % Formula: A^{i_1} A^{i_2} = sum_j U_{(i_1 i_2),j} A^j.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame.
 % Boundary: Both sides keep the outer virtual legs and the two blocked physical outputs
 %   open.
 % Source: paper TN-Review-main.tex line 914; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 685-701
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  % LHS: A^{i_1} A^{i_2} - two MPS tensors, one open up leg each
-  \begin{tenkz}[physical=up]
-    \tn[box]{A} & \tn[box]{A}
+  \tenkzkernel
+  % LHS: A^{i_1} A^{i_2} - two MPS tensors, one open up leg each, the
+  % explicit virtual bond between them the summed index.
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+    \tn[at=(1,1), skin=box, name=a1,
+      ports={180:virtual, 0:virtual, 90:physical}]{A}
+    \tn[at=(1,2), skin=box, name=a2,
+      ports={180:virtual, 0:virtual, 90:physical}]{A}
+    \tnwire{a1.0}{a2.180}
   \end{tenkz}
   \;=\;
-  % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one OPEN leg per blocked
+  % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one open leg per blocked
   % site (i_1, i_2) on its upper face, and the single vertical U-A bond
-  % below it is the summed physical index j
-  \begin{tenkz}[rows={op:none, ket}]
-    \tn[pill, wide=2, up at={1,2}]{U} & \\
-    \tn[box, wide=2]{A} &
+  % below it is the summed physical index j.
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+    \tn[at=(1,1), skin=pill, wide=2, name=U,
+      ports={90@1:physical:$i_1$, 90@2:physical:$i_2$, 270:virtual}]{U}
+    \tn[at=(2,1), skin=box, wide=2, name=A,
+      ports={180:virtual, 0:virtual, 90:virtual}]{A}
+    \tnwire{U.270}{A.90}
   \end{tenkz}
 \]

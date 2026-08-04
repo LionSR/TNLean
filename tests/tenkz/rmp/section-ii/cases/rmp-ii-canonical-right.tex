@@ -1,13 +1,17 @@
 % Target: rmp-ii-canonical-right
 % Formula: [A_R^s]_{alpha,beta} is the right-canonical tensor.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the kernel triangle skin has one fixed apex, so
+%   the glyph faces east instead of mirroring west for A_R (the bar's
+%   X row on this target).
 % Boundary: The west alpha, east beta, and downward physical s indices are open.
 % Source: paper TN-Review-main.tex line 661; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 199-207
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
   [A_R^s]_{\alpha,\beta} \;=\;
-  \begin{tenkz}[physical=down, west label=$\alpha$, east label=$\beta$]
-    \tn[tri=r, down=$s$]{A_R}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[skin=tri, name=A,
+      ports={180:virtual:$\alpha$, 0:virtual:$\beta$, 270:physical:$s$}]{A_R}
   \end{tenkz}
 \]

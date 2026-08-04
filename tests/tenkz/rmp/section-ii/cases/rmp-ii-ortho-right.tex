@@ -1,22 +1,30 @@
 % Target: rmp-ii-ortho-right
 % Formula: sum_s A_R^s (A_R^s)^dagger = 1.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the kernel triangle skin has one fixed apex, so
+%   the glyph faces east instead of mirroring west for A_R (the bar's
+%   X row on this target).
 % Boundary: The east cup contracts the right indices; the west ket-bra pair remains
 %   open.
 % Source: paper TN-Review-main.tex line 663; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 171-180
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  % LHS: same sandwich with the right-canonical triangles and the cup on
-  % the east (the contraction over the shared right index beta).
-  \begin{tenkz}[sandwich, east=cup]
-    \tn[tri=r]{A_R}\\
-    \tn*[tri=r]{A_R}
+  \tenkzkernel
+  % LHS: ket A_R over bra conj(A_R); the shared physical index contracts
+  % vertically between the rows, and east=cup contracts the shared right
+  % index beta.
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+    \tn[at=(1,1), skin=tri, name=ket,
+      ports={180:virtual, 0:virtual, 270:physical}]{A_R}
+    \tn[at=(2,1), skin=tri, name=bra,
+      ports={180:virtual, 0:virtual, 90:physical}]{\overline{A_R}}
+    \tnwire{ket.270}{bra.90}
   \end{tenkz}
   \;=\;
-  % RHS: the identity on the open (alpha, alpha') pair - the mirrored cup.
-  \begin{tenkz}[rows={wire,wire}, east=cup]
-    \tnghost{}\\
-    \tnghost{}
+  % RHS: the identity on the open (alpha, alpha') pair - the mirrored cup;
+  % skin=none is the invisible junction the source draws as a bare wire.
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
+    \tn[at=(1,1), skin=none, name=r1, ports={180:virtual, 0:virtual}]{}
+    \tn[at=(2,1), skin=none, name=r2, ports={180:virtual, 0:virtual}]{}
   \end{tenkz}
 \]
