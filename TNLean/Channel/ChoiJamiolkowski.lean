@@ -159,8 +159,9 @@ theorem omegaSlice_eq_single (i₂ j₂ : Fin D) :
   · subst hb; simp [ha, show ¬(i₂ = a) from Ne.symm ha]
   · simp [ha, hb, show ¬(i₂ = a) from Ne.symm ha, show ¬(j₂ = b) from Ne.symm hb]
 
-/-- The omega coefficient `(1/√D)·(1/√D) = 1/D`. -/
-private theorem omegaCoeff_eq_inv (hd : 0 < D) :
+/-- The omega coefficient `(1/√D)·(1/√D) = 1/D`: the squared modulus of the
+maximally-entangled normalization constant. -/
+theorem omegaCoeff_eq_inv (hd : 0 < D) :
     (((1 : ℂ) / ((D : ℝ).sqrt : ℂ)) *
       star ((1 : ℂ) / ((D : ℝ).sqrt : ℂ))) =
       1 / (D : ℂ) := by

@@ -144,3 +144,310 @@
     If $\mathcal S$ is trace-preserving completely positive and $X\geq0$, then
     $\mathcal S(X)\geq0$.
 \end{lemma}
+
+\section{The Choi--Jamiolkowski representation of maps between matrix algebras}
+
+Fix $d,d'\geq 1$. For a linear map $T:\MN{d}\to\MN{d'}$ between matrix
+algebras of possibly different dimensions, write $\Omega_d$ for the maximally
+entangled vector on the \emph{input} factor and $\tau$ for the associated
+operator on $\C^{d'}\otimes\C^{d}$, with the output factor first. The partial
+trace over the output factor is written $\tr_A$ and the partial trace over
+the input factor is written $\tr_B$.
+
+\begin{definition}[Choi matrix of a map between matrix algebras]
+    \label{def:choi_matrix_rect}
+    \lean{ChoiRectangular.choiMatrix, ChoiRectangular.mapOfChoiMatrix}
+    \leanok
+    \uses{def:maximally_entangled, def:tensor_map_id}
+    The \emph{Choi matrix} of a linear map $T:\MN{d}\to\MN{d'}$ is
+    \begin{align}
+        \tau &= (T\otimes\operatorname{id}_d)
+          \bigl(\ketbra{\Omega_d}{\Omega_d}\bigr),
+        \notag
+    \end{align}
+    an operator on $\C^{d'}\otimes\C^{d}$. This is the correspondence of
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{definition}
+
+\begin{theorem}[Mutual inverses of the Choi correspondence]
+    \label{thm:choi_rect_mutual_inverse}
+    \lean{ChoiRectangular.mapOfChoiMatrix_choiMatrix,
+        ChoiRectangular.choiMatrix_mapOfChoiMatrix,
+        ChoiRectangular.choiMatrix_injective}
+    \leanok
+    \uses{def:choi_matrix_rect}
+    The assignments $T\mapsto\tau$ and $\tau\mapsto T$, the latter defined
+    entrywise by
+    \begin{align}
+        T(B)_{i_1 j_1}
+          &= d\sum_{i_2,j_2=0}^{d-1}
+            \tau_{(i_1,i_2),(j_1,j_2)}\,B_{i_2 j_2},
+        \notag
+    \end{align}
+    are mutual inverses: every linear map is recovered from its Choi matrix,
+    and every operator on $\C^{d'}\otimes\C^{d}$ is the Choi matrix of the
+    map it defines. This is \cite[Proposition~2.1, Equation~(2.4)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The $(i_2,j_2)$-slice of $\ketbra{\Omega_d}{\Omega_d}$ is the matrix
+    unit $E_{i_2 j_2}$ scaled by $1/d$; substituting it into the defining
+    entries and using linearity gives both compositions.
+\end{proof}
+
+\begin{theorem}[Trace-pairing formula]
+    \label{thm:choi_rect_trace_pairing}
+    \lean{ChoiRectangular.trace_pairing}
+    \leanok
+    \uses{def:choi_matrix_rect, thm:choi_rect_mutual_inverse}
+    For every $A\in\MN{d'}$ and $B\in\MN{d}$,
+    \begin{align}
+        \tr\!\bigl(A\,T(B)\bigr)
+          &= d\,\tr\!\bigl(\tau\,(A\otimes B^{T})\bigr).
+        \notag
+    \end{align}
+    This is the second line of \cite[Proposition~2.1, Equation~(2.1)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand $\tr(A\,T(B))$ entrywise, insert the inverse assignment of
+    Theorem~\ref{thm:choi_rect_mutual_inverse}, and identify the resulting
+    four-fold sum with $d\,\tr(\tau\,(A\otimes B^{T}))$.
+\end{proof}
+
+\begin{theorem}[Hermiticity preservation]
+    \label{thm:choi_rect_hermiticity}
+    \lean{ChoiRectangular.choiMatrix_isHermitian_iff_hermiticityPreserving}
+    \leanok
+    \uses{def:choi_matrix_rect}
+    The Choi matrix is Hermitian, $\tau=\tau^\dagger$, if and only if
+    $T(B^\dagger)=T(B)^\dagger$ for every $B\in\MN{d}$. This is the
+    Hermiticity clause of \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The entries of $\tau$ along the diagonal slices are the entries of
+    $T(E_{i_2 j_2})$ scaled by $1/d$, so Hermiticity of $\tau$ is the
+    relation $T(E_{j_2 i_2})=T(E_{i_2 j_2})^\dagger$ on matrix units; both
+    directions then follow by linearity.
+\end{proof}
+
+\begin{theorem}[Complete positivity]
+    \label{thm:choi_rect_cp}
+    \lean{ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef,
+        ChoiRectangular.exists_isKrausCP_of_posSemidef,
+        ChoiRectangular.choiMatrix_of_kraus_posSemidef,
+        ChoiRectangular.krausOfChoiDecomp, ChoiRectangular.krausOfChoiDecomp_spec,
+        ChoiRectangular.exists_kraus_of_choiMatrix_eq_sum_vecMulVec}
+    \leanok
+    \uses{def:choi_matrix_rect, def:is_kraus_cp}
+    The map $T$ is completely positive, in the sense that it admits a Kraus
+    representation $T(X)=\sum_{j}K_jXK_j^\dagger$ with
+    $K_j\in M_{d'\times d}(\C)$, if and only if $\tau\geq0$. This is the
+    complete-positivity clause of \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $T(X)=\sum_j K_jXK_j^\dagger$, then
+    $\tau=\sum_j\ketbra{\psi_j}{\psi_j}$ with
+    $(\psi_j)_{(i_1,i_2)}=(K_j)_{i_1 i_2}/\sqrt{d}$, so $\tau\geq0$.
+    Conversely, a positive semidefinite $\tau$ decomposes into rank-one
+    outer products $\sum_j\ketbra{\psi_j}{\psi_j}$, and rescaling the
+    vectors $\psi_j$ by $\sqrt{d}$ gives Kraus operators via the inverse
+    assignment.
+\end{proof}
+
+\begin{theorem}[Unitality]
+    \label{thm:choi_rect_unital}
+    \lean{ChoiRectangular.traceRight_choiMatrix,
+        ChoiRectangular.unital_iff_traceRight_choiMatrix}
+    \leanok
+    \uses{def:choi_matrix_rect, def:partial_trace}
+    The input-factor partial trace of the Choi matrix is
+    $\tr_B(\tau)=T(\Id_d)/d$; hence $T(\Id_d)=\Id_{d'}$ if and only if
+    $\tr_B(\tau)=\Id_{d'}/d$. This is the unitality clause of
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The diagonal slices of $\ketbra{\Omega_d}{\Omega_d}$ sum to $\Id_d/d$,
+    so linearity gives $\tr_B(\tau)=T(\Id_d)/d$; cancelling the factor
+    $1/d$ gives the equivalence.
+\end{proof}
+
+\begin{theorem}[Preservation of the trace]
+    \label{thm:choi_rect_tp}
+    \lean{ChoiRectangular.traceLeft_choiMatrix,
+        ChoiRectangular.traceAdjointMap_one_eq_one_iff_tracePreserving,
+        ChoiRectangular.tracePreserving_iff_traceLeft_choiMatrix}
+    \leanok
+    \uses{def:choi_matrix_rect, def:partial_trace, def:trace_pairing_adjoint}
+    The output-factor partial trace of the Choi matrix is
+    $\tr_A(\tau)=(T^*(\Id_{d'}))^{T}/d$, where $T^*$ is the trace-pairing
+    adjoint; hence $T^*(\Id_{d'})=\Id_d$, equivalently $T$ preserves the
+    trace, if and only if $\tr_A(\tau)=\Id_d/d$. This is the
+    trace-preservation clause of \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The output-factor partial trace has entries
+    $\tr(T(E_{i_2 j_2}))/d$, which are the entries of
+    $(T^*(\Id_{d'}))^{T}/d$ by the defining trace pairing of the adjoint.
+    The equivalence $\tr(T(X))=\tr(X)\Leftrightarrow T^*(\Id_{d'})=\Id_d$
+    is the nondegeneracy of the trace pairing, and transposition and the
+    factor $1/d$ cancel.
+\end{proof}
+
+\begin{theorem}[Trace normalization]
+    \label{thm:choi_rect_normalization}
+    \lean{ChoiRectangular.trace_choiMatrix}
+    \leanok
+    \uses{def:choi_matrix_rect, thm:choi_rect_tp}
+    The full trace of the Choi matrix is
+    $\tr(\tau)=\tr(T^*(\Id_{d'}))/d$. This is the normalization clause of
+    \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Take the trace of the identity
+    $\tr_A(\tau)=(T^*(\Id_{d'}))^{T}/d$ of Theorem~\ref{thm:choi_rect_tp}.
+\end{proof}
+
+\begin{theorem}[Doubly-stochastic maps]
+    \label{thm:choi_rect_doubly_stochastic}
+    \lean{ChoiRectangular.doublyStochastic_iff_partialTraces_proportional}
+    \leanok
+    \uses{def:choi_matrix_rect, thm:choi_rect_unital, thm:choi_rect_tp}
+    The conditions $T(\Id_d)\propto\Id_{d'}$ and
+    $T^*(\Id_{d'})\propto\Id_d$ hold if and only if
+    $\tr_B(\tau)\propto\Id_{d'}$ and $\tr_A(\tau)\propto\Id_d$. This is the
+    doubly-stochastic clause of \cite[Proposition~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Immediate from the partial-trace identities
+    $\tr_B(\tau)=T(\Id_d)/d$ and $\tr_A(\tau)=(T^*(\Id_{d'}))^{T}/d$ of
+    Theorems~\ref{thm:choi_rect_unital} and~\ref{thm:choi_rect_tp}.
+\end{proof}
+
+\section{The Kraus representation theorem for rectangular matrix algebras}
+
+\begin{theorem}[Kraus normalization conditions]
+    \label{thm:kraus_rect_normalization}
+    \lean{ChoiRectangular.kraus_tp_iff_sum_conjTranspose_mul,
+        ChoiRectangular.kraus_unital_iff_sum_mul_conjTranspose,
+        ChoiRectangular.kraus_sum_conjTranspose_mul_of_tracePreserving}
+    \leanok
+    \uses{def:is_kraus_cp}
+    Let $T(X)=\sum_{j=1}^{r}K_jXK_j^\dagger$ with
+    $K_j\in M_{d'\times d}(\C)$. Then $T$ is trace preserving if and only
+    if $\sum_j K_j^\dagger K_j=\Id_d$, and unital if and only if
+    $\sum_j K_jK_j^\dagger=\Id_{d'}$. This is item~1 of
+    \cite[Theorem~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Cyclicity of the trace gives
+    $\tr\bigl(\bigl(\sum_j K_j^\dagger K_j\bigr)X\bigr)=\tr(T(X))$ for every
+    $X$, so the trace-preserving equivalence follows from nondegeneracy of
+    the trace pairing; the unital equivalence is the evaluation at $X=\Id_d$.
+\end{proof}
+
+\begin{definition}[Kraus cardinality and Kraus rank]
+    \label{def:kraus_rank_rect}
+    \lean{ChoiRectangular.HasKrausCard, ChoiRectangular.HasKrausRankLE,
+        ChoiRectangular.choiRank, ChoiRectangular.hasKrausCard_mono}
+    \leanok
+    \uses{def:is_kraus_cp, def:choi_matrix_rect}
+    A map $T:\MN{d}\to\MN{d'}$ has \emph{Kraus cardinality} $r$ if it has an
+    exact $r$-operator Kraus representation. Its \emph{Kraus rank} (Choi
+    rank) is the rank of its Choi matrix, $r=\operatorname{rank}(\tau)$;
+    following \cite[Theorem~2.1, footnote]{Wolf2012Quantum}, this is
+    distinguished from the rank of $T$ as a linear map.
+\end{definition}
+
+\begin{theorem}[Minimality of the Kraus rank]
+    \label{thm:kraus_rect_rank_minimal}
+    \lean{ChoiRectangular.hasKrausCard_choiRank_of_isKrausCP,
+        ChoiRectangular.choiRank_le_of_hasKrausCard,
+        ChoiRectangular.choiRank_isLeast_hasKrausCard_of_isKrausCP,
+        ChoiRectangular.choiRank_le_mul}
+    \leanok
+    \uses{def:kraus_rank_rect, thm:choi_rect_cp}
+    The minimal number of Kraus operators of a completely positive map
+    $T:\MN{d}\to\MN{d'}$ is $r=\operatorname{rank}(\tau)\leq dd'$. This is
+    item~2 of \cite[Theorem~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:choi_rect_cp}
+    Every $r$-operator Kraus family gives
+    $\tau=\sum_{j=1}^{r}\ketbra{\psi_j}{\psi_j}$, so
+    $\operatorname{rank}(\tau)\leq r$. Conversely, the spectral
+    decomposition of $\tau\geq0$ into $\operatorname{rank}(\tau)$ rank-one
+    outer products yields a Kraus family of exactly
+    $\operatorname{rank}(\tau)$ operators by
+    Theorem~\ref{thm:choi_rect_cp}, and
+    $\operatorname{rank}(\tau)\leq dd'$ since $\tau$ acts on a
+    $dd'$-dimensional space.
+\end{proof}
+
+\begin{theorem}[Orthogonal minimal Kraus family]
+    \label{thm:kraus_rect_orthogonal}
+    \lean{ChoiRectangular.exists_kraus_orthogonal_of_isKrausCP}
+    \leanok
+    \uses{def:kraus_rank_rect, thm:kraus_rect_rank_minimal}
+    Every completely positive map $T:\MN{d}\to\MN{d'}$ admits a Kraus
+    representation with $r=\operatorname{rank}(\tau)$ Hilbert--Schmidt
+    orthogonal Kraus operators, $\tr[K_i^\dagger K_j]\propto\delta_{ij}$;
+    the off-diagonal traces vanish and the diagonal traces are nonzero.
+    This is item~3 of \cite[Theorem~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kraus_rect_rank_minimal}
+    Choose the $\psi_j$ in the spectral decomposition of
+    Theorem~\ref{thm:kraus_rect_rank_minimal} to be orthogonal
+    eigenvectors; the corresponding Kraus operators then satisfy
+    $\tr[K_i^\dagger K_j]=d\,\lambda_i\,\delta_{ij}$, where $\lambda_i$ is
+    the $i$-th nonzero eigenvalue of $\tau$.
+\end{proof}
+
+\begin{theorem}[Unitary freedom of Kraus representations]
+    \label{thm:kraus_rect_freedom}
+    \lean{ChoiRectangular.kraus_isometry_freedom_iff,
+        ChoiRectangular.kraus_unitary_freedom_iff,
+        ChoiRectangular.kraus_isometry_freedom,
+        ChoiRectangular.kraus_same_map_of_isometry_combination,
+        ChoiRectangular.kraus_dual_eq_of_map_eq,
+        ChoiRectangular.kraus_conjTranspose_mul_eq_of_map_eq}
+    \leanok
+    \uses{def:is_kraus_cp}
+    Two sets of Kraus operators $\{K_j\}$ and $\{\widetilde{K}_\ell\}$
+    represent the same completely positive map if and only if there is a
+    unitary $U$ with $K_j=\sum_\ell U_{j\ell}\widetilde{K}_\ell$, where the
+    smaller set is padded with zero operators; equivalently, after padding,
+    the families are related by an isometry $V$ with $V^\dagger V=\Id$.
+    This is item~4 of \cite[Theorem~2.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    An isometric combination preserves the map by the orthogonality
+    relations of the mixing matrix. Conversely, equal maps have equal
+    trace-pairing adjoints, hence equal Gram matrices
+    for the vectorized Kraus operators $(K_j)_{ab}$; equal Gram matrices
+    are related by a unitary, whose rectangular submatrix is the claimed
+    isometry after zero-padding.
+\end{proof}
