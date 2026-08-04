@@ -2,24 +2,28 @@
 % Formula: Four local MPO tensors meet at one G-injective plaquette.
 % Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362),
 %   with the eight labelled half-edges drawn (the bar's X row on this target).
-% Boundary: Eight labelled virtual half-edges remain open around the plaquette.
+% Boundary: Eight labelled virtual half-edges remain open around the plaquette;
+%   the four plaquette bonds are internal and unlabelled.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 604-621; archival output GinjMPO.pdf
 % Capabilities: kernel, typed-ports
 \[
   \tenkzkernel
-  % Each corner tensor carries two sector labels on its vertical: the outer
-  % half-edge and the plaquette bond on the other side of the box.
+  % Each corner tensor turns its two sector labels outward: one on its
+  % outer vertical stub and one on its outer horizontal stub. The four
+  % plaquette bonds ride the unlabelled inward ports.
   \begin{tenkz}[rows={wire,wire}, cols=2]
     \tn[skin=mpo, name=nw,
-      ports={0:virtual, 90:virtual:$a$, 270:virtual:$h$}]{} &
+      ports={0:virtual, 270:virtual, 90:virtual:$a$, 180:virtual:$h$}]{} &
     \tn[skin=mpo, name=ne,
-      ports={180:virtual, 90:virtual:$b$, 270:virtual:$c$}]{} \\
+      ports={180:virtual, 270:virtual, 90:virtual:$b$, 0:virtual:$c$}]{} \\
     \tn[skin=mpo, name=sw,
-      ports={0:virtual, 90:virtual:$g$, 270:virtual:$f$}]{} &
+      ports={0:virtual, 90:virtual, 270:virtual:$f$, 180:virtual:$g$}]{} &
     \tn[skin=mpo, name=se,
-      ports={180:virtual, 90:virtual:$d$, 270:virtual:$e$}]{}
+      ports={180:virtual, 90:virtual, 270:virtual:$e$, 0:virtual:$d$}]{}
     \tnwire{nw.90}{open n} \tnwire{ne.90}{open n}
     \tnwire{sw.270}{open s} \tnwire{se.270}{open s}
+    \tnwire{nw.180}{open w} \tnwire{sw.180}{open w}
+    \tnwire{ne.0}{open e} \tnwire{se.0}{open e}
   \end{tenkz}.
 \]

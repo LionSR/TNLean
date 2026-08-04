@@ -1425,10 +1425,10 @@ id = "rmp-workbench-iii-g-injective-mpo"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "e898ddca0f425f8730f2c8025b8f7bc929f76380f79f1d9590f3b524628c6e76"
+case_sha256 = "346f43d8d9219e6c9a0f25b0f574b5a83475954e91ea0bb03d8168aa11113528"
 reviewed = "2026-08-04"
-renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
-note = "The X row is resolved: the eight labelled half-edges and the plaquette bonds are all drawn, with the sector labels stacked as in the source. Residue: the house box stands in for the source's circle glyph."
+renderer = "claude-open-half-edge-verification-2026-08-04-200dpi"
+note = "The eight sector labels sit on genuine open boundary half-edges (NW a north, h west; NE b north, c east; SE e south, d east; SW f south, g west), each with its own open wire, matching the source's outward stubs; the four plaquette bonds are internal and unlabelled. Residue: the house box stands in for the source's circle glyph."
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-one"
