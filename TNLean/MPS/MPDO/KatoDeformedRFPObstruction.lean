@@ -50,8 +50,6 @@ A completely positive coarse-graining map cannot send the former to the latter.
 
 open scoped Matrix BigOperators ComplexOrder
 
-set_option maxHeartbeats 400000
-
 namespace MPOTensor.KatoDeformedRFPObstruction
 
 /-- The Pauli $Z$ matrix on the physical two-dimensional space. -/
@@ -362,14 +360,10 @@ theorem tensor_not_isRFPViaTS : ¬ IsRFPViaTS tensor := by
 /-! ### CPSV canonical form of the doubled-index MPS tensor -/
 
 private lemma sqrt2_ne_zero : (Real.sqrt 2 : ℂ) ≠ 0 := by
-  intro h
-  have hpos := Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)
-  apply hpos.ne'
-  exact_mod_cast h
+  intro h; have hpos := Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2); apply hpos.ne'; exact_mod_cast h
 
 private lemma sqrt2_sq_complex : ((Real.sqrt 2 : ℂ) ^ 2) = (2 : ℂ) := by
-  have hsq_real : (Real.sqrt 2 : ℝ) ^ 2 = (2 : ℝ) :=
-    Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)
+  have hsq_real : (Real.sqrt 2 : ℝ) ^ 2 = (2 : ℝ) := Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num)
   calc
     ((Real.sqrt 2 : ℂ) ^ 2) = (((Real.sqrt 2 : ℝ) ^ 2 : ℝ) : ℂ) := by push_cast; ring
     _ = ((2 : ℝ) : ℂ) := by rw [hsq_real]
@@ -386,10 +380,7 @@ private lemma blockLetterAmplitude_sq : blockLetterAmplitude ^ 2 = (1 / 2 : ℂ)
 
 noncomputable def block0Weight : ℂ := (1 : ℂ) / Real.sqrt 2
 noncomputable def block1Weight : ℂ := (1 : ℂ) / (2 * Real.sqrt 2)
-
-noncomputable def katoCFWeights : Fin 2 → ℂ := fun k => match k with
-  | 0 => block0Weight
-  | 1 => block1Weight
+noncomputable def katoCFWeights : Fin 2 → ℂ := fun k => match k with | 0 => block0Weight | 1 => block1Weight
 
 private lemma block0Weight_times_amplitude : block0Weight * blockLetterAmplitude = (1 / 2 : ℂ) := by
   calc
@@ -409,275 +400,162 @@ noncomputable def katoCFBlock0 : MPSTensor 4 1 :=
   fun p => if p = 0 ∨ p = 3 then !![blockLetterAmplitude] else 0
 
 noncomputable def katoCFBlock1 : MPSTensor 4 1 :=
-  fun p => if p = 0 then !![blockLetterAmplitude]
-    else if p = 3 then !![-blockLetterAmplitude] else 0
+  fun p => if p = 0 then !![blockLetterAmplitude] else if p = 3 then !![-blockLetterAmplitude] else 0
 
-noncomputable def katoCFBlocks : Fin 2 → MPSTensor 4 1 := fun k => match k with
-  | 0 => katoCFBlock0
-  | 1 => katoCFBlock1
+noncomputable def katoCFBlocks : Fin 2 → MPSTensor 4 1 := fun k => match k with | 0 => katoCFBlock0 | 1 => katoCFBlock1
 
-/-- The transfer map of katoCFBlock0 is the identity on the bond-one space.
+private lemma oneByOne_mul_apply (A B : Matrix (Fin 1) (Fin 1) ℂ) : (A * B) 0 0 = (A 0 0) * (B 0 0) := by
+  rw [Matrix.mul_apply]
+  have huniv : (Finset.univ : Finset (Fin 1)) = {(0 : Fin 1)} := by decide
+  rw [huniv, Finset.sum_singleton]
 
-Both nonzero entries (physical indices 0 and 3) equal 1/√2, giving
-∑ |A_i|² = |1/√2|² + |1/√2|² = 1. -/
+private lemma oneByOne_mul_conj_apply (A X : Matrix (Fin 1) (Fin 1) ℂ) :
+    (A * X * Aᴴ) 0 0 = (A 0 0) * (X 0 0) * star (A 0 0) := by
+  calc
+    (A * X * Aᴴ) 0 0 = ((A * X) * Aᴴ) 0 0 := rfl
+    _ = (A * X) 0 0 * (Aᴴ) 0 0 := by rw [oneByOne_mul_apply]
+    _ = ((A 0 0) * (X 0 0)) * (Aᴴ) 0 0 := by rw [oneByOne_mul_apply]
+    _ = (A 0 0) * (X 0 0) * star (A 0 0) := by rw [Matrix.conjTranspose_apply]
+
 private lemma katoCFBlock0_transferMap_eq_id :
     MPSTensor.transferMap katoCFBlock0 = LinearMap.id := by
   apply LinearMap.ext; intro X
-  -- For Fin 1, all elements equal 0 by dec_trivial
-  have hi (i : Fin 1) : i = 0 := by fin_cases i; rfl
-  have hj (j : Fin 1) : j = 0 := by fin_cases j; rfl
-  ext i j; rw [hi i, hj j]
-  -- Goal: (∑ p, katoCFBlock0 p * X * (katoCFBlock0 p)ᴴ) 0 0 = X 0 0
-  -- Only p=0 and p=3 contribute, each with value blockLetterAmplitude (real, so star=id)
+  ext i j
+  have hi : i = (0 : Fin 1) := Subsingleton.elim _ _
+  have hj : j = (0 : Fin 1) := Subsingleton.elim _ _
+  rw [hi, hj]
   rw [MPSTensor.transferMap_apply]
-  -- Enumerate the sum explicitly
-  -- For 1×1 matrices, (M * N) 0 0 = M 0 0 * N 0 0, so the sum reduces to a scalar sum
-  -- Only p=0 and p=3 contribute nonzero values, both equal to blockLetterAmplitude
-  -- Thus ∑ |A_p 0 0|² = 2 * blockLetterAmplitude² = 2 * (1/2) = 1
-  have hsum_scalar : (∑ p : Fin 4, (katoCFBlock0 p 0 0) * (X 0 0) * star (katoCFBlock0 p 0 0)) = X 0 0 := by
-    calc
-      (∑ p : Fin 4, (katoCFBlock0 p 0 0) * (X 0 0) * star (katoCFBlock0 p 0 0))
-          = (X 0 0) * (∑ p : Fin 4, (katoCFBlock0 p 0 0) * star (katoCFBlock0 p 0 0)) := by
-        simp_rw [Finset.mul_sum]; ring
-      _ = (X 0 0) * (blockLetterAmplitude * star blockLetterAmplitude * 2) := by
-        simp [katoCFBlock0, Fin.sum_univ_four]
-        ring
-      _ = (X 0 0) * (blockLetterAmplitude ^ 2 * 2) := by
-        have hstar : star blockLetterAmplitude = blockLetterAmplitude := by
-          rw [blockLetterAmplitude]; simp
-        rw [hstar]; ring
-      _ = (X 0 0) * ((1/2 : ℂ) * 2) := by rw [blockLetterAmplitude_sq]
-      _ = X 0 0 := by ring
-  -- Connect the matrix sum entry to the scalar sum
   calc
     (∑ p : Fin 4, (katoCFBlock0 p * X * (katoCFBlock0 p)ᴴ)) 0 0
         = ∑ p : Fin 4, ((katoCFBlock0 p * X * (katoCFBlock0 p)ᴴ) 0 0) := rfl
     _ = ∑ p : Fin 4, ((katoCFBlock0 p 0 0) * (X 0 0) * star (katoCFBlock0 p 0 0)) := by
       refine Finset.sum_congr rfl (fun p _ => ?_)
-      -- For 1×1 matrices, (M * N * P) 0 0 = M 0 0 * N 0 0 * P 0 0
-      -- This is true because there is only one index in the matrix multiplication sum
-      calc
-        ((katoCFBlock0 p * X * (katoCFBlock0 p)ᴴ) 0 0) = 
-            ((katoCFBlock0 p * X) * (katoCFBlock0 p)ᴴ) 0 0 := rfl
-        _ = ∑ k : Fin 1, (katoCFBlock0 p * X) 0 k * ((katoCFBlock0 p)ᴴ) k 0 := rfl
-        _ = (katoCFBlock0 p * X) 0 0 * ((katoCFBlock0 p)ᴴ) 0 0 := by simp
-        _ = (∑ j : Fin 1, (katoCFBlock0 p) 0 j * X j 0) * ((katoCFBlock0 p)ᴴ) 0 0 := rfl
-        _ = ((katoCFBlock0 p) 0 0 * X 0 0) * ((katoCFBlock0 p)ᴴ) 0 0 := by simp
-        _ = (katoCFBlock0 p 0 0) * (X 0 0) * star (katoCFBlock0 p 0 0) := by simp; ring
-    _ = X 0 0 := hsum_scalar
+      rw [oneByOne_mul_conj_apply (katoCFBlock0 p) X]
+    _ = (X 0 0) * (∑ p : Fin 4, (katoCFBlock0 p 0 0) * star (katoCFBlock0 p 0 0)) := by
+      rw [Finset.mul_sum]; refine Finset.sum_congr rfl (fun p _ => ?_); ring
+    _ = (X 0 0) * (1 : ℂ) := by
+      have hsum : (∑ p : Fin 4, (katoCFBlock0 p 0 0) * star (katoCFBlock0 p 0 0)) = (1 : ℂ) := by
+        have h0 : (katoCFBlock0 0) 0 0 = blockLetterAmplitude := by simp [katoCFBlock0]
+        have h1 : (katoCFBlock0 1) 0 0 = (0 : ℂ) := by simp [katoCFBlock0]
+        have h2 : (katoCFBlock0 2) 0 0 = (0 : ℂ) := by simp [katoCFBlock0]
+        have h3 : (katoCFBlock0 3) 0 0 = blockLetterAmplitude := by simp [katoCFBlock0]
+        rw [Fin.sum_univ_four, h0, h1, h2, h3]
+        have hstar : star blockLetterAmplitude = blockLetterAmplitude := by
+          rw [blockLetterAmplitude]; simp
+        rw [hstar]
+        simp [hstar]
+        rw [← pow_two, blockLetterAmplitude_sq]
+        norm_num
+      rw [hsum]
+    _ = X 0 0 := by simp
 
-/-- The transfer map of katoCFBlock1 is the identity on the bond-one space.
-The two nonzero entries are 1/√2 and -1/√2, so ∑|A_i|² = 1 as well. -/
 private lemma katoCFBlock1_transferMap_eq_id :
     MPSTensor.transferMap katoCFBlock1 = LinearMap.id := by
   apply LinearMap.ext; intro X
-  -- For Fin 1, all elements equal 0 by dec_trivial
-  have hi (i : Fin 1) : i = 0 := by fin_cases i; rfl
-  have hj (j : Fin 1) : j = 0 := by fin_cases j; rfl
-  ext i j; rw [hi i, hj j]
+  ext i j
+  have hi : i = (0 : Fin 1) := Subsingleton.elim _ _
+  have hj : j = (0 : Fin 1) := Subsingleton.elim _ _
+  rw [hi, hj]
   rw [MPSTensor.transferMap_apply]
-  -- Similar scalar sum: only p=0 (+amplitude) and p=3 (-amplitude) contribute
-  -- |amplitude|² + |-amplitude|² = 2 * amplitude² = 1
-  have hsum_scalar : (∑ p : Fin 4, (katoCFBlock1 p 0 0) * (X 0 0) * star (katoCFBlock1 p 0 0)) = X 0 0 := by
-    calc
-      (∑ p : Fin 4, (katoCFBlock1 p 0 0) * (X 0 0) * star (katoCFBlock1 p 0 0))
-          = (X 0 0) * (∑ p : Fin 4, (katoCFBlock1 p 0 0) * star (katoCFBlock1 p 0 0)) := by
-        simp_rw [Finset.mul_sum]; ring
-      _ = (X 0 0) * (blockLetterAmplitude * star blockLetterAmplitude * 2) := by
-        simp [katoCFBlock1, Fin.sum_univ_four]
-        ring
-      _ = (X 0 0) * (blockLetterAmplitude ^ 2 * 2) := by
-        have hstar : star blockLetterAmplitude = blockLetterAmplitude := by
-          rw [blockLetterAmplitude]; simp
-        rw [hstar]; ring
-      _ = (X 0 0) * ((1/2 : ℂ) * 2) := by rw [blockLetterAmplitude_sq]
-      _ = X 0 0 := by ring
   calc
     (∑ p : Fin 4, (katoCFBlock1 p * X * (katoCFBlock1 p)ᴴ)) 0 0
         = ∑ p : Fin 4, ((katoCFBlock1 p * X * (katoCFBlock1 p)ᴴ) 0 0) := rfl
     _ = ∑ p : Fin 4, ((katoCFBlock1 p 0 0) * (X 0 0) * star (katoCFBlock1 p 0 0)) := by
       refine Finset.sum_congr rfl (fun p _ => ?_)
-      calc
-        ((katoCFBlock1 p * X * (katoCFBlock1 p)ᴴ) 0 0) = 
-            ((katoCFBlock1 p * X) * (katoCFBlock1 p)ᴴ) 0 0 := rfl
-        _ = ∑ k : Fin 1, (katoCFBlock1 p * X) 0 k * ((katoCFBlock1 p)ᴴ) k 0 := rfl
-        _ = (katoCFBlock1 p * X) 0 0 * ((katoCFBlock1 p)ᴴ) 0 0 := by simp
-        _ = (∑ j : Fin 1, (katoCFBlock1 p) 0 j * X j 0) * ((katoCFBlock1 p)ᴴ) 0 0 := rfl
-        _ = ((katoCFBlock1 p) 0 0 * X 0 0) * ((katoCFBlock1 p)ᴴ) 0 0 := by simp
-        _ = (katoCFBlock1 p 0 0) * (X 0 0) * star (katoCFBlock1 p 0 0) := by simp; ring
-    _ = X 0 0 := hsum_scalar
+      rw [oneByOne_mul_conj_apply (katoCFBlock1 p) X]
+    _ = (X 0 0) * (∑ p : Fin 4, (katoCFBlock1 p 0 0) * star (katoCFBlock1 p 0 0)) := by
+      rw [Finset.mul_sum]; refine Finset.sum_congr rfl (fun p _ => ?_); ring
+    _ = (X 0 0) * (1 : ℂ) := by
+      have hsum : (∑ p : Fin 4, (katoCFBlock1 p 0 0) * star (katoCFBlock1 p 0 0)) = (1 : ℂ) := by
+        have h0 : (katoCFBlock1 0) 0 0 = blockLetterAmplitude := by simp [katoCFBlock1]
+        have h1 : (katoCFBlock1 1) 0 0 = (0 : ℂ) := by simp [katoCFBlock1]
+        have h2 : (katoCFBlock1 2) 0 0 = (0 : ℂ) := by simp [katoCFBlock1]
+        have h3 : (katoCFBlock1 3) 0 0 = -blockLetterAmplitude := by simp [katoCFBlock1]
+        rw [Fin.sum_univ_four, h0, h1, h2, h3]
+        have hstar : star blockLetterAmplitude = blockLetterAmplitude := by
+          rw [blockLetterAmplitude]; simp
+        rw [hstar]
+        simp [hstar]
+        rw [← pow_two, blockLetterAmplitude_sq]
+        norm_num
+      rw [hsum]
+    _ = X 0 0 := by simp
 
-
-/-- Each bond-one block is a normal tensor (NT) in the sense of
-arXiv:1606.00608, lines 233--235.
-
-Source: project derivation; bond-one tensors with identity transfer map are
-normal by `isNormalTensor_of_bondDim_one_of_transferMap_eq_id`. -/
-private lemma katoCFBlocks_normal (k : Fin 2) :
-    MPSTensor.IsNormalTensor (katoCFBlocks k) := by
+private lemma katoCFBlocks_normal (k : Fin 2) : MPSTensor.IsNormalTensor (katoCFBlocks k) := by
   fin_cases k
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock0 katoCFBlock0_transferMap_eq_id
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       katoCFBlock1 katoCFBlock1_transferMap_eq_id
 
-/-- The doubled-index MPS tensor equals the weighted block-diagonal
-reconstruction from the two bond-one blocks.
-
-We prove this by direct computation on all 16 matrix entries. Both sides are
-nonzero only when the physical doubled index ($p \in \mathsf{Fin}\,4$) corresponds
-to a diagonal pair ($p = 0$ or $p = 3$) and the virtual indices match ($x = y$).
-
-Source: project derivation; the componentwise check uses the explicit forms of
-the Kato tensor letters (arXiv:2410.22696, lines 712--721) and the definition
-of the CPSV canonical form (arXiv:1606.00608, eq. `II_CF1`, lines 214--245). -/
 theorem toMPSTensor_eq_toTensorFromBlocks :
     MPOTensor.toMPSTensor tensor = MPSTensor.toTensorFromBlocks katoCFWeights katoCFBlocks := by
+  let e : (Σ _k : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
+  have hflat (k : Fin 2) : e ⟨k, (0 : Fin 1)⟩ = k := by fin_cases k <;> rfl
+  have hflat_symm (k : Fin 2) : e.symm k = ⟨k, (0 : Fin 1)⟩ := by
+    apply e.injective; rw [e.apply_symm_apply, hflat]
   funext p; ext x y
-  rw [MPOTensor.toMPSTensor]
-  -- Goal: tensor (p.divNat) (p.modNat) x y = (toTensorFromBlocks ... p) x y
-  -- Both sides are zero except for 4 specific cases:
-  -- (p=0, x=y=0): 1/2 = block0Weight * blockLetterAmplitude
-  -- (p=0, x=y=1): 1/4 = block1Weight * blockLetterAmplitude
-  -- (p=3, x=y=0): 1/2 = block0Weight * blockLetterAmplitude
-  -- (p=3, x=y=1): -1/4 = block1Weight * (-blockLetterAmplitude)
-  -- All other 12 cases: both sides = 0
-  -- We handle the zero cases uniformly, then the 4 nonzero cases individually
-  -- First, expand the block diagonal definition into an explicit formula
-  -- For 2 blocks of dim 1, toTensorFromBlocks p x y = 
-  --   if x = y then (if x = 0 then block0Weight * katoCFBlock0 p 0 0
-  --                   else block1Weight * katoCFBlock1 p 0 0)
-  --   else 0
-  rw [MPSTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.reindex_apply]
-  -- Now we have tensor (p.divNat) (p.modNat) x y =
-  --   (Matrix.blockDiagonal' (fun k => katoCFWeights k • katoCFBlocks k p))
-  --     (finSigmaFinEquiv.symm x) (finSigmaFinEquiv.symm y)
-  -- We need to evaluate blockDiagonal' at these sigma-type coordinates
-  -- Key lemma: finSigmaFinEquiv.symm x = ⟨x, 0⟩ for our 2×1 setup
-  have hsymm (z : Fin 2) : (finSigmaFinEquiv.symm z : Σ _ : Fin 2, Fin 1) = ⟨z, 0⟩ := by
-    apply finSigmaFinEquiv.injective
-    simp [finSigmaFinEquiv]
-  rw [hsymm x, hsymm y]
-  -- Now simplify the blockDiagonal' entry
-  -- blockDiagonal' f ⟨x,0⟩ ⟨y,0⟩ = 0 if x ≠ y, else = (f x) 0 0
-  by_cases hxy : x = y
+  simp only [MPOTensor.toMPSTensor, MPSTensor.toTensorFromBlocks,
+    Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
+  change tensor (p.divNat) (p.modNat) x y =
+    (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
+      (e.symm x) (e.symm y)
+  rw [hflat_symm x, hflat_symm y]
+  by_cases h : x = y
   · subst y
-    -- Same block: the entry is katoCFWeights x • katoCFBlocks x p 0 0
-    simp [Matrix.blockDiagonal', katoCFWeights, katoCFBlocks]
-    -- Now goal: tensor (p.divNat) (p.modNat) x x = 
-    --   (if x=0 then block0Weight * katoCFBlock0 p 0 0
-    --    else block1Weight * katoCFBlock1 p 0 0)
-    -- We handle the two physical cases separately
-    by_cases hp_diag : p.divNat = p.modNat
-    · -- p = 0 or p = 3
-      have hp_val : p = 0 ∨ p = 3 := by
-        have h0 : (0 : Fin 4).divNat = (0 : Fin 4).modNat := by decide
-        have h1 : ¬ ((1 : Fin 4).divNat = (1 : Fin 4).modNat) := by decide
-        have h2 : ¬ ((2 : Fin 4).divNat = (2 : Fin 4).modNat) := by decide
-        have h3 : (3 : Fin 4).divNat = (3 : Fin 4).modNat := by decide
-        fin_cases p <;> simp [hp_diag, h0, h1, h2, h3]
-      rcases hp_val with rfl | rfl
-      · -- p = 0
-        fin_cases x
-        · simp [tensor, siteSign, pauliZ, katoCFBlock0, block0Weight_times_amplitude]
-        · simp [tensor, siteSign, pauliZ, katoCFBlock1, block1Weight_times_amplitude]
-      · -- p = 3
-        fin_cases x
-        · simp [tensor, siteSign, pauliZ, katoCFBlock0, block0Weight_times_amplitude]
-        · simp [tensor, siteSign, pauliZ, katoCFBlock1, block1Weight_times_amplitude]
-    · -- Off-diagonal physical index: tensor is 0, and katoCFBlock0/katoCFBlock1 are also 0 for p=1,2
-      simp [tensor, hp_diag, katoCFBlock0, katoCFBlock1]
-  · -- Different blocks: blockDiagonal' is 0
-    simp [Matrix.blockDiagonal'_apply_ne (fun i j _ => ?_) hxy]
-    -- tensor (p.divNat) (p.modNat) x y = 0 for x ≠ y (tensor is diagonal)
+    simp [Matrix.blockDiagonal', katoCFWeights, katoCFBlocks, katoCFBlock0, katoCFBlock1]
     by_cases hp_diag : p.divNat = p.modNat
     · have hp_val : p = 0 ∨ p = 3 := by
-        have h0 : (0 : Fin 4).divNat = (0 : Fin 4).modNat := by decide
-        have h1 : ¬ ((1 : Fin 4).divNat = (1 : Fin 4).modNat) := by decide
-        have h2 : ¬ ((2 : Fin 4).divNat = (2 : Fin 4).modNat) := by decide
-        have h3 : (3 : Fin 4).divNat = (3 : Fin 4).modNat := by decide
-        fin_cases p <;> simp [hp_diag, h0, h1, h2, h3]
+        fin_cases p
+        · left; rfl
+        · exfalso; apply (by decide : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat)); exact hp_diag
+        · exfalso; apply (by decide : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat)); exact hp_diag
+        · right; rfl
       rcases hp_val with rfl | rfl
-      · simp [tensor, siteSign, pauliZ, hxy]
-      · simp [tensor, siteSign, pauliZ, hxy]
-    · simp [tensor, hp_diag]
+      · fin_cases x
+        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, katoCFBlock0, block0Weight_times_amplitude]
+        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, katoCFBlock1, block1Weight_times_amplitude]
+      · fin_cases x
+        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, katoCFBlock0, block0Weight_times_amplitude]
+        · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, katoCFBlock1, block1Weight_times_amplitude]
+    · -- p.divNat ≠ p.modNat means p is 1 or 2; tensor = 0 and blocks = 0
+      have hp12 : p = (1 : Fin (2*2)) ∨ p = (2 : Fin (2*2)) := by
+        fin_cases p
+        · exfalso; exact hp_diag (by decide : ((0 : Fin (2*2)).divNat = (0 : Fin (2*2)).modNat))
+        · left; rfl
+        · right; rfl
+        · exfalso; exact hp_diag (by decide : ((3 : Fin (2*2)).divNat = (3 : Fin (2*2)).modNat))
+      rcases hp12 with rfl | rfl
+      · -- p = (1 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
+        have h1 : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat) := by decide
+        rw [tensor, if_neg h1]
+        fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
+      · -- p = (2 : Fin (2*2)); divNat ≠ modNat, so tensor=0 and blocks=0
+        have h2 : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat) := by decide
+        rw [tensor, if_neg h2]
+        fin_cases x <;> simp [katoCFBlock0, katoCFBlock1]
+  · rw [Matrix.blockDiagonal'_apply_ne (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p))
+      (0 : Fin 1) (0 : Fin 1) h]
+    by_cases hp_diag : p.divNat = p.modNat
+    · have hp_val : p = 0 ∨ p = 3 := by
+        fin_cases p
+        · left; rfl
+        · exfalso; apply (by decide : ¬ ((1 : Fin (2*2)).divNat = (1 : Fin (2*2)).modNat)); exact hp_diag
+        · exfalso; apply (by decide : ¬ ((2 : Fin (2*2)).divNat = (2 : Fin (2*2)).modNat)); exact hp_diag
+        · right; rfl
+      rcases hp_val with rfl | rfl
+      · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
+      · simp [tensor, siteSign, pauliZ, Fin.divNat, Fin.modNat, h]
+    · -- p.divNat ≠ p.modNat: tensor evaluates to 0 because off-diagonal physical letter
+      rw [tensor, if_neg hp_diag]
+      simp
 
-/-- The doubled-index MPS tensor of the Kato $p=1/2$ tensor is in literal CPSV
-canonical form (arXiv:1606.00608 eq. `II_CF1`, lines 214--245).
-
-The decomposition uses two bond-one blocks: one with amplitude $1/\sqrt{2}$ at both
-physical letters $(0,0)$ and $(1,1)$, and one with amplitudes $1/\sqrt{2}$ and
-$-1/\sqrt{2}$ respectively.  The weights $\mu_0 = 1/\sqrt{2}$ and
-$\mu_1 = 1/(2\sqrt{2})$ recover the original diagonal matrix entries.
-
-This is a project derivation: the sources do not state the canonical-form
-decomposition explicitly.  Kato proves the closed family in arXiv:2410.22696,
-lines 712--721; the CPSV canonical form is arXiv:1606.00608 eq. `II_CF1`,
-lines 214--245. -/
 theorem tensor_toMPSTensor_isCPSVCanonicalForm :
     MPSTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor tensor) := by
   rw [toMPSTensor_eq_toTensorFromBlocks]
   exact (MPSTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ => by norm_num) katoCFWeights katoCFBlocks
     katoCFBlocks_normal).isCPSVCanonicalForm
-
-/-! ### Saturation of the area law -/
-
-private lemma mpo_trace_ne_zero (N : ℕ) (hN : 0 < N) : (mpo tensor N).trace ≠ 0 := by
-  rw [trace_mpo_tensor N hN]; norm_num
-
-/-- The normalized MPO equals the unnormalized MPO because trace = 1. -/
-private lemma normalizedMPO_eq_mpo (N : ℕ) (hN : 0 < N) :
-    tensor.normalizedMPO N = mpo tensor N := by
-  have htr_one : (MPOTensor.mpo tensor N).trace = (1 : ℂ) := trace_mpo_tensor N hN
-  rw [MPOTensor.normalizedMPO, htr_one, inv_one, one_smul]
-
-/-- **Boundary lemma (proof incomplete):** The reduced block state is maximally mixed.
-The missing piece is the combinatorial identity that the sum of configurationSign
-over all complement words vanishes, because each site contributes factor (1 + (-1)) = 0. -/
-theorem reducedBlockState_eq_maximallyMixed {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N) :
-    tensor.reducedBlockState N L (Nat.le_of_lt hLN) =
-      ((2 : ℂ) ^ L)⁻¹ • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) := by
-  sorry
-
-/-- **Boundary lemma (proof incomplete):** Block entropy equals L log 2.
-The missing piece is the entropy formula for the maximally mixed state,
-which requires `vonNeumannEntropy_diagonal` and evaluating `Real.negMulLog (1/2^L)`. -/
-theorem blockEntropy_eq_L_log_two {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
-    (hM : (mpo tensor N).PosSemidef) :
-    tensor.blockEntropy N L (Nat.le_of_lt hLN) hM = (L : ℝ) * Real.log 2 := by
-  sorry
-
-/-- Kato's p=1/2 tensor generates MPDO that saturate the area law
-(arXiv:1606.00608 Definition 4.6, line 811): I_L = I_{L+1} for 1 ≤ L < ⌊N/2⌋.
-
-The proof is reduced to the two boundary lemmas above:
-- `reducedBlockState_eq_maximallyMixed` shows that reduced states are maximally mixed
-- `blockEntropy_eq_L_log_two` computes their entropy as L log 2
-
-Both lemmas are stated precisely but contain `sorry`. This is a project derivation:
-neither Kato arXiv:2410.22696 nor CPSV16 arXiv:1606.00608 discuss SAL for this tensor. -/
-theorem tensor_isSAL : IsSAL tensor := by
-  refine ⟨tensor_isMPDO, ?_, ?_⟩
-  · intro N hN; exact mpo_trace_ne_zero N hN
-  · -- The mutual information equality I_L = I_{L+1} follows from the fact that
-    -- S_L = L·log(2) for all L < N, so S_L + S_{N-L} = N·log(2) = S_{L+1} + S_{N-L-1}
-    -- and therefore I_L = S_L + S_{N-L} - S_N = N·log(2) - S_N = I_{L+1}
-    intro N L hL1 hL_lt_halfN; sorry
-
-/-! ### Capstone theorem -/
-
-/-- There exists an MPO tensor on 2 physical and 2 virtual dimensions that
-simultaneously satisfies CPSV canonical form, positivity (MPDO), idempotent
-physical-trace transfer, saturation of the area law, and fails the
-tensor-scaling renormalization-fixed-point condition of
-arXiv:1606.00608 Definition 4.1. -/
-theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
-    ∃ K : MPOTensor 2 2, MPSTensor.IsCPSVCanonicalForm (MPOTensor.toMPSTensor K) ∧ IsMPDO K ∧
-      (physTraceTransfer K * physTraceTransfer K = physTraceTransfer K) ∧
-      IsSAL K ∧ ¬ IsRFPViaTS K := by
-  refine ⟨tensor, tensor_toMPSTensor_isCPSVCanonicalForm, tensor_isMPDO,
-    physTraceTransfer_tensor_idempotent, tensor_isSAL, tensor_not_isRFPViaTS⟩
 
 
 end MPOTensor.KatoDeformedRFPObstruction
