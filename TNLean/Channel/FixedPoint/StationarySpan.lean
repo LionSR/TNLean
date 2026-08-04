@@ -10,12 +10,11 @@ import Mathlib.LinearAlgebra.Dimension.Finite
 /-!
 # Fixed-point subspace spanned by positive-semidefinite fixed points
 
-This file proves that the fixed-point subspace of a positive trace-preserving
-linear map is spanned (over ℂ) by its positive-semidefinite elements, and then
-by stationary density matrices.  This is the key spectral lemma for Wolf
-Corollary~6.8 (Linearly independent stationary states).  The dimension/basis
-statement with exactly `r` linearly independent stationary density matrices is
-tracked for follow-up work.
+This file proves Wolf Corollary 6.8 (Linearly independent stationary states)
+in full: the fixed-point subspace of a positive trace-preserving linear map is
+spanned (over ℂ) by stationary density matrices, and when the subspace has
+dimension `r`, there exist `r` linearly independent stationary density matrices
+that span it.
 
 ## Source
 
@@ -53,7 +52,8 @@ lemma mem_fixedPointsSubmodule {X : Matrix (Fin D) (Fin D) ℂ} :
   simp [fixedPointsSubmodule, LinearMap.mem_ker, sub_eq_zero]
 
 /-- The set of PSD fixed points. -/
-def posSemidefFixedPointsSet (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+def posSemidefFixedPointsSet
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     Set (Matrix (Fin D) (Fin D) ℂ) :=
   {X | X ∈ fixedPointsSubmodule E ∧ X.PosSemidef}
 
@@ -67,7 +67,8 @@ lemma fixedPoint_mem_span_posSemidef
     (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX_fix : E X = X) :
     X ∈ Submodule.span ℂ (posSemidefFixedPointsSet E) := by
-  obtain ⟨P₁, P₂, P₃, P₄, hP₁, hP₂, hP₃, hP₄, hFP₁, hFP₂, hFP₃, hFP₄, h_decomp⟩ :=
+  obtain ⟨P₁, P₂, P₃, P₄, hP₁, hP₂, hP₃, hP₄, hFP₁, hFP₂, hFP₃, hFP₄,
+    h_decomp⟩ :=
     IsPositiveMap.exists_posSemidef_fixedPoints_decomposition E hE hTP hX_fix
   have mem (P : Matrix (Fin D) (Fin D) ℂ) (hPf : E P = P) (hPp : P.PosSemidef) :
       P ∈ Submodule.span ℂ (posSemidefFixedPointsSet E) :=
@@ -145,8 +146,9 @@ lemma stationaryDensity_of_posSemidef_fixedPoint
 The fixed-point subspace of a positive trace-preserving linear map is spanned
 (over ℂ) by stationary density matrices (PSD, trace 1, fixed by `E`).
 
-The dimension/basis statement with exactly `r` linearly independent stationary
-density matrices is tracked for follow-up work. -/
+The basis statement (Theorem `exists_stationaryDensity_basis_of_fixedPointsSubmodule`)
+yields `r` linearly independent stationary density matrices spanning the space,
+where `r` is the dimension of the fixed-point subspace. -/
 theorem fixedPointsSubmodule_spanned_by_stationaryDensities
     (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
     Submodule.span ℂ {ρ | IsStationaryDensity E ρ} = fixedPointsSubmodule E := by
@@ -186,5 +188,44 @@ theorem fixedPointsSubmodule_spanned_by_stationaryDensities
       Submodule.span_le.mpr h_P_sub_span_S
     rw [h_span_P] at h_span_le
     exact h_span_le
+
+/-- **Wolf Corollary 6.8 (Linearly independent stationary states).**
+
+Let `E` be a positive trace-preserving linear map on `M_D(ℂ)`.  The fixed-point
+subspace `F_E = {X | E X = X}` is finite-dimensional.  Let `r = dim_ℂ F_E`.
+Then there exist `r` linearly independent stationary density matrices
+`ρ₁, …, ρᵣ` (positive semidefinite, trace 1, fixed by `E`) whose ℂ-linear
+span equals `F_E`.
+
+Equivalently, the fixed-point space has a basis consisting entirely of
+stationary density matrices.
+
+Source: Wolf, *Quantum Channels & Operations: Guided Tour*, Corollary 6.8;
+local source `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`,
+lines 1204--1212. -/
+theorem exists_stationaryDensity_basis_of_fixedPointsSubmodule
+    (hE : IsPositiveMap E) (hTP : IsTracePreservingMap E) :
+    ∃ ρ : Fin (Module.finrank ℂ (fixedPointsSubmodule E)) →
+      Matrix (Fin D) (Fin D) ℂ,
+      (∀ i, IsStationaryDensity E (ρ i)) ∧
+      LinearIndependent ℂ ρ ∧
+      Submodule.span ℂ (Set.range ρ) = fixedPointsSubmodule E := by
+  set S : Set (Matrix (Fin D) (Fin D) ℂ) := {ρ | IsStationaryDensity E ρ}
+    with hS
+  have h_span : Submodule.span ℂ S = fixedPointsSubmodule E :=
+    fixedPointsSubmodule_spanned_by_stationaryDensities E hE hTP
+  -- Extract a basis from the spanning set
+  -- Rewrite the goal's index type using h_span so it matches f's type
+  rw [show Module.finrank ℂ (fixedPointsSubmodule E) =
+    Module.finrank ℂ (Submodule.span ℂ S) from by rw [h_span]]
+  rcases Submodule.exists_fun_fin_finrank_span_eq ℂ S with ⟨f, hf_mem, hf_span, hf_indep⟩
+  have h_stationary : ∀ i, IsStationaryDensity E (f i) := by
+    intro i
+    have : f i ∈ S := hf_mem i
+    rw [hS, Set.mem_setOf_eq] at this
+    exact this
+  -- Also rewrite the span goal using h_span
+  rw [← h_span]
+  exact ⟨f, h_stationary, hf_indep, hf_span⟩
 
 end IsPositiveMap
