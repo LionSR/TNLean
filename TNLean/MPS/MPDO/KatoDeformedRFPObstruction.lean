@@ -559,16 +559,16 @@ theorem tensor_toMPSTensor_isCPSVCanonicalForm :
 
 /-! ### Strong Area Law (SAL)
 
-The saturation of the area law (arXiv:1606.00608, Definition 4.6, line 811)
+The saturation of the area law (arXiv:1606.00608, Definition 4.6, line 811)
 requires the mutual information chain $I_1 = I_2 = \dots$ with
-$I_L = S_L + S_{N-L} - S_N$ (line 797).  For Kato's $p=1/2$ tensor
+$I_L = S_L + S_{N-L} - S_N$ (line 797).  For Kato's $p=1/2$ tensor
 the block reduced states are maximally mixed for non‑full blocks,
 which forces $S_L = L \log 2$ and cancels the $N$‑dependence.
 **All entropy computations in this section are project derivations,
 not stated by Kato or CPSV16.** -/
 
 /-- When the unnormalized MPO has unit trace the normalized MPO collapses
-to the bare MPO.  This relies on `trace_mpo_tensor` giving trace 1. -/
+to the bare MPO.  This relies on `trace_mpo_tensor` giving trace 1. -/
 private lemma normalizedMPO_tensor_eq_mpo (N : ℕ) (hN : 0 < N) :
     normalizedMPO tensor N = mpo tensor N := by
   rw [normalizedMPO, trace_mpo_tensor N hN, inv_one, one_smul]
@@ -798,7 +798,7 @@ private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
   rw [Real.log_pow]
 
 /-- Kato's $p=1/2$ tensor saturates the area law (arXiv:1606.00608,
-Definition 4.6, line 811): the mutual information $I_L$ is constant
+Definition 4.6, line 811): the mutual information $I_L$ is constant
 in the block size $L$ for $1 \le L < \lfloor N/2\rfloor$.
 
 The proof: for a proper subsystem, the reduced state is maximally mixed,
@@ -843,7 +843,7 @@ theorem tensor_isSAL : IsSAL tensor := by
 The tensor is in CPSV canonical form, generates an MPDO, has an
 idempotent physical‑trace transfer, saturates the area law, yet
 admits no fixed‑scale renormalisation à la arXiv:1606.00608
-Definition 4.1. -/
+Definition 4.1. -/
 theorem exists_isCPSVCanonicalForm_isMPDO_idempotent_isSAL_not_isRFPViaTS :
     ∃ K : MPOTensor 2 2,
       MPSTensor.IsCPSVCanonicalForm K.toMPSTensor ∧
