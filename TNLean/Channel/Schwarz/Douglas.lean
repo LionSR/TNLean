@@ -267,7 +267,7 @@ theorem pinv_mul_B_herm (B : Mat) : (pinv B * B)ᴴ = pinv B * B := by
     simp [Matrix.conjTranspose_mul, hSqrt.eq]
   simp [Matrix.conjTranspose_mul, Matrix.mul_assoc, hS_herm]
 
-/-! ### EDIT 1: norm_pinv_mul_B_le_one -/
+/-! ### Projection contraction -/
 
 theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
   let P := pinv B * B
@@ -341,7 +341,7 @@ theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
   rw [h_norm_sq_Px, h_norm_sq_x] at h_bound
   nlinarith [norm_nonneg ((EuclideanSpace.equiv (Fin D) ℂ).symm x)]
 
-/-! ### EDIT 3: pinv_norm_minimal -/
+/-! ### Norm minimality of the pseudoinverse factorization -/
 
 theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ ‖C‖ := by
   by_cases hCzero : ‖C‖ = 0
