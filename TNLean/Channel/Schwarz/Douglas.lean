@@ -296,7 +296,7 @@ theorem factorization_pinv (A B : Mat) (hAB : A.mulVecLin.range ≤ B.mulVecLin.
     _ = A := hSPA
 
 
-/-! ## Wolf moreover clauses -/
+/-! ## Moreover clauses of Douglas' theorem -/
 
 /-- `(pinv B * B)` is idempotent. -/
 theorem pinv_mul_B_idem (B : Mat) : (pinv B * B) * (pinv B * B) = pinv B * B := by
@@ -405,7 +405,7 @@ theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ 
       _ = ‖C‖ := by simp
 
 
-/-! ## Uniqueness (Wolf moreover (i)+(ii)) -/
+/-! ## Uniqueness of the factorization under the support constraint -/
 
 theorem pinv_mul_B_mul_conjTranspose (B : Mat) : pinv B * B * Bᴴ = Bᴴ := by
   unfold pinv
