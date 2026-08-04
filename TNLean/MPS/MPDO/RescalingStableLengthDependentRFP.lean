@@ -199,8 +199,10 @@ theorem oneLabelCoeffs_not_lengthIndependent :
 /-- The uniform positive rescaling of the displayed one-label $\chi$ block:
 the roots $\{1, 7/25\}$ become $\{s, 7s/25\}$.
 
-Source: arXiv:1606.00608, lines 995--1010 (the rescaling question after
-Theorem 4.14; the tensor is a project example). -/
+Source: arXiv:1606.00608, lines 995--1010 pose the length-dependence
+question after Theorem 4.14; the rescaling-stability strengthening is a
+project-internal follow-up motivated by that question (the tensor is a
+project example). -/
 def oneLabelChiScaled (s : ℝ) : DiagonalChiFamily (Fin 1) where
   dim _ _ _ := 2
   entry _ _ _ k :=
@@ -237,8 +239,9 @@ rescaled roots $\{s, 7s/25\}$ cannot both equal one, and the rescaled
 family $s^L(1 + (7/25)^L)$ is not length-independent.
 
 Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (the
-rescaling-stability question; the tensor is a project example, not a
-tensor stated in CPSV16). -/
+length-dependence question); the rescaling-stability strengthening is a
+project-internal follow-up motivated by that question (the tensor is a
+project example, not a tensor stated in CPSV16). -/
 theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent (s : ℝ)
     (hs : 0 < s) : ¬ (rescaledCoeffs s).LengthIndependent := by
   intro hLI
