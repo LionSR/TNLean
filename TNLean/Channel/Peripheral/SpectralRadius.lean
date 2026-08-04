@@ -54,13 +54,14 @@ The proof obtains a PSD eigenvector with eigenvalue $r > 0$ via
 then forces $r = 1$ by trace preservation.
 
 Source: Wolf, *Quantum Channels & Operations*, Proposition 6.1; local source
-`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 73--91. -/
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 73--92. -/
 theorem eigenvalue_one_exists_of_tracePreserving
     [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef ∧ ρ ≠ 0 ∧ T ρ = ρ := by
-  -- For a trace-preserving positive map, nonzero PSD matrices cannot be annihilated
-  -- (otherwise their trace would be 0, contradicting positivity)
+  -- For a trace-preserving positive map, nonzero PSD matrices cannot be annihilated:
+  -- if T(ρ) = 0 then trace preservation gives trace(ρ) = 0,
+  -- but a nonzero PSD matrix has positive trace.
   have hNZ : ∀ {ρ : Matrix (Fin D) (Fin D) ℂ}, ρ.PosSemidef → ρ ≠ 0 → T ρ ≠ 0 := by
     intro ρ hρ_psd hρ_ne hzero
     have htr_zero : trace (T ρ) = 0 := by simp [hzero]
@@ -69,7 +70,7 @@ theorem eigenvalue_one_exists_of_tracePreserving
       have h_nonneg := hρ_psd.trace_nonneg
       have h_ne_zero : trace ρ ≠ 0 := mt hρ_psd.trace_eq_zero_iff.mp hρ_ne
       exact h_nonneg.lt_of_ne h_ne_zero.symm
-    linarith
+    exact htr_pos.ne' htr_zero
   -- Get eigenvalue r > 0 with PSD eigenvector (Perron--Frobenius)
   obtain ⟨ρ, r, hρ_psd, hρ_ne, hr_pos, h_eig⟩ :=
     exists_posSemidef_eigenvector (D := D) T hPos (hNZ := hNZ)
