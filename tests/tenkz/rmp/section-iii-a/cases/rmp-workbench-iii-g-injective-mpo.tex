@@ -1,17 +1,25 @@
 % Target: rmp-workbench-iii-g-injective-mpo
 % Formula: Four local MPO tensors meet at one G-injective plaquette.
-% Ink: Canonical public tenkzfree square of four labelled MPO atoms.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362),
+%   with the eight labelled half-edges drawn (the bar's X row on this target).
 % Boundary: Eight labelled virtual half-edges remain open around the plaquette.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 604-621; archival output GinjMPO.pdf
-% Capabilities: free-graph, four-site-plaquette, sector-labels
+% Capabilities: kernel, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[mpo]{nw}{(-7mm,7mm)}{a,h}
-    \tnput[mpo]{ne}{(7mm,7mm)}{b,c}
-    \tnput[mpo]{se}{(7mm,-7mm)}{d,e}
-    \tnput[mpo]{sw}{(-7mm,-7mm)}{f,g}
-    \tnjoin{nw.east}{ne.west} \tnjoin{ne.south}{se.north}
-    \tnjoin{se.west}{sw.east} \tnjoin{sw.north}{nw.south}
-  \end{tenkzfree}.
+  \tenkzkernel
+  % Each corner tensor carries two sector labels on its vertical: the outer
+  % half-edge and the plaquette bond on the other side of the box.
+  \begin{tenkz}[rows={wire,wire}, cols=2]
+    \tn[skin=mpo, name=nw,
+      ports={0:virtual, 90:virtual:$a$, 270:virtual:$h$}]{} &
+    \tn[skin=mpo, name=ne,
+      ports={180:virtual, 90:virtual:$b$, 270:virtual:$c$}]{} \\
+    \tn[skin=mpo, name=sw,
+      ports={0:virtual, 90:virtual:$g$, 270:virtual:$f$}]{} &
+    \tn[skin=mpo, name=se,
+      ports={180:virtual, 90:virtual:$d$, 270:virtual:$e$}]{}
+    \tnwire{nw.90}{open n} \tnwire{ne.90}{open n}
+    \tnwire{sw.270}{open s} \tnwire{se.270}{open s}
+  \end{tenkz}.
 \]

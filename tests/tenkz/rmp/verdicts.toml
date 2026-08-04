@@ -7,14 +7,15 @@ campaign_sha256 = "9e0fa1f42fda08bcd97aa528178e931cb370e0f3b9e361f00f4c927948bb3
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "f6d4f06a733d5a507344be0241cc30793f2c6170b2ab20207a4cbef2811a2b40"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the projector layer is drawn: one enclosure per site over the entangled-bond sheet, with A and the |phi) bond named"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the oblique 4x4 sheet, one projector enclosure per site, per-site physical legs, open boundary, and the named A site and |phi) bond all match the source; enclosure tint and leg colour are house style under the bar."
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
@@ -122,14 +123,15 @@ note = "u and v share only their central virtual index and retain the four sourc
 
 [[verdict]]
 id = "rmp-ii-mpu-brickwork"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
 case_sha256 = "2a3f532e16c8c31610a5f6f05aa7be42a18814508041238c5249e842ff9a5eea"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "both sides now expose the same twelve legs; the type advisory (operator word vs circuit) is inherent to the identity"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the six-tensor U word and the alternating three-u two-v brick layers match the source with all six circuit wires open at both ends; labelled spanning boxes for the source's dotted gate-pair ellipses are the inherent circuit presentation (the bar)."
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
@@ -149,10 +151,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "f98ae41289a5fd47f4c103493fe9a70c6261d122330da23c892bdfd4f9e1419d"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the kernel form LANGUAGE-1.0 section 12.4 fixes for this target: two traced rows, four source-blue/source-red inter-row shift strings, both crossings declared and rendered under; the author box-turn ink is the mpu-wrap-second skin-pairings property"
+case_sha256 = "ec201c6800c6f9dffe49d2b7d06a63d6d6434afb8529f3bc49e6a795c1f3ec8b"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-pairings-source-review-2026-08-04-200dpi"
+note = "The X row is resolved: the case now records the source pairing boxes and open legs through the mpu-wrap-second skin-pairings model, with the right mover source-blue and the left mover source-red. Residue: the row channels keep house ink where the published panel colours the movers."
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
@@ -201,35 +203,37 @@ note = "rhoL/rhoR tails need the designed tail idiom"
 
 [[verdict]]
 id = "rmp-ii-spectrum-fixed-points"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "396fb62773accd8efdd87682582df59f5a3776684cbac176461e0cecdaf5c9eb"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "relation corrected"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: each side carries both fixed-point factors in the source order with the cup at the differing fold and two open virtual ends; capsule glyphs for the source's dot-and-route factors are equivalent house routing, and the dashed scope mark restates what eig scopes."
 
 [[verdict]]
 id = "rmp-ii-blocking"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "fable-structural-redraw-2026-07-27"
 defects = []
 case_sha256 = "5228f36425beff22f683cab44366b5fbb5456bf7d8d6bb1a6d5f5c1be9b9375b"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the one-site isometry V now has matching case, manifest, and t2_isometry fixture metadata"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: one pill V with the alpha input below and the i and beta outputs above matches the source panel's topology, boundary, labels, and orientation; the wider house pill is intentional styling."
 
 [[verdict]]
 id = "rmp-ii-staircase"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "190e519121d10a5fb5f5fa373f4293f743620f4b3595a398f4f2ccee9b1a9811"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "vertically mirrored vs source; V-glyph aspect"
+case_sha256 = "71c70d1e8a0bf5b71a9055045072401d21910871728de28d0a1c852b59710144"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-staircase-source-review-2026-08-04-200dpi"
+note = "Re-audit resolved the X row: the case was vertically mirrored and now ascends as in the source, with the physical output legs up. Residue: the house box stands in for the source's rounded V glyph (#5363), and the |0> label sits south rather than east."
 
 [[verdict]]
 id = "rmp-ii-circuit"
@@ -288,14 +292,15 @@ note = "better than the authors"
 
 [[verdict]]
 id = "rmp-ii-ortho-left"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
+defects = []
 case_sha256 = "977c8d627e82eecff53f1ac6ef81ef9400c292103911e88a7034e9a935b1782b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "thin wires vs bold source; end of the \"better\" run"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-600dpi"
+note = "K2 promotion: west cup, contracted physical pair, and open east pair match the source with the same right-pointing glyph orientation; thin house wires versus bold source wires are intentional styling (the bar)."
 
 [[verdict]]
 id = "rmp-ii-tangent-projector"
@@ -314,10 +319,10 @@ id = "rmp-ii-boundary-lasso"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "c3469c8df54faed6ef783e68d1fbe4c3c396a16cbaa90213bbe9407071628e45"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "pairing repaired; species hues differ from source palette"
+case_sha256 = "e065827aad149dac8e8217758dc0d1af2d1437f62ac98d924d246bb7da3ed45a"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-species-source-review-2026-08-04-400dpi"
+note = "The source palette is now model-recorded as declared species (the bar's X row is resolved); the physical policy legs stay house-ink because the policy stub does not read the host species (K1), and the kernel spells the bar accent as overline."
 
 [[verdict]]
 id = "rmp-ii-boundary-region"
@@ -356,21 +361,23 @@ id = "rmp-ii-zcl-mpdo"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "9273907dc0394e4424b0bc89b861160edd46f95ad4e4ab88cd80e543a0f2e70f"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "racetrack trace vs the source's compact caps"
+defects = []
+case_sha256 = "47f066f4a962f7afc2b051bf092ec84d40746b9e15c07dcb1f8d7c669c1ab9a3"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
+note = "Kernel stock MPO skin (#5362): the trace now closes as a capsule around each box as in the source, and the open virtual stubs are explicit wires; the capsule sits wider of the box than the author's compact caps."
 
 [[verdict]]
 id = "rmp-ii-channels-ts"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "22cc8f7da57020c0db895ecd2c9eaa1fabce722fe6e9f1cc074f85fc2d186266"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "straight double-arrow vs curved arcs"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the two-site and one-site MPDO words match leg for leg and the T/S channel arrows read in the same directions; the straight double arrow versus the source's curved arcs is equivalent house routing (the bar)."
 
 [[verdict]]
 id = "rmp-ii-mpdo-ol"
@@ -419,14 +426,15 @@ note = "the S_{alpha,g} case uses the supported ket-op-bra contraction order in 
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "38a4c16cb28f1edadc197bfaeea236185ddac75a6c04d51d7cabfaa08abad19e"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the author string realization: black c over red a at the declared crossing, both source-directed arrowheads, four quadrant sectors, and six labels at their stations"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: crossing order (c over a), both source-directed arrowheads, the four quadrant sectors, and all six labels at their stations match the author figure at lines 249-288; the printed square outline is the simplified glyph of the same tensor."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra-n"
@@ -544,45 +552,51 @@ note = "Both pulling-through panels and their lambda circles are present; curve 
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "7f707b192b0fa0a8fad77b997a4bf765c334bedc408c12db2800c5add9ee74e6"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "h glyph style differs"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the six-site MPO word and the two-site h gate contracted above and below match leg for leg; the labelled white pill for the source's filled unlabelled gate is house typography (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-proof-one"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "57011e95c813ece2d81c913e71dae7e7331bad59b7edd7363153bd0cf5b9b1d4"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "orthogonal reduction; invented boxes removed; RHS copy-dot restored"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the alpha-dot contraction into V_alpha and the reduced single tensor both keep two virtual and one physical leg open with the copy dots present; the rounded house pill for the source's tall box is a house glyph form."
 
 [[verdict]]
 id = "rmp-iii-a-proof-two"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "9460b8ab72b5e0cbc1953ed65a35b3f5f8fefc73b0a8c4a72ee2852f01e047e6"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "bond hue and box size"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the stacked beta/alpha contraction into F and the fused gamma output match wire for wire on both sides; the operator-row bond hue and box size are public-theme choices (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-proof-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
 case_sha256 = "08585d86aba483caa21068b81fc8545860cabff5e0077119c032fd853cf16f5c"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the fusion stack is restored: beta above alpha above the dot, V_alpha and V_beta spanning their levels, F and V_gamma on the right with the dot wire passing under F; rails red in the house operator hue where the source is black"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the full fusion stack (beta above alpha above the dot, V_alpha and V_beta spanning their levels, F and V_gamma with the dot wire under F, the up stub above beta) matches; the red operator rails are the house semantic hue (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-ghz-state"
@@ -597,13 +611,15 @@ note = "the six-by-eight topology, 48 GHZ copy junctions, 62 internal Hadamard b
 
 [[verdict]]
 id = "rmp-iii-a-ghz-tensor"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
+defects = []
 case_sha256 = "515a44835e0eee4b37dd4a1976f1a120188931c80c1785599848cb77ffcc878c"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "box-G vs copy-dot; diagonal leg angle"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the four-leg copy tensor keeps two virtual and two physical indices open with the same equation beside it; the labelled box for the source's bare copy junction and the orthogonal legs for its diagonal one are equivalent house forms (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-hadamard"
@@ -612,18 +628,19 @@ pairing = "wrong-source"
 case_sha256 = "ae3e69b02f579b42925b116697b02e2c5d0988578db1b0e41bb334576171b106"
 reviewed = "2026-07-30"
 renderer = "source-split-page-review-2026-07-24"
-note = "paired author panel is an unlabeled black bond node, not the declared Hadamard matrix"
+note = "paired author panel is an unlabeled black bond node, not the declared Hadamard matrix. Next: re-pair the target -- the extraction fig3_fig3-pepe_Hmatrix.pdf shows a plain bond node, so either find the paper's H glyph near line 1449 or reclassify the figure context-only and let the matrix equality carry the target"
 
 [[verdict]]
 id = "rmp-iii-a-spt-mpo"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-port-contract-source-review-2026-08-01"
 defects = []
 case_sha256 = "8c5f4cfcf58d40e9248de65932e531dc7eb69af04185ec4a65ccb31d01c61e7f"
-reviewed = "2026-08-01"
-renderer = "codex-port-contract-source-review-2026-08-01-240dpi"
-note = "the exact hash keeps the source-red g string on the black lattice and models the open physical leg with U_g as a typed two-port insertion only after the pull"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the g string moves from the northwest to the southeast corner with both declared over-crossings and action boxes on each side, U_g is deposited on the physical leg only after the pull, and the equation passes the boundary audit; rounded action boxes are a house glyph form."
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
@@ -661,32 +678,34 @@ id = "rmp-iii-a-mpo-injective"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "191f596dda42d9e7f38e04648ab52ede39bc696340814489a282723132a694ef"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "ring topology preserved; hatching and hue lost"
+case_sha256 = "beec562735963ce7542c5c7655a014b6846f9f4b503a6247cbe4ea9378f98081"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
+note = "Kernel stock MPO skin (#5362); ring topology preserved under the equation audit, hatching and hue still lost, the ring reads as straight chords, and the physical leg takes its own bearing instead of overlapping the north leg."
 
 [[verdict]]
 id = "rmp-iii-a-torus-one"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
-defects = ["weight-mismatch"]
+defects = []
 case_sha256 = "8b611dca8f741af0d4a2be88a4adadf86c7f57d55b293196e6e5a5588b7f8d8f"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "wound cycles and the opposite inner bends remain explicit; line weight remains a cosmetic gap"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the identified torus boundary, the inner opening with opposite bends, both noncontractible cycles, and the crossing at the marked tensor i all match; the outlined house box and line weight for the source's filled bold glyph are house style (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-torus-two"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
-defects = ["weight-mismatch"]
+defects = []
 case_sha256 = "6e186412fe0111f0db70f573c0e54801fff6619ef8c7e5c52d3e58ab4810b5d1"
-reviewed = "2026-07-26"
-renderer = "codex-three-cycle-source-review-2026-07-26"
-note = "The marked box and its physical legs use the public theme rather than the source's vivid blue-red ink."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the five-tensor periodic MPO word with the fourth tensor marked and all ten physical legs open matches; the public theme's outlined box and black legs replace the source's vivid blue-red ink without changing meaning (the bar)."
 
 [[verdict]]
 id = "rmp-iii-a-torus-three"
@@ -694,10 +713,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = ["weight-mismatch"]
-case_sha256 = "d10871d4fd955079040f92fbc8af81092af109fac4fdbc943e574e77503c54e4"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "The pull arrow remains outside the PEPS window; the enlarged crossing is blue-outlined rather than solid blue."
+case_sha256 = "28bbee831c296d732e5175e042536c14a23aea180a982fc133de1810298e5a6f"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-150dpi"
+note = "Kernel string-slide with declared crossings and the stock MPO crossing tensor (#5362) under the equation audit; the pull arrow remains outside the PEPS window and the enlarged crossing is blue-outlined rather than solid blue."
 
 [[verdict]]
 id = "rmp-iii-b-anyon-pair"
@@ -728,10 +747,10 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "2455ebfb9787f62a5f345cc3f5df4405155f4e3ec8c161eb2bc90f48be8e8777"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "marked region and open string remain drawn after route migration"
+case_sha256 = "e31fd7b0ac4812682e83b7b3196e6fa00c0d5300cc807588a83892828dd7569a"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
+note = "Kernel stock MPO skin (#5362) with the enclosure mark and labelled open string intact; the charge stays the stock box against the source's hatched diamond and the disk is a rounded contour, not the source's ellipse."
 
 [[verdict]]
 id = "rmp-iii-b-self-braiding"
@@ -847,93 +866,111 @@ note = "border hue; arrowed legs absent"
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-one"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "0b841457a96974c0a2e9ca23952e1d79bf0cc9f0257ae75ffa8f5d2046731560"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Contraction and boundary types match; exposed virtual ends route sideways."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: A--B closes into the wide L on both virtual ends and all three physical legs match; the sideways cup routing preserves the same boundary and contraction (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-one"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "dca16a213e6050003fe151bf3f02e48c911dff4009bf8169ed07dfe5f15a5c37"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Contraction and boundary types match; exposed virtual ends route sideways."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the uncovered wire and B--C close into the wide R on both virtual ends with all three physical legs present; the sideways cup routing preserves the same boundary and contraction (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-two"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "64b737052126d8c435a7ed85392d480e1a0ccf2734a4669559076dbdc87037e4"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Crossing removed; the two virtual openings route sideways rather than up."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: A closes into L through the west cup with A's east and L's east virtual ends and both physical legs open; the sideways openings preserve the source boundary (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-two"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "9c17f1e657c62c55981d70cd8239a2d6cd68684bd74c0bb495461cdb6d771b48"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Spurious crossing removed; exposed virtual ends route sideways."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: C closes into R through the east cup with C's west and R's west virtual ends and both physical legs open; the sideways ends are equivalent routing with no crossing (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "d0704f1902c3dd9e5ef8cd9ca29e40ae7bc13fa9a0a296897a9915370fcc9ede"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Crossing removed; exposed virtual ends route sideways."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: A--B closes into L with two virtual and three physical legs open exactly as the source; the sideways virtual ends are equivalent routing (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "364d78136c4134927cfc98a5555930b8c04096e5840337398beafcf125d2e63d"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Contraction and boundary types match; exposed virtual ends route sideways."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: both outer ends close through R with the two exposed interior virtual ends and all three physical legs open; routing is a house choice (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-four"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "109d6e9ae784af98034c849754a943130c289bddccce73fe9d0991458dd872ed"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Five-leg boundary restored; the free identity wire is horizontal, not U-shaped."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: L's two virtual ends and physical leg plus the free wire's two ends give the five source openings; the horizontal free identity wire is equivalent to the source U-route (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-four"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
+defects = []
 case_sha256 = "638b1b76910f8928a76619ad040d581c15d4dcaa6cb75c480601708e6082f909"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "crossing removed; five open ends match Rtensor4"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the four-leg inverse S with its two outputs, the B and C pair above R with the two exposed virtual ends and C's physical leg all match Rtensor4, and the spurious crossing is absent."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-five"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
+defects = []
 case_sha256 = "087a1b72eb414915bc66b0ecbe87846b9f7a584e1b1e440dba75509ab1694721"
-reviewed = "2026-07-25"
-renderer = "source-split-page-review-2026-07-25"
-note = "Three-leg boundary restored; the virtual stubs route sideways rather than up."
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: L alone carries the restored three-index boundary -- two virtual stubs and the upward physical leg; the sideways stubs preserve the source boundary (the bar)."
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-five"
@@ -955,7 +992,7 @@ missing = ["nested-regions"]
 case_sha256 = "90b54689d81f976c919bcea414d0754342133c7f521e7c8e013fa5e80d1e4114"
 reviewed = "2026-07-30"
 renderer = "codex-region-label-math-review-2026-07-26"
-note = "nested source regions are drawn as overlap plus an invented lattice"
+note = "nested source regions are drawn as overlap plus an invented lattice. Next: land nested enclosure regions in the kernel (the #4704 residue), then redraw the R window with a true inner region and drop the invented lattice"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
@@ -967,7 +1004,7 @@ missing = ["nested-regions"]
 case_sha256 = "597e03c401223fbad66083892235c28c7a7fe6f12e204367adcf55806a062210"
 reviewed = "2026-07-30"
 renderer = "codex-region-label-math-review-2026-07-26"
-note = "nested source regions are drawn as overlap plus an invented lattice"
+note = "nested source regions are drawn as overlap plus an invented lattice. Next: land nested enclosure regions in the kernel (the #4704 residue), then redraw the L window with a true inner region and drop the invented lattice"
 
 [[verdict]]
 id = "rmp-app-toric-primal"
@@ -991,14 +1028,15 @@ note = "context-only; clean"
 
 [[verdict]]
 id = "rmp-app-czx-state"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
 case_sha256 = "7757cb0c57dd3fd982dceb1fd06ce0a89df4db268a15c393e68cf717b35fcad4"
-reviewed = "2026-07-27"
-renderer = "fable-wave-b-acceptance-2026-07-27-200dpi"
-note = "sites grouped as the source groups them -- four sub-spins per red circle, wired to neighbours into one connected lattice; enclosure fill lighter than the source"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the three-by-three array of four-sub-spin sites wired into one connected lattice with open outer bonds matches the source grouping; the lighter enclosure fill is a public-theme choice (the bar)."
 
 [[verdict]]
 id = "rmp-workbench-ii-newfig7"
@@ -1021,7 +1059,7 @@ defects = ["missing-element"]
 case_sha256 = "3afa8ab06f286b75e13326b974d6a6dde1fd3454a689a405bc2c07fc6986acdc"
 reviewed = "2026-07-30"
 renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "east cup draws; the second sandwich sum has two triangles where the source has four"
+note = "east cup draws; the second sandwich sum has two triangles where the source has four. Next: redraw the second summand with all four canonical triangles of the archival projector, then re-review"
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
@@ -1133,36 +1171,39 @@ note = "3D cube vs flat tilted grid idiom"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "0a6ee52a71831cbc7f9aa1c31e006ac8b248d8597f5088b3c42c16d35c927344"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "four legs, as in Eq50.pdf"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the one-site boundary atom carries all four source legs exactly as in the archival Eq50.pdf."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq51"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "08a15f4cc9b8daea21cfeba2213a44a97519903b4a298e173de37a3205aeb999"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the trace ring closes and every box carries both physical legs; hue plain where the source is red"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the X insertion and the MPO word close on the trace ring with every box carrying both physical legs, as in Eq51.pdf; plain semantic ink versus source red is a public-theme choice (the bar)."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq52"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "ac424a4e025130027e9385f154ae3d85820a19d8c1c2cd063fc1edfa5a1908f9"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "ring closed, legs restored; hue plain where the source is red"
+reviewed = "2026-08-04"
+renderer = "kimi-k2-rereview-2026-08-04-200dpi"
+second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
+note = "K2 promotion: the X-ring plus one MPO atom closes on the trace with both physical indices open and the map named beside, as in Eq52.pdf; plain semantic ink versus source red is a public-theme choice (the bar)."
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-one"
@@ -1341,10 +1382,10 @@ id = "rmp-workbench-iii-mpo-on-peps-definition"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "1acebc0101c5d39b652a5f09d8211b1886cc6dbb5d7c2827b178920b568448b5"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "hatching, hue, center placement"
+case_sha256 = "447c6784df2f8422b68302ecde35cbb5551741acaf15cc92cb997d4ca94e309e"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
+note = "Kernel stock MPO skin (#5362); the abstraction still drops the source's hatching, red hue, and centered star, and the ring reads as straight chords since bond ink does not yet carry arc curvature."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq60-now"
@@ -1384,10 +1425,10 @@ id = "rmp-workbench-iii-g-injective-mpo"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "a01130b8ea5e8d09d982e5cee990561f8b42cb6d1a3fb18be81b3ef49ff73be8"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "circles to squares; leg stubs dropped"
+case_sha256 = "e898ddca0f425f8730f2c8025b8f7bc929f76380f79f1d9590f3b524628c6e76"
+reviewed = "2026-08-04"
+renderer = "kimi-kernel-mpo-source-review-2026-08-04-200dpi"
+note = "The X row is resolved: the eight labelled half-edges and the plaquette bonds are all drawn, with the sector labels stacked as in the source. Residue: the house box stands in for the source's circle glyph."
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-one"

@@ -1,30 +1,40 @@
 % Target: rmp-iii-a-mpo-injective
 % Formula: A PEPS tensor equals its virtual MPO ring pulled around the tensor.
-% Ink: Canonical public tenkzfree PEPS star and four-site MPO closure.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362).
 % Boundary: Five PEPS legs remain open; the surrounding MPO is closed.
 % Source: paper TN-Review-main.tex line 1505; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 521-537
-% Capabilities: free-graph, ring-closure, pulling-through
+% Capabilities: kernel, ring-closure, pulling-through
 \[
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
-    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{0mm,14mm}
-    \tnjoin{A}{0mm,7mm}
-  \end{tenkzfree}
-  =
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[mpo]{W}{(-10mm,0mm)}{}
-    \tnput[mpo]{N}{(0mm,10mm)}{}
-    \tnput[mpo]{E}{(10mm,0mm)}{}
-    \tnput[mpo]{S}{(0mm,-10mm)}{}
-    \tnjoin[route=arc]{W.north}{N.west}
-    \tnjoin[route=arc]{N.east}{E.north}
-    \tnjoin[route=arc]{E.south}{S.east}
-    \tnjoin[route=arc]{S.west}{W.south}
-    \tnjoin{-18mm,0mm}{W.west} \tnjoin{E.east}{18mm,0mm}
-    \tnjoin{0mm,-18mm}{S.south} \tnjoin{N.north}{0mm,18mm}
-    \tnjoin{A}{0mm,7mm}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkzeq}
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      % The physical leg takes its own bearing and stays source-short; the
+      % 0.7 figure overlapped it with the north virtual leg.
+      \tn[at=(2,2), name=A, skin=dot, label pos=270,
+        ports={0:virtual, 45:physical, 90:virtual, 180:virtual,
+          270:virtual}]{A}
+      \tnwire{open w}{A.180} \tnwire{A.0}{open e}
+      \tnwire{open s}{A.270} \tnwire{A.90}{open n}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      \tn[at=(2,2), name=A, skin=dot, label pos=270,
+        ports={45:physical}]{A}
+      \tn[skin=mpo, at=(2,1), name=W,
+        ports={90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(1,2), name=N,
+        ports={0:virtual, 90:virtual, 180:virtual}]{}
+      \tn[skin=mpo, at=(2,3), name=E,
+        ports={0:virtual, 90:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,2), name=S,
+        ports={0:virtual, 180:virtual, 270:virtual}]{}
+      \tnwire[route=arc]{W.90}{N.180}
+      \tnwire[route=arc]{N.0}{E.90}
+      \tnwire[route=arc]{E.270}{S.0}
+      \tnwire[route=arc]{S.180}{W.270}
+      \tnwire{open w}{W.180} \tnwire{E.0}{open e}
+      \tnwire{open s}{S.270} \tnwire{N.90}{open n}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

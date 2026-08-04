@@ -1,19 +1,23 @@
 % Target: rmp-ii-zcl-mpdo
 % Formula: For E = tr_phys(M), the zero-correlation condition is E composed with E = E.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration (#5362).
 % Boundary: Every physical pair is traced; only the west and east virtual ends remain
 %   open.
 % Source: paper TN-Review-main.tex line 939; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 702-713
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
+  \tenkzkernel
   % LHS: E . E - two physically-traced tensors sharing one virtual bond
-  \begin{tenkz}[physical=updown, trace=physical]
-    \tn[mpo]{M} & \tn[mpo]{M}
+  \begin{tenkz}[rows={wire}, cols=2, physical=updown, trace=physical]
+    \tn[skin=mpo, name=M1, ports={0:virtual, 180:virtual}]{M} &
+    \tn[skin=mpo, name=M2, ports={0:virtual, 180:virtual}]{M}
+    \tnwire{open w}{M1.180} \tnwire{M2.0}{open e}
   \end{tenkz}
   \;=\;
   % RHS: E - one physically-traced tensor
-  \begin{tenkz}[physical=updown, trace=physical]
-    \tn[mpo]{M}
+  \begin{tenkz}[rows={wire}, cols=1, physical=updown, trace=physical]
+    \tn[skin=mpo, name=M, ports={0:virtual, 180:virtual}]{M}
+    \tnwire{open w}{M.180} \tnwire{M.0}{open e}
   \end{tenkz}
 \]
