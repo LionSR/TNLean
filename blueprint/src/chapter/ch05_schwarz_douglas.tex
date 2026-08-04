@@ -2,6 +2,7 @@
 
 \begin{theorem}[Douglas factorisation]\label{thm:douglas_tfae}
   \lean{Douglas.douglas_tfae}
+  \uses{def:pinv, lem:mul_pinv_eq_supportProj}
   \leanok
   Let $A, B \in \MN{D}$. The following are equivalent:
   \begin{enumerate}
@@ -29,14 +30,14 @@
 \begin{theorem}[Explicit factorization via pseudoinverse]\label{thm:factorization_pinv}
   \lean{Douglas.factorization_pinv}
   \leanok
-  \uses{def:pinv, thm:douglas_tfae}
+  \uses{def:pinv, lem:mul_pinv_eq_supportProj}
   If $\range(A) \subseteq \range(B)$, then $A = B \cdot (B^+ A)$.
 \end{theorem}
 
 \begin{theorem}[Uniqueness of the pseudoinverse factorization]\label{thm:factorization_unique}
   \lean{Douglas.factorization_unique}
   \leanok
-  \uses{def:pinv, thm:douglas_tfae}
+  \uses{def:pinv, lem:mul_pinv_eq_supportProj}
   If $A = B C_1 = B C_2$ and $\range(C_1), \range(C_2) \subseteq \range(B^\dagger)$,
   then $C_1 = C_2$. In particular, $C = B^+ A$ is the unique such factor.
 \end{theorem}

@@ -8,7 +8,7 @@ import TNLean.Analysis.MatrixSqrt
 import Mathlib.Data.Matrix.Block
 
 /-!
-# Block Schur complements (Wolf §5.1, Theorem 5.2)
+# Block Schur complements (Wolf Theorem 5.2)
 
 For a self-adjoint 2×2 block matrix `M = [[P, Q], [Q†, R]]`
 with `P, R` PSD, the following are equivalent:
