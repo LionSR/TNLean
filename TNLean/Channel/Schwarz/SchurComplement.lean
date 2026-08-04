@@ -25,6 +25,14 @@ with `P, R` PSD, the following are equivalent:
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open Matrix
 
+
+/-- Equal matrices have equal supportInvs (proof-irrelevant after substitution). -/
+theorem Matrix.PosSemidef.supportInv_congr {n : Type*} [Fintype n] [DecidableEq n]
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) (hAB : A = B) :
+    hA.supportInv = hB.supportInv := by
+  cases hAB; rfl
+
+
 namespace SchurComplement
 
 variable {D₁ D₂ : ℕ}
