@@ -39,11 +39,13 @@
     \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90}
     \tnwire{a3.270}{b3.90} \tnwire{a4.270}{b4.90}
     % Neither form=bracket nor the retired brace-below word draws yet in
-    % the executable kernel (K1, only label and enclosure render), and
-    % neither a .. range nor a braced list draws as a mark target yet
-    % either (K1); a south label at the midpoint of the four-bead span
-    % keeps the n annotation.
+    % the executable kernel (K1, tracked in #5482); a south label at the
+    % midpoint of the four-bead span keeps the n annotation.
     \tnmark[form=label, label pos=s]{midway b1 and b4}{n}
+    % The source marks the cut with a dashed red rectangle around the
+    % four contracted columns; the house enclosure mark draws the same
+    % region.
+    \tnmark[form=enclosure, slot=secondary]{(1,2) .. (2,5)}{}
   \end{tenkz}
   \right)
 \]

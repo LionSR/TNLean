@@ -1458,3 +1458,27 @@ two-sheet population, the claimed member, the per-sheet bead offsets
 through the plane map, and the via-routed sheet strings.
 
 Census-correction: #5348
+
+### 2026-08-05 — wave 1B: seven Section-II panels move to the kernel tier
+
+The Section-II spectra-and-canonical-form family — the reduced-density
+racetrack, its eig twin, the transfer-operator ladder, the fixed-point
+capsule pair, the one-site isometry, the SV17 approximation chain, and
+the left-canonical triangle — leaves the grid tier for kernel flat
+frames with declared typed ports.  The isometry and state atoms take the
+stock pill skin.  The Fable verification pass corrected three renders
+against the sources before landing: the two racetracks re-open their
+physical legs (grid bonds had contracted every vertical pair the source
+leaves open), the SV17 marginal keeps its ket legs up and bra legs down
+(an operator, not its trace), and the transfer ladder now draws the
+source's cut region as the house enclosure.  The fixed-point pair's fold
+draws flush with the capsule edge on the kernel — a rendering regression
+from the grid cup, re-graded honestly to a cosmetic gap.
+
+M4 rises from 19.15 to 19.75 because the kernel cases name every port,
+rail, and closure that the grid rows and sandwich words implied.  The
+physical-dimension census is unchanged at 478 sites (route/string 260,
+composition/layout 218); no ceiling moves.  No parser spelling, registry
+row, alias, escape, or overload is added or removed.
+
+Census-correction: #5347
