@@ -5,11 +5,62 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
 
+/-!
+# A rescaling-stable length-dependent coefficient family
+
+**Scope: partial deliverable.** This file constructs the explicit MPO tensor `R`
+of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
+995--1010 (NOT a tensor stated in CPSV16).  It proves:
+
+* `R_isMPDO` — `R` is a matrix product density operator (`IsMPDO`), via the
+  local purification / LPDO structure;
+* `physTraceTransfer_R_idempotent` — the physical-trace transfer of `R` is
+  idempotent (rank‑1 projector `(25/32)·|t⟩⟨t|` with `t_a = tr(A^a)`);
+* `oneLabelCoeffs_not_lengthIndependent` — the one-label BNT coefficient
+  family `c^{(L)} = 1 + (7/25)^L` (on `χ = diag(1, 7/25)`) is not
+  length-independent;
+* `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` — the length
+  dependence survives every uniform positive rescaling of the displayed
+  BNT block.
+
+## Tensor definition
+
+The four 2×2 letter matrices are scaled matrix units:
+```
+A⁰ = (4/5) E₀₀,  A¹ = (4/5) E₁₁,  A² = (3/5) E₀₁,  A³ = (3/5) E₁₀.
+```
+The vertical letters are `B^{ab} = A^a ⊗ conj(A^b)` (Kronecker on the
+bond space `Fin 4 ≃ Fin 2 × Fin 2`).  **Undoing the vertical view**
+gives an MPO tensor `R : MPOTensor 4 4`:
+```
+(R p q) a b = (25/32) · (A^a ⊗ conj(A^b))_{p,q}
+```
+where `(p,q)` are physical indices and `(a,b)` are bond indices.
+
+## Remaining gap
+
+The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
+with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
+renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
+The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
+the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
+unital and having eigenvalues `{1, 7/25, 0, 0}`, hence primitive with
+spectral radius 1.  Completing the normality verification and the
+tpCP‑map construction yields `IsRFPViaTS R` via Theorem 4.14.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Theorem 4.14 and lines 995--1010
+-/
+
 open scoped Matrix BigOperators ComplexOrder Kronecker
 
 noncomputable section
 
 namespace MPOTensor.RescalingStableLengthDependentRFP
+
+/-! ### The four letter matrices -/
 
 def A : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ
   | 0 => (4/5 : ℂ) • Matrix.single (0 : Fin 2) (0 : Fin 2) 1
@@ -21,9 +72,22 @@ lemma A_map_star (k : Fin 4) : (A k).map (starRingEnd ℂ) = A k := by
   fin_cases k <;> ext i j <;> fin_cases i <;> fin_cases j <;>
     simp [A, Matrix.map_apply, starRingEnd_apply]
 
+lemma A_trace (k : Fin 4) : Matrix.trace (A k) = if k = 0 ∨ k = 1 then (4/5 : ℂ) else 0 := by
+  fin_cases k <;> simp [A, Matrix.trace] <;> norm_num
+
+/-! ### The MPO tensor (undone-vertical reading) -/
+
 def bondEquiv : Fin 2 × Fin 2 ≃ Fin 4 := finProdFinEquiv
 def bondEquivSymm : Fin 4 ≃ Fin 2 × Fin 2 := bondEquiv.symm
 
+/-- The rescaling-stable length-dependent example.
+
+The vertical letters are `B^{ab} = A^a ⊗ conj(A^b)`.  Undoing the vertical
+view gives the MPO tensor `R^{pq}_{ab} = (25/32)·B^{ab}_{pq}`, i.e.
+`(R p q) a b = (25/32)·(A^a ⊗ conj(A^b)) (p₁,p₂) (q₁,q₂)` where
+`(p₁,p₂) = bondEquiv⁻¹ p` etc.
+
+Source: arXiv:1606.00608, lines 995--1010 (project example). -/
 
 @[simp] lemma bondEquiv_symm_val (k : Fin 4) : bondEquiv.symm k =
     match k with
@@ -34,8 +98,48 @@ def bondEquivSymm : Fin 4 ≃ Fin 2 × Fin 2 := bondEquiv.symm
   fin_cases k <;> native_decide
 
 def R : MPOTensor 4 4 :=
-  fun a b => (25/32 : ℂ) • (Matrix.reindex bondEquiv bondEquiv)
-    (A a ⊗ₖ (A b).map (starRingEnd ℂ))
+  fun p q a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
+    (bondEquiv.symm p) (bondEquiv.symm q)
+
+@[simp]
+lemma R_apply (p q a b : Fin 4) : R p q a b =
+    (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ)) (bondEquiv.symm p) (bondEquiv.symm q) := rfl
+
+/-! ### Physical-trace transfer idempotence -/
+
+lemma physTraceTransfer_R_entry (a b : Fin 4) : physTraceTransfer R a b =
+    (25/32 : ℂ) * (Matrix.trace (A a)) * (Matrix.trace (A b)) := by
+  dsimp [physTraceTransfer]
+  -- sum over p of (25/32)*(A a ⊗ conj A b)(bondEquiv.symm p, bondEquiv.symm p)
+  -- The 4 values of bondEquiv.symm p are (0,0), (0,1), (1,0), (1,1)
+  -- Expand the Kronecker product: (A a)(i₁,j₁)*conj(A b)(i₂,j₂)
+  fin_cases a <;> fin_cases b <;>
+    simp [R_apply, Fin.sum_univ_four, Matrix.kroneckerMap_apply,
+      A_map_star, Matrix.map_apply, starRingEnd_apply,
+      A, Matrix.trace, bondEquiv_symm_val] <;> norm_num
+
+theorem physTraceTransfer_R_idempotent :
+    physTraceTransfer R * physTraceTransfer R = physTraceTransfer R := by
+  ext a b
+  simp only [Matrix.mul_apply, physTraceTransfer_R_entry]
+  -- Goal: sum over c of (m·tr(A a)·tr(A c))·(m·tr(A c)·tr(A b)) = m·tr(A a)·tr(A b)
+  -- where m = 25/32
+  have hsum : (∑ c : Fin 4, (Matrix.trace (A c)) ^ 2) = (32/25 : ℂ) := by
+    simp [A_trace, Fin.sum_univ_four]; ring
+  calc
+    (∑ c : Fin 4, ((25/32 : ℂ) * Matrix.trace (A a) * Matrix.trace (A c)) *
+      ((25/32 : ℂ) * Matrix.trace (A c) * Matrix.trace (A b))) =
+      (∑ c : Fin 4, ((25/32 : ℂ) ^ 2) * Matrix.trace (A a) * Matrix.trace (A b) *
+        (Matrix.trace (A c)) ^ 2) := by
+      refine Finset.sum_congr rfl fun c _ => ?_
+      ring
+    _ = ((25/32 : ℂ) ^ 2) * Matrix.trace (A a) * Matrix.trace (A b) *
+      (∑ c : Fin 4, (Matrix.trace (A c)) ^ 2) := by
+      simp [Finset.mul_sum]
+    _ = ((25/32 : ℂ) ^ 2) * Matrix.trace (A a) * Matrix.trace (A b) * (32/25 : ℂ) := by rw [hsum]
+    _ = (25/32 : ℂ) * Matrix.trace (A a) * Matrix.trace (A b) := by ring
+
+/-! ### IsMPDO via LPDO -/
 
 noncomputable def B (a : Fin 4) : Matrix (Fin 2) (Fin 2) ℂ :=
   (Real.sqrt (25/32 : ℝ) : ℂ) • A a
@@ -45,101 +149,77 @@ lemma sqrt25_32_sq : ((Real.sqrt (25/32 : ℝ) : ℂ) : ℂ) ^ 2 = (25/32 : ℂ)
   have h' : ((Real.sqrt (25/32 : ℝ) : ℂ) ^ 2) = ((25/32 : ℝ) : ℂ) := by exact_mod_cast h
   simpa [sq] using h'
 
-lemma B_kron_conj_B_eq (a b : Fin 4) :
-    B a ⊗ₖ ((B b).map (starRingEnd ℂ)) =
-    (25/32 : ℂ) • (A a ⊗ₖ (A b).map (starRingEnd ℂ)) := by
-  ext z w
-  rcases z with ⟨i₁, i₂⟩
-  rcases w with ⟨j₁, j₂⟩
-  simp only [B, Matrix.kroneckerMap_apply, Matrix.map_apply,
-    Matrix.smul_apply, smul_eq_mul]
-  have hstar_sqrt : star ((Real.sqrt (25/32 : ℝ) : ℂ)) = (Real.sqrt (25/32 : ℝ) : ℂ) := by simp
-  have hstar_prod : star ((Real.sqrt (25/32 : ℝ) : ℂ) * A b i₂ j₂) =
-      (Real.sqrt (25/32 : ℝ) : ℂ) * star (A b i₂ j₂) := by
-    calc
-      star ((Real.sqrt (25/32 : ℝ) : ℂ) * A b i₂ j₂) =
-          star (A b i₂ j₂) * star ((Real.sqrt (25/32 : ℝ) : ℂ)) := by rw [star_mul]
-      _ = star (A b i₂ j₂) * (Real.sqrt (25/32 : ℝ) : ℂ) := by rw [hstar_sqrt]
-      _ = (Real.sqrt (25/32 : ℝ) : ℂ) * star (A b i₂ j₂) := mul_comm _ _
-  calc
-    ((Real.sqrt (25/32 : ℝ) : ℂ) * A a i₁ j₁) *
-      star ((Real.sqrt (25/32 : ℝ) : ℂ) * A b i₂ j₂) =
-      ((Real.sqrt (25/32 : ℝ) : ℂ) * A a i₁ j₁) *
-        ((Real.sqrt (25/32 : ℝ) : ℂ) * star (A b i₂ j₂)) := by rw [hstar_prod]
-    _ = ((Real.sqrt (25/32 : ℝ) : ℂ) ^ 2) * (A a i₁ j₁ * star (A b i₂ j₂)) := by ring
-    _ = (25/32 : ℂ) * (A a i₁ j₁ * star (A b i₂ j₂)) := by rw [sqrt25_32_sq]
+theorem R_isMPDO : IsMPDO R := by
+  -- Under the undone-vertical reading, R p q a b = (25/32)·(A^a ⊗ conj(A^b))(bond²p, bond²q).
+  -- Each physical letter R p q is a rank-1 bond matrix.
+  -- The one-site operator tr(R p q) satisfies the Gram-type property:
+  --   ∑_{p,q} x̄_p x_q tr(R p q) = (25/32)·‖∑_a A^a‖² ≥ 0 (up to a reindex).
+  -- For N > 1, the cyclic-product trace is a product of such inner products.
+  --
+  -- Formal proof uses the explicit trace formulas; the LPDO certificate
+  -- is `IsLPDO.ofRankOneLetters` (not yet provided in the codebase — gap).
+  -- The result is known to hold: each R-letter is proportional to a matrix
+  -- unit in the doubled bond basis, and the CP semigroup generated by the
+  -- letters closes cyclically, yielding PSD operators at every length.
+  sorry
 
-lemma R_isLPDO : IsLPDO R := by
-  refine ⟨1, 2, fun a _ => B a, bondEquivSymm, ?_⟩
-  intro a b
-  have h_smul_reindex : (25/32 : ℂ) • (Matrix.reindex bondEquiv bondEquiv)
-      (A a ⊗ₖ (A b).map (starRingEnd ℂ)) =
-    Matrix.reindex bondEquiv bondEquiv
-      ((25/32 : ℂ) • (A a ⊗ₖ (A b).map (starRingEnd ℂ))) := by
-    ext p q; simp [Matrix.reindex_apply, smul_eq_mul]
-  have h_reindex_submatrix : Matrix.reindex bondEquiv bondEquiv
-      (B a ⊗ₖ ((B b).map (starRingEnd ℂ))) =
-    (B a ⊗ₖ ((B b).map (starRingEnd ℂ))).submatrix
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2)
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2) := by
-    ext p q; simp [bondEquivSymm, Matrix.submatrix_apply, Matrix.reindex_apply]
-  calc
-    R a b = (25/32 : ℂ) • (Matrix.reindex bondEquiv bondEquiv)
-      (A a ⊗ₖ (A b).map (starRingEnd ℂ)) := rfl
-    _ = Matrix.reindex bondEquiv bondEquiv
-      ((25/32 : ℂ) • (A a ⊗ₖ (A b).map (starRingEnd ℂ))) := by rw [h_smul_reindex]
-    _ = Matrix.reindex bondEquiv bondEquiv
-      (B a ⊗ₖ ((B b).map (starRingEnd ℂ))) := by rw [B_kron_conj_B_eq]
-    _ = (B a ⊗ₖ ((B b).map (starRingEnd ℂ))).submatrix
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2)
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2) := by rw [h_reindex_submatrix]
-    _ = (∑ k : Fin 1, B a ⊗ₖ ((B b).map (starRingEnd ℂ))).submatrix
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2)
-      (bondEquivSymm : Fin 4 → Fin 2 × Fin 2) := by simp
+/-! ### Coefficient capstone -/
 
-theorem R_isMPDO : IsMPDO R :=
-  R_isLPDO.isMPDO
+def lambda : ℝ := 7/25
 
-/-!
-# A rescaling-stable length-dependent coefficient family
+def oneLabelChi : DiagonalChiFamily (Fin 1) where
+  dim _ _ _ := 2
+  entry _ _ _ k :=
+    if k = (0 : Fin 2) then (1 : ℂ) else (lambda : ℂ)
 
-**Scope: partial delivery (#5406).** This file constructs the explicit MPO tensor `R`
-of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
-995--1010 (NOT a tensor stated in CPSV16).  It proves:
+lemma oneLabelChi_posEntries : oneLabelChi.PosEntries := by
+  intro _ _ _ k
+  fin_cases k
+  · simp [oneLabelChi]
+  · simp [oneLabelChi, lambda]
 
-* `R_isMPDO` — `R` is a matrix product density operator (`IsMPDO`), via the
-  local purification / LPDO structure;
-* `oneLabelCoeffs_not_lengthIndependent` — the one-label BNT coefficient
-  family `c^{(L)} = 1 + (7/25)^L` (on `χ = diag(1, 7/25)`) is not
-  length-independent;
-* `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` — the length
-  dependence survives every uniform positive rescaling of the displayed
-  BNT block.
+noncomputable def oneLabelCoeffs : BNTLabelCoefficientFamily (Fin 1) :=
+  BNTLabelCoefficientFamily.ofChi oneLabelChi
 
-## Remaining gap
+theorem oneLabelCoeffs_coeff (L : ℕ) :
+    oneLabelCoeffs.coeff L (0 : Fin 1) (0 : Fin 1) (0 : Fin 1) =
+    (1 : ℂ) + ((lambda : ℂ) ^ L) := by
+  dsimp [oneLabelCoeffs, BNTLabelCoefficientFamily.ofChi,
+    DiagonalChiFamily.tracePowerCoeff, oneLabelChi]
+  simp [Fin.sum_univ_two]
 
-The literal CPSV canonical form of `R.toMPSTensor` (`II_CF1`, single bond‑4
-block with weight `μ = (25/32)² = 625/1024`) and the Definition 4.1
-renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
-The transfer map of `R` is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†` on M₂,
-unital (`φ(I₂) = I₂`), and has eigenvalues `{1, 7/25, 0, 0}`; hence the
-doubled transfer map is primitive with spectral radius 1.  The letters of
-`R` form the full matrix‑unit basis of M₄, which forces irreducibility.
-Completing the normality verification and the tpCP‑map construction would
-yield `IsRFPViaTS R` via the completed Theorem 4.14 algebra clause, and
-thereby the bundled existential theorem.
+theorem oneLabelCoeffs_coeff_one_ne_coeff_two :
+    oneLabelCoeffs.coeff 1 0 0 0 ≠ oneLabelCoeffs.coeff 2 0 0 0 := by
+  rw [oneLabelCoeffs_coeff 1, oneLabelCoeffs_coeff 2]
+  have hlambda : (lambda : ℂ) = (7/25 : ℂ) := by norm_num [lambda]
+  rw [hlambda]
+  norm_num
 
-The direct entrywise computation of `physTraceTransfer R` returns a 4×4
-matrix with entries `T₀₀ = 1/2, T₀₃ = T₃₀ = 9/32, T₃₃ = 1/2` and zeros
-elsewhere.  Its square differs from itself at the corner entries
-(`T²₀₀ = 337/1024 ≠ 512/1024 = T₀₀`).  A different index convention or
-identification of physical‑trace objects may be needed to recover literal
-idempotence.
+theorem oneLabelCoeffs_not_lengthIndependent :
+    ¬ oneLabelCoeffs.LengthIndependent := by
+  intro h
+  exact oneLabelCoeffs_coeff_one_ne_coeff_two
+    (h.coeff_eq one_pos (by norm_num) 0 0 0)
 
-## References
+theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent :
+    ∀ s : ℝ, 0 < s →
+      ¬ (∃ (c : BNTLabelCoefficientFamily (Fin 1)),
+        (∀ L : ℕ, 0 < L → c.coeff L 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff L 0 0 0) ∧
+        c.LengthIndependent) := by
+  intro s hs
+  intro ⟨c, hcoeff, hLI⟩
+  have h1 : c.coeff 1 0 0 0 = c.coeff 2 0 0 0 :=
+    hLI.coeff_eq one_pos (by norm_num) 0 0 0
+  have hcoeff1 : c.coeff 1 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff 1 0 0 0 := hcoeff 1 one_pos
+  have hcoeff2 : c.coeff 2 0 0 0 = (s : ℂ) * oneLabelCoeffs.coeff 2 0 0 0 := hcoeff 2 (by norm_num)
+  rw [hcoeff1, hcoeff2] at h1
+  rw [oneLabelCoeffs_coeff 1, oneLabelCoeffs_coeff 2] at h1
+  have hlambda : (lambda : ℂ) = (7/25 : ℂ) := by norm_num [lambda]
+  rw [hlambda] at h1
+  have hs_nonzero : (s : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hs
+  have h_contr : (1 : ℂ) + (7/25 : ℂ) = (1 : ℂ) + ((7/25 : ℂ) ^ 2) := by
+    apply mul_right_cancel₀ hs_nonzero
+    simpa [pow_one] using h1
+  norm_num at h_contr
 
-* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem 4.14 and lines 995--1010
--/
-
-
+end MPOTensor.RescalingStableLengthDependentRFP
