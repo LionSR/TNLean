@@ -55,6 +55,6 @@ theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix 
     dotProduct (star x) (mulVec P x) + dotProduct (star x) (mulVec Q y) +
     dotProduct (star y) (mulVec (Qᴴ) x) + dotProduct (star y) (mulVec R y) := by
   rw [blockMatrix, Matrix.fromBlocks_mulVec P Q (Qᴴ) R (Sum.elim x y)]
-  simp [dotProduct_add, dotProduct]
+  simp only [dotProduct, Matrix.mulVec, Finset.sum_add_distrib, mul_add, add_comm, add_left_comm, add_assoc]
 
 end SchurComplement
