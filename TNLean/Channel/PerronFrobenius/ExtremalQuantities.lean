@@ -11,7 +11,6 @@ import TNLean.Channel.Schwarz.PositiveMapProperties
 
 Wolf Chapter 6, Eqs. (6.29)--(6.30).
 
-## TODO
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
