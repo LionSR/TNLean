@@ -147,17 +147,8 @@ theorem physTraceTransfer_R_idempotent :
     _ = ((25/32 : ℂ) ^ 2) * Matrix.trace (A a) * Matrix.trace (A b) * (32/25 : ℂ) := by rw [hsum]
     _ = (25/32 : ℂ) * Matrix.trace (A a) * Matrix.trace (A b) := by ring
 
-/-! ### IsMPDO via LPDO -/
+/-! ### The tensor and its transfer -/
 
-noncomputable def B (a : Fin 4) : Matrix (Fin 2) (Fin 2) ℂ :=
-  (Real.sqrt (25/32 : ℝ) : ℂ) • A a
-
-lemma sqrt25_32_sq : ((Real.sqrt (25/32 : ℝ) : ℂ) : ℂ) ^ 2 = (25/32 : ℂ) := by
-  have h := Real.sq_sqrt (show 0 ≤ (25/32 : ℝ) by norm_num)
-  have h' : ((Real.sqrt (25/32 : ℝ) : ℂ) ^ 2) = ((25/32 : ℝ) : ℂ) := by exact_mod_cast h
-  simpa [sq] using h'
-
-/-! ### Coefficient capstone -/
 
 def lambda : ℝ := 7/25
 
