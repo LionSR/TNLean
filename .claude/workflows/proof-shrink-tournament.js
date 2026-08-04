@@ -10,8 +10,10 @@ export const meta = {
   ],
 }
 
-const ROOT = '/Users/siruilu/Local/agentFormalization/TNLean'
-const PRE = '/private/tmp/claude-501/-Users-siruilu-Local-agentFormalization-TNLean/7ddfce32-aa15-4130-a917-bc187225b6de/scratchpad/demolition_precompute.json'
+const ROOT = process.env.TNLEAN_ROOT || process.cwd()
+// Optional precompute JSON (import-closure metrics); set TNLEAN_SHRINK_PRECOMPUTE
+// to its path when available, otherwise the lenses compute what they need.
+const PRE = process.env.TNLEAN_SHRINK_PRECOMPUTE || '<unset: run scripts to regenerate>'
 
 const CTX = `You are running a DEMOLITION AUDIT of TNLean, a Lean 4 / Mathlib v4.32 formalization of the
 Fundamental Theorem of Matrix Product States, quantum Wielandt theory, and quantum-channel
@@ -276,8 +278,8 @@ const found = await parallel(LENSES.map(l => () =>
   agent(`${CTX}\n\n${l.prompt}\n\nReturn your 3-6 largest net-deletion candidates for this lens.`,
     { label: `find:${l.key}`, phase: 'Find', schema: FIND_SCHEMA })
 ))
-const allFindings = found.filter(Boolean).flatMap((r, i) =>
-  r.findings.map(f => ({ ...f, lens: LENSES[i] ? LENSES[i].key : 'unknown' })))
+const allFindings = found.flatMap((r, i) =>
+  (r ? r.findings : []).map(f => ({ ...f, lens: LENSES[i] ? LENSES[i].key : 'unknown' })))
 log(`Collected ${allFindings.length} raw candidates; claimed gross ${allFindings.reduce((s, f) => s + (f.gross_lines || 0), 0)} lines`)
 
 phase('Merge')
@@ -339,16 +341,18 @@ CANDIDATE:\n${JSON.stringify(c, null, 1)}`,
   })
 ))
 const surviving = verified.filter(Boolean).filter(v => {
-  const saOk = v.safety ? v.safety.confirmed : true
-  const nlOk = v.netloc ? v.netloc.confirmed : true
+  // A missing or falsy verifier is a failure, never a pass: candidates
+  // survive only on an explicit confirmed=true from both verifiers.
+  const saOk = v.safety ? v.safety.confirmed === true : false
+  const nlOk = v.netloc ? v.netloc.confirmed === true : false
   return saOk && nlOk
 })
-log(`${surviving.length}/${cands.length} candidates survived; verified net ${surviving.reduce((s, v) => s + Math.min(v.safety ? v.safety.corrected_net_deletable : 1e9, v.netloc ? v.netloc.corrected_net_deletable : 1e9), 0)} lines`)
+log(`${surviving.length}/${cands.length} candidates survived; verified net ${surviving.reduce((s, v) => s + Math.min((v.safety && v.safety.confirmed === true) ? v.safety.corrected_net_deletable : 0, (v.netloc && v.netloc.confirmed === true) ? v.netloc.corrected_net_deletable : 0), 0)} lines`)
 
 phase('Rank')
 const compact = surviving.map(v => ({
   id: v.id, title: v.title, category: v.category,
-  net_deletable: Math.min(v.safety ? v.safety.corrected_net_deletable : 1e9, v.netloc ? v.netloc.corrected_net_deletable : 1e9),
+  net_deletable: Math.min((v.safety && v.safety.confirmed === true) ? v.safety.corrected_net_deletable : 0, (v.netloc && v.netloc.confirmed === true) ? v.netloc.corrected_net_deletable : 0),
   risk: Math.max(v.safety ? v.safety.risk_1_10 : 0, v.netloc ? v.netloc.risk_1_10 : 0),
   safety_notes: v.safety ? v.safety.notes : '', netloc_notes: v.netloc ? v.netloc.notes : '',
   math_justification: v.math_justification,
@@ -398,6 +402,6 @@ if (!final) throw new Error('synthesizer failed')
 
 return { plan: final.plan, total_net_deletable: final.total_net_deletable || null,
   rejected_note: final.rejected_note || '',
-  judge_rationales: rankings.filter(Boolean).map((r, i) => ({ judge: JUDGE_ANGLES[i].key, rationale: r.rationale })),
+  judge_rationales: rankings.flatMap((r, i) => r ? [{ judge: JUDGE_ANGLES[i].key, rationale: r.rationale }] : []),
   eliminated: verified.filter(Boolean).filter(v => !surviving.includes(v)).map(v => ({ id: v.id, title: v.title, why: (v.safety && !v.safety.confirmed) ? v.safety.notes : (v.netloc ? v.netloc.notes : 'verifier failed') })),
   raw_count: allFindings.length, merged_count: cands.length, surviving_count: surviving.length }

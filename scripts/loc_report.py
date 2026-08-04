@@ -12,6 +12,7 @@ Usage: python3 scripts/loc_report.py [--row-only]
 
 import argparse
 import datetime
+import hashlib
 import os
 import re
 import sys
@@ -68,7 +69,12 @@ def main():
         sorries += len(re.findall(r"\bsorry\b", text))
         stripped = [ln.strip() for ln in lines if ln.strip()]
         for i in range(len(stripped) - WINDOW + 1):
-            window_files[hash(tuple(stripped[i:i + WINDOW]))].add(rel)
+            # Stable digest: built-in hash() is salted per process and would
+            # make the duplicated-window count non-deterministic.
+            key = hashlib.sha1(
+                "\n".join(stripped[i:i + WINDOW]).encode("utf-8")
+            ).digest()
+            window_files[key].add(rel)
 
     dup_windows = sum(1 for fs in window_files.values() if len(fs) >= 2)
     today = datetime.date.today().isoformat()
