@@ -30,8 +30,9 @@ Lemma C.4 (lines 1406–1471), the active sector set is a singleton.
 Consequently the Case-I relations `T² = T` and `Q(1−LQ)L = 0` of Lemma `SALZCL`
 (lines 1473–1499) hold.
 
-The proof follows the refined route of the Lemma C.5 Case-I argument.
-
+The proof follows the route outlined in the paper-gap note
+`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` (arXiv:1606.00608,
+Appendix C.2, Lemma `SALZCL`, lines 1473--1499).
 ## Main declarations
 
 * `activeSectorTraceSqMatrix`: the matrix `S_{kh} = Re(tr(η_{kh}²))`
@@ -63,8 +64,7 @@ variable {d D : ℕ} (K : MPOTensor d D)
 /-- The active-sector trace-**squared** matrix:
 `S_{kh} = Re(tr(η_{kh}²))`.
 
-This is the matrix `S` of step 2 of the Lemma C.5 Case-I route.
-Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
+This is the matrix `S` defined in the Lemma C.5 Case-I proof.Each entry is bounded above by `T_{kh}²` where `T` is the active-sector trace
 matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/

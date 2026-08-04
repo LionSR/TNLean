@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.PerronFrobenius.SupportStabilization
 import TNLean.MPS.MPDO.CyclicActiveSuffixMarginal
 import TNLean.MPS.MPDO.SelectedFixedProductSectorVisibility
+import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
 
 /-!
 # Coefficients of adjacent cyclic-active suffix marginals
@@ -62,6 +63,7 @@ private def cyclicActiveSectorSubtypeEquiv
   left_inv q := by ext; rfl
   right_inv q := by ext; rfl
 
+<<<<<<< HEAD
 /-- The trace of the cyclic tensor product of neighboring operators equals
 the product of their individual traces.
 
@@ -100,6 +102,8 @@ theorem trace_cyclicNeighboringProduct_eq_prod_trace
         (fun i x ↦ F.neighboringOperator (k i) (k (i + 1)) x x)]
       simp only [Fintype.piFinset_univ]
 
+=======
+>>>>>>> 17724c7ed (refactor(MPS/MPDO): split cyclic-active trace identities and cite source notes)
 
 private def appendSectorFiberEquiv
     (F : PhysicalSectorFactorization K)
