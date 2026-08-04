@@ -1,0 +1,51 @@
+\section{Douglas Factorization}\label{sec:douglas}
+
+\begin{theorem}[Douglas factorisation]\label{thm:douglas_tfae}
+  \lean{Douglas.douglas_tfae}
+  \leanok
+  Let $A, B \in \MN{D}$. The following are equivalent:
+  \begin{enumerate}
+    \item $\range(A) \subseteq \range(B)$,
+    \item $A A^\dagger \le \mu B B^\dagger$ for some $\mu \ge 0$,
+    \item $A = B C$ for some $C \in \MN{D}$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{definition}[Pseudoinverse]\label{def:pinv}
+  \lean{Douglas.pinv}
+  \leanok
+  \uses{def:posSemidefBB}
+  The \emph{Moore-Penrose pseudoinverse} $B^+$ is defined via the support-generalised
+  inverse of $B B^\dagger$:
+  $B^+ := B^\dagger \cdot (B B^\dagger)^{-1}_{\mathrm{supp}}$.
+\end{definition}
+
+\begin{lemma}[Pseudoinverse-factorization identity]\label{lem:mul_pinv_eq_supportProj}
+  \lean{Douglas.mul_pinv_eq_supportProj}
+  \leanok
+  \uses{def:pinv, def:posSemidefBB}
+  $B \cdot B^+ = \operatorname{supportProj}(B B^\dagger)$.
+\end{lemma}
+
+\begin{theorem}[Explicit factorization via pseudoinverse]\label{thm:factorization_pinv}
+  \lean{Douglas.factorization_pinv}
+  \leanok
+  \uses{def:pinv, thm:douglas_tfae}
+  If $\range(A) \subseteq \range(B)$, then $A = B \cdot (B^+ A)$.
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the pseudoinverse factorization]\label{thm:factorization_unique}
+  \lean{Douglas.factorization_unique}
+  \leanok
+  \uses{def:pinv, thm:douglas_tfae}
+  If $A = B C_1 = B C_2$ and $\range(C_1), \range(C_2) \subseteq \range(B^\dagger)$,
+  then $C_1 = C_2$. In particular, $C = B^+ A$ is the unique such factor.
+\end{theorem}
+
+\begin{theorem}[Norm-minimal factorization]\label{thm:pinv_norm_minimal}
+  \lean{Douglas.pinv_norm_minimal}
+  \leanok
+  \uses{def:pinv}
+  For every factorisation $A = B C$, the pseudoinverse witness attains the minimal operator norm:
+  $\|B^+ A\| \le \|C\|$.
+\end{theorem}
