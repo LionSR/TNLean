@@ -245,10 +245,10 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
 
 The singleton-consequence theorem requires two additional pieces:
 
-1. **Trace similarity** `tr(S_tilde^N) = tr(S^N)` where
-   `(S_tilde)_{ij} = S_{ij} * v_j² / v_i²`.  This follows from
-   diagonal similarity `S_tilde = D_{v²}^{-1} S D_{v²}` and the
-   telescoping product argument `(S_tilde^N)_{ii} = (S^N)_{ii}`.
+1. **Trace similarity** `tr(S_hat^N) = tr(S^N)` where
+   `(S_hat)_{ij} = S_{ij} * v_j² / v_i²`.  This follows from
+   diagonal similarity `S_hat = D_{v²}^{-1} S D_{v²}` and the
+   telescoping product argument `(S_hat^N)_{ii} = (S^N)_{ii}`.
 
 2. **Overlap formula** `mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
    = Complex.ofReal(tr(S^N))` for `N > 0`.  Requires the
