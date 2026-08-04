@@ -10,6 +10,35 @@ import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.Analysis.Matrix.Normed
 import Mathlib.Analysis.Matrix.Order
 
+/-!
+# Douglas' theorem (Wolf Ch5, Theorem at line 88)
+
+Douglas' theorem for finite matrices: the range inclusion
+`ran A ⊆ ran B` is equivalent to a factorization `A = BC`
+and to a quadratic domination `AA† ≤ λ²BB†`.
+
+The Moore-Penrose pseudoinverse witness `C = pinv(B)·A`
+is constructed via `supportInv`; it satisfies the support constraint
+`supportProj(B·B†)·C = C` and is the unique minimizer of the
+operator norm `‖C‖`.
+
+## Main results
+
+* `douglas_tfae` : the three-way TFAE equivalence
+* `pinv` : Moore-Penrose pseudoinverse via `supportInv`
+* `mul_pinv_eq_supportProj` : `B·pinv(B) = supportProj(B·B†)`
+* `factorization_of_range_mulVecLin_le` : range inclusion → factorization
+* `le_norm_sq_mul_of_factorization` : `A = BC → AA† ≤ ‖C‖²·BB†`
+* `pinv_norm_minimal` : `‖pinv(B)·A‖ ≤ ‖C‖` for any factorization `A = BC`
+* `norm_pinv_mul_B_le_one` : `‖pinv(B)·B‖ ≤ 1` (contraction)
+* `factorization_unique` : uniqueness under the range constraint
+
+## References
+
+* [M. Wolf, *Quantum Channels & Operations*, Theorem at
+  Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex line 88][Wolf2012QChannels]
+-/
+
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open Matrix
 
@@ -86,7 +115,8 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
         simp [Matrix.mul_assoc]
       simpa [Matrix.IsHermitian] using h2'
     exact h1.sub h2
-  have h_nonneg : ∀ x, 0 ≤ star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) := by
+  have h_nonneg : ∀ x, 0 ≤ star x ⬝ᵥ
+      (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) := by
     intro x
     set y := Bᴴ *ᵥ x
     set z := Cᴴ *ᵥ y
@@ -115,7 +145,8 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
       have h_norm_Cstar : ‖Cᴴ‖ = ‖C‖ := Matrix.l2_opNorm_conjTranspose C
       rw [h_norm_Cstar] at h
       simpa [z] using h
-    have h_val : star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
+    have h_val : star x ⬝ᵥ
+        (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
         ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - (star z ⬝ᵥ z) := by
       calc
         star x ⬝ᵥ (((‖C‖ ^ 2 : ℝ) • (B * Bᴴ) - B * (C * Cᴴ) * Bᴴ) *ᵥ x) =
@@ -134,14 +165,18 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
       simp [sq]
     have h_sq_im : ((‖C‖ : ℂ) ^ 2).im = 0 := by
       simp [sq]
-    have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re = (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by
-      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) = ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
+    have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re =
+        (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by
+      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) =
+          ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
         simp [sq, mul_assoc]
       rw [h_eq, Complex.mul_re, Complex.mul_re]
       simp [sq]
       ring
-    have h_smul_im : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im = (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by
-      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) = ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
+    have h_smul_im : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).im =
+        (‖C‖ ^ 2) * (star y ⬝ᵥ y).im := by
+      have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) =
+          ((‖C‖ : ℂ) * ((‖C‖ : ℂ) * (star y ⬝ᵥ y))) := by
         simp [sq, mul_assoc]
       rw [h_eq, Complex.mul_im, Complex.mul_im]
       simp [sq]
@@ -186,7 +221,7 @@ theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ) (_hμ : 0 
   have h_RHS : Q * (μ • (B * Bᴴ)) * Q = 0 := by
     calc
       Q * (μ • (B * Bᴴ)) * Q = (μ : ℂ) • (Q * (B * Bᴴ) * Q) := by simp
-      _ = (μ : ℂ) • ((Q * (B * Bᴴ)) * Q) := by ring
+      _ = (μ : ℂ) • ((Q * (B * Bᴴ)) * Q) := by simp [Matrix.mul_assoc]
       _ = (μ : ℂ) • (0 * Q) := by rw [hQ_mul_BBstar]
       _ = 0 := by simp
   rw [h_RHS] at h_conj_ineq
@@ -256,7 +291,8 @@ theorem pinv_mul_B_idem (B : Mat) : (pinv B * B) * (pinv B * B) = pinv B * B := 
     _ = pinv B * (posSemidefBB B).supportProj * B := by rw [mul_pinv_eq_supportProj B]
     _ = pinv B * ((posSemidefBB B).supportProj * B) := by simp [Matrix.mul_assoc]
     _ = pinv B * B := by
-      simpa [posSemidefBB, Matrix.PosSemidef.supportProj] using congrArg (fun (M : Mat) => pinv B * M) h
+      simpa [posSemidefBB, Matrix.PosSemidef.supportProj] using
+        congrArg (fun (M : Mat) => pinv B * M) h
 
 /-- `(pinv B * B)` is Hermitian. -/
 theorem pinv_mul_B_herm (B : Mat) : (pinv B * B)ᴴ = pinv B * B := by
@@ -279,7 +315,8 @@ theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
     calc
       dotProduct (star y) (mulVec P y) = dotProduct (star y) (mulVec (P * P) y) := by rw [hP_idem]
       _ = dotProduct (star y) (mulVec P (mulVec P y)) := by rw [Matrix.mulVec_mulVec]
-      _ = dotProduct (star (mulVec (Pᴴ) y)) (mulVec P y) := by rw [star_dotProduct_mulVec P y (mulVec P y)]
+      _ = dotProduct (star (mulVec (Pᴴ) y)) (mulVec P y) := by
+        rw [star_dotProduct_mulVec P y (mulVec P y)]
       _ = dotProduct (star (mulVec P y)) (mulVec P y) := by rw [hP_herm]
   -- I-P is also a projection
   let IP := 1 - P
@@ -303,16 +340,14 @@ theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
         _ = dotProduct (star (mulVec IP y)) (mulVec IP y) := by rw [hIP_herm]
         _ ≥ 0 := dotProduct_star_self_nonneg _
     -- ⟨y,(I-P)·y⟩ = ⟨y,y⟩ − ⟨y,P·y⟩
-    have dot_sub_right (a b c : Fin D → ℂ) : dotProduct a (b - c) = dotProduct a b - dotProduct a c := by
-      simp [dotProduct, Finset.sum_sub_distrib, mul_sub]
     have h_expand : dotProduct (star y) (mulVec IP y) =
         dotProduct (star y) y - dotProduct (star y) (mulVec P y) := by
       calc
         dotProduct (star y) (mulVec IP y) = dotProduct (star y) (mulVec (1 - P) y) := rfl
         _ = dotProduct (star y) (mulVec 1 y - mulVec P y) := by rw [Matrix.sub_mulVec]
         _ = dotProduct (star y) (y - mulVec P y) := by simp
-        _ = dotProduct (star y) y - dotProduct (star y) (mulVec P y) :=
-          dot_sub_right (star y) y (mulVec P y)
+        _ = dotProduct (star y) y - dotProduct (star y) (mulVec P y) := by
+          rw [dotProduct_sub]
     rw [h_expand] at h_nonneg_IP
     -- h_nonneg_IP: 0 ≤ star y·y - star y·(P·y) in ℂ order
     -- Extract real parts: 0 ≤ re(star y·y) - re(star y·(P·y))
@@ -321,9 +356,6 @@ theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
       -- From 0 ≤ a - b in ℂ, we get 0 ≤ re(a) - re(b)
       have h := (Complex.nonneg_iff.mp h_nonneg_IP).1
       -- h: 0 ≤ RCLike.re (star y·y - star y·(P·y))
-      -- But RCLike.re (a-b) = RCLike.re a - RCLike.re b (for a,b real? Actually always for ℂ: re(a-b) = re(a)-re(b))
-      -- Use Complex.sub_re: (a - b).re = a.re - b.re
-      -- RCLike.re = .re, so this works
       simpa [Complex.sub_re] using h
     -- re(star y·(P·y)) = re(star(P·y)·(P·y)) [by h_proj]
     rw [h_proj y] at h_re
@@ -367,11 +399,13 @@ theorem pinv_mul_B_mul_conjTranspose (B : Mat) : pinv B * B * Bᴴ = Bᴴ := by
   have hP : (posSemidefBB B).supportProj * B = B :=
     Matrix.supportProj_mul_conjTranspose_mul_self B
   calc
-    (Bᴴ * (posSemidefBB B).supportInv * B) * Bᴴ = Bᴴ * (posSemidefBB B).supportInv * (B * Bᴴ) := by
+    (Bᴴ * (posSemidefBB B).supportInv * B) * Bᴴ =
+        Bᴴ * (posSemidefBB B).supportInv * (B * Bᴴ) := by
       simp [Matrix.mul_assoc]
     _ = Bᴴ * ((posSemidefBB B).supportInv * (B * Bᴴ)) := by simp [Matrix.mul_assoc]
     _ = Bᴴ * (posSemidefBB B).supportProj := by rw [hS]
-    _ = ((posSemidefBB B).supportProj * B)ᴴ := by simp [Matrix.conjTranspose_mul, (posSemidefBB B).supportProj_isHermitian.eq]
+    _ = ((posSemidefBB B).supportProj * B)ᴴ := by
+      simp [Matrix.conjTranspose_mul, (posSemidefBB B).supportProj_isHermitian.eq]
     _ = Bᴴ := by rw [hP]
 
 theorem pinv_mul_B_mul_C_eq_C (C B : Mat) (hC : C.mulVecLin.range ≤ Bᴴ.mulVecLin.range) :
