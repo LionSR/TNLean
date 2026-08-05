@@ -9,15 +9,14 @@
 \[
   \tenkzkernel
   % LHS: E . E - two physically-traced tensors sharing one virtual bond
-  \begin{tenkz}[rows={wire}, cols=2, physical=updown, trace=physical]
-    \tn[skin=mpo, name=M1, ports={0:virtual, 180:virtual}]{M} &
-    \tn[skin=mpo, name=M2, ports={0:virtual, 180:virtual}]{M}
-    \tnwire{open w}{M1.180} \tnwire{M2.0}{open e}
+  \begin{tenkz}[rows={wire}, cols=2, physical=updown, trace=physical,
+                west=open, east=open]
+    \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
   \end{tenkz}
   \;=\;
   % RHS: E - one physically-traced tensor
-  \begin{tenkz}[rows={wire}, cols=1, physical=updown, trace=physical]
-    \tn[skin=mpo, name=M, ports={0:virtual, 180:virtual}]{M}
-    \tnwire{open w}{M.180} \tnwire{M.0}{open e}
+  \begin{tenkz}[rows={wire}, cols=1, physical=updown, trace=physical,
+                west=open, east=open]
+    \tn[skin=mpo]{M}
   \end{tenkz}
 \]

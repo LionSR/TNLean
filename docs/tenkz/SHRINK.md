@@ -1925,3 +1925,45 @@ row.
 Extension-gate: #5524
 
 Census-correction: #5492
+
+### 2026-08-05 -- the benchmark says its pictures in the language's own words
+
+The migration to the kernel wrote every atom's address and every atom's
+port list by hand. It had to: a row holding a gauge ring or an elision
+could not declare a physical policy, so the picture abandoned the policy
+and spelled the four ports of every site.
+
+Nineteen cases in Sections II and III A now say the same drawings in the
+words the language already owns. A picture declares `physical=up`,
+`down`, or `updown` once, and the ring, the ellipsis, or the fusion box
+that carries no physical index answers `physical=none`. A site standing
+in reading order needs no address: `&` chains it along the row. A side
+that opens says `west=open, east=open` instead of running a wire to
+`open w` and another to `open e`.
+
+The MPO-word figure carries the change. Five sites that each spelled an
+address, a name, and four ports become one chained line, and the word
+falls from thirty-four lines to twenty-six. The stacked intertwiner falls
+from sixty-two to fifty-three, the three-layer reduction from fifty-seven
+to fifty-one, and the two-site zero-correlation identity states its
+traced physical pairs without a single port.
+
+Every rewritten case renders pixel-for-pixel as it did before at 200 dpi.
+The drawings, the labels, the species, and the honest residues are
+untouched; only the case hashes move. M4 falls from 26.50 to 25.92. The
+parser, the kernel ledger, the escape ledger, and the alias ledger do not
+move: this session spends no grammar.
+
+Two rewrites were reverted at the render. The two-shift MPU word hangs
+the compiler when a declared skin's pairings meet a chained row break,
+and the doubled MPS marginal loses the source's open physical legs
+because grid bonding contracts every stacked pair. Both keep their
+addresses, and the chain-grammar hang is worth a look on its own.
+
+Hand-spelled closures stay hand-spelled where the source draws them in
+its own hue or with square corners: the traced sides draw a black
+racetrack, and the boundary-algebra, coproduct, and enlarged-MPO words
+draw a red trapezoid or a sharp rectangle. Those returns are ink, not
+ceremony.
+
+Census-correction: #5524

@@ -13,11 +13,8 @@
 \[
   O_L(M) \;=\;
   \tenkzkernel
-  \begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=updown,
+  \begin{tenkz}[rows={wire}, cols=3, physical=updown,
                 west=trace, east=trace]
-    \tn[at=(1,1), skin=mpo, name=m1, ports={180:virtual, 0:virtual}]{M}
-    \tn[at=(1,2), skin=dots, name=dots, ports={180:virtual, 0:virtual}]{}
-    \tn[at=(1,3), skin=mpo, name=m2, ports={180:virtual, 0:virtual}]{M}
-    \tnwire{m1.0}{dots.180} \tnwire{dots.0}{m2.180}
+    \tn[skin=mpo]{M} & \tn[skin=dots, physical=none]{} & \tn[skin=mpo]{M}
   \end{tenkz}
 \]

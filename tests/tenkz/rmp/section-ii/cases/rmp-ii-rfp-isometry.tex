@@ -10,12 +10,8 @@
   \tenkzkernel
   % LHS: A^{i_1} A^{i_2} - two MPS tensors, one open up leg each, the
   % explicit virtual bond between them the summed index.
-  \begin{tenkz}[rows={wire}, cols=2, bonds=none]
-    \tn[at=(1,1), skin=box, name=a1,
-      ports={180:virtual, 0:virtual, 90:physical}]{A}
-    \tn[at=(1,2), skin=box, name=a2,
-      ports={180:virtual, 0:virtual, 90:physical}]{A}
-    \tnwire{a1.0}{a2.180}
+  \begin{tenkz}[rows={wire}, cols=2, physical=up, west=open, east=open]
+    \tn[skin=box]{A} & \tn[skin=box]{A}
   \end{tenkz}
   \;=\;
   % RHS: sum_j U_{(i_1 i_2), j} A^j - U keeps one open leg per blocked
