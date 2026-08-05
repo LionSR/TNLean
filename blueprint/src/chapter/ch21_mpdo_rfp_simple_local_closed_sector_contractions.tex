@@ -279,19 +279,16 @@ $\eta_{k,h}=r_k l_h$:
     % signature
     % (virtual-west=0 | virtual-east=0 | physical-up=2 | physical-down=2).
     \tenkzkernel
-    \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=none, east=none]
-        \tn[at=(1,1), skin=pill, wide=2, name=eta,
+    \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+        \tn[skin=pill, wide=2,
             ports={90@1:physical:$x_R$, 90@2:physical:$x_L$,
                    270@1:physical:$y_R$, 270@2:physical:$y_L$}]{\eta_{k,h}}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=none, east=none]
-        \tn[at=(1,1), name=rk, label pos=w,
-            ports={0:virtual, 90:physical:$x_R$, 270:physical:$y_R$}]{r_k}
-        \tn[at=(1,2), name=lh, label pos=e,
-            ports={180:virtual, 90:physical:$x_L$, 270:physical:$y_L$}]{l_h}
-        \tnwire[name=ab]{rk.0}{lh.180}
-        \tnmark[form=label, label pos=n]{on ab 0.5}{$a$}
+    \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+        \tn[label pos=w, ports={90:physical:$x_R$, 270:physical:$y_R$}]{r_k} &
+        \tn[label pos=e, ports={90:physical:$x_L$, 270:physical:$y_L$}]{l_h}
+        \tnmark[form=label, label pos=n]{midway (1,1) and (1,2)}{$a$}
     \end{tenkz}
 \end{center}
 This is the contraction in
