@@ -685,4 +685,26 @@ theorem rieszMatrix_complexify_posSemidef [NeZero m] [NeZero n]
     rw [eq_ofReal_re_of_star_eq him0]
     exact_mod_cast hre
 
+/-! ### Reconstructing the extended map -/
+
+/-- The linear map recovered from `τ'` by Wolf's own inversion formula (Ch. 1,
+line 623, run backwards): `T'(B) i j = n · τ'(B ⊗ |i⟩⟨j|)`. -/
+noncomputable def reconstructedMap (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ) :
+    Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ where
+  toFun B i j := (n : ℂ) * tau' (kroneckerMap (· * ·) B (Matrix.single i j 1))
+  map_add' X Y := by
+    ext i j
+    rw [Matrix.add_apply, kroneckerMap_add_left (· * ·) (fun a₁ a₂ b => add_mul a₁ a₂ b) X Y,
+      map_add, mul_add]
+  map_smul' c X := by
+    ext i j
+    rw [Matrix.smul_apply, smul_eq_mul, RingHom.id_apply,
+      kroneckerMap_smul_left (· * ·) c (fun a b => smul_mul_assoc c a b) X, map_smul, smul_eq_mul]
+    ring
+
+theorem reconstructedMap_apply (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ)
+    (B : Matrix (Fin m) (Fin m) ℂ) (i j : Fin n) :
+    reconstructedMap tau' B i j = (n : ℂ) * tau' (kroneckerMap (· * ·) B (Matrix.single i j 1)) :=
+  rfl
+
 end Matrix
