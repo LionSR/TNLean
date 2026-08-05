@@ -94,6 +94,17 @@ theorem mem_tensorSubmodule_iff {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     X ∈ tensorSubmodule S k ↔ ∀ i j : Fin k, Matrix.bipartiteSlice X i j ∈ S :=
   Iff.rfl
 
+/-- `S ⊗ M_k(ℂ)` is closed under the adjoint whenever `S` is an operator
+system: each block of `Xᴴ` is the adjoint of a block of `X`
+(`Matrix.bipartiteSlice_conjTranspose`), and `S` is star-stable. -/
+theorem IsOperatorSystem.conjTranspose_mem_tensorSubmodule
+    {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)} (hS : IsOperatorSystem S) {k : ℕ}
+    {X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ} (hX : X ∈ tensorSubmodule S k) :
+    Xᴴ ∈ tensorSubmodule S k := by
+  intro i j
+  rw [Matrix.bipartiteSlice_conjTranspose]
+  exact hS.star_mem (mem_tensorSubmodule_iff.mp hX j i)
+
 /-! ### Complete positivity on an operator system -/
 
 /-- `T ⊗ id_k` restricted to `S ⊗ M_k(ℂ)`: applying `T` to each

@@ -348,4 +348,220 @@ theorem exists_hahnBanach_extension {S : Submodule ℂ (Matrix (Fin m) (Fin m) �
   have h := hg_agree A
   rwa [LinearPMap.mk_apply] at h
 
+/-! ### Complexifying the Hahn–Banach extension -/
+
+section Complexify
+
+variable {ι : Type*}
+
+/-- The Hermitian part of `X`, scaled so that `X = hermPart1 X + I • hermPart2 X`. -/
+private noncomputable def hermPart1 (X : Matrix ι ι ℂ) : Matrix ι ι ℂ := (2⁻¹ : ℂ) • (X + Xᴴ)
+
+/-- The Hermitian matrix `H` with `I • H` equal to the skew-Hermitian part of `X`. -/
+private noncomputable def hermPart2 (X : Matrix ι ι ℂ) : Matrix ι ι ℂ :=
+  (-Complex.I / 2) • (X - Xᴴ)
+
+private theorem star_half : star (2⁻¹ : ℂ) = 2⁻¹ := by simp
+
+private theorem star_negI_div_two : star (-Complex.I / 2 : ℂ) = Complex.I / 2 := by
+  simp
+
+private theorem star_I : star (Complex.I : ℂ) = -Complex.I := by
+  rw [Complex.star_def, Complex.conj_I]
+
+/-- The normal form for `star` of the scalar expressions appearing in
+`hermPart1`, `hermPart2`: push `star` onto matrix entries and simplify the
+fixed scalars `2⁻¹`, `-I/2`, `I`. -/
+private theorem herm_entry_eq (z w : ℂ) :
+    (2⁻¹ : ℂ) * (z + star w) = star ((2⁻¹ : ℂ) * (w + star z)) ∧
+    (-Complex.I / 2) * (z - star w) = star ((-Complex.I / 2) * (w - star z)) := by
+  constructor
+  · rw [star_mul', star_add, star_star, star_half]; ring
+  · rw [star_mul', star_sub, star_star, star_negI_div_two]; ring
+
+private theorem hermPart1_isHermitian (X : Matrix ι ι ℂ) : (hermPart1 X).IsHermitian := by
+  ext i j
+  simp only [Matrix.conjTranspose_apply, hermPart1, Matrix.smul_apply, Matrix.add_apply,
+    smul_eq_mul]
+  exact (herm_entry_eq (X i j) (X j i)).1.symm
+
+private theorem hermPart2_isHermitian (X : Matrix ι ι ℂ) : (hermPart2 X).IsHermitian := by
+  ext i j
+  simp only [Matrix.conjTranspose_apply, hermPart2, Matrix.smul_apply, Matrix.sub_apply,
+    smul_eq_mul]
+  exact (herm_entry_eq (X i j) (X j i)).2.symm
+
+private theorem decomp_entry_eq (z w : ℂ) :
+    (2⁻¹ : ℂ) * (z + star w) + Complex.I * ((-Complex.I / 2) * (z - star w)) = z := by
+  have hI2 : Complex.I * Complex.I = -1 := Complex.I_mul_I
+  linear_combination (star w - z) / 2 * hI2
+
+private theorem hermPart1_add_I_smul_hermPart2 (X : Matrix ι ι ℂ) :
+    hermPart1 X + Complex.I • hermPart2 X = X := by
+  ext i j
+  simp only [Matrix.add_apply, Matrix.smul_apply, hermPart1, hermPart2,
+    Matrix.conjTranspose_apply, smul_eq_mul]
+  exact decomp_entry_eq (X i j) (X j i)
+
+private theorem hermPart1_add (X Y : Matrix ι ι ℂ) :
+    hermPart1 (X + Y) = hermPart1 X + hermPart1 Y := by
+  ext i j
+  simp only [hermPart1, Matrix.add_apply, Matrix.smul_apply, Matrix.conjTranspose_apply,
+    smul_eq_mul, star_add]
+  ring
+
+private theorem hermPart2_add (X Y : Matrix ι ι ℂ) :
+    hermPart2 (X + Y) = hermPart2 X + hermPart2 Y := by
+  ext i j
+  simp only [hermPart2, Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply,
+    Matrix.conjTranspose_apply, smul_eq_mul, star_add]
+  ring
+
+private theorem hermPart1_smul_real (c : ℝ) (X : Matrix ι ι ℂ) :
+    hermPart1 ((c : ℂ) • X) = (c : ℂ) • hermPart1 X := by
+  ext i j
+  simp only [hermPart1, Matrix.smul_apply, Matrix.add_apply, Matrix.conjTranspose_apply,
+    smul_eq_mul, Complex.star_def, map_mul, Complex.conj_ofReal]
+  ring
+
+private theorem hermPart2_smul_real (c : ℝ) (X : Matrix ι ι ℂ) :
+    hermPart2 ((c : ℂ) • X) = (c : ℂ) • hermPart2 X := by
+  ext i j
+  simp only [hermPart2, Matrix.smul_apply, Matrix.sub_apply, Matrix.conjTranspose_apply,
+    smul_eq_mul, Complex.star_def, map_mul, Complex.conj_ofReal]
+  ring
+
+private theorem hermPart1_smul_I (X : Matrix ι ι ℂ) :
+    hermPart1 (Complex.I • X) = -hermPart2 X := by
+  ext i j
+  simp only [hermPart1, hermPart2, Matrix.smul_apply, Matrix.add_apply, Matrix.sub_apply,
+    Matrix.neg_apply, Matrix.conjTranspose_apply, smul_eq_mul, star_mul', star_I]
+  ring
+
+private theorem hermPart2_smul_I (X : Matrix ι ι ℂ) :
+    hermPart2 (Complex.I • X) = hermPart1 X := by
+  ext i j
+  simp only [hermPart1, hermPart2, Matrix.smul_apply, Matrix.add_apply, Matrix.sub_apply,
+    Matrix.conjTranspose_apply, smul_eq_mul, star_mul', star_I]
+  have hI2 : Complex.I * Complex.I = -1 := Complex.I_mul_I
+  linear_combination (-(X i j) - star (X j i)) / 2 * hI2
+
+/-- **Complexification via Hermitian decomposition**: extend a real-linear
+functional `g` on the whole matrix space to a `ℂ`-linear functional, using
+`g` on the (always Hermitian) matrices `hermPart1 X`, `hermPart2 X` with
+`X = hermPart1 X + I • hermPart2 X`. Unlike the generic
+`Module.Dual.extendRCLike`, this construction keeps the extension real on
+every Hermitian matrix, which is essential to matching `τ` on `S ⊗ M_n(ℂ)`. -/
+private theorem g_smul_real (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) (r : ℝ) (M : Matrix ι ι ℂ) :
+    g ((r : ℂ) • M) = r * g M := by
+  have heq : (r : ℂ) • M = r • M := by ext i j; simp [Complex.real_smul]
+  rw [heq, g.map_smul r M, smul_eq_mul]
+
+noncomputable def complexify (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) : Matrix ι ι ℂ →ₗ[ℂ] ℂ where
+  toFun X := (g (hermPart1 X) : ℂ) + Complex.I * (g (hermPart2 X) : ℂ)
+  map_add' X Y := by
+    simp only [hermPart1_add, hermPart2_add, map_add, Complex.ofReal_add]
+    ring
+  map_smul' c X := by
+    simp only [RingHom.id_apply]
+    obtain ⟨a, b, rfl⟩ : ∃ a b : ℝ, c = (a : ℂ) + (b : ℂ) * Complex.I :=
+      ⟨c.re, c.im, by simp⟩
+    have hexpand : ((a : ℂ) + (b : ℂ) * Complex.I) • X = (a : ℂ) • X + (b : ℂ) • Complex.I • X :=
+      by rw [add_smul, smul_smul, mul_comm]
+    rw [hexpand, hermPart1_add, hermPart2_add, hermPart1_smul_real, hermPart2_smul_real,
+      show (b : ℂ) • Complex.I • X = Complex.I • ((b : ℂ) • X) from by
+        rw [smul_smul, smul_smul, mul_comm],
+      hermPart1_smul_I, hermPart2_smul_I, hermPart1_smul_real, hermPart2_smul_real]
+    simp only [map_add, map_neg, g_smul_real, Complex.ofReal_add, Complex.ofReal_neg,
+      Complex.ofReal_mul]
+    have hI2 : Complex.I * Complex.I = -1 := Complex.I_mul_I
+    linear_combination (-(b : ℂ)) * (g (hermPart2 X) : ℂ) * hI2
+
+theorem complexify_apply (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) (X : Matrix ι ι ℂ) :
+    complexify g X = (g (hermPart1 X) : ℂ) + Complex.I * (g (hermPart2 X) : ℂ) := rfl
+
+/-- `complexify g` reproduces `g` on Hermitian matrices. -/
+theorem complexify_apply_of_isHermitian (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) {H : Matrix ι ι ℂ}
+    (hH : H.IsHermitian) : complexify g H = (g H : ℂ) := by
+  rw [complexify_apply]
+  have h1 : hermPart1 H = H := by
+    unfold hermPart1; rw [hH.eq]; rw [← two_smul ℂ H, smul_smul]; norm_num
+  have h2 : hermPart2 H = 0 := by
+    unfold hermPart2; rw [hH.eq, sub_self, smul_zero]
+  rw [h1, h2, map_zero]
+  simp
+
+end Complexify
+
+/-! ### The complex-linear extension of `τ` -/
+
+theorem hermPart1_mem_tensorSubmodule {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {A : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ}
+    (hA : A ∈ tensorSubmodule S n) : hermPart1 A ∈ tensorSubmodule S n :=
+  (tensorSubmodule S n).smul_mem _
+    ((tensorSubmodule S n).add_mem hA (hS.conjTranspose_mem_tensorSubmodule hA))
+
+theorem hermPart2_mem_tensorSubmodule {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {A : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ}
+    (hA : A ∈ tensorSubmodule S n) : hermPart2 A ∈ tensorSubmodule S n :=
+  (tensorSubmodule S n).smul_mem _
+    ((tensorSubmodule S n).sub_mem hA (hS.conjTranspose_mem_tensorSubmodule hA))
+
+/-- A complex number fixed by conjugation is (the cast of) its own real part. -/
+private theorem eq_ofReal_re_of_star_eq {z : ℂ} (h : star z = z) : z = (z.re : ℂ) := by
+  have him : z.im = 0 := by
+    have hc := congrArg Complex.im h
+    rw [Complex.star_def, Complex.conj_im] at hc
+    linarith
+  exact Complex.ext rfl (by simp [him])
+
+/-- **The complex-linear extension of `τ`** (Wolf Ch. 1, lines 626–627): for
+`T` completely positive on the operator system `S`, `τ` extends to a full
+`ℂ`-linear functional `τ'` on `M_m(ℂ) ⊗ M_n(ℂ)` that agrees with `τ` on
+`S ⊗ M_n(ℂ)` and satisfies the same norm-domination bound on all of
+`M_m(ℂ) ⊗ M_n(ℂ)`. -/
+theorem exists_tau_extension {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ}
+    (hT : IsCPOnOperatorSystem T) :
+    ∃ tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ,
+      (∀ A : ↥(tensorSubmodule S n), tau' A = tau T A) ∧
+      ∀ X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ, X.IsHermitian →
+        (tau' X).re ≤ ‖X‖ *
+          (tau' (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ)).re := by
+  obtain ⟨g, hg_agree, hg_le⟩ := exists_hahnBanach_extension hS hT
+  have hone_herm : (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) ∈
+      hermitianTensorSubmodule S n :=
+    ⟨Matrix.isHermitian_one, one_mem_tensorSubmodule hS⟩
+  refine ⟨complexify g, ?_, ?_⟩
+  · intro A
+    obtain ⟨A, hA⟩ := A
+    have hAH := hS.conjTranspose_mem_tensorSubmodule hA
+    have h1mem : hermPart1 A ∈ tensorSubmodule S n := hermPart1_mem_tensorSubmodule hS hA
+    have h2mem : hermPart2 A ∈ tensorSubmodule S n := hermPart2_mem_tensorSubmodule hS hA
+    have h1herm := hermPart1_isHermitian A
+    have h2herm := hermPart2_isHermitian A
+    have hg1 : (g (hermPart1 A) : ℝ) = (tau T ⟨hermPart1 A, h1mem⟩).re :=
+      hg_agree ⟨hermPart1 A, h1herm, h1mem⟩
+    have hg2 : (g (hermPart2 A) : ℝ) = (tau T ⟨hermPart2 A, h2mem⟩).re :=
+      hg_agree ⟨hermPart2 A, h2herm, h2mem⟩
+    have htau1 : (tau T ⟨hermPart1 A, h1mem⟩ : ℂ) = ((tau T ⟨hermPart1 A, h1mem⟩).re : ℂ) :=
+      eq_ofReal_re_of_star_eq (tau_star_eq hS (hT n) ⟨hermPart1 A, h1mem⟩ h1herm)
+    have htau2 : (tau T ⟨hermPart2 A, h2mem⟩ : ℂ) = ((tau T ⟨hermPart2 A, h2mem⟩).re : ℂ) :=
+      eq_ofReal_re_of_star_eq (tau_star_eq hS (hT n) ⟨hermPart2 A, h2mem⟩ h2herm)
+    change complexify g A = tau T ⟨A, hA⟩
+    rw [complexify_apply, hg1, hg2, ← htau1, ← htau2,
+      show (⟨A, hA⟩ : ↥(tensorSubmodule S n)) =
+          ⟨hermPart1 A, h1mem⟩ + Complex.I • (⟨hermPart2 A, h2mem⟩ : ↥(tensorSubmodule S n))
+        from Subtype.ext (hermPart1_add_I_smul_hermPart2 A).symm,
+      map_add, map_smul, smul_eq_mul]
+  · intro X hX
+    have h1 : complexify g X = (g X : ℂ) := complexify_apply_of_isHermitian g hX
+    have h1one : complexify g (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) = (g 1 : ℂ) :=
+      complexify_apply_of_isHermitian g Matrix.isHermitian_one
+    rw [h1, h1one, Complex.ofReal_re, Complex.ofReal_re]
+    have hg1 : g (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) =
+        (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re := hg_agree ⟨1, hone_herm⟩
+    rw [hg1]
+    exact hg_le X
+
 end Matrix

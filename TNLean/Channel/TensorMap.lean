@@ -80,6 +80,13 @@ theorem bipartiteSlice_zero (i₂ j₂ : δ) :
     bipartiteSlice (0 : Matrix (α × δ) (α × δ) ℂ) i₂ j₂ = 0 := by
   ext; simp [bipartiteSlice]
 
+@[simp]
+theorem bipartiteSlice_conjTranspose
+    (X : Matrix (α × δ) (α × δ) ℂ) (i₂ j₂ : δ) :
+    bipartiteSlice Xᴴ i₂ j₂ = (bipartiteSlice X j₂ i₂)ᴴ := by
+  ext i₁ j₁
+  simp [bipartiteSlice, Matrix.conjTranspose_apply]
+
 /-- The tensor product of a matrix linear map `T` with the identity on the
 matrix factor indexed by `δ`. The resulting map has the entrywise formula
 
