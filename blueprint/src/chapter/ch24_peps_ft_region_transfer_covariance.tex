@@ -347,22 +347,24 @@
     % One-tensor boundary signature:
     %   boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0.
     \begin{center}
-        \tnpic[physical=up]{
-            \tn[label pos=south]{A_R} & \tn[label pos=south]{A}
-        }
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[label pos=s, ports={90:physical}]{A_R} &
+            \tn[label pos=s, ports={90:physical}]{A}
+        \end{tenkz}
         \quad$=$\quad
-        \tnpic[physical=up]{
-            \tn[label pos=south]{A_S}
-        }
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical}]{A_S}
+        \end{tenkz}
         \quad$\propto$\quad
-        \tnpic[physical=up]{
-            \tn[label pos=south]{\widetilde B_S}
-        }
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical}]{\widetilde B_S}
+        \end{tenkz}
         \quad$=$\quad
-        \tnpic[physical=up]{
-            \tn[label pos=south]{\widetilde B_R} &
-            \tn[label pos=south]{\widetilde B}
-        }.
+        \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+            \tn[label pos=s, ports={90:physical}]{\widetilde B_R} &
+            \tn[label pos=s, ports={90:physical}]{\widetilde B}
+        \end{tenkz}.
     \end{center}
     Applying the left inverse supplied by injectivity of the block
     $A_R=\lambda_R\widetilde B_R$ gives
