@@ -30,7 +30,7 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   factorization, exhibited by a full eigenbasis (a scope-restricted
   spectral link; see *Remaining gap*);
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
-  has the explicit eigenbasis `{1, lambda, 0, 0}` claimed in the *Remaining
+  has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
   gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
   off-diagonal matrix units annihilated).
 
