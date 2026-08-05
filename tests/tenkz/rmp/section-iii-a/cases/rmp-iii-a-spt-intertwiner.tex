@@ -1,17 +1,62 @@
 % Target: rmp-iii-a-spt-intertwiner
 % Formula: X_gh fuses O_g O_h to O_gh and obeys the local associativity move.
-% Ink: Canonical public tenkz stacked MPO words with an explicit X_gh fusion box.
+% Ink: Kernel flat frame; stacked MPO words with an explicit X_gh fusion box.
 % Boundary: Two incoming MPO interfaces fuse to one outgoing gh interface.
 % Source: paper TN-Review-main.tex line 1466; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 448-467
-% Capabilities: grid, fusion-map, equation-composition
+% Capabilities: kernel, fusion-map, equation-composition
 \[
-  \begin{tenkz}[rows={op:operator, op:operator}, tensor style=box]
-    \tn{g} & \tn{g} & \tn[box, wires=2]{X_{gh}}\\
-    \tn{h} & \tn{h} &
+  \tenkzkernel
+  \tndeclare{species}{op}{hue=source:red}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+    % the source order: gh word, then X_gh, then the g over h double column;
+    % the source centres the gh word between the rows, the frame quantizes it
+    \tn[skin=box, at=(1,1), name=GH,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[skin=none, at=0.6 w of GH, name=JW, ports={0:virtual}]{}
+    \tn[skin=box, at=(1,2), wires=2, name=X,
+        ports={180:virtual, 0@1:virtual, 0@2:virtual}]{X_{gh}}
+    \tn[skin=box, at=(1,3), name=Ga,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[skin=box, at=(1,4), name=Gb,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[skin=none, at=0.6 e of Gb, name=JGE, ports={180:virtual}]{}
+    \tn[skin=box, at=(2,3), name=Ha,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[skin=box, at=(2,4), name=Hb,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[skin=none, at=0.6 e of Hb, name=JHE, ports={180:virtual}]{}
+    \tnwire[species=op]{JW.0}{GH.180}
+    \tnwire[species=op]{GH.0}{X.180}
+    \tnwire[species=op]{X.0@1}{Ga.180}
+    \tnwire[species=op]{X.0@2}{Ha.180}
+    \tnwire[species=op]{Ga.0}{Gb.180}
+    \tnwire[species=op]{Ha.0}{Hb.180}
+    \tnwire[species=op]{Gb.0}{JGE.180}
+    \tnwire[species=op]{Hb.0}{JHE.180}
   \end{tenkz}
   =
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn[box]{X_{gh}} & \tn{gh} & \tn{gh}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+    % after the slide: two gh tensors stand west of X_gh, one column remains
+    \tn[skin=box, at=(1,1), name=GHa,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[skin=none, at=0.6 w of GHa, name=JW, ports={0:virtual}]{}
+    \tn[skin=box, at=(1,2), name=GHb,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[skin=box, at=(1,3), wires=2, name=X,
+        ports={180:virtual, 0@1:virtual, 0@2:virtual}]{X_{gh}}
+    \tn[skin=box, at=(1,4), name=Ga,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[skin=none, at=0.6 e of Ga, name=JGE, ports={180:virtual}]{}
+    \tn[skin=box, at=(2,4), name=Ha,
+        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[skin=none, at=0.6 e of Ha, name=JHE, ports={180:virtual}]{}
+    \tnwire[species=op]{JW.0}{GHa.180}
+    \tnwire[species=op]{GHa.0}{GHb.180}
+    \tnwire[species=op]{GHb.0}{X.180}
+    \tnwire[species=op]{X.0@1}{Ga.180}
+    \tnwire[species=op]{X.0@2}{Ha.180}
+    \tnwire[species=op]{Ga.0}{JGE.180}
+    \tnwire[species=op]{Ha.0}{JHE.180}
   \end{tenkz}.
 \]

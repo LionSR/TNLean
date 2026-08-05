@@ -474,31 +474,34 @@ note = "Kernel migration (wave 2B): the one-site word of the size-N case -- X ri
 id = "rmp-iii-a-pentagon-physical"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "8bfce4aa0b19b3faf70cf9bbc36e19fb294c60398bc9f8a6150179fbbc60e165"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; numeric port faces preserve the reviewed curves"
+defects = []
+case_sha256 = "66657590a7d8591791d3f5760189b32be2fadca9ac47981f804f74cc57a91a00"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel redraw against the paper's own figure fig3_pentagon3.pdf: the physical string stands west of the vertex crossing the incoming wire once, then east crossing both outgoing wires, with the string declared over and the under wires gapped; direction marks sit at the house station rather than the source's outer positions."
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-mpo"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "06905674cec78b510f3381f4c2f0719ccd519192dcce8268e07c2ad18c4696b3"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; numeric port faces preserve the reviewed curves"
+defects = []
+case_sha256 = "28354e7aa31bdaa64ce615adaf92795932235f758a5568d655b0d92dc76c41d6"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel redraw against the paper's own figure fig3_pentagon2.pdf: the left tree fuses the upper pair first, the right tree the lower pair, with one directed root and three leaves each; straight house edges replace the source's curved branches, and tenkzeq's audited = stands for the panel's equivalence sign, matching the caption formula."
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-mixed"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "a63fc0969b2dba222a58ca928efd0eb0a1370246d15fef6af6597af6a4bb853c"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; numeric port faces preserve the reviewed curves"
+defects = []
+case_sha256 = "8063c7cd74d4a01af358ac24b7de0cf5dabbd0b5e5e8f40de42f511415c51aa4"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel redraw against the paper's own figure fig3_pentagon4.pdf: the MPO string crosses the root leg below the vertex, then both split legs above it, string declared over with the legs gapped beneath; leg arrows sit at the house station below the crossings where the source points them at the tips."
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-peps"
@@ -553,14 +556,15 @@ note = "kernel respell verified against the paper's DeltaAred figure: the virtua
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
-defects = ["weight-mismatch"]
-case_sha256 = "1b8e980bc45bad1e80c9a818462bb72d853294291066e07cd45aa8f5bd21662e"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "Both pulling-through panels and their lambda circles are present; curve weight and spacing differ slightly."
+defects = []
+case_sha256 = "df473749edab188356d41e30f67b8765e7a8841d02797240324d96314c181138"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel respell of eq50redarrows: the red ring closes through all four tensors with lambda on the north-west ring wire, both action tensors ride the north/west then south/east legs with the joining string and both free string ends, and all six direction marks match the source flow; the diamond ring, straight action chord, and stadium lambda are the house forms for the source's rounded curves."
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -659,13 +663,15 @@ note = "K2 promotion: the g string moves from the northwest to the southeast cor
 
 [[verdict]]
 id = "rmp-iii-a-spt-intertwiner"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "1bdccc57799b015c97bc3a5d8e0d7e280b2c1437424c0d4aa85319702331c912"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "mirrored operator order; small glyphs"
+defects = []
+case_sha256 = "18180e206a3c91353d5f67adb7cd683677c2b2617ce46ea8e0de65438e287f09"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Factor order restored to the source: the checked-in body read (g g / h h) X = X gh gh, a mirror only defensible under trace cyclicity that the open boundary does not grant; the author panel reads gh X (g/h)(g/h) = gh gh X (g/h) with X between the gh word and the stack, as now drawn. The gh tensors sit on the g row where the source centres them between rows (frame quantization, cosmetic)."
 
 [[verdict]]
 id = "rmp-iii-a-g-injective-projector"
@@ -706,11 +712,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-three-cycle-source-review-2026-07-26"
 defects = []
-case_sha256 = "8b611dca8f741af0d4a2be88a4adadf86c7f57d55b293196e6e5a5588b7f8d8f"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the identified torus boundary, the inner opening with opposite bends, both noncontractible cycles, and the crossing at the marked tensor i all match; the outlined house box and line weight for the source's filled bold glyph are house style (the bar)."
+case_sha256 = "397345d66617c90211bee4403133c9cdcc279a1ec7420d8c4c684ab6eb07387b"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel migration to the contract's own torus spelling (LANGUAGE-1.0 s12.2): the identified-sides lattice carries both wound cycles as declared homotopy classes {1,0} and {0,1}, crossing once at the outlined blue i with the vertical cycle declared under, matching the source's paint order; the embedded donut view becomes the canonical traced-lattice projection, as already accepted for the eq59 torus panel."
 
 [[verdict]]
 id = "rmp-iii-a-torus-two"
@@ -1253,14 +1259,15 @@ note = "kernel respell verified against Dia2.pdf: Y stands over A, the vertical 
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-three"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "88afbf9c04ce6afafb3072a5adcadcab9df46c4a4be64ca9ac40d97f5cb3a0bf"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "the checked-in case already closes both pentagon rings around the relocated lambda; the blocked demand predated that body. Residue: two dir marks orient by the ports mechanism, not per-edge"
+case_sha256 = "a2feb5daecfbbb1d406197c1417a97a6651c0c5d9b2e2c812f4cf4c11d840b13"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Body now equals the pulling-through respell of the same author lines (Dia3.pdf): the earlier kernel-free body relocated lambda and omitted the two boundary action tensors and their joining string; both panels now carry the full rotated action pair, and the per-edge direction marks the K1 residue named draw from dir= on each leg."
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"
@@ -1276,14 +1283,15 @@ note = "Kernel migration checked against author lines 170-197: both panels keep 
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-four"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "8dc6b52b65a377eb85be2eccb8e945b4c4f47971876d9bf2b948447fc68803f2"
-reviewed = "2026-07-28"
-renderer = "codex-route-form-source-review-2026-07-28-180dpi"
-note = "each ring box regains its short inward open leg; residue: the RHS lambda still renders as the pre-#4960 stadium while the LHS uses the plain circle"
+case_sha256 = "9458875bee2db6a9a5adcb98e31e9cfc7dd72e30d8cf120af842ac1cfcf1227a"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel respell of Dia4.pdf: the four-tensor ring keeps every outward arm and inward pierce with lambda on the north-west wire, and the local map closes through a junction-spelled periodic return with its physical stubs; the stadium lambda for the source circle and the square return corners are house glyph forms."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"
@@ -1332,24 +1340,27 @@ note = "kernel respell verified against Oa rep.pdf: five unlabelled mpo atoms wi
 
 [[verdict]]
 id = "rmp-workbench-iii-f-tensor"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "842bc38e521fc1add17fc5403e25e8145c39cee9f1448d15257bdc91ba7e6f3a"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "explicit F box vs boxless smooth crossing"
+defects = []
+case_sha256 = "f3c0ac50644acff1330bb92d30eb6eedb2ee999d88913e464ac497a7af922ac6"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel redraw restores the source's boxless crossing that the explicit F box stood in for: the red a axis and black c axis cross at the centre with c declared over as painted, both directed; the four corner hooks are single quarter-turn strings and all six labels sit in their sectors; direction marks at the house station rather than the source's outer thirds."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59-now"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "b7c2b06bbbbfb83c6e2b8535ac69b3232d431af702635f60c85f8b7275944fbe"
-reviewed = "2026-07-27"
-renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
-note = "the group average is spelt as mathematics around the diagram and the projector ring closes through elbow routes; residue: black ring and stadium L_g where the source is red with circles"
+case_sha256 = "f1b3b7a80ab23fbfea3714014e497b8131e3bc5c54c003541381791b6b31de93"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Archival pairing corrected to Eq59.pdf: the file named Eq59now.pdf holds the SPT g-pull sketch, while Eq59.pdf is this group average (four inward L_g actions, projector ring, marked corner). Kernel respell gives the ring its source red and the marked dot at the corner station; stadium L_g glyphs, single arrowheads per leg, and the diamond ring are house forms."
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-state-workbench"
@@ -1467,10 +1478,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "291c78ad7ddbb7b07563a32152bcdfa1edac10d781d70f3edaf60b4e242d07bd"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "bare upright square, eight arms; fused sides stand in for hatch ticks (#4931)"
+case_sha256 = "b595885bb9eab9d8015cf935a16eebbd8c2fdc455f15353cee92ed3711e4a5a3"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "The X contradiction is resolved: the four edge-centred PEPS sites the manifest requires are present as glyphless junctions, each with its 50-degree physical leg as the source draws. Residue: the kernel's declared crossings gap the under bonds where the source butts plain lattice ink, and the external half-edges run a full pitch where the source stops at a quarter."
 
 [[verdict]]
 id = "rmp-workbench-iii-peps-renormalization-two"
@@ -1478,7 +1490,8 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "effac268fd02147ec0557dbdcd016cbf5e1e226b1be10bd9f95fd624dfcaf1ac"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "central effective tensor, four corner blocks, slanted fused legs"
+case_sha256 = "90fde6ac0e7f3aab2e426a5cb108f7b5ccf62fb22cd9ce9c173e2ab65fe02ca1"
+reviewed = "2026-08-05"
+renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
+note = "Kernel respell: central effective tensor, four corner blocks, connecting and free diagonal half-edges all present as angle ports. Residue: each source box carries four hatch ticks marking the blocked physical bundle, drawn here as one 60-degree physical leg per box -- bundle multiplicity owes no ink under the kernel contract (LANGUAGE-1.0 s5, #4931)."
