@@ -1,16 +1,18 @@
 % Target: rmp-ii-blocking
 % Formula: A^i_{alpha,beta} = <i,beta|V|alpha>, where V is an isometry.
-% Ink: Canonical public tenkz: one pill V with the lower alpha input and the
-%   upper i and beta outputs.
+% Ink: Kernel flat frame; one pill V with the lower alpha input and the upper i and
+%   beta outputs.
 % Boundary: There are no virtual side interfaces; alpha, i, and beta remain open.
 % Source: paper TN-Review-main.tex line 513; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 535-540
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   A^{i}_{\alpha,\beta} \;=\;
   % V: one down leg alpha in, two up legs (i, beta) out - the author's
   % one-site isometry definition, not a two-site blocking pair
-  \begin{tenkz}[rows={op:none}, tensor style=box]
-    \tn[pill, wide=2, up at={1,2}, up={$i$,$\beta$}, down={$\alpha$}]{V} &
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[skin=pill, wide=2,
+      ports={90@1:physical:$i$, 90@2:virtual:$\beta$, 270:virtual:$\alpha$}]{V}
   \end{tenkz}
 \]

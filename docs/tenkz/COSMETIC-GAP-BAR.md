@@ -47,9 +47,9 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-mpu-brickwork` | — | Promoted to `faithful` 2026-08-04: twelve legs, alternating layers, and labels match; labelled boxes for dotted gate pairs are the inherent circuit presentation. |
 | `rmp-ii-mpu-two-shift` | K1 | Resolved 2026-08-04: the case now carries the workbench-twin skin-pairings model with the published palette; the row channels keep house ink where the panel colours the movers. |
 | `rmp-ii-mpu-normal-form` | K3 | The solid S-route is heavier and less compact than the graceful default should be. |
-| `rmp-ii-spectrum-transfer` | K3 | Supply the shared designed tail idiom for the two fixed-point tails. |
-| `rmp-ii-spectrum-fixed-points` | — | Promoted to `faithful` 2026-08-04: fold side, factor order, and open ends match; capsule glyphs are equivalent house routing. |
-| `rmp-ii-blocking` | — | Promoted to `faithful` 2026-08-04: re-review and oracle pass confirmed the one-site isometry matches the source panel; the wider house pill is intentional styling. |
+| `rmp-ii-spectrum-transfer` | K1 | Tail idiom resolved 2026-08-05 (wave 1B, Fable-verified): both fixed points are the same in-line ring construction, the cut is drawn as the house enclosure, and measured rung/rail weights match the source, dropping the stale weight tag. Residue: the `n` annotation is a south label because the bracket mark form does not draw (#5482). |
+| `rmp-ii-spectrum-fixed-points` | K1 | Regressed from the 2026-08-04 `faithful` promotion by the kernel migration (wave 1B): the wires=2 self-loop fold draws flush with the glyph boundary, so the closure the grid render inked as a protruding cup arc is invisible (index wires draw straight-only; `via`/`route=arc` recorded but not inked). Restore the fold ink in the shared renderer, then re-review. |
+| `rmp-ii-blocking` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 1B, Fable-verified): the stock pill silhouette (#5480) now gives the source's rounded glyph form; the wider house pill remains intentional styling. |
 | `rmp-ii-staircase` | K3 | Resolved 2026-08-04: the re-audit confirmed the vertical mirror; the case now ascends as in the source. Residue: house box for the rounded V glyph (#5363). |
 | `rmp-ii-circuit` | — | Already `faithful` (2026-08-02 two-viewer review); the doubling tree carries the complete eight-output identity. |
 | `rmp-ii-ortho-left` | — | Promoted to `faithful` 2026-08-04: cup topology, glyph orientation, and labels match; thin house wires are intentional styling. |
