@@ -33,7 +33,11 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
   has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
   gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
-  off-diagonal matrix units annihilated).
+  off-diagonal matrix units annihilated);
+* `refineMap_isKrausCPTP` and `refineMap_physClose1` — the refinement map `T`
+  of Definition 4.1 is trace-preserving completely positive and satisfies
+  the `eq:Tmap` equation `T[M₁(X)] = M₂(X)` for `R` (see *RFP via tp-CP
+  maps*).
 
 ## Tensor definition
 
@@ -68,27 +72,58 @@ and the Schur product theorem (`Matrix.PosSemidef.hadamard`) gives `R_isMPDO`.
 The local-purification (LPDO) route does NOT apply: the undone-vertical
 letters entangle bra- and ket-side labels, so no purification tensor exists.
 
+## RFP via tp-CP maps
+
+`IsRFPViaTS M` (Definition 4.1) does not presuppose the source's canonical-
+form hypothesis: it is the bare existence of trace-preserving completely
+positive maps `S`, `T` on the physical indices with `S[M₂(X)] = M₁(X)` and
+`T[M₁(X)] = M₂(X)` for all virtual operators `X`
+(`TNLean/MPS/MPDO/RFPViaTS.lean`).
+Both one- and two-site physical operators of `R` factor through the bit
+reading `combine p q := bondEquiv (bit1 p, bit2 q)`:
+```
+physClose1 R X i j = (25/32) · (u_{ij} ⬝ᵥ (v_{ij} ᵥ* X))
+physClose2 R X (i1,i2) (j1,j2) =
+  (25/32) · (if gate i1 i2 ∧ gate j1 j2 then wMat (bit2 i1) (bit2 j1) else 0) ·
+    physClose1 R X (combine i1 i2) (combine j1 j2)
+```
+(`physClose1_R_entry`, `physClose2_R_entry`), where `gate p q` is the bond-
+matching condition `bit2 p = bit1 q`.  The refinement map `T` (`refineMap`)
+is built from two Kraus operators indexed by the Walsh–Hadamard
+eigendecomposition of `wMat`; `refineMap_isKrausCPTP` and
+`refineMap_physClose1` prove it is trace-preserving completely positive and
+satisfies the `eq:Tmap` equation for `R`.
+
 ## Remaining gap
 
+* The coarse-graining map `S` (`coarseMap`) is defined with four Kraus
+  operators — two gated (`coarseKrausGated`, sharing `T`'s Walsh–Hadamard
+  amplitude `coarseAmp = 1/√2`) and two ungated (`coarseKrausUngated`, a
+  deterministic assignment resolving the identity on bond-mismatched
+  pairs) — but its trace-preserving completely positive property
+  (`Σ (Kraus)ᴴ Kraus = 1` on the full two-site domain, including the
+  off-diagonal cancellation `Σ_s eigVecs s 0 · eigVecs s 1 = 0` between the
+  two gated Kraus operators) and the `eq:Smap` equation
+  `S[M₂(X)] = M₁(X)` are not yet proved.  Completing these two lemmas
+  and combining with `refineMap_isKrausCPTP`/`refineMap_physClose1` yields
+  `IsRFPViaTS R` directly.
 * The uniform BNT-label structure-coefficient statement of
   arXiv:1606.00608, Theorem 4.14(ii) for `R` — that `oneLabelCoeffs`
   literally arises from `R`'s same-length product algebra, not only that
   its spectral data matches (`wMat_eigenvalue_eq_oneLabelChi_entry`) —
   requires the `AlgebraStructureData` witness apparatus of
   `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
-  `IsRFPViaTS R` (below).  Documented in
+  `IsRFPViaTS R`.  Documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 * The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
-with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
-renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
+with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) is separate future work,
+not needed for `IsRFPViaTS R` as defined in this repository (see above).
 The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
 the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
 unital and having eigenvalues `{1, 7/25, 0, 0}` (`transferMap_A_eigen`),
-hence primitive with spectral radius 1.  Completing the irreducibility
-argument (the Kronecker products `A^a ⊗ conj(A^b)` span `M₄(ℂ)`), the
-Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
-`φ`, the primitivity and spectral-radius-one lemmas for the doubled map, and
-the `tpCP`-map construction yields `IsRFPViaTS R` via Theorem 4.14.
+hence primitive with spectral radius 1, matching Theorem 4.14's converse
+route through canonical form; the direct route via `S`/`T` above bypasses
+that machinery.
 
 ## References
 
