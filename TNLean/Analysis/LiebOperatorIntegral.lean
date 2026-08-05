@@ -62,6 +62,12 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 `local instance` so the `L²`-operator norm does not leak onto `Matrix n n ℂ` for transitive
 importers (see `Mathlib/Analysis/CStarAlgebra/Matrix.lean`). -/
 noncomputable local instance matrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) where
+  toNormedRing := Matrix.instL2OpNormedRing
+  toStarRing := inferInstance
+  toCompleteSpace := inferInstance
+  toCStarRing := Matrix.instCStarRing
+  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
+  toStarModule := inferInstance
 
 
 omit [Fintype n] in
