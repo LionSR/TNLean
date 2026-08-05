@@ -94,11 +94,16 @@
         % Semantic boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=L+1 | physical-down=0).  This finite schematic emits
         % (virtual-west=0 | virtual-east=0 | physical-up=3 | physical-down=0).
-        \begin{tenkz}[periodic, physical=up]
-            \tnX{X'} &
-            \tn[up=$\sigma_1$]{A}%
-            \tnspan[brace below]{4}{$L+1\text{ sites}$} &
-            \tn{A} & \tndots & \tn[up=$\sigma_{L+1}$]{A}
+        % The traced sides draw the periodic return; the site-count brace does
+        % not draw in the kernel yet (#5482), so its mathematics stays as the
+        % south label under the return.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, boundary=periodic]
+            \tn[skin=ring]{X'} &
+            \tn[label pos=s, ports={90:physical:$\sigma_1$}]{A} &
+            \tn[label pos=s, ports={90:physical}]{A} & \tn[skin=dots]{} &
+            \tn[label pos=s, ports={90:physical:$\sigma_{L+1}$}]{A}
+            \tnmark[form=label, label pos=s]{s outside}{$L+1\text{ sites}$}
         \end{tenkz}
     \end{center}
     \begin{enumerate}

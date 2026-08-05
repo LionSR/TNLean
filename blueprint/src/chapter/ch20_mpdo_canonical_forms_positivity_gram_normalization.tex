@@ -634,14 +634,17 @@
         % matrices on the wire and carry no legs.  Both sides carry the
         % same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
-        \begin{tenkz}[physical=updown, compact]
-            \tnX{X_\alpha^{\dagger}} & \tnX{X_\alpha} & \tn{M_\alpha} &
-            \tnX{X_\alpha^{-1}} & \tnX{X_\alpha^{-1\dagger}}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, west=open, east=open, size=s]
+            \tn[skin=ring]{X_\alpha^{\dagger}} & \tn[skin=ring]{X_\alpha} &
+            \tn[label pos=s, ports={90:physical, 270:physical}]{M_\alpha} &
+            \tn[skin=ring]{X_\alpha^{-1}} & \tn[skin=ring]{X_\alpha^{-1\dagger}}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=updown, compact]
-            \tnX{Y_\alpha^{\dagger}} & \tnX{Y_\alpha} & \tn{M_\alpha} &
-            \tnX{Y_\alpha^{-1}} & \tnX{Y_\alpha^{-1\dagger}}
+        \begin{tenkz}[rows={wire}, cols=5, west=open, east=open, size=s]
+            \tn[skin=ring]{Y_\alpha^{\dagger}} & \tn[skin=ring]{Y_\alpha} &
+            \tn[label pos=s, ports={90:physical, 270:physical}]{M_\alpha} &
+            \tn[skin=ring]{Y_\alpha^{-1}} & \tn[skin=ring]{Y_\alpha^{-1\dagger}}
         \end{tenkz}
     \end{center}
     \caption{Equality of the Gram conjugations for two copies of the same

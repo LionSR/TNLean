@@ -15,12 +15,16 @@ The two-site block is the virtual contraction of two copies of $K$:
 % Source verdict: exact house-style reproduction of MPDO_K=MM.png from
 % Theorem 4.9, lines 851--856.  The source has no blocking enclosure.
 \begin{tenkzequation}
-    \tnpic[physical=updown, tensor style=box]{%
-        \tn[mpo, up={$(i_1,i_2)$}, down={$(j_1,j_2)$}]{M}}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:{$(i_1,i_2)$},
+            270:physical:{$(j_1,j_2)$}}]{M}
+    \end{tenkz}
     \qquad$=$\qquad
-    \tnpic[physical=updown, tensor style=box]{%
-        \tn[mpo, up=$i_1$, down=$j_1$]{K} &
-        \tn[mpo, up=$i_2$, down=$j_2$]{K}}
+    \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{K} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{K}
+    \end{tenkz}
 \end{tenkzequation}
 The two ket indices and the two bra indices are grouped into the blocked
 physical indices, as in
