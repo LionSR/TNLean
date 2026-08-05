@@ -12,9 +12,9 @@
     \item $Q = P^{1/2} K R^{1/2}$ for a contraction $K$ with $\|K\|_\infty \le 1$.
   \end{enumerate}
   Here $R^+$ denotes the pseudoinverse (inverse on the support) and the
-  square roots $P^{1/2}, R^{1/2}$ are the positive semidefinite square roots
-  compensated on the kernel. The proof is deferred (paper-gap
-  \texttt{schur\_complement\_tfae}).
+  square roots $P^{1/2}, R^{1/2}$ are the positive semidefinite square roots,
+  with their inverses extended by zero on the kernel.
+% The proof is deferred (paper-gap schur_complement_tfae).
 \end{theorem}
 
 \begin{definition}[Block matrix]\label{def:blockMatrix}
@@ -23,6 +23,14 @@
   A $2 \times 2$ block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
   indexed by $\Fin{D_1} \oplus \Fin{D_2}$.
 \end{definition}
+
+\begin{lemma}[Hermiticity of the block matrix]\label{lem:blockMatrix_isHermitian}
+  \lean{SchurComplement.blockMatrix_isHermitian}
+  \leanok
+  \uses{def:blockMatrix}
+  If $P$ and $R$ are Hermitian, then the block matrix
+  $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is Hermitian.
+\end{lemma}
 
 \begin{definition}[Schur complement]\label{def:schurComplement}
   \lean{SchurComplement.schurComplement}
