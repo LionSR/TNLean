@@ -53,13 +53,15 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-blocking` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 1B, Fable-verified): the stock pill silhouette (#5480) now gives the source's rounded glyph form; the wider house pill remains intentional styling. |
 | `rmp-ii-staircase` | K3 | Resolved 2026-08-04: the re-audit confirmed the vertical mirror; the case now ascends as in the source. Residue: house box for the rounded V glyph (#5363). |
 | `rmp-ii-circuit` | — | Already `faithful` (2026-08-02 two-viewer review); the doubling tree carries the complete eight-output identity. |
-| `rmp-ii-ortho-left` | — | Promoted to `faithful` 2026-08-04: cup topology, glyph orientation, and labels match; thin house wires are intentional styling. |
+| `rmp-ii-canonical-right` | K1 | New 2026-08-05 with the kernel migration (wave 1C): the source draws A_R apex-west and the kernel triangle skin has one fixed east apex, so the glyph faces east; ports, labels, and openness match. Land the west-apex triangle skin (#5485), then re-review. |
+| `rmp-ii-ortho-right` | K1 | New 2026-08-05 with the kernel migration (wave 1C): in the house definition-compass frame the mirrored source glyphs face west, which the fixed east apex cannot draw; cup, contraction, and conjugate match. Land the west-apex triangle skin (#5485), then re-review. |
+| `rmp-ii-ortho-left` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 1C, Fable-countersigned): mirrored into the house definition-compass frame the source glyphs face east, exactly the kernel triangle's fixed apex; cup topology and labels match. |
 | `rmp-ii-boundary-lasso` | K1 | Resolved 2026-08-04: the palette is model-recorded as declared species; the physical policy legs stay house-ink because the policy stub does not read the host species. |
 | `rmp-ii-boundary-region` | K2 | The boundary is recorded as repaired; no residue is named. |
-| `rmp-ii-boundary-state` | K2 | A brace versus a box is an equivalent house mark for the same region. |
+| `rmp-ii-boundary-state` | — | Promoted to `faithful` 2026-08-05 (wave 1C): the range-addressed enclosure mark draws the source's sigma_partial R box directly, retiring the brace-for-box note and the migration's interim floating label; solid-grey contour and glyph labels are house style. |
 | `rmp-ii-zcl-mpdo` | K3 | Make the shared trace closure more compact than the current racetrack. |
-| `rmp-ii-channels-ts` | — | Promoted to `faithful` 2026-08-04: legs and channel directions match; the straight double arrow is equivalent house routing. |
-| `rmp-ii-mpdo-ol` | K4 | Reconcile the ledger's finite `extra-element` defect with the note saying the contrast panel is gone, then re-review the hook spacing. |
+| `rmp-ii-channels-ts` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 1C, Fable-countersigned): legs and channel directions match; the straight double arrow is equivalent house routing. |
+| `rmp-ii-mpdo-ol` | K1 | K4 reconciled 2026-08-05 (wave 1C): the `extra-element` defect was stale -- the author block draws one panel and the contrast panel left the case in a98b1e282. Residue: the single-row west/east trace wrap is recorded but draws flush with the chain, so the end identification is not legible; ink the wrap route in the shared renderer, then re-review (the left-right respelling of the source's top-down word is house layout, kernel having no rotation key). |
 | `rmp-ii-peps-rg` | X | The current hooks cross where the source keeps them separated; restore the source crossing topology. |
 | `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
 | `rmp-iii-a-f-symbol` | — | Promoted to `faithful` 2026-08-04: crossing order, directions, sectors, and all six labels verified against the author figure. |

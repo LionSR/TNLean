@@ -273,25 +273,27 @@ note = "Kernel migration (wave 1B), Fable-verified against the author panel: the
 
 [[verdict]]
 id = "rmp-ii-canonical-right"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "914fc865bf38348f73ca0be3c67346ee8d71d324def113055bfc2fb81dfeecd4"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "better than the authors"
+defects = []
+case_sha256 = "56b7fa6100a16d26e99faff2e29f852dc1efe54e1f60069becc1797f985d9b06"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-triangle-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
+note = "Kernel migration, Fable-countersigned against the author panel: the source draws A_R apex-west (pic triaR) and the kernel triangle skin has one fixed east apex, so the glyph faces east; alpha west, beta east, s south, and their openness all match the source. Residue: apex direction, an orientation deviation the bar does not absolve (kernel substrate gap, #5485 -- no west-apex triangle skin draws yet)."
 
 [[verdict]]
 id = "rmp-ii-ortho-right"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "fedb3832dd51af76a742bb68fb91b8345c576fa93a52d19bbb6cde7a59cf53b0"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "better than the authors"
+defects = []
+case_sha256 = "bb31561d9fe93bb491a8730e6f779c6a36e64a94871d93810f5cc6356d5aa06a"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-triangle-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
+note = "Kernel migration, Fable-countersigned against the author panel: the source mirrors the whole equation (nested cups west, apex-east glyphs, open pair east) while the house keeps the definition compass (east cup, open west pair -- the 2026-07-23 better-than-the-authors form); mirrored into the house frame the source glyphs face west, and the kernel triangle skin's one fixed apex faces east instead. The vertical physical contraction, conjugate overline, and cup topology match. Residue: apex direction (kernel substrate gap, #5485)."
 
 [[verdict]]
 id = "rmp-ii-ortho-left"
@@ -299,11 +301,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "977c8d627e82eecff53f1ac6ef81ef9400c292103911e88a7034e9a935b1782b"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-600dpi"
-note = "K2 promotion: west cup, contracted physical pair, and open east pair match the source with the same right-pointing glyph orientation; thin house wires versus bold source wires are intentional styling (the bar)."
+case_sha256 = "5098b0c14bc1cb3c50e85d674375c6b8f8ff70c8e63d243e557f12928cbd1928"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-600dpi"
+note = "Kernel migration, Fable-countersigned against the author panel: the source mirrors the whole equation (nested cups east, apex-west glyphs, open pair west) while the house keeps the definition compass (west cup, open east pair); mirrored into the house frame the source glyphs face east, which is exactly the kernel triangle's fixed apex, so no orientation residue remains. West cup, vertical physical contraction, and open east pair all verified; the conjugate overline is spelled directly in the label text, since kernel does not yet wire the conjugate flag to ink."
 
 [[verdict]]
 id = "rmp-ii-tangent-projector"
@@ -339,13 +341,15 @@ note = "sheet boundary repaired"
 
 [[verdict]]
 id = "rmp-ii-boundary-state"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "42699a192a7cbe7b21ec793d3ac0f6f7a64e42701d116dc4248e2f67445000ff"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "lasso closes; sigma_dR brace where the source draws a box"
+defects = []
+case_sha256 = "f8428a928de9eea853969d288aa2ebb3b52f85e7fc1de4dfc7557a3f3730b703"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-400dpi"
+note = "Kernel migration, landed with the enclosure repair: the range-addressed enclosure mark does draw, so the source's dotted rounded box around the sigma^A sigma^B cluster is now the house enclosure with sigma_partial R at its northeast corner, retiring both the wave's floating-label missing-element defect and the grid tier's brace-for-box note. Lasso topology, the B/sigma word, the east cup, and the conjugate overlines (spelled in the label text, since kernel does not yet wire the bar accent to ink) all match the author panel; solid-grey versus dotted contour, house label distance, and the added glyph labels are house style (the bar)."
 
 [[verdict]]
 id = "rmp-ii-rfp-isometry"
@@ -353,11 +357,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "91449cbf943a79faea338a1bd08af51760310f89b7c607fbfd20d324f3823df8"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "matches fig2_fig2-pepe_AAeqUA; AA = U over the grouped A"
+case_sha256 = "050ade4c26fd7f4dc4ffc8c496d6a4bc88ed32d42af6c09656853e3953a35944"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
+note = "Kernel migration, Fable-countersigned against the author panel: two open-physical A boxes bonded on the left, and U's two labelled outputs over the single blocked bond into the wide pill on the right, matching the source's rounded U glyph (stock pill skin, PR #5480, issue #5363); the wide house A under U versus the source's site-sized A is house styling (the bar)."
 
 [[verdict]]
 id = "rmp-ii-zcl-mpdo"
@@ -376,22 +380,23 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "22cc8f7da57020c0db895ecd2c9eaa1fabce722fe6e9f1cc074f85fc2d186266"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the two-site and one-site MPDO words match leg for leg and the T/S channel arrows read in the same directions; the straight double arrow versus the source's curved arcs is equivalent house routing (the bar)."
+case_sha256 = "2f84f53a6f990e0bec4a6160f5b04ecbd01ad8069bd7fc3ff2eed2f6a3924b2a"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
+note = "K2 promotion preserved through the kernel migration, Fable-countersigned: the two-site and one-site MPDO words still match leg for leg, T reads left over S reading right exactly as the source's arrow pair, with the straight double arrow standing in for the source's curved arcs (equivalent house routing, the bar)."
 
 [[verdict]]
 id = "rmp-ii-mpdo-ol"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["extra-element"]
-case_sha256 = "b0d85cb0034c40140639d169d1454b7d2d7419f357e0e9baf76b8971e7b47148"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "contrast panel gone; hooks wider"
+defects = ["placement-illegible"]
+case_sha256 = "545d701a8e67aec0717cf47d3a14d9d6d6afedb601b755d222a4c136b8f166a8"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-mpo-source-review-2026-08-05-200dpi"
+second_viewer = "fable-vision-countersign-2026-08-05-600dpi"
+note = "K4 resolved: the ledger's extra-element defect was stale bookkeeping. Commit a98b1e282 (2026-07-26) already deleted the second 'racetrack override, for contrast' panel and its caption, which the source's author block (commented-out TikZ, lines 728-741) never draws; the live case has carried only the one panel since. Kernel migration: the periodic word now runs left-right on the stock MPO skin (#5362) instead of the source's top-down layout, since frame=vertical is retired; the west/east trace wire identifying the two ends is present in the model (the boundary audit closes) but draws flush with the chain rather than as a visible loop -- a kernel rendering gap distinct from the working trace=physical racetrack."
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
