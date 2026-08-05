@@ -755,15 +755,21 @@
     theorem then gives positivity.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo}
     The entrywise factorization is proved by induction on the chain
     length, telescoping the ordinary matrix product of the rank-one bond
-    matrices via the rank-one contraction identity and closing the trace
-    at the boundary. Positivity is the Hadamard product of the rank-one
-    bond-matching indicator (positive semidefinite as an outer product)
-    with the pullback of the Kronecker power of $W$ (positive semidefinite
-    by congruence along an arbitrary reindexing), scaled by the
-    nonnegative scalar $(25/32)^N$.
+    matrices via the rank-one contraction identity
+    \begin{align}
+        \tr\bigl((u_1v_1^{\mathsf T})\cdots(u_Nv_N^{\mathsf T})\bigr)
+            &=(v_N^{\mathsf T}u_1)\prod_{n=1}^{N-1}(v_n^{\mathsf T}u_{n+1}),
+        \notag
+    \end{align}
+    where $u_n,v_n$ are the letter-column vectors of the $n$-th bond
+    matrix, and closing the trace at the boundary produces the cyclic
+    bond-matching condition. Positivity is the Hadamard product of the
+    rank-one bond-matching indicator (positive semidefinite as an outer
+    product) with the pullback of the Kronecker power of $W$ (positive
+    semidefinite by congruence along an arbitrary reindexing), scaled by
+    the nonnegative scalar $(25/32)^N$.
 \end{proof}
 
 \begin{theorem}[Spectral identification of the local factor and the
@@ -773,8 +779,7 @@
         wMat_eigenvalue_eq_oneLabelChi_entry}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_eigen}
     \leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,
-        thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The eigenvalues of the local factor $W$ are exactly the two diagonal
     entries of $\chi$: the uniform vector is fixed (eigenvalue $1$) and
     the alternating vector is scaled by $7/25$. The per-site transfer map
@@ -791,11 +796,25 @@
     work.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:mpdo}
-    Direct computation: the uniform and alternating vectors are
-    eigenvectors of the explicit $2\times2$ matrix $W$, and the identity,
-    the traceless diagonal, and the two off-diagonal matrix units are
-    eigenvectors of $\varphi$ by direct expansion of the letter matrices.
+    The uniform and alternating vectors are eigenvectors of the explicit
+    $2\times2$ matrix $W$,
+    \begin{align}
+        W\begin{pmatrix}1\\1\end{pmatrix}
+            &=1\cdot\begin{pmatrix}1\\1\end{pmatrix}, &
+        W\begin{pmatrix}1\\-1\end{pmatrix}
+            &=\frac{7}{25}\cdot\begin{pmatrix}1\\-1\end{pmatrix},
+        \notag
+    \end{align}
+    and the identity, the traceless diagonal, and the two off-diagonal
+    matrix units are eigenvectors of $\varphi$ by direct expansion of the
+    letter matrices,
+    \begin{align}
+        \varphi(1)&=1, &
+        \varphi(\operatorname{diag}(1,-1))
+            &=\frac{7}{25}\operatorname{diag}(1,-1), &
+        \varphi(E_{01})&=\varphi(E_{10})=0.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{definition}[Linearly independent operator family]%
