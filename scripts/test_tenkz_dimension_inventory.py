@@ -1474,6 +1474,19 @@ def test_updater_is_safe_and_idempotent() -> None:
         if not any(expected_counts in item for item in messages):
             raise AssertionError(f"updater did not print exact counts: {messages!r}")
 
+        # The live corpus owns zero dimensions and the ceilings are frozen
+        # there; the synthetic fixture still exercises the updater machinery,
+        # so it borrows a fixture-sized ceiling and restores the zero ratchet.
+        import tenkzlib.dimensions as _dims
+        _saved_ceiling = _dims.CASE_DIMENSION_CEILING
+        _saved_owner_ceilings = _dims.CASE_OWNER_CEILINGS
+        _dims.CASE_DIMENSION_CEILING = 5
+        _dims.CASE_OWNER_CEILINGS = {
+            DimensionOwner.METRIC: 0,
+            DimensionOwner.FRAME: 0,
+            DimensionOwner.ROUTE: 0,
+            DimensionOwner.LAYOUT: 5,
+        }
         fake_repo = tmp_path / "repo"
         case_path = Path("tests/tenkz/rmp/synthetic/cases/reviewed-deletion.tex")
         case = fake_repo / case_path
@@ -1564,7 +1577,7 @@ def test_updater_is_safe_and_idempotent() -> None:
 
         destination.write_text(baseline_text, encoding="utf-8")
         before = destination.read_bytes()
-        repeat_count = CASE_DIMENSION_CEILING // baseline.dimension_count + 1
+        repeat_count = _dims.CASE_DIMENSION_CEILING // baseline.dimension_count + 1
         _expect_error(
             lambda: update_dimension_inventory(
                 fake_repo,
@@ -1606,6 +1619,8 @@ def test_updater_is_safe_and_idempotent() -> None:
             raise AssertionError(
                 f"reviewed deletion did not print counts: {messages!r}"
             )
+        _dims.CASE_DIMENSION_CEILING = _saved_ceiling
+        _dims.CASE_OWNER_CEILINGS = _saved_owner_ceilings
 
 
 def main() -> int:

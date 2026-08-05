@@ -1786,3 +1786,44 @@ The wave drops three 0.7 spellings below tenure:
 | flag:sugar-shaped:command:tnedge | keep-because: wave 6 retired the toric diamond and diagonal edges onto kernel wires; the four remaining uses sit in one 0.7 grid-tier case (the PEPS projection) that retires wholesale at the S4 surface swap; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 7 closes the crossing and ring-closure family onto the kernel
+
+The twelve wave-7 cases — the pulling-through plaquette and its archival
+Dia3 twin, the Dia4 coproduct ring, the boxless F crossing, the Eq59
+group average, the three pentagon sketches, the SPT intertwiner, the
+torus cycle pair, and both PEPS renormalization panels — leave the free
+and grid tiers for kernel flat and traced frames.  This retires the last
+free-tier bodies of the benchmark: the rotated-frame group of Dia3
+respells through angle ports and per-leg `dir=`, the pentagon sketches
+are redrawn against the paper's own fig3 pentagon figures with their
+crossing orders declared, the torus takes the contract's section 12.2
+wound-string spelling, and the F tensor recovers the source's boxless
+directed crossing.  Two ledger contradictions close on the way: the SPT
+intertwiner regains the source factor order the mirrored spelling had
+lost, and the first renormalization panel regains its four edge-centred
+sites.  One archival pairing is corrected: the Eq59 group average pairs
+with Eq59.pdf, the file named Eq59now.pdf holding the SPT g-pull sketch.
+
+The retired tenkzfree millimetres leave the corpus entirely: the census
+falls from 313 to 0 sites (route/string 192 to 0, composition/layout 121
+to 0), metric and frame ownership stay zero, and the ceilings and
+provenance pins ratchet to zero — a published figure now contains no
+millimetres, as the contract demands.  M4 rises from 24.62 to 26.05
+because the kernel cases name the ports, junctions, species, and declared
+crossings their retired free-graph ink implied.  No parser spelling,
+registry row, alias, escape, or overload is added or removed.
+
+The wave drops seven 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:command:tngroup | dies at S4 with the 0.7 group ledger: wave 7 retired the last rotated-frame group (Dia3) onto angle ports, orientation being a consequence of where a record sits; expiry 0.9 |
+| flag:consumers:key:group:frame | dies at S4 with the tombstoned `frame={rotate=}`: its last consumer was the Dia3 group wave 7 respelled; expiry 0.9 |
+| flag:consumers:key:connection:dir | dies at S4 with the 0.7 connection ledger: wave 7 moved every directed free-tier edge onto the kernel wire's `dir=`; expiry 0.9 |
+| flag:consumers:key:connection:fused | dies at S4 with the 0.7 connection ledger: wave 7 retired both renormalization consumers, bundle multiplicity owing no ink under the kernel contract; expiry 0.9 |
+| flag:consumers:key:object:circle | dies at S4 with the 0.7 object ledger: wave 7 retired the last `\tnput[circle]` lambda insertions onto the kernel ring-skin bead; expiry 0.9 |
+| flag:consumers:key:connection:label | keep-because: wave 7 retired the F-crossing consumer onto kernel wire-point label marks; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:connection:role | keep-because: wave 7 retired the pulling-through and torus consumers onto declared kernel species; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5349
