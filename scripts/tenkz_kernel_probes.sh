@@ -67,6 +67,47 @@ labelled_cup_beads=$(grep -c '^atom|.*|skin=ring' "$WORK/r_cup_label.tnlog" \
   echo "FAIL: labelled cups minted $labelled_cup_beads beads, expected 4" >&2
   exit 1
 }
+# One rule for the math shift: the two pictures of r_label_math_shift are the
+# same figure written with and without the author's own `$...$`, so their
+# records and their measured label boxes must agree.  The verbatim `ports=`
+# echo is exempt: it repeats the authored port list as typed, and the label
+# the kernel derives from it is the peeled `port-label=` field beside it.
+shift_records() {
+  awk -v half="$1" '
+    /^picture\|id=k2\|/ { seen = 1 }
+    /^(atom|wire|mark|kernel-boundary|stringbead)\|/ {
+      if ((half == "a" && !seen) || (half == "b" && seen)) print
+    }
+  ' "$WORK/r_label_math_shift.tnlog" | sed 's/|ports=[^|]*//'
+}
+shift_boxes() {
+  awk -v half="$1" '
+    /^picture\|id=k2\|/ { seen = 1 }
+    /^bbox\|.*\|class=label\|/ {
+      if ((half == "a" && !seen) || (half == "b" && seen)) print
+    }
+  ' "$WORK/r_label_math_shift.tnlog" | sed 's/picture=k[0-9]*|//; s/|id=[0-9]*//'
+}
+shifted_records=$(shift_records a)
+bare_records=$(shift_records b)
+[ -n "$shifted_records" ] && [ "$shifted_records" = "$bare_records" ] || {
+  echo "FAIL: the two label spellings left different records" >&2
+  diff <(printf '%s\n' "$shifted_records") <(printf '%s\n' "$bare_records") >&2 \
+    || true
+  exit 1
+}
+shifted_boxes=$(shift_boxes a)
+bare_boxes=$(shift_boxes b)
+[ -n "$shifted_boxes" ] && [ "$shifted_boxes" = "$bare_boxes" ] || {
+  echo "FAIL: the two label spellings measured different label boxes" >&2
+  diff <(printf '%s\n' "$shifted_boxes") <(printf '%s\n' "$bare_boxes") >&2 \
+    || true
+  exit 1
+}
+if printf '%s\n' "$shifted_records" | grep -Eq '\|(port-)?label=[^|]*\$'; then
+  echo "FAIL: a label record kept the author's math shift" >&2
+  exit 1
+fi
 for members in \
   'members=atom-2,atom-3,atom-4' \
   'members=atom-1,atom-2,atom-3,atom-4,atom-5,atom-6'; do
@@ -991,7 +1032,7 @@ for overlay in R M O X; do
   fi
 done
 if ! grep -F '|origin=port-open|' "$WORK/r_physical_policy.tnlog" |
-     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+     grep -Fq '|port-label=m|port-slot=1|port-type=physical'; then
   echo "FAIL: an overlay's explicit physical port depended on picture policy" >&2
   exit 1
 fi
@@ -1074,7 +1115,7 @@ if ! grep -F '|name=anyon|' "$affine_log" |
   exit 1
 fi
 if ! grep -F '|origin=port-open|' "$affine_log" |
-     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+     grep -Fq '|port-label=m|port-slot=1|port-type=physical'; then
   echo "FAIL: affine overlay explicit port depended on inherited policy" >&2
   exit 1
 fi
