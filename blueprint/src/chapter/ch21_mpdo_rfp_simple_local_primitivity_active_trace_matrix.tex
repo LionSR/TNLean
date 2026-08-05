@@ -185,10 +185,19 @@
         % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1);
         % the right-hand side 0 is the zero element of the same matrix space,
         % written as plain text since it carries no ink of its own.
-        \begin{tenkz}[rows={op:none, op, op:none}]
-            \tn[mpo]{P_j} \\
-            \tn[mpo]{\mathcal K_i} \\
-            \tn[mpo]{P_{j^\prime}}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op,op}, cols=1, bonds=none]
+            \tn[at=(1,1), skin=mpo, name=p1,
+                ports={90:physical, 270:physical}]{P_j}
+            \tn[at=(2,1), skin=mpo, name=k,
+                ports={180:virtual, 0:virtual,
+                       90:physical, 270:physical}]{\noexpand\mathcal K_i}
+            \tn[at=(3,1), skin=mpo, name=p2,
+                ports={90:physical, 270:physical}]{P_{j^\prime}}
+            \tnwire{p1.270}{k.90}
+            \tnwire{k.270}{p2.90}
+            \tnwire{k.180}{open w}
+            \tnwire{k.0}{open e}
         \end{tenkz}
         $ = 0\quad\text{unless }i=j=j^\prime$
     \end{center}

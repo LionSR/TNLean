@@ -38,12 +38,24 @@ for its sector-level conclusion.
         % index at each end and one physical leg, so the two sides carry
         % the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{Q_k}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=q, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$i$}]{Q_k}
+            \tnwire{q.180}{open w}
+            \tnwire{q.0}{open e}
         \end{tenkz}
         $ = \zeta_k$
-        \begin{tenkz}[physical=up]
-            \tnX{X_k} & \tn[up=$i$]{P_{\beta(k)}} & \tnX{X_k^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=(1,1), skin=ring, name=x1, ports={180:virtual, 0:virtual}]{X_k}
+            \tn[at=(1,2), name=p, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$i$}]{P_{\beta(k)}}
+            \tn[at=(1,3), skin=ring, name=x2,
+                ports={180:virtual, 0:virtual}]{X_k^{-1}}
+            \tnwire{x1.180}{open w}
+            \tnwire{x1.0}{p.180}
+            \tnwire{p.0}{x2.180}
+            \tnwire{x2.0}{open e}
         \end{tenkz}
     \end{center}
     with every open virtual end a matrix index.

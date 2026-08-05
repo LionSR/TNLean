@@ -634,14 +634,43 @@
         % matrices on the wire and carry no legs.  Both sides carry the
         % same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
-        \begin{tenkz}[physical=updown, compact]
-            \tnX{X_\alpha^{\dagger}} & \tnX{X_\alpha} & \tn{M_\alpha} &
-            \tnX{X_\alpha^{-1}} & \tnX{X_\alpha^{-1\dagger}}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, bonds=none, size=s]
+            \tn[at=(1,1), skin=ring, name=g1,
+                ports={180:virtual, 0:virtual}]{X_\alpha^{\dagger}}
+            \tn[at=(1,2), skin=ring, name=g2,
+                ports={180:virtual, 0:virtual}]{X_\alpha}
+            \tn[at=(1,3), name=m, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M_\alpha}
+            \tn[at=(1,4), skin=ring, name=g3,
+                ports={180:virtual, 0:virtual}]{X_\alpha^{-1}}
+            \tn[at=(1,5), skin=ring, name=g4,
+                ports={180:virtual, 0:virtual}]{X_\alpha^{-1\dagger}}
+            \tnwire{g1.180}{open w}
+            \tnwire{g1.0}{g2.180}
+            \tnwire{g2.0}{m.180}
+            \tnwire{m.0}{g3.180}
+            \tnwire{g3.0}{g4.180}
+            \tnwire{g4.0}{open e}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=updown, compact]
-            \tnX{Y_\alpha^{\dagger}} & \tnX{Y_\alpha} & \tn{M_\alpha} &
-            \tnX{Y_\alpha^{-1}} & \tnX{Y_\alpha^{-1\dagger}}
+        \begin{tenkz}[rows={wire}, cols=5, bonds=none, size=s]
+            \tn[at=(1,1), skin=ring, name=g1,
+                ports={180:virtual, 0:virtual}]{Y_\alpha^{\dagger}}
+            \tn[at=(1,2), skin=ring, name=g2,
+                ports={180:virtual, 0:virtual}]{Y_\alpha}
+            \tn[at=(1,3), name=m, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M_\alpha}
+            \tn[at=(1,4), skin=ring, name=g3,
+                ports={180:virtual, 0:virtual}]{Y_\alpha^{-1}}
+            \tn[at=(1,5), skin=ring, name=g4,
+                ports={180:virtual, 0:virtual}]{Y_\alpha^{-1\dagger}}
+            \tnwire{g1.180}{open w}
+            \tnwire{g1.0}{g2.180}
+            \tnwire{g2.0}{m.180}
+            \tnwire{m.0}{g3.180}
+            \tnwire{g3.0}{g4.180}
+            \tnwire{g4.0}{open e}
         \end{tenkz}
     \end{center}
     \caption{Equality of the Gram conjugations for two copies of the same

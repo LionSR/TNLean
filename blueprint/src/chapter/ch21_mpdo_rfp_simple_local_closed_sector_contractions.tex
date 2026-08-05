@@ -278,14 +278,20 @@ $\eta_{k,h}=r_k l_h$:
     % further horizontal index.  Both sides carry the same boundary
     % signature
     % (virtual-west=0 | virtual-east=0 | physical-up=2 | physical-down=2).
-    \begin{tenkz}[physical=updown, boundary=none]
-        \tn[pill, wide=2, legs at={1,2},
-            up={{$x_R$},{$x_L$}}, down={{$y_R$},{$y_L$}}]{\eta_{k,h}}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=none, east=none]
+        \tn[at=(1,1), skin=pill, wide=2, name=eta,
+            ports={90@1:physical:$x_R$, 90@2:physical:$x_L$,
+                   270@1:physical:$y_R$, 270@2:physical:$y_L$}]{\eta_{k,h}}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[physical=updown, boundary=none,
-                  bond label={$a$ at 1-2}]
-        \tn[up=$x_R$, down=$y_R$]{r_k} & \tn[up=$x_L$, down=$y_L$]{l_h}
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=none, east=none]
+        \tn[at=(1,1), name=rk, label pos=w,
+            ports={0:virtual, 90:physical:$x_R$, 270:physical:$y_R$}]{r_k}
+        \tn[at=(1,2), name=lh, label pos=e,
+            ports={180:virtual, 90:physical:$x_L$, 270:physical:$y_L$}]{l_h}
+        \tnwire[name=ab]{rk.0}{lh.180}
+        \tnmark[form=label, label pos=n]{on ab 0.5}{$a$}
     \end{tenkz}
 \end{center}
 This is the contraction in

@@ -49,13 +49,42 @@
     % Boundary signature: both panels have (V,P)=(0,3).  Source verdict: exact
     % reproduction of paper_normal.tex:255--274 and 565--580 in house style.
     \begin{center}
-        \tnpic[periodic, physical=up]{%
-            \tn[up=$\sigma_1$]{A_1} & \tnX{X} &
-            \tn[up=$\sigma_2$]{A_2} & \tn[up=$\sigma_3$]{A_3}}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none, align=1]
+            \tn[at=(1,2), name=a1, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_1$}]{A_1}
+            \tn[at=(1,3), skin=ring, name=x, ports={180:virtual, 0:virtual}]{X}
+            \tn[at=(1,4), name=a2, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_2$}]{A_2}
+            \tn[at=(1,5), name=a3, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_3$}]{A_3}
+            \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
+            \tn[at=(2,6), skin=none, name=je, ports={90:virtual, 180:virtual}]{}
+            \tnwire{a1.0}{x.180}
+            \tnwire{x.0}{a2.180}
+            \tnwire{a2.0}{a3.180}
+            \tnwire[route=arc]{a3.0}{je.90}
+            \tnwire{je.180}{jw.0}
+            \tnwire[route=arc]{jw.90}{a1.180}
+        \end{tenkz}
         $=$
-        \tnpic[periodic, physical=up]{%
-            \tn[up=$\sigma_1$]{B_1} & \tnX{Y} &
-            \tn[up=$\sigma_2$]{B_2} & \tn[up=$\sigma_3$]{B_3}}
+        \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none, align=1]
+            \tn[at=(1,2), name=b1, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_1$}]{B_1}
+            \tn[at=(1,3), skin=ring, name=y, ports={180:virtual, 0:virtual}]{Y}
+            \tn[at=(1,4), name=b2, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_2$}]{B_2}
+            \tn[at=(1,5), name=b3, label pos=s,
+                ports={180:virtual, 0:virtual, 90:physical:$\sigma_3$}]{B_3}
+            \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
+            \tn[at=(2,6), skin=none, name=je, ports={90:virtual, 180:virtual}]{}
+            \tnwire{b1.0}{y.180}
+            \tnwire{y.0}{b2.180}
+            \tnwire{b2.0}{b3.180}
+            \tnwire[route=arc]{b3.0}{je.90}
+            \tnwire{je.180}{jw.0}
+            \tnwire[route=arc]{jw.90}{b1.180}
+        \end{tenkz}
     \end{center}
 \end{theorem}
 \begin{proof}\leanok
