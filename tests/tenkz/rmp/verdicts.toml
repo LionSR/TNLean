@@ -359,11 +359,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "fc6fb70ed7a7f5ca5fa58660d8be231b3c145d280d29c8d2f56585dabcac53b6"
+case_sha256 = "744f5d11f8528f89f9526555ccd7976078fcda32903f7e45e5c7c785ae3162d0"
 reviewed = "2026-08-05"
 renderer = "claude-kernel-source-review-2026-08-05-200dpi"
-second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
-note = "Kernel migration, Fable-countersigned against the author panel: two open-physical A boxes bonded on the left, and U's two labelled outputs over the single blocked bond into the wide pill on the right, matching the source's rounded U glyph (stock pill skin, PR #5480, issue #5363); the wide house A under U versus the source's site-sized A is house styling (the bar)."
+second_viewer = "claude-issue-5503-port-fix-countersign-2026-08-05-200dpi"
+note = "Issue #5503: U.270 and A.90 retyped virtual to physical -- the bond carries the summed physical index j (A^{i_1} A^{i_2} = sum_j U_{(i_1 i_2),j} A^j), matching the author source's identical vertical-stub style for that bond and the LHS's unambiguous physical legs (ImagesReview Section II.tex lines 693-699), and the sibling convention in rmp-ii-ortho-left/right (270:physical -> 90:physical for a contracted physical index). Render at 200dpi is pixel-identical to the pre-fix panel, since physical leg/.style={bond} in tenkz-core.code.tex aliases the two wire styles for a connected bond; the fix is a semantic-typing correction confirmed against the author panel fig2_fig2-pepe_AAeqUA.pdf, not a visual change. Prior note: Kernel migration, Fable-countersigned against the author panel: two open-physical A boxes bonded on the left, and U's two labelled outputs over the single blocked bond into the wide pill on the right, matching the source's rounded U glyph (stock pill skin, PR #5480, issue #5363); the wide house A under U versus the source's site-sized A is house styling (the bar)."
 
 [[verdict]]
 id = "rmp-ii-zcl-mpdo"
