@@ -264,3 +264,48 @@ reduced state.
     the canonical purification $\psi=(\sqrt\rho\otimes\Id)\ket\Omega$ and
     the transposition operator $\theta$ with respect to its Schmidt basis.
 \end{proof}
+
+\section{Complete positivity from positivity}
+
+For a linear map $T:\MD\to\MD$, write $T^*$ for its trace-pairing adjoint
+(Definition~\ref{def:trace_pairing_adjoint}). Complete positivity is in
+general strictly stronger than positivity, but the two coincide once $T$'s
+range, or its adjoint's range, is commutative.
+
+\begin{definition}[Commutative range]\label{def:commutative_range}
+    \lean{PositiveOnAbelian.HasCommutingRange}
+    \leanok
+    A linear map $T:\MD\to\MD$ has \emph{commutative range} if $T(X)$ and
+    $T(Y)$ commute for all $X,Y\in\MD$. Since a family of pairwise-commuting
+    elements generates a commutative subalgebra, this is the statement that
+    $T$ maps into a commutative subalgebra of $\MD$.
+\end{definition}
+
+\begin{theorem}[Complete positivity from positivity]\label{thm:cp_from_positivity_commutative}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_commutingRange_or}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      def:trace_pairing_adjoint}
+    Let $T:\MD\to\MD$ be a positive linear map. If $T$ has commutative
+    range, or $T^*$ has commutative range, then $T$ is completely positive.
+    This is \cite[Proposition~1.6]{Wolf2012Quantum}; the commutative-range
+    hypothesis is the range-only reading of Wolf's ``$\mathcal A$ or
+    $\mathcal B$ commutative'' hypothesis that his own proof establishes and
+    that his remark immediately after the proof licenses for an arbitrary
+    operator system mapping into a commutative algebra. See
+    \path{docs/paper-gaps/wolf_prop16_cp_positivity_commutative_side.tex}
+    for the precise relationship between the two phrasings.
+\end{theorem}
+
+\begin{proof}\leanok
+    Suppose first that $T$ has commutative range. Simultaneously
+    diagonalizing the mutually commuting Hermitian family $\{T(a_{ij})\}$
+    for an arbitrary positive semidefinite block matrix $[a_{ij}]$ reduces
+    the block quadratic form $\sum_{i,j}\bra{\psi_i}T(a_{ij})\ket{\psi_j}$ to
+    a sum of scalar terms, each nonnegative by positivity of $T$ and of
+    $[a_{ij}]$; taking $[a_{ij}]$ to be the coefficient family of the Choi
+    matrix of the identity map shows the Choi matrix of $T$ is positive
+    semidefinite, which is complete positivity. If instead $T^*$ has
+    commutative range, apply the codomain case to $T^*$ and use that $T$ is
+    completely positive iff $T^*$ is.
+\end{proof}
