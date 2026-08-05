@@ -1,0 +1,80 @@
+% Regression: a region window nested inside another region window.  One
+% enclosure selects a strict member subset of another; concentric order
+% steps the outer contour out by one clearance so the contours never share
+% a support, and the unbonded virtual port of an inner member runs to the
+% inner window's contour -- the boundary that cuts it -- and stops on it,
+% short of the outer window (issue 5462 acceptance).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_nested_int
+\fp_new:N \g__tenkz_test_nested_inner_fp
+\fp_new:N \g__tenkz_test_nested_outer_fp
+\fp_new:N \g__tenkz_test_nested_tip_fp
+\cs_new_eq:NN \__tenkz_test_nested_enclosure:n
+  \__tenkz_kernel_r_mark_enclosure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
+  {
+    \__tenkz_test_nested_enclosure:n {#1}
+    \int_gincr:N \g__tenkz_test_nested_int
+    \int_compare:nNnTF { \g__tenkz_test_nested_int } = {1}
+      {
+        \fp_gset:Nn \g__tenkz_test_nested_inner_fp
+          { \l__tenkz_kernel_r_xb_tl }
+      }
+      {
+        \fp_gset:Nn \g__tenkz_test_nested_outer_fp
+          { \l__tenkz_kernel_r_xb_tl }
+      }
+  }
+\cs_new_eq:NN \__tenkz_test_nested_port:n
+  \__tenkz_kernel_r_wire_port_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_port_open:n #1
+  {
+    \__tenkz_test_nested_port:n {#1}
+    \fp_gset:Nn \g__tenkz_test_nested_tip_fp
+      { \l__tenkz_kernel_r_port_tip_x_fp }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows=1, cols=3, bonds=none]
+  \tn[at=(1,1), skin=dot, name=r]{}
+  \tn[at=(1,2), skin=box, name=b]{B}
+  \tn[at=(1,3), skin=box, name=c, ports={0:virtual}]{C}
+  \tnwire{b}{c}
+  \tnmark[form=enclosure]{{b, c}}{}
+  \tnmark[form=enclosure]{{r, b, c}}{}
+\end{tenkz}
+\ExplSyntaxOn
+% the shared east support: the outer window clears the inner contour by one
+% daylight instead of colliding with it
+\fp_compare:nNnF
+  { \g__tenkz_test_nested_outer_fp - \g__tenkz_test_nested_inner_fp }
+  >
+  { 0.9 * \__tenkz_metric_ratio:n {daylight} }
+  { \errmessage{nested~region~contours~collide~on~their~shared~support} }
+% the cut index ends on the inner window's contour, up to the small
+% difference between the wire pass's silhouettes and the measured ones the
+% contour itself folds ...
+\fp_compare:nNnF
+  {
+    abs
+      ( \g__tenkz_test_nested_tip_fp - \g__tenkz_test_nested_inner_fp )
+  }
+  < { 0.35 * \__tenkz_metric_ratio:n {daylight} }
+  { \errmessage{cut~virtual~stub~does~not~meet~the~inner~window~contour} }
+% ... and short of the outer window's
+\fp_compare:nNnF
+  { \g__tenkz_test_nested_tip_fp }
+  <
+  {
+    \g__tenkz_test_nested_outer_fp
+    - 0.5 * \__tenkz_metric_ratio:n {daylight}
+  }
+  { \errmessage{cut~virtual~stub~ran~past~the~outer~window} }
+\ExplSyntaxOff
+\end{document}

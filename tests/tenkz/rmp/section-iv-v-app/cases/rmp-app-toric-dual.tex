@@ -1,21 +1,29 @@
 % Target: rmp-app-toric-dual
 % Formula: physical spins = differences of adjacent plaquette colours
-% Ink: Canonical public tenkzlattice: a selected three-by-three sheet with two
-%   dashed internal diagonals.
+% Ink: Kernel plane frame; the blocked sheet is the house enclosure, the four
+%   plaquette-colour legs leave the retained mid-side stations, and the two
+%   interior diagonals recall the original lattice.
 % Boundary: The four retained mid-side sites expose the plaquette-colour legs.
 % Source: paper TN-Review-main.tex line 2462; paper-context-only; no author drawing
 %   source
-% Capabilities: lattice, regions, typed-ports
+% Capabilities: kernel, plane-frame, regions, typed-ports
+\tenkzkernel
 \[
-\begin{tenkzlattice}[rows=3, cols=3, frame=oblique, site=none, boundary=open]
-  % the blocked tensor (shaded sheet)
-  \tnregion[slot=selected]{(1-3,1-3)}
-  % keep only the four mid-side sites: their boundary legs are the four
-  % virtual plaquette colours h_1..h_4
-  \tnsite[removed]{(1,1)} \tnsite[removed]{(1,3)}
-  \tnsite[removed]{(3,1)} \tnsite[removed]{(3,3)}
-  \tnsite[removed]{(2,2)}
-  \tnedge[style=dashed]{(1,1)-(3,3)}
-  \tnedge[style=dashed]{(1,3)-(3,1)}
-\end{tenkzlattice}
+  % The dual blocked tensor: the four mid-side stations expose the plaquette
+  % colours h_1..h_4, and the corner-to-corner diagonals are the original
+  % lattice's edges crossing under the dual sheet.
+  \begin{tenkz}[lattice={3x3}, frame=plane, bonds=none, boundary=none]
+    \tn[at=(1,1), name=cnw, skin=none]{}
+    \tn[at=(1,3), name=cne, skin=none]{}
+    \tn[at=(3,1), name=csw, skin=none]{}
+    \tn[at=(3,3), name=cse, skin=none]{}
+    \tn[at=(1,2), name=n, skin=none]{}
+    \tn[at=(2,1), name=w, skin=none]{}
+    \tn[at=(2,3), name=e, skin=none]{}
+    \tn[at=(3,2), name=s, skin=none]{}
+    \tnwire{cnw}{cse} \tnwire{cne}{csw}
+    \tnwire{n.90}{open n} \tnwire{w.180}{open w}
+    \tnwire{e.0}{open e} \tnwire{s.270}{open s}
+    \tnmark[form=enclosure]{(1,1) .. (3,3)}{}
+  \end{tenkz}
 \]

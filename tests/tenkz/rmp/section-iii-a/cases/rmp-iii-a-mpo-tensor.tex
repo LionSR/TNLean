@@ -1,32 +1,38 @@
 % Target: rmp-iii-a-mpo-tensor
 % Formula: the 4-valent MPO tensor — red virtual MPO wire a: j -> k
-% Ink: Canonical public tenkz, tenkzfree environments; no raw TikZ.
+% Ink: Kernel flat frames; the grid panel types the legs and the fat-graph
+%   panel directs them.
 % Boundary: Resolved by the public environment; open indices remain explicit.
 % Source: paper TN-Review-main.tex line 1341; paper-context-only; no author drawing
 %   source
-% Capabilities: grid, typed-ports
-% panel 1 — the same tensor in the grid language: an MPO site with open
-% virtual indices j (west), k (east) and physical legs m (up), n (down);
-% bond dir=right orients the virtual level j -> k as in the paper.
+% Capabilities: kernel, typed-ports
+\tenkzkernel
+% panel 1 — the same tensor in the grid language: an MPO site with typed open
+% legs j (west), k (east) and physical legs m (up), n (down).
 \[
-  \begin{tenkz}[physical=updown, west label=$j$, east label=$k$,
-                bond dir=right]
-    \tn[up=$m$, down=$n$]{}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=T, skin=dot, ports={180:virtual:$j$, 0:virtual:$k$,
+      90:physical:$m$, 270:physical:$n$}]{}
   \end{tenkz}
 \]
 
-% panel 2 — the fat-graph depiction, free tier: the two directed wires
-% crossing with no glyph at the crossing (the fat graph IS the tensor).
-% The physical wire pierces the virtual one away from its midpoint, so
-% the level name a — which a join always sets at mid-wire — reads over
-% clear paper instead of over the physical wire.
+% panel 2 — the fat-graph depiction: two directed levels meeting at a
+% glyphless junction (the fat graph IS the tensor).  The leg typing matches
+% the grid panel: the vertical m/n level is physical, the horizontal j/k
+% level is the virtual MPO wire; the junction sits east of the level
+% midpoint, so the level name a reads over clear paper.
 \[
-  \begin{tenkzfree}
-    \tnput[dot, label pos=west,  ports={east:virtual}]{j}{(0mm,0mm)}{j}
-    \tnput[dot, label pos=east,  ports={west:virtual}]{k}{(26mm,0mm)}{k}
-    \tnput[dot, label pos=south, ports={north:physical}]{n}{(18mm,-9mm)}{n}
-    \tnput[dot, label pos=north, ports={south:physical}]{m}{(18mm,9mm)}{m}
-    \tnjoin[dir, label=a]{j.east}{k.west}
-    \tnjoin[dir]{n.north}{m.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), name=j, skin=dot, label pos=180, ports={0:virtual}]{j}
+    \tn[at=(2,4), name=k, skin=dot, label pos=0, ports={180:virtual}]{k}
+    \tn[at=(1,3), name=m, skin=dot, label pos=90, ports={270:physical}]{m}
+    \tn[at=(3,3), name=n, skin=dot, label pos=270, ports={90:physical}]{n}
+    \tn[at=(2,3), name=X, skin=none,
+      ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{}
+    \tnwire[name=a]{j.0}{X.180}
+    \tnwire[dir=to]{X.0}{k.180}
+    \tnwire{n.90}{X.270}
+    \tnwire[dir=to]{X.90}{m.270}
+    \tnmark[form=label, label pos=90]{on a 0.5}{$a$}
+  \end{tenkz}
 \]

@@ -1,12 +1,16 @@
 % Target: rmp-workbench-iii-eq52
 % Formula: X contracted with one MPO tensor defines the local action.
-% Ink: Canonical public tenkz two-atom word with X and one MPO atom.
+% Ink: Kernel flat frame; the X ring and one stock MPO atom close on the traced
+%   sides.
 % Boundary: The virtual word is traced; both physical indices are open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 144-149; archival output Eq52.pdf
-% Capabilities: grid, boundary-insertion, closure
+% Capabilities: kernel, boundary-insertion, closure
 \[
-  \begin{tenkz}[tensor style=box, physical=updown, boundary=periodic]
-    \tnX{X} & \tn{}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace]
+    \tn[at=(1,1), skin=ring]{X}
+    \tn[at=(1,2), skin=mpo, ports={0:virtual, 90:physical, 180:virtual,
+      270:physical}]{}
   \end{tenkz} \;:\; X
 \]

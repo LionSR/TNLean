@@ -1,10 +1,14 @@
 % Target: rmp-workbench-iii-eq50
 % Formula: A single boundary tensor represents the local Eq. 50 map.
-% Ink: Canonical public tenkz one-site boundary atom.
+% Ink: Kernel flat frame; the stock MPO skin carries the one-site boundary atom.
 % Boundary: One west and one east virtual leg remain open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 133-135; archival output Eq50.pdf
-% Capabilities: grid, local-map
+% Capabilities: kernel, local-map
 \[
-  \begin{tenkz}[physical=updown, tensor style=box] \tn{} \end{tenkz}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, physical=updown]
+    \tn[skin=mpo, name=A, ports={0:virtual, 180:virtual}]{}
+    \tnwire{open w}{A.180} \tnwire{A.0}{open e}
+  \end{tenkz}
 \]

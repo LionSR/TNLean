@@ -1,28 +1,40 @@
 % Target: rmp-iii-a-mpo-action
 % Formula: u_g on the physical leg equals w_g,v_g actions on four virtual legs.
-% Ink: Canonical public tenkzfree PEPS star with five explicit action atoms.
+% Ink: Kernel flat frames; the five action atoms are ring skins on the PEPS
+%   star, with the source's diagonal virtual pair restored.
 % Boundary: The transformed tensor keeps four virtual and one physical open legs.
 % Source: paper TN-Review-main.tex line 1492; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 538-552
-% Capabilities: free-graph, virtual-action, typed-ports
+% Capabilities: kernel, virtual-action, typed-ports
 \[
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[ring]{u}{(0mm,10mm)}{u_g}
-    \tnjoin{-14mm,0mm}{A.west} \tnjoin{A.east}{14mm,0mm}
-    \tnjoin{0mm,-14mm}{A.south} \tnjoin{A.north}{u.south}
-    \tnjoin{u.north}{0mm,18mm}
-  \end{tenkzfree}
-  =
-  \begin{tenkzfree}
-    \tnput[dot]{A}{(0mm,0mm)}{A}
-    \tnput[ring]{w}{(-10mm,0mm)}{w_g}
-    \tnput[ring]{wd}{(10mm,0mm)}{w_g^\dagger}
-    \tnput[ring]{v}{(0mm,10mm)}{v_g}
-    \tnput[ring]{vd}{(0mm,-10mm)}{v_g^\dagger}
-    \tnjoin{-18mm,0mm}{w.west} \tnjoin{w.east}{A.west}
-    \tnjoin{A.east}{wd.west} \tnjoin{wd.east}{18mm,0mm}
-    \tnjoin{0mm,-18mm}{vd.south} \tnjoin{vd.north}{A.south}
-    \tnjoin{A.north}{v.south} \tnjoin{v.north}{0mm,18mm}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkzeq}
+    % LHS: u_g acts on the physical leg of the PEPS star.
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      \tn[at=(2,2), name=A, skin=dot, label pos=270,
+        ports={0:virtual, 45:virtual, 90:physical, 180:virtual,
+          225:virtual}]{A}
+      \tn[at=(1,2), name=u, skin=ring, ports={270:physical, 90:physical}]{u_g}
+      \tnwire{A.90}{u.270}
+      \tnwire{open w}{A.180} \tnwire{A.0}{open e}
+      \tnwire{0.7 sw of A}{A.225} \tnwire{A.45}{0.7 ne of A}
+    \end{tenkz}
+    =
+    % RHS: the same action as w_g, v_g pairs on the four virtual legs.
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+      \tn[at=(2,2), name=A, skin=dot, label pos=270,
+        ports={0:virtual, 45:virtual, 90:physical, 180:virtual,
+          225:virtual}]{A}
+      \tn[at=(2,1), name=w, skin=ring, ports={0:virtual, 180:virtual}]{w_g}
+      \tn[at=(2,3), name=wd, skin=ring,
+        ports={0:virtual, 180:virtual}]{w_g^\dagger}
+      \tn[at=(1,3), name=vd, skin=ring,
+        ports={225:virtual, 45:virtual}]{v_g^\dagger}
+      \tn[at=(3,1), name=v, skin=ring, ports={45:virtual, 225:virtual}]{v_g}
+      \tnwire{open w}{w.180} \tnwire{w.0}{A.180}
+      \tnwire{A.0}{wd.180} \tnwire{wd.0}{open e}
+      \tnwire{A.45}{vd.225} \tnwire{vd.45}{0.7 ne of vd}
+      \tnwire{A.225}{v.45} \tnwire{v.225}{0.7 sw of v}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

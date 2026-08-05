@@ -1,0 +1,78 @@
+% Regression: dir= rides a resolved physical index.  An internal directed
+% contraction and directed open ends on all four bearings keep the typed
+% record, the physical-leg stroke, and the direction mark; the reversed
+% spelling keeps the reversed barb.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_dir_physical_stroke_int
+\int_new:N \g__tenkz_test_dir_marks_int
+\int_new:N \g__tenkz_test_dir_marks_reversed_int
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \exp_args:NV \__tenkz_model_get:nnN
+      \l__tenkz_kernel_r_wire_record_tl {dir} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      {
+        \str_if_eq:eeF {#1} {physical~leg}
+          {\errmessage{directed~physical~index~lost~physical~stroke}}
+        \int_gincr:N \g__tenkz_test_dir_physical_stroke_int
+        \str_case:Vn \l_tmpa_tl
+          {
+            {to}
+              {
+                \tl_if_in:NnF \l__tenkz_kernel_r_wire_ink_tl {dir~marks}
+                  {\errmessage{directed~physical~index~lost~its~barb}}
+                \int_gincr:N \g__tenkz_test_dir_marks_int
+              }
+            {from}
+              {
+                \tl_if_in:NnF \l__tenkz_kernel_r_wire_ink_tl
+                  {dir~marks~reversed}
+                  {\errmessage{reversed~physical~index~lost~its~barb}}
+                \int_gincr:N \g__tenkz_test_dir_marks_reversed_int
+              }
+          }
+      }
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_dir_physical_stroke_int } = {6}
+      {\errmessage{directed~physical~stroke~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_dir_marks_int } = {5}
+      {\errmessage{directed~physical~barb~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_dir_marks_reversed_int } = {1}
+      {\errmessage{reversed~physical~barb~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% Open directed physical ends on all four bearings around one site.
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=X, skin=dot,
+    ports={0:physical, 90:physical, 180:physical, 270:physical}]{}
+  \tnwire[dir=to, name=east]{X.0}{open e}
+  \tnwire[dir=to, name=north]{X.90}{open n}
+  \tnwire[dir=to, name=west]{X.180}{open w}
+  \tnwire[dir=to, name=south]{X.270}{open s}
+\end{tenkz}
+% An internal directed physical contraction: two consumed ports, no
+% boundary entry.
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=A, ports={0:physical}]{A}
+  \tn[at=(1,2), name=B, ports={180:physical}]{B}
+  \tnwire[dir=to, name=inner]{A.0}{B.180}
+\end{tenkz}
+% The reversed spelling on an open end: the barb flips, the index enters.
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), name=C, ports={90:physical}]{C}
+  \tnwire[dir=from, name=entering]{C.90}{open n}
+\end{tenkz}
+\end{document}

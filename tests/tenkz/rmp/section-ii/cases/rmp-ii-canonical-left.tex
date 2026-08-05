@@ -1,13 +1,16 @@
 % Target: rmp-ii-canonical-left
 % Formula: [A_L^s]_{alpha,beta} is the left-canonical tensor.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; a single triangle atom carries alpha, beta, and s as
+%   typed ports.
 % Boundary: The west alpha, east beta, and downward physical s indices are open.
 % Source: paper TN-Review-main.tex line 661; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 192-198
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   [A_L^s]_{\alpha,\beta} \;=\;
-  \begin{tenkz}[physical=down, west label=$\alpha$, east label=$\beta$]
-    \tn[tri=l, down=$s$]{A_L}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[skin=tri,
+      ports={180:virtual:$\alpha$, 0:virtual:$\beta$, 270:physical:$s$}]{A_L}
   \end{tenkz}
 \]

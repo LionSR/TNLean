@@ -1,18 +1,29 @@
 % Target: rmp-workbench-iii-peps-renormalization-one
 % Formula: Four PEPS tensors occupy the edges of one renormalization plaquette.
-% Ink: Canonical public tenkzfree square with four edge-centred PEPS atoms.
-% Boundary: Eight external half-edges remain open around the plaquette.
+% Ink: Kernel flat frame; four crossing bonds and four edge-centred glyphless
+%   sites with angled physical legs.
+% Boundary: Eight external half-edges and four physical legs remain open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 622-630; archival output PEPSrenorm1.pdf
-% Capabilities: free-graph, four-site-plaquette, renormalization
+% Capabilities: kernel, four-site-plaquette, renormalization
 \[
-  \begin{tenkzfree}
-    % each side is one fused (paired/hatched) bond spanning tail-to-tail; the
-    % four sides cross pairwise at the square's corners -- a bare square of
-    % bonds, matching the author block, which places no tensor here.
-    \tnjoin[fused]{-12mm,8mm}{12mm,8mm}
-    \tnjoin[fused]{-12mm,-8mm}{12mm,-8mm}
-    \tnjoin[fused]{8mm,-12mm}{8mm,12mm}
-    \tnjoin[fused]{-8mm,-12mm}{-8mm,12mm}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+    % the bare plaquette: two horizontal and two vertical bonds crossing at
+    % the four corners, the verticals painted over the horizontals
+    \tnwire[kind=string, name=h1]{(2,1)}{(2,4)}
+    \tnwire[kind=string, name=h2]{(3,1)}{(3,4)}
+    \tnwire[kind=string, name=v1,
+            cross={over at crossing of v1 and h1,
+                   over at crossing of v1 and h2}]{(1,2)}{(4,2)}
+    \tnwire[kind=string, name=v2,
+            cross={over at crossing of v2 and h1,
+                   over at crossing of v2 and h2}]{(1,3)}{(4,3)}
+    % the four edge-centred PEPS sites are glyphless; each shows only its
+    % 50-degree physical leg, as the source draws
+    \tn[skin=none, at=midway (2,2) and (2,3), name=PN, ports={50:physical}]{}
+    \tn[skin=none, at=midway (3,2) and (3,3), name=PS, ports={50:physical}]{}
+    \tn[skin=none, at=midway (2,2) and (3,2), name=PW, ports={50:physical}]{}
+    \tn[skin=none, at=midway (2,3) and (3,3), name=PE, ports={50:physical}]{}
+  \end{tenkz}.
 \]

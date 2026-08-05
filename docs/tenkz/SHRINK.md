@@ -1436,3 +1436,458 @@ for the four added open-wire lines. No parser spelling, registry row,
 alias, escape, or overload changes.
 
 Census-correction: #5477
+
+### 2026-08-05 — the condensation panel derives its doubled plane from the frame
+
+The condensation panel (`rmp-iii-b-condensation`) leaves the lattice tier
+for the kernel: one plane frame with the contract bilayer basis (the
+`planes` preset) owns both 6x4 sheets, and every site pair, in-sheet bond,
+inter-sheet contraction, and perimeter opening is a member-addressed
+declaration.  The six interior path marks become portless affine beads --
+atoms one fractional pitch step east of their member sites -- and each
+sheet's marked string routes through its beads, which closes the
+structural gap the 2026-08-03 review recorded against the shared
+doubled-plane basis scaffold.  M4 rises from 18.72 to 19.15 because the
+kernel case names the 142 incidences the retiring preset implied.  The
+scaffold rides the existing frame, basis, and address machinery: no
+parser spelling, registry row, alias, escape, overload, page-distance
+constant, or case-specific metric is added, and the dimension census is
+unchanged.  The regression
+`tests/tenkz/kernel/regression/r_planes_doubled_scaffold.tex` pins the
+two-sheet population, the claimed member, the per-sheet bead offsets
+through the plane map, and the via-routed sheet strings.
+
+Census-correction: #5348
+
+### 2026-08-05 — wave 1B: seven Section-II panels move to the kernel tier
+
+The Section-II spectra-and-canonical-form family — the reduced-density
+racetrack, its eig twin, the transfer-operator ladder, the fixed-point
+capsule pair, the one-site isometry, the SV17 approximation chain, and
+the left-canonical triangle — leaves the grid tier for kernel flat
+frames with declared typed ports.  The isometry and state atoms take the
+stock pill skin.  The Fable verification pass corrected three renders
+against the sources before landing: the two racetracks re-open their
+physical legs (grid bonds had contracted every vertical pair the source
+leaves open), the SV17 marginal keeps its ket legs up and bra legs down
+(an operator, not its trace), and the transfer ladder now draws the
+source's cut region as the house enclosure.  The fixed-point pair's fold
+draws flush with the capsule edge on the kernel — a rendering regression
+from the grid cup, re-graded honestly to a cosmetic gap.
+
+M4 rises from 19.15 to 19.75 because the kernel cases name every port,
+rail, and closure that the grid rows and sandwich words implied.  The
+physical-dimension census is unchanged at 478 sites (route/string 260,
+composition/layout 218); no ceiling moves.  No parser spelling, registry
+row, alias, escape, or overload is added or removed.
+
+Census-correction: #5347
+
+### 2026-08-05 — seven Section-III-A workbench panels enter the kernel (wave 2A)
+
+The eq50, eq51, eq52, diagram-two, eq50-reduced, f-symbol-simplified-a,
+and mpo-representation cases leave the grid tier. Each now states its
+model on the kernel: flat frames with canonical addresses, typed ports on
+every mpo atom, and the source-red operator palette recorded as the
+declared mpo species on the simplified F-symbol and O_a panels. The
+eq50-reduced and O_a panels drop the labels their 0.7 drawings invented,
+and the traced chains book the closure-ink residue — identified extended
+ends where the sources draw the racetrack return — as one K1 renderer
+item on the gap bar (eq51, eq52, diagram-two).
+
+M4 rises from 19.75 to 20.14 because the kernel cases declare the ports,
+species, and wires their one-line grid spellings implied. The owned
+dimension census is unchanged at 478 sites (route/string 260,
+composition/layout 218), and no parser spelling, registry row, alias,
+escape, overload, or page-distance constant is added.
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 1A carries seven Section-II panels onto the kernel tier
+
+Seven Section-II cases move to kernel spellings with explicit typed ports:
+the MPS marginal, the MPO row, the local purification, the MPU blocking and
+brickwork panels, and the workbench V-tensor and boundary-B factorizations.
+The vision pass against the author sources restored four source facts the
+first draft lost: the marginal's state row points its legs up over an open
+chain, the MPO row shows its open west and east stubs, the purification's
+X capsules absorb the doubling so one virtual rail is open per outer side
+(no equation check off remains), and the conjugate tensors carry their
+overlines. The V-tensor's l^(1/2) bead now sits on the west cup arc, and
+the boundary-B palette is recovered from the author code's explicit fill
+colours as declared charge/flux species, closing that panel's X row. The
+blocking panel records hull-routed side closures the renderer does not yet
+ink (K1, bar row of 2026-08-05).
+
+M4 rises from 20.14 to 20.77 because the kernel cases spell out the typed
+ports, wires, and species that the grid tier implied. The dimension census
+is unchanged at 478 sites (route/string 260, composition/layout 218). No
+parser spelling, registry row, alias, escape, or overload is added.
+
+The wave's migrations leave `\tnX` with two corpus option signatures, so
+the sugar detector now flags it:
+
+| Flag | Verdict |
+|---|---|
+| flag:sugar-shaped:command:tnX | tombstoned by contract: `\tnX{m}` migrates to `\tn[skin=ring]{m}` (`LANGUAGE-1.0` 10); the kernel cases of this wave already spell the ring skin directly, and the remaining grid-tier uses die at the S4 swap; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — the six-panel intersection windows state their nested regions
+
+The two Section-IV six-panel cases migrate to the kernel and draw the
+source's nested selection: an inner enclosure over the retained two-site
+patch inside the outer boundary-window enclosure, replacing the invented
+three-by-four lattice. The kernel renders the containment the model
+already held: an enclosure whose members nest inside another's steps the
+outer contour out by one clearance per containment level, a pierced
+physical leg tracks that depth, and an unbonded virtual port cut by a
+region window now runs to the innermost containing contour and stops on
+it. The swapped source metadata of the two panels is realigned (LHS6 is
+the L window over A--B, RHS6 the R window over B--C) and the pairing
+digest re-bound. M4 rises from 20.77 to 20.83 because the kernel bodies
+name the ports, wire, and both windows the retired lattice preset
+implied. No parser spelling, registry row, alias, escape, or overload is
+added; the physical-dimension census is unchanged. The regression
+`tests/tenkz/kernel/regression/r_nested_regions.tex` pins the stepped-out
+outer contour and the cut stub that ends on the inner window.
+
+Census-correction: #5462
+
+### 2026-08-05 — seven Section-III-A panels enter the kernel (wave 2C)
+
+The MPO-tensor, PEPS-tensor, commuting-Hamiltonian, GHZ-tensor, Hadamard,
+MPO-action, and torus-two cases leave the grid and free tiers.  Each states
+its model on the kernel: flat frames with canonical addresses, typed ports,
+declared strings for the red operator level, and the stock pill skin for the
+two-site gate.  The Hadamard target is re-adjudicated: its paired author
+panel (lines 359-360) is the paper's own H glyph — the filled dot on the
+virtual bond that line 1449 equates with the Hadamard matrix — so the
+wrong-source pairing closes and the case redraws to the source.  The
+GHZ-tensor redraws to the author's glyphless junction, and the MPO-action
+panels regain the source's diagonal virtual pair, closing that bar row.
+
+The retired free-tier spellings take their owned physical dimensions with
+them: the census falls from 478 to 435 sites (route/string 260 to 244,
+composition/layout 218 to 191), with metric and frame ownership remaining
+zero, and the ceilings ratchet down with it.  M4 rises from 20.83 to 21.35
+because the kernel cases name the atoms, strings, and typed ports the
+retired tiers implied, and because the commuting-Hamiltonian and MPO-action
+equations now spell both panels explicitly.  No parser spelling, registry
+row, alias, escape, or overload is added.
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:picture:east label | keep-because: the wave-2C respell moved one consumer onto the kernel port-label spelling and the row's two remaining consumers are 0.7 grid-tier cases that retire wholesale at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 2B moves seven more Section-III-A panels onto the kernel
+
+The seven Section-III-A cases of wave 2B — the upward GHZ copy tensor, the
+SPT intertwiner, the u_g pull-through star, the enlarged MPO word, the
+string-order loops, and both boundary-algebra words — leave the grid and
+free tiers for kernel flat frames with declared typed ports and canonical
+addresses. The boundary-algebra family and the enlarged word restore the
+source's second physical leg per site and spell their traced returns
+through invisible corner junctions, since the single-row trace policy does
+not draw its return yet; the star and the loops replace millimetre
+placements with cell and port addresses; two archival pairings are
+corrected to the panels the cases actually draw (sptintertwin gh.pdf and
+Eq60.pdf).
+
+The migrations retire the tiers' owned physical dimensions: the census
+falls from 435 to 401 sites (route/string 244 to 224, composition/layout
+191 to 177), with metric and frame ownership remaining zero, and the
+ceilings tighten to match. M4 rises from 21.35 to 22.22 because the kernel
+cases name the ports, junctions, and species their retired sugar implied.
+No parser spelling, registry row, alias, escape, or overload is added.
+
+The wave drops the `no legs` key below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:object:no legs | dies at S4 with the 0.7 object ledger: a suppressed policy leg is port ownership, which typed `ports=` already states; wave 2B retired its intertwiner consumers; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 1C moves seven Section-II panels onto the kernel tier
+
+The Section-II canonical-form and MPDO family — the right-canonical
+triangle, both orthogonality words, the boundary-state factorization, the
+renormalization isometry, the T/S channel pair, and the periodic MPDO
+transfer word — leaves the grid tier for kernel flat frames with declared
+typed ports.  The isometry's U takes the stock pill skin and the periodic
+word the stock MPO skin.  The Fable verification pass repaired one render
+before landing: the boundary state's sigma_partial-R region, which the
+migration had reduced to a floating label, is drawn by the range-addressed
+enclosure mark — the source's dotted box — retiring the interim
+missing-element defect and the grid tier's brace-for-box note.  The two
+right-canonical triangles are re-graded honestly to cosmetic gaps: the
+sources draw their apexes west (directly in the definition, by
+whole-equation mirror in the orthogonality panel) and the kernel triangle
+skin has one fixed east apex.  The left-orthogonality word keeps faithful
+because the same mirror lands its glyphs on the fixed apex.  The periodic
+word's stale extra-element defect is adjudicated against the author
+block, which only ever draws one panel; its residue is the flush
+single-row trace wrap.
+
+M4 rises from 22.22 to 22.48 because the kernel cases name the ports,
+skins, and closures their grid rows and sandwich words implied.  The
+owned dimension census is unchanged at 401 sites (route/string 224,
+composition/layout 177); no ceiling moves.  No parser spelling, registry
+row, alias, escape, or overload is added or removed.
+
+The wave drops two 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:object:tri | keep-because: wave 1C retired the canonical-form and orthogonality consumers onto the kernel triangle skin; the two remaining consumers are 0.7 grid-tier cases (the tangent projector and the workbench P_T(A)) that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnspan | keep-because: wave 1C's enclosure respell of the boundary state dropped the lone brace-above signature, folding the corpus onto two; the span sugar is a 0.7 grid-tier spelling whose remaining consumers retire at the S4 surface swap, the kernel stating ranges through mark addresses; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 4 closes the Section-IV boundary family onto the kernel
+
+The eleven Section-IV cases of wave 4 — the one-dimensional ground-space
+trace and the ten intersection panels — leave the grid and free tiers for
+kernel flat frames with declared typed ports and canonical addresses.  The
+boundary operators L, R, and X take the stock pill as wide atoms with
+their lobe legs at top-face stations, closed through side cups; the
+rhs-four operator alone is the wide box atom of the LANGUAGE-1.0 section
+14 sign-off, and its respell retires the family's one free-tier body.
+The traced ground-space word returns below the row through corner
+junctions with the author's square X on the return, resolving the old
+small-glyph gap.  The cut virtual ends of the two, three, and four panels
+now turn upward through invisible junctions as the sources draw them, and
+the rhs-five re-audit retires the recorded mirror: the kernel respell
+restores the source embedding and the case is promoted to faithful.
+
+The retired free-tier spelling takes its owned physical dimensions with
+it: the census falls from 401 to 383 sites (route/string unchanged at
+224, composition/layout 177 to 159), with metric and frame ownership
+remaining zero, and the ceilings ratchet down to match.  M4 rises from
+22.48 to 22.88 because the kernel cases name the atoms, junctions, and
+typed ports the retired tiers implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed.
+
+The wave drops two 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:command:tnskip | keep-because: wave 4 retired the intersection break onto unbonded typed ports and invisible junctions; the two remaining consumers are blueprint MPDO staircase figures (chapters 20 and 21) that migrate with the blueprint's own kernel pass at the S4 surface swap, the kernel stating a skipped cell as `void=open`; expiry 0.9 |
+| flag:consumers:key:object:up at | keep-because: wave 4 retired the boundary-operator consumers onto typed top-face stations; the lone remaining consumer is the blueprint physical-blocking figure (chapter 26) that migrates with the blueprint's kernel pass at the S4 surface swap, the kernel stating the leg through `ports=`; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 3: the two-panel equalities and fusion trees reach the kernel
+
+The nine wave-3 cases — the three MPO-reduction proofs, the coproduct
+equation and its workbench twin, the dual-reduction intertwiner, the two
+association trees, and the workbench tangent projector — move onto the
+kernel tier.  The proofs and the intertwiner leave the free and grid
+tiers for kernel flat frames whose spanning V, F, and X boxes take
+slotted typed ports, composed in `tenkzeq` with audited equal boundary
+signatures; the proofs drop their red house rails for the sources'
+all-black ink.  The two coproduct panels spell their closed virtual
+words as drawn racetrack returns through invisible corner junctions
+(the single-row trace policy does not ink its return yet), recover the
+sources' paired physical stubs, and opt their one relation out of the
+audit with the recorded arity reason.  The association trees bind the
+kernel surface over the unchanged tree expander.  The tangent projector
+repairs its structural gap at the archival widths — four columns and the
+kernel identity strand against five-plus-four columns — while its
+mirrored triangle windows stay on the 0.7 grid tier with the fixed
+east-apex kernel skin (#5485) still pending.
+
+The reduction proofs' owned millimetres leave the corpus: the census
+falls from 383 to 357 sites (route/string 224 to 208, composition/layout
+159 to 149), with metric and frame ownership remaining zero, and the
+ceilings and provenance pins tighten to match.  M4 rises from 22.88 to
+24.11 because the kernel cases name the ports, junctions, and returns
+their retired sugar implied.  No parser spelling, registry row, alias,
+escape, or overload is added or removed.
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 5 moves the PEPS sheet family onto the plane frame
+
+Five of the six lattice-tier PEPS sheets — the projection sheet, the
+PEPO sheet, the four-panel renormalization figure, the inverse
+renormalization pair, and the workbench plaquette — leave the retiring
+`tenkzlattice` environment for kernel plane frames.  A sheet is now the
+`lattice=` sugar over one plane frame with per-site policy legs; the
+projection figure states its sixteen projector regions as enclosure
+marks of a declared source-red species and names its |phi) bond through
+a port label, the renormalization figure's product tensors take
+per-atom half sizes, and its final trace bead closes its virtual ring
+through invisible junctions, retiring the crossed rotate-180 hooks with
+the tombstoned frame rotation itself.  The workbench plaquette's
+pairing is repaired to FigPEPSRG panel (a) (author lines 744-753) with
+the caption-stated unitary, closing that ledger's wrong-source row.
+
+The sixth sheet, the PEPS marginal, stays on the lattice tier: the
+bilayer basis rejects every physical policy and numeric ports are
+in-plane, so the kept sites' open transverse ket-bra legs have no
+kernel spelling; the doubled-plane scaffold covers contracted pairs
+only.  The blocker is recorded on the verdict and the gap bar, and the
+`tenkzplanes` tenure flag below carries it.
+
+M4 rises from 24.11 to 24.27 because the kernel cases name the atoms,
+enclosure marks, junctions, and typed ports the retiring preset
+implied (+21 lines over the five respelled cases).  The dimension
+census is unchanged at 383 owner sites with unchanged ceilings, and no
+parser spelling, registry row, alias, escape, or overload is added or
+removed.
+
+The wave leaves two 0.7 spellings at reduced tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:environment:tenkzplanes | keep-because: the lone remaining consumer is the blocked PEPS marginal, whose open transverse ket-bra legs the kernel bilayer basis cannot yet spell; the environment retires with the case's migration once a bilayer transverse-physical spelling lands; expiry 0.9 |
+| flag:consumers:environment:tenkzlattice | keep-because: wave 5 retired the Section-II sheet consumers onto plane frames; the remaining consumers are 0.7 grid-tier cases outside this family that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:cooccur:picture:north+south | keep-because: a projected sheet states its whole four-side boundary contract, so every sheet picture names both receding sides; the values differ per picture (the renormalization beads open one and seal the other), so the pair is two independent policies, not one key; expiry 1.0 |
+
+Census-correction: #5348
+
+### 2026-08-05 — wave 6 moves the region-marked panels onto the kernel tier
+
+The six wave-6 cases — the published bulk-boundary region and its archival
+workbench twin, the historical four-station composite, the two-dimensional
+ground-space window, and the two toric-code blocked tensors — leave the
+lattice and free tiers for kernel plane and flat frames.  The two boundary
+panels draw their red regions as charge-species enclosure marks over the
+5x6 sheet and audit their reductions with the recorded open-leg reason;
+the archival twin regains its distinguishing R and R^c names and all-red
+rail, having previously duplicated the published A/B spelling.  The
+ground-space window nests two range-addressed enclosures with X on the
+outer contour; a 900dpi read of both source PDFs retires the ledger's
+arrowed-legs claim, the source legs being plain.  The historical composite
+respells each four-box ring as one closed operator string through its
+lambda corner with the sweeping arcs as via-routed strings.  The toric
+pair keeps its mid-side stations as portless kernel atoms with the sheet
+as the house enclosure; the dual's dotted diagonals ink solid, the kernel
+wire grammar having no stroke-style key.
+
+The retired tnregion, tnedge, tnput, and tnjoin millimetres leave the
+corpus: the census falls from 357 to 313 sites (route/string 208 to 192,
+composition/layout 149 to 121), with metric and frame ownership remaining
+zero, and the ceilings and provenance pins tighten to match.  M4 rises
+from 24.27 to 24.62 because the kernel cases name the ports, species, and
+waypoints their retired sugar implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed.
+
+The wave drops three 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:picture:bond label | dies at S4 with the 0.7 picture ledger: wave 6 retired the boundary pair's bond-label spellings onto kernel wire-point label marks, and the one remaining consumer is a blueprint chapter that respells at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:region:inset | dies at S4 with the 0.7 region ledger: wave 6 respelled the nested ground-space contours through the kernel mark's inset step (#5498), and the two remaining consumers are blueprint chapters that respell at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnedge | keep-because: wave 6 retired the toric diamond and diagonal edges onto kernel wires; the four remaining uses sit in one 0.7 grid-tier case (the PEPS projection) that retires wholesale at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5347
+
+### 2026-08-05 — wave 7 closes the crossing and ring-closure family onto the kernel
+
+The twelve wave-7 cases — the pulling-through plaquette and its archival
+Dia3 twin, the Dia4 coproduct ring, the boxless F crossing, the Eq59
+group average, the three pentagon sketches, the SPT intertwiner, the
+torus cycle pair, and both PEPS renormalization panels — leave the free
+and grid tiers for kernel flat and traced frames.  This retires the last
+free-tier bodies of the benchmark: the rotated-frame group of Dia3
+respells through angle ports and per-leg `dir=`, the pentagon sketches
+are redrawn against the paper's own fig3 pentagon figures with their
+crossing orders declared, the torus takes the contract's section 12.2
+wound-string spelling, and the F tensor recovers the source's boxless
+directed crossing.  Two ledger contradictions close on the way: the SPT
+intertwiner regains the source factor order the mirrored spelling had
+lost, and the first renormalization panel regains its four edge-centred
+sites.  One archival pairing is corrected: the Eq59 group average pairs
+with Eq59.pdf, the file named Eq59now.pdf holding the SPT g-pull sketch.
+
+The retired tenkzfree millimetres leave the corpus entirely: the census
+falls from 313 to 0 sites (route/string 192 to 0, composition/layout 121
+to 0), metric and frame ownership stay zero, and the ceilings and
+provenance pins ratchet to zero — a published figure now contains no
+millimetres, as the contract demands.  M4 rises from 24.62 to 26.05
+because the kernel cases name the ports, junctions, species, and declared
+crossings their retired free-graph ink implied.  No parser spelling,
+registry row, alias, escape, or overload is added or removed.
+
+The wave drops seven 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:command:tngroup | dies at S4 with the 0.7 group ledger: wave 7 retired the last rotated-frame group (Dia3) onto angle ports, orientation being a consequence of where a record sits; expiry 0.9 |
+| flag:consumers:key:group:frame | dies at S4 with the tombstoned `frame={rotate=}`: its last consumer was the Dia3 group wave 7 respelled; expiry 0.9 |
+| flag:consumers:key:connection:dir | dies at S4 with the 0.7 connection ledger: wave 7 moved every directed free-tier edge onto the kernel wire's `dir=`; expiry 0.9 |
+| flag:consumers:key:connection:fused | dies at S4 with the 0.7 connection ledger: wave 7 retired both renormalization consumers, bundle multiplicity owing no ink under the kernel contract; expiry 0.9 |
+| flag:consumers:key:object:circle | dies at S4 with the 0.7 object ledger: wave 7 retired the last `\tnput[circle]` lambda insertions onto the kernel ring-skin bead; expiry 0.9 |
+| flag:consumers:key:connection:label | keep-because: wave 7 retired the F-crossing consumer onto kernel wire-point label marks; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:connection:role | keep-because: wave 7 retired the pulling-through and torus consumers onto declared kernel species; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5349
+
+### 2026-08-05 — wave 8 closes the arrow-composed workbench escapes onto the kernel
+
+The two wave-8 cases — the PEPS fine-graining panel and the archival
+historical composite — leave the lattice tier for kernel flat and plane
+frames.  Each embedded panel respells through kernel lattice sheets with
+declared boundary policies; the composing arrows and panel letters stay
+plain math outside the audited kernel scope, the accepted escape idiom,
+because the audited multi-panel term grammar remains future work (#5496,
+#4703).  Both verdicts promote to faithful against figrenorm2D and the
+archival sheet, and one lattice-tier case remains in the benchmark: the
+PEPS marginal, blocked until a bilayer transverse-physical spelling
+lands.
+
+The census stays at zero sites across every dimension: the retired
+lattice bodies carried no millimetres, so the ceilings and provenance
+pins hold unchanged.  M4 rises from 26.05 to 26.08 because the kernel
+cases spell out the sites, frames, and boundary policies their retired
+one-site lattice sugar implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed, and no 0.7 spelling
+changes tenure.
+
+Census-correction: #5347
+
+### 2026-08-05 — the bilayer sheet spells its open transverse legs
+
+The plane frame's independent transverse axis gains open ends. A bilayer
+member declares an upward or downward physical leg; the end is cut on the
+page side its signed transverse vector exits, so panels compare it against
+the ordinary physical legs of that side, and it enters the boundary
+signature as an ordinary open physical index. The event schema learns the
+two transverse directions alongside the page compass.
+
+The PEPS marginal is the demand and the proof: the last non-kernel
+benchmark body leaves the lattice tier with its kept sites' ket-bra legs
+open and its traced column closing site by site. Every one of the 130
+benchmark cases now states its model on the kernel, and no verdict remains
+blocked. M4 rises from 26.08 to 26.49 for the declared legs and the closing
+loops the retired environment implied. The physical-dimension census stays
+at zero.
+
+Census-correction: #5507
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:trace | keep-because: the marginal's migration retires the picture-level trace from the doubled sheet, and the two remaining consumers state genuine single-row traces the kernel still owes its drawn return (#5492); the key retires with that ink, expiry 0.9 |
+| flag:consumers:environment:tenkzplanes | dies at S4: its lone consumer was the PEPS marginal, which this session migrates onto the kernel bilayer basis; expiry 0.9 |
+
+### 2026-08-05 — a physical index may be directed
+
+The direction mark stops being a virtual privilege. A physical index
+carries `dir=` exactly as a virtual one does, and the orientation of a
+directed physical open end enters the exposed boundary signature: a space
+and its dual no longer pass for one another across a pictured equation.
+An internal directed contraction exposes nothing and leaves no entry. The
+coded refusal that made the mark a type error retires with it.
+
+Three cases stop paying for that refusal. The MPO and PEPS fat-graph
+levels and the mixed pentagon's vertex legs had been typed virtual to
+reach the mark; they return to physical ports, and their renders are
+unchanged. M4 rises from 26.49 to 26.54 for the recovered typing. The
+physical-dimension census stays at zero.
+
+Census-correction: #5360

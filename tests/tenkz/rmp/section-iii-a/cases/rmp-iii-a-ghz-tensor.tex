@@ -1,14 +1,17 @@
 % Target: rmp-iii-a-ghz-tensor
 % Formula: G_down = |0000> + |1111> is the four-leg GHZ copy tensor.
-% Ink: Canonical public tenkz four-leg box with one physical orientation.
-% Boundary: Two virtual and two physical GHZ indices remain open.
+% Ink: Kernel flat frame; the copy tensor is the author's glyphless four-leg
+%   junction with the diagonal physical tick.
+% Boundary: Three virtual legs and one physical leg remain open.
 % Source: paper TN-Review-main.tex line 1449; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 357-358
-% Capabilities: grid, four-leg-atom, typed-ports
+% Capabilities: kernel, four-leg-atom, typed-ports
 \[
   G_{\downarrow}=
-  \begin{tenkz}[physical=updown, tensor style=box]
-    \tn{G}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=G, skin=none,
+      ports={180:virtual, 0:virtual, 270:virtual, 45:physical}]{}
   \end{tenkz}
   =|0000\rangle+|1111\rangle.
 \]

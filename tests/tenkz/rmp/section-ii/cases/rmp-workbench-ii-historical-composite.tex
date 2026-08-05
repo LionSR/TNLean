@@ -1,31 +1,38 @@
 % Target: rmp-workbench-ii-historical-composite
 % Formula: The archival composite pairs one-to-two MPS and one-to-four PEPS splittings.
-% Ink: Canonical public tenkz and tenkzlattice environments; no raw TikZ.
+% Ink: Kernel flat and plane frames; the archival arrows and panel letters stay
+%   plain math outside the audited kernel scope.
 % Boundary: Both archival arrows preserve their open virtual and physical boundary
 %   signatures.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   801-831; archival output ImagesReview Section II.pdf
-% Capabilities: grid, lattice, typed-ports
+% Capabilities: kernel, plane-frame
+\tenkzkernel
 \[
   \begin{gathered}
     (a)\quad
-    \begin{tenkz}[physical=up]
+    % one MPS site: 3-leg dot
+    \begin{tenkz}[rows={wire}, cols=1, physical=up, west=open, east=open]
       \tn{}
     \end{tenkz}
     \;\longrightarrow\;
-    \begin{tenkz}[physical=up]
+    % the split: two sites of the same bond dimension
+    \begin{tenkz}[rows={wire}, cols=2, physical=up, west=open, east=open]
       \tn{} & \tn{}
     \end{tenkz}
     \\[1em]
     (b)\quad
-    \begin{tenkzlattice}[rows=1,cols=1,frame=oblique,physical=up,
-                         boundary=open]
-      \tnsite{(1,1)}
-    \end{tenkzlattice}
+    % one PEPS site: 5-leg tensor on the projected sheet
+    \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                  west=open, east=open, north=open, south=open]
+      \tn{}
+    \end{tenkz}
     \;\longrightarrow\;
-    \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,physical=up,
-                         boundary=open]
-      \tnsite{(1,1)}
-    \end{tenkzlattice}
+    % the splitting: a 2x2 patch with the same outer boundary signature
+    \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                  west=open, east=open, north=open, south=open]
+      \tn{} & \tn{} \\
+      \tn{} & \tn{}
+    \end{tenkz}
   \end{gathered}
 \]

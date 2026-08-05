@@ -1,0 +1,40 @@
+\section{Block Schur Complements}\label{sec:schur_complement}
+
+\begin{theorem}[Block Schur complement]\label{thm:schur_tfae}
+  \notready
+  \uses{def:schurComplement, def:blockMatrix}
+  Let $P \in \MN{D_1}$, $R \in \MN{D_2}$ be positive semi-definite
+  and $Q \in \MN{D_1,D_2}$ such that $\ker(R) \subseteq \ker(Q)$.
+  Wolf's Theorem~5.2 states that the following are equivalent:
+  \begin{enumerate}
+    \item The block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is PSD,
+    \item $P \ge Q R^+ Q^\dagger$ (pseudoinverse Schur complement),
+    \item $Q = P^{1/2} K R^{1/2}$ for a contraction $K$ with $\|K\|_\infty \le 1$.
+  \end{enumerate}
+  Here $R^+$ denotes the pseudoinverse (inverse on the support) and the
+  square roots $P^{1/2}, R^{1/2}$ are the positive semidefinite square roots,
+  with their inverses extended by zero on the kernel.
+% The proof is deferred (paper-gap schur_complement_tfae).
+\end{theorem}
+
+\begin{definition}[Block matrix]\label{def:blockMatrix}
+  \lean{SchurComplement.blockMatrix}
+  \leanok
+  A $2 \times 2$ block matrix $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
+  indexed by $\Fin{D_1} \oplus \Fin{D_2}$.
+\end{definition}
+
+\begin{lemma}[Hermiticity of the block matrix]\label{lem:blockMatrix_isHermitian}
+  \lean{SchurComplement.blockMatrix_isHermitian}
+  \leanok
+  \uses{def:blockMatrix}
+  If $P$ and $R$ are Hermitian, then the block matrix
+  $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$ is Hermitian.
+\end{lemma}
+
+\begin{definition}[Schur complement]\label{def:schurComplement}
+  \lean{SchurComplement.schurComplement}
+  \leanok
+  \uses{def:pinv}
+  The pseudoinverse Schur complement $P - Q R^+ Q^\dagger$.
+\end{definition}
