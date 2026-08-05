@@ -2099,3 +2099,44 @@ The new leaf is the one census move: M1 kernel 139 to 140, M2 parser paths
 | flag:consumers:key:kernel-wire:stroke | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-wire row records; the leaf already carries its first benchmark consumer in rmp-app-toric-dual and its Extension-gate in #5543; expiry 0.8 |
 
 Extension-gate: #5543
+
+### 2026-08-05 — the moderate chapters, and the last ghost but one
+
+Nine more blueprint chapters respell onto the kernel. Twenty-nine pictures
+move to pure kernel spelling, which is what puts every one of them in the
+preserve column: a picture that says `physical=up` or `boundary=periodic`
+still reads its topology off a sugar row, and the disposition ledger books
+that as a codemod, so the ports and the two side words are written out
+instead. The trade is visible in the source: the pictures cost sixteen more
+lines than their 0.7 originals and none of that goes on scaffolding, because
+the chain still runs on the alignment character and only two atoms in the
+whole wave need an address.
+
+Three of the nine chapters carry the figures the previous wave had to leave
+behind. A tensor now stands on a generated cup, so the Choi projector, the
+correlator window, and their side words are ordinary records: the side takes
+`cup`, and the matrix it closes through rides half way along the bend. Those
+two figures also lose the ghost atoms that stood in for the empty cells the
+cup needed, because a wire row populates nothing and an address reaches an
+empty cell directly.
+
+That retirement is what moves the consumer census. Four ghost calls remain in
+the blueprint and they are all in one figure, so the command falls below
+tenure a milestone before its own verdict said it would. Nothing about the
+verdict changes: the command was already booked to die at the language
+landing, and it now has one blueprint consumer left to lose.
+
+Four grid figures keep their 0.7 spelling and are named in the disposition
+ledger. Two want an even-width centre port, which lies between numbered slots
+by construction, and a wide dot whose silhouette grows with its span; one
+wants a row separation the kernel does not name; one is a commutative diagram,
+which is not this language's to draw. The free graphs, the fusion trees, and
+the conjugated layer belong to the redraw waves and are untouched here. The
+mean lines per benchmark case is unmoved at 25.94, because the benchmark
+corpus is untouched.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tnghost | dies at the language landing because addresses name empty cells directly; the wave retires all but one blueprint consumer and the tenure it loses is the one this row already spent; expiry 0.9 |
+
+Census-correction: #4709

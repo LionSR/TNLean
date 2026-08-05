@@ -177,9 +177,10 @@ on the bond space.
     % Boundary: virtual-west=1 | virtual-east=1 | physical-up=1 |
     % physical-down=0.
     \begin{tenkzequation}
-        \begin{tenkz}[rows={op:none,ket}]
-            \tn[role=operator,up=$i$]{U(g)} \\
-            \tn{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,ket}, cols=1, west=none, east=none]
+            \tn[species=operator, label pos=w, ports={90:physical:$i$}]{U(g)} \\
+            \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
         \end{tenkz}
         \(\qquad \leadsto \qquad\)
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
@@ -192,8 +193,9 @@ on the bond space.
         % Type verdict: a rank-three twisted local tensor.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X(g)} & \tn[up=$i$]{A} & \tnX{X(g)^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X(g)} & \tn[label pos=s, ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X(g)^{-1}}
         \end{tenkz}.
     \end{tenkzequation}
     Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
@@ -313,8 +315,8 @@ on the bond space.
     \end{align}
     In tensor-network notation, for each fixed~$g$ this is the local gauge
     relation
-    \begin{align}
-         &
+    \begin{center}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % lines 328--349, gives the unitary u,V specialization
         % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
@@ -325,11 +327,11 @@ on the bond space.
         % Type verdict: a rank-three local tensor for each fixed g.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X(g)} & \tn[up=$i$]{A} & \tnX{X(g)^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X(g)} & \tn[label pos=s, ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X(g)^{-1}}
         \end{tenkz}
-        \notag
-    \end{align}
+    \end{center}
     with the black node denoting the tensor named in the surrounding
     formula and the two red side nodes acting on the virtual legs.
     In particular, $\rho$ is a projective representation of $G$ on the
@@ -443,6 +445,7 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     $\rho_2(g)=f(g^{-1})\rho_1(g)$.
     Equivalently, for each fixed $g$ the two local gauges
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % lines 328--349, gives the unitary u,V specialization
         % (V^\dagger = V^{-1}); the surrounding fundamental theorem supplies
@@ -453,9 +456,10 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
         % Type verdict: a rank-three local tensor.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X_1(g^{-1})} & \tn[up=$i$]{A} &
-            \tnX{X_1(g^{-1})^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X_1(g^{-1})} &
+            \tn[label pos=s, ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X_1(g^{-1})^{-1}}
         \end{tenkz}
         \qquad \text{and} \qquad
         % Formula/source: the same source passage, with the second virtual
@@ -466,9 +470,10 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
         % Type verdict: a rank-three local tensor, comparable to the left picture.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X_2(g^{-1})} & \tn[up=$i$]{A} &
-            \tnX{X_2(g^{-1})^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X_2(g^{-1})} &
+            \tn[label pos=s, ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X_2(g^{-1})^{-1}}
         \end{tenkz}
     \end{tenkzequation}
     describe the same twisted tensor, so they differ by a scalar. Set

@@ -23,6 +23,7 @@ $\tr(XA^\sigma)$ for the local space $\mathcal G_L^A$.
     The map $\Gamma_L$ in (\ref{eq:parent_gamma}) is a $\C$-linear map from
     $\MN{D}$ to $(\Fin{d}^{L}\to\C)$. In tensor-network notation,
     \begin{center}
+        \tenkzkernel
         % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
         % lines 889--898, defines Gamma_L(X) with coefficients
         % tr(X A_{i_1}\cdots A_{i_L}).
@@ -32,10 +33,12 @@ $\tr(XA^\sigma)$ for the local space $\mathcal G_L^A$.
         % Type verdict: a rank-L physical tensor, equivalently a length-L state.
         % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
         % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
-        \begin{tenkz}[periodic, physical=up]
-            \tnX{X} &
-            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
-            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \begin{tenkz}[rows={wire}, cols=5, west=trace, east=trace]
+            \tn[skin=ring]{X} &
+            \tn[label pos=135, ports={90:physical:$\sigma_1$}]{A} &
+            \tn[label pos=135, ports={90:physical}]{A} & \tn[skin=dots]{} &
+            \tn[label pos=135, ports={90:physical:$\sigma_L$}]{A}
+            \tnmark[form=bracket]{(1,2) .. (1,5)}{$L$}
         \end{tenkz}
     \end{center}
     The chain denotes the word tensor $A^\sigma$ with open physical indices
@@ -478,6 +481,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     \leanok
     The restriction simply absorbs the last tensor into the boundary matrix:
     \begin{center}
+        \tenkzkernel
         % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
         % lines 889--898, with boundary argument A^j X in Gamma_L.
         % Ink-to-index map: sigma_1,...,sigma_L remain free; j is absorbed into
@@ -486,10 +490,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         % Type verdict: a rank-L physical tensor in G_L(A).
         % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
         % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
-        \begin{tenkz}[periodic, physical=up]
-            \tnX{A^j X} &
-            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
-            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \begin{tenkz}[rows={wire}, cols=5, west=trace, east=trace]
+            \tn[skin=ring]{A^j X} &
+            \tn[label pos=135, ports={90:physical:$\sigma_1$}]{A} &
+            \tn[label pos=135, ports={90:physical}]{A} & \tn[skin=dots]{} &
+            \tn[label pos=135, ports={90:physical:$\sigma_L$}]{A}
+            \tnmark[form=bracket]{(1,2) .. (1,5)}{$L$}
         \end{tenkz}
     \end{center}
     Direct computation gives
@@ -517,6 +523,7 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
     On the right restriction, one first rotates the trace and then reads the
     resulting boundary matrix on the shortened window:
     \begin{center}
+        \tenkzkernel
         % Formula/source: Papers/quant-ph_0608197/MPSarchive.tex,
         % lines 889--898, with the cyclically rotated boundary argument X A^i.
         % Ink-to-index map: sigma_1,...,sigma_L remain free; i has been absorbed
@@ -525,10 +532,12 @@ Given a state $\psi$ on $L+1$ sites, we define two restriction maps.
         % Type verdict: a rank-L physical tensor in G_L(A).
         % Boundary signature: semantic virtual-west=0 | virtual-east=0 |
         % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
-        \begin{tenkz}[periodic, physical=up]
-            \tnX{X A^i} &
-            \tn[up=$\sigma_1$]{A}\tnspan[brace below]{4}{L} &
-            \tn{A} & \tndots & \tn[up=$\sigma_L$]{A}
+        \begin{tenkz}[rows={wire}, cols=5, west=trace, east=trace]
+            \tn[skin=ring]{X A^i} &
+            \tn[label pos=135, ports={90:physical:$\sigma_1$}]{A} &
+            \tn[label pos=135, ports={90:physical}]{A} & \tn[skin=dots]{} &
+            \tn[label pos=135, ports={90:physical:$\sigma_L$}]{A}
+            \tnmark[form=bracket]{(1,2) .. (1,5)}{$L$}
         \end{tenkz}
     \end{center}
     By trace cyclicity,
