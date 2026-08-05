@@ -1,35 +1,34 @@
 % Target: rmp-workbench-iii-peps-renormalization-two
 % Formula: A 2x2 PEPS block renormalizes to one effective four-leg tensor.
-% Ink: Canonical public tenkzfree block-to-site equation.
-% Boundary: Both sides expose one effective leg in each lattice direction.
+% Ink: Kernel flat frame; the central effective tensor, four corner blocks
+%   with diagonal legs, and angled physical legs.
+% Boundary: Every outward diagonal half-edge and physical leg remains open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 631-643; archival output PEPSrenom2.pdf
-% Capabilities: free-graph, blocking, equation-composition
+% Capabilities: kernel, blocking, renormalization
 \[
-  \begin{tenkzfree}
-    % the coarse-grained effective four-leg tensor and the four original
-    % sites, one per corner
-    \tnput[box]{c}{(0mm,0mm)}{}
-    \tnput[box]{ne}{(16mm,16mm)}{} \tnput[box]{nw}{(-16mm,16mm)}{}
-    \tnput[box]{se}{(16mm,-16mm)}{} \tnput[box]{sw}{(-16mm,-16mm)}{}
-    % each corner atom keeps its own slanted (fused/hatched) legs -- one
-    % inward to the block tensor, one continuing the same diagonal outward,
-    % and a free cross-diagonal pair
-    \tnjoin[fused]{c.north east}{ne.south west}
-    \tnjoin[fused]{ne.north east}{24mm,24mm}
-    \tnjoin[fused]{8mm,24mm}{ne.north west}
-    \tnjoin[fused]{ne.south east}{24mm,8mm}
-    \tnjoin[fused]{c.north west}{nw.south east}
-    \tnjoin[fused]{nw.north west}{-24mm,24mm}
-    \tnjoin[fused]{-8mm,24mm}{nw.north east}
-    \tnjoin[fused]{nw.south west}{-24mm,8mm}
-    \tnjoin[fused]{c.south east}{se.north west}
-    \tnjoin[fused]{se.south east}{24mm,-24mm}
-    \tnjoin[fused]{8mm,-24mm}{se.south west}
-    \tnjoin[fused]{se.north east}{24mm,-8mm}
-    \tnjoin[fused]{c.south west}{sw.north east}
-    \tnjoin[fused]{sw.south west}{-24mm,-24mm}
-    \tnjoin[fused]{-8mm,-24mm}{sw.south east}
-    \tnjoin[fused]{sw.north west}{-24mm,-8mm}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+    % the effective tensor and the four corner blocks; each block keeps its
+    % outward and transverse diagonal half-edges and its angled physical leg
+    \tn[skin=box, at=(2,2), name=C, size=l,
+        ports={45:virtual, 135:virtual, 225:virtual, 315:virtual,
+               60:physical}]{}
+    \tn[skin=box, at=(1,3), name=NE,
+        ports={45:virtual, 135:virtual, 225:virtual, 315:virtual,
+               60:physical}]{}
+    \tn[skin=box, at=(1,1), name=NW,
+        ports={45:virtual, 135:virtual, 225:virtual, 315:virtual,
+               60:physical}]{}
+    \tn[skin=box, at=(3,3), name=SE,
+        ports={45:virtual, 135:virtual, 225:virtual, 315:virtual,
+               60:physical}]{}
+    \tn[skin=box, at=(3,1), name=SW,
+        ports={45:virtual, 135:virtual, 225:virtual, 315:virtual,
+               60:physical}]{}
+    \tnwire{NE.225}{C.45}
+    \tnwire{NW.315}{C.135}
+    \tnwire{SW.45}{C.225}
+    \tnwire{SE.135}{C.315}
+  \end{tenkz}.
 \]

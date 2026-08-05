@@ -24,51 +24,68 @@ equals its algebraic multiplicity, i.e., all Jordan blocks for $\lambda$
 are one-dimensional.''
 
 The proof observes that the iterates $T^n$ are uniformly bounded in
-operator norm (positivity and trace preservation keep every forward orbit
-bounded) and that powers of a nontrivial Jordan block grow without bound
-when the eigenvalue has modulus~$1$, giving a contradiction.
+operator norm (positivity together with either trace preservation or
+unitality keeps every forward orbit bounded) and that powers of a
+nontrivial Jordan block grow without bound when the eigenvalue has
+modulus~$1$, giving a contradiction.
 
 \section{The formalization}
 
-The bounded-orbit lemma is already formalized:
-\leanid{IsPositiveMap.hasBoundedOrbits\_of\_tracePreserving} in
+The bounded-orbit lemma is formalized for both hypotheses of the
+proposition. \leanid{IsPositiveMap.hasBoundedOrbits\_of\_tracePreserving} in
 \doclink{TNLean/Channel/FixedPoint/MeanErgodicProjection} proves
 that every forward orbit $\{T^n X\}_{n\in\mathbb N}$ is bounded in norm
-for a positive trace-preserving $T$.
+for a positive trace-preserving $T$, and
+\leanid{IsPositiveMap.hasBoundedOrbits\_of\_unital} in
+\doclink{TNLean/Channel/Peripheral/JordanBlocks} proves the same for a
+positive unital $T$. Both share the reduction from an arbitrary matrix to
+a positive semidefinite one
+(\leanid{IsPositiveMap.hasBoundedOrbits\_of\_posSemidef\_orbit\_bounded} in
+\doclink{TNLean/Channel/FixedPoint/MeanErgodicProjection}) and differ only
+in the positive-semidefinite-orbit step: trace preservation bounds the trace
+of each iterate directly, while unitality bounds each iterate above by
+$(\operatorname{tr}X)\cdot 1$ in the Loewner order and then bounds its trace.
+This is exactly Wolf's own argument: the bound
+$\operatorname{tr}[A\,T(B)] \le \|A\|_\infty \|B\|_\infty
+\operatorname{tr}[1\,T(1)] = d\|A\|_\infty\|B\|_\infty$ holds verbatim for
+trace-preserving \emph{or} unital positive maps because
+$\operatorname{tr}[1\,T(1)] = d$ under either hypothesis (trace preservation
+gives $\operatorname{tr}[T(1)] = \operatorname{tr}[1] = d$; unitality gives
+$T(1) = 1$, so $\operatorname{tr}[1\cdot 1] = d$ directly). No duality
+argument through the adjoint map is needed or used.
 
-The binomial-expansion ingredient has not been formalized.  A rank-$2$
-generalized eigenvector $(T-\lambda)X=Y\neq0$ with $(T-\lambda)Y=0$
-would give, by \leanid{Commute.add\_pow} applied to the decomposition
-$T=\lambda I+(T-\lambda I)$,
+The binomial-expansion ingredient is formalized once and shared between the
+two cases. A rank-$2$ generalized eigenvector $(T-\lambda)X=Y\neq0$ with
+$(T-\lambda)Y=0$ gives, by induction on the decomposition
+$T=\lambda I+(T-\lambda I)$ (\leanid{IsPositiveMap.pow\_apply\_rank\_two\_genEig}),
 \[
     T^n X = \lambda^n X + n\lambda^{n-1}Y,
 \]
-whose norm grows linearly with $n$, contradicting bounded orbits.
-
-The missing work consists in (i) packaging \leanid{Commute.add\_pow}
-for the semiring of linear endomorphisms to obtain this identity,
-(ii) extracting a norm bound $\|T^n X\|\ge n\|Y\|-\|X\|$ from it, and
-(iii) applying the bounded-orbit lemma to reach a contradiction.
-The full statement for higher-rank generalized eigenvectors
-($(T-\lambda)^k X=0$ with $k>1$) would additionally require the
-binomial term $\binom{n}{k-1}$ growing like $n^{k-1}$.
+whose norm grows linearly with $n$. Extracting the norm bound
+$\|T^n X\|\ge n\|Y\|-\|X\|$ from this identity and applying the bounded-orbit
+lemma (either hypothesis) reaches the contradiction that closes the rank-$2$
+case; the full statement for higher-rank generalized eigenvectors reduces to
+rank~$2$ by induction on $k$.
 
 \section{Verdict}
 
-The trace-preserving case is \emph{closed}.  The rank-2 binomial expansion
-(\leanid{IsPositiveMap.pow\_apply\_rank\_two\_genEig}),
-the rank-2 generalized-eigenvector prohibition
-(\leanid{IsPositiveMap.no\_rank\_two\_genEigenvector\_of\_tracePreserving}),
-and the full $k$-step reduction
-(\leanid{IsPositiveMap.peripheral\_Jordan\_trivial\_of\_tracePreserving})
-are all formalized in \doclink{TNLean/Channel/Peripheral/JordanBlocks}.
+Both hypotheses of Proposition~6.2 are \emph{closed}.  The rank-2 binomial
+expansion (\leanid{IsPositiveMap.pow\_apply\_rank\_two\_genEig}) is shared
+between the two cases; the rank-2 generalized-eigenvector prohibition and
+the full $k$-step reduction are each proved once per hypothesis
+(\leanid{IsPositiveMap.no\_rank\_two\_genEigenvector\_of\_tracePreserving},
+\leanid{IsPositiveMap.no\_rank\_two\_genEigenvector\_of\_unital},
+\leanid{IsPositiveMap.peripheral\_Jordan\_trivial\_of\_tracePreserving},
+\leanid{IsPositiveMap.peripheral\_Jordan\_trivial\_of\_unital}), all in
+\doclink{TNLean/Channel/Peripheral/JordanBlocks}.
 
-The unital case remains as a \emph{scope restriction}: the source
-Proposition~6.2 is stated for trace-preserving \emph{or} unital positive maps.
-The unital case follows by duality (the trace adjoint $T^*$ is trace-preserving
-and positive, and the generalized-eigenspace structure transfers), but the
-formal dual-transport proof is not yet formalized.
-See \ghissue{3984}.\footnote{Tracking: \ghissue{3984}.}
+The unital case was formerly recorded as a \emph{scope restriction} pending a
+duality argument through the trace adjoint. That plan was not taken up:
+Wolf's own proof bounds $\operatorname{tr}[A\,T(B)]$ uniformly for
+trace-preserving \emph{or} unital positive maps by the same computation, so
+the unital case is proved directly, in parallel with the trace-preserving
+case, rather than by transport through $T^*$. See \ghissue{3984}
+(tracking) and \ghissue{5447} (this closure).
 
 \bibliographystyle{alpha}
 \bibliography{references}

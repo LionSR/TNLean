@@ -1,0 +1,10 @@
+%% Negative regression: only a plane frame declares the independent
+%% transverse physical axis, so a flat frame rejects `open up|down`.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tnwire{(1,1)}{open up}
+\end{tenkz}
+\end{document}

@@ -1,19 +1,42 @@
 % Target: rmp-ii-boundary-region
 % Formula: |psi> = sum_{I,Ibar} A^I_{partial R} B^Ibar_{partial R}.
-% Ink: Canonical public tenkzlattice, tenkz environments; no raw TikZ.
+% Ink: Kernel plane frame; the R contour is the house enclosure over the
+%   declared charge species, with the published Rbar complement label, and the
+%   reduced pair splits its rail red-then-black at partial R.
 % Boundary: The sheet exterior is open; the reduced pair seals outer virtual sides at
 %   partial R.
 % Source: paper TN-Review-main.tex line 806; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 597-617
-% Capabilities: grid, lattice, regions, typed-ports
+% Capabilities: kernel, plane-frame, regions, typed-ports
+\tenkzkernel
+\tndeclare{species}{charge}{hue=source:red}
 \[
-  \begin{tenkzlattice}[rows=5, cols=6, frame=oblique,
-                       physical=up, boundary=open]
-    \tnregion[label=$R$, label pos=center]{(2-4,2-5)}
-  \end{tenkzlattice}
-  \;=\;
-  \begin{tenkz}[physical=up, boundary=none,
-                bond label={$\partial R$ at 1-2}]
-    \tn[label pos=south]{A^{I}} & \tn[label pos=south]{B^{\bar{I}}}
+  % The published panel letters the region R inside its contour and the
+  % complement Rbar outside the sheet's top-left corner.  The audit is opted
+  % out: the bulk-boundary reduction carries the sheet's legs onto the pair's.
+  \begin{tenkzeq}[check={off={1: the bulk-boundary reduction changes the
+      open-leg census across the equality}}]
+  \begin{tenkz}[lattice={5x6}, frame=plane, physical=up, boundary=open]
+    \tn[name=nw]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+    \tnmark[form=enclosure, species=charge]{(2,2) .. (4,5)}{$R$}
+    \tnmark[form=label, label pos=nw]{nw}{$\overline{R}$}
   \end{tenkz}
+  =
+  % The reduced pair: A^I keeps the region's red half of the rail, B^Ibar the
+  % complement's black half; the seam between the halves is partial R.
+  \begin{tenkz}[rows={wire}, cols=3, bonds=none, west=none, east=none]
+    \tn[name=a, species=charge, ports={0:virtual, 90:physical}]{}
+    \tnmark[form=label, label pos=s]{a}{$A^{I}$}
+    \tn[at=(1,2), name=seam, skin=none]{}
+    \tn[at=(1,3), name=b, ports={180:virtual, 90:physical}]{}
+    \tnmark[form=label, label pos=s]{b}{$B^{\overline{I}}$}
+    \tnwire[species=charge]{a.0}{seam}
+    \tnwire{seam}{b.180}
+    \tnmark[form=label, label pos=n]{seam}{$\partial R$}
+  \end{tenkz}
+  \end{tenkzeq}
 \]
