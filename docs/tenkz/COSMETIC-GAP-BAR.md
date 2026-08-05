@@ -87,18 +87,18 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-b-braid-two` | K2 | The nested noncrossing strands match the flattened source. |
 | `rmp-iii-b-braid-three` | K2 | Lattice slant differs without changing the winding contraction. |
 | `rmp-iii-b-condensation` | K4 | Add the finite projection mark named by the verdict note. |
-| `rmp-iv-ground-space-1d` | K3 | Improve the small X glyph and overly tight placement. |
+| `rmp-iv-ground-space-1d` | K1 | Kernel migration 2026-08-05 (wave 4, Fable-verified) resolved the K3: X is the stock box at the standard size on the junction-spelled trace return. Residue: the recorded corner arcs of the return ink as straight diagonals (shared renderer, the boundary-algebra family limitation); re-review when arc inking lands. |
 | `rmp-iv-ground-space-2d` | X | `physical=up` creates ports but records no wire direction; model the source arrowed legs before theme review. |
-| `rmp-iv-intersection-lhs-one` | — | Promoted to `faithful` 2026-08-04: both virtual ends close into L with matching physical legs; sideways cups are equivalent routing. |
-| `rmp-iv-intersection-rhs-one` | — | Promoted to `faithful` 2026-08-04: uncovered wire and B--C close into R; sideways cups are equivalent routing. |
-| `rmp-iv-intersection-lhs-two` | — | Promoted to `faithful` 2026-08-04: west cup closure and both openings match; sideways routing preserves the boundary. |
-| `rmp-iv-intersection-rhs-two` | — | Promoted to `faithful` 2026-08-04: east cup closure, no crossing, sideways ends equivalent. |
-| `rmp-iv-intersection-lhs-three` | — | Promoted to `faithful` 2026-08-04: two virtual and three physical openings match; sideways ends equivalent. |
-| `rmp-iv-intersection-rhs-three` | — | Promoted to `faithful` 2026-08-04: both closures and openings match; routing is a house choice. |
-| `rmp-iv-intersection-lhs-four` | — | Promoted to `faithful` 2026-08-04: five openings match; the horizontal identity wire is equivalent to the U-route. |
-| `rmp-iv-intersection-rhs-four` | — | Promoted to `faithful` 2026-08-04: five open ends match Rtensor4; no spurious crossing. |
-| `rmp-iv-intersection-lhs-five` | — | Promoted to `faithful` 2026-08-04: the restored three-index boundary matches; sideways stubs preserve it. |
-| `rmp-iv-intersection-rhs-five` | X | Re-audit the mirrored open C--X contraction before accepting it as equivalent routing. |
+| `rmp-iv-intersection-lhs-one` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 4, Fable-verified): both virtual ends close through the pill's side cups with the lobe leg at the third station; the flat-top lobe stub is the house form for the raised lobe. |
+| `rmp-iv-intersection-rhs-one` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 4, Fable-verified): the uncovered stretch and B--C close through the pill's side cups with the lobe leg at the first station. |
+| `rmp-iv-intersection-lhs-two` | — | Promoted to `faithful` 2026-08-04; the wave-4 kernel respell retires the sideways-openings residue: both cut virtual ends now turn upward as the source draws them. |
+| `rmp-iv-intersection-rhs-two` | — | Promoted to `faithful` 2026-08-04; the wave-4 kernel respell retires the sideways-ends residue: both cut virtual ends now turn upward as the source draws them. |
+| `rmp-iv-intersection-lhs-three` | — | Promoted to `faithful` 2026-08-04; the wave-4 kernel respell turns both cut interior ends upward before the lobe leg, matching the source's order. |
+| `rmp-iv-intersection-rhs-three` | — | Promoted to `faithful` 2026-08-04; the wave-4 kernel respell turns both cut interior ends upward between B and C, retiring the facing-break spelling. |
+| `rmp-iv-intersection-lhs-four` | — | Promoted to `faithful` 2026-08-04; the wave-4 kernel respell draws the free identity wire as the source's open U, retiring the horizontal-wire equivalence. |
+| `rmp-iv-intersection-rhs-four` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 4, Fable-verified): R is now the signed wide box atom rather than the 0.7 pill; S's outputs sit at its top-face stations (house form for the source's corner rises). |
+| `rmp-iv-intersection-lhs-five` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 4, Fable-verified): the three-index boundary stands at the source's stations; the near-lobe stub points upward for the source's horizontal lobe stub (equivalent open-leg presentation). |
+| `rmp-iv-intersection-rhs-five` | — | Re-audited 2026-08-05 (wave 4, Fable-verified): the 0.7 mirror was topologically equivalent, and the kernel respell restores the source embedding -- X's leg at the far west, C closing east through the cup, C's cut end sideways west; promoted to `faithful`. |
 | `rmp-iv-intersection-lhs-six` | K2 | Resolved to `cosmetic-gap` 2026-08-05: kernel nested regions replace the invented lattice; the A--B patch window nests inside the L window and the cut bonds end on it. Residue: face stubs for the source's through-lines and the corner label station. Promote to `faithful` on a second-viewer countersign. |
 | `rmp-iv-intersection-rhs-six` | K2 | Resolved to `cosmetic-gap` 2026-08-05: kernel nested regions replace the invented lattice; the B--C patch window nests inside the R window and the cut bonds end on it. Residue: face stubs for the source's through-lines and the corner label station. Promote to `faithful` on a second-viewer countersign. |
 | `rmp-app-czx-state` | — | Promoted to `faithful` 2026-08-04: source grouping and lattice wiring verified; lighter enclosure fill is a public-theme choice. |

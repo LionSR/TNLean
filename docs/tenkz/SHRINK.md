@@ -1646,3 +1646,36 @@ The wave drops two 0.7 spellings below tenure:
 | flag:sugar-shaped:command:tnspan | keep-because: wave 1C's enclosure respell of the boundary state dropped the lone brace-above signature, folding the corpus onto two; the span sugar is a 0.7 grid-tier spelling whose remaining consumers retire at the S4 surface swap, the kernel stating ranges through mark addresses; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 4 closes the Section-IV boundary family onto the kernel
+
+The eleven Section-IV cases of wave 4 — the one-dimensional ground-space
+trace and the ten intersection panels — leave the grid and free tiers for
+kernel flat frames with declared typed ports and canonical addresses.  The
+boundary operators L, R, and X take the stock pill as wide atoms with
+their lobe legs at top-face stations, closed through side cups; the
+rhs-four operator alone is the wide box atom of the LANGUAGE-1.0 section
+14 sign-off, and its respell retires the family's one free-tier body.
+The traced ground-space word returns below the row through corner
+junctions with the author's square X on the return, resolving the old
+small-glyph gap.  The cut virtual ends of the two, three, and four panels
+now turn upward through invisible junctions as the sources draw them, and
+the rhs-five re-audit retires the recorded mirror: the kernel respell
+restores the source embedding and the case is promoted to faithful.
+
+The retired free-tier spelling takes its owned physical dimensions with
+it: the census falls from 401 to 383 sites (route/string unchanged at
+224, composition/layout 177 to 159), with metric and frame ownership
+remaining zero, and the ceilings ratchet down to match.  M4 rises from
+22.48 to 22.88 because the kernel cases name the atoms, junctions, and
+typed ports the retired tiers implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed.
+
+The wave drops two 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:command:tnskip | keep-because: wave 4 retired the intersection break onto unbonded typed ports and invisible junctions; the two remaining consumers are blueprint MPDO staircase figures (chapters 20 and 21) that migrate with the blueprint's own kernel pass at the S4 surface swap, the kernel stating a skipped cell as `void=open`; expiry 0.9 |
+| flag:consumers:key:object:up at | keep-because: wave 4 retired the boundary-operator consumers onto typed top-face stations; the lone remaining consumer is the blueprint physical-blocking figure (chapter 26) that migrates with the blueprint's kernel pass at the S4 surface swap, the kernel stating the leg through `ports=`; expiry 0.9 |
+
+Census-correction: #5347
