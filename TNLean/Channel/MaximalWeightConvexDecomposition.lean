@@ -14,6 +14,13 @@ density operators `ρ`, `ρ₁` on the same space, there is a convex decompositi
 `ρ = ∑ᵢ λᵢ ρᵢ` giving `ρ₁` a positive weight `λ₁` iff `ker(ρ) ⊆ ker(ρ₁)` and
 `λ₁ ≤ ‖ρ^{-1/2} ρ₁ ρ^{-1/2}‖∞⁻¹`, the inverse taken on the range of `ρ`.
 
+The Lean statement proves the equivalent multiplicative form
+`λ₁ * ‖ρ^{-1/2} ρ₁ ρ^{-1/2}‖∞ ≤ 1` in place of the source's inverse form: since
+`ρ₁` has unit trace it is nonzero, and the kernel inclusion then forces
+`‖ρ^{-1/2} ρ₁ ρ^{-1/2}‖∞ > 0` (a zero sandwich would compress `ρ₁` to zero on
+its own support), so the two forms agree and the multiplicative form avoids
+ever dividing by an operator norm that could vanish.
+
 ## Main definitions
 
 * `Matrix.HasConvexDecompositionWith`: `ρ` decomposes as a finite convex
@@ -76,7 +83,17 @@ theorem ker_subset_of_hasConvexDecompositionWith
 /-- **Maximal weight in convex decomposition** (Wolf Ch. 1, line 371). For
 density operators `ρ`, `ρ₁` on the same space, there is a convex decomposition
 `ρ = ∑ᵢ λᵢρᵢ` giving `ρ₁` a positive weight `c` iff `ker(ρ) ⊆ ker(ρ₁)` and
-`c ≤ ‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞⁻¹`, the inverse taken on the range of `ρ`. -/
+`c ≤ ‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞⁻¹`, the inverse taken on the range of `ρ`.
+
+Proved here in the equivalent multiplicative form
+`c * ‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞ ≤ 1`: given the kernel inclusion, `ρ₁`'s unit
+trace makes it nonzero, and its compression `ρ^{-1/2}ρ₁ρ^{-1/2}` onto the
+range of `ρ` is then nonzero too, so `‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞ > 0` and
+`c ≤ ‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞⁻¹` is equivalent to `c * ‖ρ^{-1/2}ρ₁ρ^{-1/2}‖∞ ≤ 1`.
+The multiplicative form is used because it stays correct even where the
+norm vanishes, which cannot happen under this theorem's hypotheses but
+keeps the statement uniform with the general congruence lemma it is built
+from (`Matrix.PosSemidef.sub_smul_posSemidef_iff`). -/
 theorem hasConvexDecompositionWith_iff
     {ρ ρ1 : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef) (hρ1 : ρ1.PosSemidef)
     (hρtr : ρ.trace = 1) (hρ1tr : ρ1.trace = 1) {c : ℝ} (hc : 0 < c) :
@@ -88,7 +105,7 @@ theorem hasConvexDecompositionWith_iff
     have hker := ker_subset_of_hasConvexDecompositionWith hc hdecomp
     refine ⟨hker, ?_⟩
     classical
-    obtain ⟨ι, _, lam, rho, i1, hrhoPSD, hrhoTr, hlamNonneg, hlamSum, hSum, hlam1, hrho1⟩ := hdecomp
+    obtain ⟨ι, _, lam, rho, i1, hrhoPSD, _, hlamNonneg, _, hSum, hlam1, hrho1⟩ := hdecomp
     have hrest : ρ - c • ρ1 = ∑ i ∈ Finset.univ.erase i1, lam i • rho i := by
       have hadd := Finset.add_sum_erase Finset.univ (fun i => lam i • rho i)
         (Finset.mem_univ i1)
@@ -138,7 +155,6 @@ theorem hasConvexDecompositionWith_iff
       · simp [Fin.sum_univ_two]
       · simp only [Fin.sum_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
         rw [hσdef, smul_smul]
-        have h1c' : ((1 - c : ℝ) : ℂ) ≠ 0 := by exact_mod_cast h1c.ne'
         have hinv : (1 - c) * (1 - c)⁻¹ = 1 := mul_inv_cancel₀ h1c.ne'
         rw [hinv, one_smul, add_sub_cancel]
 

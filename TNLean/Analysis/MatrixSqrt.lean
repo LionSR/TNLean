@@ -729,9 +729,9 @@ theorem PosSemidef.sub_smul_posSemidef_iff
     {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) {c : ℝ} (hc : 0 < c)
     (hker : ∀ v : n → ℂ, A *ᵥ v = 0 → B *ᵥ v = 0) :
     (A - c • B).PosSemidef ↔ c * ‖hA.supportInvSqrt * B * hA.supportInvSqrt‖ ≤ 1 := by
-  set P := hA.supportProj with hPdef
-  set Ainv := hA.supportInvSqrt with hAinvdef
-  set S := hA.isHermitian.cfc Real.sqrt with hSdef
+  set P := hA.supportProj
+  set Ainv := hA.supportInvSqrt
+  set S := hA.isHermitian.cfc Real.sqrt
   set Q := Ainv * B * Ainv with hQdef
   have hQpsd : Q.PosSemidef := by
     have h := hB.conjTranspose_mul_mul_same Ainv
