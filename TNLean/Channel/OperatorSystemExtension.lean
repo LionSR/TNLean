@@ -806,4 +806,130 @@ theorem reconstructedMap_eq_kraus_sum [NeZero m] [NeZero n]
   refine Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ => ?_
   ring
 
+/-! ### `reconstructedMap tau'` agrees with `T` on `S` -/
+
+/-- The bipartite slices of `B ⊗ |i⟩⟨j|` are scalar multiples of `B`. -/
+private theorem bipartiteSlice_kron_single (B : Matrix (Fin m) (Fin m) ℂ) (i0 j0 i j : Fin n) :
+    Matrix.bipartiteSlice (kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ))) i j =
+      (Matrix.single i0 j0 (1 : ℂ) : Matrix (Fin n) (Fin n) ℂ) i j • B := by
+  ext a b
+  simp only [Matrix.bipartiteSlice, Matrix.kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul]
+  ring
+
+theorem kron_single_mem_tensorSubmodule {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    {B : Matrix (Fin m) (Fin m) ℂ} (hB : B ∈ S) (i0 j0 : Fin n) :
+    kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)) ∈ tensorSubmodule S n := by
+  intro i j
+  rw [bipartiteSlice_kron_single, Matrix.single_apply]
+  split_ifs with h
+  · simpa using hB
+  · simp [S.zero_mem]
+
+/-- The entries of `tensorMapIdSub T` on `B ⊗ |i⟩⟨j|` are scalar multiples of
+`T(B)`, via `T`'s linearity applied to `bipartiteSlice_kron_single`. -/
+private theorem tensorMapIdSub_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ} {B : Matrix (Fin m) (Fin m) ℂ} (hB : B ∈ S)
+    (i0 j0 q1 q2 p1 p2 : Fin n) :
+    tensorMapIdSub T ⟨kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)),
+        kron_single_mem_tensorSubmodule hB i0 j0⟩ (q1, q2) (p1, p2) =
+      (if q2 = i0 ∧ p2 = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ q1 p1 := by
+  rw [tensorMapIdSub_apply]
+  have hval : (⟨Matrix.bipartiteSlice (kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ))) q2 p2,
+      mem_tensorSubmodule_iff.mp (kron_single_mem_tensorSubmodule hB i0 j0) q2 p2⟩ : ↥S) =
+      ((Matrix.single i0 j0 (1 : ℂ) : Matrix (Fin n) (Fin n) ℂ) q2 p2) • (⟨B, hB⟩ : ↥S) := by
+    apply Subtype.ext
+    exact bipartiteSlice_kron_single B i0 j0 q2 p2
+  rw [hval, map_smul]
+  simp only [Matrix.single_apply, Matrix.smul_apply, smul_eq_mul]
+  by_cases hi : q2 = i0 <;> by_cases hj : p2 = j0
+  · subst hi; subst hj; simp
+  · subst hi; simp [hj, Ne.symm hj]
+  · subst hj; simp [hi, Ne.symm hi]
+  · simp [hi, hj, Ne.symm hi, Ne.symm hj]
+
+/-- **Wolf's inversion formula on `S`** (Ch. 1, line 623): for `B ∈ S`,
+`τ(B ⊗ |i⟩⟨j|) = (1/n) · T(B) i j`, matching `tau_apply`'s definition. -/
+theorem tau_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ} {B : Matrix (Fin m) (Fin m) ℂ} (hB : B ∈ S)
+    (i0 j0 : Fin n) :
+    tau T ⟨kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)),
+        kron_single_mem_tensorSubmodule hB i0 j0⟩ =
+      (1 / (n : ℂ)) * T ⟨B, hB⟩ i0 j0 := by
+  rw [tau_apply]
+  have hentry : Matrix.trace (Matrix.omegaProj n * tensorMapIdSub T
+      ⟨kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)),
+        kron_single_mem_tensorSubmodule hB i0 j0⟩) =
+      ∑ p2a : Fin n, ∑ p2b : Fin n, ∑ q2a : Fin n, ∑ q2b : Fin n,
+        Matrix.omegaProj n (p2a, p2b) (q2a, q2b) * tensorMapIdSub T
+          ⟨kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)),
+            kron_single_mem_tensorSubmodule hB i0 j0⟩ (q2a, q2b) (p2a, p2b) := by
+    simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Fintype.sum_prod_type]
+  rw [hentry]
+  have hc : ((1 : ℂ) / ((n : ℝ).sqrt : ℂ)) * (1 / ((n : ℝ).sqrt : ℂ)) = 1 / (n : ℂ) := by
+    rw [div_mul_div_comm, one_mul, ← Complex.ofReal_mul, Real.mul_self_sqrt (Nat.cast_nonneg n)]
+    norm_num
+  have hterm : ∀ p2a p2b q2a q2b : Fin n,
+      Matrix.omegaProj n (p2a, p2b) (q2a, q2b) * tensorMapIdSub T
+          ⟨kroneckerMap (· * ·) B (Matrix.single i0 j0 (1 : ℂ)),
+            kron_single_mem_tensorSubmodule hB i0 j0⟩ (q2a, q2b) (p2a, p2b) =
+        (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+          ((if q2a = q2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+            ((if q2b = i0 ∧ p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ q2a p2a)) := by
+    intro p2a p2b q2a q2b
+    rw [tensorMapIdSub_kron_single hB,
+      show Matrix.omegaProj n (p2a, p2b) (q2a, q2b) =
+        Matrix.omegaVec n (p2a, p2b) * star (Matrix.omegaVec n (q2a, q2b)) from rfl,
+      Matrix.omegaVec_apply, Matrix.omegaVec_apply]
+    by_cases hp : p2a = p2b <;> by_cases hq : q2a = q2b <;>
+      simp [hp, hq, mul_assoc]
+  simp only [hterm]
+  -- Collapse the innermost sum (q2b) to i0: the summand vanishes unless q2b = i0.
+  have hq2b : ∀ p2a p2b q2a : Fin n, (∑ q2b : Fin n,
+      (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((if q2a = q2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+          ((if q2b = i0 ∧ p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ q2a p2a))) =
+      (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((if q2a = i0 then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+          ((if p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ q2a p2a)) := by
+    intro p2a p2b q2a
+    rw [Finset.sum_eq_single i0]
+    · simp
+    · intro b _ hb
+      have : ¬(b = i0 ∧ p2b = j0) := fun h => hb h.1
+      simp [this]
+    · intro h; exact absurd (Finset.mem_univ i0) h
+  simp only [hq2b]
+  -- Collapse q2a to i0.
+  have hq2a : ∀ p2a p2b : Fin n, (∑ q2a : Fin n,
+      (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((if q2a = i0 then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+          ((if p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ q2a p2a))) =
+      (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((1 / ((n : ℝ).sqrt : ℂ)) * ((if p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ i0 p2a)) := by
+    intro p2a p2b
+    rw [Finset.sum_eq_single i0]
+    · simp
+    · intro b _ hb; simp [hb]
+    · intro h; exact absurd (Finset.mem_univ i0) h
+  simp only [hq2a]
+  -- Collapse p2b to j0.
+  have hp2b : ∀ p2a : Fin n, (∑ p2b : Fin n,
+      (if p2a = p2b then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((1 / ((n : ℝ).sqrt : ℂ)) * ((if p2b = j0 then (1 : ℂ) else 0) * T ⟨B, hB⟩ i0 p2a))) =
+      (if p2a = j0 then (1 / ((n : ℝ).sqrt : ℂ)) else 0) *
+        ((1 / ((n : ℝ).sqrt : ℂ)) * T ⟨B, hB⟩ i0 p2a) := by
+    intro p2a
+    rw [Finset.sum_eq_single j0]
+    · simp
+    · intro b _ hb
+      simp [hb]
+    · intro h; exact absurd (Finset.mem_univ j0) h
+  simp only [hp2b]
+  -- Collapse p2a to j0.
+  rw [Finset.sum_eq_single j0]
+  · simp only [if_true]
+    rw [← mul_assoc, hc]
+  · intro b _ hb; simp [hb]
+  · intro h; exact absurd (Finset.mem_univ j0) h
+
 end Matrix
