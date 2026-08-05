@@ -1,15 +1,21 @@
 % Target: rmp-iv-intersection-lhs-three
 % Formula: Growing B back gives A--B, one exposed site, and boundary tensor L.
-% Ink: Canonical public tenkz: A--B and the two exposed interior virtual indices
-%   lie above L.
+% Ink: Kernel flat frame: A--B closes into the wide pill L through the west cup;
+%   the two exposed interior virtual ends turn upward before the lobe leg.
 % Boundary: The outer end closes through L; two virtual and three physical legs open.
 % Source: paper TN-Review-main.tex line 2063; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 103-111 (Ltensor3)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=open,
-                tensor style=box]
-    \tn{A} & \tn{B} & \\
-    \tn[pill, wide=3, up at={3}]{L} & &
+  \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none, west=cup]
+    \tn[at=(1,1), skin=box, name=a, ports={0:virtual, 180:virtual, 90:physical}]{A}
+    \tn[at=(1,2), skin=box, name=b, ports={0:virtual, 180:virtual, 90:physical}]{B}
+    % B's cut end turns upward through the invisible junction beside the lobe.
+    \tn[at=(1,3), skin=none, name=v, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=pill, wide=5, name=l,
+      ports={180:virtual, 90@4:virtual, 90@5:physical}]{L}
+    \tnwire{a.0}{b.180}
+    \tnwire{b.0}{v.180}
   \end{tenkz}
 \]
