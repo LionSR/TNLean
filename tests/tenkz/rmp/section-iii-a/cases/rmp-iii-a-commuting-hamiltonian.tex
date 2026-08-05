@@ -1,22 +1,58 @@
 % Target: rmp-iii-a-commuting-hamiltonian
 % Formula: (rho = the 6-site MPO word A x A x A x A x A x A on the red
-% Ink: Canonical public tenkz environment; no raw TikZ.
-% Boundary: Resolved by the public environment; open indices remain explicit.
+% Ink: Kernel flat frames; the gate is the stock pill skin and the word rides
+%   the operator species.
+% Boundary: The red word ends and every uncontracted physical leg remain open;
+%   the gate's own output pair is undrawn, as in the source.
 % Source: paper TN-Review-main.tex line 1389; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 289-304
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  % LHS: h . rho -- gate above, contracted with the up legs of sites 3,4
-  \begin{tenkz}[rows={op:none, op:operator}, tensor style=box]
-    \tnskip & \tnskip & \tn[pill, wide=2, down at={1,2}]{h} & & \tnskip
-      & \tnskip \\
-    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
-  \end{tenkz}
-  \;=\;
-  % RHS: rho . h -- the same gate below, contracted with the down legs
-  \begin{tenkz}[rows={op:operator, op:none}, tensor style=box]
-    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
-    \tnskip & \tnskip & \tn[pill, wide=2, up at={1,2}]{h} & & \tnskip
-      & \tnskip
-  \end{tenkz}
+  \tenkzkernel
+  % The source draws the two-site gate closed on its outer side, so neither
+  % panel legs the pill; the relation's audit is opted out because the
+  % undrawn gate output pair changes sides across the equality.
+  \begin{tenkzeq}[check={off={1: the undrawn gate output pair changes sides}}]
+    % LHS: h . rho -- the gate above, contracted with the up legs of sites 3,4
+    \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none, physical=updown,
+                  align=2]
+      \tn[at=(1,3), name=h, skin=pill, wide=2, void=sealed,
+        ports={270@1:physical, 270@2:physical}]{h}
+      \tn[at=(2,1), name=a1, skin=box]{}
+      \tn[at=(2,2), name=a2, skin=box]{}
+      \tn[at=(2,3), name=a3, skin=box]{}
+      \tn[at=(2,4), name=a4, skin=box]{}
+      \tn[at=(2,5), name=a5, skin=box]{}
+      \tn[at=(2,6), name=a6, skin=box]{}
+      \tnwire[kind=string, species=operator]{open w}{a1.w}
+      \tnwire[kind=string, species=operator]{a1.e}{a2.w}
+      \tnwire[kind=string, species=operator]{a2.e}{a3.w}
+      \tnwire[kind=string, species=operator]{a3.e}{a4.w}
+      \tnwire[kind=string, species=operator]{a4.e}{a5.w}
+      \tnwire[kind=string, species=operator]{a5.e}{a6.w}
+      \tnwire[kind=string, species=operator]{a6.e}{open e}
+      \tnwire{a3.90}{h.270@1} \tnwire{a4.90}{h.270@2}
+    \end{tenkz}
+    =
+    % RHS: rho . h -- the same gate below, contracted with the down legs
+    \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none, physical=updown,
+                  align=1]
+      \tn[at=(2,3), name=h, skin=pill, wide=2, void=sealed,
+        ports={90@1:physical, 90@2:physical}]{h}
+      \tn[at=(1,1), name=a1, skin=box]{}
+      \tn[at=(1,2), name=a2, skin=box]{}
+      \tn[at=(1,3), name=a3, skin=box]{}
+      \tn[at=(1,4), name=a4, skin=box]{}
+      \tn[at=(1,5), name=a5, skin=box]{}
+      \tn[at=(1,6), name=a6, skin=box]{}
+      \tnwire[kind=string, species=operator]{open w}{a1.w}
+      \tnwire[kind=string, species=operator]{a1.e}{a2.w}
+      \tnwire[kind=string, species=operator]{a2.e}{a3.w}
+      \tnwire[kind=string, species=operator]{a3.e}{a4.w}
+      \tnwire[kind=string, species=operator]{a4.e}{a5.w}
+      \tnwire[kind=string, species=operator]{a5.e}{a6.w}
+      \tnwire[kind=string, species=operator]{a6.e}{open e}
+      \tnwire{a3.270}{h.90@1} \tnwire{a4.270}{h.90@2}
+    \end{tenkz}
+  \end{tenkzeq}
 \]
