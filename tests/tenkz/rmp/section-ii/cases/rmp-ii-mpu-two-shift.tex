@@ -22,10 +22,10 @@
   \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
     % The upper row turns right (blue) and its lower legs turn left (red);
     % the lower row reverses both, as in the published panel.
-    \tn[at=(1,1), skin=shift-right]{} \tn[at=(1,2), skin=shift-right]{}
-    \tn[at=(1,3), skin=shift-right]{} \tn[at=(1,4), skin=shift-right]{}
-    \tn[at=(2,1), skin=shift-left]{} \tn[at=(2,2), skin=shift-left]{}
-    \tn[at=(2,3), skin=shift-left]{} \tn[at=(2,4), skin=shift-left]{}
+    \tn[skin=shift-right]{} & \tn[skin=shift-right]{} &
+    \tn[skin=shift-right]{} & \tn[skin=shift-right]{} \\
+    \tn[skin=shift-left]{} & \tn[skin=shift-left]{} &
+    \tn[skin=shift-left]{} & \tn[skin=shift-left]{}
     \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)}
     \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
     \tnwire{(1,4)}{open e}

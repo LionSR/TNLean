@@ -181,6 +181,21 @@ at_ports=$(awk '/^picture\|id=k2\|/ { seen = 1 }
   echo "FAIL: the two placements reached different open physical boundaries" >&2
   exit 1
 }
+chain_pairing=$(awk '/^picture\|id=k2\|/ { exit } /^wire\|/' \
+  "$WORK/r_skin_pairing_chain_placed.tnlog" | sed 's/addr-[0-9]*/addr/g')
+at_pairing=$(awk '/^picture\|id=k2\|/ { seen = 1 }
+  seen && /^wire\|/' \
+  "$WORK/r_skin_pairing_chain_placed.tnlog" | sed 's/addr-[0-9]*/addr/g')
+[ -n "$chain_pairing" ] && [ "$chain_pairing" = "$at_pairing" ] || {
+  echo "FAIL: a declared skin's pairings differ between the two placements" >&2
+  exit 1
+}
+[ "$(grep -Fc \
+      'kernel-boundary|signature=open:e, open:w, phys:n, phys:n, phys:s, phys:s' \
+      "$WORK/r_skin_pairing_chain_placed.tnlog" || true)" -eq 2 ] || {
+  echo "FAIL: a chained pairing carrier reached a different boundary" >&2
+  exit 1
+}
 grep -Fq 'kernel-boundary|signature=phys:n' \
     "$WORK/r_port_physical_open.tnlog" || {
   echo "FAIL: physical port type did not reach its explicit open boundary" >&2
