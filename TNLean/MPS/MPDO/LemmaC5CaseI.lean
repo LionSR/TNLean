@@ -9,10 +9,16 @@ import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
 import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.PhysicalSectorTraceMatrix
+import TNLean.MPS.MPDO.Purity
+import TNLean.MPS.MPDO.CyclicActiveTraceProductIdentities
+import TNLean.MPS.MPDO.SectorEtaPositivity
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.PerronFrobenius.Idempotent
 import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.Algebra.PerronFrobenius.RankOne
+import TNLean.Algebra.PerronFrobenius.Substochastic
+import TNLean.Algebra.TraceReindex
 
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
@@ -241,28 +247,94 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
   have hTprim := F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
   exact hTprim.pow_two_pos_of_pow_two_eq_pow_three hTsq_eq_Tcu
 
-/-! ## Remaining gap for Lemma C.5 Case I
+/-! ## Lemma C.5 Case I — remaining theorems
 
-The singleton-consequence theorem requires two additional pieces:
+The matrix-algebra components above give `S ≤ T²` entrywise, `T² = T³` from
+literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  Three further
+theorems complete the Case-I argument:
 
-1. **Trace similarity** `tr(S_hat^N) = tr(S^N)` where
-   `(S_hat)_{ij} = S_{ij} * v_j² / v_i²`.  This follows from
-   diagonal similarity `S_hat = D_{v²}^{-1} S D_{v²}` and the
-   telescoping product argument `(S_hat^N)_{ii} = (S^N)_{ii}`.
-
-2. **Overlap formula** `mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)
-   = Complex.ofReal(tr(S^N))` for `N > 0`.  Requires the
-   physical-isometry conjugation, block-diagonal decomposition,
-   squared-trace lemma, and trace-cycle identity.
-
-With these, the full Case-I singleton-consequence argument
-is complete; all matrix-algebra components are proved above.
+1. **Trace similarity** `tr(S_hat ^ N) = tr(S^N)` where `S_hat` is the diagonal
+   similarity transform of `S` by the squared Perron weights.
+2. **Overlap formula** `mpvOverlap = Complex.ofReal(tr(S^N))` expressing
+   the doubled-index self-overlap in terms of the active-sector
+   trace-squared matrix.
+3. **Singleton assembly** Prove `card(ActiveSector p) = 1`, which forces
+   `T² = T` and `Q(1−LQ)L = 0`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
-1473--1499.
+1473--1499; Case-I assumptions at lines 1374--1381; self-overlap limit at
+lines 1080--1100.
 -/
 
+open Matrix
 
+section traceSimilarity
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- **Trace similarity under diagonal conjugation.** For any real square matrix
+`S` and a diagonal matrix with nonzero entries, the trace of every power is
+preserved under the diagonal similarity `M = D⁻¹ * S * D`:
+`tr(M^N) = tr(S^N)` for all `N ≥ 0`.
+
+This is the telescoping used in the Lemma C.5 Case-I route
+(arXiv:1606.00608, Appendix C.2, lines 1473--1499): conjugate `S` by the
+squared Perron-weight diagonal matrix `D_{v²}`, and the trace of every power
+is unchanged.
+
+The proof expands `(D⁻¹·S·D)^N = D⁻¹·S^N·D` by the diagonal similarity
+telescoping, then applies trace cyclicity `tr(D⁻¹·T·D) = tr(T)`. -/
+theorem trace_pow_similarity_diagonal (S : Matrix n n ℝ) (d : n → ℝ) (hd : ∀ i, d i ≠ 0)
+    (N : ℕ) :
+    Matrix.trace (((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) ^ N) =
+      Matrix.trace (S ^ N) := by
+  have h_det : IsUnit ((Matrix.diagonal d).det) := by
+    rw [Matrix.det_diagonal]
+    exact (IsUnit.prod_univ_iff.mpr fun i => (hd i).isUnit)
+  have h_mul : (Matrix.diagonal d)⁻¹ * (Matrix.diagonal d) = 1 :=
+    Matrix.nonsing_inv_mul (Matrix.diagonal d) h_det
+  have h_mul' : (Matrix.diagonal d) * (Matrix.diagonal d)⁻¹ = 1 :=
+    Matrix.mul_nonsing_inv (Matrix.diagonal d) h_det
+  have h_pow : ((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) ^ N =
+      (Matrix.diagonal d)⁻¹ * (S ^ N) * Matrix.diagonal d := by
+    induction' N with k ih
+    · simp [h_mul]
+    · rw [pow_succ, pow_succ, ih]
+      calc
+        ((Matrix.diagonal d)⁻¹ * (S ^ k) * Matrix.diagonal d) *
+            ((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) =
+          (Matrix.diagonal d)⁻¹ * (S ^ k) *
+            (Matrix.diagonal d * (Matrix.diagonal d)⁻¹) * S * Matrix.diagonal d := by
+          simp [Matrix.mul_assoc]
+        _ = (Matrix.diagonal d)⁻¹ * (S ^ k) * 1 * S * Matrix.diagonal d := by
+          rw [h_mul']
+        _ = (Matrix.diagonal d)⁻¹ * (S ^ (k + 1)) * Matrix.diagonal d := by
+          simp [pow_succ, Matrix.mul_assoc]
+  calc
+    Matrix.trace (((Matrix.diagonal d)⁻¹ * S * Matrix.diagonal d) ^ N) =
+        Matrix.trace ((Matrix.diagonal d)⁻¹ * (S ^ N) * Matrix.diagonal d) := by
+      rw [h_pow]
+    _ = Matrix.trace ((Matrix.diagonal d) * ((Matrix.diagonal d)⁻¹ * (S ^ N))) := by
+      rw [Matrix.trace_mul_comm]
+    _ = Matrix.trace (((Matrix.diagonal d) * (Matrix.diagonal d)⁻¹) * (S ^ N)) := by
+      simp [Matrix.mul_assoc]
+    _ = Matrix.trace (1 * (S ^ N)) := by rw [h_mul']
+    _ = Matrix.trace (S ^ N) := by simp
+
+/-- `trace_pow_similarity_diagonal` specialized to the squared Perron-weight
+diagonal used in the Lemma C.5 Case-I route.  For a positive vector `v`
+(e.g. the right Perron vector of the active-sector trace matrix `T`), set
+`S_hat = D_{v²}⁻¹ * S * D_{v²}`.  Then `tr(S_hat ^ N) = tr(S^N)` for all `N`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem trace_pow_similarity_squared_diagonal (S : Matrix n n ℝ) (v : n → ℝ) (hv : ∀ i, 0 < v i)
+    (N : ℕ) :
+    Matrix.trace (((Matrix.diagonal fun i => (v i)^2)⁻¹ * S *
+        Matrix.diagonal fun i => (v i)^2) ^ N) =
+      Matrix.trace (S ^ N) :=
+  trace_pow_similarity_diagonal S (fun i => (v i)^2) (fun i => pow_ne_zero 2 (hv i).ne') N
+
+end traceSimilarity
 
 end caseI
 
