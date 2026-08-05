@@ -46,8 +46,8 @@ proved:
 
 The overlap formula assembles the doubled-index self-overlap identity
 (`Purity`) with the physical-sector product realization
-(`PhysicalSectorProductRealization`) via a physical unitary basis change
-(`trace_mpo_conjugatePhysical_mul_self`), the cyclic trace factorization
+(`PhysicalSectorProductRealization`) via a physical basis change with
+`Uᴴ * U = 1` (`trace_mpo_conjugatePhysical_mul_self`), the cyclic trace factorization
 (`CyclicActiveTraceProductIdentities`), the reduction from the full sector
 index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
