@@ -203,7 +203,7 @@ unital endomorphism is bounded.
 
 Every iterate remains positive semidefinite, and positivity together with
 `T 1 = 1` propagates the Loewner bound `T^[n] X ≤ (trace X) • 1`: each iterate
-stays in the bounded trace section `{Y ⪰ 0 | trace Y ≤ D · trace X}` of the
+stays in the bounded trace section `{Y | 0 ≤ Y, trace Y ≤ D · trace X}` of the
 positive cone.  This is the unital case of Wolf's uniform boundedness
 observation in the proof of Proposition 6.2,
 `tr[A T(B)] ≤ ‖A‖ ‖B‖ tr[1 T(1)] = d ‖A‖ ‖B‖`, which holds verbatim for
