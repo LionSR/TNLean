@@ -1,0 +1,88 @@
+% Regression: the two canonical-isometry silhouettes are one triangle read
+% from either end of its own east axis.  The east-apex skin and the mirrored
+% west-apex skin carry ports at the same twelve bearings, four of which graze
+% an apex, and every leg meets a slanted side rather than a bounding box.
+% The unit block pins the mirrored support against the established one: a
+% half turn about the record's own centre, in the turned record and in the
+% affine record alike.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\cs_new_protected:Npn \__tenkz_test_mirror_support:
+  {
+    % A half turn about the centre: the mirrored support along a bearing is
+    % the established support along the opposite bearing.
+    \clist_map_inline:nn {0, 17, 45, 90, 143, 180, 231, 314}
+      {
+        \fp_set:Nn \l_tmpa_fp
+          { \__tenkz_geom_support:nnnnnn {triwest}{1/2}{1/4}{0}{0}{##1} }
+        \fp_set:Nn \l_tmpb_fp
+          { \__tenkz_geom_support:nnnnnn {triangle}{1/2}{1/4}{0}{0}{##1+180} }
+        \fp_compare:nNnF { abs(\l_tmpa_fp - \l_tmpb_fp) } < {0.000001}
+          { \errmessage{the~mirrored~triangle~is~not~a~half~turn~of~its~own} }
+      }
+    % Hand-computed: apex west at (-1/2,0), base corners at (1/2,+-1/4).
+    % Queried north-east the mirrored silhouette reaches a base corner, at
+    % (1/2 + 1/4)/sqrt(2), where the east-apex one reaches its apex alone, at
+    % (1/2)/sqrt(2).  A shared formula would answer the same on both.
+    \fp_set:Nn \l_tmpa_fp
+      { \__tenkz_geom_support:nnnnnn {triwest}{1/2}{1/4}{0}{0}{45} }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 0.75 / sqrt(2)) } < {0.000001}
+      { \errmessage{the~mirrored~triangle~lost~its~base~corner} }
+    \fp_set:Nn \l_tmpb_fp
+      { \__tenkz_geom_support:nnnnnn {triangle}{1/2}{1/4}{0}{0}{45} }
+    \fp_compare:nNnF { abs(\l_tmpb_fp - 0.5 / sqrt(2)) } < {0.000001}
+      { \errmessage{the~east-apex~triangle~changed~its~apex~support} }
+    % A record's own turn still turns the mirrored silhouette.
+    \fp_set:Nn \l_tmpa_fp
+      { \__tenkz_geom_support:nnnnnn {triwest}{1/2}{1/4}{0}{90}{135} }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 0.75 / sqrt(2)) } < {0.000001}
+      { \errmessage{a~turned~mirrored~triangle~lost~its~turn} }
+    % The affine record answers the same through an orthogonal basis, and
+    % keeps the mirror through a shear: apex west at -2 along east, base
+    % corners at +2 with the plane's shear carrying the north extent.
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {triwest}{1/2}{1/4}{0}{1}{0}{0}{1}{45}
+      }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 0.75 / sqrt(2)) } < {0.000001}
+      { \errmessage{an~affine~mirrored~triangle~lost~its~base~corner} }
+    \fp_set:Nn \l_tmpa_fp
+      {
+        \__tenkz_geom_support_basis:nnnnnnnnn
+          {triwest}{2}{1}{0}{1}{0}{0.45}{0.60}{0}
+      }
+    \fp_compare:nNnF { abs(\l_tmpa_fp - 2.45) } < {0.000001}
+      { \errmessage{a~sheared~mirrored~triangle~lost~its~base~corner} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\ExplSyntaxOn
+\__tenkz_test_mirror_support:
+\ExplSyntaxOff
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=m]
+  \tn[skin=tri, at=(2,2), name=east,
+    ports={0:virtual, 12:virtual, 348:virtual, 60:virtual, 120:virtual,
+           150:virtual, 180:virtual, 210:virtual, 240:virtual, 270:physical,
+           300:virtual, 330:virtual}]{A_L}
+  \tnwire{east.0}{open e} \tnwire{open w}{east.180}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=m]
+  \tn[skin=triwest, at=(2,2), name=west,
+    ports={180:virtual, 168:virtual, 192:virtual, 60:virtual, 120:virtual,
+           150:virtual, 0:virtual, 210:virtual, 240:virtual, 270:physical,
+           300:virtual, 330:virtual}]{A_R}
+  \tnwire{open w}{west.180} \tnwire{west.0}{open e}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[skin=triwest, at=(2,2), name=labelled,
+    ports={180:virtual:$\alpha$, 0:virtual:$\beta$, 270:physical:$s$}]{A_R}
+\end{tenkz}
+\end{document}
