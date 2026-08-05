@@ -22,13 +22,14 @@
     \tnwire{d1.0}{r1.180} \tnwire{d2.0}{r2.180}
   \end{tenkz}
   \;=\;
-  % RHS: U^A_I feeds sigma^A then sigma^B on each row; the brace names the
-  % sigma_{partial R} span and east=cup closes the shared virtual pair.
+  % RHS: U^A_I feeds sigma^A then sigma^B on each row; the enclosure mark
+  % draws the source's sigma_{partial R} box around the sigma cluster and
+  % east=cup closes the shared virtual pair.
   \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, west=none, east=cup]
     \tn[at=(1,1), skin=box, name=u1, ports={0:virtual, 90:physical}]{U^{A}_{I}}
     \tn[at=(1,2), skin=ring, name=sa1, ports={180:virtual, 0:virtual}]{\sigma^{A}}
     \tn[at=(1,3), skin=ring, name=sb1, ports={180:virtual, 0:virtual}]{\sigma^{B}}
-    \tnmark[form=label, label pos=90]{midway sa1 and sb1}{$\sigma_{\partial R}$}
+    \tnmark[form=enclosure, label pos=ne]{(1,2) .. (2,3)}{$\sigma_{\partial R}$}
     \tn[at=(2,1), skin=box, name=u2,
       ports={0:virtual, 270:physical}]{\overline{U^{A}_{I}}}
     \tn[at=(2,2), skin=ring, name=sa2, ports={180:virtual, 0:virtual}]{\sigma^{A}}

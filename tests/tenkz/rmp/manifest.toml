@@ -406,7 +406,7 @@ section = "section-ii"
 order = 24
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-canonical-right.tex"
 formula = "[A_R^s]_{alpha,beta} is the right-canonical tensor."
-ink = "Kernel flat frame; the kernel triangle skin has one fixed apex, so the glyph faces east instead of mirroring west for A_R (the bar's X row on this target)."
+ink = "Kernel flat frame; the kernel triangle skin has one fixed apex (east), so the glyph cannot mirror west the way the source draws A_R; glyph orientation is outside the cosmetic bar, so the residue stays open until a west-apex skin lands (#5485)."
 boundary = "The west alpha, east beta, and downward physical s indices are open."
 source = "paper TN-Review-main.tex line 661; author source ImagesReview Section II/ImagesReview Section II.tex lines 199-207"
 capabilities = ["kernel", "typed-ports"]
@@ -423,7 +423,7 @@ section = "section-ii"
 order = 25
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-ortho-right.tex"
 formula = "sum_s A_R^s (A_R^s)^dagger = 1."
-ink = "Kernel flat frame; the kernel triangle skin has one fixed apex, so the glyph faces east instead of mirroring west for A_R (the bar's X row on this target)."
+ink = "Kernel flat frame; the source mirrors the whole equation (cups west, apexes east) while the house keeps the definition compass (cup east, open pair west), so in the house frame the mirrored source glyphs face west -- the apex the kernel triangle skin cannot draw (#5485)."
 boundary = "The east cup contracts the right indices; the west ket-bra pair remains open."
 source = "paper TN-Review-main.tex line 663; author source ImagesReview Section II/ImagesReview Section II.tex lines 171-180"
 capabilities = ["kernel", "typed-ports"]

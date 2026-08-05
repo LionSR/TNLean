@@ -1610,3 +1610,39 @@ The wave drops the `no legs` key below tenure:
 | flag:consumers:key:object:no legs | dies at S4 with the 0.7 object ledger: a suppressed policy leg is port ownership, which typed `ports=` already states; wave 2B retired its intertwiner consumers; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 1C moves seven Section-II panels onto the kernel tier
+
+The Section-II canonical-form and MPDO family — the right-canonical
+triangle, both orthogonality words, the boundary-state factorization, the
+renormalization isometry, the T/S channel pair, and the periodic MPDO
+transfer word — leaves the grid tier for kernel flat frames with declared
+typed ports.  The isometry's U takes the stock pill skin and the periodic
+word the stock MPO skin.  The Fable verification pass repaired one render
+before landing: the boundary state's sigma_partial-R region, which the
+migration had reduced to a floating label, is drawn by the range-addressed
+enclosure mark — the source's dotted box — retiring the interim
+missing-element defect and the grid tier's brace-for-box note.  The two
+right-canonical triangles are re-graded honestly to cosmetic gaps: the
+sources draw their apexes west (directly in the definition, by
+whole-equation mirror in the orthogonality panel) and the kernel triangle
+skin has one fixed east apex.  The left-orthogonality word keeps faithful
+because the same mirror lands its glyphs on the fixed apex.  The periodic
+word's stale extra-element defect is adjudicated against the author
+block, which only ever draws one panel; its residue is the flush
+single-row trace wrap.
+
+M4 rises from 22.22 to 22.48 because the kernel cases name the ports,
+skins, and closures their grid rows and sandwich words implied.  The
+owned dimension census is unchanged at 401 sites (route/string 224,
+composition/layout 177); no ceiling moves.  No parser spelling, registry
+row, alias, escape, or overload is added or removed.
+
+The wave drops two 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:object:tri | keep-because: wave 1C retired the canonical-form and orthogonality consumers onto the kernel triangle skin; the two remaining consumers are 0.7 grid-tier cases (the tangent projector and the workbench P_T(A)) that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnspan | keep-because: wave 1C's enclosure respell of the boundary state dropped the lone brace-above signature, folding the corpus onto two; the span sugar is a 0.7 grid-tier spelling whose remaining consumers retire at the S4 surface swap, the kernel stating ranges through mark addresses; expiry 0.9 |
+
+Census-correction: #5347
