@@ -910,7 +910,7 @@ lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) 
     dotProduct_A_col _ _ _ _
   rw [hdot]
   by_cases h : gate i1 i2 ∧ gate j1 j2
-  · simp only [h, if_true]; ring
+  · rw [if_pos h]; ring
   · rw [if_neg h]; ring
 
 /-! ### The Walsh–Hadamard eigenbasis of `wMat`, reused as Kraus data -/
@@ -1047,7 +1047,7 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     refineMap (physClose1 R X) = physClose2 R X := by
   ext ⟨i1, i2⟩ ⟨j1, j2⟩
   rw [physClose2_R_entry]
-  show (∑ s : Fin 2, refineKraus s * physClose1 R X * (refineKraus s)ᴴ) (i1, i2) (j1, j2) = _
+  change (∑ s : Fin 2, refineKraus s * physClose1 R X * (refineKraus s)ᴴ) (i1, i2) (j1, j2) = _
   simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
   by_cases h : gate i1 i2 ∧ gate j1 j2
   · have hstep : ∀ s : Fin 2,
