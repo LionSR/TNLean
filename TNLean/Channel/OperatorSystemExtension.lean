@@ -252,4 +252,100 @@ theorem tau_le_norm_mul_tau_one {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
   simp only [Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero] at htau_nonneg
   linarith
 
+/-! ### Hahn–Banach extension of `τ` -/
+
+/-- The `ℝ`-submodule of Hermitian matrices in `S ⊗ M_k(ℂ)`, the domain on
+which the Hahn–Banach extension theorem is applied. -/
+def hermitianTensorSubmodule (S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)) (k : ℕ) :
+    Submodule ℝ (Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) where
+  carrier := {X | X.IsHermitian ∧ X ∈ tensorSubmodule S k}
+  zero_mem' := ⟨Matrix.isHermitian_zero, (tensorSubmodule S k).zero_mem⟩
+  add_mem' hX hY := ⟨hX.1.add hY.1, (tensorSubmodule S k).add_mem hX.2 hY.2⟩
+  smul_mem' c X hX := by
+    have heq : c • X = (c : ℂ) • X := by ext i j; simp [Complex.real_smul]
+    refine ⟨?_, ?_⟩
+    · exact hX.1.smul (IsSelfAdjoint.all c)
+    · rw [heq]; exact (tensorSubmodule S k).smul_mem (c : ℂ) hX.2
+
+theorem mem_hermitianTensorSubmodule_iff {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)} {k : ℕ}
+    {X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ} :
+    X ∈ hermitianTensorSubmodule S k ↔ X.IsHermitian ∧ X ∈ tensorSubmodule S k :=
+  Iff.rfl
+
+/-- The real-linear functional `A ↦ τ(A).re` on the Hermitian part of
+`S ⊗ M_n(ℂ)`, the partial map that Hahn–Banach extends. -/
+noncomputable def tauReLM {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) :
+    ↥(hermitianTensorSubmodule S n) →ₗ[ℝ] ℝ where
+  toFun A := (tau T ⟨A.1, A.2.2⟩).re
+  map_add' A B := by
+    change (tau T ⟨(A + B : ↥(hermitianTensorSubmodule S n)).1, _⟩).re = _
+    have hval : (⟨(A + B : ↥(hermitianTensorSubmodule S n)).1, (A + B).2.2⟩ :
+        ↥(tensorSubmodule S n)) = ⟨A.1, A.2.2⟩ + ⟨B.1, B.2.2⟩ := rfl
+    rw [hval, map_add, Complex.add_re]
+  map_smul' c A := by
+    change (tau T ⟨(c • A : ↥(hermitianTensorSubmodule S n)).1, _⟩).re = _
+    have hval : (⟨(c • A : ↥(hermitianTensorSubmodule S n)).1, (c • A).2.2⟩ :
+        ↥(tensorSubmodule S n)) = (c : ℂ) • (⟨A.1, A.2.2⟩ : ↥(tensorSubmodule S n)) := by
+      apply Subtype.ext
+      change c • A.1 = (c : ℂ) • A.1
+      ext i j; simp [Complex.real_smul]
+    rw [hval, map_smul, smul_eq_mul, Complex.mul_re]
+    simp
+
+/-- `τ(1) ≥ 0`: the unit is positive semidefinite. -/
+theorem tau_one_nonneg {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ} (hT : IsCPAtLevel T n) :
+    0 ≤ (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re :=
+  (RCLike.nonneg_iff.mp
+    (tau_nonneg_of_posSemidef hT ⟨1, one_mem_tensorSubmodule hS⟩ Matrix.PosSemidef.one)).1
+
+/-- The sublinear functional `N(A) = ‖A‖∞ · τ(1)` dominating `τ`. -/
+noncomputable def sublinearN {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) :
+    Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ → ℝ :=
+  fun X => ‖X‖ * (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re
+
+theorem sublinearN_hom {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) (c : ℝ) (hc : 0 < c)
+    (X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) :
+    sublinearN hS T (c • X) = c * sublinearN hS T X := by
+  simp only [sublinearN, norm_smul, Real.norm_eq_abs, abs_of_pos hc, mul_assoc]
+
+theorem sublinearN_add {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ} (hT : IsCPAtLevel T n)
+    (X Y : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) :
+    sublinearN hS T (X + Y) ≤ sublinearN hS T X + sublinearN hS T Y := by
+  have hK : 0 ≤ (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re := tau_one_nonneg hS hT
+  have hnorm : ‖X + Y‖ ≤ ‖X‖ + ‖Y‖ := norm_add_le X Y
+  simp only [sublinearN]
+  calc ‖X + Y‖ * (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re
+      ≤ (‖X‖ + ‖Y‖) * (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re :=
+        mul_le_mul_of_nonneg_right hnorm hK
+    _ = ‖X‖ * (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re +
+          ‖Y‖ * (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re := by rw [add_mul]
+
+/-- **The Hahn–Banach extension of `τ`**: a real-linear functional on the
+Hermitian matrices of `M_m(ℂ) ⊗ M_n(ℂ)` agreeing with `τ.re` on `S ⊗ M_n(ℂ)`
+and dominated by the same sublinear bound `N`. -/
+theorem exists_hahnBanach_extension {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (hS : IsOperatorSystem S) {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ}
+    (hT : IsCPOnOperatorSystem T) :
+    ∃ g : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℝ] ℝ,
+      (∀ A : ↥(hermitianTensorSubmodule S n), g A = tauReLM T A) ∧
+      (∀ X, g X ≤ sublinearN hS T X) := by
+  have hf : ∀ A : (⟨hermitianTensorSubmodule S n, tauReLM T⟩ :
+      Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ.[ℝ] ℝ).domain,
+      (⟨hermitianTensorSubmodule S n, tauReLM T⟩ :
+        Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ.[ℝ] ℝ) A ≤ sublinearN hS T A := by
+    rintro ⟨A, hA1, hA2⟩
+    exact tau_le_norm_mul_tau_one hS (hT n) ⟨A, hA2⟩ hA1
+  obtain ⟨g, hg_agree, hg_le⟩ := exists_extension_of_le_sublinear
+    (f := (⟨hermitianTensorSubmodule S n, tauReLM T⟩ :
+      Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ.[ℝ] ℝ))
+    (N := sublinearN hS T) (sublinearN_hom hS T) (sublinearN_add hS (hT n)) hf
+  refine ⟨g, fun A => ?_, hg_le⟩
+  have h := hg_agree A
+  rwa [LinearPMap.mk_apply] at h
+
 end Matrix
