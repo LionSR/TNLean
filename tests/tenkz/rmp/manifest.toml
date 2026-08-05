@@ -1527,7 +1527,7 @@ section = "section-iv-v-app"
 order = 91
 case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-app-toric-dual.tex"
 formula = "physical spins = differences of adjacent plaquette colours"
-ink = "Kernel plane frame; the blocked sheet is the house enclosure, the four plaquette-colour legs leave the retained mid-side stations, and the two interior diagonals recall the original lattice."
+ink = "Kernel plane frame; the blocked sheet is the house enclosure, the four plaquette-colour legs leave the retained mid-side stations, and the two interior diagonals recall the original lattice on a dashed rail."
 boundary = "The four retained mid-side sites expose the plaquette-colour legs."
 source = "paper TN-Review-main.tex line 2462; paper-context-only; no author drawing source"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]

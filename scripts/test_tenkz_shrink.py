@@ -87,7 +87,12 @@ def test_direction_marks_share_one_named_station() -> None:
     )[1].split(
         "% annotation ink", maxsplit=1
     )[0]
-    assert direction_styles.count(r"position \tenkz@r@dirmarkstation") == 4
+    # Four styles, one named station.  The two ordinary barbs take the
+    # station as an argument so a leg leaving a glyph can count it along the
+    # daylight beyond the silhouette; the name is still the only station
+    # written down, now as the key's default.
+    assert direction_styles.count(r"\tenkz@r@dirmarkstation") == 4
+    assert direction_styles.count(r"/.default=\tenkz@r@dirmarkstation") == 2
     assert "position 0.55" not in direction_styles
 
 

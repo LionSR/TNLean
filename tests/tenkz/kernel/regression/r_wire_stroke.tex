@@ -1,0 +1,90 @@
+% Regression: a wire declares its stroke.  A rail is solid unless it says
+% otherwise; a dashed rail carries an index the picture draws but does not
+% contract, and a dotted one carries a lattice lying under the sheet being
+% drawn.  The pattern is a named metric, so the ink names a house style and
+% never a dash length of its own, and the weight and colour of the rail are
+% untouched.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_stroke_solid_int
+\int_new:N \g__tenkz_test_stroke_dashed_int
+\int_new:N \g__tenkz_test_stroke_dotted_int
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \exp_args:NV \__tenkz_model_get:nnN
+      \l__tenkz_kernel_r_wire_record_tl {stroke} \l_tmpa_tl
+    \quark_if_no_value:NTF \l_tmpa_tl
+      {
+        \tl_if_in:NnT \l__tenkz_kernel_r_wire_ink_tl {tenkz~wire~}
+          {\errmessage{an~undeclared~rail~acquired~a~dash~pattern}}
+        \int_gincr:N \g__tenkz_test_stroke_solid_int
+      }
+      {
+        \str_case:Vn \l_tmpa_tl
+          {
+            {solid}
+              {
+                \tl_if_in:NnT \l__tenkz_kernel_r_wire_ink_tl {tenkz~wire~}
+                  {\errmessage{a~solid~rail~acquired~a~dash~pattern}}
+                \int_gincr:N \g__tenkz_test_stroke_solid_int
+              }
+            {dashed}
+              {
+                \tl_if_in:NnF \l__tenkz_kernel_r_wire_ink_tl
+                  {tenkz~wire~dashed}
+                  {\errmessage{a~dashed~rail~lost~its~dash~pattern}}
+                \int_gincr:N \g__tenkz_test_stroke_dashed_int
+              }
+            {dotted}
+              {
+                \tl_if_in:NnF \l__tenkz_kernel_r_wire_ink_tl
+                  {tenkz~wire~dotted}
+                  {\errmessage{a~dotted~rail~lost~its~dot~pattern}}
+                \int_gincr:N \g__tenkz_test_stroke_dotted_int
+              }
+          }
+      }
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_stroke_solid_int } = {2}
+      {\errmessage{solid~rail~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_stroke_dashed_int } = {2}
+      {\errmessage{dashed~rail~count~changed}}
+    \int_compare:nNnF { \g__tenkz_test_stroke_dotted_int } = {2}
+      {\errmessage{dotted~rail~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% Three contracted rails: the default, the dashed spelling, the dotted one.
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=a, skin=dot, ports={0:virtual}]{}
+  \tn[at=(1,3), name=b, skin=dot, ports={180:virtual}]{}
+  \tn[at=(2,1), name=c, skin=dot, ports={0:virtual}]{}
+  \tn[at=(2,3), name=d, skin=dot, ports={180:virtual}]{}
+  \tn[at=(3,1), name=e, skin=dot, ports={0:virtual}]{}
+  \tn[at=(3,3), name=f, skin=dot, ports={180:virtual}]{}
+  \tnwire[name=plain]{a.0}{b.180}
+  \tnwire[stroke=dashed, name=dash]{c.0}{d.180}
+  \tnwire[stroke=dotted, name=dot]{e.0}{f.180}
+\end{tenkz}
+% The spelling rides an open leg and a diagonal as readily as a straight
+% contracted rail, and solid= is the default said out loud.
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(3,1), name=g, skin=dot, ports={45:virtual, 270:virtual}]{}
+  \tn[at=(1,3), name=h, skin=dot, ports={225:virtual}]{}
+  \tn[at=(2,2), name=k, skin=dot, ports={180:virtual}]{}
+  \tnwire[stroke=dotted, name=diagonal]{g.45}{h.225}
+  \tnwire[stroke=dashed, name=pendant]{k.180}{open w}
+  \tnwire[stroke=solid, name=said]{g.270}{open s}
+\end{tenkz}
+\end{document}

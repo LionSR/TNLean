@@ -2067,3 +2067,35 @@ overload census stand: the four side keys keep one leaf each and the
 bracket shares its word with no other alphabet.
 
 Census-correction: #5482
+
+### 2026-08-05 — the mark inks on every bearing, and a rail may be dashed
+
+A direction mark was a lottery on the bearing. A leg springs from the centre
+of the glyph it leaves and the glyph's ink is laid over that centre
+afterwards, so the named station — a fraction of the whole leg — fell inside
+a silhouette that is wider than it is tall. The same mark that cleared a
+south bearing vanished under an east one. The station now rides the leg's
+daylight, the stretch between the silhouette and the free tip, and it is the
+mark's body that rides it, so the barb never re-enters the silhouette. One
+rule, four bearings, both endpoint orders. The four barb styles still share
+one named station; two of them now take it as an argument and name it as the
+key's default.
+
+A wire also gains the stroke it never had. The sources draw two non-solid
+rails and no third: a dashed one for an index the picture draws but does not
+contract, a dotted one for a lattice lying under the sheet being drawn. The
+alphabet is therefore `solid`, `dashed`, `dotted`, the dash lengths are named
+metrics, and the toric-code dual sheet stops inking its original-lattice
+diagonals solid. Read beside the published figure at 900dpi, the source
+dashes those diagonals where the old note called them dotted; the case
+re-pins and promotes to `faithful`.
+
+The new leaf is the one census move: M1 kernel 139 to 140, M2 parser paths
+227 to 228, with the parser identity changing accordingly. M4 is unmoved at
+25.94 — the dashed spelling costs the case no line.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-wire:stroke | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-wire row records; the leaf already carries its first benchmark consumer in rmp-app-toric-dual and its Extension-gate in #5543; expiry 0.8 |
+
+Extension-gate: #5543

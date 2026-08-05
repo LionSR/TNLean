@@ -1207,6 +1207,8 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { cross } { cross }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { dir }
   { to, from, none } { dir }
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-wire } { stroke }
+  { solid, dashed, dotted } { stroke }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-wire } { name } { name }
 \__tenkz_kernel_flag:nnn    { tenkz-kernel-wire } { closed } { closed }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-wire } { wire }
@@ -11424,18 +11426,185 @@
       }
   }
 
+% ---------- the declared stroke of a wire ---------------------------------------------------------
+% A wire is solid unless it says otherwise.  The two other spellings are the
+% ones the sources draw: a dashed rail for a wire that is present but not
+% contracted, and a dotted one for a lattice that lies under the sheet being
+% drawn.  The pattern is a named metric, so a client never spells a dash
+% length of its own.
+\cs_new_protected:Npn \__tenkz_kernel_r_stroke_ink:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {stroke} \l__tenkz_kernel_r_c_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
+      {
+        \str_case:Vn \l__tenkz_kernel_r_c_tl
+          {
+            {dashed} { \tl_put_right:Nn #2 { , tenkz~wire~dashed } }
+            {dotted} { \tl_put_right:Nn #2 { , tenkz~wire~dotted } }
+            {solid}  { }
+          }
+      }
+  }
+
+% ---------- the station of a direction mark ------------------------------------------------------
+% A leg springs from the centre of the glyph it leaves and the glyph's ink is
+% laid over it afterwards, so the named station -- a fraction of the whole
+% leg -- can fall inside the silhouette.  A silhouette is wider than it is
+% tall, and an open leg is short, which is why the same mark that cleared a
+% south bearing vanished under an east one.  The station is therefore
+% measured along the leg's DAYLIGHT: the stretch between the silhouette and
+% the free tip.  It is the mark's BODY that rides the station, so the barb's
+% own length is set aside first and the barb never re-enters the silhouette
+% on any bearing.  A leg whose near end already stands on the silhouette has
+% reach zero and keeps the plain station.
+\fp_new:N \l__tenkz_kernel_r_dir_reach_fp
+\fp_new:N \l__tenkz_kernel_r_dir_span_fp
+\fp_new:N \l__tenkz_kernel_r_dir_station_fp
+\fp_new:N \l__tenkz_kernel_r_dir_x_fp
+\fp_new:N \l__tenkz_kernel_r_dir_y_fp
+\fp_new:N \l__tenkz_kernel_r_dir_hx_fp
+\fp_new:N \l__tenkz_kernel_r_dir_hy_fp
+\tl_new:N \l__tenkz_kernel_r_dir_station_tl
+\tl_new:N \l__tenkz_kernel_r_dir_a_tl
+\tl_new:N \l__tenkz_kernel_r_dir_b_tl
+\tl_new:N \l__tenkz_kernel_r_dir_host_tl
+
+\cs_new_protected:Npn \__tenkz_kernel_r_dir_station:n #1
+  {
+    \tl_clear:N \l__tenkz_kernel_r_dir_station_tl
+    \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_r_dir_a_tl
+    \bool_lazy_and:nnT
+      { \str_if_eq_p:Vn \l__tenkz_kernel_r_dir_a_tl {index} }
+      { ! \str_if_eq_p:ee { \__tenkz_kernel_r_frame_word: } {plane} }
+      { \__tenkz_kernel_r_dir_station_leg:n {#1} }
+  }
+
+% An open leg is the one wire whose span is the named stub reach: one end is
+% a port on a glyph, the other is a free tip.  Which end is open decides
+% whether the daylight is counted forward from the silhouette or backward
+% from the free tip.
+\cs_new_protected:Npn \__tenkz_kernel_r_dir_station_leg:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_dir_a_tl
+    \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_dir_b_tl
+    \quark_if_no_value:NTF \l__tenkz_kernel_r_dir_a_tl
+      {
+        \quark_if_no_value:NF \l__tenkz_kernel_r_dir_b_tl
+          {
+            \__tenkz_model_get:nnN {#1} {from-open} \l__tenkz_kernel_r_dir_a_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_dir_a_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_dir_reach:n
+                  \l__tenkz_kernel_r_dir_b_tl
+                \__tenkz_kernel_r_dir_station_set:n {start}
+              }
+          }
+      }
+      {
+        \quark_if_no_value:NT \l__tenkz_kernel_r_dir_b_tl
+          {
+            \__tenkz_model_get:nnN {#1} {to-open} \l__tenkz_kernel_r_dir_b_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_dir_b_tl
+              {
+                \exp_args:NV \__tenkz_kernel_r_dir_reach:n
+                  \l__tenkz_kernel_r_dir_a_tl
+                \__tenkz_kernel_r_dir_station_set:n {end}
+              }
+          }
+      }
+  }
+
+% How far the glyph's silhouette reaches along the leg: the gap between the
+% point the leg is drawn from and the point at which it leaves the glyph.
+\cs_new_protected:Npn \__tenkz_kernel_r_dir_reach:n #1
+  {
+    \fp_zero:N \l__tenkz_kernel_r_dir_reach_fp
+    \str_if_eq:eeT { \__tenkz_kernel_node_item:nn {#1} {kind} } {port}
+      {
+        \__tenkz_kernel_r_port_record:nN {#1} \l__tenkz_kernel_r_dir_host_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_r_dir_host_tl
+          {
+            \__tenkz_kernel_r_wire_end_xy:nNN {#1}
+              \l__tenkz_kernel_r_dir_x_fp \l__tenkz_kernel_r_dir_y_fp
+            \__tenkz_kernel_r_hull_port_xy:nVNN {#1}
+              \l__tenkz_kernel_r_dir_host_tl
+              \l__tenkz_kernel_r_dir_hx_fp \l__tenkz_kernel_r_dir_hy_fp
+            \fp_set:Nn \l__tenkz_kernel_r_dir_reach_fp
+              {
+                sqrt(
+                  ( \l__tenkz_kernel_r_dir_hx_fp
+                    - \l__tenkz_kernel_r_dir_x_fp ) ^ 2
+                  + ( \l__tenkz_kernel_r_dir_hy_fp
+                      - \l__tenkz_kernel_r_dir_y_fp ) ^ 2 )
+              }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_dir_station_set:n #1
+  {
+    \fp_compare:nNnT { \l__tenkz_kernel_r_dir_reach_fp } > { 0 }
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_dir_span_fp
+          {
+            \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+              / \dim_to_fp:n { \use:c {tenkz@pitch} }
+            + \__tenkz_metric_ratio:n {dirmarkstation}
+              * max(
+                  \__tenkz_metric_ratio:n {stub}
+                  - \l__tenkz_kernel_r_dir_reach_fp
+                  - \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+                    / \dim_to_fp:n { \use:c {tenkz@pitch} } ,
+                  0 )
+          }
+        \str_if_eq:nnT {#1} {end}
+          {
+            \fp_add:Nn \l__tenkz_kernel_r_dir_span_fp
+              { \l__tenkz_kernel_r_dir_reach_fp }
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_dir_station_fp
+          {
+            min( \l__tenkz_kernel_r_dir_span_fp
+                 / \__tenkz_metric_ratio:n {stub} , 1 )
+          }
+        \tl_set:Ne \l__tenkz_kernel_r_dir_station_tl
+          {
+            = {
+              \fp_eval:n { \l__tenkz_kernel_r_dir_station_fp }
+            }
+          }
+      }
+  }
+
 % Ink semantics shared by index wires and strings.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_ink:nN #1#2
   {
     \__tenkz_kernel_r_hue:nN {#1} \l__tenkz_kernel_r_hue_tl
     \tl_set:Ne #2 { draw = \tl_use:N \l__tenkz_kernel_r_hue_tl }
+    \__tenkz_kernel_r_stroke_ink:nN {#1} #2
     \__tenkz_model_get:nnN {#1} {dir} \l__tenkz_kernel_r_c_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
       {
         \str_case:Vn \l__tenkz_kernel_r_c_tl
           {
-            {to}   { \tl_put_right:Nn #2 { , dir~marks } }
-            {from} { \tl_put_right:Nn #2 { , dir~marks~reversed } }
+            {to}
+              {
+                \__tenkz_kernel_r_dir_station:n {#1}
+                \tl_put_right:Ne #2
+                  {
+                    , dir~marks
+                    \tl_use:N \l__tenkz_kernel_r_dir_station_tl
+                  }
+              }
+            {from}
+              {
+                \__tenkz_kernel_r_dir_station:n {#1}
+                \tl_put_right:Ne #2
+                  {
+                    , dir~marks~reversed
+                    \tl_use:N \l__tenkz_kernel_r_dir_station_tl
+                  }
+              }
             {none} { }
           }
       }
