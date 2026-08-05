@@ -1,12 +1,35 @@
 % Target: rmp-workbench-iii-enlarged-mpo-black
 % Formula: A marked insertion replaces one tensor in an enlarged MPO word.
-% Ink: Canonical public tenkz five-site MPO word with one marked box.
+% Ink: Kernel flat frame; a five-site MPO word closed below by the periodic
+%   return, with the fourth box marked.
 % Boundary: The virtual MPO bond is periodic; all ten physical legs are open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 553-562; archival output enlargeMPOblack.pdf
-% Capabilities: grid, mpo-word, periodic-closure, marked-insertion
+% Capabilities: kernel, mpo-word, periodic-closure, marked-insertion
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkz}[tensor style=box, physical=updown, boundary=periodic]
-    \tn{}&\tn{}&\tn{}&\tn[role=operator]{i}&\tn{}
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
+    \tn[at=(1,2), skin=box, name=M1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+    \tn[at=(1,3), skin=box, name=M2,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+    \tn[at=(1,4), skin=box, name=M3,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+    \tn[at=(1,5), skin=box, role=marked, name=M4,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+    \tn[at=(1,6), skin=box, name=M5,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+    % The periodic virtual bond returns below the word, one column wider on
+    % each side so the descent clears the physical stubs, as the source draws.
+    \tn[at=(2,1), skin=none, name=JW, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,7), skin=none, name=JE, ports={90:virtual, 180:virtual}]{}
+    \tnwire[species=operator]{M1.0}{M2.180}
+    \tnwire[species=operator]{M2.0}{M3.180}
+    \tnwire[species=operator]{M3.0}{M4.180}
+    \tnwire[species=operator]{M4.0}{M5.180}
+    \tnwire[species=operator, route=arc]{M5.0}{JE.90}
+    \tnwire[species=operator]{JE.180}{JW.0}
+    \tnwire[species=operator, route=arc]{JW.90}{M1.180}
   \end{tenkz}.
 \]
