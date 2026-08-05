@@ -2,8 +2,8 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-pairing_sha256 = "2f5df04b56caec4bfc0e2f0bc040f78f6c2ff4b718106ce1c716bda8c0338fd8"
-campaign_sha256 = "9e0fa1f42fda08bcd97aa528178e931cb370e0f3b9e361f00f4c927948bb3be7"
+pairing_sha256 = "8080d498397036533fa13015da164e74f9b86e7bf66b2f6e33f7a4719a59c317"
+campaign_sha256 = "6748cce5b7d38fde5667293e3344a25e8bd4b1aa2d1882e05aa6ba2fc1d67b74"
 
 [[verdict]]
 id = "rmp-ii-peps-projection"
@@ -11,11 +11,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "f6d4f06a733d5a507344be0241cc30793f2c6170b2ab20207a4cbef2811a2b40"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the oblique 4x4 sheet, one projector enclosure per site, per-site physical legs, open boundary, and the named A site and |phi) bond all match the source; enclosure tint and leg colour are house style under the bar."
+case_sha256 = "0f815418632578eb4f4701698d16c0264c3ef15d4634ee1e650cde8c8cdc5b04"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "kernel respell preserves the promoted model exactly: plane 4x4 sheet, sixteen source-red projector enclosures, per-site physical legs, full open boundary; A stands east of its enclosure by the station rule and |phi) is the east port label of site (3,3), both clearer than the 0.7 placements; enclosure tint and leg colour remain house style."
 
 [[verdict]]
 id = "rmp-ii-triangle-network"
@@ -48,9 +48,10 @@ pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["weight-mismatch"]
 case_sha256 = "3735c246263f3d39157f9c23bad072fb2f414042fda93115b91fff4ed56847d7"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "boundary repaired; trace loops still tall"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "re-verified against the author panel: state sheet, doubled sheet, and the traced fourth column all present; the trace loops still overshoot the sheets (K3, closure metric). Kernel migration is blocked: the bilayer basis rejects every physical policy and numeric ports are in-plane, so the kept sites' open transverse ket-bra legs have no kernel spelling; the doubled-plane scaffold covers contracted pairs only. The case stays on the lattice tier until a bilayer transverse-physical spelling lands."
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
@@ -69,11 +70,11 @@ id = "rmp-ii-pepo-sheet"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "4a5c24349e11934bde6130bbb3c942466ce1abf14464bc8270957af781d65bb7"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "the sixteen boundary legs it claimed are drawn"
+case_sha256 = "c70229fb227b2d62ad2cb95004dc9306fbd1f0616c23f9e592cf721d2cfa25ff"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified site by site: sixteen sites each carry both transverse operator legs, all sixteen sheet-edge virtual legs remain open, matching the author PEPO panel"
 
 [[verdict]]
 id = "rmp-ii-local-purification"
@@ -400,25 +401,27 @@ note = "K4 resolved: the ledger's extra-element defect was stale bookkeeping. Co
 
 [[verdict]]
 id = "rmp-ii-peps-rg"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "9877c4477a043535031b33389778b14b909c7464aff891b263857dfac04229b7"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "all second factors carry their per-bead leg subsets; the corner bead's wrap hooks open upward as the source draws, rounded and crossing where the source squares them apart"
+case_sha256 = "6026460ae88d1bedb54591e8a03d8c1bdbd3103c34516d56956740d4c8c862bb"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "kernel respell resolves the crossing-hooks defect: the final bead's virtual ring is drawn as an uncrossed closed return through invisible junctions, the house form for the source's identified upward hooks; panel (c)'s first product tensor regains its east leg and the trace bead drops the invented physical leg, both corrected against the author panel; the beads take the source's half size"
 
 [[verdict]]
 id = "rmp-ii-inverse-renormalization"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "c86b528b63d567b1fa3b2e97e19c4effb061d754acf7ae5aa2070ed0df8b411a"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "both panels match newfig13; residual spacing looseness only"
+case_sha256 = "eda21612d2b17031555e5a3377c1724818b54e802251d2bf594c18896d9f2a5c"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against newfig13: both splits preserve their boundary signatures leg for leg, and the shared kernel metric with single-quad panel separation removes the recorded spacing looseness"
 
 [[verdict]]
 id = "rmp-iii-a-symmetry-sector"
@@ -1079,13 +1082,15 @@ note = "structural gap repaired at the archival widths: the first sandwich sum d
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
-status = "cosmetic-gap"
-pairing = "wrong-source"
+status = "faithful"
+pairing = "verified"
+pairing_by = "fable-w5-pairing-repair-2026-08-05"
 defects = []
-case_sha256 = "a157963e9b3d764d6358448759f987d6abe978c7a1e03412a3fd1d1118acb984"
-reviewed = "2026-07-27"
-renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
-note = "the unitary is asserted as math-mode application U(...) around the plaquette, the accepted coproduct idiom; the source itself never draws U as a box"
+case_sha256 = "a0e56340ee59fa702e90da06e1908633c3c2e492c2cd8a149f287fd4db785473"
+reviewed = "2026-08-05"
+renderer = "fable-w5-vision-2026-08-05-200dpi"
+second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+note = "pairing repaired: the drawn model is FigPEPSRG panel (a) alone (author lines 744-753), and the unitary on the four physical indices is the operation the figure caption states, asserted as math-mode application, the accepted coproduct idiom; the kernel plaquette matches panel (a) leg for leg"
 
 [[verdict]]
 id = "rmp-workbench-ii-positive-mpo-old"

@@ -1709,3 +1709,43 @@ their retired sugar implied.  No parser spelling, registry row, alias,
 escape, or overload is added or removed.
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 5 moves the PEPS sheet family onto the plane frame
+
+Five of the six lattice-tier PEPS sheets — the projection sheet, the
+PEPO sheet, the four-panel renormalization figure, the inverse
+renormalization pair, and the workbench plaquette — leave the retiring
+`tenkzlattice` environment for kernel plane frames.  A sheet is now the
+`lattice=` sugar over one plane frame with per-site policy legs; the
+projection figure states its sixteen projector regions as enclosure
+marks of a declared source-red species and names its |phi) bond through
+a port label, the renormalization figure's product tensors take
+per-atom half sizes, and its final trace bead closes its virtual ring
+through invisible junctions, retiring the crossed rotate-180 hooks with
+the tombstoned frame rotation itself.  The workbench plaquette's
+pairing is repaired to FigPEPSRG panel (a) (author lines 744-753) with
+the caption-stated unitary, closing that ledger's wrong-source row.
+
+The sixth sheet, the PEPS marginal, stays on the lattice tier: the
+bilayer basis rejects every physical policy and numeric ports are
+in-plane, so the kept sites' open transverse ket-bra legs have no
+kernel spelling; the doubled-plane scaffold covers contracted pairs
+only.  The blocker is recorded on the verdict and the gap bar, and the
+`tenkzplanes` tenure flag below carries it.
+
+M4 rises from 24.11 to 24.27 because the kernel cases name the atoms,
+enclosure marks, junctions, and typed ports the retiring preset
+implied (+21 lines over the five respelled cases).  The dimension
+census is unchanged at 383 owner sites with unchanged ceilings, and no
+parser spelling, registry row, alias, escape, or overload is added or
+removed.
+
+The wave leaves two 0.7 spellings at reduced tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:environment:tenkzplanes | keep-because: the lone remaining consumer is the blocked PEPS marginal, whose open transverse ket-bra legs the kernel bilayer basis cannot yet spell; the environment retires with the case's migration once a bilayer transverse-physical spelling lands; expiry 0.9 |
+| flag:consumers:environment:tenkzlattice | keep-because: wave 5 retired the Section-II sheet consumers onto plane frames; the remaining consumers are 0.7 grid-tier cases outside this family that retire wholesale at the S4 surface swap; expiry 0.9 |
+| flag:cooccur:picture:north+south | keep-because: a projected sheet states its whole four-side boundary contract, so every sheet picture names both receding sides; the values differ per picture (the renormalization beads open one and seal the other), so the pair is two independent policies, not one key; expiry 1.0 |
+
+Census-correction: #5348
