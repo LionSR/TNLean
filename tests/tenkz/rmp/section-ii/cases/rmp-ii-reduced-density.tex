@@ -1,18 +1,33 @@
 % Target: rmp-ii-reduced-density
 % Formula: rho_n = Tr[rho^R A^n rho^L (A^*)^n].
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; a ket-bra racetrack closed by the rho^R and rho^L cups.
 % Boundary: rho^R and rho^L close both virtual ends; all ket and bra physical legs
 %   remain open.
 % Source: paper TN-Review-main.tex line 421; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 484-499
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   \rho_n \;=\;
   % ket rail: A^{s_1} .. A^{s_4}, up legs open; bra rail: conjugates, down
   % legs open; the cups + on-bend dots are the trace through rho^R / rho^L.
-  \begin{tenkz}[rows={ket:nopair, bra},
-                west={cup=$\rho^R$}, east={cup=$\rho^L$}]
-    \tn{} & \tn{} & \tn{} & \tn{}\\
-    \tn*{} & \tn*{} & \tn*{} & \tn*{}
+  % bonds=none with hand-written rail wires: bonds=grid would also bond
+  % each vertical pair, contracting the physical legs the source leaves open.
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, west=cup, east=cup]
+    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical}]{}\\
+    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
+    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
+    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
+    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{}
+    \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+    \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+    % west={cup=$m$}/east={cup=$m$} bracket sugar is not implemented yet
+    % (K1); the bare `cup` word plus a hand-placed bead on the canonical
+    % cup wire reproduces the same closure and the same on-bend label.
+    \tn[skin=ring, at=on cup-west-1-2 0.5]{\rho^R}
+    \tn[skin=ring, at=on cup-east-1-2 0.5]{\rho^L}
   \end{tenkz}
 \]
