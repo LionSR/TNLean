@@ -41,9 +41,9 @@ hash-pinned visual check required before changing a verdict.
 
 | Target | Kind | Reason / next action |
 |---|---:|---|
-| `rmp-ii-peps-projection` | — | Promoted to `faithful` 2026-08-04: projector layer, named A site, named bond, and boundary all present; tint and leg colour are house style. |
+| `rmp-ii-peps-projection` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 5, Fable-verified): the plane respell preserves the drawn model; A takes the east station and |phi) becomes a port label, both clearer than the 0.7 placements. |
 | `rmp-ii-mps-marginal` | — | Promoted to `faithful` 2026-08-05: the kernel migration replaced the heavy racetrack with minimal straight trace closures, and the state row regained its upward legs and open chain stubs; verified against the author panel at 200/400dpi. |
-| `rmp-ii-peps-marginal` | K3 | Reduce excessive trace-loop height through the closure metric. |
+| `rmp-ii-peps-marginal` | K3 | Reduce excessive trace-loop height through the closure metric. Kernel migration is blocked (wave 5): the bilayer basis rejects every physical policy and numeric ports are in-plane, so the kept sites' open transverse ket-bra legs have no kernel spelling; the case stays on the lattice tier until a bilayer transverse-physical spelling lands. |
 | `rmp-ii-mpu-brickwork` | — | Promoted to `faithful` 2026-08-04: twelve legs, alternating layers, and labels match; labelled boxes for dotted gate pairs are the inherent circuit presentation. |
 | `rmp-ii-mpu-blocking` | K1 | New 2026-08-05 with the kernel migration: the model records hull-routed side closures for the a/b beads, but the renderer does not yet ink a hull route on an endpoint index wire, so each closure draws along its column axis over the U-Ubar bond. Ink the contracted face-departure arc (LANGUAGE-1.0 s5) in the shared renderer, then re-review; the grid-tier predecessor's side-cup policy inked this correctly. |
 | `rmp-ii-mpu-two-shift` | K1 | Resolved 2026-08-04: the case now carries the workbench-twin skin-pairings model with the published palette; the row channels keep house ink where the panel colours the movers. |
@@ -63,7 +63,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-channels-ts` | — | Promoted to `faithful` 2026-08-04, reconfirmed on the kernel 2026-08-05 (wave 1C, Fable-countersigned): legs and channel directions match; the straight double arrow is equivalent house routing. |
 | `rmp-ii-mpdo-ol` | K1 | K4 reconciled 2026-08-05 (wave 1C): the `extra-element` defect was stale -- the author block draws one panel and the contrast panel left the case in a98b1e282. Residue: the single-row west/east trace wrap is recorded but draws flush with the chain, so the end identification is not legible; ink the wrap route in the shared renderer, then re-review (the left-right respelling of the source's top-down word is house layout, kernel having no rotation key). |
 | `rmp-ii-peps-rg` | X | The current hooks cross where the source keeps them separated; restore the source crossing topology. |
-| `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
+| `rmp-ii-peps-rg` | — | X resolved and promoted to `faithful` 2026-08-05 (wave 5, Fable-verified): the kernel respell draws the final bead's virtual ring as an uncrossed closed return through invisible junctions, the house form for the source's identified upward hooks; panel (c) regains its east leg and the trace bead drops the invented physical leg. |
 | `rmp-iii-a-f-symbol` | — | Promoted to `faithful` 2026-08-04: crossing order, directions, sectors, and all six labels verified against the author figure. |
 | `rmp-iii-a-pulling-through` | K3 | Normalize curve weight and panel spacing. |
 | `rmp-iii-a-commuting-hamiltonian` | — | Kernel respell 2026-08-05 keeps the promoted model and drops the 0.7 render's single spurious gate output leg: the author draws the gate closed, so neither panel legs the pill; the labelled white pill remains house typography. |
@@ -104,7 +104,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-app-czx-state` | — | Promoted to `faithful` 2026-08-04: source grouping and lattice wiring verified; lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
 | `rmp-workbench-ii-projector-on-pta` | — | Repaired and promoted to `faithful` 2026-08-05 (wave 3, Fable-verified): both sandwich sums now draw the archival widths (four plus identity against five plus four columns), restoring the sum's site multiplicity; cup arcs, black identity, and straight stubs are house ink for the source's brackets, blue strand, and hooks. |
-| `rmp-workbench-ii-peps-rg-workbench` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the U-application idiom. |
+| `rmp-workbench-ii-peps-rg-workbench` | — | X resolved and promoted to `faithful` 2026-08-05 (wave 5, Fable-verified): the pairing is repaired to FigPEPSRG panel (a) (author lines 744-753) with the unitary the figure caption applies to the four physical indices; the math-mode U application is the accepted coproduct idiom. |
 | `rmp-workbench-ii-positive-mpo-old` | K2 | The ledger already records equal X sizes; re-review the hash-pinned render as faithful. |
 | `rmp-workbench-ii-peps-gauge-old` | K3 | Preserve diagonal leg flow and smooth the marked detour tangents. |
 | `rmp-workbench-ii-peps-gauge-without-a` | K3 | Apply the same shared gauge-family geometry correction. |
