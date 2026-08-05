@@ -608,4 +608,139 @@ lemma coarseKraus_resolution :
 theorem coarseMap_isKrausCPTP : IsKrausCPTP coarseMap :=
   Matrix.rectangularKrausMap_isKrausCPTP _ coarseKraus_resolution
 
+theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
+    coarseMap (physClose2 R X) = physClose1 R X := by
+  ext i j
+  change (∑ α : Fin 2 ⊕ Fin 2,
+      Sum.elim coarseKrausGated coarseKrausUngated α * physClose2 R X *
+        (Sum.elim coarseKrausGated coarseKrausUngated α)ᴴ) i j = physClose1 R X i j
+  simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_sum_type,
+    Sum.elim_inl, Sum.elim_inr]
+  -- The ungated Kraus operators annihilate every entry: `physClose2 R X p q`
+  -- vanishes whenever `p` fails the bond-matching condition, which is exactly
+  -- the domain of `coarseKrausUngated`.
+  have hungated_zero : ∀ t : Fin 2,
+      (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
+          coarseKrausUngated t i p * physClose2 R X p q) * star (coarseKrausUngated t j q)) = 0 := by
+    intro t
+    apply Finset.sum_eq_zero
+    intro q _
+    have hinner : (∑ p : Fin 4 × Fin 4, coarseKrausUngated t i p * physClose2 R X p q) = 0 := by
+      apply Finset.sum_eq_zero
+      intro p _
+      by_cases hp : ¬ gate p.1 p.2 ∧ combine p.1 p.2 = i ∧ bit2 p.1 = t
+      · have hz : physClose2 R X p q = 0 := by
+          rw [physClose2_R_entry, if_neg (fun hcon : gate p.1 p.2 ∧ gate q.1 q.2 => hp.1 hcon.1)]
+          ring
+        rw [hz, mul_zero]
+      · have e : coarseKrausUngated t i p = 0 := by
+          simp only [coarseKrausUngated, Matrix.of_apply]
+          exact if_neg hp
+        rw [e, zero_mul]
+    rw [hinner]; simp
+  have hungated_sum_zero :
+      (∑ t : Fin 2, ∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
+          coarseKrausUngated t i p * physClose2 R X p q) * star (coarseKrausUngated t j q)) = 0 := by
+    rw [Fin.sum_univ_two, hungated_zero 0, hungated_zero 1, add_zero]
+  rw [hungated_sum_zero, add_zero]
+  -- The gated contribution: on the fiber of `i`, `physClose2 R X p q` rescales
+  -- and restricts `physClose1 R X` along `combine`; the two-level fiber sum
+  -- (over the shared bond bits of `p` and of `q`) reassembles the `wMat`
+  -- eigendecomposition and collapses to `physClose1 R X i j` exactly.
+  have hinner : ∀ s : Fin 2, ∀ q : Fin 4 × Fin 4,
+      (∑ p : Fin 4 × Fin 4, coarseKrausGated s i p * physClose2 R X p q) =
+        (if gate q.1 q.2 then
+            (coarseAmp : ℂ) * (25 / 32 : ℂ) * physClose1 R X i (combine q.1 q.2) *
+              (eigVecs s 0 * wMat 0 (bit2 q.1) + eigVecs s 1 * wMat 1 (bit2 q.1))
+          else 0) := by
+    intro s q
+    by_cases hq : gate q.1 q.2
+    · rw [if_pos hq]
+      have hcongr : (∑ p : Fin 4 × Fin 4, coarseKrausGated s i p * physClose2 R X p q) =
+          ∑ p : Fin 4 × Fin 4, if gate p.1 p.2 ∧ combine p.1 p.2 = i then
+              (coarseAmp : ℂ) * (25 / 32 : ℂ) * physClose1 R X i (combine q.1 q.2) *
+                (eigVecs s (bit2 p.1) * wMat (bit2 p.1) (bit2 q.1))
+            else 0 := by
+        apply Finset.sum_congr rfl
+        intro p _
+        by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
+        · rw [if_pos hp]
+          have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bit2 p.1) := by
+            simp only [coarseKrausGated, Matrix.of_apply]
+            exact if_pos hp
+          have c1 : (if gate p.1 p.2 ∧ gate q.1 q.2 then wMat (bit2 p.1) (bit2 q.1) else 0) =
+              wMat (bit2 p.1) (bit2 q.1) := if_pos ⟨hp.1, hq⟩
+          rw [e, physClose2_R_entry, hp.2, c1]; ring
+        · rw [if_neg hp]
+          have e : coarseKrausGated s i p = 0 := by
+            simp only [coarseKrausGated, Matrix.of_apply]
+            exact if_neg hp
+          rw [e, zero_mul]
+      rw [hcongr, gated_combine_fiber_sum i (fun b => (coarseAmp : ℂ) * (25 / 32 : ℂ) *
+          physClose1 R X i (combine q.1 q.2) * (eigVecs s b * wMat b (bit2 q.1)))]
+      ring
+    · rw [if_neg hq]
+      apply Finset.sum_eq_zero
+      intro p _
+      by_cases hp : gate p.1 p.2 ∧ combine p.1 p.2 = i
+      · have e : coarseKrausGated s i p = (coarseAmp : ℂ) * eigVecs s (bit2 p.1) := by
+          simp only [coarseKrausGated, Matrix.of_apply]
+          exact if_pos hp
+        have c1 : (if gate p.1 p.2 ∧ gate q.1 q.2 then wMat (bit2 p.1) (bit2 q.1) else 0) = 0 :=
+          if_neg (fun hcon => hq hcon.2)
+        rw [e, physClose2_R_entry, c1]; ring
+      · have e : coarseKrausGated s i p = 0 := by
+          simp only [coarseKrausGated, Matrix.of_apply]
+          exact if_neg hp
+        rw [e, zero_mul]
+  have houter : ∀ s : Fin 2,
+      (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
+          coarseKrausGated s i p * physClose2 R X p q) * star (coarseKrausGated s j q)) =
+        (coarseAmp : ℂ) ^ 2 * (25 / 32 : ℂ) * physClose1 R X i j *
+          (eigVecs s 0 * wMat 0 0 * eigVecs s 0 + eigVecs s 1 * wMat 1 0 * eigVecs s 0 +
+            (eigVecs s 0 * wMat 0 1 * eigVecs s 1 + eigVecs s 1 * wMat 1 1 * eigVecs s 1)) := by
+    intro s
+    have hcongr : (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
+        coarseKrausGated s i p * physClose2 R X p q) * star (coarseKrausGated s j q)) =
+        ∑ q : Fin 4 × Fin 4, if gate q.1 q.2 ∧ combine q.1 q.2 = j then
+            (coarseAmp : ℂ) ^ 2 * (25 / 32 : ℂ) * physClose1 R X i j *
+              (eigVecs s 0 * wMat 0 (bit2 q.1) + eigVecs s 1 * wMat 1 (bit2 q.1)) *
+              eigVecs s (bit2 q.1)
+          else 0 := by
+      apply Finset.sum_congr rfl
+      intro q _
+      rw [hinner]
+      by_cases hqj : gate q.1 q.2 ∧ combine q.1 q.2 = j
+      · rw [if_pos hqj.1, if_pos hqj, hqj.2]
+        have e : coarseKrausGated s j q = (coarseAmp : ℂ) * eigVecs s (bit2 q.1) := by
+          simp only [coarseKrausGated, Matrix.of_apply]
+          exact if_pos hqj
+        rw [e, star_mul', eigVecs_star, coarseAmp_star]
+        ring
+      · by_cases hq : gate q.1 q.2
+        · have hqne : combine q.1 q.2 ≠ j := fun hcon => hqj ⟨hq, hcon⟩
+          rw [if_pos hq, if_neg hqj]
+          have e : coarseKrausGated s j q = 0 := by
+            simp only [coarseKrausGated, Matrix.of_apply]
+            exact if_neg (fun hcon => hqne hcon.2)
+          rw [e]; simp
+        · rw [if_neg hq, if_neg hqj]; simp
+    rw [hcongr, gated_combine_fiber_sum j (fun b => (coarseAmp : ℂ) ^ 2 * (25 / 32 : ℂ) *
+        physClose1 R X i j * (eigVecs s 0 * wMat 0 b + eigVecs s 1 * wMat 1 b) * eigVecs s b)]
+    ring
+  rw [Fin.sum_univ_two, houter, houter]
+  have hamp : (coarseAmp : ℂ) ^ 2 = (1 / 2 : ℂ) := by
+    have hcast : ((coarseAmp : ℝ) : ℂ) ^ 2 = ((coarseAmp ^ 2 : ℝ) : ℂ) := by push_cast; ring
+    rw [hcast, coarseAmp_sq]; norm_num
+  have hw00 : wMat 0 0 = (16 / 25 : ℂ) := by simp [wMat]; norm_num
+  have hw01 : wMat 0 1 = (9 / 25 : ℂ) := by simp [wMat]; norm_num
+  have hw10 : wMat 1 0 = (9 / 25 : ℂ) := by simp [wMat]; norm_num
+  have hw11 : wMat 1 1 = (16 / 25 : ℂ) := by simp [wMat]; norm_num
+  have hev00 : eigVecs 0 0 = (1 : ℂ) := by simp [eigVecs]
+  have hev01 : eigVecs 0 1 = (1 : ℂ) := by simp [eigVecs]
+  have hev10 : eigVecs 1 0 = (1 : ℂ) := by simp [eigVecs]
+  have hev11 : eigVecs 1 1 = (-1 : ℂ) := by simp [eigVecs]
+  rw [hamp, hw00, hw01, hw10, hw11, hev00, hev01, hev10, hev11]
+  ring
+
 end MPOTensor.RescalingStableLengthDependentRFP
