@@ -31,9 +31,11 @@
   \;\longrightarrow\;
   % rho_k: the k-site marginal is an operator, so every ket leg stays open
   % upward and every bra leg open downward (the source racetrack has no
-  % ket-bra rungs); only the virtual ends close on the environment beads.
+  % ket-bra rungs); only the virtual ends close on the environment beads,
+  % which the source leaves nameless, so each cup carries an unnamed matrix.
   \underset{\rho_k}{
-  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, west=cup, east=cup]
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none,
+                west={cup=}, east={cup=}]
     \tn[at=(1,1), name=a1, ports={180:virtual, 0:virtual, 90:physical}]{}
     \tn[at=(1,2), name=a2, ports={180:virtual, 0:virtual, 90:physical}]{}
     \tn[at=(1,3), name=a3, ports={180:virtual, 0:virtual, 90:physical}]{}
@@ -45,12 +47,5 @@
       ports={180:virtual, 0:virtual, 270:physical}]{}
     \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)}
     \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)}
-    % west={cup=$m$}/east={cup=$m$} bracket sugar is not implemented yet
-    % (K1); a hand-placed unlabelled bead on the canonical cup wire draws
-    % the same on-bend closure the source leaves nameless here.
-    % \vphantom in an atom label crashes the kernel's label pass (K1); a
-    % blank label reproduces the source's unnamed bead without it.
-    \tn[skin=ring, at=on cup-west-1-2 0.5]{}
-    \tn[skin=ring, at=on cup-east-1-2 0.5]{}
   \end{tenkz}}
 \]
