@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.KrausCPTP
 import TNLean.Channel.Schwarz.ChoiCompression
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Characterization
 import TNLean.Channel.Schwarz.TwoPositive
@@ -18,7 +17,8 @@ Proposition 1.6: a positive map is completely positive whenever its range
 commutative.
 
 Local source: `Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`,
-lines 600--621 (proposition and proof).
+lines 600--614 (proposition, proof, and the licensing remark discussed
+below).
 
 **Scope restriction**: Wolf's Proposition 1.6 is stated for a positive map
 `T : 𝒜 → ℬ` between *unital $C^*$-algebras*, with the hypothesis "`𝒜` or `ℬ`
@@ -57,7 +57,7 @@ since `M_D(ℂ)` itself is commutative only for `D ≤ 1`. Documented in
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
-open Matrix Finset ChoiJamiolkowski
+open Matrix Finset
 
 namespace PositiveOnAbelian
 
@@ -71,6 +71,9 @@ def HasCommutingRange (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D)
     Prop :=
   ∀ X Y, Commute (T X) (T Y)
 
+/-- If every two images of `T` commute, then the images of any block matrix
+`a` under `T` commute pairwise: the bridge from `HasCommutingRange` to
+`PairwiseCommuteImages`. -/
 theorem pairwiseCommuteImages_of_hasCommutingRange
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : HasCommutingRange T) {n : ℕ}
@@ -143,17 +146,6 @@ theorem isCPMap_of_isPositiveMap_of_hasCommutingRange [NeZero D]
     blockPositive_bipartiteSlice_omegaProj
     (pairwiseCommuteImages_of_hasCommutingRange hcomm _) _
 
-/-- Complete positivity is invariant under the trace-pairing adjoint. -/
-theorem isCPMap_traceAdjointMap_iff
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} :
-    IsCPMap (Matrix.traceAdjointMap T) ↔ IsCPMap T := by
-  constructor
-  · intro h
-    have h' := isKrausCP_iff_isCPMap.mpr h |>.traceAdjointMap
-    rwa [Matrix.traceAdjointMap_traceAdjointMap, isKrausCP_iff_isCPMap] at h'
-  · intro h
-    exact isKrausCP_iff_isCPMap.mp ((isKrausCP_iff_isCPMap.mpr h).traceAdjointMap)
-
 /-- **Wolf Proposition 1.6, commutative-domain case**: a positive linear
 endomorphism of `M_D(ℂ)` whose trace-pairing adjoint has commutative range is
 completely positive.
@@ -174,7 +166,7 @@ linear endomorphism of `M_D(ℂ)` is completely positive whenever its range, or
 its trace-pairing adjoint's range, is commutative.
 
 Local source: `Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`,
-lines 600--621. See the module docstring for the precise relationship
+lines 600--614. See the module docstring for the precise relationship
 between `HasCommutingRange` and Wolf's "commutative" hypothesis. -/
 theorem isCPMap_of_isPositiveMap_of_commutingRange_or [NeZero D]
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ} (hT : IsPositiveMap T)

@@ -7,6 +7,7 @@ import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.TracePairing
 import TNLean.Channel.Basic
 import TNLean.Channel.ChoiJamiolkowski
+import TNLean.Channel.KrausCPTP
 import TNLean.Channel.Schwarz.KadisonSchwarz
 import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -31,6 +32,8 @@ the existing result which is restricted to completely positive maps.
 * `isNPositiveMap_one_iff_isPositiveMap` — 1-positive maps are exactly positive maps
 * `isCPMap_iff_isNPositiveMap_card` — on `M_D`, `D`-positive maps are exactly CP maps
 * `IsPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a positive map is positive
+* `isCPMap_traceAdjointMap_iff` — complete positivity is invariant under the
+  trace-pairing adjoint
 * `IsNPositiveMap.traceAdjointMap` — the trace-pairing adjoint of a `k`-positive
   map is `k`-positive
 * `IsCPMap.is2PositiveMap` — CP maps are 2-positive
@@ -275,6 +278,19 @@ theorem isPositiveMap_traceAdjointMap_iff
     simpa [Matrix.traceAdjointMap_traceAdjointMap] using h'
   · intro h
     exact h.traceAdjointMap
+
+omit [DecidableEq n] in
+/-- Complete positivity is invariant under the trace-pairing adjoint. -/
+theorem isCPMap_traceAdjointMap_iff
+    {E : Matrix n n ℂ →ₗ[ℂ] Matrix n n ℂ} :
+    IsCPMap (Matrix.traceAdjointMap E) ↔ IsCPMap E := by
+  classical
+  constructor
+  · intro h
+    have h' := isKrausCP_iff_isCPMap.mpr h |>.traceAdjointMap
+    rwa [Matrix.traceAdjointMap_traceAdjointMap, isKrausCP_iff_isCPMap] at h'
+  · intro h
+    exact isKrausCP_iff_isCPMap.mp ((isKrausCP_iff_isCPMap.mpr h).traceAdjointMap)
 
 omit [DecidableEq n] in
 private theorem trace_mul_eq_sum_trace_blocks
