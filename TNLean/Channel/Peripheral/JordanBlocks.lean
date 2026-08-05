@@ -166,7 +166,7 @@ private theorem posSemidef_le_trace_smul_one {X : Matrix (Fin D) (Fin D) ℂ}
     rw [Unitary.conjStarAlgAut_apply] at h
     have hDgeq : Matrix.diagonal (RCLike.ofReal ∘ hX.1.eigenvalues) = Dg := by
       ext i j
-      simp [Dg]
+      simp [Dg, Matrix.diagonal_apply, RCLike.ofReal]
     rwa [hDgeq] at h
   have hU1 : (U : Matrix (Fin D) (Fin D) ℂ) * star (U : Matrix (Fin D) (Fin D) ℂ) = 1 :=
     Unitary.mul_star_self_of_mem U.prop
