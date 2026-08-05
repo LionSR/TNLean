@@ -653,4 +653,36 @@ theorem trace_rieszMatrix_mul [NeZero m] [NeZero n]
         z • Matrix.single i j 1 from by rw [Matrix.smul_single, smul_eq_mul, mul_one],
       map_smul, smul_eq_mul, mul_comm]
 
+/-- `rieszMatrix (complexify g)` is positive semidefinite: it is Hermitian
+(`complexify_conjTranspose`) and the quadratic form `star v ⬝ᵥ (Y *ᵥ v)`
+equals `complexify g (vecMulVec v (star v))`, which is nonnegative because
+`vecMulVec v (star v)` is positive semidefinite. -/
+theorem rieszMatrix_complexify_posSemidef [NeZero m] [NeZero n]
+    (g : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℝ] ℝ)
+    (hNonneg : ∀ X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ,
+      X.PosSemidef → 0 ≤ (complexify g X).re) :
+    (rieszMatrix (complexify g)).PosSemidef := by
+  rw [Matrix.posSemidef_iff_dotProduct_mulVec]
+  have hHerm : ∀ X, complexify g Xᴴ = star (complexify g X) := complexify_conjTranspose g
+  refine ⟨?_, ?_⟩
+  · ext a b
+    rw [Matrix.conjTranspose_apply]
+    change star (complexify g (Matrix.single a b 1)) = complexify g (Matrix.single b a 1)
+    rw [← hHerm, Matrix.conjTranspose_single, star_one]
+  · intro v
+    have hvv : (Matrix.vecMulVec v (star v)).PosSemidef :=
+      Matrix.posSemidef_vecMulVec_self_star v
+    have key : star v ⬝ᵥ (rieszMatrix (complexify g)).mulVec v =
+        complexify g (Matrix.vecMulVec v (star v)) := by
+      rw [← trace_vecMulVec_star_mul_eq_dotProduct, Matrix.trace_mul_comm,
+        trace_rieszMatrix_mul]
+    rw [key]
+    have hre : 0 ≤ (complexify g (Matrix.vecMulVec v (star v))).re := hNonneg _ hvv
+    have him0 : star (complexify g (Matrix.vecMulVec v (star v))) =
+        complexify g (Matrix.vecMulVec v (star v)) := by
+      conv_rhs => rw [← hvv.1]
+      exact (hHerm _).symm
+    rw [eq_ofReal_re_of_star_eq him0]
+    exact_mod_cast hre
+
 end Matrix
