@@ -843,7 +843,8 @@
       MPOTensor.trace_mpo_conjugatePhysical_mul_self}
     \leanok
     \uses{def:mpo_family}
-    Let $K$ be an MPO tensor and $U$ a unitary on the physical space. Then
+    Let $K$ be an MPO tensor and $U$ an isometry on the physical space,
+    $U^\dagger U=1$. Then
     \begin{align}
         \tr\!\left(\rho^{(N)}(\widetilde K)\,\rho^{(N)}(\widetilde K)\right)
         &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right),
@@ -859,11 +860,11 @@
 \begin{proof}
     \leanok
     The sitewise product matrix $W_{\sigma,\sigma'}=\prod_n U(\sigma_n,\sigma'_n)$
-    is unitary because $U$ is: expanding $W^\dagger W$ as a sum over
-    intermediate configurations and using $\sum_x\overline{U(x,a)}\,U(x,b)
+    satisfies $W^\dagger W=1$ because $U$ does: expanding $W^\dagger W$ as a sum
+    over intermediate configurations and using $\sum_x\overline{U(x,a)}\,U(x,b)
     =\delta_{a,b}$ site by site gives the identity. Since
     $\rho^{(N)}(\widetilde K)=W\,\rho^{(N)}(K)\,W^\dagger$, cyclicity of the
-    trace and unitarity of $W$ cancel the $W$'s from
+    trace and $W^\dagger W=1$ cancel the $W$'s from
     $\tr\!\left(W\rho^{(N)}(K)\rho^{(N)}(K)W^\dagger\right)$.
 \end{proof}
 
@@ -934,16 +935,45 @@
     \uses{lem:mpdo_active_sector_trace_sq_matrix,
       thm:mpdo_doubled_overlap_hilbert_schmidt,
       thm:mpdo_trace_pow_cyclic_product,
+      thm:mpdo_cyclic_neighboring_trace_products,
       lem:mpdo_trace_conjugate_physical_invariant,
       lem:mpdo_sum_prod_traceSq_active}
-    Combine Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt} with
-    Lemma~\ref{lem:mpdo_trace_conjugate_physical_invariant} (conjugating by
-    the physical isometry of the factorization) and the block-diagonal
-    product realization to identify the doubled-index trace with the
-    full-sector cyclic trace-square sum. Lemma
-    \ref{lem:mpdo_sum_prod_traceSq_active} restricts this sum to the
-    active sector, and Hermiticity identifies each complex trace-square
-    with its real trace-squared matrix entry. Theorem
-    \ref{thm:mpdo_trace_pow_cyclic_product} collapses the resulting
-    cyclic-labeling sum into $\tr((S^*)^N)$.
+    Write $\rho=\rho^{(N)}({\cal K})$, $\widetilde\rho=\rho^{(N)}(\widetilde{\cal K})$
+    for the physically conjugated MPO, and $\Omega_k$ for the cyclic
+    neighboring product of Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products}.
+    The overlap unwinds into a chain of trace identities:
+    \begin{align}
+        O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
+        &=\tr(\rho\,\rho)
+        &&\text{Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt}}
+        \notag\\
+        &=\tr(\widetilde\rho\,\widetilde\rho)
+        &&\text{Lemma~\ref{lem:mpdo_trace_conjugate_physical_invariant}}
+        \notag\\
+        &=\tr\!\left(\Bigl(\bigoplus_{k}\Omega_k\Bigr)^{\!2}\right)
+        &&\text{block-diagonal product realization}
+        \notag\\
+        &=\sum_{k:\{0,\ldots,N-1\}\to I}\tr\!\left(\Omega_k^2\right)
+        &&\text{trace of a block-diagonal matrix}
+        \notag\\
+        &=\sum_{k:\{0,\ldots,N-1\}\to I}\ \prod_{i=0}^{N-1}
+          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+        &&\text{Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products}}
+        \notag\\
+        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
+          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+        &&\text{Lemma~\ref{lem:mpdo_sum_prod_traceSq_active}}
+        \notag\\
+        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}S^*_{k_i,k_{i+1}}
+        &&\text{Hermiticity, }\tr(A)=\re\tr(A)\text{ for }A=A^\dagger
+        \notag\\
+        &=\tr\!\left((S^*)^N\right)
+        &&\text{Theorem~\ref{thm:mpdo_trace_pow_cyclic_product}}
+        \notag
+    \end{align}
+    The third step combines the block-diagonal product realization of
+    the sector-coordinate MPO with the reindexing invariance of
+    trace-of-square. The sixth step uses Hermiticity of $\eta_{k,h}$ to
+    identify its complex trace-square with the real entry
+    $S^*_{k,h}=\re\tr(\eta_{k,h}^2)$.
 \end{proof}
