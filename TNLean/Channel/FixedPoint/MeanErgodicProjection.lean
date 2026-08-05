@@ -89,18 +89,21 @@ private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_traceNonincreasin
   obtain ⟨n, rfl⟩ := hY
   exact ⟨hiter_pos n, hiter_trace_norm n⟩
 
-/-- The forward orbit of a Hermitian matrix under a positive
-trace-nonincreasing endomorphism is bounded.
+/-- The forward orbit of a Hermitian matrix under a positive endomorphism is
+bounded, assuming the forward orbit of every positive semidefinite matrix is
+bounded.
 
 The matrix is the difference of its positive and negative parts.  Each part
-has a bounded positive semidefinite orbit, and linearity gives the stated
-bound.
+has a bounded positive semidefinite orbit by hypothesis, and linearity gives
+the stated bound.
 
 Source: Wolf, Proposition 6.3 and Equation (6.14), local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_traceNonincreasing
+private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_posSemidef_orbit_bounded
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T)
+    (_hT : IsPositiveMap T)
+    (hpsd : ∀ {X : Matrix (Fin D) (Fin D) ℂ}, X.PosSemidef →
+      Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X))
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.IsHermitian) :
     Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X) := by
   let Q₁ : Matrix (Fin D) (Fin D) ℂ := X⁺
@@ -112,8 +115,8 @@ private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_traceNonincreasi
   have hdecomp : X = Q₁ - Q₂ := by
     simpa only [Q₁, Q₂] using
       (CFC.posPart_sub_negPart X (isSelfAdjoint_iff.mpr hX)).symm
-  have hb₁ := hT.isBounded_orbit_of_posSemidef_of_traceNonincreasing hTNI hQ₁
-  have hb₂ := hT.isBounded_orbit_of_posSemidef_of_traceNonincreasing hTNI hQ₂
+  have hb₁ := hpsd hQ₁
+  have hb₂ := hpsd hQ₂
   rw [isBounded_iff_forall_norm_le] at hb₁ hb₂ ⊢
   obtain ⟨C₁, hC₁⟩ := hb₁
   obtain ⟨C₂, hC₂⟩ := hb₂
@@ -126,14 +129,22 @@ private theorem IsPositiveMap.isBounded_orbit_of_isHermitian_of_traceNonincreasi
     ‖T^[n] Q₁ - T^[n] Q₂‖ ≤ ‖T^[n] Q₁‖ + ‖T^[n] Q₂‖ := norm_sub_le _ _
     _ ≤ C₁ + C₂ := add_le_add (hC₁ _ ⟨n, rfl⟩) (hC₂ _ ⟨n, rfl⟩)
 
-/-- A positive trace-nonincreasing matrix endomorphism has bounded forward
-orbits. Positive orbits remain in the bounded trace section determined by
-their initial trace; Hermitian decomposition gives the general case.
+/-- A positive matrix endomorphism whose forward orbits are bounded on every
+positive semidefinite matrix has bounded forward orbits on every matrix.
 
-This is the trace-nonincreasing form of Wolf, Proposition 6.3. -/
-theorem IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing
+For an arbitrary matrix `X`, the matrices `X + Xᴴ` and `i(X - Xᴴ)` are
+Hermitian, and each Hermitian matrix is the difference of its positive and
+negative parts, so the assumed bounds combine linearly.
+
+This packages the reduction step of Wolf, Proposition 6.3 and Equation (6.14):
+a hypothesis on the map (trace-nonincreasing, trace-preserving, or unital)
+only has to supply the positive semidefinite orbit bound.  Local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
+theorem IsPositiveMap.hasBoundedOrbits_of_posSemidef_orbit_bounded
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T) :
+    (hT : IsPositiveMap T)
+    (hpsd : ∀ {X : Matrix (Fin D) (Fin D) ℂ}, X.PosSemidef →
+      Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X)) :
     T.HasBoundedOrbits := by
   intro X
   let H₁ : Matrix (Fin D) (Fin D) ℂ := X + Xᴴ
@@ -151,8 +162,8 @@ theorem IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing
     ring_nf
     rw [Complex.I_sq]
     ring
-  have hb₁ := hT.isBounded_orbit_of_isHermitian_of_traceNonincreasing hTNI hH₁
-  have hb₂ := hT.isBounded_orbit_of_isHermitian_of_traceNonincreasing hTNI hH₂
+  have hb₁ := hT.isBounded_orbit_of_isHermitian_of_posSemidef_orbit_bounded hpsd hH₁
+  have hb₂ := hT.isBounded_orbit_of_isHermitian_of_posSemidef_orbit_bounded hpsd hH₂
   rw [isBounded_iff_forall_norm_le] at hb₁ hb₂ ⊢
   obtain ⟨C₁, hC₁⟩ := hb₁
   obtain ⟨C₂, hC₂⟩ := hb₂
@@ -170,6 +181,18 @@ theorem IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing
     _ = ‖T^[n] H₁‖ + ‖T^[n] H₂‖ := by
       simp only [norm_smul, Complex.norm_I, one_mul, Module.End.coe_pow]
     _ ≤ C₁ + C₂ := add_le_add (hC₁ _ ⟨n, rfl⟩) (hC₂ _ ⟨n, rfl⟩)
+
+/-- A positive trace-nonincreasing matrix endomorphism has bounded forward
+orbits. Positive orbits remain in the bounded trace section determined by
+their initial trace; Hermitian decomposition gives the general case.
+
+This is the trace-nonincreasing form of Wolf, Proposition 6.3. -/
+theorem IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hTNI : IsTraceNonincreasingMap T) :
+    T.HasBoundedOrbits :=
+  hT.hasBoundedOrbits_of_posSemidef_orbit_bounded fun hX =>
+    hT.isBounded_orbit_of_posSemidef_of_traceNonincreasing hTNI hX
 
 /-- A positive trace-preserving endomorphism of a finite-dimensional complex
 matrix algebra has bounded forward orbits on every matrix.
