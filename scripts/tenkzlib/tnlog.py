@@ -145,8 +145,14 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "kind": _enum("index", "string", "pairing"),
         "from": _is_address_id,
         "to": _is_address_id,
-        "from-open": _enum("n", "ne", "e", "se", "s", "sw", "w", "nw", "route"),
-        "to-open": _enum("n", "ne", "e", "se", "s", "sw", "w", "nw", "route"),
+        # "up" and "down" are the plane frame's independent transverse
+        # physical axis; the page compass carries every other end.
+        "from-open": _enum(
+            "n", "ne", "e", "se", "s", "sw", "w", "nw", "up", "down", "route"
+        ),
+        "to-open": _enum(
+            "n", "ne", "e", "se", "s", "sw", "w", "nw", "up", "down", "route"
+        ),
     },
     "mark": {
         "picture": _is_picture_id,

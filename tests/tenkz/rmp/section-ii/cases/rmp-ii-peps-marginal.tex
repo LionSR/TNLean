@@ -1,19 +1,90 @@
 % Target: rmp-ii-peps-marginal
 % Formula: marginals rho_kept = Tr_traced |psi><psi|.
-% Ink: Canonical public tenkzlattice, tenkzplanes environments; no raw TikZ.
-% Boundary: The state sheet is open; the doubled sheet traces the declared complement.
+% Ink: Kernel plane frames; the doubled sheet is the contract bilayer basis
+%   (planes preset) with member-addressed topology.
+% Boundary: The state sheet is open; on the doubled sheet the kept sites'
+%   ket-bra physical legs stay open and the fourth column closes site by site
+%   through east wrap loops.
 % Source: paper TN-Review-main.tex line 331; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 287-304
-% Capabilities: lattice, typed-ports
+% Capabilities: kernel, plane-frame
+\tenkzkernel
 \[
 \begin{gathered}
-  \begin{tenkzlattice}[rows=4, cols=4, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-  \end{tenkzlattice}
+  % The state sheet |psi>: every site keeps its transverse physical leg.
+  \begin{tenkz}[lattice={4x4}, frame=plane, physical=up, boundary=open]
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{}
+  \end{tenkz}
   \\[1em]
-  \begin{tenkzplanes}[rows=4, cols=4, sheets={ket, bra}, boundary=open,
-                      open={(1-4,1-3)}, trace={(1-4,4)}]
-  \end{tenkzplanes}
+  % The doubled sheet |psi><psi|: the plane frame owns both sheets through
+  % the declared bilayer basis; every bond, stub, open ket-bra leg, and
+  % traced pair below is a member-addressed declaration.
+  \begin{tenkz}[lattice={4x4}, planes, bonds=none]
+    % ket-sheet east-west bonds
+    \tnwire{(1,1,1)}{(1,2,1)} \tnwire{(1,2,1)}{(1,3,1)} \tnwire{(1,3,1)}{(1,4,1)}
+    \tnwire{(2,1,1)}{(2,2,1)} \tnwire{(2,2,1)}{(2,3,1)} \tnwire{(2,3,1)}{(2,4,1)}
+    \tnwire{(3,1,1)}{(3,2,1)} \tnwire{(3,2,1)}{(3,3,1)} \tnwire{(3,3,1)}{(3,4,1)}
+    \tnwire{(4,1,1)}{(4,2,1)} \tnwire{(4,2,1)}{(4,3,1)} \tnwire{(4,3,1)}{(4,4,1)}
+    % ket-sheet north-south bonds
+    \tnwire{(1,1,1)}{(2,1,1)} \tnwire{(2,1,1)}{(3,1,1)} \tnwire{(3,1,1)}{(4,1,1)}
+    \tnwire{(1,2,1)}{(2,2,1)} \tnwire{(2,2,1)}{(3,2,1)} \tnwire{(3,2,1)}{(4,2,1)}
+    \tnwire{(1,3,1)}{(2,3,1)} \tnwire{(2,3,1)}{(3,3,1)} \tnwire{(3,3,1)}{(4,3,1)}
+    \tnwire{(1,4,1)}{(2,4,1)} \tnwire{(2,4,1)}{(3,4,1)} \tnwire{(3,4,1)}{(4,4,1)}
+    % bra-sheet east-west bonds
+    \tnwire{(1,1,2)}{(1,2,2)} \tnwire{(1,2,2)}{(1,3,2)} \tnwire{(1,3,2)}{(1,4,2)}
+    \tnwire{(2,1,2)}{(2,2,2)} \tnwire{(2,2,2)}{(2,3,2)} \tnwire{(2,3,2)}{(2,4,2)}
+    \tnwire{(3,1,2)}{(3,2,2)} \tnwire{(3,2,2)}{(3,3,2)} \tnwire{(3,3,2)}{(3,4,2)}
+    \tnwire{(4,1,2)}{(4,2,2)} \tnwire{(4,2,2)}{(4,3,2)} \tnwire{(4,3,2)}{(4,4,2)}
+    % bra-sheet north-south bonds
+    \tnwire{(1,1,2)}{(2,1,2)} \tnwire{(2,1,2)}{(3,1,2)} \tnwire{(3,1,2)}{(4,1,2)}
+    \tnwire{(1,2,2)}{(2,2,2)} \tnwire{(2,2,2)}{(3,2,2)} \tnwire{(3,2,2)}{(4,2,2)}
+    \tnwire{(1,3,2)}{(2,3,2)} \tnwire{(2,3,2)}{(3,3,2)} \tnwire{(3,3,2)}{(4,3,2)}
+    \tnwire{(1,4,2)}{(2,4,2)} \tnwire{(2,4,2)}{(3,4,2)} \tnwire{(3,4,2)}{(4,4,2)}
+    % ket-sheet perimeter openings
+    \tnwire{(1,1,1)}{open n} \tnwire{(1,2,1)}{open n}
+    \tnwire{(1,3,1)}{open n} \tnwire{(1,4,1)}{open n}
+    \tnwire{(4,1,1)}{open s} \tnwire{(4,2,1)}{open s}
+    \tnwire{(4,3,1)}{open s} \tnwire{(4,4,1)}{open s}
+    \tnwire{(1,1,1)}{open w} \tnwire{(2,1,1)}{open w}
+    \tnwire{(3,1,1)}{open w} \tnwire{(4,1,1)}{open w}
+    \tnwire{(1,4,1)}{open e} \tnwire{(2,4,1)}{open e}
+    \tnwire{(3,4,1)}{open e} \tnwire{(4,4,1)}{open e}
+    % bra-sheet perimeter openings
+    \tnwire{(1,1,2)}{open n} \tnwire{(1,2,2)}{open n}
+    \tnwire{(1,3,2)}{open n} \tnwire{(1,4,2)}{open n}
+    \tnwire{(4,1,2)}{open s} \tnwire{(4,2,2)}{open s}
+    \tnwire{(4,3,2)}{open s} \tnwire{(4,4,2)}{open s}
+    \tnwire{(1,1,2)}{open w} \tnwire{(2,1,2)}{open w}
+    \tnwire{(3,1,2)}{open w} \tnwire{(4,1,2)}{open w}
+    \tnwire{(1,4,2)}{open e} \tnwire{(2,4,2)}{open e}
+    \tnwire{(3,4,2)}{open e} \tnwire{(4,4,2)}{open e}
+    % the kept sites' 24 open ket-bra physical legs: rho's row indices up
+    % from the ket sheet, its column indices down from the bra sheet
+    \tnwire{(1,1,1)}{open up} \tnwire{(1,2,1)}{open up} \tnwire{(1,3,1)}{open up}
+    \tnwire{(2,1,1)}{open up} \tnwire{(2,2,1)}{open up} \tnwire{(2,3,1)}{open up}
+    \tnwire{(3,1,1)}{open up} \tnwire{(3,2,1)}{open up} \tnwire{(3,3,1)}{open up}
+    \tnwire{(4,1,1)}{open up} \tnwire{(4,2,1)}{open up} \tnwire{(4,3,1)}{open up}
+    \tnwire{(1,1,2)}{open down} \tnwire{(1,2,2)}{open down}
+    \tnwire{(1,3,2)}{open down}
+    \tnwire{(2,1,2)}{open down} \tnwire{(2,2,2)}{open down}
+    \tnwire{(2,3,2)}{open down}
+    \tnwire{(3,1,2)}{open down} \tnwire{(3,2,2)}{open down}
+    \tnwire{(3,3,2)}{open down}
+    \tnwire{(4,1,2)}{open down} \tnwire{(4,2,2)}{open down}
+    \tnwire{(4,3,2)}{open down}
+    % the traced fourth column: each ket-bra pair closes through its own
+    % east wrap loop, as the source draws Tr over the site's physical space
+    \tnwire[kind=string, name=tr1,
+            via={0.6 e of (1,4,1), 0.6 e of (1,4,2)}]{(1,4,1)}{(1,4,2)}
+    \tnwire[kind=string, name=tr2,
+            via={0.6 e of (2,4,1), 0.6 e of (2,4,2)}]{(2,4,1)}{(2,4,2)}
+    \tnwire[kind=string, name=tr3,
+            via={0.6 e of (3,4,1), 0.6 e of (3,4,2)}]{(3,4,1)}{(3,4,2)}
+    \tnwire[kind=string, name=tr4,
+            via={0.6 e of (4,4,1), 0.6 e of (4,4,2)}]{(4,4,1)}{(4,4,2)}
+  \end{tenkz}
 \end{gathered}
 \]

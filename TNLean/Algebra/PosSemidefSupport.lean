@@ -27,6 +27,8 @@ are specializations of that construction.
   positive-semidefinite support projection.
 * `Matrix.supportProj_mul_conjTranspose_mul_self`: the support projection of
   $B B^\dagger$ fixes $B$.
+* `Matrix.PosSemidef.supportProj_sq_eq_supportProj`: `A * A` and `A` share a
+  support projection.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -325,6 +327,40 @@ theorem exists_supportProj_eq_mul (hA : A.PosSemidef) :
 theorem supportProj_mulVec_eq_zero_of_mulVec_eq_zero (hA : A.PosSemidef)
     (v : n → ℂ) (hv : A *ᵥ v = 0) : hA.supportProj *ᵥ v = 0 :=
   hA.isHermitian.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v hv
+
+/-- `A * A` has the same support projection as `A`, for `A` positive semidefinite. -/
+theorem supportProj_sq_eq_supportProj (hA : A.PosSemidef) :
+    (posSemidef_self_mul_conjTranspose A).supportProj = hA.supportProj := by
+  let hA2 : (A * A).PosSemidef := by
+    have h_eq : A * A = A * Aᴴ := by rw [hA.isHermitian.eq]
+    rw [h_eq]
+    exact posSemidef_self_mul_conjTranspose A
+  let hA2' : (A * Aᴴ).PosSemidef := posSemidef_self_mul_conjTranspose A
+  have h_mat_eq : A * Aᴴ = A * A := by rw [hA.isHermitian.eq]
+  have h_eq_instances : hA2'.supportProj = hA2.supportProj :=
+    supportProj_congr hA2' hA2 h_mat_eq
+  have hkerA_A2 (v : n → ℂ) (hv : A *ᵥ v = 0) : (A * A) *ᵥ v = 0 := by
+    rw [← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero]
+  have hkerA2_A (v : n → ℂ) (hv : (A * A) *ᵥ v = 0) : A *ᵥ v = 0 := by
+    have hdot : star (A *ᵥ v) ⬝ᵥ (A *ᵥ v) = 0 := by
+      calc
+        star (A *ᵥ v) ⬝ᵥ (A *ᵥ v) = star (Aᴴ *ᵥ v) ⬝ᵥ (A *ᵥ v) := by rw [hA.isHermitian.eq]
+        _ = star v ⬝ᵥ (A *ᵥ (A *ᵥ v)) := by rw [← star_dotProduct_mulVec A v (A *ᵥ v)]
+        _ = star v ⬝ᵥ ((A * A) *ᵥ v) := by rw [← Matrix.mulVec_mulVec]
+        _ = star v ⬝ᵥ 0 := by rw [hv]
+        _ = 0 := dotProduct_zero _
+    exact dotProduct_star_self_eq_zero.mp hdot
+  have hPA2_PA : hA2.supportProj * hA.supportProj = hA2.supportProj :=
+    hA.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le fun v hv =>
+      hA2.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerA_A2 v hv)
+  have hPA_PA2 : hA.supportProj * hA2.supportProj = hA.supportProj :=
+    hA2.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le (B := hA.supportProj) fun v hv =>
+      hA.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerA2_A v hv)
+  have hPA_PA2' : hA.supportProj * hA2.supportProj = hA2.supportProj := by
+    simpa [Matrix.conjTranspose_mul, hA.supportProj_isHermitian.eq,
+      hA2.supportProj_isHermitian.eq] using congrArg Matrix.conjTranspose hPA2_PA
+  have h_eq_supp : hA2.supportProj = hA.supportProj := hPA_PA2'.symm.trans hPA_PA2
+  simpa [hA2'] using h_eq_instances.trans h_eq_supp
 
 /-- A positive-semidefinite matrix whose support projection is the identity is
 positive definite. -/

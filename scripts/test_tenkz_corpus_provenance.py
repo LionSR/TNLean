@@ -288,11 +288,11 @@ def test_rmp_dimension_ownership() -> None:
         {
             DimensionOwner.METRIC: 0,
             DimensionOwner.FRAME: 0,
-            DimensionOwner.ROUTE: 208,
-            DimensionOwner.LAYOUT: 149,
+            DimensionOwner.ROUTE: 0,
+            DimensionOwner.LAYOUT: 0,
         }
     )
-    if report.case_count != 357 or report.case_counts != expected:
+    if report.case_count != 0 or report.case_counts != expected:
         raise AssertionError(
             "RMP dimension ownership baseline drifted: "
             f"total={report.case_count}, owners={report.case_counts!r}"
@@ -1915,11 +1915,11 @@ ch=21mm,inline]{\\tn{A}}}
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "case dimensions increased to 358",
+        "case dimensions increased to 1",
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "composition/layout dimensions increased to 150",
+        "composition/layout dimensions increased to 1",
     )
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
@@ -1928,7 +1928,7 @@ ch=21mm,inline]{\\tn{A}}}
             r"\end{tenkzlattice}",
             "projection/frame dimensions increased",
         ),
-        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 209"),
+        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 1"),
     ):
         mutation = scan_case_dimensions(Path("synthetic.tex"), source)
         _expect_dimension_failure(
@@ -1959,16 +1959,19 @@ ch=21mm,inline]{\\tn{A}}}
         "allowlist requires exactly",
     )
 
-    first_route = next(
-        index
-        for index, occurrence in enumerate(report.cases)
-        if occurrence.owner is DimensionOwner.ROUTE
-    )
-    reduced = dataclasses.replace(
-        report,
-        cases=report.cases[:first_route] + report.cases[first_route + 1 :],
-    )
-    validate_dimension_report(reduced)
+    # The corpus owns no dimensions at all; any surviving occurrence would
+    # already have failed the ceiling above, so the removal probe is vacuous.
+    if report.cases:
+        first_route = next(
+            index
+            for index, occurrence in enumerate(report.cases)
+            if occurrence.owner is DimensionOwner.ROUTE
+        )
+        reduced = dataclasses.replace(
+            report,
+            cases=report.cases[:first_route] + report.cases[first_route + 1 :],
+        )
+        validate_dimension_report(reduced)
 
 
 def test_rmp_author_source_identity() -> None:
