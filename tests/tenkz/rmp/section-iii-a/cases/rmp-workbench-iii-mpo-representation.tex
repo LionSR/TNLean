@@ -1,13 +1,34 @@
 % Target: rmp-workbench-iii-mpo-representation
 % Formula: O_a is the product of the local MPO tensors on wire a.
-% Ink: Canonical public tenkz five-site MPO word labelled by a.
+% Ink: Kernel flat frame; the five-site MPO word rides the declared source-red
+%   mpo species, labelled a at the open east index.
 % Boundary: The MPO word has one open west and one open east virtual index.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 252-258; archival output Oa rep.pdf
-% Capabilities: grid, mpo-word, bond-label
+% Capabilities: kernel, mpo-word
 \[
-  O_a=\begin{tenkz}[physical=updown, bond label={$a$ at 1-2}, bond label={$a$ at 2-3},
-      bond label={$a$ at 3-4}, bond label={$a$ at 4-5}, tensor style=box]
-    \tn{}&\tn{}&\tn{}&\tn{}&\tn{}
+  O_a=
+  \tenkzkernel
+  \tndeclare{species}{mpo}{hue=source:red}
+  % The source labels the single open east index a in the operator hue; the
+  % internal bonds stay unlabelled.
+  \begin{tenkz}[rows={wire}, cols=5, bonds=none]
+    \tn[at=(1,1), skin=mpo, name=A1, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{}
+    \tn[at=(1,2), skin=mpo, name=A2, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{}
+    \tn[at=(1,3), skin=mpo, name=A3, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{}
+    \tn[at=(1,4), skin=mpo, name=A4, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{}
+    \tn[at=(1,5), skin=mpo, name=A5, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{}
+    \tnwire[species=mpo]{open w}{A1.180}
+    \tnwire[species=mpo]{A1.0}{A2.180}
+    \tnwire[species=mpo]{A2.0}{A3.180}
+    \tnwire[species=mpo]{A3.0}{A4.180}
+    \tnwire[species=mpo]{A4.0}{A5.180}
+    \tnwire[species=mpo, name=rail-e]{A5.0}{open e}
+    \tnmark[form=label, species=mpo, label pos=180]{1 e of A5}{$a$}
   \end{tenkz}.
 \]

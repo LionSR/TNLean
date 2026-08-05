@@ -110,17 +110,17 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-ii-boundary-b-old` | X | The case does not record `species=`; migrate the semantic colour coding into the model first. |
 | `rmp-workbench-ii-peps-fine-graining` | K2 | The structured-grid redraw already contains the required panel. |
 | `rmp-workbench-ii-historical-composite` | K2 | A flat tilted grid is the house equivalent of the source 3D cube. |
-| `rmp-workbench-iii-eq50` | K2 | All four source legs are present; no residue is named. |
-| `rmp-workbench-iii-eq51` | K2 | Plain semantic ink versus source red is a public-theme choice. |
-| `rmp-workbench-iii-eq52` | K2 | Plain semantic ink versus source red is a public-theme choice. |
+| `rmp-workbench-iii-eq50` | — | Kernel migration 2026-08-05: all four legs verified against Eq50.pdf; the wide stock mpo glyph is house style. |
+| `rmp-workbench-iii-eq51` | K1 | The kernel side trace renders as identified extended ends; ink the recorded closure's long return at the renderer, then re-review the traced-chain family. |
+| `rmp-workbench-iii-eq52` | K1 | Same closure-ink gap as eq51: the traced sides draw as identified ends, not the source's trace rectangle. |
 | `rmp-workbench-iii-diagram-one` | K2 | Both rings close; boundary-size change is the identity itself. |
-| `rmp-workbench-iii-diagram-two` | K2 | Y, A, and physical loop orientation match the source. |
+| `rmp-workbench-iii-diagram-two` | K1 | Y over A and both open indices match; the north/south trace draws as identified ends, not the source's return loop (eq51 family). |
 | `rmp-workbench-iii-diagram-three` | K1 | Per-edge direction ink is a shared ports/arrow rendering property. |
 | `rmp-workbench-iii-historical-composite` | K3 | All mathematical parts are present; only placement nuance remains. |
 | `rmp-workbench-iii-diagram-four` | K2 | Stadium versus circle is a house glyph difference. |
-| `rmp-workbench-iii-eq50-reduced` | K4 | Re-review and remove any labels not present in the source contract. |
+| `rmp-workbench-iii-eq50-reduced` | — | Promoted to `faithful` 2026-08-05: the invented L/a/R/b labels are removed; unlabelled stacked pair, tall reduction boxes, and one reduced index per side match the author lines. |
 | `rmp-workbench-iii-dual-reduced` | X | Challenge the current cyclic-equivalence note: the manifest declares an open intertwiner, so repair the source factor order. |
-| `rmp-workbench-iii-mpo-representation` | K2 | The complete MPO word and labels are present; plain virtual-index ink requires house-style re-review. |
+| `rmp-workbench-iii-mpo-representation` | — | Promoted to `faithful` 2026-08-05: the per-bond labels are removed, the rail carries the declared source-red species, and the single red a sits at the open east index. |
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |
 | `rmp-workbench-iii-ghz-state-workbench` | K1 | The manifest records `staggered-sites`; route the fix through the cell basis, not the published GHZ lattice mechanism. |
