@@ -284,8 +284,7 @@ theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent (s : ℝ)
 The strategy: factor `mpo R N = (25/32)^N · C ⊙ M` where `C` is the
 chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of the Kronecker
 power `wN N` of `wMat` (PSD by congruence).  Their Hadamard product is PSD
-by the Schur product theorem [`Matrix.PosSemidef.hadamard`], and scaling
-by `(25/32)^N ≥ 0` preserves PSD.
+by the Schur product theorem, and scaling by `(25/32)^N ≥ 0` preserves PSD.
 
 The entrywise formula for `mpo R N` (the only remaining gap) is verified
 by direct analysis of the cyclic sum; the bond‑chain constraints collapse
@@ -316,11 +315,12 @@ def bit2 : Fin 4 → Fin 2
   | 3 => 1
 
 /-- The entrywise positive square root of `wMat` (`coeff_sq_eq_wMat`).  The
-literals are the scaling factors already encoded in the letter matrices `A`:
-`coeff' i j` is the unique nonzero entry of the letter supported on the
-matrix unit `E_{ij}`, namely `4/5` for the diagonal letters `A 0`, `A 1`
-and `3/5` for the off-diagonal letters `A 2`, `A 3`; the consistency check
-`A_entry_eq_coeff'` ties the literals back to `A`.
+values `4/5` and `3/5` are the scaling factors already encoded in the
+letter matrices `A`: `coeff' i j` is the unique nonzero entry of the
+letter supported on the matrix unit `E_{ij}`, namely `4/5` for the
+diagonal letters `A 0`, `A 1` and `3/5` for the off-diagonal letters
+`A 2`, `A 3`; the consistency check `A_entry_eq_coeff'` ties these values
+back to `A`.
 
 Project example; not from CPSV16. -/
 def coeff' : Fin 2 → Fin 2 → ℂ
@@ -329,7 +329,7 @@ def coeff' : Fin 2 → Fin 2 → ℂ
   | 1, 0 => 3/5
   | 1, 1 => 4/5
 
-/-- Consistency of the hardcoded literals in `coeff'` with the letter
+/-- Consistency of the explicit values in `coeff'` with the letter
 matrices `A`: every nonzero entry of every letter `A a` at position
 `(r, c)` equals `coeff' r c`. -/
 lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
@@ -339,7 +339,7 @@ lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
 /-- The cyclic bond-matching condition on a physical-index string
 `p : Fin N → Fin 4`: the second bit of each letter equals the first bit of
 the next letter around the ring (`bit2 (p n) = bit1 (p (n + 1))`, with the
-successor implemented by `finRotate N`).  This closed-chain constraint
+successor given by `finRotate N`).  This closed-chain constraint
 collapses the bond sum in the entrywise formula for `mpo R N` to at most
 one term.
 
