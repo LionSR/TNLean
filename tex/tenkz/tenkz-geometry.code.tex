@@ -285,14 +285,6 @@
       }
   }
 
-% Kernel-local directions are measured from east in (east, north) axes,
-% while an affine frame consumes (row, column).  East is the column vector
-% and north is the negative row vector, so theta enters the matrix as
-% 90 + theta.  Keeping that convention here prevents row/column details from
-% leaking into each port, leg, and open-end consumer.
-\cs_new_protected:Npn \__tenkz_geom_local_dir:nnN #1#2#3
-  { \__tenkz_geom_local_bearing:nnnnN {#1}{1}{1}{#2} #3 }
-
 % A carrier basis is the complete local east/north pair on the page.  Keeping
 % both vectors, rather than one turn angle, preserves shear and unequal scale.
 % The generic apply/unapply pair below is shared by every consumer which
