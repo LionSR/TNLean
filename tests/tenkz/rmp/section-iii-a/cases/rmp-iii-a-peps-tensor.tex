@@ -1,19 +1,25 @@
 % Target: rmp-iii-a-peps-tensor
 % Formula: the trivalent junction of physical/fusion wires around the
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Kernel flat frame; three directed fusion levels meet at the junction.
 % Boundary: Resolved by the public environment; open indices remain explicit.
 % Source: paper TN-Review-main.tex line 1342; paper-context-only; no author drawing
 %   source
-% Capabilities: free-graph, typed-ports
+% Capabilities: kernel, typed-ports
+% gamma: m -> k, then the split alpha: k -> j and beta: k -> n.  The fat
+% wires are directed levels, as in the companion MPO panel.
 \[
-  \begin{tenkzfree}
-    \tnput[dot, label pos=south, ports={north:physical}]{m}{(0,-15mm)}{m}
-    \tnput[dot, label pos=east,  ports={south:physical}]{k}{(0,0)}{k}
-    \tnput[dot, label pos=north]{j}{(-13mm,13mm)}{j}
-    \tnput[dot, label pos=north]{n}{(13mm,13mm)}{n}
-    % gamma: m -> k, then the split alpha: k -> j and beta: k -> n
-    \tnjoin[dir, label=\gamma]{m.north}{k.south}
-    \tnjoin[dir, label=\alpha]{k.north west}{j.south east}
-    \tnjoin[dir, label=\beta]{k.north east}{n.south west}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+    \tn[at=(1,1), name=j, skin=dot, label pos=90, ports={315:virtual}]{j}
+    \tn[at=(1,3), name=n, skin=dot, label pos=90, ports={225:virtual}]{n}
+    \tn[at=(2,2), name=k, skin=dot, label pos=0,
+      ports={135:virtual, 45:virtual, 270:virtual}]{k}
+    \tn[at=(3,2), name=m, skin=dot, label pos=270, ports={90:virtual}]{m}
+    \tnwire[dir=to, name=ga]{m.90}{k.270}
+    \tnwire[dir=to, name=al]{k.135}{j.315}
+    \tnwire[dir=to, name=be]{k.45}{n.225}
+    \tnmark[form=label, label pos=180]{on ga 0.5}{$\gamma$}
+    \tnmark[form=label, label pos=90]{on al 0.45}{$\alpha$}
+    \tnmark[form=label, label pos=90]{on be 0.45}{$\beta$}
+  \end{tenkz}
 \]

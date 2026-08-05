@@ -1,39 +1,6 @@
 {
   "schema_version": 5,
   "cases": {
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-mpo-action.tex": {
-      "scopes": ["tenkzfree@1", "tenkzfree@2"],
-      "constructs": ["tenkzfree@1", "tenkzfree@2"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3", "tenkzfree@1::tenkzfree@1/tnjoin@4", "tenkzfree@1::tenkzfree@1/tnjoin@5", "tenkzfree@2::tenkzfree@2", "tenkzfree@2::tenkzfree@2/tnput@1", "tenkzfree@2::tenkzfree@2/tnput@2", "tenkzfree@2::tenkzfree@2/tnput@3", "tenkzfree@2::tenkzfree@2/tnput@4", "tenkzfree@2::tenkzfree@2/tnput@5", "tenkzfree@2::tenkzfree@2/tnjoin@1", "tenkzfree@2::tenkzfree@2/tnjoin@2", "tenkzfree@2::tenkzfree@2/tnjoin@3", "tenkzfree@2::tenkzfree@2/tnjoin@4", "tenkzfree@2::tenkzfree@2/tnjoin@5", "tenkzfree@2::tenkzfree@2/tnjoin@6", "tenkzfree@2::tenkzfree@2/tnjoin@7", "tenkzfree@2::tenkzfree@2/tnjoin@8"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[dot]{A}{(<dimension>,<dimension>)}{A}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[ring]{u}{(<dimension>,<dimension>)}{u_g}", "owner": "composition/layout", "literals": ["0mm", "10mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@1/command:\\tnjoin{<dimension>,<dimension>}{A.west}", "owner": "route/string", "literals": ["-14mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@2/command:\\tnjoin{A.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["14mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@3/command:\\tnjoin{<dimension>,<dimension>}{A.south}", "owner": "route/string", "literals": ["0mm", "-14mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@5/command:\\tnjoin{u.north}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "18mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@1/command:\\tnput[dot]{A}{(<dimension>,<dimension>)}{A}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@2/command:\\tnput[ring]{w}{(<dimension>,<dimension>)}{w_g}", "owner": "composition/layout", "literals": ["-10mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@3/command:\\tnput[ring]{wd}{(<dimension>,<dimension>)}{w_g^\\dagger}", "owner": "composition/layout", "literals": ["10mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@4/command:\\tnput[ring]{v}{(<dimension>,<dimension>)}{v_g}", "owner": "composition/layout", "literals": ["0mm", "10mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@5/command:\\tnput[ring]{vd}{(<dimension>,<dimension>)}{v_g^\\dagger}", "owner": "composition/layout", "literals": ["0mm", "-10mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@1/command:\\tnjoin{<dimension>,<dimension>}{w.west}", "owner": "route/string", "literals": ["-18mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@4/command:\\tnjoin{wd.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["18mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@5/command:\\tnjoin{<dimension>,<dimension>}{vd.south}", "owner": "route/string", "literals": ["0mm", "-18mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@8/command:\\tnjoin{v.north}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "18mm"]}
-      ]
-    },
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-mpo-tensor.tex": {
-      "scopes": ["tenkz@1", "tenkzfree@1"],
-      "constructs": ["tenkz@1", "tenkzfree@1"],
-      "invocations": ["tenkz@1::tenkz@1", "tenkz@1::tenkz@1/tn@1", "tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnput@3", "tenkzfree@1::tenkzfree@1/tnput@4", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[dot,labelpos=west,ports={east:virtual}]{j}{(<dimension>,<dimension>)}{j}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[dot,labelpos=east,ports={west:virtual}]{k}{(<dimension>,<dimension>)}{k}", "owner": "composition/layout", "literals": ["26mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@3/command:\\tnput[dot,labelpos=south,ports={north:physical}]{n}{(<dimension>,<dimension>)}{n}", "owner": "composition/layout", "literals": ["18mm", "-9mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@4/command:\\tnput[dot,labelpos=north,ports={south:physical}]{m}{(<dimension>,<dimension>)}{m}", "owner": "composition/layout", "literals": ["18mm", "9mm"]}
-      ]
-    },
     "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pentagon-mixed.tex": {
       "scopes": ["tenkzfree@1", "tenkzfree@2"],
       "constructs": ["tenkzfree@1", "tenkzfree@2"],
@@ -72,16 +39,6 @@
         {"site": "tenkzfree@2::tenkzfree@2/tnput@3/command:\\tnput[boundary]{WeS}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["19mm", "-8mm"]},
         {"site": "tenkzfree@2::tenkzfree@2/tnjoin@1/command:\\tnjoin[dir]{<dimension>,<dimension>}{W.west}", "owner": "route/string", "literals": ["-13mm", "0mm"]},
         {"site": "tenkzfree@2::tenkzfree@2/tnjoin@4/command:\\tnjoin[dir]{<dimension>,<dimension>}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["13mm", "-13mm", "13mm", "13mm"]}
-      ]
-    },
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-peps-tensor.tex": {
-      "scopes": ["tenkzfree@1"],
-      "constructs": ["tenkzfree@1"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnput@3", "tenkzfree@1::tenkzfree@1/tnput@4", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[dot,labelpos=south,ports={north:physical}]{m}{(0,<dimension>)}{m}", "owner": "composition/layout", "literals": ["-15mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@3/command:\\tnput[dot,labelpos=north]{j}{(<dimension>,<dimension>)}{j}", "owner": "composition/layout", "literals": ["-13mm", "13mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@4/command:\\tnput[dot,labelpos=north]{n}{(<dimension>,<dimension>)}{n}", "owner": "composition/layout", "literals": ["13mm", "13mm"]}
       ]
     },
     "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-proof-one.tex": {

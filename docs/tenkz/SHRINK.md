@@ -1553,3 +1553,31 @@ added; the physical-dimension census is unchanged. The regression
 outer contour and the cut stub that ends on the inner window.
 
 Census-correction: #5462
+
+### 2026-08-05 — seven Section-III-A panels enter the kernel (wave 2C)
+
+The MPO-tensor, PEPS-tensor, commuting-Hamiltonian, GHZ-tensor, Hadamard,
+MPO-action, and torus-two cases leave the grid and free tiers.  Each states
+its model on the kernel: flat frames with canonical addresses, typed ports,
+declared strings for the red operator level, and the stock pill skin for the
+two-site gate.  The Hadamard target is re-adjudicated: its paired author
+panel (lines 359-360) is the paper's own H glyph — the filled dot on the
+virtual bond that line 1449 equates with the Hadamard matrix — so the
+wrong-source pairing closes and the case redraws to the source.  The
+GHZ-tensor redraws to the author's glyphless junction, and the MPO-action
+panels regain the source's diagonal virtual pair, closing that bar row.
+
+The retired free-tier spellings take their owned physical dimensions with
+them: the census falls from 478 to 435 sites (route/string 260 to 244,
+composition/layout 218 to 191), with metric and frame ownership remaining
+zero, and the ceilings ratchet down with it.  M4 rises from 20.83 to 21.35
+because the kernel cases name the atoms, strings, and typed ports the
+retired tiers implied, and because the commuting-Hamiltonian and MPO-action
+equations now spell both panels explicitly.  No parser spelling, registry
+row, alias, escape, or overload is added.
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:picture:east label | keep-because: the wave-2C respell moved one consumer onto the kernel port-label spelling and the row's two remaining consumers are 0.7 grid-tier cases that retire wholesale at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5347
