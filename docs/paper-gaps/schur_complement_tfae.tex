@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Schur Complement TFAE --- Open Gap}
+\author{}
+\date{2026-08-04}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and
+Schur complements). Let $P$, $R$ be positive semi-definite complex matrices
+and $Q$ a complex matrix of compatible dimensions. Then the following are
+equivalent:
+\begin{enumerate}
+  \item the block matrix
+    $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
+    is positive semi-definite;
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    \begin{align}
+      P \ge Q R^{+} Q^\dagger,
+      \tag{Wolf, Theorem 5.2 (2)}
+    \end{align}
+    where $R^{+}$ is the pseudo-inverse (the inverse on the support);
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+\end{enumerate}
+
+\section{Gap}
+Only the objects entering the statement are formalised: the block matrix
+itself, its self-adjointness for Hermitian diagonal blocks, and the
+pseudoinverse Schur complement $P - Q R^{+} Q^\dagger$.\footnote{Formal
+declarations: \leanid{SchurComplement.blockMatrix},
+\leanid{SchurComplement.blockMatrix_isHermitian}, and
+\leanid{SchurComplement.schurComplement} in
+\doclink{TNLean/Channel/Schwarz/SchurComplement}.}
+No direction of the equivalence has a formal statement yet. The standard
+argument has three steps:
+\begin{enumerate}
+  \item[(1)$\Rightarrow$(2)] Quadratic-form minimisation: for the block matrix
+    $\bigl[\begin{smallmatrix} P & Q \\ Q^\dagger & R \end{smallmatrix}\bigr]$,
+    the optimal choice $y = -R^{+} Q^\dagger x$ gives
+    $x^\dagger (P - Q R^{+} Q^\dagger) x \ge 0$ for all~$x$.
+  \item[(2)$\Rightarrow$(3)] Algebraic manipulation with $P^{1/2}$ and
+    $R^{1/2}$ rewrites $P \ge Q R^{+} Q^\dagger$ as
+    $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+  \item[(3)$\Rightarrow$(1)] The contraction form gives the block PSD
+    decomposition via $K = P^{-1/2} Q R^{-1/2}$ with $\|K\| \le 1$, using the
+    operator-norm characterisation $\|L\| \le 1 \iff L L^\dagger \le I$.
+\end{enumerate}
+
+\section{Verdict}
+\textbf{Open gap}. The cited equivalence has no formal statement; only the
+block-matrix definitions it involves are formalised.
+
+\end{document}
