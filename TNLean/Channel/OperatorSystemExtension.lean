@@ -539,6 +539,22 @@ theorem complexify_apply_of_isHermitian (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) {
   rw [h1, h2, map_zero]
   simp
 
+/-- `complexify g` is Hermiticity-preserving-to-conjugate: `complexify g Xᴴ =
+star (complexify g X)` for every `X`, not only Hermitian `X`. -/
+theorem complexify_conjTranspose (g : Matrix ι ι ℂ →ₗ[ℝ] ℝ) (X : Matrix ι ι ℂ) :
+    complexify g Xᴴ = star (complexify g X) := by
+  have hH1 : hermPart1 Xᴴ = hermPart1 X := by
+    unfold hermPart1
+    rw [Matrix.conjTranspose_conjTranspose, add_comm]
+  have hH2 : hermPart2 Xᴴ = -hermPart2 X := by
+    unfold hermPart2
+    rw [Matrix.conjTranspose_conjTranspose,
+      show Xᴴ - X = -(X - Xᴴ) from by abel, smul_neg]
+  rw [complexify_apply, complexify_apply, hH1, hH2, map_neg]
+  rw [star_add, star_mul', star_I]
+  simp only [Complex.star_def, Complex.conj_ofReal, Complex.ofReal_neg]
+  ring
+
 end Complexify
 
 /-! ### The complex-linear extension of `τ` -/
@@ -611,5 +627,30 @@ theorem exists_tau_extension {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
         (tau T ⟨1, one_mem_tensorSubmodule hS⟩).re := hg_agree ⟨1, hone_herm⟩
     rw [hg1]
     exact hg_le X
+
+/-! ### Riesz representation of `τ'` -/
+
+/-- The matrix representing `τ'` via the trace pairing: `τ'(X) = tr[Y X]`
+(`trace_rieszMatrix_mul`). -/
+noncomputable def rieszMatrix (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ) :
+    Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ :=
+  fun a b => tau' (Matrix.single b a 1)
+
+theorem trace_rieszMatrix_mul [NeZero m] [NeZero n]
+    (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ)
+    (X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) :
+    Matrix.trace (rieszMatrix tau' * X) = tau' X := by
+  haveI : Nonempty (Fin m) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne m)⟩⟩
+  haveI : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne n)⟩⟩
+  refine Matrix.induction_on X ?_ ?_
+  · intro p q hp hq
+    rw [Matrix.mul_add, Matrix.trace_add, hp, hq, map_add]
+  · intro i j z
+    rw [Matrix.trace_mul_single]
+    change MulOpposite.op z • rieszMatrix tau' j i = tau' (Matrix.single i j z)
+    simp only [rieszMatrix, MulOpposite.smul_eq_mul_unop, MulOpposite.unop_op]
+    rw [show (Matrix.single i j z : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) =
+        z • Matrix.single i j 1 from by rw [Matrix.smul_single, smul_eq_mul, mul_one],
+      map_smul, smul_eq_mul, mul_comm]
 
 end Matrix
