@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
+import TNLean.MPS.MPDO.RFPViaTS
 import Mathlib.Analysis.Matrix.Order
 
 /-!
@@ -808,5 +809,30 @@ theorem R_isMPDO : IsMPDO R := by
   rw [key]
   exact ((chainIndicator_posSemidef N).hadamard ((wN_posSemidef N).submatrix (φ N))).smul
     (by positivity)
+
+/-! ### IsRFPViaTS — the tp-CP renormalization maps
+
+The physical index `Fin 4` of `R` factors through the same bit reading used
+above: a physical index `p` carries the pair `(bit1 p, bit2 p)`.  `combine p q`
+glues the first bit of `p` to the second bit of `q`, and `gate p q` is the
+bond-matching condition between two consecutive letters.  The two-site
+physical operator `physClose2 R X` is a rescaled, gate-restricted pullback of
+the one-site physical operator `physClose1 R X` along `combine`. -/
+
+/-- The physical index gluing the first bit of `p` to the second bit of `q`. -/
+def combine (p q : Fin 4) : Fin 4 := bondEquiv (bit1 p, bit2 q)
+
+@[simp] lemma bit1_combine (p q : Fin 4) : bit1 (combine p q) = bit1 p := by
+  simp [combine, bit1_eq_bondEquiv_symm_fst]
+
+@[simp] lemma bit2_combine (p q : Fin 4) : bit2 (combine p q) = bit2 q := by
+  simp [combine, bit2_eq_bondEquiv_symm_snd]
+
+/-- The bond-matching condition between two consecutive physical letters:
+the second bit of `p` equals the first bit of `q`. -/
+def gate (p q : Fin 4) : Prop := bit2 p = bit1 q
+
+instance decidableGate (p q : Fin 4) : Decidable (gate p q) :=
+  inferInstanceAs (Decidable (bit2 p = bit1 q))
 
 end MPOTensor.RescalingStableLengthDependentRFP
