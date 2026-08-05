@@ -19,9 +19,9 @@
   % below it is the summed physical index j.
   \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
     \tn[at=(1,1), skin=pill, wide=2, name=U,
-      ports={90@1:physical:$i_1$, 90@2:physical:$i_2$, 270:virtual}]{U}
+      ports={90@1:physical:$i_1$, 90@2:physical:$i_2$, 270:physical}]{U}
     \tn[at=(2,1), skin=box, wide=2, name=A,
-      ports={180:virtual, 0:virtual, 90:virtual}]{A}
+      ports={180:virtual, 0:virtual, 90:physical}]{A}
     \tnwire{U.270}{A.90}
   \end{tenkz}
 \]
