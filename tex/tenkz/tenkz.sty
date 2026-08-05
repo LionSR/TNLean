@@ -1,6 +1,6 @@
 % Input: public tenkz syntax and the package's staged implementation files.
 % Output: picture environments, composition wrappers, and setup declarations.
-% Owned state: none; this file is a logic-free dependency and stage load map.
+% Owned state: none; this file is the dependency probe and stage load map.
 % Invariants: language loads before model, shared services, and dialect renderers.
 % Next stage: tenkz-language.code.tex validates and registers public syntax.
 %
@@ -17,6 +17,17 @@
 \RequirePackage{tikz-cd}
 \usetikzlibrary{calc,arrows.meta,backgrounds,decorations.pathreplacing,
   decorations.markings,fit,shapes.geometric,hobby,spath3,intersections}
+
+% A store whose key count grows with the picture is declared through this
+% door.  expl3's default property list is a flat token list, so every lookup
+% compares the wanted key against all the others: a picture with n keys pays
+% n^2 to read itself.  The indexed representation answers a key in one step.
+% Where it is absent the flat store still answers correctly, only slowly.
+\ExplSyntaxOn
+\cs_if_exist:NTF \prop_new_linked:N
+  { \cs_new_eq:NN \__tenkz_prop_new_indexed:N \prop_new_linked:N }
+  { \cs_new_eq:NN \__tenkz_prop_new_indexed:N \prop_new:N }
+\ExplSyntaxOff
 
 \input{tenkz-language.code.tex}
 \input{tenkz-model.code.tex}
