@@ -28,6 +28,7 @@ import TNLean.Channel.Schwarz.PositiveMapProperties
 import TNLean.Channel.Schwarz.PositiveOnAbelian
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Basic
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Characterization
+import TNLean.Channel.Schwarz.PositiveOnAbelian.CompletePositivity
 import TNLean.Channel.Schwarz.PositiveOnAbelian.Consequences
 import TNLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity
 import TNLean.Channel.Schwarz.RelativeEntropyConvexity
