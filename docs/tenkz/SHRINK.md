@@ -1482,3 +1482,23 @@ composition/layout 218); no ceiling moves.  No parser spelling, registry
 row, alias, escape, or overload is added or removed.
 
 Census-correction: #5347
+
+### 2026-08-05 — seven Section-III-A workbench panels enter the kernel (wave 2A)
+
+The eq50, eq51, eq52, diagram-two, eq50-reduced, f-symbol-simplified-a,
+and mpo-representation cases leave the grid tier. Each now states its
+model on the kernel: flat frames with canonical addresses, typed ports on
+every mpo atom, and the source-red operator palette recorded as the
+declared mpo species on the simplified F-symbol and O_a panels. The
+eq50-reduced and O_a panels drop the labels their 0.7 drawings invented,
+and the traced chains book the closure-ink residue — identified extended
+ends where the sources draw the racetrack return — as one K1 renderer
+item on the gap bar (eq51, eq52, diagram-two).
+
+M4 rises from 19.75 to 20.14 because the kernel cases declare the ports,
+species, and wires their one-line grid spellings implied. The owned
+dimension census is unchanged at 478 sites (route/string 260,
+composition/layout 218), and no parser spelling, registry row, alias,
+escape, overload, or page-distance constant is added.
+
+Census-correction: #5347
