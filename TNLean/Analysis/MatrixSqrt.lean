@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.PosSemidefSupport
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.TraceCFC
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
@@ -689,6 +690,118 @@ theorem PosSemidef.star_dotProduct_supportInv_mulVec_eq_of_mulVec_eq
     _ = star (P *ᵥ b) ⬝ᵥ x := by
       rw [hS.isHermitian.supportProj_isHermitian.star_mulVec_dotProduct]
     _ = star b ⬝ᵥ x := by rw [hb]
+
+/-- A positive-semidefinite matrix's support projection is itself positive
+semidefinite: it is the congruence `Ainv * A * Ainv` of `A` by its own support
+inverse square root. -/
+theorem PosSemidef.supportProj_posSemidef {A : Matrix n n ℂ} (hA : A.PosSemidef) :
+    hA.supportProj.PosSemidef := by
+  have h := hA.conjTranspose_mul_mul_same hA.supportInvSqrt
+  rwa [hA.supportInvSqrt_isHermitian.eq,
+    hA.supportInvSqrt_mul_self_mul_supportInvSqrt] at h
+
+/-- The complementary projection `1 - supportProj A` is positive semidefinite:
+support projections are Hermitian idempotents, and so is their complement,
+which makes the quadratic form a squared norm. -/
+theorem PosSemidef.one_sub_supportProj_posSemidef {A : Matrix n n ℂ}
+    (hA : A.PosSemidef) : (1 - hA.supportProj).PosSemidef := by
+  have hHerm : (1 - hA.supportProj).IsHermitian :=
+    hA.isHermitian.one_sub_supportProj_isHermitian
+  have hIdem : (1 - hA.supportProj) * (1 - hA.supportProj) = 1 - hA.supportProj :=
+    hA.isHermitian.one_sub_supportProj_idem
+  refine Matrix.PosSemidef.of_dotProduct_mulVec_nonneg hHerm fun x => ?_
+  calc
+    (0 : ℂ) ≤ star ((1 - hA.supportProj) *ᵥ x) ⬝ᵥ ((1 - hA.supportProj) *ᵥ x) :=
+      dotProduct_star_self_nonneg _
+    _ = star x ⬝ᵥ ((1 - hA.supportProj) *ᵥ ((1 - hA.supportProj) *ᵥ x)) := by
+        rw [hHerm.star_mulVec_dotProduct]
+    _ = star x ⬝ᵥ (((1 - hA.supportProj) * (1 - hA.supportProj)) *ᵥ x) := by
+        rw [Matrix.mulVec_mulVec]
+    _ = star x ⬝ᵥ ((1 - hA.supportProj) *ᵥ x) := by rw [hIdem]
+
+/-- **Congruence criterion for positive-semidefinite domination.** For
+positive-semidefinite `A`, `B` with `ker A ⊆ ker B` and a positive real `c`,
+`A - c • B` is positive semidefinite iff `c` times the operator norm of `B`
+sandwiched by `A`'s support inverse square root is at most `1`. This is the
+finite-dimensional congruence fact behind Wolf's characterization of maximal
+convex-decomposition weights (Ch. 1, "Maximal weight in convex decomposition"). -/
+theorem PosSemidef.sub_smul_posSemidef_iff
+    {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) {c : ℝ} (hc : 0 < c)
+    (hker : ∀ v : n → ℂ, A *ᵥ v = 0 → B *ᵥ v = 0) :
+    (A - c • B).PosSemidef ↔ c * ‖hA.supportInvSqrt * B * hA.supportInvSqrt‖ ≤ 1 := by
+  set P := hA.supportProj with hPdef
+  set Ainv := hA.supportInvSqrt with hAinvdef
+  set S := hA.isHermitian.cfc Real.sqrt with hSdef
+  set Q := Ainv * B * Ainv with hQdef
+  have hQpsd : Q.PosSemidef := by
+    have h := hB.conjTranspose_mul_mul_same Ainv
+    rwa [hA.supportInvSqrt_isHermitian.eq] at h
+  have hPpsd : P.PosSemidef := hA.supportProj_posSemidef
+  have hPle1 : P ≤ 1 := Matrix.le_iff.mpr hA.one_sub_supportProj_posSemidef
+  have hBP : B * P = B := hA.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le hker
+  have hPB : P * B = B := by
+    have h2 := congrArg Matrix.conjTranspose hBP
+    rwa [Matrix.conjTranspose_mul, hA.supportProj_isHermitian.eq, hB.isHermitian.eq] at h2
+  have hAinvP : Ainv * P = Ainv := hA.supportInvSqrt_mul_supportProj
+  have hPAinv : P * Ainv = Ainv := hA.supportProj_mul_supportInvSqrt
+  have hSP : S * P = S := hA.cfc_sqrt_mul_supportProj
+  have hAinvS : Ainv * S = P := hA.supportInvSqrt_mul_cfc_sqrt
+  have hSAinv : S * Ainv = P := by
+    have h2 := congrArg Matrix.conjTranspose hAinvS
+    rwa [Matrix.conjTranspose_mul, hA.cfc_sqrt_isHermitian.eq,
+      hA.supportInvSqrt_isHermitian.eq, hA.supportProj_isHermitian.eq] at h2
+  have hPQP : P * Q * P = Q := by
+    have : P * Q * P = (P * Ainv) * B * (Ainv * P) := by
+      rw [hQdef]; simp only [Matrix.mul_assoc]
+    rw [this, hPAinv, hAinvP]
+  have hSS : S * S = A := hA.cfc_sqrt_mul_self
+  have hAinvAAinv : Ainv * A * Ainv = P := hA.supportInvSqrt_mul_self_mul_supportInvSqrt
+  have hcong1 : Ainv * (A - c • B) * Ainv = P - c • Q := by
+    rw [Matrix.mul_sub, Matrix.sub_mul, hAinvAAinv]
+    have : Ainv * (c • B) * Ainv = c • Q := by
+      rw [mul_smul_comm, smul_mul_assoc, hQdef]
+    rw [this]
+  have hcong2 : S * (P - c • Q) * S = A - c • B := by
+    rw [Matrix.mul_sub, Matrix.sub_mul]
+    have h1 : S * P * S = A := by rw [hSP, hSS]
+    have h2 : S * (c • Q) * S = c • B := by
+      have hQeq : S * Q * S = B := by
+        have : S * Q * S = (S * Ainv) * B * (Ainv * S) := by
+          rw [hQdef]; simp only [Matrix.mul_assoc]
+        rw [this, hSAinv, hAinvS, hPB, hBP]
+      rw [mul_smul_comm, smul_mul_assoc, hQeq]
+    rw [h1, h2]
+  constructor
+  · intro hsub
+    have hPcQpsd : (P - c • Q).PosSemidef := by
+      have h := hsub.conjTranspose_mul_mul_same Ainv
+      rwa [hA.supportInvSqrt_isHermitian.eq, hcong1] at h
+    have hcQleP : c • Q ≤ P := Matrix.le_iff.mpr hPcQpsd
+    have hcQle1 : c • Q ≤ 1 := le_trans hcQleP hPle1
+    have hcQpsd : (c • Q).PosSemidef := hQpsd.smul hc.le
+    have hnorm : ‖c • Q‖ ≤ 1 :=
+      (CStarAlgebra.norm_le_one_iff_of_nonneg (c • Q)
+        (Matrix.nonneg_iff_posSemidef.mpr hcQpsd)).mpr hcQle1
+    rwa [norm_smul, Real.norm_of_nonneg hc.le] at hnorm
+  · intro hnorm
+    have hcQpsd : (c • Q).PosSemidef := hQpsd.smul hc.le
+    have hnorm' : ‖c • Q‖ ≤ 1 := by
+      rwa [norm_smul, Real.norm_of_nonneg hc.le]
+    have hcQle1 : c • Q ≤ 1 :=
+      (CStarAlgebra.norm_le_one_iff_of_nonneg (c • Q)
+        (Matrix.nonneg_iff_posSemidef.mpr hcQpsd)).mp hnorm'
+    have h1cQpsd : (1 - c • Q).PosSemidef := Matrix.le_iff.mp hcQle1
+    have hPcQpsd : (P - c • Q).PosSemidef := by
+      have h := h1cQpsd.conjTranspose_mul_mul_same P
+      rw [hPpsd.isHermitian.eq] at h
+      have hPP : P * P = P := hA.isHermitian.supportProj_idem
+      have hPcQP : P * (c • Q) * P = c • Q := by
+        rw [mul_smul_comm, smul_mul_assoc, hPQP]
+      have heq : P * (1 - c • Q) * P = P - c • Q := by
+        rw [Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_one, hPP, hPcQP]
+      rwa [heq] at h
+    have h := hPcQpsd.conjTranspose_mul_mul_same S
+    rwa [hA.cfc_sqrt_isHermitian.eq, hcong2] at h
 
 /-- A finite dependent block diagonal of positive-semidefinite matrices is
 positive semidefinite. -/

@@ -42,6 +42,7 @@ import TNLean.Channel.LorentzNormalForm.QubitNormalForm
 import TNLean.Channel.MarginalSupportAbsorption
 import TNLean.Channel.MarginalSupportWhitenedChoi
 import TNLean.Channel.MaximalOverlap
+import TNLean.Channel.MaximalWeightConvexDecomposition
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.NPositivitySpectralCriterion

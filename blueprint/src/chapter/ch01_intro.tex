@@ -180,3 +180,60 @@ that exhibits its entanglement directly.
     equals the rank of the diagonal matrix of Schmidt coefficients, which is
     the number of nonzero entries.
 \end{proof}
+
+\section{Maximal weight in convex decomposition}
+
+Given a density operator $\rho$ and a candidate term $\rho_1$, how large a
+weight can $\rho_1$ carry in a convex decomposition of $\rho$?
+
+\begin{definition}[Convex decomposition with a distinguished term]
+    \label{def:convex_decomposition_with}
+    \lean{Matrix.HasConvexDecompositionWith}
+    \leanok
+    For density operators $\rho,\rho_1$ on the same space and $c\in\R$, $\rho$
+    has a convex decomposition with $\rho_1$ carrying weight $c$ when
+    $\rho=\sum_i\lambda_i\rho_i$ for some finite index set, with every
+    $\rho_i$ a density operator, every $\lambda_i\ge0$, $\sum_i\lambda_i=1$,
+    and some index $i_1$ with $\lambda_{i_1}=c$, $\rho_{i_1}=\rho_1$.
+\end{definition}
+
+\begin{theorem}[Maximal weight in convex decomposition]
+    \label{thm:maximal_weight_convex_decomposition}
+    \lean{Matrix.hasConvexDecompositionWith_iff}
+    \leanok
+    \uses{def:convex_decomposition_with}
+    Let $\rho$ and $\rho_1$ be two density operators acting on the same
+    space and let $c>0$. There is a convex decomposition of the form
+    $\rho=\sum_i\lambda_i\rho_i$ with $\rho_1$ carrying weight $c$ iff
+    $\ker(\rho)\subseteq\ker(\rho_1)$ and
+    \[
+        c \le \bigl\|\rho^{-1/2}\rho_1\rho^{-1/2}\bigr\|_\infty^{-1},
+    \]
+    where the inverse is taken on the range of $\rho$. This is
+    \cite[Proposition, ``Maximal weight in convex decomposition'']
+    {Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Necessity of the kernel inclusion: if $\rho v=0$ for some vector $v$,
+    every term in $\rho=\sum_i\lambda_i\rho_i$ is positive semidefinite, so
+    each summand's quadratic form at $v$ vanishes; in particular
+    $\lambda_{i_1}\langle v,\rho_1v\rangle=0$, and since $\lambda_{i_1}=c>0$
+    and $\rho_1$ is positive semidefinite, $\rho_1v=0$
+    (\lean{Matrix.ker_subset_of_hasConvexDecompositionWith}).
+
+    The existence of a decomposition with weight $c$ on $\rho_1$ is
+    equivalent to $\rho-c\rho_1\ge0$: given the kernel inclusion, the
+    remaining terms of the decomposition sum to $\rho-c\rho_1$, itself a
+    positive-semidefinite combination; conversely, when
+    $\rho-c\rho_1\ge0$ its trace is $1-c\ge0$, so either $c=1$ and
+    $\rho=\rho_1$ (a zero-trace positive-semidefinite matrix vanishes), or
+    $c<1$ and $\sigma:=(1-c)^{-1}(\rho-c\rho_1)$ is a density operator with
+    $\rho=c\rho_1+(1-c)\sigma$.
+
+    Finally $\rho-c\rho_1\ge0$ rewrites as $1\ge c\,\rho^{-1/2}\rho_1
+    \rho^{-1/2}$, using the kernel inclusion to compress both sides onto
+    the range of $\rho$ and conjugating by $\rho^{-1/2}$ there; by the
+    $C^*$-identity this holds iff $c\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty
+    \le 1$.
+\end{proof}
