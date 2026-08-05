@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LengthIndependentCoefficients
+import Mathlib.Analysis.Matrix.Order
 
 /-!
 # A rescaling-stable length-dependent coefficient family
@@ -23,6 +24,11 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   $c_s^{(L)} = s^L(1 + (7/25)^L)$, which is not length-independent
   for any $s > 0$.
 
+It also provides PSD infrastructure toward the remaining `IsMPDO R` gap
+(preliminary framework, not yet connected to `R`; see *Remaining gap* below):
+`chainIndicator_posSemidef`, `wMat_posSemidef`, `wN_posSemidef`, and
+`coeff_sq_eq_wMat`.
+
 ## Tensor definition
 
 The four 2×2 letter matrices are scaled matrix units:
@@ -40,11 +46,12 @@ where `(p,q)` are physical indices and `(a,b)` are bond indices.
 ## Remaining gap
 
 * `IsMPDO R`: the closed operator factors exactly as
-  `mpo R N = (25/32)^N · B · W_N · Bᵀ`, where `B` is the boundary partial
-  isometry (`BᵀB = 1`) and `W_N(a,b) = ∏_n W (a n) (b n)` with
-  `W = !![16/25, 9/25; 9/25, 16/25]`; `W` has eigenvalues `{1, 7/25}` —
-  the `χ = diag(1, 7/25)` of the coefficient family.  Positivity follows
-  from `W_N = Σ_s (∏_n λ_{s n}) • vecMulVec (e_s) (star (e_s))`
+  `mpo R N = (25/32)^N · B * wN N * Bᵀ`, where `B` is the boundary partial
+  isometry (`BᵀB = 1`) and `wN N a b = ∏ n, wMat (a n) (b n)` with
+  `wMat = !![16/25, 9/25; 9/25, 16/25]`; `wMat` has eigenvalues
+  `{1, 7/25}` — the `χ = diag(1, 7/25)` of the coefficient family.
+  Positivity follows from
+  `wN N = Σ_s (∏_n λ_{s n}) • vecMulVec (e_s) (star (e_s))`
   (Walsh–Hadamard basis, `λ ∈ {1, 7/25}`) and the `B`-congruence.  The
   local-purification (LPDO) route does NOT apply: the undone-vertical
   letters entangle bra- and ket-side labels, so no purification tensor
@@ -274,5 +281,208 @@ theorem oneLabelCoeffs_rescaling_stable_not_lengthIndependent (s : ℝ)
   rw [hlambda] at key
   norm_num at key
 
-end MPOTensor.RescalingStableLengthDependentRFP
 
+/-! ### IsMPDO — positivity of the MPO family
+
+The strategy: factor `mpo R N = (25/32)^N · C ⊙ M` where `C` is the
+chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of the Kronecker
+power `wN N` of `wMat` (PSD by congruence).  Their Hadamard product is PSD
+by the Schur product theorem, and scaling by `(25/32)^N ≥ 0` preserves PSD.
+
+The entrywise formula for `mpo R N` (the only remaining gap) is verified
+by direct analysis of the cyclic sum; the bond‑chain constraints collapse
+the sum to at most one term.  A fully formal proof of this formula is
+in progress. -/
+
+/-- The first bit of a bond label `k : Fin 4` under the Kronecker
+identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
+`bit1 k = (bondEquiv.symm k).1` (`bit1_eq_bondEquiv_symm_fst`).
+Together with `bit2` it reads a bond
+label as the pair of bits indexing the two tensor factors of the vertical
+(Kronecker) reading `B^{ab} = A^a ⊗ conj(A^b)`.
+
+Project example; not from CPSV16. -/
+def bit1 : Fin 4 → Fin 2
+  | 0 => 0
+  | 1 => 0
+  | 2 => 1
+  | 3 => 1
+
+/-- The second bit of a bond label `k : Fin 4` under `bondEquiv`:
+`bit2 k = (bondEquiv.symm k).2` (`bit2_eq_bondEquiv_symm_snd`).
+See `bit1`.
+
+Project example; not from CPSV16. -/
+def bit2 : Fin 4 → Fin 2
+  | 0 => 0
+  | 1 => 1
+  | 2 => 0
+  | 3 => 1
+
+/-- The first bit of a bond label is the first component of its preimage
+under `bondEquiv`. -/
+@[simp] lemma bit1_eq_bondEquiv_symm_fst (k : Fin 4) :
+    bit1 k = (bondEquiv.symm k).1 := by
+  fin_cases k <;> rfl
+
+/-- The second bit of a bond label is the second component of its preimage
+under `bondEquiv`. -/
+@[simp] lemma bit2_eq_bondEquiv_symm_snd (k : Fin 4) :
+    bit2 k = (bondEquiv.symm k).2 := by
+  fin_cases k <;> rfl
+
+/-- The entrywise positive square root of `wMat` (`coeff_sq_eq_wMat`).  The
+values `4/5` and `3/5` are the scaling factors already encoded in the
+letter matrices `A`: `coeff' i j` is the unique nonzero entry of the
+letter supported on the matrix unit `E_{ij}`, namely `4/5` for the
+diagonal letters `A 0`, `A 1` and `3/5` for the off-diagonal letters
+`A 2`, `A 3`; the consistency check `A_entry_eq_coeff'` ties these values
+back to `A`.
+
+Project example; not from CPSV16. -/
+def coeff' : Fin 2 → Fin 2 → ℂ
+  | 0, 0 => 4/5
+  | 0, 1 => 3/5
+  | 1, 0 => 3/5
+  | 1, 1 => 4/5
+
+/-- Consistency of the explicit values in `coeff'` with the letter
+matrices `A`: every nonzero entry of every letter `A a` at position
+`(r, c)` equals `coeff' r c`. -/
+lemma A_entry_eq_coeff' {a : Fin 4} {r c : Fin 2} (h : A a r c ≠ 0) :
+    A a r c = coeff' r c := by
+  fin_cases a <;> fin_cases r <;> fin_cases c <;> simp_all [A, coeff']
+
+/-- The cyclic bond-matching condition on a physical-index string
+`p : Fin N → Fin 4`: the second bit of each letter equals the first bit of
+the next letter around the ring (`bit2 (p n) = bit1 (p (n + 1))`, with the
+successor given by `finRotate N`).  This closed-chain constraint
+collapses the bond sum in the entrywise formula for `mpo R N` to at most
+one term.
+
+Project example; not from CPSV16. -/
+def ChainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
+  ∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))
+
+/-- `ChainOK N p` is decidable: it is a `Fin N`-indexed universal
+quantification of equalities between `Fin 2` values. -/
+instance decidableChainOK (N : ℕ) (p : Fin N → Fin 4) : Decidable (ChainOK N p) :=
+  inferInstanceAs (Decidable (∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))))
+
+/-- The indicator matrix of the cyclic bond-matching condition:
+`(chainIndicator N) p q = 1` if both `p` and `q` satisfy `ChainOK N`, and
+`0` otherwise.  It is the rank-one matrix `vecMulVec c (star c)` for the
+indicator vector `c` of `ChainOK N`, hence positive semidefinite
+(`chainIndicator_posSemidef`); in the planned factorization of `mpo R N`
+it is the chain-OK factor `C`.
+
+Project example; not from CPSV16. -/
+noncomputable def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
+  Matrix.of fun p q => if ChainOK N p ∧ ChainOK N q then (1 : ℂ) else 0
+
+/-- The chain-OK indicator matrix is positive semidefinite: it is the
+rank-one matrix `vecMulVec c (star c)` for the `ChainOK` indicator vector
+`c`. -/
+lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
+  let c : (Fin N → Fin 4) → ℂ := fun p => if ChainOK N p then (1 : ℂ) else 0
+  have h_eq : chainIndicator N = Matrix.vecMulVec c (star c) := by
+    ext p q
+    dsimp [chainIndicator, c, Matrix.vecMulVec, Matrix.mul_apply, Matrix.of_apply]
+    by_cases hp : ChainOK N p <;> by_cases hq : ChainOK N q
+    · simp [hp, hq]
+    · simp [hp, hq]
+    · simp [hp, hq]
+    · simp [hp, hq]
+  rw [h_eq]
+  exact Matrix.posSemidef_vecMulVec_self_star c
+
+/-- The local factor `wMat = !![16/25, 9/25; 9/25, 16/25]` of the
+Kronecker-power factorization of the closed operator, entrywise the
+square of `coeff'` (`coeff_sq_eq_wMat`).  Its eigenvalues are `1` and
+`7/25` — the `χ = diag(1, 7/25)` of the one-label coefficient family
+`oneLabelChi`.
+
+Project example; not from CPSV16. -/
+def wMat : Matrix (Fin 2) (Fin 2) ℂ :=
+  !![(4/5 : ℂ)^2, (3/5 : ℂ)^2; (3/5 : ℂ)^2, (4/5 : ℂ)^2]
+
+/-- The `N`-fold Kronecker power of `wMat`, entrywise:
+`wN N a b = ∏ n, wMat (a n) (b n)`.  In the planned factorization the
+closed operator is `(25/32)^N • (B * wN N * Bᴴ)` for the boundary map `B`.
+
+Project example; not from CPSV16. -/
+def wN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
+  Matrix.of fun a b => ∏ n : Fin N, wMat (a n) (b n)
+
+/-- `wMat` is positive semidefinite: `wMat = (7/25) • 1 + (9/25) • J` with
+`J = !![1, 1; 1, 1]` rank-one PSD — the spectral decomposition with
+eigenvalues `1` and `7/25`. -/
+lemma wMat_posSemidef : wMat.PosSemidef := by
+  let J : Matrix (Fin 2) (Fin 2) ℂ := !![(1 : ℂ), (1 : ℂ); (1 : ℂ), (1 : ℂ)]
+  have hJ : J.PosSemidef := by
+    have hJ_eq : J = Matrix.vecMulVec (fun (_ : Fin 2) => (1 : ℂ))
+        (star (fun (_ : Fin 2) => (1 : ℂ))) := by
+      ext i j; fin_cases i <;> fin_cases j <;> dsimp [J, Matrix.vecMulVec, star] <;> norm_num
+    rw [hJ_eq]; exact Matrix.posSemidef_vecMulVec_self_star _
+  have hI : ((1 : Matrix (Fin 2) (Fin 2) ℂ)).PosSemidef :=
+    Matrix.PosSemidef.one
+  have h_eq : wMat = ((7 : ℂ)/25) • (1 : Matrix (Fin 2) (Fin 2) ℂ) + ((9 : ℂ)/25) • J := by
+    ext i j; fin_cases i <;> fin_cases j <;> norm_num [wMat, J]
+  rw [h_eq]
+  refine Matrix.PosSemidef.add ?_ ?_
+  · have h7 : (0 : ℂ) ≤ (7/25 : ℂ) := by positivity
+    refine Matrix.PosSemidef.smul hI h7
+  · have h9 : (0 : ℂ) ≤ (9/25 : ℂ) := by positivity
+    refine Matrix.PosSemidef.smul hJ h9
+
+/-- The Kronecker power `wN N` is positive semidefinite: by induction on
+`N`, `wN (N + 1)` is a submatrix of the Kronecker product `wN N ⊗ wMat`
+of positive semidefinite matrices, along the last-coordinate peeling
+equivalence `Fin.succFunEquiv`. -/
+lemma wN_posSemidef (N : ℕ) : (wN N).PosSemidef := by
+  induction N with
+  | zero =>
+      have h_one : wN 0 = (1 : Matrix (Fin 0 → Fin 2) (Fin 0 → Fin 2) ℂ) := by
+        ext a b
+        have h_eq : a = b := Subsingleton.elim _ _
+        subst h_eq; simp [wN, Matrix.of_apply]
+      rw [h_one]
+      exact Matrix.PosSemidef.one
+  | succ N ih =>
+      let e : (Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2 :=
+        Fin.succFunEquiv (Fin 2) N
+      have h_fst : ∀ f : Fin (N + 1) → Fin 2, (e f).1 = f ∘ Fin.castSucc :=
+        fun f => funext fun i => rfl
+      have h_snd : ∀ f : Fin (N + 1) → Fin 2, (e f).2 = f (Fin.last N) :=
+        fun f => rfl
+      have h_submatrix : (wN (N + 1)) =
+          (Matrix.kroneckerMap (· * ·) (wN N) wMat).submatrix e e := by
+        ext a b
+        simp [wN, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.of_apply,
+          h_fst, h_snd, Fin.prod_univ_castSucc, Function.comp_apply]
+      rw [h_submatrix]
+      exact Matrix.PosSemidef.submatrix (Matrix.PosSemidef.kronecker ih wMat_posSemidef) e
+
+/-- The pullback map extracting the first-bit string of a physical-index
+string: `(φ N p) n = bit1 (p n)`.  In the planned factorization it pulls
+`wN N` back to the `(Fin N → Fin 4)`-indexed space as
+`Matrix.of fun p q => (wN N) (φ N p) (φ N q)`.
+
+Project example; not from CPSV16. -/
+def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bit1 (p n)
+
+/-- `wMat` is the entrywise square of `coeff'`: the local factor's entries
+are the squared magnitudes of the letter-matrix entries. -/
+lemma coeff_sq_eq_wMat (i j : Fin 2) : (coeff' i j)^2 = wMat i j := by
+  fin_cases i <;> fin_cases j <;> norm_num [coeff', wMat]
+
+/-! ### Remaining gap
+
+The entrywise formula `mpo_R_entry_formula` and the pullback equality —
+the pullback of `wN N` along `φ N`, namely
+`Matrix.of fun p q => (wN N) (φ N p) (φ N q)`, equals `B * wN N * Bᴴ` for
+`B` the boundary map — are a work in progress.  When completed, the main
+theorem `R_isMPDO` follows by the Hadamard (Schur) product argument via
+`Matrix.PosSemidef.hadamard`. -/
+
+end MPOTensor.RescalingStableLengthDependentRFP
