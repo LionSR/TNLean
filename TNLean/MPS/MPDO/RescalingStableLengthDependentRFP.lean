@@ -997,4 +997,80 @@ lemma refineKraus_resolution :
       rw [if_pos h1, if_neg h2, mul_zero]
     · rw [if_neg h1, star_zero, zero_mul]
 
+/-- **`refineMap` is trace-preserving completely positive.** -/
+theorem refineMap_isKrausCPTP : IsKrausCPTP refineMap :=
+  Matrix.rectangularKrausMap_isKrausCPTP refineKraus refineKraus_resolution
+
+lemma wMat_eigen_reconstruction (b b' : Fin 2) :
+    ∑ s : Fin 2, (eigVals s : ℂ) * eigVecs s b * eigVecs s b' = 2 * wMat b b' := by
+  fin_cases b <;> fin_cases b' <;> simp [Fin.sum_univ_two, eigVecs, eigVals, wMat, lambda] <;> ring
+
+/-- **`refineMap` sends the one-site physical operator of `R` to the two-site
+physical operator.** Together with `refineMap_isKrausCPTP`, this supplies the
+`T`-map equation of Definition 4.1 for `R`. -/
+theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
+    refineMap (physClose1 R X) = physClose2 R X := by
+  ext ⟨i1, i2⟩ ⟨j1, j2⟩
+  rw [physClose2_R_entry]
+  show (∑ s : Fin 2, refineKraus s * physClose1 R X * (refineKraus s)ᴴ) (i1, i2) (j1, j2) = _
+  simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
+  by_cases h : gate i1 i2 ∧ gate j1 j2
+  · have hstep : ∀ s : Fin 2,
+        (∑ k : Fin 4, (∑ l : Fin 4, refineKraus s (i1, i2) l * physClose1 R X l k) *
+            star (refineKraus s (j1, j2) k)) =
+          (refineAmp s : ℂ) ^ 2 * eigVecs s (bit2 i1) * eigVecs s (bit2 j1) *
+            physClose1 R X (combine i1 i2) (combine j1 j2) := by
+      intro s
+      have hl : ∀ k : Fin 4, (∑ l : Fin 4, refineKraus s (i1, i2) l * physClose1 R X l k) =
+          (refineAmp s : ℂ) * eigVecs s (bit2 i1) * physClose1 R X (combine i1 i2) k := by
+        intro k
+        rw [Finset.sum_eq_single (combine i1 i2)]
+        · simp [refineKraus, h.1]
+        · intro l _ hl
+          simp only [refineKraus, Matrix.of_apply]
+          rw [if_neg (fun hc => hl hc.2.symm)]
+          ring
+        · simp
+      simp_rw [hl]
+      rw [Finset.sum_eq_single (combine j1 j2)]
+      · simp only [refineKraus, Matrix.of_apply, h.2, true_and, if_true, star_mul',
+          refineAmp_star, eigVecs_star]
+        ring
+      · intro k _ hk
+        simp only [refineKraus, Matrix.of_apply]
+        rw [if_neg (fun hc => hk hc.2.symm), star_zero, mul_zero]
+      · simp
+    rw [Finset.sum_congr rfl fun s _ => hstep s, ← Finset.sum_mul]
+    have hcomb :
+        (∑ s : Fin 2, (refineAmp s : ℂ) ^ 2 * eigVecs s (bit2 i1) * eigVecs s (bit2 j1)) =
+        (25/32 : ℂ) * wMat (bit2 i1) (bit2 j1) := by
+      have hrw : ∀ s : Fin 2,
+          (refineAmp s : ℂ) ^ 2 * eigVecs s (bit2 i1) * eigVecs s (bit2 j1) =
+          (25/64 : ℂ) * ((eigVals s : ℂ) * eigVecs s (bit2 i1) * eigVecs s (bit2 j1)) := by
+        intro s
+        have hsq := refineAmp_sq s
+        have : ((refineAmp s : ℝ) : ℂ) ^ 2 = ((refineAmp s) ^ 2 : ℝ) := by push_cast; ring
+        rw [this, hsq]
+        push_cast
+        ring
+      simp_rw [hrw]
+      rw [← Finset.mul_sum, wMat_eigen_reconstruction]
+      ring
+    rw [hcomb, if_pos h]
+  · rw [if_neg h, mul_zero, zero_mul]
+    apply Finset.sum_eq_zero
+    intro s _
+    apply Finset.sum_eq_zero
+    intro k _
+    rw [not_and_or] at h
+    rcases h with h1 | h2
+    · apply mul_eq_zero_of_left
+      apply Finset.sum_eq_zero
+      intro l _
+      simp only [refineKraus, Matrix.of_apply]
+      rw [if_neg (fun hc => h1 hc.1), zero_mul]
+    · apply mul_eq_zero_of_right
+      simp only [refineKraus, Matrix.of_apply]
+      rw [if_neg (fun hc => h2 hc.1), star_zero]
+
 end MPOTensor.RescalingStableLengthDependentRFP
