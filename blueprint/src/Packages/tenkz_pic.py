@@ -406,11 +406,39 @@ except ImportError:  # standalone harness use; see the section comment above
     pass
 else:
 
+    class tenkzkernel(Command):
+        r"""The kernel switch (spec §2).  It draws nothing; it stands in
+        the tree so a picture can read whether the switch reaches it."""
+
+        args = ""
+
     class tenkzequation(Environment):
         """A responsive text-mode row of independent SVG picture units."""
 
         blockType = True
         templateName = "TenkzEquation"
+
+    def _kernel_switch_reaches(node) -> bool:
+        r"""Whether \tenkzkernel is in force where this picture stands.
+
+        The switch is an ordinary TeX declaration, so a group ends it: a
+        switch inside one ``center`` block does not reach a picture in the
+        next.  Reading the preceding siblings at each level up from the
+        picture answers exactly that question, and it keeps a chapter that
+        has migrated one figure from claiming the ones it has not.
+        """
+        current = node
+        while current is not None:
+            parent = getattr(current, "parentNode", None)
+            if parent is None:
+                return False
+            for sibling in getattr(parent, "childNodes", []):
+                if sibling is current:
+                    break
+                if getattr(sibling, "nodeName", "") == "tenkzkernel":
+                    return True
+            current = parent
+        return False
 
     class _TenkzSvgMixin:
         """Shared rendering: compile the captured unit, emit one <img>."""
@@ -426,6 +454,8 @@ else:
         @property
         def tenkz_svg_html(self) -> str:
             unit_source = self.tenkzUnitSource()
+            if _kernel_switch_reaches(self):
+                unit_source = "\\tenkzkernel\n" + unit_source
             output_dir = _output_dir(self.ownerDocument)
             svg_path, _ = render_unit(unit_source, output_dir / _SVG_SUBDIR)
             if svg_path is None:
