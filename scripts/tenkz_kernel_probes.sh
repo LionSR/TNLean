@@ -51,6 +51,31 @@ grep -Fq '|name=cup-east-1-2|origin=cup|' "$WORK/r_cup_both.tnlog" || {
   echo "FAIL: west/east cup policies did not mint a distinct east name" >&2
   exit 1
 }
+for side in west east; do
+  grep -Eq "^atom\|.*\|node=.*\|skin=ring" "$WORK/r_cup_label.tnlog" || {
+    echo "FAIL: the labelled cup minted no bead on its bend" >&2
+    exit 1
+  }
+  grep -Fq "|name=cup-$side-1-2|origin=cup|" "$WORK/r_cup_label.tnlog" || {
+    echo "FAIL: the labelled cup lost the $side bend it stands on" >&2
+    exit 1
+  }
+done
+labelled_cup_beads=$(grep -c '^atom|.*|skin=ring' "$WORK/r_cup_label.tnlog" \
+  || true)
+[ "$labelled_cup_beads" -eq 4 ] || {
+  echo "FAIL: labelled cups minted $labelled_cup_beads beads, expected 4" >&2
+  exit 1
+}
+for members in \
+  'members=atom-2,atom-3,atom-4' \
+  'members=atom-1,atom-2,atom-3,atom-4,atom-5,atom-6'; do
+  grep -F '|form=bracket|' "$WORK/r_mark_bracket_range.tnlog" |
+    grep -Fq "|$members" || {
+    echo "FAIL: a bracket over a cell range resolved no membership" >&2
+    exit 1
+  }
+done
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
