@@ -790,10 +790,10 @@
     spectral data of $W$ and of $\varphi$ with $\chi$.
     % Scope note: this is not the uniform BNT-label structure-coefficient
     % statement of Theorem 4.14(ii) (Cirac2016MPDO_arXiv) for R itself, nor
-    % the literal CPSV canonical form or the renormalization fixed-point
-    % property of Definition is_rfp_via_ts: those require the
-    % tensor-attached BNT algebra-structure witness for R, which is future
-    % work.
+    % the literal CPSV canonical form: those require the tensor-attached
+    % BNT algebra-structure witness for R, which is future work. The
+    % renormalization fixed-point property of Definition is_rfp_via_ts is
+    % established directly below, without that witness.
 \end{theorem}
 \begin{proof}\leanok
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -815,6 +815,41 @@
         \varphi(E_{01})&=\varphi(E_{10})=0.
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[The rescaling-stable tensor is a renormalization fixed
+    point]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The tensor $R$ of
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
+    renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}. The refinement map $\mathcal T$ has
+    two Kraus operators built from the eigenvectors of $W$, with amplitude
+    $5/8$ on the uniform eigenvector and $\sqrt7/8$ on the alternating
+    eigenvector. The coarse-graining map $\mathcal S$ has four Kraus
+    operators: two share the amplitude $1/\sqrt2$ and the eigenvectors of
+    $W$ on the physical-index pairs satisfying the bond-matching condition,
+    and two are a deterministic assignment on the pairs that fail it,
+    chosen so the family resolves the identity. This exhibits $R$ as a
+    full renormalization fixed-point example, without the tensor-attached
+    BNT algebra-structure witness anticipated in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    On the physical-index pairs satisfying the bond-matching condition,
+    the two-site physical operator is the one-site physical operator
+    rescaled by $25/32$ and by the corresponding entry of $W$; on every
+    other pair it vanishes. The refinement map reassembles $W$ from its
+    eigendecomposition against the one-site physical operator. The
+    coarse-graining map's gated Kraus operators reassemble $W$ in the
+    opposite direction, and its ungated Kraus operators annihilate the
+    vanishing entries; each of the two families resolves the identity, the
+    second using orthogonality of the eigenvectors of $W$ on distinct bond
+    bits.
 \end{proof}
 
 \begin{definition}[Linearly independent operator family]%
