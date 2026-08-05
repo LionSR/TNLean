@@ -10,12 +10,27 @@ import Mathlib.Data.Matrix.Block
 /-!
 # Block Schur complements
 
-For a self-adjoint 2×2 block matrix `M = [[P, Q], [Q†, R]]`
-with `P, R` PSD, the following are equivalent:
+Working towards Wolf's Theorem 5.2: for a self-adjoint 2×2 block matrix
+`M = [[P, Q], [Q†, R]]` with `P, R` PSD, the following are equivalent:
 
 1. `M` is PSD
 2. `ker(R) ⊆ ker(Q)` and the pseudoinverse Schur complement `P − Q·R⁺·Q†` is PSD
 3. `ker(R) ⊆ ker(Q)` and `‖P^{-1/2}·Q·R^{-1/2}‖ ≤ 1` (contraction form)
+
+## Main results
+
+* `ker_subset_of_block_psd` : the kernel-inclusion half of (1) ⟹ (2)
+* `block_quadratic_form` : the quadratic-form expansion of the block matrix
+* `R_mul_pinv_eq_supportProj`, `pinv_mul_self_eq_supportProj`,
+  `supportProj_mul_pinv_eq_pinv`, `pinv_isHermitian`, `supportProj_sq_eq_supportProj` :
+  pseudoinverse/support-projection algebra for PSD `R`
+
+## Remaining gap towards Wolf Thm 5.2
+
+The Schur-complement-PSD half of (1) ⟹ (2) (quadratic-form minimisation with
+`y = -R⁺Q†x`), the converse (2) ⟹ (1) (completing the square), and the
+contraction equivalence (2) ⟺ (3) are not formalized here; see
+`docs/paper-gaps/schur_complement_tfae.tex`.
 
 ## References
 
