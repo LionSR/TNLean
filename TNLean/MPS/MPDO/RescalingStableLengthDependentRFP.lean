@@ -86,7 +86,7 @@ unital and having eigenvalues `{1, 7/25, 0, 0}` (`transferMap_A_eigen`),
 hence primitive with spectral radius 1.  Completing the irreducibility
 argument (the Kronecker products `A^a ⊗ conj(A^b)` span `M₄(ℂ)`), the
 Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
-`φ`, the primitivity/spectral-radius-one package for the doubled map, and
+`φ`, the primitivity and spectral-radius-one lemmas for the doubled map, and
 the `tpCP`-map construction yields `IsRFPViaTS R` via Theorem 4.14.
 
 ## References
@@ -534,19 +534,20 @@ units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lamb
 
 **Scope restriction (transfer-map eigenvalue groundwork):** this
 characterizes the per-site map `φ`, not the doubled transfer map of
-`R.toMPSTensor` itself, nor the primitivity/spectral-radius-one/irreducibility
-package needed for `IsNormalTensor` and the literal CPSV canonical form
-(`MPSTensor.IsCPSVCanonicalForm`).  Those require the Kronecker-product
-factorization of `transferMap R.toMPSTensor` in terms of `φ`, which is
-future work; see the module docstring `Remaining gap` section. -/
+`R.toMPSTensor` itself, nor the primitivity, spectral-radius-one, and
+irreducibility lemmas needed for `IsNormalTensor` and the literal CPSV
+canonical form (`MPSTensor.IsCPSVCanonicalForm`).  Those require the
+Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
+`φ`, which is future work; see the module docstring `Remaining gap`
+section. -/
 theorem transferMap_A_eigen :
     MPSTensor.transferMap A 1 = (1 : ℂ) • 1 ∧
       MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
         (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] ∧
       MPSTensor.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) =
-        (0 : ℂ) • 1 ∧
+        (0 : ℂ) • Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∧
       MPSTensor.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) =
-        (0 : ℂ) • 1 :=
+        (0 : ℂ) • Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) :=
   ⟨by rw [transferMap_A_one, one_smul],
     transferMap_A_diag_alt,
     by rw [transferMap_A_single01, zero_smul],
