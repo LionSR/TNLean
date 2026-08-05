@@ -24,7 +24,10 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   $c_s^{(L)} = s^L(1 + (7/25)^L)$, which is not length-independent
   for any $s > 0$;
 * `R_isMPDO` — the closed operator family `mpo R N` is positive
-  semidefinite for every positive chain length `N` (`R` is an MPDO).
+  semidefinite for every positive chain length `N` (`R` is an MPDO);
+* `wMat_eigenvalue_eq_oneLabelChi_entry` — the eigenvalues of the local
+  factor `wMat` of the `R_isMPDO` factorization are exactly the entries of
+  `oneLabelChi` (a scope-restricted spectral link; see *Remaining gap*).
 
 ## Tensor definition
 
@@ -61,6 +64,14 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
 
 ## Remaining gap
 
+* The uniform BNT-label structure-coefficient statement of
+  arXiv:1606.00608, Theorem 4.14(ii) for `R` — that `oneLabelCoeffs`
+  literally arises from `R`'s same-length product algebra, not only that
+  its spectral data matches (`wMat_eigenvalue_eq_oneLabelChi_entry`) —
+  requires the `AlgebraStructureData` witness apparatus of
+  `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
+  `IsRFPViaTS R` (below).  Documented in
+  `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 * The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
 with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
 renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
@@ -440,6 +451,41 @@ lemma wMat_posSemidef : wMat.PosSemidef := by
     refine Matrix.PosSemidef.smul hI h7
   · have h9 : (0 : ℂ) ≤ (9/25 : ℂ) := by positivity
     refine Matrix.PosSemidef.smul hJ h9
+
+/-- The Walsh–Hadamard eigenvectors of `wMat`: the uniform vector `![1, 1]`
+is a fixed point (eigenvalue `1`), and the alternating vector `![1, -1]` is
+scaled by `lambda = 7/25` (eigenvalue `lambda`). -/
+lemma wMat_mulVec_ones : wMat.mulVec ![1, 1] = (1 : ℂ) • ![1, 1] := by
+  ext i
+  fin_cases i <;> simp [Matrix.mulVec, dotProduct, wMat, Fin.sum_univ_two] <;> norm_num
+
+lemma wMat_mulVec_alt : wMat.mulVec ![1, -1] = (lambda : ℂ) • ![1, -1] := by
+  ext i
+  fin_cases i <;>
+    simp [Matrix.mulVec, dotProduct, wMat, Fin.sum_univ_two, lambda] <;> norm_num
+
+/-- **`wMat`'s eigenvalues are exactly the entries of `oneLabelChi`.** For
+each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k` (`1` at `k = 0`, `lambda` at
+`k = 1`) is an eigenvalue of `wMat`, witnessed by the Walsh–Hadamard
+eigenvectors `![1, 1]` and `![1, -1]`.  This identifies the local factor of
+the `R_isMPDO` factorization (`wMat`, via `coeff_sq_eq_wMat`) with the
+one-label `χ` block `oneLabelChi` declared independently in this file.
+
+**Scope restriction (partial BNT-coefficient link):** this identifies the
+*spectral data* of `wMat` with `oneLabelChi`'s entries; it is not the
+uniform BNT-label structure-coefficient statement of arXiv:1606.00608,
+Theorem 4.14(ii) (which requires the `AlgebraStructureData` witness that
+`R`'s same-length product algebra realizes `oneLabelCoeffs`).  That
+construction needs `IsRFPViaTS R`, itself future work (module docstring,
+*Remaining gap*).  Documented in
+`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
+theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
+    ∃ v : Fin 2 → ℂ, v ≠ 0 ∧
+      wMat.mulVec v = (oneLabelChi.entry 0 0 0 k) • v := by
+  fin_cases k
+  · exact ⟨![1, 1], by simp, by simpa [oneLabelChi] using wMat_mulVec_ones⟩
+  · refine ⟨![1, -1], by simp, ?_⟩
+    simpa [oneLabelChi] using wMat_mulVec_alt
 
 /-- The Kronecker power `wN N` is positive semidefinite: by induction on
 `N`, `wN (N + 1)` is a submatrix of the Kronecker product `wN N ⊗ wMat`
