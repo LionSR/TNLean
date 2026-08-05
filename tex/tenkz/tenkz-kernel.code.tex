@@ -4589,6 +4589,9 @@
 \tl_new:N   \l__tenkz_kernel_r_touch_b_tl
 \tl_new:N   \l__tenkz_kernel_r_touch_c_tl
 \tl_new:N   \l__tenkz_kernel_r_touch_d_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_row_tl
+\tl_new:N   \l__tenkz_kernel_r_touch_col_tl
+\bool_new:N \l__tenkz_kernel_r_touch_cell_bool
 \tl_new:N   \l__tenkz_kernel_r_hue_tl
 \tl_new:N   \l__tenkz_kernel_r_species_tl
 \tl_new:N   \l__tenkz_kernel_r_species_descriptor_tl
@@ -12723,13 +12726,18 @@
     \bool_set_false:N \l_tmpa_bool
     % An ordinary index ending on the pairing's carrier is attached to that
     % carrier, even when grid sugar represented the end by its occupied cell
-    % rather than by an explicit port node.
+    % rather than by an explicit port node.  The carrier's cell is asked for
+    % by the one question both placements answer: an "at=" carrier keeps its
+    % address as a node, a chained carrier as address text, and reading the
+    % node alone leaves a chained carrier with no cell at all (issue 5528).
     \__tenkz_model_get:nnN {#2} {host} \l__tenkz_kernel_r_touch_c_tl
     \quark_if_no_value:NF \l__tenkz_kernel_r_touch_c_tl
       {
-        \__tenkz_model_get:nnN
-          { \l__tenkz_kernel_r_touch_c_tl } {node}
-          \l__tenkz_kernel_r_touch_d_tl
+        \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+          \l__tenkz_kernel_r_touch_c_tl
+          \l__tenkz_kernel_r_touch_row_tl
+          \l__tenkz_kernel_r_touch_col_tl
+          \l__tenkz_kernel_r_touch_cell_bool
         \clist_map_inline:nn {from,to}
           {
             \__tenkz_model_get:nnN {#1} {##1}
@@ -12754,28 +12762,25 @@
                       }
                     {cell}
                       {
-                        \bool_lazy_and:nnT
+                        \bool_lazy_all:nT
                           {
-                            \str_if_eq_p:ee
-                              {
-                                \__tenkz_kernel_r_item:nn
-                                  { \l__tenkz_kernel_r_touch_a_tl } {row}
-                              }
-                              {
-                                \__tenkz_kernel_r_item:nn
-                                  { \l__tenkz_kernel_r_touch_d_tl } {row}
-                              }
-                          }
-                          {
-                            \str_if_eq_p:ee
-                              {
-                                \__tenkz_kernel_r_item:nn
-                                  { \l__tenkz_kernel_r_touch_a_tl } {col}
-                              }
-                              {
-                                \__tenkz_kernel_r_item:nn
-                                  { \l__tenkz_kernel_r_touch_d_tl } {col}
-                              }
+                            { \l__tenkz_kernel_r_touch_cell_bool }
+                            {
+                              \str_if_eq_p:ee
+                                {
+                                  \__tenkz_kernel_r_item:nn
+                                    { \l__tenkz_kernel_r_touch_a_tl } {row}
+                                }
+                                { \l__tenkz_kernel_r_touch_row_tl }
+                            }
+                            {
+                              \str_if_eq_p:ee
+                                {
+                                  \__tenkz_kernel_r_item:nn
+                                    { \l__tenkz_kernel_r_touch_a_tl } {col}
+                                }
+                                { \l__tenkz_kernel_r_touch_col_tl }
+                            }
                           }
                           { \bool_set_true:N \l_tmpa_bool }
                       }

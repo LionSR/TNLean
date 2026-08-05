@@ -1,0 +1,26 @@
+% Regression: a declared skin's own pairings are placement-agnostic.  The
+% same row of carriers is stated twice, once with the chain cursor and once
+% with explicit addresses, and must record the same typed ports and the same
+% boundary.  Reading a carrier's cell through its address node alone left the
+% chained spelling with no cell at all and spun the compiler (issue 5528).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{right}{hue=source:blue}
+\tndeclare{species}{left}{hue=source:red}
+\tndeclare{skin}{shift-right}{
+  base=box,
+  pairings={n@1 > e@1 : right, s@1 > w@1 : left}
+}
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=updown]
+  \tn[skin=shift-right]{} & \tn[skin=shift-right]{}
+  \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{open e}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire}, cols=2, bonds=none, physical=updown]
+  \tn[at=(1,1), skin=shift-right]{}
+  \tn[at=(1,2), skin=shift-right]{}
+  \tnwire{open w}{(1,1)} \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{open e}
+\end{tenkz}
+\end{document}
