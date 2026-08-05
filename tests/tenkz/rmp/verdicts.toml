@@ -1043,13 +1043,13 @@ note = "Kernel migration of the context-only schematic: the blocked sheet is the
 
 [[verdict]]
 id = "rmp-app-toric-dual"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "context-only"
-case_sha256 = "b318ce788bf348a6615623dd7c310ee0273aa15e5be9b81771ac9b1db101ea3d"
+case_sha256 = "cf7763e56073365a2b52e180a982f43b85efb53c87f9d3bb70a982cc3593378a"
 reviewed = "2026-08-05"
-renderer = "fable-w6-vision-review-2026-08-05-200dpi"
-second_viewer = "fable-w6-countersign-2026-08-05-400dpi"
-note = "Kernel migration of the context-only schematic: the blocked sheet, the four mid-side plaquette-colour legs, and the two interior corner-to-corner diagonals are all present. Residue: the paper dots the diagonals to mark them as the original lattice seen through the dual sheet, and the kernel wire grammar has no stroke-style key, so the recorded diagonals ink solid (K1); restore a dashed spelling at the language level, then re-review."
+renderer = "claude-5509-stroke-review-2026-08-05-200dpi"
+second_viewer = "claude-5509-countersign-2026-08-05-400dpi"
+note = "Kernel migration of the context-only schematic: the blocked sheet, the four mid-side plaquette-colour legs, and the two interior corner-to-corner diagonals are all present. The diagonals now take the declared dashed rail, which is what the published figure draws — the earlier note called them dotted, and at 900dpi the source dashes them. Read beside fig_app_tc-dual.pdf at 200dpi and countersigned at 400dpi: the two rails cross corner to corner inside the sheet and read as the original lattice under the dual one. The kernel enclosure is contour-only where the paper shades the sheet; house ink for a context drawing, as on the primal twin."
 
 [[verdict]]
 id = "rmp-app-czx-state"
