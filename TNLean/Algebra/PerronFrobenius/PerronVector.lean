@@ -12,14 +12,15 @@ import TNLean.Algebra.PerronFrobenius.Substochastic
 This file constructs a strictly positive eigenvector, with eigenvalue exactly `1`, for a
 primitive real matrix `T` satisfying `T² = T³`, and the induced diagonal conjugation of
 `T` into a row-stochastic primitive matrix. This is the ingredient needed by the Lemma C.5
-Case-I singleton-sector route (see issue tracker `#5548`, prerequisite for `#5436`):
+Case-I singleton-sector route:
 the paper's own citation-based step from primitivity and constant positive-power traces to
 a rank-one factorization is not valid in general (a counterexample is recorded in
 `TNLean/Archive/PerronFrobeniusRankOneCounterexample.lean` and
 `docs/paper-gaps/cpgsv17_pf_rank_one.tex`); this file supplies the correct Perron-vector
 ingredient consumed by `trace_pow_similarity_diagonal`
 (`TNLean/MPS/MPDO/LemmaC5CaseI.lean`) for the corrected, source-faithful replacement
-argument (issue `#5404`'s "source-faithful route").
+argument, which instead exploits the tensor's normality hypothesis through the
+asymptotic overlap route.
 
 The construction is elementary: `T² = T³` and primitivity already give (via
 `IsPrimitive.exists_pos_pow_two_eq_vecMulVec_of_pow_two_eq_pow_three`) a positive rank-one
@@ -95,6 +96,17 @@ theorem IsPrimitive.exists_pos_eigenvector_one_of_pow_two_eq_pow_three
   simp only [Pi.add_apply]
   ring
 
+omit [Nonempty n] in
+/-- The entrywise formula for a diagonal similarity conjugate: `(D⁻¹ M D) i j = (d i)⁻¹ M i j
+d j`, where `D = diagonal d`. -/
+theorem diagonal_inv_mul_mul_diagonal_apply {d : n → ℝ} (hd : ∀ i, d i ≠ 0)
+    (M : Matrix n n ℝ) (i j : n) :
+    ((Matrix.diagonal d)⁻¹ * M * Matrix.diagonal d) i j = (d i)⁻¹ * M i j * d j := by
+  have hinv : (Matrix.diagonal d)⁻¹ = Matrix.diagonal (fun i => (d i)⁻¹) := by
+    apply Matrix.inv_eq_right_inv
+    simp [Matrix.diagonal_mul_diagonal, hd]
+  rw [hinv, Matrix.mul_diagonal, Matrix.diagonal_mul]
+
 /-- For a primitive matrix `T` with `T² = T³`, conjugating by the diagonal of the positive
 eigenvalue-`1` eigenvector `v` gives a row-stochastic, primitive matrix `D⁻¹ T D`. -/
 theorem IsPrimitive.exists_rowStochastic_diagonal_conj_of_pow_two_eq_pow_three
@@ -110,9 +122,8 @@ theorem IsPrimitive.exists_rowStochastic_diagonal_conj_of_pow_two_eq_pow_three
     apply Matrix.inv_eq_right_inv
     simp [Matrix.diagonal_mul_diagonal, fun i => (hv i).ne']
   have hPapply : ∀ i j, ((Matrix.diagonal v)⁻¹ * T * Matrix.diagonal v) i j =
-      (v i)⁻¹ * T i j * v j := by
-    intro i j
-    rw [hinv, Matrix.mul_diagonal, Matrix.diagonal_mul]
+      (v i)⁻¹ * T i j * v j :=
+    fun i j => diagonal_inv_mul_mul_diagonal_apply (fun i => (hv i).ne') T i j
   have hPnn : ∀ i j, 0 ≤ ((Matrix.diagonal v)⁻¹ * T * Matrix.diagonal v) i j := by
     intro i j
     rw [hPapply]
