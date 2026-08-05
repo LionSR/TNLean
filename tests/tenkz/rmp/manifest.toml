@@ -1477,15 +1477,15 @@ corpus = "published"
 section = "section-iv-v-app"
 order = 88
 case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-lhs-six.tex"
-formula = "A two-dimensional R-boundary window surrounds its retained interior."
-ink = "Canonical public tenkzlattice: the retained B--C patch is outlined inside the R boundary window."
-boundary = "The outer R window cuts virtual bonds; every lattice site remains open."
-source = "paper TN-Review-main.tex line 2083; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 156-172 (growing back R)"
-capabilities = ["lattice", "regions", "typed-ports"]
+formula = "A two-dimensional L-boundary window surrounds its retained interior."
+ink = "Canonical public kernel plane frame: the retained A--B patch is outlined inside the L boundary window, with one uncovered site in the annulus."
+boundary = "The inner window cuts the retained patch's virtual bonds; all three sites keep open physical legs."
+source = "paper TN-Review-main.tex line 2083; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 173-190 (inverting and growing back L)"
+capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_lhsrhs6.tex"
 author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
-author_lines = "156-172"
+author_lines = "173-190"
 placements = [{ order = 88, line = 2083, asset = "fig4_fig4-pepe_LHS6.pdf" }]
 
 [[target]]
@@ -1494,15 +1494,15 @@ corpus = "published"
 section = "section-iv-v-app"
 order = 89
 case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-six.tex"
-formula = "A two-dimensional L-boundary window surrounds its retained interior."
-ink = "Canonical public tenkzlattice: the retained A--B patch is outlined inside the L boundary window."
-boundary = "The outer L window cuts virtual bonds; every lattice site remains open."
-source = "paper TN-Review-main.tex line 2084; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 173-190 (growing back L)"
-capabilities = ["lattice", "regions", "typed-ports"]
+formula = "A two-dimensional R-boundary window surrounds its retained interior."
+ink = "Canonical public kernel plane frame: the retained B--C patch is outlined inside the R boundary window, with one uncovered site in the annulus."
+boundary = "The inner window cuts the retained patch's virtual bonds; all three sites keep open physical legs."
+source = "paper TN-Review-main.tex line 2084; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 156-172 (inverting and growing back R)"
+capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_lhsrhs6.tex"
 author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
-author_lines = "173-190"
+author_lines = "156-172"
 placements = [{ order = 89, line = 2084, asset = "fig4_fig4-pepe_RHS6.pdf" }]
 
 [[target]]

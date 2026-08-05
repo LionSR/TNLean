@@ -97,8 +97,8 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iv-intersection-rhs-four` | — | Promoted to `faithful` 2026-08-04: five open ends match Rtensor4; no spurious crossing. |
 | `rmp-iv-intersection-lhs-five` | — | Promoted to `faithful` 2026-08-04: the restored three-index boundary matches; sideways stubs preserve it. |
 | `rmp-iv-intersection-rhs-five` | X | Re-audit the mirrored open C--X contraction before accepting it as equivalent routing. |
-| `rmp-iv-intersection-lhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
-| `rmp-iv-intersection-rhs-six` | X | Promoted to `blocked`: the missing `nested-regions` capability leaves an invented lattice and the wrong contraction. |
+| `rmp-iv-intersection-lhs-six` | K2 | Resolved to `cosmetic-gap` 2026-08-05: kernel nested regions replace the invented lattice; the A--B patch window nests inside the L window and the cut bonds end on it. Residue: face stubs for the source's through-lines and the corner label station. Promote to `faithful` on a second-viewer countersign. |
+| `rmp-iv-intersection-rhs-six` | K2 | Resolved to `cosmetic-gap` 2026-08-05: kernel nested regions replace the invented lattice; the B--C patch window nests inside the R window and the cut bonds end on it. Residue: face stubs for the source's through-lines and the corner label station. Promote to `faithful` on a second-viewer countersign. |
 | `rmp-app-czx-state` | — | Promoted to `faithful` 2026-08-04: source grouping and lattice wiring verified; lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
 | `rmp-workbench-ii-projector-on-pta` | X | Promoted to `structural-gap`: omitting two of four source triangles changes the multiplicity of the sandwich sum. |
