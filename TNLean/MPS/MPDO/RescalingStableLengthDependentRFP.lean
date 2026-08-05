@@ -25,7 +25,7 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   for any $s > 0$.
 
 It also provides PSD infrastructure toward the remaining `IsMPDO R` gap
-(scaffolding, not yet connected to `R`; see *Remaining gap* below):
+(preliminary framework, not yet connected to `R`; see *Remaining gap* below):
 `chainIndicator_posSemidef`, `wMat_posSemidef`, `wN_posSemidef`, and
 `coeff_sq_eq_wMat`.
 
@@ -298,7 +298,7 @@ identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
 label as the pair of bits indexing the two tensor factors of the vertical
 (Kronecker) reading `B^{ab} = A^a ⊗ conj(A^b)`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def bit1 : Fin 4 → Fin 2
   | 0 => 0
   | 1 => 0
@@ -308,7 +308,7 @@ def bit1 : Fin 4 → Fin 2
 /-- The second bit of a bond label `k : Fin 4` under `bondEquiv`:
 `bit2 k = (bondEquiv.symm k).2`.  See `bit1`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def bit2 : Fin 4 → Fin 2
   | 0 => 0
   | 1 => 1
@@ -322,7 +322,7 @@ matrix unit `E_{ij}`, namely `4/5` for the diagonal letters `A 0`, `A 1`
 and `3/5` for the off-diagonal letters `A 2`, `A 3`; the consistency check
 `A_entry_eq_coeff'` ties the literals back to `A`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def coeff' : Fin 2 → Fin 2 → ℂ
   | 0, 0 => 4/5
   | 0, 1 => 3/5
@@ -343,7 +343,7 @@ successor implemented by `finRotate N`).  This closed-chain constraint
 collapses the bond sum in the entrywise formula for `mpo R N` to at most
 one term.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def chainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
   ∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))
 
@@ -359,7 +359,7 @@ indicator vector `c` of `chainOK N`, hence positive semidefinite
 (`chainIndicator_posSemidef`); in the planned factorization of `mpo R N`
 it is the chain-OK factor `C`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 noncomputable def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
   Matrix.of fun p q => if chainOK N p ∧ chainOK N q then (1 : ℂ) else 0
 
@@ -385,7 +385,7 @@ square of `coeff'` (`coeff_sq_eq_wMat`).  Its eigenvalues are `1` and
 `7/25` — the `χ = diag(1, 7/25)` of the one-label coefficient family
 `oneLabelChi`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def wMat : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(4/5 : ℂ)^2, (3/5 : ℂ)^2; (3/5 : ℂ)^2, (4/5 : ℂ)^2]
 
@@ -393,7 +393,7 @@ def wMat : Matrix (Fin 2) (Fin 2) ℂ :=
 `wN N a b = ∏ n, wMat (a n) (b n)`.  In the planned factorization the
 closed operator is `(25/32)^N • (B * wN N * Bᴴ)` for the boundary map `B`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def wN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   Matrix.of fun a b => ∏ n : Fin N, wMat (a n) (b n)
 
@@ -454,7 +454,7 @@ string: `(φ N p) n = bit1 (p n)`.  In the planned factorization it pulls
 `wN N` back to the `(Fin N → Fin 4)`-indexed space as
 `Matrix.of fun p q => (wN N) (φ N p) (φ N q)`.
 
-Project-internal infrastructure for the `IsMPDO R` gap (not from CPSV16). -/
+Project example; not from CPSV16. -/
 def φ (N : ℕ) (p : Fin N → Fin 4) : Fin N → Fin 2 := fun n => bit1 (p n)
 
 /-- `wMat` is the entrywise square of `coeff'`: the local factor's entries
