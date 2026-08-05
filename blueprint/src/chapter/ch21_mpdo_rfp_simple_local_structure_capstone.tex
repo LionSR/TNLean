@@ -330,9 +330,9 @@
     % Exact source orientation: the upper layer is plain K_y and the lower
     % layer is plain K_x.  There is no conjugation or adjoint in AppKxKy=0.
     % Source: Papers/1606.00608/MPDO_KxKy.png and source TeX lines 1634--1639.
-    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal K_y} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal K_x}
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{\mathcal K_y} \\
+        \tn[skin=mpo]{\mathcal K_x}
     \end{tenkz}
     $ = 0$
 \end{center}
@@ -849,27 +849,24 @@ leaves only the diagonal term:
     % (the physical legs, closed under sum_j P_j = Id) -- so all
     % four panels log the same boundary signature
     % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
-    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{K_i}
+    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{K_i}
     \end{tenkz}
     $ = \sum_{j,j'}$
-    \begin{tenkz}[rows={op,op,op}, cols=1, west=none, east=none]
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{P_j} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]
-          {K_i} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{P_{j'}}
+    \begin{tenkz}[rows={op,op,op}, cols=1, west=none, east=none, physical=updown]
+        \tn[skin=mpo]{P_j} \\
+        \tn[skin=mpo, ports={180:virtual, 0:virtual}]{K_i} \\
+        \tn[skin=mpo]{P_{j'}}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[rows={op,op}, cols=1, west=none, east=none]
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{P_i} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]
-          {K_i}
+    \begin{tenkz}[rows={op,op}, cols=1, west=none, east=none, physical=updown]
+        \tn[skin=mpo]{P_i} \\
+        \tn[skin=mpo, ports={180:virtual, 0:virtual}]{K_i}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[rows={op,op}, cols=1, west=none, east=none]
-        \tn[skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]
-          {K_i} \\
-        \tn[skin=mpo, ports={90:physical, 270:physical}]{P_i}
+    \begin{tenkz}[rows={op,op}, cols=1, west=none, east=none, physical=updown]
+        \tn[skin=mpo, ports={180:virtual, 0:virtual}]{K_i} \\
+        \tn[skin=mpo]{P_i}
     \end{tenkz}
 \end{center}
 Equivalently, each local tensor is supported on its own sector:
