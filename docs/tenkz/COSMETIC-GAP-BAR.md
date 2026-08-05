@@ -67,9 +67,9 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-f-symbol` | — | Promoted to `faithful` 2026-08-04: crossing order, directions, sectors, and all six labels verified against the author figure. |
 | `rmp-iii-a-pulling-through` | K3 | Normalize curve weight and panel spacing. |
 | `rmp-iii-a-commuting-hamiltonian` | — | Kernel respell 2026-08-05 keeps the promoted model and drops the 0.7 render's single spurious gate output leg: the author draws the gate closed, so neither panel legs the pill; the labelled white pill remains house typography. |
-| `rmp-iii-a-proof-one` | — | Promoted to `faithful` 2026-08-04: alpha-dot contraction and reduced tensor match; the rounded pill is a house glyph form. |
-| `rmp-iii-a-proof-two` | — | Promoted to `faithful` 2026-08-04: stacked fusion matches wire for wire; bond hue and box size are theme choices. |
-| `rmp-iii-a-proof-three` | — | Promoted to `faithful` 2026-08-04: the full fusion stack and the up stub above beta match; red operator rails are the house semantic hue. |
+| `rmp-iii-a-proof-one` | — | Reconfirmed `faithful` on the kernel 2026-08-05 (wave 3, Fable-verified): V_alpha is now the source's tall spanning rectangle instead of the pill, all-black; fused-output row slot for the source's face-centered exit is grid quantization. |
+| `rmp-iii-a-proof-two` | — | Reconfirmed `faithful` on the kernel 2026-08-05 (wave 3, Fable-verified): the red house rails are dropped for the source's all-black ink; fused-output row slot for the source's face-centered exit is grid quantization. |
+| `rmp-iii-a-proof-three` | — | Reconfirmed `faithful` on the kernel 2026-08-05 (wave 3, Fable-verified): the full stack matches level for level in the source's all-black ink, with equal audited signatures around the lambda coefficient. |
 | `rmp-iii-a-ghz-state` | K1 | Resolved: the case now records the full six-by-eight staggered model on the kernel (all junctions, bonds, and legs verified present 2026-07-30); only the shared kernel spacing and stroke profile differ. |
 | `rmp-iii-a-ghz-tensor` | — | Kernel redraw 2026-08-05 retires the labelled box with orthogonal legs in favour of the author's own glyphless junction with the 45-degree physical tick; four open indices and the equation are unchanged. |
 | `rmp-iii-a-hadamard` | — | Resolved 2026-08-05: the paired panel (lines 359-360) IS the author's Hadamard glyph — paper line 1449 equates that extraction with the matrix, and the cluster state draws H as the filled dot on every internal bond; the case is redrawn as the dot-on-bond and promoted to `faithful`. |
@@ -103,7 +103,7 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iv-intersection-rhs-six` | K2 | Resolved to `cosmetic-gap` 2026-08-05: kernel nested regions replace the invented lattice; the B--C patch window nests inside the R window and the cut bonds end on it. Residue: face stubs for the source's through-lines and the corner label station. Promote to `faithful` on a second-viewer countersign. |
 | `rmp-app-czx-state` | — | Promoted to `faithful` 2026-08-04: source grouping and lattice wiring verified; lighter enclosure fill is a public-theme choice. |
 | `rmp-workbench-ii-newfig7` | K2 | Crossing-gadget styling is a house-form difference. |
-| `rmp-workbench-ii-projector-on-pta` | X | Promoted to `structural-gap`: omitting two of four source triangles changes the multiplicity of the sandwich sum. |
+| `rmp-workbench-ii-projector-on-pta` | — | Repaired and promoted to `faithful` 2026-08-05 (wave 3, Fable-verified): both sandwich sums now draw the archival widths (four plus identity against five plus four columns), restoring the sum's site multiplicity; cup arcs, black identity, and straight stubs are house ink for the source's brackets, blue strand, and hooks. |
 | `rmp-workbench-ii-peps-rg-workbench` | X | Its ledger pairing is `wrong-source`; repair and verify the source mapping before judging the U-application idiom. |
 | `rmp-workbench-ii-positive-mpo-old` | K2 | The ledger already records equal X sizes; re-review the hash-pinned render as faithful. |
 | `rmp-workbench-ii-peps-gauge-old` | K3 | Preserve diagonal leg flow and smooth the marked detour tangents. |
@@ -116,13 +116,13 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-eq50` | — | Kernel migration 2026-08-05: all four legs verified against Eq50.pdf; the wide stock mpo glyph is house style. |
 | `rmp-workbench-iii-eq51` | K1 | The kernel side trace renders as identified extended ends; ink the recorded closure's long return at the renderer, then re-review the traced-chain family. |
 | `rmp-workbench-iii-eq52` | K1 | Same closure-ink gap as eq51: the traced sides draw as identified ends, not the source's trace rectangle. |
-| `rmp-workbench-iii-diagram-one` | K2 | Both rings close; boundary-size change is the identity itself. |
+| `rmp-workbench-iii-diagram-one` | — | Promoted to `faithful` 2026-08-05 (wave 3, Fable-verified): the kernel respell draws the closed racetrack through explicit junctions with the archival paired physical stubs; the stadium for the circle (#4931) and sharp corners are house forms. |
 | `rmp-workbench-iii-diagram-two` | K1 | Y over A and both open indices match; the north/south trace draws as identified ends, not the source's return loop (eq51 family). |
 | `rmp-workbench-iii-diagram-three` | K1 | Per-edge direction ink is a shared ports/arrow rendering property. |
 | `rmp-workbench-iii-historical-composite` | K3 | All mathematical parts are present; only placement nuance remains. |
 | `rmp-workbench-iii-diagram-four` | K2 | Stadium versus circle is a house glyph difference. |
 | `rmp-workbench-iii-eq50-reduced` | — | Promoted to `faithful` 2026-08-05: the invented L/a/R/b labels are removed; unlabelled stacked pair, tall reduction boxes, and one reduced index per side match the author lines. |
-| `rmp-workbench-iii-dual-reduced` | X | Challenge the current cyclic-equivalence note: the manifest declares an open intertwiner, so repair the source factor order. |
+| `rmp-workbench-iii-dual-reduced` | — | Repaired and promoted to `faithful` 2026-08-05 (wave 3, Fable-verified): the kernel respell restores the source factor order (box west of the a,b word; c west of the box) with source-red virtual legs and equal audited signatures. |
 | `rmp-workbench-iii-mpo-representation` | — | Promoted to `faithful` 2026-08-05: the per-bond labels are removed, the rail carries the declared source-red species, and the single red a sits at the open east index. |
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |

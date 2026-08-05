@@ -500,21 +500,21 @@ note = "context-only; numeric port faces preserve the reviewed curves"
 id = "rmp-iii-a-pentagon-peps"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "8a902cf83f1be0c4bb70838bb467472f8fc2c3ea9369a2f038f6fe7ca91101a8"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; clean"
+case_sha256 = "ab078f3ef0b559860bcba558b0008352a9066de455c18793d9bf884003858806"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "context-only; the kernel binding changes no ink: both association trees and the ^3F^3F = ^4F^3F^3F line render identically to the pre-migration case and match the paper's fig3_pentagon5 tree pair (undirected house strands for the paper's arrowed legs)."
 
 [[verdict]]
 id = "rmp-iii-a-fusion-tensor"
 status = "faithful"
 pairing = "context-only"
-case_sha256 = "d070c2349288bac38b385c9e58819adfc750686f2adfede73abf349983187f4f"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "visual-referee-2026-07-23"
-note = "context-only; clean"
+case_sha256 = "4f45fee3ad6581ec1b53128c3799b0311dc0421d4eb7750eaafba9a89b674da7"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "context-only; the kernel binding changes no ink: the associator tree pair and the ^1F^1F = ^0F^1F^1F line render identically to the pre-migration case; the paper's fig3_pentagon2 draws the same recoupling horizontally in red, which the house draws as upright black trees."
 
 [[verdict]]
 id = "rmp-iii-a-mpo-tensor"
@@ -541,11 +541,11 @@ id = "rmp-iii-a-coproduct"
 status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "c81cc9c8fb70166b73d15593c6465cc544b0b17f59ccf1b4b5bddb9197dda328"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "the pairing reading caught both panels leaving the virtual wire open where the source closes it in a loop; both now close via periodic. X renders as the grammar's stadium for the source's circle (#4931)"
+case_sha256 = "09b9af33e4e39567584917069fcdaba00412183349663d548aa4c8934d229f53"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against the paper's DeltaAred figure: the virtual loop now draws in the source-red operator hue through explicit junction returns (#5492 substitute), and the word tensors regain the paper's paired up/down physical stubs that the grid-tier physical=up dropped; the relation audit is opted out with the recorded arity reason since Delta maps one site to two. X renders as the grammar's stadium for the source's circle (#4931); sharp junction corners for the source's rounded ones."
 
 [[verdict]]
 id = "rmp-iii-a-pulling-through"
@@ -576,11 +576,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "57011e95c813ece2d81c913e71dae7e7331bad59b7edd7363153bd0cf5b9b1d4"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the alpha-dot contraction into V_alpha and the reduced single tensor both keep two virtual and one physical leg open with the copy dots present; the rounded house pill for the source's tall box is a house glyph form."
+case_sha256 = "5904a578fb5e6fc425ced674f077999fa2a82f46252d27d46a50c8a72ea78815"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against proof1.pdf: V_alpha is now the source's tall spanning rectangle (replacing the free-graph pill), the alpha box and dot feed its two west slots, and both sides expose two virtual, one fused, and one physical leg; the equation audit reports equal signatures. Residue: the fused output leaves at a row slot where the source centers it on the box face (grid quantization); all-black ink matches the source."
 
 [[verdict]]
 id = "rmp-iii-a-proof-two"
@@ -588,11 +588,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "9460b8ab72b5e0cbc1953ed65a35b3f5f8fefc73b0a8c4a72ee2852f01e047e6"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the stacked beta/alpha contraction into F and the fused gamma output match wire for wire on both sides; the operator-row bond hue and box size are public-theme choices (the bar)."
+case_sha256 = "57840e1ad9e8ea7955b5d88580854db20da21590ca811f12ceccda9468700a8f"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against proof2.pdf: the beta-over-alpha column with its middle physical contraction feeds the spanning F box, and the fused side feeds gamma; wire-for-wire match with equal audited signatures. The old red operator rails are dropped for the source's all-black ink. Residue: the fused output leaves at a row slot where the source centers it (grid quantization)."
 
 [[verdict]]
 id = "rmp-iii-a-proof-three"
@@ -600,11 +600,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "08585d86aba483caa21068b81fc8545860cabff5e0077119c032fd853cf16f5c"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the full fusion stack (beta above alpha above the dot, V_alpha and V_beta spanning their levels, F and V_gamma with the dot wire under F, the up stub above beta) matches; the red operator rails are the house semantic hue (the bar)."
+case_sha256 = "c63ee9ee436ead1383bd1339ea5dc3ca144073b0c637797f91a870634f276219"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against proof3.pdf: the full fusion stack matches level for level (beta above alpha above the dot, V_alpha spanning the lower pair into V_beta, F spanning the upper pair into V_gamma with the dot rail running beneath F, the up stub above beta), with equal audited signatures on both sides of the lambda coefficient. The old red operator rails are dropped for the source's all-black ink."
 
 [[verdict]]
 id = "rmp-iii-a-ghz-state"
@@ -1067,14 +1067,15 @@ note = "two slots on every face keep the red and blue shift paths distinct and c
 
 [[verdict]]
 id = "rmp-workbench-ii-projector-on-pta"
-status = "structural-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["missing-element"]
-case_sha256 = "3afa8ab06f286b75e13326b974d6a6dde1fd3454a689a405bc2c07fc6986acdc"
-reviewed = "2026-07-30"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "east cup draws; the second sandwich sum has two triangles where the source has four. Next: redraw the second summand with all four canonical triangles of the archival projector, then re-review"
+defects = []
+case_sha256 = "c94a5d983aa0ea0aad4b7abdd614ec77bfb06e1cfa071873d224a8b07e589d07"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "structural gap repaired at the archival widths: the first sandwich sum draws the four left- and four right-canonical triangle columns around the kernel identity strand, and the second draws the five-column left block (site i absorbed) against the four-column right block, so both summands expose the same nine physical pairs. Residues are house ink: smooth cup arcs for the source's square brackets, black for the source's blue identity and site-i legs, straight stubs for the curved physical hooks."
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-rg-workbench"
@@ -1221,14 +1222,15 @@ note = "kernel respell verified against Eq52.pdf: the X ring plus one mpo atom w
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-one"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "e86c03c2fffd4648c795b52076faa29f60a013c3b32a94c606989c5203193333"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "both panels close their rings; the one-to-two-site boundary advisory is the identity itself"
+case_sha256 = "458dc60558fa6fb631b0a79d99a522fee4f0c2d6e2848a07f8c9bbcfba2354f2"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against Dia1.pdf: both panels close their virtual word on a drawn all-black racetrack through explicit junction returns (#5492 substitute), one word tensor left and two right, each with the archival paired up/down physical stubs; the relation audit is opted out with the recorded arity reason since Delta maps one site to two. X renders as the grammar's stadium for the source's circle (#4931); sharp junction corners for the source's rounded ones."
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-two"
@@ -1288,13 +1290,14 @@ note = "kernel respell verified against author lines 211-219: all four glyphs un
 
 [[verdict]]
 id = "rmp-workbench-iii-dual-reduced"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "a343efad41230e93e3f63f900b6f364833a7eae0d314b1bd6381e90f1eb4c779"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "glyphs; RHS factor order is cyclic-equivalent"
+case_sha256 = "1137550ae09a8df459365d894f04eebc1c07088a54a70fd35e07231ddfa2a7cc"
+reviewed = "2026-08-05"
+renderer = "fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against source lines 220-248 (the archival Adualred.pdf file duplicates Dia2's ink, so the commented source is the drawing authority): the old cyclic factor order is repaired — X_ab^c now stands west with its fused red wire west and the a,b word east on the left, and the c tensor stands west of the box with the red a,b pair leaving east on the right, matching the source's centered wire heights through the three-row spanning box; audited signatures are equal. Physical columns black, virtual legs source-red."
 
 [[verdict]]
 id = "rmp-workbench-iii-f-symbol-simplified-a"
