@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.MeanErgodicProjection
+import TNLean.Channel.Schwarz.PositiveMapProperties
 import Mathlib.Analysis.Matrix.Normed
 
 /-!
@@ -17,14 +18,22 @@ multiplicity, i.e., all Jordan blocks for $\lambda$ are one-dimensional.
 The proof: if a Jordan block of size $\ge 2$ existed, the binomial expansion
 $T^n = (\lambda I + N)^n$ applied to a rank-$2$ generalized eigenvector
 would produce a term proportional to $n$, giving $\|T^n X\| \ge n\|Y\| - \|X\|$,
-which grows without bound. This contradicts the bounded-orbit theorem
-for positive trace-preserving maps.
+which grows without bound. This contradicts the uniform boundedness of the
+orbits of a positive trace-preserving or unital map. Wolf's bound
+$\operatorname{tr}[A\,T(B)] \le \|A\|_\infty \|B\|_\infty \operatorname{tr}[1\,T(1)]
+= d \|A\|_\infty \|B\|_\infty$ holds verbatim in both cases: for a unital map
+$T(1) = 1$, and powers of unital maps are unital. Both cases are therefore
+formalized by the same route, through `T.HasBoundedOrbits`.
 
 ## Main results
 
-* `IsPositiveMap.no_rank_two_genEigenvector_of_tracePreserving`:
+* `IsPositiveMap.hasBoundedOrbits_of_unital`: a positive unital matrix
+  endomorphism has bounded forward orbits.
+* `IsPositiveMap.no_rank_two_genEigenvector_of_tracePreserving` and
+  `IsPositiveMap.no_rank_two_genEigenvector_of_unital`:
   $\ker(T-\lambda)^2 = \ker(T-\lambda)$ when $|\lambda| = 1$.
-* `IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving`:
+* `IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving` and
+  `IsPositiveMap.peripheral_Jordan_trivial_of_unital`:
   generalized eigenspace equals eigenspace for peripheral eigenvalues.
 
 ## References
@@ -131,16 +140,161 @@ lemma pow_apply_rank_two_genEig
     -- Then apply h_combine to the parenthesized part
     rw [add_assoc, h_combine]
 
-/-- **Wolf Proposition 6.2** (key step): For a positive trace-preserving map,
-no rank-2 generalized eigenvector exists at a peripheral eigenvalue.
+/-! ### Bounded orbits of positive unital maps -/
+
+/-- A positive semidefinite matrix is bounded above by its trace times the
+identity matrix in the Loewner order.
+
+Diagonalize `X` by the spectral theorem: the difference
+`(trace X) • 1 - X` is unitarily congruent to a diagonal matrix whose entries
+are `trace X - λᵢ = ∑_{j ≠ i} λⱼ ≥ 0`, since every eigenvalue `λⱼ` of a
+positive semidefinite matrix is nonnegative. -/
+private theorem posSemidef_le_trace_smul_one {X : Matrix (Fin D) (Fin D) ℂ}
+    (hX : X.PosSemidef) :
+    X ≤ (X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  rw [Matrix.le_iff]
+  set U := hX.1.eigenvectorUnitary
+  set c : ℝ := X.trace.re with hc
+  have htr : c = ∑ i : Fin D, hX.1.eigenvalues i := by
+    rw [hc, hX.1.trace_eq_sum_eigenvalues]
+    push_cast
+    exact map_sum Complex.reAddMonoidHom _ _
+  set Dg : Matrix (Fin D) (Fin D) ℂ :=
+    Matrix.diagonal fun i : Fin D => ((hX.1.eigenvalues i : ℝ) : ℂ)
+  have hsp : X = (U : Matrix (Fin D) (Fin D) ℂ) * Dg * star (U : Matrix (Fin D) (Fin D) ℂ) := by
+    have h := hX.1.spectral_theorem
+    rw [conjStarAlgAut_apply] at h
+    convert h using 3
+    ext i j
+    simp [Dg, RCLike.ofReal_eq_coe]
+  have hU1 : (U : Matrix (Fin D) (Fin D) ℂ) * star (U : Matrix (Fin D) (Fin D) ℂ) = 1 :=
+    Unitary.mul_star_self_of_mem U.prop
+  have hdiag : ((c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - Dg).PosSemidef := by
+    have hdiag_eq : (c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - Dg =
+        Matrix.diagonal fun i : Fin D => (((c - hX.1.eigenvalues i : ℝ) : ℂ)) := by
+      ext i j
+      by_cases hij : i = j
+      · subst hij
+        simp [Dg, Matrix.one_apply_eq, smul_eq_mul, RCLike.real_smul_eq_coe_smul,
+          Complex.ofReal_sub]
+      · simp [Dg, Matrix.one_apply_ne hij, Matrix.diagonal_apply_ne _ hij]
+    rw [hdiag_eq]
+    refine Matrix.PosSemidef.diagonal fun i : Fin D => ?_
+    rw [Pi.zero_apply]
+    rw [Complex.nonneg_iff]
+    refine ⟨?_, by simp⟩
+    simp only [Complex.ofReal_re, sub_nonneg]
+    rw [htr]
+    exact Finset.single_le_sum (fun j _ => hX.eigenvalues_nonneg j) (Finset.mem_univ i)
+  have hdecomp : (c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - X =
+      (U : Matrix (Fin D) (Fin D) ℂ) *
+        ((c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - Dg) * star (U : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [hsp, Matrix.mul_sub, Matrix.sub_mul]
+    congr 1
+    rw [Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul, hU1, Matrix.smul_one]
+  rw [hdecomp]
+  have h := hdiag.conjTranspose_mul_mul_same (star (U : Matrix (Fin D) (Fin D) ℂ))
+  rwa [Matrix.conjTranspose_conjTranspose, Matrix.star_eq_conjTranspose] at h
+
+/-- The forward orbit of a positive semidefinite matrix under a positive
+unital endomorphism is bounded.
+
+Every iterate remains positive semidefinite, and positivity together with
+`T 1 = 1` propagates the Loewner bound `T^[n] X ≤ (trace X) • 1`: each iterate
+stays in the bounded trace section `{Y ⪰ 0 | trace Y ≤ D · trace X}` of the
+positive cone.  This is the unital case of Wolf's uniform boundedness
+observation in the proof of Proposition 6.2,
+`tr[A T(B)] ≤ ‖A‖ ‖B‖ tr[1 T(1)] = d ‖A‖ ‖B‖`, which holds verbatim for
+unital positive maps and all their powers.
+
+Source: Wolf, proof of Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 190--199. -/
+private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_unital
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hT1 : T 1 = 1)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
+    Bornology.IsBounded (Set.range fun n : ℕ ↦ T^[n] X) := by
+  classical
+  have htr_nonneg : 0 ≤ X.trace.re := (Complex.nonneg_iff.mp hX.trace_nonneg).1
+  have hiter_pos : ∀ n : ℕ, (T^[n] X).PosSemidef := by
+    intro n
+    induction n with
+    | zero => simpa using hX
+    | succ n ih =>
+        rw [Function.iterate_succ_apply']
+        exact hT _ ih
+  have hiter_le : ∀ n : ℕ, T^[n] X ≤ (X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    intro n
+    induction n with
+    | zero => simpa using posSemidef_le_trace_smul_one hX
+    | succ n ih =>
+        rw [Function.iterate_succ_apply']
+        calc
+          T (T^[n] X) ≤ T ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)) :=
+            hT.map_le_map ih
+          _ = (X.trace.re : ℝ) • T 1 := map_smul_of_tower T _ _
+          _ = (X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by rw [hT1]
+  have htrace_top : ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace =
+      (X.trace.re : ℂ) * D := by
+    rw [Matrix.trace_smul]
+    simp [Matrix.trace_one, smul_eq_mul]
+  have hiter_trace : ∀ n : ℕ,
+      (T^[n] X).trace ≤ ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace := by
+    intro n
+    have hle := hiter_le n
+    rw [Matrix.le_iff] at hle
+    have h0 := hle.trace_nonneg
+    rw [Matrix.trace_sub] at h0
+    exact sub_nonneg.mp h0
+  have htop_psd : ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).PosSemidef :=
+    Matrix.PosSemidef.one.smul htr_nonneg
+  have hiter_trace_norm : ∀ n : ℕ,
+      ‖(T^[n] X).trace‖ ≤ ‖((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace‖ := by
+    intro n
+    rw [show ‖(T^[n] X).trace‖ = ((T^[n] X).trace).re from by
+        simpa using congrArg Complex.re
+          (Complex.norm_of_nonneg' (hiter_pos n).trace_nonneg),
+      show ‖((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace‖ =
+        (((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace).re from by
+        simpa using congrArg Complex.re (Complex.norm_of_nonneg' htop_psd.trace_nonneg)]
+    rw [← sub_nonneg]
+    simpa [map_sub] using (Complex.nonneg_iff.mp (sub_nonneg.mpr (hiter_trace n))).1
+  apply (posSemidef_trace_bounded_isBounded
+    ‖((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace‖).subset
+  intro Y hY
+  obtain ⟨n, rfl⟩ := hY
+  exact ⟨hiter_pos n, hiter_trace_norm n⟩
+
+/-- A positive unital endomorphism of a finite-dimensional complex matrix
+algebra has bounded forward orbits on every matrix.
+
+Wolf's proof of Proposition 6.2 bounds `tr[A T(B)]` uniformly over the powers
+of any trace-preserving **or unital** positive map; for a unital map
+`tr[1 T(1)] = tr[1] = d`, so the same uniform bound applies.  The positive
+semidefinite orbit bound above is lifted to all matrices by Hermitian
+decomposition (`hasBoundedOrbits_of_posSemidef_orbit_bounded`).
+
+Source: Wolf, proof of Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 190--199. -/
+theorem IsPositiveMap.hasBoundedOrbits_of_unital
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hT : IsPositiveMap T) (hT1 : T 1 = 1) :
+    T.HasBoundedOrbits :=
+  hT.hasBoundedOrbits_of_posSemidef_orbit_bounded fun hX =>
+    hT.isBounded_orbit_of_posSemidef_of_unital hT1 hX
+
+/-- **Wolf Proposition 6.2** (shared key step): For a positive map with
+bounded orbits, no rank-2 generalized eigenvector exists at a peripheral
+eigenvalue.
 
 If $(T-\lambda)^2 X = 0$ with $|\lambda| = 1$, then $(T-\lambda)X = 0$.
 
 Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
-theorem no_rank_two_genEigenvector_of_tracePreserving
+private theorem no_rank_two_genEigenvector_of_hasBoundedOrbits
     [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hbounded : T.HasBoundedOrbits)
     (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (X : Matrix (Fin D) (Fin D) ℂ)
     (hN2 : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) X = 0) :
     (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 := by
@@ -148,8 +302,6 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
   by_contra h_not
   have hNX_ne_zero : N X ≠ 0 := h_not
   have hNX_norm_pos : 0 < ‖N X‖ := norm_pos_iff.mpr hNX_ne_zero
-  have hbounded : T.HasBoundedOrbits :=
-    hPos.hasBoundedOrbits_of_tracePreserving hTP
   -- Binomial expansion: T^n X = μ^n X + n μ^{n-1} (N X)
   have h_pow_formula (n : ℕ) :
       (T ^ n) X = (μ ^ n) • X + ((n : ℂ) * μ ^ (n - 1)) • (N X) :=
@@ -210,18 +362,52 @@ theorem no_rank_two_genEigenvector_of_tracePreserving
     linarith
   linarith
 
-/-- **Wolf Proposition 6.2** (full statement): For a positive trace-preserving map,
-the generalized eigenspace for any peripheral eigenvalue $\lambda$ equals
-the eigenspace: $\ker(T-\lambda)^k = \ker(T-\lambda)$ for all $k \ge 1$.
+/-- **Wolf Proposition 6.2** (key step, trace-preserving case): For a positive
+trace-preserving map, no rank-2 generalized eigenvector exists at a peripheral
+eigenvalue.
+
+If $(T-\lambda)^2 X = 0$ with $|\lambda| = 1$, then $(T-\lambda)X = 0$.
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
+theorem no_rank_two_genEigenvector_of_tracePreserving
+    [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hN2 : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) X = 0) :
+    (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 :=
+  no_rank_two_genEigenvector_of_hasBoundedOrbits
+    (hPos.hasBoundedOrbits_of_tracePreserving hTP) μ hμ_norm X hN2
+
+/-- **Wolf Proposition 6.2** (key step, unital case): For a positive unital
+map, no rank-2 generalized eigenvector exists at a peripheral eigenvalue.
+
+If $(T-\lambda)^2 X = 0$ with $|\lambda| = 1$, then $(T-\lambda)X = 0$.
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
+theorem no_rank_two_genEigenvector_of_unital
+    [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hPos : IsPositiveMap T) (hT1 : T 1 = 1)
+    (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hN2 : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ 2) X = 0) :
+    (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 :=
+  no_rank_two_genEigenvector_of_hasBoundedOrbits
+    (hPos.hasBoundedOrbits_of_unital hT1) μ hμ_norm X hN2
+
+/-- **Wolf Proposition 6.2** (full statement, shared form): For a positive map
+with bounded orbits, the generalized eigenspace for any peripheral eigenvalue
+$\lambda$ equals the eigenspace: $\ker(T-\lambda)^k = \ker(T-\lambda)$ for all
+$k \ge 1$.
 
 In other words, peripheral eigenvalues have trivial Jordan blocks
 (algebraic multiplicity equals geometric multiplicity).
 
 Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
-theorem peripheral_Jordan_trivial_of_tracePreserving
+private theorem peripheral_Jordan_trivial_of_hasBoundedOrbits
     [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (hbounded : T.HasBoundedOrbits)
     (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (k : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
     (hNk : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ k) X = 0) :
     (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 := by
@@ -253,7 +439,7 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
         rw [this, show (2 : ℕ) + (m - 1) = m + 1 by omega]
         exact hNk
       have hN1_Y : N Y = 0 :=
-        hPos.no_rank_two_genEigenvector_of_tracePreserving hTP μ hμ_norm Y hN2_Y
+        no_rank_two_genEigenvector_of_hasBoundedOrbits hbounded μ hμ_norm Y hN2_Y
       -- hN1_Y: (T - μ•1) Y = 0  where Y = (T-μ•1)^(m-1) X
       -- We need: ((T-μ•1)^m) X = 0 for the induction hypothesis ih
       -- Compute: (T-μ•1) Y = (T-μ•1) ((T-μ•1)^(m-1) X) = ((T-μ•1)^m) X
@@ -276,6 +462,44 @@ theorem peripheral_Jordan_trivial_of_tracePreserving
       -- Now rewrite hN1_Y using h_pow_eq
       rw [h_pow_eq] at hN1_Y
       exact ih hN1_Y
+
+/-- **Wolf Proposition 6.2** (full statement, trace-preserving case): For a
+positive trace-preserving map, the generalized eigenspace for any peripheral
+eigenvalue $\lambda$ equals the eigenspace: $\ker(T-\lambda)^k =
+\ker(T-\lambda)$ for all $k \ge 1$.
+
+In other words, peripheral eigenvalues have trivial Jordan blocks
+(algebraic multiplicity equals geometric multiplicity).
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
+theorem peripheral_Jordan_trivial_of_tracePreserving
+    [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T)
+    (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (k : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hNk : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ k) X = 0) :
+    (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 :=
+  peripheral_Jordan_trivial_of_hasBoundedOrbits
+    (hPos.hasBoundedOrbits_of_tracePreserving hTP) μ hμ_norm k X hNk
+
+/-- **Wolf Proposition 6.2** (full statement, unital case): For a positive
+unital map, the generalized eigenspace for any peripheral eigenvalue
+$\lambda$ equals the eigenspace: $\ker(T-\lambda)^k = \ker(T-\lambda)$ for
+all $k \ge 1$.
+
+In other words, peripheral eigenvalues have trivial Jordan blocks
+(algebraic multiplicity equals geometric multiplicity).
+
+Source: Wolf, *Quantum Channels & Operations*, Proposition 6.2; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224. -/
+theorem peripheral_Jordan_trivial_of_unital
+    [NeZero D] {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hPos : IsPositiveMap T) (hT1 : T 1 = 1)
+    (μ : ℂ) (hμ_norm : ‖μ‖ = 1) (k : ℕ) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hNk : ((T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) ^ k) X = 0) :
+    (T - μ • (1 : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)) X = 0 :=
+  peripheral_Jordan_trivial_of_hasBoundedOrbits
+    (hPos.hasBoundedOrbits_of_unital hT1) μ hμ_norm k X hNk
 
 
 end IsPositiveMap
