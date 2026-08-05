@@ -16,18 +16,19 @@
   \end{tenkz}
 \]
 
-% panel 2 — the fat-graph depiction: two directed matrix levels meeting at a
-% glyphless junction (the fat graph IS the tensor).  The grid panel above owns
-% the leg typing, so each fat wire is one directed level; the junction sits
-% east of the level midpoint, so the level name a reads over clear paper.
+% panel 2 — the fat-graph depiction: two directed levels meeting at a
+% glyphless junction (the fat graph IS the tensor).  The leg typing matches
+% the grid panel: the vertical m/n level is physical, the horizontal j/k
+% level is the virtual MPO wire; the junction sits east of the level
+% midpoint, so the level name a reads over clear paper.
 \[
   \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
     \tn[at=(2,1), name=j, skin=dot, label pos=180, ports={0:virtual}]{j}
     \tn[at=(2,4), name=k, skin=dot, label pos=0, ports={180:virtual}]{k}
-    \tn[at=(1,3), name=m, skin=dot, label pos=90, ports={270:virtual}]{m}
-    \tn[at=(3,3), name=n, skin=dot, label pos=270, ports={90:virtual}]{n}
+    \tn[at=(1,3), name=m, skin=dot, label pos=90, ports={270:physical}]{m}
+    \tn[at=(3,3), name=n, skin=dot, label pos=270, ports={90:physical}]{n}
     \tn[at=(2,3), name=X, skin=none,
-      ports={180:virtual, 0:virtual, 90:virtual, 270:virtual}]{}
+      ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{}
     \tnwire[name=a]{j.0}{X.180}
     \tnwire[dir=to]{X.0}{k.180}
     \tnwire{n.90}{X.270}
