@@ -3,7 +3,7 @@
 % Ink: Kernel flat frame; the source mirrors the whole equation (cups west,
 %   apexes east) while the house keeps the definition compass (cup east,
 %   open pair west), so in the house frame the mirrored source glyphs face
-%   west -- the apex the kernel triangle skin cannot draw (#5485).
+%   west, which the mirrored triangle skin draws.
 % Boundary: The east cup contracts the right indices; the west ket-bra pair remains
 %   open.
 % Source: paper TN-Review-main.tex line 663; author source ImagesReview Section
@@ -15,9 +15,9 @@
   % vertically between the rows, and east=cup contracts the shared right
   % index beta.
   \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, east=cup]
-    \tn[at=(1,1), skin=tri, name=ket,
+    \tn[at=(1,1), skin=triwest, name=ket,
       ports={180:virtual, 0:virtual, 270:physical}]{A_R}
-    \tn[at=(2,1), skin=tri, name=bra,
+    \tn[at=(2,1), skin=triwest, name=bra,
       ports={180:virtual, 0:virtual, 90:physical}]{\overline{A_R}}
     \tnwire{ket.270}{bra.90}
   \end{tenkz}
