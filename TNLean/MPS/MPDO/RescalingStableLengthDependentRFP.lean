@@ -138,6 +138,14 @@ Source: arXiv:1606.00608, lines 995--1010 (project example). -/
     | 3 => ((1 : Fin 2), (1 : Fin 2)) := by
   fin_cases k <;> rfl
 
+lemma bondEquiv_val (x y : Fin 2) : bondEquiv (x, y) =
+    match x, y with
+    | 0, 0 => (0 : Fin 4)
+    | 0, 1 => (1 : Fin 4)
+    | 1, 0 => (2 : Fin 4)
+    | 1, 1 => (3 : Fin 4) := by
+  fin_cases x <;> fin_cases y <;> rfl
+
 def R : MPOTensor 4 4 :=
   fun p q a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
     (bondEquiv.symm p) (bondEquiv.symm q)
@@ -867,5 +875,38 @@ lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) 
     dotProduct_A_col _ _ _ _
   rw [hdot]
   by_cases h : gate i1 i2 ∧ gate j1 j2 <;> simp [h] <;> ring
+
+/-! ### The Walsh–Hadamard eigenbasis of `wMat`, reused as Kraus data -/
+
+/-- The two (unnormalized) Walsh–Hadamard eigenvectors of `wMat`. -/
+def eigVecs : Fin 2 → Fin 2 → ℂ
+  | 0 => ![1, 1]
+  | 1 => ![1, -1]
+
+/-- The eigenvalues of `wMat` matching `eigVecs`. -/
+def eigVals : Fin 2 → ℝ
+  | 0 => 1
+  | 1 => lambda
+
+lemma wMat_mulVec_eigVecs (s : Fin 2) :
+    wMat.mulVec (eigVecs s) = (eigVals s : ℂ) • eigVecs s := by
+  fin_cases s
+  · exact wMat_mulVec_ones
+  · exact wMat_mulVec_alt
+
+lemma eigVecs_sq_sum (s : Fin 2) : (eigVecs s 0) ^ 2 + (eigVecs s 1) ^ 2 = 2 := by
+  fin_cases s <;> norm_num [eigVecs]
+
+/-- **The gated fiber of `combine` over a physical index `k` has exactly two
+elements, indexed by the shared bond bit `b`.** For any function `f` of the
+first-site's second bit, the sum over gated pairs `(p, q)` with `combine p q
+= k` of `f (bit2 p)` collapses to `f 0 + f 1`. -/
+lemma gated_combine_fiber_sum (k : Fin 4) (f : Fin 2 → ℂ) :
+    (∑ pq : Fin 4 × Fin 4,
+        if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then f (bit2 pq.1) else 0) =
+      f 0 + f 1 := by
+  rw [Fintype.sum_prod_type]
+  fin_cases k <;>
+    simp [gate, combine, bit1, bit2, bondEquiv_val, Fin.sum_univ_four] <;> ring
 
 end MPOTensor.RescalingStableLengthDependentRFP
