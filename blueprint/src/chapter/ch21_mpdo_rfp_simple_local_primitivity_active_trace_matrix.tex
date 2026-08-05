@@ -681,9 +681,7 @@
 \end{proof}
 
 % Proved Case-I components.  The remaining singleton-sector assembly
-% is not yet formalized: the trace similarity
-% $\tr(\widehat S^N)=\tr((S^*)^N)$ under a diagonal rescaling of the
-% trace-squared matrix of the preceding lemma, the overlap formula
+% is not yet formalized: the overlap formula
 % $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
 % =\tr((S^*)^N)$, and the Case-I relations $(T^*)^2=T^*$ and
 % $Q(1-LQ)L=0$ in the rectangular decomposition
@@ -769,4 +767,73 @@
     \end{align}
     which is the positivity argument of
     Theorem~\ref{thm:matrix_primitive_pow_two_rank_one}.
+\end{proof}
+
+% Elementary combinatorial infrastructure for the overlap formula
+% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)=\tr((S^*)^N)$,
+% which is not yet assembled: reconciling the active-sector-restricted
+% index set $I_*$ used by $S^*$ with the full sector index set that the
+% cyclic-product trace factorization of
+% Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products} ranges over
+% remains open.  The route is sketched in
+% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+\begin{lemma}[Indicator-path expansion of a matrix power]
+    \label{lem:mpdo_pow_apply_path_indicator}
+    \lean{MPOTensor.pow_apply_eq_sum_path_indicator}
+    \leanok
+    Let $S$ be a real square matrix indexed by a finite set $I$, and let
+    $N\geq0$. Then, for $a,b\in I$,
+    \begin{align}
+        \left(S^N\right)_{a,b}
+        &=\sum_{\substack{v:\{0,\ldots,N\}\to I\\ v_0=a,\ v_N=b}}
+          \ \prod_{i=0}^{N-1}S_{v_i,v_{i+1}},
+        \notag
+    \end{align}
+    the sum, over length-$N$ walks $v$ in $I$ from $a$ to $b$, of the
+    product of matrix entries along the walk. This is an elementary
+    combinatorial identity used to derive the cyclic-product form of
+    $\tr(S^N)$ in the Case-I route.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Induction on $N$: the base case is the identity-matrix entry
+    $\delta_{a,b}$, indexed by the unique length-$0$ walk; the
+    inductive step expands $\left(S^{N+1}\right)_{a,b}
+    =\sum_c\left(S^N\right)_{a,c}S_{c,b}$ and reindexes the
+    walk-and-endpoint pair $(v,c)$ as the length-$(N+1)$ walk obtained
+    by appending $c$ to $v$.
+\end{proof}
+
+\begin{theorem}[Trace of a matrix power as a sum over cyclic products]
+    \label{thm:mpdo_trace_pow_cyclic_product}
+    \lean{MPOTensor.trace_pow_eq_sum_cyclicProduct}
+    \leanok
+    \uses{lem:mpdo_pow_apply_path_indicator}
+    Let $S$ be a real square matrix indexed by a finite set $I$, and
+    let $N\geq1$. Then
+    \begin{align}
+        \tr\!\left(S^N\right)
+        &=\sum_{k:\{0,\ldots,N-1\}\to I}
+          \ \prod_{i=0}^{N-1}S_{k_i,k_{i+1}},
+        \notag
+    \end{align}
+    with indices read modulo $N$, the sum over labelings $k$ of the
+    $N$ cyclic positions of the product of matrix entries along the
+    cycle. Applied to the trace-squared matrix $S^*$ of
+    Lemma~\ref{lem:mpdo_active_sector_trace_sq_matrix}, this is the
+    combinatorial identity used to express the self-overlap
+    $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)$ in terms of
+    $\tr\!\left((S^*)^N\right)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_pow_apply_path_indicator}
+    Expand $\tr(S^N)=\sum_a\left(S^N\right)_{a,a}$ by
+    Lemma~\ref{lem:mpdo_pow_apply_path_indicator}, collapse the sum
+    over the shared endpoint $a=v_0=v_N$, and reindex the resulting
+    closed length-$N$ walks $v$ (with $v_0=v_N$) as cyclic labelings
+    $k:\{0,\ldots,N-1\}\to I$ by dropping the repeated final
+    coordinate.
 \end{proof}
