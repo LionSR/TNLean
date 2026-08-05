@@ -125,13 +125,13 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-workbench-iii-f-tensor` | K2 | An explicit F box faithfully replaces the source's boxless crossing. |
 | `rmp-workbench-iii-eq59-now` | K2 | Ring colour and stadium-versus-circle glyphs are house style. |
 | `rmp-workbench-iii-ghz-state-workbench` | K1 | The manifest records `staggered-sites`; route the fix through the cell basis, not the published GHZ lattice mechanism. |
-| `rmp-workbench-iii-ghz-up` | K3 | Improve glyph proportions and leg geometry as a family. |
+| `rmp-workbench-iii-ghz-up` | — | Promoted to `faithful` 2026-08-05 (wave 2B): the kernel box atom carries four typed ports with clean stub geometry, matching the faithful G_down sibling's house form; the K3 leg-geometry residue is gone. |
 | `rmp-workbench-iii-g-injective-pull` | X | Re-audit the source pairing: the current diagonal `U_g` belongs to the SPT panel. |
-| `rmp-workbench-iii-intertwining-mpo` | K2 | Line weight alone is house style. |
+| `rmp-workbench-iii-intertwining-mpo` | — | Promoted to `faithful` 2026-08-05 (wave 2B): kernel respell verified against the author panel; the archival pairing is corrected to `sptintertwin gh.pdf` (interMPO.pdf is the a/b/c fusion intertwiner). |
 | `rmp-workbench-iii-mpo-injective-white` | K2 | Direct strings faithfully replace the source's substituted boxes. |
 | `rmp-workbench-iii-mpo-on-peps-definition` | K3 | Treat unrecorded hatching and hue as house style; fix only the family-level centring residue. |
-| `rmp-workbench-iii-eq60-now` | K2 | Daggered insertions and genuinely diagonal legs are present. |
-| `rmp-workbench-iii-enlarged-mpo-black` | K2 | The closed five-box ring and marked site are complete. |
+| `rmp-workbench-iii-eq60-now` | — | Promoted to `faithful` 2026-08-05 (wave 2B): kernel star with all five insertions on their legs; the archival pairing is corrected to `Eq60.pdf` (the file named Eq60now.pdf holds the eq59-family lattice identity). |
+| `rmp-workbench-iii-enlarged-mpo-black` | — | Promoted to `faithful` 2026-08-05 (wave 2B): kernel word with the marked fourth box unlabeled as in the source; the single-row trace return is drawn through corner junctions until the closure policy inks it (K1, family-level). |
 | `rmp-workbench-iii-eq59` | K2 | Both windings, complete station counts, and joined resolution rails are present. |
 | `rmp-workbench-iii-g-injective-mpo` | K3 | Resolved 2026-08-04: the eight sector labels sit on genuine open boundary half-edges, each with its own open wire; the four plaquette bonds stay internal and unlabelled. Residue: house box for the source circle glyph. |
 | `rmp-workbench-iii-peps-renormalization-one` | X | The manifest requires four edge-centred PEPS atoms that the case omits; reconcile the contract before hatch review. |

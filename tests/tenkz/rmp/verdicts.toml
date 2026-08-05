@@ -421,11 +421,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "fable-structural-redraw-2026-07-27"
 defects = []
-case_sha256 = "4a289174e44ecddae58433bbcd329c754084cc8406585b0169b4fb8395bc85b0"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
+case_sha256 = "f15bf8267fdcdea959ef62e5bfb85db772aa34012870fedef3346d747537d915"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
 second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "the S_{alpha,g} case uses the supported ket-op-bra contraction order in a 180-degree frame, preserving the lower-ket X_g actions at author-source y=-0.75"
+note = "Kernel migration (wave 2B): each loop is now spelled upright -- bra-A over ket-A with R on the vertical physical bond, rho_l and rho_r rings closing the rails through corner arcs, X_g east of the left ket-A and X_g^dagger west of the right one, as at author-source y=-0.75; the corner arcs render as straight chords, so the loop reads as a hexagon where the source rounds a rectangle, the same house form the merged MPO-injective ring carries."
 
 [[verdict]]
 id = "rmp-iii-a-f-symbol"
@@ -444,22 +444,22 @@ id = "rmp-iii-a-boundary-algebra-n"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "bc97fd1c0d926ed9d06f9dfe127d1655fe2c77e037043fa537691e47a6d4e1b2"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "be8e9f838c64bb6fc991345b8acfb5d3cdcd85aced088fa1e16765c45435acba"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
 second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "pairing repaired; Tr[X A_1..A_N] matches"
+note = "Kernel migration (wave 2B): the X ring and the A_1..A_N word carry the source's red virtual hue, with the traced word returning below through two invisible corner junctions (the single-row trace policy does not draw its return yet, K1); each site now shows both physical legs, restoring the source's up-and-down MPO stubs that the 0.7 case drew up-only; the A_i labels remain house annotation on the source's unlabeled boxes."
 
 [[verdict]]
 id = "rmp-iii-a-boundary-algebra"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "ced39bbf276f82ed44d539ef0f578627bb25024e41248cda7be175624495da7c"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
+case_sha256 = "1754e3d48a9b42a888f9d2dccb2d8f5f3c7aab2207d45985bb630e406ac2a806"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
 second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "pairing repaired; Tr[X A] matches"
+note = "Kernel migration (wave 2B): the one-site word of the size-N case -- X ring, one A box, red traced return below through corner junctions set one column outside the word so the corner chords attach at the outer virtual ports and clear the physical stubs, and both physical legs restored where the 0.7 case drew up-only."
 
 [[verdict]]
 id = "rmp-iii-a-pentagon-physical"
@@ -1345,13 +1345,14 @@ note = "equivalence twin is pixel-identical to the published target; topology an
 
 [[verdict]]
 id = "rmp-workbench-iii-ghz-up"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "8fdf3445428c6dce5f324dde05f98f95c028559a7f7bf0998359552dc6dfe8db"
-reviewed = "2026-07-24"
-renderer = "source-split-page-review-2026-07-24"
-note = "glyph and leg geometry"
+case_sha256 = "c2ef56cbba6b433a5f0a13b63b5869091aec2449e3df845c8ca5fde076d4bda5"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
+second_viewer = "wave2b-delegated-second-viewer-2026-08-05-400dpi"
+note = "Kernel migration (wave 2B): one box atom with two virtual and two labelled physical typed ports, the same labelled-box house form the faithful G_down sibling carries for the source's bare copy junction; the typed stubs resolve the old K3 leg-geometry residue."
 
 [[verdict]]
 id = "rmp-workbench-iii-g-injective-pull"
@@ -1366,13 +1367,14 @@ note = "the exact hash follows the author-source G-injective pull at lines 468-4
 
 [[verdict]]
 id = "rmp-workbench-iii-intertwining-mpo"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
-case_sha256 = "d6904f1387f4ab0e8a6925f3716a71124513dbb0a44077a94956a45505a1d41b"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "line weight only"
+case_sha256 = "6d2ec4b1d483aece3bbc45d315a031b47901cfff6c511a199c864f6a5130afa3"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
+second_viewer = "wave2b-delegated-second-viewer-2026-08-05-400dpi"
+note = "Kernel migration (wave 2B): the tall X_gh box spans the g and h rows with its west port on the gh midline and two slotted east ports at the rail heights; every g-h column contracts g's lower physical index into h's upper one as the source's continuous vertical line does, the virtual word is red on both sides, and the boundary is one west gh end plus the open g and h rails east; the archival pairing is corrected to sptintertwin gh.pdf -- interMPO.pdf holds the a/b/c fusion intertwiner, a different panel."
 
 [[verdict]]
 id = "rmp-workbench-iii-mpo-injective-white"
@@ -1397,25 +1399,27 @@ note = "Kernel stock MPO skin (#5362); the abstraction still drops the source's 
 
 [[verdict]]
 id = "rmp-workbench-iii-eq60-now"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "566eecee0b9e128926935e77a0e07e79ecd2ec1419bf39de0488e9ef91364831"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "the daggered insertions are drawn and the diagonal legs are genuinely diagonal on both sides"
+case_sha256 = "0e5104141aff922814a3b5da19a01b0e960e361277ee9b5ec9ca0d4bed51013d"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
+second_viewer = "wave2b-delegated-second-viewer-2026-08-05-400dpi"
+note = "Kernel migration (wave 2B): the star keeps its unlabeled dot as in the source, u_g rides the physical leg with the leg continuing above it, and w_g, w_g^dagger, v_g, v_g^dagger sit on the horizontal and diagonal legs next to the tensor; the rings are the red-stroked house action capsules for the source's black circles; the archival pairing is corrected to Eq60.pdf -- the file named Eq60now.pdf holds the lattice identity of the eq59 family."
 
 [[verdict]]
 id = "rmp-workbench-iii-enlarged-mpo-black"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "1b6a223c2269f172f277aac3f78058a2f0dc445a3f236d609b3d1861370daa62"
-reviewed = "2026-07-27"
-renderer = "fable-structural-redraw-2026-07-27-200dpi"
-note = "ring closed with five boxes and the marked site, as the source draws concretely without an ellipsis"
+case_sha256 = "f9e22c81e3d955fe8490dc05e2fd59604dfecccae15c241be077352ce201f83f"
+reviewed = "2026-08-05"
+renderer = "kernel-migration-wave2b-source-review-2026-08-05-200dpi"
+second_viewer = "wave2b-delegated-second-viewer-2026-08-05-400dpi"
+note = "Kernel migration (wave 2B): five boxes with both physical legs each, the fourth carrying the marked species, and the red virtual word returning below through corner junctions (the single-row trace policy does not draw its return yet, K1); the marked box is now unlabeled as in the source, dropping the 0.7 case's extra i; house outlines stand in for the source's black and blue fills, and the marked site's red legs stay house ink because port stubs do not read the host species."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq59"
