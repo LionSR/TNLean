@@ -874,7 +874,9 @@ lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) 
       if gate i1 i2 ∧ gate j1 j2 then wMat (bit2 i1) (bit2 j1) else 0 :=
     dotProduct_A_col _ _ _ _
   rw [hdot]
-  by_cases h : gate i1 i2 ∧ gate j1 j2 <;> simp [h] <;> ring
+  by_cases h : gate i1 i2 ∧ gate j1 j2
+  · simp only [h, if_true]; ring
+  · rw [if_neg h]; ring
 
 /-! ### The Walsh–Hadamard eigenbasis of `wMat`, reused as Kraus data -/
 
@@ -907,6 +909,92 @@ lemma gated_combine_fiber_sum (k : Fin 4) (f : Fin 2 → ℂ) :
       f 0 + f 1 := by
   rw [Fintype.sum_prod_type]
   fin_cases k <;>
-    simp [gate, combine, bit1, bit2, bondEquiv_val, Fin.sum_univ_four] <;> ring
+    simp [gate, combine, bit1, bit2, bondEquiv_val, Fin.sum_univ_four]
+
+/-! ### The refinement map `T`: one-site to two-site physical operators -/
+
+lemma eigVals_pos (s : Fin 2) : 0 < eigVals s := by
+  fin_cases s <;> norm_num [eigVals, lambda]
+
+/-- The Kraus amplitude of the refinement map's `s`-th component. -/
+noncomputable def refineAmp (s : Fin 2) : ℝ := Real.sqrt (25 * eigVals s / 64)
+
+lemma refineAmp_sq (s : Fin 2) : (refineAmp s) ^ 2 = 25 * eigVals s / 64 := by
+  rw [refineAmp, Real.sq_sqrt (by have := eigVals_pos s; linarith)]
+
+/-- The `s`-th Kraus operator of the refinement map `T` sending the one-site
+physical operator to the two-site physical operator: it places the
+amplitude `refineAmp s * eigVecs s (bit2 p)` at the gated pair `(p, q)`
+whose `combine` equals `k`, and vanishes elsewhere. -/
+noncomputable def refineKraus (s : Fin 2) : Matrix (Fin 4 × Fin 4) (Fin 4) ℂ :=
+  Matrix.of fun pq k =>
+    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+      (refineAmp s : ℂ) * eigVecs s (bit2 pq.1)
+    else 0
+
+/-- The refinement map `T` from one-site to two-site physical operators. -/
+noncomputable def refineMap :
+    Matrix (Fin 4) (Fin 4) ℂ →ₗ[ℂ] Matrix (Fin 4 × Fin 4) (Fin 4 × Fin 4) ℂ :=
+  Matrix.rectangularKrausMap refineKraus
+
+lemma refineAmp_star (s : Fin 2) : star ((refineAmp s : ℝ) : ℂ) = (refineAmp s : ℂ) :=
+  Complex.conj_ofReal _
+
+lemma eigVecs_star (s b : Fin 2) : star (eigVecs s b) = eigVecs s b := by
+  fin_cases s <;> fin_cases b <;> simp [eigVecs]
+
+lemma refineKraus_apply_conj_mul (s : Fin 2) (pq : Fin 4 × Fin 4) (k : Fin 4) :
+    star (refineKraus s pq k) * refineKraus s pq k =
+      if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+        (refineAmp s : ℂ) ^ 2 * (eigVecs s (bit2 pq.1)) ^ 2
+      else 0 := by
+  simp only [refineKraus, Matrix.of_apply]
+  by_cases h : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+  · simp only [if_pos h, star_mul', refineAmp_star, eigVecs_star]
+    ring
+  · simp [h]
+
+lemma refineAmp_sq_sum :
+    (refineAmp (0 : Fin 2) : ℂ) ^ 2 * 2 + (refineAmp (1 : Fin 2) : ℂ) ^ 2 * 2 = 1 := by
+  have h0 := refineAmp_sq (0 : Fin 2)
+  have h1 := refineAmp_sq (1 : Fin 2)
+  have e0 : ((refineAmp (0 : Fin 2) : ℝ) : ℂ) ^ 2 = ((refineAmp (0 : Fin 2)) ^ 2 : ℝ) := by
+    push_cast; ring
+  have e1 : ((refineAmp (1 : Fin 2) : ℝ) : ℂ) ^ 2 = ((refineAmp (1 : Fin 2)) ^ 2 : ℝ) := by
+    push_cast; ring
+  rw [e0, e1, h0, h1]
+  norm_num [eigVals, lambda]
+
+/-- **The refinement Kraus family resolves the identity.** -/
+lemma refineKraus_resolution :
+    ∑ s : Fin 2, (refineKraus s)ᴴ * refineKraus s = (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
+  ext k k'
+  simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply]
+  by_cases hkk' : k = k'
+  · subst hkk'
+    rw [Matrix.one_apply_eq]
+    have hstep : ∀ s : Fin 2,
+        (∑ pq : Fin 4 × Fin 4, star (refineKraus s pq k) * refineKraus s pq k) =
+          (refineAmp s : ℂ) ^ 2 * 2 := by
+      intro s
+      simp_rw [refineKraus_apply_conj_mul]
+      rw [gated_combine_fiber_sum k (fun b => (refineAmp s : ℂ) ^ 2 * (eigVecs s b) ^ 2)]
+      have := eigVecs_sq_sum s
+      have heq : (eigVecs s 0) ^ 2 + (eigVecs s 1) ^ 2 = (2 : ℂ) := by exact_mod_cast this
+      rw [← mul_add, heq]
+    rw [Finset.sum_congr rfl fun s _ => hstep s]
+    simpa [Fin.sum_univ_two] using refineAmp_sq_sum
+  · rw [Matrix.one_apply_ne hkk']
+    apply Finset.sum_eq_zero
+    intro s _
+    apply Finset.sum_eq_zero
+    intro pq _
+    simp only [refineKraus, Matrix.of_apply]
+    by_cases h1 : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+    · have h2 : ¬ (gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k') := by
+        rintro ⟨_, hc⟩
+        exact hkk' (h1.2.symm.trans hc)
+      rw [if_pos h1, if_neg h2, mul_zero]
+    · rw [if_neg h1, star_zero, zero_mul]
 
 end MPOTensor.RescalingStableLengthDependentRFP
