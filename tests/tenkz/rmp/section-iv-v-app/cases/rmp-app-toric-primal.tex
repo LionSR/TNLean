@@ -1,21 +1,26 @@
 % Target: rmp-app-toric-primal
 % Formula: Gauss law g_1 g_2 g_3^{-1} g_4^{-1} = e. The PEPS tensor blocks one
-% Ink: Canonical public tenkzlattice environment; no raw TikZ.
+% Ink: Kernel plane frame; the blocked sheet is the house enclosure and the
+%   plaquette's four edge spins are explicit wires between the retained
+%   mid-side stations.
 % Boundary: Resolved by the public environment; open indices remain explicit.
 % Source: paper TN-Review-main.tex line 2456; paper-context-only; no author drawing
 %   source
-% Capabilities: lattice, regions, typed-ports
+% Capabilities: kernel, plane-frame, regions, typed-ports
+\tenkzkernel
 \[
-\begin{tenkzlattice}[rows=3, cols=3, frame=oblique, site=none, boundary=open]
-  % the blocked-plaquette tensor (shaded sheet)
-  \tnregion[slot=selected]{(1-3,1-3)}
-  % keep only the four mid-side sites: their boundary legs are the four
-  % virtual indices g_1 g_4^{-1}, g_1 g_2, g_2^{-1} g_3, g_4 g_3
-  \tnsite[removed]{(1,1)} \tnsite[removed]{(1,3)}
-  \tnsite[removed]{(3,1)} \tnsite[removed]{(3,3)}
-  \tnsite[removed]{(2,2)}
-  % the blocked plaquette: physical edge spins g_1..g_4 on the diamond
-  \tnedge{(2,1)-(1,2)} \tnedge{(1,2)-(2,3)}
-  \tnedge{(2,3)-(3,2)} \tnedge{(3,2)-(2,1)}
-\end{tenkzlattice}
+  % The blocked-plaquette tensor: only the four mid-side stations survive the
+  % blocking, and their outward legs are the four virtual indices
+  % g_1 g_4^{-1}, g_1 g_2, g_2^{-1} g_3, g_4 g_3.  The interior diamond is
+  % the original lattice's plaquette with edge spins g_1..g_4.
+  \begin{tenkz}[lattice={3x3}, frame=plane, bonds=none, boundary=none]
+    \tn[at=(1,2), name=n, skin=none]{}
+    \tn[at=(2,1), name=w, skin=none]{}
+    \tn[at=(2,3), name=e, skin=none]{}
+    \tn[at=(3,2), name=s, skin=none]{}
+    \tnwire{n}{e} \tnwire{e}{s} \tnwire{s}{w} \tnwire{w}{n}
+    \tnwire{n.90}{open n} \tnwire{w.180}{open w}
+    \tnwire{e.0}{open e} \tnwire{s.270}{open s}
+    \tnmark[form=enclosure]{(1,1) .. (3,3)}{}
+  \end{tenkz}
 \]
