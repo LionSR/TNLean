@@ -386,4 +386,112 @@ lemma eq_of_ungated_combine_bit2 {pq pq' : Fin 4 × Fin 4} (h1 : ¬ gate pq.1 pq
   · exact eq_of_bit1_bit2 _ _ e1 hb
   · exact eq_of_bit1_bit2 _ _ e3 e2
 
+lemma coarseAmp_star : star ((coarseAmp : ℝ) : ℂ) = (coarseAmp : ℂ) :=
+  Complex.conj_ofReal _
+
+/-- **The coarse-graining Kraus family resolves the identity.** -/
+lemma coarseKraus_resolution :
+    ∑ α : Fin 2 ⊕ Fin 2,
+        (Sum.elim coarseKrausGated coarseKrausUngated α)ᴴ *
+          Sum.elim coarseKrausGated coarseKrausUngated α =
+      (1 : Matrix (Fin 4 × Fin 4) (Fin 4 × Fin 4) ℂ) := by
+  ext pq pq'
+  rw [Matrix.one_apply]
+  simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_sum_type,
+    Sum.elim_inl, Sum.elim_inr]
+  -- The gated contribution at a fixed label `s`, as a sum over the domain `Fin 4`.
+  have hgated_term : ∀ s : Fin 2,
+      (∑ k : Fin 4, star (coarseKrausGated s k pq) * coarseKrausGated s k pq') =
+        if gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2 then
+          (coarseAmp : ℂ) ^ 2 * eigVecs s (bit2 pq.1) * eigVecs s (bit2 pq'.1)
+        else 0 := by
+    intro s
+    by_cases h : gate pq.1 pq.2 ∧ gate pq'.1 pq'.2 ∧ combine pq.1 pq.2 = combine pq'.1 pq'.2
+    · rw [if_pos h]
+      rw [Finset.sum_eq_single (combine pq.1 pq.2)]
+      · simp only [coarseKrausGated, Matrix.of_apply, if_pos ⟨h.1, rfl⟩, if_pos ⟨h.2.1, h.2.2.symm⟩,
+          star_mul', coarseAmp_star]
+        ring
+      · intro k _ hk
+        simp only [coarseKrausGated, Matrix.of_apply]
+        rw [if_neg (fun hc => hk hc.2.symm), star_zero, zero_mul]
+      · simp
+    · rw [if_neg h]
+      rw [not_and_or, not_and_or] at h
+      rcases h with h1 | h1 | h1
+      · apply Finset.sum_eq_zero; intro k _
+        simp only [coarseKrausGated, Matrix.of_apply]
+        rw [if_neg (fun hc => h1 hc.1), star_zero, zero_mul]
+      · apply Finset.sum_eq_zero; intro k _
+        simp only [coarseKrausGated, Matrix.of_apply]
+        rw [if_neg (fun hc => h1 hc.1)]
+        by_cases h' : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+        · simp [h']
+        · rw [if_neg h', star_zero, zero_mul]
+      · apply Finset.sum_eq_zero; intro k _
+        by_cases hpk : gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k
+        · have hpk' : ¬ (gate pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k) := by
+            rintro ⟨_, hc⟩
+            exact h1 (hpk.2.symm.trans hc)
+          simp only [coarseKrausGated, Matrix.of_apply, if_pos hpk, if_neg hpk', star_mul',
+            coarseAmp_star, mul_zero]
+        · simp only [coarseKrausGated, Matrix.of_apply, if_neg hpk, star_zero, zero_mul]
+  -- The ungated contribution at a fixed label `t`, as a sum over the domain `Fin 4`.
+  have hungated_term : ∀ t : Fin 2,
+      (∑ k : Fin 4, star (coarseKrausUngated t k pq) * coarseKrausUngated t k pq') =
+        if ¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧ bit2 pq.1 = t ∧ bit2 pq'.1 = t ∧
+            combine pq.1 pq.2 = combine pq'.1 pq'.2 then 1 else 0 := by
+    intro t
+    by_cases h : ¬ gate pq.1 pq.2 ∧ ¬ gate pq'.1 pq'.2 ∧ bit2 pq.1 = t ∧ bit2 pq'.1 = t ∧
+        combine pq.1 pq.2 = combine pq'.1 pq'.2
+    · rw [if_pos h]
+      rw [Finset.sum_eq_single (combine pq.1 pq.2)]
+      · simp only [coarseKrausUngated, Matrix.of_apply, if_pos ⟨h.1, rfl, h.2.2.1⟩,
+          if_pos ⟨h.2.1, h.2.2.2.2.symm, h.2.2.2.1⟩, star_one, one_mul]
+      · intro k _ hk
+        simp only [coarseKrausUngated, Matrix.of_apply]
+        rw [if_neg (fun hc => hk hc.2.1.symm), star_zero, zero_mul]
+      · simp
+    · rw [if_neg h]
+      apply Finset.sum_eq_zero
+      intro k _
+      by_cases hpk : ¬ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bit2 pq.1 = t
+      · have hpk' : ¬ (¬ gate pq'.1 pq'.2 ∧ combine pq'.1 pq'.2 = k ∧ bit2 pq'.1 = t) := by
+          rintro ⟨hg', hc', hb'⟩
+          exact h ⟨hpk.1, hg', hpk.2.2, hb', hpk.2.1.trans hc'.symm⟩
+        simp only [coarseKrausUngated, Matrix.of_apply, if_pos hpk, if_neg hpk', star_one, mul_zero]
+      · simp only [coarseKrausUngated, Matrix.of_apply, if_neg hpk, star_zero, zero_mul]
+  simp_rw [hgated_term, hungated_term]
+  by_cases heq : pq = pq'
+  · subst heq
+    rw [if_pos rfl]
+    by_cases hg : gate pq.1 pq.2
+    · rw [if_pos ⟨hg, hg, rfl⟩, if_neg (fun hc => (hc.1 hg))]
+      rw [Fin.sum_univ_two]
+      have h0 : (coarseAmp : ℂ) ^ 2 * eigVecs 0 (bit2 pq.1) * eigVecs 0 (bit2 pq.1) +
+          (coarseAmp : ℂ) ^ 2 * eigVecs 1 (bit2 pq.1) * eigVecs 1 (bit2 pq.1) =
+          (coarseAmp : ℂ) ^ 2 * ((eigVecs 0 (bit2 pq.1)) ^ 2 + (eigVecs 1 (bit2 pq.1)) ^ 2) := by
+        ring
+      rw [h0]
+      have hsum : ((eigVecs 0 (bit2 pq.1)) ^ 2 + (eigVecs 1 (bit2 pq.1)) ^ 2 : ℂ) = 2 := by
+        exact_mod_cast eigVecs_sq_sum' (bit2 pq.1)
+      rw [hsum]
+      have hamp2 : (coarseAmp : ℂ) ^ 2 = ((coarseAmp ^ 2 : ℝ) : ℂ) := by push_cast; ring
+      rw [hamp2, coarseAmp_sq]
+      norm_num
+    · rw [if_neg (fun hc => hg hc.1), if_pos ⟨hg, hg, rfl, rfl, rfl⟩]
+      simp
+  · rw [if_neg heq]
+    by_cases hg : gate pq.1 pq.2
+    · by_cases hg' : gate pq'.1 pq'.2
+      · by_cases hc : combine pq.1 pq.2 = combine pq'.1 pq'.2
+        · rw [if_pos ⟨hg, hg', hc⟩, if_neg (fun hcon => hg (False.elim (hcon.2.2.1 ▸ hg')).elim)]
+          sorry
+        · rw [if_neg (fun hcon => hc hcon.2.2), if_neg (fun hcon => hc hcon.2.2.2.2)]
+          simp
+      · rw [if_neg (fun hcon => hg' hcon.2.1), if_neg (fun hcon => hg' hcon.2.1)]
+        simp
+    · rw [if_neg (fun hcon => hg hcon.1), if_neg (fun hcon => hg hcon.1)]
+      simp
+
 end MPOTensor.RescalingStableLengthDependentRFP
