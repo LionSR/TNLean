@@ -1,43 +1,75 @@
 % Target: rmp-iii-a-pulling-through
 % Formula: The full MPO-algebra string pulls through the PEPS plaquette.
-% Ink: Canonical public tenkzfree four-arm ring with rotated action frames.
-% Boundary: Four external PEPS legs and two MPO string ends remain open.
+% Ink: Kernel flat frame; the stock MPO skin rings the plaquette and the
+%   lambda insertion rides the north-west ring wire.
+% Boundary: Four directed plaquette legs and two MPO string ends remain open.
 % Source: paper TN-Review-main.tex line 1356; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 170-197
-% Capabilities: free-graph, pulling-through, rotated-action
+% Capabilities: kernel, pulling-through, rotated-action, ring-closure
 \[
-  \begin{tenkzfree}
-    % the plaquette: four tensors threaded by one closed MPO ring
-    \tnput[box]{n}{(0mm,7mm)}{} \tnput[box]{e}{(7mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-7mm)}{} \tnput[box]{w}{(-7mm,0mm)}{}
-    \tnput[circle]{l}{(-7mm,7mm)}{\lambda}
-    \tnjoin[role=operator, route=arc]{w.north}{l.south}
-    \tnjoin[role=operator, route=arc]{l.east}{n.west}
-    \tnjoin[role=operator, route=arc]{n.east}{e.north}
-    \tnjoin[role=operator, route=arc]{e.south}{s.east}
-    \tnjoin[role=operator, route=arc]{s.west}{w.south}
-    % the external MPO pair rides the north and west legs
-    \tnput[box]{tn}{(0mm,16mm)}{} \tnput[box]{tw}{(-16mm,0mm)}{}
-    \tnjoin[role=operator, route=arc]{tw.north}{tn.west}
-    \tnjoin[dir]{tn.south}{n.north} \tnjoin{tn.north}{0mm,21mm}
-    \tnjoin[dir]{tw.east}{w.west} \tnjoin{tw.west}{-21mm,0mm}
-    \tnjoin[dir]{s.south}{0mm,-16mm} \tnjoin[dir]{e.east}{16mm,0mm}
-  \end{tenkzfree}
-  \;=\;
-  \begin{tenkzfree}
-    \tnput[box]{n}{(0mm,7mm)}{} \tnput[box]{e}{(7mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-7mm)}{} \tnput[box]{w}{(-7mm,0mm)}{}
-    \tnput[circle]{l}{(-7mm,7mm)}{\lambda}
-    \tnjoin[role=operator, route=arc]{w.north}{l.south}
-    \tnjoin[role=operator, route=arc]{l.east}{n.west}
-    \tnjoin[role=operator, route=arc]{n.east}{e.north}
-    \tnjoin[role=operator, route=arc]{e.south}{s.east}
-    \tnjoin[role=operator, route=arc]{s.west}{w.south}
-    % the same pair, now riding the south and east legs
-    \tnput[box]{ts}{(0mm,-16mm)}{} \tnput[box]{te}{(16mm,0mm)}{}
-    \tnjoin[role=operator, route=arc]{te.south}{ts.east}
-    \tnjoin[dir]{0mm,16mm}{n.north} \tnjoin[dir]{-16mm,0mm}{w.west}
-    \tnjoin[dir]{s.south}{ts.north} \tnjoin{ts.south}{0mm,-21mm}
-    \tnjoin[dir]{e.east}{te.west} \tnjoin{te.east}{21mm,0mm}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \tndeclare{species}{op}{hue=source:red}
+  \begin{tenkzeq}
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      % the plaquette ring: four MPO tensors joined by the red ring, with
+      % the lambda insertion on the north-west ring wire
+      \tn[skin=mpo, at=(2,3), name=N,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,4), name=E,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(4,3), name=S,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,2), name=W,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tnwire[route=arc, species=op, name=lamarc]{W.90}{N.180}
+      \tnwire[route=arc, species=op]{N.0}{E.90}
+      \tnwire[route=arc, species=op]{E.270}{S.0}
+      \tnwire[route=arc, species=op]{S.180}{W.270}
+      \tn[skin=ring, at=on lamarc 0.5, name=lam]{\lambda}
+      % the external MPO pair rides the north and west legs
+      \tn[skin=mpo, at=(1,3), name=TN,
+          ports={90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,1), name=TW,
+          ports={0:virtual, 90:virtual, 180:virtual}]{}
+      \tnwire[route=arc, species=op]{TW.90}{TN.180}
+      \tnwire[kind=string, species=op]{(1,3)}{0.5 e of (1,3)}
+      \tnwire[kind=string, species=op]{(3,1)}{0.5 s of (3,1)}
+      \tnwire{TN.90}{open n}
+      \tnwire[dir=to]{TN.270}{N.90}
+      \tnwire{TW.180}{open w}
+      \tnwire[dir=to]{TW.0}{W.180}
+      \tnwire[dir=to]{S.270}{open s}
+      \tnwire[dir=from]{open e}{E.0}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+      \tn[skin=mpo, at=(2,3), name=N,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,4), name=E,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(4,3), name=S,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,2), name=W,
+          ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+      \tnwire[route=arc, species=op, name=lamarc]{W.90}{N.180}
+      \tnwire[route=arc, species=op]{N.0}{E.90}
+      \tnwire[route=arc, species=op]{E.270}{S.0}
+      \tnwire[route=arc, species=op]{S.180}{W.270}
+      \tn[skin=ring, at=on lamarc 0.5, name=lam]{\lambda}
+      % the same pair, pulled through to the south and east legs
+      \tn[skin=mpo, at=(5,3), name=TS,
+          ports={0:virtual, 90:virtual, 270:virtual}]{}
+      \tn[skin=mpo, at=(3,5), name=TE,
+          ports={0:virtual, 180:virtual, 270:virtual}]{}
+      \tnwire[route=arc, species=op]{TE.270}{TS.0}
+      \tnwire[kind=string, species=op]{(5,3)}{0.5 w of (5,3)}
+      \tnwire[kind=string, species=op]{(3,5)}{0.5 n of (3,5)}
+      \tnwire[dir=to]{open n}{N.90}
+      \tnwire[dir=to]{S.270}{TS.90}
+      \tnwire{TS.270}{open s}
+      \tnwire[dir=to]{open w}{W.180}
+      \tnwire[dir=to]{E.0}{TE.180}
+      \tnwire{TE.0}{open e}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

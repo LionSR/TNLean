@@ -1,33 +1,43 @@
 % Target: rmp-workbench-iii-eq59-now
 % Formula: |G|^-1 sum_g of four L_g actions is the G-injective projector.
-% Ink: Canonical public tenkzfree four inward L_g actions and projector ring.
+% Ink: Kernel flat frame; four inward L_g actions and the red projector ring
+%   with its marked corner.
 % Boundary: Four directed virtual legs are open; the projector ring is closed.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
-%   lines 305-328; archival output Eq59now.pdf
-% Capabilities: free-graph, group-average, ring-closure
+%   lines 305-328; archival output Eq59.pdf
+% Capabilities: kernel, group-average, ring-closure
 \[
+  \tenkzkernel
+  \tndeclare{species}{op}{hue=source:red}
   \frac1{|G|}\sum_{g\in G}
-  \begin{tenkzfree}
-    \tnput[ring]{n}{(0mm,8mm)}{L_g} \tnput[ring]{e}{(8mm,0mm)}{L_g}
-    \tnput[ring]{s}{(0mm,-8mm)}{L_g} \tnput[ring]{w}{(-8mm,0mm)}{L_g}
-    \tnjoin[dir]{0mm,16mm}{n.north} \tnjoin[dir]{16mm,0mm}{e.east}
-    \tnjoin[dir]{0mm,-16mm}{s.south} \tnjoin[dir]{-16mm,0mm}{w.west}
-    \tnjoin[dir]{n.south}{0mm,2mm} \tnjoin[dir]{e.west}{2mm,0mm}
-    \tnjoin[dir]{s.north}{0mm,-2mm} \tnjoin[dir]{w.east}{-2mm,0mm}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+    % four L_g actions point along the four legs toward the centre; each leg
+    % keeps its short open end beside the centre
+    \tn[skin=ring, at=(1,2), name=Ln, ports={90:virtual, 270:virtual}]{L_g}
+    \tn[skin=ring, at=(2,3), name=Le, ports={0:virtual, 180:virtual}]{L_g}
+    \tn[skin=ring, at=(3,2), name=Ls, ports={90:virtual, 270:virtual}]{L_g}
+    \tn[skin=ring, at=(2,1), name=Lw, ports={0:virtual, 180:virtual}]{L_g}
+    \tnwire[dir=to]{open n}{Ln.90}
+    \tnwire[dir=to]{open e}{Le.0}
+    \tnwire[dir=to]{open s}{Ls.270}
+    \tnwire[dir=to]{open w}{Lw.180}
+  \end{tenkz}
   =
-  \begin{tenkzfree}[tensor style=box]
-    \tnput[box]{bn}{(0mm,8mm)}{} \tnput[box]{be}{(8mm,0mm)}{}
-    \tnput[box]{bs}{(0mm,-8mm)}{} \tnput[box]{bw}{(-8mm,0mm)}{}
-    \tnput[dot]{bd}{(-8mm,8mm)}{}
-    \tnjoin{0mm,14.5mm}{bn.north}   \tnjoin{bn.south}{0mm,3.5mm}
-    \tnjoin{14.5mm,0mm}{be.east}    \tnjoin{be.west}{3.5mm,0mm}
-    \tnjoin{0mm,-14.5mm}{bs.south}  \tnjoin{bs.north}{0mm,-3.5mm}
-    \tnjoin{-14.5mm,0mm}{bw.west}   \tnjoin{bw.east}{-3.5mm,0mm}
-    \tnjoin{bd.east}{bn.west}
-    \tnjoin[route=hv]{bn.east}{be.north}
-    \tnjoin[route=vh]{be.south}{bs.east}
-    \tnjoin[route=hv]{bs.west}{bw.south}
-    \tnjoin{bw.north}{bd.south}
-  \end{tenkzfree}.
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    % the projector: the red ring through four tensors, with the marked
+    % corner dot on the north-west ring wire
+    \tn[skin=box, at=(2,3), name=N,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(3,4), name=E,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(4,3), name=S,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(3,2), name=W,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tnwire[route=arc, species=op, name=markarc]{W.90}{N.180}
+    \tnwire[route=arc, species=op]{N.0}{E.90}
+    \tnwire[route=arc, species=op]{E.270}{S.0}
+    \tnwire[route=arc, species=op]{S.180}{W.270}
+    \tn[skin=dot, at=on markarc 0.5, size=s]{}
+  \end{tenkz}.
 \]
