@@ -749,23 +749,27 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{theorem}[Trivial Jordan blocks for peripheral eigenvalues]
     \label{thm:peripheral_jordan_trivial}
-    \lean{IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving}
+    \lean{IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving,
+        IsPositiveMap.peripheral_Jordan_trivial_of_unital}
     \leanok
-    \uses{def:positive_map, def:trace_preserving}
-    Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving linear map
-    with $D>0$.  If $\lambda$ is an eigenvalue of $T$ with $|\lambda|=1$,
-    then $\ker(T-\lambda)^k=\ker(T-\lambda)$ for all $k\ge1$.
-    This is the trace-preserving case of
-    \cite[Proposition~6.2]{Wolf2012Quantum}.
+    \uses{def:positive_map, def:trace_preserving, def:unital_linear_map}
+    Let $T:\MN{D}\to\MN{D}$ be a positive trace-preserving or unital
+    linear map with $D>0$.  If $\lambda$ is an eigenvalue of $T$ with
+    $|\lambda|=1$, then $\ker(T-\lambda)^k=\ker(T-\lambda)$ for all
+    $k\ge1$.  This is \cite[Proposition~6.2]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:positive_trace_nonincreasing_bounded_orbits}
+    \uses{thm:positive_trace_nonincreasing_bounded_orbits,
+        thm:positive_unital_bounded_orbits}
     If a rank-$2$ generalized eigenvector existed, the binomial expansion
     $T^n X=\lambda^n X+n\lambda^{n-1}(T-\lambda)X$ (when
-    $(T-\lambda)^2X=0$) would make $\|T^nX\|$ grow linearly with $n$,
-    contradicting the bounded-orbit theorem for positive trace-preserving
-    maps.  The rank-$k$ case reduces to rank~$2$ by induction.
+    $(T-\lambda)^2X=0$) would make $\|T^nX\|$ grow linearly with $n$.  This
+    contradicts the bounded-orbit theorem, which holds under either
+    hypothesis: trace preservation or unitality each give
+    $\tr[1\,T(1)]=D$, and positivity turns this into a uniform bound on
+    $\tr[A\,T^n(B)]$ over all powers of $T$.  The rank-$k$ case reduces to
+    rank~$2$ by induction.
 \end{proof}
 
 \section{Spectral radius at the Perron eigenvalue}
