@@ -208,9 +208,10 @@ reduced state.
     \leanok
     For a bipartite vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ with coefficient
     matrix $C$ and any linear map $T$ on $\C^{d_B}$,
-    \[
+    \begin{align}
         \tr_B\bigl[(\id\otimes T)(\ketbra{\psi}{\psi})\bigr] = C\,(T^*(\Id))^{\mathsf T}\,C^\dagger.
-    \]
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -224,7 +225,7 @@ reduced state.
     linearity, so it holds for an arbitrary purification.
 \end{proof}
 
-\begin{proposition}[Quantum steering]\label{prop:quantum_steering}
+\begin{theorem}[Quantum steering]\label{thm:quantum_steering}
     \lean{Matrix.exists_instrument_of_isConvexDecomposition}
     \leanok
     \uses{def:purification, def:convex_decomposition, def:instrument,
@@ -233,11 +234,12 @@ reduced state.
     $\psi\in\C^{d_A}\otimes\C^{d_B}$. For every convex decomposition
     $\rho=\sum_i\lambda_i\rho_i$ there is an instrument
     $\{T_i:\MN{d_B}\to\MN{d_B}\}$ acting on Bob's system such that
-    \[
+    \begin{align}
         \lambda_i\rho_i = \tr_B\bigl[(\id\otimes T_i)(\ketbra{\psi}{\psi})\bigr]
-    \]
+        \notag
+    \end{align}
     for every $i$. This is \cite[Proposition~(Quantum steering)]{Wolf2012Quantum}.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:transpose_trick}
