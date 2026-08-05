@@ -1757,8 +1757,13 @@
     \__tenkz_model_record_atom:n { kind = tn }
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-atom } {#1}
+    % A label is opaque text: \hphantom, \vphantom, and math accents like
+    % \bar embed their own conditional/box primitives, so a full expansion
+    % of the label content orphans an \iffalse from its \fi (issue 5481).
+    % The raw completion stores it unexpanded, as the model already does
+    % for the equally opaque `ports` field in \__tenkz_kernel_commit:.
     \tl_if_blank:nF {#2}
-      { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {label} {#2} }
+      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#2} }
     \prop_get:NnN \l__tenkz_kernel_stage_prop {at} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
       {
@@ -2260,8 +2265,9 @@
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-mark } {#1}
     \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {target} {#2}
+    % Opaque text, per the \tn label above (issue 5481): raw completion.
     \tl_if_blank:nF {#3}
-      { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {label} {#3} }
+      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#3} }
     \__tenkz_kernel_commit:
     \ignorespaces
   }
