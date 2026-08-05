@@ -1,0 +1,22 @@
+picture|id=k1|lang=kernel
+atom|id=atom-1|kind=tn|label-pos=n|label=A|name=ket|node=addr-1|ports=180:virtual, 0:virtual, 270:physical
+atom|id=atom-2|kind=tn|label-pos=s|label=\protect \@@overline {A}|name=bra|node=addr-2|ports=180:virtual, 0:virtual, 90:physical
+atom|id=atom-6|kind=tn|label-pos=e|label=\rho |name=rho|node=addr-7|ports=90:virtual, 270:virtual
+wire|id=wire-3|from=addr-3|kind=index|to-open=w
+wire|id=wire-4|from=addr-4|kind=index|to-open=w
+wire|id=wire-5|from=addr-5|kind=index|port-type=physical|to=addr-6
+wire|id=wire-7|from=addr-8|kind=index|route=arc|to=addr-9
+wire|id=wire-8|from=addr-10|kind=index|route=arc|to=addr-11
+kernel-boundary|signature=open:w, open:w
+ink-use|picture=k1|class=glyph|id=1|shape=circle
+glyph-geometry|picture=k1|owner=1|shape=circle|xmin=-182117|xmax=182117|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=1|owner=0|xmin=-162398|xmax=162398|ymin=874578|ymax=1192952|shape=rect|radius=0
+ink-use|picture=k1|class=glyph|id=2|shape=circle
+glyph-geometry|picture=k1|owner=2|shape=circle|xmin=-182117|xmax=182117|ymin=-4284411|ymax=-3920177|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=2|owner=0|xmin=-162398|xmax=162398|ymin=-5406650|ymax=-4976871|shape=rect|radius=0
+ink-use|picture=k1|class=glyph|id=3|shape=circle
+glyph-geometry|picture=k1|owner=3|shape=circle|xmin=1869030|xmax=2233264|ymin=-2233264|ymax=-1869030|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=3|owner=0|xmin=2925725|xmax=3197633|ymin=-2194507|ymax=-1907788|shape=rect|radius=0

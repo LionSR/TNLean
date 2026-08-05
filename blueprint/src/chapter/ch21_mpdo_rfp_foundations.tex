@@ -83,12 +83,22 @@
     % the product T_M T_M.  Traced physical legs are closed indices,
     % so both sides carry the same boundary signature
     % (virtual-west=1 | virtual-east=1 | physical-up=0 | physical-down=0).
-    \begin{tenkz}[physical=updown, trace=physical]
-        \tn[mpo]{M}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none, trace=physical]
+        \tn[at=(1,1), skin=mpo, name=m1,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M}
+        \tnwire{m1.180}{open w}
+        \tnwire{m1.0}{open e}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[physical=updown, trace=physical]
-        \tn[mpo]{M} & \tn[mpo]{M}
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none, trace=physical]
+        \tn[at=(1,1), skin=mpo, name=m1,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M}
+        \tn[at=(1,2), skin=mpo, name=m2,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M}
+        \tnwire{m1.180}{open w}
+        \tnwire{m1.0}{m2.180}
+        \tnwire{m2.0}{open e}
     \end{tenkz}
 \end{center}
 This is the literal identity in

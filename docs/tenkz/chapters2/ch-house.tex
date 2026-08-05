@@ -16,11 +16,12 @@ recurring mathematical kind:
 \hspace*{2em}ports=\{\meta{face:type},\ldots\}\}}
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tndeclareatom{\tnprojector}{
+\tenkzkernel
+\tndeclare{atom}{\tnprojector}{
   skin=box,
-  ports={west:virtual,east:virtual,up:physical}
+  ports={180:virtual, 0:virtual, 90:physical}
 }
-\begin{tenkz}[physical=up] \tnprojector{P} \end{tenkz}
+\begin{tenkz}[physical=up, cols=1] \tnprojector{P} \end{tenkz}
 \end{Verbatim}
 
 Faces are \tnval{west}, \tnval{east}, \tnval{up}, and \tnval{down}; types

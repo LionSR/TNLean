@@ -15,12 +15,26 @@ The two-site block is the virtual contraction of two copies of $K$:
 % Source verdict: exact house-style reproduction of MPDO_K=MM.png from
 % Theorem 4.9, lines 851--856.  The source has no blocking enclosure.
 \begin{tenkzequation}
-    \tnpic[physical=updown, tensor style=box]{%
-        \tn[mpo, up={$(i_1,i_2)$}, down={$(j_1,j_2)$}]{M}}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), skin=mpo, name=m,
+            ports={180:virtual, 0:virtual,
+                   90:physical:{$(i_1,i_2)$}, 270:physical:{$(j_1,j_2)$}}]{M}
+        \tnwire{m.180}{open w}
+        \tnwire{m.0}{open e}
+    \end{tenkz}
     \qquad$=$\qquad
-    \tnpic[physical=updown, tensor style=box]{%
-        \tn[mpo, up=$i_1$, down=$j_1$]{K} &
-        \tn[mpo, up=$i_2$, down=$j_2$]{K}}
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, name=k1,
+            ports={180:virtual, 0:virtual, 90:physical:$i_1$,
+                   270:physical:$j_1$}]{K}
+        \tn[at=(1,2), skin=mpo, name=k2,
+            ports={180:virtual, 0:virtual, 90:physical:$i_2$,
+                   270:physical:$j_2$}]{K}
+        \tnwire{k1.180}{open w}
+        \tnwire{k1.0}{k2.180}
+        \tnwire{k2.0}{open e}
+    \end{tenkz}
 \end{tenkzequation}
 The two ket indices and the two bra indices are grouped into the blocked
 physical indices, as in
