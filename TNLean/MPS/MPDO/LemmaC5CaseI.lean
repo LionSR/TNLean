@@ -521,8 +521,8 @@ end cyclicTrace
 section overlapFormula
 
 /-- The **sitewise product matrix** `W σ σ' = ∏ n, U (σ n) (σ' n)` used to
-congruence-conjugate the MPO family in `mpo_conjugatePhysical_eq` is unitary whenever
-`U` is.
+congruence-conjugate the MPO family in `mpo_conjugatePhysical_eq` satisfies `Wᴴ * W = 1`
+whenever `Uᴴ * U = 1`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1434--1448 (the basis change defining
 `σ_tilde`). -/
@@ -557,7 +557,8 @@ theorem sitewise_prod_conjTranspose_mul_self {N : ℕ} (U : Matrix (Fin d) (Fin 
       (fun n x => star (U x (σ n)) * U x (τ n))]
     simp only [Fintype.piFinset_univ]
 
-/-- The trace of the doubled MPO is invariant under a physical unitary basis change.
+/-- The trace of the doubled MPO is invariant under a physical basis change `U` with
+`Uᴴ * U = 1` (an isometry; a unitary in the square case, e.g. `F.physicalIsometry`).
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1434--1448. -/
 theorem trace_mpo_conjugatePhysical_mul_self
