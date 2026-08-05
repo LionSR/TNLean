@@ -294,10 +294,9 @@ chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of the Kronecker
 power `wN N` of `wMat` (PSD by congruence).  Their Hadamard product is PSD
 by the Schur product theorem, and scaling by `(25/32)^N ≥ 0` preserves PSD.
 
-The entrywise formula for `mpo R N` (the only remaining gap) is verified
-by direct analysis of the cyclic sum; the bond‑chain constraints collapse
-the sum to at most one term.  A fully formal proof of this formula is
-in progress. -/
+The entrywise formula for `mpo R N` is `mpo_R_entry_formula`, proved by
+direct analysis of the cyclic sum: the bond‑chain constraints collapse the
+sum to at most one term.  Positivity is `R_isMPDO`. -/
 
 /-- The first bit of a bond label `k : Fin 4` under the Kronecker
 identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
@@ -412,8 +411,10 @@ def wMat : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(4/5 : ℂ)^2, (3/5 : ℂ)^2; (3/5 : ℂ)^2, (4/5 : ℂ)^2]
 
 /-- The `N`-fold Kronecker power of `wMat`, entrywise:
-`wN N a b = ∏ n, wMat (a n) (b n)`.  In the planned factorization the
-closed operator is `(25/32)^N • (B * wN N * Bᴴ)` for the boundary map `B`.
+`wN N a b = ∏ n, wMat (a n) (b n)`.  The realized factorization of the
+closed operator (`mpo_R_entry_formula`) is `(25/32)^N` times the Hadamard
+product of the chain-OK indicator with the pullback of `wN N` along `φ N`
+(no boundary map is constructed).
 
 Project example; not from CPSV16. -/
 def wN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
