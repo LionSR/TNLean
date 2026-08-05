@@ -1597,8 +1597,8 @@ corrected to the panels the cases actually draw (sptintertwin gh.pdf and
 Eq60.pdf).
 
 The migrations retire the tiers' owned physical dimensions: the census
-falls from 478 to 444 sites (route/string 244 to 224, composition/layout
-218 to 204), with metric and frame ownership remaining zero, and the
+falls from 435 to 401 sites (route/string 244 to 224, composition/layout
+191 to 177), with metric and frame ownership remaining zero, and the
 ceilings tighten to match. M4 rises from 21.35 to 22.22 because the kernel
 cases name the ports, junctions, and species their retired sugar implied.
 No parser spelling, registry row, alias, escape, or overload is added.
