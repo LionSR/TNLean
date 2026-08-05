@@ -1,34 +1,36 @@
 % Target: rmp-ii-inverse-renormalization
 % Formula: One MPS site splits into two sites, and one PEPS site splits into a 2x2
 %   patch.
-% Ink: Canonical public tenkz, tenkzlattice environments; no raw TikZ.
+% Ink: Kernel flat and plane frames; both splits share one metric.
 % Boundary: Both arrows preserve the open outer virtual and physical boundary
 %   signatures.
 % Source: paper TN-Review-main.tex line 1056; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 801-831
-% Capabilities: grid, lattice, typed-ports
+% Capabilities: kernel, plane-frame
+\tenkzkernel
 \[
   (a)\quad
   % one MPS site: 3-leg dot
-  \begin{tenkz}[physical=up]
+  \begin{tenkz}[rows={wire}, cols=1, physical=up, west=open, east=open]
     \tn{}
   \end{tenkz}
   \;\longrightarrow\;
   % the split: two sites of the same bond dimension
-  \begin{tenkz}[physical=up]
+  \begin{tenkz}[rows={wire}, cols=2, physical=up, west=open, east=open]
     \tn{} & \tn{}
   \end{tenkz}
-  \qquad\qquad
+  \qquad
   (b)\quad
-  % one PEPS site: 5-leg tensor on the sheared sheet
-  \begin{tenkzlattice}[rows=1, cols=1, boundary=open, physical=up,
-                       frame=oblique]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  % one PEPS site: 5-leg tensor on the projected sheet
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{}
+  \end{tenkz}
   \;\longrightarrow\;
   % the would-be sqrt(D) fine-graining: a 2x2 patch
-  \begin{tenkzlattice}[rows=2, cols=2, boundary=open, physical=up,
-                       frame=oblique]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{} & \tn{} \\
+    \tn{} & \tn{}
+  \end{tenkz}
 \]

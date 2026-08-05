@@ -1,21 +1,42 @@
 % Target: rmp-iii-a-pentagon-mpo
-% Formula: the MPO-wire fusion move c -> (a, b):
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
-% Boundary: Resolved by the public environment; open indices remain explicit.
-% Source: paper TN-Review-main.tex line 1317; paper-context-only; no author drawing
-%   source
-% Capabilities: coherence, free-graph
+% Formula: ^1F ^1F = ^0F ^1F ^1F — recoupling the two fusion trees.
+% Ink: Kernel flat frame; two directed three-leaf fusion trees.
+% Boundary: Each tree keeps one incoming root and three outgoing leaves open.
+% Source: paper TN-Review-main.tex line 1317; paper figure fig3_pentagon2.pdf;
+%   no author drawing source
+% Capabilities: kernel, coherence, recoupling
 \[
-  \begin{tenkzfree}
-    % wire endpoints (paper: gray wedges), typed virtual on the used anchors
-    \tnput[dot, label pos=west, ports={east:virtual}]{n}{(0,0)}{n}
-    \tnput[dot, label pos=south,
-           ports={west:virtual, 50:virtual, -50:virtual}]{m}{(16mm,0)}{m}
-    \tnput[dot, label pos=east, ports={195:virtual}]{j}{(30mm,9mm)}{j}
-    \tnput[dot, label pos=east, ports={165:virtual}]{k}{(30mm,-9mm)}{k}
-    % c: n -> m (straight), then the split a: m -> j and b: m -> k (curved)
-    \tnjoin[dir, label=c]{n.east}{m.west}
-    \tnjoin[dir, route=arc, label=a]{m.50}{j.195}
-    \tnjoin[dir, route=arc, label=b]{m.-50}{k.165}
-  \end{tenkzfree}
+  \tenkzkernel
+  \tndeclare{species}{fus}{hue=source:red}
+  \tndeclare{species}{vertex}{hue=source:lightgray}
+  \begin{tenkzeq}
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+      % the left tree fuses the upper pair first
+      \tn[at=(3,1), name=A, skin=dot, species=vertex,
+          ports={180:virtual, 45:virtual, 315:virtual}]{}
+      \tn[at=(2,2), name=B, skin=dot, species=vertex,
+          ports={225:virtual, 45:virtual, 0:virtual}]{}
+      \tnwire[species=fus, dir=to]{open w}{A.180}
+      \tnwire[species=fus, dir=to]{A.45}{B.225}
+      \tnwire[species=fus, dir=to]{B.45}{(1,4)}
+      \tnwire[species=fus, dir=to]{B.0}{(2,4)}
+      \tnwire[species=fus, dir=to]{A.315}{(4,4)}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+      % the right tree fuses the lower pair first
+      \tn[at=(2,1), name=C, skin=dot, species=vertex,
+          ports={180:virtual, 45:virtual, 315:virtual}]{}
+      \tn[at=(3,2), name=D, skin=dot, species=vertex,
+          ports={135:virtual, 45:virtual, 0:virtual}]{}
+      \tnwire[species=fus, dir=to]{open w}{C.180}
+      \tnwire[species=fus, dir=to]{C.45}{(1,4)}
+      \tnwire[species=fus, dir=to]{C.315}{D.135}
+      \tnwire[species=fus, dir=to]{D.45}{(2,4)}
+      \tnwire[species=fus, dir=to]{D.0}{(3,4)}
+    \end{tenkz}
+  \end{tenkzeq}
+\]
+\[
+  {}^{1}F\,{}^{1}F \;=\; {}^{0}F\,{}^{1}F\,{}^{1}F
 \]

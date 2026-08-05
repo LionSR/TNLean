@@ -1,32 +1,46 @@
 % Target: rmp-workbench-iii-diagram-four
 % Formula: The closed four-leg tensor equals Delta^3 of the local map.
-% Ink: Canonical public tenkzfree four-arm tensor and tenkz local-map expression.
+% Ink: Kernel flat frame; a four-tensor ring with a lambda insertion and a
+%   junction-spelled periodic local map.
 % Boundary: The four-arm side is closed; the local-map side is virtual-scalar.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 198-210; archival output Dia4.pdf
-% Capabilities: free-graph, four-arm-closure, coproduct
+% Capabilities: kernel, four-arm-closure, coproduct
 \[
-  \begin{tenkzfree}
-    \tnput[circle]{l}{(-6mm,6mm)}{\lambda}
-    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnjoin[route=arc]{n.east}{e.north}
-    \tnjoin[route=arc]{e.south}{s.east}
-    \tnjoin[route=arc]{s.west}{w.south}
-    \tnjoin[route=arc]{w.north}{l.west}
-    \tnjoin{l.east}{n.west}
-    \tnjoin{n.north}{0mm,16mm} \tnjoin{e.east}{16mm,0mm}
-    \tnjoin{0mm,-16mm}{s.south} \tnjoin{-16mm,0mm}{w.west}
-    % source Dia4.pdf: each ring box carries a second, shorter leg on its
-    % free port, piercing the ring inward and left open (unconnected) --
-    % the north/east/south/west ports not already spent on the outward
-    % arm or the two ring joins.
-    \tnjoin{n.south}{0mm,4mm} \tnjoin{e.west}{4mm,0mm}
-    \tnjoin{s.north}{0mm,-4mm} \tnjoin{w.east}{-4mm,0mm}
-  \end{tenkzfree}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+    % the ring: four tensors joined by the closed bond, lambda on the
+    % north-west ring wire; each tensor keeps its short inward pierce
+    \tn[skin=box, at=(2,3), name=N,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(3,4), name=E,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(4,3), name=S,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tn[skin=box, at=(3,2), name=W,
+        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+    \tnwire[route=arc, name=lamarc]{W.90}{N.180}
+    \tnwire[route=arc]{N.0}{E.90}
+    \tnwire[route=arc]{E.270}{S.0}
+    \tnwire[route=arc]{S.180}{W.270}
+    \tn[skin=ring, at=on lamarc 0.5, name=lam]{\lambda}
+    \tnwire{N.90}{open n}
+    \tnwire{E.0}{open e}
+    \tnwire{S.270}{open s}
+    \tnwire{W.180}{open w}
+  \end{tenkz}
   =\Delta^3\!\left(
-    \begin{tenkz}[boundary=periodic, physical=up, tensor style=box]
-      \tnX{\lambda}&\tn{}
-    \end{tenkz}
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+    % the local map: lambda and one tensor on a junction-spelled periodic bond
+    \tn[skin=ring, at=(1,1), name=lam, ports={0:virtual, 180:virtual}]{\lambda}
+    \tn[skin=box, at=(1,2), name=A,
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
+    \tn[at=(2,1), skin=none, name=JW, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,2), skin=none, name=JE, ports={90:virtual, 180:virtual}]{}
+    \tnwire{lam.0}{A.180}
+    \tnwire[route=arc]{A.0}{JE.90}
+    \tnwire{JE.180}{JW.0}
+    \tnwire[route=arc]{JW.90}{lam.180}
+  \end{tenkz}
   \right).
 \]
