@@ -1378,8 +1378,6 @@
       }
   }
 \tl_new:N \l__tenkz_kernel_atom_phys_tl
-\cs_new_protected:Npn \__tenkz_kernel_atom_physical:nN #1#2
-  { \__tenkz_model_get:nnN {#1} {physical} #2 }
 
 \cs_new_protected:Npn \__tenkz_kernel_desugar_physical:n #1
   {
@@ -2445,8 +2443,9 @@
 % ---------- side policy normalizes to closure wires ---------------------------------------
 % "A closed chain that renders open is impossible by construction": each
 % trace side becomes wrap-<side> and each cup side cup-<side>, wire records
-% with origin fields, before the freeze.  The physical= expander completes
-% every chain atom's outward port here, at the same pre-freeze moment.
+% with origin fields, before the freeze.  The physical= expander completes a
+% chain atom's outward port here, at the same pre-freeze moment, unless the
+% site answered the policy for itself.
 
 % "The frame populates and the body overrides": an explicit basis creates one
 % ordinary addressed atom per cell per member.  Without a basis, each
@@ -3493,8 +3492,8 @@
             \tl_set_eq:NN \l_tmpa_tl \l__tenkz_kernel_scratch_tl
             \__tenkz_model_map_ids:nn {atom}
               {
-                \__tenkz_kernel_atom_physical:nN
-                  {##1} \l__tenkz_kernel_atom_phys_tl
+                \__tenkz_model_get:nnN {##1} {physical}
+                  \l__tenkz_kernel_atom_phys_tl
                 \quark_if_no_value:NTF \l__tenkz_kernel_atom_phys_tl
                   {
                     \__tenkz_kernel_set_atom_physical:nn
@@ -3625,7 +3624,7 @@
       \l__tenkz_kernel_port_record_tl
     \quark_if_no_value:NF \l__tenkz_kernel_port_record_tl
       {
-        \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+        \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
           \l__tenkz_kernel_port_record_tl
           \l__tenkz_kernel_port_place_tl
           \l__tenkz_kernel_port_span_tl
@@ -4719,8 +4718,6 @@
       }
       { \exp_args:NV \__tenkz_kernel_r_rc:nNN \l__tenkz_kernel_r_rc_tl #2 #3 }
   }
-\cs_new_protected:Npn \__tenkz_kernel_r_atom_rc:nNNN #1#2#3#4
-  { \__tenkz_kernel_atom_rc:nNNN {#1} #2#3#4 }
 \tl_new:N \l__tenkz_kernel_r_rc_tl
 
 % span extents of an atom record: wide and wires with default 1
@@ -5366,7 +5363,7 @@
 % direction through it.  A non-cell atom retains its carrier-local turn model.
 \cs_new_protected:Npn \__tenkz_kernel_r_page_face:nnN #1#2#3
   {
-    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+    \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
       \l__tenkz_kernel_turn_bool
     \bool_if:NTF \l__tenkz_kernel_turn_bool
@@ -5456,7 +5453,7 @@
 \bool_new:N \l__tenkz_kernel_turn_bool
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_turn:n #1
   {
-    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+    \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_turn_a_tl \l__tenkz_kernel_turn_b_tl
       \l__tenkz_kernel_turn_bool
     \bool_if:NTF \l__tenkz_kernel_turn_bool
@@ -5551,7 +5548,7 @@
           }
           {
             \tl_set:NV \l__tenkz_kernel_r_node_tl \l__tenkz_kernel_r_tl
-            \__tenkz_kernel_r_atom_rc:nNNN {#1}
+            \__tenkz_kernel_atom_rc:nNNN {#1}
               \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
               \l_tmpa_bool
             \bool_if:NTF \l_tmpa_bool
@@ -5616,7 +5613,7 @@
             - ( \l__tenkz_kernel_r_row_tl + 1 ) / 2 )
         * \__tenkz_metric_ratio:n {clusterstep}
       }
-    \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+    \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
       \l__tenkz_kernel_r_b_tl
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
       \l__tenkz_kernel_turn_bool
@@ -5948,8 +5945,9 @@
       }
       { }
   }
-% The route of one wire.  Only a curve has one; every other wire takes its
-% shape from the cells it joins, which the frame already answers for.
+% The route a wire declares before anything is drawn.  Only a curve declares
+% one here; an index wire's route is the path its own ink saves, which is why
+% a closure waits for the wire stage instead of settling on its two ends.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_route:n #1
   {
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_dep_look_tl
@@ -6621,7 +6619,7 @@
       {
         \__tenkz_model_map_ids:nn {atom}
           {
-            \__tenkz_kernel_r_atom_rc:nNNN {##1}
+            \__tenkz_kernel_atom_rc:nNNN {##1}
               \l__tenkz_kernel_sel_row_tl \l__tenkz_kernel_sel_col_tl
               \l__tenkz_kernel_sel_at_bool
             \bool_if:NT \l__tenkz_kernel_sel_at_bool
@@ -6712,13 +6710,7 @@
 
 % Resolve the effective base skin shared by scheduled and on-demand probes.
 \cs_new_protected:Npn \__tenkz_kernel_hull_resolve_skin:n #1
-  {
-    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_skin_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_hull_skin_tl
-      { \tl_set:Nn \l__tenkz_kernel_hull_skin_tl {dot} }
-    \exp_args:NV \__tenkz_kernel_skin_base:nN
-      \l__tenkz_kernel_hull_skin_tl \l__tenkz_kernel_hull_skin_tl
-  }
+  { \__tenkz_kernel_atom_skin_base:nN {#1} \l__tenkz_kernel_hull_skin_tl }
 
 % Materialize a validated glyph probe at most once.
 \cs_new_protected:Npn \__tenkz_kernel_hull_materialize:n #1
@@ -6933,36 +6925,18 @@
             \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
               {triangle}
           }
-        \pgfextractx \l__tenkz_kernel_hull_xone_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{apex}
-          }
-        \pgfextracty \l__tenkz_kernel_hull_yone_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{apex}
-          }
-        \pgfextractx \l__tenkz_kernel_hull_xtwo_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{left~corner}
-          }
-        \pgfextracty \l__tenkz_kernel_hull_ytwo_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{left~corner}
-          }
-        \pgfextractx \l__tenkz_kernel_hull_xthree_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{right~corner}
-          }
-        \pgfextracty \l__tenkz_kernel_hull_ythree_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{right~corner}
-          }
+        \__tenkz_kernel_hull_anchor_x:nN {apex}
+          \l__tenkz_kernel_hull_xone_dim
+        \__tenkz_kernel_hull_anchor_y:nN {apex}
+          \l__tenkz_kernel_hull_yone_dim
+        \__tenkz_kernel_hull_anchor_x:nN {left~corner}
+          \l__tenkz_kernel_hull_xtwo_dim
+        \__tenkz_kernel_hull_anchor_y:nN {left~corner}
+          \l__tenkz_kernel_hull_ytwo_dim
+        \__tenkz_kernel_hull_anchor_x:nN {right~corner}
+          \l__tenkz_kernel_hull_xthree_dim
+        \__tenkz_kernel_hull_anchor_y:nN {right~corner}
+          \l__tenkz_kernel_hull_ythree_dim
         \dim_set:Nn \l__tenkz_kernel_hull_west_dim
           {
             \dim_min:nn { \l__tenkz_kernel_hull_xone_dim }
@@ -7019,56 +6993,54 @@
             \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
               {rect}
           }
-        \pgfextractx \l__tenkz_kernel_hull_west_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{west}
-          }
-        \pgfextractx \l__tenkz_kernel_hull_east_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{east}
-          }
-        \pgfextracty \l__tenkz_kernel_hull_south_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{south}
-          }
-        \pgfextracty \l__tenkz_kernel_hull_north_dim
-          {
-            \pgfpointanchor
-              {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{north}
-          }
+        \__tenkz_kernel_hull_anchor_x:nN {west}
+          \l__tenkz_kernel_hull_west_dim
+        \__tenkz_kernel_hull_anchor_x:nN {east}
+          \l__tenkz_kernel_hull_east_dim
+        \__tenkz_kernel_hull_anchor_y:nN {south}
+          \l__tenkz_kernel_hull_south_dim
+        \__tenkz_kernel_hull_anchor_y:nN {north}
+          \l__tenkz_kernel_hull_north_dim
       }
-    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/xmin}
+    \__tenkz_kernel_hull_publish:nnN {#1} {xmin}
+      \l__tenkz_kernel_hull_west_dim
+    \__tenkz_kernel_hull_publish:nnN {#1} {xmax}
+      \l__tenkz_kernel_hull_east_dim
+    \__tenkz_kernel_hull_publish:nnN {#1} {ymin}
+      \l__tenkz_kernel_hull_south_dim
+    \__tenkz_kernel_hull_publish:nnN {#1} {ymax}
+      \l__tenkz_kernel_hull_north_dim
+  }
+
+% Page x and y of one anchor on the measurement node the probe above leaves
+% standing.  Every silhouette family reads its bounds through this pair, so a
+% family added later cannot address that node by a spelling of its own.
+\cs_new_protected:Npn \__tenkz_kernel_hull_anchor_x:nN #1#2
+  {
+    \pgfextractx #2
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{#1}
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_hull_anchor_y:nN #1#2
+  {
+    \pgfextracty #2
+      {
+        \pgfpointanchor
+          {\tl_use:N \l__tenkz_kernel_hull_measure_name_tl}{#1}
+      }
+  }
+
+% Live hull bounds are pitch factors: geometry folds supports in pitch units
+% and only the stroke stage multiplies back.
+\cs_new_protected:Npn \__tenkz_kernel_hull_publish:nnN #1#2#3
+  {
+    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/#2}
       {
         \fp_eval:n
           {
-            \dim_to_fp:n { \l__tenkz_kernel_hull_west_dim }
-            / \dim_to_fp:n { \use:c {tenkz@pitch} }
-          }
-      }
-    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/xmax}
-      {
-        \fp_eval:n
-          {
-            \dim_to_fp:n { \l__tenkz_kernel_hull_east_dim }
-            / \dim_to_fp:n { \use:c {tenkz@pitch} }
-          }
-      }
-    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/ymin}
-      {
-        \fp_eval:n
-          {
-            \dim_to_fp:n { \l__tenkz_kernel_hull_south_dim }
-            / \dim_to_fp:n { \use:c {tenkz@pitch} }
-          }
-      }
-    \prop_put:Nee \l__tenkz_kernel_hull_live_prop {#1/ymax}
-      {
-        \fp_eval:n
-          {
-            \dim_to_fp:n { \l__tenkz_kernel_hull_north_dim }
+            \dim_to_fp:n { #3 }
             / \dim_to_fp:n { \use:c {tenkz@pitch} }
           }
       }
@@ -7185,12 +7157,8 @@
             % The dot itself follows the affine chart, but its external label
             % occupies a page-space band.  Publish both supports so a
             % contracting chart cannot contract the label clearance.
-            \__tenkz_model_get:nnN {##1} {skin}
+            \__tenkz_kernel_atom_skin_base:nN {##1}
               \l__tenkz_kernel_hull_a_tl
-            \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
-              { \tl_set:Nn \l__tenkz_kernel_hull_a_tl {dot} }
-            \exp_args:NV \__tenkz_kernel_skin_base:nN
-              \l__tenkz_kernel_hull_a_tl \l__tenkz_kernel_hull_a_tl
             \str_if_eq:VnT \l__tenkz_kernel_hull_a_tl {dot}
               {
                 \__tenkz_model_get:nnN {##1} {label}
@@ -7238,11 +7206,7 @@
 % corner radius, and the angle its own frame turns it by
 \cs_new_protected:Npn \__tenkz_kernel_hull_skin:nN #1#2
   {
-    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_hull_a_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_hull_a_tl
-      { \tl_set:Nn \l__tenkz_kernel_hull_a_tl {dot} }
-    \exp_args:NV \__tenkz_kernel_skin_base:nN
-      \l__tenkz_kernel_hull_a_tl \l__tenkz_kernel_hull_a_tl
+    \__tenkz_kernel_atom_skin_base:nN {#1} \l__tenkz_kernel_hull_a_tl
     \str_case:VnF \l__tenkz_kernel_hull_a_tl
       {
         {dot}
@@ -7280,28 +7244,18 @@
         {none}  { \tl_set:Nn #2 { {circle}{0}{0}{0}{0} } }
         {roundrect}
           {
-            % An unmeasured pill folds like the generic spanned glyph below,
-            % but under its own family: the caps subtract the live named
+            % An unmeasured pill spans exactly as the generic glyph below
+            % does, under its own family: the caps subtract the live named
             % pill-cap radius from the sharp corners.
-            \__tenkz_kernel_hull_half:nnN {#1} {wide}
-              \l__tenkz_kernel_hull_a_tl
-            \__tenkz_kernel_hull_half:nnN {#1} {wires}
-              \l__tenkz_kernel_hull_b_tl
-            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
-            \tl_set:Ne #2
+            \__tenkz_kernel_hull_span:nnnN {#1} {roundrect}
               {
-                {roundrect}
-                { \tl_use:N \l__tenkz_kernel_hull_a_tl }
-                { \tl_use:N \l__tenkz_kernel_hull_b_tl }
-                {
-                  \fp_eval:n
-                    {
-                      \dim_to_fp:n { \__tenkz_dim:n {pillcap} }
-                      / \dim_to_fp:n { \use:c {tenkz@pitch} }
-                    }
-                }
-                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+                \fp_eval:n
+                  {
+                    \dim_to_fp:n { \__tenkz_dim:n {pillcap} }
+                    / \dim_to_fp:n { \use:c {tenkz@pitch} }
+                  }
               }
+              #2
           }
         {tri}
           {
@@ -7315,24 +7269,29 @@
             \__tenkz_kernel_hull_tri:nnN {#1} {triwest} #2
           }
       }
-      {
-        \__tenkz_kernel_hull_half:nnN {#1} {wide}  \l__tenkz_kernel_hull_a_tl
-        \__tenkz_kernel_hull_half:nnN {#1} {wires} \l__tenkz_kernel_hull_b_tl
-        \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
-        \tl_set:Ne #2
-          {
-            {rect}
-            { \tl_use:N \l__tenkz_kernel_hull_a_tl }
-            { \tl_use:N \l__tenkz_kernel_hull_b_tl }
-            {0}
-            { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
-          }
-      }
+      { \__tenkz_kernel_hull_span:nnnN {#1} {rect} {0} #2 }
     \__tenkz_kernel_r_carrier_basis:n {#1}
     \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
       {
         \exp_last_unbraced:NV
           \__tenkz_kernel_hull_skin_affine:nnnnnN #2 #2
+      }
+  }
+% A spanned glyph folds under family #2 over the atom's own half-extents and
+% its own turn, with corner radius #3 -- zero for a sharp silhouette, the live
+% cap for a rounded one.  Sharp and rounded therefore cannot drift apart.
+\cs_new_protected:Npn \__tenkz_kernel_hull_span:nnnN #1#2#3#4
+  {
+    \__tenkz_kernel_hull_half:nnN {#1} {wide}  \l__tenkz_kernel_hull_a_tl
+    \__tenkz_kernel_hull_half:nnN {#1} {wires} \l__tenkz_kernel_hull_b_tl
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
+    \tl_set:Ne #4
+      {
+        {#2}
+        { \tl_use:N \l__tenkz_kernel_hull_a_tl }
+        { \tl_use:N \l__tenkz_kernel_hull_b_tl }
+        {#3}
+        { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_hull_skin_affine:nnnnnN
@@ -7462,7 +7421,7 @@
     \bool_set_true:N \l__tenkz_kernel_hull_chart_bool
     \seq_map_inline:Nn #1
       {
-        \__tenkz_kernel_r_atom_rc:nNNN {##1}
+        \__tenkz_kernel_atom_rc:nNNN {##1}
           \l__tenkz_kernel_hull_basis_row_tl
           \l__tenkz_kernel_hull_basis_col_tl
           \l__tenkz_kernel_hull_basis_at_bool
@@ -7479,7 +7438,7 @@
                 \quark_if_no_value:NTF \l__tenkz_kernel_hull_basis_record_tl
                   { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
                   {
-                    \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+                    \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
                       \l__tenkz_kernel_hull_basis_record_tl
                       \l__tenkz_kernel_hull_basis_row_tl
                       \l__tenkz_kernel_hull_basis_col_tl
@@ -8035,7 +7994,7 @@
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_ro_b_tl
     \str_if_eq:VnF \l__tenkz_kernel_ro_b_tl {dots}
       {
-        \__tenkz_kernel_r_atom_rc:nNNN {#1}
+        \__tenkz_kernel_atom_rc:nNNN {#1}
           \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_col_tl
           \l__tenkz_kernel_ro_bool
         \bool_if:NT \l__tenkz_kernel_ro_bool
@@ -8077,7 +8036,7 @@
 \cs_new_protected:Npn
   \__tenkz_kernel_route_port_target_add:nnnn #1#2#3#4
   {
-    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+    \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_ro_row_tl \l__tenkz_kernel_ro_col_tl
       \l__tenkz_kernel_ro_bool
     \bool_if:NTF \l__tenkz_kernel_ro_bool
@@ -8653,7 +8612,7 @@
 \tl_new:N \l__tenkz_kernel_carrier_record_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_record_carrier:nNNN #1#2#3#4
   {
-    \__tenkz_kernel_r_atom_rc:nNNN {#1} #2#3#4
+    \__tenkz_kernel_atom_rc:nNNN {#1} #2#3#4
     \bool_if:NF #4
       {
         \__tenkz_model_get:nnN {#1} {node}
@@ -9431,7 +9390,7 @@
           { \__tenkz_kernel_r_item:nn {#1} {text} } { }
       }
       {
-        \exp_args:Nx \__tenkz_kernel_r_atom_rc:nNNN
+        \exp_args:Nx \__tenkz_kernel_atom_rc:nNNN
           { \l__tenkz_kernel_r_tl }
           \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl \l_tmpa_bool
         \bool_if:NTF \l_tmpa_bool
@@ -9982,7 +9941,7 @@
         \__tenkz_kernel_r_port_record:nN {#1} \l__tenkz_kernel_r_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_tl
           {
-            \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+            \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
               \l__tenkz_kernel_r_tl
               \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
               \l_tmpa_bool
@@ -10175,13 +10134,9 @@
           \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_c_tl
           {
-            \__tenkz_model_get:nnN
-              { \tl_use:N \l__tenkz_kernel_r_c_tl } {skin}
+            \__tenkz_kernel_atom_skin_base:nN
+              { \tl_use:N \l__tenkz_kernel_r_c_tl }
               \l__tenkz_kernel_r_c_tl
-            \quark_if_no_value:NT \l__tenkz_kernel_r_c_tl
-              { \tl_set:Nn \l__tenkz_kernel_r_c_tl {dot} }
-            \exp_args:NV \__tenkz_kernel_skin_base:nN
-              \l__tenkz_kernel_r_c_tl \l__tenkz_kernel_r_c_tl
             \str_if_eq:VnT \l__tenkz_kernel_r_c_tl {dots}
               { \__tenkz_kernel_r_retract:n {#2} }
           }
@@ -10804,7 +10759,7 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
   {
-    \__tenkz_kernel_r_atom_rc:nNNN {#1}
+    \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
@@ -13019,7 +12974,7 @@
       {
         \__tenkz_model_map_ids:nn {atom}
           {
-            \__tenkz_kernel_r_atom_rc:nNNN {##1}
+            \__tenkz_kernel_atom_rc:nNNN {##1}
               \l__tenkz_kernel_r_row_tl
               \l__tenkz_kernel_r_b_tl
               \l_tmpa_bool
@@ -13083,13 +13038,9 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_atom_glyph_ink:n #1
   {
-    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_r_tl
-    \quark_if_no_value:NT \l__tenkz_kernel_r_tl
-      { \tl_set:Nn \l__tenkz_kernel_r_tl { dot } }
-    \tl_set_eq:NN \l__tenkz_kernel_r_skin_declared_tl
-      \l__tenkz_kernel_r_tl
+    \__tenkz_kernel_atom_skin:nN {#1} \l__tenkz_kernel_r_skin_declared_tl
     \exp_args:NV \__tenkz_kernel_skin_base:nN
-      \l__tenkz_kernel_r_tl \l__tenkz_kernel_r_tl
+      \l__tenkz_kernel_r_skin_declared_tl \l__tenkz_kernel_r_tl
     \__tenkz_model_get:nnN {#1} {label} \l__tenkz_kernel_r_b_tl
     \quark_if_no_value:NT \l__tenkz_kernel_r_b_tl
       { \tl_clear:N \l__tenkz_kernel_r_b_tl }
@@ -13511,6 +13462,21 @@
 \int_new:N \l__tenkz_kernel_r_skin_crossings_int
 \seq_new:N \l__tenkz_kernel_skin_base_seq
 
+% The skin an atom declares, defaulting to the dot an unadorned site draws.
+\cs_new_protected:Npn \__tenkz_kernel_atom_skin:nN #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {skin} #2
+    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {dot} }
+  }
+% That skin resolved to its primitive.  Measurement, silhouette folding and
+% ink all ask this one question, so no consumer can default or resolve a skin
+% by a rule of its own.
+\cs_new_protected:Npn \__tenkz_kernel_atom_skin_base:nN #1#2
+  {
+    \__tenkz_kernel_atom_skin:nN {#1} #2
+    \exp_args:NV \__tenkz_kernel_skin_base:nN #2 #2
+  }
+
 % Resolve a declaration chain to one of the eight primitive skins.  Resolution
 % is shared by hull measurement and ink, so a declared alias cannot acquire
 % the geometry of one primitive and the rendering of another.
@@ -13679,7 +13645,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_r_skin_wire_end:nNN #1#2#3
   {
     \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {face} }
-    \exp_args:NV \__tenkz_kernel_r_atom_rc:nNNN
+    \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
       \l__tenkz_kernel_r_skin_wire_host_tl
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
       \l_tmpa_bool
@@ -14472,11 +14438,7 @@
         \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
           {
             \__tenkz_render_stroke:en
-              {
-                draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
-                line~width = \__tenkz_dim:n {annwidth} ,
-                rounded~corners = \__tenkz_dim:n {corner}
-              }
+              { \__tenkz_kernel_r_mark_contour_ink: }
               { \tl_use:N \l__tenkz_kernel_r_pts_tl -- cycle }
           }
           { \__tenkz_kernel_r_mark_enclosure_orthogonal: }
@@ -14633,14 +14595,18 @@
     \exp_last_unbraced:NV \__tenkz_kernel_r_bracket_arc:nnnnnnnn
       \l__tenkz_kernel_brk_pts_tl
     \__tenkz_render_stroke:en
-      {
-        draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
-        line~width = \__tenkz_dim:n {annwidth} ,
-        rounded~corners = \__tenkz_dim:n {corner}
-      }
+      { \__tenkz_kernel_r_mark_contour_ink: }
       { \tl_use:N \l__tenkz_kernel_r_pts_tl }
     \exp_args:NnV \__tenkz_kernel_r_mark_hull_label:nn {#1}
       \l__tenkz_kernel_r_mark_side_tl
+  }
+% The ink of a hull contour.  A bracket is an arc of the contour an enclosure
+% strokes whole, so the two carry the same weight and the same corner.
+\cs_new:Npn \__tenkz_kernel_r_mark_contour_ink:
+  {
+    draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
+    line~width = \__tenkz_dim:n {annwidth} ,
+    rounded~corners = \__tenkz_dim:n {corner}
   }
 % The four local corners of a bracket, carried through the selection's axes
 % by the same map the enclosure contour uses.
@@ -14680,9 +14646,7 @@
       }
     \__tenkz_render_stroke:en
       {
-        draw = \tl_use:N \l__tenkz_kernel_r_hue_tl ,
-        line~width = \__tenkz_dim:n {annwidth} ,
-        rounded~corners = \__tenkz_dim:n {corner}
+        \__tenkz_kernel_r_mark_contour_ink:
         \tl_use:N \l__tenkz_kernel_r_turnopt_tl
       }
       {
@@ -15123,7 +15087,7 @@
   {
     \tl_set:Ne \l__tenkz_kernel_r_face_angle_tl {#3}
     \tl_set:Ne \l__tenkz_kernel_slot_tl {#4}
-    \__tenkz_kernel_r_atom_rc:nNNN {#2}
+    \__tenkz_kernel_atom_rc:nNNN {#2}
       \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
       \l_tmpa_bool
     \bool_if:NTF \l_tmpa_bool
