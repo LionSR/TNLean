@@ -1801,10 +1801,21 @@
   { \tl_set:Nn \l__tenkz_kernel_unmath_tl {#1} }
 \cs_new_protected:Npn \__tenkz_kernel_unmath:N #1
   {
+    % A value may arrive wrapped in the braces that protected a comma while
+    % its key list was read; the delimiters to peel sit inside them.
+    \__tenkz_kernel_strip_outer_groups:N #1
     \exp_args:NV \tl_if_head_eq_catcode:nNT #1 $
       {
         \exp_last_unbraced:NV \__tenkz_kernel_unmath:w #1 \q_stop
-        \tl_set_eq:NN #1 \l__tenkz_kernel_unmath_tl
+        % A label that holds the comma separating record fields keeps the
+        % grouping that protects it; every other value returns bare, so a
+        % label still compares equal to the one a policy recorded.
+        \tl_if_in:VnTF \l__tenkz_kernel_unmath_tl { , }
+          {
+            \tl_set:Ne #1
+              { \exp_not:n { { \exp_not:V \l__tenkz_kernel_unmath_tl } } }
+          }
+          { \tl_set_eq:NN #1 \l__tenkz_kernel_unmath_tl }
       }
   }
 
