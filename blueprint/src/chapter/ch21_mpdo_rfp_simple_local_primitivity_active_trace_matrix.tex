@@ -781,8 +781,8 @@
     \label{lem:mpdo_pow_apply_path_indicator}
     \lean{MPOTensor.pow_apply_eq_sum_path_indicator}
     \leanok
-    Let $S$ be a real square matrix indexed by a finite set $I$, and let
-    $N\geq0$. Then, for $a,b\in I$,
+    Let $S$ be a square matrix with entries in a commutative semiring,
+    indexed by a finite set $I$, and let $N\geq0$. Then, for $a,b\in I$,
     \begin{align}
         \left(S^N\right)_{a,b}
         &=\sum_{\substack{v:\{0,\ldots,N\}\to I\\ v_0=a,\ v_N=b}}
@@ -810,8 +810,8 @@
     \lean{MPOTensor.trace_pow_eq_sum_cyclic_product}
     \leanok
     \uses{lem:mpdo_pow_apply_path_indicator}
-    Let $S$ be a real square matrix indexed by a finite set $I$, and
-    let $N\geq1$. Then
+    Let $S$ be a square matrix with entries in a commutative semiring,
+    indexed by a finite set $I$, and let $N\geq1$. Then
     \begin{align}
         \tr\!\left(S^N\right)
         &=\sum_{k:\{0,\ldots,N-1\}\to I}
