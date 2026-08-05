@@ -17,8 +17,8 @@
 \seq_new:N \l__tenkz_model_mark_seq
 \seq_new:N \l__tenkz_model_frame_seq
 \seq_new:N \l__tenkz_model_record_seq
-\prop_new:N \l__tenkz_model_record_prop   % "id/field" -> normalized value
-\prop_new:N \l__tenkz_model_class_prop    % "id" -> class word
+\__tenkz_prop_new_indexed:N \l__tenkz_model_record_prop   % "id/field" -> normalized value
+\__tenkz_prop_new_indexed:N \l__tenkz_model_class_prop    % "id" -> class word
 \prop_new:N \l__tenkz_model_picture_prop  % picture-level fields
 \int_new:N  \l__tenkz_model_next_int
 \bool_new:N \l__tenkz_model_validated_bool
