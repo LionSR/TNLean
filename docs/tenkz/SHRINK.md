@@ -2033,3 +2033,37 @@ four-arm ring renders as before; the other two render closer to their
 sources.
 
 Census-correction: #5530
+
+### 2026-08-05 — a cup carries its matrix and a bracket takes its side
+
+Two documented spellings could be written and could not be drawn. The
+side alphabet took the bare cup word alone, so `west={cup=$m$}` was
+rejected outright; the mark alphabet had no bracket in it, and the
+membership pass resolved a selector for one form only, so a bracket over
+a cell range had neither ink nor members. Both now draw.
+
+The labelled side word is the documented expansion and nothing more: the
+side takes `cup`, and each of its bends carries a ring holding the matrix
+the side closes through, addressed half way along the bend. It stands on
+the bend rather than inside it because the station on a generated arc
+landed one change earlier, which is what the previous session was waiting
+for when it left five figures on their 0.7 spelling.
+
+A bracket is the arc of the offset hull an enclosure strokes whole, taken
+on the side its label sits on, closing with the two turns that end it.
+Both hull forms enter the containment order, so a bracket inside a region
+window stands one clearance in from it instead of drawing along its
+support. A bracket that names no side speaks from the south, where the
+authors put a brace under a span.
+
+Four Section-II cases drop the substitutes they were carrying: three
+spelled a bare cup plus a hand-placed bead on the canonical cup wire, and
+one spelled a south label at the midpoint of a span where the source
+braces it. Six bead declarations fold into the side word each picture
+already carried, and eleven lines of apology go with them. M4 falls from
+25.98 to 25.94, and `rmp-ii-spectrum-transfer` leaves the cosmetic-gap
+bar, its last recorded substitution retired. The parser census and the
+overload census stand: the four side keys keep one leaf each and the
+bracket shares its word with no other alphabet.
+
+Census-correction: #5482

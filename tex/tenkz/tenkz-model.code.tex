@@ -101,6 +101,7 @@
       { \msg_error:nn {tenkz}{model-frozen} }
       { \prop_put:Nen \l__tenkz_model_record_prop {#1/#2} {#3} }
   }
+\cs_generate_variant:Nn \__tenkz_model_complete_raw:nnn { nnV }
 
 % Replace an author expression by the semantic field value derived from it.
 % The expression does not survive the model freeze.

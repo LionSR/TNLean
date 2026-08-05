@@ -556,9 +556,11 @@ ink of its own.
 
 A mark is a non-topological record on a target: an `enclosure` stroking the
 offset hull of a selection, a `bracket` stroking the arc of that hull on the
-label's side, or a free `label`. A mark target is one selector (§3), and the
-mark reads it through the same grammar every other key does. Marks never own
-topology; deleting every mark changes no contraction.
+label's side, or a free `label`. A bracket that names no side speaks from the
+south, where the authors draw a brace under a span. A mark target is one
+selector (§3), and both hull forms read it through the same grammar every
+other key does, so a cell range corners a bracket as it corners a contour.
+Marks never own topology; deleting every mark changes no contraction.
 
 Three forms retired. The shaded band never differed from an enclosure except
 in the shape of its selection. The lower brace merged with the upper into one

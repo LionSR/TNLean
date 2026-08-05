@@ -1,0 +1,30 @@
+% Regression: the bracket mark form draws, and a cell range corners it.
+% Before issue 5482 `form=bracket` was outside the form alphabet, and the
+% membership pass resolved a selector only for the enclosure form, so a
+% bracket over a `..` range had neither ink nor members.  A bracket is the
+% arc of the same offset hull an enclosure strokes whole, taken on the side
+% its label sits on.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% a range under a row: the default side is the south, where a brace goes
+\begin{tenkz}[rows={wire}, cols=4, bonds=grid]
+  \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=bracket]{(1,2) .. (1,4)}{$n$}
+\end{tenkz}
+\quad
+% the side a bracket speaks from is the side its label sits on
+\begin{tenkz}[rows={wire}, cols=3, bonds=grid]
+  \tn{} & \tn{} & \tn{}
+  \tnmark[form=bracket, label pos=n]{(1,1) .. (1,2)}{$k$}
+\end{tenkz}
+\quad
+% a braced address list and a two-row range corner it just as well
+\begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+  \tn[name=a]{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn[name=b]{}
+  \tnmark[form=bracket, label pos=e, species=marked]{(1,1) .. (2,3)}{$m$}
+  \tnmark[form=bracket, label pos=w]{{a, b}}{$w$}
+\end{tenkz}
+\end{document}

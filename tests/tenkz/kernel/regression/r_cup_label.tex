@@ -1,0 +1,34 @@
+% Regression: the labelled cup word draws.  `west={cup=$m$}` is the documented
+% spelling for a fixed-point matrix standing on a bend; before issue 5482 the
+% side key admitted only the bare alphabet, so the labelled form was rejected
+% outright and every consumer hand-placed a bead of its own.  The bead the
+% word mints stands at the apex of the arc, not on the chord between the two
+% row ends the arc leaves.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% opposite labelled sides: two distinct cup wires, each carrying its matrix
+\begin{tenkz}[rows={wire,wire}, cols=3, bonds=none,
+    west={cup=$\rho^R$}, east={cup=$\rho^L$}]
+  \tn{} & \tn{} & \tn{}\\
+  \tn[conjugate]{} & \tn[conjugate]{} & \tn[conjugate]{}
+  \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)}
+  \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)}
+\end{tenkz}
+\quad
+% one labelled side beside a bare one: only the labelled side grows a bead
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, west={cup=$X$}, east=cup]
+  \tn{} & \tn{}\\
+  \tn{} & \tn{}
+  \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)}
+\end{tenkz}
+\quad
+% the horizontal sides bend the same way about their column pairs
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none,
+    west=none, east=none, north={cup=$Y$}]
+  \tn{} & \tn{}\\
+  \tn{} & \tn{}
+  \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)}
+\end{tenkz}
+\end{document}
