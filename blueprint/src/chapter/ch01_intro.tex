@@ -369,3 +369,162 @@ weight can $\rho_1$ carry in a convex decomposition of $\rho$?
     Lemma~\ref{lem:sub_smul_posSemidef_iff}, applied with $A=\rho$,
     $B=\rho_1$ under the kernel inclusion.
 \end{proof}
+
+\section{Complete positivity from positivity}
+
+For a linear map $T:\MD\to\MD$, write $T^*$ for its trace-pairing adjoint
+(Definition~\ref{def:trace_pairing_adjoint}). Complete positivity is in
+general strictly stronger than positivity, but the two coincide once $T$'s
+range, or its adjoint's range, is commutative.
+
+\begin{definition}[Commutative range]\label{def:commutative_range}
+    \lean{PositiveOnAbelian.HasCommutingRange}
+    \leanok
+    A linear map $T:\MD\to\MD$ has \emph{commutative range} if $T(X)$ and
+    $T(Y)$ commute for all $X,Y\in\MD$. Since a family of pairwise-commuting
+    elements generates a commutative subalgebra, this is the statement that
+    $T$ maps into a commutative subalgebra of $\MD$.
+\end{definition}
+
+\begin{lemma}[Block quadratic form positivity for commuting images]
+    \label{lem:block_quadratic_form_nonneg_commuting}
+    \lean{PositiveOnAbelian.quadraticForm_nonneg_of_isPositiveMap_of_commuting_images}
+    \leanok
+    \uses{def:positive_map}
+    Let $T:\MD\to\MD$ be a positive linear map and let $[a_{ij}]_{i,j=1}^n$
+    be a positive semidefinite block matrix with entries in $\MD$ such that
+    the images $T(a_{ij})$ pairwise commute. Then
+    \begin{align}
+        \sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}\ge 0
+        \notag
+    \end{align}
+    for every family of vectors $\{\psi_i\}_{i=1}^n\subset\C^D$.
+\end{lemma}
+
+\begin{proof}\leanok
+    As the $T(a_{ij})$ mutually commute, choose a basis in which they are
+    simultaneously diagonal, and write $\psi_{j,\beta}$ for the components
+    of $\ket{\psi_j}$ in this basis. Then
+    \begin{align}
+        \sum_{i,j=1}^{n}\bra{\psi_i}T(a_{ij})\ket{\psi_j}
+        = \sum_\beta\bra\beta
+          T\!\left(\sum_{i,j}\overline{\psi}_{i,\beta}\,a_{ij}\,\psi_{j,\beta}\right)
+          \ket\beta \ge 0,
+        \notag
+    \end{align}
+    by positivity of $T$ and of $[a_{ij}]$: the bracketed matrix is
+    $B_\beta^\dagger[a_{ij}]B_\beta$ for the column vector
+    $B_\beta=(\psi_{j,\beta})_j$, hence positive semidefinite.
+\end{proof}
+
+\begin{lemma}[Complete positivity from positivity, commutative codomain]
+    \label{lem:cp_from_positivity_commutative_codomain}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      thm:cp_iff_choi_posSemidef, lem:block_quadratic_form_nonneg_commuting}
+    Let $T:\MD\to\MD$ be a positive linear map with commutative range. Then
+    $T$ is completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
+      lem:block_quadratic_form_nonneg_commuting}
+    By Theorem~\ref{thm:cp_iff_choi_posSemidef} it suffices to show that the
+    Choi matrix $\tau$ of $T$ satisfies $\bra{\phi}\tau\ket{\phi}\ge0$ for
+    every $\phi\in\C^D\otimes\C^D$. Let $a_{ij}\in\MD$, for
+    $i,j\in\{1,\dots,D\}$, be the blocks of $\ketbra\Omega\Omega$, the Choi
+    matrix of the identity map (Theorem~\ref{thm:choi_matrix_id}), and let
+    $\psi_k:=\phi(\cdot,k)\in\C^D$ be the reshaping of $\phi$ into a
+    $D$-indexed family of vectors. Then
+    \begin{align}
+        \bra{\phi}\tau\ket{\phi}
+        = \sum_{i,j=1}^{D}\bra{\psi_i}T(a_{ij})\ket{\psi_j},
+        \notag
+    \end{align}
+    the block quadratic form of
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} at $T$, $[a_{ij}]$,
+    and $\{\psi_i\}$. Since $[a_{ij}]\ge0$ (it is the block family of the
+    rank-one projector $\ketbra\Omega\Omega$) and, by commutative range, the
+    images $T(a_{ij})$ pairwise commute,
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} gives
+    $\bra{\phi}\tau\ket{\phi}\ge0$.
+\end{proof}
+
+\begin{lemma}[Positivity is trace-adjoint invariant]
+    \label{lem:positive_map_traceAdjointMap}
+    \lean{IsPositiveMap.traceAdjointMap}
+    \leanok
+    \uses{def:positive_map, def:trace_pairing_adjoint}
+    If $T:\MD\to\MD$ is positive, so is $T^*$.
+\end{lemma}
+
+\begin{proof}\leanok
+    For $X\ge0$, $T^*(X)$ is Hermitian since $T$ preserves the adjoint. For
+    every $B\ge0$, the trace-pairing identity $\tr[T^*(X)B]=\tr[X\,T(B)]$
+    and positivity of $X$ and of $T(B)$ (as $T$ is positive) give
+    $\tr[T^*(X)B]\ge0$; a Hermitian matrix with nonnegative trace pairing
+    against every positive semidefinite matrix is itself positive
+    semidefinite, so $T^*(X)\ge0$.
+\end{proof}
+
+\begin{lemma}[Complete positivity is trace-adjoint invariant]
+    \label{lem:cp_traceAdjointMap_iff}
+    \lean{isCPMap_traceAdjointMap_iff}
+    \leanok
+    \uses{def:cp_map, def:trace_pairing_adjoint}
+    A linear map $T:\MD\to\MD$ is completely positive if and only if $T^*$
+    is.
+\end{lemma}
+
+\begin{proof}\leanok
+    Complete positivity in Kraus form is preserved by the trace-pairing
+    adjoint, and the adjoint is an involution, so the two directions are
+    the same statement applied to $T$ and to $T^*$.
+\end{proof}
+
+\begin{lemma}[Complete positivity from positivity, commutative domain]
+    \label{lem:cp_from_positivity_commutative_domain}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange_adjoint}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      def:trace_pairing_adjoint, lem:positive_map_traceAdjointMap,
+      lem:cp_from_positivity_commutative_codomain, lem:cp_traceAdjointMap_iff}
+    Let $T:\MD\to\MD$ be a positive linear map whose trace-pairing adjoint
+    $T^*$ has commutative range. Then $T$ is completely positive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_map_traceAdjointMap,
+      lem:cp_from_positivity_commutative_codomain, lem:cp_traceAdjointMap_iff}
+    By Lemma~\ref{lem:positive_map_traceAdjointMap}, $T^*$ is positive, and
+    by hypothesis it has commutative range, so
+    Lemma~\ref{lem:cp_from_positivity_commutative_codomain} gives that $T^*$
+    is completely positive. Lemma~\ref{lem:cp_traceAdjointMap_iff} then
+    gives that $T$ is completely positive.
+\end{proof}
+
+\begin{theorem}[Complete positivity from positivity]\label{thm:cp_from_positivity_commutative}
+    \lean{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_commutingRange_or}
+    \leanok
+    \uses{def:positive_map, def:cp_map, def:commutative_range,
+      def:trace_pairing_adjoint}
+    Let $T:\MD\to\MD$ be a positive linear map. If $T$ has commutative
+    range, or $T^*$ has commutative range, then $T$ is completely positive.
+    This is \cite[Proposition~1.6]{Wolf2012Quantum}; the commutative-range
+    hypothesis is the range-only reading of Wolf's ``$\mathcal A$ or
+    $\mathcal B$ commutative'' hypothesis that his own proof establishes and
+    that his remark immediately after the proof licenses for an arbitrary
+    operator system mapping into a commutative algebra. See
+    \path{docs/paper-gaps/wolf_prop16_cp_positivity_commutative_side.tex}
+    for the precise relationship between the two phrasings.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:cp_from_positivity_commutative_codomain,
+      lem:cp_from_positivity_commutative_domain}
+    If $T$ has commutative range, apply
+    Lemma~\ref{lem:cp_from_positivity_commutative_codomain}. If instead
+    $T^*$ has commutative range, apply
+    Lemma~\ref{lem:cp_from_positivity_commutative_domain}.
+\end{proof}
