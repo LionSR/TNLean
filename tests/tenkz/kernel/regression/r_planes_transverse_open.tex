@@ -1,0 +1,57 @@
+%% Regression: a bilayer sheet member declares an open transverse physical
+%% leg with the `open up|down` wire end, the explicit sibling of the
+%% contracted-pair tie.  The tip stands one physical-leg reach from the
+%% member along the frame's signed page-space transverse vector, and the
+%% leg materializes as an ordinary open physical index in the audited
+%% boundary signature.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_transverse_tip_int
+\cs_new_eq:NN \__tenkz_test_transverse_orig:nNN
+  \__tenkz_kernel_r_open_tip_affine_xy:nNN
+\cs_set_protected:Npn \__tenkz_kernel_r_open_tip_affine_xy:nNN #1#2#3
+  {
+    \__tenkz_test_transverse_orig:nNN {#1} #2 #3
+    \str_case:nn {#1}
+      {
+        {up}
+          {
+            \fp_compare:nNnF
+              { abs( #2 - \l__tenkz_kernel_r_xc_fp ) } < {0.000001}
+              { \errmessage{an~up~tip~left~the~transverse~line} }
+            \fp_compare:nNnF
+              { abs( #3 - \l__tenkz_kernel_r_yc_fp - 0.38 ) } < {0.000001}
+              { \errmessage{an~up~tip~lost~the~physical-leg~reach} }
+            \int_gincr:N \g__tenkz_test_transverse_tip_int
+          }
+        {down}
+          {
+            \fp_compare:nNnF
+              { abs( #2 - \l__tenkz_kernel_r_xc_fp ) } < {0.000001}
+              { \errmessage{a~down~tip~left~the~transverse~line} }
+            \fp_compare:nNnF
+              { abs( \l__tenkz_kernel_r_yc_fp - #3 - 0.38 ) } < {0.000001}
+              { \errmessage{a~down~tip~lost~the~physical-leg~reach} }
+            \int_gincr:N \g__tenkz_test_transverse_tip_int
+          }
+      }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={2x2}, planes, bonds=none]
+  % one contracted pair and, at the neighbouring cell, one open transverse
+  % leg per member: ket up, bra down
+  \tnwire{(1,1,1)}{(1,1,2)}
+  \tnwire{(1,2,1)}{open up}
+  \tnwire{(1,2,2)}{open down}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkz_test_transverse_tip_int } = {2}
+  { \errmessage{a~transverse~open~tip~was~not~placed} }
+\ExplSyntaxOff
+\end{document}

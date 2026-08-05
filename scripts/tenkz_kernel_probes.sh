@@ -125,6 +125,21 @@ grep -Fq 'kernel-boundary|signature=phys:n' \
   echo "FAIL: matching physical-open policy lost its physical boundary" >&2
   exit 1
 }
+grep -Fxq 'kernel-boundary|signature=phys:n, phys:s' \
+    "$WORK/r_planes_transverse_open.tnlog" || {
+  echo "FAIL: bilayer transverse opens did not reach the boundary signature" >&2
+  exit 1
+}
+grep -Fq '|port-type=physical|to-open-type=physical|to-open=up' \
+    "$WORK/r_planes_transverse_open.tnlog" || {
+  echo "FAIL: the ket member's transverse open lost its physical typing" >&2
+  exit 1
+}
+grep -Fq '|port-type=physical|to-open-type=physical|to-open=down' \
+    "$WORK/r_planes_transverse_open.tnlog" || {
+  echo "FAIL: the bra member's transverse open lost its physical typing" >&2
+  exit 1
+}
 grep -Fq \
     '|cross=over at crossing of open-arc and port-open-1|' \
     "$WORK/r_route_open_all_arc.tnlog" || {
@@ -1218,6 +1233,21 @@ for circle_open_case in ne:from se:to sw:from nw:to; do
     exit 1
   }
 done
+
+transverse_negative="$KERNEL/negative/n_flat_open_transverse.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$transverse_negative" \
+       >"$WORK/n_flat_open_transverse.transcript" 2>&1 ); then
+  echo "FAIL: a flat frame accepted a transverse open end" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-OPEN-TRANSVERSE-FRAME]' \
+  "$WORK/n_flat_open_transverse.transcript" || {
+  echo "FAIL: the flat transverse rejection lacked its coded diagnostic" >&2
+  exit 1
+}
 
 for basis_case in \
   n_frame_basis_parse n_frame_basis_semicolon n_frame_basis_kind \
