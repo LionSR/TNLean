@@ -212,9 +212,15 @@ retired and by flattening the distinction the local-axes rule exists to make.
 The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
-carry no key type. Every registry row names exactly one value type; a shared
-key name has one type and one meaning at every scope that exposes it. The
-overload census (§11, meter M6) never rises.
+carry no key type. Being mathematics, they take one rule about the math
+shift: the kernel opens it and peels the author's outer `$...$` when a value
+brings its own, so `\tn{$\bar A$}` and `\tn{\bar A}` are the same figure and
+leave the same record. The rule governs atom bodies, all three mark forms,
+port labels, and the matrix a labelled cup stands on. A prose panel
+(`form=prose`) stands outside it, because it sets a sentence rather than a
+matrix. Every registry row names exactly one value type; a shared key name
+has one type and one meaning at every scope that exposes it. The overload
+census (§11, meter M6) never rises.
 
 ### 2.8 Closed alphabets
 
