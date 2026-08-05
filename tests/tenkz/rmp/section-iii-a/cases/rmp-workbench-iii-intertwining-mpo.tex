@@ -1,30 +1,60 @@
 % Target: rmp-workbench-iii-intertwining-mpo
 % Formula: (per site, MPO virtual spaces):
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the three-row intertwiner box between the gh word and the
+%   stacked g and h words.
 % Boundary: Resolved by the public environment; archival boundary contract is explicit.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
-%   448-467; archival output interMPO.pdf
-% Capabilities: grid, typed-ports
+%   448-467; archival output sptintertwin gh.pdf
+% Capabilities: kernel, typed-ports
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
   % LHS: gh at site 1, then X_gh, then (g over h) at sites 2 and 3
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn{gh}
-  \end{tenkz}
-  \!
-  \begin{tenkz}[rows={op:operator, op:operator}, west=none,
-                tensor style=box]
-    \tn[box, wires=2, no legs]{X_{gh}} & \tn{g} & \tn{g}\\
-                                       & \tn{h} & \tn{h}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=box, name=GH,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[at=(1,2), skin=box, wires=3, name=X,
+      ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{gh}}
+    \tn[at=(1,3), skin=box, name=G1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[at=(1,4), skin=box, name=G2,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[at=(3,3), skin=box, name=H1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[at=(3,4), skin=box, name=H2,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tnwire[species=operator]{open w}{GH.180}
+    \tnwire[species=operator]{GH.0}{X.180@2}
+    \tnwire[species=operator]{X.0@1}{G1.180}
+    \tnwire[species=operator]{X.0@3}{H1.180}
+    \tnwire[species=operator]{G1.0}{G2.180}
+    \tnwire[species=operator]{H1.0}{H2.180}
+    \tnwire[species=operator]{G2.0}{open e}
+    \tnwire[species=operator]{H2.0}{open e}
+    % Each g-h column contracts g's lower physical index with h's upper one.
+    \tnwire{G1.270}{H1.90}
+    \tnwire{G2.270}{H2.90}
   \end{tenkz}
   \;=\;
   % RHS: gh at sites 1 and 2, then X_gh, then (g over h) at site 3
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn{gh} & \tn{gh}
-  \end{tenkz}
-  \!
-  \begin{tenkz}[rows={op:operator, op:operator}, west=none,
-                tensor style=box]
-    \tn[box, wires=2, no legs]{X_{gh}} & \tn{g}\\
-                                       & \tn{h}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=box, name=GH1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[at=(2,2), skin=box, name=GH2,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[at=(1,3), skin=box, wires=3, name=X,
+      ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{gh}}
+    \tn[at=(1,4), skin=box, name=G1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[at=(3,4), skin=box, name=H1,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tnwire[species=operator]{open w}{GH1.180}
+    \tnwire[species=operator]{GH1.0}{GH2.180}
+    \tnwire[species=operator]{GH2.0}{X.180@2}
+    \tnwire[species=operator]{X.0@1}{G1.180}
+    \tnwire[species=operator]{X.0@3}{H1.180}
+    \tnwire[species=operator]{G1.0}{open e}
+    \tnwire[species=operator]{H1.0}{open e}
+    \tnwire{G1.270}{H1.90}
   \end{tenkz}
 \]

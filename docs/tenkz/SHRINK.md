@@ -1581,3 +1581,32 @@ row, alias, escape, or overload is added.
 | flag:consumers:key:picture:east label | keep-because: the wave-2C respell moved one consumer onto the kernel port-label spelling and the row's two remaining consumers are 0.7 grid-tier cases that retire wholesale at the S4 surface swap; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 2B moves seven more Section-III-A panels onto the kernel
+
+The seven Section-III-A cases of wave 2B — the upward GHZ copy tensor, the
+SPT intertwiner, the u_g pull-through star, the enlarged MPO word, the
+string-order loops, and both boundary-algebra words — leave the grid and
+free tiers for kernel flat frames with declared typed ports and canonical
+addresses. The boundary-algebra family and the enlarged word restore the
+source's second physical leg per site and spell their traced returns
+through invisible corner junctions, since the single-row trace policy does
+not draw its return yet; the star and the loops replace millimetre
+placements with cell and port addresses; two archival pairings are
+corrected to the panels the cases actually draw (sptintertwin gh.pdf and
+Eq60.pdf).
+
+The migrations retire the tiers' owned physical dimensions: the census
+falls from 478 to 444 sites (route/string 244 to 224, composition/layout
+218 to 204), with metric and frame ownership remaining zero, and the
+ceilings tighten to match. M4 rises from 21.35 to 22.22 because the kernel
+cases name the ports, junctions, and species their retired sugar implied.
+No parser spelling, registry row, alias, escape, or overload is added.
+
+The wave drops the `no legs` key below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:object:no legs | dies at S4 with the 0.7 object ledger: a suppressed policy leg is port ownership, which typed `ports=` already states; wave 2B retired its intertwiner consumers; expiry 0.9 |
+
+Census-correction: #5347
