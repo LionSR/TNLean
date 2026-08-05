@@ -213,6 +213,37 @@ for bearing in e n w s; do
     exit 1
   }
 done
+# The direction mark rides the leg's daylight, so it inks on every bearing:
+# the fixture's own assertions place each barb between the silhouette it
+# leaves and the free tip, whichever end of the leg is the open one.
+for bearing in e n w s; do
+  grep -Eq "^wire\|.*\|dir=to\|.*\|kind=index\|.*\|to-open=$bearing\$" \
+      "$WORK/r_dir_open_bearings.tnlog" || {
+    echo "FAIL: the departing open leg lost bearing $bearing" >&2
+    exit 1
+  }
+  grep -Eq "^wire\|.*\|dir=to\|from-open=$bearing\|kind=index\|.*\|to=addr-" \
+      "$WORK/r_dir_open_bearings.tnlog" || {
+    echo "FAIL: the arriving open leg lost bearing $bearing" >&2
+    exit 1
+  }
+done
+# A wire declares its stroke; the absent key and solid= are the same rail.
+for spelling in dashed dotted; do
+  [ "$(grep -c "|stroke=$spelling|" "$WORK/r_wire_stroke.tnlog" || true)" \
+      -eq 2 ] || {
+    echo "FAIL: the $spelling rail count changed" >&2
+    exit 1
+  }
+done
+grep -Eq '^wire\|.*\|name=plain\|to=addr-' "$WORK/r_wire_stroke.tnlog" || {
+  echo "FAIL: an undeclared rail acquired a stroke field" >&2
+  exit 1
+}
+grep -Fq '|name=said|stroke=solid|' "$WORK/r_wire_stroke.tnlog" || {
+  echo "FAIL: the solid spelling lost its recorded default" >&2
+  exit 1
+}
 grep -Eq '^wire\|.*dir=to\|.*kind=index\|.*name=inner\|.*port-type=physical\|to=addr-' \
     "$WORK/r_physical_dir.tnlog" || {
   echo "FAIL: internal directed physical contraction lost its typed record" >&2
@@ -1260,9 +1291,10 @@ command -v pdftoppm >/dev/null 2>&1 || {
   exit 1
 }
 for pixel_fixture in \
-    k_plane k_skin_pairings r_hull_live r_ink_semantics r_label_turn \
-    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
-    r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure; do
+    k_plane k_skin_pairings r_dir_open_bearings r_hull_live r_ink_semantics \
+    r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
+    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure \
+    r_wire_stroke; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -1322,9 +1354,10 @@ for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
-  "$WORK/k_plane.png" "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
+  "$WORK/k_plane.png" "$WORK/r_dir_open_bearings.png" \
+  "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
-  "$WORK/r_ring_closure.png" >"$PIXEL_CURRENT"
+  "$WORK/r_ring_closure.png" "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&

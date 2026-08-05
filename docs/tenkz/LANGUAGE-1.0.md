@@ -132,7 +132,7 @@ points. A cluster carrier is a glyphless group and owns no authored `ports=`;
 attach wires to its addressable member atoms instead. `void=open` is a hole
 that preserves indices; `void=sealed` removes the site and its bonds.
 
-### 2.4 Wire keys (9)
+### 2.4 Wire keys (10)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -144,6 +144,7 @@ that preserves indices; `void=sealed` removes the site and its bonds.
 | `around=` | address-list | — | empty | `TKZ-WIRE-*` |
 | `cross=` | crossing-list | — | empty | `TKZ-CROSS-*` |
 | `dir=` | small-enum | `to` `from` `none` | `none` | `TKZ-WIRE-*` |
+| `stroke=` | small-enum | `solid` `dashed` `dotted` | `solid` | `TKZ-WIRE-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
 `dir=` draws the direction mark of a directed index, virtual or physical; it
@@ -151,6 +152,17 @@ changes no topology. On a resolved physical index the typed record, the port
 consumption and mismatch checking, and the physical-leg stroke all stand; the
 orientation of a directed physical open end enters the exposed boundary
 signature, while an internal directed contraction leaves no boundary entry.
+The mark stands at the named station along the leg's daylight — the stretch
+of the leg outside the silhouette of the glyph it springs from — so the same
+placement rule inks on every bearing, and a wide silhouette can no longer
+swallow the mark of an east leg that a tall one lets a south leg keep.
+
+`stroke=` names the pattern of the rail and nothing else: the weight, the
+colour and the topology are untouched. A dashed rail carries an index the
+picture draws but does not contract; a dotted rail carries a lattice lying
+under the sheet being drawn. The dash lengths are house metrics, so a client
+never spells a length of its own.
+
 A wire carries no waypoint list, no bend factor and no stroke weight: a route names the records it must
 clear, an arc leaves and enters along its ends' faces, and the stroke follows
 the resolved endpoint type (§5).
