@@ -1679,3 +1679,33 @@ The wave drops two 0.7 spellings below tenure:
 | flag:consumers:key:object:up at | keep-because: wave 4 retired the boundary-operator consumers onto typed top-face stations; the lone remaining consumer is the blueprint physical-blocking figure (chapter 26) that migrates with the blueprint's kernel pass at the S4 surface swap, the kernel stating the leg through `ports=`; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 3: the two-panel equalities and fusion trees reach the kernel
+
+The nine wave-3 cases — the three MPO-reduction proofs, the coproduct
+equation and its workbench twin, the dual-reduction intertwiner, the two
+association trees, and the workbench tangent projector — move onto the
+kernel tier.  The proofs and the intertwiner leave the free and grid
+tiers for kernel flat frames whose spanning V, F, and X boxes take
+slotted typed ports, composed in `tenkzeq` with audited equal boundary
+signatures; the proofs drop their red house rails for the sources'
+all-black ink.  The two coproduct panels spell their closed virtual
+words as drawn racetrack returns through invisible corner junctions
+(the single-row trace policy does not ink its return yet), recover the
+sources' paired physical stubs, and opt their one relation out of the
+audit with the recorded arity reason.  The association trees bind the
+kernel surface over the unchanged tree expander.  The tangent projector
+repairs its structural gap at the archival widths — four columns and the
+kernel identity strand against five-plus-four columns — while its
+mirrored triangle windows stay on the 0.7 grid tier with the fixed
+east-apex kernel skin (#5485) still pending.
+
+The reduction proofs' owned millimetres leave the corpus: the census
+falls from 383 to 357 sites (route/string 224 to 208, composition/layout
+159 to 149), with metric and frame ownership remaining zero, and the
+ceilings and provenance pins tighten to match.  M4 rises from 22.88 to
+24.11 because the kernel cases name the ports, junctions, and returns
+their retired sugar implied.  No parser spelling, registry row, alias,
+escape, or overload is added or removed.
+
+Census-correction: #5347

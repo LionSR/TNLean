@@ -41,26 +41,6 @@
         {"site": "tenkzfree@2::tenkzfree@2/tnjoin@4/command:\\tnjoin[dir]{<dimension>,<dimension>}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["13mm", "-13mm", "13mm", "13mm"]}
       ]
     },
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-proof-one.tex": {
-      "scopes": ["tenkzfree@1", "tenkzfree@2"],
-      "constructs": ["tenkzfree@1", "tenkzfree@2"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnput@3", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3", "tenkzfree@1::tenkzfree@1/tnjoin@4", "tenkzfree@1::tenkzfree@1/tnjoin@5", "tenkzfree@1::tenkzfree@1/tnjoin@6", "tenkzfree@1::tenkzfree@1/tnjoin@7", "tenkzfree@2::tenkzfree@2", "tenkzfree@2::tenkzfree@2/tnput@1", "tenkzfree@2::tenkzfree@2/tnput@2", "tenkzfree@2::tenkzfree@2/tnjoin@1", "tenkzfree@2::tenkzfree@2/tnjoin@2", "tenkzfree@2::tenkzfree@2/tnjoin@3", "tenkzfree@2::tenkzfree@2/tnjoin@4", "tenkzfree@2::tenkzfree@2/tnjoin@5"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[pill]{V}{(<dimension>,<dimension>)}{V_\\alpha}", "owner": "composition/layout", "literals": ["16mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[box]{a}{($(V.north west)+(<dimension>,<dimension>)$)}{\\alpha}", "owner": "composition/layout", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@3/command:\\tnput[dot]{d}{($(V.south west)+(<dimension>,<dimension>)$)}{}", "owner": "composition/layout", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@3/command:\\tnjoin{$(a.west)+(<dimension>,<dimension>)$}{a.west}", "owner": "route/string", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@4/command:\\tnjoin{a.north}{$(a.north)+(<dimension>,<dimension>)$}", "owner": "route/string", "literals": ["0mm", "7mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@5/command:\\tnjoin{$(d.west)+(<dimension>,<dimension>)$}{d.west}", "owner": "route/string", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@7/command:\\tnjoin{V.east}{$(V.east)+(<dimension>,<dimension>)$}", "owner": "route/string", "literals": ["12mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@1/command:\\tnput[pill]{V}{(<dimension>,<dimension>)}{V_\\alpha}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@2/command:\\tnput[dot]{d}{($(V.east)+(<dimension>,<dimension>)$)}{}", "owner": "composition/layout", "literals": ["16mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@2/command:\\tnjoin{$(V.north west)+(<dimension>,<dimension>)$}{V.north west}", "owner": "route/string", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@3/command:\\tnjoin{$(V.south west)+(<dimension>,<dimension>)$}{V.south west}", "owner": "route/string", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@4/command:\\tnjoin{d.north}{$(d.north)+(<dimension>,<dimension>)$}", "owner": "route/string", "literals": ["0mm", "7mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@5/command:\\tnjoin{d.east}{$(d.east)+(<dimension>,<dimension>)$}", "owner": "route/string", "literals": ["12mm", "0mm"]}
-      ]
-    },
     "tests/tenkz/rmp/section-iii-a/cases/rmp-iii-a-pulling-through.tex": {
       "scopes": ["tenkzfree@1", "tenkzfree@2"],
       "constructs": ["tenkzfree@1", "tenkzfree@2"],

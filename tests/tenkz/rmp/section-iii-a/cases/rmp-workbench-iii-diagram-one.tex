@@ -1,13 +1,48 @@
 % Target: rmp-workbench-iii-diagram-one
 % Formula: Delta(XA) equals X contracted with a two-site tensor word.
-% Ink: Canonical public tenkz one-site to two-site coproduct equation.
+% Ink: Kernel flat frames; the one-site and two-site words close on the drawn
+%   racetrack return.
 % Boundary: Both sides close the virtual index in a loop; the physical legs stay open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 150-163; archival output Dia1.pdf
-% Capabilities: grid, coproduct, equation-composition
+% Capabilities: kernel, equation-composition, periodic-closure
 \[
-  \Delta\!\left(\begin{tenkz}[tensor style=box, physical=updown,
-      boundary=periodic]\tnX{X}&\tn{}\end{tenkz}\right)
-  =\begin{tenkz}[tensor style=box, physical=updown,
-      boundary=periodic]\tnX{X}&\tn{}&\tn{}\end{tenkz}.
+  \tenkzkernel
+  % The relation's audit is opted out because the coproduct genuinely changes
+  % the physical arity: one site on the left, two sites on the right.
+  \begin{tenkzeq}[check={off={1: the coproduct sends the one-site word to
+      the two-site word, so the physical arity changes across the relation}}]
+    \Delta\!\left(
+    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+      \tn[at=(1,2), skin=ring, name=X, ports={0:virtual, 180:virtual}]{X}
+      \tn[at=(1,3), skin=mpo, name=A,
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
+      % Four glyphless junctions carry the closed virtual word below the row;
+      % the drawn return replaces the uninked single-row trace (#5492).
+      \tn[at=(1,1), skin=none, name=NW, ports={0:virtual, 270:virtual}]{}
+      \tn[at=(1,4), skin=none, name=NE, ports={180:virtual, 270:virtual}]{}
+      \tn[at=(2,1), skin=none, name=SW, ports={0:virtual, 90:virtual}]{}
+      \tn[at=(2,4), skin=none, name=SE, ports={90:virtual, 180:virtual}]{}
+      \tnwire{X.0}{A.180}
+      \tnwire{A.0}{NE.180} \tnwire{NE.270}{SE.90}
+      \tnwire{SE.180}{SW.0} \tnwire{SW.90}{NW.270}
+      \tnwire{NW.0}{X.180}
+    \end{tenkz}\right)
+    =
+    \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+      \tn[at=(1,2), skin=ring, name=X, ports={0:virtual, 180:virtual}]{X}
+      \tn[at=(1,3), skin=mpo, name=A1,
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
+      \tn[at=(1,4), skin=mpo, name=A2,
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
+      \tn[at=(1,1), skin=none, name=NW, ports={0:virtual, 270:virtual}]{}
+      \tn[at=(1,5), skin=none, name=NE, ports={180:virtual, 270:virtual}]{}
+      \tn[at=(2,1), skin=none, name=SW, ports={0:virtual, 90:virtual}]{}
+      \tn[at=(2,5), skin=none, name=SE, ports={90:virtual, 180:virtual}]{}
+      \tnwire{X.0}{A1.180} \tnwire{A1.0}{A2.180}
+      \tnwire{A2.0}{NE.180} \tnwire{NE.270}{SE.90}
+      \tnwire{SE.180}{SW.0} \tnwire{SW.90}{NW.270}
+      \tnwire{NW.0}{X.180}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]
