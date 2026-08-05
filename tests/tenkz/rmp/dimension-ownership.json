@@ -184,35 +184,6 @@
         {"site": "tenkzfree@1::tenkzfree@1/tnjoin@4/command:\\tnjoin{F.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["18mm", "0mm"]}
       ]
     },
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-historical-composite.tex": {
-      "scopes": ["tenkzfree@1", "tenkzfree@2"],
-      "constructs": ["tenkzfree@1", "tenkzfree@2"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnput@3", "tenkzfree@1::tenkzfree@1/tnput@4", "tenkzfree@1::tenkzfree@1/tnput@5", "tenkzfree@1::tenkzfree@1/tnput@6", "tenkzfree@1::tenkzfree@1/tnput@7", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3", "tenkzfree@1::tenkzfree@1/tnjoin@4", "tenkzfree@1::tenkzfree@1/tnjoin@5", "tenkzfree@1::tenkzfree@1/tnjoin@6", "tenkzfree@1::tenkzfree@1/tnjoin@7", "tenkzfree@1::tenkzfree@1/tnjoin@8", "tenkzfree@1::tenkzfree@1/tnjoin@9", "tenkzfree@1::tenkzfree@1/tnjoin@10", "tenkzfree@1::tenkzfree@1/tnjoin@11", "tenkzfree@1::tenkzfree@1/tnjoin@12", "tenkzfree@2::tenkzfree@2", "tenkzfree@2::tenkzfree@2/tnput@1", "tenkzfree@2::tenkzfree@2/tnput@2", "tenkzfree@2::tenkzfree@2/tnput@3", "tenkzfree@2::tenkzfree@2/tnput@4", "tenkzfree@2::tenkzfree@2/tnput@5", "tenkzfree@2::tenkzfree@2/tnput@6", "tenkzfree@2::tenkzfree@2/tnput@7", "tenkzfree@2::tenkzfree@2/tnjoin@1", "tenkzfree@2::tenkzfree@2/tnjoin@2", "tenkzfree@2::tenkzfree@2/tnjoin@3", "tenkzfree@2::tenkzfree@2/tnjoin@4", "tenkzfree@2::tenkzfree@2/tnjoin@5", "tenkzfree@2::tenkzfree@2/tnjoin@6", "tenkzfree@2::tenkzfree@2/tnjoin@7", "tenkzfree@2::tenkzfree@2/tnjoin@8", "tenkzfree@2::tenkzfree@2/tnjoin@9", "tenkzfree@2::tenkzfree@2/tnjoin@10", "tenkzfree@2::tenkzfree@2/tnjoin@11", "tenkzfree@2::tenkzfree@2/tnjoin@12"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[box]{n}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "8mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[box]{e}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["8mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@3/command:\\tnput[box]{s}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "-8mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@4/command:\\tnput[box]{w}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["-8mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@5/command:\\tnput[circle]{lam}{(<dimension>,<dimension>)}{\\lambda}", "owner": "composition/layout", "literals": ["-8mm", "8mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@6/command:\\tnput[box]{top}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "16mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@7/command:\\tnput[box]{left}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["-16mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@7/command:\\tnjoin{top.north}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "20mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@9/command:\\tnjoin{left.west}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["-20mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@10/command:\\tnjoin[dir]{s.south}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "-12mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@11/command:\\tnjoin[dir]{e.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["12mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@1/command:\\tnput[box]{n}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "8mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@2/command:\\tnput[box]{e}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["8mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@3/command:\\tnput[box]{s}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "-8mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@4/command:\\tnput[box]{w}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["-8mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@5/command:\\tnput[circle]{lam}{(<dimension>,<dimension>)}{\\lambda}", "owner": "composition/layout", "literals": ["-8mm", "8mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@6/command:\\tnput[box]{bottom}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["0mm", "-16mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@7/command:\\tnput[box]{right}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["16mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@6/command:\\tnjoin[dir]{<dimension>,<dimension>}{n.north}", "owner": "route/string", "literals": ["0mm", "12mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@7/command:\\tnjoin[dir]{<dimension>,<dimension>}{w.west}", "owner": "route/string", "literals": ["-12mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@9/command:\\tnjoin{bottom.south}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "-20mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@11/command:\\tnjoin{right.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["20mm", "0mm"]}
-      ]
-    },
     "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-peps-renormalization-one.tex": {
       "scopes": ["tenkzfree@1"],
       "constructs": ["tenkzfree@1"],

@@ -1,15 +1,26 @@
 % Target: rmp-iv-ground-space-2d
 % Formula: |psi(X)> = sum_{s} X( {beta_r} ) C( prod_r A^{s_r} ) |s>,
-% Ink: Canonical public tenkzlattice environment; no raw TikZ.
+% Ink: Kernel plane frame; the sheet and its boundary operator are two nested
+%   house enclosures over the box-site lattice, with X on the outer contour.
 % Boundary: Resolved by the public environment; open indices remain explicit.
 % Source: paper TN-Review-main.tex line 2006; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 55-70
-% Capabilities: lattice, regions, typed-ports
+% Capabilities: kernel, plane-frame, regions, typed-ports
+\tenkzkernel
+\tndeclare{atom}{tnsheetsite}
+  {skin=box, ports={n:virtual, e:virtual, s:virtual, w:virtual}}
 \[
   |\psi(X)\rangle \;=\;
-  \begin{tenkzlattice}[rows=4, cols=4, frame=oblique,
-                       physical=up, boundary=open]
-    \tnregion[slot=neutral, outline, inset=1]{(1-4,1-4)}
-    \tnregion[slot=neutral, outline, label=$X$, label pos=north east]{(1-4,1-4)}
-  \end{tenkzlattice}
+  % The inner contour is the retained sheet; the outer contour, stepped one
+  % clearance out, is the arbitrary boundary operator X acting on the sheet's
+  % open indices.  Every site is the source's plain box tensor with one
+  % undirected upward physical leg.
+  \begin{tenkz}[lattice={4x4}, frame=plane, physical=up]
+    \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} \\
+    \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} \\
+    \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} \\
+    \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{} & \tnsheetsite{}
+    \tnmark[form=enclosure]{(1,1) .. (4,4)}{}
+    \tnmark[form=enclosure, inset=1, label pos=e]{(1,1) .. (4,4)}{$X$}
+  \end{tenkz}
 \]
