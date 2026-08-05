@@ -26,7 +26,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{The Challenge}
+\begin{frame}[fragile]{The Challenge}
 \textbf{\LARGE When do $A$ and $B$ describe the same quantum physics?}
 
 \vspace{0.5em}
@@ -55,9 +55,12 @@ B^i = X A^i X^{-1}
 % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
 % the symbolic N-site word has (0, N), with no virtual index open.
 % Source: arXiv:1606.00608, Fig. I and lines 135--170.
-\begin{tenkz}[compact, periodic, physical=up]
-  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-  \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=5, boundary=periodic, size=s]
+  \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+  \tn[label pos=s, ports={90:physical:$i_2$}]{A} & \tn[skin=dots]{} &
+  \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+  \tn[label pos=s, ports={90:physical:$i_N$}]{A}
 \end{tenkz}
 
 \vspace{1.5em}

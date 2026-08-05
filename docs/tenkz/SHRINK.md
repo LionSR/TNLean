@@ -1967,3 +1967,35 @@ draw a red trapezoid or a sharp rectangle. Those returns are ink, not
 ceremony.
 
 Census-correction: #5524
+
+### 2026-08-05 — the first blueprint chapters take the kernel
+
+Seventeen blueprint chapters, slide decks, and manual pages respell their
+figures on the kernel. Each picture states its row and its column count and
+then names its atoms in reading order: the chain runs on the alignment
+character, a stacked picture breaks its rows, and the grid bonds the
+neighbours it just placed. A word closed on itself says `boundary=periodic`
+and lets the closure draw itself; a word open at both ends says
+`west=open, east=open`. An address, a name, and a port list survive only
+where a later line reads them. The benchmark corpus is untouched, so every
+meter but the consumer census stands; the demand corpus loses the retired
+grid spellings.
+
+Five figures keep their 0.7 spelling and are named in the disposition
+ledger: the operators of the maximally entangled state, the correlation
+window, the two channel sandwiches, and the transfer-map slide ride a
+generated cup between operator rows, where the on-wire anchor divides the
+record chord rather than the drawn arc, so a tensor placed there would read
+as sitting on the physical contraction.
+
+The physical policy is a real trade and not a free win. It pays where two or
+more sites take an unlabelled leg -- the operator stack, the traced word --
+and costs where a single site among many carries the index, because every
+other site then has to refuse it. Those pictures keep their port list, which
+also keeps them out of the codemod column.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the five that remain all stand a tensor on a generated cup, and they respell when the kernel gains a station on that arc; expiry 0.9 |
+
+Census-correction: #4709

@@ -64,6 +64,7 @@
 
 The two closure maps have the same local form:
 \begin{center}
+    \tenkzkernel
     % Formula: M_\alpha(X)_{ij}
     % = \sum_{a,b}(M_\alpha^{ij})_{ab}X_{ba}
     % = \tr(M_\alpha^{ij}X).
@@ -75,8 +76,9 @@ The two closure maps have the same local form:
     % Paired signature (formula and network):
     % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
     $M_\alpha(X)=$
-    \begin{tenkz}[periodic, physical=updown, tensor style=box]
-        \tn[box, no legs]{X} & \tn[mpo]{M_\alpha}
+    \begin{tenkz}[rows={wire}, cols=2, boundary=periodic]
+        \tn[skin=box]{X} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\alpha}
     \end{tenkz}
     \qquad
     % Formula: A_\alpha(X)_{ij}
@@ -90,8 +92,9 @@ The two closure maps have the same local form:
     % Paired signature (formula and network):
     % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
     $A_\alpha(X)=$
-    \begin{tenkz}[periodic, physical=updown, tensor style=box]
-        \tn[box, no legs]{X} & \tn[mpo]{A_\alpha}
+    \begin{tenkz}[rows={wire}, cols=2, boundary=periodic]
+        \tn[skin=box]{X} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{A_\alpha}
     \end{tenkz}
 \end{center}
 In each cell, $X$ is inserted on the virtual bond and the virtual indices are
