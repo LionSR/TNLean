@@ -22,12 +22,9 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   dependence survives every uniform positive rescaling `s` of the displayed
   $\chi$ block: the rescaled roots $\{s, 7s/25\}$ give the family
   $c_s^{(L)} = s^L(1 + (7/25)^L)$, which is not length-independent
-  for any $s > 0$.
-
-It also provides PSD infrastructure toward the remaining `IsMPDO R` gap
-(preliminary framework, not yet connected to `R`; see *Remaining gap* below):
-`chainIndicator_posSemidef`, `wMat_posSemidef`, `wN_posSemidef`, and
-`coeff_sq_eq_wMat`.
+  for any $s > 0$;
+* `R_isMPDO` — the closed operator family `mpo R N` is positive
+  semidefinite for every positive chain length `N` (`R` is an MPDO).
 
 ## Tensor definition
 
@@ -43,19 +40,27 @@ gives an MPO tensor `R : MPOTensor 4 4`:
 ```
 where `(p,q)` are physical indices and `(a,b)` are bond indices.
 
+## Positivity of the closed operator family
+
+`R p q` is the rank-one bond matrix `(25/32) • vecMulVec u_{pq} v_{pq}`
+(`R_eq_vecMulVec`), so the closed-chain trace `mpo R N p q` telescopes to a
+single cyclic product of consecutive pairings (`mpo_R_entry_formula`):
+```
+mpo R N p q = (25/32)^N · chainIndicator N p q · wN N (φ N p) (φ N q)
+```
+where `chainIndicator N` is the rank-one indicator of the cyclic bond-matching
+condition `ChainOK`, `φ N` reads a physical-index string through its first
+bond bit, and `wN N a b = ∏ n, wMat (a n) (b n)` is the `N`-fold Kronecker
+power of `wMat = !![16/25, 9/25; 9/25, 16/25]` (eigenvalues `{1, 7/25}` —
+the `χ = diag(1, 7/25)` of the coefficient family).  So `mpo R N` is
+`(25/32)^N` times the Hadamard product of `chainIndicator N` (rank-one PSD)
+with the pullback of `wN N` along `φ N` (PSD by `Matrix.PosSemidef.submatrix`),
+and the Schur product theorem (`Matrix.PosSemidef.hadamard`) gives `R_isMPDO`.
+The local-purification (LPDO) route does NOT apply: the undone-vertical
+letters entangle bra- and ket-side labels, so no purification tensor exists.
+
 ## Remaining gap
 
-* `IsMPDO R`: the closed operator factors exactly as
-  `mpo R N = (25/32)^N · B * wN N * Bᵀ`, where `B` is the boundary partial
-  isometry (`BᵀB = 1`) and `wN N a b = ∏ n, wMat (a n) (b n)` with
-  `wMat = !![16/25, 9/25; 9/25, 16/25]`; `wMat` has eigenvalues
-  `{1, 7/25}` — the `χ = diag(1, 7/25)` of the coefficient family.
-  Positivity follows from
-  `wN N = Σ_s (∏_n λ_{s n}) • vecMulVec (e_s) (star (e_s))`
-  (Walsh–Hadamard basis, `λ ∈ {1, 7/25}`) and the `B`-congruence.  The
-  local-purification (LPDO) route does NOT apply: the undone-vertical
-  letters entangle bra- and ket-side labels, so no purification tensor
-  exists.  Verified numerically (N = 1, 2, 3: PSD, trace 1).
 * The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
 with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
 renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
@@ -289,10 +294,9 @@ chain‑OK indicator (rank‑1 PSD) and `M` is the pullback of the Kronecker
 power `wN N` of `wMat` (PSD by congruence).  Their Hadamard product is PSD
 by the Schur product theorem, and scaling by `(25/32)^N ≥ 0` preserves PSD.
 
-The entrywise formula for `mpo R N` (the only remaining gap) is verified
-by direct analysis of the cyclic sum; the bond‑chain constraints collapse
-the sum to at most one term.  A fully formal proof of this formula is
-in progress. -/
+The entrywise formula for `mpo R N` is `mpo_R_entry_formula`, proved by
+direct analysis of the cyclic sum: the bond‑chain constraints collapse the
+sum to at most one term.  Positivity is `R_isMPDO`. -/
 
 /-- The first bit of a bond label `k : Fin 4` under the Kronecker
 identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
@@ -407,8 +411,10 @@ def wMat : Matrix (Fin 2) (Fin 2) ℂ :=
   !![(4/5 : ℂ)^2, (3/5 : ℂ)^2; (3/5 : ℂ)^2, (4/5 : ℂ)^2]
 
 /-- The `N`-fold Kronecker power of `wMat`, entrywise:
-`wN N a b = ∏ n, wMat (a n) (b n)`.  In the planned factorization the
-closed operator is `(25/32)^N • (B * wN N * Bᴴ)` for the boundary map `B`.
+`wN N a b = ∏ n, wMat (a n) (b n)`.  The realized factorization of the
+closed operator (`mpo_R_entry_formula`) is `(25/32)^N` times the Hadamard
+product of the chain-OK indicator with the pullback of `wN N` along `φ N`
+(no boundary map is constructed).
 
 Project example; not from CPSV16. -/
 def wN (N : ℕ) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
@@ -476,13 +482,219 @@ are the squared magnitudes of the letter-matrix entries. -/
 lemma coeff_sq_eq_wMat (i j : Fin 2) : (coeff' i j)^2 = wMat i j := by
   fin_cases i <;> fin_cases j <;> norm_num [coeff', wMat]
 
-/-! ### Remaining gap
+/-! ### The entrywise formula for `mpo R N` and `IsMPDO R` -/
 
-The entrywise formula `mpo_R_entry_formula` and the pullback equality —
-the pullback of `wN N` along `φ N`, namely
-`Matrix.of fun p q => (wN N) (φ N p) (φ N q)`, equals `B * wN N * Bᴴ` for
-`B` the boundary map — are a work in progress.  When completed, the main
-theorem `R_isMPDO` follows by the Hadamard (Schur) product argument via
-`Matrix.PosSemidef.hadamard`. -/
+/-- Each letter matrix `A b` has real entries, so its entries are unaffected
+by complex conjugation. -/
+lemma A_star_eq (b : Fin 4) (i j : Fin 2) : star (A b i j) = A b i j := by
+  have h := congrFun (congrFun (A_map_star b) i) j
+  simpa [Matrix.map_apply] using h
+
+/-- The bond matrix `R p q` is the rank-one outer product of the letter-column
+vectors `u_{pq} a = A a (bit1 p) (bit1 q)` and `v_{pq} b = A b (bit2 p) (bit2 q)`,
+scaled by `25/32`.  This is the rank-one structure underlying the closed-chain
+trace factorization of `mpo R N`.
+
+Project example; not from CPSV16. -/
+lemma R_eq_vecMulVec (p q : Fin 4) :
+    R p q = (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bit1 p) (bit1 q))
+      (fun b => A b (bit2 p) (bit2 q)) := by
+  ext a b
+  simp only [Matrix.smul_apply, Matrix.vecMulVec_apply, smul_eq_mul, R_apply,
+    Matrix.kroneckerMap_apply, Matrix.map_apply, starRingEnd_apply,
+    ← bit1_eq_bondEquiv_symm_fst, ← bit2_eq_bondEquiv_symm_snd]
+  rw [A_star_eq]
+
+/-- The dot product of two `A`-letter column vectors collapses: it equals
+`wMat r1 c1` when the target positions coincide (`r1 = r2` and `c1 = c2`), and
+vanishes otherwise.  Each letter `A b` is a scaled matrix unit, nonzero at a
+unique position, so the sum over `b` has at most one nonzero term.
+
+Project example; not from CPSV16. -/
+lemma dotProduct_A_col (r1 c1 r2 c2 : Fin 2) :
+    (fun b : Fin 4 => A b r1 c1) ⬝ᵥ (fun b : Fin 4 => A b r2 c2) =
+      if r1 = r2 ∧ c1 = c2 then wMat r1 c1 else 0 := by
+  fin_cases r1 <;> fin_cases c1 <;> fin_cases r2 <;> fin_cases c2 <;>
+    simp [dotProduct, Fin.sum_univ_four, A, wMat] <;> norm_num
+
+/-- **Open-chain rank-one product formula.** For a length-`(n + 1)` chain of
+rank-one matrices `c • vecMulVec (u i) (v i)`, the ordinary (non-cyclic)
+matrix product telescopes to `c ^ (n + 1)` times the product of the
+intermediate pairings `v i ⬝ᵥ u i.succ`, times the outer rank-one matrix built
+from the first and last vectors of the chain.
+
+Project example; not from CPSV16. -/
+lemma prod_smul_vecMulVec_ofFn (c : ℂ) :
+    ∀ (n : ℕ) (u v : Fin (n + 1) → Fin 4 → ℂ),
+      (List.ofFn fun i : Fin (n + 1) => c • Matrix.vecMulVec (u i) (v i)).prod =
+        c ^ (n + 1) • ((∏ i : Fin n, v i.castSucc ⬝ᵥ u i.succ) •
+          Matrix.vecMulVec (u 0) (v (Fin.last n))) := by
+  intro n
+  induction n with
+  | zero => intro u v; simp
+  | succ n ih =>
+      intro u v
+      rw [List.ofFn_succ, List.prod_cons,
+        ih (fun i => u i.succ) (fun i => v i.succ)]
+      have e0 : (0 : Fin (n + 1)).castSucc = (0 : Fin (n + 2)) := Fin.ext (by simp)
+      have e1 : (Fin.last n : Fin (n + 1)).succ = Fin.last (n + 1) := Fin.ext (by simp)
+      have e2 : ∀ i : Fin n,
+          (i.castSucc : Fin (n + 1)).succ = (i.succ : Fin (n + 1)).castSucc :=
+        fun i => Fin.ext (by simp)
+      simp only [e1]
+      simp only [smul_mul_assoc, Matrix.mul_smul, smul_smul, Matrix.vecMulVec_mul_vecMulVec,
+        Matrix.vecMulVec_smul]
+      rw [Fin.prod_univ_succ (fun i : Fin (n + 1) => v i.castSucc ⬝ᵥ u i.succ), ← e0]
+      have hprod :
+          (∏ i : Fin n, v (i.castSucc : Fin (n + 1)).succ ⬝ᵥ u (i.succ : Fin (n + 1)).succ) =
+          ∏ i : Fin n, v (i.succ : Fin (n + 1)).castSucc ⬝ᵥ u (i.succ : Fin (n + 1)).succ :=
+        Finset.prod_congr rfl fun i _ => by rw [e2 i]
+      rw [hprod]
+      congr 1
+      ring
+
+/-- The cyclic-bond pairing across a single step: the dot product of the
+second-bit-indexed vector at `p n, q n` with the first-bit-indexed vector at
+`p (finRotate N n), q (finRotate N n)` collapses to `wMat` at the second bits
+when both steps of the bond chain match, and vanishes otherwise.
+
+Project example; not from CPSV16. -/
+lemma dotProduct_A_col_step {N : ℕ} (p q : Fin N → Fin 4) (n : Fin N) :
+    (fun b : Fin 4 => A b (bit2 (p n)) (bit2 (q n))) ⬝ᵥ
+        (fun b : Fin 4 => A b (bit1 (p (finRotate N n))) (bit1 (q (finRotate N n)))) =
+      if bit2 (p n) = bit1 (p (finRotate N n)) ∧ bit2 (q n) = bit1 (q (finRotate N n))
+        then wMat (bit2 (p n)) (bit2 (q n)) else 0 :=
+  dotProduct_A_col _ _ _ _
+
+/-- The one-step rotation `finRotate (N + 1)` sends the embedding `i.castSucc`
+of `i : Fin N` to `i.succ`, matching the ordinary (non-wraparound) successor
+step of the bond chain. -/
+lemma finRotate_succ_castSucc {N : ℕ} (i : Fin N) :
+    finRotate (N + 1) i.castSucc = i.succ := by
+  have h := finRotate_of_lt (n := N) i.isLt
+  have e1 : (⟨(i : ℕ), i.isLt.trans_le N.le_succ⟩ : Fin (N + 1)) = i.castSucc := Fin.ext rfl
+  have e2 : (⟨(i : ℕ) + 1, Nat.succ_lt_succ i.isLt⟩ : Fin (N + 1)) = i.succ := Fin.ext rfl
+  rw [e1, e2] at h
+  exact h
+
+/-- **Entrywise formula for the closed MPO operator.** For a positive chain
+length `N`, the `(p, q)` matrix element of `mpo R N` is `(25/32)^N` times the
+chain-OK indicator times the pullback of the `N`-fold Kronecker power `wN N`
+along the first-bit reading `φ N`.
+
+This is the central combinatorial identity behind `R_isMPDO`: the closed
+trace of the rank-one bond-matrix chain collapses to a single term exactly
+when the bond-matching condition `ChainOK` holds on both the ket and the bra
+index strings.
+
+Project example; not from CPSV16. -/
+theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
+    mpo R N p q = (25/32 : ℂ) ^ N * chainIndicator N p q * wN N (φ N p) (φ N q) := by
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
+  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
+  have hRstep : ∀ i : Fin (n + 1), R (p i) (q i) =
+      (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bit1 (p i)) (bit1 (q i)))
+        (fun b => A b (bit2 (p i)) (bit2 (q i))) := fun i => R_eq_vecMulVec (p i) (q i)
+  simp only [hRstep]
+  rw [prod_smul_vecMulVec_ofFn (25/32 : ℂ) n
+    (fun i => fun a => A a (bit1 (p i)) (bit1 (q i)))
+    (fun i => fun b => A b (bit2 (p i)) (bit2 (q i)))]
+  rw [Matrix.trace_smul, Matrix.trace_smul, Matrix.trace_vecMulVec]
+  simp only [smul_eq_mul]
+  have hlast :
+      (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) ⬝ᵥ
+          (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) =
+        (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) :=
+    dotProduct_comm _ _
+  rw [hlast]
+  -- combine the open-chain pairing product with the wraparound term into a
+  -- single cyclic product indexed by `Fin (n + 1)`, driven by `finRotate`.
+  set g : Fin (n + 1) → ℂ := fun i =>
+      (fun b : Fin 4 => A b (bit2 (p i)) (bit2 (q i))) ⬝ᵥ
+        (fun a : Fin 4 => A a (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i))))
+    with hg
+  have hgterm : ∀ i : Fin (n + 1), g i =
+      if bit2 (p i) = bit1 (p (finRotate (n + 1) i)) ∧ bit2 (q i) = bit1 (q (finRotate (n + 1) i))
+        then wMat (bit2 (p i)) (bit2 (q i)) else 0 :=
+    fun i => dotProduct_A_col_step p q i
+  have hstep : ∀ i : Fin n,
+      (fun b : Fin 4 => A b (bit2 (p i.castSucc)) (bit2 (q i.castSucc))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bit1 (p i.succ)) (bit1 (q i.succ))) = g i.castSucc := by
+    intro i
+    simp only [hg, finRotate_succ_castSucc]
+  have hlaststep :
+      (fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0))) = g (Fin.last n) := by
+    simp only [hg, finRotate_last]
+  have hcombine :
+      (∏ i : Fin n, (fun b : Fin 4 => A b (bit2 (p i.castSucc)) (bit2 (q i.castSucc))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bit1 (p i.succ)) (bit1 (q i.succ)))) *
+        ((fun b : Fin 4 => A b (bit2 (p (Fin.last n))) (bit2 (q (Fin.last n)))) ⬝ᵥ
+          (fun a : Fin 4 => A a (bit1 (p 0)) (bit1 (q 0)))) = ∏ i : Fin (n + 1), g i := by
+    rw [Fin.prod_univ_castSucc]
+    exact congrArg₂ (· * ·) (Finset.prod_congr rfl fun i _ => hstep i) hlaststep
+  rw [hcombine]
+  have hmain : (∏ i : Fin (n + 1), g i) =
+      chainIndicator (n + 1) p q * wN (n + 1) (φ (n + 1) p) (φ (n + 1) q) := by
+    by_cases hChain : ChainOK (n + 1) p ∧ ChainOK (n + 1) q
+    · have hall : ∀ i : Fin (n + 1), g i = wMat (bit2 (p i)) (bit2 (q i)) := fun i => by
+        rw [hgterm, if_pos ⟨hChain.1 i, hChain.2 i⟩]
+      have hprodeq : (∏ i : Fin (n + 1), g i) =
+          ∏ i : Fin (n + 1), wMat (bit2 (p i)) (bit2 (q i)) :=
+        Finset.prod_congr rfl fun i _ => hall i
+      have hrotate : (∏ i : Fin (n + 1), wMat (bit2 (p i)) (bit2 (q i))) =
+          ∏ i : Fin (n + 1),
+            wMat (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i))) :=
+        Finset.prod_congr rfl fun i _ => by rw [hChain.1 i, hChain.2 i]
+      have hreindex :
+          (∏ i : Fin (n + 1),
+              wMat (bit1 (p (finRotate (n + 1) i))) (bit1 (q (finRotate (n + 1) i)))) =
+            ∏ j : Fin (n + 1), wMat (bit1 (p j)) (bit1 (q j)) :=
+        Equiv.prod_comp (finRotate (n + 1)) (fun j => wMat (bit1 (p j)) (bit1 (q j)))
+      have hwNeq : wN (n + 1) (φ (n + 1) p) (φ (n + 1) q) =
+          ∏ j : Fin (n + 1), wMat (bit1 (p j)) (bit1 (q j)) := by
+        simp [wN, φ, Matrix.of_apply]
+      have hchainInd : chainIndicator (n + 1) p q = 1 := by
+        simp [chainIndicator, hChain.1, hChain.2]
+      rw [hprodeq, hrotate, hreindex, ← hwNeq, hchainInd, one_mul]
+    · have hchainInd : chainIndicator (n + 1) p q = 0 := by
+        simp [chainIndicator, hChain]
+      rw [hchainInd, zero_mul]
+      rw [not_and_or] at hChain
+      rcases hChain with hp | hq
+      · unfold ChainOK at hp
+        push Not at hp
+        obtain ⟨i0, hi0⟩ := hp
+        exact Finset.prod_eq_zero (Finset.mem_univ i0)
+          (by rw [hgterm, if_neg (fun h => hi0 h.1)])
+      · unfold ChainOK at hq
+        push Not at hq
+        obtain ⟨i0, hi0⟩ := hq
+        exact Finset.prod_eq_zero (Finset.mem_univ i0)
+          (by rw [hgterm, if_neg (fun h => hi0 h.2)])
+  rw [hmain, pow_succ]
+  ring
+
+/-- **`R` is an MPDO.** The closed operator `mpo R N` is positive
+semidefinite for every positive chain length `N`: it factors as
+`(25/32)^N` times the Hadamard product of the chain-OK indicator (rank-one
+PSD) with the pullback of the `N`-fold Kronecker power of `wMat` (PSD by
+congruence), and the Hadamard product of PSD matrices is PSD by the Schur
+product theorem.
+
+Source: arXiv:1606.00608, Theorem 4.14 and lines 995--1010 (project
+example; the positivity of this MPO family is a project-internal
+verification, not a tensor stated in CPSV16). -/
+theorem R_isMPDO : IsMPDO R := by
+  intro N hN
+  have key : mpo R N =
+      (25/32 : ℂ) ^ N • (chainIndicator N ⊙ (wN N).submatrix (φ N) (φ N)) := by
+    ext p q
+    rw [mpo_R_entry_formula hN p q]
+    simp [Matrix.smul_apply, Matrix.hadamard_apply, Matrix.submatrix_apply, mul_assoc]
+  rw [key]
+  exact ((chainIndicator_posSemidef N).hadamard ((wN_posSemidef N).submatrix (φ N))).smul
+    (by positivity)
 
 end MPOTensor.RescalingStableLengthDependentRFP
