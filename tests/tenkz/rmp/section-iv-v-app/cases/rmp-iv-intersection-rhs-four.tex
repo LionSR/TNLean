@@ -1,34 +1,33 @@
 % Target: rmp-iv-intersection-rhs-four
 % Formula: S acts on the R-side word consisting of an uncovered wire, B, and C.
-% Ink: Canonical public tenkzfree: four-leg inverse S acts on R's escaped index
-%   and B above boundary R.
+% Ink: Kernel flat frame: the four-leg inverse S consumes the escaped leg of the
+%   wide box R and B's leg; the two cut virtual ends turn upward between B and C.
 % Boundary: S has two open outputs; two virtual legs and C's physical leg open.
 % Source: paper TN-Review-main.tex line 2069; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 122-133 (Rtensor4)
-% Capabilities: free-graph, closure, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkzfree}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {b}{(7mm,0mm)}{B}
-    \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-      {c}{(19mm,0mm)}{C}
-    \tnput[pill, ports={160:physical,120:virtual,east:virtual}]
-      {r}{(4mm,-7mm)}{\qquad R\qquad}
-    \tnput[box, ports={225:physical,315:physical,135:physical,45:physical}]
-      {s}{(1mm,8mm)}{\;S\;}
-    \tnput[boundary, ports={south:physical}]{sL}{(-4mm,14mm)}{}
-    \tnput[boundary, ports={south:physical}]{sR}{(6mm,14mm)}{}
-    \tnput[boundary, ports={south:virtual}]{bV}{(11mm,6mm)}{}
-    \tnput[boundary, ports={south:virtual}]{cV}{(15mm,6mm)}{}
-    \tnput[boundary, ports={south:physical}]{cP}{(19mm,6mm)}{}
-    \tnjoin[route=vh]{r.120}{b.west}
-    \tnjoin[route=arc]{c.east}{r.east}
-    \tnjoin[route=hv]{b.east}{bV.south}
-    \tnjoin[route=hv]{c.west}{cV.south}
-    \tnjoin[route=vh]{r.160}{s.225}
-    \tnjoin[route=vh]{b.north}{s.315}
-    \tnjoin{c.north}{cP.south}
-    \tnjoin[route=hv]{s.135}{sL.south}
-    \tnjoin[route=hv]{s.45}{sR.south}
-  \end{tenkzfree}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=7, bonds=none]
+    \tn[at=(1,1), skin=box, wide=3, name=s,
+      ports={270@1:physical, 270@3:physical, 90@1:physical, 90@3:physical}]{S}
+    % R is the signed wide box atom; its word closes through drop junctions
+    % into the top face, and the cut interior ends turn upward.
+    \tn[at=(2,2), skin=none, name=jw, ports={0:virtual, 270:virtual}]{}
+    \tn[at=(2,3), skin=box, name=b, ports={0:virtual, 180:virtual, 90:physical}]{B}
+    \tn[at=(2,4), skin=none, name=v1, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(2,5), skin=none, name=v2, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,6), skin=box, name=c, ports={0:virtual, 180:virtual, 90:physical}]{C}
+    \tn[at=(2,7), skin=none, name=je, ports={180:virtual, 270:virtual}]{}
+    \tn[at=(3,1), skin=box, wide=7, name=r,
+      ports={90@1:physical, 90@2:virtual, 90@7:virtual}]{R}
+    \tnwire{r.90@1}{s.270@1}
+    \tnwire{b.90}{s.270@3}
+    \tnwire{b.180}{jw.0}
+    \tnwire{jw.270}{r.90@2}
+    \tnwire{b.0}{v1.180}
+    \tnwire{v2.0}{c.180}
+    \tnwire{c.0}{je.180}
+    \tnwire{je.270}{r.90@7}
+  \end{tenkz}
 \]

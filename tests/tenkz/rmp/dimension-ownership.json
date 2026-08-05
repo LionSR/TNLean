@@ -267,22 +267,6 @@
         {"site": "tenkzfree@1::tenkzfree@1/tnjoin@15/command:\\tnjoin[fused]{<dimension>,<dimension>}{sw.south east}", "owner": "route/string", "literals": ["-8mm", "-24mm"]},
         {"site": "tenkzfree@1::tenkzfree@1/tnjoin@16/command:\\tnjoin[fused]{sw.north west}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["-24mm", "-8mm"]}
       ]
-    },
-    "tests/tenkz/rmp/section-iv-v-app/cases/rmp-iv-intersection-rhs-four.tex": {
-      "scopes": ["tenkzfree@1"],
-      "constructs": ["tenkzfree@1"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnput@3", "tenkzfree@1::tenkzfree@1/tnput@4", "tenkzfree@1::tenkzfree@1/tnput@5", "tenkzfree@1::tenkzfree@1/tnput@6", "tenkzfree@1::tenkzfree@1/tnput@7", "tenkzfree@1::tenkzfree@1/tnput@8", "tenkzfree@1::tenkzfree@1/tnput@9", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3", "tenkzfree@1::tenkzfree@1/tnjoin@4", "tenkzfree@1::tenkzfree@1/tnjoin@5", "tenkzfree@1::tenkzfree@1/tnjoin@6", "tenkzfree@1::tenkzfree@1/tnjoin@7", "tenkzfree@1::tenkzfree@1/tnjoin@8", "tenkzfree@1::tenkzfree@1/tnjoin@9"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[box,ports={west:virtual,east:virtual,north:physical}]{b}{(<dimension>,<dimension>)}{B}", "owner": "composition/layout", "literals": ["7mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[box,ports={west:virtual,east:virtual,north:physical}]{c}{(<dimension>,<dimension>)}{C}", "owner": "composition/layout", "literals": ["19mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@3/command:\\tnput[pill,ports={160:physical,120:virtual,east:virtual}]{r}{(<dimension>,<dimension>)}{\\qquad R\\qquad}", "owner": "composition/layout", "literals": ["4mm", "-7mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@4/command:\\tnput[box,ports={225:physical,315:physical,135:physical,45:physical}]{s}{(<dimension>,<dimension>)}{\\;S\\;}", "owner": "composition/layout", "literals": ["1mm", "8mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@5/command:\\tnput[boundary,ports={south:physical}]{sL}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["-4mm", "14mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@6/command:\\tnput[boundary,ports={south:physical}]{sR}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["6mm", "14mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@7/command:\\tnput[boundary,ports={south:virtual}]{bV}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["11mm", "6mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@8/command:\\tnput[boundary,ports={south:virtual}]{cV}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["15mm", "6mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@9/command:\\tnput[boundary,ports={south:physical}]{cP}{(<dimension>,<dimension>)}{}", "owner": "composition/layout", "literals": ["19mm", "6mm"]}
-      ]
     }
   }
 }

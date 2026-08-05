@@ -1,15 +1,19 @@
 % Target: rmp-iv-intersection-rhs-two
 % Formula: Applying the inverse of B leaves R, an exposed site, and C.
-% Ink: Canonical public tenkz: the two virtual indices exposed by the inverse
-%   and C sit above R.
+% Ink: Kernel flat frame: C closes into the wide pill R through the east cup; the
+%   two virtual ends exposed by the inverse turn upward as the source draws them.
 % Boundary: The outer end closes through R; two virtual and two physical legs open.
 % Source: paper TN-Review-main.tex line 2059; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 87-94 (Rtensor2)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=open, east=cup,
-                tensor style=box]
-    & & \tn{C}\\
-    \tn[pill, wide=3, up at={1}]{R} & &
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, east=cup]
+    % C's cut end turns upward through the invisible junction where B stood.
+    \tn[at=(1,3), skin=none, name=v, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(1,4), skin=box, name=c, ports={0:virtual, 180:virtual, 90:physical}]{C}
+    \tn[at=(2,1), skin=pill, wide=4, name=r,
+      ports={0:virtual, 90@1:physical, 90@2:virtual}]{R}
+    \tnwire{v.0}{c.180}
   \end{tenkz}
 \]
