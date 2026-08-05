@@ -28,7 +28,11 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 * `wMat_eigenvalue_eq_oneLabelChi_entry` — the two entries of `oneLabelChi`
   are eigenvalues of the local factor `wMat` of the `R_isMPDO`
   factorization, exhibited by a full eigenbasis (a scope-restricted
-  spectral link; see *Remaining gap*).
+  spectral link; see *Remaining gap*);
+* `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
+  has the explicit eigenbasis `{1, lambda, 0, 0}` claimed in the *Remaining
+  gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
+  off-diagonal matrix units annihilated).
 
 ## Tensor definition
 
@@ -78,9 +82,12 @@ with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
 renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
 The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
 the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
-unital and having eigenvalues `{1, 7/25, 0, 0}`, hence primitive with
-spectral radius 1.  Completing the normality verification and the
-tpCP‑map construction yields `IsRFPViaTS R` via Theorem 4.14.
+unital and having eigenvalues `{1, 7/25, 0, 0}` (`transferMap_A_eigen`),
+hence primitive with spectral radius 1.  Completing the irreducibility
+argument (the Kronecker products `A^a ⊗ conj(A^b)` span `M₄(ℂ)`), the
+Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
+`φ`, the primitivity/spectral-radius-one package for the doubled map, and
+the `tpCP`-map construction yields `IsRFPViaTS R` via Theorem 4.14.
 
 ## References
 
@@ -489,6 +496,61 @@ theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
   · exact ⟨![1, 1], by simp, by simpa [oneLabelChi] using wMat_mulVec_ones⟩
   · refine ⟨![1, -1], by simp, ?_⟩
     simpa [oneLabelChi] using wMat_mulVec_alt
+
+/-- **The per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†` is unital.**
+`φ` is `MPSTensor.transferMap A`, viewing the letter family `A` as an
+`MPSTensor 4 2`. -/
+theorem transferMap_A_one : MPSTensor.transferMap A 1 = 1 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A] <;> norm_num
+
+/-- `φ` scales the traceless diagonal `diag(1, -1)` by `lambda = 7/25`. -/
+theorem transferMap_A_diag_alt :
+    MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
+      (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] := by
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A, lambda] <;> norm_num
+
+/-- `φ` annihilates the off-diagonal matrix unit `E₀₁`. -/
+theorem transferMap_A_single01 :
+    MPSTensor.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) = 0 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A]
+
+/-- `φ` annihilates the off-diagonal matrix unit `E₁₀`. -/
+theorem transferMap_A_single10 :
+    MPSTensor.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) = 0 := by
+  ext i j
+  fin_cases i <;> fin_cases j <;> simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A]
+
+/-- **The explicit eigenbasis of `φ` (`MPSTensor.transferMap A`).** The
+identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is
+scaled by `lambda = 7/25` (eigenvalue `lambda`), and the off-diagonal matrix
+units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lambda,
+0, 0}` are exactly the eigenvalues asserted for `φ` in the module docstring
+(*Remaining gap*).
+
+**Scope restriction (transfer-map eigenvalue groundwork):** this
+characterizes the per-site map `φ`, not the doubled transfer map of
+`R.toMPSTensor` itself, nor the primitivity/spectral-radius-one/irreducibility
+package needed for `IsNormalTensor` and the literal CPSV canonical form
+(`MPSTensor.IsCPSVCanonicalForm`).  Those require the Kronecker-product
+factorization of `transferMap R.toMPSTensor` in terms of `φ`, which is
+future work; see the module docstring `Remaining gap` section. -/
+theorem transferMap_A_eigen :
+    MPSTensor.transferMap A 1 = (1 : ℂ) • 1 ∧
+      MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
+        (lambda : ℂ) • !![(1 : ℂ), 0; 0, -1] ∧
+      MPSTensor.transferMap A (Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ)) =
+        (0 : ℂ) • 1 ∧
+      MPSTensor.transferMap A (Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ)) =
+        (0 : ℂ) • 1 :=
+  ⟨by rw [transferMap_A_one, one_smul],
+    transferMap_A_diag_alt,
+    by rw [transferMap_A_single01, zero_smul],
+    by rw [transferMap_A_single10, zero_smul]⟩
 
 /-- The Kronecker power `wN N` is positive semidefinite: by induction on
 `N`, `wN (N + 1)` is a submatrix of the Kronecker product `wN N ⊗ wMat`
