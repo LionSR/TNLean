@@ -1891,3 +1891,37 @@ unchanged. M4 rises from 26.49 to 26.54 for the recovered typing. The
 physical-dimension census stays at zero.
 
 Census-correction: #5360
+
+### 2026-08-05 — the closure draws itself and a site answers the policy
+
+Two changes return the picture body to the size of the idea it draws.
+
+A flat row's traced sides now draw their closure. The rail leaves both
+ends, drops by the trace reach, and returns with the source's rounded
+corners, instead of running straight along the row it closes. Every
+figure that spelled that return by hand -- an invisible junction at each
+corner and four wires between them -- says `west=trace, east=trace`
+again, and `boundary=periodic`, which is those two words, draws a
+periodic chain as the papers draw it.
+
+A site may answer the picture's physical policy for itself. The policy
+legs a row's sites; a ring standing between tensors, or an elision,
+carries no physical index and now says `physical=none` once instead of
+forcing the picture to abandon its policy and list every port of every
+atom. `void=sealed` could not serve: a sealed site is a removed site and
+loses its bonds.
+
+The boundary-insertion word shows the size of the change: eleven lines of
+addresses and ports become three lines that name the row, its closure,
+and the two sites that carry no physical index. M4 falls from 26.54 to
+26.50 on that one case, and the corpus rewrite that follows will take it
+further. The parser gains one leaf, 226 to 227, and the kernel ledger one
+row.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:physical | keep-because: the key lands with the closure fix and the first rewritten word; the rest of its consumers arrive as the corpus returns to the policy spelling it was forced to abandon; expiry 0.9 |
+
+Extension-gate: #5524
+
+Census-correction: #5492
