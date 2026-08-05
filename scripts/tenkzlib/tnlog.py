@@ -157,7 +157,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "mark": {
         "picture": _is_picture_id,
         "id": _is_kernel_record_id,
-        "form": _enum("label", "enclosure", "prose"),
+        "form": _enum("label", "enclosure", "bracket", "prose"),
     },
     "string": {
         "picture": _is_picture_id,
