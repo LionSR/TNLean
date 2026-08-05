@@ -11,15 +11,13 @@
   \tenkzkernel
   % The source draws all four glyphs unlabelled; the tall boxes absorb both
   % virtual rails and expose one reduced index each.
-  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
-    \tn[at=(1,1), skin=box, wires=2, name=L, ports={0@1:virtual, 0@2:virtual,
-      180:virtual}]{}
-    \tn[at=(1,2), skin=mpo, name=a1, ports={0:virtual, 90:physical,
-      180:virtual, 270:physical}]{}
-    \tn[at=(2,2), skin=mpo, name=a2, ports={0:virtual, 90:physical,
-      180:virtual, 270:physical}]{}
-    \tn[at=(1,3), skin=box, wires=2, name=R, ports={180@1:virtual,
-      180@2:virtual, 0:virtual}]{}
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, physical=updown]
+    \tn[at=(1,1), skin=box, wires=2, name=L, physical=none,
+      ports={0@1:virtual, 0@2:virtual, 180:virtual}]{}
+    \tn[at=(1,2), skin=mpo, name=a1]{}
+    \tn[at=(2,2), skin=mpo, name=a2]{}
+    \tn[at=(1,3), skin=box, wires=2, name=R, physical=none,
+      ports={180@1:virtual, 180@2:virtual, 0:virtual}]{}
     \tnwire{L.0@1}{a1.180} \tnwire{L.0@2}{a2.180}
     \tnwire{a1.0}{R.180@1} \tnwire{a2.0}{R.180@2}
     \tnwire{a1.270}{a2.90}

@@ -13,15 +13,11 @@
   % on-bend fixed points rho^R (west) and rho^L (east)
   % bonds=none with hand-written rail wires: bonds=grid would also bond
   % each vertical pair, contracting the physical legs the source leaves open.
-  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, west=cup, east=cup]
-    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
-    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
-    \tn[ports={180:virtual, 0:virtual, 90:physical}]{} &
-    \tn[ports={180:virtual, 0:virtual, 90:physical}]{}\\
-    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
-    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
-    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{} &
-    \tn[conjugate, ports={180:virtual, 0:virtual, 270:physical}]{}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, west=cup, east=cup,
+                physical=up]
+    \tn{} & \tn{} & \tn{} & \tn{}\\
+    \tn[conjugate, physical=down]{} & \tn[conjugate, physical=down]{} &
+    \tn[conjugate, physical=down]{} & \tn[conjugate, physical=down]{}
     \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
     \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
     % west={cup=$m$}/east={cup=$m$} bracket sugar is not implemented yet
