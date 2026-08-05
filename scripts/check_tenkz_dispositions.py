@@ -33,6 +33,13 @@ ENVIRONMENT = re.compile(
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
 SETUP_COMMAND = re.compile(r"\\(?:tnset|tndeclare(?:atom)?|tenkzkernel)\b")
+GROUP_TOKEN = re.compile(
+    r"\\begin\s*\{\s*[A-Za-z@*]+\s*\}"
+    r"|\\end\s*\{\s*[A-Za-z@*]+\s*\}"
+    r"|\\tenkzkernel(?![A-Za-z])"
+    r"|\\(?:[A-Za-z]+|.)"
+    r"|[{}]"
+)
 DISPOSITIONS = ("preserve", "codemod", "redraw")
 DEAD_COMMANDS = (
     "tnput",
@@ -252,6 +259,44 @@ def unrecognized_option_keys(source: str) -> set[str]:
     return unknown
 
 
+def kernel_switch_spans(source: str) -> list[tuple[int, int]]:
+    r"""Return the character ranges over which `\tenkzkernel` is in force.
+
+    The switch is an ordinary TeX declaration, so the group that contains it
+    ends it: a switch inside one `center` block does not reach a picture in
+    the next. Environments and brace groups both count as groups, which is
+    the same reading the blueprint renderer applies to the document tree.
+    """
+    spans: list[tuple[int, int]] = []
+    depth = 0
+    start: int | None = None
+    switch_depth = 0
+    for match in GROUP_TOKEN.finditer(source):
+        token = match.group()
+        if token.startswith("\\tenkzkernel"):
+            if start is None:
+                start, switch_depth = match.end(), depth
+            continue
+        if token.startswith("\\begin") or token == "{":
+            depth += 1
+            continue
+        if token.startswith("\\end") or token == "}":
+            depth -= 1
+        else:
+            continue
+        if start is not None and depth < switch_depth:
+            spans.append((start, match.start()))
+            start = None
+    if start is not None:
+        spans.append((start, len(source)))
+    return spans
+
+
+def within(spans: list[tuple[int, int]], offset: int) -> bool:
+    """Return whether an offset falls inside one of the given ranges."""
+    return any(start <= offset < end for start, end in spans)
+
+
 def scan_inventory_constructs(source: str) -> list[Construct]:
     """Scan picture constructs plus the non-picture `tenkzeq` wrapper."""
     constructs = scan_constructs(source)
@@ -284,15 +329,20 @@ def scan_inventory_constructs(source: str) -> list[Construct]:
     return constructs
 
 
-def construct_sources(path: Path) -> dict[tuple[str, int, str], list[str]]:
-    """Return source slices for each picture construct in a TeX file."""
+def construct_sources(
+    path: Path,
+) -> dict[tuple[str, int, str], list[tuple[str, bool]]]:
+    """Return each construct's source slice and whether the kernel reaches it."""
     source = normalized_environment_spacing(
         strip_comments(path.read_text(errors="replace"))
     )
-    result: dict[tuple[str, int, str], list[str]] = defaultdict(list)
+    spans = kernel_switch_spans(source)
+    result: dict[tuple[str, int, str], list[tuple[str, bool]]] = defaultdict(list)
     for construct in scan_inventory_constructs(source):
         key = (path.name, construct.line, construct.name)
-        result[key].append(source[construct.start : construct.end])
+        result[key].append(
+            (source[construct.start : construct.end], within(spans, construct.start))
+        )
     return result
 
 
@@ -318,8 +368,18 @@ def expanded_source(path: Path, stack: tuple[Path, ...] = ()) -> str:
     )
 
 
-def fragment_target_codes(source: str) -> frozenset[str]:
-    """Classify one construct or construct-free source fragment."""
+def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
+    r"""Classify one construct or construct-free source fragment.
+
+    `kernel` says the `\tenkzkernel` switch reaches this fragment, so its keys
+    already carry their 1.0 meaning. A key with a signed `kernel-` registry
+    row then owes no migration work, whether the row is kernel or sugar: the
+    surface switch leaves it spelled exactly as it stands. The same key on a
+    0.7 picture still owes one, because the two tiers read several of these
+    keys differently — 0.7 `boundary=` sets all four sides where the kernel
+    sets west and east, and 0.7 `physical=` is a row topology where the
+    kernel's is a per-cell port policy.
+    """
     public_commands = (
         "tn",
         "tnwire",
@@ -358,6 +418,11 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         scope: {key for option_scope, key, _value in options if option_scope == scope}
         for scope in SIGNED_KEYS_BY_SCOPE
     }
+    migrating_by_scope = {
+        scope: scope_keys - SIGNED_KEYS_BY_SCOPE[scope] if kernel else scope_keys
+        for scope, scope_keys in keys_by_scope.items()
+    }
+    migrating = set().union(*migrating_by_scope.values())
     tn_options: list[tuple[str, str | None]] = []
     for match in re.finditer(r"\\tn\*?(?![A-Za-z])", source):
         group = following_group(source, match.end(), "[", "]")
@@ -433,7 +498,9 @@ def fragment_target_codes(source: str) -> frozenset[str]:
     dead_record |= "tri" in tn_keys
     if tn_keys & {"box", "dot", "pill", "mpo", "ring", "no legs"}:
         codes.add("C-record")
-    if any(key == "cluster" and value is not None for key, value in tn_options):
+    if "cluster" in migrating_by_scope["atom"] and any(
+        key == "cluster" and value is not None for key, value in tn_options
+    ):
         codes.add("C-record")
     if dead_record:
         codes.add("R-record")
@@ -442,7 +509,9 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         codes.add("C-picture")
     if re.search(r"\\tntree\b", source):
         codes.add("C-tree")
-    if "physical" in keys or keys_by_scope["picture"] & {
+    # The kernel side grammar takes `cup={m}` itself; `tail=` has no kernel row.
+    labelled_side = r"tail" if kernel else r"(?:cup|tail)"
+    if "physical" in migrating or migrating_by_scope["picture"] & {
         "boundary",
         "west label",
         "east label",
@@ -452,14 +521,14 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         "sandwich",
         "periodic",
     } or any(
-        re.match(r"(?:cup|tail)\s*=", value.lstrip("{").strip())
+        re.match(labelled_side + r"\s*=", value.lstrip("{").strip())
         for scope, key, value in options
         if scope == "picture"
         and key in {"west", "east", "north", "south"}
         and value is not None
     ):
         codes.add("C-policy")
-    if keys_by_scope["picture"] & {
+    if migrating_by_scope["picture"] & {
         "lattice",
         "ring",
         "surface",
@@ -471,7 +540,7 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         codes.add("C-record")
     if re.search(r"\\tn\*", source):
         codes.add("C-record")
-    if keys_by_scope["atom"] & {
+    if migrating_by_scope["atom"] & {
         "combined",
         "span",
         "up at",
@@ -482,9 +551,9 @@ def fragment_target_codes(source: str) -> frozenset[str]:
         "down",
     }:
         codes.add("C-record")
-    if "role" in keys:
+    if "role" in migrating:
         codes.add("C-species")
-    if "species" in keys_by_scope["setup"]:
+    if "species" in migrating_by_scope["setup"]:
         codes.add("C-declare")
     if re.search(r"\\tndeclareatom\b", source):
         codes.add("C-declare")
@@ -502,11 +571,17 @@ def fragment_target_codes(source: str) -> frozenset[str]:
 def source_target_codes(source: str) -> frozenset[str]:
     """Derive exact migration targets, preserving mixed-construct workloads."""
     source = normalized_environment_spacing(source)
+    spans = kernel_switch_spans(source)
     constructs = scan_inventory_constructs(source)
     codes: set[str] = set()
     masked = list(source)
     for construct in constructs:
-        codes.update(fragment_target_codes(source[construct.start : construct.end]))
+        codes.update(
+            fragment_target_codes(
+                source[construct.start : construct.end],
+                within(spans, construct.start),
+            )
+        )
         for index in range(construct.start, construct.end):
             if masked[index] != "\n":
                 masked[index] = " "
@@ -673,7 +748,7 @@ def main() -> int:
 
     blueprint_occurrences: Counter[tuple[str, int, str]] = Counter()
     blueprint_raw: Counter[str] = Counter()
-    blueprint_sources: dict[tuple[str, int, str], list[str]] = {}
+    blueprint_sources: dict[tuple[str, int, str], list[tuple[str, bool]]] = {}
     for path in sorted(BLUEPRINT_ROOT.glob("*.tex")):
         blueprint_sources.update(construct_sources(path))
         for line, name in occurrences(path):
@@ -706,7 +781,10 @@ def main() -> int:
         fail("blueprint reconciliation tables have different totals")
     for key, documented_disposition in blueprint_occurrence_dispositions.items():
         actual_targets = frozenset().union(
-            *(fragment_target_codes(source) for source in blueprint_sources[key])
+            *(
+                fragment_target_codes(source, kernel)
+                for source, kernel in blueprint_sources[key]
+            )
         )
         if actual_targets != blueprint_occurrence_targets[key]:
             fail(

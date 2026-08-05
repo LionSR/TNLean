@@ -118,6 +118,42 @@ def main() -> int:
         r"\begin{tenkz}[physical=up]\tnspan[brace below]{2}{}\end{tenkz}"
     ) == frozenset({"C-policy", "C-record", "R-record"})
 
+    # A signed kernel row owes no migration work under the kernel switch,
+    # whether its registry status is kernel or sugar; the same key on a 0.7
+    # picture still does, because the two tiers read it differently.
+    signed_sugar = (
+        r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[boundary=periodic]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[sandwich]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[lattice={2x2}]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[ring=4]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[surface=torus]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[west={cup=$m$}]\tn{}\end{tenkz}",
+        r"\begin{tenkz}\tn[cluster={2x3}]{}\end{tenkz}",
+        r"\begin{tenkz}\tn[role=operator]{}\end{tenkz}",
+    )
+    for source in signed_sugar:
+        assert guard.fragment_target_codes(source, True) == frozenset(
+            {"P-grid"}
+        ), source
+        assert guard.fragment_target_codes(source) != frozenset({"P-grid"}), source
+
+    # Keys with no kernel row keep their codemod under the switch.
+    unsigned_policy = (
+        r"\begin{tenkz}[periodic]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[west label=$m$]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[bond label=$m$]\tn{}\end{tenkz}",
+        r"\begin{tenkz}[west={tail=$m$}]\tn{}\end{tenkz}",
+    )
+    for source in unsigned_policy:
+        assert "C-policy" in guard.fragment_target_codes(source, True), source
+
+    # A tombstoned key stays a redraw under the switch even where the
+    # registry still carries a kernel row of that name.
+    assert guard.fragment_target_codes(
+        r"\begin{tenkz}\tn[nudge={1,0}]{}\end{tenkz}", True
+    ) == frozenset({"R-record"})
+
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory)
         dependency = root / "dependency.inc"
@@ -142,7 +178,27 @@ def main() -> int:
         )
         sources = guard.construct_sources(blueprint)
         construct = sources[("blueprint.tex", 1, "tenkz")]
-        assert any(guard.uses_tombstone(source) for source in construct)
+        assert any(guard.uses_tombstone(source) for source, _ in construct)
+        assert not any(kernel for _, kernel in construct)
+
+        switched = root / "switched.tex"
+        switched.write_text(
+            "\\begin{center}\n"
+            r"\tenkzkernel" "\n"
+            r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}" "\n"
+            "\\end{center}\n"
+            r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
+        )
+        switched_sources = guard.construct_sources(switched)
+        assert switched_sources[("switched.tex", 3, "tenkz")] == [
+            (r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}", True)
+        ]
+        assert switched_sources[("switched.tex", 5, "tenkz")] == [
+            (r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}", False)
+        ]
+        assert guard.source_target_codes(switched.read_text()) == frozenset(
+            {"C-policy", "C-switch"}
+        )
 
         cycle = root / "cycle.tex"
         cycle.write_text(r"\input{cycle.tex}")
@@ -198,9 +254,9 @@ def main() -> int:
         tree_sources = guard.construct_sources(tree)
         tree_key = ("tree.tex", 1, "tntree")
         assert list(tree_sources) == [tree_key]
-        assert tree_sources[tree_key] == [tree_source]
+        assert tree_sources[tree_key] == [(tree_source, False)]
         assert guard.source_target_codes(tree_source) == frozenset({"C-tree"})
-        assert guard.fragment_target_codes(tree_sources[tree_key][0]) == frozenset(
+        assert guard.fragment_target_codes(*tree_sources[tree_key][0]) == frozenset(
             {"C-tree"}
         )
 
