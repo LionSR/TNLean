@@ -72,8 +72,7 @@ def HasCommutingRange (T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D)
   ∀ X Y, Commute (T X) (T Y)
 
 /-- If every two images of `T` commute, then the images of any block matrix
-`a` under `T` commute pairwise: the bridge from `HasCommutingRange` to
-`PairwiseCommuteImages`. -/
+`a` under `T` commute pairwise. -/
 theorem pairwiseCommuteImages_of_hasCommutingRange
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : HasCommutingRange T) {n : ℕ}
