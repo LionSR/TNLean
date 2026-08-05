@@ -1084,7 +1084,9 @@ lemma coarseAmp_sq : coarseAmp ^ 2 = 1 / 2 := by
 /-- The `s`-th gated Kraus operator of the coarse-graining map `S`. -/
 noncomputable def coarseKrausGated (s : Fin 2) : Matrix (Fin 4) (Fin 4 × Fin 4) ℂ :=
   Matrix.of fun k pq =>
-    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then (coarseAmp : ℂ) * eigVecs s (bit2 pq.1) else 0
+    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then
+      (coarseAmp : ℂ) * eigVecs s (bit2 pq.1)
+    else 0
 
 /-- The `t`-th ungated Kraus operator of the coarse-graining map `S`: a
 deterministic assignment of the (exactly one) ungated pair with `combine`
@@ -1100,6 +1102,7 @@ pairs that fail the bond-matching condition). -/
 noncomputable def coarseMap :
     Matrix (Fin 4 × Fin 4) (Fin 4 × Fin 4) ℂ →ₗ[ℂ] Matrix (Fin 4) (Fin 4) ℂ :=
   Matrix.rectangularKrausMap
-    (Sum.elim coarseKrausGated coarseKrausUngated : Fin 2 ⊕ Fin 2 → Matrix (Fin 4) (Fin 4 × Fin 4) ℂ)
+    (Sum.elim coarseKrausGated coarseKrausUngated :
+      Fin 2 ⊕ Fin 2 → Matrix (Fin 4) (Fin 4 × Fin 4) ℂ)
 
 end MPOTensor.RescalingStableLengthDependentRFP
