@@ -64,20 +64,20 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-ii-inverse-renormalization` | K3 | Remove the residual family-level spacing looseness. |
 | `rmp-iii-a-f-symbol` | — | Promoted to `faithful` 2026-08-04: crossing order, directions, sectors, and all six labels verified against the author figure. |
 | `rmp-iii-a-pulling-through` | K3 | Normalize curve weight and panel spacing. |
-| `rmp-iii-a-commuting-hamiltonian` | — | Promoted to `faithful` 2026-08-04: gate span and contractions match; the labelled white pill is house typography. |
+| `rmp-iii-a-commuting-hamiltonian` | — | Kernel respell 2026-08-05 keeps the promoted model and drops the 0.7 render's single spurious gate output leg: the author draws the gate closed, so neither panel legs the pill; the labelled white pill remains house typography. |
 | `rmp-iii-a-proof-one` | — | Promoted to `faithful` 2026-08-04: alpha-dot contraction and reduced tensor match; the rounded pill is a house glyph form. |
 | `rmp-iii-a-proof-two` | — | Promoted to `faithful` 2026-08-04: stacked fusion matches wire for wire; bond hue and box size are theme choices. |
 | `rmp-iii-a-proof-three` | — | Promoted to `faithful` 2026-08-04: the full fusion stack and the up stub above beta match; red operator rails are the house semantic hue. |
 | `rmp-iii-a-ghz-state` | K1 | Resolved: the case now records the full six-by-eight staggered model on the kernel (all junctions, bonds, and legs verified present 2026-07-30); only the shared kernel spacing and stroke profile differ. |
-| `rmp-iii-a-ghz-tensor` | — | Promoted to `faithful` 2026-08-04: four open indices and equation match; labelled box and orthogonal legs are house forms. |
-| `rmp-iii-a-hadamard` | X | Promoted to `structural-gap`: its pairing is `wrong-source`; repair and verify the source mapping before judging the explicit label. |
+| `rmp-iii-a-ghz-tensor` | — | Kernel redraw 2026-08-05 retires the labelled box with orthogonal legs in favour of the author's own glyphless junction with the 45-degree physical tick; four open indices and the equation are unchanged. |
+| `rmp-iii-a-hadamard` | — | Resolved 2026-08-05: the paired panel (lines 359-360) IS the author's Hadamard glyph — paper line 1449 equates that extraction with the matrix, and the cluster state draws H as the filled dot on every internal bond; the case is redrawn as the dot-on-bond and promoted to `faithful`. |
 | `rmp-iii-a-spt-mpo` | — | Promoted to `faithful` 2026-08-04: string pull, both crossings, action boxes, and the U_g insertion verified under the boundary audit. |
 | `rmp-iii-a-spt-intertwiner` | X | The open fusion map has no trace cyclicity; restore the source factor order before reviewing glyph scale. |
 | `rmp-iii-a-g-injective-projector` | X | Its ledger pairing is `wrong-source`; repair the projector source mapping before any verdict promotion. |
-| `rmp-iii-a-mpo-action` | K3 | Restore a graceful diagonal physical-leg route. |
+| `rmp-iii-a-mpo-action` | — | Resolved 2026-08-05: the kernel redraw restores the source's diagonal virtual pair on both panels; promoted to `faithful`. |
 | `rmp-iii-a-mpo-injective` | K2 | Ring topology is preserved; unrecorded hatching and hue require house-style re-review, not a renderer promise. |
 | `rmp-iii-a-torus-one` | — | Promoted to `faithful` 2026-08-04: both wound cycles, the inner bends, and the crossing at i verified; outlined box and weight are house style. |
-| `rmp-iii-a-torus-two` | — | Promoted to `faithful` 2026-08-04: periodic word, marked fourth tensor, and ten open legs match; public theme replaces vivid source ink. |
+| `rmp-iii-a-torus-two` | — | Kernel respell 2026-08-05: the periodic word is one closed operator string returning below the row; square return corners and the outlined marked box are house forms for the source's rounded loop and filled blue tensor. |
 | `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |

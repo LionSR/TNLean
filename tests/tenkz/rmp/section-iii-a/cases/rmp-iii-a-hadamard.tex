@@ -1,13 +1,15 @@
 % Target: rmp-iii-a-hadamard
 % Formula: H = 2^-1/2 [[1,1],[1,-1]] is the local Hadamard map.
-% Ink: Canonical public tenkz one-input one-output matrix box.
-% Boundary: Exactly one input and one output matrix index remain open.
+% Ink: Kernel flat frame; the Hadamard is the author's filled dot on the
+%   virtual bond.
+% Boundary: Exactly two virtual bond ends remain open.
 % Source: paper TN-Review-main.tex line 1449; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 359-360
-% Capabilities: grid, map-atom, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  \begin{tenkz}[physical=updown, west=none, east=none, tensor style=box]
-    \tnX{H}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=H, skin=dot, ports={180:virtual, 0:virtual}]{}
   \end{tenkz}
   =\frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
 \]

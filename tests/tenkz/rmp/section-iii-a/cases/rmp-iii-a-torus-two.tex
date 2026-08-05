@@ -1,14 +1,28 @@
 % Target: rmp-iii-a-torus-two
 % Formula: A five-tensor enlarged MPO word, with its fourth tensor marked.
-% Ink: Canonical public tenkz grid grammar; the MPO bond is distinguished and
-%   the marked tensor uses the marked semantic role.
+% Ink: Kernel flat frame; the periodic word is a closed operator string behind
+%   the boxes and the marked tensor uses the marked semantic role.
 % Boundary: The virtual MPO bond is periodic; all ten physical legs are open.
 % Source: paper TN-Review-main.tex line 1594; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 553-562; archival output
 %   fig3_fig3-pepe_Eq62.pdf
-% Capabilities: grid, mpo-word, periodic-closure, marked-insertion
+% Capabilities: kernel, mpo-word, periodic-closure, marked-insertion
 \[
-  \begin{tenkz}[rows={op:operator}, boundary=periodic, tensor style=box]
-    \tn{}&\tn{}&\tn{}&\tn[role=marked]{}&\tn{}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=5, bonds=none, physical=updown]
+    \tn[at=(1,1), name=b1, skin=box]{}
+    \tn[at=(1,2), name=b2, skin=box]{}
+    \tn[at=(1,3), name=b3, skin=box]{}
+    \tn[at=(1,4), name=b4, skin=box, role=marked]{}
+    \tn[at=(1,5), name=b5, skin=box]{}
+    \tnwire[kind=string, species=operator]{b1.e}{b2.w}
+    \tnwire[kind=string, species=operator]{b2.e}{b3.w}
+    \tnwire[kind=string, species=operator]{b3.e}{b4.w}
+    \tnwire[kind=string, species=operator]{b4.e}{b5.w}
+    % the periodic return of the word, drawn as the source's long loop below
+    \tnwire[kind=string, species=operator, route=orth, name=wrap,
+      via={0.8 e of (1,5), 1.1 s of 0.8 e of (1,5),
+           1.1 s of 0.8 w of (1,1), 0.8 w of (1,1)}]
+      {b5.e}{b1.w}
   \end{tenkz}
 \]
