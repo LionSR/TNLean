@@ -1,46 +1,42 @@
 picture|id=k1|lang=kernel
-atom|id=atom-1|kind=tn|label-pos=s|label=A|name=a1|node=addr-1|ports=180:virtual, 0:virtual, 90:physical:$i_1$
-atom|id=atom-2|kind=tn|label-pos=s|label=A|name=a2|node=addr-2|ports=180:virtual, 0:virtual, 90:physical:$i_2$
-atom|id=atom-3|kind=tn|name=d|node=addr-3|ports=180:virtual, 0:virtual|skin=dots
-atom|id=atom-4|kind=tn|label-pos=s|label=A|name=a3|node=addr-4|ports=180:virtual, 0:virtual, 90:physical:$i_{N-1}$
-atom|id=atom-5|kind=tn|label-pos=s|label=A|name=a4|node=addr-5|ports=180:virtual, 0:virtual, 90:physical:$i_N$
-atom|id=atom-6|kind=tn|name=jw|node=addr-6|ports=0:virtual, 90:virtual|skin=none
-atom|id=atom-7|kind=tn|name=je|node=addr-7|ports=90:virtual, 180:virtual|skin=none
-wire|id=wire-8|from=addr-8|kind=index|to=addr-9
-wire|id=wire-9|from=addr-10|kind=index|to=addr-11
-wire|id=wire-10|from=addr-12|kind=index|to=addr-13
-wire|id=wire-11|from=addr-14|kind=index|to=addr-15
-wire|id=wire-12|from=addr-16|kind=index|route=arc|to=addr-17
-wire|id=wire-13|from=addr-18|kind=index|to=addr-19
-wire|id=wire-14|from=addr-20|kind=index|route=arc|to=addr-21
-wire|id=wire-15|from=addr-22|host=atom-1|kind=index|name=port-open-1|origin=port-open|port-face=90|port-label=$i_1$|port-slot=1|port-type=physical
-wire|id=wire-16|from=addr-23|host=atom-2|kind=index|name=port-open-2|origin=port-open|port-face=90|port-label=$i_2$|port-slot=1|port-type=physical
-wire|id=wire-17|from=addr-24|host=atom-4|kind=index|name=port-open-3|origin=port-open|port-face=90|port-label=$i_{N-1}$|port-slot=1|port-type=physical
-wire|id=wire-18|from=addr-25|host=atom-5|kind=index|name=port-open-4|origin=port-open|port-face=90|port-label=$i_N$|port-slot=1|port-type=physical
+atom|id=atom-1|addr=(1,1)|kind=tn|label-pos=s|label=A|ports=90:physical:$i_1$
+atom|id=atom-2|addr=(1,2)|kind=tn|label-pos=s|label=A|ports=90:physical:$i_2$
+atom|id=atom-3|addr=(1,3)|kind=tn|skin=dots
+atom|id=atom-4|addr=(1,4)|kind=tn|label-pos=s|label=A|ports=90:physical:$i_{N-1}$
+atom|id=atom-5|addr=(1,5)|kind=tn|label-pos=s|label=A|ports=90:physical:$i_N$
+wire|id=wire-6|from=addr-1|kind=index|name=bond-1-1-1-2|origin=grid|to=addr-2
+wire|id=wire-7|from=addr-3|kind=index|name=bond-1-2-1-3|origin=grid|to=addr-4
+wire|id=wire-8|from=addr-5|kind=index|name=bond-1-3-1-4|origin=grid|to=addr-6
+wire|id=wire-9|from=addr-7|kind=index|name=bond-1-4-1-5|origin=grid|to=addr-8
+wire|id=wire-10|from=addr-9|kind=index|name=wrap-1|origin=trace|row=1|side=west-east|to=addr-10
+wire|id=wire-11|from=addr-11|host=atom-1|kind=index|name=port-open-1|origin=port-open|port-face=90|port-label=$i_1$|port-slot=1|port-type=physical
+wire|id=wire-12|from=addr-12|host=atom-2|kind=index|name=port-open-2|origin=port-open|port-face=90|port-label=$i_2$|port-slot=1|port-type=physical
+wire|id=wire-13|from=addr-13|host=atom-4|kind=index|name=port-open-3|origin=port-open|port-face=90|port-label=$i_{N-1}$|port-slot=1|port-type=physical
+wire|id=wire-14|from=addr-14|host=atom-5|kind=index|name=port-open-4|origin=port-open|port-face=90|port-label=$i_N$|port-slot=1|port-type=physical
 kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n
 ink-use|picture=k1|class=glyph|id=1|shape=circle
-glyph-geometry|picture=k1|owner=1|shape=circle|xmin=1869030|xmax=2233264|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+glyph-geometry|picture=k1|owner=1|shape=circle|xmin=-182117|xmax=182117|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=1|owner=0|xmin=1888749|xmax=2213545|ymin=-1192952|ymax=-874578|shape=rect|radius=0
+bbox|picture=k1|class=label|id=1|owner=0|xmin=-162398|xmax=162398|ymin=-1192952|ymax=-874578|shape=rect|radius=0
 ink-use|picture=k1|class=glyph|id=2|shape=circle
-glyph-geometry|picture=k1|owner=2|shape=circle|xmin=3920177|xmax=4284411|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+glyph-geometry|picture=k1|owner=2|shape=circle|xmin=1869030|xmax=2233264|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=2|owner=0|xmin=3939896|xmax=4264692|ymin=-1192952|ymax=-874578|shape=rect|radius=0
+bbox|picture=k1|class=label|id=2|owner=0|xmin=1888749|xmax=2213545|ymin=-1192952|ymax=-874578|shape=rect|radius=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=3|owner=0|xmin=5470411|xmax=6836471|ymin=-391762|ymax=391762|shape=rect|radius=0
+bbox|picture=k1|class=label|id=3|owner=0|xmin=3419264|xmax=4785324|ymin=-391762|ymax=391762|shape=rect|radius=0
 ink-use|picture=k1|class=glyph|id=3|shape=circle
-glyph-geometry|picture=k1|owner=3|shape=circle|xmin=8022471|xmax=8386705|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+glyph-geometry|picture=k1|owner=3|shape=circle|xmin=5971324|xmax=6335558|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=4|owner=0|xmin=8042190|xmax=8366986|ymin=-1192952|ymax=-874578|shape=rect|radius=0
+bbox|picture=k1|class=label|id=4|owner=0|xmin=5991043|xmax=6315839|ymin=-1192952|ymax=-874578|shape=rect|radius=0
 ink-use|picture=k1|class=glyph|id=4|shape=circle
-glyph-geometry|picture=k1|owner=4|shape=circle|xmin=10073618|xmax=10437852|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+glyph-geometry|picture=k1|owner=4|shape=circle|xmin=8022471|xmax=8386705|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=5|owner=0|xmin=10093337|xmax=10418133|ymin=-1192952|ymax=-874578|shape=rect|radius=0
+bbox|picture=k1|class=label|id=5|owner=0|xmin=8042190|xmax=8366986|ymin=-1192952|ymax=-874578|shape=rect|radius=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=6|owner=0|xmin=1834649|xmax=2267645|ymin=1038670|ymax=1566234|shape=rect|radius=0
+bbox|picture=k1|class=label|id=6|owner=0|xmin=-216498|xmax=216498|ymin=1038670|ymax=1566234|shape=rect|radius=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=7|owner=0|xmin=3885796|xmax=4318792|ymin=1038670|ymax=1566234|shape=rect|radius=0
+bbox|picture=k1|class=label|id=7|owner=0|xmin=1834649|xmax=2267645|ymin=1038670|ymax=1566234|shape=rect|radius=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=8|owner=0|xmin=7611258|xmax=8797919|ymin=1038670|ymax=1620848|shape=rect|radius=0
+bbox|picture=k1|class=label|id=8|owner=0|xmin=5560111|xmax=6746772|ymin=1038670|ymax=1620848|shape=rect|radius=0
 label-use|picture=k1
-bbox|picture=k1|class=label|id=9|owner=0|xmin=9989004|xmax=10522467|ymin=1038670|ymax=1566234|shape=rect|radius=0
+bbox|picture=k1|class=label|id=9|owner=0|xmin=7937857|xmax=8471320|ymin=1038670|ymax=1566234|shape=rect|radius=0

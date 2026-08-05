@@ -17,20 +17,17 @@ channel:
     % with the return path it represents V^\dagger in the operator formula.
     % Boundary signature: (virtual-west=2 | virtual-east=0 |
     % physical-up=0 | physical-down=0).
-    \tenkzkernel
-    $T(\rho)$
-    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
-        \tn[at=(1,1), name=ket, label pos=n,
-            ports={180:virtual, 0:virtual, 270:physical}]{V}
-        \tn[at=(3,1), name=bra, label pos=s,
-            ports={180:virtual, 0:virtual, 90:physical}]{\overline{V}}
-        \tnwire{ket.180}{open w}
-        \tnwire{bra.180}{open w}
-        \tnwire{ket.270}{bra.90}
-        \tn[at=(2,2), name=rho, label pos=e,
-            ports={90:virtual, 270:virtual}]{\rho}
-        \tnwire[route=arc]{ket.0}{rho.90}
-        \tnwire[route=arc]{rho.270}{bra.0}
+    % The state rides the closing cup.  The kernel's on-wire anchor divides the
+    % record chord rather than the drawn arc (#5482 neighbourhood), so a tensor
+    % placed there would read as sitting on the physical contraction; this
+    % picture keeps its 0.7 spelling until a station on a generated cup exists.
+    \begin{tenkz}[
+        sandwich,
+        east={cup=$\rho$},
+        west label=$T(\rho)$
+    ]
+        \tn{V} \\
+        \tn*{V}
     \end{tenkz}
 \end{center}
 

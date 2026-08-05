@@ -696,20 +696,16 @@ Pi-tensors don't span product algebra \\
 % Contraction: the physical pair is summed; the east cup inserts rho.
 % Boundary: (virtual, physical) = (2, 0), the west pair is E_A(rho).
 % Source: arXiv:1606.00608, lines 219--223; blueprint Definition 2.1.8.
-\tenkzkernel
-$\mathcal E_A(\rho)$
-\begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
-  \tn[at=(1,1), name=ket, label pos=n,
-      ports={180:virtual, 0:virtual, 270:physical}]{A}
-  \tn[at=(3,1), name=bra, label pos=s,
-      ports={180:virtual, 0:virtual, 90:physical}]{\overline{A}}
-  \tnwire{ket.180}{open w}
-  \tnwire{bra.180}{open w}
-  \tnwire{ket.270}{bra.90}
-  \tn[at=(2,2), name=rho, label pos=e,
-      ports={90:virtual, 270:virtual}]{\rho}
-  \tnwire[route=arc]{ket.0}{rho.90}
-  \tnwire[route=arc]{rho.270}{bra.0}
+% The state rides the closing cup.  The kernel's on-wire anchor divides the
+% record chord rather than the drawn arc, so a tensor placed there would read
+% as sitting on the physical contraction; this picture keeps its 0.7 spelling
+% until a station on a generated cup exists.
+\begin{tenkz}[
+    sandwich,
+    east={cup=$\rho$},
+    west label=$\mathcal E_A(\rho)$]
+  \tn{A} \\
+  \tn*{A}
 \end{tenkz}
 \end{center}
 \end{columns}

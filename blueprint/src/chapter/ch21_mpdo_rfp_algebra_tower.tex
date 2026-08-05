@@ -76,16 +76,9 @@ The two closure maps have the same local form:
     % Paired signature (formula and network):
     % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
     $M_\alpha(X)=$
-    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, align=1]
-        \tn[at=(1,2), skin=box, name=x, ports={180:virtual, 0:virtual}]{X}
-        \tn[at=(1,3), skin=mpo, name=m,
-            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M_\alpha}
-        \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
-        \tn[at=(2,4), skin=none, name=je, ports={90:virtual, 180:virtual}]{}
-        \tnwire{x.0}{m.180}
-        \tnwire[route=arc]{m.0}{je.90}
-        \tnwire{je.180}{jw.0}
-        \tnwire[route=arc]{jw.90}{x.180}
+    \begin{tenkz}[rows={wire}, cols=2, boundary=periodic]
+        \tn[skin=box]{X} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\alpha}
     \end{tenkz}
     \qquad
     % Formula: A_\alpha(X)_{ij}
@@ -99,16 +92,9 @@ The two closure maps have the same local form:
     % Paired signature (formula and network):
     % boundary|virtual-west=0|virtual-east=0|physical-up=1|physical-down=1.
     $A_\alpha(X)=$
-    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, align=1]
-        \tn[at=(1,2), skin=box, name=x, ports={180:virtual, 0:virtual}]{X}
-        \tn[at=(1,3), skin=mpo, name=m,
-            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{A_\alpha}
-        \tn[at=(2,1), skin=none, name=jw, ports={0:virtual, 90:virtual}]{}
-        \tn[at=(2,4), skin=none, name=je, ports={90:virtual, 180:virtual}]{}
-        \tnwire{x.0}{m.180}
-        \tnwire[route=arc]{m.0}{je.90}
-        \tnwire{je.180}{jw.0}
-        \tnwire[route=arc]{jw.90}{x.180}
+    \begin{tenkz}[rows={wire}, cols=2, boundary=periodic]
+        \tn[skin=box]{X} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{A_\alpha}
     \end{tenkz}
 \end{center}
 In each cell, $X$ is inserted on the virtual bond and the virtual indices are

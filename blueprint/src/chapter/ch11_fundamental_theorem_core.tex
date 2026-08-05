@@ -39,23 +39,14 @@ for its sector-level conclusion.
         % the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1).
         \tenkzkernel
-        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-            \tn[at=(1,1), name=q, label pos=s,
-                ports={180:virtual, 0:virtual, 90:physical:$i$}]{Q_k}
-            \tnwire{q.180}{open w}
-            \tnwire{q.0}{open e}
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{Q_k}
         \end{tenkz}
         $ = \zeta_k$
-        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
-            \tn[at=(1,1), skin=ring, name=x1, ports={180:virtual, 0:virtual}]{X_k}
-            \tn[at=(1,2), name=p, label pos=s,
-                ports={180:virtual, 0:virtual, 90:physical:$i$}]{P_{\beta(k)}}
-            \tn[at=(1,3), skin=ring, name=x2,
-                ports={180:virtual, 0:virtual}]{X_k^{-1}}
-            \tnwire{x1.180}{open w}
-            \tnwire{x1.0}{p.180}
-            \tnwire{p.0}{x2.180}
-            \tnwire{x2.0}{open e}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X_k} &
+            \tn[label pos=s, ports={90:physical:$i$}]{P_{\beta(k)}} &
+            \tn[skin=ring]{X_k^{-1}}
         \end{tenkz}
     \end{center}
     with every open virtual end a matrix index.
