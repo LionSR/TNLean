@@ -25,9 +25,10 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   for any $s > 0$;
 * `R_isMPDO` — the closed operator family `mpo R N` is positive
   semidefinite for every positive chain length `N` (`R` is an MPDO);
-* `wMat_eigenvalue_eq_oneLabelChi_entry` — the eigenvalues of the local
-  factor `wMat` of the `R_isMPDO` factorization are exactly the entries of
-  `oneLabelChi` (a scope-restricted spectral link; see *Remaining gap*).
+* `wMat_eigenvalue_eq_oneLabelChi_entry` — the two entries of `oneLabelChi`
+  are eigenvalues of the local factor `wMat` of the `R_isMPDO`
+  factorization, exhibited by a full eigenbasis (a scope-restricted
+  spectral link; see *Remaining gap*).
 
 ## Tensor definition
 
@@ -452,24 +453,26 @@ lemma wMat_posSemidef : wMat.PosSemidef := by
   · have h9 : (0 : ℂ) ≤ (9/25 : ℂ) := by positivity
     refine Matrix.PosSemidef.smul hJ h9
 
-/-- The Walsh–Hadamard eigenvectors of `wMat`: the uniform vector `![1, 1]`
-is a fixed point (eigenvalue `1`), and the alternating vector `![1, -1]` is
-scaled by `lambda = 7/25` (eigenvalue `lambda`). -/
+/-- The uniform Walsh–Hadamard vector `![1, 1]` is a fixed point of `wMat`
+(eigenvalue `1`). -/
 lemma wMat_mulVec_ones : wMat.mulVec ![1, 1] = (1 : ℂ) • ![1, 1] := by
   ext i
   fin_cases i <;> simp [Matrix.mulVec, dotProduct, wMat, Fin.sum_univ_two] <;> norm_num
 
+/-- The alternating Walsh–Hadamard vector `![1, -1]` is an eigenvector of
+`wMat` with eigenvalue `lambda = 7/25`. -/
 lemma wMat_mulVec_alt : wMat.mulVec ![1, -1] = (lambda : ℂ) • ![1, -1] := by
   ext i
   fin_cases i <;>
     simp [Matrix.mulVec, dotProduct, wMat, Fin.sum_univ_two, lambda] <;> norm_num
 
-/-- **`wMat`'s eigenvalues are exactly the entries of `oneLabelChi`.** For
-each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k` (`1` at `k = 0`, `lambda` at
-`k = 1`) is an eigenvalue of `wMat`, witnessed by the Walsh–Hadamard
-eigenvectors `![1, 1]` and `![1, -1]`.  This identifies the local factor of
-the `R_isMPDO` factorization (`wMat`, via `coeff_sq_eq_wMat`) with the
-one-label `χ` block `oneLabelChi` declared independently in this file.
+/-- **The two entries of `oneLabelChi` are eigenvalues of `wMat`, exhibited
+by a full eigenbasis.** For each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k`
+(`1` at `k = 0`, `lambda` at `k = 1`) is an eigenvalue of `wMat`, witnessed
+by the Walsh–Hadamard eigenvectors `![1, 1]` and `![1, -1]`.  This
+identifies the local factor of the `R_isMPDO` factorization (`wMat`, via
+`coeff_sq_eq_wMat`) with the one-label `χ` block `oneLabelChi` declared
+independently in this file.
 
 **Scope restriction (partial BNT-coefficient link):** this identifies the
 *spectral data* of `wMat` with `oneLabelChi`'s entries; it is not the
