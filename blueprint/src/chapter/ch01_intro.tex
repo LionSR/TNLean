@@ -323,15 +323,27 @@ range, or its adjoint's range, is commutative.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cp_iff_choi_posSemidef, lem:block_quadratic_form_nonneg_commuting}
-    By Theorem~\ref{thm:cp_iff_choi_posSemidef} it suffices to show the Choi
-    matrix of $T$ is positive semidefinite. Taking $[a_{ij}]$ in
-    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} to be the
-    coefficient family of the Choi matrix of the identity map exhibits the
-    Choi-matrix quadratic form of $T$ as a block quadratic form with
-    pairwise-commuting images (commutative range), so it is nonnegative for
-    every $\{\psi_i\}$; this is exactly positive semidefiniteness of the
-    Choi matrix.
+    \uses{thm:cp_iff_choi_posSemidef, thm:choi_matrix_id,
+      lem:block_quadratic_form_nonneg_commuting}
+    By Theorem~\ref{thm:cp_iff_choi_posSemidef} it suffices to show that the
+    Choi matrix $\tau$ of $T$ satisfies $\bra{\phi}\tau\ket{\phi}\ge0$ for
+    every $\phi\in\C^D\otimes\C^D$. Let $a_{ij}\in\MD$, for
+    $i,j\in\{1,\dots,D\}$, be the blocks of $\ketbra\Omega\Omega$, the Choi
+    matrix of the identity map (Theorem~\ref{thm:choi_matrix_id}), and let
+    $\psi_k:=\phi(\cdot,k)\in\C^D$ be the reshaping of $\phi$ into a
+    $D$-indexed family of vectors. Then
+    \begin{align}
+        \bra{\phi}\tau\ket{\phi}
+        = \sum_{i,j=1}^{D}\bra{\psi_i}T(a_{ij})\ket{\psi_j},
+        \notag
+    \end{align}
+    the block quadratic form of
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} at $T$, $[a_{ij}]$,
+    and $\{\psi_i\}$. Since $[a_{ij}]\ge0$ (it is the block family of the
+    rank-one projector $\ketbra\Omega\Omega$) and, by commutative range, the
+    images $T(a_{ij})$ pairwise commute,
+    Lemma~\ref{lem:block_quadratic_form_nonneg_commuting} gives
+    $\bra{\phi}\tau\ket{\phi}\ge0$.
 \end{proof}
 
 \begin{lemma}[Positivity is trace-adjoint invariant]
