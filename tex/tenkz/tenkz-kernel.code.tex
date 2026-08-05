@@ -1784,6 +1784,30 @@
     \tl_set:Ne #2 { \seq_use:Nn \l__tenkz_kernel_bundle_seq { ,~ } }
   }
 
+% ---------- the label math shift ---------------------------------------------------------
+
+% Every positional label is mathematics and the kernel opens the math shift
+% around it.  An author who spells the shift as well -- `\tn{$\bar A$}`, the
+% form most reach for -- would double it, and a doubled shift only fails on
+% content that cares, such as an accent, so the trap fires late and blames the
+% label rather than the doubling.  Peel the author's outer pair here.  Both
+% spellings then reach the label as the same tokens and leave the same record,
+% and the peel is where the labelled cup already found it (issue 5562): a
+% value that keeps its delimiters needs a box, and a box holds text style
+% inside a script-style label.
+\tl_new:N \l__tenkz_kernel_unmath_tl
+\tl_new:N \l__tenkz_kernel_label_tl
+\cs_new_protected:Npn \__tenkz_kernel_unmath:w $#1$ \q_stop
+  { \tl_set:Nn \l__tenkz_kernel_unmath_tl {#1} }
+\cs_new_protected:Npn \__tenkz_kernel_unmath:N #1
+  {
+    \exp_args:NV \tl_if_head_eq_catcode:nNT #1 $
+      {
+        \exp_last_unbraced:NV \__tenkz_kernel_unmath:w #1 \q_stop
+        \tl_set_eq:NN #1 \l__tenkz_kernel_unmath_tl
+      }
+  }
+
 % ---------- the seven commands -----------------------------------------------------------
 
 % \tn[keys]{label}: an atom at the next chain cell or at=.
@@ -1798,7 +1822,12 @@
     % The raw completion stores it unexpanded, as the model already does
     % for the equally opaque `ports` field in \__tenkz_kernel_commit:.
     \tl_if_blank:nF {#2}
-      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#2} }
+      {
+        \tl_set:Nn \l__tenkz_kernel_label_tl {#2}
+        \__tenkz_kernel_unmath:N \l__tenkz_kernel_label_tl
+        \__tenkz_model_complete_raw:nnV { \l__tenkz_model_last_tl } {label}
+          \l__tenkz_kernel_label_tl
+      }
     \prop_get:NnN \l__tenkz_kernel_stage_prop {at} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
       {
@@ -2311,8 +2340,19 @@
     \__tenkz_kernel_keys:nn { tenkz-kernel-mark } {#1}
     \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {target} {#2}
     % Opaque text, per the \tn label above (issue 5481): raw completion.
+    % A mark's label is mathematics like every other, so it peels its shift
+    % like every other.  A prose panel is the one exception: it carries a
+    % sentence rather than a matrix, and the mark renderer never typesets it.
     \tl_if_blank:nF {#3}
-      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#3} }
+      {
+        \tl_set:Nn \l__tenkz_kernel_label_tl {#3}
+        \prop_get:NnN \l__tenkz_kernel_stage_prop {form}
+          \l__tenkz_kernel_scratch_tl
+        \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {prose}
+          { \__tenkz_kernel_unmath:N \l__tenkz_kernel_label_tl }
+        \__tenkz_model_complete_raw:nnV { \l__tenkz_model_last_tl } {label}
+          \l__tenkz_kernel_label_tl
+      }
     \__tenkz_kernel_commit:
     \ignorespaces
   }
@@ -3008,29 +3048,13 @@
 \tl_new:N \l__tenkz_kernel_cupname_tl
 \tl_new:N \l__tenkz_kernel_cupother_tl
 \tl_new:N \l__tenkz_kernel_cuppol_tl
-% The documented spelling writes the matrix with its own math delimiters,
-% while the atom slot opens math around a label of its own accord.  Peel the
-% author's pair off, so the matrix reaches the label exactly as a `\tn` body
-% does and is typeset in the same math style.  Keeping the delimiters needs a
-% box, and a box holds text style inside a script-style label -- the label
-% then draws wider than the expansion it stands for.
-\cs_new_protected:Npn \__tenkz_kernel_cup_unmath:w $#1$ \q_stop
-  { \tl_set:Nn \l__tenkz_kernel_cupbead_tl {#1} }
-\cs_new_protected:Npn \__tenkz_kernel_cup_unmath:
-  {
-    \exp_args:NV \tl_if_head_eq_catcode:nNT \l__tenkz_kernel_cupbead_tl $
-      {
-        \exp_last_unbraced:NV \__tenkz_kernel_cup_unmath:w
-          \l__tenkz_kernel_cupbead_tl \q_stop
-      }
-  }
 \cs_new_protected:Npn \__tenkz_kernel_cup_bead:nn #1#2
   {
     \prop_get:NnN \l__tenkz_kernel_policy_prop {cup-#1}
       \l__tenkz_kernel_cupbead_tl
     \quark_if_no_value:NF \l__tenkz_kernel_cupbead_tl
       {
-        \__tenkz_kernel_cup_unmath:
+        \__tenkz_kernel_unmath:N \l__tenkz_kernel_cupbead_tl
         \__tenkz_model_record_atom:n { kind = tn , skin = ring }
         \__tenkz_model_complete_raw:nnV { \l__tenkz_model_last_tl } {label}
           \l__tenkz_kernel_cupbead_tl
@@ -4261,6 +4285,7 @@
           {
             \tl_set:Ne \l__tenkz_kernel_port_label_tl
               { \seq_item:Nn \l__tenkz_kernel_match_seq {5} }
+            \__tenkz_kernel_unmath:N \l__tenkz_kernel_port_label_tl
           }
         \__tenkz_kernel_port_validate_slot:n {#1}
         \__tenkz_kernel_cell_port_bearing_visit:nnnnn
@@ -9686,7 +9711,7 @@
               { \l__tenkz_kernel_r_port_tip_x_fp }
               { \l__tenkz_kernel_r_port_tip_y_fp }
           }
-          { \tl_use:N \l__tenkz_kernel_port_label_tl }
+          { $ \tl_use:N \l__tenkz_kernel_port_label_tl $ }
       }
   }
 
@@ -10136,7 +10161,7 @@
                       { \l__tenkz_kernel_r_x_fp }
                       { \l__tenkz_kernel_r_y_fp }
                   }
-                  { \tl_use:N \l__tenkz_kernel_port_label_tl }
+                  { $ \tl_use:N \l__tenkz_kernel_port_label_tl $ }
               }
           }
       }
@@ -14309,7 +14334,7 @@
                 }
             )
           }
-          { \tl_use:N \l__tenkz_kernel_r_b_tl }
+          { $ \tl_use:N \l__tenkz_kernel_r_b_tl $ }
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_text_ink:nN #1#2
@@ -14710,7 +14735,7 @@
               \__tenkz_kernel_r_pt:n { \l__tenkz_kernel_r_y_fp }
             )
           }
-          { \tl_use:N \l__tenkz_kernel_r_b_tl }
+          { $ \tl_use:N \l__tenkz_kernel_r_b_tl $ }
       }
   }
 
