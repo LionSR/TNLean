@@ -1827,3 +1827,26 @@ The wave drops seven 0.7 spellings below tenure:
 | flag:consumers:key:connection:role | keep-because: wave 7 retired the pulling-through and torus consumers onto declared kernel species; the lone remaining consumer is a blueprint figure that respells with the blueprint's kernel pass at the S4 surface swap; expiry 0.9 |
 
 Census-correction: #5349
+
+### 2026-08-05 — wave 8 closes the arrow-composed workbench escapes onto the kernel
+
+The two wave-8 cases — the PEPS fine-graining panel and the archival
+historical composite — leave the lattice tier for kernel flat and plane
+frames.  Each embedded panel respells through kernel lattice sheets with
+declared boundary policies; the composing arrows and panel letters stay
+plain math outside the audited kernel scope, the accepted escape idiom,
+because the audited multi-panel term grammar remains future work (#5496,
+#4703).  Both verdicts promote to faithful against figrenorm2D and the
+archival sheet, and one lattice-tier case remains in the benchmark: the
+PEPS marginal, blocked until a bilayer transverse-physical spelling
+lands.
+
+The census stays at zero sites across every dimension: the retired
+lattice bodies carried no millimetres, so the ceilings and provenance
+pins hold unchanged.  M4 rises from 26.05 to 26.08 because the kernel
+cases spell out the sites, frames, and boundary policies their retired
+one-site lattice sugar implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed, and no 0.7 spelling
+changes tenure.
+
+Census-correction: #5347
