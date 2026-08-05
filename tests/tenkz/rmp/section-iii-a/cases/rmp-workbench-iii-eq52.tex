@@ -8,9 +8,8 @@
 % Capabilities: kernel, boundary-insertion, closure
 \[
   \tenkzkernel
-  \begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace]
-    \tn[at=(1,1), skin=ring]{X}
-    \tn[at=(1,2), skin=mpo, ports={0:virtual, 90:physical, 180:virtual,
-      270:physical}]{}
+  \begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace,
+      physical=updown]
+    \tn[skin=ring, physical=none]{X} & \tn[skin=mpo]{}
   \end{tenkz} \;:\; X
 \]
