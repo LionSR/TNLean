@@ -109,3 +109,74 @@ fixed-point conditions for mixed states.
 % omitted from the generated blueprint while their statements are being
 % stabilized. These topics use the Fundamental Theorem, or develop later
 % finite-dimensional channel theory, rather than enter its proof.
+
+\section{Bipartite systems and the Schmidt decomposition}
+
+Every pure state of a bipartite system can be brought into a normal form
+that exhibits its entanglement directly.
+
+\begin{definition}[Schmidt decomposition]\label{def:schmidt_decomposition}
+    \lean{Matrix.IsSchmidtDecomposition}
+    \leanok
+    For $\psi\in\C^{d_A}\otimes\C^{d_B}$ with $d=\min\{d_A,d_B\}$, a Schmidt
+    decomposition of $\psi$ is a choice of orthonormal bases
+    $\{e_j\in\C^{d_A}\}$, $\{f_j\in\C^{d_B}\}$ and nonnegative reals
+    $\lambda_j$, $j=1,\ldots,d$, satisfying
+    \[
+        \psi=\sum_{j=1}^d \sqrt{\lambda_j}\,\ket{e_j}\otimes\ket{f_j},
+        \qquad
+        \sum_j \lambda_j = \|\psi\|^2.
+    \]
+\end{definition}
+
+\begin{lemma}[Schmidt decomposition, $d_A\le d_B$ case]
+    \label{lem:schmidt_decomposition_le}
+    \lean{Matrix.exists_schmidtDecomposition_of_le}
+    \leanok
+    \uses{def:schmidt_decomposition}
+    If $d_A\le d_B$, every $\psi\in\C^{d_A}\otimes\C^{d_B}$ admits a Schmidt
+    decomposition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Identify $\psi$ with its coefficient matrix $C\in \MN{d_A,d_B}$. The
+    spectral theorem applied to the positive semidefinite matrix $C\,C^\dagger$
+    supplies the eigenbasis $\{e_j\}$ of $\C^{d_A}$ and the eigenvalues
+    $\lambda_j$; the normalized images of the eigenvectors under $C^\dagger$,
+    conjugated and completed to an orthonormal basis, supply $\{f_j\}$.
+\end{proof}
+
+\begin{proposition}[Schmidt decomposition]\label{prop:schmidt_decomposition}
+    \lean{Matrix.exists_isSchmidtDecomposition}
+    \leanok
+    \uses{def:schmidt_decomposition, lem:schmidt_decomposition_le}
+    Every vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ admits a Schmidt
+    decomposition. This is \cite[Proposition~1.1]{Wolf2012Quantum}.
+\end{proposition}
+
+\begin{proof}\leanok
+    \uses{lem:schmidt_decomposition_le}
+    The case $d_A\le d_B$ is Lemma~\ref{lem:schmidt_decomposition_le}. The
+    case $d_B<d_A$ reduces to it by applying the lemma to $\psi$ with its two
+    factors exchanged, then exchanging the two resulting bases back. This
+    matches Wolf's proof sketch: a change of local bases in the coefficient
+    matrix corresponds to left and right multiplication by two unitaries, so
+    the Schmidt coefficients are its singular values.
+\end{proof}
+
+\begin{theorem}[Schmidt rank counts the nonzero Schmidt coefficients]
+    \label{thm:schmidt_rank_of_schmidt_decomposition}
+    \lean{Matrix.IsSchmidtDecomposition.schmidtRank_eq_card_ne_zero}
+    \leanok
+    \uses{def:schmidt_decomposition, def:schmidt_rank}
+    For any Schmidt decomposition of $\psi$ with coefficients
+    $\{\lambda_j\}$, the number of nonzero $\lambda_j$ equals $\SR(\psi)$.
+    This is \cite[Proposition~1.1]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Schmidt decomposition factors the coefficient matrix of $\psi$
+    through the isometries with columns $\{e_j\}$ and $\{f_j\}$, so its rank
+    equals the rank of the diagonal matrix of Schmidt coefficients, which is
+    the number of nonzero entries.
+\end{proof}
