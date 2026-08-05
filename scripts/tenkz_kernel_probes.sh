@@ -115,6 +115,47 @@ if grep -Fq '|origin=port-open|' "$WORK/r_closure_implicit_virtual.tnlog"; then
   echo "FAIL: implicit closure endpoints grew open-port stubs" >&2
   exit 1
 fi
+grep -Fq 'stringbead|id=cup-1-2|t=0.5' "$WORK/r_onwire_cup_arc.tnlog" || {
+  echo "FAIL: a place on a generated cup was not measured along the cup" >&2
+  exit 1
+}
+if grep -Fq 'stringbead|id=run|' "$WORK/r_onwire_cup_arc.tnlog"; then
+  echo "FAIL: a straight run stopped dividing its own run" >&2
+  exit 1
+fi
+awk -F'|' '
+  /^picture\|id=k2\|/ { exit }
+  /^glyph-geometry\|/ {
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "xmin") lo = kv[2] + 0
+      if (kv[1] == "xmax") hi = kv[2] + 0
+    }
+    if (n == 1) east = prev
+    else if (n > 1 && prev > east) east = prev
+    prev = hi
+    centre = (lo + hi) / 2
+    n++
+  }
+  END { exit !(n > 1 && centre > east) }
+' "$WORK/r_onwire_cup_arc.tnlog" || {
+  echo "FAIL: the operator on the cup stands on the chord, not the arc" >&2
+  exit 1
+}
+chain_ports=$(awk '/^picture\|id=k2\|/ { exit } /^wire\|.*origin=port-open/' \
+  "$WORK/r_ports_chain_placed.tnlog" | sed 's/|from=addr-[0-9]*//')
+at_ports=$(awk '/^picture\|id=k2\|/ { seen = 1 }
+  seen && /^wire\|.*origin=port-open/' \
+  "$WORK/r_ports_chain_placed.tnlog" | sed 's/|from=addr-[0-9]*//')
+[ -n "$chain_ports" ] && [ "$chain_ports" = "$at_ports" ] || {
+  echo "FAIL: chain-placed and at-placed atoms declared different ports" >&2
+  exit 1
+}
+[ "$(grep -Fc 'kernel-boundary|signature=phys:n, phys:n, phys:s, phys:s' \
+      "$WORK/r_ports_chain_placed.tnlog" || true)" -eq 2 ] || {
+  echo "FAIL: the two placements reached different open physical boundaries" >&2
+  exit 1
+}
 grep -Fq 'kernel-boundary|signature=phys:n' \
     "$WORK/r_port_physical_open.tnlog" || {
   echo "FAIL: physical port type did not reach its explicit open boundary" >&2

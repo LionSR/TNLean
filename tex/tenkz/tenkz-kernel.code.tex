@@ -5827,9 +5827,17 @@
                   \l__tenkz_kernel_ow_b_tl
                 \__tenkz_model_get:nnN {#1} {to}
                   \l__tenkz_kernel_ow_c_tl
-                \bool_lazy_and:nnTF
-                  { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_b_tl }
-                  { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_c_tl }
+                \__tenkz_model_get:nnN {#1} {origin}
+                  \l__tenkz_kernel_dep_look_tl
+                \bool_lazy_all:nTF
+                  {
+                    { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_b_tl }
+                    { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_c_tl }
+                    % A closure owns its route: the renderer chooses the shape
+                    % that leaves the frame, so two ends do not describe it.
+                    { ! \str_if_eq_p:Vn \l__tenkz_kernel_dep_look_tl {cup} }
+                    { ! \str_if_eq_p:Vn \l__tenkz_kernel_dep_look_tl {trace} }
+                  }
                   {
                     % A closed straight index wire has no staged curve; its
                     % endpoints already determine every `on wire t` point.
@@ -5987,9 +5995,11 @@
 
 % `on w t` is the point at fraction t of wire w.  A curve is measured along
 % itself, so the engine answers the arclength question on the route it saved
-% before any crossing cut it; a wire that is a straight run between two ends
-% divides that run instead.  The tensor placed there is not a junction: the
-% wire keeps its whole route and the place is read off it.
+% before any crossing cut it; that route is the one the wire inks, whether the
+% author declared it or a closure policy generated it.  Only a wire that runs
+% straight between two ends divides that run instead.  The tensor placed there
+% is not a junction: the wire keeps its whole route and the place is read off
+% it.
 \cs_new_protected:Npn \__tenkz_kernel_r_port_open_geometry:n #1
   {
     \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
@@ -6099,7 +6109,17 @@
                 {string}  { \__tenkz_kernel_r_onwire_curve:n {#1} }
                 {pairing} { \__tenkz_kernel_r_onwire_curve:n {#1} }
               }
-              { \__tenkz_kernel_r_onwire_run:n {#1} }
+              {
+                % An index wire saves the path it inks under its own id, so a
+                % generated cup or a trace closure answers along the arc the
+                % reader sees rather than along the chord between its ends.
+                \__tenkz_kernel_r_sid:nN
+                  { \tl_use:N \l__tenkz_kernel_ow_a_tl }
+                  \l__tenkz_kernel_ow_sid_tl
+                \__tenkz_string_bends:VTF \l__tenkz_kernel_ow_sid_tl
+                  { \__tenkz_kernel_r_onwire_curve:n {#1} }
+                  { \__tenkz_kernel_r_onwire_run:n {#1} }
+              }
           }
       }
   }
