@@ -1181,24 +1181,27 @@ note = "The source colour coding is recovered from the author code (the red A ro
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-fine-graining"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "817a30c81db766a8a53d5c0ca100ff7fb52ddb749b86d246d6e555ea8c865a16"
-reviewed = "2026-07-27"
-renderer = "fable-wave-a-acceptance-2026-07-27-200dpi"
-note = "the checked-in case already draws panel (b), the site-to-patch fine-graining its formula scopes; the blocked demand predated the structured-grid redraw"
+case_sha256 = "7e83168a9becf5584d93834fc807babb9a9378f61f5ea06963aa418b40050657"
+reviewed = "2026-08-05"
+renderer = "fable-w8-vision-2026-08-05-200dpi"
+second_viewer = "fable-w8-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against figrenorm2D panel (b): the one-site plane sheet keeps all five source legs and the 2x2 patch keeps every physical leg and open outer bond leg for leg; the house plane frame's flat tilted grid stands in for the source's 3D-cube projection (the bar's K2 equivalence); the fine-graining arrow stays plain math between the panels, outside the audited kernel scope"
 
 [[verdict]]
 id = "rmp-workbench-ii-historical-composite"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "50ed78a0039cf8f6c7c4f0c6b72bebadd52975b3323b23e7888a1332f2c3dc19"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "3D cube vs flat tilted grid idiom"
+defects = []
+case_sha256 = "03641fca6f00f9a4dab76e60dd37019705e52772951098c9a62e7749335ad526"
+reviewed = "2026-08-05"
+renderer = "fable-w8-vision-2026-08-05-200dpi"
+second_viewer = "fable-w8-second-pass-2026-08-05-400dpi"
+note = "kernel respell verified against the archival sheet's stacked (a)/(b) pair: the MPS split keeps both open chain ends and each site's upward physical leg, and the PEPS split preserves the five-leg site and the 2x2 patch boundary signature; the house plane frame's flat tilted grid is the K2 equivalent of the source 3D cube, and the two archival arrows and panel letters stay plain math outside the audited kernel scope"
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50"
