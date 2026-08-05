@@ -293,7 +293,8 @@ in progress. -/
 
 /-- The first bit of a bond label `k : Fin 4` under the Kronecker
 identification `bondEquiv : Fin 2 × Fin 2 ≃ Fin 4`:
-`bit1 k = (bondEquiv.symm k).1`.  Together with `bit2` it reads a bond
+`bit1 k = (bondEquiv.symm k).1` (`bit1_eq_bondEquiv_symm_fst`).
+Together with `bit2` it reads a bond
 label as the pair of bits indexing the two tensor factors of the vertical
 (Kronecker) reading `B^{ab} = A^a ⊗ conj(A^b)`.
 
@@ -305,7 +306,8 @@ def bit1 : Fin 4 → Fin 2
   | 3 => 1
 
 /-- The second bit of a bond label `k : Fin 4` under `bondEquiv`:
-`bit2 k = (bondEquiv.symm k).2`.  See `bit1`.
+`bit2 k = (bondEquiv.symm k).2` (`bit2_eq_bondEquiv_symm_snd`).
+See `bit1`.
 
 Project example; not from CPSV16. -/
 def bit2 : Fin 4 → Fin 2
@@ -313,6 +315,18 @@ def bit2 : Fin 4 → Fin 2
   | 1 => 1
   | 2 => 0
   | 3 => 1
+
+/-- The first bit of a bond label is the first component of its preimage
+under `bondEquiv`. -/
+@[simp] lemma bit1_eq_bondEquiv_symm_fst (k : Fin 4) :
+    bit1 k = (bondEquiv.symm k).1 := by
+  fin_cases k <;> rfl
+
+/-- The second bit of a bond label is the second component of its preimage
+under `bondEquiv`. -/
+@[simp] lemma bit2_eq_bondEquiv_symm_snd (k : Fin 4) :
+    bit2 k = (bondEquiv.symm k).2 := by
+  fin_cases k <;> rfl
 
 /-- The entrywise positive square root of `wMat` (`coeff_sq_eq_wMat`).  The
 values `4/5` and `3/5` are the scaling factors already encoded in the
@@ -420,8 +434,8 @@ lemma wMat_posSemidef : wMat.PosSemidef := by
 
 /-- The Kronecker power `wN N` is positive semidefinite: by induction on
 `N`, `wN (N + 1)` is a submatrix of the Kronecker product `wN N ⊗ wMat`
-of positive semidefinite matrices, along the equivalence
-`(Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2`. -/
+of positive semidefinite matrices, along the last-coordinate peeling
+equivalence `Fin.succFunEquiv`. -/
 lemma wN_posSemidef (N : ℕ) : (wN N).PosSemidef := by
   induction N with
   | zero =>
@@ -433,19 +447,16 @@ lemma wN_posSemidef (N : ℕ) : (wN N).PosSemidef := by
       exact Matrix.PosSemidef.one
   | succ N ih =>
       let e : (Fin (N + 1) → Fin 2) ≃ (Fin N → Fin 2) × Fin 2 :=
-      { toFun := fun f => (f ∘ Fin.succ, f 0)
-        invFun := fun (g, x) i => Fin.cases x g i
-        left_inv := by
-          intro f; ext i
-          cases i using Fin.cases with
-          | zero => rfl
-          | succ i => rfl
-        right_inv := by intro ⟨g, x⟩; rfl }
+        Fin.succFunEquiv (Fin 2) N
+      have h_fst : ∀ f : Fin (N + 1) → Fin 2, (e f).1 = f ∘ Fin.castSucc :=
+        fun f => funext fun i => rfl
+      have h_snd : ∀ f : Fin (N + 1) → Fin 2, (e f).2 = f (Fin.last N) :=
+        fun f => rfl
       have h_submatrix : (wN (N + 1)) =
           (Matrix.kroneckerMap (· * ·) (wN N) wMat).submatrix e e := by
         ext a b
         simp [wN, Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.of_apply,
-          e, Fin.prod_univ_succ, Function.comp, mul_comm]
+          h_fst, h_snd, Fin.prod_univ_castSucc, Function.comp_apply]
       rw [h_submatrix]
       exact Matrix.PosSemidef.submatrix (Matrix.PosSemidef.kronecker ih wMat_posSemidef) e
 
