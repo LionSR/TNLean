@@ -22,15 +22,31 @@ Working towards Wolf's Theorem 5.2: for a self-adjoint 2×2 block matrix
 * `ker_subset_of_block_psd` : the kernel-inclusion half of (1) ⟹ (2)
 * `block_quadratic_form` : the quadratic-form expansion of the block matrix
 * `R_mul_pinv_eq_supportProj`, `pinv_mul_self_eq_supportProj`,
-  `supportProj_mul_pinv_eq_pinv`, `pinv_isHermitian`, `supportProj_sq_eq_supportProj` :
-  pseudoinverse/support-projection algebra for PSD `R`
+  `supportProj_mul_pinv_eq_pinv`, `pinv_isHermitian` : pseudoinverse algebra for
+  PSD `R`, building on the general `Matrix.PosSemidef.supportProj_sq_eq_supportProj`
 
 ## Remaining gap towards Wolf Thm 5.2
 
 The Schur-complement-PSD half of (1) ⟹ (2) (quadratic-form minimisation with
 `y = -R⁺Q†x`), the converse (2) ⟹ (1) (completing the square), and the
-contraction equivalence (2) ⟺ (3) are not formalized here; see
+contraction equivalence (2) ⇔ (3) are not formalized here; see
 `docs/paper-gaps/schur_complement_tfae.tex`.
+
+## Implementation notes
+
+`pinv_isHermitian` expands `(Douglas.pinv R)ᴴ` via the definition
+`Douglas.pinv R = Rᴴ * supportInv(R Rᴴ)`, reducing it to `supportInv(R Rᴴ) * R`
+using that `supportInv(R Rᴴ)` is Hermitian, then shows `supportInv(R Rᴴ)` commutes
+with `R` via continuous-function calculus (`IsSelfAdjoint.commute_cfc`), since it
+is a cfc element of `R Rᴴ`, which commutes with `R`.
+
+`pinv_mul_self_eq_supportProj` is proved by conjugate-transposing
+`R * pinv R = supportProj R` (`R_mul_pinv_eq_supportProj`) using `pinv_isHermitian`.
+
+`supportProj_mul_pinv_eq_pinv` avoids rewriting `Rᴴ = R` inside dependent positions
+(which breaks the `rw` motive because `hR : R.PosSemidef` mentions `R`): all
+conversions are done in term mode via `congrArg` transitivity chains, factoring `R`
+as `√R * √R` and using the support absorption `supportProj R * √R = √R`.
 
 ## References
 
@@ -81,40 +97,6 @@ theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix 
     _ = star x ⬝ᵥ (P *ᵥ x) + star x ⬝ᵥ (Q *ᵥ y) +
         star y ⬝ᵥ (Qᴴ *ᵥ x) + star y ⬝ᵥ (R *ᵥ y) := by ring
 
-/-- `R * R` has the same support projection as `R`, for `R` PSD. -/
-theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
-    (posSemidef_self_mul_conjTranspose R).supportProj = hR.supportProj := by
-  let hR2 : (R * R).PosSemidef := by
-    have h_eq : R * R = R * Rᴴ := by rw [hR.isHermitian.eq]
-    rw [h_eq]
-    exact posSemidef_self_mul_conjTranspose R
-  let hR2' : (R * Rᴴ).PosSemidef := posSemidef_self_mul_conjTranspose R
-  have h_mat_eq : R * Rᴴ = R * R := by rw [hR.isHermitian.eq]
-  have h_eq_instances : hR2'.supportProj = hR2.supportProj :=
-    PosSemidef.supportProj_congr hR2' hR2 h_mat_eq
-  have hkerR_R2 (v : Fin D₂ → ℂ) (hv : R *ᵥ v = 0) : (R * R) *ᵥ v = 0 := by
-    rw [← Matrix.mulVec_mulVec, hv, Matrix.mulVec_zero]
-  have hkerR2_R (v : Fin D₂ → ℂ) (hv : (R * R) *ᵥ v = 0) : R *ᵥ v = 0 := by
-    have hdot : star (R *ᵥ v) ⬝ᵥ (R *ᵥ v) = 0 := by
-      calc
-        star (R *ᵥ v) ⬝ᵥ (R *ᵥ v) = star (Rᴴ *ᵥ v) ⬝ᵥ (R *ᵥ v) := by rw [hR.isHermitian.eq]
-        _ = star v ⬝ᵥ (R *ᵥ (R *ᵥ v)) := by rw [← star_dotProduct_mulVec R v (R *ᵥ v)]
-        _ = star v ⬝ᵥ ((R * R) *ᵥ v) := by rw [← Matrix.mulVec_mulVec]
-        _ = star v ⬝ᵥ 0 := by rw [hv]
-        _ = 0 := dotProduct_zero _
-    exact dotProduct_star_self_eq_zero.mp hdot
-  have hPR2_PR : hR2.supportProj * hR.supportProj = hR2.supportProj :=
-    hR.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le fun v hv =>
-      hR2.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerR_R2 v hv)
-  have hPR_PR2 : hR.supportProj * hR2.supportProj = hR.supportProj :=
-    hR2.isHermitian.mul_supportProj_eq_self_of_mulVec_kernel_le (B := hR.supportProj) fun v hv =>
-      hR.supportProj_mulVec_eq_zero_of_mulVec_eq_zero v (hkerR2_R v hv)
-  have hPR_PR2' : hR.supportProj * hR2.supportProj = hR2.supportProj := by
-    simpa [Matrix.conjTranspose_mul, hR.supportProj_isHermitian.eq,
-      hR2.supportProj_isHermitian.eq] using congrArg Matrix.conjTranspose hPR2_PR
-  have h_eq_supp : hR2.supportProj = hR.supportProj := hPR_PR2'.symm.trans hPR_PR2
-  simpa [hR2'] using h_eq_instances.trans h_eq_supp
-
 /-! ### Forward: block PSD → ker inclusion -/
 
 /-- If the block matrix `[[P, Q], [Q†, R]]` is PSD, then `ker(R) ⊆ ker(Q)`. -/
@@ -144,15 +126,9 @@ support-inverse. -/
 theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     R * (Douglas.pinv R) = hR.supportProj := by
   rw [Douglas.mul_pinv_eq_supportProj R]
-  exact supportProj_sq_eq_supportProj R hR
+  exact hR.supportProj_sq_eq_supportProj
 
-/-- The Moore–Penrose pseudoinverse of a PSD matrix is Hermitian.
-
-Implementation note: the proof expands `(Douglas.pinv R)ᴴ` via the definition
-`Douglas.pinv R = Rᴴ * supportInv(R Rᴴ)`, reducing it to `supportInv(R Rᴴ) * R`
-using that `supportInv(R Rᴴ)` is Hermitian, then shows `supportInv(R Rᴴ)` commutes
-with `R` via continuous-function calculus (`IsSelfAdjoint.commute_cfc`), since it
-is a cfc element of `R Rᴴ`, which commutes with `R`. -/
+/-- The Moore–Penrose pseudoinverse of a PSD matrix is Hermitian. -/
 theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     (Douglas.pinv R).IsHermitian := by
   classical
@@ -187,10 +163,7 @@ theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemid
     _ = Douglas.pinv R := rfl
 
 /-- For PSD `R`, `pinv R * R = supportProj R`: the pseudoinverse is a left
-support-inverse.
-
-Implementation note: proved by conjugate-transposing `R * pinv R = supportProj R`
-(`R_mul_pinv_eq_supportProj`) using `pinv_isHermitian`. -/
+support-inverse. -/
 theorem pinv_mul_self_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hR : R.PosSemidef) :
     Douglas.pinv R * R = hR.supportProj := by
@@ -207,12 +180,7 @@ theorem pinv_mul_self_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     _ = hR.supportProj := hR.supportProj_isHermitian.eq
 
 /-- Support-projection absorption on the pseudoinverse of a PSD matrix:
-`supportProj R * pinv R = pinv R`.
-
-Implementation note: the proof avoids rewriting `Rᴴ = R` inside dependent positions (which
-breaks the `rw` motive because `hR : R.PosSemidef` mentions `R`): all conversions are
-done in term mode via `congrArg` transitivity chains, factoring `R` as
-`√R * √R` and using the support absorption `supportProj R * √R = √R`. -/
+`supportProj R * pinv R = pinv R`. -/
 theorem supportProj_mul_pinv_eq_pinv (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hR : R.PosSemidef) :
     hR.supportProj * Douglas.pinv R = Douglas.pinv R := by
