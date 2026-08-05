@@ -48,6 +48,7 @@ import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.NPositivitySpectralCriterion
 import TNLean.Channel.NormalForm
 import TNLean.Channel.OpenSystem
+import TNLean.Channel.OperatorSystem
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.RankOneNaimark
