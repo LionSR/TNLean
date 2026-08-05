@@ -274,27 +274,27 @@ note = "Kernel migration (wave 1B), Fable-verified against the author panel: the
 
 [[verdict]]
 id = "rmp-ii-canonical-right"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "56b7fa6100a16d26e99faff2e29f852dc1efe54e1f60069becc1797f985d9b06"
+case_sha256 = "f63f0a1ab867cd68b45ab147281cfc49e1c8c01106dd6ab49fabf08e7f5de97a"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-triangle-source-review-2026-08-05-200dpi"
-second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
-note = "Kernel migration, Fable-countersigned against the author panel: the source draws A_R apex-west (pic triaR) and the kernel triangle skin has one fixed east apex, so the glyph faces east; alpha west, beta east, s south, and their openness all match the source. Residue: apex direction, an orientation deviation the bar does not absolve (kernel substrate gap, #5485 -- no west-apex triangle skin draws yet)."
+renderer = "claude-mirrored-triangle-source-review-2026-08-05-200dpi"
+second_viewer = "claude-mirrored-triangle-second-pass-2026-08-05-400dpi"
+note = "Re-promoted from cosmetic-gap once the mirrored triangle skin landed (#5485): the glyph now points its apex west, as the source pic triaR does, so the sole recorded residue is gone. Against the author panel at 200 dpi and again at 400 dpi: alpha meets the west apex, beta leaves the east flat side, s hangs south, all three open, and the bracketed formula reads the same. House placement remains: the A_R name is inscribed in the glyph where the source leaves the triangle blank, and the source curls its beta and s legs off the flat side where the house draws them straight -- the same equivalent routing already accepted on rmp-ii-canonical-left."
 
 [[verdict]]
 id = "rmp-ii-ortho-right"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "bb31561d9fe93bb491a8730e6f779c6a36e64a94871d93810f5cc6356d5aa06a"
+case_sha256 = "7ebc48bae3f2bb9b5861a965075a084cc40b3ccc0bc59a32c437c24e3823f5d1"
 reviewed = "2026-08-05"
-renderer = "claude-kernel-triangle-source-review-2026-08-05-200dpi"
-second_viewer = "fable-vision-countersign-2026-08-05-200dpi"
-note = "Kernel migration, Fable-countersigned against the author panel: the source mirrors the whole equation (nested cups west, apex-east glyphs, open pair east) while the house keeps the definition compass (east cup, open west pair -- the 2026-07-23 better-than-the-authors form); mirrored into the house frame the source glyphs face west, and the kernel triangle skin's one fixed apex faces east instead. The vertical physical contraction, conjugate overline, and cup topology match. Residue: apex direction (kernel substrate gap, #5485)."
+renderer = "claude-mirrored-triangle-source-review-2026-08-05-200dpi"
+second_viewer = "claude-mirrored-triangle-second-pass-2026-08-05-400dpi"
+note = "Re-promoted from cosmetic-gap once the mirrored triangle skin landed (#5485). The source mirrors the whole equation (nested cups west, apex-east glyphs, open pair east) while the house keeps the definition compass (east cup, open west pair -- the 2026-07-23 better-than-the-authors form); mirrored into the house frame the source glyphs face west, which both glyphs now do. Read at 200 dpi and again at 400 dpi: east cup on the contracted right index, ket over bra with the conjugate overline, vertical physical contraction, open west pair, and the bare cup on the right-hand side. The panel is now the exact mirror of the faithful rmp-ii-ortho-left, and the physical contraction is drawn vertically where the source nests it as an inner cup -- the same routing already accepted there."
 
 [[verdict]]
 id = "rmp-ii-ortho-left"

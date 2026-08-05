@@ -6813,8 +6813,18 @@
       }
     \str_if_eq:VnTF \l__tenkz_kernel_hull_shape_tl {isosceles~triangle}
       {
-        \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
-          {triangle}
+        % Both canonical isometries measure as one pgf triangle; the resolved
+        % base says which end of its own east axis the apex stands on, and
+        % the fold family carries that answer to every contour and route.
+        \str_if_eq:VnTF \l__tenkz_kernel_hull_skin_tl {triwest}
+          {
+            \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+              {triwest}
+          }
+          {
+            \prop_put:Nnn \l__tenkz_kernel_hull_live_prop {#1/family}
+              {triangle}
+          }
         \pgfextractx \l__tenkz_kernel_hull_xone_dim
           {
             \pgfpointanchor
@@ -7101,6 +7111,21 @@
           }
       }
   }
+% An unmeasured canonical isometry folds under the triangle family named by
+% its apex direction; both orientations share one square of half-extents and
+% one turn, so the pair cannot drift apart.
+\cs_new_protected:Npn \__tenkz_kernel_hull_tri:nnN #1#2#3
+  {
+    \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
+    \tl_set:Ne #3
+      {
+        {#2}
+        { \__tenkz_metric_ratio:n {glyphbox} }
+        { \__tenkz_metric_ratio:n {glyphbox} }
+        {0}
+        { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
+      }
+  }
 % a record's silhouette as the support fold wants it: family and half-extents,
 % corner radius, and the angle its own frame turns it by
 \cs_new_protected:Npn \__tenkz_kernel_hull_skin:nN #1#2
@@ -7172,15 +7197,14 @@
           }
         {tri}
           {
-            \__tenkz_kernel_r_turn:nN {#1} \l__tenkz_kernel_hull_turn_tl
-            \tl_set:Ne #2
-              {
-                {triangle}
-                { \__tenkz_metric_ratio:n {glyphbox} }
-                { \__tenkz_metric_ratio:n {glyphbox} }
-                {0}
-                { \tl_use:N \l__tenkz_kernel_hull_turn_tl }
-              }
+            \__tenkz_kernel_hull_tri:nnN {#1} {triangle} #2
+          }
+        {triwest}
+          {
+            % The mirrored isometry is the same measured triangle read
+            % apex-west; only the silhouette family changes, so the record
+            % keeps the atom's own turn and every port stays in its own axes.
+            \__tenkz_kernel_hull_tri:nnN {#1} {triwest} #2
           }
       }
       {
@@ -13090,6 +13114,7 @@
         {box}  { \tl_set:Nn #3 { box~tensor } }
         {ring} { \tl_set:Nn #3 { on-wire~matrix } }
         {tri}  { \tl_set:Nn #3 { left~canonical~tensor } }
+        {triwest} { \tl_set:Nn #3 { right~canonical~tensor } }
         {roundrect} { \tl_set:Nn #3 { pill~tensor } }
         {dots}
           {
@@ -13209,7 +13234,7 @@
 \int_new:N \l__tenkz_kernel_r_skin_crossings_int
 \seq_new:N \l__tenkz_kernel_skin_base_seq
 
-% Resolve a declaration chain to one of the seven primitive skins.  Resolution
+% Resolve a declaration chain to one of the eight primitive skins.  Resolution
 % is shared by hull measurement and ink, so a declared alias cannot acquire
 % the geometry of one primitive and the rendering of another.
 \cs_new_protected:Npn \__tenkz_kernel_skin_base:nN #1#2
@@ -13225,6 +13250,7 @@
         {box}  { \tl_set:Nn #2 {box} }
         {ring} { \tl_set:Nn #2 {ring} }
         {tri}  { \tl_set:Nn #2 {tri} }
+        {triwest} { \tl_set:Nn #2 {triwest} }
         {roundrect} { \tl_set:Nn #2 {roundrect} }
         {dots} { \tl_set:Nn #2 {dots} }
         {none} { \tl_set:Nn #2 {none} }

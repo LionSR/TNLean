@@ -200,9 +200,10 @@
       line width=\tenkz@wirewidth, text=tenkzInk},
   % the style's public 0.6 name; \tnX is the documented alias
   ring tensor/.style={on-wire matrix},
-  % canonical-form isometries (tri=l / tri=r): an isoceles triangle whose FLAT
-  % side receives the isometry's domain and whose APEX emits its codomain --
-  % the A_L / A_R glyphs of canonical-form MPS (sum_s A_L^s{}^dagger A_L^s = 1).
+  % canonical-form isometries (kernel skins tri and triwest, legacy tri=l and
+  % tri=r): an isoceles triangle whose FLAT side receives the isometry's
+  % domain and whose APEX emits its codomain -- the A_L / A_R glyphs of
+  % canonical-form MPS (sum_s A_L^s{}^dagger A_L^s = 1).
   % Wires meet the flat side's midpoint and the apex, both on the wire axis.
   % triangleinset is tight: a triangle must CIRCUMSCRIBE its text box,
   % so every point of padding costs ~triple in glyph height; the inscribed
