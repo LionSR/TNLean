@@ -2,7 +2,7 @@
 # Schema: scripts/tenkz_rmp.py (load_verdicts).  Any status may be
 # recorded, including failure; the check rejects lies, never gaps.
 schema_version = 1
-pairing_sha256 = "b3375317e8dddb4402eda08b0d74e1aaa4789467cf5a84fe4d4bd722ef470e89"
+pairing_sha256 = "2f5df04b56caec4bfc0e2f0bc040f78f6c2ff4b718106ce1c716bda8c0338fd8"
 campaign_sha256 = "9e0fa1f42fda08bcd97aa528178e931cb370e0f3b9e361f00f4c927948bb3be7"
 
 [[verdict]]
@@ -986,27 +986,27 @@ note = "Boundary types match; the equivalent C--X contraction is mirrored."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-six"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["extra-element", "wrong-contraction"]
-missing = ["nested-regions"]
-case_sha256 = "90b54689d81f976c919bcea414d0754342133c7f521e7c8e013fa5e80d1e4114"
-reviewed = "2026-07-30"
-renderer = "codex-region-label-math-review-2026-07-26"
-note = "nested source regions are drawn as overlap plus an invented lattice. Next: land nested enclosure regions in the kernel (the #4704 residue), then redraw the R window with a true inner region and drop the invented lattice"
+pairing_by = "fable-author-asset-crosscheck-2026-08-05"
+defects = []
+case_sha256 = "011be6aaed02a449c89c60fb86b282d0c8cc338599b90ec92d11aa86f35c6f31"
+reviewed = "2026-08-05"
+renderer = "fable-nested-regions-2026-08-05-200dpi"
+second_viewer = "fable-orchestrator-countersign-2026-08-05-200dpi"
+note = "kernel migration with true nested regions: the A--B patch window sits one clearance inside the L window, the patch's six virtual bonds end on the inner window that cuts them, and all three sites keep transverse physical legs, matching LHS6. Residue: the source draws the patch bonds as through-lines and sets the window label inside the annulus; the kernel draws face stubs and the corner label station (house routing). Countersigned by an independent second viewer: topology and residues confirmed against the author panel. Also realigned the swapped source metadata: LHS6 is the L window over A--B (author lines 173-190)"
 
 [[verdict]]
 id = "rmp-iv-intersection-rhs-six"
-status = "blocked"
+status = "cosmetic-gap"
 pairing = "verified"
-pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["extra-element", "wrong-contraction"]
-missing = ["nested-regions"]
-case_sha256 = "597e03c401223fbad66083892235c28c7a7fe6f12e204367adcf55806a062210"
-reviewed = "2026-07-30"
-renderer = "codex-region-label-math-review-2026-07-26"
-note = "nested source regions are drawn as overlap plus an invented lattice. Next: land nested enclosure regions in the kernel (the #4704 residue), then redraw the L window with a true inner region and drop the invented lattice"
+pairing_by = "fable-author-asset-crosscheck-2026-08-05"
+defects = []
+case_sha256 = "2658fafca514444e741e49b79d5cd72349b40f13cc26e3ad4699fca7400563c5"
+reviewed = "2026-08-05"
+renderer = "fable-nested-regions-2026-08-05-200dpi"
+second_viewer = "fable-orchestrator-countersign-2026-08-05-200dpi"
+note = "kernel migration with true nested regions: the B--C patch window sits one clearance inside the R window, the patch's six virtual bonds end on the inner window that cuts them, and all three sites keep transverse physical legs, matching RHS6. Residue: the source draws the patch bonds as through-lines and sets the window label inside the annulus; the kernel draws face stubs and the corner label station (house routing). Countersigned by an independent second viewer: topology and residues confirmed against the author panel. Also realigned the swapped source metadata: RHS6 is the R window over B--C (author lines 156-172)"
 
 [[verdict]]
 id = "rmp-app-toric-primal"
