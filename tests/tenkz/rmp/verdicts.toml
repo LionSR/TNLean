@@ -667,11 +667,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "ff8ce29510875473fe51856fe3938fe172d1d53255824fac81f148ffddec4fc4"
+case_sha256 = "396b40f39caa7338f8e50f1ff678c48b4f791a7e227474a419b7aa50d908a4ad"
 reviewed = "2026-08-05"
-renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
-second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Factor order restored to the source: the checked-in body read (g g / h h) X = X gh gh, a mirror only defensible under trace cyclicity that the open boundary does not grant; the author panel reads gh X (g/h)(g/h) = gh gh X (g/h) with X between the gh word and the stack, as now drawn. The gh tensors sit on the g row where the source centres them between rows (frame quantization, cosmetic)."
+renderer = "claude-opus-eq-boundary-review-2026-08-05-200dpi"
+second_viewer = "claude-opus-eq-boundary-recheck-2026-08-05-400dpi"
+note = "Factor order restored to the source: the checked-in body read (g g / h h) X = X gh gh, a mirror only defensible under trace cyclicity that the open boundary does not grant; the author panel reads gh X (g/h)(g/h) = gh gh X (g/h) with X between the gh word and the stack, as now drawn. The gh tensors sit on the g row where the source centres them between rows (frame quantization, cosmetic). The stacked g and h boxes of one column now share the physical index that their product sums, as the source strokes it in one line through both boxes; before, each box kept its own pair of stubs, so the equation declared five sites on the left and four on the right instead of three and three."
 
 [[verdict]]
 id = "rmp-iii-a-g-injective-projector"
@@ -758,11 +758,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-source-and-annotation-review-2026-08-01"
 defects = []
-case_sha256 = "c37b061e3fed6baaa8d49b443fac1070a86f3883ef2d0e7b3a678d6d3e28f49e"
-second_viewer = "codex-independent-source-topology-review-2026-08-01"
-reviewed = "2026-08-01"
-renderer = "codex-explicit-four-port-j-source-review-2026-08-01-300dpi"
-note = "the exact hash renders one central physical leg per side, four split virtual rails, and five explicit MPO stations; the marked four-port j tensor owns both loop bonds and both radial bonds, with no braid crossing; the bare side takes its leg from the plane physical policy, and the five station boxes opt out of that policy through the kernel per-atom exclusion void=sealed, so no typed physical port workaround remains"
+case_sha256 = "5371880824b12f79f6104030b455f90ad813fd167ef6a63cbcefa0729ed83de3"
+second_viewer = "claude-opus-eq-boundary-recheck-2026-08-05-400dpi"
+reviewed = "2026-08-05"
+renderer = "claude-opus-eq-boundary-review-2026-08-05-200dpi"
+note = "the exact hash renders one central physical leg per side, four split virtual rails, and five explicit MPO stations; the marked four-port j tensor owns both loop bonds and both radial bonds, with no braid crossing; the bare side takes its leg from the plane physical policy, and the five station boxes opt out of that policy through the kernel per-atom exclusion void=sealed, so no typed physical port workaround remains. The loop side loses a stray in-plane north wire left over from the typed-port era: the source strokes one upward leg there and the plane physical policy already draws it, so the extra wire added a fifth black half-edge that no source line answers and made the two sides disagree at the boundary. Both sides now read w, e, sw, ne, the red tail, and one upward physical leg."
 
 [[verdict]]
 id = "rmp-iii-b-dyon"
@@ -1292,11 +1292,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "9458875bee2db6a9a5adcb98e31e9cfc7dd72e30d8cf120af842ac1cfcf1227a"
+case_sha256 = "d33ad9db97ca265ff15cd1dc075a591ae3475d584556c3304eb480e746366a65"
 reviewed = "2026-08-05"
-renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
-second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Kernel respell of Dia4.pdf: the four-tensor ring keeps every outward arm and inward pierce with lambda on the north-west wire, and the local map closes through a junction-spelled periodic return with its physical stubs; the stadium lambda for the source circle and the square return corners are house glyph forms."
+renderer = "claude-opus-eq-boundary-review-2026-08-05-200dpi"
+second_viewer = "claude-opus-eq-boundary-recheck-2026-08-05-400dpi"
+note = "Kernel respell of Dia4.pdf: the four-tensor ring keeps every outward arm and inward pierce with lambda on the north-west wire, and the local map closes through a junction-spelled periodic return with its physical stubs; the stadium lambda for the source circle and the square return corners are house glyph forms. The ring's pierced wire is now typed physical, as the local map already typed the identical stroke, and the relation records the coproduct opt-out: the third coproduct carries the one-site map to four sites, so four pierced wires answer one and the arity genuinely changes. The ink is unchanged."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq50-reduced"
