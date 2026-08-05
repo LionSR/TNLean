@@ -1850,3 +1850,27 @@ alias, escape, or overload is added or removed, and no 0.7 spelling
 changes tenure.
 
 Census-correction: #5347
+
+### 2026-08-05 — the bilayer sheet spells its open transverse legs
+
+The plane frame's independent transverse axis gains open ends. A bilayer
+member declares an upward or downward physical leg; the end is cut on the
+page side its signed transverse vector exits, so panels compare it against
+the ordinary physical legs of that side, and it enters the boundary
+signature as an ordinary open physical index. The event schema learns the
+two transverse directions alongside the page compass.
+
+The PEPS marginal is the demand and the proof: the last non-kernel
+benchmark body leaves the lattice tier with its kept sites' ket-bra legs
+open and its traced column closing site by site. Every one of the 130
+benchmark cases now states its model on the kernel, and no verdict remains
+blocked. M4 rises from 26.08 to 26.49 for the declared legs and the closing
+loops the retired environment implied. The physical-dimension census stays
+at zero.
+
+Census-correction: #5507
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:trace | keep-because: the marginal's migration retires the picture-level trace from the doubled sheet, and the two remaining consumers state genuine single-row traces the kernel still owes its drawn return (#5492); the key retires with that ink, expiry 0.9 |
+| flag:consumers:environment:tenkzplanes | dies at S4: its lone consumer was the PEPS marginal, which this session migrates onto the kernel bilayer basis; expiry 0.9 |
