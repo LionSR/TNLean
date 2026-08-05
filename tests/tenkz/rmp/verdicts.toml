@@ -1217,25 +1217,27 @@ note = "kernel respell verified against Eq50.pdf: the one mpo atom keeps all fou
 
 [[verdict]]
 id = "rmp-workbench-iii-eq51"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "54a74ec6791def2aa3a12d87bc83351903ceee37b4c4978709c0b392c08c3e34"
+case_sha256 = "49eaf495e8684ff948350a6947d39cc101ba04252bb9cb46b397e0a83db2053e"
 reviewed = "2026-08-05"
-renderer = "fable-kernel-migration-2026-08-05-200dpi"
-note = "kernel respell verified against Eq51.pdf: the X ring, three mpo atoms with both physical legs, and the elision dots all match. Residue: west/east=trace renders as identified extended rail ends; the recorded closure's long return (the source's drawn racetrack) is not inked yet."
+renderer = "fable-closure-ink-2026-08-05-150dpi-was:fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-closure-ink-countersign-2026-08-05-400dpi"
+note = "kernel respell verified against Eq51.pdf: the X ring, three mpo atoms with both physical legs, and the elision dots all match, and the traced sides now draw the source's returning rail below the word. The row states its physical policy once and the ring and elision answer it with physical=none, so the case says what the picture is in three lines."
 
 [[verdict]]
 id = "rmp-workbench-iii-eq52"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "e4e66c8de80547dbc86c05ed1ed0194a3ca75459847de16ea73157399a9cf83e"
 reviewed = "2026-08-05"
-renderer = "fable-kernel-migration-2026-08-05-200dpi"
-note = "kernel respell verified against Eq52.pdf: the X ring plus one mpo atom with both physical indices open and the map named beside. Residue: the traced sides render as identified extended ends, not the source's drawn trace rectangle (same closure-ink gap as eq51)."
+renderer = "fable-closure-ink-2026-08-05-150dpi-was:fable-kernel-migration-2026-08-05-200dpi"
+second_viewer = "fable-closure-ink-countersign-2026-08-05-400dpi"
+note = "kernel respell verified against Eq52.pdf: the X ring plus one mpo atom with both physical indices open and the map named beside, with the traced sides drawing the source's returning rail."
 
 [[verdict]]
 id = "rmp-workbench-iii-diagram-one"
