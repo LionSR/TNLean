@@ -142,8 +142,8 @@ top-level-source census so a shared input is not counted multiple times.
 | Disposition | Fixtures |
 |---|---:|
 | preserve | 10 |
-| codemod | 39 |
-| redraw | 215 |
+| codemod | 40 |
+| redraw | 214 |
 | **Total** | **264** |
 
 Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
@@ -155,16 +155,16 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `P-grid`: `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex` · `trace_warn.tex` · `zz_wirescan.tex`
 - `P-none`: `geom.tex` · `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
 
-### Codemod fixtures (39)
+### Codemod fixtures (40)
 
 - `C-declare`: `p_species.tex`
 - `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_d.tex` · `rv4061_ketptrace.tex`
-- `C-policy+C-record`: `g06_stageB.tex` · `hard01_v2.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex`
+- `C-policy+C-record`: `g06_stageB.tex` · `hard01_v2.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
 - `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `t2_staircase.tex`
 - `C-switch`: `fig21d_cubic.tex` · `fig21d_cubic_v2.tex`
 - `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (215)
+### Redraw fixtures (214)
 
 - `C-declare+C-picture+C-policy+C-record+R-free+R-record`: `adv_leak.tex`
 - `C-declare+C-policy+C-record+C-species+R-free+R-lattice+R-record`: `g06_stageC.tex`
@@ -177,7 +177,7 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `C-policy+C-record+R-free+R-lattice+R-plane+R-record`: `planes_keys_test.tex`
 - `C-policy+C-record+R-free+R-record`: `gr_t1_fusion.tex` · `hard01_ortho.tex` · `hard02_ALdef.tex` · `hard03_rdm.tex` · `hard05_OL.tex` · `hard06_gauge2layer.tex` · `hard12_zcl.tex` · `rv4061_ex_atoms-keys.tex` · `t2_mpo.tex` · `zz_frame_rotation.tex`
 - `C-policy+C-record+R-lattice+R-record`: `g06_stageA.tex`
-- `C-policy+C-record+R-record`: `atoms_test.tex` · `audit1.tex` · `audit3.tex` · `audit4.tex` · `audit_open.tex` · `boundary_test.tex` · `channel_test.tex` · `cups_edge.tex` · `cups_test.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard02_v2.tex` · `hard03_v3.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard10_v2.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `iso_j.tex` · `lrbox_probe.tex` · `modes_dot_baseline.tex` · `modes_test.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `part_B1.tex` · `part_B2.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_canonical-channel.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_mpublock.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sv17.tex` · `t2_twoshift.tex`
+- `C-policy+C-record+R-record`: `atoms_test.tex` · `audit1.tex` · `audit3.tex` · `audit4.tex` · `audit_open.tex` · `boundary_test.tex` · `channel_test.tex` · `cups_edge.tex` · `cups_test.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard02_v2.tex` · `hard03_v3.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard10_v2.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `iso_j.tex` · `lrbox_probe.tex` · `modes_dot_baseline.tex` · `modes_test.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `part_B1.tex` · `part_B2.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_canonical-channel.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_mpublock.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sv17.tex`
 - `C-policy+R-free+R-lattice+R-record`: `hard07_peps.tex`
 - `C-policy+R-free+R-record`: `gr_t6_leftinv.tex`
 - `C-policy+R-lattice+R-plane+R-record`: `plane_test.tex` · `rmpfig2_test.tex`
