@@ -15,6 +15,7 @@ import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Algebra.PerronFrobenius.Idempotent
+import TNLean.Algebra.PerronFrobenius.PerronVector
 import TNLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.Algebra.PerronFrobenius.RankOne
 import TNLean.Algebra.PerronFrobenius.Substochastic
@@ -31,18 +32,20 @@ Case-I content carried here is the C.4–C.5 argument that the active-sector
 trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
 is positive.
 
-One further piece remains to complete the Case-I argument that the
-active sector set reduces to a singleton (`card(ActiveSector p) = 1`), from
-which the Case-I relations `T² = T` and `Q(1−LQ)L = 0` follow; these
-relations are the Case-I input to the proof of Lemma `SALZCL`
-(arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the lemma's
-headline statement.  Two pieces feeding that singleton assembly are now
-proved:
+The Case-I argument that the active sector set reduces to a singleton
+(`card(ActiveSector p) = 1`), from which the Case-I relation `T² = T`
+follows, is now proved.  These are the Case-I input to the proof of Lemma
+`SALZCL` (arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the
+lemma's headline statement.
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
 * the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`
-  (`mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`).
+  (`mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`),
+* the active sector is unique
+  (`card_activeSector_eq_one_of_literal_ZCL`),
+* the Case-I relation `T² = T`
+  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`).
 
 The overlap formula combines the doubled-index self-overlap identity
 (`Purity`) with the physical-sector product realization
@@ -52,9 +55,22 @@ The overlap formula combines the doubled-index self-overlap identity
 index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
-Only the singleton-sector assembly itself remains open.  The route is
-sketched in the paper-gap note
-`docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+The singleton-sector argument is a proof by contradiction (the source-faithful
+route recorded in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`): the overlap formula and normality
+(`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
+self-overlap limit) give `tr(S^N) → 1`; conjugating the primitive `T` by
+its Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`)
+to a stochastic matrix `P` bounds `S`, after the matching squared
+conjugation, entrywise by `P ⊙ P`; if more than one sector were active,
+`P` would be irreducible substochastic on a nontrivial index set, forcing
+`tr(S^N) → 0` (`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`),
+a contradiction.
+
+The remaining Case-I relation `Q(1−LQ)L = 0` is the same fact as
+`T² = T` under the rectangular decomposition `T = QL` already used in
+`activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`'s proof;
+restating it in that form is not yet formalized.  The route is sketched in
+the paper-gap note `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 ## Main declarations
 
@@ -74,6 +90,10 @@ sketched in the paper-gap note
   reduces to the active-sector sum
 * `mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`:
   **the overlap formula** `mpvOverlap = Complex.ofReal(tr(S^N))`
+* `card_activeSector_eq_one_of_literal_ZCL`:
+  **the active sector is unique**
+* `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`:
+  **the Case-I relation** `T² = T`
 
 ## Source fidelity
 
@@ -707,6 +727,135 @@ theorem mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_po
     simp [sq]
 
 end overlapFormula
+
+section singletonSector
+
+/-- **The active sector is unique.** Under literal ZCL, if the neighboring operators are
+positive semidefinite, the active-sector trace matrix is primitive, and the tensor is
+normal (in the paper's spectral-radius-one sense), then the active sector set has exactly
+one element.
+
+The proof is by contradiction from the source-faithful route recorded in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap
+formula and normality give `tr(S^N) → 1`; positivity bounds `S` entrywise by the Hadamard
+square of the primitive stochastic conjugate `P` of `T`; if there were more than one active
+sector, `P` would be irreducible substochastic on a nontrivial index set, forcing
+`tr(S^N) → 0`, a contradiction. Prerequisite Perron-vector infrastructure:
+`TNLean/Algebra/PerronFrobenius/PerronVector.lean`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; normal-tensor
+self-overlap limit (`equalMPS`) at lines 1080--1100. -/
+theorem card_activeSector_eq_one_of_literal_ZCL
+    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    [hne : Nonempty (F.ActiveSector p)] :
+    Fintype.card (F.ActiveSector p) = 1 := by
+  by_contra hcard
+  have hcard1 : 1 < Fintype.card (F.ActiveSector p) := by
+    have h1 : 1 ≤ Fintype.card (F.ActiveSector p) := Fintype.card_pos
+    omega
+  haveI : Nontrivial (F.ActiveSector p) := Fintype.one_lt_card_iff_nontrivial.mp hcard1
+  set T := F.activeSectorTraceMatrix p with hTdef
+  have hTsq : T ^ 2 = T ^ 3 :=
+    activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
+  have hTprim : T.IsPrimitive :=
+    F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
+  obtain ⟨v, hv, hPstoch, hPprim⟩ :=
+    hTprim.exists_rowStochastic_diagonal_conj_of_pow_two_eq_pow_three hTsq
+  set P := (Matrix.diagonal v)⁻¹ * T * Matrix.diagonal v with hPdef
+  set S := activeSectorTraceSqMatrix K F p with hSdef
+  have hPapply : ∀ i j, P i j = (v i)⁻¹ * T i j * v j :=
+    fun i j => Matrix.diagonal_inv_mul_mul_diagonal_apply (fun i => (hv i).ne') T i j
+  have hSnn : ∀ k h, 0 ≤ S k h := fun k h => activeSectorTraceSqMatrix_nonneg K F p hpos k h
+  have hSbound : ∀ k h, S k h ≤ (T k h) ^ 2 :=
+    fun k h => activeSectorTraceSqMatrix_le_activeSectorTraceMatrix_sq K F p hpos k h
+  set Shat := (Matrix.diagonal (fun i => (v i) ^ 2))⁻¹ * S *
+    Matrix.diagonal (fun i => (v i) ^ 2) with hShatdef
+  have hShat_trace : ∀ N, Matrix.trace (Shat ^ N) = Matrix.trace (S ^ N) :=
+    fun N => trace_pow_similarity_squared_diagonal S v hv N
+  have hShatapply : ∀ i j, Shat i j = ((v i) ^ 2)⁻¹ * S i j * (v j) ^ 2 :=
+    fun i j => Matrix.diagonal_inv_mul_mul_diagonal_apply (fun i => (pow_pos (hv i) 2).ne') S i j
+  have hShat_nn : ∀ i j, 0 ≤ Shat i j := by
+    intro i j
+    rw [hShatapply]
+    exact mul_nonneg (mul_nonneg (inv_pos.mpr (pow_pos (hv i) 2)).le (hSnn i j))
+      (pow_pos (hv j) 2).le
+  have hShat_le : ∀ i j, Shat i j ≤ (P ⊙ P) i j := by
+    intro i j
+    rw [hShatapply, Matrix.hadamard_apply, hPapply]
+    have : ((v i) ^ 2)⁻¹ * S i j * (v j) ^ 2 ≤ ((v i) ^ 2)⁻¹ * (T i j) ^ 2 * (v j) ^ 2 := by
+      gcongr
+      exact hSbound i j
+    calc ((v i) ^ 2)⁻¹ * S i j * (v j) ^ 2 ≤ ((v i) ^ 2)⁻¹ * (T i j) ^ 2 * (v j) ^ 2 := this
+      _ = ((v i)⁻¹ * T i j * v j) * ((v i)⁻¹ * T i j * v j) := by ring
+  have htendsto_zero : Filter.Tendsto (fun N => Matrix.trace (S ^ N)) Filter.atTop (nhds 0) := by
+    have := Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self hPstoch hPprim hShat_nn
+      hShat_le
+    simpa only [hShat_trace] using this
+  have htendsto_one : Filter.Tendsto (fun N => Matrix.trace (S ^ N)) Filter.atTop (nhds 1) := by
+    have hoverlap : Filter.Tendsto (fun N => MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N)
+        Filter.atTop (nhds (1 : ℂ)) := hK_normal.selfOverlap_tendsto_one
+    have hcongr : Filter.Tendsto (fun N => ((Matrix.trace (S ^ N) : ℝ) : ℂ))
+        Filter.atTop (nhds (1 : ℂ)) := by
+      apply hoverlap.congr'
+      filter_upwards [Filter.eventually_gt_atTop 0] with N hN
+      haveI : NeZero N := ⟨hN.ne'⟩
+      exact mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
+        K F p hpos hinactive
+    exact Filter.tendsto_ofReal_iff.mp hcongr
+  have := tendsto_nhds_unique htendsto_zero htendsto_one
+  norm_num at this
+
+/-- **The Case-I relation `T² = T`.** A direct corollary of the active sector being unique
+(`card_activeSector_eq_one_of_literal_ZCL`): on a singleton active-sector set the primitive
+matrix `T` collapses to a scalar `t` with `t² = t³` and `t² > 0`, forcing `t = 1`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
+    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    [hne : Nonempty (F.ActiveSector p)] :
+    (F.activeSectorTraceMatrix p) ^ 2 = F.activeSectorTraceMatrix p := by
+  have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
+    hZCL_sq hinactive hK_normal
+  haveI : Subsingleton (F.ActiveSector p) := Fintype.card_le_one_iff_subsingleton.mp hcard.le
+  set T := F.activeSectorTraceMatrix p with hTdef
+  have hTsq3 : T ^ 2 = T ^ 3 :=
+    activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL K F p hZCL_sq hinactive hpos
+  have hTsqpos := activeSectorTraceMatrix_pow_two_pos K F p hpos hspan hnonzero htriangle
+    hZCL_sq hinactive
+  ext i j
+  have hij : i = j := Subsingleton.elim i j
+  subst hij
+  have hcollapse2 : (T ^ 2) i i = T i i * T i i := by
+    rw [sq, Matrix.mul_apply, Fintype.sum_eq_single i]
+    intro k hk
+    exact absurd (Subsingleton.elim k i) hk
+  have hcollapse3 : (T ^ 3) i i = (T ^ 2) i i * T i i := by
+    rw [pow_succ, Matrix.mul_apply, Fintype.sum_eq_single i]
+    intro k hk
+    exact absurd (Subsingleton.elim k i) hk
+  have heq : (T ^ 2) i i = (T ^ 2) i i * T i i := by rw [← hcollapse3, ← hTsq3]
+  have hTii : T i i = 1 := (mul_left_cancel₀ (hTsqpos i i).ne' (by rw [mul_one]; exact heq)).symm
+  rw [hcollapse2, hTii, mul_one]
+
+end singletonSector
 
 end caseI
 

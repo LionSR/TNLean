@@ -977,3 +977,65 @@
     identify its complex trace-square with the real entry
     $S^*_{k,h}=\re\tr(\eta_{k,h}^2)$.
 \end{proof}
+
+\begin{theorem}[The active sector is unique]
+    \label{thm:mpdo_active_sector_singleton}
+    \lean{MPOTensor.card_activeSector_eq_one_of_literal_ZCL}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix, def:nt_cpsv,
+      thm:mpdo_active_trace_matrix_literal_zcl_powers,
+      thm:mpdo_overlap_formula}
+    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
+    and sector weights $p_k$, such that every neighboring operator is
+    positive semidefinite, the left tensor of every zero-weight sector
+    vanishes, and the underlying tensor is normal in the sense of
+    Definition~\ref{def:nt_cpsv}. Then the active sector set has exactly
+    one element:
+    \begin{align}
+        \left|I_*\right|&=1.
+        \notag
+    \end{align}
+    This is a project derivation completing the Case-I route toward
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv};
+    it is not a statement of that source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_overlap_formula}
+    By contradiction: suppose $|I_*|\geq2$. The overlap formula and the
+    normal self-overlap limit
+    (\cite[lines~1080--1100]{Cirac2016MPDO_arXiv}) give
+    $\tr((S^*)^N)\to1$. Conjugating the primitive trace matrix $T^*$ by
+    its positive Perron eigenvector (with eigenvalue $1$, obtained from
+    the positive rank-one factorization of $(T^*)^2$ under $(T^*)^2=(T^*)^3$)
+    yields a row-stochastic primitive matrix $P$; the matching squared
+    conjugation of $S^*$ is bounded entrywise by $P\odot P$. Since
+    $|I_*|\geq2$, $P$ is an irreducible substochastic matrix on a
+    nontrivial index set, so $\tr((S^*)^N)\to0$, contradicting the limit
+    of $1$.
+\end{proof}
+
+\begin{theorem}[The Case-I relation $(T^*)^2=T^*$]
+    \label{thm:mpdo_active_trace_matrix_pow_two_eq}
+    \lean{MPOTensor.activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL}
+    \leanok
+    \uses{thm:mpdo_active_sector_singleton,
+      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    Under the hypotheses of Theorem~\ref{thm:mpdo_active_sector_singleton},
+    \begin{align}
+        \left(T^*\right)^2&=T^*.
+        \notag
+    \end{align}
+    This is the Case-I input to the proof of Lemma~C.5
+    (\cite[Appendix~C.2, lines~1473--1499]{Cirac2016MPDO_arXiv}), not the
+    lemma's headline statement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_active_sector_singleton}
+    On the singleton active sector set, $T^*$ is a scalar $t$. Stabilization
+    gives $t^2=t^3$, and positivity of $(T^*)^2$ gives $t^2>0$, hence
+    $t=1$ and $t^2=t$.
+\end{proof}
