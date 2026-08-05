@@ -835,4 +835,37 @@ def gate (p q : Fin 4) : Prop := bit2 p = bit1 q
 instance decidableGate (p q : Fin 4) : Decidable (gate p q) :=
   inferInstanceAs (Decidable (bit2 p = bit1 q))
 
+/-- The one-site physical operator of `R`, as a bilinear pairing of the
+letter-column vectors through `X`: `physClose1 R X i j = (25/32) *
+(u_{ij} ⬝ᵥ (v_{ij} ᵥ* X))`. -/
+lemma physClose1_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i j : Fin 4) :
+    physClose1 R X i j = (25/32 : ℂ) *
+      ((fun a => A a (bit1 i) (bit1 j)) ⬝ᵥ
+        ((fun b => A b (bit2 i) (bit2 j)) ᵥ* X)) := by
+  rw [physClose1_apply, R_eq_vecMulVec, Matrix.smul_mul, Matrix.trace_smul,
+    Matrix.vecMulVec_mul, Matrix.trace_vecMulVec, smul_eq_mul]
+
+/-- **The two-site physical operator of `R` is a gate-restricted, rescaled
+pullback of the one-site physical operator along `combine`.** When both
+`(i1, i2)` and `(j1, j2)` satisfy the bond-matching condition `gate`, the
+`(i1,i2),(j1,j2)` entry of `physClose2 R X` is `(25/32) · wMat (bit2 i1)
+(bit2 j1)` times the `combine i1 i2, combine j1 j2` entry of `physClose1 R X`;
+otherwise it vanishes. -/
+lemma physClose2_R_entry (X : Matrix (Fin 4) (Fin 4) ℂ) (i1 i2 j1 j2 : Fin 4) :
+    physClose2 R X (i1, i2) (j1, j2) =
+      (25/32 : ℂ) * (if gate i1 i2 ∧ gate j1 j2 then wMat (bit2 i1) (bit2 j1) else 0) *
+        physClose1 R X (combine i1 i2) (combine j1 j2) := by
+  rw [physClose2_apply, R_eq_vecMulVec, R_eq_vecMulVec]
+  simp only [smul_mul_assoc, Matrix.mul_smul, smul_smul, Matrix.vecMulVec_mul_vecMulVec,
+    Matrix.vecMulVec_smul]
+  rw [Matrix.trace_smul, Matrix.vecMulVec_mul, Matrix.trace_vecMulVec, smul_eq_mul]
+  rw [physClose1_R_entry]
+  simp only [bit1_combine, bit2_combine]
+  have hdot : (fun b : Fin 4 => A b (bit2 i1) (bit2 j1)) ⬝ᵥ
+      (fun a : Fin 4 => A a (bit1 i2) (bit1 j2)) =
+      if gate i1 i2 ∧ gate j1 j2 then wMat (bit2 i1) (bit2 j1) else 0 :=
+    dotProduct_A_col _ _ _ _
+  rw [hdot]
+  by_cases h : gate i1 i2 ∧ gate j1 j2 <;> simp [h] <;> ring
+
 end MPOTensor.RescalingStableLengthDependentRFP
