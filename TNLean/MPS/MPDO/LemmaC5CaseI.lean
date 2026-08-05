@@ -45,7 +45,7 @@ file:
 
 For the overlap formula, the elementary combinatorial machinery is now
 available (`pow_apply_eq_sum_path_indicator`,
-`trace_pow_eq_sum_cyclicProduct`), turning `tr(S^N)` into a sum over
+`trace_pow_eq_sum_cyclic_product`), turning `tr(S^N)` into a sum over
 cyclic labelings `k : Fin N → ActiveSector p`, in the shape needed to match
 `trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq`
 (`CyclicActiveTraceProductIdentities`).  Assembling the full formula still
@@ -72,7 +72,7 @@ The route to assemble them is sketched in the paper-gap note
   `activeSectorTraceMatrix_isPrimitive` in `PhysicalSectorTraceMatrix`)
 * `pow_apply_eq_sum_path_indicator`: a matrix power's `(a, b)` entry as a
   sum over indicator-weighted length-`N` walks from `a` to `b`
-* `trace_pow_eq_sum_cyclicProduct`: `tr(S^N)` as a sum over cyclic
+* `trace_pow_eq_sum_cyclic_product`: `tr(S^N)` as a sum over cyclic
   products indexed by labelings `k : Fin N → n`
 
 ## Source fidelity
@@ -357,7 +357,11 @@ end traceSimilarity
 
 section cyclicTrace
 
-variable {n : Type*} [Fintype n] [DecidableEq n]
+/-! These two lemmas are generic `CommSemiring`-valued matrix combinatorics with no
+dependency on the MPDO/MPO development; they stay in this file, rather than moving to
+`TNLean.Algebra`, because this Case-I route is their only call site so far. -/
+
+variable {n : Type*} [Fintype n] [DecidableEq n] {R : Type*} [CommSemiring R]
 
 /-- **Indicator-path expansion of a matrix power.** The `(a, b)` entry of `S ^ N` is the sum,
 over length-`N` walks `v : Fin (N + 1) → n` from `a` to `b`, of the product of the matrix
@@ -366,8 +370,8 @@ entries along the walk.
 This is the elementary combinatorial expansion of matrix powers used to derive the
 cyclic-product form of `tr(S^N)` in the Lemma C.5 Case-I route.
 
-Source: arXiv:1606.00608, Appendix C.2, self-overlap limit at lines 1080--1100. -/
-theorem pow_apply_eq_sum_path_indicator (S : Matrix n n ℝ) :
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem pow_apply_eq_sum_path_indicator (S : Matrix n n R) :
     ∀ (N : ℕ) (a b : n), (S ^ N) a b =
       ∑ v : Fin (N + 1) → n, if v 0 = a ∧ v (Fin.last N) = b
         then ∏ i : Fin N, S (v i.castSucc) (v i.succ) else 0 := by
@@ -378,8 +382,8 @@ theorem pow_apply_eq_sum_path_indicator (S : Matrix n n ℝ) :
     rw [pow_zero, Matrix.one_apply]
     rw [Fintype.sum_equiv (Equiv.funUnique (Fin 1) n)
       (fun v : Fin 1 → n => if v 0 = a ∧ v (Fin.last 0) = b then
-        (∏ i : Fin 0, S (v i.castSucc) (v i.succ) : ℝ) else 0)
-      (fun c : n => if c = a ∧ c = b then (1 : ℝ) else 0)
+        (∏ i : Fin 0, S (v i.castSucc) (v i.succ) : R) else 0)
+      (fun c : n => if c = a ∧ c = b then (1 : R) else 0)
       (fun v => by simp [Equiv.funUnique_apply])]
     by_cases hab : a = b
     · subst hab
@@ -438,8 +442,8 @@ This is the cyclic-product identity used in the Lemma C.5 Case-I route to expres
 doubled-index self-overlap `mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)` in terms of
 `tr(S^N)`.
 
-Source: arXiv:1606.00608, Appendix C.2, self-overlap limit at lines 1080--1100. -/
-theorem trace_pow_eq_sum_cyclicProduct (S : Matrix n n ℝ) {N : ℕ} [NeZero N] :
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem trace_pow_eq_sum_cyclic_product (S : Matrix n n R) {N : ℕ} [NeZero N] :
     Matrix.trace (S ^ N) = ∑ k : Fin N → n, ∏ i : Fin N, S (k i) (k (i + 1)) := by
   obtain ⟨M, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne N)
   have htrace : Matrix.trace (S ^ (M + 1)) = ∑ a : n, (S ^ (M + 1)) a a := by
@@ -456,7 +460,7 @@ theorem trace_pow_eq_sum_cyclicProduct (S : Matrix n n ℝ) {N : ℕ} [NeZero N]
     by_cases h : v 0 = v (Fin.last (M + 1))
     · rw [if_pos h]
       have hswap : (fun a => if v 0 = a ∧ v (Fin.last (M + 1)) = a then
-          (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else (0 : ℝ)) =
+          (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else (0 : R)) =
         (fun a => if v 0 = a then (if v (Fin.last (M + 1)) = a then
           (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else 0) else 0) :=
         funext (fun a => by by_cases ha : v 0 = a <;> simp [ha])
