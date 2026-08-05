@@ -654,8 +654,9 @@ theorem sum_prod_traceSq_eq_sum_active
 /-- **The overlap formula.** The doubled-index MPS self-overlap equals the real cast of
 `tr(S^N)`, where `S` is the active-sector trace-squared matrix.
 
-Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; self-overlap
-formulation at lines 1080--1100. -/
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; the self-overlap
+formulation `<V_alpha|V_alpha> = tr(E_alpha^N)` is in Appendix A, proof of Lemma
+`equalMPS`, line 1099. -/
 theorem mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
