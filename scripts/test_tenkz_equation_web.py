@@ -66,8 +66,8 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
     ).read_text(encoding="utf-8")
     symmetry_bodies = _tenkzequation_bodies(symmetry)
     symmetry_anchors = (
-        r"\tn[role=operator,up=$i$]{U(g)}",
-        r"\tnX{X_1(g^{-1})}",
+        r"\tn[species=operator, label pos=w, ports={90:physical:$i$}]{U(g)}",
+        r"\tn[skin=ring]{X_1(g^{-1})}",
         "Condition C1, lines 328--334, states",
         "Condition C2, lines 335--340, states",
         "Conditions C2--C3, lines 335--347",
