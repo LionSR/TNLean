@@ -1,15 +1,20 @@
 % Target: rmp-ii-pepo-sheet
 % Formula: O = sum_{s,s'} C(prod_r M_r^{s_r s'_r}) |s_1..s_N><s'_1..s'_N|.
-% Ink: Canonical public tenkzlattice environment; no raw TikZ.
+% Ink: Kernel plane frame; every site carries the operator's two transverse
+%   physical legs.
 % Boundary: All sheet-edge virtual legs and both physical operator legs per site are
 %   open.
 % Source: paper TN-Review-main.tex line 363; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 311-314
-% Capabilities: lattice, typed-ports
+% Capabilities: kernel, plane-frame
+\tenkzkernel
 \[
   O \;=\;
-  \begin{tenkzlattice}[rows=4, cols=4, frame=oblique,
-                       physical=updown, boundary=open]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={4x4}, frame=plane, physical=updown,
+                west=open, east=open, north=open, south=open]
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{}
+  \end{tenkz}
 \]

@@ -1,87 +1,96 @@
 % Target: rmp-ii-peps-rg
 % Formula: A renormalized 2x2 PEPS plaquette decomposes into the four source panels
 %   (a)-(d).
-% Ink: Canonical public tenkzlattice, tenkz environments; no raw TikZ.
+% Ink: Kernel plane and flat frames; the final bead closes its virtual ring
+%   through invisible junctions.
 % Boundary: Each PEPS factor keeps its exterior legs open; the final bead closes only
 %   its virtual ring.
 % Source: paper TN-Review-main.tex line 1025; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 742-800
-% Capabilities: grid, lattice, typed-ports
+% Capabilities: kernel, plane-frame, typed-ports
+\tenkzkernel
 (a)
 \[
-  \begin{tenkzlattice}[rows=2, cols=2, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{} & \tn{} \\
+    \tn{} & \tn{}
+  \end{tenkz}
 \]
 
 (b)
 \[
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{}
+  \end{tenkz}
   \;\otimes\;
-  % three beads with depth (a sheet): up+south / west+up+north / up+east,
-  % matching the source's three oblique corner tensors
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, west=none, east=none, north=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  % three disentangled product tensors at half the site size, as the source
+  % draws them: up+south, west+up+north, up+east
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=none, east=none, north=none, south=open]
+    \tn[size=s]{}
+  \end{tenkz}
   \;
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, east=none, south=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=open, east=none, north=open, south=none]
+    \tn[size=s]{}
+  \end{tenkz}
   \;
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, west=none, north=none, south=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=none, east=open, north=none, south=none]
+    \tn[size=s]{}
+  \end{tenkz}
 \]
 
 (c)
 \[
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{}
+  \end{tenkz}
   \;\otimes\;
-  % three independent beads with depth (a sheet): west+up / up+south /
-  % up+north, matching the source's three separate oblique corner tensors
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, east=none, north=none, south=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  % the generating-MPS factors: west+up+east, up+south, up+north
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=open, east=open, north=none, south=none]
+    \tn[size=s]{}
+  \end{tenkz}
   \;
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, west=none, east=none, north=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=none, east=none, north=none, south=open]
+    \tn[size=s]{}
+  \end{tenkz}
   \;
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up, west=none, east=none, south=none]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up, size=s,
+                west=none, east=none, north=open, south=none]
+    \tn[size=s]{}
+  \end{tenkz}
 \]
 
 (d)
 \[
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
-  \;\otimes\;
-  \begin{tenkzlattice}[rows=1, cols=1, frame=oblique, boundary=open,
-                       physical=up]
-    \tnsite{(1,1)}
-\end{tenkzlattice}
-  \;\otimes\;
-  % the bead whose virtual wire closes on itself: hooks trace closure,
-  % opening upward as the source draws it (frame rotated 180 degrees, with
-  % physical=down pre-compensating so the physical leg still points up)
-  \begin{tenkz}[physical=down, boundary=periodic, trace style=hooks,
-                frame={rotate=180}]
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
     \tn{}
+  \end{tenkz}
+  \;\otimes\;
+  \begin{tenkz}[lattice={1x1}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{}
+  \end{tenkz}
+  \;\otimes\;
+  % the bead whose virtual wire closes on itself: the ring is drawn through
+  % invisible junctions, the house form for the source's identified upward
+  % hooks, and carries no physical leg, as the source draws it
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, size=s]
+    \tn[at=(2,1), skin=none, name=JW, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,2), skin=none, name=JE, ports={180:virtual, 90:virtual}]{}
+    \tn[at=(1,1), skin=none, name=KW, ports={0:virtual, 270:virtual}]{}
+    \tn[at=(1,2), skin=none, name=KE, ports={180:virtual, 270:virtual}]{}
+    \tnwire[name=run]{JW.0}{JE.180}
+    \tn[at=on run 0.5, skin=dot, size=s]{}
+    \tnwire{JW.90}{KW.270}
+    \tnwire{JE.90}{KE.270}
+    \tnwire{KW.0}{KE.180}
   \end{tenkz}
 \]
