@@ -22,6 +22,12 @@ body declarations.  Each source is complete and uses canonical public syntax.
 The environment chooses a contraction grid.  \tnkey{physical=up} is picture
 policy.  Each \tncmd{tn} declares an atom; \verb|&| advances one site.
 
+Beamer reads a frame's body before typesetting it, under the catcodes in
+force when the frame opens, so a chained picture's \verb|&| is still an
+alignment tab and the frame stops with a misplaced-tab error.  Mark the frame
+\texttt{[fragile]}; beamer then defers that reading until the picture's own
+catcode for \verb|&| applies.
+
 \subsection{A channel sandwich}
 
 \begin{tnexample}[
