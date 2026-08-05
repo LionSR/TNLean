@@ -36,6 +36,19 @@ the bound `τ(A) ≤ f(A) := ‖A‖∞ · τ(1)` for Hermitian `A ∈ S ⊗ M_n
 `τ'` is positive on positive semidefinite matrices, which by the
 Choi–Jamiolkowski correspondence yields a completely positive extension `T'`.
 
+## Main results
+
+* `Matrix.exists_cp_extension_of_operatorSystem`: the proposition itself.
+* `Matrix.exists_tau_extension`: the Hahn–Banach/complexification step, `τ`
+  extends to a `ℂ`-linear `τ' = complexify g` agreeing with `τ` on
+  `S ⊗ M_n(ℂ)` and obeying the same norm-domination bound everywhere.
+* `Matrix.rieszMatrix_complexify_posSemidef`: the Riesz matrix of `τ'` is
+  positive semidefinite.
+* `Matrix.reconstructedMap_eq_kraus_sum`: the map recovered from `τ'` by
+  Wolf's inversion formula is completely positive.
+* `Matrix.tau_kron_single`: Wolf's inversion formula holds for the original
+  `T` on `S`, giving `T'|_S = T`.
+
 ## References
 
 * [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Chapter 1][Wolf2012QChannels]
@@ -587,16 +600,16 @@ private theorem eq_ofReal_re_of_star_eq {z : ℂ} (h : star z = z) : z = (z.re :
 theorem exists_tau_extension {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     (hS : IsOperatorSystem S) {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ}
     (hT : IsCPOnOperatorSystem T) :
-    ∃ tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ,
-      (∀ A : ↥(tensorSubmodule S n), tau' A = tau T A) ∧
+    ∃ g : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℝ] ℝ,
+      (∀ A : ↥(tensorSubmodule S n), complexify g A = tau T A) ∧
       ∀ X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ, X.IsHermitian →
-        (tau' X).re ≤ ‖X‖ *
-          (tau' (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ)).re := by
+        (complexify g X).re ≤ ‖X‖ *
+          (complexify g (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ)).re := by
   obtain ⟨g, hg_agree, hg_le⟩ := exists_hahnBanach_extension hS hT
   have hone_herm : (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) ∈
       hermitianTensorSubmodule S n :=
     ⟨Matrix.isHermitian_one, one_mem_tensorSubmodule hS⟩
-  refine ⟨complexify g, ?_, ?_⟩
+  refine ⟨g, ?_, ?_⟩
   · intro A
     obtain ⟨A, hA⟩ := A
     have hAH := hS.conjTranspose_mem_tensorSubmodule hA
@@ -931,5 +944,46 @@ theorem tau_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     rw [← mul_assoc, hc]
   · intro b _ hb; simp [hb]
   · intro h; exact absurd (Finset.mem_univ j0) h
+
+/-! ### The extension theorem -/
+
+/-- **Extending cp maps from operator systems** (Wolf Ch. 1, lines 622–640): a
+completely positive linear map `T : S → M_n(ℂ)` defined on an operator system
+`S ⊆ M_m(ℂ)` extends to a completely positive map `T' : M_m(ℂ) → M_n(ℂ)`
+agreeing with `T` on `S`.
+
+The dimension hypotheses `[NeZero m] [NeZero n]` are the same standing
+finite-dimensionality convention already used for the rectangular
+Choi–Jamiolkowski reconstruction (`ChoiJamiolkowski.exists_cpMap_of_choi_posSemidef`,
+`ChoiRectangular.exists_isKrausCP_of_posSemidef`): a `0`-dimensional matrix
+algebra is a degenerate case outside the scope of a finite-dimensional
+`C^*`-algebra as Wolf uses the term, and `Matrix.induction_on` (used to build
+`rieszMatrix`/`reconstructedMap`) itself requires the index types to be
+nonempty. -/
+theorem exists_cp_extension_of_operatorSystem [NeZero m] [NeZero n]
+    {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)} (hS : IsOperatorSystem S)
+    {T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ} (hT : IsCPOnOperatorSystem T) :
+    ∃ T' : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ,
+      IsKrausCP T' ∧ ∀ x : ↥S, T' x = T x := by
+  obtain ⟨g, hg_agree, hg_le⟩ := exists_tau_extension hS hT
+  have hone_herm : (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ) ∈
+      hermitianTensorSubmodule S n :=
+    ⟨Matrix.isHermitian_one, one_mem_tensorSubmodule hS⟩
+  have hK : 0 ≤ (complexify g (1 : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ)).re := by
+    rw [hg_agree ⟨1, one_mem_tensorSubmodule hS⟩]
+    exact tau_one_nonneg hS (hT n)
+  have hNonneg : ∀ X : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ,
+      X.PosSemidef → 0 ≤ (complexify g X).re :=
+    fun X hX => tau'_nonneg_of_posSemidef hg_le hK hX
+  obtain ⟨r, v, hv⟩ :=
+    Matrix.posSemidef_iff_eq_sum_vecMulVec.mp (rieszMatrix_complexify_posSemidef g hNonneg)
+  refine ⟨reconstructedMap (complexify g),
+    ⟨r, reconstructedKraus v, reconstructedMap_eq_kraus_sum hv⟩, ?_⟩
+  rintro ⟨B, hB⟩
+  ext i0 j0
+  rw [reconstructedMap_apply, hg_agree ⟨_, kron_single_mem_tensorSubmodule hB i0 j0⟩,
+    tau_kron_single hB]
+  have hn : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne n)
+  field_simp
 
 end Matrix
