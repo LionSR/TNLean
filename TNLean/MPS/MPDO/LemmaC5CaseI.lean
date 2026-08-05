@@ -31,33 +31,29 @@ Case-I content carried here is the C.4–C.5 argument that the active-sector
 trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
 is positive.
 
-Two further pieces remain to complete the Case-I argument that the
+One further piece remains to complete the Case-I argument that the
 active sector set reduces to a singleton (`card(ActiveSector p) = 1`), from
 which the Case-I relations `T² = T` and `Q(1−LQ)L = 0` follow; these
 relations are the Case-I input to the proof of Lemma `SALZCL`
 (arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the lemma's
-headline statement.  The deferred pieces are documented at the end of the
-file:
+headline statement.  Two pieces feeding that singleton assembly are now
+proved:
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
-  (proved: `trace_pow_similarity_diagonal`),
-* the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`.
+  (`trace_pow_similarity_diagonal`),
+* the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`
+  (`mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`).
 
-For the overlap formula, the elementary combinatorial machinery is now
-available (`pow_apply_eq_sum_path_indicator`,
-`trace_pow_eq_sum_cyclic_product`), turning `tr(S^N)` into a sum over
-cyclic labelings `k : Fin N → ActiveSector p`, in the shape needed to match
-`trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq`
-(`CyclicActiveTraceProductIdentities`).  Assembling the full formula still
-requires reconciling the active-sector-restricted index type
-`F.ActiveSector p` used by `activeSectorTraceSqMatrix` with the
-full-sector index type `Fin F.sectorCount` that
-`PhysicalSectorFactorization.cyclicNeighboringProduct` and
-`reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal` range over; this
-reconciliation (via `hinactive`, which forces the contribution of any
-non-active sector to vanish) is not yet formalized.
+The overlap formula combines the doubled-index self-overlap identity
+(`Purity`) with the physical-sector product realization
+(`PhysicalSectorProductRealization`) via a physical basis change with
+`Uᴴ * U = 1` (`trace_mpo_conjugatePhysical_mul_self`), the cyclic trace factorization
+(`CyclicActiveTraceProductIdentities`), the reduction from the full sector
+index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
+cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
-The route to assemble them is sketched in the paper-gap note
+Only the singleton-sector assembly itself remains open.  The route is
+sketched in the paper-gap note
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
 
 ## Main declarations
@@ -74,6 +70,10 @@ The route to assemble them is sketched in the paper-gap note
   sum over indicator-weighted length-`N` walks from `a` to `b`
 * `trace_pow_eq_sum_cyclic_product`: `tr(S^N)` as a sum over cyclic
   products indexed by labelings `k : Fin N → n`
+* `sum_prod_traceSq_eq_sum_active`: the full-sector cyclic-product sum
+  reduces to the active-sector sum
+* `mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`:
+  **the overlap formula** `mpvOverlap = Complex.ofReal(tr(S^N))`
 
 ## Source fidelity
 
@@ -517,6 +517,196 @@ theorem trace_pow_eq_sum_cyclic_product (S : Matrix n n R) {N : ℕ} [NeZero N] 
       exact congrArg v (Fin.castSucc_succ j).symm
 
 end cyclicTrace
+
+section overlapFormula
+
+/-- The **sitewise product matrix** `W σ σ' = ∏ n, U (σ n) (σ' n)` used to
+congruence-conjugate the MPO family in `mpo_conjugatePhysical_eq` satisfies `Wᴴ * W = 1`
+whenever `Uᴴ * U = 1`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1434--1448 (the basis change defining
+`σ_tilde`). -/
+theorem sitewise_prod_conjTranspose_mul_self {N : ℕ} (U : Matrix (Fin d) (Fin d) ℂ)
+    (hU : Uᴴ * U = 1) :
+    (Matrix.of (fun σ σ' : Fin N → Fin d => ∏ n, U (σ n) (σ' n)))ᴴ *
+      (Matrix.of (fun σ σ' : Fin N → Fin d => ∏ n, U (σ n) (σ' n))) = 1 := by
+  ext σ τ
+  change (∑ σ' : Fin N → Fin d,
+      star (∏ n, U (σ' n) (σ n)) * (∏ n, U (σ' n) (τ n))) = (1 : Matrix _ _ ℂ) σ τ
+  have hstep1 : ∀ σ' : Fin N → Fin d,
+      star (∏ n, U (σ' n) (σ n)) * (∏ n, U (σ' n) (τ n)) =
+        ∏ n, (star (U (σ' n) (σ n)) * U (σ' n) (τ n)) := by
+    intro σ'
+    rw [star_prod, Finset.prod_mul_distrib]
+  simp_rw [hstep1]
+  rw [show (∑ σ' : Fin N → Fin d, ∏ n : Fin N,
+      (star (U (σ' n) (σ n)) * U (σ' n) (τ n))) =
+    ∏ n : Fin N, ∑ x : Fin d, (star (U x (σ n)) * U x (τ n)) from ?_]
+  · have hinner : ∀ n : Fin N, (∑ x : Fin d, star (U x (σ n)) * U x (τ n)) =
+        if σ n = τ n then (1 : ℂ) else 0 := by
+      intro n
+      have : (∑ x : Fin d, star (U x (σ n)) * U x (τ n)) = (Uᴴ * U) (σ n) (τ n) := by
+        simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
+      rw [this, hU, Matrix.one_apply]
+    simp_rw [hinner]
+    by_cases hστ : σ = τ
+    · simp [hστ, Matrix.one_apply]
+    · obtain ⟨n, hn⟩ := Function.ne_iff.mp hστ
+      rw [Finset.prod_eq_zero (Finset.mem_univ n) (if_neg hn), Matrix.one_apply, if_neg hστ]
+  · rw [Finset.prod_univ_sum (fun _ : Fin N => (Finset.univ : Finset (Fin d)))
+      (fun n x => star (U x (σ n)) * U x (τ n))]
+    simp only [Fintype.piFinset_univ]
+
+/-- The trace of the doubled MPO is invariant under a physical basis change `U` with
+`Uᴴ * U = 1` (an isometry; a unitary in the square case, e.g. `F.physicalIsometry`).
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1434--1448. -/
+theorem trace_mpo_conjugatePhysical_mul_self
+    (U : Matrix (Fin d) (Fin d) ℂ) (hU : Uᴴ * U = 1) {N : ℕ} [NeZero N] :
+    Matrix.trace (mpo (conjugatePhysical K U) N * mpo (conjugatePhysical K U) N) =
+      Matrix.trace (mpo K N * mpo K N) := by
+  set W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+    Matrix.of (fun σ σ' : Fin N → Fin d => ∏ n, U (σ n) (σ' n)) with hWdef
+  have hW : Wᴴ * W = 1 := sitewise_prod_conjTranspose_mul_self U hU
+  rw [mpo_conjugatePhysical_eq]
+  rw [← hWdef]
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc Wᴴ W (mpo K N * Wᴴ), hW, Matrix.one_mul]
+  rw [Matrix.trace_mul_comm]
+  simp only [Matrix.mul_assoc]
+  rw [hW, Matrix.mul_one]
+
+/-- A neighboring operator vanishes whenever its target sector is inactive, since the
+left sector tensor of an inactive sector vanishes identically.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem neighboringOperator_eq_zero_of_inactive_right
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    (k h : Fin F.sectorCount) (hh : p h = 0) :
+    F.neighboringOperator k h = 0 := by
+  ext x y
+  simp [PhysicalSectorFactorization.neighboringOperator, hinactive h hh]
+
+/-- The cyclic product of neighboring-operator trace-squares vanishes as soon as one
+sector along the cycle is inactive: that sector is the target of some edge in the cycle,
+whose neighboring operator (and hence trace-square) vanishes by
+`neighboringOperator_eq_zero_of_inactive_right`.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem prod_traceSq_eq_zero_of_not_forall_active
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    {N : ℕ} [NeZero N] (k : Fin N → Fin F.sectorCount)
+    (hk : ¬ ∀ i, p (k i) ≠ 0) :
+    ∏ i : Fin N, Matrix.trace ((F.neighboringOperator (k i) (k (i + 1))) ^ 2) = 0 := by
+  rw [not_forall] at hk
+  obtain ⟨j, hj⟩ := hk
+  rw [not_ne_iff] at hj
+  apply Finset.prod_eq_zero (Finset.mem_univ (j - 1))
+  rw [sub_add_cancel j 1,
+    neighboringOperator_eq_zero_of_inactive_right K F p hinactive (k (j - 1)) (k j) hj]
+  simp
+
+/-- **Reduction to the active sector.** The full-sector sum of cyclic trace-square
+products equals the sum restricted to cyclic labelings by the active sector, since every
+term with an inactive label vanishes.
+
+This is the reconciliation between the active-sector-restricted index type
+`F.ActiveSector p` and the full-sector index type `Fin F.sectorCount` needed to
+assemble the overlap formula.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
+theorem sum_prod_traceSq_eq_sum_active
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    {N : ℕ} [NeZero N] :
+    (∑ k : Fin N → Fin F.sectorCount, ∏ i : Fin N,
+        Matrix.trace ((F.neighboringOperator (k i) (k (i + 1))) ^ 2)) =
+      ∑ k : Fin N → F.ActiveSector p, ∏ i : Fin N,
+        Matrix.trace ((F.neighboringOperator (k i : Fin F.sectorCount)
+          (k (i + 1) : Fin F.sectorCount)) ^ 2) := by
+  rw [show (∑ k : Fin N → Fin F.sectorCount, ∏ i : Fin N,
+      Matrix.trace ((F.neighboringOperator (k i) (k (i + 1))) ^ 2)) =
+    ∑ k ∈ Finset.univ.filter (fun k : Fin N → Fin F.sectorCount => ∀ i, p (k i) ≠ 0),
+      ∏ i : Fin N, Matrix.trace ((F.neighboringOperator (k i) (k (i + 1))) ^ 2) from ?_]
+  · refine Finset.sum_bij'
+      (fun k hk i => (⟨k i, by
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hk
+        exact hk i⟩ : F.ActiveSector p))
+      (fun k' _ i => (k' i : Fin F.sectorCount))
+      ?hi ?hj ?left_inv ?right_inv ?h
+    case hi => intro k _; exact Finset.mem_univ _
+    case hj =>
+      intro k' _
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+      exact fun i => (k' i).2
+    case left_inv => intro k _; rfl
+    case right_inv => intro k' _; rfl
+    case h => intro k _; rfl
+  · rw [Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro k _
+    by_cases hk : ∀ i, p (k i) ≠ 0
+    · simp [hk]
+    · rw [if_neg hk, prod_traceSq_eq_zero_of_not_forall_active K F p hinactive k hk]
+
+/-- **The overlap formula.** The doubled-index MPS self-overlap equals the real cast of
+`tr(S^N)`, where `S` is the active-sector trace-squared matrix.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; the self-overlap
+formulation `<V_alpha|V_alpha> = tr(E_alpha^N)` is in Appendix A, proof of Lemma
+`equalMPS`, line 1099. -/
+theorem mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    {N : ℕ} [NeZero N] :
+    MPSTensor.mpvOverlap K.toMPSTensor K.toMPSTensor N =
+      Complex.ofReal (Matrix.trace ((activeSectorTraceSqMatrix K F p) ^ N)) := by
+  have hK : IsMPDO K := F.isMPDO_of_neighboringOperator_pos hpos
+  rw [mpvOverlap_toMPSTensor_self_eq_trace_sq K hK (NeZero.pos N)]
+  rw [← trace_mpo_conjugatePhysical_mul_self K F.physicalIsometry
+    F.physicalIsometry_isometry (N := N)]
+  rw [← Matrix.trace_mul_self_eq_of_reindex_eq (F.physicalConfigEquiv N) _ _
+    (F.mpo_sectorCoordinateTensor_eq_reindex_conjugatePhysical N).symm]
+  rw [← Matrix.trace_mul_self_eq_of_reindex_eq (F.sectorCoordinateChainEquiv N) _ _
+    (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal (N := N))]
+  rw [show Matrix.blockDiagonal' (fun k => F.cyclicNeighboringProduct k) *
+      Matrix.blockDiagonal' (fun k => F.cyclicNeighboringProduct k) =
+      Matrix.blockDiagonal' (fun k => (F.cyclicNeighboringProduct k) ^ 2) from ?_]
+  · rw [Matrix.trace_blockDiagonal']
+    simp_rw [F.trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq]
+    rw [sum_prod_traceSq_eq_sum_active K F p hinactive]
+    have hcast : ∀ k : Fin N → F.ActiveSector p, (∏ i : Fin N,
+        Matrix.trace ((F.neighboringOperator (k i : Fin F.sectorCount)
+          (k (i + 1) : Fin F.sectorCount)) ^ 2)) =
+        ((∏ i : Fin N, activeSectorTraceSqMatrix K F p (k i) (k (i + 1)) : ℝ) : ℂ) := by
+      intro k
+      rw [Complex.ofReal_prod]
+      apply Finset.prod_congr rfl
+      intro i _
+      have hsq : ((F.neighboringOperator (k i : Fin F.sectorCount)
+          (k (i + 1) : Fin F.sectorCount)) ^ 2).PosSemidef := by
+        have hherm := (hpos (k i) (k (i + 1))).isHermitian
+        have h_sq_eq : (F.neighboringOperator (k i : Fin F.sectorCount)
+            (k (i + 1) : Fin F.sectorCount)) ^ 2 =
+            (F.neighboringOperator (k i : Fin F.sectorCount) (k (i + 1) : Fin F.sectorCount)) *
+              (F.neighboringOperator (k i : Fin F.sectorCount)
+                (k (i + 1) : Fin F.sectorCount))ᴴ := by
+          rw [sq, hherm.eq]
+        rw [h_sq_eq]
+        exact Matrix.posSemidef_self_mul_conjTranspose _
+      rw [hsq.isHermitian.trace_eq_ofReal_re]
+      rfl
+    simp_rw [hcast]
+    rw [← Complex.ofReal_sum]
+    congr 1
+    exact (trace_pow_eq_sum_cyclic_product (activeSectorTraceSqMatrix K F p)).symm
+  · rw [← Matrix.blockDiagonal'_mul]
+    simp [sq]
+
+end overlapFormula
 
 end caseI
 
