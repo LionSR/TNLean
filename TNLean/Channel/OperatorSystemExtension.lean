@@ -707,4 +707,103 @@ theorem reconstructedMap_apply (tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) 
     reconstructedMap tau' B i j = (n : ℂ) * tau' (kroneckerMap (· * ·) B (Matrix.single i j 1)) :=
   rfl
 
+/-- The rectangular Kraus family reconstructed from a rank-one decomposition
+`Y = Σₖ vₖ vₖ†` of the Riesz matrix: `Kₖ i p := √n · star(vₖ(p, i))`
+(Wolf Eq. (1.13)-style reshaping, as in `ChoiRectangular.krausOfChoiDecomp`). -/
+noncomputable def reconstructedKraus {ι : Type*}
+    (v : ι → (Fin m × Fin n) → ℂ) : ι → Matrix (Fin n) (Fin m) ℂ :=
+  fun k i p => ((n : ℝ).sqrt : ℂ) * star (v k (p, i))
+
+/-- **`reconstructedMap tau'` is the Kraus map built from a rank-one
+decomposition of the Riesz matrix**: both sides expand to the same double
+sum `n · Σₖ Σ_{p,q} star(vₖ(p,i)) · B p q · vₖ(q,j)`, obtained on the left
+from the trace-pairing identity `trace_vecMulVec_star_mul_eq_dotProduct` and
+on the right by unfolding the Kraus sum. -/
+theorem reconstructedMap_eq_kraus_sum [NeZero m] [NeZero n]
+    {tau' : Matrix (Fin m × Fin n) (Fin m × Fin n) ℂ →ₗ[ℂ] ℂ}
+    {ι : Type*} [Fintype ι] {v : ι → (Fin m × Fin n) → ℂ}
+    (hY : rieszMatrix tau' = ∑ k, Matrix.vecMulVec (v k) (star (v k)))
+    (B : Matrix (Fin m) (Fin m) ℂ) :
+    reconstructedMap tau' B =
+      ∑ k, reconstructedKraus v k * B * (reconstructedKraus v k)ᴴ := by
+  ext i0 j0
+  have hsum_apply : (∑ k : ι, reconstructedKraus v k * B * (reconstructedKraus v k)ᴴ) i0 j0 =
+      ∑ k : ι, (reconstructedKraus v k * B * (reconstructedKraus v k)ᴴ) i0 j0 :=
+    Matrix.sum_apply i0 j0 _ _
+  rw [hsum_apply]
+  have hsqrt : ((n : ℝ).sqrt : ℂ) * ((n : ℝ).sqrt : ℂ) = (n : ℂ) := by
+    rw [← Complex.ofReal_mul, Real.mul_self_sqrt (Nat.cast_nonneg n)]
+    norm_cast
+  have hentry : ∀ k : ι, (reconstructedKraus v k * B * (reconstructedKraus v k)ᴴ) i0 j0 =
+      (n : ℂ) * ∑ p : Fin m, ∑ q : Fin m, star (v k (p, i0)) * B p q * v k (q, j0) := by
+    intro k
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, reconstructedKraus]
+    rw [Finset.sum_comm, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro p _
+    rw [Finset.sum_mul, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro q _
+    have hstar : star (((n : ℝ).sqrt : ℂ) * star (v k (p, j0))) =
+        ((n : ℝ).sqrt : ℂ) * v k (p, j0) := by
+      rw [star_mul', star_star]
+      congr 1
+      simp
+    rw [hstar]
+    calc ((n : ℝ).sqrt : ℂ) * star (v k (q, i0)) * B q p *
+          (((n : ℝ).sqrt : ℂ) * v k (p, j0))
+        = (((n : ℝ).sqrt : ℂ) * ((n : ℝ).sqrt : ℂ)) *
+            (star (v k (q, i0)) * B q p * v k (p, j0)) := by ring
+      _ = (n : ℂ) * (star (v k (q, i0)) * B q p * v k (p, j0)) := by rw [hsqrt]
+  simp only [hentry, ← Finset.mul_sum]
+  rw [reconstructedMap_apply, ← trace_rieszMatrix_mul, hY, Finset.sum_mul, Matrix.trace_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun k _ => ?_
+  set u := v k with hu
+  have hlhs : Matrix.trace (Matrix.vecMulVec u (star u) *
+      kroneckerMap (· * ·) B (Matrix.single i0 j0 1)) =
+      ∑ p2 : Fin m × Fin n, ∑ q2 : Fin m × Fin n,
+        u p2 * star (u q2) *
+          (kroneckerMap (· * ·) B (Matrix.single i0 j0 1) q2 p2) := by
+    simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Matrix.vecMulVec_apply,
+      Pi.star_apply]
+  rw [hlhs]
+  have hM : ∀ q2 p2 : Fin m × Fin n,
+      kroneckerMap (· * ·) B (Matrix.single i0 j0 1) q2 p2 =
+        B q2.1 p2.1 * (if p2.2 = j0 then (1 : ℂ) else 0) * (if q2.2 = i0 then (1 : ℂ) else 0) := by
+    intro q2 p2
+    rw [Matrix.kroneckerMap_apply, Matrix.single_apply]
+    split_ifs with h1 h2 h3 h4 h5 h6 <;> first | rfl | (exfalso; tauto) | ring
+  simp only [hM]
+  have hstep1 : ∀ p2 : Fin m × Fin n, (∑ q2 : Fin m × Fin n,
+      u p2 * star (u q2) * (B q2.1 p2.1 * (if p2.2 = j0 then (1 : ℂ) else 0) *
+        (if q2.2 = i0 then (1 : ℂ) else 0))) =
+      ∑ q1 : Fin m, u p2 * star (u (q1, i0)) *
+        (B q1 p2.1 * (if p2.2 = j0 then (1 : ℂ) else 0)) := by
+    intro p2
+    rw [Fintype.sum_prod_type]
+    refine Finset.sum_congr rfl fun q1 _ => ?_
+    dsimp only
+    rw [Finset.sum_eq_single i0]
+    · simp
+    · intro b _ hb
+      simp [hb]
+    · intro h; exact absurd (Finset.mem_univ i0) h
+  simp only [hstep1]
+  rw [Fintype.sum_prod_type]
+  dsimp only
+  have hstep2 : ∀ p1 : Fin m, (∑ p2b : Fin n, ∑ q1 : Fin m,
+      u (p1, p2b) * star (u (q1, i0)) * (B q1 p1 * (if p2b = j0 then (1 : ℂ) else 0))) =
+      ∑ q1 : Fin m, u (p1, j0) * star (u (q1, i0)) * B q1 p1 := by
+    intro p1
+    rw [Finset.sum_eq_single j0]
+    · simp
+    · intro b _ hb
+      refine Finset.sum_eq_zero fun q1 _ => ?_
+      simp [hb]
+    · intro h; exact absurd (Finset.mem_univ j0) h
+  rw [Finset.sum_congr rfl (fun (p1 : Fin m) _ => hstep2 p1), Finset.sum_comm]
+  refine Finset.sum_congr rfl fun p _ => Finset.sum_congr rfl fun q _ => ?_
+  ring
+
 end Matrix
