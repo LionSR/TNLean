@@ -31,14 +31,15 @@ note = "the three physical spokes remain open while alpha, beta, and gamma form 
 
 [[verdict]]
 id = "rmp-ii-mps-marginal"
-status = "cosmetic-gap"
+status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "f266cf32bb636d071f2d373184fe893c96c8352ea44d9c12207e914e3861d041"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "traced-out style heavy; wants the minimal closure idiom"
+defects = []
+case_sha256 = "ad1cf1756c3785e84c52538a72ce5bcdf951a60e6b226e15786ec1fc78b0d8a8"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel migration resolves the weight-mismatch: the traced columns close through minimal straight verticals in place of the old heavy racetrack, columns 1-3 keep separate open ket/bra stubs, and the state row now points its five physical legs up over an open chain, as in the author panel."
 
 [[verdict]]
 id = "rmp-ii-peps-marginal"
@@ -57,11 +58,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
-case_sha256 = "75dfe6893593acb030416c34b177d059ed5fb272319b584dfcd46c0a5a6b61e0"
-reviewed = "2026-07-27"
-renderer = "fable-prose-realignment-2026-07-27-220dpi"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-note = "the paper defines the MPO by the row network (sec2fig5MPO, the paired placement asset), so the formula is realigned and the case redrawn as the five-dot row -- site for site against the compiled author lines. The earlier refusal's discrepancy is resolved at its root"
+case_sha256 = "ce006b8f13e43dd2d70a5378454d2aaeba215c61344fb279b6bb7177c7eefe1f"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel flat frame keeps the five-dot row site for site: the paper defines the MPO by the row network (sec2fig5MPO), each site a dot tensor with two open physical legs, and the virtual chain now shows its open west and east stubs as in the author panel."
 
 [[verdict]]
 id = "rmp-ii-pepo-sheet"
@@ -80,11 +81,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "a32c36171b592ea0921ba90ab68e908ee5b7372f25019cb3ba39eaa15d1d6787"
-second_viewer = "LionSR-delegated-fable-countersign-2026-07-26"
-reviewed = "2026-07-26"
-renderer = "fable-countersign-reading-2026-07-26-200dpi"
-note = "X and X^-1 at one reference width"
+case_sha256 = "3990374fae600d60455883f726f20186432d5f9130b169744b453f45a423a7ad"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "X and X^-1 match at one reference width by the kernel size class. As in the source, each capsule absorbs the doubling: one virtual rail is open on each outer side, the doubled rail runs only between the capsules and the A pair, and the boundary matches O's four indices outright, so no tenkzeq check off is needed. The single outer rail leaves each capsule at the upper wire-row rather than mid-height (house port placement)."
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
@@ -100,14 +101,15 @@ note = "the west and east cups close the virtual pair and leave one open physica
 
 [[verdict]]
 id = "rmp-ii-mpu-blocking"
-status = "faithful"
+status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "0be536610dfe95052234c171ef0498c064da12624846bde1eef7756e88f701aa"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-second_viewer = "pairing-sweep-two-viewers-2026-07-23"
-note = "maintainer: good; a/b spacing explicitly not to pre-optimize"
+defects = ["placement-illegible"]
+case_sha256 = "afdac2f68d36447256f0af03c05dbd35d7f7e321494f96f549c7659ba6356301"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-300dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "The model matches the author panel: the 2x2 blocked sandwich, two disjoint RHS factors, the a/b beads anchored to hull-routed side closures (route={e of ...}/{w of ...}), and the conjugate row's overline. The residue is K1: the renderer does not yet ink a hull route on an endpoint index wire, so each closure currently draws along its column axis over the U-Ubar bond instead of arcing off the east/west faces the contract names (LANGUAGE-1.0 s5, bend= retirement row); the grid-tier predecessor inked this closure correctly through its side-cup policy."
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
@@ -127,11 +129,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "2a3f532e16c8c31610a5f6f05aa7be42a18814508041238c5249e842ff9a5eea"
-reviewed = "2026-08-04"
-renderer = "kimi-k2-rereview-2026-08-04-200dpi"
-second_viewer = "kimi-k2-oracle-2026-08-04-400dpi"
-note = "K2 promotion: the six-tensor U word and the alternating three-u two-v brick layers match the source with all six circuit wires open at both ends; labelled spanning boxes for the source's dotted gate-pair ellipses are the inherent circuit presentation (the bar)."
+case_sha256 = "8358866a3a190627e3bc9b3ca394c09798e5859a20574e316bd03b67ca8402cf"
+reviewed = "2026-08-05"
+renderer = "claude-kernel-w1a-review-2026-08-05-150dpi"
+second_viewer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "Kernel flat frame keeps the six-tensor U word and the alternating three-u two-v brick layers as two-column-wide gates on wire pairs (1,2)(3,4)(5,6) over (2,3)(4,5), matching the author's vertical-wire uv units; all six circuit wires stay open at both ends, and labelled boxes stand in for the source's red/blue square-circle gate pairs (the recorded circuit presentation)."
 
 [[verdict]]
 id = "rmp-ii-mpu-wrap"
@@ -1123,10 +1125,11 @@ id = "rmp-workbench-ii-v-tensor-definition"
 status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "e7e3ccd081d403bb141899657722ecb12dba13b33579a2a3758d2c968f5e6a29"
-reviewed = "2026-07-26"
-renderer = "codex-source-boundary-review-2026-07-26"
-second_viewer = "pr-4863-source-review-2026-07-26"
+case_sha256 = "ad3728511380925a473769fda2cf9d77d16ec6475e48724dc54f68f350ea4e9f"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-300dpi"
+second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
+note = "Kernel flat frame keeps the direct V-A physical bond and the west cup, with the l^(1/2) dot bead sitting on the cup arc and its label alongside as in DefV; the conjugate carries the source's overline, and both east legs stay open."
 
 [[verdict]]
 id = "rmp-workbench-ii-boundary-a-old"
@@ -1143,10 +1146,10 @@ id = "rmp-workbench-ii-boundary-b-old"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "e333b5a110e04660983f04483144b443bb84b26c9059e44ff7f2065469ea2ed2"
-reviewed = "2026-07-23"
-renderer = "maintainer-page-review-2026-07-23"
-note = "color coding lost"
+case_sha256 = "326373a0ea708fa1397c87b7ed794b467c0ff4db0eba9dbc577bd3c686cd63f3"
+reviewed = "2026-08-05"
+renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
+note = "The source colour coding is recovered from the author code (the red A row and the gray B row are explicit fill colours at lines 618-649, matching the published twin's charge/flux palette) and is now model-recorded as declared species; as on rmp-ii-boundary-lasso, the physical policy legs stay house-ink because the policy stub does not read the host species (K1)."
 
 [[verdict]]
 id = "rmp-workbench-ii-peps-fine-graining"

@@ -1502,3 +1502,33 @@ composition/layout 218), and no parser spelling, registry row, alias,
 escape, overload, or page-distance constant is added.
 
 Census-correction: #5347
+
+### 2026-08-05 — wave 1A carries seven Section-II panels onto the kernel tier
+
+Seven Section-II cases move to kernel spellings with explicit typed ports:
+the MPS marginal, the MPO row, the local purification, the MPU blocking and
+brickwork panels, and the workbench V-tensor and boundary-B factorizations.
+The vision pass against the author sources restored four source facts the
+first draft lost: the marginal's state row points its legs up over an open
+chain, the MPO row shows its open west and east stubs, the purification's
+X capsules absorb the doubling so one virtual rail is open per outer side
+(no equation check off remains), and the conjugate tensors carry their
+overlines. The V-tensor's l^(1/2) bead now sits on the west cup arc, and
+the boundary-B palette is recovered from the author code's explicit fill
+colours as declared charge/flux species, closing that panel's X row. The
+blocking panel records hull-routed side closures the renderer does not yet
+ink (K1, bar row of 2026-08-05).
+
+M4 rises from 20.14 to 20.77 because the kernel cases spell out the typed
+ports, wires, and species that the grid tier implied. The dimension census
+is unchanged at 478 sites (route/string 260, composition/layout 218). No
+parser spelling, registry row, alias, escape, or overload is added.
+
+The wave's migrations leave `\tnX` with two corpus option signatures, so
+the sugar detector now flags it:
+
+| Flag | Verdict |
+|---|---|
+| flag:sugar-shaped:command:tnX | tombstoned by contract: `\tnX{m}` migrates to `\tn[skin=ring]{m}` (`LANGUAGE-1.0` 10); the kernel cases of this wave already spell the ring skin directly, and the remaining grid-tier uses die at the S4 swap; expiry 0.9 |
+
+Census-correction: #5347

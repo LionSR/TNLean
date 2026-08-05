@@ -1,20 +1,35 @@
 % Target: rmp-ii-mps-marginal
 % Formula: marginals rho_kept = Tr_traced |psi><psi|.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the doubled ket-bra layer contracts the traced
+%   columns through explicit typed ports.
 % Boundary: The state has five open physical legs; the marginal traces the last two
 %   ket-bra pairs.
 % Source: paper TN-Review-main.tex line 327; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 269-286
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
 \begin{gathered}
-  \begin{tenkz}[physical=down]
+  \begin{tenkz}[rows={wire}, cols=5, physical=up, west=open, east=open]
     \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
   \end{tenkz}
   \\[1em]
-  \begin{tenkz}[rows={ket:nopair, bra}, trace={(physical, 4-5)}]
-    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
-    \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \begin{tenkz}[rows={ket,bra}, cols=5, bonds=none]
+    \tn[name=k1, ports={180:virtual,0:virtual,90:physical}]{} &
+    \tn[name=k2, ports={180:virtual,0:virtual,90:physical}]{} &
+    \tn[name=k3, ports={180:virtual,0:virtual,90:physical}]{} &
+    \tn[name=k4, ports={180:virtual,0:virtual,270:physical}]{} &
+    \tn[name=k5, ports={180:virtual,0:virtual,270:physical}]{} \\
+    \tn[name=b1, ports={180:virtual,0:virtual,270:physical}]{} &
+    \tn[name=b2, ports={180:virtual,0:virtual,270:physical}]{} &
+    \tn[name=b3, ports={180:virtual,0:virtual,270:physical}]{} &
+    \tn[name=b4, ports={180:virtual,0:virtual,90:physical}]{} &
+    \tn[name=b5, ports={180:virtual,0:virtual,90:physical}]{}
+    \tnwire{open w}{k1.180} \tnwire{k1.0}{k2.180} \tnwire{k2.0}{k3.180}
+    \tnwire{k3.0}{k4.180} \tnwire{k4.0}{k5.180} \tnwire{k5.0}{open e}
+    \tnwire{open w}{b1.180} \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180}
+    \tnwire{b3.0}{b4.180} \tnwire{b4.0}{b5.180} \tnwire{b5.0}{open e}
+    \tnwire{k4.270}{b4.90} \tnwire{k5.270}{b5.90}
   \end{tenkz}
 \end{gathered}
 \]
