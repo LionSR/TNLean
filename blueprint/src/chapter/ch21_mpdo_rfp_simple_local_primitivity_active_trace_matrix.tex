@@ -639,10 +639,9 @@
     entries of $\eta_{k_n,k_{n+1}}^2$.
 \end{proof}
 
-% Proved Case-I components; the singleton-sector assembly (trace
-% similarity, the overlap formula, and the Case-I relations) is not yet
-% formalized.  The route is sketched in
-% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
+% Proved Case-I components; the singleton-sector assembly (the Case-I
+% relations $(T^*)^2=T^*$ and $Q(1-LQ)L=0$) is not yet formalized.  The
+% route is sketched in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Trace-squared matrix of the neighboring operators]
     \label{lem:mpdo_active_sector_trace_sq_matrix}
     \lean{MPOTensor.activeSectorTraceSqMatrix,
@@ -683,9 +682,7 @@
 \end{proof}
 
 % Proved Case-I components.  The remaining singleton-sector assembly
-% is not yet formalized: the overlap formula
-% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
-% =\tr((S^*)^N)$, and the Case-I relations $(T^*)^2=T^*$ and
+% is not yet formalized: the Case-I relations $(T^*)^2=T^*$ and
 % $Q(1-LQ)L=0$ in the rectangular decomposition
 % $\mathcal T_{\cal K}=LQ$.  The virtual-spanning counterexample above
 % shows that the last relation does not follow from virtual spanning
@@ -838,4 +835,115 @@
     closed length-$N$ walks $v$ (with $v_0=v_N$) as cyclic labelings
     $k:\{0,\ldots,N-1\}\to I$ by dropping the repeated final
     coordinate.
+\end{proof}
+
+\begin{lemma}[Trace invariance under the physical basis change]
+    \label{lem:mpdo_trace_conjugate_physical_invariant}
+    \lean{MPOTensor.sitewise_prod_conjTranspose_mul_self,
+      MPOTensor.trace_mpo_conjugatePhysical_mul_self}
+    \leanok
+    \uses{def:mpo_family}
+    Let $K$ be an MPO tensor and $U$ a unitary on the physical space. Then
+    \begin{align}
+        \tr\!\left(\rho^{(N)}(\widetilde K)\,\rho^{(N)}(\widetilde K)\right)
+        &=\tr\!\left(\rho^{(N)}(K)\,\rho^{(N)}(K)\right),
+        \notag
+    \end{align}
+    where $\widetilde K$ is $K$ conjugated by $U$ at every physical site.
+    This is a project derivation preparing the Case-I route of
+    \cite[Appendix~C.2, lines~1434--1448]{Cirac2016MPDO_arXiv} (the basis
+    change defining $\sigma_{\mathrm{tilde}}$); it is not a claim from that
+    source.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The sitewise product matrix $W_{\sigma,\sigma'}=\prod_n U(\sigma_n,\sigma'_n)$
+    is unitary because $U$ is: expanding $W^\dagger W$ as a sum over
+    intermediate configurations and using $\sum_x\overline{U(x,a)}\,U(x,b)
+    =\delta_{a,b}$ site by site gives the identity. Since
+    $\rho^{(N)}(\widetilde K)=W\,\rho^{(N)}(K)\,W^\dagger$, cyclicity of the
+    trace and unitarity of $W$ cancel the $W$'s from
+    $\tr\!\left(W\rho^{(N)}(K)\rho^{(N)}(K)W^\dagger\right)$.
+\end{proof}
+
+\begin{lemma}[Reduction to the active sector]
+    \label{lem:mpdo_sum_prod_traceSq_active}
+    \lean{MPOTensor.neighboringOperator_eq_zero_of_inactive_right,
+      MPOTensor.prod_traceSq_eq_zero_of_not_forall_active,
+      MPOTensor.sum_prod_traceSq_eq_sum_active}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix,
+      thm:mpdo_cyclic_neighboring_trace_products}
+    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
+    and sector weights $p_k$, such that the left tensor of every
+    zero-weight sector vanishes. Then, for $N\geq1$, the sum over all
+    sector labelings of the cyclic trace-square product reduces to the
+    sum over active-sector labelings:
+    \begin{align}
+        \sum_{k:\{0,\ldots,N-1\}\to I}\ \prod_{i=0}^{N-1}
+          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right)
+        &=\sum_{k:\{0,\ldots,N-1\}\to I_*}\ \prod_{i=0}^{N-1}
+          \tr\!\left(\eta_{k_i,k_{i+1}}^2\right).
+        \notag
+    \end{align}
+    This is the reconciliation, flagged as an open reconciliation gap when
+    Lemma~\ref{lem:mpdo_pow_apply_path_indicator} and
+    Theorem~\ref{thm:mpdo_trace_pow_cyclic_product} were added, between
+    the full sector index set $I$ and the active sector set $I_*$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_active_sector_trace_matrix}
+    A neighboring operator with an inactive target sector vanishes,
+    because the left tensor of that sector vanishes identically. Hence any
+    cyclic labeling touching an inactive sector has a vanishing factor
+    (that sector is the target of some edge in the cycle), so its product
+    is zero. The active-sector sum is therefore exactly the full-sector
+    sum, restricted to a labeling-by-labeling bijection with the inactive
+    terms discarded.
+\end{proof}
+
+\begin{theorem}[The overlap formula]
+    \label{thm:mpdo_overlap_formula}
+    \lean{MPOTensor.mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow}
+    \leanok
+    \uses{lem:mpdo_active_sector_trace_sq_matrix,
+      thm:mpdo_doubled_overlap_hilbert_schmidt,
+      thm:mpdo_trace_pow_cyclic_product,
+      lem:mpdo_trace_conjugate_physical_invariant,
+      lem:mpdo_sum_prod_traceSq_active}
+    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
+    and sector weights $p_k$, such that every neighboring operator is
+    positive semidefinite and the left tensor of every zero-weight sector
+    vanishes. Then, for $N\geq1$,
+    \begin{align}
+        O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)
+        &=\tr\!\left((S^*)^N\right).
+        \notag
+    \end{align}
+    This is a project derivation completing the first step of the Case-I
+    route toward
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv};
+    it is not a statement of that source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpdo_active_sector_trace_sq_matrix,
+      thm:mpdo_doubled_overlap_hilbert_schmidt,
+      thm:mpdo_trace_pow_cyclic_product,
+      lem:mpdo_trace_conjugate_physical_invariant,
+      lem:mpdo_sum_prod_traceSq_active}
+    Combine Theorem~\ref{thm:mpdo_doubled_overlap_hilbert_schmidt} with
+    Lemma~\ref{lem:mpdo_trace_conjugate_physical_invariant} (conjugating by
+    the physical isometry of the factorization) and the block-diagonal
+    product realization to identify the doubled-index trace with the
+    full-sector cyclic trace-square sum. Lemma
+    \ref{lem:mpdo_sum_prod_traceSq_active} restricts this sum to the
+    active sector, and Hermiticity identifies each complex trace-square
+    with its real trace-squared matrix entry. Theorem
+    \ref{thm:mpdo_trace_pow_cyclic_product} collapses the resulting
+    cyclic-labeling sum into $\tr((S^*)^N)$.
 \end{proof}
