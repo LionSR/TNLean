@@ -344,34 +344,34 @@ collapses the bond sum in the entrywise formula for `mpo R N` to at most
 one term.
 
 Project example; not from CPSV16. -/
-def chainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
+def ChainOK (N : ℕ) (p : Fin N → Fin 4) : Prop :=
   ∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))
 
-/-- `chainOK N p` is decidable: it is a `Fin N`-indexed universal
+/-- `ChainOK N p` is decidable: it is a `Fin N`-indexed universal
 quantification of equalities between `Fin 2` values. -/
-instance decidableChainOK (N : ℕ) (p : Fin N → Fin 4) : Decidable (chainOK N p) :=
+instance decidableChainOK (N : ℕ) (p : Fin N → Fin 4) : Decidable (ChainOK N p) :=
   inferInstanceAs (Decidable (∀ n : Fin N, bit2 (p n) = bit1 (p (finRotate N n))))
 
 /-- The indicator matrix of the cyclic bond-matching condition:
-`(chainIndicator N) p q = 1` if both `p` and `q` satisfy `chainOK N`, and
+`(chainIndicator N) p q = 1` if both `p` and `q` satisfy `ChainOK N`, and
 `0` otherwise.  It is the rank-one matrix `vecMulVec c (star c)` for the
-indicator vector `c` of `chainOK N`, hence positive semidefinite
+indicator vector `c` of `ChainOK N`, hence positive semidefinite
 (`chainIndicator_posSemidef`); in the planned factorization of `mpo R N`
 it is the chain-OK factor `C`.
 
 Project example; not from CPSV16. -/
 noncomputable def chainIndicator (N : ℕ) : Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
-  Matrix.of fun p q => if chainOK N p ∧ chainOK N q then (1 : ℂ) else 0
+  Matrix.of fun p q => if ChainOK N p ∧ ChainOK N q then (1 : ℂ) else 0
 
 /-- The chain-OK indicator matrix is positive semidefinite: it is the
-rank-one matrix `vecMulVec c (star c)` for the `chainOK` indicator vector
+rank-one matrix `vecMulVec c (star c)` for the `ChainOK` indicator vector
 `c`. -/
 lemma chainIndicator_posSemidef (N : ℕ) : (chainIndicator N).PosSemidef := by
-  let c : (Fin N → Fin 4) → ℂ := fun p => if chainOK N p then (1 : ℂ) else 0
+  let c : (Fin N → Fin 4) → ℂ := fun p => if ChainOK N p then (1 : ℂ) else 0
   have h_eq : chainIndicator N = Matrix.vecMulVec c (star c) := by
     ext p q
     dsimp [chainIndicator, c, Matrix.vecMulVec, Matrix.mul_apply, Matrix.of_apply]
-    by_cases hp : chainOK N p <;> by_cases hq : chainOK N q
+    by_cases hp : ChainOK N p <;> by_cases hq : ChainOK N q
     · simp [hp, hq]
     · simp [hp, hq]
     · simp [hp, hq]
