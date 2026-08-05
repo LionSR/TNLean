@@ -1532,3 +1532,24 @@ the sugar detector now flags it:
 | flag:sugar-shaped:command:tnX | tombstoned by contract: `\tnX{m}` migrates to `\tn[skin=ring]{m}` (`LANGUAGE-1.0` 10); the kernel cases of this wave already spell the ring skin directly, and the remaining grid-tier uses die at the S4 swap; expiry 0.9 |
 
 Census-correction: #5347
+
+### 2026-08-05 — the six-panel intersection windows state their nested regions
+
+The two Section-IV six-panel cases migrate to the kernel and draw the
+source's nested selection: an inner enclosure over the retained two-site
+patch inside the outer boundary-window enclosure, replacing the invented
+three-by-four lattice. The kernel renders the containment the model
+already held: an enclosure whose members nest inside another's steps the
+outer contour out by one clearance per containment level, a pierced
+physical leg tracks that depth, and an unbonded virtual port cut by a
+region window now runs to the innermost containing contour and stops on
+it. The swapped source metadata of the two panels is realigned (LHS6 is
+the L window over A--B, RHS6 the R window over B--C) and the pairing
+digest re-bound. M4 rises from 20.77 to 20.83 because the kernel bodies
+name the ports, wire, and both windows the retired lattice preset
+implied. No parser spelling, registry row, alias, escape, or overload is
+added; the physical-dimension census is unchanged. The regression
+`tests/tenkz/kernel/regression/r_nested_regions.tex` pins the stepped-out
+outer contour and the cut stub that ends on the inner window.
+
+Census-correction: #5462

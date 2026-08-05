@@ -1,17 +1,22 @@
 % Target: rmp-iv-intersection-rhs-six
-% Formula: A two-dimensional L-boundary window surrounds its retained interior.
-% Ink: Canonical public tenkzlattice: the retained A--B patch is outlined inside
-%   the L boundary window.
-% Boundary: The outer L window cuts virtual bonds; every lattice site remains open.
+% Formula: A two-dimensional R-boundary window surrounds its retained interior.
+% Ink: Canonical public kernel plane frame: the retained B--C patch is outlined
+%   inside the R boundary window, with one uncovered site in the annulus.
+% Boundary: The inner window cuts the retained patch's virtual bonds; all three
+%   sites keep open physical legs.
 % Source: paper TN-Review-main.tex line 2084; author source ImagesReview Section
-%   IV/ImagesReview Section IV.tex lines 173-190 (growing back L)
-% Capabilities: lattice, regions, typed-ports
+%   IV/ImagesReview Section IV.tex lines 156-172 (inverting and growing back R)
+% Capabilities: kernel, plane-frame, regions, typed-ports
 \[
-  \begin{tenkzlattice}[rows=3, cols=4, frame=oblique, physical=up,
-                       boundary=open]
-    \tnsite[label=$A$, role=operator]{(1,2)}
-    \tnsite[label=$B$, role=operator]{(1,3)}
-    \tnregion[slot=neutral, outline, inset=1]{(1,2-3)}
-    \tnregion[slot=neutral, outline, label=$L$, label pos=south east]{(1-3,1-4)}
-  \end{tenkzlattice}
+  \tenkzkernel
+  \begin{tenkz}[lattice={1x3}, bonds=none, frame=plane, physical=up]
+    \tn[at=(1,1), skin=dot, name=r]{}
+    \tn[at=(1,2), skin=box, name=b,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{B}
+    \tn[at=(1,3), skin=box, name=c,
+      ports={0:virtual,90:virtual,180:virtual,270:virtual}]{C}
+    \tnwire{b.0}{c.180}
+    \tnmark[form=enclosure]{{b, c}}{}
+    \tnmark[form=enclosure, label pos=sw]{{b, c, r}}{$R$}
+  \end{tenkz}
 \]
