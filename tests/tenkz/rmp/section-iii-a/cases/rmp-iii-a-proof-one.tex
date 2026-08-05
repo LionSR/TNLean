@@ -10,12 +10,10 @@
   \tenkzkernel
   \begin{tenkzeq}
     % LHS: O_alpha's tensor over the MPS dot, both fed into V_alpha
-    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
-      \tn[at=(1,1), skin=box, name=O,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
-      \tn[at=(2,1), skin=dot, name=A,
-        ports={180:virtual, 0:virtual, 90:physical}]{}
-      \tn[at=(1,2), skin=box, wires=2, name=V,
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=updown]
+      \tn[at=(1,1), skin=box, name=O]{\alpha}
+      \tn[at=(2,1), skin=dot, name=A, physical=up]{}
+      \tn[at=(1,2), skin=box, wires=2, name=V, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0:virtual}]{V_\alpha}
       \tnwire{open w}{O.180} \tnwire{open w}{A.180}
       \tnwire{O.90}{open n}
@@ -25,11 +23,10 @@
     \end{tenkz}
     =
     % RHS: V_alpha's fused output feeds the bare MPS dot
-    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
-      \tn[at=(1,1), skin=box, wires=2, name=V,
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=up]
+      \tn[at=(1,1), skin=box, wires=2, name=V, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0@2:virtual}]{V_\alpha}
-      \tn[at=(2,2), skin=dot, name=A,
-        ports={180:virtual, 0:virtual, 90:physical}]{}
+      \tn[at=(2,2), skin=dot, name=A]{}
       \tnwire{open w}{V.180@1} \tnwire{open w}{V.180@2}
       \tnwire{V.0@2}{A.180}
       \tnwire{A.90}{open n}
