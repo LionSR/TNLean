@@ -148,9 +148,11 @@ theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R
 
 /-- The Moore–Penrose pseudoinverse of a PSD matrix is Hermitian.
 
-Implementation note: the proof rewrites `pinv Rᴴ` into `supportInv(R Rᴴ) * R` and then uses
-that `supportInv(R Rᴴ)` is a continuous-function-calculus element of `R Rᴴ`, hence
-commutes with `R` (`IsSelfAdjoint.commute_cfc`). -/
+Implementation note: the proof expands `(Douglas.pinv R)ᴴ` via the definition
+`Douglas.pinv R = Rᴴ * supportInv(R Rᴴ)`, reducing it to `supportInv(R Rᴴ) * R`
+using that `supportInv(R Rᴴ)` is Hermitian, then shows `supportInv(R Rᴴ)` commutes
+with `R` via continuous-function calculus (`IsSelfAdjoint.commute_cfc`), since it
+is a cfc element of `R Rᴴ`, which commutes with `R`. -/
 theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     (Douglas.pinv R).IsHermitian := by
   classical
