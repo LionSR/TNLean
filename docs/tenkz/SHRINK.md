@@ -1967,3 +1967,25 @@ draw a red trapezoid or a sharp rectangle. Those returns are ink, not
 ceremony.
 
 Census-correction: #5524
+
+### 2026-08-05 — the first blueprint chapters take the kernel
+
+Seventeen blueprint chapters, slide decks, and manual pages respell their
+figures on the kernel: declared frames, canonical addresses, typed ports,
+and stock skins replace the row-and-column spellings, periodic closures
+become explicit returns through invisible junctions, and the channel
+sandwiches route their closing cup through the operator standing on it.
+The benchmark corpus is untouched, so every meter but the consumer census
+stands; the demand corpus loses the retired grid spellings.
+
+Two figures keep their 0.7 spelling and are named in the disposition
+ledger: the operators of the maximally entangled state and the
+correlation window ride a generated cup between operator rows, where the
+on-wire anchor divides the record chord rather than the drawn arc, so a
+tensor placed there would read as sitting on the physical contraction.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the two that remain are the entangled-state and inverse-map chapters, which respell with the blueprint's later waves; expiry 0.9 |
+
+Census-correction: #4709
