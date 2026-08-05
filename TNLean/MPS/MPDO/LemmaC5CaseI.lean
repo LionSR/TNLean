@@ -253,7 +253,7 @@ The matrix-algebra components above give `S ≤ T²` entrywise, `T² = T³` from
 literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  Three further
 theorems complete the Case-I argument:
 
-1. **Trace similarity** `tr(Ŝ^N) = tr(S^N)` where `Ŝ` is the diagonal
+1. **Trace similarity** `tr(S_hat ^ N) = tr(S^N)` where `S_hat` is the diagonal
    similarity transform of `S` by the squared Perron weights.
 2. **Overlap formula** `mpvOverlap = Complex.ofReal(tr(S^N))` expressing
    the doubled-index self-overlap in terms of the active-sector
@@ -324,7 +324,7 @@ theorem trace_pow_similarity_diagonal (S : Matrix n n ℝ) (d : n → ℝ) (hd :
 /-- `trace_pow_similarity_diagonal` specialized to the squared Perron-weight
 diagonal used in the Lemma C.5 Case-I route.  For a positive vector `v`
 (e.g. the right Perron vector of the active-sector trace matrix `T`), set
-`Ŝ = D_{v²}⁻¹ * S * D_{v²}`.  Then `tr(Ŝ^N) = tr(S^N)` for all `N`.
+`S_hat = D_{v²}⁻¹ * S * D_{v²}`.  Then `tr(S_hat ^ N) = tr(S^N)` for all `N`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 theorem trace_pow_similarity_squared_diagonal (S : Matrix n n ℝ) (v : n → ℝ) (hv : ∀ i, 0 < v i)
