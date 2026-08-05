@@ -1342,6 +1342,21 @@
   }
 
 % ---------- beads ---------------------------------------------------------------
+% Whether the saved route #1 bends.  The answer is read off the stored path,
+% not off the spelling that produced it: a path assembled from straight
+% segments is divided by its ends, while a bending one is only answered for
+% along itself.  An id no route was saved under does not bend.
+\prg_new_protected_conditional:Npnn \__tenkz_string_bends:n #1 {T,F,TF}
+  {
+    \prop_if_in:NnTF \l__tenkz_string_kind_prop {#1}
+      {
+        \tl_if_in:cVTF { \l__tikzspath_prefix_tl #1 } \c_spath_curveto_tl
+          { \prg_return_true: } { \prg_return_false: }
+      }
+      { \prg_return_false: }
+  }
+\prg_generate_conditional_variant:Nnn \__tenkz_string_bends:n {V} {T,F,TF}
+
 % The point at arclength fraction #2 along string #1, exposed as TikZ
 % coordinate #3 and reported as an event.  PGF's markings decoration advances
 % by actual path distance, unlike spath's segment-count coordinate system.
