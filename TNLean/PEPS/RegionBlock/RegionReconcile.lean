@@ -313,7 +313,7 @@ forward-transfer multiplicativity `hmul`. The hypothesis is discharged by the
 coherent-frame route: `exists_regionEdgeGauge_of_blockingData`
 (`TNLean.PEPS.CoherentFrameInstance2`) derives both coefficient transfers and the
 forward multiplicativity existentially from one-edge blocking data, with no
-single-vertex injectivity of the original tensors (this resolved issue #2470). The
+single-vertex injectivity of the original tensors. The
 block-endpoint inversions above (`coeffTransfer_of_endpointOp_eq`,
 `regionInsertedCoeff_eq_of_regionRow_eq`) supply the coefficient transfers
 `htransferAB`/`htransferBA` on the direct region route; the remaining Section-3
