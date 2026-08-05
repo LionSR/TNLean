@@ -281,30 +281,79 @@ weight can $\rho_1$ carry in a convex decomposition of $\rho$?
     and some index $i_1$ with $\lambda_{i_1}=c$, $\rho_{i_1}=\rho_1$.
 \end{definition}
 
+\begin{lemma}[Congruence criterion for positive-semidefinite domination]
+    \label{lem:sub_smul_posSemidef_iff}
+    \lean{Matrix.PosSemidef.sub_smul_posSemidef_iff}
+    \leanok
+    Let $A$, $B$ be positive semidefinite operators on the same space with
+    $\ker(A)\subseteq\ker(B)$, and let $c>0$. Then
+    \[
+        A-cB\ge0 \iff c\bigl\|A^{-1/2}BA^{-1/2}\bigr\|_\infty\le1,
+    \]
+    where the inverse is taken on the range of $A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $P$ for the support projection of $A$. The kernel inclusion
+    compresses $B$ onto the range of $A$, so $A^{-1/2}BA^{-1/2}$ lies
+    entirely inside $\mathrm{ran}(P)$, and conjugating by $A^{-1/2}$ and by
+    $A^{1/2}$ give mutually inverse congruences
+    \begin{align}
+        A^{-1/2}(A-cB)A^{-1/2} &= P - c\,A^{-1/2}BA^{-1/2},
+        \notag\\
+        A^{1/2}\bigl(P - c\,A^{-1/2}BA^{-1/2}\bigr)A^{1/2} &= A-cB,
+        \notag
+    \end{align}
+    so $A-cB\ge0$ iff $P-c\,A^{-1/2}BA^{-1/2}\ge0$. Since
+    $A^{-1/2}BA^{-1/2}$ is supported on $\mathrm{ran}(P)$, this last
+    inequality is in turn equivalent to $1-c\,A^{-1/2}BA^{-1/2}\ge0$, which
+    by the $C^*$-identity $\|X\|_\infty\le1\iff X\le1$ (for $X\ge0$) holds
+    iff $c\|A^{-1/2}BA^{-1/2}\|_\infty\le1$.
+\end{proof}
+
+\begin{lemma}[Necessity of the kernel inclusion]
+    \label{lem:ker_subset_of_convex_decomposition}
+    \lean{Matrix.ker_subset_of_hasConvexDecompositionWith}
+    \leanok
+    \uses{def:convex_decomposition_with}
+    If $\rho$ has a convex decomposition $\rho=\sum_i\lambda_i\rho_i$ giving
+    $\rho_1$ a positive weight $c$, then $\ker(\rho)\subseteq\ker(\rho_1)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $\rho v=0$ for some vector $v$, every term of
+    $\rho=\sum_i\lambda_i\rho_i$ is positive semidefinite, so each
+    summand's quadratic form at $v$ vanishes; in particular
+    $c\langle v,\rho_1v\rangle=0$, and since $c>0$ and $\rho_1$ is positive
+    semidefinite, $\rho_1v=0$.
+\end{proof}
+
 \begin{theorem}[Maximal weight in convex decomposition]
     \label{thm:maximal_weight_convex_decomposition}
     \lean{Matrix.hasConvexDecompositionWith_iff}
     \leanok
-    \uses{def:convex_decomposition_with}
+    \uses{def:convex_decomposition_with, lem:sub_smul_posSemidef_iff,
+    lem:ker_subset_of_convex_decomposition}
     Let $\rho$ and $\rho_1$ be two density operators acting on the same
     space and let $c>0$. There is a convex decomposition of the form
     $\rho=\sum_i\lambda_i\rho_i$ with $\rho_1$ carrying weight $c$ iff
     $\ker(\rho)\subseteq\ker(\rho_1)$ and
     \[
-        c \le \bigl\|\rho^{-1/2}\rho_1\rho^{-1/2}\bigr\|_\infty^{-1},
+        c\bigl\|\rho^{-1/2}\rho_1\rho^{-1/2}\bigr\|_\infty\le1,
     \]
-    where the inverse is taken on the range of $\rho$. This is
-    \cite[Proposition, ``Maximal weight in convex decomposition'']
-    {Wolf2012Quantum}.
+    where the inverse is taken on the range of $\rho$. Wolf's Proposition
+    ``Maximal weight in convex decomposition'' \cite{Wolf2012Quantum}
+    states this with the inverse form $c\le\|\rho^{-1/2}\rho_1
+    \rho^{-1/2}\|_\infty^{-1}$; the two are equivalent here because the
+    kernel inclusion together with $\tr(\rho_1)=1$ (so $\rho_1\ne0$) forces
+    $\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty>0$, so dividing the displayed
+    multiplicative inequality through by that norm is valid.
 \end{theorem}
 
 \begin{proof}\leanok
-    Necessity of the kernel inclusion: if $\rho v=0$ for some vector $v$,
-    every term in $\rho=\sum_i\lambda_i\rho_i$ is positive semidefinite, so
-    each summand's quadratic form at $v$ vanishes; in particular
-    $\lambda_{i_1}\langle v,\rho_1v\rangle=0$, and since $\lambda_{i_1}=c>0$
-    and $\rho_1$ is positive semidefinite, $\rho_1v=0$
-    (\lean{Matrix.ker_subset_of_hasConvexDecompositionWith}).
+    \uses{lem:sub_smul_posSemidef_iff, lem:ker_subset_of_convex_decomposition}
+    Necessity of the kernel inclusion is
+    Lemma~\ref{lem:ker_subset_of_convex_decomposition}.
 
     The existence of a decomposition with weight $c$ on $\rho_1$ is
     equivalent to $\rho-c\rho_1\ge0$: given the kernel inclusion, the
@@ -315,9 +364,8 @@ weight can $\rho_1$ carry in a convex decomposition of $\rho$?
     $c<1$ and $\sigma:=(1-c)^{-1}(\rho-c\rho_1)$ is a density operator with
     $\rho=c\rho_1+(1-c)\sigma$.
 
-    Finally $\rho-c\rho_1\ge0$ rewrites as $1\ge c\,\rho^{-1/2}\rho_1
-    \rho^{-1/2}$, using the kernel inclusion to compress both sides onto
-    the range of $\rho$ and conjugating by $\rho^{-1/2}$ there; by the
-    $C^*$-identity this holds iff $c\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty
-    \le 1$.
+    Finally $\rho-c\rho_1\ge0$ is equivalent to
+    $c\|\rho^{-1/2}\rho_1\rho^{-1/2}\|_\infty\le1$ by
+    Lemma~\ref{lem:sub_smul_posSemidef_iff}, applied with $A=\rho$,
+    $B=\rho_1$ under the kernel inclusion.
 \end{proof}
