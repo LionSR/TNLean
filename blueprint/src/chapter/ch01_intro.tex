@@ -528,3 +528,77 @@ range, or its adjoint's range, is commutative.
     $T^*$ has commutative range, apply
     Lemma~\ref{lem:cp_from_positivity_commutative_domain}.
 \end{proof}
+
+\section{Extending completely positive maps from operator systems}
+
+An \emph{operator system} inside a finite-dimensional $C^*$-algebra is a
+subspace closed under the adjoint and containing the unit. Every positive
+map defined only on such a subspace, with values in a commutative algebra,
+is automatically completely positive by the remark following
+Theorem~\ref{thm:cp_from_positivity_commutative}; extending it to a
+completely positive map on the whole algebra makes that observation useful
+for arbitrary target algebras as well.
+
+\begin{definition}[Operator system]\label{def:operator_system}
+    \lean{Matrix.IsOperatorSystem}
+    \leanok
+    A subspace $S\subseteq\MN{m}$ is an \emph{operator system} if it
+    contains the unit and is closed under the adjoint: $\mathbb 1\in S$ and
+    $X\in S\implies X^\dagger\in S$.
+\end{definition}
+
+\begin{definition}[Complete positivity on an operator system]
+    \label{def:cp_on_operator_system}
+    \lean{Matrix.IsCPOnOperatorSystem}
+    \leanok
+    \uses{def:operator_system}
+    Let $S\subseteq\MN{m}$ be an operator system and $T:S\to\MN{n}$ a linear
+    map. For $k\ge1$, write $T\otimes\mathrm{id}_k$ for the map sending a
+    $k\times k$ block matrix with entries in $S$ to the block matrix
+    obtained by applying $T$ to every entry. Then $T$ is \emph{completely
+    positive on $S$} if $T\otimes\mathrm{id}_k$ sends every positive
+    semidefinite such block matrix to a positive semidefinite matrix, for
+    every $k\ge1$.
+\end{definition}
+
+\begin{theorem}[Extending cp maps from operator systems]
+    \label{thm:extend_cp_operator_system}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem}
+    \leanok
+    \uses{def:operator_system, def:cp_on_operator_system, def:is_kraus_cp}
+    Let $S\subseteq\MN{m}$ be an operator system and $T:S\to\MN{n}$ a
+    completely positive linear map on $S$. Then there is a completely
+    positive map $T':\MN{m}\to\MN{n}$, in rectangular Kraus form, that
+    agrees with $T$ on $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:is_kraus_cp}
+    Fix the maximally entangled vector $\Omega$ of dimension $n$ and define
+    $\tau(A):=\braket{\Omega|(T\otimes\mathrm{id}_n)(A)|\Omega}$ for
+    $A\in S\otimes\MN{n}$. Complete positivity of $T$ at level $n$ gives
+    $\tau(A)\le f(A):=\|A\|_\infty\,\tau(\mathbb 1)$ for every Hermitian
+    $A\in S\otimes\MN{n}$: $\|A\|_\infty\mathbb 1-A$ is positive
+    semidefinite, so its image under $T\otimes\mathrm{id}_n$ is too, and
+    testing against $\Omega$ gives the bound. Since $f$ is sublinear, the
+    Hahn--Banach theorem extends $\tau$, first as a real-linear functional
+    on the Hermitian matrices of $\MN{m}\otimes\MN{n}$ dominated by $f$
+    throughout, and then, decomposing each matrix into its Hermitian and
+    skew-Hermitian parts (both of which stay inside $S\otimes\MN{n}$
+    whenever the original matrix does, since $S$ is closed under the
+    adjoint), to a $\C$-linear functional $\tau'$ agreeing with $\tau$ on
+    all of $S\otimes\MN{n}$ and obeying the same bound on all Hermitian
+    matrices of $\MN{m}\otimes\MN{n}$.
+
+    Applying the bound to $\|A\|_\infty\mathbb 1-A$ for $A$ positive
+    semidefinite shows $\tau'$ is nonnegative on positive semidefinite
+    matrices. The matrix $Y$ representing $\tau'$ through the trace pairing
+    is therefore positive semidefinite, hence a sum of rank-one terms
+    $Y=\sum_k v_kv_k^\dagger$; reshaping each $v_k$ into an operator
+    $K_k:\C^m\to\C^n$ gives a rectangular Kraus family for the map
+    $T'(B)_{ij}:=n\cdot\tau'(B\otimes\ket i\bra j)$, which is exactly
+    $\sum_kK_kBK_k^\dagger$. Wolf's inversion formula
+    $\tau(B\otimes\ket i\bra j)=\tfrac1n\,T(B)_{ij}$ holds already for the
+    original $T$ on $S$, and $\tau'$ agrees with $\tau$ on $S\otimes\MN n$,
+    so $T'$ agrees with $T$ on $S$.
+\end{proof}

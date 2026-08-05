@@ -11,9 +11,11 @@ import TNLean.Channel.TensorMap
 
 This file sets up the definitions needed to state Wolf's proposition
 "Extending cp maps from operator systems"
-(`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 618–628): a
+(`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 614–619): a
 completely positive map defined only on a subspace of a finite-dimensional
-`C^*`-algebra extends to a completely positive map on the whole algebra.
+`C^*`-algebra extends to a completely positive map on the whole algebra. The
+proposition itself is proved in
+`Matrix.exists_cp_extension_of_operatorSystem` (`TNLean/Channel/OperatorSystemExtension.lean`).
 
 ## Design notes
 
@@ -24,7 +26,7 @@ full matrix algebra `M_n(ℂ)` directly is without loss of generality in finite
 dimension and matches the proof technique itself, not merely an ambient
 convenience.
 
-An **operator system** `S ⊆ M_m(ℂ)` (line 618) is a subspace closed under the
+An **operator system** `S ⊆ M_m(ℂ)` (line 614) is a subspace closed under the
 adjoint and containing the unit. We represent it as a `Submodule ℂ` together
 with the two closure conditions, rather than as a bundled structure, to reuse
 the existing `Submodule` API (`comap`, membership lemmas) without duplicating
@@ -62,7 +64,7 @@ variable {m n : ℕ}
 /-! ### Operator systems -/
 
 /-- **Operator system** (Wolf Ch. 1,
-`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, line 618): a
+`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, line 614): a
 subspace `S` of `M_m(ℂ)` that is closed under the adjoint and contains the
 unit element. -/
 def IsOperatorSystem (S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)) : Prop :=

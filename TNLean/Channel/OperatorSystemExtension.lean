@@ -13,7 +13,7 @@ import Mathlib.Analysis.Convex.Cone.Extension
 # Extending completely positive maps from operator systems
 
 This file proves Wolf's proposition "Extending cp maps from operator systems"
-(`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 622–640): a
+(`Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 616–626): a
 completely positive linear map `T : S → M_n(ℂ)` defined on an operator system
 `S ⊆ M_m(ℂ)` extends to a completely positive map `T' : M_m(ℂ) → M_n(ℂ)`
 agreeing with `T` on `S`.
@@ -947,7 +947,7 @@ theorem tau_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
 
 /-! ### The extension theorem -/
 
-/-- **Extending cp maps from operator systems** (Wolf Ch. 1, lines 622–640): a
+/-- **Extending cp maps from operator systems** (Wolf Ch. 1, lines 616–626): a
 completely positive linear map `T : S → M_n(ℂ)` defined on an operator system
 `S ⊆ M_m(ℂ)` extends to a completely positive map `T' : M_m(ℂ) → M_n(ℂ)`
 agreeing with `T` on `S`.
