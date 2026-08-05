@@ -19,7 +19,8 @@
     % frame-cell atom, including the five legless MPO stations; void=sealed
     % is the kernel's per-atom exclusion, so only the central tensor takes
     % the policy leg while the sealed stations keep their typed virtual
-    % ports and their wiring.
+    % ports and their wiring.  The source draws one upward leg on this side,
+    % and the policy is its sole author: no wire spells that leg again.
     \tn[at=(2,2), name=i, role=marked]{}
     \tnmark[form=label, label pos=nw]{i}{$i$}
     \tn[skin=box, at=(1,3), name=N, void=sealed,
@@ -37,7 +38,7 @@
     % explicit port bonds make the contraction part of the model rather than
     % an accidental overlap in the projection.
     \tnwire{W.w}{open w} \tnwire{W.e}{i.w} \tnwire{i.e}{E.w} \tnwire{E.e}{open e}
-    \tnwire{i.90}{open n} \tnwire{open sw}{S.225} \tnwire{S.45}{i.225}
+    \tnwire{open sw}{S.225} \tnwire{S.45}{i.225}
     \tnwire{i.45}{N.225} \tnwire{N.45}{open ne}
     % Each red bond terminates on a named tensor face.  Thus all five MPO
     % stations, including marked j, are contractions rather than waypoints.

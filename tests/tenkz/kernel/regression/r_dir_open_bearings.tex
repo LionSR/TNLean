@@ -1,0 +1,104 @@
+% Regression: a direction mark inks on every bearing.  An open leg springs
+% from the centre of the glyph it leaves and the glyph's ink is laid over
+% that centre afterwards, so a station measured along the whole leg falls
+% under a silhouette that is wider than it is tall: the east bearing lost
+% the mark the south bearing kept.  The station rides the leg's daylight
+% instead -- the stretch between the silhouette and the free tip -- and the
+% barb's body stays inside that stretch whichever end of the leg is open.
+% The box skin is the wide silhouette that made the defect visible.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_dir_open_int
+\fp_new:N \l__tenkz_test_barb_fp
+\fp_new:N \l__tenkz_test_back_fp
+\fp_new:N \l__tenkz_test_tip_fp
+\tl_new:N \l__tenkz_test_open_tl
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \exp_args:NV \__tenkz_model_get:nnN
+      \l__tenkz_kernel_r_wire_record_tl {dir} \l_tmpa_tl
+    \quark_if_no_value:NF \l_tmpa_tl
+      {
+        \tl_if_in:NnF \l__tenkz_kernel_r_wire_ink_tl {dir~marks}
+          {\errmessage{a~directed~open~leg~lost~its~barb}}
+        \tl_if_empty:NT \l__tenkz_kernel_r_dir_station_tl
+          {\errmessage{a~directed~open~leg~lost~its~daylight~station}}
+        % the barb occupies one barb length behind the station
+        \fp_set:Nn \l__tenkz_test_barb_fp
+          {
+            \dim_to_fp:n { \__tenkz_dim:n {barblen} }
+            / \dim_to_fp:n { \use:c {tenkz@pitch} }
+          }
+        \fp_set:Nn \l__tenkz_test_tip_fp
+          {
+            \l__tenkz_kernel_r_dir_station_fp
+            * \__tenkz_metric_ratio:n {stub}
+          }
+        \fp_set:Nn \l__tenkz_test_back_fp
+          { \l__tenkz_test_tip_fp - \l__tenkz_test_barb_fp }
+        \exp_args:NV \__tenkz_model_get:nnN
+          \l__tenkz_kernel_r_wire_record_tl {to-open} \l__tenkz_test_open_tl
+        \quark_if_no_value:NTF \l__tenkz_test_open_tl
+          {
+            % the free tip opens the leg: the daylight runs from the tip to
+            % the silhouette the leg arrives at
+            \fp_compare:nNnF { \l__tenkz_test_back_fp } > { 0 }
+              {\errmessage{the~barb~starts~before~the~free~tip}}
+            \fp_compare:nNnF
+              { \l__tenkz_test_tip_fp }
+              <
+              {
+                \__tenkz_metric_ratio:n {stub}
+                - \l__tenkz_kernel_r_dir_reach_fp
+              }
+              {\errmessage{the~barb~ends~inside~the~arrival~silhouette}}
+          }
+          {
+            % the leg leaves the silhouette: the daylight runs from the
+            % silhouette to the free tip
+            \fp_compare:nNnF
+              { \l__tenkz_test_back_fp } > { \l__tenkz_kernel_r_dir_reach_fp }
+              {\errmessage{the~barb~starts~inside~the~departure~silhouette}}
+            \fp_compare:nNnF
+              { \l__tenkz_test_tip_fp } < { \__tenkz_metric_ratio:n {stub} }
+              {\errmessage{the~barb~ends~past~the~free~tip}}
+          }
+        \int_gincr:N \g__tenkz_test_dir_open_int
+      }
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_dir_open_int } = {8}
+      {\errmessage{directed~open~leg~count~changed}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% Leaving the glyph on all four cardinals.
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=X, skin=box,
+    ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{X}
+  \tnwire[dir=to, name=east]{X.0}{open e}
+  \tnwire[dir=to, name=north]{X.90}{open n}
+  \tnwire[dir=to, name=west]{X.180}{open w}
+  \tnwire[dir=to, name=south]{X.270}{open s}
+\end{tenkz}
+% Arriving at the glyph on all four cardinals: the barb flips, and the
+% daylight is counted from the free tip the leg starts at.
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,2), name=Y, skin=box,
+    ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{Y}
+  \tnwire[dir=to, name=ineast]{open e}{Y.0}
+  \tnwire[dir=to, name=innorth]{open n}{Y.90}
+  \tnwire[dir=to, name=inwest]{open w}{Y.180}
+  \tnwire[dir=to, name=insouth]{open s}{Y.270}
+\end{tenkz}
+\end{document}

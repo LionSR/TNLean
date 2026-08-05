@@ -326,9 +326,15 @@
 % rmp-workbench-iii-mpo-injective-white.
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{crossing}{enum(over|under|alternate|alternate=over|alternate=under)}{empty}{kernel}{Default crossing order at every crossing the string makes.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{dir}{direction-policy}{none}{kernel}{Direction mark of a directed index.}
+% Extension-gate: #5543 -- the sources draw two non-solid rails and no third:
+% a dashed one for an index drawn but not contracted, a dotted one for a
+% lattice lying under the sheet being drawn.  The dash lengths are named
+% metrics, so a client never spells a length of its own.
+% Consumer: rmp-app-toric-dual.
+\__tenkz_language_registry_key:nnnnnn {kernel-wire}{stroke}{enum(solid|dashed|dotted)}{solid}{kernel}{Declared stroke pattern of the rail.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{name}{identifier}{generated}{kernel}{Addressable name.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{closed}{flag}{false}{kernel}{A smooth closed cycle; takes no ends.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(brace-above|brace-below|enclosure|cut|band|label|prose)}{label}{kernel}{Mark form.}
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{form}{enum(bracket|brace-above|brace-below|enclosure|cut|band|label|prose)}{label}{kernel}{Mark form.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{slot}{semantic-slot}{selected}{kernel}{Semantic tint.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{species}{declared-name}{empty}{kernel}{Semantic species.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{inset}{number}{0}{kernel}{Nested-contour step.}

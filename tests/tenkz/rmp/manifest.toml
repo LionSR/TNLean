@@ -1527,7 +1527,7 @@ section = "section-iv-v-app"
 order = 91
 case = "tests/tenkz/rmp/section-iv-v-app/cases/rmp-app-toric-dual.tex"
 formula = "physical spins = differences of adjacent plaquette colours"
-ink = "Kernel plane frame; the blocked sheet is the house enclosure, the four plaquette-colour legs leave the retained mid-side stations, and the two interior diagonals recall the original lattice."
+ink = "Kernel plane frame; the blocked sheet is the house enclosure, the four plaquette-colour legs leave the retained mid-side stations, and the two interior diagonals recall the original lattice on a dashed rail."
 boundary = "The four retained mid-side sites expose the plaquette-colour legs."
 source = "paper TN-Review-main.tex line 2462; paper-context-only; no author drawing source"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
@@ -1872,7 +1872,7 @@ order = 20
 case = "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-diagram-four.tex"
 formula = "The closed four-leg tensor equals Delta^3 of the local map."
 ink = "Kernel flat frame; a four-tensor ring with a lambda insertion and a junction-spelled periodic local map."
-boundary = "The four-arm side is closed; the local-map side is virtual-scalar."
+boundary = "Each side closes its virtual loop and opens the physical wire that pierces every tensor; the coproduct carries one site to four."
 source = "author source ImagesReview Section III/ImagesReview Section III.tex lines 198-210; archival output Dia4.pdf"
 capabilities = ["kernel", "four-arm-closure", "coproduct"]
 paper_context_only = false
