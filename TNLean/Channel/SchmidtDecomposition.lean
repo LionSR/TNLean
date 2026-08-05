@@ -61,7 +61,7 @@ variable {dA dB : ℕ}
 
 /-- The columns of the matrix `fun a j ↦ g (φ j) a` are orthonormal when `g` is
 an orthonormal basis and `φ` is injective, so the matrix is an isometry. -/
-theorem conjTranspose_mul_eq_one_of_orthonormal {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem conjTranspose_mul_eq_one_of_orthonormal {ι : Type*} [DecidableEq ι]
     {d : ℕ} {φ : ι → Fin d} (hφ : Function.Injective φ)
     (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
     (Matrix.of fun a j ↦ g (φ j) a)ᴴ * (Matrix.of fun a j ↦ g (φ j) a) = 1 := by
@@ -77,7 +77,7 @@ theorem conjTranspose_mul_eq_one_of_orthonormal {ι : Type*} [Fintype ι] [Decid
 
 /-- The transpose of a matrix with orthonormal columns is an isometry on the
 left: `Mᵀ * Mᵀᴴ = 1`. -/
-theorem transpose_mul_conjTranspose_eq_one_of_orthonormal {ι : Type*} [Fintype ι]
+theorem transpose_mul_conjTranspose_eq_one_of_orthonormal {ι : Type*}
     [DecidableEq ι] {d : ℕ} {φ : ι → Fin d} (hφ : Function.Injective φ)
     (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
     (Matrix.of fun a j ↦ g (φ j) a)ᵀ * ((Matrix.of fun a j ↦ g (φ j) a)ᵀ)ᴴ = 1 := by
@@ -128,6 +128,7 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
         hM.isHermitian.mulVec_eigenvectorBasis k, RCLike.real_smul_eq_coe_smul (K := ℂ),
         dotProduct_smul, smul_eq_mul, EuclideanSpace.inner_eq_star_dotProduct,
         dotProduct_comm]
+      rfl
     rw [hstep, orthonormal_iff_ite.mp e.orthonormal j k]
     by_cases hjk : j = k <;> simp [hjk]
   -- pad the data to `Fin dB`; the zero-padded slots are never used
@@ -177,7 +178,6 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
       have h2 : (Real.sqrt (lam ⟨k.val, hl⟩) : ℂ) ^ 2 = (lam ⟨k.val, hl⟩ : ℂ) := by
         rw [← Complex.ofReal_pow, Real.sq_sqrt (hlam0 _)]
       rw [h2]
-      exact div_self (Complex.ofReal_ne_zero.mpr hlaml0)
     · have hlk : (⟨l.val, hl⟩ : Fin dA) ≠ ⟨k.val, hk⟩ := by
         intro hll
         exact hkl (Fin.ext (Fin.ext_iff.mp hll).symm)
@@ -215,7 +215,8 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
       rw [hf (j.castLE h) hmem]
       simp only [hv]
       rw [hlamP_cast j, hwP_cast j, WithLp.ofLp_toLp, Pi.star_apply, Pi.smul_apply,
-        smul_eq_mul, star_mul, star_inv₀, hsr, mul_inv_cancel_left₀ hsqrtne]
+        smul_eq_mul, star_mul, star_inv₀, hsr, mul_comm (star ((w j).ofLp b)),
+        mul_inv_cancel_left₀ hsqrtne]
   -- assemble the entrywise decomposition
   have hpsi : ∀ a b, ψ (a, b) =
       ∑ j : Fin dA, (Real.sqrt (lam j) : ℂ) * e j a * (f (j.castLE h)).ofLp b := by
@@ -250,7 +251,6 @@ theorem exists_schmidtDecomposition_of_le (h : dA ≤ dB) (ψ : Fin dA × Fin dB
     rintro ⟨a, b⟩ _
     rw [hC, schmidtCoeffMatrix_apply, mul_comm, Complex.star_def,
       ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq, ← Complex.ofReal_pow]
-    rfl
   have hsum : ∑ j : Fin dA, lam j = ∑ p : Fin dA × Fin dB, ‖ψ p‖ ^ 2 := by
     have h3 : (∑ j : Fin dA, (lam j : ℂ)) = ((∑ p : Fin dA × Fin dB, ‖ψ p‖ ^ 2 : ℝ) : ℂ) :=
       htrace.symm.trans htrace2
@@ -352,6 +352,7 @@ theorem IsSchmidtDecomposition.schmidtRank_eq_card_ne_zero {dA dB : ℕ}
       Matrix.of_apply, mul_ite, mul_zero, Finset.sum_ite_eq']
     apply Finset.sum_congr rfl
     intro j _
+    rw [if_pos (Finset.mem_univ j)]
     ring
   have hE1 : Eᴴ * E = 1 :=
     conjTranspose_mul_eq_one_of_orthonormal (Fin.castLE_injective _) e
@@ -365,7 +366,7 @@ theorem IsSchmidtDecomposition.schmidtRank_eq_card_ne_zero {dA dB : ℕ}
     rw [Matrix.diagonal_conjTranspose, Matrix.diagonal_mul_diagonal]
     congr 1
     funext j
-    show σ j * star (σ j) = (lam j : ℂ)
+    change σ j * star (σ j) = (lam j : ℂ)
     rw [hsr j, hσ, ← Complex.ofReal_mul, Real.mul_self_sqrt (h0 j)]
   have hCC : C * Cᴴ = E * Matrix.diagonal (fun j ↦ (lam j : ℂ)) * Eᴴ := by
     calc C * Cᴴ = (E * Matrix.diagonal σ * Fᵀ) * (Fᵀᴴ * ((Matrix.diagonal σ)ᴴ * Eᴴ)) := by
