@@ -44,7 +44,7 @@ proved:
 * the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`
   (`mpvOverlap_toMPSTensor_self_eq_ofReal_trace_activeSectorTraceSqMatrix_pow`).
 
-The overlap formula assembles the doubled-index self-overlap identity
+The overlap formula combines the doubled-index self-overlap identity
 (`Purity`) with the physical-sector product realization
 (`PhysicalSectorProductRealization`) via a physical basis change with
 `Uᴴ * U = 1` (`trace_mpo_conjugatePhysical_mul_self`), the cyclic trace factorization
