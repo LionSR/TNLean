@@ -1,15 +1,27 @@
 % Target: rmp-iv-intersection-rhs-three
 % Formula: Growing B back gives boundary tensor R, B, one exposed site, and C.
-% Ink: Canonical public tenkz: B and C flank the two exposed interior virtual
-%   indices above R.
+% Ink: Kernel flat frame: B and C close into the wide pill R through both side
+%   cups and flank the two upturned interior virtual ends.
 % Boundary: Both outer ends close through R; two virtual and three physical legs open.
 % Source: paper TN-Review-main.tex line 2064; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 112-121 (Rtensor3)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=cup,
-                tensor style=box]
-    & \tn{B} & \tnskip & \tn{C}\\
-    \tn[pill, wide=4, up at={1}]{R} & & &
+  \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none, west=cup, east=cup]
+    % The invisible junctions carry the word to both cups and turn the two cut
+    % interior ends upward, as the source draws them.
+    \tn[at=(1,1), skin=none, name=jw, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(1,2), skin=box, name=b, ports={0:virtual, 180:virtual, 90:physical}]{B}
+    \tn[at=(1,3), skin=none, name=v1, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(1,4), skin=none, name=v2, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(1,5), skin=box, name=c, ports={0:virtual, 180:virtual, 90:physical}]{C}
+    \tn[at=(1,6), skin=none, name=je, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=pill, wide=6, name=r,
+      ports={0:virtual, 180:virtual, 90@1:physical}]{R}
+    \tnwire{jw.0}{b.180}
+    \tnwire{b.0}{v1.180}
+    \tnwire{v2.0}{c.180}
+    \tnwire{c.0}{je.180}
   \end{tenkz}
 \]

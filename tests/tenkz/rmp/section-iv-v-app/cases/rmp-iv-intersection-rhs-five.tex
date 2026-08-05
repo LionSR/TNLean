@@ -1,13 +1,17 @@
 % Target: rmp-iv-intersection-rhs-five
 % Formula: The right boundary condition reduces to X attached to the tensor C.
-% Ink: Canonical public tenkz: C closes into X on the east, with one open virtual
-%   leg to the west.
+% Ink: Kernel flat frame: C closes into the wide pill X through the east cup; X
+%   keeps its far-west physical leg and C's cut end stays sideways, as the
+%   source draws them.
 % Boundary: C and X keep upward physical legs; C's west virtual leg stays open.
 % Source: paper TN-Review-main.tex line 2074; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 148-155 (Rtensor5)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket}, west=open, east=none, tensor style=box]
-    \tn{C} & \tn[pill, wide=2, up at={2}]{X} &
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, east=cup]
+    \tn[at=(1,3), skin=box, name=c, ports={0:virtual, 180:virtual, 90:physical}]{C}
+    \tn[at=(2,1), skin=pill, wide=3, name=x,
+      ports={0:virtual, 90@1:physical}]{X}
   \end{tenkz}
 \]

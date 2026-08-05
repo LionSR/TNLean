@@ -1,15 +1,21 @@
 % Target: rmp-iv-intersection-lhs-one
 % Formula: sum A^{i_1} B^{i_2} L(i_3) |i_1 i_2 i_3>
-% Ink: Canonical public tenkz: A--B and one uncovered wire close through the
-%   boundary tensor L.
+% Ink: Kernel flat frame: A--B and one uncovered wire close through the wide pill
+%   L on both side cups; L keeps its lobe leg at the third station.
 % Boundary: Both virtual ends close into L; A, B, and L retain physical legs.
 % Source: paper TN-Review-main.tex line 2053; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 79-86 (Ltensor)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=cup,
-                tensor style=box]
-    \tn{A} & \tn{B} & \tnghost{}\\
-    \tn[pill, wide=3, up at={3}]{L} & &
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, west=cup, east=cup]
+    \tn[at=(1,1), skin=box, name=a, ports={0:virtual, 180:virtual, 90:physical}]{A}
+    \tn[at=(1,2), skin=box, name=b, ports={0:virtual, 180:virtual, 90:physical}]{B}
+    % The invisible junction carries the uncovered stretch to the east cup.
+    \tn[at=(1,3), skin=none, name=j, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=pill, wide=3, name=l,
+      ports={0:virtual, 180:virtual, 90@3:physical}]{L}
+    \tnwire{a.0}{b.180}
+    \tnwire{b.0}{j.180}
   \end{tenkz}
 \]
