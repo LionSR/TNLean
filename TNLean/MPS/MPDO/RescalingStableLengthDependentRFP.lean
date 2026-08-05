@@ -1073,4 +1073,33 @@ theorem refineMap_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) :
       simp only [refineKraus, Matrix.of_apply]
       rw [if_neg (fun hc => h2 hc.1), star_zero]
 
+/-! ### The coarse-graining map `S`: two-site to one-site physical operators -/
+
+/-- The common Kraus amplitude of `S`'s gated component: `1 / √2`. -/
+noncomputable def coarseAmp : ℝ := 1 / Real.sqrt 2
+
+lemma coarseAmp_sq : coarseAmp ^ 2 = 1 / 2 := by
+  rw [coarseAmp, div_pow, Real.sq_sqrt (by norm_num : (0:ℝ) ≤ 2), one_pow]
+
+/-- The `s`-th gated Kraus operator of the coarse-graining map `S`. -/
+noncomputable def coarseKrausGated (s : Fin 2) : Matrix (Fin 4) (Fin 4 × Fin 4) ℂ :=
+  Matrix.of fun k pq =>
+    if gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k then (coarseAmp : ℂ) * eigVecs s (bit2 pq.1) else 0
+
+/-- The `t`-th ungated Kraus operator of the coarse-graining map `S`: a
+deterministic assignment of the (exactly one) ungated pair with `combine`
+value `k` and first-site second bit `t`. -/
+noncomputable def coarseKrausUngated (t : Fin 2) : Matrix (Fin 4) (Fin 4 × Fin 4) ℂ :=
+  Matrix.of fun k pq =>
+    if ¬ gate pq.1 pq.2 ∧ combine pq.1 pq.2 = k ∧ bit2 pq.1 = t then 1 else 0
+
+/-- The coarse-graining map `S`, with four Kraus operators: two gated
+(sharing the Walsh–Hadamard structure with `T`) and two ungated (a
+deterministic assignment filling out the trace-preserving resolution on
+pairs that fail the bond-matching condition). -/
+noncomputable def coarseMap :
+    Matrix (Fin 4 × Fin 4) (Fin 4 × Fin 4) ℂ →ₗ[ℂ] Matrix (Fin 4) (Fin 4) ℂ :=
+  Matrix.rectangularKrausMap
+    (Sum.elim coarseKrausGated coarseKrausUngated : Fin 2 ⊕ Fin 2 → Matrix (Fin 4) (Fin 4 × Fin 4) ℂ)
+
 end MPOTensor.RescalingStableLengthDependentRFP
