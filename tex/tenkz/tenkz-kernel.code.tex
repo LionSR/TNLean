@@ -3005,21 +3005,32 @@
 % fixed point a side closes through is one matrix for the whole side.
 \tl_new:N \l__tenkz_kernel_cupbead_tl
 \tl_new:N \l__tenkz_kernel_cupnode_tl
+\tl_new:N \l__tenkz_kernel_cupname_tl
+\tl_new:N \l__tenkz_kernel_cupother_tl
+\tl_new:N \l__tenkz_kernel_cuppol_tl
+% The documented spelling writes the matrix with its own math delimiters,
+% while the atom slot opens math around a label of its own accord.  Peel the
+% author's pair off, so the matrix reaches the label exactly as a `\tn` body
+% does and is typeset in the same math style.  Keeping the delimiters needs a
+% box, and a box holds text style inside a script-style label -- the label
+% then draws wider than the expansion it stands for.
+\cs_new_protected:Npn \__tenkz_kernel_cup_unmath:w $#1$ \q_stop
+  { \tl_set:Nn \l__tenkz_kernel_cupbead_tl {#1} }
+\cs_new_protected:Npn \__tenkz_kernel_cup_unmath:
+  {
+    \exp_args:NV \tl_if_head_eq_catcode:nNT \l__tenkz_kernel_cupbead_tl $
+      {
+        \exp_last_unbraced:NV \__tenkz_kernel_cup_unmath:w
+          \l__tenkz_kernel_cupbead_tl \q_stop
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_cup_bead:nn #1#2
   {
     \prop_get:NnN \l__tenkz_kernel_policy_prop {cup-#1}
       \l__tenkz_kernel_cupbead_tl
     \quark_if_no_value:NF \l__tenkz_kernel_cupbead_tl
       {
-        % A positional label argument is mathematics and the atom slot opens
-        % math around it; a KEY value is typeset as the author wrote it, and
-        % the documented spelling of this one carries its own delimiters.
-        % The box keeps the author's copy inside the slot's math.
-        \tl_set:Ne \l__tenkz_kernel_cupbead_tl
-          {
-            \exp_not:N \mbox
-              { \exp_not:V \l__tenkz_kernel_cupbead_tl }
-          }
+        \__tenkz_kernel_cup_unmath:
         \__tenkz_model_record_atom:n { kind = tn , skin = ring }
         \__tenkz_model_complete_raw:nnV { \l__tenkz_model_last_tl } {label}
           \l__tenkz_kernel_cupbead_tl
@@ -3034,72 +3045,78 @@
   }
 \cs_generate_variant:Nn \__tenkz_kernel_cup_bead:nn { nV }
 
+% The name a bend takes: `cup-<i>-<i+1>` for a row pair, `cup-col-<i>-<i+1>`
+% for a column pair, qualified by the side it leaves from when the opposite
+% side bends too, so two arcs over the same pair stay separately addressable.
+\cs_new_protected:Npn \__tenkz_kernel_cup_name:nnnN #1#2#3#4
+  {
+    \str_case:nn {#1}
+      {
+        {west}  { \tl_set:Nn \l__tenkz_kernel_cupother_tl {east}  }
+        {east}  { \tl_set:Nn \l__tenkz_kernel_cupother_tl {west}  }
+        {north} { \tl_set:Nn \l__tenkz_kernel_cupother_tl {south} }
+        {south} { \tl_set:Nn \l__tenkz_kernel_cupother_tl {north} }
+      }
+    \prop_get:NVN \l__tenkz_kernel_policy_prop \l__tenkz_kernel_cupother_tl
+      \l__tenkz_kernel_cuppol_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_cuppol_tl {cup}
+      { \tl_set:Ne #4 { cup-#1-#2#3-\int_eval:n {#3 + 1} } }
+      { \tl_set:Ne #4 { cup-#2#3-\int_eval:n {#3 + 1} } }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_row_cups:n #1
   {
     \int_step_inline:nnnn {1}{2}{\__tenkz_kernel_rows: - 1}
       {
-        \tl_set:Ne \l_tmpa_tl
-          {cup-##1-\int_eval:n {##1 + 1}}
-        \str_case:nn {#1}
-          {
-            {west}
-              {
-                \prop_get:NnN \l__tenkz_kernel_policy_prop {east} \l_tmpb_tl
-                \str_if_eq:VnT \l_tmpb_tl {cup}
-                  {
-                    \tl_set:Ne \l_tmpa_tl
-                      {cup-west-##1-\int_eval:n {##1 + 1}}
-                  }
-              }
-            {east}
-              {
-                \prop_get:NnN \l__tenkz_kernel_policy_prop {west} \l_tmpb_tl
-                \str_if_eq:VnT \l_tmpb_tl {cup}
-                  {
-                    \tl_set:Ne \l_tmpa_tl
-                      {cup-east-##1-\int_eval:n {##1 + 1}}
-                  }
-              }
-          }
+        \__tenkz_kernel_cup_name:nnnN {#1}{}{##1} \l__tenkz_kernel_cupname_tl
         \__tenkz_kernel_closure_wire:nnnn
           {cup}{#1}
           {top = ##1 , bottom = \int_eval:n {##1 + 1}}
-          {\tl_use:N \l_tmpa_tl}
-        \__tenkz_kernel_cup_bead:nV {#1} \l_tmpa_tl
+          {\tl_use:N \l__tenkz_kernel_cupname_tl}
       }
   }
 \cs_new_protected:Npn \__tenkz_kernel_col_cups:n #1
   {
     \int_step_inline:nnnn {1}{2}{\__tenkz_kernel_cols: - 1}
       {
-        \tl_set:Ne \l_tmpa_tl
-          {cup-col-##1-\int_eval:n {##1 + 1}}
-        \str_case:nn {#1}
-          {
-            {north}
-              {
-                \prop_get:NnN \l__tenkz_kernel_policy_prop {south} \l_tmpb_tl
-                \str_if_eq:VnT \l_tmpb_tl {cup}
-                  {
-                    \tl_set:Ne \l_tmpa_tl
-                      {cup-north-col-##1-\int_eval:n {##1 + 1}}
-                  }
-              }
-            {south}
-              {
-                \prop_get:NnN \l__tenkz_kernel_policy_prop {north} \l_tmpb_tl
-                \str_if_eq:VnT \l_tmpb_tl {cup}
-                  {
-                    \tl_set:Ne \l_tmpa_tl
-                      {cup-south-col-##1-\int_eval:n {##1 + 1}}
-                  }
-              }
-          }
+        \__tenkz_kernel_cup_name:nnnN {#1}{col-}{##1} \l__tenkz_kernel_cupname_tl
         \__tenkz_kernel_closure_wire:nnnn
           {cup}{#1}
           {left = ##1 , right = \int_eval:n {##1 + 1}}
-          {\tl_use:N \l_tmpa_tl}
-        \__tenkz_kernel_cup_bead:nV {#1} \l_tmpa_tl
+          {\tl_use:N \l__tenkz_kernel_cupname_tl}
+      }
+  }
+% A labelled side's bead is the body atom of the documented expansion, so it
+% is minted where an author would have written it: after the body, before the
+% derived wires.  Minting it beside its bend instead would number it after
+% the grid bonds, and the sugar would record a different stream from the
+% spelling it stands for.
+\cs_new_protected:Npn \__tenkz_kernel_side_cup_beads:nnn #1#2#3
+  {
+    \int_step_inline:nnnn {1}{2}{#3 - 1}
+      {
+        \__tenkz_kernel_cup_name:nnnN {#1}{#2}{##1} \l__tenkz_kernel_cupname_tl
+        \__tenkz_kernel_cup_bead:nV {#1} \l__tenkz_kernel_cupname_tl
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_cup_beads:
+  {
+    \clist_map_inline:nn {west,east}
+      {
+        \prop_get:NnN \l__tenkz_kernel_policy_prop {##1} \l_tmpa_tl
+        \str_if_eq:VnT \l_tmpa_tl {cup}
+          {
+            \__tenkz_kernel_side_cup_beads:nnn {##1}{}
+              { \__tenkz_kernel_rows: }
+          }
+      }
+    \clist_map_inline:nn {north,south}
+      {
+        \prop_get:NnN \l__tenkz_kernel_policy_prop {##1} \l_tmpa_tl
+        \str_if_eq:VnT \l_tmpa_tl {cup}
+          {
+            \__tenkz_kernel_side_cup_beads:nnn {##1}{col-}
+              { \__tenkz_kernel_cols: }
+          }
       }
   }
 
@@ -15212,6 +15229,7 @@
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
     \__tenkz_kernel_basis_policy_validate:
+    \__tenkz_kernel_cup_beads:
     \__tenkz_kernel_populate:
     \__tenkz_kernel_skin_pairings:
     \__tenkz_kernel_prepare_cell_policies:
