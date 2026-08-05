@@ -81,16 +81,8 @@ theorem transpose_mul_conjTranspose_eq_one_of_orthonormal {ι : Type*}
     [DecidableEq ι] {d : ℕ} {φ : ι → Fin d} (hφ : Function.Injective φ)
     (g : OrthonormalBasis (Fin d) ℂ (EuclideanSpace ℂ (Fin d))) :
     (Matrix.of fun a j ↦ g (φ j) a)ᵀ * ((Matrix.of fun a j ↦ g (φ j) a)ᵀ)ᴴ = 1 := by
-  have hA := conjTranspose_mul_eq_one_of_orthonormal hφ g
-  have h2 : ((Matrix.of fun a j ↦ g (φ j) a)ᴴ * (Matrix.of fun a j ↦ g (φ j) a))ᵀ = 1 := by
-    rw [hA]
-    exact Matrix.transpose_one
-  rw [Matrix.transpose_mul] at h2
-  have hconj : ((Matrix.of fun a j ↦ g (φ j) a)ᴴ)ᵀ =
-      ((Matrix.of fun a j ↦ g (φ j) a)ᵀ)ᴴ := by
-    ext i j
-    simp [Matrix.conjTranspose_apply, Matrix.transpose_apply]
-  rwa [hconj] at h2
+  simpa [Matrix.conjTranspose_transpose_eq_transpose_conjTranspose, Matrix.transpose_mul]
+    using congrArg Matrix.transpose (conjTranspose_mul_eq_one_of_orthonormal hφ g)
 
 /-- **Schmidt decomposition when the left factor is the smaller one.**
 For `dA ≤ dB`, every `ψ : Fin dA × Fin dB → ℂ` decomposes as
