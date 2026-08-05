@@ -78,6 +78,8 @@ theorem factorization_of_range_mulVecLin_le
       simpa using (Matrix.mulVec_mulVec (Pi.single j 1) B C)
     _ = (B * C).col j := by exact Matrix.mulVec_single_one (B * C) j
 
+/-- Pointwise form of the range-inclusion premise: if every vector `A *ᵥ v`
+lies in the range of `B`, then `A = B * C` for some matrix `C`. -/
 theorem factorization_of_forall_mulVec_mem_range
     {A B : Mat} (hAB : ∀ v : Fin D → ℂ, A.mulVec v ∈ B.mulVecLin.range) :
     ∃ C : Mat, A = B * C := by
@@ -97,6 +99,8 @@ throughout the Douglas development for the support-inverse `(B Bᴴ)⁻¹_supp`)
 abbrev posSemidefBB (B : Mat) : (B * Bᴴ).PosSemidef :=
   Matrix.posSemidef_self_mul_conjTranspose B
 
+/-- The pseudoinverse is a right inverse on the support: `B * B⁺` equals the
+support projection of `B * Bᴴ`. -/
 theorem mul_pinv_eq_supportProj (B : Mat) :
     B * pinv B = (posSemidefBB B).supportProj := by
   unfold pinv
@@ -107,6 +111,9 @@ theorem mul_pinv_eq_supportProj (B : Mat) :
     _ = (posSemidefBB B).isHermitian.supportProj := h
     _ = (posSemidefBB B).supportProj := rfl
 
+/-- Any factorization `A = B * C` yields quadratic domination with constant
+`‖C‖²`: `A * Aᴴ ≤ ‖C‖² • (B * Bᴴ)`. This is the domination bound of Douglas'
+theorem, witnessed by the squared norm of the factor. -/
 theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
     A * Aᴴ ≤ (‖C‖ ^ 2 : ℝ) • (B * Bᴴ) := by
   rw [hA]
@@ -170,10 +177,6 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
           simp [smul_mulVec]
         _ = ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) - star z ⬝ᵥ z := by rw [h_BBstar]
     rw [h_val]
-    have h_sq_re : ((‖C‖ : ℂ) ^ 2).re = ‖C‖ ^ 2 := by
-      simp [sq]
-    have h_sq_im : ((‖C‖ : ℂ) ^ 2).im = 0 := by
-      simp [sq]
     have h_smul_re : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)).re =
         (‖C‖ ^ 2) * (star y ⬝ᵥ y).re := by
       have h_eq : ((‖C‖ ^ 2 : ℝ) • (star y ⬝ᵥ y)) =
@@ -204,6 +207,8 @@ theorem le_norm_sq_mul_of_factorization (A B C : Mat) (hA : A = B * C) :
     · rw [h_im]
   exact Matrix.PosSemidef.of_dotProduct_mulVec_nonneg h_herm h_nonneg
 
+/-- Quadratic domination `A * Aᴴ ≤ μ • (B * Bᴴ)` forces the columns of `A`
+into the support of `B * Bᴴ`: the support projection of `B * Bᴴ` fixes `A`. -/
 theorem supportProj_mul_eq_of_conjTranspose_le (A B : Mat) (μ : ℝ)
     (hle : A * Aᴴ ≤ μ • (B * Bᴴ)) :
     (posSemidefBB B).supportProj * A = A := by
@@ -284,6 +289,8 @@ theorem douglas_tfae (A B : Mat) : List.TFAE [
     refine ⟨C, hBC⟩
   tfae_finish
 
+/-- Explicit pseudoinverse witness for the factorization direction of Douglas'
+theorem: if `ran A ⊆ ran B`, then `A = B * (B⁺ * A)`. -/
 theorem factorization_pinv (A B : Mat) (hAB : A.mulVecLin.range ≤ B.mulVecLin.range) :
     B * (pinv B * A) = A := by
   have hSPA : (posSemidefBB B).supportProj * A = A := by
@@ -319,6 +326,8 @@ theorem pinv_mul_B_herm (B : Mat) : (pinv B * B)ᴴ = pinv B * B := by
 
 /-! ### Projection contraction -/
 
+/-- `B⁺ * B` is an orthogonal projection (idempotent and Hermitian), hence a
+contraction: `‖B⁺ * B‖ ≤ 1`. -/
 theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
   let P := pinv B * B
   have hP_idem : P * P = P := pinv_mul_B_idem B
@@ -389,6 +398,8 @@ theorem norm_pinv_mul_B_le_one (B : Mat) : ‖pinv B * B‖ ≤ 1 := by
 
 /-! ### Norm minimality of the pseudoinverse factorization -/
 
+/-- Norm minimality of the pseudoinverse factorization: for every factor `C`
+with `A = B * C`, the pseudoinverse witness satisfies `‖B⁺ * A‖ ≤ ‖C‖`. -/
 theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ ‖C‖ := by
   by_cases hCzero : ‖C‖ = 0
   · have hC : C = 0 := norm_eq_zero.mp hCzero
@@ -405,6 +416,7 @@ theorem pinv_norm_minimal (A B C : Mat) (hA : A = B * C) : ‖pinv B * A‖ ≤ 
 
 /-! ## Uniqueness of the factorization under the support constraint -/
 
+/-- The pseudoinverse absorbs `B * Bᴴ` on its support: `B⁺ * B * Bᴴ = Bᴴ`. -/
 theorem pinv_mul_B_mul_conjTranspose (B : Mat) : pinv B * B * Bᴴ = Bᴴ := by
   unfold pinv
   have hS : (posSemidefBB B).supportInv * (B * Bᴴ) = (posSemidefBB B).supportProj :=
@@ -421,6 +433,8 @@ theorem pinv_mul_B_mul_conjTranspose (B : Mat) : pinv B * B * Bᴴ = Bᴴ := by
       simp [Matrix.conjTranspose_mul, (posSemidefBB B).supportProj_isHermitian.eq]
     _ = Bᴴ := by rw [hP]
 
+/-- `B⁺ * B` acts as the identity on matrices whose columns lie in the range
+of `Bᴴ`: `ran C ⊆ ran Bᴴ` implies `(B⁺ * B) * C = C`. -/
 theorem pinv_mul_B_mul_C_eq_C (C B : Mat) (hC : C.mulVecLin.range ≤ Bᴴ.mulVecLin.range) :
     (pinv B * B) * C = C := by
   apply Matrix.ext; intro i j
@@ -442,6 +456,9 @@ theorem pinv_mul_B_mul_C_eq_C (C B : Mat) (hC : C.mulVecLin.range ≤ Bᴴ.mulVe
     _ = (mulVec C (Pi.single j (1 : ℂ))) i := rfl
     _ = C i j := by simp
 
+/-- Uniqueness of the factorization under the support constraint: two factors
+`C₁`, `C₂` with `A = B * Cᵢ` whose ranges lie in `ran Bᴴ` must coincide, so
+`B⁺ * A` is the unique factor supported on `ran Bᴴ`. -/
 theorem factorization_unique (A B C₁ C₂ : Mat) (hA₁ : A = B * C₁) (hA₂ : A = B * C₂)
     (hC₁_range : C₁.mulVecLin.range ≤ Bᴴ.mulVecLin.range)
     (hC₂_range : C₂.mulVecLin.range ≤ Bᴴ.mulVecLin.range) : C₁ = C₂ := by
