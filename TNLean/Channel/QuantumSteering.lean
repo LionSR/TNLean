@@ -10,6 +10,7 @@ import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.POVM
+import TNLean.Channel.SingleKraus
 import TNLean.Channel.TensorMap
 
 /-!
@@ -76,13 +77,11 @@ def IsConvexDecomposition {n : ℕ} (ρ : Matrix (Fin dA) (Fin dA) ℂ)
 
 /-- The trace-pairing adjoint of a single-Kraus map `X ↦ V X Vᴴ` evaluated
 at the identity is `Vᴴ V`. -/
-theorem traceAdjointMap_singleKrausMap_one {α β : Type*} [Fintype α]
-    [Fintype β] [DecidableEq β] (V : Matrix β α ℂ) :
+theorem traceAdjointMap_singleKrausMap_one {α β : Type*} [Fintype α] [Fintype β]
+    [DecidableEq β] (V : Matrix β α ℂ) :
     Matrix.traceAdjointMap (singleKrausMap V) (1 : Matrix β β ℂ) = Vᴴ * V := by
-  apply Matrix.ext_iff_trace_mul_right.mpr
-  intro X
-  rw [Matrix.trace_traceAdjointMap_mul, Matrix.one_mul, singleKrausMap_apply,
-    Matrix.trace_mul_cycle, Matrix.mul_assoc]
+  rw [Matrix.traceAdjointMap_singleKrausMap, singleKrausMap_apply, Matrix.mul_one,
+    Matrix.conjTranspose_conjTranspose]
 
 /-! ### The transpose-trick identity -/
 
@@ -137,9 +136,8 @@ variable {n : ℕ} {ρ : Matrix (Fin dA) (Fin dA) ℂ}
 /-- A real scalar multiple of a positive-semidefinite matrix is Hermitian. -/
 private theorem isHermitian_smul_of_posSemidef {A : Matrix (Fin dA) (Fin dA) ℂ}
     (hA : A.PosSemidef) (c : ℝ) : (c • A).IsHermitian := by
-  rw [Matrix.IsHermitian, RCLike.real_smul_eq_coe_smul (K := ℂ), Matrix.conjTranspose_smul,
-    hA.isHermitian.eq]
-  simp
+  rw [RCLike.real_smul_eq_coe_smul (K := ℂ)]
+  exact hA.isHermitian.smul (isSelfAdjoint_iff.mpr (by simp))
 
 /-- The support projection of `ρ` absorbs each weighted summand of a convex
 decomposition of `ρ`, on both sides. -/

@@ -207,7 +207,7 @@ reduced state.
     \lean{Matrix.partialTraceRight_idTensorMap_vecMulVec}
     \leanok
     For a bipartite vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ with coefficient
-    matrix $C$ and any linear map $T$ on $\C^{d_B}$,
+    matrix $C$ and any linear map $T$ with domain $\MN{d_B}$,
     \begin{align}
         \tr_B\bigl[(\id\otimes T)(\ketbra{\psi}{\psi})\bigr] = C\,(T^*(\Id))^{\mathsf T}\,C^\dagger.
         \notag
@@ -228,8 +228,7 @@ reduced state.
 \begin{theorem}[Quantum steering]\label{thm:quantum_steering}
     \lean{Matrix.exists_instrument_of_isConvexDecomposition}
     \leanok
-    \uses{def:purification, def:convex_decomposition, def:instrument,
-        thm:transpose_trick}
+    \uses{def:purification, def:convex_decomposition, def:instrument}
     Let $\rho\in\MN{d_A}$ be a density operator with purification
     $\psi\in\C^{d_A}\otimes\C^{d_B}$. For every convex decomposition
     $\rho=\sum_i\lambda_i\rho_i$ there is an instrument
