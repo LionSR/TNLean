@@ -1,0 +1,24 @@
+% Regression: a place on a generated cup is read off the arc the cup draws.
+% The cup policy pairs the two rows with a curve that leaves the frame to the
+% east; an operator at a fraction of that wire stands on the ink rather than on
+% the chord between the two ends (issue 5493), and a mark reaches the same
+% place through the same address.  The second picture pins the other half of
+% the contract: a wire that runs straight between two ends divides that run.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, east=cup]
+  \tn[at=(1,1), skin=mpo, name=a]{} \tn[at=(1,2), skin=mpo, name=b]{}
+  \tn[at=(2,1), skin=mpo, name=c]{} \tn[at=(2,2), skin=mpo, name=d]{}
+  \tnwire{a}{b} \tnwire{c}{d}
+  \tn[skin=box, at=on cup-1-2 0.5]{$O$}
+  \tnmark[form=label, label pos=0]{on cup-1-2 0.8}{$t$}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=mpo, name=p]{} \tn[at=(2,1), skin=mpo, name=q]{}
+  \tnwire[name=run]{p}{q}
+  \tn[skin=box, at=on run 0.5]{$Q$}
+\end{tenkz}
+\end{document}
