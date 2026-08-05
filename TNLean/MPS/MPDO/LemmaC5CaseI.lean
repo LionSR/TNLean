@@ -39,8 +39,23 @@ relations are the Case-I input to the proof of Lemma `SALZCL`
 headline statement.  The deferred pieces are documented at the end of the
 file:
 
-* trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling,
+* trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
+  (proved: `trace_pow_similarity_diagonal`),
 * the overlap formula `mpvOverlap = Complex.ofReal(tr(S^N))`.
+
+For the overlap formula, the elementary combinatorial machinery is now
+available (`pow_apply_eq_sum_path_indicator`,
+`trace_pow_eq_sum_cyclicProduct`), turning `tr(S^N)` into a sum over
+cyclic labelings `k : Fin N → ActiveSector p`, in the shape needed to match
+`trace_cyclicNeighboringProduct_sq_eq_prod_trace_sq`
+(`CyclicActiveTraceProductIdentities`).  Assembling the full formula still
+requires reconciling the active-sector-restricted index type
+`F.ActiveSector p` used by `activeSectorTraceSqMatrix` with the
+full-sector index type `Fin F.sectorCount` that
+`PhysicalSectorFactorization.cyclicNeighboringProduct` and
+`reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal` range over; this
+reconciliation (via `hinactive`, which forces the contribution of any
+non-active sector to vanish) is not yet formalized.
 
 The route to assemble them is sketched in the paper-gap note
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
@@ -55,6 +70,10 @@ The route to assemble them is sketched in the paper-gap note
 * `activeSectorTraceMatrix_pow_two_pos`:
   every entry of `T²` is strictly positive (derived from
   `activeSectorTraceMatrix_isPrimitive` in `PhysicalSectorTraceMatrix`)
+* `pow_apply_eq_sum_path_indicator`: a matrix power's `(a, b)` entry as a
+  sum over indicator-weighted length-`N` walks from `a` to `b`
+* `trace_pow_eq_sum_cyclicProduct`: `tr(S^N)` as a sum over cyclic
+  products indexed by labelings `k : Fin N → n`
 
 ## Source fidelity
 
@@ -335,6 +354,165 @@ theorem trace_pow_similarity_squared_diagonal (S : Matrix n n ℝ) (v : n → �
   trace_pow_similarity_diagonal S (fun i => (v i)^2) (fun i => pow_ne_zero 2 (hv i).ne') N
 
 end traceSimilarity
+
+section cyclicTrace
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- **Indicator-path expansion of a matrix power.** The `(a, b)` entry of `S ^ N` is the sum,
+over length-`N` walks `v : Fin (N + 1) → n` from `a` to `b`, of the product of the matrix
+entries along the walk.
+
+This is the elementary combinatorial expansion of matrix powers used to derive the
+cyclic-product form of `tr(S^N)` in the Lemma C.5 Case-I route.
+
+Source: arXiv:1606.00608, Appendix C.2, self-overlap limit at lines 1080--1100. -/
+theorem pow_apply_eq_sum_path_indicator (S : Matrix n n ℝ) :
+    ∀ (N : ℕ) (a b : n), (S ^ N) a b =
+      ∑ v : Fin (N + 1) → n, if v 0 = a ∧ v (Fin.last N) = b
+        then ∏ i : Fin N, S (v i.castSucc) (v i.succ) else 0 := by
+  intro N
+  induction N with
+  | zero =>
+    intro a b
+    rw [pow_zero, Matrix.one_apply]
+    rw [Fintype.sum_equiv (Equiv.funUnique (Fin 1) n)
+      (fun v : Fin 1 → n => if v 0 = a ∧ v (Fin.last 0) = b then
+        (∏ i : Fin 0, S (v i.castSucc) (v i.succ) : ℝ) else 0)
+      (fun c : n => if c = a ∧ c = b then (1 : ℝ) else 0)
+      (fun v => by simp [Equiv.funUnique_apply])]
+    by_cases hab : a = b
+    · subst hab
+      simp
+    · have hne : ∀ c : n, ¬(c = a ∧ c = b) := fun c ⟨h1, h2⟩ => hab (h1.symm.trans h2)
+      simp [hab, hne]
+  | succ N ih =>
+    intro a b
+    have hprod : ∀ (v : Fin (N + 1) → n) (x : n),
+        ∏ i : Fin (N + 1), S ((Fin.snoc v x : Fin (N + 2) → n) i.castSucc)
+            ((Fin.snoc v x : Fin (N + 2) → n) i.succ) =
+          (∏ i : Fin N, S (v i.castSucc) (v i.succ)) * S (v (Fin.last N)) x := by
+      intro v x
+      rw [Fin.prod_univ_castSucc]
+      congr 1
+      · apply Finset.prod_congr rfl
+        intro i _
+        have h1 : (Fin.snoc v x : Fin (N + 2) → n) (i.castSucc).castSucc = v i.castSucc := by
+          rw [Fin.snoc_castSucc]
+        have h2 : (Fin.snoc v x : Fin (N + 2) → n) (i.castSucc).succ = v i.succ := by
+          rw [← Fin.castSucc_succ, Fin.snoc_castSucc]
+        rw [h1, h2]
+      · have h1 : (Fin.snoc v x : Fin (N + 2) → n) (Fin.last N).castSucc = v (Fin.last N) := by
+          rw [Fin.snoc_castSucc]
+        have h2 : (Fin.snoc v x : Fin (N + 2) → n) (Fin.last N).succ = x := by
+          rw [Fin.succ_last, Fin.snoc_last]
+        rw [h1, h2]
+    rw [pow_succ, Matrix.mul_apply]
+    simp_rw [ih, Finset.sum_mul, ite_mul, zero_mul]
+    rw [Finset.sum_comm]
+    simp_rw [show ∀ (v : Fin (N + 1) → n) (c : n),
+        (if v 0 = a ∧ v (Fin.last N) = c then
+          (∏ i : Fin N, S (v i.castSucc) (v i.succ)) * S c b else 0) =
+        (if v 0 = a then (if v (Fin.last N) = c then
+          (∏ i : Fin N, S (v i.castSucc) (v i.succ)) * S c b else 0) else 0) from
+      fun v c => by by_cases h : v 0 = a <;> simp [h]]
+    conv_lhs => simp only [Fintype.sum_ite_eq]
+    rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 2) => n))]
+    rw [Fintype.sum_prod_type]
+    conv_rhs =>
+      simp only [Fin.snocEquiv_apply]
+      simp only [hprod]
+      simp only [Fin.snoc_castSucc, Fin.snoc_last]
+      rw [Finset.sum_comm]
+    congr 1
+    ext v
+    by_cases hv0 : v 0 = a
+    · simp [hv0]
+    · simp [hv0]
+
+/-- **Trace of a matrix power as a sum over cyclic products.** `tr(S^N)` is the sum, over all
+labelings `k : Fin N → n` of the `N` cyclic positions, of the product of matrix entries
+`S (k i) (k (i + 1))` along the cycle (indices mod `N`).
+
+This is the cyclic-product identity used in the Lemma C.5 Case-I route to express the
+doubled-index self-overlap `mpvOverlap(K.toMPSTensor, K.toMPSTensor, N)` in terms of
+`tr(S^N)`.
+
+Source: arXiv:1606.00608, Appendix C.2, self-overlap limit at lines 1080--1100. -/
+theorem trace_pow_eq_sum_cyclicProduct (S : Matrix n n ℝ) {N : ℕ} [NeZero N] :
+    Matrix.trace (S ^ N) = ∑ k : Fin N → n, ∏ i : Fin N, S (k i) (k (i + 1)) := by
+  obtain ⟨M, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne N)
+  have htrace : Matrix.trace (S ^ (M + 1)) = ∑ a : n, (S ^ (M + 1)) a a := by
+    simp [Matrix.trace, Matrix.diag]
+  rw [htrace]
+  simp_rw [pow_apply_eq_sum_path_indicator S (M + 1)]
+  rw [Finset.sum_comm]
+  have hcollapseA : ∀ v : Fin (M + 2) → n,
+      (∑ a : n, if v 0 = a ∧ v (Fin.last (M + 1)) = a then
+        (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else 0) =
+      if v 0 = v (Fin.last (M + 1)) then
+        (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else 0 := by
+    intro v
+    by_cases h : v 0 = v (Fin.last (M + 1))
+    · rw [if_pos h]
+      have hswap : (fun a => if v 0 = a ∧ v (Fin.last (M + 1)) = a then
+          (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else (0 : ℝ)) =
+        (fun a => if v 0 = a then (if v (Fin.last (M + 1)) = a then
+          (∏ i : Fin (M + 1), S (v i.castSucc) (v i.succ)) else 0) else 0) :=
+        funext (fun a => by by_cases ha : v 0 = a <;> simp [ha])
+      rw [hswap]
+      simp [h]
+    · rw [if_neg h]
+      apply Finset.sum_eq_zero
+      intro a _
+      rw [if_neg]
+      rintro ⟨ha1, ha2⟩
+      exact h (ha1.trans ha2.symm)
+  simp_rw [hcollapseA]
+  rw [← Finset.sum_filter]
+  apply Finset.sum_nbij' (fun v : Fin (M + 2) → n => Fin.init v)
+    (fun k : Fin (M + 1) → n => Fin.snoc k (k 0))
+  · intro v _
+    exact Finset.mem_univ _
+  · intro k _
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    change (Fin.snoc k (k 0) : Fin (M + 2) → n) 0 =
+      (Fin.snoc k (k 0) : Fin (M + 2) → n) (Fin.last (M + 1))
+    rw [Fin.snoc_last]
+    have hz : (0 : Fin (M + 2)) = (Fin.castSucc (0 : Fin (M + 1))) := (Fin.castSucc_zero).symm
+    rw [hz, Fin.snoc_castSucc]
+  · intro v hv
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hv
+    change (Fin.snoc (Fin.init v) ((Fin.init v) 0) : Fin (M + 2) → n) = v
+    rw [show (Fin.init v) 0 = v (Fin.last (M + 1)) from by
+      change v ((0 : Fin (M + 1)).castSucc) = v (Fin.last (M + 1))
+      rw [Fin.castSucc_zero]
+      exact hv]
+    exact Fin.snoc_init_self v
+  · intro k _
+    funext i
+    change (Fin.snoc k (k 0) : Fin (M + 2) → n) i.castSucc = k i
+    simp only [Fin.snoc_castSucc]
+  · intro v hv
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hv
+    apply Finset.prod_congr rfl
+    intro i _
+    have hi1 : v i.castSucc = (Fin.init v) i := rfl
+    have hi2 : (Fin.init v) (i + 1) = v (i + 1).castSucc := rfl
+    rw [hi1, hi2]
+    congr 1
+    cases i using Fin.lastCases with
+    | last =>
+      rw [Fin.succ_last, Fin.last_add_one]
+      have hz : (Fin.castSucc (0 : Fin (M + 1)) : Fin (M + 2)) = (0 : Fin (M + 2)) :=
+        Fin.castSucc_zero
+      rw [hz]
+      exact hv.symm
+    | cast j =>
+      rw [Fin.coeSucc_eq_succ]
+      exact congrArg v (Fin.castSucc_succ j).symm
+
+end cyclicTrace
 
 end caseI
 
