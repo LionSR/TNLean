@@ -1,15 +1,19 @@
 % Target: rmp-iv-intersection-lhs-two
 % Formula: Applying the inverse of B leaves A, an exposed site, and L.
-% Ink: Canonical public tenkz: A and the two virtual indices exposed by the
-%   inverse sit above L.
+% Ink: Kernel flat frame: A closes into the wide pill L through the west cup; the
+%   two virtual ends exposed by the inverse turn upward as the source draws them.
 % Boundary: The outer end closes through L; two virtual and two physical legs open.
 % Source: paper TN-Review-main.tex line 2058; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 95-102 (Ltensor2)
-% Capabilities: grid, closure, typed-ports
+% Capabilities: kernel, closure, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, west=cup, east=open,
-                tensor style=box]
-    \tn{A} & & \\
-    \tn[pill, wide=3, up at={3}]{L} & &
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, west=cup]
+    \tn[at=(1,1), skin=box, name=a, ports={0:virtual, 180:virtual, 90:physical}]{A}
+    % A's cut end turns upward through the invisible junction where B stood.
+    \tn[at=(1,2), skin=none, name=v, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=pill, wide=4, name=l,
+      ports={180:virtual, 90@3:virtual, 90@4:physical}]{L}
+    \tnwire{a.0}{v.180}
   \end{tenkz}
 \]

@@ -1,23 +1,28 @@
 % Target: rmp-ii-ortho-left
 % Formula: sum_s (A_L^s)^dagger A_L^s = 1.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame.
 % Boundary: The west cup contracts the left indices; the east ket-bra pair remains
 %   open.
 % Source: paper TN-Review-main.tex line 663; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 181-191
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
-  % LHS: ket A_L over bra conj(A_L); physical s pairs automatically
-  % (sandwich); west=cup contracts the shared left index.
-  \begin{tenkz}[sandwich, west=cup]
-    \tn[tri=l]{A_L}\\
-    \tn*[tri=l]{A_L}
+  \tenkzkernel
+  % LHS: ket A_L over bra conj(A_L); the shared physical index contracts
+  % vertically between the rows, and west=cup contracts the shared left
+  % index beta.
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+    \tn[at=(1,1), skin=tri, name=ket,
+      ports={180:virtual, 0:virtual, 270:physical}]{A_L}
+    \tn[at=(2,1), skin=tri, name=bra,
+      ports={180:virtual, 0:virtual, 90:physical}]{\overline{A_L}}
+    \tnwire{ket.270}{bra.90}
   \end{tenkz}
   \;=\;
-  % RHS: the identity on the open (beta, beta') pair - a bare cup; the
-  % ghosts are the wire endpoints (the suite idiom for a glyph-free wire).
-  \begin{tenkz}[rows={wire,wire}, west=cup]
-    \tnghost{}\\
-    \tnghost{}
+  % RHS: the identity on the open (beta, beta') pair - a bare cup;
+  % skin=none is the invisible junction the source draws as a bare wire.
+  \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+    \tn[at=(1,1), skin=none, name=r1, ports={180:virtual, 0:virtual}]{}
+    \tn[at=(2,1), skin=none, name=r2, ports={180:virtual, 0:virtual}]{}
   \end{tenkz}
 \]

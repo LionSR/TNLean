@@ -1,15 +1,23 @@
 % Target: rmp-ii-mpdo-ol
 % Formula: O_L(M) is the length-L periodic MPDO transfer word.
-% Ink: Canonical public tenkz environment; no raw TikZ.
+% Ink: Kernel flat frame; the stock MPO skin is the signed box declaration
+%   (#5362); the periodic word runs left-right instead of the source's
+%   top-down page layout, since the kernel frame carries no rotation key.
+%   The west/east trace wire that identifies the two open ends is present
+%   in the model but draws flush with the chain, not as a visible loop.
 % Boundary: Periodic closure seals the virtual word; each M keeps its two physical
 %   operator legs open.
 % Source: paper TN-Review-main.tex line 968; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 728-741
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
 \[
   O_L(M) \;=\;
-  \begin{tenkz}[frame=vertical, physical=updown, boundary=periodic,
-                compact]
-    \tn[box]{M} & \tndots & \tn[box]{M}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=updown,
+                west=trace, east=trace]
+    \tn[at=(1,1), skin=mpo, name=m1, ports={180:virtual, 0:virtual}]{M}
+    \tn[at=(1,2), skin=dots, name=dots, ports={180:virtual, 0:virtual}]{}
+    \tn[at=(1,3), skin=mpo, name=m2, ports={180:virtual, 0:virtual}]{M}
+    \tnwire{m1.0}{dots.180} \tnwire{dots.0}{m2.180}
   \end{tenkz}
 \]

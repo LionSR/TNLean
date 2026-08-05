@@ -1,14 +1,19 @@
 % Target: rmp-iv-intersection-lhs-four
 % Formula: The inverse S removes the jointly injective pair A--B from the L side.
-% Ink: Canonical public tenkz: three open index legs leave L; a separate identity
-%   wire adds two more.
+% Ink: Kernel flat frame: the emptied pill L keeps three upward legs; the separate
+%   identity wire stands above it as an open U, as the source draws it.
 % Boundary: L has two virtual and one physical index; the free wire adds two virtuals.
 % Source: paper TN-Review-main.tex line 2068; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 134-141 (Ltensor4)
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket:nopair, ket:nopair}, tensor style=box]
-    & \tnghost{} & \tnghost{} & \\
-    \tn[pill, wide=4, up at={4}]{L} & & &
+  \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+    % The free identity wire is a U between two invisible junctions.
+    \tn[at=(1,2), skin=none, name=u1, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(1,3), skin=none, name=u2, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=pill, wide=5, name=l,
+      ports={90@1:virtual, 90@4:virtual, 90@5:physical}]{L}
+    \tnwire{u1.0}{u2.180}
   \end{tenkz}
 \]

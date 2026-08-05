@@ -21,7 +21,7 @@
   },
   "m4_lines_per_case": {
     "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
-    "value": 21.35
+    "value": 26.08
   },
   "m5_aliases": {
     "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
