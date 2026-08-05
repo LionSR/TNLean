@@ -100,6 +100,54 @@ theorem IsHermitian.norm_smul_one_add_posSemidef {ι : Type*} [Fintype ι] [Deci
   have h := (hA.neg).norm_smul_one_sub_posSemidef
   rwa [norm_neg, sub_neg_eq_add] at h
 
+/-- For positive semidefinite `A`, `‖A‖∞ • 1 - A` has norm at most `‖A‖∞`:
+both `‖A‖∞ • 1 - A` and `‖A‖∞ • 1` are positive semidefinite, `‖A‖∞ • 1 - A ≤
+‖A‖∞ • 1`, and the `C^*`-order is norm-monotone on the positive cone. -/
+theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
+    ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := by
+  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebra ι
+  have hnn : (0 : Matrix ι ι ℂ) ≤ ‖A‖ • (1 : Matrix ι ι ℂ) - A :=
+    (hA.1.norm_smul_one_sub_posSemidef).nonneg
+  have hle : ‖A‖ • (1 : Matrix ι ι ℂ) - A ≤ ‖A‖ • (1 : Matrix ι ι ℂ) := by
+    rw [Matrix.le_iff]
+    simpa using hA
+  have hmono := CStarAlgebra.norm_le_norm_of_nonneg_of_le hnn hle
+  rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg (norm_nonneg A)] at hmono
+  have hone : ‖(1 : Matrix ι ι ℂ)‖ ≤ 1 := by
+    by_cases hnt : Nontrivial (Matrix ι ι ℂ)
+    · haveI := hnt
+      exact (norm_one (α := Matrix ι ι ℂ)).le
+    · rw [not_nontrivial_iff_subsingleton] at hnt
+      simp [Subsingleton.elim (1 : Matrix ι ι ℂ) 0]
+  calc ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ * ‖(1 : Matrix ι ι ℂ)‖ := hmono
+    _ ≤ ‖A‖ * 1 := mul_le_mul_of_nonneg_left hone (norm_nonneg A)
+    _ = ‖A‖ := mul_one _
+
+/-- **Positivity of a bounded functional** (Wolf Ch. 1, line 626 converse): a
+`ℂ`-linear functional `τ'` dominated by `X ↦ ‖X‖∞ · τ'(1)` on Hermitian
+matrices is nonnegative on every positive semidefinite matrix. Applying the
+bound to `‖A‖∞ • 1 - A` and using `PosSemidef.norm_smul_one_sub_le` gives
+`τ'(A) ≥ 0`. -/
+theorem tau'_nonneg_of_posSemidef {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {tau' : Matrix ι ι ℂ →ₗ[ℂ] ℂ}
+    (hdom : ∀ X : Matrix ι ι ℂ, X.IsHermitian → (tau' X).re ≤ ‖X‖ * (tau' 1).re)
+    (hK : 0 ≤ (tau' 1).re) {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
+    0 ≤ (tau' A).re := by
+  have hB := hdom (‖A‖ • (1 : Matrix ι ι ℂ) - A) (hA.1.norm_smul_one_sub_posSemidef).1
+  have hBnorm : ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := hA.norm_smul_one_sub_le
+  have hlin : tau' (‖A‖ • (1 : Matrix ι ι ℂ) - A) = (‖A‖ : ℂ) * tau' 1 - tau' A := by
+    have heq : ‖A‖ • (1 : Matrix ι ι ℂ) = (‖A‖ : ℂ) • (1 : Matrix ι ι ℂ) := by
+      ext i j; simp [Complex.real_smul]
+    rw [map_sub, heq, map_smul, smul_eq_mul]
+  rw [hlin] at hB
+  have hre : ((‖A‖ : ℂ) * tau' 1 - tau' A).re = ‖A‖ * (tau' 1).re - (tau' A).re := by
+    simp [Complex.sub_re, Complex.mul_re]
+  rw [hre] at hB
+  have hmul : ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ * (tau' 1).re ≤ ‖A‖ * (tau' 1).re :=
+    mul_le_mul_of_nonneg_right hBnorm hK
+  linarith
+
 /-- `Matrix.omegaProj` is Hermitian (it is a rank-one projector `|Ω⟩⟨Ω|`). -/
 theorem omegaProj_isHermitian (d : ℕ) : (Matrix.omegaProj d).IsHermitian :=
   (Matrix.posSemidef_vecMulVec_self_star (Matrix.omegaVec d)).1
