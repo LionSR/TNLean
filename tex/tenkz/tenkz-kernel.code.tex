@@ -192,8 +192,8 @@
 \int_new:N  \l__tenkz_kernel_col_int
 \int_new:N  \l__tenkz_kernel_row_advance_int  % maximum implicit span on current row
 \int_new:N  \l__tenkz_kernel_node_int         % address node serial
-\prop_new:N \l__tenkz_kernel_node_prop        % "id/field" -> value
-\prop_new:N \l__tenkz_kernel_named_prop       % user name -> record id
+\__tenkz_prop_new_indexed:N \l__tenkz_kernel_node_prop        % "id/field" -> value
+\__tenkz_prop_new_indexed:N \l__tenkz_kernel_named_prop       % user name -> record id
 % Atoms whose labels need the silhouette / pairing / label render split.
 \prop_new:N \l__tenkz_kernel_skin_pairing_host_prop
 \prop_new:N \l__tenkz_kernel_skin_pairing_cross_prop
@@ -1471,6 +1471,7 @@
         \bool_if:NT \l__tenkz_kernel_ineq_bool
           { |scope=\int_use:N \g__tenkz_kernel_eq_scope_int }
       }
+    \__tenkz_kernel_emit_index:
     \clist_map_inline:nn { atom, wire, mark, frame }
       {
         \__tenkz_model_map_ids:nn {##1}
@@ -1483,23 +1484,36 @@
         |signature=\tl_use:N \l__tenkz_kernel_sig_tl
       }
   }
+% The record store is one flat table keyed "id/field", while the stream is
+% written one record at a time.  Asking the whole table for each record's
+% fields reads every field of the picture once per record.  One pass files
+% each field under the record that owns it, and a record reads only its own.
+\__tenkz_prop_new_indexed:N \l__tenkz_kernel_emit_field_prop
+\tl_new:N \l__tenkz_kernel_emit_field_tl
+\cs_new_protected:Npn \__tenkz_kernel_emit_index:
+  {
+    \prop_clear:N \l__tenkz_kernel_emit_field_prop
+    \prop_map_inline:Nn \l__tenkz_model_record_prop
+      { \__tenkz_kernel_emit_index_entry:wn ##1 \q_stop {##2} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_emit_index_entry:wn #1 / #2 \q_stop #3
+  {
+    \prop_get:NnNF \l__tenkz_kernel_emit_field_prop {#1}
+      \l__tenkz_kernel_emit_field_tl
+      { \tl_clear:N \l__tenkz_kernel_emit_field_tl }
+    \tl_put_right:Ne \l__tenkz_kernel_emit_field_tl
+      { { \tl_to_str:n {#2} = \tl_to_str:n {#3} } }
+    \prop_put:NnV \l__tenkz_kernel_emit_field_prop {#1}
+      \l__tenkz_kernel_emit_field_tl
+  }
 \cs_new_protected:Npn \__tenkz_kernel_emit_record:n #1
   {
     \seq_clear:N \l__tenkz_kernel_emit_seq
-    \prop_map_inline:Nn \l__tenkz_model_record_prop
+    \prop_get:NnNT \l__tenkz_kernel_emit_field_prop {#1}
+      \l__tenkz_kernel_emit_field_tl
       {
-        \str_if_eq:eeT
-          { \str_range:nnn {##1} {1} { \str_count:n { #1 / } } }
-          { #1 / }
-          {
-            \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-              {
-                \str_range:nnn {##1}
-                  { \int_eval:n { \str_count:n { #1 / } + 1 } }
-                  { \str_count:n {##1} }
-                = \tl_to_str:n {##2}
-              }
-          }
+        \tl_map_inline:Nn \l__tenkz_kernel_emit_field_tl
+          { \seq_put_right:Nn \l__tenkz_kernel_emit_seq {##1} }
       }
     \seq_sort:Nn \l__tenkz_kernel_emit_seq
       {

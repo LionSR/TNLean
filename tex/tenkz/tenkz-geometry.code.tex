@@ -40,7 +40,7 @@
 % for kind=affine, or fields n (stations), r (radius), start (degrees) for
 % kind=circle.  A projected plane additionally owns one page-space transverse
 % vector.  Frames are picture-local.
-\prop_new:N \l__tenkz_geom_frame_prop     % "name/field" -> fp literal
+\__tenkz_prop_new_indexed:N \l__tenkz_geom_frame_prop     % "name/field" -> fp literal
 \prop_new:N \l__tenkz_geom_framekind_prop % "name" -> affine | circle
 \fp_const:Nn \c__tenkz_geom_plane_transverse_x_fp {0}
 \fp_const:Nn \c__tenkz_geom_plane_transverse_y_fp {1}
@@ -916,10 +916,10 @@
 % ---------- the placement graph ---------------------------------------------
 % A request is stored unresolved and evaluated on demand; evaluation walks
 % dependencies depth-first, marks the path, and a revisit names the cycle.
-\prop_new:N \l__tenkz_geom_req_prop    % id -> {type}{arg}{arg}{arg}
-\prop_new:N \l__tenkz_geom_x_prop      % id -> fp literal (pitch units)
-\prop_new:N \l__tenkz_geom_y_prop
-\prop_new:N \l__tenkz_geom_state_prop  % id -> visiting
+\__tenkz_prop_new_indexed:N \l__tenkz_geom_req_prop    % id -> {type}{arg}{arg}{arg}
+\__tenkz_prop_new_indexed:N \l__tenkz_geom_x_prop      % id -> fp literal (pitch units)
+\__tenkz_prop_new_indexed:N \l__tenkz_geom_y_prop
+\__tenkz_prop_new_indexed:N \l__tenkz_geom_state_prop  % id -> visiting
 \seq_new:N  \l__tenkz_geom_trail_seq
 \tl_new:N \l__tenkz_geom_xa_tl \tl_new:N \l__tenkz_geom_ya_tl
 \bool_new:N \l__tenkz_geom_ok_bool
