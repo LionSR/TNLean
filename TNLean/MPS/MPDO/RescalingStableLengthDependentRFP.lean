@@ -539,7 +539,7 @@ irreducibility lemmas needed for `IsNormalTensor` and the literal CPSV
 canonical form (`MPSTensor.IsCPSVCanonicalForm`).  Those require the
 Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
 `φ`, which is future work; see the module docstring `Remaining gap`
-section. -/
+section and `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem transferMap_A_eigen :
     MPSTensor.transferMap A 1 = (1 : ℂ) • 1 ∧
       MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
