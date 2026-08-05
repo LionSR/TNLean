@@ -34,6 +34,9 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
   off-diagonal matrix units annihilated).
 
+The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`) for
+`R` continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`.
+
 ## Tensor definition
 
 The four 2×2 letter matrices are scaled matrix units:
@@ -69,25 +72,31 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
 
 ## Remaining gap
 
+* The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`)
+  continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`:
+  the refinement map `T` is proved trace-preserving completely positive
+  and satisfies the `eq:Tmap` equation for `R`; the coarse-graining map
+  `S` is defined but its trace-preserving completely positive property
+  and the `eq:Smap` equation are not yet proved (see that file's module
+  docstring for the precise remaining lemmas).
 * The uniform BNT-label structure-coefficient statement of
   arXiv:1606.00608, Theorem 4.14(ii) for `R` — that `oneLabelCoeffs`
   literally arises from `R`'s same-length product algebra, not only that
   its spectral data matches (`wMat_eigenvalue_eq_oneLabelChi_entry`) —
   requires the `AlgebraStructureData` witness apparatus of
   `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
-  `IsRFPViaTS R` (below).  Documented in
+  `IsRFPViaTS R`.  Documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 * The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
-with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) and the Definition 4.1
-renormalization fixed‑point condition (`IsRFPViaTS`) are future work.
+with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) is separate future work,
+not needed for `IsRFPViaTS R` as defined in this repository (see the
+`RescalingStableLengthDependentRFPViaTS` file above).
 The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
 the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
 unital and having eigenvalues `{1, 7/25, 0, 0}` (`transferMap_A_eigen`),
-hence primitive with spectral radius 1.  Completing the irreducibility
-argument (the Kronecker products `A^a ⊗ conj(A^b)` span `M₄(ℂ)`), the
-Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
-`φ`, the primitivity and spectral-radius-one lemmas for the doubled map, and
-the `tpCP`-map construction yields `IsRFPViaTS R` via Theorem 4.14.
+hence primitive with spectral radius 1, matching Theorem 4.14's converse
+route through canonical form; the direct route via `S`/`T` bypasses that
+machinery.
 
 ## References
 
@@ -136,6 +145,14 @@ Source: arXiv:1606.00608, lines 995--1010 (project example). -/
     | 2 => ((1 : Fin 2), (0 : Fin 2))
     | 3 => ((1 : Fin 2), (1 : Fin 2)) := by
   fin_cases k <;> rfl
+
+lemma bondEquiv_val (x y : Fin 2) : bondEquiv (x, y) =
+    match x, y with
+    | 0, 0 => (0 : Fin 4)
+    | 0, 1 => (1 : Fin 4)
+    | 1, 0 => (2 : Fin 4)
+    | 1, 1 => (3 : Fin 4) := by
+  fin_cases x <;> fin_cases y <;> rfl
 
 def R : MPOTensor 4 4 :=
   fun p q a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
