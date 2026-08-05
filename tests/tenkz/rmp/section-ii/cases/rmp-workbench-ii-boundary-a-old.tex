@@ -1,19 +1,42 @@
 % Target: rmp-workbench-ii-boundary-a-old
 % Formula: A^I = U^A_I sigma^A on the region boundary.
-% Ink: Canonical public tenkzlattice region and tenkz boundary atoms.
-% Boundary: The lattice exterior is open; the reduced A-B pair seals its outer virtual
-%   sides.
+% Ink: Kernel plane frame; the red region contour is the house enclosure over
+%   the declared charge species, and the reduced pair keeps the archival R
+%   and R^c site names.
+% Boundary: The lattice exterior is open; the reduced R-R^c pair seals its outer
+%   virtual sides.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   597-617; archival output Figboundary-theory (a)old.pdf
-% Capabilities: grid, lattice, regions, typed-ports
+% Capabilities: kernel, plane-frame, regions, typed-ports
+\tenkzkernel
+\tndeclare{species}{charge}{hue=source:red}
 \[
-  \begin{tenkzlattice}[rows=5,cols=6,frame=oblique,physical=up,
-                       boundary=open]
-    \tnregion[label=$R$,label pos=center]{(2-4,2-5)}
-  \end{tenkzlattice}
-  \;=\;
-  \begin{tenkz}[physical=up,boundary=none,
-                bond label={$\partial R$ at 1-2}]
-    \tn[label pos=south]{A^I} & \tn[label pos=south]{B^{\bar I}}
+  % The archival panel leaves the region and its complement unlettered on the
+  % lattice and names the reduced sites R and R^c instead.  The enclosure over
+  % the charge species is the sheet's red region boundary.  The audit is
+  % opted out: the bulk-boundary reduction carries the sheet's thirty legs
+  % onto the pair's two.
+  \begin{tenkzeq}[check={off={1: the bulk-boundary reduction changes the
+      open-leg census across the equality}}]
+  \begin{tenkz}[lattice={5x6}, frame=plane, physical=up, boundary=open]
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+    \tnmark[form=enclosure, species=charge]{(2,2) .. (4,5)}{}
   \end{tenkz}
+  =
+  % The reduced pair: the red R site carries the region's boundary index, the
+  % black R^c site carries the complement's; the shared bond is the archival
+  % all-red partial R rail.
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none, west=none, east=none]
+    \tn[name=r, species=charge, ports={0:virtual, 90:physical}]{}
+    \tnmark[form=label, label pos=s]{r}{$R$}
+    \tn[at=(1,2), name=rc, ports={180:virtual, 90:physical}]{}
+    \tnmark[form=label, label pos=s]{rc}{$R^{c}$}
+    \tnwire[species=charge, name=rail]{r.0}{rc.180}
+    \tnmark[form=label, label pos=n]{on rail 0.6}{$\partial R$}
+  \end{tenkz}
+  \end{tenkzeq}
 \]

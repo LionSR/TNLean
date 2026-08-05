@@ -1749,3 +1749,40 @@ The wave leaves two 0.7 spellings at reduced tenure:
 | flag:cooccur:picture:north+south | keep-because: a projected sheet states its whole four-side boundary contract, so every sheet picture names both receding sides; the values differ per picture (the renormalization beads open one and seal the other), so the pair is two independent policies, not one key; expiry 1.0 |
 
 Census-correction: #5348
+
+### 2026-08-05 — wave 6 moves the region-marked panels onto the kernel tier
+
+The six wave-6 cases — the published bulk-boundary region and its archival
+workbench twin, the historical four-station composite, the two-dimensional
+ground-space window, and the two toric-code blocked tensors — leave the
+lattice and free tiers for kernel plane and flat frames.  The two boundary
+panels draw their red regions as charge-species enclosure marks over the
+5x6 sheet and audit their reductions with the recorded open-leg reason;
+the archival twin regains its distinguishing R and R^c names and all-red
+rail, having previously duplicated the published A/B spelling.  The
+ground-space window nests two range-addressed enclosures with X on the
+outer contour; a 900dpi read of both source PDFs retires the ledger's
+arrowed-legs claim, the source legs being plain.  The historical composite
+respells each four-box ring as one closed operator string through its
+lambda corner with the sweeping arcs as via-routed strings.  The toric
+pair keeps its mid-side stations as portless kernel atoms with the sheet
+as the house enclosure; the dual's dotted diagonals ink solid, the kernel
+wire grammar having no stroke-style key.
+
+The retired tnregion, tnedge, tnput, and tnjoin millimetres leave the
+corpus: the census falls from 357 to 313 sites (route/string 208 to 192,
+composition/layout 149 to 121), with metric and frame ownership remaining
+zero, and the ceilings and provenance pins tighten to match.  M4 rises
+from 24.27 to 24.62 because the kernel cases name the ports, species, and
+waypoints their retired sugar implied.  No parser spelling, registry row,
+alias, escape, or overload is added or removed.
+
+The wave drops three 0.7 spellings below tenure:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:key:picture:bond label | dies at S4 with the 0.7 picture ledger: wave 6 retired the boundary pair's bond-label spellings onto kernel wire-point label marks, and the one remaining consumer is a blueprint chapter that respells at the S4 surface swap; expiry 0.9 |
+| flag:consumers:key:region:inset | dies at S4 with the 0.7 region ledger: wave 6 respelled the nested ground-space contours through the kernel mark's inset step (#5498), and the two remaining consumers are blueprint chapters that respell at the S4 surface swap; expiry 0.9 |
+| flag:sugar-shaped:command:tnedge | keep-because: wave 6 retired the toric diamond and diagonal edges onto kernel wires; the four remaining uses sit in one 0.7 grid-tier case (the PEPS projection) that retires wholesale at the S4 surface swap; expiry 0.9 |
+
+Census-correction: #5347
