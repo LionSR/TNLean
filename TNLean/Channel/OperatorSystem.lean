@@ -100,24 +100,55 @@ theorem mem_tensorSubmodule_iff {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
 `Matrix.bipartiteSlice` block, which lies in `S` by hypothesis. -/
 noncomputable def tensorMapIdSub {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) {k : ℕ}
-    (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) (hX : X ∈ tensorSubmodule S k) :
+    (X : ↥(tensorSubmodule S k)) :
     Matrix (Fin n × Fin k) (Fin n × Fin k) ℂ :=
-  fun p q => T ⟨Matrix.bipartiteSlice X p.2 q.2, mem_tensorSubmodule_iff.mp hX p.2 q.2⟩ p.1 q.1
+  fun p q => T ⟨Matrix.bipartiteSlice X.1 p.2 q.2, mem_tensorSubmodule_iff.mp X.2 p.2 q.2⟩ p.1 q.1
 
 theorem tensorMapIdSub_apply {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) {k : ℕ}
-    (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) (hX : X ∈ tensorSubmodule S k)
+    (X : ↥(tensorSubmodule S k))
     (i₁ : Fin n) (i₂ : Fin k) (j₁ : Fin n) (j₂ : Fin k) :
-    tensorMapIdSub T X hX (i₁, i₂) (j₁, j₂) =
-      T ⟨Matrix.bipartiteSlice X i₂ j₂, mem_tensorSubmodule_iff.mp hX i₂ j₂⟩ i₁ j₁ :=
+    tensorMapIdSub T X (i₁, i₂) (j₁, j₂) =
+      T ⟨Matrix.bipartiteSlice X.1 i₂ j₂, mem_tensorSubmodule_iff.mp X.2 i₂ j₂⟩ i₁ j₁ :=
   rfl
+
+/-- `tensorMapIdSub T` as a linear map on `S ⊗ M_k(ℂ)`. -/
+noncomputable def tensorMapIdSubLM {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) {k : ℕ} :
+    ↥(tensorSubmodule S k) →ₗ[ℂ] Matrix (Fin n × Fin k) (Fin n × Fin k) ℂ where
+  toFun := tensorMapIdSub T
+  map_add' X Y := by
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+    have hval : ((X + Y : ↥(tensorSubmodule S k)) : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) =
+        (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) + Y := rfl
+    simp only [tensorMapIdSub_apply, Matrix.add_apply, hval]
+    rw [show (⟨Matrix.bipartiteSlice (X.1 + Y.1) i₂ j₂, mem_tensorSubmodule_iff.mp
+        (X + Y).2 i₂ j₂⟩ : ↥S) =
+        (⟨Matrix.bipartiteSlice X.1 i₂ j₂, mem_tensorSubmodule_iff.mp X.2 i₂ j₂⟩ : ↥S) +
+        ⟨Matrix.bipartiteSlice Y.1 i₂ j₂, mem_tensorSubmodule_iff.mp Y.2 i₂ j₂⟩ from
+      Subtype.ext (Matrix.bipartiteSlice_add X.1 Y.1 i₂ j₂)]
+    exact congrFun (congrFun (T.map_add _ _) i₁) j₁
+  map_smul' c X := by
+    ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+    have hval : ((c • X : ↥(tensorSubmodule S k)) : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) =
+        c • (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) := rfl
+    simp only [tensorMapIdSub_apply, Matrix.smul_apply, smul_eq_mul, RingHom.id_apply, hval]
+    rw [show (⟨Matrix.bipartiteSlice (c • X.1) i₂ j₂, mem_tensorSubmodule_iff.mp
+        (c • X).2 i₂ j₂⟩ : ↥S) =
+        c • (⟨Matrix.bipartiteSlice X.1 i₂ j₂, mem_tensorSubmodule_iff.mp X.2 i₂ j₂⟩ : ↥S) from
+      Subtype.ext (Matrix.bipartiteSlice_smul c X.1 i₂ j₂)]
+    exact congrFun (congrFun (T.map_smul c _) i₁) j₁
+
+@[simp] theorem tensorMapIdSubLM_apply {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
+    (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) {k : ℕ} (X : ↥(tensorSubmodule S k)) :
+    tensorMapIdSubLM T X = tensorMapIdSub T X := rfl
 
 /-- `T` is **completely positive at level `k`**: for every PSD bipartite matrix
 `X ∈ S ⊗ M_k(ℂ)`, the image `(T ⊗ id_k)(X)` is PSD. -/
 def IsCPAtLevel {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
     (T : ↥S →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ) (k : ℕ) : Prop :=
-  ∀ (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ) (hX : X ∈ tensorSubmodule S k),
-    X.PosSemidef → (tensorMapIdSub T X hX).PosSemidef
+  ∀ X : ↥(tensorSubmodule S k), (X : Matrix (Fin m × Fin k) (Fin m × Fin k) ℂ).PosSemidef →
+    (tensorMapIdSub T X).PosSemidef
 
 /-- **`T` is completely positive on the operator system `S`** (Wolf Ch. 1, line
 622): `T` is positive at every level `k` (Wolf's `T_n = T ⊗ id_n`, generalized
