@@ -497,6 +497,12 @@ These mistakes have shipped bugs here.
 8. Expand integer registers explicitly in `\iow` event writes.
 9. Picture IDs nest: the global UID and group-local current ID have different
    ownership.  An inline `\tnpic` must not clobber its parent.
+10. `\prop_new:N` builds a flat store: `\prop_get`, `\prop_if_in` and
+    `\prop_item` all compare the wanted key against every other key, so a
+    store the picture fills costs the square of its size to read.  Declare
+    such a store with `\__tenkz_prop_new_indexed:N`, which answers a key in
+    one step.  A pair-keyed store — one entry per pair of routes — is the
+    worst case and must never be flat.
 
 ## Geometry discipline
 
