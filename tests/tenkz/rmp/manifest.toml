@@ -66,10 +66,10 @@ section = "section-ii"
 order = 4
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-peps-marginal.tex"
 formula = "marginals rho_kept = Tr_traced |psi><psi|."
-ink = "Canonical public tenkzlattice, tenkzplanes environments; no raw TikZ."
-boundary = "The state sheet is open; the doubled sheet traces the declared complement."
+ink = "Kernel plane frames; the doubled sheet is the contract bilayer basis (planes preset) with member-addressed topology."
+boundary = "The state sheet is open; on the doubled sheet the kept sites' ket-bra physical legs stay open and the fourth column closes site by site through east wrap loops."
 source = "paper TN-Review-main.tex line 331; author source ImagesReview Section II/ImagesReview Section II.tex lines 287-304"
-capabilities = ["lattice", "typed-ports"]
+capabilities = ["kernel", "plane-frame"]
 paper_context_only = false
 fixture = "tests/tenkz/rmpfig2_test.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
