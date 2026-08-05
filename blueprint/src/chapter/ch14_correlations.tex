@@ -65,10 +65,9 @@ on decay rates.
         % instead feeds the adjoint and gives the same trace pairing with Y.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
-        \begin{tenkz}[rows={wire,wire}, cols=3, west=cup, east=cup]
+        \begin{tenkz}[rows={wire,wire}, cols=3,
+            west={cup=$Y$}, east={cup=$X\rho^R$}]
             \tn[at=(1,2), skin=ring, wires=2]{\E_A^n}
-            \tn[skin=ring, at=on cup-west-1-2 0.5]{Y}
-            \tn[skin=ring, at=on cup-east-1-2 0.5]{X\rho^R}
         \end{tenkz}
     \end{center}
 \end{definition}

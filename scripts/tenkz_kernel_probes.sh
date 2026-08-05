@@ -2401,14 +2401,14 @@ regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"
 
 fail=0
-for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9; do
+for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
   if ! cmp -s "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog"; then
     echo "FAIL: sugar pair $pair diverges from its kernel expansion" >&2
     diff "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog" >&2 || true
     fail=1
   fi
 done
-[ "$fail" -eq 0 ] && echo "PASS: 9 sugar spellings byte-identical to their expansions"
+[ "$fail" -eq 0 ] && echo "PASS: 10 sugar spellings byte-identical to their expansions"
 
 CURRENT="$WORK/current.sha256"
 ( cd "$WORK"
