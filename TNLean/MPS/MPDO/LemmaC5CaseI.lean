@@ -55,11 +55,11 @@ The overlap formula combines the doubled-index self-overlap identity
 index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
-The singleton-sector argument is a proof by contradiction (issue `#5404`'s
-source-faithful route): the overlap formula and normality
+The singleton-sector argument is a proof by contradiction (the source-faithful
+route recorded in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`): the overlap formula and normality
 (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
 self-overlap limit) give `tr(S^N) → 1`; conjugating the primitive `T` by
-its Perron vector (`Algebra.PerronFrobenius.PerronVector`, issue `#5548`)
+its Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`)
 to a stochastic matrix `P` bounds `S`, after the matching squared
 conjugation, entrywise by `P ⊙ P`; if more than one sector were active,
 `P` would be irreducible substochastic on a nontrivial index set, forcing
@@ -735,11 +735,13 @@ positive semidefinite, the active-sector trace matrix is primitive, and the tens
 normal (in the paper's spectral-radius-one sense), then the active sector set has exactly
 one element.
 
-The proof is by contradiction from the source-faithful route of issue `#5404`: the overlap
+The proof is by contradiction from the source-faithful route recorded in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap
 formula and normality give `tr(S^N) → 1`; positivity bounds `S` entrywise by the Hadamard
 square of the primitive stochastic conjugate `P` of `T`; if there were more than one active
 sector, `P` would be irreducible substochastic on a nontrivial index set, forcing
-`tr(S^N) → 0`, a contradiction. Prerequisite Perron-vector infrastructure: issue `#5548`.
+`tr(S^N) → 0`, a contradiction. Prerequisite Perron-vector infrastructure:
+`TNLean/Algebra/PerronFrobenius/PerronVector.lean`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; normal-tensor
 self-overlap limit (`equalMPS`) at lines 1080--1100. -/
