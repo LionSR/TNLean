@@ -146,9 +146,12 @@ that preserves indices; `void=sealed` removes the site and its bonds.
 | `dir=` | small-enum | `to` `from` `none` | `none` | `TKZ-WIRE-*` |
 | `name=` | identifier | — | generated | `TKZ-NAME-*` |
 
-`dir=` draws the direction mark of a directed virtual index; it changes no
-topology and is rejected on a physical contraction. A wire carries no waypoint
-list, no bend factor and no stroke weight: a route names the records it must
+`dir=` draws the direction mark of a directed index, virtual or physical; it
+changes no topology. On a resolved physical index the typed record, the port
+consumption and mismatch checking, and the physical-leg stroke all stand; the
+orientation of a directed physical open end enters the exposed boundary
+signature, while an internal directed contraction leaves no boundary entry.
+A wire carries no waypoint list, no bend factor and no stroke weight: a route names the records it must
 clear, an arc leaves and enters along its ends' faces, and the stroke follows
 the resolved endpoint type (§5).
 

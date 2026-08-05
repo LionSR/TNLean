@@ -1,17 +1,39 @@
 % Target: rmp-iii-a-proof-two
 % Formula: F_{alpha beta}^gamma fuses stacked O_beta,O_alpha into O_gamma.
-% Ink: Canonical public tenkz two-row fusion equation with an explicit F box.
+% Ink: Kernel flat frames; the two-row fusion equation with an explicit F box.
 % Boundary: Two incoming MPO wires become one outgoing MPO wire on each side.
 % Source: paper TN-Review-main.tex line 1407; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 376-385
-% Capabilities: grid, fusion-map, equation-composition
+% Capabilities: kernel, fusion-map, equation-composition
 \[
-  \begin{tenkz}[rows={op:operator, op:operator}, tensor style=box]
-    \tn{\beta} & \tn[box, wires=2]{F_{\alpha\beta}^{\gamma}}\\
-    \tn{\alpha} &
-  \end{tenkz}
-  =
-  \begin{tenkz}[rows={op:operator}, tensor style=box]
-    \tn[box]{F_{\alpha\beta}^{\gamma}} & \tn{\gamma}
-  \end{tenkz}.
+  \tenkzkernel
+  \begin{tenkzeq}
+    % LHS: the beta-over-alpha word feeds the spanning F box
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+      \tn[at=(1,1), skin=box, name=B,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\beta}
+      \tn[at=(2,1), skin=box, name=O,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
+      \tn[at=(1,2), skin=box, wires=2, name=F,
+        ports={180@1:virtual, 180@2:virtual, 0:virtual}]{F_{\alpha\beta}^{\gamma}}
+      \tnwire{open w}{B.180} \tnwire{open w}{O.180}
+      \tnwire{B.90}{open n} \tnwire{O.270}{open s}
+      % The column contracts beta's lower physical index with alpha's upper one.
+      \tnwire{B.270}{O.90}
+      \tnwire{B.0}{F.180@1} \tnwire{O.0}{F.180@2}
+      \tnwire{F.0}{open e}
+    \end{tenkz}
+    =
+    % RHS: F's fused output feeds the single gamma tensor
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+      \tn[at=(1,1), skin=box, wires=2, name=F,
+        ports={180@1:virtual, 180@2:virtual, 0@2:virtual}]{F_{\alpha\beta}^{\gamma}}
+      \tn[at=(2,2), skin=box, name=C,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\gamma}
+      \tnwire{open w}{F.180@1} \tnwire{open w}{F.180@2}
+      \tnwire{F.0@2}{C.180}
+      \tnwire{C.90}{open n} \tnwire{C.270}{open s}
+      \tnwire{C.0}{open e}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

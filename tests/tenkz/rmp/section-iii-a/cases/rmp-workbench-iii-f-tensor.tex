@@ -1,19 +1,38 @@
 % Target: rmp-workbench-iii-f-tensor
 % Formula: F relates sectors b,c,d,e around the crossing of a and c.
-% Ink: Canonical public tenkzfree directed crossing with six sector labels.
-% Boundary: Four diagonal sector pairs and two directed axes remain open.
+% Ink: Kernel flat frame; two directed strings cross at the centre and four
+%   corner hooks separate the six sectors.
+% Boundary: Four corner hook pairs and two directed axes remain open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 259-288; archival output tensorF.pdf
-% Capabilities: free-graph, directed-crossing, sector-labels
+% Capabilities: kernel, directed-crossing, sector-labels
 \[
-  \begin{tenkzfree}
-    \tnput[box]{F}{(0mm,0mm)}{F}
-    \tnput[dot]{b}{(-9mm,-7mm)}{b} \tnput[dot]{e}{(-9mm,7mm)}{e}
-    \tnput[dot]{f}{(9mm,-7mm)}{f} \tnput[dot]{d}{(9mm,7mm)}{d}
-    \tnjoin[dir,label=$a$]{-18mm,0mm}{F.west}
-    \tnjoin[dir,label=$c$]{0mm,-16mm}{F.south}
-    \tnjoin{F.north}{0mm,16mm} \tnjoin{F.east}{18mm,0mm}
-    \tnjoin{b.north east}{F.south west} \tnjoin{e.south east}{F.north west}
-    \tnjoin{F.south east}{f.north west} \tnjoin{F.north east}{d.south west}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \tndeclare{species}{ampo}{hue=source:red}
+  \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+    % the red a axis runs west to east; the black c axis crosses it upward,
+    % painted over a as in the author block
+    \tnwire[kind=string, species=ampo, name=a, dir=to]{(2,1)}{(2,3)}
+    \tnwire[kind=string, name=c, dir=to,
+            cross={over at crossing of c and a}]{(3,2)}{(1,2)}
+    % four one-strand corner hooks bound the sectors e, d, b, f
+    \tnwire[kind=string, name=hooke,
+            via={0.5 se of (1,1)}]{midway (1,1) and (1,2)}{midway (1,1) and (2,1)}
+    \tnwire[kind=string, name=hookd,
+            via={0.5 sw of (1,3)}]{midway (1,2) and (1,3)}{midway (1,3) and (2,3)}
+    \tnwire[kind=string, name=hookb,
+            via={0.5 ne of (3,1)}]{midway (3,1) and (3,2)}{midway (2,1) and (3,1)}
+    \tnwire[kind=string, name=hookf,
+            via={0.5 nw of (3,3)}]{midway (3,2) and (3,3)}{midway (2,3) and (3,3)}
+    \tnmark[form=label, species=ampo, label pos=w]{on a 0.05}{$a$}
+    \tnmark[form=label, label pos=n]{on c 0.95}{$c$}
+    \tn[skin=none, name=LE, at=midway (1,1) and (2,2)]{}
+    \tn[skin=none, name=LD, at=midway (1,3) and (2,2)]{}
+    \tn[skin=none, name=LB, at=midway (3,1) and (2,2)]{}
+    \tn[skin=none, name=LF, at=midway (3,3) and (2,2)]{}
+    \tnmark[form=label]{LE}{$e$}
+    \tnmark[form=label]{LD}{$d$}
+    \tnmark[form=label, label pos=s]{LB}{$b$}
+    \tnmark[form=label, label pos=s]{LF}{$f$}
+  \end{tenkz}.
 \]

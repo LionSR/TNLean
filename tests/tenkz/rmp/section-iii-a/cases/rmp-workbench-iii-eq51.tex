@@ -1,12 +1,21 @@
 % Target: rmp-workbench-iii-eq51
 % Formula: X followed by an MPO word gives the extended boundary action.
-% Ink: Canonical public tenkz X insertion, finite MPO word, and lower closure.
+% Ink: Kernel flat frame; the X ring and the stock MPO word close on the traced
+%   sides.
 % Boundary: The virtual word is traced; all physical indices are open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 136-143; archival output Eq51.pdf
-% Capabilities: grid, boundary-insertion, closure
+% Capabilities: kernel, boundary-insertion, closure
 \[
-  \begin{tenkz}[tensor style=box, physical=updown, boundary=periodic]
-    \tnX{X} & \tn{} & \tn{} & \tndots & \tn{}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire}, cols=5, west=trace, east=trace]
+    \tn[at=(1,1), skin=ring]{X}
+    \tn[at=(1,2), skin=mpo, ports={0:virtual, 90:physical, 180:virtual,
+      270:physical}]{}
+    \tn[at=(1,3), skin=mpo, ports={0:virtual, 90:physical, 180:virtual,
+      270:physical}]{}
+    \tn[at=(1,4), skin=dots]{}
+    \tn[at=(1,5), skin=mpo, ports={0:virtual, 90:physical, 180:virtual,
+      270:physical}]{}
   \end{tenkz}
 \]

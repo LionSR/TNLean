@@ -1,12 +1,15 @@
 % Target: rmp-workbench-iii-ghz-up
 % Formula: The upward GHZ copy tensor identifies its four binary indices.
-% Ink: Canonical public tenkz four-leg atom with upward copy orientation.
+% Ink: Kernel flat frame; one four-port box atom with the upward copy orientation.
 % Boundary: Two virtual and two physical copy indices remain open.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 357-358; archival output ghzup.pdf
-% Capabilities: grid, four-leg-atom, typed-ports
+% Capabilities: kernel, four-leg-atom, typed-ports
+\tenkzkernel
 \[
-  G_{\uparrow}=\begin{tenkz}[physical=updown]
-    \tn[box,up=$0/1$,down=$0/1$]{G}
+  G_{\uparrow}=
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[skin=box, ports={90:physical:$0/1$, 270:physical:$0/1$,
+      0:virtual, 180:virtual}]{G}
   \end{tenkz}.
 \]

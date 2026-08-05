@@ -1,31 +1,39 @@
 % Target: rmp-iii-a-proof-one
 % Formula: V_alpha reduces O_alpha acting on A to the original MPS tensor A.
-% Ink: Canonical public tenkzfree local reduction equation with V_alpha.
+% Ink: Kernel flat frames; V_alpha spans the alpha row and the tensor row on each
+%   side of the reduction.
 % Boundary: Both sides have the same two virtual and one physical open legs.
 % Source: paper TN-Review-main.tex line 1403; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 363-375
-% Capabilities: free-graph, local-intertwiner, equation-composition
+% Capabilities: kernel, local-intertwiner, equation-composition
 \[
-  \begin{tenkzfree}[tensor style=box]
-    \tnput[pill]{V}{(16mm,0mm)}{V_\alpha}
-    \tnput[box]{a}{($(V.north west)+(-12mm,0mm)$)}{\alpha}
-    \tnput[dot]{d}{($(V.south west)+(-12mm,0mm)$)}{}
-    \tnjoin{a.east}{V.north west}
-    \tnjoin{d.east}{V.south west}
-    \tnjoin{$(a.west)+(-12mm,0mm)$}{a.west}
-    \tnjoin{a.north}{$(a.north)+(0mm,7mm)$}
-    \tnjoin{$(d.west)+(-12mm,0mm)$}{d.west}
-    \tnjoin{d.north}{a.south}
-    \tnjoin{V.east}{$(V.east)+(12mm,0mm)$}
-  \end{tenkzfree}
-  =
-  \begin{tenkzfree}[tensor style=box]
-    \tnput[pill]{V}{(0mm,0mm)}{V_\alpha}
-    \tnput[dot]{d}{($(V.east)+(16mm,0mm)$)}{}
-    \tnjoin{V.east}{d.west}
-    \tnjoin{$(V.north west)+(-12mm,0mm)$}{V.north west}
-    \tnjoin{$(V.south west)+(-12mm,0mm)$}{V.south west}
-    \tnjoin{d.north}{$(d.north)+(0mm,7mm)$}
-    \tnjoin{d.east}{$(d.east)+(12mm,0mm)$}
-  \end{tenkzfree}.
+  \tenkzkernel
+  \begin{tenkzeq}
+    % LHS: O_alpha's tensor over the MPS dot, both fed into V_alpha
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+      \tn[at=(1,1), skin=box, name=O,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
+      \tn[at=(2,1), skin=dot, name=A,
+        ports={180:virtual, 0:virtual, 90:physical}]{}
+      \tn[at=(1,2), skin=box, wires=2, name=V,
+        ports={180@1:virtual, 180@2:virtual, 0:virtual}]{V_\alpha}
+      \tnwire{open w}{O.180} \tnwire{open w}{A.180}
+      \tnwire{O.90}{open n}
+      \tnwire{O.270}{A.90}
+      \tnwire{O.0}{V.180@1} \tnwire{A.0}{V.180@2}
+      \tnwire{V.0}{open e}
+    \end{tenkz}
+    =
+    % RHS: V_alpha's fused output feeds the bare MPS dot
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+      \tn[at=(1,1), skin=box, wires=2, name=V,
+        ports={180@1:virtual, 180@2:virtual, 0@2:virtual}]{V_\alpha}
+      \tn[at=(2,2), skin=dot, name=A,
+        ports={180:virtual, 0:virtual, 90:physical}]{}
+      \tnwire{open w}{V.180@1} \tnwire{open w}{V.180@2}
+      \tnwire{V.0@2}{A.180}
+      \tnwire{A.90}{open n}
+      \tnwire{A.0}{open e}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

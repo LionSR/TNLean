@@ -1,33 +1,56 @@
 % Target: rmp-iii-a-symmetry-sector
 % Formula: S_{alpha,g} is the two-loop string-order construction with
 %   R_{bar alpha}, R_alpha, X_g, and X_g^dagger insertions.
-% Ink: Canonical public tenkz: two fixed-point sandwich loops with R on the
-%   internal physical bonds and the on-site symmetry action on the lower ket rails.
+% Ink: Kernel flat frame; two sandwich loops closed through the rho_l and rho_r
+%   rings, with R on the internal physical bonds and the X_g rings on the lower
+%   ket rails.
 % Boundary: Both loops close their virtual ends through rho_l and rho_r; all
 %   physical indices are contracted.
 % Source: paper TN-Review-main.tex line 1184; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 114-132
-% Capabilities: grid, typed-ports
-% The string-order expectation <S_{alpha,g}>: two sandwich loops, each a
-% bra-A/ket-A pair closed west/east through the fixed points rho_l, rho_r,
-% carrying the symmetry insertion R (on the ket-bra physical bond) and the
-% on-site action X_g on the lower ket rail, as at y=-0.75 in the author
-% source.  The op row is side-sealed so the west/east cups bend only the
-% bra and ket rails.  The 180-degree public frame keeps the supported
-% ket-op-bra contraction order while placing the ket rail below as in the
-% source; body columns and cup labels are reversed before that rotation.
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket, op:west none:east none, bra}, frame={rotate=180},
-                tensor style=box, west={cup=$\rho_r$}, east={cup=$\rho_l$}]
-    \tnX{X_g} & \tn{A}\\
-    \tnskip & \tn[dot]{R_{\bar\alpha}}\\
-    \tnghost{} & \tn{A}
+  % Left loop: bra-A over ket-A, R_{bar alpha} on the physical bond, X_g on
+  % the lower rail east of A; rho_l and rho_r close the virtual rails.
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=ring, name=pl, ports={90:virtual, 270:virtual}]{\rho_l}
+    \tn[at=(1,2), skin=box, name=At,
+      ports={0:virtual, 180:virtual, 270:physical}]{A}
+    \tn[at=(3,2), skin=box, name=Ab,
+      ports={0:virtual, 180:virtual, 90:physical}]{A}
+    \tn[at=(2,2), skin=ring, name=R,
+      ports={90:physical, 270:physical}]{R_{\overline{\alpha}}}
+    \tn[at=(1,3), skin=none, name=J, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(3,3), skin=ring, name=Xg, ports={0:virtual, 180:virtual}]{X_g}
+    \tn[at=(2,4), skin=ring, name=pr, ports={90:virtual, 270:virtual}]{\rho_r}
+    \tnwire[route=arc]{pl.90}{At.180}
+    \tnwire[route=arc]{Ab.180}{pl.270}
+    \tnwire{At.270}{R.90} \tnwire{R.270}{Ab.90}
+    \tnwire{At.0}{J.180} \tnwire[route=arc]{J.0}{pr.90}
+    \tnwire{Ab.0}{Xg.180} \tnwire[route=arc]{Xg.0}{pr.270}
   \end{tenkz}
   \qquad
-  \begin{tenkz}[rows={ket, op:west none:east none, bra}, frame={rotate=180},
-                tensor style=box, west={cup=$\rho_r$}, east={cup=$\rho_l$}]
-    \tn{A} & \tnX{X_g^\dagger}\\
-    \tn[dot]{R_\alpha} & \tnskip\\
-    \tn{A} & \tnghost{}
+  % Right loop: the mirrored construction with R_alpha and X_g^dagger west
+  % of A on the lower rail.
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=ring, name=pl, ports={90:virtual, 270:virtual}]{\rho_l}
+    \tn[at=(1,2), skin=none, name=J, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(3,2), skin=ring, name=Xd,
+      ports={0:virtual, 180:virtual}]{X_g^\dagger}
+    \tn[at=(1,3), skin=box, name=At,
+      ports={0:virtual, 180:virtual, 270:physical}]{A}
+    \tn[at=(3,3), skin=box, name=Ab,
+      ports={0:virtual, 180:virtual, 90:physical}]{A}
+    \tn[at=(2,3), skin=ring, name=R,
+      ports={90:physical, 270:physical}]{R_\alpha}
+    \tn[at=(2,4), skin=ring, name=pr, ports={90:virtual, 270:virtual}]{\rho_r}
+    \tnwire[route=arc]{pl.90}{J.180}
+    \tnwire[route=arc]{Xd.180}{pl.270}
+    \tnwire{J.0}{At.180}
+    \tnwire{Xd.0}{Ab.180}
+    \tnwire{At.270}{R.90} \tnwire{R.270}{Ab.90}
+    \tnwire[route=arc]{At.0}{pr.90}
+    \tnwire[route=arc]{Ab.0}{pr.270}
   \end{tenkz}
 \]

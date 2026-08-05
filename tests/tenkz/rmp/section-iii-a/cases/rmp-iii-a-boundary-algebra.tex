@@ -1,13 +1,26 @@
 % Target: rmp-iii-a-boundary-algebra
 % Formula: A = {Tr[X A] : X} is the size-independent local MPO algebra.
-% Ink: Canonical public tenkz one-site periodic word with boundary matrix X.
-% Boundary: The virtual index is traced; the one physical index is open.
+% Ink: Kernel flat frame; the one-site word with the X ring, closed below by the
+%   periodic return in the source's red operator hue.
+% Boundary: The virtual index is traced; the one physical pair is open.
 % Source: paper TN-Review-main.tex line 1302; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 144-149
-% Capabilities: grid, periodic-closure, boundary-insertion
+% Capabilities: kernel, periodic-closure, boundary-insertion
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
   \mathcal A=\left\{
-  \begin{tenkz}[physical=up, boundary=periodic, tensor style=box]
-    \tnX{X} & \tn{A}
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+    \tn[at=(1,2), skin=ring, name=X, ports={0:virtual, 180:virtual}]{X}
+    \tn[at=(1,3), skin=box, name=A,
+      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{A}
+    % The traced virtual word returns below the row, one column wider on each
+    % side so the descent clears the physical stubs, as the source draws it.
+    \tn[at=(2,1), skin=none, name=JW, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,4), skin=none, name=JE, ports={90:virtual, 180:virtual}]{}
+    \tnwire[species=operator]{X.0}{A.180}
+    \tnwire[species=operator, route=arc]{A.0}{JE.90}
+    \tnwire[species=operator]{JE.180}{JW.0}
+    \tnwire[species=operator, route=arc]{JW.90}{X.180}
   \end{tenkz}:X\right\}.
 \]

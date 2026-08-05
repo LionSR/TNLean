@@ -1,13 +1,15 @@
 % Target: rmp-iv-intersection-lhs-five
 % Formula: After inversion, the L boundary condition retains three open indices.
-% Ink: Canonical public tenkz: L alone carries one physical and two virtual open
-%   ports.
-% Boundary: L's west and east virtual stubs and its upward physical leg remain open.
+% Ink: Kernel flat frame: the wide pill L alone carries two upward virtual stubs
+%   and its lobe leg, at the stations of the preceding panel.
+% Boundary: L's two upward virtual stubs and its lobe physical leg remain open.
 % Source: paper TN-Review-main.tex line 2073; author source ImagesReview Section
 %   IV/ImagesReview Section IV.tex lines 142-147 (Ltensor5)
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[rows={ket}]
-    \tn[pill, wide=3, up at={3}]{L} & &
+  \begin{tenkz}[rows={wire}, cols=5, bonds=none]
+    \tn[at=(1,1), skin=pill, wide=5, name=l,
+      ports={90@1:virtual, 90@4:virtual, 90@5:physical}]{L}
   \end{tenkz}
 \]

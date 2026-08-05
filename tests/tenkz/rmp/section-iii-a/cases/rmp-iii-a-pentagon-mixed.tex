@@ -1,29 +1,48 @@
 % Target: rmp-iii-a-pentagon-mixed
-% Formula: ^2F ^3F = ^3F ^2F ^2F — a horizontal MPO string (red,
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
-% Boundary: Resolved by the public environment; open indices remain explicit.
-% Source: paper TN-Review-main.tex line 1325; paper-context-only; no author drawing
-%   source
-% Capabilities: coherence, free-graph
+% Formula: ^2F ^3F = ^3F ^2F ^2F — the MPO string pulls through the physical vertex.
+% Ink: Kernel flat frame; a physical splitting vertex and a crossing MPO string.
+% Boundary: The root leg, both split legs, and both string ends are open.
+% Source: paper TN-Review-main.tex line 1325; paper figure fig3_pentagon4.pdf;
+%   no author drawing source
+% Capabilities: kernel, coherence, crossing-order
 \[
-  \begin{tenkzfree}
-    % the splitting vertex: root in from below, two legs out the top
-    \tnput[dot, ports={south:physical, 130:virtual, 50:virtual}]{V}{(0,0)}{}
-    \tnput[boundary]{VnW}{(-8mm,14mm)}{} \tnput[boundary]{VnE}{(8mm,14mm)}{}
-    \tnjoin[dir]{0mm,-16mm}{V.south}
-    \tnjoin[dir, route=arc]{V.130}{VnW.south} \tnjoin[dir, route=arc]{V.50}{VnE.south}
-    % the MPO string, below the vertex, crossing the root leg
-    \tnjoin[dir]{-9mm,-9mm}{9mm,-9mm}
-  \end{tenkzfree}
-  \;=\;
-  \begin{tenkzfree}
-    \tnput[dot, ports={south:physical, 130:virtual, 50:virtual}]{W}{(0,0)}{}
-    \tnput[boundary]{WnW}{(-8mm,18mm)}{} \tnput[boundary]{WnE}{(8mm,18mm)}{}
-    \tnjoin[dir]{0mm,-12mm}{W.south}
-    \tnjoin[dir, route=arc]{W.130}{WnW.south} \tnjoin[dir, route=arc]{W.50}{WnE.south}
-    % the string, above the vertex, crossing BOTH split legs
-    \tnjoin[dir]{-13mm,11mm}{13mm,11mm}
-  \end{tenkzfree}
+  \tenkzkernel
+  \tndeclare{species}{fus}{hue=source:red}
+  \tndeclare{species}{vertex}{hue=source:lightgray}
+  \begin{tenkzeq}
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=3, bonds=none]
+      % the MPO string runs below the vertex and crosses the root leg once;
+      % the vertex legs are directed physical levels, ended by glyphless
+      % typed sites
+      \tn[at=(2,2), name=V, skin=dot, species=vertex,
+          ports={270:physical, 135:physical, 45:physical}]{}
+      \tn[at=(4,2), name=rt, skin=none, ports={90:physical}]{}
+      \tn[at=(1,1), name=ta, skin=none, ports={315:physical}]{}
+      \tn[at=(1,3), name=tb, skin=none, ports={225:physical}]{}
+      \tnwire[dir=to, name=root]{rt.90}{V.270}
+      \tnwire[dir=to]{V.135}{ta.315}
+      \tnwire[dir=to]{V.45}{tb.225}
+      \tnwire[kind=string, species=fus, dir=to, name=g,
+              cross={over at crossing of g and root}]
+        {midway (2,1) and (3,1)}{midway (2,3) and (3,3)}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=3, bonds=none]
+      % the same string above the vertex crosses both split legs
+      \tn[at=(3,2), name=V, skin=dot, species=vertex,
+          ports={270:physical, 135:physical, 45:physical}]{}
+      \tn[at=(4,2), name=rt, skin=none, ports={90:physical}]{}
+      \tn[at=(1,1), name=ta, skin=none, ports={315:physical}]{}
+      \tn[at=(1,3), name=tb, skin=none, ports={225:physical}]{}
+      \tnwire[dir=to, name=root]{rt.90}{V.270}
+      \tnwire[dir=to, name=la]{V.135}{ta.315}
+      \tnwire[dir=to, name=lb]{V.45}{tb.225}
+      \tnwire[kind=string, species=fus, dir=to, name=g,
+              cross={over at crossing of g and la,
+                     over at crossing of g and lb}]
+        {midway (1,1) and (2,1)}{midway (1,3) and (2,3)}
+    \end{tenkz}
+  \end{tenkzeq}
 \]
 \[
   {}^{2}F\,{}^{3}F \;=\; {}^{3}F\,{}^{2}F\,{}^{2}F

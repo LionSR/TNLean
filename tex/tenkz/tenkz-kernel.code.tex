@@ -97,6 +97,10 @@
 \msg_new:nnn {tenkz}{kernel-circle-open-direction}
   { [TKZ-CIRCLE-OPEN-DIRECTION]~circle~frame~does~not~define~diagonal~open~
     direction~'#3'~at~the~#2~end~of~wire~'#1';~use~n|e|s|w. }
+\msg_new:nnn {tenkz}{kernel-open-transverse-frame}
+  { [TKZ-OPEN-TRANSVERSE-FRAME]~open~direction~'#3'~at~the~#2~end~of~
+    wire~'#1'~follows~the~independent~transverse~physical~axis,~which~
+    only~a~plane~frame~declares. }
 \msg_new:nnn {tenkz}{kernel-frame-basis-parse}
   { [TKZ-FRAME-BASIS-PARSE]~basis~member~'#1'~must~be~
     '<row~kind>~at~(<integer>,<integer>)'. }
@@ -1470,7 +1474,13 @@
 % ---------- boundary signatures --------------------------------------------------------
 % The signature of a panel is the sorted multiset of its exposed indices:
 % one entry per open wire end and one per outward physical port.  tenkzeq
-% compares adjacent panels and errors on mismatch.
+% compares adjacent panels and errors on mismatch.  A directed physical open
+% end carries its orientation: the entry says whether the index leaves the
+% panel (to) or enters it (from), so a space and its dual cannot pass for one
+% another.  An internal directed contraction exposes nothing and leaves no
+% entry.
+
+\tl_new:N \l__tenkz_kernel_sig_dir_tl
 
 \cs_new_protected:Npn \__tenkz_kernel_bearing_normalize:nN #1#2
   {
@@ -1582,17 +1592,74 @@
                               {####1}
                           }
                       }
+                    % A transverse open end is cut on the page side its
+                    % signed transverse vector exits, so panels compare it
+                    % against the ordinary physical legs of that side.
+                    \str_case:VnTF \l__tenkz_kernel_scratch_tl
+                      {
+                        {up}
+                          {
+                            \tl_set:Nn
+                              \l__tenkz_kernel_port_face_tl {n}
+                          }
+                        {down}
+                          {
+                            \tl_set:Nn
+                              \l__tenkz_kernel_port_face_tl {s}
+                          }
+                      }
+                      {
+                        \exp_args:NnV
+                          \__tenkz_geom_frame_transverse:nnNN {kpic}
+                          \l__tenkz_kernel_port_face_tl
+                          \l__tenkz_kernel_r_physical_x_tl
+                          \l__tenkz_kernel_r_physical_y_tl
+                        \exp_args:Ne
+                          \__tenkz_kernel_signature_bearing:nN
+                          {
+                            \fp_eval:n
+                              {
+                                atand(
+                                  \l__tenkz_kernel_r_physical_y_tl ,
+                                  \l__tenkz_kernel_r_physical_x_tl )
+                              }
+                          }
+                          \l__tenkz_kernel_scratch_tl
+                      }
+                      { }
                     \__tenkz_model_get:nnN
                       {##1} {####1-open-type}
                       \l__tenkz_kernel_port_type_tl
+                    % The orientation of a directed physical index is part of
+                    % the exposed entry, normalized to the cut: the barb ends
+                    % at this end (to, the index leaves) or at the other end
+                    % (from, the index enters).
+                    \tl_clear:N \l__tenkz_kernel_sig_dir_tl
+                    \str_if_eq:VnT \l__tenkz_kernel_port_type_tl {physical}
+                      {
+                        \__tenkz_model_get:nnN {##1} {dir} \l_tmpa_tl
+                        \quark_if_no_value:NF \l_tmpa_tl
+                          {
+                            \str_if_eq:VnF \l_tmpa_tl {none}
+                              {
+                                \tl_set:Ne \l__tenkz_kernel_sig_dir_tl
+                                  {
+                                    :
+                                    \str_if_eq:VnTF \l_tmpa_tl {####1}
+                                      {to} {from}
+                                  }
+                              }
+                          }
+                      }
                     \seq_put_right:Ne \l__tenkz_kernel_emit_seq
                       {
                         \str_if_eq:VnTF
                           \l__tenkz_kernel_port_type_tl {physical}
                           {phys}{open}
                         : \tl_use:N \l__tenkz_kernel_scratch_tl
-                        \str_if_eq:VnF
+                        \str_if_eq:VnTF
                           \l__tenkz_kernel_port_type_tl {physical}
+                          { \tl_use:N \l__tenkz_kernel_sig_dir_tl }
                           { \tl_use:N \l_tmpb_tl }
                       }
                   }
@@ -1999,6 +2066,20 @@
           { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
       }
       {
+    % `open up|down` is the transverse sibling of an in-plane compass open:
+    % the end is an open leg on the frame's independent transverse physical
+    % axis, so the wire is a physical leg by construction.  Validation
+    % rejects the words on frames that declare no transverse axis.
+    \regex_extract_once:nnNTF { \A open \s+ (up|down) \Z } {#2}
+      \l__tenkz_kernel_match_seq
+      {
+        \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } { #1-open }
+          { \seq_item:Nn \l__tenkz_kernel_match_seq {2} }
+        \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl }
+          { #1-open-type } {physical}
+        \__tenkz_kernel_port_wire_physical:n { \l__tenkz_model_last_tl }
+      }
+      {
         \seq_push:Ne \l__tenkz_kernel_stack_seq
           { \tl_use:N \l__tenkz_model_last_tl }
         \__tenkz_kernel_addr:nN {#2} \l_tmpa_tl
@@ -2006,6 +2087,7 @@
         \tl_set:NV \l__tenkz_model_last_tl \l__tenkz_kernel_scratch_tl
         \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {#1}
           { \tl_use:N \l_tmpa_tl }
+      }
       }
       }
   }
@@ -2084,6 +2166,35 @@
                       {
                         \msg_error:nneee
                           {tenkz}{kernel-circle-open-direction}
+                          {##1} {####1}
+                          { \tl_use:N \l__tenkz_kernel_scratch_tl }
+                      }
+                  }
+              }
+          }
+      }
+  }
+% The transverse open words follow the frame's independent physical axis,
+% which only a plane frame declares.  Flat and circle frames reject them
+% before geometry would ask for the missing transverse vector.
+\cs_new_protected:Npn \__tenkz_kernel_validate_transverse_open_ends:
+  {
+    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \__tenkz_model_map_ids:nn {wire}
+          {
+            \clist_map_inline:nn {from, to}
+              {
+                \__tenkz_model_get:nnN {##1} {####1-open}
+                  \l__tenkz_kernel_scratch_tl
+                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                  {
+                    \exp_args:NnV \regex_match:nnT
+                      { \A (up|down) \Z }
+                      \l__tenkz_kernel_scratch_tl
+                      {
+                        \msg_error:nneee
+                          {tenkz}{kernel-open-transverse-frame}
                           {##1} {####1}
                           { \tl_use:N \l__tenkz_kernel_scratch_tl }
                       }
@@ -3330,8 +3441,6 @@
   { [TKZ-PORT-SLOT]~slot~#2~on~face~#3~of~atom~#1~exceeds~its~span~#4. }
 \msg_new:nnn {tenkz}{kernel-port-type}
   { [TKZ-PORT-TYPE]~index~wire~#1~joins~a~#2~port~to~a~#3~port. }
-\msg_new:nnn {tenkz}{kernel-port-direction}
-  { [TKZ-PORT-DIRECTION]~physical~index~wire~#1~cannot~carry~dir=#2. }
 \msg_new:nnn {tenkz}{kernel-port-consumed}
   { [TKZ-PORT-CONSUMED]~typed~port~#1~is~consumed~by~both~wire~#2~and~#3. }
 \cs_new_protected:Npn \__tenkz_kernel_port_face_normalize:nN #1#2
@@ -4181,19 +4290,11 @@
       }
   }
 
+% A resolved physical index keeps its typed record; `dir=` rides it exactly
+% as on a virtual index, marking the level's orientation without changing
+% the topology, the port consumption, or the physical-leg stroke.
 \cs_new_protected:Npn \__tenkz_kernel_port_wire_physical:n #1
-  {
-    \__tenkz_model_complete:nnn {#1} {port-type} {physical}
-    \__tenkz_model_get:nnN {#1} {dir} \l__tenkz_kernel_scratch_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
-      {
-        \str_if_eq:VnF \l__tenkz_kernel_scratch_tl {none}
-          {
-            \msg_error:nnee {tenkz}{kernel-port-direction} {#1}
-              { \tl_use:N \l__tenkz_kernel_scratch_tl }
-          }
-      }
-  }
+  { \__tenkz_model_complete:nnn {#1} {port-type} {physical} }
 
 \cs_new_protected:Npn \__tenkz_kernel_port_open_type_validate:nnn #1#2#3
   {
@@ -5905,6 +6006,10 @@
       {
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {stub} }
+        % the region window that cuts an unbonded virtual index is the
+        % innermost enclosure containing its host
+        \exp_args:NV \__tenkz_kernel_r_virtual_enclosure:n
+          \l__tenkz_kernel_port_record_tl
       }
     \__tenkz_kernel_r_sid:nN {#1} \l__tenkz_kernel_r_sid_tl
     \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
@@ -6077,6 +6182,15 @@
 \tl_new:N \l__tenkz_kernel_leg_dir_tl
 \tl_new:N \l__tenkz_kernel_leg_gx_tl
 \tl_new:N \l__tenkz_kernel_leg_gy_tl
+% Containment depth of the enclosure a leg or stub is measured against, and
+% the clearance count past the member supports it must reach.  A physical
+% ray pierces the contour by one clearance (pad two: one to the contour,
+% one through it); a virtual stub cut by a region window ends on the
+% contour itself (pad one).
+\tl_new:N \l__tenkz_kernel_leg_depth_tl
+\tl_set:Nn \l__tenkz_kernel_leg_depth_tl {0}
+\tl_new:N \l__tenkz_kernel_leg_pad_tl
+\tl_set:Nn \l__tenkz_kernel_leg_pad_tl {2}
 % A leg asks every contour whether it holds the site the leg grew from, and
 % that question resolves a range through the shared cell registers.  The leg
 % therefore keeps its own cell in registers of its own: read from the shared
@@ -10255,7 +10369,8 @@
       { \l__tenkz_kernel_leg_gx_tl }
       { \l__tenkz_kernel_leg_gy_tl }
       {
-        2 * \__tenkz_metric_ratio:n {daylight}
+        ( \l__tenkz_kernel_leg_pad_tl + \l__tenkz_kernel_leg_depth_tl )
+        * \__tenkz_metric_ratio:n {daylight}
         * \l__tenkz_kernel_leg_tl
       }
       \l__tenkz_kernel_leg_reach_tl
@@ -10296,6 +10411,11 @@
                   \l__tenkz_kernel_leg_sel_seq \l__tenkz_kernel_leg_tl
                 \seq_if_in:NnT \l__tenkz_kernel_leg_sel_seq {#1}
                   {
+                    % A contour with nested contours stands further out; the
+                    % pierced leg tracks it by the same containment depth.
+                    \tl_set:Ne \l__tenkz_kernel_leg_depth_tl
+                      { \__tenkz_kernel_mark_depth:n {##1} }
+                    \tl_set:Nn \l__tenkz_kernel_leg_pad_tl {2}
                     \__tenkz_kernel_hull_obstacles:NN
                       \l__tenkz_kernel_leg_sel_seq
                       \l__tenkz_kernel_leg_obst_seq
@@ -10352,6 +10472,136 @@
               }
           }
       }
+  }
+
+% An unbonded virtual port whose host sits inside a region window is cut by
+% that window's boundary: the stub runs one clearance past the contour of
+% the innermost enclosure containing its host, and no further.  An outer
+% window does not meet a bond its inner neighbour already cut, so only the
+% minimal containing selections are folded; two windows over one selection
+% are both minimal and the outer one wins the fold.  Physical rays keep
+% their established pierce-through-every-window reach.
+\tl_new:N \l__tenkz_kernel_venc_host_tl
+\seq_new:N \l__tenkz_kernel_venc_seq
+\seq_new:N \l__tenkz_kernel_venc_sel_seq
+\seq_new:N \l__tenkz_kernel_venc_probe_seq
+\bool_new:N \l__tenkz_kernel_venc_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_virtual_enclosure:n #1
+  {
+    \tl_set:Nn \l__tenkz_kernel_venc_host_tl {#1}
+    \seq_clear:N \l__tenkz_kernel_venc_seq
+    \__tenkz_model_map_marks_form:nN {enclosure}
+      \__tenkz_kernel_r_virtual_enclosure_collect:n
+    \seq_map_inline:Nn \l__tenkz_kernel_venc_seq
+      { \__tenkz_kernel_r_virtual_enclosure_minimal:n {##1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_virtual_enclosure_collect:n #1
+  {
+    \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_venc_sel_seq
+    \seq_if_in:NVT \l__tenkz_kernel_venc_sel_seq \l__tenkz_kernel_venc_host_tl
+      { \seq_put_right:Nn \l__tenkz_kernel_venc_seq {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_virtual_enclosure_minimal:n #1
+  {
+    \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_venc_sel_seq
+    \bool_set_false:N \l__tenkz_kernel_venc_bool
+    \seq_map_inline:Nn \l__tenkz_kernel_venc_seq
+      {
+        \str_if_eq:nnF {##1} {#1}
+          {
+            \__tenkz_kernel_mark_members:nN {##1}
+              \l__tenkz_kernel_venc_probe_seq
+            % a strict subset is a subset with strictly fewer members: the
+            % canonical membership holds no repetitions
+            \int_compare:nNnT
+              { \seq_count:N \l__tenkz_kernel_venc_probe_seq }
+              <
+              { \seq_count:N \l__tenkz_kernel_venc_sel_seq }
+              {
+                \__tenkz_kernel_seq_subset:NNN
+                  \l__tenkz_kernel_venc_probe_seq
+                  \l__tenkz_kernel_venc_sel_seq
+                  \l__tenkz_kernel_depth_bool
+                \bool_if:NT \l__tenkz_kernel_depth_bool
+                  {
+                    \bool_set_true:N \l__tenkz_kernel_venc_bool
+                    \seq_map_break:
+                  }
+              }
+          }
+      }
+    \bool_if:NF \l__tenkz_kernel_venc_bool
+      { \__tenkz_kernel_r_virtual_enclosure_reach:n {#1} }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_virtual_enclosure_reach:n #1
+  {
+    \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_venc_sel_seq
+    \__tenkz_kernel_hull_obstacles:NN
+      \l__tenkz_kernel_venc_sel_seq \l__tenkz_kernel_leg_obst_seq
+    \__tenkz_kernel_hull_scale:NN
+      \l__tenkz_kernel_venc_sel_seq \l__tenkz_kernel_leg_tl
+    \tl_set:Ne \l__tenkz_kernel_leg_depth_tl
+      { \__tenkz_kernel_mark_depth:n {#1} }
+    % The boundary that cuts the index owns its end: the stub runs to the
+    % window contour and stops on it, claiming a cut rather than a crossing.
+    \tl_set:Nn \l__tenkz_kernel_leg_pad_tl {1}
+    % A stub leaves through one contour side.  On an affine chart the side a
+    % cardinal face crosses is read off the dual basis exactly, as in-plane
+    % cardinal policy legs do; a non-cardinal face and a chartless selection
+    % keep the page-direction support fold.
+    \__tenkz_kernel_hull_basis:NNNNN
+      \l__tenkz_kernel_venc_sel_seq
+      \l__tenkz_kernel_hull_ex_tl \l__tenkz_kernel_hull_ey_tl
+      \l__tenkz_kernel_hull_nx_tl \l__tenkz_kernel_hull_ny_tl
+    \__tenkz_geom_frame_if_affine:nTF {kpic}
+      {
+        \bool_if:NTF \l__tenkz_kernel_hull_chart_bool
+          {
+            \__tenkz_kernel_hull_basis_dual:
+            \str_case:enF
+              {
+                \__tenkz_kernel_r_compass:n
+                  { \tl_use:N \l__tenkz_kernel_port_face_tl }
+              }
+              {
+                {0}
+                  {
+                    \tl_set_eq:NN \l__tenkz_kernel_leg_gx_tl
+                      \l__tenkz_kernel_hull_ux_tl
+                    \tl_set_eq:NN \l__tenkz_kernel_leg_gy_tl
+                      \l__tenkz_kernel_hull_uy_tl
+                    \__tenkz_kernel_r_physical_enclosure_affine:
+                  }
+                {90}
+                  {
+                    \tl_set_eq:NN \l__tenkz_kernel_leg_gx_tl
+                      \l__tenkz_kernel_hull_vx_tl
+                    \tl_set_eq:NN \l__tenkz_kernel_leg_gy_tl
+                      \l__tenkz_kernel_hull_vy_tl
+                    \__tenkz_kernel_r_physical_enclosure_affine:
+                  }
+                {180}
+                  {
+                    \tl_set:Ne \l__tenkz_kernel_leg_gx_tl
+                      { -\l__tenkz_kernel_hull_ux_tl }
+                    \tl_set:Ne \l__tenkz_kernel_leg_gy_tl
+                      { -\l__tenkz_kernel_hull_uy_tl }
+                    \__tenkz_kernel_r_physical_enclosure_affine:
+                  }
+                {270}
+                  {
+                    \tl_set:Ne \l__tenkz_kernel_leg_gx_tl
+                      { -\l__tenkz_kernel_hull_vx_tl }
+                    \tl_set:Ne \l__tenkz_kernel_leg_gy_tl
+                      { -\l__tenkz_kernel_hull_vy_tl }
+                    \__tenkz_kernel_r_physical_enclosure_affine:
+                  }
+              }
+              { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+          }
+          { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
+      }
+      { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
@@ -10536,7 +10786,8 @@
       \l__tenkz_kernel_leg_obst_seq
       { \l__tenkz_kernel_leg_dir_tl }
       {
-        2 * \__tenkz_metric_ratio:n {daylight}
+        ( \l__tenkz_kernel_leg_pad_tl + \l__tenkz_kernel_leg_depth_tl )
+        * \__tenkz_metric_ratio:n {daylight}
         * \l__tenkz_kernel_leg_tl
       }
       \l__tenkz_kernel_leg_reach_tl
@@ -11035,6 +11286,37 @@
   }
 
 \cs_new_protected:Npn \__tenkz_kernel_r_open_tip_affine_xy:nNN #1#2#3
+  {
+    % A transverse word is not a logical ray: the tip stands one physical-leg
+    % reach from its neighbour along the frame's signed page-space transverse
+    % vector, exactly where the plane physical policy would end its own leg.
+    \str_case:nnTF {#1}
+      {
+        {up}   { \tl_set:Nn \l__tenkz_kernel_r_b_tl {n} }
+        {down} { \tl_set:Nn \l__tenkz_kernel_r_b_tl {s} }
+      }
+      {
+        \exp_args:NnV \__tenkz_geom_frame_transverse:nnNN {kpic}
+          \l__tenkz_kernel_r_b_tl
+          \l__tenkz_kernel_r_physical_x_tl
+          \l__tenkz_kernel_r_physical_y_tl
+        \fp_set:Nn #2
+          {
+            \l__tenkz_kernel_r_xc_fp
+            + \__tenkz_metric_ratio:n {physleg}
+              * \l__tenkz_kernel_r_physical_x_tl
+          }
+        \fp_set:Nn #3
+          {
+            \l__tenkz_kernel_r_yc_fp
+            + \__tenkz_metric_ratio:n {physleg}
+              * \l__tenkz_kernel_r_physical_y_tl
+          }
+      }
+      { \__tenkz_kernel_r_open_tip_affine_planar_xy:nNN {#1} #2 #3 }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_r_open_tip_affine_planar_xy:nNN #1#2#3
   {
     \__tenkz_geom_unapply:nnnNN {kpic}
       { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
@@ -13434,6 +13716,120 @@
       }
   }
 
+% ---------- concentric containment ---------------------------------------------------------------
+% Containment between two selections is a fact the model holds, and
+% concentric order nests contours inward by containment, ties broken by
+% declaration order (LANGUAGE-1.0 sections 5 and 6).  The depth of an
+% enclosure is the length of the longest chain of enclosures nested strictly
+% inside it -- a selection counts as inside on a strict member subset, or on
+% an equal member set declared earlier.  Every consumer of the offset hull
+% steps its clearance out by one daylight per level, so a region window
+% around another region window clears the inner contour instead of
+% colliding with it on a shared support.
+\prop_new:N \l__tenkz_kernel_mark_depth_prop
+\seq_new:N \l__tenkz_kernel_depth_order_seq
+\seq_new:N \l__tenkz_kernel_depth_inner_seq
+\seq_new:N \l__tenkz_kernel_depth_outer_seq
+\tl_new:N \l__tenkz_kernel_depth_tl
+\int_new:N \l__tenkz_kernel_depth_int
+\bool_new:N \l__tenkz_kernel_depth_bool
+% Is every member of #1 also a member of #2?
+\cs_new_protected:Npn \__tenkz_kernel_seq_subset:NNN #1#2#3
+  {
+    \bool_set_true:N #3
+    \seq_map_inline:Nn #1
+      { \seq_if_in:NnF #2 {##1} { \bool_set_false:N #3 \seq_map_break: } }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_mark_depths:
+  {
+    \prop_clear:N \l__tenkz_kernel_mark_depth_prop
+    \seq_clear:N \l__tenkz_kernel_depth_order_seq
+    \int_zero:N \l__tenkz_kernel_depth_int
+    \__tenkz_model_map_marks_form:nN {enclosure}
+      \__tenkz_kernel_mark_depth_collect:n
+    % Processing in member-count order visits every nested selection before
+    % the selection it sits in: a strict subset is smaller, and an equal set
+    % keeps declaration order.
+    \seq_sort:Nn \l__tenkz_kernel_depth_order_seq
+      { \__tenkz_kernel_mark_depth_cmp:nnnnnn ##1 ##2 }
+    \seq_map_inline:Nn \l__tenkz_kernel_depth_order_seq
+      { \__tenkz_kernel_mark_depth_one:nnn ##1 }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_mark_depth_collect:n #1
+  {
+    \int_incr:N \l__tenkz_kernel_depth_int
+    \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_depth_inner_seq
+    \seq_if_empty:NF \l__tenkz_kernel_depth_inner_seq
+      {
+        \seq_put_right:Ne \l__tenkz_kernel_depth_order_seq
+          {
+            { \seq_count:N \l__tenkz_kernel_depth_inner_seq }
+            { \int_use:N \l__tenkz_kernel_depth_int }
+            {#1}
+          }
+      }
+  }
+\cs_new:Npn \__tenkz_kernel_mark_depth_cmp:nnnnnn #1#2#3#4#5#6
+  {
+    \int_compare:nNnTF {#1} = {#4}
+      {
+        \int_compare:nNnTF {#2} > {#5}
+          { \sort_return_swapped: } { \sort_return_same: }
+      }
+      {
+        \int_compare:nNnTF {#1} > {#4}
+          { \sort_return_swapped: } { \sort_return_same: }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_mark_depth_one:nnn #1#2#3
+  {
+    \__tenkz_kernel_mark_members:nN {#3} \l__tenkz_kernel_depth_outer_seq
+    \int_zero:N \l__tenkz_kernel_depth_int
+    \seq_map_inline:Nn \l__tenkz_kernel_depth_order_seq
+      { \__tenkz_kernel_mark_depth_probe:nnnnnn {#1} {#2} {#3} ##1 }
+    \prop_put:Nne \l__tenkz_kernel_mark_depth_prop {#3}
+      { \int_use:N \l__tenkz_kernel_depth_int }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_mark_depth_probe:nnnnnn #1#2#3#4#5#6
+  {
+    % The probe #6 sits inside the candidate #3 when it sorts strictly
+    % before it and its members are a subset of the candidate's.
+    \bool_lazy_or:nnT
+      { \int_compare_p:nNn {#4} < {#1} }
+      {
+        \int_compare_p:nNn {#4} = {#1}
+        && \int_compare_p:nNn {#5} < {#2}
+      }
+      {
+        \__tenkz_kernel_mark_members:nN {#6} \l__tenkz_kernel_depth_inner_seq
+        \__tenkz_kernel_seq_subset:NNN
+          \l__tenkz_kernel_depth_inner_seq
+          \l__tenkz_kernel_depth_outer_seq
+          \l__tenkz_kernel_depth_bool
+        \bool_if:NT \l__tenkz_kernel_depth_bool
+          {
+            \prop_get:NnN \l__tenkz_kernel_mark_depth_prop {#6}
+              \l__tenkz_kernel_depth_tl
+            \int_compare:nNnT
+              { \l__tenkz_kernel_depth_tl + 1 }
+              >
+              { \l__tenkz_kernel_depth_int }
+              {
+                \int_set:Nn \l__tenkz_kernel_depth_int
+                  { \l__tenkz_kernel_depth_tl + 1 }
+              }
+          }
+      }
+  }
+% The containment depth of a mark, as a braced integer usable inside fp
+% expressions; a mark outside the containment pass stands at depth zero.
+\cs_new:Npn \__tenkz_kernel_mark_depth:n #1
+  {
+    \prop_if_in:NnTF \l__tenkz_kernel_mark_depth_prop {#1}
+      { \prop_item:Nn \l__tenkz_kernel_mark_depth_prop {#1} }
+      { 0 }
+  }
+
 % ---------- marks --------------------------------------------------------------------------------
 \cs_new_protected:Npn \__tenkz_kernel_r_marks:
   {
@@ -13603,10 +13999,15 @@
     % A contour clears its members by one clearance.  It is one clearance for
     % every selection: what differs between a row of labelled sites and four
     % bare spins is the members' own silhouettes, which already carry their
-    % label bands, and not a rule about how many were named.
+    % label bands, and not a rule about how many were named.  A contour with
+    % other contours nested inside it steps out one further clearance per
+    % containment level, so concentric windows stay one clearance apart.
     \__tenkz_kernel_hull_scale:NN \l__tenkz_kernel_sel_seq \l__tenkz_kernel_sel_tl
     \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-      { \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_sel_tl }
+      {
+        \__tenkz_metric_ratio:n {daylight} * \l__tenkz_kernel_sel_tl
+        * ( 1 + \__tenkz_kernel_mark_depth:n {#1} )
+      }
     \__tenkz_kernel_hull_reach_linear:NnnnN
       \l__tenkz_kernel_sel_obst_seq
       { \l__tenkz_kernel_hull_ux_tl }
@@ -13964,6 +14365,9 @@
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_settle:n {##1} }
     \__tenkz_model_map_ids:nn {atom} { \__tenkz_kernel_r_atom_turn:n {##1} }
     \__tenkz_kernel_r_prescan:
+    % Concentric containment is settled before any reach consumer: wire
+    % stubs, policy legs, and contours all measure against it.
+    \__tenkz_kernel_mark_depths:
     % The ordinary-wire pass may now settle its endpoint dependencies.  A
     % curve reached through `on w t` is declared here without ink, so the
     % ordinary wire still draws below the later leg and string passes.
@@ -14353,6 +14757,7 @@
     \__tenkz_kernel_closures:
     \__tenkz_kernel_port_opens:
     \__tenkz_kernel_validate_circle_open_ends:
+    \__tenkz_kernel_validate_transverse_open_ends:
     \__tenkz_kernel_validate_addresses:
     \__tenkz_kernel_plane_model:
     % Boundary topology and signatures use the same resolved carrier geometry

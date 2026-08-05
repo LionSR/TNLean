@@ -1,40 +1,24 @@
 % Target: rmp-iii-a-torus-one
 % Formula: Two noncontractible MPO cycles cross at tensor i on the torus.
-% Ink: Canonical public tenkzfree: the torus boundary and its central opening
-%   are black, while the two noncontractible MPO cycles are red and meet at the
-%   blue tensor i.
+% Ink: Kernel traced lattice; two wound MPO cycles and the marked crossing
+%   tensor.
 % Boundary: Both MPO cycles close through the identified torus boundary, so
 %   the diagram has no free tensor index and represents a scalar state.
 % Source: paper TN-Review-main.tex line 1584; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 563-571
-% Capabilities: free-graph, torus-cycle, crossing-tensor
+% Capabilities: kernel, torus-cycle, crossing-tensor
 \[
-  \begin{tenkzfree}
-    % The two outer arcs represent the identified boundary of the torus.
-    \tnjoin[route=arc]{-26mm,0mm}{0mm,13mm}
-    \tnjoin[route=arc]{0mm,13mm}{26mm,0mm}
-    \tnjoin[route=arc]{26mm,0mm}{0mm,-13mm}
-    \tnjoin[route=arc]{0mm,-13mm}{-26mm,0mm}
-    % The two inner arcs expose the opening of the torus.
-    \tnjoin[route=arc]{-12mm,1mm}{12mm,1mm}
-    \tnjoin[route=arc]{14mm,2mm}{-14mm,2mm}
-    % The two red MPO cycles wind in the two torus directions and cross at i.
-    \tnput[box, role=marked,
-      ports={north:virtual,east:virtual,south:virtual,west:virtual}]
-      {wi}{(0mm,-8mm)}{}
-    \tnput[boundary, label pos=east]{ilabel}{(1.5mm,-8mm)}{i}
-    % The horizontal cycle closes around the central opening.
-    \tnjoin[role=operator,route=arc]
-      {-20mm,0mm}{0mm,9mm}
-    \tnjoin[role=operator,route=arc]
-      {0mm,9mm}{20mm,0mm}
-    \tnjoin[role=operator,route=arc]
-      {20mm,0mm}{wi.east}
-    \tnjoin[role=operator,route=arc]
-      {wi.west}{-20mm,0mm}
-    % The second cycle runs from the inner opening through i to the identified
-    % outer boundary.
-    \tnjoin[role=operator]{0mm,1mm}{wi.north}
-    \tnjoin[role=operator]{wi.south}{0mm,-13mm}
-  \end{tenkzfree}
+  \tenkzkernel
+  \tndeclare{species}{cycle}{hue=source:red}
+  \tndeclare{species}{markedink}{hue=source:blue}
+  % The source's three-dimensional surface is represented by the same
+  % homotopy classes on a lattice with identified sides.
+  \begin{tenkz}[lattice={3x3},
+      west=trace, east=trace, north=trace, south=trace]
+    \tnwire[kind=string, species=cycle, name=cx, closed, wind={1,0}]
+    \tnwire[kind=string, species=cycle, name=cy, closed, wind={0,1},
+      crossing=under, cross={under at crossing of cy and cx}]
+    \tn[skin=box, species=markedink, at=crossing of cx and cy,
+        label pos=e]{i}
+  \end{tenkz}
 \]

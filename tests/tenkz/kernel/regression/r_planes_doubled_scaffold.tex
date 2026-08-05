@@ -1,0 +1,73 @@
+%% Regression: the doubled-plane scaffold derives from the declared frame
+%% topology.  The planes preset populates both sheets of every cell; an
+%% authored atom claims its member; a portless affine bead stands one
+%% fractional pitch step east of a member on either sheet, carrying that
+%% sheet's bilayer offset; a per-sheet string routes through its bead.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_scaffold_populated_int
+\int_new:N \g__tenkz_test_scaffold_named_int
+\tl_new:N \l__tenkz_test_scaffold_name_tl
+\tl_new:N \l__tenkz_test_scaffold_x_tl
+\tl_new:N \l__tenkz_test_scaffold_y_tl
+\cs_new_protected:Npn \__tenkz_test_scaffold_expect:nnn #1#2#3
+  {
+    \fp_compare:nNnF { abs( \l__tenkz_test_scaffold_x_tl - (#2) ) }
+      < {0.000001}
+      { \errmessage{scaffold~record~#1~lost~its~projected~x~coordinate} }
+    \fp_compare:nNnF { abs( \l__tenkz_test_scaffold_y_tl - (#3) ) }
+      < {0.000001}
+      { \errmessage{scaffold~record~#1~lost~its~projected~y~coordinate} }
+    \int_gincr:N \g__tenkz_test_scaffold_named_int
+  }
+\cs_new_eq:NN \__tenkz_test_scaffold_atoms: \__tenkz_kernel_r_atoms:
+\cs_set_protected:Npn \__tenkz_kernel_r_atoms:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \__tenkz_geom_xy:nNN {##1}
+          \l__tenkz_test_scaffold_x_tl \l__tenkz_test_scaffold_y_tl
+        \__tenkz_model_get:nnN {##1} {populated}
+          \l__tenkz_test_scaffold_name_tl
+        \quark_if_no_value:NF \l__tenkz_test_scaffold_name_tl
+          { \int_gincr:N \g__tenkz_test_scaffold_populated_int }
+        \__tenkz_model_get:nnN {##1} {name} \l__tenkz_test_scaffold_name_tl
+        \quark_if_no_value:NF \l__tenkz_test_scaffold_name_tl
+          {
+            \str_case:Vn \l__tenkz_test_scaffold_name_tl
+              {
+                % member replacement keeps the ket cell (1,2) point
+                {endK}{ \__tenkz_test_scaffold_expect:nnn {endK} {1} {0} }
+                % ket bead: half a pitch east of the ket (2,1) member
+                {bK}{ \__tenkz_test_scaffold_expect:nnn {bK} {0.05} {-0.60} }
+                % bra bead: the same step from the bra member keeps the
+                % bilayer offset (2,2) quarter pitches through the plane map
+                {bB}{ \__tenkz_test_scaffold_expect:nnn {bB} {0.775} {-0.30} }
+              }
+          }
+      }
+    \__tenkz_test_scaffold_atoms:
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[lattice={2x2}, planes, bonds=none]
+  \tn[at=(1,2,1), skin=dot, size=l, species=marked, name=endK]{}
+  \tn[at=0.5 e of (2,1,1), skin=dot, size=s, species=marked, name=bK]{}
+  \tn[at=0.5 e of (2,1,2), skin=dot, size=s, species=marked, name=bB]{}
+  \tnwire[kind=string, species=operator, name=sK, via={bK}]{(2,1,1)}{(2,2,1)}
+  \tnwire[kind=string, species=operator, name=sB, via={bB}]{(2,1,2)}{(2,2,2)}
+  \tnwire{(1,1,1)}{(1,1,2)}
+\end{tenkz}
+\ExplSyntaxOn
+% eight member sites minus the one claimed by the authored replacement
+\int_compare:nNnF { \g__tenkz_test_scaffold_populated_int } = {7}
+  { \errmessage{the~claimed~member~was~not~suppressed~from~population} }
+\int_compare:nNnF { \g__tenkz_test_scaffold_named_int } = {3}
+  { \errmessage{a~named~scaffold~record~was~not~visited} }
+\ExplSyntaxOff
+\end{document}

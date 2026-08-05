@@ -1,12 +1,18 @@
 % Target: rmp-workbench-iii-f-symbol-simplified-a
 % Formula: The simplified F-symbol is represented by one MPO tensor.
-% Ink: Canonical public tenkz composition commands; no raw TikZ.
+% Ink: Kernel flat frame; one stock MPO atom with the declared mpo species
+%   carrying the source-red virtual legs.
 % Boundary: Resolved by the public environment; archival boundary contract is explicit.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
 %   249-251; archival output TensorFsymplya.pdf
-% Capabilities: coherence, grid
+% Capabilities: kernel, coherence
 \[
-  \begin{tenkz}[physical=updown, tensor style=box]
-    \tn{a}
+  \tenkzkernel
+  \tndeclare{species}{mpo}{hue=source:red}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[skin=mpo, at=(1,1), name=F, ports={0:virtual, 90:physical,
+      180:virtual, 270:physical}]{a}
+    \tnwire[species=mpo]{open w}{F.180}
+    \tnwire[species=mpo]{F.0}{open e}
   \end{tenkz}
 \]

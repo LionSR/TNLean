@@ -1,14 +1,15 @@
 % Target: rmp-ii-mpo-sheet
 % Formula: An MPO is defined by the row network: tensors on an open virtual chain,
 %   each with one bra and one ket physical index.
-% Ink: Canonical public tenkz five-site MPO row of dot tensors; no raw TikZ.
+% Ink: Kernel flat frame; five dot tensors on an open virtual chain.
 % Boundary: The virtual chain is open at west and east; every site's two physical
 %   legs are open.
 % Source: paper TN-Review-main.tex line 361; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 305-309
-% Capabilities: grid, typed-ports
+% Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
-  \begin{tenkz}[physical=updown]
+  \begin{tenkz}[rows={wire}, cols=5, physical=updown, west=open, east=open]
     \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
   \end{tenkz}
 \]

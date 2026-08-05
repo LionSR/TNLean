@@ -1,14 +1,43 @@
 % Target: rmp-workbench-iii-dual-reduced
 % Formula: X_ab^c intertwines the stacked a,b wires with the c wire.
-% Ink: Canonical public tenkz stacked-wire to single-wire fusion equation.
+% Ink: Kernel flat frames; the three-row fusion box between the stacked a,b word
+%   and the c wire, on the source-red virtual legs.
 % Boundary: Two incoming virtual wires fuse to one outgoing virtual wire.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 220-248; archival output Adualred.pdf
-% Capabilities: grid, fusion-map, equation-composition
+% Capabilities: kernel, fusion-map, equation-composition
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkz}[rows={op:operator,op:operator}]
-    \tn{a}&\tn[box,wires=2]{X_{ab}^{c}}\\
-    \tn{b}&
-  \end{tenkz}
-  =\begin{tenkz}\tn[box]{X_{ab}^{c}}&\tn{c}\end{tenkz}.
+  \begin{tenkzeq}
+    % LHS: the fused c wire enters X_ab^c, which splits into the a over b word
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+      \tn[at=(1,1), skin=box, wires=3, name=X,
+        ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{ab}^{c}}
+      \tn[at=(1,2), skin=mpo, name=a,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{a}
+      \tn[at=(3,2), skin=mpo, name=b,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{b}
+      \tnwire[species=operator]{open w}{X.180@2}
+      \tnwire[species=operator]{X.0@1}{a.180}
+      \tnwire[species=operator]{X.0@3}{b.180}
+      % The a,b column contracts a's lower physical index with b's upper one.
+      \tnwire{a.90}{open n} \tnwire{a.270}{b.90} \tnwire{b.270}{open s}
+      \tnwire[species=operator]{a.0}{open e}
+      \tnwire[species=operator]{b.0}{open e}
+    \end{tenkz}
+    =
+    % RHS: the c tensor feeds X_ab^c, whose a,b pair exits east
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+      \tn[at=(2,1), skin=mpo, name=c,
+        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{c}
+      \tn[at=(1,2), skin=box, wires=3, name=X,
+        ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{ab}^{c}}
+      \tnwire[species=operator]{open w}{c.180}
+      \tnwire[species=operator]{c.0}{X.180@2}
+      \tnwire{c.90}{open n} \tnwire{c.270}{open s}
+      \tnwire[species=operator]{X.0@1}{open e}
+      \tnwire[species=operator]{X.0@3}{open e}
+    \end{tenkz}
+  \end{tenkzeq}.
 \]

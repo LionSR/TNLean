@@ -1,51 +1,50 @@
 % Target: rmp-workbench-iii-historical-composite
 % Formula: Historical composite of the four rotated boundary actions.
-% Ink: Canonical public tenkzfree environment; no raw TikZ.
+% Ink: Kernel flat frame; the four-station boundary loop is one closed operator
+%   string through the lambda corner, and each sweeping arc is an operator
+%   string routed outside the loop.
 % Boundary: Resolved by the public environment; archival boundary contract is explicit.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex lines
 %   170-197; archival output ImagesReview Section III.pdf
-% Capabilities: free-graph, regions, typed-ports
+% Capabilities: kernel, path-string, typed-ports
+\tenkzkernel
+\tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkzfree}
-    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnput[circle]{lam}{(-8mm,8mm)}{\lambda}
-    \tnput[box]{top}{(0mm,16mm)}{} \tnput[box]{left}{(-16mm,0mm)}{}
-    % the four-tensor ring: n-e and e-s turn at the plaquette's own corners;
-    % w-n is routed explicitly through the lambda intertwiner. The whole
-    % ring is role=operator (red), matching the author block.
-    \tnjoin[route=hv,role=operator]{n.east}{e.north}
-    \tnjoin[route=vh,role=operator]{e.south}{s.east}
-    \tnjoin[route=hv,role=operator]{s.west}{w.south}
-    \tnjoin[role=operator]{w.north}{lam.south}
-    \tnjoin[role=operator]{lam.east}{n.west}
-    % the two pendant actions feed INTO the ring on this panel
-    \tnjoin[dir]{top.south}{n.north} \tnjoin{top.north}{0mm,20mm}
-    \tnjoin[dir]{left.east}{w.west} \tnjoin{left.west}{-20mm,0mm}
-    % the ring's own open half-edges leave outward
-    \tnjoin[dir]{s.south}{0mm,-12mm}
-    \tnjoin[dir]{e.east}{12mm,0mm}
-    % the boundary string sweeps around the top-left, outside the ring
-    \tnjoin[route=arc,role=operator]{left.north}{top.west}
-  \end{tenkzfree}
+  % LHS: the two pendant actions feed INTO the loop and the loop's own
+  % half-edges leave outward; the boundary string sweeps around the top-left,
+  % outside the loop.
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none, boundary=none]
+    \tn[at=(1,3), skin=box, name=top, ports={90:virtual, 270:virtual}]{}
+    \tn[at=(2,2), skin=ring, name=lam, label pos=nw]{\lambda}
+    \tn[at=(2,3), skin=box, name=n, ports={90:virtual}]{}
+    \tn[at=(3,1), skin=box, name=left, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(3,2), skin=box, name=w, ports={180:virtual}]{}
+    \tn[at=(3,4), skin=box, name=e, ports={0:virtual}]{}
+    \tn[at=(4,3), skin=box, name=s, ports={270:virtual}]{}
+    \tnwire[kind=string, species=operator, name=ring, closed,
+            via={lam, n, (2,4), e, (4,4), s, (4,2), w}]
+    \tnwire[dir=to]{top.270}{n.90} \tnwire{top.90}{open n}
+    \tnwire[dir=to]{left.0}{w.180} \tnwire{left.180}{open w}
+    \tnwire[dir=to]{s.270}{open s} \tnwire[dir=to]{e.0}{open e}
+    \tnwire[kind=string, species=operator, via={1 nw of lam}]{left}{top}
+  \end{tenkz}
   \;=\;
-  \begin{tenkzfree}
-    \tnput[box]{n}{(0mm,8mm)}{} \tnput[box]{e}{(8mm,0mm)}{}
-    \tnput[box]{s}{(0mm,-8mm)}{} \tnput[box]{w}{(-8mm,0mm)}{}
-    \tnput[circle]{lam}{(-8mm,8mm)}{\lambda}
-    \tnput[box]{bottom}{(0mm,-16mm)}{} \tnput[box]{right}{(16mm,0mm)}{}
-    \tnjoin[route=hv,role=operator]{n.east}{e.north}
-    \tnjoin[route=vh,role=operator]{e.south}{s.east}
-    \tnjoin[route=hv,role=operator]{s.west}{w.south}
-    \tnjoin[role=operator]{w.north}{lam.south}
-    \tnjoin[role=operator]{lam.east}{n.west}
-    % the ring's own open half-edges arrive from outward
-    \tnjoin[dir]{0mm,12mm}{n.north}
-    \tnjoin[dir]{-12mm,0mm}{w.west}
-    % the two pendant actions drain OUT of the ring on this panel
-    \tnjoin[dir]{s.south}{bottom.north} \tnjoin{bottom.south}{0mm,-20mm}
-    \tnjoin[dir]{e.east}{right.west} \tnjoin{right.east}{20mm,0mm}
-    % the boundary string sweeps around the bottom-right, outside the ring
-    \tnjoin[route=arc,role=operator]{right.south}{bottom.east}
-  \end{tenkzfree}
+  % RHS: the loop's half-edges arrive from outward and the two pendant
+  % actions drain OUT of the loop; the boundary string sweeps around the
+  % bottom-right.
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none, boundary=none]
+    \tn[at=(1,1), skin=ring, name=lam, label pos=nw]{\lambda}
+    \tn[at=(1,2), skin=box, name=n, ports={90:virtual}]{}
+    \tn[at=(2,1), skin=box, name=w, ports={180:virtual}]{}
+    \tn[at=(2,3), skin=box, name=e, ports={0:virtual}]{}
+    \tn[at=(2,4), skin=box, name=right, ports={0:virtual, 180:virtual}]{}
+    \tn[at=(3,2), skin=box, name=s, ports={270:virtual}]{}
+    \tn[at=(4,2), skin=box, name=bottom, ports={90:virtual, 270:virtual}]{}
+    \tnwire[kind=string, species=operator, name=ring, closed,
+            via={lam, n, (1,3), e, (3,3), s, (3,1), w}]
+    \tnwire[dir=to]{open n}{n.90} \tnwire[dir=to]{open w}{w.180}
+    \tnwire[dir=to]{s.270}{bottom.90} \tnwire{bottom.270}{open s}
+    \tnwire[dir=to]{e.0}{right.180} \tnwire{right.0}{open e}
+    \tnwire[kind=string, species=operator, via={1 se of (3,3)}]{right}{bottom}
+  \end{tenkz}
 \]

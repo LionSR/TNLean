@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Schur Complement TFAE --- Open Gap}
+\author{}
+\date{2026-08-04}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+Wolf, \textit{Quantum Channels \& Operations}, Theorem~5.2 (Block matrices and
+Schur complements). Let $P$, $R$ be positive semi-definite complex matrices
+and $Q$ a complex matrix of compatible dimensions. Then the following are
+equivalent:
+\begin{enumerate}
+  \item the block matrix
+    $\begin{pmatrix} P & Q \\ Q^\dagger & R \end{pmatrix}$
+    is positive semi-definite;
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    \begin{align}
+      P \ge Q R^{+} Q^\dagger,
+      \tag{Wolf, Theorem 5.2 (2)}
+    \end{align}
+    where $R^{+}$ is the pseudo-inverse (the inverse on the support);
+  \item $\ker(R) \subseteq \ker(Q)$ and
+    $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$.
+\end{enumerate}
+
+\section{What is formalized}
+The objects entering the statement are formalised: the block matrix itself,
+its self-adjointness for Hermitian diagonal blocks, and the pseudoinverse
+Schur complement $P - Q R^{+} Q^\dagger$.\footnote{Formal declarations:
+\leanid{SchurComplement.blockMatrix}, \leanid{SchurComplement.blockMatrix_isHermitian},
+and \leanid{SchurComplement.schurComplement} in
+\doclink{TNLean/Channel/Schwarz/SchurComplement}.}
+The kernel-inclusion half of (1)$\Rightarrow$(2) is proved: if the block matrix
+is PSD then $\ker(R) \subseteq \ker(Q)$.\footnote{Formal declaration:
+\leanid{SchurComplement.ker_subset_of_block_psd}.} The proof uses the
+quadratic-form expansion of the block
+matrix\footnote{\leanid{SchurComplement.block_quadratic_form}.}
+together with the pseudoinverse/support-projection algebra for PSD $R$: $R R^{+} = R^{+}R
+= \operatorname{supportProj}(R)$, $\operatorname{supportProj}(R)\,R^{+} = R^{+}$, $R^{+}$
+is Hermitian, and $R^2$ has the same support projection as $R$.\footnote{Formal
+declarations: \leanid{SchurComplement.R_mul_pinv_eq_supportProj},
+\leanid{SchurComplement.pinv_mul_self_eq_supportProj},
+\leanid{SchurComplement.supportProj_mul_pinv_eq_pinv},
+\leanid{SchurComplement.pinv_isHermitian}, and
+\leanid{SchurComplement.supportProj_sq_eq_supportProj}.}
+
+\section{What remains}
+The standard argument has three steps, of which only the kernel-inclusion part
+of the first is formalized:
+\begin{enumerate}
+  \item[(1)$\Rightarrow$(2), Schur half] Quadratic-form minimisation: for the block matrix
+    $\bigl[\begin{smallmatrix} P & Q \\ Q^\dagger & R \end{smallmatrix}\bigr]$,
+    the optimal choice $y = -R^{+} Q^\dagger x$ gives
+    $x^\dagger (P - Q R^{+} Q^\dagger) x \ge 0$ for all~$x$. Not formalized.
+  \item[(2)$\Rightarrow$(1)] Completing the square using $\ker(R) \subseteq \ker(Q)$
+    and $P \ge Q R^{+} Q^\dagger$ to exhibit the block matrix as PSD. Not formalized.
+  \item[(2)$\Rightarrow$(3) and (3)$\Rightarrow$(1)] Algebraic manipulation with
+    $P^{1/2}$ and $R^{1/2}$ identifies $P \ge Q R^{+} Q^\dagger$ with the contraction
+    bound $\|P^{-1/2} Q R^{-1/2}\|_\infty \le 1$, and the operator-norm characterisation
+    $\|L\| \le 1 \iff L L^\dagger \le I$ recovers the block PSD decomposition via
+    $K = P^{-1/2} Q R^{-1/2}$. Not formalized; requires additional operator-norm lemmas.
+\end{enumerate}
+
+\section{Verdict}
+Wolf Theorem~5.2 is an \emph{open gap}: only the kernel-inclusion half of
+(1)$\Rightarrow$(2), together with the pseudoinverse/support-projection algebra
+it depends on, is formalized. The Schur-complement-PSD half of (1)$\Rightarrow$(2),
+the converse (2)$\Rightarrow$(1), and the contraction equivalence
+(2)$\Longleftrightarrow$(3) remain open, tracked in \ghissue{5511}.
+
+\end{document}

@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel.PerronFrobenius
 
 import TNLean.Channel.PerronFrobenius.Existence
+import TNLean.Channel.PerronFrobenius.ExtremalQuantities
 import TNLean.Channel.PerronFrobenius.Normalization
