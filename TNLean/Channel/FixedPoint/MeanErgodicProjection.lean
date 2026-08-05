@@ -22,6 +22,10 @@ complex linear combinations of two Hermitian matrices.
 
 ## Main statements
 
+* `IsPositiveMap.hasBoundedOrbits_of_posSemidef_orbit_bounded`: the
+  Hermitian-decomposition reduction from a positive-semidefinite orbit bound
+  to a bound on every matrix, shared by every hypothesis (trace-nonincreasing,
+  trace-preserving, or unital) under which Wolf's uniform bound applies.
 * `IsPositiveMap.hasBoundedOrbits_of_traceNonincreasing`: positivity and trace
   nonincrease imply bounded forward orbits on every matrix.
 * `IsPositiveMap.hasBoundedOrbits_of_tracePreserving`: the trace-preserving

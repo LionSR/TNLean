@@ -42,7 +42,7 @@ formalized by the same route, through `T.HasBoundedOrbits`.
 * Local source: `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 181--224.
 -/
 
-open scoped Matrix ComplexOrder Matrix.Norms.Frobenius
+open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.Frobenius
 open Matrix
 
 variable {D : ℕ}
@@ -157,17 +157,17 @@ private theorem posSemidef_le_trace_smul_one {X : Matrix (Fin D) (Fin D) ℂ}
   set U := hX.1.eigenvectorUnitary
   set c : ℝ := X.trace.re with hc
   have htr : c = ∑ i : Fin D, hX.1.eigenvalues i := by
-    rw [hc, hX.1.trace_eq_sum_eigenvalues]
-    push_cast
-    exact map_sum Complex.reAddMonoidHom _ _
+    rw [hc, hX.1.trace_eq_sum_eigenvalues, Complex.re_sum]
+    simp
   set Dg : Matrix (Fin D) (Fin D) ℂ :=
     Matrix.diagonal fun i : Fin D => ((hX.1.eigenvalues i : ℝ) : ℂ)
   have hsp : X = (U : Matrix (Fin D) (Fin D) ℂ) * Dg * star (U : Matrix (Fin D) (Fin D) ℂ) := by
     have h := hX.1.spectral_theorem
-    rw [conjStarAlgAut_apply] at h
-    convert h using 3
-    ext i j
-    simp [Dg, RCLike.ofReal_eq_coe]
+    rw [Unitary.conjStarAlgAut_apply] at h
+    have hDgeq : Matrix.diagonal (RCLike.ofReal ∘ hX.1.eigenvalues) = Dg := by
+      ext i j
+      simp [Dg]
+    rwa [hDgeq] at h
   have hU1 : (U : Matrix (Fin D) (Fin D) ℂ) * star (U : Matrix (Fin D) (Fin D) ℂ) = 1 :=
     Unitary.mul_star_self_of_mem U.prop
   have hdiag : ((c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - Dg).PosSemidef := by
@@ -176,8 +176,7 @@ private theorem posSemidef_le_trace_smul_one {X : Matrix (Fin D) (Fin D) ℂ}
       ext i j
       by_cases hij : i = j
       · subst hij
-        simp [Dg, Matrix.one_apply_eq, smul_eq_mul, RCLike.real_smul_eq_coe_smul,
-          Complex.ofReal_sub]
+        simp [Dg, Matrix.one_apply_eq, Complex.ofReal_sub]
       · simp [Dg, Matrix.one_apply_ne hij, Matrix.diagonal_apply_ne _ hij]
     rw [hdiag_eq]
     refine Matrix.PosSemidef.diagonal fun i : Fin D => ?_
@@ -192,10 +191,12 @@ private theorem posSemidef_le_trace_smul_one {X : Matrix (Fin D) (Fin D) ℂ}
         ((c : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) - Dg) * star (U : Matrix (Fin D) (Fin D) ℂ) := by
     rw [hsp, Matrix.mul_sub, Matrix.sub_mul]
     congr 1
-    rw [Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul, hU1, Matrix.smul_one]
+    rw [Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul, hU1]
   rw [hdecomp]
   have h := hdiag.conjTranspose_mul_mul_same (star (U : Matrix (Fin D) (Fin D) ℂ))
-  rwa [Matrix.conjTranspose_conjTranspose, Matrix.star_eq_conjTranspose] at h
+  have hUU : (star (U : Matrix (Fin D) (Fin D) ℂ))ᴴ = (U : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_conjTranspose]
+  rwa [hUU] at h
 
 /-- The forward orbit of a positive semidefinite matrix under a positive
 unital endomorphism is bounded.
@@ -210,7 +211,7 @@ unital positive maps and all their powers.
 
 Source: Wolf, proof of Proposition 6.2; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 190--199. -/
-private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_unital
+private theorem isBounded_orbit_of_posSemidef_of_unital
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hT1 : T 1 = 1)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) :
@@ -233,12 +234,12 @@ private theorem IsPositiveMap.isBounded_orbit_of_posSemidef_of_unital
         calc
           T (T^[n] X) ≤ T ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)) :=
             hT.map_le_map ih
-          _ = (X.trace.re : ℝ) • T 1 := map_smul_of_tower T _ _
+          _ = (X.trace.re : ℝ) • T 1 := LinearMap.map_smul_of_tower T _ _
           _ = (X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ) := by rw [hT1]
   have htrace_top : ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace =
       (X.trace.re : ℂ) * D := by
     rw [Matrix.trace_smul]
-    simp [Matrix.trace_one, smul_eq_mul]
+    simp [Matrix.trace_one]
   have hiter_trace : ∀ n : ℕ,
       (T^[n] X).trace ≤ ((X.trace.re : ℝ) • (1 : Matrix (Fin D) (Fin D) ℂ)).trace := by
     intro n
@@ -277,7 +278,7 @@ decomposition (`hasBoundedOrbits_of_posSemidef_orbit_bounded`).
 
 Source: Wolf, proof of Proposition 6.2; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 190--199. -/
-theorem IsPositiveMap.hasBoundedOrbits_of_unital
+theorem hasBoundedOrbits_of_unital
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     (hT : IsPositiveMap T) (hT1 : T 1 = 1) :
     T.HasBoundedOrbits :=

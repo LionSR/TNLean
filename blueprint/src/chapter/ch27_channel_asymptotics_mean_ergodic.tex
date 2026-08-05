@@ -135,6 +135,33 @@
     Hermitian matrices.
 \end{proof}
 
+\begin{theorem}[Bounded orbits from unitality]
+    \label{thm:positive_unital_bounded_orbits}
+    \lean{IsPositiveMap.hasBoundedOrbits_of_unital}
+    \leanok
+    \uses{def:positive_map, def:unital_linear_map, def:has_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be positive and unital. Then the forward orbit
+    $\{T^n(X):n\geq0\}$ is bounded for every $X\in\MN{D}$. This is the
+    unital form of \cite[Proposition~6.2]{Wolf2012Quantum}, proof.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $X\succeq0$, positivity and unitality give, by induction on $n$,
+    \[
+        T^n(X)\preceq(\tr X)\cdot\Id,
+    \]
+    since $X\preceq(\tr X)\cdot\Id$ for $X\succeq0$ and $T$ is order-preserving
+    with $T(\Id)=\Id$. Taking traces bounds $\tr(T^n(X))$ by $D\cdot\tr(X)$,
+    so the orbit again lies in a bounded trace section of the positive cone.
+    Apply this to the positive and negative parts of a Hermitian matrix, and
+    then write an arbitrary matrix as a complex linear combination of two
+    Hermitian matrices. This is the same uniform bound
+    $\tr[A\,T(B)]\leq\|A\|_\infty\|B\|_\infty\tr[1\,T(1)]$ that gives
+    Theorem~\ref{thm:positive_trace_nonincreasing_bounded_orbits} in the
+    trace-nonincreasing case, specialized to $\tr[1\,T(1)]=\tr[1]=D$ via
+    $T(1)=1$ instead of via trace preservation.
+\end{proof}
+
 \begin{theorem}[Positive trace-preserving mean-ergodic projection]
     \label{thm:positive_trace_preserving_mean_ergodic_projection}
     \lean{IsPositiveMap.hasBoundedOrbits_of_tracePreserving,
