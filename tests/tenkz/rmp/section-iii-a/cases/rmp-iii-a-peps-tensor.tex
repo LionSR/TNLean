@@ -6,15 +6,15 @@
 %   source
 % Capabilities: kernel, typed-ports
 % gamma: m -> k, then the split alpha: k -> j and beta: k -> n.  The fat
-% wires are directed levels, as in the companion MPO panel.
+% wires are directed physical levels, as in the companion MPO panel.
 \[
   \tenkzkernel
   \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
-    \tn[at=(1,1), name=j, skin=dot, label pos=90, ports={315:virtual}]{j}
-    \tn[at=(1,3), name=n, skin=dot, label pos=90, ports={225:virtual}]{n}
+    \tn[at=(1,1), name=j, skin=dot, label pos=90, ports={315:physical}]{j}
+    \tn[at=(1,3), name=n, skin=dot, label pos=90, ports={225:physical}]{n}
     \tn[at=(2,2), name=k, skin=dot, label pos=0,
-      ports={135:virtual, 45:virtual, 270:virtual}]{k}
-    \tn[at=(3,2), name=m, skin=dot, label pos=270, ports={90:virtual}]{m}
+      ports={135:physical, 45:physical, 270:physical}]{k}
+    \tn[at=(3,2), name=m, skin=dot, label pos=270, ports={90:physical}]{m}
     \tnwire[dir=to, name=ga]{m.90}{k.270}
     \tnwire[dir=to, name=al]{k.135}{j.315}
     \tnwire[dir=to, name=be]{k.45}{n.225}

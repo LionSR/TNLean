@@ -1874,3 +1874,20 @@ Census-correction: #5507
 |---|---|
 | flag:consumers:key:picture:trace | keep-because: the marginal's migration retires the picture-level trace from the doubled sheet, and the two remaining consumers state genuine single-row traces the kernel still owes its drawn return (#5492); the key retires with that ink, expiry 0.9 |
 | flag:consumers:environment:tenkzplanes | dies at S4: its lone consumer was the PEPS marginal, which this session migrates onto the kernel bilayer basis; expiry 0.9 |
+
+### 2026-08-05 — a physical index may be directed
+
+The direction mark stops being a virtual privilege. A physical index
+carries `dir=` exactly as a virtual one does, and the orientation of a
+directed physical open end enters the exposed boundary signature: a space
+and its dual no longer pass for one another across a pictured equation.
+An internal directed contraction exposes nothing and leaves no entry. The
+coded refusal that made the mark a type error retires with it.
+
+Three cases stop paying for that refusal. The MPO and PEPS fat-graph
+levels and the mixed pentagon's vertex legs had been typed virtual to
+reach the mark; they return to physical ports, and their renders are
+unchanged. M4 rises from 26.49 to 26.54 for the recovered typing. The
+physical-dimension census stays at zero.
+
+Census-correction: #5360

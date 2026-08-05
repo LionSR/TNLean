@@ -140,6 +140,39 @@ grep -Fq '|port-type=physical|to-open-type=physical|to-open=down' \
   echo "FAIL: the bra member's transverse open lost its physical typing" >&2
   exit 1
 }
+for bearing in e n w s; do
+  grep -Eq "^wire\|.*\|dir=to\|.*\|kind=index\|.*\|port-type=physical\|.*\|to-open=$bearing\$" \
+      "$WORK/r_physical_dir.tnlog" || {
+    echo "FAIL: directed physical open end lost its typed record bearing $bearing" >&2
+    exit 1
+  }
+done
+grep -Eq '^wire\|.*dir=to\|.*kind=index\|.*name=inner\|.*port-type=physical\|to=addr-' \
+    "$WORK/r_physical_dir.tnlog" || {
+  echo "FAIL: internal directed physical contraction lost its typed record" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=phys:e:to, phys:n:to, phys:s:to, phys:w:to' \
+    "$WORK/r_physical_dir.tnlog" || {
+  echo "FAIL: directed physical open ends lost their oriented boundary" >&2
+  exit 1
+}
+grep -Fq 'kernel-boundary|signature=phys:n:from' \
+    "$WORK/r_physical_dir.tnlog" || {
+  echo "FAIL: the entering physical open end lost its oriented boundary" >&2
+  exit 1
+}
+physical_dir_boundaries=$(grep -c '^kernel-boundary|' \
+  "$WORK/r_physical_dir.tnlog" || true)
+[ "$physical_dir_boundaries" -eq 3 ] || {
+  echo "FAIL: the directed physical fixture changed its picture count" >&2
+  exit 1
+}
+awk -F'signature=' '/^kernel-boundary\|/ { print $2 }' \
+    "$WORK/r_physical_dir.tnlog" | sed -n '2p' | grep -q '^$' || {
+  echo "FAIL: an internal directed physical contraction left a boundary entry" >&2
+  exit 1
+}
 grep -Fq \
     '|cross=over at crossing of open-arc and port-open-1|' \
     "$WORK/r_route_open_all_arc.tnlog" || {
@@ -1101,7 +1134,7 @@ command -v pdftoppm >/dev/null 2>&1 || {
 }
 for pixel_fixture in \
     k_plane k_skin_pairings r_hull_live r_ink_semantics r_label_turn \
-    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
+    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
     r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
@@ -1163,7 +1196,8 @@ for path in sys.argv[1:]:
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
   "$WORK/k_plane.png" "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
-  "$WORK/r_parallel_lanes.png" "$WORK/r_ring_closure.png" >"$PIXEL_CURRENT"
+  "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
+  "$WORK/r_ring_closure.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
@@ -1690,10 +1724,7 @@ for contract_negative in \
   n_authored_port_type_implicit_from \
   n_port_cell_type \
   n_cell_port_type \
-  n_physical_wire_dir_to \
-  n_physical_wire_dir_from \
-  n_physical_open_wire_dir \
-  n_physical_open_wire_dir_from \
+  n_physical_dir_mismatch \
   n_route_end_inside_hull \
   n_physical_open_port_type \
   n_interface_open_port_type \
@@ -1750,14 +1781,8 @@ do
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_cell_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
-  [ "$contract_negative" = n_physical_wire_dir_to ] &&
-    expected='[TKZ-PORT-DIRECTION]'
-  [ "$contract_negative" = n_physical_wire_dir_from ] &&
-    expected='[TKZ-PORT-DIRECTION]'
-  [ "$contract_negative" = n_physical_open_wire_dir ] &&
-    expected='[TKZ-PORT-DIRECTION]'
-  [ "$contract_negative" = n_physical_open_wire_dir_from ] &&
-    expected='[TKZ-PORT-DIRECTION]'
+  [ "$contract_negative" = n_physical_dir_mismatch ] &&
+    expected='[TKZ-EQ-SIGNATURE]'
   [ "$contract_negative" = n_route_end_inside_hull ] &&
     expected='[TKZ-ROUTE-END-INSIDE]'
   [ "$contract_negative" = n_physical_open_port_type ] &&
