@@ -188,30 +188,6 @@
         {"site": "tenkzfree@2::tenkzfree@2/tnjoin@8/command:\\tnjoin{bw.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["-3.5mm", "0mm"]}
       ]
     },
-    "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-eq60-now.tex": {
-      "scopes": ["tenkzfree@1", "tenkzfree@2"],
-      "constructs": ["tenkzfree@1", "tenkzfree@2"],
-      "invocations": ["tenkzfree@1::tenkzfree@1", "tenkzfree@1::tenkzfree@1/tnput@1", "tenkzfree@1::tenkzfree@1/tnput@2", "tenkzfree@1::tenkzfree@1/tnjoin@1", "tenkzfree@1::tenkzfree@1/tnjoin@2", "tenkzfree@1::tenkzfree@1/tnjoin@3", "tenkzfree@1::tenkzfree@1/tnjoin@4", "tenkzfree@1::tenkzfree@1/tnjoin@5", "tenkzfree@1::tenkzfree@1/tnjoin@6", "tenkzfree@2::tenkzfree@2", "tenkzfree@2::tenkzfree@2/tnput@1", "tenkzfree@2::tenkzfree@2/tnput@2", "tenkzfree@2::tenkzfree@2/tnput@3", "tenkzfree@2::tenkzfree@2/tnput@4", "tenkzfree@2::tenkzfree@2/tnput@5", "tenkzfree@2::tenkzfree@2/tnjoin@1", "tenkzfree@2::tenkzfree@2/tnjoin@2", "tenkzfree@2::tenkzfree@2/tnjoin@3", "tenkzfree@2::tenkzfree@2/tnjoin@4", "tenkzfree@2::tenkzfree@2/tnjoin@5", "tenkzfree@2::tenkzfree@2/tnjoin@6", "tenkzfree@2::tenkzfree@2/tnjoin@7", "tenkzfree@2::tenkzfree@2/tnjoin@8", "tenkzfree@2::tenkzfree@2/tnjoin@9"],
-      "sites": [
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@1/command:\\tnput[dot,ports={90:physical,180:virtual,0:virtual, 45:virtual,225:virtual}]{A}{(<dimension>,<dimension>)}{A}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnput@2/command:\\tnput[ring]{u}{(<dimension>,<dimension>)}{u_g}", "owner": "composition/layout", "literals": ["0mm", "9mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@1/command:\\tnjoin{<dimension>,<dimension>}{A.west}", "owner": "route/string", "literals": ["-14mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@2/command:\\tnjoin{A.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["14mm", "0mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@4/command:\\tnjoin{u.north}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "16mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@5/command:\\tnjoin{A.45}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["10mm", "10mm"]},
-        {"site": "tenkzfree@1::tenkzfree@1/tnjoin@6/command:\\tnjoin{<dimension>,<dimension>}{A.225}", "owner": "route/string", "literals": ["-10mm", "-10mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@1/command:\\tnput[dot,ports={90:physical,180:virtual,0:virtual, 45:virtual,225:virtual}]{A}{(<dimension>,<dimension>)}{A}", "owner": "composition/layout", "literals": ["0mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@2/command:\\tnput[ring]{w}{(<dimension>,<dimension>)}{w_g}", "owner": "composition/layout", "literals": ["-9mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@3/command:\\tnput[ring]{wd}{(<dimension>,<dimension>)}{w_g^\\dagger}", "owner": "composition/layout", "literals": ["9mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@4/command:\\tnput[ring]{v}{(<dimension>,<dimension>)}{v_g}", "owner": "composition/layout", "literals": ["-7mm", "-7mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnput@5/command:\\tnput[ring]{vd}{(<dimension>,<dimension>)}{v_g^\\dagger}", "owner": "composition/layout", "literals": ["7mm", "7mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@1/command:\\tnjoin{<dimension>,<dimension>}{w.west}", "owner": "route/string", "literals": ["-16mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@4/command:\\tnjoin{wd.east}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["16mm", "0mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@5/command:\\tnjoin{A.north}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["0mm", "9mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@7/command:\\tnjoin{vd.45}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["14mm", "14mm"]},
-        {"site": "tenkzfree@2::tenkzfree@2/tnjoin@9/command:\\tnjoin{v.225}{<dimension>,<dimension>}", "owner": "route/string", "literals": ["-14mm", "-14mm"]}
-      ]
-    },
     "tests/tenkz/rmp/section-iii-a/cases/rmp-workbench-iii-f-tensor.tex": {
       "scopes": ["tenkzfree@1"],
       "constructs": ["tenkzfree@1"],

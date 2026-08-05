@@ -288,11 +288,11 @@ def test_rmp_dimension_ownership() -> None:
         {
             DimensionOwner.METRIC: 0,
             DimensionOwner.FRAME: 0,
-            DimensionOwner.ROUTE: 244,
-            DimensionOwner.LAYOUT: 191,
+            DimensionOwner.ROUTE: 224,
+            DimensionOwner.LAYOUT: 177,
         }
     )
-    if report.case_count != 435 or report.case_counts != expected:
+    if report.case_count != 401 or report.case_counts != expected:
         raise AssertionError(
             "RMP dimension ownership baseline drifted: "
             f"total={report.case_count}, owners={report.case_counts!r}"
@@ -1915,11 +1915,11 @@ ch=21mm,inline]{\\tn{A}}}
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "case dimensions increased to 436",
+        "case dimensions increased to 402",
     )
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, extra_layout)),
-        "composition/layout dimensions increased to 192",
+        "composition/layout dimensions increased to 178",
     )
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
@@ -1928,7 +1928,7 @@ ch=21mm,inline]{\\tn{A}}}
             r"\end{tenkzlattice}",
             "projection/frame dimensions increased",
         ),
-        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 245"),
+        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 225"),
     ):
         mutation = scan_case_dimensions(Path("synthetic.tex"), source)
         _expect_dimension_failure(
