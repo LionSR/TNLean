@@ -1999,3 +1999,37 @@ also keeps them out of the codemod column.
 | flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the five that remain all stand a tensor on a generated cup, and they respell when the kernel gains a station on that arc; expiry 0.9 |
 
 Census-correction: #4709
+
+### 2026-08-05 — three equations recover the boundary their sources draw
+
+M4 rises from 25.92 to 25.98. Three benchmark equations declared different
+boundaries on their two sides, and the equation audit read the difference
+where the reviewer had read the drawing. In every case the source settles
+the question, and in two of the three the drawing was wrong as well.
+
+The stacked intertwiner had each of its four operator boxes keep its own
+pair of physical stubs, so the fusion move claimed five sites on one side
+and four on the other. A column of a stacked word is one site: the two
+boxes multiply there and the index between them is summed. The source
+strokes that index in one line through both boxes; the case now bonds it,
+and the equation reads three sites against three.
+
+The idempotent panel kept a stray in-plane north wire from its typed-port
+era. The plane transverse policy already draws the one upward leg the
+source strokes, and the wire drew a second black half-edge in a direction
+no source line takes. Removing it deletes ink that was never in the
+source and leaves both sides reading west, east, southwest, northeast,
+the red tail, and the upward leg.
+
+The four-arm coproduct ring is the honest opt-out. Its four boxes are
+pierced by the same wire the local map already typed physical, and that
+typing is now stated on both sides; but the third coproduct carries one
+site to four, so four pierced wires answer one and the arity genuinely
+changes. The relation records the waiver with that reason, and the event
+stream carries it on the one relation the scope owns.
+
+No parser spelling, registry row, alias, escape, or overload moves. The
+four-arm ring renders as before; the other two render closer to their
+sources.
+
+Census-correction: #5530

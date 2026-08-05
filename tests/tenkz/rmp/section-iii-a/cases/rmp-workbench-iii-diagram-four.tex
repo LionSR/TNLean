@@ -2,23 +2,31 @@
 % Formula: The closed four-leg tensor equals Delta^3 of the local map.
 % Ink: Kernel flat frame; a four-tensor ring with a lambda insertion and a
 %   junction-spelled periodic local map.
-% Boundary: The four-arm side is closed; the local-map side is virtual-scalar.
+% Boundary: Each side closes its virtual loop and opens the physical wire that
+%   pierces every tensor; the coproduct carries one site to four.
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 198-210; archival output Dia4.pdf
 % Capabilities: kernel, four-arm-closure, coproduct
 \[
   \tenkzkernel
+  % The relation's audit is opted out because the third coproduct genuinely
+  % changes the physical arity: four sites on the left, one on the right.
+  \begin{tenkzeq}[check={off={1: the third coproduct sends the one-site local
+      map to the four-site ring, so the physical arity changes across the
+      relation}}]
   \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
     % the ring: four tensors joined by the closed bond, lambda on the
-    % north-west ring wire; each tensor keeps its short inward pierce
+    % north-west ring wire.  The loop takes each tensor's two virtual faces;
+    % the remaining pair is the physical wire the source strokes through the
+    % box, outward arm and inward pierce alike
     \tn[skin=box, at=(2,3), name=N,
-        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
     \tn[skin=box, at=(3,4), name=E,
-        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        ports={0:physical, 90:virtual, 180:physical, 270:virtual}]{}
     \tn[skin=box, at=(4,3), name=S,
-        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        ports={0:virtual, 90:physical, 180:virtual, 270:physical}]{}
     \tn[skin=box, at=(3,2), name=W,
-        ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        ports={0:physical, 90:virtual, 180:physical, 270:virtual}]{}
     \tnwire[route=arc, name=lamarc]{W.90}{N.180}
     \tnwire[route=arc]{N.0}{E.90}
     \tnwire[route=arc]{E.270}{S.0}
@@ -42,5 +50,6 @@
     \tnwire{JE.180}{JW.0}
     \tnwire[route=arc]{JW.90}{lam.180}
   \end{tenkz}
-  \right).
+  \right)
+  \end{tenkzeq}.
 \]
