@@ -1891,3 +1891,111 @@ unchanged. M4 rises from 26.49 to 26.54 for the recovered typing. The
 physical-dimension census stays at zero.
 
 Census-correction: #5360
+
+### 2026-08-05 — the closure draws itself and a site answers the policy
+
+Two changes return the picture body to the size of the idea it draws.
+
+A flat row's traced sides now draw their closure. The rail leaves both
+ends, drops by the trace reach, and returns with the source's rounded
+corners, instead of running straight along the row it closes. Every
+figure that spelled that return by hand -- an invisible junction at each
+corner and four wires between them -- says `west=trace, east=trace`
+again, and `boundary=periodic`, which is those two words, draws a
+periodic chain as the papers draw it.
+
+A site may answer the picture's physical policy for itself. The policy
+legs a row's sites; a ring standing between tensors, or an elision,
+carries no physical index and now says `physical=none` once instead of
+forcing the picture to abandon its policy and list every port of every
+atom. `void=sealed` could not serve: a sealed site is a removed site and
+loses its bonds.
+
+The boundary-insertion word shows the size of the change: eleven lines of
+addresses and ports become three lines that name the row, its closure,
+and the two sites that carry no physical index. M4 falls from 26.54 to
+26.50 on that one case, and the corpus rewrite that follows will take it
+further. The parser gains one leaf, 226 to 227, and the kernel ledger one
+row.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:physical | keep-because: the key lands with the closure fix and the first rewritten word; the rest of its consumers arrive as the corpus returns to the policy spelling it was forced to abandon; expiry 0.9 |
+
+Extension-gate: #5524
+
+Census-correction: #5492
+
+### 2026-08-05 -- the benchmark says its pictures in the language's own words
+
+The migration to the kernel wrote every atom's address and every atom's
+port list by hand. It had to: a row holding a gauge ring or an elision
+could not declare a physical policy, so the picture abandoned the policy
+and spelled the four ports of every site.
+
+Nineteen cases in Sections II and III A now say the same drawings in the
+words the language already owns. A picture declares `physical=up`,
+`down`, or `updown` once, and the ring, the ellipsis, or the fusion box
+that carries no physical index answers `physical=none`. A site standing
+in reading order needs no address: `&` chains it along the row. A side
+that opens says `west=open, east=open` instead of running a wire to
+`open w` and another to `open e`.
+
+The MPO-word figure carries the change. Five sites that each spelled an
+address, a name, and four ports become one chained line, and the word
+falls from thirty-four lines to twenty-six. The stacked intertwiner falls
+from sixty-two to fifty-three, the three-layer reduction from fifty-seven
+to fifty-one, and the two-site zero-correlation identity states its
+traced physical pairs without a single port.
+
+Every rewritten case renders pixel-for-pixel as it did before at 200 dpi.
+The drawings, the labels, the species, and the honest residues are
+untouched; only the case hashes move. M4 falls from 26.50 to 25.92. The
+parser, the kernel ledger, the escape ledger, and the alias ledger do not
+move: this session spends no grammar.
+
+Two rewrites were reverted at the render. The two-shift MPU word hangs
+the compiler when a declared skin's pairings meet a chained row break,
+and the doubled MPS marginal loses the source's open physical legs
+because grid bonding contracts every stacked pair. Both keep their
+addresses, and the chain-grammar hang is worth a look on its own.
+
+Hand-spelled closures stay hand-spelled where the source draws them in
+its own hue or with square corners: the traced sides draw a black
+racetrack, and the boundary-algebra, coproduct, and enlarged-MPO words
+draw a red trapezoid or a sharp rectangle. Those returns are ink, not
+ceremony.
+
+Census-correction: #5524
+
+### 2026-08-05 — the first blueprint chapters take the kernel
+
+Seventeen blueprint chapters, slide decks, and manual pages respell their
+figures on the kernel. Each picture states its row and its column count and
+then names its atoms in reading order: the chain runs on the alignment
+character, a stacked picture breaks its rows, and the grid bonds the
+neighbours it just placed. A word closed on itself says `boundary=periodic`
+and lets the closure draw itself; a word open at both ends says
+`west=open, east=open`. An address, a name, and a port list survive only
+where a later line reads them. The benchmark corpus is untouched, so every
+meter but the consumer census stands; the demand corpus loses the retired
+grid spellings.
+
+Five figures keep their 0.7 spelling and are named in the disposition
+ledger: the operators of the maximally entangled state, the correlation
+window, the two channel sandwiches, and the transfer-map slide ride a
+generated cup between operator rows, where the on-wire anchor divides the
+record chord rather than the drawn arc, so a tensor placed there would read
+as sitting on the physical contraction.
+
+The physical policy is a real trade and not a free win. It pays where two or
+more sites take an unlabelled leg -- the operator stack, the traced word --
+and costs where a single site among many carries the index, because every
+other site then has to refuse it. Those pictures keep their port list, which
+also keeps them out of the codemod column.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the five that remain all stand a tensor on a generated cup, and they respell when the kernel gains a station on that arc; expiry 0.9 |
+
+Census-correction: #4709

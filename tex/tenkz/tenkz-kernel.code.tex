@@ -1138,6 +1138,11 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-atom } { nudge } { nudge }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { void }
   { open, sealed } { void }
+% A site may answer the picture's physical policy for itself: the policy
+% states what a row's sites expose, and an atom that carries no physical
+% index says so once instead of listing the ports it does carry.
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-atom } { physical }
+  { up, down, updown, none } { physical }
 \__tenkz_kernel_flag:nnn    { tenkz-kernel-atom } { conjugate } { conjugate }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-atom } { atom }
 \keys_define:nn { tenkz-kernel-atom }
@@ -1335,6 +1340,10 @@
           {surface} {#1} {torus} {picture}
       }
   }
+\tl_new:N \l__tenkz_kernel_atom_phys_tl
+\cs_new_protected:Npn \__tenkz_kernel_atom_physical:nN #1#2
+  { \__tenkz_model_get:nnN {#1} {physical} #2 }
+
 \cs_new_protected:Npn \__tenkz_kernel_desugar_physical:n #1
   {
     \__tenkz_kernel_sugar:n {physical}
@@ -1748,8 +1757,13 @@
     \__tenkz_model_record_atom:n { kind = tn }
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-atom } {#1}
+    % A label is opaque text: \hphantom, \vphantom, and math accents like
+    % \bar embed their own conditional/box primitives, so a full expansion
+    % of the label content orphans an \iffalse from its \fi (issue 5481).
+    % The raw completion stores it unexpanded, as the model already does
+    % for the equally opaque `ports` field in \__tenkz_kernel_commit:.
     \tl_if_blank:nF {#2}
-      { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {label} {#2} }
+      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#2} }
     \prop_get:NnN \l__tenkz_kernel_stage_prop {at} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_scratch_tl
       {
@@ -2251,8 +2265,9 @@
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \__tenkz_kernel_keys:nn { tenkz-kernel-mark } {#1}
     \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {target} {#2}
+    % Opaque text, per the \tn label above (issue 5481): raw completion.
     \tl_if_blank:nF {#3}
-      { \__tenkz_model_complete:nnn { \l__tenkz_model_last_tl } {label} {#3} }
+      { \__tenkz_model_complete_raw:nnn { \l__tenkz_model_last_tl } {label} {#3} }
     \__tenkz_kernel_commit:
     \ignorespaces
   }
@@ -3332,6 +3347,7 @@
       { \__tenkz_model_complete:nnn {#1} {physical} {#2} }
   }
 
+\cs_generate_variant:Nn \__tenkz_kernel_set_atom_physical:nn { ne }
 \cs_new_protected:Npn \__tenkz_kernel_closures:
   {
     \__tenkz_kernel_cell_closures:
@@ -3393,8 +3409,21 @@
             \tl_set_eq:NN \l_tmpa_tl \l__tenkz_kernel_scratch_tl
             \__tenkz_model_map_ids:nn {atom}
               {
-                \__tenkz_kernel_set_atom_physical:nn
-                  {##1} { \tl_use:N \l_tmpa_tl }
+                \__tenkz_kernel_atom_physical:nN
+                  {##1} \l__tenkz_kernel_atom_phys_tl
+                \quark_if_no_value:NTF \l__tenkz_kernel_atom_phys_tl
+                  {
+                    \__tenkz_kernel_set_atom_physical:nn
+                      {##1} { \tl_use:N \l_tmpa_tl }
+                  }
+                  {
+                    \str_if_eq:VnF \l__tenkz_kernel_atom_phys_tl {none}
+                      {
+                        \__tenkz_kernel_set_atom_physical:ne
+                          {##1}
+                          { \tl_use:N \l__tenkz_kernel_atom_phys_tl }
+                      }
+                  }
               }
           }
       }
@@ -10176,11 +10205,48 @@
                   }
               }
               {
+                % A flat row closes the way the sources draw it: the rail
+                % leaves both ends, drops below the row by the trace reach,
+                % and runs back.  Joining the two reach points directly
+                % would lay the closure along the row it closes.
+                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                  { \__tenkz_metric_ratio:n {pairtracereach} }
                 \__tenkz_kernel_r_wire_stroke:nn { bond }
                   {
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_x_fp }
                       { \l__tenkz_kernel_r_y_fp }
+                    --
+                    \__tenkz_kernel_r_pair:nn
+                      { \l__tenkz_kernel_r_x_fp }
+                      {
+                        \l__tenkz_kernel_r_y_fp
+                        - \l__tenkz_kernel_r_reach_fp / 2
+                      }
+                    arc
+                      [
+                        start~angle = 180 , end~angle = 270 ,
+                        radius =
+                          \__tenkz_kernel_r_pt:n
+                            { \l__tenkz_kernel_r_reach_fp / 2 }
+                      ]
+                    --
+                    \__tenkz_kernel_r_pair:nn
+                      {
+                        \l__tenkz_kernel_r_xb_fp
+                        - \l__tenkz_kernel_r_reach_fp / 2
+                      }
+                      {
+                        \l__tenkz_kernel_r_yb_fp
+                        - \l__tenkz_kernel_r_reach_fp
+                      }
+                    arc
+                      [
+                        start~angle = 270 , end~angle = 360 ,
+                        radius =
+                          \__tenkz_kernel_r_pt:n
+                            { \l__tenkz_kernel_r_reach_fp / 2 }
+                      ]
                     --
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_xb_fp }

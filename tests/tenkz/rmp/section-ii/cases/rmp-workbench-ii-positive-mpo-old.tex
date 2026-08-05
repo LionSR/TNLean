@@ -8,20 +8,17 @@
 % Capabilities: kernel, typed-ports
 \[
   \tenkzkernel
-  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-    \tn[at=(1,1), skin=box,
-      ports={90:physical,270:physical,0:virtual,180:virtual}]{O}
+  \begin{tenkz}[rows={wire}, cols=1, physical=updown, west=open, east=open]
+    \tn[skin=box]{O}
   \end{tenkz}
   \;=\;
-  \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
-    \tn[at=(2,1), skin=box, name=xi,
+  \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none, physical=updown]
+    \tn[at=(2,1), skin=box, name=xi, physical=none,
       ports={180:virtual,45:virtual,315:virtual}]{X^{-1}}
-    \tn[at=(1,3), skin=box, name=A,
-      ports={180:virtual,0:virtual,90:physical,270:physical}]{A}
-    \tn[at=(3,3), skin=box, name=Ab,
-      ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{A}}
+    \tn[at=(1,3), skin=box, name=A]{A}
+    \tn[at=(3,3), skin=box, name=Ab]{\overline{A}}
     % One shared size gives the X and X^{-1} nodes the same box.
-    \tn[at=(2,5), skin=box, name=x,
+    \tn[at=(2,5), skin=box, name=x, physical=none,
       ports={135:virtual,225:virtual,0:virtual}]{X}
     \tnwire{open w}{xi.180}
     \tnwire[route=arc]{xi.45}{A.180}

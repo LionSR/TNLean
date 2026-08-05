@@ -113,7 +113,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Matrix Product States in one slide}
+\begin{frame}[fragile]{Matrix Product States in one slide}
     \begin{columns}[T]
         \column{0.52\textwidth}
         \begin{block}{Definition (MPS tensor)~[1]}
@@ -137,9 +137,13 @@
         % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
         % the symbolic N-site word has (0, N), with no virtual index open.
         % Source: arXiv:1606.00608, Fig. I and lines 135--170.
-        \begin{tenkz}[compact, periodic, physical=up]
-          \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-          \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, boundary=periodic, size=s]
+          \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+          \tn[label pos=s, ports={90:physical:$i_2$}]{A} &
+          \tn[skin=dots]{} &
+          \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+          \tn[label pos=s, ports={90:physical:$i_N$}]{A}
         \end{tenkz}
         \end{center}
         \vspace{0.6em}

@@ -1,0 +1,15 @@
+% Regression: a site answers the picture's physical policy for itself.
+% The row states physical=updown; the ring and the elision carry no
+% physical index and say so once, keeping their bonds, while the third
+% site overrides the direction instead of refusing it (issue 5524).
+% The traced sides draw their returning rail (issue 5492).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=5, west=trace, east=trace, physical=updown]
+  \tn[skin=ring, physical=none]{X} & \tn[skin=mpo]{} &
+  \tn[skin=mpo, physical=up]{} & \tn[skin=dots, physical=none]{} &
+  \tn[skin=mpo]{}
+\end{tenkz}
+\end{document}

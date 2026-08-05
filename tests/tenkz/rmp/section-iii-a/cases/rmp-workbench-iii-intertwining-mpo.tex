@@ -10,19 +10,14 @@
 \tndeclare{species}{operator}{hue=source:red}
 \[
   % LHS: gh at site 1, then X_gh, then (g over h) at sites 2 and 3
-  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
-    \tn[at=(2,1), skin=box, name=GH,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
-    \tn[at=(1,2), skin=box, wires=3, name=X,
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, physical=updown]
+    \tn[at=(2,1), skin=box, name=GH]{gh}
+    \tn[at=(1,2), skin=box, wires=3, name=X, physical=none,
       ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{gh}}
-    \tn[at=(1,3), skin=box, name=G1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
-    \tn[at=(1,4), skin=box, name=G2,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
-    \tn[at=(3,3), skin=box, name=H1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
-    \tn[at=(3,4), skin=box, name=H2,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[at=(1,3), skin=box, name=G1]{g}
+    \tn[at=(1,4), skin=box, name=G2]{g}
+    \tn[at=(3,3), skin=box, name=H1]{h}
+    \tn[at=(3,4), skin=box, name=H2]{h}
     \tnwire[species=operator]{open w}{GH.180}
     \tnwire[species=operator]{GH.0}{X.180@2}
     \tnwire[species=operator]{X.0@1}{G1.180}
@@ -37,17 +32,13 @@
   \end{tenkz}
   \;=\;
   % RHS: gh at sites 1 and 2, then X_gh, then (g over h) at site 3
-  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
-    \tn[at=(2,1), skin=box, name=GH1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
-    \tn[at=(2,2), skin=box, name=GH2,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
-    \tn[at=(1,3), skin=box, wires=3, name=X,
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, physical=updown]
+    \tn[at=(2,1), skin=box, name=GH1]{gh}
+    \tn[at=(2,2), skin=box, name=GH2]{gh}
+    \tn[at=(1,3), skin=box, wires=3, name=X, physical=none,
       ports={180@2:virtual, 0@1:virtual, 0@3:virtual}]{X_{gh}}
-    \tn[at=(1,4), skin=box, name=G1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
-    \tn[at=(3,4), skin=box, name=H1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[at=(1,4), skin=box, name=G1]{g}
+    \tn[at=(3,4), skin=box, name=H1]{h}
     \tnwire[species=operator]{open w}{GH1.180}
     \tnwire[species=operator]{GH1.0}{GH2.180}
     \tnwire[species=operator]{GH2.0}{X.180@2}
