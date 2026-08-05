@@ -29,6 +29,11 @@
     \tnwire[species=op]{Ha.0}{Hb.180}
     \tnwire[species=op]{Gb.0}{JGE.180}
     \tnwire[species=op]{Hb.0}{JHE.180}
+    % One site carries one physical index: the g and h words multiply there,
+    % so the wire between the rows is the summed index, as the source draws
+    % it in one stroke through both boxes.
+    \tnwire{Ga.270}{Ha.90}
+    \tnwire{Gb.270}{Hb.90}
   \end{tenkz}
   =
   \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
@@ -49,5 +54,6 @@
     \tnwire[species=op]{X.0@2}{Ha.180}
     \tnwire[species=op]{Ga.0}{JGE.180}
     \tnwire[species=op]{Ha.0}{JHE.180}
+    \tnwire{Ga.270}{Ha.90}
   \end{tenkz}.
 \]

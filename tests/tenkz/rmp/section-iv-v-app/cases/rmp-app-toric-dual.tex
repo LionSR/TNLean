@@ -2,7 +2,7 @@
 % Formula: physical spins = differences of adjacent plaquette colours
 % Ink: Kernel plane frame; the blocked sheet is the house enclosure, the four
 %   plaquette-colour legs leave the retained mid-side stations, and the two
-%   interior diagonals recall the original lattice.
+%   interior diagonals recall the original lattice on a dashed rail.
 % Boundary: The four retained mid-side sites expose the plaquette-colour legs.
 % Source: paper TN-Review-main.tex line 2462; paper-context-only; no author drawing
 %   source
@@ -11,7 +11,8 @@
 \[
   % The dual blocked tensor: the four mid-side stations expose the plaquette
   % colours h_1..h_4, and the corner-to-corner diagonals are the original
-  % lattice's edges crossing under the dual sheet.
+  % lattice's edges crossing under the dual sheet, dashed as the source
+  % dashes them.
   \begin{tenkz}[lattice={3x3}, frame=plane, bonds=none, boundary=none]
     \tn[at=(1,1), name=cnw, skin=none]{}
     \tn[at=(1,3), name=cne, skin=none]{}
@@ -21,7 +22,7 @@
     \tn[at=(2,1), name=w, skin=none]{}
     \tn[at=(2,3), name=e, skin=none]{}
     \tn[at=(3,2), name=s, skin=none]{}
-    \tnwire{cnw}{cse} \tnwire{cne}{csw}
+    \tnwire[stroke=dashed]{cnw}{cse} \tnwire[stroke=dashed]{cne}{csw}
     \tnwire{n.90}{open n} \tnwire{w.180}{open w}
     \tnwire{e.0}{open e} \tnwire{s.270}{open s}
     \tnmark[form=enclosure]{(1,1) .. (3,3)}{}

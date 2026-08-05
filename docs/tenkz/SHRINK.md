@@ -1999,3 +1999,103 @@ also keeps them out of the codemod column.
 | flag:consumers:key:picture:west label | keep-because: this wave retires the grid consumers it touched; the five that remain all stand a tensor on a generated cup, and they respell when the kernel gains a station on that arc; expiry 0.9 |
 
 Census-correction: #4709
+
+### 2026-08-05 — three equations recover the boundary their sources draw
+
+M4 rises from 25.92 to 25.98. Three benchmark equations declared different
+boundaries on their two sides, and the equation audit read the difference
+where the reviewer had read the drawing. In every case the source settles
+the question, and in two of the three the drawing was wrong as well.
+
+The stacked intertwiner had each of its four operator boxes keep its own
+pair of physical stubs, so the fusion move claimed five sites on one side
+and four on the other. A column of a stacked word is one site: the two
+boxes multiply there and the index between them is summed. The source
+strokes that index in one line through both boxes; the case now bonds it,
+and the equation reads three sites against three.
+
+The idempotent panel kept a stray in-plane north wire from its typed-port
+era. The plane transverse policy already draws the one upward leg the
+source strokes, and the wire drew a second black half-edge in a direction
+no source line takes. Removing it deletes ink that was never in the
+source and leaves both sides reading west, east, southwest, northeast,
+the red tail, and the upward leg.
+
+The four-arm coproduct ring is the honest opt-out. Its four boxes are
+pierced by the same wire the local map already typed physical, and that
+typing is now stated on both sides; but the third coproduct carries one
+site to four, so four pierced wires answer one and the arity genuinely
+changes. The relation records the waiver with that reason, and the event
+stream carries it on the one relation the scope owns.
+
+No parser spelling, registry row, alias, escape, or overload moves. The
+four-arm ring renders as before; the other two render closer to their
+sources.
+
+Census-correction: #5530
+
+### 2026-08-05 — a cup carries its matrix and a bracket takes its side
+
+Two documented spellings could be written and could not be drawn. The
+side alphabet took the bare cup word alone, so `west={cup=$m$}` was
+rejected outright; the mark alphabet had no bracket in it, and the
+membership pass resolved a selector for one form only, so a bracket over
+a cell range had neither ink nor members. Both now draw.
+
+The labelled side word is the documented expansion and nothing more: the
+side takes `cup`, and each of its bends carries a ring holding the matrix
+the side closes through, addressed half way along the bend. It stands on
+the bend rather than inside it because the station on a generated arc
+landed one change earlier, which is what the previous session was waiting
+for when it left five figures on their 0.7 spelling.
+
+A bracket is the arc of the offset hull an enclosure strokes whole, taken
+on the side its label sits on, closing with the two turns that end it.
+Both hull forms enter the containment order, so a bracket inside a region
+window stands one clearance in from it instead of drawing along its
+support. A bracket that names no side speaks from the south, where the
+authors put a brace under a span.
+
+Four Section-II cases drop the substitutes they were carrying: three
+spelled a bare cup plus a hand-placed bead on the canonical cup wire, and
+one spelled a south label at the midpoint of a span where the source
+braces it. Six bead declarations fold into the side word each picture
+already carried, and eleven lines of apology go with them. M4 falls from
+25.98 to 25.94, and `rmp-ii-spectrum-transfer` leaves the cosmetic-gap
+bar, its last recorded substitution retired. The parser census and the
+overload census stand: the four side keys keep one leaf each and the
+bracket shares its word with no other alphabet.
+
+Census-correction: #5482
+
+### 2026-08-05 — the mark inks on every bearing, and a rail may be dashed
+
+A direction mark was a lottery on the bearing. A leg springs from the centre
+of the glyph it leaves and the glyph's ink is laid over that centre
+afterwards, so the named station — a fraction of the whole leg — fell inside
+a silhouette that is wider than it is tall. The same mark that cleared a
+south bearing vanished under an east one. The station now rides the leg's
+daylight, the stretch between the silhouette and the free tip, and it is the
+mark's body that rides it, so the barb never re-enters the silhouette. One
+rule, four bearings, both endpoint orders. The four barb styles still share
+one named station; two of them now take it as an argument and name it as the
+key's default.
+
+A wire also gains the stroke it never had. The sources draw two non-solid
+rails and no third: a dashed one for an index the picture draws but does not
+contract, a dotted one for a lattice lying under the sheet being drawn. The
+alphabet is therefore `solid`, `dashed`, `dotted`, the dash lengths are named
+metrics, and the toric-code dual sheet stops inking its original-lattice
+diagonals solid. Read beside the published figure at 900dpi, the source
+dashes those diagonals where the old note called them dotted; the case
+re-pins and promotes to `faithful`.
+
+The new leaf is the one census move: M1 kernel 139 to 140, M2 parser paths
+227 to 228, with the parser identity changing accordingly. M4 is unmoved at
+25.94 — the dashed spelling costs the case no line.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-wire:stroke | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-wire row records; the leaf already carries its first benchmark consumer in rmp-app-toric-dual and its Extension-gate in #5543; expiry 0.8 |
+
+Extension-gate: #5543

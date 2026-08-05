@@ -351,14 +351,26 @@
   % V, an INCOMING one its dual V*; contraction joins out-to-in, and REVERSING
   % a barb is the dual/inverse representation -- so `reversed` variants flip
   % the barb, never the wire.  The barb rides mid-wire and inherits the wire's
-  % colour; the `fused` variants size the barb to span the doubled wire.
+  % colour; the `fused` variants size the barb to span the doubled wire.  The
+  % station is an argument because a leg that leaves a glyph must count it
+  % along the daylight beyond the silhouette, not along the whole leg; the
+  % default is the named station a wire between two glyphs keeps.
   dir marks/.style={decoration={markings,
-      mark=at position \tenkz@r@dirmarkstation with
+      mark=at position #1 with
       {\arrow{Straight Barb[length=\tenkz@barblen]}}}, postaction=decorate},
+  dir marks/.default=\tenkz@r@dirmarkstation,
   dir marks reversed/.style={decoration={markings,
-      mark=at position \tenkz@r@dirmarkstation with
+      mark=at position #1 with
       {\arrow{Straight Barb[length=\tenkz@barblen, reversed]}}},
       postaction=decorate},
+  dir marks reversed/.default=\tenkz@r@dirmarkstation,
+  % a declared wire stroke.  A dashed rail carries an index the picture draws
+  % but does not contract; a dotted one carries a lattice lying under the
+  % sheet.  Both keep the wire's weight and colour: only the paper changes.
+  tenkz wire dashed/.style={
+      dash pattern=on \tenkz@wiredash off \tenkz@wiredash},
+  tenkz wire dotted/.style={
+      dash pattern=on \tenkz@wirewidth off \tenkz@wiredotgap},
   fused dir marks/.style={decoration={markings,
       mark=at position \tenkz@r@dirmarkstation with
       {\arrow{Straight Barb[length=\tenkz@fusedbarblen]}}},
