@@ -35,6 +35,8 @@ def blockMatrix (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (F
     Matrix ((Fin D₁) ⊕ (Fin D₂)) ((Fin D₁) ⊕ (Fin D₂)) ℂ :=
   Matrix.fromBlocks P Q (Qᴴ) R
 
+/-- The block matrix `[[P, Q], [Q†, R]]` is Hermitian when its diagonal
+blocks `P` and `R` are Hermitian. -/
 theorem blockMatrix_isHermitian (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hP : P.IsHermitian) (hR : R.IsHermitian) : (blockMatrix P Q R).IsHermitian := by
@@ -47,6 +49,8 @@ noncomputable def schurComplement (P : Matrix (Fin D₁) (Fin D₁) ℂ)
     Matrix (Fin D₁) (Fin D₁) ℂ :=
   P - Q * (Douglas.pinv R) * (Qᴴ)
 
+/-- The quadratic form of the block matrix `[[P, Q], [Q†, R]]` splits into the four
+block contributions `⟨x,Px⟩ + ⟨x,Qy⟩ + ⟨y,Q†x⟩ + ⟨y,Ry⟩`. -/
 theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix (Fin D₁) (Fin D₂) ℂ)
     (R : Matrix (Fin D₂) (Fin D₂) ℂ) (x : Fin D₁ → ℂ) (y : Fin D₂ → ℂ) :
     dotProduct (star (Sum.elim x y)) (mulVec (blockMatrix P Q R) (Sum.elim x y)) =
@@ -62,6 +66,7 @@ theorem block_quadratic_form (P : Matrix (Fin D₁) (Fin D₁) ℂ) (Q : Matrix 
     _ = star x ⬝ᵥ (P *ᵥ x) + star x ⬝ᵥ (Q *ᵥ y) +
         star y ⬝ᵥ (Qᴴ *ᵥ x) + star y ⬝ᵥ (R *ᵥ y) := by ring
 
+/-- `R * R` has the same support projection as `R`, for `R` PSD. -/
 theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     (posSemidef_self_mul_conjTranspose R).supportProj = hR.supportProj := by
   let hR2 : (R * R).PosSemidef := by
@@ -97,9 +102,30 @@ theorem supportProj_sq_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR
 
 /-! ### Forward: block PSD → ker inclusion -/
 
+/-- If the block matrix `[[P, Q], [Q†, R]]` is PSD, then `ker(R) ⊆ ker(Q)`. -/
+theorem ker_subset_of_block_psd (P : Matrix (Fin D₁) (Fin D₁) ℂ)
+    (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
+    (hM : (blockMatrix P Q R).PosSemidef) (y : Fin D₂ → ℂ) (hRy : mulVec R y = 0) :
+    mulVec Q y = 0 := by
+  have h_quad : star (Sum.elim (0 : Fin D₁ → ℂ) y) ⬝ᵥ
+      ((blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y) = 0 := by
+    rw [block_quadratic_form P Q R 0 y]
+    simp [hRy]
+  have hMv_zero : (blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y = 0 :=
+    ((Matrix.PosSemidef.dotProduct_mulVec_zero_iff hM _).mp h_quad)
+  have h_comp : (blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y =
+      Sum.elim (mulVec Q y) (mulVec R y) := by
+    rw [blockMatrix, Matrix.fromBlocks_mulVec P Q (Qᴴ) R]
+    simp [hRy]
+  rw [h_comp] at hMv_zero
+  ext i
+  have := congrFun hMv_zero (Sum.inl i)
+  simpa using this
 
 /-! ### Algebraic identities for `Douglas.pinv` on PSD `R` -/
 
+/-- For PSD `R`, `R * pinv R = supportProj R`: the pseudoinverse is a right
+support-inverse. -/
 theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     R * (Douglas.pinv R) = hR.supportProj := by
   rw [Douglas.mul_pinv_eq_supportProj R]
@@ -107,8 +133,8 @@ theorem R_mul_pinv_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R
 
 /-- The Moore–Penrose pseudoinverse of a PSD matrix is Hermitian.
 
-The proof rewrites `pinv Rᴴ` into `supportInv(R Rᴴ) * R` and then uses that
-`supportInv(R Rᴴ)` is a continuous-function-calculus element of `R Rᴴ`, hence
+Implementation note: the proof rewrites `pinv Rᴴ` into `supportInv(R Rᴴ) * R` and then uses
+that `supportInv(R Rᴴ)` is a continuous-function-calculus element of `R Rᴴ`, hence
 commutes with `R` (`IsSelfAdjoint.commute_cfc`). -/
 theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemidef) :
     (Douglas.pinv R).IsHermitian := by
@@ -144,7 +170,9 @@ theorem pinv_isHermitian (R : Matrix (Fin D₂) (Fin D₂) ℂ) (hR : R.PosSemid
     _ = Douglas.pinv R := rfl
 
 /-- For PSD `R`, `pinv R * R = supportProj R`: the pseudoinverse is a left
-support-inverse. Proved by conjugate-transposing `R * pinv R = supportProj R`
+support-inverse.
+
+Implementation note: proved by conjugate-transposing `R * pinv R = supportProj R`
 (`R_mul_pinv_eq_supportProj`) using `pinv_isHermitian`. -/
 theorem pinv_mul_self_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ)
     (hR : R.PosSemidef) :
@@ -164,8 +192,8 @@ theorem pinv_mul_self_eq_supportProj (R : Matrix (Fin D₂) (Fin D₂) ℂ)
 /-- Support-projection absorption on the pseudoinverse of a PSD matrix:
 `supportProj R * pinv R = pinv R`.
 
-The proof avoids rewriting `Rᴴ = R` inside dependent positions (which breaks
-the `rw` motive because `hR : R.PosSemidef` mentions `R`): all conversions are
+Implementation note: the proof avoids rewriting `Rᴴ = R` inside dependent positions (which
+breaks the `rw` motive because `hR : R.PosSemidef` mentions `R`): all conversions are
 done in term mode via `congrArg` transitivity chains, factoring `R` as
 `√R * √R` and using the support absorption `supportProj R * √R = √R`. -/
 theorem supportProj_mul_pinv_eq_pinv (R : Matrix (Fin D₂) (Fin D₂) ℂ)
@@ -188,24 +216,5 @@ theorem supportProj_mul_pinv_eq_pinv (R : Matrix (Fin D₂) (Fin D₂) ℂ)
         rw [Douglas.pinv, Matrix.mul_assoc]
     _ = Rᴴ * (Matrix.posSemidef_self_mul_conjTranspose R).supportInv := by rw [key]
     _ = Douglas.pinv R := by rw [Douglas.pinv]
-
-theorem ker_subset_of_block_psd (P : Matrix (Fin D₁) (Fin D₁) ℂ)
-    (Q : Matrix (Fin D₁) (Fin D₂) ℂ) (R : Matrix (Fin D₂) (Fin D₂) ℂ)
-    (hM : (blockMatrix P Q R).PosSemidef) (y : Fin D₂ → ℂ) (hRy : mulVec R y = 0) :
-    mulVec Q y = 0 := by
-  have h_quad : star (Sum.elim (0 : Fin D₁ → ℂ) y) ⬝ᵥ
-      ((blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y) = 0 := by
-    rw [block_quadratic_form P Q R 0 y]
-    simp [hRy]
-  have hMv_zero : (blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y = 0 :=
-    ((Matrix.PosSemidef.dotProduct_mulVec_zero_iff hM _).mp h_quad)
-  have h_comp : (blockMatrix P Q R) *ᵥ Sum.elim (0 : Fin D₁ → ℂ) y =
-      Sum.elim (mulVec Q y) (mulVec R y) := by
-    rw [blockMatrix, Matrix.fromBlocks_mulVec P Q (Qᴴ) R]
-    simp [hRy]
-  rw [h_comp] at hMv_zero
-  ext i
-  have := congrFun hMv_zero (Sum.inl i)
-  simpa using this
 
 end SchurComplement
