@@ -9,10 +9,10 @@ import TNLean.MPS.MPDO.RFPViaTS
 /-!
 # The renormalization fixed-point maps for the rescaling-stable example
 
-**Scope: partial formalization.** This file continues
-`TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`, constructing the two
-trace-preserving completely positive maps of Definition 4.1
-(`MPOTensor.IsRFPViaTS`) for the explicit MPO tensor `R` of that file.
+This file continues `TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`,
+constructing the two trace-preserving completely positive maps of
+Definition 4.1 (`MPOTensor.IsRFPViaTS`) for the explicit MPO tensor `R` of
+that file, and concludes that `R` satisfies `IsRFPViaTS`.
 
 `IsRFPViaTS M` (`TNLean/MPS/MPDO/RFPViaTS.lean`) does not presuppose the
 source's canonical-form hypothesis: it is the bare existence of
@@ -32,20 +32,15 @@ M X` for all virtual operators `X`.
 * `refineMap_isKrausCPTP` — `T` is trace-preserving completely positive.
 * `refineMap_physClose1` — `T[physClose1 R X] = physClose2 R X` for all `X`
   (the `eq:Tmap` equation of Definition 4.1).
-
-## Remaining gap
-
-The coarse-graining map `S` (`coarseMap`) is defined with four Kraus
-operators — two gated (`coarseKrausGated`, sharing `T`'s Walsh–Hadamard
-amplitude `coarseAmp = 1/√2`) and two ungated (`coarseKrausUngated`, a
-deterministic assignment resolving the identity on bond-mismatched pairs)
-— but its trace-preserving completely positive property
-(`Σ (Kraus)ᴴ Kraus = 1` on the full two-site domain, including the
-off-diagonal cancellation `Σ_s eigVecs s 0 · eigVecs s 1 = 0` between the
-two gated Kraus operators) and the `eq:Smap` equation
-`S[physClose2 R X] = physClose1 R X` are not yet proved.  Completing these
-two lemmas and combining with `refineMap_isKrausCPTP`/`refineMap_physClose1`
-yields `IsRFPViaTS R` directly.
+* `coarseMap` (`S`) — four Kraus operators: two gated (`coarseKrausGated`,
+  sharing `T`'s Walsh–Hadamard amplitude `coarseAmp = 1/√2`) and two
+  ungated (`coarseKrausUngated`, a deterministic assignment resolving the
+  identity on bond-mismatched pairs).
+* `coarseMap_isKrausCPTP` — `S` is trace-preserving completely positive.
+* `coarseMap_physClose2` — `S[physClose2 R X] = physClose1 R X` for all `X`
+  (the `eq:Smap` equation of Definition 4.1).
+* `isRFPViaTS_R` — `R` satisfies `IsRFPViaTS`, witnessed by `S := coarseMap`
+  and `T := refineMap`.
 
 ## References
 
@@ -620,8 +615,8 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
   -- vanishes whenever `p` fails the bond-matching condition, which is exactly
   -- the domain of `coarseKrausUngated`.
   have hungated_zero : ∀ t : Fin 2,
-      (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
-          coarseKrausUngated t i p * physClose2 R X p q) * star (coarseKrausUngated t j q)) = 0 := by
+      (∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4, coarseKrausUngated t i p * physClose2 R X p q) *
+          star (coarseKrausUngated t j q)) = 0 := by
     intro t
     apply Finset.sum_eq_zero
     intro q _
@@ -640,7 +635,8 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     rw [hinner]; simp
   have hungated_sum_zero :
       (∑ t : Fin 2, ∑ q : Fin 4 × Fin 4, (∑ p : Fin 4 × Fin 4,
-          coarseKrausUngated t i p * physClose2 R X p q) * star (coarseKrausUngated t j q)) = 0 := by
+          coarseKrausUngated t i p * physClose2 R X p q) *
+        star (coarseKrausUngated t j q)) = 0 := by
     rw [Fin.sum_univ_two, hungated_zero 0, hungated_zero 1, add_zero]
   rw [hungated_sum_zero, add_zero]
   -- The gated contribution: on the fiber of `i`, `physClose2 R X p q` rescales
@@ -742,5 +738,12 @@ theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
   have hev11 : eigVecs 1 1 = (-1 : ℂ) := by simp [eigVecs]
   rw [hamp, hw00, hw01, hw10, hw11, hev00, hev01, hev10, hev11]
   ring
+
+/-- **`R` satisfies the source's renormalization fixed-point condition
+of Definition 4.1.** `coarseMap` and `refineMap` are the trace-preserving
+completely positive maps `S` and `T` witnessing `IsRFPViaTS R`. -/
+theorem isRFPViaTS_R : IsRFPViaTS R :=
+  ⟨coarseMap, refineMap, coarseMap_isKrausCPTP, refineMap_isKrausCPTP,
+    coarseMap_physClose2, refineMap_physClose1⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP
