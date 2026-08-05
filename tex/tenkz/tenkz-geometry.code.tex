@@ -1090,7 +1090,13 @@
 % to pitch units; the other families ignore that slot.  Families: circle
 % (hx = radius), rect (half-extents), roundrect (rect shrunk by its actual
 % corner radius, then re-inflated), triangle (isoceles, apex east: vertex max
-% is exact for polygons).
+% is exact for polygons), triwest (the same isoceles triangle turned half a
+% circle about its own centre, so its apex points west).  The half turn is
+% one sign: the apex stands at +hx on the record's own east axis and the two
+% base corners at -hx, and the triangle is symmetric about that axis, so
+% reading the established formula with the apex extent negated IS the
+% mirrored silhouette.  One formula therefore serves both orientations, in
+% the turned record here and in the affine record below.
 \cs_new:Npn \__tenkz_geom_support:nnnnnn #1#2#3#4#5#6
   {
     \str_case:nnF {#1}
@@ -1113,6 +1119,8 @@
               - (#2) * cosd((#6)-(#5)) + (#3) * sind((#6)-(#5)) ,
               - (#2) * cosd((#6)-(#5)) - (#3) * sind((#6)-(#5)) )
           }
+        {triwest}
+          { \__tenkz_geom_support:nnnnnn {triangle}{-(#2)}{#3}{#4}{#5}{#6} }
       }
       { \msg_expandable_error:nnn {tenkz}{geom-family} {#1} 0 }
   }
@@ -1217,6 +1225,11 @@
                 + (#3) * ( (#7) * cosd(#9) + (#8) * sind(#9) ) ,
               - (#2) * ( (#5) * cosd(#9) + (#6) * sind(#9) )
                 - (#3) * ( (#7) * cosd(#9) + (#8) * sind(#9) ) )
+          }
+        {triwest}
+          {
+            \__tenkz_geom_support_basis:nnnnnnnnn
+              {triangle}{-(#2)}{#3}{#4}{#5}{#6}{#7}{#8}{#9}
           }
       }
       { \msg_expandable_error:nnn {tenkz}{geom-family} {#1} 0 }

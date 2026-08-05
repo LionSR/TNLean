@@ -1128,6 +1128,67 @@ grep -Fq '|origin=port-open|port-face=230|port-slot=1|port-type=physical' \
   echo "FAIL: a physical pill port lost its type on materialization" >&2
   exit 1
 }
+mirror_atoms=$(grep -Ec '^atom.*[|]skin=triwest([|]|$)' \
+  "$WORK/r_tri_apex_mirror.tnlog" || true)
+[ "$mirror_atoms" -eq 2 ] || {
+  echo "FAIL: the mirrored triangle name did not remain in its atom records" >&2
+  exit 1
+}
+mirror_glyphs=$(grep -Ec '^ink-use\|.*\|class=glyph\|.*\|shape=triangle' \
+  "$WORK/r_tri_apex_mirror.tnlog" || true)
+[ "$mirror_glyphs" -eq 3 ] || {
+  echo "FAIL: an apex-mirror silhouette left the triangle family" >&2
+  exit 1
+}
+# The apex is the vertex the audit records first.  On the east-apex skin it
+# must stand at the silhouette's own east extreme and on the mirrored skin at
+# its west extreme, each a half stroke inside the stroked envelope.  A skin
+# that fell back to the fixed apex would put all three apexes on one side.
+python3 - "$WORK/r_tri_apex_mirror.tnlog" <<'MIRROR' || exit 1
+import sys
+
+expected = ["east", "west", "west"]
+records = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("glyph-geometry|"):
+        continue
+    attrs = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    if attrs["shape"] != "triangle":
+        continue
+    records.append({key: int(attrs[key]) for key in
+                    ("xmin", "xmax", "stroke", "x1", "x2", "x3")})
+if len(records) != len(expected):
+    print("FAIL: the apex-mirror fixture lost a measured triangle",
+          file=sys.stderr)
+    raise SystemExit(1)
+for side, record in zip(expected, records):
+    corners = (record["x2"], record["x3"])
+    if side == "east":
+        held = (record["x1"] > max(corners)
+                and record["x1"] + record["stroke"] == record["xmax"])
+    else:
+        held = (record["x1"] < min(corners)
+                and record["x1"] - record["stroke"] == record["xmin"])
+    if not held:
+        print(f"FAIL: a canonical isometry did not point its apex {side}",
+              file=sys.stderr)
+        raise SystemExit(1)
+MIRROR
+grep -Fq '|origin=port-open|port-face=12|port-slot=1|port-type=virtual' \
+  "$WORK/r_tri_apex_mirror.tnlog" || {
+  echo "FAIL: an east-apex grazing port did not materialize its open leg" >&2
+  exit 1
+}
+grep -Fq '|origin=port-open|port-face=168|port-slot=1|port-type=virtual' \
+  "$WORK/r_tri_apex_mirror.tnlog" || {
+  echo "FAIL: a west-apex grazing port did not materialize its open leg" >&2
+  exit 1
+}
+grep -Fq '|origin=port-open|port-face=270|port-slot=1|port-type=physical' \
+  "$WORK/r_tri_apex_mirror.tnlog" || {
+  echo "FAIL: a mirrored triangle physical port lost its type" >&2
+  exit 1
+}
 command -v pdftoppm >/dev/null 2>&1 || {
   echo "FAIL: kernel pixel gate requires pdftoppm" >&2
   exit 1
