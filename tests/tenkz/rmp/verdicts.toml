@@ -13,8 +13,8 @@ pairing_by = "codex-pairing-sweep-2026-07-24"
 defects = []
 case_sha256 = "0f815418632578eb4f4701698d16c0264c3ef15d4634ee1e650cde8c8cdc5b04"
 reviewed = "2026-08-05"
-renderer = "fable-w5-vision-2026-08-05-200dpi"
-second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
+renderer = "fable-5507-bilayer-open-legs-2026-08-05-200dpi"
+second_viewer = "fable-orchestrator-countersign-2026-08-05-200dpi"
 note = "kernel respell preserves the promoted model exactly: plane 4x4 sheet, sixteen source-red projector enclosures, per-site physical legs, full open boundary; A stands east of its enclosure by the station rule and |phi) is the east port label of site (3,3), both clearer than the 0.7 placements; enclosure tint and leg colour remain house style."
 
 [[verdict]]
@@ -46,12 +46,12 @@ id = "rmp-ii-peps-marginal"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["weight-mismatch"]
-case_sha256 = "3735c246263f3d39157f9c23bad072fb2f414042fda93115b91fff4ed56847d7"
+defects = ["placement-illegible"]
+case_sha256 = "71ab001a3b8d2bfeb7a8f9aa02fdcc8002d048a6627faf0d1517a94917ad6517"
 reviewed = "2026-08-05"
 renderer = "fable-w5-vision-2026-08-05-200dpi"
 second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
-note = "re-verified against the author panel: state sheet, doubled sheet, and the traced fourth column all present; the trace loops still overshoot the sheets (K3, closure metric). Kernel migration is blocked: the bilayer basis rejects every physical policy and numeric ports are in-plane, so the kept sites' open transverse ket-bra legs have no kernel spelling; the doubled-plane scaffold covers contracted pairs only. The case stays on the lattice tier until a bilayer transverse-physical spelling lands."
+note = "Kernel migration under #5507: the doubled sheet is the contract bilayer basis, the kept sites keep their open transverse ket-bra legs, and the traced fourth column closes site by site, matching the author panel index for index; the recorded trace-loop overshoot is gone. Residue: the contract bilayer offset overlaps the ket and bra sheets where the source separates them vertically, so the closing loops read as compact east wraps rather than the source long connectors."
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
