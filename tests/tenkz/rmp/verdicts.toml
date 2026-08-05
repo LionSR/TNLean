@@ -154,10 +154,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "ec201c6800c6f9dffe49d2b7d06a63d6d6434afb8529f3bc49e6a795c1f3ec8b"
-reviewed = "2026-08-04"
-renderer = "kimi-kernel-pairings-source-review-2026-08-04-200dpi"
-note = "The X row is resolved: the case now records the source pairing boxes and open legs through the mpu-wrap-second skin-pairings model, with the right mover source-blue and the left mover source-red. Residue: the row channels keep house ink where the published panel colours the movers."
+case_sha256 = "8ed99f9b371ff8e0a8408398a72a154f01c19401e762270768e397dc9f15475a"
+reviewed = "2026-08-05"
+renderer = "claude-5528-chain-placed-pairings-2026-08-05-200dpi"
+second_viewer = "claude-5528-countersign-sec2fig7c-b-2026-08-05-200dpi"
+note = "The X row is resolved: the case now records the source pairing boxes and open legs through the mpu-wrap-second skin-pairings model, with the right mover source-blue and the left mover source-red. The eight carriers now stand on the chain cursor rather than on eight written addresses, and the 200 dpi raster is byte-identical to the addressed spelling it replaces. Residue: the row channels keep house ink where the published panel colours the movers."
 
 [[verdict]]
 id = "rmp-ii-mpu-normal-form"
