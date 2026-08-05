@@ -7,14 +7,15 @@
     $\{M^{ij}\}_{i,j=0}^{d-1}$ with $M^{ij} \in \MN{D}$, indexed by a ket
     index $i$ and a bra index $j$. Diagrammatically,
     \begin{center}
+        \tenkzkernel
         % Formula: (M^{ij})_{\alpha\beta}, with M^{ij}\in\operatorname{Mat}_D.
         % Ink/index correspondence: the west and east legs carry the free
         % virtual indices \alpha and \beta; the upper and lower legs carry the
         % free physical indices i and j.  Nothing is contracted, so the
         % boundary signature (virtual-west,virtual-east,physical-up,physical-down)
         % is (1,1,1,1).
-        \begin{tenkz}[physical=updown]
-            \tn[mpo, up=$i$, down=$j$]{M}
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{M}
         \end{tenkz}
     \end{center}
 \end{definition}
@@ -109,6 +110,7 @@
 
 Diagrammatically,
 \begin{center}
+    \tenkzkernel
     % Formula: \rho^{(N)}(M)_{\sigma,\tau}
     % = \tr(M^{\sigma_1\tau_1}\cdots
     % M^{\sigma_N\tau_N})
@@ -121,11 +123,11 @@ Diagrammatically,
     % \tau_1,\ldots,\tau_N, hence the semantic boundary signature is
     % (0,0,N,N).  The \tndots atom abbreviates the omitted cells, so the drawn
     % and logged physical arities are necessarily schematic rather than N.
-    \begin{tenkz}[physical=updown, periodic]
-        \tn[mpo, up=$\sigma_1$, down=$\tau_1$]{M} &
-        \tn[mpo, up=$\sigma_2$, down=$\tau_2$]{M} &
-        \tndots &
-        \tn[mpo, up=$\sigma_N$, down=$\tau_N$]{M}
+    \begin{tenkz}[rows={wire}, cols=4, west=trace, east=trace]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{M} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{M} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{M}
     \end{tenkz}
 \end{center}
 
