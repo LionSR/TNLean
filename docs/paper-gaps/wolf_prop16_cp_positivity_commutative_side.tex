@@ -1,0 +1,87 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Wolf Proposition~1.6: Complete Positivity from Positivity, Commutative Side}
+\author{}
+\date{2026-08-05}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Wolf's Proposition~1.6 reads: let $T:\mathcal A\to\mathcal B$ be a positive
+linear map between unital $C^*$-algebras; if either $\mathcal A$ or
+$\mathcal B$ is commutative then $T$ is completely positive
+\cite[Proposition~1.6]{Wolf2012Quantum}. The local source is
+\path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex},
+lines~600--612. Wolf proves only the finite-dimensional case, reduces to
+$\mathcal B$ commutative (the $\mathcal A$-commutative case follows because
+$T$ is completely positive iff its dual $T^*$ is), and then argues by
+simultaneously diagonalizing the pairwise-commuting family
+$\{T(a_{ij})\}$. His remark immediately after the proof states that the
+algebra structure of $\mathcal A$ was never used, so the same argument gives
+complete positivity for any positive map out of an operator system into a
+commutative $C^*$-algebra.
+
+\section{Formalized component}
+
+\Lean's ambient objects for this proposition are linear endomorphisms of
+$M_D(\mathbb C)$: \leanid{IsPositiveMap} and \leanid{IsCPMap} in
+\leanid{TNLean/Channel/Basic.lean} both fix $\mathcal A=\mathcal B=M_D(\mathbb
+C)$. Reading Wolf's ``$\mathcal B$ commutative'' hypothesis literally in this
+ambient setting would force $M_D(\mathbb C)$ itself to be commutative, i.e.\
+$D\le 1$, which is not the statement Wolf's proof establishes and not a
+useful specialization. The formalization instead uses the range-only
+hypothesis that Wolf's own remark licenses:
+\leanid{PositiveOnAbelian.HasCommutingRange T}, defined as
+$\forall\,X\,Y,\ \operatorname{Commute}(T(X))(T(Y))$, in
+\leanid{TNLean/Channel/Schwarz/PositiveOnAbelian/CompletePositivity.lean}.
+Since a family of pairwise-commuting elements generates a commutative
+subalgebra, \leanid{HasCommutingRange T} is exactly the statement that $T$
+maps into some commutative subalgebra of $M_D(\mathbb C)$ -- the hypothesis
+Wolf's proof actually consumes, not an invented strengthening or weakening
+of it.
+
+\leanid{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange}
+proves the commutative-codomain case:
+\leanid{IsPositiveMap T} together with \leanid{HasCommutingRange T} implies
+\leanid{IsCPMap T}. The proof follows Wolf's route: it reduces complete
+positivity to nonnegativity of the block quadratic form built from the Choi
+matrix, and this reduces to the already-proved simultaneous-diagonalization
+lemma \leanid{PositiveOnAbelian.quadraticForm_nonneg_of_isPositiveMap_of_}
+\leanid{commuting_images} (\ghissue{5468} closes the wrapping gap left open
+after that lemma was proved sorry-free).
+
+\leanid{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_hasCommutingRange_adjoint}
+proves the commutative-domain case by the same duality argument Wolf invokes:
+$T$ is completely positive iff its trace-pairing adjoint
+\leanid{Matrix.traceAdjointMap T} is, and the codomain case applies to
+\leanid{Matrix.traceAdjointMap T} when its range is commutative.
+\leanid{PositiveOnAbelian.isCPMap_of_isPositiveMap_of_commutingRange_or}
+combines both disjuncts into the ``either side'' statement.
+
+\section{Relationship to the source hypothesis}
+
+\leanid{HasCommutingRange T} is implied by, but strictly weaker than, ``the
+ambient codomain algebra is commutative'' when the ambient codomain is the
+full matrix algebra $M_D(\mathbb C)$ with $D>1$: a map with commutative range
+need not have commutative full codomain, since $M_D(\mathbb C)$ itself is
+never commutative for $D>1$. This is the correct reading of Wolf's
+proposition for an ambient setting where $\mathcal A$ and $\mathcal B$ are
+not themselves varied as commutative or noncommutative algebras but are
+fixed as $M_D(\mathbb C)$; it matches the generalization Wolf's own remark
+grants (operator system to commutative algebra), not a separately restricted
+theorem. No hypothesis absent from Wolf's argument is added, so the theorems
+above formalize Proposition~1.6 as Wolf actually proves it, not a
+corollary of it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
