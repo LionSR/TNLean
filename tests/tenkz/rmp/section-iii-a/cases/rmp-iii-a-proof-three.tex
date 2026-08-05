@@ -13,16 +13,13 @@
 \[
   \tenkzkernel
   \begin{tenkzeq}
-    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
-      \tn[at=(1,1), skin=box, name=B,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\beta}
-      \tn[at=(2,1), skin=box, name=O,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
-      \tn[at=(3,1), skin=dot, name=A,
-        ports={180:virtual, 0:virtual, 90:physical}]{}
-      \tn[at=(2,2), skin=box, wires=2, name=Va,
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, physical=updown]
+      \tn[at=(1,1), skin=box, name=B]{\beta}
+      \tn[at=(2,1), skin=box, name=O]{\alpha}
+      \tn[at=(3,1), skin=dot, name=A, physical=up]{}
+      \tn[at=(2,2), skin=box, wires=2, name=Va, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0@1:virtual}]{V_\alpha}
-      \tn[at=(1,3), skin=box, wires=2, name=Vb,
+      \tn[at=(1,3), skin=box, wires=2, name=Vb, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0:virtual}]{V_\beta}
       \tnwire{open w}{B.180} \tnwire{open w}{O.180} \tnwire{open w}{A.180}
       \tnwire{B.90}{open n}
@@ -33,16 +30,13 @@
       \tnwire{Vb.0}{open e}
     \end{tenkz}
     =\lambda(\alpha,\beta;\gamma)
-    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
-      \tn[at=(1,1), skin=box, name=B,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\beta}
-      \tn[at=(2,1), skin=box, name=O,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
-      \tn[at=(3,1), skin=dot, name=A,
-        ports={180:virtual, 0:virtual, 90:physical}]{}
-      \tn[at=(1,2), skin=box, wires=2, name=F,
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, physical=updown]
+      \tn[at=(1,1), skin=box, name=B]{\beta}
+      \tn[at=(2,1), skin=box, name=O]{\alpha}
+      \tn[at=(3,1), skin=dot, name=A, physical=up]{}
+      \tn[at=(1,2), skin=box, wires=2, name=F, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0@2:virtual}]{F_{\alpha\beta}^{\gamma}}
-      \tn[at=(2,3), skin=box, wires=2, name=Vc,
+      \tn[at=(2,3), skin=box, wires=2, name=Vc, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0:virtual}]{V_\gamma}
       \tnwire{open w}{B.180} \tnwire{open w}{O.180} \tnwire{open w}{A.180}
       \tnwire{B.90}{open n}

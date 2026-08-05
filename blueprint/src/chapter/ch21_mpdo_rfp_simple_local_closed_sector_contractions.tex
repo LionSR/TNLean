@@ -278,14 +278,17 @@ $\eta_{k,h}=r_k l_h$:
     % further horizontal index.  Both sides carry the same boundary
     % signature
     % (virtual-west=0 | virtual-east=0 | physical-up=2 | physical-down=2).
-    \begin{tenkz}[physical=updown, boundary=none]
-        \tn[pill, wide=2, legs at={1,2},
-            up={{$x_R$},{$x_L$}}, down={{$y_R$},{$y_L$}}]{\eta_{k,h}}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+        \tn[skin=pill, wide=2,
+            ports={90@1:physical:$x_R$, 90@2:physical:$x_L$,
+                   270@1:physical:$y_R$, 270@2:physical:$y_L$}]{\eta_{k,h}}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[physical=updown, boundary=none,
-                  bond label={$a$ at 1-2}]
-        \tn[up=$x_R$, down=$y_R$]{r_k} & \tn[up=$x_L$, down=$y_L$]{l_h}
+    \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+        \tn[label pos=w, ports={90:physical:$x_R$, 270:physical:$y_R$}]{r_k} &
+        \tn[label pos=e, ports={90:physical:$x_L$, 270:physical:$y_L$}]{l_h}
+        \tnmark[form=label, label pos=n]{midway (1,1) and (1,2)}{$a$}
     \end{tenkz}
 \end{center}
 This is the contraction in

@@ -247,8 +247,10 @@ nonvanishing of~$T$, which the final theorem combines into the gauge~$X$.
         % Type verdict: the picture is a rank-three local tensor.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X} & \tn[label pos=s, ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
 \end{theorem}

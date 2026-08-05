@@ -86,7 +86,7 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
     )
     blocked_bodies = _tenkzequation_bodies(blocked)
     assert len(blocked_bodies) == 1, len(blocked_bodies)
-    assert blocked_bodies[0].count(r"\tnpic") == 2
+    assert blocked_bodies[0].count(r"\begin{tenkz}") == 2
     assert r"\qquad$=$\qquad" in blocked_bodies[0]
 
     channels = _read_tex_tree(

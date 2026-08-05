@@ -181,6 +181,90 @@ that exhibits its entanglement directly.
     the number of nonzero entries.
 \end{proof}
 
+\section{Quantum steering}
+
+A purification of a density operator lets an observer on the purifying
+system remotely prepare, or ``steer,'' any ensemble consistent with the
+reduced state.
+
+\begin{definition}[Purification]\label{def:purification}
+    \lean{Matrix.IsPurification}
+    \leanok
+    A vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ purifies a density operator
+    $\rho\in\MN{d_A}$ if $\tr_B[\ketbra{\psi}{\psi}]=\rho$.
+\end{definition}
+
+\begin{definition}[Convex decomposition]\label{def:convex_decomposition}
+    \lean{Matrix.IsConvexDecomposition}
+    \leanok
+    A convex decomposition of a density operator $\rho\in\MN{d_A}$ is a
+    finite family of nonnegative weights $\lambda_i$ summing to one together
+    with density operators $\rho_i\in\MN{d_A}$ satisfying
+    $\rho=\sum_i\lambda_i\rho_i$.
+\end{definition}
+
+\begin{theorem}[The transpose trick]\label{thm:transpose_trick}
+    \lean{Matrix.partialTraceRight_idTensorMap_vecMulVec}
+    \leanok
+    For a bipartite vector $\psi\in\C^{d_A}\otimes\C^{d_B}$ with coefficient
+    matrix $C$ and any linear map $T$ with domain $\MN{d_B}$,
+    \begin{align}
+        \tr_B\bigl[(\id\otimes T)(\ketbra{\psi}{\psi})\bigr] = C\,(T^*(\Id))^{\mathsf T}\,C^\dagger.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Tracing out the second factor of $(\id\otimes T)(\ketbra{\psi}{\psi})$
+    applies $T$ to each rank-one block $\ketbra{a}{b}\mapsto C_{i,a}\,
+    \overline{C_{j,b}}$ of the coefficient matrix and takes its trace; the
+    trace-pairing identity $\tr[T(M)]=\tr[M\,T^*(\Id)]$ turns this into the
+    displayed bilinear form in the rows of $C$. Wolf derives this identity
+    for the canonical purification $\psi=(\sqrt\rho\otimes\Id)\ket\Omega$;
+    the argument here uses only the coefficient matrix of $\psi$ and
+    linearity, so it holds for an arbitrary purification.
+\end{proof}
+
+\begin{theorem}[Quantum steering]\label{thm:quantum_steering}
+    \lean{Matrix.exists_instrument_of_isConvexDecomposition}
+    \leanok
+    \uses{def:purification, def:convex_decomposition, def:instrument}
+    Let $\rho\in\MN{d_A}$ be a density operator with purification
+    $\psi\in\C^{d_A}\otimes\C^{d_B}$. For every convex decomposition
+    $\rho=\sum_i\lambda_i\rho_i$ there is an instrument
+    $\{T_i:\MN{d_B}\to\MN{d_B}\}$ acting on Bob's system such that
+    \begin{align}
+        \lambda_i\rho_i = \tr_B\bigl[(\id\otimes T_i)(\ketbra{\psi}{\psi})\bigr]
+        \notag
+    \end{align}
+    for every $i$. This is \cite[Proposition~(Quantum steering)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transpose_trick}
+    Write $C$ for the coefficient matrix of $\psi$, so $C\,C^\dagger=\rho$,
+    and let $C^+:=C^\dagger\rho^+$ using the generalized inverse of $\rho$
+    on its support. Then $C\,C^+$ is the support projection of $\rho$, and
+    $C^+C$ is an orthogonal projection on $\C^{d_B}$ (the subspace of
+    $\C^{d_B}$ needed to purify $\rho$). For each $i$, the support
+    projection of $\rho$ absorbs $\lambda_i\rho_i$ on both sides (its range
+    lies in the range of $\rho$), so
+    $C\,(C^+(\lambda_i\rho_i)(C^+)^\dagger)\,C^\dagger=\lambda_i\rho_i$.
+    Transposing $C^+(\lambda_i\rho_i)(C^+)^\dagger$ gives an effect operator
+    $E_i$ with $C\,E_i^{\mathsf T}\,C^\dagger=\lambda_i\rho_i$; adding the
+    transpose of the orthogonal complement of $C^+C$ to one fixed $E_{i_0}$
+    keeps this identity (the complement contributes zero under $C(\cdot)C^\dagger$)
+    while making $\sum_i E_i=\Id$. Taking $T_i$ to be the Lüders instrument
+    $\sigma\mapsto\sqrt{E_i}\,\sigma\,\sqrt{E_i}$ gives
+    $T_i^*(\Id)=E_i$, so $\{T_i\}$ is an instrument, and
+    Theorem~\ref{thm:transpose_trick} recovers the displayed identity.
+
+    This route proves the proposition directly for an arbitrary purification
+    and an arbitrary convex decomposition, in place of Wolf's route through
+    the canonical purification $\psi=(\sqrt\rho\otimes\Id)\ket\Omega$ and
+    the transposition operator $\theta$ with respect to its Schmidt basis.
+\end{proof}
+
 \section{Maximal weight in convex decomposition}
 
 Given a density operator $\rho$ and a candidate term $\rho_1$, how large a

@@ -1,0 +1,24 @@
+% Regression: \hphantom, \vphantom, and \bar must reach the node as opaque
+% text.  The label completion fully expanded the field; \hphantom/\vphantom
+% carry an internal \iffalse..\fi that full expansion tears from its match
+% (Incomplete \iffalse), and \bar's math-accent expansion ran before the
+% node ever entered math mode.  Atom labels take the bare command -- the
+% kernel supplies its own math shift; mark labels take no auto-wrap, so the
+% author supplies theirs (issue 5481).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1)]{\hphantom{x}A}
+  \tn[at=(1,2)]{\vphantom{x}A}
+  \tn[at=(1,3)]{\bar A}
+\end{tenkz}
+\quad
+\begin{tenkz}[rows={wire}, cols=3, bonds=none]
+  \tn[at=(1,1), name=p]{A} \tn[at=(1,2), name=q]{A} \tn[at=(1,3), name=r]{A}
+  \tnmark[form=label, label pos=n]{p}{$\hphantom{x}A$}
+  \tnmark[form=label, label pos=n]{q}{$\vphantom{x}A$}
+  \tnmark[form=label, label pos=n]{r}{$\bar A$}
+\end{tenkz}
+\end{document}

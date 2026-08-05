@@ -9,12 +9,10 @@
   \tenkzkernel
   \begin{tenkzeq}
     % LHS: the beta-over-alpha word feeds the spanning F box
-    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
-      \tn[at=(1,1), skin=box, name=B,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\beta}
-      \tn[at=(2,1), skin=box, name=O,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\alpha}
-      \tn[at=(1,2), skin=box, wires=2, name=F,
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=updown]
+      \tn[at=(1,1), skin=box, name=B]{\beta}
+      \tn[at=(2,1), skin=box, name=O]{\alpha}
+      \tn[at=(1,2), skin=box, wires=2, name=F, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0:virtual}]{F_{\alpha\beta}^{\gamma}}
       \tnwire{open w}{B.180} \tnwire{open w}{O.180}
       \tnwire{B.90}{open n} \tnwire{O.270}{open s}
@@ -25,11 +23,10 @@
     \end{tenkz}
     =
     % RHS: F's fused output feeds the single gamma tensor
-    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
-      \tn[at=(1,1), skin=box, wires=2, name=F,
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, physical=updown]
+      \tn[at=(1,1), skin=box, wires=2, name=F, physical=none,
         ports={180@1:virtual, 180@2:virtual, 0@2:virtual}]{F_{\alpha\beta}^{\gamma}}
-      \tn[at=(2,2), skin=box, name=C,
-        ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{\gamma}
+      \tn[at=(2,2), skin=box, name=C]{\gamma}
       \tnwire{open w}{F.180@1} \tnwire{open w}{F.180@2}
       \tnwire{F.0@2}{C.180}
       \tnwire{C.90}{open n} \tnwire{C.270}{open s}

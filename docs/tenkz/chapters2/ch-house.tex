@@ -8,23 +8,25 @@ typed ports, and visual skin are separate data.
 
 \subsection{Declare one typed atom}
 
-Use \tncmd{tndeclareatom} only when the stock atom vocabulary cannot express a
+Use \tncmd{tndeclare} only when the stock atom vocabulary cannot express a
 recurring mathematical kind:
 
-\cmdsig{\textbackslash tndeclareatom\{\meta{command}\}\\
+\cmdsig{\textbackslash tndeclare\{atom\}\{\meta{command}\}\\
 \{skin=\meta{dot|box|pill|mpo},\\
 \hspace*{2em}ports=\{\meta{face:type},\ldots\}\}}
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tndeclareatom{\tnprojector}{
+\tenkzkernel
+\tndeclare{atom}{\tnprojector}{
   skin=box,
-  ports={west:virtual,east:virtual,up:physical}
+  ports={180:virtual, 0:virtual, 90:physical}
 }
-\begin{tenkz}[physical=up] \tnprojector{P} \end{tenkz}
+\begin{tenkz}[cols=1] \tnprojector{P} \end{tenkz}
 \end{Verbatim}
 
-Faces are \tnval{west}, \tnval{east}, \tnval{up}, and \tnval{down}; types
-are \tnval{virtual} and \tnval{physical}.  The declaration creates a
+A face is an angle in the atom's own axes: \tnval{180} and \tnval{0} are the
+two ends of the wire, \tnval{90} is above and \tnval{270} below.  Types are
+\tnval{virtual} and \tnval{physical}.  The declaration creates a
 one-label atom command with optional per-use cell keys.  Its port list is
 complete: an anchor without a type is not an extension contract.
 

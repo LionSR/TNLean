@@ -49,13 +49,20 @@
     % Boundary signature: both panels have (V,P)=(0,3).  Source verdict: exact
     % reproduction of paper_normal.tex:255--274 and 565--580 in house style.
     \begin{center}
-        \tnpic[periodic, physical=up]{%
-            \tn[up=$\sigma_1$]{A_1} & \tnX{X} &
-            \tn[up=$\sigma_2$]{A_2} & \tn[up=$\sigma_3$]{A_3}}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=4, boundary=periodic]
+            \tn[label pos=s, ports={90:physical:$\sigma_1$}]{A_1} &
+            \tn[skin=ring]{X} &
+            \tn[label pos=s, ports={90:physical:$\sigma_2$}]{A_2} &
+            \tn[label pos=s, ports={90:physical:$\sigma_3$}]{A_3}
+        \end{tenkz}
         $=$
-        \tnpic[periodic, physical=up]{%
-            \tn[up=$\sigma_1$]{B_1} & \tnX{Y} &
-            \tn[up=$\sigma_2$]{B_2} & \tn[up=$\sigma_3$]{B_3}}
+        \begin{tenkz}[rows={wire}, cols=4, boundary=periodic]
+            \tn[label pos=s, ports={90:physical:$\sigma_1$}]{B_1} &
+            \tn[skin=ring]{Y} &
+            \tn[label pos=s, ports={90:physical:$\sigma_2$}]{B_2} &
+            \tn[label pos=s, ports={90:physical:$\sigma_3$}]{B_3}
+        \end{tenkz}
     \end{center}
 \end{theorem}
 \begin{proof}\leanok
