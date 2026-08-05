@@ -1,16 +1,21 @@
 % Target: rmp-workbench-ii-peps-rg-workbench
 % Formula: A unitary U acts on the four physical legs of a 2x2 PEPS plaquette.
-% Ink: Canonical public tenkzlattice environment; no raw TikZ.
+% Ink: Kernel plane frame; the unitary is asserted as math-mode application
+%   around the plaquette.
 % Boundary: The 2x2 plaquette keeps every sheet-edge virtual leg and each physical leg
 %   open.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
-%   742-800; archival output FigPEPSRG.pdf
-% Capabilities: lattice, typed-ports
+%   744-753 (panel (a)); archival output FigPEPSRG.pdf; the caption at paper
+%   TN-Review-main.tex line 1026 applies the unitary to the four physical
+%   indices
+% Capabilities: kernel, plane-frame
+\tenkzkernel
 \[
   U\!\left(
-  \begin{tenkzlattice}[rows=2,cols=2,frame=oblique,physical=up,
-                       boundary=open]
-    \tnsite{(1,1)}
-  \end{tenkzlattice}
+  \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    \tn{} & \tn{} \\
+    \tn{} & \tn{}
+  \end{tenkz}
   \right)
 \]
