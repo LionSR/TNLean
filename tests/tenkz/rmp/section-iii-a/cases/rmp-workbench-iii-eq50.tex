@@ -7,8 +7,7 @@
 % Capabilities: kernel, local-map
 \[
   \tenkzkernel
-  \begin{tenkz}[rows={wire}, cols=1, physical=updown]
-    \tn[skin=mpo, name=A, ports={0:virtual, 180:virtual}]{}
-    \tnwire{open w}{A.180} \tnwire{A.0}{open e}
+  \begin{tenkz}[rows={wire}, cols=1, physical=updown, west=open, east=open]
+    \tn[skin=mpo]{}
   \end{tenkz}
 \]

@@ -8,23 +8,18 @@
 \[
   \tenkzkernel
   \tndeclare{species}{op}{hue=source:red}
-  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
     % the source order: gh word, then X_gh, then the g over h double column;
     % the source centres the gh word between the rows, the frame quantizes it
-    \tn[skin=box, at=(1,1), name=GH,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[skin=box, at=(1,1), name=GH]{gh}
     \tn[skin=none, at=0.6 w of GH, name=JW, ports={0:virtual}]{}
-    \tn[skin=box, at=(1,2), wires=2, name=X,
+    \tn[skin=box, at=(1,2), wires=2, name=X, physical=none,
         ports={180:virtual, 0@1:virtual, 0@2:virtual}]{X_{gh}}
-    \tn[skin=box, at=(1,3), name=Ga,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
-    \tn[skin=box, at=(1,4), name=Gb,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[skin=box, at=(1,3), name=Ga]{g}
+    \tn[skin=box, at=(1,4), name=Gb]{g}
     \tn[skin=none, at=0.6 e of Gb, name=JGE, ports={180:virtual}]{}
-    \tn[skin=box, at=(2,3), name=Ha,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
-    \tn[skin=box, at=(2,4), name=Hb,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[skin=box, at=(2,3), name=Ha]{h}
+    \tn[skin=box, at=(2,4), name=Hb]{h}
     \tn[skin=none, at=0.6 e of Hb, name=JHE, ports={180:virtual}]{}
     \tnwire[species=op]{JW.0}{GH.180}
     \tnwire[species=op]{GH.0}{X.180}
@@ -36,20 +31,16 @@
     \tnwire[species=op]{Hb.0}{JHE.180}
   \end{tenkz}
   =
-  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, physical=updown]
     % after the slide: two gh tensors stand west of X_gh, one column remains
-    \tn[skin=box, at=(1,1), name=GHa,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
+    \tn[skin=box, at=(1,1), name=GHa]{gh}
     \tn[skin=none, at=0.6 w of GHa, name=JW, ports={0:virtual}]{}
-    \tn[skin=box, at=(1,2), name=GHb,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{gh}
-    \tn[skin=box, at=(1,3), wires=2, name=X,
+    \tn[skin=box, at=(1,2), name=GHb]{gh}
+    \tn[skin=box, at=(1,3), wires=2, name=X, physical=none,
         ports={180:virtual, 0@1:virtual, 0@2:virtual}]{X_{gh}}
-    \tn[skin=box, at=(1,4), name=Ga,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{g}
+    \tn[skin=box, at=(1,4), name=Ga]{g}
     \tn[skin=none, at=0.6 e of Ga, name=JGE, ports={180:virtual}]{}
-    \tn[skin=box, at=(2,4), name=Ha,
-        ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{h}
+    \tn[skin=box, at=(2,4), name=Ha]{h}
     \tn[skin=none, at=0.6 e of Ha, name=JHE, ports={180:virtual}]{}
     \tnwire[species=op]{JW.0}{GHa.180}
     \tnwire[species=op]{GHa.0}{GHb.180}

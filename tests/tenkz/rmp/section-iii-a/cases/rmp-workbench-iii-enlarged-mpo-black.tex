@@ -9,21 +9,16 @@
 \tenkzkernel
 \tndeclare{species}{operator}{hue=source:red}
 \[
-  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none]
-    \tn[at=(1,2), skin=box, name=M1,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
-    \tn[at=(1,3), skin=box, name=M2,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
-    \tn[at=(1,4), skin=box, name=M3,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
-    \tn[at=(1,5), skin=box, role=marked, name=M4,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
-    \tn[at=(1,6), skin=box, name=M5,
-      ports={0:virtual, 180:virtual, 90:physical, 270:physical}]{}
+  \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none, physical=updown]
+    \tn[at=(1,2), skin=box, name=M1]{}
+    \tn[at=(1,3), skin=box, name=M2]{}
+    \tn[at=(1,4), skin=box, name=M3]{}
+    \tn[at=(1,5), skin=box, role=marked, name=M4]{}
+    \tn[at=(1,6), skin=box, name=M5]{}
     % The periodic virtual bond returns below the word, one column wider on
     % each side so the descent clears the physical stubs, as the source draws.
-    \tn[at=(2,1), skin=none, name=JW, ports={0:virtual, 90:virtual}]{}
-    \tn[at=(2,7), skin=none, name=JE, ports={90:virtual, 180:virtual}]{}
+    \tn[at=(2,1), skin=none, physical=none, name=JW, ports={0:virtual, 90:virtual}]{}
+    \tn[at=(2,7), skin=none, physical=none, name=JE, ports={90:virtual, 180:virtual}]{}
     \tnwire[species=operator]{M1.0}{M2.180}
     \tnwire[species=operator]{M2.0}{M3.180}
     \tnwire[species=operator]{M3.0}{M4.180}
