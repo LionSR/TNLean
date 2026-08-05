@@ -346,4 +346,44 @@ noncomputable def coarseMap :
     (Sum.elim coarseKrausGated coarseKrausUngated :
       Fin 2 ⊕ Fin 2 → Matrix (Fin 4) (Fin 4 × Fin 4) ℂ)
 
+/-- A physical index is determined by its two bits. -/
+lemma eq_of_bit1_bit2 (p q : Fin 4) (h1 : bit1 p = bit1 q) (h2 : bit2 p = bit2 q) : p = q := by
+  have h : bondEquiv.symm p = bondEquiv.symm q := by
+    apply Prod.ext
+    · rw [← bit1_eq_bondEquiv_symm_fst, ← bit1_eq_bondEquiv_symm_fst, h1]
+    · rw [← bit2_eq_bondEquiv_symm_snd, ← bit2_eq_bondEquiv_symm_snd, h2]
+  exact bondEquiv.symm.injective h
+
+/-- The off-diagonal cancellation between `S`'s two gated Kraus operators. -/
+lemma eigVecs_orthogonal : eigVecs 0 0 * eigVecs 0 1 + eigVecs 1 0 * eigVecs 1 1 = 0 := by
+  norm_num [eigVecs]
+
+/-- `Σ_s eigVecs s b ^ 2 = 2` for a fixed bit `b`, summing over the eigenbasis label. -/
+lemma eigVecs_sq_sum' (b : Fin 2) : (eigVecs 0 b) ^ 2 + (eigVecs 1 b) ^ 2 = 2 := by
+  fin_cases b <;> norm_num [eigVecs]
+
+/-- Two elements of `Fin 2` that both differ from a common third element agree. -/
+lemma fin2_eq_of_ne_ne {a b c : Fin 2} (hac : a ≠ c) (hbc : b ≠ c) : a = b := by
+  fin_cases a <;> fin_cases b <;> fin_cases c <;> simp_all
+
+/-- An ungated pair is determined by its `combine` value and the first
+site's second bit. -/
+lemma eq_of_ungated_combine_bit2 {pq pq' : Fin 4 × Fin 4} (h1 : ¬ gate pq.1 pq.2)
+    (h1' : ¬ gate pq'.1 pq'.2) (hc : combine pq.1 pq.2 = combine pq'.1 pq'.2)
+    (hb : bit2 pq.1 = bit2 pq'.1) : pq = pq' := by
+  have e1 : bit1 pq.1 = bit1 pq'.1 := by
+    have h := congrArg bit1 hc
+    rwa [bit1_combine, bit1_combine] at h
+  have e2 : bit2 pq.2 = bit2 pq'.2 := by
+    have h := congrArg bit2 hc
+    rwa [bit2_combine, bit2_combine] at h
+  have e3 : bit1 pq.2 = bit1 pq'.2 := by
+    have h1b : bit1 pq.2 ≠ bit2 pq.1 := fun h => h1 h.symm
+    have h1'b : bit1 pq'.2 ≠ bit2 pq.1 := by
+      rw [hb]; exact fun h => h1' h.symm
+    exact fin2_eq_of_ne_ne h1b h1'b
+  apply Prod.ext
+  · exact eq_of_bit1_bit2 _ _ e1 hb
+  · exact eq_of_bit1_bit2 _ _ e3 e2
+
 end MPOTensor.RescalingStableLengthDependentRFP
