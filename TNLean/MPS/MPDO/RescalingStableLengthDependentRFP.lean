@@ -27,7 +27,7 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   semidefinite for every positive chain length `N` (`R` is an MPDO);
 * `wMat_eigenvalue_eq_oneLabelChi_entry` — the two entries of `oneLabelChi`
   are eigenvalues of the local factor `wMat` of the `R_isMPDO`
-  factorization, exhibited by a full eigenbasis (a scope-restricted
+  factorization, exhibited by explicit eigenvectors (a scope-restricted
   spectral link; see *Remaining gap*);
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
   has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
@@ -474,7 +474,7 @@ lemma wMat_mulVec_alt : wMat.mulVec ![1, -1] = (lambda : ℂ) • ![1, -1] := by
     simp [Matrix.mulVec, dotProduct, wMat, Fin.sum_univ_two, lambda] <;> norm_num
 
 /-- **The two entries of `oneLabelChi` are eigenvalues of `wMat`, exhibited
-by a full eigenbasis.** For each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k`
+by explicit eigenvectors.** For each `k : Fin 2`, `oneLabelChi.entry 0 0 0 k`
 (`1` at `k = 0`, `lambda` at `k = 1`) is an eigenvalue of `wMat`, witnessed
 by the Walsh–Hadamard eigenvectors `![1, 1]` and `![1, -1]`.  This
 identifies the local factor of the `R_isMPDO` factorization (`wMat`, via
@@ -525,7 +525,7 @@ theorem transferMap_A_single10 :
   ext i j
   fin_cases i <;> fin_cases j <;> simp [MPSTensor.transferMap_apply, Fin.sum_univ_four, A]
 
-/-- **The explicit eigenbasis of `φ` (`MPSTensor.transferMap A`).** The
+/-- **The explicit eigenvalues of `φ` (`MPSTensor.transferMap A`).** The
 identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is
 scaled by `lambda = 7/25` (eigenvalue `lambda`), and the off-diagonal matrix
 units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lambda,
