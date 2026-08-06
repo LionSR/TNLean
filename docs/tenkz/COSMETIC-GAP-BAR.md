@@ -6,6 +6,13 @@ colour, line weight, glyph outline, slant, or equivalent planar routing is
 therefore faithful when it preserves the mathematical object, topology,
 boundary, labels, orientation, and declared crossing order.
 
+A render settles less than it appears to. A contracted index carries its type
+in the model and not in its ink, so physical and virtual contractions stroke
+alike and no comparison of pictures catches a mistyped one. The record stream
+catches it, and the boundary signature catches it only when the mistyping moves
+an open end. Every verdict below was reached at the render, so typing is the
+one property a re-review must read out of the record rather than off the page.
+
 This distinction controls the verdict:
 
 - **K1 — recorded property:** the model records the property but the renderer
