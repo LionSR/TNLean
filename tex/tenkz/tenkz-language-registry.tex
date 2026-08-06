@@ -341,7 +341,9 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{label~pos}{angle}{auto}{kernel}{Label quadrant.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{nudge}{pair}{zero}{kernel}{Quarter-pitch displacement.}
 \__tenkz_language_registry_key:nnnnnn {kernel-mark}{name}{identifier}{generated}{kernel}{Addressable name.}
-\__tenkz_language_registry_key:nnnnnn {kernel-mark}{outline}{flag}{false}{kernel}{Contour without tint.}
+% Extension-gate: #5570.  The flag reads the way the corpus draws: a mark is
+% a contour, and a region that carries paper under it says so.
+\__tenkz_language_registry_key:nnnnnn {kernel-mark}{tint}{flag}{false}{kernel}{Interior tint under the contour.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{pitch}{length}{em-relative}{kernel}{Base metric.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{sizes}{size-table}{bundled table}{kernel}{Size-class table.}
 \__tenkz_language_registry_key:nnnnnn {kernel-setup}{strict}{flag}{false}{kernel}{Rejects sugar; benchmark and CI set it.}

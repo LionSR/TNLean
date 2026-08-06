@@ -1,0 +1,43 @@
+% Regression: a selector may subtract a term.  `A - B - C' resolves to the
+% records A names and neither B nor C does, the subtractions apply left to
+% right, and the model keeps the resolved membership -- so the mark over a
+% nine-cell block less two of its cells stands over seven records, and the
+% cells it stands over are the seven that remain (issue 5565 acceptance).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_sub_count_int
+\prop_new:N \g__tenkz_test_sub_cells_prop
+\cs_new_eq:NN \__tenkz_test_sub_enclosure:n
+  \__tenkz_kernel_r_mark_enclosure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
+  {
+    \__tenkz_test_sub_enclosure:n {#1}
+    \int_gset:Nn \g__tenkz_test_sub_count_int
+      { \seq_count:N \l__tenkz_kernel_sel_seq }
+    \prop_gset_eq:NN \g__tenkz_test_sub_cells_prop
+      \l__tenkz_kernel_cells_prop
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, west=open, east=open]
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+  \tnmark[form=enclosure]{(1,1) .. (3,3) - (3,2) - (3,3)}{}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkz_test_sub_count_int } = {7}
+  { \errmessage{the~difference~did~not~leave~seven~records} }
+\prop_if_in:NnT \g__tenkz_test_sub_cells_prop {3-2}
+  { \errmessage{the~first~subtracted~cell~is~still~a~member} }
+\prop_if_in:NnT \g__tenkz_test_sub_cells_prop {3-3}
+  { \errmessage{the~second~subtracted~cell~is~still~a~member} }
+\prop_if_in:NnF \g__tenkz_test_sub_cells_prop {3-1}
+  { \errmessage{the~difference~removed~a~cell~no~term~named} }
+\ExplSyntaxOff
+\end{document}
