@@ -190,19 +190,20 @@
         % A^{i_1}A^{i_2} = sum_j V^{i_1 i_2}_j A^j (eq:corr_kraus_isometry_decomp,
         % CPSV16 Thm 3.1, lines 396-412): two copies of A on physical legs
         % i_1, i_2 fuse through the isometry V into a single copy of A on
-        % physical leg j.  V is a wide pill spanning both blocked columns;
-        % up at={1,2} keeps one open up leg per column (i_1, i_2), while
-        % down at=center gives the summed index j one port.  Both
-        % sides carry the same boundary signature
+        % physical leg j.  V is a wide pill whose outer slots keep one open
+        % up leg each (i_1, i_2), while its centre slot carries the summed
+        % index j down into A.  Both sides carry the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=2).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A}
+        \tenkzkernel
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[ports={90:physical:$i_1$}]{A} & \tn[ports={90:physical:$i_2$}]{A}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[rows={op:none, ket}]
-            \tn[pill, wide=2, up at={1,2}, down at=center,
-                up={$i_1$,$i_2$}]{V} & \\
-            \tn[wide=2]{A^j} &
+        \begin{tenkz}[rows={op,wire}, cols=3, bonds=none]
+            \tn[skin=pill, wide=3, name=V,
+                ports={90@1:physical:$i_1$, 90@3:physical:$i_2$}]{V} \\
+            & \tn[name=A, ports={180:virtual, 0:virtual}]{A^j} &
+            \tnwire{A.90}{V.270@2}
         \end{tenkz}
     \end{center}
         \begin{center}
@@ -210,18 +211,17 @@
         % (CPSV16 Thm 3.1, lines 396--412, source image II_UAAA.png):
         % V^dagger has one open upper port j and two lower ports, at the
         % blocked columns, contracted separately with A^{i_1}, A^{i_2}.
-        % The two pairleg events certify that neither contraction is lost;
-        % the boundary signature (virtual-west=1 | virtual-east=1 |
+        % The boundary signature (virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0) certifies that no second upper
         % port is introduced.
-        \begin{tenkz}[rows={op:none, ket}]
-            \tn[pill, wide=2, up at=center, down at={1,2},
-                up=$j$]{V^\dagger} & \\
-            \tn{A} & \tn{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,ket}, cols=2]
+            \tn[skin=pill, wide=2, ports={90:physical:$j$}]{V^\dagger} \\
+            \tn[ports={180:virtual}]{A} & \tn[ports={0:virtual}]{A}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tn[up=$j$]{A}
+        \begin{tenkz}[cols=1, west=open, east=open]
+            \tn[ports={90:physical:$j$}]{A}
         \end{tenkz}
     \end{center}
     \begin{align}
