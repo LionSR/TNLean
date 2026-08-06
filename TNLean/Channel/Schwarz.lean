@@ -50,6 +50,7 @@ import TNLean.Channel.Schwarz.SupportSourceBDefect
 import TNLean.Channel.Schwarz.SupportSourceDefect
 import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.TwoVariable
+import TNLean.Channel.Schwarz.TwoVariableUnconditional
 import TNLean.Channel.Schwarz.WeylRelativeEntropyIntegral
 import TNLean.Channel.Schwarz.WeylSupportPetzRecovery
 import TNLean.Channel.Schwarz.WeylSupportRelativeEntropyEquality
