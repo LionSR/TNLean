@@ -349,10 +349,6 @@ lemma eq_of_bit1_bit2 (p q : Fin 4) (h1 : bit1 p = bit1 q) (h2 : bit2 p = bit2 q
     · rw [← bit2_eq_bondEquiv_symm_snd, ← bit2_eq_bondEquiv_symm_snd, h2]
   exact bondEquiv.symm.injective h
 
-/-- The off-diagonal cancellation between `S`'s two gated Kraus operators. -/
-lemma eigVecs_orthogonal : eigVecs 0 0 * eigVecs 0 1 + eigVecs 1 0 * eigVecs 1 1 = 0 := by
-  norm_num [eigVecs]
-
 /-- `Σ_s eigVecs s b ^ 2 = 2` for a fixed bit `b`, summing over the eigenbasis label. -/
 lemma eigVecs_sq_sum' (b : Fin 2) : (eigVecs 0 b) ^ 2 + (eigVecs 1 b) ^ 2 = 2 := by
   fin_cases b <;> norm_num [eigVecs]
@@ -403,7 +399,8 @@ lemma bit2_ne_of_gate_combine_eq {pq pq' : Fin 4 × Fin 4} (hg : gate pq.1 pq.2)
   exact Prod.ext hp1 (eq_of_bit1_bit2 _ _ h2 h3)
 
 /-- The off-diagonal cancellation between the eigenbasis rows for distinct
-bits, generalizing `eigVecs_orthogonal` to either order. -/
+bits: the two gated Kraus operators of `S` are orthogonal on any pair of
+physical indices whose shared bond bits differ. -/
 lemma eigVecs_orthogonal' {b b' : Fin 2} (h : b ≠ b') :
     eigVecs 0 b * eigVecs 0 b' + eigVecs 1 b * eigVecs 1 b' = 0 := by
   fin_cases b <;> fin_cases b' <;> simp_all [eigVecs]
@@ -603,6 +600,9 @@ lemma coarseKraus_resolution :
 theorem coarseMap_isKrausCPTP : IsKrausCPTP coarseMap :=
   Matrix.rectangularKrausMap_isKrausCPTP _ coarseKraus_resolution
 
+/-- **`coarseMap` sends the two-site physical operator of `R` back to the
+one-site physical operator.** Together with `coarseMap_isKrausCPTP`, this
+supplies the `S`-map equation of Definition 4.1 for `R`. -/
 theorem coarseMap_physClose2 (X : Matrix (Fin 4) (Fin 4) ℂ) :
     coarseMap (physClose2 R X) = physClose1 R X := by
   ext i j
