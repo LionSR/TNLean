@@ -271,10 +271,16 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{cols}{positive-integer}{3}{kernel}{Cells per row.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{frame}{frame-spec}{flat}{kernel}{Closed flat, plane, or circle frame word.}
 \__tenkz_language_registry_key:nnnnnn {kernel-frame}{basis}{basis-spec}{origin singleton}{kernel}{Ordered row-kind members at east/north quarter-pitch offsets.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{west}{side-policy}{open}{kernel}{West side policy.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{east}{side-policy}{open}{kernel}{East side policy.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{north}{side-policy}{open}{kernel}{North side policy.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{south}{side-policy}{open}{kernel}{South side policy.}
+% A kernel picture grows by declaration: a side exposes indices only when it
+% says so, and the frame's grid is a coordinate system rather than a claim
+% about which indices exist.  `none' is therefore the default word on every
+% side and the explicit spelling of that default.  The grid dialect's
+% {picture} rows above keep their own `open' default, which is where the
+% doctrine differs between the two languages.
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{west}{side-policy}{none}{kernel}{West side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{east}{side-policy}{none}{kernel}{East side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{north}{side-policy}{none}{kernel}{North side policy.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{south}{side-policy}{none}{kernel}{South side policy.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{trace}{trace-spec}{empty}{kernel}{Cells or physical ports closed to themselves.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{open}{cell-set}{empty}{kernel}{Cells opened by declaration.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{bonds}{bond-policy}{grid}{kernel}{Frame-generated adjacent contraction.}
@@ -282,7 +288,7 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{size}{size-class}{from math style}{kernel}{Size class of the metric context.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{check}{check-spec}{signature}{kernel}{The tenkzeq audit specification.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{sandwich}{flag}{false}{sugar(rows={ket,op,bra})}{Ket-over-bra row preset.}
-\__tenkz_language_registry_key:nnnnnn {kernel-picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west, east)}{All-side boundary word.}
+\__tenkz_language_registry_key:nnnnnn {kernel-picture}{boundary}{enum(open|none|periodic)}{none}{sugar(west, east)}{All-side boundary word.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{lattice}{pair}{empty}{sugar(rows=, cols=)}{RxC wire-row lattice preset.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{ring}{integer}{empty}{sugar(rows=, cols=, frame=circle, west=trace, east=trace)}{Circle-frame ring preset.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{surface}{identifier}{empty}{sugar(west=trace, east=trace, north=trace, south=trace)}{Torus closure preset.}

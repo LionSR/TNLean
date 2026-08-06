@@ -372,9 +372,9 @@ and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
 not a claim that every historical path has moved.  The live `tenkz-core`,
-`tenkz-grid`, `tenkz-cd`, `tenkz-lattice`, and `tenkz-free` files still combine
-some parsing, geometry, rendering, and event work; direct `\draw` or `\node`
-emission in those files remains migration debt.
+`tenkz-grid`, `tenkz-tree`, `tenkz-cd`, `tenkz-lattice`, and `tenkz-free` files
+still combine some parsing, geometry, rendering, and event work; direct `\draw`
+or `\node` emission in those files remains migration debt.
 
 - `tenkz-model.code.tex` owns normalized semantic records and freezes topology
   after validation.

@@ -789,11 +789,12 @@
     off-diagonal matrix units are annihilated. This identifies the
     spectral data of $W$ and of $\varphi$ with $\chi$.
     % Scope note: this is not the uniform BNT-label structure-coefficient
-    % statement of Theorem 4.14(ii) (Cirac2016MPDO_arXiv) for R itself, nor
-    % the literal CPSV canonical form: those require the tensor-attached
-    % BNT algebra-structure witness for R, which is future work. The
-    % renormalization fixed-point property of Definition is_rfp_via_ts is
-    % established directly below, without that witness.
+    % statement of Theorem 4.14(ii) (Cirac2016MPDO_arXiv) for R itself:
+    % that requires the tensor-attached BNT algebra-structure witness for
+    % R, which is future work. The renormalization fixed-point property of
+    % Definition is_rfp_via_ts is established directly below, without that
+    % witness; the literal CPSV canonical form of $R$ is established
+    % separately below (Theorem thm:mpdo_bnt_label_rescaling_stable_cf).
 \end{theorem}
 \begin{proof}\leanok
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -815,6 +816,42 @@
         \varphi(E_{01})&=\varphi(E_{10})=0.
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[The literal CPSV canonical form of $R$]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_cf}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isInjective}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:nt_cpsv,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The doubled-index tensor $A=R^{\bullet\bullet}$ (bond dimension $4$,
+    $16$ letters $R^{pq}$, $p,q\in\{0,\ldots,3\}$) is in the canonical form
+    of Definition~\ref{def:cpsv_canonical_form}, eq.~\eqref{eq:cpsv_canonical_form}:
+    a single retained normal block occupying the full ambient bond
+    dimension~$4$ ($r=1$, $D_1=4$, $U=\Id$), with weight
+    $\mu=\sqrt{337/512}$, the unique positive scalar making the retained
+    block's transfer map exactly idempotent (hence spectral-radius one).
+\end{theorem}
+\begin{proof}\leanok
+    Each letter $R^{pq}$ is, up to a nonzero scalar, one of the $16$
+    matrix units of the bond algebra $\C^{4\times4}$: the outer-product
+    structure of $R^{pq}$ collapses to a single matrix-unit letter because
+    each factor $A^a$, $A^b$ of the vertical letters $B^{ab}=A^a\otimes
+    \overline{A^b}$ is itself a scaled matrix unit of $\C^{2\times2}$.
+    Consequently the $16$ letters span the full bond matrix algebra, so
+    $A$ is algebraically injective, and no nontrivial invariant orthogonal
+    projection exists.
+
+    The transfer map $\E_A(X)=\sum_{p,q}R^{pq}X(R^{pq})^\dagger$ is rank
+    one: every image is a scalar multiple of a fixed diagonal matrix, and
+    the scalar evaluated at that fixed matrix is exactly $337/512$.
+    Rescaling $A$ by $\mu^{-1}=\sqrt{512/337}$ makes the transfer map
+    exactly idempotent, hence primitive with spectral radius one (all
+    other eigenvalues of the rank-one map are exactly zero). Together with
+    algebraic injectivity this gives a CPSV normal tensor, and $A=\mu\cdot
+    (\mu^{-1}A)$ pointwise gives the reconstruction equation with the
+    trivial (identity) coisometry.
 \end{proof}
 
 \begin{theorem}[The rescaling-stable tensor is a renormalization fixed
