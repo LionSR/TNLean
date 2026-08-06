@@ -82,11 +82,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "3990374fae600d60455883f726f20186432d5f9130b169744b453f45a423a7ad"
+case_sha256 = "b3b1c10f97a58346de946c44d37b0ad0be40f3ed624061f7c477c2051907e13d"
 second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
-reviewed = "2026-08-05"
-renderer = "fable-w1a-vision-review-2026-08-05-200dpi"
-note = "X and X^-1 match at one reference width by the kernel size class. As in the source, each capsule absorbs the doubling: one virtual rail is open on each outer side, the doubled rail runs only between the capsules and the A pair, and the boundary matches O's four indices outright, so no tenkzeq check off is needed. The single outer rail leaves each capsule at the upper wire-row rather than mid-height (house port placement)."
+reviewed = "2026-08-06"
+renderer = "claude-issue-5577-typing-audit-2026-08-06-200dpi"
+note = "Issue #5577: the A-Abar bond retyped virtual to physical (A.270, Ac.90). In O = X^-1 (sum_k A^k tensor conj(A^k)) X the summed index k is the purifying site index the ket tensor shares with its conjugate, not a network bond: the author draws one continuous vertical from y=0.7 to y=-0.7 through A at y=0.3 and Abar at y=-0.3, cut into three visible segments by the two white tensor boxes, while A's and Abar's virtual legs are the horizontals running into the X^-1 and X capsules (ImagesReview Section II.tex lines 323-334). Typing the middle segment virtual made one stroke change type mid-line, since A.90 and Ac.270 were already physical. The workbench rendering of the same author block, rmp-workbench-ii-positive-mpo-old, already types this bond physical. Render at 200dpi is pixel-identical, since a connected physical leg strokes as a bond. Prior note: X and X^-1 match at one reference width by the kernel size class. As in the source, each capsule absorbs the doubling: one virtual rail is open on each outer side, the doubled rail runs only between the capsules and the A pair, and the boundary matches O's four indices outright, so no tenkzeq check off is needed. The single outer rail leaves each capsule at the upper wire-row rather than mid-height (house port placement)."
 
 [[verdict]]
 id = "rmp-ii-mpu-unitarity"
@@ -106,11 +106,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = ["placement-illegible"]
-case_sha256 = "afdac2f68d36447256f0af03c05dbd35d7f7e321494f96f549c7659ba6356301"
-reviewed = "2026-08-05"
-renderer = "fable-w1a-vision-review-2026-08-05-300dpi"
+case_sha256 = "e87a92370efda1d09990e047e84dbc0b55f0e011c7012c62b396f6fdd6efcb04"
+reviewed = "2026-08-06"
+renderer = "claude-issue-5577-typing-audit-2026-08-06-200dpi"
 second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
-note = "The model matches the author panel: the 2x2 blocked sandwich, two disjoint RHS factors, the a/b beads anchored to hull-routed side closures (route={e of ...}/{w of ...}), and the conjugate row's overline. The residue is K1: the renderer does not yet ink a hull route on an endpoint index wire, so each closure currently draws along its column axis over the U-Ubar bond instead of arcing off the east/west faces the contract names (LANGUAGE-1.0 s5, bend= retirement row); the grid-tier predecessor inked this closure correctly through its side-cup policy."
+note = "Issue #5577: the four U-Ubar column bonds retyped virtual to physical (u1.270, ub1.90, u2.270, ub2.90 on both panels). The author draws each column as one continuous vertical stroke from y=0.7 to y=-0.7 through U at y=0.3 and Ubar at y=-0.3, with the virtual rails as the horizontals at y=+/-0.3 (ImagesReview Section II.tex lines 405-412); the segment between the two tensors is therefore the summed site index, and typing it virtual while its two open ends were already physical made one stroke change type mid-line. The (a1) panel the figure factors sets the same sandwich equal to a bare vertical line, which only reads as the identity on the physical space. Sibling conventions: rmp-ii-mpu-unitarity pairs the same U-Ubar site index through the grid dialect's op/op rows, and rmp-ii-ortho-left/right type a contracted physical index 270:physical to 90:physical. Render at 200dpi is pixel-identical, since a connected physical leg strokes as a bond. Prior note: The model matches the author panel: the 2x2 blocked sandwich, two disjoint RHS factors, the a/b beads anchored to hull-routed side closures (route={e of ...}/{w of ...}), and the conjugate row's overline. The residue is K1: the renderer does not yet ink a hull route on an endpoint index wire, so each closure currently draws along its column axis over the U-Ubar bond instead of arcing off the east/west faces the contract names (LANGUAGE-1.0 s5, bend= retirement row); the grid-tier predecessor inked this closure correctly through its side-cup policy."
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
@@ -978,11 +978,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "f408020089fbddfda5105f2f0f8b3edbf7c31e43441b0dfb4a65a14eeaa3caed"
-reviewed = "2026-08-05"
-renderer = "fable-w4-section-iv-migration-2026-08-05-200dpi"
+case_sha256 = "4430ce358248ab88a5bd924ed5b6054eddedaa19efa7d8b1ca6141bc5728046e"
+reviewed = "2026-08-06"
+renderer = "claude-issue-5577-typing-audit-2026-08-06-200dpi"
 second_viewer = "fable-w4-second-pass-2026-08-05-400dpi"
-note = "kernel migration: R is respelled from the 0.7 pill to the signed wide box atom (LANGUAGE-1.0 s14); S consumes R's escaped leg and B's leg through straight drops, the cut ends turn upward between B and C, and no spurious crossing appears. S's outputs sit at its top-face stations where the source raises them from the box corners (house form). Confirmed on a second 400dpi pass."
+note = "Issue #5577: S's two outputs retyped physical to virtual (90@1, 90@3). S inverts the jointly injective pair A, B, so it consumes two site indices and returns the two virtual bond ends; the author draws those ends as one open U raised from the box corners (ImagesReview Section IV.tex line 131), the same open U the equation's left panel draws as its free identity wire and types virtual on both ends (rmp-iv-intersection-lhs-four). The two panels' boundary signatures settle it: the left panel exposes open:n open:n open:n open:n phys:n, and the right panel matched that only after the retyping, having exposed open:n open:n phys:n phys:n phys:n before. Unlike a contracted index, an open port's leg reach follows its type, so the render moves: S's two upward stubs shorten from physical-leg to stub reach and nothing else changes. Prior note: kernel migration: R is respelled from the 0.7 pill to the signed wide box atom (LANGUAGE-1.0 s14); S consumes R's escaped leg and B's leg through straight drops, the cut ends turn upward between B and C, and no spurious crossing appears. S's outputs sit at its top-face stations where the source raises them from the box corners (house form). Confirmed on a second 400dpi pass."
 
 [[verdict]]
 id = "rmp-iv-intersection-lhs-five"
