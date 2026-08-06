@@ -1,0 +1,28 @@
+% Regression: an index type belongs to the port that carries it, not to the
+% frame.  A physical index on a side face is therefore an ordinary typed port:
+% the east face of a chained atom is physical while its west face is virtual,
+% and the frame-owned `physical=` policy keeps its own outward face beside
+% them without either claiming the other (issue 5566).  A wire joining two
+% physical ports strokes as a physical leg; joining a physical port to a
+% virtual one stays the coded type error it always was.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% west virtual, east physical, on the last atom of a bonded chain
+\begin{tenkz}[rows={wire}, cols=3]
+  \tn[ports={180:virtual}]{A} & \tn{B} & \tn[ports={0:physical}]{C}
+\end{tenkz}
+\qquad
+% the same side-face physical index beside the frame's own physical policy
+\begin{tenkz}[rows={wire}, cols=3, physical=up]
+  \tn[ports={180:virtual}]{A} & \tn{B} & \tn[ports={0:physical}]{C}
+\end{tenkz}
+\qquad
+% the map picture: a physical index carried east, a virtual one carried west,
+% each naming the space it leaves for
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=box, name=map,
+    ports={180:virtual:V, 0:physical:W}]{A}
+\end{tenkz}
+\end{document}

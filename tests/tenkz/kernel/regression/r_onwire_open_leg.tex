@@ -1,0 +1,27 @@
+% Regression: a place on a generated open leg is read off the leg the kernel
+% draws.  A leg with a free end has only one model end, so the arithmetic that
+% divides a run between two ends could not answer for it and the address was
+% refused outright (issue 5566).  The leg saves the route it inks like every
+% other index wire, and the address is answered along that route: a label and
+% a bead now take a station on a side-policy leg, on an authored open end, and
+% on an open physical leg alike.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% the side policy's own legs: one leaving west, one leaving east
+\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+  \tn{A} & \tn{B}
+  \tnmark[form=label, label pos=90]{on open-west-1 0.5}{$\alpha$}
+  \tn[skin=dot, at=on open-east-1 0.5]{}
+\end{tenkz}
+\qquad
+% an authored open end, and an open physical leg on a side face
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=box, name=X,
+    ports={180:virtual, 90:physical}]{X}
+  \tnwire[name=eastleg]{X.0}{open e}
+  \tnmark[form=label, label pos=270]{on eastleg 0.75}{$t$}
+  \tn[skin=dot, at=on port-open-2 0.5]{}
+\end{tenkz}
+\end{document}

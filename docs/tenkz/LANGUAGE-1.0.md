@@ -554,7 +554,9 @@ cups, names are side-qualified (`cup-west-1-2`, `cup-east-1-2`) so every
 derived wire remains addressable as one named record. Generated legs take
 canonical names on the same rule and are named records like any other, which
 is why no address production is needed to reach one. Beads and labels attach
-to closures by the ordinary address grammar. A closed chain that renders open
+to closures by the ordinary address grammar. A leg has one model end and one
+free tip, so `on <leg> t` is read along the leg the picture draws, from the
+end the wire is written from to the end it is written to. A closed chain that renders open
 is impossible by construction: the closure IS a wire record, and every wire
 is drawn or errors.
 
