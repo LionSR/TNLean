@@ -24,6 +24,11 @@ representation or complete-positivity hypothesis is imposed.
 
 * `SchwarzMap.mem_rightMultiplicativeDomain_iff`: Wolf, Equation (5.13).
 * `SchwarzMap.mem_leftMultiplicativeDomain_iff`: Wolf, Equation (5.14).
+* `SchwarzMap.eq_zero_of_forall_quadratic_posSemidef`: a matrix-valued
+  quadratic in a real parameter, positive semidefinite for every value of
+  the parameter and with zero constant term, has zero linear coefficient;
+  the completing-the-square step reused by the Wolf Ch5 line-198 equality
+  criterion for the two-variable operator Schwarz inequality.
 
 ## References
 
@@ -98,7 +103,7 @@ theorem linear_eq_zero_of_quadratic_nonneg
 
 /-- A matrix-valued quadratic which is positive semidefinite for every real
 parameter and has zero constant term must have zero linear coefficient. -/
-private theorem eq_zero_of_forall_quadratic_posSemidef
+theorem eq_zero_of_forall_quadratic_posSemidef
     {m : Type*} [Finite m] {B D : Matrix m m ℂ}
     (h : ∀ t : ℝ,
       (((t : ℂ) • B) + ((t ^ 2 : ℝ) : ℂ) • D).PosSemidef) :

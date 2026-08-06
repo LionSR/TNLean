@@ -425,27 +425,199 @@ positivity.
     $v^\dagger E(A^\dagger A)v - v^\dagger E(A^\dagger B)w \ge 0$.
 \end{proof}
 
-\begin{theorem}[Two-variable operator Schwarz inequality]
-    \label{thm:two_variable_operator_schwarz}
-    % (lean target: schwarz_two_variable_unconditional — not yet defined)
+\begin{theorem}[Conjugate-transpose identity]
+    \label{thm:map_EBA_eq_conjTranspose_EAB}
+    \lean{SchwarzTwoVariable.map_EBA_eq_conjTranspose_EAB}
+    \leanok
     \uses{def:2positive_map}
-    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map.
-    For every $A,B\in\MN{D}$ and every vector $v$,
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
+    $A,B\in\MN{D}$,
     \begin{align}
-        v^\dagger\,E(A^\dagger A)\,v
-         & \ge \sup_{w\,:\,E(B^\dagger B)w=E(B^\dagger A)v}
-            v^\dagger\,E(A^\dagger B)\,w,
+        E(B^\dagger A) & = E(A^\dagger B)^\dagger.
         \notag
     \end{align}
-    where the supremum is taken over all $w$ satisfying the side condition.
-    Equivalently, for every $v$ there exists a vector $w$ with
-    $E(B^\dagger B)w = E(B^\dagger A)v$ such that
-    $v^\dagger E(A^\dagger A)v \ge v^\dagger E(A^\dagger B)w$,
-    and the value $v^\dagger E(A^\dagger B)w$ is independent of the choice
-    of such $w$.
-    This is \cite[Eq.~(5.4)]{Wolf2012Quantum}.
-    \notready
-    % Missing: existence of w via ran(E(B†B)) = ker(E(B†B))⊥.
-    % The conditional form (Lemma~\ref{lem:two_variable_operator_schwarz_conditional})
-    % is formalized; the unconditional form needs EuclideanSpace range/ker duality.
 \end{theorem}
+
+\begin{proof}\leanok
+    A $2$-positive map is positive, and positive maps preserve adjoints.
+    Applying this to $A^\dagger B$ and using
+    $(A^\dagger B)^\dagger = B^\dagger A$ gives the identity.
+\end{proof}
+
+\begin{theorem}[Kernel inclusion for the two-variable Schwarz inequality]
+    \label{thm:ker_EBB_le_ker_EAB}
+    \lean{SchwarzTwoVariable.ker_EBB_le_ker_EAB}
+    \leanok
+    \uses{def:2positive_map, thm:map_EBA_eq_conjTranspose_EAB}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
+    $A,B\in\MN{D}$, $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:map_EBA_eq_conjTranspose_EAB, lem:two_variable_operator_schwarz_conditional}
+    Rewrite $E(B^\dagger A)$ as $E(A^\dagger B)^\dagger$
+    (Lemma~\ref{thm:map_EBA_eq_conjTranspose_EAB}) in the ampliated PSD
+    block matrix $\bigl[\begin{smallmatrix}
+        E(A^\dagger A) & E(A^\dagger B)\\
+        E(B^\dagger A) & E(B^\dagger B)
+    \end{smallmatrix}\bigr]$ from the proof of
+    Lemma~\ref{lem:two_variable_operator_schwarz_conditional}: if
+    $E(B^\dagger B)y=0$ then testing the PSD quadratic form on $(0,y)$
+    forces $E(A^\dagger B)y=0$.
+\end{proof}
+
+\begin{theorem}[Pseudoinverse range-inclusion witness]
+    \label{thm:EBB_mul_pinv_mul_EBA_eq}
+    \lean{SchwarzTwoVariable.EBB_mul_pinv_mul_EBA_eq}
+    \leanok
+    \uses{def:2positive_map, def:pinv, thm:ker_EBB_le_ker_EAB}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
+    $A,B\in\MN{D}$,
+    \begin{align}
+        E(B^\dagger B)\bigl(E(B^\dagger B)^{+}E(B^\dagger A)\bigr)
+         & = E(B^\dagger A).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The kernel inclusion $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$
+    (Lemma~\ref{thm:ker_EBB_le_ker_EAB}) gives, after taking adjoints, that
+    the support projection of $E(B^\dagger B)$ absorbs $E(B^\dagger A)$ on
+    the left. Since $E(B^\dagger B)E(B^\dagger B)^{+}$ is exactly that
+    support projection, the displayed identity follows.
+\end{proof}
+
+\begin{theorem}[Two-variable operator Schwarz inequality]
+    \label{thm:two_variable_operator_schwarz}
+    \lean{SchwarzTwoVariable.schwarz_two_variable_unconditional}
+    \leanok
+    \uses{def:2positive_map, def:pinv}
+    Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
+    $A,B\in\MN{D}$,
+    \begin{align}
+        E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
+         & \le E(A^\dagger A),
+        \notag
+    \end{align}
+    where $(\cdot)^+$ is the Moore--Penrose pseudoinverse, i.e.\ the
+    inverse taken on the range. This is \cite[Eq.~(5.4)]{Wolf2012Quantum},
+    unconditional: no vector is assumed to exist.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:two_variable_operator_schwarz_conditional, thm:EBB_mul_pinv_mul_EBA_eq}
+    For every $v$, the vector $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$
+    satisfies the side condition $E(B^\dagger B)\,w = E(B^\dagger A)\,v$ of
+    the conditional lemma
+    (Lemma~\ref{lem:two_variable_operator_schwarz_conditional}): this is
+    exactly Lemma~\ref{thm:EBB_mul_pinv_mul_EBA_eq} evaluated at $v$. The
+    kernel inclusion $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$,
+    obtained from the ampliated PSD block matrix of the conditional
+    lemma's proof,
+    gives $\operatorname{ran}(E(B^\dagger A))\subseteq
+    \operatorname{ran}(E(B^\dagger B))$, so the pseudoinverse is a genuine
+    right-inverse witness for $E(B^\dagger A)$ on the support of
+    $E(B^\dagger B)$. Applying the conditional lemma with this $w$ for
+    every $v$ gives the displayed matrix inequality.
+\end{proof}
+
+\begin{definition}[Per-$B$ Schwarz hypothesis]\label{def:has_schwarz_inequality_for}
+    \lean{SchwarzTwoVariable.HasSchwarzInequalityFor}
+    \leanok
+    \uses{def:pinv}
+    A complex-linear map $E:\MN{D}\to\MN{D}$ and a fixed $B\in\MN{D}$
+    satisfy the per-$B$ Schwarz hypothesis when
+    \begin{align}
+        E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
+         & \le E(A^\dagger A)
+        \notag
+    \end{align}
+    for every $A\in\MN{D}$. A $2$-positive map satisfies this for every
+    $B$ (Theorem~\ref{thm:two_variable_operator_schwarz}).
+\end{definition}
+
+\begin{definition}[Equality-attaining set]\label{def:equality_attaining}
+    \lean{SchwarzTwoVariable.equalityAttaining}
+    \leanok
+    \uses{def:has_schwarz_inequality_for}
+    For a fixed $B$, the set $\mc{A}_B\subseteq\MN{D}$ of $A$'s for which
+    equality is attained in the two-variable operator Schwarz inequality:
+    \begin{align}
+        E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
+         & = E(A^\dagger A).
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Vanishing linear coefficient of a nonnegative matrix quadratic]
+    \label{thm:eq_zero_of_forall_quadratic_posSemidef}
+    \lean{SchwarzMap.eq_zero_of_forall_quadratic_posSemidef}
+    \leanok
+    Let $m$ be finite and $B,D\in\MN{m}$. If
+    $tB+t^2D$ is positive semidefinite for every $t\in\mathbb R$, then
+    $B=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Testing the quadratic form on a vector $x$ reduces to the scalar
+    statement: if $tb+t^2d\ge0$ for every real $t$, where
+    $b=x^\dagger Bx$ and $d=x^\dagger Dx\ge0$, then $b=0$. Evaluating at
+    $t=\pm1$ forces $d\ge0$; evaluating at $t=-\operatorname{Re}(b)/(d+1)$
+    and completing the square forces $\operatorname{Re}(b)=0$, and
+    comparing the imaginary parts at $t=\pm1$ forces
+    $\operatorname{Im}(b)=0$. Since this holds for every $x$, $B=0$ by
+    polarization.
+\end{proof}
+
+\begin{theorem}[Equality in the operator Schwarz inequality]
+    \label{thm:two_variable_schwarz_equality}
+    \lean{SchwarzTwoVariable.schwarz_equality_criterion}
+    \leanok
+    \uses{def:has_schwarz_inequality_for, def:equality_attaining}
+    Let $E:\MN{D}\to\MN{D}$ be a positive linear map such that, for a
+    given $B\in\MN{D}$, the per-$B$ Schwarz hypothesis holds
+    (Definition~\ref{def:has_schwarz_inequality_for}). Then for every
+    $A\in\mc{A}_B$ (Definition~\ref{def:equality_attaining}) and every
+    $X\in\MN{D}$,
+    \begin{align}
+        E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger X)
+         & = E(A^\dagger X).
+        \notag
+    \end{align}
+    This is the source's equality theorem, local source
+    \path{Notes/WolfNoteTexSource/ch05_schwarz_inequalities.tex}, line 198.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:eq_zero_of_forall_quadratic_posSemidef}
+    Write $Q(U,V) = E(U^\dagger V) - E(U^\dagger B)E(B^\dagger B)^+E(B^\dagger
+    V)$; the per-$B$ hypothesis is $Q(U,U)\ge0$ for every $U$, and
+    $A\in\mc{A}_B$ means $Q(A,A)=0$. Applying the hypothesis to
+    $A + cX$ for $c\in\mathbb C$ and expanding bilinearly gives
+    \begin{align}
+        Q(A+cX,A+cX)
+         & = c\,Q(A,X) + \overline{c}\,Q(X,A) + \overline{c}c\,Q(X,X)
+        \ge 0.
+        \notag
+    \end{align}
+    Taking $c=t\in\mathbb R$ and applying
+    Lemma~\ref{thm:eq_zero_of_forall_quadratic_posSemidef} to the linear
+    coefficient $Q(A,X)+Q(X,A)$ and the fixed nonnegative quadratic
+    coefficient $Q(X,X)$ shows $Q(A,X)+Q(X,A)$ vanishes; taking $c=tI$ and
+    applying the same lemma to $I\,Q(A,X) - I\,Q(X,A)$ shows this also
+    vanishes. Combining the two gives $Q(A,X)=0$, which is the displayed
+    identity.
+\end{proof}
+
+\begin{corollary}[Converse of the equality criterion]
+    \label{cor:two_variable_schwarz_equality_converse}
+    \lean{SchwarzTwoVariable.mem_equalityAttaining_of_forall_eq}
+    \leanok
+    \uses{def:equality_attaining}
+    If the identity of
+    Theorem~\ref{thm:two_variable_schwarz_equality} holds for every
+    $X\in\MN{D}$, then $A\in\mc{A}_B$. This is immediate from the
+    theorem by specializing at $X=A$; the source states only the forward
+    direction.
+\end{corollary}
