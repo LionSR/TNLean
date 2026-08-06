@@ -48,7 +48,9 @@ style, never topology.
 
 An open leg is a wire like any other and it carries a name.  A side policy
 names its legs after the side and the row or column they leave --
-\tnval{open-west-1}, \tnval{open-south-col-3} -- and an authored open end
+\tnval{open-west-1}, \tnval{open-south-col-3} -- the \tnkey{physical=} policy
+names each of its legs after the face and the cell it grows from,
+\tnval{leg-n-1-1} and \tnval{leg-s-2-3}, and an authored open end
 takes the name its \tncmd{tnwire} declares.  Address a fraction of that name
 to put a label or a bead on the leg:
 
@@ -63,7 +65,11 @@ to put a label or a bead on the leg:
 The station is read along the leg the picture draws.  A leg has one end on a
 glyph and one free tip, and fraction zero is the end the wire is written
 from, so a leg written from a port to \tnval{open e} runs outward while one
-written from \tnval{open w} to a port runs inward.
+written from \tnval{open w} to a port runs inward.  A policy leg runs outward
+from the glyph, so \tnval{on leg-n-1-1 0} is at the north face of the site in
+row one, column one, and \tnval{on leg-n-1-1 1} is at its free tip.  Stating a
+row's legs once with \tnkey{physical=} therefore costs nothing: the same name
+serves the crossing grammar and the address.
 
 \subsection{Say which bond is the one under discussion}
 

@@ -245,7 +245,7 @@
     \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \path [ spath/save = {#1} ] #2 ;
   }
-\cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV }
+\cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV , VV }
 
 % load a token list of braced pairs {x,y}{x,y}... into the point seq
 \cs_new_protected:Npn \__tenkz_string_load_pts:n #1

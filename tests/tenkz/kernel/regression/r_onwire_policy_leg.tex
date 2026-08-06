@@ -1,0 +1,48 @@
+% Regression: a leg the picture's physical policy grows is a named wire
+% record, so it can be spoken about.  The policy used to write a field on
+% each frame-cell atom and let the renderer ink a path nothing could name,
+% while the same leg written as a typed port carried both a label and an
+% address (issue 5574).  The leg now owns a record under the canonical name
+% the crossing grammar already spells -- leg-<face>-<row>-<col> -- and every
+% consumer of a name reaches it: a label and a bead take a station on it, and
+% a declared crossing names it as an operand.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% The policy's own legs, north and south of a two-site row.  Neither is
+% deferred by a crossing, so each is inked by the leg pass and answers along
+% the route it inked.
+\begin{tenkz}[rows={wire}, cols=2, physical=updown]
+  \tn{A} & \tn{B}
+  \tnmark[form=label, label pos=0]{on leg-n-1-1 0.5}{$\sigma$}
+  \tn[skin=dot, at=on leg-s-1-2 0.6]{}
+\end{tenkz}
+\qquad
+% The same leg named by a declared crossing, which defers its ink to the
+% string surgery.  The record answers a place on it either way.
+\begin{tenkz}[rows={wire}, cols=3, bonds=none, physical=down]
+  \tn[at=(1,1), name=Q, ports={0:virtual}]{Q}
+  \tn[at=(1,2), name=M]{M}
+  \tn[at=(1,3), name=L]{L}
+  \tnwire[
+    kind=string,
+    name=g,
+    route={s of (1,1) .. (1,3)},
+    crossing=over
+  ]{open}{open}
+  \tnwire[
+    kind=string,
+    name=h,
+    route={all of Q},
+    crossing=over,
+    cross={
+      under at crossing of g and h,
+      over at crossing of h and leg-s-1-2,
+      over at crossing of h and leg-s-1-3
+    }
+  ]
+    {crossing of g and leg-s-1-3}{1 n of Q}
+  \tnmark[form=label, label pos=180]{on leg-s-1-2 0.3}{$\tau$}
+\end{tenkz}
+\end{document}
