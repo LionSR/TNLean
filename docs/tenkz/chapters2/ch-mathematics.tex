@@ -38,4 +38,7 @@ meaning in every environment that exposes it.
 Open ink is mathematical data.  A matrix keeps its two virtual indices; a
 map keeps input and output indices; a scalar has none.  Closing a picture for
 neatness changes the object.  The versioned \tnfile{.tnlog} records the
-resolved model and boundary signature used for rendering.
+resolved model and boundary signature used for rendering.  It also records
+every port's type, which the page does not: a contracted index carries its
+type in the record and not in its line, so a physical contraction and a
+virtual one stroke alike.
