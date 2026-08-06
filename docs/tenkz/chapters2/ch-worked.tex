@@ -65,6 +65,34 @@ glyph and one free tip, and fraction zero is the end the wire is written
 from, so a leg written from a port to \tnval{open e} runs outward while one
 written from \tnval{open w} to a port runs inward.
 
+\subsection{Say which bond is the one under discussion}
+
+A lattice draws its bonds from the row and column policy, and every one of
+them is the same black contraction.  A figure that distinguishes one edge --
+the edge being blocked, the bond being cut -- restates that bond in the body.
+An index wire between two adjacent cells is that pair's bond: the frame mints
+no second wire under it, and the wire's species, stroke, and route are the
+bond's.
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\tndeclare{species}{blocked-edge}{hue=source:red!65!black}
+\begin{tenkz}[rows={wire,wire}, cols=3]
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn{}
+  \tnwire[species=blocked-edge]{(1,1)}{(1,2)}
+\end{tenkz}
+\end{Verbatim}
+
+The restatement is the same contraction, so the count of internal bonds and
+the exposed boundary do not move; only the ink does.  Either spelling of the
+pair reaches it -- the two cells, as above, or the two typed ports
+\tnval{a.0} and \tnval{b.180} on named atoms.  \tnkey{bonds=none} plus a
+hand-written wire for every pair states the same picture and is not a
+spelling anyone should use.  A travelling string is not a restatement: it
+carries an operator index, so it is drawn over the lattice and retires
+nothing.
+
 \subsection{Send a physical index sideways}
 
 An index type belongs to the port that carries it.  \tnkey{ports=} types each
