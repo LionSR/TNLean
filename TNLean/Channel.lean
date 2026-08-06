@@ -9,11 +9,13 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Channel
 
 import TNLean.Channel.Basic
+import TNLean.Channel.BreuerHallIndecomposable
 import TNLean.Channel.BreuerHallMap
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.ChoiTypeMap
 import TNLean.Channel.CompletelyPositiveBridge
+import TNLean.Channel.DecomposablePPT
 import TNLean.Channel.DensityRetract
 import TNLean.Channel.Determinant
 import TNLean.Channel.Determinant.Basic
