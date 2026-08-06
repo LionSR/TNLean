@@ -178,4 +178,15 @@ theorem schwarz_equality_criterion (E : Mat →ₗ[ℂ] Mat) (B : Mat) (_hE : Is
     simpa [QQ] using hLzero
   exact (sub_eq_zero.mp hLzero').symm
 
+/-- **Converse of the equality criterion.** If the Eq. (5.5) identity
+`E(A†B) · pinv(E(B†B)) · E(B†X) = E(A†X)` holds for every `X`, then in
+particular (at `X = A`) `A` is in the equality-attaining set
+`equalityAttaining E B`. The source states only the forward direction
+(`schwarz_equality_criterion`); this converse is immediate from it by
+specializing at `X = A`. -/
+theorem mem_equalityAttaining_of_forall_eq (E : Mat →ₗ[ℂ] Mat) (B A : Mat)
+    (hid : ∀ X, E (Aᴴ * B) * Douglas.pinv (E (Bᴴ * B)) * E (Bᴴ * X) = E (Aᴴ * X)) :
+    A ∈ equalityAttaining E B :=
+  hid A
+
 end SchwarzTwoVariable

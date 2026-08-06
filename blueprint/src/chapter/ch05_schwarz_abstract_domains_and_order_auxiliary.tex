@@ -475,7 +475,7 @@ positivity.
     \lean{SchwarzTwoVariable.equalityAttaining}
     \leanok
     \uses{def:has_schwarz_inequality_for}
-    For a fixed $B$, the set $\mcA_B\subseteq\MN{D}$ of $A$'s for which
+    For a fixed $B$, the set $\mc{A}_B\subseteq\MN{D}$ of $A$'s for which
     equality is attained in the two-variable operator Schwarz inequality:
     \begin{align}
         E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger A)
@@ -492,7 +492,7 @@ positivity.
     Let $E:\MN{D}\to\MN{D}$ be a positive linear map such that, for a
     given $B\in\MN{D}$, the per-$B$ Schwarz hypothesis holds
     (Definition~\ref{def:has_schwarz_inequality_for}). Then for every
-    $A\in\mcA_B$ (Definition~\ref{def:equality_attaining}) and every
+    $A\in\mc{A}_B$ (Definition~\ref{def:equality_attaining}) and every
     $X\in\MN{D}$,
     \begin{align}
         E(A^\dagger B)\,E(B^\dagger B)^{+}\,E(B^\dagger X)
@@ -506,7 +506,7 @@ positivity.
 \begin{proof}\leanok
     Write $Q(U,V) = E(U^\dagger V) - E(U^\dagger B)E(B^\dagger B)^+E(B^\dagger
     V)$; the per-$B$ hypothesis is $Q(U,U)\ge0$ for every $U$, and
-    $A\in\mcA_B$ means $Q(A,A)=0$. Applying the hypothesis to
+    $A\in\mc{A}_B$ means $Q(A,A)=0$. Applying the hypothesis to
     $A + cX$ for $c\in\mathbb C$ and expanding bilinearly gives
     \begin{align}
         Q(A+cX,A+cX)
@@ -520,3 +520,15 @@ positivity.
     vanishes. Combining the two gives $Q(A,X)=0$, which is the displayed
     identity.
 \end{proof}
+
+\begin{corollary}[Converse of the equality criterion]
+    \label{cor:two_variable_schwarz_equality_converse}
+    \lean{SchwarzTwoVariable.mem_equalityAttaining_of_forall_eq}
+    \leanok
+    \uses{def:equality_attaining}
+    If the identity of
+    Theorem~\ref{thm:two_variable_schwarz_equality} holds for every
+    $X\in\MN{D}$, then $A\in\mc{A}_B$. This is immediate from the
+    theorem by specializing at $X=A$; the source states only the forward
+    direction.
+\end{corollary}
