@@ -709,6 +709,21 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
   echo "FAIL: a three-coordinate address did not select one basis member" >&2
   exit 1
 }
+# The transverse pairing rule types a closure between two layers of one
+# stacked site, and types nothing else: not an inter-cell bond, not the same
+# closure on a frame with no transverse axis, and not a `wire' carrier.
+grep -Fq '|name=pair|port-type=physical|' \
+    "$WORK/r_transverse_pairing.tnlog" || {
+  echo "FAIL: the ket-bra pairing of one plane cell was not typed physical" >&2
+  exit 1
+}
+for wire in inter flatpair carrier; do
+  if grep -F "|name=$wire|" "$WORK/r_transverse_pairing.tnlog" \
+      | grep -Fq 'port-type=physical'; then
+    echo "FAIL: wire '$wire' is not a transverse pairing but was typed physical" >&2
+    exit 1
+  fi
+done
 basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
 [ "$basis_override_atoms" -eq 2 ] || {
   echo "FAIL: an authored basis member did not override population" >&2

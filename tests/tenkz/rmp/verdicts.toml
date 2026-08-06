@@ -51,7 +51,7 @@ case_sha256 = "71ab001a3b8d2bfeb7a8f9aa02fdcc8002d048a6627faf0d1517a94917ad6517"
 reviewed = "2026-08-05"
 renderer = "fable-w5-vision-2026-08-05-200dpi"
 second_viewer = "fable-w5-second-pass-2026-08-05-400dpi"
-note = "Kernel migration under #5507: the doubled sheet is the contract bilayer basis, the kept sites keep their open transverse ket-bra legs, and the traced fourth column closes site by site, matching the author panel index for index; the recorded trace-loop overshoot is gone. Residue: the contract bilayer offset overlaps the ket and bra sheets where the source separates them vertically, so the closing loops read as compact east wraps rather than the source long connectors."
+note = "Kernel migration under #5507: the doubled sheet is the contract bilayer basis, the kept sites keep their open transverse ket-bra legs, and the traced fourth column closes site by site, matching the author panel index for index; the recorded trace-loop overshoot is gone. Residue: the contract bilayer offset overlaps the ket and bra sheets where the source separates them vertically, so the closing loops read as compact east wraps rather than the source long connectors. Under #5582 the four traced ket-bra closures are recorded physical by the transverse pairing rule; the case bytes and the boundary signature are unchanged and the 200 dpi raster is byte-identical to the pre-retyping build."
 
 [[verdict]]
 id = "rmp-ii-mpo-sheet"
@@ -864,7 +864,7 @@ defects = []
 case_sha256 = "1344b6356d4b7a8d4b26860e68d7286603d24429c7de64beca30f819a94f0a10"
 reviewed = "2026-08-05"
 renderer = "fable-doubled-plane-migration-review-2026-08-05-200dpi"
-note = "the kernel plane bilayer keeps both 6x4 sheets, all 40 perimeter openings, all 24 inter-sheet contractions, and both marked strings, whose six interior marks are now portless affine beads dressing the crossed bonds; residues: the string bows between beads where the source runs taut, and the contract bilayer basis ties each sheet pair along the in-plane diagonal rather than the source's vertical drop"
+note = "the kernel plane bilayer keeps both 6x4 sheets, all 40 perimeter openings, all 24 inter-sheet contractions, and both marked strings, whose six interior marks are now portless affine beads dressing the crossed bonds; residues: the string bows between beads where the source runs taut, and the contract bilayer basis ties each sheet pair along the in-plane diagonal rather than the source's vertical drop. Under #5582 the 24 inter-sheet pairs are recorded physical by the transverse pairing rule, matching the author's tm pic, which joins the two sheet beads at every site; the case bytes and the boundary signature are unchanged and the 200 dpi raster is byte-identical to the pre-retyping build"
 
 [[verdict]]
 id = "rmp-iv-ground-space-1d"
