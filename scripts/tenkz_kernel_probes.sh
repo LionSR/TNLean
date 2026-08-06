@@ -318,6 +318,58 @@ grep -Fq '|port-face=0|port-label=W|port-slot=1|port-type=physical' \
   echo "FAIL: a side-face physical port lost its tip label" >&2
   exit 1
 }
+# A leg the picture's physical policy grows is a named wire record, so it can
+# be spoken about: each of the four legs of the first picture owns a record
+# under the canonical name, and a label, a bead, and a declared crossing all
+# reach a leg by that name (issue 5574).
+for leg in leg-n-1-1 leg-s-1-1 leg-n-1-2 leg-s-1-2; do
+  grep -Fq "|kind=index|name=$leg|origin=policy-leg|port-type=physical|" \
+      "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: the policy leg $leg owns no wire record" >&2
+    exit 1
+  }
+done
+for station in 'leg-n-1-1|t=0.5' 'leg-s-1-2|t=0.6' 'leg-s-1-2|t=0.3'; do
+  grep -Fq "stringbead|id=$station|x=" "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: no place was answered on the policy leg $station" >&2
+    exit 1
+  }
+done
+# The record is a name, not a topology: the boundary counts the same exposed
+# physical indices it counted when the policy leg owned no record.
+for signature in \
+  'kernel-boundary|signature=phys:n, phys:n, phys:s, phys:s' \
+  'kernel-boundary|signature=open:e, open:e, open:w, phys:s, phys:s, phys:s'
+do
+  grep -Fxq "$signature" "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: the policy leg record moved the boundary signature" >&2
+    exit 1
+  }
+done
+# The station on the deferred leg of the second picture lies south of its
+# host, on the leg the picture draws rather than at the glyph it leaves.
+awk -F'|' '
+  /^picture\|id=k2\|/ { pic = 2 }
+  /^stringbead\|/ {
+    id = ""; y = ""
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "id") id = kv[2]
+      if (kv[1] == "y") { y = kv[2]; sub(/pt$/, "", y); y += 0 }
+    }
+    if (pic == 2 && id == "leg-s-1-2" && y < 0) south = 1
+  }
+  END { exit !south }
+' "$WORK/r_onwire_policy_leg.tnlog" || {
+  echo "FAIL: a place on a crossing-deferred policy leg did not land on it" >&2
+  exit 1
+}
+# A policy leg is named by a declared crossing under the same canonical name.
+grep -Fq 'over at crossing of h and leg-s-1-2' \
+    "$WORK/r_onwire_policy_leg.tnlog" || {
+  echo "FAIL: the canonical leg name is not a crossing operand" >&2
+  exit 1
+}
 chain_ports=$(awk '/^picture\|id=k2\|/ { exit } /^wire\|.*origin=port-open/' \
   "$WORK/r_ports_chain_placed.tnlog" | sed 's/|from=addr-[0-9]*//')
 at_ports=$(awk '/^picture\|id=k2\|/ { seen = 1 }

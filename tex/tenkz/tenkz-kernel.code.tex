@@ -4839,6 +4839,76 @@
       }
   }
 
+% ---------- the picture physical policy owns wires, not ink ------------------------------------
+% A leg the `physical=` policy grows is an exposed index like any other, and
+% therefore a named wire record like any other.  Without the record it had a
+% path the renderer inked and no name a reader could speak, so nothing could
+% stand on it -- while the same leg written as a typed port carried both.  The
+% record closes that gap: it adds no index the boundary signature did not
+% already count, and no ink, because the leg pass keeps its own.
+\tl_new:N \l__tenkz_kernel_leg_record_phys_tl
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_records:
+  {
+    \__tenkz_model_map_ids:nn {atom}
+      {
+        \__tenkz_model_get:nnN {##1} {physical}
+          \l__tenkz_kernel_leg_record_phys_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_leg_record_phys_tl
+          {
+            \str_case:Vn \l__tenkz_kernel_leg_record_phys_tl
+              {
+                {up}     { \__tenkz_kernel_policy_leg_record:nn {##1} {n} }
+                {down}   { \__tenkz_kernel_policy_leg_record:nn {##1} {s} }
+                {updown}
+                  {
+                    \__tenkz_kernel_policy_leg_record:nn {##1} {n}
+                    \__tenkz_kernel_policy_leg_record:nn {##1} {s}
+                  }
+              }
+          }
+      }
+  }
+% One policy leg, on face #2 of atom #1.  The leg exists exactly when the
+% renderer will grow one, so the record and the ink answer the same question,
+% and it takes the canonical name the leg pass and the crossing grammar
+% already spell.
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_record:nn #1#2
+  {
+    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
+      { \str_if_eq:nnTF {#2} {n} {90} {270} }
+      {
+        \__tenkz_kernel_atom_rc:nNNN {#1}
+          \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl
+          \l_tmpa_bool
+        \bool_if:NT \l_tmpa_bool
+          {
+            \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
+            \prop_if_in:NVTF \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_leg_name_tl
+              {
+                \prop_get:NVN \l__tenkz_kernel_named_prop
+                  \l__tenkz_kernel_leg_name_tl \l__tenkz_kernel_scratch_tl
+                \msg_error:nnee {tenkz}{kernel-name-collision}
+                  { \tl_use:N \l__tenkz_kernel_leg_name_tl }
+                  { \tl_use:N \l__tenkz_kernel_scratch_tl }
+              }
+              {
+                \__tenkz_model_record_wire:e
+                  {
+                    kind = index , origin = policy-leg ,
+                    name = \tl_use:N \l__tenkz_kernel_leg_name_tl ,
+                    host = #1 , face = #2 ,
+                    row = \tl_use:N \l__tenkz_kernel_leg_row_tl ,
+                    col = \tl_use:N \l__tenkz_kernel_leg_col_tl ,
+                    port-type = physical
+                  }
+                \exp_args:NV \__tenkz_kernel_register_last_wire:n
+                  \l__tenkz_kernel_leg_name_tl
+              }
+          }
+      }
+  }
+
 % ---------- render: records make ink ---------------------------------------------------------
 % The pass that closes the pipeline: validated records resolve through the
 % geometry stage and draw through the render coordinators.  Nothing here
@@ -6681,6 +6751,10 @@
 % with the first site's address, and two legs then claim one name.
 \tl_new:N \l__tenkz_kernel_leg_row_tl
 \tl_new:N \l__tenkz_kernel_leg_col_tl
+% The canonical name of a policy leg: its face and the cell it grows from.
+% One spelling serves the record, the engine path, and the address, so a leg
+% is reached by the same word wherever it is spoken about.
+\tl_new:N \l__tenkz_kernel_leg_name_tl
 % The hull builder runs INSIDE the leg walk, which is mid-computation on its
 % own position and its own cell.  It therefore touches none of the shared
 % scratch: these are its alone.
@@ -10414,6 +10488,9 @@
                 % A skin wire settles here so its endpoint geometry is ready,
                 % but its ink belongs over the carrying glyph.
                 {skin}  { }
+                % A policy leg is a record of the frame's outward index; the
+                % leg pass below measures its reach and inks it.
+                {policy-leg} { }
               }
               {
                 \msg_error:nnee {tenkz}{kernel-render-todo}
@@ -11612,12 +11689,26 @@
       { \__tenkz_kernel_r_leg_enclosure_orthogonal: }
   }
 
+% The canonical name of the leg leaving face #1 of the cell held in the leg's
+% own row and column registers, left in #2.  Every consumer -- the model
+% record, the engine path, the crossing operand, the address -- spells the
+% leg through this one production.
+\cs_new_protected:Npn \__tenkz_kernel_leg_name:nN #1#2
+  {
+    \tl_set:Ne #2
+      {
+        leg-#1-\tl_use:N \l__tenkz_kernel_leg_row_tl
+        -\tl_use:N \l__tenkz_kernel_leg_col_tl
+      }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
   {
     \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
+        \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
         \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
           \l__tenkz_kernel_leg_dir_tl
           \l__tenkz_kernel_r_physical_anchor_tl
@@ -11663,11 +11754,8 @@
         % it, plus one clearance, so a crossing the author claimed by naming
         % the side always exists and the crossing police can no longer fall
         % silent where a leg stopped short of the string.
-        \prop_get:NeN \l__tenkz_kernel_ro_legs_prop
-          {
-            leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
-            - \tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+        \prop_get:NVN \l__tenkz_kernel_ro_legs_prop
+          \l__tenkz_kernel_leg_name_tl
           \l__tenkz_kernel_leg_reach_tl
         \quark_if_no_value:NF \l__tenkz_kernel_leg_reach_tl
           {
@@ -11679,11 +11767,8 @@
               }
           }
         % a declared crossing lengthens the leg past the crossing string
-        \prop_get:NeN \l__tenkz_kernel_r_legref_prop
-          {
-            leg - #2 - \tl_use:N \l__tenkz_kernel_leg_row_tl
-            - \tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+        \prop_get:NVN \l__tenkz_kernel_r_legref_prop
+          \l__tenkz_kernel_leg_name_tl
           \l__tenkz_kernel_r_b_tl
         \quark_if_no_value:NF \l__tenkz_kernel_r_b_tl
           {
@@ -11726,10 +11811,7 @@
       { \l__tenkz_kernel_r_basis_ex_tl }
       { \l__tenkz_kernel_r_basis_ey_tl }
     \__tenkz_kernel_leg_plan_enrol:nnnnn
-      {
-        leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-        -\tl_use:N \l__tenkz_kernel_leg_col_tl
-      }
+      { \l__tenkz_kernel_leg_name_tl }
       { \l__tenkz_kernel_leg_plan_cid_tl }
       { \l__tenkz_kernel_r_x_fp }
       { \l__tenkz_kernel_r_y_fp }
@@ -11753,10 +11835,7 @@
     \bool_if:NT \l__tenkz_kernel_leg_planned_bool
       {
         \__tenkz_kernel_leg_plan_get:nN
-          {
-            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-            -\tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+          { \l__tenkz_kernel_leg_name_tl }
           \l__tenkz_kernel_leg_plan_result_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_leg_plan_result_tl
           { \bool_set_false:N \l__tenkz_kernel_leg_planned_bool }
@@ -11769,20 +11848,14 @@
     \bool_if:NTF \l__tenkz_kernel_topology_bool
       {
         \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
-          {
-            leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-            -\tl_use:N \l__tenkz_kernel_leg_col_tl
-          }
+          { \l__tenkz_kernel_leg_name_tl }
       }
       {
         \quark_if_no_value:NTF \l__tenkz_kernel_r_b_tl
           { \__tenkz_kernel_r_leg_ink:nnn {#1} {#2} { } }
           {
             \__tenkz_kernel_r_leg_ink:nnn {#1} {#2}
-              {
-                leg-#2-\tl_use:N \l__tenkz_kernel_leg_row_tl
-                -\tl_use:N \l__tenkz_kernel_leg_col_tl
-              }
+              { \l__tenkz_kernel_leg_name_tl }
           }
       }
   }
@@ -11878,6 +11951,29 @@
 % before this ink pass.
 \fp_new:N \l__tenkz_kernel_r_tipx_fp
 \fp_new:N \l__tenkz_kernel_r_tipy_fp
+% A skin pairing keeps its geometric checks beside every renderer-owned
+% route, because it guards a glyph's own decoration.  A leg of the glyph the
+% pairing decorates leaves through a port that pairing may also touch, and
+% that meeting is attachment rather than a crossing -- the same relation an
+% index wire leaving the same port already declares.
+\tl_new:N \l__tenkz_kernel_leg_skin_host_tl
+\tl_new:N \l__tenkz_kernel_leg_skin_name_tl
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_skin_touch:n #1
+  {
+    \seq_map_inline:Nn \l__tenkz_kernel_r_skin_routes_seq
+      {
+        \__tenkz_model_get:nnN {##1} {host} \l__tenkz_kernel_leg_skin_host_tl
+        \str_if_eq:eeT { \tl_use:N \l__tenkz_kernel_leg_skin_host_tl } {#1}
+          {
+            \__tenkz_model_get:nnN {##1} {name}
+              \l__tenkz_kernel_leg_skin_name_tl
+            \exp_args:NVV \__tenkz_string_touch:nn
+              \l__tenkz_kernel_leg_name_tl
+              \l__tenkz_kernel_leg_skin_name_tl
+          }
+      }
+  }
+
 \tl_new:N \l__tenkz_kernel_r_leg_turn_tl
 \tl_new:N \l__tenkz_kernel_r_leg_path_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_leg_ink:nnn #1#2#3
@@ -11921,6 +12017,17 @@
       }
     \tl_if_blank:nTF {#3}
       {
+        % A leg that no declared crossing defers keeps its own ink pass, and
+        % saves the route it inks under its canonical name exactly as an
+        % ordinary index wire does.  That is what lets a place on the leg be
+        % read along the leg the reader sees.  It joins the ordinary index
+        % class of the crossing police, which is where a leg the picture
+        % never named as a crossing operand has always stood.
+        \__tenkz_string_save_route:VV \l__tenkz_kernel_leg_name_tl
+          \l__tenkz_kernel_r_leg_path_tl
+        \exp_args:NV \__tenkz_string_touch_all:n
+          \l__tenkz_kernel_leg_name_tl
+        \__tenkz_kernel_r_leg_skin_touch:n {#1}
         \exp_args:NnV \__tenkz_render_stroke:nn { bond }
           \l__tenkz_kernel_r_leg_path_tl
       }
@@ -16179,6 +16286,10 @@
     \__tenkz_kernel_validate_transverse_open_ends:
     \__tenkz_kernel_validate_addresses:
     \__tenkz_kernel_plane_model:
+    % Last of the derivations, because a policy leg exists only where no
+    % authored port and no transverse closure has claimed the frame's outward
+    % axis, and both of those are settled above.
+    \__tenkz_kernel_policy_leg_records:
     % Boundary topology and signatures use the same resolved carrier geometry
     % as ink.  The renderer's topology prepass derives route crossings before
     % it freezes and emits the model.
