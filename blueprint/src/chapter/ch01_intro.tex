@@ -553,12 +553,12 @@ for arbitrary target algebras as well.
     \leanok
     \uses{def:operator_system}
     Let $S\subseteq\MN{m}$ be an operator system and $T:S\to\MN{n}$ a linear
-    map. For $k\ge1$, write $T\otimes\mathrm{id}_k$ for the map sending a
-    $k\times k$ block matrix with entries in $S$ to the block matrix
-    obtained by applying $T$ to every entry. Then $T$ is \emph{completely
+    map. For a natural number $k$, write $T\otimes\mathrm{id}_k$ for the map
+    sending a $k\times k$ block matrix with entries in $S$ to the block
+    matrix obtained by applying $T$ to every entry. Then $T$ is \emph{completely
     positive on $S$} if $T\otimes\mathrm{id}_k$ sends every positive
     semidefinite such block matrix to a positive semidefinite matrix, for
-    every $k\ge1$.
+    every $k$ (the condition is vacuous at $k=0$).
 \end{definition}
 
 \begin{theorem}[Extending cp maps from operator systems]
@@ -599,6 +599,6 @@ for arbitrary target algebras as well.
     $T'(B)_{ij}:=n\cdot\tau'(B\otimes\ket i\bra j)$, which is exactly
     $\sum_kK_kBK_k^\dagger$. Wolf's inversion formula
     $\tau(B\otimes\ket i\bra j)=\tfrac1n\,T(B)_{ij}$ holds already for the
-    original $T$ on $S$, and $\tau'$ agrees with $\tau$ on $S\otimes\MN n$,
+    original $T$ on $S$, and $\tau'$ agrees with $\tau$ on $S\otimes\MN{n}$,
     so $T'$ agrees with $T$ on $S$.
 \end{proof}

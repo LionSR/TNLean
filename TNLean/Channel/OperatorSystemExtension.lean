@@ -63,7 +63,7 @@ variable {m n : ℕ}
 
 /-- A `CStarAlgebra` instance for a matrix algebra using the `ℓ²`-operator
 norm, matching the pattern used elsewhere in `TNLean.Channel.Schwarz`. -/
-noncomputable local instance matrixCStarAlgebra (ι : Type*) [Fintype ι] [DecidableEq ι] :
+noncomputable local instance matrixCStarAlgebraOfFintype (ι : Type*) [Fintype ι] [DecidableEq ι] :
     CStarAlgebra (Matrix ι ι ℂ) where
   toNormedRing := Matrix.instL2OpNormedRing
   toStarRing := inferInstance
@@ -99,7 +99,7 @@ a self-adjoint element of a `C^*`-algebra lies in `[-‖A‖, ‖A‖]`
 theorem IsHermitian.norm_smul_one_sub_posSemidef {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.IsHermitian) :
     (‖A‖ • (1 : Matrix ι ι ℂ) - A).PosSemidef := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebra ι
+  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebraOfFintype ι
   have hsa : IsSelfAdjoint A := isSelfAdjoint_iff.mpr (Matrix.star_eq_conjTranspose A ▸ hA)
   have hle : A ≤ algebraMap ℝ (Matrix ι ι ℂ) ‖A‖ := hsa.le_algebraMap_norm_self
   rw [Algebra.algebraMap_eq_smul_one] at hle
@@ -119,7 +119,7 @@ both `‖A‖∞ • 1 - A` and `‖A‖∞ • 1` are positive semidefinite, `�
 theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
     ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebra ι
+  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebraOfFintype ι
   have hnn : (0 : Matrix ι ι ℂ) ≤ ‖A‖ • (1 : Matrix ι ι ℂ) - A :=
     (hA.1.norm_smul_one_sub_posSemidef).nonneg
   have hle : ‖A‖ • (1 : Matrix ι ι ℂ) - A ≤ ‖A‖ • (1 : Matrix ι ι ℂ) := by
