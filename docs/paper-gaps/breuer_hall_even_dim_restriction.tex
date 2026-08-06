@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The Even-Dimension Restriction in the Indecomposability\\
+of the Breuer--Hall Map (Wolf Example~3.1)}
+\author{}
+\date{2026-08-06}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+Wolf's Chapter~3, Example~3.1 introduces the Breuer--Hall
+map\footnote{\cite[Chapter~3, Example~3.1]{Wolf2012Quantum}; local source:
+\path{Notes/WolfNoteTexSource/ch03_positive_not_completely.tex}, lines
+344--355. Formalization issue:
+\href{https://github.com/LionSR/TNLean/issues/5471}{issue \#5471}.}
+\begin{align}
+  T_{\mathrm{BH}}(X)=\operatorname{tr}[X]\,\mathbb 1-X-UX^{T}U^{\dagger},
+  \qquad\text{for any $U$ with $U^{T}=-U$ and $U^{\dagger}U\le\mathbb 1$,}
+  \tag{3.19}
+\end{align}
+and states: ``For $d$ even there are anti-symmetric unitaries
+$U^{\dagger}=U^{-1}=-\overline{U}$ \dots\ If $U$ is an anti-symmetric unitary
+$T_{\mathrm{BH}}$ is not decomposable.''  The final sentence has no dimension
+hypothesis.
+
+\section{The point at issue}
+
+The blanket statement fails at $d=2$. Every antisymmetric $2\times2$ matrix
+is a scalar multiple of
+\begin{align}
+  J=\begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix},
+\end{align}
+so every antisymmetric unitary at $d=2$ is a phase $e^{i\theta}J$, and the
+twisted-transpose term is independent of the phase. A direct computation
+gives, for $X=(\begin{smallmatrix} a & b \\ c & d\end{smallmatrix})$,
+\begin{align}
+  JX^{T}J^{\dagger}
+  =\begin{pmatrix} d & -b \\ -c & a\end{pmatrix}
+  =\operatorname{tr}[X]\,\mathbb 1-X,
+\end{align}
+so $T_{\mathrm{BH}}$ is the zero map on $\mathcal M_2$. The zero map is
+completely positive, hence decomposable. The hypothesis $d>2$ is therefore
+necessary, and the source's sentence must be read with the restriction
+$d\ge4$ (recall that antisymmetric unitaries exist only for even $d$: taking
+determinants in $U^{T}=-U$ gives $\det U=(-1)^{d}\det U$, and $\det U\ne0$).
+
+\section{The corrected statement}
+
+The proved statement is: if $d>2$ and $U$ is an antisymmetric unitary on
+$\mathbb C^{d}$, then $T_{\mathrm{BH}}$ is an indecomposable positive
+map.\footnote{Formal declarations:
+\leanid{Matrix.breuerHallMap\_isIndecomposablePositiveMap} and
+\leanid{Matrix.breuerHallMap\_not\_isDecomposablePositiveMap} in
+\doclink{TNLean/Channel/BreuerHallIndecomposable}; positivity is
+\leanid{Matrix.breuerHallMap\_isPositiveMap} in
+\doclink{TNLean/Channel/BreuerHallMap}.}
+The source gives no proof; the formalized argument is the standard PPT
+detection route. Write $F$ for the swap operator on
+$\mathbb C^{d}\otimes\mathbb C^{d}$ and $\ket{\Psi}$ for the $U$-twisted
+maximally entangled vector, $\Psi(i,k)=U(i,k)$, with unnormalized projector
+$P_{0}=\ket{\Psi}\bra{\Psi}$. The witness state
+\begin{align}
+  \rho=(\mathbb 1+F)+P_{0}
+\end{align}
+is a sum of positive semidefinite terms, and antisymmetry with unitarity of
+$U$ gives the partial-transpose evaluations
+$(\mathbb 1+F)^{T_{1}}=\mathbb 1+P_{1}$ and
+$P_{0}^{T_{1}}=(U^{\dagger}\otimes\mathbb 1)(\mathbb 1+F)(U\otimes\mathbb 1)
+-\mathbb 1$, where $P_{1}$ is the untwisted maximally entangled projector.
+Hence
+\begin{align}
+  \rho^{T_{1}}=P_{1}+(U^{\dagger}\otimes\mathbb 1)(\mathbb 1+F)(U\otimes\mathbb 1)
+  \ge0,
+\end{align}
+so $\rho$ is a PPT state. Expanding all tensor indices and contracting
+against $U^{\dagger}U=\mathbb 1$ yields the carrying identity, valid for
+every bipartite $\sigma$,
+\begin{align}
+  \operatorname{tr}[(T_{\mathrm{BH}}\otimes\mathrm{id})(\sigma)\,P_{0}]
+  =\operatorname{tr}(\sigma)-\operatorname{tr}(\sigma P_{0})
+  -\operatorname{tr}(F\sigma).
+\end{align}
+At $\sigma=\rho$ the three traces are $d^{2}+2d$, $d^{2}$, and $d^{2}$ ---
+the last two because antisymmetry gives $F\ket{\Psi}=-\ket{\Psi}$ --- so the
+pairing equals $d(2-d)<0$ for $d>2$, and
+$(T_{\mathrm{BH}}\otimes\mathrm{id})(\rho)$ is not positive semidefinite.
+Since decomposable maps preserve positivity on PPT
+states,\footnote{Formal declarations:
+\leanid{IsDecomposablePositiveMap.tensorMapId\_posSemidef\_of\_isPPT} and
+\leanid{not\_isDecomposablePositiveMap\_of\_isPPT\_not\_tensorMapId\_posSemidef}
+in \doclink{TNLean/Channel/DecomposablePPT}.}
+$T_{\mathrm{BH}}$ is not decomposable.
+
+\section{Conclusion}
+
+The source's indecomposability claim for the Breuer--Hall map is correct
+exactly in the dimensions where antisymmetric unitaries exist and $d>2$,
+i.e.\ for even $d\ge4$; at $d=2$ the map vanishes. The formalization proves
+the corrected statement with the explicit hypothesis $d>2$, and the
+blueprint entry records the restriction in its statement.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
