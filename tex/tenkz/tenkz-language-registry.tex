@@ -310,9 +310,13 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{physical}{physical-policy}{unset}{kernel}{Site's own answer to the picture's physical policy.}
 % Issue 5383: stored but never read by ink passes or the signature fold.
-% Marked reserved until the directed-signatures design (issue 4162)
-% decides whether duality rides dir= or a real glyph flip is implemented.
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Reserved; currently inert (stored, unread).}
+% The directed-signatures question the reservation waited on is answered:
+% wire dir= is the contract's one spelling for a space against its dual, and
+% no source panel draws a conjugate glyph -- the overline the corpus wants
+% is label mathematics, already spelled there.  Sentenced in the shrink
+% ledger (2026-08-06); the status moves with the parser row at the 1.0
+% freeze, and the corpus rewrite executes with it.
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Tombstoned; stored, read by nothing. Sunset 1.0.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{cluster}{pair}{empty}{sugar(name=, skin=)}{Expander: RxC addressable sub-atom group.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.}
