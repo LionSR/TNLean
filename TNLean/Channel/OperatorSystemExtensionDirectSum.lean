@@ -43,10 +43,10 @@ along `ψ` to an operator system `S'' ⊆ M_M(ℂ)` and a map `T''` completely p
 key step is that `ψ` and its level-`j` analogues intertwine the per-block bipartite slices with
 the ambient bipartite slices (`Matrix.bipartiteSlice_directSumEmbedFinLevel`), so complete
 positivity transports across every tensor level. Apply
-`Matrix.exists_cp_extension_of_operatorSystem` to `T''` to obtain a Kraus-form extension
-`T̃'' : M_M(ℂ) →ₗ[ℂ] M_p(ℂ)`, and restrict it back to the direct-sum algebra via `T̃ := T̃'' ∘ ψ`.
-`T̃` is completely positive on the whole direct-sum algebra by the same level-transport argument,
-applied this time with `S = ⊤`.
+`Matrix.exists_cp_extension_of_operatorSystem` to `T''` to obtain a Kraus-form extension to all
+of `M_M(ℂ)`, and restrict it back to the direct-sum algebra by precomposition with `ψ`. The
+restriction is completely positive on the whole direct-sum algebra by the same level-transport
+argument, applied this time with `S = ⊤`.
 
 ## Main results
 
