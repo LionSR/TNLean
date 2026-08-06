@@ -1,0 +1,27 @@
+%% Regression: a wire joining two layers of one stacked site is that site's
+%% physical index, typed from the pairing because a member address is a
+%% lattice place and a place is not a port.  The rule holds only where the
+%% frame declares a transverse physical axis and only between the layer row
+%% kinds; an inter-cell wire, a flat frame, and a `wire' carrier stay virtual.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% ket-bra pairing on a plane: physical.  The east neighbour on one sheet is
+% an ordinary bond, so the rule reads the cell and not merely the members.
+\begin{tenkz}[lattice={1x2}, planes, bonds=none]
+  \tnwire[name=pair]{(1,1,1)}{(1,1,2)}
+  \tnwire[name=inter]{(1,1,1)}{(1,2,1)}
+\end{tenkz}
+% the same closure on a flat frame: no transverse axis, so virtual
+\begin{tenkz}[lattice={1x1}, bonds=none,
+    frame={flat, basis={ket at (0,0), bra at (2,2)}}]
+  \tnwire[name=flatpair]{(1,1,1)}{(1,1,2)}
+\end{tenkz}
+% a `wire' member carries a virtual index beside the bond and stacks with
+% nothing, so its closure to the ket layer stays virtual
+\begin{tenkz}[lattice={1x1}, bonds=none,
+    frame={plane, basis={ket at (0,0), wire at (2,2)}}]
+  \tnwire[name=carrier]{(1,1,1)}{(1,1,2)}
+\end{tenkz}
+\end{document}

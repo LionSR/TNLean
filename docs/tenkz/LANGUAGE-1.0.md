@@ -421,6 +421,19 @@ not identify a member. A bilayer is consequently one frame with two basis
 members and explicit intra-cell pairing wires; nesting cannot collapse it
 into two unrelated frames.
 
+An intra-cell pairing wire carries a type neither of its ends can state. A
+member address names a lattice place, and a place is not a port. The type
+belongs to the pairing, and the frame already knows which direction is
+physical: on a plane, a wire joining two different members of one cell, both
+of them declared `ket`, `op`, or `bra`, is that site's physical index — the
+ket-bra pairing that a partial trace or a double-layer expectation value sums
+over. It is recorded physical and strokes as the bond it already was. A `wire`
+member carries a virtual index beside the bond and pairs with nothing, and the
+same closure on a flat frame stays virtual, because only a plane declares the
+transverse physical axis such a pairing follows. The rule reads a closed
+pairing off the frame and the two row kinds exactly as `open up|down` reads an
+open transverse leg off its direction word.
+
 An authored atom at `(r,c,k)` replaces that member. An authored atom at
 `(r,c)` replaces the whole populated cell, so every member address in that
 cell resolves to the authored record rather than creating coincident
@@ -451,6 +464,8 @@ Consumers, circle pitch: `rmp-ii-triangle-network`, `rmp-iii-a-ground-space-1d`,
 `rmp-ii-idempotent`, `rmp-workbench-iii-eq51`.
 Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
 `rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`.
+Consumers, transverse pairing: `rmp-ii-peps-marginal`,
+`rmp-iii-b-condensation`.
 
 ## 5. Wires
 
@@ -465,7 +480,9 @@ stroke. Those two strokes are one ink once both ends are consumed: a contracted
 index carries its type in the record and not in its line, so no render tells a
 physical contraction from a virtual one. Type reaches the page only on an open
 leg, whose stub answers to it, and reaches a reviewer only through the record
-stream and the boundary signature.
+stream and the boundary signature. Two ends that state no type still leave one
+contraction typed: the pairing between two layers of one stacked site, which
+Section 4 types from the frame and the two row kinds rather than from its ends.
 `kind=pairing` is a declared skin's curved own-port route: it belongs to one
 host, remains addressable by arclength, and its declared list order controls
 the over-glyph ink and supplies the crossing order between pairings of that
