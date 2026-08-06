@@ -73,14 +73,6 @@ two-sided inverse `chainEmbed N` of `φ N` on chain-OK strings.  This is the
 
 Project example; not from CPSV16. -/
 
-/-- `bondEquiv (x, y)` reads back its first bit as `x`. -/
-lemma bit1_bondEquiv (x y : Fin 2) : bit1 (bondEquiv (x, y)) = x := by
-  simp [bit1_eq_bondEquiv_symm_fst]
-
-/-- `bondEquiv (x, y)` reads back its second bit as `y`. -/
-lemma bit2_bondEquiv (x y : Fin 2) : bit2 (bondEquiv (x, y)) = y := by
-  simp [bit2_eq_bondEquiv_symm_snd]
-
 /-- A bond label is `bondEquiv` applied to its own pair of bits. -/
 lemma bondEquiv_bit1_bit2 (k : Fin 4) : bondEquiv (bit1 k, bit2 k) = k := by
   fin_cases k <;> rfl
