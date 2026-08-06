@@ -61,19 +61,19 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | — | L200 `tenkz` → `C-policy+C-record` | L24, 54, 171, 272, 840, 966 `tenkz` → `C-policy+C-record+R-record` |
+| `ch02_mps.tex` | L25, 56, 176, 208, 281, 851 `tenkz` → `P-grid` | — | L983 `tenkz` → `C-policy+C-record+R-record` |
 | `ch03_single.tex` | L251 `tenkz` → `P-grid` | — | — |
 | `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
-| `ch12_symmetry_string_order.tex` | — | L396, 410, 453, 468, 549, 563 `tenkz` → `C-policy+C-record` | L39, 352, 499, 866 `tenkz` → `C-record+C-species+R-record`<br>L73 `tenkz` → `C-policy+C-record+C-species+R-record`<br>L367, 513, 871 `tenkz` → `C-policy+C-record+R-record` |
+| `ch12_symmetry_string_order.tex` | L41, 77, 359, 364, 395, 401, 446, 452, 485, 490, 528, 534, 839, 844 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_virtual_and_cohomology.tex` | L181, 196, 330, 459, 473 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | — | — | L54 `tenkzfree` → `R-free+R-record` |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | — | — | L275 `tenkzfree` → `R-free+R-record` |
 | `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L101 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 493, 535 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
-| `ch16_channel_representations_choi_and_kraus.tex` | — | L674 `tenkz` → `C-policy+C-record` | — |
-| `ch16_channel_representations_dilations_and_ordered_cp.tex` | — | L24 `tenkz` → `C-policy+C-record` | — |
+| `ch16_channel_representations_choi_and_kraus.tex` | L673 `tenkz` → `P-grid` | — | — |
+| `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | — | L234, 240 `tenkz` → `C-policy+C-record` | L154, 160, 338, 435 `tenkz` → `C-policy+C-record+R-record`<br>L178, 183 `tenkz` → `R-record` |
 | `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | — | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record`<br>L224, 359, 391, 465 `tenkzfree` → `R-free+R-record` |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L638, 644 `tenkz` → `P-grid` | — | — |
@@ -127,9 +127,9 @@ separate public-surface occurrence and therefore appears separately.
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 48 |
-| codemod | 25 |
-| redraw | 128 |
+| preserve | 70 |
+| codemod | 16 |
+| redraw | 115 |
 | **Total** | **201** |
 
 The raw count is 168 environment openings plus 33 command occurrences,

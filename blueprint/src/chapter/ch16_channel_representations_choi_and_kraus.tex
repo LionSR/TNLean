@@ -652,34 +652,29 @@ The next three corollaries support channel decompositions and correspond to
 A Kraus representation writes the channel as
 $T(\rho)=\sum_i K_i\rho K_i^\dagger$. In tensor-network form the Kraus index $i$
 is summed between the $K_i$ layer and the $K_i^\dagger$ layer:
-\begin{center}
+\begin{tenkzequation}
+    \tenkzkernel
     % Formula: T(\rho)=\sum_i K_i\rho K_i^\dagger.
     % Source verdict: Wolf, Theorem 2.1 and Equation (2.8), gives the Kraus
     %   formula but no dedicated figure; that formula is authoritative here.
     % In indices, T(\rho)_{ab}
     %   =\sum_{i,c,d}(K_i)_{ac}\rho_{cd}\overline{(K_i)_{bd}}.
-    % The sandwich pairleg contracts the unique Kraus index i.  Its upper
+    % The ket-bra pairing contracts the unique Kraus index i.  Its upper
     %   node is K_i and its lower node is the conjugate \overline{K_i}; reading
     %   the lower wire from the east input toward the west output supplies the
     %   transpose, hence K_i^\dagger in the matrix product.
-    % The east cup contracts the input indices c,d against \rho.  The west
-    %   pair carries the free output indices a,b, so reversing the picture
-    %   would instead feed the adjoint channel.
+    % The east cup contracts the input indices c,d against \rho, which rides
+    %   the cup's bend.  The west pair carries the free output indices a,b --
+    %   the two open matrix indices of T(\rho) named on the left of the
+    %   equation -- so reversing the picture would instead feed the adjoint.
     % Boundary signature: (virtual-west=2 | virtual-east=0 |
     % physical-up=0 | physical-down=0).
-    % The state rides the closing cup.  The kernel's on-wire anchor divides the
-    % record chord rather than the drawn arc (#5482 neighbourhood), so a tensor
-    % placed there would read as sitting on the physical contraction; this
-    % picture keeps its 0.7 spelling until a station on a generated cup exists.
-    \begin{tenkz}[
-        sandwich,
-        east={cup=$\rho$},
-        west label=$T(\rho)$
-    ]
-        \tn{K_i} \\
-        \tn*{K_i}
+    $T(\rho) \;=\;$
+    \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east={cup=$\rho$}]
+        \tn[label pos=n]{K_i} \\
+        \tn[label pos=s, conjugate]{\overline{K_i}}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{theorem}[Trace preservation implies Kraus normalization]\label{thm:kraus_sum_conjTranspose_mul_of_tp}
     \lean{kraus_sum_conjTranspose_mul_of_tp}
