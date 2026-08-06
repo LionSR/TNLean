@@ -6,6 +6,11 @@ Authors: TNLean contributors
 import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
+import Mathlib.Analysis.Complex.Exponential
+import Mathlib.Analysis.Real.Pi.Bounds
+import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
 # Dirichlet's simultaneous approximation theorem
@@ -18,9 +23,19 @@ $$
 
 The proof uses the pigeonhole principle.
 
-## Main result
+Applied to the arguments of finitely many unit-modulus complex numbers, the
+theorem yields exponents simultaneously bringing every phase close to one; the
+good exponents can be taken arbitrarily large, and a diagonal recursion turns
+them into a strictly monotone **recurrent subsequence** along which every phase
+tends to one.  This is the Diophantine input to Wolf's Proposition 6.3(i).
+
+## Main results
 
 * `exists_int_near_mul_simultaneous`: the full Wolf Lemma 6.1 statement.
+* `exists_ge_pow_sub_one_norm_le`: simultaneous approximate recurrence of
+  finitely many unit phases, with arbitrarily large exponents.
+* `exists_strictMono_pow_tendsto_one`: the recurrent (Dirichlet) subsequence
+  for finitely many unit phases.
 -/
 
 namespace Dirichlet
@@ -144,5 +159,159 @@ theorem exists_int_near_mul_simultaneous (x : Fin m → ℝ) (q : ℕ) (hq1 : 1 
   · -- n₂.val < n₁.val
     -- The floor equality is symmetric, so we flip the arguments
     refine dirichlet_case x q hqpos n₂ n₁ hgt (fun k => (h_floor_eq_real k).symm)
+
+/-! ## Recurrence of unit phases -/
+
+/-- For a unit-modulus complex number, the distance of `z ^ j` to `1` grows at
+most linearly in `j`.  This is the approximate additivity of the set of
+recurrence exponents used to reach arbitrarily large exponents. -/
+private theorem norm_pow_sub_one_le_mul {z : ℂ} (hz : ‖z‖ = 1) (j : ℕ) :
+    ‖z ^ j - 1‖ ≤ j * ‖z - 1‖ := by
+  induction j with
+  | zero => simp
+  | succ j ih =>
+      have h : z ^ (j + 1) - 1 = z * (z ^ j - 1) + (z - 1) := by ring
+      calc
+        ‖z ^ (j + 1) - 1‖ = ‖z * (z ^ j - 1) + (z - 1)‖ := by rw [h]
+        _ ≤ ‖z * (z ^ j - 1)‖ + ‖z - 1‖ := norm_add_le _ _
+        _ = ‖z ^ j - 1‖ + ‖z - 1‖ := by rw [norm_mul, hz, one_mul]
+        _ ≤ j * ‖z - 1‖ + ‖z - 1‖ := by gcongr
+        _ = ((j + 1 : ℕ) : ℝ) * ‖z - 1‖ := by push_cast; ring
+
+/-- **Simultaneous approximate recurrence of unit phases, with arbitrarily large
+exponents.**  For finitely many complex numbers of norm one, every `ε > 0` and
+every threshold `B`, there is an exponent `n ≥ B` simultaneously satisfying
+`‖θ_k ^ n - 1‖ ≤ ε`.
+
+Applied to the rescaled arguments `t_k / (2π)` of the phases, Dirichlet's
+theorem (`exists_int_near_mul_simultaneous`, Wolf Lemma 6.1) with denominator
+`q` yields an exponent `n₀ ∈ [1, q ^ m]` with `‖θ_k ^ n₀ - 1‖ ≤ 4π / q`;
+the multiple `n = B * n₀` reaches the prescribed size while inflating the
+error by at most the factor `B`.
+
+Source: Wolf, Proposition 6.3(i) proof; local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
+theorem exists_ge_pow_sub_one_norm_le {ι : Type*} [Fintype ι] (θ : ι → ℂ)
+    (hθ : ∀ k, ‖θ k‖ = 1) {ε : ℝ} (hε : 0 < ε) (B : ℕ) :
+    ∃ n : ℕ, B ≤ n ∧ ∀ k, ‖θ k ^ n - 1‖ ≤ ε := by
+  classical
+  rcases isEmpty_or_nonempty ι with hι | hι
+  · exact ⟨B, le_rfl, fun k ↦ isEmptyElim k⟩
+  -- Choose arguments for the phases.
+  have hphase : ∀ k, ∃ t : ℝ, Complex.exp (t * Complex.I) = θ k :=
+    fun k ↦ (Complex.norm_eq_one_iff (θ k)).mp (hθ k)
+  choose t ht using hphase
+  set e := Fintype.equivFin ι with he_def
+  set m := Fintype.card ι with hm_def
+  -- Choose the Dirichlet denominator `q`.
+  have hπ : 2 * Real.pi < 7 := by linarith [Real.pi_lt_d2]
+  obtain ⟨q, hq1, hq7, hqε⟩ :
+      ∃ q : ℕ, 1 < q ∧ 7 ≤ q ∧ 4 * Real.pi * B / ε ≤ q := by
+    refine ⟨max 7 ⌈4 * Real.pi * B / ε⌉₊ + 1, by omega, by omega, ?_⟩
+    calc
+      4 * Real.pi * B / ε ≤ (⌈4 * Real.pi * B / ε⌉₊ : ℝ) := Nat.le_ceil _
+      _ ≤ (max 7 ⌈4 * Real.pi * B / ε⌉₊ + 1 : ℕ) := by
+        exact_mod_cast (le_max_right 7 _).trans (Nat.le_succ _)
+  have hq0 : (0 : ℝ) < q := by exact_mod_cast (by omega : 0 < q)
+  have h2πq : 2 * Real.pi / q ≤ 1 := by
+    rw [div_le_one hq0]
+    exact hπ.le.trans (by exact_mod_cast hq7)
+  -- Dirichlet's theorem applied to the rescaled arguments.
+  set x : Fin m → ℝ := fun j ↦ t (e.symm j) / (2 * Real.pi) with hx_def
+  obtain ⟨n₀, p, hn₀1, -, hp⟩ := exists_int_near_mul_simultaneous x q hq1
+  -- The Dirichlet exponent approximately kills every phase.
+  have hper : ∀ k : ι, ‖θ k ^ n₀ - 1‖ ≤ 4 * Real.pi / q := by
+    intro k
+    have hsymm : e.symm (e k) = k := Equiv.symm_apply_apply e k
+    have h2π : (2 : ℝ) * Real.pi ≠ 0 := by positivity
+    have htk : t k = 2 * Real.pi * x (e k) := by
+      have hx : x (e k) = t k / (2 * Real.pi) := by simp only [hx_def, hsymm]
+      rw [hx, mul_div_cancel₀ (t k) h2π]
+    have habs : |t k * n₀ - 2 * Real.pi * p (e k)| ≤ 2 * Real.pi / q := by
+      have hrew : t k * n₀ - 2 * Real.pi * p (e k) =
+          2 * Real.pi * (x (e k) * n₀ - p (e k)) := by
+        rw [htk]; ring
+      rw [hrew, abs_mul, abs_of_pos (by positivity : (0 : ℝ) < 2 * Real.pi)]
+      calc
+        2 * Real.pi * |x (e k) * n₀ - p (e k)| ≤ 2 * Real.pi * (1 / q) :=
+          mul_le_mul_of_nonneg_left (hp (e k)) (by positivity)
+        _ = 2 * Real.pi / q := by ring
+    have hu_norm : ‖(t k * n₀ - 2 * Real.pi * p (e k) : ℝ) * Complex.I‖ ≤ 1 := by
+      rw [norm_mul, Complex.norm_I, mul_one, Complex.norm_real, Real.norm_eq_abs]
+      exact habs.trans h2πq
+    have hu : (n₀ : ℂ) * (t k * Complex.I) =
+        ((t k * n₀ - 2 * Real.pi * p (e k) : ℝ) * Complex.I) +
+          (p (e k) : ℤ) * (2 * Real.pi * Complex.I) := by
+      push_cast; ring
+    have hexp : θ k ^ n₀ =
+        Complex.exp ((t k * n₀ - 2 * Real.pi * p (e k) : ℝ) * Complex.I) := by
+      calc
+        θ k ^ n₀ = Complex.exp (t k * Complex.I) ^ n₀ := by rw [ht k]
+        _ = Complex.exp ((n₀ : ℂ) * (t k * Complex.I)) := by
+          rw [← Complex.exp_nat_mul]
+        _ = _ := by
+          rw [hu, Complex.exp_add, Complex.exp_int_mul_two_pi_mul_I, mul_one]
+    calc
+      ‖θ k ^ n₀ - 1‖ =
+          ‖Complex.exp ((t k * n₀ - 2 * Real.pi * p (e k) : ℝ) * Complex.I) - 1‖ := by
+        rw [hexp]
+      _ ≤ 2 * ‖(t k * n₀ - 2 * Real.pi * p (e k) : ℝ) * Complex.I‖ :=
+          Complex.norm_exp_sub_one_le hu_norm
+      _ = 2 * |t k * n₀ - 2 * Real.pi * p (e k)| := by
+          rw [norm_mul, Complex.norm_I, mul_one, Complex.norm_real, Real.norm_eq_abs]
+      _ ≤ 2 * (2 * Real.pi / q) :=
+          mul_le_mul_of_nonneg_left habs (by positivity)
+      _ = 4 * Real.pi / q := by ring
+  -- Boosting to a multiple of the Dirichlet exponent reaches size `B`.
+  refine ⟨B * n₀, Nat.le_mul_of_pos_right B hn₀1, fun k ↦ ?_⟩
+  have hθn : ‖θ k ^ n₀‖ = 1 := by rw [norm_pow, hθ k, one_pow]
+  calc
+    ‖θ k ^ (B * n₀) - 1‖ = ‖(θ k ^ n₀) ^ B - 1‖ := by rw [pow_mul']
+    _ ≤ B * ‖θ k ^ n₀ - 1‖ := norm_pow_sub_one_le_mul hθn B
+    _ ≤ B * (4 * Real.pi / q) := mul_le_mul_of_nonneg_left (hper k) (by positivity)
+    _ = 4 * Real.pi * B / q := by ring
+    _ ≤ ε := by
+      rw [div_le_iff₀ hq0, mul_comm ε]
+      rw [div_le_iff₀ hε] at hqε
+      exact hqε
+
+/-- **Dirichlet's recurrent subsequence for unit phases.**  For finitely many
+complex numbers of norm one there is a strictly monotone sequence of positive
+integers `n : ℕ → ℕ` with `θ_k ^ (n i) → 1` for every `k`.
+
+The exponents are chosen recursively: `n (i + 1)` is an exponent exceeding
+`n i` that simultaneously brings every phase within `1 / (i + 2)` of one,
+appealing to `exists_ge_pow_sub_one_norm_le` (Wolf Lemma 6.1) at each step.
+
+Source: Wolf, Proposition 6.3(i); local source
+`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
+theorem exists_strictMono_pow_tendsto_one {ι : Type*} [Fintype ι] (θ : ι → ℂ)
+    (hθ : ∀ k, ‖θ k‖ = 1) :
+    ∃ n : ℕ → ℕ, StrictMono n ∧ 0 < n 0 ∧
+      ∀ k, Filter.Tendsto (fun i ↦ θ k ^ n i) Filter.atTop (nhds 1) := by
+  classical
+  have key : ∀ (i b : ℕ), ∃ n ≥ b, ∀ k, ‖θ k ^ n - 1‖ ≤ ((i : ℝ) + 1)⁻¹ :=
+    fun i b ↦ exists_ge_pow_sub_one_norm_le θ hθ (by positivity) b
+  choose gn hgn using key
+  let n : ℕ → ℕ := fun i ↦ Nat.rec (motive := fun _ ↦ ℕ) (gn 0 1)
+    (fun i r ↦ gn (i + 1) (r + 1)) i
+  have hn0 : n 0 = gn 0 1 := rfl
+  have hns : ∀ i, n (i + 1) = gn (i + 1) (n i + 1) := fun i ↦ rfl
+  have hmono : StrictMono n :=
+    strictMono_nat_of_lt_succ fun i ↦
+      (Nat.lt_succ_self _).trans_le (hns i ▸ (hgn (i + 1) (n i + 1)).1)
+  have hpos : 0 < n 0 := hn0 ▸ (hgn 0 1).1
+  have hbound : ∀ k, ∀ i, ‖θ k ^ n i - 1‖ ≤ ((i : ℝ) + 1)⁻¹ := by
+    intro k i
+    cases i with
+    | zero => simpa [hn0] using (hgn 0 1).2 k
+    | succ i => rw [hns i]; exact (hgn (i + 1) (n i + 1)).2 k
+  refine ⟨n, hmono, hpos, fun k ↦ ?_⟩
+  have htol : Filter.Tendsto (fun i : ℕ ↦ ((i : ℝ) + 1)⁻¹) Filter.atTop (nhds 0) := by
+    simpa [one_div] using tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)
+  have h0 : Filter.Tendsto (fun i ↦ θ k ^ n i - 1) Filter.atTop (nhds 0) :=
+    squeeze_zero_norm (fun i ↦ hbound k i) htol
+  have h1 := h0.add_const (1 : ℂ)
+  simpa [sub_add_cancel] using h1
 
 end Dirichlet
