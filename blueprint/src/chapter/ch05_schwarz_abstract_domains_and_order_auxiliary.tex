@@ -425,8 +425,8 @@ positivity.
     $v^\dagger E(A^\dagger A)v - v^\dagger E(A^\dagger B)w \ge 0$.
 \end{proof}
 
-\begin{lemma}[Conjugate-transpose identity]
-    \label{lem:map_EBA_eq_conjTranspose_EAB}
+\begin{theorem}[Conjugate-transpose identity]
+    \label{thm:map_EBA_eq_conjTranspose_EAB}
     \lean{SchwarzTwoVariable.map_EBA_eq_conjTranspose_EAB}
     \leanok
     \uses{def:2positive_map}
@@ -436,7 +436,7 @@ positivity.
         E(B^\dagger A) & = E(A^\dagger B)^\dagger.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     A $2$-positive map is positive, and positive maps preserve adjoints.
@@ -444,19 +444,19 @@ positivity.
     $(A^\dagger B)^\dagger = B^\dagger A$ gives the identity.
 \end{proof}
 
-\begin{lemma}[Kernel inclusion for the two-variable Schwarz inequality]
-    \label{lem:ker_EBB_le_ker_EAB}
+\begin{theorem}[Kernel inclusion for the two-variable Schwarz inequality]
+    \label{thm:ker_EBB_le_ker_EAB}
     \lean{SchwarzTwoVariable.ker_EBB_le_ker_EAB}
     \leanok
-    \uses{def:2positive_map, lem:map_EBA_eq_conjTranspose_EAB}
+    \uses{def:2positive_map, thm:map_EBA_eq_conjTranspose_EAB}
     Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
     $A,B\in\MN{D}$, $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:map_EBA_eq_conjTranspose_EAB, lem:two_variable_operator_schwarz_conditional}
+    \uses{thm:map_EBA_eq_conjTranspose_EAB, lem:two_variable_operator_schwarz_conditional}
     Rewrite $E(B^\dagger A)$ as $E(A^\dagger B)^\dagger$
-    (Lemma~\ref{lem:map_EBA_eq_conjTranspose_EAB}) in the ampliated PSD
+    (Lemma~\ref{thm:map_EBA_eq_conjTranspose_EAB}) in the ampliated PSD
     block matrix $\bigl[\begin{smallmatrix}
         E(A^\dagger A) & E(A^\dagger B)\\
         E(B^\dagger A) & E(B^\dagger B)
@@ -466,11 +466,11 @@ positivity.
     forces $E(A^\dagger B)y=0$.
 \end{proof}
 
-\begin{lemma}[Pseudoinverse range-inclusion witness]
-    \label{lem:EBB_mul_pinv_mul_EBA_eq}
+\begin{theorem}[Pseudoinverse range-inclusion witness]
+    \label{thm:EBB_mul_pinv_mul_EBA_eq}
     \lean{SchwarzTwoVariable.EBB_mul_pinv_mul_EBA_eq}
     \leanok
-    \uses{def:2positive_map, def:pinv, lem:ker_EBB_le_ker_EAB}
+    \uses{def:2positive_map, def:pinv, thm:ker_EBB_le_ker_EAB}
     Let $E:\MN{D}\to\MN{D}$ be a $2$-positive complex-linear map. For every
     $A,B\in\MN{D}$,
     \begin{align}
@@ -478,11 +478,11 @@ positivity.
          & = E(B^\dagger A).
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The kernel inclusion $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$
-    (Lemma~\ref{lem:ker_EBB_le_ker_EAB}) gives, after taking adjoints, that
+    (Lemma~\ref{thm:ker_EBB_le_ker_EAB}) gives, after taking adjoints, that
     the support projection of $E(B^\dagger B)$ absorbs $E(B^\dagger A)$ on
     the left. Since $E(B^\dagger B)E(B^\dagger B)^{+}$ is exactly that
     support projection, the displayed identity follows.
@@ -506,12 +506,12 @@ positivity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:two_variable_operator_schwarz_conditional, lem:EBB_mul_pinv_mul_EBA_eq}
+    \uses{lem:two_variable_operator_schwarz_conditional, thm:EBB_mul_pinv_mul_EBA_eq}
     For every $v$, the vector $w = E(B^\dagger B)^{+}E(B^\dagger A)\,v$
     satisfies the side condition $E(B^\dagger B)\,w = E(B^\dagger A)\,v$ of
     the conditional lemma
     (Lemma~\ref{lem:two_variable_operator_schwarz_conditional}): this is
-    exactly Lemma~\ref{lem:EBB_mul_pinv_mul_EBA_eq} evaluated at $v$. The
+    exactly Lemma~\ref{thm:EBB_mul_pinv_mul_EBA_eq} evaluated at $v$. The
     kernel inclusion $\ker(E(B^\dagger B))\subseteq\ker(E(A^\dagger B))$,
     obtained from the ampliated PSD block matrix of the conditional
     lemma's proof,
@@ -550,14 +550,14 @@ positivity.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Vanishing linear coefficient of a nonnegative matrix quadratic]
-    \label{lem:eq_zero_of_forall_quadratic_posSemidef}
+\begin{theorem}[Vanishing linear coefficient of a nonnegative matrix quadratic]
+    \label{thm:eq_zero_of_forall_quadratic_posSemidef}
     \lean{SchwarzMap.eq_zero_of_forall_quadratic_posSemidef}
     \leanok
     Let $m$ be finite and $B,D\in\MN{m}$. If
     $tB+t^2D$ is positive semidefinite for every $t\in\mathbb R$, then
     $B=0$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Testing the quadratic form on a vector $x$ reduces to the scalar
@@ -590,7 +590,7 @@ positivity.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:eq_zero_of_forall_quadratic_posSemidef}
+    \uses{thm:eq_zero_of_forall_quadratic_posSemidef}
     Write $Q(U,V) = E(U^\dagger V) - E(U^\dagger B)E(B^\dagger B)^+E(B^\dagger
     V)$; the per-$B$ hypothesis is $Q(U,U)\ge0$ for every $U$, and
     $A\in\mc{A}_B$ means $Q(A,A)=0$. Applying the hypothesis to
@@ -602,7 +602,7 @@ positivity.
         \notag
     \end{align}
     Taking $c=t\in\mathbb R$ and applying
-    Lemma~\ref{lem:eq_zero_of_forall_quadratic_posSemidef} to the linear
+    Lemma~\ref{thm:eq_zero_of_forall_quadratic_posSemidef} to the linear
     coefficient $Q(A,X)+Q(X,A)$ and the fixed nonnegative quadratic
     coefficient $Q(X,X)$ shows $Q(A,X)+Q(X,A)$ vanishes; taking $c=tI$ and
     applying the same lemma to $I\,Q(A,X) - I\,Q(X,A)$ shows this also
