@@ -738,3 +738,82 @@ dimension $n$.
     $\tau'$ agrees with $\tau$ on $S\otimes\MN{n}$, so $T'$ agrees with $T$
     on $S$.
 \end{proof}
+
+\section{Extending completely positive maps from operator systems in a direct
+sum of matrix algebras}
+
+The one-summand case above (Theorem~\ref{thm:extend_cp_operator_system})
+generalizes the domain algebra to the source's full generality: the domain
+ranges over every finite-dimensional $C^*$-algebra, that is, every finite
+direct sum of matrix algebras $\bigoplus_{k<r}M_{d_k}(\C)$. The
+generalization transports the one-summand theorem along the block-diagonal
+embedding of $\bigoplus_{k<r}M_{d_k}(\C)$ into a single matrix algebra
+$M_M(\C)$, $M=\sum_kd_k$.
+
+\begin{definition}[Operator system in a direct sum of matrix algebras]
+    \label{def:operator_system_direct_sum}
+    \lean{Matrix.IsOperatorSystemDirectSum}
+    \leanok
+    A subspace $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ is an \emph{operator
+    system} if it contains the unit and is closed under the entrywise
+    adjoint: $\mathbb1\in S$ and $X\in S\implies X^\dagger\in S$, where
+    $X^\dagger$ denotes the family $(X_k^\dagger)_{k<r}$.
+\end{definition}
+
+\begin{definition}[Complete positivity on a direct-sum operator system]
+    \label{def:cp_on_operator_system_direct_sum}
+    \lean{Matrix.IsCPOnOperatorSystemDirectSum}
+    \leanok
+    \uses{def:operator_system_direct_sum}
+    Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be a subspace and
+    $T:S\to\MN{p}$ a linear map. For a natural number $j$, apply $T$
+    entrywise, block by block, to a family of $j\times j$ block matrices with
+    entries in $S$; then $T$ is \emph{completely positive on $S$} if this
+    always sends every such family that is positive semidefinite in each
+    block to a positive semidefinite matrix, for every $j$. This is
+    Definition~\ref{def:cp_on_operator_system} applied block by block, one
+    summand at a time.
+\end{definition}
+
+\begin{definition}[Complete positivity on a direct sum of matrix algebras]
+    \label{def:cp_map_direct_sum}
+    \lean{Matrix.IsCPMapDirectSum}
+    \leanok
+    A linear map $T:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ is \emph{completely
+    positive} if it is completely positive on the whole algebra in the sense
+    of Definition~\ref{def:cp_on_operator_system_direct_sum}. This is the
+    direct-sum analogue of rectangular Kraus complete positivity
+    (Definition~\ref{def:is_kraus_cp}).
+\end{definition}
+
+\begin{theorem}[Extending cp maps from operator systems, direct-sum domain]
+    \label{thm:extend_cp_operator_system_direct_sum}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum, thm:extend_cp_operator_system}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\ge1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system
+    (Definition~\ref{def:operator_system_direct_sum}), and let $T:S\to\MN{p}$
+    be completely positive on $S$
+    (Definition~\ref{def:cp_on_operator_system_direct_sum}). Then there is a
+    completely positive map $T':\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$
+    (Definition~\ref{def:cp_map_direct_sum}) that agrees with $T$ on $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system}
+    Embed $\bigoplus_{k<r}M_{d_k}(\C)$ block-diagonally into $M_M(\C)$,
+    $M=\sum_kd_k$. A block-diagonal matrix is positive semidefinite exactly
+    when each of its diagonal blocks is, so this embedding carries $S$ to an
+    operator system $S''\subseteq M_M(\C)$ and $T$ to a map $T''$ on $S''$
+    completely positive at every level in the sense of
+    Definition~\ref{def:cp_on_operator_system}. Applying
+    Theorem~\ref{thm:extend_cp_operator_system} to $T''$ produces a
+    completely positive extension $\tilde T:M_M(\C)\to\MN{p}$ agreeing with
+    $T''$ on $S''$. Restricting $\tilde T$ along the block-diagonal embedding
+    gives $T':=\tilde T\circ\iota$, which agrees with $T$ on $S$ and is
+    completely positive on the whole direct sum by the same block-diagonal
+    positivity fact, applied at every level with $S$ taken to be the whole
+    algebra $\bigoplus_kM_{d_k}(\C)$.
+\end{proof}

@@ -31,35 +31,52 @@ algebra, not only the one-summand case $\mathcal A=M_m(\mathbb C)$.
 
 \section{The formalized scope}
 
-The formal development takes both ambient algebras to be full matrix algebras,
-$\mathcal A=\MN{m}$ and $\mathcal B=\MN{n}$: \leanid{Matrix.IsOperatorSystem}
-(\doclink{TNLean/Channel/OperatorSystem}) is a predicate on a
-\leanid{Submodule ℂ} of $\MN{m}$, and the extension theorem
-\leanid{Matrix.exists_cp_extension_of_operatorSystem}
-(\doclink{TNLean/Channel/OperatorSystemExtension}) produces
-$\tilde T:\MN{m}\to\MN{n}$. This is not merely an ambient convenience: the
-choice of $\mathcal B=M_n(\mathbb C)$ tracks the source proof's own reduction,
-which fixes the ancilla dimension $n$ so that $\mathcal B$ is a subalgebra of
-$M_n(\mathbb C)$ and never revisits the direct-sum structure of $\mathcal A$
-after that point. What remains unformalized is the direct-sum case of the
-\emph{domain} algebra $\mathcal A=\bigoplus_k M_{d_k}(\mathbb C)$ with more
-than one summand, together with the corresponding operator-system predicate
-and Hahn--Banach argument stated for a subspace of that direct sum.
+The domain algebra $\mathcal A$ is now formalized at the source's stated
+generality: a finite direct sum $\mathcal A=\bigoplus_{k<r} M_{d_k}(\mathbb C)$,
+represented literally as the dependent function type
+$\forall k, \MN{d_k}$. \leanid{Matrix.IsOperatorSystemDirectSum} and
+\leanid{Matrix.IsCPOnOperatorSystemDirectSum}
+(\doclink{TNLean/Channel/OperatorSystemExtensionDirectSum}) are the
+direct-sum-domain operator-system and complete-positivity-at-every-level
+predicates, defined entrywise (block by block), matching the single-summand
+predicates \leanid{Matrix.IsOperatorSystem}/\leanid{Matrix.IsCPOnOperatorSystem}
+(\doclink{TNLean/Channel/OperatorSystem}) verbatim when $r=1$. The extension
+theorem \leanid{Matrix.exists_cp_extension_of_operatorSystem_directSum}
+produces $\tilde T:\bigoplus_k \MN{d_k}\to\MN{p}$ agreeing with $T$ on $S$,
+completely positive in the same block-by-block sense
+(\leanid{Matrix.IsCPMapDirectSum}). The proof transports the single-summand
+theorem \leanid{Matrix.exists_cp_extension_of_operatorSystem}
+(\doclink{TNLean/Channel/OperatorSystemExtension}) along the block-diagonal
+embedding $\bigoplus_k M_{d_k}(\mathbb C)\hookrightarrow M_M(\mathbb C)$,
+$M=\sum_k d_k$ (\leanid{Matrix.directSumEmbedFin}, built from
+\leanid{Matrix.directSumDiagonalEmbedding}, the same block-diagonal embedding
+used for Wolf's Theorem~6.14 block structure, composed with the canonical
+reindexing \leanid{finSigmaFinEquiv}): complete positivity at every tensor
+level descends through this embedding
+(\leanid{Matrix.bipartiteSlice_directSumEmbedFinLevel}), because a
+block-diagonal matrix is positive semidefinite exactly when each of its
+diagonal blocks is.
+
+The codomain algebra $\mathcal B$ remains a full matrix algebra
+$\mathcal B=\MN{p}$. This is not a residual scope restriction: as before, the
+choice $\mathcal B=M_p(\mathbb C)$ tracks the source proof's own reduction,
+which fixes the ancilla dimension and never revisits the direct-sum structure
+of $\mathcal B$ after that point, so the codomain restriction is without loss
+of generality for the source's own argument.
 
 \section{Verdict}
 
-\textbf{Open scope restriction.} The full-matrix-algebra case
-$\mathcal A=M_m(\mathbb C)$ is a faithful formalization of Wolf's proposition
-restricted to a one-summand domain algebra; no hypothesis is added beyond that
-restriction (the operator-system and complete-positivity predicates match the
-source's definitions verbatim on $M_m(\mathbb C)$). Generalizing to an
-arbitrary finite-dimensional $\mathcal A=\bigoplus_k M_{d_k}(\mathbb C)$ is not
-attempted here. The proof technique embeds directly (a subspace of a direct
-sum of matrix algebras is again a subspace of a single larger matrix algebra
-via block-diagonal embedding, so the extension argument itself should carry
-over), but the embedding step and the transport of the operator-system and
-complete-positivity predicates along it are separate work, tracked in
-\ghissue{5589}.
+\textbf{Closed for the domain algebra.} Wolf's proposition is now formalized
+at its stated generality for the domain algebra $\mathcal A$: an arbitrary
+finite direct sum $\bigoplus_{k<r} M_{d_k}(\mathbb C)$, not only the
+one-summand case. No hypothesis is added beyond the source statement (the
+direct-sum operator-system and complete-positivity predicates match the
+source's definitions on each summand, and complete positivity at level $j$ is
+exactly the source's $T\otimes\mathrm{id}_j$ positivity condition applied
+block by block). The codomain restriction $\mathcal B=M_p(\mathbb C)$ remains,
+documented above and in the module docstring of
+\doclink{TNLean/Channel/OperatorSystemExtension} as without loss of generality
+for the source's proof technique, not a gap. Tracked in \ghissue{5589}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
