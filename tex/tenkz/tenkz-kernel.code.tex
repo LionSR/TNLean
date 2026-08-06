@@ -4669,6 +4669,88 @@
       }
   }
 
+% A doubled or sandwiched site stacks its layers as basis members of one
+% cell, and the index joining two of those layers is that site's own physical
+% index: the ket-bra pairing a partial trace or a double-layer expectation
+% value sums over.  That type belongs to the pairing rather than to either
+% end -- a member address names a lattice place, and a place is not a port --
+% so the kernel reads it off the two members' declared row kinds, exactly as
+% `open up|down' reads a transverse open leg off its direction word.  Only a
+% plane frame declares the transverse physical axis such a pairing follows;
+% only the layer kinds ket, op and bra stack along that axis, a `wire' member
+% carrying a virtual index beside the bond instead.
+\bool_new:N \l__tenkz_kernel_transverse_pair_bool
+\int_new:N  \l__tenkz_kernel_transverse_layer_int
+\tl_new:N   \l__tenkz_kernel_transverse_from_tl
+\tl_new:N   \l__tenkz_kernel_transverse_to_tl
+\tl_new:N   \l__tenkz_kernel_transverse_kind_tl
+\cs_new:Npn \__tenkz_kernel_transverse_cell:n #1
+  {
+    \__tenkz_kernel_node_item:nn {#1} {kind} /
+    \__tenkz_kernel_node_item:nn {#1} {row} /
+    \__tenkz_kernel_node_item:nn {#1} {col}
+  }
+\cs_new_protected:Npn \__tenkz_kernel_transverse_layer:n #1
+  {
+    \prop_get:NeN \l__tenkz_kernel_basis_kind_prop {#1}
+      \l__tenkz_kernel_transverse_kind_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_transverse_kind_tl
+      {
+        \clist_if_in:nVT {ket,op,bra}
+          \l__tenkz_kernel_transverse_kind_tl
+          { \int_incr:N \l__tenkz_kernel_transverse_layer_int }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_transverse_layer:n { e }
+\cs_new_protected:Npn \__tenkz_kernel_transverse_pair_test:nn #1#2
+  {
+    \str_if_eq:eeT
+      { \__tenkz_kernel_node_item:nn {#1} {kind} } {member}
+      {
+        \str_if_eq:eeT
+          { \__tenkz_kernel_transverse_cell:n {#1} }
+          { \__tenkz_kernel_transverse_cell:n {#2} }
+          {
+            \str_if_eq:eeF
+              { \__tenkz_kernel_node_item:nn {#1} {member} }
+              { \__tenkz_kernel_node_item:nn {#2} {member} }
+              {
+                \int_zero:N \l__tenkz_kernel_transverse_layer_int
+                \__tenkz_kernel_transverse_layer:e
+                  { \__tenkz_kernel_node_item:nn {#1} {member} }
+                \__tenkz_kernel_transverse_layer:e
+                  { \__tenkz_kernel_node_item:nn {#2} {member} }
+                \int_compare:nNnT
+                  { \l__tenkz_kernel_transverse_layer_int } = {2}
+                  { \bool_set_true:N \l__tenkz_kernel_transverse_pair_bool }
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_transverse_pair_test:nn { VV }
+\cs_new_protected:Npn \__tenkz_kernel_transverse_pair_type:n #1
+  {
+    \bool_set_false:N \l__tenkz_kernel_transverse_pair_bool
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {plane}
+      {
+        \__tenkz_model_get:nnN {#1} {from}
+          \l__tenkz_kernel_transverse_from_tl
+        \__tenkz_model_get:nnN {#1} {to}
+          \l__tenkz_kernel_transverse_to_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_transverse_from_tl
+          {
+            \quark_if_no_value:NF \l__tenkz_kernel_transverse_to_tl
+              {
+                \__tenkz_kernel_transverse_pair_test:VV
+                  \l__tenkz_kernel_transverse_from_tl
+                  \l__tenkz_kernel_transverse_to_tl
+              }
+          }
+      }
+    \bool_if:NT \l__tenkz_kernel_transverse_pair_bool
+      { \__tenkz_kernel_port_wire_physical:n {#1} }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_port_wire_type_validate:n #1
   {
     \__tenkz_model_get:nnN {#1} {kind} \l__tenkz_kernel_port_type_tl
@@ -4748,8 +4830,13 @@
     \int_zero:N \l__tenkz_kernel_port_open_int
     \__tenkz_model_map_ids:nn {atom}
       { \__tenkz_kernel_port_open_atom:n {##1} }
+    % Port typing first, then the one closure ports cannot speak for: the
+    % transverse pairing between two layers of one stacked site.
     \__tenkz_model_map_ids:nn {wire}
-      { \__tenkz_kernel_port_wire_type_validate:n {##1} }
+      {
+        \__tenkz_kernel_port_wire_type_validate:n {##1}
+        \__tenkz_kernel_transverse_pair_type:n {##1}
+      }
   }
 
 % ---------- render: records make ink ---------------------------------------------------------
