@@ -622,12 +622,22 @@ the conditional-expectation step in the proof of Theorem 6.14. The theorem's
 explicit density-block formula is developed in
 `TNLean.Channel.FixedPoint.FullSupportBlockRetraction`.
 
-### Wolf Theorem 6.15 (Unique fixed point from full Kraus-word span) — NOT FORMALIZED
+### Wolf Theorem 6.15 (Unique fixed point from full Kraus-word span) — FORMALIZED
 
-The source assumes that the homogeneous words of some fixed length in the
-Kraus operators span the full matrix algebra. It concludes that the channel
-has a unique fixed density matrix and that this density matrix is positive
-definite. No Lean theorem currently has this hypothesis and conclusion.
+* `MPSTensor.wolf_theorem_6_15` (`TNLean.Wielandt.Primitivity.Equivalence`) —
+  for a normalized MPS tensor `A` (`∑ᵢ Aᵢ† Aᵢ = 1`) with eventually full Kraus
+  rank (homogeneous words of some fixed length in the Kraus operators span the
+  full matrix algebra), there exists a unique positive definite density matrix
+  `ρ` such that every fixed point of the transfer map `E_A` is a scalar
+  multiple of `ρ`.
+
+The proof routes through Proposition 3
+(`MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible`): the span
+hypothesis gives strong irreducibility, which supplies a positive-definite
+fixed point and irreducibility of `E_A`; the complementary transfer-map gap
+around that fixed point then forces every fixed point to be a scalar multiple
+of it. This differs from the source's own `T^n` / Corollary 6.5 argument but
+reuses only already-formalized Wolf Chapter 6 machinery (Proposition 3).
 
 ---
 

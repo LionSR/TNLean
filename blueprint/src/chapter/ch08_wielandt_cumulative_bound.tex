@@ -205,6 +205,37 @@ eventual exact-word spanning, and spectral strong irreducibility.
     minimum for $q(\E_A)$ is at most $\iota(A)$.
 \end{proof}
 
+\begin{theorem}[Unique fixed points of full rank]
+    \label{thm:wolf_6_15}
+    \lean{MPSTensor.wolf_theorem_6_15}
+    \leanok
+    \uses{thm:wielandt_proposition_three}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$. If there is a
+    positive $n$ for which $S_n(A)=\MN{D}$, then there is a unique positive
+    definite density matrix $\rho\in\MN{D}$ such that every fixed point of
+    $\E_A$ is a scalar multiple of $\rho$.
+
+    This is~\cite[Theorem~6.15]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:wielandt_proposition_three}
+    By Theorem~\ref{thm:wielandt_proposition_three}, the span hypothesis
+    makes $\E_A$ strongly irreducible, giving a positive-definite fixed
+    point $\rho_0$ and irreducibility of $\E_A$. Irreducibility forces the
+    complementary transfer-map gap around $\rho_0$, so every fixed point of
+    $\E_A$ is a scalar multiple of $\rho_0$; rescaling $\rho_0$ by the
+    inverse of its (positive) trace gives the unique density-matrix
+    representative $\rho$.
+
+    The source proves this instead by passing to $\E_A^n$, showing every
+    $\E_A^n(\ket\psi\!\bra\psi)$ has full rank from the span hypothesis, and
+    ruling out a fixed-point space of dimension larger than one via
+    Corollary~6.5 of~\cite{Wolf2012Quantum}. Both routes use only Wolf's own
+    Chapter~6 machinery; the present proof reuses the already-formalized
+    Proposition~3 equivalence.
+\end{proof}
+
 \begin{lemma}[Monotonicity of cumulative span]\label{lem:cumulative_mono}
     \lean{MPSTensor.cumulativeSpan_mono}
     \leanok
