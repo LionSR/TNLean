@@ -253,6 +253,7 @@ import TNLean.MPS.MPDO.ReflectedMarkedChain
 import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.RescalingStableChiAttachment
+import TNLean.MPS.MPDO.RescalingStableChiUniformity
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
 import TNLean.MPS.MPDO.RetainedClass

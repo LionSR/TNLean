@@ -934,6 +934,57 @@
     entries of $W$ and $\chi$.
 \end{proof}
 
+\begin{theorem}[Uniform $\chi$-trace-power form of R's one-label structure
+    coefficient]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        oneLabelCoeffs_coeff_eq_wMat_pow_trace}
+    \leanok
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,
+        thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
+    The coefficient family $c^{(L)}_{0,0,0}$ attached to $R$ in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    is a positive BNT-label $\chi$ trace-power witness
+    (Definition~\ref{def:mpdo_positive_bnt_label_chi_trace_power_form}) with
+    $\chi=\operatorname{diag}(1,\tfrac{7}{25})$: the SAME diagonal matrix
+    $\chi$ is used at every positive length $L$, only the exponent changes.
+    Moreover this trace-power coefficient equals $\tr(W^L)$, the trace of
+    the $L$-th ordinary matrix power of $R$'s own local factor $W$ from
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}:
+    \begin{align}
+        c^{(L)}&=\tr(\chi^L)=\tr(W^L)=1+\left(\frac{7}{25}\right)^L,
+        & L&>0.
+        \notag
+    \end{align}
+    The matrix power $W^L$ here is the ordinary $L$-fold matrix product of
+    the fixed $2\times2$ matrix $W$, distinct from the $N$-fold Kronecker
+    power $W_N$ appearing inside $\rho^{(N)}(R)$ itself
+    (Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}); the
+    two agree only at $L=N=1$. This closes the example-level uniform
+    BNT-label $\chi$-trace-power statement of
+    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} for $R$'s one-label
+    structure coefficient, at the coefficient level. It is not the
+    operator-multiplication closure law
+    $O_L(M_0)O_L(M_0)=c^{(L)}O_L(M_0)$ of that theorem for $R$'s own closed
+    operator; that remains the tensor-attached BNT algebra-structure
+    witness documented as future work in
+    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient family is canonically determined by $\chi$
+    (Lemma~\ref{lem:mpdo_bnt_label_of_chi_positive_length_trace_power}), so
+    it satisfies the positive-length trace-power condition with respect to
+    $\chi$ directly. For the trace identity, the Walsh--Hadamard identity
+    $H\chi H=2W$ gives the intertwining relation $H\chi=WH$ after
+    cancelling one factor of $H$ using $HH=2\cdot1$; this lifts to every
+    power, $H\chi^L=W^L H$, by induction. Conjugating back through $H$ and
+    its half-inverse and applying the cyclic property of the trace gives
+    $\tr(W^L)=\tr(\chi^L)$ for every $L$.
+\end{proof}
+
 \begin{definition}[Linearly independent operator family]%
     \label{def:mpdo_bnt_label_linear_independent}
     \lean{MPOTensor.BNTLabelOperatorFamily.LinearIndependentAt}

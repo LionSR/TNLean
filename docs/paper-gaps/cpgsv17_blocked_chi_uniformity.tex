@@ -117,6 +117,53 @@ should not be cited as a formalization of Theorem~4.14(ii). It is a local
 blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
+\section{Closure for the rescaling-stable example R}
+
+Verdict: closed at the example level, coefficient statement only.
+
+The uniform BNT-label $\chi$-trace-power statement of Theorem~4.14(ii),
+already separated from the blocked bases by the generic
+\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm} apparatus of
+Section~``BNT-label coefficient objects'' above, is now realized for the
+rescaling-stable example's tensor $R$ with its one BNT label and
+$\chi=\operatorname{diag}(1,7/25)$
+(\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi}).  The
+witness
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
+instantiates \leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi} for
+$R$'s one-label coefficient family
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs}: the same
+diagonal matrix $\chi$ gives the trace-power coefficient
+$c^{(L)}_{0,0,0}=\tr(\chi^L)$ at every positive length $L$.  This coefficient
+is tied concretely to $R$'s own closed-operator factorization
+(\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+mpo_R_eq_B_mul_wN_mul_transpose}) by
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace} and
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+oneLabelCoeffs_coeff_eq_wMat_pow_trace}: $\tr(W^L)=\tr(\chi^L)$, where $W$
+is $R$'s local factor and the Walsh--Hadamard change of basis conjugates $W$
+to $\chi$ exactly
+(\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+wMat_eq_conj_diagonal_oneLabelChi}).
+
+This closes the chi-uniformity part of Theorem~4.14(ii) for $R$'s one-label
+structure coefficient, at the coefficient level only.  It does \emph{not}
+close the operator-multiplication closure law
+$O_L(M_0)O_L(M_0)=c^{(L)}O_L(M_0)$ for $R$'s own closed operator: that
+matrix power $W^L$ is the ordinary $L$-fold matrix product of the fixed
+$2\times2$ local factor, distinct from the $N$-fold Kronecker power $W_N$
+that actually appears inside $\rho^{(N)}(R)$ (the two agree only at
+$L=N=1$), so the trace-power identity above does not by itself supply an
+operator-level identity for $\rho^{(N)}(R)^2$.  The tensor-attached BNT
+algebra-structure witness needed for that operator-level closure, from the
+\leanid{MPOTensor.AlgebraStructureData} apparatus applied to $R$ via
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}, remains
+future work.  The general Theorem~4.14(ii) statement --- one $\chi$-witness
+per BNT-label triple, constructed from an arbitrary MPDO tensor rather than
+attached by hand to a single example --- also remains a scope restriction,
+per the ``BNT-label coefficient objects'' section above.
+
 \section{Relation to the algebra-to-fusion converse}
 
 The line ranges must be kept distinct.  Lines~1830--1922 prove
