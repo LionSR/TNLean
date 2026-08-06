@@ -102,10 +102,10 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | — | — | L174, 196, 218, 445, 467, 489 `tenkzfree` → `C-species+R-free+R-record` |
 | `ch24_peps_ft_edge_middle.tex` | — | L278 `tnpic` → `C-picture+C-policy` | L242 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_foundations.tex` | — | — | L48, 384 `tenkzfree` → `R-free+R-record` |
-| `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L43 `tenkzlattice` → `R-lattice+R-record`<br>L67, 73 `tenkzlattice` → `C-species+R-lattice+R-record` |
+| `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L43 `tenkzlattice` → `R-lattice+R-record`<br>L69, 85 `tenkz` → `R-record` |
 | `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | — | — | L21, 28 `tenkzlattice` → `C-species+R-lattice+R-record`<br>L89, 95, 114, 150 `tenkzlattice` → `R-lattice+R-record`<br>L162, 229 `tenkzfree` → `C-species+R-free+R-record`<br>L212 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L99, 104, 121, 286 `tenkzlattice` → `R-lattice+R-record` |
-| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L205, 214 `tenkzlattice` → `R-lattice+R-record` |
+| `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L206, 229 `tenkz` → `R-record` |
 | `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | — | — | L380 `tenkzlattice` → `R-lattice+R-record` |
 | `ch24_peps_ft_normal_union.tex` | — | — | L213, 270, 301, 327, 358 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
@@ -117,10 +117,10 @@ separate public-surface occurrence and therefore appears separately.
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 114 |
+| `tenkz` | 118 |
 | `tenkzeq` | 0 |
 | `tenkzfree` | 36 |
-| `tenkzlattice` | 18 |
+| `tenkzlattice` | 14 |
 | `tenkzcd` | 6 |
 | `tenkzplanes` | 0 |
 | `tnpic` | 22 |

@@ -480,14 +480,9 @@ def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
         for _scope, _key, value in options
         if value is not None
     )
-    for match in re.finditer(r"\\tnmark\b", source):
-        position = match.end()
-        option_group = following_group_span(source, position, "[", "]")
-        if option_group is not None:
-            _contents, position = option_group
-        selector = following_group(source, position, "{", "}")
-        if selector and re.search(r"\([^)]+\)\s*-\s*\([^)]+\)", selector):
-            dead_record = True
+    # A subtracted selector term is kernel grammar (#5565): a mark states a
+    # staircase or a complement in the language itself, so the spelling is
+    # preserved rather than redrawn.
     unknown_keys = unrecognized_option_keys(source)
     dead_record |= bool(unknown_keys) and not any(
         code.startswith("R-") for code in codes
