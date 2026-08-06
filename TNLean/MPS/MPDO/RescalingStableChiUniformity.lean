@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.RescalingStableChiAttachment
 
 **Scope: partial formalization.** This file continues
 `TNLean.MPS.MPDO.RescalingStableChiAttachment`, closing the example-level
-case of arXiv:1606.00608, Theorem IV.13(ii) for the rescaling-stable
+case of arXiv:1606.00608, Theorem 4.14(ii) for the rescaling-stable
 example's tensor `R`: a single diagonal matrix `χ` such that, for every
 positive length `L`, the length-`L` one-label structure coefficient equals
 `tr(χ^L)`, with the SAME `χ` used at every length.
@@ -46,7 +46,7 @@ the trace of the `L`-fold ORDINARY matrix power of the fixed `2x2` matrix
 (tensor) power `wN N` appearing inside `R`'s own closed-operator formula
 `mpo_R_eq_B_mul_wN_mul_transpose`; the two agree only at `L = N = 1`. This
 file does not establish the operator-multiplication closure law of
-arXiv:1606.00608, Theorem IV.13(ii),
+arXiv:1606.00608, Theorem 4.14(ii),
 `O_L(M_0)O_L(M_0) = c^{(L)}O_L(M_0)`, for R's own closed operator
 `mpo R L`; that remains the tensor-attached BNT algebra-structure witness
 documented as future work in
@@ -55,7 +55,7 @@ documented as future work in
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
-  Theorem IV.13(ii) and lines 995--1010
+  Theorem 4.14(ii) and lines 995--1010
 -/
 
 open scoped Matrix
@@ -152,7 +152,7 @@ witness -/
 structure coefficient, with `χ = oneLabelChi`.** `oneLabelCoeffs` (the
 coefficient family built canonically from `oneLabelChi` via
 `BNTLabelCoefficientFamily.ofChi`) satisfies the positive-length trace-power
-form of arXiv:1606.00608, Theorem IV.13(ii): the SAME diagonal matrix
+form of arXiv:1606.00608, Theorem 4.14(ii): the SAME diagonal matrix
 `oneLabelChi` gives `oneLabelCoeffs.coeff L 0 0 0 = tr(oneLabelChi_{0,0,0}^L)`
 at every positive length `L`; only the exponent changes. Contrast
 `MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm`,
@@ -172,7 +172,7 @@ concretely from the local factor of `R`'s own closed-operator factorization
 
 See the module docstring for the scope restriction: this is a
 coefficient-level identity, not the operator-multiplication closure law of
-arXiv:1606.00608, Theorem IV.13(ii). -/
+arXiv:1606.00608, Theorem 4.14(ii). -/
 theorem oneLabelCoeffs_coeff_eq_wMat_pow_trace (L : ℕ) (hL : 0 < L) :
     oneLabelCoeffs.coeff L 0 0 0 = (wMat ^ L).trace := by
   have heq : oneLabelCoeffs.coeff L 0 0 0 = (oneLabelChi.matrix 0 0 0 ^ L).trace :=
