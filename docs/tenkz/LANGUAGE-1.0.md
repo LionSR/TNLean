@@ -92,6 +92,15 @@ A generated grid endpoint begins with the virtual default. Matching authored
 port declarations may refine both ends to physical; declaring only one end
 physical still conflicts with its implicit virtual peer.
 
+The frame populates and the body overrides, for bonds as for atoms (§4). An
+authored index wire joining two adjacent cells *is* that pair's bond, so the
+frame mints no second wire under it and the pair's ports have one consumer.
+The wire's species, stroke, and route are the bond's, which is how a figure
+distinguishes the one edge it is about. The topology is unmoved: the same
+contraction, the same boundary signature, whether the restatement carries ink
+of its own or none. A travelling string states an operator index rather than
+that contraction and retires nothing.
+
 ### 2.3 Atom keys (13)
 
 | Key | Type | Values | Default | Diagnostic family |

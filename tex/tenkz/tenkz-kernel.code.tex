@@ -2955,8 +2955,169 @@
           }
       }
   }
+% The frame populates and the body overrides.  Section 4 states that rule for
+% atoms: an authored atom at a cell replaces the atom the frame put there,
+% and every address of that cell then resolves to the authored record rather
+% than creating coincident population underneath it.  A grid bond is frame
+% population of the same kind -- `bonds=grid` mints one wire per adjacent
+% pair, and the body never sees it -- so an authored index wire joining two
+% adjacent cells IS that pair's bond, with its species, its stroke and its
+% route, and the frame mints no second one under it.  Without the rule the
+% generated bond inks over the author's, and the typed-port spelling of the
+% same pair collides with the generated bond on the ports both claim.
+%
+% Only an index wire retires a bond: a string travels over the lattice and
+% carries an operator, which is a different index type and a different claim.
+\prop_new:N \l__tenkz_kernel_authored_bond_prop
+\tl_new:N \l__tenkz_kernel_bond_host_tl
+\tl_new:N \l__tenkz_kernel_bond_node_tl
+\tl_new:N \l__tenkz_kernel_bond_a_row_tl
+\tl_new:N \l__tenkz_kernel_bond_a_col_tl
+\tl_new:N \l__tenkz_kernel_bond_b_row_tl
+\tl_new:N \l__tenkz_kernel_bond_b_col_tl
+\bool_new:N \l__tenkz_kernel_bond_a_bool
+\bool_new:N \l__tenkz_kernel_bond_b_bool
+% The cell a wire end stands at, when it stands at one.  A cell or member
+% address names it outright; a typed port and a bare name reach it through
+% the record they belong to.  Every other production is a geometric
+% construction rather than a further cell, and answers false.
+\cs_new_protected:Npn \__tenkz_kernel_bond_end_cell:nNNN #1#2#3#4
+  {
+    \bool_set_false:N #4
+    \str_case:en { \__tenkz_kernel_node_item:nn {#1} {kind} }
+      {
+        {cell}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_node_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {member}
+          {
+            \tl_set:Ne #2 { \__tenkz_kernel_node_item:nn {#1} {row} }
+            \tl_set:Ne #3 { \__tenkz_kernel_node_item:nn {#1} {col} }
+            \bool_set_true:N #4
+          }
+        {port}
+          {
+            \__tenkz_kernel_port_node_record:nN {#1}
+              \l__tenkz_kernel_bond_host_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_bond_host_tl
+              {
+                \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+                  \l__tenkz_kernel_bond_host_tl #2 #3 #4
+              }
+          }
+        {record}
+          {
+            \prop_get:NeN \l__tenkz_kernel_named_prop
+              { \__tenkz_kernel_node_item:nn {#1} {name} }
+              \l__tenkz_kernel_bond_host_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_bond_host_tl
+              {
+                \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+                  \l__tenkz_kernel_bond_host_tl #2 #3 #4
+              }
+          }
+      }
+  }
+% Record the pair under the name the frame would have minted for it, so the
+% generation loop reads one key and the model keeps one canonical spelling.
+\cs_new_protected:Npn \__tenkz_kernel_authored_bond_register:nnnn #1#2#3#4
+  {
+    \bool_lazy_and:nnTF
+      { \int_compare_p:nNn {#1} = {#3} }
+      {
+        \bool_lazy_or_p:nn
+          { \int_compare_p:nNn {#2} = { #4 - 1 } }
+          { \int_compare_p:nNn {#4} = { #2 - 1 } }
+      }
+      {
+        \int_compare:nNnTF {#2} < {#4}
+          {
+            \prop_put:Nnn \l__tenkz_kernel_authored_bond_prop
+              {#1-#2-#3-#4} {authored}
+          }
+          {
+            \prop_put:Nnn \l__tenkz_kernel_authored_bond_prop
+              {#3-#4-#1-#2} {authored}
+          }
+      }
+      {
+        \bool_lazy_and:nnT
+          { \int_compare_p:nNn {#2} = {#4} }
+          {
+            \bool_lazy_or_p:nn
+              { \int_compare_p:nNn {#1} = { #3 - 1 } }
+              { \int_compare_p:nNn {#3} = { #1 - 1 } }
+          }
+          {
+            \int_compare:nNnTF {#1} < {#3}
+              {
+                \prop_put:Nnn \l__tenkz_kernel_authored_bond_prop
+                  {#1-#2-#3-#4} {authored}
+              }
+              {
+                \prop_put:Nnn \l__tenkz_kernel_authored_bond_prop
+                  {#3-#4-#1-#2} {authored}
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_authored_bond:n #1
+  {
+    \bool_set_false:N \l__tenkz_kernel_bond_a_bool
+    \bool_set_false:N \l__tenkz_kernel_bond_b_bool
+    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_bond_node_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_bond_node_tl
+      {
+        \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
+          \l__tenkz_kernel_bond_node_tl
+          \l__tenkz_kernel_bond_a_row_tl \l__tenkz_kernel_bond_a_col_tl
+          \l__tenkz_kernel_bond_a_bool
+      }
+    \bool_if:NT \l__tenkz_kernel_bond_a_bool
+      {
+        \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_bond_node_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_bond_node_tl
+          {
+            \exp_args:NV \__tenkz_kernel_bond_end_cell:nNNN
+              \l__tenkz_kernel_bond_node_tl
+              \l__tenkz_kernel_bond_b_row_tl \l__tenkz_kernel_bond_b_col_tl
+              \l__tenkz_kernel_bond_b_bool
+          }
+      }
+    \bool_lazy_and:nnT
+      { \l__tenkz_kernel_bond_a_bool }
+      { \l__tenkz_kernel_bond_b_bool }
+      {
+        \use:e
+          {
+            \exp_not:N \__tenkz_kernel_authored_bond_register:nnnn
+              { \int_eval:n { \l__tenkz_kernel_bond_a_row_tl } }
+              { \int_eval:n { \l__tenkz_kernel_bond_a_col_tl } }
+              { \int_eval:n { \l__tenkz_kernel_bond_b_row_tl } }
+              { \int_eval:n { \l__tenkz_kernel_bond_b_col_tl } }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_authored_bonds:
+  {
+    \prop_clear:N \l__tenkz_kernel_authored_bond_prop
+    \__tenkz_model_map_ids:nn {wire}
+      {
+        \__tenkz_model_get:nnN {##1} {origin} \l__tenkz_kernel_bond_host_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_bond_host_tl
+          {
+            \__tenkz_model_get:nnN {##1} {kind} \l__tenkz_kernel_bond_host_tl
+            \str_if_eq:VnT \l__tenkz_kernel_bond_host_tl {index}
+              { \__tenkz_kernel_authored_bond:n {##1} }
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_bonds:
   {
+    \__tenkz_kernel_authored_bonds:
     \prop_get:NnN \l__tenkz_kernel_policy_prop {bonds}
       \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NT \l__tenkz_kernel_scratch_tl
@@ -2970,6 +3131,9 @@
             \int_step_inline:nn { \__tenkz_kernel_cols: - 1 }
               {
                 \bool_set_false:N \l_tmpa_bool
+                \prop_if_in:NeT \l__tenkz_kernel_authored_bond_prop
+                  { ##1-####1-##1-\int_eval:n {####1 + 1} }
+                  { \bool_set_true:N \l_tmpa_bool }
                 \__tenkz_kernel_cell_sealed:nnT {##1}{####1}
                   { \bool_set_true:N \l_tmpa_bool }
                 \__tenkz_kernel_cell_sealed:nnT
@@ -2990,6 +3154,9 @@
             \int_step_inline:nn { \__tenkz_kernel_cols: }
               {
                 \bool_set_false:N \l_tmpa_bool
+                \prop_if_in:NeT \l__tenkz_kernel_authored_bond_prop
+                  { ##1-####1-\int_eval:n {##1 + 1}-####1 }
+                  { \bool_set_true:N \l_tmpa_bool }
                 \prop_if_in:NeT \l__tenkz_kernel_trace_cell_prop
                   {##1-####1}
                   { \bool_set_true:N \l_tmpa_bool }

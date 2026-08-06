@@ -22,8 +22,8 @@ SPEC.loader.exec_module(DOCTEST)
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
-    if len(manual) != 12:
-        raise AssertionError(f"expected 12 displayed TeX examples, found {len(manual)}")
+    if len(manual) != 13:
+        raise AssertionError(f"expected 13 displayed TeX examples, found {len(manual)}")
     if len(reference) != 25:
         raise AssertionError(f"expected 25 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):

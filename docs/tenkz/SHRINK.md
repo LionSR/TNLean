@@ -2192,3 +2192,47 @@ already there.
 | flag:sugar-shaped:command:tnsite | dies at the language landing with every 0.7 lattice command; the wave that migrates the PEPS region figures retires two of its six blueprint consumers, and the narrowed option profile the flag reads is that retirement and not new uniformity; expiry 0.9 |
 
 Extension-gate: #5570
+
+### 2026-08-06 — the body restates one generated bond
+
+A lattice draws its bonds from the row and column policy, and until now the
+body could not reach one of them. Three spellings were tried and none stated
+it: an authored wire over the same pair was recorded first and the generated
+bond inked on top of it, the typed-port spelling of that pair raised
+`TKZ-PORT-CONSUMED` because the generated bond had already claimed both ports,
+and writing out eighty-four wires to give one of them a different ink is not a
+spelling anyone will use. Two PEPS panels wanted exactly that sentence — this
+edge is the edge being blocked — and were the last two the region wave could
+not carry across.
+
+The kernel already held the rule and was not applying it to bonds. Section 4
+says the frame populates and the body overrides: an authored atom at a cell
+replaces the atom the frame put there, and every address of that cell resolves
+to the authored record rather than to coincident population underneath it. A
+grid bond is frame population of the same kind. So an authored index wire
+joining two adjacent cells IS that pair's bond, with its species, its stroke
+and its route, and the frame mints no second one under it. The pair's ports
+then have one consumer, which is why the typed-port spelling stops colliding.
+
+The rule costs nothing. M1 stays at 140 kernel rows and 201 total; M2 stays at
+228 parser paths with its identity unchanged, because no key, no value, and no
+address production was added — the change is a suppression in the generation
+loop, reading the wire records the body already left. M4 is unmoved at 25.94:
+the benchmark corpus is untouched. Only an index wire retires a bond; a
+travelling string carries an operator index, states a different claim, and
+retires nothing.
+
+The two panels move, and both lose their last `\tnedge`. The remaining
+blueprint consumer of the command and of its `distinguished` flag is the same
+one figure, so both rows fall below tenure a milestone before their own
+verdicts said they would. Neither verdict changes: both were already booked to
+die with the 0.7 lattice dialect, and each now has one blueprint consumer left
+to lose. The restated bond is thinner than the 0.7 emphasis stroke and that is
+the contract doing its work — the stroke follows the type the port carries and
+`weight=` is a tombstone, so emphasis rides the declared species and nothing
+else.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tnedge | dies at the language landing with every 0.7 lattice command: an edge is an ordinary `\tnwire` of kind index, and a generated one is now restatable by the body; the two migrated PEPS panels retire all but one blueprint consumer, and the tenure it loses is the one this row already spent; expiry 0.9 |
+| flag:consumers:key:connection:distinguished | dies with `\tnedge` it rides: a distinguished edge is a restated bond carrying a declared `species=`, which is how the two migrated panels now say it; the single remaining blueprint consumer goes with the lattice dialect at S4; expiry 0.9 |
