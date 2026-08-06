@@ -25,6 +25,7 @@ import TNLean.Channel.Peripheral.JordanBlocks
 import TNLean.Channel.Peripheral.MultiCycleDecomposition
 import TNLean.Channel.Peripheral.PeriodicityRemoval
 import TNLean.Channel.Peripheral.Powers
+import TNLean.Channel.Peripheral.SpectralProjection
 import TNLean.Channel.Peripheral.SpectralRadius
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.UnitalKraus

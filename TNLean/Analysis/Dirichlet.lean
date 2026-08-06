@@ -191,10 +191,11 @@ error by at most the factor `B`.
 
 Source: Wolf, Proposition 6.3(i) proof; local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-theorem exists_ge_pow_sub_one_norm_le {ι : Type*} [Fintype ι] (θ : ι → ℂ)
+theorem exists_ge_pow_sub_one_norm_le {ι : Type*} [Finite ι] (θ : ι → ℂ)
     (hθ : ∀ k, ‖θ k‖ = 1) {ε : ℝ} (hε : 0 < ε) (B : ℕ) :
     ∃ n : ℕ, B ≤ n ∧ ∀ k, ‖θ k ^ n - 1‖ ≤ ε := by
   classical
+  letI := Fintype.ofFinite ι
   rcases isEmpty_or_nonempty ι with hι | hι
   · exact ⟨B, le_rfl, fun k ↦ isEmptyElim k⟩
   -- Choose arguments for the phases.
@@ -285,7 +286,7 @@ appealing to `exists_ge_pow_sub_one_norm_le` (Wolf Lemma 6.1) at each step.
 
 Source: Wolf, Proposition 6.3(i); local source
 `Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--256. -/
-theorem exists_strictMono_pow_tendsto_one {ι : Type*} [Fintype ι] (θ : ι → ℂ)
+theorem exists_strictMono_pow_tendsto_one {ι : Type*} [Finite ι] (θ : ι → ℂ)
     (hθ : ∀ k, ‖θ k‖ = 1) :
     ∃ n : ℕ → ℕ, StrictMono n ∧ 0 < n 0 ∧
       ∀ k, Filter.Tendsto (fun i ↦ θ k ^ n i) Filter.atTop (nhds 1) := by
