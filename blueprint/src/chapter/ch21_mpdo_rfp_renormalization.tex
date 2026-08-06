@@ -626,23 +626,21 @@ the remaining sites unchanged.
     % the contracted virtual index \gamma.  Each blue stroke is a typed map
     % between the complete objects at its endpoints, never a tensor contraction.
     \par\noindent\hfil
-    \begin{tenkzcd}[maps, species={channel},
+    \begin{tikzcd}[channel, ampersand replacement=\&,
         column sep=10mm, row sep=8mm]
       \tnpic[inline, physical=updown]{
         \tn[mpo]{M}
-      } &
+      } \arrow[r, "\mathcal T"] \&
       \tnpic[inline, physical=updown]{
         \tn[mpo]{M} & \tn[mpo]{M}
       } \\
       \tnpic[inline, physical=updown]{
         \tn[mpo]{M} & \tn[mpo]{M}
-      } &
+      } \arrow[r, "\mathcal S"] \&
       \tnpic[inline, physical=updown]{
         \tn[mpo]{M}
       }
-      \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{\mathcal T}
-      \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]{\mathcal S}
-    \end{tenkzcd}
+    \end{tikzcd}
     \hfil\par
 \end{definition}
 
