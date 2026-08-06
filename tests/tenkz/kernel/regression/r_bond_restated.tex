@@ -1,0 +1,45 @@
+% Regression: the body restates one generated bond among many.  A lattice
+% draws its bonds from the row and column policy, and before issue 5571 the
+% body could not reach one of them: an authored wire over the same pair was
+% recorded first and the generated bond inked on top of it, while the
+% typed-port spelling of that pair raised TKZ-PORT-CONSUMED because the
+% generated bond had already claimed both ports.  The frame populates and the
+% body overrides -- the rule section 4 states for atoms -- so an authored
+% index wire joining two adjacent cells IS that pair's bond, and the frame
+% mints no second one under it.  The topology is stated once either way: the
+% same contraction count, the same silhouettes, and the same exposed
+% boundary, whether the restatement carries ink of its own or none.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\tndeclare{species}{blocked}{hue=source:red}
+% the control: every bond comes from the policy
+\begin{tenkz}[rows={wire,wire,wire}, cols=3,
+  west=open, east=open, north=open, south=open]
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn{}
+\end{tenkz}
+\qquad
+% two of the twelve restated with nothing of their own: the same figure,
+% one by its cells and one through its typed ports
+\begin{tenkz}[rows={wire,wire,wire}, cols=3,
+  west=open, east=open, north=open, south=open]
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn[name=c]{}\\
+  \tn{} & \tn{} & \tn[name=d]{}
+  \tnwire{(1,1)}{(1,2)}
+  \tnwire{c.270}{d.90}
+\end{tenkz}
+\qquad
+% the same two carrying a species and a stroke: the edge under discussion
+\begin{tenkz}[rows={wire,wire,wire}, cols=3,
+  west=open, east=open, north=open, south=open]
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn[name=e]{}\\
+  \tn{} & \tn{} & \tn[name=f]{}
+  \tnwire[species=blocked]{(1,1)}{(1,2)}
+  \tnwire[species=blocked, stroke=dashed]{e.270}{f.90}
+\end{tenkz}
+\end{document}
