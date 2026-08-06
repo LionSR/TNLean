@@ -12,7 +12,7 @@
   },
   "m2_parser_paths": {
     "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
-    "identity_sha256": "59f27dea38cf8303eee607a5429d89b8f2ae10d62f1f12520bce9ac53f8ac6e2",
+    "identity_sha256": "5c075b0ad28251e664a98f670857d9f15537604420e33ff2f4814e77e15817fe",
     "value": 228
   },
   "m3_escape_usage": {
