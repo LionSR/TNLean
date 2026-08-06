@@ -2140,3 +2140,55 @@ corpus is untouched.
 | flag:consumers:command:tnghost | dies at the language landing because addresses name empty cells directly; the wave retires all but one blueprint consumer and the tenure it loses is the one this row already spent; expiry 0.9 |
 
 Census-correction: #4709
+
+### 2026-08-06 — a region traces its own cell set
+
+The selector gains a subtracted term and the region contour stops rounding
+what it encloses up to a rectangle. Both are the same claim: a mark says which
+records it stands over, and the ink says the same thing back. Until now the
+grammar could name a rectangle and a braced union and nothing else, and the
+contour over a union was the union's bounding box — so a staircase came out a
+rectangle, and a region with a site taken out of it came out with the site
+back in. Five figures in the PEPS chapters could not be drawn without claiming
+a region their theorems do not use.
+
+`A - B` names what A names and B does not. It costs no key: membership is
+already a set of records, so the difference is the set difference on those
+records, and the operator is a spaced hyphen because an address carries
+hyphens of its own. The contour follows: a selection standing on cells that
+do not fill their bounding rectangle traces the boundary of those cells, at
+the same four standoffs the offset hull already folded, so a selection that
+does fill its rectangle traces exactly the rectangle it traced before and
+every stream and pixel in the corpus is unmoved. The loops are directed with
+the member on the left, which is what lets one even-odd path fill a region
+with a site taken out of it as a ring.
+
+The dead flag on a mark is exchanged for a live one. `outline` was signed as
+"contour without tint" and no renderer read it, because the tint it presupposed
+did not exist; `tint` lays the region's hue over the paper it encloses, and
+does it before the wires, in containment order from the outside in. That is
+the renderer's class order doing the work a background layer does elsewhere —
+this stage keeps no layers. The polarity is inverted on purpose: contour-only
+is what the benchmark draws and what its sources draw, so the figures that
+want paper say so.
+
+The five slots take the house region palette at last. A mark's `selected` was
+inking blue where every source and every 0.7 figure inks the region under
+discussion red, and three benchmark cases had spelled themselves `secondary`
+to get the red they wanted. The table rotates as a whole so it stays
+injective — selected red, secondary blue, complement grey and dashed, collar
+violet, neutral plain ink — and those three cases now say the word they meant.
+Their ink does not move.
+
+M1 kernel stays at 140 and M2 parser paths at 228: one flag out, one flag in.
+The M2 identity moves because one leaf-key spelling changed, which is what the
+Extension-gate below is for. M4 is unmoved at 25.94 — the benchmark corpus
+gains no line, since the difference term is spelled inside a selector that was
+already there.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-mark:tint | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-mark row records; the leaf carries its first blueprint consumers in the two migrated PEPS chapters and its Extension-gate in #5570; expiry 0.8 |
+| flag:sugar-shaped:command:tnsite | dies at the language landing with every 0.7 lattice command; the wave that migrates the PEPS region figures retires two of its six blueprint consumers, and the narrowed option profile the flag reads is that retirement and not new uniformity; expiry 0.9 |
+
+Extension-gate: #5570

@@ -64,16 +64,39 @@ product states, and the square lattice.
         % Source verdict: exact discrete form of the one-site comparison in
         % arXiv:1804.04964, paper_normal.tex:1405--1429 and 1519--1544.
         $\text{and}\qquad$
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$R$, label at=north west]
-                {(2-4,2-4) - (4,4)}
-            \tnsite[role=marked]{(4,4)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \tndeclare{species}{marked-site}{hue=source:blue}
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{}
+            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+                {(2,2) .. (4,4) - (4,4)}{$R$}
+        \end{tenkz}
         $\qquad\subset\qquad$
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$S$, label at=north west]{(2-4,2-4)}
-            \tnsite[role=marked]{(4,4)}
-        \end{tenkzlattice}
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{}
+            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+                {(2,2) .. (4,4)}{$S$}
+        \end{tenkz}
         $\qquad S=R\cup\{v\}$
     \end{tenkzequation}
 \end{definition}

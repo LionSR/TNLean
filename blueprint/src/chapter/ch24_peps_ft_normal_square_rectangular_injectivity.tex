@@ -202,19 +202,49 @@
         % Source verdict: arXiv:1804.04964, paper_normal.tex:1430--1445 and
         % 1475--1499 motivate the complementary block.  The collar equality is
         % the exact local formal decomposition in NormalEdgeComplementCover.lean.
-        \begin{tenkzlattice}[rows=7, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$T$, label at=north]
-                {(1-6,1-5) - (3-5,1-2) - (2-3,3-5)}
-            \tnregion[slot=collar, outline, label={$C_1$},
-                label at=center]{(6-7,1-3)}
-            \tnregion[slot=collar, outline, inset=1, label={$C_2$},
-                label at=center]{(6-7,3-5)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{}
+            \tnmark[form=enclosure, slot=selected, tint, label pos=n]
+                {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
+            \tnmark[form=enclosure, slot=collar]{(6,1) .. (7,3)}{$C_1$}
+            \tnmark[form=enclosure, slot=collar, inset=1]
+                {(6,3) .. (7,5)}{$C_2$}
+        \end{tenkz}
         $ = $
-        \begin{tenkzlattice}[rows=7, cols=5, boundary legs]
-            \tnregion[slot=complement, label={$A_3$}, label at=north]
-                {(1-7,1-5) - (3-5,1-2) - (2-3,3-5)}
-        \end{tenkzlattice}
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{}
+            \tnmark[form=enclosure, slot=complement, tint, label pos=n]
+                {(1,1) .. (7,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$A_3$}
+        \end{tenkz}
     \end{tenkzequation}
 \end{lemma}
 % Current source-comparison status: docs/paper-gaps/peps_normal_ft_section3_route.tex.

@@ -30,7 +30,6 @@ def main() -> int:
         r"\tn[cluster]{}",
         r"\tn[enclosure]{}",
         r"\tn[poly=5]{}",
-        r"\tnmark{(1,1)-(2,2)}{}",
         r"\begin{tenkz}[boundary legs]\end{tenkz}",
         r"\begin{tenkz}[frame={rotate=90}]\end{tenkz}",
         r"\begin{tenkz}[frame={matrix={1,0,0,1}}]\end{tenkz}",
@@ -61,6 +60,7 @@ def main() -> int:
         r"\tnfuse[span=2]{}",
         r"\tnmark[form=bracket]{}{}",
         r"\tnmark[form=enclosure]{{(1,1)}}{}",
+        r"\tnmark[form=enclosure]{(1,1) .. (3,3) - (2,2)}{}",
         r"\tnwire[route=orth]{}{}",
         r"\tnset{species={left,right}}",
         r"\begin{tenkz}[frame={plane, basis={ket at (0,0), bra at (2,2)}}]"

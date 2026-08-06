@@ -173,7 +173,7 @@ the resolved endpoint type (§5).
 |---|---|---|---|
 | `form=` | small-enum | `bracket` `enclosure` `label` | `label` |
 | `species=` | identifier | — | empty |
-| `outline` | flag | — | false |
+| `tint` | flag | — | false |
 | `label pos=` | angle | a bearing in the host's own axes, or `auto` | `auto` |
 | `name=` | identifier | — | generated |
 
@@ -285,10 +285,11 @@ picture is a record (§2). It answers to `picture`, which is how a route or a
 mark names the whole diagram without a second grammar for doing so.
 
 A **selector** names a set of records — one address, a braced comma-separated
-list, or a range:
+list, a range, or one selector less another:
 
 ```
-<selector> ::= <address> | { <address>, <address>, ... } | <address> .. <address>
+<selector> ::= <term> | <selector> - <term>
+<term>     ::= <address> | { <address>, <address>, ... } | <address> .. <address>
 ```
 
 `x .. y` denotes the records between x and y in the frame's own order: two
@@ -296,6 +297,12 @@ cells corner a block, two places on one wire bound a closed sub-arc, two
 stations of a circle frame bound an arc. The range is written with two dots
 and never with a hyphen, because a cluster member is named `a-2-2` and a
 hyphen range cannot be told from a name the language itself generates. The
+`A - B` names what A names and B does not, and subtraction chains from the
+left, so a staircase and a complement are ordinary selections rather than
+shapes the grammar cannot state. The operator carries a space on each side:
+addresses hold hyphens of their own, and this is the one place a hyphen
+separates operands. Membership is a set of records, so the difference is the
+set difference on those records and nothing else — the
 model records the resolved membership and never the expression that produced
 it, so containment between two selections is a fact the model holds rather
 than a number an author types.
@@ -587,8 +594,8 @@ and every mark carries a label placement already. The cut has no consumer in
 the benchmark or the blueprint and fails tenure outright, taking its sugar
 row with it.
 
-`species=` binds the mark's ink to a declared semantic identity; `outline`
-strokes the contour without tint. Nesting needs no key: containment between
+`species=` binds the mark's ink to a declared semantic identity; `tint`
+lays that ink over the paper the contour encloses. Nesting needs no key: containment between
 two selections is a fact the model holds, and concentric order (§5) steps the
 inner contour in by one clearance.
 
