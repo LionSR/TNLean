@@ -6266,12 +6266,26 @@
                 % An index wire saves the path it inks under its own id, so a
                 % generated cup or a trace closure answers along the arc the
                 % reader sees rather than along the chord between its ends.
+                % A leg with a free end has no second model end to divide, and
+                % answers along its route for the same reason.
+                \__tenkz_model_get:nnN
+                  { \tl_use:N \l__tenkz_kernel_ow_a_tl } {from}
+                  \l__tenkz_kernel_ow_b_tl
+                \__tenkz_model_get:nnN
+                  { \tl_use:N \l__tenkz_kernel_ow_a_tl } {to}
+                  \l__tenkz_kernel_ow_c_tl
                 \__tenkz_kernel_r_sid:nN
                   { \tl_use:N \l__tenkz_kernel_ow_a_tl }
                   \l__tenkz_kernel_ow_sid_tl
-                \__tenkz_string_bends:VTF \l__tenkz_kernel_ow_sid_tl
-                  { \__tenkz_kernel_r_onwire_curve:n {#1} }
-                  { \__tenkz_kernel_r_onwire_run:n {#1} }
+                \bool_lazy_and:nnTF
+                  { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_b_tl }
+                  { ! \quark_if_no_value_p:N \l__tenkz_kernel_ow_c_tl }
+                  {
+                    \__tenkz_string_bends:VTF \l__tenkz_kernel_ow_sid_tl
+                      { \__tenkz_kernel_r_onwire_route:n {#1} }
+                      { \__tenkz_kernel_r_onwire_run:n {#1} }
+                  }
+                  { \__tenkz_kernel_r_onwire_route:n {#1} }
               }
           }
       }
@@ -6304,6 +6318,19 @@
       \l__tenkz_kernel_ow_t_tl
     \seq_pop_right:NN \l__tenkz_kernel_ow_run_stack_seq
       \l__tenkz_kernel_ow_a_tl
+  }
+% The point of a wire that its two model ends do not divide: a bending route,
+% or a leg one of whose ends is a free tip the renderer chose.  Both are read
+% off the route the wire inked.  A wire that inked no route at all keeps the
+% engine's own diagnostic, which names the address the author wrote.
+\cs_new_protected:Npn \__tenkz_kernel_r_onwire_route:n #1
+  {
+    \__tenkz_string_inked:VTF \l__tenkz_kernel_ow_sid_tl
+      { \__tenkz_kernel_r_onwire_curve:n {#1} }
+      {
+        \msg_error:nnee {tenkz}{kernel-render-todo}
+          { \__tenkz_kernel_r_item:nn {#1} {text} } {#1}
+      }
   }
 % the arclength point of a curve, converted once at the coordinate boundary
 \cs_new_protected:Npn \__tenkz_kernel_r_onwire_curve:n #1
