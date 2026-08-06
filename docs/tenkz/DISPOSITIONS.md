@@ -81,18 +81,16 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | L19, 24 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_foundations.tex` | L87, 92 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 292, 293, 294, 295, 296 `tntree` → `C-tree` | L291 `tenkzcd` → `C-tree+R-cd+R-record`<br>L410 `tenkzcd` → `R-cd+R-record` |
+| `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 293, 294, 295, 296, 298 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L402, 643, 649, 656, 663, 671, 676 `tnpic` → `C-picture+C-record+R-record`<br>L409 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L581, 583 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L444 `tenkzfree` → `R-free+R-record` |
-| `ch21_mpdo_rfp_renormalization.tex` | — | — | L629 `tenkzcd` → `C-picture+C-policy+C-record+R-cd+R-record`<br>L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_renormalization.tex` | — | — | L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | — | — | L43, 48, 53 `tenkz` → `R-record`<br>L70, 709 `tenkz` → `C-record+R-record`<br>L80, 131, 265, 270, 275, 282, 287 `tenkz` → `C-policy+C-record+R-record`<br>L485 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L715, 719 `tenkz` → `C-policy+R-record` |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_normalized_preparations_controlled_partial_traces.tex` | — | — | L427 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_simple_local_refinement_channels_sector_coordinates.tex` | — | — | L160, 175 `tenkzcd` → `R-cd+R-record` |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L333, 852, 856, 862, 867 `tenkz` → `P-grid` | — | — |
 | `ch23_algebraic_ft_foundations.tex` | — | — | L47, 51, 167, 371, 375, 387, 391, 433, 437, 441, 450, 454 `tenkz` → `C-policy+C-record+R-record`<br>L171 `tenkz` → `C-record+R-record` |
 | `ch24_peps_ft.tex` | L56, 92 `tenkz` → `P-grid` | — | L25 `tenkzlattice` → `C-policy+R-lattice+R-record` |
@@ -121,23 +119,25 @@ separate public-surface occurrence and therefore appears separately.
 | `tenkzeq` | 0 |
 | `tenkzfree` | 34 |
 | `tenkzlattice` | 12 |
-| `tenkzcd` | 6 |
+| `tenkzcd` | 0 |
 | `tenkzplanes` | 0 |
 | `tnpic` | 22 |
 | `tntree` | 11 |
-| **Total** | **207** |
+| **Total** | **201** |
 
 | Disposition | Occurrences |
 |---|---:|
 | preserve | 48 |
 | codemod | 25 |
-| redraw | 134 |
-| **Total** | **207** |
+| redraw | 128 |
+| **Total** | **201** |
 
-The raw count is 174 environment openings plus 33 command occurrences,
-which reconciles to 207. This reproduces the issue baseline: 106 `tenkz`,
+The raw count is 168 environment openings plus 33 command occurrences,
+which reconciles to 201. The issue baseline counted 106 `tenkz`,
 36 `tenkzfree`, 18 `tenkzlattice`, 6 `tenkzcd`, 0 `tenkzeq`,
-0 `tenkzplanes`, and 41 `\tnpic`/`\tntree` lines.
+0 `tenkzplanes`, and 41 `\tnpic`/`\tntree` lines; the six `tenkzcd`
+pictures have since been respelled onto plain tikz-cd, discharging every
+blueprint `R-cd` row.
 
 ## Standalone fixture inventory
 

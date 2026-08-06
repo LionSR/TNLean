@@ -839,11 +839,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "4b921815dddebb9a7c3d74994edc8360928daa4654e714c627b176d9c91eed72"
+case_sha256 = "c195a96cdd5fcabb2da8adb4f903eda726ec6eb431dbe8e47a40847821bb1510"
 second_viewer = "braid-plane-remodel-second-pass-2026-08-06-400dpi"
 reviewed = "2026-08-06"
 renderer = "braid-plane-remodel-2026-08-06-200dpi"
-note = "the plane frame now carries the patch the source draws, so the lattice slant matches and every inter-site index is virtual while the four site legs end in air; the source-red strings still wind through their six bead stations into R_{j,a} with j and i at their corners, and a's fourth bead now sits where it laps the lattice line running north out of i; the resolver contour stands further east than the source parallelogram, which the source shears with the plane and uses to hide the a-b meeting"
+note = "The marked site names itself north-west, clear of the lattice dot its south-west station stood on. the plane frame now carries the patch the source draws, so the lattice slant matches and every inter-site index is virtual while the four site legs end in air; the source-red strings still wind through their six bead stations into R_{j,a} with j and i at their corners, and a's fourth bead now sits where it laps the lattice line running north out of i; the resolver contour stands further east than the source parallelogram, which the source shears with the plane and uses to hide the a-b meeting"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
