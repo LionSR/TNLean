@@ -12,6 +12,9 @@ alike and no comparison of pictures catches a mistyped one. The record stream
 catches it, and the boundary signature catches it only when the mistyping moves
 an open end. Every verdict below was reached at the render, so typing is the
 one property a re-review must read out of the record rather than off the page.
+`scripts/tenkz_contracted_types.py --all` reads it out: it compiles each target
+and reports how many of its contracted indices are physical and how many
+virtual, in both picture languages. Run it after any migration wave.
 
 This distinction controls the verdict:
 
