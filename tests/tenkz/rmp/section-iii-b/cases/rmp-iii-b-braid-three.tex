@@ -1,28 +1,34 @@
 % Target: rmp-iii-b-braid-three
 % Formula: R_{j,a} replaces the upper a-j crossing in the third braid panel.
-% Ink: Canonical public kernel braid strands with an explicit R_{j,a} box.
-% Boundary: Four lattice legs and five string endpoints are open.
+% Ink: Canonical public kernel plane patch with braid strands and an explicit
+%   R_{j,a} box.
+% Boundary: Eight lattice legs run past the patch and four site legs leave the
+%   plane; string a enters from below and string b exits below.
 % Source: paper TN-Review-main.tex line 1679; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 863-899
-% Capabilities: kernel, braid-resolver, crossing-order
+% Capabilities: kernel, plane-frame, braid-resolver, crossing-order
 \[
   \tenkzkernel
   \tndeclare{species}{operator}{hue=source:red}
-  \begin{tenkz}[rows={wire,wire}, cols=2, physical=updown]
+  % The author draws all four lattice lines inside one plane, so every one of
+  % them carries a virtual bond; the site index is the stub that leaves the
+  % plane, and the four stubs end in air.
+  \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
     % the two-by-two lattice patch: the anyons stand on the right column
     \tn[at=(1,1), name=p]{}
     \tn[at=(1,2), name=i, role=marked, label pos=sw]{i}
     \tn[at=(2,1), name=q]{}
     \tn[at=(2,2), name=j, role=extra, label pos=sw]{j}
-    \tnwire{open w}{(1,1)} \tnwire{(1,2)}{open e}
-    \tnwire{open w}{(2,1)} \tnwire{(2,2)}{open e}
     % the resolver box stands east of the patch where the a-j crossing was
     \tn[at=0.9 e of midway i and j, skin=box, name=R]{\noexpand\mathcal R_{j,a}}
-    % string a winds through the patch into the resolver; every lattice
-    % crossing carries its dot
+    % string a winds through the patch into the resolver, lapping over the
+    % lattice line that runs north out of i; every lattice crossing carries
+    % its dot
     \tnwire[kind=string, species=operator, name=a, route=arc,
             via={0.3 w of q, midway p and q, midway p and i,
-                 0.4 n of i, 0.4 e of i}]{open s}{R}
+                 0.3 nw of i, 0.3 ne of i, 0.4 e of i},
+            cross={over at crossing of a and open-north-col-2}]{open s}{R}
     % string b leaves anyon i, dives behind the resolver, and exits below
     \tnwire[kind=string, species=operator, name=b, route=arc,
             via={0.3 se of i, 0.7 e of midway i and j, 0.4 e of j}]{i}{open s}
@@ -31,7 +37,8 @@
             route=arc]{j}{0.55 e of midway i and j}
     % marker beads where the strings pierce lattice lines
     \tn[at=0.3 w of q]{}      \tn[at=midway p and q]{}
-    \tn[at=midway p and i]{}  \tn[at=0.4 n of i]{}
+    \tn[at=midway p and i]{}
+    \tn[at=crossing of a and open-north-col-2]{}
     \tn[at=0.4 e of i]{}      \tn[at=0.4 e of j]{}
   \end{tenkz}
 \]
