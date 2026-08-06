@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.MatrixOperatorSpace
+import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Channel.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
@@ -39,15 +40,6 @@ variable {D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-noncomputable local instance matrixCStarAlgebra (m : Type*) [Fintype m] [DecidableEq m] :
-    CStarAlgebra (Matrix m m ℂ) where
-  toNormedRing := Matrix.instL2OpNormedRing
-  toStarRing := inferInstance
-  toCompleteSpace := inferInstance
-  toCStarRing := Matrix.instCStarRing
-  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-  toStarModule := inferInstance
-
 /-- A positive map is monotone for the matrix Loewner order. -/
 theorem IsPositiveMap.map_le_map
     {m n : Type*} [Finite m] [Finite n]
@@ -68,8 +60,8 @@ theorem IsPositiveMap.map_conjTranspose
   letI := Fintype.ofFinite n
   letI := Classical.decEq m
   letI := Classical.decEq n
-  letI : CStarAlgebra (Matrix m m ℂ) := matrixCStarAlgebra m
-  letI : CStarAlgebra (Matrix n n ℂ) := matrixCStarAlgebra n
+  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
   change hT.toPositiveLinearMap Aᴴ = (hT.toPositiveLinearMap A)ᴴ
   simpa [Matrix.star_eq_conjTranspose] using map_star hT.toPositiveLinearMap A
 
@@ -164,8 +156,8 @@ theorem Matrix.PosSemidef.fromBlocks_diag
   classical
   letI := Fintype.ofFinite m
   letI := Fintype.ofFinite o
-  letI : CStarAlgebra (Matrix m m ℂ) := matrixCStarAlgebra m
-  letI : CStarAlgebra (Matrix o o ℂ) := matrixCStarAlgebra o
+  letI : CStarAlgebra (Matrix m m ℂ) := Matrix.matrixCStarAlgebra
+  letI : CStarAlgebra (Matrix o o ℂ) := Matrix.matrixCStarAlgebra
   obtain ⟨CA, hCA⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp
     ((Matrix.nonneg_iff_posSemidef).mpr hA)
   obtain ⟨CB, hCB⟩ := CStarAlgebra.nonneg_iff_eq_mul_star_self.mp

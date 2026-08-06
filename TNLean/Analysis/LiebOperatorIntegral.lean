@@ -58,16 +58,10 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- The `C⋆`-algebra structure on `Matrix n n ℂ` from the `L²`-operator norm. Kept as a
+/-- `Matrix.matrixCStarAlgebra` (`TNLean.Analysis.MatrixOrderTopology`), registered as a
 `local instance` so the `L²`-operator norm does not leak onto `Matrix n n ℂ` for transitive
 importers (see `Mathlib/Analysis/CStarAlgebra/Matrix.lean`). -/
-noncomputable local instance matrixCStarAlgebra : CStarAlgebra (Matrix n n ℂ) where
-  toNormedRing := Matrix.instL2OpNormedRing
-  toStarRing := inferInstance
-  toCompleteSpace := inferInstance
-  toCStarRing := Matrix.instCStarRing
-  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-  toStarModule := inferInstance
+noncomputable local instance : CStarAlgebra (Matrix n n ℂ) := Matrix.matrixCStarAlgebra
 
 
 omit [Fintype n] in

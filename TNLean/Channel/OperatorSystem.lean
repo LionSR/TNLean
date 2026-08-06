@@ -19,18 +19,23 @@ proposition itself is proved in
 
 ## Design notes
 
-Following Wolf's own finite-dimensional proof, the ambient `C^*`-algebras are
-taken to be full matrix algebras `A = M_m(ℂ)`, `B = M_n(ℂ)`: Wolf's proof
-embeds `B` as a subalgebra of `M_n(ℂ)` for a suitable `n`, so working with the
-full matrix algebra `M_n(ℂ)` directly is without loss of generality in finite
-dimension and matches the proof technique itself, not merely an ambient
-convenience.
+Wolf's proposition quantifies over two arbitrary finite-dimensional
+`C^*`-algebras `A`, `B`; this file takes both to be full matrix algebras
+`A = M_m(ℂ)`, `B = M_n(ℂ)`. The two narrowings are not on the same footing.
+Taking `B = M_n(ℂ)` is without loss of generality and matches Wolf's own proof
+technique: the proof fixes the ancilla dimension `n` and embeds `B` as a
+subalgebra of `M_n(ℂ)`, so working with the full matrix algebra `M_n(ℂ)`
+directly reproduces the source argument rather than merely being an ambient
+convenience. Taking `A = M_m(ℂ)` is a genuine scope restriction: the source
+statement allows `A` to be any direct sum of matrix algebras, and the
+one-summand case formalized here is not the full proposition. See
+`docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`.
 
 An **operator system** `S ⊆ M_m(ℂ)` (line 614) is a subspace closed under the
-adjoint and containing the unit. We represent it as a `Submodule ℂ` together
-with the two closure conditions, rather than as a bundled structure, to reuse
-the existing `Submodule` API (`comap`, membership lemmas) without duplicating
-it.
+adjoint and containing the unit. We define `Matrix.IsOperatorSystem` as a
+property of a `Submodule ℂ` rather than as a separate structure, so that
+`Submodule` membership lemmas (`comap`, `zero_mem`, …) apply directly without
+duplication.
 
 Complete positivity of a map `T : S →ₗ[ℂ] M_n(ℂ)` is stated at every level `k`,
 generalizing `IsCPMap`/`IsKrausCP` (`TNLean/Channel/Basic.lean`) from maps

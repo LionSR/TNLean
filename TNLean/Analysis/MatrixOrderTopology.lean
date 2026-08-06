@@ -3,6 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.Topology.Instances.Matrix
@@ -22,6 +23,11 @@ both the channel theory and the operator-monotone and operator-concave
 machinery (which integrate matrix-valued functions against the Loewner order)
 can use them without depending on one another.
 
+It also collects the single shared `CStarAlgebra (Matrix ι ι ℂ)` instance
+built from the `L²`-operator norm, kept here for the same reason: it is the
+lowest-level module already imported (directly or transitively) by every
+call site that needs it.
+
 ## Main results
 
 * `matrix_isClosed_posSemidef` — the positive semidefinite cone is closed.
@@ -29,6 +35,8 @@ can use them without depending on one another.
 * `matrixOrderClosedTopology` — the Loewner order on finite matrices has a closed
   order topology (`OrderClosedTopology`), registered as a scoped instance in the
   `MatrixOrder` namespace.
+* `Matrix.matrixCStarAlgebra` — the shared `L²`-operator-norm `CStarAlgebra
+  (Matrix ι ι ℂ)` instance, bound locally with `letI` at each call site.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -74,3 +82,20 @@ theorem matrixOrderClosedTopology {m : Type*} [Finite m] :
   isClosed_le' := matrix_isClosed_le
 
 scoped[MatrixOrder] attribute [instance] matrixOrderClosedTopology
+
+/-- The `C⋆`-algebra structure on `Matrix ι ι ℂ` from the `L²`-operator norm,
+shared by every call site in the project that needs it (bound locally with
+`letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.matrixCStarAlgebra`, matching
+`TNLean.Channel.Schwarz.PositiveMapProperties`,
+`TNLean.Channel.OperatorSystemExtension`, and
+`TNLean.Analysis.LiebOperatorIntegral`). Kept as a plain definition rather than
+a global instance so the `L²`-operator norm does not leak onto `Matrix ι ι ℂ`
+for transitive importers. -/
+@[reducible] noncomputable def Matrix.matrixCStarAlgebra {ι : Type*} [Fintype ι] [DecidableEq ι] :
+    CStarAlgebra (Matrix ι ι ℂ) where
+  toNormedRing := Matrix.instL2OpNormedRing
+  toStarRing := inferInstance
+  toCompleteSpace := inferInstance
+  toCStarRing := Matrix.instCStarRing
+  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
+  toStarModule := inferInstance

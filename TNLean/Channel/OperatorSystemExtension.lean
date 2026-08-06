@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Channel.OperatorSystem
 import TNLean.Channel.ChoiRectangular
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -17,6 +18,11 @@ This file proves Wolf's proposition "Extending cp maps from operator systems"
 completely positive linear map `T : S → M_n(ℂ)` defined on an operator system
 `S ⊆ M_m(ℂ)` extends to a completely positive map `T' : M_m(ℂ) → M_n(ℂ)`
 agreeing with `T` on `S`.
+
+**Scope restriction:** Wolf states this for `S` a subspace of an arbitrary
+finite-dimensional `C^*`-algebra `A`; this file formalizes the case where `A`
+is a full matrix algebra `M_m(ℂ)`, see
+`docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`.
 
 ## Proof route
 
@@ -61,17 +67,6 @@ namespace Matrix
 
 variable {m n : ℕ}
 
-/-- A `CStarAlgebra` instance for a matrix algebra using the `ℓ²`-operator
-norm, matching the pattern used elsewhere in `TNLean.Channel.Schwarz`. -/
-noncomputable local instance matrixCStarAlgebraOfFintype (ι : Type*) [Fintype ι] [DecidableEq ι] :
-    CStarAlgebra (Matrix ι ι ℂ) where
-  toNormedRing := Matrix.instL2OpNormedRing
-  toStarRing := inferInstance
-  toCompleteSpace := inferInstance
-  toCStarRing := Matrix.instCStarRing
-  toNormedAlgebra := Matrix.instL2OpNormedAlgebra
-  toStarModule := inferInstance
-
 /-! ### Wolf's functional `τ` -/
 
 /-- **Wolf's functional** (Ch. 1, line 623): `τ(A) = ⟨Ω|(T ⊗ id_n)(A)|Ω⟩` for
@@ -99,7 +94,7 @@ a self-adjoint element of a `C^*`-algebra lies in `[-‖A‖, ‖A‖]`
 theorem IsHermitian.norm_smul_one_sub_posSemidef {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.IsHermitian) :
     (‖A‖ • (1 : Matrix ι ι ℂ) - A).PosSemidef := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebraOfFintype ι
+  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.matrixCStarAlgebra
   have hsa : IsSelfAdjoint A := isSelfAdjoint_iff.mpr (Matrix.star_eq_conjTranspose A ▸ hA)
   have hle : A ≤ algebraMap ℝ (Matrix ι ι ℂ) ‖A‖ := hsa.le_algebraMap_norm_self
   rw [Algebra.algebraMap_eq_smul_one] at hle
@@ -119,7 +114,7 @@ both `‖A‖∞ • 1 - A` and `‖A‖∞ • 1` are positive semidefinite, `�
 theorem PosSemidef.norm_smul_one_sub_le {ι : Type*} [Fintype ι] [DecidableEq ι]
     {A : Matrix ι ι ℂ} (hA : A.PosSemidef) :
     ‖‖A‖ • (1 : Matrix ι ι ℂ) - A‖ ≤ ‖A‖ := by
-  letI : CStarAlgebra (Matrix ι ι ℂ) := matrixCStarAlgebraOfFintype ι
+  letI : CStarAlgebra (Matrix ι ι ℂ) := Matrix.matrixCStarAlgebra
   have hnn : (0 : Matrix ι ι ℂ) ≤ ‖A‖ • (1 : Matrix ι ι ℂ) - A :=
     (hA.1.norm_smul_one_sub_posSemidef).nonneg
   have hle : ‖A‖ • (1 : Matrix ι ι ℂ) - A ≤ ‖A‖ • (1 : Matrix ι ι ℂ) := by
@@ -951,6 +946,11 @@ theorem tau_kron_single {S : Submodule ℂ (Matrix (Fin m) (Fin m) ℂ)}
 completely positive linear map `T : S → M_n(ℂ)` defined on an operator system
 `S ⊆ M_m(ℂ)` extends to a completely positive map `T' : M_m(ℂ) → M_n(ℂ)`
 agreeing with `T` on `S`.
+
+**Scope restriction:** Wolf states this for `S` a subspace of an arbitrary
+finite-dimensional `C^*`-algebra `A`; this theorem is the case where `A` is a
+full matrix algebra `M_m(ℂ)`, see
+`docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`.
 
 The dimension hypotheses `[NeZero m] [NeZero n]` are the same standing
 finite-dimensionality convention already used for the rectangular
