@@ -98,10 +98,11 @@ The rectangular Kraus development\footnote{Formal module:
 normalization equivalences \leanid{kraus_tp_iff_sum_conjTranspose_mul} and
 \leanid{kraus_unital_iff_sum_mul_conjTranspose}, the minimality of the
 Kraus rank \leanid{choiRank_isLeast_hasKrausCard_of_isKrausCP} with bound
-\leanid{choiRank_le_mul} ($r=\operatorname{rank}(\tau_T)\leq dd'$), the
-orthogonal minimal family \leanid{exists_kraus_orthogonal_of_isKrausCP},
-and the padded unitary freedom \leanid{kraus_isometry_freedom_iff} and
-\leanid{kraus_unitary_freedom_iff}.
+\leanid{choiRank_le_mul} ($r=\operatorname{rank}(\tau_T)\leq dd'$), and the
+orthogonal minimal family \leanid{exists_kraus_orthogonal_of_isKrausCP}.
+The padded unitary freedom is formalized by the dimension-generic
+\leanid{kraus_isometry_freedom_iff} and \leanid{kraus_unitary_freedom_iff}
+in \doclink{TNLean/Channel/KrausUnitaryFreedom}.
 
 The complete-positivity predicate is \leanid{IsKrausCP}, the existence of
 rectangular Kraus operators, which is the notion used elsewhere in the
@@ -109,9 +110,33 @@ development; the Choi correspondence is phrased relative to it.
 
 \section{Surviving square-only declarations}
 
+The dimension-generic Kraus API (updated 2026-08-06): the cardinality,
+rank, and freedom declarations are stated once, for rectangular Kraus
+operators $K_j\in M_{d'\times d}(\C)$, and the square development is the
+specialization $d=d'$.  Concretely, \leanid{Channel.HasKrausCard},
+\leanid{Channel.HasKrausRankLE}, \leanid{Channel.choiRank},
+\leanid{Channel.hasKrausCard_mono},
+\leanid{Channel.choiMatrix_eq_sum_vecMulVec_of_kraus},
+\leanid{Channel.choiRank_le_of_hasKrausCard}, and
+\leanid{Channel.hasKrausCard_choiRank_of_cp} live in
+\doclink{TNLean/Channel/KrausRank}; the normalization lemmas
+\leanid{kraus_sum_conjTranspose_mul_of_tp},
+\leanid{kraus_sum_mul_conjTranspose_of_unital}, and
+\leanid{kraus_same_map_of_isometry_combination} live in
+\doclink{TNLean/Channel/KrausRepresentation}; the dual/Gramian and
+necessary-direction freedom lemmas \leanid{kraus_dual_eq_of_map_eq},
+\leanid{kraus_conjTranspose_mul_eq_of_map_eq},
+\leanid{kraus_rectangular_freedom}, and \leanid{kraus_rectangular_freedom'}
+live in \doclink{TNLean/Channel/KrausFreedom}; and the freedom
+equivalences \leanid{kraus_isometry_freedom_iff} and
+\leanid{kraus_unitary_freedom_iff} live in
+\doclink{TNLean/Channel/KrausUnitaryFreedom}.  Their former
+\leanid{ChoiRectangular}-namespace duplicates have been removed.
+
 The following declarations remain square-only.  Each is the $d=d'$
-specialization of a rectangular result proved above, not an independent
-scope gap; they are retained because existing callers use them.
+specialization of a rectangular or dimension-generic result, not an
+independent scope gap; they are retained because existing callers use
+them.
 
 \begin{itemize}
     \item \leanid{ChoiJamiolkowski.choiMatrix} and its correspondence
@@ -125,18 +150,11 @@ scope gap; they are retained because existing callers use them.
         $\tr(T(X))=\tr(X)$; the channel structure (complete positivity
         plus trace preservation) is covered for rectangular maps by
         \leanid{IsKrausCPTP}.
-    \item \leanid{Channel.HasKrausCard}, \leanid{Channel.HasKrausRankLE},
-        and \leanid{Channel.choiRank}.  The square cardinality and rank
-        predicates specialize \leanid{ChoiRectangular.HasKrausCard},
-        \leanid{ChoiRectangular.HasKrausRankLE}, and
-        \leanid{ChoiRectangular.choiRank}.
-    \item The square Kraus-freedom theorems
-        \leanid{kraus_isometry_freedom_iff} and
-        \leanid{kraus_unitary_freedom_iff} in
-        \doclink{TNLean/Channel/KrausUnitaryFreedom}.  The rectangular
-        namespace carries the general-dimension forms
-        \leanid{ChoiRectangular.kraus_isometry_freedom_iff} and
-        \leanid{ChoiRectangular.kraus_unitary_freedom_iff}.
+    \item \leanid{Channel.hasKrausRankLE_choiRank_of_cptp} and
+        \leanid{kraus_transition_unitary_of_hs_orthonormal}.  These two
+        lemmas have no rectangular counterpart: the first is phrased via
+        the square-only \leanid{IsChannel} structure, and the second is a
+        square linear-algebraic core lemma with square-only call sites.
 \end{itemize}
 
 \section{Verdict}

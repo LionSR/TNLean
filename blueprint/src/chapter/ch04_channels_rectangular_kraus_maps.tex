@@ -344,7 +344,7 @@ the input factor is written $\tr_B$.
     \label{thm:kraus_rect_normalization}
     \lean{ChoiRectangular.kraus_tp_iff_sum_conjTranspose_mul,
         ChoiRectangular.kraus_unital_iff_sum_mul_conjTranspose,
-        ChoiRectangular.kraus_sum_conjTranspose_mul_of_tracePreserving}
+        kraus_sum_conjTranspose_mul_of_tp}
     \leanok
     \uses{def:is_kraus_cp}
     Let $T(X)=\sum_{j=1}^{r}K_jXK_j^\dagger$ with
@@ -364,8 +364,8 @@ the input factor is written $\tr_B$.
 
 \begin{definition}[Kraus cardinality and Kraus rank]
     \label{def:kraus_rank_rect}
-    \lean{ChoiRectangular.HasKrausCard, ChoiRectangular.HasKrausRankLE,
-        ChoiRectangular.choiRank, ChoiRectangular.hasKrausCard_mono}
+    \lean{Channel.HasKrausCard, Channel.HasKrausRankLE,
+        Channel.choiRank, Channel.hasKrausCard_mono}
     \leanok
     \uses{def:is_kraus_cp, def:choi_matrix_rect}
     A map $T:\MN{d}\to\MN{d'}$ has \emph{Kraus cardinality} $r$ if it has an
@@ -377,8 +377,8 @@ the input factor is written $\tr_B$.
 
 \begin{theorem}[Minimality of the Kraus rank]
     \label{thm:kraus_rect_rank_minimal}
-    \lean{ChoiRectangular.hasKrausCard_choiRank_of_isKrausCP,
-        ChoiRectangular.choiRank_le_of_hasKrausCard,
+    \lean{Channel.hasKrausCard_choiRank_of_cp,
+        Channel.choiRank_le_of_hasKrausCard,
         ChoiRectangular.choiRank_isLeast_hasKrausCard_of_isKrausCP,
         ChoiRectangular.choiRank_le_mul}
     \leanok
@@ -426,12 +426,12 @@ the input factor is written $\tr_B$.
 
 \begin{theorem}[Unitary freedom of Kraus representations]
     \label{thm:kraus_rect_freedom}
-    \lean{ChoiRectangular.kraus_isometry_freedom_iff,
-        ChoiRectangular.kraus_unitary_freedom_iff,
-        ChoiRectangular.kraus_isometry_freedom,
-        ChoiRectangular.kraus_same_map_of_isometry_combination,
-        ChoiRectangular.kraus_dual_eq_of_map_eq,
-        ChoiRectangular.kraus_conjTranspose_mul_eq_of_map_eq}
+    \lean{kraus_isometry_freedom_iff,
+        kraus_unitary_freedom_iff,
+        kraus_rectangular_freedom,
+        kraus_same_map_of_isometry_combination,
+        kraus_dual_eq_of_map_eq,
+        kraus_conjTranspose_mul_eq_of_map_eq}
     \leanok
     \uses{def:is_kraus_cp}
     Two sets of Kraus operators $\{K_j\}$ and $\{\widetilde{K}_\ell\}$
