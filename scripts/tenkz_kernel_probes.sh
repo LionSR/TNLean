@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Gate for the kernel language stage: the seven contract fixtures pin their
-# record streams, and every sugar spelling proves byte-identical events
-# against its kernel expansion.  Sources: tests/tenkz/kernel/.
+# record streams, and every sugar spelling proves byte-identical events and
+# pixels against its kernel expansion.  Sources: tests/tenkz/kernel/.
 set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KERNEL="$REPO/tests/tenkz/kernel"
@@ -2643,8 +2643,25 @@ for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
     diff "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog" >&2 || true
     fail=1
   fi
+  # Events do not carry a label's ink.  The labelled cup of issue 5563 left
+  # byte-identical records while its unpeeled `$...$` value set a superscript
+  # one math style larger than its expansion's \tn body.  Both halves of a
+  # pair compile in this same session, so their rasters compare byte for byte
+  # without an exact-toolchain pin.
+  for half in sugar kernel; do
+    if ! pdftoppm -singlefile -png -r 300 \
+        "$WORK/${pair}_${half}.pdf" "$WORK/${pair}_${half}" >/dev/null 2>&1; then
+      echo "FAIL: sugar pair fixture ${pair}_${half} could not be rasterized" >&2
+      exit 1
+    fi
+  done
+  if ! cmp -s "$WORK/${pair}_sugar.png" "$WORK/${pair}_kernel.png"; then
+    echo "FAIL: sugar pair $pair does not render as its kernel expansion" >&2
+    fail=1
+  fi
 done
-[ "$fail" -eq 0 ] && echo "PASS: 10 sugar spellings byte-identical to their expansions"
+[ "$fail" -eq 0 ] &&
+  echo "PASS: 10 sugar spellings byte-identical to their expansions in events and pixels"
 
 CURRENT="$WORK/current.sha256"
 ( cd "$WORK"
