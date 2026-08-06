@@ -44,6 +44,46 @@ finite family whose members keep one hue across figures.  Labels distinguish
 objects of the same kind; color does not encode identity.  A role may change
 style, never topology.
 
+\subsection{Stand a label on an open leg}
+
+An open leg is a wire like any other and it carries a name.  A side policy
+names its legs after the side and the row or column they leave --
+\tnval{open-west-1}, \tnval{open-south-col-3} -- and an authored open end
+takes the name its \tncmd{tnwire} declares.  Address a fraction of that name
+to put a label or a bead on the leg:
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+  \tn{A} & \tn{B}
+  \tnmark[form=label, label pos=90]{on open-west-1 0.5}{$\alpha$}
+\end{tenkz}
+\end{Verbatim}
+
+The station is read along the leg the picture draws.  A leg has one end on a
+glyph and one free tip, and fraction zero is the end the wire is written
+from, so a leg written from a port to \tnval{open e} runs outward while one
+written from \tnval{open w} to a port runs inward.
+
+\subsection{Send a physical index sideways}
+
+An index type belongs to the port that carries it.  \tnkey{ports=} types each
+face on its own, so \tnval{0:physical} sends a physical index east exactly as
+\tnval{0:virtual} sends a virtual one, and a map drawn as a single atom types
+its two faces differently:
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=box, ports={180:virtual:V, 0:physical:W}]{A}
+\end{tenkz}
+\end{Verbatim}
+
+\tnkey{physical=} is a picture policy, not the only source of a physical
+index: it gives every frame-cell atom one outward physical port on the
+frame's own outward face.  The two spellings stand side by side, and neither
+claims the other's face.
+
 \subsection{Keep a physical index out of a projected sheet}
 
 There are five directions at a PEPS tensor, but only four lie in the sheet.

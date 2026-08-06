@@ -1357,6 +1357,16 @@
   }
 \prg_generate_conditional_variant:Nnn \__tenkz_string_bends:n {V} {T,F,TF}
 
+% Whether a route was ever saved under #1.  A caller that means to measure a
+% route asks this first, so an id that names no ink is refused by the caller's
+% own diagnostic rather than by the bead's.
+\prg_new_protected_conditional:Npnn \__tenkz_string_inked:n #1 {T,F,TF}
+  {
+    \prop_if_in:NnTF \l__tenkz_string_kind_prop {#1}
+      { \prg_return_true: } { \prg_return_false: }
+  }
+\prg_generate_conditional_variant:Nnn \__tenkz_string_inked:n {V} {T,F,TF}
+
 % The point at arclength fraction #2 along string #1, exposed as TikZ
 % coordinate #3 and reported as an event.  PGF's markings decoration advances
 % by actual path distance, unlike spath's segment-count coordinate system.
