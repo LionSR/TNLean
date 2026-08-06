@@ -50,7 +50,8 @@ project import.
     Hermiticity-preserving ↔ `τ` is Hermitian ✓
   - `ChoiJamiolkowski.trace_choiMatrix_of_tp` — `tr(τ) = 1` for TP ✓
   - `ChoiJamiolkowski.choiMatrix_id` — `τ` of identity = `|Ω⟩⟨Ω|` ✓
-  - `Channel.choiRank` — rank of the Choi matrix ✓
+  - `Channel.choiRank` — rank of the Choi matrix (dimension-generic,
+    via `ChoiRectangular.choiMatrix`) ✓
   - `Channel.choiRank_le_of_hasKrausCard` / `Channel.choiRank_le_of_hasKrausRankLE`
     — Choi-rank upper bounds from exact / bounded Kraus families ✓
   - `Channel.hasKrausCard_choiRank_of_cp` /
@@ -76,7 +77,10 @@ project import.
     API, `IsTracePreservingMap`, `IsChannel`) are documented as specializations
     in `docs/paper-gaps/choi_rectangular_scope.tex`.
 
-* **Theorem 2.1** (Kraus representation, square development):
+* **Theorem 2.1** (Kraus representation, dimension-generic development):
+  the root/`Channel`-namespace Kraus API is stated for rectangular Kraus
+  operators `Kⱼ : Matrix (Fin d') (Fin d) ℂ`; the square development is the
+  specialization `d = d'`.
   - `kraus_tp_of_sum_conjTranspose_mul` — `∑Kᵢ†Kᵢ = 𝟙` ⟹ TP ✓
   - `kraus_sum_conjTranspose_mul_of_tp` — TP ⟹ `∑Kᵢ†Kᵢ = 𝟙` ✓
   - `kraus_sum_mul_conjTranspose_of_unital` — unital ⟹ `∑KᵢKᵢ† = 𝟙` ✓
@@ -84,28 +88,28 @@ project import.
   - `kraus_same_map_of_unitaryGroup_combination` / `kraus_same_map_of_exists_unitary_combination`
     — bundled/existential unitary-witness formulations for reuse in the converse roadmap ✓
   - `kraus_transition_unitary_of_hs_orthonormal`
-    — converse linear-algebra core: orthonormal Kraus frames force unitary transition ✓
+    — converse linear-algebra core: orthonormal Kraus frames force unitary transition
+    (square form only) ✓
   - `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality ✓
   - `kraus_conjTranspose_mul_eq_of_map_eq` — equal Stinespring Gramians ✓
   - `kraus_rectangular_freedom` / `kraus_rectangular_freedom'`
-    — rectangular Kraus freedom (necessary direction) ✓
+    — Kraus freedom (necessary direction) ✓
   - `kraus_isometry_freedom_iff`
     — Wolf Theorem 2.18 in isometric form, including zero-padding of the smaller family ✓
   - `kraus_unitary_freedom_iff`
     — Wolf Theorem 2.18 in same-size unitary form ✓
-  - **Rectangular form** in `TNLean/Channel/KrausRectangular.lean`
-    (namespace `ChoiRectangular`):
+  - `Channel.HasKrausCard` / `Channel.HasKrausRankLE` / `Channel.choiRank` /
+    `Channel.hasKrausCard_mono` / `Channel.choiRank_le_of_hasKrausCard` /
+    `Channel.hasKrausCard_choiRank_of_cp`
+    — Kraus cardinality and the minimal Kraus number `r = rank(τ)` ✓
+  - **Rectangular-specific form** in `TNLean/Channel/KrausRectangular.lean`
+    (namespace `ChoiRectangular`, no square counterpart):
     `kraus_tp_iff_sum_conjTranspose_mul` / `kraus_unital_iff_sum_mul_conjTranspose`
-    — normalization item 1 in both directions ✓
-    `choiRank` / `choiRank_le_of_hasKrausCard` /
-    `hasKrausCard_choiRank_of_isKrausCP` /
+    — normalization item 1 as iffs ✓
     `choiRank_isLeast_hasKrausCard_of_isKrausCP` / `choiRank_le_mul`
-    — minimal Kraus number `r = rank(τ) ≤ d·d'` ✓
+    — minimality of the Kraus rank and the bound `r = rank(τ) ≤ d·d'` ✓
     `exists_kraus_orthogonal_of_isKrausCP`
     — Hilbert–Schmidt orthogonal minimal family (`tr[Kᵢ†Kⱼ] ∝ δᵢⱼ`) ✓
-    `kraus_isometry_freedom` / `kraus_isometry_freedom_iff` /
-    `kraus_unitary_freedom_iff`
-    — padded isometric/unitary freedom (item 4) ✓
 
 * **Theorem 2.2** (Stinespring dilation):
   - `stinespring_dual_representation` — `T*(A) = V†(A ⊗ 𝟙)V` ✓
@@ -271,7 +275,7 @@ project import.
 | Tensor product of maps | `TensorMap.lean` | `Matrix.tensorMapId` |
 | Choi matrix | `ChoiJamiolkowski.lean` | `ChoiJamiolkowski.choiMatrix` |
 | Rectangular Choi matrix | `ChoiRectangular.lean` | `ChoiRectangular.choiMatrix` |
-| Rectangular Kraus rank | `KrausRectangular.lean` | `ChoiRectangular.choiRank` |
+| Rectangular Kraus rank | `KrausRank.lean` | `Channel.choiRank` |
 | Stinespring isometry | `Stinespring.lean` | `stinespringV` |
 | POVM | `POVM.lean` | `POVM` |
 | Naimark isometry | `POVM.lean` | `POVM.naimarkIsometry` |
