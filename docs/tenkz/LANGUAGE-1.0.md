@@ -744,6 +744,13 @@ crossing are geometric constructions rather than further cells, so the
 picture policy gives them no physical index. Such an atom may still declare
 an independent physical port with `ports=` when the mathematics requires one.
 
+The policy pays on a uniform row, where two or more sites share the leg: one
+declaration replaces a port on every eligible atom, and a rare exception
+refuses it with `physical=none`. It costs on a sparse row, where a single
+site among many carries the index: every other site must then refuse the
+policy, and the refusals outrun the port list they replaced. Write the
+policy for the shared leg; write the ports for the lone one.
+
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
