@@ -1,31 +1,35 @@
 % Target: rmp-iii-b-braid-one
 % Formula: The first braid panel moves string a past anyon i and string b.
-% Ink: Canonical public kernel two-rail patch with two crossing strings.
-% Boundary: Four lattice legs and four string endpoints are open.
+% Ink: Canonical public kernel plane patch with two crossing strings.
+% Boundary: Eight lattice legs run past the patch and four site legs leave the
+%   plane; both strings end below the lower rail.
 % Source: paper TN-Review-main.tex line 1675; author source ImagesReview Section
 %   III/ImagesReview Section III.tex lines 799-825
-% Capabilities: kernel, multi-strand-braid, crossing-order
+% Capabilities: kernel, plane-frame, multi-strand-braid, crossing-order
 \[
   \tenkzkernel
   \tndeclare{species}{operator}{hue=source:red}
-  \begin{tenkz}[rows={wire,wire}, cols=2, physical=updown]
-    % the two-by-two lattice patch: anyons j and i on the upper rail
+  % The author draws all four lattice lines inside one plane, so every one of
+  % them carries a virtual bond; the site index is the stub that leaves the
+  % plane, and the four stubs end in air.
+  \begin{tenkz}[lattice={2x2}, frame=plane, physical=up,
+                west=open, east=open, north=open, south=open]
+    % the two-by-two lattice patch: anyons j and i on the near rail
     \tn[at=(1,1), name=j, label pos=se]{j}
     \tn[at=(1,2), name=i, label pos=se]{i}
     \tn[at=(2,1), name=p]{}
     \tn[at=(2,2), name=q]{}
-    \tnwire{open w}{(1,1)} \tnwire{(1,2)}{open e}
-    \tnwire{open w}{(2,1)} \tnwire{(2,2)}{open e}
-    % string b leaves anyon j, laps over j's physical leg, and exits below;
-    % the declared crossing orders string over leg, as the source paints it
+    % string b leaves anyon j, laps over the lattice line that runs north out
+    % of j, and exits below; the declared crossing orders string over bond, as
+    % the source paints it
     \tnwire[kind=string, species=operator, name=b, route=arc,
-            via={0.4 ne of j, 0.4 nw of j, 0.4 w of j, 0.4 w of p},
-            cross={over at crossing of b and leg n of (1,1)}]{0.1 e of j}{open s}
+            via={0.3 ne of j, 0.3 nw of j, 0.4 w of j, 0.4 w of p},
+            cross={over at crossing of b and open-north-col-1}]{0.1 e of j}{open s}
     % string a rises from below through the lower rail into anyon i
     \tnwire[kind=string, species=operator, name=a, route=arc,
             via={midway p and q, 0.4 sw of i}]{open s}{i}
     % marker beads where the strings pierce lattice lines
-    \tn[at=crossing of b and leg n of (1,1), name=bb, label pos=e]{b}
+    \tn[at=crossing of b and open-north-col-1, name=bb, label pos=e]{b}
     \tn[at=0.4 w of j, name=bt]{}
     \tn[at=0.4 w of p, name=bs]{}
     \tn[at=midway p and q, name=am, label pos=se]{a}

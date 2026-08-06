@@ -773,6 +773,7 @@
         \notag
     \end{align}
     \begin{center}
+        \tenkzkernel
         % K_{3;k,l,h}(X) = B_{k,h}(X) (x) eta_{k,l} (x) eta_{l,h}: the
         % three-site closure of the sector-restricted MPO chain, after
         % regrouping its six bond-space legs (L_k,R_k,L_l,R_l,L_h,R_h),
@@ -789,32 +790,37 @@
         % Definition~\ref{def:mpdo_three_site_sector_closure}
         % (virtual-west=0 | virtual-east=0 | physical-up=6 |
         % physical-down=6 on both sides).
-        \begin{tenkz}[physical=updown, boundary=none, compact]
-            \tn[pill, wide=6, legs at={1,2,3,4,5,6},
-                up={$L_k$,$R_h$,$R_k$,$L_l$,$R_l$,$L_h$},
-                down={$L_k$,$R_h$,$R_k$,$L_l$,$R_l$,$L_h$}]
+        \begin{tenkz}[rows={wire}, cols=6, west=none, east=none]
+            \tn[skin=pill, wide=6,
+                ports={90@1:physical:$L_k$, 90@2:physical:$R_h$,
+                  90@3:physical:$R_k$, 90@4:physical:$L_l$,
+                  90@5:physical:$R_l$, 90@6:physical:$L_h$,
+                  270@1:physical:$L_k$, 270@2:physical:$R_h$,
+                  270@3:physical:$R_k$, 270@4:physical:$L_l$,
+                  270@5:physical:$R_l$, 270@6:physical:$L_h$}]
               {{\cal K}_{3;k,l,h}(X)}
         \end{tenkz}
         $\;=\;$
         % B_{k,h}(X): l_k and r_h flank the virtual matrix X on the
         % wire; their open legs are L_k and R_h.
-        \begin{tenkz}[physical=updown, boundary=none, compact]
-            \tn[up=$L_k$, down=$L_k$]{l_k} & \tnX{X} &
-            \tn[up=$R_h$, down=$R_h$]{r_h}
+        \begin{tenkz}[rows={wire}, cols=3, west=none, east=none]
+            \tn[label pos=225, ports={90:physical:$L_k$, 270:physical:$L_k$}]{l_k} &
+            \tn[skin=ring]{X} &
+            \tn[label pos=225, ports={90:physical:$R_h$, 270:physical:$R_h$}]{r_h}
         \end{tenkz}
         $\;\otimes\;$
         % eta_{k,l}: r_k and l_l share the contracted virtual bond
         % between sites k and l; their open legs are R_k and L_l.
-        \begin{tenkz}[physical=updown, boundary=none, compact]
-            \tn[up=$R_k$, down=$R_k$]{r_k} &
-            \tn[up=$L_l$, down=$L_l$]{l_l}
+        \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+            \tn[label pos=225, ports={90:physical:$R_k$, 270:physical:$R_k$}]{r_k} &
+            \tn[label pos=225, ports={90:physical:$L_l$, 270:physical:$L_l$}]{l_l}
         \end{tenkz}
         $\;\otimes\;$
         % eta_{l,h}: r_l and l_h share the contracted virtual bond
         % between sites l and h; their open legs are R_l and L_h.
-        \begin{tenkz}[physical=updown, boundary=none, compact]
-            \tn[up=$R_l$, down=$R_l$]{r_l} &
-            \tn[up=$L_h$, down=$L_h$]{l_h}
+        \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+            \tn[label pos=225, ports={90:physical:$R_l$, 270:physical:$R_l$}]{r_l} &
+            \tn[label pos=225, ports={90:physical:$L_h$, 270:physical:$L_h$}]{l_h}
         \end{tenkz}
     \end{center}
 \end{theorem}
@@ -870,6 +876,7 @@
           \notag
       \end{align}
       \begin{center}
+          \tenkzkernel
           % R_2(K_2(X))_{k,h} = a_kb_h B_{k,h}(X): the two-site
           % closure, restricted to sector pair (k,h) and traced over
           % its inner bond space R_k (x) L_h, factors into the scalar
@@ -885,15 +892,17 @@
           % no further horizontal index survives. Both sides carry
           % the same boundary signature (virtual-west=0 |
           % virtual-east=0 | physical-up=2 | physical-down=2).
-          \begin{tenkz}[physical=updown, boundary=none, compact]
-              \tn[pill, wide=2, legs at={1,2},
-                  up={{$L_k$},{$R_h$}}, down={{$L_k$},{$R_h$}}]
+          \begin{tenkz}[rows={wire}, cols=2, west=none, east=none]
+              \tn[skin=pill, wide=2,
+                  ports={90@1:physical:$L_k$, 90@2:physical:$R_h$,
+                    270@1:physical:$L_k$, 270@2:physical:$R_h$}]
                 {\mathfrak R_2({\cal K}_2(X))_{k,h}}
           \end{tenkz}
           $\;=\;a_kb_h\;$
-          \begin{tenkz}[physical=updown, boundary=none, compact]
-              \tn[up=$L_k$, down=$L_k$]{l_k} & \tnX{X} &
-              \tn[up=$R_h$, down=$R_h$]{r_h}
+          \begin{tenkz}[rows={wire}, cols=3, west=none, east=none]
+              \tn[label pos=225, ports={90:physical:$L_k$, 270:physical:$L_k$}]{l_k} &
+              \tn[skin=ring]{X} &
+              \tn[label pos=225, ports={90:physical:$R_h$, 270:physical:$R_h$}]{r_h}
           \end{tenkz}
       \end{center}
     \end{minipage}\hfill

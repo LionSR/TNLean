@@ -790,10 +790,10 @@
     spectral data of $W$ and of $\varphi$ with $\chi$.
     % Scope note: this is not the uniform BNT-label structure-coefficient
     % statement of Theorem 4.14(ii) (Cirac2016MPDO_arXiv) for R itself, nor
-    % the literal CPSV canonical form or the renormalization fixed-point
-    % property of Definition is_rfp_via_ts: those require the
-    % tensor-attached BNT algebra-structure witness for R, which is future
-    % work.
+    % the literal CPSV canonical form: those require the tensor-attached
+    % BNT algebra-structure witness for R, which is future work. The
+    % renormalization fixed-point property of Definition is_rfp_via_ts is
+    % established directly below, without that witness.
 \end{theorem}
 \begin{proof}\leanok
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -815,6 +815,72 @@
         \varphi(E_{01})&=\varphi(E_{10})=0.
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[The rescaling-stable tensor is a renormalization fixed
+    point]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
+    \leanok
+    \uses{def:is_rfp_via_ts,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The tensor $R$ of
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
+    renormalization fixed point in the sense of
+    Definition~\ref{def:is_rfp_via_ts}. The refinement map $\mathcal T$ has
+    two Kraus operators built from the eigenvectors of $W$, with amplitude
+    $5/8$ on the uniform eigenvector and $\sqrt7/8$ on the alternating
+    eigenvector. The coarse-graining map $\mathcal S$ has four Kraus
+    operators: two share the amplitude $1/\sqrt2$ and the eigenvectors of
+    $W$ on the physical-index pairs satisfying the bond-matching condition,
+    and two are a deterministic assignment on the pairs that fail it,
+    chosen so the family resolves the identity. This exhibits $R$ as a
+    full renormalization fixed-point example, without the tensor-attached
+    BNT algebra-structure witness anticipated in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
+    $(p',p'')\in\{0,1\}^2$ as above, and write $i_1\ast i_2:=(i_1',i_2'')$
+    for the physical index gluing the first bit of $i_1$ to the second bit
+    of $i_2$. The two-site physical operator is a gate-restricted, rescaled
+    pullback of the one-site physical operator along $\ast$:
+    \begin{align}
+        M_2(X)_{(i_1,i_2)(j_1,j_2)}
+            &=\frac{25}{32}\,\mathbb 1[i_1''=i_2']\,\mathbb 1[j_1''=j_2']\,
+              W(i_1'',j_1'')\,M_1(X)_{i_1\ast i_2,\,j_1\ast j_2},
+        \notag
+    \end{align}
+    vanishing whenever either indicator fails. Write $e_0=(1,1)$,
+    $e_1=(1,-1)$ for the eigenvectors of $W$ and $\lambda_0=1$,
+    $\lambda_1=7/25$ for the matching eigenvalues
+    (Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}). The
+    refinement map's two Kraus operators carry the amplitudes
+    $\sqrt{25\lambda_s/64}$ on $e_s$, and reassemble the rescaled local
+    factor from the eigendecomposition of $W$,
+    \begin{align}
+        \sum_{s\in\{0,1\}}\frac{25}{64}\lambda_s\,e_s(b)\,e_s(b')
+            &=\frac{25}{32}\,W(b,b'), &
+        b,b'&\in\{0,1\},
+        \notag
+    \end{align}
+    which is exactly the coefficient displayed above. The coarse-graining
+    map's two gated Kraus operators carry the shared amplitude $1/\sqrt2$
+    on $e_0,e_1$, and their resolution of the identity on the
+    bond-matching pairs is the single identity
+    \begin{align}
+        \frac12\sum_{s\in\{0,1\}}e_s(b)\,e_s(b')
+            &=\begin{cases}1,&b=b',\\0,&b\ne b',\end{cases} &
+        b,b'&\in\{0,1\}:
+        \notag
+    \end{align}
+    the case $b=b'$ is the trace-preserving normalization and the case
+    $b\ne b'$ the off-diagonal cancellation between the two gated Kraus
+    operators. The coarse-graining map's two ungated Kraus operators supply
+    a deterministic assignment on the bond-mismatched pairs, where the
+    two-site physical operator already vanishes by the displayed formula
+    above; together the four Kraus operators resolve the identity on the
+    full two-site domain.
 \end{proof}
 
 \begin{theorem}[The closed operator of $R$ attaches $\chi$ exactly]%

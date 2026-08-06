@@ -100,12 +100,14 @@
           { \l_tmpa_tl / port-label } \l_tmpb_tl
         \quark_if_no_value:NF \l_tmpb_tl
           {
-            \tl_if_eq:VnT \l_tmpb_tl {$q$}
+            % the record keeps the peeled mathematics; the kernel opens the
+            % math shift when the label is typeset (issue 5534)
+            \tl_if_eq:VnT \l_tmpb_tl {q}
               {
                 \int_gincr:N
                   \g__tenkz_test_consumed_policy_wire_label_int
               }
-            \tl_if_eq:VnT \l_tmpb_tl {$r$}
+            \tl_if_eq:VnT \l_tmpb_tl {r}
               {
                 \int_gincr:N
                   \g__tenkz_test_consumed_policy_wire_label_int

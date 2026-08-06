@@ -67,6 +67,47 @@ labelled_cup_beads=$(grep -c '^atom|.*|skin=ring' "$WORK/r_cup_label.tnlog" \
   echo "FAIL: labelled cups minted $labelled_cup_beads beads, expected 4" >&2
   exit 1
 }
+# One rule for the math shift: the two pictures of r_label_math_shift are the
+# same figure written with and without the author's own `$...$`, so their
+# records and their measured label boxes must agree.  The verbatim `ports=`
+# echo is exempt: it repeats the authored port list as typed, and the label
+# the kernel derives from it is the peeled `port-label=` field beside it.
+shift_records() {
+  awk -v half="$1" '
+    /^picture\|id=k2\|/ { seen = 1 }
+    /^(atom|wire|mark|kernel-boundary|stringbead)\|/ {
+      if ((half == "a" && !seen) || (half == "b" && seen)) print
+    }
+  ' "$WORK/r_label_math_shift.tnlog" | sed 's/|ports=[^|]*//'
+}
+shift_boxes() {
+  awk -v half="$1" '
+    /^picture\|id=k2\|/ { seen = 1 }
+    /^bbox\|.*\|class=label\|/ {
+      if ((half == "a" && !seen) || (half == "b" && seen)) print
+    }
+  ' "$WORK/r_label_math_shift.tnlog" | sed 's/picture=k[0-9]*|//; s/|id=[0-9]*//'
+}
+shifted_records=$(shift_records a)
+bare_records=$(shift_records b)
+[ -n "$shifted_records" ] && [ "$shifted_records" = "$bare_records" ] || {
+  echo "FAIL: the two label spellings left different records" >&2
+  diff <(printf '%s\n' "$shifted_records") <(printf '%s\n' "$bare_records") >&2 \
+    || true
+  exit 1
+}
+shifted_boxes=$(shift_boxes a)
+bare_boxes=$(shift_boxes b)
+[ -n "$shifted_boxes" ] && [ "$shifted_boxes" = "$bare_boxes" ] || {
+  echo "FAIL: the two label spellings measured different label boxes" >&2
+  diff <(printf '%s\n' "$shifted_boxes") <(printf '%s\n' "$bare_boxes") >&2 \
+    || true
+  exit 1
+}
+if printf '%s\n' "$shifted_records" | grep -Eq '\|(port-)?label=[^|]*\$'; then
+  echo "FAIL: a label record kept the author's math shift" >&2
+  exit 1
+fi
 for members in \
   'members=atom-2,atom-3,atom-4' \
   'members=atom-1,atom-2,atom-3,atom-4,atom-5,atom-6'; do
@@ -78,6 +119,56 @@ for members in \
 done
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
+  exit 1
+}
+# A restated bond is the same bond.  The three panels of r_bond_restated are
+# one 3x3 lattice: the policy's own twelve bonds, the same figure with two of
+# them restated by the body and carrying nothing, and the same two carrying a
+# species and a stroke.  The frame retires the pair the body claimed instead
+# of minting a second wire under it, so the bond count, the silhouettes, and
+# the exposed boundary hold across all three.
+restated_pane() {
+  awk -v pane="$1" -v pattern="$2" '
+    /^picture\|/ { seen++ }
+    $0 ~ pattern { if (seen == pane) print }
+  ' "$WORK/r_bond_restated.tnlog"
+}
+for pane in 1 2 3; do
+  [ "$(restated_pane "$pane" '^kernel-boundary[|]')" = \
+    'kernel-boundary|signature=open:e, open:e, open:e, open:n, open:n, open:n, open:s, open:s, open:s, open:w, open:w, open:w' ] || {
+    echo "FAIL: restating a bond moved panel $pane's exposed boundary" >&2
+    exit 1
+  }
+done
+for pane in 2 3; do
+  [ "$(restated_pane "$pane" '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 10 ] || {
+    echo "FAIL: panel $pane did not retire the two bonds its body restated" >&2
+    exit 1
+  }
+  for retired in bond-1-1-1-2 bond-2-3-3-3; do
+    if restated_pane "$pane" '[|]origin=grid[|]' | grep -Fq "|name=$retired|"; then
+      echo "FAIL: the frame minted $retired under the body's own wire" >&2
+      exit 1
+    fi
+  done
+done
+[ "$(restated_pane 1 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 12 ] || {
+  echo "FAIL: the unrestated control lost a policy bond" >&2
+  exit 1
+}
+[ "$(restated_pane 3 '^wire[|].*[|]species=blocked' | wc -l | tr -d ' ')" -eq 2 ] || {
+  echo "FAIL: the species did not reach the two restated bonds" >&2
+  exit 1
+}
+restated_glyphs() {
+  restated_pane "$1" '^glyph-geometry[|]' | sed 's/picture=k[0-9]*|//; s/owner=[0-9]*|//'
+}
+control_glyphs=$(restated_glyphs 1)
+keyless_glyphs=$(restated_glyphs 2)
+[ -n "$control_glyphs" ] && [ "$control_glyphs" = "$keyless_glyphs" ] || {
+  echo "FAIL: a keyless restatement moved the silhouettes it stands between" >&2
+  diff <(printf '%s\n' "$control_glyphs") <(printf '%s\n' "$keyless_glyphs") >&2 \
+    || true
   exit 1
 }
 [ "$(grep -c '|origin=open|' \
@@ -165,6 +256,118 @@ awk -F'|' '
   END { exit !(n > 1 && centre > east) }
 ' "$WORK/r_onwire_cup_arc.tnlog" || {
   echo "FAIL: the operator on the cup stands on the chord, not the arc" >&2
+  exit 1
+}
+# A leg with a free end has one model end, so it answers along the route it
+# inks.  Each address below was refused outright before issue 5566.
+for station in 'open-west-1|t=0.5' 'open-east-1|t=0.5' 'eastleg|t=0.75'; do
+  grep -Fq "stringbead|id=$station|x=" "$WORK/r_onwire_open_leg.tnlog" || {
+    echo "FAIL: no place was answered on the open leg $station" >&2
+    exit 1
+  }
+done
+# Each station lies on the side its leg leaves by, and the station on the
+# authored east leg lies beyond the silhouette the leg springs from.
+awk -F'|' '
+  /^picture\|id=k2\|/ { pic = 2 }
+  /^glyph-geometry\|/ {
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "xmax" && pic == 2 && !box) box = kv[2] / 65536
+    }
+  }
+  /^stringbead\|/ {
+    id = ""; x = ""
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "id") id = kv[2]
+      if (kv[1] == "x") { x = kv[2]; sub(/pt$/, "", x); x += 0 }
+    }
+    if (id == "open-west-1" && x < 0) west = 1
+    if (id == "open-east-1" && x > 0) east = 1
+    if (id == "eastleg" && x > box) beyond = 1
+  }
+  END { exit !(west && east && beyond) }
+' "$WORK/r_onwire_open_leg.tnlog" || {
+  echo "FAIL: a place on an open leg did not land on the leg" >&2
+  exit 1
+}
+# The dot standing on the north physical leg is the second picture's own atom.
+[ "$(grep -c '^atom|.*|skin=dot$' "$WORK/r_onwire_open_leg.tnlog" || true)" \
+    -eq 2 ] || {
+  echo "FAIL: an atom addressed to an open leg was not placed" >&2
+  exit 1
+}
+# An index type belongs to the port, not to the frame: a side face carries a
+# physical index, and the frame's own physical policy stands beside it.
+for signature in \
+  'kernel-boundary|signature=open:w, phys:e' \
+  'kernel-boundary|signature=open:w, phys:e, phys:n, phys:n, phys:n'; do
+  grep -Fxq "$signature" "$WORK/r_port_physical_side_face.tnlog" || {
+    echo "FAIL: a side-face physical index lost its boundary entry" >&2
+    exit 1
+  }
+done
+[ "$(grep -c '|port-face=0|.*|port-type=physical$' \
+      "$WORK/r_port_physical_side_face.tnlog" || true)" -eq 3 ] || {
+  echo "FAIL: the east face did not carry a physical index in every picture" >&2
+  exit 1
+}
+grep -Fq '|port-face=0|port-label=W|port-slot=1|port-type=physical' \
+    "$WORK/r_port_physical_side_face.tnlog" || {
+  echo "FAIL: a side-face physical port lost its tip label" >&2
+  exit 1
+}
+# A leg the picture's physical policy grows is a named wire record, so it can
+# be spoken about: each of the four legs of the first picture owns a record
+# under the canonical name, and a label, a bead, and a declared crossing all
+# reach a leg by that name (issue 5574).
+for leg in leg-n-1-1 leg-s-1-1 leg-n-1-2 leg-s-1-2; do
+  grep -Fq "|kind=index|name=$leg|origin=policy-leg|port-type=physical|" \
+      "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: the policy leg $leg owns no wire record" >&2
+    exit 1
+  }
+done
+for station in 'leg-n-1-1|t=0.5' 'leg-s-1-2|t=0.6' 'leg-s-1-2|t=0.3'; do
+  grep -Fq "stringbead|id=$station|x=" "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: no place was answered on the policy leg $station" >&2
+    exit 1
+  }
+done
+# The record is a name, not a topology: the boundary counts the same exposed
+# physical indices it counted when the policy leg owned no record.
+for signature in \
+  'kernel-boundary|signature=phys:n, phys:n, phys:s, phys:s' \
+  'kernel-boundary|signature=open:e, open:e, open:w, phys:s, phys:s, phys:s'
+do
+  grep -Fxq "$signature" "$WORK/r_onwire_policy_leg.tnlog" || {
+    echo "FAIL: the policy leg record moved the boundary signature" >&2
+    exit 1
+  }
+done
+# The station on the deferred leg of the second picture lies south of its
+# host, on the leg the picture draws rather than at the glyph it leaves.
+awk -F'|' '
+  /^picture\|id=k2\|/ { pic = 2 }
+  /^stringbead\|/ {
+    id = ""; y = ""
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "id") id = kv[2]
+      if (kv[1] == "y") { y = kv[2]; sub(/pt$/, "", y); y += 0 }
+    }
+    if (pic == 2 && id == "leg-s-1-2" && y < 0) south = 1
+  }
+  END { exit !south }
+' "$WORK/r_onwire_policy_leg.tnlog" || {
+  echo "FAIL: a place on a crossing-deferred policy leg did not land on it" >&2
+  exit 1
+}
+# A policy leg is named by a declared crossing under the same canonical name.
+grep -Fq 'over at crossing of h and leg-s-1-2' \
+    "$WORK/r_onwire_policy_leg.tnlog" || {
+  echo "FAIL: the canonical leg name is not a crossing operand" >&2
   exit 1
 }
 chain_ports=$(awk '/^picture\|id=k2\|/ { exit } /^wire\|.*origin=port-open/' \
@@ -558,6 +761,21 @@ grep -Eq '^mark.*[|]members=atom-[0-9]+([|]|$)' \
   echo "FAIL: a three-coordinate address did not select one basis member" >&2
   exit 1
 }
+# The transverse pairing rule types a closure between two layers of one
+# stacked site, and types nothing else: not an inter-cell bond, not the same
+# closure on a frame with no transverse axis, and not a `wire' carrier.
+grep -Fq '|name=pair|port-type=physical|' \
+    "$WORK/r_transverse_pairing.tnlog" || {
+  echo "FAIL: the ket-bra pairing of one plane cell was not typed physical" >&2
+  exit 1
+}
+for wire in inter flatpair carrier; do
+  if grep -F "|name=$wire|" "$WORK/r_transverse_pairing.tnlog" \
+      | grep -Fq 'port-type=physical'; then
+    echo "FAIL: wire '$wire' is not a transverse pairing but was typed physical" >&2
+    exit 1
+  fi
+done
 basis_override_atoms=$(grep -c '^atom|' "$WORK/r_basis_override.tnlog" || true)
 [ "$basis_override_atoms" -eq 2 ] || {
   echo "FAIL: an authored basis member did not override population" >&2
@@ -991,7 +1209,7 @@ for overlay in R M O X; do
   fi
 done
 if ! grep -F '|origin=port-open|' "$WORK/r_physical_policy.tnlog" |
-     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+     grep -Fq '|port-label=m|port-slot=1|port-type=physical'; then
   echo "FAIL: an overlay's explicit physical port depended on picture policy" >&2
   exit 1
 fi
@@ -1074,7 +1292,7 @@ if ! grep -F '|name=anyon|' "$affine_log" |
   exit 1
 fi
 if ! grep -F '|origin=port-open|' "$affine_log" |
-     grep -Fq '|port-label=$m$|port-slot=1|port-type=physical'; then
+     grep -Fq '|port-label=m|port-slot=1|port-type=physical'; then
   echo "FAIL: affine overlay explicit port depended on inherited policy" >&2
   exit 1
 fi
@@ -2401,14 +2619,14 @@ regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"
 
 fail=0
-for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9; do
+for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
   if ! cmp -s "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog"; then
     echo "FAIL: sugar pair $pair diverges from its kernel expansion" >&2
     diff "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog" >&2 || true
     fail=1
   fi
 done
-[ "$fail" -eq 0 ] && echo "PASS: 9 sugar spellings byte-identical to their expansions"
+[ "$fail" -eq 0 ] && echo "PASS: 10 sugar spellings byte-identical to their expansions"
 
 CURRENT="$WORK/current.sha256"
 ( cd "$WORK"

@@ -6,6 +6,16 @@ colour, line weight, glyph outline, slant, or equivalent planar routing is
 therefore faithful when it preserves the mathematical object, topology,
 boundary, labels, orientation, and declared crossing order.
 
+A render settles less than it appears to. A contracted index carries its type
+in the model and not in its ink, so physical and virtual contractions stroke
+alike and no comparison of pictures catches a mistyped one. The record stream
+catches it, and the boundary signature catches it only when the mistyping moves
+an open end. Every verdict below was reached at the render, so typing is the
+one property a re-review must read out of the record rather than off the page.
+`scripts/tenkz_contracted_types.py --all` reads it out: it compiles each target
+and reports how many of its contracted indices are physical and how many
+virtual, in both picture languages. Run it after any migration wave.
+
 This distinction controls the verdict:
 
 - **K1 — recorded property:** the model records the property but the renderer
@@ -83,9 +93,9 @@ hash-pinned visual check required before changing a verdict.
 | `rmp-iii-a-torus-three` | K2 | Outline versus solid fill on the enlarged crossing is house style. |
 | `rmp-iii-b-dyon` | K2 | The marked region and open string are present after route migration. |
 | `rmp-iii-b-self-braiding` | K2 | Tensor counts, winding classes, tail crossing, and boundary are complete. |
-| `rmp-iii-b-braid-one` | K2 | Stations and noncrossing winding strings match the source. |
+| `rmp-iii-b-braid-one` | K2 | Re-modelled on the plane frame 2026-08-06 (#5581): the author paints all four lattice lines inside one plane and hangs an out-of-plane stub on each site, so the two verticals the flat frame typed as contracted physical indices are now virtual bonds and the four site legs open into air. Stations and noncrossing winding strings still match, and b's bead moved from j's site leg to the lattice line running north out of j. Residue: the source runs its lattice legs past the stub reach and paints the anyons larger than the beads. |
 | `rmp-iii-b-braid-two` | K2 | The nested noncrossing strands match the flattened source. |
-| `rmp-iii-b-braid-three` | K2 | Lattice slant differs without changing the winding contraction. |
+| `rmp-iii-b-braid-three` | K2 | Re-modelled on the plane frame 2026-08-06 (#5581): the slant now matches the source, the two verticals the flat frame typed as contracted physical indices are virtual bonds, and the four site legs open into air. All six bead stations survive, with a's fourth bead moved from i's site leg to the lattice line running north out of i. Residue: the resolver contour is an upright box east of the source's sheared parallelogram, which the source uses to hide the a-b meeting. |
 | `rmp-iii-b-condensation` | K4 | Add the finite projection mark named by the verdict note. |
 | `rmp-iv-ground-space-1d` | K1 | Kernel migration 2026-08-05 (wave 4, Fable-verified) resolved the K3: X is the stock box at the standard size on the junction-spelled trace return. Residue: the recorded corner arcs of the return ink as straight diagonals (shared renderer, the boundary-algebra family limitation); re-review when arc inking lands. |
 | `rmp-iv-ground-space-2d` | K3 | Reclassified from X 2026-08-05 (wave 6, Fable-verified): the X row's premise is false — both GS2D.pdf and the paper's fig4 twin draw plain undirected legs at 900dpi, so `physical=up` records the source faithfully and #5360 is not implicated. Actual residue: physical legs pierce both region windows at the hull's full page-up reach, crowding the sheet where the source draws short ticks; prefer a family-level leg-reach metric fix, then re-review. |

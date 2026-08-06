@@ -72,6 +72,7 @@ The Choi--Jamio\l{}kowski isomorphism bends the input legs of the channel $T$
 around the maximally entangled pair $\ket{\Omega}$, presenting the map as the
 matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
 \begin{center}
+    \tenkzkernel
     % Formula: \tau=(T\otimes\id)(\ketbra{\Omega}{\Omega}).
     % Source verdict: Wolf, Proposition 2.1 and Equation (2.1), applies the
     %   two-wire map T\otimes\id to the maximally entangled projector.
@@ -83,13 +84,10 @@ matrix $\tau=(T\otimes\id)\ketbra{\Omega}{\Omega}$ on the doubled space:
     %   the other; the two west rails are the output indices of \tau.
     % Boundary signature: (virtual-west=2 | virtual-east=0 |
     % physical-up=0 | physical-down=0).
-    \begin{tenkz}[
-        rows={wire,wire},
-        east={cup=$\ketbra{\Omega}{\Omega}$},
-        west label=$\tau$
-    ]
-        \tnghost{} & \tnX[wires=2]{T\otimes\id} & \tnghost{} \\
-        \tnghost{} & & \tnghost{}
+    \begin{tenkz}[rows={wire,wire}, cols=2, west=open, east=cup]
+        \tn[skin=ring, wires=2,
+            ports={180@1:virtual:$\tau$, 180@2:virtual}]{T\otimes\id}
+        \tn[skin=ring, at=on cup-1-2 0.5]{\ketbra{\Omega}{\Omega}}
     \end{tenkz}
 \end{center}
 

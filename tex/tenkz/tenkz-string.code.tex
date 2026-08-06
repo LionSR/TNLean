@@ -70,15 +70,15 @@
 
 % ---------- state ------------------------------------------------------------
 \seq_new:N \l__tenkz_string_ids_seq          % declaration order
-\prop_new:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
+\__tenkz_prop_new_indexed:N \l__tenkz_string_kind_prop       % id -> open|closed|wind|around
 \prop_new:N \l__tenkz_string_source_prop     % id -> caller|generated
 \seq_new:N \l__tenkz_string_cross_seq        % {under}{over} pairs
-\prop_new:N \l__tenkz_string_cross_prop      % unordered pair -> declarations
-\prop_new:N \l__tenkz_string_join_prop       % unordered pair -> endpoint joins
-\prop_new:N \l__tenkz_string_touch_prop      % shared semantic wire ports
-\prop_new:N \l__tenkz_string_touch_all_prop  % topology-owned overlap route
-\prop_new:N \l__tenkz_string_touch_all_exempt_prop % route still checked
-\prop_new:N \l__tenkz_string_disjoint_prop   % model-proven disjoint pairs
+\__tenkz_prop_new_indexed:N \l__tenkz_string_cross_prop      % unordered pair -> declarations
+\__tenkz_prop_new_indexed:N \l__tenkz_string_join_prop       % unordered pair -> endpoint joins
+\__tenkz_prop_new_indexed:N \l__tenkz_string_touch_prop      % shared semantic wire ports
+\__tenkz_prop_new_indexed:N \l__tenkz_string_touch_all_prop  % topology-owned overlap route
+\__tenkz_prop_new_indexed:N \l__tenkz_string_touch_all_exempt_prop % route still checked
+\__tenkz_prop_new_indexed:N \l__tenkz_string_disjoint_prop   % model-proven disjoint pairs
 \seq_new:N \l__tenkz_string_gap_ids_seq      % under paths awaiting one gap pass
 \seq_new:N \l__tenkz_string_self_gap_ids_seq % self paths awaiting branch gap
 \seq_new:N \l__tenkz_string_processed_seq    % directed crossing pairs split
@@ -245,7 +245,7 @@
     \prop_put:Nnn \l__tenkz_string_source_prop {#1} {generated}
     \path [ spath/save = {#1} ] #2 ;
   }
-\cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV }
+\cs_generate_variant:Nn \__tenkz_string_save_route:nn { nV , VV }
 
 % load a token list of braced pairs {x,y}{x,y}... into the point seq
 \cs_new_protected:Npn \__tenkz_string_load_pts:n #1
@@ -1356,6 +1356,16 @@
       { \prg_return_false: }
   }
 \prg_generate_conditional_variant:Nnn \__tenkz_string_bends:n {V} {T,F,TF}
+
+% Whether a route was ever saved under #1.  A caller that means to measure a
+% route asks this first, so an id that names no ink is refused by the caller's
+% own diagnostic rather than by the bead's.
+\prg_new_protected_conditional:Npnn \__tenkz_string_inked:n #1 {T,F,TF}
+  {
+    \prop_if_in:NnTF \l__tenkz_string_kind_prop {#1}
+      { \prg_return_true: } { \prg_return_false: }
+  }
+\prg_generate_conditional_variant:Nnn \__tenkz_string_inked:n {V} {T,F,TF}
 
 % The point at arclength fraction #2 along string #1, exposed as TikZ
 % coordinate #3 and reported as an event.  PGF's markings decoration advances

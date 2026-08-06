@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=3, west={cup=$Y$}, east={cup=$X\rho^R$}]
+  \tn[at=(1,2), skin=ring, wires=2]{T^n}
+\end{tenkz}
+\mbox{p}
+\end{document}

@@ -51,6 +51,7 @@ on decay rates.
     Equivalently, insert $X$ at site $0$, propagate by $\E_A^n$, then insert
     $Y$ and take the trace.
     \begin{center}
+        \tenkzkernel
         % Formula: \langle X_0Y_n\rangle
         %   = \tr\!\left(Y\,\E_A^n(X\rho^R)\right).
         % Source verdict: Cirac2021Matrix, Section II.B.3, supports the
@@ -64,13 +65,9 @@ on decay rates.
         % instead feeds the adjoint and gives the same trace pairing with Y.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
-        \begin{tenkz}[
-            sandwich,
-            west={cup=$Y$},
-            east={cup=$X\rho^R$}
-        ]
-            \tnghost{} & \tnX[wires=2]{\E_A^n} & \tnghost{} \\
-            \tnghost{} & & \tnghost{}
+        \begin{tenkz}[rows={wire,wire}, cols=3,
+            west={cup=$Y$}, east={cup=$X\rho^R$}]
+            \tn[at=(1,2), skin=ring, wires=2]{\E_A^n}
         \end{tenkz}
     \end{center}
 \end{definition}

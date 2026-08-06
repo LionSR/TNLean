@@ -92,6 +92,15 @@ A generated grid endpoint begins with the virtual default. Matching authored
 port declarations may refine both ends to physical; declaring only one end
 physical still conflicts with its implicit virtual peer.
 
+The frame populates and the body overrides, for bonds as for atoms (§4). An
+authored index wire joining two adjacent cells *is* that pair's bond, so the
+frame mints no second wire under it and the pair's ports have one consumer.
+The wire's species, stroke, and route are the bond's, which is how a figure
+distinguishes the one edge it is about. The topology is unmoved: the same
+contraction, the same boundary signature, whether the restatement carries ink
+of its own or none. A travelling string states an operator index rather than
+that contraction and retires nothing.
+
 ### 2.3 Atom keys (13)
 
 | Key | Type | Values | Default | Diagnostic family |
@@ -173,7 +182,7 @@ the resolved endpoint type (§5).
 |---|---|---|---|
 | `form=` | small-enum | `bracket` `enclosure` `label` | `label` |
 | `species=` | identifier | — | empty |
-| `outline` | flag | — | false |
+| `tint` | flag | — | false |
 | `label pos=` | angle | a bearing in the host's own axes, or `auto` | `auto` |
 | `name=` | identifier | — | generated |
 
@@ -212,9 +221,15 @@ retired and by flattening the distinction the local-axes rule exists to make.
 The census gains one and says so.
 
 The census covers key values; positional label arguments are mathematics and
-carry no key type. Every registry row names exactly one value type; a shared
-key name has one type and one meaning at every scope that exposes it. The
-overload census (§11, meter M6) never rises.
+carry no key type. Being mathematics, they take one rule about the math
+shift: the kernel opens it and peels the author's outer `$...$` when a value
+brings its own, so `\tn{$\bar A$}` and `\tn{\bar A}` are the same figure and
+leave the same record. The rule governs atom bodies, all three mark forms,
+port labels, and the matrix a labelled cup stands on. A prose panel
+(`form=prose`) stands outside it, because it sets a sentence rather than a
+matrix. Every registry row names exactly one value type; a shared key name
+has one type and one meaning at every scope that exposes it. The overload
+census (§11, meter M6) never rises.
 
 ### 2.8 Closed alphabets
 
@@ -279,10 +294,11 @@ picture is a record (§2). It answers to `picture`, which is how a route or a
 mark names the whole diagram without a second grammar for doing so.
 
 A **selector** names a set of records — one address, a braced comma-separated
-list, or a range:
+list, a range, or one selector less another:
 
 ```
-<selector> ::= <address> | { <address>, <address>, ... } | <address> .. <address>
+<selector> ::= <term> | <selector> - <term>
+<term>     ::= <address> | { <address>, <address>, ... } | <address> .. <address>
 ```
 
 `x .. y` denotes the records between x and y in the frame's own order: two
@@ -290,6 +306,12 @@ cells corner a block, two places on one wire bound a closed sub-arc, two
 stations of a circle frame bound an arc. The range is written with two dots
 and never with a hyphen, because a cluster member is named `a-2-2` and a
 hyphen range cannot be told from a name the language itself generates. The
+`A - B` names what A names and B does not, and subtraction chains from the
+left, so a staircase and a complement are ordinary selections rather than
+shapes the grammar cannot state. The operator carries a space on each side:
+addresses hold hyphens of their own, and this is the one place a hyphen
+separates operands. Membership is a set of records, so the difference is the
+set difference on those records and nothing else — the
 model records the resolved membership and never the expression that produced
 it, so containment between two selections is a fact the model holds rather
 than a number an author types.
@@ -399,6 +421,19 @@ not identify a member. A bilayer is consequently one frame with two basis
 members and explicit intra-cell pairing wires; nesting cannot collapse it
 into two unrelated frames.
 
+An intra-cell pairing wire carries a type neither of its ends can state. A
+member address names a lattice place, and a place is not a port. The type
+belongs to the pairing, and the frame already knows which direction is
+physical: on a plane, a wire joining two different members of one cell, both
+of them declared `ket`, `op`, or `bra`, is that site's physical index — the
+ket-bra pairing that a partial trace or a double-layer expectation value sums
+over. It is recorded physical and strokes as the bond it already was. A `wire`
+member carries a virtual index beside the bond and pairs with nothing, and the
+same closure on a flat frame stays virtual, because only a plane declares the
+transverse physical axis such a pairing follows. The rule reads a closed
+pairing off the frame and the two row kinds exactly as `open up|down` reads an
+open transverse leg off its direction word.
+
 An authored atom at `(r,c,k)` replaces that member. An authored atom at
 `(r,c)` replaces the whole populated cell, so every member address in that
 cell resolves to the authored record rather than creating coincident
@@ -429,6 +464,8 @@ Consumers, circle pitch: `rmp-ii-triangle-network`, `rmp-iii-a-ground-space-1d`,
 `rmp-ii-idempotent`, `rmp-workbench-iii-eq51`.
 Consumers, basis: `rmp-workbench-iii-cluster-state`, `rmp-app-czx-state`,
 `rmp-iii-a-ghz-state`, `rmp-iii-b-condensation`.
+Consumers, transverse pairing: `rmp-ii-peps-marginal`,
+`rmp-iii-b-condensation`.
 
 ## 5. Wires
 
@@ -439,7 +476,13 @@ implicit virtual endpoint, not an untyped escape hatch. Matching declarations
 may refine a grid bond to physical. Endpoints generated by a policy that fixes
 a type retain that requirement and cannot be refined. Two physical endpoints
 produce the physical-leg stroke, while two virtual endpoints produce the bond
-stroke.
+stroke. Those two strokes are one ink once both ends are consumed: a contracted
+index carries its type in the record and not in its line, so no render tells a
+physical contraction from a virtual one. Type reaches the page only on an open
+leg, whose stub answers to it, and reaches a reviewer only through the record
+stream and the boundary signature. Two ends that state no type still leave one
+contraction typed: the pairing between two layers of one stacked site, which
+Section 4 types from the frame and the two row kinds rather than from its ends.
 `kind=pairing` is a declared skin's curved own-port route: it belongs to one
 host, remains addressable by arclength, and its declared list order controls
 the over-glyph ink and supplies the crossing order between pairings of that
@@ -540,8 +583,14 @@ closure wire carries a canonical name — `wrap-1` for row 1's trace return,
 cups, names are side-qualified (`cup-west-1-2`, `cup-east-1-2`) so every
 derived wire remains addressable as one named record. Generated legs take
 canonical names on the same rule and are named records like any other, which
-is why no address production is needed to reach one. Beads and labels attach
-to closures by the ordinary address grammar. A closed chain that renders open
+is why no address production is needed to reach one. That holds of the legs
+the `physical=` picture policy grows as well: each is a wire record named
+`leg-<face>-<row>-<col>`, the name the crossing grammar already spells, so a
+row whose legs are stated once by the policy loses nothing a per-atom port
+list would give. Beads and labels attach to
+closures by the ordinary address grammar. A leg has one model end and one
+free tip, so `on <leg> t` is read along the leg the picture draws, from the
+end the wire is written from to the end it is written to. A closed chain that renders open
 is impossible by construction: the closure IS a wire record, and every wire
 is drawn or errors.
 
@@ -581,8 +630,8 @@ and every mark carries a label placement already. The cut has no consumer in
 the benchmark or the blueprint and fails tenure outright, taking its sugar
 row with it.
 
-`species=` binds the mark's ink to a declared semantic identity; `outline`
-strokes the contour without tint. Nesting needs no key: containment between
+`species=` binds the mark's ink to a declared semantic identity; `tint`
+lays that ink over the paper the contour encloses. Nesting needs no key: containment between
 two selections is a fact the model holds, and concentric order (§5) steps the
 inner contour in by one clearance.
 
@@ -715,6 +764,13 @@ a child of a cluster. A relative point, a midpoint, a point on a wire, and a
 crossing are geometric constructions rather than further cells, so the
 picture policy gives them no physical index. Such an atom may still declare
 an independent physical port with `ports=` when the mathematics requires one.
+
+The policy pays on a uniform row, where two or more sites share the leg: one
+declaration replaces a port on every eligible atom, and a rare exception
+refuses it with `physical=none`. It costs on a sparse row, where a single
+site among many carries the index: every other site must then refuse the
+policy, and the refusals outrun the port list they replaced. Write the
+policy for the shared leg; write the ports for the lone one.
 
 | Sugar | Expands to |
 |---|---|

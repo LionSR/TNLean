@@ -1,0 +1,35 @@
+% Regression: one rule governs the math shift of every label.  The kernel
+% opens math around a label, and a value that arrives with its own outer
+% `$...$` has the pair peeled, so `\tn{$\bar A$}` and `\tn{\bar A}` reach the
+% page as the same tokens and leave the same record (issue 5534).  Before
+% this, the atom body accepted only the bare spelling while marks, ports and
+% the labelled cup accepted only the shifted one, and the doubled shift the
+% atom produced failed on content that cares -- an accent -- and blamed the
+% label rather than the doubling.
+%
+% The two pictures below are the same figure written the two ways.  Their
+% records must agree field for field, and the probe script compares them.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+% shifted spelling: every value carries its own math delimiters
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, west={cup=$\bar C$}]
+  \tn[name=SA, ports={90:physical:$\bar p$}]{$\bar A$} & \tn{$\bar B$}\\
+  \tn{$\bar A$} & \tn{$\bar B$}
+  \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)}
+  \tnmark[form=label, label pos=270]{SA}{$\bar g$}
+  \tnmark[form=enclosure]{(1,1) .. (1,2)}{$\bar e$}
+  \tnmark[form=bracket]{(2,1) .. (2,2)}{$\bar k$}
+\end{tenkz}
+\quad
+% bare spelling: every value is mathematics and the kernel opens the shift
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, west={cup=\bar C}]
+  \tn[name=SA, ports={90:physical:\bar p}]{\bar A} & \tn{\bar B}\\
+  \tn{\bar A} & \tn{\bar B}
+  \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)}
+  \tnmark[form=label, label pos=270]{SA}{\bar g}
+  \tnmark[form=enclosure]{(1,1) .. (1,2)}{\bar e}
+  \tnmark[form=bracket]{(2,1) .. (2,2)}{\bar k}
+\end{tenkz}
+\end{document}

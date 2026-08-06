@@ -440,6 +440,7 @@ ambient bond space.
     \centering
     $A=X\sqrt\rho\,U\,X^{-1}$
     \begin{center}
+        \tenkzkernel
         % A^i = X sqrt(rho) U^i X^{-1} (the corrected local packaging of
         % eq_III_NT_RFP, CPSV16 Lemma lem:charact-NT-pure-RFP, lines
         % 1275-1289; docs/paper-gaps/cpsv16_rfp_isometry_scope.tex):
@@ -449,12 +450,13 @@ ambient bond space.
         % (west, into sqrt(rho)) and beta (east, into X^{-1}).  Both
         % sides carry the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{A}
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{A}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{X} & \tnX{\sqrt\rho} & \tn[up=$i$]{U} & \tnX{X^{-1}}
+        \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+            \tn[skin=ring]{X} & \tn[skin=ring]{\sqrt\rho} &
+            \tn[label pos=s, ports={90:physical:$i$}]{U} & \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
     \caption{The square-root form of a normal renormalization fixed point:

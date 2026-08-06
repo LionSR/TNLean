@@ -44,6 +44,95 @@ finite family whose members keep one hue across figures.  Labels distinguish
 objects of the same kind; color does not encode identity.  A role may change
 style, never topology.
 
+\subsection{Stand a label on an open leg}
+
+An open leg is a wire like any other and it carries a name.  A side policy
+names its legs after the side and the row or column they leave --
+\tnval{open-west-1}, \tnval{open-south-col-3} -- the \tnkey{physical=} policy
+names each of its legs after the face and the cell it grows from,
+\tnval{leg-n-1-1} and \tnval{leg-s-2-3}, and an authored open end
+takes the name its \tncmd{tnwire} declares.  Address a fraction of that name
+to put a label or a bead on the leg:
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
+  \tn{A} & \tn{B}
+  \tnmark[form=label, label pos=90]{on open-west-1 0.5}{$\alpha$}
+\end{tenkz}
+\end{Verbatim}
+
+The station is read along the leg the picture draws.  A leg has one end on a
+glyph and one free tip, and fraction zero is the end the wire is written
+from, so a leg written from a port to \tnval{open e} runs outward while one
+written from \tnval{open w} to a port runs inward.  A policy leg runs outward
+from the glyph, so \tnval{on leg-n-1-1 0} is at the north face of the site in
+row one, column one, and \tnval{on leg-n-1-1 1} is at its free tip.  Stating a
+row's legs once with \tnkey{physical=} therefore costs nothing: the same name
+serves the crossing grammar and the address.
+
+\subsection{Say which bond is the one under discussion}
+
+A lattice draws its bonds from the row and column policy, and every one of
+them is the same black contraction.  A figure that distinguishes one edge --
+the edge being blocked, the bond being cut -- restates that bond in the body.
+An index wire between two adjacent cells is that pair's bond: the frame mints
+no second wire under it, and the wire's species, stroke, and route are the
+bond's.
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\tndeclare{species}{blocked-edge}{hue=source:red!65!black}
+\begin{tenkz}[rows={wire,wire}, cols=3]
+  \tn{} & \tn{} & \tn{}\\
+  \tn{} & \tn{} & \tn{}
+  \tnwire[species=blocked-edge]{(1,1)}{(1,2)}
+\end{tenkz}
+\end{Verbatim}
+
+The restatement is the same contraction, so the count of internal bonds and
+the exposed boundary do not move; only the ink does.  Either spelling of the
+pair reaches it -- the two cells, as above, or the two typed ports
+\tnval{a.0} and \tnval{b.180} on named atoms.  \tnkey{bonds=none} plus a
+hand-written wire for every pair states the same picture and is not a
+spelling anyone should use.  A travelling string is not a restatement: it
+carries an operator index, so it is drawn over the lattice and retires
+nothing.
+
+\subsection{Send a physical index sideways}
+
+An index type belongs to the port that carries it.  \tnkey{ports=} types each
+face on its own, so \tnval{0:physical} sends a physical index east exactly as
+\tnval{0:virtual} sends a virtual one, and a map drawn as a single atom types
+its two faces differently:
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+  \tn[at=(1,1), skin=box, ports={180:virtual:V, 0:physical:W}]{A}
+\end{tenkz}
+\end{Verbatim}
+
+\tnkey{physical=} is a picture policy, not the only source of a physical
+index: it gives every frame-cell atom one outward physical port on the
+frame's own outward face.  The two spellings stand side by side, and neither
+claims the other's face.
+
+The policy earns its place on a uniform row: state it once and every site
+takes the leg, with the rare exception refusing it by
+\tnkey{physical=none}.  It costs on a sparse row, where a single site among
+many carries the index -- every other site must then refuse it, and the
+refusals outrun the port list they replaced.  Reach for the policy when two
+or more sites share the leg; write the ports when only one does:
+
+\begin{Verbatim}[fontsize=\small,frame=leftline]
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=5]
+  \tn{} & \tn{} & \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{} &
+  \tn{} & \tn{}
+\end{tenkz}
+\end{Verbatim}
+
 \subsection{Keep a physical index out of a projected sheet}
 
 There are five directions at a PEPS tensor, but only four lie in the sheet.
