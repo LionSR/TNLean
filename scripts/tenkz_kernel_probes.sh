@@ -208,6 +208,66 @@ awk -F'|' '
   echo "FAIL: the operator on the cup stands on the chord, not the arc" >&2
   exit 1
 }
+# A leg with a free end has one model end, so it answers along the route it
+# inks.  Each address below was refused outright before issue 5566.
+for station in 'open-west-1|t=0.5' 'open-east-1|t=0.5' 'eastleg|t=0.75'; do
+  grep -Fq "stringbead|id=$station|x=" "$WORK/r_onwire_open_leg.tnlog" || {
+    echo "FAIL: no place was answered on the open leg $station" >&2
+    exit 1
+  }
+done
+# Each station lies on the side its leg leaves by, and the station on the
+# authored east leg lies beyond the silhouette the leg springs from.
+awk -F'|' '
+  /^picture\|id=k2\|/ { pic = 2 }
+  /^glyph-geometry\|/ {
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "xmax" && pic == 2 && !box) box = kv[2] / 65536
+    }
+  }
+  /^stringbead\|/ {
+    id = ""; x = ""
+    for (i = 1; i <= NF; i++) {
+      split($i, kv, "=")
+      if (kv[1] == "id") id = kv[2]
+      if (kv[1] == "x") { x = kv[2]; sub(/pt$/, "", x); x += 0 }
+    }
+    if (id == "open-west-1" && x < 0) west = 1
+    if (id == "open-east-1" && x > 0) east = 1
+    if (id == "eastleg" && x > box) beyond = 1
+  }
+  END { exit !(west && east && beyond) }
+' "$WORK/r_onwire_open_leg.tnlog" || {
+  echo "FAIL: a place on an open leg did not land on the leg" >&2
+  exit 1
+}
+# The dot standing on the north physical leg is the second picture's own atom.
+[ "$(grep -c '^atom|.*|skin=dot$' "$WORK/r_onwire_open_leg.tnlog" || true)" \
+    -eq 2 ] || {
+  echo "FAIL: an atom addressed to an open leg was not placed" >&2
+  exit 1
+}
+# An index type belongs to the port, not to the frame: a side face carries a
+# physical index, and the frame's own physical policy stands beside it.
+for signature in \
+  'kernel-boundary|signature=open:w, phys:e' \
+  'kernel-boundary|signature=open:w, phys:e, phys:n, phys:n, phys:n'; do
+  grep -Fxq "$signature" "$WORK/r_port_physical_side_face.tnlog" || {
+    echo "FAIL: a side-face physical index lost its boundary entry" >&2
+    exit 1
+  }
+done
+[ "$(grep -c '|port-face=0|.*|port-type=physical$' \
+      "$WORK/r_port_physical_side_face.tnlog" || true)" -eq 3 ] || {
+  echo "FAIL: the east face did not carry a physical index in every picture" >&2
+  exit 1
+}
+grep -Fq '|port-face=0|port-label=W|port-slot=1|port-type=physical' \
+    "$WORK/r_port_physical_side_face.tnlog" || {
+  echo "FAIL: a side-face physical port lost its tip label" >&2
+  exit 1
+}
 chain_ports=$(awk '/^picture\|id=k2\|/ { exit } /^wire\|.*origin=port-open/' \
   "$WORK/r_ports_chain_placed.tnlog" | sed 's/|from=addr-[0-9]*//')
 at_ports=$(awk '/^picture\|id=k2\|/ { seen = 1 }
