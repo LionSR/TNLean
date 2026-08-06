@@ -121,6 +121,56 @@ grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
 }
+# A restated bond is the same bond.  The three panels of r_bond_restated are
+# one 3x3 lattice: the policy's own twelve bonds, the same figure with two of
+# them restated by the body and carrying nothing, and the same two carrying a
+# species and a stroke.  The frame retires the pair the body claimed instead
+# of minting a second wire under it, so the bond count, the silhouettes, and
+# the exposed boundary hold across all three.
+restated_pane() {
+  awk -v pane="$1" -v pattern="$2" '
+    /^picture\|/ { seen++ }
+    $0 ~ pattern { if (seen == pane) print }
+  ' "$WORK/r_bond_restated.tnlog"
+}
+for pane in 1 2 3; do
+  [ "$(restated_pane "$pane" '^kernel-boundary[|]')" = \
+    'kernel-boundary|signature=open:e, open:e, open:e, open:n, open:n, open:n, open:s, open:s, open:s, open:w, open:w, open:w' ] || {
+    echo "FAIL: restating a bond moved panel $pane's exposed boundary" >&2
+    exit 1
+  }
+done
+for pane in 2 3; do
+  [ "$(restated_pane "$pane" '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 10 ] || {
+    echo "FAIL: panel $pane did not retire the two bonds its body restated" >&2
+    exit 1
+  }
+  for retired in bond-1-1-1-2 bond-2-3-3-3; do
+    if restated_pane "$pane" '[|]origin=grid[|]' | grep -Fq "|name=$retired|"; then
+      echo "FAIL: the frame minted $retired under the body's own wire" >&2
+      exit 1
+    fi
+  done
+done
+[ "$(restated_pane 1 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 12 ] || {
+  echo "FAIL: the unrestated control lost a policy bond" >&2
+  exit 1
+}
+[ "$(restated_pane 3 '^wire[|].*[|]species=blocked' | wc -l | tr -d ' ')" -eq 2 ] || {
+  echo "FAIL: the species did not reach the two restated bonds" >&2
+  exit 1
+}
+restated_glyphs() {
+  restated_pane "$1" '^glyph-geometry[|]' | sed 's/picture=k[0-9]*|//; s/owner=[0-9]*|//'
+}
+control_glyphs=$(restated_glyphs 1)
+keyless_glyphs=$(restated_glyphs 2)
+[ -n "$control_glyphs" ] && [ "$control_glyphs" = "$keyless_glyphs" ] || {
+  echo "FAIL: a keyless restatement moved the silhouettes it stands between" >&2
+  diff <(printf '%s\n' "$control_glyphs") <(printf '%s\n' "$keyless_glyphs") >&2 \
+    || true
+  exit 1
+}
 [ "$(grep -c '|origin=open|' \
       "$WORK/r_plane_open_perimeter.tnlog" || true)" -eq 12 ] || {
   echo "FAIL: four open plane sides did not materialize 12 perimeter wires" >&2

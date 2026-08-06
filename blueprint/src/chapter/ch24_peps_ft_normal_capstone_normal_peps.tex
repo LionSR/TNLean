@@ -40,16 +40,39 @@ product states, and the square lattice.
         % indices, hence boundary type (V,P)=(28,0).
         % Source verdict: exact square-lattice specialization of the first
         % hypothesis in arXiv:1804.04964, paper_normal.tex:1475--1499.
-        \begin{tenkzlattice}[rows=7, cols=7, boundary legs]
-            \tnregion[slot=selected, label={$A_1$},
-                label at=center]{(4-6,2-3)}
-            \tnregion[slot=secondary, label={$A_2$},
-                label at=center]{(3-4,4-6)}
-            \tnregion[slot=complement, outline, label={$A_3$},
-                label at=north]
-                {(1-7,1-7) - (4-6,2-3) - (3-4,4-6)}
-            \tnedge[distinguished]{(4,3)-(4,4)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \tndeclare{species}{blocked-edge}{hue=source:red!65!black}
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=7,
+            west=open, east=open, north=open, south=open]
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} \\
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
+            \tn[skin=dot]{}
+            \tnwire[species=blocked-edge]{(4,3)}{(4,4)}
+            \tnmark[form=enclosure, slot=selected, tint]
+                {(4,2) .. (6,3)}{$A_1$}
+            \tnmark[form=enclosure, slot=secondary, tint]
+                {(3,4) .. (4,6)}{$A_2$}
+            \tnmark[form=enclosure, slot=complement, label pos=n]
+                {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
+        \end{tenkz}
         $\qquad\text{edge blocking}$
     \end{tenkzequation}
     \begin{tenkzequation}
