@@ -2236,3 +2236,34 @@ else.
 |---|---|
 | flag:consumers:command:tnedge | dies at the language landing with every 0.7 lattice command: an edge is an ordinary `\tnwire` of kind index, and a generated one is now restatable by the body; the two migrated PEPS panels retire all but one blueprint consumer, and the tenure it loses is the one this row already spent; expiry 0.9 |
 | flag:consumers:key:connection:distinguished | dies with `\tnedge` it rides: a distinguished edge is a restated bond carrying a declared `species=`, which is how the two migrated panels now say it; the single remaining blueprint consumer goes with the lattice dialect at S4; expiry 0.9 |
+
+### 2026-08-06 — the commutative diagrams leave the language
+
+The six blueprint `tenkzcd` pictures are respelled onto plain tikz-cd,
+which is where the signed contract sends them: commutative diagrams
+belong to tikz-cd, outside this language (`LANGUAGE-1.0` §10). The four
+typed-map figures keep their ink through one preamble style — a channel
+arrow is a headless stroke of wire weight in the marked hue, its label
+seated on the stroke — and the two coherence pentagons take the ordinary
+category-theorist's spelling, a matrix with blank cells, their `\tntree`
+bodies unchanged. Every blueprint `R-cd` row in `DISPOSITIONS.md` is
+discharged; the environment's remaining consumers are standalone
+fixtures awaiting their own redraws.
+
+M3 falls from 29 to 24: the two `radius=`, one `column sep=`, and two
+`row sep=` occurrences that rode the retired pictures were the metered
+escapes #5085 left open until this migration. M1 stays at 140 kernel
+rows and 201 total, M2 at 228 parser paths, and M4 at 25.94 — the
+registry and the benchmark corpus are untouched. Seven rows lose their
+last demand-corpus consumers with the respelling and take their
+verdicts below.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:environment:tenkzcd | tombstoned by contract: commutative diagrams belong to tikz-cd, outside this language (`LANGUAGE-1.0` §10); the blueprint respelling leaves only fixture consumers, which go with their own `R-cd` redraws; deleted at the S4 swap; expiry 0.9 |
+| flag:consumers:command:tnarrow | tombstoned by contract: `\tnarrow` migrates to `\tnwire[dir=to]` (`LANGUAGE-1.0` §10), and a commutative-diagram arrow is tikz-cd's own `\arrow`, outside the language; the respelling retired its last demand-corpus uses; expiry 0.9 |
+| flag:consumers:key:picture:maps | tombstoned by contract: `maps` died with `tenkzcd` (`LANGUAGE-1.0` §10); its only demand-corpus consumers were the respelled typed-map figures; expiry 0.9 |
+| flag:consumers:key:connection:from | dies with the `\tnarrow` declarations that addressed it: a tikz-cd arrow names its target cell directly, and a kernel wire names both endpoints as arguments; expiry 0.9 |
+| flag:consumers:key:connection:to | dies with the `\tnarrow` declarations that addressed it, exactly as `from=` does; expiry 0.9 |
+| flag:consumers:key:connection:species | dies at the S4 swap with the 0.7 connection tier it belongs to; the kernel wire carries its own signed `species=` row, and the respelled arrows carry their type in the preamble style; expiry 0.9 |
+| flag:consumers:key:setup:species | dies as a name-list: `\tndeclare{species}{name}{hue=...}` is the one declaration door, the blueprint already declares every species through it, and the last bare name-list rode the retired `tenkzcd` opt-in; expiry 0.9 |
