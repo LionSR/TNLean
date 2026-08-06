@@ -840,16 +840,47 @@
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}.
 \end{theorem}
 \begin{proof}\leanok
-    On the physical-index pairs satisfying the bond-matching condition,
-    the two-site physical operator is the one-site physical operator
-    rescaled by $25/32$ and by the corresponding entry of $W$; on every
-    other pair it vanishes. The refinement map reassembles $W$ from its
-    eigendecomposition against the one-site physical operator. The
-    coarse-graining map's gated Kraus operators reassemble $W$ in the
-    opposite direction, and its ungated Kraus operators annihilate the
-    vanishing entries; each of the two families resolves the identity, the
-    second using orthogonality of the eigenvectors of $W$ on distinct bond
-    bits.
+    Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
+    $(p',p'')\in\{0,1\}^2$ as above, and write $i_1\ast i_2:=(i_1',i_2'')$
+    for the physical index gluing the first bit of $i_1$ to the second bit
+    of $i_2$. The two-site physical operator is a gate-restricted, rescaled
+    pullback of the one-site physical operator along $\ast$:
+    \begin{align}
+        M_2(X)_{(i_1,i_2)(j_1,j_2)}
+            &=\frac{25}{32}\,\mathbb 1[i_1''=i_2']\,\mathbb 1[j_1''=j_2']\,
+              W(i_1'',j_1'')\,M_1(X)_{i_1\ast i_2,\,j_1\ast j_2},
+        \notag
+    \end{align}
+    vanishing whenever either indicator fails. Write $e_0=(1,1)$,
+    $e_1=(1,-1)$ for the eigenvectors of $W$ and $\lambda_0=1$,
+    $\lambda_1=7/25$ for the matching eigenvalues
+    (Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}). The
+    refinement map's two Kraus operators carry the amplitudes
+    $\sqrt{25\lambda_s/64}$ on $e_s$, and reassemble the rescaled local
+    factor from the eigendecomposition of $W$,
+    \begin{align}
+        \sum_{s\in\{0,1\}}\frac{25}{64}\lambda_s\,e_s(b)\,e_s(b')
+            &=\frac{25}{32}\,W(b,b'), &
+        b,b'&\in\{0,1\},
+        \notag
+    \end{align}
+    which is exactly the coefficient displayed above. The coarse-graining
+    map's two gated Kraus operators carry the shared amplitude $1/\sqrt2$
+    on $e_0,e_1$, and their resolution of the identity on the
+    bond-matching pairs is the single identity
+    \begin{align}
+        \frac12\sum_{s\in\{0,1\}}e_s(b)\,e_s(b')
+            &=\begin{cases}1,&b=b',\\0,&b\ne b',\end{cases} &
+        b,b'&\in\{0,1\}:
+        \notag
+    \end{align}
+    the case $b=b'$ is the trace-preserving normalization and the case
+    $b\ne b'$ the off-diagonal cancellation between the two gated Kraus
+    operators. The coarse-graining map's two ungated Kraus operators supply
+    a deterministic assignment on the bond-mismatched pairs, where the
+    two-site physical operator already vanishes by the displayed formula
+    above; together the four Kraus operators resolve the identity on the
+    full two-site domain.
 \end{proof}
 
 \begin{definition}[Linearly independent operator family]%
