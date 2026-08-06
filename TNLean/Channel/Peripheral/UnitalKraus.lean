@@ -43,7 +43,7 @@ theorem IsKrausCP.norm_apply_le_of_map_one_eq_one
     {E : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ}
     (hE : IsKrausCP E) (hOne : E 1 = 1) (X : Matrix α α ℂ) :
     ‖E X‖ ≤ ‖X‖ := by
-  letI : CStarAlgebra (Matrix α α ℂ) := matrixCStarAlgebra α
+  letI : CStarAlgebra (Matrix α α ℂ) := Matrix.matrixCStarAlgebra
   have hPos : IsPositiveMap E := fun _ hA ↦ hE.map_posSemidef hA
   have hXX :
       Xᴴ * X ≤ (algebraMap ℝ (Matrix α α ℂ)) (‖X‖ ^ 2) := by
