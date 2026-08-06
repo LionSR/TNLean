@@ -91,16 +91,18 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
   `IsRFPViaTS R`.  Documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
-* The literal CPSV canonical form of `R.toMPSTensor` (single bond‑4 block
-with weight `μ = (25/32)² = 625/1024`, eq. II_CF1) is separate future work,
-not needed for `IsRFPViaTS R` as defined in this repository (see the
-`RescalingStableLengthDependentRFPViaTS` file above).
-The letters of `R` form the full matrix‑unit basis of M₄ (irreducibility);
-the doubled transfer map is `φ ⊗ φ` with `φ(Y) = Σ_a A^a Y (A^a)^†`
-unital and having eigenvalues `{1, 7/25, 0, 0}` (`transferMap_A_eigen`),
-hence primitive with spectral radius 1, matching Theorem 4.14's converse
-route through canonical form; the direct route via `S`/`T` bypasses that
-machinery.
+* The literal CPSV canonical form of `R.toMPSTensor` (eq. `II_CF1`) is proved in
+  `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
+  (`R_toMPSTensor_isCPSVCanonicalForm`): a single retained normal block occupying the
+  full ambient bond dimension `4`, with weight `weight = √(337/512)`, the unique
+  positive scalar making the retained block's transfer map exactly idempotent (hence
+  spectral-radius one).  This corrects an earlier guess in this docstring of
+  `μ = (25/32)² = 625/1024`, which did not account for `transferMap R.toMPSTensor`'s
+  rank-one closed form; see that file's module docstring for the derivation.  The
+  letters of `R` form the full matrix‑unit basis of M₄ (irreducibility,
+  `R_toMPSTensor_isInjective`); this is not needed for `IsRFPViaTS R` as defined in
+  this repository (see the `RescalingStableLengthDependentRFPViaTS` file above), whose
+  direct route via `S`/`T` bypasses the canonical-form machinery.
 
 ## References
 
@@ -558,13 +560,14 @@ units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lamb
 (*Remaining gap*).
 
 **Scope restriction (transfer-map eigenvalue groundwork):** this
-characterizes the per-site map `φ`, not the doubled transfer map of
-`R.toMPSTensor` itself, nor the primitivity, spectral-radius-one, and
-irreducibility lemmas needed for `IsNormalTensor` and the literal CPSV
-canonical form (`MPSTensor.IsCPSVCanonicalForm`).  Those require the
-Kronecker-product factorization of `transferMap R.toMPSTensor` in terms of
-`φ`, which is future work; see the module docstring `Remaining gap`
-section and `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
+characterizes the per-site map `φ`, not `transferMap R.toMPSTensor` itself.
+The primitivity, spectral-radius-one, and irreducibility lemmas needed for
+`IsNormalTensor` and the literal CPSV canonical form
+(`MPSTensor.IsCPSVCanonicalForm`) are proved directly from
+`transferMap R.toMPSTensor`'s own rank-one closed form (not from a
+Kronecker-product factorization in terms of `φ`) in
+`TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`
+(`R_toMPSTensor_isCPSVCanonicalForm`). -/
 theorem transferMap_A_eigen :
     MPSTensor.transferMap A 1 = (1 : ℂ) • 1 ∧
       MPSTensor.transferMap A !![(1 : ℂ), 0; 0, -1] =
