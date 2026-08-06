@@ -6,12 +6,24 @@ example and add only the policy the mathematics requires.
 
 \subsection{Keep a map open; close a scalar}
 
-The default open boundary is right for a matrix word or an unapplied transfer
-map.  Add \tnkey{boundary=none} only when the formula is a fully contracted
-scalar.  Use \tnkey{boundary=periodic} for a same-row trace.  Use
-\tnkey{west=cup} or \tnkey{east=cup} to connect adjacent layers.  These three
-closures can have the same count of open ends and still mean different
-operations.
+The two surfaces answer an unstated side differently, and the difference is
+worth knowing before the first picture.  In \tnenv{tenkz} and its relatives
+the open boundary is the default: a matrix word or an unapplied transfer map
+draws its west and east stubs unbidden, and \tnkey{boundary=none} is what
+seals them when the formula is a fully contracted scalar.  Under
+\tncmd{tenkzkernel} a side exposes indices only when it says so.  A kernel
+picture that states no side policy draws no side leg and carries the empty
+boundary signature on those sides, so a map keeps its ends by writing
+\tnkey{boundary=open} -- or \tnkey{west=open} for one side alone -- and
+\tnkey{boundary=none} is the explicit spelling of what the picture already
+does.  A kernel frame's grid places atoms; it does not claim that every rim
+cell owns a dangling index, which is why a circuit pyramid or a single
+four-legged junction collects no legs it did not ask for.
+
+Both surfaces agree on the rest of the alphabet.  Use
+\tnkey{boundary=periodic} for a same-row trace.  Use \tnkey{west=cup} or
+\tnkey{east=cup} to connect adjacent layers.  These closures can have the
+same count of open ends and still mean different operations.
 
 \subsection{Stack ket, operator, and bra}
 
