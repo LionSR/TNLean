@@ -62,7 +62,7 @@ decomposable. See `docs/paper-gaps/breuer_hall_even_dim_restriction.tex`.
   Phys. Rev. Lett. 97, 080501 (2006), arXiv:quant-ph/0605036]
 -/
 
-open scoped Matrix ComplexOrder MatrixOrder
+open scoped Matrix ComplexOrder MatrixOrder Kronecker
 open Matrix Finset
 
 variable {d : ℕ}
@@ -170,5 +170,147 @@ theorem one_add_swapMatrix_posSemidef (d : ℕ) :
       rw [htwice]; push_cast; ring
     rw [hS, Complex.zero_le_real]
     positivity
+
+/-! ## Antisymmetry consequences -/
+
+/-- The conjugate transpose of the transpose of an antisymmetric matrix is minus its own
+conjugate transpose: `(Uᵀ)ᴴ = -Uᴴ`. -/
+theorem transpose_conjTranspose_of_antisymmetric {U : Matrix (Fin d) (Fin d) ℂ}
+    (hUanti : Uᵀ = -U) : (Uᵀ)ᴴ = -Uᴴ := by
+  rw [hUanti]; simp
+
+/-- For antisymmetric unitary `U`, `Uᵀ * (Uᵀ)ᴴ = 1`. -/
+theorem transpose_mul_transpose_conjTranspose_eq_one {U : Matrix (Fin d) (Fin d) ℂ}
+    (hUanti : Uᵀ = -U) (hUunit : Uᴴ * U = 1) : Uᵀ * (Uᵀ)ᴴ = 1 := by
+  rw [transpose_conjTranspose_of_antisymmetric hUanti, hUanti, neg_mul_neg,
+    mul_eq_one_comm.mp hUunit]
+
+/-! ## The conjugated symmetric-subspace witness -/
+
+/-- The projector onto the symmetric subspace, conjugated by `Uᴴ` on the left and `U` on
+the right: `(Uᴴ ⊗ 1)(1 + F)(U ⊗ 1)`. Its first-factor partial transpose recovers
+`1 + twistedOmegaProj U` (`partialTransposeLeft_breuerHallSymmetricWitness`). -/
+noncomputable def breuerHallSymmetricWitness (U : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  (Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * (1 + Matrix.swapMatrix d) *
+    (U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))
+
+theorem breuerHallSymmetricWitness_posSemidef (U : Matrix (Fin d) (Fin d) ℂ) :
+    (breuerHallSymmetricWitness U).PosSemidef := by
+  have hconj : (Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))ᴴ = U ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ) := by
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_conjTranspose,
+      Matrix.conjTranspose_one]
+  rw [breuerHallSymmetricWitness, ← hconj]
+  exact (one_add_swapMatrix_posSemidef d).mul_mul_conjTranspose_same _
+
+/-! ## Partial-transpose identities -/
+
+theorem partialTransposeLeft_one (d d' : ℕ) :
+    Matrix.partialTransposeLeft (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = 1 := by
+  ext p q
+  simp only [Matrix.partialTransposeLeft_apply, Matrix.one_apply, Prod.ext_iff]
+  congr 1
+  simp [eq_comm]
+
+/-- The first-factor partial transpose of the SWAP operator is the (identity-)twisted
+maximally entangled projector: `F^{T₁} = twistedOmegaProj 1`. -/
+theorem partialTransposeLeft_swapMatrix (d : ℕ) :
+    Matrix.partialTransposeLeft (Matrix.swapMatrix d) =
+      twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ) := by
+  ext p q
+  simp only [Matrix.partialTransposeLeft_apply, Matrix.swapMatrix_apply, twistedOmegaProj_apply,
+    Matrix.one_apply]
+  by_cases h1 : p.1 = p.2 <;> by_cases h2 : q.1 = q.2 <;>
+    simp [h1, h2, eq_comm]
+
+/-- A general conjugation identity: conjugating a rank-one outer product `v vᴴ` by `M`
+recovers the rank-one outer product of `M *ᵥ v`. -/
+theorem vecMulVec_mulVec_conjTranspose {m n : Type*} [Fintype n]
+    (M : Matrix m n ℂ) (v : n → ℂ) :
+    M * Matrix.vecMulVec v (star v) * Mᴴ =
+      Matrix.vecMulVec (M *ᵥ v) (star (M *ᵥ v)) := by
+  rw [Matrix.mul_vecMulVec, Matrix.vecMulVec_mul, Matrix.vecMul_conjTranspose, star_star]
+
+/-- `(Uᵀ ⊗ 1)` applied to the identity-twisted vector `twistedOmegaVec 1` reads off the
+transpose entry `U(k, i)`. -/
+theorem transpose_kronecker_one_mulVec_twistedOmegaVec_one (U : Matrix (Fin d) (Fin d) ℂ) :
+    (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *ᵥ twistedOmegaVec (1 : Matrix (Fin d) (Fin d) ℂ)
+      = fun p => U p.2 p.1 := by
+  ext p
+  change ∑ q : Fin d × Fin d, (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) p q *
+      twistedOmegaVec (1 : Matrix (Fin d) (Fin d) ℂ) q = U p.2 p.1
+  rw [Finset.sum_eq_single (p.2, p.2)]
+  · simp [Matrix.kroneckerMap_apply, twistedOmegaVec, Matrix.transpose_apply]
+  · rintro ⟨j1, j2⟩ _ hj
+    rcases eq_or_ne j2 p.2 with hj2 | hj2
+    · subst hj2
+      have hne : j1 ≠ p.2 := fun h => hj (by rw [h])
+      simp [Matrix.kroneckerMap_apply, twistedOmegaVec, Matrix.one_apply_ne hne]
+    · have hz : (1 : Matrix (Fin d) (Fin d) ℂ) p.2 j2 = 0 := Matrix.one_apply_ne hj2.symm
+      simp [Matrix.kroneckerMap_apply, twistedOmegaVec, hz]
+  · simp
+
+/-- For antisymmetric `U`, `(Uᵀ ⊗ 1) *ᵥ twistedOmegaVec 1 = -twistedOmegaVec U`. -/
+theorem transpose_kronecker_one_mulVec_twistedOmegaVec_one_of_antisymmetric
+    {U : Matrix (Fin d) (Fin d) ℂ} (hUanti : Uᵀ = -U) :
+    (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *ᵥ twistedOmegaVec (1 : Matrix (Fin d) (Fin d) ℂ)
+      = -twistedOmegaVec U := by
+  rw [transpose_kronecker_one_mulVec_twistedOmegaVec_one]
+  funext p
+  have hp : U p.2 p.1 = Uᵀ p.1 p.2 := rfl
+  simp only [Pi.neg_apply, twistedOmegaVec, hp, hUanti, Matrix.neg_apply]
+
+/-- **Key identity.** The first-factor partial transpose of the conjugated symmetric-subspace
+witness recovers `1 + twistedOmegaProj U`. This is the precise sense in which the PPT
+witness state built below is a fixed point of the partial transpose. -/
+theorem partialTransposeLeft_breuerHallSymmetricWitness {U : Matrix (Fin d) (Fin d) ℂ}
+    (hUanti : Uᵀ = -U) (hUunit : Uᴴ * U = 1) :
+    Matrix.partialTransposeLeft (breuerHallSymmetricWitness U) = 1 + twistedOmegaProj U := by
+  have hPTadd : Matrix.partialTransposeLeft
+        ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) + Matrix.swapMatrix d)
+      = 1 + twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ) := by
+    have hadd : ∀ A B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ,
+        Matrix.partialTransposeLeft (A + B)
+          = Matrix.partialTransposeLeft A + Matrix.partialTransposeLeft B := by
+      intro A B; ext p q; simp [Matrix.partialTransposeLeft_apply, Matrix.add_apply]
+    rw [hadd, Matrix.partialTransposeLeft_one, partialTransposeLeft_swapMatrix]
+  have hstep : Matrix.partialTransposeLeft (breuerHallSymmetricWitness U)
+      = (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *
+          (1 + twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ)) *
+          ((Uᴴ)ᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
+    rw [breuerHallSymmetricWitness,
+      Matrix.partialTransposeLeft_conj_kronecker_one Uᴴ U (1 + Matrix.swapMatrix d), hPTadd]
+  rw [hstep, ← Matrix.conjTranspose_transpose_eq_transpose_conjTranspose U,
+    transpose_conjTranspose_of_antisymmetric hUanti]
+  have hnegk : (-Uᴴ : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)
+      = -(Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
+    ext p q; simp [Matrix.kroneckerMap_apply]
+  rw [hnegk, mul_neg, mul_add, add_mul, mul_one]
+  have hA : (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) * (Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))
+      = -(1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) := by
+    rw [← Matrix.mul_kronecker_mul, hUanti]
+    have hUUH : -U * Uᴴ = -1 := by rw [neg_mul, mul_eq_one_comm.mp hUunit]
+    rw [hUUH]
+    ext p q
+    simp only [Matrix.kroneckerMap_apply, Matrix.one_apply, Matrix.neg_apply, Prod.ext_iff]
+    by_cases h1 : p.1 = q.1 <;> by_cases h2 : p.2 = q.2 <;> simp [h1, h2]
+  have hMconj : (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))ᴴ
+      = -(Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
+      transpose_conjTranspose_of_antisymmetric hUanti]
+    exact hnegk
+  have hMconj' : (Uᴴ : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)
+      = -((Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))ᴴ) := by
+    rw [hMconj, neg_neg]
+  have hB : (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *
+        twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ) * (Uᴴ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))
+      = -twistedOmegaProj U := by
+    rw [twistedOmegaProj, hMconj', mul_neg, vecMulVec_mulVec_conjTranspose,
+      transpose_kronecker_one_mulVec_twistedOmegaVec_one_of_antisymmetric hUanti]
+    congr 1
+    ext p q
+    simp [twistedOmegaProj_apply, Matrix.vecMulVec_apply, Pi.star_apply, twistedOmegaVec]
+  rw [hA, hB]
+  abel
 
 end Matrix
