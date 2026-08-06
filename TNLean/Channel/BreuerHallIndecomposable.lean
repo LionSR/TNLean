@@ -212,6 +212,12 @@ theorem partialTransposeLeft_one (d d' : ℕ) :
   congr 1
   simp [eq_comm]
 
+/-- The first-factor partial transpose is additive. -/
+theorem partialTransposeLeft_add {d d' : ℕ} (A B : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
+    Matrix.partialTransposeLeft (A + B)
+      = Matrix.partialTransposeLeft A + Matrix.partialTransposeLeft B := by
+  ext p q; simp [Matrix.partialTransposeLeft_apply, Matrix.add_apply]
+
 /-- The first-factor partial transpose of the SWAP operator is the (identity-)twisted
 maximally entangled projector: `F^{T₁} = twistedOmegaProj 1`. -/
 theorem partialTransposeLeft_swapMatrix (d : ℕ) :
@@ -269,11 +275,7 @@ theorem partialTransposeLeft_breuerHallSymmetricWitness {U : Matrix (Fin d) (Fin
   have hPTadd : Matrix.partialTransposeLeft
         ((1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) + Matrix.swapMatrix d)
       = 1 + twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ) := by
-    have hadd : ∀ A B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ,
-        Matrix.partialTransposeLeft (A + B)
-          = Matrix.partialTransposeLeft A + Matrix.partialTransposeLeft B := by
-      intro A B; ext p q; simp [Matrix.partialTransposeLeft_apply, Matrix.add_apply]
-    rw [hadd, Matrix.partialTransposeLeft_one, partialTransposeLeft_swapMatrix]
+    rw [partialTransposeLeft_add, Matrix.partialTransposeLeft_one, partialTransposeLeft_swapMatrix]
   have hstep : Matrix.partialTransposeLeft (breuerHallSymmetricWitness U)
       = (Uᵀ ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) *
           (1 + twistedOmegaProj (1 : Matrix (Fin d) (Fin d) ℂ)) *
@@ -312,5 +314,52 @@ theorem partialTransposeLeft_breuerHallSymmetricWitness {U : Matrix (Fin d) (Fin
     simp [twistedOmegaProj_apply, Matrix.vecMulVec_apply, Pi.star_apply, twistedOmegaVec]
   rw [hA, hB]
   abel
+
+/-! ## The PPT witness state -/
+
+/-- The PPT witness for the Breuer-Hall map: the sum of the twisted maximally entangled
+projector and the conjugated symmetric-subspace witness. It is positive semidefinite (a
+sum of positive semidefinite terms) and, by antisymmetry and unitarity of `U`, a fixed
+point of the first-factor partial transpose, hence a PPT state
+(`breuerHallWitnessState_isPPT`). -/
+noncomputable def breuerHallWitnessState (U : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  twistedOmegaProj U + breuerHallSymmetricWitness U
+
+theorem breuerHallWitnessState_posSemidef (U : Matrix (Fin d) (Fin d) ℂ) :
+    (breuerHallWitnessState U).PosSemidef :=
+  (twistedOmegaProj_posSemidef U).add (breuerHallSymmetricWitness_posSemidef U)
+
+/-- The witness state is a fixed point of the first-factor partial transpose. -/
+theorem partialTransposeLeft_breuerHallWitnessState {U : Matrix (Fin d) (Fin d) ℂ}
+    (hUanti : Uᵀ = -U) (hUunit : Uᴴ * U = 1) :
+    Matrix.partialTransposeLeft (breuerHallWitnessState U) = breuerHallWitnessState U := by
+  have hinvol := partialTransposeLeft_breuerHallSymmetricWitness hUanti hUunit
+  have hPT0 : Matrix.partialTransposeLeft (twistedOmegaProj U)
+      = breuerHallSymmetricWitness U - 1 := by
+    have hthis := congrArg Matrix.partialTransposeLeft hinvol
+    rw [Matrix.partialTransposeLeft_partialTransposeLeft, partialTransposeLeft_add,
+      Matrix.partialTransposeLeft_one] at hthis
+    rw [hthis]; abel
+  change Matrix.partialTransposeLeft (twistedOmegaProj U + breuerHallSymmetricWitness U)
+    = twistedOmegaProj U + breuerHallSymmetricWitness U
+  rw [partialTransposeLeft_add, hPT0, hinvol]
+  abel
+
+theorem breuerHallWitnessState_isPPT {U : Matrix (Fin d) (Fin d) ℂ}
+    (hUanti : Uᵀ = -U) (hUunit : Uᴴ * U = 1) :
+    Matrix.IsPPT (breuerHallWitnessState U) := by
+  change (Matrix.partialTransposeLeft (breuerHallWitnessState U)).PosSemidef
+  rw [partialTransposeLeft_breuerHallWitnessState hUanti hUunit]
+  exact breuerHallWitnessState_posSemidef U
+
+/-! ## The key quadratic-form identity -/
+
+/-- Pairing a matrix `A` with `twistedOmegaProj U` under the trace form is the quadratic
+form of `A` at the twisted maximally entangled vector. -/
+theorem trace_mul_twistedOmegaProj (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (U : Matrix (Fin d) (Fin d) ℂ) :
+    (A * twistedOmegaProj U).trace = star (twistedOmegaVec U) ⬝ᵥ (A *ᵥ twistedOmegaVec U) := by
+  rw [twistedOmegaProj, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
 
 end Matrix
