@@ -27,8 +27,7 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   semidefinite for every positive chain length `N` (`R` is an MPDO);
 * `wMat_eigenvalue_eq_oneLabelChi_entry` — the two entries of `oneLabelChi`
   are eigenvalues of the local factor `wMat` of the `R_isMPDO`
-  factorization, exhibited by explicit eigenvectors (a scope-restricted
-  spectral link; see *Remaining gap*);
+  factorization, exhibited by explicit eigenvectors;
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
   has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
   gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
@@ -36,6 +35,10 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
 
 The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`) for
 `R` continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`.
+The closed operator's boundary-partial-isometry factorization and the
+attachment of `χ` to `R`'s closed-operator local factor
+(`mpo_R_eq_B_mul_wN_mul_transpose`, `wMat_eq_conj_diagonal_oneLabelChi`)
+continue in `TNLean.MPS.MPDO.RescalingStableChiAttachment`.
 
 ## Tensor definition
 
@@ -82,8 +85,9 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
 * The uniform BNT-label structure-coefficient statement of
   arXiv:1606.00608, Theorem 4.14(ii) for `R` — that `oneLabelCoeffs`
   literally arises from `R`'s same-length product algebra, not only that
-  its spectral data matches (`wMat_eigenvalue_eq_oneLabelChi_entry`) —
-  requires the `AlgebraStructureData` witness apparatus of
+  the closed-operator local factor diagonalizes to `oneLabelChi`
+  (`wMat_eq_conj_diagonal_oneLabelChi`) — requires the
+  `AlgebraStructureData` witness apparatus of
   `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
   `IsRFPViaTS R`.  Documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
@@ -498,14 +502,18 @@ identifies the local factor of the `R_isMPDO` factorization (`wMat`, via
 `coeff_sq_eq_wMat`) with the one-label `χ` block `oneLabelChi` declared
 independently in this file.
 
-**Scope restriction (partial BNT-coefficient link):** this identifies the
-*spectral data* of `wMat` with `oneLabelChi`'s entries; it is not the
-uniform BNT-label structure-coefficient statement of arXiv:1606.00608,
-Theorem 4.14(ii) (which requires the `AlgebraStructureData` witness that
-`R`'s same-length product algebra realizes `oneLabelCoeffs`).  That
-construction needs `IsRFPViaTS R`, itself future work (module docstring,
-*Remaining gap*).  Documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
+This eigenvector-only link is superseded by the exact diagonalization
+identity `wMat_eq_conj_diagonal_oneLabelChi`, which identifies `wMat` itself
+(not only its spectral data) with `oneLabelChi` via the Walsh–Hadamard
+change of basis.
+
+**Scope restriction (partial BNT-coefficient link):** neither this lemma
+nor `wMat_eq_conj_diagonal_oneLabelChi` is the uniform BNT-label
+structure-coefficient statement of arXiv:1606.00608, Theorem 4.14(ii)
+(which requires the `AlgebraStructureData` witness that `R`'s same-length
+product algebra realizes `oneLabelCoeffs`).  That construction needs
+`IsRFPViaTS R`, itself future work (module docstring, *Remaining gap*).
+Documented in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
     ∃ v : Fin 2 → ℂ, v ≠ 0 ∧
       wMat.mulVec v = (oneLabelChi.entry 0 0 0 k) • v := by
