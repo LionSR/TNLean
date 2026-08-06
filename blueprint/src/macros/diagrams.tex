@@ -1,0 +1,12 @@
+% Commutative diagrams are tikz-cd material, outside the tenkz language.
+% The channel style keeps the ink these arrows carried as tenkz typed
+% maps: a headless stroke of wire weight in the marked hue, its label
+% seated on the stroke over paper.  Both the print preamble and the
+% standalone web picture units read this file after loading tenkz, which
+% supplies tikz-cd and the hue.
+\tikzcdset{
+  channel/.style={
+    every arrow/.append style={draw=tenkzMarked, line width=0.55pt,
+      no head},
+    every label/.append style={description}},
+}

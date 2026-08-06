@@ -284,22 +284,19 @@
 
 \begin{figure}[ht]
     \centering
-    % Clockwise slots are M, R, P, L, LI.  The three unstarred arrows are
-    % the upper route L -> LI -> M -> R; the starred arrows are the lower
-    % route L -> P -> R.  Tree subscripts are precisely the intermediate
-    % fusion charges carried by the corresponding internal edges.
-    \begin{tenkzcd}[polygon=5, radius=34mm]
-      \tntree{(a\,((b\,c)_h\,d)_i)_e} &
-      \tntree{(a\,(b\,(c\,d)_j)_i)_e} &
-      \tntree{((a\,b)_f\,(c\,d)_j)_e} &
-      \tntree{(((a\,b)_f\,c)_g\,d)_e} &
-      \tntree{((a\,(b\,c)_h)_g\,d)_e}
-      \tnarrow[from=4, to=5]{F^{abc}_{g}}
-      \tnarrow[from=5, to=1]{F^{ahd}_{e}}
-      \tnarrow[from=1, to=2]{F^{bcd}_{i}}
-      \tnarrow*[from=4, to=3]{F^{fcd}_{e}}
-      \tnarrow*[from=3, to=2]{F^{abj}_{e}}
-    \end{tenkzcd}
+    % M sits on top, LI and R in the middle row, L and P on the bottom.
+    % The upper route L -> LI -> M -> R climbs the left flank; the lower
+    % route L -> P -> R crosses the bottom, its labels swapped outward.
+    % Tree subscripts are precisely the intermediate fusion charges
+    % carried by the corresponding internal edges.
+    \begin{tikzcd}[column sep=tiny]
+      & \tntree{(a\,((b\,c)_h\,d)_i)_e} \arrow[dr, "F^{bcd}_{i}"] & \\
+      \tntree{((a\,(b\,c)_h)_g\,d)_e} \arrow[ur, "F^{ahd}_{e}"] & &
+        \tntree{(a\,(b\,(c\,d)_j)_i)_e} \\
+      \tntree{(((a\,b)_f\,c)_g\,d)_e} \arrow[u, "F^{abc}_{g}"]
+          \arrow[rr, "F^{fcd}_{e}"'] & &
+        \tntree{((a\,b)_f\,(c\,d)_j)_e} \arrow[u, "F^{abj}_{e}"']
+    \end{tikzcd}
     \caption{The five complete zipper fusion trees of
         \cite[Section~3.4, equation~(33)]{Bultinck2017Anyons}. Each arrow is
         a printed $F$-move, with right-tree coordinates indexing rows and
@@ -404,21 +401,17 @@
 
 \begin{figure}[ht]
     \centering
-    % Clockwise slots are M, R, P, L, LI.  Hence r_1,r_2,r_3 trace the
-    % three-edge route L -> LI -> M -> R, while s_1,s_2 trace L -> P -> R.
-    % The vertices are Cartesian parenthesizations, not fusion trees.
-    \begin{tenkzcd}[polygon=5, radius=38mm]
-      \ensuremath{(A\times((B\times C)\times D))} &
-      \ensuremath{(A\times(B\times(C\times D)))} &
-      \ensuremath{((A\times B)\times(C\times D))} &
-      \ensuremath{(((A\times B)\times C)\times D)} &
-      \ensuremath{((A\times(B\times C))\times D)}
-      \tnarrow[from=4, to=5]{r_1}
-      \tnarrow[from=5, to=1]{r_2}
-      \tnarrow[from=1, to=2]{r_3}
-      \tnarrow*[from=4, to=3]{s_1}
-      \tnarrow*[from=3, to=2]{s_2}
-    \end{tenkzcd}
+    % M sits on top, LI and R in the middle row, L and P on the bottom;
+    % r_1,r_2,r_3 trace the three-edge route L -> LI -> M -> R, while
+    % s_1,s_2 trace L -> P -> R.  The vertices are Cartesian
+    % parenthesizations, not fusion trees.
+    \begin{tikzcd}[column sep=small]
+      & (A\times((B\times C)\times D)) \arrow[dr, "r_3"] & \\
+      ((A\times(B\times C))\times D) \arrow[ur, "r_2"] & &
+        (A\times(B\times(C\times D))) \\
+      (((A\times B)\times C)\times D) \arrow[u, "r_1"] \arrow[rr, "s_1"'] & &
+        ((A\times B)\times(C\times D)) \arrow[u, "s_2"']
+    \end{tikzcd}
     \caption{The five parenthesizations of four bond-coordinate factors.
         The upper path is the three-edge composite
         $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
