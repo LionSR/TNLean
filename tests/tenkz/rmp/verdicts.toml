@@ -816,10 +816,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "5436d70a9b46d27707964ba570c174d8870c532cf87025b3fde7f8cca2be5267"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "winding strings restored to the lattice patch with j, b, i, a at their stations; the strands do not cross each other, as the source draws"
+case_sha256 = "34f5ab9ab28d2d6879b20d883fd399feba8d7e94a2a6f8d2fe7b60a9585fb034"
+second_viewer = "braid-plane-remodel-second-pass-2026-08-06-400dpi"
+reviewed = "2026-08-06"
+renderer = "braid-plane-remodel-2026-08-06-200dpi"
+note = "the plane frame now carries the patch the source draws: the author paints all four lattice lines inside one xz plane and hangs one out-of-plane stub on each site, so every inter-site index is virtual and the four site legs end in air; the winding strings keep j, b, i, a at their stations and still do not cross each other; b's bead now sits where it laps the lattice line running north out of j, not on j's site leg; the source lattice extends its legs further than the stub reach and paints the anyons larger than the beads"
 
 [[verdict]]
 id = "rmp-iii-b-braid-two"
@@ -838,10 +839,11 @@ status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
 defects = []
-case_sha256 = "54a22eb0f8414db60ffca4bee9ee1a4d5e6516f3ebc3f821c3038fdf4e4a37ec"
-reviewed = "2026-07-28"
-renderer = "codex-kernel-ink-2026-07-28-200dpi"
-note = "the source-red strings wind through their bead stations into R_{j,a} with j and i at their corners; the source lattice slant differs"
+case_sha256 = "4b921815dddebb9a7c3d74994edc8360928daa4654e714c627b176d9c91eed72"
+second_viewer = "braid-plane-remodel-second-pass-2026-08-06-400dpi"
+reviewed = "2026-08-06"
+renderer = "braid-plane-remodel-2026-08-06-200dpi"
+note = "the plane frame now carries the patch the source draws, so the lattice slant matches and every inter-site index is virtual while the four site legs end in air; the source-red strings still wind through their six bead stations into R_{j,a} with j and i at their corners, and a's fourth bead now sits where it laps the lattice line running north out of i; the resolver contour stands further east than the source parallelogram, which the source shears with the plane and uses to hide the a-b meeting"
 
 [[verdict]]
 id = "rmp-iii-b-braid-four"
