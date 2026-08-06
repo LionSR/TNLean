@@ -211,6 +211,24 @@ if grep -Fq '|origin=port-open|' \
   echo "FAIL: explicit open sides left duplicate typed-port stubs" >&2
   exit 1
 fi
+# A kernel side exposes indices only when it says so.  The three chains are
+# the same picture under no side policy, under the explicit spelling of the
+# default, and under the open word; the boundary signatures read in that
+# order and the legs belong to the third alone.
+side_default_signatures=$(grep -F 'kernel-boundary|' \
+  "$WORK/r_side_default_none.tnlog")
+[ "$side_default_signatures" = 'kernel-boundary|signature=
+kernel-boundary|signature=
+kernel-boundary|signature=open:e, open:w' ] || {
+  echo "FAIL: an unstated kernel side stopped agreeing with boundary=none" >&2
+  printf '%s\n' "$side_default_signatures" >&2
+  exit 1
+}
+[ "$(grep -c '|origin=open|' "$WORK/r_side_default_none.tnlog" || true)" \
+    -eq 2 ] || {
+  echo "FAIL: the side default minted policy legs no picture asked for" >&2
+  exit 1
+}
 grep -Fq '|name=wrap-1|origin=trace|row=1|' "$WORK/k_twoshift.tnlog" || {
   echo "FAIL: trace policy did not derive the per-row wrap-1 record" >&2
   exit 1

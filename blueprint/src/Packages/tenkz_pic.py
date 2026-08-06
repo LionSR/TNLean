@@ -2,8 +2,9 @@ r"""plasTeX renderers for tenkz tensor-network pictures (spec §1.5, §5.1).
 
 The tenkz environments (``tenkz``, ``tenkzcd``, ``tenkzlattice``,
 ``tenkzplanes``, ``tenkzfree`` — the spec's four sub-languages plus the
-Phase-1 bra-ket double-layer environment that lives in the lattice layer)
-and the bridge command ``\tnpic`` are registered here as
+Phase-1 bra-ket double-layer environment that lives in the lattice layer),
+the plain ``tikzcd`` environment that carries the blueprint's commutative
+diagrams, and the bridge command ``\tnpic`` are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
 captured unit is compiled **standalone** against ``TEXINPUTS=tex/tenkz//``
 and converted to one SVG, cached by a per-body content hash, so editing one
@@ -91,6 +92,7 @@ MISSING_SVG_SENTINEL = "tenkz SVG unavailable"
 # every picture, editing one picture body re-renders exactly one SVG.
 _RENDER_SOURCE_FILES = (
     _SRC_DIR / "macros/common.tex",
+    _SRC_DIR / "macros/diagrams.tex",
     *sorted(_TENKZ_DIR.glob("*.sty")),
     *sorted(_TENKZ_DIR.glob("*.code.tex")),
 )
@@ -104,6 +106,7 @@ _ENVIRONMENT_LANGS = {
     "tenkzlattice": "lattice",
     "tenkzplanes": "planes",
     "tenkzfree": "free",
+    "tikzcd": "cd",
     "tnpic": "grid",
 }
 
@@ -129,6 +132,7 @@ def _latex_document(unit_source: str) -> str:
 \newcounter{{chapter}}
 \input{{macros/common}}
 \usepackage{{tenkz}}
+\input{{macros/diagrams}}
 \begin{{document}}
 {unit_source}
 \end{{document}}
@@ -512,6 +516,9 @@ else:
         pass
 
     class tenkzfree(_TenkzVerbatimEnvironment):
+        pass
+
+    class tikzcd(_TenkzVerbatimEnvironment):
         pass
 
     class tnpic(_TenkzSvgMixin, Command):

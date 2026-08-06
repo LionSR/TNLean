@@ -183,10 +183,10 @@ kernel-\allowbreak{}picture & \texttt{rows} & row-\allowbreak{}list & {wire} & C
 kernel-\allowbreak{}picture & \texttt{cols} & positive-\allowbreak{}integer & 3 & Cells \allowbreak{}per \allowbreak{}row. \\
 kernel-\allowbreak{}picture & \texttt{frame} & frame-\allowbreak{}spec & flat & Closed \allowbreak{}flat,\allowbreak{} \allowbreak{}plane,\allowbreak{} \allowbreak{}or \allowbreak{}circle \allowbreak{}frame \allowbreak{}word. \\
 kernel-\allowbreak{}frame & \texttt{basis} & basis-\allowbreak{}spec & origin \allowbreak{}singleton & Ordered \allowbreak{}row-\allowbreak{}kind \allowbreak{}members \allowbreak{}at \allowbreak{}east/north \allowbreak{}quarter-\allowbreak{}pitch \allowbreak{}offsets. \\
-kernel-\allowbreak{}picture & \texttt{west} & side-\allowbreak{}policy & open & West \allowbreak{}side \allowbreak{}policy. \\
-kernel-\allowbreak{}picture & \texttt{east} & side-\allowbreak{}policy & open & East \allowbreak{}side \allowbreak{}policy. \\
-kernel-\allowbreak{}picture & \texttt{north} & side-\allowbreak{}policy & open & North \allowbreak{}side \allowbreak{}policy. \\
-kernel-\allowbreak{}picture & \texttt{south} & side-\allowbreak{}policy & open & South \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{west} & side-\allowbreak{}policy & none & West \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{east} & side-\allowbreak{}policy & none & East \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{north} & side-\allowbreak{}policy & none & North \allowbreak{}side \allowbreak{}policy. \\
+kernel-\allowbreak{}picture & \texttt{south} & side-\allowbreak{}policy & none & South \allowbreak{}side \allowbreak{}policy. \\
 kernel-\allowbreak{}picture & \texttt{trace} & trace-\allowbreak{}spec & empty & Cells \allowbreak{}or \allowbreak{}physical \allowbreak{}ports \allowbreak{}closed \allowbreak{}to \allowbreak{}themselves. \\
 kernel-\allowbreak{}picture & \texttt{open} & cell-\allowbreak{}set & empty & Cells \allowbreak{}opened \allowbreak{}by \allowbreak{}declaration. \\
 kernel-\allowbreak{}picture & \texttt{bonds} & bond-\allowbreak{}policy & grid & Frame-\allowbreak{}generated \allowbreak{}adjacent \allowbreak{}contraction. \\
@@ -194,7 +194,7 @@ kernel-\allowbreak{}picture & \texttt{align} & row & midline & The \allowbreak{}
 kernel-\allowbreak{}picture & \texttt{size} & size-\allowbreak{}class & from \allowbreak{}math \allowbreak{}style & Size \allowbreak{}class \allowbreak{}of \allowbreak{}the \allowbreak{}metric \allowbreak{}context. \\
 kernel-\allowbreak{}picture & \texttt{check} & check-\allowbreak{}spec & signature & The \allowbreak{}tenkzeq \allowbreak{}audit \allowbreak{}specification. \\
 kernel-\allowbreak{}picture & \texttt{sandwich} & flag & false & Ket-\allowbreak{}over-\allowbreak{}bra \allowbreak{}row \allowbreak{}preset. \\
-kernel-\allowbreak{}picture & \texttt{boundary} & enum(\allowbreak{}open\textbar{}\allowbreak{}none\textbar{}\allowbreak{}periodic) & open & All-\allowbreak{}side \allowbreak{}boundary \allowbreak{}word. \\
+kernel-\allowbreak{}picture & \texttt{boundary} & enum(\allowbreak{}open\textbar{}\allowbreak{}none\textbar{}\allowbreak{}periodic) & none & All-\allowbreak{}side \allowbreak{}boundary \allowbreak{}word. \\
 kernel-\allowbreak{}picture & \texttt{lattice} & pair & empty & RxC \allowbreak{}wire-\allowbreak{}row \allowbreak{}lattice \allowbreak{}preset. \\
 kernel-\allowbreak{}picture & \texttt{ring} & integer & empty & Circle-\allowbreak{}frame \allowbreak{}ring \allowbreak{}preset. \\
 kernel-\allowbreak{}picture & \texttt{surface} & identifier & empty & Torus \allowbreak{}closure \allowbreak{}preset. \\

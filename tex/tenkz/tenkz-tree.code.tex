@@ -1,0 +1,562 @@
+% Input: a validated fusion-tree parenthesization word and tree keys.
+% Output: fusion-tree layout ink and the tree's structural event record.
+% Owned state: the parse stack, vertex topology, skin choice, and tree ids.
+% Invariants: the word parses to exactly one rooted tree before any ink.
+% Next stage: shared event services emit the resolved model used for rendering.
+%
+%   \tntree[keys]{(((a\,b)_x\,c)_y\,d)_e}
+%       a fusion tree from a parenthesization word: leaves on a top
+%       line, one junction per fused pair, internal charges on the
+%       downward edges, a short rooted leg carrying the total charge.
+%
+% The standalone tree is a math atom: the baseline is the vertical middle
+% of the picture lowered by the math axis, so a tree centers on the axis
+% of the surrounding formula.
+
+\ExplSyntaxOn
+
+% ---------- tree metrics (ratios of pitch) ----------
+% Sibling pitch of the leaf row and the depth of one fusion level share
+% one ratio, so every edge of a balanced pair meets its junction at 45
+% degrees; the root leg is shorter than a level so the tree reads as
+% rooted, not as one more leaf.
+\def\tenkz@r@treestep{0.55}
+\def\tenkz@r@treeleg{0.35}
+% One ribbon is a band, not a fused wire: 0.13 pitch gives its two
+% wire-weight boundary curves visible daylight at compact scale.  The
+% vertex-patch reach exceeds the half-width so its three sector arcs
+% remain distinct at the most acute junctions in a four-leaf tree; 0.72
+% measures how far each cubic control travels from its mouth toward the
+% vertex, leaving a rounded nonzero waist between the three sectors.
+\def\tenkz@r@treeribbonhalf{0.065}
+\def\tenkz@r@treepatchreach{0.16}
+\def\tenkz@r@treepatchcontrol{0.72}
+% TikZ's rotated calc-coordinate delimiter must have the ordinary colon
+% catcode, so keep this tiny coordinate primitive outside expl3 syntax.
+\ExplSyntaxOff
+\def\tenkz@ribbonoffset#1#2#3#4#5{%
+  \coordinate (#1) at ($(#2)!#4!#5:(#3)$);}
+\ExplSyntaxOn
+
+% ---------- state ----------
+\seq_new:N \l__tenkztree_items_seq     % parenthesization word, one item each
+\seq_new:N \l__tenkztree_stack_seq     % {x}{level}{charge}{node}{topology}
+\seq_new:N \l__tenkztree_vertices_seq  % postorder {node}{left}{right}
+\prop_new:N \l__tenkztree_parent_prop  % node id -> parent node id or root
+\prop_new:N \l__tenkztree_internal_prop % node id -> marker
+\tl_new:N  \l__tenkztree_word_tl
+\tl_new:N  \l__tenkztree_item_tl
+\tl_new:N  \l__tenkztree_charge_tl
+\tl_new:N  \l__tenkztree_ca_tl
+\tl_new:N  \l__tenkztree_cb_tl
+\tl_new:N  \l__tenkztree_cha_tl
+\tl_new:N  \l__tenkztree_chb_tl
+\tl_new:N  \l__tenkztree_anchor_tl
+\tl_new:N  \l__tenkztree_skin_tl
+\tl_new:N  \l__tenkztree_role_tl
+\tl_new:N  \l__tenkztree_species_tl
+\tl_new:N  \l__tenkztree_path_tl
+\tl_new:N  \l__tenkztree_fill_tl
+\tl_new:N  \l__tenkztree_junction_tl
+\tl_new:N  \l__tenkztree_parent_tl
+\tl_new:N  \l__tenkztree_topoa_tl
+\tl_new:N  \l__tenkztree_topob_tl
+\tl_new:N  \l__tenkztree_topop_tl
+\int_new:N \l__tenkztree_leaf_int
+\int_new:N \l__tenkztree_node_int
+\int_new:N \l__tenkztree_nodea_int
+\int_new:N \l__tenkztree_nodeb_int
+\int_new:N \l__tenkztree_nodep_int
+% Picture ids cannot distinguish several standalone trees, so tree ids
+% are document-global and also keep every TikZ coordinate name unique.
+\int_new:N \g__tenkztree_id_int
+\int_new:N \l__tenkztree_la_int
+\int_new:N \l__tenkztree_lb_int
+\int_new:N \l__tenkztree_lp_int
+\dim_new:N \l__tenkztree_xa_dim
+\dim_new:N \l__tenkztree_xb_dim
+\dim_new:N \l__tenkztree_xp_dim
+\dim_new:N \l__tenkztree_off_dim
+\dim_new:N \l__tenkztree_axis_dim
+
+% ---------- keys ----------
+\pgfkeys{
+  /tenkz/tree/.is~family,
+  /tenkz/tree/tree~style/.is~choice,
+  /tenkz/tree/tree~style/wire/.code={\tl_set:Nn \l__tenkztree_skin_tl {wire}},
+  /tenkz/tree/tree~style/ribbon/.code={\tl_set:Nn \l__tenkztree_skin_tl {ribbon}},
+  /tenkz/tree/role/.is~choice,
+  /tenkz/tree/role/operator/.code={\tl_set:Nn \l__tenkztree_role_tl {operator}},
+  /tenkz/tree/role/marked/.code={\tl_set:Nn \l__tenkztree_role_tl {marked}},
+  /tenkz/tree/role/extra/.code={\tl_set:Nn \l__tenkztree_role_tl {extra}},
+  /tenkz/tree/role/passive/.code={\tl_set:Nn \l__tenkztree_role_tl {passive}},
+  /tenkz/tree/species/.code={
+    \tenkz_species_check:n {#1}
+    \tl_set:Nn \l__tenkztree_species_tl {#1}
+  },
+}
+% pitch=/compact=/inline= forward to the shared /tenkz key space
+% (tenkz-core.code.tex); tree is command-scope like /tenkz/cell, so it
+% keeps its own role=/species= above (per-vertex, validated) instead of
+% the picture-scope forwarding species= the other three families use.
+\tenkz_install_core_forwards:nn {tree} {pitch,compact,inline}
+
+% ---------- the fusion tree ----------
+% Grammar of the parenthesization word:
+%   node   :=  leaf  |  ( node node ) [ _ charge ]
+%   leaf, charge  :=  one character or one braced group
+% Separators (\, and spaces) are stripped before parsing.  The word is
+% flattened into a sequence of items and consumed left to right by a
+% recursive-descent parser; every finished subtree pushes its root
+% {x}{level}{charge} onto a value stack, so a fused pair pops its two
+% children, joins them, and pushes the joint.
+%
+% Layout: leaves sit on the line y = 0, spaced by one tree step; an
+% internal vertex sits at the x-midpoint of its children's roots, one
+% level below the deeper child (level = 1 + max of the child levels,
+% y = -level steps).  Charges are typeset only when the vertex's
+% downward edge is known, so they can be set clear of the ink.
+
+% y-coordinate of a fusion level (integer factor on the right)
+\cs_new:Npn \tenkz_tree_levely:n #1
+  { \dim_eval:n { -\tenkz@r@treestep\tenkz@pitch * (#1) } }
+
+% ---------- picture framing ----------
+% Every tree picture is a math atom sharing one baseline; the cd
+% dialect draws the same kind of atom and shares this reader and
+% style until its retirement (#4699).  Read the axis
+% height (NFSS sets math fonts up lazily, so force them first), then lower
+% the picture's bounding-box centre by it so the diagram centres on the
+% surrounding formula's axis.
+\cs_new_protected:Npn \tenkz_tree_read_axis:
+  { \check@mathfonts
+    \dim_set:Nn \l__tenkztree_axis_dim { \fontdimen22\textfont2 } }
+\tikzset{
+  tenkz~tree~baseline/.style={
+    baseline={([yshift=-\dim_use:N \l__tenkztree_axis_dim]
+               current~bounding~box.center)} } }
+
+\cs_new_protected:Npn \tenkz_tree_node:
+  {
+    \seq_pop_left:NNTF \l__tenkztree_items_seq \l__tenkztree_item_tl
+      {
+        \str_if_eq:VnTF \l__tenkztree_item_tl { ( }
+          { \tenkz_tree_internal: }
+          { \tenkz_tree_leaf: }
+      }
+      { \PackageError{tenkz}{Malformed~tree:~unexpected~end~of~word}{} }
+  }
+
+% a leaf: a wire endpoint on the top line, its label above the tip.
+% Grammar guard: `_` and `)` can only reach the leaf position through a
+% malformed word -- `(a_u\,b)_x` tries to charge a leaf (the grammar
+% attaches charges to fused pairs only), `(a)` fuses a single node --
+% and typesetting them as leaves dies later with a raw TeX error, so
+% both stop here with the grammar rule spelled out.
+\cs_new_protected:Npn \tenkz_tree_leaf:
+  {
+    \str_if_eq:VnT \l__tenkztree_item_tl { _ }
+      { \PackageError{tenkz}{Malformed~tree:~a~charge~(_)~may~only~
+          follow~a~fused~pair's~closing~parenthesis}{} }
+    \str_if_eq:VnT \l__tenkztree_item_tl { ) }
+      { \PackageError{tenkz}{Malformed~tree:~unexpected~')'~--~a~fused~
+          pair~takes~exactly~two~nodes}{} }
+    \dim_set:Nn \l__tenkztree_xa_dim
+      { \tenkz@r@treestep\tenkz@pitch * \l__tenkztree_leaf_int }
+    \int_incr:N \l__tenkztree_leaf_int
+    \int_incr:N \l__tenkztree_node_int
+    \coordinate
+      (tenkztree-\int_use:N\g__tenkztree_id_int-
+       \int_use:N\l__tenkztree_node_int) at
+      (\dim_use:N \l__tenkztree_xa_dim, 0pt);
+    \node[tn~label, anchor=south] at
+      (\dim_use:N \l__tenkztree_xa_dim, \tenkz@dim{\tenkz@r@labelclear})
+      { $\tenkz@labelsize \tl_use:N \l__tenkztree_item_tl$ };
+    \seq_put_right:Ne \l__tenkztree_stack_seq
+      { { \dim_use:N \l__tenkztree_xa_dim }{ 0 }{ }
+        { \int_use:N \l__tenkztree_node_int }
+        { \int_use:N \l__tenkztree_leaf_int } }
+  }
+
+% ( node node ) [_ charge]
+\cs_new_protected:Npn \tenkz_tree_internal:
+  {
+    \tenkz_tree_node:
+    \tenkz_tree_node:
+    % the closing parenthesis
+    \seq_pop_left:NNTF \l__tenkztree_items_seq \l__tenkztree_item_tl
+      {
+        \str_if_eq:VnF \l__tenkztree_item_tl { ) }
+          { \PackageError{tenkz}
+              {Malformed~tree:~expected~a~closing~parenthesis}{} }
+      }
+      { \PackageError{tenkz}{Malformed~tree:~unexpected~end~of~word}{} }
+    % the optional charge (parsed after the recursion, so the local
+    % charge register belongs to this vertex).  Peek at the next item: a
+    % leading `_` consumes the charge; anything else is the next node and
+    % is left in place for the parser to pick up.
+    \tl_clear:N \l__tenkztree_charge_tl
+    \seq_get_left:NNT \l__tenkztree_items_seq \l__tenkztree_item_tl
+      {
+        \str_if_eq:VnT \l__tenkztree_item_tl { _ }
+          {
+            \seq_pop_left:NN \l__tenkztree_items_seq \l__tenkztree_item_tl
+            \seq_pop_left:NNF \l__tenkztree_items_seq \l__tenkztree_charge_tl
+              { \PackageError{tenkz}{Malformed~tree:~dangling~charge}{} }
+          }
+      }
+    % pop the two children and fuse them
+    \seq_pop_right:NN \l__tenkztree_stack_seq \l__tenkztree_cb_tl
+    \seq_pop_right:NN \l__tenkztree_stack_seq \l__tenkztree_ca_tl
+    \exp_last_unbraced:NNV \tenkz_tree_unpack:Nnnnnn a \l__tenkztree_ca_tl
+    \exp_last_unbraced:NNV \tenkz_tree_unpack:Nnnnnn b \l__tenkztree_cb_tl
+    \tenkz_tree_fuse:
+  }
+
+% A fusion vertex always has exactly two children, so the two popped
+% stack tuples are unpacked by the same five assignments; #1 (bare `a`
+% or `b`) selects which child's register family receives them, via the
+% `x#1_dim`/`l#1_int`/`ch#1_tl`/`node#1_int`/`topo#1_tl` naming already
+% shared by both families -- one function body instead of two.
+\cs_new_protected:Npn \tenkz_tree_unpack:Nnnnnn #1#2#3#4#5#6
+  {
+    \dim_set:cn { l__tenkztree_x #1 _dim }     {#2}
+    \int_set:cn { l__tenkztree_l #1 _int }     {#3}
+    \tl_set:cn  { l__tenkztree_ch #1 _tl }     {#4}
+    \int_set:cn { l__tenkztree_node #1 _int }  {#5}
+    \tl_set:cn  { l__tenkztree_topo #1 _tl }   {#6}
+  }
+
+% Join the two children on the stack.  Parsing records one abstract
+% trivalent vertex; the selected skin draws that same record only after
+% the full word has been parsed, when the third (parent) direction is
+% known.  This separation is what lets the ribbon skin draw a regular
+% ribbon neighbourhood instead of guessing a vertical output at
+% every vertex.
+\cs_new_protected:Npn \tenkz_tree_fuse:
+  {
+    \int_set:Nn \l__tenkztree_lp_int
+      { 1 + \int_max:nn { \l__tenkztree_la_int } { \l__tenkztree_lb_int } }
+    \dim_set:Nn \l__tenkztree_xp_dim
+      { ( \l__tenkztree_xa_dim + \l__tenkztree_xb_dim ) / 2 }
+    \int_incr:N \l__tenkztree_node_int
+    \int_set_eq:NN \l__tenkztree_nodep_int \l__tenkztree_node_int
+    \coordinate
+      (tenkztree-\int_use:N\g__tenkztree_id_int-
+       \int_use:N\l__tenkztree_nodep_int) at
+      (\dim_use:N \l__tenkztree_xp_dim,
+       \tenkz_tree_levely:n {\l__tenkztree_lp_int});
+    \prop_put:Nee \l__tenkztree_parent_prop
+      { \int_use:N \l__tenkztree_nodea_int }
+      { \int_use:N \l__tenkztree_nodep_int }
+    \prop_put:Nee \l__tenkztree_parent_prop
+      { \int_use:N \l__tenkztree_nodeb_int }
+      { \int_use:N \l__tenkztree_nodep_int }
+    \prop_put:Nee \l__tenkztree_internal_prop
+      { \int_use:N \l__tenkztree_nodep_int } {1}
+    \tl_if_blank:VF \l__tenkztree_cha_tl
+      { \tenkz_tree_edge_charge:NnN \l__tenkztree_xa_dim
+          {\l__tenkztree_la_int} \l__tenkztree_cha_tl }
+    \tl_if_blank:VF \l__tenkztree_chb_tl
+      { \tenkz_tree_edge_charge:NnN \l__tenkztree_xb_dim
+          {\l__tenkztree_lb_int} \l__tenkztree_chb_tl }
+    \seq_put_right:Ne \l__tenkztree_vertices_seq
+      { { \int_use:N \l__tenkztree_nodep_int }
+        { \int_use:N \l__tenkztree_nodea_int }
+        { \int_use:N \l__tenkztree_nodeb_int } }
+    \seq_put_right:Ne \l__tenkztree_stack_seq
+      { { \dim_use:N \l__tenkztree_xp_dim }{ \int_use:N \l__tenkztree_lp_int }
+        { \exp_not:V \l__tenkztree_charge_tl }
+        { \int_use:N \l__tenkztree_nodep_int }
+        { (\exp_not:V\l__tenkztree_topoa_tl,
+           \exp_not:V\l__tenkztree_topob_tl) } }
+  }
+
+% A charge labels its vertex's downward edge, half a fusion level below
+% the vertex, on the side of the edge away from the parent.  Both child
+% edges of the vertex lie above it and every other edge lies beyond the
+% downward edge on the parent's side, so that quadrant is ink-free by
+% construction.  #1 = x register of the vertex, #2 = its level, #3 =
+% charge register; the parent's x register is still live.
+\cs_new_protected:Npn \tenkz_tree_edge_charge:NnN #1#2#3
+  {
+    % rightward-descending edge (xp right of the vertex): label the free
+    % LEFT side, anchor east, clearance subtracted; leftward or straight:
+    % label the RIGHT side, anchor west, clearance added
+    \dim_compare:nNnTF { \l__tenkztree_xp_dim } > { #1 }
+      { \tl_set:Nn \l__tenkztree_anchor_tl {east}
+        \dim_set:Nn \l__tenkztree_off_dim { -\tenkz@dim{\tenkz@r@labelclear} } }
+      { \tl_set:Nn \l__tenkztree_anchor_tl {west}
+        \dim_set:Nn \l__tenkztree_off_dim { \tenkz@dim{\tenkz@r@labelclear} } }
+    \node[tn~label, anchor=\l__tenkztree_anchor_tl] at
+      (\dim_eval:n{ #1 + \l__tenkztree_off_dim },
+       \dim_eval:n{ \tenkz_tree_levely:n {#2}
+                    - \tenkz@r@treestep\tenkz@pitch / 2 })
+      { $\tenkz@labelsize \tl_use:N #3$ };
+  }
+
+% Resolve the semantic ink once per tree.  Species is the first
+% indirection and role wins, matching every other tenkz element.
+\cs_new_protected:Npn \tenkz_tree_resolve_style:
+  {
+    \tl_set:Nn \l__tenkztree_path_tl {bond}
+    \tl_set:Nn \l__tenkztree_fill_tl {tree~ribbon~fill}
+    \tl_set:Nn \l__tenkztree_junction_tl {tree~junction}
+    \tl_if_blank:VF \l__tenkztree_species_tl
+      {
+        \tl_set:Ne \l__tenkztree_path_tl
+          {species~\tl_use:N\l__tenkztree_species_tl\c_space_tl bond}
+        \tl_set:Ne \l__tenkztree_fill_tl
+          {species~\tl_use:N\l__tenkztree_species_tl\c_space_tl ribbon~fill}
+        \tl_set:Ne \l__tenkztree_junction_tl
+          {species~\tl_use:N\l__tenkztree_species_tl
+            \c_space_tl tree~junction}
+      }
+    \tl_if_blank:VF \l__tenkztree_role_tl
+      {
+        \tl_set:Ne \l__tenkztree_path_tl
+          {\tl_use:N\l__tenkztree_role_tl\c_space_tl bond}
+        \tl_set:Ne \l__tenkztree_fill_tl
+          {\tl_use:N\l__tenkztree_role_tl\c_space_tl ribbon~fill}
+        \tl_set:Ne \l__tenkztree_junction_tl
+          {\tl_use:N\l__tenkztree_role_tl\c_space_tl tree~junction}
+      }
+    \str_if_eq:VnT \l__tenkztree_skin_tl {ribbon}
+      {
+        \tl_if_blank:VTF \l__tenkztree_role_tl
+          {
+            \tl_if_blank:VTF \l__tenkztree_species_tl
+              { \tl_set:Nn \l__tenkztree_path_tl {tree~ribbon} }
+              { \tl_set:Ne \l__tenkztree_path_tl
+                  {species~\tl_use:N\l__tenkztree_species_tl
+                    \c_space_tl ribbon} }
+          }
+          { \tl_set:Ne \l__tenkztree_path_tl
+              {\tl_use:N\l__tenkztree_role_tl\c_space_tl ribbon} }
+      }
+  }
+
+\cs_new:Npn \tenkz_tree_name:n #1
+  { tenkztree-\int_use:N\g__tenkztree_id_int-#1 }
+
+\cs_new_protected:Npn \tenkz_tree_wire_vertex:nnn #1#2#3
+  {
+    \draw[\l__tenkztree_path_tl]
+      (\tenkz_tree_name:n {#2}) -- (\tenkz_tree_name:n {#1});
+    \draw[\l__tenkztree_path_tl]
+      (\tenkz_tree_name:n {#3}) -- (\tenkz_tree_name:n {#1});
+    \node[\l__tenkztree_junction_tl] at
+      (\tenkz_tree_name:n {#1}) {};
+  }
+
+% One band owns the filled strip and its two boundaries between leaf/root
+% endpoints or vertex-patch mouths.  It is deliberately not TikZ's
+% `double' stroke: the two curves bound a surface, while the disjoint
+% vertex patch owns all ink inside each trivalent neighbourhood.
+\cs_new_protected:Npn \tenkz_tree_ribbon_band:nn #1#2
+  {
+    % Each internal endpoint is trimmed to its patch mouth.  The patch,
+    % not a center-to-center contour hidden underneath it, owns every
+    % junction.  Leaves and the root remain untrimmed.
+    \coordinate (tenkzearaw) at (\tenkz_tree_name:n {#1});
+    \coordinate (tenkzebraw) at (\tenkz_tree_name:n {#2});
+    \prop_if_in:NnTF \l__tenkztree_internal_prop {#1}
+      { \coordinate (tenkzea) at
+          ($(tenkzearaw)!\tenkz@r@treepatchreach\tenkz@pitch!
+            (tenkzebraw)$); }
+      { \coordinate (tenkzea) at (tenkzearaw); }
+    \prop_if_in:NnTF \l__tenkztree_internal_prop {#2}
+      { \coordinate (tenkzeb) at
+          ($(tenkzebraw)!\tenkz@r@treepatchreach\tenkz@pitch!
+            (tenkzearaw)$); }
+      { \coordinate (tenkzeb) at (tenkzebraw); }
+    \draw[\l__tenkztree_fill_tl, line~cap=butt,
+      line~width=\dim_eval:n {2\tenkz@dim{\tenkz@r@treeribbonhalf}}]
+      (tenkzea) -- (tenkzeb);
+    % Calc's rotated-coordinate scanner is deliberately fed plain names;
+    % expl3 function tokens inside the rotated target are not scan-safe.
+    \tenkz@ribbonoffset{tenkzeaL}{tenkzea}{tenkzeb}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{90}
+    \tenkz@ribbonoffset{tenkzeaR}{tenkzea}{tenkzeb}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{-90}
+    \tenkz@ribbonoffset{tenkzebL}{tenkzeb}{tenkzea}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{90}
+    \tenkz@ribbonoffset{tenkzebR}{tenkzeb}{tenkzea}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{-90}
+    \draw[\l__tenkztree_path_tl]
+      (tenkzeaL) -- (tenkzebR);
+    \draw[\l__tenkztree_path_tl]
+      (tenkzeaR) -- (tenkzebL);
+  }
+\cs_new_protected:Npn \tenkz_tree_ribbon_vertex_bands:nnn #1#2#3
+  {
+    \tenkz_tree_ribbon_band:nn {#1}{#2}
+    \tenkz_tree_ribbon_band:nn {#1}{#3}
+  }
+
+% The central patch is the regular ribbon neighbourhood of a trivalent
+% vertex: a disc with three attached bands.  Each sector arc has two
+% distinct controls, so the patch retains a nonzero waist and its boundary
+% never pinches or crosses.  No tensor bead or fused-bond glyph is inserted.
+\cs_new_protected:Npn \tenkz_tree_ribbon_patch:nnnn #1#2#3#4
+  {
+    \coordinate (tenkzvc) at (\tenkz_tree_name:n {#1});
+    \coordinate (tenkzva) at (\tenkz_tree_name:n {#2});
+    \coordinate (tenkzvb) at (\tenkz_tree_name:n {#3});
+    \coordinate (tenkzvp) at (#4);
+    \coordinate (tenkzpa) at
+      ($(tenkzvc)!\tenkz@r@treepatchreach\tenkz@pitch!(tenkzva)$);
+    \coordinate (tenkzpb) at
+      ($(tenkzvc)!\tenkz@r@treepatchreach\tenkz@pitch!(tenkzvb)$);
+    \coordinate (tenkzpp) at
+      ($(tenkzvc)!\tenkz@r@treepatchreach\tenkz@pitch!(tenkzvp)$);
+    \tenkz@ribbonoffset{tenkzpaL}{tenkzpa}{tenkzva}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{90}
+    \tenkz@ribbonoffset{tenkzpaR}{tenkzpa}{tenkzva}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{-90}
+    \tenkz@ribbonoffset{tenkzpbL}{tenkzpb}{tenkzvb}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{90}
+    \tenkz@ribbonoffset{tenkzpbR}{tenkzpb}{tenkzvb}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{-90}
+    \tenkz@ribbonoffset{tenkzppL}{tenkzpp}{tenkzvp}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{90}
+    \tenkz@ribbonoffset{tenkzppR}{tenkzpp}{tenkzvp}
+      {\tenkz@r@treeribbonhalf\tenkz@pitch}{-90}
+    \path[\l__tenkztree_fill_tl, draw=none]
+      (tenkzpbL)
+        .. controls ($(tenkzpbL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzpaR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzpaR) --
+      (tenkzpaL)
+        .. controls ($(tenkzpaL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzppR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzppR) --
+      (tenkzppL)
+        .. controls ($(tenkzppL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzpbR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzpbR) -- cycle;
+    \draw[\l__tenkztree_path_tl]
+      (tenkzpbL)
+        .. controls ($(tenkzpbL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzpaR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzpaR);
+    \draw[\l__tenkztree_path_tl]
+      (tenkzpaL)
+        .. controls ($(tenkzpaL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzppR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzppR);
+    \draw[\l__tenkztree_path_tl]
+      (tenkzppL)
+        .. controls ($(tenkzppL)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        and ($(tenkzpbR)!\tenkz@r@treepatchcontrol!(tenkzvc)$)
+        .. (tenkzpbR);
+  }
+
+\cs_new_protected:Npn \tenkz_tree_ribbon_vertex_patch:nnn #1#2#3
+  {
+    \prop_get:NnNTF \l__tenkztree_parent_prop {#1} \l__tenkztree_parent_tl
+      {
+        \str_if_eq:VnTF \l__tenkztree_parent_tl {root}
+          { \tenkz_tree_ribbon_patch:nnnn {#1}{#2}{#3}
+              {tenkztree-\int_use:N\g__tenkztree_id_int-root} }
+          { \tenkz_tree_ribbon_patch:nnnn {#1}{#2}{#3}
+              {\tenkz_tree_name:n {\l__tenkztree_parent_tl}} }
+      }
+      { \PackageError{tenkz}{Internal~tree~vertex~#1~has~no~parent}{} }
+  }
+
+\cs_new_protected:Npn \tenkz_tree_geometry:n #1
+  {
+    \begin{pgfonlayer}{background}
+      \str_if_eq:VnTF \l__tenkztree_skin_tl {wire}
+        {
+          \seq_map_inline:Nn \l__tenkztree_vertices_seq
+            { \tenkz_tree_wire_vertex:nnn ##1 }
+          \draw[\l__tenkztree_path_tl]
+            (\tenkz_tree_name:n {#1}) --
+            (tenkztree-\int_use:N\g__tenkztree_id_int-root);
+        }
+        {
+          \seq_map_inline:Nn \l__tenkztree_vertices_seq
+            { \tenkz_tree_ribbon_vertex_bands:nnn ##1 }
+          \tenkz_tree_ribbon_band:nn {#1}{root}
+          \seq_map_inline:Nn \l__tenkztree_vertices_seq
+            { \tenkz_tree_ribbon_vertex_patch:nnn ##1 }
+        }
+    \end{pgfonlayer}
+  }
+
+% The root creates the third direction of its vertex, renders the selected
+% skin from the recorded topology, and finally places the total charge.
+\cs_new_protected:Npn \tenkz_tree_root:nnnnn #1#2#3#4#5
+  {
+    \tl_set:Nn \l__tenkztree_topop_tl {#5}
+    \coordinate (tenkztree-\int_use:N\g__tenkztree_id_int-root) at
+      (#1, \dim_eval:n{ \tenkz_tree_levely:n {#2}
+                        - \tenkz@r@treeleg\tenkz@pitch });
+    \prop_put:Nnn \l__tenkztree_parent_prop {#4} {root}
+    \tenkz_tree_geometry:n {#4}
+    \tl_if_blank:nF {#3}
+      {
+        \node[tn~label, anchor=west] at
+          (\dim_eval:n{ #1 + \tenkz@dim{\tenkz@r@labelclear} },
+           \dim_eval:n{ \tenkz_tree_levely:n {#2}
+                        - \tenkz@r@treeleg\tenkz@pitch / 2 })
+          { $\tenkz@labelsize #3$ };
+      }
+  }
+
+\NewDocumentCommand \tntree { O{} m }
+  { \tenkz_tree:nn {#1} {#2} }
+
+\cs_new_protected:Npn \tenkz_tree:nn #1#2
+  {
+    \group_begin:
+    \tl_set:Nn \l__tenkztree_skin_tl {wire}
+    \tl_clear:N \l__tenkztree_role_tl
+    \tl_clear:N \l__tenkztree_species_tl
+    \tl_if_empty:nF {#1} { \pgfqkeys{/tenkz/tree}{#1} }
+    \tenkz_tree_resolve_style:
+    \int_gincr:N \g__tenkztree_id_int
+    % \, and spaces are separators, not syntax; flatten to items
+    % (spaces never form items, so only \, needs stripping)
+    \tl_set:Nn \l__tenkztree_word_tl {#2}
+    \tl_remove_all:Nn \l__tenkztree_word_tl { \, }
+    \seq_clear:N \l__tenkztree_items_seq
+    \tl_map_inline:Nn \l__tenkztree_word_tl
+      { \seq_put_right:Nn \l__tenkztree_items_seq {##1} }
+    \seq_clear:N \l__tenkztree_stack_seq
+    \seq_clear:N \l__tenkztree_vertices_seq
+    \prop_clear:N \l__tenkztree_parent_prop
+    \prop_clear:N \l__tenkztree_internal_prop
+    \int_zero:N \l__tenkztree_leaf_int
+    \int_zero:N \l__tenkztree_node_int
+    \tenkz_tree_read_axis:
+    \begin{tikzpicture}[ tenkz~every~picture, tenkz~tree~baseline ]
+      \tenkz_tree_node:
+      % exactly one tree per word: leftover items after the root parse
+      % would otherwise vanish, rendering a plausible tree of the WRONG
+      % parenthesization word (`a\,b` would draw the one-leaf tree `a`)
+      \seq_if_empty:NF \l__tenkztree_items_seq
+        { \PackageError{tenkz}{Malformed~tree:~trailing~material~after~
+            the~root~--~a~word~denotes~exactly~one~tree}{} }
+      \seq_pop_right:NNT \l__tenkztree_stack_seq \l__tenkztree_ca_tl
+        { \exp_last_unbraced:NV \tenkz_tree_root:nnnnn \l__tenkztree_ca_tl }
+      % The canonical numeric bracketing reconstructs the rooted binary
+      % tree without writing arbitrary TeX labels into structural fields.
+      \tenkz@event{tree|picture=\the\tenkz@pictureid|
+        id=\int_use:N\g__tenkztree_id_int|
+        style=\tl_use:N\l__tenkztree_skin_tl|
+        leaves=\int_use:N\l__tenkztree_leaf_int|
+        vertices=\int_eval:n{\seq_count:N\l__tenkztree_vertices_seq}|
+        topology=\tl_use:N\l__tenkztree_topop_tl|
+        role=\tl_if_blank:VTF\l__tenkztree_role_tl{none}
+          {\tl_use:N\l__tenkztree_role_tl}|
+        species=\tl_if_blank:VTF\l__tenkztree_species_tl{none}
+          {\tl_use:N\l__tenkztree_species_tl}}
+    \end{tikzpicture}
+    \group_end:
+  }
+
+\ExplSyntaxOff
+\endinput

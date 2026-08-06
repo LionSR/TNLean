@@ -103,7 +103,8 @@ geometry service:
 
 - grid layout for `tenkz`;
 - lattice layout, including the `tenkzplanes` preset;
-- map, polygon, and fusion-tree layout for `tenkzcd`;
+- map and polygon layout for `tenkzcd`;
+- fusion-tree layout for the standalone `\tntree` atom;
 - explicitly placed typed-graph layout for `tenkzfree`.
 
 Dialect layout owns only placement rules that are genuinely specific to that

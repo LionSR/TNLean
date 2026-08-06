@@ -5,9 +5,10 @@
 % Next stage: tenkz-language.code.tex validates and registers public syntax.
 %
 % The four sub-languages: the contraction grid (tenkz, \tnpic),
-% commutative diagrams (tenkzcd: polygon mode and \tntree),
-% lattice-region schematics (tenkzlattice, with the tenkzplanes
-% double-layer preset), and free placement (tenkzfree).  0.6 speaks
+% commutative diagrams (tenkzcd: polygon mode), lattice-region
+% schematics (tenkzlattice, with the tenkzplanes double-layer preset),
+% and free placement (tenkzfree).  Fusion trees (\tntree) are
+% standalone structured atoms drawn by tenkz-tree.code.tex.  0.6 speaks
 % one key vocabulary across the tiers: frame=, the side-policy
 % alphabet (west=/east=), and the contraction cell-sets (open=/trace=).
 \NeedsTeXFormat{LaTeX2e}
@@ -37,6 +38,9 @@
 \input{tenkz-string.code.tex}
 \input{tenkz-frame.code.tex}
 \input{tenkz-grid.code.tex}
+% The tree file precedes the cd dialect: tenkz-cd borrows the tree's
+% math-atom axis reader and baseline style until its retirement (#4699).
+\input{tenkz-tree.code.tex}
 \input{tenkz-cd.code.tex}
 \input{tenkz-lattice.code.tex}
 \input{tenkz-free.code.tex}

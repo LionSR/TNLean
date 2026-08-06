@@ -424,18 +424,14 @@ the global controlled map $\mathcal S_0$. The four fiberwise types are
 % matrix-algebra domains and codomains. Ink: every blue stroke denotes a
 % trace-preserving completely positive map, and its label specifies the map.
 \par\noindent\hfil
-  \begin{tenkzcd}[maps, species={channel}, row sep=6mm]
-    \mathcal A_2^{k,h} & \mathcal A_{\partial}^{k,h} \\
-    \mathcal A_{\eta}^{k,h} & \mathcal A_2^{k,h} \\
-    \mathcal A_3^{k,l,h} & \mathcal A_{\partial}^{k,h} \\
-    \mathcal A_{\Omega}^{k,h} & \mathcal A_3^{k,\bullet,h}
-    \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
-      {\mathcal T_0^{(k,h)}}
-    \tnarrow[from={(2,1)}, to={(2,2)}, species=channel]
-      {\mathcal S_2^{(k,h)}}
-    \tnarrow[from={(3,1)}, to={(3,2)}, species=channel]
-      {\mathcal S_0^{(k,l,h)}}
-    \tnarrow[from={(4,1)}, to={(4,2)}, species=channel]
-      {\mathcal T_2^{(k,h)}}
-  \end{tenkzcd}
+  \begin{tikzcd}[channel, column sep=16mm, row sep=6mm]
+    \mathcal A_2^{k,h} \arrow[r, "\mathcal T_0^{(k,h)}"] &
+      \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\eta}^{k,h} \arrow[r, "\mathcal S_2^{(k,h)}"] &
+      \mathcal A_2^{k,h} \\
+    \mathcal A_3^{k,l,h} \arrow[r, "\mathcal S_0^{(k,l,h)}"] &
+      \mathcal A_{\partial}^{k,h} \\
+    \mathcal A_{\Omega}^{k,h} \arrow[r, "\mathcal T_2^{(k,h)}"] &
+      \mathcal A_3^{k,\bullet,h}
+  \end{tikzcd}
 \hfil\par
