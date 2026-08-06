@@ -63,6 +63,30 @@ theorem bipartiteSlice_apply
     (i₂ j₂ : δ) (i₁ j₁ : α) :
     bipartiteSlice X i₂ j₂ i₁ j₁ = X (i₁, i₂) (j₁, j₂) := rfl
 
+@[simp]
+theorem bipartiteSlice_add
+    (X Y : Matrix (α × δ) (α × δ) ℂ) (i₂ j₂ : δ) :
+    bipartiteSlice (X + Y) i₂ j₂ = bipartiteSlice X i₂ j₂ + bipartiteSlice Y i₂ j₂ := by
+  ext; simp [bipartiteSlice]
+
+@[simp]
+theorem bipartiteSlice_smul
+    (c : ℂ) (X : Matrix (α × δ) (α × δ) ℂ) (i₂ j₂ : δ) :
+    bipartiteSlice (c • X) i₂ j₂ = c • bipartiteSlice X i₂ j₂ := by
+  ext; simp [bipartiteSlice]
+
+@[simp]
+theorem bipartiteSlice_zero (i₂ j₂ : δ) :
+    bipartiteSlice (0 : Matrix (α × δ) (α × δ) ℂ) i₂ j₂ = 0 := by
+  ext; simp [bipartiteSlice]
+
+@[simp]
+theorem bipartiteSlice_conjTranspose
+    (X : Matrix (α × δ) (α × δ) ℂ) (i₂ j₂ : δ) :
+    bipartiteSlice Xᴴ i₂ j₂ = (bipartiteSlice X j₂ i₂)ᴴ := by
+  ext i₁ j₁
+  simp [bipartiteSlice, Matrix.conjTranspose_apply]
+
 /-- The tensor product of a matrix linear map `T` with the identity on the
 matrix factor indexed by `δ`. The resulting map has the entrywise formula
 

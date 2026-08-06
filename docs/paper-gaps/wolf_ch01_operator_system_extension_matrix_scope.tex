@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf's Operator-System Extension: Full-Matrix-Algebra Scope Restriction}
+\author{}
+\date{2026-08-06}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Wolf's proposition "Extending cp maps from operator systems" quantifies over
+two arbitrary finite-dimensional $C^\ast$-algebras $\mathcal A,\mathcal B$: let
+$T:S\to\mathcal B$ be a completely positive linear map from an operator system
+$S\subseteq\mathcal A$; then there is a completely positive map
+$\tilde T:\mathcal A\to\mathcal B$ agreeing with $T$ on $S$
+\cite[Proposition, lines~614--626]{Wolf2012Quantum}. The local source is
+\path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex}, lines~617--619
+(statement) and 620--626 (proof). Neither $\mathcal A$ nor $\mathcal B$ is
+assumed to be a full matrix algebra: a finite-dimensional $C^\ast$-algebra is,
+by the finite-dimensional structure theorem, a direct sum
+$\bigoplus_k M_{d_k}(\mathbb C)$, and the proposition covers every such
+algebra, not only the one-summand case $\mathcal A=M_m(\mathbb C)$.
+
+\section{The formalized scope}
+
+The formal development takes both ambient algebras to be full matrix algebras,
+$\mathcal A=\MN{m}$ and $\mathcal B=\MN{n}$: \leanid{Matrix.IsOperatorSystem}
+(\doclink{TNLean/Channel/OperatorSystem}) is a predicate on a
+\leanid{Submodule ℂ} of $\MN{m}$, and the extension theorem
+\leanid{Matrix.exists_cp_extension_of_operatorSystem}
+(\doclink{TNLean/Channel/OperatorSystemExtension}) produces
+$\tilde T:\MN{m}\to\MN{n}$. This is not merely an ambient convenience: the
+choice of $\mathcal B=M_n(\mathbb C)$ tracks the source proof's own reduction,
+which fixes the ancilla dimension $n$ so that $\mathcal B$ is a subalgebra of
+$M_n(\mathbb C)$ and never revisits the direct-sum structure of $\mathcal A$
+after that point. What remains unformalized is the direct-sum case of the
+\emph{domain} algebra $\mathcal A=\bigoplus_k M_{d_k}(\mathbb C)$ with more
+than one summand, together with the corresponding operator-system predicate
+and Hahn--Banach argument stated for a subspace of that direct sum.
+
+\section{Verdict}
+
+\textbf{Open scope restriction.} The full-matrix-algebra case
+$\mathcal A=M_m(\mathbb C)$ is a faithful formalization of Wolf's proposition
+restricted to a one-summand domain algebra; no hypothesis is added beyond that
+restriction (the operator-system and complete-positivity predicates match the
+source's definitions verbatim on $M_m(\mathbb C)$). Generalizing to an
+arbitrary finite-dimensional $\mathcal A=\bigoplus_k M_{d_k}(\mathbb C)$ is not
+attempted here. The proof technique embeds directly (a subspace of a direct
+sum of matrix algebras is again a subspace of a single larger matrix algebra
+via block-diagonal embedding, so the extension argument itself should carry
+over), but the embedding step and the transport of the operator-system and
+complete-positivity predicates along it are separate work, tracked in
+\ghissue{5589}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
