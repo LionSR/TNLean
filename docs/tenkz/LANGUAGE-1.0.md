@@ -583,8 +583,12 @@ closure wire carries a canonical name — `wrap-1` for row 1's trace return,
 cups, names are side-qualified (`cup-west-1-2`, `cup-east-1-2`) so every
 derived wire remains addressable as one named record. Generated legs take
 canonical names on the same rule and are named records like any other, which
-is why no address production is needed to reach one. Beads and labels attach
-to closures by the ordinary address grammar. A leg has one model end and one
+is why no address production is needed to reach one. That holds of the legs
+the `physical=` picture policy grows as well: each is a wire record named
+`leg-<face>-<row>-<col>`, the name the crossing grammar already spells, so a
+row whose legs are stated once by the policy loses nothing a per-atom port
+list would give. Beads and labels attach to
+closures by the ordinary address grammar. A leg has one model end and one
 free tip, so `on <leg> t` is read along the leg the picture draws, from the
 end the wire is written from to the end it is written to. A closed chain that renders open
 is impossible by construction: the closure IS a wire record, and every wire
