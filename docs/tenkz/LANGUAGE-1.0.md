@@ -75,7 +75,7 @@ declared. The generated reference prints this test beside every row.
 | `rows=` | row-list | — | `{wire}` | picture | `TKZ-PIC-*` |
 | `cols=` | integer | — | 3 | picture | `TKZ-PIC-*` |
 | `frame=` | frame-spec | `flat` `plane` `circle`; a picture-level `flat` or `plane` may carry `basis=` | `flat` | picture, group, atom | `TKZ-FRAME-*` |
-| `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `open` | picture | `TKZ-SIDE-*` |
+| `west=` `east=` `north=` `south=` | small-enum | `open` `none` `trace` `cup` | `none` | picture | `TKZ-SIDE-*` |
 | `trace=` | trace-spec | selector or `physical` | empty | picture | `TKZ-SELECT-*` |
 | `open=` | selector | — | empty | picture | `TKZ-SELECT-*` |
 | `bonds=` | small-enum | `grid` `none` | `grid` | picture | `TKZ-PIC-*` |
@@ -334,6 +334,18 @@ with `[TKZ-CIRCLE-OPEN-DIRECTION]` until a station-local or geodesic diagonal
 construction is part of the language. There are no placeholder atoms.
 <!-- Consumers of the open-end policy: every former tenkzfree body; e.g.
      rmp-ii-triangle-network, rmp-ii-mpo-sheet, rmp-iii-b-braid-one. -->
+
+A side that exposes indices says so. The four side words default to `none`,
+so a picture that states no policy draws no side leg and carries the empty
+boundary signature on those sides; `west=open`, or `boundary=open` for the
+pair, is what mints the legs and puts them in the signature. This follows
+from open ink being declared content (§13): the frame's grid is a coordinate
+system that places atoms, not a claim that every rim cell owns a dangling
+index, and a circuit or a single-atom picture would collect nonsense legs
+under any other reading. `none` is the explicit spelling of the default and
+changes nothing in a kernel picture; it seals in the grid dialect, whose
+pictures do draw their west and east stubs unbidden, and that difference is
+the one place the two languages disagree about a default.
 
 ## 4. Frames
 
@@ -1076,3 +1088,15 @@ confirmation at L1 acceptance:
    is one exchange of net zero, and it is spelled in §2.5 above. It costs no
    key either way, so the registry books it in the change that adds the
    parser row rather than in two halves.
+6. **The kernel side default is `none` — corrected 2026-08-06.** The key
+   table above and the four `kernel-picture` registry rows read `open`,
+   which was the 0.7 default copied into the kernel tier by hand: a grid
+   picture does draw its west and east stubs unbidden and seals them with
+   `boundary=none`, and neither is true under `\tenkzkernel`. Honouring the
+   printed `open` was measured across the 130 benchmark targets and rejected:
+   thirty stop compiling on a doubly consumed boundary port, forty-three grow
+   legs, and forty move their boundary signature. The reading the contract
+   supports is the one the kernel already implements — open ink is declared
+   content (§13), so a side that exposes indices says so. The registry rows,
+   the key table, and §3 now say that, and `none` is the explicit spelling of
+   the kernel default rather than a seal.

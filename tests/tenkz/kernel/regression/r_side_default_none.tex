@@ -1,0 +1,23 @@
+% Regression: a kernel side exposes indices only when it says so.  The three
+% pictures are the same chain under no side policy, under the explicit
+% spelling of the default, and under the open word.  The first two carry the
+% empty boundary signature and mint no policy leg; only the third mints them.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tn{A} & \tn{B}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, boundary=none]
+  \tn{A} & \tn{B}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, boundary=open]
+  \tn{A} & \tn{B}
+\end{tenkz}
+\end{document}
