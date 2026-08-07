@@ -2514,3 +2514,4 @@ leave the ledger. M2 falls from 228 parser paths to 213. M3 stays at
 24: the deleted fixtures were corpus, not demand; the metered escapes
 died with #5601's respelling. M4 is untouched at 25.94, no alias or
 overload moves, and the census decrease is the session's own evidence.
+| flag:lonely-type:address | keep: the address grammar is the kernel's placement language itself (`at=` on every atom), lonely only because the cd dialect's arrow endpoints left with their front end; expiry 0.9 |
