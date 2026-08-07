@@ -87,7 +87,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L581, 583 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L444 `tenkzfree` → `R-free+R-record` |
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 76, 128, 263, 268, 273, 280, 285, 484, 702, 708, 712 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
@@ -109,7 +109,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | — | — | L22 `tenkzlattice` → `C-species+R-lattice+R-record` |
 | `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457 `tenkz` → `P-grid` | — | L605 `tenkz` → `C-policy+R-record`<br>L610 `tenkzfree` → `R-free+R-record` |
-| `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 218, 223 `tenkz` → `P-grid` | — | — |
+| `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 220, 225 `tenkz` → `P-grid` | — | — |
 
 ### Blueprint reconciliation
 
