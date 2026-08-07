@@ -2401,3 +2401,38 @@ booked `R-free` in the disposition ledger and awaiting its own redraw.
 | flag:consumers:key:region:outline | dies at S4 with the 0.7 region ledger: a kernel enclosure strokes its contour by default and `tint` adds the wash, so the outline flag owes no kernel spelling; both remaining consumers are ch24 free graphs booked `R-free`; expiry 0.9 |
 | flag:cooccur:connection:in+route | confirmed merge, tombstoned by contract: `out=`/`in=` migrate to `route=arc`, which leaves and enters along its ends' faces (`LANGUAGE-1.0` §10); every surviving invocation rides a ch24 free graph awaiting its `R-free` redraw, and the pair dies with the connection tier at S4; expiry 0.9 |
 | flag:cooccur:connection:out+route | confirmed merge, tombstoned by contract, exactly as `in=` above: the arc route replaces the pair and the ch24 redraws retire the invocations; expiry 0.9 |
+
+### 2026-08-07 — the blueprint's last lattice regions leave the 0.7 tier
+
+The ch24 PEPS wave (issue #4699, tracker #4709) respelled the chapter set's
+twelve `tenkzlattice` and twenty-six `tenkzfree` pictures onto the kernel,
+which empties the blueprint of `tenkzlattice` entirely and drops M3 escape
+usage from 24 to 6: every removed occurrence was a raw free-graph coordinate
+that is now an address.  The `\tnregion` command and its `region` key scope
+lose their last authored consumers outside the frozen legacy fixtures, so
+the low-consumer and shape flags below all name the same fact: the 0.7
+region tier is now dead weight awaiting the S4 swap, its kernel replacement
+— `\tnmark[form=enclosure]` over a selector — already carrying every
+blueprint region this wave moved.
+
+M1, M2, M5, and M6 do not move.  M4 does not move: the benchmark corpus is
+untouched.
+
+| flag | verdict |
+|---|---|
+| flag:cooccur:region:label pos+name | dies at the S4 swap with the 0.7 region tier it belongs to; the kernel spelling is a `\tnmark[form=enclosure]` record whose label and name are ordinary mark keys, and the blueprint's last `\tnregion` consumers were respelled in this wave; expiry 0.9 |
+| flag:cooccur:region:label pos+slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row and `label pos=` separately, and their 0.7 co-occurrence is an artifact of the six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:name+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:sugar-shaped:command:tnregion | dies at the S4 swap: `\tnregion` is the 0.7 spelling of `\tnmark[form=enclosure]`, every blueprint consumer now writes the mark, and the six remaining occurrences live in the frozen legacy fixtures the compatibility renderers still read; expiry 0.9 |
+| flag:consumers:command:tnregion | dies at the S4 swap: the two remaining demand-corpus consumers are frozen legacy fixtures, and every authored region is a `\tnmark[form=enclosure]` record; expiry 0.9 |
+| flag:consumers:command:tnsite | dies at the S4 swap with the `tenkzlattice` tier: its tombstone already names `\tn[at=(r,c)]`, and this wave respelled the blueprint's last `\tnsite`; expiry 0.9 |
+| flag:consumers:key:connection:name | dies at the S4 swap with the 0.7 connection tier: the kernel wire carries its own signed `name=` row, and the named `\tnjoin` consumers left with the ch24 free graphs; expiry 0.9 |
+| flag:consumers:key:object:label | dies at the S4 swap with the 0.7 object tier: a kernel label is the positional mathematics of the record, and the blueprint no longer writes the key; expiry 0.9 |
+| flag:consumers:key:object:ring | dies at the S4 swap with the 0.7 object tier: the kernel spelling is `skin=ring`, and the last blueprint `ring` flags were respelled in this wave; expiry 0.9 |
+| flag:consumers:key:region:label | dies at the S4 swap with the 0.7 region tier: a kernel enclosure takes its label positionally; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `label pos=` row; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at the S4 swap with the 0.7 region tier: the kernel enclosure is outline by default and `tint` opts into the fill, so the flag key has no kernel row to inherit; expiry 0.9 |
+| flag:consumers:key:region:slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row until the deferred slot-for-species exchange executes; expiry 0.9 |
+| flag:cooccur:region:label+label pos | dies at the S4 swap with the 0.7 region tier, the same six frozen fixture regions as its siblings above; expiry 0.9 |
+| flag:cooccur:region:label+name | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:label+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
