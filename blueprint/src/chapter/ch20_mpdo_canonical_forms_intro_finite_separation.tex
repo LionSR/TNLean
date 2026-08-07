@@ -101,12 +101,14 @@
         % the block index j only, while the gauge blocks X_{j,q} depend on
         % both indices.  Both sides carry the same boundary signature
         % (virtual-west=1 | virtual-east=1 | physical-up=1 | physical-down=1).
-        \begin{tenkz}[physical=updown]
-            \tn{K}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[ports={90:physical, 270:physical}]{K}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=updown]
-            \tnX{X} & \tn{\bigoplus_j\mathcal K_j} & \tnX{X^{-1}}
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X} & \tn[ports={90:physical, 270:physical}]{\bigoplus_j\mathcal K_j} &
+            \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
     \caption{Horizontal canonical form of the doubled tensor: the gauge $X$,
@@ -215,10 +217,13 @@
     % signature
     % (virtual-west=1 | virtual-east=1 | physical-up=3 |
     % physical-down=3).
-    \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
-        \tn[pill, wide=3, legs at={1,2,3}]{U} & & \\
-        \tn[wide=3]{\widetilde M} & & \\
-        \tn[pill, wide=3, legs at={1,2,3}]{U^\dagger} & &
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=3]
+        \tn[at=(1,1), skin=pill, wide=3, ports={90@1:physical, 90@2:physical, 90@3:physical}]{U}
+        \tn[at=(2,1), skin=box, wide=3, name=M]{\widetilde M}
+        \tn[at=(3,1), skin=pill, wide=3,
+            ports={270@1:physical, 270@2:physical, 270@3:physical}]{U^\dagger}
+        \tnwire{open w}{M.180} \tnwire{M.0}{open e}
     \end{tenkz}
     $ = \bigoplus_\alpha $
     {\tenkzkernel
