@@ -139,9 +139,10 @@ name belongs to the port it names, and a port already knows which way it
 points. A cluster carrier is a glyphless group and owns no authored `ports=`;
 attach wires to its addressable member atoms instead. `void=open` is a hole
 that preserves indices; `void=sealed` removes the site and its bonds. A void
-site's skin defaults to `none` rather than `dot`: a hole draws nothing
-unless the author declares a skin, while every record — the bonds bridging
-an open hole, its boundary entries — stands unchanged.
+site's skin defaults to `none` rather than `dot`: a hole draws nothing —
+no glyph and, by the `skin=none` rule it inherits, no label — unless the
+author declares a skin, while every record — the bonds bridging an open
+hole, its boundary entries — stands unchanged.
 
 ### 2.4 Wire keys (10)
 
@@ -1111,3 +1112,6 @@ confirmation at L1 acceptance:
    bonds bridging an open hole, its surviving physical index, the boundary
    signature — is untouched. A declared `skin=` still draws, and the
    `\tnskip` ledger row stays one key long and is glyph-faithful as printed.
+   The default inherits the whole `skin=none` reading: a void's authored
+   label is suppressed with its glyph, so a labelled anchor that must stay
+   visible declares a skin.
