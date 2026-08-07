@@ -68,9 +68,11 @@ virtual legs against a further copy of $K$ recovers $K$:
     % physical-up=1 | physical-down=0).
     \tenkzkernel
     \begin{tenkz}[rows={ket,ket,bra}, cols=1, west=cup, east=cup, bonds=none]
-        \tn[skin=box, ports={90:physical:$p$}]{K} \\ \tn[skin=box]{K^{-1}} \\
-        \tn[skin=box, ports={180:virtual, 0:virtual}]{K}
-        \tnwire{(2,1)}{(3,1)}
+        \tn[skin=box, ports={90:physical:$p$}]{K} \\
+        \tn[skin=box, name=Kinv, ports={270:physical}]{K^{-1}} \\
+        \tn[skin=box, name=Kbot,
+            ports={90:physical, 180:virtual, 0:virtual}]{K}
+        \tnwire{Kinv.270}{Kbot.90}
     \end{tenkz}
     $ = $
     \begin{tenkz}[cols=1, west=open, east=open]

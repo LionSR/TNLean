@@ -201,8 +201,10 @@
         $ = $
         \begin{tenkz}[rows={op,wire}, cols=3, bonds=none]
             \tn[skin=pill, wide=3, name=V,
-                ports={90@1:physical:$i_1$, 90@3:physical:$i_2$}]{V} \\
-            & \tn[name=A, ports={180:virtual, 0:virtual}]{A^j} &
+                ports={90@1:physical:$i_1$, 90@3:physical:$i_2$,
+                       270@2:physical}]{V} \\
+            & \tn[name=A,
+                  ports={180:virtual, 0:virtual, 90:physical:$j$}]{A^j} &
             \tnwire{A.90}{V.270@2}
         \end{tenkz}
     \end{center}
