@@ -117,6 +117,18 @@ for members in \
     exit 1
   }
 done
+# The three unclaimed slot words and the mark name reach the record stream
+# verbatim; the fixture's own hook separately asserts each slot's resolved
+# hue and fails the compile on a mismatch.
+for slot_record in \
+  '|form=enclosure|members=atom-1,atom-4,atom-7|slot=complement|' \
+  '|form=enclosure|label-pos=n|label=R|members=atom-2,atom-5,atom-8|name=R|slot=collar|' \
+  '|form=enclosure|members=atom-3,atom-6,atom-9|slot=neutral|'; do
+  grep -Fq "$slot_record" "$WORK/r_region_slot_words.tnlog" || {
+    echo "FAIL: a region slot word or mark name left the record stream" >&2
+    exit 1
+  }
+done
 grep -Fq '|name=bond-1-1-1-2|origin=grid|' "$WORK/k_blocking.tnlog" || {
   echo "FAIL: bonds=grid did not materialize the adjacent WIRE record" >&2
   exit 1
