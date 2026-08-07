@@ -9,7 +9,7 @@ from typing import Iterable
 
 _STATIC_CONTROL_WORD_NAME_RE = re.compile(r"(?:[^\W\d_]|[@:_])+")
 PICTURE_ENVIRONMENT_NAMES = frozenset(
-    {"tenkz", "tenkzcd", "tenkzfree", "tenkzlattice", "tenkzplanes"}
+    {"tenkz", "tenkzfree", "tenkzlattice", "tenkzplanes"}
 )
 DRAWING_COMMAND_NAMES = frozenset({"tnpic", "tntree"})
 DRAWING_CONSTRUCT_NAMES = PICTURE_ENVIRONMENT_NAMES | DRAWING_COMMAND_NAMES

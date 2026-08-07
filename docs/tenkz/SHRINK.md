@@ -2487,3 +2487,31 @@ constant 201. Demand moves four times and takes its verdicts below.
 | flag:consumers:key:object:down | dies at S4 with the 0.7 object ledger, exactly as `up=` above: the two remaining consumers are the same ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
 | flag:consumers:key:setup:tensor style | dies at S4 with the 0.7 setup tier: the kernel names a silhouette per atom through the signed `skin=` row, which is how every migrated picture now spells it; the one remaining consumer is the ch21 refinement-channel picture-term figure, booked to its own redraw row; expiry 0.9 |
 | flag:sugar-shaped:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); the kernel tier does not yet place a fuse record — the gap this wave measured — so the migrated wedges spell the expansion as `wires=2` atoms bonded by the frame, and all eight remaining occurrences ride the ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+
+### 2026-08-08 — the cd front end is demolished
+
+The sentence of 2026-08-06 executes: `tenkz-cd.code.tex` is deleted, and
+with it the `tenkzcd` environment, the `\tnarrow` command, and the
+`maps`, `polygon=`, `radius=`, `column sep=`, `row sep=`, `from=`, and
+`to=` parser rows leave the registry, each already tombstoned by
+contract (`LANGUAGE-1.0` §10). The fourteen standalone fixtures that
+opened the environment leave the corpus with it; every behaviour they
+carried is classified in `FIXTURE-RETIREMENT.md` §3 as dying with the
+dialect or covered by a named kernel or RMP case, and none is a G1 or
+G2 carrier. Commutative diagrams are drawn by plain tikz-cd from now
+on, which the package no longer loads: the one blueprint consumer of
+tikz-cd is the preamble style in `blueprint/src/macros/diagrams.tex`,
+which now loads the package itself.
+
+Extension-gate: #4699 — the parser-leaf identity change is fourteen
+removed leaves and one removed environment door, the demolition the
+issue's checklist item 6.4 orders; no leaf is added.
+
+M1 falls from 140 kernel rows and 201 total to 136 and 192: four
+kernel key rows (`maps`, `polygon`, `from`, `to`), three escape rows
+(`radius`, `column sep`, `row sep`), one command, and one environment
+leave the ledger. M2 falls from 228 parser paths to 213. M3 stays at
+24: the deleted fixtures were corpus, not demand; the metered escapes
+died with #5601's respelling. M4 is untouched at 25.94, no alias or
+overload moves, and the census decrease is the session's own evidence.
+| flag:lonely-type:address | keep: the address grammar is the kernel's placement language itself (`at=` on every atom), lonely only because the cd dialect's arrow endpoints left with their front end; expiry 0.9 |

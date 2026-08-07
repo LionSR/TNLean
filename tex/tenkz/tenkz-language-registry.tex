@@ -8,8 +8,6 @@
   {Regular one-dimensional contractions.}
 \__tenkz_language_registry_environment:nnnn {tenkzlattice}{lattice}{picture}
   {Spatial lattices, sheets, and regions.}
-\__tenkz_language_registry_environment:nnnn {tenkzcd}{cd}{picture}
-  {Maps, fusion trees, and coherence diagrams.}
 \__tenkz_language_registry_environment:nnnn {tenkzfree}{free}{picture}
   {Irregular typed graphs.}
 \__tenkz_language_registry_environment:nnnn {tenkzplanes}{lattice-preset}{picture}
@@ -43,8 +41,6 @@
   {\tnjoin[keys]{from}{to}}{A free join creates a typed connection record.}
 \__tenkz_language_registry_command:nnnnn {tntree}{atoms}{object}
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
-\__tenkz_language_registry_command:nnnnn {tnarrow}{connections-closures}{connection}
-  {\tnarrow[keys]{label}}{An arrow connects declared diagram objects.}
 \__tenkz_language_registry_command:nnnnn {tnpic}{composition}{picture}
   {\tnpic[picture keys]{body}}{A wrapper composes the grid grammar inside another expression.}
 \__tenkz_language_registry_command:nnnnn {tnset}{setup-extension}{setup}
@@ -82,8 +78,6 @@
   {Mismatched endpoint types are a hard error.}
 \__tenkz_language_registry_example:nnn {tntree}{tex/tenkz/examples/api/tntree.tex}
   {An unbalanced fusion word is a hard error.}
-\__tenkz_language_registry_example:nnn {tnarrow}{tex/tenkz/examples/api/tnarrow.tex}
-  {A nonexistent source or target address is a hard error.}
 \__tenkz_language_registry_example:nnn {tnpic}{tex/tenkz/examples/api/tnpic.tex}
   {An unknown picture key is a hard error.}
 \__tenkz_language_registry_example:nnn {tnset}{tex/tenkz/examples/api/tnset.tex}
@@ -129,14 +123,6 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{escape}{Expert projected column basis.}
 \__tenkz_language_registry_key:nnnnnn {picture}{row vector}{dimension-pair}{frame}{escape}{Expert projected row basis.}
 \__tenkz_language_registry_key:nnnnnn {picture}{sheet vector}{dimension-pair}{frame}{escape}{Expert projected sheet basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{maps}{flag}{false}{kernel}{Typed-map layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{polygon}{positive-integer}{empty}{kernel}{Coherence polygon layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{radius}{length}{metric}{escape}{Coherence polygon radius.}
-% Extension-gate: #5085; Census-correction: #5085 -- these existing tenkzcd
-% geometry spellings become explicit parser leaves and visible to M3 until
-% the typed-map figures migrate under #4699.
-\__tenkz_language_registry_key:nnnnnn {picture}{column sep}{matrix-separation}{metric}{escape}{General tenkzcd column separation: a length or a tikz-cd preset (huge, large, normal, scriptsize, small, or tiny).}
-\__tenkz_language_registry_key:nnnnnn {picture}{row sep}{matrix-separation}{metric}{escape}{General tenkzcd row separation: a length or a tikz-cd preset (huge, large, normal, scriptsize, small, or tiny).}
 \__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{kernel}{Dot silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{kernel}{Box silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{kernel}{Pill silhouette.}
@@ -178,8 +164,6 @@
 \__tenkz_language_registry_key:nnnnnn {connection}{species}{declared-name}{empty}{kernel}{Connection species.}
 \__tenkz_language_registry_key:nnnnnn {connection}{name}{identifier}{generated}{kernel}{Stable semantic name.}
 \__tenkz_language_registry_key:nnnnnn {connection}{fused}{flag}{false}{kernel}{Doubled connection.}
-\__tenkz_language_registry_key:nnnnnn {connection}{from}{address}{empty}{kernel}{Arrow source.}
-\__tenkz_language_registry_key:nnnnnn {connection}{to}{address}{empty}{kernel}{Arrow target.}
 \__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{kernel}{Distinguished lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{kernel}{Suppress a lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{kernel}{Named lattice-edge style.}

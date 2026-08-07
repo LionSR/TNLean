@@ -26,9 +26,8 @@
 %                      so brace clearances tighten accordingly.
 % The policy is a document-wide \tnset key and a per-picture key of the
 % tenkz environment, \tnpic, tenkzlattice, and tenkzfree.  These environments
-% group, so a picture-local assignment scopes itself; tenkzcd cells inherit
-% it through the \tnpic objects they contain.  Explicit per-cell skins (dot,
-% box, circle, pill, mpo) always override the policy.  The event stream
+% group, so a picture-local assignment scopes itself.  Explicit per-cell
+% skins (dot, box, circle, pill, mpo) always override the policy.  The event stream
 % records the RESOLVED skin.
 
 % Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
@@ -424,8 +423,8 @@
 % \tenkz@pictureid is the EMITTING context: it is assigned LOCALLY at each
 % picture's begin (every begin site sits inside its picture's group), so
 % closing the group RESTORES the enclosing picture's id -- a nested \tnpic
-% inside a tenkzcd cell must not steal the parent's later events (cdcell
-% etc.), and back in running prose the register reverts to 0, which is how
+% inside another picture's cell must not steal the parent's later events,
+% and back in running prose the register reverts to 0, which is how
 % a bare \tntree logs picture=0.
 \newcount\tenkz@pictureid
 \newcount\tenkz@pictureuid

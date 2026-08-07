@@ -533,7 +533,6 @@ def test_construct_ordinals_are_semantic() -> None:
         "  \\tnjoin{origin}{origin}\n"
         "  \\tnwire{origin}{origin}\n"
         "  \\tnedge{origin}{origin}\n"
-        "  \\tnarrow{origin}{origin}\n"
         "  \\tnput{a}",
     )
     anchored_commands = _build(dimension_free_owner_commands)

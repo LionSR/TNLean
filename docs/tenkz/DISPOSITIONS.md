@@ -149,10 +149,10 @@ top-level-source census so a shared input is not counted multiple times.
 |---|---:|
 | preserve | 10 |
 | codemod | 40 |
-| redraw | 214 |
-| **Total** | **264** |
+| redraw | 200 |
+| **Total** | **250** |
 
-Of the 264 top-level fixtures, 246 directly or indirectly open a tenkz
+Of the 250 top-level fixtures, 232 directly or indirectly open a tenkz
 environment, 11 are picture-command-only consumers, 2 are setup-only
 consumers, and 5 contain no tenkz public-surface construct.
 
@@ -170,16 +170,13 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `C-switch`: `fig21d_cubic.tex` · `fig21d_cubic_v2.tex`
 - `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
 
-### Redraw fixtures (214)
+### Redraw fixtures (200)
 
 - `C-declare+C-picture+C-policy+C-record+R-free+R-record`: `adv_leak.tex`
 - `C-declare+C-policy+C-record+C-species+R-free+R-lattice+R-record`: `g06_stageC.tex`
 - `C-declare+C-policy+C-record+R-record`: `zz_renderslice.tex`
-- `C-picture+C-policy+C-record+C-tree+R-cd+R-free+R-lattice+R-record`: `gallery.tex`
 - `C-picture+C-policy+C-record+R-record`: `adv_brace.tex` · `adv_conj.tex` · `part_B8.tex` · `rv4061_ex_grid-benchmarks.tex` · `smoke.tex`
-- `C-picture+C-record+R-cd+R-record`: `adv_nested.tex`
 - `C-picture+C-record+R-record`: `audit2.tex`
-- `C-picture+R-cd+R-lattice+R-record`: `adv_envs.tex`
 - `C-policy+C-record+R-free+R-lattice+R-plane+R-record`: `planes_keys_test.tex`
 - `C-policy+C-record+R-free+R-record`: `gr_t1_fusion.tex` · `hard01_ortho.tex` · `hard02_ALdef.tex` · `hard03_rdm.tex` · `hard05_OL.tex` · `hard06_gauge2layer.tex` · `hard12_zcl.tex` · `rv4061_ex_atoms-keys.tex` · `t2_mpo.tex` · `zz_frame_rotation.tex`
 - `C-policy+C-record+R-lattice+R-record`: `g06_stageA.tex`
@@ -193,10 +190,6 @@ consumers, and 5 contain no tenkz public-surface construct.
 - `C-record+R-record`: `gr_t3_action.tex` · `hard03_v2.tex` · `hard04_v2.tex` · `hard09_v2.tex` · `hard10_pta.tex` · `hard10_v3.tex` · `iso_c.tex` · `p3_eq3_fusion.tex` · `p3_eq3_v2.tex` · `p3_eq8_action.tex` · `p3_eq8_v2.tex` · `part_B7.tex` · `rev4075_alias.tex` · `t2_eigladder.tex` · `t2_gs1d.tex` · `t2_hamil_gate.tex` · `t2_hamilcommu.tex` · `t2_isometry.tex` · `t2_lhsrhs1.tex` · `t2_lhsrhs2.tex` · `t2_lhsrhs3.tex` · `t2_lhsrhs4.tex` · `t2_lhsrhs5.tex` · `t2_mpubrick.tex` · `t2_sptgh_box.tex` · `t2_sptintertwin.tex`
 - `C-species+R-lattice+R-record`: `zz_edgeprobe.tex` · `zz_siteprobe.tex`
 - `C-species+R-plane+R-record`: `t2_condensanyon.tex`
-- `C-tree+R-cd`: `cd_edge.tex` · `grid_test.tex`
-- `C-tree+R-cd+R-record`: `cd_test.tex` · `p4067_baseline.tex` · `p4067_pentagon.tex` · `p_arrowtn.tex` · `pentagon_corrected.tex`
-- `R-cd`: `p4067_gridbase.tex`
-- `R-cd+R-lattice+R-record`: `p3_corner.tex` · `p3_slidecd.tex` · `p3_sliding.tex`
 - `R-free+R-record`: `free.tex` · `free_modes.tex` · `free_test.tex` · `free_typed_joins_ex.tex` · `gr_t4_lasso.tex` · `gr_t7_coset.tex` · `hard11_circuit.tex` · `lpos_probe.tex` · `p3_eq10.tex` · `p3_eq12.tex` · `p_usagefree.tex` · `plane_sweep3.tex` · `t2_eq50_pull.tex` · `t2_eq54_ginj.tex` · `t2_idempotent.tex` · `t2_pentagon2.tex` · `t2_pentagon3.tex` · `t2_pentagon4.tex` · `t2_peps.tex` · `t2_seljbraid.tex` · `t2_sptmpo_cross.tex` · `t2_triangle.tex`
 - `R-lattice`: `fig21d_expect.tex` · `fig21d_pepo.tex` · `sheets_a_role.tex` · `sheets_test.tex` · `sheets_warn_smoke.tex` · `xyz_a_lattice.tex`
 - `R-lattice+R-plane+R-record`: `plane_stress.tex` · `xyz_test.tex`
@@ -212,15 +205,15 @@ public-surface construct. It does not preserve any 0.7-only alias.
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 469 |
+| `tenkz` | 455 |
 | `tenkzeq` | 0 |
-| `tenkzfree` | 62 |
-| `tenkzlattice` | 104 |
-| `tenkzcd` | 15 |
+| `tenkzfree` | 61 |
+| `tenkzlattice` | 90 |
+| `tenkzcd` | 0 |
 | `tenkzplanes` | 36 |
-| `tnpic` | 31 |
-| `tntree` | 53 |
-| **Total** | **770** |
+| `tnpic` | 25 |
+| `tntree` | 18 |
+| **Total** | **685** |
 
 ## Retired-pipeline guard
 

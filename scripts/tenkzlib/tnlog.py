@@ -331,17 +331,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "to": _is_lattice_cell,
         "role": _enum("none", "operator", "marked", "extra", "passive"),
     },
-    "cdcell": {"picture": _is_picture_id, "index": _is_int},
-    "cdobject": {"picture": _is_picture_id, "cell": _is_cell},
-    "cdarrow": {"picture": _is_picture_id, "from": _any, "to": _any},
-    "cdmap": {
-        "picture": _is_picture_id,
-        "from": _is_cell,
-        "to": _is_cell,
-        "fused": _enum("0", "1"),
-        "role": _enum("none", "operator", "marked", "extra", "passive"),
-        "species": _any,
-    },
     "tree": {
         "picture": _is_picture_id,
         "id": _is_positive_int,

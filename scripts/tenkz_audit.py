@@ -127,7 +127,6 @@ from tenkzlib.tnlog import (
 ENVIRONMENT_LANGS = {
     "tenkz": "grid",
     "tnpic": "grid",
-    "tenkzcd": "cd",
     "tenkzlattice": "lattice",
     "tenkzplanes": "lattice",
     "tenkzfree": "free",
@@ -150,7 +149,6 @@ DIALECT_KINDS = {
     "free": {"atom", "join", "region"},
     "lattice": {"lattice", "site", "region", "edge", "cup", "trace",
                 "pairtrace", "label-anchor-site", "surface", "boundary", "warning"},
-    "cd": {"cdcell", "cdobject", "cdarrow", "cdmap", "tree"},
     "kernel": {
         "atom",
         "wire",
