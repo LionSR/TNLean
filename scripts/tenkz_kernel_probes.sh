@@ -2612,6 +2612,51 @@ for arity_negative in n_missing_relation n_dangling_relation; do
   }
 done
 
+# The contracted product joiner: a product group is one composite side whose
+# signature is the factors' outer signature with the contracted interface
+# cancelled.  The three scopes pin the three interface shapes: a virtual
+# rail cancelling twice along a three-factor chain, a directed physical
+# through-index continuing to as from, and an empty interface concatenating
+# whole.
+for product_check in \
+  'check|scope=1|product=2-3|result=contracted|interface=open:e|signature=open:e, open:w' \
+  'check|scope=1|product=3-4|result=contracted|interface=open:e|signature=open:e, open:w' \
+  'check|scope=1|relation=1|result=equal|signature=open:e, open:w' \
+  'check|scope=2|product=2-3|result=contracted|interface=phys:e:to|signature=phys:e:to, phys:w:from' \
+  'check|scope=2|relation=1|result=equal|signature=phys:e:to, phys:w:from' \
+  'check|scope=3|product=2-3|result=contracted|interface=|signature=phys:n, phys:n' \
+  'check|scope=3|relation=1|result=equal|signature=phys:n, phys:n'
+do
+  grep -Fxq "$product_check" "$WORK/r_product_sides.tnlog" || {
+    echo "FAIL: product joiner lost record: $product_check" >&2
+    exit 1
+  }
+done
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_product_sides.tnlog" "$KERNEL/regression/r_product_sides.tex" \
+  >/dev/null || {
+  echo "FAIL: the product joiner stream did not pass the one-pass audit" >&2
+  exit 1
+}
+
+product_negative="$KERNEL/negative/n_product_interface.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$product_negative" >"$WORK/n_product_interface.transcript" 2>&1 ); then
+  echo "FAIL: an uncancelled product interface was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_product_interface.transcript" || {
+  echo "FAIL: product interface mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch|reason=product-interface|left=open:e|right=' \
+  "$WORK/n_product_interface.tnlog" || {
+  echo "FAIL: product interface mismatch was not recorded with both cuts" >&2
+  exit 1
+}
+
 off_count=$(grep -c 'result=off' "$WORK/r_multiple_off.tnlog" || true)
 [ "$off_count" -eq 2 ] || {
   echo "FAIL: multiple equation opt-outs did not each emit an event" >&2
