@@ -431,8 +431,8 @@ def test_cooccurrence_is_measured_per_invocation() -> None:
 
 
 def test_command_signatures_are_balanced_and_include_optionless_uses() -> None:
-    source = r"\tnarrow[east at={1,2}, dir]{x} \tnarrow{x} \tntree{LR}"
-    assert tenkz_shrink._command_invocations(source, "tnarrow") == [
+    source = r"\tnedge[east at={1,2}, dir]{x} \tnedge{x} \tntree{LR}"
+    assert tenkz_shrink._command_invocations(source, "tnedge") == [
         "east at={1,2}, dir",
         None,
     ]

@@ -262,7 +262,7 @@ def main() -> int:
         )
 
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
-    assert len(fixture_inventory) == 264
+    assert len(fixture_inventory) == 250
     assert fixture_inventory["modes_dot_baseline.tex"][0] == "redraw"
     assert fixture_inventory["p_pitch.tex"][0] == "redraw"
     assert fixture_inventory["rev4075_alias.tex"][0] == "redraw"

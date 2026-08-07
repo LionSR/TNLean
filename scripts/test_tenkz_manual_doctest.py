@@ -24,8 +24,8 @@ def main() -> int:
     reference = DOCTEST.reference_examples()
     if len(manual) != 14:
         raise AssertionError(f"expected 14 displayed TeX examples, found {len(manual)}")
-    if len(reference) != 25:
-        raise AssertionError(f"expected 25 reference examples, found {len(reference)}")
+    if len(reference) != 24:
+        raise AssertionError(f"expected 24 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
         raise AssertionError("a displayed example was not wrapped as a document")
     if any("tenkz_rmp.py" in example.document for example in manual):

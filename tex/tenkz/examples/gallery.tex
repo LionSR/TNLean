@@ -1,30 +1,9 @@
-% tenkz Phase-0 gallery: all benchmarks (B1-B8), MPO stress cases, and the
-% cd / lattice / free sub-languages, tightly cropped.
+% tenkz Phase-0 gallery: benchmarks, MPO stress cases, and the
+% lattice / free sub-languages, tightly cropped.
 \documentclass[varwidth=19cm, border=8pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tenkz}
 \newcommand{\head}[1]{\par\medskip\noindent\textbf{#1}\par\smallskip}
-% Multiplicity-free specialization of Eq. (33) of arXiv:1511.08090:
-% sum_u [F^{abc}_y]_{xu}[F^{aud}_e]_{yw}[F^{bcd}_w]_{uv}
-%   = [F^{xcd}_e]_{yv}[F^{abv}_e]_{xw}.
-% After choosing fusion bases, the five parenthesized words are its five
-% fusion-basis morphisms, with multiplicity labels suppressed, and the
-% arrows are its F-moves; #1 selects only how each already-parsed tree is
-% drawn.  In the wire skin a simple object is a line; in the ribbon skin
-% it is a band and each fusion vertex has a nonsingular vertex patch.
-\newcommand{\gallerypentagon}[1]{%
-  \begin{tenkzcd}[polygon=5, radius=34mm]
-    \tntree[tree style=#1]{(((a\,b)_x\,c)_y\,d)_e} &
-    \tntree[tree style=#1]{((a\,(b\,c)_u)_y\,d)_e} &
-    \tntree[tree style=#1]{(a\,((b\,c)_u\,d)_w)_e} &
-    \tntree[tree style=#1]{(a\,(b\,(c\,d)_v)_w)_e} &
-    \tntree[tree style=#1]{((a\,b)_x\,(c\,d)_v)_e}
-    \tnarrow[from=1, to=2]{F^{abc}_y}
-    \tnarrow[from=2, to=3]{F^{aud}_e}
-    \tnarrow[from=3, to=4]{F^{bcd}_w}
-    \tnarrow*[from=1, to=5]{F^{xcd}_e}
-    \tnarrow*[from=5, to=4]{F^{abv}_e}
-  \end{tenkzcd}}
 \begin{document}
 
 \head{B1 — periodic MPS word}
@@ -74,11 +53,12 @@
   \end{tenkz}
 \]
 
-\head{B5 — fusion-tree pentagon, wire skin (tenkzcd, polygon mode)}
-\gallerypentagon{wire}
-
-\head{B5r — the same fusion-tree pentagon, ribbon skin}
-\gallerypentagon{ribbon}
+\head{B5 — fusion-tree skins}
+% The pentagon-coherence layout itself belongs to tikz-cd; the trees are
+% the structured atoms this package owns, in both strand skins.
+The wire skin \tntree[tree style=wire]{(((a\,b)_x\,c)_y\,d)_e} and the
+ribbon skin \tntree[tree style=ribbon]{(((a\,b)_x\,c)_y\,d)_e} share one
+topology.
 
 \head{B6 — PEPS window with regions (tenkzlattice)}
 \begin{tenkzlattice}[rows=4, cols=4, boundary legs]

@@ -75,25 +75,6 @@ SOURCE = r"""
     \global\advance\tenkztestouterhookcalls by 1\relax
     \tenkztestrealouterhook}}
 \makeatother
-% Deliberately unsafe: the explicit separation overrides the measured label band.
-\begin{tenkzcd}[maps, species={channel}, column sep=2mm]
-  A & B
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
-    {\rule{18mm}{0pt}\mathcal T}
-\end{tenkzcd}
-
-% Safe: production spacing is derived from the same materialized label box.
-% Matrix passthrough may change the live object shape; measurement follows it.
-\begingroup
-\tikzset{tn label/.append style={
-  fill=tenkzPaper, draw, line join=round, line width=2pt}}
-\begin{tenkzcd}[maps, species={channel}, nodes={circle}]
-  A & B
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
-    {\rule{18mm}{0pt}\mathcal T}
-\end{tenkzcd}
-\endgroup
-
 % Shared style capture covers unnamed production labels in every core tier.
 \begin{tenkzfree}
   \tnput[box]{a}{(0,0)}{A}
@@ -137,15 +118,6 @@ SOURCE = r"""
   \node[tn label, inner sep=0pt] at (10pt,0) {\rule{1pt}{1pt}};
 \end{tenkzfree}
 \endgroup
-% Every matrix object is audited once, even without an incident map, and live
-% rounded-corner passthrough remains visible in the emitted shape.
-\begin{tenkzcd}[
-  maps, species={channel}, nodes={rectangle, rounded corners=2pt}
-]
-  A & B & C
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
-\end{tenkzcd}
-\tenkzassertrelax{tenkz@glyphsnaptoken@tenkzmap-1-3}
 % Empty resolved regions are legitimate no-ops and still emit audit data.
 \begin{tenkzlattice}[rows=1, cols=1]
   \tnregion[name=R]{(1,1)}
@@ -533,14 +505,14 @@ def main() -> int:
                for event in label_events):
             raise AssertionError("a measured label omitted exact shape fields")
         overlap_pictures = {finding_picture_id(finding.msg) for finding in overlaps}
-        if overlap_pictures != {1, 7, 12}:
+        if overlap_pictures != {5, 9}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
 
         empty_regions = [
-            event for event in audit.events(11)
+            event for event in audit.events(8)
             if event.kind == "region" and event.attrs.get("cells") == ""
         ]
         if len(empty_regions) != 1 or any(
@@ -549,55 +521,7 @@ def main() -> int:
                 for finding in audit.findings):
             raise AssertionError("audit rejected a live empty resolved region")
 
-        for picture_id in (1, 2):
-            bbox_classes = {
-                event.attrs.get("class") for event in audit.events(picture_id)
-                if event.kind == "bbox"
-            }
-            geometry_kinds = {event.kind for event in audit.events(picture_id)}
-            if (bbox_classes != {"label"}
-                    or not {"glyph-geometry", "wire-geometry"} <= geometry_kinds):
-                raise AssertionError(
-                    f"picture {picture_id} emitted incomplete geometry: "
-                    f"bbox={bbox_classes}, kinds={geometry_kinds}"
-                )
-        map_shapes = {
-            event.attrs.get("shape") for event in audit.events(2)
-            if event.kind == "glyph-geometry"
-        }
-        if map_shapes != {"circle"}:
-            raise AssertionError(
-                f"typed-map object restyle emitted stale geometry: {map_shapes}"
-            )
-        map_glyphs = [event for event in audit.events(2)
-                      if event.kind == "glyph-geometry"]
-        if len(map_glyphs) != 2:
-            raise AssertionError(
-                f"typed-map objects were not audited exactly once: {len(map_glyphs)}"
-            )
-        map_wires = [event for event in audit.events(2)
-                     if event.kind == "wire-geometry"]
-        if len(map_wires) != 1:
-            raise AssertionError(
-                f"typed-map emitted invalid exact wire geometry: {len(map_wires)}"
-            )
-        map_labels = [event for event in audit.events(2)
-                      if event.kind == "bbox"
-                      and event.attrs.get("class") == "label"]
-        if (len(map_labels) != 1
-                or map_labels[0].attrs.get("shape") != "roundrect"
-                or abs(int(map_labels[0].attrs.get("radius", "0"))
-                       - 65536) > 1):
-            raise AssertionError(
-                "typed-map stored label lost its exact shape: "
-                + repr([event.attrs for event in map_labels])
-            )
-        wire_heights = [int(event.attrs["outer"]) for event in map_wires]
-        if any(height >= 65536 for height in wire_heights):
-            raise AssertionError(
-                f"typed-map wire bbox followed an offset label: {wire_heights}sp"
-            )
-        for picture_id in (3, 4, 5):
+        for picture_id in (1, 2, 3):
             events = audit.events(picture_id)
             uses = sum(event.kind == "label-use" for event in events)
             labels = sum(event.kind == "bbox"
@@ -608,7 +532,7 @@ def main() -> int:
                     f"picture {picture_id} did not capture label coverage: "
                     f"uses={uses}, labels={labels}"
                 )
-        free_labels = [event for event in audit.events(3)
+        free_labels = [event for event in audit.events(1)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         free_shapes = {event.attrs.get("shape") for event in free_labels}
@@ -638,13 +562,13 @@ def main() -> int:
             raise AssertionError("audit accepted an unmeasured library label use")
 
         shapes = {
-            event.attrs.get("shape") for event in audit.events(6)
+            event.attrs.get("shape") for event in audit.events(4)
             if event.kind == "glyph-geometry"
         }
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
         triangle_geometry = [
-            event for event in audit.events(6)
+            event for event in audit.events(4)
             if event.kind == "glyph-geometry"
             and event.attrs.get("shape") == "triangle"
         ]
@@ -655,7 +579,7 @@ def main() -> int:
             )
 
         reshaped = {
-            event.attrs.get("shape") for event in audit.events(7)
+            event.attrs.get("shape") for event in audit.events(5)
             if event.kind == "glyph-geometry"
         }
         if reshaped != {"roundrect"}:
@@ -664,7 +588,7 @@ def main() -> int:
             )
 
         corner_events = [
-            event for event in audit.events(8)
+            event for event in audit.events(6)
             if event.kind == "glyph-geometry"
         ]
         corner_shapes = [event.attrs.get("shape") for event in corner_events]
@@ -679,7 +603,7 @@ def main() -> int:
                - round(1.775 * 65536)) > 1:
             raise AssertionError("rounded box did not emit its live corner radius")
 
-        outer_gap = [event for event in audit.events(9)
+        outer_gap = [event for event in audit.events(7)
                      if event.kind == "glyph-geometry"]
         if len(outer_gap) != 1:
             raise AssertionError("outer-separation fixture lost glyph geometry")
@@ -687,25 +611,8 @@ def main() -> int:
                 - int(outer_gap[0].attrs["xmin"])) >= round(10 * 65536):
             raise AssertionError("glyph geometry retained invisible outer separation")
 
-        rounded_map = [event for event in audit.events(10)
-                       if event.kind == "glyph-geometry"]
-        if len(rounded_map) != 3:
-            raise AssertionError(
-                "typed-map object census omitted or duplicated a cell: "
-                f"{len(rounded_map)}"
-            )
-        if ({event.attrs.get("shape") for event in rounded_map} != {"roundrect"}
-                or any(abs(int(event.attrs["radius"])
-                           - round(2 * 65536)) > 1
-                       for event in rounded_map)):
-            raise AssertionError(
-                "typed-map rounded-corner passthrough was not preserved: "
-                + repr([(event.attrs.get("shape"), event.attrs.get("radius"))
-                        for event in rounded_map])
-            )
-
         expected_widths = {
-            12: 8, 13: 8, 14: 4, 16: 8, 17: 8, 19: 8, 20: 4,
+            9: 8, 10: 8, 11: 4, 13: 8, 14: 8, 16: 8, 17: 4,
         }
         for picture_id, expected_pt in expected_widths.items():
             geometry = [event for event in audit.events(picture_id)
@@ -721,7 +628,7 @@ def main() -> int:
                     f"expected {expected_pt}pt: {geometry[0].attrs}"
                 )
 
-        label_boxes = [event for event in audit.events(15)
+        label_boxes = [event for event in audit.events(12)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         if len(label_boxes) != 1:
@@ -731,7 +638,7 @@ def main() -> int:
         if label_width >= round(2 * 65536):
             raise AssertionError("label bbox retained invisible outer separation")
 
-        rotate_control = [event for event in audit.events(18)
+        rotate_control = [event for event in audit.events(15)
                           if event.kind == "glyph-geometry"]
         if (len(rotate_control) != 1
                 or rotate_control[0].attrs.get("shape") != "roundrect"):

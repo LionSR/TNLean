@@ -53,7 +53,7 @@ _SCOPE_COMMANDS = {
     "picture": ("tnpic",),
     "group": ("tngroup",),
     "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tnput", "tntree"),
-    "connection": ("tncut", "tnedge", "tnjoin", "tnarrow"),
+    "connection": ("tncut", "tnedge", "tnjoin"),
     "region": ("tnregion",),
     "annotation": ("tnspan",),
 }

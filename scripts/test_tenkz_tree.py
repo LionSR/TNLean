@@ -32,13 +32,14 @@ SOURCE = r"""
 NESTED_CD_SOURCE = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\usepackage{tikz-cd}
 \pagestyle{empty}
 \begin{document}
-\begin{tenkzcd}[column sep=large]
+\begin{tikzcd}[column sep=large]
   \tntree{(a\,b)_c} \arrow[r, "F"] \arrow[d, "G"']
     & \tntree{(b\,a)_c} \arrow[d, "G"] \\
   A \arrow[r, "F"'] & B
-\end{tenkzcd}
+\end{tikzcd}
 \makeatletter
 \typeout{TENKZ-CELL-SHAPE=\csname pgf@sh@ns@\tikzcdmatrixname-1-1\endcsname}
 \makeatother
@@ -117,16 +118,12 @@ def main() -> int:
             nested_status = nested_audit.run()
         if nested_status:
             raise AssertionError("audit rejected valid nested tikz-cd tree events")
-        nested_events = nested_audit.events()
-        label_uses = sum(event.kind == "label-use" for event in nested_events)
-        label_boxes = sum(
-            event.kind == "bbox" and event.attrs.get("class") == "label"
-            for event in nested_events
-        )
-        if label_uses != 6 or label_boxes != label_uses:
+        nested_lines = nested_log.read_text(encoding="utf-8").splitlines()
+        tree_events = sum(line.startswith("tree|") for line in nested_lines)
+        if tree_events != 2:
             raise AssertionError(
-                "nested tikz-cd trees did not emit exactly one bbox per owned label: "
-                f"uses={label_uses}, bboxes={label_boxes}"
+                "nested tikz-cd cells did not log one tree event per \\tntree: "
+                f"got {tree_events}"
             )
 
         malformed = work / "malformed.tnlog"
