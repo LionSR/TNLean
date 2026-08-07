@@ -2370,3 +2370,34 @@ no demand-corpus consumer at all.
 |---|---|
 | flag:consumers:key:object:pill | dies at S4 with the 0.7 object ledger: a kernel atom says the silhouette as the declared `skin=pill`, which is how the four migrated chapters now spell it; the one remaining blueprint consumer is the finite-separation isometry figure, which rides its own redraw row at the surface swap; expiry 0.9 |
 | flag:consumers:command:tnX | dies at S4 with the 0.7 command tier: the kernel spells the gauge capsule as `skin=ring`, which is how the migrated chapters now draw every X and X^{-1}; the one remaining blueprint consumer is the finite-separation direct-sum figure at ch20 intro L109, a grid-tier picture booked to the tier's own retirement; expiry 0.9 |
+
+### 2026-08-07 — the miscellaneous free graphs take the kernel
+
+The eight `tenkzfree` pictures outside the PEPS chapters — the two ch13
+support schematics, the ch20 direct-sum figure and its three
+block-injective panels, the ch21 structure-operator recursion, and the
+ch26 fixed-point decomposition — are respelled onto kernel `tenkz`
+pictures and land in the preserve column of `DISPOSITIONS.md` as
+`P-grid`. Their region marks carry declared species instead of the
+retired slot palette, and the ch21 recursion states its compact metric
+through the kernel's own `pitch=` setup key where the 0.7 spelling rode
+`compact` and raw millimetre coordinates.
+
+M3 falls from 24 to 18: the six `out=`/`in=` arc-angle escapes that rode
+the retired free bodies — the two matrix-unit hooks of the ch20 panels
+and the terminal trace arc of the ch21 recursion — go with them, each
+replaced by a route that leaves and enters along its ends' faces or by
+wires meeting at an invisible junction. M1 stays at 140 kernel rows and
+201 total, M2 at 228 parser paths, and M4 at 25.94 — the registry and
+the benchmark corpus are untouched. Five rows lose demand-corpus
+consumers with the respelling and take their verdicts below; every
+remaining consumer of the five is a ch24 free-graph figure already
+booked `R-free` in the disposition ledger and awaiting its own redraw.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:connection:name | dies at S4 with the 0.7 connection ledger: the kernel wire carries its own signed `name=` row, and the lone remaining consumer is a ch24 free graph booked `R-free` for its own redraw; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at S4 with the 0.7 region ledger it belongs to: `\tnregion` is tombstoned onto `\tnmark[form=enclosure]`, whose signed `label pos=` row this key's one remaining ch24 free-graph consumer takes at its redraw; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at S4 with the 0.7 region ledger: a kernel enclosure strokes its contour by default and `tint` adds the wash, so the outline flag owes no kernel spelling; both remaining consumers are ch24 free graphs booked `R-free`; expiry 0.9 |
+| flag:cooccur:connection:in+route | confirmed merge, tombstoned by contract: `out=`/`in=` migrate to `route=arc`, which leaves and enters along its ends' faces (`LANGUAGE-1.0` §10); every surviving invocation rides a ch24 free graph awaiting its `R-free` redraw, and the pair dies with the connection tier at S4; expiry 0.9 |
+| flag:cooccur:connection:out+route | confirmed merge, tombstoned by contract, exactly as `in=` above: the arc route replaces the pair and the ch24 redraws retire the invocations; expiry 0.9 |

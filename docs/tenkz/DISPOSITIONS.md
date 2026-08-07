@@ -67,15 +67,15 @@ separate public-surface occurrence and therefore appears separately.
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_string_order.tex` | L41, 77, 359, 364, 395, 401, 446, 452, 485, 490, 528, 534, 839, 844 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_virtual_and_cohomology.tex` | L181, 196, 330, 459, 473 `tenkz` → `P-grid` | — | — |
-| `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | — | — | L54 `tenkzfree` → `R-free+R-record` |
-| `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | — | — | L275 `tenkzfree` → `R-free+R-record` |
+| `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L55 `tenkz` → `P-grid` | — | — |
+| `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | L276 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_injective_ground_spaces_intersection_property.tex` | L101 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex` | L36, 493, 535 `tenkz` → `P-grid` | — | — |
 | `ch14_correlations.tex` | L68 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_choi_and_kraus.tex` | L673 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L154, 161, 181, 186, 234, 240, 339, 433 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | — | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record`<br>L224, 359, 391, 465 `tenkzfree` → `R-free+R-record` |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L225, 364, 377, 428 `tenkz` → `P-grid` | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record` |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L638, 644 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_foundations.tex` | L17, 126 `tenkz` → `P-grid` | — | L372 `tenkz` → `C-policy+C-record+R-record`<br>L376 `tenkz` → `C-record+R-record` |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
@@ -84,7 +84,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 293, 294, 295, 296, 298 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L402, 643, 649, 656, 663, 671, 676 `tnpic` → `C-picture+C-record+R-record`<br>L409 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | — | L581, 583 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record`<br>L444 `tenkzfree` → `R-free+R-record` |
+| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L447 `tenkz` → `P-grid` | L559, 561 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_renormalization.tex` | — | — | L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
@@ -108,16 +108,16 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_normal_union.tex` | — | — | L213, 270, 301, 327, 358 `tenkzfree` → `R-free+R-record` |
 | `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | — | — | L22 `tenkzlattice` → `C-species+R-lattice+R-record` |
-| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457 `tenkz` → `P-grid` | — | L605 `tenkz` → `C-policy+R-record`<br>L610 `tenkzfree` → `R-free+R-record` |
+| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457, 611 `tenkz` → `P-grid` | — | L605 `tenkz` → `C-policy+R-record` |
 | `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 220, 225 `tenkz` → `P-grid` | — | — |
 
 ### Blueprint reconciliation
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 123 |
+| `tenkz` | 131 |
 | `tenkzeq` | 0 |
-| `tenkzfree` | 34 |
+| `tenkzfree` | 26 |
 | `tenkzlattice` | 12 |
 | `tenkzcd` | 0 |
 | `tenkzplanes` | 0 |
@@ -127,9 +127,9 @@ separate public-surface occurrence and therefore appears separately.
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 110 |
+| preserve | 118 |
 | codemod | 14 |
-| redraw | 77 |
+| redraw | 69 |
 | **Total** | **201** |
 
 The raw count is 169 environment openings plus 32 command occurrences,
