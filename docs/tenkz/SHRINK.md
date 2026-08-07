@@ -2267,3 +2267,41 @@ verdicts below.
 | flag:consumers:key:connection:to | dies with the `\tnarrow` declarations that addressed it, exactly as `from=` does; expiry 0.9 |
 | flag:consumers:key:connection:species | dies at the S4 swap with the 0.7 connection tier it belongs to; the kernel wire carries its own signed `species=` row, and the respelled arrows carry their type in the preamble style; expiry 0.9 |
 | flag:consumers:key:setup:species | dies as a name-list: `\tndeclare{species}{name}{hue=...}` is the one declaration door, the blueprint already declares every species through it, and the last bare name-list rode the retired `tenkzcd` opt-in; expiry 0.9 |
+
+### 2026-08-06 — the conjugate flag is sentenced
+
+`conjugate=` is installed on the kernel atom tier and read by nothing: not
+the ink passes, not the boundary-signature fold, not a checker.  A sweep of
+the whole tree (issue 5383) finds sixteen atoms across seven section-II
+benchmark cases carrying the flag, two kernel regression fixtures spelling
+it as a manufactured consumer, and no consumer of the answer anywhere.  The
+only trace it leaves is the `conjugate=true` field in those atoms' records.
+
+The issue reserved the row until the directed-signatures design decided who
+carries duality.  The contract has since decided: wire `dir=` is the one
+spelling for a space against its dual (`LANGUAGE-1.0` section 2.4), so a
+second semantic carrier would say the same thing twice.  The presentational
+reading fails on the corpus's own evidence: no author panel draws a
+conjugate glyph, and every benchmark atom that wants visible conjugation
+spells `\overline{...}` in its label — wiring the flag to ink would double
+the bar on the three labelled cases, grow a stub bar on the empty-labelled
+bra rows, and change renders no figure asked for.  What remains is a flag
+that looks semantic, claims to be presentational, and is neither; a stored
+answer nobody reads is a key that can silently lie.
+
+So the row is tombstoned.  Per the booking rule in force since session 0,
+the ledger status moves with the parser row and not before: the registry row
+stays `kernel` with its note reading the sentence, the row is struck from
+the contract's atom table into the section-10 tombstones today — as the nine
+amendments were at their sentencing — and the deletion itself — the parser
+row, the sixteen benchmark spellings, the two fixture spellings, and their
+re-pinned record streams — executes as the usual corpus rewrite at the 1.0
+freeze.
+
+No meter moves today.  M1 stays at 140 kernel rows and 201 total, M2 at 228
+parser paths with an unchanged identity, M4 untouched; the registry note and
+this sentence are the whole diff.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:conjugate | tombstoned: read by nothing, duality already has its one spelling in wire `dir=`, and the conjugate overline is label mathematics already spelled in the corpus; the parser row, the sixteen benchmark spellings, and the two fixture spellings leave in the corpus rewrite at the 1.0 freeze, the status moving with the parser row as booked since session 0; expiry 0.9 |
