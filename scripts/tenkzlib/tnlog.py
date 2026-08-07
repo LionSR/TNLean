@@ -185,10 +185,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "check": {
         "scope": _is_positive_int,
         "relation": _is_positive_int,
-        "result": _enum("equal", "mismatch", "off", "malformed"),
+        "product": _is_cell,
+        "result": _enum("equal", "mismatch", "off", "malformed", "contracted"),
         "reason": _any,
         "panels": _is_nonnegative_int,
         "relations": _is_nonnegative_int,
+        "interface": _anything,
         "signature": _anything,
         "left": _anything,
         "right": _anything,
@@ -370,10 +372,14 @@ REQUIRED_FIELDS: dict[str, frozenset[str]] = {
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
     "equal": frozenset({"relation", "signature"}),
-    "mismatch": frozenset({"relation"}),
     "off": frozenset({"relation", "reason"}),
     "malformed": frozenset({"reason", "panels", "relations"}),
+    "contracted": frozenset({"product", "signature"}),
 }
+# A mismatch names the joiner it rejects: the relation ordinal, or the
+# contracted product pair when the facing cuts of a product group fail to
+# cancel.  Either field satisfies the requirement; a mismatch naming
+# neither is unusable.
 
 # Equation checks are scope-owned top-level records.  A picture= field would
 # give them a second, conflicting owner and must never enter semantic checks.
@@ -541,11 +547,12 @@ def parse_log(
                     valid = False
             required = set(REQUIRED_FIELDS.get(kind, frozenset()))
             if kind == "check":
+                result = attrs.get("result", "")
                 required.update(
-                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(
-                        attrs.get("result", ""), frozenset()
-                    )
+                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(result, frozenset())
                 )
+                if result == "mismatch" and "product" not in attrs:
+                    required.add("relation")
             missing = sorted(required - attrs.keys())
             if missing:
                 hard(

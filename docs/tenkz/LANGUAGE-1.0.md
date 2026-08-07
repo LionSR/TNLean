@@ -695,8 +695,17 @@ sum are read from the class the mathematics already has.
 4. **The audit follows the joiner.** Every term has a boundary signature;
    mathematics has none, and its signature is unknown. A relation requires
    equal signatures and ends the term. A sum requires equal signatures and
-   continues it. A product requires disjoint signatures and concatenates
-   them. Any joiner with an unknown operand yields an unknown result, and the
+   continues it. A product contracts the facing cut: every index cut on the
+   left factor's east frame continues as an index cut on the right factor's
+   west frame — the same type and weight, an outgoing index continuing as an
+   incoming one — and each such pair is one index, internal to the composite
+   term, which exposes nothing; the remaining entries of both factors
+   concatenate. The facing cuts must cancel completely, and an empty facing
+   cut is the plain juxtaposition of a scalar or a tensor factor, whose
+   signatures concatenate whole. A product group of panels is therefore one
+   composite side of the relations around it, its signature the factors'
+   outer signature with the contracted interfaces cancelled.
+   Any joiner with an unknown operand yields an unknown result, and the
    comparison is recorded as unperformed rather than as passed — which is
    what an elision between two panels asserts, and needs no spelling of its
    own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
@@ -711,7 +720,8 @@ sum are read from the class the mathematics already has.
    smashed against a panel that is always the taller.
 <!-- Consumers: rmp-ii-mpu-brickwork, rmp-iii-a-coproduct,
      rmp-workbench-iii-eq59-now, rmp-ii-mpu-unitarity,
-     rmp-ii-tangent-projector, rmp-workbench-ii-fine-graining. -->
+     rmp-ii-tangent-projector, rmp-workbench-ii-fine-graining.
+     Product joiner: rmp-ii-mpu-blocking. -->
 
 ## 8. Declarations and the extension gate
 

@@ -1587,14 +1587,36 @@ class Audit:
             )
             if scope in malformed_scopes or scope_pictures.get(scope) != members:
                 continue
-            expected_relations = set(range(1, len(members)))
-            events = scope_events.get(scope, [])
+            # Relation ordinals follow the joiners: adjacent members whose
+            # separator is relation glue own one relation each, and members
+            # adjacent without one are a product group inside a single side,
+            # so a scope may legally log fewer relations than member gaps.
+            relation_pairs = [
+                index
+                for index in range(len(members) - 1)
+                if same_equation(self._tex_src[
+                    self.constructs[members[index]].end:
+                    self.constructs[members[index + 1]].start
+                ])
+            ]
+            expected_relations = set(range(1, len(relation_pairs) + 1))
+            scope_records = scope_events.get(scope, [])
+            # A scope record is a relation comparison or a product
+            # contraction; anything else disables the scope.
+            if any(
+                "relation" not in event.attrs and "product" not in event.attrs
+                for event in scope_records
+            ):
+                continue
+            events = [
+                event for event in scope_records if "relation" in event.attrs
+            ]
             relation_numbers = [
                 int(event.attrs["relation"])
                 for event in events
                 if event.attrs.get("relation", "").isdigit()
             ]
-            # Every non-malformed event in the scope must own exactly one
+            # Every relation record in the scope must own exactly one
             # expected relation.  Missing, duplicate, unowned, and surplus
             # records disable the whole scope instead of authorizing a waiver.
             if (
@@ -1614,8 +1636,8 @@ class Audit:
             # is explicitly waived in this source scope.
             if logged_offs != declared_offs:
                 continue
-            for relation, left in enumerate(members[:-1], 1):
-                relation_checks[left] = by_relation[relation]
+            for relation, pair_index in enumerate(relation_pairs, 1):
+                relation_checks[members[pair_index]] = by_relation[relation]
 
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
