@@ -19,11 +19,11 @@ the periods $n$ and $m$.
     % is the house-style realization of the chapter's cyclic-coordinate
     % definition; unlike the former open-boundary schematic, it displays the
     % periodic contraction in both coordinate directions.
-    \begin{tenkzlattice}[
-        rows=3, cols=3, sheets={ket}, outer legs=top, frame=oblique,
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,ket,ket}, cols=3, frame=plane, physical=up,
         west=trace, east=trace, north=trace, south=trace]
-        \tnsite[role=marked, label=$A$]{(1,2)}
-    \end{tenkzlattice}
+        \tn[at=(1,2), species=marked, label pos=nw]{A}
+    \end{tenkz}
 \end{center}
 Translations act on the vertices and edges. Transporting a tensor along a graph
 isomorphism $\phi$ relabels its coefficients by

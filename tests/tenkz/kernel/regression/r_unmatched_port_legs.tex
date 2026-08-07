@@ -120,8 +120,12 @@
 \cs_new_eq:NN
   \__tenkz_test_hull_port_xy:nnNN
   \__tenkz_kernel_r_hull_port_xy:nnNN
+\fp_new:N \l__tenkz_test_hp_xb_before_fp
+\fp_new:N \l__tenkz_test_hp_yb_before_fp
 \cs_set_protected:Npn \__tenkz_kernel_r_hull_port_xy:nnNN #1#2#3#4
   {
+    \fp_set_eq:NN \l__tenkz_test_hp_xb_before_fp \l__tenkz_kernel_r_xb_fp
+    \fp_set_eq:NN \l__tenkz_test_hp_yb_before_fp \l__tenkz_kernel_r_yb_fp
     \__tenkz_test_hull_port_xy:nnNN {#1}{#2}#3#4
     \bool_if:NT \l__tenkz_test_in_bonded_label_bool
       {
@@ -130,13 +134,22 @@
           {
             \int_gincr:N \g__tenkz_test_bonded_slot_int
             \__tenkz_geom_xy:nNN {#1} \l_tmpa_fp \l_tmpb_fp
-            \__tenkz_geom_xy:nNN {#2} \l_tmpc_fp \l_tmpd_fp
+            % The resolver hands back only its two outputs and the
+            % registers leave the call exactly as they entered it, or a
+            % wire whose other end was already resolved would lose that
+            % end's coordinates.  The double-counted span of old cannot
+            % be spelled as an entry-value pin: the entry registers hold
+            % the in-flight wire state, not the far endpoint (measured),
+            % and the label math reads the outputs alone, which the
+            % per-face checks below pin.
             \fp_compare:nNnF
-              { abs(\l__tenkz_kernel_r_xb_fp-\l_tmpc_fp) } < {0.000001}
-              {\errmessage{bonded~port~label~double-counted~normal~x~span}}
+              { abs(\l__tenkz_kernel_r_xb_fp
+                    - \l__tenkz_test_hp_xb_before_fp) } < {0.000001}
+              {\errmessage{hull~port~resolver~clobbered~the~x~endpoint}}
             \fp_compare:nNnF
-              { abs(\l__tenkz_kernel_r_yb_fp-\l_tmpd_fp) } < {0.000001}
-              {\errmessage{bonded~port~label~double-counted~normal~y~span}}
+              { abs(\l__tenkz_kernel_r_yb_fp
+                    - \l__tenkz_test_hp_yb_before_fp) } < {0.000001}
+              {\errmessage{hull~port~resolver~clobbered~the~y~endpoint}}
             \exp_args:Ne \__tenkz_kernel_r_face_side:n
               { \__tenkz_kernel_node_item:nn {#1} {face} }
             \str_case:Vn \l__tenkz_kernel_r_face_side_tl
