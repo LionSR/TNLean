@@ -10681,6 +10681,31 @@
 
 % Cup records already own the paired row or column indices.  Rendering only
 % turns those resolved endpoints into an outboard half-ellipse.
+% All four sides stroke the same cubic between the resolved endpoints: both
+% control points sit the stub distance outboard along the side's outward
+% axis.  The side branch supplies that offset term for each axis; the other
+% axis receives the empty term.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_cup_stroke:nn #1#2
+  {
+    \__tenkz_kernel_r_wire_stroke:nn { bond }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp }
+          { \l__tenkz_kernel_r_y_fp }
+        .. controls
+          \__tenkz_kernel_r_pair:nn
+            { \l__tenkz_kernel_r_x_fp #1 }
+            { \l__tenkz_kernel_r_y_fp #2 }
+          and
+          \__tenkz_kernel_r_pair:nn
+            { \l__tenkz_kernel_r_xb_fp #1 }
+            { \l__tenkz_kernel_r_yb_fp #2 }
+        ..
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp }
+          { \l__tenkz_kernel_r_yb_fp }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_cup:n #1
   {
     \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
@@ -10698,30 +10723,8 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               { \l__tenkz_kernel_r_col_tl } {1}
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_x_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_y_fp }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_xb_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_yb_fp }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { - \__tenkz_metric_ratio:n {stub} } { }
           }
         {east}
           {
@@ -10737,30 +10740,8 @@
               { \l__tenkz_kernel_r_col_tl }
               { \l__tenkz_kernel_r_cols_int }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_x_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_y_fp }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_xb_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_yb_fp }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { + \__tenkz_metric_ratio:n {stub} } { }
           }
         {north}
           {
@@ -10774,30 +10755,8 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               {1} { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_x_fp }
-                    {
-                      \l__tenkz_kernel_r_y_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_xb_fp }
-                    {
-                      \l__tenkz_kernel_r_yb_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { } { + \__tenkz_metric_ratio:n {stub} }
           }
         {south}
           {
@@ -10813,30 +10772,8 @@
               { \l__tenkz_kernel_r_rows_int }
               { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_x_fp }
-                    {
-                      \l__tenkz_kernel_r_y_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_xb_fp }
-                    {
-                      \l__tenkz_kernel_r_yb_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { } { - \__tenkz_metric_ratio:n {stub} }
           }
       }
       {
