@@ -8021,6 +8021,13 @@
 % where its two offset lines meet.  A punctured selection closes more than
 % one loop, and the even-odd rule fills such a selection as a ring.
 %
+% Half-edges are keyed by corner AND direction.  At almost every corner one
+% strand passes and the chain is forced; where two members meet only at a
+% corner, the boundary passes through that point twice, and the saddle rule
+% settles the continuation: the member a strand rides stays on its left, so
+% the strand turns left, toward that member, and the two strands pass clear
+% of one another at the two offset corners the standoffs already separate.
+%
 % Under the affine chart the east axis is the column direction and the north
 % axis is the reverse row direction, so the local abscissa rises with the
 % column and the local ordinate falls with the row.  Both facts are read off
@@ -8029,7 +8036,7 @@
 \prop_new:N \l__tenkz_kernel_cells_rowv_prop
 \prop_new:N \l__tenkz_kernel_cells_colu_prop
 \prop_new:N \l__tenkz_kernel_cells_end_prop
-\prop_new:N \l__tenkz_kernel_cells_orient_prop
+\prop_new:N \l__tenkz_kernel_cells_out_prop
 \prop_new:N \l__tenkz_kernel_cells_val_prop
 \prop_new:N \l__tenkz_kernel_cells_seen_prop
 \seq_new:N \l__tenkz_kernel_cells_starts_seq
@@ -8041,7 +8048,6 @@
 \bool_new:N \l__tenkz_kernel_cells_bool
 \bool_new:N \l__tenkz_kernel_cells_rect_bool
 \bool_new:N \l__tenkz_kernel_cells_at_bool
-\bool_new:N \l__tenkz_kernel_cells_pinch_bool
 \tl_new:N \l__tenkz_kernel_cells_row_tl
 \tl_new:N \l__tenkz_kernel_cells_col_tl
 \tl_new:N \l__tenkz_kernel_cells_x_tl
@@ -8054,6 +8060,8 @@
 \tl_new:N \l__tenkz_kernel_cells_south_tl
 \tl_new:N \l__tenkz_kernel_cells_cur_tl
 \tl_new:N \l__tenkz_kernel_cells_next_tl
+\tl_new:N \l__tenkz_kernel_cells_dir_tl
+\tl_new:N \l__tenkz_kernel_cells_out_tl
 \tl_new:N \l__tenkz_kernel_cells_o_tl
 \tl_new:N \l__tenkz_kernel_cells_val_tl
 \tl_new:N \l__tenkz_kernel_cells_po_tl
@@ -8062,6 +8070,14 @@
 
 \cs_new:Npn \__tenkz_kernel_cells_key:nn #1#2
   { \int_eval:n {#1} - \int_eval:n {#2} }
+% a half-edge is a corner #1 and the direction #2 it leaves by
+\cs_new:Npn \__tenkz_kernel_cells_ekey:nn #1#2 { #1 . #2 }
+% the direction one quarter turn to the left of #1
+\cs_new:Npn \__tenkz_kernel_cells_left:n #1
+  { \str_case:en {#1} { {E} {N}  {N} {W}  {W} {S}  {S} {E} } }
+% the axis a direction runs along
+\cs_new:Npn \__tenkz_kernel_cells_axis:n #1
+  { \str_case:en {#1} { {E} {H}  {W} {H}  {N} {V}  {S} {V} } }
 \prg_new_conditional:Npnn \__tenkz_kernel_cells_member:nn #1#2 { p, T, F }
   {
     \prop_if_in:NeTF \l__tenkz_kernel_cells_prop
@@ -8227,10 +8243,9 @@
 \cs_new_protected:Npn \__tenkz_kernel_cells_edges:
   {
     \prop_clear:N \l__tenkz_kernel_cells_end_prop
-    \prop_clear:N \l__tenkz_kernel_cells_orient_prop
+    \prop_clear:N \l__tenkz_kernel_cells_out_prop
     \prop_clear:N \l__tenkz_kernel_cells_val_prop
     \seq_clear:N \l__tenkz_kernel_cells_starts_seq
-    \bool_set_false:N \l__tenkz_kernel_cells_pinch_bool
     \int_step_inline:nnn
       { \l__tenkz_kernel_cells_rmin_int - 1 }
       { \l__tenkz_kernel_cells_rmax_int }
@@ -8262,7 +8277,7 @@
         % below that member's centre
         \__tenkz_kernel_cells_edge:nnnn
           { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } }
-          { \__tenkz_kernel_cells_key:nn {#1} {#2} } {H}
+          { \__tenkz_kernel_cells_key:nn {#1} {#2} } {E}
           {
             \fp_eval:n
               {
@@ -8280,7 +8295,7 @@
             % above that member's centre
             \__tenkz_kernel_cells_edge:nnnn
               { \__tenkz_kernel_cells_key:nn {#1} {#2} }
-              { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } } {H}
+              { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } } {W}
               {
                 \fp_eval:n
                   {
@@ -8302,7 +8317,7 @@
         % beyond that member's centre
         \__tenkz_kernel_cells_edge:nnnn
           { \__tenkz_kernel_cells_key:nn {#1} {#2} }
-          { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} } {V}
+          { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} } {N}
           {
             \fp_eval:n
               {
@@ -8320,7 +8335,7 @@
             % before that member's centre
             \__tenkz_kernel_cells_edge:nnnn
               { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} }
-              { \__tenkz_kernel_cells_key:nn {#1} {#2} } {V}
+              { \__tenkz_kernel_cells_key:nn {#1} {#2} } {S}
               {
                 \fp_eval:n
                   {
@@ -8331,20 +8346,20 @@
           }
       }
   }
+% One half-edge, from corner #1 in direction #3 (E, W, N or S) to corner #2,
+% on the offset line #4.  Keying by corner and direction lets one corner
+% carry two departing strands: two selected cells meeting across that corner
+% and nowhere else contribute two half-edges in, two out, and each entry
+% below stays distinct.
 \cs_new_protected:Npn \__tenkz_kernel_cells_edge:nnnn #1#2#3#4
   {
-    % Two half-edges leaving one corner mean the cells meet across that
-    % corner and nowhere else, so the boundary passes through the point
-    % twice and which strand continues into which is not settled by the
-    % corner.  Such a set has no single closed walk, and the reading an
-    % author means by one contour over it is the offset hull -- which is
-    % what two records on a diagonal have always been drawn as.
-    \prop_if_in:NeT \l__tenkz_kernel_cells_end_prop {#1}
-      { \bool_set_true:N \l__tenkz_kernel_cells_pinch_bool }
-    \prop_put:Nee \l__tenkz_kernel_cells_end_prop {#1} {#2}
-    \prop_put:Nen \l__tenkz_kernel_cells_orient_prop {#1} {#3}
-    \prop_put:Nee \l__tenkz_kernel_cells_val_prop {#1} {#4}
-    \seq_put_right:Ne \l__tenkz_kernel_cells_starts_seq {#1}
+    \prop_put:Nee \l__tenkz_kernel_cells_end_prop
+      { \__tenkz_kernel_cells_ekey:nn {#1} {#3} } {#2}
+    \prop_put:Nee \l__tenkz_kernel_cells_val_prop
+      { \__tenkz_kernel_cells_ekey:nn {#1} {#3} } {#4}
+    \prop_put:Nee \l__tenkz_kernel_cells_out_prop {#1}
+      { \prop_item:Ne \l__tenkz_kernel_cells_out_prop {#1} #3 }
+    \seq_put_right:Ne \l__tenkz_kernel_cells_starts_seq { {#1} {#3} }
   }
 
 % The whole boundary as one path: every loop closed, all of them in the same
@@ -8355,31 +8370,81 @@
     \prop_clear:N \l__tenkz_kernel_cells_seen_prop
     \seq_map_inline:Nn \l__tenkz_kernel_cells_starts_seq
       {
-        \prop_if_in:NnF \l__tenkz_kernel_cells_seen_prop {##1}
-          { \__tenkz_kernel_cells_loop:n {##1} }
+        \prop_if_in:NeF \l__tenkz_kernel_cells_seen_prop
+          { \__tenkz_kernel_cells_ekey:nn ##1 }
+          { \__tenkz_kernel_cells_loop:nn ##1 }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_cells_loop:n #1
+% One closed walk from the half-edge leaving corner #1 in direction #2.  A
+% corner with one departing strand forces the chain.  A corner with two is a
+% saddle: both members touch it, the one this strand rides is on its left,
+% and the left turn is the departure that keeps riding it -- so the strand
+% turns toward its member and the two walks pass without joining.
+\cs_new_protected:Npn \__tenkz_kernel_cells_loop:nn #1#2
   {
     \seq_clear:N \l__tenkz_kernel_cells_loop_seq
     \tl_set:Nn \l__tenkz_kernel_cells_cur_tl {#1}
+    \tl_set:Nn \l__tenkz_kernel_cells_dir_tl {#2}
     \bool_until_do:nn
-      { \prop_if_in_p:NV \l__tenkz_kernel_cells_seen_prop
-          \l__tenkz_kernel_cells_cur_tl }
       {
-        \prop_put:NVn \l__tenkz_kernel_cells_seen_prop
-          \l__tenkz_kernel_cells_cur_tl {1}
-        \prop_get:NVN \l__tenkz_kernel_cells_orient_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_o_tl
-        \prop_get:NVN \l__tenkz_kernel_cells_val_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_val_tl
+        \prop_if_in_p:Ne \l__tenkz_kernel_cells_seen_prop
+          {
+            \__tenkz_kernel_cells_ekey:nn
+              { \l__tenkz_kernel_cells_cur_tl }
+              { \l__tenkz_kernel_cells_dir_tl }
+          }
+      }
+      {
+        \prop_put:Nen \l__tenkz_kernel_cells_seen_prop
+          {
+            \__tenkz_kernel_cells_ekey:nn
+              { \l__tenkz_kernel_cells_cur_tl }
+              { \l__tenkz_kernel_cells_dir_tl }
+          }
+          {1}
+        \tl_set:Ne \l__tenkz_kernel_cells_o_tl
+          { \__tenkz_kernel_cells_axis:n { \l__tenkz_kernel_cells_dir_tl } }
+        \tl_set:Ne \l__tenkz_kernel_cells_val_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_val_prop
+              {
+                \__tenkz_kernel_cells_ekey:nn
+                  { \l__tenkz_kernel_cells_cur_tl }
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
         \seq_put_right:Ne \l__tenkz_kernel_cells_loop_seq
           {
             { \exp_not:V \l__tenkz_kernel_cells_o_tl }
             { \exp_not:V \l__tenkz_kernel_cells_val_tl }
           }
-        \prop_get:NVN \l__tenkz_kernel_cells_end_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_next_tl
+        \tl_set:Ne \l__tenkz_kernel_cells_next_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_end_prop
+              {
+                \__tenkz_kernel_cells_ekey:nn
+                  { \l__tenkz_kernel_cells_cur_tl }
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
+        \tl_set:Ne \l__tenkz_kernel_cells_out_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_out_prop
+              { \l__tenkz_kernel_cells_next_tl }
+          }
+        \int_compare:nNnTF
+          { \tl_count:N \l__tenkz_kernel_cells_out_tl } = {2}
+          {
+            \tl_set:Ne \l__tenkz_kernel_cells_dir_tl
+              {
+                \__tenkz_kernel_cells_left:n
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
+          {
+            \tl_set_eq:NN \l__tenkz_kernel_cells_dir_tl
+              \l__tenkz_kernel_cells_out_tl
+          }
         \tl_set_eq:NN \l__tenkz_kernel_cells_cur_tl
           \l__tenkz_kernel_cells_next_tl
       }
@@ -15544,9 +15609,7 @@
               {
                 \__tenkz_kernel_cells_geometry:
                 \__tenkz_kernel_cells_edges:
-                \bool_if:NTF \l__tenkz_kernel_cells_pinch_bool
-                  { \__tenkz_kernel_r_mark_hull_rect: }
-                  { \__tenkz_kernel_cells_path: }
+                \__tenkz_kernel_cells_path:
               }
               { \__tenkz_kernel_r_mark_hull_rect: }
           }
