@@ -93,21 +93,21 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L333, 852, 856, 862, 867 `tenkz` → `P-grid` | — | — |
 | `ch23_algebraic_ft_foundations.tex` | L48, 52, 169, 173, 374, 378, 391, 395, 438, 442, 446, 455, 459 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft.tex` | L56, 92 `tenkz` → `P-grid` | — | L25 `tenkzlattice` → `C-policy+R-lattice+R-record` |
-| `ch24_peps_ft_balanced_edge_scalars.tex` | — | — | L18 `tenkzfree` → `C-species+R-free+R-record` |
-| `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | — | — | L83, 115, 329, 347, 365, 623, 647 `tenkzfree` → `C-species+R-free+R-record`<br>L316 `tenkzfree` → `R-free+R-record` |
+| `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_balanced_edge_scalars.tex` | L21 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_edge_kernel_gauges_absorption_scalar_comparison.tex` | L84, 104, 294, 300, 312, 324, 577, 596 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_edge_kernel_gauges_insertion_algebra_local_gauges.tex` | L53, 60 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | — | — | L174, 196, 218, 445, 467, 489 `tenkzfree` → `C-species+R-free+R-record` |
-| `ch24_peps_ft_edge_middle.tex` | — | L278 `tnpic` → `C-picture+C-policy` | L242 `tenkzfree` → `R-free+R-record` |
-| `ch24_peps_ft_foundations.tex` | — | — | L48, 384 `tenkzfree` → `R-free+R-record` |
+| `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` | L175, 180, 187, 400, 407, 414 `tenkz` → `P-grid` | — | — |
+| `ch24_peps_ft_edge_middle.tex` | L273 `tenkz` → `P-grid` | — | L246 `tenkz` → `R-record` |
+| `ch24_peps_ft_foundations.tex` | L49, 377 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_normal_capstone_normal_peps.tex` | — | — | L45, 92, 108 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | — | — | L21, 28 `tenkzlattice` → `C-species+R-lattice+R-record`<br>L89, 95, 114, 150 `tenkzlattice` → `R-lattice+R-record`<br>L162, 229 `tenkzfree` → `C-species+R-free+R-record`<br>L212 `tenkzfree` → `R-free+R-record` |
-| `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L99, 104, 121, 286 `tenkzlattice` → `R-lattice+R-record` |
+| `ch24_peps_ft_normal_square_blocking_and_fundamental.tex` | L193, 199 `tenkz` → `P-grid` | — | L21, 28, 89, 95, 115, 151, 163 `tenkz` → `R-record` |
+| `ch24_peps_ft_normal_square_coordinate_regions.tex` | — | — | L100, 106, 126, 293 `tenkz` → `R-record` |
 | `ch24_peps_ft_normal_square_rectangular_injectivity.tex` | — | — | L206, 229 `tenkz` → `R-record` |
 | `ch24_peps_ft_normal_square_translated_windows_and_comparison.tex` | — | — | L382 `tenkz` → `R-record` |
-| `ch24_peps_ft_normal_union.tex` | — | — | L213, 270, 301, 327, 358 `tenkzfree` → `R-free+R-record` |
+| `ch24_peps_ft_normal_union.tex` | L214, 263, 289, 301, 316 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
-| `ch24_peps_ft_torus_translation_and_reference_windows.tex` | — | — | L22 `tenkzlattice` → `C-species+R-lattice+R-record` |
+| `ch24_peps_ft_torus_translation_and_reference_windows.tex` | L23 `tenkz` → `P-grid` | — | — |
 | `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457, 611 `tenkz` → `P-grid` | — | L605 `tenkz` → `C-policy+R-record` |
 | `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 220, 225 `tenkz` → `P-grid` | — | — |
 
@@ -115,24 +115,21 @@ separate public-surface occurrence and therefore appears separately.
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 131 |
-| `tenkzeq` | 0 |
-| `tenkzfree` | 26 |
-| `tenkzlattice` | 12 |
+| `tenkz` | 170 |
 | `tenkzcd` | 0 |
 | `tenkzplanes` | 0 |
-| `tnpic` | 21 |
+| `tnpic` | 20 |
 | `tntree` | 11 |
 | **Total** | **201** |
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 118 |
-| codemod | 14 |
-| redraw | 69 |
+| preserve | 145 |
+| codemod | 13 |
+| redraw | 43 |
 | **Total** | **201** |
 
-The raw count is 169 environment openings plus 32 command occurrences,
+The raw count is 170 environment openings plus 31 command occurrences,
 which reconciles to 201. The issue baseline counted 106 `tenkz`,
 36 `tenkzfree`, 18 `tenkzlattice`, 6 `tenkzcd`, 0 `tenkzeq`,
 0 `tenkzplanes`, and 41 `\tnpic`/`\tntree` lines; the six `tenkzcd`

@@ -210,40 +210,32 @@ every finite union of injective regions.
     % Structural boundary verdict: the typed boundary atoms and their joins
     %   derive (V,P)=(0,4).  The free tier does not emit a boundary event.
     \begin{center}
-        \begin{tenkzfree}[compact]
-            \tnput[dot, label pos=west,
-                ports={45:virtual,east:virtual,-45:virtual,north:physical}]
-                {unionLeft}{(-14mm,0)}{A\setminus B}
-            \tnput[dot, label pos=east,
-                ports={-135:virtual,-35:virtual,-70:virtual,north:physical}]
-                {unionOverlap}{(-4mm,11mm)}{A\cap B}
-            \tnput[dot, label pos=east,
-                ports={west:virtual,135:virtual,-135:virtual,north:physical}]
-                {unionRight}{(14mm,0)}{B\setminus A}
-            \tnput[dot, label pos=south,
-                ports={150:virtual,110:virtual,45:virtual,north:physical}]
-                {unionOutside}{(4mm,-11mm)}{(A\cup B)^c}
-
-            \tnput[boundary, ports={south:physical}]
-                {unionLeftPhysical}{(-14mm,7mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {unionOverlapPhysical}{(-4mm,18mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {unionRightPhysical}{(14mm,7mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {unionOutsidePhysical}{(4mm,-4mm)}{}
-
-            \tnjoin{unionLeft.45}{unionOverlap.-135}
-            \tnjoin{unionLeft.east}{unionRight.west}
-            \tnjoin{unionLeft.-45}{unionOutside.150}
-            \tnjoin{unionOverlap.-35}{unionRight.135}
-            \tnjoin{unionOverlap.-70}{unionOutside.110}
-            \tnjoin{unionRight.-135}{unionOutside.45}
-            \tnjoin{unionLeft.north}{unionLeftPhysical.south}
-            \tnjoin{unionOverlap.north}{unionOverlapPhysical.south}
-            \tnjoin{unionRight.north}{unionRightPhysical.south}
-            \tnjoin{unionOutside.north}{unionOutsidePhysical.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=unionLeft, label pos=w,
+                ports={45:virtual, 0:virtual, -45:virtual,
+                       90:physical}]{A\setminus B}
+            \tn[at=1.3 ne of unionLeft, name=unionOverlap, label pos=e,
+                ports={-135:virtual, -35:virtual, -70:virtual,
+                       90:physical}]{A\cap B}
+            \tn[at=3.5 e of unionLeft, name=unionRight, label pos=e,
+                ports={180:virtual, 135:virtual, -135:virtual,
+                       90:physical}]{B\setminus A}
+            \tn[at=2.25 e of 1.4 s of unionLeft, name=unionOutside,
+                label pos=s,
+                ports={150:virtual, 110:virtual, 45:virtual,
+                       90:physical}]{(A\cup B)^c}
+            \tnwire{unionLeft.45}{unionOverlap.-135}
+            \tnwire[name=unionAcross]{unionLeft.0}{unionRight.180}
+            \tnwire{unionLeft.-45}{unionOutside.150}
+            \tnwire{unionOverlap.-35}{unionRight.135}
+            % The two bonds cross on the page without braiding; the
+            % declared order is the drawing's, not the mathematics'.
+            \tnwire[name=unionDown,
+                cross={under at crossing of unionDown and unionAcross}]
+                {unionOverlap.-70}{unionOutside.110}
+            \tnwire{unionRight.-135}{unionOutside.45}
+        \end{tenkz}
     \end{center}
     Taking a boundary tensor $X$ on $(A\cup B)^c$ with
     $\mathcal C_{\{0,1,2\}}(X)=0$, injectivity of $A$ gives
@@ -267,108 +259,64 @@ every finite union of injective regions.
     %   from left to right, (V,P)=(0,3), (4,1), (3,2), and (3,0).  The free
     %   tier does not emit boundary events.
     \begin{center}
-        \begin{tenkzfree}[compact]
-            \tnput[dot, label pos=west,
-                ports={45:virtual,east:virtual,-45:virtual,north:physical}]
-                {proofZeroLeft}{(-7mm,0)}{P_0}
-            \tnput[dot, label pos=east,
-                ports={-135:virtual,-45:virtual,-90:virtual,north:physical}]
-                {proofZeroOverlap}{(0,6mm)}{P_1}
-            \tnput[dot, label pos=east,
-                ports={west:virtual,135:virtual,-135:virtual,north:physical}]
-                {proofZeroRight}{(7mm,0)}{P_2}
-            \tnput[dot, label pos=south,
-                ports={135:virtual,90:virtual,45:virtual}]
-                {proofZeroX}{(0,-6mm)}{X}
-            \tnput[boundary, ports={south:physical}]
-                {proofZeroLeftPhysical}{(-7mm,4mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {proofZeroOverlapPhysical}{(0,10mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {proofZeroRightPhysical}{(7mm,4mm)}{}
-
-            \tnjoin{proofZeroLeft.45}{proofZeroOverlap.-135}
-            \tnjoin{proofZeroLeft.east}{proofZeroRight.west}
-            \tnjoin{proofZeroLeft.-45}{proofZeroX.135}
-            \tnjoin{proofZeroOverlap.-45}{proofZeroRight.135}
-            \tnjoin{proofZeroOverlap.-90}{proofZeroX.90}
-            \tnjoin{proofZeroRight.-135}{proofZeroX.45}
-            \tnjoin{proofZeroLeft.north}{proofZeroLeftPhysical.south}
-            \tnjoin{proofZeroOverlap.north}{proofZeroOverlapPhysical.south}
-            \tnjoin{proofZeroRight.north}{proofZeroRightPhysical.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=proofZeroLeft, label pos=w,
+                ports={45:virtual, 0:virtual, -45:virtual,
+                       90:physical}]{P_0}
+            \tn[at=1 ne of proofZeroLeft, name=proofZeroOverlap,
+                label pos=e,
+                ports={-135:virtual, -45:virtual, -90:virtual,
+                       90:physical}]{P_1}
+            \tn[at=2 e of proofZeroLeft, name=proofZeroRight,
+                label pos=e,
+                ports={180:virtual, 135:virtual, -135:virtual,
+                       90:physical}]{P_2}
+            \tn[at=1 se of proofZeroLeft, name=proofZeroX, label pos=s,
+                ports={135:virtual, 90:virtual, 45:virtual}]{X}
+            \tnwire{proofZeroLeft.45}{proofZeroOverlap.-135}
+            \tnwire[name=proofAcross]{proofZeroLeft.0}{proofZeroRight.180}
+            \tnwire{proofZeroLeft.-45}{proofZeroX.135}
+            \tnwire{proofZeroOverlap.-45}{proofZeroRight.135}
+            % The page crossing carries no braiding; the order is the
+            % drawing's choice.
+            \tnwire[name=proofDown,
+                cross={under at crossing of proofDown and proofAcross}]
+                {proofZeroOverlap.-90}{proofZeroX.90}
+            \tnwire{proofZeroRight.-135}{proofZeroX.45}
+        \end{tenkz}
         \,$=0$\quad$\xrightarrow{A^{-1}}$\quad
-        \begin{tenkzfree}[compact]
-            \tnput[dot, label pos=east,
-                ports={-135:virtual,135:virtual,-90:virtual,north:physical}]
-                {proofOneRight}{(4mm,1mm)}{P_2}
-            \tnput[dot, label pos=south,
-                ports={45:virtual,90:virtual,150:virtual}]
-                {proofOneX}{(-2mm,-6mm)}{X}
-            \tnput[boundary, ports={east:virtual}]
-                {proofOneRightLower}{(-3mm,-1mm)}{}
-            \tnput[boundary, ports={-45:virtual}]
-                {proofOneRightUpper}{(-2mm,7mm)}{}
-            \tnput[boundary, ports={east:virtual}]
-                {proofOneXLower}{(-8mm,-3mm)}{}
-            \tnput[boundary, ports={south:virtual}]
-                {proofOneXUpper}{(-2mm,1mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {proofOneRightPhysical}{(4mm,7mm)}{}
-
-            \tnjoin{proofOneRight.-90}{proofOneX.45}
-            \tnjoin{proofOneRight.-135}{proofOneRightLower.east}
-            \tnjoin{proofOneRight.135}{proofOneRightUpper.-45}
-            \tnjoin{proofOneX.150}{proofOneXLower.east}
-            \tnjoin{proofOneX.90}{proofOneXUpper.south}
-            \tnjoin{proofOneRight.north}{proofOneRightPhysical.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=proofOneRight, label pos=e,
+                ports={-135:virtual, 135:virtual, -90:virtual,
+                       90:physical}]{P_2}
+            % X stands off the -135 bearing of P_2, so the open -135 stub
+            % of P_2 is not swallowed by the bond running down to X.
+            \tn[at=1.2 s of 0.6 w of proofOneRight, name=proofOneX,
+                label pos=s,
+                ports={45:virtual, 90:virtual, 150:virtual}]{X}
+            \tnwire{proofOneRight.-90}{proofOneX.45}
+        \end{tenkz}
         \,$=0$\quad$\xrightarrow{A\cap B}$\quad
-        \begin{tenkzfree}[compact]
-            \tnput[dot, label pos=east,
-                ports={-135:virtual,-90:virtual,-45:virtual,north:physical}]
-                {proofTwoOverlap}{(0,6mm)}{P_1}
-            \tnput[dot, label pos=east,
-                ports={135:virtual,-135:virtual,west:virtual,north:physical}]
-                {proofTwoRight}{(7mm,0)}{P_2}
-            \tnput[dot, label pos=south,
-                ports={90:virtual,45:virtual,135:virtual}]
-                {proofTwoX}{(0,-6mm)}{X}
-            \tnput[boundary, ports={45:virtual}]
-                {proofTwoOverlapFree}{(-5mm,2mm)}{}
-            \tnput[boundary, ports={east:virtual}]
-                {proofTwoRightFree}{(-5mm,0)}{}
-            \tnput[boundary, ports={-45:virtual}]
-                {proofTwoXFree}{(-5mm,-2mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {proofTwoOverlapPhysical}{(0,10mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {proofTwoRightPhysical}{(7mm,4mm)}{}
-
-            \tnjoin{proofTwoOverlap.-135}{proofTwoOverlapFree.45}
-            \tnjoin{proofTwoRight.west}{proofTwoRightFree.east}
-            \tnjoin{proofTwoX.135}{proofTwoXFree.-45}
-            \tnjoin{proofTwoOverlap.-90}{proofTwoX.90}
-            \tnjoin{proofTwoOverlap.-45}{proofTwoRight.135}
-            \tnjoin{proofTwoRight.-135}{proofTwoX.45}
-            \tnjoin{proofTwoOverlap.north}{proofTwoOverlapPhysical.south}
-            \tnjoin{proofTwoRight.north}{proofTwoRightPhysical.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=proofTwoOverlap, label pos=e,
+                ports={-135:virtual, -90:virtual, -45:virtual,
+                       90:physical}]{P_1}
+            \tn[at=0.9 e of 0.75 s of proofTwoOverlap,
+                name=proofTwoRight, label pos=e,
+                ports={135:virtual, -135:virtual, 180:virtual,
+                       90:physical}]{P_2}
+            \tn[at=1.5 s of proofTwoOverlap, name=proofTwoX, label pos=s,
+                ports={90:virtual, 45:virtual, 135:virtual}]{X}
+            \tnwire{proofTwoOverlap.-90}{proofTwoX.90}
+            \tnwire{proofTwoOverlap.-45}{proofTwoRight.135}
+            \tnwire{proofTwoRight.-135}{proofTwoX.45}
+        \end{tenkz}
         \,$=0$\quad$\xrightarrow{B^{-1}}$\quad
-        \begin{tenkzfree}[compact]
-            \tnput[dot, label pos=south, ports={135:virtual,90:virtual,45:virtual}]
-                {proofThreeX}{(0,0)}{X}
-            \tnput[boundary, ports={-45:virtual}]
-                {proofThreeLeft}{(-4mm,5mm)}{}
-            \tnput[boundary, ports={south:virtual}]
-                {proofThreeMiddle}{(0,6mm)}{}
-            \tnput[boundary, ports={-135:virtual}]
-                {proofThreeRight}{(4mm,5mm)}{}
-
-            \tnjoin{proofThreeX.135}{proofThreeLeft.-45}
-            \tnjoin{proofThreeX.90}{proofThreeMiddle.south}
-            \tnjoin{proofThreeX.45}{proofThreeRight.-135}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[label pos=s,
+                ports={135:virtual, 90:virtual, 45:virtual}]{X}
+        \end{tenkz}
         \,$=0$.
     \end{center}
 \end{lemma}
