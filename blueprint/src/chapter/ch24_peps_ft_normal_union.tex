@@ -290,7 +290,10 @@ every finite union of injective regions.
             \tn[at=(1,1), name=proofOneRight, label pos=e,
                 ports={-135:virtual, 135:virtual, -90:virtual,
                        90:physical}]{P_2}
-            \tn[at=0.9 sw of proofOneRight, name=proofOneX, label pos=s,
+            % X stands off the -135 bearing of P_2, so the open -135 stub
+            % of P_2 is not swallowed by the bond running down to X.
+            \tn[at=1.2 s of 0.6 w of proofOneRight, name=proofOneX,
+                label pos=s,
                 ports={45:virtual, 90:virtual, 150:virtual}]{X}
             \tnwire{proofOneRight.-90}{proofOneX.45}
         \end{tenkz}
