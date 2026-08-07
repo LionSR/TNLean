@@ -205,6 +205,7 @@
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
+\prop_new:N \l__tenkz_kernel_populated_cell_prop % "r-c" -> populated atom id
 \prop_new:N \l__tenkz_kernel_basis_cell_prop  % "r-c-k" -> basis atom id
 \prop_new:N \l__tenkz_kernel_basis_claim_prop % "r-c-k" -> authored atom id
 \prop_new:N \l__tenkz_kernel_basis_live_prop  % "k/r/c" -> canonical atom id
@@ -2720,6 +2721,11 @@
                                       ####1 )
                                   }
                               }
+                            \prop_put:Nee
+                              \l__tenkz_kernel_populated_cell_prop
+                              { \int_use:N \l__tenkz_kernel_pop_int
+                                - ####1 }
+                              { \tl_use:N \l__tenkz_model_last_tl }
                           }
                       }
                   }
@@ -10330,8 +10336,21 @@
         \fp_zero:N #4
       }
   }
+% The aux works in the shared endpoint registers, so it saves them on entry
+% and hands back only its two outputs: a wire whose other end was already
+% resolved keeps that end's coordinates.
+\fp_new:N \l__tenkz_kernel_r_hp_save_x_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_y_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_xb_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_yb_fp
+\fp_new:N \l__tenkz_kernel_r_hp_out_x_fp
+\fp_new:N \l__tenkz_kernel_r_hp_out_y_fp
 \cs_new_protected:Npn \__tenkz_kernel_r_hull_port_xy_aux:nnNN #1#2#3#4
   {
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_x_fp \l__tenkz_kernel_r_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_y_fp \l__tenkz_kernel_r_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_xb_fp \l__tenkz_kernel_r_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_yb_fp \l__tenkz_kernel_r_yb_fp
     \__tenkz_kernel_r_node:n {#1}
     \__tenkz_geom_xy:nNN {#1}
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
@@ -10382,10 +10401,16 @@
       { \l__tenkz_kernel_r_basis_ny_tl }
       { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
       \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
-    \fp_set:Nn #3
+    \fp_set:Nn \l__tenkz_kernel_r_hp_out_x_fp
       { \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_x_tl }
-    \fp_set:Nn #4
+    \fp_set:Nn \l__tenkz_kernel_r_hp_out_y_fp
       { \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_y_tl }
+    \fp_set_eq:NN \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_hp_save_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_y_fp \l__tenkz_kernel_r_hp_save_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_hp_save_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_hp_save_yb_fp
+    \fp_set_eq:NN #3 \l__tenkz_kernel_r_hp_out_x_fp
+    \fp_set_eq:NN #4 \l__tenkz_kernel_r_hp_out_y_fp
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_hull_port_xy:nnNN { nVNN, VVNN }
 
@@ -10863,17 +10888,28 @@
 
 % A bond between two unoccupied cells is rail territory: the wrap records
 % own that ink, and without them the cells are bare crossings of nothing.
+% A grid bond inks when either endpoint cell carries a live atom.  The
+% occupancy table holds the cells the body claimed; a frame-populated
+% non-wire cell carries the atom the frame put there, and Section 2.2 makes
+% its bond the same declared contraction, so it inks on the same rule.  A
+% wire-row cell populates nothing: its rail segment still waits for an
+% authored neighbour, and an all-empty wire row still draws no ink.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_grid:n #1
   {
     \bool_set_false:N \l_tmpa_bool
     \clist_map_inline:nn {from, to}
       {
         \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_tl
-        \prop_if_in:NeT \l__tenkz_kernel_cell_prop
+        \tl_set:Ne \l__tenkz_kernel_r_end_tl
           {
             \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_tl {row}
             - \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_tl {col}
           }
+        \prop_if_in:NVT \l__tenkz_kernel_cell_prop
+          \l__tenkz_kernel_r_end_tl
+          { \bool_set_true:N \l_tmpa_bool }
+        \prop_if_in:NVT \l__tenkz_kernel_populated_cell_prop
+          \l__tenkz_kernel_r_end_tl
           { \bool_set_true:N \l_tmpa_bool }
       }
     \bool_if:NT \l_tmpa_bool { \__tenkz_kernel_r_wire_ends:n {#1} }
@@ -16246,6 +16282,7 @@
     \prop_clear:N \l__tenkz_kernel_cell_port_pairing_bearing_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
+    \prop_clear:N \l__tenkz_kernel_populated_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_claim_prop
     \prop_clear:N \l__tenkz_kernel_basis_live_prop

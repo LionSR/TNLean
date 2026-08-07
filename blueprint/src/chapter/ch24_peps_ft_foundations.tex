@@ -45,23 +45,13 @@ together with the local inverse it provides.
     % Papers/1804.04964/paper_normal.tex:961--979; suppressing intervening
     % edges avoids a square-lattice degree-four restriction.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[dot, ports={210:virtual,270:virtual,330:virtual,
-                    north:physical}, label pos=west]
-                {localStar}{(0,0)}{A_v}
-            \tnput[boundary, ports={30:virtual}, label pos=south]
-                {localStarFirst}{(-10mm,-8mm)}{e_1}
-            \tnput[boundary, ports={90:virtual}, label pos=west]
-                {localStarTypical}{(0,-12mm)}{e_k}
-            \tnput[boundary, ports={150:virtual}, label pos=south]
-                {localStarLast}{(10mm,-8mm)}{e_{\deg(v)}}
-            \tnput[boundary, ports={south:physical}, label pos=east]
-                {localStarPhysical}{(0,12mm)}{\sigma(v)}
-            \tnjoin{localStar.210}{localStarFirst.30}
-            \tnjoin{localStar.270}{localStarTypical.90}
-            \tnjoin{localStar.330}{localStarLast.150}
-            \tnjoin{localStar.north}{localStarPhysical.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[label pos=w,
+                ports={210:virtual:$e_1$, 270:virtual:$e_k$,
+                       330:virtual:$e_{\deg(v)}$,
+                       90:physical:$\sigma(v)$}]{A_v}
+        \end{tenkz}
     \end{center}
 \end{definition}
 
@@ -381,17 +371,14 @@ sections.
     % Papers/1804.04964/paper_normal.tex:961--981; no square-lattice valence is
     % assumed.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[boundary, ports={east:virtual}, label pos=south]
-                {vertexInjectiveDomain}{(-18mm,0)}
-                {\bigotimes_{e\ni v}\C^{D_e}}
-            \tnput[box, ports={west:virtual,east:physical}]
-                {vertexInjectiveMap}{(0,0)}{A_v}
-            \tnput[boundary, ports={west:physical}, label pos=south]
-                {vertexInjectiveCodomain}{(18mm,0)}{\C^d}
-            \tnjoin{vertexInjectiveDomain.east}{vertexInjectiveMap.west}
-            \tnjoin{vertexInjectiveMap.east}{vertexInjectiveCodomain.west}
-        \end{tenkzfree}
+        \tenkzkernel
+        % The domain and the codomain name the two open ends of the map, so
+        % each is the tip label of the port whose type it belongs to.
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[skin=box,
+                ports={180:virtual:$\bigotimes_{e\ni v}\C^{D_e}$,
+                       0:physical:$\C^d$}]{A_v}
+        \end{tenkz}
         \qquad $\ker A_v=\{0\}$.
     \end{center}
 \end{definition}

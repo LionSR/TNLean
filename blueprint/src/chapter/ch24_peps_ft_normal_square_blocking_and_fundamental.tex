@@ -8,7 +8,7 @@
     one-site comparison used after the edge gauges have been obtained.
     Diagrammatically, in the square-lattice proof this is the comparison
     between the source regions $R$ and $S=R\cup\{v\}$:
-    \begin{align}
+    \begin{tenkzequation}
         % Source verdict: paper_normal.tex:1519--1544 compares the injective
         % regions R and S=R\cup\{v\}; their complements are injective as well.
         % Type verdict: this is a lattice/set schematic, not a tensor
@@ -17,22 +17,22 @@
         % S=(2-4,2-4) has nine; v=(4,4) is marked in both pictures.
         % Contraction/boundary audit: there are no tensor contractions and no
         % tensor boundary signature; the boundary legs are cut lattice edges.
-        &\vcenter{\hbox{%
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$R$]
-                {(2-4,2-4) - (4,4)}
-            \tnsite[role=marked, label=$v$]{(4,4)}
-        \end{tenkzlattice}}}
-        \qquad
-        \vcenter{\hbox{%
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
-            \tnsite[role=marked, label=$v$]{(4,4)}
-        \end{tenkzlattice}}}
-        \qquad
-        R\subset S=R\cup\{v\}.
-        \notag
-    \end{align}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[at=(4,4), species=marked, name=vSite]{v}
+            \tnmark[form=enclosure, slot=selected, tint]
+                {(2,2) .. (4,4) - (4,4)}{$R$}
+        \end{tenkz}
+        $\qquad$
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tn[at=(4,4), species=marked, name=vSite]{v}
+            \tnmark[form=enclosure, slot=selected, tint]
+                {(2,2) .. (4,4)}{$S$}
+        \end{tenkz}
+        $\qquad R\subset S=R\cup\{v\}$
+    \end{tenkzequation}
 \end{definition}
 
 \begin{theorem}[Membership in a one-site separated region]%
