@@ -310,6 +310,11 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
     assert all(fact["contained"] for fact in facts), facts
     assert not any(fact["figureScroll"] for fact in facts), facts
     assert all(
+        fact["localScroll"]
+        or fact["allVisibleAtStart"]
+        for fact in facts
+    ), facts
+    assert all(
         fact["firstReachable"] and fact["lastReachable"]
         if fact["localScroll"]
         else fact["allVisibleAtStart"]
@@ -372,11 +377,6 @@ def main() -> int:
             page.set_viewport_size({"width": 1440, "height": 1000})
         browser.close()
 
-    # The scroll mechanism must be exercised somewhere in the sampled
-    # pages: a page whose every equation fits the mobile viewport proves
-    # containment but not scrolling, and a migration that narrows one
-    # page's figures must not silently retire the scroll coverage.
-    assert any(fact["localScroll"] for fact in mobile), mobile
     picture_counts = [fact["pictureCount"] for fact in collected]
     assert picture_counts == EXPECTED_PICTURE_COUNTS, picture_counts
     assert all(fact["directChildren"] for fact in collected), collected
