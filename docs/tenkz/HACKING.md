@@ -81,7 +81,7 @@ missing capability all fail, while recorded gaps merely appear in the book's
 histogram.  A judged verdict pins the SHA-256 of its case; editing the case
 stales exactly that verdict.
 
-The ordinary 257-fixture corpus keeps its existing default interface:
+The ordinary 243-fixture corpus keeps its existing default interface:
 
 ```sh
 scripts/tenkz_corpus.sh
@@ -349,8 +349,8 @@ is pending.
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
 `.tnlog` event streams.  Use it whenever a checker needs structured event
 fields.  Some narrow regression tests still inspect raw lines directly,
-including `scripts/test_tenkz_cd_map_labels.py`,
-`scripts/test_tenkz_enclosures.py`, and `scripts/test_tenkz_peps_torus.py`.
+including `scripts/test_tenkz_enclosures.py` and
+`scripts/test_tenkz_peps_torus.py`.
 Before changing event syntax, field order, or validation, search every `.tnlog`
 consumer and update or migrate these exceptions; do not assume the canonical
 parser is their only dependency.
@@ -372,7 +372,7 @@ and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
 not a claim that every historical path has moved.  The live `tenkz-core`,
-`tenkz-grid`, `tenkz-tree`, `tenkz-cd`, `tenkz-lattice`, and `tenkz-free` files
+`tenkz-grid`, `tenkz-tree`, `tenkz-lattice`, and `tenkz-free` files
 still combine some parsing, geometry, rendering, and event work; direct `\draw`
 or `\node` emission in those files remains migration debt.
 

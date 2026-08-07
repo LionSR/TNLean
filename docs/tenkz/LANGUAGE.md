@@ -14,14 +14,12 @@ those declarations, not a second authoring language.
 
 ## Choose one layout
 
-There are four genres.
+There are three genres.
 
 - `tenkz` is the regular one-dimensional contraction grid.  Rows are layers,
   columns are sites, and adjacent compatible cells contract implicitly.
 - `tenkzlattice` is a spatial lattice or sheet.  Its body selects sites,
   edges, and measured regions of a finite window.
-- `tenkzcd` is for maps, fusion trees, and coherence diagrams.  Its topology
-  is composition rather than tensor contraction.
 - `tenkzfree` is the escape hatch for an irregular typed graph.  Every atom is
   named, every port is typed, and every connection names two ports.
 

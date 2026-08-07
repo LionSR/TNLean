@@ -44,9 +44,6 @@
 \texttt{\textbackslash tntree} & atoms & A \allowbreak{}fusion \allowbreak{}tree \allowbreak{}is \allowbreak{}one \allowbreak{}structured \allowbreak{}atom. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tntree[keys]{word}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tntree.tex}}. Representative failure: An \allowbreak{}unbalanced \allowbreak{}fusion \allowbreak{}word \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
-\texttt{\textbackslash tnarrow} & connections-\allowbreak{}closures & An \allowbreak{}arrow \allowbreak{}connects \allowbreak{}declared \allowbreak{}diagram \allowbreak{}objects. \\
-\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnarrow[keys]{label}}}} \\[2pt]
-\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnarrow.tex}}. Representative failure: A \allowbreak{}nonexistent \allowbreak{}source \allowbreak{}or \allowbreak{}target \allowbreak{}address \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tnpic} & composition & A \allowbreak{}wrapper \allowbreak{}composes \allowbreak{}the \allowbreak{}grid \allowbreak{}grammar \allowbreak{}inside \allowbreak{}another \allowbreak{}expression. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnpic[picture keys]{body}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnpic.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}picture \allowbreak{}key \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
@@ -117,11 +114,6 @@ picture & \texttt{plane \allowbreak{}slant} & length & metric & Projected \allow
 picture & \texttt{col \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}column \allowbreak{}basis. \\
 picture & \texttt{row \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}row \allowbreak{}basis. \\
 picture & \texttt{sheet \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}sheet \allowbreak{}basis. \\
-picture & \texttt{maps} & flag & false & Typed-\allowbreak{}map \allowbreak{}layout. \\
-picture & \texttt{polygon} & positive-\allowbreak{}integer & empty & Coherence \allowbreak{}polygon \allowbreak{}layout. \\
-picture & \texttt{radius} & length & metric & Coherence \allowbreak{}polygon \allowbreak{}radius. \\
-picture & \texttt{column \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}column \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
-picture & \texttt{row \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}row \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
 object & \texttt{dot} & flag & policy & Dot \allowbreak{}silhouette. \\
 object & \texttt{box} & flag & policy & Box \allowbreak{}silhouette. \\
 object & \texttt{pill} & flag & policy & Pill \allowbreak{}silhouette. \\
@@ -161,8 +153,6 @@ connection & \texttt{role} & semantic-\allowbreak{}role & empty & Connection \al
 connection & \texttt{species} & declared-\allowbreak{}name & empty & Connection \allowbreak{}species. \\
 connection & \texttt{name} & identifier & generated & Stable \allowbreak{}semantic \allowbreak{}name. \\
 connection & \texttt{fused} & flag & false & Doubled \allowbreak{}connection. \\
-connection & \texttt{from} & address & empty & Arrow \allowbreak{}source. \\
-connection & \texttt{to} & address & empty & Arrow \allowbreak{}target. \\
 connection & \texttt{distinguished} & flag & false & Distinguished \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{none} & flag & false & Suppress \allowbreak{}a \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{style} & style-\allowbreak{}name & empty & Named \allowbreak{}lattice-\allowbreak{}edge \allowbreak{}style. \\
