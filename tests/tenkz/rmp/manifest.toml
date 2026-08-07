@@ -340,7 +340,7 @@ section = "section-ii"
 order = 20
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-staircase.tex"
 formula = "|psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta."
-ink = "Kernel flat frame; the staircase ascends as in the source (the bar's X row on this target: the 0.7 case was vertically mirrored)."
+ink = "Kernel flat frame; four pill isometries ascend as in the source (the bar's X row on this target: the 0.7 case was vertically mirrored)."
 boundary = "The initial state closes the input; each isometry exposes one output and the final bond."
 source = "paper TN-Review-main.tex line 514; author source ImagesReview Section II/ImagesReview Section II.tex lines 541-546"
 capabilities = ["kernel", "typed-ports"]
