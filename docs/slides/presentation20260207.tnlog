@@ -9,10 +9,10 @@ wire|id=wire-7|from=addr-3|kind=index|name=bond-1-2-1-3|origin=grid|to=addr-4
 wire|id=wire-8|from=addr-5|kind=index|name=bond-1-3-1-4|origin=grid|to=addr-6
 wire|id=wire-9|from=addr-7|kind=index|name=bond-1-4-1-5|origin=grid|to=addr-8
 wire|id=wire-10|from=addr-9|kind=index|name=wrap-1|origin=trace|row=1|side=west-east|to=addr-10
-wire|id=wire-11|from=addr-11|host=atom-1|kind=index|name=port-open-1|origin=port-open|port-face=90|port-label=$i_1$|port-slot=1|port-type=physical
-wire|id=wire-12|from=addr-12|host=atom-2|kind=index|name=port-open-2|origin=port-open|port-face=90|port-label=$i_2$|port-slot=1|port-type=physical
-wire|id=wire-13|from=addr-13|host=atom-4|kind=index|name=port-open-3|origin=port-open|port-face=90|port-label=$i_{N-1}$|port-slot=1|port-type=physical
-wire|id=wire-14|from=addr-14|host=atom-5|kind=index|name=port-open-4|origin=port-open|port-face=90|port-label=$i_N$|port-slot=1|port-type=physical
+wire|id=wire-11|from=addr-11|host=atom-1|kind=index|name=port-open-1|origin=port-open|port-face=90|port-label=i_1|port-slot=1|port-type=physical
+wire|id=wire-12|from=addr-12|host=atom-2|kind=index|name=port-open-2|origin=port-open|port-face=90|port-label=i_2|port-slot=1|port-type=physical
+wire|id=wire-13|from=addr-13|host=atom-4|kind=index|name=port-open-3|origin=port-open|port-face=90|port-label=i_{N-1}|port-slot=1|port-type=physical
+wire|id=wire-14|from=addr-14|host=atom-5|kind=index|name=port-open-4|origin=port-open|port-face=90|port-label=i_N|port-slot=1|port-type=physical
 kernel-boundary|signature=phys:n, phys:n, phys:n, phys:n
 ink-use|picture=k1|class=glyph|id=1|shape=circle
 glyph-geometry|picture=k1|owner=1|shape=circle|xmin=-182117|xmax=182117|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
