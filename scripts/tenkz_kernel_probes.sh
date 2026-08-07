@@ -1183,6 +1183,61 @@ if grep -Fq '|origin=grid|' "$WORK/r_sealed_void.tnlog"; then
   echo "FAIL: a sealed void retained an incident generated grid bond" >&2
   exit 1
 fi
+# A void site draws no glyph by default; its records decide open against
+# sealed.  The two chains of r_void_open share one shape: the open hole
+# keeps both bridging grid bonds, its own physical leg, and its boundary
+# entry, while the sealed variant loses the site's bonds and leg.  Neither
+# void draws a site glyph, so each picture inks exactly its two real sites.
+void_pane() {
+  awk -v pane="$1" -v pattern="$2" '
+    /^picture\|/ { seen++ }
+    $0 ~ pattern { if (seen == pane) print }
+  ' "$WORK/r_void_open.tnlog"
+}
+grep -Fq '|name=H|physical=up|void=open' "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the open hole lost its record or its physical policy answer" >&2
+  exit 1
+}
+[ "$(void_pane 1 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 2 ] || {
+  echo "FAIL: an open hole did not keep both bridging grid bonds" >&2
+  exit 1
+}
+grep -Fq '|host=atom-2|kind=index|name=leg-n-1-2|origin=policy-leg|port-type=physical' \
+    "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the open hole lost its physical leg" >&2
+  exit 1
+}
+[ "$(void_pane 2 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 0 ] || {
+  echo "FAIL: the sealed contrast retained a generated grid bond" >&2
+  exit 1
+}
+[ "$(void_pane 1 '^kernel-boundary[|]')" = \
+  'kernel-boundary|signature=phys:n, phys:n, phys:n, phys:s' ] || {
+  echo "FAIL: the open chain's boundary lost the hole's index or the updown answer" >&2
+  exit 1
+}
+[ "$(void_pane 2 '^kernel-boundary[|]')" = \
+  'kernel-boundary|signature=phys:n, phys:n' ] || {
+  echo "FAIL: the sealed chain's boundary kept a removed index" >&2
+  exit 1
+}
+for pane in 1 2; do
+  [ "$(void_pane "$pane" '^ink-use[|].*[|]class=glyph[|]' | wc -l | tr -d ' ')" \
+      -eq 2 ] || {
+    echo "FAIL: a void site in pane $pane drew a site glyph" >&2
+    exit 1
+  }
+done
+grep -Fq '|name=C|physical=updown' "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the atom-scope updown answer did not reach the site" >&2
+  exit 1
+}
+for leg in leg-n-1-3 leg-s-1-3; do
+  void_pane 1 '[|]origin=policy-leg[|]' | grep -Fq "|name=$leg|" || {
+    echo "FAIL: the atom-scope updown answer lost its $leg" >&2
+    exit 1
+  }
+done
 if grep -Fq '|physical=none|' "$WORK/r_physical_policy.tnlog"; then
   echo "FAIL: physical=none materialized a physical port" >&2
   exit 1

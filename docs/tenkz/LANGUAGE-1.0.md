@@ -105,7 +105,7 @@ that contraction and retires nothing.
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
-| `skin=` | identifier | a declared skin; defaults §2.8 | theme default (`dot`) | `TKZ-SKIN-*` |
+| `skin=` | identifier | a declared skin; defaults §2.8 | theme default (`dot`; `none` on a void site) | `TKZ-SKIN-*` |
 | `wide=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `wires=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
@@ -138,7 +138,10 @@ The label component is where the retired page-relative keys went: an index
 name belongs to the port it names, and a port already knows which way it
 points. A cluster carrier is a glyphless group and owns no authored `ports=`;
 attach wires to its addressable member atoms instead. `void=open` is a hole
-that preserves indices; `void=sealed` removes the site and its bonds.
+that preserves indices; `void=sealed` removes the site and its bonds. A void
+site's skin defaults to `none` rather than `dot`: a hole draws nothing
+unless the author declares a skin, while every record — the bonds bridging
+an open hole, its boundary entries — stands unchanged.
 
 ### 2.4 Wire keys (10)
 
@@ -1100,3 +1103,11 @@ confirmation at L1 acceptance:
    content (§13), so a side that exposes indices says so. The registry rows,
    the key table, and §3 now say that, and `none` is the explicit spelling of
    the kernel default rather than a seal.
+7. **A void site draws no glyph — corrected 2026-08-07.** The skin default
+   read `dot` for every atom, so `\tn[void=open]{}` drew a site
+   indistinguishable from a real one and a sealed void drew a free-floating
+   dot with no bonds. A hole means an absent site: both void words now
+   default the skin to `none`, and the record half of the contract — the
+   bonds bridging an open hole, its surviving physical index, the boundary
+   signature — is untouched. A declared `skin=` still draws, and the
+   `\tnskip` ledger row stays one key long and is glyph-faithful as printed.

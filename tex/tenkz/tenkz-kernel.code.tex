@@ -14362,10 +14362,22 @@
 \seq_new:N \l__tenkz_kernel_skin_base_seq
 
 % The skin an atom declares, defaulting to the dot an unadorned site draws.
+% A void site — open or sealed — defaults to none instead: a hole keeps its
+% records (bonds bridging it, its boundary entries) but draws no glyph unless
+% the author declares one (issue 5609).  The void field is read before the
+% skin field: a caller may pass a result variable that its own #1 expansion
+% reads, so #1 must not be expanded again once #2 holds \q_no_value.
+\tl_new:N \l__tenkz_kernel_atom_skin_void_tl
 \cs_new_protected:Npn \__tenkz_kernel_atom_skin:nN #1#2
   {
+    \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_atom_skin_void_tl
     \__tenkz_model_get:nnN {#1} {skin} #2
-    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {dot} }
+    \quark_if_no_value:NT #2
+      {
+        \quark_if_no_value:NTF \l__tenkz_kernel_atom_skin_void_tl
+          { \tl_set:Nn #2 {dot} }
+          { \tl_set:Nn #2 {none} }
+      }
   }
 % That skin resolved to its primitive.  Measurement, silhouette folding and
 % ink all ask this one question, so no consumer can default or resolve a skin
