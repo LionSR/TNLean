@@ -422,6 +422,24 @@ else:
         blockType = True
         templateName = "TenkzEquation"
 
+    def _holds_kernel_switch(node) -> bool:
+        r"""Whether this preceding sibling carries \tenkzkernel in force.
+
+        A paragraph break is not a TeX group, so a switch inside a
+        preceding ``par`` wrapper still governs what follows; the search
+        descends through ``par`` nodes and nothing else, since every
+        other container opens a group that ends the declaration.
+        """
+        name = getattr(node, "nodeName", "")
+        if name == "tenkzkernel":
+            return True
+        if name != "par":
+            return False
+        return any(
+            _holds_kernel_switch(child)
+            for child in getattr(node, "childNodes", [])
+        )
+
     def _kernel_switch_reaches(node) -> bool:
         r"""Whether \tenkzkernel is in force where this picture stands.
 
@@ -439,7 +457,7 @@ else:
             for sibling in getattr(parent, "childNodes", []):
                 if sibling is current:
                     break
-                if getattr(sibling, "nodeName", "") == "tenkzkernel":
+                if _holds_kernel_switch(sibling):
                     return True
             current = parent
         return False
