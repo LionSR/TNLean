@@ -134,10 +134,14 @@
           {
             \int_gincr:N \g__tenkz_test_bonded_slot_int
             \__tenkz_geom_xy:nNN {#1} \l_tmpa_fp \l_tmpb_fp
-            % The resolver hands back only its two outputs: the shared
-            % endpoint registers must leave the call exactly as they
-            % entered it, or a wire whose other end was already resolved
-            % would lose that end's coordinates.
+            % The resolver hands back only its two outputs and the
+            % registers leave the call exactly as they entered it, or a
+            % wire whose other end was already resolved would lose that
+            % end's coordinates.  The double-counted span of old cannot
+            % be spelled as an entry-value pin: the entry registers hold
+            % the in-flight wire state, not the far endpoint (measured),
+            % and the label math reads the outputs alone, which the
+            % per-face checks below pin.
             \fp_compare:nNnF
               { abs(\l__tenkz_kernel_r_xb_fp
                     - \l__tenkz_test_hp_xb_before_fp) } < {0.000001}
