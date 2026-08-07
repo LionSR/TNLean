@@ -503,6 +503,12 @@ These mistakes have shipped bugs here.
     such a store with `\__tenkz_prop_new_indexed:N`, which answers a key in
     one step.  A pair-keyed store — one entry per pair of routes — is the
     worst case and must never be flat.
+11. Call sites may alias an argument to the result variable:
+    `\__tenkz_kernel_atom_skin_base:nN { \tl_use:N \l__tenkz_kernel_r_c_tl }
+    \l__tenkz_kernel_r_c_tl` reads and writes one token list.  Inside such a
+    function, read every input before the first write to the target: once
+    the target holds `\q_no_value`, re-expanding the argument is trap 1 and
+    loops forever.
 
 ## Geometry discipline
 
