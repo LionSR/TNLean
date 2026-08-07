@@ -2305,3 +2305,29 @@ this sentence are the whole diff.
 | flag | verdict |
 |---|---|
 | flag:consumers:key:kernel-atom:conjugate | tombstoned: read by nothing, duality already has its one spelling in wire `dir=`, and the conjugate overline is label mathematics already spelled in the corpus; the parser row, the sixteen benchmark spellings, and the two fixture spellings leave in the corpus rewrite at the 1.0 freeze, the status moving with the parser row as booked since session 0; expiry 0.9 |
+
+### 2026-08-06 — the MPS and symmetry chapters leave the grid tier
+
+Thirty-three blueprint pictures across the matrix-product-vector chapter, the
+string-order chapter, the symmetry appendix, and the two channel-representation
+chapters now carry `\tenkzkernel`. The wave retires the chapters' 0.7
+spellings — `sandwich` two-row presets, `periodic` flags, `up=` shorthands,
+`role=`, `tensor style=`, `west label=`, `\tnX`, `\tn*`, `\tndots`, and
+`\tnspan` — for signed kernel rows: `rows={ket,bra}` ladders with bead
+operators on the pairing bonds, typed `ports=` with port labels, `boundary=`
+side policy, labelled side cups, and `\tnmark` bracket and enclosure ranges.
+One picture stays on the grid tier with its blocker named in the source: the
+MPV-overlap ladder needs a per-row trace return that clears the two-row
+selection it closes, and the kernel still drops every flat-row return one
+clearance below its own row.
+
+All six meters are unchanged: M1 stays at 140 kernel rows, M2 keeps its parser
+identity, M3 gains no escape, M4 is untouched at its frozen denominator, and
+no alias or overload moves. What moves is demand: three 0.7 rows lose their
+last blueprint consumers a milestone before the S4 swap would have taken them.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:annotation:brace below | dies at the S4 swap with the 0.7 annotation tier: the kernel bracket mark speaks from the south by itself, and the two remaining demand-corpus consumers are the blocked MPV-overlap ladder and a fixture booked to the grid dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:picture:sandwich | dies at the S4 swap: the 0.7 two-row preset has no consumer left, and the kernel's own `sandwich` row is the three-row preset the sugar ledger signs, so nothing remains for the grid reading to serve; expiry 0.9 |
+| flag:cooccur:picture:east label+west label | dies with the 0.7 boundary-label keys they are: the kernel tier carries no side-label row, a boundary pair is named by the mathematics beside the panel or by a port label, and the five shared invocations all ride grid-tier fixtures booked to the dialect's retirement; expiry 0.9 |
