@@ -602,8 +602,9 @@ representation.
         % (virtual-west=1 | virtual-east=1 | physical-up=1).
         % Source verdict: CPSV16 Theorem 3.11 and its graphical explanation,
         % Papers/1606.00608/MPDO-22-12-17-2.tex:543--562.
-        \begin{tenkz}[physical=up, tensor style=box]
-            \tn{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[skin=box, ports={90:physical}]{A}
         \end{tenkz}
         $ = $
         % TENKZ-II-RFP-BEGIN

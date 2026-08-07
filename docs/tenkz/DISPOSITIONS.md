@@ -75,9 +75,9 @@ separate public-surface occurrence and therefore appears separately.
 | `ch16_channel_representations_choi_and_kraus.tex` | L673 `tenkz` → `P-grid` | — | — |
 | `ch16_channel_representations_dilations_and_ordered_cp.tex` | L23 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_first_site_contractions.tex` | L154, 161, 181, 186, 234, 240, 339, 433 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L225, 364, 377, 428 `tenkz` → `P-grid` | L104 `tenkz` → `C-policy`<br>L108 `tenkz` → `C-policy+C-record` | L218 `tenkz` → `C-record+R-record` |
+| `ch20_mpdo_canonical_forms_intro_finite_separation.tex` | L105, 109, 221, 230, 369, 382, 433 `tenkz` → `P-grid` | — | — |
 | `ch20_mpdo_canonical_forms_positivity_gram_normalization.tex` | L638, 644 `tenkz` → `P-grid` | — | — |
-| `ch20_mpdo_foundations.tex` | L17, 126 `tenkz` → `P-grid` | — | L372 `tenkz` → `C-policy+C-record+R-record`<br>L376 `tenkz` → `C-record+R-record` |
+| `ch20_mpdo_foundations.tex` | L17, 126, 373, 377 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_algebra_tower.tex` | L79, 95 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_blocked_rfp_positive_blocking_and_sector_algebra.tex` | L19, 24 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_foundations.tex` | L87, 92 `tenkz` → `P-grid` | — | — |
@@ -108,7 +108,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch24_peps_ft_normal_union.tex` | L214, 263, 289, 301, 316 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_region_transfer_covariance.tex` | L351, 355, 359, 363 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft_torus_translation_and_reference_windows.tex` | L23 `tenkz` → `P-grid` | — | — |
-| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457, 611 `tenkz` → `P-grid` | — | L605 `tenkz` → `C-policy+R-record` |
+| `ch26_mps_rfp_normal_isometry_canonical_forms.tex` | L453, 457, 606, 612 `tenkz` → `P-grid` | — | — |
 | `ch26_mps_rfp_physical_blocking.tex` | L198, 202, 220, 225 `tenkz` → `P-grid` | — | — |
 
 ### Blueprint reconciliation
@@ -124,9 +124,9 @@ separate public-surface occurrence and therefore appears separately.
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 145 |
-| codemod | 13 |
-| redraw | 43 |
+| preserve | 151 |
+| codemod | 11 |
+| redraw | 39 |
 | **Total** | **201** |
 
 The raw count is 170 environment openings plus 31 command occurrences,

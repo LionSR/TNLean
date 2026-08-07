@@ -2444,3 +2444,46 @@ untouched.
 | flag:consumers:environment:tenkzfree | dies at S4: the blueprint's last free-graph pictures left with this wave and the ch24 chapters, so the environment's demand-corpus consumers are gone; the front end and its fixtures are booked to the dialect retirement (FIXTURE-RETIREMENT.md); expiry 0.9 |
 | flag:consumers:command:tnput | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
 | flag:consumers:command:tnjoin | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+
+### 2026-08-08 — the last grid-tier blueprint pictures take the kernel
+
+The six 0.7 grid pictures the earlier waves left behind — the LPDO
+local contraction and its doubled-index tensor in the MPDO foundations,
+the horizontal canonical form of the doubled tensor and its direct-sum
+panel, the finite-separation isometry stack, and the ch26 fixed-point
+panel whose right-hand side already rode the kernel — now carry
+`\tenkzkernel`. `tensor style=` and the `up=`/`down=` shorthands become
+typed `ports=` with the index written on its port; the `\tnfuse` wedges
+become the prelude fuse shape the sugar ledger signs, spelled as
+`wires=2` atoms whose split legs the frame bonds to the two rows; the
+`op:none` row modifier and `legs at=` become slotted `ports=` on a
+`wide=3` atom; `\tnX` becomes `skin=ring` and `\tn*` becomes the
+overline in the label. The isometry stack takes the stock `skin=pill`
+its disposition row demanded. One picture stays on the grid tier, as
+before: the MPV-overlap ladder, blocked on a per-row trace return that
+clears the two-row selection it closes.
+
+The wave measures three kernel gaps and names them rather than hiding
+them. A fuse record inside a kernel picture is refused unplaced, so the
+signed `\tnfuse` sugar row has no kernel-tier reading yet and both
+migrated wedges spell its expansion by hand — the LPDO panel pays three
+source lines over its 0.7 spelling for exactly this reason. A `wires=`
+slot span resolves only at a frame cell, so a fuse standing at a
+`midway` address loses its second slot and is refused. And a wide
+atom's `physical=` policy mints one centre port rather than one per
+spanned cell, so a three-legged isometry face spells its three slots by
+hand.
+
+All six meters are unchanged from the ch24 wave: M1 stays at 140 kernel
+rows and 201 total, M2 at 228 parser paths, M3 at 6 escapes — the new
+pictures ride the kernel grammar with none — M4 at its frozen 25.94,
+and no alias or overload moves. The blueprint disposition ledger moves
+145 preserve, 13 codemod, 43 redraw to 151, 11, and 39 over the
+constant 201. Demand moves four times and takes its verdicts below.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:object:up | dies at S4 with the 0.7 object ledger: `up=` is tombstoned onto `ports=` (`LANGUAGE-1.0` §10), the migrated pictures write the physical index on its typed port, and both remaining demand-corpus consumers are ch21 fusion-isometry figures booked `C-picture+C-policy+C-record+R-record` for their own redraw; expiry 0.9 |
+| flag:consumers:key:object:down | dies at S4 with the 0.7 object ledger, exactly as `up=` above: the two remaining consumers are the same ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+| flag:consumers:key:setup:tensor style | dies at S4 with the 0.7 setup tier: the kernel names a silhouette per atom through the signed `skin=` row, which is how every migrated picture now spells it; the one remaining consumer is the ch21 refinement-channel picture-term figure, booked to its own redraw row; expiry 0.9 |
+| flag:sugar-shaped:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); the kernel tier does not yet place a fuse record — the gap this wave measured — so the migrated wedges spell the expansion as `wires=2` atoms bonded by the frame, and all eight remaining occurrences ride the ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
