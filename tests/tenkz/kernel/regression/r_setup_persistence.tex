@@ -14,14 +14,15 @@
     \str_if_eq:VnF \l_tmpa_tl {review-table}
       { \errmessage{sizes setup did not reach the picture model} }
   }
+% The picture body is captured under document catcodes, so the probe needs a
+% document-level name.
+\cs_new_eq:NN \tenkzTestSetupPersistence \__tenkz_test_setup_persistence:
 \ExplSyntaxOff
 \makeatother
 \begin{document}
 \tenkzkernel
 \tnset{theme=review, sizes={review-table}}
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-  \ExplSyntaxOn
-  \__tenkz_test_setup_persistence:
-  \ExplSyntaxOff
+  \tenkzTestSetupPersistence
 \end{tenkz}
 \end{document}

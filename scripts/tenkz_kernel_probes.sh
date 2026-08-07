@@ -2633,6 +2633,19 @@ grep -Fq 'check|scope=2|relation=1|result=equal' \
   echo "FAIL: later valid equation inherited the malformed scope" >&2
   exit 1
 }
+# A beamer frame hands the kernel a pre-tokenized body, so its column tabs
+# arrive as the document's alignment character.  The chained fixture holds
+# exactly when the tab and the row break both advance the cursor there.
+beamer_atoms=$(grep -c '^atom|' "$WORK/r_beamer_frame.tnlog" || true)
+[ "$beamer_atoms" -eq 6 ] || {
+  echo "FAIL: the plain beamer frame's chained body lost atoms" >&2
+  exit 1
+}
+grep -Fq '|addr=(2,3)|' "$WORK/r_beamer_frame.tnlog" || {
+  echo "FAIL: the plain beamer frame's chained body lost its cursor" >&2
+  exit 1
+}
+
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"
 
