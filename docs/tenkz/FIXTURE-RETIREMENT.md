@@ -133,12 +133,12 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 | 37 | `legs at=`, fusion `rows=` alias | 9 | dies | aliases, sunset 1.0 |
 | 38 | `no legs` | 12 | dies | 0.7 spelling; the refusal is `physical=none`: `r_atom_physical_answer.tex` |
 | 39 | site `removed=` | 11 | dies | lattice spelling; `void=sealed` covered by `r_sealed_void.tex` |
-| 40 | `\tnput`, `\tnsite` placement | 45 | dies | §10 → `\tn[at=…]`: `r_explicit_at.tex`, `r_midway.tex` |
+| 40 | `\tnput`, `\tnsite` placement | 45 | `\tnskip` open hole | 11 (`hole` event emitters) | covered | `r_void_open.tex` (landed with the void-skin correction #5609/#5616: a hole draws no glyph, its bonds bridge it, the boundary carries the preserved index; the sealed contrast and the atom-scope `updown` answer ride the same fixture) |
 | 41 | `\tnghost` invisible anchors | 41 | dies | §10: addresses reference empty cells directly; string ends on empty wire cells in `k_torus.tex` |
 | 42 | `\tnX` on-wire map | 34 | dies | SHRINK verdict: tombstoned, migrates to `\tn[skin=ring]`; `s10_kernel.tex` |
 | 43 | `\tnfuse` fusion atom | 34 | dies | SHRINK verdict: demoted to a prelude-declared atom; declarations covered by `r_declare_atom.tex`, trees by `rmp-iii-a-fusion-tensor` |
 | 44 | `\tndots` elision | 33 | covered | `rmp-ii-tangent-projector` (command), `k_blocking.tex` (`skin=dots`); sentenced to fold into `\tn[skin=dots]` at the language landing |
-| 45 | `\tnskip` open hole | 11 (`hole` event emitters) | **gap G1 — blocked** | `void=open` preserves bonds and indices as documented (§2.3), but an atom's skin still defaults to `dot` regardless of `void`: `\tn[void=open]{}` draws a glyph, so the migration mapping `\tnskip` -> `\tn[void=open]{}` (`LANGUAGE-1.0` line 809) is not glyph-faithful to the hole it replaces; see §5 |
+| 45 | `\tnskip` open hole | 11 (`hole` event emitters) | covered | `r_void_open.tex` (landed with the void-skin correction #5609 / PR #5616: a hole draws no glyph, its bonds bridge it, the boundary carries the preserved index; the sealed contrast and the atom-scope `updown` answer ride the same fixture) |
 | 46 | atom-scope `physical=` answers | 14 | covered | `r_atom_physical_answer.tex` (`none`, `up` against an `updown` row; the atom-scope `updown` answer of `t2_twoshift` folds into G1's fixture) |
 | 47 | typed `ports=` lists (free dialect) | 11 | covered | `r_closure_typed_ports.tex`, `r_authored_port_default_type.tex` |
 | 48 | `wide=`/`wires=` spans | 40+ | covered | `k_roperator.tex`, `r_tall_grid.tex`, `r_basis_member_wide.tex` |
@@ -202,16 +202,17 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 
 ## 4. Counts
 
-Classifying the 85 ledger rows: **55 die** with their dialect, **28 are
-covered** by a named kernel or RMP case, and **2 rows remain gaps**, forming
-two distinct open gaps (G1, blocked, and G3, conditional). G2 discharged
-(rows 64 and 65 move from gap to covered) with `r_region_slot_words.tex`.
+Classifying the 85 ledger rows: **55 die** with their dialect, **29 are
+covered** by a named kernel or RMP case, and **1 row remains a gap** (G3,
+conditional). G2 discharged (rows 64 and 65 move from gap to covered) with
+`r_region_slot_words.tex`; G1 discharged with `r_void_open.tex` once the
+void-skin correction (#5609, PR #5616) made the hole glyph-faithful.
 Nothing else in the legacy corpus's construct inventory, key-value
 inventory, or event census falls outside these rows.
 
 ## 5. The gaps
 
-### G1 — `void=open` (write before deletion)
+### G1 — `void=open` (discharged)
 
 The eleven fixtures that call `\tnskip` are the only tests of an open hole:
 they emit the grid `hole` event and pin that a removed object preserves its
@@ -230,30 +231,7 @@ compare the boundary signature against the sealed variant in a second
 picture). Include one atom answering `physical=updown` at atom scope, the one
 policy-answer value `r_atom_physical_answer.tex` does not spell.
 
-**Blocked.** Compiling exactly `\tn[void=open]{}` in the chain above shows
-the bond/index half of this pin holds: `wire|...|origin=grid|...` records
-bridge both sides of the hole, the hole's atom keeps its `leg-n-...`
-physical-port wire, and the `kernel-boundary` signature (`phys:n, phys:n,
-phys:n`) differs from the `void=sealed` variant (`phys:n, phys:n`, two
-ports, no `origin=grid` bond) exactly as documented. The glyph half does not:
-`__tenkz_kernel_atom_skin:nN` (`tenkz-kernel.code.tex` ~line 14428) defaults
-an atom's skin to `dot` whenever `skin=` is unset, and nothing in
-`__tenkz_kernel_r_atom_ink:n`/`__tenkz_kernel_r_atom_glyph_ink:n` reads
-`void`; `\tn[void=open]{}` therefore emits an `ink-use`/`glyph-geometry`
-pair at the hole's position, same as an ordinary bare atom. Only adding
-`skin=none` alongside `void=open` suppresses the glyph. The same default
-reaches `void=sealed`: a sealed site draws a free-floating dot with no
-incident bonds, and `r_sealed_void.tex`'s pinned stream already carries that
-glyph record, so a skin-default fix re-pins a pre-existing golden stream. This makes the
-`\tnskip` -> `\tn[void=open]{}` migration mapping (`LANGUAGE-1.0` line 809)
-not glyph-faithful to the hole it replaces: the 0.7 `\tnskip` kind is absent
-from `tenkz-grid.code.tex`'s node-placement `\str_case`, so it draws no ink
-at all, while the kernel's `void=open` alone draws the theme's default dot.
-Resolution needs a decision before this fixture can land as specified:
-either `tenkz-kernel.code.tex` defaults an open void's skin to `none`, or
-`LANGUAGE-1.0.md`/this document's replacement spec are corrected to require
-`\tn[void=open, skin=none]{}` for the hole spelling. No fixture is checked in
-for this gap until that decision is made.
+**Discharged.** The glyph half blocked this fixture: `__tenkz_kernel_atom_skin:nN` defaulted every atom's skin to `dot`, so `\tn[void=open]{}` drew a site indistinguishable from a real one (recorded as issue #5609). PR #5616 defaults a void's skin to `none` — a hole draws nothing, no glyph and no label, unless the author declares a skin — and shipped `tests/tenkz/kernel/regression/r_void_open.tex` pinning the open hole's bridging bonds, its preserved physical index, the boundary contrast against the sealed variant, and the atom-scope `physical=updown` answer.
 
 ### G2 — mark slot words and mark names (write before deletion)
 
@@ -340,5 +318,5 @@ preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`, `trace_warn`,
 `zz_wirescan`), and the two kernel-switch fixtures (`fig21d_cubic`,
 `fig21d_cubic_v2`). Everything else — 252 fixtures — either dies or is
 respelled according to its `DISPOSITIONS.md` code, and either way leaves the
-corpus safely once G1 lands, with G3's requirement recorded on the S4
+corpus safely — G1 has landed — with G3's requirement recorded on the S4
 tracking issue. G2 has already landed (`r_region_slot_words.tex`).
