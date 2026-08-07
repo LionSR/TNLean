@@ -1,0 +1,41 @@
+% Regression: a staircase that pinches at one lattice point.  Two runs of
+% two cells meet only at the corner between them, so the boundary closes two
+% four-corner loops, one around each run, in place of the fallback's solid
+% bounding rectangle over all eight cells (issue 5573 acceptance).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_stair_corner_int
+\int_new:N \g__tenkz_test_stair_loop_int
+\int_new:N \l__tenkz_test_stair_int
+\cs_new_eq:NN \__tenkz_test_stair_enclosure:n
+  \__tenkz_kernel_r_mark_enclosure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
+  {
+    \__tenkz_test_stair_enclosure:n {#1}
+    \regex_count:nVN { -- } \l__tenkz_kernel_r_pts_tl
+      \l__tenkz_test_stair_int
+    \int_gset_eq:NN \g__tenkz_test_stair_corner_int \l__tenkz_test_stair_int
+    \regex_count:nVN { cycle } \l__tenkz_kernel_r_pts_tl
+      \l__tenkz_test_stair_int
+    \int_gset_eq:NN \g__tenkz_test_stair_loop_int \l__tenkz_test_stair_int
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=4, west=open, east=open]
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+  \tnmark[form=enclosure, slot=selected, tint, label pos=n]%
+    {{(1,1)..(1,2), (2,3)..(2,4)}}{$S$}
+\end{tenkz}
+\ExplSyntaxOn
+\int_compare:nNnF { \g__tenkz_test_stair_loop_int } = {2}
+  { \errmessage{the~pinched~staircase~did~not~close~one~loop~per~run} }
+\int_compare:nNnF { \g__tenkz_test_stair_corner_int } = {8}
+  { \errmessage{the~pinched~staircase~contour~is~not~its~two~runs} }
+\ExplSyntaxOff
+\end{document}

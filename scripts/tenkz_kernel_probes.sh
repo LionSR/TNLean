@@ -1544,7 +1544,8 @@ command -v pdftoppm >/dev/null 2>&1 || {
 for pixel_fixture in \
     k_plane k_skin_pairings r_dir_open_bearings r_hull_live r_ink_semantics \
     r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
-    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure \
+    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
+    r_region_diagonal r_region_pinch_staircase r_ring_closure \
     r_wire_stroke; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
@@ -1608,6 +1609,7 @@ for path in sys.argv[1:]:
   "$WORK/k_plane.png" "$WORK/r_dir_open_bearings.png" \
   "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
+  "$WORK/r_region_diagonal.png" "$WORK/r_region_pinch_staircase.png" \
   "$WORK/r_ring_closure.png" "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
