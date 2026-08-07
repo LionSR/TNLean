@@ -2394,8 +2394,12 @@
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_commit:
+    % the group body arrives as one grabbed argument, so its column tabs
+    % are the document's alignment character; give them the column step
+    \tl_set:Nn \l__tenkz_kernel_group_body_tl {#2}
+    \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_group_body_tl
     \ignorespaces
-    #2
+    \tl_use:N \l__tenkz_kernel_group_body_tl
     \ignorespaces
   }
 
@@ -16148,7 +16152,6 @@
     % keyval syntax inside the picture is plain even under tenkzeq's
     % active relation glyph
     \char_set_catcode_other:N \=
-    \char_set_catcode_active:N \&
     \__tenkz_model_reset:
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_node_prop
@@ -16205,9 +16208,6 @@
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \cs_set_eq:NN \tn \__tenkz_kernel_tn_cmd
     \cs_set_eq:NN \\ \__tenkz_kernel_newrow:
-    \char_set_active_eq:NN \& \__tenkz_kernel_nextcol:
-    % and the break between the option list and the first declaration
-    \ignorespaces
   }
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
@@ -16472,8 +16472,45 @@
     \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
   }
 
+% The picture body is captured, then executed.  A frame-collecting class --
+% beamer is the standing example -- tokenizes a frame body long before any
+% picture code runs, so a catcode arrangement made at picture entry can
+% never reach a chained body's column tabs.  The captured tokens therefore
+% keep the document's alignment character, and the rewrite below gives that
+% token the column step: the same reading the grid and cd surfaces give
+% their captured bodies, and it holds in a plain beamer frame.  A tab nested
+% in a braced argument is data and stays untouched; \tngroup applies the
+% same rewrite to its own body.
+\tl_new:N \l__tenkz_kernel_body_tl
+\tl_new:N \l__tenkz_kernel_group_body_tl
+\cs_new_protected:Npn \__tenkz_kernel_rewrite_tabs:N #1
+  { \tl_replace_all:Nnn #1 { & } { \__tenkz_kernel_nextcol: } }
 \NewDocumentCommand \__tenkz_kernel_env_begin_cmd { O{} }
-  { \__tenkz_kernel_begin:n {#1} }
+  {
+    \__tenkz_kernel_begin:n {#1}
+    \tl_clear:N \l__tenkz_kernel_body_tl
+    \__tenkz_kernel_env_body:w
+  }
+% #1 is the chunk before the next \end and #2 that \end's environment name.
+% Chunks accumulate until the name is our own, so a different environment
+% closed inside the body passes through intact; the picture's own \end is
+% reinserted for the ordinary environment closing.
+\cs_new_protected:Npn \__tenkz_kernel_env_body:w #1 \end #2
+  {
+    \tl_put_right:Nn \l__tenkz_kernel_body_tl {#1}
+    \str_if_eq:nnTF {#2} {tenkz}
+      {
+        \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_body_tl
+        % the break between the option list and the first declaration
+        \ignorespaces
+        \tl_use:N \l__tenkz_kernel_body_tl
+        \end {tenkz}
+      }
+      {
+        \tl_put_right:Nn \l__tenkz_kernel_body_tl { \end {#2} }
+        \__tenkz_kernel_env_body:w
+      }
+  }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
   { \__tenkz_kernel_eq_begin:n {#1} }
 \NewDocumentCommand \tenkzkernel { }

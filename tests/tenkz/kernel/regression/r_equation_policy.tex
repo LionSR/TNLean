@@ -16,21 +16,20 @@
     \quark_if_no_value:NF \l_tmpa_tl
       { \errmessage{tenkzeq check policy leaked into its panel} }
   }
+% The panel body is captured under document catcodes, so the probe needs a
+% document-level name.
+\cs_new_eq:NN \tenkzTestSharedPolicy \__tenkz_test_shared_policy:
 \ExplSyntaxOff
 \makeatother
 \begin{document}
 \tenkzkernel
 \begin{tenkzeq}[size=m, align=2, check={signature}]
   \begin{tenkz}[rows={ket,wire}, cols=1, size=s, align=1]
-    \ExplSyntaxOn
-    \__tenkz_test_shared_policy:
-    \ExplSyntaxOff
+    \tenkzTestSharedPolicy
   \end{tenkz}
   =
   \begin{tenkz}[rows={ket,wire}, cols=1]
-    \ExplSyntaxOn
-    \__tenkz_test_shared_policy:
-    \ExplSyntaxOff
+    \tenkzTestSharedPolicy
   \end{tenkz}
 \end{tenkzeq}
 \mbox{parsed}
