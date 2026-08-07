@@ -2331,3 +2331,42 @@ last blueprint consumers a milestone before the S4 swap would have taken them.
 | flag:consumers:key:annotation:brace below | dies at the S4 swap with the 0.7 annotation tier: the kernel bracket mark speaks from the south by itself, and the two remaining demand-corpus consumers are the blocked MPV-overlap ladder and a fixture booked to the grid dialect's own retirement; expiry 0.9 |
 | flag:consumers:key:picture:sandwich | dies at the S4 swap: the 0.7 two-row preset has no consumer left, and the kernel's own `sandwich` row is the three-row preset the sugar ledger signs, so nothing remains for the grid reading to serve; expiry 0.9 |
 | flag:cooccur:picture:east label+west label | dies with the 0.7 boundary-label keys they are: the kernel tier carries no side-label row, a boundary pair is named by the mathematics beside the panel or by a port label, and the five shared invocations all ride grid-tier fixtures booked to the dialect's retirement; expiry 0.9 |
+
+### 2026-08-07 — the MPDO and algebraic-FT chapters take the kernel
+
+Four more blueprint chapters respell onto the kernel: the first-site
+contractions, the inverse-map factorization, the algebraic foundations,
+and the physical blocking. Forty constructs move — thirty-nine pictures
+and the blueprint's last `\tnpic`, whose sandwich becomes a scoped
+picture term — and every disposition row of the four files lands in the
+preserve column, which takes the ledger from 48 preserve, 25 codemod,
+128 redraw to 88, 23, and 90. The raw census trades that one command
+for one environment, 169 openings and 32 commands, and still reconciles
+to 201.
+
+Every picture now states its sides. The grid tier opened all four by
+default; a kernel word open at both ends says `west=open, east=open`, a
+closed word says `boundary=periodic`, and a single site that carries
+the boundary among sites that do not states it through typed `ports=`.
+The side-by-side renders lose no leg and recover two truths the 0.7
+tier had garbled: the sector-factorization sandwich drops the
+mis-anchored `legs at` stroke the old renderer drew as a diagonal
+across the operator row, and the transfer-operator equation now writes
+the summed index on the wire its own comment always claimed for it.
+The pictures shed twenty-two source lines; the eighteen `\tenkzkernel`
+lines that carry the temporary opt-in go at the surface swap with
+their C-switch row.
+
+M1 stays at 140 kernel rows and 201 total, M2 at 228 parser paths, M3
+at 24 metered escapes, and M4 at 25.94 — the registry, the parser, and
+the benchmark corpus are untouched. The consumer census moves twice.
+The bare `pill` flag falls to one blueprint consumer and takes its
+verdict below. The `up at=` key loses its last one exactly as its
+standing verdict said it would: the physical-blocking figure now
+states its leg through `ports=`, and the key waits out the swap with
+no demand-corpus consumer at all.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:object:pill | dies at S4 with the 0.7 object ledger: a kernel atom says the silhouette as the declared `skin=pill`, which is how the four migrated chapters now spell it; the one remaining blueprint consumer is the finite-separation isometry figure, which rides its own redraw row at the surface swap; expiry 0.9 |
+| flag:consumers:command:tnX | dies at S4 with the 0.7 command tier: the kernel spells the gauge capsule as `skin=ring`, which is how the migrated chapters now draw every X and X^{-1}; the one remaining blueprint consumer is the finite-separation direct-sum figure at ch20 intro L109, a grid-tier picture booked to the tier's own retirement; expiry 0.9 |
