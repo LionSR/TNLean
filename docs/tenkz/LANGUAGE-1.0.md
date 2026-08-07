@@ -101,7 +101,7 @@ contraction, the same boundary signature, whether the restatement carries ink
 of its own or none. A travelling string states an operator index rather than
 that contraction and retires nothing.
 
-### 2.3 Atom keys (13)
+### 2.3 Atom keys (12)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
@@ -116,7 +116,6 @@ that contraction and retires nothing.
 | `pairing cross=` | indexed-crossing-list | `<pairing-number>: <crossing-declaration>, ...` | empty | `TKZ-SKIN-PAIRING-*` |
 | `size=` | small-enum | `s` `m` `l` | `m` | `TKZ-SIZE-*` |
 | `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
-| `conjugate` | flag | — | false | `TKZ-ATOM-*` |
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |
 
 A face is an angle in the record's own axes (§3, §4), so the outward physical
@@ -875,6 +874,7 @@ is not the fixed two-axis atom contract of §7.
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `check=` | nothing: the audit follows the joiner class (§7) |
+| `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
 | `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
 | `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |
 | `leg <face> of <cell>`, `<compass> outside` | a generated leg is a named record; an open end takes its place from the route (§5) |
