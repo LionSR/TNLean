@@ -2,13 +2,15 @@
 % Formula: The blocked two-site sandwich factors through cup contractions a and b.
 % Ink: Kernel flat frame; explicit typed ports carry the U-over-U vertical
 %   bond at each column.
-% Boundary: The blocked sandwich and cup factors expose the same unmatched outer
-%   virtual rails.
+% Boundary: The right side is the product of two genuine cup-factor panels; the
+%   juxtaposition contracts an empty interface, so the factors' outer rails
+%   concatenate and match the blocked sandwich.
 % Source: paper TN-Review-main.tex line 379; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 405-432
-% Capabilities: kernel, typed-ports
+% Capabilities: kernel, typed-ports, closure, equation-composition
 \tenkzkernel
 \[
+\begin{tenkzeq}[check={signature}]
   % LHS: the blocked two-column sandwich, everything open
   \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
     \tn[at=(1,1), name=u1, skin=box,
@@ -24,27 +26,24 @@
     \tnwire{u1.270}{ub1.90} \tnwire{u2.270}{ub2.90}
   \end{tenkz}
   \;=\;
-  % RHS: two disjoint closed factors in one frame (the audit reads the whole
-  % panel as the product) -- factor 1 (left) closes its own east side through
-  % bead b, factor 2 (right) closes its own west side through bead a; no wire
-  % crosses between the two factors.  The closure wires carry hull routes
-  % (route={e of ...}, route={w of ...}); the renderer does not yet ink the
-  % routed detour, so the closure currently draws along the column axis.
-  \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+  % RHS: the product of two genuine panels -- the contracted product joiner.
+  % The left factor closes its east side through bead b, the right its west
+  % side through bead a; the facing cuts are empty, so the audit
+  % concatenates the factors' outer rails.
+  \begin{tenkz}[rows={op,op}, cols=1, bonds=none, east={cup=$b$}]
     \tn[at=(1,1), name=u1, skin=box,
       ports={180:virtual,0:virtual,90:physical,270:physical}]{U}
     \tn[at=(2,1), name=ub1, skin=box, conjugate,
       ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{U}}
-    \tn[at=(1,2), name=u2, skin=box,
-      ports={180:virtual,0:virtual,90:physical,270:physical}]{U}
-    \tn[at=(2,2), name=ub2, skin=box, conjugate,
-      ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{U}}
-    \tnwire{u1.270}{ub1.90} \tnwire{u2.270}{ub2.90}
-    \tnwire{open w}{u1.180} \tnwire{open w}{ub1.180}
-    \tnwire{u2.0}{open e} \tnwire{ub2.0}{open e}
-    \tnwire[name=cupb, route={e of (1,1) .. (2,1)}]{u1.0}{ub1.0}
-    \tnwire[name=cupa, route={w of (1,2) .. (2,2)}]{u2.180}{ub2.180}
-    \tn[skin=dot, label pos=w, at=on cupb 0.5]{b}
-    \tn[skin=dot, label pos=e, at=on cupa 0.5]{a}
+    \tnwire{open w}{u1.180} \tnwire{open w}{ub1.180} \tnwire{u1.270}{ub1.90}
   \end{tenkz}
+  \;
+  \begin{tenkz}[rows={op,op}, cols=1, bonds=none, west={cup=$a$}]
+    \tn[at=(1,1), name=u2, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{U}
+    \tn[at=(2,1), name=ub2, skin=box, conjugate,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{\overline{U}}
+    \tnwire{u2.0}{open e} \tnwire{ub2.0}{open e} \tnwire{u2.270}{ub2.90}
+  \end{tenkz}
+\end{tenkzeq}
 \]
