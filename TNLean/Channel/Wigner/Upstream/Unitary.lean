@@ -3,11 +3,9 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-module
-
-public import Mathlib.LinearAlgebra.Projectivization.Action
-public import Mathlib.LinearAlgebra.UnitaryGroup
-public import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.Projectivization.Action
+import Mathlib.LinearAlgebra.UnitaryGroup
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Matrix unitary group action on projective Euclidean space
@@ -51,16 +49,14 @@ Original source path:
 
 The adaptation replaces the upstream custom topology import with Mathlib 4.32's
 `Projectivization.Action`, omits the continuity instance outside the rigidity cone,
-and includes the nonzero-action lemma from the upstream `FubiniStudy.lean`.
+and includes the nonzero-action lemma from the upstream `FubiniStudy.lean`. Ordinary
+imports and public declarations replace the upstream module-system commands.
 
 ## Tags
 
 projectivization, unitary group, MulAction, complex projective space
 -/
 
-@[expose] public section
-
-open Matrix
 open scoped LinearAlgebra.Projectivization
 
 namespace Matrix.UnitaryGroup

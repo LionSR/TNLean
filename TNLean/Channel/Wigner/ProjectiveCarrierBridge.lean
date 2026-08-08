@@ -42,9 +42,7 @@ theorem fromEuclideanRay_toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
     fromEuclideanRay (toEuclideanRay p) = p := by
   induction p using Projectivization.ind with
   | h v hv =>
-      rw [toEuclideanRay, Projectivization.map_mk, fromEuclideanRay,
-        Projectivization.map_mk]
-      rfl
+      simp [toEuclideanRay, fromEuclideanRay, Projectivization.map_mk]
 
 /-- Adding the Euclidean wrapper after forgetting it fixes every Euclidean-space ray. -/
 @[simp]
@@ -53,9 +51,7 @@ theorem toEuclideanRay_fromEuclideanRay
     toEuclideanRay (fromEuclideanRay p) = p := by
   induction p using Projectivization.ind with
   | h v hv =>
-      rw [fromEuclideanRay, Projectivization.map_mk, toEuclideanRay,
-        Projectivization.map_mk]
-      rfl
+      simp [toEuclideanRay, fromEuclideanRay, Projectivization.map_mk]
 
 private theorem transitionProbability_toEuclideanRay_mk
     (v w : Fin d → ℂ) (hv : v ≠ 0) (hw : w ≠ 0) :
@@ -99,7 +95,7 @@ private theorem transitionProbability_toEuclideanRay_mk
 
 /-- The upstream real transition probability agrees with TNLean's complex
 transition probability under the carrier identification. -/
-theorem ofReal_transProb_toEuclideanRay (p q : ℙ ℂ (Fin d → ℂ)) :
+theorem transProb_toEuclideanRay_ofReal_eq (p q : ℙ ℂ (Fin d → ℂ)) :
     ((transProb (toEuclideanRay p) (toEuclideanRay q) : ℝ) : ℂ) =
       transitionProbability p q := by
   induction p using Projectivization.ind with

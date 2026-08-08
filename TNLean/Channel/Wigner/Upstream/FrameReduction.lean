@@ -3,9 +3,7 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-module
-
-public import TNLean.Channel.Wigner.Upstream.TransitionProbability
+import TNLean.Channel.Wigner.Upstream.TransitionProbability
 
 /-!
 # Projective Wigner rigidity: orthogonal frames and frame reduction
@@ -16,14 +14,12 @@ This module is adapted from
 `55ac6758832291c8b0fb94d78e10dc47b1cb8a06`, under the Apache License 2.0.
 The upstream single source file was split mechanically at semantic section
 boundaries, preserving declaration order, to satisfy TNLean's module-size policy.
-The only proof-level adaptation is inherited from the reduced Lean 4.32 import
-cone; this section's upstream proof text is otherwise unchanged.
+Ordinary imports and public declarations replace the upstream module-system commands.
+The only proof-level adaptation is inherited from the reduced Lean 4.32 import cone;
+this section's upstream proof text is otherwise unchanged.
 -/
 
-@[expose] public section
-
-open scoped LinearAlgebra.Projectivization ComplexOrder
-open Matrix
+open scoped LinearAlgebra.Projectivization
 
 namespace Projectivization
 

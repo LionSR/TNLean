@@ -3,9 +3,7 @@ Copyright (c) 2026 Zayn Blore. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Zayn Blore
 -/
-module
-
-public import TNLean.Channel.Wigner.Upstream.Unitary
+import TNLean.Channel.Wigner.Upstream.Unitary
 
 /-!
 # Transition probability on complex projective space
@@ -72,8 +70,9 @@ Original source path:
 `CsdLean4/Mathlib/LinearAlgebra/Projectivization/TransitionProbability.lean`.
 
 The adaptation replaces the full Fubini--Study topology, Haar, measure, and
-continuity import by the reduced unitary compatibility module and rewrites only the
-action-on-`mk` proof for Mathlib 4.32's projectivization action API.
+continuity import by the reduced unitary compatibility module. Ordinary imports and
+public declarations replace the upstream module-system commands. The action-on-`mk`
+proof is rewritten for Mathlib 4.32's projectivization action API.
 
 ## Tags
 
@@ -81,10 +80,7 @@ projectivization, transition probability, Fubini-Study, Wigner theorem,
 unitary group, complex projective space
 -/
 
-@[expose] public section
-
-open scoped LinearAlgebra.Projectivization ComplexOrder
-open Matrix
+open scoped LinearAlgebra.Projectivization
 
 namespace Projectivization
 
@@ -195,10 +191,14 @@ lemma inner_toEuclideanLin_unitary
         (Matrix.toEuclideanLin U.val w) : ℂ)
       = inner ℂ v w := by
   rw [EuclideanSpace.inner_eq_star_dotProduct, EuclideanSpace.inner_eq_star_dotProduct]
-  change (U.val *ᵥ w.ofLp) ⬝ᵥ star (U.val *ᵥ v.ofLp) = w.ofLp ⬝ᵥ star v.ofLp
-  rw [Matrix.star_mulVec, dotProduct_comm (U.val *ᵥ w.ofLp), ← dotProduct_mulVec,
-      mulVec_mulVec, show (U.val)ᴴ * U.val = 1 from Unitary.coe_star_mul_self U,
-      one_mulVec, dotProduct_comm]
+  change Matrix.mulVec U.val w.ofLp ⬝ᵥ star (Matrix.mulVec U.val v.ofLp) =
+    w.ofLp ⬝ᵥ star v.ofLp
+  rw [Matrix.star_mulVec, dotProduct_comm (Matrix.mulVec U.val w.ofLp),
+      ← Matrix.dotProduct_mulVec,
+      Matrix.mulVec_mulVec,
+      show (U.val).conjTranspose * U.val = 1 from by
+        simpa [Matrix.star_eq_conjTranspose] using Unitary.coe_star_mul_self U,
+      Matrix.one_mulVec, dotProduct_comm]
 
 /-- The unitary action sends `mk v` to `mk (toEuclideanLin U v)`. -/
 lemma smul_mk_eq_mk_toEuclideanLin

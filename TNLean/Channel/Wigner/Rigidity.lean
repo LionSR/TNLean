@@ -43,11 +43,11 @@ theorem wigner_rigidity_fin
       ((transProb (fE p) (fE q) : ℝ) : ℂ) =
           transitionProbability (f (fromEuclideanRay p))
             (f (fromEuclideanRay q)) := by
-              exact ofReal_transProb_toEuclideanRay _ _
+              exact transProb_toEuclideanRay_ofReal_eq _ _
       _ = transitionProbability (fromEuclideanRay p) (fromEuclideanRay q) :=
         hf _ _
       _ = ((transProb p q : ℝ) : ℂ) := by
-        rw [← ofReal_transProb_toEuclideanRay]
+        rw [← transProb_toEuclideanRay_ofReal_eq]
         simp
   rcases wigner_rigidity_unitaryGroup hfE with ⟨U, hU⟩ | ⟨U, hU⟩
   · exact Or.inl ⟨U, fun p ↦ by
