@@ -825,8 +825,8 @@ strong subadditivity for a normalized three-site reduced state.
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1759.
-\begin{lemma}[Physical-trace transfer after common-weight absorption]
-    \label{lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+\begin{theorem}[Physical-trace transfer after common-weight absorption]
+    \label{thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_toMPSTensor}
     \lean{MPOTensor.physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \leanok
@@ -839,7 +839,7 @@ strong subadditivity for a normalized three-site reduced state.
         \mathcal T_{\mathcal K_s}&=\mu_s\mathcal B_s.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_doubled_phys_trace_transfer_to_mps}
@@ -879,7 +879,7 @@ strong subadditivity for a normalized three-site reduced state.
       lem:mpdo_doubled_phys_trace_transfer_to_mps,
       lem:mpdo_doubled_phys_trace_transfer_blockwise,
       lem:mpdo_copy_weight_eq_common_weight,
-      lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+      thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is
@@ -923,7 +923,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}\leanok
     \uses{cor:mpdo_simple_zcl_weight_copy_independent,
       lem:mpdo_simple_blockwise_zcl_equation,
-      lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+      thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
     common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
     then gives the displayed quadratic identity. The common weight is nonzero,
