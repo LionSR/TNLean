@@ -559,11 +559,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "df473749edab188356d41e30f67b8765e7a8841d02797240324d96314c181138"
+case_sha256 = "a4f2e10685507dbe6528a21f2f214767ca1f4eed15a4900ff29a8a8c7d340f37"
 reviewed = "2026-08-05"
 renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
 second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Kernel respell of eq50redarrows: the red ring closes through all four tensors with lambda on the north-west ring wire, both action tensors ride the north/west then south/east legs with the joining string and both free string ends, and all six direction marks match the source flow; the diamond ring, straight action chord, and stadium lambda are the house forms for the source's rounded curves."
+note = "Kernel respell of eq50redarrows: the red ring closes through all four tensors with lambda on the north-west ring wire, both action tensors ride the north/west then south/east legs with the joining string and both free string ends, and all six direction marks match the source flow; the diamond ring, straight action chord, and stadium lambda are the house forms for the source's rounded curves. The equation now names its opt-out: with directed open ends in the boundary signature the two sides state their plaquette legs on opposite faces, which is the source panel's own decoration rule (each segment carries the arrowhead of the tensor that claims it) and not a difference of type; the rendered ink is byte-identical at 300 dpi to the reviewed panel."
 
 [[verdict]]
 id = "rmp-iii-a-commuting-hamiltonian"
@@ -1269,11 +1269,11 @@ status = "faithful"
 pairing = "verified"
 pairing_by = "site-glyph-source-review-2026-07-27"
 defects = []
-case_sha256 = "a2feb5daecfbbb1d406197c1417a97a6651c0c5d9b2e2c812f4cf4c11d840b13"
+case_sha256 = "b839d24857d91ded0de88a14c7d428711a578b756a3c21f61952db87e490eb7a"
 reviewed = "2026-08-05"
 renderer = "fable-w7-crossings-vision-review-2026-08-05-200dpi"
 second_viewer = "fable-w7-crossings-recheck-2026-08-05-400dpi"
-note = "Body now equals the pulling-through respell of the same author lines (Dia3.pdf): the earlier kernel-free body relocated lambda and omitted the two boundary action tensors and their joining string; both panels now carry the full rotated action pair, and the per-edge direction marks the K1 residue named draw from dir= on each leg."
+note = "Body now equals the pulling-through respell of the same author lines (Dia3.pdf): the earlier kernel-free body relocated lambda and omitted the two boundary action tensors and their joining string; both panels now carry the full rotated action pair, and the per-edge direction marks the K1 residue named draw from dir= on each leg. The equation now names its opt-out: with directed open ends in the boundary signature the two sides state their plaquette legs on opposite faces, which is the source panel's own decoration rule (each segment carries the arrowhead of the tensor that claims it) and not a difference of type; the rendered ink is byte-identical at 300 dpi to the reviewed panel."
 
 [[verdict]]
 id = "rmp-workbench-iii-historical-composite"

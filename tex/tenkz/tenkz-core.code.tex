@@ -367,16 +367,14 @@
 % ---------- event stream (v2, minimal Phase-0 writer) ----------
 \newwrite\tenkz@log
 \newif\iftenkz@logopen
-% Two registers, two jobs.  \tenkz@pictureuid is the GLOBAL uniqueness
-% counter: it only ever grows, so every picture's id is fresh.
-% \tenkz@pictureid is the EMITTING context: it is assigned LOCALLY at each
-% picture's begin (every begin site sits inside its picture's group), so
-% closing the group RESTORES the enclosing picture's id -- a nested picture
-% inside another picture's cell must not steal the parent's later events,
-% and back in running prose the register reverts to 0, which is how
-% a bare \tntree logs picture=0.
+% One writer, one emitting context.  The picture surface owns its own
+% identity and hands it to the shared renderer as \tenkz@auditpictureid,
+% assigned LOCALLY inside the picture's group so that closing the group
+% RESTORES the enclosing picture's id -- a nested picture inside another
+% picture's cell must not steal the parent's later events.  Back in running
+% prose \tenkz@pictureid is the identity of no picture, which is how a bare
+% \tntree logs picture=0.
 \newcount\tenkz@pictureid
-\newcount\tenkz@pictureuid
 \newif\iftenkz@auditpicture
 \tenkz@auditpicturefalse
 \def\tenkz@auditpictureid{\the\tenkz@pictureid}
@@ -384,13 +382,6 @@
 \AtEndDocument{\iftenkz@logopen\immediate\closeout\tenkz@log\fi}
 \def\tenkz@event#1{\iftenkz@logopen
   \immediate\write\tenkz@log{#1}\fi}
-\def\tenkz@picturelang{none}
-\def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
-  \tenkz@pictureid=\tenkz@pictureuid
-  \tenkz@auditpicturetrue
-  \def\tenkz@auditpictureid{\the\tenkz@pictureid}%
-  \def\tenkz@picturelang{#1}%
-  \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
 % so the event stream is independent of locale and TeX's decimal formatting.

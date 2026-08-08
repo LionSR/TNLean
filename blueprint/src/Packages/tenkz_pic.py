@@ -310,6 +310,10 @@ def _compile_unit(unit_source: str, stem: str, svg_path: Path) -> bool:
     if engine.returncode != 0:
         log_path = _CACHE_DIR / f"{stem}.compile.log"
         log_path.write_text(engine.stdout, encoding="utf-8")
+        # A run that stopped partway still wrote whatever events it reached.
+        # Leaving that behind would let the next caller read a fragment as a
+        # finished stream.
+        (_CACHE_DIR / f"{stem}.tnlog").unlink(missing_ok=True)
         raise RuntimeError(
             f"tenkz picture compilation failed for {unit_source!r}; see {log_path}"
         )
@@ -327,6 +331,10 @@ def _compile_unit(unit_source: str, stem: str, svg_path: Path) -> bool:
     if converter.returncode != 0 or not svg_path.is_file():
         log_path = _CACHE_DIR / f"{stem}.convert.log"
         log_path.write_text(converter.stdout, encoding="utf-8")
+        # The engine wrote a complete stream but the unit did not render, so
+        # the pair is incomplete; leaving the stream behind would let the
+        # next caller call the unit sound.
+        (_CACHE_DIR / f"{stem}.tnlog").unlink(missing_ok=True)
         raise RuntimeError(
             f"tenkz SVG conversion failed for {unit_source!r}; see {log_path}"
         )
@@ -352,6 +360,27 @@ def render_unit(unit_source: str, svg_dir: Path) -> tuple[Path | None, bool]:
     if not _compile_unit(unit_source, stem, svg_path):
         return None, False
     return svg_path, False
+
+
+def unit_event_log(unit_source: str, svg_dir: Path) -> Path | None:
+    """Return the ``.tnlog`` one unit wrote, compiling it when absent.
+
+    The event stream is the audit's subject and the SVG is the reader's, so
+    the two are cached the same way and by the same compile; a sweep asks for
+    the log and gets whichever the last render left behind.
+    """
+
+    stem = f"tenkz-{unit_hash(unit_source)}"
+    log_path = _CACHE_DIR / f"{stem}.tnlog"
+    # The stream is the evidence that the compile finished, because a run
+    # that stopped at either stage takes its stream with it.  The drawing is
+    # not: it lands wherever its caller asked for it, so a stream cached
+    # beside one caller's SVG is still this caller's answer.
+    if log_path.is_file():
+        return log_path
+    if not _compile_unit(unit_source, stem, svg_dir / f"{stem}.svg"):
+        return None
+    return log_path if log_path.is_file() else None
 
 
 # --------------------------------------------------------------------------

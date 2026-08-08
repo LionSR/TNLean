@@ -2878,3 +2878,33 @@ named factor; no other registry dimension moves.
 | flag:consumers:key:kernel-picture:metrics | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-picture row records; the leaf already carries its first blueprint consumer in the ch21 structure-operator recursion and its Extension-gate in #5620; expiry 0.8 |
 
 Extension-gate: #5620
+
+### 2026-08-08 — the event-stream layer reviewed as one system
+
+The simplification gate ran over every `\tenkz@event` emitter at once, which
+had never happened: the emitters accreted a tier at a time and were only ever
+read one tier at a time. Five files write events. `tenkz-core` owns the writer
+and the measured-geometry records; `tenkz-geometry` writes one development
+probe; `tenkz-tree`, `tenkz-string`, and `tenkz-kernel` write their own record
+classes. Read together they are one system with one writer and one late-bound
+name, which the kernel rebinds while it suppresses a measuring pass and
+restores afterwards — the indirection is what makes the suppression possible
+and stays.
+
+The gate found one dead limb. `\tenkz@beginpicture` was the dialect era's
+picture opener: it advanced a global uniqueness counter, assigned the emitting
+identity, and wrote the `picture` record. Since the surface swap the kernel
+opens every picture and states its own identity, and the opener had no caller
+anywhere in the package. Its counter, its language variable, and it are gone,
+and the label-overlap harness — the one consumer left, a synthetic canvas that
+fabricates a picture record for measured geometry — states the four lines it
+needs itself. Every golden event stream is byte-identical across the deletion,
+which is the proof the limb was dead.
+
+Nothing else in the layer is redundant. The geometry probe has no schema row
+and the audit reports it as an unknown kind, which is the correct
+forward-compatible reading of a development record with three fixtures and no
+production caller; it earns its place until those fixtures do not.
+
+The census does not move: no registry row, parser leaf, or alias changes, and
+no flag is raised that a previous session has not already answered.

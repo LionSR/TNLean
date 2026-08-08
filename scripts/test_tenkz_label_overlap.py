@@ -31,7 +31,7 @@ SOURCE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -219,7 +219,7 @@ AFFINE_GLYPHS = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -270,7 +270,7 @@ INVALID_CORNERS = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -288,7 +288,7 @@ ROUNDED_TRIANGLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -304,7 +304,7 @@ OVERSIZED_OUTER_SEP = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -321,7 +321,7 @@ INACTIVE_SNAPSHOT = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -342,7 +342,7 @@ TRANSFORMED_RECT = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -358,7 +358,7 @@ TRANSFORMED_CIRCLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -374,7 +374,7 @@ TRANSFORMED_TRIANGLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -390,7 +390,7 @@ TRANSFORMED_LABEL = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -405,7 +405,7 @@ DRAW_ONLY_GLYPH = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -421,7 +421,7 @@ NONRECTANGLE_LABEL = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -436,7 +436,7 @@ NONAUDITED_CUSTOMIZATION = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \usetikzlibrary{fadings}
@@ -453,7 +453,7 @@ NESTED_END_HOOK = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -490,7 +490,7 @@ def customized_glyph(options: str, preamble: str = "") -> str:
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 %s
@@ -509,7 +509,7 @@ def customized_label(options: str, preamble: str = "") -> str:
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
+  {\global\advance\tenkz@pictureid by 1\relax\tenkz@auditpicturetrue\def\tenkz@auditpictureid{\the\tenkz@pictureid}\tenkz@event{picture|id=\the\tenkz@pictureid|lang=kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 %s
