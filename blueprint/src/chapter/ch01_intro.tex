@@ -1386,11 +1386,52 @@ $v$ is multiplied by a nonzero scalar.
     which gives the displayed quotient.
 \end{proof}
 
+\begin{theorem}[Projective Wigner rigidity]
+    \label{thm:projective_wigner_rigidity}
+    \lean{Projectivization.wigner_rigidity_fin}
+    \leanok
+    \uses{def:projective_transition_probability}
+    Let $f$ be a map on the rays of $\C^d$ such that
+    \begin{align}
+        \operatorname{tp}(f(p),f(q))=\operatorname{tp}(p,q)
+    \end{align}
+    for all rays $p,q$. Then there is a unitary $U$ such that either
+    $f(p)=U\cdot p$ for every $p$, or
+    $f(p)=U\cdot\overline p$ for every $p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The canonical linear isometry between $\C^d$ and its Euclidean-space
+    realization induces inverse maps on rays. This identification preserves
+    transition probabilities and commutes with both the unitary action and
+    coordinatewise conjugation. Apply projective Wigner rigidity on the
+    Euclidean-space realization and return the two alternatives through the
+    inverse identification.
+\end{proof}
+
 \begin{theorem}[Wigner's theorem]\label{thm:wigner}
-    \notready
-    Let $F$ be a bijection of the normalized pure states such that
+    \lean{Projectivization.wolf_wigner_pureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $F$ be a bijection of the normalized pure states $P_p$ such that
     $\tr(F(P)F(Q))=\tr(PQ)$ for all normalized pure states $P,Q$.
     Then there is a unitary $U$ such that either
     $F(P)=UPU^\dagger$ for every $P$, or
     $F(P)=UP^{\mathsf T}U^\dagger$ for every $P$.
+    This is a disjunction, not an exclusive alternative. For $d=0$ the set of
+    pure states is empty, while for $d=1$ it is a singleton and the two
+    alternatives coincide.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:projective_pure_state_bridge,
+      thm:projective_wigner_rigidity}
+    Use the bijection between rays and the range of $p\mapsto P_p$ to regard
+    $F$ as a map of projective rays. The trace identity
+    $\tr(P_pP_q)=\operatorname{tp}(p,q)$ shows that this map preserves
+    transition probabilities. Projective Wigner rigidity gives a unitary $U$
+    and either $p\mapsto U\cdot p$ or
+    $p\mapsto U\cdot\overline p$. The identities
+    $P_{U\cdot p}=UP_pU^\dagger$ and
+    $P_{\overline p}=P_p^{\mathsf T}$ give the two stated formulas.
+\end{proof}
