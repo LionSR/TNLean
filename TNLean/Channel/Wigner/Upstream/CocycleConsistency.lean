@@ -42,12 +42,12 @@ ray and every anchored two-level ray `mk (b i₀ + b i)`). Writing `h (mk ψ) = 
   rays.
 * **Two-level relative phase** (`two_level_relphase_of_fixes`,
   `diagReducedMap_two_level_relphase`) — the heart of piece 2:
-  `Re(d̄_{i₀} d_i) / ‖φ‖² = Re(c̄_{i₀} c_i) / ‖ψ‖²`, i.e.
+  `Re(conj(d_{i₀}) d_i) / ‖φ‖² = Re(conj(c_{i₀}) c_i) / ‖ψ‖²`, i.e.
   `arg(d_i / d_{i₀}) = ± arg(c_i / c_{i₀})`. The overlap fixes only the real part;
   the sign of the imaginary part — the cocycle's ℤ/2 datum — stays free.
 * **Conditional pairwise relation** (`diagReducedMap_pairwise_relphase_of_fixed`):
   for any pair `(i, j)` whose two-level ray is fixed by `h`, the analogous relation
-  `Re(d̄_i d_j) / ‖φ‖² = Re(c̄_i c_j) / ‖ψ‖²` holds.
+  `Re(conj(d_i) d_j) / ‖φ‖² = Re(conj(c_i) c_j) / ‖ψ‖²` holds.
 
 **No ℂ-linearity of `f`/`h` is used anywhere below**: every relation comes from the
 `transProb`/`transProbVec` overlap algebra, the fixed-point content of
@@ -619,7 +619,7 @@ part of the relative phase between coordinates `i` and `j`:
 Together with `diagReducedMap_two_level_relphase` (the anchored legs
 `(i₀, k)`), the pairwise legs `(i, j)` here give the full **coboundary
 structure** of the phase 2-cocycle — the real-part relations
-`Re(c̄_i d_j) = Re(c̄_i c_j)·‖φ‖²/‖ψ‖²` for all pairs — with the ± sign of the
+`Re(conj(c_i) d_j) = Re(conj(c_i) c_j)·‖φ‖²/‖ψ‖²` for all pairs — with the ± sign of the
 imaginary parts still free (the ℤ/2 datum resolved only by piece 3). No
 ℂ-linearity is assumed. -/
 theorem diagReducedMap_pairwise_relphase
