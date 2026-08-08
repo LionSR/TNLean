@@ -54,6 +54,44 @@ theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
       K hK hη R alpha beta k gamma hk
   rw [hleft, Matrix.zero_apply, zero_mul, Matrix.zero_apply]
 
+/-- Every neighboring operator incident to a zero-weight sector vanishes after
+zero-weight reparameterization and coherent rephasing.
+
+The reparameterization sets the right tensor of an inactive source sector to
+zero, while its left tensor was already zero. Thus both outgoing and incoming
+neighboring operators vanish.
+
+**Local fix (inactive sectors):** see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
+1434--1445. -/
+theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
+    (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
+    (z : Fin hη.m → Circle) (k h : Fin hη.m)
+    (hzero : hη.p k = 0 ∨ hη.p h = 0) :
+    let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm
+    ((F.rephase z).neighboringOperator k h) = 0 := by
+  let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+    K hK R hρ hη alpha beta hm
+  change (F.rephase z).neighboringOperator k h = 0
+  rw [F.rephase_neighboringOperator]
+  suffices hvanish : F.neighboringOperator k h = 0 by
+    rw [hvanish, smul_zero]
+    rfl
+  rcases hzero with hk | hh
+  · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
+      if_neg (not_ne_iff.mpr hk)]
+    rfl
+  · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
+    split
+    · exact sectorEta_eq_zero_of_target_weight_eq_zero
+        K hK hη R alpha beta k h hh
+    · rfl
+
 /-- The source inverse-map factorization admits a coherent rephasing retaining the
 active-sector witnesses used to prove primitivity and the Case-I coefficient equations.
 
