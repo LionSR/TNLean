@@ -58,3 +58,25 @@ id = "timeout"
 outcome = "fails-closed"
 message = "exceeded its 1s timeout"
 timeout_seconds = 1
+
+# Escape guards. Each stages one way out of the hermetic view in a throwaway
+# directory and requires the supervisor to refuse it. They cannot be staged
+# from inside a view: a view that could stage them has already failed. The
+# `message` must occur in the refusal, so a guard cannot be satisfied by an
+# unrelated error.
+
+[[guard]]
+id = "nested-symlink"
+message = "contains the symlink"
+
+[[guard]]
+id = "symlinked-program-path"
+message = "rejected without following it"
+
+[[guard]]
+id = "symlinked-parent"
+message = "rejected without following it"
+
+[[guard]]
+id = "special-entry"
+message = "neither a regular file nor a directory"

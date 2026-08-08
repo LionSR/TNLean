@@ -100,14 +100,52 @@ def mode_environment() -> None:
     )
 
 
-def mode_readonly() -> None:
-    subject = Path("tex/tenkz/tenkz.sty")
+def refused(action) -> bool:
+    """Run one mutation and report whether the view refused it."""
+
     try:
-        with subject.open("a", encoding="utf-8"):
-            writable = True
+        action()
     except OSError:
-        writable = False
-    check(not writable, "a declared subject is writable inside the view")
+        return True
+    return False
+
+
+def mode_readonly() -> None:
+    # Appending to a declared subject is the shallow half of the guarantee.
+    subject = Path("tex/tenkz/tenkz.sty")
+    check(
+        refused(lambda: subject.open("a", encoding="utf-8").close()),
+        "a declared subject is writable inside the view",
+    )
+
+    # The deep half: a writable directory permits create, rename, and unlink,
+    # so a command could delete a declared subject and put its own bytes at the
+    # same path while every file in the view still reads mode 444. Each probe
+    # below mutates a *directory*, not a file, and each must be refused.
+    directory = Path("tex/tenkz")
+    intruder = directory / "intruder.sty"
+    check(
+        refused(lambda: intruder.write_text("x\n", encoding="utf-8")),
+        f"a new file can be created under the read-only subject tree {directory}",
+    )
+    check(
+        refused(lambda: (directory / "intruder-dir").mkdir()),
+        f"a new directory can be created under {directory}",
+    )
+    check(
+        refused(lambda: subject.rename(directory / "renamed.sty")),
+        f"a declared subject can be renamed inside {directory}",
+    )
+    check(
+        refused(subject.unlink),
+        f"a declared subject can be deleted from {directory}",
+    )
+    check(
+        subject.exists() and not intruder.exists(),
+        f"{directory} was mutated despite refusing every recorded attempt",
+    )
+
+    # The output mount is the one writable path.
     probe = output_directory() / "writable-probe"
     probe.write_text("ok\n", encoding="utf-8")
     check(probe.read_text(encoding="utf-8") == "ok\n", "the output mount is not writable")

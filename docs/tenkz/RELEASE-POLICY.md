@@ -71,6 +71,27 @@ that hides the real checkout and the denial of network access before repository
 code runs belong to the enforcement workflow, not to the supervisor, and the
 armed workflow adds both.
 
+**What `check_tenkz_policy.py` reports, and when that changes.** The checker
+prints `evidence not-started (0 entries)` and will keep printing it until a
+freeze entry lands. Read it as the campaign's state, not as a defect: while
+`enforcement = "pending"` the ledger is closed to entries by construction, so
+`not-started` is the only state a valid pending ledger can have. Three things
+must happen, in this order, before it reports anything else:
+
+1. the blocker chain closes — #4162, #4703, #4708, and #4163 remain open;
+2. the arming pull request flips both enforcement values and pins the four
+   digests, which moves the checker from a pending ledger to an armed one;
+3. the first `freeze` entry lands, which is what makes the state
+   `attempt-1-active`.
+
+Step 2 alone is not enough. On an armed ledger the validator requires a
+repository-evidence bundle, which the plain command-line entry point does not
+build; the armed states are reachable only through the enforcement workflow,
+which supplies the GitHub and Git evidence. So the bare command reporting a
+live chain is not a milestone this or any other implementation change reaches —
+it is the campaign having started. Until then the standing gates below, not the
+ledger, are the release evidence.
+
 **(this page)** The standing gates below already run per PR and must be green
 at the exact release head:
 

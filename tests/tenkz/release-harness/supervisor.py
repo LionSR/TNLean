@@ -160,6 +160,90 @@ def within_roots(path: str, roots: tuple[str, ...]) -> bool:
 
 
 # --------------------------------------------------------------------------
+# Symlink and file-mode rejection
+# --------------------------------------------------------------------------
+#
+# `docs/tenkz/SOAK-1.0.md` §Release payload evidence: every exposed repository
+# entry is recursively a regular blob or tree, and symlinks, submodules,
+# special entries, and any other in-repository dependency are rejected
+# *without following them*.  Every check below therefore reads `os.lstat` and
+# never `Path.exists`, `Path.is_file`, or any other call that resolves a link.
+# A path is checked one component at a time, because a symlinked parent
+# directory escapes the repository just as effectively as a symlinked leaf.
+
+
+def lstat_mode(root: Path, relative: str) -> int:
+    """Return the unresolved mode of one repository path, or 0 when absent."""
+
+    try:
+        return os.lstat(root / relative).st_mode
+    except OSError:
+        return 0
+
+
+def resolve_without_following(root: Path, relative: str, subject: str) -> int:
+    """Walk a repository path component by component, refusing every symlink.
+
+    Returns the leaf's unresolved mode.  A missing component, a symlink at any
+    depth, or an entry that is neither a regular file nor a directory fails
+    closed, so no caller can reach outside the repository through a link and no
+    caller learns anything about the link's target.
+    """
+
+    parts = relative.split("/")
+    for depth in range(1, len(parts) + 1):
+        prefix = "/".join(parts[:depth])
+        mode = lstat_mode(root, prefix)
+        require(mode != 0, f"{subject} is absent at {prefix}")
+        require(
+            not stat.S_ISLNK(mode),
+            f"{subject} passes through the symlink {prefix}, which is rejected "
+            f"without following it",
+        )
+        if depth < len(parts):
+            require(
+                stat.S_ISDIR(mode),
+                f"{subject} treats the non-directory {prefix} as a directory",
+            )
+    require(
+        stat.S_ISREG(mode) or stat.S_ISDIR(mode),
+        f"{subject} at {relative} is neither a regular file nor a directory",
+    )
+    return mode
+
+
+def require_regular_file(root: Path, relative: str, subject: str) -> None:
+    mode = resolve_without_following(root, relative, subject)
+    require(stat.S_ISREG(mode), f"{subject} at {relative} is not a regular file")
+
+
+def require_tree_is_clean(root: Path, relative: str, subject: str) -> None:
+    """Reject a symlink or special entry anywhere beneath one exposed tree."""
+
+    mode = resolve_without_following(root, relative, subject)
+    if not stat.S_ISDIR(mode):
+        return
+    pending = [relative]
+    while pending:
+        current = pending.pop()
+        for entry in sorted(os.listdir(root / current)):
+            child = f"{current}/{entry}"
+            child_mode = lstat_mode(root, child)
+            require(
+                not stat.S_ISLNK(child_mode),
+                f"{subject} contains the symlink {child}, which is rejected "
+                f"without following it",
+            )
+            require(
+                stat.S_ISREG(child_mode) or stat.S_ISDIR(child_mode),
+                f"{subject} contains {child}, which is neither a regular file "
+                f"nor a directory",
+            )
+            if stat.S_ISDIR(child_mode):
+                pending.append(child)
+
+
+# --------------------------------------------------------------------------
 # Inventory
 # --------------------------------------------------------------------------
 
@@ -230,7 +314,7 @@ def load_inventory(policy: Policy, root: Path = ROOT) -> tuple[Test, ...]:
             path.endswith(RUNNER_SUFFIX[runner]),
             f"{test_id} path suffix does not match its runner",
         )
-        require((root / path).is_file(), f"{test_id} path is not a regular file")
+        require_regular_file(root, path, f"{test_id} runner path")
 
         args = entry["args"]
         require(
@@ -242,10 +326,7 @@ def load_inventory(policy: Policy, root: Path = ROOT) -> tuple[Test, ...]:
         programs = subject_paths(root, policy, test_id, entry["program_paths"], "program")
         require(programs, f"{test_id} declares no program path")
         for program in programs:
-            require(
-                (root / program).is_file(),
-                f"{test_id} program path {program} is not a regular file",
-            )
+            require_regular_file(root, program, f"{test_id} program path")
             require(
                 any(glob_matches(program, p) for p in policy.fix_paths[surface]),
                 f"{test_id} program path {program} is outside its surface's fix paths",
@@ -253,10 +334,7 @@ def load_inventory(policy: Policy, root: Path = ROOT) -> tuple[Test, ...]:
 
         fixtures = subject_paths(root, policy, test_id, entry["fixture_paths"], "fixture")
         for fixture in fixtures:
-            require(
-                (root / fixture).exists(),
-                f"{test_id} fixture path {fixture} is absent",
-            )
+            require_tree_is_clean(root, fixture, f"{test_id} fixture path")
 
         overlap = set(programs) & set(fixtures)
         require(not overlap, f"{test_id} declares {sorted(overlap)} in both roles")
@@ -385,35 +463,91 @@ def resolve_tool(name: str, pattern: str, root: Path) -> tuple[str, str]:
     return executable, fingerprint
 
 
-def expose(root: Path, view: Path, relative: str) -> None:
-    """Copy one repository entry into the view at its own relative path."""
+IGNORED_ENTRIES = frozenset({"__pycache__"})
+READ_ONLY_FILE = stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+READ_ONLY_DIRECTORY = (
+    stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH
+)
 
-    source = root / relative
-    require(not source.is_symlink(), f"{relative} is a symlink")
+
+def expose(root: Path, view: Path, relative: str) -> None:
+    """Copy one repository entry into the view at its own relative path.
+
+    The copy never follows a link.  `shutil.copytree` is not used: with
+    `symlinks=False` it dereferences a nested symlink and pulls its target into
+    the view, which is exactly the escape the ledger forbids, and with
+    `symlinks=True` it reproduces the link so the command dereferences it
+    instead.  Every entry is checked with `os.lstat` and copied only when it is
+    a regular file or a directory.
+    """
+
+    require_tree_is_clean(root, relative, f"exposed entry {relative}")
     destination = view / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
-    if source.is_dir():
+    if stat.S_ISDIR(lstat_mode(root, relative)):
         if destination.exists():
             return
-        shutil.copytree(
-            source,
-            destination,
-            symlinks=False,
-            ignore=shutil.ignore_patterns("__pycache__"),
-        )
+        copy_tree_without_links(root / relative, destination)
     else:
-        shutil.copy2(source, destination)
+        shutil.copyfile(root / relative, destination, follow_symlinks=False)
+
+
+def copy_tree_without_links(source: Path, destination: Path) -> None:
+    """Copy one directory, refusing any entry that is not a file or directory."""
+
+    destination.mkdir(parents=True, exist_ok=True)
+    for name in sorted(os.listdir(source)):
+        if name in IGNORED_ENTRIES:
+            continue
+        child = source / name
+        mode = os.lstat(child).st_mode
+        require(
+            not stat.S_ISLNK(mode),
+            f"{child} is a symlink and cannot enter the view",
+        )
+        require(
+            stat.S_ISREG(mode) or stat.S_ISDIR(mode),
+            f"{child} is neither a regular file nor a directory",
+        )
+        if stat.S_ISDIR(mode):
+            copy_tree_without_links(child, destination / name)
+        else:
+            shutil.copyfile(child, destination / name, follow_symlinks=False)
 
 
 def make_read_only(view: Path) -> None:
+    """Clear write access on files *and* directories under the view.
+
+    A read-only file inside a writable directory is not read-only in any sense
+    a release cares about: on Unix the directory's write bit governs create,
+    unlink, and rename, so a command could delete a declared subject and put
+    its own bytes at the same path. Directories are walked deepest first so a
+    parent is sealed only after its children.
+    """
+
     for path in sorted(view.rglob("*"), reverse=True):
-        if path.is_file():
-            path.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+        mode = os.lstat(path).st_mode
+        if stat.S_ISDIR(mode):
+            path.chmod(READ_ONLY_DIRECTORY)
+        elif stat.S_ISREG(mode):
+            path.chmod(READ_ONLY_FILE)
+    view.chmod(READ_ONLY_DIRECTORY)
 
 
 def make_writable(view: Path) -> None:
-    for path in view.rglob("*"):
-        if path.is_file():
+    """Restore write access so the workspace can be removed.
+
+    Directories are reopened shallowest first: a sealed directory permits
+    reading and traversal, so the walk itself succeeds either way, but a child
+    cannot be unlinked until its parent is writable again.
+    """
+
+    view.chmod(stat.S_IRWXU)
+    for path in sorted(view.rglob("*")):
+        mode = os.lstat(path).st_mode
+        if stat.S_ISDIR(mode):
+            path.chmod(stat.S_IRWXU)
+        elif stat.S_ISREG(mode):
             path.chmod(stat.S_IRUSR | stat.S_IWUSR)
 
 
@@ -426,9 +560,22 @@ def canonical_artifacts(policy: Policy) -> tuple[str, ...]:
     )
 
 
-def observe(test: Test, policy: Policy, root: Path = ROOT) -> dict:
-    """Run one inventory test in its own view and return its payload receipt."""
+def observe(
+    test: Test,
+    policy: Policy,
+    root: Path = ROOT,
+    pins: dict[str, str] | None = None,
+) -> dict:
+    """Run one inventory test in its own view and return its payload receipt.
 
+    The receipt carries every field the `supervisorReceipt` shape in
+    `tests/tenkz/release-support/reset-replay-v1.schema.json` marks required,
+    because a replay receipt embeds these receipts verbatim and a later payload
+    validation rejects an incomplete one. `pins` is accepted so a caller
+    running the whole inventory reads the three Git pins once.
+    """
+
+    pins = pins if pins is not None else computed_pins(policy, root)
     profile = tool_profile(root)
     require(
         test.runner in profile,
@@ -492,6 +639,9 @@ def observe(test: Test, policy: Policy, root: Path = ROOT) -> dict:
         return {
             "test_id": test.id,
             "surface": test.surface,
+            "code_tree": pins["release_test_code_tree"],
+            "support_tree": pins["release_test_support_tree"],
+            "inventory_sha256": pins["release_test_inventory_sha256"],
             "command": [test.runner, test.path, *test.args],
             "program_paths": list(test.program_paths),
             "fixture_paths": list(test.fixture_paths),
@@ -557,9 +707,10 @@ def command_run(policy: Policy, root: Path, selected: str | None) -> int:
     if selected is not None:
         tests = tuple(test for test in tests if test.id == selected)
         require(tests, f"no inventory test has id {selected}")
+    pins = computed_pins(policy, root)
     failures = []
     for test in tests:
-        receipt = observe(test, policy, root)
+        receipt = observe(test, policy, root, pins)
         print(f"{receipt['assertion_result']:>16}  {test.id}")
         if receipt["assertion_result"] != "passed":
             failures.append((test, receipt))
