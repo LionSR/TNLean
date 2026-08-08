@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
 import TNLean.MPS.Core.Transfer
-import TNLean.Algebra.TracePairing
+import TNLean.Algebra.MatrixTracePairing
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Matrix.Trace

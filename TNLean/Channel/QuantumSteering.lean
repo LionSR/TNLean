@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixAux
 import TNLean.Algebra.OrthogonalProjection
-import TNLean.Algebra.TracePairing
+import TNLean.Algebra.MatrixTracePairing
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.MaximalOverlap
