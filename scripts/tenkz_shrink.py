@@ -52,9 +52,8 @@ CURRENT_MILESTONE = "0.8"
 _SCOPE_COMMANDS = {
     "picture": ("tnpic",),
     "group": ("tngroup",),
-    "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tntree"),
-    "connection": ("tncut", "tnedge"),
-    "region": ("tnregion",),
+    "object": ("tn", "tnX", "tnfuse", "tndots", "tntree"),
+    "connection": ("tncut",),
     "annotation": ("tnspan",),
 }
 _SETUP_COMMAND_FORWARDS = {
@@ -211,7 +210,7 @@ def _forwarded_options(payload: str, keys: set[str]) -> str:
 
 def _environment_options(text: str) -> list[str]:
     payloads: list[str] = []
-    pattern = re.compile(r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}")
+    pattern = re.compile(r"\\begin\{tenkz\}")
     for match in pattern.finditer(text):
         start = _skip_space_and_star(text, match.end())
         group = _group_payload(text, start, "[", "]")

@@ -290,8 +290,12 @@ fixtures that used to state it.
   diagnostics over stacked sheets and removed sites — survives as the §4
   basis-spacing check, covered by `r_basis_spacing.tex` and
   `n_geom_singular_basis.tex`; site removal is `r_sealed_void.tex`. Delete
-  them with the dialect and re-pin `tests/tenkz/kernel/golden.sha256` and
-  `golden-pixels.sha256`.
+  them with the dialect together with their probe assertions in
+  `scripts/tenkz_kernel_probes.sh`; the kernel golden ledgers pin only the
+  twelve `k_*` streams, so no kernel re-pin is owed. (Corrected by the
+  lattice deletion: this bullet originally ordered a
+  `tests/tenkz/kernel/golden.sha256` / `golden-pixels.sha256` re-pin the
+  ledgers' coverage never required.)
 - `tests/tenkz/PROVENANCE.tsv`, `tests/tenkz/LOCAL_FIXTURES.tsv` — drop the
   deleted rows; `scripts/test_tenkz_corpus_provenance.py` enforces agreement.
 - `tests/tenkz/pixelpair-sources.txt` — all six listed fixtures (`gallery`,
@@ -311,12 +315,14 @@ fixtures that used to state it.
 
 ## 7. Survivors
 
-Fixtures the deletion does not touch: the five with no tenkz construct
-(`geom`, `plane_experiment`, `zz_geomdag`, `zz_geomframe`, `zz_geomsupport` —
-geometry-stage probes emitting `geomprobe` events), the five pure-kernel-grid
-preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`, `trace_warn`,
-`zz_wirescan`), and the two kernel-switch fixtures (`fig21d_cubic`,
-`fig21d_cubic_v2`). Everything else — 252 fixtures — either dies or is
+Fixtures the deletion does not touch: those with no tenkz construct
+(`plane_experiment`, `zz_geomdag`, `zz_geomframe`, `zz_geomsupport` —
+geometry-stage probes emitting `geomprobe` events; `geom` was listed here
+but exercises the lattice tier's private coordinate helpers and fell with
+that front end — corrected by the lattice deletion), the five
+pure-kernel-grid preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`,
+`trace_warn`, `zz_wirescan`), and the two kernel-switch fixtures
+(`fig21d_cubic`, `fig21d_cubic_v2`). Everything else — 252 fixtures — either dies or is
 respelled according to its `DISPOSITIONS.md` code, and either way leaves the
 corpus safely — G1 has landed — with G3's requirement recorded on the S4
 tracking issue. G2 has already landed (`r_region_slot_words.tex`).

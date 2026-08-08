@@ -2652,3 +2652,47 @@ spellings' demand:
 | flag:consumers:key:object:mpo | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette through the prelude skin (`skin=mpo`), which every redrawn figure now writes; zero demand consumers remain; expiry 0.9 |
 | flag:consumers:command:tndots | keep-because: this wave's loops write the kernel spelling `\tn[skin=dots]`, leaving two 0.7 consumers — the ch02 blocked-overlap ladder and the tangent-projector benchmark case — that retire with their own redraw rows at the S4 surface swap; folds into `\tn[skin=dots]` at the language landing; expiry 0.9 |
 | flag:consumers:command:tnspan | keep-because: the refinement rows now state their blocked sites as range-addressed enclosure marks, leaving the ch02 blocked-overlap ladder as the one 0.7 consumer, which retires with its own redraw row at the S4 surface swap; expiry 0.9 |
+
+### 2026-08-09 — the lattice front end is demolished
+
+The third demolition of the S4 swap: `tenkz-lattice.code.tex` is
+deleted, and with it the `tenkzlattice` environment, its `tenkzplanes`
+double-layer preset, the `\tnregion`, `\tnedge`, and `\tnsite`
+commands, and the parser rows only the lattice dialect read — the
+picture rows `cols=`, `site=`, `sheets=`, `sheet sep=`, `pairing`,
+`outer legs=`, `plane lean=`, and the 0.7 `north=`/`south=` sides, the
+object rows `label=`, `removed=`, and `size=`, the five 0.7 connection
+rows, the six region rows, the five projected-basis escape rows, and
+the `boundary legs` and region `label at=` aliases — each tombstoned
+by contract (`LANGUAGE-1.0` §10: a spatial lattice is `tenkz` with
+`lattice=`/`planes` sugar or a declared basis). The fifty-one
+standalone fixtures that opened the environments leave the corpus with
+it, and the two sheet-coincide kernel regressions die with the
+`\tenkzl_` internals they hooked; their subject survives as the
+basis-spacing diagnostic (`r_basis_spacing.tex`,
+`n_geom_singular_basis.tex`), and every behaviour the corpus carried
+is classified in `FIXTURE-RETIREMENT.md` §3 as dying with the dialect
+or covered by a named kernel or RMP case. The kernel's three
+plane-ratio guard messages, which lived in the lattice file, rehome
+into `tenkz-kernel.code.tex` unchanged.
+
+Extension-gate: #4699 — the parser-leaf identity change is forty-five
+removed leaves, three removed command doors, and two removed
+environment doors, the demolition the issue's checklist item 6.4
+orders; no leaf is added.
+
+M1 falls from 126 kernel rows and 177 total to 103 and 142:
+twenty-three kernel key rows, five escape rows, two aliases, three
+commands, and two environments leave the ledger. M2 falls from 178
+parser paths to 133. M3 is untouched at 0. M4 is untouched at 25.94.
+M5 falls from six aliases to four; both departing aliases were
+lattice-parsed spellings. No metric-registry ratio moves: the lattice
+projection ratios died with their stage file, never having migrated
+into the registry. The census decrease is the session's own evidence.
+
+| flag | verdict |
+|---|---|
+| flag:lonely-type:semantic-slot | dies at the deferred slot-for-species exchange (`LANGUAGE-1.0` §14.5): the kernel mark's `slot=` is its last carrier now that the region rows left with their dialect; expiry 0.9 |
+| flag:lonely-type:compass | keep-because: `plane lean=` left with its dialect and `nudge=`'s pair spelling never used it, so the kernel's one compass reading stands alone until the amendment batch retires `nudge=`; expiry 0.9 |
+| flag:lonely-type:dimension-pair | keep-because: the projected-basis escape rows that shared the type left with their dialect; the surviving carrier is the object `label shift=` escape, itself sentenced by §10, and the type dies with it; expiry 0.9 |
+| flag:lonely-type:math-and-range | keep-because: `bond label=` is the type's one carrier and already holds its S4 death sentence (SHRINK wave verdict: dies with the 0.7 picture ledger); the type leaves with the row at the swap; expiry 0.9 |

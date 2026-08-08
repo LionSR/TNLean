@@ -3,9 +3,9 @@
 
 Rules (findings exit 1 unless escaped):
 
-  dots     Literal `...`, `\\ldots`, or `\\cdots` inside a tenkz,
-           tenkzlattice, or tenkzplanes body (or a `\\tnpic` body, which
-           is a tenkz body by construction).  An ellipsis cell interrupts
+  dots     Literal `...`, `\\ldots`, or `\\cdots` inside a tenkz body
+           (or a `\\tnpic` body, which is a tenkz body by
+           construction).  An ellipsis cell interrupts
            the implicit wire; literal dots typeset ink that the event
            stream cannot see, so the audited contraction graph and the
            printed picture diverge.  `\\tndots` is the only legal
@@ -20,12 +20,6 @@ Rules (findings exit 1 unless escaped):
            two-layer theme/semantic split, so the picture stops
            restyling under `\\tnset` and diverges between print and
            dark builds.
-
-  lattice-body
-           Every `tenkzlattice` body contains at least one native
-           `\\tnregion`, `\\tnedge`, or `\\tnsite` record.  Generated option
-           ink and body customization are separate parts of the language;
-           an empty specimen does not exercise their composition.
 
   rmp-*    Canonical RMP case files additionally require the six provenance
            headers, preamble-free source, canonical spellings, public names,
@@ -197,17 +191,6 @@ def lint_file(path: Path) -> list[Finding]:
                                         escaped(lineno, rule)))
 
     for body in scan_bodies(src):
-        if body.name == "tenkzlattice" and not re.search(
-                r"\\tn(?:region|edge|site)\b", body.text):
-            lineno = line_of(body.start)
-            key = (lineno, "lattice-body")
-            if key not in seen:
-                seen.add(key)
-                snippet = (raw_lines[lineno - 1].strip()
-                           if lineno <= len(raw_lines) else "")
-                findings.append(Finding(
-                    path, lineno, "lattice-body", snippet,
-                    escaped(lineno, "lattice-body")))
         if body.name in DOTS_ENVS:
             scan(mask_option_groups(body.text), body.start, DOTS_PATTERNS)
         if body.name in INK_ENVS:

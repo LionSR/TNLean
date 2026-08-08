@@ -14,18 +14,17 @@ those declarations, not a second authoring language.
 
 ## Choose one layout
 
-There are two genres.
+There is one genre.
 
 - `tenkz` is the regular one-dimensional contraction grid.  Rows are layers,
   columns are sites, and adjacent compatible cells contract implicitly.
-- `tenkzlattice` is a spatial lattice or sheet.  Its body selects sites,
-  edges, and measured regions of a finite window.
 
 An irregular typed graph is not a genre of its own: it is addressed
-`\tn`, `\tnwire`, and `\tnmark` records of the kernel language.
+`\tn`, `\tnwire`, and `\tnmark` records of the kernel language.  A
+spatial lattice, sheet, or measured region is a kernel picture: a frame
+with `lattice=` or `planes` sugar, or a declared basis.
 
-`tenkzplanes` is not a third genre.  It is the ket-over-bra preset of
-`tenkzlattice`.  `\tnpic` is not a layout.  It is a composition wrapper that
+`\tnpic` is not a layout.  It is a composition wrapper that
 lets one `tenkz` picture behave as an inline mathematical atom.
 
 Choose the layout from the topology.  Do not choose it from the desired
@@ -35,10 +34,8 @@ silhouette, and do not cross into another layout merely to obtain a style.
 
 Every public word belongs to exactly one class.
 
-1. **Atoms** declare tensors, matrices, fusion vertices, and lattice
-   sites.
-2. **Connections and closures** declare bonds, lattice edges, traces,
-   cups, and cuts.
+1. **Atoms** declare tensors, matrices, and fusion vertices.
+2. **Connections and closures** declare bonds, traces, cups, and cuts.
 3. **Regions and annotations** declare measured regions, braces, labels, and
    other non-topological marks.
 4. **Composition** places pictures in equations, inline mathematics, or
@@ -48,9 +45,9 @@ Every public word belongs to exactly one class.
 
 A command is warranted only when it declares a new object in one of these
 classes or introduces a grammatical class of its own.  A key modifies the
-record already being declared.  Thus `\tnedge` is a command because an edge
-is a connection record; `role=marked` is a key because it is a property of
-that edge.  This test is documented beside every public command in the
+record already being declared.  Thus `\tnwire` is a command because a wire
+is a connection record; `species=` is a key because it is a property of
+that wire.  This test is documented beside every public command in the
 generated reference.
 
 ## Grammar rules
@@ -126,7 +123,6 @@ The canonical examples include these distinctions:
   and bends the east, because the specific statement outranks the general
   one. A cup that finds no pair to bend is an error, not a blank space.
 - `route=arc` is canonical; `route=curve` is a compatibility alias.
-- `tenkzplanes` spells a lattice preset; it does not own keys with new types.
 
 ## Extension gates
 
