@@ -14,7 +14,7 @@ argument of \cite[lines~405--426]{Cirac2017MPU}.
     \begin{align}
         C_{\dim_K(V)}(L,V) &= 0.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     As long as $C_r(L,V)$ is nonzero, nilpotency prevents two consecutive
@@ -171,20 +171,27 @@ in \cite[lines~349--354]{Cirac2017MPU} we need the algebraic fact that a matrix
 whose positive powers all have trace~$1$ must have characteristic polynomial
 $X^{n-1}(X-1)$.
 
-\begin{lemma}[Rank-one diagonal idempotent]
+\begin{definition}[Rank-one diagonal idempotent]
+  \label{def:mpu_diagonal_one_at}
+  \lean{Matrix.diagonalOneAt}
+  \leanok
+  For an index $i_0$ in a finite type $n$, let $M_{i_0}$ be the $n\times n$
+  diagonal matrix with a $1$ at position $i_0$ and zeros elsewhere.
+\end{definition}
+
+\begin{lemma}[Properties of the rank-one diagonal idempotent]
   \label{thm:mpu_diagonal_one_at}
-  \lean{Matrix.diagonalOneAt, Matrix.trace_diagonalOneAt,
+  \lean{Matrix.trace_diagonalOneAt,
     Matrix.diagonalOneAt_pow, Matrix.trace_pow_diagonalOneAt,
     Matrix.charpoly_diagonalOneAt}
   \leanok
-  Fix an index $i_0$ in $\{1,\dots,n\}$.  The diagonal matrix with a single
-  $1$ at position $i_0$ and zeros elsewhere satisfies
+  The matrix $M_{i_0}$ from Definition~\ref{def:mpu_diagonal_one_at} satisfies
   \begin{itemize}
-    \item $M^k = M$ for every $k\ge 1$,
-    \item $\tr(M^k) = 1$ for every $k\ge 1$,
-    \item $\chi_M(X) = X^{\,n-1}(X-1)$.
+    \item $M_{i_0}^k = M_{i_0}$ for every $k\ge 1$,
+    \item $\tr(M_{i_0}^k) = 1$ for every $k\ge 1$,
+    \item $\chi_{M_{i_0}}(X) = X^{\,n-1}(X-1)$.
   \end{itemize}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
   The first two items follow from $1^k=1$ and $0^k=0$ for $k\ge 1$.
@@ -196,7 +203,6 @@ $X^{n-1}(X-1)$.
   \label{thm:mpu_trace_power_le_card}
   \lean{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card}
   \leanok
-  \uses{thm:newton_girard, thm:mpu_diagonal_one_at}
   Let $A$ be an $n\times n$ complex matrix with $n\ge 1$.  If
   $\tr(A^k)=1$ for every $k$ with $1\le k\le n$, then
   \[
@@ -218,7 +224,6 @@ $X^{n-1}(X-1)$.
   \label{thm:mpu_trace_power_all}
   \lean{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one}
   \leanok
-  \uses{thm:mpu_trace_power_le_card}
   Let $A$ be an $n\times n$ complex matrix.  If $\tr(A^k)=1$ for
   every $k\ge 1$, then
   \[
