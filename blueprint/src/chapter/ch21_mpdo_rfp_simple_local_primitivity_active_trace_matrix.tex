@@ -758,14 +758,6 @@
     Theorem~\ref{thm:matrix_primitive_pow_two_rank_one}.
 \end{proof}
 
-% Elementary combinatorial infrastructure for the overlap formula
-% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)=\tr((S^*)^N)$,
-% which is not yet assembled: reconciling the active-sector-restricted
-% index set $I_*$ used by $S^*$ with the full sector index set that the
-% cyclic-product trace factorization of
-% Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products} ranges over
-% remains open.  The route is sketched in
-% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Indicator-path expansion of a matrix power]
     \label{lem:mpdo_pow_apply_path_indicator}
     \lean{MPOTensor.pow_apply_eq_sum_path_indicator}
@@ -1029,8 +1021,9 @@
         \tr(S^N)&\leq\tr\!\left((P\odot P)^N\right).
         \notag
     \end{align}
-    Every power of $P\odot P$ has operator norm at most one. Primitivity
-    gives a positive power whose operator norm is strictly below one; the
+    Every power of $P\odot P$ has $L^\infty$ operator norm at most one.
+    Primitivity gives a positive power whose $L^\infty$ operator norm is
+    strictly below one; the
     division algorithm then shows that $(P\odot P)^N\to0$. Thus its trace
     tends to zero, and the squeeze theorem proves the result.
 \end{proof}
