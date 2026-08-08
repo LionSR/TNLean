@@ -169,13 +169,15 @@ lemma leftRank_eq : ℓ[U] = (sourceCutM₂ U).rank := rfl
 
 /-- The right rank $r = \operatorname{rank} {\cal M}_1 \le D d$,
 since ${\cal M}_1$ has $Dd$ rows and $dD$ columns. -/
-theorem rightRank_bound : (sourceCutM₁ U).rank ≤ D * d := by
+theorem rightRank_bound : r[U] ≤ D * d := by
+  rw [rightRank]
   refine (Matrix.rank_le_card_width (sourceCutM₁ U)).trans ?_
   simp [Fintype.card_fin, mul_comm]
 
 /-- The left rank $\ell = \operatorname{rank} {\cal M}_2 \le D d$,
 since ${\cal M}_2$ also has $Dd$ rows and $dD$ columns. -/
-theorem leftRank_bound : (sourceCutM₂ U).rank ≤ D * d := by
+theorem leftRank_bound : ℓ[U] ≤ D * d := by
+  rw [leftRank]
   refine (Matrix.rank_le_card_width (sourceCutM₂ U)).trans ?_
   simp [Fintype.card_fin, mul_comm]
 
