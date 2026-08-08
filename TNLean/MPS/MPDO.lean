@@ -162,6 +162,7 @@ import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
 import TNLean.MPS.MPDO.InverseMapActiveSectorZCL
+import TNLean.MPS.MPDO.InverseMapLemmaC5CaseI
 import TNLean.MPS.MPDO.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.MPDO.IsometricAdjacentBondTransport
 import TNLean.MPS.MPDO.KatoDeformedRFPObstruction

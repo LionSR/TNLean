@@ -54,21 +54,21 @@ theorem zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
       K hK hη R alpha beta k gamma hk
   rw [hleft, Matrix.zero_apply, zero_mul, Matrix.zero_apply]
 
-/-- The source inverse-map factorization admits a coherent rephasing whose
-active trace matrix is primitive.
+/-- The source inverse-map factorization admits a coherent rephasing retaining the
+active-sector witnesses used to prove primitivity and the Case-I coefficient equations.
 
 **Local fix (inactive sectors):** the physical factorization retains every
-zero-weight sector. Primitivity concerns only the subtype on which the Hayashi
-weight is nonzero. See
+zero-weight sector. The active matrix and its spanning family use only the
+nonzero-weight Hayashi sectors. See
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
-**Local fix (periodicity):** the proof uses closed walks of lengths two and
-three in place of the source's blocking of periodic components. See the same
-paper-gap note.
+**Local fix (periodicity):** the returned triangle witness gives closed walks of
+lengths two and three in place of the source's blocking of periodic components.
+See the same paper-gap note.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1471. -/
-theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
+theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
     (K : MPOTensor d D) (hK : K.IsInjective)
     (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
     (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
@@ -77,26 +77,47 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
       K hK R hρ hη alpha beta hm
     ∃ z : Fin F.sectorCount → Circle,
       (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
-        Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) := by
+        Submodule.span ℂ
+          (Set.range ((F.rephase z).activeSectorOneSiteMatrixFamily hη.p)) = ⊤ ∧
+        (∀ k : (F.rephase z).ActiveSector hη.p,
+          ∃ x y : (F.rephase z).SectorIndex k,
+            (F.rephase z).sectorVirtualMatrix k x y ≠ 0) ∧
+        (∀ {k h : (F.rephase z).ActiveSector hη.p},
+          (F.rephase z).neighboringOperator k h ≠ 0 →
+            ∃ j : (F.rephase z).ActiveSector hη.p,
+              (F.rephase z).neighboringOperator h j ≠ 0 ∧
+                (F.rephase z).neighboringOperator j k ≠ 0) ∧
+        (∀ k, hη.p k = 0 → ∀ gamma, (F.rephase z).leftTensor k gamma = 0) ∧
+        Nonempty ((F.rephase z).ActiveSector hη.p) := by
   let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
     K hK R hρ hη alpha beta hm
   change ∃ z : Fin F.sectorCount → Circle,
     (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
-      Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p)
+      Submodule.span ℂ
+        (Set.range ((F.rephase z).activeSectorOneSiteMatrixFamily hη.p)) = ⊤ ∧
+      (∀ k : (F.rephase z).ActiveSector hη.p,
+        ∃ x y : (F.rephase z).SectorIndex k,
+          (F.rephase z).sectorVirtualMatrix k x y ≠ 0) ∧
+      (∀ {k h : (F.rephase z).ActiveSector hη.p},
+        (F.rephase z).neighboringOperator k h ≠ 0 →
+          ∃ j : (F.rephase z).ActiveSector hη.p,
+            (F.rephase z).neighboringOperator h j ≠ 0 ∧
+              (F.rephase z).neighboringOperator j k ≠ 0) ∧
+      (∀ k, hη.p k = 0 → ∀ gamma, (F.rephase z).leftTensor k gamma = 0) ∧
+      Nonempty ((F.rephase z).ActiveSector hη.p)
   obtain ⟨z, hpos⟩ := exists_rephase_zeroWeightInverseMap_posSemidef
     K hK R hρ hη alpha beta hm hM
-  refine ⟨z, hpos, ?_⟩
   have hspanAll :
       Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) = ⊤ :=
     F.sectorVirtualMatrixFamily_span_eq_top hK
-  have hinactive : ∀ k, hη.p k = 0 →
+  have hinactiveVirtual : ∀ k, hη.p k = 0 →
       ∀ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y = 0 := by
     intro k hk x y
     exact zeroWeightReparameterized_sectorVirtualMatrix_eq_zero
       K hK R hρ hη alpha beta hm k hk x y
   have hspanF : Submodule.span ℂ
       (Set.range (F.activeSectorOneSiteMatrixFamily hη.p)) = ⊤ :=
-    F.activeSectorOneSiteMatrixFamily_span_eq_top hη.p hspanAll hinactive
+    F.activeSectorOneSiteMatrixFamily_span_eq_top hη.p hspanAll hinactiveVirtual
   have hfamily :
       (F.rephase z).activeSectorOneSiteMatrixFamily hη.p =
         F.activeSectorOneSiteMatrixFamily hη.p := by
@@ -141,8 +162,53 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
     exact ⟨⟨j, hj⟩,
       (F.rephase_neighboringOperator_ne_zero_iff z h.1 j).2 hhj,
       (F.rephase_neighboringOperator_ne_zero_iff z j k.1).2 hjk⟩
-  exact (F.rephase z).activeSectorTraceMatrix_isPrimitive
-    hη.p hpos hspan hnonzero htriangle
+  have hinactive : ∀ k, hη.p k = 0 →
+      ∀ gamma, (F.rephase z).leftTensor k gamma = 0 := by
+    intro k hk gamma
+    change (z k : ℂ) • sectorTensorL K hK hη R alpha beta k gamma = 0
+    rw [sectorTensorL_eq_zero_of_weight_eq_zero K hK hη R alpha beta k gamma hk,
+      smul_zero]
+  have hactive : ∃ k, hη.p k ≠ 0 := by
+    by_contra h
+    simp only [not_exists, not_ne_iff] at h
+    have hp_sum := hη.hp_sum
+    simp [h] at hp_sum
+  have hne : Nonempty ((F.rephase z).ActiveSector hη.p) := by
+    obtain ⟨k, hk⟩ := hactive
+    exact ⟨⟨k, hk⟩⟩
+  exact ⟨z, hpos, hspan, hnonzero, htriangle, hinactive, hne⟩
+
+/-- The source inverse-map factorization admits a coherent rephasing whose
+active trace matrix is primitive.
+
+**Local fix (inactive sectors):** the physical factorization retains every
+zero-weight sector. Primitivity concerns only the subtype on which the Hayashi
+weight is nonzero. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+**Local fix (periodicity):** the proof uses closed walks of lengths two and
+three in place of the source's blocking of periodic components. See the same
+paper-gap note.
+
+Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
+1406--1471. -/
+theorem exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
+    (K : MPOTensor d D) (hK : K.IsInjective)
+    (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R rho)
+    (hη : EtaStructure rho) (alpha beta : Fin D) (hm : R beta alpha ≠ 0)
+    (hM : IsMPDO K) :
+    let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+      K hK R hρ hη alpha beta hm
+    ∃ z : Fin F.sectorCount → Circle,
+      (∀ k h, ((F.rephase z).neighboringOperator k h).PosSemidef) ∧
+        Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) := by
+  let F := zeroWeightReparameterizedInverseMapPhysicalSectorFactorization
+    K hK R hρ hη alpha beta hm
+  obtain ⟨z, hpos, hspan, hnonzero, htriangle, _, _⟩ :=
+    exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
+      K hK R hρ hη alpha beta hm hM
+  exact ⟨z, hpos, (F.rephase z).activeSectorTraceMatrix_isPrimitive
+    hη.p hpos hspan hnonzero htriangle⟩
 
 /-- Every injective MPO tensor satisfying the strong area law admits a
 positive physical-sector factorization whose active trace matrix is primitive.
