@@ -23,6 +23,7 @@ import TNLean.Channel.Determinant.Bound
 import TNLean.Channel.Determinant.HeisenbergDual
 import TNLean.Channel.Determinant.HilbertSchmidt
 import TNLean.Channel.Determinant.UnitaryCharacterization
+import TNLean.Channel.DirectSumConditionalExpectation
 import TNLean.Channel.EntanglementWitness
 import TNLean.Channel.FaithfulMarginalWhitenedChoi
 import TNLean.Channel.FixedPoint
