@@ -102,7 +102,7 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
         strict=True,
     ):
         assert anchor in body, anchor
-        assert body.count(r"\tnpic") == 3, anchor
+        assert body.count(r"\begin{tenkz}") == 3, anchor
         assert body.count(r"\xrightarrow") == 2, anchor
 
 
