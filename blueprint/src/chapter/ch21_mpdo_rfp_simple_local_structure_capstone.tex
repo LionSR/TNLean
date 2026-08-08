@@ -23,9 +23,9 @@
     representative $A=(4/\sqrt5)\mathcal K$ satisfies
     $\mathcal B_A^2=(4/\sqrt5)\mathcal B_A\ne\mathcal B_A$ and therefore fails
     the paper's literal zero-correlation-length diagram. Thus it does not
-    obstruct the active supported-sector theorem proved under the complete
-    normal Case-I hypotheses. The remaining open step is the all-sector
-    structure used by the following corollary.
+    obstruct the all-sector coefficient theorem proved under the complete
+    normal Case-I hypotheses. The remaining open step is the structural
+    statement used by the following corollary.
 \end{remark}
 
 \begin{theorem}[SAL--ZCL rank-one normalization obstruction]
@@ -245,10 +245,9 @@
 % **Normal Case-I boundary:**
 % rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
 % has the displayed SAL, ZCL, and inverse-map identities but is not the normal tensor
-% assumed in Case I; its normal representative loses literal ZCL. The active
-% supported-sector rank-one conclusion is now complete. The source corollary
-% still requires one all-sector statement containing the physical isometry,
-% left--right tensors, and coefficients across the ambient zero-weight sectors.
+% assumed in Case I; its normal representative loses literal ZCL. The all-sector
+% coefficient conclusion is now complete. The source corollary still requires one
+% structural statement containing the physical isometry and left--right tensors.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{corollary}[Local sector structure from SAL and ZCL (all-sector boundary)]
@@ -256,7 +255,7 @@
     \notready
     \uses{def:is_sal, def:mpo_physical_trace_transfer,
         thm:sal_implies_eta_structure,
-        thm:mpdo_casei_rank_one_coefficients_of_is_sal}
+        thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     Let $\mathcal K$ be an injective normal matrix product density operator
     tensor satisfying the strong area law and literal zero correlation length,
     \begin{align}
@@ -275,10 +274,9 @@
     This is the structural corollary at
     \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
     derivation combines Lemma~C.4 with the rank-one matrix step in Lemma~C.5.
-    The supported-sector rank-one theorem supplies that matrix step. The
-    remaining task is to extend the coefficients across the ambient zero-weight
-    sectors and combine them with the physical isometry and left--right tensors
-    in one all-sector statement.
+    The all-sector coefficient theorem supplies the rank-one matrix step.
+    The remaining task is to combine it with the physical isometry and the
+    left--right tensors in one structural statement.
 \end{corollary}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
@@ -883,9 +881,9 @@ This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
 % **All-sector Case-II boundary:**
-% The supported-sector normal Case-I rank-one theorem is complete. The remaining
+% The all-sector normal Case-I coefficient theorem is complete. The remaining
 % source step must show that every BNT tensor inherits MPDO positivity, SAL, and
-% literal ZCL, then combine the physical isometries, left--right tensors, and
+% literal ZCL, then package the physical isometries, left--right tensors, and
 % coefficients into the all-sector structure.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
@@ -917,10 +915,10 @@ This is the calculation in
     the positive neighboring operators in each sector factorization, and the
     unstarred layer identities. The remaining identities specify the local
     factorization and its rank-one normalization.
-    The active supported-sector rank-one conclusion of Lemma~C.5 is complete
-    under the normal Case-I hypotheses. The printed Case-II proof still needs
-    to show that every BNT tensor inherits MPDO positivity, SAL, and literal
-    ZCL, and then to combine the resulting physical isometries, left--right
-    tensors, and coefficients into the all-sector structure above. It remains
-    to establish this Case-II passage.
+    The all-sector normal Case-I coefficient conclusion of Lemma~C.5 is
+    complete. The printed Case-II proof still needs to show that every BNT
+    tensor inherits MPDO positivity, SAL, and literal ZCL, and then to combine
+    the resulting physical isometries, left--right tensors, and coefficients
+    into the all-sector structure above. It remains to establish this Case-II
+    passage.
 \end{theorem}
