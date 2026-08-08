@@ -668,7 +668,14 @@ not a mark, and it takes the same concentric discipline in one direction
 only: a bracket whose selection reaches a traced boundary row steps its arc
 outside the returns routed on the side it speaks from, so a return never
 runs between the arc and its caption, while no mark ever moves a wire —
-which is what keeps mark deletion ink-neutral for the network.
+which is what keeps mark deletion ink-neutral for the network. The rows a
+selection occupies, span and all, decide whether it reaches the boundary
+row, and the obstacles the arc steps past include the legs of its own
+members, whether the author or the picture's physical policy asked for
+them. The step is stated for the frames whose rows are lines of the page,
+`flat` and `plane`; on a ring, whose row closes at the frame radius and
+whose sides are radial, the order between a return and a mark on that row
+is not yet settled.
 
 **Label stations.** Every label belongs to a host — a glyph, a wire, a place
 on a wire, a selection — and inherits from it a ranked ring of stations: the

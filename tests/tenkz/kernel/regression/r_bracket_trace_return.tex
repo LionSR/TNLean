@@ -1,24 +1,41 @@
 %% Regression: a bracket under a traced row steps outside the row's closure
-%% return (issue #5631).  On a two-row ladder the lower row's return runs
-%% one trace reach below the row; a south bracket on that row previously
-%% put its arc between the row and the rail while its caption stood beyond
-%% the rail, so the generated return split the annotation.  The bracket now
+%% return (issue #5631).  Five pictures, told apart by the order their
+%% brackets render.  On a two-row ladder the lower row's return runs one
+%% trace reach below the row; a south bracket on that row previously put
+%% its arc between the row and the rail while its caption stood beyond the
+%% rail, so the generated return split the annotation.  The bracket now
 %% takes concentric order against the returns routed on the side it speaks
 %% from: the rail keeps its pinned run, the band between the row and the
 %% rail carries no annotation ink, the bar stands two clearances outside
 %% the rail -- the turns that close the arc rise one clearance from the
 %% bar, keeping one clearance of daylight between their tips and the rail
-%% -- and the two paths never touch.  The single-row picture adds labelled
-%% physical legs through the return: the bar steps past the leg tips and
-%% their label bands as well, so it never lands in the label text beyond
-%% the rail.  Each expectation counts intersections of a probe segment
-%% against the saved rail and bracket paths, so the layering is pinned
-%% structurally as well as by the exact-toolchain pixel ledger.
+%% -- and the two paths never touch.
+%%
+%% The other four pictures pin the reach of that order.  The single-row
+%% picture adds labelled physical legs through the return: the bar steps
+%% past the leg tips and their label bands as well, so it never lands in
+%% the label text beyond the rail.  The spanning picture selects glyphs
+%% anchored on the open row whose `wires=' extent carries them onto the
+%% closed one, so the rows a selection occupies -- not the row its anchors
+%% name -- decide whether a return stands between the arc and the sites.
+%% The sheared picture takes the same order on a plane frame, whose rows
+%% are page-horizontal and whose returns the closure renderer transforms
+%% through the frame, so the rail is a page ordinate and the support that
+%% clears it is that ordinate in the hull's own axis.  The last picture
+%% grows its legs from the picture's own physical policy and lengthens
+%% them to meet a string routed below the row: a leg the picture rather
+%% than the author asked for is an obstacle exactly as an authored one is,
+%% so the bar clears the tips it carries past the rail.
+%%
+%% Each expectation counts intersections of a probe segment against the
+%% saved rail and bracket paths, so the layering is pinned structurally as
+%% well as by the exact-toolchain pixel ledger.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
 \ExplSyntaxOn
 \file_input:n { tenkz-kernel.code.tex }
+\int_new:N \g__tenkz_test_brk_case_int
 \int_new:N \l__tenkz_test_brk_cross_int
 \fp_new:N \l__tenkz_test_brk_x_fp
 \fp_new:N \l__tenkz_test_brk_ya_fp
@@ -39,39 +56,10 @@
             \int_use:N \l__tenkz_test_brk_cross_int }
       }
   }
-\cs_new_protected:Npn \__tenkz_test_brk_audit:
+% the bracket and the return named #1 must never touch
+\cs_new_protected:Npn \__tenkz_test_brk_apart:n #1
   {
-    \int_compare:nNnTF { \l__tenkz_kernel_r_rows_int } = {1}
-      { \__tenkz_test_brk_leg_audit: }
-      { \__tenkz_test_brk_ladder_audit: }
-  }
-% The single-row picture: the rail keeps its run, and the bar clears not
-% only the rail but the labelled leg tips beyond it, standing below the
-% conservative label band at one further clearance.
-\cs_new_protected:Npn \__tenkz_test_brk_leg_audit:
-  {
-    \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
-      \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
-    \__tenkz_test_brk_probe:nnnnnn {wrap-1}
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.35 }
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.45 }
-      {1}
-    % no bar between the rail and the far side of the leg-label band
-    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.05 }
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.85 }
-      {0}
-    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.95 }
-      { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 2 }
-      {1}
-    \__tenkz_string_count:nnN {tenkz-test-bracket} {wrap-1}
+    \__tenkz_string_count:nnN {tenkz-test-bracket} {#1}
       \l__tenkz_test_brk_cross_int
     \int_compare:nNnF { \l__tenkz_test_brk_cross_int } = {0}
       {
@@ -80,20 +68,32 @@
             \int_use:N \l__tenkz_test_brk_cross_int ~time(s) }
       }
   }
+\cs_new_protected:Npn \__tenkz_test_brk_audit:
+  {
+    \int_case:nn { \g__tenkz_test_brk_case_int }
+      {
+        {1} { \__tenkz_test_brk_ladder_audit: }
+        {2} { \__tenkz_test_brk_leg_audit: }
+        {3} { \__tenkz_test_brk_span_audit: }
+        {4} { \__tenkz_test_brk_plane_audit: }
+        {5} { \__tenkz_test_brk_policy_audit: }
+      }
+  }
+% The two-row ladder: the rail keeps its pinned run one trace reach below
+% the closed row, the band between the row and the rail carries no
+% annotation ink, and the bar stands two clearances beyond the rail.
 \cs_new_protected:Npn \__tenkz_test_brk_ladder_audit:
   {
     \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
       \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
     \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
       \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_yb_fp
-    % the lower row's rail keeps its pinned run, one trace reach below
     \__tenkz_test_brk_probe:nnnnnn {wrap-2}
       { \l__tenkz_test_brk_x_fp }
       { \l__tenkz_test_brk_yb_fp - 0.35 }
       { \l__tenkz_test_brk_x_fp }
       { \l__tenkz_test_brk_yb_fp - 0.45 }
       {1}
-    % the band between the row and the rail carries no annotation ink
     \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
       { \l__tenkz_test_brk_x_fp }
       { \l__tenkz_test_brk_yb_fp - 0.05 }
@@ -121,19 +121,126 @@
       { \l__tenkz_test_brk_x_fp }
       { \l__tenkz_test_brk_ya_fp + 2 }
       {0}
-    % stepped outside, the bracket and the rail never touch
-    \__tenkz_string_count:nnN {tenkz-test-bracket} {wrap-2}
-      \l__tenkz_test_brk_cross_int
-    \int_compare:nNnF { \l__tenkz_test_brk_cross_int } = {0}
-      {
-        \errmessage
-          { bracket~and~trace~return~intersect~
-            \int_use:N \l__tenkz_test_brk_cross_int ~time(s) }
-      }
+    \__tenkz_test_brk_apart:n {wrap-2}
+  }
+% The single-row picture: the rail keeps its run, and the bar clears not
+% only the rail but the labelled leg tips beyond it, standing below the
+% conservative label band at one further clearance.
+\cs_new_protected:Npn \__tenkz_test_brk_leg_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
+      \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
+    \__tenkz_test_brk_probe:nnnnnn {wrap-1}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.35 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.45 }
+      {1}
+    % no bar between the rail and the far side of the leg-label band
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.05 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.85 }
+      {0}
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.95 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 2 }
+      {1}
+    \__tenkz_test_brk_apart:n {wrap-1}
+  }
+% The spanning picture: both glyphs are anchored on the open row and reach
+% the closed one through their wire span, so the selection meets the
+% boundary row and the arc steps outside its return.  A selection read at
+% its anchors alone leaves the arc unstepped, its turns crossing the rail.
+\cs_new_protected:Npn \__tenkz_test_brk_span_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+      \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_yb_fp
+    \__tenkz_test_brk_probe:nnnnnn {wrap-2}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.35 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.45 }
+      {1}
+    % the spanning silhouette alone carries the bar just past the rail; a
+    % stepped bar stands two clearances beyond it, so the band just outside
+    % the rail is empty
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.05 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.55 }
+      {0}
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.65 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 2 }
+      {1}
+    \__tenkz_test_brk_apart:n {wrap-2}
+  }
+% The sheared picture: the closure renderer transforms the rail through the
+% plane frame, and the arc steps outside it there too.  A step armed on the
+% flat frame alone leaves the bar between the row and the rail.
+\cs_new_protected:Npn \__tenkz_test_brk_plane_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+      \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_yb_fp
+    \__tenkz_test_brk_probe:nnnnnn {wrap-2}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.35 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.45 }
+      {1}
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.05 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.35 }
+      {0}
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 0.45 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_yb_fp - 2 }
+      {1}
+    \__tenkz_test_brk_apart:n {wrap-2}
+  }
+% The policy picture: the legs come from the picture's physical policy and
+% run out to meet the string routed below the row, well past the rail.  A
+% scan that reads authored legs alone lays the bar across them.
+\cs_new_protected:Npn \__tenkz_test_brk_policy_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
+      \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
+    \__tenkz_test_brk_probe:nnnnnn {wrap-1}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.35 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.45 }
+      {1}
+    % no bar between the row and the far side of the lengthened leg tips
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.05 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 0.95 }
+      {0}
+    \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 1 }
+      { \l__tenkz_test_brk_x_fp }
+      { \l__tenkz_test_brk_ya_fp - 3 }
+      {1}
+    \__tenkz_test_brk_apart:n {wrap-1}
   }
 \cs_new_eq:NN \__tenkz_test_brk_mark:n \__tenkz_kernel_r_mark_bracket:n
 \cs_set_protected:Npn \__tenkz_kernel_r_mark_bracket:n #1
   {
+    \int_gincr:N \g__tenkz_test_brk_case_int
     \__tenkz_test_brk_mark:n {#1}
     \path [ spath/save = tenkz-test-bracket ]
       \tl_use:N \l__tenkz_kernel_r_pts_tl ;
@@ -151,6 +258,22 @@
 \begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace]
   \tn[skin=box, ports={270:physical:$j_1$}]{M} &
   \tn[skin=box, ports={270:physical:$j_2$}]{M}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$n$}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=2, west=trace, east=trace]
+  \tn[skin=box, wires=2, name=W]{W} & \tn[skin=box, wires=2, name=V]{V}
+  \tnmark[form=bracket]{(1,1) .. (1,2)}{$n$}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire}, cols=2, frame=plane, west=trace, east=trace]
+  \tn[skin=box]{A} & \tn[skin=box]{A} \\
+  \tn[skin=box]{B} & \tn[skin=box]{B}
+  \tnmark[form=bracket]{(2,1) .. (2,2)}{$n$}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace, physical=down]
+  \tn[at=(1,1), skin=box, name=P]{M} &
+  \tn[at=(1,2), skin=box, name=Q]{M}
+  \tnwire[kind=string, name=g, route={s of (1,1) .. (1,2)},
+    crossing=over]{open}{open}
   \tnmark[form=bracket]{(1,1) .. (1,2)}{$n$}
 \end{tenkz}
 \end{document}
