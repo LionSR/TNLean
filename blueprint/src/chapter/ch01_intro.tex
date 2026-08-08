@@ -765,13 +765,18 @@ $M_M(\C)$, $M=\sum_kd_k$.
     \lean{Matrix.IsCPOnOperatorSystemDirectSum}
     \leanok
     Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be a subspace and
-    $T:S\to\MN{p}$ a linear map. For a natural number $j$, apply $T$
-    entrywise, block by block, to a family of $j\times j$ block matrices with
-    entries in $S$; then $T$ is \emph{completely positive on $S$} if this
-    always sends every such family that is positive semidefinite in each
-    block to a positive semidefinite matrix, for every $j$. This is
-    Definition~\ref{def:cp_on_operator_system} applied block by block, one
-    summand at a time.
+    $T:S\to\MN{p}$ a linear map. The level-$j$ ampliation of $T$ is defined
+    by bipartite slicing: for a family $X=(X_k)_{k<r}$ with
+    $X_k\in M_{d_k}(\C)\otimes\MN{j}$ whose slice families lie in $S$,
+    \begin{align}
+        \bigl((T\otimes\id_j)(X)\bigr)_{ab}
+        =T\Bigl(\bigl((X_k)_{ab}\bigr)_{k<r}\Bigr),
+        \qquad a,b<j,
+    \end{align}
+    and $T$ is \emph{completely positive on $S$} if entrywise positivity
+    $(\forall k<r,\ X_k\ge0)$ always implies $(T\otimes\id_j)(X)\ge0$, for
+    every $j$. This is Definition~\ref{def:cp_on_operator_system} applied
+    block by block, one summand at a time.
 \end{definition}
 
 \begin{definition}[Complete positivity on a direct sum of matrix algebras]
@@ -832,7 +837,7 @@ $M_M(\C)$, $M=\sum_kd_k$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:is_kraus_cp_basic}
+    \uses{def:is_kraus_cp, lem:is_kraus_cp_basic}
     Expanding matrix entries gives
     \begin{align}
         (\Phi\otimes\id_j)(X)
