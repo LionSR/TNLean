@@ -2867,9 +2867,9 @@ its own coded error, and a profile word outside the alphabet is refused, not
 kept. The ch21 figure drops its raw length in the same change and renders
 pixel-identically.
 
-The new leaf is the one census move: M1 kernel 103 to 104, M2 parser paths
-133 to 134, with the parser identity changing accordingly. M3 is untouched
-at 0, M4 at 25.94, and the alias and overload ledgers do not move. The
+The new leaf is the one census move: M1 kernel 62 to 63, M2 parser paths
+74 to 75, with the parser identity changing accordingly. M3 is untouched
+at 0, M4 at 26.46, and the alias and overload ledgers do not move. The
 metric registry gains one ratio row, `compactpitch` (0.5), the profile's
 named factor; no other registry dimension moves.
 
