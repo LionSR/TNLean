@@ -38,7 +38,7 @@ correspondence:
   of the rigidity correspondence.
 * `transProb_eq_one_iff` / `transProb_eq_zero_iff` — the equality and
   orthogonality characterisations (coincidence and orthogonality of rays),
-  the provable hooks for the converse.
+  the provable preconditions for the converse.
 
 ## Open target (not proved here): the Wigner / Fubini–Study converse
 
@@ -244,7 +244,7 @@ theorem transProb_smul_unitary
         inner_toEuclideanLin_unitary U x x]
   rw [hnorm, hnorm]
 
-/-! ## Equality and orthogonality characterisations (converse hooks) -/
+/-! ## Equality and orthogonality characterisations (converse preconditions) -/
 
 /-- **Coincidence characterisation.** The transition probability is `1` iff
 the two projective points are equal. The forward implication is the
