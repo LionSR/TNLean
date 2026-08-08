@@ -32,8 +32,11 @@ copy index.
   MPDO.
 * `commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL`:
   the source projector construction supplies the required compression.
+* `commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL`:
+  literal zero correlation length restricts to every absorbed BNT representative.
 * `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
-  scale-invariant source zero correlation length restricts to every absorbed BNT representative.
+  scale-invariant source zero correlation length restricts to every absorbed BNT
+  representative.
 * `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
   simple canonical data package copy-independent weights and sectorwise source
   zero correlation length.

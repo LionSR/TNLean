@@ -856,7 +856,8 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}\leanok
     \uses{def:global_gauge_of_blocks,
       lem:mpdo_doubled_phys_trace_transfer_to_mps,
-      lem:mpdo_doubled_phys_trace_transfer_blockwise}
+      lem:mpdo_doubled_phys_trace_transfer_blockwise,
+      lem:mpdo_copy_weight_eq_common_weight}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is
@@ -899,7 +900,8 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}\leanok
     \uses{cor:mpdo_simple_zcl_weight_copy_independent,
-      lem:mpdo_simple_blockwise_zcl_equation}
+      lem:mpdo_simple_blockwise_zcl_equation,
+      thm:mpdo_absorbed_bnt_sector_literal_zcl}
     Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
     common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
     then gives the displayed quadratic identity. The common weight is nonzero,
@@ -1076,8 +1078,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpo_physical_trace_transfer,
-      lem:mpdo_trace_loop_chain,
+    \uses{lem:mpdo_trace_loop_chain,
       thm:mpo_source_zcl_of_physical_trace_idempotent,
       thm:mpdo_bnt_physical_support_restriction,
       cor:mpdo_absorbed_bnt_sector_is_mpdo,
