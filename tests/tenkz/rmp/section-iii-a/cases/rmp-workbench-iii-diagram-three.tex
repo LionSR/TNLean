@@ -6,10 +6,16 @@
 % Source: author source ImagesReview Section III/ImagesReview Section III.tex
 %   lines 170-197; archival output Dia3.pdf
 % Capabilities: kernel, rotated-action, ring-closure
+% Signature: the source panel gives each segment the arrowhead of the tensor
+%   that claims it, so a leg that a pulled-through string passes carries no
+%   drawn orientation on its outer half.  The two sides therefore state
+%   their directed plaquette legs on opposite faces, and the relation is
+%   opted out by name rather than decorated with arrowheads the author
+%   never drew.
 \[
   \tenkzkernel
   \tndeclare{species}{op}{hue=source:red}
-  \begin{tenkzeq}
+  \begin{tenkzeq}[check={signature, off={1: the source marks each segment per tensor}}]
     \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
       % the plaquette ring: four MPO tensors joined by the red ring, with
       % the lambda insertion on the north-west ring wire

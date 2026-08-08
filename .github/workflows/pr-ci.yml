@@ -40,6 +40,7 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
@@ -101,6 +102,7 @@ on:
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
+      - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
@@ -197,6 +199,7 @@ jobs:
               - 'scripts/blueprint_bibtex.py'
               - 'scripts/check_reader_facing_prose.py'
               - 'scripts/tenkz_audit.py'
+              - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_language.py'
@@ -223,6 +226,7 @@ jobs:
               - 'scripts/tenkz_manual_doctest.py'
               - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
+              - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
@@ -307,6 +311,11 @@ jobs:
 
       - name: Test tenkz render baseline replacement
         run: python3 scripts/test_tenkz_corpus_render.py
+
+      # The seeded equation defects: a mismatched group must fail the audit
+      # and a clean one must pass, wherever tenkz pictures compile.
+      - name: Test tenkz equation group enforcement
+        run: python3 scripts/test_tenkz_equation_audit.py
 
       - name: Test tenkz manual extraction and reference coverage
         run: python3 scripts/test_tenkz_manual_doctest.py
@@ -723,6 +732,14 @@ jobs:
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
+
+      # Every blueprint picture compiled standalone during the web build and
+      # left its event stream in the render cache; the sweep audits all of
+      # them, so the boundary-signature rules reach the volume's figures and
+      # not only the regression corpus.
+      - name: Sweep tenkz blueprint event streams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/tenkz_blueprint_sweep.py
 
       - name: Test tenkz equation web layout
         if: env.TEX_CHANGED == 'true'

@@ -1559,13 +1559,39 @@
 % ---------- boundary signatures --------------------------------------------------------
 % The signature of a panel is the sorted multiset of its exposed indices:
 % one entry per open wire end and one per outward physical port.  tenkzeq
-% compares adjacent panels and errors on mismatch.  A directed physical open
-% end carries its orientation: the entry says whether the index leaves the
-% panel (to) or enters it (from), so a space and its dual cannot pass for one
-% another.  An internal directed contraction exposes nothing and leaves no
-% entry.
+% compares adjacent panels and errors on mismatch.  A directed open end,
+% virtual or physical, carries its orientation: the entry says whether the
+% index leaves the panel (to) or enters it (from), so a space and its dual
+% cannot pass for one another and two sides of a relation must agree on
+% orientation and not merely on count.  An internal directed contraction
+% exposes nothing and leaves no entry.  The orientation is the entry's last
+% field; a port and a policy leg declare no direction, so only a wire end
+% carries one.
 
 \tl_new:N \l__tenkz_kernel_sig_dir_tl
+\tl_new:N \l__tenkz_kernel_sig_dir_src_tl
+
+% The orientation of a directed index at the end being described, normalized
+% to the cut: the barb ends at this end (to, the index leaves the panel) or
+% at the other end (from, the index enters it).  #1 is the wire record, #2
+% the end (`from' or `to'); an undirected wire yields the empty suffix.
+\cs_new_protected:Npn \__tenkz_kernel_signature_dir:nnN #1#2#3
+  {
+    \tl_clear:N #3
+    \__tenkz_model_get:nnN {#1} {dir} \l__tenkz_kernel_sig_dir_src_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_sig_dir_src_tl
+      {
+        \str_if_eq:VnF \l__tenkz_kernel_sig_dir_src_tl {none}
+          {
+            \tl_set:Ne #3
+              {
+                :
+                \str_if_eq:VnTF \l__tenkz_kernel_sig_dir_src_tl {#2}
+                  {to} {from}
+              }
+          }
+      }
+  }
 
 \cs_new_protected:Npn \__tenkz_kernel_bearing_normalize:nN #1#2
   {
@@ -1723,37 +1749,25 @@
                     \__tenkz_model_get:nnN
                       {##1} {####1-open-type}
                       \l__tenkz_kernel_port_type_tl
-                    % The orientation of a directed physical index is part of
-                    % the exposed entry, normalized to the cut: the barb ends
-                    % at this end (to, the index leaves) or at the other end
-                    % (from, the index enters).
-                    \tl_clear:N \l__tenkz_kernel_sig_dir_tl
-                    \str_if_eq:VnT \l__tenkz_kernel_port_type_tl {physical}
-                      {
-                        \__tenkz_model_get:nnN {##1} {dir} \l_tmpa_tl
-                        \quark_if_no_value:NF \l_tmpa_tl
-                          {
-                            \str_if_eq:VnF \l_tmpa_tl {none}
-                              {
-                                \tl_set:Ne \l__tenkz_kernel_sig_dir_tl
-                                  {
-                                    :
-                                    \str_if_eq:VnTF \l_tmpa_tl {####1}
-                                      {to} {from}
-                                  }
-                              }
-                          }
-                      }
+                    % The orientation of a directed index is part of the
+                    % exposed entry whether the index is virtual or physical:
+                    % a directed virtual leg states the bond space against
+                    % its dual exactly as a directed physical leg does.
+                    % A physical index carries no strand weight, so the
+                    % orientation is the third field there and the fourth
+                    % beside a weight.
+                    \__tenkz_kernel_signature_dir:nnN {##1} {####1}
+                      \l__tenkz_kernel_sig_dir_tl
                     \seq_put_right:Ne \l__tenkz_kernel_emit_seq
                       {
                         \str_if_eq:VnTF
                           \l__tenkz_kernel_port_type_tl {physical}
                           {phys}{open}
                         : \tl_use:N \l__tenkz_kernel_scratch_tl
-                        \str_if_eq:VnTF
+                        \str_if_eq:VnF
                           \l__tenkz_kernel_port_type_tl {physical}
-                          { \tl_use:N \l__tenkz_kernel_sig_dir_tl }
                           { \tl_use:N \l_tmpb_tl }
+                        \tl_use:N \l__tenkz_kernel_sig_dir_tl
                       }
                   }
               }
@@ -1766,11 +1780,14 @@
                   {
                     \str_if_eq:VnT \l_tmpa_tl {outside}
                       {
+                        \__tenkz_kernel_signature_dir:nnN {##1} {####1}
+                          \l__tenkz_kernel_sig_dir_tl
                         \seq_put_right:Ne \l__tenkz_kernel_emit_seq
                           {
                             edge: \prop_item:Ne \l__tenkz_kernel_node_prop
                               { \l__tenkz_kernel_scratch_tl / side }
                             \tl_use:N \l_tmpb_tl
+                            \tl_use:N \l__tenkz_kernel_sig_dir_tl
                           }
                       }
                   }

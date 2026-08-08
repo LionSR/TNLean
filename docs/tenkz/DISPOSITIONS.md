@@ -65,7 +65,7 @@ separate public-surface occurrence and therefore appears separately.
 | `ch03_single.tex` | L251 `tenkz` → `P-grid` | — | — |
 | `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
-| `ch12_symmetry_string_order.tex` | L41, 77, 359, 364, 395, 401, 446, 452, 485, 490, 528, 534, 839, 844 `tenkz` → `P-grid` | — | — |
+| `ch12_symmetry_string_order.tex` | L41, 80, 362, 367, 398, 404, 449, 455, 488, 493, 531, 537, 842, 847 `tenkz` → `P-grid` | — | — |
 | `ch12_symmetry_virtual_and_cohomology.tex` | L181, 196, 330, 459, 473 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_commutation.tex` | L55 `tenkz` → `P-grid` | — | — |
 | `ch13_parent_hamiltonian_commuting_gap_appendix_b_supports.tex` | L276 `tenkz` → `P-grid` | — | — |

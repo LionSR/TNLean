@@ -354,6 +354,23 @@ def render_unit(unit_source: str, svg_dir: Path) -> tuple[Path | None, bool]:
     return svg_path, False
 
 
+def unit_event_log(unit_source: str, svg_dir: Path) -> Path | None:
+    """Return the ``.tnlog`` one unit wrote, compiling it when absent.
+
+    The event stream is the audit's subject and the SVG is the reader's, so
+    the two are cached the same way and by the same compile; a sweep asks for
+    the log and gets whichever the last render left behind.
+    """
+
+    stem = f"tenkz-{unit_hash(unit_source)}"
+    log_path = _CACHE_DIR / f"{stem}.tnlog"
+    if log_path.is_file():
+        return log_path
+    if not _compile_unit(unit_source, stem, svg_dir / f"{stem}.svg"):
+        return None
+    return log_path if log_path.is_file() else None
+
+
 # --------------------------------------------------------------------------
 # plasTeX layer.  Deferred import so scripts/test_tenkz_pic.py can exercise
 # the compile+cache core above without a plasTeX installation.

@@ -31,13 +31,29 @@ Hard errors (exit 1):
                       recorded under/over occlusion, or hit no intersection.
   kernel-check        A kernel equation check reported a malformed relation
                       or unequal boundary signatures.
-  eq-boundary-mismatch Consecutive kernel pictures joined by `=` in the
-                       source have different boundary kinds or
-                       multiplicities.  A tensor equation equates two maps
-                       of one type, so the multisets of open legs must agree
-                       side-to-side; their drawing directions may rotate.
+  eq-boundary-mismatch Two panels of one equation group expose different
+                       boundary kinds, multiplicities, or orientations.  A
+                       tensor equation equates two maps of one type, so the
+                       multisets of open legs must agree side-to-side, an
+                       index leaving one side must leave the other, and only
+                       the drawing directions may rotate.
+  eq-unchecked        An equation group holds panels its own check records
+                      never folded into a relation: the group's arithmetic
+                      (relations plus contractions plus one equals panels)
+                      does not close, so some panel's boundary was never
+                      compared.
 
 Advisories (never affect the exit code):
+  eq-sibling-mismatch  Consecutive kernel pictures joined by `=` in the
+                       source, outside any equation group, expose different
+                       boundaries.  The source `=` is a heuristic, not a
+                       declaration: the mechanism that makes an equation
+                       checkable is `tenkzeq` (DESIGN.md, "Equation
+                       grouping"), so a mismatch here reports a picture pair
+                       still to be moved into the scope.
+  eq-check-off         An equation group waived one relation with
+                       `check={off={k: reason}}`.  The waiver is legal and
+                       never silent: it is reported with its reason.
   repeated-topology    Identical canonical atom+bond content in several
                        pictures: review ordinary TeX composition.  Repetition
                        alone never extends the public grammar.
@@ -47,11 +63,17 @@ Advisories (never affect the exit code):
   stale-log            The source declares picture constructs but the log
                        has none (failed or interrupted compile).
 
-Source heuristic (documented, deliberately simple): picture-producing
-constructs (`\\begin{tenkz...}`) are matched to log pictures in order of
-appearance; standalone `\\tntree` drawings emit no picture event and are
-excluded.  The match is used only when the counts agree.
-Two consecutive pictures are "one displayed equation" when the source
+The equation group is the `tenkzeq` scope and nothing else.  Every panel of
+one scope carries that scope's number in its `picture` record and the scope
+writes one `check` record per joiner, so the in-group enforcement above reads
+the stream alone and runs wherever a picture compiles -- no source, no
+heuristic.
+
+Source heuristic (documented, deliberately simple, advisory only): out of
+scope, picture-producing constructs (`\\begin{tenkz...}`) are matched to log
+pictures in order of appearance; standalone `\\tntree` drawings emit no
+picture event and are excluded.  The match is used only when the counts
+agree.  Two consecutive pictures are "one displayed equation" when the source
 between them contains `=` and no math-mode boundary (`$`, `\\[`, `\\]`),
 no cell separator `&`, no other environment, and is short.
 
@@ -69,7 +91,7 @@ from collections import Counter
 from dataclasses import dataclass
 from fractions import Fraction
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from tenkzlib.texcase import (
     Construct,
@@ -1187,13 +1209,15 @@ class Audit:
         if self.tex_linked:
             self._tex_src = src
 
-    def check_equation_boundaries(self) -> None:
-        if not self.tex_linked:
-            return
-        relation_checks: dict[int, Event] = {}
-        # The kernel stamps each equation picture and relation with one scope.
-        # Missing, duplicate, or malformed records therefore fail locally and
-        # can never shift an accepted result onto another equation.
+    # ---------------- the equation group ----------------
+
+    def _scope_index(self) -> tuple[dict[int, int], dict[int, list[int]]]:
+        """Map picture position to its `tenkzeq` scope and back.
+
+        A picture record carries `scope=` exactly when it is a panel of an
+        equation group, so the grouping is a fact of the stream and needs
+        neither source nor heuristic.
+        """
         picture_indices = {
             picture.ident: index for index, picture in enumerate(self.pictures)
         }
@@ -1209,7 +1233,10 @@ class Audit:
             scope_index = int(scope)
             picture_scopes[picture] = scope_index
             scope_pictures.setdefault(scope_index, []).append(picture)
+        return picture_scopes, scope_pictures
 
+    def _scope_checks(self) -> tuple[dict[int, list[Event]], set[int]]:
+        """Each scope's `check` records, and the scopes that failed arity."""
         scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
@@ -1223,134 +1250,190 @@ class Audit:
                 malformed_scopes.add(scope_index)
                 continue
             scope_events.setdefault(scope_index, []).append(event)
+        return scope_events, malformed_scopes
 
-        equation_tokens = list(re.finditer(
-            r"\\(begin|end)\{tenkzeq\}", self._tex_src
-        ))
-        equation_stack: list[re.Match[str]] = []
-        for token in equation_tokens:
+    def _tenkzeq_spans(self) -> list[tuple[int, int]]:
+        """Source spans of the equation environments, innermost first."""
+        spans: list[tuple[int, int]] = []
+        stack: list[int] = []
+        for token in re.finditer(r"\\(begin|end)\{tenkzeq\}", self._tex_src):
             if token.group(1) == "begin":
-                equation_stack.append(token)
-                continue
-            if not equation_stack:
-                continue
-            begin = equation_stack.pop()
-            first_construct = next(
-                (construct for construct in self.constructs
-                 if begin.end() <= construct.start < token.start()),
-                None,
-            )
-            if first_construct is None:
-                continue
-            declared_offs = _tenkzeq_declared_offs(self._tex_src, begin.end())
-            if declared_offs is None:
-                continue
+                stack.append(token.end())
+            elif stack:
+                spans.append((stack.pop(), token.start()))
+        return spans
+
+    def _source_authorized_offs(self) -> Optional[dict[int, set[int]]]:
+        """Per scope, the relations the source itself waives.
+
+        `None` when no source is linked: the stream is then the only witness
+        of its own waivers, which are honoured and reported.  With a source,
+        a waiver counts only where the environment's own `check={off={k:
+        reason}}` names it, so a stale or edited stream cannot retire a
+        comparison the author never opted out of.
+        """
+        if not self.tex_linked:
+            return None
+        picture_scopes, scope_pictures = self._scope_index()
+        authorized: dict[int, set[int]] = {}
+        for begin, end in self._tenkzeq_spans():
             members = [
                 index for index, construct in enumerate(self.constructs)
-                if begin.end() <= construct.start and construct.end <= token.start()
+                if begin <= construct.start and construct.end <= end
             ]
-            logged_scopes = {picture_scopes.get(member) for member in members}
-            if len(logged_scopes) != 1 or None in logged_scopes:
+            scopes = {picture_scopes.get(member) for member in members}
+            if len(scopes) != 1 or None in scopes:
                 continue
-            scope = next(
-                value for value in logged_scopes if value is not None
-            )
-            if scope in malformed_scopes or scope_pictures.get(scope) != members:
+            scope = scopes.pop()
+            if scope is None or scope_pictures.get(scope) != members:
                 continue
-            # Relation ordinals follow the joiners: adjacent members whose
-            # separator is relation glue own one relation each, and members
-            # adjacent without one are a product group inside a single side,
-            # so a scope may legally log fewer relations than member gaps.
-            relation_pairs = [
-                index
-                for index in range(len(members) - 1)
-                if same_equation(self._tex_src[
-                    self.constructs[members[index]].end:
-                    self.constructs[members[index + 1]].start
-                ])
-            ]
-            expected_relations = set(range(1, len(relation_pairs) + 1))
-            scope_records = scope_events.get(scope, [])
-            # A scope record is a relation comparison or a product
-            # contraction; anything else disables the scope.
-            if any(
-                "relation" not in event.attrs and "product" not in event.attrs
-                for event in scope_records
-            ):
-                continue
-            events = [
-                event for event in scope_records if "relation" in event.attrs
-            ]
-            relation_numbers = [
-                int(event.attrs["relation"])
-                for event in events
+            authorized[scope] = _tenkzeq_declared_offs(self._tex_src, begin) or set()
+        return authorized
+
+    def check_equation_groups(self) -> None:
+        """Enforce the boundary signature inside every equation group.
+
+        The group is the `tenkzeq` scope.  Two facts carry it in the stream:
+        every panel's `picture` record names its scope, and the scope writes
+        one `check` record per joiner -- a relation comparison or a product
+        contraction.  A mismatch inside a group is a hard error, not an
+        advisory: an equation whose sides expose different boundaries states
+        an identity between maps of different types.
+
+        Two rules apply.  The group's arithmetic must close -- relations plus
+        contractions plus one equals panels -- so that no panel escapes
+        comparison; a group whose arithmetic fails is read as unchecked, and
+        its panels are then compared pair by pair with no waiver honoured.
+        And where every side is one panel, the panels' own boundary records
+        are compared here whatever the kernel's verdict said, so a stream
+        whose comparison never ran is caught rather than trusted.
+        """
+        _, scope_pictures = self._scope_index()
+        scope_events, malformed_scopes = self._scope_checks()
+        authorized = self._source_authorized_offs()
+        for scope in sorted(scope_pictures):
+            members = scope_pictures[scope]
+            records = scope_events.get(scope, [])
+            relation_records = [
+                event for event in records
                 if event.attrs.get("relation", "").isdigit()
             ]
-            # Every relation record in the scope must own exactly one
-            # expected relation.  Missing, duplicate, unowned, and surplus
-            # records disable the whole scope instead of authorizing a waiver.
-            if (
-                len(events) != len(expected_relations)
-                or len(relation_numbers) != len(events)
-                or set(relation_numbers) != expected_relations
-            ):
-                continue
-            by_relation = {
-                int(event.attrs["relation"]): event for event in events
+            relations = {
+                int(event.attrs["relation"]): event for event in relation_records
             }
-            logged_offs = {
-                relation for relation, event in by_relation.items()
+            products = [event for event in records if "product" in event.attrs]
+            modulo = any(
+                event.attrs.get("modulo") == "bundles" for event in records
+            )
+            where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
+            closed = (
+                scope not in malformed_scopes
+                and len(relation_records) == len(relations)
+                and set(relations) == set(range(1, len(relations) + 1))
+                and len(relations) + len(products) + 1 == len(members)
+            )
+            waived: set[int] = {
+                relation for relation, event in relations.items()
                 if event.attrs.get("result") == "off"
             }
-            # An event-stream opt-out is authority only when the same relation
-            # is explicitly waived in this source scope.
-            if logged_offs != declared_offs:
+            if authorized is not None and waived != authorized.get(scope, set()):
+                for relation in sorted(waived - authorized.get(scope, set())):
+                    self.hard(
+                        "eq-check-off", where,
+                        f"equation scope {scope} waives relation {relation} "
+                        f"but its source declares no such opt-out",
+                    )
+                waived = set()
+            else:
+                for relation in sorted(waived):
+                    event = relations[relation]
+                    self.adv(
+                        "eq-check-off",
+                        f"{self.log_path.name}:{event.line}",
+                        f"equation scope {scope} waived relation {relation}: "
+                        f"{event.attrs.get('reason', '(no reason recorded)')}",
+                    )
+            if not closed:
+                if scope not in malformed_scopes:
+                    # A malformed scope already failed as a hard kernel-check.
+                    self.hard(
+                        "eq-unchecked", where,
+                        f"equation scope {scope} holds {len(members)} panel(s) "
+                        f"but records {len(relation_records)} relation(s) and "
+                        f"{len(products)} contraction(s); every panel must "
+                        f"fold into a compared side",
+                    )
+                self._compare_adjacent(members, scope, modulo, waived=set())
                 continue
-            for relation, pair_index in enumerate(relation_pairs, 1):
-                relation_checks[members[pair_index]] = by_relation[relation]
+            if products:
+                # A product group's signature is a fold over an interface the
+                # kernel resolves; its verdict is the `check` record, which
+                # `check_kernel_checks` rejects when it says mismatch.
+                continue
+            self._compare_adjacent(members, scope, modulo, waived)
 
+    def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
+                          waived: set[int]) -> None:
+        for relation in range(1, len(members)):
+            if relation in waived:
+                continue
+            self._compare_panels(
+                self.pictures[members[relation - 1]],
+                self.pictures[members[relation]],
+                self.hard, "eq-boundary-mismatch",
+                f"sit on relation {relation} of equation scope {scope}",
+                modulo=modulo,
+            )
+
+    def _compare_panels(self, left: Picture, right: Picture,
+                        report: Callable[[str, str, str], None], rule: str,
+                        relation: str, source: str = "",
+                        modulo: bool = False) -> None:
+        """Report when two panels expose different open-leg classes.
+
+        Only the page face is dropped: a panel drawn rotated cuts the same
+        indices on other sides of its frame.  Everything else the entry
+        states -- virtual or physical, strand weight, and the orientation of
+        a directed index -- belongs to the index and must agree.
+        """
+        sig_left, sig_right = left.kernel_boundary(), right.kernel_boundary()
+        if sig_left is None or sig_right is None or sig_left == sig_right:
+            return
+        classes_left = boundary_classes(sig_left, modulo)
+        classes_right = boundary_classes(sig_right, modulo)
+        if classes_left == classes_right:
+            return
+        report(rule, f"{self.log_path.name}:{left.line}",
+               f"pictures {left.ident} and {right.ident} {relation} "
+               f"but open-leg classes differ: {sig_left} vs {sig_right}"
+               f"{source}")
+
+    def check_equation_boundaries(self) -> None:
+        """Advise on pictures joined by a source `=` outside every group.
+
+        The mechanism is `tenkzeq`; a bare `=` between two pictures is a
+        reading of the source, not a declaration, so a mismatch here reports
+        migration work rather than failing the stream.
+        """
+        if not self.tex_linked:
+            return
+        picture_scopes, _ = self._scope_index()
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
             if a.lang != b.lang or a.lang != "kernel":
                 continue
+            if i in picture_scopes and picture_scopes.get(i + 1) == picture_scopes[i]:
+                continue  # one group: check_equation_groups owns the pair
             ca, cb = self.constructs[i], self.constructs[i + 1]
             if ca.end > cb.start:
                 continue  # nested constructs: no linear separator
-            sep = self._tex_src[ca.end:cb.start]
-            if not same_equation(sep):
+            if not same_equation(self._tex_src[ca.end:cb.start]):
                 continue
-            relation_check = relation_checks.get(i)
-            if (
-                relation_check is not None
-                and relation_check.attrs.get("result") in {"equal", "off"}
-            ):
-                continue
-            sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
-            if sig_a is None or sig_b is None or sig_a == sig_b:
-                continue
-            # Rotation may change only the direction field.  Everything
-            # after it, notably strand weight, remains semantic.
-            def without_direction(item: str) -> tuple[str, ...]:
-                parts = item.split(":")
-                kind = parts[0].strip()
-                if kind in {"edge", "open"}:
-                    kind = "virtual"
-                weight = (
-                    ":".join(parts[2:]).strip()
-                    if len(parts) > 2 else "single"
-                )
-                weight = re.sub(r"\s*=\s*", "=", weight)
-                return kind, weight
-
-            kinds_a = Counter(without_direction(item) for item in sig_a)
-            kinds_b = Counter(without_direction(item) for item in sig_b)
-            if kinds_a == kinds_b:
-                continue
-            self.hard("eq-boundary-mismatch",
-                      f"{self.log_path.name}:{a.line}",
-                      f"pictures {a.ident} and {b.ident} sit on one `=` "
-                      f"but open-leg kinds differ: {sig_a} vs {sig_b} "
-                      f"[{self.tex_path.name}:{ca.line}]")
+            self._compare_panels(
+                a, b, self.adv, "eq-sibling-mismatch",
+                "sit on one source `=` outside every equation group",
+                f" [{self.tex_path.name}:{ca.line}]",
+            )
 
     # ---------------- driver ----------------
 
@@ -1363,6 +1446,7 @@ class Audit:
         self.check_kernel_checks()
         self.check_bbox_coverage()
         self.check_label_overlaps()
+        self.check_equation_groups()
         self.check_equation_boundaries()
         self.check_repeated_topology()
         return self.report()
@@ -1457,7 +1541,7 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
     """Return source-authorized opt-outs from one equation's actual options.
 
     ``None`` means that the environment has no single top-level ``check`` key,
-    so its event records cannot authorize source-linked boundary delegation.
+    so the source authorizes no waiver at all.
     """
     options = following_group(source, position, "[", "]")
     if options is None:
@@ -1479,6 +1563,48 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
         if match is not None:
             declared.add(int(match.group(1)))
     return declared
+
+
+_ORIENTATIONS = frozenset({"to", "from"})
+_BUNDLE = re.compile(r"bundle=([1-9]\d*)")
+
+
+def boundary_classes(signature: tuple[str, ...],
+                     modulo_bundles: bool = False) -> Counter:
+    """The multiset of open-leg classes a boundary signature exposes.
+
+    Under `check={modulo=bundles}` a bundled strand stands for its own
+    multiplicity of single strands, and the comparison expands it, exactly as
+    the kernel's own comparison does.
+    """
+    classes: Counter = Counter()
+    for item in signature:
+        kind, weight, orientation = signature_entry_class(item)
+        bundle = _BUNDLE.fullmatch(weight) if modulo_bundles else None
+        if bundle is None:
+            classes[(kind, weight, orientation)] += 1
+        else:
+            classes[(kind, "single", orientation)] += int(bundle.group(1))
+    return classes
+
+
+def signature_entry_class(item: str) -> tuple[str, str, str]:
+    """Classify one boundary-signature entry, dropping only its page face.
+
+    An entry is ``kind:face`` followed by the optional fields the index
+    itself carries: a strand weight, and the orientation of a directed
+    index (``to`` when it leaves the panel, ``from`` when it enters).  A
+    rotated panel cuts its indices on other faces of its frame, so the face
+    is not compared; weight and orientation are the index's own and are.
+    """
+    parts = [part.strip() for part in item.split(":")]
+    kind = parts[0]
+    if kind in {"edge", "open"}:
+        kind = "virtual"
+    rest = parts[2:]
+    orientation = next((part for part in rest if part in _ORIENTATIONS), "none")
+    weight = next((part for part in rest if part not in _ORIENTATIONS), "single")
+    return kind, re.sub(r"\s*=\s*", "=", weight), orientation
 
 
 def same_equation(sep: str) -> bool:

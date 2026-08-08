@@ -101,6 +101,49 @@ tex_api = "breaking-change"
 tnlog = "breaking-versioned"
 ```
 
+## Equation grouping
+
+A boundary signature is checkable only against another boundary signature,
+so the enforceable unit is not the picture but the group of pictures one
+equation relates. tenkz has exactly one such group: the `tenkzeq`
+environment, whose relation glyphs delimit the sides and whose juxtaposed
+panels form a product term (`LANGUAGE-1.0.md` §7). The environment writes its
+number into every panel's `picture` record and one `check` record for every
+joiner it resolves, so a reader of the event stream alone knows which
+pictures an author asserted equal and which comparisons were performed. That
+is what makes the group enforceable: a mismatch inside one is a hard finding
+of the stream, needing no source file and no reading of the mathematics
+between the panels.
+
+Two other spellings were considered and are rejected.
+
+A shared **`equation=<id>` picture key** would let any pictures anywhere in a
+document declare themselves one group. It is rejected because it separates
+the assertion from the thing asserted. The claim an equation makes is made by
+the relation glyph standing between two panels; an identifier repeated on
+scattered pictures restates that claim in a second place, where it can go
+stale, contradict the typeset mathematics, or group panels no reader sees
+side by side. It also gives the author two ways to spell one concept, which
+the grammar's one-concept-one-spelling rule forbids, and it cannot express
+the product joiner at all: an identifier says which pictures belong together
+but not in which order they contract.
+
+**Automatic grouping of consecutive pictures in one display**, inferred from
+the order pictures appear in the event stream, needs no spelling at all. It is
+rejected because the event stream records no displays. A picture's position in
+the stream is the order TeX shipped it, which merges the panels of a display
+with pictures from surrounding prose, from a float, from a footnote, and from
+the same paragraph; nothing in the stream separates them. Recovering the
+display would mean parsing the source beside the log and guessing which
+separator is a relation — precisely the heuristic that made the old sibling
+check advisory. Inference cannot be made hard, because the author never
+declared anything for it to be hard about.
+
+The audit keeps that heuristic, downgraded to what it is. Two consecutive
+pictures joined by a source `=` outside every group raise the advisory
+`eq-sibling-mismatch`: not a defect in the diagram but a picture pair still
+to be moved into the scope. The hard rules apply inside the group only.
+
 ## Compatibility ownership
 
 tenkz has two public surfaces. A release decision names both; compatibility on

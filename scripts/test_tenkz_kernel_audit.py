@@ -21,6 +21,10 @@ string|id=b|kind=open|pts=2
 string|id=c|kind=wind|pts=2
 string|id=d|kind=around|pts=2
 stringcross|under=b|over=a|hits=1
+picture|id=k2|lang=kernel|scope=1
+atom|id=atom-2|cell=1-2|kind=tn
+mark|id=mark-4|form=label
+kernel-boundary|signature=open:e, open:w
 check|scope=1|relation=1|result=equal|signature=open:e, open:w
 """
 
@@ -43,6 +47,7 @@ def audit_log(log: str, source: str | None = None) -> Audit:
         audit.check_kernel_checks()
         audit.check_bbox_coverage()
         audit.check_label_overlaps()
+        audit.check_equation_groups()
         audit.check_equation_boundaries()
         return audit
 
@@ -80,10 +85,15 @@ def main() -> int:
         GOOD_LOG + tree_event,
         r"\tntree{(a\,b)_c}"
         "\n"
+        r"\begin{tenkz}[rows={wire}]\tn{}\end{tenkz}"
+        "\n"
         r"\begin{tenkz}[rows={wire}]\tn{}\end{tenkz}",
     )
     assert mixed_tree.tex_linked
-    assert [construct.name for construct in mixed_tree.constructs] == ["tenkz"]
+    assert [construct.name for construct in mixed_tree.constructs] == [
+        "tenkz",
+        "tenkz",
+    ]
     assert not {
         finding.rule for finding in mixed_tree.findings
     } & {"stale-log", "tex-unlinked"}
@@ -176,10 +186,10 @@ kernel-boundary|signature=phys:up
     equation = audit_log(equation_log, equation_source)
     equation_mismatches = [
         finding for finding in equation.findings
-        if finding.rule == "eq-boundary-mismatch"
+        if finding.rule == "eq-sibling-mismatch"
     ]
     assert len(equation_mismatches) == 1, equation.findings
-    assert equation_mismatches[0].severity == "HARD", equation_mismatches
+    assert equation_mismatches[0].severity == "ADV", equation_mismatches
 
     matching_physical_equation = audit_log(
         equation_log.replace(
@@ -188,7 +198,7 @@ kernel-boundary|signature=phys:up
         ),
         equation_source,
     )
-    assert "eq-boundary-mismatch" not in [
+    assert "eq-sibling-mismatch" not in [
         finding.rule for finding in matching_physical_equation.findings
     ]
 
@@ -196,7 +206,7 @@ kernel-boundary|signature=phys:up
         equation_log.replace("open:w", "edge:n").replace("phys:up", "edge:e"),
         equation_source,
     )
-    assert "eq-boundary-mismatch" not in [
+    assert "eq-sibling-mismatch" not in [
         finding.rule for finding in rotated_open_equation.findings
     ]
 
@@ -204,7 +214,7 @@ kernel-boundary|signature=phys:up
         equation_log.replace("phys:up", "edge:e"),
         equation_source,
     )
-    assert "eq-boundary-mismatch" not in [
+    assert "eq-sibling-mismatch" not in [
         finding.rule for finding in mixed_virtual_equation.findings
     ]
 
@@ -216,10 +226,10 @@ kernel-boundary|signature=phys:up
     )
     weighted_mismatches = [
         finding for finding in weighted_open_equation.findings
-        if finding.rule == "eq-boundary-mismatch"
+        if finding.rule == "eq-sibling-mismatch"
     ]
     assert len(weighted_mismatches) == 1, weighted_open_equation.findings
-    assert weighted_mismatches[0].severity == "HARD", weighted_mismatches
+    assert weighted_mismatches[0].severity == "ADV", weighted_mismatches
 
     equivalent_bundle_equation = audit_log(
         equation_log.replace("open:w", "edge:n:bundle=3").replace(
@@ -227,7 +237,7 @@ kernel-boundary|signature=phys:up
         ),
         equation_source,
     )
-    assert "eq-boundary-mismatch" not in [
+    assert "eq-sibling-mismatch" not in [
         finding.rule for finding in equivalent_bundle_equation.findings
     ]
 
@@ -237,7 +247,7 @@ kernel-boundary|signature=phys:up
         ),
         equation_source,
     )
-    assert "eq-boundary-mismatch" in [
+    assert "eq-sibling-mismatch" in [
         finding.rule for finding in different_bundle_equation.findings
     ]
 
@@ -250,9 +260,12 @@ kernel-boundary|signature=phys:up
     )
     checked_equation_log = (
         equation_log.replace("|lang=kernel", "|lang=kernel|scope=1")
-        .replace("open:w", "edge:w:bundle=3")
-        .replace("phys:up", "open:e")
-        + "check|scope=1|relation=1|result=equal|modulo=bundles|signature=edge:e\n"
+        .replace("kernel-boundary|signature=open:w",
+                 "kernel-boundary|signature=edge:w:bundle=3")
+        .replace("kernel-boundary|signature=phys:up",
+                 "kernel-boundary|signature=open:e, open:e, open:e")
+        + "check|scope=1|relation=1|result=equal|modulo=bundles"
+          "|signature=edge:e, edge:e, edge:e\n"
     )
     checked_equation = audit_log(checked_equation_log, checked_equation_source)
     assert "eq-boundary-mismatch" not in [
@@ -374,7 +387,9 @@ kernel-boundary|signature=phys:up
         finding.rule for finding in invalid_picture_scope.findings
     ]
     assert "malformed-event" in invalid_picture_rules
-    assert "eq-boundary-mismatch" in invalid_picture_rules
+    # The surviving panels land in two different scopes, so neither scope
+    # closes its arithmetic and the group is read as unchecked.
+    assert "eq-unchecked" in invalid_picture_rules
 
     for picture_reference in ("oops", "k1"):
         picture_owned_check = audit_log(
