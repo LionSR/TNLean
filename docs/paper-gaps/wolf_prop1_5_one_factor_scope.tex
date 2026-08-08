@@ -6,7 +6,7 @@
 
 \input{command}
 
-\title{Wolf Proposition~1.5: One-Factor Scope Restriction}
+\title{Wolf Proposition~1.5: Factor and Coordinate Direct-Sum Scope Restrictions}
 \author{}
 \date{2026-07-18}
 
@@ -42,6 +42,21 @@ source proposition.  In particular, the representing matrix is only required
 to be positive semidefinite and to have trace one.  Thus the theorem is a
 faithful scope-restricted case, but it is not the full direct-sum
 classification of Proposition~1.5.
+
+The theorem
+\leanid{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
+constructs the normalized trace-preserving choice simultaneously on all
+summands in displayed direct-sum coordinates.  In the tensor-factor order used
+by TNLean, its range is
+\[
+    \bigoplus_{k=1}^{K}\mathbf 1_{m_k}\otimes M_{d_k}(\mathbb C),
+\]
+and its formula is obtained from Wolf's order by interchanging the two tensor
+factors.  This theorem includes the coordinatewise partial traces and removal
+of off-diagonal blocks, but it neither conjugates an arbitrary represented
+subalgebra into these coordinates nor corestricts the ambient matrix-valued map
+to that subalgebra.  It is therefore a coordinate construction, not the full
+unitarily transported statement of Proposition~1.5.
 
 \section{Resolution of the direct-sum argument}
 
