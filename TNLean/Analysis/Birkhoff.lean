@@ -26,7 +26,7 @@ namespace TNLean
 The set of `d × d` doubly stochastic matrices over `ℝ` equals the convex
 hull of the `d × d` permutation matrices.
 -/
-theorem wolf_birkhoff_doublyStochastic_convexHull {d : ℕ} :
+theorem wolf_birkhoff_doubly_stochastic_convex_hull {d : ℕ} :
     (doublyStochastic ℝ (Fin d) : Set (Matrix (Fin d) (Fin d) ℝ)) =
       convexHull ℝ {σ.permMatrix ℝ | σ : Equiv.Perm (Fin d)} :=
   _root_.doublyStochastic_eq_convexHull_permMatrix
@@ -37,7 +37,7 @@ theorem wolf_birkhoff_doublyStochastic_convexHull {d : ℕ} :
 The extreme points of the set of `d × d` doubly stochastic matrices over
 `ℝ` are exactly the `d × d` permutation matrices.
 -/
-theorem wolf_birkhoff_extremePoints_doublyStochastic {d : ℕ} :
+theorem wolf_birkhoff_extreme_points_doubly_stochastic {d : ℕ} :
     Set.extremePoints ℝ ((doublyStochastic ℝ (Fin d) : Set (Matrix (Fin d) (Fin d) ℝ))) =
       {σ.permMatrix ℝ | σ : Equiv.Perm (Fin d)} :=
   _root_.extremePoints_doublyStochastic

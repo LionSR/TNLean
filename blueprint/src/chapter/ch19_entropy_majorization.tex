@@ -1,18 +1,16 @@
 %% =========================================================
-%% Majorization and Birkhoff's theorem
-%% Doubly-stochastic half.
+%% Birkhoff's theorem --- doubly-stochastic half
 %% =========================================================
 
-\section{Majorization}
+\section{Birkhoff's theorem}
 
-Majorization is a preorder on real vectors that captures when one
-probability distribution is more ``mixed'' than another.
-Its convex-geometric foundation is Birkhoff's theorem.
+Birkhoff's theorem characterizes the convex geometry of doubly
+stochastic matrices.
 
 \begin{theorem}[Birkhoff]
     \label{thm:birkhoff_doubly_stochastic}
-    \lean{TNLean.wolf_birkhoff_doublyStochastic_convexHull}
-    \lean{TNLean.wolf_birkhoff_extremePoints_doublyStochastic}
+    \lean{TNLean.wolf_birkhoff_doubly_stochastic_convex_hull}
+    \lean{TNLean.wolf_birkhoff_extreme_points_doubly_stochastic}
     \leanok
     The set of doubly stochastic matrices in $M_d(\R)$ is the convex
     hull of the $d\times d$ permutation matrices, and its extreme
