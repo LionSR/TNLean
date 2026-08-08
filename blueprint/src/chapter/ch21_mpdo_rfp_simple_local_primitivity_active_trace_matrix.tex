@@ -307,9 +307,9 @@
     zero-weight reparameterized inverse-map factorization. There are coherent
     sector phases for which all neighboring operators are positive semidefinite
     and the active one-site matrices span $\MN{D}$. Every active sector contains
-    a nonzero virtual matrix, every nonzero neighboring edge closes through a
-    third active sector, every inactive left tensor vanishes, and $I_*$ is
-    nonempty.
+    a nonzero virtual matrix, every virtual matrix in a zero-weight sector
+    vanishes, every nonzero neighboring edge closes through a third active
+    sector, every inactive left tensor vanishes, and $I_*$ is nonempty.
 \end{theorem}
 
 \begin{proof}
@@ -404,14 +404,17 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_inverse_map_active_sector_witnesses,
-      thm:mpdo_active_sector_three_step_return_and_primitivity}
+      thm:mpdo_active_sector_three_step_return_and_primitivity,
+      lem:mpo_source_zcl_normalized_idempotent}
     Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} gives one
     rephased factorization with positive neighboring operators and vanishing
     left tensors on the zero-weight sectors. Apply
     Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
-    obtain primitivity of its active trace matrix. Source zero correlation
-    length then gives a positive normalization of this same matrix satisfying
-    the square--cube identity and the positive-power trace identities.
+    obtain primitivity of its active trace matrix.
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent} supplies normalized
+    idempotence of the physical-trace transfer, from which the same active trace
+    matrix satisfies the square--cube identity and the positive-power trace
+    identities.
 \end{proof}
 
 \begin{theorem}[Virtual spanning does not force active-sector idempotence]
