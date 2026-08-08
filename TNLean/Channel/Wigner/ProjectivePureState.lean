@@ -18,7 +18,7 @@ and semilinear `Projectivization.map`, but it does not yet provide the
 `TransitionProbability`, projective unitary, coordinate-conjugation, or Wigner
 rigidity modules available in the separately staged `zblore/csd-lean4`
 development. Accordingly, this module supplies only the finite-coordinate
-matrix bridge and its two elementary actions; it does not restate or prove
+ray-to-matrix identification and its two elementary actions; it does not restate or prove
 Wigner rigidity.
 
 ## Main declarations
@@ -42,7 +42,7 @@ variable {d : ℕ}
 /-- The normalized rank-one matrix
 $|v\rangle\langle v|/\langle v,v\rangle$ of a vector. It is defined at
 zero by the ambient field's inverse-of-zero convention, while the projective
-bridge uses it only for nonzero representatives. -/
+identification uses it only for nonzero representatives. -/
 noncomputable def normalizedPureStateMatrix (v : Fin d → ℂ) : Matrix (Fin d) (Fin d) ℂ :=
   (star v ⬝ᵥ v)⁻¹ • Matrix.vecMulVec v (star v)
 private theorem normalizedPureStateMatrix_smul (v : Fin d → ℂ) (c : ℂ) (hc : c ≠ 0) :

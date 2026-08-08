@@ -1037,8 +1037,7 @@ $v$ is multiplied by a nonzero scalar.
     \label{def:projective_transition_probability}
     \lean{Projectivization.transitionProbability}
     \leanok
-    For each ray $p$, let $p^{\mathrm{rep}}$ denote the nonzero representative
-    selected by the projectivization. Define
+    For each ray $p$, fix a nonzero representative $p^{\mathrm{rep}}$. Define
     \begin{align}
         \operatorname{tp}(p,q)
         =\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
@@ -1078,8 +1077,15 @@ $v$ is multiplied by a nonzero scalar.
     The rank-one identity
     $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ gives idempotence,
     while taking the adjoint gives Hermiticity. The trace of
-    $\ketbra{v}{v}$ is $\langle v,v\rangle$. Multiplying two rank-one
-    matrices and taking the trace gives the normalized squared overlap.
+    $\ketbra{v}{v}$ is $\langle v,v\rangle$, and
+    \begin{align}
+        \tr(P_pP_q)
+        &=\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}
+        =\operatorname{tp}(p,q).
+    \end{align}
     Equality $P_p=P_q$ implies that a representative of one ray is a
     nonzero scalar multiple of a representative of the other. Finally,
     matrix multiplication sends $\ketbra{v}{v}$ to
@@ -1104,9 +1110,15 @@ $v$ is multiplied by a nonzero scalar.
     \uses{def:projective_pure_state_matrix,
       thm:projective_pure_state_bridge}
     By the trace-product identity above,
-    $\operatorname{tp}([v],[w])=\tr(P_{[v]}P_{[w]})$. Substituting the
-    normalized outer products, multiplying the two rank-one matrices, and
-    taking the trace gives the displayed quotient.
+    $\operatorname{tp}([v],[w])=\tr(P_{[v]}P_{[w]})$. Moreover,
+    \begin{align}
+        \tr(P_{[v]}P_{[w]})
+        &=\frac{\tr(\ketbra{v}{v}\ketbra{w}{w})}
+          {\langle v,v\rangle\langle w,w\rangle}
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+          {\langle v,v\rangle\langle w,w\rangle},
+    \end{align}
+    which gives the displayed quotient.
 \end{proof}
 
 \begin{theorem}[Wigner's theorem]\label{thm:wigner}
