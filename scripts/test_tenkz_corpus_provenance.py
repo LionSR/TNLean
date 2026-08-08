@@ -102,7 +102,6 @@ def test_ink_environment_owner() -> None:
     log = "\n".join(
         (
             "picture|id=1|lang=grid",
-            "picture|id=3|lang=free",
             "picture|id=4|lang=lattice",
             "picture|id=5|lang=lattice",
             "surface|picture=5|name=tenkzplanes",
@@ -116,7 +115,6 @@ def test_ink_environment_owner() -> None:
     used = rendered_ink_environment_families(parsed)
     expected = {
         "tenkz",
-        "tenkzfree",
         "tenkzlattice",
         "tenkzplanes",
         "kernel",
@@ -152,7 +150,7 @@ def test_ink_environment_owner() -> None:
                 + "; ".join(finding.msg for finding in mismatches)
             )
     ink = (
-        "Canonical tenkz, tenkzfree, tenkzlattice, tenkzplanes, "
+        "Canonical tenkz, tenkzlattice, tenkzplanes, "
         "and kernel."
     )
     if ink_environment_problems("good", ink, used):
@@ -166,9 +164,9 @@ def test_ink_environment_owner() -> None:
     if tree_used != {"tenkz"}:
         raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
     mismatch = ink_environment_problems(
-        "wrong", "Canonical tenkzfree environment.", {"kernel"}
+        "wrong", "Canonical tenkzlattice environment.", {"kernel"}
     )
-    if not any("Ink names tenkzfree" in problem for problem in mismatch):
+    if not any("Ink names tenkzlattice" in problem for problem in mismatch):
         raise AssertionError("stale Ink family was accepted")
     if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
         raise AssertionError("compiled kernel owner was omitted")
@@ -278,8 +276,8 @@ def test_rmp_dimension_ownership() -> None:
         )
     synthetic = r"""% pitch=14mm remains visible to the comment audit
 \begin{tenkz}[pitch=11mm]
-  \tnput{a}{(1mm,2mm)}{}
-  \tnjoin[via={(3mm,4mm)}]{a}{5mm,6mm}
+  \tnwire{a}{(1mm,2mm)}
+  \tnwire[via={(3mm,4mm)}]{a}{5mm,6mm}
 \end{tenkz}
 \begin{tenkzlattice}[sheet vector={0mm,2.5mm}]\end{tenkzlattice}
 """
@@ -291,8 +289,7 @@ def test_rmp_dimension_ownership() -> None:
         {
             DimensionOwner.METRIC: 1,
             DimensionOwner.FRAME: 2,
-            DimensionOwner.ROUTE: 4,
-            DimensionOwner.LAYOUT: 2,
+            DimensionOwner.ROUTE: 6,
         }
     ):
         raise AssertionError(
@@ -303,10 +300,10 @@ def test_rmp_dimension_ownership() -> None:
 
     absolute_units = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnput{x}{(1 in, 1truept, 1 true pt, 1 true in)}{}",
+        r"\tnwire{x}{(1 in, 1truept, 1 true pt, 1 true in)}",
     )
     if len(absolute_units) != 4 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in absolute_units
     ):
         raise AssertionError(
@@ -314,7 +311,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     command_adjacent_units = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnput{x}{(\kern1mm,1MM,1Mm,\kern1mmfoo)}{}",
+        r"\tnwire{x}{(\kern1mm,1MM,1Mm,\kern1mmfoo)}",
     )
     if [occurrence.literal for occurrence in command_adjacent_units] != [
         "1mm",
@@ -322,7 +319,7 @@ def test_rmp_dimension_ownership() -> None:
         "1Mm",
         "1mm",
     ] or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in command_adjacent_units
     ):
         raise AssertionError(
@@ -331,13 +328,13 @@ def test_rmp_dimension_ownership() -> None:
         )
     command_arity_cases = (
         (
-            r"\tnput{a}{(3mm,0)}{\rule{4pt}{5pt}}{\hspace{6mm}}",
-            DimensionOwner.LAYOUT,
-            ("3mm", "4pt", "5pt"),
+            r"\tnedge{(3mm,0)}{\hspace{6mm}}",
+            DimensionOwner.ROUTE,
+            ("3mm",),
             "6mm",
         ),
         (
-            r"\tnjoin[label={\rule{11pt}{12pt}}]{0mm,0}{13mm,0}"
+            r"\tnwire[name={\rule{11pt}{12pt}}]{0mm,0}{13mm,0}"
             r"{\hspace{14mm}}",
             DimensionOwner.ROUTE,
             ("11pt", "12pt", "0mm", "13mm"),
@@ -384,7 +381,7 @@ def test_rmp_dimension_ownership() -> None:
                 f"source={source!r}, occurrences={occurrences!r}"
             )
     escaped_command_units = scan_case_dimensions(
-        Path("synthetic.tex"), r"\\tnput{x}{(1mm,0)}{}"
+        Path("synthetic.tex"), r"\\tnwire{x}{(1mm,0)}"
     )
     if (
         len(escaped_command_units) != 1
@@ -395,11 +392,11 @@ def test_rmp_dimension_ownership() -> None:
             f"{escaped_command_units!r}"
         )
     active_after_escape_units = scan_case_dimensions(
-        Path("synthetic.tex"), r"\\\tnput{x}{(2mm,0)}{}"
+        Path("synthetic.tex"), r"\\\tnwire{x}{(2mm,0)}"
     )
     if (
         len(active_after_escape_units) != 1
-        or active_after_escape_units[0].owner is not DimensionOwner.LAYOUT
+        or active_after_escape_units[0].owner is not DimensionOwner.ROUTE
     ):
         raise AssertionError(
             "an active command after an escaped backslash lost ownership: "
@@ -407,10 +404,10 @@ def test_rmp_dimension_ownership() -> None:
         )
     label_option_text = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnput{x}{(0,0)}{pitch=1mm, row vector={2mm,3mm}}",
+        r"\tnwire{x}{pitch=1mm, row vector={2mm,3mm}}",
     )
     if len(label_option_text) != 3 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in label_option_text
     ):
         raise AssertionError(
@@ -519,7 +516,7 @@ def test_rmp_dimension_ownership() -> None:
             )
     unclosed_public_argument = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{x \tnpic[pitch=41mm \tnput{x}{(42mm,0)}{} "
+        r"\tnedge{x \tnpic[pitch=41mm \tnwire{x}{(42mm,0)} "
         r"\rule{43mm}{44mm}}",
     )
     if len(unclosed_public_argument) != 4 or any(
@@ -530,9 +527,9 @@ def test_rmp_dimension_ownership() -> None:
             f"{unclosed_public_argument!r}"
         )
     for malformed_nested_source in (
-        r"\tnpic{51mm \tnput{x}{(52mm,0)}{}",
+        r"\tnpic{51mm \tnwire{x}{(52mm,0)}",
         r"\tndeclareatom{\tnmalformed}{skin=dot}"
-        r"\tnmalformed[label shift=53mm \tnput{x}{(54mm,0)}{}",
+        r"\tnmalformed[label shift=53mm \tnwire{x}{(54mm,0)}",
     ):
         malformed_nested = scan_case_dimensions(
             Path("synthetic.tex"), malformed_nested_source
@@ -569,11 +566,11 @@ def test_rmp_dimension_ownership() -> None:
             "route",
             r"\tnedge{",
             "}",
-            r"\tnput{x}{(DIM,0)}{}",
+            r"\tnwire{x}{(DIM,0)}",
         ),
         (
             "layout",
-            r"\tnput{x}{(0,0)}{",
+            r"\tnwire{x}{(0,0)}{",
             "}",
             r"\tnedge{DIM}",
         ),
@@ -685,11 +682,11 @@ def test_rmp_dimension_ownership() -> None:
             )
         inert_owners = definition_template.replace(
             "TOKEN",
-            r"\tnset{pitch=203mm}\tnput{x}{(204mm,0)}{}",
+            r"\tnset{pitch=203mm}\tnwire{x}{(204mm,0)}",
         )
         occurrences = scan_case_dimensions(
             Path("synthetic.tex"),
-            inert_owners + r"\tnedge{\tnput{x}{(205mm,0)}{}}",
+            inert_owners + r"\tnedge{\tnwire{x}{(205mm,0)}}",
         )
         if [
             (occurrence.literal, occurrence.owner)
@@ -697,7 +694,7 @@ def test_rmp_dimension_ownership() -> None:
         ] != [
             ("203mm", None),
             ("204mm", None),
-            ("205mm", DimensionOwner.LAYOUT),
+            ("205mm", DimensionOwner.ROUTE),
         ]:
             raise AssertionError(
                 "stored public syntax gained ownership or masked active input: "
@@ -873,7 +870,7 @@ def test_rmp_dimension_ownership() -> None:
             )
         unmatched_source = (
             rf"\tnedge{{{{\{primitive}\x}}"
-            r"\tnput{x}{(207mm,0)}{}}}"
+            r"\tnwire{x}{(207mm,0)}}}"
         )
         definition_start = unmatched_source.index(rf"\{primitive}")
         replacement_spans = _macro_replacement_spans(
@@ -896,7 +893,7 @@ def test_rmp_dimension_ownership() -> None:
                 f"primitive={primitive}, occurrences={unmatched_primitive!r}"
             )
     unclosed_environment_end = scan_case_dimensions(
-        Path("synthetic.tex"), r"\end{tenkz \tnput{x}{(79mm,0)}{}"
+        Path("synthetic.tex"), r"\end{tenkz \tnwire{x}{(79mm,0)}"
     )
     if len(unclosed_environment_end) != 1 or unclosed_environment_end[0].owner is not None:
         raise AssertionError(
@@ -1003,7 +1000,7 @@ def test_rmp_dimension_ownership() -> None:
     unbraced_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo\tnput{x}{(121mm,0)}{}}",
+        r"\tnedge{\tnfoo\tnwire{x}{(121mm,0)}}",
     )
     if len(unbraced_dynamic_label) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1078,10 +1075,10 @@ def test_rmp_dimension_ownership() -> None:
     definition_in_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\def\x}\tnput{x}{(131mm,0)}{}}",
+        r"\tnedge{\tnfoo{\def\x}\tnwire{x}{(131mm,0)}}",
     )
     if len(definition_in_dynamic_label) != 1 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in definition_in_dynamic_label
     ):
         raise AssertionError(
@@ -1091,15 +1088,15 @@ def test_rmp_dimension_ownership() -> None:
     active_definition_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\def\x{\tnput{x}{(132mm,0)}{}}"
-        r"\tnput{x}{(133mm,0)}{}}",
+        r"\tnedge{\tnfoo A\def\x{\tnwire{x}{(132mm,0)}}"
+        r"\tnwire{x}{(133mm,0)}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
         for occurrence in active_definition_sibling
     ] != [
         ("132mm", None),
-        ("133mm", DimensionOwner.LAYOUT),
+        ("133mm", DimensionOwner.ROUTE),
     ]:
         raise AssertionError(
             "a dynamic label masked a later active definition or command: "
@@ -1108,10 +1105,10 @@ def test_rmp_dimension_ownership() -> None:
     inert_dynamic_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\def\x{\tndeclareatom{\tnfoo}{skin=dot}}"
-        r"\tnedge{\tnfoo{\tnput{x}{(201mm,0)}{}}}",
+        r"\tnedge{\tnfoo{\tnwire{x}{(201mm,0)}}}",
     )
     if len(inert_dynamic_declaration) != 1 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in inert_dynamic_declaration
     ):
         raise AssertionError(
@@ -1121,7 +1118,7 @@ def test_rmp_dimension_ownership() -> None:
     active_dynamic_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\tnput{x}{(202mm,0)}{}}}",
+        r"\tnedge{\tnfoo{\tnwire{x}{(202mm,0)}}}",
     )
     if len(active_dynamic_declaration) != 1 or any(
         occurrence.owner is not None
@@ -1135,10 +1132,10 @@ def test_rmp_dimension_ownership() -> None:
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
         r"\tnedge{\tnfoo{\tndeclareatom{\tnbar}{skin=dot}}"
-        r"\tnbar{\tnput{x}{(203mm,0)}{}}}",
+        r"\tnbar{\tnwire{x}{(203mm,0)}}}",
     )
     if len(declaration_in_dynamic_label) != 1 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in declaration_in_dynamic_label
     ):
         raise AssertionError(
@@ -1149,7 +1146,7 @@ def test_rmp_dimension_ownership() -> None:
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
         r"\tnedge{\tnfoo A\tndeclareatom{\tnbar}{skin=dot}"
-        r"\tnbar{\tnput{x}{(204mm,0)}{}}}",
+        r"\tnbar{\tnwire{x}{(204mm,0)}}}",
     )
     if len(active_declaration_sibling) != 1 or any(
         occurrence.owner is not None
@@ -1164,7 +1161,7 @@ def test_rmp_dimension_ownership() -> None:
         r"\def\holder{\tndeclareatom{\foo}{skin=dot}}"
         r"\tndeclareatom{\bar}{skin=dot}"
         r"\foo\bar{\def\x}\tndeclareatom{\baz}{skin=dot}"
-        r"\tnedge{\baz\tnput{x}{(205mm,0)}{}}",
+        r"\tnedge{\baz\tnwire{x}{(205mm,0)}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -1191,10 +1188,10 @@ def test_rmp_dimension_ownership() -> None:
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{A}{\tnput{x}{(124mm,0)}{}}}",
+        r"\tnedge{\tnfoo{A}{\tnwire{x}{(124mm,0)}}}",
     )
     if len(braced_dynamic_sibling) != 1 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in braced_dynamic_sibling
     ):
         raise AssertionError(
@@ -1204,10 +1201,10 @@ def test_rmp_dimension_ownership() -> None:
     later_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\tnput{x}{(122mm,0)}{}}",
+        r"\tnedge{\tnfoo A\tnwire{x}{(122mm,0)}}",
     )
     if len(later_dynamic_sibling) != 1 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in later_dynamic_sibling
     ):
         raise AssertionError(
@@ -1217,7 +1214,7 @@ def test_rmp_dimension_ownership() -> None:
     grouped_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\tnput{x}{(123mm,0)}{}}}",
+        r"\tnedge{\tnfoo{\tnwire{x}{(123mm,0)}}}",
     )
     if len(grouped_dynamic_label) != 1 or any(
         occurrence.owner is not None for occurrence in grouped_dynamic_label
@@ -1317,8 +1314,8 @@ def test_rmp_dimension_ownership() -> None:
         )
     colliding_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tndeclareatom{\tnjoin}{skin=dot}"
-        r"\tnjoin[label shift={62mm,63mm}]{a}{b}",
+        r"\tndeclareatom{\tnwire}{skin=dot}"
+        r"\tnwire[label shift={62mm,63mm}]{a}{b}",
     )
     if len(colliding_atom_declaration) != 2 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1480,7 +1477,6 @@ def test_rmp_dimension_ownership() -> None:
             )
     for environment in (
         "tenkz",
-        "tenkzfree",
         "tenkzlattice",
         "tenkzplanes",
         "tenkzeq",
@@ -1548,7 +1544,7 @@ kz}}
             "a comment-spliced environment lost its neutral boundary: "
             f"{spliced_environment!r}"
         )
-    for spaced_name in ("ten kz", "tenkz free", " tenkz", "ten\nkz"):
+    for spaced_name in ("ten kz", "tenkz lattice", " tenkz", "ten\nkz"):
         spaced_environment = scan_case_dimensions(
             Path("synthetic.tex"),
             rf"\tnedge{{\begin{{{spaced_name}}}[pitch=90mm]"
@@ -1646,10 +1642,10 @@ ch=21mm,inline]{\\tn{A}}}
             "a comment-split picture control word gained option ownership: "
             f"{split_picture!r}"
         )
-    comment_spliced_source = """\\tnput{x}{(1% join the number and unit
+    comment_spliced_source = """\\tnwire{x}{(1% join the number and unit
  mm,2m% join the unit letters
  m,3tr% join the true prefix
- ue pt)}{}
+ ue pt)}
 """
     comment_spliced_units = scan_case_dimensions(
         Path("synthetic.tex"), comment_spliced_source
@@ -1664,14 +1660,14 @@ ch=21mm,inline]{\\tn{A}}}
         for occurrence in comment_spliced_units
     ] != expected_spliced or any(
         occurrence.in_comment
-        or occurrence.owner is not DimensionOwner.LAYOUT
+        or occurrence.owner is not DimensionOwner.ROUTE
         for occurrence in comment_spliced_units
     ):
         raise AssertionError(
             "comment-spliced active dimensions lost their source locations: "
             f"{comment_spliced_units!r}"
         )
-    split_owner_source = "\\tn% terminate the control word\nput{x}{1mm}{}\n"
+    split_owner_source = "\\tn% terminate the control word\nwire{x}{1mm}\n"
     split_owner = scan_case_dimensions(Path("synthetic.tex"), split_owner_source)
     if (
         len(split_owner) != 1
@@ -1683,8 +1679,8 @@ ch=21mm,inline]{\\tn{A}}}
             f"a comment-split control word gained dimension ownership: {split_owner!r}"
         )
     for extended_comment_command in (
-        "% \\tnput_extra 47mm\n",
-        "% \\tnjoin@extra 48mm\n",
+        "% \\tnwire_extra 47mm\n",
+        "% \\tnwire@extra 48mm\n",
         "% \\tnwire:extra 49mm\n",
         "% \\tnedgeλ 50mm\n",
     ):
@@ -1784,7 +1780,7 @@ ch=21mm,inline]{\\tn{A}}}
                 f"{governed_comment_inch!r}"
             )
     for source in (
-        r"% \tnjoin path is 1 in from the origin" "\n",
+        r"% \tnwire path is 1 in from the origin" "\n",
         "% routes 2 in long\n",
         "% the distances 5 in apart\n",
     ):
@@ -1801,7 +1797,7 @@ ch=21mm,inline]{\\tn{A}}}
             f"ownerless comment inch escaped: {ownerless_comment_inch!r}"
         )
     active_inch = scan_case_dimensions(
-        Path("synthetic.tex"), r"\tnput{x}{(1 in plus 2pt,0)}{}"
+        Path("synthetic.tex"), r"\tnwire{x}{(1 in plus 2pt,0)}"
     )
     if [occurrence.literal for occurrence in active_inch] != ["1 in", "2pt"]:
         raise AssertionError(f"active spaced inch escaped: {active_inch!r}")
@@ -1858,7 +1854,7 @@ ch=21mm,inline]{\\tn{A}}}
             r"\end{tenkzlattice}",
             "projection/frame dimensions increased",
         ),
-        (r"\tnjoin{a}{1mm}", "route/string dimensions increased to 1"),
+        (r"\tnwire{a}{1mm}", "route/string dimensions increased to 1"),
     ):
         mutation = scan_case_dimensions(Path("synthetic.tex"), source)
         _expect_dimension_failure(

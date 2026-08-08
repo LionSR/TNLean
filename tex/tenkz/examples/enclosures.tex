@@ -6,8 +6,6 @@
 % pairs, a two-site capability, and two three-site blocked rows.  The cited
 % source for TNMPDOTwoSiteBlocking draws no enclosure, so this file exercises
 % the general two-site capability without assigning that extra ink to it.
-% K7: a region encloses the measured ink of named free atoms and named joins.
-% Its boundary denotes a selected/grouped subgraph and introduces no index.
 \documentclass[border=6pt]{standalone}
 \usepackage{amsmath}
 \usepackage{tenkz}
@@ -44,29 +42,6 @@
   \tn{A_1}\tnspan[box, label pos=west]{3}{A'} & \tn{A_2} & \tn{A_3} \\
   \tn{C_1}\tnspan[box, label pos=east]{2}{C'} & \tn{C_2} &
 \end{tenkz}
-\]
-
-% The named joins j_0,j_1 carry summed virtual indices.  R is their selected
-% support together with U_0,U_1; P groups the rank-one bond object phi.
-\[
-\begin{tenkzfree}
-  \tnput[box, ports={south:virtual}]{u0}{(0,1.1)}{U_0}
-  \tnput[box, ports={south:virtual}]{u1}{(2.5,1.4)}{U_1}
-  \tnput[dot, ports={west:virtual,east:virtual},
-         label pos=south]{phi}{(1.2,-0.2)}{\varphi}
-  \tnjoin[name=j0, route=vh]{u0.south}{phi.west}
-  \tnjoin[name=j1, route=hv]{u1.south}{phi.east}
-  \tnregion[group, label={$P$}, label pos=south]{phi}
-  \tnregion[slot=selected, outline, label={$R$}, label pos=north,
-            name=R]{u0,u1,j0,j1}
-\end{tenkzfree}
-\qquad
-% Oblique, asymmetric atom labels are part of each measured member box.
-\begin{tenkzfree}
-  \tnput[dot, label pos=west]{a}{(0,0)}{A_{\alpha}}
-  \tnput[pill]{b}{(1.6,0.8)}{B^{\beta}}
-  \tnregion[slot=secondary, label={$S$}, label pos=north east]{a,b}
-\end{tenkzfree}
 \]
 
 % No-feature control: loading the enclosure implementation does not add ink to

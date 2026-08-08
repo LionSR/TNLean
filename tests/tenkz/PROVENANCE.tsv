@@ -1,7 +1,6 @@
 source_file	disposition	adopted_path	reason
 adv_brace.tex	standalone	tests/tenkz/adv_brace.tex	compiles, emits tnlog, and passes tenkz_audit
 adv_conj.tex	standalone	tests/tenkz/adv_conj.tex	compiles, emits tnlog, and passes tenkz_audit
-adv_leak.tex	standalone	tests/tenkz/adv_leak.tex	compiles, emits tnlog, and passes tenkz_audit
 atoms_test.tex	standalone	tests/tenkz/atoms_test.tex	compiles, emits tnlog, and passes tenkz_audit
 audit1.tex	standalone	tests/tenkz/audit1.tex	compiles, emits tnlog, and passes tenkz_audit
 audit2.tex	standalone	tests/tenkz/audit2.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -21,57 +20,38 @@ fig21d_cubic.tex	standalone	tests/tenkz/fig21d_cubic.tex	compiles, emits tnlog, 
 fig21d_cubic_v2.tex	standalone	tests/tenkz/fig21d_cubic_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 fig21d_expect.tex	standalone	tests/tenkz/fig21d_expect.tex	compiles, emits tnlog, and passes tenkz_audit
 fig21d_pepo.tex	standalone	tests/tenkz/fig21d_pepo.tex	compiles, emits tnlog, and passes tenkz_audit
-free.tex	standalone	tests/tenkz/free.tex	compiles, emits tnlog, and passes tenkz_audit
-free_modes.tex	standalone	tests/tenkz/free_modes.tex	compiles, emits tnlog, and passes tenkz_audit
-free_test.tex	standalone	tests/tenkz/free_test.tex	compiles, emits tnlog, and passes tenkz_audit
-free_typed_joins_ex.tex	standalone	tests/tenkz/free_typed_joins_ex.tex	compiles, emits tnlog, and passes tenkz_audit
 g06_stageA.tex	standalone	tests/tenkz/g06_stageA.tex	compiles, emits tnlog, and passes tenkz_audit
 g06_stageB.tex	standalone	tests/tenkz/g06_stageB.tex	compiles, emits tnlog, and passes tenkz_audit
-g06_stageC.tex	standalone	tests/tenkz/g06_stageC.tex	compiles, emits tnlog, and passes tenkz_audit
 geom.tex	standalone	tests/tenkz/geom.tex	compiles and passes audit with an intentionally empty tnlog (package-internal geometry probe)
-gr_t1_fusion.tex	standalone	tests/tenkz/gr_t1_fusion.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t2_fsymbol.tex	standalone	tests/tenkz/gr_t2_fsymbol.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t3_action.tex	standalone	tests/tenkz/gr_t3_action.tex	compiles, emits tnlog, and passes tenkz_audit
-gr_t4_lasso.tex	standalone	tests/tenkz/gr_t4_lasso.tex	compiles, emits tnlog, and passes tenkz_audit
 gr_t5_zipper.tex	standalone	tests/tenkz/gr_t5_zipper.tex	compiles, emits tnlog, and passes tenkz_audit
-gr_t6_leftinv.tex	standalone	tests/tenkz/gr_t6_leftinv.tex	compiles, emits tnlog, and passes tenkz_audit
-gr_t7_coset.tex	standalone	tests/tenkz/gr_t7_coset.tex	curated: shifts two gray boxes 4 mm right to clear k_x^-1; compiles and passes audit
 gr_t8_sum.tex	standalone	tests/tenkz/gr_t8_sum.tex	compiles, emits tnlog, and passes tenkz_audit
-hard01_ortho.tex	standalone	tests/tenkz/hard01_ortho.tex	compiles, emits tnlog, and passes tenkz_audit
 hard01_v2.tex	standalone	tests/tenkz/hard01_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard01_v3.tex	standalone	tests/tenkz/hard01_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard02_ALdef.tex	standalone	tests/tenkz/hard02_ALdef.tex	compiles, emits tnlog, and passes tenkz_audit
 hard02_v2.tex	standalone	tests/tenkz/hard02_v2.tex	compiles, emits tnlog, and passes tenkz_audit
-hard03_rdm.tex	standalone	tests/tenkz/hard03_rdm.tex	compiles, emits tnlog, and passes tenkz_audit
 hard03_v2.tex	standalone	tests/tenkz/hard03_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard03_v3.tex	standalone	tests/tenkz/hard03_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard04_eig.tex	standalone	tests/tenkz/hard04_eig.tex	compiles, emits tnlog, and passes tenkz_audit
 hard04_v2.tex	standalone	tests/tenkz/hard04_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard04_v3.tex	standalone	tests/tenkz/hard04_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard05_OL.tex	standalone	tests/tenkz/hard05_OL.tex	compiles, emits tnlog, and passes tenkz_audit
 hard05_v2.tex	standalone	tests/tenkz/hard05_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard05_v4.tex	standalone	tests/tenkz/hard05_v4.tex	compiles, emits tnlog, and passes tenkz_audit
-hard06_gauge2layer.tex	standalone	tests/tenkz/hard06_gauge2layer.tex	compiles, emits tnlog, and passes tenkz_audit
 hard06_v2.tex	standalone	tests/tenkz/hard06_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard06_v3.tex	standalone	tests/tenkz/hard06_v3.tex	compiles, emits tnlog, and passes tenkz_audit
 hard06_v4.tex	standalone	tests/tenkz/hard06_v4.tex	compiles, emits tnlog, and passes tenkz_audit
-hard07_peps.tex	standalone	tests/tenkz/hard07_peps.tex	compiles, emits tnlog, and passes tenkz_audit
 hard07_v2.tex	standalone	tests/tenkz/hard07_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard08_mpu.tex	standalone	tests/tenkz/hard08_mpu.tex	compiles, emits tnlog, and passes tenkz_audit
 hard08_v2.tex	standalone	tests/tenkz/hard08_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard08_v3.tex	standalone	tests/tenkz/hard08_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard09_pull.tex	standalone	tests/tenkz/hard09_pull.tex	compiles, emits tnlog, and passes tenkz_audit
 hard09_v2.tex	standalone	tests/tenkz/hard09_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard10_pta.tex	standalone	tests/tenkz/hard10_pta.tex	compiles, emits tnlog, and passes tenkz_audit
 hard10_v2.tex	standalone	tests/tenkz/hard10_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard10_v3.tex	standalone	tests/tenkz/hard10_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard11_circuit.tex	standalone	tests/tenkz/hard11_circuit.tex	compiles, emits tnlog, and passes tenkz_audit
 hard11_v2.tex	standalone	tests/tenkz/hard11_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard11_v3.tex	standalone	tests/tenkz/hard11_v3.tex	compiles, emits tnlog, and passes tenkz_audit
 hard11_v4.tex	standalone	tests/tenkz/hard11_v4.tex	compiles, emits tnlog, and passes tenkz_audit
 hard12_v2.tex	standalone	tests/tenkz/hard12_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 hard12_v3.tex	standalone	tests/tenkz/hard12_v3.tex	compiles, emits tnlog, and passes tenkz_audit
-hard12_zcl.tex	standalone	tests/tenkz/hard12_zcl.tex	compiles, emits tnlog, and passes tenkz_audit
 hdr.tex	standalone	tests/tenkz/hdr.tex	compiles, emits tnlog, and passes tenkz_audit
 iso_a.tex	standalone	tests/tenkz/iso_a.tex	compiles, emits tnlog, and passes tenkz_audit
 iso_b.tex	standalone	tests/tenkz/iso_b.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -86,7 +66,6 @@ iso_j.tex	standalone	tests/tenkz/iso_j.tex	compiles, emits tnlog, and passes ten
 iso_k.tex	standalone	tests/tenkz/iso_k.tex	compiles, emits tnlog, and passes tenkz_audit
 iso_t.tex	standalone	tests/tenkz/iso_t.tex	compiles, emits tnlog, and passes tenkz_audit
 lattice_test.tex	standalone	tests/tenkz/lattice_test.tex	compiles, emits tnlog, and passes tenkz_audit
-lpos_probe.tex	standalone	tests/tenkz/lpos_probe.tex	compiles, emits tnlog, and passes tenkz_audit
 lrbox_probe.tex	standalone	tests/tenkz/lrbox_probe.tex	compiles, emits tnlog, and passes tenkz_audit
 modes_dot_baseline.tex	standalone	tests/tenkz/modes_dot_baseline.tex	compiles, emits tnlog, and passes tenkz_audit
 modes_suite.tex	support	tests/tenkz/modes_suite.inc	shared input for modes_test.tex; not standalone
@@ -100,8 +79,6 @@ p3_blocking.tex	standalone	tests/tenkz/p3_blocking.tex	compiles, emits tnlog, an
 p3_bond_insertion.tex	standalone	tests/tenkz/p3_bond_insertion.tex	compiles, emits tnlog, and passes tenkz_audit
 p3_eq08.tex	standalone	tests/tenkz/p3_eq08.tex	compiles, emits tnlog, and passes tenkz_audit
 p3_eq09.tex	standalone	tests/tenkz/p3_eq09.tex	compiles, emits tnlog, and passes tenkz_audit
-p3_eq10.tex	standalone	tests/tenkz/p3_eq10.tex	compiles, emits tnlog, and passes tenkz_audit
-p3_eq12.tex	standalone	tests/tenkz/p3_eq12.tex	compiles, emits tnlog, and passes tenkz_audit
 p3_eq32.tex	standalone	tests/tenkz/p3_eq32.tex	compiles, emits tnlog, and passes tenkz_audit
 p3_eq3_fusion.tex	standalone	tests/tenkz/p3_eq3_fusion.tex	compiles, emits tnlog, and passes tenkz_audit
 p3_eq3_v2.tex	standalone	tests/tenkz/p3_eq3_v2.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -151,7 +128,6 @@ p_pitch.tex	standalone	tests/tenkz/p_pitch.tex	compiles and passes audit with an
 p_species.tex	standalone	tests/tenkz/p_species.tex	compiles and passes audit with an intentionally empty tnlog (species-style probe)
 p_speciesmsg.tex	excluded	-	intentional negative diagnostic
 p_specscope.tex	excluded	-	stale API or parser probe; does not compile on adoption base
-p_usagefree.tex	standalone	tests/tenkz/p_usagefree.tex	compiles, emits tnlog, and passes tenkz_audit
 part_B1.tex	standalone	tests/tenkz/part_B1.tex	compiles, emits tnlog, and passes tenkz_audit
 part_B2.tex	standalone	tests/tenkz/part_B2.tex	compiles, emits tnlog, and passes tenkz_audit
 part_B3.tex	standalone	tests/tenkz/part_B3.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -164,9 +140,7 @@ plane_stress.tex	standalone	tests/tenkz/plane_stress.tex	compiles, emits tnlog, 
 plane_sweep1.tex	standalone	tests/tenkz/plane_sweep1.tex	compact 0.45/0.55 R label curated to scriptscriptstyle; compiles, emits tnlog, and passes tenkz_audit
 plane_sweep2.tex	standalone	tests/tenkz/plane_sweep2.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_sweep2_v2.tex	standalone	tests/tenkz/plane_sweep2_v2.tex	compiles, emits tnlog, and passes tenkz_audit
-plane_sweep3.tex	standalone	tests/tenkz/plane_sweep3.tex	compiles, emits tnlog, and passes tenkz_audit
 plane_test.tex	standalone	tests/tenkz/plane_test.tex	compiles, emits tnlog, and passes tenkz_audit
-planes_keys_test.tex	standalone	tests/tenkz/planes_keys_test.tex	compiles, emits tnlog, and passes tenkz_audit
 probe.tex	standalone	tests/tenkz/probe.tex	compiles, emits tnlog, and passes tenkz_audit
 regress_x_pbc.tex	standalone	tests/tenkz/regress_x_pbc.tex	compiles, emits tnlog, and passes tenkz_audit
 rem.tex	standalone	tests/tenkz/rem.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -178,7 +152,6 @@ rgn.tex	standalone	tests/tenkz/rgn.tex	compiles, emits tnlog, and passes tenkz_a
 rmpfig2_test.tex	standalone	tests/tenkz/rmpfig2_test.tex	compiles, emits tnlog, and passes tenkz_audit
 rv4061_cellset.tex	standalone	tests/tenkz/rv4061_cellset.tex	compiles, emits tnlog, and passes tenkz_audit
 rv4061_cuporder.tex	standalone	tests/tenkz/rv4061_cuporder.tex	compiles, emits tnlog, and passes tenkz_audit
-rv4061_ex_atoms-keys.tex	standalone	tests/tenkz/rv4061_ex_atoms-keys.tex	compiles, emits tnlog, and passes tenkz_audit
 rv4061_ex_boundary-doctrine.tex	standalone	tests/tenkz/rv4061_ex_boundary-doctrine.tex	compiles, emits tnlog, and passes tenkz_audit
 rv4061_ex_canonical-channel.tex	standalone	tests/tenkz/rv4061_ex_canonical-channel.tex	compiles, emits tnlog, and passes tenkz_audit
 rv4061_ex_cups-channels.tex	standalone	tests/tenkz/rv4061_ex_cups-channels.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -201,8 +174,6 @@ t2_braidpat1.tex	standalone	tests/tenkz/t2_braidpat1.tex	compiles, emits tnlog, 
 t2_condensanyon.tex	standalone	tests/tenkz/t2_condensanyon.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_czx.tex	standalone	tests/tenkz/t2_czx.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_eigladder.tex	standalone	tests/tenkz/t2_eigladder.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_eq50_pull.tex	standalone	tests/tenkz/t2_eq50_pull.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_eq54_ginj.tex	standalone	tests/tenkz/t2_eq54_ginj.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_finegrain.tex	standalone	tests/tenkz/t2_finegrain.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_fusion.tex	standalone	tests/tenkz/t2_fusion.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_gs1d.tex	standalone	tests/tenkz/t2_gs1d.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -210,7 +181,6 @@ t2_gs2d.tex	standalone	tests/tenkz/t2_gs2d.tex	compiles, emits tnlog, and passes
 t2_gs2d_lasso.tex	standalone	tests/tenkz/t2_gs2d_lasso.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_hamil_gate.tex	standalone	tests/tenkz/t2_hamil_gate.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_hamilcommu.tex	standalone	tests/tenkz/t2_hamilcommu.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_idempotent.tex	standalone	tests/tenkz/t2_idempotent.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_isometry.tex	standalone	tests/tenkz/t2_isometry.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_lassoC.tex	standalone	tests/tenkz/t2_lassoC.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_lassodef.tex	standalone	tests/tenkz/t2_lassodef.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -221,7 +191,6 @@ t2_lhsrhs3.tex	standalone	tests/tenkz/t2_lhsrhs3.tex	compiles, emits tnlog, and 
 t2_lhsrhs4.tex	standalone	tests/tenkz/t2_lhsrhs4.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_lhsrhs5.tex	standalone	tests/tenkz/t2_lhsrhs5.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_lhsrhs6.tex	standalone	tests/tenkz/t2_lhsrhs6.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_mpo.tex	standalone	tests/tenkz/t2_mpo.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_mpublock.tex	standalone	tests/tenkz/t2_mpublock.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_mpubrick.tex	standalone	tests/tenkz/t2_mpubrick.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_mpucond.tex	standalone	tests/tenkz/t2_mpucond.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -229,22 +198,16 @@ t2_mpuflow.tex	standalone	tests/tenkz/t2_mpuflow.tex	compiles, emits tnlog, and 
 t2_mpusplit.tex	standalone	tests/tenkz/t2_mpusplit.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_olvert.tex	standalone	tests/tenkz/t2_olvert.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_pairs.tex	standalone	tests/tenkz/t2_pairs.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_pentagon2.tex	standalone	tests/tenkz/t2_pentagon2.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_pentagon3.tex	standalone	tests/tenkz/t2_pentagon3.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_pentagon4.tex	standalone	tests/tenkz/t2_pentagon4.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_pentagon5.tex	standalone	tests/tenkz/t2_pentagon5.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_pepo5.tex	standalone	tests/tenkz/t2_pepo5.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_peps.tex	standalone	tests/tenkz/t2_peps.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_probe_pepoupdown.tex	standalone	tests/tenkz/t2_probe_pepoupdown.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_probe_sides.tex	standalone	tests/tenkz/t2_probe_sides.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_purifyO.tex	standalone	tests/tenkz/t2_purifyO.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_renorm13.tex	standalone	tests/tenkz/t2_renorm13.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_rgfp4.tex	standalone	tests/tenkz/t2_rgfp4.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_rhoR.tex	standalone	tests/tenkz/t2_rhoR.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_seljbraid.tex	standalone	tests/tenkz/t2_seljbraid.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_sptgh_box.tex	standalone	tests/tenkz/t2_sptgh_box.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_sptintertwin.tex	standalone	tests/tenkz/t2_sptintertwin.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_sptmpo_cross.tex	standalone	tests/tenkz/t2_sptmpo_cross.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_staircase.tex	standalone	tests/tenkz/t2_staircase.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_sv17.tex	standalone	tests/tenkz/t2_sv17.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_tands.tex	standalone	tests/tenkz/t2_tands.tex	compiles, emits tnlog, and passes tenkz_audit
@@ -252,7 +215,6 @@ t2_tcdual.tex	standalone	tests/tenkz/t2_tcdual.tex	compiles, emits tnlog, and pa
 t2_tcdual_v2.tex	standalone	tests/tenkz/t2_tcdual_v2.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_tcprimal.tex	standalone	tests/tenkz/t2_tcprimal.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_tcprimal_v2.tex	standalone	tests/tenkz/t2_tcprimal_v2.tex	compiles, emits tnlog, and passes tenkz_audit
-t2_triangle.tex	standalone	tests/tenkz/t2_triangle.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_twoshift.tex	standalone	tests/tenkz/t2_twoshift.tex	compiles, emits tnlog, and passes tenkz_audit
 t2_wrap9a.tex	standalone	tests/tenkz/t2_wrap9a.tex	compiles, emits tnlog, and passes tenkz_audit
 trace_probe.tex	standalone	tests/tenkz/trace_probe.tex	compiles, emits tnlog, and passes tenkz_audit

@@ -133,7 +133,7 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 | 37 | `legs at=`, fusion `rows=` alias | 9 | dies | aliases, sunset 1.0 |
 | 38 | `no legs` | 12 | dies | 0.7 spelling; the refusal is `physical=none`: `r_atom_physical_answer.tex` |
 | 39 | site `removed=` | 11 | dies | lattice spelling; `void=sealed` covered by `r_sealed_void.tex` |
-| 40 | `\tnput`, `\tnsite` placement | 45 | `\tnskip` open hole | 11 (`hole` event emitters) | covered | `r_void_open.tex` (landed with the void-skin correction #5609/#5616: a hole draws no glyph, its bonds bridge it, the boundary carries the preserved index; the sealed contrast and the atom-scope `updown` answer ride the same fixture) |
+| 40 | `\tnput`, `\tnsite` placement | 45 | dies | §10: `\tnput` is `\tn[at=<address>]` and `\tnsite` is `\tn[at=(r,c)]`; addressed placement is `k_torus.tex`, `r_label_carriers_affine.tex` and throughout |
 | 41 | `\tnghost` invisible anchors | 41 | dies | §10: addresses reference empty cells directly; string ends on empty wire cells in `k_torus.tex` |
 | 42 | `\tnX` on-wire map | 34 | dies | SHRINK verdict: tombstoned, migrates to `\tn[skin=ring]`; `s10_kernel.tex` |
 | 43 | `\tnfuse` fusion atom | 34 | dies | SHRINK verdict: demoted to a prelude-declared atom; declarations covered by `r_declare_atom.tex`, trees by `rmp-iii-a-fusion-tensor` |

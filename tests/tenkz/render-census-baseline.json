@@ -3,7 +3,6 @@
     "by_file": {
       "tenkz-core.code.tex": 8,
       "tenkz-frame.code.tex": 0,
-      "tenkz-free.code.tex": 0,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 7,
       "tenkz-kernel.code.tex": 0,
@@ -21,7 +20,6 @@
     "by_file": {
       "tenkz-core.code.tex": 1,
       "tenkz-frame.code.tex": 0,
-      "tenkz-free.code.tex": 4,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 9,
       "tenkz-kernel.code.tex": 0,
@@ -33,6 +31,6 @@
       "tenkz-string.code.tex": 0,
       "tenkz-tree.code.tex": 0
     },
-    "total": 19
+    "total": 15
   }
 }

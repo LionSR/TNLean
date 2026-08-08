@@ -316,12 +316,11 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "site": {"picture": _is_picture_id, "cell": _is_lattice_cell, "mode": _enum("removed")},
     "region": {
         "picture": _is_picture_id,
-        "lang": _enum("free", "lattice"),
+        "lang": _enum("lattice"),
         "slot": _enum(
-            "selected", "secondary", "complement", "collar", "neutral", "group"
+            "selected", "secondary", "complement", "collar", "neutral"
         ),
         "cells": _is_region_cell_list,
-        "members": _any,
         "outline": _enum("0", "1"),
         "name": _any,
     },
@@ -341,7 +340,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "role": _enum("none", "operator", "marked", "extra", "passive"),
         "species": _any,
     },
-    "join": {"picture": _is_picture_id, "from": _any, "to": _any},
     "span": {
         "picture": _is_picture_id,
         "row": _is_positive_int,
