@@ -34,9 +34,9 @@ variable {d D : ℕ}
 zero correlation length admits normalized rank-one coefficients for the active
 inverse-map trace matrix.
 
-The factorization and all active-sector witnesses come from the same rephased
-inverse-map Hayashi construction. The MPDO positivity used there is the one
-contained in `IsSAL K`.
+The factorization, normalized nonnegative Hayashi weights, and all active-sector
+witnesses come from the same rephased inverse-map construction. The MPDO
+positivity used there is the one contained in `IsSAL K`.
 
 **Scope restriction (active Hayashi/Case I):** this is the normal Case-I
 active-sector conclusion of CPSV16 Appendix C.2. It does not assert the
@@ -51,9 +51,10 @@ theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (a b : F.ActiveSector p → ℝ),
-      (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
-        (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
-          (∑ k, a k * b k) = 1 := by
+      (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
+        (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
+          (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
+            (∑ k, a k * b k) = 1 := by
   letI : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
@@ -71,6 +72,6 @@ theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal
   obtain ⟨a, b, hab, hsum⟩ :=
     activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
       K (F.rephase z) hη.p hpos hspan hnonzero htriangle hZCL_sq hinactive hK_normal
-  exact ⟨F.rephase z, hη.p, a, b, hpos, hab, hsum⟩
+  exact ⟨F.rephase z, hη.p, a, b, hη.hp_nonneg, hη.hp_sum, hpos, hab, hsum⟩
 
 end MPOTensor

@@ -1176,6 +1176,11 @@
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal,
       def:mpo_physical_trace_transfer, def:nt_cpsv,
+      def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
       thm:mpdo_sector_trace_matrix_primitive,
       thm:mpdo_casei_rank_one_coefficients}
     Let ${\cal K}$ be an injective MPO tensor. Suppose
@@ -1187,8 +1192,9 @@
     \end{align}
     and that the underlying tensor is normal in the sense of
     Definition~\ref{def:nt_cpsv}. Then there is a physical-sector factorization
-    with sector weights $p_k$, for which every neighboring operator is positive
-    semidefinite, and there are real functions $a,b$ on
+    with sector weights $p_k\geq0$ satisfying $\sum_kp_k=1$, for which every
+    neighboring operator is positive semidefinite. There are real functions
+    $a,b$ on
     $I_*=\{k:p_k\ne0\}$. For all $k,h\in I_*$,
     \begin{align}
         T^*_{k,h}&=a_kb_h,
@@ -1199,25 +1205,40 @@
         \sum_{k\in I_*}a_kb_k&=1.
         \notag
     \end{align}
-    This is the normal Case-I conclusion from
-    \cite[Appendix~C.2, Case~I, lines~1374--1505]{Cirac2016MPDO_arXiv}:
-    Lemma~C.4 supplies the active Hayashi factorization
-    (lines~1406--1471), Lemma~C.5 gives the normalized coefficients
-    (lines~1473--1499), and the corollary uses this rank-one input
-    (lines~1501--1505). Literal idempotence is essential here; the statement
+    This is the normal Case-I conclusion of
+    \cite[Appendix~C.2, Case~I, lines~1374--1381]{Cirac2016MPDO_arXiv}.
+    The active Hayashi factorization comes from
+    \cite[Appendix~C.2, Lemma~C.4, lines~1406--1471]{Cirac2016MPDO_arXiv};
+    the normalized coefficients come from
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv};
+    and the corollary uses this rank-one input at
+    \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}.
+    Literal idempotence is essential here; the statement
     neither replaces it by a scale-invariant zero-correlation-length condition
     nor asserts a conclusion in Case~II.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_trace_matrix_primitive,
+    \uses{def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
+      thm:mpdo_sector_trace_matrix_primitive,
       thm:mpdo_casei_rank_one_coefficients}
-    Choose the physical-sector factorization and the coherent sector phases
-    supplied by the strong-area-law decomposition. Its neighboring operators
-    are positive semidefinite, and its active one-site matrices, nonzero sector
-    tensors, return condition, inactive sectors, and nonempty active sector
-    satisfy the hypotheses of Theorem~\ref{thm:mpdo_casei_rank_one_coefficients}.
+    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
+    Hayashi decomposition, and
+    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
+    nonzero outer indices for the normalized four-site tail, and
+    Theorem~\ref{thm:mpdo_three_site_closure_reduced} identifies the required
+    three-site closure. Apply the zero-weight reparameterized inverse-map
+    factorization and choose the coherent sector phases retained by
+    Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. Its neighboring
+    operators are positive semidefinite, and its active one-site matrices,
+    nonzero sector tensors, return condition, inactive sectors, and nonempty
+    active sector satisfy the hypotheses of
+    Theorem~\ref{thm:mpdo_casei_rank_one_coefficients}.
     Hence
     \begin{align}
         T^*_{k,h}&=a_kb_h,

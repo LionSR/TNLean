@@ -171,8 +171,9 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
   have hactive : ∃ k, hη.p k ≠ 0 := by
     by_contra h
     simp only [not_exists, not_ne_iff] at h
-    have hp_sum := hη.hp_sum
-    simp [h] at hp_sum
+    have hzero_one : (0 : ℝ) = 1 := by
+      simpa [h] using hη.hp_sum
+    exact zero_ne_one hzero_one
   have hne : Nonempty ((F.rephase z).ActiveSector hη.p) := by
     obtain ⟨k, hk⟩ := hactive
     exact ⟨⟨k, hk⟩⟩
