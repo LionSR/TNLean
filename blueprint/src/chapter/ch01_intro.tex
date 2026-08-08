@@ -1023,18 +1023,28 @@ rank-one matrix
 The quotient in (\ref{eq:projective_pure_state_matrix}) is unchanged when
 $v$ is multiplied by a nonzero scalar.
 
-\begin{definition}[Projective pure-state matrix and transition probability]
+\begin{definition}[Projective pure-state matrix]
     \label{def:projective_pure_state_matrix}
     \lean{Projectivization.pureStateMatrix}
+    \leanok
+    For a ray $p=[v]$ in $\C^d$, define
+    \begin{align}
+        P_p=\frac{\ketbra{v}{v}}{\langle v,v\rangle}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Projective transition probability]
+    \label{def:projective_transition_probability}
     \lean{Projectivization.transitionProbability}
     \leanok
-    For rays $p=[v]$ and $q=[w]$ in $\C^d$, define
+    For each ray $p$, let $p^{\mathrm{rep}}$ denote the nonzero representative
+    selected by the projectivization. Define
     \begin{align}
-        P_p&=\frac{\ketbra{v}{v}}{\langle v,v\rangle},
-        &
         \operatorname{tp}(p,q)
-        &=\frac{\langle v,w\rangle\langle w,v\rangle}
-        {\langle v,v\rangle\langle w,w\rangle}.
+        =\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}.
     \end{align}
 \end{definition}
 
@@ -1047,7 +1057,8 @@ $v$ is multiplied by a nonzero scalar.
     \lean{Projectivization.pureStateMatrix_unitaryAction}
     \lean{Projectivization.pureStateMatrix_coordinateConjugation}
     \leanok
-    \uses{def:projective_pure_state_matrix}
+    \uses{def:projective_pure_state_matrix,
+      def:projective_transition_probability}
     The matrix $P_p$ is an orthogonal projection with trace one, and
     \begin{align}
         \tr(P_pP_q)=\operatorname{tp}(p,q).
@@ -1080,8 +1091,7 @@ $v$ is multiplied by a nonzero scalar.
     \label{thm:projective_transition_probability_mk}
     \lean{Projectivization.transitionProbability_mk}
     \leanok
-    \uses{def:projective_pure_state_matrix,
-      thm:projective_pure_state_bridge}
+    \uses{def:projective_transition_probability}
     For arbitrary nonzero representatives $v,w\in\C^d$,
     \begin{align}
         \operatorname{tp}([v],[w])
