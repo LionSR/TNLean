@@ -173,10 +173,12 @@ hole, its boundary entries — stands unchanged.
 `dir=` draws the direction mark of a directed index, virtual or physical; it
 changes no topology, and it enters the boundary signature. On a resolved
 physical index the typed record, the port consumption and mismatch checking,
-and the physical-leg stroke all stand. The orientation of a directed open
-end, virtual or physical, is the last field of that end's exposed entry —
-`to` when the index leaves the panel, `from` when it enters — so a space is
-distinguished from its dual and the two sides of a relation must agree on
+and the physical-leg stroke all stand. In that end's exposed entry the
+orientation follows the face and precedes any strand weight — `to` when the
+index leaves the panel, `from` when it enters, so `open:e:to` and
+`open:e:to:bundle=3` — which keeps the weight the entry's last field and a
+directed bundle expandable to its own multiplicity. A space is thereby
+distinguished from its dual, and the two sides of a relation must agree on
 orientation and not merely on count. An internal directed contraction leaves
 no boundary entry.
 The mark stands at the named station along the leg's daylight — the stretch

@@ -52,8 +52,11 @@ from tenkzlib.texcase import (  # noqa: E402
 # The rows that hold several panels around the mathematics between them.
 # `tenkzeq` is the language's own equation scope; `tenkzequation` is the
 # blueprint's presentational row, whose migration is #5693.
+# TeX reads the space after a control word as part of it, so `\begin {tenkzeq}`
+# opens the same environment; the shared construct scanner allows it and so
+# must this, or a spaced wrapper would leave its panels ungrouped.
 DISPLAYS = re.compile(
-    r"\\begin\{(tenkzeq|tenkzequation)\}(.*?)\\end\{\1\}", re.S
+    r"\\begin\s*\{(tenkzeq|tenkzequation)\}(.*?)\\end\s*\{\1\}", re.S
 )
 
 

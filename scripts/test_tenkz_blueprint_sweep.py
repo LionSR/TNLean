@@ -37,6 +37,13 @@ SOURCES = {
         "% \\begin{tenkz}\\tn{dead}\\end{tenkz}\n"
         "\\begin{tenkz}\\tn{live}\\end{tenkz}\n"
     ),
+    "spaced.tex": (
+        "\\begin {tenkzequation}\n"
+        "\\begin{tenkz}\\tn{A}\\end{tenkz}\n"
+        "$ = $\n"
+        "\\begin{tenkz}\\tn{B}\\end{tenkz}\n"
+        "\\end {tenkzequation}\n"
+    ),
     "prose_row.tex": (
         "\\begin{tenkzequation}\n$a = b$\n\\end{tenkzequation}\n"
     ),
@@ -77,6 +84,12 @@ def main() -> int:
 
     # A row with no picture writes no event stream.
     assert "prose_row.tex" not in units, names
+
+    # TeX reads the space after a control word as part of it, so a spaced
+    # wrapper opens the same environment and keeps its panels together.
+    assert names.count("spaced.tex") == 1, names
+    assert units["spaced.tex"].display
+    assert units["spaced.tex"].source.count("\\begin{tenkz}") == 2
 
     print(f"tenkz-blueprint-sweep-units: {len(names)} unit(s) over "
           f"{len(SOURCES)} source(s) selected as expected")

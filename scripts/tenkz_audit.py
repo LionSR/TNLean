@@ -1266,6 +1266,10 @@ class Audit:
             scope_events.setdefault(scope_index, []).append(event)
         return scope_events, malformed_scopes
 
+    def _tex_line(self, offset: int) -> int:
+        """The source line an offset falls on."""
+        return self._tex_src.count("\n", 0, offset) + 1
+
     def _tenkzeq_spans(self) -> list[tuple[int, int]]:
         """Source spans of the equation environments, innermost first."""
         spans: list[tuple[int, int]] = []
@@ -1298,10 +1302,20 @@ class Audit:
                 if begin <= construct.start and construct.end <= end
             ]
             scopes = {picture_scopes.get(member) for member in members}
-            if len(scopes) != 1 or None in scopes:
-                continue
-            scope = scopes.pop()
+            scope = scopes.pop() if len(scopes) == 1 else None
+            # The source states which pictures one equation holds and the
+            # stream states which scope each picture claimed.  Where the two
+            # do not name the same group, the comparisons that ran were
+            # between panels no author put on one relation.
             if scope is None or scope_pictures.get(scope) != members:
+                self.hard(
+                    "eq-unchecked",
+                    f"{self.tex_path.name}:{self._tex_line(begin)}",
+                    f"the source states an equation over "
+                    f"{len(members)} picture(s) that the stream does not "
+                    f"group: its panels claim "
+                    f"{sorted(str(picture_scopes.get(member, 'no scope')) for member in members)}",
+                )
                 continue
             authorized[scope] = (
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
@@ -1396,6 +1410,9 @@ class Audit:
                 )
             closed = (
                 scope not in malformed_scopes
+                # An equation asserts at least one relation, so a scope
+                # recording none compared nothing, however its panels count.
+                and relations
                 and len(relation_records) == len(relations)
                 and set(relations) == set(range(1, len(relations) + 1))
                 and len(product_records) == len(products)

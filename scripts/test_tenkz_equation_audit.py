@@ -270,10 +270,46 @@ def main() -> int:
     mismatches = [rule for rule, _ in mixed if rule == "eq-boundary-mismatch"]
     assert len(mismatches) == 1, mixed
 
+    # Seeded defect: a scope whose arity failure went missing with its
+    # record.  One panel and no relation compares nothing, whatever the
+    # arithmetic says.
+    relationless = audit_rules(panel(1, "open:w"))
+    assert ("eq-unchecked", "HARD") in relationless, relationless
+
+    # Seeded defect: one record claiming to be both joiners of a three-panel
+    # scope.  A check names the one joiner it resolved.
+    two_faced = audit_rules(
+        panel(1, "open:w") + panel(2, "open:e") + panel(3, "open:w")
+        + "check|scope=1|relation=1|product=1-2|result=contracted"
+        "|signature=open:w\n"
+    )
+    assert ("malformed-event", "HARD") in two_faced, two_faced
+    assert ("eq-unchecked", "HARD") in two_faced, two_faced
+
+    # Seeded defect: two source equations whose panels the stream has
+    # cross-assigned.  Each scope owns two panels and a relation record, so
+    # the arithmetic closes, but neither authored pair was compared.
+    crossed_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    crossed = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w", scope="|scope=2")
+        + panel(3, "open:w", scope="|scope=1") + panel(4, "open:w", scope="|scope=2")
+        + "check|scope=1|relation=1|result=equal|signature=open:w\n"
+        "check|scope=2|relation=1|result=equal|signature=open:w\n",
+        crossed_source,
+    )
+    assert ("eq-unchecked", "HARD") in crossed, crossed
+
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 16 seeded group checks passed"
+        "and 20 seeded group checks passed"
     )
     return 0
 
