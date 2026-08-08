@@ -501,6 +501,45 @@ def require_clean_worktree(
     )
 
 
+def head_commit(root: Path) -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    require(result.returncode == 0, "could not resolve the observed commit")
+    oid = result.stdout.strip()
+    require(GIT_OID_RE.fullmatch(oid) is not None, "HEAD did not resolve to a commit OID")
+    return oid
+
+
+def object_ids(root: Path, paths: tuple[str, ...]) -> dict[str, str]:
+    """The Git object ID of each exposed path at `HEAD`.
+
+    A receipt naming only the harness pins and its subjects' *paths* cannot be
+    told apart from a receipt produced at another commit where the same paths
+    hold different bytes. The blob and tree identities are what bind a receipt
+    to what it actually read.
+    """
+
+    identities = {}
+    for path in paths:
+        result = subprocess.run(
+            ["git", "rev-parse", f"HEAD:{path}"],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        require(result.returncode == 0, f"could not read the object ID of {path}")
+        oid = result.stdout.strip()
+        require(GIT_OID_RE.fullmatch(oid) is not None, f"{path} has no object ID")
+        identities[path] = oid
+    return identities
+
+
 def computed_pins(policy: Policy, root: Path = ROOT) -> dict[str, str]:
     """The three values the activation change copies into the pinned policy."""
 
@@ -832,6 +871,7 @@ def observe(
             exposed.append(manifest)
         for relative in exposed:
             expose(root, view, relative)
+        subject_objects = object_ids(root, tuple(exposed))
         home = workspace / "home"
         home.mkdir()
         home.chmod(READ_ONLY_DIRECTORY)
@@ -860,6 +900,8 @@ def observe(
             "test_id": test.id,
             "surface": test.surface,
             "tag": tag,
+            "observed_commit": head_commit(root),
+            "exposed_objects": subject_objects,
             "code_tree": pins["release_test_code_tree"],
             "support_tree": pins["release_test_support_tree"],
             "inventory_sha256": pins["release_test_inventory_sha256"],
@@ -1037,9 +1079,39 @@ def command_check_readiness(policy: Policy, root: Path) -> int:
             f"armed policy {name} does not equal this tree's value",
         )
     require_regular_file(root, policy.tag_public_key, "the final-tag public key")
+    require_fixed_tagger(root)
     require_armed_workflow(root)
     print("PASS: enforcement armed; every activation pin matches this tree")
     return 0
+
+
+TAG_OBJECT_SCHEMA = "tests/tenkz/release-support/final-tag-object-v1.schema.json"
+
+
+def require_fixed_tagger(root: Path) -> None:
+    """The tagger identity must be two byte constants before arming.
+
+    The publisher constructs one byte-deterministic tag object, so every field
+    it does not derive from its needs tuple has to be fixed in the pinned
+    schema. `tagger_name` and `tagger_email` are left open while the signing
+    key is absent; arming with them still open would pin a support tree that
+    cannot produce a deterministic object, and the failure would not appear
+    until the publisher ran.
+    """
+
+    require_regular_file(root, TAG_OBJECT_SCHEMA, "the final-tag object schema")
+    schema = json.loads((root / TAG_OBJECT_SCHEMA).read_text(encoding="utf-8"))
+    properties = schema.get("properties", {})
+    open_fields = [
+        field
+        for field in ("tagger_name", "tagger_email")
+        if not isinstance(properties.get(field, {}).get("const"), str)
+    ]
+    require(
+        not open_fields,
+        f"armed policy but {TAG_OBJECT_SCHEMA} leaves {open_fields} without a "
+        f"fixed const value, so the tag object would not be byte-deterministic",
+    )
 
 
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"

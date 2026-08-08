@@ -49,8 +49,9 @@ def parsed_block() -> tuple[dict | None, str]:
         table = tomllib.loads(blocks[0])
     except tomllib.TOMLDecodeError as error:
         return None, f"{DECLARATION} kind block is not valid TOML: {error}"
-    if table.get("schema") != 1:
-        return None, f"{DECLARATION} kind block declares schema {table.get('schema')!r}"
+    schema = table.get("schema")
+    if not isinstance(schema, int) or isinstance(schema, bool) or schema != 1:
+        return None, f"{DECLARATION} kind block declares schema {schema!r}, not the integer 1"
     if not isinstance(table.get("reader_table"), list):
         return None, f"{DECLARATION} kind block has no reader_table list"
     return table, ""

@@ -67,13 +67,13 @@
       "description": "The tag message. Its template is fixed; the four substitutions bind the release name, the integration it peels to, the armed policy hash, and the validated ledger prefix.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["template", "release_tag", "integration", "policy_sha256", "prefix_sha256"],
+      "required": ["template", "release_tag", "policy_sha256", "prefix_sha256"],
       "properties": {
         "template": {
-          "const": "tenkz {release_tag}\n\nintegration {integration}\npolicy {policy_sha256}\nprefix {prefix_sha256}\n"
+          "description": "The message template. `{integration}` is substituted from the object's own `object` header, not from a separate field: a schema cannot compare two of its properties, so carrying the integration twice would let a signed object authenticate two conflicting identities.",
+          "const": "tenkz {release_tag}\n\nintegration {object}\npolicy {policy_sha256}\nprefix {prefix_sha256}\n"
         },
         "release_tag": { "const": "tenkz-v1.0.0" },
-        "integration": { "$ref": "#/$defs/gitOid" },
         "policy_sha256": {
           "description": "SHA-256 of the armed docs/tenkz/DESIGN.md blob, as pinned by the ledger's policy_sha256.",
           "$ref": "#/$defs/sha256"

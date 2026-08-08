@@ -126,16 +126,15 @@
       }
     },
     "workflow_dependency_closure": {
-      "description": "The content-addressed closure of the enforcement workflow at the validation target: every local object by Git OID, every external action or called workflow by full commit SHA, every container by content digest.",
-      "type": "array",
-      "minItems": 1,
-      "uniqueItems": true,
-      "items": {
+      "description": "The content-addressed closure of the enforcement workflow at the validation target: every local object by Git OID, every external action or called workflow by full commit SHA, every container by content digest. Keyed by reference rather than listed, because a reference must have exactly one identity — an array with `uniqueItems` accepts the same reference twice with two digests, since the whole objects differ, and a closure that gives one dependency two identities is not content-addressed.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "minLength": 1 },
+      "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["reference", "kind", "digest"],
+        "required": ["kind", "digest"],
         "properties": {
-          "reference": { "type": "string", "minLength": 1 },
           "kind": {
             "enum": ["blob", "tree", "action", "reusable-workflow", "container"]
           },
@@ -205,17 +204,22 @@
       "pattern": "^[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9]|60)Z$"
     },
     "pullRequestFact": {
+      "description": "One pull request as the resolver normalized it. The provenance and integration predicates are part of the fact, not decoration: record validity turns on whether the pull request is in this repository, whether its integration is reachable from main, whether that integration's tree equals the approved head's tree, and whether it strictly descends from the anchor. Without them a receipt for an invalid record is indistinguishable from one for a valid record with the same metadata, and the replay cannot reproduce the queue it claims to preserve.",
       "type": "object",
       "additionalProperties": false,
       "required": [
         "pr",
+        "in_repository",
         "base_ref_name",
         "author_login",
         "head_oid",
         "merged",
         "merged_at",
         "merged_by_login",
-        "merge_commit_oid"
+        "merge_commit_oid",
+        "integration_reachable_from_main",
+        "integration_tree_matches_head",
+        "integration_strict_descendant_of_anchor"
       ],
       "properties": {
         "pr": { "$ref": "#/$defs/prRef" },
@@ -231,6 +235,19 @@
         },
         "merge_commit_oid": {
           "oneOf": [{ "$ref": "#/$defs/gitOid" }, { "type": "null" }]
+        },
+        "in_repository": {
+          "description": "Whether GitHub reports the pull request in this repository rather than a fork or another repository entirely.",
+          "type": "boolean"
+        },
+        "integration_reachable_from_main": {
+          "oneOf": [{ "type": "boolean" }, { "type": "null" }]
+        },
+        "integration_tree_matches_head": {
+          "oneOf": [{ "type": "boolean" }, { "type": "null" }]
+        },
+        "integration_strict_descendant_of_anchor": {
+          "oneOf": [{ "type": "boolean" }, { "type": "null" }]
         }
       }
     },
@@ -317,6 +334,8 @@
         "test_id",
         "surface",
         "tag",
+        "observed_commit",
+        "exposed_objects",
         "code_tree",
         "support_tree",
         "inventory_sha256",
@@ -336,6 +355,17 @@
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
         },
         "surface": { "enum": ["tex-api", "tnlog"] },
+        "observed_commit": {
+          "description": "The commit whose tree the command actually read. Two clean commits can hold the same harness pins and the same subject paths over different bytes, so the pins alone do not say which was observed.",
+          "$ref": "#/$defs/gitOid"
+        },
+        "exposed_objects": {
+          "description": "Every entry placed in the view, by repository path and Git object ID. These are the identities a replay compares; the path names alone are not evidence.",
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "minLength": 1 },
+          "additionalProperties": { "$ref": "#/$defs/gitOid" }
+        },
         "tag": {
           "description": "The campaign tag this observation was bound to, or null for a standing run at a tree with no tag. A null value is evidence in its own right: it says the receipt cannot support a claim about any release.",
           "oneOf": [

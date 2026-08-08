@@ -230,6 +230,22 @@ def guard_armed_workflow_block_environment(workspace: Path) -> None:
     )
 
 
+# The closed probe set. `selftest_probe.py` implements each mode; the
+# expectations name each one and its outcome. The three collections must agree
+# exactly, so neither a probe nor an expectation can quietly disappear.
+PROBES = (
+    "pass",
+    "assertion",
+    "unrelated-exit",
+    "exit-without-receipt",
+    "isolation",
+    "environment",
+    "readonly",
+    "timeout",
+    "bool-schema",
+    "orphan-timeout",
+)
+
 GUARDS = {
     "nested-symlink": guard_nested_symlink,
     "symlinked-program-path": guard_symlinked_program_path,
@@ -306,6 +322,22 @@ def run(root: Path = ROOT) -> int:
         print("FAIL: self-test expectations have an unknown schema", file=sys.stderr)
         return 1
     fingerprint = document["synthetic_fingerprint"]
+
+    # The suite is closed in both directions. An expectations file listing no
+    # probes and no guards is valid TOML and would have printed a cheerful
+    # "0 isolation probe(s) completed", letting activation pin a support tree
+    # carrying no isolation evidence at all.
+    named_probes = {probe["id"] for probe in document.get("probe", [])}
+    named_guards = {guard["id"] for guard in document.get("guard", [])}
+    if named_probes != set(PROBES) or named_guards != set(GUARDS):
+        print(
+            f"FAIL: the expectations name probes {sorted(named_probes)} and guards "
+            f"{sorted(named_guards)}, which differ from the suite's "
+            f"{sorted(PROBES)} and {sorted(GUARDS)}",
+            file=sys.stderr,
+        )
+        return 1
+
     pins = computed_pins(policy, root)
 
     completed: list[str] = []
