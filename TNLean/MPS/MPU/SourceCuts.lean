@@ -14,7 +14,7 @@ This module defines the two source matrices ${\cal M}_1$ and ${\cal M}_2$
 obtained from a four-index tensor ${\cal U}$ by regrouping its indices, and
 the associated ranks $r$ and $\ell$, following
 [Cirac--Perez-Garcia--Schuch--Verstraete 2017, arXiv:1703.09188],
-Section II, Definition II.3 (label `defnrl`).
+Section III, definition `defnrl`, lines 450–477.
 
 A tensor ${\cal U}$ generating a matrix product unitary (MPU) carries four
 indices: up $i$ (ket, first physical), down $j$ (bra, second physical),
@@ -37,8 +37,9 @@ ways to form rectangular matrices:
 
 ## Ranks $r$ and $\ell$
 
-We set $r := \operatorname{rank} {\cal M}_1$,
-$\ell := \operatorname{rank} {\cal M}_2$ as in Definition II.3 of the paper.
+We set $r := \operatorname{rank} {\cal M}_1$ (the **right rank**) and
+$\ell := \operatorname{rank} {\cal M}_2$ (the **left rank**), as in
+definition `defnrl` and lines 697–704 of the paper.
 
 ## Main definitions
 
@@ -46,11 +47,11 @@ $\ell := \operatorname{rank} {\cal M}_2$ as in Definition II.3 of the paper.
   with product-index rows and columns.
 * `MPOTensor.sourceCutM₁Fin`, `MPOTensor.sourceCutM₂Fin`: reindexed versions
   `Matrix (Fin (D * d)) (Fin (d * D)) ℂ`.
-* `MPOTensor.sourceRank₁` (`r`), `MPOTensor.sourceRank₂` (`ℓ`): the ranks.
+* `MPOTensor.rightRank` (`r`), `MPOTensor.leftRank` (`ℓ`): the ranks.
 
 ## Main results
 
-* `sourceCutM₁_rank_bound`, `sourceCutM₂_rank_bound`: rank bounds
+* `rightRank_bound`, `leftRank_bound`: rank bounds
   $r \le \min(Dd, dD) = Dd$ and similarly $\ell \le Dd$.
 * `sourceCut_entry` lemmas: `[simp]` entry formulas for both cuts and both
   index forms.
@@ -58,7 +59,7 @@ $\ell := \operatorname{rank} {\cal M}_2$ as in Definition II.3 of the paper.
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1703.09188,
-  Section II, Definition II.3 and lines 458–477.
+  Section III, definition `defnrl`, lines 450–477 and 697–704.
 -/
 
 open scoped Matrix
@@ -146,64 +147,36 @@ lemma sourceCutM₂_rank_eq_sourceCutM₂Fin_rank :
     (sourceCutM₂ U).rank = (sourceCutM₂Fin U).rank := by
   rw [sourceCutM₂Fin_eq_reindex, Matrix.rank_reindex]
 
-/-! ### Source ranks $r$ and $\ell$ (Definition II.3, label `defnrl`) -/
+/-! ### Right and left ranks $r$ and $\ell$ (definition `defnrl`, lines 697–704) -/
 
-/-- The rank $r$ of ${\cal M}_1$, as in arXiv:1703.09188, Definition II.3. -/
-noncomputable def sourceRank₁ : ℕ := (sourceCutM₁ U).rank
+/-- The **right rank** $r = \operatorname{rank} {\cal M}_1$, as in
+arXiv:1703.09188, definition `defnrl` (lines 450–477) and lines 697–704. -/
+noncomputable def rightRank : ℕ := (sourceCutM₁ U).rank
 
-/-- The rank $\ell$ of ${\cal M}_2$, as in arXiv:1703.09188, Definition II.3. -/
-noncomputable def sourceRank₂ : ℕ := (sourceCutM₂ U).rank
+/-- The **left rank** $\ell = \operatorname{rank} {\cal M}_2$, as in
+arXiv:1703.09188, definition `defnrl` (lines 450–477) and lines 697–704. -/
+noncomputable def leftRank : ℕ := (sourceCutM₂ U).rank
 
 -- Notation corresponding to the paper's `r` and `ℓ`
-@[inherit_doc sourceRank₁] scoped notation "r[" U "]" => MPOTensor.sourceRank₁ U
-@[inherit_doc sourceRank₂] scoped notation "ℓ[" U "]" => MPOTensor.sourceRank₂ U
+@[inherit_doc rightRank] scoped notation "r[" U "]" => MPOTensor.rightRank U
+@[inherit_doc leftRank] scoped notation "ℓ[" U "]" => MPOTensor.leftRank U
 
-lemma sourceRank₁_eq : r[U] = (sourceCutM₁ U).rank := rfl
+lemma rightRank_eq : r[U] = (sourceCutM₁ U).rank := rfl
 
-lemma sourceRank₂_eq : ℓ[U] = (sourceCutM₂ U).rank := rfl
+lemma leftRank_eq : ℓ[U] = (sourceCutM₂ U).rank := rfl
 
 /-! ### Rank bounds -/
 
-/-- $r = \operatorname{rank} {\cal M}_1 \le D d$, since ${\cal M}_1$
-has $Dd$ rows and $dD$ columns. -/
-theorem sourceCutM₁_rank_bound : (sourceCutM₁ U).rank ≤ D * d := by
+/-- The right rank $r = \operatorname{rank} {\cal M}_1 \le D d$,
+since ${\cal M}_1$ has $Dd$ rows and $dD$ columns. -/
+theorem rightRank_bound : (sourceCutM₁ U).rank ≤ D * d := by
   refine (Matrix.rank_le_card_width (sourceCutM₁ U)).trans ?_
   simp [Fintype.card_fin, mul_comm]
 
-/-- $\ell = \operatorname{rank} {\cal M}_2 \le D d$, since ${\cal M}_2$
-also has $Dd$ rows and $dD$ columns. -/
-theorem sourceCutM₂_rank_bound : (sourceCutM₂ U).rank ≤ D * d := by
+/-- The left rank $\ell = \operatorname{rank} {\cal M}_2 \le D d$,
+since ${\cal M}_2$ also has $Dd$ rows and $dD$ columns. -/
+theorem leftRank_bound : (sourceCutM₂ U).rank ≤ D * d := by
   refine (Matrix.rank_le_card_width (sourceCutM₂ U)).trans ?_
   simp [Fintype.card_fin, mul_comm]
-
-theorem sourceRank₁_bound : r[U] ≤ D * d :=
-  sourceCutM₁_rank_bound U
-
-theorem sourceRank₂_bound : ℓ[U] ≤ D * d :=
-  sourceCutM₂_rank_bound U
-
-/-! ### Literal verification: identity tensor
-
-We verify the ranks for the identity MPU tensor
-${\cal U}^{i}_{j,\alpha,\beta} = \delta_{i,j} \cdot \delta_{\alpha,\beta}$.
-For this tensor both ${\cal M}_1$ and ${\cal M}_2$ become identity-like
-matrices on $\min(Dd, dD) = Dd$ dimensions, so both ranks equal $D d$.
-
-This example is source-relevant: the identity MPU is the trivial case of
-Definition II.3, and the ranks saturate the bound $r, \ell \le Dd$. -/
-
-/-- The identity MPU tensor: `idU d D i j α β = δ_{i,j} · δ_{α,β}`.
-When $d$ and $D$ are concrete naturals the physical and virtual identity
-Kronecker deltas are `if i = j ∧ α = β then 1 else 0`. -/
-def idU (d D : ℕ) : MPOTensor d D :=
-  fun i j α β => if i = j ∧ α = β then 1 else 0
-
-lemma sourceCutM₁_idU (d D : ℕ) (α : Fin D) (j : Fin d) (i : Fin d) (β : Fin D) :
-    sourceCutM₁ (idU d D) (α, j) (i, β) = if i = j ∧ α = β then 1 else 0 := by
-  simp [idU, sourceCutM₁]
-
-lemma sourceCutM₂_idU (d D : ℕ) (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
-    sourceCutM₂ (idU d D) (α, i) (j, β) = if i = j ∧ α = β then 1 else 0 := by
-  simp [idU, sourceCutM₂]
 
 end MPOTensor
