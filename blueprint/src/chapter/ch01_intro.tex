@@ -1340,8 +1340,9 @@ $v$ is multiplied by a nonzero scalar.
     \leanok
     \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
       def:cp_map_direct_sum}
-    Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, and
-    let $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra. Suppose that
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, and let
+    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra. Suppose that
     $T:S\to\MN{p}$ is completely positive and $T(S)\subseteq\mathcal B$.
     Then there is a completely positive map
     $G:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ such that
@@ -1351,6 +1352,7 @@ $v$ is multiplied by a nonzero scalar.
 \begin{proof}\leanok
     \uses{thm:extend_cp_operator_system_direct_sum,
       thm:matrix_star_subalgebra_cptp_conditional_expectation,
+      lem:is_kraus_cp_basic,
       thm:cp_direct_sum_postcomp_kraus}
     Theorem~\ref{thm:extend_cp_operator_system_direct_sum} gives a completely
     positive extension $F$ with values in $\MN{p}$. Choose the conditional
@@ -1369,7 +1371,8 @@ $v$ is multiplied by a nonzero scalar.
     \leanok
     \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
       def:cp_map_direct_sum}
-    Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, let
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, let
     $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra, and let
     $T:S\to\mathcal B$ be completely positive, where positivity in
     $\mathcal B$ is read through its inclusion in $\MN{p}$. Then there is a
