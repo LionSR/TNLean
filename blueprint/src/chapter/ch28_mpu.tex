@@ -4,17 +4,17 @@ This chapter develops the algebraic prerequisites for matrix product unitaries
 from arXiv:1703.09188.  The first result supplies the corrected nil-matrix
 bound used in the blocking argument at lines 405--426.
 
-\begin{lemma}[Dimension bound for a nilpotent Lie action]
-    \label{lem:mpu_lcs_finrank}
+\begin{theorem}[Dimension bound for a nilpotent Lie action]
+    \label{thm:mpu_lcs_finrank}
     \lean{LieModule.lowerCentralSeries_finrank_eq_bot}
     \leanok
     Let a Lie algebra $L$ act nilpotently on a finite-dimensional vector space
     $V$ over a field $K$.  Write $C_r(L,V)$ for the $r$th term of the lower
     central series of this action.  Then
-    \[
-        C_{\dim_K(V)}(L,V)=0.
-    \]
-\end{lemma}
+    \begin{align}
+        C_{\dim_K(V)}(L,V) &= 0.
+    \end{align}
+\end{theorem}
 
 \begin{proof}\leanok
     As long as $C_r(L,V)$ is nonzero, nilpotency prevents two consecutive
@@ -36,18 +36,18 @@ bound used in the blocking argument at lines 405--426.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_lcs_finrank}
+    \uses{thm:mpu_lcs_finrank}
     Regard $A$ as a Lie algebra under the commutator bracket.  Engel's theorem
     makes $V$ a nilpotent Lie module, so the dimension bound gives
-    \[
-        C_{\dim_K(V)}(A,V)=0.
-    \]
+    \begin{align}
+        C_{\dim_K(V)}(A,V) &= 0.
+    \end{align}
     For every nonnegative integer $r$, every ordered family
     $a_1,\ldots,a_r$ in $A$, and every vector $v$ in $V$, induction on $r$
     gives
-    \[
-        (a_1\cdots a_r)v\in C_r(A,V).
-    \]
+    \begin{align}
+        (a_1\cdots a_r)v &\in C_r(A,V).
+    \end{align}
     Taking $r=\dim_K(V)$ proves that the product annihilates every vector and
     is therefore zero.
 \end{proof}
