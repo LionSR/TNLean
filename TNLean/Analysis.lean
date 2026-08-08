@@ -21,6 +21,7 @@ import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.EntropyReindex
 import TNLean.Analysis.HayashiMarkovStructure
 import TNLean.Analysis.IsometricCompression
+import TNLean.Analysis.JordanBlockPower
 import TNLean.Analysis.KleinInequality
 import TNLean.Analysis.KyFanNorm
 import TNLean.Analysis.LiebIntegrandConcave

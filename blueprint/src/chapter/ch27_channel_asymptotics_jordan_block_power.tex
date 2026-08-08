@@ -1,0 +1,31 @@
+% Preparatory lemma: nilpotent-shift and binomial expansion
+% Source: Wolf (2012), Chapter 8, lines 1211--1212
+%
+% This is a purely algebraic calculation that provides the algebraic
+% formula for powers of a Jordan block.  It does NOT deliver the
+% two-sided operator-norm bound of Wolf Eq. (8.104); that will require
+% additional $\ell^2$ norm infrastructure and is separate.
+\begin{lemma}[Nilpotent shift and Jordan-block binomial expansion]
+    \label{lem:jordan_block_power}
+    \lean{Matrix.nilpotentShift_pow_apply, Matrix.nilpotentShift_pow_D_eq_zero, Matrix.jordanBlock_pow}
+    \leanok
+    Let $D\ge 1$, let $N\in M_{D}(\mathbb C)$ be the strict upper-shift matrix
+    $N_{i,j}=1$ iff $j=i+1$ (and $0$ otherwise), and
+    $J_{D}(\lambda)=\lambda I+N$ the associated Jordan block.
+    Then $N^{k}_{i,j}=1$ iff $j=i+k$ (with $N^{k}=0$ for $k\ge D$), and for
+    every $n\in\mathbb N$,
+    \begin{align}
+    J_{D}(\lambda)^{n}
+      =\sum_{k=0}^{\min\{n,D-1\}}
+        \binom{n}{k}\,\lambda^{\,n-k}\,N^{k}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+  Because $\lambda I$ and $N$ commute, the ordinary binomial theorem expands
+  $(\lambda I+N)^{n}$ into a sum of terms $\binom{n}{k}(\lambda I)^{n-k}N^{k}$
+  for $0\le k\le n$.  Substituting $(\lambda I)^{n-k}=\lambda^{n-k}I$ and
+  observing that $N^{k}=0$ whenever $k\ge D$ truncates the sum at
+  $k\le\min\{n,D-1\}$.  The superdiagonal formula $N^{k}_{i,j}=1$ iff $j=i+k$
+  is a straightforward induction on $k$ using the definition of $N$.
+\end{proof}
