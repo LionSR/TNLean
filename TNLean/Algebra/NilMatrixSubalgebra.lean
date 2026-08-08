@@ -104,7 +104,11 @@ variable [FiniteDimensional K V]
 vanishes.
 
 The statement includes the zero-dimensional case: there `finrank K V = 0`, the empty product is
-the identity endomorphism, and that identity equals zero. -/
+the identity endomorphism, and that identity equals zero.
+
+**Local fix (arXiv:1703.09188, lines 405--426):** this theorem supplies the corrected weak bound at
+the ambient dimension in place of the source's unavailable strict bound.  The correction is
+documented in `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem list_prod_eq_zero_of_forall_isNilpotent
     (A : NonUnitalSubalgebra K (Module.End K V))
     (hnil : ∀ a : A, IsNilpotent (a : Module.End K V))
@@ -143,7 +147,11 @@ namespace NonUnitalSubalgebra
 variable {K n : Type*} [Field K] [Fintype n] [DecidableEq n]
 
 /-- Matrix form of the finite-dimensional nil-matrix theorem: every mixed product of
-`Fintype.card n` matrices in a nil nonunital matrix subalgebra is zero. -/
+`Fintype.card n` matrices in a nil nonunital matrix subalgebra is zero.
+
+**Local fix (arXiv:1703.09188, lines 405--426):** this specialization gives the corrected matrix
+bound used by the source's blocking argument.  The correction is documented in
+`docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem matrix_list_prod_eq_zero_of_forall_isNilpotent
     (A : NonUnitalSubalgebra K (Matrix n n K))
     (hnil : ∀ a : A, IsNilpotent (a : Matrix n n K))

@@ -4,6 +4,25 @@ This chapter develops the algebraic prerequisites for matrix product unitaries
 from arXiv:1703.09188.  The first result supplies the corrected nil-matrix
 bound used in the blocking argument at lines 405--426.
 
+\begin{lemma}[Dimension bound for a nilpotent Lie action]
+    \label{lem:mpu_lcs_finrank}
+    \lean{LieModule.lowerCentralSeries_finrank_eq_bot}
+    \leanok
+    Let a Lie algebra $L$ act nilpotently on a finite-dimensional vector space
+    $V$ over a field $K$.  Write $C_r(L,V)$ for the $r$th term of the lower
+    central series of this action.  Then
+    \[
+        C_{\dim_K(V)}(L,V)=0.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    As long as $C_r(L,V)$ is nonzero, nilpotency prevents two consecutive
+    terms from being equal: equality would make every later term equal, in
+    contradiction with eventual vanishing.  Thus each nonzero step strictly
+    lowers dimension, and at most $\dim_K(V)$ such steps are possible.
+\end{proof}
+
 \begin{theorem}[Finite-dimensional nil-matrix theorem]
     \label{thm:mpu_nil_matrix}
     \lean{NonUnitalSubalgebra.list_prod_eq_zero_of_forall_isNilpotent}
@@ -17,11 +36,20 @@ bound used in the blocking argument at lines 405--426.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_lcs_finrank}
     Regard $A$ as a Lie algebra under the commutator bracket.  Engel's theorem
-    makes $V$ a nilpotent Lie module.  Its lower central series strictly drops
-    at every nonzero step, so a dimension count forces the term indexed by
-    $\dim_K(V)$ to vanish.  An ordered product of $r$ elements of $A$, applied
-    to any vector, belongs to the $r$th term of this series.
+    makes $V$ a nilpotent Lie module, so the dimension bound gives
+    \[
+        C_{\dim_K(V)}(A,V)=0.
+    \]
+    For every nonnegative integer $r$, every ordered family
+    $a_1,\ldots,a_r$ in $A$, and every vector $v$ in $V$, induction on $r$
+    gives
+    \[
+        (a_1\cdots a_r)v\in C_r(A,V).
+    \]
+    Taking $r=\dim_K(V)$ proves that the product annihilates every vector and
+    is therefore zero.
 \end{proof}
 
 \begin{corollary}[Nil matrix subalgebras]
@@ -32,6 +60,14 @@ bound used in the blocking argument at lines 405--426.
     $n\times n$ matrices over a field.  If every matrix in $A$ is nilpotent,
     then every ordered product of $n$ matrices from $A$ vanishes.
 \end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_nil_matrix}
+    Transport the matrix algebra to the endomorphisms of the coordinate space
+    through the standard algebra equivalence.  Nilpotency, membership, and the
+    ordered product are preserved, so the finite-dimensional nil-matrix
+    theorem applies; injectivity of the equivalence returns the zero matrix.
+\end{proof}
 
 The length $n$ is a weak bound, not a strict bound below $n$; the latter is
 false for strictly upper-triangular matrices.  This corrects the intermediate
