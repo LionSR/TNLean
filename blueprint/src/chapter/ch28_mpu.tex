@@ -76,7 +76,7 @@ final strict $D^4$ estimate.
 
 \section{The matrix product unitary condition}
 
-Let $\mathcal U=(U^{ij})_{i,j=1}^d$ be a matrix product operator tensor of
+Let $\mathcal U=\{U^{ij}\}_{i,j=0}^{d-1}$ be a matrix product operator tensor of
 bond dimension $D$, and write $U^{(N)}$ for the periodic operator obtained by
 closing a chain of $N$ copies of $\mathcal U$.
 
@@ -105,7 +105,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \leanok
     The tensor $\mathcal U$ generates matrix product unitaries if $U^{(N)}$ is
     unitary for every integer $N>1$.  This is the matrix product unitary
-    condition in \cite[lines~319--335]{Cirac2017MPU}.
+    condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
 
 \begin{lemma}[Unitarity at a fixed system size]
@@ -126,7 +126,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{lem:mpu_mul_adjoint}
     \lean{MPOTensor.IsMPU.mpo_mul_conjTranspose_mpo}
     \leanok
-    \uses{lem:mpu_unitary_fixed_size}
+    \uses{def:mpu}
     If $\mathcal U$ generates matrix product unitaries and $N>1$, then
     \begin{align}
         U^{(N)}\bigl(U^{(N)}\bigr)^\dagger &= \Id.
@@ -142,13 +142,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{lem:mpu_adjoint_mul}
     \lean{MPOTensor.IsMPU.conjTranspose_mpo_mul_mpo}
     \leanok
-    \uses{lem:mpu_unitary_fixed_size}
+    \uses{def:mpu}
     If $\mathcal U$ generates matrix product unitaries and $N>1$, then
     \begin{align}
         \bigl(U^{(N)}\bigr)^\dagger U^{(N)} &= \Id.
     \end{align}
     This is the unitarity equation displayed in
-    \cite[lines~331--335]{Cirac2017MPU}.
+    \cite[Section~III, equation~(12)]{Cirac2017MPU}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -156,23 +156,22 @@ closing a chain of $N$ copies of $\mathcal U$.
     Use the equivalent left-multiplied characterization of a unitary matrix.
 \end{proof}
 
-\begin{theorem}[Physical blocking preserves matrix product unitarity]
-    \label{thm:mpu_blocking}
+\begin{lemma}[Physical blocking preserves matrix product unitarity]
+    \label{lem:mpu_blocking}
     \lean{MPOTensor.IsMPU.blockTensor}
     \leanok
-    \uses{def:mpu, lem:mpu_unitary_fixed_size,
-        thm:mpu_reindex_unitary}
+    \uses{def:mpu}
     Suppose that $\mathcal U$ generates matrix product unitaries.  For every
-    positive integer $L$, the tensor $\mathcal U_L$ obtained by blocking $L$
-    adjacent sites also generates matrix product unitaries.  This is the
-    blocking operation of \cite[lines~295--305]{Cirac2017MPU}; the paper uses
-    without further comment that a blocked MPU tensor again generates a
-    unitary family \cite[line~356]{Cirac2017MPU}.
-\end{theorem}
+    positive integer $L$, the tensor $\mathcal U^{[L]}$ obtained by blocking
+    $L$ adjacent sites also generates matrix product unitaries.  This is the
+    blocking operation of \cite[Definition~II.5 and equation~(9)]{Cirac2017MPU};
+    preservation of the MPU property under blocking is used in the proof of
+    \cite[Proposition~III.2]{Cirac2017MPU}.
+\end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu, lem:mpu_unitary_fixed_size,
-        thm:mpu_reindex_unitary}
+    \uses{lem:mpu_unitary_fixed_size, thm:mpu_reindex_unitary,
+        thm:mpdo_closed_chain_physical_blocking}
     At system size $N$, closing the blocked tensor gives $U^{(NL)}$, up to the
     canonical bijection between $N$ blocked configurations and $NL$ unblocked
     configurations.  If $N>1$ and $L>0$, then $NL>1$, so $U^{(NL)}$ is
