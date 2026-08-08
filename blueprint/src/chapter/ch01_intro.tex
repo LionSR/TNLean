@@ -832,6 +832,7 @@ $M_M(\C)$, $M=\sum_kd_k$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:is_kraus_cp_basic}
     Expanding matrix entries gives
     \begin{align}
         (\Phi\otimes\id_j)(X)
@@ -839,6 +840,30 @@ $M_M(\C)$, $M=\sum_kd_k$.
           (A_i\otimes\mathbb1_j)^\dagger.
     \end{align}
     Each summand preserves positive semidefiniteness, and so does their sum.
+\end{proof}
+
+\begin{theorem}[Transport through the block-diagonal embedding]
+    \label{thm:direct_sum_embedding_transport}
+    \lean{Matrix.isOperatorSystem_map_directSumEmbedFin}
+    \lean{Matrix.isCPOnOperatorSystem_transport}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      thm:direct_sum_level_transport}
+    Let $\iota$ be the block-diagonal embedding of
+    $\bigoplus_{k<r}M_{d_k}(\C)$ into $M_M(\C)$, $M=\sum_kd_k$. If
+    $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ is an operator system, then
+    $\iota(S)$ is an operator system in $M_M(\C)$; and if
+    $T:S\to\MN{p}$ is completely positive on $S$, then the induced map
+    $T'':\iota(S)\to\MN{p}$, $T''(\iota(X))=T(X)$, is completely positive
+    on $\iota(S)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The image of an operator system under an injective unital
+    $*$-homomorphism is an operator system. For complete positivity, the
+    slice identity (\ref{eq:direct_sum_slice_transport}) identifies the
+    ampliation of $T''$ with the embedded direct-sum ampliation of $T$,
+    while block-diagonal positivity identifies the two positive cones.
 \end{proof}
 
 \begin{theorem}[Extending cp maps from operator systems, direct-sum domain]
@@ -858,14 +883,11 @@ $M_M(\C)$, $M=\sum_kd_k$.
 
 \begin{proof}\leanok
     \uses{thm:extend_cp_operator_system, thm:direct_sum_level_transport,
-      thm:kraus_cp_tensor_id}
+      thm:direct_sum_embedding_transport, thm:kraus_cp_tensor_id}
     Let $\iota=\iota_1$ be the block-diagonal embedding. By
-    Theorem~\ref{thm:direct_sum_level_transport}, $\iota(S)$ is an operator
-    system in $M_M(\C)$ and the induced map $T''$ is completely positive at
-    every matrix level: the slice identity
-    (\ref{eq:direct_sum_slice_transport}) identifies its ampliation with the
-    embedded direct-sum ampliation, while block-diagonal positivity identifies
-    the two positive cones. Theorem~\ref{thm:extend_cp_operator_system} gives
+    Theorem~\ref{thm:direct_sum_embedding_transport}, $\iota(S)$ is an
+    operator system in $M_M(\C)$ and the induced map $T''$ is completely
+    positive at every matrix level. Theorem~\ref{thm:extend_cp_operator_system} gives
     a rectangular Kraus extension $\widetilde T:M_M(\C)\to\MN{p}$ of
     $T''$. Define $T'=\widetilde T\circ\iota$.
 
