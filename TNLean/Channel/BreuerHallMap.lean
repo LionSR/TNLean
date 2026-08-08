@@ -27,8 +27,9 @@ entrywise conjugate of `v`.  The two vectors `v` and `w` are orthogonal (by
 antisymmetry of `U`) and `‖w‖ ≤ ‖v‖` (by the contraction property), so the
 quadratic form is nonnegative by a two-vector form of Bessel's inequality.
 
-Indecomposability of the Breuer-Hall map and the `n`-positivity threshold are
-not treated here; only positivity is established.
+The `n`-positivity threshold is not treated here; only positivity is
+established. Indecomposability of `T_BH` for antisymmetric unitary `U` in
+dimension `d > 2` is `Matrix.breuerHallMap_isIndecomposablePositiveMap`.
 
 ## Main declarations
 
