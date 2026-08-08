@@ -719,8 +719,8 @@ algebra is a single full matrix algebra $\MN{m}$; see
 \end{proof}
 
 % Unitary coordinate changes associated with Equation (1.39).
-\begin{lemma}[Positivity in unitary block coordinates]
-    \label{lem:unitary_reindex_posSemidef}
+\begin{theorem}[Positivity in unitary block coordinates]
+    \label{thm:unitary_reindex_posSemidef}
     \lean{Matrix.unitaryReindexLinearEquiv_posSemidef}
     \lean{Matrix.unitaryReindexLinearEquiv_symm_posSemidef}
     \leanok
@@ -737,7 +737,7 @@ algebra is a single full matrix algebra $\MN{m}$; see
         \notag
     \end{align}
     both preserve positive semidefiniteness.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Unitary conjugation preserves positive semidefiniteness, as does
@@ -787,13 +787,19 @@ algebra is a single full matrix algebra $\MN{m}$; see
     trace-preserving completely positive map $E:\MN{n}\to\MN{n}$ that is
     a conditional expectation onto $\mathcal B$: it is unital and
     idempotent, its range lies in $\mathcal B$, and it fixes every element
-    of $\mathcal B$.
+    of $\mathcal B$. This is the normalized trace-preserving choice in the
+    family described by
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:starSubalgebra_unitary_block_diagonal_iff,
       thm:coordinate_direct_sum_conditional_expectation,
-      thm:unitary_reindex_channels}
+      thm:unitary_reindex_channels,
+      lem:is_kraus_cptp_comp,
+      lem:is_kraus_cp_basic,
+      lem:is_kraus_cp_iff_is_cp_map,
+      thm:cp_is_positive}
     By the finite-dimensional block form, choose unitary coordinates in
     which
     \begin{align}
