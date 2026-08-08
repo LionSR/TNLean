@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.Algebra
-import TNLean.Channel.FixedPoint.CanonicalGauge
-import TNLean.MPS.Core.TPGauge
+import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.KrausMap
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # Corollaries on weighted fixed-point algebras
@@ -60,7 +61,9 @@ theorem map_rightCanonicalGauge
       (CFC.sqrt ρ)⁻¹ * map K (CFC.sqrt ρ * X * CFC.sqrt ρ) * (CFC.sqrt ρ)⁻¹ := by
   set S : Mat := CFC.sqrt ρ
   have hS_herm : Sᴴ = S := by
-    simpa [S] using MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
+    have hS_psd : (CFC.sqrt ρ).PosSemidef :=
+      Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
+    simpa [S] using hS_psd.isHermitian.eq
   calc
     map (rightCanonicalGauge K ρ) X
         = ∑ i : Fin d, (S⁻¹ * K i * S) * X * (S⁻¹ * K i * S)ᴴ := by
@@ -86,7 +89,10 @@ theorem map_rightCanonicalGauge_eq_iff
       map K (CFC.sqrt ρ * X * CFC.sqrt ρ) = CFC.sqrt ρ * X * CFC.sqrt ρ := by
   set S : Mat := CFC.sqrt ρ
   have hS_det : IsUnit S.det := by
-    simpa [S] using MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
+    have hS_unit : IsUnit S := by
+      simpa [S] using
+        (CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).2 (Matrix.PosDef.isUnit hρ)
+    exact (Matrix.isUnit_iff_isUnit_det S).1 hS_unit
   have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
   have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
   have hmap : map (rightCanonicalGauge K ρ) X = S⁻¹ * map K (S * X * S) * S⁻¹ := by
@@ -117,19 +123,23 @@ theorem isUnital_rightCanonicalGauge
     (K : Fin d → Mat) {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : map K ρ = ρ) :
     IsUnital (rightCanonicalGauge K ρ) := by
   set S : Mat := CFC.sqrt ρ
-  have hS_det : S.det ≠ 0 :=
-    (MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ).ne_zero
-  have hS_herm : Sᴴ = S := by
-    simpa [S] using MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
-  have hSS : S * Sᴴ = ρ := by
+  have hS_det : IsUnit S.det := by
+    have hS_unit : IsUnit S := by
+      simpa [S] using
+        (CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).2 (Matrix.PosDef.isUnit hρ)
+    exact (Matrix.isUnit_iff_isUnit_det S).1 hS_unit
+  have hS_sq : S * S = ρ := by
+    simpa [S] using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
+  have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
+  have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
+  have hmap_one : map (rightCanonicalGauge K ρ) (1 : Mat) = 1 := by
     calc
-      S * Sᴴ = S * S := by rw [hS_herm]
-      _ = ρ := by
-            simpa [S] using MPSTensor.cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
-  have hρ_fix_transfer : MPSTensor.transferMap (d := d) (D := D) K ρ = ρ := by
-    simpa [map, MPSTensor.transferMap_apply] using hρ_fix
-  simpa [IsUnital, rightCanonicalGauge, S, hS_herm, Matrix.mul_assoc] using
-    (gauged_unital (A := K) (S := S) (ρ := ρ) hS_det hSS hρ_fix_transfer)
+      map (rightCanonicalGauge K ρ) 1
+          = S⁻¹ * map K (S * 1 * S) * S⁻¹ := by
+              simpa [S] using map_rightCanonicalGauge (K := K) ρ (1 : Mat)
+      _ = S⁻¹ * ρ * S⁻¹ := by rw [Matrix.mul_one, hS_sq, hρ_fix]
+      _ = 1 := by rw [← hS_sq]; simp [Matrix.mul_assoc, hSinv_mul, hSmul_inv]
+  simpa [IsUnital, map, Matrix.mul_one] using hmap_one
 
 /-- The original positive-definite fixed point `ρ` is fixed by the adjoint map
 of the right-canonical gauge whenever `K` is trace-preserving. -/
@@ -141,11 +151,16 @@ theorem adjointMap_rightCanonicalGauge_fixedPoint
     ext i
     simp [rightCanonicalGauge, S]
   have hS_det : IsUnit S.det := by
-    simpa [S] using MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := D) ρ hρ
+    have hS_unit : IsUnit S := by
+      simpa [S] using
+        (CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).2 (Matrix.PosDef.isUnit hρ)
+    exact (Matrix.isUnit_iff_isUnit_det S).1 hS_unit
   have hS_herm : Sᴴ = S := by
-    simpa [S] using MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
+    have hS_psd : (CFC.sqrt ρ).PosSemidef :=
+      Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)
+    simpa [S] using hS_psd.isHermitian.eq
   have hSS : S * S = ρ := by
-    simpa [S] using MPSTensor.cfc_sqrt_mul_self_of_posDef (D := D) ρ hρ
+    simpa [S] using CFC.sqrt_mul_sqrt_self ρ hρ.posSemidef.nonneg
   have hSinv_mul : S⁻¹ * S = 1 := Matrix.nonsing_inv_mul S hS_det
   have hSmul_inv : S * S⁻¹ = 1 := Matrix.mul_nonsing_inv S hS_det
   rw [hGauge]
