@@ -44,6 +44,7 @@ import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixTracePairing
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NewtonGirard
+import TNLean.Algebra.NilMatrixSubalgebra
 import TNLean.Algebra.OperatorBlock
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalProjection

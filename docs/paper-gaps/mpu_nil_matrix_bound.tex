@@ -1,0 +1,89 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Nil-Matrix Product-Length Bound in the MPU Blocking Argument}
+\author{}
+\date{2026-08-08}
+
+\begin{document}
+\maketitle
+
+\section{The source assertion}
+
+The blocking argument for matrix product unitaries in
+\cite[lines~405--426]{Cirac2017MPU} considers a possibly nonunital associative
+subalgebra $A$ of the endomorphisms of a complex vector space of dimension
+$D^2$.  Every element of $A$ is nilpotent.  The source invokes results of
+Nagata--Higman and Razmyslov to choose a mixed-product length $J'$ satisfying
+\begin{align}
+  J' &< D^2,
+  & A^{J'} &= 0.                                         \label{eq:source-bound}
+\end{align}
+Here $A^{J'}=0$ means that every ordered product of $J'$ elements of $A$
+vanishes.
+
+The cited nil-algebra references are Nagata, \emph{Journal of the Mathematical
+Society of Japan} 4 (1952), 296--301; Higman, \emph{Proceedings of the
+Cambridge Philosophical Society} 52 (1956), 1--4; and Razmyslov,
+\emph{Izvestiya Akademii Nauk SSSR, Seriya Matematicheskaya} 38 (1974).
+These results provide nilpotency theorems and general quantitative bounds, but
+do not supply the strict linear estimate in \eqref{eq:source-bound}.
+
+\section{The corrected nil-matrix bound}
+
+Let $V$ be an $n$-dimensional vector space over a field and let
+$A\subseteq\operatorname{End}(V)$ be a possibly nonunital associative
+subalgebra consisting entirely of nilpotent endomorphisms.  The classical
+finite-dimensional nil-matrix theorem, also known as Levitzki's theorem and
+equivalently obtainable from Engel's theorem by simultaneous strict
+triangularization, gives
+\begin{align}
+  A^n &= 0.                                               \label{eq:corrected-bound}
+\end{align}
+Thus the concrete transfer-space algebra in the source satisfies
+\begin{align}
+  J' &\leq D^2.                                          \label{eq:transfer-bound}
+\end{align}
+The weak inequality is sharp in general: the algebra of strictly
+upper-triangular $n\times n$ matrices admits a nonzero ordered product of
+$n-1$ matrix units.  Accordingly, no general replacement of
+\eqref{eq:transfer-bound} by $J'<D^2$ is available.
+
+\section{Effect on the blocking estimate}
+
+The source has already obtained a first Jordan-block length $J$ satisfying
+$J<D^2$.  Combining this strict inequality with the corrected weak bound gives
+\begin{align}
+  JJ' &< D^2D^2 = D^4.                                   \label{eq:final-bound}
+\end{align}
+Therefore the final strict blocking estimate is unchanged.  Only the
+intermediate claim $J'<D^2$ is replaced by $J'\leq D^2$.
+
+The formal development proves \eqref{eq:corrected-bound} for arbitrary
+finite-dimensional vector spaces and then transports it to square matrices.
+\footnote{Formal declarations:
+  \leanid{NonUnitalSubalgebra.list_prod_eq_zero_of_forall_isNilpotent} and
+  \leanid{NonUnitalSubalgebra.matrix_list_prod_eq_zero_of_forall_isNilpotent}
+  in \doclink{TNLean/Algebra/NilMatrixSubalgebra}.}
+It includes the zero-dimensional case and fixes the ordered-product convention.
+The strict-upper-triangular example is recorded here only as the mathematical
+reason that a strict bound is unavailable; no formalization of that example is
+claimed.
+
+\section{Classification}
+
+\textbf{Verdict: local correction.}  Replacing the unsupported intermediate
+strict bound by the finite-dimensional nil-matrix bound preserves every
+hypothesis and conclusion needed by the surrounding blocking argument, and
+\eqref{eq:final-bound} retains the source's final strict estimate.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
