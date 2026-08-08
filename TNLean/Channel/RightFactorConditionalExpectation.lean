@@ -12,7 +12,7 @@ import TNLean.Channel.KrausCPTP
 
 This file constructs the trace-preserving conditional expectation
 \[
-  E(A)=\frac{\mathbf 1_m}{m}\otimes\operatorname{tr}_m(A)
+  E(A)=\mathbf 1_m\otimes\bigl(m^{-1}\operatorname{tr}_m(A)\bigr)
 \]
 from `M_m(ℂ) ⊗ M_d(ℂ)` onto `1_m ⊗ M_d(ℂ)`. It is the one-block codomain
 retraction needed when a finite-dimensional codomain algebra is represented
