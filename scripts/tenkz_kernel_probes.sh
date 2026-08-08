@@ -2756,6 +2756,25 @@ grep -Fq '|addr=(2,3)|' "$WORK/r_beamer_frame.tnlog" || {
   echo "FAIL: the plain beamer frame's chained body lost its cursor" >&2
   exit 1
 }
+# A math alignment cell holds the body scan hostage to the alignment counter:
+# mathtools' gathered template and amsmath's aligned both leave it at zero,
+# where a raw tab once ended the cell mid-scan.  The chained fixture holds
+# exactly when both cells' pictures keep every atom and the tab and the row
+# break both advance the cursor there.
+alignment_pictures=$(grep -c '^picture|' "$WORK/r_alignment_cell.tnlog" || true)
+[ "$alignment_pictures" -eq 2 ] || {
+  echo "FAIL: an alignment cell lost a chained picture" >&2
+  exit 1
+}
+alignment_atoms=$(grep -c '^atom|' "$WORK/r_alignment_cell.tnlog" || true)
+[ "$alignment_atoms" -eq 6 ] || {
+  echo "FAIL: an alignment cell's chained body lost atoms" >&2
+  exit 1
+}
+grep -Fq '|addr=(2,2)|' "$WORK/r_alignment_cell.tnlog" || {
+  echo "FAIL: an alignment cell's chained body lost its cursor" >&2
+  exit 1
+}
 
 # A slot span answers from the atom's own measured silhouette wherever it
 # stands: a wires=2 atom at a midway address keeps slot 2 for wires and for
