@@ -79,10 +79,13 @@ theorem rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_inciden
     K hK R hρ hη alpha beta hm
   change (F.rephase z).neighboringOperator k h = 0
   rw [F.rephase_neighboringOperator]
-  suffices F.neighboringOperator k h = 0 by simp [this]
+  suffices hvanish : F.neighboringOperator k h = 0 by
+    rw [hvanish, smul_zero]
+    rfl
   rcases hzero with hk | hh
   · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator,
       if_neg (not_ne_iff.mpr hk)]
+    rfl
   · rw [zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator]
     split
     · exact sectorEta_eq_zero_of_target_weight_eq_zero

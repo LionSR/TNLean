@@ -152,13 +152,15 @@ theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_liter
       simp [a, hk]
   have hsum : (∑ k, a k * b k) = 1 := by
     calc
-      ∑ k, a k * b k = ∑ k : F.ActiveSector p, a k * b k := by
+      ∑ k, a k * b k =
+          ∑ k ∈ Finset.univ.filter (fun k ↦ p k ≠ 0), a k * b k := by
         symm
-        apply Finset.sum_subtype (Finset.univ.filter (fun k ↦ p k ≠ 0))
-          (by simp)
-        intro k hk
-        simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hk
-        simp [a, b, hk]
+        apply Finset.sum_subset (Finset.filter_subset _ _)
+        intro k _ hk
+        have hpk : p k = 0 := not_ne_iff.mp (by simpa using hk)
+        rw [(hzero k hpk).1, zero_mul]
+      _ = ∑ k : F.ActiveSector p, a k * b k :=
+        Finset.sum_subtype _ (by simp) _
       _ = ∑ k : F.ActiveSector p, aActive k * bActive k := by
         apply Finset.sum_congr rfl
         intro k _
