@@ -491,6 +491,44 @@ theorem peripheralProjection_isCPMap
   exact IsCPMap.of_tendsto_toCLM (fun i ↦ IsCPMap.pow hCP (n i))
     (ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional hn)
 
+/-- **Wolf Proposition 6.3(i), combined form.**  Along one and the same
+Dirichlet recurrent subsequence, the powers converge to `T_φ` both pointwise
+and in the operator norm. -/
+theorem exists_strictMono_tendsto_pow_peripheralProjection_clm
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
+    ∃ n : ℕ → ℕ, StrictMono n ∧ 0 < n 0 ∧
+      (∀ X, Tendsto (fun i : ℕ ↦ (T ^ n i) X) atTop (𝓝 (T.peripheralProjection X))) ∧
+        Tendsto (fun i : ℕ ↦ endEquiv (T ^ n i)) atTop
+          (𝓝 (endEquiv T.peripheralProjection)) := by
+  classical
+  letI := (peripheralEigenvalues_finite T).fintype
+  obtain ⟨n, hnmono, hn0, hn⟩ := Dirichlet.exists_strictMono_pow_tendsto_one
+    (fun μ : peripheralEigenvalues T ↦ (μ : ℂ)) (fun μ ↦ μ.prop.2)
+  exact ⟨n, hnmono, hn0,
+    fun X ↦ hPos.tendsto_pow_apply_peripheralProjection hTP hnmono
+      (fun μ hμ ↦ hn ⟨μ, hμ⟩) X,
+    hPos.tendsto_endEquiv_pow_peripheralProjection hTP hnmono (fun μ hμ ↦ hn ⟨μ, hμ⟩)⟩
+
+/-- The phase-weighted peripheral projection `T_φ' = T ∘ T_φ` of a positive
+trace-preserving map is positive: the positive-only case of the preservation
+assertion in Wolf Proposition 6.3(ii) (no complete positivity needed, since
+positive maps are closed under composition). -/
+theorem peripheralWeightedProjection_isPositiveMap
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
+    IsPositiveMap T.peripheralWeightedProjection := by
+  intro X hX
+  rw [Module.End.peripheralWeightedProjection, LinearMap.comp_apply]
+  exact hPos _ ((hPos.peripheralProjection_isPositiveMap hTP) _ hX)
+
+/-- The phase-weighted peripheral projection `T_φ' = T ∘ T_φ` of a positive
+trace-preserving map is trace-preserving: both factors preserve the trace. -/
+theorem peripheralWeightedProjection_isTracePreservingMap
+    (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
+    IsTracePreservingMap T.peripheralWeightedProjection := by
+  intro X
+  rw [Module.End.peripheralWeightedProjection, LinearMap.comp_apply, hTP,
+    hPos.peripheralProjection_isTracePreservingMap hTP]
+
 end IsPositiveMap
 
 /-! ### Channel packaging and the mean-ergodic absorption identity -/
