@@ -9,6 +9,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BoundaryMatrixBlock
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
+import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 
 /-!
 # Boundary closing by comparison across a cyclic cut
@@ -504,6 +505,52 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_c
   exact le_of_eq
     (chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07
       μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge)
+
+/-- At the PGVWC07 source range, the parent-Hamiltonian kernel of the normalized
+BNT block direct sum is exactly the span of the periodic component vectors.
+
+This packages the final equality in arXiv:quant-ph/0608197, Theorem 12, proof
+lines 1424--1456. -/
+theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (hμ : ∀ k : Fin r, μ k ≠ 0)
+    {L₀ L N : ℕ}
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hLeft : IsLeftCanonicalBlockFamily (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (hBlk : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    [NeZero d]
+    (hRange :
+      (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 ≤ L)
+    (hNlarge : L + L₀ ≤ N) :
+    LinearMap.ker (parentHamiltonian
+      (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
+      bntMPSVectorSpan A N := by
+  have hFactor :
+      (L₀ + 1) + ((L₀ + 1) + (L₀ + 1)) ≤
+        (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+    have hrpred : 1 ≤ r - 1 := by omega
+    simpa only [one_mul] using
+      (Nat.mul_le_mul_right ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) hrpred)
+  have hL : L₀ < L := by omega
+  have hN : 0 < N := by omega
+  have hNtwo : 2 ≤ N := by omega
+  have hLN : L ≤ N := by omega
+  have hNstrict : L₀ + 1 < N := by omega
+  apply le_antisymm
+  · apply
+      ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07
+        μ A hμ hr hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital hRange hNlarge
+    intro j
+    exact le_of_eq (chainGroundSpace_eq_mpvSubmodule_normal
+      ⟨L₀, hL₀, hBlk j⟩ (hBlk j) hL₀ hNtwo hL hLN hNstrict)
+  · exact bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
+      μ A hμ hN hLN
 
 /-- The normalized BNT block-diagonal periodic chain space is the sum of the
 single-block periodic chain spaces in the finite Condition C1 range, and the
