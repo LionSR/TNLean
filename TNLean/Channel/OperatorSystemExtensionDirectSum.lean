@@ -150,9 +150,10 @@ noncomputable def tensorMapIdDirectSum
     Matrix (Fin p × Fin j) (Fin p × Fin j) ℂ :=
   fun p₁ p₂ => T (fun k => Matrix.bipartiteSlice (X k) p₁.2 p₂.2) p₁.1 p₂.1
 
-/-- **`T` is completely positive on a direct sum of matrix algebras** (the direct-sum-domain
-analogue of `Matrix.IsKrausCP`): entrywise positive semidefiniteness is preserved at every
-tensor level `j`. -/
+/-- **`T` is completely positive on a direct sum of matrix algebras** (Wolf Ch. 1,
+lines 616--626, the `T ⊗ id_j` ampliation positivity condition applied to the whole
+direct-sum algebra; the direct-sum-domain analogue of `Matrix.IsKrausCP`): entrywise
+positive semidefiniteness is preserved at every tensor level `j`. -/
 def IsCPMapDirectSum
     (T : (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ) : Prop :=
   ∀ j : ℕ, ∀ X : ∀ k, Matrix (Fin (d k) × Fin j) (Fin (d k) × Fin j) ℂ,
@@ -208,11 +209,12 @@ theorem blockDiagonal'_posSemidef_iff {ι : Type*} [Fintype ι] [DecidableEq ι]
     (Matrix.blockDiagonal' M).PosSemidef ↔ ∀ i, (M i).PosSemidef := by
   constructor
   · intro h k
-    have hsub := h.submatrix (Sigma.mk k)
-    have heq : (Matrix.blockDiagonal' M).submatrix (Sigma.mk k) (Sigma.mk k) = M k := by
-      ext a b; exact Matrix.blockDiagonal'_apply_eq M k a b
-    rwa [heq] at hsub
-  · exact Matrix.PosSemidef.blockDiagonal' M
+    have hcomp := directSumDiagonalCompression_posSemidef
+      (A := directSumDiagonalEmbedding M) (directSumDiagonalEmbedding_apply M ▸ h) k
+    rwa [directSumDiagonalCompression_embedding] at hcomp
+  · intro h
+    rw [← directSumDiagonalEmbedding_apply M]
+    exact directSumDiagonalEmbedding_posSemidef h
 
 theorem directSumEmbedFin_posSemidef_iff (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     (directSumEmbedFin A).PosSemidef ↔ ∀ k, (A k).PosSemidef := by
