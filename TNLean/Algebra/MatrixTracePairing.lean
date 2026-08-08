@@ -26,6 +26,8 @@ linear map between matrix algebras.
 * `Matrix.submodule_sup_ne_top_of_mul_eq_zero` — two nonzero matrix subspaces with
   one-sided zero product cannot span the full matrix algebra
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
+* `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
+* `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
 * `Matrix.traceAdjointMap_comp` — the trace-pairing adjoint reverses composition
 -/
