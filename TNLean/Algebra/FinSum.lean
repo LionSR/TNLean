@@ -20,6 +20,18 @@ open scoped BigOperators
 
 namespace Fintype
 
+/-- Pull a common left factor out of a finite sum of triple products.
+
+This replaces the repeated normalization
+`rw [Finset.mul_sum]; apply Finset.sum_congr rfl; intro i _; ring`.
+The identity needs only a semiring; commutative-semiring callers may reorder
+the common factor before applying it. -/
+theorem sum_mul_mul_eq_mul_sum_mul {ι R : Type*} [Fintype ι] [Semiring R]
+    (a : R) (f g : ι → R) :
+    (∑ i, a * f i * g i) = a * ∑ i, f i * g i := by
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun i _ => mul_assoc a (f i) (g i)
+
 /-- Reindex a sum over a finite dependent pair by `finSigmaFinEquiv`. -/
 theorem sum_finSigmaFinEquiv {g : ℕ} {mult : Fin g → ℕ} {β : Type*}
     [AddCommMonoid β] (f : ((j : Fin g) × Fin (mult j)) → β) :

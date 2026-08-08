@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.EigenvectorProjection
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.TopologicalDensityDecomposition
 
 /-!
@@ -417,10 +418,10 @@ private theorem sum_smul_recursiveProjectorQ
   · subst h'
     simp only [Matrix.sum_apply, Matrix.smul_apply,
       Matrix.blockDiagonal'_apply_eq, smul_eq_mul]
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro i _
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul
+        (Fam.fusionHistoryWeight α previous h.1 h.2) a
+        (fun i => P i h.1 x y)
   · simp [Matrix.sum_apply, Matrix.smul_apply,
       Matrix.blockDiagonal'_apply_ne _ _ _ hhh']
 

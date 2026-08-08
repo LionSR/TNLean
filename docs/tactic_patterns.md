@@ -75,6 +75,28 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `@[mps_transfer]` simp set + `transfer_simp` macro
   (`TNLean/MPS/Tactic/Basic.lean`).
 
+### finite-sum common-left-factor normalization — promoted
+- **Pattern:**
+  ```lean
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  ring
+  ```
+- **Seen:** six occurrences across
+  `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
+  `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`, and
+  `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean` before promotion.
+- **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
+  `TNLean/Algebra/FinSum.lean`.
+- **Notes:** the shared identity requires only a semiring and pulls a common
+  left factor from a sum of triple products. The two complex-valued callers
+  whose common factor was in the middle first use commutativity to put it in
+  the canonical position. All six scanner-known sites now call the lemma; the
+  four-line pattern no longer appears in the scanner report. The consumer
+  proofs remove 24 repeated tactic lines; the documented lemma and three
+  direct imports leave the Lean-source refactor at three net added lines.
+
 ### dependent finite-sum flattening — promoted
 - **Pattern:** pass between the double sum over `j` and `q : Fin (mult j)` and the
   single sum over `Fin (∑ j, mult j)` reindexed by `finSigmaFinEquiv.symm`.
