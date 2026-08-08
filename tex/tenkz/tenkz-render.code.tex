@@ -62,30 +62,6 @@
 \cs_new_protected:Npn \__tenkz_render_labelnode_named:nnnn #1#2#3#4
   { \node[#1] (#2) at #3 {#4}; }
 
-% ---------- free-tier coordinators --------------------------------------------
-% The free tier places named nodes at author coordinates and routes joins
-% with spliced label nodes.  Ink ownership moves here token-identically;
-% the join body reads the free tier's resolved j* locals exactly as the
-% legacy site did (the language landing replaces the locals with record
-% fields).
-\cs_new_protected:Npn \__tenkz_render_free_coordinate:nn #1#2
-  { \coordinate (#1) at #2; }
-\cs_new_protected:Npn \__tenkz_render_free_marker:n #1
-  { \path (#1) node[inner~sep=0pt, outer~sep=0pt, minimum~size=0pt] {}; }
-\cs_new_protected:Npn \__tenkz_render_free_join:nnnn #1#2#3#4
-  {
-    \use:e
-      {
-        \exp_not:n
-          { \draw [ \tl_use:N \l__tenkz_jstyle_tl,
-                    \tl_use:N \l__tenkz_jmarks_tl,
-                    \tl_use:N \l__tenkz_jrolesty_tl, #1 ]
-              (#2) #3 }
-        \exp_not:V \l__tenkz_jlabelnode_tl
-        \exp_not:n { (#4) ; }
-      }
-  }
-
 % ---------- skins ------------------------------------------------------------
 % The eight kernel base skins resolve to the calibrated styles of tenkz-core.
 % A declared skin adds only the own-port pairing primitive below.

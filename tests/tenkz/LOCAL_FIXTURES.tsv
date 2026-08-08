@@ -1,5 +1,4 @@
 source_file	adopted_path	reason
-zz_frame_rotation.tex	tests/tenkz/zz_frame_rotation.tex	local affine-frame regression; compiles, emits tnlog, and passes tenkz_audit
 zz_geomdag.tex	tests/tenkz/zz_geomdag.tex	local geometry DAG regression; compiles, emits tnlog, and passes tenkz_audit
 zz_geomframe.tex	tests/tenkz/zz_geomframe.tex	local geometry frame regression; compiles, emits tnlog, and passes tenkz_audit
 zz_geomsupport.tex	tests/tenkz/zz_geomsupport.tex	local support-function regression; compiles, emits tnlog, and passes tenkz_audit

@@ -15,35 +15,26 @@ $\prod_{e\ni v}c_{v,e}=1$.
 % Papers/1804.04964/paper_normal.tex:1207--1212; the displayed product is the
 % exact local balance condition of this definition, not a separate paper figure.
 \begin{center}
-    \begin{tenkzfree}
-        \tnput[dot, ports={210:virtual,270:virtual,330:virtual,
-                north:physical}, label pos=west]
-            {balanceVertex}{(0,0)}{v}
-        \tnput[ring, role=operator, ports={30:virtual,210:virtual},
-                label pos=south]
-            {balanceFirst}{(-7mm,-6mm)}{c_{v,e_1}}
-        \tnput[ring, role=operator, ports={90:virtual,270:virtual},
-                label pos=west]
-            {balanceTypical}{(0,-8mm)}{c_{v,e_k}}
-        \tnput[ring, role=operator, ports={150:virtual,330:virtual},
-                label pos=south]
-            {balanceLast}{(7mm,-6mm)}{c_{v,e_{\deg(v)}}}
-        \tnput[boundary, ports={30:virtual}]
-            {balanceFirstBoundary}{(-14mm,-12mm)}{}
-        \tnput[boundary, ports={90:virtual}]
-            {balanceTypicalBoundary}{(0,-16mm)}{}
-        \tnput[boundary, ports={150:virtual}]
-            {balanceLastBoundary}{(14mm,-12mm)}{}
-        \tnput[boundary, ports={south:physical}]
-            {balancePhysical}{(0,10mm)}{}
-        \tnjoin{balanceVertex.210}{balanceFirst.30}
-        \tnjoin{balanceFirst.210}{balanceFirstBoundary.30}
-        \tnjoin{balanceVertex.270}{balanceTypical.90}
-        \tnjoin{balanceTypical.270}{balanceTypicalBoundary.90}
-        \tnjoin{balanceVertex.330}{balanceLast.150}
-        \tnjoin{balanceLast.330}{balanceLastBoundary.150}
-        \tnjoin{balanceVertex.north}{balancePhysical.south}
-    \end{tenkzfree}
+    \tenkzkernel
+    % Each incident half-edge carries its endpoint scalar as a ring whose
+    % outward port stays open.
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[name=balanceVertex, label pos=w,
+            ports={225:virtual, 270:virtual, 315:virtual,
+                   90:physical}]{v}
+        \tn[at=1 sw of balanceVertex, name=balanceFirst, skin=ring,
+            species=operator, label pos=w,
+            ports={45:virtual, 225:virtual}]{c_{v,e_1}}
+        \tn[at=1 s of balanceVertex, name=balanceTypical, skin=ring,
+            species=operator, label pos=e,
+            ports={90:virtual, 270:virtual}]{c_{v,e_k}}
+        \tn[at=1 se of balanceVertex, name=balanceLast, skin=ring,
+            species=operator, label pos=e,
+            ports={135:virtual, 315:virtual}]{c_{v,e_{\deg(v)}}}
+        \tnwire{balanceVertex.225}{balanceFirst.45}
+        \tnwire{balanceVertex.270}{balanceTypical.90}
+        \tnwire{balanceVertex.315}{balanceLast.135}
+    \end{tenkz}
     \qquad $\prod_{e\ni v}c_{v,e}=1$.
 \end{center}
 Two gauge families related by such an assignment give the same gauge

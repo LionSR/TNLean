@@ -44,16 +44,16 @@ reordering basis states rather than by a general linear map. % The statements of
     % Contractions: none.
     % Paired boundary: boundary|virtual-west=1|virtual-east=1|
     % physical-up=1|physical-down=0.
-    \begin{align}
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{A}
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$i$}]{A}
         \end{tenkz}
-         & \qquad \xrightarrow{\sigma_g} \qquad
-        \begin{tenkz}[physical=up]
-            \tn[up=$\sigma(g)(i)$]{A}
+        \(\qquad \xrightarrow{\sigma_g} \qquad\)
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$\sigma(g)(i)$}]{A}
         \end{tenkz}.
-        \notag
-    \end{align}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
@@ -105,14 +105,20 @@ $\sigma(h)$ acts first on the index.
     % Contractions: none in any panel.
     % Common boundary: boundary|virtual-west=1|virtual-east=1|
     % physical-up=1|physical-down=0.
-    \begin{align}
-        \tnpic[physical=up]{\tn[up=$i$]{A}}
-         & \qquad \xrightarrow{\sigma_h} \qquad
-        \tnpic[physical=up]{\tn[up=$\sigma(h)(i)$]{A}}
-        \qquad \xrightarrow{\sigma_g} \qquad
-        \tnpic[physical=up]{\tn[up=$\sigma(g)(\sigma(h)(i))$]{A}}.
-        \notag
-    \end{align}
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$i$}]{A}
+        \end{tenkz}
+        \(\qquad \xrightarrow{\sigma_h} \qquad\)
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$\sigma(h)(i)$}]{A}
+        \end{tenkz}
+        \(\qquad \xrightarrow{\sigma_g} \qquad\)
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$\sigma(g)(\sigma(h)(i))$}]{A}
+        \end{tenkz}.
+    \end{tenkzequation}
 \end{proof}
 
 
@@ -193,15 +199,17 @@ scalar factor.
     \uses{def:gauge_equiv}
     Diagrammatically, the hypothesis is that the two local gauges
     \begin{center}
+        \tenkzkernel
         % B^i = X A^i X^{-1}: the red capsules act on the west and east
         % virtual indices of A^i; the upper leg is the free index i.
         % Both sides have boundary signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{B}
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$i$}]{B}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{X} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X^{-1}}
         \end{tenkz}
 
         \qquad\text{and}\qquad
@@ -209,12 +217,13 @@ scalar factor.
         % B^i = Y A^i Y^{-1}: this second gauge has the same source,
         % target, and free physical index as the X-gauge above.  Both
         % sides again have boundary signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{B}
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$i$}]{B}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{Y} & \tn[up=$i$]{A} & \tnX{Y^{-1}}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{Y} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{Y^{-1}}
         \end{tenkz}
     \end{center}
     produce the same target tensor $B^i$ from the same source tensor
@@ -264,17 +273,19 @@ scalar factor.
     $c(g,h) \in \C^{\times}$. Diagrammatically, the two candidate gauges
     are competing local replacements for the same twisted tensor:
     \begin{center}
+        \tenkzkernel
         % (X(h)X(g)) A^i (X(h)X(g))^{-1}
         %   = X(gh) A^i X(gh)^{-1}: the two candidate gauges act on
         % the same virtual indices of A^i and produce the same twisted
         % tensor.  The upper leg is i; both terms have signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tnX{X(h)X(g)} & \tn[up=$i$]{A} &
-            \tnX{(X(h)X(g))^{-1}}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{X(h)X(g)} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{(X(h)X(g))^{-1}}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{X(gh)} & \tn[up=$i$]{A} & \tnX{X(gh)^{-1}}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{X(gh)} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X(gh)^{-1}}
         \end{tenkz}
     \end{center}
     and both sides conjugate $A^i$ to the same twisted tensor

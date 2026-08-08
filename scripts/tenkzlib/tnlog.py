@@ -185,10 +185,12 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "check": {
         "scope": _is_positive_int,
         "relation": _is_positive_int,
-        "result": _enum("equal", "mismatch", "off", "malformed"),
+        "product": _is_cell,
+        "result": _enum("equal", "mismatch", "off", "malformed", "contracted"),
         "reason": _any,
         "panels": _is_nonnegative_int,
         "relations": _is_nonnegative_int,
+        "interface": _anything,
         "signature": _anything,
         "left": _anything,
         "right": _anything,
@@ -314,12 +316,11 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
     "site": {"picture": _is_picture_id, "cell": _is_lattice_cell, "mode": _enum("removed")},
     "region": {
         "picture": _is_picture_id,
-        "lang": _enum("free", "lattice"),
+        "lang": _enum("lattice"),
         "slot": _enum(
-            "selected", "secondary", "complement", "collar", "neutral", "group"
+            "selected", "secondary", "complement", "collar", "neutral"
         ),
         "cells": _is_region_cell_list,
-        "members": _any,
         "outline": _enum("0", "1"),
         "name": _any,
     },
@@ -328,17 +329,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "from": _is_lattice_cell,
         "to": _is_lattice_cell,
         "role": _enum("none", "operator", "marked", "extra", "passive"),
-    },
-    "cdcell": {"picture": _is_picture_id, "index": _is_int},
-    "cdobject": {"picture": _is_picture_id, "cell": _is_cell},
-    "cdarrow": {"picture": _is_picture_id, "from": _any, "to": _any},
-    "cdmap": {
-        "picture": _is_picture_id,
-        "from": _is_cell,
-        "to": _is_cell,
-        "fused": _enum("0", "1"),
-        "role": _enum("none", "operator", "marked", "extra", "passive"),
-        "species": _any,
     },
     "tree": {
         "picture": _is_picture_id,
@@ -350,7 +340,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "role": _enum("none", "operator", "marked", "extra", "passive"),
         "species": _any,
     },
-    "join": {"picture": _is_picture_id, "from": _any, "to": _any},
     "span": {
         "picture": _is_picture_id,
         "row": _is_positive_int,
@@ -370,10 +359,14 @@ REQUIRED_FIELDS: dict[str, frozenset[str]] = {
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
     "equal": frozenset({"relation", "signature"}),
-    "mismatch": frozenset({"relation"}),
     "off": frozenset({"relation", "reason"}),
     "malformed": frozenset({"reason", "panels", "relations"}),
+    "contracted": frozenset({"product", "signature"}),
 }
+# A mismatch names the joiner it rejects: the relation ordinal, or the
+# contracted product pair when the facing cuts of a product group fail to
+# cancel.  Either field satisfies the requirement; a mismatch naming
+# neither is unusable.
 
 # Equation checks are scope-owned top-level records.  A picture= field would
 # give them a second, conflicting owner and must never enter semantic checks.
@@ -541,11 +534,12 @@ def parse_log(
                     valid = False
             required = set(REQUIRED_FIELDS.get(kind, frozenset()))
             if kind == "check":
+                result = attrs.get("result", "")
                 required.update(
-                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(
-                        attrs.get("result", ""), frozenset()
-                    )
+                    REQUIRED_CHECK_FIELDS_BY_RESULT.get(result, frozenset())
                 )
+                if result == "mismatch" and "product" not in attrs:
+                    required.add("relation")
             missing = sorted(required - attrs.keys())
             if missing:
                 hard(
