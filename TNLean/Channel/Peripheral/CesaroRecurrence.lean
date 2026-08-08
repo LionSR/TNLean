@@ -516,9 +516,11 @@ theorem exists_strictMono_tendsto_pow_peripheralProjection_clm
     hPos.tendsto_endEquiv_pow_peripheralProjection hTP hnmono hn⟩
 
 /-- The phase-weighted peripheral projection `T_φ' = T ∘ T_φ` of a positive
-trace-preserving map is positive: the positive-only case of the preservation
-assertion in Wolf Proposition 6.3(ii) (no complete positivity needed, since
-positive maps are closed under composition). -/
+trace-preserving map is positive: the positive-only case for `T_φ'` of the
+preservation assertion in the opening of Wolf, Proposition 6.3
+(`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--229; item
+(ii) itself states only the composition identity). Positive maps are closed
+under composition, so no complete positivity is needed. -/
 theorem peripheralWeightedProjection_isPositiveMap
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     IsPositiveMap T.peripheralWeightedProjection := by
