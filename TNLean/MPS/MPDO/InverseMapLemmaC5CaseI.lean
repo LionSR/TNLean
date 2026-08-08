@@ -46,7 +46,7 @@ coefficient-rescaled Case-II result. See
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
 theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    [NeZero D] (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
@@ -54,6 +54,7 @@ theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal
       (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
         (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
           (∑ k, a k * b k) = 1 := by
+  letI : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
     exists_normalizedFourSiteTail_entry_ne_zero

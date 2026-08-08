@@ -22,8 +22,10 @@
     $\mathcal E_{\mathcal K}^2=(5/16)\mathcal E_{\mathcal K}$. Its normalized
     representative $A=(4/\sqrt5)\mathcal K$ satisfies
     $\mathcal B_A^2=(4/\sqrt5)\mathcal B_A\ne\mathcal B_A$ and therefore fails
-    the paper's literal zero-correlation-length diagram. Thus the matrix
-    inference is obstructed, while the exact source lemma remains unsettled.
+    the paper's literal zero-correlation-length diagram. Thus it does not
+    obstruct the active supported-sector theorem proved under the complete
+    normal Case-I hypotheses. The remaining open step is the all-sector
+    structural package used by the following corollary.
 \end{remark}
 
 \begin{theorem}[SAL--ZCL rank-one normalization obstruction]
@@ -240,20 +242,21 @@
     $Q$, and direct multiplication gives $Q(1-LQ)L\ne0$.
 \end{proof}
 
-% **Normalization obstruction (Lemma C.5):**
+% **Normal Case-I boundary:**
 % rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
 % has the displayed SAL, ZCL, and inverse-map data but is not the normal tensor
-% assumed in Case I; its normal representative loses literal ZCL. Thus the
-% source corollary remains unresolved. Corrected rank-one criteria under
-% positive semidefiniteness or linear independence are given by
-% thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t.
+% assumed in Case I; its normal representative loses literal ZCL. The active
+% supported-sector rank-one conclusion is now complete. The source corollary
+% still requires one all-sector package containing the physical isometry,
+% left--right tensors, and coefficients across the ambient zero-weight sectors.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{corollary}[Local sector structure from SAL and ZCL (rank-one obstruction)]
+\begin{corollary}[Local sector structure from SAL and ZCL (all-sector boundary)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_source_zcl, thm:sal_implies_eta_structure,
-        thm:mpdo_active_trace_matrix_zcl_relations}
+        thm:mpdo_active_trace_matrix_zcl_relations,
+        thm:mpdo_casei_rank_one_coefficients_of_is_sal}
     Let $\mathcal K$ be an injective normal matrix product density operator
     tensor satisfying the strong area law and zero correlation length. Then
     there are
@@ -907,10 +910,9 @@ This is the calculation in
     the positive neighboring operators in each sector factorization, and the
     unstarred layer identities. The remaining identities specify the local
     factorization and its rank-one normalization.
-    The printed proof obtains that normalization from the structural corollary
-    above, whose derivation invokes the unresolved rank-one step of Lemma~C.5.
-    The available raw witness lies outside its normal-tensor standing
-    hypothesis, and its normal representative loses literal ZCL. Thus no
-    alternative proof of the complete sector structure under the exact source
-    hypotheses is known.
+    The active supported-sector rank-one conclusion of Lemma~C.5 is complete
+    under the normal Case-I hypotheses. The printed Case-II proof still needs
+    to show that every BNT tensor inherits MPDO positivity, SAL, and literal
+    ZCL, and then to combine the resulting Case-I data into the all-sector
+    structural package above. That passage is not yet formalized.
 \end{theorem}
