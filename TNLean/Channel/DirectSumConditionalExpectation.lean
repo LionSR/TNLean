@@ -63,40 +63,57 @@ noncomputable def coordinateRightFactorStarAlgHom :
   toFun B := directSumDiagonalEmbedding fun k ↦
     rightKroneckerEmbed (m := Fin (m k)) (B k)
   map_one' := by
-    change Matrix.blockDiagonal' _ = 1
-    rw [← Matrix.blockDiagonal'_one]
-    congr 1
-    funext k
-    exact map_one (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k)))
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k))
+        ((1 : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ) k)) =
+        (1 : ∀ k, Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ) := by
+      funext k
+      exact map_one (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k)))
+    rw [h]
+    exact Matrix.blockDiagonal'_one
   map_mul' A B := by
-    rw [← directSumDiagonalEmbedding_mul]
-    congr 1
-    funext k
-    exact map_mul (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k) (B k)
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) ((A * B) k)) =
+        (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (A k)) *
+          fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (B k) := by
+      funext k
+      exact map_mul (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k) (B k)
+    rw [h]
+    exact directSumDiagonalEmbedding_mul _ _
   map_zero' := by
-    change Matrix.blockDiagonal' _ = 0
-    rw [← Matrix.blockDiagonal'_zero]
-    congr 1
-    funext k
-    exact map_zero (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k)))
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k))
+        ((0 : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ) k)) =
+        (0 : ∀ k, Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ) := by
+      funext k
+      exact map_zero (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k)))
+    rw [h]
+    exact LinearMap.map_zero directSumDiagonalEmbedding
   map_add' A B := by
-    rw [← Matrix.blockDiagonal'_add]
-    congr 1
-    funext k
-    exact map_add (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k) (B k)
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) ((A + B) k)) =
+        (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (A k)) +
+          fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (B k) := by
+      funext k
+      exact map_add (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k) (B k)
+    rw [h]
+    exact LinearMap.map_add directSumDiagonalEmbedding _ _
   commutes' r := by
     rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one]
-    change directSumDiagonalEmbedding _ = r • (1 : Matrix _ _ ℂ)
-    rw [← Matrix.blockDiagonal'_smul, ← Matrix.blockDiagonal'_one]
-    congr 1
-    funext k
-    exact map_smul (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) r 1
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k))
+        ((r • (1 : ∀ k, Matrix (Fin (d k)) (Fin (d k)) ℂ)) k)) =
+        r • (1 : ∀ k, Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ) := by
+      funext k
+      change rightKroneckerEmbed (m := Fin (m k)) (r • 1) = r • 1
+      rw [map_smul, map_one]
+    rw [h, LinearMap.map_smul, show directSumDiagonalEmbedding
+      (1 : ∀ k, Matrix (Fin (m k) × Fin (d k)) (Fin (m k) × Fin (d k)) ℂ) = 1 from
+        Matrix.blockDiagonal'_one]
   map_star' A := by
-    rw [star_eq_conjTranspose, star_eq_conjTranspose,
-      ← directSumDiagonalEmbedding_conjTranspose]
-    congr 1
-    funext k
-    exact map_star (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k)
+    have h : (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (star A k)) =
+        fun k ↦ star (rightKroneckerEmbed (m := Fin (m k)) (A k)) := by
+      funext k
+      exact map_star (rightKroneckerEmbed (m := Fin (m k)) (n := Fin (d k))) (A k)
+    rw [h]
+    simpa only [star_eq_conjTranspose] using
+      (directSumDiagonalEmbedding_conjTranspose
+        (fun k ↦ rightKroneckerEmbed (m := Fin (m k)) (A k)))
 
 @[simp]
 theorem coordinateRightFactorStarAlgHom_apply
@@ -138,6 +155,7 @@ noncomputable def coordinateDirectSumConditionalExpectation :
   directSumExtension (LinearMap.piMap fun k ↦
     rightFactorConditionalExpectation (m := m k) (d := d k))
 
+omit [Fintype κ] in
 /-- Explicit evaluation formula for the coordinate direct-sum expectation. -/
 @[simp]
 theorem coordinateDirectSumConditionalExpectation_apply
@@ -148,11 +166,14 @@ theorem coordinateDirectSumConditionalExpectation_apply
         (1 : Matrix (Fin (m k)) (Fin (m k)) ℂ) ⊗ₖ
           (((m k : ℂ)⁻¹) • partialTraceLeft
             (directSumDiagonalCompression A k)) := by
-  rw [coordinateDirectSumConditionalExpectation, directSumExtension_apply]
+  change Matrix.blockDiagonal' (fun k ↦
+    rightFactorConditionalExpectation (m := m k) (d := d k)
+      (directSumDiagonalCompression A k)) = _
   congr 1
   funext k
   exact rightFactorConditionalExpectation_apply _
 
+omit [Fintype κ] in
 /-- Every off-diagonal block of the coordinate direct-sum expectation vanishes. -/
 theorem coordinateDirectSumConditionalExpectation_offDiagonal
     (A : Matrix ((k : κ) × (Fin (m k) × Fin (d k)))
@@ -208,6 +229,7 @@ theorem coordinateDirectSumConditionalExpectation_fixes
   funext k
   exact rightFactorConditionalExpectation_fixes (B k)
 
+omit [Fintype κ] in
 /-- The coordinate direct-sum expectation is idempotent. -/
 theorem coordinateDirectSumConditionalExpectation_idempotent
     (hm : ∀ k, 0 < m k)
@@ -216,15 +238,28 @@ theorem coordinateDirectSumConditionalExpectation_idempotent
     coordinateDirectSumConditionalExpectation (m := m) (d := d)
         (coordinateDirectSumConditionalExpectation (m := m) (d := d) A) =
       coordinateDirectSumConditionalExpectation (m := m) (d := d) A := by
-  rw [coordinateDirectSumConditionalExpectation_apply A]
-  exact coordinateDirectSumConditionalExpectation_fixes hm _
+  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  let T := LinearMap.piMap fun k ↦
+    rightFactorConditionalExpectation (m := m k) (d := d k)
+  change directSumExtension T
+      (directSumDiagonalEmbedding (T (directSumDiagonalCompression A))) =
+    directSumDiagonalEmbedding (T (directSumDiagonalCompression A))
+  apply (directSumExtension_embedding_eq_self_iff _ _).2
+  funext k
+  exact rightFactorConditionalExpectation_idempotent _
 
+omit [Fintype κ] in
 /-- The coordinate direct-sum expectation is unital. -/
 theorem coordinateDirectSumConditionalExpectation_unital
     (hm : ∀ k, 0 < m k) :
     coordinateDirectSumConditionalExpectation (m := m) (d := d) 1 = 1 := by
-  rw [← map_one (coordinateRightFactorStarAlgHom (m := m) (d := d))]
-  exact coordinateDirectSumConditionalExpectation_fixes hm 1
+  letI (k : κ) : NeZero (m k) := ⟨Nat.ne_of_gt (hm k)⟩
+  rw [show (1 : Matrix ((k : κ) × (Fin (m k) × Fin (d k)))
+      ((k : κ) × (Fin (m k) × Fin (d k))) ℂ) =
+        directSumDiagonalEmbedding 1 from Matrix.blockDiagonal'_one.symm]
+  apply (directSumExtension_embedding_eq_self_iff _ _).2
+  funext k
+  exact rightFactorConditionalExpectation_unital
 
 /-- The coordinate normalized partial trace is a conditional expectation onto
 `⊕ k, (1_{mₖ} ⊗ M_{dₖ}(ℂ))`. -/

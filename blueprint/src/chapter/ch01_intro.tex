@@ -641,6 +641,60 @@ algebra is a single full matrix algebra $\MN{m}$; see
     the range inclusion.
 \end{proof}
 
+% Coordinate finite-direct-sum consequence of the preceding one-block result.
+% This does not include unitary conjugation to an arbitrary represented algebra.
+\begin{theorem}[Coordinate direct-sum conditional expectation]
+    \label{thm:coordinate_direct_sum_conditional_expectation}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_apply}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    Let $K$ be finite, let $m_k\geq1$, and set
+    \begin{align}
+        \mathcal H
+        &=\bigoplus_{k\in K}\bigl(\C^{m_k}\otimes\C^{d_k}\bigr).
+        \notag
+    \end{align}
+    For $A\in\End(\mathcal H)$, write $A_{kk}$ for its $k$-th diagonal
+    block. The map
+    \begin{align}
+        E(A)
+        &=\operatorname{diag}_{k\in K}\!\left(
+          \mathbb1_{m_k}\otimes
+          \bigl(m_k^{-1}\tr_{m_k}(A_{kk})\bigr)\right)
+        \notag
+    \end{align}
+    is trace-preserving and completely positive. It is a conditional
+    expectation onto the coordinate subalgebra
+    \begin{align}
+        \bigoplus_{k\in K}
+          \bigl(\mathbb1_{m_k}\otimes\MN{d_k}\bigr)
+        &\subseteq\End(\mathcal H).
+        \notag
+    \end{align}
+    This theorem concerns only the displayed direct-sum coordinates; it does
+    not conjugate the subalgebra by an arbitrary unitary or corestrict the
+    codomain.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:right_factor_conditional_expectation,
+      def:kraus_map_between_direct_sums,
+      lem:direct_sum_kraus_composition_schwarz,
+      thm:direct_sum_full_matrix_extension_compatibility}
+    Compress $A$ to the family $(A_{kk})_{k\in K}$ and apply the normalized
+    partial-trace expectation from
+    Theorem~\ref{thm:right_factor_conditional_expectation} in each coordinate.
+    The coordinatewise Kraus theorem makes the resulting map on the finite
+    sum completely positive, and its canonical full-matrix extension discards
+    the off-diagonal blocks. Each coordinate preserves trace, so preservation
+    of the total block trace implies preservation of the trace on
+    $\End(\mathcal H)$. The displayed formula shows that the range lies in the
+    coordinate subalgebra. The one-block fixation identity holds in every
+    summand, hence $E$ fixes that subalgebra pointwise; idempotence and
+    unitality follow.
+\end{proof}
+
 \begin{definition}[Operator system]\label{def:operator_system}
     \lean{Matrix.IsOperatorSystem}
     \leanok
