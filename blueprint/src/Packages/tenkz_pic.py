@@ -310,6 +310,10 @@ def _compile_unit(unit_source: str, stem: str, svg_path: Path) -> bool:
     if engine.returncode != 0:
         log_path = _CACHE_DIR / f"{stem}.compile.log"
         log_path.write_text(engine.stdout, encoding="utf-8")
+        # A run that stopped partway still wrote whatever events it reached.
+        # Leaving that behind would let the next caller read a fragment as a
+        # finished stream.
+        (_CACHE_DIR / f"{stem}.tnlog").unlink(missing_ok=True)
         raise RuntimeError(
             f"tenkz picture compilation failed for {unit_source!r}; see {log_path}"
         )

@@ -159,7 +159,7 @@ def main() -> int:
         ),
         group_source(),
     )
-    assert ("eq-check-off", "HARD") in forged, forged
+    assert ("eq-check-drift", "HARD") in forged, forged
     assert ("eq-boundary-mismatch", "HARD") in forged, forged
 
     # A waiver the source declares but the stream never recorded means the
@@ -172,7 +172,7 @@ def main() -> int:
         ),
         group_source("[check={signature, off={1: drafted}}]"),
     )
-    assert ("eq-check-off", "HARD") in stale, stale
+    assert ("eq-check-drift", "HARD") in stale, stale
 
     # The kernel's own refusal stays a hard finding of its own.
     refused = audit_rules(
@@ -226,10 +226,54 @@ def main() -> int:
         rule for rule, _ in product_display
     ], product_display
 
+    # Seeded defect: a stale stream compares modulo bundles past a source
+    # that asks for strand-for-strand, and the loose reading is not honoured.
+    loosened = audit_rules(
+        group_log(
+            "open:e:bundle=2",
+            "open:e, open:e",
+            "check|scope=1|relation=1|result=equal|modulo=bundles"
+            "|signature=open:e, open:e\n",
+        ),
+        group_source(),
+    )
+    assert ("eq-check-drift", "HARD") in loosened, loosened
+    assert ("eq-boundary-mismatch", "HARD") in loosened, loosened
+
+    # The same comparison the source does ask for is honoured.
+    bundled = audit_rules(
+        group_log(
+            "open:e:bundle=2",
+            "open:e, open:e",
+            "check|scope=1|relation=1|result=equal|modulo=bundles"
+            "|signature=open:e, open:e\n",
+        ),
+        group_source("[check={signature, modulo=bundles}]"),
+    )
+    assert not bundled, bundled
+
+    # A forged waiver on one relation retires nothing, and retires nothing of
+    # the author's honest waiver on another relation of the same equation.
+    mixed_source = (
+        "\\begin{tenkzeq}[check={signature, off={2: drafted}}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}=\n{PANELS[0]}"
+        "\\end{tenkzeq}\n"
+    )
+    mixed = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up") + panel(3, "open:e")
+        + "check|scope=1|relation=1|result=off|reason=forged\n"
+        "check|scope=1|relation=2|result=off|reason=drafted\n",
+        mixed_source,
+    )
+    assert ("eq-check-drift", "HARD") in mixed, mixed
+    assert ("eq-check-off", "ADV") in mixed, mixed
+    mismatches = [rule for rule, _ in mixed if rule == "eq-boundary-mismatch"]
+    assert len(mismatches) == 1, mixed
+
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 13 seeded group checks passed"
+        "and 16 seeded group checks passed"
     )
     return 0
 

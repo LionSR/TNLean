@@ -44,11 +44,10 @@ sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO / "blueprint/src/Packages"))
 
 from tenkz_audit import Audit  # noqa: E402
-from tenkzlib.texcase import strip_comments  # noqa: E402
-
-# The picture environment plasTeX captures verbatim; `tikzcd` is drawn by
-# tikz-cd and writes no event stream.
-PICTURE = re.compile(r"\\begin\{tenkz\}(.*?)\\end\{tenkz\}", re.S)
+from tenkzlib.texcase import (  # noqa: E402
+    scan_picture_event_constructs,
+    strip_comments,
+)
 
 # The rows that hold several panels around the mathematics between them.
 # `tenkzeq` is the language's own equation scope; `tenkzequation` is the
@@ -85,28 +84,52 @@ def scan_units(src_dir: Path) -> list[Unit]:
         # A commented-out picture is not drawn, so it owns no stream; the
         # offsets of the surviving ones must still name their real lines.
         live = strip_comments(path.read_text(encoding="utf-8"))
+        # The shared scanner owns picture syntax and matches begin against end
+        # by nesting, so an outer picture keeps the inner one it contains.
+        constructs = scan_picture_event_constructs(live)
+        pictures = [
+            construct for construct in constructs
+            if not any(
+                other.start < construct.start and construct.end <= other.end
+                for other in constructs
+            )
+        ]
         found: list[Unit] = []
         covered: list[tuple[int, int]] = []
         for match in DISPLAYS.finditer(live):
-            if not PICTURE.search(match.group(2)):
+            if not any(
+                match.start() <= picture.start and picture.end <= match.end()
+                for picture in pictures
+            ):
                 continue  # a row of prose or of tikz-cd: no stream to audit
-            name = match.group(1)
             source = (
-                match.group(0) if name == "tenkzeq" else match.group(2)
+                match.group(0) if match.group(1) == "tenkzeq" else match.group(2)
             )
             found.append(
                 Unit(path, live.count("\n", 0, match.start()) + 1, source, True)
             )
             covered.append((match.start(), match.end()))
-        for match in PICTURE.finditer(live):
-            if any(start <= match.start() < end for start, end in covered):
+        for picture in pictures:
+            if any(start <= picture.start < end for start, end in covered):
                 continue  # audited as a panel of its display
-            source = f"\\begin{{tenkz}}{match.group(1)}\\end{{tenkz}}"
             found.append(
-                Unit(path, live.count("\n", 0, match.start()) + 1, source, False)
+                Unit(
+                    path,
+                    live.count("\n", 0, picture.start) + 1,
+                    live[picture.start:picture.end],
+                    False,
+                )
             )
         units.extend(sorted(found, key=lambda unit: unit.line))
     return units
+
+
+def _relative(path: Path) -> Path:
+    """The repository-relative name when there is one, else the path itself."""
+    try:
+        return path.relative_to(REPO)
+    except ValueError:
+        return path
 
 
 def main(argv: list[str]) -> int:
@@ -133,11 +156,18 @@ def main(argv: list[str]) -> int:
     scoped = 0
     with tempfile.TemporaryDirectory(prefix="tenkz_blueprint_sweep_") as tmp:
         for unit in units:
-            where = f"{unit.path.relative_to(REPO)}:{unit.line}"
+            where = f"{_relative(unit.path)}:{unit.line}"
             # Name the linked copy after the source it came from, so a
             # source-linked finding's bracket reads as the chapter it is about.
             source_path = Path(tmp) / f"{unit.path.stem}-{unit.line}.tex"
-            log_path = tenkz_pic.unit_event_log(unit.source, svg_dir)
+            # One figure that will not compile or convert must not take the
+            # sweep down with it: the rest of the volume still has an answer.
+            try:
+                log_path = tenkz_pic.unit_event_log(unit.source, svg_dir)
+            except (RuntimeError, OSError) as failure:
+                print(f"  HARD [unit-compile] {where}: {failure}")
+                failed.append(where)
+                continue
             if log_path is None:
                 print(f"  MISSING {where}: no event stream and no SVG toolchain")
                 failed.append(where)

@@ -41,6 +41,7 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_blueprint_sweep.py'
+      - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
@@ -103,6 +104,7 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/tenkz_audit.py'
       - 'scripts/tenkz_blueprint_sweep.py'
+      - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
@@ -200,6 +202,7 @@ jobs:
               - 'scripts/check_reader_facing_prose.py'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_blueprint_sweep.py'
+              - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_language.py'
@@ -227,6 +230,7 @@ jobs:
               - 'scripts/test_tenkz_manual_doctest.py'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_blueprint_sweep.py'
+              - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
@@ -315,7 +319,9 @@ jobs:
       # The seeded equation defects: a mismatched group must fail the audit
       # and a clean one must pass, wherever tenkz pictures compile.
       - name: Test tenkz equation group enforcement
-        run: python3 scripts/test_tenkz_equation_audit.py
+        run: |
+          python3 scripts/test_tenkz_equation_audit.py
+          python3 scripts/test_tenkz_blueprint_sweep.py
 
       - name: Test tenkz manual extraction and reference coverage
         run: python3 scripts/test_tenkz_manual_doctest.py

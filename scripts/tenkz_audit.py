@@ -43,11 +43,13 @@ Hard errors (exit 1):
                       equals panels) does not close, so some panel's boundary
                       was never compared.  A check record whose scope owns no
                       panel at all fails the same way.
-  eq-check-off        A waiver and its source disagree: the stream retires a
-                      relation the source never opted out of, or the source
-                      opts out of a relation the stream checked anyway.  The
-                      stream is then stale against the source it is read with,
-                      and no waiver is honoured.
+  eq-check-drift      The stream's check policy is not its source's: it
+                      retires a relation the source never opted out of, the
+                      source opts out of a relation the stream checked anyway,
+                      or the two disagree about comparing modulo bundles.  The
+                      stream is then stale against the source it is read with;
+                      only the waivers both state stand, and the comparison
+                      runs in the stricter of the two readings.
 
 Advisories (never affect the exit code):
   eq-sibling-mismatch  Consecutive kernel pictures joined by `=` in the
@@ -1275,19 +1277,21 @@ class Audit:
                 spans.append((stack.pop(), token.start()))
         return spans
 
-    def _source_authorized_offs(self) -> Optional[dict[int, set[int]]]:
-        """Per scope, the relations the source itself waives.
+    def _source_check_policy(self) -> Optional[dict[int, tuple[set[int], bool]]]:
+        """Per scope, the check policy the source itself declares.
 
-        `None` when no source is linked: the stream is then the only witness
-        of its own waivers, which are honoured and reported.  With a source,
-        a waiver counts only where the environment's own `check={off={k:
-        reason}}` names it, so a stale or edited stream cannot retire a
-        comparison the author never opted out of.
+        The policy is the relations it waives and whether it compares modulo
+        bundles.  `None` when no source is linked: the stream is then the only
+        witness of its own policy, which is honoured and reported.  With a
+        source, a waiver counts and a bundle expansion applies only where the
+        environment's own `check=` says so, so a stale or edited stream can
+        neither retire a comparison the author never opted out of nor loosen
+        one the author never loosened.
         """
         if not self.tex_linked:
             return None
         picture_scopes, scope_pictures = self._scope_index()
-        authorized: dict[int, set[int]] = {}
+        authorized: dict[int, tuple[set[int], bool]] = {}
         for begin, end in self._tenkzeq_spans():
             members = [
                 index for index, construct in enumerate(self.constructs)
@@ -1299,7 +1303,10 @@ class Audit:
             scope = scopes.pop()
             if scope is None or scope_pictures.get(scope) != members:
                 continue
-            authorized[scope] = _tenkzeq_declared_offs(self._tex_src, begin) or set()
+            authorized[scope] = (
+                _tenkzeq_declared_offs(self._tex_src, begin) or set(),
+                _tenkzeq_declares_bundles(self._tex_src, begin),
+            )
         return authorized
 
     def check_equation_groups(self) -> None:
@@ -1328,7 +1335,7 @@ class Audit:
         """
         _, scope_pictures = self._scope_index()
         scope_events, malformed_scopes = self._scope_checks()
-        authorized = self._source_authorized_offs()
+        policy = self._source_check_policy()
         for scope in sorted(set(scope_events) | set(malformed_scopes)):
             if scope in scope_pictures:
                 continue
@@ -1364,10 +1371,29 @@ class Audit:
                 )
                 if pair is not None
             }
-            modulo = any(
+            logged_modulo = any(
                 event.attrs.get("modulo") == "bundles" for event in records
             )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
+            declared, declared_modulo = (
+                (set(), logged_modulo) if policy is None
+                else policy.get(scope, (set(), False))
+            )
+            # A bundle expansion loosens the comparison, so the source has to
+            # ask for it: a stale stream carrying `modulo=bundles` past a
+            # source that no longer says so would accept a bundle against a
+            # count the current source rejects.  The comparison then runs in
+            # the stricter of the two readings.
+            modulo = logged_modulo and declared_modulo
+            if policy is not None and logged_modulo != declared_modulo:
+                self.hard(
+                    "eq-check-drift", where,
+                    f"equation scope {scope} compares "
+                    f"{'modulo bundles' if logged_modulo else 'strand for strand'}"
+                    f" but its source asks for "
+                    f"{'modulo bundles' if declared_modulo else 'strand for strand'}"
+                    f"; the stream is not this source's",
+                )
             closed = (
                 scope not in malformed_scopes
                 and len(relation_records) == len(relations)
@@ -1379,31 +1405,33 @@ class Audit:
                 relation for relation, event in relations.items()
                 if event.attrs.get("result") == "off"
             }
-            declared = set() if authorized is None else authorized.get(scope, set())
-            if authorized is not None and waived != declared:
+            if policy is not None:
                 for relation in sorted(waived - declared):
                     self.hard(
-                        "eq-check-off", where,
+                        "eq-check-drift", where,
                         f"equation scope {scope} waives relation {relation} "
                         f"but its source declares no such opt-out",
                     )
                 for relation in sorted(declared - waived):
                     self.hard(
-                        "eq-check-off", where,
+                        "eq-check-drift", where,
                         f"the source waives relation {relation} of equation "
                         f"scope {scope} but the stream records no waiver; the "
                         f"stream predates this source",
                     )
-                waived = set()
-            else:
-                for relation in sorted(waived):
-                    event = relations[relation]
-                    self.adv(
-                        "eq-check-off",
-                        f"{self.log_path.name}:{event.line}",
-                        f"equation scope {scope} waived relation {relation}: "
-                        f"{event.attrs.get('reason', '(no reason recorded)')}",
-                    )
+                # Only the waivers both state stand.  A forged one on its own
+                # relation retires nothing; it does not retire the author's
+                # honest opt-out on another relation of the same equation,
+                # which would report a mismatch the author waived.
+                waived &= declared
+            for relation in sorted(waived):
+                event = relations[relation]
+                self.adv(
+                    "eq-check-off",
+                    f"{self.log_path.name}:{event.line}",
+                    f"equation scope {scope} waived relation {relation}: "
+                    f"{event.attrs.get('reason', '(no reason recorded)')}",
+                )
             if not closed:
                 if scope not in malformed_scopes:
                     # A malformed scope already failed as a hard kernel-check.
@@ -1657,6 +1685,19 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
         if match is not None:
             declared.add(int(match.group(1)))
     return declared
+
+
+def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
+    """True when one equation's own options ask to compare modulo bundles."""
+    options = following_group(source, position, "[", "]")
+    if options is None:
+        return False
+    for key, value in top_level_options(options):
+        if key != "check" or value is None:
+            continue
+        if re.search(r"modulo\s*=\s*bundles", value) is not None:
+            return True
+    return False
 
 
 _ORIENTATIONS = frozenset({"to", "from"})
