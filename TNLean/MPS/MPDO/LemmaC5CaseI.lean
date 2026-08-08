@@ -66,11 +66,12 @@ conjugation, entrywise by `P ⊙ P`; if more than one sector were active,
 `tr(S^N) → 0` (`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`),
 a contradiction.
 
-The remaining Case-I relation `Q(1−LQ)L = 0` is the same fact as
-`T² = T` under the rectangular decomposition `T = QL` already used in
-`activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`'s proof;
-restating it in that form is not yet formalized.  The route is sketched in
-the paper-gap note `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
+The rectangular Case-I relation `Q(1−LQ)L = 0` is proved as the
+project-derived rectangular form of `T² = T`, using the same factors
+`T = QL` as in the proof of
+`activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`.  This is the
+notation used in CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper
+does not print the rectangular identity as a separate displayed theorem.
 
 ## Main declarations
 
@@ -94,6 +95,8 @@ the paper-gap note `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`.
   **the active sector is unique**
 * `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`:
   **the Case-I relation** `T² = T`
+* `caseI_rectangular_remainder_eq_zero_of_literal_ZCL`:
+  **the rectangular Case-I relation** `Q(1−LQ)L = 0`
 
 ## Source fidelity
 
@@ -161,6 +164,32 @@ theorem activeSectorTraceSqMatrix_nonneg
     exact Matrix.posSemidef_self_mul_conjTranspose (F.neighboringOperator k h)
   exact (Complex.nonneg_iff.mp hsq.trace_nonneg).1
 
+/-- The product of the theorem-local Case-I trace factors is the complexification of
+`activeSectorTraceMatrix`.  This is the rectangular identity `QL = T` used in CPSV16,
+Appendix C.2, Lemma C.5, lines 1473--1499. -/
+private theorem trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceMatrix
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
+    let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
+      fun k alpha ↦ (F.rightTensor k alpha).trace
+    let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
+      fun beta h ↦ (F.leftTensor h beta).trace
+    Q * L = Matrix.map (F.activeSectorTraceMatrix p) Complex.ofReal := by
+  dsimp only
+  ext k h
+  simp only [Matrix.mul_apply, Matrix.map_apply,
+    PhysicalSectorFactorization.activeSectorTraceMatrix]
+  rw [← (hpos k h).isHermitian.trace_eq_ofReal_re]
+  simp only [PhysicalSectorFactorization.neighboringOperator, Matrix.trace,
+    Matrix.diag, Matrix.of_apply]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro j _
+  rw [Finset.mul_sum]
+  rw [Fintype.sum_prod_type]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+
 /-- **The literal ZCL identity `physTraceTransfer² = physTraceTransfer`
 forces `T² = T³` for the active-sector trace matrix, without any positive
 scalar normalization.**
@@ -218,22 +247,8 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
     Matrix.pow_two_eq_pow_three_of_rectangular_idempotent L Q h_idem
   -- TC = Q*L is the complex version of T
   have hTC : Q * L = Matrix.map T Complex.ofReal := by
-    ext k h
-    simp only [Matrix.mul_apply, Q, L, Matrix.map_apply, T,
-      PhysicalSectorFactorization.activeSectorTraceMatrix]
-    change (∑ j, (F.rightTensor (k : Fin F.sectorCount) j).trace *
-      (F.leftTensor (h : Fin F.sectorCount) j).trace) =
-        ((F.neighboringOperator k h).trace.re : ℂ)
-    rw [← (hpos k h).isHermitian.trace_eq_ofReal_re]
-    simp only [PhysicalSectorFactorization.neighboringOperator, Matrix.trace,
-      Matrix.diag, Matrix.of_apply]
-    rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro j _
-    rw [Finset.mul_sum]
-    rw [Fintype.sum_prod_type]
-    simp_rw [Finset.sum_mul]
-    rw [Finset.sum_comm]
+    simpa only [Q, L, T] using
+      trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceMatrix K F p hpos
   -- Transfer the relation to T
   rw [hTC] at h_TC_sq_cu
   have hT_sq_cu : T ^ 2 = T ^ 3 := by
@@ -289,7 +304,7 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
 /-! ## Lemma C.5 Case I — remaining theorems
 
 The matrix-algebra components above give `S ≤ T²` entrywise, `T² = T³` from
-literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  Three further
+literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  Four further
 theorems complete the Case-I argument:
 
 1. **Trace similarity** `tr(S_hat ^ N) = tr(S^N)` where `S_hat` is the diagonal
@@ -298,7 +313,9 @@ theorems complete the Case-I argument:
    the doubled-index self-overlap in terms of the active-sector
    trace-squared matrix.
 3. **Singleton assembly** Prove `card(ActiveSector p) = 1`, which forces
-   `T² = T` and `Q(1−LQ)L = 0`.
+   `T² = T`.
+4. **Rectangular form** Rewrite `T² = T` through `T = QL` as
+   `Q(1−LQ)L = 0`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5 (`SALZCL`), lines
 1473--1499; Case-I assumptions at lines 1374--1381; self-overlap limit at
@@ -854,6 +871,54 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
   have heq : (T ^ 2) i i = (T ^ 2) i i * T i i := by rw [← hcollapse3, ← hTsq3]
   have hTii : T i i = 1 := (mul_left_cancel₀ (hTsqpos i i).ne' (by rw [mul_one]; exact heq)).symm
   rw [hcollapse2, hTii, mul_one]
+
+/-- **The rectangular Case-I relation `Q(1−LQ)L = 0`.**  Here
+`L β h = tr(F.leftTensor h β)` and `Q k α = tr(F.rightTensor k α)` are the Case-I
+factors, and `QL` is the complexification of the active-sector trace matrix `T`.
+Thus this identity is the algebraic form of
+`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`, namely `T² = T`.
+
+This is a project-derived rectangular form in the notation of CPSV16, Appendix C.2,
+Lemma C.5, lines 1473--1499, rather than a separate displayed theorem in the paper. -/
+theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
+    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    [hne : Nonempty (F.ActiveSector p)] :
+    let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
+      fun beta h ↦ (F.leftTensor h beta).trace
+    let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
+      fun k alpha ↦ (F.rightTensor k alpha).trace
+    Q * (1 - L * Q) * L = 0 := by
+  dsimp only
+  let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
+    fun beta h ↦ (F.leftTensor h beta).trace
+  let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
+    fun k alpha ↦ (F.rightTensor k alpha).trace
+  let T := F.activeSectorTraceMatrix p
+  have hT : T ^ 2 = T :=
+    activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL K F p hpos hspan hnonzero htriangle
+      hZCL_sq hinactive hK_normal
+  have hQL : Q * L = Matrix.map T Complex.ofReal := by
+    simpa only [Q, L, T] using
+      trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceMatrix K F p hpos
+  have hmap : (Matrix.map T Complex.ofReal) ^ 2 = Matrix.map T Complex.ofReal := by
+    calc
+      (Matrix.map T Complex.ofReal) ^ 2 = Matrix.map (T ^ 2) Complex.ofReal := by
+        exact (Matrix.map_pow T Complex.ofRealHom 2).symm
+      _ = Matrix.map T Complex.ofReal := congrArg (fun M ↦ Matrix.map M Complex.ofReal) hT
+  calc
+    Q * (1 - L * Q) * L = Q * L - (Q * L) ^ 2 := by
+      simp [Matrix.mul_sub, Matrix.sub_mul, pow_two, Matrix.mul_assoc]
+    _ = Matrix.map T Complex.ofReal - (Matrix.map T Complex.ofReal) ^ 2 := by rw [hQL]
+    _ = 0 := sub_eq_zero.mpr hmap.symm
 
 end singletonSector
 
