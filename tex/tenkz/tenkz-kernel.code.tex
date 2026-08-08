@@ -1600,8 +1600,8 @@
             \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
               { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
               {
-                \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
-                  \l__tenkz_kernel_r_leg_turn_tl \l_tmpa_tl
+                \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
+                  \l__tenkz_kernel_r_leg_turn_tl
                 \exp_args:NV \__tenkz_kernel_signature_bearing:nN
                   \l__tenkz_kernel_r_leg_turn_tl
                   \l__tenkz_kernel_port_face_tl
@@ -4143,6 +4143,35 @@
           {
             \__tenkz_model_get:nnN {#1} {wide} #2
             \quark_if_no_value:NT #2 { \tl_set:Nn #2 {1} }
+          }
+      }
+  }
+
+% The page bearing of slot #3's policy leg on face #2 (n|s) of atom #1,
+% left in #4.  A spanning atom on a curved carrier grows each leg along its
+% own spanned cell's local normal, so every consumer of the bearing -- the
+% ink, the boundary signature, the route-face classifier -- reads this one
+% production and agrees with the drawn indices.  The caller has resolved
+% the atom's span into \l__tenkz_kernel_policy_span_tl; a span of one keeps
+% the host's own axis, plane carriers included.
+\cs_new_protected:Npn \__tenkz_kernel_policy_slot_bearing:nnnN #1#2#3#4
+  {
+    \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2} #4
+      \l__tenkz_kernel_r_physical_anchor_tl
+    \int_compare:nNnT { \l__tenkz_kernel_policy_span_tl } > {1}
+      {
+        \__tenkz_kernel_atom_rc:nNNN {#1}
+          \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl
+          \l_tmpa_bool
+        \bool_if:NT \l_tmpa_bool
+          {
+            \tl_set:Ne \l__tenkz_kernel_leg_col_tl
+              { \int_eval:n { \l__tenkz_kernel_leg_col_tl + #3 - 1 } }
+            \__tenkz_geom_local_bearing:nnnnN {kpic}
+              { \l__tenkz_kernel_leg_row_tl }
+              { \l__tenkz_kernel_leg_col_tl }
+              { \str_if_eq:nnTF {#2} {n} {90} {270} }
+              #4
           }
       }
   }
@@ -8955,9 +8984,8 @@
             \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
               { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
               {
-                \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+                \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
                   \l__tenkz_kernel_r_leg_turn_tl
-                  \l__tenkz_kernel_r_physical_anchor_tl
                 \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
                   \l__tenkz_kernel_r_leg_turn_tl
                   \l__tenkz_kernel_port_face_tl
@@ -9131,7 +9159,16 @@
       }
       {
         % A derived carrier has no integer cell, but its resolved port still
-        % has one logical position in the picture frame.
+        % has one logical position in the picture frame.  The port's slot
+        % walks the span symmetrically about that centre, at the same cell
+        % step a frame-anchored spanning atom gives its slots, so a route
+        % meets one distinct exit per slot here too.
+        \__tenkz_kernel_r_span:nNN {#1}
+          \l__tenkz_kernel_ro_b_tl \l__tenkz_kernel_ro_tl
+        \__tenkz_model_get:nnN {#3} {port-slot}
+          \l__tenkz_kernel_port_slot_tl
+        \quark_if_no_value:NT \l__tenkz_kernel_port_slot_tl
+          { \tl_set:Nn \l__tenkz_kernel_port_slot_tl {1} }
         \__tenkz_kernel_r_xy:nNN {#1}
           \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
         \__tenkz_geom_unapply:nnnNN {kpic}
@@ -9146,18 +9183,49 @@
           {
             \str_case:nnF {#2}
               {
-                {e}{ \l__tenkz_kernel_ro_row_tl }
-                {w}{ \l__tenkz_kernel_ro_row_tl }
+                {e}
+                  {
+                    \l__tenkz_kernel_ro_row_tl
+                    + \l__tenkz_kernel_port_slot_tl
+                    - ( \l__tenkz_kernel_ro_tl + 1 ) / 2
+                  }
+                {w}
+                  {
+                    \l__tenkz_kernel_ro_row_tl
+                    + \l__tenkz_kernel_port_slot_tl
+                    - ( \l__tenkz_kernel_ro_tl + 1 ) / 2
+                  }
               }
-              { \l__tenkz_kernel_ro_col_tl }
+              {
+                \l__tenkz_kernel_ro_col_tl
+                + \l__tenkz_kernel_port_slot_tl
+                - ( \l__tenkz_kernel_ro_b_tl + 1 ) / 2
+              }
           }
           {
-            \str_case:nnF {#2}
+            \str_case:nn {#2}
               {
-                {e}{ \l__tenkz_kernel_ro_col_tl }
-                {w}{ \l__tenkz_kernel_ro_col_tl }
+                {n}
+                  {
+                    \l__tenkz_kernel_ro_row_tl
+                    - ( \l__tenkz_kernel_ro_tl - 1 ) / 2
+                  }
+                {s}
+                  {
+                    \l__tenkz_kernel_ro_row_tl
+                    + ( \l__tenkz_kernel_ro_tl - 1 ) / 2
+                  }
+                {e}
+                  {
+                    \l__tenkz_kernel_ro_col_tl
+                    + ( \l__tenkz_kernel_ro_b_tl - 1 ) / 2
+                  }
+                {w}
+                  {
+                    \l__tenkz_kernel_ro_col_tl
+                    - ( \l__tenkz_kernel_ro_b_tl - 1 ) / 2
+                  }
               }
-              { \l__tenkz_kernel_ro_row_tl }
           }
       }
   }
@@ -11838,20 +11906,12 @@
         \tl_set:Ne \l__tenkz_kernel_leg_col_tl
           { \int_eval:n { \l__tenkz_kernel_leg_col_tl + #3 - 1 } }
         \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
-        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+        % A spanning atom's slots read the frame at their own spanned cell:
+        % its local bearing and its cell point, which is where the same
+        % slot's authored port stands.  The one bearing production keeps the
+        % ink, the signature, and the route classifier in agreement.
+        \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {#3}
           \l__tenkz_kernel_leg_dir_tl
-          \l__tenkz_kernel_r_physical_anchor_tl
-        % A spanning atom's non-first slots read the frame at their own
-        % spanned cell: its local bearing and its cell point, which is where
-        % the same slot's authored port stands.
-        \int_compare:nNnT { \l__tenkz_kernel_policy_span_tl } > {1}
-          {
-            \__tenkz_geom_local_bearing:nnnnN {kpic}
-              { \l__tenkz_kernel_leg_row_tl }
-              { \l__tenkz_kernel_leg_col_tl }
-              { \str_if_eq:nnTF {#2} {n} {90} {270} }
-              \l__tenkz_kernel_leg_dir_tl
-          }
         \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
         \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
           {

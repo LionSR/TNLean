@@ -1,0 +1,13 @@
+% Control for r_route_noncell_slots: the same picture with the spanning
+% atom cell-anchored; the pair must render byte-identical rasters and
+% publish the same slot-ordered route exits.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,2), name=M, skin=pill, wires=2,
+      ports={180@2:virtual, 180@1:virtual}]{M}
+  \tnwire[kind=string, name=lift, route={w of M}, crossing=over]{open}{open}
+\end{tenkz}
+\end{document}

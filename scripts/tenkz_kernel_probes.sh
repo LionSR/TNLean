@@ -1614,7 +1614,8 @@ for pixel_fixture in \
     r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
     r_region_diagonal r_region_pinch_staircase r_ring_closure \
     r_wire_stroke r_noncell_port_slot r_noncell_port_slot_cell \
-    r_wide_policy_legs r_wide_policy_ports; do
+    r_wide_policy_legs r_wide_policy_ports \
+    r_route_noncell_slots r_route_noncell_slots_cell; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -2812,6 +2813,36 @@ grep -Fxq 'kernel-boundary|signature=phys:n, phys:n' \
 }
 cmp -s "$WORK/r_wide_policy_legs.png" "$WORK/r_wide_policy_ports.png" || {
   echo "FAIL: the wide policy legs render apart from authored slot ports" >&2
+  exit 1
+}
+# A route over a spanning atom meets one distinct exit per slot, ordered by
+# the slot's place on the span rather than by record id, wherever the atom
+# stands: the midway and cell-anchored spellings publish the same crossing
+# order and render byte-identical.
+for half in r_route_noncell_slots r_route_noncell_slots_cell; do
+  grep -Fq 'cross=over at crossing of lift and port-open-2,over at crossing of lift and port-open-1|' \
+      "$WORK/$half.tnlog" || {
+    echo "FAIL: $half did not meet the span's exits in slot order" >&2
+    exit 1
+  }
+done
+cmp -s "$WORK/r_route_noncell_slots.png" \
+    "$WORK/r_route_noncell_slots_cell.png" || {
+  echo "FAIL: a route over a midway span renders apart from its cell anchor" >&2
+  exit 1
+}
+# On a curved carrier a wide atom's policy legs and its boundary signature
+# agree per slot: two stations, two bearings, no duplicated host bearing.
+for leg in leg-n-1-1 leg-n-1-2; do
+  grep -Fq "|kind=index|name=$leg|origin=policy-leg|port-type=physical|" \
+      "$WORK/r_circle_wide_policy.tnlog" || {
+    echo "FAIL: the circle-frame wide policy atom lost slot leg $leg" >&2
+    exit 1
+  }
+done
+grep -Fxq 'kernel-boundary|signature=phys:e, phys:n' \
+    "$WORK/r_circle_wide_policy.tnlog" || {
+  echo "FAIL: the circle-frame wide policy signature left its slot bearings" >&2
   exit 1
 }
 
