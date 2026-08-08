@@ -48,6 +48,133 @@
     lie in $q^m$ cells; two share a cell, and their difference yields $n$.
 \end{proof}
 
+
+\begin{corollary}[Recurrent powers of finitely many phases]
+    \label{cor:dirichlet_phase_recurrence}
+    \lean{Dirichlet.exists_ge_pow_sub_one_norm_le,
+        Dirichlet.exists_strictMono_pow_tendsto_one}
+    \leanok
+    \uses{lem:dirichlet_simultaneous}
+    For finitely many complex numbers $\theta_j$ satisfying $|\theta_j|=1$,
+    there is a strictly increasing sequence of positive integers $n_i$ such
+    that $\theta_j^{n_i}\longrightarrow1$ simultaneously for every~$j$.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{lem:dirichlet_simultaneous}
+    Write each phase as $\theta_j=e^{2\pi i x_j}$. Apply simultaneous
+    approximation with successively larger denominators and choose the
+    approximating exponents recursively beyond the preceding one.
+\end{proof}
+
+\begin{definition}[Peripheral spectral splitting]
+    \label{def:peripheral_spectral_splitting}
+    \lean{Module.End.peripheralSubspace,
+        Module.End.nonPeripheralSubspace,
+        Module.End.isCompl_peripheralSubspace_nonPeripheralSubspace}
+    \leanok
+    Let $T$ be an endomorphism of a finite-dimensional complex vector space.
+    Its peripheral subspace is the sum of the maximal generalized eigenspaces
+    for eigenvalues $\mu$ with $|\mu|=1$; its non-peripheral subspace is the
+    corresponding sum for the remaining eigenvalues. These subspaces are
+    complementary. This is the splitting in Wolf Equation~(6.11).
+\end{definition}
+
+\begin{definition}[Peripheral spectral projections]
+    \label{def:peripheral_spectral_projections}
+    \lean{Module.End.peripheralProjection,
+        Module.End.peripheralWeightedProjection,
+        Module.End.range_peripheralProjection,
+        Module.End.isIdempotentElem_peripheralProjection,
+        Module.End.peripheralProjection_comp,
+        Module.End.peripheralWeightedProjection_eq_comp,
+        Module.End.peripheralWeightedProjection_apply_of_mem_eigenspace}
+    \leanok
+    \uses{def:peripheral_spectral_splitting}
+    The map $T_\varphi$ is the projection onto the peripheral subspace along
+    the non-peripheral subspace, and
+    $T_\varphi'=T\circ T_\varphi=T_\varphi\circ T$. On a peripheral
+    $\mu$-eigenvector, $T_\varphi$ acts as the identity and
+    $T_\varphi'$ acts as multiplication by~$\mu$. These are Wolf
+    Equations~(6.12) and~(6.13).
+\end{definition}
+
+\begin{theorem}[Recurrent subsequence and peripheral projection]
+    \label{thm:peripheral_projection_recurrent_subsequence}
+    \lean{IsPositiveMap.tendsto_pow_apply_peripheralProjection,
+        IsPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection,
+        IsPositiveMap.tendsto_endEquiv_pow_peripheralProjection}
+    \leanok
+    \uses{cor:dirichlet_phase_recurrence,
+        def:peripheral_spectral_projections,
+        thm:peripheral_jordan_trivial,
+        thm:positive_trace_nonincreasing_bounded_orbits}
+    Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$.
+    There is a strictly increasing sequence of positive integers $n_i$ such
+    that $T^{n_i}\to T_\varphi$ pointwise and in operator norm. This is Wolf
+    Proposition~6.3(i).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:dirichlet_phase_recurrence,
+        def:peripheral_spectral_projections,
+        thm:peripheral_jordan_trivial,
+        thm:positive_trace_nonincreasing_bounded_orbits}
+    Bounded forward orbits imply that every eigenvalue has modulus at most
+    one. On the non-peripheral generalized eigenspaces, the binomial expansion
+    of each Jordan block tends to zero. Proposition~6.2 removes nilpotent
+    parts on the peripheral subspace, while the simultaneous recurrence
+    corollary chooses a common subsequence on which all peripheral phases tend
+    to one. The complementary splitting gives pointwise convergence, which is
+    equivalent to operator-norm convergence in finite dimension.
+\end{proof}
+
+\begin{corollary}[Channel structure of the peripheral projections]
+    \label{cor:peripheral_projection_channel}
+    \lean{IsPositiveMap.peripheralProjection_isPositiveMap,
+        IsPositiveMap.peripheralProjection_isTracePreservingMap,
+        IsPositiveMap.peripheralProjection_isCPMap,
+        IsChannel.peripheralProjection,
+        IsChannel.peripheralWeightedProjection}
+    \leanok
+    \uses{thm:peripheral_projection_recurrent_subsequence,
+        def:peripheral_spectral_projections}
+    The peripheral projection of a positive trace-preserving map is positive
+    and trace-preserving. If the original map is completely positive, then
+    $T_\varphi$ and $T_\varphi'$ are quantum channels. This is the
+    preservation assertion in Wolf Proposition~6.3(ii).
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peripheral_projection_recurrent_subsequence}
+    Every power of $T$ preserves positivity and trace, and every power of a
+    completely positive map is completely positive. These properties are
+    closed under the operator-norm limit. Composition with $T$ gives the
+    assertion for $T_\varphi'$.
+\end{proof}
+
+\begin{theorem}[Peripheral absorption of the mean-ergodic projection]
+    \label{thm:peripheral_mean_ergodic_absorption}
+    \lean{IsPositiveMap.peripheralProjection_comp_meanErgodicProjection}
+    \leanok
+    \uses{thm:peripheral_projection_recurrent_subsequence,
+        def:peripheral_spectral_projections,
+        thm:positive_trace_nonincreasing_bounded_orbits}
+    If $T_\infty$ denotes the mean-ergodic projection of a positive
+    trace-preserving map, then
+    \begin{align}
+        T_\varphi T_\infty=T_\infty.
+    \end{align}
+    This is the absorption identity adjacent to Wolf Equation~(6.14).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peripheral_projection_recurrent_subsequence}
+    The range of $T_\infty$ consists of fixed points of~$T$, hence every power
+    of $T$ fixes this range. Passing to the recurrent-subsequence limit shows
+    that $T_\varphi$ also fixes it pointwise.
+\end{proof}
+
 \begin{theorem}[Ces\`aro fixed-point theorem]\label{thm:cesaro_fixedpoint}
     \lean{IsChannel.exists_posSemidef_fixedPoint}
     \leanok
