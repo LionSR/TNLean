@@ -1,0 +1,60 @@
+# Pinned expectations for the supervisor self-test.
+#
+# `docs/tenkz/SOAK-1.0.md` §Release payload evidence: activation runs a closed
+# supervisor self-test suite from the pinned support tree against pinned
+# synthetic fixtures, and a missing or mismatched receipt prevents arming.
+# These rows are that suite. Each drives one mode of
+# `tests/tenkz/release-harness/selftest_probe.py` through the supervisor and
+# fixes the outcome the supervisor must report.
+#
+# `outcome` is one of:
+#   passed            the command exited zero and wrote no receipt
+#   assertion-failed  the command exited ten with the exact closed receipt
+#   fails-closed      the supervisor refused the run; `message` must occur in
+#                     its diagnosis
+
+schema = 1
+synthetic_fingerprint = "5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+
+[[probe]]
+id = "pass"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "assertion"
+outcome = "assertion-failed"
+timeout_seconds = 60
+
+[[probe]]
+id = "unrelated-exit"
+outcome = "fails-closed"
+message = "exited 3, which is neither a pass nor an assertion failure"
+timeout_seconds = 60
+
+[[probe]]
+id = "exit-without-receipt"
+outcome = "fails-closed"
+message = "exited 10 without its receipt"
+timeout_seconds = 60
+
+[[probe]]
+id = "isolation"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "environment"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "readonly"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "timeout"
+outcome = "fails-closed"
+message = "exceeded its 1s timeout"
+timeout_seconds = 1

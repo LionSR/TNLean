@@ -1,0 +1,16 @@
+# Child tools the evidence supervisor may place on a command's sanitized PATH.
+#
+# `docs/tenkz/SOAK-1.0.md` §Release payload evidence: the supervisor resolves
+# each tool without following a repository link, validates its configured
+# version fingerprint, and records the resolved identity in the receipt. A tool
+# absent from this file cannot be reached by any inventory command.
+#
+# The fingerprint is a pattern rather than one exact version string. A hosted
+# runner's interpreter is upgraded on the vendor's schedule, and pinning an
+# exact patch release would make every such upgrade a release incident while
+# proving nothing about compatibility. The pattern states the range the
+# assertions were written against; narrowing it is a support-tree change and
+# therefore a new pinned tree.
+
+[tool.python3]
+version_pattern = "Python 3\\.(?:1[2-9]|[2-9][0-9])(?:\\.[0-9]+)*[a-z0-9+]*"

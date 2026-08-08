@@ -1,0 +1,62 @@
+name: Tenkz Release Policy
+
+# The enforcement workflow named by `docs/tenkz/DESIGN.md`'s
+# `release_enforcement_workflows`. While enforcement is pending it checks the
+# release-test contract on every change: the supervisor's isolation probes, the
+# closed inventory against the pinned policy, every atomic compatibility
+# assertion, and the activation pins.
+#
+# Two mechanisms the policy requires of this workflow are absent by design
+# until the campaign is armed, and their absence is checked rather than
+# assumed. The terminal publisher job with `contents: write` and the
+# `tenkz-release-publisher` environment is added by the change that lands the
+# final-tag signing key, which cannot be committed before the maintainer
+# generates it; `tests/tenkz/release-support/README.md` records that step.
+# Network denial before repository code runs likewise belongs to the armed
+# shape. `check-readiness` fails closed if the pinned policy ever says `armed`
+# while those artifacts are missing, so an activation that skipped them cannot
+# go green here.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  release-payload:
+    name: Check tenkz release harness and inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run the supervisor isolation probes
+        run: python3 tests/tenkz/release-harness/selftest.py
+
+      - name: Check the closed release-test inventory
+        run: python3 tests/tenkz/release-harness/supervisor.py check-inventory
+
+      - name: Run every atomic release assertion
+        run: python3 tests/tenkz/release-harness/supervisor.py run-all
+
+      - name: Check what the enforcement state permits
+        run: python3 tests/tenkz/release-harness/supervisor.py check-readiness
+
+      - name: Report the activation pins
+        run: python3 tests/tenkz/release-harness/supervisor.py pins

@@ -1,0 +1,61 @@
+# The closed release-test inventory.
+#
+# `docs/tenkz/DESIGN.md` pins this file by raw-blob SHA-256 at activation, and
+# `docs/tenkz/SOAK-1.0.md` §Release payload evidence fixes its grammar. Each
+# entry names one atomic compatibility assertion about one public surface: one
+# command, one failure cause, one fingerprint. A test that could fail for two
+# reasons is two tests, because a friction record names the fingerprint and a
+# fingerprint that stands for a suite tells a reader nothing.
+#
+# `program_paths` are the mutable subjects under test; `fixture_paths` are the
+# other repository blobs the command may read. Neither role may supply runner,
+# helper, or acceptance logic: those come from the pinned code and support
+# trees. Run the inventory with
+#
+#     python3 tests/tenkz/release-harness/supervisor.py run-all
+
+schema = 1
+
+[[test]]
+id = "tex-api-package-version-declared"
+surface = "tex-api"
+failure_fingerprint = "aa16d2f161b986789b582d211b59344b66171a386e3fcfcc259aafb2ba48e1d8"
+runner = "python3"
+path = "tests/tenkz/release-harness/tex_api_package_version.py"
+args = []
+program_paths = ["tex/tenkz/tenkz.sty"]
+fixture_paths = []
+timeout_seconds = 60
+
+[[test]]
+id = "tex-api-registry-commands-reach-the-reference"
+surface = "tex-api"
+failure_fingerprint = "6b10bdfa0d4079c322990a4e9916416013a4c8a6f8ba47aa69d6905cd50d10b0"
+runner = "python3"
+path = "tests/tenkz/release-harness/tex_api_language_reference.py"
+args = []
+program_paths = ["tex/tenkz/tenkz-language-registry.tex"]
+fixture_paths = ["docs/tenkz/chapters2/generated-language-reference.tex"]
+timeout_seconds = 60
+
+[[test]]
+id = "tnlog-reader-ignores-unknown-fields"
+surface = "tnlog"
+failure_fingerprint = "4312555019ae1123120a0e29328272a20f876568c2f6d12a470cf3e5aea6648f"
+runner = "python3"
+path = "tests/tenkz/release-harness/tnlog_unknown_field.py"
+args = []
+program_paths = ["scripts/tenkzlib/tnlog.py"]
+fixture_paths = []
+timeout_seconds = 60
+
+[[test]]
+id = "tnlog-declared-kinds-match-the-reader"
+surface = "tnlog"
+failure_fingerprint = "bae39735591cfdbdf20376e84041aec4d57f7c5b004e5addce6f5a3fa24e5cf3"
+runner = "python3"
+path = "tests/tenkz/release-harness/tnlog_declared_kinds.py"
+args = []
+program_paths = ["scripts/tenkzlib/tnlog.py"]
+fixture_paths = ["docs/tenkz/TNLOG.md"]
+timeout_seconds = 60
