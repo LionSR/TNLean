@@ -1,0 +1,68 @@
+% Regression: the named metric profile.  metrics=compact scales the one
+% base pitch by the compactpitch row of the metric registry, so every
+% named ratio -- a leg, a clearance, a glyph reference -- follows the
+% pitch, while the print-size floors -- the wire stroke among them --
+% hold at print size.  The base picture and the profiled picture are
+% otherwise the same figure, and the profile is a picture-record field
+% of the event stream, because pitch-normalized coordinates cannot show
+% it.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\seq_new:N \g__tenkz_test_pitch_seq
+\seq_new:N \g__tenkz_test_stub_seq
+\seq_new:N \g__tenkz_test_floor_seq
+\cs_new_eq:NN \__tenkz_test_emit: \__tenkz_kernel_emit:
+\cs_set_protected:Npn \__tenkz_kernel_emit:
+  {
+    \seq_gput_right:Ne \g__tenkz_test_pitch_seq { \dim_use:N \tenkz@pitch }
+    \seq_gput_right:Ne \g__tenkz_test_stub_seq
+      { \dim_eval:n { \__tenkz_dim:n {stub} } }
+    \seq_gput_right:Ne \g__tenkz_test_floor_seq
+      { \dim_eval:n { \__tenkz_dim:n {wirewidth} } }
+    \__tenkz_test_emit:
+  }
+\AtEndDocument
+  {
+    \int_compare:nNnF { \seq_count:N \g__tenkz_test_pitch_seq } = {2}
+      {\errmessage{the~fixture~did~not~render~exactly~two~pictures}}
+    \dim_compare:nNnF
+      { \seq_item:Nn \g__tenkz_test_pitch_seq {2} } =
+      {
+        \__tenkz_metric_ratio:n {compactpitch}
+        \dimexpr \seq_item:Nn \g__tenkz_test_pitch_seq {1} \relax
+      }
+      {\errmessage{the~compact~profile~is~not~the~compactpitch~fraction~
+        of~the~base~pitch}}
+    \dim_compare:nNnF
+      { \seq_item:Nn \g__tenkz_test_stub_seq {2} } =
+      {
+        \__tenkz_metric_ratio:n {stub}
+        \dimexpr \seq_item:Nn \g__tenkz_test_pitch_seq {2} \relax
+      }
+      {\errmessage{a~named~ratio~did~not~follow~the~profiled~pitch}}
+    \dim_compare:nNnF
+      { \seq_item:Nn \g__tenkz_test_floor_seq {2} } =
+      { \seq_item:Nn \g__tenkz_test_floor_seq {1} }
+      {\errmessage{a~print-size~floor~moved~with~the~profile}}
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% The same three-site word at the base metric and under the compact
+% profile: two bonds, an open boundary pair, one labelled physical leg.
+\begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+  \tn[name=A, ports={180:virtual, 0:virtual}]{A} &
+  \tn[name=B, ports={180:virtual, 0:virtual, 90:physical:$i$}]{B} &
+  \tn[name=C, ports={180:virtual, 0:virtual}]{C}
+\end{tenkz}
+\quad
+\begin{tenkz}[metrics=compact, rows={wire}, cols=3, west=open, east=open]
+  \tn[name=A, ports={180:virtual, 0:virtual}]{A} &
+  \tn[name=B, ports={180:virtual, 0:virtual, 90:physical:$i$}]{B} &
+  \tn[name=C, ports={180:virtual, 0:virtual}]{C}
+\end{tenkz}
+\end{document}

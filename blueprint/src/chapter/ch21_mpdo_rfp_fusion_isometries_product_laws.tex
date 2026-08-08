@@ -462,11 +462,11 @@ of_verticalDecompositions_of_unitaryBlockEquiv}
     %   the contraction displayed here asserts only the operator Q_N.
     \ensuremath{Q={}}
     \tenkzkernel
-    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=19, bonds=none]
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=19, bonds=none,
+                  metrics=compact]
         % Nineteen columns at the base metric outrun the compiled page and
-        % lose the terminal trace; half pitch keeps the whole recursion on
-        % one line, as the 0.7 spelling's compact profile did.
-        \tnset{pitch=5.5mm}
+        % lose the terminal trace; the compact profile keeps the whole
+        % recursion on one line.
         \tn[at=(5,1), skin=box, name=X1,
             ports={45:physical, 0:physical, -20:physical, -45:physical}]{X}
         \tn[at=(4,5), skin=box, name=X2,

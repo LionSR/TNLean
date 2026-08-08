@@ -492,6 +492,25 @@ grep -Fq '|name=said|stroke=solid|' "$WORK/r_wire_stroke.tnlog" || {
   echo "FAIL: the solid spelling lost its recorded default" >&2
   exit 1
 }
+# The named metric profile is a picture-record field of the stream: the
+# profiled picture states it, the base picture carries no metrics field,
+# and the two otherwise-identical figures keep identical pitch-normalized
+# records.  The fixture's own assertions pin the dimensions: the profiled
+# pitch is the compactpitch fraction of the base pitch, the named ratios
+# follow it, and the print-size floors hold.
+[ "$(grep -c '^picture|' "$WORK/r_metrics_compact.tnlog" || true)" -eq 2 ] || {
+  echo "FAIL: the metric-profile fixture lost a picture" >&2
+  exit 1
+}
+grep -Fq 'picture|id=k2|lang=kernel|metrics=compact' \
+    "$WORK/r_metrics_compact.tnlog" || {
+  echo "FAIL: the compact profile left the picture record" >&2
+  exit 1
+}
+grep -Eq '^picture\|id=k1\|lang=kernel$' "$WORK/r_metrics_compact.tnlog" || {
+  echo "FAIL: the base picture acquired a metrics field" >&2
+  exit 1
+}
 grep -Eq '^wire\|.*dir=to\|.*kind=index\|.*name=inner\|.*port-type=physical\|to=addr-' \
     "$WORK/r_physical_dir.tnlog" || {
   echo "FAIL: internal directed physical contraction lost its typed record" >&2
@@ -1605,10 +1624,10 @@ command -v pdftoppm >/dev/null 2>&1 || {
 }
 for pixel_fixture in \
     k_plane k_skin_pairings r_dir_open_bearings r_hull_live r_ink_semantics \
-    r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
-    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
-    r_region_diagonal r_region_pinch_staircase r_ring_closure \
-    r_trace_return_rows r_wire_stroke \
+    r_label_turn r_metrics_compact r_mpo_skin_box r_mpo_skin_prelude \
+    r_parallel_lanes r_physical_dir r_pill_skin_prelude \
+    r_pill_skin_roundrect r_region_diagonal r_region_pinch_staircase \
+    r_ring_closure r_trace_return_rows r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
     r_route_noncell_slots r_route_noncell_slots_cell; do
@@ -1673,10 +1692,11 @@ for path in sys.argv[1:]:
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
   "$WORK/k_plane.png" "$WORK/r_dir_open_bearings.png" \
   "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
-  "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
-  "$WORK/r_region_diagonal.png" "$WORK/r_region_pinch_staircase.png" \
-  "$WORK/r_ring_closure.png" "$WORK/r_trace_return_rows.png" \
-  "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
+  "$WORK/r_metrics_compact.png" "$WORK/r_parallel_lanes.png" \
+  "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \
+  "$WORK/r_region_pinch_staircase.png" "$WORK/r_ring_closure.png" \
+  "$WORK/r_trace_return_rows.png" "$WORK/r_wire_stroke.png" \
+  >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
@@ -1715,6 +1735,33 @@ if ( cd "$WORK" &&
 fi
 grep -Fq '[TKZ-KERNEL-SKIN]' "$WORK/n_unknown_skin.transcript" || {
   echo "FAIL: unknown skin lacked TKZ-KERNEL-SKIN" >&2
+  exit 1
+}
+
+metrics_negative="$KERNEL/negative/n_picture_metrics.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$metrics_negative" >"$WORK/n_picture_metrics.transcript" 2>&1 ); then
+  echo "FAIL: a word outside the metric-profile alphabet was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_picture_metrics.transcript" || {
+  echo "FAIL: unknown metric profile lacked TKZ-LANG-CHOICE" >&2
+  exit 1
+}
+
+group_metrics_negative="$KERNEL/negative/n_group_metrics.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$group_metrics_negative" \
+       >"$WORK/n_group_metrics.transcript" 2>&1 ); then
+  echo "FAIL: a group-scope metric profile was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-METRICS-SCOPE]' "$WORK/n_group_metrics.transcript" || {
+  echo "FAIL: group-scope metric profile lacked TKZ-METRICS-SCOPE" >&2
   exit 1
 }
 
