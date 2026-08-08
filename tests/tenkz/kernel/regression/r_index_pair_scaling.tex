@@ -36,13 +36,14 @@
     \int_compare:nNnF { \g__tenkz_test_index_pairing_int } = {0}
       {\errmessage{ordinary~index~routes~entered~the~pairing~candidate~pass}}
   }
+% The picture body is captured under document catcodes, so the probe needs a
+% document-level name.
+\cs_new_eq:NN \tenkzTestManyIndexWires \__tenkz_test_many_index_wires:
 \ExplSyntaxOff
 \makeatother
 \begin{document}
 \tenkzkernel
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-  \ExplSyntaxOn
-  \__tenkz_test_many_index_wires:
-  \ExplSyntaxOff
+  \tenkzTestManyIndexWires
 \end{tenkz}
 \end{document}

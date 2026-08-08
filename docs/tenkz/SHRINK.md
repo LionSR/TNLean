@@ -2267,3 +2267,285 @@ verdicts below.
 | flag:consumers:key:connection:to | dies with the `\tnarrow` declarations that addressed it, exactly as `from=` does; expiry 0.9 |
 | flag:consumers:key:connection:species | dies at the S4 swap with the 0.7 connection tier it belongs to; the kernel wire carries its own signed `species=` row, and the respelled arrows carry their type in the preamble style; expiry 0.9 |
 | flag:consumers:key:setup:species | dies as a name-list: `\tndeclare{species}{name}{hue=...}` is the one declaration door, the blueprint already declares every species through it, and the last bare name-list rode the retired `tenkzcd` opt-in; expiry 0.9 |
+
+### 2026-08-06 — the conjugate flag is sentenced
+
+`conjugate=` is installed on the kernel atom tier and read by nothing: not
+the ink passes, not the boundary-signature fold, not a checker.  A sweep of
+the whole tree (issue 5383) finds sixteen atoms across seven section-II
+benchmark cases carrying the flag, two kernel regression fixtures spelling
+it as a manufactured consumer, and no consumer of the answer anywhere.  The
+only trace it leaves is the `conjugate=true` field in those atoms' records.
+
+The issue reserved the row until the directed-signatures design decided who
+carries duality.  The contract has since decided: wire `dir=` is the one
+spelling for a space against its dual (`LANGUAGE-1.0` section 2.4), so a
+second semantic carrier would say the same thing twice.  The presentational
+reading fails on the corpus's own evidence: no author panel draws a
+conjugate glyph, and every benchmark atom that wants visible conjugation
+spells `\overline{...}` in its label — wiring the flag to ink would double
+the bar on the three labelled cases, grow a stub bar on the empty-labelled
+bra rows, and change renders no figure asked for.  What remains is a flag
+that looks semantic, claims to be presentational, and is neither; a stored
+answer nobody reads is a key that can silently lie.
+
+So the row is tombstoned.  Per the booking rule in force since session 0,
+the ledger status moves with the parser row and not before: the registry row
+stays `kernel` with its note reading the sentence, the row is struck from
+the contract's atom table into the section-10 tombstones today — as the nine
+amendments were at their sentencing — and the deletion itself — the parser
+row, the sixteen benchmark spellings, the two fixture spellings, and their
+re-pinned record streams — executes as the usual corpus rewrite at the 1.0
+freeze.
+
+No meter moves today.  M1 stays at 140 kernel rows and 201 total, M2 at 228
+parser paths with an unchanged identity, M4 untouched; the registry note and
+this sentence are the whole diff.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-atom:conjugate | tombstoned: read by nothing, duality already has its one spelling in wire `dir=`, and the conjugate overline is label mathematics already spelled in the corpus; the parser row, the sixteen benchmark spellings, and the two fixture spellings leave in the corpus rewrite at the 1.0 freeze, the status moving with the parser row as booked since session 0; expiry 0.9 |
+
+### 2026-08-06 — the MPS and symmetry chapters leave the grid tier
+
+Thirty-three blueprint pictures across the matrix-product-vector chapter, the
+string-order chapter, the symmetry appendix, and the two channel-representation
+chapters now carry `\tenkzkernel`. The wave retires the chapters' 0.7
+spellings — `sandwich` two-row presets, `periodic` flags, `up=` shorthands,
+`role=`, `tensor style=`, `west label=`, `\tnX`, `\tn*`, `\tndots`, and
+`\tnspan` — for signed kernel rows: `rows={ket,bra}` ladders with bead
+operators on the pairing bonds, typed `ports=` with port labels, `boundary=`
+side policy, labelled side cups, and `\tnmark` bracket and enclosure ranges.
+One picture stays on the grid tier with its blocker named in the source: the
+MPV-overlap ladder needs a per-row trace return that clears the two-row
+selection it closes, and the kernel still drops every flat-row return one
+clearance below its own row.
+
+All six meters are unchanged: M1 stays at 140 kernel rows, M2 keeps its parser
+identity, M3 gains no escape, M4 is untouched at its frozen denominator, and
+no alias or overload moves. What moves is demand: three 0.7 rows lose their
+last blueprint consumers a milestone before the S4 swap would have taken them.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:annotation:brace below | dies at the S4 swap with the 0.7 annotation tier: the kernel bracket mark speaks from the south by itself, and the two remaining demand-corpus consumers are the blocked MPV-overlap ladder and a fixture booked to the grid dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:picture:sandwich | dies at the S4 swap: the 0.7 two-row preset has no consumer left, and the kernel's own `sandwich` row is the three-row preset the sugar ledger signs, so nothing remains for the grid reading to serve; expiry 0.9 |
+| flag:cooccur:picture:east label+west label | dies with the 0.7 boundary-label keys they are: the kernel tier carries no side-label row, a boundary pair is named by the mathematics beside the panel or by a port label, and the five shared invocations all ride grid-tier fixtures booked to the dialect's retirement; expiry 0.9 |
+
+### 2026-08-07 — the MPDO and algebraic-FT chapters take the kernel
+
+Four more blueprint chapters respell onto the kernel: the first-site
+contractions, the inverse-map factorization, the algebraic foundations,
+and the physical blocking. Forty constructs move — thirty-nine pictures
+and the blueprint's last `\tnpic`, whose sandwich becomes a scoped
+picture term — and every disposition row of the four files lands in the
+preserve column, which takes the ledger from 48 preserve, 25 codemod,
+128 redraw to 88, 23, and 90. The raw census trades that one command
+for one environment, 169 openings and 32 commands, and still reconciles
+to 201.
+
+Every picture now states its sides. The grid tier opened all four by
+default; a kernel word open at both ends says `west=open, east=open`, a
+closed word says `boundary=periodic`, and a single site that carries
+the boundary among sites that do not states it through typed `ports=`.
+The side-by-side renders lose no leg and recover two truths the 0.7
+tier had garbled: the sector-factorization sandwich drops the
+mis-anchored `legs at` stroke the old renderer drew as a diagonal
+across the operator row, and the transfer-operator equation now writes
+the summed index on the wire its own comment always claimed for it.
+The pictures shed twenty-two source lines; the eighteen `\tenkzkernel`
+lines that carry the temporary opt-in go at the surface swap with
+their C-switch row.
+
+M1 stays at 140 kernel rows and 201 total, M2 at 228 parser paths, M3
+at 24 metered escapes, and M4 at 25.94 — the registry, the parser, and
+the benchmark corpus are untouched. The consumer census moves twice.
+The bare `pill` flag falls to one blueprint consumer and takes its
+verdict below. The `up at=` key loses its last one exactly as its
+standing verdict said it would: the physical-blocking figure now
+states its leg through `ports=`, and the key waits out the swap with
+no demand-corpus consumer at all.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:object:pill | dies at S4 with the 0.7 object ledger: a kernel atom says the silhouette as the declared `skin=pill`, which is how the four migrated chapters now spell it; the one remaining blueprint consumer is the finite-separation isometry figure, which rides its own redraw row at the surface swap; expiry 0.9 |
+| flag:consumers:command:tnX | dies at S4 with the 0.7 command tier: the kernel spells the gauge capsule as `skin=ring`, which is how the migrated chapters now draw every X and X^{-1}; the one remaining blueprint consumer is the finite-separation direct-sum figure at ch20 intro L109, a grid-tier picture booked to the tier's own retirement; expiry 0.9 |
+
+### 2026-08-07 — the miscellaneous free graphs take the kernel
+
+The eight `tenkzfree` pictures outside the PEPS chapters — the two ch13
+support schematics, the ch20 direct-sum figure and its three
+block-injective panels, the ch21 structure-operator recursion, and the
+ch26 fixed-point decomposition — are respelled onto kernel `tenkz`
+pictures and land in the preserve column of `DISPOSITIONS.md` as
+`P-grid`. Their region marks carry declared species instead of the
+retired slot palette, and the ch21 recursion states its compact metric
+through the kernel's own `pitch=` setup key where the 0.7 spelling rode
+`compact` and raw millimetre coordinates.
+
+M3 falls from 24 to 18: the six `out=`/`in=` arc-angle escapes that rode
+the retired free bodies — the two matrix-unit hooks of the ch20 panels
+and the terminal trace arc of the ch21 recursion — go with them, each
+replaced by a route that leaves and enters along its ends' faces or by
+wires meeting at an invisible junction. M1 stays at 140 kernel rows and
+201 total, M2 at 228 parser paths, and M4 at 25.94 — the registry and
+the benchmark corpus are untouched. Five rows lose demand-corpus
+consumers with the respelling and take their verdicts below; every
+remaining consumer of the five is a ch24 free-graph figure already
+booked `R-free` in the disposition ledger and awaiting its own redraw.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:connection:name | dies at S4 with the 0.7 connection ledger: the kernel wire carries its own signed `name=` row, and the lone remaining consumer is a ch24 free graph booked `R-free` for its own redraw; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at S4 with the 0.7 region ledger it belongs to: `\tnregion` is tombstoned onto `\tnmark[form=enclosure]`, whose signed `label pos=` row this key's one remaining ch24 free-graph consumer takes at its redraw; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at S4 with the 0.7 region ledger: a kernel enclosure strokes its contour by default and `tint` adds the wash, so the outline flag owes no kernel spelling; both remaining consumers are ch24 free graphs booked `R-free`; expiry 0.9 |
+| flag:cooccur:connection:in+route | confirmed merge, tombstoned by contract: `out=`/`in=` migrate to `route=arc`, which leaves and enters along its ends' faces (`LANGUAGE-1.0` §10); every surviving invocation rides a ch24 free graph awaiting its `R-free` redraw, and the pair dies with the connection tier at S4; expiry 0.9 |
+| flag:cooccur:connection:out+route | confirmed merge, tombstoned by contract, exactly as `in=` above: the arc route replaces the pair and the ch24 redraws retire the invocations; expiry 0.9 |
+
+### 2026-08-07 — the blueprint's last lattice regions leave the 0.7 tier
+
+The ch24 PEPS wave (issue #4699, tracker #4709) respelled the chapter set's
+twelve `tenkzlattice` and twenty-six `tenkzfree` pictures onto the kernel,
+which empties the blueprint of `tenkzlattice` entirely and drops M3 escape
+usage from 24 to 6: every removed occurrence was a raw free-graph coordinate
+that is now an address.  The `\tnregion` command and its `region` key scope
+lose their last authored consumers outside the frozen legacy fixtures, so
+the low-consumer and shape flags below all name the same fact: the 0.7
+region tier is now dead weight awaiting the S4 swap, its kernel replacement
+— `\tnmark[form=enclosure]` over a selector — already carrying every
+blueprint region this wave moved.
+
+M1, M2, M5, and M6 do not move.  M4 does not move: the benchmark corpus is
+untouched.
+
+| flag | verdict |
+|---|---|
+| flag:cooccur:region:label pos+name | dies at the S4 swap with the 0.7 region tier it belongs to; the kernel spelling is a `\tnmark[form=enclosure]` record whose label and name are ordinary mark keys, and the blueprint's last `\tnregion` consumers were respelled in this wave; expiry 0.9 |
+| flag:cooccur:region:label pos+slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row and `label pos=` separately, and their 0.7 co-occurrence is an artifact of the six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:name+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:sugar-shaped:command:tnregion | dies at the S4 swap: `\tnregion` is the 0.7 spelling of `\tnmark[form=enclosure]`, every blueprint consumer now writes the mark, and the six remaining occurrences live in the frozen legacy fixtures the compatibility renderers still read; expiry 0.9 |
+| flag:consumers:command:tnregion | dies at the S4 swap: the two remaining demand-corpus consumers are frozen legacy fixtures, and every authored region is a `\tnmark[form=enclosure]` record; expiry 0.9 |
+| flag:consumers:command:tnsite | dies at the S4 swap with the `tenkzlattice` tier: its tombstone already names `\tn[at=(r,c)]`, and this wave respelled the blueprint's last `\tnsite`; expiry 0.9 |
+| flag:consumers:key:connection:name | dies at the S4 swap with the 0.7 connection tier: the kernel wire carries its own signed `name=` row, and the named `\tnjoin` consumers left with the ch24 free graphs; expiry 0.9 |
+| flag:consumers:key:object:label | dies at the S4 swap with the 0.7 object tier: a kernel label is the positional mathematics of the record, and the blueprint no longer writes the key; expiry 0.9 |
+| flag:consumers:key:object:ring | dies at the S4 swap with the 0.7 object tier: the kernel spelling is `skin=ring`, and the last blueprint `ring` flags were respelled in this wave; expiry 0.9 |
+| flag:consumers:key:region:label | dies at the S4 swap with the 0.7 region tier: a kernel enclosure takes its label positionally; expiry 0.9 |
+| flag:consumers:key:region:label pos | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `label pos=` row; expiry 0.9 |
+| flag:consumers:key:region:outline | dies at the S4 swap with the 0.7 region tier: the kernel enclosure is outline by default and `tint` opts into the fill, so the flag key has no kernel row to inherit; expiry 0.9 |
+| flag:consumers:key:region:slot | dies at the S4 swap with the 0.7 region tier; the kernel mark carries the signed `slot=` row until the deferred slot-for-species exchange executes; expiry 0.9 |
+| flag:cooccur:region:label+label pos | dies at the S4 swap with the 0.7 region tier, the same six frozen fixture regions as its siblings above; expiry 0.9 |
+| flag:cooccur:region:label+name | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:cooccur:region:label+slot | dies at the S4 swap with the 0.7 region tier, for the same six frozen fixture regions; expiry 0.9 |
+| flag:consumers:key:setup:compact | dies at S4 with the 0.7 metric tier: the kernel names no compact profile, and a page-constrained picture states its pitch in the body as the recursion figure now does; the two remaining demand-corpus consumers are grid-tier fixtures booked to the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:dot | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=dot`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:box | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=box`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:object:boundary | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette as the declared `skin=boundary`, which is how the migrated chapters draw it; no demand-corpus consumer remains and the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:key:connection:route | dies at S4 with the 0.7 connection tier: the kernel wire carries its own route row (registry, kernel-wire), so the grid reading serves nothing once the last grid pictures leave; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:environment:tenkzfree | dies at S4: the blueprint's last free-graph pictures left with this wave and the ch24 chapters, so the environment's demand-corpus consumers are gone; the front end and its fixtures are booked to the dialect retirement (FIXTURE-RETIREMENT.md); expiry 0.9 |
+| flag:consumers:command:tnput | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+| flag:consumers:command:tnjoin | dies at S4 with the 0.7 tier that reads it: the kernel carries its own row where the concept survives, and no demand-corpus consumer remains; the fixture uses ride the dialect's own retirement; expiry 0.9 |
+
+### 2026-08-08 — the last grid-tier blueprint pictures take the kernel
+
+The six 0.7 grid pictures the earlier waves left behind — the LPDO
+local contraction and its doubled-index tensor in the MPDO foundations,
+the horizontal canonical form of the doubled tensor and its direct-sum
+panel, the finite-separation isometry stack, and the ch26 fixed-point
+panel whose right-hand side already rode the kernel — now carry
+`\tenkzkernel`. `tensor style=` and the `up=`/`down=` shorthands become
+typed `ports=` with the index written on its port; the `\tnfuse` wedges
+become the prelude fuse shape the sugar ledger signs, spelled as
+`wires=2` atoms whose split legs the frame bonds to the two rows; the
+`op:none` row modifier and `legs at=` become slotted `ports=` on a
+`wide=3` atom; `\tnX` becomes `skin=ring` and `\tn*` becomes the
+overline in the label. The isometry stack takes the stock `skin=pill`
+its disposition row demanded. One picture stays on the grid tier, as
+before: the MPV-overlap ladder, blocked on a per-row trace return that
+clears the two-row selection it closes.
+
+The wave measures three kernel gaps and names them rather than hiding
+them. A fuse record inside a kernel picture is refused unplaced, so the
+signed `\tnfuse` sugar row has no kernel-tier reading yet and both
+migrated wedges spell its expansion by hand — the LPDO panel pays three
+source lines over its 0.7 spelling for exactly this reason. A `wires=`
+slot span resolves only at a frame cell, so a fuse standing at a
+`midway` address loses its second slot and is refused. And a wide
+atom's `physical=` policy mints one centre port rather than one per
+spanned cell, so a three-legged isometry face spells its three slots by
+hand.
+
+All six meters are unchanged from the ch24 wave: M1 stays at 140 kernel
+rows and 201 total, M2 at 228 parser paths, M3 at 6 escapes — the new
+pictures ride the kernel grammar with none — M4 at its frozen 25.94,
+and no alias or overload moves. The blueprint disposition ledger moves
+145 preserve, 13 codemod, 43 redraw to 151, 11, and 39 over the
+constant 201. Demand moves four times and takes its verdicts below.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:object:up | dies at S4 with the 0.7 object ledger: `up=` is tombstoned onto `ports=` (`LANGUAGE-1.0` §10), the migrated pictures write the physical index on its typed port, and both remaining demand-corpus consumers are ch21 fusion-isometry figures booked `C-picture+C-policy+C-record+R-record` for their own redraw; expiry 0.9 |
+| flag:consumers:key:object:down | dies at S4 with the 0.7 object ledger, exactly as `up=` above: the two remaining consumers are the same ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+| flag:consumers:key:setup:tensor style | dies at S4 with the 0.7 setup tier: the kernel names a silhouette per atom through the signed `skin=` row, which is how every migrated picture now spells it; the one remaining consumer is the ch21 refinement-channel picture-term figure, booked to its own redraw row; expiry 0.9 |
+| flag:sugar-shaped:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9); the kernel tier does not yet place a fuse record — the gap this wave measured — so the migrated wedges spell the expansion as `wires=2` atoms bonded by the frame, and all eight remaining occurrences ride the ch21 fusion-isometry figures awaiting their own redraw; expiry 0.9 |
+
+### 2026-08-08 — the cd front end is demolished
+
+The sentence of 2026-08-06 executes: `tenkz-cd.code.tex` is deleted, and
+with it the `tenkzcd` environment, the `\tnarrow` command, and the
+`maps`, `polygon=`, `radius=`, `column sep=`, `row sep=`, `from=`, and
+`to=` parser rows leave the registry, each already tombstoned by
+contract (`LANGUAGE-1.0` §10). The fourteen standalone fixtures that
+opened the environment leave the corpus with it; every behaviour they
+carried is classified in `FIXTURE-RETIREMENT.md` §3 as dying with the
+dialect or covered by a named kernel or RMP case, and none is a G1 or
+G2 carrier. Commutative diagrams are drawn by plain tikz-cd from now
+on, which the package no longer loads: the one blueprint consumer of
+tikz-cd is the preamble style in `blueprint/src/macros/diagrams.tex`,
+which now loads the package itself.
+
+Extension-gate: #4699 — the parser-leaf identity change is fourteen
+removed leaves and one removed environment door, the demolition the
+issue's checklist item 6.4 orders; no leaf is added.
+
+M1 falls from 140 kernel rows and 201 total to 136 and 192: four
+kernel key rows (`maps`, `polygon`, `from`, `to`), three escape rows
+(`radius`, `column sep`, `row sep`), one command, and one environment
+leave the ledger. M2 falls from 228 parser paths to 213. M3 stays at
+24: the deleted fixtures were corpus, not demand; the metered escapes
+died with #5601's respelling. M4 is untouched at 25.94, no alias or
+overload moves, and the census decrease is the session's own evidence.
+| flag:lonely-type:address | keep: the address grammar is the kernel's placement language itself (`at=` on every atom), lonely only because the cd dialect's arrow endpoints left with their front end; expiry 0.9 |
+
+### 2026-08-08 — the free front end is demolished
+
+The second demolition of the S4 swap: `tenkz-free.code.tex` is deleted,
+and with it the `tenkzfree` environment, the `\tnput` and `\tnjoin`
+commands, and the parser rows only the free dialect read — the typed
+`ports=` object row, the free-only silhouette flags `ring`, `circle`,
+and `boundary`, the 0.7 connection rows `route=`, `dir=`, `fused=`,
+`name=`, and `species=`, the free region's `group=`, the escape angles
+`out=` and `in=`, and the `route=curve` value alias — each tombstoned
+by contract (`LANGUAGE-1.0` §10: an irregular typed
+graph is addressed `\tn`/`\tnwire`/`\tnmark` records). The thirty-nine
+standalone fixtures that opened the environment leave the corpus with
+it; every behaviour they carried is classified in
+`FIXTURE-RETIREMENT.md` §3 as dying with the dialect or covered by a
+named kernel or RMP case, G1 and G2 landed before them, and G3's
+inline-embedding requirement stays recorded on the S4 surface swap
+(#4908).
+
+Extension-gate: #4699 — the parser-leaf identity change is thirty-five
+removed leaves, two removed command doors, and one removed environment
+door, the demolition the issue's checklist item 6.4 orders; no leaf is
+added.
+
+M1 falls from 136 kernel rows and 192 total to 126 and 177: ten
+kernel key rows (`ports`, `ring`, `circle`, `boundary`, `route`,
+`dir`, `fused`, `name`, `species`, `group`), two escape rows (`out`,
+`in`), two commands, and one environment leave the ledger. M2 falls
+from 213 parser paths to 178. M3 is untouched at 0. M4 is untouched at
+25.94. M5 keeps its six key aliases; the one value alias
+(`route=curve`) leaves with the join that read it, and the census
+decrease is the session's own evidence.
+| flag:lonely-type:direction-policy | keep: `dir=` is the contract's one spelling of a space against its dual (`LANGUAGE-1.0` §2.4), lonely only because the 0.7 connection twin left with its front end; expiry 0.9 |
+| flag:lonely-type:name-list | keep: `\tnset{species={...}}` is the document's species declaration itself, lonely only because the free region's member list left with its dialect; expiry 0.9 |

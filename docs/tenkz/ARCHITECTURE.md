@@ -13,7 +13,7 @@ topology it received.
 ## Current migration boundary
 
 The logic-free load map, executable language registry, typed atom extension,
-and model-freeze seam are active.  The four historical dialect files still
+and model-freeze seam are active.  The historical dialect files still
 contain substantial parser, geometry, rendering, and event code together,
 and many established private controls have not yet moved to the owner-prefixed
 form.  They are loaded behind the staged seam to preserve the verified
@@ -103,9 +103,7 @@ geometry service:
 
 - grid layout for `tenkz`;
 - lattice layout, including the `tenkzplanes` preset;
-- map and polygon layout for `tenkzcd`;
-- fusion-tree layout for the standalone `\tntree` atom;
-- explicitly placed typed-graph layout for `tenkzfree`.
+- fusion-tree layout for the standalone `\tntree` atom.
 
 Dialect layout owns only placement rules that are genuinely specific to that
 genre.  Shared keys and records are not reimplemented here.

@@ -38,10 +38,10 @@
     % virtual supports around each \varphi bond and overlapping physical
     % supports around sites 01 and 12.
     % Ink-to-index: U_r maps its two virtual half-indices to the upper physical
-    % index.  Each \varphi dot carries a rank-one virtual bond.  The inner red
-    % regions are P_{01},P_{12}; the two overlapping blue outlines are the
+    % index.  Each \varphi dot carries a rank-one virtual bond.  The inner
+    % tinted regions are P_{01},P_{12}; the two overlapping outlines are the
     % transported physical supports (P_2)_{01},(P_2)_{12}.
-    % Contractions: the four U--\varphi joins are the internal virtual sums.
+    % Contractions: the four grid bonds are the internal virtual sums.
     % The two outer virtual and three upper physical indices remain free.
     % Boundary signature: (virtual-west, virtual-east, physical-up,
     % physical-down)=(1,1,3,0).  Regions are annotations, not contractions.
@@ -51,64 +51,24 @@
     % structure; the explicit adjacent-projector transport is a blueprint
     % algebraic elaboration, and the schematic marks only its support geometry.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[boundary, ports={east:virtual}]
-            {transportLeft}{(-12mm,0)}{}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-            {transportUzero}{(0,0)}{U_0}
-            \tnput[dot, ports={west:virtual,east:virtual},
-                label pos=south]
-            {transportPhiZero}{(16mm,0)}{\varphi_{01}}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-            {transportUone}{(32mm,0)}{U_1}
-            \tnput[dot, ports={west:virtual,east:virtual},
-                label pos=south]
-            {transportPhiOne}{(48mm,0)}{\varphi_{12}}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-            {transportUtwo}{(64mm,0)}{U_2}
-            \tnput[boundary, ports={west:virtual}]
-            {transportRight}{(76mm,0)}{}
-            \tnput[boundary, ports={south:physical}]
-            {transportPhysicalZero}{(0,14mm)}{}
-            \tnput[boundary, ports={south:physical}]
-            {transportPhysicalOne}{(32mm,14mm)}{}
-            \tnput[boundary, ports={south:physical}]
-            {transportPhysicalTwo}{(64mm,14mm)}{}
-            \tnjoin[name=transportOuterLeft]
-            {transportLeft.east}{transportUzero.west}
-            \tnjoin[name=transportZeroLeft]
-            {transportUzero.east}{transportPhiZero.west}
-            \tnjoin[name=transportZeroRight]
-            {transportPhiZero.east}{transportUone.west}
-            \tnjoin[name=transportOneLeft]
-            {transportUone.east}{transportPhiOne.west}
-            \tnjoin[name=transportOneRight]
-            {transportPhiOne.east}{transportUtwo.west}
-            \tnjoin[name=transportOuterRight]
-            {transportUtwo.east}{transportRight.west}
-            \tnjoin[name=transportPhysicalJoinZero]
-            {transportUzero.north}{transportPhysicalZero.south}
-            \tnjoin[name=transportPhysicalJoinOne]
-            {transportUone.north}{transportPhysicalOne.south}
-            \tnjoin[name=transportPhysicalJoinTwo]
-            {transportUtwo.north}{transportPhysicalTwo.south}
-            \tnregion[slot=selected, label={$\supp(P_{01})$},
-                label pos=south,
-                name=transportVirtualZero]{transportPhiZero}
-            \tnregion[slot=selected, label={$\supp(P_{12})$},
-                label pos=south,
-                name=transportVirtualOne]{transportPhiOne}
-            \tnregion[slot=secondary, outline,
-                label={$\supp((P_2)_{01})$},
-                label pos=north west, name=transportPhysicalRegionZero]
-            {transportUzero,transportUone,transportZeroLeft,
-                transportZeroRight,transportVirtualZero}
-            \tnregion[slot=secondary, outline,
-                label={$\supp((P_2)_{12})$},
-                label pos=north east, name=transportPhysicalRegionOne]
-            {transportUone,transportUtwo,transportOneLeft,
-                transportOneRight,transportVirtualOne}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, west=open, east=open, physical=up]
+            \tn[skin=box]{U_0} &
+            \tn[physical=none, label pos=s]{\varphi_{01}} &
+            \tn[skin=box]{U_1} &
+            \tn[physical=none, label pos=s]{\varphi_{12}} &
+            \tn[skin=box]{U_2}
+            \tndeclare{species}{support}{hue=source:red}
+            \tndeclare{species}{transported}{hue=source:blue}
+            \tnmark[form=enclosure, species=support, tint, label pos=s]
+                {(1,2)}{$\supp(P_{01})$}
+            \tnmark[form=enclosure, species=support, tint, label pos=s]
+                {(1,4)}{$\supp(P_{12})$}
+            \tnmark[form=enclosure, species=transported, label pos=nw]
+                {(1,1) .. (1,3)}{$\supp((P_2)_{01})$}
+            \tnmark[form=enclosure, species=transported, label pos=ne]
+                {(1,3) .. (1,5)}{$\supp((P_2)_{12})$}
+        \end{tenkz}
     \end{center}
 \end{proof}
 

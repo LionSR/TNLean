@@ -105,12 +105,11 @@ id = "rmp-ii-mpu-blocking"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-defects = ["placement-illegible"]
-case_sha256 = "e87a92370efda1d09990e047e84dbc0b55f0e011c7012c62b396f6fdd6efcb04"
-reviewed = "2026-08-06"
-renderer = "claude-issue-5577-typing-audit-2026-08-06-200dpi"
-second_viewer = "fable-w1a-recheck-2026-08-05-400dpi"
-note = "Issue #5577: the four U-Ubar column bonds retyped virtual to physical (u1.270, ub1.90, u2.270, ub2.90 on both panels). The author draws each column as one continuous vertical stroke from y=0.7 to y=-0.7 through U at y=0.3 and Ubar at y=-0.3, with the virtual rails as the horizontals at y=+/-0.3 (ImagesReview Section II.tex lines 405-412); the segment between the two tensors is therefore the summed site index, and typing it virtual while its two open ends were already physical made one stroke change type mid-line. The (a1) panel the figure factors sets the same sandwich equal to a bare vertical line, which only reads as the identity on the physical space. Sibling conventions: rmp-ii-mpu-unitarity pairs the same U-Ubar site index through the grid dialect's op/op rows, and rmp-ii-ortho-left/right type a contracted physical index 270:physical to 90:physical. Render at 200dpi is pixel-identical, since a connected physical leg strokes as a bond. Prior note: The model matches the author panel: the 2x2 blocked sandwich, two disjoint RHS factors, the a/b beads anchored to hull-routed side closures (route={e of ...}/{w of ...}), and the conjugate row's overline. The residue is K1: the renderer does not yet ink a hull route on an endpoint index wire, so each closure currently draws along its column axis over the U-Ubar bond instead of arcing off the east/west faces the contract names (LANGUAGE-1.0 s5, bend= retirement row); the grid-tier predecessor inked this closure correctly through its side-cup policy."
+defects = []
+case_sha256 = "6603f1b344c9c30db86cd4ebf4e8bb2b76982f74f900a0300c913a6271ada0cb"
+reviewed = "2026-08-07"
+renderer = "fable-issue-5496-product-joiner-2026-08-07-200dpi"
+note = "Issue #5496: the RHS returns to two genuine panels joined by the contracted product joiner; tenkzeq reads the juxtaposition as one composite side whose empty facing cuts concatenate the factors' outer rails, and check=signature passes against the blocked sandwich. Each factor closes its inner side through the side-cup policy (east={cup=$b$}, west={cup=$a$}), so the closure now arcs off the east/west face into the bead instead of drawing along the column axis over the U-Ubar bond -- the placement-illegible defect of the one-frame respelling is gone, and no stroke crosses between the factors. Residual cosmetic gap: the labelled cup mints the house red ring bead with the letter inside, while the author draws a thin black circle at the bend (ImagesReview Section II.tex lines 405-412). Single-viewer review at 200dpi (400dpi spot-check); faithful awaits a second viewer. Prior history: retyped column bonds (issue #5577), one-frame product workaround with hull-routed closures (wave 1A)."
 
 [[verdict]]
 id = "rmp-ii-mpu-splitting"
@@ -234,10 +233,10 @@ id = "rmp-ii-staircase"
 status = "cosmetic-gap"
 pairing = "verified"
 pairing_by = "pairing-sweep-two-viewers-2026-07-23"
-case_sha256 = "71c70d1e8a0bf5b71a9055045072401d21910871728de28d0a1c852b59710144"
-reviewed = "2026-08-04"
-renderer = "kimi-kernel-staircase-source-review-2026-08-04-200dpi"
-note = "Re-audit resolved the X row: the case was vertically mirrored and now ascends as in the source, with the physical output legs up. Residue: the house box stands in for the source's rounded V glyph (#5363), and the |0> label sits south rather than east."
+case_sha256 = "4146c0cffbb0248a36d06a4c5296eb094056f9790d4c9caedc571648609255c5"
+reviewed = "2026-08-07"
+renderer = "fable-5363-pill-respell-source-review-2026-08-07-200dpi"
+note = "Issue #5363: the four V isometries respelled from the house box onto the stock pill silhouette, giving the source's rounded V glyph (Vtensor, ImagesReview Section II.tex lines 75-81); the 225- and 45-degree bond ports meet and trim to the measured rounded boundary. Remaining residue: the |0> label sits south rather than east of its dot."
 
 [[verdict]]
 id = "rmp-ii-circuit"

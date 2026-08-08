@@ -170,13 +170,12 @@ existing geometry, not another site; the picture policy therefore gives it no
 physical index.  If such a mark represents an additional tensor with a
 physical index, declare that port explicitly with \tnkey{ports=}.
 
-\subsection{Compose maps and fusion trees}
+\subsection{Draw fusion trees; leave commutative diagrams to tikz-cd}
 
-Use the \tnenv{tenkzcd} environment with its \tnkey{maps} option when cells
-are mathematical objects and \tncmd{tnarrow} records maps between them.  Use
-\tncmd{tntree} for a
-parenthesized fusion word.  A map edge is not a tensor contraction; do not
-translate it into \tnenv{tenkzfree} merely to adjust its placement.
+Use \tncmd{tntree} for a parenthesized fusion word.  A commutative diagram
+composes morphisms rather than contracting tensor indices; it belongs to
+tikz-cd, outside this language.  A \tncmd{tntree} atom is a self-contained
+box and sits directly in a tikz-cd cell.
 
 \subsection{Put a picture in a sentence}
 

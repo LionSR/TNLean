@@ -40,19 +40,18 @@ Its two Kronecker factors are the two bare cups:
     % The upper inverse tensor and lower tensor contract through the doubled
     % physical index p.  Their four virtual legs remain open and are
     % identified pairwise by the tensor product of the two cups on the right.
-    \begin{tenkz}[rows={ket, bra}, tensor style=box]
-        \tn{K^{-1}} \\
-        \tn{K}
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,bra}, cols=1]
+        \tn[skin=box, ports={180:virtual, 0:virtual}]{K^{-1}} \\
+        \tn[skin=box, ports={180:virtual, 0:virtual}]{K}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[rows={wire, wire}, east=cup]
-        \tnghost{} \\
-        \tnghost{}
+    \begin{tenkz}[rows={wire,wire}, cols=1, west=open, east=cup, bonds=none]
+        \tn[skin=none]{} \\ \tn[skin=none]{}
     \end{tenkz}
     $ \otimes $
-    \begin{tenkz}[rows={wire, wire}, west=cup]
-        \tnghost{} \\
-        \tnghost{}
+    \begin{tenkz}[rows={wire,wire}, cols=1, west=cup, east=open, bonds=none]
+        \tn[skin=none]{} \\ \tn[skin=none]{}
     \end{tenkz}
 \end{tenkzequation}
 This is the identity in
@@ -67,18 +66,17 @@ virtual legs against a further copy of $K$ recovers $K$:
     % with the bottom K, whose virtual legs remain open.
     % Both sides have boundary signature (virtual-west=1 | virtual-east=1 |
     % physical-up=1 | physical-down=0).
-    \begin{tenkz}[
-            rows={ket:nopair, ket, bra},
-            west=cup,
-            east=cup,
-            tensor style=box]
-        \tn[up=p]{K} \\
-        \tn{K^{-1}} \\
-        \tn{K}
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,ket,bra}, cols=1, west=cup, east=cup, bonds=none]
+        \tn[skin=box, ports={90:physical:$p$}]{K} \\
+        \tn[skin=box, name=Kinv, ports={270:physical}]{K^{-1}} \\
+        \tn[skin=box, name=Kbot,
+            ports={90:physical, 180:virtual, 0:virtual}]{K}
+        \tnwire{Kinv.270}{Kbot.90}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[physical=up, tensor style=box]
-        \tn[up=p]{K}
+    \begin{tenkz}[cols=1, west=open, east=open]
+        \tn[skin=box, ports={90:physical:$p$}]{K}
     \end{tenkz}
 \end{tenkzequation}
 This is the single-block identity in
@@ -128,11 +126,12 @@ This is the single-block identity in
     % virtual ring through the virtual-only R_4 cell.  The boundary signature
     % is (virtual-west=0 | virtual-east=0 |
     % physical-up=3 | physical-down=3).
-    \begin{tenkz}[physical=updown, periodic]
-        \tn[up=$i_1$, down=$j_1$]{\mathcal K} &
-        \tn[up=$i_2$, down=$j_2$]{\mathcal K} &
-        \tn[up=$i_3$, down=$j_3$]{\mathcal K} &
-        \tnX{R_4}
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic]
+        \tn[label pos=w, ports={90:physical:$i_1$, 270:physical:$j_1$}]{\mathcal K} &
+        \tn[label pos=w, ports={90:physical:$i_2$, 270:physical:$j_2$}]{\mathcal K} &
+        \tn[label pos=w, ports={90:physical:$i_3$, 270:physical:$j_3$}]{\mathcal K} &
+        \tn[skin=ring]{R_4}
     \end{tenkz}
     \caption{Tracing the fourth site of the normalized four-site periodic MPO
     leaves the physical legs of sites $1,2,3$ open and replaces the fourth site
@@ -261,32 +260,33 @@ This is the single-block identity in
         % boundary signature (virtual-west=2 | physical-up=1 |
         % virtual-east=2).
         \begin{tenkzequation}
+            \tenkzkernel
             $\Bigl($
-            \begin{tenkz}[compact, physical=down,
-                          west label=$\alpha_1$, east label=$\beta_1$]
-                \tn[down=$p_1$]{\mathcal K^{-1}}
+            \begin{tenkz}[cols=1, size=s]
+                \tn[label pos=n, ports={180:virtual:$\alpha_1$,
+                    0:virtual:$\beta_1$, 270:physical:$p_1$}]{\mathcal K^{-1}}
             \end{tenkz}%
             $\;\otimes\;\Id\;\otimes\;$%
-            \begin{tenkz}[compact, physical=down,
-                          west label=$\alpha_3$, east label=$\beta_3$]
-                \tn[down=$p_3$]{\mathcal K^{-1}}
+            \begin{tenkz}[cols=1, size=s]
+                \tn[label pos=n, ports={180:virtual:$\alpha_3$,
+                    0:virtual:$\beta_3$, 270:physical:$p_3$}]{\mathcal K^{-1}}
             \end{tenkz}
             $\Bigr)$
-            \begin{tenkz}[compact, physical=up, periodic]
-                \tn[up=$p_1$]{\mathcal K} &
-                \tn[up=$p_2$]{\mathcal K} &
-                \tn[up=$p_3$]{\mathcal K} &
-                \tnX{R}
+            \begin{tenkz}[cols=4, boundary=periodic, size=s]
+                \tn[label pos=s, ports={90:physical:$p_1$}]{\mathcal K} &
+                \tn[label pos=s, ports={90:physical:$p_2$}]{\mathcal K} &
+                \tn[label pos=s, ports={90:physical:$p_3$}]{\mathcal K} &
+                \tn[skin=ring]{R}
             \end{tenkz}
             $ = $
-            \begin{tenkz}[compact, physical=up,
-                          west label=$\beta_1$, east label=$\alpha_3$]
-                \tn[up=$p_2$]{\mathcal K}
+            \begin{tenkz}[cols=1, size=s]
+                \tn[label pos=s, ports={180:virtual:$\beta_1$,
+                    0:virtual:$\alpha_3$, 90:physical:$p_2$}]{\mathcal K}
             \end{tenkz}
             $ \otimes $
-            \begin{tenkz}[compact,
-                          west label=$\beta_3$, east label=$\alpha_1$]
-                \tnX{R}
+            \begin{tenkz}[cols=1, size=s]
+                \tn[skin=ring, ports={180:virtual:$\beta_3$,
+                    0:virtual:$\alpha_1$}]{R}
             \end{tenkz}
         \end{tenkzequation}
     \caption{Applying $\mathcal K^{-1}$ at the first and third sites collapses
@@ -481,18 +481,12 @@ For fixed $k,\alpha_1,\beta_3$, the identity
 % of MPDO-22-12-17-2.tex, fixes the one-tensor four-leg topology.  The
 % normalized formula is Theorem thm:mpdo_inverse_map_hayashi_sector_comparison.
 \begin{tenkzequation}
+\tenkzkernel
 $R_{\beta_3,\alpha_1}\,$
-\tnpic[
-    physical=updown,
-    west label=$\beta_1$,
-    east label=$\alpha_3$
-]{
-    \tn[
-        mpo,
-        up={$(l,r)$},
-        down={$(l',r')$}
-    ]{\widetilde\kappa^{(k)}}
-}
+\begin{tenkz}[cols=1]
+    \tn[skin=mpo, ports={90:physical:$(l{,}r)$, 270:physical:$(l'{,}r')$,
+        180:virtual:$\beta_1$, 0:virtual:$\alpha_3$}]{\widetilde\kappa^{(k)}}
+\end{tenkz}
 $ = $
 $p_k\,A^{(k)}_{\alpha_1,\beta_1}(l,l')
 B^{(k)}_{\alpha_3,\beta_3}(r,r')$.
@@ -706,18 +700,19 @@ In the middle-site basis selected by $U_B$, the same factorization
     % leg.  Both sides have boundary signature
     % (virtual-west=1 | virtual-east=1 | physical-up=2 |
     % physical-down=2).
-    \begin{tenkz}[rows={op:none, op, op:none}, tensor style=box]
-        \tn[pill, wide=2, legs at={1,2}]{U_B} & \\
-        \tn[wide=2]{\kappa_{\beta_1,\alpha_3}} & \\
-        \tn[pill, wide=2, legs at={1,2}]{U_B^\dagger} &
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=2]
+        \tn[skin=pill, wide=2, ports={90@1:physical, 90@2:physical}]{U_B} \\
+        \tn[skin=box, wide=2, ports={180:virtual, 0:virtual}]{\kappa_{\beta_1,\alpha_3}} \\
+        \tn[skin=pill, wide=2, ports={270@1:physical, 270@2:physical}]{U_B^\dagger}
     \end{tenkz}
     $ = \bigoplus_k$
-    \begin{tenkz}[physical=updown, east=none, tensor style=box]
-        \tn{l_k}
+    \begin{tenkz}[cols=1, west=open]
+        \tn[skin=box, ports={90:physical, 270:physical}]{l_k}
     \end{tenkz}
     $ \otimes $
-    \begin{tenkz}[physical=updown, west=none, tensor style=box]
-        \tn{r_k}
+    \begin{tenkz}[cols=1, east=open]
+        \tn[skin=box, ports={90:physical, 270:physical}]{r_k}
     \end{tenkz}
 \end{center}
 

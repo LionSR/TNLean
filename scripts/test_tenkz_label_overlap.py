@@ -29,6 +29,11 @@ def finding_picture_id(message: str) -> int:
 SOURCE = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \pagestyle{empty}
 \begin{document}
 \makeatletter
@@ -75,33 +80,15 @@ SOURCE = r"""
     \global\advance\tenkztestouterhookcalls by 1\relax
     \tenkztestrealouterhook}}
 \makeatother
-% Deliberately unsafe: the explicit separation overrides the measured label band.
-\begin{tenkzcd}[maps, species={channel}, column sep=2mm]
-  A & B
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
-    {\rule{18mm}{0pt}\mathcal T}
-\end{tenkzcd}
-
-% Safe: production spacing is derived from the same materialized label box.
-% Matrix passthrough may change the live object shape; measurement follows it.
-\begingroup
-\tikzset{tn label/.append style={
-  fill=tenkzPaper, draw, line join=round, line width=2pt}}
-\begin{tenkzcd}[maps, species={channel}, nodes={circle}]
-  A & B
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]
-    {\rule{18mm}{0pt}\mathcal T}
-\end{tenkzcd}
-\endgroup
-
-% Shared style capture covers unnamed production labels in every core tier.
-\begin{tenkzfree}
-  \tnput[box]{a}{(0,0)}{A}
-  \tnput[box]{b}{(20mm,0)}{}
-  \tnjoin[label=f]{a.east}{b.west}
+% Shared style capture covers unnamed production labels and raw audited
+% nodes on the local audited canvas.
+\begin{tenkztestcanvas}
+  \node[box tensor] (a) at (0,0) {$A$};
+  \node[box tensor] (b) at (20mm,0) {};
+  \node[tn label] at (10mm,0) {$f$};
   \node[tn label, fill=tenkzPaper, draw, line join=round, line width=2pt]
     at (40mm,0) {$g$};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \begin{tenkz}
   \tn{B} & \tn[box]{}
 \end{tenkz}
@@ -115,37 +102,28 @@ SOURCE = r"""
 % sits inside the rectangle's corner but outside its inscribed circle.
 \tikzset{tensor/.append style={
   rectangle, minimum width=10mm, minimum height=10mm}}
-\begin{tenkzfree}
-  \tnput{reshaped}{(0,0)}{}
+\begin{tenkztestcanvas}
+  \node[tensor] (reshaped) at (0,0) {};
   \node[tn label, inner sep=0pt] at (4.7mm,4.7mm)
     {\rule{0.3mm}{0.3mm}};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 % Final corner overrides must likewise win over the semantic skin defaults.
 \tikzset{
   pill tensor/.append style={rounded corners=0pt},
   box tensor/.append style={rounded corners=1.5pt}}
-\begin{tenkzfree}
-  \tnput[pill]{sharp-pill}{(0,0)}{}
-  \tnput[box]{rounded-box}{(20mm,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[pill tensor] (sharp-pill) at (0,0) {};
+  \node[box tensor] (rounded-box) at (20mm,0) {};
+\end{tenkztestcanvas}
 % A large outer separation is positioning whitespace, not glyph ink.
 \begingroup
 \tikzset{box tensor/.append style={
   minimum size=4pt, inner sep=0pt, outer sep=20pt}}
-\begin{tenkzfree}
-  \tnput[box]{outer-gap}{(0,0)}{}
+\begin{tenkztestcanvas}
+  \node[box tensor] (outer-gap) at (0,0) {};
   \node[tn label, inner sep=0pt] at (10pt,0) {\rule{1pt}{1pt}};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \endgroup
-% Every matrix object is audited once, even without an incident map, and live
-% rounded-corner passthrough remains visible in the emitted shape.
-\begin{tenkzcd}[
-  maps, species={channel}, nodes={rectangle, rounded corners=2pt}
-]
-  A & B & C
-  \tnarrow[from={(1,1)}, to={(1,2)}, species=channel]{f}
-\end{tenkzcd}
-\tenkzassertrelax{tenkz@glyphsnaptoken@tenkzmap-1-3}
 % Empty resolved regions are legitimate no-ops and still emit audit data.
 \begin{tenkzlattice}[rows=1, cols=1]
   \tnregion[name=R]{(1,1)}
@@ -156,16 +134,16 @@ SOURCE = r"""
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=4pt, minimum height=4pt, inner sep=0pt,
   outer sep=20pt, line width=4pt}}
-\begin{tenkzfree}
-  \tnput[box]{stroke-hit}{(0,0)}{}
+\begin{tenkztestcanvas}
+  \node[box tensor] (stroke-hit) at (0,0) {};
   \node[tn label, inner sep=0pt, outer sep=0pt] at (3pt,0)
     {\rule{0.2pt}{0.2pt}};
-\end{tenkzfree}
-\begin{tenkzfree}
-  \tnput[box]{margin-safe}{(0,0)}{}
+\end{tenkztestcanvas}
+\begin{tenkztestcanvas}
+  \node[box tensor] (margin-safe) at (0,0) {};
   \node[tn label, inner sep=0pt, outer sep=0pt] at (10pt,0)
     {\rule{0.2pt}{0.2pt}};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \endgroup
 \tenkzassertsnapshotclean
 % draw=none removes the stroke band from visible geometry.
@@ -173,22 +151,22 @@ SOURCE = r"""
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=4pt, minimum height=4pt, inner sep=0pt,
   outer sep=20pt, line width=4pt, draw=none}}
-\begin{tenkzfree}
-  \tnput[box]{undrawn}{(0,0)}{}
+\begin{tenkztestcanvas}
+  \node[box tensor] (undrawn) at (0,0) {};
   \node[tn label, inner sep=0pt, outer sep=0pt] at (3pt,0)
     {\rule{0.2pt}{0.2pt}};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \endgroup
 % Transparent-label inner and outer separation are invisible whitespace.
 \begingroup
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=1pt, minimum height=1pt, inner sep=0pt,
   outer sep=0pt, draw=none}}
-\begin{tenkzfree}
-  \tnput[box]{label-margin-safe}{(4pt,0)}{}
+\begin{tenkztestcanvas}
+  \node[box tensor] (label-margin-safe) at (4pt,0) {};
   \node[tn label, inner sep=9pt, outer sep=8pt] at (0,0)
     {\rule{1pt}{1pt}};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \endgroup
 \tenkzassertsnapshotclean
 % Circle anchors use max(outer xsep, outer ysep) on every axis.
@@ -196,28 +174,28 @@ SOURCE = r"""
 \tikzset{tensor/.append style={circle, minimum width=4pt,
   minimum height=4pt, inner sep=0pt, outer xsep=2pt, outer ysep=5pt,
   line width=4pt}}
-\begin{tenkzfree}
-  \tnput{anisotropic-circle}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[tensor] (anisotropic-circle) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 % A late line-width override is the width used by the audit snapshot.
 \begingroup
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=4pt, minimum height=4pt, inner sep=0pt,
   outer sep=0pt, line width=4pt}}
-\begin{tenkzfree}
-  \tnput[box]{late-width}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (late-width) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 % Ordinary coordinate rotation does not transform the node shape.
 \begingroup
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=4pt, minimum height=4pt}}
-\begin{tenkzfree}
+\begin{tenkztestcanvas}
   \begin{scope}[rotate=45]
-    \tnput[box]{untransformed-rotate}{(0,0)}{}
+    \node[box tensor] (untransformed-rotate) at (0,0) {};
   \end{scope}
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \endgroup
 % outer sep=auto must be evaluated at execute-end-node, not parsed literally.
 \begingroup
@@ -225,9 +203,9 @@ SOURCE = r"""
   minimum width=4pt, minimum height=4pt, inner sep=0pt,
   outer sep=auto, line width=4pt,
   /utils/exec=\tenkztestcountouterhook}}
-\begin{tenkzfree}
-  \tnput[box]{auto-drawn}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (auto-drawn) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 \ifnum\tenkztestouterhookcalls=1\relax\else
   \PackageError{tenkz test}{Audited outer hook did not run exactly once}{}%
@@ -236,9 +214,9 @@ SOURCE = r"""
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
   minimum width=4pt, minimum height=4pt, inner sep=0pt,
   outer sep=auto, line width=4pt, draw=none}}
-\begin{tenkzfree}
-  \tnput[box]{auto-undrawn}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (auto-undrawn) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 \tenkzassertsnapshotclean
 \end{document}
@@ -247,6 +225,11 @@ SOURCE = r"""
 AFFINE_GLYPHS = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \pagestyle{empty}
 \begin{document}
 \tikzset{
@@ -254,22 +237,22 @@ AFFINE_GLYPHS = r"""
   box tensor/.append style={tenkz glyph basis={1,0,.5,.75}},
   pill tensor/.append style={tenkz glyph basis={1,0,.5,.75}},
   canonical tensor/.append style={tenkz glyph basis={1,0,.5,.75}}}
-\begin{tenkzfree}
-  \tnput[dot]{dot}{(0,0)}{}
-  \tnput[box]{box}{(2,0)}{}
-  \tnput[pill]{pill}{(4,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[tensor] (dot) at (0,0) {};
+  \node[box tensor] (box) at (2,0) {};
+  \node[pill tensor] (pill) at (4,0) {};
+\end{tenkztestcanvas}
 \begingroup
 \tikzset{tensor/.append style={outer sep=0pt}}
-\begin{tenkzfree}
-  \tnput[dot]{outer-zero}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[tensor] (outer-zero) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 \begingroup
 \tikzset{tensor/.append style={outer sep=20pt}}
-\begin{tenkzfree}
-  \tnput[dot]{outer-large}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[tensor] (outer-large) at (0,0) {};
+\end{tenkztestcanvas}
 \endgroup
 \begin{tenkz}
   \tn[tri=l]{}
@@ -293,19 +276,29 @@ AFFINE_GLYPHS = r"""
 INVALID_CORNERS = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \pagestyle{empty}
 \begin{document}
 \tikzset{box tensor/.append style={
   /utils/exec={\pgfsetcornersarced{\pgfpoint{2pt}{3pt}}}}}
-\begin{tenkzfree}
-  \tnput[box]{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """
 
 ROUNDED_TRIANGLE = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{canonical tensor/.append style={rounded corners=1pt}}
 \begin{tenkz}
@@ -317,18 +310,28 @@ ROUNDED_TRIANGLE = r"""
 OVERSIZED_OUTER_SEP = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{box tensor/.append style={
   minimum size=4pt, inner sep=0pt, outer sep=20pt, rounded corners=6pt}}
-\begin{tenkzfree}
-  \tnput[box]{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """
 
 INACTIVE_SNAPSHOT = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \pagestyle{empty}
 \begin{document}
 \makeatletter
@@ -345,28 +348,43 @@ INACTIVE_SNAPSHOT = r"""
 TRANSFORMED_RECT = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{box tensor/.append style={rotate=45, transform shape}}
-\begin{tenkzfree}
-  \tnput[box]{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """
 
 TRANSFORMED_CIRCLE = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{tensor/.append style={xscale=2, transform shape}}
-\begin{tenkzfree}
-  \tnput{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """
 
 TRANSFORMED_TRIANGLE = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{canonical tensor/.append style={rotate=30, transform shape}}
 \begin{tenkz}
@@ -378,37 +396,57 @@ TRANSFORMED_TRIANGLE = r"""
 TRANSFORMED_LABEL = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
-\begin{tenkzfree}
+\begin{tenkztestcanvas}
   \node[tn label, rotate=45, transform shape] at (0,0) {$f$};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \end{document}
 """
 
 DRAW_ONLY_GLYPH = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \tikzset{box tensor/.append style={fill=none}}
-\begin{tenkzfree}
-  \tnput[box]{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """
 
 NONRECTANGLE_LABEL = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
-\begin{tenkzfree}
+\begin{tenkztestcanvas}
   \node[tn label, circle] at (0,0) {$f$};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \end{document}
 """
 
 NONAUDITED_CUSTOMIZATION = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \usetikzlibrary{fadings}
 \begin{document}
 \begin{tikzpicture}
@@ -421,15 +459,20 @@ NONAUDITED_CUSTOMIZATION = r"""
 NESTED_END_HOOK = r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 \begin{document}
 \newif\ifinhook
 \tikzset{box tensor/.append style={execute at end node={%
   \ifinhook\else\global\inhooktrue
   \tikz[baseline] \node[tn label] (inner-audit) {inner};%
   \global\inhookfalse\fi}}}
-\begin{tenkzfree}
-  \tnput[box]{outer}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (outer) at (0,0) {};
+\end{tenkztestcanvas}
 \makeatletter
 \def\tenkzassertrelax#1{%
   \expandafter\ifx\csname #1\endcsname\relax\else
@@ -453,12 +496,17 @@ def customized_glyph(options: str, preamble: str = "") -> str:
     return r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 %s
 \begin{document}
 \tikzset{box tensor/.append style={%s}}
-\begin{tenkzfree}
-  \tnput[box]{bad}{(0,0)}{}
-\end{tenkzfree}
+\begin{tenkztestcanvas}
+  \node[box tensor] (bad) at (0,0) {};
+\end{tenkztestcanvas}
 \end{document}
 """ % (preamble, options)
 
@@ -467,11 +515,16 @@ def customized_label(options: str, preamble: str = "") -> str:
     return r"""
 \documentclass{article}
 \usepackage{tenkz}
+\makeatletter
+\newenvironment{tenkztestcanvas}
+  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\end{tikzpicture}}
+\makeatother
 %s
 \begin{document}
-\begin{tenkzfree}
+\begin{tenkztestcanvas}
   \node[tn label, %s] at (0,0) {$f$};
-\end{tenkzfree}
+\end{tenkztestcanvas}
 \end{document}
 """ % (preamble, options)
 
@@ -533,14 +586,14 @@ def main() -> int:
                for event in label_events):
             raise AssertionError("a measured label omitted exact shape fields")
         overlap_pictures = {finding_picture_id(finding.msg) for finding in overlaps}
-        if overlap_pictures != {1, 7, 12}:
+        if overlap_pictures != {5, 9}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
 
         empty_regions = [
-            event for event in audit.events(11)
+            event for event in audit.events(8)
             if event.kind == "region" and event.attrs.get("cells") == ""
         ]
         if len(empty_regions) != 1 or any(
@@ -549,55 +602,7 @@ def main() -> int:
                 for finding in audit.findings):
             raise AssertionError("audit rejected a live empty resolved region")
 
-        for picture_id in (1, 2):
-            bbox_classes = {
-                event.attrs.get("class") for event in audit.events(picture_id)
-                if event.kind == "bbox"
-            }
-            geometry_kinds = {event.kind for event in audit.events(picture_id)}
-            if (bbox_classes != {"label"}
-                    or not {"glyph-geometry", "wire-geometry"} <= geometry_kinds):
-                raise AssertionError(
-                    f"picture {picture_id} emitted incomplete geometry: "
-                    f"bbox={bbox_classes}, kinds={geometry_kinds}"
-                )
-        map_shapes = {
-            event.attrs.get("shape") for event in audit.events(2)
-            if event.kind == "glyph-geometry"
-        }
-        if map_shapes != {"circle"}:
-            raise AssertionError(
-                f"typed-map object restyle emitted stale geometry: {map_shapes}"
-            )
-        map_glyphs = [event for event in audit.events(2)
-                      if event.kind == "glyph-geometry"]
-        if len(map_glyphs) != 2:
-            raise AssertionError(
-                f"typed-map objects were not audited exactly once: {len(map_glyphs)}"
-            )
-        map_wires = [event for event in audit.events(2)
-                     if event.kind == "wire-geometry"]
-        if len(map_wires) != 1:
-            raise AssertionError(
-                f"typed-map emitted invalid exact wire geometry: {len(map_wires)}"
-            )
-        map_labels = [event for event in audit.events(2)
-                      if event.kind == "bbox"
-                      and event.attrs.get("class") == "label"]
-        if (len(map_labels) != 1
-                or map_labels[0].attrs.get("shape") != "roundrect"
-                or abs(int(map_labels[0].attrs.get("radius", "0"))
-                       - 65536) > 1):
-            raise AssertionError(
-                "typed-map stored label lost its exact shape: "
-                + repr([event.attrs for event in map_labels])
-            )
-        wire_heights = [int(event.attrs["outer"]) for event in map_wires]
-        if any(height >= 65536 for height in wire_heights):
-            raise AssertionError(
-                f"typed-map wire bbox followed an offset label: {wire_heights}sp"
-            )
-        for picture_id in (3, 4, 5):
+        for picture_id in (1, 2, 3):
             events = audit.events(picture_id)
             uses = sum(event.kind == "label-use" for event in events)
             labels = sum(event.kind == "bbox"
@@ -608,7 +613,7 @@ def main() -> int:
                     f"picture {picture_id} did not capture label coverage: "
                     f"uses={uses}, labels={labels}"
                 )
-        free_labels = [event for event in audit.events(3)
+        free_labels = [event for event in audit.events(1)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         free_shapes = {event.attrs.get("shape") for event in free_labels}
@@ -626,8 +631,8 @@ def main() -> int:
 
         missing = work / "missing-label-bbox.tnlog"
         missing.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "label-use|picture=1\n",
             encoding="utf-8",
         )
@@ -638,13 +643,13 @@ def main() -> int:
             raise AssertionError("audit accepted an unmeasured library label use")
 
         shapes = {
-            event.attrs.get("shape") for event in audit.events(6)
+            event.attrs.get("shape") for event in audit.events(4)
             if event.kind == "glyph-geometry"
         }
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
         triangle_geometry = [
-            event for event in audit.events(6)
+            event for event in audit.events(4)
             if event.kind == "glyph-geometry"
             and event.attrs.get("shape") == "triangle"
         ]
@@ -655,7 +660,7 @@ def main() -> int:
             )
 
         reshaped = {
-            event.attrs.get("shape") for event in audit.events(7)
+            event.attrs.get("shape") for event in audit.events(5)
             if event.kind == "glyph-geometry"
         }
         if reshaped != {"roundrect"}:
@@ -664,7 +669,7 @@ def main() -> int:
             )
 
         corner_events = [
-            event for event in audit.events(8)
+            event for event in audit.events(6)
             if event.kind == "glyph-geometry"
         ]
         corner_shapes = [event.attrs.get("shape") for event in corner_events]
@@ -679,7 +684,7 @@ def main() -> int:
                - round(1.775 * 65536)) > 1:
             raise AssertionError("rounded box did not emit its live corner radius")
 
-        outer_gap = [event for event in audit.events(9)
+        outer_gap = [event for event in audit.events(7)
                      if event.kind == "glyph-geometry"]
         if len(outer_gap) != 1:
             raise AssertionError("outer-separation fixture lost glyph geometry")
@@ -687,25 +692,8 @@ def main() -> int:
                 - int(outer_gap[0].attrs["xmin"])) >= round(10 * 65536):
             raise AssertionError("glyph geometry retained invisible outer separation")
 
-        rounded_map = [event for event in audit.events(10)
-                       if event.kind == "glyph-geometry"]
-        if len(rounded_map) != 3:
-            raise AssertionError(
-                "typed-map object census omitted or duplicated a cell: "
-                f"{len(rounded_map)}"
-            )
-        if ({event.attrs.get("shape") for event in rounded_map} != {"roundrect"}
-                or any(abs(int(event.attrs["radius"])
-                           - round(2 * 65536)) > 1
-                       for event in rounded_map)):
-            raise AssertionError(
-                "typed-map rounded-corner passthrough was not preserved: "
-                + repr([(event.attrs.get("shape"), event.attrs.get("radius"))
-                        for event in rounded_map])
-            )
-
         expected_widths = {
-            12: 8, 13: 8, 14: 4, 16: 8, 17: 8, 19: 8, 20: 4,
+            9: 8, 10: 8, 11: 4, 13: 8, 14: 8, 16: 8, 17: 4,
         }
         for picture_id, expected_pt in expected_widths.items():
             geometry = [event for event in audit.events(picture_id)
@@ -721,7 +709,7 @@ def main() -> int:
                     f"expected {expected_pt}pt: {geometry[0].attrs}"
                 )
 
-        label_boxes = [event for event in audit.events(15)
+        label_boxes = [event for event in audit.events(12)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         if len(label_boxes) != 1:
@@ -731,7 +719,7 @@ def main() -> int:
         if label_width >= round(2 * 65536):
             raise AssertionError("label bbox retained invisible outer separation")
 
-        rotate_control = [event for event in audit.events(18)
+        rotate_control = [event for event in audit.events(15)
                           if event.kind == "glyph-geometry"]
         if (len(rotate_control) != 1
                 or rotate_control[0].attrs.get("shape") != "roundrect"):
@@ -941,8 +929,8 @@ def main() -> int:
 
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|xmin=8|xmax=10|ymin=8|ymax=10|"
             "shape=rect|radius=0\n"
@@ -972,8 +960,8 @@ def main() -> int:
             fixture = work / name
             xmin, xmax, ymin, ymax = bounds
             fixture.write_text(
-                "picture|id=1|lang=free\n"
-                "atom|picture=1|name=a|kind=dot\n"
+                "picture|id=1|lang=grid\n"
+                "atom|picture=1|cell=1-1|kind=dot\n"
                 "label-use|picture=1\n"
                 f"bbox|picture=1|class=label|id=1|xmin={xmin}|xmax={xmax}|"
                 f"ymin={ymin}|ymax={ymax}|shape=rect|radius=0\n"
@@ -1013,8 +1001,8 @@ def main() -> int:
         def write_round_label_glyph_fixture(name: str, edge: int) -> Path:
             fixture = work / name
             fixture.write_text(
-                "picture|id=1|lang=free\n"
-                "atom|picture=1|name=a|kind=dot\n"
+                "picture|id=1|lang=grid\n"
+                "atom|picture=1|cell=1-1|kind=dot\n"
                 "label-use|picture=1\n"
                 "bbox|picture=1|class=label|id=1|owner=0|"
                 "xmin=0|xmax=100|ymin=0|ymax=100|"
@@ -1045,8 +1033,8 @@ def main() -> int:
 
         round_branches = work / "round-label-glyph-branches.tnlog"
         round_branches.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"
             "xmin=0|xmax=100|ymin=0|ymax=100|"
@@ -1118,7 +1106,7 @@ def main() -> int:
 
         wrong_dialect = work / "free-label-anchor-site.tnlog"
         wrong_dialect.write_text(
-            anchor_prefix.replace("lang=lattice", "lang=free", 1)
+            anchor_prefix.replace("lang=lattice", "lang=grid", 1)
             + "label-anchor-site|picture=1|label=1|x=50|y=50\n",
             encoding="utf-8",
         )
@@ -1136,8 +1124,8 @@ def main() -> int:
             fixture = work / name
             qxmin, qxmax, qymin, qymax = query
             fixture.write_text(
-                "picture|id=1|lang=free\n"
-                "atom|picture=1|name=a|kind=dot\n"
+                "picture|id=1|lang=grid\n"
+                "atom|picture=1|cell=1-1|kind=dot\n"
                 "label-use|picture=1\n"
                 "bbox|picture=1|class=label|id=1|owner=0|"
                 "xmin=20|xmax=80|ymin=0|ymax=60|"
@@ -1236,8 +1224,8 @@ def main() -> int:
             raise AssertionError("audit missed a fused typed-map rail overlap")
 
         malformed_wire_prefix = (
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"
             "xmin=20|xmax=80|ymin=0|ymax=60|"
@@ -1311,7 +1299,7 @@ def main() -> int:
 
         oversized_roundrect = work / "oversized-roundrect.tnlog"
         oversized_roundrect.write_text(
-            "picture|id=1|lang=free\n"
+            "picture|id=1|lang=grid\n"
             "ink-use|picture=1|class=glyph|id=1|shape=roundrect\n"
             "glyph-geometry|picture=1|owner=1|shape=roundrect|"
             "xmin=0|xmax=10|ymin=0|ymax=10|radius=6|stroke=0|"
@@ -1327,8 +1315,8 @@ def main() -> int:
 
         nonsquare_circle = work / "nonsquare-circle.tnlog"
         nonsquare_circle.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "glyph-geometry|picture=1|owner=1|shape=circle|"
             "xmin=0|xmax=10|ymin=0|ymax=12|radius=0|stroke=0|"
@@ -1373,8 +1361,8 @@ def main() -> int:
 
         missing_ink = work / "missing-ink-geometry.tnlog"
         missing_ink.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "ink-use|picture=1|class=wire|id=2\n",
             encoding="utf-8",
@@ -1387,8 +1375,8 @@ def main() -> int:
 
         duplicate_geometry = work / "duplicate-ink-geometry.tnlog"
         duplicate_geometry.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "ink-use|picture=1|class=glyph|id=1|shape=rect\n"
             "glyph-geometry|picture=1|owner=1|shape=rect|"
             "xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|"
@@ -1407,8 +1395,8 @@ def main() -> int:
 
         missing_class = work / "missing-ink-class.tnlog"
         missing_class.write_text(
-            "picture|id=1|lang=free\n"
-            "atom|picture=1|name=a|kind=dot\n"
+            "picture|id=1|lang=grid\n"
+            "atom|picture=1|cell=1-1|kind=dot\n"
             "ink-use|picture=1|id=1\n"
             "bbox|picture=1|class=wire|id=1|owner=1|"
             "xmin=0|xmax=1|ymin=0|ymax=1\n",
@@ -1422,7 +1410,7 @@ def main() -> int:
 
         glyph_bbox = work / "glyph-bbox.tnlog"
         glyph_bbox.write_text(
-            "picture|id=1|lang=free\n"
+            "picture|id=1|lang=grid\n"
             "bbox|picture=1|class=glyph|id=1|owner=1|"
             "xmin=0|xmax=1|ymin=0|ymax=1\n",
             encoding="utf-8",
