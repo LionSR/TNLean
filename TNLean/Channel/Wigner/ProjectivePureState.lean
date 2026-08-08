@@ -25,7 +25,7 @@ Wigner rigidity.
 ## Main declarations
 
 * `Projectivization.pureStateMatrix`
-* `Projectivization.selfDot_smul_normalizedPureStateMatrix`
+* `Projectivization.star_dot_self_smul_normalizedPureStateMatrix`
 * `Projectivization.linearMap_eq_of_eq_on_pureStateMatrix`
 * `Projectivization.transitionProbability`
 * `Projectivization.transitionProbability_mk`
@@ -90,7 +90,7 @@ private theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
 
 /-- Rescaling the normalized pure-state matrix of a nonzero vector by its
 squared norm recovers its rank-one self-outer-product. -/
-theorem selfDot_smul_normalizedPureStateMatrix (v : Fin d → ℂ) (hv : v ≠ 0) :
+theorem star_dot_self_smul_normalizedPureStateMatrix (v : Fin d → ℂ) (hv : v ≠ 0) :
     (star v ⬝ᵥ v) • normalizedPureStateMatrix v = Matrix.vecMulVec v (star v) := by
   rw [normalizedPureStateMatrix, smul_smul, mul_inv_cancel₀ (star_dot_self_ne_zero v hv),
     one_smul]
@@ -108,7 +108,7 @@ theorem linearMap_eq_of_eq_on_pureStateMatrix
     simp
   · have hp := h (Projectivization.mk ℂ v hv)
     rw [pureStateMatrix_mk] at hp
-    rw [← selfDot_smul_normalizedPureStateMatrix v hv, map_smul, map_smul, hp]
+    rw [← star_dot_self_smul_normalizedPureStateMatrix v hv, map_smul, map_smul, hp]
 
 private theorem normalizedPureStateMatrix_isOrthogonalProjection
     (v : Fin d → ℂ) (hv : v ≠ 0) :

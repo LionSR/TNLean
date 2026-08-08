@@ -1358,16 +1358,16 @@ $v$ is multiplied by a nonzero scalar.
     factors of the outer product.
 \end{proof}
 
-\begin{lemma}[Normalized and unnormalized pure states]
-    \label{lem:self_dot_smul_normalized_pure_state_matrix}
-    \lean{Projectivization.selfDot_smul_normalizedPureStateMatrix}
+\begin{theorem}[Normalized and unnormalized pure states]
+    \label{thm:star_dot_self_smul_normalized_pure_state_matrix}
+    \lean{Projectivization.star_dot_self_smul_normalizedPureStateMatrix}
     \leanok
     \uses{def:projective_pure_state_matrix}
     For every nonzero $v\in\C^d$,
     \begin{align}
         \langle v,v\rangle P_{[v]}=\ketbra{v}{v}.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Substitute the definition
@@ -1388,7 +1388,7 @@ $v$ is multiplied by a nonzero scalar.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:self_dot_smul_normalized_pure_state_matrix,
+    \uses{thm:star_dot_self_smul_normalized_pure_state_matrix,
       thm:linearMap_eq_of_eq_on_rankOne}
     For $v\ne0$, multiply the equality at $p=[v]$ by
     $\langle v,v\rangle$ to obtain
