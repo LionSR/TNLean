@@ -79,7 +79,7 @@ the absorbed BNT representative, but not spectral normality. Coefficient absorpt
 transfer spectral radius by the squared modulus of the coefficient, and the global canonical-form
 normalization does not make every coefficient unit modulus. Thus the normal Case-I theorem cannot
 yet be applied sectorwise. The remaining boundary is recorded in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
