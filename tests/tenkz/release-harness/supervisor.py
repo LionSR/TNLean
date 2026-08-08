@@ -510,10 +510,13 @@ def require_clean_worktree(
         check=False,
     )
     require(extra.returncode == 0, "could not list ignored files under the pinned trees")
+    # `IGNORED_ENTRIES` never enters the view, so an ignored file under one of
+    # those directories is not unpinned bytes a command could read.
     untracked = sorted(
         path
         for path in extra.stdout.decode("utf-8", errors="replace").split("\0")
-        if path.strip() and not path.endswith("__pycache__/")
+        if path.strip()
+        and not any(part in IGNORED_ENTRIES for part in path.split("/"))
     )
     require(
         not untracked,
