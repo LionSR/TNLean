@@ -11495,6 +11495,11 @@
                 % another by one trace reach in page space, and the rail
                 % crosses no row, no inter-row pairing, and no other return
                 % between its reach points.
+                % Each side branch states only its constants: the arc
+                % angles, the outward sign, the rows passed, and the
+                % envelope range.  The reach and lead arithmetic below is
+                % written once, so a change to it cannot reach one side
+                % and miss the other.
                 \int_compare:nNnTF
                   { 2 * \l__tenkz_kernel_r_row_tl }
                   <
@@ -11504,23 +11509,8 @@
                     \tl_set:Nn \l__tenkz_kernel_r_c_tl {0}
                     \__tenkz_kernel_r_wrap_envelope:nn
                       {1} { \l__tenkz_kernel_r_row_tl }
-                    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-                      {
-                        \l__tenkz_kernel_r_row_tl
-                        * \__tenkz_metric_ratio:n {pairtracereach}
-                        + \l__tenkz_kernel_r_wrap_yhi_fp
-                        - \l__tenkz_kernel_r_y_fp
-                      }
-                    \fp_sub:Nn \l__tenkz_kernel_r_wrap_wx_fp
-                      {
-                        ( \l__tenkz_kernel_r_row_tl - 1 )
-                        * \__tenkz_metric_ratio:n {pairtracereach}
-                      }
-                    \fp_add:Nn \l__tenkz_kernel_r_wrap_ex_fp
-                      {
-                        ( \l__tenkz_kernel_r_row_tl - 1 )
-                        * \__tenkz_metric_ratio:n {pairtracereach}
-                      }
+                    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+                      { \l__tenkz_kernel_r_row_tl - 1 }
                     \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
                   }
                   {
@@ -11529,34 +11519,38 @@
                     \__tenkz_kernel_r_wrap_envelope:nn
                       { \l__tenkz_kernel_r_row_tl }
                       { \l__tenkz_kernel_r_rows_int }
-                    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
                       {
-                        (
-                          \l__tenkz_kernel_r_rows_int
-                          - \l__tenkz_kernel_r_row_tl
-                          + 1
-                        )
-                        * \__tenkz_metric_ratio:n {pairtracereach}
-                        + \l__tenkz_kernel_r_y_fp
-                        - \l__tenkz_kernel_r_wrap_ylo_fp
-                      }
-                    \fp_sub:Nn \l__tenkz_kernel_r_wrap_wx_fp
-                      {
-                        (
-                          \l__tenkz_kernel_r_rows_int
-                          - \l__tenkz_kernel_r_row_tl
-                        )
-                        * \__tenkz_metric_ratio:n {pairtracereach}
-                      }
-                    \fp_add:Nn \l__tenkz_kernel_r_wrap_ex_fp
-                      {
-                        (
-                          \l__tenkz_kernel_r_rows_int
-                          - \l__tenkz_kernel_r_row_tl
-                        )
-                        * \__tenkz_metric_ratio:n {pairtracereach}
+                        \l__tenkz_kernel_r_rows_int
+                        - \l__tenkz_kernel_r_row_tl
                       }
                     \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
+                  }
+                % One trace reach past the outward extreme of the passed
+                % row lines per return crossed; the outward extreme is the
+                % signed maximum, so one formula serves both sides.
+                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                  {
+                    ( \l__tenkz_kernel_r_xc_fp + 1 )
+                    * \__tenkz_metric_ratio:n {pairtracereach}
+                    + max
+                        (
+                          \l__tenkz_kernel_r_yc_fp
+                          * \l__tenkz_kernel_r_wrap_yhi_fp ,
+                          \l__tenkz_kernel_r_yc_fp
+                          * \l__tenkz_kernel_r_wrap_ylo_fp
+                        )
+                    - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+                  }
+                \fp_sub:Nn \l__tenkz_kernel_r_wrap_wx_fp
+                  {
+                    \l__tenkz_kernel_r_xc_fp
+                    * \__tenkz_metric_ratio:n {pairtracereach}
+                  }
+                \fp_add:Nn \l__tenkz_kernel_r_wrap_ex_fp
+                  {
+                    \l__tenkz_kernel_r_xc_fp
+                    * \__tenkz_metric_ratio:n {pairtracereach}
                   }
                 \__tenkz_kernel_r_wire_stroke:nn { bond }
                   {
