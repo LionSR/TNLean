@@ -489,18 +489,6 @@ theorem peripheralProjection_isTracePreservingMap
   rw [hconst] at hlim
   exact tendsto_nhds_unique hlim tendsto_const_nhds
 
-/-- The peripheral spectral projection `T_φ` of a completely positive
-trace-preserving map is completely positive: in finite dimension the set of
-completely positive maps is closed, and along the recurrent subsequence the
-powers converge to `T_φ` in the operator norm. -/
-theorem peripheralProjection_isCPMap
-    (hCP : IsCPMap T) (hTP : IsTracePreservingMap T) :
-    IsCPMap T.peripheralProjection := by
-  obtain ⟨n, hnmono, -, hn⟩ :=
-    hCP.isPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection hTP
-  exact IsCPMap.of_tendsto_toCLM (fun i ↦ IsCPMap.pow hCP (n i))
-    (ContinuousLinearMap.tendsto_of_tendsto_apply_of_finiteDimensional hn)
-
 /-- **Wolf Proposition 6.3(i), combined form.**  Along one and the same
 Dirichlet recurrent subsequence, the powers converge to `T_φ` both pointwise
 and in the operator norm. -/
@@ -539,6 +527,17 @@ theorem peripheralWeightedProjection_isTracePreservingMap
   intro X
   rw [Module.End.peripheralWeightedProjection, LinearMap.comp_apply, hTP,
     hPos.peripheralProjection_isTracePreservingMap hTP]
+
+/-- The peripheral spectral projection `T_φ` of a completely positive
+trace-preserving map is completely positive: in finite dimension the set of
+completely positive maps is closed, and along the recurrent subsequence the
+powers converge to `T_φ` in the operator norm. -/
+theorem peripheralProjection_isCPMap
+    (hCP : IsCPMap T) (hTP : IsTracePreservingMap T) :
+    IsCPMap T.peripheralProjection := by
+  obtain ⟨n, -, -, -, hn⟩ :=
+    hCP.isPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection_clm hTP
+  exact IsCPMap.of_tendsto_toCLM (fun i ↦ IsCPMap.pow hCP (n i)) hn
 
 end IsPositiveMap
 
