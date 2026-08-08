@@ -142,18 +142,15 @@ STRUCTURAL_CAPABILITY_PATTERNS = {
     "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
     "lattice": re.compile(r"\\begin\{tenkzlattice\}|\\begin\{tenkzplanes\}"),
     "lattice-preset": re.compile(r"\\begin\{tenkzplanes\}"),
-    "free-graph": re.compile(r"\\begin\{tenkzfree\}"),
     "fusion-tree": re.compile(r"\\tntree\b"),
 }
 INK_ENVIRONMENT_FAMILIES = (
-    "tenkzfree",
     "tenkzlattice",
     "tenkzplanes",
     "tenkz",
     "kernel",
 )
 INK_EVENT_FAMILIES = {
-    "free": "tenkzfree",
     "grid": "tenkz",
     "kernel": "kernel",
 }

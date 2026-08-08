@@ -1,5 +1,5 @@
 % tenkz Phase-0 gallery: benchmarks, MPO stress cases, and the
-% lattice / free sub-languages, tightly cropped.
+% lattice sub-language, tightly cropped.
 \documentclass[varwidth=19cm, border=8pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tenkz}
@@ -155,14 +155,6 @@ each summand is a congruence.
     \tn*{B} & \tnghost{} & \tn*{B}
   \end{tenkz}
 \]
-
-\head{F1 — free tier: typed curved joins}
-\begin{tenkzfree}
-  \tnput[ports={east:virtual, north:physical}]{a}{(0,0)}{A}
-  \tnput[ports={west:virtual}]{b}{(14mm,0)}{B}
-  \tnjoin{a.east}{b.west}
-  \tnjoin[route=curve, out=90, in=90, label=T]{a.north}{b.north}
-\end{tenkzfree}
 
 \head{T1 — standalone fusion tree in text}
 A module tree \tntree{((a\,b)_x\,c)_e} sits on the math axis.

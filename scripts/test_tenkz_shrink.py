@@ -280,18 +280,23 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
             replacement,
             errors,
         )
+    # The ledger holds no live value alias, so the replacement-vocabulary
+    # check is exercised on a synthetic row over the kernel wire's route.
     changed_value = [
+        *entries,
         Entry(
-            entry.kind,
-            (entry.fields[0], entry.fields[1], "route=bogus", entry.fields[3]),
-        )
-        if entry.kind == "alias" and entry.fields[1] == "route=curve"
-        else entry
-        for entry in entries
+            "alias",
+            (
+                "kernel-wire",
+                "route=curve",
+                "route=bogus",
+                "Legacy curved-route value. Sunset 1.0.",
+            ),
+        ),
     ]
     errors = check(changed_value)
     assert any(
-        "value alias connection:route=curve replacement value 'bogus'"
+        "value alias kernel-wire:route=curve replacement value 'bogus'"
         in error
         for error in errors
     ), errors
@@ -481,10 +486,9 @@ def test_manifest_freezes_case_denominator() -> None:
 
 def test_rmp_alias_patterns_use_only_alias_ledgers() -> None:
     patterns = registry_alias_patterns()
-    canonical = "dot, route=arc, out=90, in=0, label=x"
+    canonical = "dot, route=arc, label=x"
     assert not any(pattern.search(canonical) for pattern in patterns)
     assert any(pattern.search("chain axis=east") for pattern in patterns)
-    assert any(pattern.search("route=curve") for pattern in patterns)
 
 
 def test_baseline_matches_actuals() -> None:

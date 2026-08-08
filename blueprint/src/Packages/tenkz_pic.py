@@ -1,8 +1,8 @@
 r"""plasTeX renderers for tenkz tensor-network pictures (spec §1.5, §5.1).
 
-The tenkz environments (``tenkz``, ``tenkzlattice``, ``tenkzplanes``,
-``tenkzfree`` — the spec's three sub-languages plus the Phase-1 bra-ket
-double-layer environment that lives in the lattice layer),
+The tenkz environments (``tenkz``, ``tenkzlattice``, ``tenkzplanes`` —
+the spec's two sub-languages plus the Phase-1 bra-ket double-layer
+environment that lives in the lattice layer),
 the plain ``tikzcd`` environment that carries the blueprint's commutative
 diagrams, and the bridge command ``\tnpic`` are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
@@ -104,7 +104,6 @@ _ENVIRONMENT_LANGS = {
     "tenkz": "grid",
     "tenkzlattice": "lattice",
     "tenkzplanes": "planes",
-    "tenkzfree": "free",
     "tikzcd": "cd",
     "tnpic": "grid",
 }
@@ -527,9 +526,6 @@ else:
         pass
 
     class tenkzplanes(_TenkzVerbatimEnvironment):
-        pass
-
-    class tenkzfree(_TenkzVerbatimEnvironment):
         pass
 
     class tikzcd(_TenkzVerbatimEnvironment):
