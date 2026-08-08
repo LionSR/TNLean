@@ -81,7 +81,7 @@ missing capability all fail, while recorded gaps merely appear in the book's
 histogram.  A judged verdict pins the SHA-256 of its case; editing the case
 stales exactly that verdict.
 
-The ordinary 154-fixture corpus keeps its existing default interface:
+The ordinary corpus — 153 standalone fixtures in `PROVENANCE.tsv`, 159 files once the driver adds its six local fixtures — keeps its existing default interface:
 
 ```sh
 scripts/tenkz_corpus.sh

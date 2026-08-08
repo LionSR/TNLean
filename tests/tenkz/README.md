@@ -79,19 +79,16 @@ census produced this adoption:
 belong in dedicated tests that assert their expected diagnostics; they are not
 passing corpus entries.
 
-Four package-internal probes deliberately create no event records:
-`geom.tex`, `p_pitch.tex`, `p_species.tex`, and `plane_experiment.tex`. They use
+Three package-internal probes deliberately create no event records:
+`p_pitch.tex`, `p_species.tex`, and `plane_experiment.tex`. They use
 tenkz dimensions, keys, or TikZ styles without opening a tenkz environment. The
-driver names these four exceptions explicitly and rejects an empty `.tnlog` from
+driver names these three exceptions explicitly and rejects an empty `.tnlog` from
 every other fixture, so a broken event writer cannot silently pass the corpus.
 
-Two included fixtures have documented presentation-only curations.
+One included fixture has a documented presentation-only curation.
 `gr_t7_coset.tex` moves its two gray action boxes 4 mm right so the
-`k_x^{-1}` label clears the next box under the measured-overlap audit.
-`plane_sweep1.tex` keeps its compact 0.45/0.55 region annotation visibly as
-`R`, but uses `\scriptscriptstyle` so the adopted stress probe fits the compact
-cell-corner clearance contract measured by the audit. Both formulas and diagram
-topologies are unchanged.
+`k_x^{-1}` label clears the next box under the measured-overlap audit. The
+formula and diagram topology are unchanged.
 
 Every standalone fixture begins with a one-line `% Regression:` header and has a
 `% Formula:` comment. Geometry-only fixtures state their geometry contract rather
