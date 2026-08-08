@@ -836,6 +836,20 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     canonical extension.
 \end{proof}
 
+\begin{theorem}[Agreement of the two direct-sum extensions]
+    \label{thm:direct_sum_map_extension_self}
+    \lean{Matrix.directSumMapExtension_self}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    If $T:\mathcal A\to\mathcal A$ is an endomorphism, then its full-matrix
+    extension as a map between two finite sums agrees with its canonical
+    endomorphic extension.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both maps are $\iota_A\circ T\circ\pi_A$.
+\end{proof}
+
 \begin{theorem}[Fixed embedded families under the canonical extension]
     \label{thm:direct_sum_extension_embedding_fixed}
     \lean{Matrix.directSumExtension_embedding_eq_self_iff}
@@ -844,7 +858,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     Let $T:\mathcal A\to\mathcal A$ be a linear endomorphism of a finite sum
     of matrix algebras. For every $A\in\mathcal A$,
     \begin{align}
-        \widehat T(\iota(A))=\iota(A)
+        \widehat T(\iota_A(A))=\iota_A(A)
         &\quad\Longleftrightarrow\quad T(A)=A.
         \notag
     \end{align}
@@ -854,11 +868,11 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \uses{thm:direct_sum_extension_embedding_compression}
     Diagonal compression is a left inverse of block-diagonal embedding. Hence
     \begin{align}
-        \widehat T(\iota(A))
-        &=\iota(T(A)).
+        \widehat T(\iota_A(A))
+        &=\iota_A(T(A)).
         \notag
     \end{align}
-    If this equals $\iota(A)$, applying diagonal compression gives
+    If this equals $\iota_A(A)$, applying diagonal compression gives
     $T(A)=A$. Conversely, substituting $T(A)=A$ gives the fixed-point
     identity.
 \end{proof}
