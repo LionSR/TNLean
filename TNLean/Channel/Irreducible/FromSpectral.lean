@@ -7,7 +7,6 @@ import TNLean.Channel.Irreducible.Ergodicity
 import TNLean.Channel.Irreducible.Basic
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.SpectralRadius
-import TNLean.Channel.Irreducible.TraceAdjoint
 
 /-!
 # Irreducibility from spectral properties (Wolf Theorem 6.4)
@@ -200,7 +199,11 @@ theorem hasSpectralProperties_of_irreducible_cp
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
-    fun X => trace_mul_transferMap_adjoint K hE_eq σ X
+    fun X => by
+      rw [hE_eq]
+      simpa only [Kraus.map, Kraus.adjointMap, MPSTensor.transferMap_apply,
+        Matrix.conjTranspose_conjTranspose] using
+          (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) σ X)
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr_zero
     exact hρ_ne

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain

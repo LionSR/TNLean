@@ -22,4 +22,3 @@ import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Scaling
 import TNLean.Channel.Irreducible.Similarity
 import TNLean.Channel.Irreducible.SpectralRadius
-import TNLean.Channel.Irreducible.TraceAdjoint
