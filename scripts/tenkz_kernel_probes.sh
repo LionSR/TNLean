@@ -1156,6 +1156,33 @@ grep -Fq '|col=1|kind=index|name=wrap-north-col-1|origin=trace|side=north' \
   echo "FAIL: north=trace did not materialize its first closure wire" >&2
   exit 1
 }
+# A traced row's return clears the other rows of its picture (#5623): one
+# closure record per row of each traced picture, while the fixture's own
+# stroke hook refuses any rail that crosses another row, another return,
+# or the band between the rows.  The four sub-pictures hold 2, 3, 1, and
+# 3 rows, so across the whole log row 1 closes four times, row 2 three
+# times, and row 3 twice; wrap names recur across the sub-pictures, so an
+# existence check cannot see a lost closure, while these exact per-row
+# counts fail when any one picture drops one.
+trace_return_wraps=$(grep -c '|origin=trace|row=[0-9]*|side=west-east' \
+  "$WORK/r_trace_return_rows.tnlog" || true)
+[ "$trace_return_wraps" -eq 9 ] || {
+  echo "FAIL: per-row traces minted $trace_return_wraps closure records," \
+    "expected 9" >&2
+  exit 1
+}
+for wrap_spec in 1:4 2:3 3:2; do
+  wrap_row=${wrap_spec%:*}
+  wrap_expected=${wrap_spec#*:}
+  wrap_found=$(grep -c \
+    "|name=wrap-$wrap_row|origin=trace|row=$wrap_row|side=west-east" \
+    "$WORK/r_trace_return_rows.tnlog" || true)
+  [ "$wrap_found" -eq "$wrap_expected" ] || {
+    echo "FAIL: row $wrap_row closed $wrap_found times across the traced" \
+      "pictures, expected $wrap_expected" >&2
+    exit 1
+  }
+done
 grep -Fq '|name=P|ports=n:physical|skin=box' \
     "$WORK/r_declare_atom.tnlog" || {
   echo "FAIL: an identifier atom declaration did not mint a typed command" >&2
@@ -1613,7 +1640,8 @@ for pixel_fixture in \
     r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
     r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
     r_region_diagonal r_region_pinch_staircase r_ring_closure \
-    r_wire_stroke r_noncell_port_slot r_noncell_port_slot_cell \
+    r_trace_return_rows r_wire_stroke \
+    r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
     r_route_noncell_slots r_route_noncell_slots_cell; do
   if ! pdftoppm -singlefile -png -r 300 \
@@ -1679,7 +1707,8 @@ for path in sys.argv[1:]:
   "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
   "$WORK/r_region_diagonal.png" "$WORK/r_region_pinch_staircase.png" \
-  "$WORK/r_ring_closure.png" "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
+  "$WORK/r_ring_closure.png" "$WORK/r_trace_return_rows.png" \
+  "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
 if ( cd "$WORK" &&
