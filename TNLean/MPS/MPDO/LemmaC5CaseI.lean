@@ -24,19 +24,19 @@ import TNLean.Algebra.TraceReindex
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
 
-This file provides the matrix-algebra components of the Case-I argument in
-the proof of Lemma `SALZCL` (arXiv:1606.00608, Appendix C.2, lines
-1473–1499), which states that a zero-correlation-length (ZCL) source yields
-a structured active-level (SAL) decomposition for simple MPO tensors.  The
-Case-I content carried here is the C.4–C.5 argument that the active-sector
-trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
-is positive.
+This file provides the matrix-algebra components of the Case-I argument for
+Lemma `SALZCL` (arXiv:1606.00608, Appendix C.2, lines 1473–1499), which assumes
+SAL and literal zero correlation length in the standing Case-I setting and
+concludes normalized rank-one coefficient equations for the active-sector trace
+matrix.  The Case-I content carried here includes the C.4–C.5 argument that `T`
+satisfies `T² = T³`, is primitive, and every entry of `T²` is positive.
 
 The active sector set reduces to a singleton (`card(ActiveSector p) = 1`),
 from which the Case-I relation `T² = T` and its normalized rank-one coefficient
-form follow.  The coefficient theorem packages the two displayed conclusions of
-Lemma `SALZCL` on the normal Case-I active sector; singletonness and `T² = T` are
-the project-derived inputs.
+form follow.  On the explicit normal Case-I hypothesis surface, the coefficient
+theorem reproves the two equations asserted by Lemma `SALZCL`; it does not use
+the source's trace-power argument.  Singletonness and `T² = T` are the
+project-derived inputs.
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
