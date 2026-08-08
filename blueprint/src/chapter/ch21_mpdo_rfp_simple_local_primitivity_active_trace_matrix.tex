@@ -319,13 +319,15 @@
       lem:mpdo_sector_tensor_left_zero_of_weight_zero,
       thm:mpdo_sector_virtual_matrix_spanning,
       thm:mpdo_active_one_site_matrix_spanning,
-      thm:mpdo_sector_support_triangle_closure}
+      thm:mpdo_sector_support_triangle_closure,
+      thm:mpdo_physical_sector_rephasing_invariance}
     Choose the coherent positive phases. Injectivity gives the full virtual
     matrix span, while zero-weight reparameterization removes the inactive
     summands from the active span. A nonzero virtual matrix exists in every
     active sector, and the neighboring-support recurrence gives the three-edge
-    return. Inactive left tensors vanish by construction. Finally,
-    $\sum_kp_k=1$ gives a nonempty active sector.
+    return. Rephasing preserves the nonzero neighboring edges, so this return
+    persists after the coherent rephasing. Inactive left tensors vanish by
+    construction. Finally, $\sum_kp_k=1$ gives a nonempty active sector.
 \end{proof}
 
 % The effective-sector restriction, including the zero rows and columns on
@@ -357,9 +359,20 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:mpdo_inverse_map_active_sector_witnesses,
+    \uses{def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
+      thm:mpdo_inverse_map_active_sector_witnesses,
       thm:mpdo_active_sector_three_step_return_and_primitivity}
     \leanok
+    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
+    Hayashi decomposition, and
+    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
+    nonzero outer indices for the normalized four-site tail. Its reduced block
+    state gives the required three-site closure; form the zero-weight
+    reparameterized inverse-map factorization. Then
     Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} supplies one
     rephased factorization with positive neighboring operators, full active
     span, nonzero active virtual matrices, and the three-edge return condition.
