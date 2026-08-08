@@ -1258,10 +1258,14 @@
     \uses{thm:mpdo_physical_sector_rephasing_invariance,
       thm:mpdo_zero_weight_reparameterized_neighboring_operator,
       lem:mpdo_sector_tensor_left_zero_of_weight_zero}
-    If the source sector has zero weight, its reparameterized right tensor is
-    zero. If the target sector has zero weight, its left tensor is zero.
-    Rephasing only rescales the neighboring operator, and hence preserves its
-    vanishing.
+    Rephasing changes a neighboring operator by
+    \begin{align}
+        (\eta_z)_{k,h}&=z_k^{-1}z_h\eta_{k,h}.
+        \notag
+    \end{align}
+    Hence \(\eta_{k,h}=0\) implies \((\eta_z)_{k,h}=0\). If \(p_k=0\),
+    the reparameterized right tensor vanishes, so \(\eta_{k,h}=0\). If
+    \(p_h=0\), the left tensor vanishes and again \(\eta_{k,h}=0\).
 \end{proof}
 
 \begin{theorem}[Rephased inverse-map Case-I coefficient witness]
