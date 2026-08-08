@@ -498,7 +498,8 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_power_trace}
+    \uses{thm:mpu_transfer_matrix_power_trace,thm:overlap_trace,
+        thm:mixed_self}
     Replace the matrix power by the transfer matrix of the corresponding
     operator power, identify matrix trace with operator trace, and expand the
     latter over periodic words.
@@ -515,11 +516,41 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
     \end{align}
 \end{definition}
 
+\begin{theorem}[Self-overlap scaling]
+    \label{thm:mpu_self_overlap_scaling}
+    \lean{MPSTensor.mpvOverlap_smul_self,
+      MPOTensor.mpvOverlap_normalizedFlattening_self}
+    \leanok
+    For a matrix product tensor $A$, a complex number $c$, and a nonnegative
+    integer $N$, scaling every local matrix by $c$ gives
+    \begin{align}
+        \sum_\sigma \operatorname{mpv}(cA,\sigma)
+          \overline{\operatorname{mpv}(cA,\sigma)}
+        &=(c\overline c)^N
+          \sum_\sigma \operatorname{mpv}(A,\sigma)
+          \overline{\operatorname{mpv}(A,\sigma)}.
+    \end{align}
+    Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
+    $d$, then
+    \begin{align}
+        \sum_\sigma \operatorname{mpv}(\widetilde U,\sigma)
+          \overline{\operatorname{mpv}(\widetilde U,\sigma)}
+        &=d^{-N}
+          \sum_\sigma \operatorname{mpv}(U,\sigma)
+          \overline{\operatorname{mpv}(U,\sigma)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_normalized_flattening}
+    Each length-$N$ coefficient is multiplied by $c^N$.  Multiplication by
+    its complex conjugate gives the first identity.  Taking
+    $c=1/\sqrt d$ gives the second.
+\end{proof}
+
 \begin{theorem}[Normalized MPU transfer trace]
     \label{thm:mpu_normalized_transfer_trace}
-    \lean{MPSTensor.mpvOverlap_smul_self,
-      MPOTensor.mpvOverlap_normalizedFlattening_self,
-      MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
+    \lean{MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
     \leanok
     Let $U$ be an MPU tensor with positive physical and bond dimensions, and
     let $E$ be the transfer matrix of its normalized flattening.  For every
@@ -530,7 +561,9 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_overlap,def:mpu_normalized_flattening}
+    \uses{thm:mpu_transfer_matrix_overlap,thm:mpu_self_overlap_scaling,
+        thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint,
+        def:mpu_normalized_flattening}
     Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
     self-overlap by $d^{-N}$.  The raw self-overlap is the trace of
     $\operatorname{MPO}_N(U)\operatorname{MPO}_N(U)^\dagger$.  Since $N>1$,
