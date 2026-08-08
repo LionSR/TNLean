@@ -8,7 +8,7 @@ module
 public import TNLean.Channel.Wigner.Upstream.TransitionProbability
 
 /-!
-# Projective Wigner rigidity: transition-preserving maps, antiunitary conjugation, orthogonal frames, and frame reduction
+# Projective Wigner rigidity: orthogonal frames and frame reduction
 
 This module is adapted from
 `CsdLean4/Mathlib/LinearAlgebra/Projectivization/WignerRigidity.lean` in
@@ -121,7 +121,7 @@ it is not the linear scaling law satisfied by any `≃ₗᵢ[ℂ]`, so `conjProj
 lemma conjVec_smul (c : ℂ) (ψ : EuclideanSpace ℂ (Fin N)) :
     conjVec (c • ψ) = (starRingEnd ℂ) c • conjVec ψ := by
   ext i
-  show (starRingEnd ℂ) ((c • ψ).ofLp i) = ((starRingEnd ℂ) c • conjVec ψ).ofLp i
+  change (starRingEnd ℂ) ((c • ψ).ofLp i) = ((starRingEnd ℂ) c • conjVec ψ).ofLp i
   simp [conjVec_ofLp, map_mul]
 
 /-- `conjVec` preserves nonvanishing: `‖conjVec ψ‖ = ‖ψ‖ ≠ 0`. -/
@@ -156,7 +156,7 @@ The eventual Wigner dichotomy is thus non-vacuous on the antiunitary side. -/
 theorem conjProj_transProbPreserving :
     TransProbPreserving (conjProj (N := N)) := by
   intro p q
-  show transProb (Projectivization.mk ℂ (conjVec p.rep) _)
+  change transProb (Projectivization.mk ℂ (conjVec p.rep) _)
       (Projectivization.mk ℂ (conjVec q.rep) _) = transProb p q
   rw [transProb_mk (conjVec_ne_zero p.rep_nonzero) (conjVec_ne_zero q.rep_nonzero),
       conjVec_transProbVec]
@@ -167,7 +167,7 @@ theorem conjProj_transProbPreserving :
 is `a • v` for some nonzero `a`; `conjVec (a • v) = conj a • conjVec v`
 (`conjVec_smul`), a nonzero rescaling, so both sides span the same ray. This is
 the representative-independent form of `conjProj`, needed for the eventual
-antiunitary assembly (Stage 3). -/
+antiunitary conclusion (Stage 3). -/
 lemma conjProj_mk {v : EuclideanSpace ℂ (Fin N)} (hv : v ≠ 0) :
     conjProj (Projectivization.mk ℂ v hv)
       = Projectivization.mk ℂ (conjVec v) (conjVec_ne_zero hv) := by
@@ -373,7 +373,7 @@ lemma mk_imageOrthonormalBasis
     Projectivization.mk ℂ (imageOrthonormalBasis hf b i)
         ((imageOrthonormalBasis_apply hf b i).symm ▸ imageVec_ne_zero hf b i)
       = f (Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i)) := by
-  show _ = f (srcPoint b i)
+  change _ = f (srcPoint b i)
   -- mk (imageONB i) = mk (imageVec i) = mk ((f (srcPoint i)).rep) = f (srcPoint i).
   -- `mk` is proof-irrelevant in the nonzero hypothesis, so the dependent proof
   -- argument is immaterial; chain three `mk` equalities.
@@ -565,7 +565,7 @@ theorem reducedMap_fixes_basis
     reducedMap hf b (Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i))
       = Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i) := by
   set U := candidateUnitary hf b with hU
-  show projMap U.symm (f (Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i)))
+  change projMap U.symm (f (Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i)))
       = Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i)
   rw [← candidateUnitary_agrees_on_basis hf b i, ← hU,
       projMap_mk U.symm (U (b i))

@@ -8,7 +8,7 @@ module
 public import TNLean.Channel.Wigner.Upstream.ComplexReconstruction
 
 /-!
-# Projective Wigner rigidity: global-sign closure and assembly of Wigner rigidity
+# Projective Wigner rigidity: global-sign closure and the rigidity theorem
 
 This module is adapted from
 `CsdLean4/Mathlib/LinearAlgebra/Projectivization/WignerRigidity.lean` in
@@ -71,7 +71,9 @@ lemma masterVec_im_ne
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) {a c : Fin N} (hac : a ≠ c) :
     ((starRingEnd ℂ) (b.repr (masterVec b) a) * b.repr (masterVec b) c).im ≠ 0 := by
   rw [masterVec_repr, masterVec_repr]
-  have him : ((starRingEnd ℂ) (1 + Complex.I * ((a : ℕ) : ℂ)) * (1 + Complex.I * ((c : ℕ) : ℂ))).im
+  have him :
+      ((starRingEnd ℂ) (1 + Complex.I * ((a : ℕ) : ℂ)) *
+        (1 + Complex.I * ((c : ℕ) : ℂ))).im
       = ((c : ℕ) : ℝ) - ((a : ℕ) : ℝ) := by
     simp only [map_add, map_one, map_mul, Complex.conj_I, Complex.conj_natCast]
     simp only [Complex.mul_im, Complex.mul_re, Complex.add_re, Complex.add_im, Complex.one_re,
@@ -119,17 +121,22 @@ lemma sign_link_core {cA cB cC dA dB dC : ℂ} {S F : ℝ}
     (Ebc : (starRingEnd ℂ) dB * dC * (S : ℂ) = Γbc * (F : ℂ))
     (Eac : (starRingEnd ℂ) dA * dC * (S : ℂ) = Γac * (F : ℂ))
     (Ebb : (starRingEnd ℂ) dB * dB * (S : ℂ) = (starRingEnd ℂ) cB * cB * (F : ℂ))
-    (hAB : Γab = (starRingEnd ℂ) cA * cB ∨ Γab = (starRingEnd ℂ) ((starRingEnd ℂ) cA * cB))
-    (hBC : Γbc = (starRingEnd ℂ) cB * cC ∨ Γbc = (starRingEnd ℂ) ((starRingEnd ℂ) cB * cC))
-    (hAC : Γac = (starRingEnd ℂ) cA * cC ∨ Γac = (starRingEnd ℂ) ((starRingEnd ℂ) cA * cC)) :
+    (hAB : Γab = (starRingEnd ℂ) cA * cB ∨
+      Γab = (starRingEnd ℂ) ((starRingEnd ℂ) cA * cB))
+    (hBC : Γbc = (starRingEnd ℂ) cB * cC ∨
+      Γbc = (starRingEnd ℂ) ((starRingEnd ℂ) cB * cC))
+    (hAC : Γac = (starRingEnd ℂ) cA * cC ∨
+      Γac = (starRingEnd ℂ) ((starRingEnd ℂ) cA * cC)) :
     (Γab = (starRingEnd ℂ) cA * cB ↔ Γbc = (starRingEnd ℂ) cB * cC) := by
   have hFc : (F : ℂ) ≠ 0 := by exact_mod_cast (ne_of_gt hFpos)
   have hdia : Γab * Γbc = Γac * ((starRingEnd ℂ) cB * cB) := by
     have hbase : ((starRingEnd ℂ) dA * dB * (S : ℂ)) * ((starRingEnd ℂ) dB * dC * (S : ℂ))
-        = ((starRingEnd ℂ) dA * dC * (S : ℂ)) * ((starRingEnd ℂ) dB * dB * (S : ℂ)) := by ring
+        = ((starRingEnd ℂ) dA * dC * (S : ℂ)) *
+            ((starRingEnd ℂ) dB * dB * (S : ℂ)) := by ring
     rw [Eab, Ebc, Eac, Ebb] at hbase
     have h2 : Γab * Γbc * ((F : ℂ) * (F : ℂ))
-        = Γac * ((starRingEnd ℂ) cB * cB) * ((F : ℂ) * (F : ℂ)) := by linear_combination hbase
+        = Γac * ((starRingEnd ℂ) cB * cB) * ((F : ℂ) * (F : ℂ)) := by
+          linear_combination hbase
     exact mul_right_cancel₀ (mul_ne_zero hFc hFc) h2
   have hsrc : ((starRingEnd ℂ) cA * cB) * ((starRingEnd ℂ) cB * cC)
       = ((starRingEnd ℂ) cA * cC) * ((starRingEnd ℂ) cB * cB) := by ring
@@ -137,7 +144,9 @@ lemma sign_link_core {cA cB cC dA dB dC : ℂ} {S F : ℝ}
   have hγbc : (starRingEnd ℂ) cB * cC ≠ 0 := mul_ne_zero (by simpa using hcB) hcC
   have hγbb_real : (starRingEnd ℂ) ((starRingEnd ℂ) cB * cB) = (starRingEnd ℂ) cB * cB := by
     rw [map_mul, Complex.conj_conj, mul_comm]
-  have hsrcC : (starRingEnd ℂ) ((starRingEnd ℂ) cA * cB) * (starRingEnd ℂ) ((starRingEnd ℂ) cB * cC)
+  have hsrcC :
+      (starRingEnd ℂ) ((starRingEnd ℂ) cA * cB) *
+        (starRingEnd ℂ) ((starRingEnd ℂ) cB * cC)
       = (starRingEnd ℂ) ((starRingEnd ℂ) cA * cC) * ((starRingEnd ℂ) cB * cB) := by
     rw [← map_mul, hsrc, map_mul, hγbb_real]
   constructor
@@ -182,7 +191,8 @@ lemma sign_link_core {cA cB cC dA dB dC : ℂ} {S F : ℝ}
 def CFixed (hf : TransProbPreserving f)
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (i₀ : Fin N)
     {i j : Fin N} (hij : i ≠ j) : Prop :=
-  diagReducedMap hf b i₀ (Projectivization.mk ℂ (b i + Complex.I • b j) (Iadd_basis_ne_zero b hij))
+  diagReducedMap hf b i₀
+    (Projectivization.mk ℂ (b i + Complex.I • b j) (Iadd_basis_ne_zero b hij))
     = Projectivization.mk ℂ (b i + Complex.I • b j) (Iadd_basis_ne_zero b hij)
 
 /-- Middle-index linking: the complex sign of `(a,bx)` matches that of `(bx,c)`. -/
@@ -353,9 +363,9 @@ theorem diagReducedMap_dichotomy
           = Projectivization.mk ℂ (bConjVec b ψ) (bConjVec_ne_zero b hψ)) :=
   diagReducedMap_dichotomy_of_complexSign hf b i₀ (diagReducedMap_complexSign_closure hf b i₀)
 
-/-! ## STEP 2: assembly of the Wigner rigidity theorem -/
+/-! ## STEP 2: proof of the Wigner rigidity theorem -/
 
-section Assembly
+section RigidityTheorem
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- `projMap` functoriality: composition of projective isometry maps. -/
@@ -378,7 +388,7 @@ lemma projMap_symm_projMap (e : E ≃ₗᵢ[ℂ] E) (p : ℙ ℂ E) :
   congr 1
   exact e.apply_symm_apply p.rep
 
-end Assembly
+end RigidityTheorem
 
 /-- Coordinatewise conjugation in the standard basis is `conjVec`. -/
 lemma bConjVec_basisFun (ψ : EuclideanSpace ℂ (Fin N)) :
@@ -397,7 +407,8 @@ identity), never assumed; the antiunitary branch is genuinely present
 transition-probability preservation alone. Foundational-triple only. -/
 theorem wigner_rigidity
     (hf : TransProbPreserving f) :
-    (∃ e : EuclideanSpace ℂ (Fin N) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin N), ∀ p, f p = projMap e p)
+    (∃ e : EuclideanSpace ℂ (Fin N) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin N),
+      ∀ p, f p = projMap e p)
     ∨ (∃ e : EuclideanSpace ℂ (Fin N) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin N),
         ∀ p, f p = projMap e (conjProj p)) := by
   rcases Nat.eq_zero_or_pos N with hN | hN
@@ -468,7 +479,7 @@ posited. Its only logical dependencies are the foundational triple
 `∃ U : Matrix.unitaryGroup (Fin N) ℂ, f = U • ·` form, where `U • ·` is the exact
 projective action used by `transProbPreserving_unitary` /
 `transProb_smul_unitary` (the `MulAction.compHom` of
-`Matrix.UnitaryGroup.toEuclideanLinearEquivHom`). The bridge is the matrix of the
+`Matrix.UnitaryGroup.toEuclideanLinearEquivHom`). The identification is the matrix of the
 isometry in the standard basis: `unitaryOfIsometry e := toEuclideanLin.symm e`,
 whose columns are `e (basisFun j)`, hence `star M * M = 1` by the isometry
 property `e.inner_map_map` and orthonormality of `basisFun`. The antiunitary
@@ -543,7 +554,7 @@ noncomputable def unitaryGroupOfIsometry
     Matrix.unitaryGroup (Fin N) ℂ :=
   ⟨unitaryOfIsometry e, unitaryOfIsometry_mem e⟩
 
-/-- **The action bridge.** `projMap e` agrees with the `unitaryGroup` ray action
+/-- **Compatibility with the matrix action.** `projMap e` agrees with the `unitaryGroup` ray action
 `unitaryGroupOfIsometry e • ·` used by `transProbPreserving_unitary`. Reduce `p`
 to `mk p.rep`, push both sides through `projMap_mk` /
 `smul_mk_eq_mk_toEuclideanLin`, and note the underlying vectors agree since
@@ -557,7 +568,7 @@ theorem projMap_eq_smul_unitary
   rw [projMap_mk e p.rep p.rep_nonzero,
       smul_mk_eq_mk_toEuclideanLin (unitaryGroupOfIsometry e) p.rep_nonzero]
   have hvec : Matrix.toEuclideanLin ((unitaryGroupOfIsometry e).val) p.rep = e p.rep := by
-    show Matrix.toEuclideanLin (unitaryOfIsometry e) p.rep = e p.rep
+    change Matrix.toEuclideanLin (unitaryOfIsometry e) p.rep = e p.rep
     rw [unitaryOfIsometry_toEuclideanLin]; rfl
   exact (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).mpr ⟨1, by rw [one_smul, hvec]⟩
 
@@ -566,7 +577,7 @@ every transition-probability-preserving self-map of `ℂℙ^{N-1}` is `U • ·`
 `U : Matrix.unitaryGroup (Fin N) ℂ` (the **unitary** branch) or `U • conjProj ·`
 (the **antiunitary** branch), with `U • ·` the same `MulAction` used by
 `transProbPreserving_unitary`. Reformulation of `wigner_rigidity` through the
-isometry-to-matrix bridge `projMap_eq_smul_unitary`; no ℂ-linearity is assumed on
+isometry-to-matrix compatibility `projMap_eq_smul_unitary`; no ℂ-linearity is assumed on
 `f`, the antiunitary branch is genuinely present, foundational-triple only. -/
 theorem wigner_rigidity_unitaryGroup
     (hf : TransProbPreserving f) :

@@ -319,7 +319,8 @@ lemma twoLevelPhase_norm
   · rw [dif_pos h, norm_one]
   · rw [dif_neg h]
     obtain ⟨_, hnorm, _⟩ :=
-      Classical.choose_spec (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := j) (Ne.symm h))
+      Classical.choose_spec
+        (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := j) (Ne.symm h))
     exact hnorm
 
 /-- The **diagonally-reduced map**: `projMap D⁻¹ ∘ reducedMap hf b`, where
@@ -350,7 +351,7 @@ lemma diagReducedMap_fixes_basis
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (i₀ i : Fin N) :
     diagReducedMap hf b i₀ (Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i))
       = Projectivization.mk ℂ (b i) (b.orthonormal.ne_zero i) := by
-  show projMap (diagUnitary b (twoLevelPhase hf b i₀) (twoLevelPhase_norm hf b i₀)).symm
+  change projMap (diagUnitary b (twoLevelPhase hf b i₀) (twoLevelPhase_norm hf b i₀)).symm
       (reducedMap hf b _) = _
   rw [reducedMap_fixes_basis hf b i, projMap_mk]
   refine (Projectivization.mk_eq_mk_iff' ℂ _ _ _ _).mpr ⟨(twoLevelPhase hf b i₀ i)⁻¹, ?_⟩
@@ -369,7 +370,8 @@ step (pieces 2–3): a `TransProbPreserving` map fixing every basis ray and ever
 two-level ray `mk (b i₀ + b i)`. **No ℂ-linearity assumed.** -/
 theorem diagReducedMap_fixes_two_level
     (hf : TransProbPreserving f)
-    (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) {i₀ i : Fin N} (hij : i₀ ≠ i) :
+    (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N)))
+    {i₀ i : Fin N} (hij : i₀ ≠ i) :
     diagReducedMap hf b i₀ (Projectivization.mk ℂ (b i₀ + b i) (add_basis_ne_zero b hij))
       = Projectivization.mk ℂ (b i₀ + b i) (add_basis_ne_zero b hij) := by
   obtain ⟨_, hnorm, heq⟩ :=
@@ -377,9 +379,10 @@ theorem diagReducedMap_fixes_two_level
   have hci : twoLevelPhase hf b i₀ i
       = Classical.choose (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij) := by
     rw [twoLevelPhase, dif_neg (Ne.symm hij)]
-  set c := Classical.choose (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij) with hc
+  set c := Classical.choose
+    (reducedMap_two_level_normal_form hf b (i₀ := i₀) (i := i) hij) with hc
   have hcne : c ≠ 0 := by rw [← norm_ne_zero_iff, hnorm]; norm_num
-  show projMap (diagUnitary b (twoLevelPhase hf b i₀) (twoLevelPhase_norm hf b i₀)).symm
+  change projMap (diagUnitary b (twoLevelPhase hf b i₀) (twoLevelPhase_norm hf b i₀)).symm
       (reducedMap hf b _) = _
   rw [heq, projMap_mk]
   have hcomp :

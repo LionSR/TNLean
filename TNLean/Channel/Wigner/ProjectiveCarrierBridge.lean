@@ -7,7 +7,7 @@ import TNLean.Channel.Wigner.ProjectivePureState
 import TNLean.Channel.Wigner.Upstream.WignerRigidity
 
 /-!
-# Projective carrier bridge for Wigner rigidity
+# Projective carrier identification for Wigner rigidity
 
 This module identifies rays over `Fin d → ℂ`, used for TNLean's pure-state
 matrices, with rays over `EuclideanSpace ℂ (Fin d)`, used by the Wigner rigidity
@@ -36,6 +36,7 @@ noncomputable def fromEuclideanRay (p : ℙ ℂ (EuclideanSpace ℂ (Fin d))) :
   p.map (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).toLinearMap
     (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).injective
 
+/-- Forgetting the Euclidean wrapper after adding it fixes every finite-coordinate ray. -/
 @[simp]
 theorem fromEuclideanRay_toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
     fromEuclideanRay (toEuclideanRay p) = p := by
@@ -45,6 +46,7 @@ theorem fromEuclideanRay_toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
         Projectivization.map_mk]
       rfl
 
+/-- Adding the Euclidean wrapper after forgetting it fixes every Euclidean-space ray. -/
 @[simp]
 theorem toEuclideanRay_fromEuclideanRay
     (p : ℙ ℂ (EuclideanSpace ℂ (Fin d))) :

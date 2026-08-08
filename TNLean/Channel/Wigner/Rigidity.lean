@@ -76,10 +76,12 @@ noncomputable def pureStateMatrixEquiv :
         ⟨p, rfl⟩))
   right_inv P := Subtype.ext (Classical.choose_spec P.property)
 
+/-- The range equivalence sends a ray to its normalized pure-state matrix. -/
 @[simp]
 theorem pureStateMatrixEquiv_val (p : ℙ ℂ (Fin d → ℂ)) :
     (pureStateMatrixEquiv p).1 = pureStateMatrix p := rfl
 
+/-- The ray corresponding to a matrix in the range realizes that matrix. -/
 @[simp]
 theorem pureStateMatrix_pureStateMatrixEquiv_symm (P : PureStateMatrix d) :
     pureStateMatrix (pureStateMatrixEquiv.symm P) = P.1 := by

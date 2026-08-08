@@ -72,7 +72,7 @@ Original source path:
 `CsdLean4/Mathlib/LinearAlgebra/Projectivization/TransitionProbability.lean`.
 
 The adaptation replaces the full Fubini--Study topology, Haar, measure, and
-continuity import by the reduced unitary bridge and rewrites only the
+continuity import by the reduced unitary compatibility module and rewrites only the
 action-on-`mk` proof for Mathlib 4.32's projectivization action API.
 
 ## Tags
@@ -136,7 +136,8 @@ lemma transProbVec_le_one (ψ φ : E) : transProbVec ψ φ ≤ 1 := by
   · simp [h']
   rw [div_le_one (by positivity)]
   calc ‖(inner ℂ ψ φ : ℂ)‖ ^ 2
-      ≤ (‖ψ‖ * ‖φ‖) ^ 2 := pow_le_pow_left₀ (norm_nonneg _) (norm_inner_le_norm ψ φ) 2
+      ≤ (‖ψ‖ * ‖φ‖) ^ 2 :=
+        pow_le_pow_left₀ (norm_nonneg _) (norm_inner_le_norm ψ φ) 2
     _ = ‖ψ‖ ^ 2 * ‖φ‖ ^ 2 := by ring
 
 /-- The diagonal value is `1` for any nonzero vector: `⟪ψ, ψ⟫ = ‖ψ‖²`. -/
@@ -194,7 +195,7 @@ lemma inner_toEuclideanLin_unitary
         (Matrix.toEuclideanLin U.val w) : ℂ)
       = inner ℂ v w := by
   rw [EuclideanSpace.inner_eq_star_dotProduct, EuclideanSpace.inner_eq_star_dotProduct]
-  show (U.val *ᵥ w.ofLp) ⬝ᵥ star (U.val *ᵥ v.ofLp) = w.ofLp ⬝ᵥ star v.ofLp
+  change (U.val *ᵥ w.ofLp) ⬝ᵥ star (U.val *ᵥ v.ofLp) = w.ofLp ⬝ᵥ star v.ofLp
   rw [Matrix.star_mulVec, dotProduct_comm (U.val *ᵥ w.ofLp), ← dotProduct_mulVec,
       mulVec_mulVec, show (U.val)ᴴ * U.val = 1 from Unitary.coe_star_mul_self U,
       one_mulVec, dotProduct_comm]
@@ -260,7 +261,8 @@ theorem transProb_eq_one_iff (p q : ℙ ℂ (EuclideanSpace ℂ (Fin N))) :
   rw [div_eq_one_iff_eq (ne_of_gt hden)]
   constructor
   · intro h
-    -- ‖⟪p,q⟫‖² = ‖p‖²‖q‖²  ⇒  ‖⟪p,q⟫‖ = ‖p‖‖q‖  (both sides nonneg)
+    -- Taking square roots gives `‖⟪p,q⟫‖ = ‖p‖‖q‖` because both sides are
+    -- nonnegative.
     have hnorm : ‖(inner ℂ p.rep q.rep : ℂ)‖ = ‖p.rep‖ * ‖q.rep‖ := by
       have hsq : ‖(inner ℂ p.rep q.rep : ℂ)‖ ^ 2 = (‖p.rep‖ * ‖q.rep‖) ^ 2 := by
         rw [h]; ring

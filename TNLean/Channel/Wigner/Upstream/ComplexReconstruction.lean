@@ -8,7 +8,7 @@ module
 public import TNLean.Channel.Wigner.Upstream.CocycleConsistency
 
 /-!
-# Projective Wigner rigidity: complex probes, ray reconstruction, and the local unitary/antiunitary dichotomy
+# Projective Wigner rigidity: complex probes and reconstruction
 
 This module is adapted from
 `CsdLean4/Mathlib/LinearAlgebra/Projectivization/WignerRigidity.lean` in
@@ -141,7 +141,8 @@ lemma transProb_two_level_I
 /-- **Imaginary relative-phase constraint (fixed complex ray).** Let `g` be
 `TransProbPreserving`, fixing every basis ray and the complex two-level ray
 `mk (b i + I • b j)`. Writing `g (mk ψ) = mk φ`, the *imaginary* part of the
-relative phase is preserved: `Im(conj dᵢ · dⱼ) / ‖φ‖² = Im(conj cᵢ · cⱼ) / ‖ψ‖²`.
+relative phase is preserved:
+`Im(conj dᵢ · dⱼ) / ‖φ‖² = Im(conj cᵢ · cⱼ) / ‖ψ‖²`.
 The `I`-probe is *not* conjugation-invariant, so this is the datum piece 2 could
 not reach. Pure overlap algebra; no ℂ-linearity. -/
 theorem two_level_imrelphase_of_fixes
@@ -231,7 +232,8 @@ lemma transProb_two_level_negI
 /-- **Imaginary relative-phase constraint (flipped complex ray).** If `g`
 `TransProbPreserving` fixes every basis ray and *flips* the complex two-level ray,
 `g (mk (b i + I • b j)) = mk (b i - I • b j)`, then the imaginary part of the
-relative phase is **negated**: `Im(conj dᵢ · dⱼ) / ‖φ‖² = -Im(conj cᵢ · cⱼ) / ‖ψ‖²`.
+relative phase is **negated**:
+`Im(conj dᵢ · dⱼ) / ‖φ‖² = -Im(conj cᵢ · cⱼ) / ‖ψ‖²`.
 This is the antiunitary reading. No ℂ-linearity. -/
 theorem two_level_imrelphase_of_flips
     {g : ℙ ℂ (EuclideanSpace ℂ (Fin N)) → ℙ ℂ (EuclideanSpace ℂ (Fin N))}
@@ -285,7 +287,8 @@ two-level ray `mk (b i + I • b j)` is the **identity on rays**:
 
 The real relations (`two_level_relphase_of_fixes`) and the imaginary relations
 (`two_level_imrelphase_of_fixes`) together pin the full Gram datum
-`conj dᵢ · dⱼ · ‖ψ‖² = conj cᵢ · cⱼ · ‖φ‖²` for every pair; taking a reference
+`conj dᵢ · dⱼ · ‖ψ‖² = conj cᵢ · cⱼ · ‖φ‖²` for every pair;
+taking a reference
 index `i₁` with `c_{i₁} ≠ 0` gives `dⱼ = λ · cⱼ` with `λ` fixed, so `φ = λ • ψ`.
 **ℂ-linearity is an output here, not an input.** -/
 theorem eq_id_of_fixes_all_two_level
@@ -320,9 +323,13 @@ theorem eq_id_of_fixes_all_two_level
       have hm := coord_modulus_of_fixes_basis hg b hfixb hψ i₁
       rw [← hφ_def] at hm
       have hmc := (div_eq_div_iff hDφ hDψ).mp hm
-      have e1 : (starRingEnd ℂ) (b.repr φ i₁) * b.repr φ i₁ = ((‖b.repr φ i₁‖ ^ 2 : ℝ) : ℂ) := by
+      have e1 :
+          (starRingEnd ℂ) (b.repr φ i₁) * b.repr φ i₁ =
+            ((‖b.repr φ i₁‖ ^ 2 : ℝ) : ℂ) := by
         rw [RCLike.conj_mul]; norm_cast
-      have e2 : (starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁ = ((‖b.repr ψ i₁‖ ^ 2 : ℝ) : ℂ) := by
+      have e2 :
+          (starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁ =
+            ((‖b.repr ψ i₁‖ ^ 2 : ℝ) : ℂ) := by
         rw [RCLike.conj_mul]; norm_cast
       rw [e1, e2]; exact_mod_cast hmc
     · have hre := two_level_relphase_of_fixes hg b hfixb h (hR i₁ j h) hψ
@@ -451,16 +458,21 @@ theorem eq_bconj_of_flips_complex
     apply hψ
     rw [← b.sum_repr ψ]; exact Finset.sum_eq_zero (fun j _ => by rw [h j, zero_smul])
   have key : ∀ j, (starRingEnd ℂ) (b.repr φ i₁) * b.repr φ j * ((‖ψ‖ ^ 2 : ℝ) : ℂ)
-      = (starRingEnd ℂ) ((starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ j) * ((‖φ‖ ^ 2 : ℝ) : ℂ) := by
+      = (starRingEnd ℂ) ((starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ j) *
+          ((‖φ‖ ^ 2 : ℝ) : ℂ) := by
     intro j
     rcases eq_or_ne i₁ j with h | h
     · subst h
       have hm := coord_modulus_of_fixes_basis hg b hfixb hψ i₁
       rw [← hφ_def] at hm
       have hmc := (div_eq_div_iff hDφ hDψ).mp hm
-      have e1 : (starRingEnd ℂ) (b.repr φ i₁) * b.repr φ i₁ = ((‖b.repr φ i₁‖ ^ 2 : ℝ) : ℂ) := by
+      have e1 :
+          (starRingEnd ℂ) (b.repr φ i₁) * b.repr φ i₁ =
+            ((‖b.repr φ i₁‖ ^ 2 : ℝ) : ℂ) := by
         rw [RCLike.conj_mul]; norm_cast
-      have e2 : (starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁ = ((‖b.repr ψ i₁‖ ^ 2 : ℝ) : ℂ) := by
+      have e2 :
+          (starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁ =
+            ((‖b.repr ψ i₁‖ ^ 2 : ℝ) : ℂ) := by
         rw [RCLike.conj_mul]; norm_cast
       have hconj_real : (starRingEnd ℂ) ((starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁)
           = (starRingEnd ℂ) (b.repr ψ i₁) * b.repr ψ i₁ := by
@@ -529,7 +541,8 @@ zero real part and unit modulus, hence `ε = ± I` (`unit_re_zero_eq_I_or_negI`)
 The two signs are the two branches. No ℂ-linearity is assumed. -/
 theorem diagReducedMap_complex_probe
     (hf : TransProbPreserving f)
-    (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) {i₀ i : Fin N} (hii : i₀ ≠ i) :
+    (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N)))
+    {i₀ i : Fin N} (hii : i₀ ≠ i) :
     diagReducedMap hf b i₀
         (Projectivization.mk ℂ (b i₀ + Complex.I • b i) (Iadd_basis_ne_zero b hii))
       = Projectivization.mk ℂ (b i₀ + Complex.I • b i) (Iadd_basis_ne_zero b hii)
@@ -607,7 +620,9 @@ theorem diagReducedMap_complex_probe
     have hr : (starRingEnd ℂ) (b.repr φ i₀) * (ε * b.repr φ i₀)
         = ε * ((‖b.repr φ i₀‖ ^ 2 : ℝ) : ℂ) := by
       rw [show (starRingEnd ℂ) (b.repr φ i₀) * (ε * b.repr φ i₀)
-            = ε * ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ i₀) from by ring, RCLike.conj_mul]
+            = ε * ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ i₀) from by
+              ring,
+          RCLike.conj_mul]
       norm_cast
     rw [hr, mul_ofReal_re] at hRe
     have hpos : (0 : ℝ) < ‖b.repr φ i₀‖ ^ 2 := pow_pos (norm_pos_iff.mpr ha) 2
@@ -699,6 +714,7 @@ theorem diagReducedMap_dichotomy_of_complexSign
   · exact Or.inl (fun ψ hψ => eq_id_of_fixes_all_two_level hg b hfixb hR hfix hψ)
   · exact Or.inr (fun ψ hψ => eq_bconj_of_flips_complex hg b hfixb hR hflip hψ)
 
+/-- The diagonally reduced map preserves every pairwise real relative phase. -/
 theorem diagReducedMap_relphase_all
     (hf : TransProbPreserving f)
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (i₀ : Fin N)
@@ -712,6 +728,7 @@ theorem diagReducedMap_relphase_all
     (fun k => by rw [srcPoint_eq]; exact diagReducedMap_fixes_basis hf b i₀ k)
     hij (diagReducedMap_fixes_real_all hf b i₀ i j hij) hψ
 
+/-- Every two-coordinate complex probe is either fixed or coordinate-conjugated. -/
 theorem diagReducedMap_complex_probe_general
     (hf : TransProbPreserving f)
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (i₀ : Fin N)
@@ -824,7 +841,8 @@ theorem diagReducedMap_gram_of_fixed
           * b.repr (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep j
           * ((‖ψ‖ ^ 2 : ℝ) : ℂ)
       = (starRingEnd ℂ) (b.repr ψ i) * b.repr ψ j
-          * ((‖(diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
+          * ((‖(diagReducedMap hf b i₀
+            (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
   have hg : TransProbPreserving (diagReducedMap hf b i₀) :=
     diagReducedMap_transProbPreserving hf b i₀
   have hfixb : ∀ k, diagReducedMap hf b i₀ (srcPoint b k) = srcPoint b k := fun k => by
@@ -832,7 +850,8 @@ theorem diagReducedMap_gram_of_fixed
   have hre := diagReducedMap_relphase_all hf b i₀ hij hψ
   have him := two_level_imrelphase_of_fixes hg b hfixb hij hfixI hψ
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep with hφ
-  have hDφ : ‖φ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
+  have hDφ : ‖φ‖ ^ 2 ≠ 0 :=
+    pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
   have hDψ : ‖ψ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr hψ)
   have hrec := (div_eq_div_iff hDφ hDψ).mp hre
   have himc := (div_eq_div_iff hDφ hDψ).mp him
@@ -853,7 +872,8 @@ theorem diagReducedMap_gram_of_flips
           * b.repr (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep j
           * ((‖ψ‖ ^ 2 : ℝ) : ℂ)
       = (starRingEnd ℂ) ((starRingEnd ℂ) (b.repr ψ i) * b.repr ψ j)
-          * ((‖(diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
+          * ((‖(diagReducedMap hf b i₀
+            (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
   have hg : TransProbPreserving (diagReducedMap hf b i₀) :=
     diagReducedMap_transProbPreserving hf b i₀
   have hfixb : ∀ k, diagReducedMap hf b i₀ (srcPoint b k) = srcPoint b k := fun k => by
@@ -861,7 +881,8 @@ theorem diagReducedMap_gram_of_flips
   have hre := diagReducedMap_relphase_all hf b i₀ hij hψ
   have him := two_level_imrelphase_of_flips hg b hfixb hij hflipI hψ
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep with hφ
-  have hDφ : ‖φ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
+  have hDφ : ‖φ‖ ^ 2 ≠ 0 :=
+    pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
   have hDψ : ‖ψ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr hψ)
   have hrec := (div_eq_div_iff hDφ hDψ).mp hre
   have himc := (div_eq_div_iff hDφ hDψ).mp him
@@ -878,19 +899,25 @@ theorem diagReducedMap_gram_diag
           * b.repr (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep i
           * ((‖ψ‖ ^ 2 : ℝ) : ℂ)
       = (starRingEnd ℂ) (b.repr ψ i) * b.repr ψ i
-          * ((‖(diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
+          * ((‖(diagReducedMap hf b i₀
+            (Projectivization.mk ℂ ψ hψ)).rep‖ ^ 2 : ℝ) : ℂ) := by
   have hg : TransProbPreserving (diagReducedMap hf b i₀) :=
     diagReducedMap_transProbPreserving hf b i₀
   have hfixb : ∀ k, diagReducedMap hf b i₀ (srcPoint b k) = srcPoint b k := fun k => by
     rw [srcPoint_eq]; exact diagReducedMap_fixes_basis hf b i₀ k
   have hm := coord_modulus_of_fixes_basis hg b hfixb hψ i
   set φ := (diagReducedMap hf b i₀ (Projectivization.mk ℂ ψ hψ)).rep with hφ
-  have hDφ : ‖φ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
+  have hDφ : ‖φ‖ ^ 2 ≠ 0 :=
+    pow_ne_zero 2 (norm_ne_zero_iff.mpr (Projectivization.rep_nonzero _))
   have hDψ : ‖ψ‖ ^ 2 ≠ 0 := pow_ne_zero 2 (norm_ne_zero_iff.mpr hψ)
   have hmc := (div_eq_div_iff hDφ hDψ).mp hm
-  have e1 : (starRingEnd ℂ) (b.repr φ i) * b.repr φ i = ((‖b.repr φ i‖ ^ 2 : ℝ) : ℂ) := by
+  have e1 :
+      (starRingEnd ℂ) (b.repr φ i) * b.repr φ i =
+        ((‖b.repr φ i‖ ^ 2 : ℝ) : ℂ) := by
     rw [RCLike.conj_mul]; norm_cast
-  have e2 : (starRingEnd ℂ) (b.repr ψ i) * b.repr ψ i = ((‖b.repr ψ i‖ ^ 2 : ℝ) : ℂ) := by
+  have e2 :
+      (starRingEnd ℂ) (b.repr ψ i) * b.repr ψ i =
+        ((‖b.repr ψ i‖ ^ 2 : ℝ) : ℂ) := by
     rw [RCLike.conj_mul]; norm_cast
   rw [e1, e2, ← Complex.ofReal_mul, ← Complex.ofReal_mul, Complex.ofReal_inj]
   exact hmc

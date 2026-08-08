@@ -38,8 +38,8 @@ ray and every anchored two-level ray `mk (b i₀ + b i)`). Writing `h (mk ψ) = 
 `cⱼ := b.repr ψ j`, `dⱼ := b.repr φ j`:
 
 * **Moduli** (`coord_modulus_of_fixes_basis`, `diagReducedMap_coord_modulus`):
-  `‖dⱼ‖² / ‖φ‖² = ‖cⱼ‖² / ‖ψ‖²`, for any `TransProbPreserving` map fixing the basis
-  rays.
+  `‖dⱼ‖² / ‖φ‖² = ‖cⱼ‖² / ‖ψ‖²`, for any `TransProbPreserving` map
+  fixing the basis rays.
 * **Two-level relative phase** (`two_level_relphase_of_fixes`,
   `diagReducedMap_two_level_relphase`) — the heart of piece 2:
   `Re(conj(d_{i₀}) d_i) / ‖φ‖² = Re(conj(c_{i₀}) c_i) / ‖ψ‖²`, i.e.
@@ -477,10 +477,12 @@ theorem diagReducedMap_fixes_three_level
     rwa [← hφ_def] at h
   rw [hwi0, hwj, hwnorm] at hrel_j
   simp only [map_one, mul_one, Complex.one_re] at hrel_j
-  have hre_i : ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ i).re = ‖b.repr φ i₀‖ ^ 2 := by
+  have hre_i :
+      ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ i).re = ‖b.repr φ i₀‖ ^ 2 := by
     rw [div_eq_div_iff hden (by norm_num : (3 : ℝ) ≠ 0)] at hrel_i
     rw [md_i0, eq_div_iff (by norm_num : (3 : ℝ) ≠ 0)]; linarith [hrel_i]
-  have hre_j : ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ j).re = ‖b.repr φ i₀‖ ^ 2 := by
+  have hre_j :
+      ((starRingEnd ℂ) (b.repr φ i₀) * b.repr φ j).re = ‖b.repr φ i₀‖ ^ 2 := by
     rw [div_eq_div_iff hden (by norm_num : (3 : ℝ) ≠ 0)] at hrel_j
     rw [md_i0, eq_div_iff (by norm_num : (3 : ℝ) ≠ 0)]; linarith [hrel_j]
   have hmod_i : ‖b.repr φ i‖ = ‖b.repr φ i₀‖ := by
@@ -578,8 +580,9 @@ theorem diagReducedMap_fixes_two_level_general
   -- triple-support probe overlap
   have hfix3 := diagReducedMap_fixes_three_level hf b h0i h0j hij
   have hoverlap := hg.transProb_of_fixed hfix3 (Projectivization.mk ℂ w hwne)
-  rw [show diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne) = Projectivization.mk ℂ φ hφne
-        from (Projectivization.mk_rep
+  rw [show
+        diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne) =
+          Projectivization.mk ℂ φ hφne from (Projectivization.mk_rep
           (diagReducedMap hf b i₀ (Projectivization.mk ℂ w hwne))).symm,
       transProb_three_level b hφne h0i h0j hij,
       transProb_three_level b hwne h0i h0j hij,
@@ -619,8 +622,8 @@ part of the relative phase between coordinates `i` and `j`:
 Together with `diagReducedMap_two_level_relphase` (the anchored legs
 `(i₀, k)`), the pairwise legs `(i, j)` here give the full **coboundary
 structure** of the phase 2-cocycle — the real-part relations
-`Re(conj(c_i) d_j) = Re(conj(c_i) c_j)·‖φ‖²/‖ψ‖²` for all pairs — with the ± sign of the
-imaginary parts still free (the ℤ/2 datum resolved only by piece 3). No
+`Re(conj(c_i) d_j) = Re(conj(c_i) c_j)·‖φ‖²/‖ψ‖²` for all pairs —
+with the ± sign of the imaginary parts still free (the ℤ/2 datum resolved only by piece 3). No
 ℂ-linearity is assumed. -/
 theorem diagReducedMap_pairwise_relphase
     (hf : TransProbPreserving f)

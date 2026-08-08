@@ -26,7 +26,8 @@ unitary group on the projective space of Euclidean space.
   Companion to Mathlib's `Matrix.UnitaryGroup.toLinearEquiv` for the
   Euclidean (`PiLp 2`) version of the underlying vector space.
 - `Matrix.UnitaryGroup.toEuclideanLinearEquivHom`: the monoid hom
-  `unitaryGroup (Fin N) ℂ →* (EuclideanSpace ℂ (Fin N) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N))`.
+  `unitaryGroup (Fin N) ℂ →*
+    (EuclideanSpace ℂ (Fin N) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N))`.
 
 ## Main instance
 
@@ -76,7 +77,7 @@ noncomputable def toEuclideanLinearEquiv (A : Matrix.unitaryGroup (Fin N) ℂ) :
     (Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ))
     (Matrix.toEuclideanLin (star A.val : Matrix (Fin N) (Fin N) ℂ))
     (by
-      show Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ) ∘ₗ
+      change Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ) ∘ₗ
            Matrix.toEuclideanLin (star A.val : Matrix (Fin N) (Fin N) ℂ)
          = LinearMap.id
       rw [← Matrix.toLpLin_mul_same 2 (A.val : Matrix (Fin N) (Fin N) ℂ) (star A.val),
@@ -84,7 +85,7 @@ noncomputable def toEuclideanLinearEquiv (A : Matrix.unitaryGroup (Fin N) ℂ) :
                 = (1 : Matrix (Fin N) (Fin N) ℂ) from Unitary.coe_mul_star_self A,
           Matrix.toLpLin_one 2])
     (by
-      show Matrix.toEuclideanLin (star A.val : Matrix (Fin N) (Fin N) ℂ) ∘ₗ
+      change Matrix.toEuclideanLin (star A.val : Matrix (Fin N) (Fin N) ℂ) ∘ₗ
            Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ)
          = LinearMap.id
       rw [← Matrix.toLpLin_mul_same 2 (star A.val : Matrix (Fin N) (Fin N) ℂ) A.val,
@@ -105,7 +106,7 @@ lemma toEuclideanLinearEquiv_one :
   apply LinearEquiv.toLinearMap_injective
   -- Goal: ↑(toEuclideanLinearEquiv 1) = ↑(LinearEquiv.refl ℂ ...)
   --      = LinearMap.id
-  show Matrix.toEuclideanLin
+  change Matrix.toEuclideanLin
         ((1 : Matrix.unitaryGroup (Fin N) ℂ).val : Matrix (Fin N) (Fin N) ℂ)
       = LinearMap.id
   rw [Matrix.UnitaryGroup.one_val]
@@ -115,9 +116,9 @@ lemma toEuclideanLinearEquiv_mul (A B : Matrix.unitaryGroup (Fin N) ℂ) :
     toEuclideanLinearEquiv (A * B)
       = toEuclideanLinearEquiv A * toEuclideanLinearEquiv B := by
   apply LinearEquiv.toLinearMap_injective
-  -- LinearMap-level goal: toEuclideanLin (A*B).val = (toEuclideanLin A.val) ∘ₗ (toEuclideanLin B.val)
+  -- Linear-map goal: `toEuclideanLin (A * B).val` is the composite of the two maps.
   -- The LinearEquiv * coerces to the LinearMap * = LinearMap.comp (= ∘ₗ).
-  show Matrix.toEuclideanLin ((A * B).val : Matrix (Fin N) (Fin N) ℂ)
+  change Matrix.toEuclideanLin ((A * B).val : Matrix (Fin N) (Fin N) ℂ)
       = (Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ)) ∘ₗ
         (Matrix.toEuclideanLin (B.val : Matrix (Fin N) (Fin N) ℂ))
   rw [Matrix.UnitaryGroup.mul_val, Matrix.toLpLin_mul_same]
