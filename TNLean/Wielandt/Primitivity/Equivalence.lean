@@ -274,12 +274,14 @@ The source proves this by passing to `T^n`, showing every `T^n(|ψ⟩⟨ψ|)` ha
 full rank from the span hypothesis, concluding no stationary density has a
 kernel, and ruling out a fixed-point space of dimension larger than one via
 Corollary 6.5. This proof instead routes through Proposition 3
-(arXiv:0909.5347, `hasEventuallyFullKrausRank_iff_stronglyIrreducible` above):
-the span hypothesis gives strong irreducibility, which supplies a
-positive-definite fixed point together with irreducibility of `E_A`; the
-complementary transfer-map gap around that fixed point
-(`IsPrimitiveMPS.fixedPoint_unique`) then forces every fixed point of `E_A` to
-be a scalar multiple of it. Both routes are Wolf's own Chapter 6 machinery;
+(arXiv:0909.5347): `isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank`
+turns the span hypothesis into strong irreducibility, then
+`isPrimitiveMPS_of_isStronglyIrreduciblePaper` supplies a positive-definite
+fixed point `ρ₀` together with peripheral primitivity and irreducibility of
+`E_A`, and the complementary transfer-map gap around that fixed point
+(`IsPrimitiveMPS.fixedPoint_unique`) forces every fixed point of `E_A` to be
+a scalar multiple of `ρ₀`; rescaling by the inverse trace gives the unique
+density-matrix representative. Both routes are Wolf's own Chapter 6 machinery;
 this one reuses the already-formalized Proposition 3 equivalence rather than
 repeating the `T^n` / Corollary 6.5 argument. -/
 theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)

@@ -631,13 +631,16 @@ explicit density-block formula is developed in
   `ρ` such that every fixed point of the transfer map `E_A` is a scalar
   multiple of `ρ`.
 
-The proof routes through Proposition 3
-(`MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible`): the span
-hypothesis gives strong irreducibility, which supplies a positive-definite
-fixed point and irreducibility of `E_A`; the complementary transfer-map gap
-around that fixed point then forces every fixed point to be a scalar multiple
-of it. This differs from the source's own `T^n` / Corollary 6.5 argument but
-reuses only already-formalized Wolf Chapter 6 machinery (Proposition 3).
+The proof routes through Proposition 3:
+`MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank` turns the
+span hypothesis into strong irreducibility, then
+`MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper` supplies a
+positive-definite fixed point together with peripheral primitivity and
+irreducibility of `E_A`; the complementary transfer-map gap around that fixed
+point (`MPSTensor.IsPrimitiveMPS.fixedPoint_unique`) then forces every fixed
+point to be a scalar multiple of it. This differs from the source's own `T^n`
+/ Corollary 6.5 argument but reuses only already-formalized Wolf Chapter 6
+machinery (Proposition 3).
 
 ---
 
