@@ -32,8 +32,7 @@ Wigner rigidity.
 * `Projectivization.pureStateMatrix_coordinateConjugation`
 -/
 
-open scoped ComplexConjugate LinearAlgebra.Projectivization Matrix
-open ComplexConjugate
+open scoped LinearAlgebra.Projectivization Matrix
 
 namespace Projectivization
 
@@ -131,19 +130,29 @@ noncomputable def transitionProbability (p q : ℙ ℂ (Fin d → ℂ)) : ℂ :=
   ((star p.rep ⬝ᵥ q.rep) * (star q.rep ⬝ᵥ p.rep)) /
     ((star p.rep ⬝ᵥ p.rep) * (star q.rep ⬝ᵥ q.rep))
 
+private theorem trace_normalizedPureStateMatrix_mul_normalizedPureStateMatrix
+    (v w : Fin d → ℂ) (hv : v ≠ 0) (hw : w ≠ 0) :
+    Matrix.trace (normalizedPureStateMatrix v * normalizedPureStateMatrix w) =
+      ((star v ⬝ᵥ w) * (star w ⬝ᵥ v)) /
+        ((star v ⬝ᵥ v) * (star w ⬝ᵥ w)) := by
+  have hvv := star_dot_self_ne_zero v hv
+  have hww := star_dot_self_ne_zero w hw
+  simp only [normalizedPureStateMatrix, Matrix.smul_mul, Matrix.mul_smul,
+    Matrix.vecMulVec_mul_vecMulVec, Matrix.trace_smul, Matrix.trace_vecMulVec,
+    dotProduct_smul, smul_eq_mul]
+  rw [dotProduct_comm v (star w)]
+  field_simp
+
 /-- The trace of the product of two pure-state matrices is their projective
 transition probability, as in Wolf's Wigner-theorem hypothesis. -/
 theorem trace_pureStateMatrix_mul_pureStateMatrix
     (p q : ℙ ℂ (Fin d → ℂ)) :
     Matrix.trace (pureStateMatrix p * pureStateMatrix q) = transitionProbability p q := by
-  classical
   rw [pureStateMatrix_eq_normalizedPureStateMatrix_rep,
     pureStateMatrix_eq_normalizedPureStateMatrix_rep]
-  simp only [normalizedPureStateMatrix, Matrix.smul_mul, Matrix.mul_smul,
-    Matrix.vecMulVec_mul_vecMulVec, Matrix.trace_smul, Matrix.trace_vecMulVec, dotProduct_smul,
-    smul_eq_mul, transitionProbability]
-  rw [dotProduct_comm p.rep (star q.rep)]
-  field_simp
+  simpa only [transitionProbability] using
+    trace_normalizedPureStateMatrix_mul_normalizedPureStateMatrix
+      p.rep q.rep p.rep_nonzero q.rep_nonzero
 
 /-- The transition probability evaluated on arbitrary nonzero representatives.
 This is the representative-invariance formula underlying the projective
@@ -155,11 +164,7 @@ theorem transitionProbability_mk (v w : Fin d → ℂ) (hv : v ≠ 0) (hw : w �
         ((star v ⬝ᵥ v) * (star w ⬝ᵥ w)) := by
   rw [← trace_pureStateMatrix_mul_pureStateMatrix, pureStateMatrix_mk,
     pureStateMatrix_mk]
-  simp only [normalizedPureStateMatrix, Matrix.smul_mul, Matrix.mul_smul,
-    Matrix.vecMulVec_mul_vecMulVec, Matrix.trace_smul, Matrix.trace_vecMulVec,
-    dotProduct_smul, smul_eq_mul]
-  rw [dotProduct_comm v (star w)]
-  field_simp
+  exact trace_normalizedPureStateMatrix_mul_normalizedPureStateMatrix v w hv hw
 
 private theorem normalizedPureStateMatrix_mulVec_self (v : Fin d → ℂ) (hv : v ≠ 0) :
     normalizedPureStateMatrix v *ᵥ v = v := by
