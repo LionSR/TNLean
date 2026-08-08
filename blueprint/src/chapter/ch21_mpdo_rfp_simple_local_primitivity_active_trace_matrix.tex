@@ -1132,9 +1132,7 @@
     \label{thm:mpdo_casei_rank_one_coefficients}
     \lean{MPOTensor.activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL}
     \leanok
-    \uses{thm:mpdo_active_sector_singleton,
-      thm:mpdo_active_trace_matrix_pow_two_eq,
-      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    \uses{thm:mpdo_active_trace_matrix_pow_two_eq}
     Under the complete normal Case-I hypotheses of
     Theorem~\ref{thm:mpdo_active_trace_matrix_pow_two_eq}, there are real
     functions $a,b:I_*\to\mathbb R$ such that, for all $k,h\in I_*$,
@@ -1147,9 +1145,9 @@
         \sum_{k\in I_*}a_kb_k&=1.
         \notag
     \end{align}
-    This is the normal Case-I active-sector packaging of CPSV16 equations
-    \texttt{Apptralktrrk} and \texttt{AppPsiPhi}
-    (\cite[Appendix~C.2, lines~1394--1401 and 1484--1499]{Cirac2016MPDO_arXiv}).
+    This is the normal Case-I active-sector packaging of the displayed
+    rank-one and normalization equations in
+    \cite[Appendix~C.2, lines~1394--1401 and 1484--1499]{Cirac2016MPDO_arXiv}.
     It neither transfers a conclusion to Case~II nor uses the paper's
     constant-trace-powers rank-one argument.
 \end{theorem}

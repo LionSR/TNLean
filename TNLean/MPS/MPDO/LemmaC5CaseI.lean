@@ -865,15 +865,17 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
   have hTii : T i i = 1 := (mul_left_cancel₀ (hTsqpos i i).ne' (by rw [mul_one]; exact heq)).symm
   rw [hcollapse2, hTii, mul_one]
 
-/-- **The normalized Case-I rank-one coefficients.** Under literal ZCL, there are
-real functions $a$ and $b$ on the active sector such that $T_{kh}=a_kb_h$ and
-$\sum_k a_kb_k=1$.
+/-- **The normalized Case-I rank-one coefficients.** Under the complete normal
+Case-I hypotheses below, including literal ZCL, there are real functions $a$ and $b$
+on the active sector such that $T_{kh}=a_kb_h$ and $\sum_k a_kb_k=1$.
 
 The unique active sector, the identity $T^2=T$, and strict positivity of $T^2$ force
-the sole entry of $T$ to equal one, so the constant functions $a=b=1$ suffice. This is
-the normal Case-I active-sector packaging of CPSV16 equations `Apptralktrrk` and
-`AppPsiPhi` (Appendix C.2, lines 1394--1401 and 1484--1499). No Case-II conclusion
-follows from this statement; Case II requires its separate coefficient argument. -/
+the sole entry of $T$ to equal one, so the constant functions $a=b=1$ suffice.
+
+**Scope restriction (`docs/paper-gaps/cpgsv17_pf_rank_one.tex`):** this is the normal
+Case-I active-sector packaging of CPSV16 equations `Apptralktrrk` and `AppPsiPhi`
+(Appendix C.2, lines 1394--1401 and 1484--1499). No Case-II conclusion follows;
+Case II requires its separate coefficient argument. -/
 theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
     [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
