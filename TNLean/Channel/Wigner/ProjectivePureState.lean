@@ -25,6 +25,7 @@ Wigner rigidity.
 ## Main declarations
 
 * `Projectivization.pureStateMatrix`
+* `Projectivization.star_dot_self_ne_zero`
 * `Projectivization.star_dot_self_smul_normalizedPureStateMatrix`
 * `Projectivization.linearMap_eq_of_eq_on_pureStateMatrix`
 * `Projectivization.transitionProbability`
@@ -80,7 +81,8 @@ theorem pureStateMatrix_mk (v : Fin d → ℂ) (hv : v ≠ 0) :
     pureStateMatrix (Projectivization.mk ℂ v hv) = normalizedPureStateMatrix v :=
   rfl
 
-private theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
+/-- The Hermitian self-dot-product of a nonzero complex vector is nonzero. -/
+theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
     star v ⬝ᵥ v ≠ 0 := by
   rw [dotProduct_comm]
   let w : EuclideanSpace ℂ (Fin d) := WithLp.toLp 2 v

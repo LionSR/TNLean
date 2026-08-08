@@ -14,6 +14,11 @@ Wolf, Chapter 1, lines 289--296. In dimension at least two, the proof factors th
 pure-state matrices as a rectangular product and compares the characteristic polynomials of the
 two product orders. The dimensions zero and one are treated separately.
 
+**Local fix (docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex):** Wolf's
+spectrum shorthand lists the two possibly nonzero eigenvalues but omits the $d-2$ zero eigenvalues
+and their multiplicities. The characteristic-polynomial statement restores them; this correction
+does not assert that Wolf's intended spectrum-preserver argument is false.
+
 ## Main results
 
 * `Projectivization.charpoly_add_pureStateMatrix_of_two_le`
@@ -49,14 +54,6 @@ theorem charpoly_add_pureStateMatrix_fin_one (p q : ℙ ℂ (Fin 1 → ℂ)) :
   rw [pureStateMatrix_fin_one p, pureStateMatrix_fin_one q]
   simp [Matrix.charpoly, Matrix.charmatrix]
   norm_num
-
-private theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
-    star v ⬝ᵥ v ≠ 0 := by
-  rw [dotProduct_comm]
-  let w : EuclideanSpace ℂ (Fin d) := WithLp.toLp 2 v
-  have hw : w ≠ 0 := by simpa [w] using hv
-  rw [← EuclideanSpace.inner_eq_star_dotProduct w w]
-  exact inner_self_ne_zero (𝕜 := ℂ) |>.mpr hw
 
 /-- The multiplicity-aware characteristic polynomial of the sum of two normalized pure-state
 matrices in dimension at least two. This is Wolf's Chapter 1 calculation with the omitted

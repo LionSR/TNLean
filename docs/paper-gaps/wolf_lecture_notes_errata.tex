@@ -142,6 +142,41 @@ This is a local well-posedness correction, not an assertion that the
 nonempty-case Radon--Nikodym theorem is false. The source's word ``set'' and
 summation notation leave the boundary implicit; Lean must state it.
 
+\section{Suppressed zero multiplicities in the two-pure-state spectrum}
+\label{sec:two-pure-state-spectrum}
+
+\paragraph{Formalization trigger.}
+The Lean theorem
+\leanid{Projectivization.charpoly_add_pureStateMatrix_of_two_le} keeps the full
+characteristic polynomial of a sum of two normalized pure-state matrices. The
+correction is documented in
+\path{docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex}.
+
+\paragraph{Printed source and its role.}
+In the spectrum-preserver argument following Wigner's theorem, Chapter~1 says
+that the spectrum of two Hermitian rank-one projections $P,Q$ is
+\begin{equation}
+  1\pm\sqrt{\operatorname{tr}(PQ)}.
+\end{equation}
+This pair describes the restriction of $P+Q$ to the span of the two pure-state
+ranges.
+
+\paragraph{Correction.}
+For $d\geq2$, the multiplicity-aware statement is
+\begin{equation}
+  \chi_{P+Q}(X)
+  =X^{d-2}\bigl((X-1)^2-\operatorname{tr}(PQ)\bigr).
+\end{equation}
+The source shorthand suppresses the $d-2$ zero eigenvalues and their
+multiplicities. Dimension one has the separate formula $\chi_{P+Q}(X)=X-2$,
+and dimension zero has no projective pure states.
+
+\paragraph{Classification.}
+This is a local correction to the displayed spectrum shorthand, not a claim
+that Wolf's intended spectrum-preserver argument is false. The two displayed
+values contain the transition-probability information used in that argument;
+the characteristic polynomial records the complete multiplicity data.
+
 \section{Formalization gaps that are not source corrections}
 
 The following Wolf-specific paper-gap notes are intentionally \emph{not}
@@ -165,9 +200,10 @@ errata entries:
 \section{Conclusion}
 
 At present the formalization-derived record contains one genuine mathematical
-source error (Section~\ref{sec:lorentz}) and one explicit boundary convention
-(Section~\ref{sec:radon-nikodym}).  These are the only corrections asserted by
-the Lean documentation itself.
+source error (Section~\ref{sec:lorentz}), one explicit boundary convention
+(Section~\ref{sec:radon-nikodym}), and one local correction to a spectrum
+shorthand (Section~\ref{sec:two-pure-state-spectrum}). These are the corrections
+asserted by the Lean documentation itself.
 
 \appendix
 \section{Corrected errors in the local LaTeX transcription}

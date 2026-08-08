@@ -1,0 +1,70 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Zero Multiplicities in Wolf's Two-Pure-State Spectrum Shorthand}
+\author{}
+\date{2026-08-08}
+
+\begin{document}
+\maketitle
+
+\section{The source display}
+
+In the proof of the spectrum-preserver consequence following Wigner's theorem,
+Wolf considers Hermitian rank-one projections $P,Q\in M_d(\mathbb C)$ and
+writes that the spectrum of $P+Q$ is
+\begin{align}
+  1\pm\sqrt{\tr(PQ)}.
+\end{align}
+The statement appears in Chapter~1, lines 289--296 of the local source,
+\path{Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex}.
+
+\section{The suppressed eigenvalues}
+
+The range of $P+Q$ lies in the span of the two one-dimensional ranges of $P$
+and $Q$. Hence $P+Q$ vanishes on a subspace of dimension at least $d-2$.
+Counting algebraic multiplicities, its characteristic polynomial is
+\begin{align}
+  \chi_{P+Q}(X)
+  =X^{d-2}((X-1)^2-\tr(PQ))
+  \qquad(d\geq2).
+\end{align}
+Thus the displayed pair gives the two eigenvalues arising on the span of the
+pure states, but it suppresses the remaining $d-2$ zero eigenvalues and their
+multiplicities. In dimension one the separate formula is
+\begin{align}
+  \chi_{P+Q}(X)=X-2,
+\end{align}
+because every normalized rank-one projection is the identity. In dimension
+zero there are no projective pure states.
+
+\section{Formal correction}
+
+The declaration
+\leanid{Projectivization.charpoly_add_pureStateMatrix_of_two_le} proves the
+multiplicity-aware formula through a $d\times2$ and $2\times d$ factorization.
+The declaration
+\leanid{Projectivization.trace_pureStateMatrix_mul_eq_of_charpoly_add_eq}
+then recovers $\tr(PQ)$ from equality of two such characteristic polynomials.
+Both are in
+\doclink{TNLean/Channel/Wigner/TwoPureStateCharpoly}; the low-dimensional cases
+are stated explicitly there. This correction is tracked by \ghissue{5683}.
+
+\section{Classification}
+
+This is a local correction to a spectrum shorthand, not a claim that Wolf's
+intended spectrum-preserver argument is false. The displayed pair identifies
+the nonzero two-dimensional part used to recover the transition probability.
+The formal statement uses characteristic polynomials because they retain all
+zero eigenvalues and all algebraic multiplicities without ambiguity.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
