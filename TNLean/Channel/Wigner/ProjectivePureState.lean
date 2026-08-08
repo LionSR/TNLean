@@ -2,7 +2,7 @@
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib.LinearAlgebra.Projectivization.Action
+import Mathlib.LinearAlgebra.Projectivization.Basic
 import TNLean.Algebra.OrthogonalProjection
 
 /-!
@@ -24,6 +24,7 @@ Wigner rigidity.
 
 * `Projectivization.pureStateMatrix`
 * `Projectivization.transitionProbability`
+* `Projectivization.transitionProbability_mk`
 * `Projectivization.trace_pureStateMatrix_mul_pureStateMatrix`
 * `Projectivization.pureStateMatrix_injective`
 * `Projectivization.pureStateMatrix_unitaryAction`
@@ -140,6 +141,22 @@ theorem trace_pureStateMatrix_mul_pureStateMatrix
     Matrix.vecMulVec_mul_vecMulVec, Matrix.trace_smul, Matrix.trace_vecMulVec, dotProduct_smul,
     smul_eq_mul, transitionProbability]
   rw [dotProduct_comm p.rep (star q.rep)]
+  field_simp
+
+/-- The transition probability evaluated on arbitrary nonzero representatives.
+This is the representative-invariance formula underlying the projective
+definition. -/
+@[simp]
+theorem transitionProbability_mk (v w : Fin d → ℂ) (hv : v ≠ 0) (hw : w ≠ 0) :
+    transitionProbability (Projectivization.mk ℂ v hv) (Projectivization.mk ℂ w hw) =
+      ((star v ⬝ᵥ w) * (star w ⬝ᵥ v)) /
+        ((star v ⬝ᵥ v) * (star w ⬝ᵥ w)) := by
+  rw [← trace_pureStateMatrix_mul_pureStateMatrix, pureStateMatrix_mk,
+    pureStateMatrix_mk]
+  simp only [normalizedPureStateMatrix, Matrix.smul_mul, Matrix.mul_smul,
+    Matrix.vecMulVec_mul_vecMulVec, Matrix.trace_smul, Matrix.trace_vecMulVec,
+    dotProduct_smul, smul_eq_mul]
+  rw [dotProduct_comm v (star w)]
   field_simp
 
 private theorem normalizedPureStateMatrix_mulVec_self (v : Fin d → ℂ) (hv : v ≠ 0) :

@@ -1038,8 +1038,27 @@ $v$ is multiplied by a nonzero scalar.
     \end{align}
 \end{definition}
 
-\begin{proposition}[Projective rays as normalized pure states]
-    \label{prop:projective_pure_state_bridge}
+\begin{theorem}[Transition probability on representatives]
+    \label{thm:projective_transition_probability_mk}
+    \lean{Projectivization.transitionProbability_mk}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    For arbitrary nonzero representatives $v,w\in\C^d$,
+    \begin{align}
+        \operatorname{tp}([v],[w])
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+        {\langle v,v\rangle\langle w,w\rangle}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiplying either representative by a nonzero scalar multiplies the
+    numerator and denominator by the same squared modulus, so the quotient
+    is unchanged.
+\end{proof}
+
+\begin{theorem}[Projective rays as normalized pure states]
+    \label{thm:projective_pure_state_bridge}
     \lean{Projectivization.isOrthogonalProjection_pureStateMatrix}
     \lean{Projectivization.trace_pureStateMatrix}
     \lean{Projectivization.trace_pureStateMatrix_mul_pureStateMatrix}
@@ -1047,7 +1066,8 @@ $v$ is multiplied by a nonzero scalar.
     \lean{Projectivization.pureStateMatrix_unitaryAction}
     \lean{Projectivization.pureStateMatrix_coordinateConjugation}
     \leanok
-    \uses{def:projective_pure_state_matrix}
+    \uses{def:projective_pure_state_matrix,
+      thm:projective_transition_probability_mk}
     The matrix $P_p$ is an orthogonal projection with trace one, and
     \begin{align}
         \tr(P_pP_q)=\operatorname{tp}(p,q).
@@ -1061,11 +1081,12 @@ $v$ is multiplied by a nonzero scalar.
     \end{align}
     These are the pure-state matrix identities used in
     \cite[Chapter~1, Wigner's theorem]{Wolf2012Quantum}.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}\leanok
-    The rank-one identity
-    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ gives idempotence,
+    \uses{thm:projective_transition_probability_mk}
+    The representative formula above and the rank-one identity
+    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ give idempotence,
     while taking the adjoint gives Hermiticity. The trace of
     $\ketbra{v}{v}$ is $\langle v,v\rangle$. Multiplying two rank-one
     matrices and taking the trace gives the normalized squared overlap.
