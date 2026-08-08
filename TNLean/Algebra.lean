@@ -41,6 +41,7 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.MatrixSpectralDecomp
+import TNLean.Algebra.MatrixTracePairing
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NewtonGirard
 import TNLean.Algebra.OperatorBlock
