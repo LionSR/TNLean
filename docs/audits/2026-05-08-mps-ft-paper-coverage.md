@@ -53,8 +53,8 @@ trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
 `prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
 `propblockinj` theorem, and the literal CPSV topological-projector commuting
 Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
-results. The occurrence-level count is 24 complete, 7 partial, and 14
-not-ready; the distinct-result count is 23 complete, 5 partial, and 12
+results. The occurrence-level count is 25 complete, 7 partial, and 13
+not-ready; the distinct-result count is 24 complete, 5 partial, and 11
 not-ready. Here **not-ready** means that the printed statement is false,
 ambiguous, or depends essentially on a formally refuted source lemma. It does
 not mean that every printed result has been formalized. In particular, the
@@ -65,17 +65,17 @@ The distinct count is the 40 source `thm`, `prop`, `cor`, and `lem`
 environments. The occurrence count adds five Appendix A/D restatements.
 The following ledger makes the count reproducible from source line numbers:
 
-- **Complete (23 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
-  1130, 1274, 1333, 1351, 1406, 1484, 1510, 1569, 1597, 1647, 1680, 1786,
-  1835, and 2221.
+- **Complete (24 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
+  1130, 1274, 1333, 1351, 1406, 1484, 1503, 1510, 1569, 1597, 1647, 1680,
+  1786, 1835, and 2221.
 - **Partial (5 distinct):** 278, 801, 851, 972, and 1801.
-- **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
-  1197, 1503, 1740, and 1810.
+- **Not-ready (11 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
+  1197, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 24/7/14.
+  occurrences, giving the displayed totals 25/7/13.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -161,7 +161,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Lemma `Lsigma3` | 1351–1359 | SAL gives the three-site Markov decomposition | `TNLean/Analysis/EntropyMarkovForward.lean` (`Matrix.hayashi_ssa_equality_characterization_forward`); `TNLean/MPS/MPDO/SimpleLocalStructure.lean`; `docs/paper-gaps/cpsv16_ssa_equality_hayashi_markov.tex` | **complete** — the ambient HJPW blocks are normalized with $p_j=\operatorname{Re}\operatorname{tr}\omega_j$, nonnegative weights summing to one, and recovered trace-one right states on every supported sector. At supported zero weight only the left factor may be a normalized filler; on complementary sectors both factors may be fillers. The Hayashi fibre order and unitary orientation are fixed explicitly, and the characterization is axiom-free |
 | Lemma `propSN` | 1406–1411 | SAL gives a positive physical-sector factorization with primitive active trace matrix | `TNLean/MPS/MPDO/InverseMapActiveSectorPrimitivity.lean` (`exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL`) | **complete** |
 | Lemma `SALZCL` / Lemma C.5 | 1484–1502 | SAL and ZCL force the trace coefficients to have rank one on every sector label | `TNLean/MPS/MPDO/InverseMapLemmaC5CaseI.lean` (`MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL`); `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **complete** — under the standing normal Case-I hypotheses, injectivity, normality, SAL, and literal physical-trace idempotence give normalized rank-one coefficients for all Hayashi sector labels. The project extends the active coefficients by zero; the zero-weight reparameterized and rephased factorization makes every incident neighboring operator vanish. This realizes the source's all-index coefficient statement, though the source does not distinguish TNLean's active and inactive sectors. This neither replaces literal ZCL by TNLean's scale-invariant source-ZCL condition nor gives a Case-II conclusion. The raw four-sector tensor remains outside the normal Case-I hypotheses, and its normal representative loses literal ZCL |
-| Corollary | 1503–1506 | SAL and ZCL imply the displayed structural form | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`; `InverseMapLemmaC5CaseI.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **not-ready** — the normal Case-I all-sector rank-one coefficients are complete. A declaration must still combine them with the physical isometry and left--right tensors in the structural statement printed in the corollary |
+| Corollary | 1503–1506 | SAL and ZCL imply the displayed structural form | `TNLean/MPS/MPDO/InverseMapLemmaC5CaseI.lean` (`MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL`); `PhysicalSectorFactorization.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` | **complete** — on the normal Case-I and literal-ZCL surface, the factorization supplies TNLean's direct-sum physical-slice formula, ambient positive semidefinite neighboring operators, the exact complex identity \(\operatorname{tr}(\eta_{k,h})=a_kb_h\), and \(\sum_k a_kb_k=1\). The inactive-sector zero-weight completion is project-derived; this is neither TNLean's scale-invariant source-ZCL condition nor a Case-II result |
 | Prop `3to5` | 1510–1517 | The structural data give trace-preserving coarse-graining and refinement maps | `TNLean/MPS/MPDO/PhysicalSectorCoarseGrainingIdentity.lean`; `PhysicalSectorRefinementIdentity.lean`; `PhysicalSectorBlockedRFP.lean`; `PhysicalSectorPhysicalTransport.lean` (`NeighboringTraceFactorization.blockTwo_isRFPViaTS`); `docs/paper-gaps/cpgsv17_mpdo_blocked_rfp_physical_transport.tex`; `docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex`; `docs/paper-gaps/cpgsv17_mpdo_theorem_4_9_implication_label.tex` | **complete** — the physical-transport theorem carries the sector-coordinate channels back to the original blocked tensor. Two local fixes are disclosed: zero-weight preparation is completed on the quotient, and the source Appendix label \((iii)\Rightarrow(v)\) is corrected to the implication actually proved, \((iv)\Rightarrow(v)\) |
 | Prop `3to4` | 1569–1577 | SAL gives the commuting product form | `TNLean/MPS/MPDO/CommutingFormBridge.lean`; `GSNNCHSectorSum.lean`; related physical-sector modules | **complete** |
 | Prop `4to2` | 1597–1601 | Commuting form and ZCL imply SAL | `TNLean/MPS/MPDO/CyclicActiveAreaLaw.lean` (`EtaLocalStructureData.isSAL_of_isSourceZCL`); `ZCL.lean` (`MPOTensor.IsSourceZCL.bondDim_ne_zero`); `CyclicActiveMarkovDecomposition.lean`; `FixedBondPositivePhysicalSectorRepresentative.lean`; `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` | **complete** — all-cut Hayashi decompositions for the original injective MPDO tensor in the selected physical coordinates imply SAL there, and the selected one-site isometry preserves SAL for the source tensor. Source ZCL itself forces nonzero bond dimension, so neither normality nor any property of the selected fixed tensor is assumed |
@@ -327,7 +327,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 17 non-complete distinct CPSV16 results comprise 5 partial and 12
+The 16 non-complete distinct CPSV16 results comprise 5 partial and 11
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
@@ -350,7 +350,6 @@ axiom-free.
 | Partial | CPSV16 | Proposition 4.5 | Monotonicity and the finite-chain bound are complete, including the stronger estimate $I_L\le 2\log D$; the proposition remains partial only because the unrestricted thermodynamic-limit clause is formally refuted | `TNLean/MPS/MPDO/MutualInfoMonotone.lean` (`MPOTensor.mutualInfoChain_monotone`); `TNLean/MPS/MPDO/MutualInfoAreaLaw.lean` (`MPOTensor.mutualInfoChain_le_two_log_bondDim`, `MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim`); `TNLean/MPS/MPDO/ThermodynamicLimitCounterexample.lean`; `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` |
 | Partial | CPSV16 | Theorem 4.9 | Implication \((i)\Rightarrow(ii)\), the HJPW/Hayashi equality characterization, and the exact Petz-recovery construction are complete. The remaining SAL-and-ZCL structural implication requires the unformalized Case-II passage from BNT projectors to all-sector factorization data for every BNT tensor | `TNLean/Analysis/EntropyMarkovForward.lean`; `TNLean/Channel/PetzProductReference.lean`; `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean`; `docs/paper-gaps/cpgsv17_pf_rank_one.tex` |
 | Partial/corrected | CPSV16 | Theorem 4.14 | The equivalence between the RFP condition and the tensor-attached BNT algebra clause is complete under the printed standing assumptions. The fusion equivalence is complete for the documented active-support correction to clause (iii), but this is not the unrestricted printed clause. The mixed-prefix marked comparison gives the scalar Gram identity, unitary sector gauges, and the full trace-preserving completely positive maps. | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean`; `TNLean/MPS/MPDO/CPSVBNTTheoremEquivalence.lean`; `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` |
-| Not-ready | CPSV16 | Structural corollary, lines 1503–1506 | The normal Case-I all-sector coefficients are complete, but they must still be combined with the physical isometry and left--right tensors in one structural statement | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`; `InverseMapLemmaC5CaseI.lean` |
 | Complete | CPSV16 | Proposition `4to2`, lines 1597–1601 | The selected physical coordinates give all-cut Markov decompositions for the original tensor, hence SAL, which is transported back through the one-site isometry | `MPOTensor.EtaLocalStructureData.isSAL_of_isSourceZCL` |
 | Not-ready | CPSV16 | Proposition `prop2to3` | The BNT-sector argument must still prove MPDO positivity, SAL, and literal ZCL for every BNT tensor and then produce the all-sector Case-I structural datum | `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `BNTSourceSectorProjectors.lean` |
 | Partial | CPSV16 | Proposition `prop4to2` | The corrected canonical-BNT theorem is complete under ambient source ZCL, the standing biCF one-letter span, and one-site positivity of each absorbed sector. Positive commuting bonds give every $N\geq2$ positivity, so no full sector-MPDO or normality premise remains. The printed GSNNCH-only statement still omits ambient ZCL, and its unambiguous bond realization begins at $N=2$ | `TNLean/MPS/MPDO/OrthogonalSectorAreaLaw.lean` (`MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL`); `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex` |

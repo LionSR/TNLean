@@ -245,39 +245,63 @@
 % **Normal Case-I boundary:**
 % rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
 % has the displayed SAL, ZCL, and inverse-map identities but is not the normal tensor
-% assumed in Case I; its normal representative loses literal ZCL. The all-sector
-% coefficient conclusion is now complete. The source corollary still requires one
-% structural statement containing the physical isometry and left--right tensors.
-% Documented in
+% assumed in Case I; its normal representative loses literal ZCL. The completed
+% source corollary retains the physical isometry and left--right tensors of the
+% selected physical-sector factorization. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{corollary}[Local sector structure from SAL and ZCL (all-sector boundary)]
+\begin{corollary}[Local sector structure from SAL and ZCL]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
-    \notready
-    \uses{def:is_sal, def:mpo_physical_trace_transfer,
-        thm:sal_implies_eta_structure,
-        thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    \lean{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}
+    \leanok
+    \uses{def:mpdo, def:injective, def:is_sal,
+        def:mpo_physical_trace_transfer, def:nt_cpsv,
+        def:mpdo_physical_sector_factorization}
     Let $\mathcal K$ be an injective normal matrix product density operator
     tensor satisfying the strong area law and literal zero correlation length,
     \begin{align}
         \mathcal T_{\mathcal K}^2&=\mathcal T_{\mathcal K}.
         \notag
     \end{align}
-    Then
-    there are
-    an isometry, closed sector tensors, positive neighboring operators
-    $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ such that the inverse-map
-    sector decomposition holds and
+    Then there is a physical-sector factorization
     \begin{align}
-        \tr(\eta_{k,h})&=a_kb_h, \notag\\
-        \sum_k a_kb_k&=1. \notag
+        \C^d&\simeq\bigoplus_k(B_k^L\otimes B_k^R),
+        \notag
     \end{align}
-    This is the structural corollary at
-    \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
-    derivation combines Lemma~C.4 with the rank-one matrix step in Lemma~C.5.
-    The all-sector coefficient theorem supplies the rank-one matrix step.
-    The remaining task is to combine it with the physical isometry and the
-    left--right tensors in one structural statement.
+    with
+    \begin{align}
+        U\kappa_{\beta,\alpha}U^\dagger
+        &=\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha,
+        \notag
+    \end{align}
+    positive semidefinite neighboring operators $\eta_{k,h}$, and real
+    families $(a_k)_k,(b_k)_k$ such that
+    \begin{align}
+        \tr(\eta_{k,h})&=a_kb_h,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \sum_k a_kb_k&=1.
+        \notag
+    \end{align}
+    The orientation of $U$ is the physical-sector-factorization convention
+    displayed above. No additional closure property of the sector tensors is
+    asserted. This is the structural corollary at
+    \cite[Appendix~C.2, lines~1503--1506]{Cirac2016MPDO_arXiv}.
 \end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    Apply Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}.
+    Its factorization witness already contains the physical isometry, the
+    direct-sum physical-slice formula, and positive neighboring operators.
+    Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
+    gives the real-part identity
+    $\operatorname{Re}\tr(\eta_{k,h})=a_kb_h$. Positivity makes each
+    neighboring operator Hermitian, so its trace is real and the displayed
+    complex trace identity follows.
+\end{proof}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
     \label{thm:mpdo_neighboring_sector_positivity}
