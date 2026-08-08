@@ -29,6 +29,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.HermitianUnitaryConjugacy
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.Algebra.ListProduct
