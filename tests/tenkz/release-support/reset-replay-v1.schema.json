@@ -309,6 +309,7 @@
         "command",
         "program_paths",
         "fixture_paths",
+        "undeclared_artifacts_withheld",
         "exit_status",
         "assertion_result",
         "timed_out",
@@ -336,6 +337,12 @@
           "items": { "type": "string", "minLength": 1 }
         },
         "fixture_paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "undeclared_artifacts_withheld": {
+          "description": "The canonical release artifacts this command did not declare in either role, and which the supervisor therefore kept out of its view. Recording them makes the exclusion auditable: a receipt that names none is claiming the command declared all four.",
           "type": "array",
           "uniqueItems": true,
           "items": { "type": "string", "minLength": 1 }

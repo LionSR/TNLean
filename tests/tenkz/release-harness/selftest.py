@@ -243,7 +243,7 @@ def run(root: Path = ROOT) -> int:
         "code_tree": pins["release_test_code_tree"],
         "support_tree": pins["release_test_support_tree"],
         "inventory_sha256": pins["release_test_inventory_sha256"],
-        "output_mount": "/tenkz-output",
+        "output_mount": sorted({r["output_mount"] for r in observed_receipts}),
         "tool_fingerprints": {
             name: resolve_tool(name, pattern, root)[1]
             for name, pattern in sorted(tool_profile(root).items())

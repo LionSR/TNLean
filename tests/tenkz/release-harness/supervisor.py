@@ -68,6 +68,7 @@ TEST_FIELDS = {
 }
 FAILURE_RECEIPT = "assertion-failure-v1.json"
 ASSERTION_EXIT = 10
+DRAIN_SECONDS = 15
 TOOL_PROFILE = "tests/tenkz/release-support/tool-profile.toml"
 
 
@@ -103,6 +104,7 @@ class Policy:
     change_record: str
     event_format: str
     tag_public_key: str
+    manifest_pattern: str
 
 
 def read_policy(root: Path = ROOT) -> Policy:
@@ -128,6 +130,7 @@ def read_policy(root: Path = ROOT) -> Policy:
         change_record=table["release_change_record"],
         event_format=table["release_event_format"],
         tag_public_key=table["release_tag_public_key"],
+        manifest_pattern=table["release_manifest_pattern"],
     )
 
 
@@ -218,10 +221,39 @@ def require_regular_file(root: Path, relative: str, subject: str) -> None:
     require(stat.S_ISREG(mode), f"{subject} at {relative} is not a regular file")
 
 
+def gitlink_paths(root: Path) -> frozenset[str]:
+    """Every submodule path Git records, by mode 160000 in the index.
+
+    A checked-out submodule is an ordinary directory to `lstat`, and an
+    uninitialized one is an empty directory, so neither filesystem mode nor
+    emptiness distinguishes it from a tree the view may copy. The Git index is
+    the only place the distinction is recorded.
+    """
+
+    result = subprocess.run(
+        ["git", "ls-files", "--stage", "-z"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return frozenset()
+    paths = set()
+    for record in result.stdout.decode("utf-8", errors="replace").split("\0"):
+        if record.startswith("160000 "):
+            paths.add(record.split("\t", 1)[-1])
+    return frozenset(paths)
+
+
 def require_tree_is_clean(root: Path, relative: str, subject: str) -> None:
     """Reject a symlink or special entry anywhere beneath one exposed tree."""
 
     mode = resolve_without_following(root, relative, subject)
+    submodules = gitlink_paths(root)
+    require(
+        relative not in submodules,
+        f"{subject} at {relative} is a submodule, which the release contract rejects",
+    )
     if not stat.S_ISDIR(mode):
         return
     pending = [relative]
@@ -229,6 +261,11 @@ def require_tree_is_clean(root: Path, relative: str, subject: str) -> None:
         current = pending.pop()
         for entry in sorted(os.listdir(root / current)):
             child = f"{current}/{entry}"
+            require(
+                child not in submodules,
+                f"{subject} contains the submodule {child}, which the release "
+                f"contract rejects",
+            )
             child_mode = lstat_mode(root, child)
             require(
                 not stat.S_ISLNK(child_mode),
@@ -271,7 +308,11 @@ def load_inventory(policy: Policy, root: Path = ROOT) -> tuple[Test, ...]:
     require(blob.is_file(), f"{policy.inventory} is absent")
     document = tomllib.loads(blob.read_text(encoding="utf-8"))
     require(set(document) == {"schema", "test"}, "inventory has fields outside its schema")
-    require(document["schema"] == 1, "inventory schema must be 1")
+    schema = document["schema"]
+    require(
+        isinstance(schema, int) and not isinstance(schema, bool) and schema == 1,
+        "inventory schema must be the integer 1",
+    )
     raw = document["test"]
     require(isinstance(raw, list) and raw, "inventory needs one or more [[test]] tables")
 
@@ -411,6 +452,35 @@ def blob_sha256(root: Path, path: str) -> str:
     return hashlib.sha256((root / path).read_bytes()).hexdigest()
 
 
+def require_clean_worktree(policy: Policy, root: Path = ROOT) -> None:
+    """Refuse to run when the exposed trees differ from the recorded OIDs.
+
+    The pins come from `HEAD` while `expose` copies bytes from the working
+    tree. If the two disagree — a dirty checkout, or an earlier workflow step
+    that rewrote the harness — the command would execute code the receipt does
+    not name, which is the one thing a payload receipt exists to prevent.
+    """
+
+    roots = [policy.code_root, policy.support_root, policy.inventory]
+    result = subprocess.run(
+        ["git", "status", "--porcelain", "-z", "--", *roots],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    require(result.returncode == 0, "could not read worktree status for the pinned trees")
+    dirty = sorted(
+        record[3:]
+        for record in result.stdout.decode("utf-8", errors="replace").split("\0")
+        if record.strip()
+    )
+    require(
+        not dirty,
+        f"the pinned trees differ from HEAD at {dirty}; the receipt would name "
+        f"OIDs the command did not execute",
+    )
+
+
 def computed_pins(policy: Policy, root: Path = ROOT) -> dict[str, str]:
     """The three values the activation change copies into the pinned policy."""
 
@@ -538,6 +608,7 @@ def tool_directory(workspace: Path, tools: dict[str, tuple[str, str]]) -> Path:
     directory.mkdir()
     for name, (executable, _) in tools.items():
         os.symlink(executable, directory / name)
+    directory.chmod(READ_ONLY_DIRECTORY)
     return directory
 
 
@@ -607,7 +678,18 @@ def run_command(
         return process.returncode, stderr, False
     except subprocess.TimeoutExpired:
         terminate_group(process)
-        process.communicate()
+        try:
+            # Descendants inherit the pipes, so an unbounded drain here would
+            # block forever exactly when the group kill failed — turning a
+            # fail-closed timeout into a hung run.
+            process.communicate(timeout=DRAIN_SECONDS)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            require(
+                False,
+                "the command's descendants outlived their process group and kept "
+                "its output pipes open",
+            )
         return -1, "", True
 
 
@@ -629,11 +711,16 @@ def canonical_artifacts(policy: Policy) -> tuple[str, ...]:
     )
 
 
+def manifest_path(policy: Policy, tag: str) -> str:
+    return policy.manifest_pattern.replace("TAG", tag)
+
+
 def observe(
     test: Test,
     policy: Policy,
     root: Path = ROOT,
     pins: dict[str, str] | None = None,
+    tag: str | None = None,
 ) -> dict:
     """Run one inventory test in its own view and return its payload receipt.
 
@@ -642,6 +729,19 @@ def observe(
     because a replay receipt embeds these receipts verbatim and a later payload
     validation rejects an incomplete one. `pins` is accepted so a caller
     running the whole inventory reads the three Git pins once.
+
+    `output_mount` records the path the command actually received, not the
+    ledger's `/tenkz-output` spelling. Until the enforcement workflow supplies
+    a mount namespace, the two differ, and a receipt that named the intended
+    path while the command saw another would be false evidence about the run
+    that produced it.
+
+    `tag` selects the release the observation is bound to. With a tag this is
+    `observe-release-test(K, Q, R)`: the tag-derived manifest joins the view
+    and its absence fails closed. Without one — the only shape available while
+    no `tenkz-v*` tag exists — the run is a standing check of the assertions at
+    this tree and the receipt records `tag = null`, so it can never be read as
+    evidence for a release it never saw.
     """
 
     pins = pins if pins is not None else computed_pins(policy, root)
@@ -660,15 +760,29 @@ def observe(
     output.mkdir()
     try:
         sanitized_path = str(tool_directory(workspace, tools))
-        for relative in (
+        # A canonical artifact reaches a command only through one of its two
+        # declared roles. Exposing all four to every command would let an
+        # assertion read `CHANGES.md` or `TNLOG.md` while its receipt declared
+        # neither, so the receipt would not describe what the assertion
+        # depended on.
+        artifacts = set(canonical_artifacts(policy))
+        undeclared = artifacts - set(test.program_paths) - set(test.fixture_paths)
+        exposed = [
             policy.code_root,
             policy.support_root,
             policy.inventory,
-            *canonical_artifacts(policy),
             *test.program_paths,
             *test.fixture_paths,
-        ):
+        ]
+        if tag is not None:
+            manifest = manifest_path(policy, tag)
+            require_regular_file(root, manifest, f"the {tag} release manifest")
+            exposed.append(manifest)
+        for relative in exposed:
             expose(root, view, relative)
+        home = workspace / "home"
+        home.mkdir()
+        home.chmod(READ_ONLY_DIRECTORY)
         make_read_only(view)
 
         environment = {
@@ -676,11 +790,10 @@ def observe(
             "LC_ALL": "C",
             "LANG": "C",
             "TZ": "UTC",
-            "HOME": str(workspace / "home"),
+            "HOME": str(home),
             "TENKZ_TEST_OUTPUT": str(output),
             "PYTHONDONTWRITEBYTECODE": "1",
         }
-        (workspace / "home").mkdir()
 
         exit_status, stderr, timed_out = run_command(
             [tools[test.runner][0], test.path, *test.args],
@@ -694,16 +807,18 @@ def observe(
         return {
             "test_id": test.id,
             "surface": test.surface,
+            "tag": tag,
             "code_tree": pins["release_test_code_tree"],
             "support_tree": pins["release_test_support_tree"],
             "inventory_sha256": pins["release_test_inventory_sha256"],
             "command": [test.runner, test.path, *test.args],
             "program_paths": list(test.program_paths),
             "fixture_paths": list(test.fixture_paths),
+            "undeclared_artifacts_withheld": sorted(undeclared),
             "exit_status": exit_status,
             "assertion_result": result,
             "timed_out": timed_out,
-            "output_mount": "/tenkz-output",
+            "output_mount": str(output),
             "tool_fingerprints": {name: value[1] for name, value in tools.items()},
         }
     finally:
@@ -761,15 +876,21 @@ def command_check_inventory(policy: Policy, root: Path) -> int:
     return 0
 
 
-def command_run(policy: Policy, root: Path, selected: str | None) -> int:
+def command_run(
+    policy: Policy,
+    root: Path,
+    selected: str | None,
+    tag: str | None = None,
+) -> int:
     tests = load_inventory(policy, root)
     if selected is not None:
         tests = tuple(test for test in tests if test.id == selected)
         require(tests, f"no inventory test has id {selected}")
+    require_clean_worktree(policy, root)
     pins = computed_pins(policy, root)
     failures = []
     for test in tests:
-        receipt = observe(test, policy, root, pins)
+        receipt = observe(test, policy, root, pins, tag)
         print(f"{receipt['assertion_result']:>16}  {test.id}")
         if receipt["assertion_result"] != "passed":
             failures.append((test, receipt))
@@ -812,18 +933,53 @@ def command_check_readiness(policy: Policy, root: Path) -> int:
             "is available."
         )
         return 0
+    require_clean_worktree(policy, root)
     computed = computed_pins(policy, root)
     for name, value in pending.items():
         require(
             value == computed[name],
             f"armed policy {name} does not equal this tree's value",
         )
-    require(
-        (root / policy.tag_public_key).is_file(),
-        "armed policy names a final-tag public key that is absent",
-    )
+    require_regular_file(root, policy.tag_public_key, "the final-tag public key")
+    require_armed_workflow(root)
     print("PASS: enforcement armed; every activation pin matches this tree")
     return 0
+
+
+ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
+MUTABLE_ACTION = re.compile(r"uses:\s*\S+@(?!\b[0-9a-f]{40}\b)\S+")
+
+
+def require_armed_workflow(root: Path) -> None:
+    """Check the mechanisms the armed enforcement workflow must carry.
+
+    The workflow's own header says `check-readiness` fails closed when these
+    are missing, so this is where that promise is kept. Until they land the
+    campaign cannot be armed, and an activation that flipped the scalars
+    without them would be caught here rather than at the release.
+    """
+
+    require_regular_file(root, ARMED_WORKFLOW, "the enforcement workflow")
+    text = (root / ARMED_WORKFLOW).read_text(encoding="utf-8")
+    missing = []
+    if "tenkz-release-publisher" not in text:
+        missing.append("the terminal publisher job in its dedicated environment")
+    if "TENKZ_FINAL_TAG_SIGNING_KEY" not in text:
+        missing.append("the publisher signing secret")
+    if "contents: write" not in text:
+        missing.append("job-level contents: write on the publisher")
+    if "tenkz-network-denied" not in text:
+        missing.append("network denial before repository code runs")
+    require(
+        not missing,
+        f"armed policy but {ARMED_WORKFLOW} lacks {'; '.join(missing)}",
+    )
+    mutable = sorted(set(MUTABLE_ACTION.findall(text)))
+    require(
+        not mutable,
+        f"{ARMED_WORKFLOW} pins {mutable} by a mutable reference rather than a "
+        f"full commit SHA",
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -833,7 +989,9 @@ def main(argv: list[str] | None = None) -> int:
     subparsers.add_parser("check-inventory")
     run = subparsers.add_parser("run")
     run.add_argument("--test", help="run only the inventory test with this id")
-    subparsers.add_parser("run-all")
+    run.add_argument("--tag", help="bind the observation to this release tag")
+    run_all = subparsers.add_parser("run-all")
+    run_all.add_argument("--tag", help="bind the observations to this release tag")
     subparsers.add_parser("pins")
     subparsers.add_parser("check-readiness")
     args = parser.parse_args(argv)
@@ -844,9 +1002,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "check-inventory":
             return command_check_inventory(policy, root)
         if args.command == "run":
-            return command_run(policy, root, args.test)
+            return command_run(policy, root, args.test, args.tag)
         if args.command == "run-all":
-            return command_run(policy, root, None)
+            return command_run(policy, root, None, args.tag)
         if args.command == "pins":
             return command_pins(policy, root)
         return command_check_readiness(policy, root)

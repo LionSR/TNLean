@@ -39,12 +39,23 @@ fixture_paths = []
 timeout_seconds = 60
 
 [[test]]
+id = "tex-api-registry-declares-commands"
+surface = "tex-api"
+failure_fingerprint = "9848e1f6bf653612c61c5287b7e7ebb165a39224623b66b8ee8f4ddd26aee26b"
+runner = "python3"
+path = "tests/tenkz/release-harness/tex_api_language_reference.py"
+args = ["extraction"]
+program_paths = ["tex/tenkz/tenkz-language-registry.tex"]
+fixture_paths = []
+timeout_seconds = 60
+
+[[test]]
 id = "tex-api-registry-commands-reach-the-reference"
 surface = "tex-api"
 failure_fingerprint = "6b10bdfa0d4079c322990a4e9916416013a4c8a6f8ba47aa69d6905cd50d10b0"
 runner = "python3"
 path = "tests/tenkz/release-harness/tex_api_language_reference.py"
-args = []
+args = ["coverage"]
 program_paths = ["tex/tenkz/tenkz-language-registry.tex"]
 fixture_paths = ["docs/tenkz/chapters2/generated-language-reference.tex"]
 timeout_seconds = 60

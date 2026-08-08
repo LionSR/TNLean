@@ -35,8 +35,6 @@ roots = [
 files = [
   "tests/tenkz/release-tests.toml",
   "tex/tenkz/tenkz.sty",
-  "docs/tenkz/manual2.tex",
-  "docs/tenkz/CHANGES.md",
   "docs/tenkz/TNLOG.md",
 ]
 

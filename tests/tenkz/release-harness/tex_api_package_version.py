@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -32,7 +33,26 @@ from harnesslib import assert_that, read  # noqa: E402
 
 SUBJECT = "tex/tenkz/tenkz.sty"
 DECLARATION = re.compile(r"^\\ProvidesPackage\{tenkz\}\[([^]]*)\]", re.MULTILINE)
-PAYLOAD = re.compile(r"[0-9]{4}/[0-9]{2}/[0-9]{2} v[0-9]+\.[0-9]+(?:\.[0-9]+)? \S.*")
+PAYLOAD = re.compile(
+    r"(?P<y>[0-9]{4})/(?P<m>[0-9]{2})/(?P<d>[0-9]{2}) v[0-9]+\.[0-9]+(?:\.[0-9]+)? \S.*"
+)
+
+
+def well_formed(payload: str) -> bool:
+    """The payload parses, and its date is a real calendar date.
+
+    Counting digits is not enough: `2026/99/99` has the right shape and cannot
+    be the ISO calendar date the release manifest declares against.
+    """
+
+    match = PAYLOAD.fullmatch(payload)
+    if match is None:
+        return False
+    try:
+        date(int(match["y"]), int(match["m"]), int(match["d"]))
+    except ValueError:
+        return False
+    return True
 
 ASSERTIONS = {
     "cardinality": (
@@ -66,16 +86,14 @@ def main() -> int:
         )
         return 0
 
-    malformed = [
-        payload for payload in declarations if PAYLOAD.fullmatch(payload) is None
-    ]
+    malformed = [payload for payload in declarations if not well_formed(payload)]
     assert_that(
         not malformed,
         test_id=test_id,
         failure_fingerprint=fingerprint,
         reason=(
             f"{SUBJECT} declares {malformed!r}, which is not spelled "
-            f"[YYYY/MM/DD vMAJOR.MINOR[.PATCH] description]"
+            f"[YYYY/MM/DD vMAJOR.MINOR[.PATCH] description] with a real date"
         ),
     )
     return 0
