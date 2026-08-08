@@ -1358,6 +1358,44 @@ $v$ is multiplied by a nonzero scalar.
     factors of the outer product.
 \end{proof}
 
+\begin{lemma}[Normalized and unnormalized pure states]
+    \label{lem:self_dot_smul_normalized_pure_state_matrix}
+    \lean{Projectivization.selfDot_smul_normalizedPureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    For every nonzero $v\in\C^d$,
+    \begin{align}
+        \langle v,v\rangle P_{[v]}=\ketbra{v}{v}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the definition
+    $P_{[v]}=\langle v,v\rangle^{-1}\ketbra{v}{v}$ and use
+    $\langle v,v\rangle\ne0$.
+\end{proof}
+
+\begin{theorem}[Pure-state extensionality for linear maps]
+    \label{thm:linear_map_eq_of_eq_on_pure_state_matrix}
+    \lean{Projectivization.linearMap_eq_of_eq_on_pureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $T,S:\MN{d}\to\MN{d}$ be complex-linear maps. If
+    \begin{align}
+        T(P_p)=S(P_p)
+    \end{align}
+    for every ray $p$ in $\C^d$, then $T=S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:self_dot_smul_normalized_pure_state_matrix,
+      thm:linearMap_eq_of_eq_on_rankOne}
+    For $v\ne0$, multiply the equality at $p=[v]$ by
+    $\langle v,v\rangle$ to obtain
+    $T(\ketbra{v}{v})=S(\ketbra{v}{v})$. The same equality is immediate for
+    $v=0$. Rank-one extensionality now gives $T=S$.
+\end{proof}
+
 \begin{theorem}[Transition probability on representatives]
     \label{thm:projective_transition_probability_mk}
     \lean{Projectivization.transitionProbability_mk}

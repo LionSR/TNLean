@@ -551,6 +551,24 @@ The next three corollaries support channel decompositions and correspond to
     For $D=0$ the matrix algebra is trivial, so the conclusion also holds.
 \end{proof}
 
+\begin{theorem}[Rank-one extensionality for linear maps]
+    \label{thm:linearMap_eq_of_eq_on_rankOne}
+    \lean{WolfProps.linearMap_eq_of_eq_on_rankOne}
+    \leanok
+    Let $T,S:\MN{D}\to\MN{D}$ be complex-linear maps. If
+    \begin{align}
+        T(\ketbra{v}{v})=S(\ketbra{v}{v})
+    \end{align}
+    for every $v\in\C^D$, then $T=S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:linearMap_eq_id_of_fixes_rankOne}
+    The map $T-S+\id$ fixes every matrix $\ketbra{v}{v}$, so
+    Theorem~\ref{thm:linearMap_eq_id_of_fixes_rankOne} gives
+    $T-S+\id=\id$. Hence $T=S$.
+\end{proof}
+
 \begin{definition}[Pure-state ensemble density]
     \label{def:pureEnsembleDensity}
     \lean{WolfProps.pureEnsembleDensity}
