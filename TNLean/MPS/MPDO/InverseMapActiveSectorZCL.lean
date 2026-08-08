@@ -79,15 +79,12 @@ theorem exists_rephased_inverseMap_activeSectorTraceMatrix_normalized_relations
         ((lam⁻¹ • T) ^ 2 = (lam⁻¹ • T) ^ 3) ∧
           ∀ N : ℕ, 0 < N →
             Matrix.trace ((lam⁻¹ • T) ^ N) = Matrix.trace (lam⁻¹ • T)
-  obtain ⟨z, hpos, hprim⟩ :=
-    exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive
+  obtain ⟨z, hpos, hspan, hnonzero, htriangle, hinactive, _⟩ :=
+    exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses
       K hK R hρ hη alpha beta hm hM
-  have hinactive : ∀ k, hη.p k = 0 →
-      ∀ gamma, (F.rephase z).leftTensor k gamma = 0 := by
-    intro k hk gamma
-    change (z k : ℂ) • sectorTensorL K hK hη R alpha beta k gamma = 0
-    rw [sectorTensorL_eq_zero_of_weight_eq_zero K hK hη R alpha beta k gamma hk,
-      smul_zero]
+  have hprim : Matrix.IsPrimitive ((F.rephase z).activeSectorTraceMatrix hη.p) :=
+    (F.rephase z).activeSectorTraceMatrix_isPrimitive
+      hη.p hpos hspan hnonzero htriangle
   obtain ⟨lam, hlam, hrel⟩ :=
     (F.rephase z).activeSectorTraceMatrix_normalized_relations_of_isSourceZCL
       hη.p hinactive hpos hZCL

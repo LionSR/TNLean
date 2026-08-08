@@ -291,25 +291,60 @@
     apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
 \end{proof}
 
+\begin{theorem}[Retained witnesses for the active inverse-map factorization]
+    \label{thm:mpdo_inverse_map_active_sector_witnesses}
+    \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
+    \lean{MPOTensor.%
+      exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
+    \leanok
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
+      def:mpdo_three_site_closure,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    Let ${\cal K}$ be an injective tensor generating MPDOs, let $R$ close a
+    three-site state $\rho$, and choose a Hayashi decomposition with weights
+    $p_k$. Fix outer indices
+    for which the corresponding entry of $R$ is nonzero, and let $F$ be the
+    zero-weight reparameterized inverse-map factorization. There are coherent
+    sector phases for which all neighboring operators are positive semidefinite
+    and the active one-site matrices span $\MN{D}$. Every active sector contains
+    a nonzero virtual matrix, every virtual matrix in a zero-weight sector
+    vanishes, every nonzero neighboring edge closes through a third active
+    sector, every inactive left tensor vanishes, and $I_*$ is nonempty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_eta_coherent_positive_choice,
+      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+      lem:mpdo_sector_tensor_left_zero_of_weight_zero,
+      thm:mpdo_sector_virtual_matrix_spanning,
+      thm:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_sector_support_triangle_closure,
+      thm:mpdo_physical_sector_rephasing_invariance}
+    Choose the coherent positive phases. Injectivity gives the full virtual
+    matrix span, while zero-weight reparameterization removes the inactive
+    summands from the active span. A nonzero virtual matrix exists in every
+    active sector, and the neighboring-support recurrence gives the three-edge
+    return. Rephasing preserves the nonzero neighboring edges, so this return
+    persists after the coherent rephasing. Inactive left tensors vanish by
+    construction. Finally, $\sum_kp_k=1$ gives a nonempty active sector.
+\end{proof}
+
 % The effective-sector restriction, including the zero rows and columns on
 % the full ambient sector set, is documented in
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
-    \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
     \lean{MPOTensor.%
       exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
     \lean{MPOTensor.%
       exists_positive_physicalSectorFactorization_activeSectorTraceMatrix_isPrimitive_of_isSAL}
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal,
-        def:mpdo_active_sector_trace_matrix,
-        def:mpdo_explicit_eta_of_sector_tensors,
-        thm:mpdo_eta_coherent_positive_choice,
-        thm:mpdo_sector_eta_data_trace_matrix}
-    Let ${\cal K}$ be an injective tensor that generates MPDOs and
-    satisfies SAL, and choose the positive semidefinite neighboring operators of
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
+        def:mpdo_active_sector_trace_matrix}
+    Let ${\cal K}$ be an injective tensor that generates MPDOs and satisfies
+    SAL, and choose the positive semidefinite neighboring operators of
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Restrict the sector
     index to the positive-weight summands of the Hayashi decomposition. Then
     positive semidefiniteness makes every neighboring trace real and
     non-negative, and the matrix
@@ -324,31 +359,26 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{def:mpdo_eta_recurrent_support,
-        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-        thm:mpdo_sector_virtual_matrix_spanning,
-        thm:mpdo_active_one_site_matrix_spanning,
-        thm:mpdo_sector_support_triangle_closure,
-        thm:mpdo_active_neighboring_support_strongly_connected,
-        thm:mpdo_active_sector_two_step_return,
-        thm:mpdo_active_trace_matrix_irreducible,
-        thm:mpdo_active_trace_matrix_positive_entries,
-        thm:mpdo_active_sector_three_step_return_and_primitivity}
+    \uses{def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
+      thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_active_sector_three_step_return_and_primitivity}
     \leanok
-    First use the zero-weight reparameterization to make every zero-weight
-    sector isolated. Injectivity makes the nonzero-weight one-site matrices
-    span $\MN{D}$, and every such sector contains a nonzero matrix. Hence
-    Theorem~\ref{thm:mpdo_active_neighboring_support_strongly_connected}
-    gives strong connectivity of the active neighboring support. Its proof is
-    the one-sided directed-cut argument at
-    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
-
-    Finally, nondegeneracy and cyclicity of the trace pairing give a closed
-    support walk of length two through every active sector. Triangle closure
-    gives one of length three. Strong connectivity together with these two
-    coprime return lengths yields a common length at which every entry of the
-    active trace-matrix power is positive. Thus $T$ is primitive.
+    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
+    Hayashi decomposition, and
+    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
+    nonzero outer indices for the normalized four-site tail. Its reduced block
+    state gives the required three-site closure; form the zero-weight
+    reparameterized inverse-map factorization. Then
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} supplies one
+    rephased factorization with positive neighboring operators, full active
+    span, nonzero active virtual matrices, and the three-edge return condition.
+    Apply
+    Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
+    conclude that the active trace matrix is primitive.
 \end{proof}
 
 \begin{theorem}[Zero-correlation-length relations on the primitive active trace matrix]%
@@ -384,29 +414,17 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_trace_matrix_primitive,
-      thm:mpdo_closed_sector_pairing_normalized_idempotent}
-    Choose the coherent sector phases from
-    Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. For the resulting
-    factorization, let $L$ have columns
-    $(\tr((l_h)_\beta))_\beta$ and let $Q$ have rows
-    $(\tr((r_k)_\alpha))_\alpha$, with both indices restricted to
-    $I_*$. The left tensor vanishes when $p_k=0$, so the rectangular product
-    $LQ$ is the full physical-trace transfer. Source zero correlation length
-    therefore makes $\lambda^{-1}LQ$ idempotent for some $\lambda>0$.
-
-    Positivity of the neighboring operators makes their traces real, and
-    hence $QL$ is the complexification of $T^*$. Associativity and cyclicity
-    of trace give, for every $N\geq1$,
-    \begin{align}
-        (\lambda^{-1}QL)^2
-        &=(\lambda^{-1}QL)^3,
-        \notag\\
-        \tr((\lambda^{-1}QL)^N)
-        &=\tr(\lambda^{-1}QL).
-        \notag
-    \end{align}
-    Injectivity of the real-to-complex inclusion gives the two real matrix
+    \uses{thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_active_sector_three_step_return_and_primitivity,
+      lem:mpo_source_zcl_normalized_idempotent}
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} gives one
+    rephased factorization with positive neighboring operators and vanishing
+    left tensors on the zero-weight sectors. Apply
+    Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
+    obtain primitivity of its active trace matrix.
+    Lemma~\ref{lem:mpo_source_zcl_normalized_idempotent} supplies normalized
+    idempotence of the physical-trace transfer, from which the same active trace
+    matrix satisfies the square--cube identity and the positive-power trace
     identities.
 \end{proof}
 
@@ -1166,6 +1184,78 @@
     Thus the sole entry is $T^*_{k_0,k_0}=1$. Taking $a_k=b_k=1$ gives
     $T^*_{k,h}=a_kb_h$ and
     $\sum_{k\in I_*}a_kb_k=1$.
+\end{proof}
+
+\begin{theorem}[Strong-area-law form of the normalized Case-I coefficients]
+    \label{thm:mpdo_casei_rank_one_coefficients_of_is_sal}
+    \lean{MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL}
+    \leanok
+    \uses{def:mpdo, def:injective, def:is_sal,
+      def:mpo_physical_trace_transfer, def:nt_cpsv}
+    Let ${\cal K}$ be an injective MPO tensor. Suppose
+    that ${\cal K}$ satisfies the strong area law, that its physical-trace
+    transfer is literally idempotent,
+    \begin{align}
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \notag
+    \end{align}
+    and that the underlying tensor is normal in the sense of
+    Definition~\ref{def:nt_cpsv}. Then there is a physical-sector factorization
+    with sector weights $p_k\geq0$ satisfying $\sum_kp_k=1$, for which every
+    neighboring operator is positive semidefinite. There are real functions
+    $a,b$ on
+    $I_*=\{k:p_k\ne0\}$. For all $k,h\in I_*$,
+    \begin{align}
+        T^*_{k,h}&=a_kb_h,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \sum_{k\in I_*}a_kb_k&=1.
+        \notag
+    \end{align}
+    This is the normal Case-I conclusion of
+    \cite[Appendix~C.2, Case~I, lines~1374--1381]{Cirac2016MPDO_arXiv}.
+    The active Hayashi factorization comes from
+    \cite[Appendix~C.2, Lemma~C.4, lines~1406--1471]{Cirac2016MPDO_arXiv};
+    the normalized coefficients come from
+    \cite[Appendix~C.2, Lemma~C.5, lines~1473--1499]{Cirac2016MPDO_arXiv};
+    and the corollary uses this rank-one input at
+    \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}.
+    % Literal idempotence is essential here; the statement neither replaces it
+    % by a scale-invariant zero-correlation-length condition nor asserts a
+    % conclusion in Case~II.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
+      thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_casei_rank_one_coefficients}
+    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
+    Hayashi decomposition, and
+    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
+    nonzero outer indices for the normalized four-site tail, and
+    Theorem~\ref{thm:mpdo_three_site_closure_reduced} identifies the required
+    three-site closure. Apply the zero-weight reparameterized inverse-map
+    factorization and choose the coherent sector phases from
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Its neighboring
+    operators are positive semidefinite, and its active one-site matrices,
+    nonzero sector tensors, return condition, inactive sectors, and nonempty
+    active sector satisfy the hypotheses of
+    Theorem~\ref{thm:mpdo_casei_rank_one_coefficients}.
+    Hence
+    \begin{align}
+        T^*_{k,h}&=a_kb_h,
+        \notag\\
+        \sum_{k\in I_*}a_kb_k&=1,
+        \notag
+    \end{align}
+    for the resulting active sector set.
 \end{proof}
 
 \begin{theorem}[Rectangular form of the Case-I relation]
