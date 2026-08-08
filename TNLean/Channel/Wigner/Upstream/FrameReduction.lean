@@ -15,8 +15,9 @@ This module is adapted from
 The upstream single source file was split mechanically at semantic section
 boundaries, preserving declaration order, to satisfy TNLean's module-size policy.
 Ordinary imports and public declarations replace the upstream module-system commands.
-The only proof-level adaptation is inherited from the reduced Lean 4.32 import cone;
-this section's upstream proof text is otherwise unchanged.
+Further adaptations are limited to formatting, explicit qualification, documentation, and
+style-linter compliance. Declaration order, theorem statements, and proof structure are
+preserved.
 -/
 
 open scoped LinearAlgebra.Projectivization
