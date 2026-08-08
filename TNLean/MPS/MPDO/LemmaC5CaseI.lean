@@ -69,9 +69,10 @@ a contradiction.
 The rectangular Case-I relation `Q(1−LQ)L = 0` is proved as the
 project-derived rectangular form of `T² = T`, using the same factors
 `T = QL` as in the proof of
-`activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`.  This is the
-notation used in CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper
-does not print the rectangular identity as a separate displayed theorem.
+`activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL`.  The factors
+come from the tensors $l_h$ and $r_k$ of CPSV16, Appendix C.2, Lemma C.5,
+lines 1473--1499; `L` and `Q` are project notation, and the paper does not
+print the rectangular identity as a separate displayed theorem.
 
 ## Main declarations
 
@@ -165,8 +166,9 @@ theorem activeSectorTraceSqMatrix_nonneg
   exact (Complex.nonneg_iff.mp hsq.trace_nonneg).1
 
 /-- The product of the theorem-local Case-I trace factors is the complexification of
-`activeSectorTraceMatrix`.  This is the rectangular identity `QL = T` used in CPSV16,
-Appendix C.2, Lemma C.5, lines 1473--1499. -/
+`activeSectorTraceMatrix`.  In the project's rectangular notation this is `QL = T`,
+built from the tensors $l_h$ and $r_k$ of CPSV16, Appendix C.2, Lemma C.5,
+lines 1473--1499. -/
 private theorem trace_rightTensor_mul_trace_leftTensor_eq_map_activeSectorTraceMatrix
     (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
@@ -236,11 +238,6 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
   -- From literal ZCL, L*Q is idempotent
   have h_idem : IsIdempotentElem (L * Q) := by
     rw [← hphys]
-    -- IsIdempotentElem means M * M = M
-    -- We have physTraceTransfer * physTraceTransfer = physTraceTransfer
-    -- So physTraceTransfer is idempotent
-    change physTraceTransfer K * physTraceTransfer K = physTraceTransfer K at hZCL_sq
-    -- IsIdempotentElem M := M * M = M
     exact hZCL_sq
   -- Apply rectangular idempotent lemma: (Q*L)² = (Q*L)³
   have h_TC_sq_cu : (Q * L) ^ 2 = (Q * L) ^ 3 :=
@@ -878,8 +875,9 @@ factors, and `QL` is the complexification of the active-sector trace matrix `T`.
 Thus this identity is the algebraic form of
 `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`, namely `T² = T`.
 
-This is a project-derived rectangular form in the notation of CPSV16, Appendix C.2,
-Lemma C.5, lines 1473--1499, rather than a separate displayed theorem in the paper. -/
+This is a project-derived rectangular form, in project notation, of the factors built
+from $l_h$ and $r_k$ in CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper
+does not state it as a separate displayed theorem. -/
 theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
     [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
