@@ -960,8 +960,8 @@
     $S^*_{k,h}=\re\tr(\eta_{k,h}^2)$.
 \end{proof}
 
-\begin{lemma}[Trace invariance under squared diagonal similarity]
-    \label{lem:mpdo_trace_pow_similarity_squared_diagonal}
+\begin{theorem}[Trace invariance under squared diagonal similarity]
+    \label{thm:mpdo_trace_pow_similarity_squared_diagonal}
     \lean{MPOTensor.trace_pow_similarity_squared_diagonal}
     \leanok
     Let $I$ be a finite index set, let $S\in\mathbb R^{I\times I}$, and
@@ -979,7 +979,7 @@
     This project lemma isolates the diagonal-conjugation calculation used in
     the Case-I argument. It is not a separately stated result of
     \cite{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -1069,7 +1069,7 @@
       thm:mpdo_active_trace_matrix_literal_zcl_powers,
       thm:mpdo_active_sector_three_step_return_and_primitivity,
       thm:mpdo_overlap_formula,
-      lem:mpdo_trace_pow_similarity_squared_diagonal,
+      thm:mpdo_trace_pow_similarity_squared_diagonal,
       thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
     By contradiction, suppose $|I_*|\geq2$. The overlap formula and the
     normal self-overlap limit
@@ -1080,8 +1080,9 @@
     matching squared diagonal conjugate $\widehat S$ of $S^*$ is
     entrywise non-negative and bounded by $P\odot P$. On the nontrivial
     active-sector set, Theorem~\ref{thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
-    gives $\tr(\widehat S^N)\to0$. Lemma~\ref{lem:mpdo_trace_pow_similarity_squared_diagonal}
-    then gives $\tr((S^*)^N)\to0$, contradicting the limit $1$.
+    gives $\tr(\widehat S^N)\to0$.
+    Theorem~\ref{thm:mpdo_trace_pow_similarity_squared_diagonal} then gives
+    $\tr((S^*)^N)\to0$, contradicting the limit $1$.
 \end{proof}
 
 \begin{theorem}[The Case-I relation $(T^*)^2=T^*$]
