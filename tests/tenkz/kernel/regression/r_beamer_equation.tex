@@ -1,0 +1,22 @@
+% Regression: an equation keeps its relation glyphs inside a plain beamer
+% frame.  Beamer tokenizes a frame body long before any equation code runs,
+% so the relation glyph reaches the wrapper as a frozen other-character; the
+% captured-body reading finds it there and the audit compares the two sides
+% without [fragile].
+\documentclass{beamer}
+\usepackage{tenkz}
+
+\begin{document}
+\begin{frame}{Equation}
+  \tenkzkernel
+  \begin{tenkzeq}[check={signature}]
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+      \tn[ports={0:virtual, 180:virtual}]{A}
+    \end{tenkz}
+    =
+    \begin{tenkz}[rows={wire}, cols=2, bonds=grid]
+      \tn[ports={180:virtual}]{B} & \tn[ports={0:virtual}]{B}
+    \end{tenkz}
+  \end{tenkzeq}
+\end{frame}
+\end{document}
