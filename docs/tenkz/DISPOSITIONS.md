@@ -83,14 +83,14 @@ separate public-surface occurrence and therefore appears separately.
 | `ch21_mpdo_rfp_foundations.tex` | L87, 92 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex` | — | L215, 219, 293, 294, 295, 296, 298 `tntree` → `C-tree` | — |
 | `ch21_mpdo_rfp_fusion_isometries_fixed_final_comparison.tex` | — | L572, 577 `tntree` → `C-tree` | — |
-| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | — | — | L402, 643, 649, 656, 663, 671, 676 `tnpic` → `C-picture+C-record+R-record`<br>L409 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L447 `tenkz` → `P-grid` | L559, 561 `tntree` → `C-tree` | L38, 50 `tnpic` → `C-picture+C-policy+C-record+R-record` |
-| `ch21_mpdo_rfp_renormalization.tex` | — | — | L631, 634, 637, 640 `tnpic` → `C-picture+C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_fusion_isometries_foundations.tex` | L403, 413, 648, 657, 669, 678, 690, 695 `tenkz` → `P-grid` | — | — |
+| `ch21_mpdo_rfp_fusion_isometries_product_laws.tex` | L45, 61, 65, 465 `tenkz` → `P-grid` | L577, 579 `tntree` → `C-tree` | — |
+| `ch21_mpdo_rfp_renormalization.tex` | L632, 635, 638, 641 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_closed_sector_contractions.tex` | L282, 288 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_inverse_map_factorization.tex` | L44, 49, 53, 70, 78, 130, 265, 270, 275, 282, 287, 486, 704, 710, 714 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_neighboring_bond_contractions.tex` | L793, 806, 814, 821, 895, 902 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_primitivity_active_trace_matrix.tex` | L189 `tenkz` → `P-grid` | — | — |
-| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | — | — | L324, 329, 334, 344, 352, 357 `tnpic` → `C-picture+C-policy+C-record+R-record` |
+| `ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex` | L326, 332, 338, 352, 363, 369 `tenkz` → `P-grid` | — | — |
 | `ch21_mpdo_rfp_simple_local_structure_capstone.tex` | L333, 852, 856, 862, 867 `tenkz` → `P-grid` | — | — |
 | `ch23_algebraic_ft_foundations.tex` | L48, 52, 169, 173, 374, 378, 391, 395, 438, 442, 446, 455, 459 `tenkz` → `P-grid` | — | — |
 | `ch24_peps_ft.tex` | L27, 57, 93 `tenkz` → `P-grid` | — | — |
@@ -115,26 +115,26 @@ separate public-surface occurrence and therefore appears separately.
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 170 |
+| `tenkz` | 191 |
 | `tenkzcd` | 0 |
 | `tenkzplanes` | 0 |
-| `tnpic` | 20 |
+| `tnpic` | 0 |
 | `tntree` | 11 |
-| **Total** | **201** |
+| **Total** | **202** |
 
 | Disposition | Occurrences |
 |---|---:|
-| preserve | 152 |
+| preserve | 173 |
 | codemod | 11 |
-| redraw | 38 |
-| **Total** | **201** |
+| redraw | 18 |
 
-The raw count is 170 environment openings plus 31 command occurrences,
-which reconciles to 201. The issue baseline counted 106 `tenkz`,
+The raw count is 191 environment openings plus 11 command occurrences,
+which reconciles to 202. The issue baseline counted 106 `tenkz`,
 36 `tenkzfree`, 18 `tenkzlattice`, 6 `tenkzcd`, 0 `tenkzeq`,
 0 `tenkzplanes`, and 41 `\tnpic`/`\tntree` lines; the six `tenkzcd`
 pictures have since been respelled onto plain tikz-cd, discharging every
-blueprint `R-cd` row.
+blueprint `R-cd` row, and the twenty `\tnpic` pictures have since been
+redrawn as kernel grid pictures, discharging every blueprint `\tnpic` row.
 
 ## Standalone fixture inventory
 
