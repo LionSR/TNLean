@@ -52,8 +52,8 @@ CURRENT_MILESTONE = "0.8"
 _SCOPE_COMMANDS = {
     "picture": ("tnpic",),
     "group": ("tngroup",),
-    "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tnput", "tntree"),
-    "connection": ("tncut", "tnedge", "tnjoin"),
+    "object": ("tn", "tnX", "tnfuse", "tndots", "tnsite", "tntree"),
+    "connection": ("tncut", "tnedge"),
     "region": ("tnregion",),
     "annotation": ("tnspan",),
 }

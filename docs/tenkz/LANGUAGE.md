@@ -14,16 +14,17 @@ those declarations, not a second authoring language.
 
 ## Choose one layout
 
-There are three genres.
+There are two genres.
 
 - `tenkz` is the regular one-dimensional contraction grid.  Rows are layers,
   columns are sites, and adjacent compatible cells contract implicitly.
 - `tenkzlattice` is a spatial lattice or sheet.  Its body selects sites,
   edges, and measured regions of a finite window.
-- `tenkzfree` is the escape hatch for an irregular typed graph.  Every atom is
-  named, every port is typed, and every connection names two ports.
 
-`tenkzplanes` is not a fifth genre.  It is the ket-over-bra preset of
+An irregular typed graph is not a genre of its own: it is addressed
+`\tn`, `\tnwire`, and `\tnmark` records of the kernel language.
+
+`tenkzplanes` is not a third genre.  It is the ket-over-bra preset of
 `tenkzlattice`.  `\tnpic` is not a layout.  It is a composition wrapper that
 lets one `tenkz` picture behave as an inline mathematical atom.
 
@@ -34,10 +35,10 @@ silhouette, and do not cross into another layout merely to obtain a style.
 
 Every public word belongs to exactly one class.
 
-1. **Atoms** declare tensors, matrices, fusion vertices, lattice sites, and
-   typed free-graph nodes.
-2. **Connections and closures** declare bonds, typed joins, traces, cups,
-   arrows, and cuts.
+1. **Atoms** declare tensors, matrices, fusion vertices, and lattice
+   sites.
+2. **Connections and closures** declare bonds, lattice edges, traces,
+   cups, and cuts.
 3. **Regions and annotations** declare measured regions, braces, labels, and
    other non-topological marks.
 4. **Composition** places pictures in equations, inline mathematics, or
@@ -47,10 +48,10 @@ Every public word belongs to exactly one class.
 
 A command is warranted only when it declares a new object in one of these
 classes or introduces a grammatical class of its own.  A key modifies the
-record already being declared.  Thus `\tnjoin` is a command because a join is
-a connection record; `route=arc` is a key because it is a property of that
-join.  This test is documented beside every public command in the generated
-reference.
+record already being declared.  Thus `\tnedge` is a command because an edge
+is a connection record; `role=marked` is a key because it is a property of
+that edge.  This test is documented beside every public command in the
+generated reference.
 
 ## Grammar rules
 

@@ -2515,3 +2515,37 @@ leave the ledger. M2 falls from 228 parser paths to 213. M3 stays at
 died with #5601's respelling. M4 is untouched at 25.94, no alias or
 overload moves, and the census decrease is the session's own evidence.
 | flag:lonely-type:address | keep: the address grammar is the kernel's placement language itself (`at=` on every atom), lonely only because the cd dialect's arrow endpoints left with their front end; expiry 0.9 |
+
+### 2026-08-08 — the free front end is demolished
+
+The second demolition of the S4 swap: `tenkz-free.code.tex` is deleted,
+and with it the `tenkzfree` environment, the `\tnput` and `\tnjoin`
+commands, and the parser rows only the free dialect read — the typed
+`ports=` object row, the free-only silhouette flags `ring`, `circle`,
+and `boundary`, the 0.7 connection rows `route=`, `dir=`, `fused=`,
+`name=`, and `species=`, the free region's `group=`, the escape angles
+`out=` and `in=`, and the `route=curve` value alias — each tombstoned
+by contract (`LANGUAGE-1.0` §10: an irregular typed
+graph is addressed `\tn`/`\tnwire`/`\tnmark` records). The thirty-nine
+standalone fixtures that opened the environment leave the corpus with
+it; every behaviour they carried is classified in
+`FIXTURE-RETIREMENT.md` §3 as dying with the dialect or covered by a
+named kernel or RMP case, G1 and G2 landed before them, and G3's
+inline-embedding requirement stays recorded on the S4 surface swap
+(#4908).
+
+Extension-gate: #4699 — the parser-leaf identity change is thirty-five
+removed leaves, two removed command doors, and one removed environment
+door, the demolition the issue's checklist item 6.4 orders; no leaf is
+added.
+
+M1 falls from 136 kernel rows and 192 total to 126 and 177: ten
+kernel key rows (`ports`, `ring`, `circle`, `boundary`, `route`,
+`dir`, `fused`, `name`, `species`, `group`), two escape rows (`out`,
+`in`), two commands, and one environment leave the ledger. M2 falls
+from 213 parser paths to 178. M3 is untouched at 0. M4 is untouched at
+25.94. M5 keeps its six key aliases; the one value alias
+(`route=curve`) leaves with the join that read it, and the census
+decrease is the session's own evidence.
+| flag:lonely-type:direction-policy | keep: `dir=` is the contract's one spelling of a space against its dual (`LANGUAGE-1.0` §2.4), lonely only because the 0.7 connection twin left with its front end; expiry 0.9 |
+| flag:lonely-type:name-list | keep: `\tnset{species={...}}` is the document's species declaration itself, lonely only because the free region's member list left with its dialect; expiry 0.9 |

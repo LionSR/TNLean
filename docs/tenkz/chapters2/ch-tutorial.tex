@@ -90,24 +90,3 @@ model and event stream; the audit compares their boundary signatures.
 The layout owns site positions.  \tncmd{tnregion} declares measured cell
 sets, and \tncmd{tnsite} changes one site record.  No polygon is hand traced.
 
-\subsection{Join an irregular typed graph}
-
-\begin{tnexample}[
-  formula={\sum_\alpha A_\alpha^{\mathsf T}TB_\alpha},
-  caption={typed ports make the free layout auditable},
-  index={The straight join contracts the virtual index $\alpha$.  The arc
-    connects physical ports and carries $T$.},
-  signature={free|atoms=2|joins=2}]
-% Formula: sum_alpha A_alpha^T T B_alpha.
-% Boundary: both joins connect equal port types.
-\begin{tenkzfree}
- \tnput[ports={east:virtual,north:physical}]{a}{(0,0)}{A}
- \tnput[ports={west:virtual,north:physical}]{b}{(14mm,0)}{B}
- \tnjoin{a.east}{b.west}
- \tnjoin[route=arc,out=90,in=90,label=T]{a.north}{b.north}
-\end{tenkzfree}
-\end{tnexample}
-
-Coordinates place atoms; they do not type the graph.  \tncmd{tnput} declares
-names and typed ports, while \tncmd{tnjoin} declares connections between
-those ports.  Joining unequal types is a hard error.

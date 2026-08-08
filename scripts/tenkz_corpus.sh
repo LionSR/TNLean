@@ -127,7 +127,7 @@ if any(not record["reason"].strip() for record in records):
 # Independent source-name invariant derived from tenkz/handoff-artifacts.
 # Sorting and LF-delimiting make the digest insensitive to TSV row order.
 expected_source_names_sha256 = (
-    "327e950cdfdc2fac7330c699beddd62433d914bba9f8dee48a9ab93d9caa1bb8"
+    "4eefe4575a44a478b1ac436febcc1d34b7e3abd14d83d1a2576aaff00cd91175"
 )
 source_names_payload = "".join(
     f"{name}\n" for name in sorted(source_names)
@@ -141,7 +141,7 @@ if actual_source_names_sha256 != expected_source_names_sha256:
 
 # Independent handoff-census invariant: do not derive these values from the TSV
 # being checked.  A changed manifest must not redefine its own expected corpus.
-expected_counts = {"standalone": 243, "support": 1, "excluded": 20}
+expected_counts = {"standalone": 205, "support": 1, "excluded": 20}
 actual_counts = Counter(record["disposition"] for record in records)
 if actual_counts != expected_counts:
     fail(
