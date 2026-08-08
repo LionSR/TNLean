@@ -813,6 +813,33 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     conclusion of that passage.
 \end{definition}
 
+\begin{lemma}[Fixed embedded families under the canonical extension]
+    \label{lem:direct_sum_extension_embedding_fixed}
+    \lean{Matrix.directSumExtension_embedding_eq_self_iff}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    Let $T:\mathcal A\to\mathcal A$ be a linear endomorphism of a finite sum
+    of matrix algebras. For every $A\in\mathcal A$,
+    \begin{align}
+        \widehat T(\iota(A))=\iota(A)
+        &\quad\Longleftrightarrow\quad T(A)=A.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    Diagonal compression is a left inverse of block-diagonal embedding. Hence
+    \begin{align}
+        \widehat T(\iota(A))
+        &=\iota(T(A)).
+        \notag
+    \end{align}
+    If this equals $\iota(A)$, applying diagonal compression gives
+    $T(A)=A$. Conversely, substituting $T(A)=A$ gives the fixed-point
+    identity.
+\end{proof}
+
 Definition~\ref{def:direct_sum_full_matrix_extension} and the trace-adjoint
 laws in Lemma~\ref{lem:direct_sum_rectangular_trace_adjoint} provide
 supporting facts for the classification argument. By themselves, they do

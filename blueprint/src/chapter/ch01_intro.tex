@@ -684,7 +684,13 @@ algebra is a single full matrix algebra $\MN{m}$; see
 \begin{proof}\leanok
     \uses{thm:right_factor_conditional_expectation,
       lem:direct_sum_kraus_composition_schwarz,
-      thm:direct_sum_full_matrix_extension_compatibility}
+      thm:direct_sum_full_matrix_extension_compatibility,
+      lem:direct_sum_extension_embedding_fixed,
+      thm:is_kraus_cptp_of_is_kraus_cp_trace_preserving,
+      thm:is_kraus_cptp_trace_map,
+      lem:is_kraus_cp_basic,
+      lem:is_kraus_cp_iff_is_cp_map,
+      thm:cp_is_positive}
     Compress $A$ to the family $(A_{kk})_{k\in K}$ and apply the normalized
     partial-trace expectation from
     Theorem~\ref{thm:right_factor_conditional_expectation} in each coordinate.
