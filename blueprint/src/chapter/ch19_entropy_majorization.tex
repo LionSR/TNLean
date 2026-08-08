@@ -23,19 +23,19 @@ stochastic matrices.
 \begin{proof}\leanok
     Let $\mathcal{DS}_d \subset M_d(\mathbb{R})$ be the set of $d \times d$
     doubly stochastic matrices and let $\mathcal{P}_d$ be the set of
-    $d \times d$ permutation matrices.  Mathlib establishes both
-    characterizations separately:
-    \[
+    $d \times d$ permutation matrices.  The Birkhoff--von Neumann
+    decomposition gives
+    \
     \begin{aligned}
       \mathcal{DS}_d &= \operatorname{conv}(\mathcal{P}_d), \\
       \operatorname{ext}(\mathcal{DS}_d) &= \mathcal{P}_d .
     \end{aligned}
-    \]
-    The first identity says every doubly stochastic matrix is a convex
-    combination of permutation matrices, and conversely every convex
-    combination of permutation matrices is doubly stochastic.  The second
-    identifies the extreme points of the doubly stochastic matrices as
-    exactly the permutation matrices.  Both results are reused directly
-    from Mathlib (no reproof).
+    \
+    Indeed, every doubly stochastic matrix is a convex combination of
+    permutation matrices, while convexity of $\mathcal{DS}_d$ gives the
+    converse inclusion in the first identity.  Each permutation matrix is
+    extreme.  Conversely, a non-permutation matrix has a Birkhoff
+    decomposition involving at least two distinct permutation matrices and
+    is therefore not extreme, which proves the second identity.
 \end{proof}
 \endinput
