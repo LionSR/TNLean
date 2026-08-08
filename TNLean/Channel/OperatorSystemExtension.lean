@@ -23,6 +23,11 @@ agreeing with `T` on `S`.
 finite-dimensional `C^*`-algebra `A`; this file formalizes the case where `A`
 is a full matrix algebra `M_m(ℂ)`, see
 `docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`.
+Likewise, Wolf quantifies the codomain `B` over an arbitrary finite-dimensional
+`C^*`-algebra, while this file formalizes `B = M_n(ℂ)`: the source's proof
+produces an `M_n(ℂ)`-valued extension, and landing in a general subalgebra
+`B ⊆ M_n(ℂ)` would compose with a completely positive conditional expectation
+onto `B`, which the library does not currently provide.
 
 ## Proof route
 

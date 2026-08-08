@@ -1023,38 +1023,6 @@ if grep -Fq '|code=basis-spacing|' \
   echo "FAIL: a contracted CZX or planes basis emitted a spacing warning" >&2
   exit 1
 fi
-sheet_coincide_count=$(
-  grep -Fc '|code=sheet-coincide|' \
-    "$WORK/r_sheet_coincide_removed.tnlog" || true
-)
-[ "$sheet_coincide_count" -eq 4 ] || {
-  echo "FAIL: removed sites did not filter realized sheet-spacing pairs" >&2
-  exit 1
-}
-for expected in \
-  'warning|picture=2|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
-  'warning|picture=3|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
-  'warning|picture=5|code=sheet-coincide|dist=0|floor=0.327573|dr=-1|dc=0' \
-  'warning|picture=6|code=sheet-coincide|dist=0.327573|floor=0.327573|dr=0|dc=0'
-do
-  grep -Fxq "$expected" "$WORK/r_sheet_coincide_removed.tnlog" || {
-    echo "FAIL: surviving adjacent sheets lost witness: $expected" >&2
-    exit 1
-  }
-done
-if grep -Eq '^warning[|]picture=(1|4)[|]code=sheet-coincide[|]' \
-    "$WORK/r_sheet_coincide_removed.tnlog"; then
-  echo "FAIL: a removed adjacent-sheet endpoint retained a warning" >&2
-  exit 1
-fi
-sheet_coincide_messages=$(
-  grep -Fc 'Package tenkz Warning: sheet vector:' \
-    "$WORK/r_sheet_coincide_removed.tex.transcript" || true
-)
-[ "$sheet_coincide_messages" -eq 4 ] || {
-  echo "FAIL: sheet-coincide events and human diagnostics diverged" >&2
-  exit 1
-}
 awk '
   /^picture[|]id=/ {
     id = $0
@@ -2786,6 +2754,25 @@ beamer_atoms=$(grep -c '^atom|' "$WORK/r_beamer_frame.tnlog" || true)
 }
 grep -Fq '|addr=(2,3)|' "$WORK/r_beamer_frame.tnlog" || {
   echo "FAIL: the plain beamer frame's chained body lost its cursor" >&2
+  exit 1
+}
+# A math alignment cell holds the body scan hostage to the alignment counter:
+# mathtools' gathered template and amsmath's aligned both leave it at zero,
+# where a raw tab once ended the cell mid-scan.  The chained fixture holds
+# exactly when both cells' pictures keep every atom and the tab and the row
+# break both advance the cursor there.
+alignment_pictures=$(grep -c '^picture|' "$WORK/r_alignment_cell.tnlog" || true)
+[ "$alignment_pictures" -eq 2 ] || {
+  echo "FAIL: an alignment cell lost a chained picture" >&2
+  exit 1
+}
+alignment_atoms=$(grep -c '^atom|' "$WORK/r_alignment_cell.tnlog" || true)
+[ "$alignment_atoms" -eq 6 ] || {
+  echo "FAIL: an alignment cell's chained body lost atoms" >&2
+  exit 1
+}
+grep -Fq '|addr=(2,2)|' "$WORK/r_alignment_cell.tnlog" || {
+  echo "FAIL: an alignment cell's chained body lost its cursor" >&2
   exit 1
 }
 

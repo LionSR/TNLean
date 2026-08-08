@@ -153,7 +153,6 @@ class _CommandGrammar:
 # claim more brace groups than a valid invocation can consume.
 _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
     "tnwire": _CommandGrammar(DimensionOwner.ROUTE, (0, 2)),    # O{} or O{} m m
-    "tnedge": _CommandGrammar(DimensionOwner.ROUTE, (1,)),      # O{} m
     # Typed containers below are ownership barriers, not blanket LAYOUT
     # owners.  Their recognized physical option values receive narrower
     # spans; arbitrary dimensions in an object label/body remain unowned and
@@ -163,7 +162,6 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
     "tn": _CommandGrammar(None, (1,), accepts_star=True),        # s O{} m
     "tnX": _CommandGrammar(None, (1,)),                          # O{} m
     "tnfuse": _CommandGrammar(None, (1,)),                       # O{} m
-    "tnsite": _CommandGrammar(None, (1,)),                       # O{} m
     "tndots": _CommandGrammar(None, (0,)),                       # O{}
     "tnghost": _CommandGrammar(                                 # m
         None, (1,), accepts_options=False
@@ -173,7 +171,6 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
     ),
     "tnspan": _CommandGrammar(None, (2,)),                       # O{} m m
     "tncut": _CommandGrammar(None, (1,)),                        # O{} m
-    "tnregion": _CommandGrammar(None, (1,)),                     # O{} m
     "tnset": _CommandGrammar(                                   # m
         None, (1,), accepts_options=False
     ),
@@ -213,9 +210,6 @@ DIMENSION_COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
 # invariant at import time.
 _PHYSICAL_OPTION_KEY_OWNERS: Mapping[str, DimensionOwner] = {
     "pitch": DimensionOwner.METRIC,
-    "col vector": DimensionOwner.FRAME,
-    "row vector": DimensionOwner.FRAME,
-    "sheet vector": DimensionOwner.FRAME,
     "label shift": DimensionOwner.LAYOUT,
 }
 DIMENSION_OPTION_OWNERS: Mapping[str, DimensionOwner] = dict(
@@ -238,12 +232,6 @@ _OPTION_OWNER_RE = re.compile(
 )
 _OPTION_ENVIRONMENT_KEYS: Mapping[str, frozenset[str]] = {
     "tenkz": frozenset({"pitch"}),
-    "tenkzlattice": frozenset(
-        {"pitch", "col vector", "row vector", "sheet vector"}
-    ),
-    "tenkzplanes": frozenset(
-        {"pitch", "col vector", "row vector", "sheet vector"}
-    ),
 }
 
 

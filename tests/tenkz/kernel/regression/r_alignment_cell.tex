@@ -1,0 +1,23 @@
+% Regression: a chained picture compiles inside a math alignment cell.
+% mathtools rebuilds gathered on a cell template that leaves the alignment
+% counter at zero, and amsmath's aligned does the same, so the captured-body
+% scan once met the cell's end-of-template marker at the first raw tab and
+% died in a runaway.  The align-safe scan reads both bodies whole.
+\documentclass{article}
+\usepackage{mathtools}
+\usepackage{tenkz}
+
+\begin{document}
+\tenkzkernel
+\[\begin{gathered}
+  \begin{tenkz}[rows={wire}, cols=2, physical=up, west=open, east=open]
+    \tn{} & \tn{}
+  \end{tenkz}
+\end{gathered}\]
+\[\begin{aligned}
+  \begin{tenkz}[rows={wire,wire}, cols=2, bonds=grid]
+    \tn{} & \tn{} \\
+    \tn{} & \tn{}
+  \end{tenkz}
+\end{aligned}\]
+\end{document}

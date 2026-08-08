@@ -8,9 +8,7 @@ from typing import Iterable
 
 
 _STATIC_CONTROL_WORD_NAME_RE = re.compile(r"(?:[^\W\d_]|[@:_])+")
-PICTURE_ENVIRONMENT_NAMES = frozenset(
-    {"tenkz", "tenkzlattice", "tenkzplanes"}
-)
+PICTURE_ENVIRONMENT_NAMES = frozenset({"tenkz"})
 DRAWING_COMMAND_NAMES = frozenset({"tnpic", "tntree"})
 DRAWING_CONSTRUCT_NAMES = PICTURE_ENVIRONMENT_NAMES | DRAWING_COMMAND_NAMES
 PICTURE_EVENT_CONSTRUCT_NAMES = PICTURE_ENVIRONMENT_NAMES | {"tnpic"}

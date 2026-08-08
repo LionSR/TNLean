@@ -102,7 +102,6 @@ Each front end translates its layout grammar into requests against the shared
 geometry service:
 
 - grid layout for `tenkz`;
-- lattice layout, including the `tenkzplanes` preset;
 - fusion-tree layout for the standalone `\tntree` atom.
 
 Dialect layout owns only placement rules that are genuinely specific to that

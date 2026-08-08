@@ -49,21 +49,6 @@ def _is_cell(value: str) -> bool:
     return re.fullmatch(r"\d+-\d+", value) is not None
 
 
-def _is_lattice_cell(value: str) -> bool:
-    return re.fullmatch(r"\d+-\d+(?:-\d+)?", value) is not None
-
-
-def _is_lattice_cell_list(value: str) -> bool:
-    return bool(value) and all(
-        _is_lattice_cell(cell.strip()) for cell in value.split(",")
-    )
-
-
-def _is_region_cell_list(value: str) -> bool:
-    """A resolved region may be empty; non-empty memberships stay strict."""
-    return not value or _is_lattice_cell_list(value)
-
-
 def _is_pairleg_port(value: str) -> bool:
     """A contraction starts at the centred face or a positive face slot."""
     if value == "center":
@@ -106,10 +91,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "lang": _any,
         "scope": _is_positive_int,
     },
-    "surface": {
-        "picture": _is_picture_id,
-        "name": _enum("tenkzplanes"),
-    },
     "frame": {
         "picture": _is_picture_id,
         "scope": _enum("picture", "group"),
@@ -120,12 +101,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "d": _is_number,
     },
     "label-use": {"picture": _is_picture_id},
-    "label-anchor-site": {
-        "picture": _is_picture_id,
-        "label": _is_positive_int,
-        "x": _is_int,
-        "y": _is_int,
-    },
     "ink-use": {
         "picture": _is_picture_id,
         "class": _enum("glyph", "wire"),
@@ -220,12 +195,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "picture": _is_picture_id,
         "row": _is_int,
         "side": _enum("above", "below"),
-        "lang": _enum("lattice"),
-        "axis": _enum("west-east", "north-south"),
-        "sheet": _is_nonnegative_int,
-        "slot": _is_positive_int,
-        "from": _is_cell,
-        "to": _is_cell,
     },
     "hooks": {
         "picture": _is_picture_id,
@@ -236,18 +205,13 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "picture": _is_picture_id,
         "row": _is_int,
         "col": _is_int,
-        "site": _is_cell,
     },
     "phtrace": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
     "cup": {
         "picture": _is_picture_id,
-        "lang": _enum("lattice"),
-        "side": _enum("west", "east", "north", "south"),
+        "side": _enum("west", "east"),
         "top": _is_int,
         "bottom": _is_int,
-        "cell": _is_cell,
-        "sheet-a": _is_int,
-        "sheet-b": _is_int,
         "matrix": _is_int,
     },
     "hole": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
@@ -256,8 +220,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "picture": _is_picture_id,
         "virtual-west": _is_int,
         "virtual-east": _is_int,
-        "virtual-north": _is_int,
-        "virtual-south": _is_int,
         "physical-up": _is_int,
         "physical-down": _is_int,
     },
@@ -305,30 +267,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "cut-ymax": _is_int,
         "cut-radius": _is_nonnegative_int,
         "cut-id": _is_positive_int,
-    },
-    "lattice": {
-        "picture": _is_picture_id,
-        "rows": _is_positive_int,
-        "cols": _is_positive_int,
-        "sheets": _is_positive_int,
-        "roles": _any,
-    },
-    "site": {"picture": _is_picture_id, "cell": _is_lattice_cell, "mode": _enum("removed")},
-    "region": {
-        "picture": _is_picture_id,
-        "lang": _enum("lattice"),
-        "slot": _enum(
-            "selected", "secondary", "complement", "collar", "neutral"
-        ),
-        "cells": _is_region_cell_list,
-        "outline": _enum("0", "1"),
-        "name": _any,
-    },
-    "edge": {
-        "picture": _is_picture_id,
-        "from": _is_lattice_cell,
-        "to": _is_lattice_cell,
-        "role": _enum("none", "operator", "marked", "extra", "passive"),
     },
     "tree": {
         "picture": _is_picture_id,
@@ -396,7 +334,6 @@ class Picture:
         excluded = {
             "bbox",
             "label-use",
-            "label-anchor-site",
             "ink-use",
             "glyph-geometry",
             "wire-geometry",

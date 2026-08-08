@@ -221,7 +221,7 @@ def _equation_facts(page: Page) -> list[dict[str, object]]:
             directChildren: pictures.every(picture => picture.parentElement === row),
             insideMathJax: pictures.some(picture =>
               picture.closest('mjx-container, .MathJax, script[type^="math/tex"]')),
-            visibleRawSource: /\\\\begin\\{tenkz(?:cd|lattice|planes|free)?\\}|\\\\tnpic/
+            visibleRawSource: /\\\\begin\\{tenkz\\}|\\\\tnpic/
               .test(wrapper.innerText),
           };
         })"""
