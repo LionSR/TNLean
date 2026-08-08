@@ -73,6 +73,7 @@ import TNLean.Channel.Primitive
 import TNLean.Channel.QuantumSteering
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.ReductionCriterion
+import TNLean.Channel.RightFactorConditionalExpectation
 import TNLean.Channel.SchmidtDecomposition
 import TNLean.Channel.SchmidtNumber
 import TNLean.Channel.SchmidtNumberCompact

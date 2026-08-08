@@ -545,6 +545,42 @@ algebras. What follows treats the one-summand case, where the ambient
 algebra is a single full matrix algebra $\MN{m}$; see
 \path{docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex}.
 
+% Wolf ch01 source lines 616--626; one-block retraction from Proposition 1.5,
+% Equation (1.40), source lines 536--570.
+\begin{theorem}[Normalized partial-trace conditional expectation]
+    \label{thm:right_factor_conditional_expectation}
+    \lean{Matrix.rightFactorConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    Let $m\geq1$. The map
+    \[
+        E:\MN{m}\otimes\MN{d}\longrightarrow\MN{m}\otimes\MN{d},
+        \qquad
+        E(A)=\frac{\mathbb1_m}{m}\otimes\tr_m(A),
+    \]
+    is trace-preserving and completely positive. It is a conditional
+    expectation onto the unital $*$-subalgebra
+    $\mathbb1_m\otimes\MN{d}$: it is unital and idempotent, its range lies
+    in that subalgebra, and it fixes the subalgebra pointwise. This is the
+    one-block trace-preserving choice in the family described by
+    \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum}; it supplies
+    the corresponding one-block codomain retraction for the extension
+    theorem, not the general finite-dimensional codomain construction.
+\end{theorem}
+
+\begin{proof}\leanok
+    Interchange the two tensor factors, trace out the new right factor,
+    prepare the maximally mixed state $m^{-1}\mathbb1_m$, and interchange
+    the factors back. Each operation is trace-preserving and completely
+    positive. Moreover,
+    \[
+        \tr_m(\mathbb1_m\otimes X)=mX,
+    \]
+    so $E(\mathbb1_m\otimes X)=\mathbb1_m\otimes X$. Pointwise fixation
+    gives both idempotence and unitality, while the displayed formula for
+    $E(A)$ gives the range inclusion.
+\end{proof}
+
 \begin{definition}[Operator system]\label{def:operator_system}
     \lean{Matrix.IsOperatorSystem}
     \leanok
