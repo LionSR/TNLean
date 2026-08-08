@@ -764,7 +764,6 @@ $M_M(\C)$, $M=\sum_kd_k$.
     \label{def:cp_on_operator_system_direct_sum}
     \lean{Matrix.IsCPOnOperatorSystemDirectSum}
     \leanok
-    \uses{def:operator_system_direct_sum}
     Let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be a subspace and
     $T:S\to\MN{p}$ a linear map. For a natural number $j$, apply $T$
     entrywise, block by block, to a family of $j\times j$ block matrices with
@@ -780,11 +779,67 @@ $M_M(\C)$, $M=\sum_kd_k$.
     \lean{Matrix.IsCPMapDirectSum}
     \leanok
     A linear map $T:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ is \emph{completely
-    positive} if it is completely positive on the whole algebra in the sense
-    of Definition~\ref{def:cp_on_operator_system_direct_sum}. This is the
-    direct-sum analogue of rectangular Kraus complete positivity
+    positive} if, for every natural number $j$ and every family
+    $X=(X_k)_{k<r}$ with $X_k\in M_{d_k}(\C)\otimes\MN{j}$,
+    entrywise positivity implies
+    \begin{align}
+        (\forall k<r,\ X_k\ge0)
+        \quad\Longrightarrow\quad (T\otimes\id_j)(X)\ge0,
+        \label{eq:cp_direct_sum_ampliation}
+    \end{align}
+    where the $(a,b)$ slice of $(T\otimes\id_j)(X)$ is $T$ applied to the
+    family of $(a,b)$ slices of the matrices $X_k$. This is the direct-sum
+    analogue of rectangular Kraus complete positivity
     (Definition~\ref{def:is_kraus_cp}).
 \end{definition}
+
+\begin{theorem}[Block-diagonal transport at every matrix level]
+    \label{thm:direct_sum_level_transport}
+    \lean{Matrix.directSumEmbedFinLevel_posSemidef_iff}
+    \lean{Matrix.bipartiteSlice_directSumEmbedFinLevel}
+    \leanok
+    Let $\iota_j$ be the block-diagonal embedding
+    \begin{align}
+        \iota_j:\bigoplus_{k<r}
+          M_{d_k}(\C)\otimes\MN{j}
+          \longrightarrow M_{\sum_kd_k}(\C)\otimes\MN{j}.
+    \end{align}
+    Then $\iota_j(X)$ is positive semidefinite exactly when every $X_k$ is
+    positive semidefinite. Moreover, for all $a,b<j$,
+    \begin{align}
+        \bigl(\iota_j(X)\bigr)_{ab}
+        =\iota\bigl((X_k)_{ab}\bigr)_{k<r}.
+        \label{eq:direct_sum_slice_transport}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The first assertion follows from the corresponding block-diagonal
+    positivity equivalence and invariance of positivity under simultaneous
+    row and column reindexing. The second follows by evaluating both sides of
+    (\ref{eq:direct_sum_slice_transport}) at a pair of ambient matrix indices.
+\end{proof}
+
+\begin{theorem}[Complete positivity after tensoring with the identity]
+    \label{thm:kraus_cp_tensor_id}
+    \lean{Matrix.tensorMapIdLM_isKrausCP}
+    \lean{Matrix.tensorMapId_posSemidef_of_isKrausCP}
+    \leanok
+    If $\Phi(X)=\sum_iA_iXA_i^\dagger$ is a rectangular Kraus completely
+    positive map, then $\Phi\otimes\id_j$ is a Kraus completely positive
+    map with Kraus operators $A_i\otimes\mathbb1_j$. In particular,
+    $(\Phi\otimes\id_j)(X)$ is positive semidefinite whenever $X$ is.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expanding matrix entries gives
+    \begin{align}
+        (\Phi\otimes\id_j)(X)
+        =\sum_i(A_i\otimes\mathbb1_j)X
+          (A_i\otimes\mathbb1_j)^\dagger.
+    \end{align}
+    Each summand preserves positive semidefiniteness, and so does their sum.
+\end{proof}
 
 \begin{theorem}[Extending cp maps from operator systems, direct-sum domain]
     \label{thm:extend_cp_operator_system_direct_sum}
@@ -802,18 +857,25 @@ $M_M(\C)$, $M=\sum_kd_k$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:extend_cp_operator_system}
-    Embed $\bigoplus_{k<r}M_{d_k}(\C)$ block-diagonally into $M_M(\C)$,
-    $M=\sum_kd_k$. A block-diagonal matrix is positive semidefinite exactly
-    when each of its diagonal blocks is, so this embedding carries $S$ to an
-    operator system $S''\subseteq M_M(\C)$ and $T$ to a map $T''$ on $S''$
-    completely positive at every level in the sense of
-    Definition~\ref{def:cp_on_operator_system}. Applying
-    Theorem~\ref{thm:extend_cp_operator_system} to $T''$ produces a
-    completely positive extension $\tilde T:M_M(\C)\to\MN{p}$ agreeing with
-    $T''$ on $S''$. Restricting $\tilde T$ along the block-diagonal embedding
-    gives $T':=\tilde T\circ\iota$, which agrees with $T$ on $S$ and is
-    completely positive on the whole direct sum by the same block-diagonal
-    positivity fact, applied at every level with $S$ taken to be the whole
-    algebra $\bigoplus_kM_{d_k}(\C)$.
+    \uses{thm:extend_cp_operator_system, thm:direct_sum_level_transport,
+      thm:kraus_cp_tensor_id}
+    Let $\iota=\iota_1$ be the block-diagonal embedding. By
+    Theorem~\ref{thm:direct_sum_level_transport}, $\iota(S)$ is an operator
+    system in $M_M(\C)$ and the induced map $T''$ is completely positive at
+    every matrix level: the slice identity
+    (\ref{eq:direct_sum_slice_transport}) identifies its ampliation with the
+    embedded direct-sum ampliation, while block-diagonal positivity identifies
+    the two positive cones. Theorem~\ref{thm:extend_cp_operator_system} gives
+    a rectangular Kraus extension $\widetilde T:M_M(\C)\to\MN{p}$ of
+    $T''$. Define $T'=\widetilde T\circ\iota$.
+
+    To verify (\ref{eq:cp_direct_sum_ampliation}), fix $j$ and an entrywise
+    positive family $X$. The level embedding $\iota_j(X)$ is positive by
+    Theorem~\ref{thm:direct_sum_level_transport}. The Kraus ampliation theorem
+    (Theorem~\ref{thm:kraus_cp_tensor_id}) therefore gives
+    $(\widetilde T\otimes\id_j)(\iota_j(X))\ge0$. Using
+    (\ref{eq:direct_sum_slice_transport}) identifies this matrix with
+    $(T'\otimes\id_j)(X)$, proving complete positivity of $T'$. The defining
+    agreement of $\widetilde T$ with $T''$ shows that $T'$ agrees with $T$ on
+    $S$.
 \end{proof}

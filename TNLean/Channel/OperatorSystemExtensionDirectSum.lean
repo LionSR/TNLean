@@ -212,41 +212,7 @@ theorem blockDiagonal'_posSemidef_iff {ι : Type*} [Fintype ι] [DecidableEq ι]
     have heq : (Matrix.blockDiagonal' M).submatrix (Sigma.mk k) (Sigma.mk k) = M k := by
       ext a b; exact Matrix.blockDiagonal'_apply_eq M k a b
     rwa [heq] at hsub
-  · intro h
-    rw [Matrix.posSemidef_iff_dotProduct_mulVec]
-    refine ⟨(Matrix.isHermitian_blockDiagonal'_iff).mpr fun i => (h i).isHermitian, fun v => ?_⟩
-    have hlhs : star v ⬝ᵥ (Matrix.blockDiagonal' M).mulVec v =
-        ∑ p : Σ i, β i, ∑ q : Σ i, β i,
-          star (v p) * Matrix.blockDiagonal' M p q * v q := by
-      simp only [dotProduct, Matrix.mulVec, Finset.mul_sum, Pi.star_apply, mul_assoc]
-    rw [hlhs]
-    have hsplit1 : (∑ p : Σ i, β i, ∑ q : Σ i, β i,
-        star (v p) * Matrix.blockDiagonal' M p q * v q) =
-        ∑ k : ι, ∑ a : β k, ∑ q : Σ i, β i,
-          star (v ⟨k, a⟩) * Matrix.blockDiagonal' M ⟨k, a⟩ q * v q :=
-      Fintype.sum_sigma (fun p : Σ i, β i => ∑ q : Σ i, β i,
-        star (v p) * Matrix.blockDiagonal' M p q * v q)
-    rw [hsplit1]
-    refine Finset.sum_nonneg fun k _ => ?_
-    have hk : (∑ a : β k, ∑ q : Σ i, β i,
-        star (v ⟨k, a⟩) * Matrix.blockDiagonal' M ⟨k, a⟩ q * v q) =
-        star (fun a : β k => v ⟨k, a⟩) ⬝ᵥ (M k).mulVec (fun a : β k => v ⟨k, a⟩) := by
-      simp only [dotProduct, Pi.star_apply]
-      refine Finset.sum_congr rfl fun a _ => ?_
-      have hsplit2 : (∑ q : Σ i, β i,
-          star (v ⟨k, a⟩) * Matrix.blockDiagonal' M ⟨k, a⟩ q * v q) =
-          ∑ k' : ι, ∑ b : β k',
-            star (v ⟨k, a⟩) * Matrix.blockDiagonal' M ⟨k, a⟩ ⟨k', b⟩ * v ⟨k', b⟩ :=
-        Fintype.sum_sigma (fun q : Σ i, β i =>
-          star (v ⟨k, a⟩) * Matrix.blockDiagonal' M ⟨k, a⟩ q * v q)
-      rw [hsplit2, Finset.sum_eq_single k (fun k' _ hk' => by
-          refine Finset.sum_eq_zero fun b _ => ?_
-          rw [Matrix.blockDiagonal'_apply_ne M a b (Ne.symm hk')]; ring)
-        (fun habs => absurd (Finset.mem_univ k) habs)]
-      simp only [Matrix.mulVec, dotProduct, Matrix.blockDiagonal'_apply_eq, Finset.mul_sum,
-        mul_assoc]
-    rw [hk]
-    exact (Matrix.posSemidef_iff_dotProduct_mulVec.mp (h k)).2 _
+  · exact Matrix.PosSemidef.blockDiagonal' M
 
 theorem directSumEmbedFin_posSemidef_iff (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     (directSumEmbedFin A).PosSemidef ↔ ∀ k, (A k).PosSemidef := by
@@ -411,25 +377,6 @@ theorem isCPOnOperatorSystem_transport
       ⟨Matrix.bipartiteSlice Y.1 i₂ l₂, mem_tensorSubmodule_iff.mp Y.2 i₂ l₂⟩) i₁ l₁ =
     T ⟨fun k => Matrix.bipartiteSlice (X.1 k) i₂ l₂, X.2 i₂ l₂⟩ i₁ l₁
   rw [LinearEquiv.coe_toLinearMap, heq i₂ l₂]
-
-/-- `T ⊗ id_δ` maps a completely positive rectangular Kraus map to a completely positive
-rectangular Kraus map, with Kraus operators `Aᵢ ⊗ 1`. -/
-theorem tensorMapIdLM_isKrausCP {α β δ : Type*} [Fintype α] [DecidableEq α] [Fintype β]
-    [DecidableEq β] [Fintype δ] [DecidableEq δ] {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ}
-    (hS : IsKrausCP S) :
-    IsKrausCP (Matrix.tensorMapIdLM (δ := δ) S) := by
-  obtain ⟨rk, A, hAform⟩ := hS
-  refine ⟨rk, fun i => Matrix.kroneckerMap (· * ·) (A i) 1, ?_⟩
-  intro X
-  ext ⟨b, u⟩ ⟨c, v⟩
-  change Matrix.tensorMapId S X (b, u) (c, v) = _
-  rw [Matrix.tensorMapId_apply, hAform, Matrix.sum_apply]
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply]
-  rw [Matrix.sum_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  simp only [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.conjTranspose_apply,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, star_mul']
-  simp [Matrix.bipartiteSlice]
 
 set_option linter.unusedFintypeInType false in
 set_option linter.unusedDecidableInType false in
