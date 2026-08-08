@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Complex.Basic
+import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Nat.Choose.Sum
-import Mathlib.Tactic
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Jordan block: definition, nilpotent shift, and binomial expansion
@@ -219,7 +221,7 @@ private lemma jordanBlock_term (a : ℂ) (n m : ℕ) :
         ((Nat.choose n m : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ)) := by
       rw [natCast_matrix_eq]
     _ = ((Nat.choose n m : ℂ) * a ^ m) • (nilpotentShift D) ^ (n - m) := by
-      rw [Matrix.mul_smul, Matrix.mul_one, smul_smul, mul_comm]
+      rw [Matrix.mul_smul, Matrix.mul_one, smul_smul]
 
 /-- Binomial expansion of $J_D(a)^n$, truncated at $\min\{n,D-1\}$:
 $$
