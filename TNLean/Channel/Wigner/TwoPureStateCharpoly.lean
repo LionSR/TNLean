@@ -14,10 +14,9 @@ Wolf, Chapter 1, lines 289--296. In dimension at least two, the proof factors th
 pure-state matrices as a rectangular product and compares the characteristic polynomials of the
 two product orders. The dimensions zero and one are treated separately.
 
-**Local fix (docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex):** Wolf's
-spectrum shorthand lists the two possibly nonzero eigenvalues but omits the $d-2$ zero eigenvalues
-and their multiplicities. The characteristic-polynomial statement restores them; this correction
-does not assert that Wolf's intended spectrum-preserver argument is false.
+Wolf's spectrum shorthand lists the two possibly nonzero eigenvalues but omits the $d-2$ zero
+eigenvalues and their multiplicities. The characteristic-polynomial statement below restores them;
+see `docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex` for the source audit.
 
 ## Main results
 
@@ -57,7 +56,13 @@ theorem charpoly_add_pureStateMatrix_fin_one (p q : ℙ ℂ (Fin 1 → ℂ)) :
 
 /-- The multiplicity-aware characteristic polynomial of the sum of two normalized pure-state
 matrices in dimension at least two. This is Wolf's Chapter 1 calculation with the omitted
-$d-2$ zero eigenvalues restored. -/
+$d-2$ zero eigenvalues restored.
+
+**Local fix (zero eigenvalue multiplicities):** Wolf's spectrum shorthand lists the two possibly
+nonzero eigenvalues but omits the remaining $d-2$ zero eigenvalues and their multiplicities. The
+characteristic-polynomial formula restores them; see
+`docs/paper-gaps/wolf_ch01_two_pure_state_zero_multiplicities.tex`. This correction does not assert
+that Wolf's intended spectrum-preserver argument is false. -/
 theorem charpoly_add_pureStateMatrix_of_two_le (hd : 2 ≤ d)
     (p q : ℙ ℂ (Fin d → ℂ)) :
     (pureStateMatrix p + pureStateMatrix q).charpoly =
