@@ -415,10 +415,11 @@ def _stroked_polygon_intersects_roundrect(
 class ScopePolicy(NamedTuple):
     """What one equation's own source says about how it is checked."""
 
-    waived: set[int]        # relations its `check={off={k: ...}}` retires
-    modulo_bundles: bool    # whether it compares a bundle as its multiplicity
-    relation_gaps: set[int]  # gaps it writes a recognized relation across
-    product_gaps: set[int]   # gaps it leaves empty, joining by juxtaposition
+    waived: set[int]         # relations its `check={off={k: ...}}` retires
+    modulo_bundles: bool     # whether it compares a bundle as its multiplicity
+    relation_gaps: set[int]  # gaps holding a relation glyph
+    product_gaps: set[int]   # gaps holding none, joining by juxtaposition
+    relation_count: Optional[int]  # relation glyphs over all its gaps
 
 
 @dataclass
@@ -1297,16 +1298,17 @@ class Audit:
         return spans
 
     def _source_check_policy(self) -> Optional[dict[int, ScopePolicy]]:
-        """Per scope, the check policy the source itself declares.
+        r"""Per scope, the check policy the source itself declares.
 
         The policy is the relations it waives, whether it compares modulo
-        bundles, and what its own joiners settle about each gap between its
-        panels.  Two things a source settles positively: a gap it writes a
-        recognized relation across is a relation, and a gap it leaves empty
-        carries no mathematics at all and so can only be juxtaposition.  The
-        reading claims nothing about the gaps in between -- a relation set
-        inside braces is one it does not recognize -- so neither rule is ever
-        phrased as the absence of evidence.  `None` when no source is linked: the stream is then the only
+        bundles, and which gap between its panels each joiner occupies.  That
+        last part is exact rather than heuristic.  `tenkzeq` makes `=` the
+        active relation glyph over its whole body while a picture resets it,
+        so between two panels every unescaped `=` records one relation and a
+        gap holding none joins its panels by juxtaposition -- a product.
+        Reading the gaps for that one character therefore names the same
+        joiners the kernel recorded, `\mbox{a=b}` included, which no reading
+        of the mathematics could do.  `None` when no source is linked: the stream is then the only
         witness of its own policy, which is honoured and reported.  With a
         source, a waiver counts and a bundle expansion applies only where the
         environment's own `check=` says so, so a stale or edited stream can
@@ -1344,19 +1346,20 @@ class Audit:
                 ]
                 for left, right in zip(members, members[1:])
             ]
+            marks = [relation_marks(separator) for separator in separators]
             relation_gaps = {
-                position + 1 for position, separator in enumerate(separators)
-                if same_equation(separator)
+                position + 1 for position, count in enumerate(marks) if count
             }
             product_gaps = {
-                position + 1 for position, separator in enumerate(separators)
-                if not separator.strip()
+                position + 1 for position, count in enumerate(marks) if not count
             }
+            relation_count = sum(marks)
             authorized[scope] = ScopePolicy(
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
                 _tenkzeq_declares_bundles(self._tex_src, begin),
                 relation_gaps,
                 product_gaps,
+                relation_count,
             )
         return authorized
 
@@ -1373,8 +1376,8 @@ class Audit:
         Two rules apply.  The group's arithmetic must close -- relations plus
         distinct adjacent contractions plus one equals panels -- so that no
         panel escapes comparison; a group whose arithmetic fails is read as
-        unchecked, and its panels are then compared pair by pair with no
-        waiver honoured.  And a side that is one panel is compared here
+        unchecked, and its panels are then compared pair by pair, keeping the
+        waivers the source authorizes.  And a side that is one panel is compared here
         whatever the kernel's verdict said, so a stream whose comparison never
         ran is caught rather than trusted -- for every relation of a group
         with no contraction in it, and, where the source settles which gaps
@@ -1430,10 +1433,16 @@ class Audit:
                 event.attrs.get("modulo") == "bundles" for event in records
             )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
-            declared, declared_modulo, relation_gaps, product_gaps = (
-                ScopePolicy(set(), logged_modulo, set(), set()) if policy is None
-                else policy.get(scope, ScopePolicy(set(), False, set(), set()))
+            source = (
+                None if policy is None
+                else policy.get(
+                    scope, ScopePolicy(set(), False, set(), set(), None)
+                )
             )
+            declared = set() if source is None else source.waived
+            declared_modulo = logged_modulo if source is None else source.modulo_bundles
+            relation_gaps = set() if source is None else source.relation_gaps
+            product_gaps = set() if source is None else source.product_gaps
             # A bundle expansion loosens the comparison, so the source has to
             # ask for it: a stale stream carrying `modulo=bundles` past a
             # source that no longer says so would accept a bundle against a
@@ -1457,14 +1466,16 @@ class Audit:
                 and len(relation_records) == len(relations)
                 and set(relations) == set(range(1, len(relations) + 1))
                 and len(product_records) == len(products)
-                # The joiners must partition the gaps the source settles: a
-                # contraction cannot sit where the source writes a relation,
-                # and a gap the source leaves empty joins its panels by
-                # juxtaposition and nothing else, so a contraction has to name
-                # it.  Either failure leaves a panel outside every side while
-                # the count still balances.
-                and not (products & relation_gaps)
-                and product_gaps <= products
+                # With a source the joiners are placed, not merely counted:
+                # the contractions are exactly the gaps holding no relation
+                # glyph, and there are as many relations as glyphs.  A stream
+                # that moves a joiner to another gap leaves a panel outside
+                # every side while its counts still balance.
+                and (source is None or products == product_gaps)
+                and (
+                    source is None or source.relation_count is None
+                    or len(relations) == source.relation_count
+                )
                 and len(relations) + len(products) + 1 == len(members)
             )
             waived: set[int] = {
@@ -1509,7 +1520,12 @@ class Audit:
                         f"{len(products)} distinct adjacent pair(s); every "
                         f"panel must fold into a compared side",
                     )
-                self._compare_adjacent(members, scope, modulo, waived=set())
+                # The fallback reads the panels as adjacent pairs, which is
+                # what the kernel's own malformed-scope path does -- and it
+                # honours the source's waivers there for the same reason the
+                # kernel honours its own: an author who opted a relation out
+                # did not opt back in by losing a record elsewhere.
+                self._compare_adjacent(members, scope, modulo, waived)
                 continue
             if not products:
                 self._compare_adjacent(members, scope, modulo, waived)
@@ -1853,6 +1869,19 @@ def signature_entry_class(item: str) -> tuple[str, str, str]:
     orientation = next((part for part in rest if part in _ORIENTATIONS), "none")
     weight = next((part for part in rest if part not in _ORIENTATIONS), "single")
     return kind, re.sub(r"\s*=\s*", "=", weight), orientation
+
+
+_RELATION_MARK = re.compile(r"(?<!\\)(?:\\\\)*=")
+
+
+def relation_marks(sep: str) -> int:
+    r"""The relation glyphs one gap of an equation body holds.
+
+    Inside `tenkzeq` the equals sign is the active relation glyph and a
+    picture resets it, so between two panels each unescaped `=` records one
+    relation.  A `\=` is a control symbol and never becomes that token.
+    """
+    return len(_RELATION_MARK.findall(sep))
 
 
 def one_display(sep: str) -> bool:

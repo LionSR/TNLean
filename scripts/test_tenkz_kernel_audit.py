@@ -304,7 +304,10 @@ kernel-boundary|signature=phys:up
             "check={signature, off={1: documented}}",
         ),
     )
-    assert "eq-boundary-mismatch" in [
+    # The scope holds one relation gap, so a second relation record is one
+    # joiner too many and the group is unchecked; the waiver the source does
+    # declare still stands over the pair it names.
+    assert "eq-unchecked" in [
         finding.rule for finding in surplus_opt_out.findings
     ]
 
@@ -317,7 +320,10 @@ kernel-boundary|signature=phys:up
             "check={signature, off={1: documented}}",
         ),
     )
-    assert "eq-boundary-mismatch" in [
+    # The scope holds one relation gap, so a second relation record is one
+    # joiner too many and the group is unchecked; the waiver the source does
+    # declare still stands over the pair it names.
+    assert "eq-unchecked" in [
         finding.rule for finding in duplicate_opt_out.findings
     ]
 

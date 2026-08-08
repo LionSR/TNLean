@@ -409,6 +409,57 @@ def main() -> int:
     )
     assert not gap_partition_whole, gap_partition_whole
 
+    # Seeded defect: gaps the reading of the mathematics settles nothing
+    # about.  The stream claims a relation on the last gap and a contraction
+    # on the middle one; the source spells a product sign on both, so the
+    # contractions are the two gaps holding no relation glyph and there is
+    # one relation, not two.
+    unsettled_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}$\\otimes$\n{PANELS[0]}$\\otimes$\n{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    unsettled = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w") + panel(3, "open:e")
+        + panel(4, "phys:up")
+        + "check|scope=1|product=2-3|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n"
+        "check|scope=1|relation=2|result=equal|signature=open:w\n",
+        unsettled_source,
+    )
+    assert ("eq-unchecked", "HARD") in unsettled, unsettled
+    assert ("eq-boundary-mismatch", "HARD") in unsettled, unsettled
+
+    # The same display read the way the kernel reads it: one relation over
+    # the equals sign, a contraction on each product sign.
+    unsettled_whole = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w") + panel(3, "open:e")
+        + panel(4, "open:w")
+        + "check|scope=1|product=2-3|result=contracted|signature=open:w\n"
+        "check|scope=1|product=3-4|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n",
+        unsettled_source,
+    )
+    assert not unsettled_whole, unsettled_whole
+
+    # A relation the source waives stays waived when the scope fails closure
+    # for a reason of its own: an author who opted a relation out did not opt
+    # back in by losing a record elsewhere.
+    waived_under_failure = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up") + panel(3, "phys:up")
+        + "check|scope=1|relation=1|result=off|reason=drafted\n"
+        "check|scope=1|relation=2|result=equal|signature=open:w\n"
+        "check|scope=1|relation=2|result=equal|signature=open:w\n",
+        "\\begin{tenkzeq}[check={signature, off={1: drafted}}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}=\n{PANELS[0]}"
+        "\\end{tenkzeq}\n",
+    )
+    assert ("eq-unchecked", "HARD") in waived_under_failure, waived_under_failure
+    assert ("eq-check-off", "ADV") in waived_under_failure, waived_under_failure
+    assert "eq-boundary-mismatch" not in [
+        rule for rule, _ in waived_under_failure
+    ], waived_under_failure
+
     # A spaced environment name opens the same equation, so its declared
     # waiver is the source's and not a forgery.
     spaced = audit_rules(
@@ -427,7 +478,7 @@ def main() -> int:
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 28 seeded group checks passed"
+        "and 31 seeded group checks passed"
     )
     return 0
 

@@ -372,12 +372,13 @@ def unit_event_log(unit_source: str, svg_dir: Path) -> Path | None:
 
     stem = f"tenkz-{unit_hash(unit_source)}"
     log_path = _CACHE_DIR / f"{stem}.tnlog"
-    svg_path = svg_dir / f"{stem}.svg"
-    # One compile writes both artifacts, so both together are the evidence
-    # that it finished: a stream without its drawing is a run that stopped.
-    if log_path.is_file() and svg_path.is_file():
+    # The stream is the evidence that the compile finished, because a run
+    # that stopped at either stage takes its stream with it.  The drawing is
+    # not: it lands wherever its caller asked for it, so a stream cached
+    # beside one caller's SVG is still this caller's answer.
+    if log_path.is_file():
         return log_path
-    if not _compile_unit(unit_source, stem, svg_path):
+    if not _compile_unit(unit_source, stem, svg_dir / f"{stem}.svg"):
         return None
     return log_path if log_path.is_file() else None
 
