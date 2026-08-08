@@ -1623,11 +1623,12 @@ command -v pdftoppm >/dev/null 2>&1 || {
   exit 1
 }
 for pixel_fixture in \
-    k_plane k_skin_pairings r_dir_open_bearings r_hull_live r_ink_semantics \
-    r_label_turn r_metrics_compact r_mpo_skin_box r_mpo_skin_prelude \
-    r_parallel_lanes r_physical_dir r_pill_skin_prelude \
-    r_pill_skin_roundrect r_region_diagonal r_region_pinch_staircase \
-    r_ring_closure r_trace_return_rows r_wire_stroke \
+    k_plane k_skin_pairings r_bracket_trace_return r_dir_open_bearings \
+    r_hull_live r_ink_semantics r_label_turn r_metrics_compact \
+    r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes r_physical_dir \
+    r_pill_skin_prelude r_pill_skin_roundrect r_region_diagonal \
+    r_region_pinch_staircase r_ring_closure r_trace_return_rows \
+    r_wire_stroke \
     r_noncell_port_slot r_noncell_port_slot_cell \
     r_wide_policy_legs r_wide_policy_ports \
     r_route_noncell_slots r_route_noncell_slots_cell; do
@@ -1690,7 +1691,8 @@ for path in sys.argv[1:]:
     data = open(path, "rb").read()
     print(hashlib.sha256(data).hexdigest(), "", path.rsplit("/", 1)[-1])' \
   "$WORK/k_skin_pairings.png" "$WORK/r_hull_live.png" \
-  "$WORK/k_plane.png" "$WORK/r_dir_open_bearings.png" \
+  "$WORK/k_plane.png" "$WORK/r_bracket_trace_return.png" \
+  "$WORK/r_dir_open_bearings.png" \
   "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_metrics_compact.png" "$WORK/r_parallel_lanes.png" \
   "$WORK/r_physical_dir.png" "$WORK/r_region_diagonal.png" \

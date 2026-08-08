@@ -11477,6 +11477,59 @@
           }
       }
   }
+% The side and reach of a traced row's return.  Reads the closed row from
+% \l__tenkz_kernel_r_row_tl and the row's west reach-point ordinate from
+% \l__tenkz_kernel_r_y_fp; leaves the arc angles in the b/c registers, the
+% outward sign in \l__tenkz_kernel_r_yc_fp, the passed-row count less one in
+% \l__tenkz_kernel_r_xc_fp, the passed rows' envelope in the wrap registers,
+% and the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
+% annotation layering of \__tenkz_kernel_r_mark_rails:n both read the rail
+% through this one function, so the two cannot drift.
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_side_reach:
+  {
+    \int_compare:nNnTF
+      { 2 * \l__tenkz_kernel_r_row_tl }
+      <
+      { \l__tenkz_kernel_r_rows_int + 1 }
+      {
+        \tl_set:Nn \l__tenkz_kernel_r_b_tl {90}
+        \tl_set:Nn \l__tenkz_kernel_r_c_tl {0}
+        \__tenkz_kernel_r_wrap_envelope:nn
+          {1} { \l__tenkz_kernel_r_row_tl }
+        \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+          { \l__tenkz_kernel_r_row_tl - 1 }
+        \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
+      }
+      {
+        \tl_set:Nn \l__tenkz_kernel_r_b_tl {270}
+        \tl_set:Nn \l__tenkz_kernel_r_c_tl {360}
+        \__tenkz_kernel_r_wrap_envelope:nn
+          { \l__tenkz_kernel_r_row_tl }
+          { \l__tenkz_kernel_r_rows_int }
+        \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+          {
+            \l__tenkz_kernel_r_rows_int
+            - \l__tenkz_kernel_r_row_tl
+          }
+        \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
+      }
+    % One trace reach past the outward extreme of the passed
+    % row lines per return crossed; the outward extreme is the
+    % signed maximum, so one formula serves both sides.
+    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+      {
+        ( \l__tenkz_kernel_r_xc_fp + 1 )
+        * \__tenkz_metric_ratio:n {pairtracereach}
+        + max
+            (
+              \l__tenkz_kernel_r_yc_fp
+              * \l__tenkz_kernel_r_wrap_yhi_fp ,
+              \l__tenkz_kernel_r_yc_fp
+              * \l__tenkz_kernel_r_wrap_ylo_fp
+            )
+        - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_trace:n #1
   {
     \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
@@ -11580,53 +11633,12 @@
                 % another by one trace reach in page space, and the rail
                 % crosses no row, no inter-row pairing, and no other return
                 % between its reach points.
-                % Each side branch states only its constants: the arc
-                % angles, the outward sign, the rows passed, and the
-                % envelope range.  The reach and lead arithmetic below is
-                % written once, so a change to it cannot reach one side
-                % and miss the other.
-                \int_compare:nNnTF
-                  { 2 * \l__tenkz_kernel_r_row_tl }
-                  <
-                  { \l__tenkz_kernel_r_rows_int + 1 }
-                  {
-                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {90}
-                    \tl_set:Nn \l__tenkz_kernel_r_c_tl {0}
-                    \__tenkz_kernel_r_wrap_envelope:nn
-                      {1} { \l__tenkz_kernel_r_row_tl }
-                    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
-                      { \l__tenkz_kernel_r_row_tl - 1 }
-                    \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
-                  }
-                  {
-                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {270}
-                    \tl_set:Nn \l__tenkz_kernel_r_c_tl {360}
-                    \__tenkz_kernel_r_wrap_envelope:nn
-                      { \l__tenkz_kernel_r_row_tl }
-                      { \l__tenkz_kernel_r_rows_int }
-                    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
-                      {
-                        \l__tenkz_kernel_r_rows_int
-                        - \l__tenkz_kernel_r_row_tl
-                      }
-                    \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
-                  }
-                % One trace reach past the outward extreme of the passed
-                % row lines per return crossed; the outward extreme is the
-                % signed maximum, so one formula serves both sides.
-                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-                  {
-                    ( \l__tenkz_kernel_r_xc_fp + 1 )
-                    * \__tenkz_metric_ratio:n {pairtracereach}
-                    + max
-                        (
-                          \l__tenkz_kernel_r_yc_fp
-                          * \l__tenkz_kernel_r_wrap_yhi_fp ,
-                          \l__tenkz_kernel_r_yc_fp
-                          * \l__tenkz_kernel_r_wrap_ylo_fp
-                        )
-                    - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
-                  }
+                % Each side branch of \__tenkz_kernel_r_trace_side_reach:
+                % states only its constants: the arc angles, the outward
+                % sign, the rows passed, and the envelope range.  The
+                % reach and lead arithmetic is written once there, so a
+                % change to it cannot reach one side and miss the other.
+                \__tenkz_kernel_r_trace_side_reach:
                 \fp_sub:Nn \l__tenkz_kernel_r_wrap_wx_fp
                   {
                     \l__tenkz_kernel_r_xc_fp
@@ -15815,23 +15827,7 @@
       { \l__tenkz_kernel_r_reach_fp } \l__tenkz_kernel_r_y_tl
     \tl_set:Ne \l__tenkz_kernel_r_y_tl
       { \fp_eval:n { -\l__tenkz_kernel_r_y_tl } }
-    % The centre is formed in local coordinates and carried through both
-    % basis vectors.
-    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
-      { ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2 }
-    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
-      { ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2 }
-    \__tenkz_geom_basis_apply:nnnnnnNN
-      { \l__tenkz_kernel_hull_ex_tl }
-      { \l__tenkz_kernel_hull_ey_tl }
-      { \l__tenkz_kernel_hull_nx_tl }
-      { \l__tenkz_kernel_hull_ny_tl }
-      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
-      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
-    \fp_set:Nn \l__tenkz_kernel_r_x_fp
-      { \l__tenkz_kernel_ro_apply_x_tl }
-    \fp_set:Nn \l__tenkz_kernel_r_y_fp
-      { \l__tenkz_kernel_ro_apply_y_tl }
+    \__tenkz_kernel_r_mark_recentre:
     \__tenkz_model_get:nnN {#1} {species} \l__tenkz_kernel_r_species_tl
     \tl_clear:N \l__tenkz_kernel_r_mark_dash_tl
     \quark_if_no_value:NTF \l__tenkz_kernel_r_species_tl
@@ -15947,6 +15943,254 @@
     \__tenkz_kernel_r_mark_label_ink:n {#1}
   }
 
+% The centre of the offset hull, formed in local coordinates and carried
+% through both basis vectors to the page registers.  Called by the hull
+% construction and again after annotation layering moves a support.
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_recentre:
+  {
+    \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+      { ( \l__tenkz_kernel_r_xb_tl + \l__tenkz_kernel_r_x_tl ) / 2 }
+    \fp_set:Nn \l__tenkz_kernel_r_yc_fp
+      { ( \l__tenkz_kernel_r_yb_tl + \l__tenkz_kernel_r_y_tl ) / 2 }
+    \__tenkz_geom_basis_apply:nnnnnnNN
+      { \l__tenkz_kernel_hull_ex_tl }
+      { \l__tenkz_kernel_hull_ey_tl }
+      { \l__tenkz_kernel_hull_nx_tl }
+      { \l__tenkz_kernel_hull_ny_tl }
+      { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
+      \l__tenkz_kernel_ro_apply_x_tl \l__tenkz_kernel_ro_apply_y_tl
+    \fp_set:Nn \l__tenkz_kernel_r_x_fp
+      { \l__tenkz_kernel_ro_apply_x_tl }
+    \fp_set:Nn \l__tenkz_kernel_r_y_fp
+      { \l__tenkz_kernel_ro_apply_y_tl }
+  }
+
+% ---------- annotation layering against generated returns ----------------------------------------
+% A traced row's return is network ink: it belongs to the row it closes, and
+% removing an annotation must never move it.  The converse discipline is the
+% annotation's: a span annotation reads as one unit -- arc and caption
+% adjacent -- so a generated return must not run between them (issue #5631).
+% A bracket therefore takes concentric order against the returns routed on
+% the side it speaks from: its arc steps outside the outermost rail there --
+% and outside its members' own leg tips and their label bands, which stand
+% beyond that rail -- standing off by the clearance the hull stands off its
+% members, and
+% the caption follows the arc.  The step keeps the bracket adjacent to its
+% selection, so it is taken only when the selection reaches the boundary row
+% on that side -- a return then carries no foreign row between itself and
+% the selection.  It reads the rails through the closure's own arithmetic
+% (\__tenkz_kernel_r_trace_side_reach:), on the flat frame, where the hull's
+% axes are the page's and a rail is one page ordinate.  The vertical descents
+% of a return run outside every column, so the east and west sides need no
+% step today; neither do the column returns of a north/south trace, which no
+% picture yet combines with an east or west bracket.
+\fp_new:N \l__tenkz_kernel_annot_lo_fp
+\fp_new:N \l__tenkz_kernel_annot_hi_fp
+\bool_new:N \l__tenkz_kernel_annot_lo_bool
+\bool_new:N \l__tenkz_kernel_annot_hi_bool
+\fp_new:N \l__tenkz_kernel_annot_row_min_fp
+\fp_new:N \l__tenkz_kernel_annot_row_max_fp
+\bool_new:N \l__tenkz_kernel_annot_rows_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_rails:n #1
+  {
+    \bool_set_false:N \l__tenkz_kernel_annot_lo_bool
+    \bool_set_false:N \l__tenkz_kernel_annot_hi_bool
+    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {flat}
+      {
+        \bool_set_true:N \l__tenkz_kernel_annot_rows_bool
+        \fp_set:Nn \l__tenkz_kernel_annot_row_min_fp {inf}
+        \fp_set:Nn \l__tenkz_kernel_annot_row_max_fp {-inf}
+        \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_sel_seq
+        \seq_map_inline:Nn \l__tenkz_kernel_sel_seq
+          {
+            \__tenkz_kernel_atom_rc:nNNN {##1}
+              \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
+              \l__tenkz_kernel_turn_bool
+            \bool_if:NTF \l__tenkz_kernel_turn_bool
+              {
+                \fp_set:Nn \l__tenkz_kernel_annot_row_min_fp
+                  {
+                    min
+                      (
+                        \l__tenkz_kernel_annot_row_min_fp ,
+                        \l__tenkz_kernel_r_row_tl
+                      )
+                  }
+                \fp_set:Nn \l__tenkz_kernel_annot_row_max_fp
+                  {
+                    max
+                      (
+                        \l__tenkz_kernel_annot_row_max_fp ,
+                        \l__tenkz_kernel_r_row_tl
+                      )
+                  }
+              }
+              { \bool_set_false:N \l__tenkz_kernel_annot_rows_bool }
+          }
+        \bool_if:NT \l__tenkz_kernel_annot_rows_bool
+          {
+            \fp_set:Nn \l__tenkz_kernel_annot_lo_fp {inf}
+            \fp_set:Nn \l__tenkz_kernel_annot_hi_fp {-inf}
+            \__tenkz_model_map_ids:nn {wire}
+              { \__tenkz_kernel_r_mark_rail:n {##1} }
+          }
+      }
+  }
+% One wire record of the rail scan.  A west-east trace closure contributes
+% the outward extreme of its rail to the side it routes on, when no foreign
+% row stands between that rail and the selection; only a rail arms the step.
+% A member's open leg contributes the far side of its tip -- plus the
+% conservative dot-label band when the tip carries a label -- so a bar that
+% steps over the rail does not land in the labels the legs put beyond it.
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_rail:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {origin} \l__tenkz_kernel_r_tl
+    \str_case:Vn \l__tenkz_kernel_r_tl
+      {
+        {trace}
+          {
+            \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
+            \str_if_eq:VnT \l__tenkz_kernel_r_tl {west-east}
+              {
+                \__tenkz_model_get:nnN {#1} {row}
+                  \l__tenkz_kernel_r_row_tl
+                \__tenkz_kernel_r_frame_xy:nnNN
+                  { \l__tenkz_kernel_r_row_tl }
+                  { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+                \__tenkz_kernel_r_trace_side_reach:
+                \fp_compare:nNnTF { \l__tenkz_kernel_r_yc_fp } > {0}
+                  {
+                    \fp_compare:nNnT
+                      { \l__tenkz_kernel_annot_row_min_fp } = {1}
+                      {
+                        \bool_set_true:N \l__tenkz_kernel_annot_hi_bool
+                        \fp_set:Nn \l__tenkz_kernel_annot_hi_fp
+                          {
+                            max
+                              (
+                                \l__tenkz_kernel_annot_hi_fp ,
+                                \l__tenkz_kernel_r_y_fp
+                                + \l__tenkz_kernel_r_reach_fp
+                              )
+                          }
+                      }
+                  }
+                  {
+                    \fp_compare:nNnT
+                      { \l__tenkz_kernel_annot_row_max_fp }
+                      =
+                      { \l__tenkz_kernel_r_rows_int }
+                      {
+                        \bool_set_true:N \l__tenkz_kernel_annot_lo_bool
+                        \fp_set:Nn \l__tenkz_kernel_annot_lo_fp
+                          {
+                            min
+                              (
+                                \l__tenkz_kernel_annot_lo_fp ,
+                                \l__tenkz_kernel_r_y_fp
+                                - \l__tenkz_kernel_r_reach_fp
+                              )
+                          }
+                      }
+                  }
+              }
+          }
+        {port-open}
+          {
+            \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_tl
+            \seq_if_in:NVT \l__tenkz_kernel_sel_seq
+              \l__tenkz_kernel_r_tl
+              {
+                \__tenkz_kernel_r_port_open_geometry:n {#1}
+                \__tenkz_model_get:nnN {#1} {port-label}
+                  \l__tenkz_kernel_r_tl
+                \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+                  {
+                    \quark_if_no_value_p:N \l__tenkz_kernel_r_tl
+                      ? 0 : \__tenkz_metric_ratio:n {dotlabelband}
+                  }
+                \fp_compare:nNnTF
+                  { \l__tenkz_kernel_r_port_tip_y_fp }
+                  <
+                  { \l__tenkz_kernel_r_port_y_fp }
+                  {
+                    \fp_set:Nn \l__tenkz_kernel_annot_lo_fp
+                      {
+                        min
+                          (
+                            \l__tenkz_kernel_annot_lo_fp ,
+                            \l__tenkz_kernel_r_port_tip_y_fp
+                            - \l__tenkz_kernel_r_xc_fp
+                          )
+                      }
+                  }
+                  {
+                    \fp_set:Nn \l__tenkz_kernel_annot_hi_fp
+                      {
+                        max
+                          (
+                            \l__tenkz_kernel_annot_hi_fp ,
+                            \l__tenkz_kernel_r_port_tip_y_fp
+                            + \l__tenkz_kernel_r_xc_fp
+                          )
+                      }
+                  }
+              }
+          }
+      }
+  }
+% Step the speaking side's support outside the outermost rail routed there,
+% then restate the hull centre the supports imply.  The quadrant register
+% holds the side the bracket speaks from: 1 is the north, 3 the south.  The
+% bar stands two clearances outside the rail: the turns that close the arc
+% rise one clearance from the bar toward the selection, so one clearance of
+% daylight stays between their tips and the rail they stepped over.
+\cs_new_protected:Npn \__tenkz_kernel_r_mark_trace_step:
+  {
+    \str_case:Vn \l__tenkz_kernel_r_tl
+      {
+        {1}
+          {
+            \bool_if:NT \l__tenkz_kernel_annot_hi_bool
+              {
+                \tl_set:Ne \l__tenkz_kernel_r_yb_tl
+                  {
+                    \fp_eval:n
+                      {
+                        max
+                          (
+                            \l__tenkz_kernel_r_yb_tl ,
+                            \l__tenkz_kernel_annot_hi_fp
+                            + 2 * \l__tenkz_kernel_r_reach_fp
+                          )
+                      }
+                  }
+                \__tenkz_kernel_r_mark_recentre:
+              }
+          }
+        {3}
+          {
+            \bool_if:NT \l__tenkz_kernel_annot_lo_bool
+              {
+                \tl_set:Ne \l__tenkz_kernel_r_y_tl
+                  {
+                    \fp_eval:n
+                      {
+                        min
+                          (
+                            \l__tenkz_kernel_r_y_tl ,
+                            \l__tenkz_kernel_annot_lo_fp
+                            - 2 * \l__tenkz_kernel_r_reach_fp
+                          )
+                      }
+                  }
+                \__tenkz_kernel_r_mark_recentre:
+              }
+          }
+      }
+  }
+
 % A bracket strokes the arc of the offset hull on one side: the bar along
 % that side and the two turns that close it, each turning in by the same
 % clearance the hull already stands off by.  The side a bracket speaks from
@@ -15957,6 +16201,7 @@
 \tl_new:N \l__tenkz_kernel_brk_pts_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_bracket:n #1
   {
+    \__tenkz_kernel_r_mark_rails:n {#1}
     \__tenkz_kernel_r_mark_hull:n {#1}
     \tl_set:Nn \l__tenkz_kernel_r_mark_side_tl {s}
     \__tenkz_model_get:nnN {#1} {label-pos} \l__tenkz_kernel_r_b_tl
@@ -15978,6 +16223,7 @@
       }
     \tl_set:Ne \l__tenkz_kernel_r_tl
       { \int_mod:nn { \l__tenkz_kernel_r_tl + 400 } {4} }
+    \__tenkz_kernel_r_mark_trace_step:
     \str_case:Vn \l__tenkz_kernel_r_tl
       {
         {0}

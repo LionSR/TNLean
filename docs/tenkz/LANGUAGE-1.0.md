@@ -663,7 +663,12 @@ row with it.
 `species=` binds the mark's ink to a declared semantic identity; `tint`
 lays that ink over the paper the contour encloses. Nesting needs no key: containment between
 two selections is a fact the model holds, and concentric order (§5) steps the
-inner contour in by one clearance.
+inner contour in by one clearance. A generated trace return is network ink,
+not a mark, and it takes the same concentric discipline in one direction
+only: a bracket whose selection reaches a traced boundary row steps its arc
+outside the returns routed on the side it speaks from, so a return never
+runs between the arc and its caption, while no mark ever moves a wire —
+which is what keeps mark deletion ink-neutral for the network.
 
 **Label stations.** Every label belongs to a host — a glyph, a wire, a place
 on a wire, a selection — and inherits from it a ranked ring of stations: the
