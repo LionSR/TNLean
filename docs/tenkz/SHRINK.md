@@ -2576,3 +2576,33 @@ awaiting their own redraw.
 | flag | verdict |
 |---|---|
 | flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9) whose kernel-tier reading landed with #5624; two kernel-tier blueprint wedges consume the sugar and the eight ch21 occurrences ride their figures' own redraw rows; expiry 0.9 |
+
+### 2026-08-08 — a traced row's return clears the other rows of its picture
+
+The last 0.7 picture in the blueprint migrates (issue #5623). The
+kernel's flat traced closure dropped every row's return one trace reach
+below its own row, so on a multi-row picture the upper row's return ran
+through the rows beneath it — the defect that held the MPV-overlap
+ladder on the grid tier. The closure now routes each return on its
+row's outward side, the side with fewer rows between it and the picture
+edge and below on a tie, which leaves the single-row rail byte-for-byte
+where it ran; where rows do lie on that side the reach runs one trace
+reach past the outermost of them per return crossed, led out sideways
+by the same step, so nested returns stand one trace reach apart on
+every side, the way the sources draw nested partial traces. The ladder
+respells onto the kernel and the blueprint disposition ledger moves
+151 preserve, 11 codemod, 39 redraw to 152, 11, and 38 over the
+constant 201: the blueprint holds no 0.7 picture.
+
+All six meters are unchanged: M1 stays at 136 kernel rows and 192
+total, M2 at 213 parser paths, M3 at 24, M4 at its frozen 25.94, and
+no alias or overload moves. The wave measures two kernel gaps by the
+same rule as the fuse row before it: a `\tndots` record inside a
+kernel picture is refused unplaced, and a `form=span` mark does not
+draw on the kernel tier, so the migrated ladder spells both expansions
+by hand and each row's demand count drops below tenure. Verdicts:
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tndots | keep-because: a signed 1.0 sugar row (`\tndots` expands to the ellipsis atom, `LANGUAGE-1.0` §9) whose kernel-tier reading does not exist yet — the gap this wave measured — so the migrated ladder writes the expansion and the two remaining demand-corpus consumers are 0.7 pictures awaiting their own migration (`ch20_mpdo_foundations`, `ch21` product laws); tenure recounts at the S4 swap; expiry 0.9 |
+| flag:consumers:command:tnspan | keep-because: a signed 1.0 sugar row (`\tnspan[form]{k}{m}` expands to a ranged `\tnmark`, `LANGUAGE-1.0` §9) whose span form is refused undrawn on the kernel tier — the gap this wave measured — so the migrated ladder writes the `\tnmark[form=bracket]` expansion and the two remaining demand-corpus consumers are 0.7 ch21 pictures awaiting their own migration; tenure recounts at the S4 swap; expiry 0.9 |

@@ -11412,47 +11412,173 @@
               }
               {
                 % A flat row closes the way the sources draw it: the rail
-                % leaves both ends, drops below the row by the trace reach,
+                % leaves both ends, swings past the row by the trace reach,
                 % and runs back.  Joining the two reach points directly
-                % would lay the closure along the row it closes.
-                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
-                  { \__tenkz_metric_ratio:n {pairtracereach} }
+                % would lay the closure along the row it closes.  A traced
+                % row inside a multi-row picture closes around its own row
+                % only, so the return keeps to the row's outward side --
+                % the side with fewer rows between it and the picture edge,
+                % below on a tie, which leaves the single-row rail exactly
+                % where it runs today.  Where n > 0 rows lie on that side,
+                % the reach is measured through the frame to the outermost
+                % of them plus n+1 trace reaches, and the rail leads out
+                % past its own reach points by n trace reaches before it
+                % turns, so nested returns stand one trace reach apart on
+                % every side and the rail crosses no row, no inter-row
+                % pairing, and no other return between its reach points.
+                \int_compare:nNnTF
+                  { 2 * \l__tenkz_kernel_r_row_tl }
+                  <
+                  { \l__tenkz_kernel_r_rows_int + 1 }
+                  {
+                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {90}
+                    \tl_set:Nn \l__tenkz_kernel_r_c_tl {0}
+                    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                      {
+                        \l__tenkz_kernel_r_row_tl
+                        * \__tenkz_metric_ratio:n {pairtracereach}
+                      }
+                    \fp_zero:N \l__tenkz_kernel_r_xc_fp
+                    \int_compare:nNnF
+                      { \l__tenkz_kernel_r_row_tl } = {1}
+                      {
+                        \__tenkz_kernel_r_frame_xy:nnNN
+                          {1}
+                          { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+                          \l__tenkz_kernel_r_xc_fp
+                          \l__tenkz_kernel_r_yc_fp
+                        \fp_add:Nn \l__tenkz_kernel_r_reach_fp
+                          {
+                            abs
+                              (
+                                \l__tenkz_kernel_r_yc_fp
+                                - \l__tenkz_kernel_r_y_fp
+                              )
+                          }
+                        \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+                          {
+                            ( \l__tenkz_kernel_r_row_tl - 1 )
+                            * \__tenkz_metric_ratio:n {pairtracereach}
+                          }
+                      }
+                    \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
+                  }
+                  {
+                    \tl_set:Nn \l__tenkz_kernel_r_b_tl {270}
+                    \tl_set:Nn \l__tenkz_kernel_r_c_tl {360}
+                    \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                      {
+                        (
+                          \l__tenkz_kernel_r_rows_int
+                          - \l__tenkz_kernel_r_row_tl
+                          + 1
+                        )
+                        * \__tenkz_metric_ratio:n {pairtracereach}
+                      }
+                    \fp_zero:N \l__tenkz_kernel_r_xc_fp
+                    \int_compare:nNnF
+                      { \l__tenkz_kernel_r_row_tl }
+                      =
+                      { \l__tenkz_kernel_r_rows_int }
+                      {
+                        \__tenkz_kernel_r_frame_xy:nnNN
+                          { \l__tenkz_kernel_r_rows_int }
+                          { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+                          \l__tenkz_kernel_r_xc_fp
+                          \l__tenkz_kernel_r_yc_fp
+                        \fp_add:Nn \l__tenkz_kernel_r_reach_fp
+                          {
+                            abs
+                              (
+                                \l__tenkz_kernel_r_yc_fp
+                                - \l__tenkz_kernel_r_y_fp
+                              )
+                          }
+                        \fp_set:Nn \l__tenkz_kernel_r_xc_fp
+                          {
+                            (
+                              \l__tenkz_kernel_r_rows_int
+                              - \l__tenkz_kernel_r_row_tl
+                            )
+                            * \__tenkz_metric_ratio:n {pairtracereach}
+                          }
+                      }
+                    \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
+                  }
                 \__tenkz_kernel_r_wire_stroke:nn { bond }
                   {
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_x_fp }
                       { \l__tenkz_kernel_r_y_fp }
+                    \fp_compare:nNnF { \l__tenkz_kernel_r_xc_fp } = {0}
+                      {
+                        --
+                        \__tenkz_kernel_r_pair:nn
+                          {
+                            \l__tenkz_kernel_r_x_fp
+                            - \l__tenkz_kernel_r_xc_fp
+                          }
+                          { \l__tenkz_kernel_r_y_fp }
+                      }
                     --
                     \__tenkz_kernel_r_pair:nn
-                      { \l__tenkz_kernel_r_x_fp }
+                      {
+                        \l__tenkz_kernel_r_x_fp
+                        - \l__tenkz_kernel_r_xc_fp
+                      }
                       {
                         \l__tenkz_kernel_r_y_fp
-                        - \l__tenkz_kernel_r_reach_fp / 2
+                        + \l__tenkz_kernel_r_yc_fp
+                          * (
+                              \l__tenkz_kernel_r_reach_fp
+                              - \__tenkz_metric_ratio:n {pairtracereach}
+                                / 2
+                            )
                       }
                     arc
                       [
-                        start~angle = 180 , end~angle = 270 ,
+                        start~angle = 180 ,
+                        end~angle = \tl_use:N \l__tenkz_kernel_r_b_tl ,
                         radius =
                           \__tenkz_kernel_r_pt:n
-                            { \l__tenkz_kernel_r_reach_fp / 2 }
+                            {
+                              \__tenkz_metric_ratio:n {pairtracereach}
+                              / 2
+                            }
                       ]
                     --
                     \__tenkz_kernel_r_pair:nn
                       {
                         \l__tenkz_kernel_r_xb_fp
-                        - \l__tenkz_kernel_r_reach_fp / 2
+                        + \l__tenkz_kernel_r_xc_fp
+                        - \__tenkz_metric_ratio:n {pairtracereach} / 2
                       }
                       {
                         \l__tenkz_kernel_r_yb_fp
-                        - \l__tenkz_kernel_r_reach_fp
+                        + \l__tenkz_kernel_r_yc_fp
+                          * \l__tenkz_kernel_r_reach_fp
                       }
                     arc
                       [
-                        start~angle = 270 , end~angle = 360 ,
+                        start~angle = \tl_use:N \l__tenkz_kernel_r_b_tl ,
+                        end~angle = \tl_use:N \l__tenkz_kernel_r_c_tl ,
                         radius =
                           \__tenkz_kernel_r_pt:n
-                            { \l__tenkz_kernel_r_reach_fp / 2 }
+                            {
+                              \__tenkz_metric_ratio:n {pairtracereach}
+                              / 2
+                            }
                       ]
+                    \fp_compare:nNnF { \l__tenkz_kernel_r_xc_fp } = {0}
+                      {
+                        --
+                        \__tenkz_kernel_r_pair:nn
+                          {
+                            \l__tenkz_kernel_r_xb_fp
+                            + \l__tenkz_kernel_r_xc_fp
+                          }
+                          { \l__tenkz_kernel_r_yb_fp }
+                      }
                     --
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_xb_fp }

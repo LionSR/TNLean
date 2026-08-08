@@ -1,0 +1,209 @@
+%% Regression: a traced row's return clears the other rows of its picture
+%% (issue #5623).  Three pictures, told apart inside the stroke hook by
+%% their row count.  The two-row ladder closes row 1 above and row 2 below,
+%% each one trace reach out, so neither return crosses the band between the
+%% rows.  The three-row picture sends the middle row's return below the
+%% lowest row, one trace reach outside the bottom row's own return on every
+%% side, with its west descent led out past the shared reach column.  The
+%% single-row picture keeps the below-the-row rail exactly where it always
+%% ran.  Each expectation counts intersections of a probe segment against
+%% the saved rail path, so the routing is pinned structurally as well as by
+%% the exact-toolchain pixel ledger.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\tl_new:N \l__tenkz_test_wrap_name_tl
+\int_new:N \l__tenkz_test_wrap_cross_int
+\fp_new:N \l__tenkz_test_wrap_x_fp
+\fp_new:N \l__tenkz_test_wrap_xw_fp
+\fp_new:N \l__tenkz_test_wrap_ya_fp
+\fp_new:N \l__tenkz_test_wrap_yb_fp
+\fp_new:N \l__tenkz_test_wrap_yc_fp
+\cs_new_eq:NN
+  \__tenkz_test_wire_stroke:nn
+  \__tenkz_kernel_r_wire_stroke:nn
+% wire #1 must meet the probe segment (#2,#3)--(#4,#5) exactly #6 times
+\cs_new_protected:Npn \__tenkz_test_wrap_probe:nnnnnn #1#2#3#4#5#6
+  {
+    \path [ spath/save = tenkz-test-wrap-probe ]
+      \__tenkz_kernel_r_pair:nn {#2} {#3}
+      --
+      \__tenkz_kernel_r_pair:nn {#4} {#5} ;
+    \__tenkz_string_count:nnN {#1} {tenkz-test-wrap-probe}
+      \l__tenkz_test_wrap_cross_int
+    \int_compare:nNnF { \l__tenkz_test_wrap_cross_int } = {#6}
+      {
+        \errmessage
+          { trace~return~#1~expected~#6~probe~crossings,~found~
+            \int_use:N \l__tenkz_test_wrap_cross_int }
+      }
+  }
+% The audit runs once per picture, after its last generated return is
+% saved, and reads every row line through the live frame.
+\cs_new_protected:Npn \__tenkz_test_wrap_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
+      \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_ya_fp
+    \int_case:nn { \l__tenkz_kernel_r_rows_int }
+      {
+        {1}
+          {
+            % the single-row rail still drops by the trace reach, never up
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 2 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp - 0.2 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp - 0.6 }
+              {1}
+          }
+        {2}
+          {
+            \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+              \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yb_fp
+            % row 1 returns above the picture, row 2 below it, and the
+            % band between the rows carries neither return
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 2 }
+              {1}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp - 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp + 0.05 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp - 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp - 2 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 2 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp - 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp + 0.05 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp - 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp - 2 }
+              {1}
+          }
+        {3}
+          {
+            \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+              \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yb_fp
+            \__tenkz_kernel_r_frame_xy:nnNN {3} {1.5}
+              \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yc_fp
+            % the top row still rises by one trace reach
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-1}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 0.2 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_ya_fp + 0.6 }
+              {1}
+            % the middle row's return clears the row below it entirely
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yb_fp - 0.05 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp + 0.05 }
+              {0}
+            % and runs back two trace reaches below the lowest row, one
+            % clearance outside the bottom row's own return
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.6 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 1.0 }
+              {1}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.2 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.6 }
+              {0}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-3}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.2 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.6 }
+              {1}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-3}
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 0.6 }
+              { \l__tenkz_test_wrap_x_fp }
+              { \l__tenkz_test_wrap_yc_fp - 1.0 }
+              {0}
+            % the west descent of the middle row's return is led out one
+            % trace reach past the shared reach column
+            \__tenkz_kernel_r_frame_xy:nnNN {3}
+              { 1 - \__tenkz_metric_ratio:n {wrapreach} }
+              \l__tenkz_test_wrap_xw_fp \l__tenkz_test_wrap_yc_fp
+            \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+              \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yb_fp
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+              { \l__tenkz_test_wrap_xw_fp - 0.6 }
+              { ( \l__tenkz_test_wrap_yb_fp + \l__tenkz_test_wrap_yc_fp )
+                / 2 }
+              { \l__tenkz_test_wrap_xw_fp - 0.05 }
+              { ( \l__tenkz_test_wrap_yb_fp + \l__tenkz_test_wrap_yc_fp )
+                / 2 }
+              {1}
+            \__tenkz_test_wrap_probe:nnnnnn {wrap-3}
+              { \l__tenkz_test_wrap_xw_fp - 0.6 }
+              { ( \l__tenkz_test_wrap_yb_fp + \l__tenkz_test_wrap_yc_fp )
+                / 2 }
+              { \l__tenkz_test_wrap_xw_fp - 0.05 }
+              { ( \l__tenkz_test_wrap_yb_fp + \l__tenkz_test_wrap_yc_fp )
+                / 2 }
+              {0}
+          }
+      }
+  }
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
+  {
+    \__tenkz_test_wire_stroke:nn {#1} {#2}
+    \__tenkz_model_get:nnN
+      { \l__tenkz_kernel_r_wire_record_tl } {name}
+      \l__tenkz_test_wrap_name_tl
+    \str_if_eq:eeT
+      { \tl_use:N \l__tenkz_test_wrap_name_tl }
+      { wrap- \int_use:N \l__tenkz_kernel_r_rows_int }
+      { \__tenkz_test_wrap_audit: }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, west=trace, east=trace]
+  \tn[skin=box]{A} & \tn[skin=box]{A} \\
+  \tn[skin=box]{B} & \tn[skin=box]{B}
+\end{tenkz}
+\begin{tenkz}[rows={wire,wire,wire}, cols=2, west=trace, east=trace]
+  \tn[skin=box]{A} & \tn[skin=box]{A} \\
+  \tn[skin=box]{B} & \tn[skin=box]{B} \\
+  \tn[skin=box]{C} & \tn[skin=box]{C}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace]
+  \tn[skin=box]{M} & \tn[skin=box]{M}
+\end{tenkz}
+\end{document}
