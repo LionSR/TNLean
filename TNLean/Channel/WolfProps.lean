@@ -36,6 +36,8 @@ Wolf's *Quantum Channels & Operations: Guided Tour*:
   every rank-one self-outer-product ray is a scalar multiple of the identity.
 * `WolfProps.linearMap_eq_id_of_fixes_rankOne` — Proposition 2.3 (linear-algebra
   form): a linear map fixing every `vecMulVec v (star v)` is the identity.
+* `WolfProps.linearMap_eq_of_eq_on_rankOne` — two linear maps that agree on every
+  `vecMulVec v (star v)` are equal.
 * `WolfProps.channel_eq_id_of_fixes_pureStates` — Proposition 2.3 (channel form):
   a quantum channel fixing every pure-state projector is the identity.
 * `WolfProps.pureEnsembleDensity_eq_of_isometric_mixing` — Proposition 2.4
@@ -334,6 +336,23 @@ theorem linearMap_eq_id_of_fixes_rankOne
   have hc_one : c = 1 := by
     simpa [Matrix.vecMulVec_apply, Pi.star_apply, i₀] using hii
   simpa [hc_one] using hc
+
+/-- Two complex-linear matrix maps are equal if they agree on every rank-one
+self-outer-product `vecMulVec v (star v)`. -/
+theorem linearMap_eq_of_eq_on_rankOne
+    (T S : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (h : ∀ v : Fin D → ℂ,
+      T (Matrix.vecMulVec v (star v)) = S (Matrix.vecMulVec v (star v))) :
+    T = S := by
+  have hfix : T - S + LinearMap.id = LinearMap.id :=
+    linearMap_eq_id_of_fixes_rankOne (T - S + LinearMap.id) fun v ↦ by
+      simp only [LinearMap.add_apply, LinearMap.sub_apply, LinearMap.id_apply, h v,
+        sub_self, zero_add]
+  apply LinearMap.ext
+  intro X
+  have hX := LinearMap.congr_fun hfix X
+  simpa only [LinearMap.add_apply, LinearMap.sub_apply, LinearMap.id_apply,
+    add_eq_right, sub_eq_zero] using hX
 
 /-- **Proposition 2.3 (Wolf), pure-state form**: any linear map (in particular any
 quantum channel) leaving every pure-state projector `vecMulVec v (star v)`

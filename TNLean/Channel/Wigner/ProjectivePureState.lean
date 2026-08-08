@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Projectivization.Basic
 import TNLean.Algebra.OrthogonalProjection
+import TNLean.Channel.WolfProps
 
 /-!
 # Projective rays as normalized pure-state matrices
@@ -24,6 +25,8 @@ Wigner rigidity.
 ## Main declarations
 
 * `Projectivization.pureStateMatrix`
+* `Projectivization.star_dot_self_smul_normalizedPureStateMatrix`
+* `Projectivization.linearMap_eq_of_eq_on_pureStateMatrix`
 * `Projectivization.transitionProbability`
 * `Projectivization.transitionProbability_mk`
 * `Projectivization.trace_pureStateMatrix_mul_pureStateMatrix`
@@ -84,6 +87,29 @@ private theorem star_dot_self_ne_zero (v : Fin d → ℂ) (hv : v ≠ 0) :
   have hw : w ≠ 0 := by simpa [w] using hv
   rw [← EuclideanSpace.inner_eq_star_dotProduct w w]
   exact inner_self_ne_zero (𝕜 := ℂ) |>.mpr hw
+
+/-- Rescaling the normalized pure-state matrix of a nonzero vector by its
+squared norm recovers its rank-one self-outer-product. -/
+theorem star_dot_self_smul_normalizedPureStateMatrix (v : Fin d → ℂ) (hv : v ≠ 0) :
+    (star v ⬝ᵥ v) • normalizedPureStateMatrix v = Matrix.vecMulVec v (star v) := by
+  rw [normalizedPureStateMatrix, smul_smul, mul_inv_cancel₀ (star_dot_self_ne_zero v hv),
+    one_smul]
+
+/-- Two complex-linear matrix maps that agree on every normalized pure-state
+matrix agree on all matrices. -/
+theorem linearMap_eq_of_eq_on_pureStateMatrix
+    (T S : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
+    (h : ∀ p : ℙ ℂ (Fin d → ℂ), T (pureStateMatrix p) = S (pureStateMatrix p)) :
+    T = S := by
+  apply WolfProps.linearMap_eq_of_eq_on_rankOne
+  intro v
+  by_cases hv : v = 0
+  · subst v
+    simp
+  · have hp := h (Projectivization.mk ℂ v hv)
+    rw [pureStateMatrix_mk] at hp
+    rw [← star_dot_self_smul_normalizedPureStateMatrix v hv, map_smul, map_smul, hp]
+
 private theorem normalizedPureStateMatrix_isOrthogonalProjection
     (v : Fin d → ℂ) (hv : v ≠ 0) :
     IsOrthogonalProjection (normalizedPureStateMatrix v) := by
