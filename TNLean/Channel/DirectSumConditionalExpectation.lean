@@ -25,8 +25,12 @@ by applying the one-block right-factor expectation in every coordinate and then
 using the existing direct-sum Kraus extension; no new Kraus family is introduced.
 
 This is the coordinate direct-sum retraction used in Wolf's operator-system
-extension argument. Arbitrary unitary change of coordinates and codomain
-corestriction are not part of this construction.
+extension argument.
+
+**Scope restriction (coordinate direct sum):** Arbitrary unitary change of
+coordinates and codomain corestriction are not part of this construction. The
+relationship with the full unitarily transported statement is recorded in
+`docs/paper-gaps/wolf_prop1_5_one_factor_scope.tex`.
 
 ## Main definitions
 
