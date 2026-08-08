@@ -67,14 +67,18 @@
   { [TKZ-LANG-PRELUDE-CLASS]~stock~prelude~class~'#1'~is~not~supported;~
     expected~skin. }
 \msg_new:nnn {tenkz}{kernel-signature}
-  { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~expose~unequal~boundaries:~
+  { [TKZ-EQ-SIGNATURE]~sides~#1~and~#2~expose~unequal~boundaries:~
     (#3)~versus~(#4). }
 \msg_new:nnn {tenkz}{kernel-signature-prose}
-  { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~include~prose;~
+  { [TKZ-EQ-SIGNATURE]~sides~#1~and~#2~include~prose;~
     checked~relations~require~diagrams~unless~the~relation~is~opted~out. }
+\msg_new:nnn {tenkz}{kernel-product-signature}
+  { [TKZ-EQ-SIGNATURE]~panels~#1~and~#2~cannot~contract:~
+    the~east~cut~(#3)~does~not~continue~as~the~west~cut~(#4). }
 \msg_new:nnn {tenkz}{kernel-equation-arity}
   { [TKZ-EQ-ARITY]~an~equation~with~#1~panel(s)~has~#2~relation~glyph(s);~
-    expected~one~fewer~relation~than~panels~and~at~least~two~panels. }
+    every~relation~needs~a~panel~or~product~group~on~each~side,~and~an~
+    equation~asserts~at~least~one~relation. }
 \msg_new:nnn {tenkz}{kernel-equation-nested}
   { [TKZ-EQ-NESTED]~tenkzeq~cannot~be~nested;~each~equation~is~one~
     audit~scope,~and~the~tngroup~command~nests~picture~content. }
@@ -201,6 +205,7 @@
 \prop_new:N \l__tenkz_kernel_policy_prop      % picture policy for late passes
 \prop_new:N \l__tenkz_kernel_eq_policy_prop   % tenkzeq policy inherited by panels
 \prop_new:N \l__tenkz_kernel_cell_prop        % "r-c" -> atom id (occupancy)
+\prop_new:N \l__tenkz_kernel_populated_cell_prop % "r-c" -> populated atom id
 \prop_new:N \l__tenkz_kernel_basis_cell_prop  % "r-c-k" -> basis atom id
 \prop_new:N \l__tenkz_kernel_basis_claim_prop % "r-c-k" -> authored atom id
 \prop_new:N \l__tenkz_kernel_basis_live_prop  % "k/r/c" -> canonical atom id
@@ -274,6 +279,7 @@
 \seq_new:N  \g__tenkz_kernel_panel_gseq       % tenkzeq panel signatures
 \seq_new:N  \g__tenkz_kernel_panel_kind_gseq  % diagram or prose per panel
 \seq_new:N  \g__tenkz_kernel_rel_gseq         % tenkzeq relation glyphs
+\seq_new:N  \g__tenkz_kernel_rel_pos_gseq     % panels closed before each relation
 
 % Key trees fill one staging table; each command copies it onto its record
 % and clears it, so one tree serves every use site.
@@ -292,6 +298,11 @@
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_opts_tl {#2}
+    % A panel option list under tenkzeq is tokenized while `=` is the
+    % active relation glyph; rewrite each one to the plain equals the
+    % keyval and value parsers read.
+    \bool_if:NT \l__tenkz_kernel_ineq_bool
+      { \regex_replace_all:nnN { = } { = } \l__tenkz_kernel_opts_tl }
     % Parameterized alphabet words remain one key value even though their
     % canonical spelling contains `=`.
     \regex_replace_all:nnN
@@ -2394,8 +2405,12 @@
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_commit:
+    % the group body arrives as one grabbed argument, so its column tabs
+    % are the document's alignment character; give them the column step
+    \tl_set:Nn \l__tenkz_kernel_group_body_tl {#2}
+    \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_group_body_tl
     \ignorespaces
-    #2
+    \tl_use:N \l__tenkz_kernel_group_body_tl
     \ignorespaces
   }
 
@@ -2706,6 +2721,11 @@
                                       ####1 )
                                   }
                               }
+                            \prop_put:Nee
+                              \l__tenkz_kernel_populated_cell_prop
+                              { \int_use:N \l__tenkz_kernel_pop_int
+                                - ####1 }
+                              { \tl_use:N \l__tenkz_model_last_tl }
                           }
                       }
                   }
@@ -8017,6 +8037,13 @@
 % where its two offset lines meet.  A punctured selection closes more than
 % one loop, and the even-odd rule fills such a selection as a ring.
 %
+% Half-edges are keyed by corner AND direction.  At almost every corner one
+% strand passes and the chain is forced; where two members meet only at a
+% corner, the boundary passes through that point twice, and the saddle rule
+% settles the continuation: the member a strand rides stays on its left, so
+% the strand turns left, toward that member, and the two strands pass clear
+% of one another at the two offset corners the standoffs already separate.
+%
 % Under the affine chart the east axis is the column direction and the north
 % axis is the reverse row direction, so the local abscissa rises with the
 % column and the local ordinate falls with the row.  Both facts are read off
@@ -8025,7 +8052,7 @@
 \prop_new:N \l__tenkz_kernel_cells_rowv_prop
 \prop_new:N \l__tenkz_kernel_cells_colu_prop
 \prop_new:N \l__tenkz_kernel_cells_end_prop
-\prop_new:N \l__tenkz_kernel_cells_orient_prop
+\prop_new:N \l__tenkz_kernel_cells_out_prop
 \prop_new:N \l__tenkz_kernel_cells_val_prop
 \prop_new:N \l__tenkz_kernel_cells_seen_prop
 \seq_new:N \l__tenkz_kernel_cells_starts_seq
@@ -8037,7 +8064,6 @@
 \bool_new:N \l__tenkz_kernel_cells_bool
 \bool_new:N \l__tenkz_kernel_cells_rect_bool
 \bool_new:N \l__tenkz_kernel_cells_at_bool
-\bool_new:N \l__tenkz_kernel_cells_pinch_bool
 \tl_new:N \l__tenkz_kernel_cells_row_tl
 \tl_new:N \l__tenkz_kernel_cells_col_tl
 \tl_new:N \l__tenkz_kernel_cells_x_tl
@@ -8050,6 +8076,8 @@
 \tl_new:N \l__tenkz_kernel_cells_south_tl
 \tl_new:N \l__tenkz_kernel_cells_cur_tl
 \tl_new:N \l__tenkz_kernel_cells_next_tl
+\tl_new:N \l__tenkz_kernel_cells_dir_tl
+\tl_new:N \l__tenkz_kernel_cells_out_tl
 \tl_new:N \l__tenkz_kernel_cells_o_tl
 \tl_new:N \l__tenkz_kernel_cells_val_tl
 \tl_new:N \l__tenkz_kernel_cells_po_tl
@@ -8058,6 +8086,14 @@
 
 \cs_new:Npn \__tenkz_kernel_cells_key:nn #1#2
   { \int_eval:n {#1} - \int_eval:n {#2} }
+% a half-edge is a corner #1 and the direction #2 it leaves by
+\cs_new:Npn \__tenkz_kernel_cells_ekey:nn #1#2 { #1 . #2 }
+% the direction one quarter turn to the left of #1
+\cs_new:Npn \__tenkz_kernel_cells_left:n #1
+  { \str_case:en {#1} { {E} {N}  {N} {W}  {W} {S}  {S} {E} } }
+% the axis a direction runs along
+\cs_new:Npn \__tenkz_kernel_cells_axis:n #1
+  { \str_case:en {#1} { {E} {H}  {W} {H}  {N} {V}  {S} {V} } }
 \prg_new_conditional:Npnn \__tenkz_kernel_cells_member:nn #1#2 { p, T, F }
   {
     \prop_if_in:NeTF \l__tenkz_kernel_cells_prop
@@ -8223,10 +8259,9 @@
 \cs_new_protected:Npn \__tenkz_kernel_cells_edges:
   {
     \prop_clear:N \l__tenkz_kernel_cells_end_prop
-    \prop_clear:N \l__tenkz_kernel_cells_orient_prop
+    \prop_clear:N \l__tenkz_kernel_cells_out_prop
     \prop_clear:N \l__tenkz_kernel_cells_val_prop
     \seq_clear:N \l__tenkz_kernel_cells_starts_seq
-    \bool_set_false:N \l__tenkz_kernel_cells_pinch_bool
     \int_step_inline:nnn
       { \l__tenkz_kernel_cells_rmin_int - 1 }
       { \l__tenkz_kernel_cells_rmax_int }
@@ -8258,7 +8293,7 @@
         % below that member's centre
         \__tenkz_kernel_cells_edge:nnnn
           { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } }
-          { \__tenkz_kernel_cells_key:nn {#1} {#2} } {H}
+          { \__tenkz_kernel_cells_key:nn {#1} {#2} } {E}
           {
             \fp_eval:n
               {
@@ -8276,7 +8311,7 @@
             % above that member's centre
             \__tenkz_kernel_cells_edge:nnnn
               { \__tenkz_kernel_cells_key:nn {#1} {#2} }
-              { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } } {H}
+              { \__tenkz_kernel_cells_key:nn {#1} { \int_eval:n {#2-1} } } {W}
               {
                 \fp_eval:n
                   {
@@ -8298,7 +8333,7 @@
         % beyond that member's centre
         \__tenkz_kernel_cells_edge:nnnn
           { \__tenkz_kernel_cells_key:nn {#1} {#2} }
-          { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} } {V}
+          { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} } {N}
           {
             \fp_eval:n
               {
@@ -8316,7 +8351,7 @@
             % before that member's centre
             \__tenkz_kernel_cells_edge:nnnn
               { \__tenkz_kernel_cells_key:nn { \int_eval:n {#1-1} } {#2} }
-              { \__tenkz_kernel_cells_key:nn {#1} {#2} } {V}
+              { \__tenkz_kernel_cells_key:nn {#1} {#2} } {S}
               {
                 \fp_eval:n
                   {
@@ -8327,20 +8362,20 @@
           }
       }
   }
+% One half-edge, from corner #1 in direction #3 (E, W, N or S) to corner #2,
+% on the offset line #4.  Keying by corner and direction lets one corner
+% carry two departing strands: two selected cells meeting across that corner
+% and nowhere else contribute two half-edges in, two out, and each entry
+% below stays distinct.
 \cs_new_protected:Npn \__tenkz_kernel_cells_edge:nnnn #1#2#3#4
   {
-    % Two half-edges leaving one corner mean the cells meet across that
-    % corner and nowhere else, so the boundary passes through the point
-    % twice and which strand continues into which is not settled by the
-    % corner.  Such a set has no single closed walk, and the reading an
-    % author means by one contour over it is the offset hull -- which is
-    % what two records on a diagonal have always been drawn as.
-    \prop_if_in:NeT \l__tenkz_kernel_cells_end_prop {#1}
-      { \bool_set_true:N \l__tenkz_kernel_cells_pinch_bool }
-    \prop_put:Nee \l__tenkz_kernel_cells_end_prop {#1} {#2}
-    \prop_put:Nen \l__tenkz_kernel_cells_orient_prop {#1} {#3}
-    \prop_put:Nee \l__tenkz_kernel_cells_val_prop {#1} {#4}
-    \seq_put_right:Ne \l__tenkz_kernel_cells_starts_seq {#1}
+    \prop_put:Nee \l__tenkz_kernel_cells_end_prop
+      { \__tenkz_kernel_cells_ekey:nn {#1} {#3} } {#2}
+    \prop_put:Nee \l__tenkz_kernel_cells_val_prop
+      { \__tenkz_kernel_cells_ekey:nn {#1} {#3} } {#4}
+    \prop_put:Nee \l__tenkz_kernel_cells_out_prop {#1}
+      { \prop_item:Ne \l__tenkz_kernel_cells_out_prop {#1} #3 }
+    \seq_put_right:Ne \l__tenkz_kernel_cells_starts_seq { {#1} {#3} }
   }
 
 % The whole boundary as one path: every loop closed, all of them in the same
@@ -8351,31 +8386,81 @@
     \prop_clear:N \l__tenkz_kernel_cells_seen_prop
     \seq_map_inline:Nn \l__tenkz_kernel_cells_starts_seq
       {
-        \prop_if_in:NnF \l__tenkz_kernel_cells_seen_prop {##1}
-          { \__tenkz_kernel_cells_loop:n {##1} }
+        \prop_if_in:NeF \l__tenkz_kernel_cells_seen_prop
+          { \__tenkz_kernel_cells_ekey:nn ##1 }
+          { \__tenkz_kernel_cells_loop:nn ##1 }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_cells_loop:n #1
+% One closed walk from the half-edge leaving corner #1 in direction #2.  A
+% corner with one departing strand forces the chain.  A corner with two is a
+% saddle: both members touch it, the one this strand rides is on its left,
+% and the left turn is the departure that keeps riding it -- so the strand
+% turns toward its member and the two walks pass without joining.
+\cs_new_protected:Npn \__tenkz_kernel_cells_loop:nn #1#2
   {
     \seq_clear:N \l__tenkz_kernel_cells_loop_seq
     \tl_set:Nn \l__tenkz_kernel_cells_cur_tl {#1}
+    \tl_set:Nn \l__tenkz_kernel_cells_dir_tl {#2}
     \bool_until_do:nn
-      { \prop_if_in_p:NV \l__tenkz_kernel_cells_seen_prop
-          \l__tenkz_kernel_cells_cur_tl }
       {
-        \prop_put:NVn \l__tenkz_kernel_cells_seen_prop
-          \l__tenkz_kernel_cells_cur_tl {1}
-        \prop_get:NVN \l__tenkz_kernel_cells_orient_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_o_tl
-        \prop_get:NVN \l__tenkz_kernel_cells_val_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_val_tl
+        \prop_if_in_p:Ne \l__tenkz_kernel_cells_seen_prop
+          {
+            \__tenkz_kernel_cells_ekey:nn
+              { \l__tenkz_kernel_cells_cur_tl }
+              { \l__tenkz_kernel_cells_dir_tl }
+          }
+      }
+      {
+        \prop_put:Nen \l__tenkz_kernel_cells_seen_prop
+          {
+            \__tenkz_kernel_cells_ekey:nn
+              { \l__tenkz_kernel_cells_cur_tl }
+              { \l__tenkz_kernel_cells_dir_tl }
+          }
+          {1}
+        \tl_set:Ne \l__tenkz_kernel_cells_o_tl
+          { \__tenkz_kernel_cells_axis:n { \l__tenkz_kernel_cells_dir_tl } }
+        \tl_set:Ne \l__tenkz_kernel_cells_val_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_val_prop
+              {
+                \__tenkz_kernel_cells_ekey:nn
+                  { \l__tenkz_kernel_cells_cur_tl }
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
         \seq_put_right:Ne \l__tenkz_kernel_cells_loop_seq
           {
             { \exp_not:V \l__tenkz_kernel_cells_o_tl }
             { \exp_not:V \l__tenkz_kernel_cells_val_tl }
           }
-        \prop_get:NVN \l__tenkz_kernel_cells_end_prop
-          \l__tenkz_kernel_cells_cur_tl \l__tenkz_kernel_cells_next_tl
+        \tl_set:Ne \l__tenkz_kernel_cells_next_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_end_prop
+              {
+                \__tenkz_kernel_cells_ekey:nn
+                  { \l__tenkz_kernel_cells_cur_tl }
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
+        \tl_set:Ne \l__tenkz_kernel_cells_out_tl
+          {
+            \prop_item:Ne \l__tenkz_kernel_cells_out_prop
+              { \l__tenkz_kernel_cells_next_tl }
+          }
+        \int_compare:nNnTF
+          { \tl_count:N \l__tenkz_kernel_cells_out_tl } = {2}
+          {
+            \tl_set:Ne \l__tenkz_kernel_cells_dir_tl
+              {
+                \__tenkz_kernel_cells_left:n
+                  { \l__tenkz_kernel_cells_dir_tl }
+              }
+          }
+          {
+            \tl_set_eq:NN \l__tenkz_kernel_cells_dir_tl
+              \l__tenkz_kernel_cells_out_tl
+          }
         \tl_set_eq:NN \l__tenkz_kernel_cells_cur_tl
           \l__tenkz_kernel_cells_next_tl
       }
@@ -10251,8 +10336,21 @@
         \fp_zero:N #4
       }
   }
+% The aux works in the shared endpoint registers, so it saves them on entry
+% and hands back only its two outputs: a wire whose other end was already
+% resolved keeps that end's coordinates.
+\fp_new:N \l__tenkz_kernel_r_hp_save_x_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_y_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_xb_fp
+\fp_new:N \l__tenkz_kernel_r_hp_save_yb_fp
+\fp_new:N \l__tenkz_kernel_r_hp_out_x_fp
+\fp_new:N \l__tenkz_kernel_r_hp_out_y_fp
 \cs_new_protected:Npn \__tenkz_kernel_r_hull_port_xy_aux:nnNN #1#2#3#4
   {
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_x_fp \l__tenkz_kernel_r_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_y_fp \l__tenkz_kernel_r_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_xb_fp \l__tenkz_kernel_r_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_hp_save_yb_fp \l__tenkz_kernel_r_yb_fp
     \__tenkz_kernel_r_node:n {#1}
     \__tenkz_geom_xy:nNN {#1}
       \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
@@ -10303,10 +10401,16 @@
       { \l__tenkz_kernel_r_basis_ny_tl }
       { \l__tenkz_kernel_r_xc_fp } { \l__tenkz_kernel_r_yc_fp }
       \l__tenkz_kernel_r_x_tl \l__tenkz_kernel_r_y_tl
-    \fp_set:Nn #3
+    \fp_set:Nn \l__tenkz_kernel_r_hp_out_x_fp
       { \l__tenkz_kernel_r_xb_fp + \l__tenkz_kernel_r_x_tl }
-    \fp_set:Nn #4
+    \fp_set:Nn \l__tenkz_kernel_r_hp_out_y_fp
       { \l__tenkz_kernel_r_yb_fp + \l__tenkz_kernel_r_y_tl }
+    \fp_set_eq:NN \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_hp_save_x_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_y_fp \l__tenkz_kernel_r_hp_save_y_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_hp_save_xb_fp
+    \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp \l__tenkz_kernel_r_hp_save_yb_fp
+    \fp_set_eq:NN #3 \l__tenkz_kernel_r_hp_out_x_fp
+    \fp_set_eq:NN #4 \l__tenkz_kernel_r_hp_out_y_fp
   }
 \cs_generate_variant:Nn \__tenkz_kernel_r_hull_port_xy:nnNN { nVNN, VVNN }
 
@@ -10681,6 +10785,31 @@
 
 % Cup records already own the paired row or column indices.  Rendering only
 % turns those resolved endpoints into an outboard half-ellipse.
+% All four sides stroke the same cubic between the resolved endpoints: both
+% control points sit the stub distance outboard along the side's outward
+% axis.  The side branch supplies that offset term for each axis; the other
+% axis receives the empty term.
+\cs_new_protected:Npn \__tenkz_kernel_r_wire_cup_stroke:nn #1#2
+  {
+    \__tenkz_kernel_r_wire_stroke:nn { bond }
+      {
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_x_fp }
+          { \l__tenkz_kernel_r_y_fp }
+        .. controls
+          \__tenkz_kernel_r_pair:nn
+            { \l__tenkz_kernel_r_x_fp #1 }
+            { \l__tenkz_kernel_r_y_fp #2 }
+          and
+          \__tenkz_kernel_r_pair:nn
+            { \l__tenkz_kernel_r_xb_fp #1 }
+            { \l__tenkz_kernel_r_yb_fp #2 }
+        ..
+        \__tenkz_kernel_r_pair:nn
+          { \l__tenkz_kernel_r_xb_fp }
+          { \l__tenkz_kernel_r_yb_fp }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_cup:n #1
   {
     \__tenkz_model_get:nnN {#1} {side} \l__tenkz_kernel_r_tl
@@ -10698,30 +10827,8 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               { \l__tenkz_kernel_r_col_tl } {1}
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_x_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_y_fp }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_xb_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_yb_fp }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { - \__tenkz_metric_ratio:n {stub} } { }
           }
         {east}
           {
@@ -10737,30 +10844,8 @@
               { \l__tenkz_kernel_r_col_tl }
               { \l__tenkz_kernel_r_cols_int }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_x_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_y_fp }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    {
-                      \l__tenkz_kernel_r_xb_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                    { \l__tenkz_kernel_r_yb_fp }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { + \__tenkz_metric_ratio:n {stub} } { }
           }
         {north}
           {
@@ -10774,30 +10859,8 @@
             \__tenkz_kernel_r_frame_xy:nnNN
               {1} { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_x_fp }
-                    {
-                      \l__tenkz_kernel_r_y_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_xb_fp }
-                    {
-                      \l__tenkz_kernel_r_yb_fp
-                      + \__tenkz_metric_ratio:n {stub}
-                    }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { } { + \__tenkz_metric_ratio:n {stub} }
           }
         {south}
           {
@@ -10813,30 +10876,8 @@
               { \l__tenkz_kernel_r_rows_int }
               { \l__tenkz_kernel_r_col_tl }
               \l__tenkz_kernel_r_xb_fp \l__tenkz_kernel_r_yb_fp
-            \__tenkz_kernel_r_wire_stroke:nn { bond }
-              {
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_x_fp }
-                  { \l__tenkz_kernel_r_y_fp }
-                .. controls
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_x_fp }
-                    {
-                      \l__tenkz_kernel_r_y_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                  and
-                  \__tenkz_kernel_r_pair:nn
-                    { \l__tenkz_kernel_r_xb_fp }
-                    {
-                      \l__tenkz_kernel_r_yb_fp
-                      - \__tenkz_metric_ratio:n {stub}
-                    }
-                ..
-                \__tenkz_kernel_r_pair:nn
-                  { \l__tenkz_kernel_r_xb_fp }
-                  { \l__tenkz_kernel_r_yb_fp }
-              }
+            \__tenkz_kernel_r_wire_cup_stroke:nn
+              { } { - \__tenkz_metric_ratio:n {stub} }
           }
       }
       {
@@ -10847,17 +10888,28 @@
 
 % A bond between two unoccupied cells is rail territory: the wrap records
 % own that ink, and without them the cells are bare crossings of nothing.
+% A grid bond inks when either endpoint cell carries a live atom.  The
+% occupancy table holds the cells the body claimed; a frame-populated
+% non-wire cell carries the atom the frame put there, and Section 2.2 makes
+% its bond the same declared contraction, so it inks on the same rule.  A
+% wire-row cell populates nothing: its rail segment still waits for an
+% authored neighbour, and an all-empty wire row still draws no ink.
 \cs_new_protected:Npn \__tenkz_kernel_r_wire_grid:n #1
   {
     \bool_set_false:N \l_tmpa_bool
     \clist_map_inline:nn {from, to}
       {
         \__tenkz_model_get:nnN {#1} {##1} \l__tenkz_kernel_r_tl
-        \prop_if_in:NeT \l__tenkz_kernel_cell_prop
+        \tl_set:Ne \l__tenkz_kernel_r_end_tl
           {
             \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_tl {row}
             - \__tenkz_kernel_node_item:Nn \l__tenkz_kernel_r_tl {col}
           }
+        \prop_if_in:NVT \l__tenkz_kernel_cell_prop
+          \l__tenkz_kernel_r_end_tl
+          { \bool_set_true:N \l_tmpa_bool }
+        \prop_if_in:NVT \l__tenkz_kernel_populated_cell_prop
+          \l__tenkz_kernel_r_end_tl
           { \bool_set_true:N \l_tmpa_bool }
       }
     \bool_if:NT \l_tmpa_bool { \__tenkz_kernel_r_wire_ends:n {#1} }
@@ -14425,10 +14477,22 @@
 \seq_new:N \l__tenkz_kernel_skin_base_seq
 
 % The skin an atom declares, defaulting to the dot an unadorned site draws.
+% A void site — open or sealed — defaults to none instead: a hole keeps its
+% records (bonds bridging it, its boundary entries) but draws no glyph unless
+% the author declares one (issue 5609).  The void field is read before the
+% skin field: a caller may pass a result variable that its own #1 expansion
+% reads, so #1 must not be expanded again once #2 holds \q_no_value.
+\tl_new:N \l__tenkz_kernel_atom_skin_void_tl
 \cs_new_protected:Npn \__tenkz_kernel_atom_skin:nN #1#2
   {
+    \__tenkz_model_get:nnN {#1} {void} \l__tenkz_kernel_atom_skin_void_tl
     \__tenkz_model_get:nnN {#1} {skin} #2
-    \quark_if_no_value:NT #2 { \tl_set:Nn #2 {dot} }
+    \quark_if_no_value:NT #2
+      {
+        \quark_if_no_value:NTF \l__tenkz_kernel_atom_skin_void_tl
+          { \tl_set:Nn #2 {dot} }
+          { \tl_set:Nn #2 {none} }
+      }
   }
 % That skin resolved to its primitive.  Measurement, silhouette folding and
 % ink all ask this one question, so no consumer can default or resolve a skin
@@ -15591,9 +15655,7 @@
               {
                 \__tenkz_kernel_cells_geometry:
                 \__tenkz_kernel_cells_edges:
-                \bool_if:NTF \l__tenkz_kernel_cells_pinch_bool
-                  { \__tenkz_kernel_r_mark_hull_rect: }
-                  { \__tenkz_kernel_cells_path: }
+                \__tenkz_kernel_cells_path:
               }
               { \__tenkz_kernel_r_mark_hull_rect: }
           }
@@ -16211,7 +16273,6 @@
     % keyval syntax inside the picture is plain even under tenkzeq's
     % active relation glyph
     \char_set_catcode_other:N \=
-    \char_set_catcode_active:N \&
     \__tenkz_model_reset:
     \__tenkz_geom_reset:
     \prop_clear:N \l__tenkz_kernel_node_prop
@@ -16221,6 +16282,7 @@
     \prop_clear:N \l__tenkz_kernel_cell_port_pairing_bearing_prop
     \prop_clear:N \l__tenkz_kernel_policy_prop
     \prop_clear:N \l__tenkz_kernel_cell_prop
+    \prop_clear:N \l__tenkz_kernel_populated_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_cell_prop
     \prop_clear:N \l__tenkz_kernel_basis_claim_prop
     \prop_clear:N \l__tenkz_kernel_basis_live_prop
@@ -16268,9 +16330,6 @@
     \prop_clear:N \l__tenkz_kernel_stage_prop
     \cs_set_eq:NN \tn \__tenkz_kernel_tn_cmd
     \cs_set_eq:NN \\ \__tenkz_kernel_newrow:
-    \char_set_active_eq:NN \& \__tenkz_kernel_nextcol:
-    % and the break between the option list and the first declaration
-    \ignorespaces
   }
 \cs_new_protected:Npn \__tenkz_kernel_end:
   {
@@ -16335,7 +16394,8 @@
 
 % tenkzeq: the audit scope.  Panels accumulate their signatures globally
 % (each panel closes its own group); the active `=` records one relation
-% per glyph, and the audit compares adjacent panels per relation.
+% per glyph together with its place in the panel sequence, and the audit
+% compares the composite sides those places delimit.
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
     \bool_if:NT \l__tenkz_kernel_ineq_bool
@@ -16346,6 +16406,7 @@
     \seq_gclear:N \g__tenkz_kernel_panel_gseq
     \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
     \seq_gclear:N \g__tenkz_kernel_rel_gseq
+    \seq_gclear:N \g__tenkz_kernel_rel_pos_gseq
     \clist_clear:N \l__tenkz_kernel_check_off_clist
     \bool_set_false:N \l__tenkz_kernel_check_bundles_bool
     \prop_clear:N \l__tenkz_kernel_eq_policy_prop
@@ -16387,101 +16448,424 @@
 \cs_new_protected:Npn \__tenkz_kernel_eq_rel:
   {
     \seq_gput_right:Nn \g__tenkz_kernel_rel_gseq { = }
+    % the joiner's place in the panel sequence: a relation after k panels
+    % ends the k-th side, and the panels between two relations are one
+    % product group
+    \seq_gput_right:Ne \g__tenkz_kernel_rel_pos_gseq
+      { \int_eval:n { \seq_count:N \g__tenkz_kernel_panel_gseq } }
     % the glyph itself: an equation shows its relation
     \ensuremath { {} \char_generate:nn { 61 } { 12 } {} }
   }
+% ---------- the joiner audit -----------------------------------------------------------
+% The audit follows the joiner (LANGUAGE-1.0 section 7).  A relation glyph
+% ends a side; the panels between two relations are one product group and
+% form one composite side.  The composite side's boundary signature is the
+% product panels' outer signature with the contracted interface cancelled:
+% juxtaposing two panels asserts that every index cut on the left factor's
+% east frame continues as an index cut on the right factor's west frame.
+% The two cut ends are then one index, internal to the composite term, and
+% an internal contraction exposes nothing -- so each paired east/west entry
+% pair leaves the signature, a directed `to' continuing as a `from', weight
+% and type intact, and the remaining entries of both factors concatenate.
+% The facing cuts must cancel completely: an unpaired index on either
+% facing frame is a signature error.  An empty facing cut is the plain
+% scalar or tensor juxtaposition, whose signatures concatenate whole.
+
+\seq_new:N \l__tenkz_kernel_side_lo_seq       % first panel of each side
+\seq_new:N \l__tenkz_kernel_side_hi_seq       % last panel of each side
+\seq_new:N \l__tenkz_kernel_side_sig_seq      % composite signature per side
+\seq_new:N \l__tenkz_kernel_side_kind_seq     % diagram or prose per side
+\seq_new:N \l__tenkz_kernel_fold_seq          % running composite entries
+\seq_new:N \l__tenkz_kernel_cut_seq           % east cut of the left factor
+\seq_new:N \l__tenkz_kernel_wcut_seq          % west cut of the right factor
+\seq_new:N \l__tenkz_kernel_next_seq          % entries of the joining panel
+\seq_new:N \l__tenkz_kernel_keep_seq          % entries surviving a cut split
+\seq_new:N \l__tenkz_kernel_entry_seq         % one entry split at its colons
+\tl_new:N \l__tenkz_kernel_side_sig_tl
+\tl_new:N \l__tenkz_kernel_entry_face_tl
+\tl_new:N \l__tenkz_kernel_continue_tl
+\tl_new:N \l__tenkz_kernel_iface_tl
+\tl_new:N \l__tenkz_kernel_wface_tl
+\int_new:N \l__tenkz_kernel_side_lo_int
+\int_new:N \l__tenkz_kernel_side_hi_int
+\int_new:N \l__tenkz_kernel_eq_panels_int
+\int_new:N \l__tenkz_kernel_eq_rels_int
+\int_new:N \l__tenkz_kernel_eq_prev_int
+\bool_new:N \l__tenkz_kernel_side_prose_bool
+\bool_new:N \l__tenkz_kernel_iface_bool
+\bool_new:N \l__tenkz_kernel_removed_bool
+\cs_generate_variant:Nn \seq_set_split:Nnn { NVn }
+
+\cs_new_protected:Npn \__tenkz_kernel_eq_sort:N #1
+  {
+    \seq_sort:Nn #1
+      {
+        \str_compare:eNeTF {##1} > {##2}
+          { \sort_return_swapped: } { \sort_return_same: }
+      }
+  }
+
+% One panel's signature as a sequence of detokenized entries, bundles
+% already expanded when the check runs modulo bundles.
+\cs_new_protected:Npn \__tenkz_kernel_eq_panel_entries:nN #1#2
+  {
+    \tl_set:Ne \l__tenkz_kernel_side_sig_tl
+      { \seq_item:Nn \g__tenkz_kernel_panel_gseq {#1} }
+    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+      {
+        \__tenkz_kernel_signature_expand_bundles:NN
+          \l__tenkz_kernel_side_sig_tl \l__tenkz_kernel_side_sig_tl
+      }
+    \seq_clear:N #2
+    \exp_args:NV \clist_map_inline:nn \l__tenkz_kernel_side_sig_tl
+      { \seq_put_right:Ne #2 { \tl_to_str:n {##1} } }
+  }
+
+% The face an entry is cut on: the second colon field of `kind:face[:rest]`.
+\cs_new_protected:Npn \__tenkz_kernel_eq_entry_face:nN #1#2
+  {
+    \seq_set_split:NVn \l__tenkz_kernel_entry_seq \c_colon_str {#1}
+    \int_compare:nNnTF { \seq_count:N \l__tenkz_kernel_entry_seq } < {2}
+      { \tl_clear:N #2 }
+      { \tl_set:Ne #2 { \seq_item:Nn \l__tenkz_kernel_entry_seq {2} } }
+  }
+
+% The west spelling an east-cut entry must continue as: the face turns from
+% e to w and a directed index keeps its arrow, so `to' (the index leaves the
+% left factor) continues as `from' (it enters the right factor); every other
+% field -- type, weight -- is the same index's and rides along unchanged.
+\cs_new_protected:Npn \__tenkz_kernel_eq_entry_continue:nN #1#2
+  {
+    \seq_set_split:NVn \l__tenkz_kernel_entry_seq \c_colon_str {#1}
+    \seq_pop_left:NN \l__tenkz_kernel_entry_seq \l_tmpa_tl
+    \seq_pop_left:NN \l__tenkz_kernel_entry_seq \l_tmpb_tl
+    \tl_set:Ne #2 { \tl_use:N \l_tmpa_tl \c_colon_str w }
+    \seq_map_inline:Nn \l__tenkz_kernel_entry_seq
+      {
+        \str_case:nnF {##1}
+          {
+            {to}   { \tl_put_right:Ne #2 { \c_colon_str from } }
+            {from} { \tl_put_right:Ne #2 { \c_colon_str to } }
+          }
+          { \tl_put_right:Ne #2 { \c_colon_str ##1 } }
+      }
+  }
+
+% Remove one occurrence of a value from a sequence of entries; the removed
+% flag reports whether a match existed.
+\cs_new_protected:Npn \__tenkz_kernel_eq_remove_one:Nn #1#2
+  {
+    \bool_set_false:N \l__tenkz_kernel_removed_bool
+    \seq_clear:N \l__tenkz_kernel_keep_seq
+    \seq_map_inline:Nn #1
+      {
+        \bool_if:NTF \l__tenkz_kernel_removed_bool
+          { \seq_put_right:Nn \l__tenkz_kernel_keep_seq {##1} }
+          {
+            \str_if_eq:nnTF {##1} {#2}
+              { \bool_set_true:N \l__tenkz_kernel_removed_bool }
+              { \seq_put_right:Nn \l__tenkz_kernel_keep_seq {##1} }
+          }
+      }
+    \seq_set_eq:NN #1 \l__tenkz_kernel_keep_seq
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_eq_remove_one:Nn { NV }
+
+% Contract the running composite with panel #1: cancel the composite's east
+% cut against the panel's west cut and concatenate the rest.  The
+% composite's east entries are exactly panel #1-1's east entries, because
+% every earlier interface cancelled completely, so the event names the
+% adjacent panel pair.
+\cs_new_protected:Npn \__tenkz_kernel_eq_contract:n #1
+  {
+    \__tenkz_kernel_eq_panel_entries:nN {#1} \l__tenkz_kernel_next_seq
+    \seq_clear:N \l__tenkz_kernel_cut_seq
+    \seq_clear:N \l__tenkz_kernel_keep_seq
+    \seq_map_inline:Nn \l__tenkz_kernel_fold_seq
+      {
+        \__tenkz_kernel_eq_entry_face:nN {##1} \l__tenkz_kernel_entry_face_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_entry_face_tl {e}
+          { \seq_put_right:Nn \l__tenkz_kernel_cut_seq {##1} }
+          { \seq_put_right:Nn \l__tenkz_kernel_keep_seq {##1} }
+      }
+    \seq_set_eq:NN \l__tenkz_kernel_fold_seq \l__tenkz_kernel_keep_seq
+    \seq_clear:N \l__tenkz_kernel_wcut_seq
+    \seq_clear:N \l__tenkz_kernel_keep_seq
+    \seq_map_inline:Nn \l__tenkz_kernel_next_seq
+      {
+        \__tenkz_kernel_eq_entry_face:nN {##1} \l__tenkz_kernel_entry_face_tl
+        \str_if_eq:VnTF \l__tenkz_kernel_entry_face_tl {w}
+          { \seq_put_right:Nn \l__tenkz_kernel_wcut_seq {##1} }
+          { \seq_put_right:Nn \l__tenkz_kernel_keep_seq {##1} }
+      }
+    \seq_set_eq:NN \l__tenkz_kernel_next_seq \l__tenkz_kernel_keep_seq
+    \__tenkz_kernel_eq_sort:N \l__tenkz_kernel_cut_seq
+    \__tenkz_kernel_eq_sort:N \l__tenkz_kernel_wcut_seq
+    \tl_set:Ne \l__tenkz_kernel_iface_tl
+      { \seq_use:Nn \l__tenkz_kernel_cut_seq { ,~ } }
+    \tl_set:Ne \l__tenkz_kernel_wface_tl
+      { \seq_use:Nn \l__tenkz_kernel_wcut_seq { ,~ } }
+    \bool_set_true:N \l__tenkz_kernel_iface_bool
+    \seq_map_inline:Nn \l__tenkz_kernel_cut_seq
+      {
+        \__tenkz_kernel_eq_entry_continue:nN {##1}
+          \l__tenkz_kernel_continue_tl
+        \__tenkz_kernel_eq_remove_one:NV \l__tenkz_kernel_wcut_seq
+          \l__tenkz_kernel_continue_tl
+        \bool_if:NF \l__tenkz_kernel_removed_bool
+          { \bool_set_false:N \l__tenkz_kernel_iface_bool }
+      }
+    \seq_if_empty:NF \l__tenkz_kernel_wcut_seq
+      { \bool_set_false:N \l__tenkz_kernel_iface_bool }
+    \bool_if:NTF \l__tenkz_kernel_iface_bool
+      {
+        \seq_concat:NNN \l__tenkz_kernel_fold_seq
+          \l__tenkz_kernel_fold_seq \l__tenkz_kernel_next_seq
+        \__tenkz_kernel_eq_sort:N \l__tenkz_kernel_fold_seq
+        \__tenkz_kernel_event:n
+          {
+            check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+            |product=\int_eval:n { #1 - 1 }-\int_eval:n {#1}
+            |result=contracted
+            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+              { |modulo=bundles }
+            |interface=\tl_use:N \l__tenkz_kernel_iface_tl
+            |signature=\seq_use:Nn \l__tenkz_kernel_fold_seq { ,~ }
+          }
+      }
+      {
+        \__tenkz_kernel_event:n
+          {
+            check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+            |product=\int_eval:n { #1 - 1 }-\int_eval:n {#1}
+            |result=mismatch|reason=product-interface
+            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+              { |modulo=bundles }
+            |left=\tl_use:N \l__tenkz_kernel_iface_tl
+            |right=\tl_use:N \l__tenkz_kernel_wface_tl
+          }
+        \msg_error:nneeee {tenkz}{kernel-product-signature}
+          { \int_eval:n { #1 - 1 } } { \int_eval:n {#1} }
+          { \tl_use:N \l__tenkz_kernel_iface_tl }
+          { \tl_use:N \l__tenkz_kernel_wface_tl }
+        % carry the uncancelled union so later joiners stay defined
+        \seq_concat:NNN \l__tenkz_kernel_fold_seq
+          \l__tenkz_kernel_fold_seq \l__tenkz_kernel_cut_seq
+        \seq_concat:NNN \l__tenkz_kernel_fold_seq
+          \l__tenkz_kernel_fold_seq \l__tenkz_kernel_next_seq
+        \seq_concat:NNN \l__tenkz_kernel_fold_seq
+          \l__tenkz_kernel_fold_seq \l__tenkz_kernel_wcut_seq
+        \__tenkz_kernel_eq_sort:N \l__tenkz_kernel_fold_seq
+      }
+  }
+
+% One side of the equation: the panels of side #1, folded left to right.
+% A side holding any prose panel has no computable signature.
+\cs_new_protected:Npn \__tenkz_kernel_eq_side:n #1
+  {
+    \int_set:Nn \l__tenkz_kernel_side_lo_int
+      { \seq_item:Nn \l__tenkz_kernel_side_lo_seq {#1} }
+    \int_set:Nn \l__tenkz_kernel_side_hi_int
+      { \seq_item:Nn \l__tenkz_kernel_side_hi_seq {#1} }
+    \bool_set_false:N \l__tenkz_kernel_side_prose_bool
+    \int_step_inline:nnn
+      { \l__tenkz_kernel_side_lo_int } { \l__tenkz_kernel_side_hi_int }
+      {
+        \str_if_eq:eeT
+          { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1} } {prose}
+          { \bool_set_true:N \l__tenkz_kernel_side_prose_bool }
+      }
+    \bool_if:NTF \l__tenkz_kernel_side_prose_bool
+      {
+        \seq_put_right:Nn \l__tenkz_kernel_side_kind_seq {prose}
+        \seq_put_right:Nn \l__tenkz_kernel_side_sig_seq { }
+      }
+      {
+        \seq_put_right:Nn \l__tenkz_kernel_side_kind_seq {diagram}
+        \int_compare:nNnTF
+          { \l__tenkz_kernel_side_lo_int } = { \l__tenkz_kernel_side_hi_int }
+          {
+            % one panel: its stored signature verbatim
+            \tl_set:Ne \l__tenkz_kernel_side_sig_tl
+              { \seq_item:Nn \g__tenkz_kernel_panel_gseq
+                  { \l__tenkz_kernel_side_lo_int } }
+            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+              {
+                \__tenkz_kernel_signature_expand_bundles:NN
+                  \l__tenkz_kernel_side_sig_tl \l__tenkz_kernel_side_sig_tl
+              }
+          }
+          {
+            \__tenkz_kernel_eq_panel_entries:nN
+              { \l__tenkz_kernel_side_lo_int } \l__tenkz_kernel_fold_seq
+            \int_step_inline:nnn
+              { \l__tenkz_kernel_side_lo_int + 1 }
+              { \l__tenkz_kernel_side_hi_int }
+              { \__tenkz_kernel_eq_contract:n {##1} }
+            \tl_set:Ne \l__tenkz_kernel_side_sig_tl
+              { \seq_use:Nn \l__tenkz_kernel_fold_seq { ,~ } }
+          }
+        \seq_put_right:NV \l__tenkz_kernel_side_sig_seq
+          \l__tenkz_kernel_side_sig_tl
+      }
+  }
+
+% The relation comparison.  #1 is the relation ordinal, #2 and #3 the two
+% side kinds; the side signatures arrive in \l_tmpa_tl and \l_tmpb_tl with
+% bundles already expanded.
+\cs_new_protected:Npn \__tenkz_kernel_eq_compare_core:nnn #1#2#3
+  {
+    \clist_if_in:NnF \l__tenkz_kernel_check_off_clist {#1}
+      {
+        \bool_set_false:N \l_tmpa_bool
+        \str_if_eq:nnT {#2} {prose} { \bool_set_true:N \l_tmpa_bool }
+        \str_if_eq:nnT {#3} {prose} { \bool_set_true:N \l_tmpa_bool }
+        \bool_if:NTF \l_tmpa_bool
+          {
+            \__tenkz_kernel_event:n
+              {
+                check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                |relation=#1|result=mismatch|reason=prose
+                |left-kind=#2
+                |right-kind=#3
+              }
+            \msg_error:nnee {tenkz}{kernel-signature-prose}
+              {#1} { \int_eval:n { #1 + 1 } }
+          }
+          {
+            \str_if_eq:eeTF
+              { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+              {
+                \__tenkz_kernel_event:n
+                  {
+                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                    |relation=#1|result=equal
+                    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+                      { |modulo=bundles }
+                    |signature=\tl_use:N \l_tmpa_tl
+                  }
+              }
+              {
+                \__tenkz_kernel_event:n
+                  {
+                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
+                    |relation=#1|result=mismatch
+                    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+                      { |modulo=bundles }
+                    |left=\tl_use:N \l_tmpa_tl
+                    |right=\tl_use:N \l_tmpb_tl
+                  }
+                \msg_error:nneeee {tenkz}{kernel-signature}
+                  {#1} { \int_eval:n { #1 + 1 } }
+                  { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
+              }
+          }
+      }
+  }
+\cs_generate_variant:Nn \__tenkz_kernel_eq_compare_core:nnn { nee }
+
+\cs_new_protected:Npn \__tenkz_kernel_eq_side_compare:n #1
+  {
+    \tl_set:Ne \l_tmpa_tl
+      { \seq_item:Nn \l__tenkz_kernel_side_sig_seq {#1} }
+    \tl_set:Ne \l_tmpb_tl
+      { \seq_item:Nn \l__tenkz_kernel_side_sig_seq { #1 + 1 } }
+    \__tenkz_kernel_eq_compare_core:nee {#1}
+      { \seq_item:Nn \l__tenkz_kernel_side_kind_seq {#1} }
+      { \seq_item:Nn \l__tenkz_kernel_side_kind_seq { #1 + 1 } }
+  }
+
+% The adjacent-panel reading a malformed scope falls back to, so its
+% per-relation records stay owned by this scope and a later scope inherits
+% nothing.
+\cs_new_protected:Npn \__tenkz_kernel_eq_panel_compare:n #1
+  {
+    \tl_set:Ne \l_tmpa_tl
+      { \seq_item:Nn \g__tenkz_kernel_panel_gseq {#1} }
+    \tl_set:Ne \l_tmpb_tl
+      { \seq_item:Nn \g__tenkz_kernel_panel_gseq { #1 + 1 } }
+    \bool_if:NT \l__tenkz_kernel_check_bundles_bool
+      {
+        \__tenkz_kernel_signature_expand_bundles:NN \l_tmpa_tl \l_tmpa_tl
+        \__tenkz_kernel_signature_expand_bundles:NN \l_tmpb_tl \l_tmpb_tl
+      }
+    \__tenkz_kernel_eq_compare_core:nee {#1}
+      { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {#1} }
+      { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { #1 + 1 } }
+  }
+
 \cs_new_protected:Npn \__tenkz_kernel_eq_end:
   {
-    \int_set:Nn \l_tmpa_int { \seq_count:N \g__tenkz_kernel_panel_gseq }
-    \int_set:Nn \l_tmpb_int { \seq_count:N \g__tenkz_kernel_rel_gseq }
+    \int_set:Nn \l__tenkz_kernel_eq_panels_int
+      { \seq_count:N \g__tenkz_kernel_panel_gseq }
+    \int_set:Nn \l__tenkz_kernel_eq_rels_int
+      { \seq_count:N \g__tenkz_kernel_rel_gseq }
+    % Arity: relations split the panel sequence into sides and every side
+    % must hold at least one panel.  Fewer relations than panel gaps is not
+    % an arity failure: panels adjacent without a relation glyph are one
+    % product group.
     \bool_set_false:N \l_tmpa_bool
-    \int_compare:nNnT { \l_tmpa_int } < {2}
+    \int_compare:nNnT { \l__tenkz_kernel_eq_rels_int } = {0}
       { \bool_set_true:N \l_tmpa_bool }
-    \int_compare:nNnF { \l_tmpb_int } = { \l_tmpa_int - 1 }
-      { \bool_set_true:N \l_tmpa_bool }
-    \bool_if:NT \l_tmpa_bool
+    \int_zero:N \l__tenkz_kernel_eq_prev_int
+    \int_step_inline:nn { \l__tenkz_kernel_eq_rels_int }
+      {
+        \int_compare:nNnT
+          { \seq_item:Nn \g__tenkz_kernel_rel_pos_gseq {##1} }
+          = { \l__tenkz_kernel_eq_prev_int }
+          { \bool_set_true:N \l_tmpa_bool }
+        \int_set:Nn \l__tenkz_kernel_eq_prev_int
+          { \seq_item:Nn \g__tenkz_kernel_rel_pos_gseq {##1} }
+      }
+    \int_compare:nNnT { \l__tenkz_kernel_eq_rels_int } > {0}
+      {
+        \int_compare:nNnT
+          { \l__tenkz_kernel_eq_prev_int }
+          = { \l__tenkz_kernel_eq_panels_int }
+          { \bool_set_true:N \l_tmpa_bool }
+      }
+    \bool_if:NTF \l_tmpa_bool
       {
         \__tenkz_kernel_event:n
           {
             check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
             |result=malformed|reason=relation-count
-            |panels=\int_use:N \l_tmpa_int
-            |relations=\int_use:N \l_tmpb_int
+            |panels=\int_use:N \l__tenkz_kernel_eq_panels_int
+            |relations=\int_use:N \l__tenkz_kernel_eq_rels_int
           }
         \msg_error:nnee {tenkz}{kernel-equation-arity}
-          { \int_use:N \l_tmpa_int } { \int_use:N \l_tmpb_int }
-      }
-    \int_step_inline:nn { \seq_count:N \g__tenkz_kernel_rel_gseq }
-      {
-        \int_compare:nNnT {##1 + 1} <
-          { \seq_count:N \g__tenkz_kernel_panel_gseq + 1 }
+          { \int_use:N \l__tenkz_kernel_eq_panels_int }
+          { \int_use:N \l__tenkz_kernel_eq_rels_int }
+        \int_step_inline:nn { \l__tenkz_kernel_eq_rels_int }
           {
-            \clist_if_in:NnF \l__tenkz_kernel_check_off_clist {##1}
-            {
-            \tl_set:Ne \l_tmpa_tl
-              { \seq_item:Nn \g__tenkz_kernel_panel_gseq {##1} }
-            \tl_set:Ne \l_tmpb_tl
-              { \seq_item:Nn \g__tenkz_kernel_panel_gseq { ##1 + 1 } }
-            \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-              {
-                \__tenkz_kernel_signature_expand_bundles:NN
-                  \l_tmpa_tl \l_tmpa_tl
-                \__tenkz_kernel_signature_expand_bundles:NN
-                  \l_tmpb_tl \l_tmpb_tl
-              }
-            \bool_set_false:N \l_tmpa_bool
-            \str_if_eq:eeT
-              { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1} }
-              {prose}
-              { \bool_set_true:N \l_tmpa_bool }
-            \str_if_eq:eeT
-              { \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { ##1 + 1 } }
-              {prose}
-              { \bool_set_true:N \l_tmpa_bool }
-            \bool_if:NTF \l_tmpa_bool
-              {
-                \__tenkz_kernel_event:n
-                  {
-                    check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
-                    |relation=##1|result=mismatch|reason=prose
-                    |left-kind=
-                      \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq {##1}
-                    |right-kind=
-                      \seq_item:Nn \g__tenkz_kernel_panel_kind_gseq { ##1 + 1 }
-                  }
-                \msg_error:nnee {tenkz}{kernel-signature-prose}
-                  {##1} { \int_eval:n { ##1 + 1 } }
-              }
-              {
-                \str_if_eq:eeTF
-                  { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
-                  {
-                    \__tenkz_kernel_event:n
-                      {
-                        check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
-                        |relation=##1|result=equal
-                        \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-                          { |modulo=bundles }
-                        |signature=\tl_use:N \l_tmpa_tl
-                      }
-                  }
-                  {
-                    \__tenkz_kernel_event:n
-                      {
-                        check|scope=\int_use:N \g__tenkz_kernel_eq_scope_int
-                        |relation=##1|result=mismatch
-                        \bool_if:NT \l__tenkz_kernel_check_bundles_bool
-                          { |modulo=bundles }
-                        |left=\tl_use:N \l_tmpa_tl
-                        |right=\tl_use:N \l_tmpb_tl
-                      }
-                    \msg_error:nneeee {tenkz}{kernel-signature}
-                      {##1} { \int_eval:n { ##1 + 1 } }
-                      { \tl_use:N \l_tmpa_tl } { \tl_use:N \l_tmpb_tl }
-                  }
-              }
-            }
+            \int_compare:nNnT {##1 + 1} <
+              { \l__tenkz_kernel_eq_panels_int + 1 }
+              { \__tenkz_kernel_eq_panel_compare:n {##1} }
           }
+      }
+      {
+        \seq_clear:N \l__tenkz_kernel_side_lo_seq
+        \seq_clear:N \l__tenkz_kernel_side_hi_seq
+        \seq_clear:N \l__tenkz_kernel_side_sig_seq
+        \seq_clear:N \l__tenkz_kernel_side_kind_seq
+        \int_zero:N \l__tenkz_kernel_eq_prev_int
+        \int_step_inline:nn { \l__tenkz_kernel_eq_rels_int }
+          {
+            \seq_put_right:Ne \l__tenkz_kernel_side_lo_seq
+              { \int_eval:n { \l__tenkz_kernel_eq_prev_int + 1 } }
+            \seq_put_right:Ne \l__tenkz_kernel_side_hi_seq
+              { \seq_item:Nn \g__tenkz_kernel_rel_pos_gseq {##1} }
+            \int_set:Nn \l__tenkz_kernel_eq_prev_int
+              { \seq_item:Nn \g__tenkz_kernel_rel_pos_gseq {##1} }
+          }
+        \seq_put_right:Ne \l__tenkz_kernel_side_lo_seq
+          { \int_eval:n { \l__tenkz_kernel_eq_prev_int + 1 } }
+        \seq_put_right:Ne \l__tenkz_kernel_side_hi_seq
+          { \int_use:N \l__tenkz_kernel_eq_panels_int }
+        \int_step_inline:nn { \l__tenkz_kernel_eq_rels_int + 1 }
+          { \__tenkz_kernel_eq_side:n {##1} }
+        \int_step_inline:nn { \l__tenkz_kernel_eq_rels_int }
+          { \__tenkz_kernel_eq_side_compare:n {##1} }
       }
     \group_end:
   }
@@ -16535,8 +16919,45 @@
     \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
   }
 
+% The picture body is captured, then executed.  A frame-collecting class --
+% beamer is the standing example -- tokenizes a frame body long before any
+% picture code runs, so a catcode arrangement made at picture entry can
+% never reach a chained body's column tabs.  The captured tokens therefore
+% keep the document's alignment character, and the rewrite below gives that
+% token the column step: the same reading the grid and cd surfaces give
+% their captured bodies, and it holds in a plain beamer frame.  A tab nested
+% in a braced argument is data and stays untouched; \tngroup applies the
+% same rewrite to its own body.
+\tl_new:N \l__tenkz_kernel_body_tl
+\tl_new:N \l__tenkz_kernel_group_body_tl
+\cs_new_protected:Npn \__tenkz_kernel_rewrite_tabs:N #1
+  { \tl_replace_all:Nnn #1 { & } { \__tenkz_kernel_nextcol: } }
 \NewDocumentCommand \__tenkz_kernel_env_begin_cmd { O{} }
-  { \__tenkz_kernel_begin:n {#1} }
+  {
+    \__tenkz_kernel_begin:n {#1}
+    \tl_clear:N \l__tenkz_kernel_body_tl
+    \__tenkz_kernel_env_body:w
+  }
+% #1 is the chunk before the next \end and #2 that \end's environment name.
+% Chunks accumulate until the name is our own, so a different environment
+% closed inside the body passes through intact; the picture's own \end is
+% reinserted for the ordinary environment closing.
+\cs_new_protected:Npn \__tenkz_kernel_env_body:w #1 \end #2
+  {
+    \tl_put_right:Nn \l__tenkz_kernel_body_tl {#1}
+    \str_if_eq:nnTF {#2} {tenkz}
+      {
+        \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_body_tl
+        % the break between the option list and the first declaration
+        \ignorespaces
+        \tl_use:N \l__tenkz_kernel_body_tl
+        \end {tenkz}
+      }
+      {
+        \tl_put_right:Nn \l__tenkz_kernel_body_tl { \end {#2} }
+        \__tenkz_kernel_env_body:w
+      }
+  }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
   { \__tenkz_kernel_eq_begin:n {#1} }
 \NewDocumentCommand \tenkzkernel { }

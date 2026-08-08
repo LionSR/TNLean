@@ -21,8 +21,9 @@ boundary conditions (PBC).
         % index i, and the open west/east legs are the two virtual
         % matrix indices. Boundary signature: (virtual-west=1 |
         % virtual-east=1 | physical-up=1 | physical-down=0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{A}
+        \tenkzkernel
+        \begin{tenkz}[cols=1, boundary=open]
+            \tn[ports={90:physical:$i$}]{A}
         \end{tenkz}
     \end{center}
     The black node denotes the tensor $A$, the horizontal legs are virtual,
@@ -51,9 +52,12 @@ boundary conditions (PBC).
         % the remaining L-3 factors. Emitted boundary signature of this
         % finite schematic: (virtual-west=1 | virtual-east=1 |
         % physical-up=3 | physical-down=0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i_1$]{A}\tnspan[brace below]{4}{$L\text{ copies}$} &
-            \tn{A} & \tndots & \tn[up=$i_L$]{A}
+        \tenkzkernel
+        \begin{tenkz}[cols=4, boundary=open, physical=up]
+            \tn[label pos=135, ports={90:physical:$i_1$}]{A} &
+            \tn[label pos=135]{A} & \tn[skin=dots]{} &
+            \tn[label pos=135, ports={90:physical:$i_L$}]{A}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ copies}$}
         \end{tenkz}
     \end{center}
     in which each black node denotes the same local tensor $A$, the virtual
@@ -168,9 +172,12 @@ boundary conditions (PBC).
         % the remaining N-3 factors. Emitted boundary signature of this
         % finite schematic: (virtual-west=0 | virtual-east=0 |
         % physical-up=3 | physical-down=0).
-        \begin{tenkz}[periodic, physical=up]
-            \tn[up=$i_1$]{A}\tnspan[brace below]{4}{$N\text{ copies}$} &
-            \tn{A} & \tndots & \tn[up=$i_N$]{A}
+        \tenkzkernel
+        \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+            \tn[label pos=135, ports={90:physical:$i_1$}]{A} &
+            \tn[label pos=135]{A} & \tn[skin=dots]{} &
+            \tn[label pos=135, ports={90:physical:$i_N$}]{A}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$N\text{ copies}$}
         \end{tenkz}
     \end{center}
     of $N$ copies of the local tensor $A$, with the outer virtual legs closed
@@ -190,16 +197,17 @@ boundary conditions (PBC).
     \end{align}
     Diagrammatically, the transfer map is the double-layer contraction
     \begin{center}
-        % \E_A(X) = \sum_i A^i X (A^i)^\dagger: the upper and starred
+        % \E_A(X) = \sum_i A^i X (A^i)^\dagger: the upper and conjugate
         % lower nodes are A and its conjugate, their paired physical
         % legs sum i, and X rides the east cup (the input). Traversing
         % the lower wire in the opposite direction supplies the transpose
         % in the adjoint. The west pair remains open as the matrix output.
         % Boundary signature: (virtual-west=2 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
-        \begin{tenkz}[sandwich, east={cup=$X$}]
-            \tn{A} \\
-            \tn*{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east={cup=$X$}]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
         \end{tenkz}
     \end{center}
     in which the upper node denotes $A$, the lower node denotes $A^\dagger$,
@@ -269,8 +277,10 @@ boundary conditions (PBC).
         % Type verdict: both sides are rank-three local MPS tensors.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0.
-        \begin{tenkz}[physical=up]
-            \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+        \tenkzkernel
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{X} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{X^{-1}}
         \end{tenkz}
     \end{center}
     where the black node denotes the tensor $A$, the upper leg is the physical
@@ -837,9 +847,11 @@ $A^{-1}A=\Id$. This is the identity used in
         % tensor after combining the L physical indices.
         % Boundary signature: semantic virtual-west=1 | virtual-east=1 |
         % physical-up=L | physical-down=0; the finite schematic emits 3 up legs.
-        \begin{tenkz}[physical=up, tensor style=box]
-            \tn[up=$i_1$]{A}\tnspan[box, label pos=west]{4}{A^{[L]}} &
-            \tn{A} & \tndots & \tn[up=$i_L$]{A}
+        \tenkzkernel
+        \begin{tenkz}[cols=4, boundary=open, physical=up]
+            \tn[skin=box, ports={90:physical:$i_1$}]{A} & \tn[skin=box]{A} &
+            \tn[skin=dots]{} & \tn[skin=box, ports={90:physical:$i_L$}]{A}
+            \tnmark[form=enclosure, label pos=w]{(1,1) .. (1,4)}{$A^{[L]}$}
         \end{tenkz}
     \end{center}
 \end{definition}
@@ -963,6 +975,11 @@ $A^{-1}A=\Id$. This is the identity used in
         % scalar. The brace makes the N-site contraction schematic.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
+        % Blocked on the 0.7 grid tier: the kernel draws each row's trace
+        % return one clearance below its own row, so the upper ring's return
+        % would run through the ladder and cross the physical pairings.  The
+        % picture migrates once a per-row closure can clear the whole
+        % two-row selection it closes.
         \begin{tenkz}[rows={ket, bra}, periodic]
             \tn{A} & \tndots & \tn{A} \\
             \tn*{B}\tnspan[brace below]{3}{$N\text{ sites}$} & \tndots & \tn*{B}

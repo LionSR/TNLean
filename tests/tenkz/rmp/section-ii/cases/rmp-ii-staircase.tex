@@ -1,7 +1,7 @@
 % Target: rmp-ii-staircase
 % Formula: |psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta.
-% Ink: Kernel flat frame; the staircase ascends as in the source (the bar's X row
-%   on this target: the 0.7 case was vertically mirrored).
+% Ink: Kernel flat frame; four pill isometries ascend as in the source (the bar's
+%   X row on this target: the 0.7 case was vertically mirrored).
 % Boundary: The initial state closes the input; each isometry exposes one output and
 %   the final bond.
 % Source: paper TN-Review-main.tex line 514; author source ImagesReview Section
@@ -13,13 +13,13 @@
   % V_k takes the bond from below-left, exposes its output above, and passes
   % the bond above-right; the initial state closes the chain from below-left.
   \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, west=none]
-    \tn[skin=box, at=(1,5), name=v4,
+    \tn[skin=pill, at=(1,5), name=v4,
       ports={90:physical, 225:virtual, 45:virtual}]{V}
-    \tn[skin=box, at=(2,4), name=v3,
+    \tn[skin=pill, at=(2,4), name=v3,
       ports={90:physical, 225:virtual, 45:virtual}]{V}
-    \tn[skin=box, at=(3,3), name=v2,
+    \tn[skin=pill, at=(3,3), name=v2,
       ports={90:physical, 225:virtual, 45:virtual}]{V}
-    \tn[skin=box, at=(4,2), name=v1,
+    \tn[skin=pill, at=(4,2), name=v1,
       ports={90:physical, 225:virtual, 45:virtual}]{V}
     \tn[skin=dot, at=(5,1), name=z, label pos=270,
       ports={45:virtual}]{\lvert 0\rangle}

@@ -1,0 +1,53 @@
+% Regression: the saddle rule resolves a corner two selected cells share.
+% Two cells on a diagonal close two four-corner loops, one around each cell,
+% where the retired fallback drew their bounding rectangle; a block less a
+% corner cell and the interior cell it touches closes one ten-corner walk,
+% the puncture reaching the outer boundary through the shared corner
+% (issue 5573 acceptance).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\seq_new:N \g__tenkz_test_diag_corner_seq
+\seq_new:N \g__tenkz_test_diag_loop_seq
+\int_new:N \l__tenkz_test_diag_int
+\cs_new_eq:NN \__tenkz_test_diag_enclosure:n
+  \__tenkz_kernel_r_mark_enclosure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
+  {
+    \__tenkz_test_diag_enclosure:n {#1}
+    \regex_count:nVN { -- } \l__tenkz_kernel_r_pts_tl
+      \l__tenkz_test_diag_int
+    \seq_gput_right:Ne \g__tenkz_test_diag_corner_seq
+      { \int_use:N \l__tenkz_test_diag_int }
+    \regex_count:nVN { cycle } \l__tenkz_kernel_r_pts_tl
+      \l__tenkz_test_diag_int
+    \seq_gput_right:Ne \g__tenkz_test_diag_loop_seq
+      { \int_use:N \l__tenkz_test_diag_int }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, west=open, east=open]
+  \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{}
+  \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+    {{(1,1), (2,2)}}{$D$}
+\end{tenkz}
+\qquad
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, west=open, east=open]
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+  \tnmark[form=enclosure, slot=secondary, tint, label pos=se]
+    {(1,1) .. (3,3) - (1,1) - (2,2)}{$P$}
+\end{tenkz}
+\ExplSyntaxOn
+\str_if_eq:eeF { \seq_use:Nn \g__tenkz_test_diag_loop_seq {,} } {2,1}
+  { \errmessage{the~saddles~did~not~close~two~loops~then~one} }
+\str_if_eq:eeF { \seq_use:Nn \g__tenkz_test_diag_corner_seq {,} } {8,10}
+  { \errmessage{the~saddle~walks~do~not~follow~their~cells} }
+\ExplSyntaxOff
+\end{document}

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -261,7 +262,7 @@ def main() -> int:
         )
 
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
-    assert len(fixture_inventory) == 264
+    assert len(fixture_inventory) == 211
     assert fixture_inventory["modes_dot_baseline.tex"][0] == "redraw"
     assert fixture_inventory["p_pitch.tex"][0] == "redraw"
     assert fixture_inventory["rev4075_alias.tex"][0] == "redraw"
@@ -272,11 +273,24 @@ def main() -> int:
     _, _, blueprint_inventory, _ = guard.documented_blueprint(
         guard.DOCUMENT.read_text()
     )
-    assert blueprint_inventory[("ch02_mps.tex", 54, "tenkz")] == "redraw"
-
-    broken_total = guard.DOCUMENT.read_text().replace(
-        "| **Total** | **207** |", "| **Total** | **999** |", 1
+    # Structural checks only: naming a live row's disposition here would
+    # break this test whenever a migration legitimately discharges it.
+    assert blueprint_inventory
+    assert all(
+        disposition in guard.DISPOSITIONS
+        for disposition in blueprint_inventory.values()
     )
+
+    # Corrupt the first reconciliation total, whatever its current value:
+    # hard-coding the live number would make this probe a silent no-op the
+    # next time a migration legitimately moves the total.
+    broken_total, replacements = re.subn(
+        r"\| \*\*Total\*\* \| \*\*\d+\*\* \|",
+        "| **Total** | **999** |",
+        guard.DOCUMENT.read_text(),
+        count=1,
+    )
+    assert replacements == 1, "no reconciliation total row found to corrupt"
     try:
         guard.parse_counter_table(
             broken_total, "| Raw construct | Occurrences |"

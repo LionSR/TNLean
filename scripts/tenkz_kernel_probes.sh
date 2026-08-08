@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Gate for the kernel language stage: the seven contract fixtures pin their
-# record streams, and every sugar spelling proves byte-identical events
-# against its kernel expansion.  Sources: tests/tenkz/kernel/.
+# record streams, and every sugar spelling proves byte-identical events and
+# pixels against its kernel expansion.  Sources: tests/tenkz/kernel/.
 set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 KERNEL="$REPO/tests/tenkz/kernel"
@@ -114,6 +114,18 @@ for members in \
   grep -F '|form=bracket|' "$WORK/r_mark_bracket_range.tnlog" |
     grep -Fq "|$members" || {
     echo "FAIL: a bracket over a cell range resolved no membership" >&2
+    exit 1
+  }
+done
+# The three unclaimed slot words and the mark name reach the record stream
+# verbatim; the fixture's own hook separately asserts each slot's resolved
+# hue and fails the compile on a mismatch.
+for slot_record in \
+  '|form=enclosure|members=atom-1,atom-4,atom-7|slot=complement|' \
+  '|form=enclosure|label-pos=n|label=R|members=atom-2,atom-5,atom-8|name=R|slot=collar|' \
+  '|form=enclosure|members=atom-3,atom-6,atom-9|slot=neutral|'; do
+  grep -Fq "$slot_record" "$WORK/r_region_slot_words.tnlog" || {
+    echo "FAIL: a region slot word or mark name left the record stream" >&2
     exit 1
   }
 done
@@ -1183,6 +1195,61 @@ if grep -Fq '|origin=grid|' "$WORK/r_sealed_void.tnlog"; then
   echo "FAIL: a sealed void retained an incident generated grid bond" >&2
   exit 1
 fi
+# A void site draws no glyph by default; its records decide open against
+# sealed.  The two chains of r_void_open share one shape: the open hole
+# keeps both bridging grid bonds, its own physical leg, and its boundary
+# entry, while the sealed variant loses the site's bonds and leg.  Neither
+# void draws a site glyph, so each picture inks exactly its two real sites.
+void_pane() {
+  awk -v pane="$1" -v pattern="$2" '
+    /^picture\|/ { seen++ }
+    $0 ~ pattern { if (seen == pane) print }
+  ' "$WORK/r_void_open.tnlog"
+}
+grep -Fq '|name=H|physical=up|void=open' "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the open hole lost its record or its physical policy answer" >&2
+  exit 1
+}
+[ "$(void_pane 1 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 2 ] || {
+  echo "FAIL: an open hole did not keep both bridging grid bonds" >&2
+  exit 1
+}
+grep -Fq '|host=atom-2|kind=index|name=leg-n-1-2|origin=policy-leg|port-type=physical' \
+    "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the open hole lost its physical leg" >&2
+  exit 1
+}
+[ "$(void_pane 2 '[|]origin=grid[|]' | wc -l | tr -d ' ')" -eq 0 ] || {
+  echo "FAIL: the sealed contrast retained a generated grid bond" >&2
+  exit 1
+}
+[ "$(void_pane 1 '^kernel-boundary[|]')" = \
+  'kernel-boundary|signature=phys:n, phys:n, phys:n, phys:s' ] || {
+  echo "FAIL: the open chain's boundary lost the hole's index or the updown answer" >&2
+  exit 1
+}
+[ "$(void_pane 2 '^kernel-boundary[|]')" = \
+  'kernel-boundary|signature=phys:n, phys:n' ] || {
+  echo "FAIL: the sealed chain's boundary kept a removed index" >&2
+  exit 1
+}
+for pane in 1 2; do
+  [ "$(void_pane "$pane" '^ink-use[|].*[|]class=glyph[|]' | wc -l | tr -d ' ')" \
+      -eq 2 ] || {
+    echo "FAIL: a void site in pane $pane drew a site glyph" >&2
+    exit 1
+  }
+done
+grep -Fq '|name=C|physical=updown' "$WORK/r_void_open.tnlog" || {
+  echo "FAIL: the atom-scope updown answer did not reach the site" >&2
+  exit 1
+}
+for leg in leg-n-1-3 leg-s-1-3; do
+  void_pane 1 '[|]origin=policy-leg[|]' | grep -Fq "|name=$leg|" || {
+    echo "FAIL: the atom-scope updown answer lost its $leg" >&2
+    exit 1
+  }
+done
 if grep -Fq '|physical=none|' "$WORK/r_physical_policy.tnlog"; then
   echo "FAIL: physical=none materialized a physical port" >&2
   exit 1
@@ -1544,7 +1611,8 @@ command -v pdftoppm >/dev/null 2>&1 || {
 for pixel_fixture in \
     k_plane k_skin_pairings r_dir_open_bearings r_hull_live r_ink_semantics \
     r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
-    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect r_ring_closure \
+    r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
+    r_region_diagonal r_region_pinch_staircase r_ring_closure \
     r_wire_stroke; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
@@ -1608,6 +1676,7 @@ for path in sys.argv[1:]:
   "$WORK/k_plane.png" "$WORK/r_dir_open_bearings.png" \
   "$WORK/r_ink_semantics.png" "$WORK/r_label_turn.png" \
   "$WORK/r_parallel_lanes.png" "$WORK/r_physical_dir.png" \
+  "$WORK/r_region_diagonal.png" "$WORK/r_region_pinch_staircase.png" \
   "$WORK/r_ring_closure.png" "$WORK/r_wire_stroke.png" >"$PIXEL_CURRENT"
 
 negative="$KERNEL/negative/n_diagonal_port.tex"
@@ -2555,6 +2624,51 @@ for arity_negative in n_missing_relation n_dangling_relation; do
   }
 done
 
+# The contracted product joiner: a product group is one composite side whose
+# signature is the factors' outer signature with the contracted interface
+# cancelled.  The three scopes pin the three interface shapes: a virtual
+# rail cancelling twice along a three-factor chain, a directed physical
+# through-index continuing to as from, and an empty interface concatenating
+# whole.
+for product_check in \
+  'check|scope=1|product=2-3|result=contracted|interface=open:e|signature=open:e, open:w' \
+  'check|scope=1|product=3-4|result=contracted|interface=open:e|signature=open:e, open:w' \
+  'check|scope=1|relation=1|result=equal|signature=open:e, open:w' \
+  'check|scope=2|product=2-3|result=contracted|interface=phys:e:to|signature=phys:e:to, phys:w:from' \
+  'check|scope=2|relation=1|result=equal|signature=phys:e:to, phys:w:from' \
+  'check|scope=3|product=2-3|result=contracted|interface=|signature=phys:n, phys:n' \
+  'check|scope=3|relation=1|result=equal|signature=phys:n, phys:n'
+do
+  grep -Fxq "$product_check" "$WORK/r_product_sides.tnlog" || {
+    echo "FAIL: product joiner lost record: $product_check" >&2
+    exit 1
+  }
+done
+python3 "$REPO/scripts/tenkz_audit.py" \
+  "$WORK/r_product_sides.tnlog" "$KERNEL/regression/r_product_sides.tex" \
+  >/dev/null || {
+  echo "FAIL: the product joiner stream did not pass the one-pass audit" >&2
+  exit 1
+}
+
+product_negative="$KERNEL/negative/n_product_interface.tex"
+if ( cd "$WORK" &&
+     TEXINPUTS="$REPO/tex/tenkz//:" \
+       timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+       "$product_negative" >"$WORK/n_product_interface.transcript" 2>&1 ); then
+  echo "FAIL: an uncancelled product interface was accepted" >&2
+  exit 1
+fi
+grep -Fq '[TKZ-EQ-SIGNATURE]' "$WORK/n_product_interface.transcript" || {
+  echo "FAIL: product interface mismatch lacked TKZ-EQ-SIGNATURE" >&2
+  exit 1
+}
+grep -Fq 'result=mismatch|reason=product-interface|left=open:e|right=' \
+  "$WORK/n_product_interface.tnlog" || {
+  echo "FAIL: product interface mismatch was not recorded with both cuts" >&2
+  exit 1
+}
+
 off_count=$(grep -c 'result=off' "$WORK/r_multiple_off.tnlog" || true)
 [ "$off_count" -eq 2 ] || {
   echo "FAIL: multiple equation opt-outs did not each emit an event" >&2
@@ -2633,6 +2747,19 @@ grep -Fq 'check|scope=2|relation=1|result=equal' \
   echo "FAIL: later valid equation inherited the malformed scope" >&2
   exit 1
 }
+# A beamer frame hands the kernel a pre-tokenized body, so its column tabs
+# arrive as the document's alignment character.  The chained fixture holds
+# exactly when the tab and the row break both advance the cursor there.
+beamer_atoms=$(grep -c '^atom|' "$WORK/r_beamer_frame.tnlog" || true)
+[ "$beamer_atoms" -eq 6 ] || {
+  echo "FAIL: the plain beamer frame's chained body lost atoms" >&2
+  exit 1
+}
+grep -Fq '|addr=(2,3)|' "$WORK/r_beamer_frame.tnlog" || {
+  echo "FAIL: the plain beamer frame's chained body lost its cursor" >&2
+  exit 1
+}
+
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"
 
@@ -2643,8 +2770,25 @@ for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
     diff "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog" >&2 || true
     fail=1
   fi
+  # Events do not carry a label's ink.  The labelled cup of issue 5563 left
+  # byte-identical records while its unpeeled `$...$` value set a superscript
+  # one math style larger than its expansion's \tn body.  Both halves of a
+  # pair compile in this same session, so their rasters compare byte for byte
+  # without an exact-toolchain pin.
+  for half in sugar kernel; do
+    if ! pdftoppm -singlefile -png -r 300 \
+        "$WORK/${pair}_${half}.pdf" "$WORK/${pair}_${half}" >/dev/null 2>&1; then
+      echo "FAIL: sugar pair fixture ${pair}_${half} could not be rasterized" >&2
+      exit 1
+    fi
+  done
+  if ! cmp -s "$WORK/${pair}_sugar.png" "$WORK/${pair}_kernel.png"; then
+    echo "FAIL: sugar pair $pair does not render as its kernel expansion" >&2
+    fail=1
+  fi
 done
-[ "$fail" -eq 0 ] && echo "PASS: 10 sugar spellings byte-identical to their expansions"
+[ "$fail" -eq 0 ] &&
+  echo "PASS: 10 sugar spellings byte-identical to their expansions in events and pixels"
 
 CURRENT="$WORK/current.sha256"
 ( cd "$WORK"

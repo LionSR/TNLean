@@ -1,8 +1,8 @@
 r"""plasTeX renderers for tenkz tensor-network pictures (spec §1.5, §5.1).
 
-The tenkz environments (``tenkz``, ``tenkzcd``, ``tenkzlattice``,
-``tenkzplanes``, ``tenkzfree`` — the spec's four sub-languages plus the
-Phase-1 bra-ket double-layer environment that lives in the lattice layer),
+The tenkz environments (``tenkz``, ``tenkzlattice``, ``tenkzplanes`` —
+the spec's two sub-languages plus the Phase-1 bra-ket double-layer
+environment that lives in the lattice layer),
 the plain ``tikzcd`` environment that carries the blueprint's commutative
 diagrams, and the bridge command ``\tnpic`` are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
@@ -102,10 +102,8 @@ _RENDER_SOURCE_FILES = (
 # the emitted <img>.
 _ENVIRONMENT_LANGS = {
     "tenkz": "grid",
-    "tenkzcd": "cd",
     "tenkzlattice": "lattice",
     "tenkzplanes": "planes",
-    "tenkzfree": "free",
     "tikzcd": "cd",
     "tnpic": "grid",
 }
@@ -422,6 +420,24 @@ else:
         blockType = True
         templateName = "TenkzEquation"
 
+    def _holds_kernel_switch(node) -> bool:
+        r"""Whether this preceding sibling carries \tenkzkernel in force.
+
+        A paragraph break is not a TeX group, so a switch inside a
+        preceding ``par`` wrapper still governs what follows; the search
+        descends through ``par`` nodes and nothing else, since every
+        other container opens a group that ends the declaration.
+        """
+        name = getattr(node, "nodeName", "")
+        if name == "tenkzkernel":
+            return True
+        if name != "par":
+            return False
+        return any(
+            _holds_kernel_switch(child)
+            for child in getattr(node, "childNodes", [])
+        )
+
     def _kernel_switch_reaches(node) -> bool:
         r"""Whether \tenkzkernel is in force where this picture stands.
 
@@ -439,7 +455,7 @@ else:
             for sibling in getattr(parent, "childNodes", []):
                 if sibling is current:
                     break
-                if getattr(sibling, "nodeName", "") == "tenkzkernel":
+                if _holds_kernel_switch(sibling):
                     return True
             current = parent
         return False
@@ -506,16 +522,10 @@ else:
     class tenkz(_TenkzVerbatimEnvironment):
         pass
 
-    class tenkzcd(_TenkzVerbatimEnvironment):
-        pass
-
     class tenkzlattice(_TenkzVerbatimEnvironment):
         pass
 
     class tenkzplanes(_TenkzVerbatimEnvironment):
-        pass
-
-    class tenkzfree(_TenkzVerbatimEnvironment):
         pass
 
     class tikzcd(_TenkzVerbatimEnvironment):

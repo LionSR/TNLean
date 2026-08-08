@@ -33,11 +33,11 @@ def source_picture() -> str:
     """Return the single chapter-owned torus environment verbatim."""
     source = read_tex_tree(CHAPTER)
     pictures = re.findall(
-        r"\\begin\{tenkzlattice\}\[[\s\S]*?\\end\{tenkzlattice\}",
+        r"\\begin\{tenkz\}\[[\s\S]*?\\end\{tenkz\}",
         source,
     )
     assert len(pictures) == 1, (
-        "expected exactly one source-linked torus lattice",
+        "expected exactly one source-linked torus picture",
         len(pictures),
     )
     picture = pictures[0]
@@ -46,8 +46,9 @@ def source_picture() -> str:
         "east=trace",
         "north=trace",
         "south=trace",
-        "frame=oblique",
-        r"\tnsite[role=marked, label=$A$]{(1,2)}",
+        "frame=plane",
+        "physical=up",
+        r"\tn[at=(1,2), species=marked, label pos=nw]{A}",
     ):
         assert spelling in picture, spelling
     return picture
@@ -68,6 +69,7 @@ def main() -> int:
 \documentclass[tikz,border=2pt]{{standalone}}
 \usepackage{{tenkz}}
 \begin{{document}}
+\tenkzkernel
 {picture}
 \end{{document}}
 """
@@ -111,10 +113,16 @@ def main() -> int:
 
         events = (work / "peps-torus.tnlog").read_text(encoding="utf-8").splitlines()
         pictures = [line for line in events if line.startswith("picture|")]
-        traces = [line for line in events if line.startswith("trace|")]
-        horizontal = [line for line in traces if "|axis=west-east|" in line]
-        vertical = [line for line in traces if "|axis=north-south|" in line]
-        boundaries = [line for line in events if line.startswith("boundary|")]
+        traces = [
+            line
+            for line in events
+            if line.startswith("wire|") and "|origin=trace|" in line
+        ]
+        horizontal = [line for line in traces if "|side=west-east" in line]
+        vertical = [line for line in traces if "|side=north-south" in line]
+        boundaries = [
+            line for line in events if line.startswith("kernel-boundary|")
+        ]
 
         extracted = subprocess.run(
             [pdftotext, "-layout", "peps-torus.pdf", "-"],
@@ -132,15 +140,9 @@ def main() -> int:
         assert len(traces) == 6, traces
         assert len(boundaries) == 1, boundaries
         boundary = boundaries[0]
-        for field in (
-            "physical-up=9",
-            "physical-down=0",
-            "virtual-west=0",
-            "virtual-east=0",
-            "virtual-north=0",
-            "virtual-south=0",
-        ):
-            assert field in boundary, boundary
+        signature = boundary.split("signature=", 1)[1]
+        entries = [entry.strip() for entry in signature.split(",")]
+        assert entries == ["phys:n"] * 9, boundary
 
     print(
         "PASS: source-linked PEPS torus expands once with live customization, "

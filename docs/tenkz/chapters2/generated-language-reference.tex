@@ -28,25 +28,16 @@
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tncut.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}cut \allowbreak{}option \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tnregion} & regions-\allowbreak{}annotations & A \allowbreak{}region \allowbreak{}creates \allowbreak{}a \allowbreak{}semantic \allowbreak{}enclosure \allowbreak{}record. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnregion[keys]{members}}}} \\[2pt]
-\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnregion.tex}}. Representative failure: A \allowbreak{}region \allowbreak{}outside \allowbreak{}lattice \allowbreak{}or \allowbreak{}free \allowbreak{}scope \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
+\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnregion.tex}}. Representative failure: A \allowbreak{}region \allowbreak{}outside \allowbreak{}lattice \allowbreak{}scope \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tnedge} & connections-\allowbreak{}closures & A \allowbreak{}lattice \allowbreak{}edge \allowbreak{}creates \allowbreak{}or \allowbreak{}changes \allowbreak{}one \allowbreak{}connection. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnedge[keys]{endpoints}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnedge.tex}}. Representative failure: Malformed \allowbreak{}or \allowbreak{}out-\allowbreak{}of-\allowbreak{}range \allowbreak{}endpoints \allowbreak{}are \allowbreak{}hard \allowbreak{}errors.} \\[3pt]
 \texttt{\textbackslash tnsite} & atoms & A \allowbreak{}lattice \allowbreak{}site \allowbreak{}creates \allowbreak{}or \allowbreak{}changes \allowbreak{}one \allowbreak{}atom. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnsite[keys]{cell}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnsite.tex}}. Representative failure: An \allowbreak{}out-\allowbreak{}of-\allowbreak{}range \allowbreak{}cell \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
-\texttt{\textbackslash tnput} & atoms & A \allowbreak{}free \allowbreak{}atom \allowbreak{}needs \allowbreak{}a \allowbreak{}stable \allowbreak{}name \allowbreak{}and \allowbreak{}position. \\
-\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnput[keys]{name}{position}{label}}}} \\[2pt]
-\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnput.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}atom \allowbreak{}role \allowbreak{}or \allowbreak{}port \allowbreak{}type \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
-\texttt{\textbackslash tnjoin} & connections-\allowbreak{}closures & A \allowbreak{}free \allowbreak{}join \allowbreak{}creates \allowbreak{}a \allowbreak{}typed \allowbreak{}connection \allowbreak{}record. \\
-\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnjoin[keys]{from}{to}}}} \\[2pt]
-\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnjoin.tex}}. Representative failure: Mismatched \allowbreak{}endpoint \allowbreak{}types \allowbreak{}are \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tntree} & atoms & A \allowbreak{}fusion \allowbreak{}tree \allowbreak{}is \allowbreak{}one \allowbreak{}structured \allowbreak{}atom. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tntree[keys]{word}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tntree.tex}}. Representative failure: An \allowbreak{}unbalanced \allowbreak{}fusion \allowbreak{}word \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
-\texttt{\textbackslash tnarrow} & connections-\allowbreak{}closures & An \allowbreak{}arrow \allowbreak{}connects \allowbreak{}declared \allowbreak{}diagram \allowbreak{}objects. \\
-\multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnarrow[keys]{label}}}} \\[2pt]
-\multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnarrow.tex}}. Representative failure: A \allowbreak{}nonexistent \allowbreak{}source \allowbreak{}or \allowbreak{}target \allowbreak{}address \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
 \texttt{\textbackslash tnpic} & composition & A \allowbreak{}wrapper \allowbreak{}composes \allowbreak{}the \allowbreak{}grid \allowbreak{}grammar \allowbreak{}inside \allowbreak{}another \allowbreak{}expression. \\
 \multicolumn{3}{@{}p{106mm}@{}}{\footnotesize\texttt{\detokenize{\tnpic[picture keys]{body}}}} \\[2pt]
 \multicolumn{3}{@{}p{106mm}@{}}{Example: \texttt{\detokenize{tex/tenkz/examples/api/tnpic.tex}}. Representative failure: An \allowbreak{}unknown \allowbreak{}picture \allowbreak{}key \allowbreak{}is \allowbreak{}a \allowbreak{}hard \allowbreak{}error.} \\[3pt]
@@ -117,18 +108,10 @@ picture & \texttt{plane \allowbreak{}slant} & length & metric & Projected \allow
 picture & \texttt{col \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}column \allowbreak{}basis. \\
 picture & \texttt{row \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}row \allowbreak{}basis. \\
 picture & \texttt{sheet \allowbreak{}vector} & dimension-\allowbreak{}pair & frame & Expert \allowbreak{}projected \allowbreak{}sheet \allowbreak{}basis. \\
-picture & \texttt{maps} & flag & false & Typed-\allowbreak{}map \allowbreak{}layout. \\
-picture & \texttt{polygon} & positive-\allowbreak{}integer & empty & Coherence \allowbreak{}polygon \allowbreak{}layout. \\
-picture & \texttt{radius} & length & metric & Coherence \allowbreak{}polygon \allowbreak{}radius. \\
-picture & \texttt{column \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}column \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
-picture & \texttt{row \allowbreak{}sep} & matrix-\allowbreak{}separation & metric & General \allowbreak{}tenkzcd \allowbreak{}row \allowbreak{}separation: \allowbreak{}a \allowbreak{}length \allowbreak{}or \allowbreak{}a \allowbreak{}tikz-\allowbreak{}cd \allowbreak{}preset \allowbreak{}(\allowbreak{}huge,\allowbreak{} \allowbreak{}large,\allowbreak{} \allowbreak{}normal,\allowbreak{} \allowbreak{}scriptsize,\allowbreak{} \allowbreak{}small,\allowbreak{} \allowbreak{}or \allowbreak{}tiny). \\
 object & \texttt{dot} & flag & policy & Dot \allowbreak{}silhouette. \\
 object & \texttt{box} & flag & policy & Box \allowbreak{}silhouette. \\
 object & \texttt{pill} & flag & policy & Pill \allowbreak{}silhouette. \\
 object & \texttt{mpo} & flag & policy & MPO \allowbreak{}silhouette. \\
-object & \texttt{ring} & flag & false & Ring \allowbreak{}silhouette. \\
-object & \texttt{circle} & flag & false & Plain \allowbreak{}circular \allowbreak{}silhouette \allowbreak{}with \allowbreak{}an \allowbreak{}inscribed \allowbreak{}label. \\
-object & \texttt{boundary} & flag & false & Boundary \allowbreak{}silhouette. \\
 object & \texttt{tri} & enum(\allowbreak{}l\textbar{}\allowbreak{}r) & empty & Canonical \allowbreak{}isometry \allowbreak{}silhouette. \\
 object & \texttt{wide} & positive-\allowbreak{}integer & 1 & Column \allowbreak{}span. \\
 object & \texttt{wires} & positive-\allowbreak{}integer & 1 & Wire-\allowbreak{}row \allowbreak{}span. \\
@@ -147,22 +130,12 @@ object & \texttt{label} & math & empty & Lattice-\allowbreak{}site \allowbreak{}
 object & \texttt{label \allowbreak{}pos} & angle & auto & Object \allowbreak{}label \allowbreak{}policy. \\
 object & \texttt{size} & size-\allowbreak{}class & m & Compatibility-\allowbreak{}object \allowbreak{}metric \allowbreak{}size \allowbreak{}class. \\
 object & \texttt{label \allowbreak{}shift} & dimension-\allowbreak{}pair & zero & Object \allowbreak{}label \allowbreak{}adjustment. \\
-object & \texttt{ports} & typed-\allowbreak{}port-\allowbreak{}list & empty & Free-\allowbreak{}atom \allowbreak{}typed \allowbreak{}ports. \\
 object & \texttt{frame} & frame-\allowbreak{}spec & flat & Atom-\allowbreak{}local \allowbreak{}coordinate \allowbreak{}frame. \\
 object & \texttt{no \allowbreak{}legs} & flag & false & Suppress \allowbreak{}physical \allowbreak{}ports. \\
 object & \texttt{removed} & flag & false & Remove \allowbreak{}a \allowbreak{}lattice \allowbreak{}atom. \\
 object & \texttt{tree \allowbreak{}style} & enum(\allowbreak{}wire\textbar{}\allowbreak{}ribbon) & wire & Fusion-\allowbreak{}tree \allowbreak{}strand \allowbreak{}style. \\
-connection & \texttt{route} & enum(\allowbreak{}straight\textbar{}\allowbreak{}orth\textbar{}\allowbreak{}arc) & straight & Connection \allowbreak{}route \allowbreak{}family; \allowbreak{}0.7 \allowbreak{}compatibility \allowbreak{}also \allowbreak{}accepts \allowbreak{}hv/vh \allowbreak{}until \allowbreak{}S4. \\
-connection & \texttt{dir} & direction-\allowbreak{}policy & false & Connection \allowbreak{}direction. \\
-connection & \texttt{out} & angle & automatic & Arc \allowbreak{}departure \allowbreak{}angle. \\
-connection & \texttt{in} & angle & automatic & Arc \allowbreak{}arrival \allowbreak{}angle. \\
 connection & \texttt{label} & math & empty & Connection \allowbreak{}label. \\
 connection & \texttt{role} & semantic-\allowbreak{}role & empty & Connection \allowbreak{}theme \allowbreak{}role. \\
-connection & \texttt{species} & declared-\allowbreak{}name & empty & Connection \allowbreak{}species. \\
-connection & \texttt{name} & identifier & generated & Stable \allowbreak{}semantic \allowbreak{}name. \\
-connection & \texttt{fused} & flag & false & Doubled \allowbreak{}connection. \\
-connection & \texttt{from} & address & empty & Arrow \allowbreak{}source. \\
-connection & \texttt{to} & address & empty & Arrow \allowbreak{}target. \\
 connection & \texttt{distinguished} & flag & false & Distinguished \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{none} & flag & false & Suppress \allowbreak{}a \allowbreak{}lattice \allowbreak{}edge. \\
 connection & \texttt{style} & style-\allowbreak{}name & empty & Named \allowbreak{}lattice-\allowbreak{}edge \allowbreak{}style. \\
@@ -172,7 +145,6 @@ region & \texttt{inset} & number & 0 & Nested-\allowbreak{}region \allowbreak{}i
 region & \texttt{label} & math & empty & Region \allowbreak{}label. \\
 region & \texttt{label \allowbreak{}pos} & angle & auto & Region \allowbreak{}label \allowbreak{}policy. \\
 region & \texttt{name} & identifier & generated & Addressable \allowbreak{}region \allowbreak{}name. \\
-region & \texttt{group} & name-\allowbreak{}list & empty & Free-\allowbreak{}graph \allowbreak{}region \allowbreak{}members. \\
 annotation & \texttt{brace \allowbreak{}above} & flag & false & Brace \allowbreak{}annotation \allowbreak{}above \allowbreak{}a \allowbreak{}span. \\
 annotation & \texttt{brace \allowbreak{}below} & flag & false & Brace \allowbreak{}annotation \allowbreak{}below \allowbreak{}a \allowbreak{}span. \\
 annotation & \texttt{box} & flag & false & Boxed \allowbreak{}span \allowbreak{}annotation. \\
@@ -213,7 +185,7 @@ kernel-\allowbreak{}atom & \texttt{label~pos} & angle & auto & Label \allowbreak
 kernel-\allowbreak{}atom & \texttt{nudge} & pair & zero & Quarter-\allowbreak{}pitch \allowbreak{}displacement. \\
 kernel-\allowbreak{}atom & \texttt{void} & void-\allowbreak{}policy & unset & Hole \allowbreak{}or \allowbreak{}removed \allowbreak{}site. \\
 kernel-\allowbreak{}atom & \texttt{physical} & physical-\allowbreak{}policy & unset & Site's \allowbreak{}own \allowbreak{}answer \allowbreak{}to \allowbreak{}the \allowbreak{}picture's \allowbreak{}physical \allowbreak{}policy. \\
-kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Reserved; \allowbreak{}currently \allowbreak{}inert \allowbreak{}(\allowbreak{}stored,\allowbreak{} \allowbreak{}unread). \\
+kernel-\allowbreak{}atom & \texttt{conjugate} & flag & false & Tombstoned; \allowbreak{}stored,\allowbreak{} \allowbreak{}read \allowbreak{}by \allowbreak{}nothing. \allowbreak{}Sunset \allowbreak{}1.0. \\
 kernel-\allowbreak{}atom & \texttt{cluster} & pair & empty & Expander: \allowbreak{}RxC \allowbreak{}addressable \allowbreak{}sub-\allowbreak{}atom \allowbreak{}group. \\
 kernel-\allowbreak{}atom & \texttt{role} & semantic-\allowbreak{}role & empty & Prelude \allowbreak{}species \allowbreak{}spelling. \\
 kernel-\allowbreak{}wire & \texttt{kind} & enum(\allowbreak{}index\textbar{}\allowbreak{}string\textbar{}\allowbreak{}pairing) & index & Bond,\allowbreak{} \allowbreak{}travelling \allowbreak{}string,\allowbreak{} \allowbreak{}or \allowbreak{}generated \allowbreak{}skin \allowbreak{}pairing. \\

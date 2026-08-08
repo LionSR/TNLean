@@ -60,7 +60,6 @@ on:
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
-      - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_enclosures.py'
@@ -124,7 +123,6 @@ on:
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
-      - 'scripts/test_tenkz_cd_map_labels.py'
       - 'scripts/test_tenkz_label_overlap.py'
       - 'scripts/test_tenkz_face_ports.py'
       - 'scripts/test_tenkz_enclosures.py'
@@ -212,7 +210,6 @@ jobs:
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_equation_audit.py'
               - 'scripts/test_tenkz_equation_web.py'
-              - 'scripts/test_tenkz_cd_map_labels.py'
               - 'scripts/test_tenkz_label_overlap.py'
               - 'scripts/test_tenkz_face_ports.py'
               - 'scripts/test_tenkz_enclosures.py'
@@ -662,10 +659,6 @@ jobs:
       - name: Test tenkz equation audit
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_equation_audit.py
-
-      - name: Test measured tenkz typed-map label bands
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_cd_map_labels.py
 
       - name: Test measured tenkz label overlaps
         if: env.TEX_CHANGED == 'true'

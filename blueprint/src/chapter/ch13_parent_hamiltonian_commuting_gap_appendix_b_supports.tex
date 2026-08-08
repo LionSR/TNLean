@@ -260,9 +260,9 @@
     % two virtual-bond supports marked around \varphi_{01} and \varphi_{12}.
     % Ink-to-index: U_r has left/right virtual indices and one upper physical
     % index.  The dots \varphi_{01},\varphi_{12} carry the two virtual
-    % half-indices of the corresponding bonds; the red regions locate the two
-    % supports and introduce no operator layer or indices.
-    % Contractions: the four U--\varphi joins contract the two internal bonds.
+    % half-indices of the corresponding bonds; the tinted regions locate the
+    % two supports and introduce no operator layer or indices.
+    % Contractions: the four grid bonds contract the two internal bonds.
     % The two outer virtual indices and all three physical indices remain free.
     % Boundary signature: (virtual-west, virtual-east, physical-up,
     % physical-down)=(1,1,3,0).
@@ -272,48 +272,19 @@
     % explicit adjacent-projector lemma and support marking are blueprint
     % algebraic elaborations, not a separately stated source result or figure.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[boundary, ports={east:virtual}]
-                {bondLeft}{(-12mm,0)}{}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {bondUzero}{(0,0)}{U_0}
-            \tnput[dot, ports={west:virtual,east:virtual},
-                label pos=south]
-                {bondPhiZero}{(16mm,0)}{\varphi_{01}}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {bondUone}{(32mm,0)}{U_1}
-            \tnput[dot, ports={west:virtual,east:virtual},
-                label pos=south]
-                {bondPhiOne}{(48mm,0)}{\varphi_{12}}
-            \tnput[box, ports={west:virtual,east:virtual,north:physical}]
-                {bondUtwo}{(64mm,0)}{U_2}
-            \tnput[boundary, ports={west:virtual}]
-                {bondRight}{(76mm,0)}{}
-            \tnput[boundary, ports={south:physical}]
-                {bondPhysicalZero}{(0,14mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {bondPhysicalOne}{(32mm,14mm)}{}
-            \tnput[boundary, ports={south:physical}]
-                {bondPhysicalTwo}{(64mm,14mm)}{}
-            \tnjoin[name=bondOuterLeft]{bondLeft.east}{bondUzero.west}
-            \tnjoin[name=bondZeroLeft]{bondUzero.east}{bondPhiZero.west}
-            \tnjoin[name=bondZeroRight]{bondPhiZero.east}{bondUone.west}
-            \tnjoin[name=bondOneLeft]{bondUone.east}{bondPhiOne.west}
-            \tnjoin[name=bondOneRight]{bondPhiOne.east}{bondUtwo.west}
-            \tnjoin[name=bondOuterRight]{bondUtwo.east}{bondRight.west}
-            \tnjoin[name=bondPhysicalJoinZero]
-                {bondUzero.north}{bondPhysicalZero.south}
-            \tnjoin[name=bondPhysicalJoinOne]
-                {bondUone.north}{bondPhysicalOne.south}
-            \tnjoin[name=bondPhysicalJoinTwo]
-                {bondUtwo.north}{bondPhysicalTwo.south}
-            \tnregion[slot=selected, label={$\supp(P_{01})$},
-                label pos=south,
-                name=bondProjectorZero]{bondPhiZero}
-            \tnregion[slot=selected, label={$\supp(P_{12})$},
-                label pos=south,
-                name=bondProjectorOne]{bondPhiOne}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, west=open, east=open, physical=up]
+            \tn[skin=box]{U_0} &
+            \tn[physical=none, label pos=s]{\varphi_{01}} &
+            \tn[skin=box]{U_1} &
+            \tn[physical=none, label pos=s]{\varphi_{12}} &
+            \tn[skin=box]{U_2}
+            \tndeclare{species}{support}{hue=source:red}
+            \tnmark[form=enclosure, species=support, tint, label pos=s]
+                {(1,2)}{$\supp(P_{01})$}
+            \tnmark[form=enclosure, species=support, tint, label pos=s]
+                {(1,4)}{$\supp(P_{12})$}
+        \end{tenkz}
     \end{center}
 \end{theorem}
 

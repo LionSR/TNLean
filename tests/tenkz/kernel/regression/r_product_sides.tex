@@ -1,0 +1,69 @@
+% Regression: the contracted product joiner (issue 5496).  Panels adjacent
+% without a relation glyph are one product group, and the boundary audit
+% reads the group as one composite side: the group's signature is the
+% factors' outer signature with the contracted interface cancelled.  Three
+% equations pin the three interface shapes.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% One virtual rail equals the three-factor chain: each juxtaposition
+% cancels one east/west pair, and the composite keeps the outer pair.
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=a, ports={180:virtual,0:virtual}]{A}
+    \tnwire{open w}{a.180} \tnwire{a.0}{open e}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=b, ports={180:virtual,0:virtual}]{B}
+    \tnwire{open w}{b.180} \tnwire{b.0}{open e}
+  \end{tenkz}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=c, ports={180:virtual,0:virtual}]{C}
+    \tnwire{open w}{c.180} \tnwire{c.0}{open e}
+  \end{tenkz}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=d, ports={180:virtual,0:virtual}]{D}
+    \tnwire{open w}{d.180} \tnwire{d.0}{open e}
+  \end{tenkz}
+\end{tenkzeq}
+% A directed physical through-index: the index leaving the left factor's
+% east frame (to) continues as the index entering the right factor's west
+% frame (from), and the contracted pair leaves no entry.
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=x, ports={180:physical,0:physical}]{X}
+    \tnwire[dir=to]{open w}{x.180} \tnwire[dir=to]{x.0}{open e}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=y, ports={180:physical,0:physical}]{Y}
+    \tnwire[dir=to]{open w}{y.180} \tnwire[dir=to]{y.0}{open e}
+  \end{tenkz}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=z, ports={180:physical,0:physical}]{Z}
+    \tnwire[dir=to]{open w}{z.180} \tnwire[dir=to]{z.0}{open e}
+  \end{tenkz}
+\end{tenkzeq}
+% An empty interface is the plain tensor juxtaposition: nothing cancels and
+% the factors' signatures concatenate whole.
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+    \tn[at=(1,1), ports={90:physical}]{P}
+    \tn[at=(1,2), ports={90:physical}]{Q}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={90:physical}]{P}
+  \end{tenkz}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[ports={90:physical}]{Q}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

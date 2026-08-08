@@ -101,11 +101,11 @@ contraction, the same boundary signature, whether the restatement carries ink
 of its own or none. A travelling string states an operator index rather than
 that contraction and retires nothing.
 
-### 2.3 Atom keys (13)
+### 2.3 Atom keys (12)
 
 | Key | Type | Values | Default | Diagnostic family |
 |---|---|---|---|---|
-| `skin=` | identifier | a declared skin; defaults §2.8 | theme default (`dot`) | `TKZ-SKIN-*` |
+| `skin=` | identifier | a declared skin; defaults §2.8 | theme default (`dot`; `none` on a void site) | `TKZ-SKIN-*` |
 | `wide=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `wires=` | positive-integer | — | 1 | `TKZ-ATOM-*` |
 | `at=` | address | — | next chain cell | `TKZ-ADDR-*` |
@@ -116,7 +116,6 @@ that contraction and retires nothing.
 | `pairing cross=` | indexed-crossing-list | `<pairing-number>: <crossing-declaration>, ...` | empty | `TKZ-SKIN-PAIRING-*` |
 | `size=` | small-enum | `s` `m` `l` | `m` | `TKZ-SIZE-*` |
 | `label pos=` | angle | a bearing in the record's own axes, or `auto` | `auto` | `TKZ-LABEL-*` |
-| `conjugate` | flag | — | false | `TKZ-ATOM-*` |
 | `void=` | small-enum | `open` `sealed` | unset | `TKZ-ATOM-*` |
 
 A face is an angle in the record's own axes (§3, §4), so the outward physical
@@ -139,7 +138,11 @@ The label component is where the retired page-relative keys went: an index
 name belongs to the port it names, and a port already knows which way it
 points. A cluster carrier is a glyphless group and owns no authored `ports=`;
 attach wires to its addressable member atoms instead. `void=open` is a hole
-that preserves indices; `void=sealed` removes the site and its bonds.
+that preserves indices; `void=sealed` removes the site and its bonds. A void
+site's skin defaults to `none` rather than `dot`: a hole draws nothing —
+no glyph and, by the `skin=none` rule it inherits, no label — unless the
+author declares a skin, while every record — the bonds bridging an open
+hole, its boundary entries — stands unchanged.
 
 ### 2.4 Wire keys (10)
 
@@ -692,8 +695,17 @@ sum are read from the class the mathematics already has.
 4. **The audit follows the joiner.** Every term has a boundary signature;
    mathematics has none, and its signature is unknown. A relation requires
    equal signatures and ends the term. A sum requires equal signatures and
-   continues it. A product requires disjoint signatures and concatenates
-   them. Any joiner with an unknown operand yields an unknown result, and the
+   continues it. A product contracts the facing cut: every index cut on the
+   left factor's east frame continues as an index cut on the right factor's
+   west frame — the same type and weight, an outgoing index continuing as an
+   incoming one — and each such pair is one index, internal to the composite
+   term, which exposes nothing; the remaining entries of both factors
+   concatenate. The facing cuts must cancel completely, and an empty facing
+   cut is the plain juxtaposition of a scalar or a tensor factor, whose
+   signatures concatenate whole. A product group of panels is therefore one
+   composite side of the relations around it, its signature the factors'
+   outer signature with the contracted interfaces cancelled.
+   Any joiner with an unknown operand yields an unknown result, and the
    comparison is recorded as unperformed rather than as passed — which is
    what an elision between two panels asserts, and needs no spelling of its
    own. A mismatch is `[TKZ-EQ-SIGNATURE]`, printing both signatures. A
@@ -708,7 +720,8 @@ sum are read from the class the mathematics already has.
    smashed against a panel that is always the taller.
 <!-- Consumers: rmp-ii-mpu-brickwork, rmp-iii-a-coproduct,
      rmp-workbench-iii-eq59-now, rmp-ii-mpu-unitarity,
-     rmp-ii-tangent-projector, rmp-workbench-ii-fine-graining. -->
+     rmp-ii-tangent-projector, rmp-workbench-ii-fine-graining.
+     Product joiner: rmp-ii-mpu-blocking. -->
 
 ## 8. Declarations and the extension gate
 
@@ -875,6 +888,7 @@ is not the fixed two-axis atom contract of §7.
 | `slot=` | `species=`, which atoms and wires already carry |
 | `up=`, `down=` | `ports=`: the outward physical face is the row's own normal |
 | `check=` | nothing: the audit follows the joiner class (§7) |
+| `conjugate` flag | nothing: duality is the wire's `dir=` (§2.4), and a conjugate overline is label mathematics |
 | `form=cut`, `form=band`, `form=brace-below`, `form=prose`, `\tncut`, `\tnregion`, `\tnprose` | `form=enclosure`, `form=bracket`, or a term of unknown signature (§6, §7) |
 | `frame=vertical`, `frame=rotate=<deg>`, frame matrices | `flat`, `plane`, `circle`; orientation is a consequence of where a record sits (§4) |
 | `leg <face> of <cell>`, `<compass> outside` | a generated leg is a named record; an open end takes its place from the route (§5) |
@@ -1100,3 +1114,14 @@ confirmation at L1 acceptance:
    content (§13), so a side that exposes indices says so. The registry rows,
    the key table, and §3 now say that, and `none` is the explicit spelling of
    the kernel default rather than a seal.
+7. **A void site draws no glyph — corrected 2026-08-07.** The skin default
+   read `dot` for every atom, so `\tn[void=open]{}` drew a site
+   indistinguishable from a real one and a sealed void drew a free-floating
+   dot with no bonds. A hole means an absent site: both void words now
+   default the skin to `none`, and the record half of the contract — the
+   bonds bridging an open hole, its surviving physical index, the boundary
+   signature — is untouched. A declared `skin=` still draws, and the
+   `\tnskip` ledger row stays one key long and is glyph-faithful as printed.
+   The default inherits the whole `skin=none` reading: a void's authored
+   label is suppressed with its glyph, so a labelled anchor that must stay
+   visible declares a skin.

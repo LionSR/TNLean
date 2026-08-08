@@ -720,10 +720,7 @@ def _site_contract(
         )
     if match.group("kind") == "command":
         command = _COMMAND_SITE_RE.match(skeleton)
-        if command is None or (
-            command.group("star") is not None
-            and command.group("command") != "tnarrow"
-        ):
+        if command is None or command.group("star") is not None:
             raise DimensionInventoryError(
                 f"{where}.site command skeleton is not a dimension owner"
             )
