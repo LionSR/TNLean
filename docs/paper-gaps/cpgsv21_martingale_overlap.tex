@@ -255,11 +255,19 @@ existential MPS gap theorem, but it would not immediately be the displayed
 all-$L$ estimate with constant $1/(4L)$ unless the constants are converted to
 the same blocking convention.
 
-Consequently the remaining comparison is not whether the row-sum algebra is
-valid; that part has been isolated and formalized. The remaining comparison is
-whether the cited FNW--Nachtergaele--Kastoryano principal-angle estimates supply
-the required cyclic-window anticommutator estimate, with constants independent
-of the chain length, after the same blocking convention has been fixed.
+Consequently the remaining comparison is neither the row-sum algebra nor the
+generic two-projection geometry; both parts have been isolated and formalized.
+In particular,
+\leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
+shows that a Friedrichs bound $\eta$ for the two ground-space ranges, after
+removing their common intersection, gives
+\[
+  h_i h_j+h_jh_i\ge -\eta(h_i+h_j)
+\]
+for the complementary excitation projections. The remaining comparison is
+whether the cited FNW--Nachtergaele--Kastoryano estimates supply the required
+uniform ground-space Friedrichs bound, with constants independent of the chain
+length, after the same blocking convention has been fixed.
 The qualitative fact that two finite-dimensional subspaces have a well-defined
 principal-angle decomposition is not enough: the martingale reduction needs a
 uniform numerical bound after the same blocking convention has been fixed.
@@ -323,9 +331,10 @@ and
 with public reformulations
 \leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
 \leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The remaining
-MPS-specific task is unchanged: to produce a uniform anticommutator (or
-ground-space principal-angle) estimate for overlapping cyclic windows, using the
-intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
+MPS-specific task is to produce a uniform ground-space principal-angle estimate
+for overlapping cyclic windows; the generic theorem above then supplies the
+anticommutator estimate. This uses the intersection identity
+$\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
 \leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; a uniform
 small bound on $\|p_ip_j\|$ itself is not available in the generic overlapping
 case, since that norm is $1$ whenever the two excitation ranges have a common
