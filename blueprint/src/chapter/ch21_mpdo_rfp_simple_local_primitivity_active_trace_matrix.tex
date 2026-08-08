@@ -291,14 +291,49 @@
     apply Theorem~\ref{thm:matrix_primitive_of_two_three_returns}.
 \end{proof}
 
+\begin{theorem}[Retained witnesses for the active inverse-map factorization]
+    \label{thm:mpdo_inverse_map_active_sector_witnesses}
+    \lean{MPOTensor.%
+      exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
+    \leanok
+    \uses{def:mpdo, def:injective, def:mpdo_eta_structure,
+      def:mpdo_three_site_closure,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_eta_coherent_positive_choice,
+      thm:mpdo_sector_virtual_matrix_spanning,
+      thm:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_sector_support_triangle_closure}
+    Let ${\cal K}$ be injective and generate MPDOs, let $R$ close a three-site
+    state $\rho$, and choose Hayashi data with weights $p_k$. Fix outer indices
+    for which the corresponding entry of $R$ is nonzero, and let $F$ be the
+    zero-weight reparameterized inverse-map factorization. There are coherent
+    sector phases for which all neighboring operators are positive semidefinite
+    and the active one-site matrices span $\MN{D}$. Every active sector contains
+    a nonzero virtual matrix, every nonzero neighboring edge closes through a
+    third active sector, every inactive left tensor vanishes, and $I_*$ is
+    nonempty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_eta_coherent_positive_choice,
+      thm:mpdo_sector_virtual_matrix_spanning,
+      thm:mpdo_active_one_site_matrix_spanning,
+      thm:mpdo_sector_support_triangle_closure}
+    Choose the coherent positive phases. Injectivity gives the full virtual
+    matrix span, while zero-weight reparameterization removes the inactive
+    summands from the active span. A nonzero virtual matrix exists in every
+    active sector, and the neighboring-support recurrence gives the three-edge
+    return. Inactive left tensors vanish by construction. Finally,
+    $\sum_kp_k=1$ gives a nonempty active sector.
+\end{proof}
+
 % The effective-sector restriction, including the zero rows and columns on
 % the full ambient sector set, is documented in
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
     \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
-    \lean{MPOTensor.%
-      exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
     \lean{MPOTensor.%
       exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
     \lean{MPOTensor.%
@@ -308,6 +343,7 @@
         def:mpdo_active_sector_trace_matrix,
         def:mpdo_explicit_eta_of_sector_tensors,
         thm:mpdo_eta_coherent_positive_choice,
+        thm:mpdo_inverse_map_active_sector_witnesses,
         thm:mpdo_sector_eta_data_trace_matrix}
     Let ${\cal K}$ be an injective tensor that generates MPDOs and
     satisfies SAL, and choose the positive semidefinite neighboring operators of
@@ -1181,7 +1217,7 @@
       thm:mpdo_four_site_sal_eta_structure,
       thm:mpdo_normalized_four_site_tail_entry_ne_zero,
       thm:mpdo_three_site_closure_reduced,
-      thm:mpdo_sector_trace_matrix_primitive,
+      thm:mpdo_inverse_map_active_sector_witnesses,
       thm:mpdo_casei_rank_one_coefficients}
     Let ${\cal K}$ be an injective MPO tensor. Suppose
     that ${\cal K}$ satisfies the strong area law, that its physical-trace
@@ -1225,7 +1261,7 @@
       thm:mpdo_four_site_sal_eta_structure,
       thm:mpdo_normalized_four_site_tail_entry_ne_zero,
       thm:mpdo_three_site_closure_reduced,
-      thm:mpdo_sector_trace_matrix_primitive,
+      thm:mpdo_inverse_map_active_sector_witnesses,
       thm:mpdo_casei_rank_one_coefficients}
     Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
     Hayashi decomposition, and
@@ -1233,8 +1269,8 @@
     nonzero outer indices for the normalized four-site tail, and
     Theorem~\ref{thm:mpdo_three_site_closure_reduced} identifies the required
     three-site closure. Apply the zero-weight reparameterized inverse-map
-    factorization and choose the coherent sector phases retained by
-    Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. Its neighboring
+    factorization and choose the coherent sector phases from
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Its neighboring
     operators are positive semidefinite, and its active one-site matrices,
     nonzero sector tensors, return condition, inactive sectors, and nonempty
     active sector satisfy the hypotheses of
