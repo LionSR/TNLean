@@ -1038,25 +1038,6 @@ $v$ is multiplied by a nonzero scalar.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Transition probability on representatives]
-    \label{thm:projective_transition_probability_mk}
-    \lean{Projectivization.transitionProbability_mk}
-    \leanok
-    \uses{def:projective_pure_state_matrix}
-    For arbitrary nonzero representatives $v,w\in\C^d$,
-    \begin{align}
-        \operatorname{tp}([v],[w])
-        =\frac{\langle v,w\rangle\langle w,v\rangle}
-        {\langle v,v\rangle\langle w,w\rangle}.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Multiplying either representative by a nonzero scalar multiplies the
-    numerator and denominator by the same squared modulus, so the quotient
-    is unchanged.
-\end{proof}
-
 \begin{theorem}[Projective rays as normalized pure states]
     \label{thm:projective_pure_state_bridge}
     \lean{Projectivization.isOrthogonalProjection_pureStateMatrix}
@@ -1066,8 +1047,7 @@ $v$ is multiplied by a nonzero scalar.
     \lean{Projectivization.pureStateMatrix_unitaryAction}
     \lean{Projectivization.pureStateMatrix_coordinateConjugation}
     \leanok
-    \uses{def:projective_pure_state_matrix,
-      thm:projective_transition_probability_mk}
+    \uses{def:projective_pure_state_matrix}
     The matrix $P_p$ is an orthogonal projection with trace one, and
     \begin{align}
         \tr(P_pP_q)=\operatorname{tp}(p,q).
@@ -1084,9 +1064,8 @@ $v$ is multiplied by a nonzero scalar.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:projective_transition_probability_mk}
-    The representative formula above and the rank-one identity
-    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ give idempotence,
+    The rank-one identity
+    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ gives idempotence,
     while taking the adjoint gives Hermiticity. The trace of
     $\ketbra{v}{v}$ is $\langle v,v\rangle$. Multiplying two rank-one
     matrices and taking the trace gives the normalized squared overlap.
@@ -1095,6 +1074,28 @@ $v$ is multiplied by a nonzero scalar.
     matrix multiplication sends $\ketbra{v}{v}$ to
     $\ketbra{Uv}{Uv}$, and coordinatewise conjugation exchanges the two
     factors of the outer product.
+\end{proof}
+
+\begin{theorem}[Transition probability on representatives]
+    \label{thm:projective_transition_probability_mk}
+    \lean{Projectivization.transitionProbability_mk}
+    \leanok
+    \uses{def:projective_pure_state_matrix,
+      thm:projective_pure_state_bridge}
+    For arbitrary nonzero representatives $v,w\in\C^d$,
+    \begin{align}
+        \operatorname{tp}([v],[w])
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+        {\langle v,v\rangle\langle w,w\rangle}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:projective_pure_state_bridge}
+    By the trace-product identity above,
+    $\operatorname{tp}([v],[w])=\tr(P_{[v]}P_{[w]})$. Substituting the
+    normalized outer products, multiplying the two rank-one matrices, and
+    taking the trace gives the displayed quotient.
 \end{proof}
 
 \begin{theorem}[Wigner's theorem]\label{thm:wigner}
