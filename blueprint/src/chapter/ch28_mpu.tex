@@ -1,0 +1,75 @@
+\chapter{Matrix Product Unitaries}\label{ch:mpu}
+
+This chapter develops the algebraic prerequisites for matrix product unitaries.
+The first result supplies the corrected nil-matrix bound used in the blocking
+argument of \cite[lines~405--426]{Cirac2017MPU}.
+
+\begin{theorem}[Dimension bound for a nilpotent Lie action]
+    \label{thm:mpu_lcs_finrank}
+    \lean{LieModule.lowerCentralSeries_finrank_eq_bot}
+    \leanok
+    Let a Lie algebra $L$ act nilpotently on a finite-dimensional vector space
+    $V$ over a field $K$.  Write $C_r(L,V)$ for the $r$th term of the lower
+    central series of this action.  Then
+    \begin{align}
+        C_{\dim_K(V)}(L,V) &= 0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    As long as $C_r(L,V)$ is nonzero, nilpotency prevents two consecutive
+    terms from being equal: equality would make every later term equal, in
+    contradiction with eventual vanishing.  Thus each nonzero step strictly
+    lowers dimension, and at most $\dim_K(V)$ such steps are possible.
+\end{proof}
+
+\begin{theorem}[Finite-dimensional nil-matrix theorem]
+    \label{thm:mpu_nil_matrix}
+    \lean{NonUnitalSubalgebra.list_prod_eq_zero_of_forall_isNilpotent}
+    \leanok
+    Let $V$ be a finite-dimensional vector space over a field $K$, and let
+    $A\subseteq\operatorname{End}_K(V)$ be a not necessarily unital
+    associative subalgebra.  If every element of $A$ is nilpotent, then every
+    ordered product of $\dim_K(V)$ elements of $A$ is zero.  The empty product
+    in dimension zero is also zero because the identity endomorphism of the
+    zero space is zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_lcs_finrank}
+    Regard $A$ as a Lie algebra under the commutator bracket.  Engel's theorem
+    makes $V$ a nilpotent Lie module, so the dimension bound gives
+    \begin{align}
+        C_{\dim_K(V)}(A,V) &= 0.
+    \end{align}
+    For every nonnegative integer $r$, every ordered family
+    $a_1,\ldots,a_r$ in $A$, and every vector $v$ in $V$, induction on $r$
+    gives
+    \begin{align}
+        (a_1\cdots a_r)v &\in C_r(A,V).
+    \end{align}
+    Taking $r=\dim_K(V)$ proves that the product annihilates every vector and
+    is therefore zero.
+\end{proof}
+
+\begin{theorem}[Nil matrix subalgebras]
+    \label{thm:mpu_nil_matrices}
+    \lean{NonUnitalSubalgebra.matrix_list_prod_eq_zero_of_forall_isNilpotent}
+    \leanok
+    Let $A$ be a not necessarily unital associative subalgebra of
+    $n\times n$ matrices over a field.  If every matrix in $A$ is nilpotent,
+    then every ordered product of $n$ matrices from $A$ vanishes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_nil_matrix}
+    Transport the matrix algebra to the endomorphisms of the coordinate space
+    through the standard algebra equivalence.  Nilpotency, membership, and the
+    ordered product are preserved, so the finite-dimensional nil-matrix
+    theorem applies; injectivity of the equivalence returns the zero matrix.
+\end{proof}
+
+The length $n$ is a weak bound, not a strict bound below $n$; the latter is
+false for strictly upper-triangular matrices.  This corrects the intermediate
+strict inequality in \cite[lines~405--426]{Cirac2017MPU} without changing its
+final strict $D^4$ estimate.
