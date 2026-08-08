@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Trace-Power Lemma: Stronger $k\ge1$ Hypothesis\\
+vs.\ Source's $k>1$ Moments}
+\author{}
+\date{2026-08-08}
+
+\begin{document}
+\maketitle
+
+\section{Source statement}
+
+\cite[Proposition~1, lines~349--354]{Cirac2017MPU} asserts: if $E$ is the
+transfer matrix of a matrix-product unitary with physical dimension $d$ and
+bond dimension $D$, then $\tr(E^N)=1$ for all $N>1$, and consequently the
+spectrum of $E$ contains a single eigenvalue equal to one with the rest
+vanishing.  The paper cites Lemma~A.5 of
+\cite{Cirac2016MPDO_arXiv}\footnote{Lemma~A.5, lines~1155--1163 of the
+preprint arXiv:1606.00608.} for this conclusion.
+
+\section{The point at issue}
+
+The present formalization (PR~\ghpr{5732}) proves the algebraic core
+under the stronger hypothesis $\tr(A^k)=1$ for \emph{all} $k\ge 1$,
+including $k=1$.  The source only provides $\tr(E^N)=1$ for $N>1$ via
+unitarity of blocked tensors.
+
+Newton's identities determine the elementary symmetric polynomials
+(hence the characteristic polynomial) from the power-sum traces
+$p_k=\tr(A^k)$.  The recurrence
+$k e_k = \sum_{i=1}^k (-1)^{i-1} e_{k-i} p_i$ needs $p_1$ to
+determine $e_1$, $p_1$ and $p_2$ to determine $e_2$, etc.  With only
+$p_2,p_3,\dots$ the system is underdetermined; no purely algebraic
+argument can recover the characteristic polynomial from $k>1$ moments
+alone.
+
+In the source context the missing first moment follows from the
+\emph{definition} of $E$ as a normalized partial trace of a unitary,
+which gives $\tr(E)=1$ independently of the blocking argument.  The
+formalization therefore supplies the algebraic prerequisite under the
+all-positive-moment hypothesis it actually needs, leaving the
+definitional first-moment recovery to the downstream MPU transfer
+argument (\ghissue{5706}).
+
+\section{Formalization status}
+
+\textbf{Verdict: scoped stronger-hypothesis prerequisite.}
+The two Lean theorems in
+\doclink{TNLean/Algebra/TracePowerCharPoly} prove the algebraic
+consequence for $k\ge 1$:
+\begin{itemize}
+  \item \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card}
+        (finite-range, $1\le k\le n$, requires $n\ge1$),
+  \item \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one}
+        (all $k\ge 1$, cardinality derived internally).
+\end{itemize}
+The source-level gap (bridging $N>1$ to $N\ge1$ in the MPU context) is
+tracked in \ghissue{5737} and will be resolved by the definitional
+$\tr(E)=1$ step in \ghissue{5706}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

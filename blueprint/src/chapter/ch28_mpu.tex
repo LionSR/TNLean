@@ -14,7 +14,7 @@ argument of \cite[lines~405--426]{Cirac2017MPU}.
     \begin{align}
         C_{\dim_K(V)}(L,V) &= 0.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     As long as $C_r(L,V)$ is nonzero, nilpotency prevents two consecutive
@@ -166,12 +166,12 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
-For the transfer-matrix spectrum argument of Proposition~\ref{prop:normal-tensor}
+For the transfer-matrix spectrum argument of \cite[Proposition~1]{Cirac2017MPU}
 in \cite[lines~349--354]{Cirac2017MPU} we need the algebraic fact that a matrix
 whose positive powers all have trace~$1$ must have characteristic polynomial
 $X^{n-1}(X-1)$.
 
-\begin{theorem}[Rank-one diagonal idempotent]
+\begin{lemma}[Rank-one diagonal idempotent]
   \label{thm:mpu_diagonal_one_at}
   \lean{Matrix.diagonalOneAt, Matrix.trace_diagonalOneAt,
     Matrix.diagonalOneAt_pow, Matrix.trace_pow_diagonalOneAt,
@@ -208,7 +208,7 @@ $X^{n-1}(X-1)$.
   \uses{thm:newton_girard, thm:mpu_diagonal_one_at}
   Choose any index $i_0$ (the hypothesis $n\ge1$ makes this possible)
   and let $B$ be the rank-one diagonal idempotent from
-  Theorem~\ref{thm:mpu_diagonal_one_at}.  For $1\le k\le n$ we have
+  Lemma~\ref{thm:mpu_diagonal_one_at}.  For $1\le k\le n$ we have
   $\tr(A^k)=1=\tr(B^k)$.  The finite-range half of the Newton--Girard
   theorem~\ref{thm:newton_girard} then yields $\chi_A = \chi_B =
   X^{\,n-1}(X-1)$.

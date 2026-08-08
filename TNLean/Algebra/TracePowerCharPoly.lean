@@ -202,7 +202,7 @@ theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one
     A.charpoly = X ^ (Fintype.card n - 1) * (X - 1) := by
   by_cases hcard0 : Fintype.card n = 0
   · -- Empty index type: `trace (A ^ 1) = 1` contradicts `trace = 0`
-    have hisEmpty : IsEmpty n := (Fintype.card_eq_zero_iff.mp hcard0)
+    haveI : IsEmpty n := (Fintype.card_eq_zero_iff.mp hcard0)
     have htrace0 : trace (A ^ 1) = 0 := by
       simp [trace]
     have htrace1 := h 1 (by norm_num)
