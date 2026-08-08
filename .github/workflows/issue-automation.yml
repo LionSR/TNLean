@@ -126,7 +126,9 @@ jobs:
             const chapter = text.match(/\bwolf(?:\s+|-)ch(?:apter)?\s*([1-7])\b/);
             if (chapter) labels.add(`wolf-ch${chapter[1]}`);
 
-            const papers = ['0802.0447', '1606.00608', '1708.00029', '1804.04964', '2011.12127'];
+            const papers = [
+              '0802.0447', '1606.00608', '1703.09188', '1708.00029', '1804.04964', '2011.12127'
+            ];
             for (const paper of papers) {
               if (text.includes(paper)) labels.add(paper);
             }
