@@ -10,8 +10,8 @@ import TNLean.Channel.PositiveConditionalExpectationDirectSum
 # Trace-preserving conditional expectations onto matrix star subalgebras
 
 Every star subalgebra of a full complex matrix algebra has unitary block coordinates in
-which it is a direct sum of right matrix factors.  Transporting the normalized coordinate
-expectation through this change of coordinates gives a trace-preserving completely positive
+which it is a direct sum of right matrix factors.  Conjugating the normalized coordinate
+expectation by this change of coordinates gives a trace-preserving completely positive
 conditional expectation onto the original star subalgebra.
 
 ## Main result
@@ -35,7 +35,8 @@ completely positive conditional expectation.
 
 The map is obtained from the coordinate direct-sum expectation by the unitary block
 coordinates of Wolf, Equation (1.39).  This is the matrix-algebra codomain step in the
-operator-system extension argument following Wolf, Proposition 1.5 and Equation (1.40);
+operator-system extension argument following Wolf, Proposition 1.5 and Equation (1.40),
+local source `Notes/WolfNoteTexSource/ch01_deconstructing_quantum.tex`, lines 536--577;
 it does not corestrict the codomain to the subtype of the star subalgebra. -/
 theorem exists_krausCPTP_conditionalExpectation
     {n : Type*} [Fintype n] [DecidableEq n]

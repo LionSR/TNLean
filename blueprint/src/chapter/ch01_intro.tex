@@ -718,6 +718,77 @@ algebra is a single full matrix algebra $\MN{m}$; see
     unitality follow.
 \end{proof}
 
+% Unitary transport of the coordinate expectation from Equation (1.39).
+\begin{theorem}[Unitary block-coordinate channels]
+    \label{thm:unitary_reindex_channels}
+    \lean{Matrix.unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP}
+    \lean{Matrix.unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP}
+    \leanok
+    \uses{def:is_kraus_cptp}
+    Let $e:H\simeq I$ be an equivalence of finite index sets and let
+    $U$ be a unitary matrix indexed by $I$. The forward coordinate change is
+    \begin{align}
+        \Phi(A)&=e^{-1}(U^\dagger A U).
+        \notag
+    \end{align}
+    Its inverse is
+    \begin{align}
+        \Phi^{-1}(X)&=Ue(X)U^\dagger.
+        \notag
+    \end{align}
+    are trace-preserving and completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      thm:mpdo_single_kraus_map_cptp,
+      lem:is_kraus_cptp_comp}
+    The forward map is the composition of conjugation by $U^\dagger$ with
+    reindexing by $e^{-1}$, while the inverse is reindexing by $e$ followed
+    by conjugation by $U$. Unitarity makes both single-Kraus conjugations
+    trace preserving. Equivalence reindexing is trace preserving and
+    completely positive, and composition preserves these properties.
+\end{proof}
+
+% Wolf ch01 source lines 539--577: combine the unital block form (1.39),
+% the conditional expectations (1.40), and the two building blocks named at line 577.
+\begin{theorem}[Trace-preserving conditional expectation onto a matrix subalgebra]
+    \label{thm:matrix_star_subalgebra_cptp_conditional_expectation}
+    \lean{StarSubalgebra.exists_krausCPTP_conditionalExpectation}
+    \leanok
+    \uses{def:is_kraus_cptp, def:is_conditional_expectation}
+    For every unital $*$-subalgebra $\mathcal B\subseteq\MN{n}$, there is a
+    trace-preserving completely positive map $E:\MN{n}\to\MN{n}$ that is
+    a conditional expectation onto $\mathcal B$: it is unital and
+    idempotent, its range lies in $\mathcal B$, and it fixes every element
+    of $\mathcal B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:starSubalgebra_unitary_block_diagonal_iff,
+      thm:coordinate_direct_sum_conditional_expectation,
+      thm:unitary_reindex_channels}
+    By the finite-dimensional block form, choose unitary coordinates in
+    which
+    \begin{align}
+        \mathcal B
+        &=\bigoplus_k\bigl(\mathbb1_{m_k}\otimes\MN{d_k}\bigr).
+        \notag
+    \end{align}
+    Let $E_0$ be the coordinate direct-sum expectation and set
+    \begin{align}
+        E&=\Phi^{-1}\circ E_0\circ\Phi.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:unitary_reindex_channels} and closure under composition
+    show that $E$ is trace-preserving and completely positive. The identities
+    $\Phi\Phi^{-1}=\id$ and $E_0^2=E_0$ give $E^2=E$, and all three maps are
+    unital. Finally, the block-membership equivalence identifies
+    $\Phi(\mathcal B)$ with the coordinate subalgebra. Thus the range of $E$
+    lies in $\mathcal B$, and the pointwise fixation of that coordinate
+    subalgebra by $E_0$ implies $E(B)=B$ for every $B\in\mathcal B$.
+\end{proof}
+
 \begin{definition}[Operator system]\label{def:operator_system}
     \lean{Matrix.IsOperatorSystem}
     \leanok
