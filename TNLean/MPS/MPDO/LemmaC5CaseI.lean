@@ -34,9 +34,9 @@ is positive.
 
 The active sector set reduces to a singleton (`card(ActiveSector p) = 1`),
 from which the Case-I relation `T² = T` and its normalized rank-one coefficient
-form follow.  These are the Case-I input to the proof of Lemma `SALZCL`
-(arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the lemma's headline
-statement.
+form follow.  The coefficient theorem packages the two displayed conclusions of
+Lemma `SALZCL` on the normal Case-I active sector; singletonness and `T² = T` are
+the project-derived inputs.
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
@@ -45,7 +45,11 @@ statement.
 * the active sector is unique
   (`card_activeSector_eq_one_of_literal_ZCL`),
 * the Case-I relation `T² = T`
-  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`).
+  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`),
+* the normalized Case-I coefficients `T_{kh} = a_k b_h` and `∑ₖ a_k b_k = 1`
+  (`activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL`),
+* the rectangular form `Q(1−LQ)L = 0`
+  (`caseI_rectangular_remainder_eq_zero_of_literal_ZCL`).
 
 The overlap formula combines the doubled-index self-overlap identity
 (`Purity`) with the physical-sector product realization
@@ -55,16 +59,15 @@ The overlap formula combines the doubled-index self-overlap identity
 index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
-The singleton-sector proof is by contradiction, following the source argument documented in
-`docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap formula and normality
-(`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
-self-overlap limit) give `tr(S^N) → 1`; conjugating the primitive `T` by
-its Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`)
-to a stochastic matrix `P` bounds `S`, after the matching squared
-conjugation, entrywise by `P ⊙ P`; if more than one sector were active,
-`P` would be irreducible substochastic on a nontrivial index set, forcing
-`tr(S^N) → 0` (`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`),
-a contradiction.
+The singleton-sector proof is by contradiction, following the source-facing repair
+documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap formula and
+normality (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
+self-overlap limit) give `tr(S^N) → 1`.  Conjugating the primitive `T` by its
+Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
+stochastic matrix `P`, while the matching squared conjugation of `S` is bounded
+entrywise by `P ⊙ P`.  If more than one sector were active, a positive power of
+`P ⊙ P` would have $L^∞$ operator norm below one, forcing `tr(S^N) → 0`
+(`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`), a contradiction.
 
 The rectangular Case-I relation `Q(1−LQ)L = 0` is proved as the
 project-derived rectangular form of `T² = T`, using the same factors
