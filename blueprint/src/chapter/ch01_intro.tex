@@ -1011,3 +1011,122 @@ $M_M(\C)$, $M=\sum_kd_k$.
     agreement of $\widetilde T$ with $T''$ shows that $T'$ agrees with $T$ on
     $S$.
 \end{proof}
+
+\section{Pure states, projective rays, and Wigner's theorem}
+
+A nonzero vector $v\in\C^d$ determines a ray $[v]$ and the normalized
+rank-one matrix
+\begin{align}
+    P_{[v]}=\frac{\ketbra{v}{v}}{\langle v,v\rangle}.
+    \label{eq:projective_pure_state_matrix}
+\end{align}
+The quotient in (\ref{eq:projective_pure_state_matrix}) is unchanged when
+$v$ is multiplied by a nonzero scalar.
+
+\begin{definition}[Projective pure-state matrix]
+    \label{def:projective_pure_state_matrix}
+    \lean{Projectivization.pureStateMatrix}
+    \leanok
+    For a ray $p=[v]$ in $\C^d$, define
+    \begin{align}
+        P_p=\frac{\ketbra{v}{v}}{\langle v,v\rangle}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Projective transition probability]
+    \label{def:projective_transition_probability}
+    \lean{Projectivization.transitionProbability}
+    \leanok
+    For each ray $p$, fix a nonzero representative $p^{\mathrm{rep}}$. Define
+    \begin{align}
+        \operatorname{tp}(p,q)
+        =\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Projective rays as normalized pure states]
+    \label{thm:projective_pure_state_bridge}
+    \lean{Projectivization.isOrthogonalProjection_pureStateMatrix}
+    \lean{Projectivization.trace_pureStateMatrix}
+    \lean{Projectivization.trace_pureStateMatrix_mul_pureStateMatrix}
+    \lean{Projectivization.pureStateMatrix_injective}
+    \lean{Projectivization.pureStateMatrix_unitaryAction}
+    \lean{Projectivization.pureStateMatrix_coordinateConjugation}
+    \leanok
+    \uses{def:orthogonal_projection_channel,
+      def:projective_pure_state_matrix,
+      def:projective_transition_probability}
+    The matrix $P_p$ is an orthogonal projection with trace one, and
+    \begin{align}
+        \tr(P_pP_q)=\operatorname{tp}(p,q).
+    \end{align}
+    The map $p\mapsto P_p$ is injective. Moreover, a unitary $U$ and
+    coordinatewise conjugation act by
+    \begin{align}
+        P_{U\cdot p}&=UP_pU^\dagger,
+        &
+        P_{\overline p}&=P_p^{\mathsf T}.
+    \end{align}
+    These are the pure-state matrix identities used in
+    \cite[Chapter~1, Wigner's theorem]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rank-one identity
+    $\ketbra{v}{v}^2=\langle v,v\rangle\ketbra{v}{v}$ gives idempotence,
+    while taking the adjoint gives Hermiticity. The trace of
+    $\ketbra{v}{v}$ is $\langle v,v\rangle$, and
+    \begin{align}
+        \tr(P_pP_q)
+        &=\frac{\langle p^{\mathrm{rep}},q^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},p^{\mathrm{rep}}\rangle}
+        {\langle p^{\mathrm{rep}},p^{\mathrm{rep}}\rangle
+          \langle q^{\mathrm{rep}},q^{\mathrm{rep}}\rangle}
+        =\operatorname{tp}(p,q).
+    \end{align}
+    Equality $P_p=P_q$ implies that a representative of one ray is a
+    nonzero scalar multiple of a representative of the other. Finally,
+    matrix multiplication sends $\ketbra{v}{v}$ to
+    $\ketbra{Uv}{Uv}$, and coordinatewise conjugation exchanges the two
+    factors of the outer product.
+\end{proof}
+
+\begin{theorem}[Transition probability on representatives]
+    \label{thm:projective_transition_probability_mk}
+    \lean{Projectivization.transitionProbability_mk}
+    \leanok
+    \uses{def:projective_transition_probability}
+    For arbitrary nonzero representatives $v,w\in\C^d$,
+    \begin{align}
+        \operatorname{tp}([v],[w])
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+        {\langle v,v\rangle\langle w,w\rangle}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:projective_pure_state_matrix,
+      thm:projective_pure_state_bridge}
+    By the trace-product identity above,
+    $\operatorname{tp}([v],[w])=\tr(P_{[v]}P_{[w]})$. Moreover,
+    \begin{align}
+        \tr(P_{[v]}P_{[w]})
+        &=\frac{\tr(\ketbra{v}{v}\ketbra{w}{w})}
+          {\langle v,v\rangle\langle w,w\rangle}
+        =\frac{\langle v,w\rangle\langle w,v\rangle}
+          {\langle v,v\rangle\langle w,w\rangle},
+    \end{align}
+    which gives the displayed quotient.
+\end{proof}
+
+\begin{theorem}[Wigner's theorem]\label{thm:wigner}
+    \notready
+    Let $F$ be a bijection of the normalized pure states such that
+    $\tr(F(P)F(Q))=\tr(PQ)$ for all normalized pure states $P,Q$.
+    Then there is a unitary $U$ such that either
+    $F(P)=UPU^\dagger$ for every $P$, or
+    $F(P)=UP^{\mathsf T}U^\dagger$ for every $P$.
+\end{theorem}
