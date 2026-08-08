@@ -162,9 +162,10 @@ noncomputable def oneLabelChiTracePowerForm :
 /-- **R's one-label structure coefficient equals the trace of the `L`-th
 ordinary matrix power of `R`'s own local factor `wMat`.** For every positive
 length `L`,
-`oneLabelCoeffs.coeff L 0 0 0 = tr(wMat^L)` (and `tr(wMat^L) = tr(χ^L) =
-1 + (7/25)^L` by `wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace` and the
-diagonal power trace). This realizes
+`oneLabelCoeffs.coeff L 0 0 0 = tr(wMat^L)` (the closed form
+`tr(wMat^L) = 1 + (7/25)^L` follows by
+`wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace` and the diagonal power
+trace). This realizes
 the coefficient-level trace-power identity of `oneLabelChiTracePowerForm`
 concretely from the local factor of `R`'s own closed-operator factorization
 `mpo_R_eq_B_mul_wN_mul_transpose`, via the Walsh–Hadamard diagonalization

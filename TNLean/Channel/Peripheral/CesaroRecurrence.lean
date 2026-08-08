@@ -521,7 +521,10 @@ theorem peripheralWeightedProjection_isPositiveMap
   exact hPos _ ((hPos.peripheralProjection_isPositiveMap hTP) _ hX)
 
 /-- The phase-weighted peripheral projection `T_φ' = T ∘ T_φ` of a positive
-trace-preserving map is trace-preserving: both factors preserve the trace. -/
+trace-preserving map is trace-preserving: both factors preserve the trace.
+This is the positive-only case for `T_φ'` of the preservation assertion in
+Wolf, Proposition 6.3
+(`Notes/WolfNoteTexSource/ch06_spectral_properties.tex`, lines 226--229). -/
 theorem peripheralWeightedProjection_isTracePreservingMap
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     IsTracePreservingMap T.peripheralWeightedProjection := by
