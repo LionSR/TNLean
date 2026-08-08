@@ -417,10 +417,12 @@ python3 scripts/tenkz_audit.py <job>.tnlog
 python3 scripts/tenkz_lint.py <source>.tex
 ```
 
-The blueprint's own pictures are audited as a set.  Each one compiles
-standalone during `leanblueprint web` and leaves its event stream in the
-render cache, so after a web build the sweep is a read; run alone it compiles
-what the cache lacks.
+The blueprint's own pictures are audited as a set, and the audited unit is
+the display rather than the panel: a picture in a displayed row compiles with
+the whole row, so one stream holds every panel and the equation checks have
+something to compare.  The closing line states how far those checks reached —
+how many displays declared an equation scope, and how many were read only
+through the source `=`.
 
 ```sh
 python3 scripts/tenkz_blueprint_sweep.py

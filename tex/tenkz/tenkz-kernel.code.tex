@@ -1564,9 +1564,10 @@
 % index leaves the panel (to) or enters it (from), so a space and its dual
 % cannot pass for one another and two sides of a relation must agree on
 % orientation and not merely on count.  An internal directed contraction
-% exposes nothing and leaves no entry.  The orientation is the entry's last
-% field; a port and a policy leg declare no direction, so only a wire end
-% carries one.
+% exposes nothing and leaves no entry.  The orientation follows the face and
+% precedes the strand weight, which stays the entry's last field so that a
+% bundle expands to its multiplicity whichever way it points; a port and a
+% policy leg declare no direction, so only a wire end carries one.
 
 \tl_new:N \l__tenkz_kernel_sig_dir_tl
 \tl_new:N \l__tenkz_kernel_sig_dir_src_tl
@@ -1753,9 +1754,10 @@
                     % exposed entry whether the index is virtual or physical:
                     % a directed virtual leg states the bond space against
                     % its dual exactly as a directed physical leg does.
-                    % A physical index carries no strand weight, so the
-                    % orientation is the third field there and the fourth
-                    % beside a weight.
+                    % The orientation follows the face and precedes any
+                    % strand weight, so a bundle stays the entry's last
+                    % field and a directed bundle still expands to its own
+                    % multiplicity.
                     \__tenkz_kernel_signature_dir:nnN {##1} {####1}
                       \l__tenkz_kernel_sig_dir_tl
                     \seq_put_right:Ne \l__tenkz_kernel_emit_seq
@@ -1764,10 +1766,10 @@
                           \l__tenkz_kernel_port_type_tl {physical}
                           {phys}{open}
                         : \tl_use:N \l__tenkz_kernel_scratch_tl
+                        \tl_use:N \l__tenkz_kernel_sig_dir_tl
                         \str_if_eq:VnF
                           \l__tenkz_kernel_port_type_tl {physical}
                           { \tl_use:N \l_tmpb_tl }
-                        \tl_use:N \l__tenkz_kernel_sig_dir_tl
                       }
                   }
               }
@@ -1786,8 +1788,8 @@
                           {
                             edge: \prop_item:Ne \l__tenkz_kernel_node_prop
                               { \l__tenkz_kernel_scratch_tl / side }
-                            \tl_use:N \l_tmpb_tl
                             \tl_use:N \l__tenkz_kernel_sig_dir_tl
+                            \tl_use:N \l_tmpb_tl
                           }
                       }
                   }

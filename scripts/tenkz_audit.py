@@ -39,9 +39,15 @@ Hard errors (exit 1):
                        the drawing directions may rotate.
   eq-unchecked        An equation group holds panels its own check records
                       never folded into a relation: the group's arithmetic
-                      (relations plus contractions plus one equals panels)
-                      does not close, so some panel's boundary was never
-                      compared.
+                      (relations plus distinct adjacent contractions plus one
+                      equals panels) does not close, so some panel's boundary
+                      was never compared.  A check record whose scope owns no
+                      panel at all fails the same way.
+  eq-check-off        A waiver and its source disagree: the stream retires a
+                      relation the source never opted out of, or the source
+                      opts out of a relation the stream checked anyway.  The
+                      stream is then stale against the source it is read with,
+                      and no waiver is honoured.
 
 Advisories (never affect the exit code):
   eq-sibling-mismatch  Consecutive kernel pictures joined by `=` in the
@@ -51,9 +57,15 @@ Advisories (never affect the exit code):
                        checkable is `tenkzeq` (DESIGN.md, "Equation
                        grouping"), so a mismatch here reports a picture pair
                        still to be moved into the scope.
+  eq-sibling-unread    Pictures share one display but are not all joined by a
+                       relation, so the display states a product, a sum, or a
+                       map that only the scope classifies.  Reading it
+                       pairwise would compare one factor against a whole side,
+                       so nothing is claimed about it at all.
   eq-check-off         An equation group waived one relation with
-                       `check={off={k: reason}}`.  The waiver is legal and
-                       never silent: it is reported with its reason.
+                       `check={off={k: reason}}`, and its source declares the
+                       same waiver.  Legal, and never silent: it is reported
+                       with its reason.
   repeated-topology    Identical canonical atom+bond content in several
                        pictures: review ordinary TeX composition.  Repetition
                        alone never extends the public grammar.
@@ -1301,16 +1313,36 @@ class Audit:
         an identity between maps of different types.
 
         Two rules apply.  The group's arithmetic must close -- relations plus
-        contractions plus one equals panels -- so that no panel escapes
-        comparison; a group whose arithmetic fails is read as unchecked, and
-        its panels are then compared pair by pair with no waiver honoured.
-        And where every side is one panel, the panels' own boundary records
-        are compared here whatever the kernel's verdict said, so a stream
-        whose comparison never ran is caught rather than trusted.
+        distinct adjacent contractions plus one equals panels -- so that no
+        panel escapes comparison; a group whose arithmetic fails is read as
+        unchecked, and its panels are then compared pair by pair with no
+        waiver honoured.  And where every side is one panel, the panels' own
+        boundary records are compared here whatever the kernel's verdict said,
+        so a stream whose comparison never ran is caught rather than trusted.
+
+        Both halves of the ownership are checked.  A panel names its scope and
+        a check names the scope it belongs to; a check whose scope owns no
+        panel is an equation the stream does not contain, and a waiver the
+        source and the stream disagree about means the two are not the same
+        document.
         """
         _, scope_pictures = self._scope_index()
         scope_events, malformed_scopes = self._scope_checks()
         authorized = self._source_authorized_offs()
+        for scope in sorted(set(scope_events) | set(malformed_scopes)):
+            if scope in scope_pictures:
+                continue
+            # A check record's scope is its ownership key.  A scope that owns
+            # no panel names an equation the stream does not contain, which is
+            # what an emitter losing `scope=` from its picture headers looks
+            # like: the comparisons are recorded and the panels they name have
+            # left the group.
+            self.hard(
+                "eq-unchecked", self.log_path.name,
+                f"equation scope {scope} records "
+                f"{len(scope_events.get(scope, []))} check(s) but owns no "
+                f"panel; the scope's pictures never claimed it",
+            )
         for scope in sorted(scope_pictures):
             members = scope_pictures[scope]
             records = scope_events.get(scope, [])
@@ -1321,7 +1353,17 @@ class Audit:
             relations = {
                 int(event.attrs["relation"]): event for event in relation_records
             }
-            products = [event for event in records if "product" in event.attrs]
+            product_records = [event for event in records if "product" in event.attrs]
+            # A contraction names the adjacent panel pair it folded.  Only a
+            # well-formed sequence of distinct adjacent pairs counts toward
+            # closure: otherwise one pair recorded twice stands in for another
+            # that was lost, and the panel that pair held escapes comparison.
+            products = {
+                pair for pair in (
+                    _product_pair(event, len(members)) for event in product_records
+                )
+                if pair is not None
+            }
             modulo = any(
                 event.attrs.get("modulo") == "bundles" for event in records
             )
@@ -1330,18 +1372,27 @@ class Audit:
                 scope not in malformed_scopes
                 and len(relation_records) == len(relations)
                 and set(relations) == set(range(1, len(relations) + 1))
+                and len(product_records) == len(products)
                 and len(relations) + len(products) + 1 == len(members)
             )
             waived: set[int] = {
                 relation for relation, event in relations.items()
                 if event.attrs.get("result") == "off"
             }
-            if authorized is not None and waived != authorized.get(scope, set()):
-                for relation in sorted(waived - authorized.get(scope, set())):
+            declared = set() if authorized is None else authorized.get(scope, set())
+            if authorized is not None and waived != declared:
+                for relation in sorted(waived - declared):
                     self.hard(
                         "eq-check-off", where,
                         f"equation scope {scope} waives relation {relation} "
                         f"but its source declares no such opt-out",
+                    )
+                for relation in sorted(declared - waived):
+                    self.hard(
+                        "eq-check-off", where,
+                        f"the source waives relation {relation} of equation "
+                        f"scope {scope} but the stream records no waiver; the "
+                        f"stream predates this source",
                     )
                 waived = set()
             else:
@@ -1360,8 +1411,9 @@ class Audit:
                         "eq-unchecked", where,
                         f"equation scope {scope} holds {len(members)} panel(s) "
                         f"but records {len(relation_records)} relation(s) and "
-                        f"{len(products)} contraction(s); every panel must "
-                        f"fold into a compared side",
+                        f"{len(product_records)} contraction(s) over "
+                        f"{len(products)} distinct adjacent pair(s); every "
+                        f"panel must fold into a compared side",
                     )
                 self._compare_adjacent(members, scope, modulo, waived=set())
                 continue
@@ -1408,32 +1460,74 @@ class Audit:
                f"but open-leg classes differ: {sig_left} vs {sig_right}"
                f"{source}")
 
-    def check_equation_boundaries(self) -> None:
-        """Advise on pictures joined by a source `=` outside every group.
+    def _display_runs(self) -> list[list[int]]:
+        """Maximal runs of pictures the source sets in one display.
 
-        The mechanism is `tenkzeq`; a bare `=` between two pictures is a
-        reading of the source, not a declaration, so a mismatch here reports
-        migration work rather than failing the stream.
+        Two consecutive pictures share a display when the source between them
+        crosses no environment and no display-math boundary and is short.
+        Panels of a `tenkzeq` scope are excluded: their group owns them.
+        """
+        picture_scopes, _ = self._scope_index()
+        runs: list[list[int]] = []
+        current: list[int] = []
+        for index in range(len(self.pictures)):
+            picture = self.pictures[index]
+            if picture.lang != "kernel" or index in picture_scopes:
+                current = []
+                continue
+            if current:
+                previous, this = self.constructs[current[-1]], self.constructs[index]
+                separator = (
+                    self._tex_src[previous.end:this.start]
+                    if previous.end <= this.start else None
+                )
+                if separator is None or not one_display(separator):
+                    runs.append(current)
+                    current = []
+            current.append(index)
+            if len(current) == 1:
+                runs.append(current)
+        return [run for run in runs if len(run) > 1]
+
+    def check_equation_boundaries(self) -> None:
+        """Advise on pictures the source sets in one display, out of scope.
+
+        The mechanism is `tenkzeq`; the mathematics between two pictures is a
+        reading of the source, not a declaration, so nothing here fails the
+        stream.  A display whose panels are all joined by a relation is read
+        pairwise.  A display that asserts a relation somewhere but joins other
+        panels another way -- a product, a sum, an arrow -- states a
+        composition only the scope can classify, and the pairwise reading
+        would compare one factor against a whole side; it is reported as
+        unread rather than guessed at.  Pictures that assert no relation at
+        all are simply adjacent, and nothing is said about them.
         """
         if not self.tex_linked:
             return
-        picture_scopes, _ = self._scope_index()
-        for i in range(len(self.pictures) - 1):
-            a, b = self.pictures[i], self.pictures[i + 1]
-            if a.lang != b.lang or a.lang != "kernel":
+        for run in self._display_runs():
+            separators = [
+                self._tex_src[self.constructs[left].end:self.constructs[right].start]
+                for left, right in zip(run, run[1:])
+            ]
+            if not any(same_equation(separator) for separator in separators):
+                continue  # adjacent pictures, not a display asserting anything
+            first = self.constructs[run[0]]
+            if not all(same_equation(separator) for separator in separators):
+                self.adv(
+                    "eq-sibling-unread",
+                    f"{self.log_path.name}:{self.pictures[run[0]].line}",
+                    f"{len(run)} pictures share one display but are not all "
+                    f"joined by a relation; the composition they state is the "
+                    f"scope's to classify [{self.tex_path.name}:{first.line}]",
+                )
                 continue
-            if i in picture_scopes and picture_scopes.get(i + 1) == picture_scopes[i]:
-                continue  # one group: check_equation_groups owns the pair
-            ca, cb = self.constructs[i], self.constructs[i + 1]
-            if ca.end > cb.start:
-                continue  # nested constructs: no linear separator
-            if not same_equation(self._tex_src[ca.end:cb.start]):
-                continue
-            self._compare_panels(
-                a, b, self.adv, "eq-sibling-mismatch",
-                "sit on one source `=` outside every equation group",
-                f" [{self.tex_path.name}:{ca.line}]",
-            )
+            for left, right in zip(run, run[1:]):
+                self._compare_panels(
+                    self.pictures[left], self.pictures[right], self.adv,
+                    "eq-sibling-mismatch",
+                    "sit on one source `=` outside every equation group",
+                    f" [{self.tex_path.name}:{self.constructs[left].line}]",
+                )
 
     # ---------------- driver ----------------
 
@@ -1567,6 +1661,23 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
 
 _ORIENTATIONS = frozenset({"to", "from"})
 _BUNDLE = re.compile(r"bundle=([1-9]\d*)")
+_PRODUCT_PAIR = re.compile(r"(\d+)-(\d+)")
+
+
+def _product_pair(event: Event, panels: int) -> int | None:
+    """The left panel of a contraction, or `None` when it names no pair.
+
+    A contraction folds one adjacent pair of a scope's panels, so a record
+    naming a non-adjacent or out-of-range pair describes a fold the group
+    cannot contain.
+    """
+    match = _PRODUCT_PAIR.fullmatch(event.attrs.get("product", ""))
+    if match is None:
+        return None
+    left, right = int(match.group(1)), int(match.group(2))
+    if right != left + 1 or left < 1 or right > panels:
+        return None
+    return left
 
 
 def boundary_classes(signature: tuple[str, ...],
@@ -1605,6 +1716,16 @@ def signature_entry_class(item: str) -> tuple[str, str, str]:
     orientation = next((part for part in rest if part in _ORIENTATIONS), "none")
     weight = next((part for part in rest if part not in _ORIENTATIONS), "single")
     return kind, re.sub(r"\s*=\s*", "=", weight), orientation
+
+
+def one_display(sep: str) -> bool:
+    """True when the comment-stripped source between two pictures keeps them
+    in one display: it crosses no environment, no display-math boundary and
+    no cell separator, and is short.  Inline mathematics is the joiner the
+    display is made of and does not end it."""
+    if any(tok in sep for tok in ("\\[", "\\]", "&", "\\begin", "\\end")):
+        return False
+    return len(sep.strip()) <= 200
 
 
 def same_equation(sep: str) -> bool:

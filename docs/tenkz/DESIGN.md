@@ -144,6 +144,13 @@ pictures joined by a source `=` outside every group raise the advisory
 `eq-sibling-mismatch`: not a defect in the diagram but a picture pair still
 to be moved into the scope. The hard rules apply inside the group only.
 
+The heuristic also states its own limit. A display that asserts a relation
+somewhere but joins other panels another way — a product, a sum, an arrow —
+is read as `eq-sibling-unread` and nothing is claimed about it, because the
+pairwise reading would compare one factor against a whole side. That is the
+same argument one tier down: the composition is exactly what the scope
+classifies and a reading of the source cannot.
+
 ## Compatibility ownership
 
 tenkz has two public surfaces. A release decision names both; compatibility on

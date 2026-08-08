@@ -476,6 +476,19 @@ for bearing in e n w s; do
     exit 1
   }
 done
+# A directed bundle keeps its multiplicity: the orientation precedes the
+# strand weight, so `modulo=bundles' still expands the bundle and the
+# equation of one directed bundle against three directed singles holds.
+grep -Fq 'kernel-boundary|signature=open:e:to:bundle=3' \
+    "$WORK/r_bundle_dir_modulo.tnlog" || {
+  echo "FAIL: the directed bundle lost its expandable weight field" >&2
+  exit 1
+}
+grep -Fq 'check|scope=1|relation=1|result=equal|modulo=bundles' \
+    "$WORK/r_bundle_dir_modulo.tnlog" || {
+  echo "FAIL: a directed bundle no longer expands modulo bundles" >&2
+  exit 1
+}
 # A directed index states its orientation in the boundary signature whether
 # it is virtual or physical, normalized to the cut: the departing panel's
 # four legs leave, the arriving panel's four enter.

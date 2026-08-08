@@ -62,18 +62,35 @@ def group_log(left: str, right: str, records: str) -> str:
     )
 
 
-def audit_rules(log: str, source: str) -> list[tuple[str, str]]:
-    """Run the whole equation half of the audit on one seeded stream."""
+def panel(index: int, signature: str, scope: str = "|scope=1") -> str:
+    """One panel of a seeded stream: its header, one atom, its boundary."""
+    return (
+        f"picture|id=k{index}|lang=kernel{scope}\n"
+        "atom|id=atom-1|cell=1-1|kind=tn\n"
+        f"kernel-boundary|signature={signature}\n"
+    )
+
+
+def audit_rules(log: str, source: str | None = None) -> list[tuple[str, str]]:
+    """Run the whole equation half of the audit on one seeded stream.
+
+    Passing no source runs the log-only half, which is what the blueprint
+    sweep and any unlinked consumer see.
+    """
     with tempfile.TemporaryDirectory(prefix="tenkz_equation_audit_") as tmp:
         work = Path(tmp)
-        tex_path = work / "fixture.tex"
         log_path = work / "fixture.tnlog"
-        tex_path.write_text(source, encoding="utf-8")
         log_path.write_text(log, encoding="utf-8")
+        tex_path = None
+        if source is not None:
+            tex_path = work / "fixture.tex"
+            tex_path.write_text(source, encoding="utf-8")
         audit = Audit(log_path, tex_path)
         audit.parse_log()
         audit.link_tex()
-        assert audit.tex_linked, "equation fixture did not link to its source"
+        assert source is None or audit.tex_linked, (
+            "equation fixture did not link to its source"
+        )
         audit.check_kernel_checks()
         audit.check_equation_groups()
         audit.check_equation_boundaries()
@@ -145,6 +162,18 @@ def main() -> int:
     assert ("eq-check-off", "HARD") in forged, forged
     assert ("eq-boundary-mismatch", "HARD") in forged, forged
 
+    # A waiver the source declares but the stream never recorded means the
+    # two are not the same document, even where the panels agree.
+    stale = audit_rules(
+        group_log(
+            "open:w",
+            "open:w",
+            "check|scope=1|relation=1|result=equal|signature=open:w\n",
+        ),
+        group_source("[check={signature, off={1: drafted}}]"),
+    )
+    assert ("eq-check-off", "HARD") in stale, stale
+
     # The kernel's own refusal stays a hard finding of its own.
     refused = audit_rules(
         group_log(
@@ -157,10 +186,50 @@ def main() -> int:
     )
     assert ("kernel-check", "HARD") in refused, refused
 
+    # Seeded defect: one contraction lost and another recorded twice.  The
+    # count closes, but panel 4 was never folded into a side.
+    duplicated_product = audit_rules(
+        panel(1, "open:w") + panel(2, "open:e") + panel(3, "open:w")
+        + panel(4, "open:e")
+        + "check|scope=1|product=1-2|result=contracted|signature=open:w\n"
+        "check|scope=1|product=1-2|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n"
+    )
+    assert ("eq-unchecked", "HARD") in duplicated_product, duplicated_product
+
+    # The same group with both contractions recorded closes and passes.
+    honest_product = audit_rules(
+        panel(1, "open:w") + panel(2, "open:e") + panel(3, "open:w")
+        + panel(4, "open:e")
+        + "check|scope=1|product=1-2|result=contracted|signature=open:w\n"
+        "check|scope=1|product=3-4|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n"
+    )
+    assert not honest_product, honest_product
+
+    # Seeded defect: the panels lost the scope their checks still name.
+    orphaned = audit_rules(
+        panel(1, "open:w", scope="") + panel(2, "phys:up", scope="")
+        + "check|scope=7|relation=1|result=equal|signature=open:w\n"
+    )
+    assert ("eq-unchecked", "HARD") in orphaned, orphaned
+
+    # A display asserting a relation over a product says nothing pairwise:
+    # the right factor of the product is not the side the relation names.
+    product_display = audit_rules(
+        panel(1, "open:w, open:e", scope="") + panel(2, "open:w", scope="")
+        + panel(3, "open:e", scope=""),
+        f"{PANELS[0]}$ = $\n{PANELS[1]}$ \\otimes $\n{PANELS[0]}",
+    )
+    assert ("eq-sibling-unread", "ADV") in product_display, product_display
+    assert "eq-sibling-mismatch" not in [
+        rule for rule, _ in product_display
+    ], product_display
+
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 8 seeded group checks passed"
+        "and 13 seeded group checks passed"
     )
     return 0
 
