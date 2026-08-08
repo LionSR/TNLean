@@ -573,6 +573,19 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### rectangular complement expansion — candidate
+- **Pattern:** expand a rectangular remainder by associativity:
+  `Q * (1 - L * Q) * L = Q * L - (Q * L) * (Q * L)`.
+- **Seen:** two occurrences: `rectangular_remainder_eq_mul_sub_sq` in
+  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean` and
+  `caseI_rectangular_remainder_eq_zero_of_literal_ZCL` in
+  `TNLean/MPS/MPDO/LemmaC5CaseI.lean` (review on 2026-08-08).
+- **Abstraction:** if a third occurrence appears, promote the expansion to a
+  general rectangular-matrix lemma over a nonunital nonassociative ring with
+  the finite-index assumptions needed for matrix multiplication.
+- **Notes:** Below the rule-of-three promotion threshold; keep the explicit
+  calculation so each application exposes the relevant opposite product.
+
 ### stationary-sector rank-one physical probes — candidate
 - **Pattern:** choose the trace-one stationary state of an irreducible
   left-canonical sector, realize rank-one inserted maps by physical
