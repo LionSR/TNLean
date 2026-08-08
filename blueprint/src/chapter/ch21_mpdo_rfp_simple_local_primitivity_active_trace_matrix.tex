@@ -985,12 +985,25 @@
     \uses{def:mpdo_active_sector_trace_matrix, def:nt_cpsv,
       thm:mpdo_active_trace_matrix_literal_zcl_powers,
       thm:mpdo_overlap_formula}
-    Let ${\cal K}$ be an MPO tensor with a physical-sector factorization
-    and sector weights $p_k$, such that every neighboring operator is
-    positive semidefinite, the left tensor of every zero-weight sector
-    vanishes, and the underlying tensor is normal in the sense of
-    Definition~\ref{def:nt_cpsv}. Then the active sector set has exactly
-    one element:
+    Let ${\cal K}$ be an MPO tensor of positive bond dimension $D$ with a
+    physical-sector factorization and sector weights $p_k$, and let
+    $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
+    $\eta_{k,h}$ is positive semidefinite,
+    \begin{align}
+        \spn_{\C}\{A_{k;x,y}:k\in I_*\}&=\MN{D},
+        \notag
+    \end{align}
+    and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
+    Suppose also that every nonzero $\eta_{k,h}$ with $k,h\in I_*$ admits
+    $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
+    physical-trace transfer is literally idempotent,
+    \begin{align}
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \notag
+    \end{align}
+    that $p_k=0$ implies that the left tensor of sector $k$ vanishes, that
+    the underlying tensor is normal in the sense of
+    Definition~\ref{def:nt_cpsv}, and that $I_*$ is nonempty. Then
     \begin{align}
         \left|I_*\right|&=1.
         \notag
@@ -1002,7 +1015,11 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_active_sector_trace_matrix, thm:mpdo_overlap_formula}
+    \uses{def:mpdo_active_sector_trace_matrix,
+      lem:mpdo_active_sector_trace_sq_matrix,
+      thm:mpdo_active_trace_matrix_literal_zcl_powers,
+      thm:mpdo_active_sector_three_step_return_and_primitivity,
+      thm:mpdo_overlap_formula}
     By contradiction: suppose $|I_*|\geq2$. The overlap formula and the
     normal self-overlap limit
     (\cite[lines~1080--1100]{Cirac2016MPDO_arXiv}) give
@@ -1022,7 +1039,25 @@
     \leanok
     \uses{thm:mpdo_active_sector_singleton,
       thm:mpdo_active_trace_matrix_literal_zcl_powers}
-    Under the hypotheses of Theorem~\ref{thm:mpdo_active_sector_singleton},
+    Let ${\cal K}$ be an MPO tensor of positive bond dimension $D$ with a
+    physical-sector factorization and sector weights $p_k$, and let
+    $I_*=\{k:p_k\ne0\}$. Suppose that every neighboring operator
+    $\eta_{k,h}$ is positive semidefinite,
+    \begin{align}
+        \spn_{\C}\{A_{k;x,y}:k\in I_*\}&=\MN{D},
+        \notag
+    \end{align}
+    and, for every $k\in I_*$, some virtual matrix $A_{k;x,y}$ is nonzero.
+    Suppose also that every nonzero $\eta_{k,h}$ with $k,h\in I_*$ admits
+    $j\in I_*$ such that $\eta_{h,j}\ne0$ and $\eta_{j,k}\ne0$, that the
+    physical-trace transfer is literally idempotent,
+    \begin{align}
+        \mathcal T_{\cal K}^2&=\mathcal T_{\cal K},
+        \notag
+    \end{align}
+    that $p_k=0$ implies that the left tensor of sector $k$ vanishes, that
+    the underlying tensor is normal in the sense of
+    Definition~\ref{def:nt_cpsv}, and that $I_*$ is nonempty. Then
     \begin{align}
         \left(T^*\right)^2&=T^*.
         \notag
@@ -1034,7 +1069,8 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_active_sector_singleton}
+    \uses{thm:mpdo_active_sector_singleton,
+      thm:mpdo_active_trace_matrix_literal_zcl_powers}
     On the singleton active sector set, $T^*$ is a scalar $t$. Stabilization
     gives $t^2=t^3$, and positivity of $(T^*)^2$ gives $t^2>0$, hence
     $t=1$ and $t^2=t$.
