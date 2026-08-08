@@ -36,6 +36,7 @@ noncomputable def masterVec
     EuclideanSpace ℂ (Fin N) :=
   ∑ a : Fin N, (1 + Complex.I * ((a : ℕ) : ℂ)) • b a
 
+/-- The `k`-th coordinate of the master witness is `1 + I * k`. -/
 lemma masterVec_repr
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (k : Fin N) :
     b.repr (masterVec b) k = 1 + Complex.I * ((k : ℕ) : ℂ) := by
@@ -48,6 +49,7 @@ lemma masterVec_repr
         mul_zero]
   · intro h; exact absurd (Finset.mem_univ k) h
 
+/-- Every coordinate of the master witness in the basis `b` is nonzero. -/
 lemma masterVec_coord_ne_zero
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (k : Fin N) :
     b.repr (masterVec b) k ≠ 0 := by
@@ -58,12 +60,14 @@ lemma masterVec_coord_ne_zero
   rw [h] at hre
   simp at hre
 
+/-- The master witness is nonzero in every nonempty finite dimension. -/
 lemma masterVec_ne_zero
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) (k : Fin N) :
     masterVec b ≠ 0 := by
   intro h
   exact masterVec_coord_ne_zero b k (by rw [h]; simp)
 
+/-- Distinct coordinates of the master witness have nonzero imaginary relative phase. -/
 lemma masterVec_im_ne
     (b : OrthonormalBasis (Fin N) ℂ (EuclideanSpace ℂ (Fin N))) {a c : Fin N} (hac : a ≠ c) :
     ((starRingEnd ℂ) (b.repr (masterVec b) a) * b.repr (masterVec b) c).im ≠ 0 := by

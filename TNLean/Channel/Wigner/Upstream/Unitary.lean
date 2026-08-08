@@ -89,6 +89,7 @@ noncomputable def toEuclideanLinearEquiv (A : Matrix.unitaryGroup (Fin N) ℂ) :
                 = (1 : Matrix (Fin N) (Fin N) ℂ) from Unitary.coe_star_mul_self A,
           Matrix.toLpLin_one 2])
 
+/-- The Euclidean linear equivalence associated with `A` acts by matrix multiplication by `A`. -/
 @[simp]
 lemma toEuclideanLinearEquiv_apply (A : Matrix.unitaryGroup (Fin N) ℂ)
     (v : EuclideanSpace ℂ (Fin N)) :
@@ -96,6 +97,7 @@ lemma toEuclideanLinearEquiv_apply (A : Matrix.unitaryGroup (Fin N) ℂ)
       = Matrix.toEuclideanLin (A.val : Matrix (Fin N) (Fin N) ℂ) v :=
   rfl
 
+/-- The identity unitary induces the identity linear equivalence on Euclidean space. -/
 lemma toEuclideanLinearEquiv_one :
     toEuclideanLinearEquiv (1 : Matrix.unitaryGroup (Fin N) ℂ)
       = LinearEquiv.refl ℂ (EuclideanSpace ℂ (Fin N)) := by
@@ -108,6 +110,7 @@ lemma toEuclideanLinearEquiv_one :
   rw [Matrix.UnitaryGroup.one_val]
   exact Matrix.toLpLin_one 2
 
+/-- A product of unitaries induces the product of their Euclidean linear equivalences. -/
 lemma toEuclideanLinearEquiv_mul (A B : Matrix.unitaryGroup (Fin N) ℂ) :
     toEuclideanLinearEquiv (A * B)
       = toEuclideanLinearEquiv A * toEuclideanLinearEquiv B := by
