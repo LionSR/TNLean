@@ -72,12 +72,9 @@ Source: Wolf (2012), Chapter 8, lines 1211--1214. -/
 lemma nilpotentShift_pow_apply {k : ℕ} {i j : Fin D} :
     (nilpotentShift D ^ k) i j =
     if (j : ℕ) = (i : ℕ) + k then (1 : ℂ) else 0 := by
-  revert i j
-  induction k with
-  | zero =>
-    intro i j; simp [Matrix.one_apply, Fin.ext_iff, eq_comm]
+  induction k generalizing i j with
+  | zero => simp [Matrix.one_apply, Fin.ext_iff, eq_comm]
   | succ k ih =>
-    intro i j
     rw [pow_succ, Matrix.mul_apply]
     simp_rw [ih, nilpotentShift_apply D]
     by_cases h_target : (j : ℕ) = (i : ℕ) + (k + 1)
