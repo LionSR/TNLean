@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Analysis.CfcKronecker
 import TNLean.Channel.FixedPoint.ConditionalExpectation
 import TNLean.Channel.KrausCPTP
+import TNLean.Channel.MaximallyMixed
 
 /-!
 # Conditional expectation onto one right matrix factor

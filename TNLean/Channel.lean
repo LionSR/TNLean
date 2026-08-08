@@ -46,6 +46,7 @@ import TNLean.Channel.MarginalSupportWhitenedChoi
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.MaximalWeightConvexDecomposition
 import TNLean.Channel.MaximallyEntangled
+import TNLean.Channel.MaximallyMixed
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.NPositivitySpectralCriterion
 import TNLean.Channel.NormalForm
