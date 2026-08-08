@@ -24,19 +24,19 @@ import TNLean.Algebra.TraceReindex
 /-!
 # Lemma C.5 Case I: active-sector trace matrix components
 
-This file provides the matrix-algebra components of the Case-I argument in
-the proof of Lemma `SALZCL` (arXiv:1606.00608, Appendix C.2, lines
-1473–1499), which states that a zero-correlation-length (ZCL) source yields
-a structured active-level (SAL) decomposition for simple MPO tensors.  The
-Case-I content carried here is the C.4–C.5 argument that the active-sector
-trace matrix `T` satisfies `T² = T³`, is primitive, and every entry of `T²`
-is positive.
+This file provides the matrix-algebra components of the Case-I argument for
+Lemma `SALZCL` (arXiv:1606.00608, Appendix C.2, lines 1473–1499), which assumes
+SAL and literal zero correlation length in the standing Case-I setting and
+concludes normalized rank-one coefficient equations for the active-sector trace
+matrix.  The Case-I content carried here includes the C.4–C.5 argument that `T`
+satisfies `T² = T³`, is primitive, and every entry of `T²` is positive.
 
-The Case-I argument that the active sector set reduces to a singleton
-(`card(ActiveSector p) = 1`), from which the Case-I relation `T² = T`
-follows, is now proved.  These are the Case-I input to the proof of Lemma
-`SALZCL` (arXiv:1606.00608, Appendix C.2, lines 1473--1499), not the
-lemma's headline statement.
+The active sector set reduces to a singleton (`card(ActiveSector p) = 1`),
+from which the Case-I relation `T² = T` and its normalized rank-one coefficient
+form follow.  On the explicit normal Case-I hypothesis surface, the coefficient
+theorem reproves the two equations asserted by Lemma `SALZCL`; it does not use
+the source's trace-power argument.  Singletonness and `T² = T` are the
+project-derived inputs.
 
 * trace similarity `tr(S_hat^N) = tr(S^N)` under diagonal scaling
   (`trace_pow_similarity_diagonal`),
@@ -45,7 +45,11 @@ lemma's headline statement.
 * the active sector is unique
   (`card_activeSector_eq_one_of_literal_ZCL`),
 * the Case-I relation `T² = T`
-  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`).
+  (`activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`),
+* the normalized Case-I coefficients `T_{kh} = a_k b_h` and `∑ₖ a_k b_k = 1`
+  (`activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL`),
+* the rectangular form `Q(1−LQ)L = 0`
+  (`caseI_rectangular_remainder_eq_zero_of_literal_ZCL`).
 
 The overlap formula combines the doubled-index self-overlap identity
 (`Purity`) with the physical-sector product realization
@@ -55,16 +59,15 @@ The overlap formula combines the doubled-index self-overlap identity
 index to the active sector (`sum_prod_traceSq_eq_sum_active`), and the
 cyclic-product expansion of `tr(S^N)` (`trace_pow_eq_sum_cyclic_product`).
 
-The singleton-sector argument is a proof by contradiction (the source-faithful
-route recorded in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`): the overlap formula and normality
-(`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
-self-overlap limit) give `tr(S^N) → 1`; conjugating the primitive `T` by
-its Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`)
-to a stochastic matrix `P` bounds `S`, after the matching squared
-conjugation, entrywise by `P ⊙ P`; if more than one sector were active,
-`P` would be irreducible substochastic on a nontrivial index set, forcing
-`tr(S^N) → 0` (`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`),
-a contradiction.
+The singleton-sector proof is by contradiction, following the source-facing repair
+documented in `docs/paper-gaps/cpgsv17_pf_rank_one.tex`: the overlap formula and
+normality (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
+self-overlap limit) give `tr(S^N) → 1`.  Conjugating the primitive `T` by its
+Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
+stochastic matrix `P`, while the matching squared conjugation of `S` is bounded
+entrywise by `P ⊙ P`.  If more than one sector were active, a positive power of
+`P ⊙ P` would have $L^∞$ operator norm below one, forcing `tr(S^N) → 0`
+(`Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self`), a contradiction.
 
 The rectangular Case-I relation `Q(1−LQ)L = 0` is proved as the
 project-derived rectangular form of `T² = T`, using the same factors
@@ -96,6 +99,8 @@ print the rectangular identity as a separate displayed theorem.
   **the active sector is unique**
 * `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`:
   **the Case-I relation** `T² = T`
+* `activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL`:
+  **the normalized Case-I coefficients** `T_{kh} = a_k b_h` and `∑ₖ a_k b_k = 1`
 * `caseI_rectangular_remainder_eq_zero_of_literal_ZCL`:
   **the rectangular Case-I relation** `Q(1−LQ)L = 0`
 
@@ -859,6 +864,57 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
   have heq : (T ^ 2) i i = (T ^ 2) i i * T i i := by rw [← hcollapse3, ← hTsq3]
   have hTii : T i i = 1 := (mul_left_cancel₀ (hTsqpos i i).ne' (by rw [mul_one]; exact heq)).symm
   rw [hcollapse2, hTii, mul_one]
+
+/-- **The normalized Case-I rank-one coefficients.** Under the complete normal
+Case-I hypotheses below, including literal ZCL, there are real functions $a$ and $b$
+on the active sector such that $T_{kh}=a_kb_h$ and $\sum_k a_kb_k=1$.
+
+The unique active sector, the identity $T^2=T$, and strict positivity of $T^2$ force
+the sole entry of $T$ to equal one, so the constant functions $a=b=1$ suffice.
+
+**Scope restriction (`docs/paper-gaps/cpgsv17_pf_rank_one.tex`):** this is the normal
+Case-I active-sector packaging of CPSV16 equations `Apptralktrrk` and `AppPsiPhi`
+(Appendix C.2, lines 1394--1401 and 1484--1499). No Case-II conclusion follows;
+Case II requires its separate coefficient argument. -/
+theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
+    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
+    (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
+    (hnonzero : ∀ k : F.ActiveSector p,
+      ∃ x y : F.SectorIndex k, F.sectorVirtualMatrix k x y ≠ 0)
+    (htriangle : ∀ {k h : F.ActiveSector p}, F.neighboringOperator k h ≠ 0 →
+      ∃ j : F.ActiveSector p, F.neighboringOperator h j ≠ 0 ∧ F.neighboringOperator j k ≠ 0)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hinactive : ∀ k, p k = 0 → ∀ beta, F.leftTensor k beta = 0)
+    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
+    [hne : Nonempty (F.ActiveSector p)] :
+    ∃ a b : F.ActiveSector p → ℝ,
+      (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
+        ∑ k, a k * b k = 1 := by
+  have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
+    hZCL_sq hinactive hK_normal
+  letI : Unique (F.ActiveSector p) :=
+    Classical.choice (Fintype.card_eq_one_iff_nonempty_unique.mp hcard)
+  let T := F.activeSectorTraceMatrix p
+  have hT : T ^ 2 = T :=
+    activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL K F p hpos hspan hnonzero htriangle
+      hZCL_sq hinactive hK_normal
+  have hTsqpos := activeSectorTraceMatrix_pow_two_pos K F p hpos hspan hnonzero htriangle
+    hZCL_sq hinactive
+  have hcollapse : (T ^ 2) default default = T default default * T default default := by
+    rw [sq, Matrix.mul_apply, Fintype.sum_unique]
+  have hTdd_ne : T default default ≠ 0 := by
+    intro hzero
+    apply (hTsqpos default default).ne'
+    rw [hcollapse, hzero, zero_mul]
+  have hTdd : T default default = 1 := by
+    apply mul_left_cancel₀ hTdd_ne
+    rw [mul_one, ← hcollapse, hT]
+  refine ⟨fun _ ↦ 1, fun _ ↦ 1, ?_, ?_⟩
+  · intro k h
+    change T k h = 1 * 1
+    rw [Unique.eq_default k, Unique.eq_default h, hTdd, one_mul]
+  · rw [Fintype.sum_unique, one_mul]
 
 /-- **The rectangular Case-I relation `Q(1−LQ)L = 0`.**  Here
 `L β h = tr(F.leftTensor h β)` and `Q k α = tr(F.rightTensor k α)` are the Case-I
