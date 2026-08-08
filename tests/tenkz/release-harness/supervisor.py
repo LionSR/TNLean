@@ -499,6 +499,27 @@ def require_clean_worktree(
         f"the pinned trees differ from HEAD at {dirty}; the receipt would name "
         f"OIDs the command did not execute",
     )
+    # `git status --porcelain` says nothing about ignored files, but the view
+    # is built by copying the filesystem, so an ignored `.DS_Store` under the
+    # support tree reaches the command while the receipt names only the tree
+    # from HEAD. Anything present and not tracked is unpinned.
+    extra = subprocess.run(
+        ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "-z", "--", *roots],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    require(extra.returncode == 0, "could not list ignored files under the pinned trees")
+    untracked = sorted(
+        path
+        for path in extra.stdout.decode("utf-8", errors="replace").split("\0")
+        if path.strip() and not path.endswith("__pycache__/")
+    )
+    require(
+        not untracked,
+        f"the pinned trees carry untracked or ignored files {untracked}; the view "
+        f"would copy bytes no OID in the receipt names",
+    )
 
 
 def head_commit(root: Path) -> str:
@@ -590,7 +611,11 @@ def resolve_tool(name: str, pattern: str, root: Path) -> tuple[str, str]:
         re.fullmatch(pattern, fingerprint) is not None,
         f"child tool {name} reports {fingerprint!r}, which the tool profile rejects",
     )
-    return executable, fingerprint
+    # A version line is not an identity: two executables can report the same
+    # one, and a wrapper reports whatever it likes. The receipt records the
+    # resolved path and the bytes' digest alongside it.
+    digest = hashlib.sha256(resolved.read_bytes()).hexdigest()
+    return executable, f"{fingerprint} sha256:{digest} at {resolved}"
 
 
 IGNORED_ENTRIES = frozenset({"__pycache__"})
@@ -732,16 +757,21 @@ def run_command(
         stderr=subprocess.PIPE,
         start_new_session=True,
     )
+    # `start_new_session=True` makes the child its own group leader, so the
+    # group id equals its pid. Read it now: after `communicate` reaps the
+    # leader, `os.getpgid(pid)` raises ESRCH and a lookup-then-kill would
+    # signal nothing while appearing to succeed.
+    group = process.pid
     try:
         _, stderr = process.communicate(timeout=timeout)
         # Success is an execution boundary too. A command that left a
         # background child running would otherwise keep running through
         # classification and workspace teardown, racing the removal of the
         # very files the receipt describes.
-        terminate_group(process)
+        terminate_group(group, process)
         return process.returncode, stderr, False
     except subprocess.TimeoutExpired:
-        terminate_group(process)
+        terminate_group(group, process)
         try:
             # Descendants inherit the pipes, so an unbounded drain here would
             # block forever exactly when the group kill failed — turning a
@@ -757,13 +787,16 @@ def run_command(
         return -1, "", True
 
 
-def terminate_group(process: subprocess.Popen) -> None:
-    """Signal the command's whole process group, then its leader as a fallback."""
+def terminate_group(group: int, process: subprocess.Popen) -> None:
+    """Signal the command's whole process group by its saved group id."""
 
     try:
-        os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+        os.killpg(group, signal.SIGKILL)
     except (OSError, ProcessLookupError):
-        process.kill()
+        try:
+            process.kill()
+        except (OSError, ProcessLookupError):
+            pass
 
 
 def canonical_artifacts(policy: Policy) -> tuple[str, ...]:
@@ -1117,30 +1150,42 @@ def require_fixed_tagger(root: Path) -> None:
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
 YAML_COMMENT = re.compile(r"(?m)(?:(?<=^)|(?<=\s))#.*$")
 MUTABLE_ACTION = re.compile(r"uses:\s*\S+@(?!\b[0-9a-f]{40}\b)\S+")
-JOBS_KEY = re.compile(r"(?m)^jobs:\s*$")
-JOB_HEADER = re.compile(r"(?m)^(\s+)([A-Za-z_][\w-]*):\s*$")
+ANY_ACTION = re.compile(r"(?m)^[ \t]+(?:-[ \t]+)?uses:[ \t]*\S+")
+JOBS_KEY = re.compile(r"(?m)^jobs:[ \t]*$")
+# `[ \t]` rather than `\s`: `\s` matches a newline, so a header at the very
+# start of the scanned text absorbs the preceding line break into its indent
+# and measures one deeper than the same header found mid-text.
+JOB_HEADER = re.compile(r"(?m)^([ \t]+)([A-Za-z_][\w-]*):[ \t]*$")
 # `environment: name` and the block form `environment:\n  name: name` are both
 # legal GitHub spellings of the same thing, so both must match.
 PUBLISHER_ENVIRONMENT = re.compile(
     r"(?m)^\s+environment:\s*(?:tenkz-release-publisher\s*$"
     r"|\s*\n\s+name:\s*tenkz-release-publisher\s*$)"
 )
+PUBLISHER_NEEDS = re.compile(r"(?m)^[ \t]+needs:[ \t]*(.+)$")
+STEP_MARKER = re.compile(r"(?m)^[ \t]+-[ \t]+(?:id|name|uses|run):")
+NO_OP_RUN = re.compile(r"^(?:true|:|echo\b.*)$")
+BOUNDARY_STEPS = {
+    "tenkz-network-denied": (
+        "denies network access before repository code runs",
+        "release_enforcement_network",
+    ),
+    "tenkz-filesystem-isolated": (
+        "places the run in a mount namespace under an identity that does not "
+        "own the checkout",
+        "release_test_protocol",
+    ),
+}
 PUBLISHER_REQUIREMENTS = (
     (
-        re.compile(r"(?m)^\s+contents:\s*write\s*$"),
+        re.compile(r"(?m)^[ \t]+contents:[ \t]*write[ \t]*$"),
         "a job-level `contents: write` permission",
     ),
     (
         re.compile(r"\$\{\{\s*secrets\.TENKZ_FINAL_TAG_SIGNING_KEY\s*\}\}"),
         "a reference to the TENKZ_FINAL_TAG_SIGNING_KEY secret",
     ),
-    (
-        re.compile(r"(?m)^\s+needs:\s*\S"),
-        "its own `needs:` dependency, which is what orders it after post-merge "
-        "validation",
-    ),
 )
-NETWORK_DENIAL = re.compile(r"(?m)^\s+(?:-\s+)?(?:id|name):\s*tenkz-network-denied\s*$")
 
 
 def workflow_jobs(text: str) -> dict[str, str]:
@@ -1167,6 +1212,68 @@ def workflow_jobs(text: str) -> dict[str, str]:
         stop = tops[index + 1].start() if index + 1 < len(tops) else len(body)
         jobs[header.group(2)] = body[header.start() : stop]
     return jobs
+
+
+def named_steps(block: str) -> list[tuple[int, str]]:
+    """Each step in one job block, as its position and its text."""
+
+    marks = [match.start() for match in STEP_MARKER.finditer(block)]
+    return [
+        (index, block[start : marks[index + 1] if index + 1 < len(marks) else len(block)])
+        for index, start in enumerate(marks)
+    ]
+
+
+def boundary_step_failures(name: str, block: str, job: str) -> list[str]:
+    """Check one declared boundary step: present, first, and not a no-op.
+
+    What a checker can establish about these steps is that the workflow
+    declares one, that it runs before any other step in its job, and that its
+    command is not a placeholder. What it cannot establish is that the command
+    achieves what it is named for. `RELEASE-POLICY.md` §2 records that residue:
+    the marker is the workflow author's declaration, and the review of the
+    arming change is what confirms it.
+    """
+
+    description = BOUNDARY_STEPS[name][0]
+    steps = named_steps(block)
+    matching = [
+        (index, text)
+        for index, text in steps
+        if re.search(rf"(?m)^[ \t]+(?:-[ \t]+)?(?:id|name):[ \t]*{re.escape(name)}[ \t]*$", text)
+    ]
+    if not matching:
+        return [f"job {job} has no step named {name}, which {description}"]
+    index, text = matching[0]
+    failures = []
+    # There is more than one boundary step, so "first" cannot be the rule.
+    # Each must precede every step that is not itself a boundary — that is the
+    # ordering the policy states: before repository code runs.
+    boundary_positions = {
+        position
+        for position, step in steps
+        if any(
+            re.search(
+                rf"(?m)^[ \t]+(?:-[ \t]+)?(?:id|name):[ \t]*{re.escape(other)}[ \t]*$",
+                step,
+            )
+            for other in BOUNDARY_STEPS
+        )
+    }
+    ordinary = [position for position, _ in steps if position not in boundary_positions]
+    if ordinary and index > min(ordinary):
+        failures.append(
+            f"job {job} runs {min(ordinary) + 1} ordinary step(s) before {name}; "
+            f"the step that {description} must precede repository code"
+        )
+    run = re.search(r"(?m)^[ \t]+run:[ \t]*(?:\|[ \t]*\n[ \t]+)?(.+)$", text)
+    command = run.group(1).strip() if run else ""
+    if not command or NO_OP_RUN.fullmatch(command):
+        failures.append(
+            f"job {job} declares {name} as the no-op {command!r}; a step that "
+            f"{description} has to do something"
+        )
+    return failures
 
 
 def require_armed_workflow(root: Path) -> None:
@@ -1199,21 +1306,63 @@ def require_armed_workflow(root: Path) -> None:
         f"{ARMED_WORKFLOW} has {len(publishers)} publisher jobs {publishers}; the "
         f"campaign has one terminal publisher",
     )
-    publisher = jobs[publishers[0]]
-    missing = [
-        description
+    publisher_name = publishers[0]
+    publisher = jobs[publisher_name]
+
+    failures = [
+        f"the {publisher_name} job lacks {description}"
         for pattern, description in PUBLISHER_REQUIREMENTS
         if pattern.search(publisher) is None
     ]
-    if NETWORK_DENIAL.search(text) is None:
-        missing.append(
-            "a step named tenkz-network-denied, which denies network access "
-            "before repository code runs"
+
+    # The publisher's `needs:` must name a real validation job, not merely be
+    # nonempty: an arbitrary dependency lets the job that writes the release
+    # tag start without the gate it exists behind.
+    needs = PUBLISHER_NEEDS.search(publisher)
+    if needs is None:
+        failures.append(
+            f"the {publisher_name} job has no `needs:`, so nothing orders it "
+            f"after post-merge validation"
         )
+    else:
+        named = {
+            token.strip(" []'\"")
+            for token in needs.group(1).replace(",", " ").split()
+            if token.strip(" []'\"")
+        }
+        unknown = sorted(named - set(jobs))
+        if unknown:
+            failures.append(
+                f"the {publisher_name} job needs {unknown}, which is not a job in "
+                f"this workflow"
+            )
+        elif named <= {publisher_name} or not named:
+            failures.append(
+                f"the {publisher_name} job needs only itself, so no validation "
+                f"gates it"
+            )
+
+    # The secret-bearing job runs one closed inline command. An action — even a
+    # SHA-pinned one — puts third-party code in the job that reads the signing
+    # key, which is the one job the contract keeps free of it.
+    actions = ANY_ACTION.findall(publisher)
+    if actions:
+        failures.append(
+            f"the {publisher_name} job carries {len(actions)} `uses:` step(s); the "
+            f"secret-bearing publisher runs a closed inline command only"
+        )
+
+    for name in BOUNDARY_STEPS:
+        hosts = [job for job, block in jobs.items() if job != publisher_name]
+        if not hosts:
+            failures.append(f"no job could carry the {name} step")
+            continue
+        for job in hosts:
+            failures.extend(boundary_step_failures(name, jobs[job], job))
+
     require(
-        not missing,
-        f"armed policy but the {publishers[0]} job in {ARMED_WORKFLOW} lacks "
-        f"{'; '.join(missing)}",
+        not failures,
+        f"armed policy but {ARMED_WORKFLOW}: {'; '.join(failures)}",
     )
     mutable = sorted(set(MUTABLE_ACTION.findall(text)))
     require(

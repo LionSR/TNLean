@@ -400,13 +400,33 @@
         },
         "exit_status": { "type": "integer" },
         "assertion_result": { "enum": ["passed", "assertion-failed"] },
-        "timed_out": { "type": "boolean" },
+        "timed_out": {
+          "description": "Always false in a receipt. A timeout fails closed and emits no payload receipt at all, so `true` here describes a run the supervisor cannot have produced.",
+          "const": false
+        },
         "output_mount": { "type": "string", "minLength": 1 },
         "tool_fingerprints": {
           "type": "object",
           "additionalProperties": { "type": "string", "minLength": 1 }
         }
-      }
+      },
+      "allOf": [
+        {
+          "$comment": "The supervisor emits exactly two outcome tuples: a pass exits zero, an assertion failure exits ten. Validating the fields independently would admit `passed` with exit 10, which is not a run that happened but a claim no evidence supports.",
+          "if": {
+            "properties": { "assertion_result": { "const": "passed" } },
+            "required": ["assertion_result"]
+          },
+          "then": { "properties": { "exit_status": { "const": 0 } } }
+        },
+        {
+          "if": {
+            "properties": { "assertion_result": { "const": "assertion-failed" } },
+            "required": ["assertion_result"]
+          },
+          "then": { "properties": { "exit_status": { "const": 10 } } }
+        }
+      ]
     }
   }
 }

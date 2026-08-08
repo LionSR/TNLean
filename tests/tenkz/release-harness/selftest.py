@@ -150,9 +150,11 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
       - id: tenkz-network-denied
-        run: true
+        run: sudo iptables -P OUTPUT DROP && sudo iptables -P INPUT DROP
+      - id: tenkz-filesystem-isolated
+        run: unshare --mount --map-root-user tests/tenkz/release-harness/supervisor.py run-all
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
   publish:
     needs: validate
     environment: tenkz-release-publisher
@@ -188,11 +190,75 @@ def guard_armed_workflow_comments(workspace: Path) -> None:
 
 
 def guard_armed_workflow_foreign_needs(workspace: Path) -> None:
-    """A `needs:` on another job must not order the publisher."""
+    """A `needs:` on another job must not order the publisher.
+
+    The fixture removes the publisher's `needs:` *and* gives one to the
+    validation job, so a whole-file scan would still find `needs:` and pass.
+    A fixture that only deleted the publisher's would be refused by the broken
+    check too, and would therefore prove nothing.
+    """
+
+    body = ARMED_WORKFLOW.replace("    needs: validate\n", "").replace(
+        "  validate:\n", "  validate:\n    needs: nothing-in-particular\n"
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_unknown_needs(workspace: Path) -> None:
+    """The publisher's `needs:` must name a job that exists."""
 
     require_armed_workflow(
-        staged_workflow(workspace, ARMED_WORKFLOW.replace("    needs: validate\n", ""))
+        staged_workflow(workspace, ARMED_WORKFLOW.replace("needs: validate", "needs: lint"))
     )
+
+
+def guard_armed_workflow_publisher_action(workspace: Path) -> None:
+    """The secret-bearing publisher must carry no `uses:` step at all."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}",
+        "      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803\n"
+        "      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_no_op_denial(workspace: Path) -> None:
+    """A boundary step declared as a no-op must not satisfy its requirement."""
+
+    body = ARMED_WORKFLOW.replace(
+        "        run: sudo iptables -P OUTPUT DROP && sudo iptables -P INPUT DROP",
+        "        run: true",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_late_denial(workspace: Path) -> None:
+    """A boundary step must run before any other step in its job."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      - id: tenkz-network-denied\n"
+        "        run: sudo iptables -P OUTPUT DROP && sudo iptables -P INPUT DROP\n",
+        "",
+    ).replace(
+        "      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803\n"
+        "      - id: tenkz-network-denied\n"
+        "        run: sudo iptables -P OUTPUT DROP",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_no_filesystem_isolation(workspace: Path) -> None:
+    """The mount-namespace boundary must be declared like the network one."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      - id: tenkz-filesystem-isolated\n"
+        "        run: unshare --mount --map-root-user "
+        "tests/tenkz/release-harness/supervisor.py run-all\n",
+        "",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
 
 
 def guard_armed_workflow_mutable_action(workspace: Path) -> None:
@@ -254,6 +320,11 @@ GUARDS = {
     "armed-workflow-comments": guard_armed_workflow_comments,
     "armed-workflow-foreign-needs": guard_armed_workflow_foreign_needs,
     "armed-workflow-mutable-action": guard_armed_workflow_mutable_action,
+    "armed-workflow-unknown-needs": guard_armed_workflow_unknown_needs,
+    "armed-workflow-publisher-action": guard_armed_workflow_publisher_action,
+    "armed-workflow-no-op-denial": guard_armed_workflow_no_op_denial,
+    "armed-workflow-late-denial": guard_armed_workflow_late_denial,
+    "armed-workflow-no-filesystem-isolation": guard_armed_workflow_no_filesystem_isolation,
     "armed-workflow-short-environment": guard_armed_workflow_short_environment,
     "armed-workflow-block-environment": guard_armed_workflow_block_environment,
 }

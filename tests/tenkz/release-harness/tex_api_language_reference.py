@@ -41,6 +41,20 @@ SUBJECTS = {
 REGISTRY = "tex/tenkz/tenkz-language-registry.tex"
 REFERENCE = "docs/tenkz/chapters2/generated-language-reference.tex"
 COMMAND_ROW = re.compile(r"\\__tenkz_language_registry_command:nnnnn\s*\{([^}]+)\}")
+TEX_COMMENT = re.compile(r"(?<!\\)%.*")
+
+
+def registry_rows() -> list[str]:
+    """The command names the registry actually declares.
+
+    Comments are stripped first. A row commented out with `%` is not in the
+    executable registry, so counting it would let this assertion report that a
+    removed public command is still declared — the precise failure the
+    manual-is-the-contract rule exists to catch.
+    """
+
+    source = TEX_COMMENT.sub("", read(REGISTRY))
+    return sorted(set(COMMAND_ROW.findall(source)))
 
 
 def main() -> int:
@@ -49,7 +63,7 @@ def main() -> int:
         print(f"unknown assertion {mode!r}", file=sys.stderr)
         return 2
     test_id, fingerprint = SUBJECTS[mode]
-    declared = sorted(set(COMMAND_ROW.findall(read(REGISTRY))))
+    declared = registry_rows()
 
     if mode == "extraction":
         assert_that(
