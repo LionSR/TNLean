@@ -34,6 +34,64 @@ def read_tex_tree(path: Path) -> str:
     return re.sub(r"\\input\{([^}]+)\}", expand, source)
 
 
+# The figure's contraction graph, spelled endpoint by endpoint.  An
+# endpoint is an atom face (``name.bearing``) or an open boundary end
+# (``open w`` / ``open e`` / ``open n``).  The graph, the coefficient
+# arities, and the boundary signature are the mathematical content of
+# the figure; everything else is presentation.
+EXPECTED_PORTS = {
+    "X": {"180": "virtual", "0": "virtual", "270": "virtual"},
+    "rho": {"180": "virtual", "0": "virtual", "270": "virtual"},
+    "mid": {"90": "virtual", "0": "virtual", "270": "virtual"},
+    "M": {"180": "virtual", "0": "virtual", "270": "virtual"},
+    "Xinv": {"180": "virtual", "0": "virtual", "135": "virtual",
+             "270": "virtual"},
+    "U": {"225": "virtual", "270": "virtual", "315": "virtual",
+          "90": "physical"},
+    "jX": {"180": "virtual", "0": "virtual", "90": "virtual",
+           "270": "virtual"},
+    "jrho": {"180": "virtual", "0": "virtual", "90": "virtual"},
+    "jU": {"180": "virtual", "0": "virtual", "90": "virtual"},
+    "jXinv": {"180": "virtual", "0": "virtual", "90": "virtual",
+              "270": "virtual"},
+    "qX": {"180": "virtual", "0": "virtual", "90": "virtual"},
+    "qM": {"180": "virtual", "0": "virtual", "90": "virtual"},
+    "qXinv": {"180": "virtual", "0": "virtual", "90": "virtual"},
+}
+EXPECTED_WIRES = {
+    frozenset(edge)
+    for edge in (
+        ("X.180", "open w"),
+        ("X.0", "rho.180"),
+        ("U.225", "rho.0"),
+        ("U.270", "mid.90"),
+        ("U.315", "Xinv.135"),
+        ("mid.0", "M.180"),
+        ("M.0", "Xinv.180"),
+        ("Xinv.0", "open e"),
+        ("U.90", "open n"),
+        ("X.270", "jX.90"),
+        ("rho.270", "jrho.90"),
+        ("mid.270", "jU.90"),
+        ("Xinv.270", "jXinv.90"),
+        ("jX.270", "qX.90"),
+        ("M.270", "qM.90"),
+        ("jXinv.270", "qXinv.90"),
+        ("jX.180", "open w"),
+        ("jX.0", "jrho.180"),
+        ("jrho.0", "jU.180"),
+        ("jU.0", "jXinv.180"),
+        ("jXinv.0", "open e"),
+        ("qX.180", "open w"),
+        ("qX.0", "qM.180"),
+        ("qM.0", "qXinv.180"),
+        ("qXinv.0", "open e"),
+    )
+}
+EXPECTED_COEFF_ARITIES = {"X": 3, "rho": 3, "U": 4, "M": 3, "Xinv": 4}
+EXPECTED_BOUNDARY = "open:e, open:e, open:e, open:w, open:w, open:w, phys:n"
+
+
 def main() -> int:
     engine = shutil.which("xelatex")
     if engine is None:
@@ -44,34 +102,58 @@ def main() -> int:
     if chapter.count(BEGIN) != 1 or chapter.count(END) != 1:
         raise AssertionError("II_RFP routing markers must occur exactly once")
     body = chapter.split(BEGIN, 1)[1].split(END, 1)[0]
+
     declared_ports: dict[str, dict[str, str]] = {}
     for match in re.finditer(
-        r"\\tnput\[(?P<options>.*?)\]\s*\{(?P<name>[^}]+)\}", body, re.DOTALL
+        r"\\tn\[(?P<options>[^]]*)\]\s*\{", body, re.DOTALL
     ):
-        ports = re.search(r"ports=\{(?P<ports>[^}]*)\}", match["options"], re.DOTALL)
-        if ports is None:
+        options = match["options"]
+        name = re.search(r"name=(?P<name>[A-Za-z]+)", options)
+        ports = re.search(r"ports=\{(?P<ports>[^}]*)\}", options, re.DOTALL)
+        if name is None or ports is None:
             continue
-        declared_ports[match["name"]] = {
-            anchor.strip(): port_type.strip()
+        declared_ports[name["name"]] = {
+            bearing.strip(): port_type.split(":", 1)[0].strip()
             for item in ports["ports"].split(",")
-            for anchor, port_type in [item.rsplit(":", 1)]
+            for bearing, port_type in [item.split(":", 1)]
         }
-    expected_boundary_ports = {
-        "rfpWest": {"east": "virtual"},
-        "rfpEast": {"west": "virtual"},
-        "rfpPhysical": {"south": "physical"},
-        "rfpJwest": {"east": "virtual"},
-        "rfpJeast": {"west": "virtual"},
-        "rfpQwest": {"east": "virtual"},
-        "rfpQeast": {"west": "virtual"},
-    }
-    actual_boundary_ports = {
-        name: declared_ports.get(name) for name in expected_boundary_ports
-    }
-    if actual_boundary_ports != expected_boundary_ports:
+    if declared_ports != EXPECTED_PORTS:
         raise AssertionError(
-            f"II_RFP boundary port declarations changed: {actual_boundary_ports}"
+            f"II_RFP port declarations changed: {declared_ports}"
         )
+
+    wires = [
+        frozenset((match["a"].strip(), match["b"].strip()))
+        for match in re.finditer(
+            r"\\tnwire(?:\[[^]]*\])?\s*\{(?P<a>[^}]+)\}\s*\{(?P<b>[^}]+)\}",
+            body,
+        )
+    ]
+    if len(wires) != len(EXPECTED_WIRES) or set(wires) != EXPECTED_WIRES:
+        raise AssertionError("II_RFP contraction graph changed")
+
+    # Every declared port is consumed exactly once: the wired faces of
+    # each atom must be exactly its declared bearings.
+    wired: dict[str, Counter[str]] = {}
+    for edge in wires:
+        for endpoint in edge:
+            if endpoint.startswith("open "):
+                continue
+            name, bearing = endpoint.split(".", 1)
+            wired.setdefault(name, Counter())[bearing] += 1
+    for name, bearings in EXPECTED_PORTS.items():
+        used = wired.get(name, Counter())
+        if used != Counter(bearings.keys()):
+            raise AssertionError(
+                f"II_RFP port usage for {name} changed: {dict(used)}"
+            )
+
+    arities = {
+        name: len(EXPECTED_PORTS[name]) for name in EXPECTED_COEFF_ARITIES
+    }
+    if arities != EXPECTED_COEFF_ARITIES:
+        raise AssertionError(f"II_RFP coefficient arity changed: {arities}")
+
     source = (
         "\\documentclass{article}\n"
         "\\usepackage{tenkz}\n"
@@ -80,7 +162,6 @@ def main() -> int:
         f"{body}\n"
         "\\end{document}\n"
     )
-
     with tempfile.TemporaryDirectory(prefix="tenkz_index_routing_") as tmp:
         work = Path(tmp)
         tex = work / "ii-rfp-routing.tex"
@@ -106,80 +187,15 @@ def main() -> int:
         hard = [finding for finding in audit.findings if finding.severity == "HARD"]
         if hard:
             raise AssertionError(f"II_RFP event stream has hard findings: {hard}")
-        # Reuse the audit's own parse instead of re-splitting the .tnlog a
-        # second time (both scripts did this independently; tenkz_audit's
-        # Event objects already carry the typed attrs dict).
         events = audit.events()
 
-    atoms = {
-        event.attrs["name"]: event.attrs["kind"]
+    boundary = [
+        event.attrs["signature"]
         for event in events
-        if event.kind == "atom"
-    }
-    expected_atoms = {
-        "rfpWest": "boundary", "rfpX": "box", "rfpLambda": "box",
-        "rfpU": "box", "rfpMain": "dot", "rfpM": "box",
-        "rfpXinv": "box", "rfpEast": "boundary",
-        "rfpPhysical": "boundary", "rfpJwest": "boundary",
-        "rfpXj": "dot", "rfpLambdaj": "dot", "rfpUj": "dot",
-        "rfpXinvj": "dot", "rfpJeast": "boundary",
-        "rfpQwest": "boundary", "rfpXq": "dot", "rfpMq": "dot",
-        "rfpXinvq": "dot", "rfpQeast": "boundary",
-    }
-    if atoms != expected_atoms:
-        raise AssertionError(f"II_RFP atoms changed: {atoms}")
-
-    joins = [
-        frozenset((event.attrs["from"], event.attrs["to"]))
-        for event in events
-        if event.kind == "join"
+        if event.kind == "kernel-boundary"
     ]
-    expected_joins = {
-        frozenset(edge)
-        for edge in (
-            ("rfpWest.east", "rfpX.west"),
-            ("rfpX.east", "rfpLambda.west"),
-            ("rfpLambda.east", "rfpU.south west"),
-            ("rfpU.south east", "rfpXinv.north west"),
-            ("rfpU.south", "rfpMain.north"),
-            ("rfpMain.east", "rfpM.west"),
-            ("rfpM.east", "rfpXinv.west"),
-            ("rfpXinv.east", "rfpEast.west"),
-            ("rfpPhysical.south", "rfpU.north"),
-            ("rfpX.south", "rfpXj.north"),
-            ("rfpXj.south", "rfpXq.north"),
-            ("rfpLambda.south", "rfpLambdaj.north"),
-            ("rfpMain.south", "rfpUj.north"),
-            ("rfpM.south", "rfpMq.north"),
-            ("rfpXinv.south", "rfpXinvj.north"),
-            ("rfpXinvj.south", "rfpXinvq.north"),
-            ("rfpJwest.east", "rfpXj.west"),
-            ("rfpXj.east", "rfpLambdaj.west"),
-            ("rfpLambdaj.east", "rfpUj.west"),
-            ("rfpUj.east", "rfpXinvj.west"),
-            ("rfpXinvj.east", "rfpJeast.west"),
-            ("rfpQwest.east", "rfpXq.west"),
-            ("rfpXq.east", "rfpMq.west"),
-            ("rfpMq.east", "rfpXinvq.west"),
-            ("rfpXinvq.east", "rfpQeast.west"),
-        )
-    }
-    if len(joins) != len(expected_joins) or set(joins) != expected_joins:
-        raise AssertionError("II_RFP join graph changed")
-
-    degree: Counter[str] = Counter()
-    for edge in joins:
-        for endpoint in edge:
-            degree[endpoint.split(".", 1)[0]] += 1
-    boundary_names = {name for name, kind in atoms.items() if kind == "boundary"}
-    if any(degree[name] != 1 for name in boundary_names):
-        raise AssertionError(f"II_RFP boundary is not open exactly once: {degree}")
-    expected_coeff_degrees = {
-        "rfpX": 3, "rfpLambda": 3, "rfpU": 4,
-        "rfpM": 3, "rfpXinv": 4,
-    }
-    if any(degree[name] != value for name, value in expected_coeff_degrees.items()):
-        raise AssertionError(f"II_RFP coefficient arity changed: {degree}")
+    if boundary != [EXPECTED_BOUNDARY]:
+        raise AssertionError(f"II_RFP boundary signature changed: {boundary}")
 
     print("PASS: II_RFP block and multiplicity rails retain their routed arities")
     return 0

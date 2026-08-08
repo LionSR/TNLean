@@ -602,89 +602,60 @@ representation.
         % (virtual-west=1 | virtual-east=1 | physical-up=1).
         % Source verdict: CPSV16 Theorem 3.11 and its graphical explanation,
         % Papers/1606.00608/MPDO-22-12-17-2.tex:543--562.
-        \begin{tenkz}[physical=up, tensor style=box]
-            \tn{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[skin=box, ports={90:physical}]{A}
         \end{tenkz}
         $ = $
         % TENKZ-II-RFP-BEGIN
-        \begin{tenkzfree}[tensor style=box]
-            \tnput[boundary, ports={east:virtual}]
-            {rfpWest}{(-8mm,0)}{}
-            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-            {rfpX}{(0,0)}{X}
-            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-            {rfpLambda}{(14mm,0)}{\sqrt\rho}
-            \tnput[box,
-                ports={south west:virtual,south:virtual,
-                        south east:virtual,north:physical}]
-            {rfpU}{(31mm,11mm)}{\quad U\quad}
-            \tnput[dot, ports={north:virtual,south:virtual,east:virtual}]
-            {rfpMain}{(31mm,0)}{}
-            \tnput[box, ports={west:virtual,east:virtual,south:virtual}]
-            {rfpM}{(40mm,0)}{M}
-            \tnput[box,
-                ports={west:virtual,east:virtual,north west:virtual,
-                        south:virtual}]
-            {rfpXinv}{(54mm,0)}{X^{-1}}
-            \tnput[boundary, ports={west:virtual}]
-            {rfpEast}{(63mm,0)}{}
-            \tnput[boundary, ports={south:physical}]
-            {rfpPhysical}{(31mm,20mm)}{}
-
-            \tnput[boundary, label pos=west, ports={east:virtual}]
-            {rfpJwest}{(-8mm,-9mm)}{j}
-            \tnput[dot, ports={west:virtual,east:virtual,
-                        north:virtual,south:virtual}]
-            {rfpXj}{(0,-9mm)}{}
-            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {rfpLambdaj}{(14mm,-9mm)}{}
-            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {rfpUj}{(31mm,-9mm)}{}
-            \tnput[dot, ports={west:virtual,east:virtual,
-                        north:virtual,south:virtual}]
-            {rfpXinvj}{(54mm,-9mm)}{}
-            \tnput[boundary, ports={west:virtual}]
-            {rfpJeast}{(63mm,-9mm)}{}
-
-            \tnput[boundary, label pos=west, ports={east:virtual}]
-            {rfpQwest}{(-8mm,-16mm)}{q}
-            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {rfpXq}{(0,-16mm)}{}
-            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {rfpMq}{(40mm,-16mm)}{}
-            \tnput[dot, ports={west:virtual,east:virtual,north:virtual}]
-            {rfpXinvq}{(54mm,-16mm)}{}
-            \tnput[boundary, ports={west:virtual}]
-            {rfpQeast}{(63mm,-16mm)}{}
-
-            \tnjoin{rfpWest.east}{rfpX.west}
-            \tnjoin{rfpX.east}{rfpLambda.west}
-            \tnjoin[route=hv]{rfpLambda.east}{rfpU.south west}
-            \tnjoin[route=vh]{rfpU.south east}{rfpXinv.north west}
-            \tnjoin{rfpU.south}{rfpMain.north}
-            \tnjoin{rfpMain.east}{rfpM.west}
-            \tnjoin{rfpM.east}{rfpXinv.west}
-            \tnjoin{rfpXinv.east}{rfpEast.west}
-            \tnjoin{rfpPhysical.south}{rfpU.north}
-
-            \tnjoin{rfpX.south}{rfpXj.north}
-            \tnjoin{rfpXj.south}{rfpXq.north}
-            \tnjoin{rfpLambda.south}{rfpLambdaj.north}
-            \tnjoin{rfpMain.south}{rfpUj.north}
-            \tnjoin{rfpM.south}{rfpMq.north}
-            \tnjoin{rfpXinv.south}{rfpXinvj.north}
-            \tnjoin{rfpXinvj.south}{rfpXinvq.north}
-
-            \tnjoin{rfpJwest.east}{rfpXj.west}
-            \tnjoin{rfpXj.east}{rfpLambdaj.west}
-            \tnjoin{rfpLambdaj.east}{rfpUj.west}
-            \tnjoin{rfpUj.east}{rfpXinvj.west}
-            \tnjoin{rfpXinvj.east}{rfpJeast.west}
-            \tnjoin{rfpQwest.east}{rfpXq.west}
-            \tnjoin{rfpXq.east}{rfpMq.west}
-            \tnjoin{rfpMq.east}{rfpXinvq.west}
-            \tnjoin{rfpXinvq.east}{rfpQeast.west}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none]
+            \tn[at=(1,1), skin=box, name=X,
+                ports={180:virtual, 0:virtual, 270:virtual}]{X}
+            \tn[at=(1,2), skin=box, name=rho,
+                ports={180:virtual, 0:virtual, 270:virtual}]{\sqrt\rho}
+            \tn[at=(1,3), name=mid, ports={90:virtual, 0:virtual, 270:virtual}]{}
+            \tn[at=(1,4), skin=box, name=M,
+                ports={180:virtual, 0:virtual, 270:virtual}]{M}
+            \tn[at=(1,5), skin=box, name=Xinv,
+                ports={180:virtual, 0:virtual, 135:virtual, 270:virtual}]{X^{-1}}
+            \tn[at={1 n of (1,3)}, skin=box, name=U,
+                ports={225:virtual, 270:virtual, 315:virtual, 90:physical}]{U}
+            \tn[at=(2,1), name=jX, ports={180:virtual, 0:virtual, 90:virtual, 270:virtual}]{}
+            \tn[at=(2,2), name=jrho, ports={180:virtual, 0:virtual, 90:virtual}]{}
+            \tn[at=(2,3), name=jU, ports={180:virtual, 0:virtual, 90:virtual}]{}
+            \tn[at=(2,5), name=jXinv, ports={180:virtual, 0:virtual, 90:virtual, 270:virtual}]{}
+            \tn[at=(3,1), name=qX, ports={180:virtual, 0:virtual, 90:virtual}]{}
+            \tn[at=(3,4), name=qM, ports={180:virtual, 0:virtual, 90:virtual}]{}
+            \tn[at=(3,5), name=qXinv, ports={180:virtual, 0:virtual, 90:virtual}]{}
+            \tnwire{X.180}{open w}
+            \tnwire{X.0}{rho.180}
+            \tnwire{U.225}{rho.0}
+            \tnwire{U.270}{mid.90}
+            \tnwire{U.315}{Xinv.135}
+            \tnwire{mid.0}{M.180}
+            \tnwire{M.0}{Xinv.180}
+            \tnwire{Xinv.0}{open e}
+            \tnwire{U.90}{open n}
+            \tnwire{X.270}{jX.90}
+            \tnwire{rho.270}{jrho.90}
+            \tnwire{mid.270}{jU.90}
+            \tnwire{Xinv.270}{jXinv.90}
+            \tnwire{jX.270}{qX.90}
+            \tnwire[crossing=over]{M.270}{qM.90}
+            \tnwire{jXinv.270}{qXinv.90}
+            \tnwire[name=jw]{jX.180}{open w}
+            \tnwire{jX.0}{jrho.180}
+            \tnwire{jrho.0}{jU.180}
+            \tnwire{jU.0}{jXinv.180}
+            \tnwire{jXinv.0}{open e}
+            \tnwire[name=qw]{qX.180}{open w}
+            \tnwire{qX.0}{qM.180}
+            \tnwire{qM.0}{qXinv.180}
+            \tnwire{qXinv.0}{open e}
+            \tnmark[form=label, label pos=w]{on jw 0.8}{$j$}
+            \tnmark[form=label, label pos=w]{on qw 0.8}{$q$}
+        \end{tenkz}
         % TENKZ-II-RFP-END
     \end{center}
     \caption{Block and multiplicity indices in the fixed-point decomposition.

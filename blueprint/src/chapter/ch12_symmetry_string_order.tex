@@ -27,22 +27,23 @@ physical state symmetry requires additional hypotheses.
     % A_n\otimes\overline{A_{n'}}.
     % Source verdict: Papers/0802.0447/StringOrder-v10.tex, equation EU,
     % lines 164--174, gives this exact algebraic identity but no dedicated
-    % figure.  The lower \tn* supplies entrywise conjugation; reading order
-    % supplies the transpose that yields A_{n'}^\dagger in the applied map.
-    % Pairing/index map: the top-to-middle pairleg contracts n and the
-    % middle-to-bottom pairleg contracts n'.  These are the only physical
-    % pairings.  The middle u row has no virtual boundary, while both
-    % virtual legs of A_n and both virtual legs of \overline{A_{n'}} remain
-    % free because the map has not consumed X.
+    % figure.  The conjugate lower node supplies entrywise conjugation;
+    % reading order supplies the transpose that yields A_{n'}^\dagger in the
+    % applied map.
+    % Pairing/index map: u rides the single ket-bra rung; the segment above
+    % it contracts n and the segment below it contracts n'.  These are the
+    % only physical pairings.  Both virtual legs of A_n and both virtual
+    % legs of \overline{A_{n'}} remain free because the map has not
+    % consumed X.
     % boundary|virtual-west=2|virtual-east=2|physical-up=0|physical-down=0.
-    \begin{align}
-         & \begin{tenkz}[rows={ket,op:none,bra}]
-               \tn{A_n} \\
-               \tn[role=operator]{u} \\
-               \tn*{A_{n'}}
-           \end{tenkz}.
-        \notag
-    \end{align}
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, boundary=open]
+            \tn[label pos=n]{A_n} \\
+            \tn[label pos=s, conjugate]{\overline{A_{n'}}}
+            \tn[species=operator, label pos=w, at=on bond-1-1-2-1 0.5]{u}
+        \end{tenkz}.
+    \end{center}
     The upper and lower black nodes denote $A_n$ and $A_{n'}^\dagger$, and the
     red node labelled $u$ couples the physical legs.
 \end{definition}
@@ -69,17 +70,22 @@ physical state symmetry requires additional hypotheses.
     % Type verdict: a scalar after every physical and virtual index is contracted.
     % Boundary signature: virtual-west=0 | virtual-east=0 |
     % physical-up=0 | physical-down=0.
-    \begin{align}
-         & \begin{tenkz}[rows={ket,op:none,bra},
-                   west={cup=$\Lambda$}, east=cup]
-               \tn{A} & \tn{A} & \tndots & \tn{A} \\
-               \tn[role=operator]{u} & \tn[role=operator]{u} & \tndots &
-               \tn[role=operator]{u} \\
-               \tn*{A}\tnspan[brace below]{4}{$L\text{ sites}$} &
-               \tn*{A} & \tndots & \tn*{A}
-           \end{tenkz}.
-        \notag
-    \end{align}
+    % The site count stands as a label below the chain: a brace under the
+    % conjugate row would run through that row's labels.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=4, west={cup=$\Lambda$}, east=cup]
+            \tn[label pos=n]{A} & \tn[label pos=n]{A} & \tn[skin=dots]{} &
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}} &
+            \tn[label pos=s, conjugate]{\overline{A}} & \tn[skin=dots]{} &
+            \tn[label pos=s, conjugate]{\overline{A}}
+            \tn[species=operator, label pos=w, at=on bond-1-1-2-1 0.5]{u}
+            \tn[species=operator, label pos=w, at=on bond-1-2-2-2 0.5]{u}
+            \tn[species=operator, label pos=w, at=on bond-1-4-2-4 0.5]{u}
+            \tnmark[form=label]{2 s of midway (2,2) and (2,3)}{$L\text{ sites}$}
+        \end{tenkz}.
+    \end{center}
     The boundary matrix $\Lambda$ is contracted into the virtual boundary, the
     red nodes labelled $u$ sit on the physical rungs, and the right boundary
     is traced.
@@ -339,6 +345,7 @@ physical state symmetry requires additional hypotheses.
     Locally, the physical action of $u$ can therefore be pushed to the virtual
     legs:
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % Condition C1, lines 328--334, states
         % sum_j u_{ij} A^j = V A^i V^\dagger.
@@ -349,23 +356,14 @@ physical state symmetry requires additional hypotheses.
         % Type verdict: both sides are rank-three local tensors.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0 on both sides.
-        \begin{tenkz}[rows={op:none,ket}]
-            \tn[role=operator,up=$i$]{u} \\
-            \tn{A}
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[species=operator, label pos=w, ports={90:physical:$i$}]{u} \\
+            \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
         \end{tenkz}
         =
-        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-        % Condition C1, lines 328--334, states
-        % sum_j u_{ij} A^j = V A^i V^\dagger.
-        % Ink-to-index map: i is free above u; j is the sole physical
-        % contraction between u and A; west/east virtual indices remain free.
-        % Contraction set: one physical u--A bond on the left and two
-        % virtual gauge bonds on the right.
-        % Type verdict: both sides are rank-three local tensors.
-        % Boundary signature: virtual-west=1 | virtual-east=1 |
-        % physical-up=1 | physical-down=0 on both sides.
-        \begin{tenkz}[physical=up]
-            \tnX{V} & \tn[up=$i$]{A} & \tnX{V^\dagger}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{V} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{V^\dagger}
         \end{tenkz}.
     \end{tenkzequation}
 \end{definition}
@@ -384,6 +382,7 @@ physical state symmetry requires additional hypotheses.
     In doubled-layer notation, the virtual operators slide through the local
     transfer cell:
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % Condition C2, lines 335--340, states E(VXV^\dagger)=V E(X)V^\dagger.
         % Ink-to-index map: the ket row carries V and A, the bra row carries
@@ -393,23 +392,16 @@ physical state symmetry requires additional hypotheses.
         % Type verdict: equality of endomorphisms on the doubled virtual space.
         % Boundary signature: virtual-west=2 | virtual-east=2 |
         % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tnX{V} & \tn{A} \\
-            \tnX{\overline V} & \tn*{A}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[skin=ring]{V} & \tn[label pos=n]{A} \\
+            \tn[skin=ring]{\overline V} & \tn[label pos=s, conjugate]{\overline{A}}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,2)}{(2,2)}
         \end{tenkz}
         =
-        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-        % Condition C2, lines 335--340, states E(VXV^\dagger)=V E(X)V^\dagger.
-        % Ink-to-index map: the ket row carries V and A, the bra row carries
-        % their complex conjugates; each column of A and bar(A) shares one index.
-        % Contraction set: one physical ket--bra pairing per transfer cell and
-        % the internal horizontal bonds on each row; all four outer wires are free.
-        % Type verdict: equality of endomorphisms on the doubled virtual space.
-        % Boundary signature: virtual-west=2 | virtual-east=2 |
-        % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tn{A} & \tnX{V} \\
-            \tn*{A} & \tnX{\overline V}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[label pos=n]{A} & \tn[skin=ring]{V} \\
+            \tn[label pos=s, conjugate]{\overline{A}} & \tn[skin=ring]{\overline V}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,1)}{(2,1)}
         \end{tenkz}.
     \end{tenkzequation}
 \end{definition}
@@ -440,6 +432,7 @@ physical state symmetry requires additional hypotheses.
     \leanok
     Both sides express the same local picture with opposite orientation:
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % Conditions C2--C3, lines 335--347, identify covariance with
         % commutation by V\otimes\overline V in the doubled picture.
@@ -450,24 +443,16 @@ physical state symmetry requires additional hypotheses.
         % Type verdict: equality of two doubled-space endomorphisms.
         % Boundary signature: virtual-west=2 | virtual-east=2 |
         % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tnX{V} & \tn{A} \\
-            \tnX{\overline V} & \tn*{A}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[skin=ring]{V} & \tn[label pos=n]{A} \\
+            \tn[skin=ring]{\overline V} & \tn[label pos=s, conjugate]{\overline{A}}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,2)}{(2,2)}
         \end{tenkz}
         =
-        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-        % Conditions C2--C3, lines 335--347, identify covariance with
-        % commutation by V\otimes\overline V in the doubled picture.
-        % Ink-to-index map: the upper/lower rows carry the ket/bra virtual
-        % indices; the A--bar(A) pair contracts the physical Kraus index.
-        % Contraction set: the transfer-cell physical pairing and each internal
-        % horizontal row bond are summed; the four outer virtual indices are free.
-        % Type verdict: equality of two doubled-space endomorphisms.
-        % Boundary signature: virtual-west=2 | virtual-east=2 |
-        % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tn{A} & \tnX{V} \\
-            \tn*{A} & \tnX{\overline V}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[label pos=n]{A} & \tn[skin=ring]{V} \\
+            \tn[label pos=s, conjugate]{\overline{A}} & \tn[skin=ring]{\overline V}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,1)}{(2,1)}
         \end{tenkz}.
     \end{tenkzequation}
     The two formulas are the same identity read from opposite sides.
@@ -487,6 +472,7 @@ physical state symmetry requires additional hypotheses.
     \uses{lem:unitary_kraus_mixing}
     Starting from
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % Condition C1, lines 328--334, is the displayed intertwining relation.
         % Ink-to-index map: i stays free, j contracts vertically between u and A,
@@ -496,22 +482,14 @@ physical state symmetry requires additional hypotheses.
         % Type verdict: equality of rank-three local tensors.
         % Boundary signature: virtual-west=1 | virtual-east=1 |
         % physical-up=1 | physical-down=0 on both sides.
-        \begin{tenkz}[rows={op:none,ket}]
-            \tn[role=operator,up=$i$]{u} \\
-            \tn{A}
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[species=operator, label pos=w, ports={90:physical:$i$}]{u} \\
+            \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
         \end{tenkz}
         =
-        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-        % Condition C1, lines 328--334, is the displayed intertwining relation.
-        % Ink-to-index map: i stays free, j contracts vertically between u and A,
-        % and the west/east virtual indices stay free on both sides.
-        % Contraction set: one physical bond on the left; two virtual gauge
-        % bonds on the right.
-        % Type verdict: equality of rank-three local tensors.
-        % Boundary signature: virtual-west=1 | virtual-east=1 |
-        % physical-up=1 | physical-down=0 on both sides.
-        \begin{tenkz}[physical=up]
-            \tnX{V} & \tn[up=$i$]{A} & \tnX{V^\dagger}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{V} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{V^\dagger}
         \end{tenkz},
     \end{tenkzequation}
     one inserts $V^\dagger V = \Id$ so that each local transfer cell is
@@ -537,6 +515,7 @@ physical state symmetry requires additional hypotheses.
     \uses{thm:kraus_rectangular_freedom}
     Set $B^i := V\, A^i\, V^\dagger$. The transfer-map covariance relation
     \begin{tenkzequation}
+        \tenkzkernel
         % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
         % Condition C2, lines 335--340, is E\circ Ad_V=Ad_V\circ E.
         % Ink-to-index map: V and bar(V) act on the ket/bra virtual rows;
@@ -546,23 +525,16 @@ physical state symmetry requires additional hypotheses.
         % Type verdict: equality of doubled-space endomorphisms.
         % Boundary signature: virtual-west=2 | virtual-east=2 |
         % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tnX{V} & \tn{A} \\
-            \tnX{\overline V} & \tn*{A}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[skin=ring]{V} & \tn[label pos=n]{A} \\
+            \tn[skin=ring]{\overline V} & \tn[label pos=s, conjugate]{\overline{A}}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,2)}{(2,2)}
         \end{tenkz}
         =
-        % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-        % Condition C2, lines 335--340, is E\circ Ad_V=Ad_V\circ E.
-        % Ink-to-index map: V and bar(V) act on the ket/bra virtual rows;
-        % A and bar(A) share the summed physical Kraus index.
-        % Contraction set: one transfer-cell physical pairing and both internal
-        % horizontal row bonds; the four boundary wires remain free.
-        % Type verdict: equality of doubled-space endomorphisms.
-        % Boundary signature: virtual-west=2 | virtual-east=2 |
-        % physical-up=0 | physical-down=0 on both sides.
-        \begin{tenkz}[sandwich]
-            \tn{A} & \tnX{V} \\
-            \tn*{A} & \tnX{\overline V}
+        \begin{tenkz}[rows={ket,bra}, cols=2, bonds=none, boundary=open]
+            \tn[label pos=n]{A} & \tn[skin=ring]{V} \\
+            \tn[label pos=s, conjugate]{\overline{A}} & \tn[skin=ring]{\overline V}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(2,1)}{(2,2)} \tnwire{(1,1)}{(2,1)}
         \end{tenkz}
     \end{tenkzequation}
     implies that the two $d$-element Kraus families $B$ and $A$ define the
@@ -863,13 +835,15 @@ physical state symmetry requires additional hypotheses.
     % Boundary signature: virtual-west=1 | virtual-east=1 |
     % physical-up=1 | physical-down=0 on both sides.
     \begin{tenkzequation}
-        \begin{tenkz}[rows={op:none,ket}]
-            \tn[role=operator,up=$i$]{u} \\
-            \tn{A}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[species=operator, label pos=w, ports={90:physical:$i$}]{u} \\
+            \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
         \end{tenkz}
         $\;=\;\mu\,$
-        \begin{tenkz}[physical=up]
-            \tnX{V} & \tn[up=$i$]{A} & \tnX{V^\dagger}
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{V} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{V^\dagger}
         \end{tenkz}.
     \end{tenkzequation}
 \end{theorem}

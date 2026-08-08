@@ -16,7 +16,7 @@
 % manual override.
 %
 % Tensor-style doctrine: ONE glyph policy per scope decides how an
-% unadorned tensor (\tn{A}, \tnput{...}) renders.
+% unadorned tensor (\tn{A}) renders.
 %   tensor style=dot   (default) filled bead, label placed OUTSIDE in a
 %                      free quadrant by the auto-quadrant algorithm
 %                      (the CPSV school);
@@ -25,10 +25,9 @@
 %                      \overline{A}, and no external auto label exists,
 %                      so brace clearances tighten accordingly.
 % The policy is a document-wide \tnset key and a per-picture key of the
-% tenkz environment, \tnpic, tenkzlattice, and tenkzfree.  These environments
-% group, so a picture-local assignment scopes itself; tenkzcd cells inherit
-% it through the \tnpic objects they contain.  Explicit per-cell skins (dot,
-% box, circle, pill, mpo) always override the policy.  The event stream
+% tenkz environment, \tnpic, and tenkzlattice.  These environments
+% group, so a picture-local assignment scopes itself.  Explicit per-cell
+% skins (dot, box, circle, pill, mpo) always override the policy.  The event stream
 % records the RESOLVED skin.
 
 % Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
@@ -132,7 +131,7 @@
 
 % ---------- glyph policy (see the tensor-style doctrine above) ----------
 % \tenkz@tensorstyle holds the resolved mode, `dot` or `box`; grid cells
-% and \tnput read it as their default skin at option-parse time;
+% read it as their default skin at option-parse time;
 % \tenkz@tensorskin is the corresponding resolved TikZ node style for
 % automatic-site families such as tenkzlattice.
 \def\tenkz@tensorstyle{dot}
@@ -297,8 +296,9 @@
   passive site/.style={draw=tenkzPassive, fill=tenkzPassive},
   % Compatibility-object size classes act on the metric floor, not by an
   % affine canvas transform: the audited glyph measures the actual enlarged
-  % silhouette.  This is the transitional free renderer's content-sized
-  % contract, not the canonical kernel's fixed two-axis atom contract.
+  % silhouette.  This is the transitional compatibility renderer's
+  % content-sized contract, not the canonical kernel's fixed two-axis
+  % atom contract.
   % Labelled skins take 3/4, 1, or 5/4 of their common reference width; dots
   % use the existing cluster, ordinary, and inscribed-glyph diameters.
   % Medium repeats the established reference extent exactly.
@@ -385,8 +385,7 @@
       decoration={brace, amplitude=\tenkz@braceamp}, decorate},
   % One presentation for one meaning: these outlines delimit members of a
   % blocked/grouped object; they are not contraction wires.  K1 grid spans
-  % and K7 free regions consume this same style and the same measured-box
-  % renderer below.
+  % consume this style and the measured-box renderer below.
   group region/.style={draw=tenkzPassive, fill=none, densely dashed,
       rounded corners=\tenkz@groupcorner, line width=\tenkz@annwidth},
   % the package's label skin.  Named `tn label`, NOT `label`: a bare
@@ -424,8 +423,8 @@
 % \tenkz@pictureid is the EMITTING context: it is assigned LOCALLY at each
 % picture's begin (every begin site sits inside its picture's group), so
 % closing the group RESTORES the enclosing picture's id -- a nested \tnpic
-% inside a tenkzcd cell must not steal the parent's later events (cdcell
-% etc.), and back in running prose the register reverts to 0, which is how
+% inside another picture's cell must not steal the parent's later events,
+% and back in running prose the register reverts to 0, which is how
 % a bare \tntree logs picture=0.
 \newcount\tenkz@pictureid
 \newcount\tenkz@pictureuid
@@ -1488,11 +1487,10 @@
 
 % ---------- measured named enclosures ----------
 % Every enclosure consumes this ONE registry: a semantic member name maps to
-% a TikZ node whose bounding box is the member's actual rendered ink.  Grid
-% cells register their glyph nodes; free atoms and joins register composite
-% `local bounding box' nodes, so external dot labels and curved paths are
-% measured rather than budgeted.  The renderer adds only the existing
-% daylight constant.
+% a TikZ node whose bounding box is the member's actual rendered ink, so
+% external labels and enclosed paths are measured rather than budgeted.
+% Grid cells register their glyph nodes.  The renderer adds only the
+% existing daylight constant.
 \prop_new:N \g__tenkz_enclosure_prop
 \prop_new:N \g__tenkz_enclosure_depth_prop
 \int_new:N  \g__tenkz_enclosure_int
@@ -1517,8 +1515,8 @@
   { Enclosure~member~name~'#1'~is~already~defined~in~this~picture. }
 \msg_new:nnn { tenkz } { enclosure-unknown }
   {
-    Unknown~enclosure~member~'#1'.~Name~a~\token_to_str:N \tnput,~a~
-    \token_to_str:N \tnjoin,~or~an~earlier~region~before~using~it.
+    Unknown~enclosure~member~'#1'.~Name~a~rendered~cell~or~an~earlier~
+    region~before~using~it.
   }
 \msg_new:nnn { tenkz } { enclosure-empty }
   { An~enclosure~needs~at~least~one~rendered~member. }
@@ -1529,8 +1527,8 @@
   }
 \msg_new:nnn { tenkz } { region-context }
   {
-    \token_to_str:N \tnregion~is~available~inside~tenkzlattice~and~
-    tenkzfree,~not~the~'#1'~dialect.
+    \token_to_str:N \tnregion~is~available~inside~tenkzlattice,~not~
+    the~'#1'~dialect.
   }
 
 \cs_new_protected:Npn \tenkz_enclosure_fresh:N #1
@@ -1899,15 +1897,13 @@
 \prg_generate_conditional_variant:Nnn \tenkz_enclosure_draw:nnnnn
   { VVVVV } { T, F, TF }
 
-% `\tnregion' is one grammatical class in two geometry dialects.  The public
-% command dispatches to the active picture rather than defining a duplicate
-% free-tier synonym.
+% `\tnregion' is one grammatical class.  The public command dispatches to
+% the active picture rather than assuming a lattice scope.
 \cs_new_protected:Npn \tenkz_region_dispatch:nn #1#2
   {
     \str_case:enF {\tenkz@picturelang}
       {
         {lattice} { \tenkz_lattice_region:nn {#1}{#2} }
-        {free}    { \tenkz_free_region:nn {#1}{#2} }
       }
       { \msg_error:nne {tenkz}{region-context}{\tenkz@picturelang} }
   }

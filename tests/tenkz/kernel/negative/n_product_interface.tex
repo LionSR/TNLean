@@ -1,0 +1,29 @@
+% Negative regression: juxtaposed panels assert a contracted interface, and
+% the facing cuts must cancel completely.  The left factor cuts one virtual
+% index on its east frame; the right factor's west frame cuts nothing, so
+% the product is refused with both cuts printed.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkzeq}[check={signature}]
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=a, ports={180:virtual,0:virtual}]{A}
+    \tnwire{open w}{a.180} \tnwire{a.0}{open e}
+  \end{tenkz}
+  =
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=b, ports={180:virtual,0:virtual}]{B}
+    \tnwire{open w}{b.180} \tnwire{b.0}{open e}
+  \end{tenkz}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[name=c, ports={0:virtual}]{C}
+    \tnwire{c.0}{open e}
+  \end{tenkz}
+\end{tenkzeq}
+\end{document}

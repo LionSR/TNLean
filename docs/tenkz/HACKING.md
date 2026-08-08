@@ -81,7 +81,7 @@ missing capability all fail, while recorded gaps merely appear in the book's
 histogram.  A judged verdict pins the SHA-256 of its case; editing the case
 stales exactly that verdict.
 
-The ordinary 257-fixture corpus keeps its existing default interface:
+The ordinary 205-fixture corpus keeps its existing default interface:
 
 ```sh
 scripts/tenkz_corpus.sh
@@ -349,8 +349,8 @@ is pending.
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
 `.tnlog` event streams.  Use it whenever a checker needs structured event
 fields.  Some narrow regression tests still inspect raw lines directly,
-including `scripts/test_tenkz_cd_map_labels.py`,
-`scripts/test_tenkz_enclosures.py`, and `scripts/test_tenkz_peps_torus.py`.
+including `scripts/test_tenkz_enclosures.py` and
+`scripts/test_tenkz_peps_torus.py`.
 Before changing event syntax, field order, or validation, search every `.tnlog`
 consumer and update or migrate these exceptions; do not assume the canonical
 parser is their only dependency.
@@ -372,9 +372,9 @@ and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
 not a claim that every historical path has moved.  The live `tenkz-core`,
-`tenkz-grid`, `tenkz-cd`, `tenkz-lattice`, and `tenkz-free` files still combine
-some parsing, geometry, rendering, and event work; direct `\draw` or `\node`
-emission in those files remains migration debt.
+`tenkz-grid`, `tenkz-tree`, and `tenkz-lattice` files still combine
+some parsing, geometry, rendering, and event work; direct `\draw`
+or `\node` emission in those files remains migration debt.
 
 - `tenkz-model.code.tex` owns normalized semantic records and freezes topology
   after validation.
@@ -503,6 +503,12 @@ These mistakes have shipped bugs here.
     such a store with `\__tenkz_prop_new_indexed:N`, which answers a key in
     one step.  A pair-keyed store — one entry per pair of routes — is the
     worst case and must never be flat.
+11. Call sites may alias an argument to the result variable:
+    `\__tenkz_kernel_atom_skin_base:nN { \tl_use:N \l__tenkz_kernel_r_c_tl }
+    \l__tenkz_kernel_r_c_tl` reads and writes one token list.  Inside such a
+    function, read every input before the first write to the target: once
+    the target holds `\q_no_value`, re-expanding the argument is trap 1 and
+    loops forever.
 
 ## Geometry discipline
 

@@ -54,12 +54,11 @@ from tenkz_language import load_registry, parse_status
 from tenkzlib.texcase import match_group, scan_constructs, strip_comments
 
 # Bodies scanned for the dots rule: the grid languages whose cells feed
-# the implicit wire.  (tenkzcd cells are math objects and tenkzfree has
-# no implicit wire, so a literal ellipsis there is ordinary math.)
-DOTS_ENVS = set(ENVIRONMENT_LANGS) - {"tenkzcd", "tenkzfree"}
+# the implicit wire.
+DOTS_ENVS = set(ENVIRONMENT_LANGS)
 
 # Bodies scanned for the raw-ink rule: every tenkz-family body -- the
-# theme contract covers all five sub-languages.
+# theme contract covers every sub-language.
 INK_ENVS = set(ENVIRONMENT_LANGS)
 
 DOTS_PATTERNS = [

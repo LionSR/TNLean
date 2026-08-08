@@ -96,14 +96,18 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
         % contractions, and 20 cut virtual bonds; (4,4) remains ordinary.
         % Structurally derived boundary/type verdict: no physical index is
         % exposed, so each panel has (V,P)=(20,0).
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$R$]
-                {(2-4,2-4) - (4,4)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+                {(2,2) .. (4,4) - (4,4)}{$R$}
+        \end{tenkz}
         $\qquad\text{and}\qquad$
-        \begin{tenkzlattice}[rows=5, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$S$]{(2-4,2-4)}
-        \end{tenkzlattice}
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tnmark[form=enclosure, slot=selected, tint, label pos=nw]
+                {(2,2) .. (4,4)}{$S$}
+        \end{tenkz}
     \end{tenkzequation}
     \begin{tenkzequation}
         % Formula verdict: in row-column coordinates the exact local formal
@@ -118,10 +122,12 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
         % Source verdict: arXiv:1804.04964, paper_normal.tex:1430--1445
         % depicts the same 5-by-6 window complement; this panel uses the exact
         % cell set of normalSquareRegionT rather than the source's rounded ink.
-        \begin{tenkzlattice}[rows=6, cols=5, boundary legs]
-            \tnregion[slot=selected, label=$T$, label at=north]
-                {(1-6,1-5) - (3-5,1-2) - (2-3,3-5)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket}, cols=5,
+            west=open, east=open, north=open, south=open]
+            \tnmark[form=enclosure, slot=selected, tint, label pos=n]
+                {(1,1) .. (6,5) - (3,1) .. (5,2) - (2,3) .. (3,5)}{$T$}
+        \end{tenkz}
     \end{tenkzequation}
     % Maintainer note: injectivity of this finite-lattice complementary block
     % is not yet proved; this definition only names the region.
@@ -283,12 +289,12 @@ rectangles, so a rectangular injectivity hypothesis yields their injectivity.
         % 2-by-3 and 3-by-2 injective pieces.  The following formal lemma proves
         % the local no-cover obstruction for the present origin-based T and A3,
         % so no stronger geometric claim is encoded by this schematic.
-        \begin{tenkzlattice}[rows=4, cols=4, boundary legs]
-            \tnregion[slot=selected, outline, label={$2\times3$},
-                label at=center]{(1-2,1-3)}
-            \tnregion[slot=secondary, outline, inset=1,
-                label={$3\times2$}, label at=center]{(2-4,3-4)}
-        \end{tenkzlattice}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket}, cols=4,
+            west=open, east=open, north=open, south=open]
+            \tnmark[form=enclosure, slot=selected]{(1,1) .. (2,3)}{$2\times3$}
+            \tnmark[form=enclosure, slot=secondary]{(2,3) .. (4,4)}{$3\times2$}
+        \end{tenkz}
     \end{tenkzequation}
 \end{definition}
 % Maintainer note: this definition records sufficient coordinate criteria.

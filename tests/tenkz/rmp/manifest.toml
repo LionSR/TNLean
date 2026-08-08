@@ -37,7 +37,6 @@ boundary = "The three physical spokes are open; alpha, beta, and gamma form the 
 source = "paper TN-Review-main.tex line 322; author source ImagesReview Section II/ImagesReview Section II.tex lines 258-268"
 capabilities = ["kernel", "circle-frame", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_triangle.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "258-268"
 placements = [{ order = 2, line = 322, asset = "fig2_fig2-pepe_sec2fig3.pdf" }]
@@ -88,7 +87,6 @@ boundary = "The virtual chain is open at west and east; every site's two physica
 source = "paper TN-Review-main.tex line 361; author source ImagesReview Section II/ImagesReview Section II.tex lines 305-309"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_mpo.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "305-309"
 placements = [{ order = 5, line = 361, asset = "fig2_fig2-pepe_sec2fig5MPO.pdf" }]
@@ -152,9 +150,9 @@ order = 9
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-mpu-blocking.tex"
 formula = "The blocked two-site sandwich factors through cup contractions a and b."
 ink = "Kernel flat frame; explicit typed ports carry the U-over-U vertical bond at each column."
-boundary = "The blocked sandwich and cup factors expose the same unmatched outer virtual rails."
+boundary = "The right side is the product of two genuine cup-factor panels; the juxtaposition contracts an empty interface, so the factors' outer rails concatenate and match the blocked sandwich."
 source = "paper TN-Review-main.tex line 379; author source ImagesReview Section II/ImagesReview Section II.tex lines 405-432"
-capabilities = ["kernel", "typed-ports"]
+capabilities = ["kernel", "typed-ports", "closure", "equation-composition"]
 paper_context_only = false
 fixture = "tests/tenkz/t2_mpublock.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
@@ -340,7 +338,7 @@ section = "section-ii"
 order = 20
 case = "tests/tenkz/rmp/section-ii/cases/rmp-ii-staircase.tex"
 formula = "|psi> = V_5 V_4 V_3 V_2 |0>, with V_k : H_beta -> H_i tensor H_beta."
-ink = "Kernel flat frame; the staircase ascends as in the source (the bar's X row on this target: the 0.7 case was vertically mirrored)."
+ink = "Kernel flat frame; four pill isometries ascend as in the source (the bar's X row on this target: the 0.7 case was vertically mirrored)."
 boundary = "The initial state closes the input; each isometry exposes one output and the final bond."
 source = "paper TN-Review-main.tex line 514; author source ImagesReview Section II/ImagesReview Section II.tex lines 541-546"
 capabilities = ["kernel", "typed-ports"]
@@ -394,7 +392,6 @@ boundary = "The west alpha, east beta, and downward physical s indices are open.
 source = "paper TN-Review-main.tex line 661; author source ImagesReview Section II/ImagesReview Section II.tex lines 192-198"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/hard02_ALdef.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "192-198"
 placements = [{ order = 23, line = 661, asset = "fig2_fig2-pepe_AL.pdf" }]
@@ -411,7 +408,6 @@ boundary = "The west alpha, east beta, and downward physical s indices are open.
 source = "paper TN-Review-main.tex line 661; author source ImagesReview Section II/ImagesReview Section II.tex lines 199-207"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/hard02_ALdef.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "199-207"
 placements = [{ order = 24, line = 661, asset = "fig2_fig2-pepe_AR.pdf" }]
@@ -699,7 +695,6 @@ boundary = "One incoming and two outgoing MPO wires and both string ends are ope
 source = "paper TN-Review-main.tex line 1312; paper figure fig3_pentagon3.pdf; no author drawing source"
 capabilities = ["kernel", "coherence", "crossing-order"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_pentagon3.tex"
 placements = [{ order = 41, line = 1312, asset = "fig3_pentagon3.pdf" }]
 
 [[target]]
@@ -714,7 +709,6 @@ boundary = "Each tree keeps one incoming root and three outgoing leaves open."
 source = "paper TN-Review-main.tex line 1317; paper figure fig3_pentagon2.pdf; no author drawing source"
 capabilities = ["kernel", "coherence", "recoupling"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_pentagon2.tex"
 placements = [{ order = 42, line = 1317, asset = "fig3_pentagon2.pdf" }]
 
 [[target]]
@@ -729,7 +723,6 @@ boundary = "The root leg, both split legs, and both string ends are open."
 source = "paper TN-Review-main.tex line 1325; paper figure fig3_pentagon4.pdf; no author drawing source"
 capabilities = ["kernel", "coherence", "crossing-order"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_pentagon4.tex"
 placements = [{ order = 43, line = 1325, asset = "fig3_pentagon4.pdf" }]
 
 [[target]]
@@ -774,7 +767,6 @@ boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1341; paper-context-only; no author drawing source"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_mpo.tex"
 placements = [{ order = 46, line = 1341, asset = "fig3_mpo.pdf" }, { order = 94, line = 2620, asset = "fig3_mpo.pdf" }]
 
 [[target]]
@@ -789,7 +781,6 @@ boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 1342; paper-context-only; no author drawing source"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_peps.tex"
 placements = [{ order = 47, line = 1342, asset = "fig3_peps.pdf" }, { order = 92, line = 2476, asset = "fig3_peps.pdf" }]
 
 [[target]]
@@ -821,7 +812,6 @@ boundary = "Four directed plaquette legs and two MPO string ends remain open."
 source = "paper TN-Review-main.tex line 1356; author source ImagesReview Section III/ImagesReview Section III.tex lines 170-197"
 capabilities = ["kernel", "pulling-through", "rotated-action", "ring-closure"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_eq50_pull.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "170-197"
 placements = [{ order = 49, line = 1356, asset = "fig3_fig3-pepe_eq50redarrows.pdf" }]
@@ -855,7 +845,6 @@ boundary = "Both sides have the same two virtual and one physical open legs."
 source = "paper TN-Review-main.tex line 1403; author source ImagesReview Section III/ImagesReview Section III.tex lines 363-375"
 capabilities = ["kernel", "local-intertwiner", "equation-composition"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_sptmpo_cross.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "363-375"
 placements = [{ order = 51, line = 1403, asset = "fig3_fig3-pepe_proof1.pdf" }]
@@ -956,7 +945,6 @@ boundary = "Four virtual legs, one physical leg, and two g-string ends are open.
 source = "paper TN-Review-main.tex line 1459; author source ImagesReview Section III/ImagesReview Section III.tex lines 414-444"
 capabilities = ["kernel", "pulling-through", "crossing-order", "rotated-action"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_sptmpo_cross.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "414-444"
 placements = [{ order = 57, line = 1459, asset = "fig3_fig3-pepe_newSPTMPO.pdf" }]
@@ -990,7 +978,6 @@ boundary = "Four virtual lines pass through each side; only group actions are di
 source = "paper TN-Review-main.tex line 1483; author source ImagesReview Section III/ImagesReview Section III.tex lines 305-328"
 capabilities = ["kernel", "group-average", "ring-closure", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_eq54_ginj.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "305-328"
 placements = [{ order = 59, line = 1483, asset = "fig3_fig3-pepe_Eq54Ginjred.pdf" }]
@@ -1024,7 +1011,6 @@ boundary = "Five PEPS legs remain open; the surrounding MPO is closed."
 source = "paper TN-Review-main.tex line 1505; author source ImagesReview Section III/ImagesReview Section III.tex lines 521-537"
 capabilities = ["kernel", "ring-closure", "pulling-through"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_peps.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "521-537"
 placements = [{ order = 61, line = 1505, asset = "fig3_fig3-pepe_MPOinjnog.pdf" }]
@@ -1109,7 +1095,6 @@ boundary = "Both sides retain the horizontal and diagonal virtual rails and one 
 source = "paper TN-Review-main.tex line 1649; author source ImagesReview Section III/ImagesReview Section III.tex lines 661-687"
 capabilities = ["kernel", "plane-frame", "ring-closure", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_idempotent.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "661-687"
 placements = [{ order = 66, line = 1649, asset = "fig3_fig3-pepe_Idempotent.pdf" }]
@@ -1143,7 +1128,6 @@ boundary = "Both MPO cycles close; one marked j-string tail remains open in each
 source = "paper TN-Review-main.tex line 1662; author source ImagesReview Section III/ImagesReview Section III.tex lines 704-738"
 capabilities = ["kernel", "self-braiding", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_seljbraid.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "704-738"
 placements = [{ order = 68, line = 1662, asset = "fig3_fig3-pepe_seljbraidanyon.pdf" }]
@@ -1895,7 +1879,6 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "211-219"
 placements = []
-fixture = "tests/tenkz/t2_eq50_pull.tex"
 
 [[target]]
 id = "rmp-workbench-iii-dual-reduced"
@@ -2025,7 +2008,6 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "468-497"
 placements = []
-fixture = "tests/tenkz/t2_eq50_pull.tex"
 
 [[target]]
 id = "rmp-workbench-iii-intertwining-mpo"
@@ -2059,7 +2041,6 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "501-520"
 placements = []
-fixture = "tests/tenkz/t2_peps.tex"
 
 [[target]]
 id = "rmp-workbench-iii-mpo-on-peps-definition"
@@ -2076,7 +2057,6 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "521-537"
 placements = []
-fixture = "tests/tenkz/t2_peps.tex"
 
 [[target]]
 id = "rmp-workbench-iii-eq60-now"

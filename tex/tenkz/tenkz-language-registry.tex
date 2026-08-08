@@ -8,10 +8,6 @@
   {Regular one-dimensional contractions.}
 \__tenkz_language_registry_environment:nnnn {tenkzlattice}{lattice}{picture}
   {Spatial lattices, sheets, and regions.}
-\__tenkz_language_registry_environment:nnnn {tenkzcd}{cd}{picture}
-  {Maps, fusion trees, and coherence diagrams.}
-\__tenkz_language_registry_environment:nnnn {tenkzfree}{free}{picture}
-  {Irregular typed graphs.}
 \__tenkz_language_registry_environment:nnnn {tenkzplanes}{lattice-preset}{picture}
   {Compatibility preset for a two-sheet lattice.}
 
@@ -37,14 +33,8 @@
   {\tnedge[keys]{endpoints}}{A lattice edge creates or changes one connection.}
 \__tenkz_language_registry_command:nnnnn {tnsite}{atoms}{object}
   {\tnsite[keys]{cell}}{A lattice site creates or changes one atom.}
-\__tenkz_language_registry_command:nnnnn {tnput}{atoms}{object}
-  {\tnput[keys]{name}{position}{label}}{A free atom needs a stable name and position.}
-\__tenkz_language_registry_command:nnnnn {tnjoin}{connections-closures}{connection}
-  {\tnjoin[keys]{from}{to}}{A free join creates a typed connection record.}
 \__tenkz_language_registry_command:nnnnn {tntree}{atoms}{object}
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
-\__tenkz_language_registry_command:nnnnn {tnarrow}{connections-closures}{connection}
-  {\tnarrow[keys]{label}}{An arrow connects declared diagram objects.}
 \__tenkz_language_registry_command:nnnnn {tnpic}{composition}{picture}
   {\tnpic[picture keys]{body}}{A wrapper composes the grid grammar inside another expression.}
 \__tenkz_language_registry_command:nnnnn {tnset}{setup-extension}{setup}
@@ -71,19 +61,13 @@
 \__tenkz_language_registry_example:nnn {tncut}{tex/tenkz/examples/api/tncut.tex}
   {An unknown cut option is a hard error.}
 \__tenkz_language_registry_example:nnn {tnregion}{tex/tenkz/examples/api/tnregion.tex}
-  {A region outside lattice or free scope is a hard error.}
+  {A region outside lattice scope is a hard error.}
 \__tenkz_language_registry_example:nnn {tnedge}{tex/tenkz/examples/api/tnedge.tex}
   {Malformed or out-of-range endpoints are hard errors.}
 \__tenkz_language_registry_example:nnn {tnsite}{tex/tenkz/examples/api/tnsite.tex}
   {An out-of-range cell is a hard error.}
-\__tenkz_language_registry_example:nnn {tnput}{tex/tenkz/examples/api/tnput.tex}
-  {An unknown atom role or port type is a hard error.}
-\__tenkz_language_registry_example:nnn {tnjoin}{tex/tenkz/examples/api/tnjoin.tex}
-  {Mismatched endpoint types are a hard error.}
 \__tenkz_language_registry_example:nnn {tntree}{tex/tenkz/examples/api/tntree.tex}
   {An unbalanced fusion word is a hard error.}
-\__tenkz_language_registry_example:nnn {tnarrow}{tex/tenkz/examples/api/tnarrow.tex}
-  {A nonexistent source or target address is a hard error.}
 \__tenkz_language_registry_example:nnn {tnpic}{tex/tenkz/examples/api/tnpic.tex}
   {An unknown picture key is a hard error.}
 \__tenkz_language_registry_example:nnn {tnset}{tex/tenkz/examples/api/tnset.tex}
@@ -129,21 +113,10 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{escape}{Expert projected column basis.}
 \__tenkz_language_registry_key:nnnnnn {picture}{row vector}{dimension-pair}{frame}{escape}{Expert projected row basis.}
 \__tenkz_language_registry_key:nnnnnn {picture}{sheet vector}{dimension-pair}{frame}{escape}{Expert projected sheet basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{maps}{flag}{false}{kernel}{Typed-map layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{polygon}{positive-integer}{empty}{kernel}{Coherence polygon layout.}
-\__tenkz_language_registry_key:nnnnnn {picture}{radius}{length}{metric}{escape}{Coherence polygon radius.}
-% Extension-gate: #5085; Census-correction: #5085 -- these existing tenkzcd
-% geometry spellings become explicit parser leaves and visible to M3 until
-% the typed-map figures migrate under #4699.
-\__tenkz_language_registry_key:nnnnnn {picture}{column sep}{matrix-separation}{metric}{escape}{General tenkzcd column separation: a length or a tikz-cd preset (huge, large, normal, scriptsize, small, or tiny).}
-\__tenkz_language_registry_key:nnnnnn {picture}{row sep}{matrix-separation}{metric}{escape}{General tenkzcd row separation: a length or a tikz-cd preset (huge, large, normal, scriptsize, small, or tiny).}
 \__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{kernel}{Dot silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{kernel}{Box silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{kernel}{Pill silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{mpo}{flag}{policy}{kernel}{MPO silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{ring}{flag}{false}{kernel}{Ring silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{circle}{flag}{false}{kernel}{Plain circular silhouette with an inscribed label.}
-\__tenkz_language_registry_key:nnnnnn {object}{boundary}{flag}{false}{kernel}{Boundary silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{tri}{enum(l|r)}{empty}{kernel}{Canonical isometry silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{wide}{positive-integer}{1}{kernel}{Column span.}
 \__tenkz_language_registry_key:nnnnnn {object}{wires}{positive-integer}{1}{kernel}{Wire-row span.}
@@ -162,24 +135,12 @@
 \__tenkz_language_registry_key:nnnnnn {object}{label pos}{angle}{auto}{kernel}{Object label policy.}
 \__tenkz_language_registry_key:nnnnnn {object}{size}{size-class}{m}{kernel}{Compatibility-object metric size class.}
 \__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{escape}{Object label adjustment.}
-\__tenkz_language_registry_key:nnnnnn {object}{ports}{typed-port-list}{empty}{kernel}{Free-atom typed ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{frame}{frame-spec}{flat}{kernel}{Atom-local coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
-% The active 0.7 parser still accepts hv/vh during coexistence.  They are
-% migration-only values; the canonical 1.0 route family spells both `orth`.
-\__tenkz_language_registry_key:nnnnnn {connection}{route}{enum(straight|orth|arc)}{straight}{kernel}{Connection route family; 0.7 compatibility also accepts hv/vh until S4.}
-\__tenkz_language_registry_key:nnnnnn {connection}{dir}{direction-policy}{false}{kernel}{Connection direction.}
-\__tenkz_language_registry_key:nnnnnn {connection}{out}{angle}{automatic}{escape}{Arc departure angle.}
-\__tenkz_language_registry_key:nnnnnn {connection}{in}{angle}{automatic}{escape}{Arc arrival angle.}
 \__tenkz_language_registry_key:nnnnnn {connection}{label}{math}{empty}{kernel}{Connection label.}
 \__tenkz_language_registry_key:nnnnnn {connection}{role}{semantic-role}{empty}{kernel}{Connection theme role.}
-\__tenkz_language_registry_key:nnnnnn {connection}{species}{declared-name}{empty}{kernel}{Connection species.}
-\__tenkz_language_registry_key:nnnnnn {connection}{name}{identifier}{generated}{kernel}{Stable semantic name.}
-\__tenkz_language_registry_key:nnnnnn {connection}{fused}{flag}{false}{kernel}{Doubled connection.}
-\__tenkz_language_registry_key:nnnnnn {connection}{from}{address}{empty}{kernel}{Arrow source.}
-\__tenkz_language_registry_key:nnnnnn {connection}{to}{address}{empty}{kernel}{Arrow target.}
 \__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{kernel}{Distinguished lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{kernel}{Suppress a lattice edge.}
 \__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{kernel}{Named lattice-edge style.}
@@ -189,7 +150,6 @@
 \__tenkz_language_registry_key:nnnnnn {region}{label}{math}{empty}{kernel}{Region label.}
 \__tenkz_language_registry_key:nnnnnn {region}{label pos}{angle}{auto}{kernel}{Region label policy.}
 \__tenkz_language_registry_key:nnnnnn {region}{name}{identifier}{generated}{kernel}{Addressable region name.}
-\__tenkz_language_registry_key:nnnnnn {region}{group}{name-list}{empty}{kernel}{Free-graph region members.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{brace above}{flag}{false}{kernel}{Brace annotation above a span.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{kernel}{Brace annotation below a span.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{kernel}{Boxed span annotation.}
@@ -205,8 +165,6 @@
 \__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span; sunset=1.0)}{Legacy fusion span.}
 \__tenkz_language_registry_key:nnnnnn {picture}{boundary legs}{flag}{false}{alias(boundary=open; sunset=1.0)}{Legacy lattice boundary spelling.}
 \__tenkz_language_registry_key:nnnnnn {region}{label at}{angle}{auto}{alias(label pos; sunset=1.0)}{Legacy region-label spelling.}
-\__tenkz_language_registry_alias:nnnn {connection}{route=curve}{route=arc}
-  {Legacy curved-route value. Sunset 1.0.}
 
 % ---- the 1.0 kernel surface (LANGUAGE-1.0.md; the S4 swap retires the
 % ---- 0.7 rows above in favor of these) ----
@@ -310,9 +268,13 @@
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{void}{void-policy}{unset}{kernel}{Hole or removed site.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{physical}{physical-policy}{unset}{kernel}{Site's own answer to the picture's physical policy.}
 % Issue 5383: stored but never read by ink passes or the signature fold.
-% Marked reserved until the directed-signatures design (issue 4162)
-% decides whether duality rides dir= or a real glyph flip is implemented.
-\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Reserved; currently inert (stored, unread).}
+% The directed-signatures question the reservation waited on is answered:
+% wire dir= is the contract's one spelling for a space against its dual, and
+% no source panel draws a conjugate glyph -- the overline the corpus wants
+% is label mathematics, already spelled there.  Sentenced in the shrink
+% ledger (2026-08-06); the status moves with the parser row at the 1.0
+% freeze, and the corpus rewrite executes with it.
+\__tenkz_language_registry_key:nnnnnn {kernel-atom}{conjugate}{flag}{false}{kernel}{Tombstoned; stored, read by nothing. Sunset 1.0.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{cluster}{pair}{empty}{sugar(name=, skin=)}{Expander: RxC addressable sub-atom group.}
 \__tenkz_language_registry_key:nnnnnn {kernel-atom}{role}{semantic-role}{empty}{sugar(species=)}{Prelude species spelling.}
 \__tenkz_language_registry_key:nnnnnn {kernel-wire}{kind}{enum(index|string|pairing)}{index}{kernel}{Bond, travelling string, or generated skin pairing.}

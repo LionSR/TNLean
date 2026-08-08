@@ -1,0 +1,25 @@
+% Regression: an open hole keeps its indices and draws nothing.
+% The first chain's middle cell is a hole: both generated grid bonds
+% bridge it, its physical leg survives in the boundary signature, and no
+% glyph stands in the cell (issue 5609).  The sealed chain below it is
+% the contrast: the site and its bonds are gone.  The third site answers
+% the row's physical=up policy with updown at atom scope, the one policy
+% answer r_atom_physical_answer.tex does not spell.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, physical=up]
+  \tn[name=A]{A} & \tn[void=open, name=H]{} &
+  \tn[name=C, physical=updown]{C}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, physical=up]
+  \tn[name=A]{A} & \tn[void=sealed, name=V]{} & \tn[name=C]{C}
+\end{tenkz}
+\mbox{parsed}
+\end{document}

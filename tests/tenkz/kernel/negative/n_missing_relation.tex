@@ -1,3 +1,6 @@
+% Negative regression: an equation asserts at least one relation.  Two
+% panels with no relation glyph are a single product group -- one term, and
+% a term alone is not an equation.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -8,8 +11,6 @@
 \begin{document}
 \tenkzkernel
 \begin{tenkzeq}[check={signature}]
-  \begin{tenkz}[rows={wire}, cols=1]\end{tenkz}
-  =
   \begin{tenkz}[rows={wire}, cols=1]\end{tenkz}
   \begin{tenkz}[rows={wire}, cols=1]\end{tenkz}
 \end{tenkzeq}

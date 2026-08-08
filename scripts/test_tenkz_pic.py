@@ -129,7 +129,37 @@ def _assert_contract_rejects(core_source: str, theme_source: str, defect: str) -
     raise AssertionError(f"slide theme contract accepted {defect}")
 
 
+class _Node:
+    """A bare document node for exercising the kernel-switch walk."""
+
+    def __init__(self, name, children=()):
+        self.nodeName = name
+        self.parentNode = None
+        self.childNodes = list(children)
+        for child in self.childNodes:
+            child.parentNode = self
+
+
+def _assert_switch_scope() -> None:
+    reaches = tenkz_pic._kernel_switch_reaches
+    # A paragraph break is not a group: a switch inside a preceding par
+    # wrapper still governs a picture in a later par of the same center.
+    switch_par = _Node("par", [_Node("tenkzkernel"), _Node("tenkz")])
+    later_pic = _Node("tenkz")
+    center = _Node("center", [switch_par, _Node("par", [later_pic])])
+    _Node("document", [center])
+    assert reaches(switch_par.childNodes[1]), "same-par picture unreached"
+    assert reaches(later_pic), "picture after a par break unreached"
+    # A center is a group: the switch must not leak into the next one.
+    outside = _Node("tenkz")
+    _Node("document", [center, _Node("center", [_Node("par", [outside])])])
+    assert not reaches(outside), "switch leaked past its group"
+
+
 def main() -> int:
+    _assert_switch_scope()
+    print("PASS switch scope: par-transparent kernel-switch walk")
+
     missing_html = tenkz_pic._missing_tools_html(r"\tnpic{\tn{A}}")
     sentinel = tenkz_pic.MISSING_SVG_SENTINEL
     assert sentinel in missing_html, "missing-tool HTML lost its stable sentinel"

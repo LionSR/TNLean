@@ -1,0 +1,35 @@
+% Regression: the three unclaimed mark slots -- complement, collar, neutral
+% -- each answer with the theme's own hue instead of borrowing another
+% slot's ink, and a mark accepts and keeps name= (issue 4699, closing gap G2
+% of docs/tenkz/FIXTURE-RETIREMENT.md).
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\seq_new:N \g__tenkz_test_slot_hue_seq
+\cs_new_eq:NN \__tenkz_test_slot_enclosure:n \__tenkz_kernel_r_mark_enclosure:n
+\cs_set_protected:Npn \__tenkz_kernel_r_mark_enclosure:n #1
+  {
+    \__tenkz_test_slot_enclosure:n {#1}
+    \seq_gput_right:Ne \g__tenkz_test_slot_hue_seq
+      { \tl_use:N \l__tenkz_kernel_r_hue_tl }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire,wire}, cols=3, west=open, east=open]
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+  \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+  \tnmark[form=enclosure, slot=complement, tint]{(1,1) .. (3,1)}{}
+  \tnmark[form=enclosure, slot=collar, tint, name=R, label pos=n]{(1,2) .. (3,2)}{$R$}
+  \tnmark[form=enclosure, slot=neutral, tint]{(1,3) .. (3,3)}{}
+\end{tenkz}
+\ExplSyntaxOn
+\str_if_eq:eeF { \seq_use:Nn \g__tenkz_test_slot_hue_seq {,} }
+  {tenkzPassive,tenkzExtra,tenkzInk}
+  { \errmessage{the~three~region~slots~did~not~resolve~their~own~ink} }
+\ExplSyntaxOff
+\end{document}
