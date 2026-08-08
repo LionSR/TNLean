@@ -813,6 +813,29 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     conclusion of that passage.
 \end{definition}
 
+\begin{theorem}[Embedding and compression for the canonical extension]
+    \label{thm:direct_sum_extension_embedding_compression}
+    \lean{Matrix.directSumDiagonalCompression_embedding}
+    \lean{Matrix.directSumExtension_apply}
+    \leanok
+    \uses{def:direct_sum_full_matrix_extension}
+    For every $A\in\mathcal A$ and every linear map
+    $T:\mathcal A\to\mathcal B$,
+    \begin{align}
+        \pi_A(\iota_A(A))
+        &=A, \notag\\
+        \widehat T(X)
+        &=\iota_B(T(\pi_A(X))).
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The first identity follows by extracting each diagonal block of
+    $\iota_A(A)$. The second is the defining evaluation formula for the
+    canonical extension.
+\end{proof}
+
 \begin{theorem}[Fixed embedded families under the canonical extension]
     \label{thm:direct_sum_extension_embedding_fixed}
     \lean{Matrix.directSumExtension_embedding_eq_self_iff}
@@ -828,6 +851,7 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:direct_sum_extension_embedding_compression}
     Diagonal compression is a left inverse of block-diagonal embedding. Hence
     \begin{align}
         \widehat T(\iota(A))
