@@ -1429,8 +1429,15 @@ class Audit:
                 )
                 if pair is not None
             }
+            # Only a comparison states the mode it ran in; a waiver ran none
+            # and says nothing, so a scope whose every relation is waived
+            # leaves the mode unobserved rather than observed to be off.
+            stated = [
+                event for event in records
+                if event.attrs.get("result") in {"equal", "mismatch", "contracted"}
+            ]
             logged_modulo = any(
-                event.attrs.get("modulo") == "bundles" for event in records
+                event.attrs.get("modulo") == "bundles" for event in stated
             )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
             source = (
@@ -1449,7 +1456,7 @@ class Audit:
             # count the current source rejects.  The comparison then runs in
             # the stricter of the two readings.
             modulo = logged_modulo and declared_modulo
-            if policy is not None and logged_modulo != declared_modulo:
+            if policy is not None and stated and logged_modulo != declared_modulo:
                 self.hard(
                     "eq-check-drift", where,
                     f"equation scope {scope} compares "
@@ -1771,11 +1778,12 @@ _INLINE_EQUALITY_GLUE = re.compile(
 )
 
 
-def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
-    """Return source-authorized opt-outs from one equation's actual options.
+def _tenkzeq_check_value(source: str, position: int) -> str | None:
+    """One equation's `check=` value, unwrapped from its braces.
 
-    ``None`` means that the environment has no single top-level ``check`` key,
-    so the source authorizes no waiver at all.
+    ``None`` when the environment states no single top-level `check` key, in
+    which case it declares no policy at all -- neither a waiver nor a
+    comparison mode -- and both readers below agree on that.
     """
     options = following_group(source, position, "[", "]")
     if options is None:
@@ -1789,6 +1797,14 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
     grouped = following_group_span(check_value, 0, "{", "}")
     if grouped is not None and not check_value[grouped[1] :].strip():
         check_value = grouped[0]
+    return check_value
+
+
+def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
+    """Return source-authorized opt-outs from one equation's actual options."""
+    check_value = _tenkzeq_check_value(source, position)
+    if check_value is None:
+        return None
     declared: set[int] = set()
     for key, value in top_level_options(check_value):
         if key != "off" or value is None:
@@ -1801,15 +1817,11 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
 
 def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
     """True when one equation's own options ask to compare modulo bundles."""
-    options = following_group(source, position, "[", "]")
-    if options is None:
-        return False
-    for key, value in top_level_options(options):
-        if key != "check" or value is None:
-            continue
-        if re.search(r"modulo\s*=\s*bundles", value) is not None:
-            return True
-    return False
+    check_value = _tenkzeq_check_value(source, position)
+    return (
+        check_value is not None
+        and re.search(r"modulo\s*=\s*bundles", check_value) is not None
+    )
 
 
 _ORIENTATIONS = frozenset({"to", "from"})

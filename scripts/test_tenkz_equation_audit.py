@@ -460,6 +460,35 @@ def main() -> int:
         rule for rule, _ in waived_under_failure
     ], waived_under_failure
 
+    # A waiver runs no comparison and so states no comparison mode: a scope
+    # whose every relation is waived leaves the mode unobserved, not observed
+    # to be off, and its source's `modulo=bundles` is no disagreement.
+    all_waived = audit_rules(
+        group_log(
+            "open:w",
+            "open:w",
+            "check|scope=1|relation=1|result=off|reason=drafted\n",
+        ),
+        group_source("[check={signature, modulo=bundles, off={1: drafted}}]"),
+    )
+    assert ("eq-check-off", "ADV") in all_waived, all_waived
+    assert "eq-check-drift" not in [rule for rule, _ in all_waived], all_waived
+
+    # Two `check=` keys state no single policy, and both halves of the policy
+    # reader say so: the waiver reader already refused such a source, and the
+    # comparison mode is refused with it rather than taken from one of them.
+    two_checks = audit_rules(
+        group_log(
+            "open:e:bundle=2",
+            "open:e, open:e",
+            "check|scope=1|relation=1|result=equal|modulo=bundles"
+            "|signature=open:e, open:e\n",
+        ),
+        group_source("[check={signature, modulo=bundles}, check={signature}]"),
+    )
+    assert ("eq-check-drift", "HARD") in two_checks, two_checks
+    assert ("eq-boundary-mismatch", "HARD") in two_checks, two_checks
+
     # A spaced environment name opens the same equation, so its declared
     # waiver is the source's and not a forgery.
     spaced = audit_rules(
@@ -478,7 +507,7 @@ def main() -> int:
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 31 seeded group checks passed"
+        "and 33 seeded group checks passed"
     )
     return 0
 
