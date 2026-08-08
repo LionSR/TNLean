@@ -1128,6 +1128,46 @@
     $t=1$ and $t^2=t$.
 \end{proof}
 
+\begin{theorem}[Normalized Case-I rank-one coefficients]
+    \label{thm:mpdo_casei_rank_one_coefficients}
+    \lean{MPOTensor.activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL}
+    \leanok
+    \uses{thm:mpdo_active_trace_matrix_pow_two_eq}
+    Under the complete normal Case-I hypotheses of
+    Theorem~\ref{thm:mpdo_active_trace_matrix_pow_two_eq}, there are real
+    functions $a,b:I_*\to\mathbb R$ such that, for all $k,h\in I_*$,
+    \begin{align}
+        T^*_{k,h}&=a_kb_h,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \sum_{k\in I_*}a_kb_k&=1.
+        \notag
+    \end{align}
+    This is the normal Case-I active-sector packaging of the displayed
+    rank-one and normalization equations in
+    \cite[Appendix~C.2, lines~1394--1401 and 1484--1499]{Cirac2016MPDO_arXiv}.
+    It neither transfers a conclusion to Case~II nor uses the paper's
+    constant-trace-powers rank-one argument.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpdo_active_sector_singleton,
+      thm:mpdo_active_trace_matrix_pow_two_eq,
+      thm:mpdo_active_trace_matrix_literal_zcl_powers}
+    Write $I_*=\{k_0\}$. Strict positivity of $(T^*)^2$ and
+    $(T^*)^2=T^*$ give
+    \begin{align}
+        0&<(T^*_{k_0,k_0})^2=T^*_{k_0,k_0}.
+        \notag
+    \end{align}
+    Thus the sole entry is $T^*_{k_0,k_0}=1$. Taking $a_k=b_k=1$ gives
+    $T^*_{k,h}=a_kb_h$ and
+    $\sum_{k\in I_*}a_kb_k=1$.
+\end{proof}
+
 \begin{theorem}[Rectangular form of the Case-I relation]
     \label{thm:mpdo_casei_rectangular_remainder}
     \lean{MPOTensor.caseI_rectangular_remainder_eq_zero_of_literal_ZCL}
