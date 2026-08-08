@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Channel.Peripheral
 
+import TNLean.Channel.Peripheral.CesaroRecurrence
 import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.Channel.Peripheral.Cycles

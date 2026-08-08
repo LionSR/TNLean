@@ -88,7 +88,9 @@ private lemma dirichlet_case (x : Fin m → ℝ) (q : ℕ) (hqpos : q > 0)
     rw [hn_def, Nat.cast_sub (Nat.le_of_lt hlt)]
   -- For each coordinate k, relate (x k)*(n_hi - n_lo) to floor differences and fract differences
   have htarget (k : Fin m) :
-      |(x k) * (n : ℝ) - (↑(⌊(x k) * (n_hi.val : ℝ)⌋ - ⌊(x k) * (n_lo.val : ℝ)⌋) : ℝ)| ≤ 1 / (q : ℝ) := by
+      |(x k) * (n : ℝ) -
+        (↑(⌊(x k) * (n_hi.val : ℝ)⌋ - ⌊(x k) * (n_lo.val : ℝ)⌋) : ℝ)| ≤
+          1 / (q : ℝ) := by
     have hb := fract_bound_lemma (Int.fract ((x k) * (n_lo.val : ℝ)))
       (Int.fract ((x k) * (n_hi.val : ℝ))) (h_floor_eq_real k)
     have hcalc : (x k) * ((n_hi.val : ℝ) - (n_lo.val : ℝ)) =
