@@ -1,0 +1,135 @@
+% Regression: a void=open hole keeps its plane physical closure ink.  The
+% row-zero opening and both row-zero trace spellings route through the
+% hole's skinless record, and each physical support degrades to the hole's
+% site point instead of raising the glyph-face diagnostic (issue 5619).
+% A skinned partner in the same closure keeps its measured glyph face.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+
+\int_new:N \g__tenkz_test_voidcl_open_int
+\int_new:N \g__tenkz_test_voidcl_trace_int
+\fp_new:N \l__tenkz_test_voidcl_x_fp
+\fp_new:N \l__tenkz_test_voidcl_y_fp
+
+\cs_new_protected:Npn \__tenkz_test_voidcl_close:nnn #1#2#3
+  {
+    \fp_compare:nNnF { abs((#1)-(#2)) } < { 0.000001 }
+      { \errmessage{#3} }
+  }
+
+% The opening's start point is the hole's own site point, and its tip
+% stands one physical-leg reach up the transverse axis.
+\cs_new_eq:NN
+  \__tenkz_test_voidcl_axis_open:n
+  \__tenkz_kernel_r_wire_physical_axis_open:n
+\cs_set_protected:Npn \__tenkz_kernel_r_wire_physical_axis_open:n #1
+  {
+    \__tenkz_test_voidcl_axis_open:n {#1}
+    \exp_args:NV \__tenkz_geom_xy:nNN
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_test_voidcl_x_fp \l__tenkz_test_voidcl_y_fp
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_r_x_fp } { \l__tenkz_test_voidcl_x_fp }
+      {a~void~opening~left~its~site~point}
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_r_y_fp } { \l__tenkz_test_voidcl_y_fp }
+      {a~void~opening~left~its~site~point}
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_r_yb_fp - \l__tenkz_kernel_r_y_fp }
+      { \__tenkz_metric_ratio:n {physleg} }
+      {a~void~opening~lost~its~named~excursion}
+    \int_gincr:N \g__tenkz_test_voidcl_open_int
+  }
+
+% Every void support of a trace is the void's site point, including the
+% clearance-owning east read; a skinned partner keeps a real glyph face,
+% which stands off its site point.
+\cs_new_eq:NN
+  \__tenkz_test_voidcl_trace:n
+  \__tenkz_kernel_r_physical_trace_plane:n
+\cs_set_protected:Npn \__tenkz_kernel_r_physical_trace_plane:n #1
+  {
+    \__tenkz_test_voidcl_trace:n {#1}
+    \exp_args:NV \__tenkz_geom_xy:nNN
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_test_voidcl_x_fp \l__tenkz_test_voidcl_y_fp
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_phtrace_from_x_fp } { \l__tenkz_test_voidcl_x_fp }
+      {a~void~trace~support~left~its~site~point}
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_phtrace_from_y_fp } { \l__tenkz_test_voidcl_y_fp }
+      {a~void~trace~support~left~its~site~point}
+    \__tenkz_test_voidcl_close:nnn
+      { \l__tenkz_kernel_phtrace_from_east_x_fp }
+      { \l__tenkz_test_voidcl_x_fp }
+      {a~void~trace~clearance~read~left~its~site~point}
+    \__tenkz_test_voidcl_close:nnn
+      {
+        \l__tenkz_kernel_phtrace_from_tip_y_fp
+        - \l__tenkz_kernel_phtrace_from_y_fp
+      }
+      { \__tenkz_metric_ratio:n {physleg} }
+      {a~void~trace~lost~its~named~north~excursion}
+    \str_if_eq:VVTF
+      \l__tenkz_kernel_physical_axis_host_tl
+      \l__tenkz_kernel_physical_axis_other_host_tl
+      {
+        \__tenkz_test_voidcl_close:nnn
+          { \l__tenkz_kernel_phtrace_to_x_fp }
+          { \l__tenkz_test_voidcl_x_fp }
+          {a~one-site~void~trace~split~its~two~supports}
+        \__tenkz_test_voidcl_close:nnn
+          { \l__tenkz_kernel_phtrace_to_y_fp }
+          { \l__tenkz_test_voidcl_y_fp }
+          {a~one-site~void~trace~split~its~two~supports}
+      }
+      {
+        \exp_args:NV \__tenkz_geom_xy:nNN
+          \l__tenkz_kernel_physical_axis_other_host_tl
+          \l__tenkz_test_voidcl_x_fp \l__tenkz_test_voidcl_y_fp
+        \fp_compare:nNnF
+          {
+            abs(
+              \l__tenkz_kernel_phtrace_to_y_fp
+              - \l__tenkz_test_voidcl_y_fp )
+          } > { 0.000001 }
+          { \errmessage{a~skinned~trace~partner~lost~its~glyph~face} }
+      }
+    \int_gincr:N \g__tenkz_test_voidcl_trace_int
+  }
+
+\AtEndDocument
+  {
+    \int_compare:nNnF { \g__tenkz_test_voidcl_open_int } = {1}
+      { \errmessage{the~void~opening~was~not~inspected~once} }
+    \int_compare:nNnF { \g__tenkz_test_voidcl_trace_int } = {2}
+      { \errmessage{the~two~void~traces~were~not~both~inspected} }
+  }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+% A row-zero opening whose column host is an open hole; the skinned
+% neighbour answers the same policy through its ordinary policy leg.
+\begin{tenkz}[
+    rows={wire}, cols=2, bonds=none, physical=up,
+    open={(physical,1)}, frame=plane]
+  \tn[void=open, name=H]{} & \tn[skin=box]{S}
+\end{tenkz}
+% A one-site trace closes both transverse directions on the hole itself.
+\begin{tenkz}[
+    rows={wire}, cols=1, bonds=none, physical=updown, trace=physical,
+    frame={plane,basis={wire at (0,0)}}]
+  \tn[at=(1,1,1), void=open, name=I]{}
+\end{tenkz}
+% A two-site trace joins the hole's site point to a real glyph face.
+\begin{tenkz}[
+    rows={wire,wire}, cols=1, bonds=none, physical=updown,
+    trace={(physical,1)}, frame=plane]
+  \tn[void=open, name=J]{} \\
+  \tn[skin=box]{R}
+\end{tenkz}
+\end{document}
