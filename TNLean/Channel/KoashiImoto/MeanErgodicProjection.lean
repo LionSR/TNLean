@@ -26,10 +26,6 @@ finite-dimensional Schrödinger mean-ergodic theorem entrywise.
 
 ## Main declarations
 
-* `Kraus.isPositiveMap_mapLM`: the Schrödinger action of any Kraus family is a positive map
-  (it is completely positive).
-* `Kraus.isTracePreservingMap_mapLM_of_isTP`: a trace-preserving Kraus family's Schrödinger
-  action is a trace-preserving map.
 * `Kraus.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
   action is its Heisenberg adjoint map.
 * `Kraus.isSchwarzMap_traceAdjointMap_mapLM_of_isTP`: the trace adjoint of a
