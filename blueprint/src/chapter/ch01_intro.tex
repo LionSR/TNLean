@@ -553,12 +553,12 @@ algebra is a single full matrix algebra $\MN{m}$; see
     \lean{Matrix.rightFactorConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
     \leanok
     \uses{def:is_kraus_cptp, def:is_conditional_expectation}
-    Let $m\geq1$. The map
-    \[
-        E:\MN{m}\otimes\MN{d}\longrightarrow\MN{m}\otimes\MN{d},
-        \qquad
-        E(A)=\mathbb1_m\otimes\bigl(m^{-1}\tr_m(A)\bigr),
-    \]
+    Let $m\geq1$. The linear map
+    $E:\MN{m}\otimes\MN{d}\to\MN{m}\otimes\MN{d}$ defined by
+    \begin{align}
+        E(A)&=\mathbb1_m\otimes\bigl(m^{-1}\tr_{m}(A)\bigr),
+        \notag
+    \end{align}
     is trace-preserving and completely positive. It is a conditional
     expectation onto the unital $*$-subalgebra
     $\mathbb1_m\otimes\MN{d}$: it is unital and idempotent, its range lies
@@ -582,13 +582,15 @@ algebra is a single full matrix algebra $\MN{m}$; see
     Lemma~\ref{lem:mpdo_state_preparation_cptp}, and
     Lemma~\ref{lem:is_kraus_cptp_comp} show that the resulting map is
     trace-preserving and completely positive. Expanding the composition gives
-    \[
-        E(A)=\mathbb1_m\otimes\bigl(m^{-1}\tr_m(A)\bigr).
-    \]
+    \begin{align}
+        E(A)&=\mathbb1_m\otimes\bigl(m^{-1}\tr_{m}(A)\bigr).
+        \notag
+    \end{align}
     The Kronecker-product partial-trace identity gives
-    \[
-        \tr_m(\mathbb1_m\otimes X)=mX,
-    \]
+    \begin{align}
+        \tr_{m}(\mathbb1_m\otimes X)&=mX,
+        \notag
+    \end{align}
     so $E(\mathbb1_m\otimes X)=\mathbb1_m\otimes X$. Pointwise fixation
     gives both idempotence and unitality, while the evaluation identity gives
     the range inclusion.
