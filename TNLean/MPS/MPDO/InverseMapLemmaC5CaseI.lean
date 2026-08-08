@@ -31,16 +31,22 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- The normal Case-I coefficient witness, including vanishing of every
-neighboring operator incident to a zero-weight sector in the selected
-zero-weight-reparameterized and coherently rephased factorization.
+/-- A single rephased inverse-map witness carries the normal Case-I active
+rank-one coefficients and vanishing at every zero-weight incident sector.
 
-Local fix: the incident-vanishing statement belongs to this selected witness,
-not to the raw inverse-map factorization.
+The returned factorization has normalized nonnegative Hayashi weights,
+positive semidefinite neighboring operators, normalized active rank-one
+coefficients, and zero neighboring operators whenever either incident sector
+has weight zero.
+
+**Local fix (inactive sectors):** incident vanishing belongs to the chosen
+zero-weight reparameterization and coherent rephasing, not to the raw
+inverse-map factors. See
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
 1374--1505. -/
-private theorem exists_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+theorem exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
     (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
@@ -100,7 +106,7 @@ theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal
           (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
             (∑ k, a k * b k) = 1 := by
   obtain ⟨F, p, a, b, hp, hpsum, hpos, hab, hsum, _⟩ :=
-    exists_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+    exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
       K hK hSAL hZCL_sq hK_normal
   exact ⟨F, p, a, b, hp, hpsum, hpos, hab, hsum⟩
 
@@ -136,7 +142,7 @@ theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_liter
                     (∑ k, a k * b k) = 1 := by
   classical
   obtain ⟨F, p, aActive, bActive, hp, hpsum, hpos, habActive, hsumActive,
-      hincident⟩ := exists_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+      hincident⟩ := exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
         K hK hSAL hZCL_sq hK_normal
   let a : Fin F.sectorCount → ℝ := fun k ↦
     if hk : p k ≠ 0 then aActive ⟨k, hk⟩ else 0
