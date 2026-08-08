@@ -1256,11 +1256,40 @@
     for the resulting active sector set.
 \end{proof}
 
+\begin{theorem}[Vanishing at a zero-weight incident sector]
+    \label{lem:mpdo_rephased_zero_weight_incident_vanish}
+    \lean{MPOTensor.rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident}
+    \leanok
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    Let $(\eta_{k,h})_{k,h}$ be the neighboring operators of the
+    zero-weight-reparameterized inverse-map factorization, after a coherent
+    sector rephasing, and let $(p_k)_k$ be its Hayashi weights. If
+    $p_k=0$ or $p_h=0$, then
+    \begin{align}
+        \eta_{k,h}&=0.
+        \notag
+    \end{align}
+    The reparameterization makes the right tensor of an inactive source sector
+    zero, while its left tensor is already zero. Thus this is a statement about
+    the retained reparameterized and rephased witness, not about the raw
+    inverse-map factorization.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    If the source sector has zero weight, its reparameterized right tensor is
+    zero. If the target sector has zero weight, its left tensor is zero.
+    Rephasing only rescales the neighboring operator, and hence preserves its
+    vanishing.
+\end{proof}
+
 \begin{theorem}[All-sector normalized Case-I rank-one coefficients]
     \label{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal}
+    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal,
+      lem:mpdo_rephased_zero_weight_incident_vanish}
     Let ${\cal K}$ be an injective normal MPO tensor satisfying the strong area
     law and literal physical-trace idempotence,
     \begin{align}
@@ -1288,7 +1317,8 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal}
+    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal,
+      lem:mpdo_rephased_zero_weight_incident_vanish}
     Extend the active coefficient families by zero. In the chosen
     zero-weight-reparameterized and rephased factorization, $p_k=0$ makes
     every neighboring operator incident to $k$ vanish. Therefore the trace
