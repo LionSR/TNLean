@@ -208,6 +208,9 @@ machine-readable verdict.
 
 ## Pre-1.0 contract and 1.0 evidence gate
 
+`RELEASE-POLICY.md` is the one-page operating summary — the compatibility
+promise, the gate list a release head must show green, the version and tag
+mechanics, and the deprecation path; read it before any release step.
 `DESIGN.md` owns the package and event-stream contract.  `SOAK-1.0.md` is an
 inactive ledger while its normative block says `enforcement = "pending"`.
 During that state, no campaign entry is valid and reviewed follow-up PRs may still
