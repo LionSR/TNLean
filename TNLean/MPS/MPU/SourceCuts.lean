@@ -53,8 +53,8 @@ definition `defnrl` and lines 697–704 of the paper.
 
 * `rightRank_bound`, `leftRank_bound`: rank bounds
   $r \le \min(Dd, dD) = Dd$ and similarly $\ell \le Dd$.
-* `sourceCutM₁_apply`, `sourceCutM₂_apply`, `sourceCutM₁Fin_apply`, `sourceCutM₂Fin_apply`: `[simp]` entry formulas for both cuts and both
-  index forms.
+* `sourceCutM₁_apply`, `sourceCutM₂_apply`, `sourceCutM₁Fin_apply`,
+  `sourceCutM₂Fin_apply`: `[simp]` entry formulas for both cuts and both index forms.
 
 ## References
 

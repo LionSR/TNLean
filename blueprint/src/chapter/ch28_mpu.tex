@@ -166,67 +166,56 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
 
-We now introduce the two matrix unfoldings used in the singular-value analysis
-of a matrix product unitary tensor in Section~III of
-\cite{Cirac2017MPU}.  Let $P$ and $A$ be finite index sets of cardinalities
-$d$ and $D$, respectively, and write
-$\mathcal U^i_{j,\alpha,\beta}$ for the entries of a tensor $\mathcal U$, where
-$i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
+We now introduce the two matrices used for the singular-value decompositions of
+a Matrix Product Unitary tensor in Section~III of \cite{Cirac2017MPU}.  Write
+$\mathcal U^i_{j,\alpha,\beta}$ for the entries of the tensor, where $i,j$ are
+physical indices and $\alpha,\beta$ are auxiliary indices.
 
-\begin{definition}[Source matrix cuts]
-    \label{def:mpu_source_cuts}
-    \lean{MPOTensor.sourceCutM₁, MPOTensor.sourceCutM₂,
-      MPOTensor.sourceCutM₁_apply, MPOTensor.sourceCutM₂_apply}
+\begin{definition}[First matrix associated to a Matrix Product Unitary tensor]
+    \label{def:mpu_source_matrix_one}
+    \lean{MPOTensor.sourceCutM₁}
     \leanok
-    The first and second source matrix cuts of $\mathcal U$ are the matrices
-    $\mathcal M_1$ and $\mathcal M_2$ defined by
+    The matrix $M_1$ is obtained by combining the left auxiliary index with the
+    lower physical index, and the upper physical index with the right auxiliary
+    index. Thus
     \begin{align}
-        (\mathcal M_1)_{(\alpha,j),(i,\beta)}
-            &= \mathcal U^i_{j,\alpha,\beta}, \\
-        (\mathcal M_2)_{(\alpha,i),(j,\beta)}
-            &= \mathcal U^i_{j,\alpha,\beta}.
-    \end{align}
-    Thus $\mathcal M_1$ groups the left auxiliary index with the lower
-    physical index, whereas $\mathcal M_2$ groups it with the upper physical
-    index.  The displayed equations also give their entrywise evaluation
-    formulas.
-\end{definition}
-
-\begin{definition}[Enumerated source matrix cuts]
-    \label{def:mpu_source_cuts_fin}
-    \lean{MPOTensor.sourceCutM₁Fin, MPOTensor.sourceCutM₂Fin,
-      MPOTensor.sourceCutM₁Fin_eq_reindex, MPOTensor.sourceCutM₂Fin_eq_reindex,
-      MPOTensor.sourceCutM₁Fin_apply, MPOTensor.sourceCutM₂Fin_apply,
-      MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank,
-      MPOTensor.sourceCutM₂_rank_eq_sourceCutM₂Fin_rank}
-    \leanok
-    \uses{def:mpu_source_cuts}
-    Choose the standard enumerations
-    $A\times P\cong\{0,\ldots,Dd-1\}$ and
-    $P\times A\cong\{0,\ldots,dD-1\}$.  The enumerated source cuts
-    $\widetilde{\mathcal M}_1$ and $\widetilde{\mathcal M}_2$ are obtained
-    from $\mathcal M_1$ and $\mathcal M_2$ by transporting their row and
-    column indices along these bijections.  Their entries are obtained by
-    applying the original cuts to the inverse images of the enumerated
-    indices, and bijective reindexing preserves their ranks:
-    \begin{align}
-        \operatorname{rank}(\mathcal M_1)
-            &= \operatorname{rank}(\widetilde{\mathcal M}_1), \\
-        \operatorname{rank}(\mathcal M_2)
-            &= \operatorname{rank}(\widetilde{\mathcal M}_2).
+        (M_1)_{(\alpha,j),(i,\beta)}
+        &= \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
 \end{definition}
 
-\begin{definition}[Right and left ranks]
-    \label{def:mpu_right_left_ranks}
-    \lean{MPOTensor.rightRank, MPOTensor.leftRank,
-      MPOTensor.rightRank_eq, MPOTensor.leftRank_eq}
+\begin{definition}[Second matrix associated to a Matrix Product Unitary tensor]
+    \label{def:mpu_source_matrix_two}
+    \lean{MPOTensor.sourceCutM₂}
     \leanok
-    \uses{def:mpu_source_cuts}
-    The right rank $r[\mathcal U]$ and left rank $\ell[\mathcal U]$ are
+    The matrix $M_2$ is obtained by combining the left auxiliary index with the
+    upper physical index, and the lower physical index with the right auxiliary
+    index. Thus
     \begin{align}
-        r[\mathcal U] &= \operatorname{rank}(\mathcal M_1), \\
-        \ell[\mathcal U] &= \operatorname{rank}(\mathcal M_2).
+        (M_2)_{(\alpha,i),(j,\beta)}
+        &= \mathcal U^i_{j,\alpha,\beta}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Right rank]
+    \label{def:mpu_right_rank}
+    \lean{MPOTensor.rightRank}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    The right rank is
+    \begin{align}
+        r &= \operatorname{rank}(M_1).
+    \end{align}
+\end{definition}
+
+\begin{definition}[Left rank]
+    \label{def:mpu_left_rank}
+    \lean{MPOTensor.leftRank}
+    \leanok
+    \uses{def:mpu_source_matrix_two}
+    The left rank is
+    \begin{align}
+        \ell &= \operatorname{rank}(M_2).
     \end{align}
 \end{definition}
 
@@ -234,32 +223,36 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
     \leanok
-    \uses{def:mpu_right_left_ranks}
-    Every tensor $\mathcal U$ of physical dimension $d$ and auxiliary
-    dimension $D$ satisfies
+    \uses{def:mpu_right_rank}
+    If the physical and auxiliary dimensions are $d$ and $D$, respectively,
+    then
     \begin{align}
-        r[\mathcal U] &\leq Dd.
+        r &\leq Dd.
     \end{align}
 \end{theorem}
 
-\begin{proof}\leanok
-    \uses{def:mpu_source_cuts}
-    The rank of $\mathcal M_1$ is at most its number $dD=Dd$ of columns.
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    The matrix $M_1$ has $Dd$ rows and $dD$ columns, so its rank is at most
+    $Dd$.
 \end{proof}
 
 \begin{theorem}[Left-rank bound]
     \label{thm:mpu_left_rank_bound}
     \lean{MPOTensor.leftRank_bound}
     \leanok
-    \uses{def:mpu_right_left_ranks}
-    Every tensor $\mathcal U$ of physical dimension $d$ and auxiliary
-    dimension $D$ satisfies
+    \uses{def:mpu_left_rank}
+    If the physical and auxiliary dimensions are $d$ and $D$, respectively,
+    then
     \begin{align}
-        \ell[\mathcal U] &\leq Dd.
+        \ell &\leq Dd.
     \end{align}
 \end{theorem}
 
-\begin{proof}\leanok
-    \uses{def:mpu_source_cuts}
-    The rank of $\mathcal M_2$ is at most its number $dD=Dd$ of columns.
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_matrix_two}
+    The matrix $M_2$ has $Dd$ rows and $dD$ columns, so its rank is at most
+    $Dd$.
 \end{proof}
