@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.PhysicalBlocking
-import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
 # Matrix Product Unitaries — core definition and blocking preservation
@@ -23,13 +23,12 @@ Cirac--Perez-Garcia--Schuch--Verstraete, Section II, lines 297--340:
   the two defining unitarity equations (thin lemmas).
 * `IsMPU.blockTensor`: physical blocking preserves the MPU property,
   proved via `mpo_blockTensor_eq_reindex` and the fact that square-matrix
-  reindexing along an equivalence preserves membership in `Matrix.unitaryGroup`.
+  reindexing along an equivalence preserves membership in `Matrix.unitaryGroup`
+  (see `Matrix.reindex_mem_unitaryGroup`).
 
 ## Main definitions
 
 * `IsMPU` — the all-`N>1` MPU predicate (Section II, eq. `UisUnitary`).
-* `Matrix.reindex_mem_unitaryGroup` — reindexing a square matrix through
-  an equivalence preserves membership in the unitary group.
 
 ## References
 
@@ -38,33 +37,6 @@ Cirac--Perez-Garcia--Schuch--Verstraete, Section II, lines 297--340:
 -/
 
 open scoped Matrix ComplexOrder
-
-/-! ### Reindexing preserves unitary group membership -/
-
-/-- Reindexing a square matrix through an equivalence of index types preserves
-membership in the unitary group.
-
-This is the key algebraic fact behind the blocking-preservation argument:
-`Matrix.reindex e e` is a `RingEquiv` (hence preserves `1` and `*`) and commutes
-with `conjTranspose`, so it maps unitaries to unitaries.
-
-Source: Cirac--Perez-Garcia--Schuch--Verstraete,
-implicit in the blocking argument of Section II. -/
-theorem Matrix.reindex_mem_unitaryGroup {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m]
-    [DecidableEq n] (e : m ≃ n) (A : Matrix m m ℂ) (hA : A ∈ Matrix.unitaryGroup m ℂ) :
-    Matrix.reindex e e A ∈ Matrix.unitaryGroup n ℂ := by
-  rw [Matrix.mem_unitaryGroup_iff] at hA ⊢
-  rw [Matrix.star_eq_conjTranspose] at hA ⊢
-  have h_star_comm : (Matrix.reindex e e A)ᴴ = Matrix.reindex e e (Aᴴ) := by
-    ext i j
-    simp [Matrix.reindex_apply, Matrix.conjTranspose_apply, Matrix.submatrix_apply]
-  calc
-    Matrix.reindex e e A * (Matrix.reindex e e A)ᴴ
-        = Matrix.reindex e e A * Matrix.reindex e e (Aᴴ) := by rw [h_star_comm]
-    _ = Matrix.reindex e e (A * Aᴴ) :=
-      ((Matrix.reindexRingEquiv ℂ e).map_mul A (Aᴴ)).symm
-    _ = Matrix.reindex e e (1 : Matrix m m ℂ) := by rw [hA]
-    _ = (1 : Matrix n n ℂ) := by simp
 
 namespace MPOTensor
 
@@ -133,9 +105,12 @@ lemma IsMPU.blockTensor {U : MPOTensor d D} (hU : IsMPU U) (L : ℕ) (hL : 0 < L
     IsMPU (blockTensor U L) := by
   intro N hN
   rw [mpo_blockTensor_eq_reindex U L N]
-  have hNL : 1 < N * L := by
-    have h_mul : 1 * L < N * L := Nat.mul_lt_mul_of_pos_right hN hL
-    omega
+  have hL' : 1 ≤ L := Nat.succ_le_of_lt hL
+  have hNL : 1 < N * L :=
+    calc
+      1 < N := hN
+      _ = N * 1 := by simp
+      _ ≤ N * L := Nat.mul_le_mul_left N hL'
   apply Matrix.reindex_mem_unitaryGroup
     (MPSTensor.blockedConfigEquiv d N L).symm (mpo U (N * L))
   exact IsMPU.mpo_mem_unitaryGroup hU hNL
