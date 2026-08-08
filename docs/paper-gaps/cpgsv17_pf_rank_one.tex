@@ -786,18 +786,18 @@ in Case~I. Its normal representative loses literal ZCL. Thus the example
 isolates the normalization-sensitive step needed for
 $T_{k,h}=a_kb_h$; it does not refute Lemma~C.5 under all standing hypotheses.
 
-This obstruction propagates to every source statement whose proof invokes the
-rank-one factorization from Lemma~C.5.  In particular, the structural
-corollary at lines~1501--1505 and the proposition proving Theorem~4.9
-(ii)$\Rightarrow$(iv) at lines~1740--1788 are not formalized from their stated
-SAL and ZCL hypotheses.  The proof of Theorem~4.9
-(ii)$\Rightarrow$(v) at lines~1810--1825 is likewise invalid. The normalized
-representative above shows that the broadened implication formed with TNLean's
-up-to-scalar \leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet
-the paper's literal ZCL diagram and therefore does not settle the exact source
-statement. The constructions from an explicitly supplied rank-one neighboring
-trace factorization remain valid restricted results, but they do not establish
-the three source statements.
+This obstruction does not survive the full normal Case-I hypotheses: the
+completed route below excludes it and formalizes the structural corollary at
+lines~1503--1506. It remains relevant to the later Case-II passage. The
+proposition proving Theorem~4.9 (ii)$\Rightarrow$(iv) at lines~1740--1788 and
+the proof of (ii)$\Rightarrow$(v) at lines~1810--1825 are not yet formalized
+from their stated SAL and ZCL hypotheses. The normalized representative above
+shows that the broadened implication formed with TNLean's up-to-scalar
+\leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet the paper's
+literal ZCL diagram and therefore does not settle the exact source statement.
+The constructions from an explicitly supplied rank-one neighboring trace
+factorization remain valid restricted results, but they do not establish these
+two later implications.
 
 \section{Conclusion}
 
@@ -838,7 +838,10 @@ $I_* = \{k:p_k\ne0\}$ and set
 \]
 In the zero-weight-reparameterized and rephased factorization selected by the
 construction, $p_k=0$ makes both every incoming and every outgoing neighboring
-operator vanish. Hence
+operator vanish. On active pairs, the all-sector theorem first gives
+$\operatorname{Re}\operatorname{tr}(\eta_{k,h})=a_kb_h$.
+Every neighboring operator is positive semidefinite, hence Hermitian with real
+trace. Therefore
 \[
   \operatorname{tr}(\eta_{k,h})=a_kb_h
 \]
