@@ -72,12 +72,23 @@ fixture_paths = []
 timeout_seconds = 60
 
 [[test]]
+id = "tnlog-declaration-block-parses"
+surface = "tnlog"
+failure_fingerprint = "db1f1014a9d1791c035590e01900c4ed4a1780de55ebc893ac69a748904dcf64"
+runner = "python3"
+path = "tests/tenkz/release-harness/tnlog_declared_kinds.py"
+args = ["declaration"]
+program_paths = ["scripts/tenkzlib/tnlog.py"]
+fixture_paths = ["docs/tenkz/TNLOG.md"]
+timeout_seconds = 60
+
+[[test]]
 id = "tnlog-declared-kinds-match-the-reader"
 surface = "tnlog"
 failure_fingerprint = "bae39735591cfdbdf20376e84041aec4d57f7c5b004e5addce6f5a3fa24e5cf3"
 runner = "python3"
 path = "tests/tenkz/release-harness/tnlog_declared_kinds.py"
-args = []
+args = ["kinds"]
 program_paths = ["scripts/tenkzlib/tnlog.py"]
 fixture_paths = ["docs/tenkz/TNLOG.md"]
 timeout_seconds = 60

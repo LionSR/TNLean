@@ -179,15 +179,15 @@ def run_guards(document: dict, failures: list[str]) -> list[str]:
     return completed
 
 
-def receipt_required_fields(root: Path) -> list[str]:
-    """The receipt fields the pinned replay schema marks required."""
+def receipt_schema(root: Path) -> dict:
+    """The `supervisorReceipt` shape from the pinned replay schema."""
 
     schema = json.loads(
         (root / "tests/tenkz/release-support/reset-replay-v1.schema.json").read_text(
             encoding="utf-8"
         )
     )
-    return sorted(schema["$defs"]["supervisorReceipt"]["required"])
+    return schema["$defs"]["supervisorReceipt"]
 
 
 def run(root: Path = ROOT) -> int:
@@ -225,16 +225,22 @@ def run(root: Path = ROOT) -> int:
 
     guards_completed = run_guards(document, failures)
 
-    # Every payload receipt the supervisor emitted must carry the complete
-    # field set the pinned replay schema requires, because a replay receipt
-    # embeds these verbatim and a later validation rejects an incomplete one.
-    required = receipt_required_fields(root)
+    # A replay receipt embeds these verbatim under a shape that is closed in
+    # both directions, so the check runs in both directions. Missing a required
+    # field and carrying one the schema does not declare are equally fatal, and
+    # the second is the one that bit: `tag` was added to every receipt without
+    # being added to the schema, and a required-fields-only check saw nothing.
+    shape = receipt_schema(root)
+    required = sorted(shape["required"])
+    declared = set(shape["properties"])
     for payload in observed_receipts:
         missing = [field for field in required if field not in payload]
-        if missing:
+        forbidden = sorted(set(payload) - declared)
+        if missing or forbidden:
             failures.append(
-                f"{payload['test_id']}: payload receipt omits required field(s) "
-                f"{missing!r}"
+                f"{payload['test_id']}: payload receipt omits {missing!r} and "
+                f"carries undeclared field(s) {forbidden!r}, which "
+                f"additionalProperties:false rejects"
             )
             break
 

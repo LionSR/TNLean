@@ -108,8 +108,19 @@
             "required": ["name", "scope"],
             "properties": {
               "name": { "type": "string", "minLength": 1 },
-              "scope": { "enum": ["repository", "organization", "environment"] }
-            }
+              "scope": { "enum": ["repository", "organization", "environment"] },
+              "environment": {
+                "description": "The environment holding the secret. Required when `scope` is `environment`, because the policy's invariant is not that the key exists in some environment but that it exists only in tenkz-release-publisher; without the name, the dedicated environment and an unauthorized second one are the same fact.",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "if": {
+              "properties": { "scope": { "const": "environment" } },
+              "required": ["scope"]
+            },
+            "then": { "required": ["environment"] },
+            "else": { "not": { "required": ["environment"] } }
           }
         }
       }
@@ -188,8 +199,10 @@
       "pattern": "^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$"
     },
     "utcInstant": {
+      "description": "An integral UTC instant. `format` carries full calendar validity for a validator that asserts formats; the pattern bounds every field so that a validator that does not still rejects 2026-99-99T99:99:99Z. The two together leave only impossible-but-well-ranged dates such as 02-30, which the resolver rejects when it parses the value.",
       "type": "string",
-      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:(?:[0-5][0-9]|60)Z$"
     },
     "pullRequestFact": {
       "type": "object",
@@ -303,6 +316,7 @@
       "required": [
         "test_id",
         "surface",
+        "tag",
         "code_tree",
         "support_tree",
         "inventory_sha256",
@@ -322,6 +336,13 @@
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
         },
         "surface": { "enum": ["tex-api", "tnlog"] },
+        "tag": {
+          "description": "The campaign tag this observation was bound to, or null for a standing run at a tree with no tag. A null value is evidence in its own right: it says the receipt cannot support a claim about any release.",
+          "oneOf": [
+            { "type": "string", "pattern": "^tenkz-v(?:0\\.9\\.(?:0|[1-9][0-9]*)|1\\.0\\.0)$" },
+            { "type": "null" }
+          ]
+        },
         "code_tree": { "$ref": "#/$defs/gitOid" },
         "support_tree": { "$ref": "#/$defs/gitOid" },
         "inventory_sha256": { "$ref": "#/$defs/sha256" },

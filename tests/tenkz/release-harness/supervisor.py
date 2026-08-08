@@ -260,10 +260,16 @@ def require_tree_is_clean(root: Path, relative: str, subject: str) -> None:
 
     mode = resolve_without_following(root, relative, subject)
     submodules = gitlink_paths(root)
-    require(
-        relative not in submodules,
-        f"{subject} at {relative} is a submodule, which the release contract rejects",
-    )
+    # The index records only the submodule's own path, so a declared file
+    # *inside* one looks like an ordinary file. Every ancestor is checked.
+    parts = relative.split("/")
+    for depth in range(1, len(parts) + 1):
+        prefix = "/".join(parts[:depth])
+        require(
+            prefix not in submodules,
+            f"{subject} at {relative} descends through the submodule {prefix}, "
+            f"which the release contract rejects",
+        )
     if not stat.S_ISDIR(mode):
         return
     pending = [relative]
@@ -462,7 +468,11 @@ def blob_sha256(root: Path, path: str) -> str:
     return hashlib.sha256((root / path).read_bytes()).hexdigest()
 
 
-def require_clean_worktree(policy: Policy, root: Path = ROOT) -> None:
+def require_clean_worktree(
+    policy: Policy,
+    root: Path = ROOT,
+    extra: tuple[str, ...] = (),
+) -> None:
     """Refuse to run when the exposed trees differ from the recorded OIDs.
 
     The pins come from `HEAD` while `expose` copies bytes from the working
@@ -471,7 +481,7 @@ def require_clean_worktree(policy: Policy, root: Path = ROOT) -> None:
     not name, which is the one thing a payload receipt exists to prevent.
     """
 
-    roots = [policy.code_root, policy.support_root, policy.inventory]
+    roots = [policy.code_root, policy.support_root, policy.inventory, *extra]
     result = subprocess.run(
         ["git", "status", "--porcelain", "-z", "--", *roots],
         cwd=root,
@@ -685,6 +695,11 @@ def run_command(
     )
     try:
         _, stderr = process.communicate(timeout=timeout)
+        # Success is an execution boundary too. A command that left a
+        # background child running would otherwise keep running through
+        # classification and workspace teardown, racing the removal of the
+        # very files the receipt describes.
+        terminate_group(process)
         return process.returncode, stderr, False
     except subprocess.TimeoutExpired:
         terminate_group(process)
@@ -721,8 +736,25 @@ def canonical_artifacts(policy: Policy) -> tuple[str, ...]:
     )
 
 
+CAMPAIGN_TAG = re.compile(r"tenkz-v(?:0\.9\.(?:0|[1-9][0-9]*)|1\.0\.0)")
+
+
 def manifest_path(policy: Policy, tag: str) -> str:
-    return policy.manifest_pattern.replace("TAG", tag)
+    """The manifest path for one campaign tag, after checking the tag itself.
+
+    The tag is interpolated into a repository path, so an unchecked value
+    containing `..` would walk out of both the repository and the view. Only
+    the two shapes this campaign validates are accepted: a `tenkz-v0.9.PATCH`
+    freeze tag or `tenkz-v1.0.0`.
+    """
+
+    require(
+        CAMPAIGN_TAG.fullmatch(tag) is not None,
+        f"{tag!r} is not a campaign tag; expected tenkz-v0.9.PATCH or tenkz-v1.0.0",
+    )
+    path = normalized(policy.manifest_pattern.replace("TAG", tag))
+    require(path is not None, f"the {tag} manifest path is not a repository path")
+    return path
 
 
 def observe(
@@ -775,8 +807,18 @@ def observe(
         # assertion read `CHANGES.md` or `TNLOG.md` while its receipt declared
         # neither, so the receipt would not describe what the assertion
         # depended on.
-        artifacts = set(canonical_artifacts(policy))
-        undeclared = artifacts - set(test.program_paths) - set(test.fixture_paths)
+        # An artifact is declared when a declared path *is* it or contains it:
+        # a fixture tree such as `docs/tenkz` carries three of the four
+        # canonical documents, and reporting those as withheld while the
+        # command could read them would make the receipt false.
+        declared = (*test.program_paths, *test.fixture_paths)
+        undeclared = sorted(
+            artifact
+            for artifact in canonical_artifacts(policy)
+            if not any(
+                artifact == path or artifact.startswith(f"{path}/") for path in declared
+            )
+        )
         exposed = [
             policy.code_root,
             policy.support_root,
@@ -824,7 +866,7 @@ def observe(
             "command": [test.runner, test.path, *test.args],
             "program_paths": list(test.program_paths),
             "fixture_paths": list(test.fixture_paths),
-            "undeclared_artifacts_withheld": sorted(undeclared),
+            "undeclared_artifacts_withheld": undeclared,
             "exit_status": exit_status,
             "assertion_result": result,
             "timed_out": timed_out,
@@ -834,6 +876,25 @@ def observe(
     finally:
         make_writable(view)
         shutil.rmtree(workspace, ignore_errors=True)
+
+
+def load_closed_json(path: Path, subject: str) -> dict:
+    """Parse one closed JSON object, refusing a repeated key.
+
+    `json.loads` keeps the last of a repeated key and drops the rest, so an
+    object carrying `"schema": 1` twice — or once with each of two values —
+    passes a field-set check while meaning different things to different
+    readers. A closed protocol cannot be parser-dependent.
+    """
+
+    def reject_duplicates(pairs: list[tuple[str, object]]) -> dict:
+        seen: set[str] = set()
+        for key, _ in pairs:
+            require(key not in seen, f"{subject} receipt repeats the key {key!r}")
+            seen.add(key)
+        return dict(pairs)
+
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicates)
 
 
 def classify(test: Test, exit_status: int, output: Path, stderr: str) -> str:
@@ -851,8 +912,17 @@ def classify(test: Test, exit_status: int, output: Path, stderr: str) -> str:
         f"{test.id} exited {exit_status}, which is neither a pass nor an assertion "
         f"failure: {stderr.strip()[:400]}",
     )
-    require(receipt_path.is_file(), f"{test.id} exited 10 without its receipt")
-    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    try:
+        receipt_mode = os.lstat(receipt_path).st_mode
+    except OSError:
+        receipt_mode = 0
+    require(receipt_mode != 0, f"{test.id} exited 10 without its receipt")
+    require(
+        stat.S_ISREG(receipt_mode),
+        f"{test.id} wrote its receipt as something other than a regular file; a "
+        f"link there would let the payload live outside the output mount",
+    )
+    receipt = load_closed_json(receipt_path, test.id)
     require(
         set(receipt) == {"schema", "test_id", "failure_fingerprint", "completed"},
         f"{test.id} wrote a receipt outside the closed shape",
@@ -891,19 +961,35 @@ def command_run(
     root: Path,
     selected: str | None,
     tag: str | None = None,
+    receipts_path: Path | None = None,
 ) -> int:
     tests = load_inventory(policy, root)
     if selected is not None:
         tests = tuple(test for test in tests if test.id == selected)
         require(tests, f"no inventory test has id {selected}")
-    require_clean_worktree(policy, root)
+    subjects = {path for test in tests for path in test.program_paths}
+    subjects.update(path for test in tests for path in test.fixture_paths)
+    subjects.update(canonical_artifacts(policy))
+    if tag is not None:
+        subjects.add(manifest_path(policy, tag))
+    require_clean_worktree(policy, root, tuple(sorted(subjects)))
     pins = computed_pins(policy, root)
     failures = []
+    receipts = []
     for test in tests:
         receipt = observe(test, policy, root, pins, tag)
+        receipts.append(receipt)
         print(f"{receipt['assertion_result']:>16}  {test.id}")
         if receipt["assertion_result"] != "passed":
             failures.append((test, receipt))
+    # The receipts are the durable half of the run. A friction or reset-replay
+    # record embeds them verbatim, so discarding them at exit would leave a
+    # caller with a summary line and nothing to submit.
+    if receipts_path is not None:
+        receipts_path.write_text(
+            json.dumps(receipts, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(f"wrote {len(receipts)} payload receipt(s) to {receipts_path}")
     if failures:
         for test, receipt in failures:
             print(
@@ -957,29 +1043,54 @@ def command_check_readiness(policy: Policy, root: Path) -> int:
 
 
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
+YAML_COMMENT = re.compile(r"(?m)(?:(?<=^)|(?<=\s))#.*$")
 MUTABLE_ACTION = re.compile(r"uses:\s*\S+@(?!\b[0-9a-f]{40}\b)\S+")
+ARMED_MECHANISMS = (
+    (
+        re.compile(r"(?m)^\s+environment:\s*\n(?:\s+name:\s*)?tenkz-release-publisher\s*$"),
+        "a job whose `environment:` is tenkz-release-publisher",
+    ),
+    (
+        re.compile(r"(?m)^\s+contents:\s*write\s*$"),
+        "a job-level `contents: write` permission",
+    ),
+    (
+        re.compile(r"\$\{\{\s*secrets\.TENKZ_FINAL_TAG_SIGNING_KEY\s*\}\}"),
+        "a reference to the TENKZ_FINAL_TAG_SIGNING_KEY secret",
+    ),
+    (
+        re.compile(r"(?m)^\s+(?:id|name):\s*tenkz-network-denied\s*$"),
+        "a step named tenkz-network-denied, which denies network access before "
+        "repository code runs",
+    ),
+    (
+        re.compile(r"(?m)^\s+needs:\s*"),
+        "a `needs:` dependency ordering the publisher after post-merge validation",
+    ),
+)
 
 
 def require_armed_workflow(root: Path) -> None:
     """Check the mechanisms the armed enforcement workflow must carry.
 
     The workflow's own header says `check-readiness` fails closed when these
-    are missing, so this is where that promise is kept. Until they land the
-    campaign cannot be armed, and an activation that flipped the scalars
-    without them would be caught here rather than at the release.
+    are missing, so this is where that promise is kept.
+
+    The checks match YAML structure, not raw substrings, and they run against
+    the file with its comments removed. A substring search would have been
+    satisfied by this very file's header, which names the publisher
+    environment and `contents: write` while explaining that neither exists
+    yet — a check that its own documentation satisfies is not a check.
     """
 
     require_regular_file(root, ARMED_WORKFLOW, "the enforcement workflow")
-    text = (root / ARMED_WORKFLOW).read_text(encoding="utf-8")
-    missing = []
-    if "tenkz-release-publisher" not in text:
-        missing.append("the terminal publisher job in its dedicated environment")
-    if "TENKZ_FINAL_TAG_SIGNING_KEY" not in text:
-        missing.append("the publisher signing secret")
-    if "contents: write" not in text:
-        missing.append("job-level contents: write on the publisher")
-    if "tenkz-network-denied" not in text:
-        missing.append("network denial before repository code runs")
+    raw = (root / ARMED_WORKFLOW).read_text(encoding="utf-8")
+    text = YAML_COMMENT.sub("", raw)
+    missing = [
+        description
+        for pattern, description in ARMED_MECHANISMS
+        if pattern.search(text) is None
+    ]
     require(
         not missing,
         f"armed policy but {ARMED_WORKFLOW} lacks {'; '.join(missing)}",
@@ -1000,8 +1111,14 @@ def main(argv: list[str] | None = None) -> int:
     run = subparsers.add_parser("run")
     run.add_argument("--test", help="run only the inventory test with this id")
     run.add_argument("--tag", help="bind the observation to this release tag")
+    run.add_argument(
+        "--receipts", type=Path, help="write the payload receipts to this JSON file"
+    )
     run_all = subparsers.add_parser("run-all")
     run_all.add_argument("--tag", help="bind the observations to this release tag")
+    run_all.add_argument(
+        "--receipts", type=Path, help="write the payload receipts to this JSON file"
+    )
     subparsers.add_parser("pins")
     subparsers.add_parser("check-readiness")
     args = parser.parse_args(argv)
@@ -1012,9 +1129,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "check-inventory":
             return command_check_inventory(policy, root)
         if args.command == "run":
-            return command_run(policy, root, args.test, args.tag)
+            return command_run(policy, root, args.test, args.tag, args.receipts)
         if args.command == "run-all":
-            return command_run(policy, root, None, args.tag)
+            return command_run(policy, root, None, args.tag, args.receipts)
         if args.command == "pins":
             return command_pins(policy, root)
         return command_check_readiness(policy, root)
