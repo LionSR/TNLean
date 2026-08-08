@@ -1354,10 +1354,11 @@ $v$ is multiplied by a nonzero scalar.
       thm:cp_direct_sum_postcomp_kraus}
     Theorem~\ref{thm:extend_cp_operator_system_direct_sum} gives a completely
     positive extension $F$ with values in $\MN{p}$. Choose the conditional
-    expectation $E:\MN{p}\to\mathcal B$ from
-    Theorem~\ref{thm:matrix_star_subalgebra_cptp_conditional_expectation} and
-    set $G=E\circ F$. Theorem~\ref{thm:cp_direct_sum_postcomp_kraus} shows
-    that $G$ is completely positive, while $E(\MN{p})\subseteq\mathcal B$.
+    expectation $E:\MN{p}\to\MN{p}$ from
+    Theorem~\ref{thm:matrix_star_subalgebra_cptp_conditional_expectation}; its
+    range lies in $\mathcal B$. Set $G=E\circ F$.
+    Theorem~\ref{thm:cp_direct_sum_postcomp_kraus} shows that $G$ is completely
+    positive, while $E(\MN{p})\subseteq\mathcal B$.
     For $x\in S$, one has $F(x)=T(x)\in\mathcal B$, and therefore
     $G(x)=E(T(x))=T(x)$.
 \end{proof}
