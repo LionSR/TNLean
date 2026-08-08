@@ -3,7 +3,7 @@
 The implementation target follows the data, in one direction:
 
 ```text
-language -> model -> style/atoms -> geometry -> dialect layout -> rendering -> events
+language -> model -> style/atoms -> geometry -> kernel layout -> rendering -> events
 ```
 
 The stages are ownership boundaries, not suggestions.  A later stage may
@@ -13,17 +13,15 @@ topology it received.
 ## Current migration boundary
 
 The logic-free load map, executable language registry, typed atom extension,
-and model-freeze seam are active.  The historical dialect files still
-contain substantial parser, geometry, rendering, and event code together,
-and many established private controls have not yet moved to the owner-prefixed
-form.  They are loaded behind the staged seam to preserve the verified
-257-fixture contract while that internal migration proceeds.
+and model-freeze seam are active, and the dialect front ends are deleted:
+since the S4 surface swap the package binds the kernel surface at load.
+`tenkz-kernel.code.tex` still combines parsing, geometry, rendering, and
+event work for the kernel records, and some established private controls
+have not moved to the owner-prefixed form.
 
 Consequently, the stage sections below are normative ownership rules for new
 code and the destination for migrated code; they are not a claim that every
-legacy implementation path already crosses the normalized model.  Moving a
-dialect path across that boundary requires exact event comparison and the
-full legacy corpus before its old path can be removed.
+implementation path already crosses the normalized model.
 
 ## Load map
 
@@ -48,7 +46,7 @@ when the language registry declares it.
 ## 1. Language
 
 The language stage implementation is `tex/tenkz/tenkz-language.code.tex`.  It
-owns public environments, commands, keys, compatibility aliases, value types,
+owns public environments, commands, keys, value types,
 defaults, and diagnostics.  Its executable registry,
 `tex/tenkz/tenkz-language-registry.tex`, is the single vocabulary source for
 parser registration, manual reference generation, linting, and API census.
@@ -58,8 +56,7 @@ codes with normalized context and an actionable expected-value clause, for
 example:
 
 ```text
-[TKZ-GRID-UNKNOWN-VALUE] picture=3 cell=(2,4) key=frame;
-got diagonal; expected horizontal|vertical; try frame=vertical
+[TKZ-LANG-UNKNOWN-KEY] 'combined' is not a atom key (record atom-2).
 ```
 
 An invalid declaration does not reach the model.  Unsupported requested ink
@@ -68,7 +65,7 @@ is an error, never a warning followed by a smaller drawing.
 ## 2. Model
 
 The model stage owns normalized records for pictures, atoms, connections,
-closures, regions, and annotations.  Dialect surface syntax disappears here:
+closures, regions, and annotations.  Surface syntax disappears here:
 records use common fields and common value types.  References are resolved,
 ports are typed, spans and cell sets are checked, and topology is complete
 before the model is released.
@@ -96,33 +93,33 @@ Clearance is measured, not predicted: the silhouette gives the occupied ink
 and one daylight constant supplies separation.  Geometry may choose among
 declared routes; it may not invent a connection or suppress an obstacle.
 
-## 5. Dialect layout
+## 5. Kernel layout
 
-Each front end translates its layout grammar into requests against the shared
+The surface translates its layout grammar into requests against the shared
 geometry service:
 
-- grid layout for `tenkz`;
+- frame layout for `tenkz`;
 - fusion-tree layout for the standalone `\tntree` atom.
 
-Dialect layout owns only placement rules that are genuinely specific to that
+Layout owns only placement rules that are genuinely specific to that
 genre.  Shared keys and records are not reimplemented here.
 
 ## 6. Rendering
 
 Rendering consumes resolved records and geometry.  It emits ink only.  It
 does not parse user tokens, allocate semantic names, mutate topology, or
-silently recover from unsupported requests.  Dialect renderers contain only
+silently recover from unsupported requests.  The kernel renderer contains only
 ink that cannot be expressed by the shared atom, connection, region, and
 annotation renderers.
 
 ## 7. Events
 
 The events stage serializes the resolved model that rendering consumed.  The
-versioned `.tnlog` includes picture identity, atoms, connections, face ports,
-closures, boundaries, regions, annotations, and relevant resolved policy.
+versioned `.tnlog` includes picture identity, atoms, wires, marks, strings,
+boundaries, and relevant resolved policy.
 Changing the event schema changes its version.
 
-Audits compare meaning, not drawing order.  Canonical and compatibility
+Audits compare meaning, not drawing order.  Canonical and sugar
 spellings must normalize to equivalent semantic events.  A renderer and an
 auditor disagreeing about a record is an architecture violation, because both
 must consume the same resolved model.

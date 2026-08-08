@@ -1,0 +1,32 @@
+% Regression: r_load_surface — the S4 surface swap binds the kernel at load.
+% Loading the package binds `tenkz`, `tenkzeq`, and the body commands; the
+% retained \tenkzkernel switch rebinds the same meanings, so a group that
+% calls it changes nothing and leaks nothing.
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{tenkz}
+
+\ExplSyntaxOn
+\clist_map_inline:nn
+  {tenkz,endtenkz,tenkzeq,endtenkzeq,tnset,tngroup,
+   tnwire,tnmark,tndeclare,tnbond,tnprose,tnfuse}
+  {
+    \cs_if_exist:cF {#1}
+      { \tex_errmessage:D { kernel~surface~name~#1~unbound~at~package~load } }
+  }
+\cs_if_exist:NT \mpo
+  { \tex_errmessage:D { stock~skin~mpo~leaked~a~public~command } }
+\cs_new_eq:NN \tenkz_test_load_env: \tenkz
+\ExplSyntaxOff
+
+\begin{document}
+\begingroup
+  \tenkzkernel
+  \ExplSyntaxOn
+  \cs_if_eq:NNF \tenkz \tenkz_test_load_env:
+    { \tex_errmessage:D { the~switch~changed~the~loaded~surface } }
+  \ExplSyntaxOff
+\endgroup
+\begin{tenkz}[cols=1]
+  \tn{A}
+\end{tenkz}
+\end{document}

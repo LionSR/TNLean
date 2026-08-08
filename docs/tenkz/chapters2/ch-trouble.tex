@@ -16,8 +16,8 @@ merely by total count.
 \toprule
 Symptom & First correction \\
 \midrule
-A map rendered as a scalar & Remove \tnkey{boundary=none}; open is the map
-default. \\
+A map rendered as a scalar & State \tnkey{boundary=open}, or type the open
+ports; an unstated side draws no leg. \\
 A trace looks like a layer cup & Use \tnkey{boundary=periodic} for same-row closure;
 use side \tnval{cup} only between adjacent layers. \\
 A label touches ink & Restore a documented metric or label band; do not hide
@@ -28,16 +28,17 @@ ink must be a hard coded error, never a warning followed by omission. \\
 \end{tabularx}
 }
 
-Brace any key value containing a comma or a second equals sign.  The conjugate
-atom is \tncmd{tn*}.  \tncmd{tnghost} takes an empty argument; a genuine hole
-is \tncmd{tnskip}, because its incident indices survive.
+Brace any key value containing a comma or a second equals sign.  A conjugate
+is label mathematics and a wire direction, not an atom flag.  A genuine hole
+is \tnkey{void=open}, because its incident indices survive; \tnkey{void=sealed}
+removes the site and its bonds.
 
 \subsection{Maintainer pipeline}
 
 The internal flow is
 
 \begin{center}
-\texttt{language -> model -> style/atoms -> geometry -> dialect layout ->
+\texttt{language -> model -> style/atoms -> geometry -> kernel layout ->
 rendering -> events}.
 \end{center}
 

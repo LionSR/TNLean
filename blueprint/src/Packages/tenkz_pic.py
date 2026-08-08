@@ -1,8 +1,8 @@
 r"""plasTeX renderers for tenkz tensor-network pictures (spec §1.5, §5.1).
 
-The ``tenkz`` picture environment,
-the plain ``tikzcd`` environment that carries the blueprint's commutative
-diagrams, and the bridge command ``\tnpic`` are registered here as
+The ``tenkz`` picture environment (the kernel surface, bound at package
+load since the S4 surface swap) and the plain ``tikzcd`` environment that
+carries the blueprint's commutative diagrams are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
 captured unit is compiled **standalone** against ``TEXINPUTS=tex/tenkz//``
 and converted to one SVG, cached by a per-body content hash, so editing one
@@ -95,13 +95,12 @@ _RENDER_SOURCE_FILES = (
     *sorted(_TENKZ_DIR.glob("*.code.tex")),
 )
 
-# The .tnlog dialect tag of each environment (the ``\tenkz@beginpicture``
-# argument in tex/tenkz/, spec §5.1); reused as the CSS modifier class of
-# the emitted <img>.
+# The .tnlog language tag of each environment (spec §5.1); reused as the
+# CSS modifier class of the emitted <img>.  Since the S4 surface swap the
+# ``tenkz`` environment is the kernel surface.
 _ENVIRONMENT_LANGS = {
-    "tenkz": "grid",
+    "tenkz": "kernel",
     "tikzcd": "cd",
-    "tnpic": "grid",
 }
 
 # Ink canary for the route probe: a pure \draw, no text.  Any <path> in its
@@ -405,8 +404,10 @@ except ImportError:  # standalone harness use; see the section comment above
 else:
 
     class tenkzkernel(Command):
-        r"""The kernel switch (spec §2).  It draws nothing; it stands in
-        the tree so a picture can read whether the switch reaches it."""
+        r"""The retained kernel switch (spec §2).  Since the S4 surface
+        swap the package binds the kernel surface at load, so the switch
+        rebinds the same meanings and is inert; it stands in the tree only
+        so sources that still spell it parse."""
 
         args = ""
 
@@ -415,46 +416,6 @@ else:
 
         blockType = True
         templateName = "TenkzEquation"
-
-    def _holds_kernel_switch(node) -> bool:
-        r"""Whether this preceding sibling carries \tenkzkernel in force.
-
-        A paragraph break is not a TeX group, so a switch inside a
-        preceding ``par`` wrapper still governs what follows; the search
-        descends through ``par`` nodes and nothing else, since every
-        other container opens a group that ends the declaration.
-        """
-        name = getattr(node, "nodeName", "")
-        if name == "tenkzkernel":
-            return True
-        if name != "par":
-            return False
-        return any(
-            _holds_kernel_switch(child)
-            for child in getattr(node, "childNodes", [])
-        )
-
-    def _kernel_switch_reaches(node) -> bool:
-        r"""Whether \tenkzkernel is in force where this picture stands.
-
-        The switch is an ordinary TeX declaration, so a group ends it: a
-        switch inside one ``center`` block does not reach a picture in the
-        next.  Reading the preceding siblings at each level up from the
-        picture answers exactly that question, and it keeps a chapter that
-        has migrated one figure from claiming the ones it has not.
-        """
-        current = node
-        while current is not None:
-            parent = getattr(current, "parentNode", None)
-            if parent is None:
-                return False
-            for sibling in getattr(parent, "childNodes", []):
-                if sibling is current:
-                    break
-                if _holds_kernel_switch(sibling):
-                    return True
-            current = parent
-        return False
 
     class _TenkzSvgMixin:
         """Shared rendering: compile the captured unit, emit one <img>."""
@@ -470,8 +431,6 @@ else:
         @property
         def tenkz_svg_html(self) -> str:
             unit_source = self.tenkzUnitSource()
-            if _kernel_switch_reaches(self):
-                unit_source = "\\tenkzkernel\n" + unit_source
             output_dir = _output_dir(self.ownerDocument)
             svg_path, _ = render_unit(unit_source, output_dir / _SVG_SUBDIR)
             if svg_path is None:
@@ -501,7 +460,7 @@ else:
             )
 
     class _TenkzVerbatimEnvironment(_TenkzSvgMixin, VerbatimEnvironment):
-        r"""Base of the four picture environments.
+        r"""Base of the two picture environments.
 
         VerbatimEnvironment switches to verbatim catcodes right after
         parsing the (empty) argument spec, so everything between
@@ -520,82 +479,3 @@ else:
 
     class tikzcd(_TenkzVerbatimEnvironment):
         pass
-
-    class tnpic(_TenkzSvgMixin, Command):
-        r"""The bridge object ``\tnpic[keys]{grid body}`` (spec §2.3).
-
-        The optional key list and the mandatory body are read with
-        verbatim catcodes and balanced-brace scanning, mirroring how
-        ``\verb`` captures its argument, so cell separators (``&``),
-        comments, and math inside the body survive untouched.
-
-        In blueprint source this command is supported at top level, including
-        as a child of ``tenkzequation``.  It must not appear inside MathJax
-        input: the explicit equation wrapper is the G20 web contract, while
-        ordinary TeX may continue to use the atom in running mathematics.
-        """
-
-        blockType = False
-
-        def invoke(self, tex):
-            self.ownerDocument.context.push(self)
-            self.parse(tex)
-            self.ownerDocument.context.setVerbatimCatcodes()
-            try:
-                self.tenkzCaptured = self._capture_call(tex)
-            finally:
-                self.ownerDocument.context.pop(self)
-            return [self]
-
-        @staticmethod
-        def _next_nonspace(tokens) -> str | None:
-            for tok in tokens:
-                if str(tok) not in " \t\r\n":
-                    return tok
-            return None
-
-        def _capture_call(self, tex) -> str:
-            tokens = iter(tex)
-            parts: list[str] = []
-            head = self._next_nonspace(tokens)
-            if head == "[":
-                # Optional key list: keys may contain braced values
-                # (``bond label={$D$ at 1-2}``), so ``]`` closes only at
-                # brace depth zero.
-                option = ["["]
-                depth = 0
-                for tok in tokens:
-                    option.append(str(tok))
-                    if tok == "{":
-                        depth += 1
-                    elif tok == "}":
-                        depth -= 1
-                    elif tok == "]" and depth == 0:
-                        break
-                else:
-                    raise ValueError(r"unterminated \tnpic optional argument")
-                parts.append("".join(option))
-                head = self._next_nonspace(tokens)
-            if head != "{":
-                raise ValueError(r"\tnpic requires a braced grid body")
-            body = ["{"]
-            depth = 1
-            for tok in tokens:
-                body.append(str(tok))
-                if tok == "{":
-                    depth += 1
-                elif tok == "}":
-                    depth -= 1
-                    if depth == 0:
-                        break
-            else:
-                raise ValueError(r"unterminated \tnpic body")
-            parts.append("".join(body))
-            return "".join(parts)
-
-        def tenkzUnitSource(self) -> str:
-            return r"\tnpic" + self.tenkzCaptured
-
-        @property
-        def source(self) -> str:
-            return self.tenkzUnitSource()

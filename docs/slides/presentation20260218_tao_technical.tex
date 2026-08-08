@@ -80,9 +80,12 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
             % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
             % the symbolic N-site word has (0, N), with no virtual index open.
             % Source: arXiv:1606.00608, Fig. I and lines 135--170.
-            \begin{tenkz}[compact, periodic, physical=up]
-              \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-              \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+            \begin{tenkz}[rows={wire}, cols=5, boundary=periodic, size=s]
+              \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+              \tn[label pos=s, ports={90:physical:$i_2$}]{A} &
+              \tn[skin=dots]{} &
+              \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+              \tn[label pos=s, ports={90:physical:$i_N$}]{A}
             \end{tenkz}
 
             {\scriptsize\textcolor{dimwhite}{Tensor network for $\tr(A^{i_1}\!\cdots A^{i_N})$.\\
@@ -252,7 +255,9 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
 \end{frame}
 
 % SOURCE: audits/2026-02-20_invariant_subspace_step_literature_map.txt
-\begin{frame}{Step~(i): canonical form reduction~\cite{Cirac2017Annals,Cirac2021Matrix}}
+% The equation wrapper reads its relation glyphs from unprocessed tokens,
+% so its frame is fragile.
+\begin{frame}[fragile]{Step~(i): canonical form reduction~\cite{Cirac2017Annals,Cirac2021Matrix}}
     \vspace{-0.7em}
 
     \begin{columns}[T]
@@ -326,16 +331,21 @@ Key references:~\cite{Perez-Garcia2007Matrix,Cirac2021Matrix,Cirac2017Annals,Wol
             % Boundary: the emitted lhs/rhs have (virtual, physical) = (2, 1)/(2, 3);
             % symbolically the bundled lhs represents the rhs with (2, L).
             % Source: arXiv:1606.00608, Fig. I_Blocking and lines 227--230.
-            \resizebox{\linewidth}{!}{%
-              \begin{tenkz}[compact, physical=up]
-                \tn[pill, wide=2, up={$(i_1,\ldots,i_L)$}]{C}
+            \begin{tenkzeq}[check={off={1: the bundled physical index
+                elides to three drawn legs}}]
+              \begin{tenkz}[cols=2, size=s]
+                \tn[skin=pill, wide=2,
+                  ports={180:virtual, 0:virtual,
+                    90:physical:{$(i_1,\ldots,i_L)$}}]{C}
               \end{tenkz}
-              \(\;=\;\)
-              \begin{tenkz}[compact, physical=up]
-                \tn[up=$i_1$]{B} & \tn[up=$i_2$]{B} & \tndots &
-                \tn[up=$i_L$]{B}
+              =
+              \begin{tenkz}[rows={wire}, cols=4, size=s, west=open, east=open]
+                \tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+                \tn[label pos=s, ports={90:physical:$i_2$}]{B} &
+                \tn[skin=dots]{} &
+                \tn[label pos=s, ports={90:physical:$i_L$}]{B}
               \end{tenkz}
-            }
+            \end{tenkzeq}
 
             \vspace{0.2em}
             {\scriptsize\textcolor{dimwhite}{Blocking:
@@ -829,13 +839,15 @@ def mpv (A : MPSTensor d D) {N : (*@$\mathbb{N}$@*)} ((*@$\sigma$@*) : Fin N (*@
             % Contraction: vertical bonds sum each physical pair; the east cup inserts X.
             % Boundary: (virtual, physical) = (2, 0), the west pair is the matrix output.
             % Source: arXiv:2011.12127, line 1861; TNLean/Spectral/MixedTransfer.lean.
-            \begin{tenkz}[
-                compact,
-                sandwich,
-                east={cup=$X$},
-                west label=$\mathcal F^N_{A,B}(X)$]
-              \tn{A} & \tn{A} & \tndots & \tn{A} & \tn{A} \\
-              \tn*{B} & \tn*{B} & \tndots & \tn*{B} & \tn*{B}
+            \begin{tenkz}[rows={ket,bra}, cols=5, size=s,
+                west=open, east={cup=$X$}]
+              \tn{A} & \tn{A} & \tn[skin=dots]{} & \tn{A} &
+              \tn[label pos=180]{A} \\
+              \tn{$\overline{B}$} & \tn{$\overline{B}$} &
+              \tn[skin=dots]{} & \tn{$\overline{B}$} &
+              \tn[label pos=180]{$\overline{B}$}
+              \tnmark[form=label, label pos=90]
+                {on open-west-1 0.5}{$\mathcal F^N_{A,B}(X)$}
             \end{tenkz}
 
             {\scriptsize\textcolor{dimwhite}{Sandwich: $\cF^N_{A,B}(X)$.\\Top: $A$, bottom: $B^\dagger$, contract physical indices.}}

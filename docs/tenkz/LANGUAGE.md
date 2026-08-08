@@ -1,8 +1,10 @@
 # The tenkz language
 
-This file is the normative semantic contract for the public language.  The
-generated reference in the manual is the normative inventory of exact
-commands, environments, keys, value types, aliases, and defaults.
+This file is the short semantic contract for the public language; since the
+S4 surface swap the binding inventory is `LANGUAGE-1.0.md`, whose tables the
+executable registry is regenerated to.  The generated reference in the
+manual is the normative inventory of exact commands, environments, keys,
+value types, and defaults.
 
 > A picture chooses one layout; its options declare topology and policy; its
 > body declares atoms, connections, regions, and annotations.
@@ -16,16 +18,14 @@ those declarations, not a second authoring language.
 
 There is one genre.
 
-- `tenkz` is the regular one-dimensional contraction grid.  Rows are layers,
-  columns are sites, and adjacent compatible cells contract implicitly.
+- `tenkz` draws one typed tensor network in one frame.  In the flat frame,
+  rows are layers, columns are sites, and adjacent compatible cells contract
+  implicitly.
 
 An irregular typed graph is not a genre of its own: it is addressed
-`\tn`, `\tnwire`, and `\tnmark` records of the kernel language.  A
-spatial lattice, sheet, or measured region is a kernel picture: a frame
-with `lattice=` or `planes` sugar, or a declared basis.
-
-`\tnpic` is not a layout.  It is a composition wrapper that
-lets one `tenkz` picture behave as an inline mathematical atom.
+`\tn`, `\tnwire`, and `\tnmark` records.  A spatial lattice, sheet, or
+measured region is the same picture with a frame: `lattice=` or `planes`
+sugar, or a declared basis.
 
 Choose the layout from the topology.  Do not choose it from the desired
 silhouette, and do not cross into another layout merely to obtain a style.
@@ -84,22 +84,21 @@ Scope is explicit at every level.
 
 A key is not resolved by searching several scopes for a convenient match.
 The generated reference names its one legal scope and value type.  Shared
-names such as `role`, `species`, `pitch`, and `tensor style` retain one meaning
-wherever the registry exposes them.
+names such as `role`, `species`, and `pitch` retain one meaning wherever the
+registry exposes them.
 
-Free-graph ports and extension ports are typed.  The base kinds are `virtual`
-and `physical`; a connection between unequal kinds is an error.  Custom atoms
-are introduced by
+Ports are typed.  The base kinds are `virtual` and `physical`; a connection
+between unequal kinds is an error.  Custom atoms are introduced by
 
 ```tex
-\tndeclareatom{\tnprojector}{
+\tndeclare{atom}{\tnprojector}{
   skin=box,
-  ports={west:virtual,east:virtual,up:physical}
+  ports={180:virtual, 0:virtual, 90:physical}
 }
 ```
 
 The declaration creates a one-label atom command with optional per-use cell
-keys.  Faces are `west`, `east`, `up`, and `down`; types are `virtual` and
+keys.  A face is an angle in the atom's own axes; types are `virtual` and
 `physical`.  It supplies a sanctioned skin and the complete typed-port
 contract.  Bare anchors are not an extension API.  There is no public
 `\tndefine`: repeated whole figures remain ordinary TeX composition, not new
@@ -108,20 +107,21 @@ tenkz grammar.
 ## Canonical spellings and aliases
 
 One concept has one canonical spelling.  Current tutorials, recipes,
-benchmarks, and new source use canonical spellings only.  Compatibility
-aliases exist solely to read older documents; the generated reference lists
-them in a separate appendix and the linter can reject them in canonical-only
-sources.
+benchmarks, and new source use canonical spellings only.  No compatibility
+alias remains: the last four died with the 0.7 front end at the surface
+swap, and the generated alias appendix is empty.
 
 The canonical examples include these distinctions:
 
 - `boundary=periodic` closes each row to itself; `west=cup` or `east=cup`
   connects adjacent layers.
-- `boundary=none` seals an object; omitting it retains the canonical open
-  boundary when the object is a matrix or map. A side that names its own
-  policy overrides the picture's: `boundary=none, east=cup` seals the west
-  and bends the east, because the specific statement outranks the general
-  one. A cup that finds no pair to bend is an error, not a blank space.
+- A side exposes indices only when it says so: an unstated side draws no
+  leg, `boundary=open` (or `west=open` alone) mints the legs, and
+  `boundary=none` is the explicit spelling of the default. A side that
+  names its own policy overrides the picture's: `boundary=none, east=cup`
+  seals the west and bends the east, because the specific statement
+  outranks the general one. A cup that finds no pair to bend is an error,
+  not a blank space.
 - `route=arc` is the canonical curved spelling; the route family is
   `straight`, `orth`, and `arc`.
 

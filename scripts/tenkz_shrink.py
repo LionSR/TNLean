@@ -49,15 +49,14 @@ BLUEPRINT = sorted(ROOT.glob("blueprint/src/chapter/*.tex"))
 # Alias sunsets execute at their milestone; milestones this project uses.
 CURRENT_MILESTONE = "0.8"
 
+# Since the S4 surface swap the kernel is the package surface: the demand
+# corpus's constructs are kernel constructs, and each registry scope is fed
+# by the option groups of the commands and environments that own it.
 _SCOPE_COMMANDS = {
-    "picture": ("tnpic",),
-    "group": ("tngroup",),
-    "object": ("tn", "tnX", "tnfuse", "tndots", "tntree"),
-    "connection": ("tncut",),
-    "annotation": ("tnspan",),
-}
-_SETUP_COMMAND_FORWARDS = {
-    "tntree": {"pitch", "compact", "inline"},
+    "kernel-atom": ("tn", "tnfuse"),
+    "kernel-wire": ("tnwire", "tnbond"),
+    "kernel-mark": ("tnmark",),
+    "object": ("tntree",),
 }
 
 
@@ -209,8 +208,10 @@ def _forwarded_options(payload: str, keys: set[str]) -> str:
 
 
 def _environment_options(text: str) -> list[str]:
+    # `tenkzeq` parses the same picture-policy rows as `tenkz`, so both
+    # environments feed the kernel-picture demand census.
     payloads: list[str] = []
-    pattern = re.compile(r"\\begin\{tenkz\}")
+    pattern = re.compile(r"\\begin\{tenkz(?:eq)?\}")
     for match in pattern.finditer(text):
         start = _skip_space_and_star(text, match.end())
         group = _group_payload(text, start, "[", "]")
@@ -219,8 +220,9 @@ def _environment_options(text: str) -> list[str]:
     return payloads
 
 
-def _brace_argument(text: str, name: str, argument: int) -> list[str]:
-    payloads: list[str] = []
+def _brace_arguments(text: str, name: str, argument: int) -> list[list[str]]:
+    """Return every invocation's complete brace-argument list."""
+    invocations: list[list[str]] = []
     for match in _command_pattern(name).finditer(text):
         start = _skip_space_and_star(text, match.end())
         groups: list[str] = []
@@ -231,8 +233,14 @@ def _brace_argument(text: str, name: str, argument: int) -> list[str]:
             groups.append(group[0])
             start = _skip_space_and_star(text, group[1])
         if len(groups) == argument:
-            payloads.append(groups[-1])
-    return payloads
+            invocations.append(groups)
+    return invocations
+
+
+def _brace_argument(text: str, name: str, argument: int) -> list[str]:
+    return [
+        groups[-1] for groups in _brace_arguments(text, name, argument)
+    ]
 
 
 def scoped_consumer_text(corpus: dict[Path, str]) -> dict[str, dict[Path, str]]:
@@ -252,44 +260,57 @@ def scoped_option_groups(
     """Individual option payloads grouped by their registry scope."""
     scoped = {
         scope: {} for scope in (
-            "setup",
-            "picture",
-            "group",
+            "kernel-setup",
+            "kernel-picture",
+            "kernel-frame",
+            "kernel-atom",
+            "kernel-wire",
+            "kernel-mark",
+            "kernel-declare",
             "object",
-            "connection",
-            "region",
-            "annotation",
             "atom-declaration",
         )
     }
     for path, text in corpus.items():
         picture_options = [
             *_environment_options(text),
-            *_command_options(text, "tnpic"),
+            *_command_options(text, "tngroup"),
         ]
-        scoped["picture"][path] = picture_options
+        scoped["kernel-picture"][path] = picture_options
+        # The kernel-frame rows are spelled inside the `frame={...}` value
+        # of a picture (or group) option list, so their scope reads the
+        # extracted frame descriptors rather than the raw payloads.
+        scoped["kernel-frame"][path] = [
+            part.partition("=")[2].strip().strip("{}")
+            for payload in picture_options
+            for part in _top_level_option_parts(payload)
+            if part.partition("=")[0].strip() == "frame"
+            and part.partition("=")[2].strip()
+        ]
         for scope, commands in _SCOPE_COMMANDS.items():
-            if scope == "picture":
-                continue
             scoped[scope][path] = [
                 option
                 for command in commands
                 for option in _command_options(text, command)
             ]
-        # Setup keys are legal both in \tnset and in each picture family's
-        # option list through the shared forwarders.
-        scoped["setup"][path] = [
-            *_brace_argument(text, "tnset", 1),
-            *picture_options,
-            *(
-                _forwarded_options(payload, keys)
-                for command, keys in _SETUP_COMMAND_FORWARDS.items()
-                for payload in _command_options(text, command)
-            ),
+        scoped["kernel-setup"][path] = _brace_argument(text, "tnset", 1)
+        # A \tndeclare descriptor belongs to the scope its class argument
+        # names: atom declarations feed the atom-declaration rows, and the
+        # skin and species classes feed kernel-declare.
+        declare_argument_lists = _brace_arguments(text, "tndeclare", 3)
+        scoped["kernel-declare"][path] = [
+            arguments[2]
+            for arguments in declare_argument_lists
+            if arguments[0].strip() != "atom"
         ]
-        scoped["atom-declaration"][path] = _brace_argument(
-            text, "tndeclareatom", 2
-        )
+        scoped["atom-declaration"][path] = [
+            *(
+                arguments[2]
+                for arguments in declare_argument_lists
+                if arguments[0].strip() == "atom"
+            ),
+            *_brace_argument(text, "tndeclareatom", 2),
+        ]
     return scoped
 
 
@@ -298,8 +319,6 @@ def _scope_groups(
 ) -> dict[Path, list[str]]:
     if scope in groups:
         return groups[scope]
-    if scope.startswith("kernel-"):
-        return {}
     raise KeyError(f"unknown registry scope: {scope}")
 
 
@@ -311,9 +330,6 @@ def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, se
         if entry.kind == "key":
             scope, name = entry.fields[0], entry.fields[1].replace("~", " ")
             row_id = f"key:{scope}:{name}"
-            # kernel-* scopes have no demand-corpus constructs until the
-            # S4 surface swap; their rows count zero consumers here and the
-            # tenure flags they raise carry session verdicts instead.
             hits = {
                 str(path.relative_to(ROOT))
                 for path, payloads in _scope_groups(scoped, scope).items()

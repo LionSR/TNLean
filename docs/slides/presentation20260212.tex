@@ -57,9 +57,12 @@
             % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
             % the symbolic N-site word has (0, N), with no virtual index open.
             % Source: arXiv:1606.00608, Fig. I and lines 135--170.
-            \begin{tenkz}[compact, periodic, physical=up]
-              \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-              \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+            \begin{tenkz}[rows={wire}, cols=5, boundary=periodic, size=s]
+              \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+              \tn[label pos=s, ports={90:physical:$i_2$}]{A} &
+              \tn[skin=dots]{} &
+              \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+              \tn[label pos=s, ports={90:physical:$i_N$}]{A}
             \end{tenkz}
 
             \vspace{1.2em}
@@ -69,12 +72,14 @@
             % Boundary: both sides have (virtual, physical) = (2, 1).
             % Source: arXiv:1606.00608, Fig. I_B=XCX and lines 187--195.
             \[
-              \begin{tenkz}[physical=up]
-                \tn[up=$i$]{B}
+              \begin{tenkz}[cols=1]
+                \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{B}
               \end{tenkz}
               \;=\;
-              \begin{tenkz}[physical=up]
-                \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+              \begin{tenkz}[cols=3]
+                \tn[skin=ring, ports={180:virtual, 0:virtual}]{X} &
+                \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{A} &
+                \tn[skin=ring, ports={180:virtual, 0:virtual}]{X^{-1}}
               \end{tenkz}
             \]
         \end{center}

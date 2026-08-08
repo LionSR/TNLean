@@ -14,19 +14,18 @@ def main() -> int:
     parsed = parse_log(
         "\n".join(
             (
-                "picture|id=1|lang=grid",
-                "frame|picture=1|scope=picture|map=rotate(30)|"
+                "picture|id=k1|lang=kernel",
+                "frame|scope=picture|map=rotate(30)|"
                 "a=0.866025|b=-0.5|c=0.5|d=0.866025",
-                "atom|picture=1|cell=1-2|name=A|kind=tensor",
-                "bond|picture=1|row=1|from=2|to=3|dir=none",
-                "boundary|picture=1|virtual-west=1|virtual-east=2|"
-                "physical-up=3|physical-down=4",
+                "atom|id=atom-1|cell=1-2|name=A|kind=tensor",
+                "wire|id=wire-1|kind=index|from=addr-1|to=addr-2",
+                "kernel-boundary|signature=open:e,open:w",
                 "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
                 "topology=(1,2)|role=none|species=plain",
             )
         ),
         source_name="case.tnlog",
-        known_langs={"grid"},
+        known_langs={"kernel"},
         hard=lambda *finding: hard.append(finding),
         advisory=lambda *finding: advisory.append(finding),
     )
@@ -36,17 +35,16 @@ def main() -> int:
         "picture",
         "frame",
         "atom",
-        "bond",
-        "boundary",
+        "wire",
+        "kernel-boundary",
         "tree",
     ]
     assert all(event.valid for event in parsed.events)
     assert len(parsed.pictures) == 1
     picture = parsed.pictures[0]
-    assert picture is parsed.by_id[1]
-    assert [event.kind for event in picture.content()] == ["atom", "bond"]
-    assert picture.boundary() == (1, 2, 3, 4)
-    assert picture.ncols() == 3
+    assert picture is parsed.by_id["k1"]
+    assert [event.kind for event in picture.content()] == ["atom", "wire"]
+    assert picture.kernel_boundary() == ("open:e", "open:w")
 
     malformed: list[tuple[str, str, str]] = []
     notes: list[tuple[str, str, str]] = []
@@ -54,7 +52,7 @@ def main() -> int:
         "\n".join(
             (
                 "picture|id=1|lang=future",
-                "picture|id=1|lang=grid",
+                "picture|id=1|lang=kernel",
                 "atom|picture=oops|cell=1-1|name=A|kind=tensor",
                 "frame|picture=1|scope=atom|map=rotate(30)|"
                 "a=bad|b=0|c=0|d=1",
@@ -69,7 +67,7 @@ def main() -> int:
             )
         ),
         source_name="bad.tnlog",
-        known_langs={"grid"},
+        known_langs={"kernel"},
         hard=lambda *finding: malformed.append(finding),
         advisory=lambda *finding: notes.append(finding),
     )

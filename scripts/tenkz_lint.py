@@ -3,15 +3,14 @@
 
 Rules (findings exit 1 unless escaped):
 
-  dots     Literal `...`, `\\ldots`, or `\\cdots` inside a tenkz body
-           (or a `\\tnpic` body, which is a tenkz body by
-           construction).  An ellipsis cell interrupts
+  dots     Literal `...`, `\\ldots`, or `\\cdots` inside a tenkz body.
+           An ellipsis cell interrupts
            the implicit wire; literal dots typeset ink that the event
            stream cannot see, so the audited contraction graph and the
-           printed picture diverge.  `\\tndots` is the only legal
+           printed picture diverge.  `\\tn[skin=dots]` is the only legal
            ellipsis.  Dots inside `[...]` option groups are exempt: a
-           label value such as `up={$i_1\\cdots i_L$}` is math content of
-           a leg label, not a wire cell (spec benchmark B4 sanctions it).
+           label value such as `ports={90:physical:$i_1\\cdots i_L$}` is
+           math content of a leg label, not a wire cell.
 
   raw-ink  Raw TikZ ink inside any tenkz-family body (`line width=`,
            `draw=`, `fill=`, `color=`, or raw `\\draw`/`\\fill`/
@@ -117,7 +116,7 @@ class Body:
 
 def scan_bodies(src: str) -> list[Body]:
     """tenkz-family bodies in a comment-stripped source: environment
-    bodies (options group excluded) and balanced `\\tnpic` arguments."""
+    bodies (options group excluded)."""
     return [
         Body(construct.name, construct.body_start, construct.body)
         for construct in scan_constructs(src)

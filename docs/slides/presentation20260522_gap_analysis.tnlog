@@ -1,20 +1,24 @@
-picture|id=1|lang=grid
-ink-use|picture=1|class=glyph|id=1|shape=circle
-glyph-geometry|picture=1|owner=1|shape=circle|xmin=1869030|xmax=2233264|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
-atom|picture=1|cell=1-1|kind=dot|role=none|species=none
-ink-use|picture=1|class=glyph|id=2|shape=circle
-glyph-geometry|picture=1|owner=2|shape=circle|xmin=1869030|xmax=2233264|ymin=-1823040|ymax=-1458806|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
-atom|picture=1|cell=2-1|kind=dot|role=none|species=none
-label-use|picture=1
-bbox|picture=1|class=label|id=1|owner=0|xmin=-577161|xmax=621251|ymin=-229376|ymax=229376|shape=rect|radius=0
-ink-use|picture=1|class=glyph|id=3|shape=circle
-glyph-geometry|picture=1|owner=3|shape=circle|xmin=2974156|xmax=3338390|ymin=-1002579|ymax=-638345|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
-label-use|picture=1
-bbox|picture=1|class=label|id=2|owner=0|xmin=3663160|xmax=3935068|ymin=-963822|ymax=-677103|shape=rect|radius=0
-cup|picture=1|side=east|top=1|bottom=2|matrix=1
-pairleg|picture=1|upper=1-1|lower=2-1|upper-port=center|column=1
-label-use|picture=1
-bbox|picture=1|class=label|id=3|owner=0|xmin=1935149|xmax=2167146|ymin=506887|ymax=734297|shape=rect|radius=0
-label-use|picture=1
-bbox|picture=1|class=label|id=4|owner=0|xmin=1935149|xmax=2167146|ymin=-2454794|ymax=-2147809|shape=rect|radius=0
-boundary|picture=1|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0
+picture|id=k1|lang=kernel
+atom|id=atom-1|addr=(1,1)|kind=tn|label-pos=180|label=A
+atom|id=atom-2|addr=(2,1)|kind=tn|label-pos=180|label=\overline {A}
+atom|id=atom-4|kind=tn|label=\rho |node=addr-1|skin=ring
+wire|id=wire-5|from=addr-2|kind=index|name=bond-1-1-2-1|origin=grid|to=addr-3
+wire|id=wire-6|from-open=w|kind=index|name=open-west-1|origin=open|row=1|side=west|to=addr-4
+wire|id=wire-7|from-open=w|kind=index|name=open-west-2|origin=open|row=2|side=west|to=addr-5
+wire|id=wire-8|bottom=2|from=addr-6|kind=index|name=cup-1-2|origin=cup|side=east|to=addr-7|top=1
+mark|id=mark-3|form=label|label-pos=90|label=\mathcal E_A(\rho )|node=addr-8
+kernel-boundary|signature=open:w, open:w
+stringbead|id=cup-1-2|t=0.5|x=10.563pt|y=-15.6533pt
+ink-use|picture=k1|class=glyph|id=1|shape=circle
+glyph-geometry|picture=k1|owner=1|shape=circle|xmin=-182117|xmax=182117|ymin=-182117|ymax=182117|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=1|owner=0|xmin=-1199374|xmax=-874578|ymin=-159187|ymax=159187|shape=rect|radius=0
+ink-use|picture=k1|class=glyph|id=2|shape=circle
+glyph-geometry|picture=k1|owner=2|shape=circle|xmin=-182117|xmax=182117|ymin=-2233264|ymax=-1869030|radius=0|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+label-use|picture=k1
+bbox|picture=k1|class=label|id=2|owner=0|xmin=-1199374|xmax=-874578|ymin=-2266036|ymax=-1836257|shape=rect|radius=0
+ink-use|picture=k1|class=glyph|id=3|shape=roundrect
+glyph-geometry|picture=k1|owner=3|shape=roundrect|xmin=161451|xmax=1223067|ymin=-1351550|ymax=-700156|radius=325681|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+stringbead|id=open-west-1|t=0.5|x=-7.0421pt|y=0pt
+label-use|picture=k1
+bbox|picture=k1|class=label|id=3|owner=0|xmin=-1237512|xmax=314495|ymin=874578|ymax=1529938|shape=rect|radius=0
