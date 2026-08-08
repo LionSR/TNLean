@@ -28,8 +28,6 @@ matrix as `ε → 0`.  Every statement also covers `d = 0`.
 
 open scoped Matrix BigOperators
 
-open Polynomial
-
 namespace Matrix.IsHermitian
 
 variable {d : ℕ} {A : Matrix (Fin d) (Fin d) ℂ}

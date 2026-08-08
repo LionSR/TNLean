@@ -1360,24 +1360,36 @@ that hypothesis by multiplicity preservation.
 \end{proof}
 
 \begin{theorem}[Set spectrum determines multiplicities at simple spectrum]
+    \label{thm:set_spectrum_multiplicity}
+    \lean{Matrix.roots_charpoly_eq_of_spectrum_eq_of_roots_nodup}
+    \leanok
+    Let $A,B\in M_d(\C)$. Suppose $\sigma(B)=\sigma(A)$ and the roots of
+    $\chi_A$ have no repetitions. Then the root multisets of $\chi_A$ and
+    $\chi_B$ are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    The common spectrum is the common finite set underlying the two root
+    multisets. The roots of $\chi_A$ are distinct, so this set has $d$
+    elements. Both characteristic polynomials split over $\C$ and have degree
+    $d$, so the root multiset of $\chi_B$ also has cardinality $d$. Hence it
+    cannot repeat any root, and the two root multisets agree.
+\end{proof}
+
+\begin{theorem}[Hermitian trace powers from simple set spectrum]
     \label{thm:hermitian_set_spectrum_multiplicity}
-    \lean{Matrix.IsHermitian.roots_charpoly_eq_of_spectrum_eq_of_roots_nodup}
     \lean{Matrix.IsHermitian.trace_pow_eq_of_spectrum_eq_of_roots_nodup}
     \leanok
     Let $A,B\in M_d(\C)$ be Hermitian. Suppose
     $\sigma(B)=\sigma(A)$ and the roots of $\chi_A$ have no repetitions.
-    Then the root multisets of $\chi_A$ and $\chi_B$ are equal. Consequently,
-    $\tr(B^k)=\tr(A^k)$ for every $k\in\N$.
+    Then $\tr(B^k)=\tr(A^k)$ for every $k\in\N$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:hermitian_trace_power_sum}
-    The common spectrum is the common finite set underlying the two root
-    multisets. The roots of $\chi_A$ are distinct, so this set has $d$
-    elements. Since $B$ is Hermitian, $\chi_B$ splits and has degree $d$, so
-    its root multiset also has cardinality $d$. Hence it cannot repeat
-    any root, and the two root multisets agree. Formula
-    (\ref{eq:ch01_trace_power_sum}) then gives equality of trace powers.
+    \uses{thm:set_spectrum_multiplicity, thm:hermitian_trace_power_sum}
+    Theorem~\ref{thm:set_spectrum_multiplicity} gives equality of the root
+    multisets. Formula~(\ref{eq:ch01_trace_power_sum}) then gives equality of
+    trace powers.
 \end{proof}
 
 \begin{theorem}[Continuity of trace powers]
@@ -1412,7 +1424,6 @@ that hypothesis by multiplicity preservation.
     \begin{align}
         m e_m
          & = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
-        \label{eq:bnt_power_newton_girard}
     \end{align}
     expresses the coefficients of the characteristic polynomial in terms
     of the power-sum traces $\tr(A^i)$. Equal power sums for $A$ and $B$
