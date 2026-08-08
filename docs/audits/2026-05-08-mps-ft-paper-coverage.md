@@ -53,8 +53,8 @@ trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
 `prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
 `propblockinj` theorem, and the literal CPSV topological-projector commuting
 Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
-results. The occurrence-level count is 22 complete, 8 partial, and 15
-not-ready; the distinct-result count is 21 complete, 6 partial, and 13
+results. The occurrence-level count is 23 complete, 8 partial, and 14
+not-ready; the distinct-result count is 22 complete, 6 partial, and 12
 not-ready. Here **not-ready** means that the printed statement is false,
 ambiguous, or depends essentially on a formally refuted source lemma. It does
 not mean that every printed result has been formalized. In particular, the
@@ -68,14 +68,14 @@ The following ledger makes the count reproducible from source line numbers:
 - **Complete (22 distinct):** 249, 253, 342, 398, 606, 945, 1013, 1080, 1121,
   1130, 1274, 1333, 1351, 1406, 1510, 1569, 1597, 1647, 1680, 1786, 1835, and
   2221.
-- **Partial (5 distinct):** 278, 801, 851, 972, and 1801.
-- **Not-ready (13 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
-  1197, 1484, 1503, 1740, and 1810.
+- **Partial (6 distinct):** 278, 801, 851, 972, 1484, and 1801.
+- **Not-ready (12 distinct):** 349, 354, 500, 534, 543, 583, 777, 1155,
+  1197, 1503, 1740, and 1810.
 - **Additional occurrences:** the Appendix A restatements at 1137, 1167,
   and 1172 inherit partial, not-ready, and not-ready status, respectively; the
   Appendix D restatements at 1863 and 1929 inherit complete and partial status.
   Thus the five restatements add one complete, two partial, and two not-ready
-  occurrences, giving the displayed totals 23/7/15.
+  occurrences, giving the displayed totals 23/8/14.
 
 Definitions, equations, and explanatory proof-segment rows are not counted.
 In particular, Eq. `II_XAX` at 1072--1077 is excluded, while the purification
@@ -123,7 +123,7 @@ segments of Theorems 3.1 and 3.10, not additional theorem occurrences.
 | Proposition 4.5 (l.801, `PropILILp1`) | 801–807 | Mutual information is monotone, bounded, and has the stated thermodynamic limit | `TNLean/MPS/MPDO/MutualInfoMonotone.lean` (`MPOTensor.mutualInfoChain_monotone`); `TNLean/MPS/MPDO/MutualInfoAreaLaw.lean` (`MPOTensor.mutualInfoChain_le_two_log_bondDim`, `MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim`); `TNLean/MPS/MPDO/ThermodynamicLimitCounterexample.lean`; `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` | **partial** — monotonicity and the finite-chain bound are complete, including the stronger estimate $I_L\le 2\log D$ for every fixed positive MPO operator of nonzero trace; the proposition remains partial only because a positive parity-sensitive family refutes the unrestricted thermodynamic-limit clause |
 | Defn SAL (l.811, `def:area-law`) | 811–813 | Saturation of the area law | `TNLean/MPS/MPDO/AreaLaw.lean` (`MPOTensor.IsSAL`) | `leanok` |
 | Defn GSNNCH (l.829) | 829–837 | Gibbs state of a nearest-neighbor commuting Hamiltonian | `TNLean/MPS/MPDO/CommutingForm.lean` (`MPOTensor.GSNNCHData`, `MPOTensor.IsGSNNCH`) | `leanok` |
-| **Theorem 4.9** (l.851, `thm:main-simple`) | 851–893 | Simple-MPDO implication chain \((i)\Rightarrow(ii)\Leftrightarrow(iii)\Rightarrow(iv)\Rightarrow(v)\) | `TNLean/MPS/MPDO/RFPViaTSSAL.lean`; `TNLean/MPS/MPDO/CyclicActiveAreaLaw.lean`; `TNLean/MPS/MPDO/ActiveSectorSpanningAreaLaw.lean`; `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`; `TNLean/Analysis/EntropyMarkovForward.lean`; `TNLean/Channel/PetzProductReference.lean` | **partial** — implication \((i)\Rightarrow(ii)\) is complete at the explicit density-family boundary: positive semidefinite rings, nonzero trace at every positive length, and the Definition 4.1 local RFP equations imply source ZCL and SAL. The fixed-bond and source-ZCL implication to SAL is complete for the original injective MPDO tensor, without normality. The HJPW/Hayashi equality characterization and the exact Petz-recovery construction are also complete. The SAL-and-ZCL structural implication remains unresolved at the normal-tensor normalization boundary: the raw obstruction has literal ZCL but is not the Case I normal tensor, while its normal representative loses literal ZCL |
+| **Theorem 4.9** (l.851, `thm:main-simple`) | 851–893 | Simple-MPDO implication chain \((i)\Rightarrow(ii)\Leftrightarrow(iii)\Rightarrow(iv)\Rightarrow(v)\) | `TNLean/MPS/MPDO/RFPViaTSSAL.lean`; `TNLean/MPS/MPDO/CyclicActiveAreaLaw.lean`; `TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`; `TNLean/MPS/MPDO/BNTSourceSectorProjectors.lean`; `TNLean/Analysis/EntropyMarkovForward.lean`; `TNLean/Channel/PetzProductReference.lean` | **partial** — implication \((i)\Rightarrow(ii)\) is complete at the explicit density-family boundary: positive semidefinite rings, nonzero trace at every positive length, and the Definition 4.1 local RFP equations imply source ZCL and SAL. The fixed-bond and source-ZCL implication to SAL is complete for the original injective MPDO tensor, without normality. The HJPW/Hayashi equality characterization and the exact Petz-recovery construction are also complete. The supported-sector normal Case-I rank-one theorem is complete. The remaining SAL-and-literal-ZCL structural implication must show that every BNT tensor inherits MPDO positivity, SAL, and literal ZCL, and then combine the resulting physical isometries, left--right tensors, and coefficients into the all-sector Case-II structure |
 | **Proposition 4.13** (source label `Prop:IV.12`, l.945) | 945–952; proof 1863–1922 | A literal CPSV canonical-form MPDO tensor is vertically in canonical form | `TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean` (`MPOTensor.verticalCF_of_cpsvCanonicalForm`) and its prerequisite modules | **complete** — the theorem constructs positive grouped weights and a rectangular coisometry $U$ with $UU^\dagger=I$, $U\widetilde M U^\dagger=\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$, and $\widetilde M=U^\dagger(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha)U$; it does not assert $U^\dagger U=I$ |
 | **Theorem 4.14** (source label `thm:IV.13`, l.972) | 972–993; proof 1929–2088 | RFP iff the tensor-attached BNT algebra condition iff the fusion-isometry condition | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean`; `CPSVBNTFusionTensorClauseFromRFP.lean`; `CPSVBNTTheoremEquivalence.lean`; `TwoSitePrefixReflectedMarkedChain.lean`; `docs/paper-gaps/cpsv16_two_site_sector_unitary_gauge_gap.tex` | **partial as printed; complete for (i) iff (ii), with the corrected active-support form complete for (i) iff (iii)** — under precisely the standing literal CPSV canonical-form and MPDO hypotheses, the one-site raw corner and two-site gauge corner have the same unblocked reflected tail. Literal Lemma L identifies the raw and Gram-dressed marks, normality makes the gauge Gram matrix scalar, and unitary normalization gives the two trace-preserving completely positive renormalization maps. The remaining qualification concerns only the fusion clause: the formal equivalence uses the documented active-support reading of (iii), including the empty-support and coisometry corrections, rather than the unrestricted printed clause. |
 | Open question on length-dependent coefficients | 995–997 | Whether an RFP MPDO can have BNT structure coefficients that genuinely depend on the chain length | `TNLean/MPS/MPDO/LengthDependentRFPExample.lean` (`MPOTensor.BondTwoSingletonBaseModel.exists_isRFPViaTS_not_lengthIndependent_bntCoefficients`) | **answered affirmatively for an explicit BNT presentation** — the bond-two singleton model is an MPDO in literal CPSV canonical form and is an RFP by Theorem 4.14(ii)$\Rightarrow$(i). Its displayed one-label tensor-attached BNT clause has $c^{(L)}=(\sqrt{1/2})^L$, hence $c^{(1)}\ne c^{(2)}$. The result is existential for this presentation and does not claim presentation-independent length dependence. |
@@ -327,7 +327,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 19 non-complete distinct CPSV16 results comprise 6 partial and 13
+The 18 non-complete distinct CPSV16 results comprise 6 partial and 12
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the

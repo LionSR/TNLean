@@ -293,6 +293,7 @@
 
 \begin{theorem}[Retained witnesses for the active inverse-map factorization]
     \label{thm:mpdo_inverse_map_active_sector_witnesses}
+    \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
     \lean{MPOTensor.%
       exists_rephased_inverseMap_activeSectorTraceMatrix_primitivity_witnesses}
     \leanok
@@ -300,11 +301,14 @@
       def:mpdo_three_site_closure,
       def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
       thm:mpdo_eta_coherent_positive_choice,
+      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+      lem:mpdo_sector_tensor_left_zero_of_weight_zero,
       thm:mpdo_sector_virtual_matrix_spanning,
       thm:mpdo_active_one_site_matrix_spanning,
       thm:mpdo_sector_support_triangle_closure}
     Let ${\cal K}$ be an injective tensor generating MPDOs, let $R$ close a
-    three-site state $\rho$, and choose Hayashi data with weights $p_k$. Fix outer indices
+    three-site state $\rho$, and choose a Hayashi decomposition with weights
+    $p_k$. Fix outer indices
     for which the corresponding entry of $R$ is nonzero, and let $F$ be the
     zero-weight reparameterized inverse-map factorization. There are coherent
     sector phases for which all neighboring operators are positive semidefinite
@@ -317,6 +321,8 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_eta_coherent_positive_choice,
+      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+      lem:mpdo_sector_tensor_left_zero_of_weight_zero,
       thm:mpdo_sector_virtual_matrix_spanning,
       thm:mpdo_active_one_site_matrix_spanning,
       thm:mpdo_sector_support_triangle_closure}
@@ -333,7 +339,6 @@
 % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
 \begin{theorem}[Primitivity of the active sector trace matrix]%
     \label{thm:mpdo_sector_trace_matrix_primitive}
-    \lean{MPOTensor.zeroWeightReparameterized_sectorVirtualMatrix_eq_zero}
     \lean{MPOTensor.%
       exists_rephased_inverseMap_activeSectorTraceMatrix_isPrimitive}
     \lean{MPOTensor.%
@@ -341,13 +346,11 @@
     \leanok
     \uses{def:mpdo, def:injective, def:is_sal,
         def:mpdo_active_sector_trace_matrix,
-        def:mpdo_explicit_eta_of_sector_tensors,
-        thm:mpdo_eta_coherent_positive_choice,
         thm:mpdo_inverse_map_active_sector_witnesses,
-        thm:mpdo_sector_eta_data_trace_matrix}
-    Let ${\cal K}$ be an injective tensor that generates MPDOs and
-    satisfies SAL, and choose the positive semidefinite neighboring operators of
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}. Restrict the sector
+        thm:mpdo_active_sector_three_step_return_and_primitivity}
+    Let ${\cal K}$ be an injective tensor that generates MPDOs and satisfies
+    SAL, and choose the positive semidefinite neighboring operators of
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Restrict the sector
     index to the positive-weight summands of the Hayashi decomposition. Then
     positive semidefiniteness makes every neighboring trace real and
     non-negative, and the matrix
@@ -362,31 +365,15 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{def:mpdo_eta_recurrent_support,
-        def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-        thm:mpdo_zero_weight_reparameterized_neighboring_operator,
-        thm:mpdo_sector_virtual_matrix_spanning,
-        thm:mpdo_active_one_site_matrix_spanning,
-        thm:mpdo_sector_support_triangle_closure,
-        thm:mpdo_active_neighboring_support_strongly_connected,
-        thm:mpdo_active_sector_two_step_return,
-        thm:mpdo_active_trace_matrix_irreducible,
-        thm:mpdo_active_trace_matrix_positive_entries,
-        thm:mpdo_active_sector_three_step_return_and_primitivity}
+    \uses{thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_active_sector_three_step_return_and_primitivity}
     \leanok
-    First use the zero-weight reparameterization to make every zero-weight
-    sector isolated. Injectivity makes the nonzero-weight one-site matrices
-    span $\MN{D}$, and every such sector contains a nonzero matrix. Hence
-    Theorem~\ref{thm:mpdo_active_neighboring_support_strongly_connected}
-    gives strong connectivity of the active neighboring support. Its proof is
-    the one-sided directed-cut argument at
-    \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}.
-
-    Finally, nondegeneracy and cyclicity of the trace pairing give a closed
-    support walk of length two through every active sector. Triangle closure
-    gives one of length three. Strong connectivity together with these two
-    coprime return lengths yields a common length at which every entry of the
-    active trace-matrix power is positive. Thus $T$ is primitive.
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} supplies one
+    rephased factorization with positive neighboring operators, full active
+    span, nonzero active virtual matrices, and the three-edge return condition.
+    Apply
+    Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
+    conclude that the active trace matrix is primitive.
 \end{proof}
 
 \begin{theorem}[Zero-correlation-length relations on the primitive active trace matrix]%
