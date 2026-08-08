@@ -15,20 +15,21 @@ Suppose `A` is an `n × n` matrix over `ℂ` such that `tr(A^k) = 1` for all
 `k ≥ 1`.  Then `A.charpoly = X^(n-1) * (X - 1)`.  In particular `A` has a
 single nonzero eigenvalue equal to one, with the rest equal to zero.
 
-This is the matrix-algebraic core of the observation in arXiv:1703.09188
-(Cirac--Perez-Garcia--Schuch--Verstraete), Proposition `prop:normal-tensor`,
-lines 349–354: the transfer-matrix spectrum of a matrix-product unitary
-contains a single eigenvalue equal to one and all others vanish.  The
-paper's proof route uses Lemma A.5 of arXiv:1606.00608; we formalize it
-via Newton--Girard identities as already developed in
-`TNLean.Algebra.NewtonGirard`, comparing against an explicit rank-one
-idempotent whose positive powers all have trace one.
+This is a Newton--Girard prerequisite for the transfer-matrix spectrum
+argument in arXiv:1703.09188 (Cirac--Perez-Garcia--Schuch--Verstraete),
+Proposition `prop:normal-tensor`, lines 349–354.  The paper's unitary
+hypothesis supplies `tr(E^N) = 1` for `N > 1`; the missing first moment
+`tr(E) = 1` follows from the definition of the transfer matrix `E` as a
+normalized partial trace of a unitary, not from the unitary hypothesis.
+The present file formalizes the algebraic consequence of the stronger
+all-positive-moment hypothesis; the bridge from `N > 1` to `N ≥ 1` in the
+MPU context is tracked in #5706.
 
 The proof is purely algebraic: no spectral radius, positivity, normality, or
-diagonalizability is required.  A companion paper-gap note
-`docs/paper-gaps/cpsv17_transfer_trace_power.tex` records the scope
-restriction to `Fintype.card n ≥ 1` (the source assumes a transfer matrix
-of a unitary tensor, which always has positive dimension).
+diagonalizability is required.  We construct an explicit rank-one diagonal
+idempotent whose positive powers all have trace one, then invoke the
+Newton--Girard lemma `Matrix.charpoly_eq_of_trace_pow_eq_of_le_card` from
+`TNLean.Algebra.NewtonGirard`.
 
 ## Main results
 
@@ -38,7 +39,9 @@ of a unitary tensor, which always has positive dimension).
   `A.charpoly = X ^ (Fintype.card n - 1) * (X - 1)`.
 
 * `Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one`:
-  all-positive-powers corollary.
+  all-positive-powers theorem: if `tr(A^k) = 1` for all `k ≥ 1`, same
+  conclusion.  The positive-cardinality condition is derived internally
+  from `h 1` (the empty-index case is contradictory).
 
 ## Proof strategy
 
@@ -148,18 +151,15 @@ lemma charpoly_diagonalOneAt (i0 : n) :
 /-- **Finite-range trace-power lemma.**
 
 If an `n × n` complex matrix `A` satisfies `tr(A^k) = 1` for
-`1 ≤ k ≤ card n`, then `A.charpoly = X^(n-1) * (X-1)`.  In particular `A`
-has a single nonzero eigenvalue equal to one, with the rest equal to zero.
+`1 ≤ k ≤ card n` and `0 < Fintype.card n`, then
+`A.charpoly = X^(n-1) * (X-1)`.  In particular `A` has a single nonzero
+eigenvalue equal to one, with the rest equal to zero.
 
-This is the algebraic core of the observation in arXiv:1703.09188
-(Cirac--Perez-Garcia--Schuch--Verstraete), Proposition `prop:normal-tensor`,
-lines 349–354.
-
-**Scope restriction:** The dimension `Fintype.card n` must be positive
-(`0 < Fintype.card n`).  In the source context `A` is the transfer matrix
-of a unitary tensor, whose index type always has at least one element.
-The restriction is recorded in
-`docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
+The positive-cardinality hypothesis `0 < Fintype.card n` is required here
+because the finite-range hypothesis is vacuous when `card n = 0` (there are
+no `k` with `0 < k ≤ 0`), so the theorem cannot extract a witness.  The
+all-positive-powers corollary below derives the cardinality condition
+internally. -/
 theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card
     (A : Matrix n n ℂ)
     (hcard : 0 < Fintype.card n)
@@ -183,16 +183,34 @@ theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card
 If `tr(A^k) = 1` for all `k ≥ 1`, then
 `A.charpoly = X^(n-1) * (X-1)`.
 
-This is the corollary of the finite-range version obtained by restricting
-its hypothesis to `1 ≤ k ≤ card n`.
+In particular `A` has a single nonzero eigenvalue equal to one, with the
+rest equal to zero.  The positive-cardinality condition is derived
+internally from the first-moment hypothesis `tr(A) = 1` (when the index
+type is empty, the trace is `0`, contradicting the hypothesis).
 
-Source: arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 349–354. -/
+This is a Newton--Girard prerequisite for the transfer-matrix spectrum
+argument in arXiv:1703.09188, Proposition `prop:normal-tensor`, lines
+349–354.  The paper supplies `tr(E^N) = 1` for `N > 1` from unitarity of
+blocked tensors; the missing first moment `tr(E) = 1` follows from the
+definition of the transfer matrix as a normalized partial trace of a
+unitary, not from the unitary hypothesis.  The bridge from the paper's
+`N > 1` hypothesis to the all-positive-moment hypothesis used here is
+tracked in #5706. -/
 theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one
     (A : Matrix n n ℂ)
-    (hcard : 0 < Fintype.card n)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = 1) :
-    A.charpoly = X ^ (Fintype.card n - 1) * (X - 1) :=
-  charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card A hcard
-    (fun k hk _ => h k hk)
+    A.charpoly = X ^ (Fintype.card n - 1) * (X - 1) := by
+  by_cases hcard0 : Fintype.card n = 0
+  · -- Empty index type: `trace (A ^ 1) = 1` contradicts `trace = 0`
+    have hisEmpty : IsEmpty n := (Fintype.card_eq_zero_iff.mp hcard0)
+    have htrace0 : trace (A ^ 1) = 0 := by
+      simp [trace]
+    have htrace1 := h 1 (by norm_num)
+    rw [htrace1] at htrace0
+    exact absurd htrace0 one_ne_zero
+  · -- Positive cardinality: delegate to the finite-range theorem
+    have hcard_pos : 0 < Fintype.card n := Nat.pos_of_ne_zero hcard0
+    exact charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card A hcard_pos
+      (fun k hk _ => h k hk)
 
 end Matrix
