@@ -440,7 +440,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     spectral-radius and primitivity properties.
 \end{proof}
 
-\section{Transfer-matrix bridges}
+\section{Transfer-matrix identities}
 
 Let $D$ be a positive integer and let
 $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map.  Write $\widehat T$
@@ -480,6 +480,9 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
     eigenmatrices to nonzero eigenvectors and conversely.
 \end{proof}
 
+For a matrix product tensor $A$, write $V^{(N)}(A)_\sigma$ for the
+coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
+
 \begin{theorem}[Transfer-matrix powers as periodic overlaps]
     \label{thm:mpu_transfer_matrix_overlap}
     \lean{MPSTensor.trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap,
@@ -490,8 +493,8 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
     transfer map.  Then
     \begin{align}
         \tr\!\left(\widehat{F_{A,B}}^{\,N}\right)
-          &=\sum_\sigma \operatorname{mpv}(A,\sigma)
-             \overline{\operatorname{mpv}(B,\sigma)}.
+          &=\sum_\sigma V^{(N)}(A)_\sigma
+             \overline{V^{(N)}(B)_\sigma}.
     \end{align}
     In particular, taking $B=A$ identifies the trace of the $N$th power of
     the ordinary transfer matrix with the length-$N$ self-overlap.
@@ -524,20 +527,20 @@ $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
     For a matrix product tensor $A$, a complex number $c$, and a nonnegative
     integer $N$, scaling every local matrix by $c$ gives
     \begin{align}
-        \sum_\sigma \operatorname{mpv}(cA,\sigma)
-          \overline{\operatorname{mpv}(cA,\sigma)}
+        \sum_\sigma V^{(N)}(cA)_\sigma
+          \overline{V^{(N)}(cA)_\sigma}
         &=(c\overline c)^N
-          \sum_\sigma \operatorname{mpv}(A,\sigma)
-          \overline{\operatorname{mpv}(A,\sigma)}.
+          \sum_\sigma V^{(N)}(A)_\sigma
+          \overline{V^{(N)}(A)_\sigma}.
     \end{align}
     Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
     $d$, then
     \begin{align}
-        \sum_\sigma \operatorname{mpv}(\widetilde U,\sigma)
-          \overline{\operatorname{mpv}(\widetilde U,\sigma)}
+        \sum_\sigma V^{(N)}(\widetilde U)_\sigma
+          \overline{V^{(N)}(\widetilde U)_\sigma}
         &=d^{-N}
-          \sum_\sigma \operatorname{mpv}(U,\sigma)
-          \overline{\operatorname{mpv}(U,\sigma)}.
+          \sum_\sigma V^{(N)}(U)_\sigma
+          \overline{V^{(N)}(U)_\sigma}.
     \end{align}
 \end{theorem}
 
