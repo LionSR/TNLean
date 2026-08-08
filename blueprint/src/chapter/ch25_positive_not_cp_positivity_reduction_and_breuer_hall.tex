@@ -438,8 +438,15 @@ is built from an antisymmetric contraction $U$ on $\C^{D}$, a matrix with
 $U^{\mathsf T}=-U$ and $U^{\dagger}U\le\Id$. The associated Breuer--Hall map
 \cite[Equation~(3.19)]{Wolf2012Quantum} is
 $T_{\mathrm{BH}}(X)=\tr(X) \Id-X-U\,X^{\mathsf T}U^{\dagger}$.
-It is positive; whether it is decomposable, and the threshold beyond which it
-fails to be completely positive, are not treated here.
+It is positive, and for an antisymmetric unitary in dimension $D>2$ it is
+indecomposable (Theorem~\ref{thm:breuer_hall_indecomposable}); the threshold
+beyond which it fails to be completely positive is not treated here. The
+source states indecomposability for every antisymmetric unitary without a
+dimension hypothesis, but the restriction $D>2$ is necessary: at $D=2$ every
+antisymmetric unitary is a phase multiple of
+$J=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$, and
+$JX^{\mathsf T}J^{\dagger}=\tr(X)\Id-X$ for every $2\times2$ matrix $X$, so
+$T_{\mathrm{BH}}$ is the zero map, which is decomposable.
 
 \begin{definition}[Breuer--Hall map]
     \label{def:breuer_hall_map}
@@ -513,4 +520,64 @@ fails to be completely positive, are not treated here.
     sends each such operator to a positive semidefinite matrix, and a sum of
     positive semidefinite matrices is positive semidefinite, so $T_{\mathrm{BH}}$
     is positive.
+\end{proof}
+
+\begin{theorem}[The Breuer--Hall map is indecomposable]
+    \label{thm:breuer_hall_indecomposable}
+    \lean{Matrix.breuerHallMap_isIndecomposablePositiveMap,
+        Matrix.breuerHallMap_not_isDecomposablePositiveMap}
+    \leanok
+    \uses{def:breuer_hall_map, def:decomposable_positive_map,
+        thm:breuer_hall_positive, thm:indecomposable_of_ppt_witness}
+    Suppose $D>2$ and $U$ is an antisymmetric unitary on $\C^{D}$,
+    $U^{\mathsf T}=-U$ and $U^{\dagger}U=\Id$. Then the Breuer--Hall map
+    $T_{\mathrm{BH}}$ is an indecomposable positive map.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:breuer_hall_map, thm:breuer_hall_positive,
+        thm:indecomposable_of_ppt_witness}
+    Positivity is Theorem~\ref{thm:breuer_hall_positive}. For
+    indecomposability, write $F$ for the swap operator on
+    $\C^{D}\otimes\C^{D}$ and $\ket{\Psi}$ for the $U$-twisted maximally
+    entangled vector, $\Psi(i,k)=U(i,k)$, with unnormalized projector
+    $P_{0}=\ket{\Psi}\bra{\Psi}$. The witness is the bipartite state
+    \begin{align}
+        \rho & =(\Id+F)+P_{0},
+        \notag
+    \end{align}
+    a sum of positive semidefinite terms ($\Id+F$ is twice the projector onto
+    the permutation-symmetric subspace), hence positive semidefinite. Its
+    first-factor partial transpose is
+    \begin{align}
+        \rho^{T_{1}} & =P_{1}+(U^{\dagger}\otimes\Id)(\Id+F)(U\otimes\Id),
+        \notag
+    \end{align}
+    where $P_{1}$ is the untwisted maximally entangled projector: the partial
+    transpose of $\Id+F$ is $\Id+P_{1}$, and antisymmetry together with
+    unitarity of $U$ gives
+    $P_{0}^{T_{1}}=(U^{\dagger}\otimes\Id)(\Id+F)(U\otimes\Id)-\Id$, so the
+    identity summands cancel and $\rho^{T_{1}}$ is again a sum of positive
+    semidefinite terms. Hence $\rho$ has the PPT property. The carrying
+    identity, valid for every bipartite $\sigma$ and proved by expanding all
+    tensor indices and contracting against $U^{\dagger}U=\Id$, is
+    \begin{align}
+        \tr\!\big[(T_{\mathrm{BH}}\otimes\id)(\sigma)\,P_{0}\big]
+         & =\tr(\sigma)-\tr(\sigma P_{0})-\tr(F\sigma).
+        \notag
+    \end{align}
+    At $\sigma=\rho$ the three traces evaluate to $\tr(\rho)=D^{2}+2D$,
+    $\tr(\rho P_{0})=D^{2}$, and $\tr(F\rho)=D^{2}$ --- the last two because
+    antisymmetry gives $F\ket{\Psi}=-\ket{\Psi}$ --- and therefore
+    \begin{align}
+        \tr\!\big[(T_{\mathrm{BH}}\otimes\id)(\rho)\,P_{0}\big]
+         & =D(2-D)<0.
+        \notag
+    \end{align}
+    So the quadratic form of $(T_{\mathrm{BH}}\otimes\id)(\rho)$ at
+    $\ket{\Psi}$ is negative and $(T_{\mathrm{BH}}\otimes\id)(\rho)$ is not
+    positive semidefinite. By
+    Theorem~\ref{thm:indecomposable_of_ppt_witness}, $T_{\mathrm{BH}}$ is not
+    decomposable.
 \end{proof}

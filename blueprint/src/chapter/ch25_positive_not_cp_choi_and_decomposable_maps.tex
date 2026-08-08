@@ -419,3 +419,54 @@ positive map and a completely copositive map.
     $\Phi_{\mathrm{ccp}}(X)\ge0$. Their sum is positive, hence
     $\Phi(X)\ge0$.
 \end{proof}
+
+\begin{theorem}[Decomposable maps preserve positivity on PPT states]
+    \label{thm:decomposable_map_tensor_id_ppt}
+    \lean{IsDecomposablePositiveMap.tensorMapId_posSemidef_of_isPPT}
+    \leanok
+    \uses{def:decomposable_positive_map, def:is_ppt}
+    If $\Phi\colon\MN{D}\to\MN{D}$ is decomposable and $\rho$ is a positive
+    semidefinite matrix on $\C^{D}\otimes\C^{D}$ with the PPT property, then
+    $(\Phi\otimes\id)(\rho)\ge0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:decomposable_positive_map, def:is_ppt,
+        thm:partial_transpose_left_involution}
+    Write $\Phi=\Phi_{\mathrm{cp}}+\Phi_{\mathrm{ccp}}$ with
+    $\Phi_{\mathrm{cp}}$ completely positive and $\Phi_{\mathrm{ccp}}$
+    completely copositive. Complete positivity implies positivity of every
+    finite ampliation, so
+    $(\Phi_{\mathrm{cp}}\otimes\id)(\rho)\ge0$. For the second summand,
+    ampliating $\Phi_{\mathrm{ccp}}$ after transposition equals ampliating $\Phi_{\mathrm{ccp}}$ after the first-factor partial transpose
+    of the input,
+    \begin{align}
+        (\Phi_{\mathrm{ccp}}\otimes\id)(\rho)
+         & =((\Phi_{\mathrm{ccp}}\circ\theta)\otimes\id)(\rho^{T_{1}}),
+        \notag
+    \end{align}
+    because both sides evaluate $\Phi_{\mathrm{ccp}}$ on the transposed
+    $(i_{2},j_{2})$-slice of $\rho$. Since $\Phi_{\mathrm{ccp}}\circ\theta$ is
+    completely positive and $\rho^{T_{1}}\ge0$ is the PPT hypothesis, the
+    right-hand side is positive semidefinite. The sum of the two positive
+    images is positive.
+\end{proof}
+
+\begin{theorem}[A PPT state detected by an ampliation witnesses indecomposability]
+    \label{thm:indecomposable_of_ppt_witness}
+    \lean{not_isDecomposablePositiveMap_of_isPPT_not_tensorMapId_posSemidef}
+    \leanok
+    \uses{def:decomposable_positive_map, def:is_ppt,
+        thm:decomposable_map_tensor_id_ppt}
+    Let $\Phi\colon\MN{D}\to\MN{D}$ be a linear map. If some positive
+    semidefinite matrix $\rho$ on $\C^{D}\otimes\C^{D}$ with the PPT property
+    has $(\Phi\otimes\id)(\rho)$ not positive semidefinite, then $\Phi$ is not
+    decomposable.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the contrapositive of
+    Theorem~\ref{thm:decomposable_map_tensor_id_ppt}.
+\end{proof}
