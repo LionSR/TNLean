@@ -52,14 +52,14 @@ argument of \cite[lines~405--426]{Cirac2017MPU}.
     is therefore zero.
 \end{proof}
 
-\begin{corollary}[Nil matrix subalgebras]
-    \label{cor:mpu_nil_matrices}
+\begin{theorem}[Nil matrix subalgebras]
+    \label{thm:mpu_nil_matrices}
     \lean{NonUnitalSubalgebra.matrix_list_prod_eq_zero_of_forall_isNilpotent}
     \leanok
     Let $A$ be a not necessarily unital associative subalgebra of
     $n\times n$ matrices over a field.  If every matrix in $A$ is nilpotent,
     then every ordered product of $n$ matrices from $A$ vanishes.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_nil_matrix}
