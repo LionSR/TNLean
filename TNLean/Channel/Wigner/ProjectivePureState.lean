@@ -71,6 +71,7 @@ noncomputable def pureStateMatrix (p : ℙ ℂ (Fin d → ℂ)) : Matrix (Fin d)
         simp [h, hc]
       simpa [h] using normalizedPureStateMatrix_smul (b : Fin d → ℂ) c hc)
 
+/-- The pure-state matrix of a ray constructed from a nonzero vector. -/
 @[simp]
 theorem pureStateMatrix_mk (v : Fin d → ℂ) (hv : v ≠ 0) :
     pureStateMatrix (Projectivization.mk ℂ v hv) = normalizedPureStateMatrix v :=
