@@ -786,18 +786,18 @@ in Case~I. Its normal representative loses literal ZCL. Thus the example
 isolates the normalization-sensitive step needed for
 $T_{k,h}=a_kb_h$; it does not refute Lemma~C.5 under all standing hypotheses.
 
-This obstruction propagates to every source statement whose proof invokes the
-rank-one factorization from Lemma~C.5.  In particular, the structural
-corollary at lines~1501--1505 and the proposition proving Theorem~4.9
-(ii)$\Rightarrow$(iv) at lines~1740--1788 are not formalized from their stated
-SAL and ZCL hypotheses.  The proof of Theorem~4.9
-(ii)$\Rightarrow$(v) at lines~1810--1825 is likewise invalid. The normalized
-representative above shows that the broadened implication formed with TNLean's
-up-to-scalar \leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet
-the paper's literal ZCL diagram and therefore does not settle the exact source
-statement. The constructions from an explicitly supplied rank-one neighboring
-trace factorization remain valid restricted results, but they do not establish
-the three source statements.
+This obstruction does not survive the full normal Case-I hypotheses: the
+completed route below excludes it and formalizes the structural corollary at
+lines~1503--1506. It remains relevant to the later Case-II passage. The
+proposition proving Theorem~4.9 (ii)$\Rightarrow$(iv) at lines~1740--1788 and
+the proof of (ii)$\Rightarrow$(v) at lines~1810--1825 are not yet formalized
+from their stated SAL and ZCL hypotheses. The normalized representative above
+shows that the broadened implication formed with TNLean's up-to-scalar
+\leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet the paper's
+literal ZCL diagram and therefore does not settle the exact source statement.
+The constructions from an explicitly supplied rank-one neighboring trace
+factorization remain valid restricted results, but they do not establish these
+two later implications.
 
 \section{Conclusion}
 
@@ -838,18 +838,33 @@ $I_* = \{k:p_k\ne0\}$ and set
 \]
 In the zero-weight-reparameterized and rephased factorization selected by the
 construction, $p_k=0$ makes both every incoming and every outgoing neighboring
-operator vanish. Hence
+operator vanish. On active pairs, the all-sector theorem first gives
+$\operatorname{Re}\operatorname{tr}(\eta_{k,h})=a_kb_h$.
+Every neighboring operator is positive semidefinite, hence Hermitian with real
+trace. Therefore
 \[
-  \operatorname{Re}\operatorname{tr}(\eta_{k,h})=a_kb_h
+  \operatorname{tr}(\eta_{k,h})=a_kb_h
 \]
 for every pair of sector labels, and filtering the diagonal sum to $I_*$ gives
 $\sum_k a_kb_k=1$. This is a project-derived realization of the printed
 all-index coefficient equation in Lemma~C.5: CPSV16 quantifies sector labels
 without defining TNLean's active--inactive split or its ambient filler sectors.
-It completes Lemma~C.5 on the stated normal Case-I and literal-ZCL surface.
-The structural corollary at lines~1503--1505 remains open, since it must still
-package these coefficients with the physical isometry and the left--right
-tensors in one statement.
+
+The structural corollary at lines~1503--1506 is now formalized by
+\leanid{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}.
+It retains the selected physical-sector factorization itself: an isometry $U$
+with TNLean's orientation
+\[
+  U\kappa_{\beta,\alpha}U^\dagger
+    =\bigoplus_k(l_k)_\beta\otimes(r_k)_\alpha,
+\]
+its left and right factor matrices, and ambient positive semidefinite
+neighboring operators.  Together with the exact complex trace identity above
+and the normalization, this completes the normal Case-I corollary on the
+literal-ZCL surface.  It asserts no additional closure property of the sector
+tensors.  The orientation is the convention of
+\leanid{MPOTensor.PhysicalSectorFactorization}, rather than an identification
+with a separately drawn graphical orientation in the source.
 
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
@@ -857,9 +872,10 @@ inverse-map relations while the asserted factorization
 $T_{k,h}=a_kb_h$ does not exist. However, that tensor is not the injective
 normal tensor assumed in Case~I, and its normal representative loses literal
 ZCL. The raw example therefore does not refute Lemma~C.5 under its complete
-standing hypotheses. The coefficient theorem above does not supply the
-structural corollary or a later Case-II argument; the latter still requires a
-proof that normality survives the relevant rescaling.
+standing hypotheses. The completed normal Case-I corollary does not replace
+literal ZCL by TNLean's scale-invariant \leanid{MPOTensor.IsSourceZCL}
+predicate, and it supplies no Case-II statement. The Case-II passage remains
+separate under issue \ghissue{5673}.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site
