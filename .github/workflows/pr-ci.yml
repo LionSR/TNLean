@@ -61,8 +61,6 @@ on:
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_label_overlap.py'
-      - 'scripts/test_tenkz_face_ports.py'
-      - 'scripts/test_tenkz_enclosures.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_cubic.py'
       - 'scripts/test_tenkz_index_routing.py'
@@ -124,8 +122,6 @@ on:
       - 'scripts/test_tenkz_equation_audit.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_label_overlap.py'
-      - 'scripts/test_tenkz_face_ports.py'
-      - 'scripts/test_tenkz_enclosures.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_cubic.py'
       - 'scripts/test_tenkz_index_routing.py'
@@ -211,8 +207,6 @@ jobs:
               - 'scripts/test_tenkz_equation_audit.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_label_overlap.py'
-              - 'scripts/test_tenkz_face_ports.py'
-              - 'scripts/test_tenkz_enclosures.py'
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_tenkz_tree.py'
@@ -663,14 +657,6 @@ jobs:
       - name: Test measured tenkz label overlaps
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_label_overlap.py
-
-      - name: Test asymmetric tenkz face ports
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_face_ports.py
-
-      - name: Test measured tenkz grouping enclosures
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_enclosures.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'

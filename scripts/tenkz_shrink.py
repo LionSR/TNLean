@@ -220,8 +220,9 @@ def _environment_options(text: str) -> list[str]:
     return payloads
 
 
-def _brace_argument(text: str, name: str, argument: int) -> list[str]:
-    payloads: list[str] = []
+def _brace_arguments(text: str, name: str, argument: int) -> list[list[str]]:
+    """Return every invocation's complete brace-argument list."""
+    invocations: list[list[str]] = []
     for match in _command_pattern(name).finditer(text):
         start = _skip_space_and_star(text, match.end())
         groups: list[str] = []
@@ -232,8 +233,14 @@ def _brace_argument(text: str, name: str, argument: int) -> list[str]:
             groups.append(group[0])
             start = _skip_space_and_star(text, group[1])
         if len(groups) == argument:
-            payloads.append(groups[-1])
-    return payloads
+            invocations.append(groups)
+    return invocations
+
+
+def _brace_argument(text: str, name: str, argument: int) -> list[str]:
+    return [
+        groups[-1] for groups in _brace_arguments(text, name, argument)
+    ]
 
 
 def scoped_consumer_text(corpus: dict[Path, str]) -> dict[str, dict[Path, str]]:
@@ -287,10 +294,23 @@ def scoped_option_groups(
                 for option in _command_options(text, command)
             ]
         scoped["kernel-setup"][path] = _brace_argument(text, "tnset", 1)
-        scoped["kernel-declare"][path] = _brace_argument(text, "tndeclare", 3)
-        scoped["atom-declaration"][path] = _brace_argument(
-            text, "tndeclareatom", 2
-        )
+        # A \tndeclare descriptor belongs to the scope its class argument
+        # names: atom declarations feed the atom-declaration rows, and the
+        # skin and species classes feed kernel-declare.
+        declare_argument_lists = _brace_arguments(text, "tndeclare", 3)
+        scoped["kernel-declare"][path] = [
+            arguments[2]
+            for arguments in declare_argument_lists
+            if arguments[0].strip() != "atom"
+        ]
+        scoped["atom-declaration"][path] = [
+            *(
+                arguments[2]
+                for arguments in declare_argument_lists
+                if arguments[0].strip() == "atom"
+            ),
+            *_brace_argument(text, "tndeclareatom", 2),
+        ]
     return scoped
 
 

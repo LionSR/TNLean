@@ -2839,3 +2839,13 @@ ledger row:
   kernel-setup pitch row in the census. Extension-gate: #4699 — the
   restoration re-lands a pre-swap leaf the demolition removed by
   accident; no new vocabulary arrives.
+
+Fourth correction, same round: `\tndeclare` descriptors now dispatch by
+their class argument, so the six benchmark atom declarations feed the
+atom-declaration rows (their zero-consumer flags leave) and the
+skin/species classes feed kernel-declare. The dispatch surfaces one new
+co-occurrence flag:
+
+| flag | verdict |
+|---|---|
+| flag:cooccur:atom-declaration:ports+skin | keep-because: a declared atom states its sanctioned skin and its complete typed ports — the declaration contract requires both halves, so their co-occurrence is the grammar, not a foldable pair; expiry 1.0 |
