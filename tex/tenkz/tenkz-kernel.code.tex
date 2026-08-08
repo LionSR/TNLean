@@ -10017,6 +10017,28 @@
       }
   }
 
+% A physical carrier read that tolerates a barren `none` host.  A void hole
+% keeps its physical indices, so the closure ink that consumes them is
+% legitimate even though the hole has no glyph face to probe.  Its support
+% degrades to the host's site point -- the same centre-origin fallback the
+% policy-leg renderer established -- while every other host keeps the exact
+% measured glyph face.  A direct authored face query still raises the
+% face-none diagnostic through \__tenkz_kernel_r_glyph_face_validate:nN.
+\cs_new_protected:Npn \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN #1#2#3#4
+  {
+    \bool_set_true:N \l__tenkz_kernel_hull_measure_valid_bool
+    \__tenkz_kernel_hull_resolve_skin:n {#1}
+    \str_if_eq:VnT \l__tenkz_kernel_hull_skin_tl {none}
+      {
+        \prop_if_in:NnF \l__tenkz_kernel_skin_pairing_host_prop {#1}
+          { \bool_set_false:N \l__tenkz_kernel_hull_measure_valid_bool }
+      }
+    \bool_if:NT \l__tenkz_kernel_hull_measure_valid_bool
+      { \__tenkz_kernel_r_glyph_anchor_xy:nnNN {#1}{#2}#3#4 }
+    \bool_if:NF \l__tenkz_kernel_hull_measure_valid_bool
+      { \__tenkz_kernel_r_xy:nNN {#1} #3#4 }
+  }
+
 % ---------- physical-leg lane plan -------------------------------------------
 % The planner is data-only: the physical-leg renderer collects every eligible
 % request, resolves once, then consumes the resulting S--B--T paths.  Corridors
@@ -10778,7 +10800,7 @@
           \l__tenkz_kernel_r_b_tl
           \l__tenkz_kernel_leg_dir_tl
           \l__tenkz_kernel_r_physical_anchor_tl
-        \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+        \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
           \l__tenkz_kernel_physical_axis_host_tl
           \l__tenkz_kernel_r_physical_anchor_tl
           \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
@@ -14238,21 +14260,21 @@
       \l__tenkz_kernel_phtrace_to_axis_tl
       \l__tenkz_kernel_phtrace_to_dir_tl
       \l__tenkz_kernel_phtrace_to_anchor_tl
-    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
       \l__tenkz_kernel_physical_axis_host_tl
       \l__tenkz_kernel_phtrace_from_anchor_tl
       \l__tenkz_kernel_phtrace_from_x_fp
       \l__tenkz_kernel_phtrace_from_y_fp
-    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+    \exp_args:NVV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
       \l__tenkz_kernel_physical_axis_other_host_tl
       \l__tenkz_kernel_phtrace_to_anchor_tl
       \l__tenkz_kernel_phtrace_to_x_fp
       \l__tenkz_kernel_phtrace_to_y_fp
-    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
       \l__tenkz_kernel_physical_axis_host_tl {east}
       \l__tenkz_kernel_phtrace_from_east_x_fp
       \l__tenkz_kernel_phtrace_from_east_y_fp
-    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_xy:nnNN
+    \exp_args:NV \__tenkz_kernel_r_glyph_anchor_or_site_xy:nnNN
       \l__tenkz_kernel_physical_axis_other_host_tl {east}
       \l__tenkz_kernel_phtrace_to_east_x_fp
       \l__tenkz_kernel_phtrace_to_east_y_fp
