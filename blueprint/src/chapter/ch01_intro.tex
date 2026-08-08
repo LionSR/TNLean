@@ -545,6 +545,44 @@ algebras. What follows treats the one-summand case, where the ambient
 algebra is a single full matrix algebra $\MN{m}$; see
 \path{docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex}.
 
+\begin{theorem}[Left partial trace of a Kronecker product]
+    \label{thm:mpdo_left_partial_trace_kronecker}
+    \lean{Matrix.partialTraceLeft_kronecker}
+    \leanok
+    \uses{def:partial_trace_left}
+    For square matrices $X$ on $A$ and $Y$ on $B$,
+    $\tr_{A}(X\otimes Y)=\tr(X)Y$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For all $i,j$,
+    $[\tr_{A}(X\otimes Y)]_{ij}
+    =\sum_t X_{tt}Y_{ij}=\tr(X)Y_{ij}$.
+\end{proof}
+
+\begin{theorem}[Positivity of the maximally mixed matrix]
+    \label{thm:maximally_mixed_pos}
+    \lean{Matrix.maximallyMixedOn_posSemidef}
+    \leanok
+    For every natural number $m$, the matrix $m^{-1}\mathbb1_m$ is positive
+    semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The identity matrix is positive semidefinite, and $m^{-1}$ is nonnegative.
+\end{proof}
+
+\begin{theorem}[Trace of the maximally mixed matrix]
+    \label{thm:maximally_mixed_trace}
+    \lean{Matrix.maximallyMixedOn_trace}
+    \leanok
+    If $m\geq1$, then $\tr(m^{-1}\mathbb1_m)=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\tr(\mathbb1_m)=m$, scalar linearity of the trace gives the result.
+\end{proof}
+
 % Wolf ch01 source lines 616--626; one-block retraction from Proposition 1.5,
 % Equation (1.40), source lines 536--570.
 \begin{theorem}[Normalized partial-trace conditional expectation]
@@ -572,6 +610,8 @@ algebra is a single full matrix algebra $\MN{m}$; see
 \begin{proof}\leanok
     \uses{thm:mpdo_equiv_reindex_cptp,
       lem:mpdo_right_partial_trace_cptp,
+      thm:maximally_mixed_pos,
+      thm:maximally_mixed_trace,
       lem:mpdo_state_preparation_cptp,
       lem:is_kraus_cptp_comp,
       lem:is_kraus_cp_basic,
@@ -580,10 +620,12 @@ algebra is a single full matrix algebra $\MN{m}$; see
       thm:mpdo_left_partial_trace_kronecker}
     Interchange the two tensor factors, trace out the new right factor,
     prepare the maximally mixed state $m^{-1}\mathbb1_m$, and interchange
-    the factors back. Theorem~\ref{thm:mpdo_equiv_reindex_cptp},
+    the factors back. Theorem~\ref{thm:maximally_mixed_pos} and
+    Theorem~\ref{thm:maximally_mixed_trace} show that the prepared matrix is
+    positive semidefinite and has trace one. Theorem~\ref{thm:mpdo_equiv_reindex_cptp},
     Lemma~\ref{lem:mpdo_right_partial_trace_cptp},
     Lemma~\ref{lem:mpdo_state_preparation_cptp}, and
-    Lemma~\ref{lem:is_kraus_cptp_comp} show that the resulting map is
+    Lemma~\ref{lem:is_kraus_cptp_comp} then show that the resulting map is
     trace-preserving and completely positive. Expanding the composition gives
     \begin{align}
         E(A)&=\mathbb1_m\otimes\bigl(m^{-1}\tr_{m}(A)\bigr).
