@@ -124,6 +124,18 @@ lemma mpvOverlap_eq_mul_of_mpv_eq_mul
   rw [h σ]
   ring
 
+/-- Scaling both copies of a tensor by `c` scales its length-`N` self-overlap by
+`(c * star c) ^ N`. -/
+theorem mpvOverlap_smul_self (c : ℂ) {d D : ℕ} (A : MPSTensor d D) (N : ℕ) :
+    mpvOverlap (fun i => c • A i) (fun i => c • A i) N =
+      (c * star c) ^ N * mpvOverlap A A N := by
+  classical
+  simp only [mpvOverlap, mpv, coeff, evalWord_smul, List.length_ofFn,
+    Matrix.trace_smul, smul_eq_mul, star_mul, star_pow]
+  rw [Finset.mul_sum]
+  refine Finset.sum_congr rfl fun σ _ => ?_
+  ring
+
 /-- Conjugate symmetry for `mpvOverlap`. -/
 lemma mpvOverlap_star_swap {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (N : ℕ) :

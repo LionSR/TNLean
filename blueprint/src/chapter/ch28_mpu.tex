@@ -439,3 +439,101 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Combine the preceding irreducibility conclusion with the supplied
     spectral-radius and primitivity properties.
 \end{proof}
+
+\section{Transfer-matrix bridges}
+
+Let $D$ be a positive integer and let
+$T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map.  Write $\widehat T$
+for its matrix in the column-stacking identification
+$M_D(\mathbb C)\cong\mathbb C^{D^2}$.
+
+\begin{theorem}[Powers and traces of transfer matrices]
+    \label{thm:mpu_transfer_matrix_power_trace}
+    \lean{transferMatrix_pow,trace_transferMatrix_eq_linearMap_trace}
+    \leanok
+    For every nonnegative integer $N$,
+    \begin{align}
+        \widehat{T^N}&=(\widehat T)^N,
+        &\tr(\widehat T)&=\operatorname{Tr}(T),
+    \end{align}
+    where the second trace is the operator trace of the endomorphism of
+    $M_D(\mathbb C)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compatibility with composition proves the power identity by induction.
+    For the trace identity, expand the operator trace in the matrix-unit basis.
+    The two diagonal sums differ only by exchanging the row and column indices.
+\end{proof}
+
+\begin{theorem}[Eigenvalues of a transfer matrix]
+    \label{thm:mpu_transfer_matrix_eigenvalues}
+    \lean{transferMatrix_hasEigenvalue_iff}
+    \leanok
+    A complex number $\mu$ is an eigenvalue of $T$ if and only if it is an
+    eigenvalue of $\widehat T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Column stacking is a linear bijection and intertwines $T$ with
+    multiplication by $\widehat T$.  It therefore carries nonzero
+    eigenmatrices to nonzero eigenvectors and conversely.
+\end{proof}
+
+\begin{theorem}[Transfer-matrix powers as periodic overlaps]
+    \label{thm:mpu_transfer_matrix_overlap}
+    \lean{MPSTensor.trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap,
+      MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap}
+    \leanok
+    Let $A$ and $B$ be matrix product tensors with the same positive bond
+    dimension, and let $F_{A,B}(X)=\sum_i A^iX(B^i)^\dagger$ be their mixed
+    transfer map.  Then
+    \begin{align}
+        \tr\!\left(\widehat{F_{A,B}}^{\,N}\right)
+          &=\sum_\sigma \operatorname{mpv}(A,\sigma)
+             \overline{\operatorname{mpv}(B,\sigma)}.
+    \end{align}
+    In particular, taking $B=A$ identifies the trace of the $N$th power of
+    the ordinary transfer matrix with the length-$N$ self-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_power_trace}
+    Replace the matrix power by the transfer matrix of the corresponding
+    operator power, identify matrix trace with operator trace, and expand the
+    latter over periodic words.
+\end{proof}
+
+\begin{definition}[Normalized flattening of an MPO tensor]
+    \label{def:mpu_normalized_flattening}
+    \lean{MPOTensor.normalizedFlattening}
+    \leanok
+    For an MPO tensor $U$ of physical dimension $d>0$, its normalized
+    flattening is the doubled-physical-index MPS tensor
+    \begin{align}
+        \widetilde U^{ij}&=\frac{1}{\sqrt d}\,U^{ij}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Normalized MPU transfer trace]
+    \label{thm:mpu_normalized_transfer_trace}
+    \lean{MPSTensor.mpvOverlap_smul_self,
+      MPOTensor.mpvOverlap_normalizedFlattening_self,
+      MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
+    \leanok
+    Let $U$ be an MPU tensor with positive physical and bond dimensions, and
+    let $E$ be the transfer matrix of its normalized flattening.  For every
+    integer $N>1$,
+    \begin{align}
+        \tr(E^N)&=1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_overlap,def:mpu_normalized_flattening}
+    Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
+    self-overlap by $d^{-N}$.  The raw self-overlap is the trace of
+    $\operatorname{MPO}_N(U)\operatorname{MPO}_N(U)^\dagger$.  Since $N>1$,
+    the MPU equation makes this product the identity on a space of dimension
+    $d^N$.  Its trace is therefore $d^N$, and the normalization gives one.
+\end{proof}
