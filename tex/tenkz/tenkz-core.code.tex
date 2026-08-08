@@ -1,6 +1,6 @@
 % Input: normalized model records and global semantic style policy.
 % Output: styles, metrics, geometry services, diagnostics, and versioned events.
-% Owned state: semantic themes, measurements, enclosure registry, and event writer.
+% Owned state: semantic themes, measurements, and the event writer.
 % Invariants: drawing never parses picture syntax or mutates validated topology.
 % Next stage: dialect front ends translate their syntax into shared services.
 %
@@ -15,20 +15,11 @@
 % free quadrant, and every label accepts `label pos` / `label shift` for
 % manual override.
 %
-% Tensor-style doctrine: ONE glyph policy per scope decides how an
-% unadorned tensor (\tn{A}) renders.
-%   tensor style=dot   (default) filled bead, label placed OUTSIDE in a
-%                      free quadrant by the auto-quadrant algorithm
-%                      (the CPSV school);
-%   tensor style=box   square/rectangular box, label typeset INSIDE
-%                      (the Bultinck/Ghent school); \tn*{A} inscribes
-%                      \overline{A}, and no external auto label exists,
-%                      so brace clearances tighten accordingly.
-% The policy is a document-wide \tnset key and a per-picture key of the
-% tenkz environment and \tnpic.  These environments group, so a
-% picture-local assignment scopes itself.  Explicit per-cell
-% skins (dot, box, circle, pill, mpo) always override the policy.  The event stream
-% records the RESOLVED skin.
+% Glyph doctrine: an unadorned tensor (\tn{A}) renders as the theme's
+% default skin -- a filled bead with its label placed OUTSIDE in a free
+% quadrant (the CPSV school); an inscribed-label glyph is an explicit
+% skin (box, pill, mpo, tri).  The kernel's skin= key owns the choice per
+% atom, and the event stream records the RESOLVED skin.
 
 % Triangle skins (tri=l / tri=r) borrow the isosceles-triangle node shape;
 % the library itself loads with the rest of tenkz.sty's tikz libraries.
@@ -128,11 +119,6 @@
 % the styles below keep reading \tenkz@wirewidth et al. unchanged.
 
 \def\tenkz@dim#1{\dimexpr#1\tenkz@pitch\relax}
-
-% ---------- glyph policy (see the tensor-style doctrine above) ----------
-% \tenkz@tensorstyle holds the resolved mode, `dot` or `box`; grid cells
-% read it as their default skin at option-parse time.
-\def\tenkz@tensorstyle{dot}
 
 % Label mathematics is script-size by default: glyphs are compact marks, not
 % text boxes, and the surrounding equation stays visually dominant.
@@ -383,9 +369,6 @@
   % every picture that merely loads tenkz.
   tn label/.style={tenkz audited label, shape=rectangle, rounded corners=0pt,
       text=tenkzInk, inner sep=\tenkz@labelinset, font=\scriptsize},
-  cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
-      -{Straight Barb[length=\tenkz@cdbarblen]},
-      shorten <=\tenkz@cdsourceshorten, shorten >=\tenkz@cdtargetshorten},
 }
 
 % ---------- event stream (v2, minimal Phase-0 writer) ----------
@@ -409,13 +392,11 @@
 \def\tenkz@event#1{\iftenkz@logopen
   \immediate\write\tenkz@log{#1}\fi}
 \def\tenkz@picturelang{none}
-\def\tenkz@enclosurereset{}
 \def\tenkz@beginpicture#1{\global\advance\tenkz@pictureuid by 1\relax
   \tenkz@pictureid=\tenkz@pictureuid
   \tenkz@auditpicturetrue
   \def\tenkz@auditpictureid{\the\tenkz@pictureid}%
   \def\tenkz@picturelang{#1}%
-  \tenkz@enclosurereset
   \tenkz@event{picture|id=\the\tenkz@pictureid|lang=#1}}
 
 % Measured audit geometry.  Coordinates are written as integer scaled points,
@@ -1458,416 +1439,10 @@
 \prg_generate_conditional_variant:Nnn \tenkz_token_if_decimal_digits:n
   { V } { T, F, TF }
 
-% ---------- measured named enclosures ----------
-% Every enclosure consumes this ONE registry: a semantic member name maps to
-% a TikZ node whose bounding box is the member's actual rendered ink, so
-% external labels and enclosed paths are measured rather than budgeted.
-% Grid cells register their glyph nodes.  The renderer adds only the
-% existing daylight constant.
-\prop_new:N \g__tenkz_enclosure_prop
-\prop_new:N \g__tenkz_enclosure_depth_prop
-\int_new:N  \g__tenkz_enclosure_int
-\int_new:N  \l__tenkz_enclosure_depth_int
-\int_new:N  \l__tenkz_enclosure_max_depth_int
-\seq_new:N  \l__tenkz_enclosure_nodes_seq
-\tl_new:N   \l__tenkz_enclosure_fit_tl
-\tl_new:N   \l__tenkz_enclosure_node_tl
-\tl_new:N   \l__tenkz_enclosure_result_tl
-\tl_new:N   \l__tenkz_enclosure_layer_tl
-\clist_new:N \l__tenkz_enclosure_layers_clist
-\clist_new:N \l__tenkz_enclosure_layers_new_clist
-\dim_new:N  \l__tenkz_enclosure_dx_dim
-\dim_new:N  \l__tenkz_enclosure_dy_dim
-\bool_new:N \l__tenkz_enclosure_valid_bool
-\bool_new:N \l__tenkz_enclosure_main_layer_bool
-
-\cs_set_protected:Npn \tenkz@enclosurereset
-  { \int_set:Nn \l__tenkz_enclosure_max_depth_int {-1} }
-
-\msg_new:nnn { tenkz } { enclosure-duplicate }
-  { Enclosure~member~name~'#1'~is~already~defined~in~this~picture. }
-\msg_new:nnn { tenkz } { enclosure-unknown }
-  {
-    Unknown~enclosure~member~'#1'.~Name~a~rendered~cell~or~an~earlier~
-    region~before~using~it.
-  }
-\msg_new:nnn { tenkz } { enclosure-empty }
-  { An~enclosure~needs~at~least~one~rendered~member. }
-\msg_new:nnn { tenkz } { enclosure-label-pos }
-  {
-    Unknown~enclosure~label~position~'#1'.~Use~north,~south,~east,~west,
-    ~a~two-word~corner,~or~center.
-  }
-\cs_new_protected:Npn \tenkz_enclosure_fresh:N #1
-  {
-    \int_gincr:N \g__tenkz_enclosure_int
-    \tl_set:Ne #1
-      { tenkz-enclosure-\int_use:N \tenkz@pictureid-\int_use:N
-          \g__tenkz_enclosure_int }
-  }
-
-\cs_new_protected:Npn \tenkz_enclosure_register_existing:nn #1#2
-  {
-    \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #1 }
-    \prop_if_in:NVTF \g__tenkz_enclosure_prop \l_tmpa_tl
-      { \msg_error:nnn {tenkz}{enclosure-duplicate}{#1} }
-      { \prop_gput:NVn \g__tenkz_enclosure_prop \l_tmpa_tl {#2} }
-  }
-\cs_generate_variant:Nn \tenkz_enclosure_register_existing:nn { eV }
-
-% Allocate the node name that a `local bounding box' scope will create, and
-% register it under semantic name #1 before the scope is drawn.
-\cs_new_protected:Npn \tenkz_enclosure_allocate:nN #1#2
-  {
-    \tenkz_enclosure_fresh:N #2
-    \tenkz_enclosure_register_existing:eV {#1} #2
-  }
-
-% Allocate only when the semantic name is still free.  Error recovery is not
-% a transaction boundary by itself: under nonstop mode \msg_error:nnn returns
-% to its caller.  Free-tier commands therefore use this conditional form to
-% keep a rejected duplicate from drawing ink, emitting events, or overwriting
-% any registry owned by the first declaration.
-\cs_new_protected:Npn \tenkz_enclosure_allocate:nNTF #1#2#3#4
-  {
-    \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #1 }
-    \prop_if_in:NVTF \g__tenkz_enclosure_prop \l_tmpa_tl
-      {
-        \msg_error:nnn {tenkz}{enclosure-duplicate}{#1}
-        #4
-      }
-      {
-        \tenkz_enclosure_fresh:N #2
-        \prop_gput:NVV \g__tenkz_enclosure_prop \l_tmpa_tl #2
-        #3
-      }
-  }
-\cs_generate_variant:Nn \tenkz_enclosure_allocate:nNTF { VNTF }
-\cs_generate_variant:Nn \prop_gput:Nnn { NVn, NVV, NVe }
-
-\cs_new_protected:Npn \tenkz_enclosure_resolve:n #1
-  {
-    \seq_clear:N \l__tenkz_enclosure_nodes_seq
-    \int_zero:N \l__tenkz_enclosure_depth_int
-    \bool_set_true:N \l__tenkz_enclosure_valid_bool
-    \clist_map_inline:nn {#1}
-      {
-        \tl_set:Ne \l_tmpb_tl { \int_use:N \tenkz@pictureid / ##1 }
-        \prop_get:NVNTF \g__tenkz_enclosure_prop \l_tmpb_tl \l_tmpa_tl
-          {
-            \seq_if_in:NVF \l__tenkz_enclosure_nodes_seq \l_tmpa_tl
-              { \seq_put_right:NV \l__tenkz_enclosure_nodes_seq \l_tmpa_tl }
-            % An enclosure which contains a named region belongs one fill
-            % level farther back.  Atoms and joins have no depth entry.
-            \prop_get:NVNT \g__tenkz_enclosure_depth_prop \l_tmpb_tl \l_tmpc_tl
-              {
-                \int_set:Nn \l__tenkz_enclosure_depth_int
-                  { \int_max:nn { \l__tenkz_enclosure_depth_int }
-                      { \l_tmpc_tl + 1 } }
-              }
-          }
-          {
-            \msg_error:nnn {tenkz}{enclosure-unknown}{##1}
-            \bool_set_false:N \l__tenkz_enclosure_valid_bool
-          }
-      }
-    \seq_if_empty:NT \l__tenkz_enclosure_nodes_seq
-      {
-        \msg_error:nn {tenkz}{enclosure-empty}
-        \bool_set_false:N \l__tenkz_enclosure_valid_bool
-      }
-    \tl_clear:N \l__tenkz_enclosure_fit_tl
-    \seq_map_inline:Nn \l__tenkz_enclosure_nodes_seq
-      { \tl_put_right:Nn \l__tenkz_enclosure_fit_tl {(##1)} }
-  }
-
-% Activate one automatically ordered fill layer.  Larger depth means an outer
-% region, so the layer list runs from the largest depth down to zero before
-% main ink.  Existing non-enclosure layers retain their relative positions;
-% unrelated regions at one depth retain declaration order on their layer.
-\cs_new_protected:Npn \tenkz_enclosure_activate_fill_layer:
-  {
-    \int_compare:nNnT { \l__tenkz_enclosure_depth_int } >
-      { \l__tenkz_enclosure_max_depth_int }
-      {
-        \int_step_inline:nnnn
-          { \l__tenkz_enclosure_max_depth_int + 1 } {1}
-          { \l__tenkz_enclosure_depth_int }
-          {
-            \use:e
-              { \exp_not:N \pgfdeclarelayer {tenkz-enclosure-fill-##1} }
-          }
-        \int_set_eq:NN \l__tenkz_enclosure_max_depth_int
-          \l__tenkz_enclosure_depth_int
-      }
-    \clist_set:Ne \l__tenkz_enclosure_layers_clist { \pgf@layerlist }
-    \clist_clear:N \l__tenkz_enclosure_layers_new_clist
-    \bool_set_false:N \l__tenkz_enclosure_main_layer_bool
-    \clist_map_inline:Nn \l__tenkz_enclosure_layers_clist
-      {
-        \regex_match:nnF { \A tenkz-enclosure-fill- } {##1}
-          {
-            \str_if_eq:nnT {##1} {main}
-              {
-                \bool_set_true:N \l__tenkz_enclosure_main_layer_bool
-                \int_step_inline:nnnn
-                  { \l__tenkz_enclosure_max_depth_int } {-1} {0}
-                  {
-                    \clist_put_right:Nn
-                      \l__tenkz_enclosure_layers_new_clist
-                      {tenkz-enclosure-fill-####1}
-                  }
-              }
-            \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist {##1}
-          }
-      }
-    \bool_if:NF \l__tenkz_enclosure_main_layer_bool
-      {
-        \int_step_inline:nnnn
-          { \l__tenkz_enclosure_max_depth_int } {-1} {0}
-          {
-            \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist
-              {tenkz-enclosure-fill-##1}
-          }
-        \clist_put_right:Nn \l__tenkz_enclosure_layers_new_clist {main}
-      }
-    \exp_args:NV \pgfsetlayers \l__tenkz_enclosure_layers_new_clist
-    \tl_set:Ne \l__tenkz_enclosure_layer_tl
-      { tenkz-enclosure-fill-\int_use:N \l__tenkz_enclosure_depth_int }
-  }
-
-\prg_new_conditional:Npnn \tenkz_enclosure_if_registered:n #1 { T, F, TF }
-  {
-    \tl_set:Ne \l_tmpb_tl { \int_use:N \tenkz@pictureid / #1 }
-    \prop_if_in:NVTF \g__tenkz_enclosure_prop \l_tmpb_tl
-      { \prg_return_true: } { \prg_return_false: }
-  }
-\prg_generate_conditional_variant:Nnn \tenkz_enclosure_if_registered:n
-  { V } { T, F, TF }
-
-% ---------- label placement: one bearing, two consequences ----------
-% A label's placement is a bearing read in its host's own axes; the compass
-% words are sugar for the eight right and half-right angles of that bearing,
-% and nothing else.  ONE bearing settles both quantities a placed label
-% needs: the outward step from the host's boundary point, and the anchor,
-% which is the same bearing turned through half a turn.  Choosing the two
-% separately is how a label comes to step one way and hang the other, so
-% they are derived here, from one table, and never stated side by side.
-%
-% The table holds each word's outward direction as a pair of signs.  The
-% anchor is read back out of the same table under the negated pair, and the
-% step is that direction made a unit vector and scaled by the caller's
-% clearance band -- so a diagonal label stands exactly as far from its host
-% as a cardinal one, and no factor is written down.
-\prop_new:N \g__tenkz_bearing_prop      % word -> "sx,sy"
-\prop_new:N \g__tenkz_bearing_word_prop % "sx,sy" -> word
-\cs_new_protected:Npn \__tenkz_bearing_declare:nnn #1#2#3
-  {
-    \prop_gput:Nnn \g__tenkz_bearing_prop {#1} {#2,#3}
-    \prop_gput:Nnn \g__tenkz_bearing_word_prop {#2,#3} {#1}
-  }
-\__tenkz_bearing_declare:nnn {east}       { 1}{ 0}
-\__tenkz_bearing_declare:nnn {north~east} { 1}{ 1}
-\__tenkz_bearing_declare:nnn {north}      { 0}{ 1}
-\__tenkz_bearing_declare:nnn {north~west} {-1}{ 1}
-\__tenkz_bearing_declare:nnn {west}       {-1}{ 0}
-\__tenkz_bearing_declare:nnn {south~west} {-1}{-1}
-\__tenkz_bearing_declare:nnn {south}      { 0}{-1}
-\__tenkz_bearing_declare:nnn {south~east} { 1}{-1}
-
-% \tenkz_label_bearing:nnNNN {word} {clearance band} \anchor \dx \dy
-% True when the word is a placement; then the anchor tl holds the opposite
-% compass word and the two dimensions hold the outward step.
-\tl_new:N \l__tenkz_bearing_tl
-\clist_new:N \l__tenkz_bearing_clist
-\int_new:N \l__tenkz_bearing_sx_int
-\int_new:N \l__tenkz_bearing_sy_int
-\dim_new:N \l__tenkz_bearing_band_dim
-\prg_new_protected_conditional:Npnn \tenkz_label_bearing:nnNNN #1#2#3#4#5
-    { T, F, TF }
-  {
-    \prop_get:NnNTF \g__tenkz_bearing_prop {#1} \l__tenkz_bearing_tl
-      {
-        \clist_set:NV \l__tenkz_bearing_clist \l__tenkz_bearing_tl
-        \int_set:Nn \l__tenkz_bearing_sx_int
-          { \clist_item:Nn \l__tenkz_bearing_clist {1} }
-        \int_set:Nn \l__tenkz_bearing_sy_int
-          { \clist_item:Nn \l__tenkz_bearing_clist {2} }
-        \prop_get:NeN \g__tenkz_bearing_word_prop
-          {
-            \int_eval:n { -\l__tenkz_bearing_sx_int } ,
-            \int_eval:n { -\l__tenkz_bearing_sy_int }
-          } #3
-        \dim_set:Nn \l__tenkz_bearing_band_dim {#2}
-        \dim_set:Nn #4 { \__tenkz_bearing_step:N \l__tenkz_bearing_sx_int }
-        \dim_set:Nn #5 { \__tenkz_bearing_step:N \l__tenkz_bearing_sy_int }
-        \prg_return_true:
-      }
-      { \prg_return_false: }
-  }
-% one component of the unit bearing, scaled by the band
-\cs_new:Npn \__tenkz_bearing_step:N #1
-  {
-    \fp_to_dim:n
-      {
-        \int_use:N #1 /
-          sqrt( \l__tenkz_bearing_sx_int * \l__tenkz_bearing_sx_int
-              + \l__tenkz_bearing_sy_int * \l__tenkz_bearing_sy_int )
-          * \dim_to_fp:n { \l__tenkz_bearing_band_dim }
-      }
-  }
-\prg_generate_conditional_variant:Nnn \tenkz_label_bearing:nnNNN
-  { VnNNN } { T, F, TF }
-
-% Resolve one enclosure label position to its label anchor and displacement.
-% Both option parsing and final placement use this conditional, so there is
-% one accepted vocabulary rather than a preflight list which can drift from
-% the geometry cases.
-\prg_new_protected_conditional:Npnn \tenkz_enclosure_label_position:n #1
-    { T, F, TF }
-  {
-    \dim_zero:N \l__tenkz_enclosure_dx_dim
-    \dim_zero:N \l__tenkz_enclosure_dy_dim
-    \tl_clear:N \l_tmpa_tl
-    \str_case:nnF {#1}
-      {
-        {north}      { \tl_set:Nn \l_tmpa_tl {south}
-                       \dim_set:Nn \l__tenkz_enclosure_dy_dim
-                         { \tenkz@dim{\tenkz@r@daylight} } }
-        {south}      { \tl_set:Nn \l_tmpa_tl {north}
-                       \dim_set:Nn \l__tenkz_enclosure_dy_dim
-                         {-\tenkz@dim{\tenkz@r@daylight}} }
-        {east}       { \tl_set:Nn \l_tmpa_tl {west}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         { \tenkz@dim{\tenkz@r@daylight} } }
-        {west}       { \tl_set:Nn \l_tmpa_tl {east}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         {-\tenkz@dim{\tenkz@r@daylight}} }
-        {north~east} { \tl_set:Nn \l_tmpa_tl {south~west}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         { \tenkz@dim{\tenkz@r@daylight} }
-                       \dim_set_eq:NN \l__tenkz_enclosure_dy_dim
-                         \l__tenkz_enclosure_dx_dim }
-        {north~west} { \tl_set:Nn \l_tmpa_tl {south~east}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         {-\tenkz@dim{\tenkz@r@daylight}}
-                       \dim_set:Nn \l__tenkz_enclosure_dy_dim
-                         { \tenkz@dim{\tenkz@r@daylight} } }
-        {south~east} { \tl_set:Nn \l_tmpa_tl {north~west}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         { \tenkz@dim{\tenkz@r@daylight} }
-                       \dim_set:Nn \l__tenkz_enclosure_dy_dim
-                         {-\tenkz@dim{\tenkz@r@daylight}} }
-        {south~west} { \tl_set:Nn \l_tmpa_tl {north~east}
-                       \dim_set:Nn \l__tenkz_enclosure_dx_dim
-                         {-\tenkz@dim{\tenkz@r@daylight}}
-                       \dim_set_eq:NN \l__tenkz_enclosure_dy_dim
-                         \l__tenkz_enclosure_dx_dim }
-        {center}     { \tl_set:Nn \l_tmpa_tl {center} }
-      }
-      { }
-    \tl_if_empty:NTF \l_tmpa_tl
-      { \prg_return_false: }
-      { \prg_return_true: }
-  }
-\prg_generate_conditional_variant:Nnn \tenkz_enclosure_label_position:n
-  { V } { T, F, TF }
-
-% Position an already formatted label #2 outside node #3.  `center' is the
-% deliberate exception: it is useful for a region name placed in empty fill.
-\cs_new_protected:Npn \tenkz_enclosure_label:nnn #1#2#3
-  {
-    \tenkz_enclosure_label_position:nT {#1}
-      {
-        \node[tn~label, anchor=\l_tmpa_tl] at
-          ($(#3.#1)+(\dim_use:N \l__tenkz_enclosure_dx_dim,
-                     \dim_use:N \l__tenkz_enclosure_dy_dim)$) {#2};
-      }
-  }
-
-% #1 semantic member names, #2 TikZ semantic style, #3 formatted label,
-% #4 label position, #5 optional semantic name for the resulting region.
-% The conditional result is the shared commit gate for callers: validation
-% precedes every registry, ink, and audit-stream side effect, so nonstop-mode
-% recovery cannot leave a semantic record for geometry which was rejected.
-\prg_new_protected_conditional:Npnn \tenkz_enclosure_draw:nnnnn
-    #1#2#3#4#5 { T, F, TF }
-  {
-    \tenkz_enclosure_resolve:n {#1}
-    \tl_if_blank:nF {#5}
-      {
-        \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #5 }
-        \prop_if_in:NVT \g__tenkz_enclosure_prop \l_tmpa_tl
-          {
-            \msg_error:nnn {tenkz}{enclosure-duplicate}{#5}
-            \bool_set_false:N \l__tenkz_enclosure_valid_bool
-          }
-      }
-    % A label position has no effect when there is no label.  Otherwise
-    % validate it before allocating the result name or drawing either pass.
-    \tl_if_blank:nF {#3}
-      {
-        \tenkz_enclosure_label_position:nF {#4}
-          {
-            \msg_error:nnn {tenkz}{enclosure-label-pos}{#4}
-            \bool_set_false:N \l__tenkz_enclosure_valid_bool
-          }
-      }
-    \bool_if:NT \l__tenkz_enclosure_valid_bool
-      {
-        \tenkz_enclosure_fresh:N \l__tenkz_enclosure_node_tl
-        % The semantic result covers BOTH the outline and its separately
-        % placed label.  A later named region therefore measures nested label
-        % ink instead of resolving only the inner outline.
-        \tenkz_enclosure_fresh:N \l__tenkz_enclosure_result_tl
-        \tl_if_blank:nF {#5}
-          {
-            \tl_set:Ne \l_tmpa_tl { \int_use:N \tenkz@pictureid / #5 }
-            \prop_gput:NVV \g__tenkz_enclosure_prop \l_tmpa_tl
-              \l__tenkz_enclosure_result_tl
-            \prop_gput:NVe \g__tenkz_enclosure_depth_prop \l_tmpa_tl
-              { \int_use:N \l__tenkz_enclosure_depth_int }
-          }
-        \tenkz_enclosure_activate_fill_layer:
-        \begin{scope}[local~bounding~box=\l__tenkz_enclosure_result_tl]
-          % Fill and outline are separate passes.  Automatically depth-ordered
-          % fill layers put an outer named region below every region it
-          % contains, while all outlines remain above every fill with main
-          % ink.  Both passes use the same fit geometry, and the named fill
-          % node remains the label anchor.
-          \begin{pgfonlayer}{\l__tenkz_enclosure_layer_tl}
-            \use:e
-              {
-                \exp_not:N \node
-                  [#2, draw=none,
-                   fit=\exp_not:V \l__tenkz_enclosure_fit_tl,
-                   inner~sep=\tenkz@dim{\tenkz@r@daylight}]
-                  (\exp_not:V \l__tenkz_enclosure_node_tl) {};
-              }
-          \end{pgfonlayer}
-          \use:e
-            {
-              \exp_not:N \node
-                [#2, fill=none,
-                 fit=\exp_not:V \l__tenkz_enclosure_fit_tl,
-                 inner~sep=\tenkz@dim{\tenkz@r@daylight}] {};
-            }
-          \tl_if_blank:nF {#3}
-            { \exp_args:NnnV \tenkz_enclosure_label:nnn {#4}{#3}
-                \l__tenkz_enclosure_node_tl }
-        \end{scope}
-      }
-    \bool_if:NTF \l__tenkz_enclosure_valid_bool
-      { \prg_return_true: }
-      { \prg_return_false: }
-  }
-\prg_generate_conditional_variant:Nnn \tenkz_enclosure_draw:nnnnn
-  { VVVVV } { T, F, TF }
-
 % ---------- species (the 0.6 hue contract, clause 2) ----------
-% Species declare NAMES, never colors: `species={right,left}' (document
-% preamble via \tnset, or picture scope) assigns each new name the next
-% hue of the theme's semantic cycle and derives one style per glyph
+% Species declare NAMES, never colors: \tndeclare{species}{name}{}
+% assigns each new name the next hue of the theme's semantic cycle and
+% derives one style per glyph
 % family — `species <name> bond', `species <name> tensor', `species
 % <name> outline' — through the same indirection as the role styles, so
 % a theme rebinding the core hue slots recolours every species at one
@@ -1889,8 +1464,8 @@
 \msg_new:nnn { tenkz } { unknown-species }
   {
     Undeclared~species~'#1'.~Declare~names~first~--~
-    \token_to_str:N \tnset{species={...}}~in~the~preamble~(recommended:~
-    a~species~keeps~one~hue~across~every~figure)~or~in~the~picture's~
+    \token_to_str:N \tndeclare{species}{name}{}~(recommended~in~the~
+    preamble:~a~species~keeps~one~hue~across~every~figure)~before~the~
     option~list.~A~declaration~inside~a~group~or~picture~ends~with~
     that~group.
   }
@@ -1907,8 +1482,6 @@
       { \msg_error:nnn { tenkz } { unknown-species } {#1} }
   }
 \cs_generate_variant:Nn \tenkz_species_check:n { e, V }
-\cs_new_protected:Npn \tenkz_species_declare:n #1
-  { \clist_map_inline:nn {#1} { \tenkz_species_one:n {##1} } }
 \cs_new_protected:Npn \tenkz_species_one:n #1
   {
     % first declaration fixes the index; a redeclaration re-derives the
@@ -1939,21 +1512,6 @@
       }
     \exp_args:NV \tikzset \l_tmpa_tl
   }
-% ---------- shared core-forward installer ----------
-% \tenkz_install_core_forwards:nn {<family>}{<comma list>}: install, in
-% pgfkeys family /tenkz/<family>, one pass-through key per name in the
-% list, each forwarding to the shared /tenkz/<name> key above with the
-% same value.  <name> is one of: pitch, compact, inline, tensor~style,
-% species.  Every picture-scope sub-language (and the command-scope
-% \tntree family) hand-copied this 4-6 line block, two of them spelling
-% the forward two different ways (\pgfkeys{/tenkz/pitch=#1} vs
-% \pgfqkeys{/tenkz}{pitch=#1}); one mechanism, one spelling (GOAL.md
-% "one universal language"). Per-atom families (/tenkz/cell) do NOT
-% call this: pitch/compact/inline pick the picture's metric once, not
-% per atom, so those families never had these keys and do not gain
-% them here -- an existing pattern, not a new exemption.
-% Installed by tenkz-language.code.tex from the public registry vocabulary.
-
 % ---------- the cell-set algebra ----------
 % One addressing algebra serves the contraction keys: terms `(r,c)` |
 % `(r1-r2,c1-c2)`, optionally with a trailing third coordinate, or a

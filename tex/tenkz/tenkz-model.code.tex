@@ -191,34 +191,6 @@
 \cs_new_protected:Npn \__tenkz_model_map_ids:nn #1#2
   { \seq_map_inline:cn { l__tenkz_model_ #1 _seq } {#2} }
 
-% Locate the wire record joining from=#1 to to=#2; leaves the record id in
-% #3, or \q_no_value when the derivation recorded no such wire.  Linear in
-% the wire count -- pictures hold tens of wires, not thousands.
-\tl_new:N \l__tenkz_model_probe_tl
-\cs_new_protected:Npn \__tenkz_model_wire_by_ends:nnN #1#2#3
-  {
-    \tl_set:Nn #3 { \q_no_value }
-    \seq_map_inline:Nn \l__tenkz_model_wire_seq
-      {
-        % Closure wires carry no from/to; the sentinel is a quark and
-        % must never reach an e-expanding comparison.
-        \__tenkz_model_get:nnN {##1} {from} \l__tenkz_model_probe_tl
-        \quark_if_no_value:NF \l__tenkz_model_probe_tl
-          {
-        \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#1}
-          {
-            \__tenkz_model_get:nnN {##1} {to} \l__tenkz_model_probe_tl
-            \quark_if_no_value:NF \l__tenkz_model_probe_tl
-              {
-            \str_if_eq:eeT { \tl_use:N \l__tenkz_model_probe_tl } {#2}
-              { \tl_set:Nn #3 {##1} \seq_map_break: }
-              }
-          }
-          }
-      }
-  }
-\cs_generate_variant:Nn \__tenkz_model_wire_by_ends:nnN { ee }
-
 % Apply function #2 (one n-type argument, the wire id) to every wire whose
 % origin field equals #1, in declaration order.  Closure draw passes
 % consume records through this one door.

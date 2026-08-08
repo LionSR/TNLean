@@ -10,7 +10,7 @@ scripts/tenkz_corpus.sh
 The driver copies the whole directory to a temporary workspace, compiles every
 standalone `.tex` file with the invocation from `docs/tenkz/HACKING.md`, and runs
 `scripts/tenkz_audit.py` on every resulting `.tnlog`. The tracked corpus remains
-clean, and sibling inputs such as `modes_suite.inc` remain available.
+clean.
 
 ## Render baselines
 
@@ -79,16 +79,11 @@ census produced this adoption:
 belong in dedicated tests that assert their expected diagnostics; they are not
 passing corpus entries.
 
-Three package-internal probes deliberately create no event records:
-`p_pitch.tex`, `p_species.tex`, and `plane_experiment.tex`. They use
-tenkz dimensions, keys, or TikZ styles without opening a tenkz environment. The
-driver names these three exceptions explicitly and rejects an empty `.tnlog` from
-every other fixture, so a broken event writer cannot silently pass the corpus.
-
-One included fixture has a documented presentation-only curation.
-`gr_t7_coset.tex` moves its two gray action boxes 4 mm right so the
-`k_x^{-1}` label clears the next box under the measured-overlap audit. The
-formula and diagram topology are unchanged.
+One package-internal probe deliberately creates no event records:
+`plane_experiment.tex` uses tenkz dimensions, keys, or TikZ styles without
+opening a tenkz environment. The driver names this exception explicitly and
+rejects an empty `.tnlog` from every other fixture, so a broken event writer
+cannot silently pass the corpus.
 
 Every standalone fixture begins with a one-line `% Regression:` header and has a
 `% Formula:` comment. Geometry-only fixtures state their geometry contract rather

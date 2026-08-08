@@ -1,4 +1,4 @@
-% Input:       kernel syntax plus \tngroup supplied by tenkz-frame.code.tex.
+% Input:       kernel syntax from the executable registry.
 % Output:      validated model records, placement requests, and kernel events.
 % Owned state: the chain cursor, the address node table, panel and relation stores.
 % Invariants:  every record is written before validation; addresses parse or error.
@@ -11,10 +11,12 @@
 % closure, or a declared open leg; equations compose whole pictures under one
 % shared metric and must expose equal boundaries.
 %
-% The kernel coexists with the 0.7 surface until the S4 swap: \tenkzkernel
-% rebinds `tenkz`, `tenkzeq`, and the body commands for the current group,
-% and the swap deletes that switch.  Nothing here draws; rendering consumes
-% the records this stage validates.
+% The S4 swap made this stage the package surface: tenkz.sty calls
+% \tenkzkernel at load, so `tenkz`, `tenkzeq`, and the body commands are
+% bound as soon as the package is.  The switch remains callable and rebinds
+% the same meanings, keeping the per-group opt-in spelling of existing
+% documents inert; its deletion is the 1.0 freeze's corpus rewrite.  Nothing
+% here draws; rendering consumes the records this stage validates.
 %
 % Shelf notes (reuse over reinvention, one line per decision):
 %   l3keys       TAKE  every key tree below; .choices for closed alphabets,
@@ -2455,6 +2457,10 @@
   {
     \__tenkz_kernel_declare_table:Nnn
       \g__tenkz_kernel_species_prop {#1} {#2}
+    % One door, both stores: the same declaration mints the shared
+    % `species <name> ...' style family (tenkz-core) that \tntree draws
+    % from, so a declared species is usable on every record class.
+    \tenkz_species_one:n {#1}
     % Hue-less declarations receive a document-scope cycle slot now, in
     % declaration order.  Reordering first uses in later pictures therefore
     % cannot change the identity's ink.
@@ -17242,9 +17248,9 @@
   }
 
 % ---------- the public surface -----------------------------------------------------------------
-% Every body command is kernel-private at load.  \tenkzkernel installs the
-% public surface for the current group; until then the bridge changes no 0.7
-% command or environment binding.
+% Every body command is kernel-private here; \tenkzkernel binds the public
+% names, and tenkz.sty calls it at load, which is what makes the kernel the
+% package surface.
 
 % A closed wire takes no positional ends, so both ends are peeked before the
 % command commits.  This preserves the dedicated arity diagnostic for a
@@ -17269,10 +17275,6 @@
   }
 \NewDocumentCommand \__tenkz_kernel_tnmark_cmd { O{} m m }
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }
-% The dialect composition layer installs \tngroup first; the kernel switch
-% (\tenkzkernel, below) replaces that renderer-backed binding with the
-% record grammar -- at opt-in, never at load, so the bridge leaves the 0.7
-% group untouched for every document that does not ask for the kernel.
 \NewDocumentCommand \__tenkz_kernel_tngroup_cmd { O{} m }
   { \__tenkz_kernel_tngroup:nn {#1} {#2} }
 \NewDocumentCommand \__tenkz_kernel_tndeclare_cmd { m m m }

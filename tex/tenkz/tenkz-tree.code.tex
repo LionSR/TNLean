@@ -95,12 +95,6 @@
     \tl_set:Nn \l__tenkztree_species_tl {#1}
   },
 }
-% pitch=/compact=/inline= forward to the shared /tenkz key space
-% (tenkz-core.code.tex); tree is command-scope like /tenkz/cell, so it
-% keeps its own role=/species= above (per-vertex, validated) instead of
-% the picture-scope forwarding species= the other three families use.
-\tenkz_install_core_forwards:nn {tree} {pitch,compact,inline}
-
 % ---------- the fusion tree ----------
 % Grammar of the parenthesization word:
 %   node   :=  leaf  |  ( node node ) [ _ charge ]

@@ -1,23 +1,26 @@
 % Target: rmp-ii-mpu-unitarity
 % Formula: U^\dagger U = I for the blocked two-site MPU tensor.
-% Ink: Canonical public tenkz and kernel environments; no raw TikZ.
+% Ink: Canonical public tenkz kernel environments; no raw TikZ.
 % Boundary: The west and east cups contract a and b; the remaining physical pair is the
 %   identity.
 % Source: paper TN-Review-main.tex line 378; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 393-404
 % Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
   % LHS: a (west cup) [U over conj(U), physical pair contracted] b (east cup)
-  \begin{tenkz}[rows={op,op},
+  \begin{tenkz}[rows={op,op}, cols=1, bonds=none,
                 west={cup=$a$}, east={cup=$b$}]
-    \tn[box]{U} \\
-    \tn*[box]{U}
+    \tn[at=(1,1), name=u, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{U}
+    \tn[at=(2,1), name=ub, skin=box,
+      ports={180:virtual,0:virtual,90:physical,270:physical}]{$\overline{U}$}
+    \tnwire{u.90}{open n} \tnwire{u.270}{ub.90} \tnwire{ub.270}{open s}
   \end{tenkz}
   \;=\;
-  {\tenkzkernel
-   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-     % A glyphless typed carrier makes one open physical identity wire through
-     % the centre, without either endpoint becoming an atom.
-     \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
-   \end{tenkz}}
+  \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    % A glyphless typed carrier makes one open physical identity wire through
+    % the centre, without either endpoint becoming an atom.
+    \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
+  \end{tenkz}
 \]

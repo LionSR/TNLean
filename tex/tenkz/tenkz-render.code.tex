@@ -37,10 +37,7 @@
   { \draw[#1] #2 ; }
 
 % ---------- coordinator strokes ------------------------------------------------
-% Through S2 the grid walk remains the topology coordinator; every stroke it
-% decides is inked here, token-for-token what the legacy walk emitted.  The
-% pixel gate holds because the emission is identical; the census holds
-% because grid keeps no ink authority.
+% The kernel's topology passes decide every stroke; each one is inked here.
 % One contraction bond, backed by wire record #1 (diagnostics and, at the
 % events landing, provenance): #2 style tokens, #3 direction-mark tokens,
 % #4/#5 the resolved anchors, west side first.
