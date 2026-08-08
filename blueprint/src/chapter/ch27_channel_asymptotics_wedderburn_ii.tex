@@ -819,13 +819,13 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     \lean{Matrix.directSumExtension_apply}
     \leanok
     \uses{def:direct_sum_full_matrix_extension}
-    For every $A\in\mathcal A$ and every linear map
-    $T:\mathcal A\to\mathcal B$,
+    For every $A\in\mathcal A$, every $X\in\End(\mathcal H_A)$, and every
+    linear endomorphism $T:\mathcal A\to\mathcal A$,
     \begin{align}
         \pi_A(\iota_A(A))
         &=A, \notag\\
         \widehat T(X)
-        &=\iota_B(T(\pi_A(X))).
+        &=\iota_A(T(\pi_A(X))).
         \notag
     \end{align}
 \end{theorem}
