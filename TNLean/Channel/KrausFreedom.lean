@@ -8,7 +8,7 @@ import TNLean.Channel.KrausRepresentation
 import TNLean.Channel.Stinespring
 import TNLean.Algebra.FinSum
 import TNLean.Algebra.MatrixGramUnitary
-import TNLean.Algebra.TracePairing
+import TNLean.Algebra.MatrixTracePairing
 
 /-!
 # Rectangular Kraus freedom (Wolf Theorem 2.1 item 4, necessary direction)

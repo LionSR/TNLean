@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixSpectralDecomp
-import TNLean.Algebra.TracePairing
+import TNLean.Algebra.MatrixTracePairing
 import TNLean.Channel.PartialTrace
 import TNLean.Channel.MaximallyEntangled
 import TNLean.Channel.TensorMap

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import TNLean.Algebra.MatrixAux
-import TNLean.Algebra.TracePairing
+import TNLean.Algebra.MatrixTracePairing
 
 /-!
 # Fixed points of abstract unital Schwarz maps
