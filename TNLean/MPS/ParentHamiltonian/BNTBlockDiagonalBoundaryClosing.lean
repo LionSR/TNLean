@@ -531,13 +531,15 @@ theorem ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_c
     LinearMap.ker (parentHamiltonian
       (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
       bntMPSVectorSpan A N := by
-  have hFactor :
-      (L₀ + 1) + ((L₀ + 1) + (L₀ + 1)) ≤
-        (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-    have hrpred : 1 ≤ r - 1 := by omega
-    simpa only [one_mul] using
-      (Nat.mul_le_mul_right ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) hrpred)
-  have hL : L₀ < L := by omega
+  have hL : L₀ < L := by
+    calc
+      L₀ < ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 := by omega
+      _ ≤ (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) + 1 :=
+        Nat.add_le_add_right (by
+          simpa only [one_mul] using
+            (Nat.mul_le_mul_right ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+              (show 1 ≤ r - 1 by omega))) 1
+      _ ≤ L := hRange
   have hN : 0 < N := by omega
   have hNtwo : 2 ≤ N := by omega
   have hLN : L ≤ N := by omega

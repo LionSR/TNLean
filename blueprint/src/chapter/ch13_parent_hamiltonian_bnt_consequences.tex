@@ -428,12 +428,10 @@ with the chosen basis of normal tensors.
     \label{thm:gs_eq_bnt_span}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{thm:block_diagonal_chain_space_global_cut,
-        cor:block_diagonal_kernel_global_cut, lem:bnt_mpv_mem_ground_space,
-        thm:chain_ground_space_eq_mpv_normal, def:bnt_span}
-    Under the normalized BNT hypotheses and the source length bounds of
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut}, the
-    parent-Hamiltonian kernel is exactly the span of the BNT component vectors:
+    \uses{def:parent_hamiltonian, def:bnt_span}
+    Under the normalized BNT hypotheses and the PGVWC07 source length bounds,
+    the parent-Hamiltonian kernel is exactly the span of the BNT component
+    vectors:
     \begin{align}
         \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
         &=
@@ -445,12 +443,13 @@ with the chosen basis of normal tensors.
 \begin{proof}
     \leanok
     \uses{cor:block_diagonal_kernel_global_cut,
-        lem:bnt_mpv_mem_ground_space, thm:chain_ground_space_eq_mpv_normal}
+        thm:chain_ground_space_eq_mpv_normal,
+        lem:bnt_span_le_parent_hamiltonian_kernel}
     The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
     Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} therefore identifies
     each single-block periodic chain space with its matrix-product-vector
     line. Corollary~\ref{cor:block_diagonal_kernel_global_cut} gives the
     containment of the kernel in the BNT span. Conversely,
-    Lemma~\ref{lem:bnt_mpv_mem_ground_space} places every component vector in
-    the parent-Hamiltonian kernel. Taking spans gives the reverse containment.
+    Lemma~\ref{lem:bnt_span_le_parent_hamiltonian_kernel} gives the reverse
+    containment directly.
 \end{proof}
