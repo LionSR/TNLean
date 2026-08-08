@@ -29,17 +29,19 @@ iff statements matching Wolf Theorem 2.18 (ensemble equivalence, Eq. (2.10)).
 open scoped Matrix
 open Matrix Finset BigOperators
 
-variable {D : ℕ}
+variable {d d' : ℕ}
 
 /-- **Wolf Theorem 2.18 (isometric form)**: two finite Kraus families define the
 same completely positive map if and only if, after padding the smaller family
-with zeros, they are related by an isometric mixing matrix. -/
+with zeros, they are related by an isometric mixing matrix. Stated for
+rectangular Kraus operators `Matrix (Fin d') (Fin d) ℂ`; the square form is
+the specialization `d = d'`. -/
 theorem kraus_isometry_freedom_iff
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
-    (B : ι₁ → Matrix (Fin D) (Fin D) ℂ)
-    (A : ι₂ → Matrix (Fin D) (Fin D) ℂ)
+    (B : ι₁ → Matrix (Fin d') (Fin d) ℂ)
+    (A : ι₂ → Matrix (Fin d') (Fin d) ℂ)
     (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
-    (∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α, B α * X * (B α)ᴴ = ∑ j, A j * X * (A j)ᴴ) ↔
       ∃ V : Matrix ι₁ ι₂ ℂ,
         Vᴴ * V = 1 ∧
@@ -53,8 +55,8 @@ finite index type, then they define the same completely positive map if and only
 if they are related by a unitary mixing matrix. -/
 theorem kraus_unitary_freedom_iff
     {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (B A : ι → Matrix (Fin D) (Fin D) ℂ) :
-    (∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (B A : ι → Matrix (Fin d') (Fin d) ℂ) :
+    (∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α, B α * X * (B α)ᴴ = ∑ j, A j * X * (A j)ᴴ) ↔
       ∃ U : Matrix.unitaryGroup ι ℂ,
         ∀ α, B α = ∑ j, (U : Matrix ι ι ℂ) α j • A j := by
