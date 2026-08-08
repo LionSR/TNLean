@@ -1,0 +1,33 @@
+%% =========================================================
+%% Majorization and Birkhoff's theorem
+%% Doubly-stochastic half.
+%% =========================================================
+
+\section{Majorization}
+
+Majorization is a preorder on real vectors that captures when one
+probability distribution is more ``mixed'' than another.
+Its convex-geometric foundation is Birkhoff's theorem.
+
+\begin{theorem}[Birkhoff]
+    \label{thm:birkhoff_doubly_stochastic}
+    \lean{TNLean.wolf_birkhoff_doublyStochastic_convexHull}
+    \lean{TNLean.wolf_birkhoff_extremePoints_doublyStochastic}
+    \leanok
+    The set of doubly stochastic matrices in $M_d(\R)$ is the convex
+    hull of the $d\times d$ permutation matrices, and its extreme
+    points are exactly the permutation matrices.
+    See \cite[Chapter~8, lines~263--266]{Wolf2012Quantum}.
+\end{theorem}
+% The doubly-substochastic half of Birkhoff's theorem (extreme
+% points of the substochastic matrices) is not formalized; #3959.
+
+\begin{proof}\leanok
+    Every doubly stochastic matrix is a convex combination of
+    permutation matrices, and every convex combination of permutation
+    matrices is doubly stochastic (the first identity).  Since the
+    permutation matrices themselves are extreme points of the doubly
+    stochastic matrices and no other extreme points exist, the second
+    identity follows.
+\end{proof}
+\endinput
