@@ -378,12 +378,8 @@ end Instrument
 
 /-! ### Projective pinching inequality (Wolf Eq. (8.56)) -/
 
-/-- Expansion: (A - B)·ρ·(A - B) = A·ρ·A + B·ρ·B - A·ρ·B - B·ρ·A -/
-private lemma expand_pinching_term {D : ℕ} (A B ρ : Matrix (Fin D) (Fin D) ℂ) :
-    (A - B) * ρ * (A - B) = A * ρ * A + B * ρ * B - A * ρ * B - B * ρ * A := by
-  noncomm_ring
-
-/-- Algebraic identity behind the projective pinching inequality. -/
+/-- Algebraic identity behind the projective pinching inequality:
+`∑_{i,j} (P_i - P_j) ρ (P_i - P_j) = 2 (k T(ρ) - ρ)` where `T(ρ) = ∑_i P_i ρ P_i`. -/
 private lemma pinching_difference_identity {D k : ℕ}
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (P : Fin k → Matrix (Fin D) (Fin D) ℂ)
@@ -400,11 +396,8 @@ private lemma pinching_difference_identity {D k : ℕ}
         exact (Finset.sum_mul Finset.univ P ρ).symm
       _ = ρ := by rw [hPsum, Matrix.one_mul, Matrix.mul_one]
   have h_cross' : (∑ i : Fin k, ∑ j : Fin k, P j * ρ * P i) = ρ := by
-    calc
-      _ = ∑ j : Fin k, ∑ i : Fin k, P j * ρ * P i :=
-        @Finset.sum_comm (Fin k) (Matrix (Fin D) (Fin D) ℂ) (Fin k) _
-          Finset.univ Finset.univ (fun i j ↦ P j * ρ * P i)
-      _ = ρ := h_cross
+    rw [Finset.sum_comm]
+    exact h_cross
   have h_diag :
       (∑ i : Fin k, ∑ _j : Fin k, P i * ρ * P i) =
         (k : ℂ) • (∑ i : Fin k, P i * ρ * P i) := by
@@ -414,22 +407,19 @@ private lemma pinching_difference_identity {D k : ℕ}
   have h_diag' :
       (∑ _i : Fin k, ∑ j : Fin k, P j * ρ * P j) =
         (k : ℂ) • (∑ i : Fin k, P i * ρ * P i) := by
-    rw [Finset.sum_comm]
-    exact h_diag
+    rw [Finset.sum_comm]; exact h_diag
   calc
     (∑ i : Fin k, ∑ j : Fin k, (P i - P j) * ρ * (P i - P j)) =
         ∑ i : Fin k, ∑ j : Fin k,
           (P i * ρ * P i + P j * ρ * P j - P i * ρ * P j - P j * ρ * P i) := by
-      apply Finset.sum_congr rfl
-      intro i _
-      apply Finset.sum_congr rfl
-      intro j _
-      exact expand_pinching_term (P i) (P j) ρ
+      refine Finset.sum_congr rfl fun i _ =>
+        Finset.sum_congr rfl fun j _ => ?_
+      noncomm_ring
     _ = (∑ i : Fin k, ∑ _j : Fin k, P i * ρ * P i) +
           (∑ _i : Fin k, ∑ j : Fin k, P j * ρ * P j) -
           (∑ i : Fin k, ∑ j : Fin k, P i * ρ * P j) -
           (∑ i : Fin k, ∑ j : Fin k, P j * ρ * P i) := by
-      simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+      simp [Finset.sum_add_distrib, Finset.sum_sub_distrib]
     _ = _ := by rw [h_diag, h_diag', h_cross, h_cross']; module
 
 /-- **Wolf Eq. (8.56): projective pinching inequality.**
@@ -475,6 +465,7 @@ theorem projectivePOVM_pinching {D k : ℕ}
   -- (1/2) · (PSD sum) is PSD because 2⁻¹ ≥ 0 in ℂ
   refine h_sum_psd.smul ?_
   have h_half_nonneg : (0 : ℂ) ≤ (2⁻¹ : ℂ) := by
-    have h : (0 : ℝ) ≤ 1 / 2 := by norm_num
-    convert RCLike.ofReal_nonneg.mpr h using 1; norm_num
+    have h : (0 : ℝ) ≤ 1/2 := by norm_num
+    convert RCLike.ofReal_nonneg.mpr h using 1
+    norm_num
   exact h_half_nonneg
