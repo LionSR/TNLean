@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Projectivization.Basic
+import TNLean.Algebra.FinSum
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Channel.WolfProps
 
@@ -56,10 +57,8 @@ private theorem normalizedPureStateMatrix_smul (v : Fin d → ℂ) (c : ℂ) (hc
     Matrix.vecMulVec_apply, dotProduct, star_smul, star_mul, smul_eq_mul]
   rw [show (∑ x, star (v x) * star c * (c * v x)) =
       star c * c * ∑ x, star (v x) * v x by
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro x _
-    ring]
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul (star c * c) (fun x => star (v x)) v]
   have hsc : star c ≠ 0 := star_ne_zero.mpr hc
   field_simp [hsc]
 

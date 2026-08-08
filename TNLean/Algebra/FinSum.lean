@@ -20,12 +20,9 @@ open scoped BigOperators
 
 namespace Fintype
 
-/-- Pull a common left factor out of a finite sum of triple products.
-
-This replaces the repeated normalization
-`rw [Finset.mul_sum]; apply Finset.sum_congr rfl; intro i _; ring`.
-The identity needs only a non-unital semiring; commutative-semiring callers
-may reorder the common factor before applying it. -/
+/-- In a non-unital semiring, a common left factor can be pulled out of a
+finite sum of triple products:
+$\sum_i (a f_i) g_i = a \sum_i f_i g_i$. -/
 theorem sum_mul_mul_eq_mul_sum_mul {ι R : Type*} [Fintype ι] [NonUnitalSemiring R]
     (a : R) (f g : ι → R) :
     (∑ i, a * f i * g i) = a * ∑ i, f i * g i := by

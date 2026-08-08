@@ -83,19 +83,21 @@ abstracted — record why, so it is not re-proposed).
   intro i _
   ring
   ```
-- **Seen:** six occurrences across
+- **Seen:** seven occurrences across
+  `TNLean/Channel/Wigner/ProjectivePureState.lean`,
   `TNLean/Channel/Wigner/TwoPureStateCharpoly.lean`,
   `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean`, and
   `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean` before promotion.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
   `TNLean/Algebra/FinSum.lean`.
 - **Notes:** the shared identity requires only a non-unital semiring and pulls
-  a common left factor from a sum of triple products. The two complex-valued callers
-  whose common factor was in the middle first use commutativity to put it in
-  the canonical position. All six scanner-known sites now call the lemma; the
-  four-line pattern no longer appears in the scanner report. The consumer
-  proofs remove 24 repeated tactic lines; the documented lemma and three
-  direct imports leave the Lean-source refactor at three net added lines.
+  a common left factor from a sum of triple products. The three sites whose
+  common factor was in the middle first use commutativity to put it in the
+  canonical position. All seven sites now call the lemma, and all four
+  consumer files import `TNLean.Algebra.FinSum` directly. The consumer proofs
+  remove 28 repeated tactic lines; after the mathematical lemma documentation
+  and four direct imports, the cumulative Lean-source refactor removes one
+  line net (29 additions, 30 deletions).
 
 ### dependent finite-sum flattening — promoted
 - **Pattern:** pass between the double sum over `j` and `q : Fin (mult j)` and the
