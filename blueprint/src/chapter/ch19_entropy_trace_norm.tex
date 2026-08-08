@@ -498,11 +498,11 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \section{Projective pinching}
 
-\begin{lemma}[Projective pinching inequality]
-    \label{lem:projective_povm_pinching}
+\begin{theorem}[Projective pinching inequality]
+    \label{thm:projective_povm_pinching}
     \lean{projectivePOVM_pinching}
     \leanok
-    \uses{def:density_matrices}
+    \uses{def:density_matrices, def:orthogonal_projection_channel}
     Let $\rho\in\MN{d}$ be a density matrix and let
     $P_1,\ldots,P_k\in\MN{d}$ be orthogonal projections satisfying
     $\sum_{i=1}^k P_i=\Id$.  Define
@@ -515,7 +515,7 @@ Theorem~\ref{thm:trace_norm_abs}.
         \label{eq:projective_pinching}
     \end{align}
     This is \cite[Chapter~8, Eq.~(8.56)]{Wolf2012Quantum}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     For $A_{ij}=P_i-P_j$, positivity of $\rho$ gives
