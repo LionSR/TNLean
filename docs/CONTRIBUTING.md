@@ -223,6 +223,7 @@ needs `\lean{}` / `\leanok` tags.
 |---------------|---------------------------------------------------------------|
 | `0802.0447`   | arXiv:0802.0447 -- String order and symmetries (PRL 2008)     |
 | `1606.00608`  | arXiv:1606.00608 -- MPDO RFP                                  |
+| `1703.09188`  | arXiv:1703.09188 -- Matrix Product Unitaries                  |
 | `1708.00029`  | arXiv:1708.00029 -- Periodic FT for MPS (De las Cuevas et al.)|
 | `1804.04964`  | arXiv:1804.04964 -- FT for normal tensor networks             |
 | `2011.12127`  | arXiv:2011.12127 -- RMP review (Cirac--Perez-Garcia--Schuch--Verstraete) |
@@ -235,6 +236,7 @@ needs `\lean{}` / `\leanok` tags.
 | `correlation-decay`  | Exponential decay of correlations in MPS                              |
 | `symmetry-SPT`       | MPS symmetries, projective representations, and SPT classification    |
 | `rfp-mpdo`           | Renormalization fixed points and MPDO theory                          |
+| `mpu`                | Matrix Product Unitaries: structure, index, symmetries, and QCA       |
 | `algebraic-FT`       | Algebraic approach to Fundamental Theorem                             |
 | `wolf-ch1`           | Wolf Lecture Notes -- Chapter 1: Deconstructing Quantum               |
 | `wolf-ch2`           | Wolf Lecture Notes -- Chapter 2: Representations                      |
