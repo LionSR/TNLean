@@ -8,4 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Channel.Wigner
 
+import TNLean.Channel.Wigner.ProjectiveCarrierBridge
 import TNLean.Channel.Wigner.ProjectivePureState
+import TNLean.Channel.Wigner.Rigidity
+import TNLean.Channel.Wigner.Upstream

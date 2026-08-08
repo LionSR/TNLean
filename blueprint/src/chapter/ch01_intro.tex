@@ -1387,10 +1387,28 @@ $v$ is multiplied by a nonzero scalar.
 \end{proof}
 
 \begin{theorem}[Wigner's theorem]\label{thm:wigner}
-    \notready
-    Let $F$ be a bijection of the normalized pure states such that
+    \lean{Projectivization.wolf_wigner_pureStateMatrix}
+    \leanok
+    \uses{def:projective_pure_state_matrix,
+      def:projective_transition_probability,
+      thm:projective_pure_state_bridge}
+    Let $F$ be a bijection of the normalized pure states $P_p$ such that
     $\tr(F(P)F(Q))=\tr(PQ)$ for all normalized pure states $P,Q$.
     Then there is a unitary $U$ such that either
     $F(P)=UPU^\dagger$ for every $P$, or
     $F(P)=UP^{\mathsf T}U^\dagger$ for every $P$.
+    This is a disjunction, not an exclusive alternative. For $d=0$ the set of
+    pure states is empty, while for $d=1$ it is a singleton and the two
+    alternatives coincide.
 \end{theorem}
+
+\begin{proof}\leanok
+    Use the injective correspondence $p\mapsto P_p$ to regard $F$ as a map of
+    projective rays. The trace identity
+    $\tr(P_pP_q)=\operatorname{tp}(p,q)$ shows that this map preserves
+    transition probabilities. Projective Wigner rigidity gives a unitary $U$
+    and either $p\mapsto U\cdot p$ or
+    $p\mapsto U\cdot\overline p$. The identities
+    $P_{U\cdot p}=UP_pU^\dagger$ and
+    $P_{\overline p}=P_p^{\mathsf T}$ give the two stated formulas.
+\end{proof}
