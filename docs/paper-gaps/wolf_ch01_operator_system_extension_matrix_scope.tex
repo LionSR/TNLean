@@ -7,9 +7,9 @@
 
 \input{command}
 
-\title{Wolf's Operator-System Extension: Full-Matrix-Algebra Scope Restriction}
+\title{Wolf's Operator-System Extension: Matrix-Algebra Realization}
 \author{}
-\date{2026-08-06}
+\date{2026-08-08}
 
 \begin{document}
 \maketitle
@@ -57,32 +57,35 @@ level descends through this embedding
 block-diagonal matrix is positive semidefinite exactly when each of its
 diagonal blocks is.
 
-The codomain algebra $\mathcal B$ remains a full matrix algebra
-$\mathcal B=\MN{p}$. This \emph{is} a residual scope restriction. The source
-statement quantifies $\mathcal B$ over every finite-dimensional $C^*$-algebra,
-while the source's displayed proof only constructs an $M_n(\mathbb C)$-valued
-extension: the ancilla dimension $n$ is fixed with
-$\mathcal B\subseteq M_n(\mathbb C)$, and Hahn--Banach plus Choi--Jamiolkowski
-yield a completely positive $\tilde T:\mathcal A\to M_n(\mathbb C)$. The final
-$\mathcal B$-valued step is left implicit in the source; it follows by
-composing with a completely positive conditional expectation
-$M_n(\mathbb C)\to\mathcal B$ onto the subalgebra (for instance the
-trace-preserving one), which the library does not currently provide in this
-generality.
+The codomain is now allowed to be any unital $*$-subalgebra
+$\mathcal B\subseteq\MN{p}$. The theorem
+\leanid{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra}
+(\doclink{TNLean/Channel/OperatorSystemExtensionStarSubalgebra}) starts with a
+map $T:S\to\mathcal B$ and returns an extension
+$\widetilde T:\bigoplus_k\MN{d_k}\to\mathcal B$. Complete positivity is stated
+after the canonical inclusion $\mathcal B\hookrightarrow\MN{p}$, because the
+direct-sum complete-positivity predicate has a full matrix codomain.
+
+The construction supplies the final step left implicit in the source's proof.
+First, \leanid{Matrix.exists_cp_extension_of_operatorSystem_directSum} gives an
+ambient extension $F:\bigoplus_k\MN{d_k}\to\MN{p}$. Next,
+\leanid{StarSubalgebra.exists_krausCPTP_conditionalExpectation} gives a
+trace-preserving completely positive conditional expectation
+$E:\MN{p}\to\MN{p}$ with range in $\mathcal B$ and $E|_{\mathcal B}=\mathrm{id}$.
+The map $E\circ F$ remains completely positive, takes values in $\mathcal B$,
+and agrees with $T$ on $S$. Restricting its codomain gives $\widetilde T$.
 
 \section{Verdict}
 
-\textbf{Closed for the domain algebra; codomain restriction remains.} Wolf's
-proposition is now formalized at its stated generality for the domain algebra
-$\mathcal A$: an arbitrary finite direct sum $\bigoplus_{k<r} M_{d_k}(\mathbb
-C)$, not only the one-summand case. No hypothesis is added beyond the source
-statement (the direct-sum operator-system and complete-positivity predicates
-match the source's definitions on each summand, and complete positivity at
-level $j$ is exactly the source's $T\otimes\mathrm{id}_j$ positivity condition
-applied block by block). The codomain restriction $\mathcal B=M_p(\mathbb C)$
-remains a residual scope restriction, documented above and in the module
-docstring of \doclink{TNLean/Channel/OperatorSystemExtension}; the general
-codomain subalgebra is tracked in \ghissue{5645}.
+\textbf{Closed for matrix-realized finite-dimensional algebras.} The domain is
+a finite direct sum $\bigoplus_{k<r}M_{d_k}(\mathbb C)$ and the codomain is a
+concrete unital $*$-subalgebra of a full matrix algebra, exactly the
+representation chosen in Wolf's displayed proof. The formal theorem does not
+quantify over an abstract finite-dimensional $C^*$-algebra type lacking a
+specified matrix representation, and it should not be cited as such an
+abstract theorem. It closes the matrix-algebra scope gap tracked in
+\ghissue{5645}: neither the domain nor the codomain is required to be a single
+full matrix algebra.
 
 \bibliographystyle{alpha}
 \bibliography{references}
