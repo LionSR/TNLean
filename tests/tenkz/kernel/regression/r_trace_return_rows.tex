@@ -1,13 +1,17 @@
 %% Regression: a traced row's return clears the other rows of its picture
-%% (issue #5623).  Three pictures, told apart inside the stroke hook by
-%% their row count.  The two-row ladder closes row 1 above and row 2 below,
-%% each one trace reach out, so neither return crosses the band between the
-%% rows.  The three-row picture sends the middle row's return below the
-%% lowest row, one trace reach outside the bottom row's own return on every
-%% side, with its west descent led out past the shared reach column.  The
-%% single-row picture keeps the below-the-row rail exactly where it always
-%% ran.  Each expectation counts intersections of a probe segment against
-%% the saved rail path, so the routing is pinned structurally as well as by
+%% (issue #5623).  Four pictures, told apart inside the stroke hook by
+%% their frame word and row count.  The two-row ladder closes row 1 above
+%% and row 2 below, each one trace reach out, so neither return crosses
+%% the band between the rows.  The flat three-row picture sends the middle
+%% row's return below the lowest row, one trace reach outside the bottom
+%% row's own return on every side, with its west descent led out past the
+%% shared reach column.  The single-row picture keeps the below-the-row
+%% rail exactly where it always ran.  The three-row plane picture pins the
+%% frame-transformed lead: a sheared frame offsets adjacent rows in page
+%% x, so a lead taken as a flat multiple of the trace reach would land the
+%% middle row's descent inside the bottom row's bend.  Each expectation
+%% counts intersections of a probe segment or a sibling rail against the
+%% saved rail path, so the routing is pinned structurally as well as by
 %% the exact-toolchain pixel ledger.
 \documentclass{standalone}
 \usepackage{tenkz}
@@ -40,12 +44,29 @@
             \int_use:N \l__tenkz_test_wrap_cross_int }
       }
   }
+% two returns of one picture must never intersect
+\cs_new_protected:Npn \__tenkz_test_wrap_disjoint:nn #1#2
+  {
+    \__tenkz_string_count:nnN {#1} {#2} \l__tenkz_test_wrap_cross_int
+    \int_compare:nNnF { \l__tenkz_test_wrap_cross_int } = {0}
+      {
+        \errmessage
+          { trace~returns~#1~and~#2~intersect~
+            \int_use:N \l__tenkz_test_wrap_cross_int ~time(s) }
+      }
+  }
 % The audit runs once per picture, after its last generated return is
 % saved, and reads every row line through the live frame.
 \cs_new_protected:Npn \__tenkz_test_wrap_audit:
   {
     \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
       \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_ya_fp
+    \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+      { \__tenkz_test_wrap_plane_audit: }
+      { \__tenkz_test_wrap_flat_audit: }
+  }
+\cs_new_protected:Npn \__tenkz_test_wrap_flat_audit:
+  {
     \int_case:nn { \l__tenkz_kernel_r_rows_int }
       {
         {1}
@@ -176,8 +197,42 @@
               { ( \l__tenkz_test_wrap_yb_fp + \l__tenkz_test_wrap_yc_fp )
                 / 2 }
               {0}
+            \__tenkz_test_wrap_disjoint:nn {wrap-1} {wrap-2}
+            \__tenkz_test_wrap_disjoint:nn {wrap-1} {wrap-3}
+            \__tenkz_test_wrap_disjoint:nn {wrap-2} {wrap-3}
           }
       }
+  }
+% The sheared frame: the middle row's return must clear the band between
+% the rows, run back two trace reaches below the lowest row, and never
+% touch a sibling return, with every coordinate read through the frame.
+\cs_new_protected:Npn \__tenkz_test_wrap_plane_audit:
+  {
+    \__tenkz_kernel_r_frame_xy:nnNN {2} {1.5}
+      \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yb_fp
+    \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yb_fp - 0.05 }
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yb_fp - 2 }
+      {1}
+    \__tenkz_kernel_r_frame_xy:nnNN {3} {1.5}
+      \l__tenkz_test_wrap_x_fp \l__tenkz_test_wrap_yc_fp
+    \__tenkz_test_wrap_probe:nnnnnn {wrap-2}
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yc_fp - 0.6 }
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yc_fp - 1.0 }
+      {1}
+    \__tenkz_test_wrap_probe:nnnnnn {wrap-3}
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yc_fp - 0.2 }
+      { \l__tenkz_test_wrap_x_fp }
+      { \l__tenkz_test_wrap_yc_fp - 0.6 }
+      {1}
+    \__tenkz_test_wrap_disjoint:nn {wrap-1} {wrap-2}
+    \__tenkz_test_wrap_disjoint:nn {wrap-1} {wrap-3}
+    \__tenkz_test_wrap_disjoint:nn {wrap-2} {wrap-3}
   }
 \cs_set_protected:Npn \__tenkz_kernel_r_wire_stroke:nn #1#2
   {
@@ -205,5 +260,8 @@
 \end{tenkz}
 \begin{tenkz}[rows={wire}, cols=2, west=trace, east=trace]
   \tn[skin=box]{M} & \tn[skin=box]{M}
+\end{tenkz}
+\begin{tenkz}[rows={ket,ket,ket}, cols=2, frame=plane,
+              west=trace, east=trace]
 \end{tenkz}
 \end{document}

@@ -1159,18 +1159,27 @@ grep -Fq '|col=1|kind=index|name=wrap-north-col-1|origin=trace|side=north' \
 # A traced row's return clears the other rows of its picture (#5623): one
 # closure record per row of each traced picture, while the fixture's own
 # stroke hook refuses any rail that crosses another row, another return,
-# or the band between the rows.
+# or the band between the rows.  The four sub-pictures hold 2, 3, 1, and
+# 3 rows, so across the whole log row 1 closes four times, row 2 three
+# times, and row 3 twice; wrap names recur across the sub-pictures, so an
+# existence check cannot see a lost closure, while these exact per-row
+# counts fail when any one picture drops one.
 trace_return_wraps=$(grep -c '|origin=trace|row=[0-9]*|side=west-east' \
   "$WORK/r_trace_return_rows.tnlog" || true)
-[ "$trace_return_wraps" -eq 6 ] || {
+[ "$trace_return_wraps" -eq 9 ] || {
   echo "FAIL: per-row traces minted $trace_return_wraps closure records," \
-    "expected 6" >&2
+    "expected 9" >&2
   exit 1
 }
-for wrap_row in 1 2 3; do
-  grep -Fq "|name=wrap-$wrap_row|origin=trace|row=$wrap_row|side=west-east" \
-    "$WORK/r_trace_return_rows.tnlog" || {
-    echo "FAIL: the three-row traced picture lost row $wrap_row's closure" >&2
+for wrap_spec in 1:4 2:3 3:2; do
+  wrap_row=${wrap_spec%:*}
+  wrap_expected=${wrap_spec#*:}
+  wrap_found=$(grep -c \
+    "|name=wrap-$wrap_row|origin=trace|row=$wrap_row|side=west-east" \
+    "$WORK/r_trace_return_rows.tnlog" || true)
+  [ "$wrap_found" -eq "$wrap_expected" ] || {
+    echo "FAIL: row $wrap_row closed $wrap_found times across the traced" \
+      "pictures, expected $wrap_expected" >&2
     exit 1
   }
 done
