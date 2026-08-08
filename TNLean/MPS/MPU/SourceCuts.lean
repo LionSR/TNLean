@@ -62,9 +62,6 @@ definition `defnrl` and lines 697–704 of the paper.
   Section III, definition `defnrl`, lines 450–477 and 697–704.
 -/
 
-open scoped Matrix
-open Matrix
-
 namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D)
