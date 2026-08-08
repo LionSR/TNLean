@@ -90,6 +90,11 @@ SUGAR_COMMANDS = (
     "tndots",
     "tnskip",
 )
+# Sugar commands the kernel tier binds to their signed expansions.  Under
+# `\tenkzkernel` these owe no migration work, exactly as a key with a signed
+# `kernel-` registry row owes none: the surface switch reads them as their
+# ledger expansions where they stand.
+KERNEL_SUGAR_COMMANDS = frozenset({"tnbond", "tnfuse"})
 BARE_DEAD_FLAGS = ("boundary legs", "maps")
 SIGNED_KEYS_BY_SCOPE = {
     scope: {
@@ -531,7 +536,11 @@ def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
         "planes",
     }:
         codes.add("C-frame")
-    if any(re.search(rf"\\{name}\b", source) for name in SUGAR_COMMANDS):
+    if any(
+        re.search(rf"\\{name}\b", source)
+        for name in SUGAR_COMMANDS
+        if not (kernel and name in KERNEL_SUGAR_COMMANDS)
+    ):
         codes.add("C-record")
     if re.search(r"\\tn\*", source):
         codes.add("C-record")

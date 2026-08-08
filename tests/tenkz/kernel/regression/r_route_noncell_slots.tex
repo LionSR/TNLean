@@ -1,0 +1,15 @@
+% Regression: a route over a midway-addressed spanning atom meets one
+% distinct exit per slot, ordered by the slot's place on the span rather
+% than by record id -- the ports are declared in reverse slot order to
+% catch a centre-collapsed sort -- and renders exactly as its
+% cell-anchored spelling (r_route_noncell_slots_cell).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=midway (1,2) and (2,2), name=M, skin=pill, wires=2,
+      ports={180@2:virtual, 180@1:virtual}]{M}
+  \tnwire[kind=string, name=lift, route={w of M}, crossing=over]{open}{open}
+\end{tenkz}
+\end{document}

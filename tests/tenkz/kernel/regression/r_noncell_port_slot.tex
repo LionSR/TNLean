@@ -1,0 +1,16 @@
+% Regression: a slot span answers from the atom's own measured silhouette
+% wherever the atom stands, so a spanning atom at a midway address keeps
+% every slot for its wires and renders exactly as its cell-anchored
+% spelling (r_noncell_port_slot_cell).
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,2), name=A, skin=box]{A}
+  \tn[at=(2,2), name=B, skin=box]{B}
+  \tn[at=midway (1,1) and (2,1), name=e, skin=pill, wires=2]{e}
+  \tnwire{e.0@1}{A.180}
+  \tnwire{e.0@2}{B.180}
+\end{tenkz}
+\end{document}

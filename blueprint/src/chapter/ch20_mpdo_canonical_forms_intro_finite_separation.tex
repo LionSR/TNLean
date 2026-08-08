@@ -219,10 +219,9 @@
     % physical-down=3).
     \tenkzkernel
     \begin{tenkz}[rows={op,op,op}, cols=3]
-        \tn[at=(1,1), skin=pill, wide=3, ports={90@1:physical, 90@2:physical, 90@3:physical}]{U}
+        \tn[at=(1,1), skin=pill, wide=3, physical=up]{U}
         \tn[at=(2,1), skin=box, wide=3, name=M]{\widetilde M}
-        \tn[at=(3,1), skin=pill, wide=3,
-            ports={270@1:physical, 270@2:physical, 270@3:physical}]{U^\dagger}
+        \tn[at=(3,1), skin=pill, wide=3, physical=down]{U^\dagger}
         \tnwire{open w}{M.180} \tnwire{M.0}{open e}
     \end{tenkz}
     $ = \bigoplus_\alpha $

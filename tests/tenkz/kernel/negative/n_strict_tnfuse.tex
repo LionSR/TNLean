@@ -1,3 +1,4 @@
+% Negative regression: strict mode rejects the fuse-atom sugar command.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -7,9 +8,8 @@
 \makeatother
 \begin{document}
 \tenkzkernel
-\begin{tenkz}[rows={wire}, cols=2, bonds=none]
-  \tn[at=(1,1), name=A]{A}
-  \tn[at=(1,2), name=B]{B}
-  \tn[at={midway A and B}, wide=2, ports={90@2:physical}]{M}
+\tnset{strict}
+\begin{tenkz}[rows={op,op}, cols=2]
+  \tnfuse[at=(1,1), name=V]{V}
 \end{tenkz}
 \end{document}

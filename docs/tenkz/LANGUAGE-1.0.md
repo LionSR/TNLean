@@ -289,7 +289,11 @@ a .. b                 the records between a and b in the frame's own order
 Operands compose: in productions four through eight an operand is itself an
 address, so `crossing of g and on r 0.4` is well formed. `crossing` operands
 must resolve to wires. The slot suffix `@k` is optional when the angle
-carries one slot: `B.270` means `B.270@1`. A cell named without a member
+carries one slot: `B.270` means `B.270@1`. A face's slot count is the
+atom's own measured extent (`wide=` across a vertical face, `wires=`
+across a horizontal one), and it answers wherever the atom stands — a
+spanning atom at a midway or on-wire address keeps every slot a
+frame-anchored one would. A cell named without a member
 index denotes the whole cell, which is what a cell means to a selection.
 
 Every record class is addressable by name, generated names included, and the
@@ -800,7 +804,7 @@ policy for the shared leg; write the ports for the lone one.
 | Sugar | Expands to |
 |---|---|
 | `sandwich` | `rows={ket,op,bra}` |
-| `physical=up\|down\|updown\|none` | expander: declares each frame-cell atom's outward centre port physical; geometric overlay atoms are excluded; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
+| `physical=up\|down\|updown\|none` | expander: declares each frame-cell atom's outward face physical, one port per face slot — a `wide=k` atom answers with `k` legs, one per spanned cell, exactly as the authored `90@1..@k` port list; geometric overlay atoms are excluded; in a plane this is the independent page-transverse axis, not a numeric in-plane face |
 | `boundary=open\|none` | `west=<w>, east=<w>` |
 | `boundary=periodic`, `periodic` | `west=trace, east=trace` |
 | `west={cup=$m$}` (any side) | side `cup` + `\tn[skin=ring, at=on <cup wire> 0.5]{m}` |
@@ -816,7 +820,7 @@ policy for the shared leg; write the ports for the lone one.
 | `\tn*[k]{m}` | `\tn[conjugate, k]{m}` |
 | `\tnbond[k]{a}{b}` | `\tnwire[kind=index, k]{a}{b}` |
 | `\tnstring[k]{verbs}` | `\tnwire[kind=string, ...]` — verb table below |
-| `\tnfuse[k]{m}` | prelude fuse atom (`skin=tri`, `wires=`, `ports=`); tenure: 0 benchmark consumers, held by 4 blueprint figures |
+| `\tnfuse[k]{m}` | `\tn[skin=tri, wires=2, k]{m}` — the prelude fuse atom, its split side bonded by the frame; authored keys follow the preset, so `skin=`, `wires=`, `ports=` in `k` override it; tenure: 0 benchmark consumers, held by 5 blueprint figures |
 | `\tnspan[form]{k}{m}` | `\tnmark[form=...]{(r,c) .. (r,c+k-1)}{m}` |
 | `\tndots` | `\tn[skin=dots]{}` (elision bit read by the audit) |
 | `\tnskip` | `\tn[void=open]{}` |

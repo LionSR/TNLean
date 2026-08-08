@@ -1,0 +1,19 @@
+% Control for r_wide_policy_legs: the same two pictures with the wide
+% atoms' policy answers spelled as authored slot ports; the pair must
+% render byte-identical rasters.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={op}, cols=3]
+  \tn[at=(1,1), skin=pill, wide=3,
+      ports={90@1:physical, 90@2:physical, 90@3:physical}]{U}
+\end{tenkz}
+\mbox{p}
+\begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,2), name=D, skin=box, ports={270:physical}]{D}
+  \tn[at=(2,1), name=U, skin=pill, wide=3,
+      ports={90@1:physical, 90@2:physical, 90@3:physical}]{U}
+  \tnwire{U.90@2}{D.270}
+\end{tenkz}
+\end{document}
