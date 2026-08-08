@@ -742,8 +742,8 @@ dimension $n$.
 \section{Extending completely positive maps from operator systems in a direct
 sum of matrix algebras}
 
-The one-summand case above (Theorem~\ref{thm:extend_cp_operator_system})
-generalizes the domain algebra to the source's full generality: the domain
+The one-summand case above (Theorem~\ref{thm:extend_cp_operator_system}) is
+generalized here to the source's full domain generality: the domain
 ranges over every finite-dimensional $C^*$-algebra, that is, every finite
 direct sum of matrix algebras $\bigoplus_{k<r}M_{d_k}(\C)$. The
 generalization transports the one-summand theorem along the block-diagonal
@@ -861,12 +861,18 @@ $M_M(\C)$, $M=\sum_kd_k$.
     The image of an operator system under an injective unital
     $*$-homomorphism is an operator system. For complete positivity, a
     level-$j$ matrix over the image $\iota(S)$ compresses blockwise to a
-    family over $S$ — the block-diagonal compression left-inverts the
-    embedding on every slice — and each block is positive semidefinite by
-    invariance of positivity under simultaneous row and column reindexing.
-    Complete positivity of $T$ on $S$ applies to this family, and the
-    linear equivalence of $S$ and $\iota(S)$ converts the conclusion back
-    to $T''$.
+    family over $S$: the block-diagonal compression left-inverts the
+    embedding on every slice,
+    \begin{align}
+        \bigl(\iota_j(X)\bigr)_{ab}
+        =\iota\bigl((X_k)_{ab}\bigr)_{k<r},
+        \qquad\text{so}\qquad
+        \bigl(\operatorname{compress}_j(\iota_j(X))\bigr)_k = X_k ,
+    \end{align}
+    and each block is positive semidefinite by invariance of positivity
+    under simultaneous row and column reindexing. Complete positivity of
+    $T$ on $S$ applies to this family, and the linear equivalence of $S$
+    and $\iota(S)$ converts the conclusion back to $T''$.
 \end{proof}
 
 \begin{theorem}[Extending cp maps from operator systems, direct-sum domain]
