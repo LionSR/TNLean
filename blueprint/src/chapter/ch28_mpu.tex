@@ -175,7 +175,8 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
 
 \begin{definition}[Source matrix cuts]
     \label{def:mpu_source_cuts}
-    \lean{MPOTensor.sourceCutM₁, MPOTensor.sourceCutM₂}
+    \lean{MPOTensor.sourceCutM₁, MPOTensor.sourceCutM₂,
+      MPOTensor.sourceCutM₁_apply, MPOTensor.sourceCutM₂_apply}
     \leanok
     The first and second source matrix cuts of $\mathcal U$ are the matrices
     $\mathcal M_1$ and $\mathcal M_2$ defined by
@@ -187,31 +188,17 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
     \end{align}
     Thus $\mathcal M_1$ groups the left auxiliary index with the lower
     physical index, whereas $\mathcal M_2$ groups it with the upper physical
-    index.
+    index.  The displayed equations also give their entrywise evaluation
+    formulas.
 \end{definition}
-
-\begin{lemma}[Entries of the source matrix cuts]
-    \label{lem:mpu_source_cut_entries}
-    \lean{MPOTensor.sourceCutM₁_apply, MPOTensor.sourceCutM₂_apply}
-    \leanok
-    \uses{def:mpu_source_cuts}
-    For all $i,j\in P$ and $\alpha,\beta\in A$, the entries of the two cuts
-    are
-    \begin{align}
-        (\mathcal M_1)_{(\alpha,j),(i,\beta)}
-            &= \mathcal U^i_{j,\alpha,\beta}, \\
-        (\mathcal M_2)_{(\alpha,i),(j,\beta)}
-            &= \mathcal U^i_{j,\alpha,\beta}.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    Both identities follow directly from Definition~\ref{def:mpu_source_cuts}.
-\end{proof}
 
 \begin{definition}[Enumerated source matrix cuts]
     \label{def:mpu_source_cuts_fin}
-    \lean{MPOTensor.sourceCutM₁Fin, MPOTensor.sourceCutM₂Fin}
+    \lean{MPOTensor.sourceCutM₁Fin, MPOTensor.sourceCutM₂Fin,
+      MPOTensor.sourceCutM₁Fin_eq_reindex, MPOTensor.sourceCutM₂Fin_eq_reindex,
+      MPOTensor.sourceCutM₁Fin_apply, MPOTensor.sourceCutM₂Fin_apply,
+      MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank,
+      MPOTensor.sourceCutM₂_rank_eq_sourceCutM₂Fin_rank}
     \leanok
     \uses{def:mpu_source_cuts}
     Choose the standard enumerations
@@ -219,43 +206,16 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
     $P\times A\cong\{0,\ldots,dD-1\}$.  The enumerated source cuts
     $\widetilde{\mathcal M}_1$ and $\widetilde{\mathcal M}_2$ are obtained
     from $\mathcal M_1$ and $\mathcal M_2$ by transporting their row and
-    column indices along these bijections.
-\end{definition}
-
-\begin{lemma}[Reindexing formulas for the source cuts]
-    \label{lem:mpu_source_cut_reindex}
-    \lean{MPOTensor.sourceCutM₁Fin_eq_reindex, MPOTensor.sourceCutM₂Fin_eq_reindex,
-      MPOTensor.sourceCutM₁Fin_apply, MPOTensor.sourceCutM₂Fin_apply}
-    \leanok
-    \uses{def:mpu_source_cuts, def:mpu_source_cuts_fin}
-    Each enumerated source cut is the corresponding product-indexed cut
-    transported along the standard row and column bijections.  In particular,
-    its entry at enumerated indices is the entry of the original cut at their
-    inverse images.
-\end{lemma}
-
-\begin{proof}\leanok
-    This is the defining property of transport of a matrix along bijections.
-\end{proof}
-
-\begin{lemma}[Ranks are invariant under source-cut enumeration]
-    \label{lem:mpu_source_cut_rank_reindex}
-    \lean{MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank,
-      MPOTensor.sourceCutM₂_rank_eq_sourceCutM₂Fin_rank}
-    \leanok
-    \uses{lem:mpu_source_cut_reindex}
-    Reindexing does not change either matrix rank:
+    column indices along these bijections.  Their entries are obtained by
+    applying the original cuts to the inverse images of the enumerated
+    indices, and bijective reindexing preserves their ranks:
     \begin{align}
         \operatorname{rank}(\mathcal M_1)
             &= \operatorname{rank}(\widetilde{\mathcal M}_1), \\
         \operatorname{rank}(\mathcal M_2)
             &= \operatorname{rank}(\widetilde{\mathcal M}_2).
     \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    Matrix rank is invariant under bijective reindexing of rows and columns.
-\end{proof}
+\end{definition}
 
 \begin{definition}[Right and left ranks]
     \label{def:mpu_right_left_ranks}
@@ -274,7 +234,7 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
     \leanok
-    \uses{def:mpu_source_cuts, def:mpu_right_left_ranks}
+    \uses{def:mpu_right_left_ranks}
     Every tensor $\mathcal U$ of physical dimension $d$ and auxiliary
     dimension $D$ satisfies
     \begin{align}
@@ -283,6 +243,7 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpu_source_cuts}
     The rank of $\mathcal M_1$ is at most its number $dD=Dd$ of columns.
 \end{proof}
 
@@ -290,7 +251,7 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
     \label{thm:mpu_left_rank_bound}
     \lean{MPOTensor.leftRank_bound}
     \leanok
-    \uses{def:mpu_source_cuts, def:mpu_right_left_ranks}
+    \uses{def:mpu_right_left_ranks}
     Every tensor $\mathcal U$ of physical dimension $d$ and auxiliary
     dimension $D$ satisfies
     \begin{align}
@@ -299,5 +260,6 @@ $i,j\in P$ are physical indices and $\alpha,\beta\in A$ are auxiliary indices.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpu_source_cuts}
     The rank of $\mathcal M_2$ is at most its number $dD=Dd$ of columns.
 \end{proof}
