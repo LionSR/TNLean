@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTSectorAnalyticProperties
 import TNLean.MPS.MPDO.LocalOrthogonalSumAreaLaw
+import TNLean.MPS.MPDO.PhysicalSupportRestriction
 import TNLean.MPS.MPDO.SimpleLocalStructure
 
 /-!
@@ -382,5 +383,64 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
   · intro N hN t
     exact trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos
       M S hTotal X hEq hM hZCL hWeight hnonNil hSpan hSAL t hN
+
+/-- Every common-weight-absorbed BNT representative inherits the four Case-II
+properties available before the structural classification: one-site injectivity, positivity on
+all positive chain lengths, saturation of the area law, and literal physical-trace idempotence.
+
+The ambient SAL normalization makes its physical-trace transfer nonzero. Hence ambient literal
+idempotence also supplies the scale-invariant relation needed by the existing sectorwise entropy
+argument. The literal block equation itself is retained separately in the conclusion.
+
+**Scope restriction (literal-ZCL inheritance):** This is only the literal-ZCL inheritance part
+of Case II. It does not assert `MPSTensor.IsNormalTensor` for an absorbed tensor, invoke the
+normal Case-I structural theorem, or complete `prop2to3`. The remaining Case-II boundary is
+recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
+theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hSAL : IsSAL M)
+    (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
+    (s : Fin S.basisCount) :
+    (commonWeightAbsorbedBasisMPOTensor S hWeight s).IsInjective ∧
+      IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
+      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s) ∧
+      physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *
+          physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
+        physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+  have hTransfer : physTraceTransfer M ≠ 0 := by
+    intro hZero
+    exact (Classical.choose_spec hSAL).1 1 Nat.zero_lt_one (by
+      rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer, hZero]
+      simp)
+  have hSourceZCL : IsSourceZCL M :=
+    isSourceZCL_of_physTraceTransfer_sq M hTransfer hZCL_sq
+  exact ⟨commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s,
+    commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
+      M S hM hWeight hnonNil hSpan hSAL s,
+    commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
+      M S hTotal X hEq hM hWeight hnonNil hSpan hSAL hSourceZCL s,
+    commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
+      M S hTotal X hEq hZCL_sq hWeight s⟩
 
 end MPOTensor
