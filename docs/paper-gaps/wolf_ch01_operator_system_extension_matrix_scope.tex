@@ -58,25 +58,31 @@ block-diagonal matrix is positive semidefinite exactly when each of its
 diagonal blocks is.
 
 The codomain algebra $\mathcal B$ remains a full matrix algebra
-$\mathcal B=\MN{p}$. This is not a residual scope restriction: as before, the
-choice $\mathcal B=M_p(\mathbb C)$ tracks the source proof's own reduction,
-which fixes the ancilla dimension and never revisits the direct-sum structure
-of $\mathcal B$ after that point, so the codomain restriction is without loss
-of generality for the source's own argument.
+$\mathcal B=\MN{p}$. This \emph{is} a residual scope restriction. The source
+statement quantifies $\mathcal B$ over every finite-dimensional $C^*$-algebra,
+while the source's displayed proof only constructs an $M_n(\mathbb C)$-valued
+extension: the ancilla dimension $n$ is fixed with
+$\mathcal B\subseteq M_n(\mathbb C)$, and Hahn--Banach plus Choi--Jamiolkowski
+yield a completely positive $\tilde T:\mathcal A\to M_n(\mathbb C)$. The final
+$\mathcal B$-valued step is left implicit in the source; it follows by
+composing with a completely positive conditional expectation
+$M_n(\mathbb C)\to\mathcal B$ onto the subalgebra (for instance the
+trace-preserving one), which the library does not currently provide in this
+generality.
 
 \section{Verdict}
 
-\textbf{Closed for the domain algebra.} Wolf's proposition is now formalized
-at its stated generality for the domain algebra $\mathcal A$: an arbitrary
-finite direct sum $\bigoplus_{k<r} M_{d_k}(\mathbb C)$, not only the
-one-summand case. No hypothesis is added beyond the source statement (the
-direct-sum operator-system and complete-positivity predicates match the
-source's definitions on each summand, and complete positivity at level $j$ is
-exactly the source's $T\otimes\mathrm{id}_j$ positivity condition applied
-block by block). The codomain restriction $\mathcal B=M_p(\mathbb C)$ remains,
-documented above and in the module docstring of
-\doclink{TNLean/Channel/OperatorSystemExtension} as without loss of generality
-for the source's proof technique, not a gap. Tracked in \ghissue{5589}.
+\textbf{Closed for the domain algebra; codomain restriction remains.} Wolf's
+proposition is now formalized at its stated generality for the domain algebra
+$\mathcal A$: an arbitrary finite direct sum $\bigoplus_{k<r} M_{d_k}(\mathbb
+C)$, not only the one-summand case. No hypothesis is added beyond the source
+statement (the direct-sum operator-system and complete-positivity predicates
+match the source's definitions on each summand, and complete positivity at
+level $j$ is exactly the source's $T\otimes\mathrm{id}_j$ positivity condition
+applied block by block). The codomain restriction $\mathcal B=M_p(\mathbb C)$
+remains a residual scope restriction, documented above and in the module
+docstring of \doclink{TNLean/Channel/OperatorSystemExtension}; the general
+codomain subalgebra is tracked in \ghissue{5645}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
