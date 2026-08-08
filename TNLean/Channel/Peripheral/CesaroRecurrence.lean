@@ -65,7 +65,7 @@ open Matrix Filter
 
 namespace Module.End
 
-variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
+variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V]
 
 /-! ### Decay of powers on generalized eigenspaces with `‖μ‖ < 1` -/
 
@@ -198,7 +198,7 @@ theorem tendsto_pow_apply_zero_of_norm_lt_one {f : Module.End ℂ V} {μ : ℂ}
 
 /-- **Decay of powers on a maximal generalized eigenspace of modulus `< 1`.** -/
 theorem tendsto_pow_apply_zero_of_mem_maxGenEigenspace_of_norm_lt_one
-    {f : Module.End ℂ V} {μ : ℂ} (hμ : ‖μ‖ < 1) {x : V}
+    [FiniteDimensional ℂ V] {f : Module.End ℂ V} {μ : ℂ} (hμ : ‖μ‖ < 1) {x : V}
     (hx : x ∈ f.maxGenEigenspace μ) :
     Tendsto (fun n : ℕ ↦ (f ^ n) x) atTop (𝓝 0) := by
   obtain ⟨l, hl⟩ := (f.mem_maxGenEigenspace μ x).mp hx
@@ -217,7 +217,8 @@ private theorem biSup_set_eq_toFinset {α : Type*} [CompleteLattice α] {s : Set
 eigenvalue of `f` has modulus at most one, each non-peripheral eigenvalue has
 modulus strictly less than one, so `fⁿ x → 0` on the sum of the non-peripheral
 generalized eigenspaces. -/
-theorem tendsto_pow_apply_zero_of_mem_nonPeripheralSubspace {f : Module.End ℂ V}
+theorem tendsto_pow_apply_zero_of_mem_nonPeripheralSubspace [FiniteDimensional ℂ V]
+    {f : Module.End ℂ V}
     (hb : ∀ μ : ℂ, f.HasEigenvalue μ → ‖μ‖ ≤ 1) {x : V}
     (hx : x ∈ f.nonPeripheralSubspace) :
     Tendsto (fun n : ℕ ↦ (f ^ n) x) atTop (𝓝 0) := by
@@ -433,6 +434,7 @@ theorem tendsto_endEquiv_pow_peripheralProjection
 
 /-! ### Positivity, trace preservation, and complete positivity of `T_φ` -/
 
+omit [NeZero D] in
 /-- Powers of a positive map stay positive on positive-semidefinite inputs. -/
 private theorem pow_posSemidef_of_isPositiveMap (hPos : IsPositiveMap T)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X.PosSemidef) (m : ℕ) :
