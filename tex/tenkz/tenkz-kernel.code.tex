@@ -120,6 +120,9 @@
     use~bonds=none~and~declare~multi-member~topology~with~wires. }
 \msg_new:nnn {tenkz}{kernel-frame-basis-scope}
   { [TKZ-FRAME-BASIS-SCOPE]~basis=~is~picture-scoped~in~this~kernel~stage. }
+\msg_new:nnn {tenkz}{kernel-metrics-scope}
+  { [TKZ-METRICS-SCOPE]~metrics=~is~picture~policy:~a~group~shares~its~
+    picture's~metric~context. }
 \msg_new:nnn {tenkz}{kernel-frame-basis-circle}
   { [TKZ-FRAME-BASIS-CIRCLE]~basis=~currently~requires~flat~or~plane;~
     a~circle~basis~needs~a~declared~tangent-offset~contract. }
@@ -1140,6 +1143,12 @@
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { align } { align }
 \__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { size }
   { s, m, l } { size }
+% metrics=: the named metric profile of the picture's pitch.  Math style
+% owns the density profile; only the author knows the page, and a picture
+% whose word outruns the text column names the compact profile here
+% instead of spelling a raw length in its body (Extension-gate: #5620).
+\__tenkz_kernel_choice:nnnn { tenkz-kernel-picture } { metrics }
+  { compact } { metrics }
 \__tenkz_kernel_value:nnn   { tenkz-kernel-picture } { check } { check }
 \__tenkz_kernel_unknown:nn  { tenkz-kernel-picture } { picture }
 
@@ -1478,9 +1487,14 @@
     \use:c {tenkz@auditpicturetrue}
     \cs_set:cpe {tenkz@auditpictureid}
       { k \int_use:N \g__tenkz_kernel_picture_int }
+    % A declared metric profile is part of the picture record: the stream
+    % states it, since pitch-normalized coordinates cannot show it.
+    \__tenkz_model_picture_get:nN {metrics} \l__tenkz_kernel_scratch_tl
     \__tenkz_kernel_event:n
       {
         picture|id=k \int_use:N \g__tenkz_kernel_picture_int |lang=kernel
+        \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+          { |metrics=\tl_use:N \l__tenkz_kernel_scratch_tl }
         \bool_if:NT \l__tenkz_kernel_ineq_bool
           { |scope=\int_use:N \g__tenkz_kernel_eq_scope_int }
       }
@@ -2414,6 +2428,13 @@
     \bool_set_true:N \l__tenkz_kernel_group_keys_bool
     \__tenkz_kernel_keys:nn { tenkz-kernel-picture } {#1}
     \bool_set_false:N \l__tenkz_kernel_group_keys_bool
+    % The metric context is picture policy: a sub-frame shares its
+    % picture's pitch, so a group-scope profile is refused, not scaled.
+    \prop_if_in:NnT \l__tenkz_kernel_stage_prop {metrics}
+      {
+        \msg_error:nn {tenkz}{kernel-metrics-scope}
+        \prop_remove:Nn \l__tenkz_kernel_stage_prop {metrics}
+      }
     \__tenkz_kernel_commit:
     % the group body arrives as one grabbed argument, so its column tabs
     % are the document's alignment character; give them the column step
@@ -16718,6 +16739,19 @@
     \prop_map_inline:Nn \l__tenkz_kernel_policy_prop
       { \exp_args:Ne \__tenkz_model_record_picture:n { ##1 = { \exp_not:n {##2} } } }
     \prop_clear:N \l__tenkz_kernel_stage_prop
+    % The named metric profile acts once, here, on the group-local pitch:
+    % the pitch is the one base dimension, so scaling it scales every named
+    % ratio while the print-size floors hold (tenkz-metric.code.tex).
+    \prop_get:NnN
+      \l__tenkz_kernel_policy_prop {metrics} \l__tenkz_kernel_scratch_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+      {
+        \str_if_eq:VnT \l__tenkz_kernel_scratch_tl {compact}
+          {
+            \dim_set:Nn \tenkz@pitch
+              { \__tenkz_metric_ratio:n {compactpitch} \tenkz@pitch }
+          }
+      }
     \cs_set_eq:NN \tn \__tenkz_kernel_tn_cmd
     \cs_set_eq:NN \\ \__tenkz_kernel_newrow:
   }

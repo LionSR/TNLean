@@ -1,0 +1,13 @@
+% Negative regression: the metric-profile alphabet is closed.  A profile
+% word outside it is a coded error, never a silently kept base metric.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=1, metrics=tight]\end{tenkz}
+\end{document}

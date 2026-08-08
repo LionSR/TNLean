@@ -2849,3 +2849,32 @@ co-occurrence flag:
 | flag | verdict |
 |---|---|
 | flag:cooccur:atom-declaration:ports+skin | keep-because: a declared atom states its sanctioned skin and its complete typed ports — the declaration contract requires both halves, so their co-occurrence is the grammar, not a foldable pair; expiry 1.0 |
+
+### 2026-08-08 — the compact metric profile is named
+
+The 0.7 surface had a compact profile; the kernel had none, and the free-misc
+redraw wave paid for the gap: the ch21 structure-operator recursion — nineteen
+columns whose word outruns the compiled page at the base metric — could state
+its half pitch only as a raw in-body `\tnset{pitch=5.5mm}` setup length. Math
+style cannot close this gap, because it senses the surrounding text and not
+the page; only the author knows the column. The picture now declares
+`metrics=compact`, which sets the pitch to the `compactpitch` row of the
+metric registry — half the base metric — and because every repeated distance
+is a named ratio of that one base dimension, the whole metric family scales
+with the pitch while the print-size floors hold. The profile is picture
+policy: a group shares its picture's metric context and refuses the key with
+its own coded error, and a profile word outside the alphabet is refused, not
+kept. The ch21 figure drops its raw length in the same change and renders
+pixel-identically.
+
+The new leaf is the one census move: M1 kernel 103 to 104, M2 parser paths
+133 to 134, with the parser identity changing accordingly. M3 is untouched
+at 0, M4 at 25.94, and the alias and overload ledgers do not move. The
+metric registry gains one ratio row, `compactpitch` (0.5), the profile's
+named factor; no other registry dimension moves.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-picture:metrics | keep-because: kernel-scope rows count no demand-corpus consumers before the S4 surface swap, as every other kernel-picture row records; the leaf already carries its first blueprint consumer in the ch21 structure-operator recursion and its Extension-gate in #5620; expiry 0.8 |
+
+Extension-gate: #5620

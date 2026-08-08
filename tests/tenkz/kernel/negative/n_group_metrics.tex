@@ -1,0 +1,16 @@
+% Negative regression: metrics= is picture policy.  A group is a sub-frame
+% of its picture and shares the picture's metric context, so a group-scope
+% profile is refused, not scaled.
+\documentclass{standalone}
+\usepackage{tenkz}
+\makeatletter
+\ExplSyntaxOn
+\file_input:n { tenkz-kernel.code.tex }
+\ExplSyntaxOff
+\makeatother
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2, bonds=none]
+  \tngroup[metrics=compact]{ \tn[at=(1,1), name=A]{A} }
+\end{tenkz}
+\end{document}

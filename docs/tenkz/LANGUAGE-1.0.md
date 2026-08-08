@@ -68,7 +68,7 @@ command is warranted only when
 it declares a record class of its own; a key modifies the record being
 declared. The generated reference prints this test beside every row.
 
-### 2.2 Picture and equation keys (12)
+### 2.2 Picture and equation keys (13)
 
 | Key | Type | Values | Default | Scope | Diagnostic family |
 |---|---|---|---|---|---|
@@ -81,6 +81,17 @@ declared. The generated reference prints this test beside every row.
 | `bonds=` | small-enum | `grid` `none` | `grid` | picture | `TKZ-PIC-*` |
 | `align=` | row | row number or `midline` | `midline` | picture | `TKZ-PIC-*` |
 | `size=` | small-enum | `s` `m` `l` | from math style | picture, equation | `TKZ-SIZE-*` |
+| `metrics=` | small-enum | `compact` | unset — the base metric | picture, equation | `TKZ-METRICS-*` |
+
+`metrics=` names the picture's metric profile, and it exists because the two
+density decisions have different owners: math style senses the surrounding
+text (§7), but only the author knows the page. A picture whose word outruns
+the text column declares `metrics=compact`, which sets the pitch to the
+`compactpitch` row of the metric registry — half the base metric. Every
+repeated distance is a named ratio of that one base dimension, so the whole
+metric family scales with the pitch while the print-size floors hold; no raw
+length enters the source. A group shares its picture's metric context, so
+the key is picture policy and is refused at group scope.
 
 With the default single-member basis, every frame contracts adjacent
 compatible cells by default: `bonds=grid` holds in chain and lattice frames
@@ -694,7 +705,9 @@ sum are read from the class the mathematics already has.
    the glyph — it goes to the station rule (§6).
 2. **Math-style sensing.** Display, text, and script contexts choose the
    density profile; there is no manual compact or inline flag. An inline
-   picture inherits the sensing.
+   picture inherits the sensing. A page-constrained picture declares its
+   metric profile with `metrics=` (§2.2), which scales the pitch and leaves
+   the density profile to the sensing.
 3. **Axis alignment.** Panels align on the declared wire axis (`align=`).
 4. **The audit follows the joiner.** Every term has a boundary signature;
    mathematics has none, and its signature is unknown. A relation requires
@@ -894,7 +907,7 @@ is not the fixed two-axis atom contract of §7.
 | `poly=k` | permanently dead: the consumers arrived and they want angles, not corners |
 | `weight=string` | `kind=string` |
 | `trace style=racetrack` | closure depth follows the selection the closure clears (§5) |
-| `inline`, `compact` | math-style sensing + `size=` |
+| `inline`, `compact` | math-style sensing + `size=`; a page-constrained picture declares `metrics=compact` (§2.2) |
 | `via=` | `route={<side> of <selector>}`: every waypoint in this contract's own sketches was a side of a selection |
 | `bend=` | nothing: an arc leaves and enters along its ends' faces |
 | `weight=` | nothing: the port type decides the stroke, and bundling is a claim the audit already carries |
