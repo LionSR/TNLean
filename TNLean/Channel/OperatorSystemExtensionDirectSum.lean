@@ -310,13 +310,7 @@ the block-diagonal embedding `Matrix.directSumEmbedFin`. -/
 noncomputable def directSumSubmoduleEquiv
     (S : Submodule ℂ (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ)) :
     ↥S ≃ₗ[ℂ] ↥(S.map directSumEmbedFin) :=
-  LinearEquiv.ofBijective
-    (LinearMap.codRestrict (S.map directSumEmbedFin) (directSumEmbedFin ∘ₗ S.subtype)
-      fun x => Submodule.mem_map_of_mem x.2)
-    ⟨fun x y hxy => Subtype.ext (directSumEmbedFin_injective (congrArg Subtype.val hxy)),
-      fun y => by
-        obtain ⟨x, hx, hxy⟩ := y.2
-        exact ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
+  Submodule.equivMapOfInjective directSumEmbedFin directSumEmbedFin_injective S
 
 theorem directSumSubmoduleEquiv_apply_coe
     (S : Submodule ℂ (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ)) (x : ↥S) :

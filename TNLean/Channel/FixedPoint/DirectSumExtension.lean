@@ -225,6 +225,8 @@ theorem directSumDiagonalCompression_posSemidef
     (directSumDiagonalCompression A k).PosSemidef := by
   exact hA.submatrix (Sigma.mk k)
 
+set_option linter.unusedFintypeInType false in
+omit [(k : ι) → DecidableEq (n k)] in
 /-- A block-diagonal matrix is positive semidefinite iff each of its diagonal blocks is: the
 canonical order on a finite direct sum of matrix algebras is entrywise, and this is the fact
 that realizes it inside the ambient block-diagonal embedding. -/
