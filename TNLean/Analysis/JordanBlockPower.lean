@@ -152,13 +152,6 @@ lemma nilpotentShift_pow_eq_zero_of_ge_D [NeZero D] {k : ℕ} (hk : D ≤ k) :
   have : k = D + (k - D) := (Nat.add_sub_cancel' hk).symm
   rw [this, pow_add, nilpotentShift_pow_D_eq_zero D, zero_mul]
 
-/-- Powers $N^k$ vanish for $k > D-1$. -/
-private lemma nilpotentShift_pow_eq_zero_of_gt_sub_one [NeZero D] {k : ℕ}
-    (hk : D - 1 < k) :
-    nilpotentShift D ^ k = (0 : Matrix (Fin D) (Fin D) ℂ) := by
-  have hkD : D ≤ k := by omega
-  exact nilpotentShift_pow_eq_zero_of_ge_D D hkD
-
 end NilpotentShiftPow
 
 section JordanBlock
