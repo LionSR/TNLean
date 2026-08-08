@@ -646,6 +646,13 @@ algebra is a single full matrix algebra $\MN{m}$; see
 \begin{theorem}[Coordinate direct-sum conditional expectation]
     \label{thm:coordinate_direct_sum_conditional_expectation}
     \lean{Matrix.coordinateDirectSumConditionalExpectation_apply}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_offDiagonal}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_range_subset}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_fixes}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_idempotent}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_unital}
+    \lean{Matrix.coordinateDirectSumConditionalExpectation_isConditionalExpectation}
     \lean{Matrix.coordinateDirectSumConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
     \leanok
     \uses{def:is_kraus_cptp, def:is_conditional_expectation}
@@ -664,15 +671,18 @@ algebra is a single full matrix algebra $\MN{m}$; see
           \bigl(m_k^{-1}\tr_{m_k}(A_{kk})\bigr)\right)
         \notag
     \end{align}
-    is trace-preserving and completely positive. It is a conditional
-    expectation onto the coordinate subalgebra
+    has zero off-diagonal output blocks. It is trace-preserving and completely
+    positive, and it is a conditional expectation onto the coordinate
+    subalgebra
     \begin{align}
         \bigoplus_{k\in K}
           \bigl(\mathbb1_{m_k}\otimes\MN{d_k}\bigr)
         &\subseteq\End(\mathcal H).
         \notag
     \end{align}
-    This is the normalized trace-preserving coordinate choice obtained by
+    Thus its range lies in this subalgebra, it fixes the subalgebra pointwise,
+    and it is unital and idempotent. This is the normalized trace-preserving
+    coordinate choice obtained by
     specializing the block densities in
     \cite[Proposition~1.5 and Equation~(1.40)]{Wolf2012Quantum} to maximally
     mixed densities. Relative to
