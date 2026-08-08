@@ -824,12 +824,33 @@ strong subadditivity for a normalized three-site reduced state.
     integer $n_s$ then gives positivity of the sector operator.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1759.
+\begin{lemma}[Physical-trace transfer after common-weight absorption]
+    \label{lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_toMPSTensor}
+    \lean{MPOTensor.physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer,
+      def:mpdo_common_sector_weight_absorption}
+    Suppose the weights over each BNT representative are copy-independent.
+    For $\mathcal K_s=\mu_sA_s$ and
+    $\mathcal B_s=\mathcal T_{A_s}$, one has
+    \begin{align}
+        \mathcal T_{\mathcal K_s}&=\mu_s\mathcal B_s.
+        \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_doubled_phys_trace_transfer_to_mps}
+    Substitute $\mathcal K_s=\mu_sA_s$ into the defining diagonal sum for the
+    physical-trace transfer and factor out the scalar $\mu_s$.
+\end{proof}
+
 % Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782.
 \begin{theorem}[Literal ZCL descends to absorbed BNT representatives]
     \label{thm:mpdo_absorbed_bnt_sector_literal_zcl}
     \lean{MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
-    \lean{MPOTensor.%
-      physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \lean{MPOTensor.%
       commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
@@ -857,7 +878,8 @@ strong subadditivity for a normalized three-site reduced state.
     \uses{def:global_gauge_of_blocks,
       lem:mpdo_doubled_phys_trace_transfer_to_mps,
       lem:mpdo_doubled_phys_trace_transfer_blockwise,
-      lem:mpdo_copy_weight_eq_common_weight}
+      lem:mpdo_copy_weight_eq_common_weight,
+      lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is
@@ -901,7 +923,7 @@ strong subadditivity for a normalized three-site reduced state.
 \begin{proof}\leanok
     \uses{cor:mpdo_simple_zcl_weight_copy_independent,
       lem:mpdo_simple_blockwise_zcl_equation,
-      thm:mpdo_absorbed_bnt_sector_literal_zcl}
+      lem:mpdo_absorbed_bnt_sector_phys_trace_transfer}
     Corollary~\ref{cor:mpdo_simple_zcl_weight_copy_independent} gives the
     common weight on every copy. Lemma~\ref{lem:mpdo_simple_blockwise_zcl_equation}
     then gives the displayed quadratic identity. The common weight is nonzero,
