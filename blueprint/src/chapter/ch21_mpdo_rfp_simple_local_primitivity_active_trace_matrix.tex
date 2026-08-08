@@ -639,9 +639,6 @@
     entries of $\eta_{k_n,k_{n+1}}^2$.
 \end{proof}
 
-% Proved Case-I components; the singleton-sector assembly (the Case-I
-% relations $(T^*)^2=T^*$ and $Q(1-LQ)L=0$) is not yet formalized.  The
-% route is sketched in docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Trace-squared matrix of the neighboring operators]
     \label{lem:mpdo_active_sector_trace_sq_matrix}
     \lean{MPOTensor.activeSectorTraceSqMatrix,
@@ -681,13 +678,6 @@
     to $\eta_{k,h}$.
 \end{proof}
 
-% Proved Case-I components.  The remaining singleton-sector assembly
-% is not yet formalized: the Case-I relations $(T^*)^2=T^*$ and
-% $Q(1-LQ)L=0$ in the rectangular decomposition
-% $\mathcal T_{\cal K}=LQ$.  The virtual-spanning counterexample above
-% shows that the last relation does not follow from virtual spanning
-% alone.  The route is sketched in
-% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{theorem}[Literal zero correlation length stabilizes the active
     trace matrix]
     \label{thm:mpdo_active_trace_matrix_literal_zcl_powers}
@@ -768,14 +758,6 @@
     Theorem~\ref{thm:matrix_primitive_pow_two_rank_one}.
 \end{proof}
 
-% Elementary combinatorial infrastructure for the overlap formula
-% $O_{{\cal K}^{\mathrm{MPS}}{\cal K}^{\mathrm{MPS}}}(N)=\tr((S^*)^N)$,
-% which is not yet assembled: reconciling the active-sector-restricted
-% index set $I_*$ used by $S^*$ with the full sector index set that the
-% cyclic-product trace factorization of
-% Theorem~\ref{thm:mpdo_cyclic_neighboring_trace_products} ranges over
-% remains open.  The route is sketched in
-% docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Indicator-path expansion of a matrix power]
     \label{lem:mpdo_pow_apply_path_indicator}
     \lean{MPOTensor.pow_apply_eq_sum_path_indicator}
@@ -978,6 +960,73 @@
     $S^*_{k,h}=\re\tr(\eta_{k,h}^2)$.
 \end{proof}
 
+\begin{theorem}[Trace invariance under squared diagonal similarity]
+    \label{thm:mpdo_trace_pow_similarity_squared_diagonal}
+    \lean{MPOTensor.trace_pow_similarity_squared_diagonal}
+    \leanok
+    Let $I$ be a finite index set, let $S\in\mathbb R^{I\times I}$, and
+    let $v\in\mathbb R^I$ satisfy $v_i>0$ for every $i\in I$. Put
+    \begin{align}
+        D&=\diag(v_i^2).
+        \notag
+    \end{align}
+    Then, for every $N\geq0$,
+    \begin{align}
+        \tr\!\left((D^{-1}SD)^N\right)
+        &=\tr(S^N).
+        \notag
+    \end{align}
+    This project lemma isolates the diagonal-conjugation calculation used in
+    the Case-I argument. It is not a separately stated result of
+    \cite{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every diagonal entry of $D$ is nonzero, so $D$ is invertible. Induction
+    on $N$ gives
+    \begin{align}
+        (D^{-1}SD)^N&=D^{-1}S^ND.
+        \notag
+    \end{align}
+    Cyclicity of trace and $DD^{-1}=1$ then give the claimed equality.
+\end{proof}
+
+\begin{theorem}[Trace-power decay below a stochastic Hadamard square]
+    \label{thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
+    \lean{Matrix.trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
+    \leanok
+    Let $I$ be a finite set with at least two elements, and let
+    $P,S\in\mathbb R^{I\times I}$. Suppose that $P$ is primitive and
+    row-stochastic, and that, for all $i,j\in I$,
+    \begin{align}
+        0\leq S_{i,j}&\leq(P\odot P)_{i,j}=P_{i,j}^2.
+        \notag
+    \end{align}
+    Then, as $N\to\infty$,
+    \begin{align}
+        \tr(S^N)&\longrightarrow0.
+        \notag
+    \end{align}
+    This project matrix-theoretic lemma is used in the Case-I argument. It
+    is not a separately stated result of \cite{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Entrywise non-negativity gives $\tr(S^N)\geq0$. Entrywise domination is
+    preserved by matrix powers, and hence
+    \begin{align}
+        \tr(S^N)&\leq\tr\!\left((P\odot P)^N\right).
+        \notag
+    \end{align}
+    Every power of $P\odot P$ has $L^\infty$ operator norm at most one.
+    Primitivity gives a positive power whose $L^\infty$ operator norm is
+    strictly below one; the
+    division algorithm then shows that $(P\odot P)^N\to0$. Thus its trace
+    tends to zero, and the squeeze theorem proves the result.
+\end{proof}
+
 \begin{theorem}[The active sector is unique]
     \label{thm:mpdo_active_sector_singleton}
     \lean{MPOTensor.card_activeSector_eq_one_of_literal_ZCL}
@@ -1019,18 +1068,21 @@
       lem:mpdo_active_sector_trace_sq_matrix,
       thm:mpdo_active_trace_matrix_literal_zcl_powers,
       thm:mpdo_active_sector_three_step_return_and_primitivity,
-      thm:mpdo_overlap_formula}
-    By contradiction: suppose $|I_*|\geq2$. The overlap formula and the
+      thm:mpdo_overlap_formula,
+      thm:mpdo_trace_pow_similarity_squared_diagonal,
+      thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
+    By contradiction, suppose $|I_*|\geq2$. The overlap formula and the
     normal self-overlap limit
     (\cite[lines~1080--1100]{Cirac2016MPDO_arXiv}) give
-    $\tr((S^*)^N)\to1$. Conjugating the primitive trace matrix $T^*$ by
-    its positive Perron eigenvector (with eigenvalue $1$, obtained from
-    the positive rank-one factorization of $(T^*)^2$ under $(T^*)^2=(T^*)^3$)
-    yields a row-stochastic primitive matrix $P$; the matching squared
-    conjugation of $S^*$ is bounded entrywise by $P\odot P$. Since
-    $|I_*|\geq2$, $P$ is an irreducible substochastic matrix on a
-    nontrivial index set, so $\tr((S^*)^N)\to0$, contradicting the limit
-    of $1$.
+    $\tr((S^*)^N)\to1$. The relation $(T^*)^2=(T^*)^3$ and primitivity
+    supply a positive Perron eigenvector with eigenvalue $1$. Conjugating
+    by its diagonal gives a row-stochastic primitive matrix $P$. The
+    matching squared diagonal conjugate $\widehat S$ of $S^*$ is
+    entrywise non-negative and bounded by $P\odot P$. On the nontrivial
+    active-sector set, Theorem~\ref{thm:matrix_trace_pow_tendsto_zero_of_nonneg_le_hadamard_self}
+    gives $\tr(\widehat S^N)\to0$.
+    Theorem~\ref{thm:mpdo_trace_pow_similarity_squared_diagonal} then gives
+    $\tr((S^*)^N)\to0$, contradicting the limit $1$.
 \end{proof}
 
 \begin{theorem}[The Case-I relation $(T^*)^2=T^*$]

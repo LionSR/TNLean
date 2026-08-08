@@ -270,15 +270,6 @@ theorem activeSectorTraceMatrix_pow_two_eq_pow_three_of_literal_ZCL
       _ = (T ^ 3).map Complex.ofReal := h2
   exact hT_sq_cu
 
-/-! ## Proved components
-
-The following theorems capture the proved matrix-algebra components of the
-Lemma C.5 Case-I argument.  The final singleton-consequence theorem
-`lemmaC5_caseI_singleton` is deferred (see the remaining-gap section
-below for the two missing pieces).
--/
-
-
 /-- If `T² = T³` and `T` is primitive, then every entry of `T²` is positive.
 This is the Perron-projection lemma used in the Case-I route.
 
@@ -298,10 +289,10 @@ theorem activeSectorTraceMatrix_pow_two_pos (F : PhysicalSectorFactorization K)
   have hTprim := F.activeSectorTraceMatrix_isPrimitive p hpos hspan hnonzero htriangle
   exact hTprim.pow_two_pos_of_pow_two_eq_pow_three hTsq_eq_Tcu
 
-/-! ## Lemma C.5 Case I — remaining theorems
+/-! ## Lemma C.5 Case I — completed route
 
 The matrix-algebra components above give `S ≤ T²` entrywise, `T² = T³` from
-literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  Four further
+literal ZCL, primitivity of `T`, and `T² > 0` entrywise.  The following four
 theorems complete the Case-I argument:
 
 1. **Trace similarity** `tr(S_hat ^ N) = tr(S^N)` where `S_hat` is the diagonal
