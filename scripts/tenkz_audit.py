@@ -1274,7 +1274,13 @@ class Audit:
         """Source spans of the equation environments, innermost first."""
         spans: list[tuple[int, int]] = []
         stack: list[int] = []
-        for token in re.finditer(r"\\(begin|end)\{tenkzeq\}", self._tex_src):
+        # TeX reads the space after a control word as part of it, so
+        # `\begin {tenkzeq}` opens the same environment; the shared construct
+        # scanner allows it and the span scan must agree, or a spaced source
+        # would look to the audit like an equation with no source at all.
+        for token in re.finditer(
+            r"\\(begin|end)\s*\{tenkzeq\}", self._tex_src
+        ):
             if token.group(1) == "begin":
                 stack.append(token.end())
             elif stack:
@@ -1354,9 +1360,13 @@ class Audit:
         distinct adjacent contractions plus one equals panels -- so that no
         panel escapes comparison; a group whose arithmetic fails is read as
         unchecked, and its panels are then compared pair by pair with no
-        waiver honoured.  And where every side is one panel, the panels' own
-        boundary records are compared here whatever the kernel's verdict said,
-        so a stream whose comparison never ran is caught rather than trusted.
+        waiver honoured.  And a side that is one panel is compared here
+        whatever the kernel's verdict said, so a stream whose comparison never
+        ran is caught rather than trusted -- for every relation of a group
+        with no contraction in it, and, where the source settles which gaps
+        its relations cross, for the single-panel sides of a group that holds
+        one too.  Only a composite side's fold is left to the kernel, which is
+        the one answer the audit does not recompute.
 
         Both halves of the ownership are checked.  A panel names its scope and
         a check names the scope it belongs to; a check whose scope owns no
@@ -1484,12 +1494,40 @@ class Audit:
                     )
                 self._compare_adjacent(members, scope, modulo, waived=set())
                 continue
-            if products:
-                # A product group's signature is a fold over an interface the
-                # kernel resolves; its verdict is the `check` record, which
-                # `check_kernel_checks` rejects when it says mismatch.
+            if not products:
+                self._compare_adjacent(members, scope, modulo, waived)
                 continue
-            self._compare_adjacent(members, scope, modulo, waived)
+            # A composite side's signature is a fold over an interface the
+            # kernel resolves, and its verdict is the `check` record that
+            # `check_kernel_checks` rejects when it says mismatch.  The sides
+            # that are one panel need no fold, so where the source settles
+            # every gap -- each one either a relation it writes or a
+            # contraction the stream records -- their relations are compared
+            # here as well.
+            gaps = relation_gaps | products
+            if not relation_gaps or len(gaps) != len(members) - 1:
+                continue
+            sides = self._scope_sides(members, sorted(relation_gaps))
+            for relation, (left, right) in enumerate(zip(sides, sides[1:]), 1):
+                if relation in waived or len(left) != 1 or len(right) != 1:
+                    continue
+                self._compare_panels(
+                    self.pictures[left[0]], self.pictures[right[0]],
+                    self.hard, "eq-boundary-mismatch",
+                    f"sit on relation {relation} of equation scope {scope}",
+                    modulo=modulo,
+                )
+
+    @staticmethod
+    def _scope_sides(members: list[int], relation_gaps: list[int]) -> list[list[int]]:
+        """The panel groups a scope's relations delimit, in source order."""
+        sides: list[list[int]] = []
+        start = 0
+        for gap in relation_gaps:
+            sides.append(members[start:gap])
+            start = gap
+        sides.append(members[start:])
+        return sides
 
     def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
                           waived: set[int]) -> None:

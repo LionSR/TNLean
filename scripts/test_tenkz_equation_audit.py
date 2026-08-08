@@ -344,10 +344,58 @@ def main() -> int:
     )
     assert once.count(("eq-sibling-mismatch", "ADV")) == 1, once
 
+    # Seeded defect: `panel1 = panel2 = panel3 panel4`.  The last side folds
+    # over a contraction and stays the kernel's to answer for, but the first
+    # relation has one panel on each side, and a mismatch there is the audit's
+    # to find however confidently the record says otherwise.
+    beside_product_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}=\n{PANELS[0]}{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    beside_product_records = (
+        "check|scope=1|product=3-4|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n"
+        "check|scope=1|relation=2|result=equal|signature=open:w\n"
+    )
+    beside_product = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up") + panel(3, "open:w")
+        + panel(4, "open:e") + beside_product_records,
+        beside_product_source,
+    )
+    mismatched_sides = [
+        rule for rule, _ in beside_product if rule == "eq-boundary-mismatch"
+    ]
+    assert len(mismatched_sides) == 1, beside_product
+
+    # The same shape with single sides that do agree stays clean: the fold
+    # over the contraction is not recomputed here.
+    beside_product_clean = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w") + panel(3, "open:w")
+        + panel(4, "open:e") + beside_product_records,
+        beside_product_source,
+    )
+    assert not beside_product_clean, beside_product_clean
+
+    # A spaced environment name opens the same equation, so its declared
+    # waiver is the source's and not a forgery.
+    spaced = audit_rules(
+        group_log(
+            "open:w",
+            "phys:up",
+            "check|scope=1|relation=1|result=off|reason=drafted\n",
+        ),
+        group_source("[check={signature, off={1: drafted}}]").replace(
+            "\\begin{tenkzeq}", "\\begin {tenkzeq}"
+        ).replace("\\end{tenkzeq}", "\\end {tenkzeq}"),
+    )
+    assert ("eq-check-off", "ADV") in spaced, spaced
+    assert "eq-check-drift" not in [rule for rule, _ in spaced], spaced
+
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 23 seeded group checks passed"
+        "and 26 seeded group checks passed"
     )
     return 0
 
