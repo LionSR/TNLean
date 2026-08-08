@@ -364,6 +364,21 @@ section.
     =\sum_t X_{ij}Y_{tt}=\tr(Y)X_{ij}$.
 \end{proof}
 
+\begin{theorem}[Left partial trace of a Kronecker product]
+    \label{thm:mpdo_left_partial_trace_kronecker}
+    \lean{Matrix.partialTraceLeft_kronecker}
+    \leanok
+    \uses{def:partial_trace_left}
+    For square matrices $X$ on $A$ and $Y$ on $B$,
+    $\tr_{A}(X\otimes Y)=\tr(X)Y$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For all $i,j$,
+    $[\tr_{A}(X\otimes Y)]_{ij}
+    =\sum_t X_{tt}Y_{ij}=\tr(X)Y_{ij}$.
+\end{proof}
+
 \begin{lemma}[The right partial trace is trace-preserving completely positive]
     \label{lem:mpdo_right_partial_trace_cptp}
     \lean{Matrix.partialTraceRightLM_isKrausCPTP}

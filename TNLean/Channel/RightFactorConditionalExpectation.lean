@@ -29,10 +29,18 @@ left state, and interchange the factors back.
 
 ## Main results
 
+* `Matrix.rightFactorConditionalExpectation_apply`: the explicit evaluation formula.
 * `Matrix.rightFactorConditionalExpectation_isKrausCPTP`: the map is trace-preserving
   and completely positive.
+* `Matrix.rightFactorConditionalExpectation_fixes`: the map fixes the right factor.
+* `Matrix.rightFactorConditionalExpectation_range_subset`: its range lies in the
+  right-factor subalgebra.
+* `Matrix.rightFactorConditionalExpectation_idempotent`: the map is idempotent.
+* `Matrix.rightFactorConditionalExpectation_unital`: the map is unital.
 * `Matrix.rightFactorConditionalExpectation_isConditionalExpectation`: the map is a
   conditional expectation in the sense of `Kraus.IsConditionalExpectation`.
+* `Matrix.rightFactorConditionalExpectation_isKrausCPTP_and_isConditionalExpectation`:
+  the combined interface used by the operator-system extension argument.
 
 ## References
 
@@ -51,18 +59,6 @@ namespace Matrix
 
 variable {m d : ℕ}
 
-private noncomputable def maximallyMixedLeft : Matrix (Fin m) (Fin m) ℂ :=
-  ((m : ℂ)⁻¹) • 1
-
-private theorem maximallyMixedLeft_posSemidef :
-    (maximallyMixedLeft (m := m)).PosSemidef := by
-  exact Matrix.PosSemidef.smul Matrix.PosSemidef.one (by positivity)
-
-private theorem maximallyMixedLeft_trace [NeZero m] :
-    (maximallyMixedLeft (m := m)).trace = 1 := by
-  simp [maximallyMixedLeft, Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin,
-    (Nat.cast_ne_zero.mpr (NeZero.ne m) : (m : ℂ) ≠ 0)]
-
 /-- The normalized partial-trace expectation onto the right matrix factor.
 
 It is implemented as tensor-factor interchange, partial trace, preparation of
@@ -72,11 +68,11 @@ exhibits the standard completely positive construction.
 Source: the one-block trace-preserving choice associated with Wolf,
 Proposition 1.5 and Equation (1.40); it supplies the codomain retraction for
 the extension theorem at local source lines 616--626. -/
-noncomputable def rightFactorConditionalExpectation :
+def rightFactorConditionalExpectation :
     Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ :=
   (equivReindexMap (Equiv.prodComm (Fin d) (Fin m))).comp
-    ((preparationMap (α := Fin d) (maximallyMixedLeft (m := m))).comp
+    ((preparationMap (α := Fin d) (maximallyMixedOn (dA := m))).comp
       ((partialTraceRightLM (α := Fin d) (β := Fin m)).comp
         (equivReindexMap (Equiv.prodComm (Fin m) (Fin d)))))
 
@@ -89,7 +85,7 @@ theorem rightFactorConditionalExpectation_apply
       (1 : Matrix (Fin m) (Fin m) ℂ) ⊗ₖ
         (((m : ℂ)⁻¹) • partialTraceLeft A) := by
   ext p q
-  simp [rightFactorConditionalExpectation, maximallyMixedLeft, equivReindexMap,
+  simp [rightFactorConditionalExpectation, maximallyMixedOn, equivReindexMap,
     Matrix.coe_reindexLinearEquiv, Matrix.reindex_apply, preparationMap,
     partialTraceRightLM, partialTraceRight_apply, Matrix.partialTraceLeft_apply]
   ring
@@ -104,8 +100,8 @@ theorem rightFactorConditionalExpectation_isKrausCPTP [NeZero m] :
   have hTrace := partialTraceRightLM_isKrausCPTP (α := Fin d) (β := Fin m)
   have hTraceReindex := isKrausCPTP_comp hReindexIn hTrace
   have hPrepare := preparationMap_isKrausCPTP (α := Fin d)
-    (maximallyMixedLeft (m := m)) maximallyMixedLeft_posSemidef
-    maximallyMixedLeft_trace
+    (maximallyMixedOn (dA := m)) maximallyMixedOn_posSemidef
+    maximallyMixedOn_trace
   have hPrepareTrace := isKrausCPTP_comp hTraceReindex hPrepare
   have hReindexOut :=
     equivReindexMap_isKrausCPTP (Equiv.prodComm (Fin d) (Fin m))
@@ -118,7 +114,7 @@ theorem rightFactorConditionalExpectation_isKrausCP [NeZero m] :
 
 /-- The unital star subalgebra `1_m ⊗ M_d(ℂ)` inside
 `M_m(ℂ) ⊗ M_d(ℂ)`. -/
-noncomputable def rightFactorStarSubalgebra :
+def rightFactorStarSubalgebra :
     StarSubalgebra ℂ (Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ) :=
   StarAlgHom.range (rightKroneckerEmbed (m := Fin m) (n := Fin d))
 

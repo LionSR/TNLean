@@ -365,16 +365,6 @@ variable {dA : ℕ} [NeZero dA]
 variable {B C : Type*} [Fintype B] [DecidableEq B]
   [Fintype C] [DecidableEq C]
 
-/-- The maximally mixed matrix on a nonzero `Fin dA` index. -/
-noncomputable def maximallyMixedOn : Matrix (Fin dA) (Fin dA) ℂ :=
-  (dA : ℂ)⁻¹ • (1 : Matrix (Fin dA) (Fin dA) ℂ)
-
-/-- The maximally mixed matrix is positive definite. -/
-theorem maximallyMixedOn_posDef : (maximallyMixedOn (dA := dA)).PosDef := by
-  apply Matrix.PosDef.smul Matrix.PosDef.one
-  rw [inv_pos]
-  exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne dA)
-
 /-- The reference
 $\sigma_{ABC}=d_A^{-1}\mathbf 1_A\otimes\rho_{BC}$, reindexed from
 $A\times(B\times C)$ to $(A\times B)\times C$ so that `partialTraceRight`
