@@ -68,7 +68,7 @@ theorem choiRank_le_mul
 /-- **Kraus rank** (Wolf, Theorem 2.1 item 2): the minimal number of
 rectangular Kraus operators of a completely positive map is the rank of its
 Choi matrix, `r = rank(τ)`. -/
-theorem choiRank_isLeast_hasKrausCard_of_isKrausCP [NeZero d]
+theorem choiRank_isLeast_hasKrausCard_of_isKrausCP
     {T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d') (Fin d') ℂ}
     (hT : IsKrausCP T) :
     IsLeast {r : ℕ | Channel.HasKrausCard T r} (Channel.choiRank T) :=
