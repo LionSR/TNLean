@@ -46,7 +46,7 @@ inverse-map factors. See
 
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
 1374--1505. -/
-theorem exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
     (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
@@ -106,7 +106,7 @@ theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal
           (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
             (∑ k, a k * b k) = 1 := by
   obtain ⟨F, p, a, b, hp, hpsum, hpos, hab, hsum, _⟩ :=
-    exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+    exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
       K hK hSAL hZCL_sq hK_normal
   exact ⟨F, p, a, b, hp, hpsum, hpos, hab, hsum⟩
 
@@ -142,7 +142,7 @@ theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_liter
                     (∑ k, a k * b k) = 1 := by
   classical
   obtain ⟨F, p, aActive, bActive, hp, hpsum, hpos, habActive, hsumActive,
-      hincident⟩ := exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses
+      hincident⟩ := exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
         K hK hSAL hZCL_sq hK_normal
   let a : Fin F.sectorCount → ℝ := fun k ↦
     if hk : p k ≠ 0 then aActive ⟨k, hk⟩ else 0
