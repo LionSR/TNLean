@@ -225,6 +225,25 @@ theorem directSumDiagonalCompression_posSemidef
     (directSumDiagonalCompression A k).PosSemidef := by
   exact hA.submatrix (Sigma.mk k)
 
+-- The finite instances construct the sigma index used by `PosSemidef`; the unused-instance
+-- linter does not detect this use through the block-diagonal embedding. The per-summand
+-- `DecidableEq` instance is genuinely unused and is omitted.
+set_option linter.unusedFintypeInType false in
+omit [(k : ι) → DecidableEq (n k)] in
+/-- A block-diagonal matrix is positive semidefinite iff each of its diagonal blocks is: the
+canonical order on a finite direct sum of matrix algebras is entrywise, and this is the fact
+that realizes it inside the ambient block-diagonal embedding. -/
+theorem blockDiagonal'_posSemidef_iff (M : ∀ i, Matrix (n i) (n i) ℂ) :
+    (Matrix.blockDiagonal' M).PosSemidef ↔ ∀ i, (M i).PosSemidef := by
+  constructor
+  · intro h k
+    have hcomp := directSumDiagonalCompression_posSemidef
+      (A := directSumDiagonalEmbedding M) (directSumDiagonalEmbedding_apply M ▸ h) k
+    rwa [directSumDiagonalCompression_embedding] at hcomp
+  · intro h
+    rw [← directSumDiagonalEmbedding_apply M]
+    exact directSumDiagonalEmbedding_posSemidef h
+
 omit [Fintype ι] [DecidableEq ι] [(k : ι) → Fintype (n k)]
     [(k : ι) → DecidableEq (n k)] in
 /-- Diagonal compression commutes with conjugate transpose. -/

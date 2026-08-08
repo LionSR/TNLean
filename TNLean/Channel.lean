@@ -52,6 +52,7 @@ import TNLean.Channel.NormalForm
 import TNLean.Channel.OpenSystem
 import TNLean.Channel.OperatorSystem
 import TNLean.Channel.OperatorSystemExtension
+import TNLean.Channel.OperatorSystemExtensionDirectSum
 import TNLean.Channel.OrderedCP
 import TNLean.Channel.POVM
 import TNLean.Channel.POVM.RankOneNaimark
