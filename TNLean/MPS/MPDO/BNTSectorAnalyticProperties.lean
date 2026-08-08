@@ -16,7 +16,7 @@ formula
   P_s^{\otimes N}\sigma^{(N)}(K)P_s^{\otimes N}
     =n_s\sigma^{(N)}(\mathcal K_s)
 \]
-to the corresponding analytic properties of each absorbed normal
+to the corresponding analytic properties of each absorbed BNT
 representative \(\mathcal K_s\).
 
 This file proves the first and third properties in that passage.  Positivity
@@ -33,7 +33,7 @@ copy index.
 * `commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL`:
   the source projector construction supplies the required compression.
 * `commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
-  source zero correlation length restricts to every absorbed representative.
+  scale-invariant source zero correlation length restricts to every absorbed BNT representative.
 * `IsSimpleCanonicalForm.exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL`:
   simple canonical data package copy-independent weights and sectorwise source
   zero correlation length.
@@ -74,9 +74,11 @@ representative:
   \mathcal T_{\mathcal K_s}^2=\mathcal T_{\mathcal K_s}.
 \]
 
-**Scope restriction (literal-ZCL inheritance):** This proves only the literal-ZCL inheritance
-part of Case II. It does not assert spectral normality of the absorbed tensor or complete
-`prop2to3`. The remaining Case-II boundary is recorded in
+**Scope restriction (Case-II normality):** This proves literal physical-trace idempotence for
+the absorbed BNT representative, but not spectral normality. Coefficient absorption scales the
+transfer spectral radius by the squared modulus of the coefficient, and the global canonical-form
+normalization does not make every coefficient unit modulus. Thus the normal Case-I theorem cannot
+yet be applied sectorwise. The remaining boundary is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
@@ -107,8 +109,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
   rw [S.weight_eq_commonWeight hWeight] at hsquare
   exact hsquare
 
-/-- The source zero-correlation-length equation restricts to every absorbed
-normal representative in the horizontal canonical form.
+/-- The scale-invariant source zero-correlation-length equation restricts to every
+absorbed BNT representative in the horizontal canonical form.
 
 The nonnilpotence condition is used only to exclude the zero transfer.  The
 quadratic equation itself is the corresponding diagonal block of the
@@ -152,8 +154,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSourceZCL
   exact ⟨hweighted, lam, hlam, hsquare⟩
 
 /-- A simple canonical-form tensor with source zero correlation length admits
-canonical-form data whose weights are copy-independent and whose absorbed
-normal representatives all have source zero correlation length.
+canonical-form data whose weights are copy-independent and whose absorbed BNT
+representatives all have scale-invariant source zero correlation length.
 
 The chosen data retain the nonnilpotence condition from simplicity, so the
 sectorwise zero-correlation-length theorem applies without an additional
@@ -230,7 +232,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
   simpa only [smul_smul, inv_mul_cancel₀ hcopiesNe, one_smul] using hrescaled
 
 /-- Under the source hypotheses used to construct the BNT projectors, every
-absorbed normal representative generates an MPDO.
+absorbed BNT representative generates an MPDO.
 
 **Source hypothesis (biCF):** the one-letter simultaneous span is precisely
 the block-injective canonical-form assumption imposed at the start of Case II
@@ -263,7 +265,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
   exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     M S hM hWeight hC hClosure.1 hη hClosure.2 (Classical.choose hSAL) s
 
-/-- Every absorbed normal representative has strictly positive trace on each
+/-- Every absorbed BNT representative has strictly positive trace on each
 nonempty chain.  Positivity comes from the projector compression, while
 nonvanishing comes from the zero-correlation-length equation already
 restricted to the representative.

@@ -330,7 +330,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
   dsimp only at hEqL hEqSucc
   linarith [hEqL, hEqSucc]
 
-/-- Every absorbed normal representative of a simple tensor satisfies the
+/-- Every absorbed BNT representative of a simple tensor satisfies the
 saturated area law.
 
 The conclusion follows by decomposing each of the four marginals in strong
@@ -392,10 +392,12 @@ The ambient SAL normalization makes its physical-trace transfer nonzero. Hence a
 idempotence also supplies the scale-invariant relation needed by the existing sectorwise entropy
 argument. The literal block equation itself is retained separately in the conclusion.
 
-**Scope restriction (literal-ZCL inheritance):** This is only the literal-ZCL inheritance part
-of Case II. It does not assert `MPSTensor.IsNormalTensor` for an absorbed tensor, invoke the
-normal Case-I structural theorem, or complete `prop2to3`. The remaining Case-II boundary is
-recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+**Scope restriction (Case-II normality):** This theorem completes one-site injectivity, MPDO
+positivity, SAL, and literal physical-trace idempotence for each absorbed BNT representative.
+It does not assert `MPSTensor.IsNormalTensor`: coefficient absorption rescales the transfer
+spectral radius by the squared coefficient modulus, while the global canonical-form normalization
+does not force every coefficient to have modulus one. The normal Case-I structural theorem
+therefore remains unavailable sectorwise. This boundary is recorded in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL
