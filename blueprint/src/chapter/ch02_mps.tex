@@ -969,20 +969,20 @@ $A^{-1}A=\Id$. This is the identity used in
     \begin{center}
         % O_{AB}(N) = \sum_\sigma V^{(N)}(A)_\sigma
         % \overline{V^{(N)}(B)_\sigma}: the ket row is the A ring and the
-        % starred bra row is the conjugate B ring. Each vertical pairing
-        % sums one shared physical index; periodic closes both virtual
-        % rings. Hence every index is contracted and the network is a
-        % scalar. The brace makes the N-site contraction schematic.
+        % conjugate bra row is the conjugate B ring. Each vertical pairing
+        % sums one shared physical index; the periodic closure closes both
+        % virtual rings, the upper ring's return above the ladder and the
+        % lower ring's below it, so neither return crosses the physical
+        % pairings. Hence every index is contracted and the network is a
+        % scalar. The bracket makes the N-site contraction schematic.
         % Boundary signature: (virtual-west=0 | virtual-east=0 |
         % physical-up=0 | physical-down=0).
-        % Blocked on the 0.7 grid tier: the kernel draws each row's trace
-        % return one clearance below its own row, so the upper ring's return
-        % would run through the ladder and cross the physical pairings.  The
-        % picture migrates once a per-row closure can clear the whole
-        % two-row selection it closes.
-        \begin{tenkz}[rows={ket, bra}, periodic]
-            \tn{A} & \tndots & \tn{A} \\
-            \tn*{B}\tnspan[brace below]{3}{$N\text{ sites}$} & \tndots & \tn*{B}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket, bra}, boundary=periodic]
+            \tn[skin=box]{A} & \tn[skin=dots]{} & \tn[skin=box]{A} \\
+            \tn[skin=box]{\overline{B}} & \tn[skin=dots]{} &
+            \tn[skin=box]{\overline{B}}
+            \tnmark[form=bracket]{(2,1) .. (2,3)}{$N\text{ sites}$}
         \end{tenkz}
     \end{center}
     This pairing is linear in the first MPV coefficient and conjugate-linear
