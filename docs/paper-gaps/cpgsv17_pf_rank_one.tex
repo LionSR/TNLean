@@ -817,12 +817,11 @@ supplied trace matrix has been retired: it imposed no relation between the
 state, the matrix, and an MPO tensor, and therefore added no consequence to
 either criterion.
 
-The completed normal Case-I route supplies a third, tensor-attached result on
-the supported Hayashi sectors at the source hypothesis boundary.  The
-normalized active-sector rank-one conclusion is formalized in
+The completed normal Case-I route supplies a third, tensor-attached result at
+the source hypothesis boundary. The active-sector conclusion is formalized in
 \leanid{MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL},
-and its rectangular consequence is formalized in
-\leanid{MPOTensor.caseI_rectangular_remainder_eq_zero_of_literal_ZCL}.
+and the all-sector coefficient statement is formalized in
+\leanid{MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL}.
 Normality and literal ZCL, together with the physical-sector positivity and
 primitivity data, force the active sector to be unique and hence $T^2=T$.
 For the project factors $T=QL$, this gives
@@ -832,19 +831,35 @@ For the project factors $T=QL$, this gives
 Thus the nilpotent-zero obstruction is excluded on this normal Case-I surface;
 idempotence of $LQ$ alone would still yield only $T^2=T^3$.
 
+For the all-sector statement, retain the active coefficient functions on
+$I_* = \{k:p_k\ne0\}$ and set
+\[
+  a_k=b_k=0 \qquad (p_k=0).
+\]
+In the zero-weight-reparameterized and rephased factorization selected by the
+construction, $p_k=0$ makes both every incoming and every outgoing neighboring
+operator vanish. Hence
+\[
+  \operatorname{Re}\operatorname{tr}(\eta_{k,h})=a_kb_h
+\]
+for every pair of sector labels, and filtering the diagonal sum to $I_*$ gives
+$\sum_k a_kb_k=1$. This is a project-derived realization of the printed
+all-index coefficient equation in Lemma~C.5: CPSV16 quantifies sector labels
+without defining TNLean's active--inactive split or its ambient filler sectors.
+It completes Lemma~C.5 on the stated normal Case-I and literal-ZCL surface.
+The structural corollary at lines~1503--1505 remains open, since it must still
+package these coefficients with the physical isometry and the left--right
+tensors in one statement.
+
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
 inverse-map relations while the asserted factorization
 $T_{k,h}=a_kb_h$ does not exist. However, that tensor is not the injective
 normal tensor assumed in Case~I, and its normal representative loses literal
-ZCL. The raw example therefore does not refute Lemma~C.5 under its complete standing
-hypotheses, and the normal Case-I theorem above completes the supported-sector
-rank-one conclusion at that boundary.  Extending the coefficients across
-TNLean's ambient zero-weight filler sectors and packaging the structural
-corollary remain unsettled, as does the downstream normalization step used
-after absorbing BNT coefficients; in
-particular, this Case-I result must not be transported to the later Case-II
-argument without proving that normality survives the rescaling.
+ZCL. The raw example therefore does not refute Lemma~C.5 under its complete
+standing hypotheses. The coefficient theorem above does not supply the
+structural corollary or a later Case-II argument; the latter still requires a
+proof that normality survives the relevant rescaling.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site
