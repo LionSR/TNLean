@@ -254,11 +254,16 @@
 \begin{corollary}[Local sector structure from SAL and ZCL (all-sector boundary)]
     \label{cor:mpdo_sal_zcl_local_sector_structure}
     \notready
-    \uses{def:is_sal, def:mpo_source_zcl, thm:sal_implies_eta_structure,
-        thm:mpdo_active_trace_matrix_zcl_relations,
+    \uses{def:is_sal, def:mpo_physical_trace_transfer,
+        thm:sal_implies_eta_structure,
         thm:mpdo_casei_rank_one_coefficients_of_is_sal}
     Let $\mathcal K$ be an injective normal matrix product density operator
-    tensor satisfying the strong area law and zero correlation length. Then
+    tensor satisfying the strong area law and literal zero correlation length,
+    \begin{align}
+        \mathcal T_{\mathcal K}^2&=\mathcal T_{\mathcal K}.
+        \notag
+    \end{align}
+    Then
     there are
     an isometry, closed sector tensors, positive neighboring operators
     $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ such that the inverse-map
@@ -270,10 +275,10 @@
     This is the structural corollary at
     \cite[Appendix~C.2, lines~1501--1505]{Cirac2016MPDO_arXiv}. Its printed
     derivation combines Lemma~C.4 with the rank-one matrix step in Lemma~C.5.
-    The raw obstruction above does not satisfy the normal-tensor standing
-    hypothesis, while its normal representative loses literal ZCL. Thus the
-    printed route remains unresolved at this normalization boundary; no
-    alternative proof under the exact source hypotheses is known.
+    The supported-sector rank-one theorem supplies that matrix step. The
+    remaining task is to extend the coefficients across the ambient zero-weight
+    sectors and combine them with the physical isometry and left--right tensors
+    in one all-sector statement.
 \end{corollary}
 
 \begin{theorem}[Positive neighboring sectors generate positive periodic operators]
@@ -877,25 +882,26 @@ $\mathcal K_i=P_i\mathcal K_i=\mathcal K_iP_i$.
 This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
-% **Normalization obstruction (Lemma C.5):**
-% rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
-% has the displayed SAL, ZCL, and inverse-map data but is not the normal tensor
-% assumed in Case I; its normal representative loses literal ZCL. Hence the
-% proposition remains unresolved under the exact source hypotheses. Corrected
-% rank-one criteria under positive semidefiniteness or linear independence are
-% given by thm:psd_trace_powers_rank_one_t and
-% thm:pairing_idempotent_rank_one_t.
+% **All-sector Case-II boundary:**
+% The supported-sector normal Case-I rank-one theorem is complete. The remaining
+% source step must show that every BNT tensor inherits MPDO positivity, SAL, and
+% literal ZCL, then combine those Case-I data into the all-sector structure.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[BNT sector structure from SAL and ZCL (rank-one obstruction)]
+\begin{theorem}[BNT sector structure from SAL and ZCL (all-sector Case-II boundary)]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
-    \uses{def:is_sal, def:mpo_source_zcl,
+    \uses{def:is_sal, def:mpo_physical_trace_transfer,
         cor:mpdo_sal_zcl_local_sector_structure}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
-    equipped with a basis-of-normal-tensors decomposition. If $K$ satisfies
-    the strong area law and zero correlation length, then its basis tensors
-    have mutually orthogonal physical supports. Moreover, each basis tensor
+    equipped with a basis-of-normal-tensors decomposition. Suppose that $K$
+    satisfies the strong area law and literal zero correlation length,
+    \begin{align}
+        \mathcal T_K^2&=\mathcal T_K.
+        \notag
+    \end{align}
+    Then its basis tensors have mutually orthogonal physical supports.
+    Moreover, each basis tensor
     has an inverse-map sector decomposition with positive neighboring
     operators $\eta_{k,h}$ and real families $(a_k)_k,(b_k)_k$ satisfying
     \begin{align}

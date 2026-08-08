@@ -53,8 +53,8 @@ trace-normalized RFP-to-ZCL-and-SAL result, the unrestricted Proposition
 `prop3to4`, the fixed-bond/source-ZCL SAL theorem, the literal sharp
 `propblockinj` theorem, and the literal CPSV topological-projector commuting
 Gibbs theorem, the paper has 45 theorem-like occurrences and 40 distinct
-results. The occurrence-level count is 23 complete, 7 partial, and 15
-not-ready; the distinct-result count is 22 complete, 5 partial, and 13
+results. The occurrence-level count is 22 complete, 8 partial, and 15
+not-ready; the distinct-result count is 21 complete, 6 partial, and 13
 not-ready. Here **not-ready** means that the printed statement is false,
 ambiguous, or depends essentially on a formally refuted source lemma. It does
 not mean that every printed result has been formalized. In particular, the
@@ -327,7 +327,7 @@ These are known oversized (documented in #1512/#1522) and do not block unrelated
 
 ## 7. Key remaining coverage gaps
 
-The 18 non-complete distinct CPSV16 results comprise 5 partial and 13
+The 19 non-complete distinct CPSV16 results comprise 6 partial and 13
 not-ready results. They are source-ambiguous, formally refuted, research-level,
 owner-held, or scope-restricted by the current formal interface. Lemma
 `Lsigma3`, the Hayashi strong-subadditivity equality characterization, and the
