@@ -45,10 +45,10 @@ def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
 `MPSTensor` with the ambient physical dimension by zero-padding the Kraus family. -/
 theorem exists_tensor_of_hasKrausRankLE
     {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hE : Channel.HasKrausRankLE (D := D) E d) :
+    (hE : Channel.HasKrausRankLE E d) :
     ∃ A : MPSTensor d D, transferMap A = E := by
   rcases hE with ⟨s, hs, hE⟩
-  obtain ⟨K, hK⟩ := Channel.hasKrausCard_mono (D := D) hE hs
+  obtain ⟨K, hK⟩ := Channel.hasKrausCard_mono hE hs
   refine ⟨K, ?_⟩
   ext X i j
   simpa [transferMap_apply] using congrArg (fun M => M i j) (hK X).symm
@@ -69,7 +69,7 @@ def PeripheralEqualCaseRootChannelOfZGauge (d D p : ℕ) : Prop :=
       ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
         IsChannel E' ∧
         transferMap C = E' ^ p ∧
-        Channel.HasKrausRankLE (D := D) E' d
+        Channel.HasKrausRankLE E' d
 
 /-- **Tensor-level blocked-to-root reconstruction from a bounded channel root.**
 
@@ -101,7 +101,7 @@ step in the reverse direction of Theorem 4.1. -/
 def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
     ∀ {E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ},
-      IsChannel E' → transferMap B = E' ^ p → Channel.HasKrausRankLE (D := D) E' d
+      IsChannel E' → transferMap B = E' ^ p → Channel.HasKrausRankLE E' d
 
 /-- A bounded-Kraus-rank root hypothesis is enough to recover the existing
 inverse canonicalization hypothesis. -/
@@ -110,7 +110,7 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
     PRefinementInverseCanonicalization d D p := by
   intro B hB hDivisible
   rcases hDivisible with ⟨E', hE'chan, hpow⟩
-  have hRank : Channel.HasKrausRankLE (D := D) E' d := hRoot hB hE'chan hpow
+  have hRank : Channel.HasKrausRankLE E' d := hRoot hB hE'chan hpow
   obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
   refine ⟨A, ?_⟩
   calc

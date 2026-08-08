@@ -17,6 +17,11 @@ This file proves the necessary direction of the Kraus freedom theorem:
 if two Kraus families define the same completely positive map, they are
 related by a rectangular isometry.
 
+The results are stated for rectangular Kraus operators
+`Kⱼ : Matrix (Fin d') (Fin d) ℂ`, i.e. for maps `T : M_d(ℂ) → M_{d'}(ℂ)`
+between matrix algebras of possibly different dimensions; the square
+development is the specialization `d = d'`.
+
 ## Main results
 
 * `kraus_dual_eq_of_map_eq` — dual map equality from primal map equality
@@ -45,7 +50,7 @@ Concretely:
 open scoped Matrix ComplexOrder MatrixOrder InnerProductSpace
 open Matrix Finset BigOperators
 
-variable {D : ℕ}
+variable {d d' : ℕ}
 
 /-! ### Auxiliary lemma: dual map equality from primal map equality -/
 
@@ -53,22 +58,24 @@ variable {D : ℕ}
 the same Heisenberg dual: `∑ Bα† Y Bα = ∑ Aj† Y Aj` for all `Y`.
 
 This follows because a linear map determines its adjoint (w.r.t. the
-trace inner product) uniquely. -/
+trace inner product) uniquely. Stated for rectangular Kraus operators
+`Matrix (Fin d') (Fin d) ℂ`; the square form is the specialization
+`d = d'`. -/
 theorem kraus_dual_eq_of_map_eq
     {r₁ r₂ : ℕ}
-    (B : Fin r₁ → Matrix (Fin D) (Fin D) ℂ)
-    (A : Fin r₂ → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (B : Fin r₁ → Matrix (Fin d') (Fin d) ℂ)
+    (A : Fin r₂ → Matrix (Fin d') (Fin d) ℂ)
+    (h : ∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α : Fin r₁, B α * X * (B α)ᴴ =
       ∑ j : Fin r₂, A j * X * (A j)ᴴ) :
-    ∀ Y : Matrix (Fin D) (Fin D) ℂ,
+    ∀ Y : Matrix (Fin d') (Fin d') ℂ,
       ∑ α : Fin r₁, (B α)ᴴ * Y * B α =
       ∑ j : Fin r₂, (A j)ᴴ * Y * A j := by
   intro Y
   apply (Matrix.ext_iff_trace_mul_right).2
   intro X
   simp_rw [Finset.sum_mul, Matrix.trace_sum]
-  have trace_cycle : ∀ K : Matrix (Fin D) (Fin D) ℂ,
+  have trace_cycle : ∀ K : Matrix (Fin d') (Fin d) ℂ,
       trace (Kᴴ * Y * K * X) = trace (K * X * Kᴴ * Y) := fun K => by
     rw [Matrix.mul_assoc (Kᴴ * Y) K X, Matrix.trace_mul_comm,
         ← Matrix.mul_assoc (K * X) Kᴴ Y]
@@ -81,9 +88,9 @@ theorem kraus_dual_eq_of_map_eq
 `∑ Bα†Bα = ∑ Aj†Aj`. -/
 theorem kraus_conjTranspose_mul_eq_of_map_eq
     {r₁ r₂ : ℕ}
-    (B : Fin r₁ → Matrix (Fin D) (Fin D) ℂ)
-    (A : Fin r₂ → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (B : Fin r₁ → Matrix (Fin d') (Fin d) ℂ)
+    (A : Fin r₂ → Matrix (Fin d') (Fin d) ℂ)
+    (h : ∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α : Fin r₁, B α * X * (B α)ᴴ =
       ∑ j : Fin r₂, A j * X * (A j)ᴴ) :
     ∑ α : Fin r₁, (B α)ᴴ * B α =
@@ -99,7 +106,9 @@ first family is a linear combination of the second via a rectangular isometry
 `V : r₁ × r₂` with `V†V = 1`.
 
 Concretely: if `∑α Bα X Bα† = ∑j Aj X Aj†` for all `X` and `r₂ ≤ r₁`, then
-there exists `V` with `V†V = 1` and `Bα = ∑j Vαj • Aj` for all `α`.
+there exists `V` with `V†V = 1` and `Bα = ∑j Vαj • Aj` for all `α`. The Kraus
+operators are rectangular (`Matrix (Fin d') (Fin d) ℂ`), covering maps
+`M_d(ℂ) → M_{d'}(ℂ)`; the square form is the specialization `d = d'`.
 
 **Proof**: The map equality forces the "Stinespring vectors"
 `f(a,b)_j = (Aj)_{ab}` and `g(a,b)_α = (Bα)_{ab}` to have equal Gram matrices.
@@ -109,9 +118,9 @@ extends to a full isometry `V : ℂ^{r₂} → ℂ^{r₁}` whose matrix satisfie
 `V†V = 1`. -/
 theorem kraus_rectangular_freedom
     {r₁ r₂ : ℕ}
-    (B : Fin r₁ → Matrix (Fin D) (Fin D) ℂ)
-    (A : Fin r₂ → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (B : Fin r₁ → Matrix (Fin d') (Fin d) ℂ)
+    (A : Fin r₂ → Matrix (Fin d') (Fin d) ℂ)
+    (h : ∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α : Fin r₁, B α * X * (B α)ᴴ =
       ∑ j : Fin r₂, A j * X * (A j)ᴴ)
     (hCard : r₂ ≤ r₁) :
@@ -119,7 +128,7 @@ theorem kraus_rectangular_freedom
       V.conjTranspose * V = 1 ∧
       ∀ α : Fin r₁, B α = ∑ j : Fin r₂, V α j • A j := by
   -- ===== Phase 1: Pad A to size r₁ =====
-  let A' : Fin r₁ → Matrix (Fin D) (Fin D) ℂ :=
+  let A' : Fin r₁ → Matrix (Fin d') (Fin d) ℂ :=
     fun α => if hlt : α.val < r₂ then A ⟨α.val, hlt⟩ else 0
   -- B and A' define the same CPM
   have hBA' : ∀ X, ∑ α : Fin r₁, B α * X * (B α)ᴴ =
@@ -131,25 +140,25 @@ theorem kraus_rectangular_freedom
   -- Dual map equality
   have hdual := kraus_dual_eq_of_map_eq B A' hBA'
   -- ===== Phase 2: Gram matrix equality =====
-  let MB : Matrix (Fin r₁) (Fin D × Fin D) ℂ := fun α x => B α x.1 x.2
-  let MA' : Matrix (Fin r₁) (Fin D × Fin D) ℂ := fun α x => A' α x.1 x.2
+  let MB : Matrix (Fin r₁) (Fin d' × Fin d) ℂ := fun α x => B α x.1 x.2
+  let MA' : Matrix (Fin r₁) (Fin d' × Fin d) ℂ := fun α x => A' α x.1 x.2
   have hGram : MBᴴ * MB = MA'ᴴ * MA' := by
-    ext ⟨a, b⟩ ⟨c, d⟩
+    ext ⟨a, b⟩ ⟨c, e⟩
     simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, MB, MA']
     -- Use dual map equality at single a c 1
-    have h_entry := congr_fun (congr_fun (hdual (Matrix.single a c 1)) b) d
+    have h_entry := congr_fun (congr_fun (hdual (Matrix.single a c 1)) b) e
     simp only [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
       Matrix.single_apply] at h_entry
     -- Collapse the inner sum (over x₂) using sum_eq_single
-    have collapse : ∀ (K : Fin r₁ → Matrix (Fin D) (Fin D) ℂ),
+    have collapse : ∀ (K : Fin r₁ → Matrix (Fin d') (Fin d) ℂ),
         (∑ α, ∑ x₁, (∑ x₂, star (K α x₂ b) *
-          (if a = x₂ ∧ c = x₁ then (1 : ℂ) else 0)) * K α x₁ d) =
-        ∑ α, star (K α a b) * K α c d := by
+          (if a = x₂ ∧ c = x₁ then (1 : ℂ) else 0)) * K α x₁ e) =
+        ∑ α, star (K α a b) * K α c e := by
       intro K
       apply Finset.sum_congr rfl; intro α _
       have step₁ : ∀ x₁, (∑ x₂, star (K α x₂ b) *
-          (if a = x₂ ∧ c = x₁ then (1 : ℂ) else 0)) * K α x₁ d =
-          if c = x₁ then star (K α a b) * K α x₁ d else 0 := by
+          (if a = x₂ ∧ c = x₁ then (1 : ℂ) else 0)) * K α x₁ e =
+          if c = x₁ then star (K α a b) * K α x₁ e else 0 := by
         intro x₁
         have h_inner : (∑ x₂, star (K α x₂ b) *
             (if a = x₂ ∧ c = x₁ then (1 : ℂ) else 0)) =
@@ -195,9 +204,9 @@ theorem kraus_rectangular_freedom
 /-- Variant of `kraus_rectangular_freedom` with general index types. -/
 theorem kraus_rectangular_freedom'
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂] [DecidableEq ι₂]
-    (B : ι₁ → Matrix (Fin D) (Fin D) ℂ)
-    (A : ι₂ → Matrix (Fin D) (Fin D) ℂ)
-    (h : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+    (B : ι₁ → Matrix (Fin d') (Fin d) ℂ)
+    (A : ι₂ → Matrix (Fin d') (Fin d) ℂ)
+    (h : ∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α, B α * X * (B α)ᴴ =
       ∑ j, A j * X * (A j)ᴴ)
     (hCard : Fintype.card ι₂ ≤ Fintype.card ι₁) :
@@ -207,9 +216,9 @@ theorem kraus_rectangular_freedom'
   -- Reindex to Fin using Fintype.equivFin
   let e₁ : ι₁ ≃ Fin (Fintype.card ι₁) := Fintype.equivFin ι₁
   let e₂ : ι₂ ≃ Fin (Fintype.card ι₂) := Fintype.equivFin ι₂
-  let B' : Fin (Fintype.card ι₁) → Matrix (Fin D) (Fin D) ℂ := B ∘ e₁.symm
-  let A' : Fin (Fintype.card ι₂) → Matrix (Fin D) (Fin D) ℂ := A ∘ e₂.symm
-  have h' : ∀ X : Matrix (Fin D) (Fin D) ℂ,
+  let B' : Fin (Fintype.card ι₁) → Matrix (Fin d') (Fin d) ℂ := B ∘ e₁.symm
+  let A' : Fin (Fintype.card ι₂) → Matrix (Fin d') (Fin d) ℂ := A ∘ e₂.symm
+  have h' : ∀ X : Matrix (Fin d) (Fin d) ℂ,
       ∑ α : Fin (Fintype.card ι₁), B' α * X * (B' α)ᴴ =
       ∑ j : Fin (Fintype.card ι₂), A' j * X * (A' j)ᴴ := by
     intro X
