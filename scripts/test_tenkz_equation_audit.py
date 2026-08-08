@@ -377,6 +377,38 @@ def main() -> int:
     )
     assert not beside_product_clean, beside_product_clean
 
+    # Seeded defect: `A = B C D` written with two relation records and one
+    # contraction.  The count balances and the contraction stays clear of the
+    # one recognized relation, but a gap the source leaves empty joins its
+    # panels by juxtaposition and nothing else, so a contraction has to name
+    # it -- and the panel behind the unnamed gap carries the mismatch.
+    gap_partition_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}{PANELS[0]}{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    gap_partition = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w") + panel(3, "open:e")
+        + panel(4, "phys:up")
+        + "check|scope=1|product=2-3|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n"
+        "check|scope=1|relation=2|result=equal|signature=open:w\n",
+        gap_partition_source,
+    )
+    assert ("eq-unchecked", "HARD") in gap_partition, gap_partition
+    assert ("eq-boundary-mismatch", "HARD") in gap_partition, gap_partition
+
+    # The same display with a contraction on each juxtaposed gap closes.
+    gap_partition_whole = audit_rules(
+        panel(1, "open:w") + panel(2, "open:w") + panel(3, "open:e")
+        + panel(4, "open:w")
+        + "check|scope=1|product=2-3|result=contracted|signature=open:w\n"
+        "check|scope=1|product=3-4|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n",
+        gap_partition_source,
+    )
+    assert not gap_partition_whole, gap_partition_whole
+
     # A spaced environment name opens the same equation, so its declared
     # waiver is the source's and not a forgery.
     spaced = audit_rules(
@@ -395,7 +427,7 @@ def main() -> int:
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 26 seeded group checks passed"
+        "and 28 seeded group checks passed"
     )
     return 0
 

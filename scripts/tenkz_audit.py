@@ -105,7 +105,7 @@ from collections import Counter
 from dataclasses import dataclass
 from fractions import Fraction
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, NamedTuple, Optional
 
 from tenkzlib.texcase import (
     Construct,
@@ -410,6 +410,15 @@ def _stroked_polygon_intersects_roundrect(
         )
         for center, diameter in circles
     )
+
+
+class ScopePolicy(NamedTuple):
+    """What one equation's own source says about how it is checked."""
+
+    waived: set[int]        # relations its `check={off={k: ...}}` retires
+    modulo_bundles: bool    # whether it compares a bundle as its multiplicity
+    relation_gaps: set[int]  # gaps it writes a recognized relation across
+    product_gaps: set[int]   # gaps it leaves empty, joining by juxtaposition
 
 
 @dataclass
@@ -1287,14 +1296,17 @@ class Audit:
                 spans.append((stack.pop(), token.start()))
         return spans
 
-    def _source_check_policy(
-        self,
-    ) -> Optional[dict[int, tuple[set[int], bool, set[int]]]]:
+    def _source_check_policy(self) -> Optional[dict[int, ScopePolicy]]:
         """Per scope, the check policy the source itself declares.
 
         The policy is the relations it waives, whether it compares modulo
-        bundles, and which adjacent panel pairs its own joiners contract --
-        the gaps its panels sit across without a relation between them.  `None` when no source is linked: the stream is then the only
+        bundles, and what its own joiners settle about each gap between its
+        panels.  Two things a source settles positively: a gap it writes a
+        recognized relation across is a relation, and a gap it leaves empty
+        carries no mathematics at all and so can only be juxtaposition.  The
+        reading claims nothing about the gaps in between -- a relation set
+        inside braces is one it does not recognize -- so neither rule is ever
+        phrased as the absence of evidence.  `None` when no source is linked: the stream is then the only
         witness of its own policy, which is honoured and reported.  With a
         source, a waiver counts and a bundle expansion applies only where the
         environment's own `check=` says so, so a stale or edited stream can
@@ -1304,7 +1316,7 @@ class Audit:
         if not self.tex_linked:
             return None
         picture_scopes, scope_pictures = self._scope_index()
-        authorized: dict[int, tuple[set[int], bool, set[int]]] = {}
+        authorized: dict[int, ScopePolicy] = {}
         for begin, end in self._tenkzeq_spans():
             members = [
                 index for index, construct in enumerate(self.constructs)
@@ -1326,23 +1338,25 @@ class Audit:
                     f"{sorted(str(picture_scopes.get(member, 'no scope')) for member in members)}",
                 )
                 continue
-            # The separator reading recognizes a relation but never rules one
-            # out -- a relation set inside braces reads as unknown -- so what
-            # the source settles is where a contraction cannot be: across a
-            # gap it demonstrably writes a relation over.
+            separators = [
+                self._tex_src[
+                    self.constructs[left].end:self.constructs[right].start
+                ]
+                for left, right in zip(members, members[1:])
+            ]
             relation_gaps = {
-                position + 1
-                for position, (left, right) in enumerate(zip(members, members[1:]))
-                if same_equation(
-                    self._tex_src[
-                        self.constructs[left].end:self.constructs[right].start
-                    ]
-                )
+                position + 1 for position, separator in enumerate(separators)
+                if same_equation(separator)
             }
-            authorized[scope] = (
+            product_gaps = {
+                position + 1 for position, separator in enumerate(separators)
+                if not separator.strip()
+            }
+            authorized[scope] = ScopePolicy(
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
                 _tenkzeq_declares_bundles(self._tex_src, begin),
                 relation_gaps,
+                product_gaps,
             )
         return authorized
 
@@ -1416,9 +1430,9 @@ class Audit:
                 event.attrs.get("modulo") == "bundles" for event in records
             )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
-            declared, declared_modulo, relation_gaps = (
-                (set(), logged_modulo, set()) if policy is None
-                else policy.get(scope, (set(), False, set()))
+            declared, declared_modulo, relation_gaps, product_gaps = (
+                ScopePolicy(set(), logged_modulo, set(), set()) if policy is None
+                else policy.get(scope, ScopePolicy(set(), False, set(), set()))
             )
             # A bundle expansion loosens the comparison, so the source has to
             # ask for it: a stale stream carrying `modulo=bundles` past a
@@ -1443,11 +1457,14 @@ class Audit:
                 and len(relation_records) == len(relations)
                 and set(relations) == set(range(1, len(relations) + 1))
                 and len(product_records) == len(products)
-                # A contraction recorded across a gap the source writes a
-                # relation over folds panels the author never juxtaposed, and
-                # leaves the pair the author did juxtapose unchecked, while
+                # The joiners must partition the gaps the source settles: a
+                # contraction cannot sit where the source writes a relation,
+                # and a gap the source leaves empty joins its panels by
+                # juxtaposition and nothing else, so a contraction has to name
+                # it.  Either failure leaves a panel outside every side while
                 # the count still balances.
                 and not (products & relation_gaps)
+                and product_gaps <= products
                 and len(relations) + len(products) + 1 == len(members)
             )
             waived: set[int] = {
