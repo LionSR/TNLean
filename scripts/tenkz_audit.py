@@ -1281,11 +1281,14 @@ class Audit:
                 spans.append((stack.pop(), token.start()))
         return spans
 
-    def _source_check_policy(self) -> Optional[dict[int, tuple[set[int], bool]]]:
+    def _source_check_policy(
+        self,
+    ) -> Optional[dict[int, tuple[set[int], bool, set[int]]]]:
         """Per scope, the check policy the source itself declares.
 
-        The policy is the relations it waives and whether it compares modulo
-        bundles.  `None` when no source is linked: the stream is then the only
+        The policy is the relations it waives, whether it compares modulo
+        bundles, and which adjacent panel pairs its own joiners contract --
+        the gaps its panels sit across without a relation between them.  `None` when no source is linked: the stream is then the only
         witness of its own policy, which is honoured and reported.  With a
         source, a waiver counts and a bundle expansion applies only where the
         environment's own `check=` says so, so a stale or edited stream can
@@ -1295,7 +1298,7 @@ class Audit:
         if not self.tex_linked:
             return None
         picture_scopes, scope_pictures = self._scope_index()
-        authorized: dict[int, tuple[set[int], bool]] = {}
+        authorized: dict[int, tuple[set[int], bool, set[int]]] = {}
         for begin, end in self._tenkzeq_spans():
             members = [
                 index for index, construct in enumerate(self.constructs)
@@ -1317,9 +1320,23 @@ class Audit:
                     f"{sorted(str(picture_scopes.get(member, 'no scope')) for member in members)}",
                 )
                 continue
+            # The separator reading recognizes a relation but never rules one
+            # out -- a relation set inside braces reads as unknown -- so what
+            # the source settles is where a contraction cannot be: across a
+            # gap it demonstrably writes a relation over.
+            relation_gaps = {
+                position + 1
+                for position, (left, right) in enumerate(zip(members, members[1:]))
+                if same_equation(
+                    self._tex_src[
+                        self.constructs[left].end:self.constructs[right].start
+                    ]
+                )
+            }
             authorized[scope] = (
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
                 _tenkzeq_declares_bundles(self._tex_src, begin),
+                relation_gaps,
             )
         return authorized
 
@@ -1389,9 +1406,9 @@ class Audit:
                 event.attrs.get("modulo") == "bundles" for event in records
             )
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
-            declared, declared_modulo = (
-                (set(), logged_modulo) if policy is None
-                else policy.get(scope, (set(), False))
+            declared, declared_modulo, relation_gaps = (
+                (set(), logged_modulo, set()) if policy is None
+                else policy.get(scope, (set(), False, set()))
             )
             # A bundle expansion loosens the comparison, so the source has to
             # ask for it: a stale stream carrying `modulo=bundles` past a
@@ -1416,6 +1433,11 @@ class Audit:
                 and len(relation_records) == len(relations)
                 and set(relations) == set(range(1, len(relations) + 1))
                 and len(product_records) == len(products)
+                # A contraction recorded across a gap the source writes a
+                # relation over folds panels the author never juxtaposed, and
+                # leaves the pair the author did juxtapose unchecked, while
+                # the count still balances.
+                and not (products & relation_gaps)
                 and len(relations) + len(products) + 1 == len(members)
             )
             waived: set[int] = {
@@ -1527,11 +1549,13 @@ class Audit:
                     if previous.end <= this.start else None
                 )
                 if separator is None or not one_display(separator):
-                    runs.append(current)
                     current = []
-            current.append(index)
-            if len(current) == 1:
+            if not current:
+                # A run enters the list once, when it opens; it is the same
+                # list that grows, so closing it must not enter it again.
+                current = []
                 runs.append(current)
+            current.append(index)
         return [run for run in runs if len(run) > 1]
 
     def check_equation_boundaries(self) -> None:

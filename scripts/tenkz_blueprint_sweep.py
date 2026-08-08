@@ -34,6 +34,7 @@ Exit status: 1 iff some unit's stream has a hard finding.
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass
@@ -163,11 +164,14 @@ def main(argv: list[str]) -> int:
             # Name the linked copy after the source it came from, so a
             # source-linked finding's bracket reads as the chapter it is about.
             source_path = Path(tmp) / f"{unit.path.stem}-{unit.line}.tex"
-            # One figure that will not compile or convert must not take the
-            # sweep down with it: the rest of the volume still has an answer.
+            # One figure that will not compile, convert, or finish inside
+            # its timeout must not take the sweep down with it: the rest of
+            # the volume still has an answer.
             try:
                 log_path = tenkz_pic.unit_event_log(unit.source, svg_dir)
-            except (RuntimeError, OSError) as failure:
+            except (
+                RuntimeError, OSError, subprocess.SubprocessError
+            ) as failure:
                 print(f"  HARD [unit-compile] {where}: {failure}")
                 failed.append(where)
                 continue

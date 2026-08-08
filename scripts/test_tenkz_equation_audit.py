@@ -306,10 +306,48 @@ def main() -> int:
     )
     assert ("eq-unchecked", "HARD") in crossed, crossed
 
+    # Seeded defect: `panel1 = panel2 panel3` contracts only the second gap,
+    # so a record folding the first one leaves panel 3 uncompared even though
+    # the count balances.
+    product_side_source = (
+        "\\begin{tenkzeq}[check={signature}]\n"
+        f"{PANELS[0]}=\n{PANELS[1]}{PANELS[0]}"
+        "\\end{tenkzeq}\n"
+    )
+    crossed_product = audit_rules(
+        panel(1, "open:w") + panel(2, "open:e") + panel(3, "open:w")
+        + "check|scope=1|product=1-2|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n",
+        product_side_source,
+    )
+    assert ("eq-unchecked", "HARD") in crossed_product, crossed_product
+
+    # The contraction the source does state closes the same scope.
+    honest_side = audit_rules(
+        panel(1, "open:w") + panel(2, "open:e") + panel(3, "open:w")
+        + "check|scope=1|product=2-3|result=contracted|signature=open:w\n"
+        "check|scope=1|relation=1|result=equal|signature=open:w\n",
+        product_side_source,
+    )
+    assert not honest_side, honest_side
+
+    # A display run enters the report once, whether it ends at a boundary or
+    # at the end of the stream.
+    boundary_source = (
+        f"{PANELS[0]}$ = $\n{PANELS[1]}\n"
+        "\\begin{center}\n" + PANELS[0] + "\\end{center}\n"
+    )
+    once = audit_rules(
+        panel(1, "open:w", scope="") + panel(2, "phys:up", scope="")
+        + panel(3, "open:w", scope=""),
+        boundary_source,
+    )
+    assert once.count(("eq-sibling-mismatch", "ADV")) == 1, once
+
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 20 seeded group checks passed"
+        "and 23 seeded group checks passed"
     )
     return 0
 
