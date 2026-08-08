@@ -34,9 +34,13 @@ stochastic matrices.
     \end{align}
     Indeed, every doubly stochastic matrix is a convex combination of
     permutation matrices, while convexity of $\mathcal{DS}_d$ gives the
-    converse inclusion in the first identity.  Each permutation matrix is
-    extreme.  Conversely, a non-permutation matrix has a Birkhoff
-    decomposition involving at least two distinct permutation matrices and
-    is therefore not extreme, which proves the second identity.
+    converse inclusion in the first identity.  If a permutation matrix is a
+    nontrivial convex combination of two doubly stochastic matrices,
+    nonnegativity forces both matrices to vanish at every zero entry of the
+    permutation matrix; their row sums then force both matrices to equal that
+    permutation matrix.  Hence every permutation matrix is extreme.
+    Conversely, a non-permutation matrix has a Birkhoff decomposition
+    involving at least two distinct permutation matrices and is therefore
+    not extreme, which proves the second identity.
 \end{proof}
 \endinput
