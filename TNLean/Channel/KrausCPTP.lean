@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Channel.KrausRepresentation
-import TNLean.Channel.MaximallyMixed
 import TNLean.Channel.PartialTrace
 import TNLean.Algebra.MatrixTracePairing
 import Mathlib.Data.Matrix.PEquiv
