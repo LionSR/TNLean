@@ -28,32 +28,50 @@
     %   q_\ell and contracts the bra index of M_\alpha with the ket index of
     %   M_\beta.  Their periodic rows contract a_0=a_L and b_0=b_L
     %   independently; i_\ell and j_\ell remain free.  On the right, the
-    %   upper wire row is the multiplicity trace
+    %   upper loop is the multiplicity trace
     %   tr(\chi_{\alpha,\beta,\gamma}^{L}) (labelled \chi in the ink), and the
-    %   lower operator row is O_L(M_\gamma).  These two loops have no pairleg.
+    %   lower loop is O_L(M_\gamma).  The two loops share no index, so each
+    %   is a whole picture, and their juxtaposition is the product of a
+    %   scalar and an operator.
     %   The sum over \gamma is a sector sum, not a contraction edge.
     % Boundary signatures (virtual-west, virtual-east, physical-up,
     %   physical-down): both sides have semantic signature (0,0,L,L).
     %   Each three-site representative emits (0,0,3,3).
-    \tnpic[compact, rows={op,op}, periodic]{
-        \tn[mpo, up=$i_1$]{M_\alpha} &
-        \tn[mpo]{M_\alpha} & \tndots &
-        \tn[mpo, up=$i_L$]{M_\alpha} \\
-        \tn[mpo, down=$j_1$]{M_\beta}
-            \tnspan[brace below]{4}{$L\text{ sites}$} &
-        \tn[mpo]{M_\beta} & \tndots &
-        \tn[mpo, down=$j_L$]{M_\beta}
-    }
-    \qquad$=\sum_\gamma$\qquad
-    % The doubled row gap makes the absent chi--M_gamma pairleg unmistakable
-    % at print size.
-    \tnpic[compact, rows={wire,op}, layer sep=2, periodic]{
-        \tn[box]{\chi} & \tn[box]{\chi} & \tndots & \tn[box]{\chi} \\
-        \tn[mpo, up=$i_1$, down=$j_1$]{M_\gamma}
-            \tnspan[brace below]{4}{$L\text{ sites}$} &
-        \tn[mpo]{M_\gamma} & \tndots &
-        \tn[mpo, up=$i_L$, down=$j_L$]{M_\gamma}
-    }
+    % The elided columns contract in pairs like the displayed ones, and the
+    %   frame would mint that pairleg between the two ellipsis cells as a
+    %   stub; the left panel therefore authors its bonds and leaves the
+    %   ellipsis column bare.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, west=trace, east=trace, bonds=none]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M_\alpha} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\alpha} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{M_\alpha} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M_\beta} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\beta} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M_\beta}
+        \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+        \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+        \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+        \tnmark[form=bracket]{(2,1) .. (2,4)}{$L\text{ sites}$}
+    \end{tenkz}
+    \quad$=\sum_\gamma$\quad
+    \begin{tabular}[c]{@{}c@{}}
+        {\begin{tenkz}[cols=4, west=trace, east=trace]
+            \tn[skin=box]{\chi} & \tn[skin=box]{\chi} & \tn[skin=dots]{} &
+            \tn[skin=box]{\chi}
+        \end{tenkz}} \\
+        {\begin{tenkz}[cols=4, west=trace, east=trace]
+            \tn[skin=mpo,
+                ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_\gamma} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\gamma} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo,
+                ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_\gamma}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ sites}$}
+        \end{tenkz}}
+    \end{tabular}
     \caption{Closing an $L$-site chain of the local fusion identity. On the
         left, the bra legs of the $M_\alpha$ operator are contracted with the
         ket legs of the $M_\beta$ operator. On the right, the multiplicity loop

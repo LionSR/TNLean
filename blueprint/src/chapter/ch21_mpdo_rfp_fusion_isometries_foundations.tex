@@ -399,16 +399,20 @@ $G_{\alpha,\beta}^{ij}=\bigoplus_\gamma
 % source states the algebraic identity and direct-sum decomposition, but
 % contains no dedicated diagram for U_{\alpha,\beta}.
 \par\noindent\hfil
-\tnpic[rows={op,op}]{
-    \tnfuse[combined=west]{U_{\alpha,\beta}} &
-    \tn[mpo, up=$i$]{M_\alpha} &
-    \tnfuse[combined=east]{U_{\alpha,\beta}^{\dagger}} \\
-    & \tn[mpo, down=$j$]{M_\beta} &
-}
+\tenkzkernel
+\begin{tenkz}[rows={op,op}, cols=3]
+    \tnfuse[at=(1,1), name=U, skin=pill]{U_{\alpha,\beta}}
+    \tn[at=(1,2), skin=mpo,
+        ports={90:physical:$i$, 270:physical}]{M_\alpha}
+    \tn[at=(2,2), skin=mpo,
+        ports={90:physical, 270:physical:$j$}]{M_\beta}
+    \tnfuse[at=(1,3), name=Ud, skin=pill]{U_{\alpha,\beta}^{\dagger}}
+    \tnwire{open w}{U.180} \tnwire{Ud.0}{open e}
+\end{tenkz}
 \qquad$=$\qquad
-\tnpic[physical=updown]{
-    \tn[mpo, up=$i$, down=$j$]{G_{\alpha,\beta}}
-}
+\begin{tenkz}[cols=1, west=open, east=open]
+    \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{G_{\alpha,\beta}}
+\end{tenkz}
 \hfil\par
 
 \begin{lemma}[Weighted zipper identities on the active support]
@@ -628,56 +632,76 @@ weights in the length-independent case at
 %   row 3: (2,2,1,1)=(2,2,1,1).
 % Ink-to-index map: each M box carries one product factor; their vertical
 %   stroke is the q contraction and their outer legs are i,j.  Each H box is
-%   the single aggregate letter \(H_{\alpha,\beta}^{ij}\).  A fusion bar
-%   presents the separate \(\alpha,\beta\) ports at \(\{1,2\}\) and the fused
-%   port at center.  The
-%   H--bar bonds lie on a fused row; the second row is structural, and the
-%   reconstruction hole prevents it from adding a second H channel.
+%   the single aggregate letter \(H_{\alpha,\beta}^{ij}\) and stands across
+%   both wire rows.  A fusion wedge spans the two rows as well: its two
+%   per-row strands are the separate \(\alpha,\beta\) indices and its
+%   centered stub is the fused index, so each H--wedge bond is one fused
+%   contraction and no second H channel exists.
 % Source verdict: Bultinck et al. arXiv:1511.08090, Eq. (21), states the two
 %   zipper orientations algebraically but gives no dedicated figure for that
-%   equation.  CPSV16 Theorem 4.14(iii) supplies the MPDO identity.  The old
-%   catalogue picture fixes only row order and topology, not coordinates;
-%   therefore the current diagonal fused bonds preserve the asserted
-%   contraction without inventing a centred tall H atom.
+%   equation.  CPSV16 Theorem 4.14(iii) supplies the MPDO identity.  The
+%   source fixes only row order and topology, not coordinates; H drawn
+%   across both rows carries the same asserted contraction, since the fused
+%   index is one bond however tall its carrier stands.
 \par\noindent\hfil
-\tnpic[rows={op,op}]{
-  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} &
-  \tn[mpo, up=$i$]{M_\alpha} \\
-  & \tn[mpo, down=$j$]{M_\beta}
-}
+\tenkzkernel
+\begin{tenkz}[rows={op,op}, cols=2, east=open]
+    \tnfuse[at=(1,1), name=U, skin=pill]{U_{\alpha,\beta}}
+    \tn[at=(1,2), skin=mpo,
+        ports={90:physical:$i$, 270:physical}]{M_\alpha}
+    \tn[at=(2,2), skin=mpo,
+        ports={90:physical, 270:physical:$j$}]{M_\beta}
+    \tnwire{open w}{U.180}
+\end{tenkz}
 \qquad$=$\qquad
-\tnpic[rows={op:fused,wire:west none}]{
-  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} &
-  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} \\
-  &
-}
+\begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+    \tn[at=(1,1), skin=mpo, wires=2, name=H,
+        ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{H}
+    \tnfuse[at=(1,2), name=U, skin=pill]{U_{\alpha,\beta}}
+    \tnwire{open w}{H.180}
+    \tnwire{H.0}{U.180}
+    \tnwire{U.0@1}{open e}
+    \tnwire{U.0@2}{open e}
+\end{tenkz}
 \hfil\par
 \par\noindent\hfil
-\tnpic[rows={op,op}]{
-  \tn[mpo, up=$i$]{M_\alpha} &
-  \tnfuse[span=2, west at={1,2}, east at=center]
-    {U_{\alpha,\beta}^{\dagger}} \\
-  \tn[mpo, down=$j$]{M_\beta} &
-}
+\tenkzkernel
+\begin{tenkz}[rows={op,op}, cols=2, west=open]
+    \tn[at=(1,1), skin=mpo,
+        ports={90:physical:$i$, 270:physical}]{M_\alpha}
+    \tn[at=(2,1), skin=mpo,
+        ports={90:physical, 270:physical:$j$}]{M_\beta}
+    \tnfuse[at=(1,2), name=Ud, skin=pill]{U_{\alpha,\beta}^{\dagger}}
+    \tnwire{Ud.0}{open e}
+\end{tenkz}
 \qquad$=$\qquad
-\tnpic[rows={op:fused,wire:east none}]{
-  \tnfuse[span=2, west at={1,2}, east at=center]
-    {U_{\alpha,\beta}^{\dagger}} &
-  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} \\
-  &
-}
+\begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+    \tnfuse[at=(1,1), name=Ud, skin=pill]{U_{\alpha,\beta}^{\dagger}}
+    \tn[at=(1,2), skin=mpo, wires=2, name=H,
+        ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{H}
+    \tnwire{open w}{Ud.180@1}
+    \tnwire{open w}{Ud.180@2}
+    \tnwire{Ud.0}{H.180}
+    \tnwire{H.0}{open e}
+\end{tenkz}
 \hfil\par
 \par\noindent\hfil
-\tnpic[rows={op,op}]{
-  \tn[mpo, up=$i$]{M_\alpha} \\
-  \tn[mpo, down=$j$]{M_\beta}
-}
+\tenkzkernel
+\begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+    \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{M_\alpha} \\
+    \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{M_\beta}
+\end{tenkz}
 \qquad$=$\qquad
-\tnpic[rows={op:fused,wire}]{
-  \tnfuse[span=2, west at={1,2}, east at=center]
-    {U_{\alpha,\beta}^{\dagger}} &
-  \tn[mpo, west at=center, east at=center, up=$i$, down=$j$]{H} &
-  \tnfuse[span=2, west at=center, east at={1,2}]{U_{\alpha,\beta}} \\
-  & \tnskip &
-}
+\begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+    \tnfuse[at=(1,1), name=Ud, skin=pill]{U_{\alpha,\beta}^{\dagger}}
+    \tn[at=(1,2), skin=mpo, wires=2, name=H,
+        ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{H}
+    \tnfuse[at=(1,3), name=U, skin=pill]{U_{\alpha,\beta}}
+    \tnwire{open w}{Ud.180@1}
+    \tnwire{open w}{Ud.180@2}
+    \tnwire{Ud.0}{H.180}
+    \tnwire{H.0}{U.180}
+    \tnwire{U.0@1}{open e}
+    \tnwire{U.0@2}{open e}
+\end{tenkz}
 \hfil\par

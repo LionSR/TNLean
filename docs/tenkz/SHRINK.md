@@ -2613,3 +2613,42 @@ by hand and each row's demand count drops below tenure. Verdicts:
 |---|---|
 | flag:consumers:command:tndots | keep-because: a signed 1.0 sugar row (`\tndots` expands to the ellipsis atom, `LANGUAGE-1.0` §9) whose kernel-tier reading does not exist yet — the gap this wave measured — so the migrated ladder writes the expansion and the two remaining demand-corpus consumers are 0.7 pictures awaiting their own migration (`ch20_mpdo_foundations`, `ch21` product laws); tenure recounts at the S4 swap; expiry 0.9 |
 | flag:consumers:command:tnspan | keep-because: a signed 1.0 sugar row (`\tnspan[form]{k}{m}` expands to a ranged `\tnmark`, `LANGUAGE-1.0` §9) whose span form is refused undrawn on the kernel tier — the gap this wave measured — so the migrated ladder writes the `\tnmark[form=bracket]` expansion and the two remaining demand-corpus consumers are 0.7 ch21 pictures awaiting their own migration; tenure recounts at the S4 swap; expiry 0.9 |
+
+### 2026-08-09 — the blueprint's twenty `\tnpic` pictures take the kernel
+
+The last 0.7 command surface in the blueprint is gone: the twenty
+`\tnpic` pictures across four ch21 files — the fusion-coisometry G
+equation and the unweighted zipper triple, the trace-power product
+law, the two-step refinement-channel rows, and the renormalization
+fixed-point square — are redrawn as kernel grid pictures under
+`\tenkzkernel`. The eight fusion wedges consume the `\tnfuse` sugar
+row #5624 bound, H stands as a `wires=2` atom across both wire rows,
+physical labels stand on their typed ports, every declared side is
+derived from the figure's stated boundary signature, and the
+renormalization square keeps its tikz-cd carrier with one kernel
+picture per cell, each brace-wrapped so its column tabs stay out of
+the diagram's own alignment. The refinement spans become
+range-addressed enclosure marks, and the product law's multiplicity
+and operator loops — which share no index — stand as two whole traced
+pictures whose juxtaposition is the product of a scalar and an
+operator.
+
+Two idiom gaps measured along the way, recorded on #4709: a multi-row
+frame mints its vertical bond under an ellipsis column too, so a
+paired-row chain with an elision authors its bonds under `bonds=none`;
+and one row of a multi-row frame cannot be traced alone — a side word
+closes every row and `trace=` closes cells to themselves — so disjoint
+loops separate into whole pictures, which is the honest sentence for a
+tensor product of closed diagrams.
+
+No meter moves: the census, parser paths, escape uses, alias and
+overload ledgers are unchanged, and every spelling the redraw writes
+already had a signed kernel or sugar row. The wave drops four 0.7
+spellings' demand:
+
+| Flag | Verdict |
+|---|---|
+| flag:consumers:command:tnpic | dies at S4 with the 0.7 grid front end: the blueprint's twenty pictures are redrawn as kernel grid pictures and zero demand consumers remain; the signed §9 sugar row over the picture environment waits on the kernel binding and math-style sensing recorded on #4908; expiry 0.9 |
+| flag:consumers:key:object:mpo | dies at S4 with the 0.7 object ledger: the kernel spells the silhouette through the prelude skin (`skin=mpo`), which every redrawn figure now writes; zero demand consumers remain; expiry 0.9 |
+| flag:consumers:command:tndots | keep-because: this wave's loops write the kernel spelling `\tn[skin=dots]`, leaving two 0.7 consumers — the ch02 blocked-overlap ladder and the tangent-projector benchmark case — that retire with their own redraw rows at the S4 surface swap; folds into `\tn[skin=dots]` at the language landing; expiry 0.9 |
+| flag:consumers:command:tnspan | keep-because: the refinement rows now state their blocked sites as range-addressed enclosure marks, leaving the ch02 blocked-overlap ladder as the one 0.7 consumer, which retires with its own redraw row at the S4 surface swap; expiry 0.9 |

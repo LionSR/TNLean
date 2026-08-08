@@ -308,8 +308,9 @@
     % =\widehat{\cal K}_4(X); the reverse row is the corresponding pair of
     % \widehat{\mathcal S} identities.
     % Ink-to-index: every \widehat{\cal K} box has west/east virtual indices
-    % and upper/lower physical indices.  Each dashed span groups two adjacent
-    % tensor bodies into one blocked local site and introduces no contraction.
+    % and upper/lower physical indices.  Each enclosure mark groups two
+    % adjacent tensor bodies into one blocked local site and introduces no
+    % contraction.
     % Contractions: only adjacent east--west virtual legs are summed.  All
     % upper and lower physical legs, and both outer virtual legs, remain free.
     % Boundary signatures (virtual-west, virtual-east, physical-up,
@@ -320,48 +321,60 @@
     % channels algebraically but has no dedicated figure.  The rows reproduce
     % that composition using the local tensors already defined here.
     \begin{tenkzequation}
+        \tenkzkernel
         $\widehat{\mathcal T}^{\,2}:\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} & \tn[skin=mpo]{\widehat{\cal K}}
+            \tnmark[form=enclosure, label pos=s]{(1,1) .. (1,2)}
+                {$\widehat{\cal K}^{[2]}$}
+        \end{tenkz}
         $\quad\xrightarrow{\widehat{\mathcal T}}\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=3, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}}
+        \end{tenkz}
         $\quad\xrightarrow{\widehat{\mathcal T}_{(12)3}}\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=4, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}}
+            \tnmark[form=enclosure, label pos=s]{(1,1) .. (1,2)}
+                {$\widehat{\cal K}^{[2]}$}
+            \tnmark[form=enclosure, label pos=s]{(1,3) .. (1,4)}
+                {$\widehat{\cal K}^{[2]}$}
+        \end{tenkz}
     \end{tenkzequation}
     \par    \begin{tenkzequation}
+        \tenkzkernel
         $\widehat{\mathcal S}^{\,2}:\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=4, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}}
+            \tnmark[form=enclosure, label pos=s]{(1,1) .. (1,2)}
+                {$\widehat{\cal K}^{[2]}$}
+            \tnmark[form=enclosure, label pos=s]{(1,3) .. (1,4)}
+                {$\widehat{\cal K}^{[2]}$}
+        \end{tenkz}
         $\quad\xrightarrow{\widehat{\mathcal S}_{(123)4}}\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=3, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}} &
+            \tn[skin=mpo]{\widehat{\cal K}}
+        \end{tenkz}
         $\quad\xrightarrow{\widehat{\mathcal S}}\quad$
-        \tnpic[compact, physical=updown, tensor style=box]{%
-            \tn[mpo]{\widehat{\cal K}}
-                \tnspan[box, label pos=south]{2}{\widehat{\cal K}^{[2]}} &
-            \tn[mpo]{\widehat{\cal K}}}
+        \begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+            \tn[skin=mpo]{\widehat{\cal K}} & \tn[skin=mpo]{\widehat{\cal K}}
+            \tnmark[form=enclosure, label pos=s]{(1,1) .. (1,2)}
+                {$\widehat{\cal K}^{[2]}$}
+        \end{tenkz}
     \end{tenkzequation}
     \caption{The superscripts in $\widehat{\mathcal T}^2$ and
     $\widehat{\mathcal S}^2$ denote successive overlapping applications.
-    The dashed frames identify the two-site and four-site endpoints with one
+    The enclosures identify the two-site and four-site endpoints with one
     and two sites of the blocked tensor. This is the channel construction in
     \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}.}
     \label{fig:mpdo_blocked_rfp_channels}

@@ -626,21 +626,22 @@ the remaining sites unchanged.
     % the contracted virtual index \gamma.  Each blue stroke is a typed map
     % between the complete objects at its endpoints, never a tensor contraction.
     \par\noindent\hfil
+    {\tenkzkernel
     \begin{tikzcd}[channel, ampersand replacement=\&,
         column sep=10mm, row sep=8mm]
-      \tnpic[inline, physical=updown]{
-        \tn[mpo]{M}
-      } \arrow[r, "\mathcal T"] \&
-      \tnpic[inline, physical=updown]{
-        \tn[mpo]{M} & \tn[mpo]{M}
-      } \\
-      \tnpic[inline, physical=updown]{
-        \tn[mpo]{M} & \tn[mpo]{M}
-      } \arrow[r, "\mathcal S"] \&
-      \tnpic[inline, physical=updown]{
-        \tn[mpo]{M}
-      }
-    \end{tikzcd}
+      {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{M}
+      \end{tenkz}} \arrow[r, "\mathcal T"] \&
+      {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+      \end{tenkz}} \\
+      {\begin{tenkz}[cols=2, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
+      \end{tenkz}} \arrow[r, "\mathcal S"] \&
+      {\begin{tenkz}[cols=1, west=open, east=open, physical=updown]
+        \tn[skin=mpo]{M}
+      \end{tenkz}}
+    \end{tikzcd}}
     \hfil\par
 \end{definition}
 
