@@ -96,12 +96,12 @@ def sourceCutM₂ : Matrix (Fin D × Fin d) (Fin d × Fin D) ℂ :=
 @[simp] lemma sourceCutM₂_apply (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
     sourceCutM₂ U (α, i) (j, β) = U i j α β := rfl
 
-/-! ### Reindexing to `Fin (D * d)` and `Fin (d * D)` (thin bridges) -/
+/-! ### Reindexing to `Fin (D * d)` and `Fin (d * D)` (reindexed formulations) -/
 
 /-- ${\cal M}_1$ reindexed to `Fin (D * d)` rows and `Fin (d * D)` columns
 via the standard product encoding `finProdFinEquiv`.
 
-This is a thin bridge; the primary definition remains `sourceCutM₁`. -/
+This is a reindexed formulation; the primary definition remains `sourceCutM₁`. -/
 def sourceCutM₁Fin : Matrix (Fin (D * d)) (Fin (d * D)) ℂ :=
   Matrix.reindex
     (finProdFinEquiv (m := D) (n := d))
