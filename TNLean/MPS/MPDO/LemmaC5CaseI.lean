@@ -875,9 +875,10 @@ factors, and `QL` is the complexification of the active-sector trace matrix `T`.
 Thus this identity is the algebraic form of
 `activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL`, namely `T² = T`.
 
-This is a project-derived rectangular form, in project notation, of the factors built
-from $l_h$ and $r_k$ in CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper
-does not state it as a separate displayed theorem. -/
+**Local fix (`docs/paper-gaps/cpgsv17_pf_rank_one.tex`):** this is a project-derived
+rectangular form, in project notation, of the factors built from $l_h$ and $r_k$ in
+CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper does not state it as a
+separate displayed theorem. -/
 theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
     [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)

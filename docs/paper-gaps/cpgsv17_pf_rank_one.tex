@@ -806,28 +806,40 @@ primitive entrywise non-negative matrix with constant traces of positive powers
 need not have rank one. The obstruction is a nilpotent Jordan component at the
 zero eigenvalue, which is not detected by the trace identities.
 
-The formal development now proves two corrected sufficient theorems.  The
+The formal development proves two corrected sufficient matrix theorems.  The
 first derives the rank-one factorization from positive semidefiniteness, trace
 normalization, and the trace-power identities.  The second derives
 $T^2=T$ from the sector-pairing identity and linear independence of the closed
 sector tensors; trace one then gives the same rank-one factorization directly.
-These two corrected direct rank-one criteria remain available as independent
-matrix results.  The unrelated aggregate bundle that paired a three-site
-Markov witness with an independently supplied trace matrix has been retired:
-it imposed no relation between the state, the matrix, and an MPO tensor, and
-therefore added no consequence to either criterion.
+These criteria remain available as independent matrix results.  The unrelated
+aggregate bundle that paired a three-site Markov witness with an independently
+supplied trace matrix has been retired: it imposed no relation between the
+state, the matrix, and an MPO tensor, and therefore added no consequence to
+either criterion.
+
+The completed normal Case-I route supplies a third, tensor-attached result at
+the source hypothesis boundary formalized in
+\leanid{MPOTensor.caseI_rectangular_remainder_eq_zero_of_literal_ZCL}.
+Normality and literal ZCL, together with the physical-sector positivity and
+primitivity data, force the active sector to be unique and hence $T^2=T$.
+For the project factors $T=QL$, this gives
+\[
+  Q(1-LQ)L=QL-(QL)^2=0.
+\]
+Thus the nilpotent-zero obstruction is excluded on this normal Case-I surface;
+idempotence of $LQ$ alone would still yield only $T^2=T^3$.
 
 The all-cut Markov proof and the source-selected inverse-map calculation show
 that the raw four-sector tensor satisfies the displayed SAL, literal ZCL, and
 inverse-map relations while the asserted factorization
 $T_{k,h}=a_kb_h$ does not exist. However, that tensor is not the injective
 normal tensor assumed in Case~I, and its normal representative loses literal
-ZCL. Consequently Lemma~C.5 and the downstream source implications remain
-unsettled at this normalization boundary; the raw example does not refute them
-under their complete standing hypotheses. The direct matrix conclusions remain
-available under positive semidefiniteness or the appropriate linear-independence
-hypothesis, but those additional conditions do not supply the source's
-structural corollary and must not be attributed to it.
+ZCL. The raw example therefore does not refute Lemma~C.5 under its complete standing
+hypotheses, and the normal Case-I theorem above resolves its rectangular
+matrix obstruction.  The full source rank-one-factorization package and the
+downstream normalization step used after absorbing BNT coefficients remain
+unsettled; in particular, this Case-I result must not be transported to the
+later Case-II argument without proving that normality survives the rescaling.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site
