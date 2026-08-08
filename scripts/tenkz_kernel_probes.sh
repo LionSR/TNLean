@@ -2822,6 +2822,26 @@ if grep -Fq 'reason=relation-count' "$WORK/r_beamer_equation.tnlog"; then
   echo "FAIL: the plain beamer frame's equation counted its relations wrong" >&2
   exit 1
 fi
+# The equation reads its own token stream for glyphs, and a picture owns
+# everything it consumes.  The fixture holds exactly when the two panel
+# labels keep their own equals, the panels' option lists keep their key
+# separators, and the single glyph between the panels is the only relation.
+panel_equals_checks=$(grep -c '^check|' "$WORK/r_equation_panel_equals.tnlog" || true)
+[ "$panel_equals_checks" -eq 1 ] || {
+  echo "FAIL: a panel's own equals was counted as an equation relation" >&2
+  exit 1
+}
+grep -Fq 'check|scope=1|relation=1|result=equal' \
+  "$WORK/r_equation_panel_equals.tnlog" || {
+  echo "FAIL: the equation lost the relation standing between its panels" >&2
+  exit 1
+}
+for label in 'A=B' 'D=E'; do
+  grep -Fq "|label=$label|" "$WORK/r_equation_panel_equals.tnlog" || {
+    echo "FAIL: the panel label $label lost its own equals" >&2
+    exit 1
+  }
+done
 # A math alignment cell holds the body scan hostage to the alignment counter:
 # mathtools' gathered template and amsmath's aligned both leave it at zero,
 # where a raw tab once ended the cell mid-scan.  The chained fixture holds

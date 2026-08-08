@@ -308,10 +308,7 @@
     % marker; give each one back the plain equals the keyval and value
     % parsers read.
     \bool_if:NT \l__tenkz_kernel_ineq_bool
-      {
-        \regex_replace_all:nnN
-          { \c{__tenkz_kernel_eq_rel:} } { = } \l__tenkz_kernel_opts_tl
-      }
+      { \__tenkz_kernel_revert_rels:N \l__tenkz_kernel_opts_tl }
     % Parameterized alphabet words remain one key value even though their
     % canonical spelling contains `=`.
     \regex_replace_all:nnN
@@ -17838,6 +17835,13 @@
       {
         \group_align_safe_end:
         \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_body_tl
+        % A picture standing in an equation is a term, not the equation's
+        % own token stream: the `=' of a label or a mark's prose is that
+        % panel's mathematics and no joiner of the equation around it.  The
+        % equation's sweep cannot see the picture boundary, so the picture
+        % announces it here and gives its whole body the plain equals back.
+        \bool_if:NT \l__tenkz_kernel_ineq_bool
+          { \__tenkz_kernel_revert_rels:N \l__tenkz_kernel_body_tl }
         % the break between the option list and the first declaration
         \ignorespaces
         \tl_use:N \l__tenkz_kernel_body_tl
@@ -17860,14 +17864,24 @@
 % The sweep reaches every brace level, because the active glyph did: a
 % joiner is the mathematics standing between two terms (LANGUAGE-1.0
 % section 7), and the braces of an \mbox or an \ensuremath around that
-% mathematics are its spelling, not its depth.  A panel's option list is
-% swept along with the joiners, so its key separators arrive at
-% \__tenkz_kernel_keys:nn wearing the marker; that door gives them back the
-% plain equals before l3keys reads them, exactly as it gave back the active
-% glyph.
+% mathematics are its spelling, not its depth.
+%
+% What separates a joiner from an equals that merely looks like one is the
+% term boundary, not the brace: the equation may read its own token stream,
+% and everything a picture consumes belongs to that picture.  The catcode
+% arrangement drew this boundary with \char_set_catcode_other:N \= at
+% picture entry, which put the picture's body back on the plain equals; the
+% capture draws the same boundary by reverting the marker on the two token
+% ranges a picture owns.  Its option list is read before the picture's own
+% capture starts, and \__tenkz_kernel_keys:nn reverts it there; its body is
+% reverted by \__tenkz_kernel_env_body:w above.  So $A=B$ on a panel's label
+% is that panel's mathematics, while a=b in an \mbox between two panels is
+% the equation's, and each is read as what it is.
 \tl_new:N \l__tenkz_kernel_eq_body_tl
 \cs_new_protected:Npn \__tenkz_kernel_rewrite_rels:N #1
   { \regex_replace_all:nnN { = } { \c{__tenkz_kernel_eq_rel:} } #1 }
+\cs_new_protected:Npn \__tenkz_kernel_revert_rels:N #1
+  { \regex_replace_all:nnN { \c{__tenkz_kernel_eq_rel:} } { = } #1 }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
   {
     \__tenkz_kernel_eq_begin:n {#1}
