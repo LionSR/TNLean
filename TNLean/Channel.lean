@@ -93,7 +93,7 @@ import TNLean.Channel.TensorMap
 import TNLean.Channel.TransferMatrix
 import TNLean.Channel.WeightedHilbertSchmidt
 import TNLean.Channel.WhitenedChoi
-import TNLean.Channel.Wigner.ProjectivePureState
+import TNLean.Channel.Wigner
 import TNLean.Channel.WolfChapter2Index
 import TNLean.Channel.WolfChapter6Index
 import TNLean.Channel.WolfChapter6Wrappers
