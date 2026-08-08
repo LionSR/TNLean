@@ -23,7 +23,7 @@ hypothesis supplies `tr(E^N) = 1` for `N > 1`; the missing first moment
 normalized partial trace of a unitary, not from the unitary hypothesis.
 The present file formalizes the algebraic consequence of the stronger
 all-positive-moment hypothesis; the bridge from `N > 1` to `N ≥ 1` in the
-MPU context is tracked in #5706.
+MPU context is documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
 
 The proof is purely algebraic: no spectral radius, positivity, normality, or
 diagonalizability is required.  We construct an explicit rank-one diagonal
@@ -195,7 +195,7 @@ blocked tensors; the missing first moment `tr(E) = 1` follows from the
 definition of the transfer matrix as a normalized partial trace of a
 unitary, not from the unitary hypothesis.  The bridge from the paper's
 `N > 1` hypothesis to the all-positive-moment hypothesis used here is
-tracked in #5706. -/
+documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
 theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one
     (A : Matrix n n ℂ)
     (h : ∀ k : ℕ, 0 < k → trace (A ^ k) = 1) :
