@@ -64,12 +64,30 @@ chain closes and the final-tag signing key lands
 What the harness is: the closed inventory names one atomic compatibility
 assertion per entry, each with its own failure fingerprint, and the supervisor
 runs each one in a repository-shaped view holding only the pinned trees, the
-inventory, the four canonical artifacts, and that entry's declared subjects. An
+inventory, and that entry's declared subjects — a canonical artifact reaches a
+command only through one of its two declared roles, and the receipt records
+which artifacts were withheld. An
 assertion passes by exiting zero and fails by writing the closed receipt and
-exiting ten; the supervisor rejects every other outcome. The mount namespace
-that hides the real checkout and the denial of network access before repository
-code runs belong to the enforcement workflow, not to the supervisor, and the
-armed workflow adds both.
+exiting ten; the supervisor rejects every other outcome.
+
+The view is declarative isolation, not a sandbox, and the difference matters
+when reading a receipt. A command runs as the user that owns every path in its
+view, so it can restore write permission on a sealed file and change it; it can
+read an absolute path outside the view; it can open a socket. The mode bits and
+the exposure list stop an accident and make a receipt name everything the
+command could legitimately have seen. They do not stop an adversary. Closing
+that gap needs a mount namespace and an identity that does not own the view,
+which belong to the enforcement workflow — as does the denial of network access
+before repository code runs. Both arrive with the armed workflow, and
+`supervisor.py check-readiness` refuses an armed policy whose workflow lacks
+them.
+
+One consequence for sequencing. The enforcement workflow must supply the
+repository-evidence bundle to `check_tenkz_policy.py` before the campaign is
+armed, because the arming change may touch only the two normative documents and
+so cannot add that wiring itself. An armed ledger without it fails closed on
+every validation. That wiring is therefore a prerequisite change, not part of
+arming.
 
 **What `check_tenkz_policy.py` reports, and when that changes.** The checker
 prints `evidence not-started (0 entries)` and will keep printing it until a

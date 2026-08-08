@@ -16,13 +16,23 @@ Subcommands:
     pins              the three activation pins as the current tree computes them
     check-readiness   what the enforcement state permits at this tree
 
-Two parts of the ledger's protocol are not simulated here and belong to the
-enforcement workflow: the mount namespace that hides the real checkout, and the
-denial of network access before repository code runs.  The view below exposes
-exactly the declared entries and nothing else, and every path a command reads
-outside it is a defect the receipt cannot hide, but a determined command could
-still read an absolute path.  `RELEASE-POLICY.md` §2 records this as the
-boundary between the harness and the job that runs it.
+What the view is, and what it is not.  It is *declarative* isolation: it
+contains exactly the pinned trees, the inventory, the command's declared
+subjects, and — with a tag — the tag-derived manifest, so a command that reads
+only what it declared cannot see anything else, and a receipt names everything
+it could have seen.  It is not a sandbox.  Three limits follow and none is
+closed by anything this file can do:
+
+  * the command runs as the user that built the view and owns every path in
+    it, so it can `chmod` a sealed file or directory back and then modify it;
+  * nothing stops it reading an absolute path outside the view;
+  * nothing stops it opening a socket.
+
+The mode bits below therefore stop an accident, not an adversary.  Closing all
+three needs a mount namespace and an identity that does not own the view, which
+the ledger assigns to the enforcement workflow and not to the supervisor;
+`RELEASE-POLICY.md` §2 records the boundary.  Read a payload receipt as
+evidence about a cooperating command, which is what a release test is.
 """
 
 from __future__ import annotations
