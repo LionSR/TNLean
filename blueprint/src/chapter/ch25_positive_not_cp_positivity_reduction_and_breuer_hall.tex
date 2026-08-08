@@ -528,7 +528,7 @@ $T_{\mathrm{BH}}$ is the zero map, which is decomposable.
         Matrix.breuerHallMap_not_isDecomposablePositiveMap}
     \leanok
     \uses{def:breuer_hall_map, def:decomposable_positive_map,
-        thm:breuer_hall_positive, lem:indecomposable_of_ppt_witness}
+        thm:breuer_hall_positive, thm:indecomposable_of_ppt_witness}
     Suppose $D>2$ and $U$ is an antisymmetric unitary on $\C^{D}$,
     $U^{\mathsf T}=-U$ and $U^{\dagger}U=\Id$. Then the Breuer--Hall map
     $T_{\mathrm{BH}}$ is an indecomposable positive map.
@@ -537,7 +537,7 @@ $T_{\mathrm{BH}}$ is the zero map, which is decomposable.
 \begin{proof}
     \leanok
     \uses{def:breuer_hall_map, thm:breuer_hall_positive,
-        lem:indecomposable_of_ppt_witness}
+        thm:indecomposable_of_ppt_witness}
     Positivity is Theorem~\ref{thm:breuer_hall_positive}. For
     indecomposability, write $F$ for the swap operator on
     $\C^{D}\otimes\C^{D}$ and $\ket{\Psi}$ for the $U$-twisted maximally
@@ -578,6 +578,6 @@ $T_{\mathrm{BH}}$ is the zero map, which is decomposable.
     So the quadratic form of $(T_{\mathrm{BH}}\otimes\id)(\rho)$ at
     $\ket{\Psi}$ is negative and $(T_{\mathrm{BH}}\otimes\id)(\rho)$ is not
     positive semidefinite. By
-    Lemma~\ref{lem:indecomposable_of_ppt_witness}, $T_{\mathrm{BH}}$ is not
+    Theorem~\ref{thm:indecomposable_of_ppt_witness}, $T_{\mathrm{BH}}$ is not
     decomposable.
 \end{proof}

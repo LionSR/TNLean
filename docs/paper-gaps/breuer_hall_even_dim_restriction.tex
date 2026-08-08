@@ -23,14 +23,20 @@ map\footnote{\cite[Chapter~3, Example~3.1]{Wolf2012Quantum}; local source:
 344--355. Formalization issue:
 \href{https://github.com/LionSR/TNLean/issues/5471}{issue \#5471}.}
 \begin{align}
-  T_{\mathrm{BH}}(X)=\operatorname{tr}[X]\,\mathbb 1-X-UX^{T}U^{\dagger},
-  \qquad\text{for any $U$ with $U^{T}=-U$ and $U^{\dagger}U\le\mathbb 1$,}
+  T_{\mathrm{BH}}(X)=\operatorname{tr}[X]\,\mathbb 1-X-UX^{T}U^{\dagger}.
   \tag{3.19}
 \end{align}
-and states: ``For $d$ even there are anti-symmetric unitaries
+Here $U$ may be any antisymmetric contraction satisfying $U^{T}=-U$ and
+$U^{\dagger}U\le\mathbb 1$.  The source then states: ``For $d$ even there are
+anti-symmetric unitaries
 $U^{\dagger}=U^{-1}=-\overline{U}$ \dots\ If $U$ is an anti-symmetric unitary
 $T_{\mathrm{BH}}$ is not decomposable.''  The final sentence has no dimension
-hypothesis.
+hypothesis.  Thus the source uses two distinct hypothesis regimes: the map is
+defined and proved positive for antisymmetric contractions
+$U^{\dagger}U\le\mathbb 1$, whereas its indecomposability assertion concerns
+antisymmetric unitaries $U^{\dagger}U=\mathbb 1$.  The formalization proves
+indecomposability only in the unitary case; extending that conclusion to general
+antisymmetric contractions remains open.
 
 \section{The point at issue}
 

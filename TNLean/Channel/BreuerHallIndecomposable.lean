@@ -193,12 +193,6 @@ theorem transpose_conjTranspose_of_antisymmetric {U : Matrix (Fin d) (Fin d) ℂ
     (hUanti : Uᵀ = -U) : (Uᵀ)ᴴ = -Uᴴ := by
   rw [hUanti]; simp
 
-/-- For antisymmetric unitary `U`, `Uᵀ * (Uᵀ)ᴴ = 1`. -/
-theorem transpose_mul_transpose_conjTranspose_eq_one {U : Matrix (Fin d) (Fin d) ℂ}
-    (hUanti : Uᵀ = -U) (hUunit : Uᴴ * U = 1) : Uᵀ * (Uᵀ)ᴴ = 1 := by
-  rw [transpose_conjTranspose_of_antisymmetric hUanti, hUanti, neg_mul_neg,
-    mul_eq_one_comm.mp hUunit]
-
 /-! ## The conjugated symmetric-subspace witness -/
 
 /-- The projector onto the symmetric subspace, conjugated by `Uᴴ` on the left and `U` on
@@ -219,6 +213,7 @@ theorem breuerHallSymmetricWitness_posSemidef (U : Matrix (Fin d) (Fin d) ℂ) :
 
 /-! ## Partial-transpose identities -/
 
+/-- The first-factor partial transpose of the identity matrix is the identity matrix. -/
 theorem partialTransposeLeft_one (d d' : ℕ) :
     Matrix.partialTransposeLeft (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = 1 := by
   ext p q
@@ -385,6 +380,158 @@ theorem trace_mul_twistedOmegaProj (A : Matrix (Fin d × Fin d) (Fin d × Fin d)
     (A * twistedOmegaProj U).trace = star (twistedOmegaVec U) ⬝ᵥ (A *ᵥ twistedOmegaVec U) := by
   rw [twistedOmegaProj, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
 
+/-- Unitarity contracts two columns of `U` to a Kronecker delta. -/
+private theorem unitarity_column_contraction
+    {U : Matrix (Fin d) (Fin d) ℂ} (hUunit : Uᴴ * U = 1) :
+    ∀ i2 j2 : Fin d,
+      ∑ i1 : Fin d, star (U i1 i2) * U i1 j2 = if i2 = j2 then (1 : ℂ) else 0 := by
+  intro i2 j2
+  have heq : (Uᴴ * U) i2 j2 = ∑ i1 : Fin d, star (U i1 i2) * U i1 j2 := rfl
+  rw [← heq, hUunit, Matrix.one_apply]
+
+/-- The quadratic form of `U * Mᵀ * Uᴴ` at two columns of a unitary `U` reads off
+the corresponding transposed entry of `M`. -/
+private theorem unitarity_sandwich_contraction
+    {U : Matrix (Fin d) (Fin d) ℂ} (hUunit : Uᴴ * U = 1) :
+    ∀ (M : Matrix (Fin d) (Fin d) ℂ) (i2 j2 : Fin d),
+      ∑ i1 : Fin d, ∑ j1 : Fin d,
+      star (U i1 i2) * (U * Mᵀ * Uᴴ) i1 j1 * U j1 j2 = M j2 i2 := by
+  intro M i2 j2
+  have hL : ∑ i1 : Fin d, ∑ j1 : Fin d,
+      star (U i1 i2) * (U * Mᵀ * Uᴴ) i1 j1 * U j1 j2
+      = (fun k => star (U k i2)) ⬝ᵥ ((U * Mᵀ * Uᴴ) *ᵥ (fun k => U k j2)) := by
+    simp only [dotProduct, Matrix.mulVec, Finset.mul_sum]
+    refine Finset.sum_congr rfl fun i1 _ => Finset.sum_congr rfl fun j1 _ => ?_
+    ring
+  rw [hL, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
+  have hstep1 : Uᴴ *ᵥ (fun k => U k j2) = fun k => if k = j2 then (1 : ℂ) else 0 := by
+    funext k
+    change ∑ l : Fin d, Uᴴ k l * U l j2 = _
+    simp_rw [Matrix.conjTranspose_apply]
+    exact unitarity_column_contraction hUunit k j2
+  have hstep2 : Mᵀ *ᵥ (fun k => if k = j2 then (1 : ℂ) else 0) = fun a => M j2 a := by
+    funext a
+    change ∑ l : Fin d, Mᵀ a l * (if l = j2 then (1 : ℂ) else 0) = _
+    rw [Finset.sum_eq_single j2]
+    · simp [Matrix.transpose_apply]
+    · intro l _ hl; simp [hl]
+    · simp
+  rw [hstep1, hstep2]
+  change ∑ i1 : Fin d, star (U i1 i2) * (∑ a : Fin d, U i1 a * M j2 a) = M j2 i2
+  have hstep3 : ∀ i1 : Fin d, star (U i1 i2) * (∑ a : Fin d, U i1 a * M j2 a)
+      = ∑ a : Fin d, M j2 a * (star (U i1 i2) * U i1 a) := by
+    intro i1
+    rw [Finset.mul_sum]
+    refine Finset.sum_congr rfl fun a _ => ?_
+    ring
+  simp_rw [hstep3]
+  rw [Finset.sum_comm]
+  simp_rw [← Finset.mul_sum, unitarity_column_contraction hUunit]
+  rw [Finset.sum_eq_single i2]
+  · simp
+  · intro a _ ha; simp [Ne.symm ha]
+  · simp
+
+/-- Reorder a quadruple sum so that the two slice indices are outermost. -/
+private theorem sum_reindex_slice_outside : ∀ f : Fin d → Fin d → Fin d → Fin d → ℂ,
+    (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d, f i1 i2 j1 j2)
+      = ∑ i2 : Fin d, ∑ j2 : Fin d, ∑ i1 : Fin d, ∑ j1 : Fin d, f i1 i2 j1 j2 := by
+  intro f
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i2 _ => ?_
+  rw [show (∑ i1 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d, f i1 i2 j1 j2)
+      = ∑ i1 : Fin d, ∑ j2 : Fin d, ∑ j1 : Fin d, f i1 i2 j1 j2 from
+    Finset.sum_congr rfl fun i1 _ => Finset.sum_comm]
+  exact Finset.sum_comm
+
+/-- The trace summand in the expanded Breuer--Hall pairing contracts to `ρ.trace`. -/
+private theorem trace_breuerHall_trace_summand
+    {U : Matrix (Fin d) (Fin d) ℂ} (hUunit : Uᴴ * U = 1)
+    (ρ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
+      star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace *
+        (if i1 = j1 then (1 : ℂ) else 0) * U j1 j2)
+    = ρ.trace := by
+  have hc1 : ∀ i1 i2 : Fin d, (∑ j1 : Fin d, ∑ j2 : Fin d,
+        star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace *
+          (if i1 = j1 then (1 : ℂ) else 0) * U j1 j2)
+      = ∑ j2 : Fin d, star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2 := by
+    intro i1 i2
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl fun j2 _ => ?_
+    rw [Finset.sum_eq_single i1]
+    · rw [if_pos rfl]; ring
+    · intro j1 _ hj1; rw [if_neg (Ne.symm hj1)]; ring
+    · simp
+  simp_rw [hc1]
+  rw [Finset.sum_comm]
+  have hc2 : ∀ i2 : Fin d, (∑ i1 : Fin d, ∑ j2 : Fin d,
+        star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2)
+      = (Matrix.bipartiteSlice ρ i2 i2).trace := by
+    intro i2
+    have h1 : (∑ i1 : Fin d, ∑ j2 : Fin d,
+          star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2)
+        = ∑ j2 : Fin d, (Matrix.bipartiteSlice ρ i2 j2).trace *
+            (∑ i1 : Fin d, star (U i1 i2) * U i1 j2) := by
+      rw [Finset.sum_comm]
+      refine Finset.sum_congr rfl fun j2 _ => ?_
+      rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl fun i1 _ => ?_
+      ring
+    rw [h1]
+    simp_rw [unitarity_column_contraction hUunit]
+    rw [Finset.sum_eq_single i2]
+    · simp
+    · intro j2 _ hj2; simp [Ne.symm hj2]
+    · simp
+  simp_rw [hc2]
+  have htr : ∀ i2 : Fin d, (Matrix.bipartiteSlice ρ i2 i2).trace
+      = ∑ x : Fin d, ρ (x, i2) (x, i2) := by
+    intro i2
+    simp only [Matrix.trace, Matrix.diag, Matrix.bipartiteSlice_apply]
+  simp_rw [htr]
+  simp only [Matrix.trace, Matrix.diag, Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+
+/-- The identity summand in the expanded Breuer--Hall pairing is the pairing with the
+twisted maximally entangled projector. -/
+private theorem trace_breuerHall_identity_summand
+    (U : Matrix (Fin d) (Fin d) ℂ)
+    (ρ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
+      star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2) i1 j1 * U j1 j2)
+    = (ρ * twistedOmegaProj U).trace := by
+  simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Fintype.sum_prod_type,
+    twistedOmegaProj_apply, Matrix.bipartiteSlice_apply]
+  refine Finset.sum_congr rfl fun i1 _ => Finset.sum_congr rfl fun i2 _ =>
+    Finset.sum_congr rfl fun j1 _ => Finset.sum_congr rfl fun j2 _ => ?_
+  ring
+
+/-- The twisted-transpose summand in the expanded Breuer--Hall pairing contracts to the
+swap pairing. -/
+private theorem trace_breuerHall_transpose_summand
+    {U : Matrix (Fin d) (Fin d) ℂ} (hUunit : Uᴴ * U = 1)
+    (ρ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
+      star (U i1 i2) * (U * (Matrix.bipartiteSlice ρ i2 j2)ᵀ * Uᴴ) i1 j1 * U j1 j2)
+    = (Matrix.swapMatrix d * ρ).trace := by
+  rw [sum_reindex_slice_outside]
+  simp_rw [unitarity_sandwich_contraction hUunit]
+  have htrace : (Matrix.swapMatrix d * ρ).trace
+      = ∑ p : Fin d × Fin d, ρ (p.2, p.1) (p.1, p.2) := by
+    simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
+    refine Finset.sum_congr rfl fun ⟨p1, p2⟩ _ => ?_
+    rw [Finset.sum_eq_single (p2, p1)]
+    · simp [Matrix.swapMatrix_apply]
+    · rintro ⟨q1, q2⟩ _ hq
+      have hne : ¬ (p1 = q2 ∧ p2 = q1) := by
+        rintro ⟨h1, h2⟩
+        exact hq (Prod.ext h2.symm h1.symm)
+      rw [Matrix.swapMatrix_apply, if_neg hne, zero_mul]
+    · simp
+  rw [htrace]
+  simp only [Fintype.sum_prod_type, Matrix.bipartiteSlice_apply]
+
 /-- **Key quadratic-form identity.** For unitary `U`, pairing the ampliation of the
 Breuer-Hall map applied to any bipartite `ρ` against the twisted maximally entangled
 projector reduces to an elementary combination of three traces of `ρ`. The three terms
@@ -398,63 +545,6 @@ theorem trace_tensorMapId_breuerHallMap_mul_twistedOmegaProj
     (Matrix.tensorMapId (Matrix.breuerHallMap U) ρ * twistedOmegaProj U).trace
       = ρ.trace - (ρ * twistedOmegaProj U).trace - (Matrix.swapMatrix d * ρ).trace := by
   classical
-  -- Unitarity contraction, summed form.
-  have hkey : ∀ i2 j2 : Fin d, ∑ i1 : Fin d, star (U i1 i2) * U i1 j2
-      = if i2 = j2 then (1 : ℂ) else 0 := by
-    intro i2 j2
-    have heq : (Uᴴ * U) i2 j2 = ∑ i1 : Fin d, star (U i1 i2) * U i1 j2 := rfl
-    rw [← heq, hUunit, Matrix.one_apply]
-  -- Unitarity contraction, sandwich form: the quadratic form of `U * Mᵀ * Uᴴ` at the
-  -- `i2`th and `j2`th columns of `U` reads off the single entry `M j2 i2`.
-  have hcol : ∀ (M : Matrix (Fin d) (Fin d) ℂ) (i2 j2 : Fin d),
-      ∑ i1 : Fin d, ∑ j1 : Fin d,
-        star (U i1 i2) * (U * Mᵀ * Uᴴ) i1 j1 * U j1 j2 = M j2 i2 := by
-    intro M i2 j2
-    have hL : ∑ i1 : Fin d, ∑ j1 : Fin d,
-        star (U i1 i2) * (U * Mᵀ * Uᴴ) i1 j1 * U j1 j2
-        = (fun k => star (U k i2)) ⬝ᵥ ((U * Mᵀ * Uᴴ) *ᵥ (fun k => U k j2)) := by
-      simp only [dotProduct, Matrix.mulVec, Finset.mul_sum]
-      refine Finset.sum_congr rfl fun i1 _ => Finset.sum_congr rfl fun j1 _ => ?_
-      ring
-    rw [hL, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-    have hstep1 : Uᴴ *ᵥ (fun k => U k j2) = fun k => if k = j2 then (1 : ℂ) else 0 := by
-      funext k
-      change ∑ l : Fin d, Uᴴ k l * U l j2 = _
-      simp_rw [Matrix.conjTranspose_apply]
-      exact hkey k j2
-    have hstep2 : Mᵀ *ᵥ (fun k => if k = j2 then (1 : ℂ) else 0) = fun a => M j2 a := by
-      funext a
-      change ∑ l : Fin d, Mᵀ a l * (if l = j2 then (1 : ℂ) else 0) = _
-      rw [Finset.sum_eq_single j2]
-      · simp [Matrix.transpose_apply]
-      · intro l _ hl; simp [hl]
-      · simp
-    rw [hstep1, hstep2]
-    change ∑ i1 : Fin d, star (U i1 i2) * (∑ a : Fin d, U i1 a * M j2 a) = M j2 i2
-    have hstep3 : ∀ i1 : Fin d, star (U i1 i2) * (∑ a : Fin d, U i1 a * M j2 a)
-        = ∑ a : Fin d, M j2 a * (star (U i1 i2) * U i1 a) := by
-      intro i1
-      rw [Finset.mul_sum]
-      refine Finset.sum_congr rfl fun a _ => ?_
-      ring
-    simp_rw [hstep3]
-    rw [Finset.sum_comm]
-    simp_rw [← Finset.mul_sum, hkey]
-    rw [Finset.sum_eq_single i2]
-    · simp
-    · intro a _ ha; simp [Ne.symm ha]
-    · simp
-  -- Reordering a quadruple sum to bring the slice indices to the outside.
-  have hswap : ∀ f : Fin d → Fin d → Fin d → Fin d → ℂ,
-      (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d, f i1 i2 j1 j2)
-        = ∑ i2 : Fin d, ∑ j2 : Fin d, ∑ i1 : Fin d, ∑ j1 : Fin d, f i1 i2 j1 j2 := by
-    intro f
-    rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun i2 _ => ?_
-    rw [show (∑ i1 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d, f i1 i2 j1 j2)
-        = ∑ i1 : Fin d, ∑ j2 : Fin d, ∑ j1 : Fin d, f i1 i2 j1 j2 from
-      Finset.sum_congr rfl fun i1 _ => Finset.sum_comm]
-    exact Finset.sum_comm
   -- Expand the pairing into the three summands of `breuerHallMap_apply`.
   have hexpand : star (twistedOmegaVec U) ⬝ᵥ
         (Matrix.tensorMapId (Matrix.breuerHallMap U) ρ *ᵥ twistedOmegaVec U)
@@ -472,79 +562,9 @@ theorem trace_tensorMapId_breuerHallMap_mul_twistedOmegaProj
     ring
   rw [trace_mul_twistedOmegaProj, hexpand]
   simp_rw [Finset.sum_sub_distrib]
-  -- The three pieces evaluate to the three traces.
-  have hA : (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
-        star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace *
-          (if i1 = j1 then (1 : ℂ) else 0) * U j1 j2)
-      = ρ.trace := by
-    have hc1 : ∀ i1 i2 : Fin d, (∑ j1 : Fin d, ∑ j2 : Fin d,
-          star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace *
-            (if i1 = j1 then (1 : ℂ) else 0) * U j1 j2)
-        = ∑ j2 : Fin d, star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2 := by
-      intro i1 i2
-      rw [Finset.sum_comm]
-      refine Finset.sum_congr rfl fun j2 _ => ?_
-      rw [Finset.sum_eq_single i1]
-      · rw [if_pos rfl]; ring
-      · intro j1 _ hj1; rw [if_neg (Ne.symm hj1)]; ring
-      · simp
-    simp_rw [hc1]
-    rw [Finset.sum_comm]
-    have hc2 : ∀ i2 : Fin d, (∑ i1 : Fin d, ∑ j2 : Fin d,
-          star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2)
-        = (Matrix.bipartiteSlice ρ i2 i2).trace := by
-      intro i2
-      have h1 : (∑ i1 : Fin d, ∑ j2 : Fin d,
-            star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2).trace * U i1 j2)
-          = ∑ j2 : Fin d, (Matrix.bipartiteSlice ρ i2 j2).trace *
-              (∑ i1 : Fin d, star (U i1 i2) * U i1 j2) := by
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun j2 _ => ?_
-        rw [Finset.mul_sum]
-        refine Finset.sum_congr rfl fun i1 _ => ?_
-        ring
-      rw [h1]
-      simp_rw [hkey]
-      rw [Finset.sum_eq_single i2]
-      · simp
-      · intro j2 _ hj2; simp [Ne.symm hj2]
-      · simp
-    simp_rw [hc2]
-    have htr : ∀ i2 : Fin d, (Matrix.bipartiteSlice ρ i2 i2).trace
-        = ∑ x : Fin d, ρ (x, i2) (x, i2) := by
-      intro i2
-      simp only [Matrix.trace, Matrix.diag, Matrix.bipartiteSlice_apply]
-    simp_rw [htr]
-    simp only [Matrix.trace, Matrix.diag, Fintype.sum_prod_type]
-    rw [Finset.sum_comm]
-  have hB : (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
-        star (U i1 i2) * (Matrix.bipartiteSlice ρ i2 j2) i1 j1 * U j1 j2)
-      = (ρ * twistedOmegaProj U).trace := by
-    simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply, Fintype.sum_prod_type,
-      twistedOmegaProj_apply, Matrix.bipartiteSlice_apply]
-    refine Finset.sum_congr rfl fun i1 _ => Finset.sum_congr rfl fun i2 _ =>
-      Finset.sum_congr rfl fun j1 _ => Finset.sum_congr rfl fun j2 _ => ?_
-    ring
-  have hC : (∑ i1 : Fin d, ∑ i2 : Fin d, ∑ j1 : Fin d, ∑ j2 : Fin d,
-        star (U i1 i2) * (U * (Matrix.bipartiteSlice ρ i2 j2)ᵀ * Uᴴ) i1 j1 * U j1 j2)
-      = (Matrix.swapMatrix d * ρ).trace := by
-    rw [hswap]
-    simp_rw [hcol]
-    have htrace : (Matrix.swapMatrix d * ρ).trace
-        = ∑ p : Fin d × Fin d, ρ (p.2, p.1) (p.1, p.2) := by
-      simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
-      refine Finset.sum_congr rfl fun ⟨p1, p2⟩ _ => ?_
-      rw [Finset.sum_eq_single (p2, p1)]
-      · simp [Matrix.swapMatrix_apply]
-      · rintro ⟨q1, q2⟩ _ hq
-        have hne : ¬ (p1 = q2 ∧ p2 = q1) := by
-          rintro ⟨h1, h2⟩
-          exact hq (Prod.ext h2.symm h1.symm)
-        rw [Matrix.swapMatrix_apply, if_neg hne, zero_mul]
-      · simp
-    rw [htrace]
-    simp only [Fintype.sum_prod_type, Matrix.bipartiteSlice_apply]
-  rw [hA, hB, hC]
+  rw [trace_breuerHall_trace_summand hUunit ρ,
+    trace_breuerHall_identity_summand U ρ,
+    trace_breuerHall_transpose_summand hUunit ρ]
 
 /-! ## Evaluation of the carrying identity at the witness -/
 
