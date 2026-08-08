@@ -11,13 +11,12 @@ field would turn every such addition into a breaking change.
 
 from __future__ import annotations
 
-import importlib.util
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from harnesslib import assert_that  # noqa: E402
+from harnesslib import assert_that, load_module  # noqa: E402
 
 
 TEST_ID = "tnlog-reader-ignores-unknown-fields"
@@ -30,18 +29,10 @@ STREAM = [
 ]
 
 
-def load_reader():
-    """Load the pinned reader from its declared program path, nothing else."""
-
-    spec = importlib.util.spec_from_file_location("tenkz_release_tnlog", SUBJECT)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
 
 
 def main() -> int:
-    reader = load_reader()
+    reader = load_module(SUBJECT)
     findings: list[str] = []
     parsed = reader.parse_log(
         "\n".join(STREAM) + "\n",

@@ -11,13 +11,20 @@ fell from 201 public rows to 86 and the parser-path count from 228 to 75; the
 escape ledger, which prices every occurrence of a spelling the core grammar
 cannot say, reached zero.
 
-The spellings below are removed outright. 1.0 is a major release and keeps no
-alias, compatibility reader, or dual writer for any of them: an old spelling
-stops the run with an unknown-key or unknown-command error naming the
-vocabulary, and nothing is silently reinterpreted. Every documented replacement
-was applied to the blueprint corpus and the 130-case benchmark before its front
-end was deleted, and each deletion carried the fixtures whose language died —
-the regression corpus went from 264 sources to 9.
+The spellings below are removed outright, with one stated exception. 1.0 is a
+major release and keeps no alias, compatibility reader, or dual writer for any
+of them: an old spelling stops the run with an unknown-key or unknown-command
+error naming the vocabulary, and nothing is silently reinterpreted. Every
+documented replacement was applied to the blueprint corpus and the 130-case
+benchmark before its front end was deleted, and each deletion carried the
+fixtures whose language died — the regression corpus went from 264 sources
+to 9.
+
+The exception is `\tenkzkernel`. It is not removed: it is inert for the whole
+1.0 series and carries a registry sunset, because the kernel it used to switch
+on is now bound at package load, so a document that still writes it asks for
+what it already has. Delete it at leisure. Every other row below is an error
+from 1.0.0 onward.
 
 ## Retired environments
 
@@ -123,7 +130,7 @@ Spellings inside the kernel tier itself:
 | `physical=` as a picture-wide row topology | `physical=` as a per-cell port policy |
 | `\tnset{pitch=...}` in the body | `metrics=compact` |
 | hand-written leave and enter angles on a route | `crossing=` for the habit, `cross=` for the exception |
-| `\tenkzkernel` | nothing; the kernel is bound at package load |
+| `\tenkzkernel` | nothing; the kernel is bound at package load. Retained, inert, sunset — the one row above that is not an error |
 
 ## Why the front ends died
 

@@ -17,12 +17,23 @@
 schema = 1
 
 [[test]]
-id = "tex-api-package-version-declared"
+id = "tex-api-package-version-declared-once"
 surface = "tex-api"
-failure_fingerprint = "aa16d2f161b986789b582d211b59344b66171a386e3fcfcc259aafb2ba48e1d8"
+failure_fingerprint = "6975c749deed3d812904570c3ea9fc4d14fe2f002c5ecff56b66e7aaba8e6e21"
 runner = "python3"
 path = "tests/tenkz/release-harness/tex_api_package_version.py"
-args = []
+args = ["cardinality"]
+program_paths = ["tex/tenkz/tenkz.sty"]
+fixture_paths = []
+timeout_seconds = 60
+
+[[test]]
+id = "tex-api-package-version-well-formed"
+surface = "tex-api"
+failure_fingerprint = "4c75affd12f21b0ee2e262ccce6495382baed3cf11e1d9ac96c5bed05d8a3d36"
+runner = "python3"
+path = "tests/tenkz/release-harness/tex_api_package_version.py"
+args = ["syntax"]
 program_paths = ["tex/tenkz/tenkz.sty"]
 fixture_paths = []
 timeout_seconds = 60

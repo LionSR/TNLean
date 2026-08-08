@@ -53,7 +53,15 @@
       "description": "The complete normalized external facts the resolver read. Every fact the queue depends on appears here; a fact absent from this object cannot be replayed and therefore cannot support the reset.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["pull_requests", "issues", "tags", "reviews"],
+      "required": [
+        "pull_requests",
+        "issues",
+        "tags",
+        "reviews",
+        "workflow_runs",
+        "tag_protection",
+        "secret_locations"
+      ],
       "properties": {
         "pull_requests": {
           "type": "array",
@@ -70,6 +78,39 @@
         "reviews": {
           "type": "array",
           "items": { "$ref": "#/$defs/reviewFact" }
+        },
+        "workflow_runs": {
+          "description": "Every enforcement or publisher run the validator read, each bound to the exact pinned workflow blob and head it ran against. A reset caused by a run's conclusion cannot be replayed without it.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/workflowRunFact" }
+        },
+        "tag_protection": {
+          "description": "The unredacted tenkz-v* ruleset state at the snapshot. Redacted or missing detail fails closed, so the receipt records what was visible rather than what was assumed.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["namespace", "update_allowed", "delete_allowed", "bypass_actors"],
+          "properties": {
+            "namespace": { "const": "tenkz-v*" },
+            "update_allowed": { "type": "boolean" },
+            "delete_allowed": { "type": "boolean" },
+            "bypass_actors": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "secret_locations": {
+          "description": "Where the publisher signing secret was configured at the snapshot, by name and scope only; a value is never read. Key retirement is decided from this list being empty, so a reset turning on retirement needs it recorded.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "scope"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "scope": { "enum": ["repository", "organization", "environment"] }
+            }
+          }
         }
       }
     },
@@ -88,7 +129,30 @@
             "enum": ["blob", "tree", "action", "reusable-workflow", "container"]
           },
           "digest": { "$ref": "#/$defs/contentDigest" }
-        }
+        },
+        "allOf": [
+          {
+            "$comment": "A repository object, an action, and a called workflow are pinned by full Git commit or object ID; only a container carries a registry content digest. Leaving the union unconstrained would accept a container pinned by a bare Git OID, or an action pinned by a sha256 digest — both of which are exactly the mutable-resolution mistake the closure exists to prevent.",
+            "if": {
+              "properties": {
+                "kind": { "enum": ["blob", "tree", "action", "reusable-workflow"] }
+              },
+              "required": ["kind"]
+            },
+            "then": { "properties": { "digest": { "$ref": "#/$defs/gitOid" } } }
+          },
+          {
+            "if": {
+              "properties": { "kind": { "const": "container" } },
+              "required": ["kind"]
+            },
+            "then": {
+              "properties": {
+                "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+              }
+            }
+          }
+        ]
       }
     },
     "supervisor_receipts": {
@@ -178,6 +242,33 @@
         "object_id": { "$ref": "#/$defs/gitOid" },
         "kind": { "enum": ["annotated", "lightweight"] },
         "peeled_commit": { "$ref": "#/$defs/gitOid" }
+      }
+    },
+    "workflowRunFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_path",
+        "workflow_blob",
+        "head_oid",
+        "job_name",
+        "conclusion",
+        "completed_at"
+      ],
+      "properties": {
+        "workflow_path": { "type": "string", "minLength": 1 },
+        "workflow_blob": {
+          "description": "The exact pinned workflow blob the run executed, so a later edit cannot be mistaken for the run's own bytes.",
+          "$ref": "#/$defs/gitOid"
+        },
+        "head_oid": { "$ref": "#/$defs/gitOid" },
+        "job_name": { "type": "string", "minLength": 1 },
+        "conclusion": {
+          "enum": ["success", "failure", "cancelled", "skipped", "timed_out", "not-run"]
+        },
+        "completed_at": {
+          "oneOf": [{ "$ref": "#/$defs/utcInstant" }, { "type": "null" }]
+        }
       }
     },
     "reviewFact": {

@@ -14,6 +14,7 @@ reaching the same fingerprint would make the friction record unreadable.
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import os
 import sys
@@ -68,3 +69,21 @@ def read(relative: str) -> str:
     """Read one declared subject from the view, by its repository-relative path."""
 
     return Path(relative).read_text(encoding="utf-8")
+
+
+def load_module(relative: str, name: str = "tenkz_release_subject"):
+    """Import one declared program path as the product under test.
+
+    The view exposes a subject at its own repository-relative path and nothing
+    around it — `scripts/tenkzlib/tnlog.py` arrives without the package
+    `__init__.py` beside it — so a subject is loaded from its file rather than
+    imported by module path. The module is registered in `sys.modules` before
+    execution because `dataclasses` resolves a class's own module during class
+    creation and fails on an unregistered one.
+    """
+
+    spec = importlib.util.spec_from_file_location(name, relative)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module

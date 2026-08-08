@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-"""The package declares exactly one well-formed version.
+"""The package's version declaration, as two independent assertions.
 
 `RELEASE-POLICY.md` §3: the version string lives in one place, the
 `\\ProvidesPackage` line of `tex/tenkz/tenkz.sty`, and the manual, change
 record, event-format declaration, and release manifest are all checked against
-it. A second declaration, a missing date, or a version the manifest grammar
-cannot read makes every one of those checks meaningless, so this is the
-assertion they all rest on.
+it.
+
+Two things can be wrong with that line and they need separate fingerprints,
+because a friction record names the fingerprint and one that stood for both
+could not tell a reader whether to fix a duplicated declaration or a malformed
+version:
+
+    cardinality   the file carries exactly one declaration
+    syntax        every declaration it carries parses as date-and-version
+
+The two are independent. A file with two well-formed declarations fails the
+first and passes the second; a file with one malformed declaration does the
+reverse.
 """
 
 from __future__ import annotations
@@ -20,22 +30,52 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from harnesslib import assert_that, read  # noqa: E402
 
 
-TEST_ID = "tex-api-package-version-declared"
-FINGERPRINT = "aa16d2f161b986789b582d211b59344b66171a386e3fcfcc259aafb2ba48e1d8"
 SUBJECT = "tex/tenkz/tenkz.sty"
 DECLARATION = re.compile(r"^\\ProvidesPackage\{tenkz\}\[([^]]*)\]", re.MULTILINE)
 PAYLOAD = re.compile(r"[0-9]{4}/[0-9]{2}/[0-9]{2} v[0-9]+\.[0-9]+(?:\.[0-9]+)? \S.*")
 
+ASSERTIONS = {
+    "cardinality": (
+        "tex-api-package-version-declared-once",
+        "6975c749deed3d812904570c3ea9fc4d14fe2f002c5ecff56b66e7aaba8e6e21",
+    ),
+    "syntax": (
+        "tex-api-package-version-well-formed",
+        "4c75affd12f21b0ee2e262ccce6495382baed3cf11e1d9ac96c5bed05d8a3d36",
+    ),
+}
+
 
 def main() -> int:
+    mode = sys.argv[1] if len(sys.argv) > 1 else ""
+    if mode not in ASSERTIONS:
+        print(f"unknown assertion {mode!r}", file=sys.stderr)
+        return 2
+    test_id, fingerprint = ASSERTIONS[mode]
     declarations = DECLARATION.findall(read(SUBJECT))
+
+    if mode == "cardinality":
+        assert_that(
+            len(declarations) == 1,
+            test_id=test_id,
+            failure_fingerprint=fingerprint,
+            reason=(
+                f"{SUBJECT} must carry exactly one \\ProvidesPackage{{tenkz}} line; "
+                f"found {len(declarations)}"
+            ),
+        )
+        return 0
+
+    malformed = [
+        payload for payload in declarations if PAYLOAD.fullmatch(payload) is None
+    ]
     assert_that(
-        len(declarations) == 1 and PAYLOAD.fullmatch(declarations[0]) is not None,
-        test_id=TEST_ID,
-        failure_fingerprint=FINGERPRINT,
+        not malformed,
+        test_id=test_id,
+        failure_fingerprint=fingerprint,
         reason=(
-            f"{SUBJECT} must carry exactly one \\ProvidesPackage line spelled "
-            f"[YYYY/MM/DD vMAJOR.MINOR[.PATCH] description]; found {declarations!r}"
+            f"{SUBJECT} declares {malformed!r}, which is not spelled "
+            f"[YYYY/MM/DD vMAJOR.MINOR[.PATCH] description]"
         ),
     )
     return 0

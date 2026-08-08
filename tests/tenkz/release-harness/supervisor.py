@@ -33,6 +33,7 @@ import json
 import os
 import re
 import shutil
+import signal
 import stat
 import subprocess
 import sys
@@ -485,15 +486,22 @@ def expose(root: Path, view: Path, relative: str) -> None:
     destination = view / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     if stat.S_ISDIR(lstat_mode(root, relative)):
-        if destination.exists():
-            return
         copy_tree_without_links(root / relative, destination)
     else:
         shutil.copyfile(root / relative, destination, follow_symlinks=False)
 
 
 def copy_tree_without_links(source: Path, destination: Path) -> None:
-    """Copy one directory, refusing any entry that is not a file or directory."""
+    """Copy one directory, refusing any entry that is not a file or directory.
+
+    The copy merges rather than replacing, because exposed entries overlap: a
+    declared fixture tree may be an ancestor of a canonical artifact already
+    written, and `docs/tenkz` is exactly that case. Returning early when the
+    destination existed would have handed the command a directory containing
+    only the artifacts, so a tree-shaped assertion would have inspected partial
+    coverage and failed for the wrong reason. Merging keeps the union, and a
+    file already present is identical because both copies came from one tree.
+    """
 
     destination.mkdir(parents=True, exist_ok=True)
     for name in sorted(os.listdir(source)):
@@ -511,8 +519,26 @@ def copy_tree_without_links(source: Path, destination: Path) -> None:
         )
         if stat.S_ISDIR(mode):
             copy_tree_without_links(child, destination / name)
-        else:
+        elif not (destination / name).exists():
             shutil.copyfile(child, destination / name, follow_symlinks=False)
+
+
+def tool_directory(workspace: Path, tools: dict[str, tuple[str, str]]) -> Path:
+    """Build the one directory the sanitized `PATH` names.
+
+    Putting each resolved interpreter's *parent* on `PATH` would have handed
+    the command every sibling executable in that directory — a CPython install
+    ships `pip`, `pydoc`, and versioned interpreters beside `python3` — so the
+    allowlist would have named the tools while the path exposed the image. The
+    directory below contains exactly one entry per allowlisted tool, each a
+    link to the executable whose fingerprint was validated.
+    """
+
+    directory = workspace / "tools"
+    directory.mkdir()
+    for name, (executable, _) in tools.items():
+        os.symlink(executable, directory / name)
+    return directory
 
 
 def make_read_only(view: Path) -> None:
@@ -551,6 +577,49 @@ def make_writable(view: Path) -> None:
             path.chmod(stat.S_IRUSR | stat.S_IWUSR)
 
 
+def run_command(
+    argv: list[str],
+    *,
+    cwd: Path,
+    environment: dict[str, str],
+    timeout: int,
+) -> tuple[int, str, bool]:
+    """Run one command in its own process group and bound its whole descendancy.
+
+    `subprocess.run(timeout=...)` kills only the process it started, so a
+    command that spawned a child tool could leave descendants running past the
+    declared timeout and on into the workspace teardown. The declared timeout
+    has to be an execution boundary for the command and everything it starts,
+    so the runner gets a new session and the timeout kills the group.
+    """
+
+    process = subprocess.Popen(
+        argv,
+        cwd=cwd,
+        env=environment,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        start_new_session=True,
+    )
+    try:
+        _, stderr = process.communicate(timeout=timeout)
+        return process.returncode, stderr, False
+    except subprocess.TimeoutExpired:
+        terminate_group(process)
+        process.communicate()
+        return -1, "", True
+
+
+def terminate_group(process: subprocess.Popen) -> None:
+    """Signal the command's whole process group, then its leader as a fallback."""
+
+    try:
+        os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+    except (OSError, ProcessLookupError):
+        process.kill()
+
+
 def canonical_artifacts(policy: Policy) -> tuple[str, ...]:
     return (
         policy.package_metadata,
@@ -584,16 +653,13 @@ def observe(
     tools = {
         name: resolve_tool(name, pattern, root) for name, pattern in profile.items()
     }
-    sanitized_path = os.pathsep.join(
-        dict.fromkeys(str(Path(executable).parent) for executable, _ in tools.values())
-    )
-
     workspace = Path(tempfile.mkdtemp(prefix="tenkz-release-"))
     view = workspace / "view"
     output = workspace / "output"
     view.mkdir()
     output.mkdir()
     try:
+        sanitized_path = str(tool_directory(workspace, tools))
         for relative in (
             policy.code_root,
             policy.support_root,
@@ -616,23 +682,12 @@ def observe(
         }
         (workspace / "home").mkdir()
 
-        timed_out = False
-        try:
-            completed = subprocess.run(
-                [tools[test.runner][0], test.path, *test.args],
-                cwd=view,
-                env=environment,
-                text=True,
-                capture_output=True,
-                timeout=test.timeout_seconds,
-                check=False,
-            )
-            exit_status = completed.returncode
-            stderr = completed.stderr
-        except subprocess.TimeoutExpired:
-            timed_out = True
-            exit_status = -1
-            stderr = ""
+        exit_status, stderr, timed_out = run_command(
+            [tools[test.runner][0], test.path, *test.args],
+            cwd=view,
+            environment=environment,
+            timeout=test.timeout_seconds,
+        )
 
         require(not timed_out, f"{test.id} exceeded its {test.timeout_seconds}s timeout")
         result = classify(test, exit_status, output, stderr)
@@ -677,7 +732,11 @@ def classify(test: Test, exit_status: int, output: Path, stderr: str) -> str:
         set(receipt) == {"schema", "test_id", "failure_fingerprint", "completed"},
         f"{test.id} wrote a receipt outside the closed shape",
     )
-    require(receipt["schema"] == 1, f"{test.id} receipt schema must be 1")
+    schema = receipt["schema"]
+    require(
+        isinstance(schema, int) and not isinstance(schema, bool) and schema == 1,
+        f"{test.id} receipt schema must be the integer 1",
+    )
     require(receipt["test_id"] == test.id, f"{test.id} receipt names another test")
     require(
         receipt["failure_fingerprint"] == test.failure_fingerprint,

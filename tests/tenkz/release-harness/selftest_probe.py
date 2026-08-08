@@ -13,9 +13,12 @@ the synthetic fingerprint rather than as a crash.
 
 from __future__ import annotations
 
+import json
 import os
+import subprocess
 import sys
 import time
+import tomllib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -31,22 +34,13 @@ def test_id() -> str:
 
     return f"supervisor-selftest-{sys.argv[1] if len(sys.argv) > 1 else 'unknown'}"
 
-# Exposed to every command: the pinned trees, the inventory, and the four
-# canonical artifacts.  Nothing else in the repository may be reachable.
-DECLARED = (
-    "tests/tenkz/release-harness/harnesslib.py",
-    "tests/tenkz/release-support/tool-profile.toml",
-    "tests/tenkz/release-tests.toml",
-    "tex/tenkz/tenkz.sty",
-    "docs/tenkz/TNLOG.md",
-)
-UNDECLARED = (
-    "scripts/check_tenkz_policy.py",
-    "docs/tenkz/SOAK-1.0.md",
-    "tests/tenkz/census-baseline.json",
-    "lakefile.toml",
-    "TNLean.lean",
-)
+# The pinned manifest of everything this run may see, read from the support
+# tree, which is itself exposed.  The probe compares it with the *complete*
+# view rather than sampling a handful of paths: sampling passes whenever a
+# regression exposes something the sample forgot to name, and this probe is the
+# activation evidence that the access denials hold.
+MANIFEST = "tests/tenkz/release-support/selftest-expectations.toml"
+TOOL_PROFILE = "tests/tenkz/release-support/tool-profile.toml"
 
 
 def check(condition: object, reason: str) -> None:
@@ -58,11 +52,33 @@ def check(condition: object, reason: str) -> None:
     )
 
 
+def allowed_view() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    document = tomllib.loads(Path(MANIFEST).read_text(encoding="utf-8"))
+    view = document["view"]
+    return tuple(view["roots"]), tuple(view["files"])
+
+
 def mode_isolation() -> None:
-    absent = [path for path in DECLARED if not Path(path).exists()]
+    roots, files = allowed_view()
+
+    absent = [path for path in files if not Path(path).exists()]
     check(not absent, f"the view is missing declared entries {absent!r}")
-    present = [path for path in UNDECLARED if Path(path).exists()]
-    check(not present, f"the view exposes undeclared entries {present!r}")
+    missing_roots = [root for root in roots if not Path(root).is_dir()]
+    check(not missing_roots, f"the view is missing pinned trees {missing_roots!r}")
+
+    # Every regular file anywhere in the view must be inside a pinned tree or
+    # be one of the named blobs. Anything else entered the view undeclared.
+    unexpected = sorted(
+        str(path)
+        for path in Path(".").rglob("*")
+        if path.is_file()
+        and str(path) not in files
+        and not any(str(path).startswith(f"{root}/") for root in roots)
+    )
+    check(
+        not unexpected,
+        f"the view exposes {len(unexpected)} undeclared entr(ies): {unexpected[:10]!r}",
+    )
 
 
 def mode_environment() -> None:
@@ -97,6 +113,22 @@ def mode_environment() -> None:
     check(
         not repository_directories,
         f"PATH reaches into the pinned trees at {repository_directories!r}",
+    )
+
+    # PATH must name the allowlist, not a directory that happens to contain
+    # it. A CPython install ships `pip`, `pydoc`, and versioned interpreters
+    # beside `python3`, so putting the interpreter's parent on PATH would hand
+    # the command every one of them un-fingerprinted.
+    allowed = set(tomllib.loads(Path(TOOL_PROFILE).read_text(encoding="utf-8"))["tool"])
+    reachable: set[str] = set()
+    for entry in os.environ["PATH"].split(os.pathsep):
+        directory = Path(entry)
+        if directory.is_dir():
+            reachable.update(item.name for item in directory.iterdir())
+    check(
+        reachable == allowed,
+        f"PATH reaches {sorted(reachable - allowed)!r} beyond the tool allowlist "
+        f"{sorted(allowed)!r}",
     )
 
 
@@ -172,6 +204,29 @@ def main() -> int:
         mode_readonly()
         return 0
     if mode == "timeout":
+        time.sleep(30)
+        return 0
+    if mode == "bool-schema":
+        # A receipt whose `schema` is JSON `true` must not be read as version 1
+        # merely because Python considers `True == 1`.
+        receipt = output_directory() / "assertion-failure-v1.json"
+        receipt.write_text(
+            json.dumps(
+                {
+                    "schema": True,
+                    "test_id": test_id(),
+                    "failure_fingerprint": FINGERPRINT,
+                    "completed": True,
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return 10
+    if mode == "orphan-timeout":
+        # Leave a descendant running and then hang. The supervisor must bound
+        # the whole process group, not just this process.
+        subprocess.Popen([sys.executable, "-c", "import time; time.sleep(300)"])
         time.sleep(30)
         return 0
     print(f"unknown probe mode {mode!r}", file=sys.stderr)

@@ -11,7 +11,6 @@ holds it equal to `FIELD_VALIDATORS`.
 
 from __future__ import annotations
 
-import importlib.util
 import re
 import sys
 import tomllib
@@ -19,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from harnesslib import assert_that, read  # noqa: E402
+from harnesslib import assert_that, load_module, read  # noqa: E402
 
 
 TEST_ID = "tnlog-declared-kinds-match-the-reader"
@@ -32,12 +31,6 @@ BLOCK = re.compile(
 )
 
 
-def load_reader():
-    spec = importlib.util.spec_from_file_location("tenkz_release_tnlog", SUBJECT)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
 
 
 def declared_kinds() -> list[str] | None:
@@ -52,7 +45,7 @@ def declared_kinds() -> list[str] | None:
 
 def main() -> int:
     declared = declared_kinds()
-    tabled = sorted(load_reader().FIELD_VALIDATORS)
+    tabled = sorted(load_module(SUBJECT).FIELD_VALIDATORS)
     assert_that(
         declared == tabled,
         test_id=TEST_ID,

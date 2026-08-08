@@ -31,10 +31,17 @@ only in the `tenkz-release-publisher` environment secret named by
 reviewed change:
 
 ```bash
-ssh-keygen -t ed25519 -C tenkz-v1.0.0 -f tenkz-final-tag
+ssh-keygen -t ed25519 -N '' -C tenkz-v1.0.0 -f tenkz-final-tag
 # tenkz-final-tag.pub -> tests/tenkz/release-support/final-tag-signing-key.pub
 # tenkz-final-tag     -> the TENKZ_FINAL_TAG_SIGNING_KEY environment secret
 ```
+
+`-N ''` is not optional. Without it `ssh-keygen` prompts for a passphrase, and
+a maintainer who supplies one stores an encrypted private key in the secret.
+The publisher runs one closed noninteractive command and has no passphrase
+input of any kind, so it would then be unable to sign and the campaign would
+stall at `signed-off-awaiting-tag` with nothing pointing at the key as the
+cause.
 
 The same change fixes the two byte constants the tag-object schema currently
 leaves open, `tagger_name` and `tagger_email`, and adds the publisher job to
