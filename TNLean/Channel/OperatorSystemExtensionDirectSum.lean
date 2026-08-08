@@ -51,8 +51,9 @@ argument, applied this time with `S = ⊤`.
 ## Main results
 
 * `Matrix.IsOperatorSystemDirectSum`, `Matrix.IsCPOnOperatorSystemDirectSum`,
-  `Matrix.IsCPMapDirectSum`: the direct-sum-domain analogues of `Matrix.IsOperatorSystem`,
-  `Matrix.IsCPOnOperatorSystem`, and `Matrix.IsKrausCP`.
+  `Matrix.IsCPMapDirectSum`: the direct-sum-domain analogues of `Matrix.IsOperatorSystem` and
+  `Matrix.IsCPOnOperatorSystem`, the third being the whole-algebra case: entrywise complete
+  positivity at every tensor level `j`.
 * `Matrix.exists_cp_extension_of_operatorSystem_directSum`: the proposition itself, for the
   direct-sum domain `⊕_{k : Fin r} M_{d_k}(ℂ)`.
 
@@ -152,8 +153,8 @@ noncomputable def tensorMapIdDirectSum
 
 /-- **`T` is completely positive on a direct sum of matrix algebras** (Wolf Ch. 1,
 lines 616--626, the `T ⊗ id_j` ampliation positivity condition applied to the whole
-direct-sum algebra; the direct-sum-domain analogue of `Matrix.IsKrausCP`): entrywise
-positive semidefiniteness is preserved at every tensor level `j`. -/
+direct-sum algebra; the whole-algebra case of `Matrix.IsCPOnOperatorSystemDirectSum`):
+entrywise positive semidefiniteness is preserved at every tensor level `j`. -/
 def IsCPMapDirectSum
     (T : (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) →ₗ[ℂ] Matrix (Fin p) (Fin p) ℂ) : Prop :=
   ∀ j : ℕ, ∀ X : ∀ k, Matrix (Fin (d k) × Fin j) (Fin (d k) × Fin j) ℂ,
@@ -197,24 +198,6 @@ theorem directSumEmbedFin_conjTranspose (A : ∀ k : Fin r, Matrix (Fin (d k)) (
     Matrix.conjTranspose_apply, ← Matrix.blockDiagonal'_conjTranspose]
 
 /-! ### Positive semidefiniteness of a block-diagonal family -/
-
-set_option linter.unusedFintypeInType false in
-set_option linter.unusedDecidableInType false in
-/-- A block-diagonal matrix is positive semidefinite iff each of its diagonal blocks is: the
-canonical order on a finite direct sum of matrix algebras is entrywise, and this is the fact
-that realizes it inside the ambient block-diagonal embedding. -/
-theorem blockDiagonal'_posSemidef_iff {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {β : ι → Type*} [∀ i, Fintype (β i)] [∀ i, DecidableEq (β i)]
-    (M : ∀ i, Matrix (β i) (β i) ℂ) :
-    (Matrix.blockDiagonal' M).PosSemidef ↔ ∀ i, (M i).PosSemidef := by
-  constructor
-  · intro h k
-    have hcomp := directSumDiagonalCompression_posSemidef
-      (A := directSumDiagonalEmbedding M) (directSumDiagonalEmbedding_apply M ▸ h) k
-    rwa [directSumDiagonalCompression_embedding] at hcomp
-  · intro h
-    rw [← directSumDiagonalEmbedding_apply M]
-    exact directSumDiagonalEmbedding_posSemidef h
 
 theorem directSumEmbedFin_posSemidef_iff (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     (directSumEmbedFin A).PosSemidef ↔ ∀ k, (A k).PosSemidef := by
