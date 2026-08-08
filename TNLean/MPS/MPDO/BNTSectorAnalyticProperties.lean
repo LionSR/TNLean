@@ -68,6 +68,45 @@ theorem physTraceTransfer_commonWeightAbsorbedBasisMPOTensor
   rw [Finset.smul_sum]
   simp only [MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis]
 
+/-- Literal zero correlation length restricts to each common-weight-absorbed BNT
+representative:
+\[
+  \mathcal T_{\mathcal K_s}^2=\mathcal T_{\mathcal K_s}.
+\]
+
+**Scope restriction (literal-ZCL inheritance):** This proves only the literal-ZCL inheritance
+part of Case II. It does not assert spectral normality of the absorbed tensor or complete
+`prop2to3`. The remaining Case-II boundary is recorded in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
+theorem commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q') (s : Fin S.basisCount) :
+    physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) *
+        physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) =
+      physTraceTransfer (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
+  rw [physTraceTransfer_commonWeightAbsorbedBasisMPOTensor]
+  have hsquare := weighted_basis_physTraceTransfer_sq_of_literal_ZCL
+    S hTotal X hEq hZCL_sq s ⟨0, S.copies_pos s⟩
+  rw [S.weight_eq_commonWeight hWeight] at hsquare
+  exact hsquare
+
 /-- The source zero-correlation-length equation restricts to every absorbed
 normal representative in the horizontal canonical form.
 
