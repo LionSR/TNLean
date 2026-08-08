@@ -457,8 +457,8 @@ The unconditional `diagReducedMap_dichotomy` follows, and the headline
 (**unitary**) or `projMap e ∘ conjProj` (**antiunitary**). The antiunitary
 branch is genuinely present (`conjProj`); ℂ-linearity of `e` is an OUTPUT of the
 dichotomy landing on the identity, never assumed; the global sign is forced, not
-posited. Foundational triple only (`propext, Classical.choice, Quot.sound`); no
-`busch`, no `sorry`, no `native_decide`.
+posited. Its only logical dependencies are the foundational triple
+`propext`, `Classical.choice`, and `Quot.sound`.
 -/
 
 /-! ## The `Matrix.unitaryGroup` reformulation

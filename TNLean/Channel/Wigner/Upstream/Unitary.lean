@@ -28,27 +28,10 @@ unitary group on the projective space of Euclidean space.
 - `Matrix.UnitaryGroup.toEuclideanLinearEquivHom`: the monoid hom
   `unitaryGroup (Fin N) ℂ →* (EuclideanSpace ℂ (Fin N) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N))`.
 
-## Main instances
+## Main instance
 
 - `MulAction (Matrix.unitaryGroup (Fin N) ℂ) (ℙ ℂ (EuclideanSpace ℂ (Fin N)))`
   via `MulAction.compHom` applied to `toEuclideanLinearEquivHom`.
-- `ContinuousConstSMul (Matrix.unitaryGroup (Fin N) ℂ) (ℙ ℂ (EuclideanSpace ℂ (Fin N)))`
-  by routing through `Projectivization.mapEquiv_continuous_of_finiteDim`.
-
-## What this unlocks
-
-These instances are the substrate for the SU(N)-invariant Borel
-probability measure on `ℂℙ^{N-1}` (`fubiniStudyMeasure`) and the associated
-uniqueness theorem (`fubiniStudyMeasure_unique`). Together with the
-finite-measure normalisation `invariant_measure_uniqueness_cpn`
-(`FubiniStudyUnique.lean`), they provide the invariant-measure-uniqueness fact
-for the `ℂℙ^{N-1}` / `U(N)` instantiation, consumed directly by LF4's concrete
-measure bridges (`CSD.LF4.cp_measure_bridge` / `k_measure_bridge`), which
-therefore cite no axiom at that site. (Historically this was the proved
-concrete realisation of an abstract `CSD.LF2.invariant_measure_uniqueness`
-axiom; that axiom — together with the abstract `measure_bridge` lemma it
-served — was **removed 2026-06-04**, since nothing downstream used the abstract
-statement. The concrete fact here is all that was ever load-bearing.)
 
 ## Provenance
 

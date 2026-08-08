@@ -53,8 +53,8 @@ phase-coherence bookkeeping, extraction of (semi)linearity from the
 overlap data, and ruling out the antiunitary branch via the Kähler complex
 structure (over ℂ, transition-probability preservation alone admits both
 the unitary and antiunitary classes; the holomorphic / Kähler structure
-selects the unitary one). It is **not** stated here as an axiom or a
-`sorry`; this file is the foundation on which it will eventually be stated.
+selects the unitary one). This file supplies the foundation consumed by the
+subsequent rigidity modules.
 
 ## Provenance
 
