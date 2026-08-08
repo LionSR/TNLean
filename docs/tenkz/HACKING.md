@@ -417,6 +417,17 @@ python3 scripts/tenkz_audit.py <job>.tnlog
 python3 scripts/tenkz_lint.py <source>.tex
 ```
 
+The blueprint's own pictures are audited as a set, and the audited unit is
+the display rather than the panel: a picture in a displayed row compiles with
+the whole row, so one stream holds every panel and the equation checks have
+something to compare.  The closing line states how far those checks reached —
+how many displays declared an equation scope, and how many were read only
+through the source `=`.
+
+```sh
+python3 scripts/tenkz_blueprint_sweep.py
+```
+
 Render every affected PDF and inspect it.  Exit status is not visual review.
 
 ```sh
@@ -438,6 +449,10 @@ Generated PDFs and PNGs are build artifacts, not committed source.
   a case carries `kernel` whether it spells the retained switch or only the
   `tenkz` environment; the retired `grid` tag is rejected.
 - A diagrammatic equation has the intended boundary signature on both sides.
+  The equation group is `tenkzeq` and nothing else (`DESIGN.md`, "Equation
+  grouping"): inside it a mismatch is a hard finding of both the compiler and
+  the audit, while two pictures joined by a bare source `=` raise only the
+  advisory that names the pair still to be moved into the scope.
 - A matrix keeps two open virtual indices, a doubled-space map keeps four,
   and a scalar keeps none.
 - The applied channel is `[sandwich, east={cup=$X$}]`; a west cup feeds the

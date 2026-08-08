@@ -476,6 +476,33 @@ for bearing in e n w s; do
     exit 1
   }
 done
+# A directed bundle keeps its multiplicity: the orientation precedes the
+# strand weight, so `modulo=bundles' still expands the bundle and the
+# equation of one directed bundle against three directed singles holds.
+grep -Fq 'kernel-boundary|signature=open:e:to:bundle=3' \
+    "$WORK/r_bundle_dir_modulo.tnlog" || {
+  echo "FAIL: the directed bundle lost its expandable weight field" >&2
+  exit 1
+}
+grep -Fq 'check|scope=1|relation=1|result=equal|modulo=bundles' \
+    "$WORK/r_bundle_dir_modulo.tnlog" || {
+  echo "FAIL: a directed bundle no longer expands modulo bundles" >&2
+  exit 1
+}
+# A directed index states its orientation in the boundary signature whether
+# it is virtual or physical, normalized to the cut: the departing panel's
+# four legs leave, the arriving panel's four enter.
+grep -Fq 'kernel-boundary|signature=open:e:to, open:n:to, open:s:to, open:w:to' \
+    "$WORK/r_dir_open_bearings.tnlog" || {
+  echo "FAIL: the departing virtual legs lost their signature orientation" >&2
+  exit 1
+}
+grep -Fq \
+  'kernel-boundary|signature=open:e:from, open:n:from, open:s:from, open:w:from' \
+    "$WORK/r_dir_open_bearings.tnlog" || {
+  echo "FAIL: the arriving virtual legs lost their signature orientation" >&2
+  exit 1
+}
 # A wire declares its stroke; the absent key and solid= are the same rail.
 for spelling in dashed dotted; do
   [ "$(grep -c "|stroke=$spelling|" "$WORK/r_wire_stroke.tnlog" || true)" \
@@ -2254,6 +2281,7 @@ for contract_negative in \
   n_port_cell_type \
   n_cell_port_type \
   n_physical_dir_mismatch \
+  n_virtual_dir_mismatch \
   n_route_end_inside_hull \
   n_physical_open_port_type \
   n_interface_open_port_type \
@@ -2310,6 +2338,8 @@ do
   [ "$contract_negative" = n_cell_port_type ] &&
     expected='[TKZ-PORT-TYPE]'
   [ "$contract_negative" = n_physical_dir_mismatch ] &&
+    expected='[TKZ-EQ-SIGNATURE]'
+  [ "$contract_negative" = n_virtual_dir_mismatch ] &&
     expected='[TKZ-EQ-SIGNATURE]'
   [ "$contract_negative" = n_route_end_inside_hull ] &&
     expected='[TKZ-ROUTE-END-INSIDE]'
@@ -2759,14 +2789,22 @@ python3 "$REPO/scripts/tenkz_audit.py" \
 grep -Fv 'check|scope=1|relation=1|' \
   "$WORK/r_check_scope_nested.tnlog" \
   >"$WORK/r_check_scope_nested_truncated.tnlog"
-python3 "$REPO/scripts/tenkz_audit.py" \
+# A relation whose record went missing leaves its own group unchecked, and
+# the later group's record never covers it.
+if python3 "$REPO/scripts/tenkz_audit.py" \
   "$WORK/r_check_scope_nested_truncated.tnlog" \
   "$KERNEL/regression/r_check_scope_nested.tex" \
-  >"$WORK/r_check_scope_nested_truncated.audit" || {
+  >"$WORK/r_check_scope_nested_truncated.audit"; then
+  echo "FAIL: a missing relation record left the equation group checked" >&2
+  cat "$WORK/r_check_scope_nested_truncated.audit" >&2
+  exit 1
+fi
+if ! grep -F 'HARD [eq-unchecked]' \
+  "$WORK/r_check_scope_nested_truncated.audit" | grep -Fq 'scope 1'; then
   echo "FAIL: a missing record stole the later equation scope" >&2
   cat "$WORK/r_check_scope_nested_truncated.audit" >&2
   exit 1
-}
+fi
 
 scope_malformed="$KERNEL/negative/n_check_scope_malformed_then_valid.tex"
 if ( cd "$WORK" &&

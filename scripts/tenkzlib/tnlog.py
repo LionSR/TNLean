@@ -245,6 +245,13 @@ FORBIDDEN_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"picture"}),
 }
 
+# A check record names the one joiner it resolved: a relation it compared or a
+# product interface it contracted.  Carrying both would let one record stand
+# for two joiners and close a scope that recorded only one of them.
+EXCLUSIVE_FIELDS: dict[str, frozenset[str]] = {
+    "check": frozenset({"relation", "product"}),
+}
+
 
 @dataclass
 class Event:
@@ -390,6 +397,15 @@ def parse_log(
                     "malformed-event",
                     where,
                     f"{kind} event forbids field(s): {', '.join(forbidden)}: {line}",
+                )
+                valid = False
+            exclusive = sorted(EXCLUSIVE_FIELDS.get(kind, frozenset()) & attrs.keys())
+            if len(exclusive) > 1:
+                hard(
+                    "malformed-event",
+                    where,
+                    f"{kind} event names more than one joiner: "
+                    f"{', '.join(exclusive)}: {line}",
                 )
                 valid = False
             event.valid = valid

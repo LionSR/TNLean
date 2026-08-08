@@ -31,13 +31,43 @@ Hard errors (exit 1):
                       recorded under/over occlusion, or hit no intersection.
   kernel-check        A kernel equation check reported a malformed relation
                       or unequal boundary signatures.
-  eq-boundary-mismatch Consecutive kernel pictures joined by `=` in the
-                       source have different boundary kinds or
-                       multiplicities.  A tensor equation equates two maps
-                       of one type, so the multisets of open legs must agree
-                       side-to-side; their drawing directions may rotate.
+  eq-boundary-mismatch Two panels of one equation group expose different
+                       boundary kinds, multiplicities, or orientations.  A
+                       tensor equation equates two maps of one type, so the
+                       multisets of open legs must agree side-to-side, an
+                       index leaving one side must leave the other, and only
+                       the drawing directions may rotate.
+  eq-unchecked        An equation group holds panels its own check records
+                      never folded into a relation: the group's arithmetic
+                      (relations plus distinct adjacent contractions plus one
+                      equals panels) does not close, so some panel's boundary
+                      was never compared.  A check record whose scope owns no
+                      panel at all fails the same way.
+  eq-check-drift      The stream's check policy is not its source's: it
+                      retires a relation the source never opted out of, the
+                      source opts out of a relation the stream checked anyway,
+                      or the two disagree about comparing modulo bundles.  The
+                      stream is then stale against the source it is read with;
+                      only the waivers both state stand, and the comparison
+                      runs in the stricter of the two readings.
 
 Advisories (never affect the exit code):
+  eq-sibling-mismatch  Consecutive kernel pictures joined by `=` in the
+                       source, outside any equation group, expose different
+                       boundaries.  The source `=` is a heuristic, not a
+                       declaration: the mechanism that makes an equation
+                       checkable is `tenkzeq` (DESIGN.md, "Equation
+                       grouping"), so a mismatch here reports a picture pair
+                       still to be moved into the scope.
+  eq-sibling-unread    Pictures share one display but are not all joined by a
+                       relation, so the display states a product, a sum, or a
+                       map that only the scope classifies.  Reading it
+                       pairwise would compare one factor against a whole side,
+                       so nothing is claimed about it at all.
+  eq-check-off         An equation group waived one relation with
+                       `check={off={k: reason}}`, and its source declares the
+                       same waiver.  Legal, and never silent: it is reported
+                       with its reason.
   repeated-topology    Identical canonical atom+bond content in several
                        pictures: review ordinary TeX composition.  Repetition
                        alone never extends the public grammar.
@@ -47,11 +77,17 @@ Advisories (never affect the exit code):
   stale-log            The source declares picture constructs but the log
                        has none (failed or interrupted compile).
 
-Source heuristic (documented, deliberately simple): picture-producing
-constructs (`\\begin{tenkz...}`) are matched to log pictures in order of
-appearance; standalone `\\tntree` drawings emit no picture event and are
-excluded.  The match is used only when the counts agree.
-Two consecutive pictures are "one displayed equation" when the source
+The equation group is the `tenkzeq` scope and nothing else.  Every panel of
+one scope carries that scope's number in its `picture` record and the scope
+writes one `check` record per joiner, so the in-group enforcement above reads
+the stream alone and runs wherever a picture compiles -- no source, no
+heuristic.
+
+Source heuristic (documented, deliberately simple, advisory only): out of
+scope, picture-producing constructs (`\\begin{tenkz...}`) are matched to log
+pictures in order of appearance; standalone `\\tntree` drawings emit no
+picture event and are excluded.  The match is used only when the counts
+agree.  Two consecutive pictures are "one displayed equation" when the source
 between them contains `=` and no math-mode boundary (`$`, `\\[`, `\\]`),
 no cell separator `&`, no other environment, and is short.
 
@@ -69,7 +105,7 @@ from collections import Counter
 from dataclasses import dataclass
 from fractions import Fraction
 from pathlib import Path
-from typing import Optional
+from typing import Callable, NamedTuple, Optional
 
 from tenkzlib.texcase import (
     Construct,
@@ -374,6 +410,16 @@ def _stroked_polygon_intersects_roundrect(
         )
         for center, diameter in circles
     )
+
+
+class ScopePolicy(NamedTuple):
+    """What one equation's own source says about how it is checked."""
+
+    waived: set[int]         # relations its `check={off={k: ...}}` retires
+    modulo_bundles: bool     # whether it compares a bundle as its multiplicity
+    relation_gaps: set[int]  # gaps holding a relation glyph
+    product_gaps: set[int]   # gaps holding none, joining by juxtaposition
+    relation_count: Optional[int]  # relation glyphs over all its gaps
 
 
 @dataclass
@@ -1187,13 +1233,15 @@ class Audit:
         if self.tex_linked:
             self._tex_src = src
 
-    def check_equation_boundaries(self) -> None:
-        if not self.tex_linked:
-            return
-        relation_checks: dict[int, Event] = {}
-        # The kernel stamps each equation picture and relation with one scope.
-        # Missing, duplicate, or malformed records therefore fail locally and
-        # can never shift an accepted result onto another equation.
+    # ---------------- the equation group ----------------
+
+    def _scope_index(self) -> tuple[dict[int, int], dict[int, list[int]]]:
+        """Map picture position to its `tenkzeq` scope and back.
+
+        A picture record carries `scope=` exactly when it is a panel of an
+        equation group, so the grouping is a fact of the stream and needs
+        neither source nor heuristic.
+        """
         picture_indices = {
             picture.ident: index for index, picture in enumerate(self.pictures)
         }
@@ -1209,7 +1257,10 @@ class Audit:
             scope_index = int(scope)
             picture_scopes[picture] = scope_index
             scope_pictures.setdefault(scope_index, []).append(picture)
+        return picture_scopes, scope_pictures
 
+    def _scope_checks(self) -> tuple[dict[int, list[Event]], set[int]]:
+        """Each scope's `check` records, and the scopes that failed arity."""
         scope_events: dict[int, list[Event]] = {}
         malformed_scopes: set[int] = set()
         for event in self.log_events:
@@ -1223,134 +1274,407 @@ class Audit:
                 malformed_scopes.add(scope_index)
                 continue
             scope_events.setdefault(scope_index, []).append(event)
+        return scope_events, malformed_scopes
 
-        equation_tokens = list(re.finditer(
-            r"\\(begin|end)\{tenkzeq\}", self._tex_src
-        ))
-        equation_stack: list[re.Match[str]] = []
-        for token in equation_tokens:
+    def _tex_line(self, offset: int) -> int:
+        """The source line an offset falls on."""
+        return self._tex_src.count("\n", 0, offset) + 1
+
+    def _tenkzeq_spans(self) -> list[tuple[int, int]]:
+        """Source spans of the equation environments, innermost first."""
+        spans: list[tuple[int, int]] = []
+        stack: list[int] = []
+        # TeX reads the space after a control word as part of it, so
+        # `\begin {tenkzeq}` opens the same environment; the shared construct
+        # scanner allows it and the span scan must agree, or a spaced source
+        # would look to the audit like an equation with no source at all.
+        for token in re.finditer(
+            r"\\(begin|end)\s*\{tenkzeq\}", self._tex_src
+        ):
             if token.group(1) == "begin":
-                equation_stack.append(token)
-                continue
-            if not equation_stack:
-                continue
-            begin = equation_stack.pop()
-            first_construct = next(
-                (construct for construct in self.constructs
-                 if begin.end() <= construct.start < token.start()),
-                None,
-            )
-            if first_construct is None:
-                continue
-            declared_offs = _tenkzeq_declared_offs(self._tex_src, begin.end())
-            if declared_offs is None:
-                continue
+                stack.append(token.end())
+            elif stack:
+                spans.append((stack.pop(), token.start()))
+        return spans
+
+    def _source_check_policy(self) -> Optional[dict[int, ScopePolicy]]:
+        r"""Per scope, the check policy the source itself declares.
+
+        The policy is the relations it waives, whether it compares modulo
+        bundles, and which gap between its panels each joiner occupies.  That
+        last part is exact rather than heuristic.  `tenkzeq` makes `=` the
+        active relation glyph over its whole body while a picture resets it,
+        so between two panels every unescaped `=` records one relation and a
+        gap holding none joins its panels by juxtaposition -- a product.
+        Reading the gaps for that one character therefore names the same
+        joiners the kernel recorded, `\mbox{a=b}` included, which no reading
+        of the mathematics could do.  `None` when no source is linked: the stream is then the only
+        witness of its own policy, which is honoured and reported.  With a
+        source, a waiver counts and a bundle expansion applies only where the
+        environment's own `check=` says so, so a stale or edited stream can
+        neither retire a comparison the author never opted out of nor loosen
+        one the author never loosened.
+        """
+        if not self.tex_linked:
+            return None
+        picture_scopes, scope_pictures = self._scope_index()
+        authorized: dict[int, ScopePolicy] = {}
+        for begin, end in self._tenkzeq_spans():
             members = [
                 index for index, construct in enumerate(self.constructs)
-                if begin.end() <= construct.start and construct.end <= token.start()
+                if begin <= construct.start and construct.end <= end
             ]
-            logged_scopes = {picture_scopes.get(member) for member in members}
-            if len(logged_scopes) != 1 or None in logged_scopes:
+            scopes = {picture_scopes.get(member) for member in members}
+            scope = scopes.pop() if len(scopes) == 1 else None
+            # The source states which pictures one equation holds and the
+            # stream states which scope each picture claimed.  Where the two
+            # do not name the same group, the comparisons that ran were
+            # between panels no author put on one relation.
+            if scope is None or scope_pictures.get(scope) != members:
+                self.hard(
+                    "eq-unchecked",
+                    f"{self.tex_path.name}:{self._tex_line(begin)}",
+                    f"the source states an equation over "
+                    f"{len(members)} picture(s) that the stream does not "
+                    f"group: its panels claim "
+                    f"{sorted(str(picture_scopes.get(member, 'no scope')) for member in members)}",
+                )
                 continue
-            scope = next(
-                value for value in logged_scopes if value is not None
+            separators = [
+                self._tex_src[
+                    self.constructs[left].end:self.constructs[right].start
+                ]
+                for left, right in zip(members, members[1:])
+            ]
+            marks = [relation_marks(separator) for separator in separators]
+            relation_gaps = {
+                position + 1 for position, count in enumerate(marks) if count
+            }
+            product_gaps = {
+                position + 1 for position, count in enumerate(marks) if not count
+            }
+            relation_count = sum(marks)
+            authorized[scope] = ScopePolicy(
+                _tenkzeq_declared_offs(self._tex_src, begin) or set(),
+                _tenkzeq_declares_bundles(self._tex_src, begin),
+                relation_gaps,
+                product_gaps,
+                relation_count,
             )
-            if scope in malformed_scopes or scope_pictures.get(scope) != members:
+        return authorized
+
+    def check_equation_groups(self) -> None:
+        """Enforce the boundary signature inside every equation group.
+
+        The group is the `tenkzeq` scope.  Two facts carry it in the stream:
+        every panel's `picture` record names its scope, and the scope writes
+        one `check` record per joiner -- a relation comparison or a product
+        contraction.  A mismatch inside a group is a hard error, not an
+        advisory: an equation whose sides expose different boundaries states
+        an identity between maps of different types.
+
+        Two rules apply.  The group's arithmetic must close -- relations plus
+        distinct adjacent contractions plus one equals panels -- so that no
+        panel escapes comparison; a group whose arithmetic fails is read as
+        unchecked, and its panels are then compared pair by pair, keeping the
+        waivers the source authorizes.  And a side that is one panel is compared here
+        whatever the kernel's verdict said, so a stream whose comparison never
+        ran is caught rather than trusted -- for every relation of a group
+        with no contraction in it, and, where the source settles which gaps
+        its relations cross, for the single-panel sides of a group that holds
+        one too.  Only a composite side's fold is left to the kernel, which is
+        the one answer the audit does not recompute.
+
+        Both halves of the ownership are checked.  A panel names its scope and
+        a check names the scope it belongs to; a check whose scope owns no
+        panel is an equation the stream does not contain, and a waiver the
+        source and the stream disagree about means the two are not the same
+        document.
+        """
+        _, scope_pictures = self._scope_index()
+        scope_events, malformed_scopes = self._scope_checks()
+        policy = self._source_check_policy()
+        for scope in sorted(set(scope_events) | set(malformed_scopes)):
+            if scope in scope_pictures:
                 continue
-            # Relation ordinals follow the joiners: adjacent members whose
-            # separator is relation glue own one relation each, and members
-            # adjacent without one are a product group inside a single side,
-            # so a scope may legally log fewer relations than member gaps.
-            relation_pairs = [
-                index
-                for index in range(len(members) - 1)
-                if same_equation(self._tex_src[
-                    self.constructs[members[index]].end:
-                    self.constructs[members[index + 1]].start
-                ])
-            ]
-            expected_relations = set(range(1, len(relation_pairs) + 1))
-            scope_records = scope_events.get(scope, [])
-            # A scope record is a relation comparison or a product
-            # contraction; anything else disables the scope.
-            if any(
-                "relation" not in event.attrs and "product" not in event.attrs
-                for event in scope_records
-            ):
-                continue
-            events = [
-                event for event in scope_records if "relation" in event.attrs
-            ]
-            relation_numbers = [
-                int(event.attrs["relation"])
-                for event in events
+            # A check record's scope is its ownership key.  A scope that owns
+            # no panel names an equation the stream does not contain, which is
+            # what an emitter losing `scope=` from its picture headers looks
+            # like: the comparisons are recorded and the panels they name have
+            # left the group.
+            self.hard(
+                "eq-unchecked", self.log_path.name,
+                f"equation scope {scope} records "
+                f"{len(scope_events.get(scope, []))} check(s) but owns no "
+                f"panel; the scope's pictures never claimed it",
+            )
+        for scope in sorted(scope_pictures):
+            members = scope_pictures[scope]
+            records = scope_events.get(scope, [])
+            relation_records = [
+                event for event in records
                 if event.attrs.get("relation", "").isdigit()
             ]
-            # Every relation record in the scope must own exactly one
-            # expected relation.  Missing, duplicate, unowned, and surplus
-            # records disable the whole scope instead of authorizing a waiver.
-            if (
-                len(events) != len(expected_relations)
-                or len(relation_numbers) != len(events)
-                or set(relation_numbers) != expected_relations
-            ):
-                continue
-            by_relation = {
-                int(event.attrs["relation"]): event for event in events
+            relations = {
+                int(event.attrs["relation"]): event for event in relation_records
             }
-            logged_offs = {
-                relation for relation, event in by_relation.items()
+            product_records = [event for event in records if "product" in event.attrs]
+            # A contraction names the adjacent panel pair it folded.  Only a
+            # well-formed sequence of distinct adjacent pairs counts toward
+            # closure: otherwise one pair recorded twice stands in for another
+            # that was lost, and the panel that pair held escapes comparison.
+            products = {
+                pair for pair in (
+                    _product_pair(event, len(members)) for event in product_records
+                )
+                if pair is not None
+            }
+            # Only a comparison states the mode it ran in; a waiver ran none
+            # and says nothing, so a scope whose every relation is waived
+            # leaves the mode unobserved rather than observed to be off.
+            stated = [
+                event for event in records
+                if event.attrs.get("result") in {"equal", "mismatch", "contracted"}
+            ]
+            logged_modulo = any(
+                event.attrs.get("modulo") == "bundles" for event in stated
+            )
+            where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
+            source = (
+                None if policy is None
+                else policy.get(
+                    scope, ScopePolicy(set(), False, set(), set(), None)
+                )
+            )
+            declared = set() if source is None else source.waived
+            declared_modulo = logged_modulo if source is None else source.modulo_bundles
+            relation_gaps = set() if source is None else source.relation_gaps
+            product_gaps = set() if source is None else source.product_gaps
+            # A bundle expansion loosens the comparison, so the source has to
+            # ask for it: a stale stream carrying `modulo=bundles` past a
+            # source that no longer says so would accept a bundle against a
+            # count the current source rejects.  The comparison then runs in
+            # the stricter of the two readings.
+            modulo = logged_modulo and declared_modulo
+            if policy is not None and stated and logged_modulo != declared_modulo:
+                self.hard(
+                    "eq-check-drift", where,
+                    f"equation scope {scope} compares "
+                    f"{'modulo bundles' if logged_modulo else 'strand for strand'}"
+                    f" but its source asks for "
+                    f"{'modulo bundles' if declared_modulo else 'strand for strand'}"
+                    f"; the stream is not this source's",
+                )
+            closed = (
+                scope not in malformed_scopes
+                # An equation asserts at least one relation, so a scope
+                # recording none compared nothing, however its panels count.
+                and relations
+                and len(relation_records) == len(relations)
+                and set(relations) == set(range(1, len(relations) + 1))
+                and len(product_records) == len(products)
+                # With a source the joiners are placed, not merely counted:
+                # the contractions are exactly the gaps holding no relation
+                # glyph, and there are as many relations as glyphs.  A stream
+                # that moves a joiner to another gap leaves a panel outside
+                # every side while its counts still balance.
+                and (source is None or products == product_gaps)
+                and (
+                    source is None or source.relation_count is None
+                    or len(relations) == source.relation_count
+                )
+                and len(relations) + len(products) + 1 == len(members)
+            )
+            waived: set[int] = {
+                relation for relation, event in relations.items()
                 if event.attrs.get("result") == "off"
             }
-            # An event-stream opt-out is authority only when the same relation
-            # is explicitly waived in this source scope.
-            if logged_offs != declared_offs:
-                continue
-            for relation, pair_index in enumerate(relation_pairs, 1):
-                relation_checks[members[pair_index]] = by_relation[relation]
-
-        for i in range(len(self.pictures) - 1):
-            a, b = self.pictures[i], self.pictures[i + 1]
-            if a.lang != b.lang or a.lang != "kernel":
-                continue
-            ca, cb = self.constructs[i], self.constructs[i + 1]
-            if ca.end > cb.start:
-                continue  # nested constructs: no linear separator
-            sep = self._tex_src[ca.end:cb.start]
-            if not same_equation(sep):
-                continue
-            relation_check = relation_checks.get(i)
-            if (
-                relation_check is not None
-                and relation_check.attrs.get("result") in {"equal", "off"}
-            ):
-                continue
-            sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
-            if sig_a is None or sig_b is None or sig_a == sig_b:
-                continue
-            # Rotation may change only the direction field.  Everything
-            # after it, notably strand weight, remains semantic.
-            def without_direction(item: str) -> tuple[str, ...]:
-                parts = item.split(":")
-                kind = parts[0].strip()
-                if kind in {"edge", "open"}:
-                    kind = "virtual"
-                weight = (
-                    ":".join(parts[2:]).strip()
-                    if len(parts) > 2 else "single"
+            if policy is not None:
+                for relation in sorted(waived - declared):
+                    self.hard(
+                        "eq-check-drift", where,
+                        f"equation scope {scope} waives relation {relation} "
+                        f"but its source declares no such opt-out",
+                    )
+                for relation in sorted(declared - waived):
+                    self.hard(
+                        "eq-check-drift", where,
+                        f"the source waives relation {relation} of equation "
+                        f"scope {scope} but the stream records no waiver; the "
+                        f"stream predates this source",
+                    )
+                # Only the waivers both state stand.  A forged one on its own
+                # relation retires nothing; it does not retire the author's
+                # honest opt-out on another relation of the same equation,
+                # which would report a mismatch the author waived.
+                waived &= declared
+            for relation in sorted(waived):
+                event = relations[relation]
+                self.adv(
+                    "eq-check-off",
+                    f"{self.log_path.name}:{event.line}",
+                    f"equation scope {scope} waived relation {relation}: "
+                    f"{event.attrs.get('reason', '(no reason recorded)')}",
                 )
-                weight = re.sub(r"\s*=\s*", "=", weight)
-                return kind, weight
-
-            kinds_a = Counter(without_direction(item) for item in sig_a)
-            kinds_b = Counter(without_direction(item) for item in sig_b)
-            if kinds_a == kinds_b:
+            if not closed:
+                if scope not in malformed_scopes:
+                    # A malformed scope already failed as a hard kernel-check.
+                    self.hard(
+                        "eq-unchecked", where,
+                        f"equation scope {scope} holds {len(members)} panel(s) "
+                        f"but records {len(relation_records)} relation(s) and "
+                        f"{len(product_records)} contraction(s) over "
+                        f"{len(products)} distinct adjacent pair(s); every "
+                        f"panel must fold into a compared side",
+                    )
+                # The fallback reads the panels as adjacent pairs, which is
+                # what the kernel's own malformed-scope path does -- and it
+                # honours the source's waivers there for the same reason the
+                # kernel honours its own: an author who opted a relation out
+                # did not opt back in by losing a record elsewhere.
+                self._compare_adjacent(members, scope, modulo, waived)
                 continue
-            self.hard("eq-boundary-mismatch",
-                      f"{self.log_path.name}:{a.line}",
-                      f"pictures {a.ident} and {b.ident} sit on one `=` "
-                      f"but open-leg kinds differ: {sig_a} vs {sig_b} "
-                      f"[{self.tex_path.name}:{ca.line}]")
+            if not products:
+                self._compare_adjacent(members, scope, modulo, waived)
+                continue
+            # A composite side's signature is a fold over an interface the
+            # kernel resolves, and its verdict is the `check` record that
+            # `check_kernel_checks` rejects when it says mismatch.  The sides
+            # that are one panel need no fold, so where the source settles
+            # every gap -- each one either a relation it writes or a
+            # contraction the stream records -- their relations are compared
+            # here as well.
+            gaps = relation_gaps | products
+            if not relation_gaps or len(gaps) != len(members) - 1:
+                continue
+            sides = self._scope_sides(members, sorted(relation_gaps))
+            for relation, (left, right) in enumerate(zip(sides, sides[1:]), 1):
+                if relation in waived or len(left) != 1 or len(right) != 1:
+                    continue
+                self._compare_panels(
+                    self.pictures[left[0]], self.pictures[right[0]],
+                    self.hard, "eq-boundary-mismatch",
+                    f"sit on relation {relation} of equation scope {scope}",
+                    modulo=modulo,
+                )
+
+    @staticmethod
+    def _scope_sides(members: list[int], relation_gaps: list[int]) -> list[list[int]]:
+        """The panel groups a scope's relations delimit, in source order."""
+        sides: list[list[int]] = []
+        start = 0
+        for gap in relation_gaps:
+            sides.append(members[start:gap])
+            start = gap
+        sides.append(members[start:])
+        return sides
+
+    def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
+                          waived: set[int]) -> None:
+        for relation in range(1, len(members)):
+            if relation in waived:
+                continue
+            self._compare_panels(
+                self.pictures[members[relation - 1]],
+                self.pictures[members[relation]],
+                self.hard, "eq-boundary-mismatch",
+                f"sit on relation {relation} of equation scope {scope}",
+                modulo=modulo,
+            )
+
+    def _compare_panels(self, left: Picture, right: Picture,
+                        report: Callable[[str, str, str], None], rule: str,
+                        relation: str, source: str = "",
+                        modulo: bool = False) -> None:
+        """Report when two panels expose different open-leg classes.
+
+        Only the page face is dropped: a panel drawn rotated cuts the same
+        indices on other sides of its frame.  Everything else the entry
+        states -- virtual or physical, strand weight, and the orientation of
+        a directed index -- belongs to the index and must agree.
+        """
+        sig_left, sig_right = left.kernel_boundary(), right.kernel_boundary()
+        if sig_left is None or sig_right is None or sig_left == sig_right:
+            return
+        classes_left = boundary_classes(sig_left, modulo)
+        classes_right = boundary_classes(sig_right, modulo)
+        if classes_left == classes_right:
+            return
+        report(rule, f"{self.log_path.name}:{left.line}",
+               f"pictures {left.ident} and {right.ident} {relation} "
+               f"but open-leg classes differ: {sig_left} vs {sig_right}"
+               f"{source}")
+
+    def _display_runs(self) -> list[list[int]]:
+        """Maximal runs of pictures the source sets in one display.
+
+        Two consecutive pictures share a display when the source between them
+        crosses no environment and no display-math boundary and is short.
+        Panels of a `tenkzeq` scope are excluded: their group owns them.
+        """
+        picture_scopes, _ = self._scope_index()
+        runs: list[list[int]] = []
+        current: list[int] = []
+        for index in range(len(self.pictures)):
+            picture = self.pictures[index]
+            if picture.lang != "kernel" or index in picture_scopes:
+                current = []
+                continue
+            if current:
+                previous, this = self.constructs[current[-1]], self.constructs[index]
+                separator = (
+                    self._tex_src[previous.end:this.start]
+                    if previous.end <= this.start else None
+                )
+                if separator is None or not one_display(separator):
+                    current = []
+            if not current:
+                # A run enters the list once, when it opens; it is the same
+                # list that grows, so closing it must not enter it again.
+                current = []
+                runs.append(current)
+            current.append(index)
+        return [run for run in runs if len(run) > 1]
+
+    def check_equation_boundaries(self) -> None:
+        """Advise on pictures the source sets in one display, out of scope.
+
+        The mechanism is `tenkzeq`; the mathematics between two pictures is a
+        reading of the source, not a declaration, so nothing here fails the
+        stream.  A display whose panels are all joined by a relation is read
+        pairwise.  A display that asserts a relation somewhere but joins other
+        panels another way -- a product, a sum, an arrow -- states a
+        composition only the scope can classify, and the pairwise reading
+        would compare one factor against a whole side; it is reported as
+        unread rather than guessed at.  Pictures that assert no relation at
+        all are simply adjacent, and nothing is said about them.
+        """
+        if not self.tex_linked:
+            return
+        for run in self._display_runs():
+            separators = [
+                self._tex_src[self.constructs[left].end:self.constructs[right].start]
+                for left, right in zip(run, run[1:])
+            ]
+            if not any(same_equation(separator) for separator in separators):
+                continue  # adjacent pictures, not a display asserting anything
+            first = self.constructs[run[0]]
+            if not all(same_equation(separator) for separator in separators):
+                self.adv(
+                    "eq-sibling-unread",
+                    f"{self.log_path.name}:{self.pictures[run[0]].line}",
+                    f"{len(run)} pictures share one display but are not all "
+                    f"joined by a relation; the composition they state is the "
+                    f"scope's to classify [{self.tex_path.name}:{first.line}]",
+                )
+                continue
+            for left, right in zip(run, run[1:]):
+                self._compare_panels(
+                    self.pictures[left], self.pictures[right], self.adv,
+                    "eq-sibling-mismatch",
+                    "sit on one source `=` outside every equation group",
+                    f" [{self.tex_path.name}:{self.constructs[left].line}]",
+                )
 
     # ---------------- driver ----------------
 
@@ -1363,6 +1687,7 @@ class Audit:
         self.check_kernel_checks()
         self.check_bbox_coverage()
         self.check_label_overlaps()
+        self.check_equation_groups()
         self.check_equation_boundaries()
         self.check_repeated_topology()
         return self.report()
@@ -1453,11 +1778,12 @@ _INLINE_EQUALITY_GLUE = re.compile(
 )
 
 
-def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
-    """Return source-authorized opt-outs from one equation's actual options.
+def _tenkzeq_check_value(source: str, position: int) -> str | None:
+    """One equation's `check=` value, unwrapped from its braces.
 
-    ``None`` means that the environment has no single top-level ``check`` key,
-    so its event records cannot authorize source-linked boundary delegation.
+    ``None`` when the environment states no single top-level `check` key, in
+    which case it declares no policy at all -- neither a waiver nor a
+    comparison mode -- and both readers below agree on that.
     """
     options = following_group(source, position, "[", "]")
     if options is None:
@@ -1471,6 +1797,14 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
     grouped = following_group_span(check_value, 0, "{", "}")
     if grouped is not None and not check_value[grouped[1] :].strip():
         check_value = grouped[0]
+    return check_value
+
+
+def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
+    """Return source-authorized opt-outs from one equation's actual options."""
+    check_value = _tenkzeq_check_value(source, position)
+    if check_value is None:
+        return None
     declared: set[int] = set()
     for key, value in top_level_options(check_value):
         if key != "off" or value is None:
@@ -1479,6 +1813,97 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
         if match is not None:
             declared.add(int(match.group(1)))
     return declared
+
+
+def _tenkzeq_declares_bundles(source: str, position: int) -> bool:
+    """True when one equation's own options ask to compare modulo bundles."""
+    check_value = _tenkzeq_check_value(source, position)
+    return (
+        check_value is not None
+        and re.search(r"modulo\s*=\s*bundles", check_value) is not None
+    )
+
+
+_ORIENTATIONS = frozenset({"to", "from"})
+_BUNDLE = re.compile(r"bundle=([1-9]\d*)")
+_PRODUCT_PAIR = re.compile(r"(\d+)-(\d+)")
+
+
+def _product_pair(event: Event, panels: int) -> int | None:
+    """The left panel of a contraction, or `None` when it names no pair.
+
+    A contraction folds one adjacent pair of a scope's panels, so a record
+    naming a non-adjacent or out-of-range pair describes a fold the group
+    cannot contain.
+    """
+    match = _PRODUCT_PAIR.fullmatch(event.attrs.get("product", ""))
+    if match is None:
+        return None
+    left, right = int(match.group(1)), int(match.group(2))
+    if right != left + 1 or left < 1 or right > panels:
+        return None
+    return left
+
+
+def boundary_classes(signature: tuple[str, ...],
+                     modulo_bundles: bool = False) -> Counter:
+    """The multiset of open-leg classes a boundary signature exposes.
+
+    Under `check={modulo=bundles}` a bundled strand stands for its own
+    multiplicity of single strands, and the comparison expands it, exactly as
+    the kernel's own comparison does.
+    """
+    classes: Counter = Counter()
+    for item in signature:
+        kind, weight, orientation = signature_entry_class(item)
+        bundle = _BUNDLE.fullmatch(weight) if modulo_bundles else None
+        if bundle is None:
+            classes[(kind, weight, orientation)] += 1
+        else:
+            classes[(kind, "single", orientation)] += int(bundle.group(1))
+    return classes
+
+
+def signature_entry_class(item: str) -> tuple[str, str, str]:
+    """Classify one boundary-signature entry, dropping only its page face.
+
+    An entry is ``kind:face`` followed by the optional fields the index
+    itself carries: a strand weight, and the orientation of a directed
+    index (``to`` when it leaves the panel, ``from`` when it enters).  A
+    rotated panel cuts its indices on other faces of its frame, so the face
+    is not compared; weight and orientation are the index's own and are.
+    """
+    parts = [part.strip() for part in item.split(":")]
+    kind = parts[0]
+    if kind in {"edge", "open"}:
+        kind = "virtual"
+    rest = parts[2:]
+    orientation = next((part for part in rest if part in _ORIENTATIONS), "none")
+    weight = next((part for part in rest if part not in _ORIENTATIONS), "single")
+    return kind, re.sub(r"\s*=\s*", "=", weight), orientation
+
+
+_RELATION_MARK = re.compile(r"(?<!\\)(?:\\\\)*=")
+
+
+def relation_marks(sep: str) -> int:
+    r"""The relation glyphs one gap of an equation body holds.
+
+    Inside `tenkzeq` the equals sign is the active relation glyph and a
+    picture resets it, so between two panels each unescaped `=` records one
+    relation.  A `\=` is a control symbol and never becomes that token.
+    """
+    return len(_RELATION_MARK.findall(sep))
+
+
+def one_display(sep: str) -> bool:
+    """True when the comment-stripped source between two pictures keeps them
+    in one display: it crosses no environment, no display-math boundary and
+    no cell separator, and is short.  Inline mathematics is the joiner the
+    display is made of and does not end it."""
+    if any(tok in sep for tok in ("\\[", "\\]", "&", "\\begin", "\\end")):
+        return False
+    return len(sep.strip()) <= 200
 
 
 def same_equation(sep: str) -> bool:
