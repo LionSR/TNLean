@@ -1257,10 +1257,11 @@
 \end{proof}
 
 \begin{theorem}[Vanishing at a zero-weight incident sector]
-    \label{lem:mpdo_rephased_zero_weight_incident_vanish}
+    \label{thm:mpdo_rephased_zero_weight_incident_vanish}
     \lean{MPOTensor.rephase_zeroWeightReparameterized_neighboringOperator_eq_zero_of_incident}
     \leanok
-    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      def:mpdo_physical_sector_rephasing}
     Let $(\eta_{k,h})_{k,h}$ be the neighboring operators of the
     zero-weight-reparameterized inverse-map factorization, after a coherent
     sector rephasing, and let $(p_k)_k$ be its Hayashi weights. If
@@ -1277,7 +1278,9 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
+    \uses{thm:mpdo_physical_sector_rephasing_invariance,
+      thm:mpdo_zero_weight_reparameterized_neighboring_operator,
+      lem:mpdo_sector_tensor_left_zero_of_weight_zero}
     If the source sector has zero weight, its reparameterized right tensor is
     zero. If the target sector has zero weight, its left tensor is zero.
     Rephasing only rescales the neighboring operator, and hence preserves its
@@ -1288,8 +1291,8 @@
     \label{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL}
     \leanok
-    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal,
-      lem:mpdo_rephased_zero_weight_incident_vanish}
+    \uses{def:mpdo, def:injective, def:is_sal,
+      def:mpo_physical_trace_transfer, def:nt_cpsv}
     Let ${\cal K}$ be an injective normal MPO tensor satisfying the strong area
     law and literal physical-trace idempotence,
     \begin{align}
@@ -1299,10 +1302,9 @@
     Then there is a physical-sector factorization with nonnegative weights
     $(p_k)_k$ satisfying $\sum_k p_k=1$, positive semidefinite neighboring
     operators $\eta_{k,h}$, and real families $(a_k)_k,(b_k)_k$ indexed by all
-    sector labels such that
+    sector labels. For all $k,h$,
     \begin{align}
-        \operatorname{Re}\tr(\eta_{k,h})&=a_kb_h
-        \qquad\text{for all }k,h, \notag\\
+        \operatorname{Re}\tr(\eta_{k,h})&=a_kb_h, \notag\\
         \sum_k a_kb_k&=1. \notag
     \end{align}
     On the nonzero-weight sectors these are the coefficient families of
@@ -1318,7 +1320,7 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal,
-      lem:mpdo_rephased_zero_weight_incident_vanish}
+      thm:mpdo_rephased_zero_weight_incident_vanish}
     Extend the active coefficient families by zero. In the chosen
     zero-weight-reparameterized and rephased factorization, $p_k=0$ makes
     every neighboring operator incident to $k$ vanish. Therefore the trace

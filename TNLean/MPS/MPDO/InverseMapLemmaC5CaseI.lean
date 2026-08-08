@@ -31,6 +31,15 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
+/-- The normal Case-I coefficient witness, including vanishing of every
+neighboring operator incident to a zero-weight sector in the selected
+zero-weight-reparameterized and coherently rephased factorization.
+
+Local fix: the incident-vanishing statement belongs to this selected witness,
+not to the raw inverse-map factorization.
+
+Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
+1374--1505. -/
 private theorem exists_activeSectorTraceMatrix_rank_one_coefficients_witnesses
     (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
