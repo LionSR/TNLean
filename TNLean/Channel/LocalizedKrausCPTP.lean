@@ -32,7 +32,7 @@ the neighboring site is left unchanged.
   Definition 4.1 and Appendix C.2, Proposition C.7
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace Matrix
 
@@ -64,6 +64,20 @@ theorem tensorMapIdLM_isKrausCP
   obtain ⟨r, A, hAform⟩ := hS
   exact ⟨r, fun i => Matrix.kroneckerMap (· * ·) (A i) 1,
     tensorMapId_krausForm A hAform⟩
+
+-- The finite and decidable instances construct the product indices in `tensorMapIdLM_isKrausCP`
+-- and `PosSemidef`; the unused-instance linters do not detect these uses through those definitions.
+set_option linter.unusedFintypeInType false in
+set_option linter.unusedDecidableInType false in
+/-- Tensoring a Kraus completely positive map with the identity on a finite matrix factor
+preserves positive semidefiniteness. -/
+theorem tensorMapId_posSemidef_of_isKrausCP {α β δ : Type*} [Fintype α] [DecidableEq α]
+    [Fintype β] [DecidableEq β] [Fintype δ] [DecidableEq δ]
+    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S)
+    {X : Matrix (α × δ) (α × δ) ℂ} (hX : X.PosSemidef) :
+    (Matrix.tensorMapId S X).PosSemidef := by
+  have hkraus := (tensorMapIdLM_isKrausCP (δ := δ) hS).map_posSemidef hX
+  rwa [Matrix.tensorMapIdLM_apply] at hkraus
 
 /-- Tensoring a trace-preserving completely positive matrix map with the
 identity on a finite matrix factor preserves the trace-preserving completely

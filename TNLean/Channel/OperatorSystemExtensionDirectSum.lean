@@ -177,6 +177,8 @@ theorem directSumEmbedFin_apply (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv (Matrix.blockDiagonal' A) :=
   rfl
 
+/-- The block-diagonal embedding is injective, since both the block-diagonal map and the
+canonical reindexing are injective. -/
 theorem directSumEmbedFin_injective :
     Function.Injective (directSumEmbedFin (r := r) (d := d)) := by
   intro A B hAB
@@ -184,6 +186,8 @@ theorem directSumEmbedFin_injective :
   exact Matrix.blockDiagonal'_inj.mp
     ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv).injective hAB)
 
+/-- The block-diagonal embedding is unital: the family of identity blocks maps to the identity
+matrix. -/
 theorem directSumEmbedFin_one :
     directSumEmbedFin (1 : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) = 1 := by
   change (Matrix.reindexLinearEquiv ℂ ℂ finSigmaFinEquiv finSigmaFinEquiv).toLinearMap
@@ -191,6 +195,7 @@ theorem directSumEmbedFin_one :
   rw [Matrix.directSumDiagonalEmbedding_apply, Matrix.blockDiagonal'_one]
   exact Matrix.reindexLinearEquiv_one ℂ ℂ finSigmaFinEquiv
 
+/-- The block-diagonal embedding commutes with the adjoint. -/
 theorem directSumEmbedFin_conjTranspose (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     directSumEmbedFin (fun k => (A k)ᴴ) = (directSumEmbedFin A)ᴴ := by
   ext p q
@@ -199,6 +204,8 @@ theorem directSumEmbedFin_conjTranspose (A : ∀ k : Fin r, Matrix (Fin (d k)) (
 
 /-! ### Positive semidefiniteness of a block-diagonal family -/
 
+/-- The block-diagonal embedding is positive semidefinite exactly when each diagonal block is
+positive semidefinite. -/
 theorem directSumEmbedFin_posSemidef_iff (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     (directSumEmbedFin A).PosSemidef ↔ ∀ k, (A k).PosSemidef := by
   rw [directSumEmbedFin_apply, Matrix.reindex_apply,
@@ -238,6 +245,8 @@ theorem directSumEmbedFinLevel_apply (j : ℕ)
       Matrix.reindex (directSumLevelEquiv j) (directSumLevelEquiv j) (Matrix.blockDiagonal' X) :=
   rfl
 
+/-- At tensor level `j`, the block-diagonal embedding is positive semidefinite exactly when each
+block is positive semidefinite. -/
 theorem directSumEmbedFinLevel_posSemidef_iff (j : ℕ)
     (X : ∀ k : Fin r, Matrix (Fin (d k) × Fin j) (Fin (d k) × Fin j) ℂ) :
     (directSumEmbedFinLevel j X).PosSemidef ↔ ∀ k, (X k).PosSemidef := by
@@ -271,6 +280,7 @@ noncomputable def directSumCompressFin (Z : Matrix (Fin (∑ k, d k)) (Fin (∑ 
     (k : Fin r) : Matrix (Fin (d k)) (Fin (d k)) ℂ :=
   fun a b => Z (finSigmaFinEquiv ⟨k, a⟩) (finSigmaFinEquiv ⟨k, b⟩)
 
+/-- Compressing the block-diagonal embedding to each summand recovers the original family. -/
 theorem directSumCompressFin_directSumEmbedFin
     (A : ∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ) :
     directSumCompressFin (directSumEmbedFin A) = A := by
@@ -286,6 +296,8 @@ noncomputable def directSumCompressFinLevel (j : ℕ)
     Matrix (Fin (d k) × Fin j) (Fin (d k) × Fin j) ℂ :=
   fun a b => Z (directSumLevelEquiv j ⟨k, a⟩) (directSumLevelEquiv j ⟨k, b⟩)
 
+/-- Slicing a compressed level-`j` matrix equals compressing the corresponding ambient
+slice. -/
 theorem bipartiteSlice_directSumCompressFinLevel (j : ℕ)
     (Z : Matrix (Fin (∑ k, d k) × Fin j) (Fin (∑ k, d k) × Fin j) ℂ) (k : Fin r) (i l : Fin j) :
     Matrix.bipartiteSlice (directSumCompressFinLevel j Z k) i l =
@@ -296,6 +308,8 @@ theorem bipartiteSlice_directSumCompressFinLevel (j : ℕ)
 
 /-! ### Transport of the operator-system and complete-positivity predicates -/
 
+/-- The image of a direct-sum operator system under the block-diagonal embedding is an
+operator system in the ambient full matrix algebra. -/
 theorem isOperatorSystem_map_directSumEmbedFin
     {S : Submodule ℂ (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ)}
     (hS : IsOperatorSystemDirectSum S) : IsOperatorSystem (S.map directSumEmbedFin) := by
@@ -356,16 +370,6 @@ theorem isCPOnOperatorSystem_transport
       ⟨Matrix.bipartiteSlice Y.1 i₂ l₂, mem_tensorSubmodule_iff.mp Y.2 i₂ l₂⟩) i₁ l₁ =
     T ⟨fun k => Matrix.bipartiteSlice (X.1 k) i₂ l₂, X.2 i₂ l₂⟩ i₁ l₁
   rw [LinearEquiv.coe_toLinearMap, heq i₂ l₂]
-
-set_option linter.unusedFintypeInType false in
-set_option linter.unusedDecidableInType false in
-theorem tensorMapId_posSemidef_of_isKrausCP {α β δ : Type*} [Fintype α] [DecidableEq α]
-    [Fintype β] [DecidableEq β] [Fintype δ] [DecidableEq δ]
-    {S : Matrix α α ℂ →ₗ[ℂ] Matrix β β ℂ} (hS : IsKrausCP S)
-    {X : Matrix (α × δ) (α × δ) ℂ} (hX : X.PosSemidef) :
-    (Matrix.tensorMapId S X).PosSemidef := by
-  have hkraus := (tensorMapIdLM_isKrausCP (δ := δ) hS).map_posSemidef hX
-  rwa [Matrix.tensorMapIdLM_apply] at hkraus
 
 /-! ### The extension theorem -/
 
