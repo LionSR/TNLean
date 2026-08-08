@@ -813,8 +813,8 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
     conclusion of that passage.
 \end{definition}
 
-\begin{lemma}[Fixed embedded families under the canonical extension]
-    \label{lem:direct_sum_extension_embedding_fixed}
+\begin{theorem}[Fixed embedded families under the canonical extension]
+    \label{thm:direct_sum_extension_embedding_fixed}
     \lean{Matrix.directSumExtension_embedding_eq_self_iff}
     \leanok
     \uses{def:direct_sum_full_matrix_extension}
@@ -825,10 +825,9 @@ equals the block algebra $\bigoplus_k\Id_{m_k}\otimes\MN{d_k}$.
         &\quad\Longleftrightarrow\quad T(A)=A.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:direct_sum_full_matrix_extension}
     Diagonal compression is a left inverse of block-diagonal embedding. Hence
     \begin{align}
         \widehat T(\iota(A))
