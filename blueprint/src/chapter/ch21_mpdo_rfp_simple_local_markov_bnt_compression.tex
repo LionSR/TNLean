@@ -824,24 +824,66 @@ strong subadditivity for a normalized three-site reduced state.
     integer $n_s$ then gives positivity of the sector operator.
 \end{proof}
 
+% Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782.
+\begin{theorem}[Literal ZCL descends to absorbed BNT representatives]
+    \label{thm:mpdo_absorbed_bnt_sector_literal_zcl}
+    \lean{MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
+    \lean{MPOTensor.%
+      physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}
+    \leanok
+    \uses{def:mpo_physical_trace_transfer,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ be gauge equivalent to the weighted direct sum of BNT
+    representatives $A_s$, with copy weights $\mu_{s,q}$. If its
+    physical-trace transfer is literally idempotent, then every weighted copy
+    satisfies
+    \begin{align}
+        \mathcal T_{\mu_{s,q}A_s}^{2}
+        &=\mathcal T_{\mu_{s,q}A_s}.
+        \notag
+    \end{align}
+    If the copy weights over $A_s$ agree and
+    $\mathcal K_s=\mu_sA_s$, then
+    \begin{align}
+        \mathcal T_{\mathcal K_s}^{2}
+        &=\mathcal T_{\mathcal K_s}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:global_gauge_of_blocks,
+      lem:mpdo_doubled_phys_trace_transfer_to_mps,
+      lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
+    gives the same identity for the weighted direct sum. Its diagonal block
+    indexed by $(s,q)$ is
+    $\mathcal T_{\mu_{s,q}A_s}^{2}
+      =\mathcal T_{\mu_{s,q}A_s}$.
+    When the weights are copy-independent,
+    $\mathcal T_{\mathcal K_s}=\mu_s\mathcal T_{A_s}$ is that block for any
+    copy over $s$.
+\end{proof}
+
 % Source: arXiv:1606.00608, Appendix C.2, Lemma `lemmus`, lines
 % 1646--1661, and the absorbed-sector ZCL conclusion at line 1781.
-\begin{theorem}[Ambient ZCL descends to the canonical absorbed BNT elements]
+\begin{theorem}[Scale-invariant source ZCL descends to absorbed BNT representatives]
     \label{thm:mpdo_absorbed_bnt_sector_zcl}
     \lean{MPOTensor.IsSimpleCanonicalForm.%
       exists_commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
-    \lean{MPOTensor.%
-      physTraceTransfer_commonWeightAbsorbedBasisMPOTensor}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}
     \leanok
     \uses{def:mpdo_simple_cf_tensor, def:mpo_source_zcl,
       def:mpdo_common_sector_weight_absorption}
     Let $K$ be a simple tensor in its chosen canonical form and suppose that
-    $K$ has source zero correlation length. Then the copy weights over each
-    normal representative agree. For every representative $A_s$ with
+    $K$ has scale-invariant source zero correlation length. Then the copy
+    weights over each normal representative $A_s$ agree. For every $A_s$ with
     non-nilpotent physical-trace transfer $\mathcal B_s$, absorb the common
-    weight and write $\mathcal K_s=\mu_sA_s$. Each $\mathcal K_s$ has source
-    zero correlation length. More precisely,
+    weight and write $\mathcal K_s=\mu_sA_s$. Each absorbed BNT representative
+    $\mathcal K_s$ has scale-invariant source zero correlation length. More
+    precisely,
     \begin{align}
         \mathcal T_{\mathcal K_s}
         &=\mu_s\mathcal B_s\ne0,
@@ -1004,4 +1046,47 @@ strong subadditivity for a normalized three-site reduced state.
     in each sector, and strict positivity of every $p_s^{(N)}$ forces every
     such inequality to be an equality. Comparing the equalities for block
     lengths $L$ and $L+1$ proves saturation for $\mathcal K_s$.
+\end{proof}
+
+
+% Source: arXiv:1606.00608, Appendix C.2, lines 1740--1782.
+\begin{theorem}[Analytic properties of absorbed BNT representatives]
+    \label{thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties}
+    \lean{MPOTensor.%
+      commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL}
+    \leanok
+    \uses{def:injective, def:mpdo, def:is_sal,
+      def:mpo_physical_trace_transfer,
+      def:mpdo_common_sector_weight_absorption}
+    Let $K$ be an MPDO tensor in biCF, written up to a block-diagonal
+    gauge as a weighted BNT direct sum whose BNT representatives have
+    nonnilpotent physical-trace transfers. Suppose that $K$ saturates the area
+    law and satisfies literal zero correlation length,
+    $\mathcal T_K^2=\mathcal T_K$. For every BNT label $s$, let
+    $\mathcal K_s=\mu_sA_s$ be the absorbed BNT representative. Then
+    $\mathcal K_s$ is one-site injective, generates positive semidefinite
+    operators on every nonempty periodic chain, saturates the area law, and
+    satisfies
+    \begin{align}
+        \mathcal T_{\mathcal K_s}^{2}
+        &=\mathcal T_{\mathcal K_s}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_trace_loop_chain,
+      thm:mpo_source_zcl_of_physical_trace_idempotent,
+      thm:mpdo_bnt_physical_support_restriction,
+      cor:mpdo_absorbed_bnt_sector_is_mpdo,
+      thm:mpdo_absorbed_bnt_sector_sal,
+      thm:mpdo_absorbed_bnt_sector_literal_zcl}
+    Saturation gives $\tr(\sigma^{(1)}(K))>0$. Since
+    $\tr(\sigma^{(1)}(K))=\tr(\mathcal T_K)$, one has
+    $\mathcal T_K\ne0$. Together with $\mathcal T_K^2=\mathcal T_K$, this
+    gives scale-invariant source zero correlation length with scalar $1$.
+    The one-letter BNT span gives injectivity, the sector compression gives
+    positivity, and the sector entropy decomposition gives saturation of the
+    area law. Theorem~\ref{thm:mpdo_absorbed_bnt_sector_literal_zcl} supplies
+    the final literal idempotence identity.
 \end{proof}

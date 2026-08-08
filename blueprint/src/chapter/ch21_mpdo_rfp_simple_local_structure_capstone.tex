@@ -905,16 +905,16 @@ This is the calculation in
 \cite[Appendix~C.2, lines~1745--1751]{Cirac2016MPDO_arXiv}.
 
 % **All-sector Case-II boundary:**
-% The all-sector normal Case-I coefficient theorem is complete. The remaining
-% source step must show that every BNT tensor inherits MPDO positivity, SAL, and
-% literal ZCL, then package the physical isometries, left--right tensors, and
-% coefficients into the all-sector structure.
+% Analytic inheritance is complete for every absorbed BNT representative.
+% Coefficient absorption need not preserve normality, so the normal Case-I
+% structural theorem cannot yet be applied sectorwise.
 % Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
 \begin{theorem}[BNT sector structure from SAL and ZCL (all-sector Case-II boundary)]
     \label{thm:mpdo_sal_zcl_bnt_sector_structure}
     \notready
     \uses{def:is_sal, def:mpo_physical_trace_transfer,
+        thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties,
         cor:mpdo_sal_zcl_local_sector_structure}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition. Suppose that $K$
@@ -939,10 +939,15 @@ This is the calculation in
     the positive neighboring operators in each sector factorization, and the
     unstarred layer identities. The remaining identities specify the local
     factorization and its rank-one normalization.
-    The all-sector normal Case-I coefficient conclusion of Lemma~C.5 is
-    complete. The printed Case-II proof still needs to show that every BNT
-    tensor inherits MPDO positivity, SAL, and literal ZCL, and then to combine
-    the resulting physical isometries, left--right tensors, and coefficients
-    into the all-sector structure above. It remains to establish this Case-II
-    passage.
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_caseii_analytic_properties}
+    proves that every absorbed BNT representative is injective, generates
+    positive semidefinite operators, saturates the area law, and retains
+    literal physical-trace idempotence. The remaining obstruction is
+    normality. If $\mathcal K_s=\mu_sA_s$, then the transfer spectral radius is
+    multiplied by $|\mu_s|^2$. The global canonical-form normalization gives
+    only one unit-modulus coefficient and does not imply $|\mu_s|=1$ for every
+    $s$. Hence the normal Case-I result
+    Corollary~\ref{cor:mpdo_sal_zcl_local_sector_structure} cannot yet be
+    applied to every absorbed BNT representative. This normality step, and the
+    resulting all-sector factorization, remain open.
 \end{theorem}

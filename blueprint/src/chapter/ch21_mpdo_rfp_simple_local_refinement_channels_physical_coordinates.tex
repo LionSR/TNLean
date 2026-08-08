@@ -454,10 +454,9 @@
 \end{proof}
 
 % **All-sector Case-II boundary:**
-% The supported-sector normal Case-I rank-one theorem is complete. The printed
-% proof through prop2to3 still must show that every BNT tensor inherits MPDO
-% positivity, SAL, and literal ZCL, and then combine the physical isometries,
-% left--right tensors, and coefficients required by implication (ii) => (v).
+% Positivity, SAL, and literal ZCL now descend to every absorbed BNT
+% representative. The remaining input is the all-sector structural
+% factorization of thm:mpdo_sal_zcl_bnt_sector_structure.
 % The conditional
 % blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead
 % assumes a neighboring trace factorization.
@@ -466,7 +465,8 @@
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
     \uses{def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
-        def:mpdo_two_site_blocking}
+        def:mpdo_two_site_blocking,
+        thm:mpdo_sal_zcl_bnt_sector_structure}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition and satisfying the
     strong area law and literal zero correlation length,
@@ -484,12 +484,13 @@
     imposed at lines~849--850 and restated at line~1628 of the same source.
     The printed proof of implication (ii)$\Rightarrow$(v) refers back to the
     construction of Proposition~C.7 after projection to each local sector.
-    The supported-sector rank-one theorem supplies the normal Case-I
-    coefficient step. What remains is to prove that every BNT tensor inherits
-    MPDO positivity, SAL, and literal ZCL, and then to combine the physical
-    isometries, closed sector tensors, positive neighboring operators, and
-    rank-one coefficients into the all-sector structure required by
-    Proposition~C.7. It remains to establish this Case-II passage.
+    The analytic hypotheses on every absorbed BNT representative are
+    complete: each is injective, positive on every nonempty chain, saturates
+    the area law, and retains literal physical-trace idempotence. The remaining
+    input is Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure}, namely the
+    all-sector factorization by physical isometries, closed sector tensors,
+    positive neighboring operators, and rank-one coefficients. Once that
+    factorization is available, Proposition~C.7 gives the two channels.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
