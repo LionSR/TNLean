@@ -193,9 +193,10 @@ The extension across inactive Hayashi sectors is the project-derived zero-weight
 completion of the coherently rephased inverse-map witness; CPSV16 does not specify
 this inactive-sector convention.
 
-**Scope restriction (normal Case I):** this theorem assumes the strong area law,
-literal zero correlation length, and normality. It makes no scale-invariant ZCL
-or Case-II claim.
+**Scope restriction (normal Case I):** this theorem assumes injectivity, the
+strong area law, literal zero correlation length, and normality. It makes no
+scale-invariant ZCL or Case-II claim. See
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex` for the precise paper boundary.
 
 Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
 1503--1506. -/
@@ -207,7 +208,8 @@ theorem exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_lit
       (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
         (∀ k h, (F.neighboringOperator k h).trace = (a k * b h : ℂ)) ∧
           (∑ k, a k * b k) = 1 := by
-  obtain ⟨F, _, _, _, a, b, _, _, hpos, _, _, _, _, hab, hsum⟩ :=
+  obtain ⟨F, p, aActive, bActive, a, b, hp, hpsum, hpos, habActive,
+      hsumActive, hagree, hzero, hab, hsum⟩ :=
     exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL
       K hK hSAL hZCL_sq hK_normal
   refine ⟨F, a, b, hpos, ?_, hsum⟩
