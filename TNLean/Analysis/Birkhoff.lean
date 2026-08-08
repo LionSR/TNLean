@@ -21,8 +21,6 @@ extreme partial-permutation-matrix characterization) is missing.
 See `docs/paper-gaps/wolf_ch8_birkhoff_doubly_substochastic_gap.tex`.
 -/
 
-open Set
-
 namespace TNLean
 
 /--
