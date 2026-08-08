@@ -255,7 +255,7 @@ family is an orthonormal basis. Each image ONB vector spans the image ray:
 variable {f : ℙ ℂ (EuclideanSpace ℂ (Fin N)) → ℙ ℂ (EuclideanSpace ℂ (Fin N))}
 
 /-- The `i`-th source basis projective point `mk (b i)`. A definitional
-abbreviation kept folded inside the helper lemmas; the public headlines
+abbreviation kept folded inside the auxiliary lemmas; the public headlines
 (`mk_imageOrthonormalBasis`, `candidateUnitary_agrees_on_basis`) restate it as
 the explicit `mk ℂ (b i) (b.orthonormal.ne_zero i)`. -/
 noncomputable def srcPoint

@@ -30,13 +30,13 @@ noncomputable def toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
   p.map (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).symm.toLinearMap
     (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).symm.injective
 
-/-- Forget the Euclidean-space wrapper on a finite-coordinate ray. -/
+/-- Send a Euclidean-space ray to the same ray on its finite-coordinate carrier. -/
 noncomputable def fromEuclideanRay (p : ℙ ℂ (EuclideanSpace ℂ (Fin d))) :
     ℙ ℂ (Fin d → ℂ) :=
   p.map (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).toLinearMap
     (WithLp.linearEquiv 2 ℂ (Fin d → ℂ)).injective
 
-/-- Forgetting the Euclidean wrapper after adding it fixes every finite-coordinate ray. -/
+/-- Passing to the Euclidean-space realization and back fixes every finite-coordinate ray. -/
 @[simp]
 theorem fromEuclideanRay_toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
     fromEuclideanRay (toEuclideanRay p) = p := by
@@ -44,7 +44,7 @@ theorem fromEuclideanRay_toEuclideanRay (p : ℙ ℂ (Fin d → ℂ)) :
   | h v hv =>
       simp [toEuclideanRay, fromEuclideanRay, Projectivization.map_mk]
 
-/-- Adding the Euclidean wrapper after forgetting it fixes every Euclidean-space ray. -/
+/-- Passing to the finite-coordinate carrier and back fixes every Euclidean-space ray. -/
 @[simp]
 theorem toEuclideanRay_fromEuclideanRay
     (p : ℙ ℂ (EuclideanSpace ℂ (Fin d))) :

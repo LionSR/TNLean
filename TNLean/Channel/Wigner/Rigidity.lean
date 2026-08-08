@@ -89,7 +89,7 @@ theorem pureStateMatrix_pureStateMatrixEquiv_symm (P : PureStateMatrix d) :
 
 /-- Wolf's matrix-facing Wigner theorem for normalized pure states.
 
-The bijectivity hypothesis is retained exactly as in Wolf, Chapter 1, although
+The bijectivity hypothesis is retained exactly as in Wolf, Theorem 1.1, although
 the adapted projective rigidity theorem proves the classification from
 transition-probability preservation alone. -/
 theorem wolf_wigner_pureStateMatrix
