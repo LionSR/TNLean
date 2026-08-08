@@ -1,7 +1,7 @@
 # Hacking on tenkz
 
-`LANGUAGE.md` is the public semantic contract.  `ARCHITECTURE.md` owns the
-internal pipeline.  This file is the operational checklist for changing and
+`LANGUAGE.md` is the short public semantic contract and `LANGUAGE-1.0.md`
+the binding inventory.  `ARCHITECTURE.md` owns the internal pipeline.  This file is the operational checklist for changing and
 debugging the package.
 
 ## Fast build loop
@@ -113,34 +113,22 @@ intentionally changes the emitted events, and the new streams have been
 reviewed as the intended contract.  Behavior-preserving package changes must
 pass `--check`; they do not authorize a new baseline.
 
-## Same-session pixel pairs
+## Pixel regression
 
-Pixel evidence compares two package revisions in one session:
-
-```sh
-scripts/tenkz_pixelpair.sh origin/main
-```
-
-The command creates a detached worktree at the base revision, renders the
-renderer-only source manifest against that true legacy package and the current
-package, rasterizes both at 300 dpi, and compares the paired pages byte for
-byte.  A copied package tree is not a legacy control.  Stored raster hashes are
-not cross-revision redraw evidence because raster bytes depend on the machine
-and TeX epoch.  The exact-toolchain pins in
-`tests/tenkz/kernel/golden-pixels.sha256` are a narrower regression gate:
-after an approved XeTeX, Poppler, font, or intentional render change, inspect
-the full-resolution fixtures.  Before re-pinning, run
-`scripts/tenkz_kernel_probes.sh --check`: an expected pixel mismatch is
-acceptable, but every non-pixel probe must pass, including structural
-assertions, sugar-expansion parity, and the event-stream comparison.  If a
-separate reviewed contract change intentionally affects a non-pixel pin, review
-and update that contract first, then rerun until every non-pixel probe passes.
-Do not snapshot after any non-pixel failure.  Then re-pin with
-`scripts/tenkz_kernel_probes.sh --snapshot`, which updates both the pixel and
-event ledgers.
-
-This command exists for the redraw campaign and expires at its close, no later
-than 1.0.  Do not turn it into a permanent raster manifest.
+The same-session pixel-pair command (`tenkz_pixelpair.sh`) existed for the
+redraw campaign and expired at its close: the S4 surface swap deleted the
+last fixtures in its source manifest, and the script with them.  The
+exact-toolchain pins in `tests/tenkz/kernel/golden-pixels.sha256` are the
+remaining pixel regression gate: after an approved XeTeX, Poppler, font, or
+intentional render change, inspect the full-resolution fixtures.  Before
+re-pinning, run `scripts/tenkz_kernel_probes.sh --check`: an expected pixel
+mismatch is acceptable, but every non-pixel probe must pass, including
+structural assertions, sugar-expansion parity, and the event-stream
+comparison.  If a separate reviewed contract change intentionally affects a
+non-pixel pin, review and update that contract first, then rerun until every
+non-pixel probe passes.  Do not snapshot after any non-pixel failure.  Then
+re-pin with `scripts/tenkz_kernel_probes.sh --snapshot`, which updates both
+the pixel and event ledgers.
 
 ## Shrink sessions
 
@@ -351,8 +339,7 @@ is pending.
 
 `scripts/tenkzlib/tnlog.py` is the canonical schema-validating parser for
 `.tnlog` event streams.  Use it whenever a checker needs structured event
-fields.  Some narrow regression tests still inspect raw lines directly,
-including `scripts/test_tenkz_enclosures.py` and
+fields.  One narrow regression test still inspects raw lines directly,
 `scripts/test_tenkz_peps_torus.py`.
 Before changing event syntax, field order, or validation, search every `.tnlog`
 consumer and update or migrate these exceptions; do not assume the canonical
@@ -375,7 +362,7 @@ and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
 not a claim that every historical path has moved.  The live `tenkz-core`,
-`tenkz-grid`, and `tenkz-tree` files still combine
+`tenkz-kernel`, and `tenkz-tree` files still combine
 some parsing, geometry, rendering, and event work; direct `\draw`
 or `\node` emission in those files remains migration debt.
 
@@ -405,22 +392,20 @@ the pull-request body:
 
 ```sh
 scripts/tenkz_golden.sh --check
-scripts/tenkz_pixelpair.sh origin/main
+scripts/tenkz_kernel_probes.sh --check
 ```
 
 The golden gate proves event-stream parity for the top-level corpus fixtures.
 Run the applicable suite-specific semantic gates for affected nested fixtures.
-The same-session pixel pair proves render parity only for the fixtures listed in
-`tests/tenkz/pixelpair-sources.txt`.  If a change can affect a fixture outside
-that manifest, add the affected fixture to the comparison or attach reviewed
-replacement render evidence.  If a reviewed contract or drawing intentionally
-changes, state the affected fixtures and attach the reviewed replacement
-evidence instead of claiming parity.
+The kernel probes' pixel ledger proves render parity for the kernel suite; a
+change that can affect a drawing outside it attaches reviewed replacement
+render evidence.  If a reviewed contract or drawing intentionally changes,
+state the affected fixtures and attach the reviewed replacement evidence
+instead of claiming parity.
 
 The demolition checker remains a temporary guard against restoring retired
 catalogue paths and expires at the 0.8 close, after branches predating the
-demolition have landed or died.  The pixel-pair command expires with the redraw
-campaign at 1.0.
+demolition have landed or died.
 
 ## Audit and visual review
 
@@ -467,7 +452,7 @@ Generated PDFs and PNGs are build artifacts, not committed source.
 Before editing a stage, read its five-line contract.  Maintain the direction
 
 ```text
-language -> model -> style/atoms -> geometry -> dialect layout -> rendering -> events
+language -> model -> style/atoms -> geometry -> kernel layout -> rendering -> events
 ```
 
 Validation ends before measurement.  Rendering neither parses user syntax nor
@@ -475,9 +460,9 @@ changes topology.  Public names come from the executable registry; private
 names follow `\__tenkz_<owner>_...:`.  Unsupported requested ink is a coded
 error, never a warning followed by omission.
 
-Until the S4 surface swap, kernel package loading is inert with respect to the
-0.7 surface. `KERNEL-LOAD-SWEEP.md` records the binding and key-tree audit and
-the regression that protects this boundary.
+Since the S4 surface swap the package binds the kernel surface at load;
+`r_load_surface.tex` pins that contract, and `KERNEL-LOAD-SWEEP.md` records
+the historical pre-swap audit of the once-inert boundary.
 
 ## expl3 and PGF traps
 
@@ -499,7 +484,7 @@ These mistakes have shipped bugs here.
    a second equals sign.  Brace values containing either character.
 8. Expand integer registers explicitly in `\iow` event writes.
 9. Picture IDs nest: the global UID and group-local current ID have different
-   ownership.  An inline `\tnpic` must not clobber its parent.
+   ownership.  A nested picture must not clobber its parent.
 10. `\prop_new:N` builds a flat store: `\prop_get`, `\prop_if_in` and
     `\prop_item` all compare the wanted key against every other key, so a
     store the picture fills costs the square of its size to read.  Declare
@@ -522,9 +507,8 @@ do not add a constant that predicts what another pass will draw.
 Useful focused regressions include:
 
 ```sh
-python3 scripts/test_tenkz_face_ports.py
 python3 scripts/test_tenkz_label_overlap.py
-python3 scripts/test_tenkz_enclosures.py
+python3 scripts/test_tenkz_index_routing.py
 ```
 
 Run the focused test while iterating, then the affected corpus or benchmark
@@ -540,7 +524,7 @@ literal at its semantic owner site.  Each case first lists its executed PICTURE
 scopes.  Public tenkz environments, `tenkzeq`, and `tngroup` receive
 hierarchical, per-parent source-order anchors even when their bodies contain no
 dimensions.  The construct list records the drawing constructs: picture
-environments, `tnpic`, and `tntree`.  A nested drawing's anchor includes its
+environments and `tntree`.  A nested drawing's anchor includes its
 PICTURE ancestry.  Command and drawing-container invocations are anchored
 beneath their owning drawing; dimension-free commands and semantic starred
 variants still receive source-order anchors.  `tenkzeq` is recorded only as a

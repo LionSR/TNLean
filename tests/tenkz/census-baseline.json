@@ -2,18 +2,18 @@
   "m1_census": {
     "definition": "registry key rows per ledger plus public commands and environments; kernel is one-in-one-out and the total never rises between shrink sessions",
     "value": {
-      "alias": 4,
-      "commands": 19,
+      "alias": 0,
+      "commands": 12,
       "environments": 2,
-      "escape": 1,
-      "kernel": 103,
-      "sugar": 13
+      "escape": 0,
+      "kernel": 62,
+      "sugar": 9
     }
   },
   "m2_parser_paths": {
     "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
-    "identity_sha256": "d8a3e00e74daa680335834b7cfd48661e7858697aed82f2bf074423684f80688",
-    "value": 133
+    "identity_sha256": "2c8c4257577b527658800a884e7a8d973b24f2f3e38c89634276c15a5311efa4",
+    "value": 73
   },
   "m3_escape_usage": {
     "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",
@@ -21,20 +21,20 @@
   },
   "m4_lines_per_case": {
     "definition": "mean non-comment non-blank lines over the frozen 130 benchmark cases; the fidelity meter against fake shrink",
-    "value": 25.94
+    "value": 26.46
   },
   "m5_aliases": {
     "definition": "key and value alias rows plus sunset compliance; near zero at the 1.0 freeze",
     "value": {
-      "count": 4,
+      "count": 0,
       "missing_sunset": 0
     }
   },
   "m6_overloads": {
     "definition": "names with several value types + union types + enum words shared across enums; must never rise",
     "value": {
-      "multi_typed_names": 2,
-      "shared_enum_words": 3,
+      "multi_typed_names": 0,
+      "shared_enum_words": 0,
       "union_types": 0
     }
   }

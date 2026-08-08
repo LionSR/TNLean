@@ -22,10 +22,10 @@ SPEC.loader.exec_module(DOCTEST)
 def main() -> int:
     manual = DOCTEST.displayed_examples()
     reference = DOCTEST.reference_examples()
-    if len(manual) != 12:
-        raise AssertionError(f"expected 12 displayed TeX examples, found {len(manual)}")
-    if len(reference) != 19:
-        raise AssertionError(f"expected 19 reference examples, found {len(reference)}")
+    if len(manual) != 11:
+        raise AssertionError(f"expected 11 displayed TeX examples, found {len(manual)}")
+    if len(reference) != 12:
+        raise AssertionError(f"expected 12 reference examples, found {len(reference)}")
     if any(r"\begin{document}" not in example.document for example in manual):
         raise AssertionError("a displayed example was not wrapped as a document")
     if any("tenkz_rmp.py" in example.document for example in manual):

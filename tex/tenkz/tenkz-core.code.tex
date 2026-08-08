@@ -218,13 +218,6 @@
   tree ribbon fill/.style={draw=tenkzPaper, fill=tenkzPaper},
   % wires
   bond/.style={draw=tenkzInk, line width=\tenkz@wirewidth},
-  % No-op by default: an observability hook, not ink. It rides on every
-  % open-stub draw for a periodic-pairing candidate face
-  % (\tenkz_draw_combined_stub:nnn in tenkz-grid) so a test can
-  % `/.append style` a probe (e.g. a counter) onto that exact draw call
-  % without touching the grid renderer itself; see
-  % scripts/test_tenkz_face_ports.py.
-  tenkz combined stub/.style={},
   fused bond/.style={bond, double=tenkzPaper,
       double distance=\tenkz@fusedwiregap},
   physical leg/.style={bond},
@@ -378,7 +371,7 @@
 % counter: it only ever grows, so every picture's id is fresh.
 % \tenkz@pictureid is the EMITTING context: it is assigned LOCALLY at each
 % picture's begin (every begin site sits inside its picture's group), so
-% closing the group RESTORES the enclosing picture's id -- a nested \tnpic
+% closing the group RESTORES the enclosing picture's id -- a nested picture
 % inside another picture's cell must not steal the parent's later events,
 % and back in running prose the register reverts to 0, which is how
 % a bare \tntree logs picture=0.

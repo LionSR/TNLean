@@ -1,8 +1,10 @@
 # Kernel load-time binding sweep
 
-This is the 2026-07-28 audit requested by #5014. The 1.0 kernel remains a
-group-local opt-in until the S4 surface swap, so loading `tenkz.sty` must not
-change the 0.7 command surface.
+This is the 2026-07-28 audit requested by #5014, now historical: the S4
+surface swap has executed and `tenkz.sty` binds the kernel surface at load
+(`r_load_surface.tex` pins the post-swap contract). The audit below recorded
+the pre-swap boundary, when the 1.0 kernel was a group-local opt-in and
+loading the package could not change the 0.7 command surface.
 
 ## Method
 

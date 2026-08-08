@@ -2,9 +2,9 @@
 """Audit a tenkz `.tnlog` event stream (tenkz spec section 5).
 
 A `.tnlog` is a line-oriented stream `event|key=value|...` written by the
-tenkz LaTeX environments.  Every picture opens with `picture|id=N|lang=L`
-(langs: grid, kernel); subsequent events carry an
-explicit `picture=N` back-reference.  `tree|picture=0` marks a `\\tntree`
+tenkz LaTeX environments.  Every picture opens with `picture|id=kN|lang=kernel`
+(the kernel surface is the package surface since the S4 swap); kernel records
+belong to their picture by nesting.  `tree|picture=0` marks a `\\tntree`
 typeset outside any environment (legal in running math).
 
 Hard errors (exit 1):
@@ -18,22 +18,11 @@ Hard errors (exit 1):
                        leaf and vertex counts.
   duplicate-picture    Two `picture` lines share one id: picture identity
                        is the key of every back-reference.
-  conflicting-faceports
-                       Two faceports records declare different slots for the
-                       same cell face.  The first valid declaration remains
-                       authoritative; identical retries are idempotent.
   dangling-picture-ref An event references an undeclared picture.
-  empty-picture        A grid or kernel picture emitted no content
-                       events.  A tensor diagram with no atoms and no
-                       regions denotes no tensor network -- historically
-                       the "34 fake diagrams" class.
-  pairleg-faceport-mismatch
-                       A grid pairleg names a contraction slot absent from the
-                       upper cell's declared down face.  Explicit declarations
-                       resolve `center`, comma-separated slots, `rows`, and
-                       `none`.  If no faceports event exists, the check is
-                       skipped for compatibility with legacy logs, including
-                       simple centred faces.
+  empty-picture        A kernel picture emitted no content events.  A
+                       tensor diagram with no atoms and no regions denotes
+                       no tensor network -- historically the "34 fake
+                       diagrams" class.
   label-overlap       A measured `tn label` visible support strictly intersects
                       a sibling glyph node or explicit visible wire node.
   bbox-coverage       A library-owned label, glyph, or wire use did not
@@ -49,11 +38,6 @@ Hard errors (exit 1):
                        side-to-side; their drawing directions may rotate.
 
 Advisories (never affect the exit code):
-  eq-boundary-mismatch Consecutive legacy-grid pictures joined by `=` have
-                       different directional boundary signatures.
-  periodic-no-dots     A traced (periodic) chain of >= 4 columns without
-                       an ellipsis cell: a closed word of generic length n
-                       drawn with every site reads as fixed length.
   repeated-topology    Identical canonical atom+bond content in several
                        pictures: review ordinary TeX composition.  Repetition
                        alone never extends the public grammar.
@@ -64,12 +48,12 @@ Advisories (never affect the exit code):
                        has none (failed or interrupted compile).
 
 Source heuristic (documented, deliberately simple): picture-producing
-constructs (`\\begin{tenkz...}` and `\\tnpic`) are matched to log pictures
-in order of appearance; standalone `\\tntree` drawings emit no picture event
-and are excluded.  The match is used only when the counts agree.
-Two consecutive grid pictures are "one displayed equation" when the
-source between them contains `=` and no math-mode boundary (`$`, `\\[`,
-`\\]`), no cell separator `&`, no other environment, and is short.
+constructs (`\\begin{tenkz...}`) are matched to log pictures in order of
+appearance; standalone `\\tntree` drawings emit no picture event and are
+excluded.  The match is used only when the counts agree.
+Two consecutive pictures are "one displayed equation" when the source
+between them contains `=` and no math-mode boundary (`$`, `\\[`, `\\]`),
+no cell separator `&`, no other environment, and is short.
 
 Usage: tenkz_audit.py file.tnlog [file.tex]
 If file.tex is omitted, a sibling `<stem>.tex` is used when present.
@@ -99,37 +83,31 @@ from tenkzlib.tnlog import (
     FIELD_VALIDATORS,
     Event,
     Picture,
-    _is_cell,
     _is_int,
     _is_nonnegative_int,
-    _is_pairleg_port,
     _is_positive_int,
     parse_log,
 )
 
-# The .tnlog dialect tag each tenkz environment logs -- the single
-# argument the picture code passes to `\tenkz@beginpicture` in
-# tex/tenkz/*.code.tex (grep `tenkz@beginpicture{` to re-verify).
+# The .tnlog language tag of the one picture environment: since the S4
+# surface swap the `tenkz` environment is the kernel surface.
 # The shared source other scripts (tenkz_lint.py) import.
 ENVIRONMENT_LANGS = {
-    "tenkz": "grid",
-    "tnpic": "grid",
+    "tenkz": "kernel",
 }
 
-KNOWN_LANGS = set(ENVIRONMENT_LANGS.values()) | {"kernel"}
+KNOWN_LANGS = set(ENVIRONMENT_LANGS.values())
 
 # Empty-picture hard check applies exactly to the spec's list (section 5.4).
-EMPTY_CHECK_LANGS = {"grid", "kernel"}
+EMPTY_CHECK_LANGS = {"kernel"}
 
-# Event kinds each dialect is expected to emit -- generated by grepping
-# every `\tenkz@event{...}` call site in tex/tenkz/*.code.tex (DESIGN.md
-# 5.1 carries the same table; keep the two in step by hand). `warning`
-# Geometry/use events, `warning`, and `boundary` are cross-cutting/derived
-# and are stripped from a picture's content before this table is consulted
-# (see Picture.content), so listing them here is harmless but never load-bearing.
+# Event kinds the language is expected to emit -- generated by grepping
+# every event call site in tex/tenkz/*.code.tex (DESIGN.md 5.1 carries the
+# same table; keep the two in step by hand).  Geometry/use events and
+# `warning` are cross-cutting/derived and are stripped from a picture's
+# content before this table is consulted (see Picture.content), so listing
+# them here is harmless but never load-bearing.
 DIALECT_KINDS = {
-    "grid": {"atom", "bond", "faceports", "pairleg", "trace", "pairtrace",
-             "phtrace", "hooks", "cup", "hole", "span", "warning", "boundary"},
     "kernel": {
         "atom",
         "wire",
@@ -519,12 +497,6 @@ class Audit:
                     self.adv("dialect-mismatch", f"{self.log_path.name}:{e.line}",
                              f"{e.kind} event inside picture {pic.ident} "
                              f"(lang={pic.lang}); not part of that dialect")
-                elif e.kind == "atom" and pic.lang == "grid":
-                    if "cell" not in e.attrs:
-                        self.adv("dialect-mismatch",
-                                 f"{self.log_path.name}:{e.line}",
-                                 f"atom in {pic.lang} picture {pic.ident} lacks "
-                                 f"cell=")
 
     @staticmethod
     def _kernel_string_id(spelling: str) -> str:
@@ -1176,129 +1148,6 @@ class Audit:
                         f"ink owner id={owner}",
                     )
 
-    @staticmethod
-    def _declared_face_ports(
-            event: Event) -> Optional[tuple[set[str], Optional[int]]]:
-        """Resolve explicit slots and an optional inclusive `rows` bound."""
-        at = event.attrs.get("at", "").strip()
-        if at == "center":
-            return {"center"}, None
-        if at == "none":
-            return set(), None
-        if at == "rows":
-            arity = event.attrs.get("arity", "")
-            if not _is_nonnegative_int(arity):
-                return None
-            count = int(arity)
-            # A one-row physical face emits its unique contraction as `center`.
-            return ({"center"} if count == 1 else set()), count
-        slots = [slot.strip() for slot in at.split(",")]
-        if slots and all(
-                _is_pairleg_port(slot) and slot != "center" for slot in slots):
-            return set(slots), None
-        return None
-
-    def check_pairleg_faceports(self) -> None:
-        """Cross-check pairleg slots against explicit upper down-face declarations.
-
-        Older event streams did not always emit faceports records.  Absence is
-        therefore deliberately not an error; an explicit declaration is the
-        authority whenever one is present.
-        """
-        for pic in self.pictures:
-            if pic.lang != "grid":
-                continue
-            declared: dict[
-                tuple[str, str], tuple[set[str], Optional[int], int]
-            ] = {}
-            for event in pic.events:
-                if event.kind != "faceports":
-                    continue
-                cell = event.attrs.get("cell", "")
-                face = event.attrs.get("face", "")
-                if (not _is_cell(cell)
-                        or face not in {"up", "down", "west", "east"}):
-                    continue
-                missing = [
-                    field for field in ("arity", "at")
-                    if field not in event.attrs
-                ]
-                if missing:
-                    fields = ",".join(f"{field}=" for field in missing)
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        f"picture {pic.ident} faceports cell={cell} face={face} "
-                        f"lacks required {fields}",
-                    )
-                    continue
-                at = event.attrs["at"]
-                arity = event.attrs["arity"]
-                if not at or not _is_nonnegative_int(arity):
-                    continue  # FIELD_VALIDATORS already emitted malformed-event.
-                declaration = self._declared_face_ports(event)
-                if declaration is None:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        f"picture {pic.ident} faceports cell={cell} "
-                        f"face={face} has invalid at={at!r}",
-                    )
-                    continue
-                ports, row_count = declaration
-                expected_arity = row_count if row_count is not None else len(ports)
-                if int(arity) != expected_arity:
-                    self.hard(
-                        "malformed-event",
-                        f"{self.log_path.name}:{event.line}",
-                        f"picture {pic.ident} faceports cell={cell} face={face} "
-                        f"declares arity={arity} but at={at!r} resolves to "
-                        f"{expected_arity} port(s)",
-                    )
-                    continue
-                key = cell, face
-                previous = declared.get(key)
-                if previous is None:
-                    declared[key] = ports, row_count, event.line
-                    continue
-                previous_ports, previous_rows, previous_line = previous
-                if previous_ports == ports and previous_rows == row_count:
-                    continue
-                self.hard(
-                    "conflicting-faceports",
-                    f"{self.log_path.name}:{event.line}",
-                    f"picture {pic.ident} cell={cell} face={face} conflicts "
-                    f"with its declaration on line {previous_line}",
-                )
-            for event in pic.events:
-                if event.kind != "pairleg":
-                    continue
-                upper = event.attrs.get("upper", "")
-                port = event.attrs.get("upper-port", "")
-                down_key = upper, "down"
-                if (not _is_cell(upper) or not _is_pairleg_port(port)
-                        or down_key not in declared):
-                    continue
-                ports, row_count, _ = declared[down_key]
-                matches = port in ports
-                if not matches and row_count is not None and port != "center":
-                    matches = row_count != 1 and int(port) <= row_count
-                if matches:
-                    continue
-                available_parts = sorted(
-                    ports,
-                    key=lambda slot: -1 if slot == "center" else int(slot),
-                )
-                if row_count is not None:
-                    available_parts.append(f"rows 1..{row_count}")
-                available = ",".join(available_parts) or "none"
-                self.hard(
-                    "pairleg-faceport-mismatch",
-                    f"{self.log_path.name}:{event.line}",
-                    f"picture {pic.ident} pairleg upper={upper} names upper-port={port!r}, "
-                    f"but its declared down face has ports {available}",
-                )
-
     def check_repeated_topology(self) -> None:
         groups: dict[tuple[str, str], list[Picture]] = {}
         for pic in self.pictures:
@@ -1310,61 +1159,10 @@ class Audit:
                                            key=lambda kv: kv[1][0].ident):
             if len(pics) < 2:
                 continue
-            # A cd parent emits its final addressed edges after all object
-            # cells have been typeset.  Grid pictures declared inside that
-            # line interval are therefore nested object cells.  Repeating an
-            # object in several rows of one map family is the point of a
-            # small-multiple diagram, not a candidate for a global named
-            # figure definition.
-            parents = []
-            for pic in pics:
-                containing = [
-                    parent for parent in self.pictures
-                    if parent.lang == "cd"
-                    and parent.line < pic.line
-                    and parent.content()
-                    and pic.line < max(e.line for e in parent.content())
-                ]
-                parents.append(max(containing, key=lambda p: p.line,
-                                   default=None))
-            if parents[0] is not None and all(
-                    parent is not None
-                    and parent.ident == parents[0].ident
-                    for parent in parents):
-                continue
             ids = ", ".join(str(p.ident) for p in pics)
             self.adv("repeated-topology", self.log_path.name,
                      f"pictures {ids} (lang={lang}) share canonical topology "
                      f"{digest}; keep it inline or use ordinary TeX composition")
-
-    def check_periodic_dots(self) -> None:
-        for idx, pic in enumerate(self.pictures):
-            if pic.lang != "grid":
-                continue
-            if not any(e.kind == "trace" for e in pic.events):
-                continue
-            ncols = pic.ncols()
-            if ncols < 4:
-                continue
-            if self._has_dots_cell(idx, pic, ncols):
-                continue
-            self.adv("periodic-no-dots", f"{self.log_path.name}:{pic.line}",
-                     f"picture {pic.ident}: traced chain of {ncols} columns "
-                     f"without an ellipsis cell; a generic-length word should "
-                     f"show \\tndots")
-
-    def _has_dots_cell(self, idx: int, pic: Picture, ncols: int) -> bool:
-        """Prefer the source (`\\tndots` in the matched body); otherwise use
-        the atom-gap proxy: `\\tndots` emits no atom, so a column with no
-        atom in any row is an ellipsis candidate.  The proxy over-detects
-        (`\\tnX`/`\\tnghost` also emit no atom), so it only ever
-        under-reports -- safe for an advisory."""
-        if self.tex_linked:
-            return re.search(r"\\tndots\b", self.constructs[idx].body) is not None
-        cols_with_atoms = {int(e.attrs["cell"].split("-")[1])
-                           for e in pic.events
-                           if e.kind == "atom" and _is_cell(e.attrs.get("cell", ""))}
-        return any(c not in cols_with_atoms for c in range(1, ncols + 1))
 
     # ---------------- source-linked checks ----------------
 
@@ -1513,7 +1311,7 @@ class Audit:
 
         for i in range(len(self.pictures) - 1):
             a, b = self.pictures[i], self.pictures[i + 1]
-            if a.lang != b.lang or a.lang not in {"grid", "kernel"}:
+            if a.lang != b.lang or a.lang != "kernel":
                 continue
             ca, cb = self.constructs[i], self.constructs[i + 1]
             if ca.end > cb.start:
@@ -1527,42 +1325,32 @@ class Audit:
                 and relation_check.attrs.get("result") in {"equal", "off"}
             ):
                 continue
-            if a.lang == "kernel":
-                sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
-            else:
-                sig_a, sig_b = a.boundary(), b.boundary()
+            sig_a, sig_b = a.kernel_boundary(), b.kernel_boundary()
             if sig_a is None or sig_b is None or sig_a == sig_b:
                 continue
-            if a.lang == "kernel":
-                # Rotation may change only the direction field.  Everything
-                # after it, notably strand weight, remains semantic.
-                def without_direction(item: str) -> tuple[str, ...]:
-                    parts = item.split(":")
-                    kind = parts[0].strip()
-                    if kind in {"edge", "open"}:
-                        kind = "virtual"
-                    weight = (
-                        ":".join(parts[2:]).strip()
-                        if len(parts) > 2 else "single"
-                    )
-                    weight = re.sub(r"\s*=\s*", "=", weight)
-                    return kind, weight
+            # Rotation may change only the direction field.  Everything
+            # after it, notably strand weight, remains semantic.
+            def without_direction(item: str) -> tuple[str, ...]:
+                parts = item.split(":")
+                kind = parts[0].strip()
+                if kind in {"edge", "open"}:
+                    kind = "virtual"
+                weight = (
+                    ":".join(parts[2:]).strip()
+                    if len(parts) > 2 else "single"
+                )
+                weight = re.sub(r"\s*=\s*", "=", weight)
+                return kind, weight
 
-                kinds_a = Counter(without_direction(item) for item in sig_a)
-                kinds_b = Counter(without_direction(item) for item in sig_b)
-                if kinds_a == kinds_b:
-                    continue
-                self.hard("eq-boundary-mismatch",
-                          f"{self.log_path.name}:{a.line}",
-                          f"pictures {a.ident} and {b.ident} sit on one `=` "
-                          f"but open-leg kinds differ: {sig_a} vs {sig_b} "
-                          f"[{self.tex_path.name}:{ca.line}]")
-            else:
-                self.adv("eq-boundary-mismatch",
-                         f"{self.log_path.name}:{a.line}",
-                         f"pictures {a.ident} and {b.ident} sit on one `=` "
-                         f"but open-leg signatures differ: {sig_a} vs "
-                         f"{sig_b} [{self.tex_path.name}:{ca.line}]")
+            kinds_a = Counter(without_direction(item) for item in sig_a)
+            kinds_b = Counter(without_direction(item) for item in sig_b)
+            if kinds_a == kinds_b:
+                continue
+            self.hard("eq-boundary-mismatch",
+                      f"{self.log_path.name}:{a.line}",
+                      f"pictures {a.ident} and {b.ident} sit on one `=` "
+                      f"but open-leg kinds differ: {sig_a} vs {sig_b} "
+                      f"[{self.tex_path.name}:{ca.line}]")
 
     # ---------------- driver ----------------
 
@@ -1575,9 +1363,7 @@ class Audit:
         self.check_kernel_checks()
         self.check_bbox_coverage()
         self.check_label_overlaps()
-        self.check_pairleg_faceports()
         self.check_equation_boundaries()
-        self.check_periodic_dots()
         self.check_repeated_topology()
         return self.report()
 
@@ -1647,26 +1433,12 @@ def parse_tree_topology(value: str) -> Optional[tuple[int, int]]:
 
 
 def canonical_hash(pic: Picture) -> str:
-    """Order-free digest of a picture's content.  Attributes are sorted,
+    """Order-free digest of a picture's content.  Attributes are sorted and
     the `picture` back-reference is dropped (identity must not depend on
-    position in the document), and `dir=none` is normalized away so logs
-    from emitters before the `dir` attribute hash identically."""
+    position in the document)."""
     lines = []
     for e in pic.content():
         attrs = {k: v for k, v in e.attrs.items() if k != "picture"}
-        if e.kind == "bond" and attrs.get("dir") == "none":
-            del attrs["dir"]
-        if e.kind == "faceports":
-            at = attrs.get("at", "")
-            try:
-                if at == "rows":
-                    slots = range(1, int(attrs["arity"]) + 1)
-                    attrs["at"] = ",".join(str(slot) for slot in slots)
-                elif at not in {"center", "none"}:
-                    slots = sorted({int(slot) for slot in at.split(",")})
-                    attrs["at"] = ",".join(str(slot) for slot in slots)
-            except (KeyError, ValueError):
-                pass  # malformed fields are reported by the parser
         lines.append(e.kind + "|" + "|".join(
             f"{k}={v}" for k, v in sorted(attrs.items())))
     payload = "\n".join(sorted(lines)).encode("utf-8")

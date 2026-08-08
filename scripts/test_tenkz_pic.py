@@ -3,9 +3,9 @@ r"""Standalone test harness for the tenkz plasTeX SVG pipeline.
 
 Exercises the compile+cache core of ``blueprint/src/Packages/tenkz_pic.py``
 **without plasTeX**: the module defers its plasTeX imports, so importing it
-here only loads the pure compile machinery.  Verbatim units from the
-spec's benchmark corpus (a ``tenkz`` grid and a ``\tnpic`` sandwich atom)
-are rendered standalone; the harness asserts that
+here only loads the pure compile machinery.  Verbatim units spelled on the
+kernel surface (a chain with labelled physical ports and a sandwich
+picture) are rendered standalone; the harness asserts that
 
   1. each SVG materializes with real drawing ink and a plausible extent
      (a silently ink-stripped render collapses to the text glyphs' bbox —
@@ -48,18 +48,22 @@ _THEME_GEOMETRY_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# Spec benchmark bodies (B1, B6, B8 of tenkz_final_spec.md §3), with the
-# minimum width (pt) a faithful render must exceed: an ink-stripped SVG of
-# B1 measures ~12pt (three letters), a real one ~95pt at 11mm pitch.
+# Kernel-surface benchmark bodies (the spec's B1 and B8 subjects respelled
+# onto the load-time kernel surface), with the minimum width (pt) a
+# faithful render must exceed: an ink-stripped SVG of the chain measures
+# ~12pt (three letters), a real one ~95pt at the default pitch.
 UNITS: dict[str, tuple[str, float]] = {
-    "B1 tenkz grid": (
-        r"""\begin{tenkz}[periodic, physical=up, bond label={$D$ at 1-2}]
-  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
+    "B1 tenkz chain": (
+        r"""\begin{tenkz}[cols=3, boundary=periodic, physical=up]
+  \tn[ports={90:physical:$i_1$}]{A} & \tn[ports={90:physical:$i_2$}]{A} &
+  \tn[ports={90:physical:$i_3$}]{A}
 \end{tenkz}""",
         60.0,
     ),
-    "B8 tnpic sandwich": (
-        r"\tnpic[sandwich, inline]{\tn{A} \\ \tn*{A}}",
+    "B8 sandwich": (
+        r"""\begin{tenkz}[cols=1, sandwich]
+  \tn[at=(1,1)]{A} \tn[at=(2,1)]{A}
+\end{tenkz}""",
         12.0,
     ),
 }
@@ -114,38 +118,8 @@ def _assert_contract_rejects(core_source: str, theme_source: str, defect: str) -
     raise AssertionError(f"slide theme contract accepted {defect}")
 
 
-class _Node:
-    """A bare document node for exercising the kernel-switch walk."""
-
-    def __init__(self, name, children=()):
-        self.nodeName = name
-        self.parentNode = None
-        self.childNodes = list(children)
-        for child in self.childNodes:
-            child.parentNode = self
-
-
-def _assert_switch_scope() -> None:
-    reaches = tenkz_pic._kernel_switch_reaches
-    # A paragraph break is not a group: a switch inside a preceding par
-    # wrapper still governs a picture in a later par of the same center.
-    switch_par = _Node("par", [_Node("tenkzkernel"), _Node("tenkz")])
-    later_pic = _Node("tenkz")
-    center = _Node("center", [switch_par, _Node("par", [later_pic])])
-    _Node("document", [center])
-    assert reaches(switch_par.childNodes[1]), "same-par picture unreached"
-    assert reaches(later_pic), "picture after a par break unreached"
-    # A center is a group: the switch must not leak into the next one.
-    outside = _Node("tenkz")
-    _Node("document", [center, _Node("center", [_Node("par", [outside])])])
-    assert not reaches(outside), "switch leaked past its group"
-
-
 def main() -> int:
-    _assert_switch_scope()
-    print("PASS switch scope: par-transparent kernel-switch walk")
-
-    missing_html = tenkz_pic._missing_tools_html(r"\tnpic{\tn{A}}")
+    missing_html = tenkz_pic._missing_tools_html(r"\tn{A}")
     sentinel = tenkz_pic.MISSING_SVG_SENTINEL
     assert sentinel in missing_html, "missing-tool HTML lost its stable sentinel"
     for workflow in _PLACEHOLDER_WORKFLOWS:
@@ -226,12 +200,12 @@ def main() -> int:
             print(f"PASS warm  {name}: cache hit ({elapsed*1000:.0f}ms)")
 
         # 3. Per-figure invalidation: one edited body, one new SVG.
-        grid_unit, _ = UNITS["B1 tenkz grid"]
+        grid_unit, _ = UNITS["B1 tenkz chain"]
         edited = grid_unit.replace("$i_2$", "$j_2$")
         assert tenkz_pic.unit_hash(edited) != tenkz_pic.unit_hash(grid_unit)
         edited_path, hit = tenkz_pic.render_unit(edited, svg_dir)
         assert edited_path is not None and not hit
-        assert edited_path.name != rendered["B1 tenkz grid"].name, (
+        assert edited_path.name != rendered["B1 tenkz chain"].name, (
             "edited body reused the old content hash"
         )
         survivors = {path.name for path in svg_dir.glob("tenkz-*.svg")}

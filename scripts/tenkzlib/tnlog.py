@@ -25,7 +25,7 @@ def _is_int(value: str) -> bool:
 
 
 def _is_picture_id(value: str) -> bool:
-    """Dialect pictures use integer ids; the kernel prefixes its own with k."""
+    """Kernel pictures use k-prefixed ids; plain integers remain accepted."""
     if value.startswith("k"):
         return _is_int(value[1:])
     return _is_int(value)
@@ -47,14 +47,6 @@ def _is_nonnegative_int(value: str) -> bool:
 
 def _is_cell(value: str) -> bool:
     return re.fullmatch(r"\d+-\d+", value) is not None
-
-
-def _is_pairleg_port(value: str) -> bool:
-    """A contraction starts at the centred face or a positive face slot."""
-    if value == "center":
-        return True
-    parsed = _parse_int(value)
-    return parsed is not None and parsed > 0
 
 
 def _enum(*values: str) -> Callable[[str], bool]:
@@ -170,59 +162,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "left": _anything,
         "right": _anything,
     },
-    "faceports": {
-        "picture": _is_picture_id,
-        "cell": _is_cell,
-        "face": _enum("up", "down", "west", "east"),
-        "arity": _is_nonnegative_int,
-        "at": _any,
-    },
-    "pairleg": {
-        "picture": _is_picture_id,
-        "upper": _is_cell,
-        "lower": _is_cell,
-        "upper-port": _is_pairleg_port,
-        "column": _is_int,
-    },
-    "bond": {
-        "picture": _is_picture_id,
-        "row": _is_int,
-        "from": _is_int,
-        "to": _is_int,
-        "dir": _enum("none", "left", "right", "forward", "reverse"),
-    },
-    "trace": {
-        "picture": _is_picture_id,
-        "row": _is_int,
-        "side": _enum("above", "below"),
-    },
-    "hooks": {
-        "picture": _is_picture_id,
-        "row": _is_int,
-        "side": _enum("above", "below"),
-    },
-    "pairtrace": {
-        "picture": _is_picture_id,
-        "row": _is_int,
-        "col": _is_int,
-    },
-    "phtrace": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
-    "cup": {
-        "picture": _is_picture_id,
-        "side": _enum("west", "east"),
-        "top": _is_int,
-        "bottom": _is_int,
-        "matrix": _is_int,
-    },
-    "hole": {"picture": _is_picture_id, "row": _is_int, "col": _is_int},
     "warning": {"picture": _is_picture_id, "code": _any},
-    "boundary": {
-        "picture": _is_picture_id,
-        "virtual-west": _is_int,
-        "virtual-east": _is_int,
-        "physical-up": _is_int,
-        "physical-down": _is_int,
-    },
     "bbox": {
         "picture": _is_picture_id,
         "class": _enum("label", "wire"),
@@ -278,13 +218,6 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "role": _enum("none", "operator", "marked", "extra", "passive"),
         "species": _any,
     },
-    "span": {
-        "picture": _is_picture_id,
-        "row": _is_positive_int,
-        "col": _is_positive_int,
-        "length": _is_positive_int,
-        "kind": _enum("brace above", "brace below", "box"),
-    },
 }
 
 # Fields whose absence makes an otherwise typed event unusable.  Most event
@@ -338,28 +271,10 @@ class Picture:
             "glyph-geometry",
             "wire-geometry",
             "frame",
-            "boundary",
             "kernel-boundary",
             "warning",
         }
         return [event for event in self.events if event.kind not in excluded]
-
-    def boundary(self) -> tuple[int, int, int, int] | None:
-        for event in self.events:
-            if event.kind == "boundary":
-                try:
-                    return tuple(
-                        int(event.attrs[key].strip())
-                        for key in (
-                            "virtual-west",
-                            "virtual-east",
-                            "physical-up",
-                            "physical-down",
-                        )
-                    )
-                except (KeyError, ValueError):
-                    return None
-        return None
 
     def kernel_boundary(self) -> tuple[str, ...] | None:
         """Return the kernel's canonical exposed-index multiset."""
@@ -371,22 +286,6 @@ class Picture:
                     if item.strip()
                 )
         return None
-
-    def ncols(self) -> int:
-        columns = 0
-        for event in self.events:
-            if (
-                event.kind == "atom"
-                and "cell" in event.attrs
-                and _is_cell(event.attrs["cell"].strip())
-            ):
-                columns = max(columns, int(event.attrs["cell"].strip().split("-")[1]))
-            elif event.kind == "bond":
-                for key in ("from", "to"):
-                    value = event.attrs.get(key, "").strip()
-                    if _is_int(value):
-                        columns = max(columns, int(value))
-        return columns
 
 
 @dataclass

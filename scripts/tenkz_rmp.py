@@ -137,17 +137,24 @@ DEFECT_KINDS = (
 )
 # Structural capability tags map one-to-one onto public constructs; a tag
 # without its construct in the case body is manifest drift, not judgment.
+# Since the S4 surface swap the `tenkz` environment is the kernel surface,
+# so the retained switch and the environment witness the same capability.
 STRUCTURAL_CAPABILITY_PATTERNS = {
-    "kernel": re.compile(r"\\tenkzkernel\b"),
-    "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
+    "kernel": re.compile(r"\\tenkzkernel\b|\\begin\{tenkz\}"),
     "fusion-tree": re.compile(r"\\tntree\b"),
 }
+# Since the S4 surface swap there is one surface, so the two family words
+# an Ink sentence may use -- `tenkz` (the environment) and `kernel` (the
+# language) -- both claim the one kernel family.
 INK_ENVIRONMENT_FAMILIES = (
     "tenkz",
     "kernel",
 )
 INK_EVENT_FAMILIES = {
-    "grid": "tenkz",
+    "kernel": "kernel",
+}
+_INK_FAMILY_CANON = {
+    "tenkz": "kernel",
     "kernel": "kernel",
 }
 
@@ -176,7 +183,7 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
     ):
         # A command-scope \tntree is a complete public tenkz composition but
         # deliberately logs against picture 0 rather than opening a container.
-        families.add("tenkz")
+        families.add("kernel")
     return families
 
 
@@ -186,11 +193,11 @@ def ink_environment_problems(
     """Return contradictions between Ink claims and compiled picture owners."""
     problems: list[str] = []
     claimed = {
-        family
+        _INK_FAMILY_CANON[family]
         for family in INK_ENVIRONMENT_FAMILIES
         if re.search(rf"\b{family}\b", ink, flags=re.IGNORECASE)
     }
-    for family in INK_ENVIRONMENT_FAMILIES:
+    for family in sorted(set(_INK_FAMILY_CANON.values())):
         if family in claimed and family not in used:
             problems.append(
                 f"{target_id}: Ink names {family} but the compiled render model "

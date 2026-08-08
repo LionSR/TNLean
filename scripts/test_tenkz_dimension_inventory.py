@@ -273,7 +273,7 @@ m,4mm}
 
 def test_owner_span_grouping() -> None:
     source = r"""\begin{tenkz}[pitch=1mm]
-  \tnwire[route=arc]{\tn[label shift={2mm,5mm}]{A}}{(3mm,4mm)}
+  \tnwire[route=arc]{\tntree[pitch=2mm]{(a\,b)}}{(3mm,4mm)}
 \end{tenkz}
 """
     inventory = _build(source)
@@ -282,13 +282,13 @@ def test_owner_span_grouping() -> None:
         raise AssertionError(f"nested option/command sites were not split: {sites!r}")
     if tuple(site.owner for site in sites) != (
         DimensionOwner.METRIC,
-        DimensionOwner.LAYOUT,
+        DimensionOwner.METRIC,
         DimensionOwner.ROUTE,
     ):
         raise AssertionError(f"narrowest owner spans were not retained: {sites!r}")
     if tuple(site.literals for site in sites) != (
         ("1mm",),
-        ("2mm", "5mm"),
+        ("2mm",),
         ("3mm", "4mm"),
     ):
         raise AssertionError(f"owner-site literal vectors were not explicit: {sites!r}")
@@ -297,7 +297,7 @@ def test_owner_span_grouping() -> None:
     ):
         raise AssertionError(f"environment option lost its semantic key: {sites[0]!r}")
     if not sites[1].site.startswith(
-        "tenkz@1::tenkz@1/tn@1/option:tn/labelshift="
+        "tenkz@1/tntree@1::tenkz@1/tntree@1/option:tntree/pitch="
     ):
         raise AssertionError(f"nested option lost its semantic key: {sites[1]!r}")
     if not sites[2].site.startswith(
@@ -316,22 +316,20 @@ def test_owner_span_grouping() -> None:
         "cannot inventory unowned case dimension",
     )
 
-    tn_owned = _build(
-        r"\begin{tenkz}\tn[label shift=1mm]{A}\tnX{B}"
+    tree_owned = _build(
+        r"\begin{tenkz}\tntree[pitch=1mm]{(a)}\tntree{(b)}"
         r"\end{tenkz}"
     )
-    tn_x_owned = _build(
-        r"\begin{tenkz}\tn{A}\tnX[label shift=1mm]{B}"
+    tree_second_owned = _build(
+        r"\begin{tenkz}\tntree{(a)}\tntree[pitch=1mm]{(b)}"
         r"\end{tenkz}"
     )
-    if tn_owned == tn_x_owned:
+    if tree_owned == tree_second_owned:
         raise AssertionError("moving an option between containers preserved identity")
-    if "/option:tn/labelshift=" not in tn_owned.cases[0].sites[0].site:
-        raise AssertionError("tn option site lost its owning container")
-    if "/option:tnX/labelshift=" not in tn_x_owned.cases[0].sites[0].site:
-        raise AssertionError("tnX option site lost its owning container")
+    if "/option:tntree/pitch=" not in tree_owned.cases[0].sites[0].site:
+        raise AssertionError("tntree option site lost its owning container")
     _expect_error(
-        lambda: validate_dimension_inventory(tn_owned, tn_x_owned),
+        lambda: validate_dimension_inventory(tree_owned, tree_second_owned),
         "dimension owner site changed",
     )
 
@@ -411,11 +409,6 @@ def test_construct_ordinals_are_semantic() -> None:
     base = _build(base_source)
     for construct_name, sibling_source in (
         (
-            "tnpic",
-            r"\tnpic[pitch=1mm]{\tn{A}}"
-            r"\tnpic[pitch=2mm]{\tn{B}}",
-        ),
-        (
             "tntree",
             r"\tntree[pitch=1mm]{({}{})}"
             r"\tntree[pitch=2mm]{({}{})}",
@@ -437,7 +430,6 @@ def test_construct_ordinals_are_semantic() -> None:
                 f"sibling {construct_name} containers did not round-trip"
             )
     for different_kind_prefix, changed_anchor in (
-        (r"\tnpic{\tn{}}" + "\n", "dimension construct anchors changed"),
         (r"\tntree{({}{})}" + "\n", "dimension construct anchors changed"),
     ):
         prefixed = _build(different_kind_prefix + base_source)
@@ -510,9 +502,6 @@ def test_construct_ordinals_are_semantic() -> None:
         "dimension invocation anchors changed",
     )
 
-    inert_tnpic = _build(r"\def\unused{\tnpic{\tn{}}}" + base_source)
-    if inert_tnpic != base:
-        raise AssertionError("a tnpic stored in a replacement body gained an anchor")
     inert_tntree = _build(r"\def\unused{\tntree{({}{})}}" + base_source)
     if inert_tntree != base:
         raise AssertionError("a tntree stored in a replacement body gained an anchor")
@@ -527,7 +516,7 @@ def test_construct_ordinals_are_semantic() -> None:
         "  \\tnwire{a}",
         "  \\tnwire{origin}{(0,0)}\n"
         "  \\tnwire{origin}{origin}\n"
-        "  \\tncut{origin}\n"
+        "  \\tnmark{origin}{m}\n"
         "  \\tnwire{a}",
     )
     anchored_commands = _build(dimension_free_owner_commands)
@@ -547,14 +536,6 @@ def test_construct_ordinals_are_semantic() -> None:
     if _build(spaced) != base or _build(commented) != base:
         raise AssertionError("legal begin spacing or comment splice changed site keys")
 
-    real_tnpic = r"\tnpic{\tnwire{a}{(1mm,2mm)}}"
-    escaped_tnpic = r"\\tnpic{\tnwire{a}{(1mm,2mm)}}"
-    _build(real_tnpic)
-    _expect_error(
-        lambda: _build(escaped_tnpic),
-        "outside a tenkz environment",
-    )
-
     standalone_tree = _build(r"\tntree[pitch=1mm]{({}{})}")
     if not standalone_tree.cases[0].sites[0].site.startswith(
         "tntree@1::tntree@1/option:tntree/pitch="
@@ -570,11 +551,10 @@ def test_construct_ordinals_are_semantic() -> None:
 \begin{tenkz}
   \tnwire{c}{(5mm,6mm)}
 \end{tenkz}
-\tnpic{\tnwire{d}{(7mm,8mm)}}
 """
     multiple_sites = _build(multiple).cases[0].sites
     prefixes = tuple(site.site.split("::", 1)[0] for site in multiple_sites)
-    if prefixes != ("tenkz@1", "tenkz@2", "tenkz@3", "tnpic@1"):
+    if prefixes != ("tenkz@1", "tenkz@2", "tenkz@3"):
         raise AssertionError(f"per-kind construct ordinals drifted: {prefixes!r}")
 
     nested = r"""\begin{tenkz}
@@ -691,7 +671,6 @@ def test_picture_scope_ancestry_is_semantic() -> None:
         raise AssertionError("moving a dimension between sibling scopes preserved identity")
 
     for body in (
-        r"\tnpic{\tnwire{a}{(1mm,2mm)}}",
         r"\tntree[pitch=1mm]{({}{})}",
     ):
         nested_construct = _build(
@@ -724,7 +703,7 @@ def test_picture_scope_ancestry_is_semantic() -> None:
         raise AssertionError("inert PICTURE containers consumed scope anchors")
 
     ordinary_arguments = _build(
-        r"\begin{tenkz}\tnspan{a}{b}\tncut{a}\tnprose{text}"
+        r"\begin{tenkz}\tnprose{text}"
         r"\tnwire{a}{(1mm,2mm)}\end{tenkz}"
     )
     if ordinary_arguments.cases[0].scopes != ("tenkz@1",):
@@ -833,37 +812,22 @@ def test_balanced_changes_are_rejected() -> None:
 
 
 def test_invocation_anchors_are_semantic() -> None:
-    plain = _build(
-        r"\begin{tenkz}\tn[label shift=1mm]{A}\end{tenkz}"
-    )
-    conjugate = _build(
-        r"\begin{tenkz}\tn*[label shift=1mm]{A}\end{tenkz}"
-    )
-    if plain == conjugate:
-        raise AssertionError("tn and conjugate tn* shared an invocation anchor")
-    if "/tn@1/option:tn/" not in plain.cases[0].sites[0].site:
-        raise AssertionError("plain tn option lost its semantic invocation")
-    if "/tn*@1/option:tn*/" not in conjugate.cases[0].sites[0].site:
-        raise AssertionError("conjugate tn option lost its semantic invocation")
-    _expect_error(
-        lambda: validate_dimension_inventory(plain, conjugate),
-        "dimension invocation anchors changed",
-    )
-
     first_tn = _build(
-        r"\begin{tenkz}\tn[label shift=1mm]{A}\tn{B}"
+        r"\begin{tenkz}\tntree[pitch=1mm]{(a)}\tntree{(b)}"
         r"\end{tenkz}"
     )
     second_tn = _build(
-        r"\begin{tenkz}\tn{A}\tn[label shift=1mm]{B}"
+        r"\begin{tenkz}\tntree{(a)}\tntree[pitch=1mm]{(b)}"
         r"\end{tenkz}"
     )
     if first_tn == second_tn:
-        raise AssertionError("moving an option between tn siblings preserved identity")
-    if "/tn@1/option:" not in first_tn.cases[0].sites[0].site:
-        raise AssertionError("first tn sibling lost its invocation ordinal")
-    if "/tn@2/option:" not in second_tn.cases[0].sites[0].site:
-        raise AssertionError("second tn sibling lost its invocation ordinal")
+        raise AssertionError(
+            "moving an option between tntree siblings preserved identity"
+        )
+    if "/tntree@1/option:" not in first_tn.cases[0].sites[0].site:
+        raise AssertionError("first tntree sibling lost its invocation ordinal")
+    if "/tntree@2/option:" not in second_tn.cases[0].sites[0].site:
+        raise AssertionError("second tntree sibling lost its invocation ordinal")
     _expect_error(
         lambda: validate_dimension_inventory(first_tn, second_tn),
         "dimension owner site changed",
@@ -913,8 +877,6 @@ def test_invocation_anchors_are_semantic() -> None:
     )
 
     for inventory in (
-        plain,
-        conjugate,
         first_tn,
         second_tn,
         first_tnwire,
@@ -1099,16 +1061,16 @@ def test_invalid_schema_is_rejected() -> None:
         (["not-an-anchor"], "must be a construct anchor"),
         (["tenkz@0"], "must be a construct anchor"),
         (["tenkz@01"], "must be a construct anchor"),
-        (["tnpic@2"], "continue contiguous tnpic ordinals"),
+        (["tntree@2"], "continue contiguous tntree ordinals"),
         (
-            ["tenkz@1/tnpic@2"],
-            "continue contiguous tnpic ordinals",
+            ["tenkz@1/tntree@2"],
+            "continue contiguous tntree ordinals",
         ),
         (
             ["tenkz@1/tenkz@1"],
             "scope construct lacks matching scope",
         ),
-        (["tnpic@1/tnpic@1"], "must be a construct anchor"),
+        (["tntree@1/tntree@1"], "must be a construct anchor"),
         (["tenkz@1", "tenkz@1"], "continue contiguous"),
     ):
         _expect_error(
@@ -1226,7 +1188,7 @@ def test_invalid_schema_is_rejected() -> None:
         iter(invalid_container_data["cases"].values())
     )["sites"][0]
     invalid_container_row["site"] = str(invalid_container_row["site"]).replace(
-        "tenkz/pitch=", "tn/pitch="
+        "tenkz/pitch=", "tntree/labelshift="
     )
     _expect_error(
         lambda: parse_dimension_inventory(_json(invalid_container_data)),
@@ -1243,11 +1205,11 @@ def test_invalid_schema_is_rejected() -> None:
     )
     mismatched_case = next(iter(mismatched_command_data["cases"].values()))
     mismatched_case["invocations"][1] = (
-        "tenkz@1::tenkz@1/tncut@1"
+        "tenkz@1::tenkz@1/tnmark@1"
     )
     mismatched_case["sites"][0]["site"] = str(
         mismatched_case["sites"][0]["site"]
-    ).replace("/tnwire@1/", "/tncut@1/")
+    ).replace("/tnwire@1/", "/tnmark@1/")
     _expect_error(
         lambda: parse_dimension_inventory(_json(mismatched_command_data)),
         "command skeleton does not match its invocation",
@@ -1275,8 +1237,8 @@ def test_invalid_schema_is_rejected() -> None:
     for nested_source in (
         r"\begin{tenkz}\begin{tenkz}"
         r"\tnwire{a}{(1mm,2mm)}\end{tenkz}\end{tenkz}",
-        r"\begin{tenkz}\tngroup{\tnpic{"
-        r"\tnwire{a}{(1mm,2mm)}}}\end{tenkz}",
+        r"\begin{tenkz}\tngroup{"
+        r"\tnwire{a}{(1mm,2mm)}}\end{tenkz}",
     ):
         nested_inventory = _build(nested_source)
         if (
@@ -1476,10 +1438,10 @@ def test_updater_is_safe_and_idempotent() -> None:
         _saved_owner_ceilings = _dims.CASE_OWNER_CEILINGS
         _dims.CASE_DIMENSION_CEILING = 5
         _dims.CASE_OWNER_CEILINGS = {
-            DimensionOwner.METRIC: 0,
+            DimensionOwner.METRIC: 1,
             DimensionOwner.FRAME: 0,
             DimensionOwner.ROUTE: 4,
-            DimensionOwner.LAYOUT: 1,
+            DimensionOwner.LAYOUT: 0,
         }
         fake_repo = tmp_path / "repo"
         case_path = Path("tests/tenkz/rmp/synthetic/cases/reviewed-deletion.tex")
@@ -1489,13 +1451,13 @@ def test_updater_is_safe_and_idempotent() -> None:
 \begin{tenkz}
   \tnwire{a}{(1mm,2mm)}
   \tnwire{b}{(3mm,4mm)}
-  \tn[label shift=5mm]{x}
+  \tntree[pitch=5mm]{(x)}
 \end{tenkz}
 """
         after_source = r"""\begin{tenkz}\tn{}\end{tenkz}
 \begin{tenkz}
   \tnwire{a}{(1mm,2mm)}
-  \tn[label shift=5mm]{x}
+  \tntree[pitch=5mm]{(x)}
 \end{tenkz}
 """
         case.write_text(before_source, encoding="utf-8")
@@ -1507,7 +1469,11 @@ def test_updater_is_safe_and_idempotent() -> None:
         baseline = _build(before_source, path=case_path)
         if baseline.cases[0].scopes != ("tenkz@1", "tenkz@2"):
             raise AssertionError("updater fixture lost its PICTURE scope anchors")
-        if baseline.cases[0].constructs != ("tenkz@1", "tenkz@2"):
+        if baseline.cases[0].constructs != (
+            "tenkz@1",
+            "tenkz@2",
+            "tenkz@2/tntree@1",
+        ):
             raise AssertionError("updater fixture lost its dimension-free anchor")
         if baseline.cases[0].invocations != (
             "tenkz@1::tenkz@1",
@@ -1515,11 +1481,11 @@ def test_updater_is_safe_and_idempotent() -> None:
             "tenkz@2::tenkz@2",
             "tenkz@2::tenkz@2/tnwire@1",
             "tenkz@2::tenkz@2/tnwire@2",
-            "tenkz@2::tenkz@2/tn@1",
+            "tenkz@2/tntree@1::tenkz@2/tntree@1",
         ):
             raise AssertionError("updater fixture lost invocation anchors")
         if not any(
-            "/option:tn/labelshift=" in site.site
+            "/option:tntree/pitch=" in site.site
             for site in baseline.cases[0].sites
         ):
             raise AssertionError("updater fixture lost its option-container identity")

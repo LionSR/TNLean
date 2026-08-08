@@ -101,7 +101,7 @@ def test_kernel_capability_owner() -> None:
 def test_ink_environment_owner() -> None:
     log = "\n".join(
         (
-            "picture|id=1|lang=grid",
+            "picture|id=1|lang=kernel",
             "picture|id=k1|lang=kernel",
             "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
             "topology=(1,2)|role=none|species=none",
@@ -118,7 +118,7 @@ def test_ink_environment_owner() -> None:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
     malformed: list[tuple[str, str, str]] = []
     rejected = parse_log(
-        "picture|id=1|id=2|lang=grid\n"
+        "picture|id=1|id=2|lang=kernel\n"
         "kernel-boundary|picture=1|signature=a|signature=b\n",
         source_name="invalid-owner-test.tnlog",
         hard=lambda *finding: malformed.append(finding),
@@ -404,14 +404,14 @@ def test_rmp_dimension_ownership() -> None:
         )
     nested_picture_option = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnwire{\tnpic[pitch=5mm]{x}}",
+        r"\tnwire{\tntree[pitch=5mm]{a(b,c)}}",
     )
     if (
         len(nested_picture_option) != 1
         or nested_picture_option[0].owner is not DimensionOwner.METRIC
     ):
         raise AssertionError(
-            "a nested tnpic metric option inherited command ownership: "
+            "a nested tntree metric option inherited command ownership: "
             f"{nested_picture_option!r}"
         )
     tree_option = scan_case_dimensions(
@@ -419,30 +419,19 @@ def test_rmp_dimension_ownership() -> None:
     )
     if len(tree_option) != 1 or tree_option[0].owner is not DimensionOwner.METRIC:
         raise AssertionError(f"a tntree metric option lost ownership: {tree_option!r}")
+    # `label shift=` died with the grid front end (its escape row left the
+    # registry at the S4 surface swap), so the spelling owns nothing.
     direct_label_shift = scan_case_dimensions(
-        Path("synthetic.tex"), r"\tn*[label shift={17mm,18mm}]{A}"
+        Path("synthetic.tex"), r"\tn[label shift={17mm,18mm}]{A}"
     )
     if len(direct_label_shift) != 2 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not None
         for occurrence in direct_label_shift
     ):
         raise AssertionError(
-            "a public object label shift lost layout ownership: "
+            "the dead label shift spelling gained ownership: "
             f"{direct_label_shift!r}"
         )
-    for command in ("tnX", "tnfuse"):
-        object_label_shift = scan_case_dimensions(
-            Path("synthetic.tex"),
-            rf"\{command}[label shift={{17mm,18mm}}]{{A}}",
-        )
-        if len(object_label_shift) != 2 or any(
-            occurrence.owner is not DimensionOwner.LAYOUT
-            for occurrence in object_label_shift
-        ):
-            raise AssertionError(
-                f"{command} label shift lost layout ownership: "
-                f"{object_label_shift!r}"
-            )
     for malformed_source, expected_count in (
         (r"\tnfoo[label shift={23mm,24mm}]{(1,1)}", 2),
         (r"\tndots[label shift={25mm,26mm}]", 2),
@@ -463,7 +452,7 @@ def test_rmp_dimension_ownership() -> None:
             )
     unclosed_public_argument = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnwire{x \tnpic[pitch=41mm \tnwire{x}{(42mm,0)} "
+        r"\tnwire{x \tntree[pitch=41mm \tnwire{x}{(42mm,0)} "
         r"\rule{43mm}{44mm}}",
     )
     if len(unclosed_public_argument) != 4 or any(
@@ -474,7 +463,7 @@ def test_rmp_dimension_ownership() -> None:
             f"{unclosed_public_argument!r}"
         )
     for malformed_nested_source in (
-        r"\tnpic{51mm \tnwire{x}{(52mm,0)}",
+        r"\tntree{51mm \tnwire{x}{(52mm,0)}",
         r"\tndeclareatom{\tnmalformed}{skin=dot}"
         r"\tnmalformed[label shift=53mm \tnwire{x}{(54mm,0)}",
     ):
@@ -848,7 +837,7 @@ def test_rmp_dimension_ownership() -> None:
             f"{unclosed_environment_end!r}"
         )
     for case_variant in (
-        r"\tnwire{x \tnpic[PITCH=34mm]{y}}",
+        r"\tnwire{x \tntree[PITCH=34mm]{y}}",
         r"\tnwire{x \tn[Label Shift={35mm,36mm}]{A}}",
         r"\tnwire{x \begin{tenkz}[PITCH={37mm,38mm}]"
         r"\end{tenkz}}",
@@ -882,14 +871,8 @@ def test_rmp_dimension_ownership() -> None:
         )
     neutral_command_containers = (
         ("tn", r"\tn{\rule{41mm}{42mm}}"),
-        ("tnX", r"\tnX{\rule{41mm}{42mm}}"),
         ("tnfuse", r"\tnfuse{\rule{41mm}{42mm}}"),
-        ("tndots", r"\tndots[label shift={41mm,42mm}]"),
-        ("tnghost", r"\tnghost{41mm}"),
-        ("tnspan", r"\tnspan{2}{\rule{41mm}{42mm}}"),
-        ("tncut", r"\tncut{\rule{41mm}{42mm}}"),
         ("tntree", r"\tntree{{\rule{41mm}{42mm}}}"),
-        ("tnpic", r"\tnpic{\rule{41mm}{42mm}}"),
         ("tnset", r"\tnset{radius=41mm}"),
         ("tndeclareatom", r"\tndeclareatom{\foo}{bogus=41mm}"),
         ("tnmark", r"\tnmark[form=label]{x}{\rule{41mm}{42mm}}"),
@@ -974,7 +957,7 @@ def test_rmp_dimension_ownership() -> None:
                 f"occurrences={consumed_dynamic_option!r}"
             )
     for active_sibling, expected_owner in (
-        (r"\tn[label shift=127mm]{A}", DimensionOwner.LAYOUT),
+        (r"\tntree[pitch=127mm]{a}", DimensionOwner.METRIC),
         (r"\tnset{pitch=128mm}", DimensionOwner.METRIC),
     ):
         active_dynamic_option_sibling = scan_case_dimensions(
@@ -1438,13 +1421,13 @@ def test_rmp_dimension_ownership() -> None:
             )
     unbraced_pgf_brackets = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnwire{\tn[label shift=[47mm,48mm]]{A}}",
+        r"\tnwire{\tntree[pitch=[47mm,48mm]]{a}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
         for occurrence in unbraced_pgf_brackets
     ] != [
-        ("47mm", DimensionOwner.LAYOUT),
+        ("47mm", DimensionOwner.METRIC),
         ("48mm", None),
     ]:
         raise AssertionError(
@@ -1527,20 +1510,19 @@ kz}}
         )
     nested_label_shift = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnwire{\tnpic[inline]{"
-        r"\tn*[label shift={19mm,20mm}]{A}}}",
+        r"\tnwire{\tn[label shift={19mm,20mm}]{A}}",
     )
     if len(nested_label_shift) != 2 or any(
-        occurrence.owner is not DimensionOwner.LAYOUT
+        occurrence.owner is not None
         for occurrence in nested_label_shift
     ):
         raise AssertionError(
-            "a nested object label shift inherited route ownership: "
+            "a nested dead label shift gained ownership: "
             f"{nested_label_shift!r}"
         )
     spliced_picture_key_source = """\\tnwire{
-  \\tnpic[pit% splice the public option key
-ch=21mm,inline]{\\tn{A}}}
+  \\tntree[pit% splice the public option key
+ch=21mm]{a}}
 """
     spliced_picture_key = scan_case_dimensions(
         Path("synthetic.tex"), spliced_picture_key_source

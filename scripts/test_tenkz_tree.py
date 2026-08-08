@@ -20,7 +20,7 @@ SOURCE = r"""
 \usepackage{tenkz}
 \pagestyle{empty}
 \begin{document}
-\tnset{species={anyon}}
+\tndeclare{species}{anyon}{hue=source:red}
 % With fusion bases chosen and multiplicity labels suppressed, both calls
 % denote the same basis morphism; only the skin changes.
 \tntree[tree style=wire, species=anyon]{((a\,b)_x\,c)_e}

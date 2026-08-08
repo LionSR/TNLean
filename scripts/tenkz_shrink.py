@@ -49,15 +49,14 @@ BLUEPRINT = sorted(ROOT.glob("blueprint/src/chapter/*.tex"))
 # Alias sunsets execute at their milestone; milestones this project uses.
 CURRENT_MILESTONE = "0.8"
 
+# Since the S4 surface swap the kernel is the package surface: the demand
+# corpus's constructs are kernel constructs, and each registry scope is fed
+# by the option groups of the commands and environments that own it.
 _SCOPE_COMMANDS = {
-    "picture": ("tnpic",),
-    "group": ("tngroup",),
-    "object": ("tn", "tnX", "tnfuse", "tndots", "tntree"),
-    "connection": ("tncut",),
-    "annotation": ("tnspan",),
-}
-_SETUP_COMMAND_FORWARDS = {
-    "tntree": {"pitch", "compact", "inline"},
+    "kernel-atom": ("tn", "tnfuse"),
+    "kernel-wire": ("tnwire", "tnbond"),
+    "kernel-mark": ("tnmark",),
+    "object": ("tntree",),
 }
 
 
@@ -252,41 +251,34 @@ def scoped_option_groups(
     """Individual option payloads grouped by their registry scope."""
     scoped = {
         scope: {} for scope in (
-            "setup",
-            "picture",
-            "group",
+            "kernel-setup",
+            "kernel-picture",
+            "kernel-frame",
+            "kernel-atom",
+            "kernel-wire",
+            "kernel-mark",
+            "kernel-declare",
             "object",
-            "connection",
-            "region",
-            "annotation",
             "atom-declaration",
         )
     }
     for path, text in corpus.items():
         picture_options = [
             *_environment_options(text),
-            *_command_options(text, "tnpic"),
+            *_command_options(text, "tngroup"),
         ]
-        scoped["picture"][path] = picture_options
+        scoped["kernel-picture"][path] = picture_options
+        # The frame words are spelled inside the picture (and group) option
+        # list, so the kernel-frame rows read the same payloads.
+        scoped["kernel-frame"][path] = picture_options
         for scope, commands in _SCOPE_COMMANDS.items():
-            if scope == "picture":
-                continue
             scoped[scope][path] = [
                 option
                 for command in commands
                 for option in _command_options(text, command)
             ]
-        # Setup keys are legal both in \tnset and in each picture family's
-        # option list through the shared forwarders.
-        scoped["setup"][path] = [
-            *_brace_argument(text, "tnset", 1),
-            *picture_options,
-            *(
-                _forwarded_options(payload, keys)
-                for command, keys in _SETUP_COMMAND_FORWARDS.items()
-                for payload in _command_options(text, command)
-            ),
-        ]
+        scoped["kernel-setup"][path] = _brace_argument(text, "tnset", 1)
+        scoped["kernel-declare"][path] = _brace_argument(text, "tndeclare", 3)
         scoped["atom-declaration"][path] = _brace_argument(
             text, "tndeclareatom", 2
         )
@@ -298,8 +290,6 @@ def _scope_groups(
 ) -> dict[Path, list[str]]:
     if scope in groups:
         return groups[scope]
-    if scope.startswith("kernel-"):
-        return {}
     raise KeyError(f"unknown registry scope: {scope}")
 
 
@@ -311,9 +301,6 @@ def row_consumers(entries: list[Entry], corpus: dict[Path, str]) -> dict[str, se
         if entry.kind == "key":
             scope, name = entry.fields[0], entry.fields[1].replace("~", " ")
             row_id = f"key:{scope}:{name}"
-            # kernel-* scopes have no demand-corpus constructs until the
-            # S4 surface swap; their rows count zero consumers here and the
-            # tenure flags they raise carry session verdicts instead.
             hits = {
                 str(path.relative_to(ROOT))
                 for path, payloads in _scope_groups(scoped, scope).items()

@@ -11,16 +11,21 @@ body declarations.  Each source is complete and uses canonical public syntax.
   caption={a regular contraction},
   index={The horizontal bonds are summed virtual indices.  The two stubs are
     the open matrix indices; each upward leg is one physical index.},
-  signature={boundary|virtual-west=1|virtual-east=1|physical-up=3|physical-down=0}]
+  signature={kernel-boundary|signature=open:e, open:w, phys:n, phys:n, phys:n}]
 % Formula: (A^{i_1} A^{i_2} A^{i_3})_{alpha beta}
-% Ink: bonds contract; stubs and up legs are open indices.
-\begin{tenkz}[physical=up,west label=$\alpha$,east label=$\beta$]
-  \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
+% Ink: bonds contract; typed ports declare the open indices.
+\begin{tenkz}[cols=3]
+  \tn[ports={180:virtual:$\alpha$, 0:virtual, 90:physical:$i_1$}]{A} &
+  \tn[ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A} &
+  \tn[ports={180:virtual, 0:virtual:$\beta$, 90:physical:$i_3$}]{A}
 \end{tenkz}
 \end{tnexample}
 
-The environment chooses a contraction grid.  \tnkey{physical=up} is picture
-policy.  Each \tncmd{tn} declares an atom; \verb|&| advances one site.
+The environment is one typed tensor network in one frame.  Each \tncmd{tn}
+declares an atom; \verb|&| advances one site.  \tnkey{ports=} types each
+face and may label it, and a typed port with no partner is an open index:
+open ink is declared content, so the picture exposes exactly the indices its
+atoms state.
 
 Beamer reads a frame's body before typesetting it, so a chained picture
 reaches the environment with its \verb|&| already an ordinary alignment tab.
@@ -35,19 +40,19 @@ site advance itself, so a chained picture compiles in a plain frame; no
   caption={the channel applied to $X$},
   index={$X$ closes the east input pair.  The west pair remains open because
     the output is a matrix; the vertical connection sums $i$.},
-  signature={boundary|virtual-west=2|virtual-east=0|physical-up=0|physical-down=0}]
+  signature={kernel-boundary|signature=open:w, open:w}]
 % Formula: E_A(X) = sum_i A^i X A^{i dagger}.
 % Boundary: the input closes east; the matrix output stays
 % open west.
-\begin{tenkz}[sandwich,east={cup=$X$}]
+\begin{tenkz}[rows={ket,bra}, cols=1, west=open, east={cup=$X$}]
   \tn{A} \\
-  \tn*{A}
+  \tn{$\overline{A}$}
 \end{tenkz}
 \end{tnexample}
 
-\tnkey{sandwich} declares ket over bra and pairs their physical legs.  The
-star declares the conjugate atom.  A cup connects adjacent layers; it is not
-a same-row trace.
+\tnkey{rows=} declares ket over bra and pairs their physical legs; the
+conjugate is label mathematics.  A cup connects adjacent layers; it is not a
+same-row trace.
 
 \subsection{Compose an equation}
 
@@ -56,13 +61,17 @@ a same-row trace.
   caption={pictures compose as mathematical atoms},
   index={The capsules are matrices on the wire and add no indices.  Both
     sides expose one west stub, one east stub, and one physical leg.},
-  signature={boundary|virtual-west=1|virtual-east=1|physical-up=1|physical-down=0}]
+  signature={kernel-boundary|signature=open:e, open:w, phys:n}]
 % Formula: B^i = X A^i X^{-1}; both boundary signatures agree.
 \[
- \begin{tenkz}[physical=up] \tn[up=$i$]{B} \end{tenkz}
+ \begin{tenkz}[cols=1]
+   \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{B}
+ \end{tenkz}
  =
- \begin{tenkz}[physical=up]
-   \tnX{X} & \tn[up=$i$]{A} & \tnX{X^{-1}}
+ \begin{tenkz}[cols=3]
+   \tn[skin=ring, ports={180:virtual, 0:virtual}]{X} &
+   \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{A} &
+   \tn[skin=ring, ports={180:virtual, 0:virtual}]{X^{-1}}
  \end{tenkz}
 \]
 \end{tnexample}

@@ -47,22 +47,9 @@ BASELINE = ROOT / "tests/tenkz/census-baseline.json"
 _LEDGERS = ("kernel", "sugar", "alias", "escape")
 MILESTONES = ("0.8", "0.9", "1.0")
 _PARSER_FAMILY_SCOPE = {
-    "setup": "setup",
-    "grid": "picture",
-    "lattice": "picture",
-    "cd": "picture",
-    "free": "picture",
-    "cell": "object",
-    "put": "object",
+    # the surviving pgfkeys families (the dialect families died with their
+    # front ends; the S4 surface swap removed the last, grid)
     "tree": "object",
-    "site": "object",
-    "join": "connection",
-    "edge": "connection",
-    "arrow": "connection",
-    "region": "region",
-    "free region": "region",
-    "group": "group",
-    "span": "annotation",
     "declare atom": "atom-declaration",
     # the 1.0 kernel trees (l3keys); scopes mirror LANGUAGE-1.0.md section 2
     "kernel-picture": "kernel-picture",
@@ -74,13 +61,9 @@ _PARSER_FAMILY_SCOPE = {
     "kernel-declare": "kernel-declare",
     "kernel-declare-atom": "atom-declaration",
 }
-_SETUP_FORWARDS = {
-    "grid": {"pitch", "compact", "inline", "tensor style", "species"},
-    "lattice": {"pitch", "compact", "inline", "tensor style", "species"},
-    "free": {"pitch", "compact", "inline", "tensor style", "species"},
-    "cd": {"pitch", "compact", "inline", "tensor style", "species"},
-    "tree": {"pitch", "compact", "inline"},
-}
+# The 0.7 dialects forwarded document-setup keys into their picture
+# families; the last forwarding parser left with the grid front end.
+_SETUP_FORWARDS: dict[str, set[str]] = {}
 
 
 def parse_status(status: str) -> tuple[str, str]:
@@ -292,7 +275,11 @@ def _parser_leaf_keys_from_texts(texts: Iterable[str]) -> set[tuple[str, str]]:
             )
         for match in root_leaf.finditer(text):
             name = match.group(1).replace("~", " ").strip()
-            if name not in {"", "declare atom"}:
+            # `pitch` is the internal metric door the kernel-setup pitch row
+            # delegates to (tenkz-language.code.tex); since the S4 surface
+            # swap no public spelling reaches the /tenkz root directly, so
+            # the door is plumbing, not a census leaf.
+            if name not in {"", "declare atom", "pitch"}:
                 leaves.add(("setup", name))
     return leaves
 

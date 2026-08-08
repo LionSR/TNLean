@@ -31,7 +31,7 @@ SOURCE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -90,10 +90,10 @@ SOURCE = r"""
     at (40mm,0) {$g$};
 \end{tenkztestcanvas}
 \begin{tenkz}
-  \tn{B} & \tn[box]{}
+  \tn{B} & \tn[skin=box]{}
 \end{tenkz}
 \begin{tenkz}
-  \tn{} & \tn[pill]{} & \tnX{} & \tn[tri=l]{}
+  \tn{} & \tn[skin=pill]{} & \tn[skin=ring]{} & \tn[skin=tri]{}
 \end{tenkz}
 % A final style override must change the emitted geometry too.  The small label
 % sits inside the rectangle's corner but outside its inscribed circle.
@@ -219,7 +219,7 @@ AFFINE_GLYPHS = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -247,7 +247,7 @@ AFFINE_GLYPHS = r"""
 \end{tenkztestcanvas}
 \endgroup
 \begin{tenkz}
-  \tn[tri=l]{}
+  \tn[skin=tri]{}
 \end{tenkz}
 \makeatletter
 \def\tenkzassertaffineclean#1{%
@@ -270,7 +270,7 @@ INVALID_CORNERS = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -288,13 +288,13 @@ ROUNDED_TRIANGLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
 \tikzset{canonical tensor/.append style={rounded corners=1pt}}
 \begin{tenkz}
-  \tn[tri=l]{}
+  \tn[skin=tri]{}
 \end{tenkz}
 \end{document}
 """
@@ -304,7 +304,7 @@ OVERSIZED_OUTER_SEP = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -321,7 +321,7 @@ INACTIVE_SNAPSHOT = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \pagestyle{empty}
@@ -342,7 +342,7 @@ TRANSFORMED_RECT = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -358,7 +358,7 @@ TRANSFORMED_CIRCLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -374,13 +374,13 @@ TRANSFORMED_TRIANGLE = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
 \tikzset{canonical tensor/.append style={rotate=30, transform shape}}
 \begin{tenkz}
-  \tn[tri=l]{}
+  \tn[skin=tri]{}
 \end{tenkz}
 \end{document}
 """
@@ -390,7 +390,7 @@ TRANSFORMED_LABEL = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -405,7 +405,7 @@ DRAW_ONLY_GLYPH = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -421,7 +421,7 @@ NONRECTANGLE_LABEL = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -436,7 +436,7 @@ NONAUDITED_CUSTOMIZATION = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \usetikzlibrary{fadings}
@@ -453,7 +453,7 @@ NESTED_END_HOOK = r"""
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 \begin{document}
@@ -490,7 +490,7 @@ def customized_glyph(options: str, preamble: str = "") -> str:
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 %s
@@ -509,7 +509,7 @@ def customized_label(options: str, preamble: str = "") -> str:
 \usepackage{tenkz}
 \makeatletter
 \newenvironment{tenkztestcanvas}
-  {\tenkz@beginpicture{grid}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\begin{tikzpicture}[tenkz every picture]}
+  {\tenkz@beginpicture{kernel}\tenkz@event{atom|picture=\the\tenkz@pictureid|cell=1-1|kind=dot}\tenkz@event{kernel-boundary|picture=\the\tenkz@pictureid|signature=}\begin{tikzpicture}[tenkz every picture]}
   {\end{tikzpicture}}
 \makeatother
 %s
@@ -578,13 +578,13 @@ def main() -> int:
                for event in label_events):
             raise AssertionError("a measured label omitted exact shape fields")
         overlap_pictures = {finding_picture_id(finding.msg) for finding in overlaps}
-        if overlap_pictures != {4, 7}:
+        if overlap_pictures != {2, 5}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
 
-        for picture_id in (1, 2):
+        for picture_id in (1, "k1"):
             events = audit.events(picture_id)
             uses = sum(event.kind == "label-use" for event in events)
             labels = sum(event.kind == "bbox"
@@ -613,8 +613,9 @@ def main() -> int:
 
         missing = work / "missing-label-bbox.tnlog"
         missing.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "label-use|picture=1\n",
             encoding="utf-8",
         )
@@ -625,13 +626,13 @@ def main() -> int:
             raise AssertionError("audit accepted an unmeasured library label use")
 
         shapes = {
-            event.attrs.get("shape") for event in audit.events(3)
+            event.attrs.get("shape") for event in audit.events("k2")
             if event.kind == "glyph-geometry"
         }
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
         triangle_geometry = [
-            event for event in audit.events(3)
+            event for event in audit.events("k2")
             if event.kind == "glyph-geometry"
             and event.attrs.get("shape") == "triangle"
         ]
@@ -642,7 +643,7 @@ def main() -> int:
             )
 
         reshaped = {
-            event.attrs.get("shape") for event in audit.events(4)
+            event.attrs.get("shape") for event in audit.events(2)
             if event.kind == "glyph-geometry"
         }
         if reshaped != {"roundrect"}:
@@ -651,7 +652,7 @@ def main() -> int:
             )
 
         corner_events = [
-            event for event in audit.events(5)
+            event for event in audit.events(3)
             if event.kind == "glyph-geometry"
         ]
         corner_shapes = [event.attrs.get("shape") for event in corner_events]
@@ -666,7 +667,7 @@ def main() -> int:
                - round(1.775 * 65536)) > 1:
             raise AssertionError("rounded box did not emit its live corner radius")
 
-        outer_gap = [event for event in audit.events(6)
+        outer_gap = [event for event in audit.events(4)
                      if event.kind == "glyph-geometry"]
         if len(outer_gap) != 1:
             raise AssertionError("outer-separation fixture lost glyph geometry")
@@ -675,7 +676,7 @@ def main() -> int:
             raise AssertionError("glyph geometry retained invisible outer separation")
 
         expected_widths = {
-            7: 8, 8: 8, 9: 4, 11: 8, 12: 8, 14: 8, 15: 4,
+            5: 8, 6: 8, 7: 4, 9: 8, 10: 8, 12: 8, 13: 4,
         }
         for picture_id, expected_pt in expected_widths.items():
             geometry = [event for event in audit.events(picture_id)
@@ -691,7 +692,7 @@ def main() -> int:
                     f"expected {expected_pt}pt: {geometry[0].attrs}"
                 )
 
-        label_boxes = [event for event in audit.events(10)
+        label_boxes = [event for event in audit.events(8)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         if len(label_boxes) != 1:
@@ -701,7 +702,7 @@ def main() -> int:
         if label_width >= round(2 * 65536):
             raise AssertionError("label bbox retained invisible outer separation")
 
-        rotate_control = [event for event in audit.events(13)
+        rotate_control = [event for event in audit.events(11)
                           if event.kind == "glyph-geometry"]
         if (len(rotate_control) != 1
                 or rotate_control[0].attrs.get("shape") != "roundrect"):
@@ -911,8 +912,9 @@ def main() -> int:
 
         exact = work / "exact-shapes.tnlog"
         exact.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|xmin=8|xmax=10|ymin=8|ymax=10|"
             "shape=rect|radius=0\n"
@@ -942,8 +944,9 @@ def main() -> int:
             fixture = work / name
             xmin, xmax, ymin, ymax = bounds
             fixture.write_text(
-                "picture|id=1|lang=grid\n"
+                "picture|id=1|lang=kernel\n"
                 "atom|picture=1|cell=1-1|kind=dot\n"
+                "kernel-boundary|picture=1|signature=\n"
                 "label-use|picture=1\n"
                 f"bbox|picture=1|class=label|id=1|xmin={xmin}|xmax={xmax}|"
                 f"ymin={ymin}|ymax={ymax}|shape=rect|radius=0\n"
@@ -983,8 +986,9 @@ def main() -> int:
         def write_round_label_glyph_fixture(name: str, edge: int) -> Path:
             fixture = work / name
             fixture.write_text(
-                "picture|id=1|lang=grid\n"
+                "picture|id=1|lang=kernel\n"
                 "atom|picture=1|cell=1-1|kind=dot\n"
+                "kernel-boundary|picture=1|signature=\n"
                 "label-use|picture=1\n"
                 "bbox|picture=1|class=label|id=1|owner=0|"
                 "xmin=0|xmax=100|ymin=0|ymax=100|"
@@ -1015,8 +1019,9 @@ def main() -> int:
 
         round_branches = work / "round-label-glyph-branches.tnlog"
         round_branches.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"
             "xmin=0|xmax=100|ymin=0|ymax=100|"
@@ -1054,8 +1059,9 @@ def main() -> int:
             fixture = work / name
             qxmin, qxmax, qymin, qymax = query
             fixture.write_text(
-                "picture|id=1|lang=grid\n"
+                "picture|id=1|lang=kernel\n"
                 "atom|picture=1|cell=1-1|kind=dot\n"
+                "kernel-boundary|picture=1|signature=\n"
                 "label-use|picture=1\n"
                 "bbox|picture=1|class=label|id=1|owner=0|"
                 "xmin=20|xmax=80|ymin=0|ymax=60|"
@@ -1154,8 +1160,9 @@ def main() -> int:
             raise AssertionError("audit missed a fused typed-map rail overlap")
 
         malformed_wire_prefix = (
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"
             "xmin=20|xmax=80|ymin=0|ymax=60|"
@@ -1229,7 +1236,7 @@ def main() -> int:
 
         oversized_roundrect = work / "oversized-roundrect.tnlog"
         oversized_roundrect.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "ink-use|picture=1|class=glyph|id=1|shape=roundrect\n"
             "glyph-geometry|picture=1|owner=1|shape=roundrect|"
             "xmin=0|xmax=10|ymin=0|ymax=10|radius=6|stroke=0|"
@@ -1245,8 +1252,9 @@ def main() -> int:
 
         nonsquare_circle = work / "nonsquare-circle.tnlog"
         nonsquare_circle.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "glyph-geometry|picture=1|owner=1|shape=circle|"
             "xmin=0|xmax=10|ymin=0|ymax=12|radius=0|stroke=0|"
@@ -1262,8 +1270,9 @@ def main() -> int:
 
         missing_ink = work / "missing-ink-geometry.tnlog"
         missing_ink.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
             "ink-use|picture=1|class=wire|id=2\n",
             encoding="utf-8",
@@ -1276,8 +1285,9 @@ def main() -> int:
 
         duplicate_geometry = work / "duplicate-ink-geometry.tnlog"
         duplicate_geometry.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "ink-use|picture=1|class=glyph|id=1|shape=rect\n"
             "glyph-geometry|picture=1|owner=1|shape=rect|"
             "xmin=0|xmax=10|ymin=0|ymax=10|radius=0|stroke=0|"
@@ -1296,8 +1306,9 @@ def main() -> int:
 
         missing_class = work / "missing-ink-class.tnlog"
         missing_class.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "atom|picture=1|cell=1-1|kind=dot\n"
+            "kernel-boundary|picture=1|signature=\n"
             "ink-use|picture=1|id=1\n"
             "bbox|picture=1|class=wire|id=1|owner=1|"
             "xmin=0|xmax=1|ymin=0|ymax=1\n",
@@ -1311,7 +1322,7 @@ def main() -> int:
 
         glyph_bbox = work / "glyph-bbox.tnlog"
         glyph_bbox.write_text(
-            "picture|id=1|lang=grid\n"
+            "picture|id=1|lang=kernel\n"
             "bbox|picture=1|class=glyph|id=1|owner=1|"
             "xmin=0|xmax=1|ymin=0|ymax=1\n",
             encoding="utf-8",
@@ -1322,16 +1333,6 @@ def main() -> int:
                 and "class=glyph" in finding.msg
                 for finding in glyph_bbox_audit.findings):
             raise AssertionError("audit accepted obsolete glyph bbox geometry")
-
-        grid_source = (ROOT / "tex/tenkz/tenkz-grid.code.tex").read_text(
-            encoding="utf-8")
-        for function in ("tenkz_draw_lower_label:N", "tenkz_pair_wide_leg:nn",
-                         "tenkz_brick_face:nnnNn"):
-            start = grid_source.index(f"\\cs_new_protected:Npn \\{function}")
-            excerpt = grid_source[start:start + 7000]
-            if "\\node[tn~label" not in excerpt and \
-               "\\__tenkz_render_labelnode:nnn" not in excerpt:
-                raise AssertionError(f"{function} bypasses the audited label style")
 
         core_source = (ROOT / "tex/tenkz/tenkz-core.code.tex").read_text(
             encoding="utf-8")
