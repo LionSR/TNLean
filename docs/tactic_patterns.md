@@ -89,8 +89,8 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/TopologicalTerminalSpectral.lean` before promotion.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
   `TNLean/Algebra/FinSum.lean`.
-- **Notes:** the shared identity requires only a semiring and pulls a common
-  left factor from a sum of triple products. The two complex-valued callers
+- **Notes:** the shared identity requires only a non-unital semiring and pulls
+  a common left factor from a sum of triple products. The two complex-valued callers
   whose common factor was in the middle first use commutativity to put it in
   the canonical position. All six scanner-known sites now call the lemma; the
   four-line pattern no longer appears in the scanner report. The consumer

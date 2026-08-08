@@ -24,9 +24,9 @@ namespace Fintype
 
 This replaces the repeated normalization
 `rw [Finset.mul_sum]; apply Finset.sum_congr rfl; intro i _; ring`.
-The identity needs only a semiring; commutative-semiring callers may reorder
-the common factor before applying it. -/
-theorem sum_mul_mul_eq_mul_sum_mul {ι R : Type*} [Fintype ι] [Semiring R]
+The identity needs only a non-unital semiring; commutative-semiring callers
+may reorder the common factor before applying it. -/
+theorem sum_mul_mul_eq_mul_sum_mul {ι R : Type*} [Fintype ι] [NonUnitalSemiring R]
     (a : R) (f g : ι → R) :
     (∑ i, a * f i * g i) = a * ∑ i, f i * g i := by
   rw [Finset.mul_sum]
