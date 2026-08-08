@@ -17,6 +17,7 @@ import TNLean.MPS.Examples
 import TNLean.MPS.FundamentalTheorem
 import TNLean.MPS.Irreducible
 import TNLean.MPS.MPDO
+import TNLean.MPS.MPU
 import TNLean.MPS.OpenBoundary
 import TNLean.MPS.Overlap
 import TNLean.MPS.ParentHamiltonian
