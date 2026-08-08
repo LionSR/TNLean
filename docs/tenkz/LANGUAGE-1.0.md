@@ -670,9 +670,13 @@ outside the returns routed on the side it speaks from, so a return never
 runs between the arc and its caption, while no mark ever moves a wire —
 which is what keeps mark deletion ink-neutral for the network. The rows a
 selection occupies, span and all, decide whether it reaches the boundary
-row, and the obstacles the arc steps past include the legs of its own
-members, whether the author or the picture's physical policy asked for
-them. The step is stated for the frames whose rows are lines of the page,
+row; a member stands where its own address puts it, or — for a cluster's
+generated children, which have no address of their own — where its carrier
+stands, and a member that stands nowhere is passed over rather than allowed
+to overrule the members that stand somewhere. The obstacles the arc steps
+past include the legs of its own members, whether the author or the
+picture's physical policy asked for them. The step is stated for the frames
+whose rows are lines of the page,
 `flat` and `plane`; on a ring, whose row closes at the frame radius and
 whose sides are radial, the order between a return and a mark on that row
 is not yet settled.

@@ -8036,6 +8036,41 @@
       }
   }
 
+% The cell a selection member stands in, and the record that answers for it:
+% the member's own address, or -- for a generated cluster child, which
+% carries no address of its own -- its carrier's.  #5 is false when the
+% member stands in no cell either way, which is exactly when a selection has
+% no common chart.  The basis and the annotation layering read a selection's
+% cells through this one production, so a selection one of them can chart is
+% a selection the other can place.
+\tl_new:N \l__tenkz_kernel_hull_member_tl
+\cs_new_protected:Npn \__tenkz_kernel_hull_member_rc:nNNN #1#2#3#4
+  {
+    \tl_set:Nn \l__tenkz_kernel_hull_member_tl {#1}
+    \__tenkz_kernel_atom_rc:nNNN {#1} #2#3#4
+    \bool_if:NF #4
+      {
+        \__tenkz_model_get:nnN {#1} {cluster-of}
+          \l__tenkz_kernel_hull_basis_parent_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_hull_basis_parent_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_hull_basis_parent_tl
+              \l__tenkz_kernel_hull_basis_record_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_hull_basis_record_tl
+              {
+                \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
+                  \l__tenkz_kernel_hull_basis_record_tl #2#3#4
+                \bool_if:NT #4
+                  {
+                    \tl_set_eq:NN \l__tenkz_kernel_hull_member_tl
+                      \l__tenkz_kernel_hull_basis_record_tl
+                  }
+              }
+          }
+      }
+  }
+
 % The complete east/north basis of a selection.  Affine pictures have one
 % global linear part.  Circle selections retain the established mean tangent,
 % represented here as an orthonormal pair so all downstream consumers use the
@@ -8045,33 +8080,12 @@
     \bool_set_true:N \l__tenkz_kernel_hull_chart_bool
     \seq_map_inline:Nn #1
       {
-        \__tenkz_kernel_atom_rc:nNNN {##1}
+        \__tenkz_kernel_hull_member_rc:nNNN {##1}
           \l__tenkz_kernel_hull_basis_row_tl
           \l__tenkz_kernel_hull_basis_col_tl
           \l__tenkz_kernel_hull_basis_at_bool
         \bool_if:NF \l__tenkz_kernel_hull_basis_at_bool
-          {
-            \__tenkz_model_get:nnN {##1} {cluster-of}
-              \l__tenkz_kernel_hull_basis_parent_tl
-            \quark_if_no_value:NTF \l__tenkz_kernel_hull_basis_parent_tl
-              { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
-              {
-                \prop_get:NVN \l__tenkz_kernel_named_prop
-                  \l__tenkz_kernel_hull_basis_parent_tl
-                  \l__tenkz_kernel_hull_basis_record_tl
-                \quark_if_no_value:NTF \l__tenkz_kernel_hull_basis_record_tl
-                  { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
-                  {
-                    \exp_args:NV \__tenkz_kernel_atom_rc:nNNN
-                      \l__tenkz_kernel_hull_basis_record_tl
-                      \l__tenkz_kernel_hull_basis_row_tl
-                      \l__tenkz_kernel_hull_basis_col_tl
-                      \l__tenkz_kernel_hull_basis_at_bool
-                    \bool_if:NF \l__tenkz_kernel_hull_basis_at_bool
-                      { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
-                  }
-              }
-          }
+          { \bool_set_false:N \l__tenkz_kernel_hull_chart_bool }
       }
     \__tenkz_geom_frame_if_affine:nTF {kpic}
       {
@@ -16001,7 +16015,7 @@
       { \l__tenkz_kernel_ro_apply_y_tl }
   }
 
-% ---------- annotation layering against generated returns ----------------------------------------
+% ---------- annotation layering against generated returns ------------------
 % A traced row's return is network ink: it belongs to the row it closes, and
 % removing an annotation must never move it.  The converse discipline is the
 % annotation's: a span annotation reads as one unit -- arc and caption
@@ -16055,17 +16069,26 @@
         \fp_set:Nn \l__tenkz_kernel_annot_row_min_fp {inf}
         \fp_set:Nn \l__tenkz_kernel_annot_row_max_fp {-inf}
         \__tenkz_kernel_mark_members:nN {#1} \l__tenkz_kernel_sel_seq
+        % A member that stands in no cell -- and has no carrier to borrow one
+        % from -- is passed over rather than allowed to veto: the rows its
+        % fellow members establish are evidence about where the selection
+        % stands, and a bead on a wire says nothing against them.  A
+        % selection where nothing places at all establishes no rows.
+        \bool_set_false:N \l__tenkz_kernel_annot_rows_bool
         \seq_map_inline:Nn \l__tenkz_kernel_sel_seq
           {
-            \__tenkz_kernel_atom_rc:nNNN {##1}
+            \__tenkz_kernel_hull_member_rc:nNNN {##1}
               \l__tenkz_kernel_r_row_tl \l__tenkz_kernel_r_col_tl
               \l__tenkz_kernel_turn_bool
-            \bool_if:NTF \l__tenkz_kernel_turn_bool
+            \bool_if:NT \l__tenkz_kernel_turn_bool
               {
-                % The rows a member occupies run from its anchor through
-                % its `wires=` span, so a spanning glyph anchored off the
-                % boundary row still reaches it.
-                \__tenkz_kernel_r_span:nNN {##1}
+                \bool_set_true:N \l__tenkz_kernel_annot_rows_bool
+                % The rows a member occupies run from the anchor of the
+                % record that placed it through that record's `wires=' span,
+                % so a spanning glyph anchored off the boundary row still
+                % reaches it and a cluster child spans with its carrier.
+                \exp_args:NV \__tenkz_kernel_r_span:nNN
+                  \l__tenkz_kernel_hull_member_tl
                   \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
                 \fp_set:Nn \l__tenkz_kernel_annot_row_min_fp
                   {
@@ -16085,7 +16108,6 @@
                       )
                   }
               }
-              { \bool_set_false:N \l__tenkz_kernel_annot_rows_bool }
           }
         \bool_if:NT \l__tenkz_kernel_annot_rows_bool
           {
@@ -16310,9 +16332,17 @@
 % daylight stays between their tips and the rail they stepped over.  The
 % obstacle extremes are page ordinates while a hull support is a coordinate
 % along the north dual (0, 1/ny); dividing the stepped page ordinate by the
-% basis ny converts it, and on the flat frame the two coincide.
+% basis ny converts it, and on the flat frame the two coincide.  That
+% division is the frame's own arithmetic only where the hull took the frame's
+% chart, so the step asks the hull -- which has by now chosen its basis --
+% rather than guessing from the selection at scan time.
 \cs_new_protected:Npn \__tenkz_kernel_r_mark_trace_step:
   {
+    \bool_if:NF \l__tenkz_kernel_hull_chart_bool
+      {
+        \bool_set_false:N \l__tenkz_kernel_annot_lo_bool
+        \bool_set_false:N \l__tenkz_kernel_annot_hi_bool
+      }
     \str_case:Vn \l__tenkz_kernel_r_tl
       {
         {1}
