@@ -92,9 +92,6 @@ SOURCE = r"""
 \begin{tenkz}
   \tn{B} & \tn[box]{}
 \end{tenkz}
-\begin{tenkzlattice}[rows=1, cols=2]
-  \tnsite[label=$C$]{(1,1)}
-\end{tenkzlattice}
 \begin{tenkz}
   \tn{} & \tn[pill]{} & \tnX{} & \tn[tri=l]{}
 \end{tenkz}
@@ -124,11 +121,6 @@ SOURCE = r"""
   \node[tn label, inner sep=0pt] at (10pt,0) {\rule{1pt}{1pt}};
 \end{tenkztestcanvas}
 \endgroup
-% Empty resolved regions are legitimate no-ops and still emit audit data.
-\begin{tenkzlattice}[rows=1, cols=1]
-  \tnregion[name=R]{(1,1)}
-  \tnregion{R - R}
-\end{tenkzlattice}
 % Visible glyph ink includes the live stroke, but not positioning margin.
 \begingroup
 \tikzset{box tensor/.append style={rectangle, rounded corners=0pt,
@@ -586,23 +578,13 @@ def main() -> int:
                for event in label_events):
             raise AssertionError("a measured label omitted exact shape fields")
         overlap_pictures = {finding_picture_id(finding.msg) for finding in overlaps}
-        if overlap_pictures != {5, 9}:
+        if overlap_pictures != {4, 7}:
             raise AssertionError(
                 "overlap findings missed an unsafe picture: "
                 + "; ".join(finding.msg for finding in overlaps)
             )
 
-        empty_regions = [
-            event for event in audit.events(8)
-            if event.kind == "region" and event.attrs.get("cells") == ""
-        ]
-        if len(empty_regions) != 1 or any(
-                finding.rule == "malformed-event"
-                and "region field cells=''" in finding.msg
-                for finding in audit.findings):
-            raise AssertionError("audit rejected a live empty resolved region")
-
-        for picture_id in (1, 2, 3):
+        for picture_id in (1, 2):
             events = audit.events(picture_id)
             uses = sum(event.kind == "label-use" for event in events)
             labels = sum(event.kind == "bbox"
@@ -643,13 +625,13 @@ def main() -> int:
             raise AssertionError("audit accepted an unmeasured library label use")
 
         shapes = {
-            event.attrs.get("shape") for event in audit.events(4)
+            event.attrs.get("shape") for event in audit.events(3)
             if event.kind == "glyph-geometry"
         }
         if shapes != {"circle", "roundrect", "triangle"}:
             raise AssertionError(f"core shape fixture emitted {shapes}")
         triangle_geometry = [
-            event for event in audit.events(4)
+            event for event in audit.events(3)
             if event.kind == "glyph-geometry"
             and event.attrs.get("shape") == "triangle"
         ]
@@ -660,7 +642,7 @@ def main() -> int:
             )
 
         reshaped = {
-            event.attrs.get("shape") for event in audit.events(5)
+            event.attrs.get("shape") for event in audit.events(4)
             if event.kind == "glyph-geometry"
         }
         if reshaped != {"roundrect"}:
@@ -669,7 +651,7 @@ def main() -> int:
             )
 
         corner_events = [
-            event for event in audit.events(6)
+            event for event in audit.events(5)
             if event.kind == "glyph-geometry"
         ]
         corner_shapes = [event.attrs.get("shape") for event in corner_events]
@@ -684,7 +666,7 @@ def main() -> int:
                - round(1.775 * 65536)) > 1:
             raise AssertionError("rounded box did not emit its live corner radius")
 
-        outer_gap = [event for event in audit.events(7)
+        outer_gap = [event for event in audit.events(6)
                      if event.kind == "glyph-geometry"]
         if len(outer_gap) != 1:
             raise AssertionError("outer-separation fixture lost glyph geometry")
@@ -693,7 +675,7 @@ def main() -> int:
             raise AssertionError("glyph geometry retained invisible outer separation")
 
         expected_widths = {
-            9: 8, 10: 8, 11: 4, 13: 8, 14: 8, 16: 8, 17: 4,
+            7: 8, 8: 8, 9: 4, 11: 8, 12: 8, 14: 8, 15: 4,
         }
         for picture_id, expected_pt in expected_widths.items():
             geometry = [event for event in audit.events(picture_id)
@@ -709,7 +691,7 @@ def main() -> int:
                     f"expected {expected_pt}pt: {geometry[0].attrs}"
                 )
 
-        label_boxes = [event for event in audit.events(12)
+        label_boxes = [event for event in audit.events(10)
                        if event.kind == "bbox"
                        and event.attrs.get("class") == "label"]
         if len(label_boxes) != 1:
@@ -719,7 +701,7 @@ def main() -> int:
         if label_width >= round(2 * 65536):
             raise AssertionError("label bbox retained invisible outer separation")
 
-        rotate_control = [event for event in audit.events(15)
+        rotate_control = [event for event in audit.events(13)
                           if event.kind == "glyph-geometry"]
         if (len(rotate_control) != 1
                 or rotate_control[0].attrs.get("shape") != "roundrect"):
@@ -1065,58 +1047,6 @@ def main() -> int:
                 f"round-label glyph branches were not exercised: {branch_shapes}"
             )
 
-        anchor_prefix = (
-            "picture|id=1|lang=lattice\n"
-            "lattice|picture=1|rows=1|cols=1\n"
-            "ink-use|picture=1|class=glyph|id=1|shape=circle\n"
-            "glyph-geometry|picture=1|owner=1|shape=circle|"
-            "xmin=40|xmax=60|ymin=40|ymax=60|radius=0|stroke=0|"
-            "x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
-            "label-use|picture=1\n"
-            "bbox|picture=1|class=label|id=1|owner=0|"
-            "xmin=45|xmax=65|ymin=45|ymax=65|shape=rect|radius=0\n"
-        )
-        valid_anchor = work / "lattice-label-anchor-site.tnlog"
-        valid_anchor.write_text(
-            anchor_prefix
-            + "label-anchor-site|picture=1|label=1|x=50|y=50\n",
-            encoding="utf-8",
-        )
-        valid_anchor_status, valid_anchor_audit = audit_status(valid_anchor)
-        if valid_anchor_status != 0:
-            raise AssertionError(
-                "declared lattice corner-label adjacency was rejected: "
-                + "; ".join(
-                    finding.msg for finding in valid_anchor_audit.findings
-                )
-            )
-
-        wrong_anchor = work / "lattice-label-wrong-anchor-site.tnlog"
-        wrong_anchor.write_text(
-            anchor_prefix
-            + "label-anchor-site|picture=1|label=1|x=51|y=50\n",
-            encoding="utf-8",
-        )
-        wrong_anchor_status, wrong_anchor_audit = audit_status(wrong_anchor)
-        if wrong_anchor_status != 1 or not any(
-                finding.rule == "malformed-event"
-                and "matches no circle glyph center" in finding.msg
-                for finding in wrong_anchor_audit.findings):
-            raise AssertionError("audit accepted a nonexistent label anchor site")
-
-        wrong_dialect = work / "free-label-anchor-site.tnlog"
-        wrong_dialect.write_text(
-            anchor_prefix.replace("lang=lattice", "lang=grid", 1)
-            + "label-anchor-site|picture=1|label=1|x=50|y=50\n",
-            encoding="utf-8",
-        )
-        wrong_dialect_status, wrong_dialect_audit = audit_status(wrong_dialect)
-        if wrong_dialect_status != 1 or not any(
-                finding.rule == "dialect-mismatch"
-                and "valid only in a lattice picture" in finding.msg
-                for finding in wrong_dialect_audit.findings):
-            raise AssertionError("audit accepted a non-lattice label anchor site")
-
         def write_cut_wire_fixture(
                 name: str, query: tuple[int, int, int, int], inner: int = 0,
                 y: int = 10, outer: int = 20,
@@ -1329,35 +1259,6 @@ def main() -> int:
                 and "ellipses are unsupported" in finding.msg
                 for finding in circle_audit.findings):
             raise AssertionError("audit accepted a nonsquare circle geometry")
-
-        empty_region = work / "empty-region.tnlog"
-        empty_region.write_text(
-            "picture|id=1|lang=lattice\n"
-            "region|picture=1|slot=selected|cells=\n",
-            encoding="utf-8",
-        )
-        empty_region_status, empty_region_audit = audit_status(empty_region)
-        if empty_region_status != 0:
-            raise AssertionError(
-                "audit rejected a synthetic empty resolved region: "
-                + "; ".join(
-                    finding.msg for finding in empty_region_audit.findings
-                )
-            )
-
-        malformed_region = work / "malformed-region.tnlog"
-        malformed_region.write_text(
-            "picture|id=1|lang=lattice\n"
-            "region|picture=1|slot=selected|cells=1-1,bad\n",
-            encoding="utf-8",
-        )
-        malformed_region_status, malformed_region_audit = audit_status(
-            malformed_region
-        )
-        if malformed_region_status != 1 or not any(
-                finding.rule == "malformed-event"
-                for finding in malformed_region_audit.findings):
-            raise AssertionError("audit weakened non-empty region validation")
 
         missing_ink = work / "missing-ink-geometry.tnlog"
         missing_ink.write_text(

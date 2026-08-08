@@ -140,13 +140,9 @@ DEFECT_KINDS = (
 STRUCTURAL_CAPABILITY_PATTERNS = {
     "kernel": re.compile(r"\\tenkzkernel\b"),
     "grid": re.compile(r"\\begin\{tenkz\}|\\tnpic\b"),
-    "lattice": re.compile(r"\\begin\{tenkzlattice\}|\\begin\{tenkzplanes\}"),
-    "lattice-preset": re.compile(r"\\begin\{tenkzplanes\}"),
     "fusion-tree": re.compile(r"\\tntree\b"),
 }
 INK_ENVIRONMENT_FAMILIES = (
-    "tenkzlattice",
-    "tenkzplanes",
     "tenkz",
     "kernel",
 )
@@ -163,7 +159,7 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
         for event in parsed.valid_events
         if event.kind == "picture"
     }
-    unknown_languages = languages.difference((*INK_EVENT_FAMILIES, "lattice"))
+    unknown_languages = languages.difference(INK_EVENT_FAMILIES)
     if unknown_languages:
         fail(
             "compiled picture stream has unrecognized owners: "
@@ -181,22 +177,6 @@ def rendered_ink_environment_families(parsed: ParsedLog) -> set[str]:
         # A command-scope \tntree is a complete public tenkz composition but
         # deliberately logs against picture 0 rather than opening a container.
         families.add("tenkz")
-    lattice_pictures = {
-        event.attrs["id"]
-        for event in parsed.valid_events
-        if event.kind == "picture" and event.attrs["lang"] == "lattice"
-    }
-    planes_pictures = {
-        event.attrs["picture"]
-        for event in parsed.valid_events
-        if event.kind == "surface" and event.attrs["name"] == "tenkzplanes"
-    }
-    if planes_pictures.difference(lattice_pictures):
-        fail("tenkzplanes surface event has no matching lattice picture")
-    if planes_pictures:
-        families.add("tenkzplanes")
-    if lattice_pictures.difference(planes_pictures):
-        families.add("tenkzlattice")
     return families
 
 
@@ -740,7 +720,7 @@ def validate_case(target: Target) -> None:
             line = syntax.count("\n", 0, match.start()) + 1
             fail(f"{target.case.as_posix()}:{line}: {reason}: {match.group(0)}")
     if re.search(
-        r"\\begin\{tenkz(?:cd|lattice|free|planes)?\}|\\tnpic\b|\\tntree\b", syntax
+        r"\\begin\{tenkz\}|\\tnpic\b|\\tntree\b", syntax
     ) is None:
         fail(f"{target.case.as_posix()}: case must contain a public tenkz picture")
     bracket_display = "\\[" in syntax and "\\]" in syntax

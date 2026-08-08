@@ -1,5 +1,5 @@
-% tenkz Phase-0 gallery: benchmarks, MPO stress cases, and the
-% lattice sub-language, tightly cropped.
+% tenkz Phase-0 gallery: benchmarks and MPO stress cases, tightly
+% cropped.
 \documentclass[varwidth=19cm, border=8pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tenkz}
@@ -59,17 +59,6 @@
 The wire skin \tntree[tree style=wire]{(((a\,b)_x\,c)_y\,d)_e} and the
 ribbon skin \tntree[tree style=ribbon]{(((a\,b)_x\,c)_y\,d)_e} share one
 topology.
-
-\head{B6 — PEPS window with regions (tenkzlattice)}
-\begin{tenkzlattice}[rows=4, cols=4, boundary legs]
-  \tnregion[slot=selected,  name=R, label=$R$]{(1-3, 1-3)}
-  % R = [1,3] x [1,3];  S = R \ {(2,2)}.  S's outer boundary coincides
-  % with R's, so it is drawn with inset=1 (one nesting unit tighter); the
-  % ring around the removed site is S's inner boundary.
-  \tnregion[slot=secondary, outline, inset=1, label=$S$, label at=south west]{R - (2,2)}
-  \tnedge[distinguished]{(2,3)-(2,4)}
-  \tnsite[removed]{(2,2)}
-\end{tenkzlattice}
 
 \head{B7 — zipper / pulling-through}
 % Zipper (pulling through, arXiv:2203.12563): V (O-window (x) A-window)

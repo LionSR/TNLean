@@ -5227,6 +5227,29 @@
       }
   }
 
+% ---------- plane-ratio guards ----------
+% Warnings, never clamps: the ratios draw what they are told, and the log
+% names the regime the value has entered.  Thresholds come from named metrics
+% or dimensionless geometry, so a metric retune moves them automatically;
+% measured examples only explain failure modes.
+\msg_new:nnn { tenkz } { plane-rise-low }
+  { plane~rise=#1~is~at~or~below~the~normalized~physical-leg~clearance~
+    threshold~#2:~vertical~
+    physical~legs~cross~the~behind~row's~in-plane~bond~(false~junctions;~
+    the~worst~sweep~cell~0.30/0.40~produced~false~5-valent~junctions).~
+    Keep~plane~rise~above~#2. }
+\msg_new:nnn { tenkz } { plane-slant-band }
+  { plane~slant=#1~is~outside~the~readable~band~(#2,~#3).~Choose~a~
+    plane~slant~strictly~inside~this~band.~Below~the~band,~depth~bonds~
+    trend~toward~vertical~physical~legs;~above~the~band,~depth~neighbours~
+    trend~toward~column~neighbours. }
+\msg_new:nnn { tenkz } { plane-tall-window }
+  { (rows-1)~x~plane~slant~=~#1~exceeds~(cols-1)/2~=~#2.~The~sheared~
+    projection~approaches~a~rhombus~staircase~and~can~be~mistaken~for~
+    a~rotated~lattice~(plane_sweep1~page~2b;~5x3~drift/width~0.9).~
+    Reduce~the~row~count,~increase~the~column~count,~or~lower~the~plane~
+    slant~while~keeping~it~above~the~readable~floor~#3. }
+
 % A projected picture carries its map as model data.  This is recorded after
 % authored and derived topology, so enabling a frame cannot renumber atoms or
 % wires.  The readability guard thresholds are evaluated from named metrics:

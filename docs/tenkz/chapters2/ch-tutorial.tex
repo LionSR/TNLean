@@ -70,23 +70,3 @@ a same-row trace.
 Ordinary TeX owns the equals sign.  Each picture remains an independent
 model and event stream; the audit compares their boundary signatures.
 
-\subsection{Select a lattice region}
-
-\begin{tnexample}[
-  formula={S=R\smallsetminus\{(2,2)\}},
-  caption={regions are cell-set data},
-  index={The tracer measures the outer contour and the hole.  Boundary legs
-    are the virtual indices cut by the finite window.},
-  signature={lattice|rows=4|cols=4|region=2}]
-% Formula: S = R minus {(2,2)}.
-% Ink: the region contour is derived from its cell set.
-\begin{tenkzlattice}[rows=4,cols=4,boundary=open]
-  \tnregion[slot=selected,name=R,label=$R$]{(1-3,1-3)}
-  \tnregion[slot=secondary,outline,label=$S$]{R - (2,2)}
-  \tnsite[removed]{(2,2)}
-\end{tenkzlattice}
-\end{tnexample}
-
-The layout owns site positions.  \tncmd{tnregion} declares measured cell
-sets, and \tncmd{tnsite} changes one site record.  No polygon is hand traced.
-

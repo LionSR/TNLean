@@ -25,8 +25,8 @@
 %                      \overline{A}, and no external auto label exists,
 %                      so brace clearances tighten accordingly.
 % The policy is a document-wide \tnset key and a per-picture key of the
-% tenkz environment, \tnpic, and tenkzlattice.  These environments
-% group, so a picture-local assignment scopes itself.  Explicit per-cell
+% tenkz environment and \tnpic.  These environments group, so a
+% picture-local assignment scopes itself.  Explicit per-cell
 % skins (dot, box, circle, pill, mpo) always override the policy.  The event stream
 % records the RESOLVED skin.
 
@@ -131,11 +131,8 @@
 
 % ---------- glyph policy (see the tensor-style doctrine above) ----------
 % \tenkz@tensorstyle holds the resolved mode, `dot` or `box`; grid cells
-% read it as their default skin at option-parse time;
-% \tenkz@tensorskin is the corresponding resolved TikZ node style for
-% automatic-site families such as tenkzlattice.
+% read it as their default skin at option-parse time.
 \def\tenkz@tensorstyle{dot}
-\def\tenkz@tensorskin{tensor}
 
 % Label mathematics is script-size by default: glyphs are compact marks, not
 % text boxes, and the surrounding equation stays visually dominant.
@@ -250,11 +247,11 @@
   % ---------- semantic roles (the 0.6 hue contract) ----------
   % Resolution is pure style indirection: role words map to ONE derived
   % style per role x glyph family — bond (wires, joins), tensor (filled
-  % beads), outline (inscribed-label glyphs: box, pill, mpo, tri, ring),
-  % edge and site (the lattice families) — all bound to the core hue
-  % slots, so a theme that rebinds tenkzOperator etc. recolours every
-  % role-hued atom, wire and join at one point.  No raw colour is ever
-  % accepted at a call site, in any tier.
+  % beads), outline (inscribed-label glyphs: box, pill, mpo, tri, ring)
+  % — all bound to the core hue slots, so a theme that rebinds
+  % tenkzOperator etc. recolours every role-hued atom, wire and join at
+  % one point.  No raw colour is ever accepted at a call site, in any
+  % tier.
   marked bond/.style={bond, draw=tenkzMarked},
   extra bond/.style={bond, draw=tenkzExtra},
   passive bond/.style={bond, draw=tenkzPassive},
@@ -286,14 +283,6 @@
   marked outline/.style={draw=tenkzMarked, text=tenkzMarked},
   extra outline/.style={draw=tenkzExtra, text=tenkzExtra},
   passive outline/.style={draw=tenkzPassive, text=tenkzPassive},
-  operator edge/.style={distinguished edge, draw=tenkzOperator},
-  marked edge/.style={distinguished edge, draw=tenkzMarked},
-  extra edge/.style={distinguished edge, draw=tenkzExtra},
-  passive edge/.style={distinguished edge, draw=tenkzPassive},
-  operator site/.style={draw=tenkzOperator, fill=tenkzOperator},
-  marked site/.style={draw=tenkzMarked, fill=tenkzMarked},
-  extra site/.style={draw=tenkzExtra, fill=tenkzExtra},
-  passive site/.style={draw=tenkzPassive, fill=tenkzPassive},
   % Compatibility-object size classes act on the metric floor, not by an
   % affine canvas transform: the audited glyph measures the actual enlarged
   % silhouette.  This is the transitional compatibility renderer's
@@ -397,22 +386,6 @@
   cd arrow/.style={draw=tenkzInk, line width=\tenkz@annwidth,
       -{Straight Barb[length=\tenkz@cdbarblen]},
       shorten <=\tenkz@cdsourceshorten, shorten >=\tenkz@cdtargetshorten},
-  % regions
-  region selected/.style={draw=tenkzAction, fill=tenkzAction!12!tenkzPaper,
-      line width=\tenkz@emphwidth},
-  region secondary/.style={draw=tenkzMarked, fill=tenkzMarked!10!tenkzPaper,
-      line width=\tenkz@emphwidth},
-  region complement/.style={draw=tenkzPassive,
-      fill=tenkzPassive!8!tenkzPaper, densely dashed,
-      line width=\tenkz@emphwidth},
-  region collar/.style={draw=tenkzExtra, fill=tenkzExtra!10!tenkzPaper,
-      line width=\tenkz@emphwidth},
-  region neutral/.style={draw=tenkzInk, fill=tenkzPaper,
-      line width=\tenkz@emphwidth},
-  region outline/.style={fill=none},
-  distinguished edge/.style={draw=tenkzAction, line width=\tenkz@emphwidth},
-  removed site/.style={draw=tenkzPassive, fill=tenkzPaper,
-      line width=\tenkz@wirewidth},
 }
 
 % ---------- event stream (v2, minimal Phase-0 writer) ----------
@@ -1525,12 +1498,6 @@
     Unknown~enclosure~label~position~'#1'.~Use~north,~south,~east,~west,
     ~a~two-word~corner,~or~center.
   }
-\msg_new:nnn { tenkz } { region-context }
-  {
-    \token_to_str:N \tnregion~is~available~inside~tenkzlattice,~not~
-    the~'#1'~dialect.
-  }
-
 \cs_new_protected:Npn \tenkz_enclosure_fresh:N #1
   {
     \int_gincr:N \g__tenkz_enclosure_int
@@ -1897,19 +1864,6 @@
 \prg_generate_conditional_variant:Nnn \tenkz_enclosure_draw:nnnnn
   { VVVVV } { T, F, TF }
 
-% `\tnregion' is one grammatical class.  The public command dispatches to
-% the active picture rather than assuming a lattice scope.
-\cs_new_protected:Npn \tenkz_region_dispatch:nn #1#2
-  {
-    \str_case:enF {\tenkz@picturelang}
-      {
-        {lattice} { \tenkz_lattice_region:nn {#1}{#2} }
-      }
-      { \msg_error:nne {tenkz}{region-context}{\tenkz@picturelang} }
-  }
-\NewDocumentCommand \tnregion { O{} m }
-  { \tenkz_region_dispatch:nn {#1}{#2} }
-
 % ---------- species (the 0.6 hue contract, clause 2) ----------
 % Species declare NAMES, never colors: `species={right,left}' (document
 % preamble via \tnset, or picture scope) assigns each new name the next
@@ -1990,33 +1944,30 @@
 % pgfkeys family /tenkz/<family>, one pass-through key per name in the
 % list, each forwarding to the shared /tenkz/<name> key above with the
 % same value.  <name> is one of: pitch, compact, inline, tensor~style,
-% species.  Every picture-scope sub-language (grid, cd, lattice, and the
-% command-scope \tntree family) hand-copied this 4-6 line block, two of
-% them spelling the forward two different ways (\pgfkeys{/tenkz/pitch=#1}
-% vs \pgfqkeys{/tenkz}{pitch=#1}); one mechanism, one spelling (GOAL.md
-% "one universal language"). Per-atom families (/tenkz/cell, /tenkz/put,
-% /tenkz/join) do NOT call this: pitch/compact/inline pick the picture's
-% metric once, not per atom, so those families never had these keys and
-% do not gain them here -- an existing pattern, not a new exemption.
+% species.  Every picture-scope sub-language (and the command-scope
+% \tntree family) hand-copied this 4-6 line block, two of them spelling
+% the forward two different ways (\pgfkeys{/tenkz/pitch=#1} vs
+% \pgfqkeys{/tenkz}{pitch=#1}); one mechanism, one spelling (GOAL.md
+% "one universal language"). Per-atom families (/tenkz/cell) do NOT
+% call this: pitch/compact/inline pick the picture's metric once, not
+% per atom, so those families never had these keys and do not gain
+% them here -- an existing pattern, not a new exemption.
 % Installed by tenkz-language.code.tex from the public registry vocabulary.
 
-% ---------- the cell-set algebra (shared by every tier) ----------
-% One addressing algebra serves every tier: terms `(r,c)` |
+% ---------- the cell-set algebra ----------
+% One addressing algebra serves the contraction keys: terms `(r,c)` |
 % `(r1-r2,c1-c2)`, optionally with a trailing third coordinate, or a
 % registered name; terms combine with `+` (union) / `-` (difference),
 % left to right.  \tenkz_cs_openscan:n pre-scans a braced option value
 % and rewrites its TOP-LEVEL commas to unions (parenthesis depth decides
 % which commas separate terms); \tenkz_cs_resolve:nN turns the rewritten
 % expression into a membership prop whose keys read "r-c" on the default
-% third coordinate and "r-c-h" otherwise.  The third slot means SHEET in
-% the lattice's geometric records and INTERFACE in the contraction keys
-% (grid and lattice open=/trace=); each caller sets the state below
-% around its resolve.
+% third coordinate and "r-c-h" otherwise.  The third slot means
+% INTERFACE in the contraction keys (open=/trace=); each caller sets
+% the state below around its resolve.
 %
 % The machinery lives HERE, in core, under shared single-underscore
-% names: the grid tier (loaded before the lattice) and the lattice tier
-% both consume it, and neither may reach into the other's private
-% namespace.  Caller-set state:
+% names, outside the grid tier's private namespace.  Caller-set state:
 %   \l_tenkz_cs_defsheet_int  default third coordinate of a 2-slot term
 %                             (mask to -1 so an explicit third
 %                             coordinate never collapses to a bare key)
@@ -2046,7 +1997,7 @@
 \bool_new:N \l_tenkz_cs_valid_bool
 \bool_set_true:N \l_tenkz_cs_guard_bool
 \msg_new:nnn { tenkz } { unknown-name }
-  { Unknown~cell-set~name~'#1'~in~a~\token_to_str:N \tnregion \ expression. }
+  { Unknown~cell-set~name~'#1'~in~a~cell-set~expression. }
 \msg_new:nnn { tenkz } { sheet-range }
   { A~cell~addresses~sheet~#1,~but~this~picture~stacks~sheets~0..#2:~
     the~cell~renders~on~no~sheet. }

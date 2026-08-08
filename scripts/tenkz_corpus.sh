@@ -127,7 +127,7 @@ if any(not record["reason"].strip() for record in records):
 # Independent source-name invariant derived from tenkz/handoff-artifacts.
 # Sorting and LF-delimiting make the digest insensitive to TSV row order.
 expected_source_names_sha256 = (
-    "4eefe4575a44a478b1ac436febcc1d34b7e3abd14d83d1a2576aaff00cd91175"
+    "ace3bcb7d9cdb4b30d510ab6f4dba8f2473d4cff571dca75a969d1fb879bc5ae"
 )
 source_names_payload = "".join(
     f"{name}\n" for name in sorted(source_names)
@@ -141,7 +141,7 @@ if actual_source_names_sha256 != expected_source_names_sha256:
 
 # Independent handoff-census invariant: do not derive these values from the TSV
 # being checked.  A changed manifest must not redefine its own expected corpus.
-expected_counts = {"standalone": 205, "support": 1, "excluded": 20}
+expected_counts = {"standalone": 153, "support": 1, "excluded": 20}
 actual_counts = Counter(record["disposition"] for record in records)
 if actual_counts != expected_counts:
     fail(
@@ -293,7 +293,7 @@ done
 # must prove that the event instrumentation wrote at least one record.
 is_zero_event_probe() {
   case "$1" in
-    geom.tex|p_pitch.tex|p_species.tex|plane_experiment.tex) return 0 ;;
+    p_pitch.tex|p_species.tex|plane_experiment.tex) return 0 ;;
     *) return 1 ;;
   esac
 }

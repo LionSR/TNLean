@@ -4,9 +4,8 @@ r"""Standalone test harness for the tenkz plasTeX SVG pipeline.
 Exercises the compile+cache core of ``blueprint/src/Packages/tenkz_pic.py``
 **without plasTeX**: the module defers its plasTeX imports, so importing it
 here only loads the pure compile machinery.  Verbatim units from the
-spec's benchmark corpus (a ``tenkz`` grid, a ``tenkzlattice`` window, a
-``tenkzplanes`` double layer, and a ``\tnpic`` sandwich atom) are rendered
-standalone; the harness asserts that
+spec's benchmark corpus (a ``tenkz`` grid and a ``\tnpic`` sandwich atom)
+are rendered standalone; the harness asserts that
 
   1. each SVG materializes with real drawing ink and a plausible extent
      (a silently ink-stripped render collapses to the text glyphs' bbox —
@@ -58,20 +57,6 @@ UNITS: dict[str, tuple[str, float]] = {
   \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
 \end{tenkz}""",
         60.0,
-    ),
-    "B6 tenkzlattice": (
-        r"""\begin{tenkzlattice}[rows=4, cols=4, boundary legs]
-  \tnregion[slot=selected, name=R, label=$R$]{(1-3, 1-3)}
-  \tnregion[slot=secondary, outline, label=$S$, label at=south west]{R - (2,2)}
-  \tnedge[distinguished]{(2,3)-(2,4)}
-  \tnsite[removed]{(2,2)}
-\end{tenkzlattice}""",
-        70.0,
-    ),
-    "planes double layer": (
-        r"""\begin{tenkzplanes}[rows=2, cols=3, open={(1,2)}]
-\end{tenkzplanes}""",
-        40.0,
     ),
     "B8 tnpic sandwich": (
         r"\tnpic[sandwich, inline]{\tn{A} \\ \tn*{A}}",

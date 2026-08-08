@@ -1023,38 +1023,6 @@ if grep -Fq '|code=basis-spacing|' \
   echo "FAIL: a contracted CZX or planes basis emitted a spacing warning" >&2
   exit 1
 fi
-sheet_coincide_count=$(
-  grep -Fc '|code=sheet-coincide|' \
-    "$WORK/r_sheet_coincide_removed.tnlog" || true
-)
-[ "$sheet_coincide_count" -eq 4 ] || {
-  echo "FAIL: removed sites did not filter realized sheet-spacing pairs" >&2
-  exit 1
-}
-for expected in \
-  'warning|picture=2|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
-  'warning|picture=3|code=sheet-coincide|dist=0.299995|floor=0.327573|dr=0|dc=0' \
-  'warning|picture=5|code=sheet-coincide|dist=0|floor=0.327573|dr=-1|dc=0' \
-  'warning|picture=6|code=sheet-coincide|dist=0.327573|floor=0.327573|dr=0|dc=0'
-do
-  grep -Fxq "$expected" "$WORK/r_sheet_coincide_removed.tnlog" || {
-    echo "FAIL: surviving adjacent sheets lost witness: $expected" >&2
-    exit 1
-  }
-done
-if grep -Eq '^warning[|]picture=(1|4)[|]code=sheet-coincide[|]' \
-    "$WORK/r_sheet_coincide_removed.tnlog"; then
-  echo "FAIL: a removed adjacent-sheet endpoint retained a warning" >&2
-  exit 1
-fi
-sheet_coincide_messages=$(
-  grep -Fc 'Package tenkz Warning: sheet vector:' \
-    "$WORK/r_sheet_coincide_removed.tex.transcript" || true
-)
-[ "$sheet_coincide_messages" -eq 4 ] || {
-  echo "FAIL: sheet-coincide events and human diagnostics diverged" >&2
-  exit 1
-}
 awk '
   /^picture[|]id=/ {
     id = $0
