@@ -173,57 +173,6 @@ theorem UnitarySectorConjugacy.directSumUnitaryS_apply
   simp [directSumUnitaryS, sectorLinearEquiv,
     Matrix.star_eq_conjTranspose]
 
-private theorem UnitarySectorConjugacy.forwardComponent_isKrausCPTP
-    {S : TwoSiteExactSectorGauge H} (C : UnitarySectorConjugacy S)
-    (γ : Fin H.labelCount) :
-    IsKrausCPTP
-      (Matrix.unitaryReindexLinearEquiv
-        (finCongr (S.bondDim_eq γ)) (C.unitary γ)
-          (C.unitary γ).property).symm.toLinearMap := by
-  rw [show (Matrix.unitaryReindexLinearEquiv
-      (finCongr (S.bondDim_eq γ)) (C.unitary γ)
-        (C.unitary γ).property).symm.toLinearMap =
-      singleKrausMap (C.unitary γ) ∘ₗ
-        Matrix.equivReindexMap (finCongr (S.bondDim_eq γ)) by
-    apply LinearMap.ext
-    intro X
-    simp [Matrix.unitaryReindexLinearEquiv_symm_apply,
-      Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-      Matrix.star_eq_conjTranspose]]
-  apply isKrausCPTP_comp
-    (Matrix.equivReindexMap_isKrausCPTP (finCongr (S.bondDim_eq γ)))
-  apply singleKrausMap_isKrausCPTP
-  simpa only [Matrix.star_eq_conjTranspose] using
-    Matrix.mem_unitaryGroup_iff'.mp (C.unitary γ).property
-
-private theorem UnitarySectorConjugacy.backwardComponent_isKrausCPTP
-    {S : TwoSiteExactSectorGauge H} (C : UnitarySectorConjugacy S)
-    (γ : Fin H.labelCount) :
-    IsKrausCPTP
-      (Matrix.unitaryReindexLinearEquiv
-        (finCongr (S.bondDim_eq γ)) (C.unitary γ)
-          (C.unitary γ).property).toLinearMap := by
-  rw [show (Matrix.unitaryReindexLinearEquiv
-      (finCongr (S.bondDim_eq γ)) (C.unitary γ)
-        (C.unitary γ).property).toLinearMap =
-      Matrix.equivReindexMap (finCongr (S.bondDim_eq γ)).symm ∘ₗ
-        singleKrausMap
-          ((C.unitary γ : Matrix
-            (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ) by
-    apply LinearMap.ext
-    intro Y
-    simp [Matrix.unitaryReindexLinearEquiv_apply,
-      Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-      Matrix.star_eq_conjTranspose]]
-  apply isKrausCPTP_comp
-  · apply singleKrausMap_isKrausCPTP
-    simpa only [Matrix.star_eq_conjTranspose,
-      Matrix.conjTranspose_conjTranspose] using
-      Matrix.mem_unitaryGroup_iff.mp (C.unitary γ).property
-  · exact Matrix.equivReindexMap_isKrausCPTP
-      (finCongr (S.bondDim_eq γ)).symm
-
 /-- The map \(\widetilde T\) is completely positive between the two finite
 direct sums.
 
@@ -239,7 +188,8 @@ theorem UnitarySectorConjugacy.directSumUnitaryT_isKrausDirectSumMap
     intro X
     rfl]
   exact Matrix.isKrausDirectSumMap_piMap _
-    (fun γ ↦ (C.forwardComponent_isKrausCPTP γ).isKrausCP)
+    (fun γ ↦ (Matrix.unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP
+      (finCongr (S.bondDim_eq γ)) (C.unitary γ) (C.unitary γ).property).isKrausCP)
 
 /-- The map \(\widetilde S\) is completely positive between the two finite
 direct sums.
@@ -256,7 +206,8 @@ theorem UnitarySectorConjugacy.directSumUnitaryS_isKrausDirectSumMap
     intro Y
     rfl]
   exact Matrix.isKrausDirectSumMap_piMap _
-    (fun γ ↦ (C.backwardComponent_isKrausCPTP γ).isKrausCP)
+    (fun γ ↦ (Matrix.unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP
+      (finCongr (S.bondDim_eq γ)) (C.unitary γ) (C.unitary γ).property).isKrausCP)
 
 /-- The map \(\widetilde T\) preserves the sum of the traces of its simple
 matrix summands.
@@ -268,7 +219,8 @@ theorem UnitarySectorConjugacy.directSumUnitaryT_isTracePreservingBetweenDirectS
   intro X
   apply Finset.sum_congr rfl
   intro γ _
-  exact (C.forwardComponent_isKrausCPTP γ).trace_map (X γ)
+  exact (Matrix.unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP
+    (finCongr (S.bondDim_eq γ)) (C.unitary γ) (C.unitary γ).property).trace_map (X γ)
 
 /-- The map \(\widetilde S\) preserves the sum of the traces of its simple
 matrix summands.
@@ -280,7 +232,8 @@ theorem UnitarySectorConjugacy.directSumUnitaryS_isTracePreservingBetweenDirectS
   intro Y
   apply Finset.sum_congr rfl
   intro γ _
-  exact (C.backwardComponent_isKrausCPTP γ).trace_map (Y γ)
+  exact (Matrix.unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP
+    (finCongr (S.bondDim_eq γ)) (C.unitary γ) (C.unitary γ).property).trace_map (Y γ)
 
 /-- The direct-sum map \(\widetilde S\) is a left inverse of
 \(\widetilde T\).

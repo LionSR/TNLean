@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.StarSubalgebraBlockForm
 import TNLean.Analysis.MatrixSqrt
+import TNLean.Channel.KrausCPTP
 import TNLean.Channel.PositiveConditionalExpectation
 import TNLean.Channel.Schwarz.PositiveMapProperties
 
@@ -171,6 +172,39 @@ theorem unitaryReindexLinearEquiv_symm_posSemidef
     ((unitaryReindexLinearEquiv e U hU).symm A).PosSemidef := by
   rw [unitaryReindexLinearEquiv_symm_apply]
   exact (hA.submatrix e.symm).mul_mul_conjTranspose_same (B := U)
+
+/-- Changing to unitary block coordinates is trace-preserving and completely positive. -/
+theorem unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
+    IsKrausCPTP (unitaryReindexLinearEquiv e U hU).toLinearMap := by
+  rw [show (unitaryReindexLinearEquiv e U hU).toLinearMap =
+      equivReindexMap e.symm ∘ₗ singleKrausMap (star U) by
+    apply LinearMap.ext
+    intro A
+    simp [unitaryReindexLinearEquiv_apply, equivReindexMap,
+      Matrix.coe_reindexLinearEquiv, Matrix.star_eq_conjTranspose]]
+  apply isKrausCPTP_comp
+  · apply singleKrausMap_isKrausCPTP
+    simpa only [Matrix.star_eq_conjTranspose,
+      Matrix.conjTranspose_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hU
+  · exact equivReindexMap_isKrausCPTP e.symm
+
+/-- Returning from unitary block coordinates is trace-preserving and completely positive. -/
+theorem unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP
+    {n H : Type*} [Fintype n] [DecidableEq n] [Fintype H] [DecidableEq H]
+    (e : H ≃ n) (U : Matrix n n ℂ) (hU : U ∈ Matrix.unitaryGroup n ℂ) :
+    IsKrausCPTP (unitaryReindexLinearEquiv e U hU).symm.toLinearMap := by
+  rw [show (unitaryReindexLinearEquiv e U hU).symm.toLinearMap =
+      singleKrausMap U ∘ₗ equivReindexMap e by
+    apply LinearMap.ext
+    intro A
+    simp [unitaryReindexLinearEquiv_symm_apply, equivReindexMap,
+      Matrix.coe_reindexLinearEquiv, Matrix.star_eq_conjTranspose]]
+  apply isKrausCPTP_comp
+  · exact equivReindexMap_isKrausCPTP e
+  · apply singleKrausMap_isKrausCPTP
+    simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff'.mp hU
 
 /-- A matrix acting on the traced factor may be moved across an input before taking the
 partial trace.

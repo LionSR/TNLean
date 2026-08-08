@@ -87,6 +87,7 @@ import TNLean.Channel.Separable
 import TNLean.Channel.SingleKraus
 import TNLean.Channel.SingleKrausPositivity
 import TNLean.Channel.Spectral
+import TNLean.Channel.StarSubalgebraConditionalExpectation
 import TNLean.Channel.Stinespring
 import TNLean.Channel.SupportCompletion
 import TNLean.Channel.SupportedMarginalChannel
