@@ -208,8 +208,10 @@ def _forwarded_options(payload: str, keys: set[str]) -> str:
 
 
 def _environment_options(text: str) -> list[str]:
+    # `tenkzeq` parses the same picture-policy rows as `tenkz`, so both
+    # environments feed the kernel-picture demand census.
     payloads: list[str] = []
-    pattern = re.compile(r"\\begin\{tenkz\}")
+    pattern = re.compile(r"\\begin\{tenkz(?:eq)?\}")
     for match in pattern.finditer(text):
         start = _skip_space_and_star(text, match.end())
         group = _group_payload(text, start, "[", "]")
@@ -268,9 +270,16 @@ def scoped_option_groups(
             *_command_options(text, "tngroup"),
         ]
         scoped["kernel-picture"][path] = picture_options
-        # The frame words are spelled inside the picture (and group) option
-        # list, so the kernel-frame rows read the same payloads.
-        scoped["kernel-frame"][path] = picture_options
+        # The kernel-frame rows are spelled inside the `frame={...}` value
+        # of a picture (or group) option list, so their scope reads the
+        # extracted frame descriptors rather than the raw payloads.
+        scoped["kernel-frame"][path] = [
+            part.partition("=")[2].strip().strip("{}")
+            for payload in picture_options
+            for part in _top_level_option_parts(payload)
+            if part.partition("=")[0].strip() == "frame"
+            and part.partition("=")[2].strip()
+        ]
         for scope, commands in _SCOPE_COMMANDS.items():
             scoped[scope][path] = [
                 option

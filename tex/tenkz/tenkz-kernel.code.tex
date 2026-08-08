@@ -2459,16 +2459,29 @@
       \g__tenkz_kernel_species_prop {#1} {#2}
     % One door, both stores: the same declaration mints the shared
     % `species <name> ...' style family (tenkz-core) that \tntree draws
-    % from, so a declared species is usable on every record class.
-    \tenkz_species_one:n {#1}
-    % Hue-less declarations receive a document-scope cycle slot now, in
-    % declaration order.  Reordering first uses in later pictures therefore
-    % cannot change the identity's ink.
-    \regex_extract_once:nnNF
-      { (?: \A | , ) \s* hue \s* = }
+    % from, so a declared species is usable on every record class.  A
+    % declared hue is authoritative there exactly as it is for kernel
+    % records (\__tenkz_kernel_r_species_hue:nN); only hue-less
+    % declarations take the house cycle.
+    \regex_extract_once:nnNTF
+      {
+        (?: \A | , ) \s* hue \s* = \s*
+        (?: \{ \s* )? (?: source: )?
+        ([^,{}\s]+) (?: \s* \} )?
+      }
       {#2}
       \l__tenkz_kernel_r_hue_match_seq
       {
+        \tl_set:Ne \l__tenkz_kernel_scratch_tl
+          { \seq_item:Nn \l__tenkz_kernel_r_hue_match_seq {2} }
+        \exp_args:NnV \tenkz_species_one_hued:nn {#1}
+          \l__tenkz_kernel_scratch_tl
+      }
+      {
+        \tenkz_species_one:n {#1}
+        % Hue-less declarations receive a document-scope cycle slot now, in
+        % declaration order.  Reordering first uses in later pictures
+        % therefore cannot change the identity's ink.
         \prop_if_in:NnF \g__tenkz_kernel_species_hue_prop {#1}
           {
             \int_set:Nn \l_tmpa_int

@@ -61,9 +61,12 @@ _PARSER_FAMILY_SCOPE = {
     "kernel-declare": "kernel-declare",
     "kernel-declare-atom": "atom-declaration",
 }
-# The 0.7 dialects forwarded document-setup keys into their picture
-# families; the last forwarding parser left with the grid front end.
-_SETUP_FORWARDS: dict[str, set[str]] = {}
+# The tree's `pitch=` rescopes the kernel-setup metric door for one tree,
+# so the parser leaf collapses onto the kernel-setup registry row.  (The
+# 0.7 dialects' broader setup forwarding left with the grid front end.)
+_SETUP_FORWARDS: dict[str, set[str]] = {
+    "tree": {"pitch"},
+}
 
 
 def parse_status(status: str) -> tuple[str, str]:
@@ -345,7 +348,7 @@ def _parser_registry_keys() -> set[tuple[str, str]]:
         if family not in _PARSER_FAMILY_SCOPE:
             raise ValueError(f"parser family {family!r} has no registry scope")
         scope = (
-            "setup"
+            "kernel-setup"
             if name in _SETUP_FORWARDS.get(family, set())
             else _PARSER_FAMILY_SCOPE[family]
         )

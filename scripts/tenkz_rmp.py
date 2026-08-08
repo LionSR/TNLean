@@ -140,7 +140,7 @@ DEFECT_KINDS = (
 # Since the S4 surface swap the `tenkz` environment is the kernel surface,
 # so the retained switch and the environment witness the same capability.
 STRUCTURAL_CAPABILITY_PATTERNS = {
-    "kernel": re.compile(r"\\tenkzkernel\b|\\begin\{tenkz\}"),
+    "kernel": re.compile(r"\\tenkzkernel\b|\\begin\s*\{\s*tenkz\s*\}"),
     "fusion-tree": re.compile(r"\\tntree\b"),
 }
 # Since the S4 surface swap there is one surface, so the two family words

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import io
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -21,9 +22,15 @@ SOURCE = r"""
 \pagestyle{empty}
 \begin{document}
 \tndeclare{species}{anyon}{hue=source:red}
+% The declaration door mints the shared tree styles from the declared hue,
+% so a species keeps one color across record classes.
+\makeatletter
+\pgfkeysgetvalue{/tikz/species anyon tensor/.@cmd}\tenkztesthue
+\typeout{TENKZ-SPECIES-HUE=\meaning\tenkztesthue}
+\makeatother
 % With fusion bases chosen and multiplicity labels suppressed, both calls
 % denote the same basis morphism; only the skin changes.
-\tntree[tree style=wire, species=anyon]{((a\,b)_x\,c)_e}
+\tntree[tree style=wire, species=anyon, pitch=12mm]{((a\,b)_x\,c)_e}
 \tntree[tree style=ribbon, species=anyon]{((a\,b)_x\,c)_e}
 \tntree[tree style=ribbon, species=anyon, role=marked]{(a\,(b\,c)_u)_e}
 \end{document}
@@ -93,6 +100,12 @@ def main() -> int:
             raise AssertionError("the two skins did not preserve one topology")
         if "role=marked|species=anyon" not in lines[2]:
             raise AssertionError("tree role/species semantics were not recorded")
+        if not re.search(
+            r"TENKZ-SPECIES-HUE=.*draw=red\s*,\s*fill=red", run.stdout
+        ):
+            raise AssertionError(
+                "a declared hue did not reach the shared species tree styles"
+            )
 
         nested_tex = work / "nested-cd-trees.tex"
         nested_tex.write_text(NESTED_CD_SOURCE, encoding="utf-8")

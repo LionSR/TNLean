@@ -1490,21 +1490,29 @@
       { \clist_item:Nn \c__tenkz_speccycle_clist
           { 1 + \int_mod:nn { \l_tmpa_tl - 1 }
               { \clist_count:N \c__tenkz_speccycle_clist } } }
+    \exp_args:NnV \tenkz_species_one_hued:nn {#1} \l_tmpb_tl
+  }
+% The style family of one species from an explicit hue.  A declared hue is
+% authoritative for every record class, so the kernel's declaration door
+% mints the tree styles from the same color its own records resolve.
+\cs_new_protected:Npn \tenkz_species_one_hued:nn #1#2
+  {
     \tl_set:Ne \l_tmpa_tl
       {
-        species~#1~bond/.style={bond, draw=\l_tmpb_tl},
-        species~#1~tensor/.style={draw=\l_tmpb_tl, fill=\l_tmpb_tl},
+        species~#1~bond/.style={bond, draw=#2},
+        species~#1~tensor/.style={draw=#2, fill=#2},
         species~#1~tree~junction/.style={tree~junction,
           species~#1~tensor},
-        species~#1~outline/.style={draw=\l_tmpb_tl, text=\l_tmpb_tl},
-        species~#1~ribbon/.style={tree~ribbon, draw=\l_tmpb_tl,
-          fill=\l_tmpb_tl!12!tenkzPaper},
+        species~#1~outline/.style={draw=#2, text=#2},
+        species~#1~ribbon/.style={tree~ribbon, draw=#2,
+          fill=#2!12!tenkzPaper},
         species~#1~ribbon~fill/.style={
-          draw=\l_tmpb_tl!12!tenkzPaper,
-          fill=\l_tmpb_tl!12!tenkzPaper}
+          draw=#2!12!tenkzPaper,
+          fill=#2!12!tenkzPaper}
       }
     \exp_args:NV \tikzset \l_tmpa_tl
   }
+\cs_generate_variant:Nn \tenkz_species_one_hued:nn { nV }
 % ---------- the cell-set algebra ----------
 % One addressing algebra serves the contraction keys: terms `(r,c)` |
 % `(r1-r2,c1-c2)`, optionally with a trailing third coordinate, or a

@@ -93,9 +93,16 @@ def test_kernel_capability_owner() -> None:
     if not any("exclusive owner tag 'kernel'" in problem for problem in mixed):
         raise AssertionError("kernel picture accepted both structural owner tags")
 
-    bare_grid = r"\begin{tenkz} A \end{tenkz}"
-    if structural_capability_problems("grid", ("grid",), bare_grid):
-        raise AssertionError("bare grid owner tag was rejected")
+    # Since the S4 surface swap a bare `tenkz` body is the kernel surface;
+    # the retired `grid` tag is rejected on it like on any kernel picture.
+    bare_body = r"\begin{tenkz} A \end{tenkz}"
+    if structural_capability_problems("bare", ("kernel",), bare_body):
+        raise AssertionError("bare kernel environment owner tag was rejected")
+    stale = structural_capability_problems("stale", ("grid",), bare_body)
+    if not any("capability 'kernel' is missing" in problem for problem in stale):
+        raise AssertionError("bare environment hid a missing kernel owner tag")
+    if not any("exclusive owner tag 'kernel'" in problem for problem in stale):
+        raise AssertionError("bare environment accepted the retired grid tag")
 
 
 def test_ink_environment_owner() -> None:
@@ -110,11 +117,9 @@ def test_ink_environment_owner() -> None:
     )
     parsed = parse_log(log, source_name="ink-owner-test.tnlog")
     used = rendered_ink_environment_families(parsed)
-    expected = {
-        "tenkz",
-        "kernel",
-    }
-    if used != expected:
+    # One surface since the S4 swap: every picture and command-scope tree
+    # owns the one kernel family.
+    if used != {"kernel"}:
         raise AssertionError(f"compiled Ink owners disagree: {used!r}")
     malformed: list[tuple[str, str, str]] = []
     rejected = parse_log(
@@ -154,15 +159,21 @@ def test_ink_environment_owner() -> None:
         source_name="ink-tree-owner-test.tnlog",
     )
     tree_used = rendered_ink_environment_families(tree_only)
-    if tree_used != {"tenkz"}:
-        raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
-    mismatch = ink_environment_problems(
-        "wrong", "Canonical tenkz environment.", {"kernel"}
-    )
-    if not any("Ink names tenkz" in problem for problem in mismatch):
-        raise AssertionError("stale Ink family was accepted")
-    if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
+    if tree_used != {"kernel"}:
+        raise AssertionError(f"standalone tree lost its owner: {tree_used!r}")
+    # Both family words name the one surface now, so a mismatch is an Ink
+    # sentence naming no family, or naming one over an empty model.
+    unnamed = ink_environment_problems("wrong", "Raw strokes only.", {"kernel"})
+    if not any("uses kernel but Ink does not name" in problem for problem in unnamed):
         raise AssertionError("compiled kernel owner was omitted")
+    unbacked = ink_environment_problems(
+        "wrong", "Canonical tenkz environment.", set()
+    )
+    if not any(
+        "Ink names kernel but the compiled render model" in problem
+        for problem in unbacked
+    ):
+        raise AssertionError("an unbacked Ink family claim was accepted")
 
 
 def _expect_dimension_failure(report: DimensionReport, phrase: str) -> None:

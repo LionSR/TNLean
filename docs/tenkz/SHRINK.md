@@ -2814,3 +2814,28 @@ not an unexercised row.
 | flag:sugar-shaped:command:tntree | keep-because: a fusion tree is one structured atom and its word argument is the whole signature; expiry 1.0 |
 | flag:sugar-shaped:command:tndeclare | keep-because: the declaration door's uniform three-argument shape is its contract, not sugar debt; expiry 1.0 |
 | flag:sugar-shaped:command:tenkzkernel | dies at the 1.0 freeze: the load-time surface makes every call inert, and the freeze's corpus rewrite deletes the spelling (registry sunset 1.0); executes at the 1.0 freeze; expiry 1.0 |
+
+#### 2026-08-09 review corrections (PR #5662)
+
+Three census-mechanics corrections from the review round, none moving a
+ledger row:
+
+- The kernel-picture demand census now reads `tenkzeq` option lists —
+  the equation wrapper parses the same picture-policy rows — so
+  `kernel-picture:check` counts its seven equation-wrapper consumers and
+  leaves the flag list; its verdict above stands as the row's §10
+  sentence, not as a zero-demand claim.
+- The kernel-frame census now reads the extracted `frame={...}`
+  descriptors, so `basis` counts its real consumers. Corrected verdict:
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-frame:basis | keep-because: the declared-basis door of `frame=` (`k_plane.tex`, `r_basis_plane.tex`), with two benchmark consumers now counted from the extracted frame descriptors; expiry 1.0 |
+
+- M2 rises 73 to 74: the tree's `pitch=` door returns. The demolition
+  had deleted the forwards installer with the grid file, leaving the
+  advertised `\tntree[pitch=]` spelling a hard error; the restored key
+  rescopes the shared metric door for one tree and collapses onto the
+  kernel-setup pitch row in the census. Extension-gate: #4699 — the
+  restoration re-lands a pre-swap leaf the demolition removed by
+  accident; no new vocabulary arrives.

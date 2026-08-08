@@ -12,8 +12,8 @@
   },
   "m2_parser_paths": {
     "definition": "public leaf keys installed by the TeX parsers; identity changes require an Extension-gate citation",
-    "identity_sha256": "2c8c4257577b527658800a884e7a8d973b24f2f3e38c89634276c15a5311efa4",
-    "value": 73
+    "identity_sha256": "9282767c78905b76a9cb94182514ffe521d5784e7329d06fcfccb4c42921ae81",
+    "value": 74
   },
   "m3_escape_usage": {
     "definition": "occurrences of escape-ledger spellings in the demand corpus; every occurrence names a core-grammar gap",

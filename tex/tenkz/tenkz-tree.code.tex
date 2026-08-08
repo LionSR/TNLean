@@ -90,6 +90,12 @@
   /tenkz/tree/role/marked/.code={\tl_set:Nn \l__tenkztree_role_tl {marked}},
   /tenkz/tree/role/extra/.code={\tl_set:Nn \l__tenkztree_role_tl {extra}},
   /tenkz/tree/role/passive/.code={\tl_set:Nn \l__tenkztree_role_tl {passive}},
+  % pitch= rescopes the shared /tenkz metric door (tenkz-core) for one
+  % tree: \tenkz_tree:nn opens a group before reading its keys, so the
+  % register assignment ends with the tree.  The 0.7 compact/inline
+  % forwards died with their rows; pitch is the door the kernel-setup
+  % pitch row delegates to and the one length the language spells.
+  /tenkz/tree/pitch/.code={\pgfqkeys{/tenkz}{pitch=#1}},
   /tenkz/tree/species/.code={
     \tenkz_species_check:n {#1}
     \tl_set:Nn \l__tenkztree_species_tl {#1}

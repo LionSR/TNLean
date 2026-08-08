@@ -829,6 +829,17 @@ policy for the shared leg; write the ports for the lone one.
 | `role=` | `species=` (the four prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
 
+S4 status (2026-08-09): the registry is the existence test, so the table
+above is the sugar ledger's *target* inventory, not a claim that every row
+is spelled today. `\tnpic` is deferred — it lands with math-style sensing
+(§7.2), and until that landing the spelling does not exist. The `\tnX`,
+`\tn*`, `\tnspan`, `\tndots`, `\tnskip`, and boundary-label rows were the
+migration readings of 0.7 spellings and closed at the surface swap with
+their last consumers; the kernel spellings in their right-hand columns are
+how those figures are written. `\tnstring` likewise waits on its own
+landing — a string is `\tnwire[kind=string]` today. The live rows are the
+registry's `sugar(...)` entries.
+
 Two rows are expanders: their expansion is a rule over the picture, not a
 token substitution — `physical=` adds a port per wire-row atom, `\tntree`
 builds atoms and wires from the word. Expander output is still pure kernel
