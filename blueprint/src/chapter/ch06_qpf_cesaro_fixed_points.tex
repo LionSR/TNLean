@@ -70,34 +70,55 @@
 \begin{definition}[Peripheral spectral splitting]
     \label{def:peripheral_spectral_splitting}
     \lean{Module.End.peripheralSubspace,
-        Module.End.nonPeripheralSubspace,
-        Module.End.isCompl_peripheralSubspace_nonPeripheralSubspace}
+        Module.End.nonPeripheralSubspace}
     \leanok
     Let $T$ be an endomorphism of a finite-dimensional complex vector space.
     Its peripheral subspace is the sum of the maximal generalized eigenspaces
     for eigenvalues $\mu$ with $|\mu|=1$; its non-peripheral subspace is the
-    corresponding sum for the remaining eigenvalues. These subspaces are
-    complementary. This is the splitting in Wolf Equation~(6.11).
+    corresponding sum for the remaining eigenvalues. This is the splitting in
+    \cite[Equation~(6.11)]{Wolf2012Quantum}.
 \end{definition}
+
+\begin{theorem}[Complementarity of the peripheral splitting]
+    \label{thm:peripheral_spectral_complementarity}
+    \lean{Module.End.isCompl_peripheralSubspace_nonPeripheralSubspace}
+    \leanok
+    \uses{def:peripheral_spectral_splitting}
+    The peripheral and non-peripheral spectral subspaces are complementary.
+\end{theorem}
 
 \begin{definition}[Peripheral spectral projections]
     \label{def:peripheral_spectral_projections}
     \lean{Module.End.peripheralProjection,
-        Module.End.peripheralWeightedProjection,
-        Module.End.range_peripheralProjection,
+        Module.End.peripheralWeightedProjection}
+    \leanok
+    \uses{def:peripheral_spectral_splitting,
+        thm:peripheral_spectral_complementarity}
+    The map $T_\varphi$ is the projection onto the peripheral subspace along
+    the non-peripheral subspace. The phase-weighted peripheral map is
+    $T_\varphi'=T\circ T_\varphi$.
+\end{definition}
+
+\begin{theorem}[Properties of the peripheral spectral projections]
+    \label{thm:peripheral_spectral_projection_properties}
+    \lean{Module.End.range_peripheralProjection,
         Module.End.isIdempotentElem_peripheralProjection,
         Module.End.peripheralProjection_comp,
         Module.End.peripheralWeightedProjection_eq_comp,
+        Module.End.peripheralWeightedProjection_eq_peripheralProjection_comp,
+        Module.End.peripheralProjection_apply_of_mem_eigenspace,
         Module.End.peripheralWeightedProjection_apply_of_mem_eigenspace}
     \leanok
-    \uses{def:peripheral_spectral_splitting}
-    The map $T_\varphi$ is the projection onto the peripheral subspace along
-    the non-peripheral subspace, and
-    $T_\varphi'=T\circ T_\varphi=T_\varphi\circ T$. On a peripheral
-    $\mu$-eigenvector, $T_\varphi$ acts as the identity and
-    $T_\varphi'$ acts as multiplication by~$\mu$. These are Wolf
-    Equations~(6.12) and~(6.13).
-\end{definition}
+    \uses{def:peripheral_spectral_projections}
+    The range of $T_\varphi$ is the peripheral subspace, $T_\varphi$ is
+    idempotent, and
+    \begin{align}
+        T_\varphi' & =T\circ T_\varphi=T_\varphi\circ T.
+    \end{align}
+    On a peripheral $\mu$-eigenvector, $T_\varphi$ acts as the identity and
+    $T_\varphi'$ acts as multiplication by~$\mu$. These are
+    \cite[Equations~(6.12) and~(6.13)]{Wolf2012Quantum}.
+\end{theorem}
 
 \begin{theorem}[Recurrent subsequence and peripheral projection]
     \label{thm:peripheral_projection_recurrent_subsequence}
@@ -107,26 +128,35 @@
     \leanok
     \uses{cor:dirichlet_phase_recurrence,
         def:peripheral_spectral_projections,
+        thm:peripheral_spectral_projection_properties,
         thm:peripheral_jordan_trivial,
-        thm:positive_trace_nonincreasing_bounded_orbits}
+        thm:positive_trace_preserving_mean_ergodic_projection}
     Let $T:\MN{D}\to\MN{D}$ be positive and trace-preserving, with $D>0$.
     There is a strictly increasing sequence of positive integers $n_i$ such
-    that $T^{n_i}\to T_\varphi$ pointwise and in operator norm. This is Wolf
-    Proposition~6.3(i).
+    that $T^{n_i}\to T_\varphi$ pointwise and in operator norm. This is
+    \cite[Proposition~6.3(i)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{cor:dirichlet_phase_recurrence,
         def:peripheral_spectral_projections,
+        thm:peripheral_spectral_projection_properties,
         thm:peripheral_jordan_trivial,
-        thm:positive_trace_nonincreasing_bounded_orbits}
+        thm:positive_trace_preserving_mean_ergodic_projection}
     Bounded forward orbits imply that every eigenvalue has modulus at most
-    one. On the non-peripheral generalized eigenspaces, the binomial expansion
-    of each Jordan block tends to zero. Proposition~6.2 removes nilpotent
-    parts on the peripheral subspace, while the simultaneous recurrence
-    corollary chooses a common subsequence on which all peripheral phases tend
-    to one. The complementary splitting gives pointwise convergence, which is
-    equivalent to operator-norm convergence in finite dimension.
+    one. On a non-peripheral generalized eigenspace, write the corresponding
+    Jordan block as $\mu\Id+N$, where $N^\ell=0$. Then
+    \begin{align}
+        (\mu\Id+N)^n
+        =\sum_{m=0}^{\ell-1}\binom{n}{m}\mu^{n-m}N^m,
+    \end{align}
+    and every summand tends to zero because $|\mu|<1$.
+    Theorem~\ref{thm:peripheral_jordan_trivial} removes nilpotent parts on the
+    peripheral subspace, while the simultaneous recurrence corollary chooses a
+    common subsequence on which all peripheral
+    phases tend to one. The complementary splitting gives pointwise
+    convergence, which is equivalent to operator-norm convergence in finite
+    dimension.
 \end{proof}
 
 \begin{corollary}[Channel structure of the peripheral projections]
@@ -142,7 +172,7 @@
     The peripheral projection of a positive trace-preserving map is positive
     and trace-preserving. If the original map is completely positive, then
     $T_\varphi$ and $T_\varphi'$ are quantum channels. This is the
-    preservation assertion in Wolf Proposition~6.3(ii).
+    preservation assertion in \cite[Proposition~6.3(ii)]{Wolf2012Quantum}.
 \end{corollary}
 
 \begin{proof}\leanok
@@ -159,17 +189,23 @@
     \leanok
     \uses{thm:peripheral_projection_recurrent_subsequence,
         def:peripheral_spectral_projections,
-        thm:positive_trace_nonincreasing_bounded_orbits}
+        def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_preserving_mean_ergodic_projection}
     If $T_\infty$ denotes the mean-ergodic projection of a positive
     trace-preserving map, then
     \begin{align}
         T_\varphi T_\infty=T_\infty.
     \end{align}
-    This is the absorption identity adjacent to Wolf Equation~(6.14).
+    This is the absorption identity adjacent to
+    \cite[Equation~(6.14)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_projection_recurrent_subsequence}
+    \uses{thm:peripheral_projection_recurrent_subsequence,
+        def:mean_ergodic_projection,
+        thm:mean_ergodic_bounded_orbits,
+        thm:positive_trace_preserving_mean_ergodic_projection}
     The range of $T_\infty$ consists of fixed points of~$T$, hence every power
     of $T$ fixes this range. Passing to the recurrent-subsequence limit shows
     that $T_\varphi$ also fixes it pointwise.

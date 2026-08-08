@@ -12,7 +12,7 @@ import Mathlib.Data.Nat.Choose.Sum
 import Mathlib.Analysis.SpecificLimits.Normed
 
 /-!
-# The recurrent subsequence and the Cesàro spectral package — Wolf Proposition 6.3
+# The recurrent subsequence and Cesàro spectral identities — Wolf Proposition 6.3
 
 For a positive trace-preserving linear map `T` on `M_d(ℂ)`, Wolf's
 Proposition 6.3(i) produces a strictly increasing sequence `n₁ < n₂ < ⋯` of
@@ -49,7 +49,7 @@ finite dimension).
   `IsPositiveMap.peripheralProjection_isCPMap`: `T_φ` inherits positivity,
   trace preservation, and complete positivity.
 * `IsChannel.peripheralProjection`, `IsChannel.peripheralWeightedProjection`:
-  the channel package for `T_φ` and `T_φ' = T T_φ` (Wolf Equation 6.13).
+  the channel properties of `T_φ` and `T_φ' = T T_φ` (Wolf Equation 6.13).
 * `IsPositiveMap.peripheralProjection_comp_meanErgodicProjection`:
   the absorption identity `T_φ T_∞ = T_∞` (Wolf Equation 6.14 area).
 
@@ -301,7 +301,7 @@ theorem norm_le_one_of_hasEigenvalue (hf : f.HasBoundedOrbits) {μ : ℂ}
   obtain ⟨n, hn⟩ := hgrow.exists
   have := hbound n
   rw [div_lt_iff₀ hxn] at hn
-  linarith [mul_le_mul_of_nonneg_right hn.le hxn.le]
+  linarith
 
 end LinearMap.HasBoundedOrbits
 
