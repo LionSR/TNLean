@@ -95,11 +95,11 @@ private theorem bipartiteBlock_vecMulVec_eq (ψ : Fin dA × Fin dB → ℂ) (i�
   simp only [Matrix.bipartiteBlock_apply, Matrix.vecMulVec_apply, Pi.star_apply,
     Matrix.schmidtCoeffMatrix_apply]
 
-/-- **Partial-trace consequence of the transpose trick** (Wolf, line 364, in general
-purification-independent form): for any linear map `T` on Bob's system and any bipartite
-vector `ψ` with coefficient matrix `C`, tracing out Bob's system after applying
-`id ⊗ T` to `|ψ⟩⟨ψ|` equals `C (T*(1))ᵀ Cᴴ`, where `T*` is the trace-pairing
-adjoint of `T`.
+/-- **Partial-trace consequence of the transpose trick** (Wolf, line 364, in
+general purification-independent form): for any linear map `T` on Bob's system
+and any bipartite vector `ψ` with coefficient matrix `C`, tracing out Bob's
+system after applying `id ⊗ T` to `|ψ⟩⟨ψ|` equals
+`C (T*(1))ᵀ Cᴴ`, where `T*` is the trace-pairing adjoint of `T`.
 
 Wolf derives this for the specific canonical purification `ψ = (√ρ ⊗ 1)|Ω⟩`;
 the identity holds for an arbitrary purification since it only uses the
