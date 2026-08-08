@@ -14,7 +14,7 @@ import TNLean.Channel.SingleKraus
 import TNLean.Channel.TensorMap
 
 /-!
-# Quantum steering via instruments (Wolf Chapter 1, Proposition 1.2)
+# Quantum steering via instruments (Wolf Chapter 1, Proposition 1.3)
 
 This file proves Wolf's quantum-steering proposition: for a density operator
 `ρ` with purification `ψ`, every convex decomposition `ρ = Σᵢ λᵢ ρᵢ` is
@@ -40,7 +40,7 @@ lines 348--357 (statement) and 359--370 (proof sketch).
   is the general (purification-independent) form of the identity Wolf
   derives at line 364 for the canonical purification `ψ = (√ρ ⊗ 1)|Ω⟩`.
 * `Matrix.exists_instrument_of_isConvexDecomposition`: **Wolf Proposition
-  1.2 (Quantum steering)**. For every convex decomposition `ρ = Σᵢ λᵢ ρᵢ`
+  1.3 (Quantum steering)**. For every convex decomposition `ρ = Σᵢ λᵢ ρᵢ`
   there is an instrument `{Tᵢ}` on Bob's system with
   `λᵢ • ρᵢ = Tr_B[(id ⊗ Tᵢ)(|ψ⟩⟨ψ|)]` for every `i`.
 
@@ -83,7 +83,7 @@ theorem traceAdjointMap_singleKrausMap_one {α β : Type*} [Fintype α] [Fintype
   rw [Matrix.traceAdjointMap_singleKrausMap, singleKrausMap_apply, Matrix.mul_one,
     Matrix.conjTranspose_conjTranspose]
 
-/-! ### The transpose-trick identity -/
+/-! ### Partial-trace consequence of the transpose trick -/
 
 /-- The `(i₁, j₁)`-block of `vecMulVec ψ (star ψ)` is the outer product of
 the corresponding rows of the coefficient matrix. -/
@@ -95,9 +95,9 @@ private theorem bipartiteBlock_vecMulVec_eq (ψ : Fin dA × Fin dB → ℂ) (i�
   simp only [Matrix.bipartiteBlock_apply, Matrix.vecMulVec_apply, Pi.star_apply,
     Matrix.schmidtCoeffMatrix_apply]
 
-/-- **The transpose trick** (Wolf, line 364, in general purification-independent
-form): for any linear map `T` on Bob's system and any bipartite vector `ψ`
-with coefficient matrix `C`, tracing out Bob's system after applying
+/-- **Partial-trace consequence of the transpose trick** (Wolf, line 364, in general
+purification-independent form): for any linear map `T` on Bob's system and any bipartite
+vector `ψ` with coefficient matrix `C`, tracing out Bob's system after applying
 `id ⊗ T` to `|ψ⟩⟨ψ|` equals `C (T*(1))ᵀ Cᴴ`, where `T*` is the trace-pairing
 adjoint of `T`.
 
