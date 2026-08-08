@@ -18,7 +18,7 @@ derives the latter information internally.
 For a Hermitian matrix `A`, explicit positive perturbations split its ordered
 eigenvalues and converge to `A`.  Set-spectrum equality on each perturbed
 matrix then gives equality of characteristic-root multisets, because the input
-roots are nodup and both matrices have the same finite dimension.  Hence all
+roots are distinct and both matrices have the same finite dimension.  Hence all
 trace powers agree on the perturbations.  Continuity of the linear map and of
 matrix trace powers passes these identities to `A`; Newton--Girard then gives
 characteristic-polynomial equality.

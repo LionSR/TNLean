@@ -12,7 +12,7 @@ import TNLean.Algebra.HermitianTracePower
 
 For complex matrices of the same finite dimension, equality of their spectra
 as sets determines equality of their characteristic-root multisets whenever one
-matrix has simple spectrum.  The other root multiset is forced to be nodup by
+matrix has simple spectrum.  The other root multiset is forced to have no repetitions by
 comparing its cardinality with the common root support.  For Hermitian matrices,
 this also gives equality of all trace powers.  No nonempty-dimension assumption
 is needed.
