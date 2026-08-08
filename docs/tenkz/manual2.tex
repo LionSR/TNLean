@@ -32,14 +32,15 @@
   {The TNLean project \quad---\quad July 2026\par}
   \vspace{16mm}
 
-  \begin{tenkz}[physical=up,west label=$\alpha$,
-                east label=$\beta$]
-    \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tn[up=$i_3$]{A}
+  \begin{tenkz}[cols=3]
+    \tn[ports={180:virtual:$\alpha$, 0:virtual, 90:physical:$i_1$}]{A} &
+    \tn[ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A} &
+    \tn[ports={180:virtual, 0:virtual:$\beta$, 90:physical:$i_3$}]{A}
   \end{tenkz}
   \hspace{13mm}
-  \begin{tenkz}[sandwich,east={cup=$X$}]
-    \tn{A} \\
-    \tn*{A}
+  \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east={cup=$X$}]
+    \tn[label pos=180]{A} \\
+    \tn[label pos=180]{$\overline{A}$}
   \end{tenkz}
 
   \vspace{16mm}
@@ -68,21 +69,19 @@
 
 \begin{quickrefcard}[The tenkz language at a glance]
   \qrsection{Choose one layout}
-  \qritem{tenkz}{regular one-dimensional contractions}
-  \qritem{\textbackslash tnpic}{inline composition wrapper for tenkz}
+  \qritem{tenkz}{one typed tensor network in one frame}
 
   \qrsection{Five word classes}
-  \qritem{atoms}{tn, tnX, tnfuse, tntree}
-  \qritem{connections}{implicit bonds, cups, traces}
-  \qritem{annotations}{tnspan, tncut, labels}
-  \qritem{composition}{TeX equations, alignment, and tnpic}
-  \qritem{setup}{tnset, species, themes, tndeclareatom}
+  \qritem{atoms}{tn, tnfuse, tntree}
+  \qritem{connections}{tnwire, tnbond, implicit bonds, cups, traces}
+  \qritem{annotations}{tnmark, labels}
+  \qritem{composition}{TeX equations, alignment, tngroup}
+  \qritem{setup}{tnset, tndeclare, themes}
 
   \qrsection{Boundary facts}
-  \qritem{boundary=open}{keeps matrix or map indices visible; it is the
-    default outside the kernel and the word a kernel picture writes}
-  \qritem{boundary=none}{seals an object outside the kernel, and spells the
-    kernel default}
+  \qritem{boundary=open}{mints the side legs and puts them in the
+    signature; an unstated side draws no leg}
+  \qritem{boundary=none}{the explicit spelling of the default}
   \qritem{boundary=periodic}{returns each row to itself}
   \qritem{west=cup / east=cup}{connects adjacent layers, and outranks
     boundary= on its own side}

@@ -39,12 +39,12 @@ def equation_boundary_rules(separator: str) -> list[str]:
         "\\begin{tenkz}\n\\tn{B}\n\\end{tenkz}\n"
     )
     log = (
-        "picture|id=1|lang=grid\n"
-        "boundary|picture=1|virtual-west=1|virtual-east=1|"
-        "physical-up=0|physical-down=0\n"
-        "picture|id=2|lang=grid\n"
-        "boundary|picture=2|virtual-west=0|virtual-east=0|"
-        "physical-up=1|physical-down=0\n"
+        "picture|id=k1|lang=kernel\n"
+        "atom|id=atom-1|cell=1-1|kind=tn\n"
+        "kernel-boundary|signature=open:e,open:w\n"
+        "picture|id=k2|lang=kernel\n"
+        "atom|id=atom-1|cell=1-1|kind=tn\n"
+        "kernel-boundary|signature=up:physical\n"
     )
     with tempfile.TemporaryDirectory(prefix="tenkz_equation_audit_") as tmp:
         work = Path(tmp)

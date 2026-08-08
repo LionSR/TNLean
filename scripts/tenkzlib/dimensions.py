@@ -157,20 +157,9 @@ _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
     # owners.  Their recognized physical option values receive narrower
     # spans; arbitrary dimensions in an object label/body remain unowned and
     # cannot inherit an enclosing route owner.
-    "tnpic": _CommandGrammar(None, (1,)),                        # O{} m
     "tntree": _CommandGrammar(None, (1,)),                       # O{} m
-    "tn": _CommandGrammar(None, (1,), accepts_star=True),        # s O{} m
-    "tnX": _CommandGrammar(None, (1,)),                          # O{} m
+    "tn": _CommandGrammar(None, (1,)),                           # O{} m
     "tnfuse": _CommandGrammar(None, (1,)),                       # O{} m
-    "tndots": _CommandGrammar(None, (0,)),                       # O{}
-    "tnghost": _CommandGrammar(                                 # m
-        None, (1,), accepts_options=False
-    ),
-    "tnskip": _CommandGrammar(                                  # no arguments
-        None, (0,), accepts_options=False
-    ),
-    "tnspan": _CommandGrammar(None, (2,)),                       # O{} m m
-    "tncut": _CommandGrammar(None, (1,)),                        # O{} m
     "tnset": _CommandGrammar(                                   # m
         None, (1,), accepts_options=False
     ),
@@ -283,16 +272,10 @@ class _OptionCommandGrammar:
 
 
 _OPTION_BRACKET_COMMANDS: Mapping[str, _OptionCommandGrammar] = {
-    # Picture/tree explicitly forward pitch; the three cell commands consume
-    # label shift through /tenkz/cell.  Do not infer option families from the
-    # registry's broad object scope: /tenkz/site rejects label shift today,
-    # while tndots has no option slot in the public grammar.  Leaving both out
-    # keeps malformed or undocumented dimensions unowned.
-    "tnpic": _OptionCommandGrammar(False, frozenset({"pitch"})),
+    # The tree family forwards pitch.  Do not infer option families from the
+    # registry's broad object scope: leaving undocumented keys out keeps
+    # malformed or undocumented dimensions unowned.
     "tntree": _OptionCommandGrammar(False, frozenset({"pitch"})),
-    "tn": _OptionCommandGrammar(True, frozenset({"label shift"})),
-    "tnX": _OptionCommandGrammar(False, frozenset({"label shift"})),
-    "tnfuse": _OptionCommandGrammar(False, frozenset({"label shift"})),
 }
 _OPTION_BRACKET_COMMAND_RE = re.compile(
     r"\\("
@@ -1430,16 +1413,14 @@ def _comment_owner(comment: str) -> DimensionOwner | None:
     ):
         return DimensionOwner.FRAME
     if re.search(
-        r"\\tn(?:join|wire|edge|arrow)"
+        r"\\tnwire"
         + _TEX_CONTROL_WORD_END
         + r"|\b(?:route|string)\b",
         lowered,
     ):
         return DimensionOwner.ROUTE
     if re.search(
-        r"\\tnput"
-        + _TEX_CONTROL_WORD_END
-        + r"|\b(?:composition|layout|width|height|length|radius|diameter|wide|"
+        r"\b(?:composition|layout|width|height|length|radius|diameter|wide|"
         r"tall|long|thick)\b",
         lowered,
     ):

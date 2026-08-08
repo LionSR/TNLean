@@ -139,64 +139,51 @@ redrawn as kernel grid pictures, discharging every blueprint `\tnpic` row.
 
 ## Standalone fixture inventory
 
-The source root for every file below is `tests/tenkz/`. Classification is
-whole-fixture so the list decides whether each top-level corpus file is
-retained, mechanically respelled, or redrawn/re-baselined at S4. Each target
-code group applies to every fixture named on that row. Local input dependencies
-participate in disposition, while the raw-count table remains a direct
-top-level-source census so a shared input is not counted multiple times.
+The source root for every file below is `tests/tenkz/`. The S4 surface swap
+has executed: the grid front end is deleted, the kernel is the package
+surface, and every fixture whose disposition was codemod or redraw has left
+the corpus, its behaviours dying with the dialect or covered by the kernel
+and RMP suites per `FIXTURE-RETIREMENT.md`. What remains is the surviving
+corpus itself.
 
 | Disposition | Fixtures |
 |---|---:|
 | preserve | 9 |
-| codemod | 40 |
-| redraw | 110 |
-| **Total** | **159** |
+| **Total** | **9** |
 
-Of the 159 top-level fixtures, 142 directly or indirectly open a tenkz
-environment, 11 are picture-command-only consumers, 2 are setup-only
-consumers, and 4 contain no tenkz public-surface construct.
+Of the 9 top-level fixtures, 5 open the (kernel) tenkz environment and 4
+contain no tenkz public-surface construct.
 
 ### Preserve fixtures (9)
 
-- `P-grid`: `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex` · `trace_warn.tex` · `zz_wirescan.tex`
+- `P-grid`: `fig21d_cubic.tex` · `fig21d_cubic_v2.tex` · `iso_h.tex` · `p3_probe_opop.tex` · `rv4061_flatonly.tex`
 - `P-none`: `plane_experiment.tex` · `zz_geomdag.tex` · `zz_geomframe.tex` · `zz_geomsupport.tex`
 
-### Codemod fixtures (40)
+Three corrections executed with the swap, against the pre-swap ledger:
 
-- `C-declare`: `p_species.tex`
-- `C-policy`: `hdr.tex` · `iso_i.tex` · `iso_k.tex` · `p3_bisect_d.tex` · `rv4061_ketptrace.tex`
-- `C-policy+C-record`: `g06_stageB.tex` · `hard01_v2.tex` · `p3_bond_insertion.tex` · `p3_gauge.tex` · `p3_lemma1.tex` · `p3_trace_word.tex` · `p3_word.tex` · `p_newcup.tex` · `part_B3.tex` · `rv4061_cellset.tex` · `rv4061_cuporder.tex` · `t2_lassodef.tex` · `t2_lassodef_v2.tex` · `t2_twoshift.tex`
-- `C-record`: `hard11_v3.tex` · `hard11_v4.tex` · `iso_a.tex` · `iso_b.tex` · `iso_d.tex` · `iso_e.tex` · `iso_f.tex` · `iso_g.tex` · `iso_t.tex` · `t2_staircase.tex`
-- `C-switch`: `fig21d_cubic.tex` · `fig21d_cubic_v2.tex`
-- `C-tree`: `gr_t2_fsymbol.tex` · `hard11_v2.tex` · `p3_eq5_fsymbol.tex` · `p3_eq5_v2.tex` · `p4067_braced.tex` · `t2_fusion.tex` · `t2_pentagon5.tex` · `tree_test.tex`
-
-### Redraw fixtures (110)
-
-- `C-declare+C-policy+C-record+R-record`: `zz_renderslice.tex`
-- `C-picture+C-policy+C-record+R-record`: `adv_brace.tex` · `adv_conj.tex` · `part_B8.tex` · `rv4061_ex_grid-benchmarks.tex` · `smoke.tex`
-- `C-picture+C-record+R-record`: `audit2.tex`
-- `C-policy+C-record+R-record`: `atoms_test.tex` · `audit1.tex` · `audit3.tex` · `audit4.tex` · `audit_open.tex` · `boundary_test.tex` · `channel_test.tex` · `cups_edge.tex` · `cups_test.tex` · `gr_t5_zipper.tex` · `gr_t8_sum.tex` · `hard01_v3.tex` · `hard02_v2.tex` · `hard03_v3.tex` · `hard04_v3.tex` · `hard05_v2.tex` · `hard05_v4.tex` · `hard06_v2.tex` · `hard06_v3.tex` · `hard06_v4.tex` · `hard08_mpu.tex` · `hard08_v2.tex` · `hard08_v3.tex` · `hard10_v2.tex` · `hard12_v2.tex` · `hard12_v3.tex` · `iso_j.tex` · `lrbox_probe.tex` · `modes_dot_baseline.tex` · `modes_test.tex` · `p3_eq08.tex` · `p3_eq09.tex` · `p3_eq4_ortho.tex` · `p3_eq4_v2.tex` · `p3_multibond.tex` · `p3_multibond2.tex` · `part_B1.tex` · `part_B2.tex` · `part_B4.tex` · `regress_x_pbc.tex` · `rev4075_sig.tex` · `rv4061_ex_boundary-doctrine.tex` · `rv4061_ex_canonical-channel.tex` · `rv4061_ex_cups-channels.tex` · `rv4061_ex_grid-mpo-stress.tex` · `rv_probe.tex` · `stress.tex` · `t2_ared.tex` · `t2_ared_loop.tex` · `t2_mpublock.tex` · `t2_mpucond.tex` · `t2_mpuflow.tex` · `t2_olvert.tex` · `t2_purifyO.tex` · `t2_rhoR.tex` · `t2_sv17.tex`
-- `C-policy+R-record`: `p3_bisect_a.tex` · `p3_bisect_b.tex` · `p3_eq32.tex` · `p3_ghostket_probe.tex` · `p3_inverse.tex` · `p3_inverse_identity.tex` · `p3_pitch_probe.tex` · `p3_probe_pitch2.tex` · `t2_probe_sides.tex` · `t2_tands.tex`
-- `C-record+R-record`: `gr_t3_action.tex` · `hard03_v2.tex` · `hard04_v2.tex` · `hard09_v2.tex` · `hard10_pta.tex` · `hard10_v3.tex` · `iso_c.tex` · `p3_eq3_fusion.tex` · `p3_eq3_v2.tex` · `p3_eq8_action.tex` · `p3_eq8_v2.tex` · `part_B7.tex` · `rev4075_alias.tex` · `t2_eigladder.tex` · `t2_gs1d.tex` · `t2_hamil_gate.tex` · `t2_hamilcommu.tex` · `t2_isometry.tex` · `t2_lhsrhs1.tex` · `t2_lhsrhs2.tex` · `t2_lhsrhs3.tex` · `t2_lhsrhs4.tex` · `t2_lhsrhs5.tex` · `t2_mpubrick.tex` · `t2_sptgh_box.tex` · `t2_sptintertwin.tex`
-- `R-record`: `p3_bisect_c.tex` · `p3_min1.tex` · `p3_min2.tex` · `p3_probe_opmod.tex` · `p3_probe_opop2.tex` · `p_pitch.tex` · `rv4061_vertlabel.tex` · `rv4061_vertonly.tex` · `t2_mpusplit.tex` · `trace_probe.tex` · `zz_vertprune.tex`
-
-The preserved list intentionally contains only signed kernel spelling or no
-public-surface construct. It does not preserve any 0.7-only alias.
+- `trace_warn.tex` and `zz_wirescan.tex` were classified preserve, but each
+  pinned a grid-only property: the one a grid misuse warning
+  (`grid-interface-range`), the other the grid boundary pass's virtual
+  pairing and a model lookup whose only caller was the grid walk. Both died
+  with the front end.
+- The `C-switch` code executed: `fig21d_cubic.tex` and `fig21d_cubic_v2.tex`
+  dropped their `\tenkzkernel` opt-in lines, which the load-time surface
+  makes redundant.
+- The three preserves that omitted a column count (`iso_h.tex`,
+  `p3_probe_opop.tex`, `rv4061_flatonly.tex`) now spell `cols=` explicitly:
+  the 0.7 grid sized its columns from the body, while the kernel frame's
+  `cols=` defaults to 3 and populates, so the omitted key was the one
+  spelling whose meaning the switch changed.
 
 ### Fixture raw-count reconciliation
 
 | Raw construct | Occurrences |
 |---|---:|
-| `tenkz` | 375 |
+| `tenkz` | 5 |
 | `tenkzeq` | 0 |
-| `tenkzfree` | 0 |
-| `tenkzlattice` | 0 |
-| `tenkzcd` | 0 |
-| `tenkzplanes` | 0 |
-| `tnpic` | 17 |
-| `tntree` | 18 |
-| **Total** | **410** |
+| `tnpic` | 0 |
+| `tntree` | 0 |
+| **Total** | **5** |
 
 ## Retired-pipeline guard
 

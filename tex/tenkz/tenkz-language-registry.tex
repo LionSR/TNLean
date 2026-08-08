@@ -4,29 +4,15 @@
 % Invariants: one canonical record per concept; aliases are explicitly marked.
 % Next stage: tenkz-language.code.tex installs the declared parser front doors.
 
-\__tenkz_language_registry_environment:nnnn {tenkz}{grid}{picture}
-  {Regular one-dimensional contractions.}
+\__tenkz_language_registry_environment:nnnn {tenkz}{kernel}{picture}
+  {One typed tensor network in one frame.}
 
 \__tenkz_language_registry_command:nnnnn {tn}{atoms}{object}
   {\tn[object keys]{label}}{An atom changes the object record, so it is a command rather than a key.}
-\__tenkz_language_registry_command:nnnnn {tnX}{atoms}{object}
-  {\tnX[object keys]{label}}{An on-wire map is an atom with its own silhouette.}
 \__tenkz_language_registry_command:nnnnn {tnfuse}{atoms}{object}
   {\tnfuse[object keys]{label}}{A fusion atom changes wire arity.}
-\__tenkz_language_registry_command:nnnnn {tndots}{atoms}{object}
-  {\tndots}{An ellipsis occupies a cell without creating an atom.}
-\__tenkz_language_registry_command:nnnnn {tnghost}{atoms}{object}
-  {\tnghost{name}}{A ghost creates an addressable invisible atom.}
-\__tenkz_language_registry_command:nnnnn {tnskip}{atoms}{object}
-  {\tnskip}{A skip removes one object while preserving its open indices.}
-\__tenkz_language_registry_command:nnnnn {tnspan}{regions-annotations}{object}
-  {\tnspan[mode]{length}{label}}{A span annotates several resolved atoms.}
-\__tenkz_language_registry_command:nnnnn {tncut}{regions-annotations}{connection}
-  {\tncut[keys]{label}}{A cut annotates one resolved connection.}
 \__tenkz_language_registry_command:nnnnn {tntree}{atoms}{object}
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
-\__tenkz_language_registry_command:nnnnn {tnpic}{composition}{picture}
-  {\tnpic[picture keys]{body}}{A wrapper composes the grid grammar inside another expression.}
 \__tenkz_language_registry_command:nnnnn {tnset}{setup-extension}{setup}
   {\tnset{setup keys}}{Setup changes document or group policy outside any one picture.}
 \__tenkz_language_registry_command:nnnnn {tndeclareatom}{setup-extension}{setup}
@@ -36,24 +22,10 @@
 % command, standalone example, representative failure
 \__tenkz_language_registry_example:nnn {tn}{tex/tenkz/examples/api/tn.tex}
   {An unknown object key is a hard error.}
-\__tenkz_language_registry_example:nnn {tnX}{tex/tenkz/examples/api/tnX.tex}
-  {A nonpositive wires value is a hard error.}
 \__tenkz_language_registry_example:nnn {tnfuse}{tex/tenkz/examples/api/tnfuse.tex}
   {A nonpositive span is a hard error.}
-\__tenkz_language_registry_example:nnn {tndots}{tex/tenkz/examples/api/tndots.tex}
-  {An unsupported ellipsis option is a hard error.}
-\__tenkz_language_registry_example:nnn {tnghost}{tex/tenkz/examples/api/tnghost.tex}
-  {A ghost without a name is rejected by its command signature.}
-\__tenkz_language_registry_example:nnn {tnskip}{tex/tenkz/examples/api/tnskip.tex}
-  {Options after a skip are not part of its command signature.}
-\__tenkz_language_registry_example:nnn {tnspan}{tex/tenkz/examples/api/tnspan.tex}
-  {A zero or noninteger length is a hard error.}
-\__tenkz_language_registry_example:nnn {tncut}{tex/tenkz/examples/api/tncut.tex}
-  {An unknown cut option is a hard error.}
 \__tenkz_language_registry_example:nnn {tntree}{tex/tenkz/examples/api/tntree.tex}
   {An unbalanced fusion word is a hard error.}
-\__tenkz_language_registry_example:nnn {tnpic}{tex/tenkz/examples/api/tnpic.tex}
-  {An unknown picture key is a hard error.}
 \__tenkz_language_registry_example:nnn {tnset}{tex/tenkz/examples/api/tnset.tex}
   {An unknown setup key or enum value is a hard error.}
 \__tenkz_language_registry_example:nnn {tndeclareatom}
@@ -61,67 +33,16 @@
   {An unknown face, type, skin, or duplicate command is a hard error.}
 
 % scope, canonical spelling, value type, default, status, meaning
-\__tenkz_language_registry_key:nnnnnn {setup}{pitch}{length}{11mm}{kernel}{Base metric.}
-\__tenkz_language_registry_key:nnnnnn {setup}{compact}{flag}{false}{sugar(pitch=)}{Compact metric profile.}
-\__tenkz_language_registry_key:nnnnnn {setup}{inline}{flag}{false}{kernel}{Inline metric and label profile.}
-\__tenkz_language_registry_key:nnnnnn {setup}{tensor style}{enum(dot|box)}{dot}{kernel}{Default atom silhouette.}
-\__tenkz_language_registry_key:nnnnnn {setup}{species}{name-list}{empty}{kernel}{Semantic species declarations.}
-\__tenkz_language_registry_key:nnnnnn {picture}{rows}{row-list}{wire}{kernel}{Grid row topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{physical}{physical-policy}{none}{sugar(rows)}{One-row physical topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sandwich}{flag}{false}{sugar(rows={ket,bra})}{Ket-over-bra row preset.}
-\__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west=, east=)}{Side boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{west}{side-policy}{inherit}{kernel}{West boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{east}{side-policy}{inherit}{kernel}{East boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-spec}{flat}{kernel}{Picture coordinate frame.}
-\__tenkz_language_registry_key:nnnnnn {group}{frame}{frame-spec}{flat}{kernel}{Group-local coordinate frame.}
-\__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{kernel}{Closure rendering policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{trace}{trace-spec}{empty}{kernel}{Closed interface segments or physical trace.}
-\__tenkz_language_registry_key:nnnnnn {picture}{open}{cell-set}{empty}{kernel}{Open interface segments.}
-\__tenkz_language_registry_key:nnnnnn {picture}{bond dir}{enum(right|left)}{none}{kernel}{Connection orientation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{west label}{math}{empty}{kernel}{West boundary label.}
-\__tenkz_language_registry_key:nnnnnn {picture}{east label}{math}{empty}{kernel}{East boundary label.}
-\__tenkz_language_registry_key:nnnnnn {picture}{bond label}{math-and-range}{empty}{kernel}{Connection annotation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{align}{row}{midline}{kernel}{Math-axis row.}
-\__tenkz_language_registry_key:nnnnnn {picture}{layer sep}{number}{1}{kernel}{Layer separation factor.}
-\__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{kernel}{Dot silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{kernel}{Box silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{kernel}{Pill silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{mpo}{flag}{policy}{kernel}{MPO silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{tri}{enum(l|r)}{empty}{kernel}{Canonical isometry silhouette.}
-\__tenkz_language_registry_key:nnnnnn {object}{wide}{positive-integer}{1}{kernel}{Column span.}
-\__tenkz_language_registry_key:nnnnnn {object}{wires}{positive-integer}{1}{kernel}{Wire-row span.}
-\__tenkz_language_registry_key:nnnnnn {object}{combined}{enum(west|east)}{empty}{kernel}{Combined virtual face.}
-\__tenkz_language_registry_key:nnnnnn {object}{span}{positive-integer}{2}{kernel}{Fusion-row span.}
-\__tenkz_language_registry_key:nnnnnn {object}{up at}{slot-list}{center}{kernel}{Upper face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{down at}{slot-list}{center}{kernel}{Lower face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{west at}{slot-list}{rows}{kernel}{West face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{east at}{slot-list}{rows}{kernel}{East face ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{up}{math-list}{empty}{kernel}{Upper port labels.}
-\__tenkz_language_registry_key:nnnnnn {object}{down}{math-list}{empty}{kernel}{Lower port labels.}
-\__tenkz_language_registry_key:nnnnnn {object}{physical}{physical-policy}{empty}{kernel}{Cell physical-port faces.}
 \__tenkz_language_registry_key:nnnnnn {object}{role}{semantic-role}{empty}{kernel}{Semantic theme role.}
 \__tenkz_language_registry_key:nnnnnn {object}{species}{declared-name}{empty}{kernel}{Semantic species.}
-\__tenkz_language_registry_key:nnnnnn {object}{label pos}{angle}{auto}{kernel}{Object label policy.}
-\__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{escape}{Object label adjustment.}
-\__tenkz_language_registry_key:nnnnnn {object}{frame}{frame-spec}{flat}{kernel}{Atom-local coordinate frame.}
-\__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{brace above}{flag}{false}{kernel}{Brace annotation above a span.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{kernel}{Brace annotation below a span.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{kernel}{Boxed span annotation.}
-\__tenkz_language_registry_key:nnnnnn {annotation}{label pos}{angle}{auto}{kernel}{Span-label position.}
 \__tenkz_language_registry_key:nnnnnn {atom-declaration}{skin}{silhouette-name}{dot}{kernel}{Declared atom silhouette.}
 \__tenkz_language_registry_key:nnnnnn {atom-declaration}{ports}{typed-port-list}{empty}{kernel}{Declared atom ports.}
 
-% Compatibility spellings are data, never tutorial vocabulary.  Every alias
-% carries its sunset milestone; the sunset executes as a corpus rewrite.
-\__tenkz_language_registry_key:nnnnnn {picture}{periodic}{flag}{false}{alias(boundary=periodic; sunset=1.0)}{Legacy periodic closure.}
-\__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{compass}{east}{alias(frame; sunset=1.0)}{Legacy frame spelling.}
-\__tenkz_language_registry_key:nnnnnn {object}{legs at}{slot-list}{center}{alias(up at,down at; sunset=1.0)}{Legacy shared physical ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span; sunset=1.0)}{Legacy fusion span.}
+% No alias rows remain: the last four compatibility spellings were grid
+% parses and left with that front end at the S4 surface swap.
 
-% ---- the 1.0 kernel surface (LANGUAGE-1.0.md; the S4 swap retires the
-% ---- 0.7 rows above in favor of these) ----
+% ---- the 1.0 kernel surface (LANGUAGE-1.0.md) ----
 %
 % Sentenced 2026-07-25 by the nine signed amendments, booked in
 % docs/tenkz/SHRINK.md session 1, and struck from the contract's tables.
@@ -157,7 +78,7 @@
 \__tenkz_language_registry_command:nnnnn {tnbond}{connections-closures}{connection}
   {\tnbond[wire keys]{end}{end}}{Sugar: a bond is a wire of kind index.}
 \__tenkz_language_registry_command:nnnnn {tenkzkernel}{setup-extension}{setup}
-  {\tenkzkernel}{Binds the 1.0 kernel surface for the group; the S4 swap deletes it.}
+  {\tenkzkernel}{Rebinds the kernel surface; tenkz.sty calls it at load, so a document's own call is inert. Sunset 1.0.}
 \__tenkz_language_registry_command:nnnnn {tnprose}{regions-annotations}{picture}
   {\tnprose{text}}{Sugar: recorded prose in place of a diagram.}
 \__tenkz_language_registry_example:nnn {tnwire}{tex/tenkz/examples/api/tnwire.tex}
@@ -171,7 +92,7 @@
 \__tenkz_language_registry_example:nnn {tnbond}{tex/tenkz/examples/api/tnbond.tex}
   {An unknown wire key is a hard error.}
 \__tenkz_language_registry_example:nnn {tenkzkernel}{tex/tenkz/examples/api/tenkzkernel.tex}
-  {Kernel spellings without the switch fall to the 0.7 surface.}
+  {The package binds the kernel surface at load; a document's own call rebinds the same meanings.}
 \__tenkz_language_registry_example:nnn {tnprose}{tex/tenkz/examples/api/tnprose.tex}
   {Prose on a checked relation without an opt-out is a hard error.}
 
@@ -186,9 +107,7 @@
 % A kernel picture grows by declaration: a side exposes indices only when it
 % says so, and the frame's grid is a coordinate system rather than a claim
 % about which indices exist.  `none' is therefore the default word on every
-% side and the explicit spelling of that default.  The grid dialect's
-% {picture} rows above keep their own `open' default, which is where the
-% doctrine differs between the two languages.
+% side and the explicit spelling of that default.
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{west}{side-policy}{none}{kernel}{West side policy.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{east}{side-policy}{none}{kernel}{East side policy.}
 \__tenkz_language_registry_key:nnnnnn {kernel-picture}{north}{side-policy}{none}{kernel}{North side policy.}

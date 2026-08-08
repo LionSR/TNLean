@@ -10,7 +10,7 @@ scripts/tenkz_corpus.sh
 The driver copies the whole directory to a temporary workspace, compiles every
 standalone `.tex` file with the invocation from `docs/tenkz/HACKING.md`, and runs
 `scripts/tenkz_audit.py` on every resulting `.tnlog`. The tracked corpus remains
-clean, and sibling inputs such as `modes_suite.inc` remain available.
+clean.
 
 ## Render baselines
 
@@ -62,33 +62,31 @@ not commit generated PNGs as source fixtures.
 
 ## Provenance
 
-The source is `handoff/corpus/` on branch `tenkz/handoff-artifacts`. The branch
-contains 278 `.tex` files, although the handoff note reported 279. A current-main
-census produced this adoption:
+The original source is `handoff/corpus/` on branch `tenkz/handoff-artifacts`
+(278 `.tex` files; the handoff note reported 279). The adoption brought 257
+standalone fixtures and one support input into the corpus; the front-end
+demolitions then retired the fixtures whose language died, ending with the
+S4 surface swap, whose retirement authority is
+`docs/tenkz/FIXTURE-RETIREMENT.md` and whose per-fixture codes are
+`docs/tenkz/DISPOSITIONS.md`. The post-swap census:
 
 | Disposition | Count | Reason |
 |---|---:|---|
-| Included standalone fixtures | 257 | Compile with XeLaTeX, emit `.tnlog`, and pass `tenkz_audit.py` |
-| Included support input | 1 | `modes_suite.tex` was renamed `modes_suite.inc`; it is included by `modes_test.tex`, not compiled alone |
-| Excluded negative diagnostics | 7 | Deliberately exercise package errors or invalid arrow/species syntax |
-| Excluded stale API probes | 12 | Historical spellings or parser experiments that no longer compile |
-| Excluded non-tenkz probe | 1 | `exp_probe.tex` is a pure TikZ expansion experiment and emits no `.tnlog` |
-| Source total | 278 | 257 + 1 + 7 + 12 + 1 |
+| Surviving handoff fixtures | 6 | Kernel spellings or no public construct; compile, emit `.tnlog`, and pass `tenkz_audit.py` |
+| Surviving local fixtures | 3 | Added on main after the adoption (`LOCAL_FIXTURES.tsv`) |
+| Excluded sources | 20 | Negative diagnostics, stale API probes, and the pure-TikZ `exp_probe.tex` |
 
-`PROVENANCE.tsv` records the disposition of every source file. Negative probes
-belong in dedicated tests that assert their expected diagnostics; they are not
-passing corpus entries.
+`PROVENANCE.tsv` records the disposition of every surviving or excluded
+handoff source; retired rows left with their fixtures, and the complete
+original adoption remains readable at the branch above. Negative probes
+belong in dedicated tests that assert their expected diagnostics; they are
+not passing corpus entries.
 
-Three package-internal probes deliberately create no event records:
-`p_pitch.tex`, `p_species.tex`, and `plane_experiment.tex`. They use
-tenkz dimensions, keys, or TikZ styles without opening a tenkz environment. The
-driver names these three exceptions explicitly and rejects an empty `.tnlog` from
-every other fixture, so a broken event writer cannot silently pass the corpus.
-
-One included fixture has a documented presentation-only curation.
-`gr_t7_coset.tex` moves its two gray action boxes 4 mm right so the
-`k_x^{-1}` label clears the next box under the measured-overlap audit. The
-formula and diagram topology are unchanged.
+One package-internal probe deliberately creates no event records:
+`plane_experiment.tex` uses tenkz dimensions, keys, or TikZ styles without
+opening a tenkz environment. The driver names this exception explicitly and
+rejects an empty `.tnlog` from every other fixture, so a broken event writer
+cannot silently pass the corpus.
 
 Every standalone fixture begins with a one-line `% Regression:` header and has a
 `% Formula:` comment. Geometry-only fixtures state their geometry contract rather

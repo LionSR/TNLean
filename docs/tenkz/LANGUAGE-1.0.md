@@ -1,14 +1,14 @@
 # The tenkz language, version 1.0
 
 The tenkz 1.0 kernel — record classes, environments, commands, keys,
-alphabets, and ledgers — is fixed by this contract. The executable registry
-(`tex/tenkz/tenkz-language-registry.tex`) is regenerated to the inventory
-below in the change that lands the kernel; until then the 0.7 registry and
-`LANGUAGE.md` describe the current package. The Session-0 artifacts —
-`tests/tenkz/census-baseline.json`, `scripts/tenkz_shrink.py`,
-`docs/tenkz/SHRINK.md` — land with this contract's acceptance. Once the
-kernel lands, a spelling absent from the registry does not exist, and every
-table below is checked against the registry by the census.
+alphabets, and ledgers — is fixed by this contract. The S4 surface swap has
+executed: the package binds the kernel surface at load, the executable
+registry (`tex/tenkz/tenkz-language-registry.tex`) carries this contract's
+inventory, and the 0.7 front end is deleted. `\tenkzkernel` remains
+callable, rebinds the same meanings, and is therefore inert; the 1.0
+freeze's corpus rewrite deletes the spelling. A spelling absent from the
+registry does not exist, and every table below is checked against the
+registry by the census.
 
 <!-- Status: signed off (#4687); this is the binding contract. Supersedes
      LANGUAGE.md (0.7). Kernel follows the Session-0 compression review; where
@@ -350,9 +350,9 @@ from open ink being declared content (§13): the frame's grid is a coordinate
 system that places atoms, not a claim that every rim cell owns a dangling
 index, and a circuit or a single-atom picture would collect nonsense legs
 under any other reading. `none` is the explicit spelling of the default and
-changes nothing in a kernel picture; it seals in the grid dialect, whose
-pictures do draw their west and east stubs unbidden, and that difference is
-the one place the two languages disagree about a default.
+changes nothing; the 0.7 grid dialect, whose pictures drew their west and
+east stubs unbidden and sealed them with this word, is deleted, and its
+reading died with it.
 
 ## 4. Frames
 
@@ -828,6 +828,17 @@ policy for the shared leg; write the ports for the lone one.
 | `up at= down at= west at= east at=`, `combined=`, `span=` | `ports=` angle/slot grammar; `span=` folds into `wires=` |
 | `role=` | `species=` (the four prelude species) |
 | `\tndeclareatom` | `\tndeclare{atom}` |
+
+S4 status (2026-08-09): the registry is the existence test, so the table
+above is the sugar ledger's *target* inventory, not a claim that every row
+is spelled today. `\tnpic` is deferred — it lands with math-style sensing
+(§7.2), and until that landing the spelling does not exist. The `\tnX`,
+`\tn*`, `\tnspan`, `\tndots`, `\tnskip`, and boundary-label rows were the
+migration readings of 0.7 spellings and closed at the surface swap with
+their last consumers; the kernel spellings in their right-hand columns are
+how those figures are written. `\tnstring` likewise waits on its own
+landing — a string is `\tnwire[kind=string]` today. The live rows are the
+registry's `sugar(...)` entries.
 
 Two rows are expanders: their expansion is a rule over the picture, not a
 token substitution — `physical=` adds a port per wire-row atom, `\tntree`

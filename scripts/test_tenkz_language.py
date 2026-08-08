@@ -131,23 +131,25 @@ def main() -> int:
 """)
     if bad.returncode == 0 or "TKZ-ATOM-INVALID-PORT" not in bad.stdout:
         raise SystemExit("invalid typed port did not produce TKZ-ATOM-INVALID-PORT")
+    # No alias remains since the S4 surface swap, so the event-equivalence
+    # probe compares a sugar row with its kernel expansion instead.
     canonical, canonical_events = compile_event_source(r"""\documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}
-\begin{tenkz}[boundary=periodic]\tn{A}&\tn{B}\end{tenkz}
+\begin{tenkz}[rows={ket,op,bra}, cols=2]\end{tenkz}
 \end{document}
 """)
-    compatible, compatible_events = compile_event_source(r"""\documentclass{standalone}
+    sugared, sugared_events = compile_event_source(r"""\documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}
-\begin{tenkz}[periodic]\tn{A}&\tn{B}\end{tenkz}
+\begin{tenkz}[sandwich, cols=2]\end{tenkz}
 \end{document}
 """)
-    if canonical.returncode or compatible.returncode:
-        raise SystemExit("canonical/compatibility event-equivalence probe did not compile")
-    if canonical_events != compatible_events:
-        raise SystemExit("boundary=periodic and periodic emitted different semantic events")
-    print("PASS: registry, typed atom diagnostic, and alias event equivalence")
+    if canonical.returncode or sugared.returncode:
+        raise SystemExit("kernel/sugar event-equivalence probe did not compile")
+    if canonical_events != sugared_events:
+        raise SystemExit("sandwich and rows={ket,op,bra} emitted different semantic events")
+    print("PASS: registry, typed atom diagnostic, and sugar event equivalence")
     return 0
 
 

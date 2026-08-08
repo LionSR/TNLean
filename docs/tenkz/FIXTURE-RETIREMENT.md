@@ -326,3 +326,50 @@ pure-kernel-grid preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`,
 respelled according to its `DISPOSITIONS.md` code, and either way leaves the
 corpus safely — G1 has landed — with G3's requirement recorded on the S4
 tracking issue. G2 has already landed (`r_region_slot_words.tex`).
+
+Three corrections found by the grid deletion itself:
+
+- `trace_warn` was not a survivor: its subject is the grid misuse warning
+  `grid-interface-range`, a diagnostic of the dying dialect; the same bytes
+  are a valid kernel cell selection, so nothing of the fixture's subject
+  survives to preserve. It died with the front end (cell-selection coverage:
+  `r_cell_policy.tex`).
+- `zz_wirescan` was not a survivor: it hooks the grid walk's bond pass and
+  virtual-pairing store directly, and its model-lookup half probes a lookup
+  whose only caller was that walk; the lookup left the model stage with its
+  caller. It died with the front end.
+- The surviving preserves were byte-compatible except for one omitted key:
+  the 0.7 grid sized its columns from the body, while the kernel's `cols=`
+  defaults to 3 and populates, so `iso_h`, `p3_probe_opop`, and
+  `rv4061_flatonly` now write their `cols=` explicitly.
+
+The deletion also retired two kernel regressions of the pre-swap binding
+contract: `r_load_inert.tex` and `r_kernel_scope.tex` pinned that loading
+the package left the 0.7 surface untouched and that the switch was
+group-local. With the kernel bound at load, that contract inverts;
+`r_load_surface.tex` pins its successor (the surface exists at load and the
+retained switch rebinds the same meanings), and the `\tnset` scoping half
+of row 81's coverage rests on `r_setup_persistence.tex`.
+
+Script collateral beyond the §6 list, recorded as the deletion executed:
+
+- `scripts/tenkz_pixelpair.sh` and `tests/tenkz/pixelpair-sources.txt` —
+  every fixture in the source manifest was legacy, so the same-session
+  pixel-pair command expired with the redraw campaign it existed for
+  (`HACKING.md` had scheduled exactly this expiry); the kernel pixel ledger
+  remains the render regression gate.
+- `scripts/test_tenkz_face_ports.py` — compiled grid pictures to pin the
+  grid contraction-slot machinery (`legs at=`, faceports, pairlegs), all of
+  which dies with rows 35–36; the kernel port typing it contrasted against
+  is rows 47 and 59's coverage.
+- `scripts/test_tenkz_enclosures.py` — inspected grid region-outline events
+  behind row 66's dying `outline` spelling; kernel enclosures are rows 60,
+  63–65's coverage.
+- `scripts/test_tenkz_label_overlap.py` survives respelled: its subject —
+  the measured label/glyph/wire overlap audit — is surface-independent, so
+  its fixtures now drive the kernel surface and its synthetic streams write
+  kernel records.
+- `tests/tenkz/rmp/manifest.toml` dropped its 51 `fixture =` provenance
+  keys: every one named a deleted figure-level draft, and row 85 already
+  records that each draft's benchmark form is an RMP case of the same
+  subject.

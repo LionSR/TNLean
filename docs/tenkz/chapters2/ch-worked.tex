@@ -6,21 +6,16 @@ example and add only the policy the mathematics requires.
 
 \subsection{Keep a map open; close a scalar}
 
-The two surfaces answer an unstated side differently, and the difference is
-worth knowing before the first picture.  In \tnenv{tenkz} and its relatives
-the open boundary is the default: a matrix word or an unapplied transfer map
-draws its west and east stubs unbidden, and \tnkey{boundary=none} is what
-seals them when the formula is a fully contracted scalar.  Under
-\tncmd{tenkzkernel} a side exposes indices only when it says so.  A kernel
-picture that states no side policy draws no side leg and carries the empty
-boundary signature on those sides, so a map keeps its ends by writing
-\tnkey{boundary=open} -- or \tnkey{west=open} for one side alone -- and
-\tnkey{boundary=none} is the explicit spelling of what the picture already
-does.  A kernel frame's grid places atoms; it does not claim that every rim
-cell owns a dangling index, which is why a circuit pyramid or a single
-four-legged junction collects no legs it did not ask for.
+A side exposes indices only when it says so.  A picture that states no side
+policy draws no side leg and carries the empty boundary signature on those
+sides, so a map keeps its ends by writing \tnkey{boundary=open} -- or
+\tnkey{west=open} for one side alone -- and \tnkey{boundary=none} is the
+explicit spelling of what the picture already does.  The frame's grid places
+atoms; it does not claim that every rim cell owns a dangling index, which is
+why a circuit pyramid or a single four-legged junction collects no legs it
+did not ask for.
 
-Both surfaces agree on the rest of the alphabet.  Use
+The rest of the alphabet: use
 \tnkey{boundary=periodic} for a same-row trace.  Use \tnkey{west=cup} or
 \tnkey{east=cup} to connect adjacent layers.  These closures can have the
 same count of open ends and still mean different operations.
@@ -32,21 +27,22 @@ same count of open ends and still mean different operations.
   caption={an expectation-value window},
   index={The rows declare their roles.  Vertical connections contract physical
     indices; six horizontal stubs keep the window a map.},
-  signature={boundary|virtual-west=3|virtual-east=3|physical-up=0|physical-down=0}]
+  signature={kernel-boundary|signature=open:e, open:e, open:e, open:w, open:w, open:w}]
 % Formula: sum_{s,s'} A^s tensor O^{ss'} tensor conjugate(A^{s'}).
-\begin{tenkz}[rows={ket,op,bra}]
+\begin{tenkz}[rows={ket,op,bra}, cols=2, west=open, east=open]
   \tn{A} & \tn{A} \\
-  \tn[mpo]{O} & \tn[mpo]{O} \\
-  \tn*{A} & \tn*{A}
+  \tn[skin=mpo]{O} & \tn[skin=mpo]{O} \\
+  \tn{$\overline{A}$} & \tn{$\overline{A}$}
 \end{tenkz}
 \end{tnexample}
 
 \subsection{Block a run without changing topology}
 
-\tncmd{tnspan} declares a brace or measured group over existing atoms;
-\tncmd{tndots} declares an ellipsis whose wires pass through.  Neither
-creates a contraction.  A wide atom is appropriate only when the formula has
-already replaced the run by one blocked tensor.
+A bracket mark over a cell range (\tncmd{tnmark} with
+\tnkey{form=bracket}) declares a brace or measured group over existing
+atoms; \tnval{skin=dots} declares an ellipsis cell whose wires pass
+through.  Neither creates a contraction.  A wide atom is appropriate only
+when the formula has already replaced the run by one blocked tensor.
 
 \subsection{Distinguish a role from a species}
 
@@ -67,7 +63,6 @@ takes the name its \tncmd{tnwire} declares.  Address a fraction of that name
 to put a label or a bead on the leg:
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tenkzkernel
 \begin{tenkz}[rows={wire}, cols=2, west=open, east=open]
   \tn{A} & \tn{B}
   \tnmark[form=label, label pos=90]{on open-west-1 0.5}{$\alpha$}
@@ -93,7 +88,6 @@ no second wire under it, and the wire's species, stroke, and route are the
 bond's.
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tenkzkernel
 \tndeclare{species}{blocked-edge}{hue=source:red!65!black}
 \begin{tenkz}[rows={wire,wire}, cols=3]
   \tn{} & \tn{} & \tn{}\\
@@ -119,7 +113,6 @@ face on its own, so \tnval{0:physical} sends a physical index east exactly as
 its two faces differently:
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tenkzkernel
 \begin{tenkz}[rows={wire}, cols=1, bonds=none]
   \tn[at=(1,1), skin=box, ports={180:virtual:V, 0:physical:W}]{A}
 \end{tenkz}
@@ -138,7 +131,6 @@ refusals outrun the port list they replaced.  Reach for the policy when two
 or more sites share the leg; write the ports when only one does:
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tenkzkernel
 \begin{tenkz}[rows={wire}, cols=5]
   \tn{} & \tn{} & \tn[ports={180:virtual, 0:virtual, 90:physical:$i$}]{} &
   \tn{} & \tn{}
@@ -152,7 +144,6 @@ The four numeric ports below follow the projected axes.  The picture policy
 supplies the remaining, page-vertical direction.
 
 \begin{Verbatim}[fontsize=\small,frame=leftline]
-\tenkzkernel
 \begin{tenkz}[rows={wire,wire,wire}, cols=3,
                frame=plane, bonds=none, physical=up]
   \tn[at=(2,2),
@@ -179,12 +170,8 @@ box and sits directly in a tikz-cd cell.
 
 \subsection{Put a picture in a sentence}
 
-\tncmd{tnpic} wraps a short \tnenv{tenkz} cell body as an inline math atom:
-
-\begin{Verbatim}[fontsize=\small,frame=leftline]
-$\tnpic[physical=up]{\tn[up=$i$]{A} & \tn[up=$j$]{B}}$
-\end{Verbatim}
-
-It is a composition command because it changes how a complete picture enters
-surrounding TeX.  It is not a key: no record inside the picture acquires an
-``inline'' property.
+A picture enters surrounding TeX as a displayed term today.  The inline
+composition wrapper -- one picture behaving as a running-math atom, with the
+metric sensing its mathematical context -- is contract work that has not
+landed; when it does, it will be a composition spelling, not a key: no
+record inside the picture acquires an ``inline'' property.

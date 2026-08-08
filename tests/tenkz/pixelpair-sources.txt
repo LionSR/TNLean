@@ -1,5 +1,0 @@
-# Stable visual fixtures used to compare old and new package trees.
-gr_t3_action.tex
-gr_t8_sum.tex
-p3_eq3_fusion.tex
-p3_eq8_action.tex

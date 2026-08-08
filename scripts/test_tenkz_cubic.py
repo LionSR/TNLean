@@ -127,8 +127,10 @@ def compare_edges(path: Path, counts: Counter[EDGE]) -> None:
 
 def inspect(path: Path) -> Topology:
     source = strip_comments(path.read_text(encoding="utf-8"))
-    if len(re.findall(r"\\tenkzkernel\b", source)) != 1:
-        fail(path, "expected one literal tenkzkernel switch")
+    # Since the S4 surface swap the package binds the kernel surface at
+    # load; a per-document switch would be an inert leftover spelling.
+    if re.search(r"\\tenkzkernel\b", source):
+        fail(path, "redundant tenkzkernel switch under the load-time surface")
     if re.search(r"\\(?:tenkzlattice|tnedge|tnsite|tnset)\b", source):
         fail(path, "legacy or per-picture metric spelling remains")
     if re.search(

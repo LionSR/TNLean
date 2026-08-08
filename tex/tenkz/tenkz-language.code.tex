@@ -11,9 +11,6 @@
 \seq_new:N \g__tenkz_language_aliases_seq
 \seq_new:N \g__tenkz_language_examples_seq
 \seq_new:N \g__tenkz_language_preludes_seq
-\prop_new:N \g__tenkz_language_atom_skin_prop
-\prop_new:N \g__tenkz_language_atom_ports_prop
-\prop_new:N \g__tenkz_language_atom_options_prop
 \tl_new:N \l__tenkz_language_atom_skin_tl
 \tl_new:N \l__tenkz_language_atom_ports_tl
 \tl_new:N \l__tenkz_language_atom_options_tl
@@ -51,44 +48,15 @@
     selected|secondary|complement|collar|neutral.
   }
 
-\cs_new_protected:Npn \tnset #1 { \pgfqkeys{/tenkz}{#1} }
+% \tnset is bound by \tenkzkernel; since the S4 surface swap tenkz.sty makes
+% that binding at load, so setup keys are the kernel-setup registry rows.
+% The one /tenkz pgf key left is the metric door the kernel-setup pitch row
+% delegates to; the register lives in tenkz-core.
 \pgfkeys{
   /tenkz/.is~family,
   /tenkz/pitch/.code={\tenkz@basepitch=#1\relax
                       \tenkz@pitch=\tenkz@basepitch},
-  /tenkz/compact/.code={\tenkz@pitch=0.8\tenkz@basepitch},
-  /tenkz/inline/.code={\tenkz@pitch=0.62\tenkz@basepitch
-                       \let\tenkz@labelsize\scriptscriptstyle
-                       \let\tenkz@r@physleg\tenkz@r@inlinephysleg
-                       \let\tenkz@r@labelclear\tenkz@r@inlinelabelclear},
-  /tenkz/tensor~style/.is~choice,
-  /tenkz/tensor~style/dot/.code={\def\tenkz@tensorstyle{dot}%
-                                  \def\tenkz@tensorskin{tensor}},
-  /tenkz/tensor~style/box/.code={\def\tenkz@tensorstyle{box}%
-                                  \def\tenkz@tensorskin{box~tensor}},
-  /tenkz/species/.code={\tenkz_species_declare:n{#1}},
 }
-
-\cs_new_protected:Npn \__tenkz_language_install_forward_one:nn #1#2
-  {
-    \str_case:nnF {#2}
-      {
-        {pitch}        {\pgfkeys{/tenkz/#1/pitch/.code=
-                          {\pgfqkeys{/tenkz}{pitch=##1}}}}
-        {compact}      {\pgfkeys{/tenkz/#1/compact/.code=
-                          {\pgfqkeys{/tenkz}{compact}}}}
-        {inline}       {\pgfkeys{/tenkz/#1/inline/.code=
-                          {\pgfqkeys{/tenkz}{inline}}}}
-        {tensor~style} {\pgfkeys{/tenkz/#1/tensor~style/.code=
-                          {\pgfqkeys{/tenkz}{tensor~style=##1}}}}
-        {species}      {\pgfkeys{/tenkz/#1/species/.code=
-                          {\pgfqkeys{/tenkz}{species={##1}}}}}
-      }
-      { \msg_error:nnn {tenkz}{language-value}
-          {internal~shared~key~'#2'~for~scope~'#1'} }
-  }
-\cs_new_protected:Npn \tenkz_install_core_forwards:nn #1#2
-  { \clist_map_inline:nn {#2} { \__tenkz_language_install_forward_one:nn {#1}{##1} } }
 
 \pgfkeys{
   /tenkz/declare~atom/.is~family,
@@ -103,6 +71,11 @@
     \msg_error:nnn {tenkz}{language-value}
       {atom~descriptor~key~'\pgfkeyscurrentname'}},
 }
+% The compatibility descriptor speaks compass faces (west:virtual,
+% up:physical); the kernel's port grammar has the same compass shorthand
+% (w:virtual, n:physical), so validation translates face words and the
+% declaration is minted by the kernel's own door -- a declared command is an
+% ordinary kernel atom.
 \cs_new_protected:Npn \__tenkz_language_validate_port:n #1
   {
     \regex_extract_once:nnNTF
@@ -112,10 +85,10 @@
         \str_case_e:nnF
           { \seq_item:Nn \l_tmpa_seq {2} : \seq_item:Nn \l_tmpa_seq {3} }
           {
-            {west:virtual} { }
-            {east:virtual} { }
-            {up:physical}  { }
-            {down:physical}{ }
+            {west:virtual} { \tl_set:Nn \l_tmpb_tl { w:virtual } }
+            {east:virtual} { \tl_set:Nn \l_tmpb_tl { e:virtual } }
+            {up:physical}  { \tl_set:Nn \l_tmpb_tl { n:physical } }
+            {down:physical}{ \tl_set:Nn \l_tmpb_tl { s:physical } }
           }
           { \bool_set_false:N \l__tenkz_language_valid_bool
             \msg_error:nnn {tenkz}{atom-port}{#1} }
@@ -123,20 +96,11 @@
           {
             \tl_if_empty:NF \l__tenkz_language_atom_options_tl
               { \tl_put_right:Nn \l__tenkz_language_atom_options_tl {,} }
-            \tl_put_right:Ne \l__tenkz_language_atom_options_tl
-              { \seq_item:Nn \l_tmpa_seq {2} ~at=center }
+            \tl_put_right:NV \l__tenkz_language_atom_options_tl \l_tmpb_tl
           }
       }
       { \bool_set_false:N \l__tenkz_language_valid_bool
         \msg_error:nnn {tenkz}{atom-port}{#1} }
-  }
-\cs_new_protected:Npn \__tenkz_language_use_atom:nnn #1#2#3
-  {
-    \prop_get:NnN \g__tenkz_language_atom_skin_prop {#1} \l_tmpa_tl
-    \prop_get:NnN \g__tenkz_language_atom_options_prop {#1} \l_tmpb_tl
-    \tl_if_blank:nTF {#2}
-      { \use:e { \exp_not:N \tn [\l_tmpa_tl,\l_tmpb_tl] {\exp_not:n{#3}} } }
-      { \use:e { \exp_not:N \tn [\l_tmpa_tl,\l_tmpb_tl,\exp_not:n{#2}] {\exp_not:n{#3}} } }
   }
 \cs_new_protected:Npn \__tenkz_language_declare_atom:Nn #1#2
   {
@@ -152,14 +116,16 @@
       { \__tenkz_language_validate_port:n {##1} }
     \bool_if:NT \l__tenkz_language_valid_bool
       {
-        \prop_gput:NnV \g__tenkz_language_atom_skin_prop
-          {\cs_to_str:N #1} \l__tenkz_language_atom_skin_tl
-        \prop_gput:NnV \g__tenkz_language_atom_ports_prop
-          {\cs_to_str:N #1} \l__tenkz_language_atom_ports_tl
-        \prop_gput:NnV \g__tenkz_language_atom_options_prop
-          {\cs_to_str:N #1} \l__tenkz_language_atom_options_tl
-        \exp_args:Nc \NewDocumentCommand {\cs_to_str:N #1} { O{} m }
-          { \__tenkz_language_use_atom:nnn {\cs_to_str:N #1} {##1}{##2} }
+        \use:e
+          {
+            \exp_not:N \__tenkz_kernel_declare_atom:nn
+              { \exp_not:N #1 }
+              {
+                skin = \tl_use:N \l__tenkz_language_atom_skin_tl
+                \tl_if_empty:NF \l__tenkz_language_atom_options_tl
+                  { , ports = { \tl_use:N \l__tenkz_language_atom_options_tl } }
+              }
+          }
       }
   }
 \NewDocumentCommand \tndeclareatom { m m }

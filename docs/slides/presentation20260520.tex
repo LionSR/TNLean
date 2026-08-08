@@ -157,9 +157,11 @@
     % Boundary: the emitted four-site schematic has (virtual, physical) = (0, 4);
     % the symbolic N-site word has (0, N), with no virtual index open.
     % Source: arXiv:1606.00608, Fig. I and lines 135--170.
-    \begin{tenkz}[compact, periodic, physical=up]
-      \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-      \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+    \begin{tenkz}[rows={wire}, cols=5, boundary=periodic, size=s]
+      \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+      \tn[label pos=s, ports={90:physical:$i_2$}]{A} & \tn[skin=dots]{} &
+      \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+      \tn[label pos=s, ports={90:physical:$i_N$}]{A}
     \end{tenkz}
     \end{center}
     \vspace{0.4em}
@@ -241,16 +243,19 @@
     % Boundary: each row has two open virtual indices and its displayed physical factors.
     % Source: arXiv:1606.00608, Fig. I_Blocking and lines 227--230.
     {\small unblocked:}\quad
-    \begin{tenkz}[compact, physical=up]
-      \tn[up=$i_1$]{A} & \tn[up=$i_2$]{A} & \tndots &
-      \tn[up=$i_{N-1}$]{A} & \tn[up=$i_N$]{A}
+    \begin{tenkz}[rows={wire}, cols=5, size=s, west=open, east=open]
+      \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+      \tn[label pos=s, ports={90:physical:$i_2$}]{A} & \tn[skin=dots]{} &
+      \tn[label pos=s, ports={90:physical:$i_{N-1}$}]{A} &
+      \tn[label pos=s, ports={90:physical:$i_N$}]{A}
     \end{tenkz}
 
     \vspace{0.5em}
     {\small blocked into $L$-site tensors:}\quad
-    \begin{tenkz}[compact, physical=up]
-      \tn[pill, up=$I_1$]{A^{(L)}} & \tndots &
-      \tn[pill, up=$I_{N/L}$]{A^{(L)}}
+    \begin{tenkz}[rows={wire}, cols=3, size=s, west=open, east=open]
+      \tn[skin=pill, label pos=s, ports={90:physical:$I_1$}]{A^{(L)}} &
+      \tn[skin=dots]{} &
+      \tn[skin=pill, label pos=s, ports={90:physical:$I_{N/L}$}]{A^{(L)}}
     \end{tenkz}
     \end{center}
     \vspace{0.2em}

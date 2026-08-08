@@ -181,13 +181,15 @@ def test_sugar_expansion_checks_every_token() -> None:
                 (*entry.fields[:4], f"sugar(rows=, {fragment}=)", entry.fields[5]),
             )
             if entry.kind == "key"
-            and entry.fields[0] == "picture"
+            and entry.fields[0] == "kernel-picture"
             and entry.fields[1] == "physical"
             else entry
             for entry in entries
         ]
         errors = check(changed)
-        assert any("sugar row picture:physical" in error for error in errors), (
+        assert any(
+            "sugar row kernel-picture:physical" in error for error in errors
+        ), (
             fragment,
             errors,
         )
@@ -196,19 +198,19 @@ def test_sugar_expansion_checks_every_token() -> None:
             entry.kind,
             (
                 *entry.fields[:4],
-                "sugar(trace style=bogus)",
+                "sugar(route=bogus)",
                 entry.fields[5],
             ),
         )
         if entry.kind == "key"
-        and entry.fields[0] == "picture"
-        and entry.fields[1] == "physical"
+        and entry.fields[0] == "kernel-wire"
+        and entry.fields[1] == "name"
         else entry
         for entry in entries
     ]
     errors = check(changed_enum)
     assert any(
-        "sugar row picture:physical replacement value 'bogus'"
+        "sugar row kernel-wire:name replacement value 'bogus'"
         in error
         for error in errors
     ), errors
@@ -219,18 +221,18 @@ def test_parser_registry_census_preserves_scopes() -> None:
     moved = [
         Entry(
             entry.kind,
-            ("picture", *entry.fields[1:]),
+            ("kernel-picture", *entry.fields[1:]),
         )
         if entry.kind == "key"
-        and entry.fields[0] == "annotation"
-        and entry.fields[1] == "brace above"
+        and entry.fields[0] == "object"
+        and entry.fields[1] == "tree style"
         else entry
         for entry in entries
     ]
     errors = check(moved)
     assert any(
-        "missing=annotation:brace above" in error
-        and "extra=picture:brace above" in error
+        "missing=object:tree style" in error
+        and "extra=kernel-picture:tree style" in error
         for error in errors
     ), errors
 
@@ -258,6 +260,9 @@ def test_kernel_parser_census_includes_hyphenated_families() -> None:
 
 
 def test_alias_replacements_are_registered_vocabulary() -> None:
+    # The live ledger holds no alias since the S4 surface swap, so the
+    # replacement-vocabulary check is exercised by mutating a surviving
+    # kernel row into a synthetic alias.
     entries = tenkz_shrink.load_registry()
     for replacement in ("does not exist", " "):
         changed = [
@@ -270,13 +275,15 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
                 ),
             )
             if entry.kind == "key"
-            and entry.fields[0] == "picture"
-            and entry.fields[1] == "chain axis"
+            and entry.fields[0] == "kernel-picture"
+            and entry.fields[1] == "frame"
             else entry
             for entry in entries
         ]
         errors = check(changed)
-        assert any("alias row picture:chain axis" in error for error in errors), (
+        assert any(
+            "alias row kernel-picture:frame" in error for error in errors
+        ), (
             replacement,
             errors,
         )
@@ -310,14 +317,14 @@ def test_alias_replacements_are_registered_vocabulary() -> None:
             ),
         )
         if entry.kind == "key"
-        and entry.fields[0] == "picture"
-        and entry.fields[1] == "periodic"
+        and entry.fields[0] == "kernel-picture"
+        and entry.fields[1] == "sandwich"
         else entry
         for entry in entries
     ]
     errors = check(changed_key_alias)
     assert any(
-        "alias row picture:periodic replacement value 'bogus'"
+        "alias row kernel-picture:sandwich replacement value 'bogus'"
         in error
         for error in errors
     ), errors
@@ -339,70 +346,62 @@ def test_escape_usage_is_scoped_to_picture_options() -> None:
     scoped = tenkz_shrink.scoped_option_groups(corpus)
     assert sum(
         tenkz_shrink._option_key_names(payload).count("radius")
-        for payloads in scoped["picture"].values()
+        for payloads in scoped["kernel-picture"].values()
         for payload in payloads
     ) == 1
 
 
-def test_setup_consumers_include_picture_options() -> None:
+def test_setup_consumers_read_the_tnset_argument() -> None:
     path = ROOT / "synthetic.tex"
     corpus = {
         path: (
-            r"\tnset{pitch=10mm} "
-            r"\begin{tenkz}[compact]\tn{A}\end{tenkz} "
-            r"\tnpic[inline, tensor style=box]{\tn{B}}"
+            r"\tnset{pitch=10mm, theme=house} "
+            r"\begin{tenkz}[cols=1]\tn{A}\end{tenkz}"
         )
     }
-    scoped = tenkz_shrink.scoped_option_groups(corpus)["setup"][path]
+    scoped = tenkz_shrink.scoped_option_groups(corpus)["kernel-setup"][path]
     names = {
         name
         for payload in scoped
         for name in tenkz_shrink._option_key_names(payload)
     }
-    for key in ("pitch", "compact", "inline", "tensor style"):
+    for key in ("pitch", "theme"):
         assert key in names
 
 
-def test_setup_consumers_include_only_forwarded_tree_options() -> None:
+def test_tree_options_feed_the_object_scope() -> None:
     path = ROOT / "synthetic.tex"
     corpus = {
         path: (
-            r"\tntree[pitch=9mm, compact, inline, species=fermion, "
+            r"\tntree[species=fermion, "
             r"tree style=ribbon, role=operator]{(a\,b)_c}"
         )
     }
     scoped = tenkz_shrink.scoped_option_groups(corpus)
-    setup_names = {
-        name
-        for payload in scoped["setup"][path]
-        for name in tenkz_shrink._option_key_names(payload)
-    }
     object_names = {
         name
         for payload in scoped["object"][path]
         for name in tenkz_shrink._option_key_names(payload)
     }
-    assert setup_names == {"pitch", "compact", "inline"}
     assert object_names == {
-        "pitch",
-        "compact",
-        "inline",
         "species",
         "tree style",
         "role",
     }
     entries = [
-        Entry("key", ("setup", "species", "name-list", "empty", "kernel", "")),
+        Entry(
+            "key",
+            ("kernel-setup", "species", "name-list", "empty", "kernel", ""),
+        ),
         Entry("key", ("object", "species", "declared-name", "empty", "kernel", "")),
     ]
     consumers = tenkz_shrink.row_consumers(entries, corpus)
-    assert consumers["key:setup:species"] == set()
+    assert consumers["key:kernel-setup:species"] == set()
     assert consumers["key:object:species"] == {"synthetic.tex"}
 
 
-def test_only_kernel_scopes_may_lack_consumer_groups() -> None:
+def test_unknown_scopes_are_rejected() -> None:
     groups = {"object": {ROOT / "synthetic.tex": ["skin=box"]}}
-    assert tenkz_shrink._scope_groups(groups, "kernel-wire") == {}
     try:
         tenkz_shrink._scope_groups(groups, "objct")
     except KeyError as error:
@@ -415,22 +414,22 @@ def test_cooccurrence_is_measured_per_invocation() -> None:
     entries = [
         Entry(
             "key",
-            ("connection", "label", "math", "empty", "kernel", "Label."),
+            ("kernel-wire", "label", "math", "empty", "kernel", "Label."),
         ),
         Entry(
             "key",
-            ("connection", "role", "name", "empty", "kernel", "Role."),
+            ("kernel-wire", "role", "name", "empty", "kernel", "Role."),
         ),
     ]
     corpus = {
         ROOT / f"synthetic-{index}.tex": (
-            rf"\tncut[label=x]{{a{index}}} "
-            rf"\tncut[role=wire]{{c{index}}}"
+            rf"\tnwire[label=x]{{a{index}}}{{b{index}}} "
+            rf"\tnwire[role=wire]{{c{index}}}{{d{index}}}"
         )
         for index in range(5)
     }
     assert not any(
-        flag["id"] == "flag:cooccur:connection:label+role"
+        flag["id"] == "flag:cooccur:kernel-wire:label+role"
         for flag in tenkz_shrink.flags(entries, corpus)
     )
 
@@ -485,10 +484,12 @@ def test_manifest_freezes_case_denominator() -> None:
 
 
 def test_rmp_alias_patterns_use_only_alias_ledgers() -> None:
+    # The alias ledger is empty since the S4 surface swap, so no alias
+    # pattern exists to match anything.
     patterns = registry_alias_patterns()
     canonical = "dot, route=arc, label=x"
     assert not any(pattern.search(canonical) for pattern in patterns)
-    assert any(pattern.search("chain axis=east") for pattern in patterns)
+    assert not patterns
 
 
 def test_baseline_matches_actuals() -> None:

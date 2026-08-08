@@ -1,18 +1,17 @@
 % Input: public tenkz syntax and the package's staged implementation files.
 % Output: picture environments, composition wrappers, and setup declarations.
 % Owned state: none; this file is the dependency probe and stage load map.
-% Invariants: language loads before model, shared services, and dialect renderers.
+% Invariants: language loads before model, shared services, and the kernel.
 % Next stage: tenkz-language.code.tex validates and registers public syntax.
 %
-% The one sub-language: the contraction grid (tenkz, \tnpic).  Fusion
+% The one language: the 1.0 kernel — tenkz, tenkzeq, and the body
+% commands — bound as the public surface at package load.  Fusion
 % trees (\tntree) are standalone structured atoms drawn by
 % tenkz-tree.code.tex.  Commutative diagrams belong to tikz-cd, outside
 % this language; an irregular typed graph is addressed kernel records;
 % a spatial lattice is a kernel frame with lattice=/planes sugar or a
-% declared basis (the tenkzcd, tenkzfree, tenkzlattice, and tenkzplanes
-% dialects are tombstones).  0.6 speaks one key vocabulary across the
-% tiers: frame=, the side-policy alphabet (west=/east=), and the
-% contraction cell-sets (open=/trace=).
+% declared basis (the tenkzcd, tenkzfree, tenkzlattice, tenkzplanes
+% dialects and the 0.7 grid front end are tombstones).
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tenkz}[2026/07/22 v0.7 Declarative tensor-network diagrams]
 
@@ -29,6 +28,16 @@
 \cs_if_exist:NTF \prop_new_linked:N
   { \cs_new_eq:NN \__tenkz_prop_new_indexed:N \prop_new_linked:N }
   { \cs_new_eq:NN \__tenkz_prop_new_indexed:N \prop_new:N }
+% Shared expl3 argument variants.  The base functions belong to the expl3
+% kernel, so no tenkz stage owns them; the package declares them once, ahead
+% of every stage that calls them.
+\cs_generate_variant:Nn \prop_put:Nnn { Nen, Nne, Nee }
+\cs_generate_variant:Nn \prop_get:NnN { NeN }
+\prg_generate_conditional_variant:Nnn \prop_get:NnN { NeN } { T, TF }
+\prg_generate_conditional_variant:Nnn \prop_if_in:Nn { Ne } { T, F, TF }
+\prg_generate_conditional_variant:Nnn \tl_if_blank:n { V } { T, F, TF }
+\cs_generate_variant:Nn \msg_error:nnnn { nnne }
+\cs_generate_variant:Nn \msg_warning:nnnn { nnee }
 \ExplSyntaxOff
 
 \input{tenkz-language.code.tex}
@@ -37,16 +46,21 @@
 \input{tenkz-metric.code.tex}
 \input{tenkz-geometry.code.tex}
 \input{tenkz-string.code.tex}
-\input{tenkz-frame.code.tex}
-\input{tenkz-grid.code.tex}
 \input{tenkz-tree.code.tex}
 % The render stage loads LAST: its ink primitives are created here, so any
 % earlier stage that references them fails at load (the lockout).
 \input{tenkz-render.code.tex}
 
 % The kernel language stage loads after render so its records meet the same
-% ink primitives; \tenkzkernel stays an explicit per-group opt-in until the
-% S4 swap makes it the surface (#4908).
+% ink primitives.
 \input{tenkz-kernel.code.tex}
+
+% The S4 surface swap: the kernel surface is the package surface.  Binding at
+% load is what deleting the grid front end means for a document — `tenkz`,
+% `tenkzeq`, and the body commands exist as soon as the package is loaded.
+% \tenkzkernel remains callable and rebinds the same meanings, so the
+% per-group opt-in spelling of existing documents is inert rather than an
+% error; the command's own deletion is the 1.0 freeze's corpus rewrite.
+\tenkzkernel
 
 \endinput

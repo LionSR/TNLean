@@ -22,7 +22,6 @@ def main() -> int:
         "  \\tn{A} % hidden atom\n"
         "  \\begin{tenkz}\\tn{B}\\end{tenkz}\n"
         "\\end{tenkz}\n"
-        "\\tnpic[label={x]y}]{\\tn{C}}\n"
         "\\tntree[label={x]y}]{({}{})}\n"
     )
     stripped = strip_comments(source)
@@ -48,13 +47,11 @@ def main() -> int:
     assert [construct.name for construct in constructs] == [
         "tenkz",
         "tenkz",
-        "tnpic",
         "tntree",
     ]
-    outer, inner, inline, tree = constructs
+    outer, inner, tree = constructs
     assert "\\tn{A}" in outer.body
     assert "\\tn{B}" in inner.body
-    assert inline.body == "\\tn{C}"
     assert tree.body == "({}{})"
     for construct in constructs:
         assert stripped[construct.body_start : construct.body_start + len(construct.body)] == (
@@ -63,7 +60,7 @@ def main() -> int:
         assert construct.line == source.count("\n", 0, construct.start) + 1
     assert [
         construct.name for construct in scan_picture_event_constructs(stripped)
-    ] == ["tenkz", "tenkz", "tnpic"]
+    ] == ["tenkz", "tenkz"]
 
     spliced_source = (
         "\\begin {tenkz}\\tn{}\\end {tenkz}\n"
@@ -78,9 +75,7 @@ def main() -> int:
 
     control_boundaries = (
         r"\\begin{tenkz}\tn{}\\end{tenkz}" "\n"
-        r"\\tnpic{\tn{}}" "\n"
         r"\\tntree{({}{})}" "\n"
-        r"\tnpicⅣ{\tn{}}" "\n"
         r"\tntreeⅣ{({}{})}" "\n"
         r"\begin{tenkz}\\end{tenkz}\tn{}\end{tenkz}" "\n"
     )

@@ -76,9 +76,11 @@ def main() -> int:
     )
     for source in accepted:
         assert not guard.uses_tombstone(source), source
+    # Since the S4 surface swap the kernel reaches every construct, so a
+    # signed key (physical=) owes no work; the 0.7 atom flag still does.
     assert guard.source_target_codes(
         r"\begin{tenkz}[physical=up]\tn[box]{}\end{tenkz}"
-    ) == frozenset({"C-policy", "C-record"})
+    ) == frozenset({"C-record"})
     assert guard.source_target_codes(
         r"\tnset{species={alpha,beta}}"
     ) == frozenset({"C-declare"})
@@ -97,8 +99,10 @@ def main() -> int:
     ):
         assert guard.SETUP_COMMAND.search(source), source
     assert guard.source_target_codes(r"\tn[pill]{}") == frozenset({"C-record"})
+    # cluster={RxC} is the signed kernel basis sugar, so it owes no work
+    # under the load-time surface.
     assert guard.source_target_codes(r"\tn[cluster={2x3}]{}") == frozenset(
-        {"C-record"}
+        {"P-grid"}
     )
     for source in (
         r"\begin{tenkz}\tn{$in=x$}\end{tenkz}",
@@ -114,7 +118,7 @@ def main() -> int:
     assert guard.source_target_codes(
         r"\begin{tenkzfree}\tnghost{}\end{tenkzfree}"
         r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
-    ) == frozenset({"R-free", "R-record", "C-policy"})
+    ) == frozenset({"R-free", "R-record"})
     assert guard.fragment_target_codes(
         r"\begin{tenkz}[physical=up]\tnspan[brace below]{2}{}\end{tenkz}"
     ) == frozenset({"C-policy", "C-record", "R-record"})
@@ -197,7 +201,8 @@ def main() -> int:
         sources = guard.construct_sources(blueprint)
         construct = sources[("blueprint.tex", 1, "tenkz")]
         assert any(guard.uses_tombstone(source) for source, _ in construct)
-        assert not any(kernel for _, kernel in construct)
+        # The load-time surface reaches every construct.
+        assert all(kernel for _, kernel in construct)
 
         switched = root / "switched.tex"
         switched.write_text(
@@ -208,14 +213,16 @@ def main() -> int:
             r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}"
         )
         switched_sources = guard.construct_sources(switched)
+        # The switch's position no longer matters: the package binds the
+        # kernel surface at load, so both pictures read as kernel.
         assert switched_sources[("switched.tex", 3, "tenkz")] == [
             (r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}", True)
         ]
         assert switched_sources[("switched.tex", 5, "tenkz")] == [
-            (r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}", False)
+            (r"\begin{tenkz}[physical=up]\tn{}\end{tenkz}", True)
         ]
         assert guard.source_target_codes(switched.read_text()) == frozenset(
-            {"C-policy", "C-switch"}
+            {"C-switch"}
         )
 
         cycle = root / "cycle.tex"
@@ -272,20 +279,21 @@ def main() -> int:
         tree_sources = guard.construct_sources(tree)
         tree_key = ("tree.tex", 1, "tntree")
         assert list(tree_sources) == [tree_key]
-        assert tree_sources[tree_key] == [(tree_source, False)]
+        assert tree_sources[tree_key] == [(tree_source, True)]
         assert guard.source_target_codes(tree_source) == frozenset({"C-tree"})
         assert guard.fragment_target_codes(*tree_sources[tree_key][0]) == frozenset(
             {"C-tree"}
         )
 
     fixture_inventory = guard.documented_fixtures(guard.DOCUMENT.read_text())
-    assert len(fixture_inventory) == 159
-    assert fixture_inventory["modes_dot_baseline.tex"][0] == "redraw"
-    assert fixture_inventory["p_pitch.tex"][0] == "redraw"
-    assert fixture_inventory["rev4075_alias.tex"][0] == "redraw"
-    assert fixture_inventory["p_species.tex"] == (
-        "codemod",
-        frozenset({"C-declare"}),
+    assert len(fixture_inventory) == 9
+    assert fixture_inventory["iso_h.tex"] == (
+        "preserve",
+        frozenset({"P-grid"}),
+    )
+    assert fixture_inventory["plane_experiment.tex"] == (
+        "preserve",
+        frozenset({"P-none"}),
     )
     _, _, blueprint_inventory, _ = guard.documented_blueprint(
         guard.DOCUMENT.read_text()

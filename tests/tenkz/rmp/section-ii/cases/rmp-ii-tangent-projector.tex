@@ -1,42 +1,66 @@
 % Target: rmp-ii-tangent-projector
 % Formula: P_T(A) = sum_i P_L^(i-1) tensor I_i tensor P_R^(i+1) - sum_i P_L^i tensor
 %   P_R^(i+1).
-% Ink: Canonical public tenkz and kernel environments; no raw TikZ.
+% Ink: Canonical public tenkz kernel environments; no raw TikZ.
 % Boundary: Each block closes only at its internal cup; the identity wire and all
 %   displayed outer and physical endpoints stay open.
 % Source: paper TN-Review-main.tex line 667; author source ImagesReview Section
 %   II/ImagesReview Section II.tex lines 208-236
 % Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
 \begin{aligned}
   P_{T(A)} \;=\;& \sum_{i=1}^{n}\;
   % P_L^{(i-1)}: A_L window, all legs open, bracket (cup) at the east edge
-  \begin{tenkz}[rows={ket:nopair, bra}, east=cup]
-    \tndots & \tn[tri=l]{} & \tn[tri=l]{}\\
-    \tndots & \tn*[tri=l]{} & \tn*[tri=l]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=3, bonds=none, physical=updown, east=cup]
+    \tn[at=(1,1), physical=none, skin=dots, name=a1]{} &
+    \tn[at=(1,2), name=a2, skin=tri]{} &
+    \tn[at=(1,3), name=a3, skin=tri]{} \\
+    \tn[at=(2,1), physical=none, skin=dots, name=b1]{} &
+    \tn[at=(2,2), name=b2, skin=tri]{} &
+    \tn[at=(2,3), name=b3, skin=tri]{}
+    \tnwire{open w}{a1} \tnwire{a1}{a2.180} \tnwire{a2.0}{a3.180}
+    \tnwire{open w}{b1} \tnwire{b1}{b2.180} \tnwire{b2.0}{b3.180}
+  \end{tenkz}}
   \otimes
-  {\tenkzkernel
-   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-     \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
-   \end{tenkz}}
+  {\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
+  \end{tenkz}}
   \otimes
   % P_R^{(i+1)}: A_R window, bracket (cup) at the west edge
-  \begin{tenkz}[rows={ket:nopair, bra}, west=cup]
-    \tn[tri=r]{} & \tn[tri=r]{} & \tndots\\
-    \tn*[tri=r]{} & \tn*[tri=r]{} & \tndots
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=3, bonds=none, physical=updown, west=cup]
+    \tn[at=(1,1), name=a1, skin=triwest]{} &
+    \tn[at=(1,2), name=a2, skin=triwest]{} &
+    \tn[at=(1,3), physical=none, skin=dots, name=a3]{} \\
+    \tn[at=(2,1), name=b1, skin=triwest]{} &
+    \tn[at=(2,2), name=b2, skin=triwest]{} &
+    \tn[at=(2,3), physical=none, skin=dots, name=b3]{}
+    \tnwire{a3}{open e} \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3}
+    \tnwire{b3}{open e} \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3}
+  \end{tenkz}}
   \\[0.4em]
   -\;& \sum_{i=1}^{n}\;
   % P_L^{(i)} (x) P_R^{(i+1)}: the two brackets meet back to back
-  \begin{tenkz}[rows={ket:nopair, bra}, east=cup]
-    \tndots & \tn[tri=l]{} & \tn[tri=l]{}\\
-    \tndots & \tn*[tri=l]{} & \tn*[tri=l]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=3, bonds=none, physical=updown, east=cup]
+    \tn[at=(1,1), physical=none, skin=dots, name=a1]{} &
+    \tn[at=(1,2), name=a2, skin=tri]{} &
+    \tn[at=(1,3), name=a3, skin=tri]{} \\
+    \tn[at=(2,1), physical=none, skin=dots, name=b1]{} &
+    \tn[at=(2,2), name=b2, skin=tri]{} &
+    \tn[at=(2,3), name=b3, skin=tri]{}
+    \tnwire{open w}{a1} \tnwire{a1}{a2.180} \tnwire{a2.0}{a3.180}
+    \tnwire{open w}{b1} \tnwire{b1}{b2.180} \tnwire{b2.0}{b3.180}
+  \end{tenkz}}
   \otimes
-  \begin{tenkz}[rows={ket:nopair, bra}, west=cup]
-    \tn[tri=r]{} & \tn[tri=r]{} & \tndots\\
-    \tn*[tri=r]{} & \tn*[tri=r]{} & \tndots
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=3, bonds=none, physical=updown, west=cup]
+    \tn[at=(1,1), name=a1, skin=triwest]{} &
+    \tn[at=(1,2), name=a2, skin=triwest]{} &
+    \tn[at=(1,3), physical=none, skin=dots, name=a3]{} \\
+    \tn[at=(2,1), name=b1, skin=triwest]{} &
+    \tn[at=(2,2), name=b2, skin=triwest]{} &
+    \tn[at=(2,3), physical=none, skin=dots, name=b3]{}
+    \tnwire{a3}{open e} \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3}
+    \tnwire{b3}{open e} \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3}
+  \end{tenkz}}
 \end{aligned}
 \]

@@ -33,13 +33,6 @@ ENVIRONMENT = re.compile(
 COMMAND = re.compile(r"\\(tnpic|tntree)\b")
 TENKZEQ_TOKEN = re.compile(r"\\(begin|end)\{tenkzeq\}")
 SETUP_COMMAND = re.compile(r"\\(?:tnset|tndeclare(?:atom)?|tenkzkernel)\b")
-GROUP_TOKEN = re.compile(
-    r"\\begin\s*\{\s*[A-Za-z@*]+\s*\}"
-    r"|\\end\s*\{\s*[A-Za-z@*]+\s*\}"
-    r"|\\tenkzkernel(?![A-Za-z])"
-    r"|\\(?:[A-Za-z]+|.)"
-    r"|[{}]"
-)
 DISPOSITIONS = ("preserve", "codemod", "redraw")
 DEAD_COMMANDS = (
     "tnput",
@@ -264,44 +257,6 @@ def unrecognized_option_keys(source: str) -> set[str]:
     return unknown
 
 
-def kernel_switch_spans(source: str) -> list[tuple[int, int]]:
-    r"""Return the character ranges over which `\tenkzkernel` is in force.
-
-    The switch is an ordinary TeX declaration, so the group that contains it
-    ends it: a switch inside one `center` block does not reach a picture in
-    the next. Environments and brace groups both count as groups, which is
-    the same reading the blueprint renderer applies to the document tree.
-    """
-    spans: list[tuple[int, int]] = []
-    depth = 0
-    start: int | None = None
-    switch_depth = 0
-    for match in GROUP_TOKEN.finditer(source):
-        token = match.group()
-        if token.startswith("\\tenkzkernel"):
-            if start is None:
-                start, switch_depth = match.end(), depth
-            continue
-        if token.startswith("\\begin") or token == "{":
-            depth += 1
-            continue
-        if token.startswith("\\end") or token == "}":
-            depth -= 1
-        else:
-            continue
-        if start is not None and depth < switch_depth:
-            spans.append((start, match.start()))
-            start = None
-    if start is not None:
-        spans.append((start, len(source)))
-    return spans
-
-
-def within(spans: list[tuple[int, int]], offset: int) -> bool:
-    """Return whether an offset falls inside one of the given ranges."""
-    return any(start <= offset < end for start, end in spans)
-
-
 def scan_inventory_constructs(source: str) -> list[Construct]:
     """Scan picture constructs plus the non-picture `tenkzeq` wrapper."""
     constructs = scan_constructs(source)
@@ -337,16 +292,20 @@ def scan_inventory_constructs(source: str) -> list[Construct]:
 def construct_sources(
     path: Path,
 ) -> dict[tuple[str, int, str], list[tuple[str, bool]]]:
-    """Return each construct's source slice and whether the kernel reaches it."""
+    """Return each construct's source slice and whether the kernel reaches it.
+
+    Since the S4 surface swap the package binds the kernel surface at load,
+    so the kernel reaches every construct; a document's own `\\tenkzkernel`
+    call rebinds the same meanings and is inert.
+    """
     source = normalized_environment_spacing(
         strip_comments(path.read_text(errors="replace"))
     )
-    spans = kernel_switch_spans(source)
     result: dict[tuple[str, int, str], list[tuple[str, bool]]] = defaultdict(list)
     for construct in scan_inventory_constructs(source):
         key = (path.name, construct.line, construct.name)
         result[key].append(
-            (source[construct.start : construct.end], within(spans, construct.start))
+            (source[construct.start : construct.end], True)
         )
     return result
 
@@ -573,9 +532,12 @@ def fragment_target_codes(source: str, kernel: bool = False) -> frozenset[str]:
 
 
 def source_target_codes(source: str) -> frozenset[str]:
-    """Derive exact migration targets, preserving mixed-construct workloads."""
+    """Derive exact migration targets, preserving mixed-construct workloads.
+
+    The kernel is passed as reaching every construct: since the S4 surface
+    swap the package binds the kernel surface at load.
+    """
     source = normalized_environment_spacing(source)
-    spans = kernel_switch_spans(source)
     constructs = scan_inventory_constructs(source)
     codes: set[str] = set()
     masked = list(source)
@@ -583,13 +545,13 @@ def source_target_codes(source: str) -> frozenset[str]:
         codes.update(
             fragment_target_codes(
                 source[construct.start : construct.end],
-                within(spans, construct.start),
+                True,
             )
         )
         for index in range(construct.start, construct.end):
             if masked[index] != "\n":
                 masked[index] = " "
-    codes.update(fragment_target_codes("".join(masked)))
+    codes.update(fragment_target_codes("".join(masked), True))
     if any(not code.startswith("P-") for code in codes):
         codes = {code for code in codes if not code.startswith("P-")}
     elif "P-grid" in codes:
@@ -654,7 +616,9 @@ def parse_fixture_table(text: str) -> tuple[Counter[str], int]:
         total_match = re.match(r"\| \*\*Total\*\* \| \*\*([0-9]+)\*\* \|$", row)
         if total_match:
             total = int(total_match.group(1))
-    if set(files) != set(DISPOSITIONS):
+    # Since the S4 surface swap every codemod and redraw fixture has left the
+    # corpus, so the table may carry the preserve row alone.
+    if not files or set(files) - set(DISPOSITIONS):
         fail("could not parse standalone fixture reconciliation table")
     if total is None or total != sum(files.values()):
         fail(f"invalid standalone fixture total: {total} != {sum(files.values())}")
@@ -705,13 +669,17 @@ def documented_fixtures(text: str) -> dict[str, tuple[str, frozenset[str]]]:
     target_codes = set(re.findall(r"^\| `([PCR]-[^`]+)` \|", text, re.MULTILINE))
     for disposition in DISPOSITIONS:
         heading = rf"### {disposition.capitalize()} fixtures \(([0-9]+)\)\n"
-        ending = r"(?=\n### |\nThe preserved list)"
+        ending = r"(?=\n### |\nThe preserved list|\n\nThree corrections)"
         match = re.search(
             heading + r"(.*?)" + ending,
             text,
             flags=re.DOTALL,
         )
         if not match:
+            # Since the S4 surface swap the codemod and redraw groups are
+            # empty and their lists have left the document.
+            if disposition in ("codemod", "redraw"):
+                continue
             fail(f"missing {disposition} fixture list")
         names: list[str] = []
         for row in match.group(2).splitlines():
@@ -864,20 +832,22 @@ def main() -> int:
         fail("fixture raw-count table does not match the source inventory")
 
     census = re.search(
-        r"Of the ([0-9]+) top-level fixtures, ([0-9]+) directly or indirectly "
-        r"open a tenkz\n"
-        r"environment, ([0-9]+) are picture-command-only consumers, ([0-9]+) "
-        r"are setup-only\n"
-        r"consumers, and ([0-9]+) contain no tenkz public-surface construct\.",
+        r"Of the ([0-9]+) top-level fixtures, ([0-9]+) open the \(kernel\) "
+        r"tenkz environment and ([0-9]+)\n"
+        r"contain no tenkz public-surface construct\.",
         text,
     )
     actual_census = (
         len(expected_fixtures),
         environment_files,
-        command_only_files,
-        setup_only_files,
         no_surface_files,
     )
+    if command_only_files or setup_only_files:
+        fail(
+            "fixture consumer census has command-only or setup-only "
+            f"consumers the document does not state: {command_only_files}, "
+            f"{setup_only_files}"
+        )
     if not census or tuple(map(int, census.groups())) != actual_census:
         fail(f"fixture consumer census does not match {actual_census}")
 

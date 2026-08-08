@@ -1,46 +1,87 @@
 % Target: rmp-workbench-ii-projector-on-pta
 % Formula: The archival tangent projector is a difference of two canonical sandwich
 %   sums.
-% Ink: Canonical public tenkz and kernel environments; no raw TikZ.
+% Ink: Canonical public tenkz kernel environments; no raw TikZ.
 % Boundary: Each block closes ket to bra at its inner edge; outer virtual rails and
 %   all physical legs stay open.
 % Source: author source ImagesReview Section II/ImagesReview Section II.tex lines
 %   208-236; archival output projectoronPTA.pdf
 % Capabilities: kernel, typed-ports
+\tenkzkernel
 \[
 \begin{aligned}
   P_{T(A)} \;=\;& \sum_{i=1}^{n}\;
   % P_L^{(i-1)}: the four left-canonical columns of the archival first
   % summand, ket closed to bra at the east edge
-  \begin{tenkz}[rows={ket:nopair, bra}, east=cup]
-    \tn[tri=l]{} & \tn[tri=l]{} & \tn[tri=l]{} & \tn[tri=l]{}\\
-    \tn*[tri=l]{} & \tn*[tri=l]{} & \tn*[tri=l]{} & \tn*[tri=l]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=4, bonds=none, physical=updown, east=cup]
+    \tn[at=(1,1), name=a1, skin=tri]{} &
+    \tn[at=(1,2), name=a2, skin=tri]{} &
+    \tn[at=(1,3), name=a3, skin=tri]{} &
+    \tn[at=(1,4), name=a4, skin=tri]{} \\
+    \tn[at=(2,1), name=b1, skin=tri]{} &
+    \tn[at=(2,2), name=b2, skin=tri]{} &
+    \tn[at=(2,3), name=b3, skin=tri]{} &
+    \tn[at=(2,4), name=b4, skin=tri]{}
+    \tnwire{open w}{a1.180} \tnwire{a1.0}{a2.180}
+    \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+    \tnwire{open w}{b1.180} \tnwire{b1.0}{b2.180}
+    \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+  \end{tenkz}}
   \;
   % the site-i identity strand between the two blocks
-  {\tenkzkernel
-   \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-     \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
-   \end{tenkz}}
+  {\begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \tn[at=(1,1), skin=none, ports={90:physical,270:physical}]{}
+  \end{tenkz}}
   \;
   % P_R^{(i+1)}: the four right-canonical columns, closed at the west edge
-  \begin{tenkz}[rows={ket:nopair, bra}, west=cup]
-    \tn[tri=r]{} & \tn[tri=r]{} & \tn[tri=r]{} & \tn[tri=r]{}\\
-    \tn*[tri=r]{} & \tn*[tri=r]{} & \tn*[tri=r]{} & \tn*[tri=r]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=4, bonds=none, physical=updown, west=cup]
+    \tn[at=(1,1), name=a1, skin=triwest]{} &
+    \tn[at=(1,2), name=a2, skin=triwest]{} &
+    \tn[at=(1,3), name=a3, skin=triwest]{} &
+    \tn[at=(1,4), name=a4, skin=triwest]{} \\
+    \tn[at=(2,1), name=b1, skin=triwest]{} &
+    \tn[at=(2,2), name=b2, skin=triwest]{} &
+    \tn[at=(2,3), name=b3, skin=triwest]{} &
+    \tn[at=(2,4), name=b4, skin=triwest]{}
+    \tnwire{a4.0}{open e} \tnwire{a1.0}{a2.180}
+    \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+    \tnwire{b4.0}{open e} \tnwire{b1.0}{b2.180}
+    \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+  \end{tenkz}}
   \\[0.4em]
   -\;& \sum_{i=1}^{n}\;
   % P_L^{(i)}: the site-i column joins the left block, so the second
   % sandwich sum keeps the first summand's site multiplicity
-  \begin{tenkz}[rows={ket:nopair, bra}, east=cup]
-    \tn[tri=l]{} & \tn[tri=l]{} & \tn[tri=l]{} & \tn[tri=l]{} & \tn[tri=l]{}\\
-    \tn*[tri=l]{} & \tn*[tri=l]{} & \tn*[tri=l]{} & \tn*[tri=l]{} &
-      \tn*[tri=l]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=5, bonds=none, physical=updown, east=cup]
+    \tn[at=(1,1), name=a1, skin=tri]{} &
+    \tn[at=(1,2), name=a2, skin=tri]{} &
+    \tn[at=(1,3), name=a3, skin=tri]{} &
+    \tn[at=(1,4), name=a4, skin=tri]{} &
+    \tn[at=(1,5), name=a5, skin=tri]{} \\
+    \tn[at=(2,1), name=b1, skin=tri]{} &
+    \tn[at=(2,2), name=b2, skin=tri]{} &
+    \tn[at=(2,3), name=b3, skin=tri]{} &
+    \tn[at=(2,4), name=b4, skin=tri]{} &
+    \tn[at=(2,5), name=b5, skin=tri]{}
+    \tnwire{open w}{a1.180} \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180}
+    \tnwire{a3.0}{a4.180} \tnwire{a4.0}{a5.180}
+    \tnwire{open w}{b1.180} \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180}
+    \tnwire{b3.0}{b4.180} \tnwire{b4.0}{b5.180}
+  \end{tenkz}}
   \;
-  \begin{tenkz}[rows={ket:nopair, bra}, west=cup]
-    \tn[tri=r]{} & \tn[tri=r]{} & \tn[tri=r]{} & \tn[tri=r]{}\\
-    \tn*[tri=r]{} & \tn*[tri=r]{} & \tn*[tri=r]{} & \tn*[tri=r]{}
-  \end{tenkz}
+  {\begin{tenkz}[rows={op,op}, cols=4, bonds=none, physical=updown, west=cup]
+    \tn[at=(1,1), name=a1, skin=triwest]{} &
+    \tn[at=(1,2), name=a2, skin=triwest]{} &
+    \tn[at=(1,3), name=a3, skin=triwest]{} &
+    \tn[at=(1,4), name=a4, skin=triwest]{} \\
+    \tn[at=(2,1), name=b1, skin=triwest]{} &
+    \tn[at=(2,2), name=b2, skin=triwest]{} &
+    \tn[at=(2,3), name=b3, skin=triwest]{} &
+    \tn[at=(2,4), name=b4, skin=triwest]{}
+    \tnwire{a4.0}{open e} \tnwire{a1.0}{a2.180}
+    \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+    \tnwire{b4.0}{open e} \tnwire{b1.0}{b2.180}
+    \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+  \end{tenkz}}
 \end{aligned}
 \]

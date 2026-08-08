@@ -2696,3 +2696,156 @@ into the registry. The census decrease is the session's own evidence.
 | flag:lonely-type:compass | keep-because: `plane lean=` left with its dialect and `nudge=`'s pair spelling never used it, so the kernel's one compass reading stands alone until the amendment batch retires `nudge=`; expiry 0.9 |
 | flag:lonely-type:dimension-pair | keep-because: the projected-basis escape rows that shared the type left with their dialect; the surviving carrier is the object `label shift=` escape, itself sentenced by §10, and the type dies with it; expiry 0.9 |
 | flag:lonely-type:math-and-range | keep-because: `bond label=` is the type's one carrier and already holds its S4 death sentence (SHRINK wave verdict: dies with the 0.7 picture ledger); the type leaves with the row at the swap; expiry 0.9 |
+
+### 2026-08-09 — the grid front end is demolished; the kernel is the surface
+
+The last demolition of the S4 swap, and the swap itself:
+`tenkz-grid.code.tex` and `tenkz-frame.code.tex` are deleted, and
+`tenkz.sty` binds the kernel surface at package load. The `tenkz`
+environment now *is* the kernel picture; `\tenkzkernel` remains
+callable, rebinds the same meanings, and is therefore inert — its own
+deletion is the 1.0 freeze's corpus rewrite. With the 0.7 front end go
+its seven commands (`\tnpic`, `\tnX`, `\tndots`, `\tnghost`,
+`\tnskip`, `\tnspan`, `\tncut`), the whole 0.7 setup, picture, object,
+and annotation key ledgers, the last four aliases, and the
+`label shift=` escape row — each tombstoned by contract
+(`LANGUAGE-1.0` §10). The 150 standalone fixtures whose disposition
+was codemod or redraw leave the corpus; every behaviour they carried
+is classified in `FIXTURE-RETIREMENT.md` §3 as dying with the dialect
+or covered by a named kernel or RMP case, and the nine survivors are
+the corpus. Two pre-swap binding regressions invert with the contract:
+`r_load_inert.tex` and `r_kernel_scope.tex` pinned that loading the
+package left the 0.7 surface untouched, and `r_load_surface.tex` now
+pins that the surface exists at load and the retained switch changes
+nothing.
+
+Extension-gate: #4699 — the parser-leaf identity change is sixty
+removed leaves and seven removed command doors, the demolition the
+issue's checklist item 6.4 orders; no leaf is added.
+
+Census-correction: #5651 — M4 rises from 25.94 to 26.46: the three
+benchmark cases that consumed legacy fixtures respell onto the kernel,
+where typed ports and explicit wires are longer than the 0.7
+shorthands, and the alignment-cell body-capture defect recorded on
+that issue makes the house idiom brace-wrap each picture inside
+`aligned`; both changes add lines to frozen cases without adding
+vocabulary.
+
+M1 falls from 103 kernel rows and 142 total to 62 and 85: forty-one
+kernel key rows, seven commands, four sugar rows, both remaining
+aliases pairs, and the one escape row leave the ledger. M2 falls from
+133 parser paths to 73. M3 falls to 0: the last escape spelling died
+with its row. M5 falls from four aliases to zero. M6 falls to zero on
+every component: the multi-typed names and shared enum words were 0.7
+spellings beside their kernel namesakes, and one surface now spells
+each once. No metric-registry ratio moves: the grid renderer consumed
+registry ratios and owned none, so its deletion retires consumers,
+not names.
+
+The consumer census now reads the kernel scopes from the demand
+corpus — the swap is what gives `kernel-*` rows demand-corpus
+constructs to count — so this session's flag list surfaces the whole
+kernel vocabulary at its true benchmark demand for the first time.
+Verdicts below; the registry's regression tenure (the `r_*`,
+`n_*`, `s*`, and `k_*` suites) is deliberately not demand, so a
+0-consumer row here is a row the 130 benchmarks happen not to need,
+not an unexercised row.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tnbond | keep-because: the signed sugar row over `\tnwire` of kind index; two kernel regressions and the sugar-pair suite hold its expansion identity while benchmark demand stays with `\tnwire`; expiry 1.0 |
+| flag:consumers:command:tndeclareatom | keep-because: the atom-declaration door of the prelude contract (`r_declare_atom.tex`); benchmarks declare through `\tndeclare`, and the two doors are one review question at the freeze; expiry 0.9 |
+| flag:consumers:command:tnfuse | demoted: a prelude-declared atom by SHRINK wave verdict; its two benchmark consumers are the fusion-tree cases whose declarations land with the tree redraw; expiry 0.9 |
+| flag:consumers:command:tngroup | keep-because: the one composition scope between picture and document (`r_setup_persistence.tex` pins its scoping); zero benchmark demand is the composition sugar's normal idle state; expiry 1.0 |
+| flag:consumers:command:tnprose | keep-because: the signed sugar row for recorded prose in place of a diagram; its consumers are review documents, not benchmarks; expiry 1.0 |
+| flag:consumers:command:tnset | keep-because: the setup door of the kernel-setup ledger; one benchmark consumer plus the document-scope regressions; expiry 1.0 |
+| flag:consumers:key:atom-declaration:ports | keep-because: typed ports are the declaration contract's load-bearing half (`r_closure_typed_ports.tex`, `n_port_type.tex` family); expiry 1.0 |
+| flag:consumers:key:atom-declaration:skin | keep-because: the declaration's silhouette half, same contract as its ports row; expiry 1.0 |
+| flag:consumers:key:kernel-atom:cluster | keep-because: `cluster={RxC}` is the signed basis sugar for addressable sub-spins; one benchmark consumer and the cluster regressions carry it; expiry 1.0 |
+| flag:consumers:key:kernel-atom:nudge | dies at the amendment landing (`LANGUAGE-1.0` §10: a basis member, an ordinary address, or the label station rule replaces it); expiry 0.9 |
+| flag:consumers:key:kernel-atom:pairing cross | keep-because: the only spelling that reorders a declared skin pairing's crossing, held by the pairing regressions; expiry 0.9 |
+| flag:consumers:key:kernel-atom:void | keep-because: `void={open,sealed}` is the hole contract (`r_void_open.tex`, `r_sealed_void.tex`), with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:kernel-frame:basis | keep-because: the declared-basis door of `frame=` (`k_plane.tex`, `r_basis_plane.tex`); the counter reads top-level keys and a basis is always nested inside `frame={...}`, so its demand rides the frame row's; expiry 1.0 |
+| flag:consumers:key:kernel-mark:inset | dies by the ninth amendment: concentric order is doctrine on the hull and the key is sentenced (`LANGUAGE-1.0` §10); its two benchmark consumers respell at the amendment landing; expiry 0.9 |
+| flag:consumers:key:kernel-mark:name | keep-because: a named mark is the target of enclosure-over-selection and is pinned by `r_region_slot_words.tex`; expiry 1.0 |
+| flag:consumers:key:kernel-mark:nudge | dies at the amendment landing with its atom twin; expiry 0.9 |
+| flag:consumers:key:kernel-picture:align | keep-because: the math-axis row choice with one benchmark consumer and the equation-policy regression; expiry 1.0 |
+| flag:consumers:key:kernel-picture:check | dies by §10: the audit follows the joiner class; the key is sentenced and its regressions move to the joiner-class audit at the amendment landing; expiry 0.9 |
+| flag:consumers:key:kernel-picture:open | keep-because: the cell-selection half of the side policy (`r_cell_policy.tex`); benchmarks state sides, probes state cells; expiry 1.0 |
+| flag:consumers:key:kernel-picture:planes | keep-because: the two-sheet preset is the signed sugar over a declared basis (`s9_sugar.tex`) with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:kernel-picture:ring | keep-because: the circle-frame population sugar (`k_ring.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-picture:sandwich | keep-because: the ket-over-bra preset (`s1_sugar.tex`); benchmarks spell `rows=` explicitly, prose examples reach for the preset; expiry 1.0 |
+| flag:consumers:key:kernel-picture:surface | keep-because: the closed-surface frame sugar (`k_torus.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-picture:trace | keep-because: the cell-closure half of the closure alphabet with two benchmark consumers (`r_one_sided_trace.tex`, `r_affine_physical_trace.tex`); expiry 1.0 |
+| flag:consumers:key:kernel-setup:pitch | keep-because: the one document metric (`r_basis_spacing.tex`); a benchmark that restates the default would be noise; expiry permanent |
+| flag:consumers:key:kernel-setup:sizes | keep-because: the size-class table is the metric contract's second half; expiry 1.0 |
+| flag:consumers:key:kernel-setup:strict | keep-because: the benchmark and CI sugar rejector; its consumers are drivers, not cases; expiry permanent |
+| flag:consumers:key:kernel-setup:theme | keep-because: the semantic-ink theme door; the dark-slide theme is its consumer outside the demand corpus; expiry 1.0 |
+| flag:consumers:key:kernel-wire:around | keep-because: the winding-closure spelling of the string family, pinned by the string regressions; expiry 0.9 |
+| flag:consumers:key:kernel-wire:bend | dies by §10: an arc leaves and enters along its ends' faces; the key is sentenced; expiry 0.9 |
+| flag:consumers:key:kernel-wire:stroke | keep-because: the explicit stroke-class override with one benchmark consumer; the port type decides the stroke everywhere else; expiry 0.9 |
+| flag:consumers:key:kernel-wire:weight | dies by §10: the port type decides the stroke and bundling is a claim the audit already carries; expiry 0.9 |
+| flag:consumers:key:kernel-wire:wind | keep-because: the string winding count with two benchmark consumers; expiry 1.0 |
+| flag:consumers:key:object:role | keep-because: the tree's semantic role words feed the recorded `role=` field the RMP tree cases assert; the counter reads `\tntree` options and the benchmark trees carry their roles today; expiry 0.9 |
+| flag:consumers:key:object:species | keep-because: the tree twin of the atom species row; one declaration vocabulary across records; expiry 0.9 |
+| flag:consumers:key:object:tree style | keep-because: wire and ribbon are the two tree strand semantics (`test_tenkz_tree.py` pins both); expiry 0.9 |
+| flag:cooccur:kernel-declare:base+pairings | keep-because: a declared pairing skin always names the base it decorates; the co-occurrence is the declaration's grammar, not a foldable pair; expiry 1.0 |
+| flag:cooccur:kernel-picture:north+south | keep-because: a doubled-layer picture states both transverse sides for the same reason an equation states both members; the four side keys are one alphabet; expiry 1.0 |
+| flag:lonely-type:address | keep-because: `at=` is the addressing door of the whole record grammar; the type is lonely because addressing is one concept spelled once; expiry permanent |
+| flag:lonely-type:basis-spec | keep-because: a declared basis is one concept with one owner (`frame=`'s basis member list); expiry 1.0 |
+| flag:lonely-type:bond-policy | keep-because: `bonds=` owns the generated-bond alphabet alone; expiry 1.0 |
+| flag:lonely-type:cell-set | keep-because: `open=` is the one cell-selection key left after the 0.7 `trace=`/`open=` pair collapsed onto the kernel's; expiry 1.0 |
+| flag:lonely-type:check-spec | dies with its owner `check=` at the amendment landing (§10); expiry 0.9 |
+| flag:lonely-type:crossing-list | keep-because: `cross=` owns crossing order alone; a second consumer would be a second crossing grammar; expiry 1.0 |
+| flag:lonely-type:direction-policy | keep-because: `dir=` owns duality alone (§2.4); expiry permanent |
+| flag:lonely-type:frame-spec | keep-because: `frame=` owns the three-word frame alphabet alone (§4); expiry permanent |
+| flag:lonely-type:hue-source | keep-because: `hue=` is the declaration ledger's one colour door; expiry 1.0 |
+| flag:lonely-type:indexed-crossing-list | keep-because: the pairing-cross spelling of its crossing-list sibling; dies if its owner dies; expiry 0.9 |
+| flag:lonely-type:integer | keep-because: `ring=` is the one bare-count sugar; expiry 1.0 |
+| flag:lonely-type:length | keep-because: `pitch=` is deliberately the language's only length (`LANGUAGE-1.0` §11: no millimetres appear elsewhere); expiry permanent |
+| flag:lonely-type:port-pair-list | keep-because: `pairings=` owns declared skin pairings alone; expiry 1.0 |
+| flag:lonely-type:row | keep-because: `align=` owns the math-axis row alone; expiry 1.0 |
+| flag:lonely-type:row-list | keep-because: `rows=` owns row topology alone; expiry permanent |
+| flag:lonely-type:semantic-slot | dies at the deferred slot-for-species exchange (`LANGUAGE-1.0` §14.5): the kernel mark's `slot=` is the type's last carrier; expiry 0.9 |
+| flag:lonely-type:size-table | keep-because: the size-class table is one concept with one owner; expiry 1.0 |
+| flag:lonely-type:trace-spec | keep-because: `trace=` owns cell closure alone after the swap; expiry 1.0 |
+| flag:lonely-type:void-policy | keep-because: `void=` owns the hole alphabet alone; expiry 1.0 |
+| flag:sugar-shaped:command:tnfuse | demoted: same sentence as its consumer flag above — a prelude-declared atom; the single option signature is the demotion's evidence; expiry 0.9 |
+| flag:sugar-shaped:command:tntree | keep-because: a fusion tree is one structured atom and its word argument is the whole signature; expiry 1.0 |
+| flag:sugar-shaped:command:tndeclare | keep-because: the declaration door's uniform three-argument shape is its contract, not sugar debt; expiry 1.0 |
+| flag:sugar-shaped:command:tenkzkernel | dies at the 1.0 freeze: the load-time surface makes every call inert, and the freeze's corpus rewrite deletes the spelling (registry sunset 1.0); executes at the 1.0 freeze; expiry 1.0 |
+
+#### 2026-08-09 review corrections (PR #5662)
+
+Three census-mechanics corrections from the review round, none moving a
+ledger row:
+
+- The kernel-picture demand census now reads `tenkzeq` option lists —
+  the equation wrapper parses the same picture-policy rows — so
+  `kernel-picture:check` counts its seven equation-wrapper consumers and
+  leaves the flag list; its verdict above stands as the row's §10
+  sentence, not as a zero-demand claim.
+- The kernel-frame census now reads the extracted `frame={...}`
+  descriptors, so `basis` counts its real consumers. Corrected verdict:
+
+| flag | verdict |
+|---|---|
+| flag:consumers:key:kernel-frame:basis | keep-because: the declared-basis door of `frame=` (`k_plane.tex`, `r_basis_plane.tex`), with two benchmark consumers now counted from the extracted frame descriptors; expiry 1.0 |
+
+- M2 rises 73 to 74: the tree's `pitch=` door returns. The demolition
+  had deleted the forwards installer with the grid file, leaving the
+  advertised `\tntree[pitch=]` spelling a hard error; the restored key
+  rescopes the shared metric door for one tree and collapses onto the
+  kernel-setup pitch row in the census. Extension-gate: #4699 — the
+  restoration re-lands a pre-swap leaf the demolition removed by
+  accident; no new vocabulary arrives.
+
+Fourth correction, same round: `\tndeclare` descriptors now dispatch by
+their class argument, so the six benchmark atom declarations feed the
+atom-declaration rows (their zero-consumer flags leave) and the
+skin/species classes feed kernel-declare. The dispatch surfaces one new
+co-occurrence flag:
+
+| flag | verdict |
+|---|---|
+| flag:cooccur:atom-declaration:ports+skin | keep-because: a declared atom states its sanctioned skin and its complete typed ports — the declaration contract requires both halves, so their co-occurrence is the grammar, not a foldable pair; expiry 1.0 |
