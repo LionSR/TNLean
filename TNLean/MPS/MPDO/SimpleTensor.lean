@@ -249,7 +249,7 @@ canonical-form gauge and then reads the diagonal block indexed by `(j, q)`.
 **Scope restriction (literal-ZCL inheritance):** This is only the literal-ZCL inheritance
 part of Case II. It neither gives spectral normality of the absorbed tensor nor completes
 `prop2to3`. The remaining Case-II boundary is recorded in
-`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
 theorem weighted_basis_physTraceTransfer_sq_of_literal_ZCL
