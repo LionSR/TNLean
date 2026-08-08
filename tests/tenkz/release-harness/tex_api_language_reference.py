@@ -25,7 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from harnesslib import assert_that, read  # noqa: E402
+from harnesslib import assert_that, read, selected_assertion  # noqa: E402
 
 
 SUBJECTS = {
@@ -58,11 +58,8 @@ def registry_rows() -> list[str]:
 
 
 def main() -> int:
-    mode = sys.argv[1] if len(sys.argv) > 1 else ""
-    if mode not in SUBJECTS:
-        print(f"unknown assertion {mode!r}", file=sys.stderr)
-        return 2
-    test_id, fingerprint = SUBJECTS[mode]
+    mode = sys.argv[1]
+    test_id, fingerprint = selected_assertion(SUBJECTS)
     declared = registry_rows()
 
     if mode == "extraction":

@@ -64,8 +64,10 @@
       ],
       "properties": {
         "pull_requests": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/pullRequestFact" }
+          "description": "Keyed by pull-request reference, because a reference has one set of facts. An array admits two entries for the same pull request with conflicting merge or integration predicates, and those predicates decide queue membership, so two replay implementations could derive different queues from one receipt.",
+          "type": "object",
+          "propertyNames": { "pattern": "^#[1-9][0-9]*$" },
+          "additionalProperties": { "$ref": "#/$defs/pullRequestFact" }
         },
         "issues": {
           "type": "array",
@@ -208,7 +210,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "pr",
         "in_repository",
         "base_ref_name",
         "author_login",
@@ -222,9 +223,11 @@
         "integration_strict_descendant_of_anchor"
       ],
       "properties": {
-        "pr": { "$ref": "#/$defs/prRef" },
         "base_ref_name": { "type": "string", "minLength": 1 },
-        "author_login": { "$ref": "#/$defs/login" },
+        "author_login": {
+          "description": "Null when GitHub no longer supplies an author, as after account deletion. The policy checker treats a missing login as a record-invalid error, so the receipt must be able to record the absence: a schema that forbade null would make the reset that absence causes unrepresentable.",
+          "oneOf": [{ "$ref": "#/$defs/login" }, { "type": "null" }]
+        },
         "head_oid": { "$ref": "#/$defs/gitOid" },
         "merged": { "type": "boolean" },
         "merged_at": {

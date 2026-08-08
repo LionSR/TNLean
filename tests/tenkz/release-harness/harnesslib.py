@@ -87,3 +87,24 @@ def load_module(relative: str, name: str = "tenkz_release_subject"):
     sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def selected_assertion(assertions: dict[str, tuple[str, str]]) -> tuple[str, str]:
+    """Resolve the assertion this run was asked for, from its one argument.
+
+    An assertion file holding several assertions is the normal shape here, one
+    failure cause each, so the argument-to-identity lookup is the same in every
+    one of them. An unknown name exits 2: that is neither a pass nor an
+    assertion failure, and the supervisor fails closed on it, which is the
+    right answer for an inventory naming an assertion the file does not have.
+    """
+
+    mode = sys.argv[1] if len(sys.argv) > 1 else ""
+    if mode not in assertions:
+        print(
+            f"unknown assertion {mode!r}; this file offers "
+            f"{sorted(assertions)}",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+    return assertions[mode]

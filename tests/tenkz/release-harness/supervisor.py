@@ -161,11 +161,20 @@ def normalized(value: object) -> str | None:
 
 
 def glob_matches(path: str, pattern: str) -> bool:
-    """Match the policy's `*`/`**` repository-path grammar, not the shell's."""
+    """Match the policy's `*`/`**`/`?` repository-path grammar, not the shell's.
+
+    This duplicates `policy_glob_matches` in `scripts/check_tenkz_policy.py`
+    and must stay identical to it. The duplication is forced: release-test code
+    may import nothing from `scripts/`, and the two answer the same question
+    about the same pinned patterns, so a difference between them would let a
+    program path satisfy one checker and fail the other. The `?` rule was
+    missing here and is restored; change neither copy alone.
+    """
 
     expression = re.escape(pattern)
     expression = expression.replace(r"\*\*/", r"(?:[^/]+/)*")
     expression = expression.replace(r"\*", r"[^/]*")
+    expression = expression.replace(r"\?", r"[^/]")
     return re.fullmatch(expression, path) is not None
 
 
@@ -240,14 +249,28 @@ def gitlink_paths(root: Path) -> frozenset[str]:
     the only place the distinction is recorded.
     """
 
+    inside = subprocess.run(
+        ["git", "rev-parse", "--git-dir"],
+        cwd=root,
+        capture_output=True,
+        check=False,
+    )
+    if inside.returncode != 0:
+        # A tree that is not under Git has no index and therefore no gitlinks.
+        # That is a determinate answer rather than a failure to get one, and it
+        # is the case the self-test's synthetic fixtures are in.
+        return frozenset()
     result = subprocess.run(
         ["git", "ls-files", "--stage", "-z"],
         cwd=root,
         capture_output=True,
         check=False,
     )
-    if result.returncode != 0:
-        return frozenset()
+    require(
+        result.returncode == 0,
+        "could not read the Git index of a repository; submodule rejection "
+        "cannot fail open",
+    )
     paths = set()
     for record in result.stdout.decode("utf-8", errors="replace").split("\0"):
         if record.startswith("160000 "):
@@ -602,14 +625,19 @@ def resolve_tool(name: str, pattern: str, root: Path) -> tuple[str, str]:
         not resolved.is_relative_to(root),
         f"child tool {name} resolves inside the repository at {resolved}",
     )
-    result = subprocess.run(
-        [executable, "--version"],
-        text=True,
-        capture_output=True,
-        check=False,
-        timeout=30,
-    )
-    fingerprint = (result.stdout + result.stderr).strip().splitlines()[0]
+    try:
+        result = subprocess.run(
+            [executable, "--version"],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=30,
+        )
+    except subprocess.SubprocessError as error:
+        raise SupervisorError(f"child tool {name} did not report a version: {error}")
+    reported = (result.stdout + result.stderr).strip().splitlines()
+    require(reported, f"child tool {name} reported no version line")
+    fingerprint = reported[0]
     require(
         re.fullmatch(pattern, fingerprint) is not None,
         f"child tool {name} reports {fingerprint!r}, which the tool profile rejects",
@@ -832,12 +860,85 @@ def manifest_path(policy: Policy, tag: str) -> str:
     return path
 
 
+MANIFEST_FIELDS = {
+    "schema",
+    "tag",
+    "version",
+    "date",
+    "test_inventory_sha256",
+    "test_code_tree",
+    "test_support_tree",
+}
+ISO_DATE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
+
+
+def validate_manifest(
+    root: Path,
+    policy: Policy,
+    tag: str,
+    pins: dict[str, str],
+) -> dict:
+    """Check the tag-derived manifest against the tag and canonical artifacts.
+
+    `docs/tenkz/SOAK-1.0.md` §Release payload evidence states this shape.
+    Exposing the manifest without reading it would have let an armed payload
+    run pass with a malformed manifest or a package version disagreeing with
+    the tag — the observation would then be evidence for a release nobody had
+    described correctly.
+    """
+
+    relative = manifest_path(policy, tag)
+    require_regular_file(root, relative, f"the {tag} release manifest")
+    document = tomllib.loads((root / relative).read_text(encoding="utf-8"))
+    require(set(document) == {"release"}, f"{relative} has tables outside [release]")
+    release = document["release"]
+    require(
+        set(release) == MANIFEST_FIELDS,
+        f"{relative} fields differ from the manifest schema",
+    )
+    schema = release["schema"]
+    require(
+        isinstance(schema, int) and not isinstance(schema, bool) and schema == 1,
+        f"{relative} schema must be the integer 1",
+    )
+    require(release["tag"] == tag, f"{relative} names another tag")
+    version = tag.removeprefix("tenkz-v")
+    require(
+        release["version"] == version,
+        f"{relative} version {release['version']!r} is not the tag's {version!r}",
+    )
+    date = str(release["date"])
+    require(ISO_DATE.fullmatch(date) is not None, f"{relative} date is not ISO 8601")
+    for field, pin in (
+        ("test_inventory_sha256", "release_test_inventory_sha256"),
+        ("test_code_tree", "release_test_code_tree"),
+        ("test_support_tree", "release_test_support_tree"),
+    ):
+        require(
+            release[field] == pins[pin],
+            f"{relative} {field} does not equal this tree's {pins[pin]}",
+        )
+
+    # The package metadata and manual declare the manifest's version and date;
+    # the change record and event-format declaration name the tag and version.
+    declaration = (root / policy.package_metadata).read_text(encoding="utf-8")
+    require(
+        f"v{version}" in declaration and date.replace("-", "/") in declaration,
+        f"{policy.package_metadata} does not declare version {version} at {date}",
+    )
+    for artifact in (policy.manual, policy.change_record, policy.event_format):
+        text = (root / artifact).read_text(encoding="utf-8")
+        require(version in text, f"{artifact} does not name version {version}")
+    return release
+
+
 def observe(
     test: Test,
     policy: Policy,
     root: Path = ROOT,
     pins: dict[str, str] | None = None,
     tag: str | None = None,
+    output_mount: Path | None = None,
 ) -> dict:
     """Run one inventory test in its own view and return its payload receipt.
 
@@ -872,9 +973,20 @@ def observe(
     }
     workspace = Path(tempfile.mkdtemp(prefix="tenkz-release-"))
     view = workspace / "view"
-    output = workspace / "output"
+    # The ledger fixes the writable mount at `/tenkz-output`. A workspace path
+    # is what a developer run can have; an armed run inside the required mount
+    # namespace has to receive the fixed path, and the workflow cannot guess a
+    # randomly generated one. `--output-mount` lets the caller supply it, and
+    # the receipt records whichever was actually used.
+    if output_mount is None:
+        output = workspace / "output"
+        output.mkdir()
+    else:
+        output = output_mount
+        require(output.is_absolute(), "the output mount must be an absolute path")
+        require(output.is_dir(), f"the output mount {output} is not a directory")
+        require(not any(output.iterdir()), f"the output mount {output} is not empty")
     view.mkdir()
-    output.mkdir()
     try:
         sanitized_path = str(tool_directory(workspace, tools))
         # A canonical artifact reaches a command only through one of its two
@@ -903,7 +1015,7 @@ def observe(
         ]
         if tag is not None:
             manifest = manifest_path(policy, tag)
-            require_regular_file(root, manifest, f"the {tag} release manifest")
+            validate_manifest(root, policy, tag, pins)
             exposed.append(manifest)
         for relative in exposed:
             expose(root, view, relative)
@@ -953,6 +1065,9 @@ def observe(
         }
     finally:
         make_writable(view)
+        if output_mount is not None:
+            for leftover in sorted(output_mount.rglob("*"), reverse=True):
+                leftover.unlink() if leftover.is_file() else leftover.rmdir()
         shutil.rmtree(workspace, ignore_errors=True)
 
 
@@ -980,9 +1095,17 @@ def classify(test: Test, exit_status: int, output: Path, stderr: str) -> str:
 
     receipt_path = output / FAILURE_RECEIPT
     if exit_status == 0:
+        # `os.lstat`, not `exists()`: a dangling link at the receipt path is
+        # something the command wrote, and `exists()` reports it as absent.
+        try:
+            os.lstat(receipt_path)
+            stray = True
+        except OSError:
+            stray = False
         require(
-            not receipt_path.exists(),
-            f"{test.id} passed but wrote an assertion-failure receipt",
+            not stray,
+            f"{test.id} passed but left something at the assertion-failure "
+            f"receipt path",
         )
         return "passed"
     require(
@@ -1040,6 +1163,7 @@ def command_run(
     selected: str | None,
     tag: str | None = None,
     receipts_path: Path | None = None,
+    output_mount: Path | None = None,
 ) -> int:
     tests = load_inventory(policy, root)
     if selected is not None:
@@ -1055,7 +1179,7 @@ def command_run(
     failures = []
     receipts = []
     for test in tests:
-        receipt = observe(test, policy, root, pins, tag)
+        receipt = observe(test, policy, root, pins, tag, output_mount)
         receipts.append(receipt)
         print(f"{receipt['assertion_result']:>16}  {test.id}")
         if receipt["assertion_result"] != "passed":
@@ -1108,6 +1232,11 @@ def command_check_readiness(policy: Policy, root: Path) -> int:
         )
         return 0
     require_clean_worktree(policy, root)
+    require(
+        policy.enforcement == "armed",
+        f"policy enforcement is {policy.enforcement!r}; the grammar admits only "
+        f"'pending' and 'armed'",
+    )
     computed = computed_pins(policy, root)
     for name, value in pending.items():
         require(
@@ -1152,8 +1281,11 @@ def require_fixed_tagger(root: Path) -> None:
 
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
 YAML_COMMENT = re.compile(r"(?m)(?:(?<=^)|(?<=\s))#.*$")
-MUTABLE_ACTION = re.compile(r"uses:\s*\S+@(?!\b[0-9a-f]{40}\b)\S+")
-ANY_ACTION = re.compile(r"(?m)^[ \t]+(?:-[ \t]+)?uses:[ \t]*\S+")
+MUTABLE_ACTION = re.compile(r"uses:[ \t]*\S+@(?!\b[0-9a-f]{40}\b)\S+")
+# Both block style (`- uses: x`) and YAML flow style (`- {uses: x}`) name an
+# action. A flow mapping pinned to a full SHA evaded both this check and the
+# mutable-reference one, which is the combination that mattered.
+ANY_ACTION = re.compile(r"(?m)^[ \t]+(?:-[ \t]+)?[{[]?[ \t]*uses:[ \t]*\S+")
 JOBS_KEY = re.compile(r"(?m)^jobs:[ \t]*$")
 # `[ \t]` rather than `\s`: `\s` matches a newline, so a header at the very
 # start of the scanned text absorbs the preceding line break into its indent
@@ -1386,10 +1518,20 @@ def main(argv: list[str] | None = None) -> int:
     run.add_argument(
         "--receipts", type=Path, help="write the payload receipts to this JSON file"
     )
+    run.add_argument(
+        "--output-mount",
+        type=Path,
+        help="the writable mount to give each command; armed runs pass /tenkz-output",
+    )
     run_all = subparsers.add_parser("run-all")
     run_all.add_argument("--tag", help="bind the observations to this release tag")
     run_all.add_argument(
         "--receipts", type=Path, help="write the payload receipts to this JSON file"
+    )
+    run_all.add_argument(
+        "--output-mount",
+        type=Path,
+        help="the writable mount to give each command; armed runs pass /tenkz-output",
     )
     subparsers.add_parser("pins")
     subparsers.add_parser("check-readiness")
@@ -1401,9 +1543,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "check-inventory":
             return command_check_inventory(policy, root)
         if args.command == "run":
-            return command_run(policy, root, args.test, args.tag, args.receipts)
+            return command_run(
+                policy, root, args.test, args.tag, args.receipts, args.output_mount
+            )
         if args.command == "run-all":
-            return command_run(policy, root, None, args.tag, args.receipts)
+            return command_run(
+                policy, root, None, args.tag, args.receipts, args.output_mount
+            )
         if args.command == "pins":
             return command_pins(policy, root)
         return command_check_readiness(policy, root)

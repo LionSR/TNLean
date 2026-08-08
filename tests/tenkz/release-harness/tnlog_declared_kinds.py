@@ -18,7 +18,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from harnesslib import assert_that, load_module, read  # noqa: E402
+from harnesslib import (  # noqa: E402
+    assert_that,
+    load_module,
+    read,
+    selected_assertion,
+)
 
 
 ASSERTIONS = {
@@ -58,11 +63,8 @@ def parsed_block() -> tuple[dict | None, str]:
 
 
 def main() -> int:
-    mode = sys.argv[1] if len(sys.argv) > 1 else ""
-    if mode not in ASSERTIONS:
-        print(f"unknown assertion {mode!r}", file=sys.stderr)
-        return 2
-    test_id, fingerprint = ASSERTIONS[mode]
+    mode = sys.argv[1]
+    test_id, fingerprint = selected_assertion(ASSERTIONS)
     table, reason = parsed_block()
 
     if mode == "declaration":
