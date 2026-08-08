@@ -73,3 +73,108 @@ The length $n$ is a weak bound, not a strict bound below $n$; the latter is
 false for strictly upper-triangular matrices.  This corrects the intermediate
 strict inequality in \cite[lines~405--426]{Cirac2017MPU} without changing its
 final strict $D^4$ estimate.
+
+\section{The matrix product unitary condition}
+
+Let $\mathcal U=(U^{ij})_{i,j=1}^d$ be a matrix product operator tensor of
+bond dimension $D$, and write $U^{(N)}$ for the periodic operator obtained by
+closing a chain of $N$ copies of $\mathcal U$.
+
+\begin{theorem}[Unitarity under simultaneous reindexing]
+    \label{thm:mpu_reindex_unitary}
+    \lean{Matrix.reindex_mem_unitaryGroup}
+    \leanok
+    Let $I$ and $J$ be finite sets, let $e\colon I\to J$ be a bijection, and
+    let $A$ be a unitary matrix indexed by $I$.  The matrix indexed by $J$
+    whose $(j,k)$ entry is
+    \begin{align}
+        A_{e^{-1}(j),e^{-1}(k)}
+    \end{align}
+    is unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    Simultaneous reindexing preserves the identity and matrix multiplication,
+    and it commutes with the conjugate transpose.  Reindex the equation
+    $AA^\dagger=\Id$.
+\end{proof}
+
+\begin{definition}[Matrix product unitary tensor]
+    \label{def:mpu}
+    \lean{MPOTensor.IsMPU}
+    \leanok
+    The tensor $\mathcal U$ generates matrix product unitaries if $U^{(N)}$ is
+    unitary for every integer $N>1$.  This is the matrix product unitary
+    condition in \cite[lines~319--335]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Unitarity at a fixed system size]
+    \label{lem:mpu_unitary_fixed_size}
+    \lean{MPOTensor.IsMPU.mpo_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpu}
+    If $\mathcal U$ generates matrix product unitaries and $N>1$, then
+    $U^{(N)}$ is unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu}
+    This is the defining condition at system size $N$.
+\end{proof}
+
+\begin{lemma}[First matrix product unitarity equation]
+    \label{lem:mpu_mul_adjoint}
+    \lean{MPOTensor.IsMPU.mpo_mul_conjTranspose_mpo}
+    \leanok
+    \uses{lem:mpu_unitary_fixed_size}
+    If $\mathcal U$ generates matrix product unitaries and $N>1$, then
+    \begin{align}
+        U^{(N)}\bigl(U^{(N)}\bigr)^\dagger &= \Id.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_unitary_fixed_size}
+    Expand the unitary-group condition for $U^{(N)}$.
+\end{proof}
+
+\begin{lemma}[Second matrix product unitarity equation]
+    \label{lem:mpu_adjoint_mul}
+    \lean{MPOTensor.IsMPU.conjTranspose_mpo_mul_mpo}
+    \leanok
+    \uses{lem:mpu_unitary_fixed_size}
+    If $\mathcal U$ generates matrix product unitaries and $N>1$, then
+    \begin{align}
+        \bigl(U^{(N)}\bigr)^\dagger U^{(N)} &= \Id.
+    \end{align}
+    This is the unitarity equation displayed in
+    \cite[lines~331--335]{Cirac2017MPU}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_unitary_fixed_size}
+    Use the equivalent left-multiplied characterization of a unitary matrix.
+\end{proof}
+
+\begin{theorem}[Physical blocking preserves matrix product unitarity]
+    \label{thm:mpu_blocking}
+    \lean{MPOTensor.IsMPU.blockTensor}
+    \leanok
+    \uses{def:mpu, lem:mpu_unitary_fixed_size,
+        thm:mpu_reindex_unitary}
+    Suppose that $\mathcal U$ generates matrix product unitaries.  For every
+    positive integer $L$, the tensor $\mathcal U_L$ obtained by blocking $L$
+    adjacent sites also generates matrix product unitaries.  This is the
+    blocking operation of \cite[lines~295--305]{Cirac2017MPU}; the paper uses
+    without further comment that a blocked MPU tensor again generates a
+    unitary family \cite[line~356]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu, lem:mpu_unitary_fixed_size,
+        thm:mpu_reindex_unitary}
+    At system size $N$, closing the blocked tensor gives $U^{(NL)}$, up to the
+    canonical bijection between $N$ blocked configurations and $NL$ unblocked
+    configurations.  If $N>1$ and $L>0$, then $NL>1$, so $U^{(NL)}$ is
+    unitary.  Simultaneous reindexing preserves unitarity.
+\end{proof}
