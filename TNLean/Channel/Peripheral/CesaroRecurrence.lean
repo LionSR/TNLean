@@ -427,8 +427,6 @@ theorem exists_strictMono_tendsto_pow_peripheralProjection
     (hPos : IsPositiveMap T) (hTP : IsTracePreservingMap T) :
     ∃ n : ℕ → ℕ, StrictMono n ∧ 0 < n 0 ∧
       ∀ X, Tendsto (fun i : ℕ ↦ (T ^ n i) X) atTop (𝓝 (T.peripheralProjection X)) := by
-  classical
-  letI := (peripheralEigenvalues_finite T).fintype
   obtain ⟨n, hnmono, hn0, hn⟩ := exists_dirichlet_recurrent_subsequence (T := T)
   exact ⟨n, hnmono, hn0, fun X ↦
     hPos.tendsto_pow_apply_peripheralProjection hTP hnmono hn X⟩
@@ -512,8 +510,6 @@ theorem exists_strictMono_tendsto_pow_peripheralProjection_clm
       (∀ X, Tendsto (fun i : ℕ ↦ (T ^ n i) X) atTop (𝓝 (T.peripheralProjection X))) ∧
         Tendsto (fun i : ℕ ↦ endEquiv (T ^ n i)) atTop
           (𝓝 (endEquiv T.peripheralProjection)) := by
-  classical
-  letI := (peripheralEigenvalues_finite T).fintype
   obtain ⟨n, hnmono, hn0, hn⟩ := exists_dirichlet_recurrent_subsequence (T := T)
   exact ⟨n, hnmono, hn0,
     fun X ↦ hPos.tendsto_pow_apply_peripheralProjection hTP hnmono hn X,
