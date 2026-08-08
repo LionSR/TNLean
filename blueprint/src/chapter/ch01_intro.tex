@@ -718,27 +718,51 @@ algebra is a single full matrix algebra $\MN{m}$; see
     unitality follow.
 \end{proof}
 
-% Unitary transport of the coordinate expectation from Equation (1.39).
-\begin{theorem}[Unitary block-coordinate channels]
-    \label{thm:unitary_reindex_channels}
+% Unitary coordinate changes associated with Equation (1.39).
+\begin{lemma}[Positivity in unitary block coordinates]
+    \label{lem:unitary_reindex_posSemidef}
     \lean{Matrix.unitaryReindexLinearEquiv_posSemidef}
     \lean{Matrix.unitaryReindexLinearEquiv_symm_posSemidef}
+    \leanok
+    Let $e:H\simeq I$ be an equivalence of finite index sets and let
+    $U$ be a unitary matrix indexed by $I$. The mutually inverse coordinate
+    changes
+    \begin{align}
+        \Phi(A)&=e^{-1}(U^\dagger A U)
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \Phi^{-1}(X)&=Ue(X)U^\dagger
+        \notag
+    \end{align}
+    both preserve positive semidefiniteness.
+\end{lemma}
+
+\begin{proof}\leanok
+    Unitary conjugation preserves positive semidefiniteness, as does
+    reindexing a matrix along an equivalence. Apply these facts in the two
+    possible orders.
+\end{proof}
+
+\begin{theorem}[Unitary block-coordinate channels]
+    \label{thm:unitary_reindex_channels}
     \lean{Matrix.unitaryReindexLinearEquiv_toLinearMap_isKrausCPTP}
     \lean{Matrix.unitaryReindexLinearEquiv_symm_toLinearMap_isKrausCPTP}
     \leanok
     \uses{def:is_kraus_cptp}
     Let $e:H\simeq I$ be an equivalence of finite index sets and let
-    $U$ be a unitary matrix indexed by $I$. The forward coordinate change is
+    $U$ be a unitary matrix indexed by $I$. Define
     \begin{align}
-        \Phi(A)&=e^{-1}(U^\dagger A U).
+        \Phi(A)&=e^{-1}(U^\dagger A U)
         \notag
     \end{align}
-    Its inverse is
+    and
     \begin{align}
         \Phi^{-1}(X)&=Ue(X)U^\dagger.
         \notag
     \end{align}
-    are trace-preserving and completely positive.
+    Both $\Phi$ and $\Phi^{-1}$ are trace-preserving and completely positive.
 \end{theorem}
 
 \begin{proof}\leanok
