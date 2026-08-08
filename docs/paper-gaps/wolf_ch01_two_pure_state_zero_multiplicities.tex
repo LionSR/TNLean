@@ -35,9 +35,11 @@ Counting algebraic multiplicities, its characteristic polynomial is
   =X^{d-2}((X-1)^2-\tr(PQ))
   \qquad(d\geq2).
 \end{align}
-Thus the displayed pair gives the two eigenvalues arising on the span of the
-pure states, but it suppresses the remaining $d-2$ zero eigenvalues and their
-multiplicities. In dimension one the separate formula is
+The displayed values are precisely the two roots of
+$(X-1)^2-\tr(PQ)$. The factor $X^{d-2}$ supplies the guaranteed additional
+zero multiplicity. If $P=Q$, then the quadratic is $X(X-2)$ and contributes
+one further zero, so the total zero multiplicity is $d-1$. In dimension one
+the separate formula is
 \begin{align}
   \chi_{P+Q}(X)=X-2,
 \end{align}
@@ -59,8 +61,8 @@ are stated explicitly there. This correction is tracked by \ghissue{5683}.
 \section{Classification}
 
 This is a local correction to a spectrum shorthand, not a claim that Wolf's
-intended spectrum-preserver argument is false. The displayed pair identifies
-the nonzero two-dimensional part used to recover the transition probability.
+intended spectrum-preserver argument is false. The roots of the quadratic
+factor retain the transition-probability information used in that argument.
 The formal statement uses characteristic polynomials because they retain all
 zero eigenvalues and all algebraic multiplicities without ambiguity.
 

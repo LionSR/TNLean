@@ -158,8 +158,8 @@ that the spectrum of two Hermitian rank-one projections $P,Q$ is
 \begin{equation}
   1\pm\sqrt{\operatorname{tr}(PQ)}.
 \end{equation}
-This pair describes the restriction of $P+Q$ to the span of the two pure-state
-ranges.
+These values are the two roots of the quadratic
+$(X-1)^2-\operatorname{tr}(PQ)$.
 
 \paragraph{Correction.}
 For $d\geq2$, the multiplicity-aware statement is
@@ -167,9 +167,10 @@ For $d\geq2$, the multiplicity-aware statement is
   \chi_{P+Q}(X)
   =X^{d-2}\bigl((X-1)^2-\operatorname{tr}(PQ)\bigr).
 \end{equation}
-The source shorthand suppresses the $d-2$ zero eigenvalues and their
-multiplicities. Dimension one has the separate formula $\chi_{P+Q}(X)=X-2$,
-and dimension zero has no projective pure states.
+The factor $X^{d-2}$ supplies the guaranteed additional zero multiplicity.
+If $P=Q$, then the quadratic is $X(X-2)$ and contributes one further zero, so
+the total zero multiplicity is $d-1$. Dimension one has the separate formula
+$\chi_{P+Q}(X)=X-2$, and dimension zero has no projective pure states.
 
 \paragraph{Classification.}
 This is a local correction to the displayed spectrum shorthand, not a claim
