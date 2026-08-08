@@ -1280,11 +1280,20 @@
     rephased, zero-weight-reparameterized inverse-map factorization with
     nonnegative weights $(p_k)_k$ satisfying $\sum_kp_k=1$, positive
     semidefinite neighboring operators $\eta_{k,h}$, and real functions
-    $a,b$ on $I_*=\{k:p_k\ne0\}$ such that
+    $a,b$ on $I_*=\{k:p_k\ne0\}$. For all $k,h\in I_*$,
     \begin{align}
-        T^*_{k,h}&=a_kb_h &&(k,h\in I_*), \notag\\
-        \sum_{k\in I_*}a_kb_k&=1, \notag\\
-        p_k=0\ \text{or}\ p_h=0&\implies \eta_{k,h}=0. \notag
+        T^*_{k,h}&=a_kb_h,
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        \sum_{k\in I_*}a_kb_k&=1.
+        \notag
+    \end{align}
+    For all ambient sector labels $k,h$,
+    \begin{align}
+        p_k=0\ \text{or}\ p_h=0&\implies \eta_{k,h}=0.
+        \notag
     \end{align}
     The incident-vanishing clause belongs to this chosen reparameterized and
     rephased factorization, not to the raw inverse-map factors. This is the
