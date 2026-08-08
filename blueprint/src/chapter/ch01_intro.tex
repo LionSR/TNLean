@@ -1276,6 +1276,12 @@ $M_M(\C)$, $M=\sum_kd_k$.
     $\MN{p}$ gives $\widetilde T|_S=T$.
 \end{proof}
 
+\section{Set spectra and spectral multiplicities}
+
+For a finite Hermitian matrix, the characteristic polynomial records the
+ordered eigenvalues with their multiplicities. This determines the matrix up
+to unitary conjugation.
+
 \begin{theorem}[Hermitian matrices with the same characteristic polynomial]
     \label{thm:hermitian_charpoly_unitary_conjugacy}
     \lean{Matrix.IsHermitian.exists_unitary_conj_of_charpoly_eq}
@@ -1285,8 +1291,6 @@ $M_M(\C)$, $M=\sum_kd_k$.
     \begin{align}
         B=UAU^\dagger.
     \end{align}
-    This is the finite-dimensional spectral classification used in
-    \cite[Chapter~1, Proposition~1.4]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1299,7 +1303,14 @@ $M_M(\C)$, $M=\sum_kd_k$.
     \begin{align}
         B=U_B D U_B^\dagger.
     \end{align}
-    Then $U=U_BU_A^\dagger$ is unitary and $B=UAU^\dagger$.
+    Set
+    \begin{align}
+        U=U_BU_A^\dagger.
+    \end{align}
+    This matrix is unitary, and cancellation of $U_A^\dagger U_A$ gives
+    \begin{align}
+        B=UAU^\dagger.
+    \end{align}
 \end{proof}
 
 \section{Pure states, projective rays, and Wigner's theorem}

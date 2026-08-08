@@ -10,7 +10,7 @@ import Mathlib.Analysis.Matrix.Spectrum
 
 Two finite complex Hermitian matrices with the same characteristic polynomial are unitarily
 conjugate. The proof identifies their ordered eigenvalue lists and compares their unitary spectral
-decompositions. This is the spectral classification used in Wolf, Proposition 1.4.
+decompositions.
 -/
 
 namespace Matrix.IsHermitian
@@ -19,7 +19,7 @@ variable {n : Type*} [Fintype n]
 
 open scoped Classical in
 /-- Two finite complex Hermitian matrices with the same characteristic polynomial are unitarily
-conjugate, as used in Wolf, Proposition 1.4. -/
+conjugate. -/
 theorem exists_unitary_conj_of_charpoly_eq {A B : Matrix n n ℂ} (hA : A.IsHermitian)
     (hB : B.IsHermitian) (hcharpoly : A.charpoly = B.charpoly) :
     ∃ U : Matrix.unitaryGroup n ℂ, B = (U : Matrix n n ℂ) * A * star (U : Matrix n n ℂ) := by
@@ -33,6 +33,5 @@ theorem exists_unitary_conj_of_charpoly_eq {A B : Matrix n n ℂ} (hA : A.IsHerm
   rw [← Unitary.conjStarAlgAut_symm]
   exact congrArg (Unitary.conjStarAlgAut ℂ (Matrix n n ℂ) hB.eigenvectorUnitary)
     ((Unitary.conjStarAlgAut ℂ (Matrix n n ℂ) hA.eigenvectorUnitary).symm_apply_apply _).symm
-
 
 end Matrix.IsHermitian
