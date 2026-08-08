@@ -147,7 +147,7 @@ theorem rightFactorConditionalExpectation_fixes [NeZero m]
 
 /-- The range of the normalized partial-trace expectation is contained in the
 right-factor star subalgebra. -/
-theorem rightFactorConditionalExpectation_range_subset [NeZero m]
+theorem rightFactorConditionalExpectation_range_subset
     (A : Matrix (Fin m × Fin d) (Fin m × Fin d) ℂ) :
     rightFactorConditionalExpectation (m := m) A ∈
       rightFactorStarSubalgebra (m := m) (d := d) := by
