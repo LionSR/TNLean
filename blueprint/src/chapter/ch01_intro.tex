@@ -1192,6 +1192,90 @@ $M_M(\C)$, $M=\sum_kd_k$.
     $S$.
 \end{proof}
 
+% Wolf Chapter 1, lines 616--626: matrix-realized finite-dimensional codomain.
+\begin{theorem}[Postcomposition with a Kraus completely positive map]
+    \label{thm:cp_direct_sum_postcomp_kraus}
+    \lean{Matrix.IsCPMapDirectSum.comp_isKrausCP}
+    \leanok
+    \uses{def:cp_map_direct_sum, def:is_kraus_cp}
+    Let $F:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ be completely positive and
+    let $E:\MN{p}\to\MN{q}$ have a Kraus representation. Then $E\circ F$ is
+    completely positive.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:kraus_cp_tensor_id}
+    At each matrix level $j$, the ampliations satisfy
+    \begin{align}
+        ((E\circ F)\otimes\id_j)(X)
+        &=(E\otimes\id_j)((F\otimes\id_j)(X)).
+    \end{align}
+    If every component of $X$ is positive semidefinite, complete positivity
+    of $F$ makes the inner matrix positive semidefinite. The Kraus
+    representation of $E\otimes\id_j$ then preserves its positivity.
+\end{proof}
+
+\begin{theorem}[Extension with range in a matrix subalgebra]
+    \label{thm:extend_cp_operator_system_subalgebra_range}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra_range}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, and let
+    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra. Suppose that
+    $T:S\to\MN{p}$ is completely positive and $T(S)\subseteq\mathcal B$.
+    Then there is a completely positive map
+    $G:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ such that
+    $G(\bigoplus_{k<r}M_{d_k}(\C))\subseteq\mathcal B$ and $G|_S=T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system_direct_sum,
+      thm:matrix_star_subalgebra_cptp_conditional_expectation,
+      lem:is_kraus_cp_basic,
+      thm:cp_direct_sum_postcomp_kraus}
+    Theorem~\ref{thm:extend_cp_operator_system_direct_sum} gives a completely
+    positive extension $F$ with values in $\MN{p}$. Choose the conditional
+    expectation $E:\MN{p}\to\MN{p}$ from
+    Theorem~\ref{thm:matrix_star_subalgebra_cptp_conditional_expectation}; its
+    range lies in $\mathcal B$. Set $G=E\circ F$.
+    Theorem~\ref{thm:cp_direct_sum_postcomp_kraus} shows that $G$ is completely
+    positive, while $E(\MN{p})\subseteq\mathcal B$.
+    For $x\in S$, one has $F(x)=T(x)\in\mathcal B$, and therefore
+    $G(x)=E(T(x))=T(x)$.
+\end{proof}
+
+\begin{theorem}[Extending cp maps from operator systems to matrix subalgebras]
+    \label{thm:extend_cp_operator_system_star_subalgebra}
+    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra}
+    \leanok
+    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
+      def:cp_map_direct_sum}
+    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
+    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, let
+    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra, and let
+    $T:S\to\mathcal B$ be completely positive, where positivity in
+    $\mathcal B$ is read through its inclusion in $\MN{p}$. Then there is a
+    linear map
+    \begin{align}
+        \widetilde T:
+        \bigoplus_{k<r}M_{d_k}(\C)&\longrightarrow\mathcal B
+    \end{align}
+    whose inclusion into $\MN{p}$ is completely positive and which satisfies
+    $\widetilde T|_S=T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:extend_cp_operator_system_subalgebra_range}
+    Apply Theorem~\ref{thm:extend_cp_operator_system_subalgebra_range} to the
+    composite of $T$ with the inclusion $\mathcal B\hookrightarrow\MN{p}$.
+    Since the resulting ambient map $G$ takes every value in $\mathcal B$, it
+    defines a map $\widetilde T$ with codomain $\mathcal B$. Its composite
+    with the inclusion is $G$, hence is completely positive, and equality in
+    $\MN{p}$ gives $\widetilde T|_S=T$.
+\end{proof}
+
 \section{Pure states, projective rays, and Wigner's theorem}
 
 A nonzero vector $v\in\C^d$ determines a ray $[v]$ and the normalized
@@ -1310,87 +1394,3 @@ $v$ is multiplied by a nonzero scalar.
     $F(P)=UPU^\dagger$ for every $P$, or
     $F(P)=UP^{\mathsf T}U^\dagger$ for every $P$.
 \end{theorem}
-
-% Wolf Chapter 1, lines 616--626: matrix-realized finite-dimensional codomain.
-\begin{theorem}[Postcomposition with a Kraus completely positive map]
-    \label{thm:cp_direct_sum_postcomp_kraus}
-    \lean{Matrix.IsCPMapDirectSum.comp_isKrausCP}
-    \leanok
-    \uses{def:cp_map_direct_sum, def:is_kraus_cp}
-    Let $F:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ be completely positive and
-    let $E:\MN{p}\to\MN{q}$ have a Kraus representation. Then $E\circ F$ is
-    completely positive.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:kraus_cp_tensor_id}
-    At each matrix level $j$, the ampliations satisfy
-    \begin{align}
-        ((E\circ F)\otimes\id_j)(X)
-        &=(E\otimes\id_j)((F\otimes\id_j)(X)).
-    \end{align}
-    If every component of $X$ is positive semidefinite, complete positivity
-    of $F$ makes the inner matrix positive semidefinite. The Kraus
-    representation of $E\otimes\id_j$ then preserves its positivity.
-\end{proof}
-
-\begin{theorem}[Extension with range in a matrix subalgebra]
-    \label{thm:extend_cp_operator_system_subalgebra_range}
-    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra_range}
-    \leanok
-    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
-      def:cp_map_direct_sum}
-    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
-    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, and let
-    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra. Suppose that
-    $T:S\to\MN{p}$ is completely positive and $T(S)\subseteq\mathcal B$.
-    Then there is a completely positive map
-    $G:\bigoplus_{k<r}M_{d_k}(\C)\to\MN{p}$ such that
-    $G(\bigoplus_{k<r}M_{d_k}(\C))\subseteq\mathcal B$ and $G|_S=T$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:extend_cp_operator_system_direct_sum,
-      thm:matrix_star_subalgebra_cptp_conditional_expectation,
-      lem:is_kraus_cp_basic,
-      thm:cp_direct_sum_postcomp_kraus}
-    Theorem~\ref{thm:extend_cp_operator_system_direct_sum} gives a completely
-    positive extension $F$ with values in $\MN{p}$. Choose the conditional
-    expectation $E:\MN{p}\to\MN{p}$ from
-    Theorem~\ref{thm:matrix_star_subalgebra_cptp_conditional_expectation}; its
-    range lies in $\mathcal B$. Set $G=E\circ F$.
-    Theorem~\ref{thm:cp_direct_sum_postcomp_kraus} shows that $G$ is completely
-    positive, while $E(\MN{p})\subseteq\mathcal B$.
-    For $x\in S$, one has $F(x)=T(x)\in\mathcal B$, and therefore
-    $G(x)=E(T(x))=T(x)$.
-\end{proof}
-
-\begin{theorem}[Extending cp maps from operator systems to matrix subalgebras]
-    \label{thm:extend_cp_operator_system_star_subalgebra}
-    \lean{Matrix.exists_cp_extension_of_operatorSystem_directSum_starSubalgebra}
-    \leanok
-    \uses{def:operator_system_direct_sum, def:cp_on_operator_system_direct_sum,
-      def:cp_map_direct_sum}
-    Let $d_0,\dots,d_{r-1}$ be natural numbers, not all zero, let $p\geq1$,
-    let $S\subseteq\bigoplus_{k<r}M_{d_k}(\C)$ be an operator system, let
-    $\mathcal B\subseteq\MN{p}$ be a unital $*$-subalgebra, and let
-    $T:S\to\mathcal B$ be completely positive, where positivity in
-    $\mathcal B$ is read through its inclusion in $\MN{p}$. Then there is a
-    linear map
-    \begin{align}
-        \widetilde T:
-        \bigoplus_{k<r}M_{d_k}(\C)&\longrightarrow\mathcal B
-    \end{align}
-    whose inclusion into $\MN{p}$ is completely positive and which satisfies
-    $\widetilde T|_S=T$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:extend_cp_operator_system_subalgebra_range}
-    Apply Theorem~\ref{thm:extend_cp_operator_system_subalgebra_range} to the
-    composite of $T$ with the inclusion $\mathcal B\hookrightarrow\MN{p}$.
-    Since the resulting ambient map $G$ takes every value in $\mathcal B$, it
-    defines a map $\widetilde T$ with codomain $\mathcal B$. Its composite
-    with the inclusion is $G$, hence is completely positive, and equality in
-    $\MN{p}$ gives $\widetilde T|_S=T$.
-\end{proof}

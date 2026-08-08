@@ -60,7 +60,12 @@ theorem IsCPMapDirectSum.comp_isKrausCP
 /-- **Extending cp maps from operator systems, with range in a matrix star subalgebra**
 (Wolf Ch. 1, lines 616--626): if a completely positive map on an operator system in a finite
 direct sum of matrix algebras takes values in a matrix star subalgebra, then it has a completely
-positive ambient-matrix-valued extension whose whole range lies in that subalgebra. -/
+positive ambient-matrix-valued extension whose whole range lies in that subalgebra.
+
+**Scope restriction (concrete matrix realization):** Wolf states the result for arbitrary
+finite-dimensional `C^*`-algebras. Here the domain is given in direct-sum matrix coordinates and
+the codomain algebra is a concrete unital star subalgebra of a full matrix algebra. Documented in
+`docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`. -/
 theorem exists_cp_extension_of_operatorSystem_directSum_starSubalgebra_range
     [NeZero (∑ k, d k)] [NeZero p]
     {S : Submodule ℂ (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ)}
@@ -83,7 +88,12 @@ theorem exists_cp_extension_of_operatorSystem_directSum_starSubalgebra_range
 (Wolf Ch. 1, lines 616--626): a completely positive map from an operator system in a finite
 direct sum of full matrix algebras to a matrix star subalgebra extends to the whole domain.
 Complete positivity is measured after the canonical inclusion of the codomain subalgebra into
-its ambient full matrix algebra. -/
+its ambient full matrix algebra.
+
+**Scope restriction (concrete matrix realization):** Wolf states the result for arbitrary
+finite-dimensional `C^*`-algebras. Here the domain is given in direct-sum matrix coordinates and
+the codomain is a concrete unital star subalgebra of a full matrix algebra. Documented in
+`docs/paper-gaps/wolf_ch01_operator_system_extension_matrix_scope.tex`. -/
 theorem exists_cp_extension_of_operatorSystem_directSum_starSubalgebra
     [NeZero (∑ k, d k)] [NeZero p]
     {S : Submodule ℂ (∀ k : Fin r, Matrix (Fin (d k)) (Fin (d k)) ℂ)}
