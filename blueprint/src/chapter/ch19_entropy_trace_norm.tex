@@ -495,3 +495,36 @@ Theorem~\ref{thm:trace_norm_abs}.
     $\rho_1-\rho_2$ is Hermitian as a difference of positive semidefinite
     matrices, so Theorem~\ref{thm:trace_norm_contractivity} applies.
 \end{proof}
+
+\section{Projective pinching}
+
+\begin{theorem}[Projective pinching inequality]
+    \label{thm:projective_povm_pinching}
+    \lean{projectivePOVM_pinching}
+    \leanok
+    \uses{def:density_matrices, def:orthogonal_projection_channel}
+    Let $\rho\in\MN{d}$ be a density matrix and let
+    $P_1,\ldots,P_k\in\MN{d}$ be orthogonal projections satisfying
+    $\sum_{i=1}^k P_i=\Id$.  Define
+    \begin{align}
+        T(X) &= \sum_{i=1}^k P_iXP_i .
+    \end{align}
+    Then
+    \begin{align}
+        \rho &\le kT(\rho).
+        \label{eq:projective_pinching}
+    \end{align}
+    This is \cite[Chapter~8, Eq.~(8.56)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $A_{ij}=P_i-P_j$, positivity of $\rho$ gives
+    $A_{ij}\rho A_{ij}^{\dagger}\ge 0$.  Since the projections are
+    Hermitian and sum to the identity, expansion and collection of the four
+    double sums gives
+    \begin{align}
+        \sum_{i,j=1}^k A_{ij}\rho A_{ij}^{\dagger}
+        &= 2\bigl(kT(\rho)-\rho\bigr).
+    \end{align}
+    Thus $kT(\rho)-\rho$ is positive semidefinite.
+\end{proof}
