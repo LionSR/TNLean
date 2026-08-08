@@ -1278,6 +1278,163 @@ $M_M(\C)$, $M=\sum_kd_k$.
 
 \section{Set spectra and spectral multiplicities}
 
+For a matrix $A\in M_d(\C)$, the spectrum $\sigma(A)$ is a set: it does not
+record how often a root of the characteristic polynomial occurs. Wolf's
+spectrum-preserver hypothesis is precisely equality of these sets on
+Hermitian inputs. The next results justify the continuity argument in
+\cite[Chapter~1, Spectrum preserving maps]{Wolf2012Quantum} without replacing
+that hypothesis by multiplicity preservation.
+
+\begin{theorem}[Hermitian trace power sums]
+    \label{thm:hermitian_trace_power_sum}
+    \lean{Matrix.IsHermitian.trace_pow_eq_sum_eigenvalues_pow}
+    \leanok
+    If $A$ is Hermitian with eigenvalues $\lambda_0,\ldots,\lambda_{d-1}$,
+    listed with multiplicity, then for every $k\in\N$,
+    \begin{align}
+        \tr(A^k)=\sum_{i=0}^{d-1}\lambda_i^k.
+        \label{eq:ch01_trace_power_sum}
+    \end{align}
+    This includes $d=0$, when both sides are empty sums.
+\end{theorem}
+
+\begin{proof}\leanok
+    Diagonalize $A=UDU^\dagger$, where
+    $D=\operatorname{diag}(\lambda_0,\ldots,\lambda_{d-1})$. Unitary
+    conjugation commutes with powers and leaves the trace unchanged, while
+    $D^k=\operatorname{diag}(\lambda_0^k,\ldots,\lambda_{d-1}^k)$.
+\end{proof}
+
+\begin{definition}[Ordered simple-spectrum perturbation]
+    \label{def:hermitian_simple_spectrum_perturbation}
+    \lean{Matrix.IsHermitian.orderedPerturbedEigenvalue}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation}
+    \leanok
+    Let $A=U\operatorname{diag}(\lambda_0,\ldots,\lambda_{d-1})U^\dagger$
+    be Hermitian with $\lambda_0\ge\cdots\ge\lambda_{d-1}$. For
+    $\varepsilon\in\R$, define
+    \begin{align}
+        \lambda_i(\varepsilon)
+        &=\lambda_i+\varepsilon(d-i).
+        \label{eq:ch01_perturbed_eigenvalue}
+    \end{align}
+    Define the corresponding Hermitian matrix by
+    \begin{align}
+        A_\varepsilon
+        &=U\operatorname{diag}\bigl(\lambda_0(\varepsilon),\ldots,
+          \lambda_{d-1}(\varepsilon)\bigr)U^\dagger.
+        \label{eq:ch01_simple_perturbation}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Simple spectrum and convergence of the perturbations]
+    \label{thm:hermitian_simple_spectrum_perturbation}
+    \lean{Matrix.IsHermitian.orderedPerturbedEigenvalue_strictAnti}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation_isHermitian}
+    \lean{Matrix.IsHermitian.simpleSpectrumPerturbation_roots_nodup}
+    \lean{Matrix.IsHermitian.continuous_simpleSpectrumPerturbation}
+    \lean{Matrix.IsHermitian.tendsto_simpleSpectrumPerturbation}
+    \lean{Matrix.IsHermitian.tendsto_simpleSpectrumPerturbation_one_div}
+    \leanok
+    \uses{def:hermitian_simple_spectrum_perturbation}
+    If $\varepsilon>0$, then
+    $\lambda_0(\varepsilon)>\cdots>\lambda_{d-1}(\varepsilon)$, so the roots
+    of $\chi_{A_\varepsilon}$ have no repetitions. Moreover,
+    $A_\varepsilon\to A$ as $\varepsilon\to0$. In particular, the positive
+    sequence $\varepsilon_n=1/(n+1)$ gives simple-spectrum matrices
+    $A_{\varepsilon_n}\to A$. All assertions remain valid for $d=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $i<j$, monotonicity of the ordered eigenvalues and positivity of
+    $\varepsilon$ give
+    \begin{align}
+        \lambda_j+\varepsilon(d-j)
+        <\lambda_i+\varepsilon(d-i).
+    \end{align}
+    Thus the diagonal entries in (\ref{eq:ch01_simple_perturbation}) are
+    distinct. The same formula is continuous in $\varepsilon$, and at
+    $\varepsilon=0$ it is the spectral decomposition of $A$.
+\end{proof}
+
+\begin{theorem}[Set spectrum determines multiplicities at simple spectrum]
+    \label{thm:hermitian_set_spectrum_multiplicity}
+    \lean{Matrix.IsHermitian.roots_charpoly_eq_of_spectrum_eq_of_roots_nodup}
+    \lean{Matrix.IsHermitian.trace_pow_eq_of_spectrum_eq_of_roots_nodup}
+    \leanok
+    Let $A,B\in M_d(\C)$ be Hermitian. Suppose
+    $\sigma(B)=\sigma(A)$ and the roots of $\chi_A$ have no repetitions.
+    Then the root multisets of $\chi_A$ and $\chi_B$ are equal. Consequently,
+    $\tr(B^k)=\tr(A^k)$ for every $k\in\N$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hermitian_trace_power_sum}
+    The common spectrum is the common finite set underlying the two root
+    multisets. The roots of $\chi_A$ are distinct, so this set has $d$
+    elements. Since the Hermitian polynomial $\chi_B$ splits and has degree
+    $d$, its root multiset also has cardinality $d$. Hence it cannot repeat
+    any root, and the two root multisets agree. Formula
+    (\ref{eq:ch01_trace_power_sum}) then gives equality of trace powers.
+\end{proof}
+
+\begin{theorem}[Continuity of trace powers]
+    \label{thm:matrix_trace_power_continuity}
+    \lean{Matrix.continuous_trace_pow}
+    \lean{Matrix.tendsto_trace_pow}
+    \leanok
+    For each $k\in\N$, the function
+    $A\mapsto\tr(A^k)$ on $M_d(\C)$ is continuous. Thus $A_n\to A$ implies
+    $\tr(A_n^k)\to\tr(A^k)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Finite matrix multiplication is continuous, hence so is $A\mapsto A^k$;
+    the trace is a finite sum of matrix entries.
+\end{proof}
+
+\begin{theorem}[Hermitian set-spectrum multiplicity bridge]
+    \label{thm:hermitian_set_spectrum_charpoly}
+    \lean{Matrix.charpoly_map_eq_of_preservesHermitianSpectrum}
+    \leanok
+    Let $T:M_d(\C)\to M_d(\C)$ be complex linear. Suppose that $T(A)$ is
+    Hermitian whenever $A$ is Hermitian and that
+    \begin{align}
+        \sigma(T(A))=\sigma(A)
+        \label{eq:ch01_set_spectrum_hypothesis}
+    \end{align}
+    for every Hermitian $A$. Then every Hermitian $A$ satisfies
+    \begin{align}
+        \chi_{T(A)}=\chi_A.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:hermitian_simple_spectrum_perturbation,
+      thm:hermitian_simple_spectrum_perturbation,
+      thm:hermitian_set_spectrum_multiplicity,
+      thm:matrix_trace_power_continuity,
+      thm:newton_girard}
+    Fix Hermitian $A$ and use the positive simple-spectrum perturbations
+    $A_{\varepsilon_n}$ from
+    Theorem~\ref{thm:hermitian_simple_spectrum_perturbation}. The hypothesis
+    (\ref{eq:ch01_set_spectrum_hypothesis}) and
+    Theorem~\ref{thm:hermitian_set_spectrum_multiplicity} give
+    \begin{align}
+        \tr\bigl(T(A_{\varepsilon_n})^k\bigr)
+        =\tr(A_{\varepsilon_n}^k)
+    \end{align}
+    for every $n$ and $k$. Linearity makes $T$ continuous in finite
+    dimension. Since $A_{\varepsilon_n}\to A$, continuity from
+    Theorem~\ref{thm:matrix_trace_power_continuity} yields
+    $\tr(T(A)^k)=\tr(A^k)$. For $1\le k\le d$, Newton--Girard identities
+    determine all coefficients of the degree-$d$ characteristic polynomial,
+    proving $\chi_{T(A)}=\chi_A$. When $d=0$, the same argument consists of
+    empty sums and degree-zero characteristic polynomials.
+\end{proof}
+
+
+
 For a finite Hermitian matrix, the characteristic polynomial records the
 ordered eigenvalues with their multiplicities. This determines the matrix up
 to unitary conjugation.
