@@ -549,6 +549,7 @@ algebra is a single full matrix algebra $\MN{m}$; see
 % Equation (1.40), source lines 536--570.
 \begin{theorem}[Normalized partial-trace conditional expectation]
     \label{thm:right_factor_conditional_expectation}
+    \lean{Matrix.rightFactorConditionalExpectation_apply}
     \lean{Matrix.rightFactorConditionalExpectation_isKrausCPTP_and_isConditionalExpectation}
     \leanok
     \uses{def:is_kraus_cptp, def:is_conditional_expectation}
@@ -556,7 +557,7 @@ algebra is a single full matrix algebra $\MN{m}$; see
     \[
         E:\MN{m}\otimes\MN{d}\longrightarrow\MN{m}\otimes\MN{d},
         \qquad
-        E(A)=\frac{\mathbb1_m}{m}\otimes\tr_m(A),
+        E(A)=\mathbb1_m\otimes\bigl(m^{-1}\tr_m(A)\bigr),
     \]
     is trace-preserving and completely positive. It is a conditional
     expectation onto the unital $*$-subalgebra
@@ -569,16 +570,28 @@ algebra is a single full matrix algebra $\MN{m}$; see
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpdo_equiv_reindex_cptp,
+      lem:mpdo_right_partial_trace_cptp,
+      lem:mpdo_state_preparation_cptp,
+      lem:is_kraus_cptp_comp,
+      thm:mpdo_right_partial_trace_kronecker}
     Interchange the two tensor factors, trace out the new right factor,
     prepare the maximally mixed state $m^{-1}\mathbb1_m$, and interchange
-    the factors back. Each operation is trace-preserving and completely
-    positive. Moreover,
+    the factors back. Theorem~\ref{thm:mpdo_equiv_reindex_cptp},
+    Lemma~\ref{lem:mpdo_right_partial_trace_cptp},
+    Lemma~\ref{lem:mpdo_state_preparation_cptp}, and
+    Lemma~\ref{lem:is_kraus_cptp_comp} show that the resulting map is
+    trace-preserving and completely positive. Expanding the composition gives
+    \[
+        E(A)=\mathbb1_m\otimes\bigl(m^{-1}\tr_m(A)\bigr).
+    \]
+    The Kronecker-product partial-trace identity gives
     \[
         \tr_m(\mathbb1_m\otimes X)=mX,
     \]
     so $E(\mathbb1_m\otimes X)=\mathbb1_m\otimes X$. Pointwise fixation
-    gives both idempotence and unitality, while the displayed formula for
-    $E(A)$ gives the range inclusion.
+    gives both idempotence and unitality, while the evaluation identity gives
+    the range inclusion.
 \end{proof}
 
 \begin{definition}[Operator system]\label{def:operator_system}
