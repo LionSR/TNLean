@@ -6,30 +6,25 @@ For a normalized Kraus family, the Stinespring construction realizes the
 channel through an isometry $V$ into a larger space,
 $T(\rho)=\tr_E[V\rho V^\dagger]$; tracing out the environment $E$ returns the
 channel:
-\begin{center}
+\begin{tenkzequation}
+    \tenkzkernel
     % Formula/source: Wolf, Sec. 2.2, proof of Thm. 2.5, gives the
     % Schrödinger-picture identity
     % T(\rho)=\tr_{\mathbb C^r}(V\rho V^\dagger).
-    % Indices: \rho contracts the east system-index pair; the west system
-    % pair consists of the free indices of T(\rho), while the unique vertical
-    % pairleg contracts the repeated dilation-space index e.
-    % Orientation: the starred lower V is the conjugate bra layer; together
+    % Indices: \rho rides the east cup and contracts the east system-index
+    % pair; the west system pair consists of the free indices of T(\rho),
+    % named on the left of the equation, while the unique ket-bra pairing
+    % contracts the repeated dilation-space index e.
+    % Orientation: the conjugate lower V is the bra layer; together
     % with the return path it represents V^\dagger in the operator formula.
     % Boundary signature: (virtual-west=2 | virtual-east=0 |
     % physical-up=0 | physical-down=0).
-    % The state rides the closing cup.  The kernel's on-wire anchor divides the
-    % record chord rather than the drawn arc (#5482 neighbourhood), so a tensor
-    % placed there would read as sitting on the physical contraction; this
-    % picture keeps its 0.7 spelling until a station on a generated cup exists.
-    \begin{tenkz}[
-        sandwich,
-        east={cup=$\rho$},
-        west label=$T(\rho)$
-    ]
-        \tn{V} \\
-        \tn*{V}
+    $T(\rho) \;=\;$
+    \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east={cup=$\rho$}]
+        \tn[label pos=n]{V} \\
+        \tn[label pos=s, conjugate]{\overline{V}}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{definition}[Stinespring matrix]\label{def:stinespring_v}
     \lean{stinespringV}

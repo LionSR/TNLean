@@ -133,12 +133,12 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 | 37 | `legs at=`, fusion `rows=` alias | 9 | dies | aliases, sunset 1.0 |
 | 38 | `no legs` | 12 | dies | 0.7 spelling; the refusal is `physical=none`: `r_atom_physical_answer.tex` |
 | 39 | site `removed=` | 11 | dies | lattice spelling; `void=sealed` covered by `r_sealed_void.tex` |
-| 40 | `\tnput`, `\tnsite` placement | 45 | dies | §10 → `\tn[at=…]`: `r_explicit_at.tex`, `r_midway.tex` |
+| 40 | `\tnput`, `\tnsite` placement | 45 | dies | §10: `\tnput` is `\tn[at=<address>]` and `\tnsite` is `\tn[at=(r,c)]`; addressed placement is `k_torus.tex`, `r_label_carriers_affine.tex` and throughout |
 | 41 | `\tnghost` invisible anchors | 41 | dies | §10: addresses reference empty cells directly; string ends on empty wire cells in `k_torus.tex` |
 | 42 | `\tnX` on-wire map | 34 | dies | SHRINK verdict: tombstoned, migrates to `\tn[skin=ring]`; `s10_kernel.tex` |
 | 43 | `\tnfuse` fusion atom | 34 | dies | SHRINK verdict: demoted to a prelude-declared atom; declarations covered by `r_declare_atom.tex`, trees by `rmp-iii-a-fusion-tensor` |
 | 44 | `\tndots` elision | 33 | covered | `rmp-ii-tangent-projector` (command), `k_blocking.tex` (`skin=dots`); sentenced to fold into `\tn[skin=dots]` at the language landing |
-| 45 | `\tnskip` open hole | 11 (`hole` event emitters) | **gap G1** | the kernel target `void=open` has no surviving fixture; see §5 |
+| 45 | `\tnskip` open hole | 11 (`hole` event emitters) | covered | `r_void_open.tex` (landed with the void-skin correction #5609 / PR #5616: a hole draws no glyph, its bonds bridge it, the boundary carries the preserved index; the sealed contrast and the atom-scope `updown` answer ride the same fixture) |
 | 46 | atom-scope `physical=` answers | 14 | covered | `r_atom_physical_answer.tex` (`none`, `up` against an `updown` row; the atom-scope `updown` answer of `t2_twoshift` folds into G1's fixture) |
 | 47 | typed `ports=` lists (free dialect) | 11 | covered | `r_closure_typed_ports.tex`, `r_authored_port_default_type.tex` |
 | 48 | `wide=`/`wires=` spans | 40+ | covered | `k_roperator.tex`, `r_tall_grid.tex`, `r_basis_member_wide.tex` |
@@ -167,8 +167,8 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 | 61 | `\tncut` connection cut | 7 | dies | §10: `form=cut` fails tenure outright, no successor owed |
 | 62 | `\tnspan` braces above/below | 16 | dies | SHRINK verdict; the kernel states ranges through mark addresses: `r_mark_bracket_range.tex` |
 | 63 | `slot=selected`, `slot=secondary` | 25 | covered | `r_region_staircase.tex`, `r_region_complement.tex`, 13 `slot=selected` uses across `k_*` and RMP |
-| 64 | `slot=complement\|collar\|neutral` | 5 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`) | **gap G2** | live kernel enum words (`tenkz-kernel.code.tex` line 1222) with no surviving fixture; see §5 |
-| 65 | region `name=` | 4 | **gap G2** | `name` is a registered kernel mark key with no surviving fixture; folded into G2's replacement |
+| 64 | `slot=complement\|collar\|neutral` | 5 (`lattice_test`, `notch`, `feat`, `t2_gs2d_lasso`, `t2_tcdual`) | covered | `r_region_slot_words.tex`, closing gap G2 |
+| 65 | region `name=` | 4 | covered | `r_region_slot_words.tex`, closing gap G2 |
 | 66 | `outline` flag | 17 | dies | 0.7 spelling; a kernel enclosure strokes only, `tint` adds the paper: `r_region_staircase.tex` |
 | 67 | `inset=` nested regions | 6 | covered | `rmp-iv-ground-space-2d`; concentric order doctrine `r_nested_regions.tex` (the key itself is sentenced by the amendments) |
 | 68 | `label at=` | 9 | dies | alias, sunset 1.0; `label pos=` covered by `r_label_turn.tex` |
@@ -202,15 +202,17 @@ named. Evidence for **dies** is the contract or ledger line; evidence for
 
 ## 4. Counts
 
-Classifying the 85 ledger rows: **55 die** with their dialect, **26 are
-covered** by a named kernel or RMP case, and **4 rows are gaps**, forming
-three distinct gaps (G1 and G2 immediate — G2 spans rows 64 and 65 — and G3
-conditional). Nothing else in the legacy corpus's construct inventory,
-key-value inventory, or event census falls outside these rows.
+Classifying the 85 ledger rows: **55 die** with their dialect, **29 are
+covered** by a named kernel or RMP case, and **1 row remains a gap** (G3,
+conditional). G2 discharged (rows 64 and 65 move from gap to covered) with
+`r_region_slot_words.tex`; G1 discharged with `r_void_open.tex` once the
+void-skin correction (#5609, PR #5616) made the hole glyph-faithful.
+Nothing else in the legacy corpus's construct inventory, key-value
+inventory, or event census falls outside these rows.
 
 ## 5. The gaps
 
-### G1 — `void=open` (write before deletion)
+### G1 — `void=open` (discharged)
 
 The eleven fixtures that call `\tnskip` are the only tests of an open hole:
 they emit the grid `hole` event and pin that a removed object preserves its
@@ -229,6 +231,8 @@ compare the boundary signature against the sealed variant in a second
 picture). Include one atom answering `physical=updown` at atom scope, the one
 policy-answer value `r_atom_physical_answer.tex` does not spell.
 
+**Discharged.** The glyph half blocked this fixture: `__tenkz_kernel_atom_skin:nN` defaulted every atom's skin to `dot`, so `\tn[void=open]{}` drew a site indistinguishable from a real one (recorded as issue #5609). PR #5616 defaults a void's skin to `none` — a hole draws nothing, no glyph and no label, unless the author declares a skin — and shipped `tests/tenkz/kernel/regression/r_void_open.tex` pinning the open hole's bridging bonds, its preserved physical index, the boundary contrast against the sealed variant, and the atom-scope `physical=updown` answer.
+
 ### G2 — mark slot words and mark names (write before deletion)
 
 The kernel mark slot alphabet is `{selected, secondary, complement, collar,
@@ -246,6 +250,15 @@ semantic ink (the theme maps `collar` to its dedicated hue,
 recorded. If the deferred slot-for-species exchange
 (`LANGUAGE-1.0.md` §14.5) lands first and retires `slot=`, the fixture pins
 the `species=` respelling instead and the three words join the tombstones.
+
+**Closed.** `r_region_slot_words.tex` lands with this document. It hooks
+`\__tenkz_kernel_r_mark_enclosure:n` to capture the resolved
+`\l__tenkz_kernel_r_hue_tl` for each of the three enclosures and asserts the
+sequence `tenkzPassive, tenkzExtra, tenkzInk` (an `\errmessage` on mismatch
+fails the compile, verified by a negative control that mutates one expected
+hue); the `.tnlog` `mark` records separately confirm `slot=complement`,
+`slot=collar`, `slot=neutral`, and `name=R` are recorded verbatim. Rows 64
+and 65 move to covered in §3.5.
 
 ### G3 — inline embedding and math-style sensing (conditional on contract work)
 
@@ -305,5 +318,5 @@ preserves (`iso_h`, `p3_probe_opop`, `rv4061_flatonly`, `trace_warn`,
 `zz_wirescan`), and the two kernel-switch fixtures (`fig21d_cubic`,
 `fig21d_cubic_v2`). Everything else — 252 fixtures — either dies or is
 respelled according to its `DISPOSITIONS.md` code, and either way leaves the
-corpus safely once G1 and G2 land, with G3's requirement recorded on the S4
-tracking issue.
+corpus safely — G1 has landed — with G3's requirement recorded on the S4
+tracking issue. G2 has already landed (`r_region_slot_words.tex`).

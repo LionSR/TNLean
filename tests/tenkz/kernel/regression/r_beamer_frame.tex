@@ -1,0 +1,16 @@
+% Regression: a chained picture compiles inside a plain beamer frame.
+% Beamer tokenizes a frame body long before any picture code runs, so the
+% body reaches the kernel carrying the document's alignment character; the
+% captured-body reading gives that token the column step without [fragile].
+\documentclass{beamer}
+\usepackage{tenkz}
+
+\begin{document}
+\begin{frame}{Chained picture}
+  \tenkzkernel
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=grid]
+    \tn{} & \tn{} & \tn{} \\
+    \tn{} & \tn{} & \tn{}
+  \end{tenkz}
+\end{frame}
+\end{document}

@@ -44,12 +44,13 @@ first.
         % gauges, and the upper leg carries the free physical index i.
         % Both sides have boundary signature (1,1,1,0), ordered as
         % (virtual-west, virtual-east, physical-up, physical-down).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{B_k}
+        \tenkzkernel
+        \begin{tenkz}[cols=1, west=open, east=open]
+            \tn[ports={90:physical:$i$}]{B_k}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{Z_k} & \tn[up=$i$]{A_k} & \tnX{Z_{k+1}^{-1}}
+        \begin{tenkz}[west=open, east=open]
+            \tn[skin=ring]{Z_k} & \tn[ports={90:physical:$i$}]{A_k} & \tn[skin=ring]{Z_{k+1}^{-1}}
         \end{tenkz}
     \end{center}
 \end{definition}
@@ -162,15 +163,16 @@ used in the virtual bond gauge.
         % A^i X = sum_j O_A(X)_{ij} A^j: on the left, X is inserted on
         % A's east virtual leg.  On the right, the lower leg of O_A(X)
         % contracts with A's physical leg over j, while O_A(X)'s upper
-        % leg is the free index i.  The operator row has no virtual
-        % boundary.  Both sides have signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{A} & \tnX{X}
+        % leg is the free index i.  The operator carries no virtual
+        % index.  Both sides have signature (1,1,1,0).
+        \tenkzkernel
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[ports={90:physical:$i$}]{A} & \tn[skin=ring]{X}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[rows={op:none, ket}]
-            \tn[mpo, up=$i$, down=$j$]{O_A(X)} \\
-            \tn{A}
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{O_A(X)} \\
+            \tn[ports={90:physical, 180:virtual, 0:virtual}]{A}
         \end{tenkz}
     \end{center}
     The map $X\mapsto O_A(X)$ is $\C$-linear.
@@ -368,12 +370,13 @@ shows that this agreement forces the local tensors to be proportional.
         % internal bond between the two site tensors, and the periodic
         % return closes the remaining virtual ends.  The two upper legs
         % are the free indices i,j.  Both sides have signature (0,0,2,0).
-        \begin{tenkz}[periodic, physical=up]
-            \tn[up=$i$]{A_1} & \tnX{X} & \tn[up=$j$]{A_2}
+        \tenkzkernel
+        \begin{tenkz}[boundary=periodic]
+            \tn[ports={90:physical:$i$}]{A_1} & \tn[skin=ring]{X} & \tn[ports={90:physical:$j$}]{A_2}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[periodic, physical=up]
-            \tn[up=$i$]{B_1} & \tnX{X} & \tn[up=$j$]{B_2}
+        \begin{tenkz}[boundary=periodic]
+            \tn[ports={90:physical:$i$}]{B_1} & \tn[skin=ring]{X} & \tn[ports={90:physical:$j$}]{B_2}
         \end{tenkz}
     \end{center}
     while the insertion $Y$ on the outer trace bond, as
@@ -384,12 +387,13 @@ shows that this agreement forces the local tensors to be proportional.
         % outer return bond, then A_1/B_1.  Thus this is not the internal
         % cyclic order above.  The upper legs are the free indices i,j,
         % and both sides have signature (0,0,2,0).
-        \begin{tenkz}[periodic, physical=up]
-            \tn[up=$i$]{A_1} & \tn[up=$j$]{A_2} & \tnX{Y}
+        \tenkzkernel
+        \begin{tenkz}[boundary=periodic]
+            \tn[ports={90:physical:$i$}]{A_1} & \tn[ports={90:physical:$j$}]{A_2} & \tn[skin=ring]{Y}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[periodic, physical=up]
-            \tn[up=$i$]{B_1} & \tn[up=$j$]{B_2} & \tnX{Y}
+        \begin{tenkz}[boundary=periodic]
+            \tn[ports={90:physical:$i$}]{B_1} & \tn[ports={90:physical:$j$}]{B_2} & \tn[skin=ring]{Y}
         \end{tenkz}
     \end{center}
     so the two hypotheses distinguish the internal and external virtual
@@ -430,16 +434,17 @@ shows that this agreement forces the local tensors to be proportional.
         % index i, the red capsule Z acts on the west or east virtual
         % index, and the untouched outer virtual indices remain open.
         % All three terms have boundary signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{A_1}
+        \tenkzkernel
+        \begin{tenkz}[cols=1, west=open, east=open]
+            \tn[ports={90:physical:$i$}]{A_1}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{Z} & \tn[up=$i$]{B_1}
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[skin=ring]{Z} & \tn[ports={90:physical:$i$}]{B_1}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tn[up=$i$]{B_1} & \tnX{Z}
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[ports={90:physical:$i$}]{B_1} & \tn[skin=ring]{Z}
         \end{tenkz}
 
 
@@ -447,12 +452,12 @@ shows that this agreement forces the local tensors to be proportional.
         % with lambda Id_D, the two red capsules act on the same west
         % virtual index of B_1^i.  Both terms keep the east virtual index
         % and physical index i open, hence have signature (1,1,1,0).
-        \begin{tenkz}[physical=up]
-            \tnX{Z} & \tn[up=$i$]{B_1}
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[skin=ring]{Z} & \tn[ports={90:physical:$i$}]{B_1}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[physical=up]
-            \tnX{\lambda \Id_D} & \tn[up=$i$]{B_1}
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[skin=ring]{\lambda \Id_D} & \tn[ports={90:physical:$i$}]{B_1}
         \end{tenkz}
     \end{center}
     The first product identity (\ref{eq:aft_product_identities_a}) gives

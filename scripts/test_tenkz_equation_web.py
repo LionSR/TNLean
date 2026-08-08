@@ -307,9 +307,13 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
           };
         })"""
     )
-    assert any(fact["localScroll"] for fact in facts), facts
     assert all(fact["contained"] for fact in facts), facts
     assert not any(fact["figureScroll"] for fact in facts), facts
+    assert all(
+        fact["localScroll"]
+        or fact["allVisibleAtStart"]
+        for fact in facts
+    ), facts
     assert all(
         fact["firstReachable"] and fact["lastReachable"]
         if fact["localScroll"]
