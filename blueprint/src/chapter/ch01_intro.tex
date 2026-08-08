@@ -1276,6 +1276,32 @@ $M_M(\C)$, $M=\sum_kd_k$.
     $\MN{p}$ gives $\widetilde T|_S=T$.
 \end{proof}
 
+\begin{theorem}[Hermitian matrices with the same characteristic polynomial]
+    \label{thm:hermitian_charpoly_unitary_conjugacy}
+    \lean{Matrix.IsHermitian.exists_unitary_conj_of_charpoly_eq}
+    \leanok
+    Let $A,B\in M_d(\C)$ be Hermitian. If their characteristic polynomials
+    agree, then there is a unitary matrix $U\in M_d(\C)$ such that
+    \begin{align}
+        B=UAU^\dagger.
+    \end{align}
+    This is the finite-dimensional spectral classification used in
+    \cite[Chapter~1, Proposition~1.4]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Equality of the characteristic polynomials gives equality of the ordered
+    eigenvalue lists. Write the two spectral decompositions as
+    \begin{align}
+        A=U_A D U_A^\dagger.
+    \end{align}
+    Likewise,
+    \begin{align}
+        B=U_B D U_B^\dagger.
+    \end{align}
+    Then $U=U_BU_A^\dagger$ is unitary and $B=UAU^\dagger$.
+\end{proof}
+
 \section{Pure states, projective rays, and Wigner's theorem}
 
 A nonzero vector $v\in\C^d$ determines a ray $[v]$ and the normalized
