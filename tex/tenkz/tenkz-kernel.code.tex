@@ -303,11 +303,15 @@
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_opts_tl {#2}
-    % A panel option list under tenkzeq is tokenized while `=` is the
-    % active relation glyph; rewrite each one to the plain equals the
-    % keyval and value parsers read.
+    % A panel option list standing in an equation body was swept by the
+    % relation rewrite, so its key separators arrive wearing the relation
+    % marker; give each one back the plain equals the keyval and value
+    % parsers read.
     \bool_if:NT \l__tenkz_kernel_ineq_bool
-      { \regex_replace_all:nnN { = } { = } \l__tenkz_kernel_opts_tl }
+      {
+        \regex_replace_all:nnN
+          { \c{__tenkz_kernel_eq_rel:} } { = } \l__tenkz_kernel_opts_tl
+      }
     % Parameterized alphabet words remain one key value even though their
     % canonical spelling contains `=`.
     \regex_replace_all:nnN
@@ -17262,9 +17266,10 @@
   { \__tenkz_kernel_tn:nn {#1} {#2} \ignorespaces }
 
 % tenkzeq: the audit scope.  Panels accumulate their signatures globally
-% (each panel closes its own group); the active `=` records one relation
-% per glyph together with its place in the panel sequence, and the audit
-% compares the composite sides those places delimit.
+% (each panel closes its own group); each relation glyph standing in the
+% equation body records one relation together with its place in the panel
+% sequence, and the audit compares the composite sides those places
+% delimit.  The body capture below finds the glyphs.
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
     \bool_if:NT \l__tenkz_kernel_ineq_bool
@@ -17311,8 +17316,6 @@
     \prop_set_eq:NN
       \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \char_set_catcode_active:N \=
-    \char_set_active_eq:NN \= \__tenkz_kernel_eq_rel:
   }
 \cs_new_protected:Npn \__tenkz_kernel_eq_rel:
   {
@@ -17845,8 +17848,48 @@
         \__tenkz_kernel_env_body:w
       }
   }
+% The equation body is captured on the same terms, and for the same reason.
+% A relation glyph is an ordinary `=' the author writes between panels, and
+% the wrapper used to recognize it by making `=' active at equation entry.
+% That arrangement fails wherever the body was tokenized earlier: in a plain
+% beamer frame every `=' reaches the wrapper as a frozen other-character, no
+% relation is recorded, and the audit reports an equation with panels and no
+% relations.  The capture reads the glyphs out of the tokens instead, so the
+% reading no longer depends on when the body was tokenized.
+%
+% The sweep reaches every brace level, because the active glyph did: a
+% joiner is the mathematics standing between two terms (LANGUAGE-1.0
+% section 7), and the braces of an \mbox or an \ensuremath around that
+% mathematics are its spelling, not its depth.  A panel's option list is
+% swept along with the joiners, so its key separators arrive at
+% \__tenkz_kernel_keys:nn wearing the marker; that door gives them back the
+% plain equals before l3keys reads them, exactly as it gave back the active
+% glyph.
+\tl_new:N \l__tenkz_kernel_eq_body_tl
+\cs_new_protected:Npn \__tenkz_kernel_rewrite_rels:N #1
+  { \regex_replace_all:nnN { = } { \c{__tenkz_kernel_eq_rel:} } #1 }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
-  { \__tenkz_kernel_eq_begin:n {#1} }
+  {
+    \__tenkz_kernel_eq_begin:n {#1}
+    \tl_clear:N \l__tenkz_kernel_eq_body_tl
+    \group_align_safe_begin:
+    \__tenkz_kernel_eq_body:w
+  }
+\cs_new_protected:Npn \__tenkz_kernel_eq_body:w #1 \end #2
+  {
+    \tl_put_right:Nn \l__tenkz_kernel_eq_body_tl {#1}
+    \str_if_eq:nnTF {#2} {tenkzeq}
+      {
+        \group_align_safe_end:
+        \__tenkz_kernel_rewrite_rels:N \l__tenkz_kernel_eq_body_tl
+        \tl_use:N \l__tenkz_kernel_eq_body_tl
+        \end {tenkzeq}
+      }
+      {
+        \tl_put_right:Nn \l__tenkz_kernel_eq_body_tl { \end {#2} }
+        \__tenkz_kernel_eq_body:w
+      }
+  }
 \NewDocumentCommand \tenkzkernel { }
   {
     \cs_set_eq:NN \tenkz \__tenkz_kernel_env_begin_cmd
