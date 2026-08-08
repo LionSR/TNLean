@@ -1,0 +1,14 @@
+% Control for r_noncell_port_slot: the same picture with the spanning atom
+% cell-anchored; the pair must render byte-identical rasters.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,2), name=A, skin=box]{A}
+  \tn[at=(2,2), name=B, skin=box]{B}
+  \tn[at=(1,1), name=e, skin=pill, wires=2]{e}
+  \tnwire{e.0@1}{A.180}
+  \tnwire{e.0@2}{B.180}
+\end{tenkz}
+\end{document}

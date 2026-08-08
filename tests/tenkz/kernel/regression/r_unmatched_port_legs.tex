@@ -72,9 +72,9 @@
     \__tenkz_test_port_stroke:nn {#1}{#2}
   }
 \cs_new_eq:NN
-  \__tenkz_test_policy_port_leg:nn
-  \__tenkz_kernel_r_leg:nn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
+  \__tenkz_test_policy_port_leg:nnn
+  \__tenkz_kernel_r_leg_slot:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_slot:nnn #1#2#3
   {
     \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
     \str_case:Vn \l_tmpa_tl
@@ -82,7 +82,7 @@
         {H}{ \int_gincr:N \g__tenkz_test_consumed_policy_leg_int }
         {J}{ \int_gincr:N \g__tenkz_test_consumed_policy_leg_int }
       }
-    \__tenkz_test_policy_port_leg:nn {#1}{#2}
+    \__tenkz_test_policy_port_leg:nnn {#1}{#2}{#3}
   }
 \cs_new_eq:NN
   \__tenkz_test_bonded_port_label:nn

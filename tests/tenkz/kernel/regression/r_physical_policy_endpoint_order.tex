@@ -32,9 +32,9 @@
     \__tenkz_test_policy_endpoint_stroke:nn {#1}{#2}
   }
 \cs_new_eq:NN
-  \__tenkz_test_policy_endpoint_leg:nn
-  \__tenkz_kernel_r_leg:nn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
+  \__tenkz_test_policy_endpoint_leg:nnn
+  \__tenkz_kernel_r_leg_slot:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_slot:nnn #1#2#3
   {
     \__tenkz_model_get:nnN {#1} {name} \l_tmpa_tl
     \str_case:Vn \l_tmpa_tl
@@ -42,7 +42,7 @@
         {A}{\int_gincr:N \g__tenkz_test_policy_endpoint_leg_int}
         {B}{\int_gincr:N \g__tenkz_test_policy_endpoint_leg_int}
       }
-    \__tenkz_test_policy_endpoint_leg:nn {#1}{#2}
+    \__tenkz_test_policy_endpoint_leg:nnn {#1}{#2}{#3}
   }
 \AtEndDocument
   {

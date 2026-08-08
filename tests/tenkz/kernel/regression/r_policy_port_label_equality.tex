@@ -23,12 +23,12 @@
     \__tenkz_test_policy_equal_labelnode:nnn {#1}{#2}{#3}
   }
 \cs_new_eq:NN
-  \__tenkz_test_policy_equal_leg:nn
-  \__tenkz_kernel_r_leg:nn
-\cs_set_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
+  \__tenkz_test_policy_equal_leg:nnn
+  \__tenkz_kernel_r_leg_slot:nnn
+\cs_set_protected:Npn \__tenkz_kernel_r_leg_slot:nnn #1#2#3
   {
     \int_gincr:N \g__tenkz_test_policy_equal_leg_int
-    \__tenkz_test_policy_equal_leg:nn {#1}{#2}
+    \__tenkz_test_policy_equal_leg:nnn {#1}{#2}{#3}
   }
 \AtEndDocument
   {
