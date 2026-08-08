@@ -1374,8 +1374,8 @@ that hypothesis by multiplicity preservation.
     \uses{thm:hermitian_trace_power_sum}
     The common spectrum is the common finite set underlying the two root
     multisets. The roots of $\chi_A$ are distinct, so this set has $d$
-    elements. Since the Hermitian polynomial $\chi_B$ splits and has degree
-    $d$, its root multiset also has cardinality $d$. Hence it cannot repeat
+    elements. Since $B$ is Hermitian, $\chi_B$ splits and has degree $d$, so
+    its root multiset also has cardinality $d$. Hence it cannot repeat
     any root, and the two root multisets agree. Formula
     (\ref{eq:ch01_trace_power_sum}) then gives equality of trace powers.
 \end{proof}
@@ -1395,9 +1395,34 @@ that hypothesis by multiplicity preservation.
     the trace is a finite sum of matrix entries.
 \end{proof}
 
-\begin{theorem}[Hermitian set-spectrum multiplicity bridge]
+\begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
+    \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
+        Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
+    \leanok
+    If $A, B \in \MN{n}$ satisfy
+    $\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
+    then $A$ and $B$ have the same characteristic polynomial.
+    It is enough to assume this equality for $1 \le k \le n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $e_m$ denote the $m$th elementary symmetric polynomial in the
+    eigenvalues, with $e_0 = 1$. The Newton--Girard recursion
+    \begin{align}
+        m e_m
+         & = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
+        \label{eq:bnt_power_newton_girard}
+    \end{align}
+    expresses the coefficients of the characteristic polynomial in terms
+    of the power-sum traces $\tr(A^i)$. Equal power sums for $A$ and $B$
+    therefore give equal coefficients, hence equal characteristic
+    polynomials.
+\end{proof}
+
+\begin{theorem}[Characteristic-polynomial preservation from Hermitian set spectra]
     \label{thm:hermitian_set_spectrum_charpoly}
-    \lean{Matrix.charpoly_map_eq_of_preservesHermitianSpectrum}
+    \lean{Matrix.charpoly_map_eq_of_preserves_hermitian_spectrum}
     \leanok
     Let $T:M_d(\C)\to M_d(\C)$ be complex linear. Suppose that $T(A)$ is
     Hermitian whenever $A$ is Hermitian and that

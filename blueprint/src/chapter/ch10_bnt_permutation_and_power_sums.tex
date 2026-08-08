@@ -133,30 +133,9 @@ two-layer BNT expansion are power sums of the copy weights. Recovering the
 individual weights from these sums is a Newton--Girard problem: equal power sums
 determine equal characteristic polynomials, hence equal multisets of roots.
 
-\begin{theorem}[Newton--Girard trace recursion]\label{thm:newton_girard}
-    \lean{Matrix.charpoly_eq_of_forall_trace_pow_eq,
-        Matrix.charpoly_eq_of_trace_pow_eq_of_le_card}
-    \leanok
-    If $A, B \in \MN{n}$ satisfy
-    $\tr(A^k) = \tr(B^k)$ for all $k \ge 1$,
-    then $A$ and $B$ have the same characteristic polynomial.
-    It is enough to assume this equality for $1 \le k \le n$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Let $e_m$ denote the $m$th elementary symmetric polynomial in the
-    eigenvalues, with $e_0 = 1$. The Newton--Girard recursion
-    \begin{align}
-        m e_m
-         & = \sum_{i=1}^m (-1)^{i-1} e_{m-i} \tr(A^i)
-        \label{eq:bnt_power_newton_girard}
-    \end{align}
-    expresses the coefficients of the characteristic polynomial in terms
-    of the power-sum traces $\tr(A^i)$. Equal power sums for $A$ and $B$
-    therefore give equal coefficients, hence equal characteristic
-    polynomials.
-\end{proof}
+The general matrix statement is
+Theorem~\ref{thm:newton_girard}. It identifies a characteristic polynomial
+from the first $n$ power-sum traces.
 
 The matched-sector comparison below applies the power-sum identities to a single
 matched pair, after the BNT permutation and phase gauges have identified which

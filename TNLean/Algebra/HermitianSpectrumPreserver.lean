@@ -9,7 +9,7 @@ import TNLean.Algebra.MatrixTracePowerContinuity
 import TNLean.Algebra.NewtonGirard
 
 /-!
-# Multiplicity bridge for Hermitian spectrum preservers
+# Characteristic-polynomial preservation from Hermitian set spectra
 
 Wolf's Chapter 1 spectrum-preserver argument assumes equality of spectra as
 sets on Hermitian inputs, not equality counting multiplicities.  This file
@@ -27,7 +27,7 @@ The proof includes matrix dimension zero and assumes no density theorem.
 
 ## Main declaration
 
-* `Matrix.charpoly_map_eq_of_preservesHermitianSpectrum`: Wolf's exact
+* `Matrix.charpoly_map_eq_of_preserves_hermitian_spectrum`: Wolf's exact
   set-spectrum hypothesis implies characteristic-polynomial preservation on
   Hermitian matrices.
 -/
@@ -44,7 +44,7 @@ polynomials on Hermitian inputs.
 
 This is the multiplicity step in Wolf, Chapter 1, "Spectrum preserving maps".
 Characteristic-polynomial preservation is a conclusion, not a hypothesis. -/
-theorem charpoly_map_eq_of_preservesHermitianSpectrum
+theorem charpoly_map_eq_of_preserves_hermitian_spectrum
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
     (hHermitian : ∀ A : Matrix (Fin d) (Fin d) ℂ,
       A.IsHermitian → (T A).IsHermitian)
