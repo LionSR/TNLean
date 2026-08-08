@@ -152,13 +152,8 @@ class _CommandGrammar:
 # wire takes two.  The scanner does not validate invocations, but it must never
 # claim more brace groups than a valid invocation can consume.
 _COMMAND_GRAMMARS: Mapping[str, _CommandGrammar] = {
-    "tnput": _CommandGrammar(DimensionOwner.LAYOUT, (3,)),       # O{} m m m
-    "tnjoin": _CommandGrammar(DimensionOwner.ROUTE, (2,)),      # O{} m m
     "tnwire": _CommandGrammar(DimensionOwner.ROUTE, (0, 2)),    # O{} or O{} m m
     "tnedge": _CommandGrammar(DimensionOwner.ROUTE, (1,)),      # O{} m
-    "tnarrow": _CommandGrammar(                                 # s O{} m
-        DimensionOwner.ROUTE, (1,), accepts_star=True
-    ),
     # Typed containers below are ownership barriers, not blanket LAYOUT
     # owners.  Their recognized physical option values receive narrower
     # spans; arbitrary dimensions in an object label/body remain unowned and
@@ -218,9 +213,6 @@ DIMENSION_COMMAND_OWNERS: Mapping[str, DimensionOwner] = {
 # invariant at import time.
 _PHYSICAL_OPTION_KEY_OWNERS: Mapping[str, DimensionOwner] = {
     "pitch": DimensionOwner.METRIC,
-    "radius": DimensionOwner.METRIC,
-    "column sep": DimensionOwner.METRIC,
-    "row sep": DimensionOwner.METRIC,
     "col vector": DimensionOwner.FRAME,
     "row vector": DimensionOwner.FRAME,
     "sheet vector": DimensionOwner.FRAME,
@@ -246,8 +238,6 @@ _OPTION_OWNER_RE = re.compile(
 )
 _OPTION_ENVIRONMENT_KEYS: Mapping[str, frozenset[str]] = {
     "tenkz": frozenset({"pitch"}),
-    "tenkzcd": frozenset({"pitch", "radius", "column sep", "row sep"}),
-    "tenkzfree": frozenset({"pitch"}),
     "tenkzlattice": frozenset(
         {"pitch", "col vector", "row vector", "sheet vector"}
     ),

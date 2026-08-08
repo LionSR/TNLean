@@ -80,69 +80,46 @@
     % general theorem's (0,|V(G)|) physical boundary.  Source verdict: exact graph
     % and insertion from paper_normal.tex:1037--1065.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[ports={0:virtual,110:virtual,north:physical}]
-                {edgeEqAone}{(-10mm,-5mm)}{A_1}
-            \tnput[ports={180:virtual,55:virtual,141:virtual,north:physical}]
-                {edgeEqAtwo}{(8mm,-5mm)}{A_2}
-            \tnput[ports={235:virtual,155:virtual,north:physical}]
-                {edgeEqAthree}{(16mm,6mm)}{A_3}
-            \tnput[ports={-25:virtual,190:virtual,north:physical}]
-                {edgeEqAfour}{(4mm,15mm)}{A_4}
-            \tnput[ports={10:virtual,-70:virtual,-39:virtual,north:physical}]
-                {edgeEqAfive}{(-12mm,11mm)}{A_5}
-            \tnput[ring, role=operator, ports={-39:virtual,141:virtual}]
-                {edgeEqAX}{(-2mm,3mm)}{X}
-            \tnput[boundary, ports={south:physical}]{edgeEqAPone}{(-10mm,2mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqAPtwo}{(8mm,2mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqAPthree}{(16mm,13mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqAPfour}{(4mm,22mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqAPfive}{(-12mm,18mm)}{}
-            \tnjoin{edgeEqAone.0}{edgeEqAtwo.180}
-            \tnjoin{edgeEqAtwo.55}{edgeEqAthree.235}
-            \tnjoin{edgeEqAthree.155}{edgeEqAfour.-25}
-            \tnjoin{edgeEqAfour.190}{edgeEqAfive.10}
-            \tnjoin{edgeEqAfive.-70}{edgeEqAone.110}
-            \tnjoin{edgeEqAtwo.141}{edgeEqAX.-39}
-            \tnjoin{edgeEqAX.141}{edgeEqAfive.-39}
-            \tnjoin{edgeEqAone.north}{edgeEqAPone.south}
-            \tnjoin{edgeEqAtwo.north}{edgeEqAPtwo.south}
-            \tnjoin{edgeEqAthree.north}{edgeEqAPthree.south}
-            \tnjoin{edgeEqAfour.north}{edgeEqAPfour.south}
-            \tnjoin{edgeEqAfive.north}{edgeEqAPfive.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=5, frame=circle, bonds=none]
+            \tn[at=(1,1), name=edgeEqA1, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{A_1}
+            \tn[at=(1,2), name=edgeEqA2, label pos=145,
+                ports={0:virtual, 180:virtual, -72:virtual, 90:physical}]{A_2}
+            \tn[at=(1,3), name=edgeEqA3, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{A_3}
+            \tn[at=(1,4), name=edgeEqA4, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{A_4}
+            \tn[at=(1,5), name=edgeEqA5, label pos=145,
+                ports={0:virtual, 180:virtual, 252:virtual, 90:physical}]{A_5}
+            \tnwire{edgeEqA1.0}{edgeEqA2.180}
+            \tnwire{edgeEqA2.0}{edgeEqA3.180}
+            \tnwire{edgeEqA3.0}{edgeEqA4.180}
+            \tnwire{edgeEqA4.0}{edgeEqA5.180}
+            \tnwire{edgeEqA5.0}{edgeEqA1.180}
+            \tnwire[name=edgeEqAChord]{edgeEqA2.-72}{edgeEqA5.252}
+            \tn[skin=ring, species=operator, at=on edgeEqAChord 0.5]{X}
+        \end{tenkz}
         $ = $
-        \begin{tenkzfree}
-            \tnput[ports={0:virtual,110:virtual,north:physical}]
-                {edgeEqBone}{(-10mm,-5mm)}{\widetilde B_1}
-            \tnput[ports={180:virtual,55:virtual,141:virtual,north:physical}]
-                {edgeEqBtwo}{(8mm,-5mm)}{\widetilde B_2}
-            \tnput[ports={235:virtual,155:virtual,north:physical}]
-                {edgeEqBthree}{(16mm,6mm)}{\widetilde B_3}
-            \tnput[ports={-25:virtual,190:virtual,north:physical}]
-                {edgeEqBfour}{(4mm,15mm)}{\widetilde B_4}
-            \tnput[ports={10:virtual,-70:virtual,-39:virtual,north:physical}]
-                {edgeEqBfive}{(-12mm,11mm)}{\widetilde B_5}
-            \tnput[ring, role=operator, ports={-39:virtual,141:virtual}]
-                {edgeEqBX}{(-2mm,3mm)}{X}
-            \tnput[boundary, ports={south:physical}]{edgeEqBPone}{(-10mm,2mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqBPtwo}{(8mm,2mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqBPthree}{(16mm,13mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqBPfour}{(4mm,22mm)}{}
-            \tnput[boundary, ports={south:physical}]{edgeEqBPfive}{(-12mm,18mm)}{}
-            \tnjoin{edgeEqBone.0}{edgeEqBtwo.180}
-            \tnjoin{edgeEqBtwo.55}{edgeEqBthree.235}
-            \tnjoin{edgeEqBthree.155}{edgeEqBfour.-25}
-            \tnjoin{edgeEqBfour.190}{edgeEqBfive.10}
-            \tnjoin{edgeEqBfive.-70}{edgeEqBone.110}
-            \tnjoin{edgeEqBtwo.141}{edgeEqBX.-39}
-            \tnjoin{edgeEqBX.141}{edgeEqBfive.-39}
-            \tnjoin{edgeEqBone.north}{edgeEqBPone.south}
-            \tnjoin{edgeEqBtwo.north}{edgeEqBPtwo.south}
-            \tnjoin{edgeEqBthree.north}{edgeEqBPthree.south}
-            \tnjoin{edgeEqBfour.north}{edgeEqBPfour.south}
-            \tnjoin{edgeEqBfive.north}{edgeEqBPfive.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=5, frame=circle, bonds=none]
+            \tn[at=(1,1), name=edgeEqB1, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{\widetilde B_1}
+            \tn[at=(1,2), name=edgeEqB2, label pos=145,
+                ports={0:virtual, 180:virtual, -72:virtual, 90:physical}]{\widetilde B_2}
+            \tn[at=(1,3), name=edgeEqB3, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{\widetilde B_3}
+            \tn[at=(1,4), name=edgeEqB4, label pos=145,
+                ports={0:virtual, 180:virtual, 90:physical}]{\widetilde B_4}
+            \tn[at=(1,5), name=edgeEqB5, label pos=145,
+                ports={0:virtual, 180:virtual, 252:virtual, 90:physical}]{\widetilde B_5}
+            \tnwire{edgeEqB1.0}{edgeEqB2.180}
+            \tnwire{edgeEqB2.0}{edgeEqB3.180}
+            \tnwire{edgeEqB3.0}{edgeEqB4.180}
+            \tnwire{edgeEqB4.0}{edgeEqB5.180}
+            \tnwire{edgeEqB5.0}{edgeEqB1.180}
+            \tnwire[name=edgeEqBChord]{edgeEqB2.-72}{edgeEqB5.252}
+            \tn[skin=ring, species=operator, at=on edgeEqBChord 0.5]{X}
+        \end{tenkz}
     \end{center}
     as in \cite[Section~3, lines 1037--1065]{Molnar2018NormalPEPS}. The
     positive-bond hypothesis is the source's standing assumption that injective
@@ -313,72 +290,48 @@
     % Boundary signature: every panel has (V,P)=(3,1).  Source verdict: exact
     % four-panel scalar-reduction identity in house style.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[ports={35:virtual,0:virtual,-35:virtual,north:physical}]
-                {scalarA}{(0,0)}{A_1}
-            \tnput[boundary, ports={west:virtual}]{scalarAup}{(14mm,6mm)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarAmid}{(14mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarAlow}{(14mm,-6mm)}{}
-            \tnput[boundary, ports={south:physical}]{scalarAphys}{(0,8mm)}{}
-            \tnjoin{scalarA.35}{scalarAup.west}
-            \tnjoin{scalarA.0}{scalarAmid.west}
-            \tnjoin{scalarA.-35}{scalarAlow.west}
-            \tnjoin{scalarA.north}{scalarAphys.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[name=scalarA, label pos=w,
+                ports={35:virtual, 0:virtual, -35:virtual,
+                       90:physical}]{A_1}
+        \end{tenkz}
         $ = $
-        \begin{tenkzfree}
-            \tnput[ports={35:virtual,0:virtual,-35:virtual,north:physical}]
-                {scalarBZ}{(0,0)}{B_1}
-            \tnput[box, role=operator,
-                ports={160:virtual,200:virtual,20:virtual,-20:virtual}]
-                {scalarZ}{(8mm,-3mm)}{Z}
-            \tnput[boundary, ports={west:virtual}]{scalarZup}{(14mm,6mm)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarZmid}{(16mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarZlow}{(14mm,-8mm)}{}
-            \tnput[boundary, ports={south:physical}]{scalarZphys}{(0,8mm)}{}
-            \tnjoin{scalarBZ.35}{scalarZup.west}
-            \tnjoin{scalarBZ.0}{scalarZ.160}
-            \tnjoin{scalarBZ.-35}{scalarZ.200}
-            \tnjoin{scalarZ.20}{scalarZmid.west}
-            \tnjoin{scalarZ.-20}{scalarZlow.west}
-            \tnjoin{scalarBZ.north}{scalarZphys.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=scalarBZ, label pos=w,
+                ports={35:virtual, 0:virtual, -35:virtual,
+                       90:physical}]{B_1}
+            \tn[at=0.4 s of 1.2 e of scalarBZ, name=scalarZ, skin=box,
+                species=operator,
+                ports={160:virtual, 200:virtual, 20:virtual,
+                       -20:virtual}]{Z}
+            \tnwire{scalarBZ.0}{scalarZ.160}
+            \tnwire{scalarBZ.-35}{scalarZ.200}
+        \end{tenkz}
         $ = $
-        \begin{tenkzfree}
-            \tnput[ports={35:virtual,0:virtual,-35:virtual,north:physical}]
-                {scalarBU}{(0,0)}{B_1}
-            \tnput[box, role=operator,
-                ports={160:virtual,200:virtual,20:virtual,-20:virtual}]
-                {scalarU}{(8mm,3mm)}{U}
-            \tnput[boundary, ports={west:virtual}]{scalarUup}{(14mm,8mm)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarUmid}{(16mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarUlow}{(14mm,-6mm)}{}
-            \tnput[boundary, ports={south:physical}]{scalarUphys}{(0,8mm)}{}
-            \tnjoin{scalarBU.35}{scalarU.160}
-            \tnjoin{scalarBU.0}{scalarU.200}
-            \tnjoin{scalarU.20}{scalarUup.west}
-            \tnjoin{scalarU.-20}{scalarUmid.west}
-            \tnjoin{scalarBU.-35}{scalarUlow.west}
-            \tnjoin{scalarBU.north}{scalarUphys.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=scalarBU, label pos=w,
+                ports={35:virtual, 0:virtual, -35:virtual,
+                       90:physical}]{B_1}
+            \tn[at=0.4 n of 1.2 e of scalarBU, name=scalarU, skin=box,
+                species=operator,
+                ports={160:virtual, 200:virtual, 20:virtual,
+                       -20:virtual}]{U}
+            \tnwire{scalarBU.35}{scalarU.160}
+            \tnwire{scalarBU.0}{scalarU.200}
+        \end{tenkz}
         $ = $
-        \begin{tenkzfree}
-            \tnput[ports={35:virtual,0:virtual,-35:virtual,north:physical}]
-                {scalarBW}{(0,0)}{B_1}
-            \tnput[box, role=operator,
-                ports={160:virtual,200:virtual,20:virtual,-20:virtual}]
-                {scalarW}{(9mm,5mm)}{W}
-            \tnput[boundary, ports={west:virtual}]{scalarWup}{(16mm,9mm)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarWmid}{(16mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{scalarWlow}{(16mm,-7mm)}{}
-            \tnput[boundary, ports={south:physical}]{scalarWphys}{(0,8mm)}{}
-            \tnjoin{scalarBW.35}{scalarW.160}
-            \tnjoin{scalarBW.-35}{scalarW.200}
-            \tnjoin{scalarW.20}{scalarWup.west}
-            \tnjoin{scalarW.-20}{scalarWlow.west}
-            \tnjoin{scalarBW.0}{scalarWmid.west}
-            \tnjoin{scalarBW.north}{scalarWphys.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+            \tn[name=scalarBW, label pos=w,
+                ports={35:virtual, 0:virtual, -35:virtual,
+                       90:physical}]{B_1}
+            \tn[at=0.7 n of 1.2 e of scalarBW, name=scalarW, skin=box,
+                species=operator,
+                ports={160:virtual, 200:virtual, 20:virtual,
+                       -20:virtual}]{W}
+            \tnwire{scalarBW.35}{scalarW.160}
+            \tnwire{scalarBW.-35}{scalarW.200}
+        \end{tenkz}
     \end{center}
     Inverting the first injective tensor then shows that the corresponding
     residual operator on the three exposed virtual legs has the three
@@ -620,53 +573,44 @@
     % three shared bonds without loss of generality; the theorem's aggregate
     % external virtual boundaries are restored here.
     \begin{center}
-        \begin{tenkzfree}
-            \tnput[ports={west:virtual,20:virtual,0:virtual,-20:virtual,
-                north:physical}]
-                {twoInjAone}{(0,0)}{A_1}
-            \tnput[ports={east:virtual,160:virtual,180:virtual,200:virtual,
-                north:physical}]
-                {twoInjAtwo}{(28mm,0)}{A_2}
-            \tnput[ring, role=operator, ports={200:virtual,-20:virtual}]
-                {twoInjAX}{(14mm,5mm)}{X}
-            \tnput[boundary, ports={south:physical}]{twoInjAPone}{(0,8mm)}{}
-            \tnput[boundary, ports={south:physical}]{twoInjAPtwo}{(28mm,8mm)}{}
-            \tnput[boundary, ports={east:virtual}]{twoInjAEtaOne}{(-8mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{twoInjAEtaTwo}{(36mm,0)}{}
-            \tnjoin{twoInjAone.20}{twoInjAX.200}
-            \tnjoin{twoInjAX.-20}{twoInjAtwo.160}
-            \tnjoin{twoInjAone.0}{twoInjAtwo.180}
-            \tnjoin[route=arc, out=-20, in=200]
-                {twoInjAone.-20}{twoInjAtwo.200}
-            \tnjoin[label=\eta_1]{twoInjAone.west}{twoInjAEtaOne.east}
-            \tnjoin[label=\eta_2]{twoInjAtwo.east}{twoInjAEtaTwo.west}
-            \tnjoin{twoInjAone.north}{twoInjAPone.south}
-            \tnjoin{twoInjAtwo.north}{twoInjAPtwo.south}
-        \end{tenkzfree}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+            \tn[at=(1,1), name=twoInjAOne, label pos=s,
+                ports={180:virtual:$\eta_1$, 20:virtual, 0:virtual,
+                       -20:virtual, 90:physical}]{A_1}
+            \tn[at=(1,4), name=twoInjATwo, label pos=s,
+                ports={0:virtual:$\eta_2$, 160:virtual, 180:virtual,
+                       200:virtual, 90:physical}]{A_2}
+            \tn[at=0.45 n of midway twoInjAOne and twoInjATwo,
+                name=twoInjAX, skin=ring, species=operator,
+                ports={200:virtual, -20:virtual}]{X}
+            \tn[at=0.45 s of midway twoInjAOne and twoInjATwo,
+                name=twoInjALow, skin=none]{}
+            \tnwire{twoInjAOne.20}{twoInjAX.200}
+            \tnwire{twoInjAX.-20}{twoInjATwo.160}
+            \tnwire{twoInjAOne.0}{twoInjATwo.180}
+            \tnwire{twoInjAOne.-20}{twoInjALow}
+            \tnwire{twoInjALow}{twoInjATwo.200}
+        \end{tenkz}
         $ = $
-        \begin{tenkzfree}
-            \tnput[ports={west:virtual,20:virtual,0:virtual,-20:virtual,
-                north:physical}]
-                {twoInjBone}{(0,0)}{B_1}
-            \tnput[ports={east:virtual,160:virtual,180:virtual,200:virtual,
-                north:physical}]
-                {twoInjBtwo}{(28mm,0)}{B_2}
-            \tnput[ring, role=operator, ports={200:virtual,-20:virtual}]
-                {twoInjBX}{(14mm,5mm)}{X}
-            \tnput[boundary, ports={south:physical}]{twoInjBPone}{(0,8mm)}{}
-            \tnput[boundary, ports={south:physical}]{twoInjBPtwo}{(28mm,8mm)}{}
-            \tnput[boundary, ports={east:virtual}]{twoInjBEtaOne}{(-8mm,0)}{}
-            \tnput[boundary, ports={west:virtual}]{twoInjBEtaTwo}{(36mm,0)}{}
-            \tnjoin{twoInjBone.20}{twoInjBX.200}
-            \tnjoin{twoInjBX.-20}{twoInjBtwo.160}
-            \tnjoin{twoInjBone.0}{twoInjBtwo.180}
-            \tnjoin[route=arc, out=-20, in=200]
-                {twoInjBone.-20}{twoInjBtwo.200}
-            \tnjoin[label=\eta_1]{twoInjBone.west}{twoInjBEtaOne.east}
-            \tnjoin[label=\eta_2]{twoInjBtwo.east}{twoInjBEtaTwo.west}
-            \tnjoin{twoInjBone.north}{twoInjBPone.south}
-            \tnjoin{twoInjBtwo.north}{twoInjBPtwo.south}
-        \end{tenkzfree}
+        \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+            \tn[at=(1,1), name=twoInjBOne, label pos=s,
+                ports={180:virtual:$\eta_1$, 20:virtual, 0:virtual,
+                       -20:virtual, 90:physical}]{B_1}
+            \tn[at=(1,4), name=twoInjBTwo, label pos=s,
+                ports={0:virtual:$\eta_2$, 160:virtual, 180:virtual,
+                       200:virtual, 90:physical}]{B_2}
+            \tn[at=0.45 n of midway twoInjBOne and twoInjBTwo,
+                name=twoInjBX, skin=ring, species=operator,
+                ports={200:virtual, -20:virtual}]{X}
+            \tn[at=0.45 s of midway twoInjBOne and twoInjBTwo,
+                name=twoInjBLow, skin=none]{}
+            \tnwire{twoInjBOne.20}{twoInjBX.200}
+            \tnwire{twoInjBX.-20}{twoInjBTwo.160}
+            \tnwire{twoInjBOne.0}{twoInjBTwo.180}
+            \tnwire{twoInjBOne.-20}{twoInjBLow}
+            \tnwire{twoInjBLow}{twoInjBTwo.200}
+        \end{tenkz}
     \end{center}
     Then there exists $\lambda\in\C^\times$ such that
     $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$.

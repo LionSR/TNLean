@@ -145,22 +145,24 @@
         % product vector V^{(N)} of that doubled-index tensor
         % (lem:mpdo_three_first_site_contraction_coefficients), so Lemma
         % L's one-leg hypothesis picture applies verbatim: Y (resp. Z)
-        % rides the doubled physical leg of site 1 only; sites 2..N keep
-        % that leg open, drawn schematically through the ellipsis.  A
-        % dummy `wire' row keeps the inserted operator off tenkz's traced
-        % first/last row, so only the \widetilde M ring is closed.  Both
-        % sides: periodic ring, same boundary signature (virtual-west=0 |
-        % virtual-east=0 | physical-up=N).
-        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
-            \tnskip & \tnskip & \tnskip & \tnskip \\
-            \tn{Y} & \tnskip & \tnskip & \tnskip \\
-            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        % rides the doubled physical leg of site 1 only, contracting that
+        % site's declared port while its own output leg stays open; sites
+        % 2..N keep the policy leg open, drawn schematically through the
+        % ellipsis.  Both sides: periodic ring, same boundary signature
+        % (virtual-west=0 | virtual-east=0 | physical-up=N).
+        \tenkzkernel
+        \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+            \tn[name=M, ports={90:physical}]{\widetilde M} & \tn{\widetilde M} &
+            \tn[skin=dots]{} & \tn{\widetilde M}
+            \tn[at=1 n of M, name=Y, label pos=w, ports={270:physical, 90:physical}]{Y}
+            \tnwire{Y.270}{M.90}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[periodic, rows={wire, op:none, ket}, align=3]
-            \tnskip & \tnskip & \tnskip & \tnskip \\
-            \tn{Z} & \tnskip & \tnskip & \tnskip \\
-            \tn{\widetilde M} & \tn{\widetilde M} & \tndots & \tn{\widetilde M}
+        \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+            \tn[name=M, ports={90:physical}]{\widetilde M} & \tn{\widetilde M} &
+            \tn[skin=dots]{} & \tn{\widetilde M}
+            \tn[at=1 n of M, name=Z, label pos=w, ports={270:physical, 90:physical}]{Z}
+            \tnwire{Z.270}{M.90}
         \end{tenkz}
     \end{center}
         \begin{center}
@@ -170,19 +172,20 @@
         % each block A_k of the canonical form (CPSV16 Appendix C.3,
         % Lemma L, conclusion display, lines 1843--1846).  The operator
         % rides the block's physical leg: its down leg pairs into A_k's
-        % up leg and its top leg is the open physical output index; the
-        % op row is sealed, since Y and Z carry no virtual indices.
+        % up leg and its top leg is the open physical output index;
+        % Y and Z carry no virtual indices.
         % Both sides expose one virtual index at each end and one
         % physical leg, so the two sides carry the same boundary
         % signature (virtual-west=1 | virtual-east=1 | physical-up=1).
-        \begin{tenkz}[rows={op:none, ket}]
-            \tn{Y} \\
-            \tn{A_k}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[label pos=w, ports={90:physical}]{Y} \\
+            \tn[ports={180:virtual, 0:virtual}]{A_k}
         \end{tenkz}
         $ = $
-        \begin{tenkz}[rows={op:none, ket}]
-            \tn{Z} \\
-            \tn{A_k}
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[label pos=w, ports={90:physical}]{Z} \\
+            \tn[ports={180:virtual, 0:virtual}]{A_k}
         \end{tenkz}
     \end{center}
     \caption{Blockwise equality from agreement on the MPV family. Top: the
@@ -223,24 +226,21 @@ $\tr(WYA_k)=\tr(WZA_k)$:
 \begin{center}
     % tr(W Y A_k) = tr(W Z A_k): trace pairing of a first-site
     % insertion against a test tensor W.  The virtual bond of the
-    % two-site chain W, A_k closes into a loop (periodic, on the
-    % ket row); the physical leg of A_k feeds up into the inserted
-    % operator Y (resp. Z), whose own leg stays open.  Both sides
-    % carry the same boundary signature
+    % two-site chain W, A_k closes into a loop; the physical leg of
+    % A_k feeds up into the inserted operator Y (resp. Z), whose own
+    % leg stays open.  Both sides carry the same boundary signature
     % (virtual-west=0 | virtual-east=0 | physical-up=1).
-    % The blank top row is padding: `periodic' closes only the
-    % picture's first and last rows, so the padding keeps the
-    % insertion row untouched while the ket row (last) is traced.
-    \begin{tenkz}[rows={wire, op, ket}, periodic]
-         & \\
-         & \tn{Y} \\
-        \tn[no legs]{W} & \tn{A_k}
+    \tenkzkernel
+    \begin{tenkz}[cols=2, boundary=periodic]
+        \tn{W} & \tn[name=A, ports={90:physical}]{A_k}
+        \tn[at=1 n of A, name=Y, label pos=w, ports={270:physical, 90:physical}]{Y}
+        \tnwire{Y.270}{A.90}
     \end{tenkz}
     $ = $
-    \begin{tenkz}[rows={wire, op, ket}, periodic]
-         & \\
-         & \tn{Z} \\
-        \tn[no legs]{W} & \tn{A_k}
+    \begin{tenkz}[cols=2, boundary=periodic]
+        \tn{W} & \tn[name=A, ports={90:physical}]{A_k}
+        \tn[at=1 n of A, name=Z, label pos=w, ports={270:physical, 90:physical}]{Z}
+        \tnwire{Z.270}{A.90}
     \end{tenkz}
 \end{center}
 For every $W$ in the span of the length-$N$ word evaluations of the
@@ -335,11 +335,12 @@ $H^{(N)}(\widetilde M)=\tr_{\mathrm v}(\widetilde M_1\cdots\widetilde M_N)$:
     % (virtual-west=0 | virtual-east=0 | physical-up=N | physical-down=N);
     % the drawn leg count is schematic under the ellipsis.
     $H^{(N)}(\widetilde M) = $
-    \begin{tenkz}[physical=updown, periodic]
-        \tn[up=$\sigma_1$, down=$\tau_1$]{\widetilde M_1} &
-        \tn[up=$\sigma_2$, down=$\tau_2$]{\widetilde M_2} &
-        \tndots &
-        \tn[up=$\sigma_N$, down=$\tau_N$]{\widetilde M_N}
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic]
+        \tn[label pos=225, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\widetilde M_1} &
+        \tn[label pos=225, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\widetilde M_2} &
+        \tn[skin=dots]{} &
+        \tn[label pos=225, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\widetilde M_N}
     \end{tenkz}
 \end{center}
 Its virtual indices are contracted around the row, while every ket and bra
@@ -427,16 +428,13 @@ tensor. This is the contraction in
         % open ket index.  The ring leaves no virtual stubs.  The schematic
         % boundary signature is therefore (virtual-west=0 | virtual-east=0 |
         % physical-up=N+1 | physical-down=N+1).
-        %
-        % The empty first row is structural padding: tenkz closes the first
-        % and last rows of a multi-row periodic picture, so padding keeps P's
-        % row untraced while closing the \widetilde M row exactly once.
         $PH^{(N+1)} = $
-        \begin{tenkz}[rows={wire, op:none, op}, compact, periodic, align=3]
-            \tnskip & \tnskip & \tnskip & \tnskip \\
-            \tnskip & \tnskip & \tnskip & \tn{P} \\
-            \tn[mpo]{\widetilde M} & \tn[mpo]{\widetilde M} & \tndots &
-                \tn[mpo]{\widetilde M}
+        \tenkzkernel
+        \begin{tenkz}[cols=4, boundary=periodic, physical=updown, size=s]
+            \tn[skin=mpo]{\widetilde M} & \tn[skin=mpo]{\widetilde M} & \tn[skin=dots]{} &
+            \tn[skin=mpo, name=M, physical=down, ports={90:physical}]{\widetilde M}
+            \tn[at=1 n of M, name=P, label pos=w, ports={270:physical, 90:physical}]{P}
+            \tnwire{P.270}{M.90}
         \end{tenkz}
     \caption{The periodic contraction representing $PH^{(N+1)}$. The
     analogous contractions with $Y_R$ and $Y_C$ place $P$ on the bra leg or

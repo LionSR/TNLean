@@ -22,11 +22,11 @@ body declarations.  Each source is complete and uses canonical public syntax.
 The environment chooses a contraction grid.  \tnkey{physical=up} is picture
 policy.  Each \tncmd{tn} declares an atom; \verb|&| advances one site.
 
-Beamer reads a frame's body before typesetting it, under the catcodes in
-force when the frame opens, so a chained picture's \verb|&| is still an
-alignment tab and the frame stops with a misplaced-tab error.  Mark the frame
-\texttt{[fragile]}; beamer then defers that reading until the picture's own
-catcode for \verb|&| applies.
+Beamer reads a frame's body before typesetting it, so a chained picture
+reaches the environment with its \verb|&| already an ordinary alignment tab.
+The environment reads its body as captured tokens and gives that tab the
+site advance itself, so a chained picture compiles in a plain frame; no
+\texttt{[fragile]} marking is needed.
 
 \subsection{A channel sandwich}
 
@@ -90,24 +90,3 @@ model and event stream; the audit compares their boundary signatures.
 The layout owns site positions.  \tncmd{tnregion} declares measured cell
 sets, and \tncmd{tnsite} changes one site record.  No polygon is hand traced.
 
-\subsection{Join an irregular typed graph}
-
-\begin{tnexample}[
-  formula={\sum_\alpha A_\alpha^{\mathsf T}TB_\alpha},
-  caption={typed ports make the free layout auditable},
-  index={The straight join contracts the virtual index $\alpha$.  The arc
-    connects physical ports and carries $T$.},
-  signature={free|atoms=2|joins=2}]
-% Formula: sum_alpha A_alpha^T T B_alpha.
-% Boundary: both joins connect equal port types.
-\begin{tenkzfree}
- \tnput[ports={east:virtual,north:physical}]{a}{(0,0)}{A}
- \tnput[ports={west:virtual,north:physical}]{b}{(14mm,0)}{B}
- \tnjoin{a.east}{b.west}
- \tnjoin[route=arc,out=90,in=90,label=T]{a.north}{b.north}
-\end{tenkzfree}
-\end{tnexample}
-
-Coordinates place atoms; they do not type the graph.  \tncmd{tnput} declares
-names and typed ports, while \tncmd{tnjoin} declares connections between
-those ports.  Joining unequal types is a hard error.

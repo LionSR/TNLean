@@ -89,18 +89,18 @@ def test_repository_inventory() -> None:
 
 
 def test_formatting_stability() -> None:
-    compact = r"""\begin{tenkzfree}
-\tnput[dot,label={A B},role=extra]{a}{(1MM,2 true pt)}{}
-\tnjoin{a}{3mm,4 mm}
-\end{tenkzfree}
+    compact = r"""\begin{tenkzlattice}
+\tnwire[route=arc,name={A B}]{a}{(1MM,2 true pt)}
+\tnwire{a}{3mm,4 mm}
+\end{tenkzlattice}
 """
     reformatted = r"""% A comment with an ignored 99mm literal.
-\begin{tenkzfree}
-  \tnput % formatting splice
-    [ dot , label = {A B} , role = extra ] {a} {(1 mm,2truept)} {}
-  \tnjoin{a}{3m% join a dimension unit
+\begin{tenkzlattice}
+  \tnwire % formatting splice
+    [ route = arc , name = {A B} ] {a} {(1 mm,2truept)}
+  \tnwire{a}{3m% join a dimension unit
 m,4mm}
-\end{tenkzfree}
+\end{tenkzlattice}
 """
     first = _build(compact)
     second = _build(reformatted)
@@ -126,12 +126,12 @@ m,4mm}
         raise AssertionError("comment dimensions entered the active inventory")
 
     spaced_label = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{A B}}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\text{A B}}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     joined_label = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{AB}}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\text{AB}}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if spaced_label == joined_label:
         raise AssertionError("TeX-significant argument whitespace left site identity")
@@ -141,23 +141,23 @@ m,4mm}
     )
 
     separated_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\foo α}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\foo α}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     merged_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\fooα}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\fooα}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if separated_control == merged_control:
         raise AssertionError("a Unicode control-word boundary left site identity")
 
     separated_conservative_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\foo Ⅳ}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\foo Ⅳ}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     merged_conservative_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\fooⅣ}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\fooⅣ}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if separated_conservative_control == merged_conservative_control:
         raise AssertionError(
@@ -165,16 +165,16 @@ m,4mm}
         )
 
     comment_terminated_control = _build(
-        "\\begin{tenkzfree}\\tnput{a}{(1mm,2mm)}{\\foo% boundary\n"
-        "bar}\\end{tenkzfree}"
+        "\\begin{tenkzlattice}\\tnwire{\\foo% boundary\n"
+        "bar}{(1mm,2mm)}\\end{tenkzlattice}"
     )
     spaced_terminated_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\foo bar}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\foo bar}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     merged_terminated_control = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\foobar}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\foobar}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if comment_terminated_control != spaced_terminated_control:
         raise AssertionError("a comment-terminated control word changed identity")
@@ -182,23 +182,23 @@ m,4mm}
         raise AssertionError("a comment splice merged distinct control words")
 
     spaced_option_value = _build(
-        r"\begin{tenkzfree}\tnput[label={A B}]{a}{(1mm,2mm)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire[name={A B}]{a}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     joined_option_value = _build(
-        r"\begin{tenkzfree}\tnput[label={AB}]{a}{(1mm,2mm)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire[name={AB}]{a}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if spaced_option_value == joined_option_value:
         raise AssertionError("whitespace inside an option value left site identity")
 
     nested_bracket_value = _build(
-        r"\begin{tenkzfree}\tnput[label=[A B]]{a}{(1mm,2mm)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire[name=[A B]]{a}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     joined_bracket_value = _build(
-        r"\begin{tenkzfree}\tnput[label=[AB]]{a}{(1mm,2mm)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire[name=[AB]]{a}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if nested_bracket_value == joined_bracket_value:
         raise AssertionError(
@@ -206,12 +206,12 @@ m,4mm}
         )
 
     authored_marker_first = _build(
-        r"\begin{tenkzfree}\tnput{<dimension>}{(1mm,0)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{<dimension>}{(1mm,0)}"
+        r"\end{tenkzlattice}"
     )
     authored_marker_second = _build(
-        r"\begin{tenkzfree}\tnput{1mm}{(<dimension>,0)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{1mm}{(<dimension>,0)}"
+        r"\end{tenkzlattice}"
     )
     for marker_inventory in (authored_marker_first, authored_marker_second):
         if "%3Cdimension%3E" not in marker_inventory.cases[0].sites[0].site:
@@ -231,8 +231,8 @@ m,4mm}
     )
 
     authored_occurrence = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\#occurrence=1}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{\#occurrence=1}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     if "%23occurrence=1" not in authored_occurrence.cases[0].sites[0].site:
         raise AssertionError("authored occurrence-marker punctuation was not escaped")
@@ -244,9 +244,9 @@ m,4mm}
 
     for authored_delimiter in ("/command:x", "/option:y"):
         delimiter_inventory = _build(
-            r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{"
+            r"\begin{tenkzlattice}\tnwire{"
             + authored_delimiter
-            + r"}\end{tenkzfree}"
+            + r"}{(1mm,2mm)}\end{tenkzlattice}"
         )
         if (
             parse_dimension_inventory(
@@ -259,8 +259,8 @@ m,4mm}
             )
 
     combined_authored_markers = _build(
-        r"\begin{tenkzfree}\tnput{<dimension>}{(1mm,2mm)}{"
-        r"/command:x /option:y \#occurrence=1}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{<dimension> /command:x /option:y "
+        r"\#occurrence=1}{(1mm,2mm)}\end{tenkzlattice}"
     )
     if (
         parse_dimension_inventory(
@@ -272,9 +272,9 @@ m,4mm}
 
 
 def test_owner_span_grouping() -> None:
-    source = r"""\begin{tenkzfree}[pitch=1mm]
-  \tnput[dot]{a}{(3mm,4mm)}{\tn[label shift={2mm,5mm}]{A}}
-\end{tenkzfree}
+    source = r"""\begin{tenkzlattice}[pitch=1mm]
+  \tnwire[route=arc]{\tn[label shift={2mm,5mm}]{A}}{(3mm,4mm)}
+\end{tenkzlattice}
 """
     inventory = _build(source)
     sites = inventory.cases[0].sites
@@ -283,46 +283,46 @@ def test_owner_span_grouping() -> None:
     if tuple(site.owner for site in sites) != (
         DimensionOwner.METRIC,
         DimensionOwner.LAYOUT,
-        DimensionOwner.LAYOUT,
+        DimensionOwner.ROUTE,
     ):
         raise AssertionError(f"narrowest owner spans were not retained: {sites!r}")
     if tuple(site.literals for site in sites) != (
         ("1mm",),
-        ("3mm", "4mm"),
         ("2mm", "5mm"),
+        ("3mm", "4mm"),
     ):
         raise AssertionError(f"owner-site literal vectors were not explicit: {sites!r}")
     if not sites[0].site.startswith(
-        "tenkzfree@1::tenkzfree@1/option:tenkzfree/pitch="
+        "tenkzlattice@1::tenkzlattice@1/option:tenkzlattice/pitch="
     ):
         raise AssertionError(f"environment option lost its semantic key: {sites[0]!r}")
     if not sites[1].site.startswith(
-        "tenkzfree@1::tenkzfree@1/tnput@1/command:"
+        "tenkzlattice@1::tenkzlattice@1/tn@1/option:tn/labelshift="
     ):
-        raise AssertionError(f"command site lost its semantic key: {sites[1]!r}")
+        raise AssertionError(f"nested option lost its semantic key: {sites[1]!r}")
     if not sites[2].site.startswith(
-        "tenkzfree@1::tenkzfree@1/tn@1/option:tn/labelshift="
+        "tenkzlattice@1::tenkzlattice@1/tnwire@1/command:"
     ):
-        raise AssertionError(f"nested option lost its semantic key: {sites[2]!r}")
+        raise AssertionError(f"command site lost its semantic key: {sites[2]!r}")
     if parse_dimension_inventory(format_dimension_inventory(inventory)) != inventory:
         raise AssertionError("generated command and option site keys did not round-trip")
 
     _expect_error(
-        lambda: _build(r"\tnput{a}{(1mm,2mm)}{}"),
+        lambda: _build(r"\tnwire{a}{(1mm,2mm)}"),
         "outside a tenkz environment",
     )
     _expect_error(
-        lambda: _build(r"\begin{tenkzfree}\foo{1mm}\end{tenkzfree}"),
+        lambda: _build(r"\begin{tenkzlattice}\foo{1mm}\end{tenkzlattice}"),
         "cannot inventory unowned case dimension",
     )
 
     tn_owned = _build(
-        r"\begin{tenkzfree}\tn[label shift=1mm]{A}\tnX{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn[label shift=1mm]{A}\tnX{B}"
+        r"\end{tenkzlattice}"
     )
     tn_x_owned = _build(
-        r"\begin{tenkzfree}\tn{A}\tnX[label shift=1mm]{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn{A}\tnX[label shift=1mm]{B}"
+        r"\end{tenkzlattice}"
     )
     if tn_owned == tn_x_owned:
         raise AssertionError("moving an option between containers preserved identity")
@@ -343,28 +343,28 @@ def test_comment_terminated_control_word() -> None:
     # comment-stripped view and `_active_fragment` inserts a space across
     # comment gaps so control words cannot merge).  TeX reads a backslash-name
     # interrupted by a comment as the control word `\tn` followed by the
-    # letters p, u, t on the next line, never as the merged command
-    # `\tnput`; the scanner must reproduce that reading on raw,
+    # letters w, i, r, e on the next line, never as the merged command
+    # `\tnwire`; the scanner must reproduce that reading on raw,
     # non-comment-stripped source.
     comment_terminated = (
-        "\\begin{tenkzfree}[pitch=1mm]\n"
+        "\\begin{tenkzlattice}[pitch=1mm]\n"
         "  \\tn% mid-name comment\n"
-        "put{a}{(3mm,4mm)}{}\n"
-        "\\end{tenkzfree}\n"
+        "wire{a}{(3mm,4mm)}\n"
+        "\\end{tenkzlattice}\n"
     )
     space_terminated = (
-        "\\begin{tenkzfree}[pitch=1mm]\n"
-        "  \\tn put{a}{(3mm,4mm)}{}\n"
-        "\\end{tenkzfree}\n"
+        "\\begin{tenkzlattice}[pitch=1mm]\n"
+        "  \\tn wire{a}{(3mm,4mm)}\n"
+        "\\end{tenkzlattice}\n"
     )
     merged = (
-        "\\begin{tenkzfree}[pitch=1mm]\n"
-        "  \\tnput{a}{(3mm,4mm)}{}\n"
-        "\\end{tenkzfree}\n"
+        "\\begin{tenkzlattice}[pitch=1mm]\n"
+        "  \\tnwire{a}{(3mm,4mm)}\n"
+        "\\end{tenkzlattice}\n"
     )
 
     # The comment-terminated and space-terminated forms both leave the
-    # (3mm,4mm) dimensions unowned (no `\tnput` command is formed) ...
+    # (3mm,4mm) dimensions unowned (no `\tnwire` command is formed) ...
     comment_message = _expect_error(
         lambda: _build(comment_terminated),
         "cannot inventory unowned case dimension",
@@ -391,11 +391,11 @@ def test_comment_terminated_control_word() -> None:
     merged_sites = merged_inventory.cases[0].sites
     if tuple(site.owner for site in merged_sites) != (
         DimensionOwner.METRIC,
-        DimensionOwner.LAYOUT,
+        DimensionOwner.ROUTE,
     ):
         raise AssertionError(f"merged control word lost its owners: {merged_sites!r}")
     if not any(
-        site.site.endswith("tnput@1/command:\\tnput{a}{(<dimension>,<dimension>)}{}")
+        site.site.endswith("tnwire@1/command:\\tnwire{a}{(<dimension>,<dimension>)}")
         for site in merged_sites
     ):
         raise AssertionError(
@@ -404,9 +404,9 @@ def test_comment_terminated_control_word() -> None:
 
 
 def test_construct_ordinals_are_semantic() -> None:
-    base_source = r"""\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-\end{tenkzfree}
+    base_source = r"""\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+\end{tenkzlattice}
 """
     base = _build(base_source)
     for construct_name, sibling_source in (
@@ -457,30 +457,30 @@ def test_construct_ordinals_are_semantic() -> None:
             changed_anchor,
         )
 
-    same_kind_prefix = r"\begin{tenkzfree}\tn{}\end{tenkzfree}" + "\n"
+    same_kind_prefix = r"\begin{tenkzlattice}\tn{}\end{tenkzlattice}" + "\n"
     shifted = _build(same_kind_prefix + base_source)
     if shifted == base or not shifted.cases[0].sites[0].site.startswith(
-        "tenkzfree@2::tenkzfree@2/"
+        "tenkzlattice@2::tenkzlattice@2/"
     ):
         raise AssertionError(
             "a dimension-free construct did not retain its ordinal identity"
         )
-    if shifted.cases[0].constructs != ("tenkzfree@1", "tenkzfree@2"):
+    if shifted.cases[0].constructs != ("tenkzlattice@1", "tenkzlattice@2"):
         raise AssertionError(
             f"dimension-free anchor sequence drifted: {shifted.cases[0].constructs!r}"
         )
     if parse_dimension_inventory(format_dimension_inventory(shifted)) != shifted:
         raise AssertionError("dimension-free construct anchors did not round-trip")
 
-    first_construct = r"""\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-\end{tenkzfree}
-\begin{tenkzfree}\tn{}\end{tenkzfree}
+    first_construct = r"""\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+\end{tenkzlattice}
+\begin{tenkzlattice}\tn{}\end{tenkzlattice}
 """
-    second_construct = r"""\begin{tenkzfree}\tn{}\end{tenkzfree}
-\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-\end{tenkzfree}
+    second_construct = r"""\begin{tenkzlattice}\tn{}\end{tenkzlattice}
+\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+\end{tenkzlattice}
 """
     first_inventory = _build(first_construct)
     second_inventory = _build(second_construct)
@@ -491,18 +491,18 @@ def test_construct_ordinals_are_semantic() -> None:
         "dimension invocation anchors changed",
     )
 
-    inert_definition = r"""\def\unused{\begin{tenkzfree}\tn{}\end{tenkzfree}}
-\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}
-\begin{tenkzfree}\tn{}\end{tenkzfree}
+    inert_definition = r"""\def\unused{\begin{tenkzlattice}\tn{}\end{tenkzlattice}}
+\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}
+\begin{tenkzlattice}\tn{}\end{tenkzlattice}
 """
-    active_move = r"""\begin{tenkzfree}\tn{}\end{tenkzfree}
-\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}
+    active_move = r"""\begin{tenkzlattice}\tn{}\end{tenkzlattice}
+\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}
 """
     definition_inventory = _build(inert_definition)
     moved_inventory = _build(active_move)
     if definition_inventory.cases[0].constructs != (
-        "tenkzfree@1",
-        "tenkzfree@2",
+        "tenkzlattice@1",
+        "tenkzlattice@2",
     ):
         raise AssertionError("an inert replacement construct consumed an anchor")
     if definition_inventory == moved_inventory:
@@ -521,40 +521,38 @@ def test_construct_ordinals_are_semantic() -> None:
     if inert_tntree != base:
         raise AssertionError("a tntree stored in a replacement body gained an anchor")
     inert_end = _build(
-        r"\begin{tenkzfree}\def\unused{\end{tenkzfree}}"
-        r"\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\def\unused{\end{tenkzlattice}}"
+        r"\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     if inert_end != base:
         raise AssertionError("an inert environment end closed an active construct")
 
     dimension_free_owner_commands = base_source.replace(
-        "  \\tnput{a}",
-        "  \\tnput{origin}{(0,0)}{}\n"
-        "  \\tnjoin{origin}{origin}\n"
+        "  \\tnwire{a}",
+        "  \\tnwire{origin}{(0,0)}\n"
         "  \\tnwire{origin}{origin}\n"
-        "  \\tnedge{origin}{origin}\n"
-        "  \\tnarrow{origin}{origin}\n"
-        "  \\tnput{a}",
+        "  \\tnedge{origin}\n"
+        "  \\tnwire{a}",
     )
     anchored_commands = _build(dimension_free_owner_commands)
     if anchored_commands == base:
         raise AssertionError("dimension-free owner commands lacked invocation anchors")
-    if "/tnput@2/command:" not in anchored_commands.cases[0].sites[0].site:
-        raise AssertionError("a dimension-free tnput did not consume its ordinal")
+    if "/tnwire@3/command:" not in anchored_commands.cases[0].sites[0].site:
+        raise AssertionError("a dimension-free tnwire did not consume its ordinal")
     _expect_error(
         lambda: validate_dimension_inventory(base, anchored_commands),
         "dimension invocation anchors changed",
     )
 
-    spaced = base_source.replace(r"\begin{tenkzfree}", r"\begin {tenkzfree}")
+    spaced = base_source.replace(r"\begin{tenkzlattice}", r"\begin {tenkzlattice}")
     commented = base_source.replace(
-        r"\begin{tenkzfree}", "\\begin% legal splice\n{tenkzfree}"
+        r"\begin{tenkzlattice}", "\\begin% legal splice\n{tenkzlattice}"
     )
     if _build(spaced) != base or _build(commented) != base:
         raise AssertionError("legal begin spacing or comment splice changed site keys")
 
-    real_tnpic = r"\tnpic{\tnput{a}{(1mm,2mm)}{}}"
-    escaped_tnpic = r"\\tnpic{\tnput{a}{(1mm,2mm)}{}}"
+    real_tnpic = r"\tnpic{\tnwire{a}{(1mm,2mm)}}"
+    escaped_tnpic = r"\\tnpic{\tnwire{a}{(1mm,2mm)}}"
     _build(real_tnpic)
     _expect_error(
         lambda: _build(escaped_tnpic),
@@ -567,34 +565,34 @@ def test_construct_ordinals_are_semantic() -> None:
     ):
         raise AssertionError("a standalone tntree lacked its construct anchor")
 
-    multiple = r"""\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-\end{tenkzfree}
-\begin{tenkzfree}
-  \tnput{b}{(3mm,4mm)}{}
-\end{tenkzfree}
+    multiple = r"""\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+\end{tenkzlattice}
+\begin{tenkzlattice}
+  \tnwire{b}{(3mm,4mm)}
+\end{tenkzlattice}
 \begin{tenkz}
-  \tnput{c}{(5mm,6mm)}{}
+  \tnwire{c}{(5mm,6mm)}
 \end{tenkz}
-\tnpic{\tnput{d}{(7mm,8mm)}{}}
+\tnpic{\tnwire{d}{(7mm,8mm)}}
 """
     multiple_sites = _build(multiple).cases[0].sites
     prefixes = tuple(site.site.split("::", 1)[0] for site in multiple_sites)
-    if prefixes != ("tenkzfree@1", "tenkzfree@2", "tenkz@1", "tnpic@1"):
+    if prefixes != ("tenkzlattice@1", "tenkzlattice@2", "tenkz@1", "tnpic@1"):
         raise AssertionError(f"per-kind construct ordinals drifted: {prefixes!r}")
 
-    nested = r"""\begin{tenkzfree}
-  \tnput{outer}{(1mm,2mm)}{}
-  \begin{tenkzfree}
-    \tnput{inner}{(3mm,4mm)}{}
-  \end{tenkzfree}
-\end{tenkzfree}
+    nested = r"""\begin{tenkzlattice}
+  \tnwire{outer}{(1mm,2mm)}
+  \begin{tenkzlattice}
+    \tnwire{inner}{(3mm,4mm)}
+  \end{tenkzlattice}
+\end{tenkzlattice}
 """
     nested_sites = _build(nested).cases[0].sites
     nested_prefixes = tuple(site.site.split("::", 1)[0] for site in nested_sites)
     if nested_prefixes != (
-        "tenkzfree@1",
-        "tenkzfree@1/tenkzfree@1",
+        "tenkzlattice@1",
+        "tenkzlattice@1/tenkzlattice@1",
     ):
         raise AssertionError(
             f"nested sites were not assigned to the narrowest construct: "
@@ -604,34 +602,34 @@ def test_construct_ordinals_are_semantic() -> None:
 
 def test_picture_scope_ancestry_is_semantic() -> None:
     grouped = _build(
-        r"\begin{tenkzfree}"
-        r"\tngroup[frame={rotate=90}]{\tnput{a}{(1mm,2mm)}{}}\tn{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}"
+        r"\tngroup[frame={rotate=90}]{\tnwire{a}{(1mm,2mm)}}\tn{B}"
+        r"\end{tenkzlattice}"
     )
     ungrouped = _build(
-        r"\begin{tenkzfree}"
-        r"\tngroup[frame={rotate=90}]{}\tnput{a}{(1mm,2mm)}{}\tn{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}"
+        r"\tngroup[frame={rotate=90}]{}\tnwire{a}{(1mm,2mm)}\tn{B}"
+        r"\end{tenkzlattice}"
     )
     if grouped.cases[0].scopes != (
-        "tenkzfree@1",
-        "tenkzfree@1/tngroup@1",
+        "tenkzlattice@1",
+        "tenkzlattice@1/tngroup@1",
     ):
         raise AssertionError("tngroup did not gain hierarchical scope identity")
     if grouped.cases[0].scopes != ungrouped.cases[0].scopes:
         raise AssertionError("moving content changed unchanged tngroup scope anchors")
     if grouped == ungrouped:
         raise AssertionError("moving a dimension across tngroup preserved identity")
-    if "::tenkzfree@1/tngroup@1/tnput@1/" not in grouped.cases[0].sites[0].site:
+    if "::tenkzlattice@1/tngroup@1/tnwire@1/" not in grouped.cases[0].sites[0].site:
         raise AssertionError("a grouped invocation lost its PICTURE ancestry")
-    if "::tenkzfree@1/tnput@1/" not in ungrouped.cases[0].sites[0].site:
+    if "::tenkzlattice@1/tnwire@1/" not in ungrouped.cases[0].sites[0].site:
         raise AssertionError("an ungrouped invocation gained PICTURE ancestry")
     _expect_error(
         lambda: validate_dimension_inventory(grouped, ungrouped),
         "dimension invocation anchors changed",
     )
 
-    panel = r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+    panel = r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     equation_panel = _build(
         r"\tenkzkernel\begin{tenkzeq}[size=m]"
         + panel
@@ -644,10 +642,10 @@ def test_picture_scope_ancestry_is_semantic() -> None:
     )
     if equation_panel.cases[0].scopes != (
         "tenkzeq@1",
-        "tenkzeq@1/tenkzfree@1",
+        "tenkzeq@1/tenkzlattice@1",
     ):
         raise AssertionError("tenkzeq did not own its nested PICTURE scope")
-    if trailing_panel.cases[0].scopes != ("tenkzeq@1", "tenkzfree@1"):
+    if trailing_panel.cases[0].scopes != ("tenkzeq@1", "tenkzlattice@1"):
         raise AssertionError("a trailing panel inherited the preceding tenkzeq scope")
     if equation_panel == trailing_panel:
         raise AssertionError("moving a panel across tenkzeq preserved identity")
@@ -657,17 +655,17 @@ def test_picture_scope_ancestry_is_semantic() -> None:
     )
 
     nested_group = _build(
-        r"\begin{tenkzfree}\tngroup{\tngroup{"
-        r"\tnput{a}{(1mm,2mm)}{}}}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{\tngroup{"
+        r"\tnwire{a}{(1mm,2mm)}}}\end{tenkzlattice}"
     )
     outer_group = _build(
-        r"\begin{tenkzfree}\tngroup{\tngroup{}"
-        r"\tnput{a}{(1mm,2mm)}{}}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{\tngroup{}"
+        r"\tnwire{a}{(1mm,2mm)}}\end{tenkzlattice}"
     )
     expected_nested_scopes = (
-        "tenkzfree@1",
-        "tenkzfree@1/tngroup@1",
-        "tenkzfree@1/tngroup@1/tngroup@1",
+        "tenkzlattice@1",
+        "tenkzlattice@1/tngroup@1",
+        "tenkzlattice@1/tngroup@1/tngroup@1",
     )
     if nested_group.cases[0].scopes != expected_nested_scopes:
         raise AssertionError("nested same-name scopes lost per-parent ordinals")
@@ -677,17 +675,17 @@ def test_picture_scope_ancestry_is_semantic() -> None:
         raise AssertionError("moving a dimension out of a nested group preserved identity")
 
     first_sibling = _build(
-        r"\begin{tenkzfree}\tngroup{\tnput{a}{(1mm,2mm)}{}}"
-        r"\tngroup{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{\tnwire{a}{(1mm,2mm)}}"
+        r"\tngroup{}\end{tenkzlattice}"
     )
     second_sibling = _build(
-        r"\begin{tenkzfree}\tngroup{}"
-        r"\tngroup{\tnput{a}{(1mm,2mm)}{}}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{}"
+        r"\tngroup{\tnwire{a}{(1mm,2mm)}}\end{tenkzlattice}"
     )
     expected_sibling_scopes = (
-        "tenkzfree@1",
-        "tenkzfree@1/tngroup@1",
-        "tenkzfree@1/tngroup@2",
+        "tenkzlattice@1",
+        "tenkzlattice@1/tngroup@1",
+        "tenkzlattice@1/tngroup@2",
     )
     if first_sibling.cases[0].scopes != expected_sibling_scopes:
         raise AssertionError("dimension-free first sibling did not consume scope @1")
@@ -697,14 +695,14 @@ def test_picture_scope_ancestry_is_semantic() -> None:
         raise AssertionError("moving a dimension between sibling scopes preserved identity")
 
     for body in (
-        r"\tnpic{\tnput{a}{(1mm,2mm)}{}}",
+        r"\tnpic{\tnwire{a}{(1mm,2mm)}}",
         r"\tntree[pitch=1mm]{({}{})}",
     ):
         nested_construct = _build(
-            r"\begin{tenkzfree}\tngroup{" + body + r"}\end{tenkzfree}"
+            r"\begin{tenkzlattice}\tngroup{" + body + r"}\end{tenkzlattice}"
         )
         sibling_construct = _build(
-            r"\begin{tenkzfree}\tngroup{}" + body + r"\end{tenkzfree}"
+            r"\begin{tenkzlattice}\tngroup{}" + body + r"\end{tenkzlattice}"
         )
         if nested_construct.cases[0].constructs == sibling_construct.cases[0].constructs:
             raise AssertionError("a nested command construct lost its scope ancestry")
@@ -716,33 +714,33 @@ def test_picture_scope_ancestry_is_semantic() -> None:
         )
 
     base = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     inert_definition = _build(
         r"\def\unused{\tngroup{\tn{}}\begin{tenkzeq}\end{tenkzeq}}"
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     comment_hidden = _build(
         "% \\tngroup{\\tn{}} \\begin{tenkzeq}\\end{tenkzeq}\n"
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     if inert_definition != base or comment_hidden != base:
         raise AssertionError("inert PICTURE containers consumed scope anchors")
 
     ordinary_arguments = _build(
-        r"\begin{tenkzfree}\tnspan{a}{b}\tnregion{a}\tnprose{text}"
-        r"\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnspan{a}{b}\tnregion{a}\tnprose{text}"
+        r"\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
-    if ordinary_arguments.cases[0].scopes != ("tenkzfree@1",):
+    if ordinary_arguments.cases[0].scopes != ("tenkzlattice@1",):
         raise AssertionError("ordinary brace arguments were promoted to PICTURE scopes")
 
     spliced_group = _build(
-        "\\begin{tenkzfree}\\tngroup% legal splice\n"
-        "{\\tnput{a}{(1mm,2mm)}{}}\\end{tenkzfree}"
+        "\\begin{tenkzlattice}\\tngroup% legal splice\n"
+        "{\\tnwire{a}{(1mm,2mm)}}\\end{tenkzlattice}"
     )
     compact_group = _build(
-        r"\begin{tenkzfree}\tngroup{\tnput{a}{(1mm,2mm)}{}}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{\tnwire{a}{(1mm,2mm)}}"
+        r"\end{tenkzlattice}"
     )
     if spliced_group != compact_group:
         raise AssertionError("a comment splice changed PICTURE scope identity")
@@ -762,22 +760,22 @@ def test_picture_scope_ancestry_is_semantic() -> None:
 
 
 def test_balanced_changes_are_rejected() -> None:
-    duplicate_source = r"""\begin{tenkzfree}
-  \tnjoin[fused]{1mm,2mm}{3mm,4mm}
-  \tnjoin[fused]{5mm,6mm}{7mm,8mm}
-\end{tenkzfree}
+    duplicate_source = r"""\begin{tenkzlattice}
+  \tnwire[route=arc]{1mm,2mm}{3mm,4mm}
+  \tnwire[route=arc]{5mm,6mm}{7mm,8mm}
+\end{tenkzlattice}
 """
     duplicate = _build(duplicate_source)
     duplicate_sites = duplicate.cases[0].sites
     if not (
-        "/tnjoin@1/command:" in duplicate_sites[0].site
-        and "/tnjoin@2/command:" in duplicate_sites[1].site
+        "/tnwire@1/command:" in duplicate_sites[0].site
+        and "/tnwire@2/command:" in duplicate_sites[1].site
     ):
         raise AssertionError(
             f"same-name commands lacked invocation ordinals: {duplicate_sites!r}"
         )
     repeated_option = _build(
-        r"\begin{tenkzfree}[pitch=1mm,pitch=2mm]\end{tenkzfree}"
+        r"\begin{tenkzlattice}[pitch=1mm,pitch=2mm]\end{tenkzlattice}"
     )
     repeated_option_sites = repeated_option.cases[0].sites
     if [
@@ -800,11 +798,11 @@ def test_balanced_changes_are_rejected() -> None:
             f"balanced-move diagnostic lost its source line: {message}"
         )
 
-    distinct = r"""\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-  \tnput{b}{(3mm,4mm)}{}
-  \tnjoin{a}{5mm,6mm}
-\end{tenkzfree}
+    distinct = r"""\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+  \tnwire{b}{(3mm,4mm)}
+  \tnwire{a}{5mm,6mm}
+\end{tenkzlattice}
 """
     expected = _build(distinct)
     literal_replacement = _build(distinct.replace("1mm", "9mm", 1))
@@ -819,12 +817,12 @@ def test_balanced_changes_are_rejected() -> None:
         lambda: validate_dimension_inventory(expected, cross_site_move),
         "dimension literal vector changed",
     )
-    site_replacement = _build(distinct.replace(r"\tnput{a}", r"\tnput{c}"))
+    site_replacement = _build(distinct.replace(r"\tnwire{a}", r"\tnwire{c}"))
     _expect_error(
         lambda: validate_dimension_inventory(expected, site_replacement),
         "dimension owner site changed",
     )
-    deleted = _build(distinct.replace("  \\tnjoin{a}{5mm,6mm}\n", ""))
+    deleted = _build(distinct.replace("  \\tnwire{a}{5mm,6mm}\n", ""))
     _expect_error(
         lambda: validate_dimension_inventory(expected, deleted),
         "dimension invocation anchors changed",
@@ -840,10 +838,10 @@ def test_balanced_changes_are_rejected() -> None:
 
 def test_invocation_anchors_are_semantic() -> None:
     plain = _build(
-        r"\begin{tenkzfree}\tn[label shift=1mm]{A}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn[label shift=1mm]{A}\end{tenkzlattice}"
     )
     conjugate = _build(
-        r"\begin{tenkzfree}\tn*[label shift=1mm]{A}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn*[label shift=1mm]{A}\end{tenkzlattice}"
     )
     if plain == conjugate:
         raise AssertionError("tn and conjugate tn* shared an invocation anchor")
@@ -857,12 +855,12 @@ def test_invocation_anchors_are_semantic() -> None:
     )
 
     first_tn = _build(
-        r"\begin{tenkzfree}\tn[label shift=1mm]{A}\tn{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn[label shift=1mm]{A}\tn{B}"
+        r"\end{tenkzlattice}"
     )
     second_tn = _build(
-        r"\begin{tenkzfree}\tn{A}\tn[label shift=1mm]{B}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tn{A}\tn[label shift=1mm]{B}"
+        r"\end{tenkzlattice}"
     )
     if first_tn == second_tn:
         raise AssertionError("moving an option between tn siblings preserved identity")
@@ -875,32 +873,32 @@ def test_invocation_anchors_are_semantic() -> None:
         "dimension owner site changed",
     )
 
-    first_tnput = _build(
-        r"\begin{tenkzfree}\tnput{a}{(1mm,0)}{}"
-        r"\tnput{a}{(0,0)}{}\end{tenkzfree}"
+    first_tnwire = _build(
+        r"\begin{tenkzlattice}\tnwire{a}{(1mm,0)}"
+        r"\tnwire{a}{(0,0)}\end{tenkzlattice}"
     )
-    second_tnput = _build(
-        r"\begin{tenkzfree}\tnput{a}{(0,0)}{}"
-        r"\tnput{a}{(1mm,0)}{}\end{tenkzfree}"
+    second_tnwire = _build(
+        r"\begin{tenkzlattice}\tnwire{a}{(0,0)}"
+        r"\tnwire{a}{(1mm,0)}\end{tenkzlattice}"
     )
-    if first_tnput == second_tnput:
-        raise AssertionError("moving a dimension between tnput siblings preserved identity")
-    if "/tnput@1/command:" not in first_tnput.cases[0].sites[0].site:
-        raise AssertionError("first tnput sibling lost its invocation ordinal")
-    if "/tnput@2/command:" not in second_tnput.cases[0].sites[0].site:
-        raise AssertionError("second tnput sibling lost its invocation ordinal")
+    if first_tnwire == second_tnwire:
+        raise AssertionError("moving a dimension between tnwire siblings preserved identity")
+    if "/tnwire@1/command:" not in first_tnwire.cases[0].sites[0].site:
+        raise AssertionError("first tnwire sibling lost its invocation ordinal")
+    if "/tnwire@2/command:" not in second_tnwire.cases[0].sites[0].site:
+        raise AssertionError("second tnwire sibling lost its invocation ordinal")
     _expect_error(
-        lambda: validate_dimension_inventory(first_tnput, second_tnput),
+        lambda: validate_dimension_inventory(first_tnwire, second_tnwire),
         "dimension owner site changed",
     )
 
     base_source = (
-        r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     inert_prefix = _build(
         base_source.replace(
-            r"\tnput{a}",
-            r"\def\unused{\tnput{x}{(0,0)}{}}\tnput{a}",
+            r"\tnwire{a}",
+            r"\def\unused{\tnwire{x}{(0,0)}}\tnwire{a}",
         )
     )
     base = _build(base_source)
@@ -908,10 +906,10 @@ def test_invocation_anchors_are_semantic() -> None:
         raise AssertionError("an inert macro-body command consumed an invocation anchor")
     active_prefix = _build(
         base_source.replace(
-            r"\tnput{a}", r"\tnput{x}{(0,0)}{}\tnput{a}"
+            r"\tnwire{a}", r"\tnwire{x}{(0,0)}\tnwire{a}"
         )
     )
-    if "/tnput@2/command:" not in active_prefix.cases[0].sites[0].site:
+    if "/tnwire@2/command:" not in active_prefix.cases[0].sites[0].site:
         raise AssertionError("a dimension-free active command lacked an anchor")
     _expect_error(
         lambda: validate_dimension_inventory(base, active_prefix),
@@ -923,8 +921,8 @@ def test_invocation_anchors_are_semantic() -> None:
         conjugate,
         first_tn,
         second_tn,
-        first_tnput,
-        second_tnput,
+        first_tnwire,
+        second_tnwire,
         inert_prefix,
         active_prefix,
     ):
@@ -933,7 +931,7 @@ def test_invocation_anchors_are_semantic() -> None:
 
 
 def test_invalid_schema_is_rejected() -> None:
-    valid = _data(_build(r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"))
+    valid = _data(_build(r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"))
     valid_path = SYNTHETIC_PATH.as_posix()
     valid_case = next(iter(valid["cases"].values()))
     scope_anchors = list(valid_case["scopes"])
@@ -1001,7 +999,7 @@ def test_invalid_schema_is_rejected() -> None:
             {"schema_version": 5, "cases": {valid_path: {"sites": [row]}}},
             "fields must be exactly",
         ),
-        (document([row], scopes="tenkzfree@1"), ".scopes must be an array"),
+        (document([row], scopes="tenkzlattice@1"), ".scopes must be an array"),
         (
             document([row], constructs=[]),
             ".constructs must be a nonempty array",
@@ -1047,20 +1045,20 @@ def test_invalid_schema_is_rejected() -> None:
     for scopes, phrase in (
         (["not-an-anchor"], "must be a scope anchor"),
         (["tnpic@1"], "must be a scope anchor"),
-        (["tenkzfree@0"], "must be a scope anchor"),
-        (["tenkzfree@01"], "must be a scope anchor"),
-        (["tenkzfree@2"], "continue contiguous tenkzfree ordinals"),
+        (["tenkzlattice@0"], "must be a scope anchor"),
+        (["tenkzlattice@01"], "must be a scope anchor"),
+        (["tenkzlattice@2"], "continue contiguous tenkzlattice ordinals"),
         (
-            ["tenkzfree@1/tngroup@1"],
+            ["tenkzlattice@1/tngroup@1"],
             "references missing parent scope",
         ),
         (
-            ["tenkzfree@1", "tenkzfree@1/tngroup@2"],
+            ["tenkzlattice@1", "tenkzlattice@1/tngroup@2"],
             "continue contiguous tngroup ordinals",
         ),
         (
-            ["tenkzfree@1", "tenkzfree@1"],
-            "continue contiguous tenkzfree ordinals",
+            ["tenkzlattice@1", "tenkzlattice@1"],
+            "continue contiguous tenkzlattice ordinals",
         ),
     ):
         _expect_error(
@@ -1075,11 +1073,11 @@ def test_invalid_schema_is_rejected() -> None:
             _json(
                 document(
                     [row],
-                    scopes=["tenkzfree@1", "tenkzfree@1/tngroup@1"],
+                    scopes=["tenkzlattice@1", "tenkzlattice@1/tngroup@1"],
                 )
             )
         ),
-        "missing invocations=['tenkzfree@1/tngroup@1'], extra invocations=[]",
+        "missing invocations=['tenkzlattice@1/tngroup@1'], extra invocations=[]",
     )
 
     _expect_error(
@@ -1088,34 +1086,34 @@ def test_invalid_schema_is_rejected() -> None:
                 document(
                     [row],
                     scopes=[
-                        "tenkzfree@1",
-                        "tenkzfree@1/tenkzfree@1",
+                        "tenkzlattice@1",
+                        "tenkzlattice@1/tenkzlattice@1",
                     ],
                     invocations=[
                         *invocation_anchors,
-                        "tenkzfree@1::tenkzfree@1/tenkzfree@1",
+                        "tenkzlattice@1::tenkzlattice@1/tenkzlattice@1",
                     ],
                 )
             )
         ),
-        "missing constructs=['tenkzfree@1/tenkzfree@1'], extra constructs=[]",
+        "missing constructs=['tenkzlattice@1/tenkzlattice@1'], extra constructs=[]",
     )
 
     for constructs, phrase in (
         (["not-an-anchor"], "must be a construct anchor"),
-        (["tenkzfree@0"], "must be a construct anchor"),
-        (["tenkzfree@01"], "must be a construct anchor"),
+        (["tenkzlattice@0"], "must be a construct anchor"),
+        (["tenkzlattice@01"], "must be a construct anchor"),
         (["tnpic@2"], "continue contiguous tnpic ordinals"),
         (
-            ["tenkzfree@1/tnpic@2"],
+            ["tenkzlattice@1/tnpic@2"],
             "continue contiguous tnpic ordinals",
         ),
         (
-            ["tenkzfree@1/tenkzfree@1"],
+            ["tenkzlattice@1/tenkzlattice@1"],
             "scope construct lacks matching scope",
         ),
         (["tnpic@1/tnpic@1"], "must be a construct anchor"),
-        (["tenkzfree@1", "tenkzfree@1"], "continue contiguous"),
+        (["tenkzlattice@1", "tenkzlattice@1"], "continue contiguous"),
     ):
         _expect_error(
             lambda constructs=constructs: parse_dimension_inventory(
@@ -1126,41 +1124,41 @@ def test_invalid_schema_is_rejected() -> None:
 
     for invocations, phrase in (
         (["not-an-anchor"], "must be an invocation anchor"),
-        (["tenkzfree@1::tenkzfree@0"], "must be an invocation anchor"),
-        (["tenkzfree@1::tenkzfree@01"], "must be an invocation anchor"),
+        (["tenkzlattice@1::tenkzlattice@0"], "must be an invocation anchor"),
+        (["tenkzlattice@1::tenkzlattice@01"], "must be an invocation anchor"),
         (
-            ["tenkzfree@2::tenkzfree@2"],
+            ["tenkzlattice@2::tenkzlattice@2"],
             "references missing construct anchor",
         ),
         (
             [
-                "tenkzfree@1::tenkzfree@1",
-                "tenkzfree@1::tenkzfree@1/tnput@2",
+                "tenkzlattice@1::tenkzlattice@1",
+                "tenkzlattice@1::tenkzlattice@1/tnwire@2",
             ],
-            "continue contiguous tnput ordinals",
+            "continue contiguous tnwire ordinals",
         ),
         (
             [
-                "tenkzfree@1::tenkzfree@1",
-                "tenkzfree@1::tenkzfree@1",
+                "tenkzlattice@1::tenkzlattice@1",
+                "tenkzlattice@1::tenkzlattice@1",
             ],
             "duplicates scope invocation",
         ),
         (
             [
-                "tenkzfree@1::tenkzfree@1",
-                "tenkzfree@1::tenkzfree@1/tngroup@1",
+                "tenkzlattice@1::tenkzlattice@1",
+                "tenkzlattice@1::tenkzlattice@1/tngroup@1",
             ],
-            "extra invocations=['tenkzfree@1/tngroup@1']",
+            "extra invocations=['tenkzlattice@1/tngroup@1']",
         ),
         (
-            ["tenkzfree@1::tenkzfree@1/tnput@1"],
+            ["tenkzlattice@1::tenkzlattice@1/tnwire@1"],
             "before its container invocation",
         ),
         (
             [
                 *invocation_anchors,
-                "tenkzfree@1::tenkzeq@1",
+                "tenkzlattice@1::tenkzeq@1",
             ],
             "must be an invocation anchor",
         ),
@@ -1188,11 +1186,11 @@ def test_invalid_schema_is_rejected() -> None:
             "references missing invocation anchor",
         ),
         (
-            row_mutation(site=str(row["site"]).replace(r"\tnput", r"\tnunknown")),
+            row_mutation(site=str(row["site"]).replace(r"\tnwire", r"\tnunknown")),
             "command skeleton is not a dimension owner",
         ),
         (
-            row_mutation(site=str(row["site"]).replace(r"\tnput", r"\tnput*")),
+            row_mutation(site=str(row["site"]).replace(r"\tnwire", r"\tnwire*")),
             "command skeleton is not a dimension owner",
         ),
         (
@@ -1209,7 +1207,7 @@ def test_invalid_schema_is_rejected() -> None:
         ),
         (row_mutation(owner="benchmark-book layout"), "active case dimension"),
         (row_mutation(owner="unknown"), "is not a dimension owner"),
-        (row_mutation(owner="route/string"), "owner implied by its site command"),
+        (row_mutation(owner="composition/layout"), "owner implied by its site command"),
         (row_mutation(literals=[]), "must be a nonempty array"),
         (
             row_mutation(literals=["1mm"]),
@@ -1222,17 +1220,17 @@ def test_invalid_schema_is_rejected() -> None:
             lambda mutation=mutation: parse_dimension_inventory(_json(mutation)), phrase
         )
 
-    option_data = _data(_build(r"\begin{tenkzfree}[pitch=1mm]\end{tenkzfree}"))
+    option_data = _data(_build(r"\begin{tenkzlattice}[pitch=1mm]\end{tenkzlattice}"))
     parse_dimension_inventory(_json(option_data))
     option_row = next(iter(option_data["cases"].values()))["sites"][0]
     invalid_container_data = _data(
-        _build(r"\begin{tenkzfree}[pitch=1mm]\end{tenkzfree}")
+        _build(r"\begin{tenkzlattice}[pitch=1mm]\end{tenkzlattice}")
     )
     invalid_container_row = next(
         iter(invalid_container_data["cases"].values())
     )["sites"][0]
     invalid_container_row["site"] = str(invalid_container_row["site"]).replace(
-        "tenkzfree/pitch=", "tn/pitch="
+        "tenkzlattice/pitch=", "tn/pitch="
     )
     _expect_error(
         lambda: parse_dimension_inventory(_json(invalid_container_data)),
@@ -1245,15 +1243,15 @@ def test_invalid_schema_is_rejected() -> None:
     )
 
     mismatched_command_data = _data(
-        _build(r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}")
+        _build(r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}")
     )
     mismatched_case = next(iter(mismatched_command_data["cases"].values()))
     mismatched_case["invocations"][1] = (
-        "tenkzfree@1::tenkzfree@1/tnjoin@1"
+        "tenkzlattice@1::tenkzlattice@1/tnedge@1"
     )
     mismatched_case["sites"][0]["site"] = str(
         mismatched_case["sites"][0]["site"]
-    ).replace("/tnput@1/", "/tnjoin@1/")
+    ).replace("/tnwire@1/", "/tnedge@1/")
     _expect_error(
         lambda: parse_dimension_inventory(_json(mismatched_command_data)),
         "command skeleton does not match its invocation",
@@ -1261,13 +1259,13 @@ def test_invalid_schema_is_rejected() -> None:
 
     sibling_construct_data = _data(
         _build(
-            r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
-            r"\begin{tenkzfree}\tnput{b}{(3mm,4mm)}{}\end{tenkzfree}"
+            r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
+            r"\begin{tenkzlattice}\tnwire{b}{(3mm,4mm)}\end{tenkzlattice}"
         )
     )
     sibling_case = next(iter(sibling_construct_data["cases"].values()))
-    sibling_invocation = "tenkzfree@2::tenkzfree@2/tnput@1"
-    forged_invocation = "tenkzfree@1::tenkzfree@2/tnput@1"
+    sibling_invocation = "tenkzlattice@2::tenkzlattice@2/tnwire@1"
+    forged_invocation = "tenkzlattice@1::tenkzlattice@2/tnwire@1"
     sibling_index = sibling_case["invocations"].index(sibling_invocation)
     sibling_case["invocations"][sibling_index] = forged_invocation
     sibling_case["sites"][1]["site"] = str(
@@ -1279,10 +1277,10 @@ def test_invalid_schema_is_rejected() -> None:
     )
 
     for nested_source in (
-        r"\begin{tenkzfree}\begin{tenkzfree}"
-        r"\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}\end{tenkzfree}",
-        r"\begin{tenkzfree}\tngroup{\tnpic{"
-        r"\tnput{a}{(1mm,2mm)}{}}}\end{tenkzfree}",
+        r"\begin{tenkzlattice}\begin{tenkzlattice}"
+        r"\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}\end{tenkzlattice}",
+        r"\begin{tenkzlattice}\tngroup{\tnpic{"
+        r"\tnwire{a}{(1mm,2mm)}}}\end{tenkzlattice}",
     ):
         nested_inventory = _build(nested_source)
         if (
@@ -1295,8 +1293,8 @@ def test_invalid_schema_is_rejected() -> None:
 
     late_enclosing_construct = _data(
         _build(
-            r"\begin{tenkzfree}\begin{tenkzfree}"
-            r"\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}\end{tenkzfree}"
+            r"\begin{tenkzlattice}\begin{tenkzlattice}"
+            r"\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}\end{tenkzlattice}"
         )
     )
     late_enclosing_case = next(
@@ -1305,11 +1303,11 @@ def test_invalid_schema_is_rejected() -> None:
     late_enclosing_case["constructs"].reverse()
     _expect_error(
         lambda: parse_dimension_inventory(_json(late_enclosing_construct)),
-        "enclosing construct 'tenkzfree@1' must precede nested construct",
+        "enclosing construct 'tenkzlattice@1' must precede nested construct",
     )
 
     late_construct_container = _data(
-        _build(r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}")
+        _build(r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}")
     )
     late_container_case = next(
         iter(late_construct_container["cases"].values())
@@ -1319,13 +1317,13 @@ def test_invalid_schema_is_rejected() -> None:
     )
     _expect_error(
         lambda: parse_dimension_inventory(_json(late_construct_container)),
-        "depends on construct 'tenkzfree@1' before its container invocation",
+        "depends on construct 'tenkzlattice@1' before its container invocation",
     )
 
     late_parent_scope = _data(
         _build(
-            r"\begin{tenkzfree}\tngroup{\tnput{a}{(1mm,2mm)}{}}"
-            r"\end{tenkzfree}"
+            r"\begin{tenkzlattice}\tngroup{\tnwire{a}{(1mm,2mm)}}"
+            r"\end{tenkzlattice}"
         )
     )
     late_parent_case = next(iter(late_parent_scope["cases"].values()))
@@ -1334,13 +1332,13 @@ def test_invalid_schema_is_rejected() -> None:
     )
     _expect_error(
         lambda: parse_dimension_inventory(_json(late_parent_scope)),
-        "depends on represented parent scope 'tenkzfree@1/tngroup@1' "
+        "depends on represented parent scope 'tenkzlattice@1/tngroup@1' "
         "before its invocation",
     )
 
     empty_picture_scope = _build(
-        r"\begin{tenkzfree}\begin{tenkzfree}\end{tenkzfree}"
-        r"\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+        r"\begin{tenkzlattice}\begin{tenkzlattice}\end{tenkzlattice}"
+        r"\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     )
     if (
         parse_dimension_inventory(
@@ -1352,15 +1350,15 @@ def test_invalid_schema_is_rejected() -> None:
 
     empty_scope_only_containers = _build(
         r"\tenkzkernel\begin{tenkzeq}[size=m]\end{tenkzeq}"
-        r"\begin{tenkzfree}\tngroup{}\tnput{a}{(1mm,2mm)}{}"
-        r"\end{tenkzfree}"
+        r"\begin{tenkzlattice}\tngroup{}\tnwire{a}{(1mm,2mm)}"
+        r"\end{tenkzlattice}"
     )
     scope_only_anchors = set(empty_scope_only_containers.cases[0].scopes) - set(
         empty_scope_only_containers.cases[0].constructs
     )
     if scope_only_anchors != {
         "tenkzeq@1",
-        "tenkzfree@1/tngroup@1",
+        "tenkzlattice@1/tngroup@1",
     }:
         raise AssertionError(
             "empty tngroup or tenkzeq did not remain a scope-only container: "
@@ -1398,8 +1396,8 @@ def test_invalid_schema_is_rejected() -> None:
 
     whitespace_data = _data(
         _build(
-            r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{\text{A B}}"
-            r"\end{tenkzfree}"
+            r"\begin{tenkzlattice}\tnwire{\text{A B}}{(1mm,2mm)}"
+            r"\end{tenkzlattice}"
         )
     )
     parse_dimension_inventory(_json(whitespace_data))
@@ -1412,7 +1410,7 @@ def test_invalid_schema_is_rejected() -> None:
 
 
 def test_case_paths_are_regular_and_unaliased() -> None:
-    source = r"\begin{tenkzfree}\tnput{a}{(1mm,2mm)}{}\end{tenkzfree}"
+    source = r"\begin{tenkzlattice}\tnwire{a}{(1mm,2mm)}\end{tenkzlattice}"
     case_path = Path("tests/tenkz/rmp/synthetic/cases/synthetic-case.tex")
     with tempfile.TemporaryDirectory(prefix="tenkz-dimension-path-") as tmp:
         tmp_path = Path(tmp)
@@ -1484,25 +1482,25 @@ def test_updater_is_safe_and_idempotent() -> None:
         _dims.CASE_OWNER_CEILINGS = {
             DimensionOwner.METRIC: 0,
             DimensionOwner.FRAME: 0,
-            DimensionOwner.ROUTE: 0,
-            DimensionOwner.LAYOUT: 5,
+            DimensionOwner.ROUTE: 4,
+            DimensionOwner.LAYOUT: 1,
         }
         fake_repo = tmp_path / "repo"
         case_path = Path("tests/tenkz/rmp/synthetic/cases/reviewed-deletion.tex")
         case = fake_repo / case_path
         case.parent.mkdir(parents=True)
-        before_source = r"""\begin{tenkzfree}\tn{}\end{tenkzfree}
-\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
-  \tnput{b}{(3mm,4mm)}{}
+        before_source = r"""\begin{tenkzlattice}\tn{}\end{tenkzlattice}
+\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
+  \tnwire{b}{(3mm,4mm)}
   \tn[label shift=5mm]{x}
-\end{tenkzfree}
+\end{tenkzlattice}
 """
-        after_source = r"""\begin{tenkzfree}\tn{}\end{tenkzfree}
-\begin{tenkzfree}
-  \tnput{a}{(1mm,2mm)}{}
+        after_source = r"""\begin{tenkzlattice}\tn{}\end{tenkzlattice}
+\begin{tenkzlattice}
+  \tnwire{a}{(1mm,2mm)}
   \tn[label shift=5mm]{x}
-\end{tenkzfree}
+\end{tenkzlattice}
 """
         case.write_text(before_source, encoding="utf-8")
         book = fake_repo / "docs/tenkz/rmp-benchmark.tex"
@@ -1511,17 +1509,17 @@ def test_updater_is_safe_and_idempotent() -> None:
         book.write_text(" ".join(["1pt"] * 4), encoding="utf-8")
         style.write_text(" ".join(["1pt"] * 24), encoding="utf-8")
         baseline = _build(before_source, path=case_path)
-        if baseline.cases[0].scopes != ("tenkzfree@1", "tenkzfree@2"):
+        if baseline.cases[0].scopes != ("tenkzlattice@1", "tenkzlattice@2"):
             raise AssertionError("updater fixture lost its PICTURE scope anchors")
-        if baseline.cases[0].constructs != ("tenkzfree@1", "tenkzfree@2"):
+        if baseline.cases[0].constructs != ("tenkzlattice@1", "tenkzlattice@2"):
             raise AssertionError("updater fixture lost its dimension-free anchor")
         if baseline.cases[0].invocations != (
-            "tenkzfree@1::tenkzfree@1",
-            "tenkzfree@1::tenkzfree@1/tn@1",
-            "tenkzfree@2::tenkzfree@2",
-            "tenkzfree@2::tenkzfree@2/tnput@1",
-            "tenkzfree@2::tenkzfree@2/tnput@2",
-            "tenkzfree@2::tenkzfree@2/tn@1",
+            "tenkzlattice@1::tenkzlattice@1",
+            "tenkzlattice@1::tenkzlattice@1/tn@1",
+            "tenkzlattice@2::tenkzlattice@2",
+            "tenkzlattice@2::tenkzlattice@2/tnwire@1",
+            "tenkzlattice@2::tenkzlattice@2/tnwire@2",
+            "tenkzlattice@2::tenkzlattice@2/tn@1",
         ):
             raise AssertionError("updater fixture lost invocation anchors")
         if not any(
