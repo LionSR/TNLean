@@ -75,8 +75,10 @@
     Let $T$ be an endomorphism of a finite-dimensional complex vector space.
     Its peripheral subspace is the sum of the maximal generalized eigenspaces
     for eigenvalues $\mu$ with $|\mu|=1$; its non-peripheral subspace is the
-    corresponding sum for the remaining eigenvalues. This is the splitting in
-    \cite[Equation~(6.11)]{Wolf2012Quantum}.
+    corresponding sum for the remaining eigenvalues. This is the splitting
+    induced by the full spectral decomposition of
+    \cite[Equation~(6.5)]{Wolf2012Quantum}, with the peripheral projection
+    itself defined in \cite[Equation~(6.12)]{Wolf2012Quantum}.
 \end{definition}
 
 \begin{theorem}[Complementarity of the peripheral splitting]
@@ -124,7 +126,8 @@
     \label{thm:peripheral_projection_recurrent_subsequence}
     \lean{IsPositiveMap.tendsto_pow_apply_peripheralProjection,
         IsPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection,
-        IsPositiveMap.tendsto_endEquiv_pow_peripheralProjection}
+        IsPositiveMap.tendsto_endEquiv_pow_peripheralProjection,
+        IsPositiveMap.exists_strictMono_tendsto_pow_peripheralProjection_clm}
     \leanok
     \uses{cor:dirichlet_phase_recurrence,
         def:peripheral_spectral_projections,
@@ -161,6 +164,8 @@
     \label{cor:peripheral_projection_channel}
     \lean{IsPositiveMap.peripheralProjection_isPositiveMap,
         IsPositiveMap.peripheralProjection_isTracePreservingMap,
+        IsPositiveMap.peripheralWeightedProjection_isPositiveMap,
+        IsPositiveMap.peripheralWeightedProjection_isTracePreservingMap,
         IsPositiveMap.peripheralProjection_isCPMap,
         IsChannel.peripheralProjection,
         IsChannel.peripheralWeightedProjection}
@@ -168,9 +173,12 @@
     \uses{thm:peripheral_projection_recurrent_subsequence,
         def:peripheral_spectral_projections}
     The peripheral projection of a positive trace-preserving map is positive
-    and trace-preserving. If the original map is completely positive, then
-    $T_\varphi$ and $T_\varphi'$ are quantum channels. This is the
-    preservation assertion in \cite[Proposition~6.3(ii)]{Wolf2012Quantum}.
+    and trace-preserving, and then the weighted projection $T_\varphi'$ is
+    positive and trace-preserving as well. If the original map is completely
+    positive, then $T_\varphi$ and $T_\varphi'$ are quantum channels. This
+    is the preservation assertion in the opening clause of
+    \cite[Proposition~6.3]{Wolf2012Quantum} (item~(ii) itself states only the
+    composition identity).
 \end{corollary}
 
 \begin{proof}\leanok

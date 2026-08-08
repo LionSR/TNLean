@@ -818,28 +818,43 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[The literal CPSV canonical form of $R$]%
-    \label{thm:mpdo_bnt_label_rescaling_stable_cf}
+\begin{lemma}[Algebraic injectivity of $R^{\bullet\bullet}$]%
+    \label{lem:mpdo_bnt_label_rescaling_stable_injective}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isInjective}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
     \leanok
-    \uses{def:cpsv_canonical_form, def:nt_cpsv,
-        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    The doubled-index tensor $A=R^{\bullet\bullet}$ (bond dimension $4$,
-    $16$ letters $R^{pq}$, $p,q\in\{0,\ldots,3\}$) is in the canonical form
-    of Definition~\ref{def:cpsv_canonical_form}, eq.~\eqref{eq:cpsv_canonical_form}:
-    a single retained normal block occupying the full ambient bond
-    dimension~$4$ ($r=1$, $D_1=4$, $U=\Id$), with weight
-    $\mu=\sqrt{337/512}$, the unique positive scalar making the retained
-    block's transfer map exactly idempotent (hence spectral-radius one).
-\end{theorem}
+    \uses{def:injective, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The $16$ letters $R^{pq}$ of the doubled-index tensor
+    $R^{\bullet\bullet}$ span the full bond matrix algebra $M_4(\C)$.
+\end{lemma}
+
 \begin{proof}\leanok
     Each letter $R^{pq}$ is, up to a nonzero scalar, one of the $16$
     matrix units of the bond algebra $\C^{4\times4}$: the outer-product
     structure of $R^{pq}$ collapses to a single matrix-unit letter because
     each factor $A^a$, $A^b$ of the vertical letters $B^{ab}=A^a\otimes
     \overline{A^b}$ is itself a scaled matrix unit of $\C^{2\times2}$.
-    Consequently the $16$ letters span the full bond matrix algebra, so
+    Hence the standard matrix-unit basis lies in the span of the letters.
+\end{proof}
+
+\begin{theorem}[The literal CPSV canonical form of $R$]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_cf}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:nt_cpsv,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The doubled-index tensor $A=R^{\bullet\bullet}$ (bond dimension $4$,
+    $16$ letters $R^{pq}$, $p,q\in\{0,\ldots,3\}$) is in the canonical form
+    of Definition~\ref{def:cpsv_canonical_form}
+    (\ref{eq:cpsv_canonical_form}):
+    a single retained normal block occupying the full ambient bond
+    dimension~$4$ ($r=1$, $D_1=4$, $U=\Id$), with weight
+    $\mu=\sqrt{337/512}$, the unique positive scalar making the retained
+    block's transfer map exactly idempotent (hence spectral-radius one).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mpdo_bnt_label_rescaling_stable_injective}
+    By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_injective}, the $16$
+    letters span the full bond matrix algebra, so
     $A$ is algebraically injective, and no nontrivial invariant orthogonal
     projection exists.
 
