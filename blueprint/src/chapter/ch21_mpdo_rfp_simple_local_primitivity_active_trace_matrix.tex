@@ -409,30 +409,15 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_trace_matrix_primitive,
-      thm:mpdo_closed_sector_pairing_normalized_idempotent}
-    Choose the coherent sector phases from
-    Theorem~\ref{thm:mpdo_sector_trace_matrix_primitive}. For the resulting
-    factorization, let $L$ have columns
-    $(\tr((l_h)_\beta))_\beta$ and let $Q$ have rows
-    $(\tr((r_k)_\alpha))_\alpha$, with both indices restricted to
-    $I_*$. The left tensor vanishes when $p_k=0$, so the rectangular product
-    $LQ$ is the full physical-trace transfer. Source zero correlation length
-    therefore makes $\lambda^{-1}LQ$ idempotent for some $\lambda>0$.
-
-    Positivity of the neighboring operators makes their traces real, and
-    hence $QL$ is the complexification of $T^*$. Associativity and cyclicity
-    of trace give, for every $N\geq1$,
-    \begin{align}
-        (\lambda^{-1}QL)^2
-        &=(\lambda^{-1}QL)^3,
-        \notag\\
-        \tr((\lambda^{-1}QL)^N)
-        &=\tr(\lambda^{-1}QL).
-        \notag
-    \end{align}
-    Injectivity of the real-to-complex inclusion gives the two real matrix
-    identities.
+    \uses{thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_active_sector_three_step_return_and_primitivity}
+    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses} gives one
+    rephased factorization with positive neighboring operators and vanishing
+    left tensors on the zero-weight sectors. Apply
+    Theorem~\ref{thm:mpdo_active_sector_three_step_return_and_primitivity} to
+    obtain primitivity of its active trace matrix. Source zero correlation
+    length then gives a positive normalization of this same matrix satisfying
+    the square--cube identity and the positive-power trace identities.
 \end{proof}
 
 \begin{theorem}[Virtual spanning does not force active-sector idempotence]
