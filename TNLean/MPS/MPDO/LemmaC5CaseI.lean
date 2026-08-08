@@ -896,11 +896,7 @@ theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
     let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
       fun k alpha ↦ (F.rightTensor k alpha).trace
     Q * (1 - L * Q) * L = 0 := by
-  dsimp only
-  let L : Matrix (Fin D) (F.ActiveSector p) ℂ :=
-    fun beta h ↦ (F.leftTensor h beta).trace
-  let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
-    fun k alpha ↦ (F.rightTensor k alpha).trace
+  intro L Q
   let T := F.activeSectorTraceMatrix p
   have hT : T ^ 2 = T :=
     activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL K F p hpos hspan hnonzero htriangle
