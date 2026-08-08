@@ -46,6 +46,7 @@ import TNLean.Channel.MarginalSupportWhitenedChoi
 import TNLean.Channel.MaximalOverlap
 import TNLean.Channel.MaximalWeightConvexDecomposition
 import TNLean.Channel.MaximallyEntangled
+import TNLean.Channel.MaximallyMixed
 import TNLean.Channel.NPositivityChainStrict
 import TNLean.Channel.NPositivitySpectralCriterion
 import TNLean.Channel.NormalForm
@@ -73,6 +74,7 @@ import TNLean.Channel.Primitive
 import TNLean.Channel.QuantumSteering
 import TNLean.Channel.RadonNikodym
 import TNLean.Channel.ReductionCriterion
+import TNLean.Channel.RightFactorConditionalExpectation
 import TNLean.Channel.SchmidtDecomposition
 import TNLean.Channel.SchmidtNumber
 import TNLean.Channel.SchmidtNumberCompact
