@@ -127,6 +127,7 @@ separate public-surface occurrence and therefore appears separately.
 | preserve | 173 |
 | codemod | 11 |
 | redraw | 18 |
+| **Total** | **202** |
 
 The raw count is 191 environment openings plus 11 command occurrences,
 which reconciles to 202. The issue baseline counted 106 `tenkz`,
