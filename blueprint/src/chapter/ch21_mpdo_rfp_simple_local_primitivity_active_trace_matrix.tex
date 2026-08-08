@@ -1227,33 +1227,10 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_normalized_four_site_tail,
-      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
-      thm:mpdo_four_site_sal_eta_structure,
-      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
-      thm:mpdo_three_site_closure_reduced,
-      thm:mpdo_inverse_map_active_sector_witnesses,
-      thm:mpdo_casei_rank_one_coefficients}
-    Theorem~\ref{thm:mpdo_four_site_sal_eta_structure} supplies the four-site
-    Hayashi decomposition, and
-    Theorem~\ref{thm:mpdo_normalized_four_site_tail_entry_ne_zero} supplies
-    nonzero outer indices for the normalized four-site tail, and
-    Theorem~\ref{thm:mpdo_three_site_closure_reduced} identifies the required
-    three-site closure. Apply the zero-weight reparameterized inverse-map
-    factorization and choose the coherent sector phases from
-    Theorem~\ref{thm:mpdo_inverse_map_active_sector_witnesses}. Its neighboring
-    operators are positive semidefinite, and its active one-site matrices,
-    nonzero sector tensors, return condition, inactive sectors, and nonempty
-    active sector satisfy the hypotheses of
-    Theorem~\ref{thm:mpdo_casei_rank_one_coefficients}.
-    Hence
-    \begin{align}
-        T^*_{k,h}&=a_kb_h,
-        \notag\\
-        \sum_{k\in I_*}a_kb_k&=1,
-        \notag
-    \end{align}
-    for the resulting active sector set.
+    \uses{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
+    Apply
+    Theorem~\ref{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
+    and retain its active coefficient functions and equations.
 \end{proof}
 
 \begin{theorem}[Vanishing at a zero-weight incident sector]
@@ -1287,6 +1264,52 @@
     vanishing.
 \end{proof}
 
+\begin{theorem}[Rephased inverse-map Case-I coefficient witness]
+    \label{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
+    \lean{MPOTensor.exists_rephased_inverseMap_activeSectorTraceMatrix_rank_one_coefficients_witnesses}
+    \leanok
+    \uses{def:mpdo, def:injective, def:is_sal,
+      def:mpo_physical_trace_transfer, def:nt_cpsv}
+    Let ${\cal K}$ be an injective MPO tensor satisfying the strong area law.
+    Suppose that its physical-trace transfer is literally idempotent and that
+    its underlying tensor is normal. Then one can choose a single coherently
+    rephased, zero-weight-reparameterized inverse-map factorization with
+    nonnegative weights $(p_k)_k$ satisfying $\sum_kp_k=1$, positive
+    semidefinite neighboring operators $\eta_{k,h}$, and real functions
+    $a,b$ on $I_*=\{k:p_k\ne0\}$ such that
+    \begin{align}
+        T^*_{k,h}&=a_kb_h &&(k,h\in I_*), \notag\\
+        \sum_{k\in I_*}a_kb_k&=1, \notag\\
+        p_k=0\ \text{or}\ p_h=0&\implies \eta_{k,h}=0. \notag
+    \end{align}
+    The incident-vanishing clause belongs to this chosen reparameterized and
+    rephased factorization, not to the raw inverse-map factors. This is the
+    normal Case-I construction from
+    \cite[Appendix~C.2, Case~I, Lemmas~C.4--C.5,
+    lines~1374--1505]{Cirac2016MPDO_arXiv}; the incident-vanishing clause is the
+    chosen zero-weight convention for inactive summands.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_normal_bond_dim_pos,
+      def:mpdo_normalized_four_site_tail,
+      def:mpdo_zero_weight_reparameterized_inverse_map_factorization,
+      thm:mpdo_four_site_sal_eta_structure,
+      thm:mpdo_normalized_four_site_tail_entry_ne_zero,
+      thm:mpdo_three_site_closure_reduced,
+      thm:mpdo_inverse_map_active_sector_witnesses,
+      thm:mpdo_casei_rank_one_coefficients,
+      thm:mpdo_rephased_zero_weight_incident_vanish}
+    Normality makes the bond dimension positive. The strong area law supplies
+    the four-site Hayashi decomposition, while the normalized four-site tail
+    gives nonzero outer indices and the required three-site closure. Choose the
+    coherently rephased zero-weight-reparameterized inverse-map factorization.
+    Its active-sector witnesses give the normalized rank-one equations, and
+    Theorem~\ref{thm:mpdo_rephased_zero_weight_incident_vanish} gives the final
+    incident-vanishing clause for the same factorization.
+\end{proof}
+
 \begin{theorem}[All-sector normalized Case-I rank-one coefficients]
     \label{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     \lean{MPOTensor.exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL}
@@ -1308,7 +1331,8 @@
         \sum_k a_kb_k&=1. \notag
     \end{align}
     On the nonzero-weight sectors these are the coefficient families of
-    Theorem~\ref{thm:mpdo_casei_rank_one_coefficients_of_is_sal}; if $p_k=0$,
+    Theorem~\ref{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}; if
+    $p_k=0$,
     then $a_k=b_k=0$. This is a project-derived realization of the all-index
     coefficient statement in \cite[Appendix~C.2, Lemma~C.5,
     lines~1473--1499]{Cirac2016MPDO_arXiv}. The source does not introduce the
@@ -1319,9 +1343,8 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_casei_rank_one_coefficients_of_is_sal,
-      thm:mpdo_rephased_zero_weight_incident_vanish}
-    Extend the active coefficient families by zero. In the chosen
+    \uses{thm:mpdo_casei_rephased_inverse_map_coefficient_witness}
+    Extend the coupled witness's active coefficient families by zero. In the chosen
     zero-weight-reparameterized and rephased factorization, $p_k=0$ makes
     every neighboring operator incident to $k$ vanish. Therefore the trace
     factorization is zero whenever either index is inactive, while it is the
