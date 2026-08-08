@@ -27,7 +27,7 @@ theorem continuous_trace_pow (k : ℕ) :
   (continuous_pow k).matrix_trace
 
 /-- Trace powers preserve convergence of finite square matrices. -/
-theorem Filter.Tendsto.trace_pow {α : Type*} {l : Filter α}
+theorem tendsto_trace_pow {α : Type*} {l : Filter α}
     {f : α → Matrix n n ℂ} {A : Matrix n n ℂ}
     (h : Filter.Tendsto f l (nhds A)) (k : ℕ) :
     Filter.Tendsto (fun x => Matrix.trace ((f x) ^ k)) l
