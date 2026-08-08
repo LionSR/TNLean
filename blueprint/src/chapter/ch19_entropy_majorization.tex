@@ -7,15 +7,18 @@
 Birkhoff's theorem characterizes the convex geometry of doubly
 stochastic matrices.
 
-\begin{theorem}[Birkhoff]
+\begin{theorem}[Birkhoff (doubly-stochastic part)]
     \label{thm:birkhoff_doubly_stochastic}
-    \lean{TNLean.wolf_birkhoff_doubly_stochastic_convex_hull}
-    \lean{TNLean.wolf_birkhoff_extreme_points_doubly_stochastic}
+    \lean{TNLean.wolf_birkhoff_doublyStochastic_convexHull}
+    \lean{TNLean.wolf_birkhoff_extremePoints_doublyStochastic}
     \leanok
     The set of doubly stochastic matrices in $M_d(\R)$ is the convex
     hull of the $d\times d$ permutation matrices, and its extreme
     points are exactly the permutation matrices.
     See \cite[Chapter~8, Theorem~8.6]{Wolf2012Quantum}.
+    The doubly-substochastic half of Theorem~8.6 (definition of
+    substochastic matrices, their polytope structure, and extreme
+    partial-permutation-matrix characterization) is not yet formalized.
 \end{theorem}
 % The doubly-substochastic half of Birkhoff's theorem (extreme
 % points of the substochastic matrices) is not formalized; #3959.
@@ -25,12 +28,12 @@ stochastic matrices.
     doubly stochastic matrices and let $\mathcal{P}_d$ be the set of
     $d \times d$ permutation matrices.  The Birkhoff--von Neumann
     decomposition gives
-    \
+    \[
     \begin{aligned}
       \mathcal{DS}_d &= \operatorname{conv}(\mathcal{P}_d), \\
       \operatorname{ext}(\mathcal{DS}_d) &= \mathcal{P}_d .
     \end{aligned}
-    \
+    \]
     Indeed, every doubly stochastic matrix is a convex combination of
     permutation matrices, while convexity of $\mathcal{DS}_d$ gives the
     converse inclusion in the first identity.  Each permutation matrix is

@@ -1,0 +1,97 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf Theorem~8.6 --- the Doubly-Substochastic Half of Birkhoff}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Wolf's Theorem~8.6 (``Birkhoff's theorem'') states two characterizations
+in the same theorem environment
+\cite[Chapter~8, Theorem~8.6]{Wolf2012Quantum}.  The local source is
+\path{Notes/WolfNoteTexSource/ch08_distance_measures.tex}, lines~263--266.
+
+\begin{enumerate}
+  \item[\textbf{DS}] The set of $d\times d$ doubly stochastic matrices is the
+    convex hull of the $d\times d$ permutation matrices, and its extreme
+    points are exactly the permutation matrices.
+  \item[\textbf{Sub}] The set of $d\times d$ doubly substochastic matrices is
+    the convex hull of the $d\times d$ partial permutation matrices, and its
+    extreme points are exactly the partial permutation matrices.
+\end{enumerate}
+
+\section{Formalized component}
+
+The doubly-stochastic half (DS) is formalized as two declarations:
+\begin{itemize}
+  \item \leanid{TNLean.wolf_birkhoff_doublyStochastic_convexHull}
+    --- the set of doubly stochastic matrices is the convex hull of the
+    permutation matrices, in \doclink{TNLean/Analysis/Birkhoff};
+  \item \leanid{TNLean.wolf_birkhoff_extremePoints_doublyStochastic}
+    --- the extreme points of the doubly stochastic matrices are exactly the
+    permutation matrices, likewise in \doclink{TNLean/Analysis/Birkhoff}.
+\end{itemize}
+Both are direct reuse of Mathlib's existing Birkhoff theorems
+(\leanid{doublyStochastic_eq_convexHull_permMatrix} and
+\leanid{extremePoints_doublyStochastic}) without reproof.
+
+\section{Missing component}
+
+The doubly-substochastic half (Sub) has not been formalized.  It requires
+the following definitions and results:
+\begin{enumerate}
+  \item Define the predicate ``doubly substochastic'': a nonnegative square
+    matrix whose row sums and column sums are each bounded by~$1$.
+  \item Define the partial permutation matrices: square $\{0,1\}$-matrices
+    with at most one~$1$ in each row and each column, all other entries~$0$.
+  \item Prove that the set of doubly substochastic matrices is the convex hull
+    of the partial permutation matrices, and that its extreme points are
+    exactly the partial permutation matrices.  This is the substochastic
+    analogue of Birkhoff's theorem.
+\end{enumerate}
+The substochastic polytope is larger (containing the stochastic polytope as a
+face) and the extreme-point argument differs from the stochastic case:
+permutation matrices are replaced by partial permutation matrices, and the
+support of a substochastic matrix may omit rows or columns.
+
+\section{Elimination plan}
+
+\begin{enumerate}
+  \item Port the predicate \leanid{doublyStochastic} from Mathlib to a
+    ``doubly substochastic'' predicate \leanid{doublySubstochastic}, borrowing
+    the nonnegativity, row-sum, and column-sum structure with $\le 1$ bounds
+    instead of~$=1$.
+  \item Define the set of partial permutation matrices over
+    $\operatorname{Fin} d$ and establish that each is doubly substochastic.
+  \item Carry out a Birkhoff-style decomposition: every doubly substochastic
+    matrix can be written as a convex combination of partial permutation
+    matrices.  The standard proof appends a dummy row and column to reduce to
+    the doubly stochastic case (the ``dilation trick''), which would reuse the
+    already-formalized Mathlib Birkhoff theorem.
+  \item Prove that the extreme points of the doubly substochastic set are
+    exactly the partial permutation matrices, adapting the extreme-point
+    argument from the stochastic case.
+\end{enumerate}
+
+\section{Verdict}
+
+This is a \emph{scope restriction}.  The doubly-stochastic half of Wolf
+Theorem~8.6 (the two Birkhoff characterizations for stochastic matrices) is
+fully formalized and linked to the blueprint.  The doubly-substochastic half
+(definition, polytope structure, and extreme partial-permutation-matrix
+characterization) is not yet formalized.  Tracking: \ghissue{3959}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
