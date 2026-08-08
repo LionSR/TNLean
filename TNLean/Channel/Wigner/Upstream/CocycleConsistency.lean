@@ -250,7 +250,7 @@ triple ray `mk (b i₀ + b i + b j)` is first shown fixed
 (`diagReducedMap_fixes_two_level_general`), whence the conditional pairwise leg
 becomes unconditional (`diagReducedMap_pairwise_relphase`).
 
-**Critical honesty (audit).** Every probe here is a **real-coordinate**
+**Unitary/antiunitary caveat.** Every probe here is a **real-coordinate**
 superposition (all surviving source coordinates `= 1`), so its ray is fixed by
 the identity and by coordinatewise conjugation **alike**: fixing it is consistent
 with **both** the unitary (`d = c`) and antiunitary (`d = conj c`) branches, and

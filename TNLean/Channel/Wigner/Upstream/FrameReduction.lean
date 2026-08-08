@@ -37,10 +37,10 @@ lemma transProb_self (p : ℙ ℂ E) : transProb p p = 1 := by
 /-! ## The transition-probability-preserving predicate -/
 
 /-- A self-map of `ℙ ℂ E` is **transition-probability preserving** when it
-preserves `transProb` on every pair of projective points. The
-realisability direction `transProbPreserving_unitary` shows every unitary
-action is such a map; the converse (every such map is induced by a unitary) is
-the open Wigner target documented in the module header. -/
+preserves `transProb` on every pair of projective points. Both unitary actions
+and coordinatewise conjugation satisfy this condition. Wigner rigidity states
+that, in finite complex dimension, every such map belongs to one of these two
+branches. -/
 def TransProbPreserving (f : ℙ ℂ E → ℙ ℂ E) : Prop :=
   ∀ p q, transProb (f p) (f q) = transProb p q
 
@@ -551,7 +551,7 @@ Proof chain. Write `U := candidateUnitary hf b`. By definition
 `LinearIsometryEquiv.symm_apply_apply`. `mk` is proof-irrelevant in its nonzero
 hypothesis, so the dependent nonzero proofs are immaterial.
 
-**Critical honesty note.** Fixing the basis rays does *not* make `reducedMap`
+**Residual diagonal-phase freedom.** Fixing the basis rays does *not* make `reducedMap`
 the identity: the diagonal-phase freedom is genuine and is exactly what the
 remaining normal-form lemma (step (2c)) must pin down. Do not read this as
 `reducedMap = id` or `f = projMap (candidateUnitary hf b)`. -/

@@ -40,19 +40,14 @@ correspondence:
   orthogonality characterisations (coincidence and orthogonality of rays),
   the provable preconditions for the converse.
 
-## Open target (not proved here): the Wigner / Fubini–Study converse
+## The Wigner / Fubini–Study converse
 
-The converse of `transProb_smul_unitary` is the **Wigner / Fubini–Study
-rigidity theorem**: every transition-probability-preserving self-map of
-`ℙ ℂ E` is induced by a unitary (equivalently, the isometry group of
-`ℂℙⁿ` with the Fubini–Study metric is the projective unitary group
-`PU(n+1)`). This is multi-session Mathlib-gap mathematics — it requires
-phase-coherence bookkeeping, extraction of (semi)linearity from the
-overlap data, and ruling out the antiunitary branch via the Kähler complex
-structure (over ℂ, transition-probability preservation alone admits both
-the unitary and antiunitary classes; the holomorphic / Kähler structure
-selects the unitary one). This file supplies the foundation consumed by the
-subsequent rigidity modules.
+The converse classification has two branches: every transition-probability-
+preserving self-map of `ℙ ℂ E` is induced by either a unitary or an antiunitary
+map. Equivalently, the full Fubini–Study isometry group includes projective
+unitaries and their compositions with coordinatewise conjugation. Restricting
+to holomorphic isometries selects the projective unitary group `PU(n+1)`. The
+subsequent rigidity modules prove the two-branch classification.
 
 ## Provenance
 
