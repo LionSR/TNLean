@@ -189,9 +189,9 @@ neighboring operators whose complex traces form a normalized rank-one matrix.
 The factorization itself retains the source isometry, the sector equivalence,
 the left and right factor tensors, and the exact physical-slice factorization.
 
-The extension across inactive Hayashi sectors is the project-derived zero-weight
-completion of the coherently rephased inverse-map witness; CPSV16 does not specify
-this inactive-sector convention.
+**Local fix (inactive sectors):** the zero-weight extension belongs to the
+coherently rephased inverse-map witness; CPSV16 does not specify this
+inactive-sector convention. See `docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
 
 **Scope restriction (normal Case I):** this theorem assumes injectivity, the
 strong area law, literal zero correlation length, and normality. It makes no
