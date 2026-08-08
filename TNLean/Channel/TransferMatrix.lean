@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Basic
-import TNLean.MPS.Core.Transfer
 import TNLean.Algebra.MatrixTracePairing
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.LinearAlgebra.Matrix.Vec
@@ -52,8 +51,6 @@ with composition. We also relate it to the Kraus representation.
   Chapter 3, Proposition 3.8 — conjugation `X ↦ Y X Y†` and its transpose
   variant `X ↦ Y Xᵀ Y†` by an invertible `Y` map the positive semidefinite
   cone onto itself
-* `MPSTensor.transferMatrix_eq`: the MPS transfer map `E_A` has transfer
-  matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ`
 
 ## References
 
@@ -242,23 +239,6 @@ theorem transferMatrix_kraus
   simp only [Matrix.mul_apply, Matrix.single_apply, Matrix.conjTranspose_apply]
   simp only [ite_and, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
     Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, mul_comm]
-
-/-! ### Connection to MPS transfer maps -/
-
-namespace MPSTensor
-
-/-- The MPS transfer map `E_A(X) = ∑ᵢ Aᵢ X Aᵢ†` has transfer matrix
-`∑ᵢ Āᵢ ⊗ₖ Aᵢ`.
-
-This relates Wolf's Section 2.2 transfer matrix for quantum channels to the MPS
-transfer operator. -/
-theorem transferMatrix_eq (A : MPSTensor d D) :
-    transferMatrix (MPSTensor.transferMap A) =
-      ∑ n : Fin d,
-        (A n).map (starRingEnd ℂ) ⊗ₖ A n :=
-  transferMatrix_kraus A _ (fun X => by simp [transferMap_apply])
-
-end MPSTensor
 
 /-! ### Propositions 2.5-2.6: Transfer matrix characterizations of TP, unital, and HP maps -/
 

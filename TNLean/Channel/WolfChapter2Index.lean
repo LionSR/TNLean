@@ -205,8 +205,8 @@ project import.
 * `transferMatrix_id` — transfer matrix of identity = identity ✓
 * `transferMatrix_injective` — the representation is faithful ✓
 * `transferMatrix_kraus` — Kraus form: `T̂ = ∑ᵢ K'ᵢ ⊗ₖ Kᵢ` ✓
-* `MPSTensor.transferMatrix_eq` — MPS bridge:
-  `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✓
+* `MPSTensor.transferMatrix_eq` — MPS transfer-operator specialization, stated in
+  `TNLean.MPS.Core.TransferMatrix`: `E_A` has transfer matrix `∑ᵢ Āᵢ ⊗ₖ Aᵢ` ✓
 
 ### Section 2.2–2.3 Transfer matrix characterizations & normal forms (Propositions 2.5-2.8)
 
