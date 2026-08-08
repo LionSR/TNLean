@@ -73,11 +73,15 @@ support of a substochastic matrix may omit rows or columns.
     instead of~$=1$.
   \item Define the set of partial permutation matrices over
     $\operatorname{Fin} d$ and establish that each is doubly substochastic.
-  \item Carry out a Birkhoff-style decomposition: every doubly substochastic
-    matrix can be written as a convex combination of partial permutation
-    matrices.  The standard proof appends a dummy row and column to reduce to
-    the doubly stochastic case (the ``dilation trick''), which would reuse the
-    already-formalized Mathlib Birkhoff theorem.
+  \item Carry out a Birkhoff-style decomposition by completing a
+    $d\times d$ doubly substochastic matrix to a $2d\times 2d$ doubly
+    stochastic block matrix.  The diagonal off-blocks encode the row and
+    column deficits.  A nonnegative lower-right block has row sums equal to
+    the original column sums and column sums equal to the original row sums;
+    it can be obtained from their normalized outer product when the total
+    matrix sum is nonzero, with the zero case treated separately.  Applying
+    Birkhoff's theorem to this completion and restricting permutation
+    matrices to the original block yields partial permutation matrices.
   \item Prove that the extreme points of the doubly substochastic set are
     exactly the partial permutation matrices, adapting the extreme-point
     argument from the stochastic case.
