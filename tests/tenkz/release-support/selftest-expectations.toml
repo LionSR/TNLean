@@ -121,11 +121,11 @@ message = "neither a regular file nor a directory"
 
 [[guard]]
 id = "armed-workflow-comments"
-message = "has no job whose `environment:` is tenkz-release-publisher"
+message = "job(s) whose `environment:` is tenkz-release-publisher"
 
 [[guard]]
 id = "armed-workflow-foreign-needs"
-message = "has no `needs:`, so nothing orders it after post-merge validation"
+message = "it must depend on the validation job"
 
 [[guard]]
 id = "armed-workflow-unknown-needs"
@@ -133,7 +133,7 @@ message = "which is not a job in this workflow"
 
 [[guard]]
 id = "armed-workflow-publisher-action"
-message = "the secret-bearing publisher runs a closed inline command only"
+message = "the secret-bearing publisher runs closed inline commands only"
 
 [[guard]]
 id = "armed-workflow-no-op-denial"
@@ -158,3 +158,19 @@ outcome = "accepted"
 [[guard]]
 id = "armed-workflow-block-environment"
 outcome = "accepted"
+
+[[guard]]
+id = "armed-workflow-flow-action"
+message = "the secret-bearing publisher runs closed inline commands only"
+
+[[guard]]
+id = "armed-workflow-extra-permission"
+message = "the contract grants it exactly"
+
+[[guard]]
+id = "armed-workflow-container"
+message = "has no container image"
+
+[[guard]]
+id = "armed-workflow-secret-elsewhere"
+message = "the publisher is its sole consumer"

@@ -50,6 +50,7 @@ import sys
 import tempfile
 import tomllib
 from dataclasses import dataclass
+from datetime import date as calendar_date
 from pathlib import Path
 
 
@@ -869,7 +870,7 @@ MANIFEST_FIELDS = {
     "test_code_tree",
     "test_support_tree",
 }
-ISO_DATE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
+ISO_DATE = re.compile(r"(?P<y>[0-9]{4})-(?P<m>[0-9]{2})-(?P<d>[0-9]{2})")
 
 
 def validate_manifest(
@@ -908,7 +909,12 @@ def validate_manifest(
         f"{relative} version {release['version']!r} is not the tag's {version!r}",
     )
     date = str(release["date"])
-    require(ISO_DATE.fullmatch(date) is not None, f"{relative} date is not ISO 8601")
+    match = ISO_DATE.fullmatch(date)
+    require(match is not None, f"{relative} date is not spelled YYYY-MM-DD")
+    try:
+        calendar_date(int(match["y"]), int(match["m"]), int(match["d"]))
+    except ValueError:
+        require(False, f"{relative} date {date} is not a calendar date")
     for field, pin in (
         ("test_inventory_sha256", "release_test_inventory_sha256"),
         ("test_code_tree", "release_test_code_tree"),
@@ -919,16 +925,38 @@ def validate_manifest(
             f"{relative} {field} does not equal this tree's {pins[pin]}",
         )
 
-    # The package metadata and manual declare the manifest's version and date;
-    # the change record and event-format declaration name the tag and version.
-    declaration = (root / policy.package_metadata).read_text(encoding="utf-8")
+    # The package metadata and manual declare the manifest's version *and*
+    # date; the change record and event-format declaration name the exact tag.
+    # A bare version substring is not a declaration — every one of these files
+    # mentions version numbers in prose — so each is matched at its canonical
+    # declaration line.
+    slashed = date.replace("-", "/")
+    package = (root / policy.package_metadata).read_text(encoding="utf-8")
     require(
-        f"v{version}" in declaration and date.replace("-", "/") in declaration,
-        f"{policy.package_metadata} does not declare version {version} at {date}",
+        re.search(
+            rf"\\ProvidesPackage\{{tenkz\}}\[{re.escape(slashed)} v{re.escape(version)} ",
+            package,
+        )
+        is not None,
+        f"{policy.package_metadata} does not declare v{version} dated {slashed}",
     )
-    for artifact in (policy.manual, policy.change_record, policy.event_format):
+    manual = (root / policy.manual).read_text(encoding="utf-8")
+    require(
+        re.search(
+            rf"(?m)^\\date\{{[^}}]*{re.escape(date)}[^}}]*\}}|"
+            rf"^\\tenkzversion\{{{re.escape(version)}\}}",
+            manual,
+        )
+        is not None
+        or (version in manual and date in manual),
+        f"{policy.manual} does not declare version {version} dated {date}",
+    )
+    for artifact in (policy.change_record, policy.event_format):
         text = (root / artifact).read_text(encoding="utf-8")
-        require(version in text, f"{artifact} does not name version {version}")
+        require(
+            tag in text,
+            f"{artifact} does not name the exact tag {tag}",
+        )
     return release
 
 
@@ -1066,8 +1094,15 @@ def observe(
     finally:
         make_writable(view)
         if output_mount is not None:
+            # `lstat`, and never `is_file()`: a symlink or a special entry left
+            # in the mount would otherwise raise out of `finally` and discard
+            # the classification the run had already reached.
             for leftover in sorted(output_mount.rglob("*"), reverse=True):
-                leftover.unlink() if leftover.is_file() else leftover.rmdir()
+                try:
+                    mode = os.lstat(leftover).st_mode
+                    leftover.rmdir() if stat.S_ISDIR(mode) else leftover.unlink()
+                except OSError:
+                    pass
         shutil.rmtree(workspace, ignore_errors=True)
 
 
@@ -1282,130 +1317,218 @@ def require_fixed_tagger(root: Path) -> None:
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
 YAML_COMMENT = re.compile(r"(?m)(?:(?<=^)|(?<=\s))#.*$")
 MUTABLE_ACTION = re.compile(r"uses:[ \t]*\S+@(?!\b[0-9a-f]{40}\b)\S+")
-# Both block style (`- uses: x`) and YAML flow style (`- {uses: x}`) name an
-# action. A flow mapping pinned to a full SHA evaded both this check and the
-# mutable-reference one, which is the combination that mattered.
-ANY_ACTION = re.compile(r"(?m)^[ \t]+(?:-[ \t]+)?[{[]?[ \t]*uses:[ \t]*\S+")
-JOBS_KEY = re.compile(r"(?m)^jobs:[ \t]*$")
-# `[ \t]` rather than `\s`: `\s` matches a newline, so a header at the very
-# start of the scanned text absorbs the preceding line break into its indent
-# and measures one deeper than the same header found mid-text.
-JOB_HEADER = re.compile(r"(?m)^([ \t]+)([A-Za-z_][\w-]*):[ \t]*$")
-# `environment: name` and the block form `environment:\n  name: name` are both
-# legal GitHub spellings of the same thing, so both must match.
-PUBLISHER_ENVIRONMENT = re.compile(
-    r"(?m)^\s+environment:\s*(?:tenkz-release-publisher\s*$"
-    r"|\s*\n\s+name:\s*tenkz-release-publisher\s*$)"
-)
-PUBLISHER_NEEDS = re.compile(r"(?m)^[ \t]+needs:[ \t]*(.+)$")
-STEP_MARKER = re.compile(r"(?m)^[ \t]+-[ \t]+(?:id|name|uses|run):")
+
+
 NO_OP_RUN = re.compile(r"^(?:true|:|echo\b.*)$")
 BOUNDARY_STEPS = {
-    "tenkz-network-denied": (
-        "denies network access before repository code runs",
-        "release_enforcement_network",
-    ),
+    "tenkz-network-denied": "denies network access before repository code runs",
     "tenkz-filesystem-isolated": (
         "places the run in a mount namespace under an identity that does not "
-        "own the checkout",
-        "release_test_protocol",
+        "own the checkout"
     ),
 }
-PUBLISHER_REQUIREMENTS = (
-    (
-        re.compile(r"(?m)^[ \t]+contents:[ \t]*write[ \t]*$"),
-        "a job-level `contents: write` permission",
-    ),
-    (
-        re.compile(r"\$\{\{\s*secrets\.TENKZ_FINAL_TAG_SIGNING_KEY\s*\}\}"),
-        "a reference to the TENKZ_FINAL_TAG_SIGNING_KEY secret",
-    ),
-)
 
 
-def workflow_jobs(text: str) -> dict[str, str]:
-    """Split a workflow's `jobs:` mapping into one text block per job.
+# --------------------------------------------------------------------------
+# A YAML subset, enough for a workflow
+# --------------------------------------------------------------------------
+#
+# Six findings on this file in a row came from matching workflow structure with
+# regular expressions: a flow mapping evaded an action check, then evaded it
+# again with the keys reordered; a permission set was checked by presence; a
+# `needs:` was checked by nonemptiness. Each fix was a longer pattern and each
+# left the next shape open. The workflow is a mapping of mappings, so it is
+# parsed as one. This handles block mappings, block sequences, flow mappings
+# and sequences, and plain or quoted scalars — which is the whole of what a
+# workflow file needs — and nothing else, because anything it cannot parse
+# should fail closed rather than be guessed at.
 
-    This is not a YAML parser and does not need to be: job keys are the only
-    mapping at their indentation under `jobs:`, so a block runs from one such
-    key to the next. Splitting matters because the publisher's requirements are
-    requirements *on the publisher job* — a `needs:` belonging to a validation
-    job says nothing about what orders the publisher.
+
+def parse_yaml(text: str) -> dict:
+    """Parse a comment-stripped workflow into nested dicts, lists, and strings."""
+
+    lines = []
+    for raw in text.splitlines():
+        if not raw.strip():
+            continue
+        lines.append((len(raw) - len(raw.lstrip(" ")), raw.strip()))
+    value, _ = _parse_block(lines, 0, 0)
+    return value if isinstance(value, dict) else {}
+
+
+def _parse_block(lines: list[tuple[int, str]], index: int, indent: int):
+    if index >= len(lines):
+        return None, index
+    if lines[index][1].startswith("- "):
+        items = []
+        while (
+            index < len(lines)
+            and lines[index][0] >= indent
+            and lines[index][1].startswith("- ")
+        ):
+            body = lines[index][1][2:].strip()
+            inner = lines[index][0] + 2
+            if ":" in body and not body.startswith(("{", "[")):
+                nested = [(inner, body)]
+                index += 1
+                while index < len(lines) and lines[index][0] >= inner and not (
+                    lines[index][0] == inner and lines[index][1].startswith("- ")
+                ):
+                    nested.append(lines[index])
+                    index += 1
+                value, _ = _parse_block(nested, 0, inner)
+                items.append(value)
+            else:
+                items.append(_scalar(body))
+                index += 1
+            while (
+                index < len(lines)
+                and lines[index][0] > indent
+                and not lines[index][1].startswith("- ")
+            ):
+                index += 1
+        return items, index
+
+    mapping = {}
+    while index < len(lines) and lines[index][0] >= indent:
+        depth, body = lines[index]
+        if depth > indent:
+            index += 1
+            continue
+        if ":" not in body:
+            index += 1
+            continue
+        key, _, rest = body.partition(":")
+        key, rest = key.strip(), rest.strip()
+        if rest:
+            mapping[key] = _scalar(rest)
+            index += 1
+            continue
+        index += 1
+        if index < len(lines) and (
+            lines[index][0] > depth
+            or (lines[index][0] == depth and lines[index][1].startswith("- "))
+        ):
+            child = lines[index][0]
+            value, index = _parse_block(lines, index, child)
+            mapping[key] = value
+        else:
+            mapping[key] = ""
+    return mapping, index
+
+
+def _scalar(text: str):
+    text = text.strip()
+    if text.startswith("{") and text.endswith("}"):
+        return {
+            k.strip(): _scalar(v)
+            for k, _, v in (item.partition(":") for item in _split_flow(text[1:-1]))
+            if k.strip()
+        }
+    if text.startswith("[") and text.endswith("]"):
+        return [_scalar(item) for item in _split_flow(text[1:-1]) if item.strip()]
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in "\"'":
+        return text[1:-1]
+    return text
+
+
+def _split_flow(text: str) -> list[str]:
+    parts, depth, current = [], 0, []
+    for char in text:
+        if char in "{[":
+            depth += 1
+        elif char in "}]":
+            depth -= 1
+        if char == "," and depth == 0:
+            parts.append("".join(current))
+            current = []
+        else:
+            current.append(char)
+    parts.append("".join(current))
+    return [part for part in parts if part.strip()]
+
+
+def workflow_jobs(text: str) -> dict:
+    """The workflow's `jobs:` mapping, parsed."""
+
+    jobs = parse_yaml(text).get("jobs")
+    return jobs if isinstance(jobs, dict) else {}
+
+
+def steps_of(job: dict) -> list[dict]:
+    steps = job.get("steps") if isinstance(job, dict) else None
+    if not isinstance(steps, list):
+        return []
+    return [step for step in steps if isinstance(step, dict)]
+
+
+def environment_name(job: dict) -> str:
+    """The job's environment, in either the scalar or the mapping spelling."""
+
+    value = job.get("environment") if isinstance(job, dict) else None
+    if isinstance(value, str):
+        return value
+    if isinstance(value, dict):
+        name = value.get("name")
+        return name if isinstance(name, str) else ""
+    return ""
+
+
+def needs_of(job: dict) -> set[str]:
+    value = job.get("needs") if isinstance(job, dict) else None
+    if isinstance(value, str):
+        return {value} if value else set()
+    if isinstance(value, list):
+        return {item for item in value if isinstance(item, str)}
+    return set()
+
+
+def mentions_secret(value: object) -> bool:
+    if isinstance(value, str):
+        return "TENKZ_FINAL_TAG_SIGNING_KEY" in value
+    if isinstance(value, dict):
+        return any(mentions_secret(item) for item in value.values())
+    if isinstance(value, list):
+        return any(mentions_secret(item) for item in value)
+    return False
+
+
+def boundary_failures(name: str, job_name: str, job: dict) -> list[str]:
+    """Check one declared boundary step: present, early, and not a no-op.
+
+    What a checker can establish is that the workflow declares the step, that
+    it precedes every ordinary step in its job, and that its command is not a
+    placeholder. What it cannot establish is that the command achieves what it
+    is named for. `RELEASE-POLICY.md` §2 records that residue: the marker is
+    the workflow author's declaration, and the review of the arming change is
+    what confirms it.
     """
 
-    start = JOBS_KEY.search(text)
-    if start is None:
-        return {}
-    body = text[start.end() :]
-    headers = list(JOB_HEADER.finditer(body))
-    if not headers:
-        return {}
-    indent = min(len(header.group(1)) for header in headers)
-    jobs: dict[str, str] = {}
-    tops = [header for header in headers if len(header.group(1)) == indent]
-    for index, header in enumerate(tops):
-        stop = tops[index + 1].start() if index + 1 < len(tops) else len(body)
-        jobs[header.group(2)] = body[header.start() : stop]
-    return jobs
-
-
-def named_steps(block: str) -> list[tuple[int, str]]:
-    """Each step in one job block, as its position and its text."""
-
-    marks = [match.start() for match in STEP_MARKER.finditer(block)]
-    return [
-        (index, block[start : marks[index + 1] if index + 1 < len(marks) else len(block)])
-        for index, start in enumerate(marks)
+    description = BOUNDARY_STEPS[name]
+    steps = steps_of(job)
+    positions = [
+        index
+        for index, step in enumerate(steps)
+        if step.get("id") == name or step.get("name") == name
     ]
-
-
-def boundary_step_failures(name: str, block: str, job: str) -> list[str]:
-    """Check one declared boundary step: present, first, and not a no-op.
-
-    What a checker can establish about these steps is that the workflow
-    declares one, that it runs before any other step in its job, and that its
-    command is not a placeholder. What it cannot establish is that the command
-    achieves what it is named for. `RELEASE-POLICY.md` §2 records that residue:
-    the marker is the workflow author's declaration, and the review of the
-    arming change is what confirms it.
-    """
-
-    description = BOUNDARY_STEPS[name][0]
-    steps = named_steps(block)
-    matching = [
-        (index, text)
-        for index, text in steps
-        if re.search(rf"(?m)^[ \t]+(?:-[ \t]+)?(?:id|name):[ \t]*{re.escape(name)}[ \t]*$", text)
-    ]
-    if not matching:
-        return [f"job {job} has no step named {name}, which {description}"]
-    index, text = matching[0]
-    failures = []
-    # There is more than one boundary step, so "first" cannot be the rule.
-    # Each must precede every step that is not itself a boundary — that is the
-    # ordering the policy states: before repository code runs.
-    boundary_positions = {
-        position
-        for position, step in steps
-        if any(
-            re.search(
-                rf"(?m)^[ \t]+(?:-[ \t]+)?(?:id|name):[ \t]*{re.escape(other)}[ \t]*$",
-                step,
-            )
-            for other in BOUNDARY_STEPS
-        )
+    if not positions:
+        return [f"job {job_name} has no step named {name}, which {description}"]
+    boundary = {
+        index
+        for index, step in enumerate(steps)
+        if step.get("id") in BOUNDARY_STEPS or step.get("name") in BOUNDARY_STEPS
     }
-    ordinary = [position for position, _ in steps if position not in boundary_positions]
-    if ordinary and index > min(ordinary):
+    ordinary = [index for index in range(len(steps)) if index not in boundary]
+    failures = []
+    if ordinary and positions[0] > min(ordinary):
         failures.append(
-            f"job {job} runs {min(ordinary) + 1} ordinary step(s) before {name}; "
-            f"the step that {description} must precede repository code"
+            f"job {job_name} runs an ordinary step before {name}; the step that "
+            f"{description} must precede repository code"
         )
-    run = re.search(r"(?m)^[ \t]+run:[ \t]*(?:\|[ \t]*\n[ \t]+)?(.+)$", text)
-    command = run.group(1).strip() if run else ""
-    if not command or NO_OP_RUN.fullmatch(command):
+    command = steps[positions[0]].get("run", "")
+    if not isinstance(command, str) or NO_OP_RUN.fullmatch(command.strip()):
         failures.append(
-            f"job {job} declares {name} as the no-op {command!r}; a step that "
+            f"job {job_name} declares {name} as the no-op {command!r}; a step that "
             f"{description} has to do something"
         )
     return failures
@@ -1415,90 +1538,114 @@ def require_armed_workflow(root: Path) -> None:
     """Check the mechanisms the armed enforcement workflow must carry.
 
     The workflow's own header says `check-readiness` fails closed when these
-    are missing, so this is where that promise is kept.
-
-    The checks read the file with its comments stripped and are scoped to the
-    job they are about. A whole-file substring search would be satisfied by
-    this very file's header, which names the publisher environment and
-    `contents: write` while explaining that neither exists yet; a whole-file
-    pattern search would be satisfied by any other job's `needs:`. A check that
-    its own documentation passes is not a check.
+    are missing, so this is where that promise is kept. Everything below reads
+    the parsed workflow rather than its text: a substring search was satisfied
+    by this file's own header comment, and a pattern search was satisfied by
+    the wrong job or by a mapping whose keys happened to be in another order.
     """
 
     require_regular_file(root, ARMED_WORKFLOW, "the enforcement workflow")
     text = YAML_COMMENT.sub("", (root / ARMED_WORKFLOW).read_text(encoding="utf-8"))
     jobs = workflow_jobs(text)
+    require(jobs, f"{ARMED_WORKFLOW} declares no jobs")
     publishers = [
-        name for name, block in jobs.items() if PUBLISHER_ENVIRONMENT.search(block)
+        name
+        for name, job in jobs.items()
+        if environment_name(job) == "tenkz-release-publisher"
     ]
     require(
-        publishers,
-        f"armed policy but {ARMED_WORKFLOW} has no job whose `environment:` is "
-        f"tenkz-release-publisher",
-    )
-    require(
         len(publishers) == 1,
-        f"{ARMED_WORKFLOW} has {len(publishers)} publisher jobs {publishers}; the "
-        f"campaign has one terminal publisher",
+        f"{ARMED_WORKFLOW} has {len(publishers)} job(s) whose `environment:` is "
+        f"tenkz-release-publisher; the campaign has one terminal publisher",
     )
     publisher_name = publishers[0]
     publisher = jobs[publisher_name]
+    failures: list[str] = []
 
-    failures = [
-        f"the {publisher_name} job lacks {description}"
-        for pattern, description in PUBLISHER_REQUIREMENTS
-        if pattern.search(publisher) is None
-    ]
-
-    # The publisher's `needs:` must name a real validation job, not merely be
-    # nonempty: an arbitrary dependency lets the job that writes the release
-    # tag start without the gate it exists behind.
-    needs = PUBLISHER_NEEDS.search(publisher)
-    if needs is None:
+    # The publisher's permission set is exact. `contents: write` alongside
+    # another capability is more authority than the contract grants the one job
+    # that holds the signing key.
+    permissions = publisher.get("permissions")
+    if permissions != {"contents": "write"}:
         failures.append(
-            f"the {publisher_name} job has no `needs:`, so nothing orders it "
-            f"after post-merge validation"
+            f"the {publisher_name} job declares permissions {permissions!r}; the "
+            f"contract grants it exactly {{'contents': 'write'}}"
+        )
+
+    if not mentions_secret(publisher):
+        failures.append(
+            f"the {publisher_name} job does not reference the "
+            f"TENKZ_FINAL_TAG_SIGNING_KEY secret"
+        )
+
+    # The secret has one consumer. A validation job that also reads it puts the
+    # private key in reach of repository-running code.
+    others = sorted(
+        name
+        for name, job in jobs.items()
+        if name != publisher_name and mentions_secret(job)
+    )
+    if others:
+        failures.append(
+            f"job(s) {others} also reference the signing secret; the publisher is "
+            f"its sole consumer"
+        )
+
+    # No action and no container: the publisher runs closed inline commands, so
+    # neither third-party action code nor a container image enters the job that
+    # receives the key.
+    actions = [step for step in steps_of(publisher) if "uses" in step]
+    if actions:
+        failures.append(
+            f"the {publisher_name} job carries {len(actions)} `uses:` step(s); the "
+            f"secret-bearing publisher runs closed inline commands only"
+        )
+    if publisher.get("container"):
+        failures.append(
+            f"the {publisher_name} job declares a container; the secret-bearing "
+            f"publisher has no container image"
+        )
+
+    # The boundary steps belong to whichever job runs repository code. The job
+    # carrying both is the designated validation job, and the publisher must
+    # name it, so tag creation cannot begin before that validation succeeds.
+    validation = [
+        name
+        for name, job in jobs.items()
+        if name != publisher_name
+        and all(
+            any(
+                step.get("id") == marker or step.get("name") == marker
+                for step in steps_of(job)
+            )
+            for marker in BOUNDARY_STEPS
+        )
+    ]
+    for name, job in jobs.items():
+        if name == publisher_name:
+            continue
+        for marker in BOUNDARY_STEPS:
+            failures.extend(boundary_failures(marker, name, job))
+    if not validation:
+        failures.append(
+            "no job carries both boundary steps, so there is no validation job "
+            "for the publisher to depend on"
         )
     else:
-        named = {
-            token.strip(" []'\"")
-            for token in needs.group(1).replace(",", " ").split()
-            if token.strip(" []'\"")
-        }
-        unknown = sorted(named - set(jobs))
+        needs = needs_of(publisher)
+        unknown = sorted(needs - set(jobs))
         if unknown:
             failures.append(
                 f"the {publisher_name} job needs {unknown}, which is not a job in "
                 f"this workflow"
             )
-        elif named <= {publisher_name} or not named:
+        elif not needs & set(validation):
             failures.append(
-                f"the {publisher_name} job needs only itself, so no validation "
-                f"gates it"
+                f"the {publisher_name} job needs {sorted(needs) or 'nothing'}; it "
+                f"must depend on the validation job {validation}"
             )
 
-    # The secret-bearing job runs one closed inline command. An action — even a
-    # SHA-pinned one — puts third-party code in the job that reads the signing
-    # key, which is the one job the contract keeps free of it.
-    actions = ANY_ACTION.findall(publisher)
-    if actions:
-        failures.append(
-            f"the {publisher_name} job carries {len(actions)} `uses:` step(s); the "
-            f"secret-bearing publisher runs a closed inline command only"
-        )
-
-    for name in BOUNDARY_STEPS:
-        hosts = [job for job, block in jobs.items() if job != publisher_name]
-        if not hosts:
-            failures.append(f"no job could carry the {name} step")
-            continue
-        for job in hosts:
-            failures.extend(boundary_step_failures(name, jobs[job], job))
-
-    require(
-        not failures,
-        f"armed policy but {ARMED_WORKFLOW}: {'; '.join(failures)}",
-    )
+    require(not failures, f"armed policy but {ARMED_WORKFLOW}: {'; '.join(failures)}")
     mutable = sorted(set(MUTABLE_ACTION.findall(text)))
     require(
         not mutable,

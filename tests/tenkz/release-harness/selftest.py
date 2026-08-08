@@ -312,6 +312,49 @@ PROBES = (
     "orphan-timeout",
 )
 
+def guard_armed_workflow_flow_action(workspace: Path) -> None:
+    """A flow mapping naming an action must be caught whatever its key order."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}",
+        "      - {name: fetch, uses: actions/checkout@"
+        "d23441a48e516b6c34aea4fa41551a30e30af803}\n"
+        "      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_extra_permission(workspace: Path) -> None:
+    """The publisher's permission set is exact, not a lower bound."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      contents: write", "      contents: write\n      id-token: write"
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_container(workspace: Path) -> None:
+    """A containerized publisher puts image code in the secret-bearing job."""
+
+    body = ARMED_WORKFLOW.replace(
+        "    environment: tenkz-release-publisher",
+        "    container: alpine@sha256:"
+        "0000000000000000000000000000000000000000000000000000000000000000\n"
+        "    environment: tenkz-release-publisher",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_secret_elsewhere(workspace: Path) -> None:
+    """The signing secret has one consumer."""
+
+    body = ARMED_WORKFLOW.replace(
+        "      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+        "      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}",
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
 GUARDS = {
     "nested-symlink": guard_nested_symlink,
     "symlinked-program-path": guard_symlinked_program_path,
@@ -325,6 +368,10 @@ GUARDS = {
     "armed-workflow-no-op-denial": guard_armed_workflow_no_op_denial,
     "armed-workflow-late-denial": guard_armed_workflow_late_denial,
     "armed-workflow-no-filesystem-isolation": guard_armed_workflow_no_filesystem_isolation,
+    "armed-workflow-flow-action": guard_armed_workflow_flow_action,
+    "armed-workflow-extra-permission": guard_armed_workflow_extra_permission,
+    "armed-workflow-container": guard_armed_workflow_container,
+    "armed-workflow-secret-elsewhere": guard_armed_workflow_secret_elsewhere,
     "armed-workflow-short-environment": guard_armed_workflow_short_environment,
     "armed-workflow-block-environment": guard_armed_workflow_block_environment,
 }
