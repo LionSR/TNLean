@@ -4,12 +4,12 @@
 % Invariants: language loads before model, shared services, and dialect renderers.
 % Next stage: tenkz-language.code.tex validates and registers public syntax.
 %
-% The two sub-languages: the contraction grid (tenkz, \tnpic) and
-% lattice-region schematics (tenkzlattice, with the tenkzplanes
-% double-layer preset).  Fusion trees (\tntree) are standalone
-% structured atoms drawn by tenkz-tree.code.tex.  Commutative diagrams
-% belong to tikz-cd, outside this language, and an irregular typed
-% graph is addressed kernel records (the tenkzcd and tenkzfree
+% The one sub-language: the contraction grid (tenkz, \tnpic).  Fusion
+% trees (\tntree) are standalone structured atoms drawn by
+% tenkz-tree.code.tex.  Commutative diagrams belong to tikz-cd, outside
+% this language; an irregular typed graph is addressed kernel records;
+% a spatial lattice is a kernel frame with lattice=/planes sugar or a
+% declared basis (the tenkzcd, tenkzfree, tenkzlattice, and tenkzplanes
 % dialects are tombstones).  0.6 speaks one key vocabulary across the
 % tiers: frame=, the side-policy alphabet (west=/east=), and the
 % contraction cell-sets (open=/trace=).
@@ -40,7 +40,6 @@
 \input{tenkz-frame.code.tex}
 \input{tenkz-grid.code.tex}
 \input{tenkz-tree.code.tex}
-\input{tenkz-lattice.code.tex}
 % The render stage loads LAST: its ink primitives are created here, so any
 % earlier stage that references them fails at load (the lockout).
 \input{tenkz-render.code.tex}

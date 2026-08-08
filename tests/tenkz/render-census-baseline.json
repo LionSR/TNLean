@@ -7,7 +7,6 @@
       "tenkz-grid.code.tex": 7,
       "tenkz-kernel.code.tex": 0,
       "tenkz-language.code.tex": 0,
-      "tenkz-lattice.code.tex": 0,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
       "tenkz-render.code.tex": 0,
@@ -22,15 +21,14 @@
       "tenkz-frame.code.tex": 0,
       "tenkz-geometry.code.tex": 0,
       "tenkz-grid.code.tex": 9,
-      "tenkz-kernel.code.tex": 0,
+      "tenkz-kernel.code.tex": 3,
       "tenkz-language.code.tex": 0,
-      "tenkz-lattice.code.tex": 5,
       "tenkz-metric.code.tex": 0,
       "tenkz-model.code.tex": 0,
       "tenkz-render.code.tex": 0,
       "tenkz-string.code.tex": 0,
       "tenkz-tree.code.tex": 0
     },
-    "total": 15
+    "total": 13
   }
 }

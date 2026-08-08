@@ -6,10 +6,6 @@
 
 \__tenkz_language_registry_environment:nnnn {tenkz}{grid}{picture}
   {Regular one-dimensional contractions.}
-\__tenkz_language_registry_environment:nnnn {tenkzlattice}{lattice}{picture}
-  {Spatial lattices, sheets, and regions.}
-\__tenkz_language_registry_environment:nnnn {tenkzplanes}{lattice-preset}{picture}
-  {Compatibility preset for a two-sheet lattice.}
 
 \__tenkz_language_registry_command:nnnnn {tn}{atoms}{object}
   {\tn[object keys]{label}}{An atom changes the object record, so it is a command rather than a key.}
@@ -27,12 +23,6 @@
   {\tnspan[mode]{length}{label}}{A span annotates several resolved atoms.}
 \__tenkz_language_registry_command:nnnnn {tncut}{regions-annotations}{connection}
   {\tncut[keys]{label}}{A cut annotates one resolved connection.}
-\__tenkz_language_registry_command:nnnnn {tnregion}{regions-annotations}{picture}
-  {\tnregion[keys]{members}}{A region creates a semantic enclosure record.}
-\__tenkz_language_registry_command:nnnnn {tnedge}{connections-closures}{connection}
-  {\tnedge[keys]{endpoints}}{A lattice edge creates or changes one connection.}
-\__tenkz_language_registry_command:nnnnn {tnsite}{atoms}{object}
-  {\tnsite[keys]{cell}}{A lattice site creates or changes one atom.}
 \__tenkz_language_registry_command:nnnnn {tntree}{atoms}{object}
   {\tntree[keys]{word}}{A fusion tree is one structured atom.}
 \__tenkz_language_registry_command:nnnnn {tnpic}{composition}{picture}
@@ -60,12 +50,6 @@
   {A zero or noninteger length is a hard error.}
 \__tenkz_language_registry_example:nnn {tncut}{tex/tenkz/examples/api/tncut.tex}
   {An unknown cut option is a hard error.}
-\__tenkz_language_registry_example:nnn {tnregion}{tex/tenkz/examples/api/tnregion.tex}
-  {A region outside lattice scope is a hard error.}
-\__tenkz_language_registry_example:nnn {tnedge}{tex/tenkz/examples/api/tnedge.tex}
-  {Malformed or out-of-range endpoints are hard errors.}
-\__tenkz_language_registry_example:nnn {tnsite}{tex/tenkz/examples/api/tnsite.tex}
-  {An out-of-range cell is a hard error.}
 \__tenkz_language_registry_example:nnn {tntree}{tex/tenkz/examples/api/tntree.tex}
   {An unbalanced fusion word is a hard error.}
 \__tenkz_language_registry_example:nnn {tnpic}{tex/tenkz/examples/api/tnpic.tex}
@@ -85,11 +69,9 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{rows}{row-list}{wire}{kernel}{Grid row topology.}
 \__tenkz_language_registry_key:nnnnnn {picture}{physical}{physical-policy}{none}{sugar(rows)}{One-row physical topology.}
 \__tenkz_language_registry_key:nnnnnn {picture}{sandwich}{flag}{false}{sugar(rows={ket,bra})}{Ket-over-bra row preset.}
-\__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west=, east=, north=, south=)}{All-side boundary policy.}
+\__tenkz_language_registry_key:nnnnnn {picture}{boundary}{enum(open|none|periodic)}{open}{sugar(west=, east=)}{Side boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{west}{side-policy}{inherit}{kernel}{West boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{east}{side-policy}{inherit}{kernel}{East boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{north}{side-policy}{inherit}{kernel}{North boundary policy.}
-\__tenkz_language_registry_key:nnnnnn {picture}{south}{side-policy}{inherit}{kernel}{South boundary policy.}
 \__tenkz_language_registry_key:nnnnnn {picture}{frame}{frame-spec}{flat}{kernel}{Picture coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {group}{frame}{frame-spec}{flat}{kernel}{Group-local coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {picture}{trace style}{enum(racetrack|hooks)}{racetrack}{kernel}{Closure rendering policy.}
@@ -101,18 +83,6 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{bond label}{math-and-range}{empty}{kernel}{Connection annotation.}
 \__tenkz_language_registry_key:nnnnnn {picture}{align}{row}{midline}{kernel}{Math-axis row.}
 \__tenkz_language_registry_key:nnnnnn {picture}{layer sep}{number}{1}{kernel}{Layer separation factor.}
-\__tenkz_language_registry_key:nnnnnn {picture}{cols}{positive-integer}{3}{kernel}{Lattice column count.}
-\__tenkz_language_registry_key:nnnnnn {picture}{site}{enum(dot|none)}{dot}{kernel}{Default lattice-site ink.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheets}{positive-integer|role-list}{1}{kernel}{Lattice sheet topology.}
-\__tenkz_language_registry_key:nnnnnn {picture}{outer legs}{enum(both|top|bottom|none)}{none}{kernel}{Sheet exterior ports.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheet sep}{number}{1}{kernel}{Projected sheet separation.}
-\__tenkz_language_registry_key:nnnnnn {picture}{pairing}{flag}{false}{kernel}{Pair adjacent lattice sheets.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane lean}{compass}{east}{kernel}{Projected-plane lean.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane rise}{length}{metric}{escape}{Projected row rise.}
-\__tenkz_language_registry_key:nnnnnn {picture}{plane slant}{length}{metric}{escape}{Projected column slant.}
-\__tenkz_language_registry_key:nnnnnn {picture}{col vector}{dimension-pair}{frame}{escape}{Expert projected column basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{row vector}{dimension-pair}{frame}{escape}{Expert projected row basis.}
-\__tenkz_language_registry_key:nnnnnn {picture}{sheet vector}{dimension-pair}{frame}{escape}{Expert projected sheet basis.}
 \__tenkz_language_registry_key:nnnnnn {object}{dot}{flag}{policy}{kernel}{Dot silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{box}{flag}{policy}{kernel}{Box silhouette.}
 \__tenkz_language_registry_key:nnnnnn {object}{pill}{flag}{policy}{kernel}{Pill silhouette.}
@@ -131,25 +101,11 @@
 \__tenkz_language_registry_key:nnnnnn {object}{physical}{physical-policy}{empty}{kernel}{Cell physical-port faces.}
 \__tenkz_language_registry_key:nnnnnn {object}{role}{semantic-role}{empty}{kernel}{Semantic theme role.}
 \__tenkz_language_registry_key:nnnnnn {object}{species}{declared-name}{empty}{kernel}{Semantic species.}
-\__tenkz_language_registry_key:nnnnnn {object}{label}{math}{empty}{kernel}{Lattice-site label.}
 \__tenkz_language_registry_key:nnnnnn {object}{label pos}{angle}{auto}{kernel}{Object label policy.}
-\__tenkz_language_registry_key:nnnnnn {object}{size}{size-class}{m}{kernel}{Compatibility-object metric size class.}
 \__tenkz_language_registry_key:nnnnnn {object}{label shift}{dimension-pair}{zero}{escape}{Object label adjustment.}
 \__tenkz_language_registry_key:nnnnnn {object}{frame}{frame-spec}{flat}{kernel}{Atom-local coordinate frame.}
 \__tenkz_language_registry_key:nnnnnn {object}{no legs}{flag}{false}{kernel}{Suppress physical ports.}
-\__tenkz_language_registry_key:nnnnnn {object}{removed}{flag}{false}{kernel}{Remove a lattice atom.}
 \__tenkz_language_registry_key:nnnnnn {object}{tree style}{enum(wire|ribbon)}{wire}{kernel}{Fusion-tree strand style.}
-\__tenkz_language_registry_key:nnnnnn {connection}{label}{math}{empty}{kernel}{Connection label.}
-\__tenkz_language_registry_key:nnnnnn {connection}{role}{semantic-role}{empty}{kernel}{Connection theme role.}
-\__tenkz_language_registry_key:nnnnnn {connection}{distinguished}{flag}{false}{kernel}{Distinguished lattice edge.}
-\__tenkz_language_registry_key:nnnnnn {connection}{none}{flag}{false}{kernel}{Suppress a lattice edge.}
-\__tenkz_language_registry_key:nnnnnn {connection}{style}{style-name}{empty}{kernel}{Named lattice-edge style.}
-\__tenkz_language_registry_key:nnnnnn {region}{slot}{semantic-slot}{selected}{kernel}{Region semantic slot.}
-\__tenkz_language_registry_key:nnnnnn {region}{outline}{flag}{false}{kernel}{Outline-only region.}
-\__tenkz_language_registry_key:nnnnnn {region}{inset}{number}{0}{kernel}{Nested-region inset.}
-\__tenkz_language_registry_key:nnnnnn {region}{label}{math}{empty}{kernel}{Region label.}
-\__tenkz_language_registry_key:nnnnnn {region}{label pos}{angle}{auto}{kernel}{Region label policy.}
-\__tenkz_language_registry_key:nnnnnn {region}{name}{identifier}{generated}{kernel}{Addressable region name.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{brace above}{flag}{false}{kernel}{Brace annotation above a span.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{brace below}{flag}{false}{kernel}{Brace annotation below a span.}
 \__tenkz_language_registry_key:nnnnnn {annotation}{box}{flag}{false}{kernel}{Boxed span annotation.}
@@ -163,8 +119,6 @@
 \__tenkz_language_registry_key:nnnnnn {picture}{chain axis}{compass}{east}{alias(frame; sunset=1.0)}{Legacy frame spelling.}
 \__tenkz_language_registry_key:nnnnnn {object}{legs at}{slot-list}{center}{alias(up at,down at; sunset=1.0)}{Legacy shared physical ports.}
 \__tenkz_language_registry_key:nnnnnn {object}{rows}{positive-integer}{2}{alias(span; sunset=1.0)}{Legacy fusion span.}
-\__tenkz_language_registry_key:nnnnnn {picture}{boundary legs}{flag}{false}{alias(boundary=open; sunset=1.0)}{Legacy lattice boundary spelling.}
-\__tenkz_language_registry_key:nnnnnn {region}{label at}{angle}{auto}{alias(label pos; sunset=1.0)}{Legacy region-label spelling.}
 
 % ---- the 1.0 kernel surface (LANGUAGE-1.0.md; the S4 swap retires the
 % ---- 0.7 rows above in favor of these) ----

@@ -15,24 +15,21 @@ Layout & Use it when & Recognition test \\
 \midrule
 \tnenv{tenkz} & The picture is a regular one-dimensional contraction. &
 Rows are layers, columns are sites, and neighbouring cells contract. \\
-\addlinespace
-\tnenv{tenkzlattice} & The picture is a lattice, sheet, window, or measured
-region. & Sites have row-column addresses and regions are cell sets. \\
 \bottomrule
 \end{tabularx}
 }
 \medskip
 
-\tnenv{tenkzplanes} is the ket-over-bra preset of
-\tnenv{tenkzlattice}; it is not a separate genre.  Use it when every site of
-two matching sheets is the datum.  \tncmd{tnpic} is the inline composition
-wrapper for one \tnenv{tenkz} body; it is not a fifth layout.
+\tncmd{tnpic} is the inline composition wrapper for one \tnenv{tenkz}
+body; it is not a second layout.  A spatial lattice, sheet, window, or
+measured region is a kernel picture: a frame with \tnkey{lattice=} or
+\tnkey{planes} sugar, or a declared basis.
 
 \paragraph{Do not change layouts for style.}
-The genres share the metric, atom skins, semantic roles, labels, and
-connection policy.  A chain does not become a coordinate drawing because it
-is vertical.  Choose the layout once, then declare policy through its public
-keys.
+The layout shares the metric, atom skins, semantic roles, labels, and
+connection policy across every picture.  A chain does not become a
+coordinate drawing because it is vertical.  Choose the layout once, then
+declare policy through its public keys.
 
 \paragraph{When none fits.}
 State the missing mathematical class before adding syntax.  A new key needs

@@ -102,9 +102,6 @@ def test_ink_environment_owner() -> None:
     log = "\n".join(
         (
             "picture|id=1|lang=grid",
-            "picture|id=4|lang=lattice",
-            "picture|id=5|lang=lattice",
-            "surface|picture=5|name=tenkzplanes",
             "picture|id=k1|lang=kernel",
             "tree|picture=0|id=1|style=wire|leaves=2|vertices=1|"
             "topology=(1,2)|role=none|species=none",
@@ -115,8 +112,6 @@ def test_ink_environment_owner() -> None:
     used = rendered_ink_environment_families(parsed)
     expected = {
         "tenkz",
-        "tenkzlattice",
-        "tenkzplanes",
         "kernel",
     }
     if used != expected:
@@ -149,10 +144,8 @@ def test_ink_environment_owner() -> None:
                 "compiled Ink owner metadata was foreign to its picture dialect: "
                 + "; ".join(finding.msg for finding in mismatches)
             )
-    ink = (
-        "Canonical tenkz, tenkzlattice, tenkzplanes, "
-        "and kernel."
-    )
+    ink = "Canonical tenkz and kernel."
+
     if ink_environment_problems("good", ink, used):
         raise AssertionError("accurate compiled Ink owners were rejected")
     tree_only = parse_log(
@@ -164,9 +157,9 @@ def test_ink_environment_owner() -> None:
     if tree_used != {"tenkz"}:
         raise AssertionError(f"standalone tree lost its tenkz owner: {tree_used!r}")
     mismatch = ink_environment_problems(
-        "wrong", "Canonical tenkzlattice environment.", {"kernel"}
+        "wrong", "Canonical tenkz environment.", {"kernel"}
     )
-    if not any("Ink names tenkzlattice" in problem for problem in mismatch):
+    if not any("Ink names tenkz" in problem for problem in mismatch):
         raise AssertionError("stale Ink family was accepted")
     if not any("uses kernel but Ink does not name" in problem for problem in mismatch):
         raise AssertionError("compiled kernel owner was omitted")
@@ -279,7 +272,6 @@ def test_rmp_dimension_ownership() -> None:
   \tnwire{a}{(1mm,2mm)}
   \tnwire[via={(3mm,4mm)}]{a}{5mm,6mm}
 \end{tenkz}
-\begin{tenkzlattice}[sheet vector={0mm,2.5mm}]\end{tenkzlattice}
 """
     occurrences = scan_case_dimensions(Path("synthetic.tex"), synthetic)
     synthetic_counts = Counter(
@@ -288,7 +280,6 @@ def test_rmp_dimension_ownership() -> None:
     if synthetic_counts != Counter(
         {
             DimensionOwner.METRIC: 1,
-            DimensionOwner.FRAME: 2,
             DimensionOwner.ROUTE: 6,
         }
     ):
@@ -328,12 +319,6 @@ def test_rmp_dimension_ownership() -> None:
         )
     command_arity_cases = (
         (
-            r"\tnedge{(3mm,0)}{\hspace{6mm}}",
-            DimensionOwner.ROUTE,
-            ("3mm",),
-            "6mm",
-        ),
-        (
             r"\tnwire[name={\rule{11pt}{12pt}}]{0mm,0}{13mm,0}"
             r"{\hspace{14mm}}",
             DimensionOwner.ROUTE,
@@ -345,13 +330,6 @@ def test_rmp_dimension_ownership() -> None:
             DimensionOwner.ROUTE,
             (),
             "22mm",
-        ),
-        (
-            r"\tnedge[label={\rule{31pt}{32pt}}]{(1,1)-(1,2)}"
-            r"{\hspace{33mm}}",
-            DimensionOwner.ROUTE,
-            ("31pt", "32pt"),
-            "33mm",
         ),
         (
             r"\tnpic{\rule{61pt}{62pt}}{\hspace{63mm}}",
@@ -426,7 +404,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     nested_picture_option = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tnpic[pitch=5mm]{x}}",
+        r"\tnwire{\tnpic[pitch=5mm]{x}}",
     )
     if (
         len(nested_picture_option) != 1
@@ -441,37 +419,6 @@ def test_rmp_dimension_ownership() -> None:
     )
     if len(tree_option) != 1 or tree_option[0].owner is not DimensionOwner.METRIC:
         raise AssertionError(f"a tntree metric option lost ownership: {tree_option!r}")
-    physical_picture_options = scan_case_dimensions(
-        Path("synthetic.tex"),
-        r"\begin{tenkzlattice}[col vector={9mm,10mm},"
-        r"row vector={11mm,12mm},sheet vector={13mm,14mm}]"
-        r"\end{tenkzlattice}",
-    )
-    expected_picture_owners = tuple(
-        (literal, DimensionOwner.FRAME) for literal in (
-            "9mm", "10mm", "11mm", "12mm", "13mm", "14mm"
-        )
-    )
-    if tuple(
-        (occurrence.literal, occurrence.owner)
-        for occurrence in physical_picture_options
-    ) != expected_picture_owners:
-        raise AssertionError(
-            "public physical picture keys lost their semantic owners: "
-            f"{physical_picture_options!r}"
-        )
-    ratio_keys = scan_case_dimensions(
-        Path("synthetic.tex"),
-        r"\begin{tenkzlattice}[plane rise=15mm,plane slant=16mm]"
-        r"\end{tenkzlattice}",
-    )
-    if len(ratio_keys) != 2 or any(
-        occurrence.owner is not None for occurrence in ratio_keys
-    ):
-        raise AssertionError(
-            "dimensionless plane-ratio keys gained physical ownership: "
-            f"{ratio_keys!r}"
-        )
     direct_label_shift = scan_case_dimensions(
         Path("synthetic.tex"), r"\tn*[label shift={17mm,18mm}]{A}"
     )
@@ -497,9 +444,9 @@ def test_rmp_dimension_ownership() -> None:
                 f"{object_label_shift!r}"
             )
     for malformed_source, expected_count in (
-        (r"\tnsite[label shift={23mm,24mm}]{(1,1)}", 2),
+        (r"\tnfoo[label shift={23mm,24mm}]{(1,1)}", 2),
         (r"\tndots[label shift={25mm,26mm}]", 2),
-        (r"\tnedge{\tn[pitch=27mm]{A}}", 1),
+        (r"\tnwire{\tn[pitch=27mm]{A}}", 1),
         (r"\tnpic[label shift={28mm,29mm}]{\tn{A}}", 2),
         (r"\tnset{radius=30mm}", 1),
         (r"\begin{tenkz}[radius=31mm]\end{tenkz}", 1),
@@ -516,7 +463,7 @@ def test_rmp_dimension_ownership() -> None:
             )
     unclosed_public_argument = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{x \tnpic[pitch=41mm \tnwire{x}{(42mm,0)} "
+        r"\tnwire{x \tnpic[pitch=41mm \tnwire{x}{(42mm,0)} "
         r"\rule{43mm}{44mm}}",
     )
     if len(unclosed_public_argument) != 4 or any(
@@ -564,7 +511,7 @@ def test_rmp_dimension_ownership() -> None:
     owner_contexts = (
         (
             "route",
-            r"\tnedge{",
+            r"\tnwire{",
             "}",
             r"\tnwire{x}{(DIM,0)}",
         ),
@@ -572,7 +519,7 @@ def test_rmp_dimension_ownership() -> None:
             "layout",
             r"\tnwire{x}{(0,0)}{",
             "}",
-            r"\tnedge{DIM}",
+            r"\tnwire{DIM}",
         ),
     )
     malformed_kinds = ("unclosed name", "unclosed option", "missing end")
@@ -667,7 +614,7 @@ def test_rmp_dimension_ownership() -> None:
                 )
         inert_begin = definition_template.replace("TOKEN", r"\begin{tenkz}")
         source = (
-            r"\tnedge{\begin{tenkz}\end{tenkz}"
+            r"\tnwire{\begin{tenkz}\end{tenkz}"
             + inert_begin
             + r"\rule{83mm}{84mm}}"
         )
@@ -686,7 +633,7 @@ def test_rmp_dimension_ownership() -> None:
         )
         occurrences = scan_case_dimensions(
             Path("synthetic.tex"),
-            inert_owners + r"\tnedge{\tnwire{x}{(205mm,0)}}",
+            inert_owners + r"\tnwire{\tnwire{x}{(205mm,0)}}",
         )
         if [
             (occurrence.literal, occurrence.owner)
@@ -705,7 +652,7 @@ def test_rmp_dimension_ownership() -> None:
         )
         occurrences = scan_case_dimensions(
             Path("synthetic.tex"),
-            inert_unclosed_option + r"\tnedge{207mm]}",
+            inert_unclosed_option + r"\tnwire{207mm]}",
         )
         if [
             (occurrence.literal, occurrence.owner)
@@ -776,7 +723,7 @@ def test_rmp_dimension_ownership() -> None:
     for outer_kind, outer_template in replacement_templates:
         for inner_kind, inner_definition in nested_definition_tokens:
             source = outer_template.replace("TOKEN", inner_definition) + (
-                r"\tnedge{\begin{tenkz}\rule{85mm}{86mm}\end{tenkz}}"
+                r"\tnwire{\begin{tenkz}\rule{85mm}{86mm}\end{tenkz}}"
             )
             replacement_spans = _macro_replacement_spans(strip_comments(source))
             active_environment = source.index(r"\begin{tenkz}")
@@ -849,7 +796,7 @@ def test_rmp_dimension_ownership() -> None:
                 f"definition={definition_kind}, spans={environment_spans!r}"
             )
     for primitive in ("def", "gdef", "edef", "xdef"):
-        source = rf"\tnedge{{\{primitive}\x 206mm}}"
+        source = rf"\tnwire{{\{primitive}\x 206mm}}"
         definition_start = source.index(rf"\{primitive}")
         replacement_spans = _macro_replacement_spans(strip_comments(source))
         if replacement_spans != [(definition_start, len(source))]:
@@ -869,7 +816,7 @@ def test_rmp_dimension_ownership() -> None:
                 f"primitive={primitive}, occurrences={brace_less_primitive!r}"
             )
         unmatched_source = (
-            rf"\tnedge{{{{\{primitive}\x}}"
+            rf"\tnwire{{{{\{primitive}\x}}"
             r"\tnwire{x}{(207mm,0)}}}"
         )
         definition_start = unmatched_source.index(rf"\{primitive}")
@@ -901,10 +848,10 @@ def test_rmp_dimension_ownership() -> None:
             f"{unclosed_environment_end!r}"
         )
     for case_variant in (
-        r"\tnedge{x \tnpic[PITCH=34mm]{y}}",
-        r"\tnedge{x \tn[Label Shift={35mm,36mm}]{A}}",
-        r"\tnedge{x \begin{tenkzlattice}[COL VECTOR={37mm,38mm}]"
-        r"\end{tenkzlattice}}",
+        r"\tnwire{x \tnpic[PITCH=34mm]{y}}",
+        r"\tnwire{x \tn[Label Shift={35mm,36mm}]{A}}",
+        r"\tnwire{x \begin{tenkz}[PITCH={37mm,38mm}]"
+        r"\end{tenkz}}",
     ):
         case_sensitive_options = scan_case_dimensions(
             Path("synthetic.tex"), case_variant
@@ -920,7 +867,7 @@ def test_rmp_dimension_ownership() -> None:
             )
     nested_setup = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{x \tnset{pitch=39mm,radius=40mm}}",
+        r"\tnwire{x \tnset{pitch=39mm,radius=40mm}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -941,8 +888,6 @@ def test_rmp_dimension_ownership() -> None:
         ("tnghost", r"\tnghost{41mm}"),
         ("tnspan", r"\tnspan{2}{\rule{41mm}{42mm}}"),
         ("tncut", r"\tncut{\rule{41mm}{42mm}}"),
-        ("tnregion", r"\tnregion[label={\rule{41mm}{42mm}}]{x}"),
-        ("tnsite", r"\tnsite[label={\rule{41mm}{42mm}}]{(1,1)}"),
         ("tntree", r"\tntree{{\rule{41mm}{42mm}}}"),
         ("tnpic", r"\tnpic{\rule{41mm}{42mm}}"),
         ("tnset", r"\tnset{radius=41mm}"),
@@ -956,7 +901,7 @@ def test_rmp_dimension_ownership() -> None:
     for command, container in neutral_command_containers:
         nested_container = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnedge{{{container}}}",
+            rf"\tnwire{{{container}}}",
         )
         if not nested_container or any(
             occurrence.owner is not None for occurrence in nested_container
@@ -968,7 +913,7 @@ def test_rmp_dimension_ownership() -> None:
     declared_compatibility_atom = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnmyatom}{skin=dot}"
-        r"\tnedge{\tnmyatom[label shift={52mm,53mm}]"
+        r"\tnwire{\tnmyatom[label shift={52mm,53mm}]"
         r"{\rule{54mm}{55mm}}}",
     )
     if [
@@ -986,7 +931,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     unbraced_compatibility_atom = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tndeclareatom\tnbareatom{skin=dot}"
+        r"\tnwire{\tndeclareatom\tnbareatom{skin=dot}"
         r"\tnbareatom[label shift={86mm,87mm}]{A}}",
     )
     if len(unbraced_compatibility_atom) != 2 or any(
@@ -1000,7 +945,7 @@ def test_rmp_dimension_ownership() -> None:
     unbraced_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo\tnwire{x}{(121mm,0)}}",
+        r"\tnwire{\tnfoo\tnwire{x}{(121mm,0)}}",
     )
     if len(unbraced_dynamic_label) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1017,7 +962,7 @@ def test_rmp_dimension_ownership() -> None:
         consumed_dynamic_option = scan_case_dimensions(
             Path("synthetic.tex"),
             r"\tndeclareatom{\tnfoo}{skin=dot}"
-            rf"\tnedge{{\tnfoo{consumed_label}}}",
+            rf"\tnwire{{\tnfoo{consumed_label}}}",
         )
         if len(consumed_dynamic_option) != 1 or any(
             occurrence.owner is not DimensionOwner.ROUTE
@@ -1035,7 +980,7 @@ def test_rmp_dimension_ownership() -> None:
         active_dynamic_option_sibling = scan_case_dimensions(
             Path("synthetic.tex"),
             r"\tndeclareatom{\tnfoo}{skin=dot}"
-            rf"\tnedge{{\tnfoo A{active_sibling}}}",
+            rf"\tnwire{{\tnfoo A{active_sibling}}}",
         )
         if len(active_dynamic_option_sibling) != 1 or any(
             occurrence.owner is not expected_owner
@@ -1049,7 +994,7 @@ def test_rmp_dimension_ownership() -> None:
     consumed_dynamic_environment = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo\begin{tenkz}129mm\end{tenkz}}",
+        r"\tnwire{\tnfoo\begin{tenkz}129mm\end{tenkz}}",
     )
     if len(consumed_dynamic_environment) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1062,7 +1007,7 @@ def test_rmp_dimension_ownership() -> None:
     active_dynamic_environment_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\begin{tenkz}130mm\end{tenkz}}",
+        r"\tnwire{\tnfoo A\begin{tenkz}130mm\end{tenkz}}",
     )
     if len(active_dynamic_environment_sibling) != 1 or any(
         occurrence.owner is not None
@@ -1075,7 +1020,7 @@ def test_rmp_dimension_ownership() -> None:
     definition_in_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\def\x}\tnwire{x}{(131mm,0)}}",
+        r"\tnwire{\tnfoo{\def\x}\tnwire{x}{(131mm,0)}}",
     )
     if len(definition_in_dynamic_label) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1088,7 +1033,7 @@ def test_rmp_dimension_ownership() -> None:
     active_definition_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\def\x{\tnwire{x}{(132mm,0)}}"
+        r"\tnwire{\tnfoo A\def\x{\tnwire{x}{(132mm,0)}}"
         r"\tnwire{x}{(133mm,0)}}",
     )
     if [
@@ -1105,7 +1050,7 @@ def test_rmp_dimension_ownership() -> None:
     inert_dynamic_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\def\x{\tndeclareatom{\tnfoo}{skin=dot}}"
-        r"\tnedge{\tnfoo{\tnwire{x}{(201mm,0)}}}",
+        r"\tnwire{\tnfoo{\tnwire{x}{(201mm,0)}}}",
     )
     if len(inert_dynamic_declaration) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1118,7 +1063,7 @@ def test_rmp_dimension_ownership() -> None:
     active_dynamic_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\tnwire{x}{(202mm,0)}}}",
+        r"\tnwire{\tnfoo{\tnwire{x}{(202mm,0)}}}",
     )
     if len(active_dynamic_declaration) != 1 or any(
         occurrence.owner is not None
@@ -1131,7 +1076,7 @@ def test_rmp_dimension_ownership() -> None:
     declaration_in_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\tndeclareatom{\tnbar}{skin=dot}}"
+        r"\tnwire{\tnfoo{\tndeclareatom{\tnbar}{skin=dot}}"
         r"\tnbar{\tnwire{x}{(203mm,0)}}}",
     )
     if len(declaration_in_dynamic_label) != 1 or any(
@@ -1145,7 +1090,7 @@ def test_rmp_dimension_ownership() -> None:
     active_declaration_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\tndeclareatom{\tnbar}{skin=dot}"
+        r"\tnwire{\tnfoo A\tndeclareatom{\tnbar}{skin=dot}"
         r"\tnbar{\tnwire{x}{(204mm,0)}}}",
     )
     if len(active_declaration_sibling) != 1 or any(
@@ -1161,7 +1106,7 @@ def test_rmp_dimension_ownership() -> None:
         r"\def\holder{\tndeclareatom{\foo}{skin=dot}}"
         r"\tndeclareatom{\bar}{skin=dot}"
         r"\foo\bar{\def\x}\tndeclareatom{\baz}{skin=dot}"
-        r"\tnedge{\baz\tnwire{x}{(205mm,0)}}",
+        r"\tnwire{\baz\tnwire{x}{(205mm,0)}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -1188,7 +1133,7 @@ def test_rmp_dimension_ownership() -> None:
     braced_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{A}{\tnwire{x}{(124mm,0)}}}",
+        r"\tnwire{\tnfoo{A}{\tnwire{x}{(124mm,0)}}}",
     )
     if len(braced_dynamic_sibling) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1201,7 +1146,7 @@ def test_rmp_dimension_ownership() -> None:
     later_dynamic_sibling = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo A\tnwire{x}{(122mm,0)}}",
+        r"\tnwire{\tnfoo A\tnwire{x}{(122mm,0)}}",
     )
     if len(later_dynamic_sibling) != 1 or any(
         occurrence.owner is not DimensionOwner.ROUTE
@@ -1214,7 +1159,7 @@ def test_rmp_dimension_ownership() -> None:
     grouped_dynamic_label = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclareatom{\tnfoo}{skin=dot}"
-        r"\tnedge{\tnfoo{\tnwire{x}{(123mm,0)}}}",
+        r"\tnwire{\tnfoo{\tnwire{x}{(123mm,0)}}}",
     )
     if len(grouped_dynamic_label) != 1 or any(
         occurrence.owner is not None for occurrence in grouped_dynamic_label
@@ -1233,7 +1178,7 @@ def test_rmp_dimension_ownership() -> None:
         catcode_atom = scan_case_dimensions(
             Path("synthetic.tex"),
             rf"{catcode_prelude}\tndeclareatom{{\{atom_name}}}{{skin=dot}}"
-            rf"\tnedge{{\{atom_name}[label shift={{99mm,100mm}}]"
+            rf"\tnwire{{\{atom_name}[label shift={{99mm,100mm}}]"
             r"{101mm}{102mm}}",
         )
         if [
@@ -1246,7 +1191,7 @@ def test_rmp_dimension_ownership() -> None:
     declared_kernel_atom = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\tndeclare{atom}{tnkernelatom}{skin=dot}"
-        r"\tnedge{\tnkernelatom[label shift={56mm,57mm}]"
+        r"\tnwire{\tnkernelatom[label shift={56mm,57mm}]"
         r"{\rule{58mm}{59mm}}}",
     )
     if len(declared_kernel_atom) != 4 or any(
@@ -1264,7 +1209,7 @@ def test_rmp_dimension_ownership() -> None:
     ):
         rejected_compatibility_atom = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnedge{{\tndeclareatom{{\tninvalidatom}}"
+            rf"\tnwire{{\tndeclareatom{{\tninvalidatom}}"
             rf"{{{invalid_descriptor}}}"
             r"\tninvalidatom[label shift={80mm,81mm}]{A}}",
         )
@@ -1285,7 +1230,7 @@ def test_rmp_dimension_ownership() -> None:
             Path("synthetic.tex"),
             rf"\{opener}1\tndeclareatom{{\tngroupatom}}{{skin=dot}}"
             rf"\tngroupatom[label shift={{82mm,83mm}}]{{A}}\{closer}2"
-            r"\tnedge{\tngroupatom[label shift={84mm,85mm}]{B}}",
+            r"\tnwire{\tngroupatom[label shift={84mm,85mm}]{B}}",
         )
         if [
             (occurrence.literal, occurrence.owner)
@@ -1302,7 +1247,7 @@ def test_rmp_dimension_ownership() -> None:
             )
     atom_before_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tnlateatom[label shift={60mm,61mm}]{A}}"
+        r"\tnwire{\tnlateatom[label shift={60mm,61mm}]{A}}"
         r"\tndeclareatom{\tnlateatom}{skin=dot}",
     )
     if len(atom_before_declaration) != 2 or any(
@@ -1327,7 +1272,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     colliding_latex_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tndeclareatom\rule{skin=dot}"
+        r"\tnwire{\tndeclareatom\rule{skin=dot}"
         r"\rule[label shift={88mm,89mm}]{95mm}{96mm}}",
     )
     if [
@@ -1340,7 +1285,7 @@ def test_rmp_dimension_ownership() -> None:
     source_local_collision = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\newcommand{\tnoccupied}[2][]{A}"
-        r"\tnedge{\tndeclareatom{\tnoccupied}{skin=dot}"
+        r"\tnwire{\tndeclareatom{\tnoccupied}{skin=dot}"
         r"\tnoccupied[label shift={93mm,94mm}]{97mm}{98mm}}",
     )
     if [
@@ -1353,7 +1298,7 @@ def test_rmp_dimension_ownership() -> None:
     repeated_optional_collision = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\NewDocumentCommand{\tnoccupied}{O{} O{} m}{}"
-        r"\tnedge{\tndeclareatom{\tnoccupied}{skin=dot}"
+        r"\tnwire{\tndeclareatom{\tnoccupied}{skin=dot}"
         r"\tnoccupied[][103mm]{104mm}}",
     )
     if len(repeated_optional_collision) != 2 or any(
@@ -1366,7 +1311,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     colliding_parbox = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tndeclareatom{\parbox}{skin=dot}"
+        r"\tnwire{\tndeclareatom{\parbox}{skin=dot}"
         r"\parbox[c][105mm][c]{106mm}{x}}",
     )
     if len(colliding_parbox) != 2 or any(
@@ -1379,7 +1324,7 @@ def test_rmp_dimension_ownership() -> None:
         )
     scoped_atom_declaration = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{{\tndeclareatom{\tnlocalatom}{skin=dot}"
+        r"\tnwire{{\tndeclareatom{\tnlocalatom}{skin=dot}"
         r"\tnlocalatom[label shift={64mm,65mm}]{A}}"
         r"\tnlocalatom[label shift={66mm,67mm}]{B}}",
     )
@@ -1447,7 +1392,7 @@ def test_rmp_dimension_ownership() -> None:
         Path("synthetic.tex"),
         r"\begin{tenkzeq}\tndeclareatom{\tnenvatom}{skin=dot}"
         r"\tnenvatom[label shift={76mm,77mm}]{A}\end{tenkzeq}"
-        r"\tnedge{\tnenvatom[label shift={78mm,79mm}]{B}}",
+        r"\tnwire{\tnenvatom[label shift={78mm,79mm}]{B}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -1466,7 +1411,7 @@ def test_rmp_dimension_ownership() -> None:
         csname_declared_atom = scan_case_dimensions(
             Path("synthetic.tex"),
             rf"\tndeclare{{atom}}{{{kernel_name}}}{{skin=dot}}"
-            r"\tnedge{\tnspaced[label shift={107mm,108mm}]{A}}",
+            r"\tnwire{\tnspaced[label shift={107mm,108mm}]{A}}",
         )
         if len(csname_declared_atom) != 2 or any(
             occurrence.owner is not None for occurrence in csname_declared_atom
@@ -1477,13 +1422,11 @@ def test_rmp_dimension_ownership() -> None:
             )
     for environment in (
         "tenkz",
-        "tenkzlattice",
-        "tenkzplanes",
         "tenkzeq",
     ):
         nested_environment = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnedge{{\begin{{{environment}}}"
+            rf"\tnwire{{\begin{{{environment}}}"
             rf"\rule{{43mm}}{{44mm}}\end{{{environment}}}}}",
         )
         if len(nested_environment) != 2 or any(
@@ -1493,25 +1436,9 @@ def test_rmp_dimension_ownership() -> None:
                 f"a nested {environment} environment inherited route ownership: "
                 f"{nested_environment!r}"
             )
-    unbraced_pgf_pair = scan_case_dimensions(
-        Path("synthetic.tex"),
-        r"\tnedge{\begin{tenkzlattice}[col vector=(45mm,46mm)]"
-        r"\end{tenkzlattice}}",
-    )
-    if [
-        (occurrence.literal, occurrence.owner)
-        for occurrence in unbraced_pgf_pair
-    ] != [
-        ("45mm", DimensionOwner.FRAME),
-        ("46mm", None),
-    ]:
-        raise AssertionError(
-            "parentheses incorrectly protected a PGF option comma: "
-            f"{unbraced_pgf_pair!r}"
-        )
     unbraced_pgf_brackets = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tn[label shift=[47mm,48mm]]{A}}",
+        r"\tnwire{\tn[label shift=[47mm,48mm]]{A}}",
     )
     if [
         (occurrence.literal, occurrence.owner)
@@ -1524,7 +1451,7 @@ def test_rmp_dimension_ownership() -> None:
             "brackets incorrectly protected a PGF option comma: "
             f"{unbraced_pgf_brackets!r}"
         )
-    spliced_environment_source = r"""\tnedge{
+    spliced_environment_source = r"""\tnwire{
   \begin{ten% splice an environment name
 kz}[pitch=49mm]\rule{50mm}{51mm}\end{ten% splice the closing name
 kz}}
@@ -1544,10 +1471,10 @@ kz}}
             "a comment-spliced environment lost its neutral boundary: "
             f"{spliced_environment!r}"
         )
-    for spaced_name in ("ten kz", "tenkz lattice", " tenkz", "ten\nkz"):
+    for spaced_name in ("ten kz", "te nkz", " tenkz", "ten\nkz"):
         spaced_environment = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnedge{{\begin{{{spaced_name}}}[pitch=90mm]"
+            rf"\tnwire{{\begin{{{spaced_name}}}[pitch=90mm]"
             rf"\rule{{91mm}}{{92mm}}\end{{{spaced_name}}}}}",
         )
         if [
@@ -1569,7 +1496,7 @@ kz}}
     ):
         expanded_space_environment = scan_case_dimensions(
             Path("synthetic.tex"),
-            rf"\tnedge{{\begin{{{expanded_space_name}}}[pitch=109mm]"
+            rf"\tnwire{{\begin{{{expanded_space_name}}}[pitch=109mm]"
             rf"\rule{{110mm}}{{111mm}}\end{{{expanded_space_name}}}}}",
         )
         if [
@@ -1588,7 +1515,7 @@ kz}}
     macro_environment = scan_case_dimensions(
         Path("synthetic.tex"),
         r"\def\tenname{tenkz}"
-        r"\tnedge{\begin{\tenname}[pitch=112mm]"
+        r"\tnwire{\begin{\tenname}[pitch=112mm]"
         r"\rule{113mm}{114mm}\end{\tenname}}",
     )
     if len(macro_environment) != 3 or any(
@@ -1600,7 +1527,7 @@ kz}}
         )
     nested_label_shift = scan_case_dimensions(
         Path("synthetic.tex"),
-        r"\tnedge{\tnpic[inline]{"
+        r"\tnwire{\tnpic[inline]{"
         r"\tn*[label shift={19mm,20mm}]{A}}}",
     )
     if len(nested_label_shift) != 2 or any(
@@ -1611,7 +1538,7 @@ kz}}
             "a nested object label shift inherited route ownership: "
             f"{nested_label_shift!r}"
         )
-    spliced_picture_key_source = """\\tnedge{
+    spliced_picture_key_source = """\\tnwire{
   \\tnpic[pit% splice the public option key
 ch=21mm,inline]{\\tn{A}}}
 """
@@ -1682,7 +1609,7 @@ ch=21mm,inline]{\\tn{A}}}
         "% \\tnwire_extra 47mm\n",
         "% \\tnwire@extra 48mm\n",
         "% \\tnwire:extra 49mm\n",
-        "% \\tnedgeλ 50mm\n",
+        "% \\tnwireλ 50mm\n",
     ):
         comment_dimensions = scan_case_dimensions(
             Path("synthetic.tex"), extended_comment_command
@@ -1849,11 +1776,6 @@ ch=21mm,inline]{\\tn{A}}}
     )
     for source, phrase in (
         (r"\begin{tenkz}[pitch=1mm]\end{tenkz}", "metric dimensions increased"),
-        (
-            r"\begin{tenkzlattice}[sheet vector={0mm,1mm}]"
-            r"\end{tenkzlattice}",
-            "projection/frame dimensions increased",
-        ),
         (r"\tnwire{a}{1mm}", "route/string dimensions increased to 1"),
     ):
         mutation = scan_case_dimensions(Path("synthetic.tex"), source)
@@ -1861,6 +1783,13 @@ ch=21mm,inline]{\\tn{A}}}
             dataclasses.replace(report, cases=(*report.cases, *mutation)),
             phrase,
         )
+    extra_frame = dataclasses.replace(
+        extra_layout, owner=DimensionOwner.FRAME
+    )
+    _expect_dimension_failure(
+        dataclasses.replace(report, cases=(*report.cases, extra_frame)),
+        "projection/frame dimensions increased",
+    )
     unknown = scan_case_dimensions(Path("synthetic.tex"), r"\foo{1 in}")
     _expect_dimension_failure(
         dataclasses.replace(report, cases=(*report.cases, *unknown)),

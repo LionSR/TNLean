@@ -20,7 +20,6 @@ boundary = "The 4x4 sheet has open virtual legs on every side and one open physi
 source = "paper TN-Review-main.tex line 250; author source ImagesReview Section II/ImagesReview Section II.tex lines 237-257"
 capabilities = ["kernel", "plane-frame", "typed-ports", "regions"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_pairs.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "237-257"
 placements = [{ order = 1, line = 250, asset = "fig2_fig2-pepe_sec2fig1.pdf" }]
@@ -53,7 +52,6 @@ boundary = "The state has five open physical legs; the marginal traces the last 
 source = "paper TN-Review-main.tex line 327; author source ImagesReview Section II/ImagesReview Section II.tex lines 269-286"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/rmpfig2_test.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "269-286"
 placements = [{ order = 3, line = 327, asset = "fig2_fig2-pepe_sec2fig4aMPS.pdf" }]
@@ -70,7 +68,6 @@ boundary = "The state sheet is open; on the doubled sheet the kept sites' ket-br
 source = "paper TN-Review-main.tex line 331; author source ImagesReview Section II/ImagesReview Section II.tex lines 287-304"
 capabilities = ["kernel", "plane-frame"]
 paper_context_only = false
-fixture = "tests/tenkz/rmpfig2_test.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "287-304"
 placements = [{ order = 4, line = 331, asset = "fig2_fig2-pepe_secfig4bPEPS.pdf" }]
@@ -103,7 +100,6 @@ boundary = "All sheet-edge virtual legs and both physical operator legs per site
 source = "paper TN-Review-main.tex line 363; author source ImagesReview Section II/ImagesReview Section II.tex lines 311-314"
 capabilities = ["kernel", "plane-frame"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_pepo5.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "311-314"
 placements = [{ order = 6, line = 363, asset = "fig2_fig2-pepe_sec2fig5PEPO.pdf" }]
@@ -205,7 +201,6 @@ boundary = "Four upper and four lower legs are open; the alternating turns leave
 source = "paper TN-Review-main.tex line 391; author source ImagesReview Section II/ImagesReview Section II.tex lines 465-472"
 capabilities = ["kernel", "typed-ports", "skin-pairings"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_wrap9a.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "465-472"
 placements = [{ order = 12, line = 391, asset = "fig2_fig2-pepe_sec2fig9a.pdf" }]
@@ -492,7 +487,6 @@ boundary = "The sheet exterior is open; the reduced pair seals outer virtual sid
 source = "paper TN-Review-main.tex line 806; author source ImagesReview Section II/ImagesReview Section II.tex lines 597-617"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_lassoC.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "597-617"
 placements = [{ order = 29, line = 806, asset = "fig2_fig2-pepe_Figboundary-theoryc.pdf" }]
@@ -594,7 +588,6 @@ boundary = "Each PEPS factor keeps its exterior legs open; the final bead closes
 source = "paper TN-Review-main.tex line 1025; author source ImagesReview Section II/ImagesReview Section II.tex lines 742-800"
 capabilities = ["kernel", "plane-frame", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_rgfp4.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "742-800"
 placements = [{ order = 35, line = 1025, asset = "fig2_fig2-pepe_newfig12.pdf" }]
@@ -611,7 +604,6 @@ boundary = "Both arrows preserve the open outer virtual and physical boundary si
 source = "paper TN-Review-main.tex line 1056; author source ImagesReview Section II/ImagesReview Section II.tex lines 801-831"
 capabilities = ["kernel", "plane-frame"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_renorm13.tex"
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "801-831"
 placements = [{ order = 36, line = 1056, asset = "fig2_fig2-pepe_newfig13.pdf" }]
@@ -911,7 +903,6 @@ boundary = "Three virtual legs and one physical leg remain open."
 source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 357-358"
 capabilities = ["kernel", "four-leg-atom", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "357-358"
 placements = [{ order = 55, line = 1449, asset = "fig3_fig3-pepe_ghzdown.pdf" }]
@@ -928,7 +919,6 @@ boundary = "Exactly two virtual bond ends remain open."
 source = "paper TN-Review-main.tex line 1449; author source ImagesReview Section III/ImagesReview Section III.tex lines 359-360"
 capabilities = ["kernel", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "359-360"
 placements = [{ order = 56, line = 1449, asset = "fig3_fig3-pepe_Hmatrix.pdf" }]
@@ -1078,7 +1068,6 @@ boundary = "The 3x3 PEPS patch retains all twelve perimeter virtual openings and
 source = "paper TN-Review-main.tex line 1645; author source ImagesReview Section III/ImagesReview Section III.tex lines 644-660"
 capabilities = ["kernel", "plane-frame", "typed-ports", "affine-addresses", "path-string", "marked-endpoints"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_condensanyon.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "644-660"
 placements = [{ order = 65, line = 1645, asset = "fig3_fig3-pepe_Anyonia.pdf" }]
@@ -1111,7 +1100,6 @@ boundary = "Four lattice legs, one physical leg, and one h-string tail are open.
 source = "paper TN-Review-main.tex line 1655; author source ImagesReview Section III/ImagesReview Section III.tex lines 688-703"
 capabilities = ["kernel", "marked-region", "open-string"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_condensanyon.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "688-703"
 placements = [{ order = 67, line = 1655, asset = "fig3_fig3-pepe_DyonfoGinj.pdf" }]
@@ -1144,7 +1132,6 @@ boundary = "Two horizontal rails and the diagonal transversal are open; the thre
 source = "paper TN-Review-main.tex line 1668; author source ImagesReview Section III/ImagesReview Section III.tex lines 739-772"
 capabilities = ["kernel", "plane-frame", "multi-strand-braid", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "739-772"
 placements = [{ order = 69, line = 1668, asset = "fig3_fig3-pepe_Rtensorpart1.pdf" }]
@@ -1161,7 +1148,6 @@ boundary = "Two horizontal rails and the diagonal transversal are open; three re
 source = "paper TN-Review-main.tex line 1669; author source ImagesReview Section III/ImagesReview Section III.tex lines 773-798"
 capabilities = ["kernel", "plane-frame", "braid-resolver", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "773-798"
 placements = [{ order = 70, line = 1669, asset = "fig3_fig3-pepe_Rtensorpart2.pdf" }]
@@ -1178,7 +1164,6 @@ boundary = "Eight lattice legs run past the patch and four site legs leave the p
 source = "paper TN-Review-main.tex line 1675; author source ImagesReview Section III/ImagesReview Section III.tex lines 799-825"
 capabilities = ["kernel", "plane-frame", "multi-strand-braid", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "799-825"
 placements = [{ order = 71, line = 1675, asset = "fig3_fig3-pepe_Braidpat1.pdf" }]
@@ -1195,7 +1180,6 @@ boundary = "Four lattice legs and six string endpoints are open."
 source = "paper TN-Review-main.tex line 1676; author source ImagesReview Section III/ImagesReview Section III.tex lines 826-862"
 capabilities = ["kernel", "multi-strand-braid", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "826-862"
 placements = [{ order = 72, line = 1676, asset = "fig3_fig3-pepe_braidpart2.pdf" }]
@@ -1212,7 +1196,6 @@ boundary = "Eight lattice legs run past the patch and four site legs leave the p
 source = "paper TN-Review-main.tex line 1679; author source ImagesReview Section III/ImagesReview Section III.tex lines 863-899"
 capabilities = ["kernel", "plane-frame", "braid-resolver", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "863-899"
 placements = [{ order = 73, line = 1679, asset = "fig3_fig3-pepe_braidpart3.pdf" }]
@@ -1229,7 +1212,6 @@ boundary = "Two horizontal rails and the diagonal transversal are open; red cont
 source = "paper TN-Review-main.tex line 1680; author source ImagesReview Section III/ImagesReview Section III.tex lines 900-924"
 capabilities = ["kernel", "plane-frame", "braid-resolver", "crossing-order"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_braidpat1.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "900-924"
 placements = [{ order = 74, line = 1680, asset = "fig3_fig3-pepe_braidpart4.pdf" }]
@@ -1246,7 +1228,6 @@ boundary = "Both 6x4 sheets retain every perimeter virtual stub; all 24 inter-sh
 source = "paper TN-Review-main.tex line 1697; author source ImagesReview Section III/ImagesReview Section III.tex lines 925-953"
 capabilities = ["kernel", "plane-frame", "double-layer-string", "marked-endpoints"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_condensanyon.tex"
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "925-953"
 placements = [{ order = 75, line = 1697, asset = "fig3_fig3-pepe_condensanyon.pdf" }]
@@ -1280,7 +1261,6 @@ boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 2006; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 55-70"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_gs2d.tex"
 author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
 author_lines = "55-70"
 placements = [{ order = 77, line = 2006, asset = "fig4_fig4-pepe_GS2D.pdf" }]
@@ -1467,7 +1447,6 @@ boundary = "The inner window cuts the retained patch's virtual bonds; all three 
 source = "paper TN-Review-main.tex line 2083; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 173-190 (inverting and growing back L)"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_lhsrhs6.tex"
 author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
 author_lines = "173-190"
 placements = [{ order = 88, line = 2083, asset = "fig4_fig4-pepe_LHS6.pdf" }]
@@ -1484,7 +1463,6 @@ boundary = "The inner window cuts the retained patch's virtual bonds; all three 
 source = "paper TN-Review-main.tex line 2084; author source ImagesReview Section IV/ImagesReview Section IV.tex lines 156-172 (inverting and growing back R)"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_lhsrhs6.tex"
 author_source = "ImagesReview Section IV/ImagesReview Section IV.tex"
 author_lines = "156-172"
 placements = [{ order = 89, line = 2084, asset = "fig4_fig4-pepe_RHS6.pdf" }]
@@ -1501,7 +1479,6 @@ boundary = "Resolved by the public environment; open indices remain explicit."
 source = "paper TN-Review-main.tex line 2456; paper-context-only; no author drawing source"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_tcprimal_v2.tex"
 placements = [{ order = 90, line = 2456, asset = "fig_app_tc-primal" }]
 
 [[target]]
@@ -1516,7 +1493,6 @@ boundary = "The four retained mid-side sites expose the plaquette-colour legs."
 source = "paper TN-Review-main.tex line 2462; paper-context-only; no author drawing source"
 capabilities = ["kernel", "plane-frame", "regions", "typed-ports"]
 paper_context_only = true
-fixture = "tests/tenkz/t2_tcdual_v2.tex"
 placements = [{ order = 91, line = 2462, asset = "fig_app_tc-dual" }]
 
 [[target]]
@@ -1531,7 +1507,6 @@ boundary = "The displayed patch has open virtual bonds on every outer lattice si
 source = "paper TN-Review-main.tex line 2511; author source ImagesReview Section V/ImagesReview Section V.tex lines 147-219"
 capabilities = ["kernel", "regions", "semantic-roles"]
 paper_context_only = false
-fixture = "tests/tenkz/t2_czx.tex"
 author_source = "ImagesReview Section V/ImagesReview Section V.tex"
 author_lines = "147-219"
 placements = [{ order = 93, line = 2511, asset = "fig_app_CZXstate.pdf" }]
@@ -1584,7 +1559,6 @@ paper_context_only = false
 author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "744-753"
 placements = []
-fixture = "tests/tenkz/t2_rgfp4.tex"
 
 [[target]]
 id = "rmp-workbench-ii-positive-mpo-old"
@@ -1714,7 +1688,6 @@ author_source = "ImagesReview Section II/ImagesReview Section II.tex"
 author_lines = "801-831"
 extraction_override = "shared archival sheet; fine-graining is panel (b) of the historical composite"
 placements = []
-fixture = "tests/tenkz/t2_renorm13.tex"
 
 [[target]]
 id = "rmp-workbench-ii-historical-composite"
@@ -2137,7 +2110,6 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "622-630"
 placements = []
-fixture = "tests/tenkz/t2_rgfp4.tex"
 
 [[target]]
 id = "rmp-workbench-iii-peps-renormalization-two"
@@ -2154,4 +2126,3 @@ paper_context_only = false
 author_source = "ImagesReview Section III/ImagesReview Section III.tex"
 author_lines = "631-643"
 placements = []
-fixture = "tests/tenkz/t2_rgfp4.tex"

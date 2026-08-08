@@ -250,9 +250,9 @@
   /tenkz/grid/layer~sep/.code={\cs_set:Npe \tenkz@r@layersep
       { \fp_eval:n { \tenkz@r@layersep * (#1) } }},
   % trace = {<cellset>} / open = {<cellset>}: the contraction policy of
-  % interface SEGMENTS, addressed by the one cell-set algebra every tier
-  % shares (terms (i, c) | (i1-i2, c1-c2) combined with +/-, top-level
-  % commas as unions, resolved by the lattice resolver).  The first slot
+  % interface SEGMENTS, addressed by the shared cell-set algebra of
+  % tenkz-core (terms (i, c) | (i1-i2, c1-c2) combined with +/-,
+  % top-level commas as unions).  The first slot
   % names an INTERFACE: pairing interfaces are numbered top-down per
   % adjacent facing pair, and the word `physical' names the word's
   % physical self-interface, its topology resolved from row-type data,
@@ -353,7 +353,7 @@
 % Shared-resolver plumbing: the value is str-normalized, the word
 % `physical' maps to the sentinel interface 0 (so the resolver sees
 % pure integer tuples), top-level commas rewrite to unions through the
-% lattice scanner, and the lattice resolver produces "i-c" membership
+% shared scanner, and the shared resolver produces "i-c" membership
 % keys.  Keys at interface 0 feed the physical-word column lists; keys
 % at interface i >= 1 feed the interface-segment specs, mapped to rows
 % at render time (interface numbering needs the row-type table).
@@ -381,10 +381,9 @@
         \tl_replace_all:Nnn \exp_not:N \l__tenkz_csexpr_tl
           { \tl_to_str:n {physical} } { 0 }
       }
-    % the shared cell-set machinery lives in tenkz-core (this tier loads
-    % before the lattice and may not reach into its private state).  Grid
-    % terms are (interface, columns) pairs with no third coordinate, so
-    % the default third coordinate is pinned to 0 (the `physical'
+    % the shared cell-set machinery lives in tenkz-core.  Grid terms
+    % are (interface, columns) pairs with no third coordinate, so the
+    % default third coordinate is pinned to 0 (the `physical'
     % sentinel) and the sheet guard -- whose alphabet is not this tier's
     % -- is switched off around the resolve.
     \tl_clear:N \l_tenkz_cs_scan_tl

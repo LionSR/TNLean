@@ -81,7 +81,7 @@ missing capability all fail, while recorded gaps merely appear in the book's
 histogram.  A judged verdict pins the SHA-256 of its case; editing the case
 stales exactly that verdict.
 
-The ordinary 205-fixture corpus keeps its existing default interface:
+The ordinary 154-fixture corpus keeps its existing default interface:
 
 ```sh
 scripts/tenkz_corpus.sh
@@ -375,7 +375,7 @@ and next-stage contract.
 
 These are normative ownership rules for new code and migration destinations,
 not a claim that every historical path has moved.  The live `tenkz-core`,
-`tenkz-grid`, `tenkz-tree`, and `tenkz-lattice` files still combine
+`tenkz-grid`, and `tenkz-tree` files still combine
 some parsing, geometry, rendering, and event work; direct `\draw`
 or `\node` emission in those files remains migration debt.
 
