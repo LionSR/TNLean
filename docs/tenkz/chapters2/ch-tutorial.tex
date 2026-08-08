@@ -28,10 +28,11 @@ open ink is declared content, so the picture exposes exactly the indices its
 atoms state.
 
 Beamer reads a frame's body before typesetting it, so a chained picture
-reaches the environment with its \verb|&| already an ordinary alignment tab.
-The environment reads its body as captured tokens and gives that tab the
-site advance itself, so a chained picture compiles in a plain frame; no
-\texttt{[fragile]} marking is needed.
+reaches the environment with its \verb|&| already an ordinary alignment tab,
+and an equation reaches the wrapper with its relation glyph already an
+ordinary character.  Both read their bodies as captured tokens and find the
+tab and the glyph there themselves, so a chained picture and an equation
+each compile in a plain frame; no \texttt{[fragile]} marking is needed.
 
 \subsection{A channel sandwich}
 

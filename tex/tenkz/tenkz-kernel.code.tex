@@ -303,11 +303,12 @@
 \cs_new_protected:Npn \__tenkz_kernel_keys:nn #1#2
   {
     \tl_set:Nn \l__tenkz_kernel_opts_tl {#2}
-    % A panel option list under tenkzeq is tokenized while `=` is the
-    % active relation glyph; rewrite each one to the plain equals the
-    % keyval and value parsers read.
+    % A panel option list standing in an equation body was swept by the
+    % relation rewrite, so its key separators arrive wearing the relation
+    % marker; give each one back the plain equals the keyval and value
+    % parsers read.
     \bool_if:NT \l__tenkz_kernel_ineq_bool
-      { \regex_replace_all:nnN { = } { = } \l__tenkz_kernel_opts_tl }
+      { \__tenkz_kernel_revert_rels:N \l__tenkz_kernel_opts_tl }
     % Parameterized alphabet words remain one key value even though their
     % canonical spelling contains `=`.
     \regex_replace_all:nnN
@@ -17262,9 +17263,10 @@
   { \__tenkz_kernel_tn:nn {#1} {#2} \ignorespaces }
 
 % tenkzeq: the audit scope.  Panels accumulate their signatures globally
-% (each panel closes its own group); the active `=` records one relation
-% per glyph together with its place in the panel sequence, and the audit
-% compares the composite sides those places delimit.
+% (each panel closes its own group); each relation glyph standing in the
+% equation body records one relation together with its place in the panel
+% sequence, and the audit compares the composite sides those places
+% delimit.  The body capture below finds the glyphs.
 \cs_new_protected:Npn \__tenkz_kernel_eq_begin:n #1
   {
     \bool_if:NT \l__tenkz_kernel_ineq_bool
@@ -17311,8 +17313,6 @@
     \prop_set_eq:NN
       \l__tenkz_kernel_eq_policy_prop \l__tenkz_kernel_stage_prop
     \prop_clear:N \l__tenkz_kernel_stage_prop
-    \char_set_catcode_active:N \=
-    \char_set_active_eq:NN \= \__tenkz_kernel_eq_rel:
   }
 \cs_new_protected:Npn \__tenkz_kernel_eq_rel:
   {
@@ -17835,6 +17835,13 @@
       {
         \group_align_safe_end:
         \__tenkz_kernel_rewrite_tabs:N \l__tenkz_kernel_body_tl
+        % A picture standing in an equation is a term, not the equation's
+        % own token stream: the `=' of a label or a mark's prose is that
+        % panel's mathematics and no joiner of the equation around it.  The
+        % equation's sweep cannot see the picture boundary, so the picture
+        % announces it here and gives its whole body the plain equals back.
+        \bool_if:NT \l__tenkz_kernel_ineq_bool
+          { \__tenkz_kernel_revert_rels:N \l__tenkz_kernel_body_tl }
         % the break between the option list and the first declaration
         \ignorespaces
         \tl_use:N \l__tenkz_kernel_body_tl
@@ -17845,8 +17852,58 @@
         \__tenkz_kernel_env_body:w
       }
   }
+% The equation body is captured on the same terms, and for the same reason.
+% A relation glyph is an ordinary `=' the author writes between panels, and
+% the wrapper used to recognize it by making `=' active at equation entry.
+% That arrangement fails wherever the body was tokenized earlier: in a plain
+% beamer frame every `=' reaches the wrapper as a frozen other-character, no
+% relation is recorded, and the audit reports an equation with panels and no
+% relations.  The capture reads the glyphs out of the tokens instead, so the
+% reading no longer depends on when the body was tokenized.
+%
+% The sweep reaches every brace level, because the active glyph did: a
+% joiner is the mathematics standing between two terms (LANGUAGE-1.0
+% section 7), and the braces of an \mbox or an \ensuremath around that
+% mathematics are its spelling, not its depth.
+%
+% What separates a joiner from an equals that merely looks like one is the
+% term boundary, not the brace: the equation may read its own token stream,
+% and everything a picture consumes belongs to that picture.  The catcode
+% arrangement drew this boundary with \char_set_catcode_other:N \= at
+% picture entry, which put the picture's body back on the plain equals; the
+% capture draws the same boundary by reverting the marker on the two token
+% ranges a picture owns.  Its option list is read before the picture's own
+% capture starts, and \__tenkz_kernel_keys:nn reverts it there; its body is
+% reverted by \__tenkz_kernel_env_body:w above.  So $A=B$ on a panel's label
+% is that panel's mathematics, while a=b in an \mbox between two panels is
+% the equation's, and each is read as what it is.
+\tl_new:N \l__tenkz_kernel_eq_body_tl
+\cs_new_protected:Npn \__tenkz_kernel_rewrite_rels:N #1
+  { \regex_replace_all:nnN { = } { \c{__tenkz_kernel_eq_rel:} } #1 }
+\cs_new_protected:Npn \__tenkz_kernel_revert_rels:N #1
+  { \regex_replace_all:nnN { \c{__tenkz_kernel_eq_rel:} } { = } #1 }
 \NewDocumentCommand \__tenkz_kernel_eq_env_begin_cmd { O{} }
-  { \__tenkz_kernel_eq_begin:n {#1} }
+  {
+    \__tenkz_kernel_eq_begin:n {#1}
+    \tl_clear:N \l__tenkz_kernel_eq_body_tl
+    \group_align_safe_begin:
+    \__tenkz_kernel_eq_body:w
+  }
+\cs_new_protected:Npn \__tenkz_kernel_eq_body:w #1 \end #2
+  {
+    \tl_put_right:Nn \l__tenkz_kernel_eq_body_tl {#1}
+    \str_if_eq:nnTF {#2} {tenkzeq}
+      {
+        \group_align_safe_end:
+        \__tenkz_kernel_rewrite_rels:N \l__tenkz_kernel_eq_body_tl
+        \tl_use:N \l__tenkz_kernel_eq_body_tl
+        \end {tenkzeq}
+      }
+      {
+        \tl_put_right:Nn \l__tenkz_kernel_eq_body_tl { \end {#2} }
+        \__tenkz_kernel_eq_body:w
+      }
+  }
 \NewDocumentCommand \tenkzkernel { }
   {
     \cs_set_eq:NN \tenkz \__tenkz_kernel_env_begin_cmd
