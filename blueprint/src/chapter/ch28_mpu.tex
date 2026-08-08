@@ -102,25 +102,13 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{definition}[Matrix product unitary tensor]
     \label{def:mpu}
     \lean{MPOTensor.IsMPU}
+    \lean{MPOTensor.IsMPU.mpo_mem_unitaryGroup}
     \leanok
+    \uses{def:mpo_family}
     The tensor $\mathcal U$ generates matrix product unitaries if $U^{(N)}$ is
     unitary for every integer $N>1$.  This is the matrix product unitary
     condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
-
-\begin{lemma}[Unitarity at a fixed system size]
-    \label{lem:mpu_unitary_fixed_size}
-    \lean{MPOTensor.IsMPU.mpo_mem_unitaryGroup}
-    \leanok
-    \uses{def:mpu}
-    If $\mathcal U$ generates matrix product unitaries and $N>1$, then
-    $U^{(N)}$ is unitary.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:mpu}
-    This is the defining condition at system size $N$.
-\end{proof}
 
 \begin{lemma}[First matrix product unitarity equation]
     \label{lem:mpu_mul_adjoint}
@@ -134,7 +122,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_unitary_fixed_size}
+    \uses{def:mpu}
     Expand the unitary-group condition for $U^{(N)}$.
 \end{proof}
 
@@ -152,7 +140,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_unitary_fixed_size}
+    \uses{def:mpu}
     Use the equivalent left-multiplied characterization of a unitary matrix.
 \end{proof}
 
@@ -170,7 +158,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_unitary_fixed_size, thm:mpu_reindex_unitary,
+    \uses{def:mpu, thm:mpu_reindex_unitary,
         thm:mpdo_closed_chain_physical_blocking}
     At system size $N$, closing the blocked tensor gives $U^{(NL)}$, up to the
     canonical bijection between $N$ blocked configurations and $NL$ unblocked
