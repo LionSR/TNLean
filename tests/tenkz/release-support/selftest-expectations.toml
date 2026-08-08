@@ -114,3 +114,27 @@ message = "rejected without following it"
 [[guard]]
 id = "special-entry"
 message = "neither a regular file nor a directory"
+
+# The armed enforcement workflow's requirements. `outcome = "accepted"` rows
+# matter as much as refusals: a check that rejected a legal `environment:`
+# spelling would refuse a correctly armed workflow and stall the campaign.
+
+[[guard]]
+id = "armed-workflow-comments"
+message = "has no job whose `environment:` is tenkz-release-publisher"
+
+[[guard]]
+id = "armed-workflow-foreign-needs"
+message = "lacks its own `needs:` dependency"
+
+[[guard]]
+id = "armed-workflow-mutable-action"
+message = "by a mutable reference rather than a full commit SHA"
+
+[[guard]]
+id = "armed-workflow-short-environment"
+outcome = "accepted"
+
+[[guard]]
+id = "armed-workflow-block-environment"
+outcome = "accepted"

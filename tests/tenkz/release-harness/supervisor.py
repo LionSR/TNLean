@@ -1045,11 +1045,15 @@ def command_check_readiness(policy: Policy, root: Path) -> int:
 ARMED_WORKFLOW = ".github/workflows/tenkz-release-policy.yml"
 YAML_COMMENT = re.compile(r"(?m)(?:(?<=^)|(?<=\s))#.*$")
 MUTABLE_ACTION = re.compile(r"uses:\s*\S+@(?!\b[0-9a-f]{40}\b)\S+")
-ARMED_MECHANISMS = (
-    (
-        re.compile(r"(?m)^\s+environment:\s*\n(?:\s+name:\s*)?tenkz-release-publisher\s*$"),
-        "a job whose `environment:` is tenkz-release-publisher",
-    ),
+JOBS_KEY = re.compile(r"(?m)^jobs:\s*$")
+JOB_HEADER = re.compile(r"(?m)^(\s+)([A-Za-z_][\w-]*):\s*$")
+# `environment: name` and the block form `environment:\n  name: name` are both
+# legal GitHub spellings of the same thing, so both must match.
+PUBLISHER_ENVIRONMENT = re.compile(
+    r"(?m)^\s+environment:\s*(?:tenkz-release-publisher\s*$"
+    r"|\s*\n\s+name:\s*tenkz-release-publisher\s*$)"
+)
+PUBLISHER_REQUIREMENTS = (
     (
         re.compile(r"(?m)^\s+contents:\s*write\s*$"),
         "a job-level `contents: write` permission",
@@ -1059,15 +1063,38 @@ ARMED_MECHANISMS = (
         "a reference to the TENKZ_FINAL_TAG_SIGNING_KEY secret",
     ),
     (
-        re.compile(r"(?m)^\s+(?:id|name):\s*tenkz-network-denied\s*$"),
-        "a step named tenkz-network-denied, which denies network access before "
-        "repository code runs",
-    ),
-    (
-        re.compile(r"(?m)^\s+needs:\s*"),
-        "a `needs:` dependency ordering the publisher after post-merge validation",
+        re.compile(r"(?m)^\s+needs:\s*\S"),
+        "its own `needs:` dependency, which is what orders it after post-merge "
+        "validation",
     ),
 )
+NETWORK_DENIAL = re.compile(r"(?m)^\s+(?:-\s+)?(?:id|name):\s*tenkz-network-denied\s*$")
+
+
+def workflow_jobs(text: str) -> dict[str, str]:
+    """Split a workflow's `jobs:` mapping into one text block per job.
+
+    This is not a YAML parser and does not need to be: job keys are the only
+    mapping at their indentation under `jobs:`, so a block runs from one such
+    key to the next. Splitting matters because the publisher's requirements are
+    requirements *on the publisher job* — a `needs:` belonging to a validation
+    job says nothing about what orders the publisher.
+    """
+
+    start = JOBS_KEY.search(text)
+    if start is None:
+        return {}
+    body = text[start.end() :]
+    headers = list(JOB_HEADER.finditer(body))
+    if not headers:
+        return {}
+    indent = min(len(header.group(1)) for header in headers)
+    jobs: dict[str, str] = {}
+    tops = [header for header in headers if len(header.group(1)) == indent]
+    for index, header in enumerate(tops):
+        stop = tops[index + 1].start() if index + 1 < len(tops) else len(body)
+        jobs[header.group(2)] = body[header.start() : stop]
+    return jobs
 
 
 def require_armed_workflow(root: Path) -> None:
@@ -1076,24 +1103,45 @@ def require_armed_workflow(root: Path) -> None:
     The workflow's own header says `check-readiness` fails closed when these
     are missing, so this is where that promise is kept.
 
-    The checks match YAML structure, not raw substrings, and they run against
-    the file with its comments removed. A substring search would have been
-    satisfied by this very file's header, which names the publisher
-    environment and `contents: write` while explaining that neither exists
-    yet — a check that its own documentation satisfies is not a check.
+    The checks read the file with its comments stripped and are scoped to the
+    job they are about. A whole-file substring search would be satisfied by
+    this very file's header, which names the publisher environment and
+    `contents: write` while explaining that neither exists yet; a whole-file
+    pattern search would be satisfied by any other job's `needs:`. A check that
+    its own documentation passes is not a check.
     """
 
     require_regular_file(root, ARMED_WORKFLOW, "the enforcement workflow")
-    raw = (root / ARMED_WORKFLOW).read_text(encoding="utf-8")
-    text = YAML_COMMENT.sub("", raw)
-    missing = [
-        description
-        for pattern, description in ARMED_MECHANISMS
-        if pattern.search(text) is None
+    text = YAML_COMMENT.sub("", (root / ARMED_WORKFLOW).read_text(encoding="utf-8"))
+    jobs = workflow_jobs(text)
+    publishers = [
+        name for name, block in jobs.items() if PUBLISHER_ENVIRONMENT.search(block)
     ]
     require(
+        publishers,
+        f"armed policy but {ARMED_WORKFLOW} has no job whose `environment:` is "
+        f"tenkz-release-publisher",
+    )
+    require(
+        len(publishers) == 1,
+        f"{ARMED_WORKFLOW} has {len(publishers)} publisher jobs {publishers}; the "
+        f"campaign has one terminal publisher",
+    )
+    publisher = jobs[publishers[0]]
+    missing = [
+        description
+        for pattern, description in PUBLISHER_REQUIREMENTS
+        if pattern.search(publisher) is None
+    ]
+    if NETWORK_DENIAL.search(text) is None:
+        missing.append(
+            "a step named tenkz-network-denied, which denies network access "
+            "before repository code runs"
+        )
+    require(
         not missing,
-        f"armed policy but {ARMED_WORKFLOW} lacks {'; '.join(missing)}",
+        f"armed policy but the {publishers[0]} job in {ARMED_WORKFLOW} lacks "
+        f"{'; '.join(missing)}",
     )
     mutable = sorted(set(MUTABLE_ACTION.findall(text)))
     require(

@@ -40,6 +40,7 @@ from supervisor import (  # noqa: E402
     expose,
     observe,
     read_policy,
+    require_armed_workflow,
     require_regular_file,
     require_tree_is_clean,
     resolve_tool,
@@ -143,39 +144,147 @@ def guard_special_entry(workspace: Path) -> None:
     require_tree_is_clean(fake_root, "docs/tenkz", "guard fixture path")
 
 
+ARMED_WORKFLOW_PATH = ".github/workflows/tenkz-release-policy.yml"
+ARMED_WORKFLOW = """name: x
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - id: tenkz-network-denied
+        run: true
+  publish:
+    needs: validate
+    environment: tenkz-release-publisher
+    permissions:
+      contents: write
+    steps:
+      - run: echo ${{ secrets.TENKZ_FINAL_TAG_SIGNING_KEY }}
+"""
+
+
+def staged_workflow(workspace: Path, body: str) -> Path:
+    fake_root = workspace / "repository"
+    (fake_root / ".github" / "workflows").mkdir(parents=True)
+    (fake_root / ARMED_WORKFLOW_PATH).write_text(body, encoding="utf-8")
+    return fake_root
+
+
+def guard_armed_workflow_comments(workspace: Path) -> None:
+    """Markers appearing only in comments must not satisfy the armed check.
+
+    The pending workflow's own header names the publisher environment and
+    `contents: write` while explaining that neither exists, so a substring
+    check passed on its own documentation.
+    """
+
+    body = (
+        "name: x\n"
+        "# tenkz-release-publisher contents: write "
+        "TENKZ_FINAL_TAG_SIGNING_KEY tenkz-network-denied\n"
+        "jobs:\n  validate:\n    needs: nothing\n    steps:\n      - run: true\n"
+    )
+    require_armed_workflow(staged_workflow(workspace, body))
+
+
+def guard_armed_workflow_foreign_needs(workspace: Path) -> None:
+    """A `needs:` on another job must not order the publisher."""
+
+    require_armed_workflow(
+        staged_workflow(workspace, ARMED_WORKFLOW.replace("    needs: validate\n", ""))
+    )
+
+
+def guard_armed_workflow_mutable_action(workspace: Path) -> None:
+    """A tag-pinned action must not pass the closure requirement."""
+
+    require_armed_workflow(
+        staged_workflow(
+            workspace,
+            ARMED_WORKFLOW.replace("@d23441a48e516b6c34aea4fa41551a30e30af803", "@v6"),
+        )
+    )
+
+
+def guard_armed_workflow_short_environment(workspace: Path) -> None:
+    """Both legal spellings of `environment:` must be accepted.
+
+    This guard expects acceptance, not refusal: a check that rejected the
+    single-line form would refuse a correctly armed workflow.
+    """
+
+    require_armed_workflow(staged_workflow(workspace, ARMED_WORKFLOW))
+
+
+def guard_armed_workflow_block_environment(workspace: Path) -> None:
+    """The block spelling of `environment:` must be accepted too."""
+
+    require_armed_workflow(
+        staged_workflow(
+            workspace,
+            ARMED_WORKFLOW.replace(
+                "    environment: tenkz-release-publisher",
+                "    environment:\n      name: tenkz-release-publisher",
+            ),
+        )
+    )
+
+
 GUARDS = {
     "nested-symlink": guard_nested_symlink,
     "symlinked-program-path": guard_symlinked_program_path,
     "symlinked-parent": guard_symlinked_parent,
     "special-entry": guard_special_entry,
+    "armed-workflow-comments": guard_armed_workflow_comments,
+    "armed-workflow-foreign-needs": guard_armed_workflow_foreign_needs,
+    "armed-workflow-mutable-action": guard_armed_workflow_mutable_action,
+    "armed-workflow-short-environment": guard_armed_workflow_short_environment,
+    "armed-workflow-block-environment": guard_armed_workflow_block_environment,
 }
 
 
 def run_guards(document: dict, failures: list[str]) -> list[str]:
+    """Run each guard and compare the supervisor's answer with its expectation.
+
+    Most guards expect a refusal. A few expect acceptance: a check that refuses
+    a legal spelling is as wrong as one that accepts an illegal shape, and only
+    a guard that expects acceptance can catch it.
+    """
+
     completed: list[str] = []
     for guard in document["guard"]:
         name = guard["id"]
+        expected = guard.get("outcome", "refused")
         if name not in GUARDS:
             failures.append(f"{name}: the expectations name an unknown guard")
             continue
         workspace = Path(tempfile.mkdtemp(prefix="tenkz-guard-"))
+        observed = "accepted"
+        detail = ""
         try:
             GUARDS[name](workspace)
         except SupervisorError as error:
-            if guard["message"] not in str(error):
-                failures.append(
-                    f"{name}: refused with {str(error)!r}, which does not carry "
-                    f"the expected {guard['message']!r}"
-                )
-                continue
-            completed.append(name)
-            continue
+            observed, detail = "refused", str(error)
         except OSError as error:
             failures.append(f"{name}: could not be staged: {error}")
-            continue
-        finally:
             shutil.rmtree(workspace, ignore_errors=True)
-        failures.append(f"{name}: the supervisor accepted a staged escape")
+            continue
+        shutil.rmtree(workspace, ignore_errors=True)
+
+        if observed != expected:
+            failures.append(
+                f"{name}: expected the supervisor to have {expected} this, and it "
+                f"{observed} it{': ' + detail if detail else ''}"
+            )
+            continue
+        message = guard.get("message", "")
+        if observed == "refused" and message and message not in detail:
+            failures.append(
+                f"{name}: refused with {detail!r}, which does not carry the "
+                f"expected {message!r}"
+            )
+            continue
+        completed.append(name)
     return completed
 
 
