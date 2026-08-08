@@ -817,8 +817,11 @@ supplied trace matrix has been retired: it imposed no relation between the
 state, the matrix, and an MPO tensor, and therefore added no consequence to
 either criterion.
 
-The completed normal Case-I route supplies a third, tensor-attached result at
-the source hypothesis boundary formalized in
+The completed normal Case-I route supplies a third, tensor-attached result on
+the supported Hayashi sectors at the source hypothesis boundary.  The
+normalized active-sector rank-one conclusion is formalized in
+\leanid{MPOTensor.exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL},
+and its rectangular consequence is formalized in
 \leanid{MPOTensor.caseI_rectangular_remainder_eq_zero_of_literal_ZCL}.
 Normality and literal ZCL, together with the physical-sector positivity and
 primitivity data, force the active sector to be unique and hence $T^2=T$.
@@ -835,11 +838,13 @@ inverse-map relations while the asserted factorization
 $T_{k,h}=a_kb_h$ does not exist. However, that tensor is not the injective
 normal tensor assumed in Case~I, and its normal representative loses literal
 ZCL. The raw example therefore does not refute Lemma~C.5 under its complete standing
-hypotheses, and the normal Case-I theorem above resolves its rectangular
-matrix obstruction.  The full source rank-one-factorization package and the
-downstream normalization step used after absorbing BNT coefficients remain
-unsettled; in particular, this Case-I result must not be transported to the
-later Case-II argument without proving that normality survives the rescaling.
+hypotheses, and the normal Case-I theorem above completes the supported-sector
+rank-one conclusion at that boundary.  Extending the coefficients across
+TNLean's ambient zero-weight filler sectors and packaging the structural
+corollary remain unsettled, as does the downstream normalization step used
+after absorbing BNT coefficients; in
+particular, this Case-I result must not be transported to the later Case-II
+argument without proving that normality survives the rescaling.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site

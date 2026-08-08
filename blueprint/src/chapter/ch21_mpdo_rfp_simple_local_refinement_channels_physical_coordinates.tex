@@ -453,26 +453,28 @@
     $\mathcal K^{[2]}$.
 \end{proof}
 
-% **Normalization obstruction (Lemma C.5):**
-% rem:mpdo_sal_zcl_rank_one_normalization_boundary records that the raw witness
-% has the displayed SAL, ZCL, and inverse-map data but is not the normal tensor
-% assumed in Case I; its normal representative loses literal ZCL. Hence the
-% printed proof through prop2to3 does not establish implication (ii) => (v),
-% which remains unresolved. Corrected rank-one criteria under positive
-% semidefiniteness or linear independence are given by
-% thm:psd_trace_powers_rank_one_t and thm:pairing_idempotent_rank_one_t. The
-% conditional blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts
-% instead assumes a neighboring trace factorization.
+% **All-sector Case-II boundary:**
+% The supported-sector normal Case-I rank-one theorem is complete. The printed
+% proof through prop2to3 still must show that every BNT tensor inherits MPDO
+% positivity, SAL, and literal ZCL, and then combine the physical isometries,
+% left--right tensors, and coefficients required by implication (ii) => (v).
+% The conditional
+% blocking theorem thm:mpdo_blocked_original_tensor_is_rfp_via_ts instead
+% assumes a neighboring trace factorization.
 % Documented in docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Blocking channels from SAL and ZCL (normalization obstruction)]
+\begin{theorem}[Blocking channels from SAL and ZCL (all-sector Case-II boundary)]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \notready
-    \uses{def:is_sal, def:mpo_source_zcl, def:is_rfp_via_ts,
+    \uses{def:is_sal, def:mpo_physical_trace_transfer, def:is_rfp_via_ts,
         def:mpdo_two_site_blocking}
     Let $K$ be a simple tensor in block-injective canonical form (biCF),
     equipped with a basis-of-normal-tensors decomposition and satisfying the
-    strong area law and zero correlation length. Let $M=K^{[2]}$ be its
-    two-site blocking. Then
+    strong area law and literal zero correlation length,
+    \begin{align}
+        \mathcal T_K^2&=\mathcal T_K.
+        \notag
+    \end{align}
+    Let $M=K^{[2]}$ be its two-site blocking. Then
     there are trace-preserving completely positive maps in both directions
     between the one-site and two-site closures of $M$. Equivalently, $M$ is a
     renormalization fixed point via these two maps. This is implication
@@ -482,12 +484,12 @@
     imposed at lines~849--850 and restated at line~1628 of the same source.
     The printed proof of implication (ii)$\Rightarrow$(v) refers back to the
     construction of Proposition~C.7 after projection to each local sector.
-    That construction requires the rank-one neighboring-trace factorization
-    supplied by the rank-one step of Lemma~C.5. The raw obstruction does not
-    satisfy the normal-tensor standing hypothesis, while its normal
-    representative loses literal ZCL. Thus the printed route remains
-    unresolved at this normalization boundary; no alternative proof under the
-    exact source hypotheses is known.
+    The supported-sector rank-one theorem supplies the normal Case-I
+    coefficient step. What remains is to prove that every BNT tensor inherits
+    MPDO positivity, SAL, and literal ZCL, and then to combine the physical
+    isometries, closed sector tensors, positive neighboring operators, and
+    rank-one coefficients into the all-sector structure required by
+    Proposition~C.7. It remains to establish this Case-II passage.
 \end{theorem}
 
 % Correct equation, not a figure: the cited source draws the two-to-three
