@@ -1,0 +1,52 @@
+%% =========================================================
+%% Birkhoff's theorem --- doubly-stochastic half
+%% =========================================================
+
+\section{Birkhoff's theorem}
+
+Birkhoff's theorem characterizes the convex geometry of doubly
+stochastic matrices.
+
+\begin{theorem}[Birkhoff (doubly-stochastic part)]
+    \label{thm:birkhoff_doubly_stochastic}
+    \lean{TNLean.wolf_birkhoff_doublyStochastic_convexHull}
+    \lean{TNLean.wolf_birkhoff_extremePoints_doublyStochastic}
+    \leanok
+    The set of doubly stochastic matrices in $M_d(\R)$ is the convex
+    hull of the $d\times d$ permutation matrices, and its extreme
+    points are exactly the permutation matrices.
+    See \cite[Chapter~8, Theorem~8.6]{Wolf2012Quantum}.
+    This statement concerns only doubly stochastic matrices; the
+    corresponding assertion of Theorem~8.6 for doubly substochastic
+    matrices is not included here.
+\end{theorem}
+% The doubly-substochastic half of Birkhoff's theorem (extreme
+% points of the substochastic matrices) is not formalized; #3959.
+
+\begin{proof}\leanok
+    Let $\mathcal{DS}_d \subset M_d(\mathbb{R})$ be the set of $d \times d$
+    doubly stochastic matrices and let $\mathcal{P}_d$ be the set of
+    $d \times d$ permutation matrices.  The Birkhoff--von Neumann
+    decomposition gives
+    \begin{align}
+      \mathcal{DS}_d &= \operatorname{conv}(\mathcal{P}_d), \\
+      \operatorname{ext}(\mathcal{DS}_d) &= \mathcal{P}_d .
+    \end{align}
+    Indeed, every doubly stochastic matrix is a convex combination of
+    permutation matrices, while convexity of $\mathcal{DS}_d$ gives the
+    converse inclusion in the first identity.  Suppose that a permutation
+    matrix $P_\sigma$ is a convex combination
+    $P_\sigma=tA+(1-t)B$, where $0<t<1$ and $A,B$ are doubly stochastic.
+    Nonnegativity and the row sums give
+    \begin{align}
+      (P_\sigma)_{ij}=0
+      &\Longrightarrow A_{ij}=B_{ij}=0, \\
+      1=\sum_j A_{ij} &= A_{i,\sigma(i)}, \\
+      1=\sum_j B_{ij} &= B_{i,\sigma(i)}.
+    \end{align}
+    Thus $A=B=P_\sigma$, so every permutation matrix is extreme.
+    Conversely, a non-permutation matrix has a Birkhoff decomposition
+    involving at least two distinct permutation matrices and is therefore
+    not extreme, which proves the second identity.
+\end{proof}
+\endinput

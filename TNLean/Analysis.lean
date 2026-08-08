@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Analysis
 
+import TNLean.Analysis.Birkhoff
 import TNLean.Analysis.CfcConjugation
 import TNLean.Analysis.CfcKronecker
 import TNLean.Analysis.CfcLogAdditive
