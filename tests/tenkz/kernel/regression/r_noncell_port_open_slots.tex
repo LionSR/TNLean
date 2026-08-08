@@ -1,0 +1,12 @@
+% Regression: authored open ports on a midway-addressed spanning atom keep
+% their slots -- the span answers from the atom's own measured silhouette,
+% not from a frame cell -- and each unconsumed slot grows its open leg.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+  \tn[at=midway (1,1) and (2,1), name=f, skin=pill, wires=2,
+      ports={0@1:virtual, 0@2:virtual, 180:virtual}]{f}
+\end{tenkz}
+\end{document}

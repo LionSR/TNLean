@@ -1591,16 +1591,24 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_signature_physical_axis:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
-      { \str_if_eq:nnTF {#2} {n} {90} {270} }
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
-          \l__tenkz_kernel_r_leg_turn_tl \l_tmpa_tl
-        \exp_args:NV \__tenkz_kernel_signature_bearing:nN
-          \l__tenkz_kernel_r_leg_turn_tl
-          \l__tenkz_kernel_port_face_tl
-        \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-          { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+          {
+            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
+              {
+                \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+                  \l__tenkz_kernel_r_leg_turn_tl \l_tmpa_tl
+                \exp_args:NV \__tenkz_kernel_signature_bearing:nN
+                  \l__tenkz_kernel_r_leg_turn_tl
+                  \l__tenkz_kernel_port_face_tl
+                \seq_put_right:Ne \l__tenkz_kernel_emit_seq
+                  { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
+              }
+          }
       }
   }
 
@@ -4118,26 +4126,29 @@
       }
   }
 
-\cs_new_protected:Npn
-  \__tenkz_kernel_policy_leg_port_slot:nN #1#2
+% The policy slots on the outward face of #1: one per spanned cell, read
+% from the atom's own measured extent, so a wide atom answers the picture
+% policy with one leg per face slot exactly as an authored `90@1..@k` port
+% list would.  q_no_value when the atom renders no policy leg at all, and
+% one on a plane frame, whose policy is the per-member transverse axis
+% rather than an in-plane face slot.
+\tl_new:N \l__tenkz_kernel_policy_span_tl
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_span:nN #1#2
   {
     \tl_set:Nn #2 { \q_no_value }
     \__tenkz_kernel_policy_leg_renders:nT {#1}
       {
-        \__tenkz_model_get:nnN {#1} {wide}
-          \l__tenkz_kernel_port_span_tl
-        \quark_if_no_value:NT \l__tenkz_kernel_port_span_tl
-          { \tl_set:Nn \l__tenkz_kernel_port_span_tl {1} }
-        \int_if_odd:nT { \l__tenkz_kernel_port_span_tl }
+        \str_if_eq:eeTF { \__tenkz_kernel_r_frame_word: } {plane}
+          { \tl_set:Nn #2 {1} }
           {
-            \tl_set:Ne #2
-              { \int_eval:n { ( \l__tenkz_kernel_port_span_tl + 1 ) / 2 } }
+            \__tenkz_model_get:nnN {#1} {wide} #2
+            \quark_if_no_value:NT #2 { \tl_set:Nn #2 {1} }
           }
       }
   }
 
 \prg_new_protected_conditional:Npnn
-  \__tenkz_kernel_policy_leg_exposed:nn #1#2 { T, F, TF }
+  \__tenkz_kernel_policy_leg_exposed:nnn #1#2#3 { T, F, TF }
   {
     \__tenkz_kernel_policy_leg_renders:nTF {#1}
       {
@@ -4155,52 +4166,42 @@
               { \prg_return_true: }
           }
           {
-            \__tenkz_kernel_policy_leg_port_slot:nN {#1}
-              \l__tenkz_kernel_port_slot_tl
-            \quark_if_no_value:NTF \l__tenkz_kernel_port_slot_tl
-              {
-                % An even-width centre lies between numbered slots, so no
-                % authored port endpoint can consume this policy leg.
-                \prg_return_true:
-              }
-              {
-                \prop_if_in:NeTF
-                  \l__tenkz_kernel_port_external_consumer_prop
-                  {#1/#2/\l__tenkz_kernel_port_slot_tl}
-                  { \prg_return_false: }
-                  { \prg_return_true: }
-              }
+            \prop_if_in:NeTF
+              \l__tenkz_kernel_port_external_consumer_prop
+              {#1/#2/\int_eval:n {#3}}
+              { \prg_return_false: }
+              { \prg_return_true: }
           }
       }
       { \prg_return_false: }
   }
 
+% A slot span belongs to the atom's own measured silhouette, so it answers
+% wherever the atom stands: a spanning atom at a midway or on-wire address
+% keeps every slot its `wide=`/`wires=` extent declares, exactly as at a
+% frame cell.
 \cs_new_protected:Npn \__tenkz_kernel_port_validate_slot:n #1
   {
-    \__tenkz_kernel_atom_cell_placed:nTF {#1}
+    \exp_args:NV \__tenkz_kernel_r_face_side:n
+      \l__tenkz_kernel_port_face_tl
+    \str_case:VnF \l__tenkz_kernel_r_face_side_tl
       {
-        \exp_args:NV \__tenkz_kernel_r_face_side:n
-          \l__tenkz_kernel_port_face_tl
-        \str_case:VnF \l__tenkz_kernel_r_face_side_tl
+        {n}
           {
-            {n}
-              {
-                \__tenkz_model_get:nnN {#1} {wide}
-                  \l__tenkz_kernel_port_span_tl
-              }
-            {s}
-              {
-                \__tenkz_model_get:nnN {#1} {wide}
-                  \l__tenkz_kernel_port_span_tl
-              }
-          }
-          {
-            \__tenkz_model_get:nnN {#1} {wires}
+            \__tenkz_model_get:nnN {#1} {wide}
               \l__tenkz_kernel_port_span_tl
           }
-        \quark_if_no_value:NT \l__tenkz_kernel_port_span_tl
-          { \tl_set:Nn \l__tenkz_kernel_port_span_tl {1} }
+        {s}
+          {
+            \__tenkz_model_get:nnN {#1} {wide}
+              \l__tenkz_kernel_port_span_tl
+          }
       }
+      {
+        \__tenkz_model_get:nnN {#1} {wires}
+          \l__tenkz_kernel_port_span_tl
+      }
+    \quark_if_no_value:NT \l__tenkz_kernel_port_span_tl
       { \tl_set:Nn \l__tenkz_kernel_port_span_tl {1} }
     \int_compare:nNnT
       { \l__tenkz_kernel_port_slot_tl }
@@ -4392,40 +4393,47 @@
               }
           }
       }
-    % A flat or circular policy owns the centre slot of its local north/south
-    % face.  A plane policy instead owns the frame's independent transverse
-    % axis; no authored in-plane port can consume or refine that third axis.
+    % A flat or circular policy owns every slot of its local north/south
+    % face, one per spanned cell.  A plane policy instead owns the frame's
+    % independent transverse axis; no authored in-plane port can consume or
+    % refine that third axis.
     \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {plane}
       {
         \__tenkz_model_map_ids:nn {atom}
+          { \__tenkz_kernel_port_policy_register_atom:n {##1} }
+      }
+  }
+
+\cs_new_protected:Npn \__tenkz_kernel_port_policy_register_atom:n #1
+  {
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+      {
+        \__tenkz_model_get:nnN {#1} {physical}
+          \l__tenkz_kernel_atom_phys_tl
+        \quark_if_no_value:NF \l__tenkz_kernel_atom_phys_tl
           {
-            \__tenkz_kernel_policy_leg_port_slot:nN {##1}
-              \l__tenkz_kernel_port_slot_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_port_slot_tl
+            \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
               {
-                \__tenkz_model_get:nnN {##1} {physical}
-                  \l__tenkz_kernel_scratch_tl
-                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
+                \str_case:Vn \l__tenkz_kernel_atom_phys_tl
                   {
-                    \str_case:Vn \l__tenkz_kernel_scratch_tl
+                    {up}
                       {
-                        {up}
-                          {
-                            \__tenkz_kernel_port_policy_register:nnn
-                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                          }
-                        {down}
-                          {
-                            \__tenkz_kernel_port_policy_register:nnn
-                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
-                          }
-                        {updown}
-                          {
-                            \__tenkz_kernel_port_policy_register:nnn
-                              {##1} {90} {\l__tenkz_kernel_port_slot_tl}
-                            \__tenkz_kernel_port_policy_register:nnn
-                              {##1} {270} {\l__tenkz_kernel_port_slot_tl}
-                          }
+                        \__tenkz_kernel_port_policy_register:nnn
+                          {#1} {90} {##1}
+                      }
+                    {down}
+                      {
+                        \__tenkz_kernel_port_policy_register:nnn
+                          {#1} {270} {##1}
+                      }
+                    {updown}
+                      {
+                        \__tenkz_kernel_port_policy_register:nnn
+                          {#1} {90} {##1}
+                        \__tenkz_kernel_port_policy_register:nnn
+                          {#1} {270} {##1}
                       }
                   }
               }
@@ -4888,43 +4896,55 @@
           }
       }
   }
-% One policy leg, on face #2 of atom #1.  The leg exists exactly when the
-% renderer will grow one, so the record and the ink answer the same question,
-% and it takes the canonical name the leg pass and the crossing grammar
-% already spell.
+% One policy leg per exposed slot, on face #2 of atom #1.  A leg exists
+% exactly when the renderer will grow one, so the records and the ink answer
+% the same question, and each takes the canonical name of the spanned cell
+% it leaves -- the name the leg pass and the crossing grammar already spell.
 \cs_new_protected:Npn \__tenkz_kernel_policy_leg_record:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
-      { \str_if_eq:nnTF {#2} {n} {90} {270} }
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \__tenkz_kernel_atom_rc:nNNN {#1}
-          \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl
-          \l_tmpa_bool
-        \bool_if:NT \l_tmpa_bool
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
           {
-            \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
-            \prop_if_in:NVTF \l__tenkz_kernel_named_prop
+            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
+              { \__tenkz_kernel_policy_leg_record_slot:nnn {#1} {#2} {##1} }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_record_slot:nnn #1#2#3
+  {
+    \__tenkz_kernel_atom_rc:nNNN {#1}
+      \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl
+      \l_tmpa_bool
+    \bool_if:NT \l_tmpa_bool
+      {
+        \tl_set:Ne \l__tenkz_kernel_leg_col_tl
+          { \int_eval:n { \l__tenkz_kernel_leg_col_tl + #3 - 1 } }
+        \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
+        \prop_if_in:NVTF \l__tenkz_kernel_named_prop
+          \l__tenkz_kernel_leg_name_tl
+          {
+            \prop_get:NVN \l__tenkz_kernel_named_prop
+              \l__tenkz_kernel_leg_name_tl \l__tenkz_kernel_scratch_tl
+            \msg_error:nnee {tenkz}{kernel-name-collision}
+              { \tl_use:N \l__tenkz_kernel_leg_name_tl }
+              { \tl_use:N \l__tenkz_kernel_scratch_tl }
+          }
+          {
+            \__tenkz_model_record_wire:e
+              {
+                kind = index , origin = policy-leg ,
+                name = \tl_use:N \l__tenkz_kernel_leg_name_tl ,
+                host = #1 , face = #2 ,
+                row = \tl_use:N \l__tenkz_kernel_leg_row_tl ,
+                col = \tl_use:N \l__tenkz_kernel_leg_col_tl ,
+                port-type = physical
+              }
+            \exp_args:NV \__tenkz_kernel_register_last_wire:n
               \l__tenkz_kernel_leg_name_tl
-              {
-                \prop_get:NVN \l__tenkz_kernel_named_prop
-                  \l__tenkz_kernel_leg_name_tl \l__tenkz_kernel_scratch_tl
-                \msg_error:nnee {tenkz}{kernel-name-collision}
-                  { \tl_use:N \l__tenkz_kernel_leg_name_tl }
-                  { \tl_use:N \l__tenkz_kernel_scratch_tl }
-              }
-              {
-                \__tenkz_model_record_wire:e
-                  {
-                    kind = index , origin = policy-leg ,
-                    name = \tl_use:N \l__tenkz_kernel_leg_name_tl ,
-                    host = #1 , face = #2 ,
-                    row = \tl_use:N \l__tenkz_kernel_leg_row_tl ,
-                    col = \tl_use:N \l__tenkz_kernel_leg_col_tl ,
-                    port-type = physical
-                  }
-                \exp_args:NV \__tenkz_kernel_register_last_wire:n
-                  \l__tenkz_kernel_leg_name_tl
-              }
           }
       }
   }
@@ -8926,17 +8946,25 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_route_policy_face_add:nnn #1#2#3
   {
-    \__tenkz_kernel_policy_leg_exposed:nnT {#1}
-      { \str_if_eq:nnTF {#2} {n} {90} {270} }
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
-          \l__tenkz_kernel_r_leg_turn_tl
-          \l__tenkz_kernel_r_physical_anchor_tl
-        \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
-          \l__tenkz_kernel_r_leg_turn_tl
-          \l__tenkz_kernel_port_face_tl
-        \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
-          { \__tenkz_kernel_route_face_add:nn {#1} {#3} }
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+          {
+            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
+              {
+                \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
+                  \l__tenkz_kernel_r_leg_turn_tl
+                  \l__tenkz_kernel_r_physical_anchor_tl
+                \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+                  \l__tenkz_kernel_r_leg_turn_tl
+                  \l__tenkz_kernel_port_face_tl
+                \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
+                  { \__tenkz_kernel_route_face_add:nnn {#1} {#3} {##1} }
+              }
+          }
       }
   }
 
@@ -9002,7 +9030,7 @@
           }
       }
   }
-\cs_new_protected:Npn \__tenkz_kernel_route_face_add:nn #1#2
+\cs_new_protected:Npn \__tenkz_kernel_route_face_add:nnn #1#2#3
   {
     % an ellipsis occupies its cell and grows no leg
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_ro_b_tl
@@ -9013,6 +9041,9 @@
           \l__tenkz_kernel_ro_bool
         \bool_if:NT \l__tenkz_kernel_ro_bool
           {
+            % the leg of slot #3 leaves the spanned cell #3 - 1 columns east
+            \tl_set:Ne \l__tenkz_kernel_ro_col_tl
+              { \int_eval:n { \l__tenkz_kernel_ro_col_tl + #3 - 1 } }
             \tl_set:Ne \l__tenkz_kernel_ro_tl
               {
                 leg - #2 - \tl_use:N \l__tenkz_kernel_ro_row_tl
@@ -10477,11 +10508,47 @@
               }
           }
           {
-            % A non-cell atom still owns its first port on every face.  Its
-            % center supplies the transverse coordinate; the glyph anchor
-            % supplies the face-normal coordinate during ink.
-            \__tenkz_geom_place_rel:nVee {#1}
-              \l__tenkz_kernel_r_tl {0} {0}
+            % A non-cell atom owns every slot its own measured extent
+            % declares: the slot walks the span symmetrically about the
+            % atom's centre, along its local span axis, at the same cell
+            % step a frame-anchored spanning atom gives its slots.  The
+            % glyph anchor still supplies the face-normal coordinate
+            % during ink.
+            \__tenkz_kernel_r_span:nNN { \tl_use:N \l__tenkz_kernel_r_tl }
+              \l__tenkz_kernel_r_b_tl \l__tenkz_kernel_r_c_tl
+            \exp_args:Ne \__tenkz_kernel_r_face_side:n
+              { \__tenkz_kernel_r_item:nn {#1} {face} }
+            \exp_args:Ne \__tenkz_kernel_r_turn:nN
+              { \tl_use:N \l__tenkz_kernel_r_tl } \l__tenkz_kernel_r_row_tl
+            \str_case:VnTF \l__tenkz_kernel_r_face_side_tl
+              {
+                {e} { }
+                {w} { }
+              }
+              {
+                % e/w faces: the slot walks the rows, along local south
+                \__tenkz_geom_place_rel:nVee {#1} \l__tenkz_kernel_r_tl
+                  { \fp_eval:n { \l__tenkz_kernel_r_row_tl - 90 } }
+                  {
+                    \fp_eval:n
+                      {
+                        \__tenkz_kernel_r_item:nn {#1} {slot}
+                        - ( \l__tenkz_kernel_r_c_tl + 1 ) / 2
+                      }
+                  }
+              }
+              {
+                % n/s faces: the slot walks the columns, along local east
+                \__tenkz_geom_place_rel:nVee {#1} \l__tenkz_kernel_r_tl
+                  { \tl_use:N \l__tenkz_kernel_r_row_tl }
+                  {
+                    \fp_eval:n
+                      {
+                        \__tenkz_kernel_r_item:nn {#1} {slot}
+                        - ( \l__tenkz_kernel_r_b_tl + 1 ) / 2
+                      }
+                  }
+              }
           }
       }
   }
@@ -11478,21 +11545,13 @@
                 \str_case:Vn \l__tenkz_kernel_r_tl
                   {
                     {up}
-                      {
-                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {90}
-                          { \__tenkz_kernel_r_leg:nn {##1} {n} }
-                      }
+                      { \__tenkz_kernel_r_leg:nn {##1} {n} }
                     {down}
-                      {
-                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {270}
-                          { \__tenkz_kernel_r_leg:nn {##1} {s} }
-                      }
+                      { \__tenkz_kernel_r_leg:nn {##1} {s} }
                     {updown}
                       {
-                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {90}
-                          { \__tenkz_kernel_r_leg:nn {##1} {n} }
-                        \__tenkz_kernel_policy_leg_exposed:nnT {##1} {270}
-                          { \__tenkz_kernel_r_leg:nn {##1} {s} }
+                        \__tenkz_kernel_r_leg:nn {##1} {n}
+                        \__tenkz_kernel_r_leg:nn {##1} {s}
                       }
                   }
               }
@@ -11754,16 +11813,45 @@
       }
   }
 
+% One ink walk per exposed slot: the legs of a spanning atom leave one per
+% spanned cell, exactly where the same slots' authored ports would.
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
+  {
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+          {
+            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
+              { \__tenkz_kernel_r_leg_slot:nnn {#1} {#2} {##1} }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_leg_slot:nnn #1#2#3
   {
     \__tenkz_kernel_atom_rc:nNNN {#1}
       \l__tenkz_kernel_leg_row_tl \l__tenkz_kernel_leg_col_tl \l_tmpa_bool
     \bool_if:NT \l_tmpa_bool
       {
+        \tl_set:Ne \l__tenkz_kernel_leg_col_tl
+          { \int_eval:n { \l__tenkz_kernel_leg_col_tl + #3 - 1 } }
         \__tenkz_kernel_leg_name:nN {#2} \l__tenkz_kernel_leg_name_tl
         \__tenkz_kernel_r_physical_axis:nnNN {#1} {#2}
           \l__tenkz_kernel_leg_dir_tl
           \l__tenkz_kernel_r_physical_anchor_tl
+        % A spanning atom's non-first slots read the frame at their own
+        % spanned cell: its local bearing and its cell point, which is where
+        % the same slot's authored port stands.
+        \int_compare:nNnT { \l__tenkz_kernel_policy_span_tl } > {1}
+          {
+            \__tenkz_geom_local_bearing:nnnnN {kpic}
+              { \l__tenkz_kernel_leg_row_tl }
+              { \l__tenkz_kernel_leg_col_tl }
+              { \str_if_eq:nnTF {#2} {n} {90} {270} }
+              \l__tenkz_kernel_leg_dir_tl
+          }
         \bool_set_false:N \l__tenkz_kernel_leg_planned_bool
         \bool_if:NT \l__tenkz_kernel_r_basis_plane_bool
           {
@@ -11792,8 +11880,17 @@
               }
           }
           {
-            \__tenkz_kernel_r_xy:nNN {#1}
-              \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+            \int_compare:nNnTF { \l__tenkz_kernel_policy_span_tl } > {1}
+              {
+                \__tenkz_kernel_r_frame_xy:nnNN
+                  { \l__tenkz_kernel_leg_row_tl }
+                  { \l__tenkz_kernel_leg_col_tl }
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+              }
+              {
+                \__tenkz_kernel_r_xy:nNN {#1}
+                  \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+              }
           }
         \fp_set:Nn \l__tenkz_kernel_r_reach_fp
           { \__tenkz_metric_ratio:n {physleg} }
@@ -16918,6 +17015,16 @@
     \__tenkz_kernel_sugar:n {tnprose}
     \__tenkz_kernel_tnmark:nnn { form = prose } { panel } {#1}
   }
+% The prelude fuse atom of the sugar ledger: a `wires=2` atom the frame
+% bonds, wearing the ledger's `tri` silhouette until an author's `skin=`
+% overrides it.  Authored keys follow the preset, so any of the three
+% defaults yields to the author's spelling.
+\NewDocumentCommand \__tenkz_kernel_tnfuse_cmd { O{} m }
+  {
+    \__tenkz_kernel_sugar:n {tnfuse}
+    \__tenkz_kernel_tn:nn { skin = tri , wires = 2 , #1 } {#2}
+    \ignorespaces
+  }
 
 % The picture body is captured, then executed.  A frame-collecting class --
 % beamer is the standing example -- tokenizes a frame body long before any
@@ -16973,6 +17080,7 @@
     \cs_set_eq:NN \tndeclare \__tenkz_kernel_tndeclare_cmd
     \cs_set_eq:NN \tnbond \__tenkz_kernel_tnbond_cmd
     \cs_set_eq:NN \tnprose \__tenkz_kernel_tnprose_cmd
+    \cs_set_eq:NN \tnfuse \__tenkz_kernel_tnfuse_cmd
   }
 
 \ExplSyntaxOff

@@ -2549,3 +2549,30 @@ from 213 parser paths to 178. M3 is untouched at 0. M4 is untouched at
 decrease is the session's own evidence.
 | flag:lonely-type:direction-policy | keep: `dir=` is the contract's one spelling of a space against its dual (`LANGUAGE-1.0` §2.4), lonely only because the 0.7 connection twin left with its front end; expiry 0.9 |
 | flag:lonely-type:name-list | keep: `\tnset{species={...}}` is the document's species declaration itself, lonely only because the free region's member list left with its dialect; expiry 0.9 |
+
+### 2026-08-09 — the three mop-up idioms draw (#5624)
+
+The mop-up wave's three measured gaps close. The signed `\tnfuse` sugar
+row gains its kernel-tier reading — the prelude fuse atom, a `wires=2`
+atom the frame bonds, authored keys overriding the preset — and the two
+LPDO wedges shrink back from their hand-spelled expansions to the sugar.
+A slot span now answers from the atom's own measured silhouette wherever
+the atom stands, so a spanning atom at a midway address keeps every slot
+its `wires=`/`wide=` extent declares. And a wide atom answering the
+`physical=` policy mints one leg per face slot, named per spanned cell,
+exactly as the authored `90@1..@k` port list; the finite-separation
+isometry stack shrinks back onto the policy. Both re-sugared pictures
+render byte-identical to their expansions at 200 dpi, and the sugar-pair
+probe pins the fuse pair in events and pixels.
+
+No meter moves: the census is stable, no registry row is added or
+removed, and the kernel binds the existing `\tnfuse` command exactly as
+it binds `\tnbond`. The disposition checker learns that a sugar command
+the kernel binds owes no migration work under the switch, the same
+doctrine signed keys already enjoy. Demand for `\tnfuse` moves to two
+kernel-tier blueprint consumers beside the eight ch21 occurrences still
+awaiting their own redraw.
+
+| flag | verdict |
+|---|---|
+| flag:consumers:command:tnfuse | demoted at the language landing: a prelude-declared fuse atom (`LANGUAGE-1.0` §9) whose kernel-tier reading landed with #5624; two kernel-tier blueprint wedges consume the sugar and the eight ch21 occurrences ride their figures' own redraw rows; expiry 0.9 |

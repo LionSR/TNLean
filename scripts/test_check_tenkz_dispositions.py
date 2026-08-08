@@ -139,6 +139,23 @@ def main() -> int:
         ), source
         assert guard.fragment_target_codes(source) != frozenset({"P-grid"}), source
 
+    # A sugar command the kernel binds (tnfuse, tnbond) owes no migration
+    # work under the switch; one it does not yet bind still does.
+    kernel_bound_sugar = (
+        r"\begin{tenkz}[rows={op,op}, cols=3]"
+        r"\tnfuse[at=(1,1), name=e, skin=pill]{e}\end{tenkz}",
+        r"\begin{tenkz}[rows={wire,wire}, cols=2]"
+        r"\tnbond{(1,1)}{(2,2)}\end{tenkz}",
+    )
+    for source in kernel_bound_sugar:
+        assert guard.fragment_target_codes(source, True) == frozenset(
+            {"P-grid"}
+        ), source
+        assert "C-record" in guard.fragment_target_codes(source), source
+    assert "C-record" in guard.fragment_target_codes(
+        r"\begin{tenkz}[rows={wire}, cols=2]\tndots\end{tenkz}", True
+    )
+
     # Keys with no kernel row keep their codemod under the switch.
     unsigned_policy = (
         r"\begin{tenkz}[periodic]\tn{}\end{tenkz}",

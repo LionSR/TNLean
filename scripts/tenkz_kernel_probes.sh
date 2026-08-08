@@ -1613,7 +1613,8 @@ for pixel_fixture in \
     r_label_turn r_mpo_skin_box r_mpo_skin_prelude r_parallel_lanes \
     r_physical_dir r_pill_skin_prelude r_pill_skin_roundrect \
     r_region_diagonal r_region_pinch_staircase r_ring_closure \
-    r_wire_stroke; do
+    r_wire_stroke r_noncell_port_slot r_noncell_port_slot_cell \
+    r_wide_policy_legs r_wide_policy_ports; do
   if ! pdftoppm -singlefile -png -r 300 \
       "$WORK/$pixel_fixture.pdf" "$WORK/$pixel_fixture" >/dev/null 2>&1; then
     echo "FAIL: $pixel_fixture fixture could not be rasterized" >&2
@@ -2175,7 +2176,8 @@ for strict_negative in \
   n_strict_sandwich \
   n_strict_role \
   n_strict_tnbond \
-  n_strict_tnprose
+  n_strict_tnprose \
+  n_strict_tnfuse
 do
   source="$KERNEL/negative/$strict_negative.tex"
   if ( cd "$WORK" &&
@@ -2217,7 +2219,6 @@ for contract_negative in \
   n_sealed_duplicate_port \
   n_sealed_malformed_port \
   n_port_slot \
-  n_noncell_port_slot \
   n_port_open_name \
   n_padded_duplicate_port \
   n_rounding_duplicate_port \
@@ -2286,8 +2287,6 @@ do
   [ "$contract_negative" = n_sealed_malformed_port ] &&
     expected='[TKZ-PORT-PARSE]'
   [ "$contract_negative" = n_port_slot ] &&
-    expected='[TKZ-PORT-SLOT]'
-  [ "$contract_negative" = n_noncell_port_slot ] &&
     expected='[TKZ-PORT-SLOT]'
   [ "$contract_negative" = n_port_open_name ] &&
     expected='[TKZ-LANG-NAME-COLLISION]'
@@ -2760,11 +2759,67 @@ grep -Fq '|addr=(2,3)|' "$WORK/r_beamer_frame.tnlog" || {
   exit 1
 }
 
+# A slot span answers from the atom's own measured silhouette wherever it
+# stands: a wires=2 atom at a midway address keeps slot 2 for wires and for
+# authored open ports, and its contracted picture renders exactly as the
+# cell-anchored spelling.
+[ "$(grep -c '^wire|' "$WORK/r_noncell_port_slot.tnlog" || true)" -eq 2 ] || {
+  echo "FAIL: a midway-addressed spanning atom lost a slot wire" >&2
+  exit 1
+}
+for slot_port in \
+  '|port-face=0|port-slot=1|port-type=virtual' \
+  '|port-face=0|port-slot=2|port-type=virtual' \
+  '|port-face=180|port-slot=1|port-type=virtual'; do
+  grep -F '|origin=port-open|' "$WORK/r_noncell_port_open_slots.tnlog" |
+    grep -Fq "$slot_port" || {
+    echo "FAIL: a midway-addressed atom lost the authored port $slot_port" >&2
+    exit 1
+  }
+done
+grep -Fxq 'kernel-boundary|signature=open:e, open:e, open:w' \
+    "$WORK/r_noncell_port_open_slots.tnlog" || {
+  echo "FAIL: the midway-addressed fuse lost its open boundary" >&2
+  exit 1
+}
+cmp -s "$WORK/r_noncell_port_slot.png" "$WORK/r_noncell_port_slot_cell.png" || {
+  echo "FAIL: a midway-addressed slot span renders apart from its cell anchor" >&2
+  exit 1
+}
+# A wide atom answering the physical policy mints one leg per face slot,
+# named per spanned cell; a wire consuming one slot retires that slot's leg
+# alone; the ink equals the authored slot-port spelling.
+for leg in leg-n-1-1 leg-n-1-2 leg-n-1-3 leg-n-2-1 leg-n-2-3; do
+  grep -Fq "|kind=index|name=$leg|origin=policy-leg|port-type=physical|" \
+      "$WORK/r_wide_policy_legs.tnlog" || {
+    echo "FAIL: the wide policy atom lost slot leg $leg" >&2
+    exit 1
+  }
+done
+if grep -Fq '|name=leg-n-2-2|' "$WORK/r_wide_policy_legs.tnlog"; then
+  echo "FAIL: a consumed slot of a wide policy atom kept its leg" >&2
+  exit 1
+fi
+[ "$(grep -Fc 'kernel-boundary|signature=phys:n, phys:n, phys:n' \
+      "$WORK/r_wide_policy_legs.tnlog" || true)" -eq 1 ] || {
+  echo "FAIL: the wide policy atom lost its three-index boundary" >&2
+  exit 1
+}
+grep -Fxq 'kernel-boundary|signature=phys:n, phys:n' \
+    "$WORK/r_wide_policy_legs.tnlog" || {
+  echo "FAIL: the slot-consumed wide policy atom lost its two-index boundary" >&2
+  exit 1
+}
+cmp -s "$WORK/r_wide_policy_legs.png" "$WORK/r_wide_policy_ports.png" || {
+  echo "FAIL: the wide policy legs render apart from authored slot ports" >&2
+  exit 1
+}
+
 regression_count=$(find "$WORK" -maxdepth 1 -name 'r_*.tex' | wc -l | tr -d ' ')
 echo "PASS: $regression_count review regressions hold"
 
 fail=0
-for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
+for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10 s11; do
   if ! cmp -s "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog"; then
     echo "FAIL: sugar pair $pair diverges from its kernel expansion" >&2
     diff "$WORK/${pair}_sugar.tnlog" "$WORK/${pair}_kernel.tnlog" >&2 || true
@@ -2788,7 +2843,7 @@ for pair in s1 s2 s3 s4 s5 s6 s7 s8 s9 s10; do
   fi
 done
 [ "$fail" -eq 0 ] &&
-  echo "PASS: 10 sugar spellings byte-identical to their expansions in events and pixels"
+  echo "PASS: 11 sugar spellings byte-identical to their expansions in events and pixels"
 
 CURRENT="$WORK/current.sha256"
 ( cd "$WORK"
