@@ -184,4 +184,35 @@ theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_liter
   exact ⟨F, p, aActive, bActive, a, b, hp, hpsum, hpos, habActive,
     hsumActive, hagree, hzero, hab, hsum⟩
 
+/-- In normal Case I, the physical-sector factorization has positive semidefinite
+neighboring operators whose complex traces form a normalized rank-one matrix.
+The factorization itself retains the source isometry, the sector equivalence,
+the left and right factor tensors, and the exact physical-slice factorization.
+
+The extension across inactive Hayashi sectors is the project-derived zero-weight
+completion of the coherently rephased inverse-map witness; CPSV16 does not specify
+this inactive-sector convention.
+
+**Scope restriction (normal Case I):** this theorem assumes the strong area law,
+literal zero correlation length, and normality. It makes no scale-invariant ZCL
+or Case-II claim.
+
+Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
+1503--1506. -/
+theorem exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL
+    (K : MPOTensor d D) (hK : K.IsInjective) (hSAL : IsSAL K)
+    (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
+    (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor) :
+    ∃ F : PhysicalSectorFactorization K, ∃ a b : Fin F.sectorCount → ℝ,
+      (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
+        (∀ k h, (F.neighboringOperator k h).trace = (a k * b h : ℂ)) ∧
+          (∑ k, a k * b k) = 1 := by
+  obtain ⟨F, _, _, _, a, b, _, _, hpos, _, _, _, _, hab, hsum⟩ :=
+    exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL
+      K hK hSAL hZCL_sq hK_normal
+  refine ⟨F, a, b, hpos, ?_, hsum⟩
+  intro k h
+  rw [(hpos k h).isHermitian.trace_eq_ofReal_re, hab k h]
+  norm_cast
+
 end MPOTensor
