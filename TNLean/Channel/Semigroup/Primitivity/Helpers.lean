@@ -365,7 +365,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   -- ── Step 10: Apply power closure theorem and transfer back ──
   have hμ_L : μ ∈ peripheralEigenvalues (Kraus.mapLM L) :=
     ⟨heig_fwd μ hμ.1, hμ.2⟩
-  have hpow := MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
+  have hpow := Kraus.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     L hL_unital σ hσ_pd hL_adj hL_irr μ hμ_L
   intro n
   obtain ⟨hpow_eig, hpow_norm⟩ := hpow n

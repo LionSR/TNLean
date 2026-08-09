@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Channel.Peripheral.CyclicGroup
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
-import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
 import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.SharedInfra.KrausAdjointSetup
@@ -66,27 +65,22 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
-  have hK_map : Kraus.mapLM (fun i ↦ (A i)ᴴ) =
-      transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) :=
-    Kraus.mapLM_eq_transferMap _
-  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM (fun i ↦ (A i)ᴴ)) :=
-    Kraus.isIrreducibleMap_mapLM_of_transferMap _ hIrrK
   obtain ⟨hm, γ, hγroot, hPeriphK⟩ :=
     peripheralEigenvalues_eq_range_primitiveRoot
-      (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK_map
+      (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK
   let m : ℕ := (peripheralEigenvalues_finite
-    (f := Kraus.mapLM (fun i ↦ (A i)ᴴ))).toFinset.card
+    (f := transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
   have hm' : 0 < m := by simpa [m] using hm
   have hγroot' : IsPrimitiveRoot γ m := by simpa [m] using hγroot
   have hPeriphK' :
-      peripheralEigenvalues (Kraus.mapLM (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         Set.range (fun j : Fin m ↦ γ ^ (j : ℕ)) := by
     simpa [m] using hPeriphK
   haveI : NeZero m := ⟨hm'.ne'⟩
   have hKRoots :
       peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         {z : ℂ | z ^ m = 1} := by
-    rw [← hK_map, hPeriphK']
+    rw [hPeriphK']
     ext z
     constructor
     · rintro ⟨j, rfl⟩

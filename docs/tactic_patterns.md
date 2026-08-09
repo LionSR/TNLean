@@ -29,15 +29,12 @@ abstracted — record why, so it is not re-proposed).
   `IsIrreducibleMap (MPSTensor.transferMap F)` as
   `IsIrreducibleMap (Kraus.mapLM F)` before applying generic peripheral
   theorems.
-- **Seen:** 3 occurrences across 3 files (2026-08-09):
-  `TNLean/MPS/CanonicalForm/BlockingViaAdjoint.lean`,
-  `TNLean/MPS/Periodic/NormalizedSelfOverlap.lean`, and
-  `TNLean/Archive/BlockingPeriodicityCFII2.lean`.
+- **Seen:** the five transfer-map compatibility declarations in
+  `TNLean/Channel/Peripheral/{ClosureFixedPoint,CyclicGroup}.lean` (2026-08-09).
 - **Abstraction:** `Kraus.isIrreducibleMap_mapLM_of_transferMap` in
   `TNLean/MPS/Core/TransferChannel.lean`.
-- **Notes:** all three conversions now use the compatibility lemma. The two
-  consumers that also need the named map equality later retain that separate
-  equality; the duplicated irreducibility proof is removed.
+- **Notes:** the generic theorems use `Kraus.mapLM`; each transfer-map statement
+  applies this conversion once before invoking its generic counterpart.
 
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,

@@ -518,7 +518,7 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{lemma}[Peripheral eigenvectors are invertible]%
     \label{lem:isUnit_peripheral_eigenvector}
-    \lean{MPSTensor.isUnit_peripheral_eigenvector}
+    \lean{Kraus.isUnit_peripheral_eigenvector}
     \leanok
     \uses{thm:ks_peripheral}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
@@ -542,7 +542,7 @@ projections, and tracking how the channel shifts the resulting corners.
 
 \begin{lemma}[Peripheral eigenvalues: product closure]%
     \label{lem:peripheral_mul_closure}
-    \lean{MPSTensor.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
+    \lean{Kraus.peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint}
     \leanok
     \uses{lem:isUnit_peripheral_eigenvector,thm:ks_peripheral}
     Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
@@ -839,7 +839,6 @@ them.
     \label{lem:peripheral_closed_under_inv_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_closed_under_inv}
     \leanok
-    \uses{thm:peripheral_cyclic_structure}
     The inverse of a peripheral eigenvalue is peripheral.
 \end{lemma}
 
