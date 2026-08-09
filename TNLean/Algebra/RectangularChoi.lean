@@ -24,8 +24,8 @@ The argument is independent of positivity and channel normalization.
 
 - `Matrix.linearMapMatrix`: the matrix of a linear map in the matrix-unit bases
 - `Matrix.rectangularChoi`: the unnormalized rectangular Choi matrix
-- `Matrix.gramReshuffleMatrix`: the matrix whose \(((b,a),(e,c))\) entry is `rectangularChoi Φ (c,e) (a,b)`
-- `Matrix.gramReshuffle`: the Euclidean operator `toEuclideanCLM (gramReshuffleMatrix Φ)`
+- `Matrix.gramReshuffleMatrix`: the matrix with entries \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\); its `toEuclideanCLM` image is `gramReshuffle`
+- `Matrix.gramReshuffle`: the Euclidean CLM of the reshuffling \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\)
 - `Matrix.IsHilbertSchmidtContraction`: contraction for the Hilbert--Schmidt norm
 
 ## Main results
@@ -78,15 +78,16 @@ theorem rectangularChoi_apply
     rectangularChoi L (i, a) (j, b) = L (single i j 1) a b := by
   rw [rectangularChoi, linearMapMatrix_apply]
 
-/-- The matrix whose \((b,a),(e,c)\) entry is the rectangular Choi entry
-\(J(\Phi)_{(c,e),(a,b)}\).  Its `toEuclideanCLM` image is `gramReshuffle`. -/
+/-- The algebraic matrix of the reshuffling \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\).
+Its `toEuclideanCLM` image is `gramReshuffle`. -/
 noncomputable def gramReshuffleMatrix
     (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
     Matrix (α × α) (α × α) ℂ :=
   fun (b, a) (e, c) ↦ rectangularChoi Φ (c, e) (a, b)
 
-/-- The linear operator obtained by applying `Matrix.toEuclideanCLM`
-to `gramReshuffleMatrix`. -/
+/-- The Euclidean operator obtained by reshuffling Choi entries:
+\(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\).
+It is `Matrix.toEuclideanCLM` of `gramReshuffleMatrix`. -/
 noncomputable def gramReshuffle
     (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
     EuclideanSpace ℂ (α × α) →L[ℂ] EuclideanSpace ℂ (α × α) :=
