@@ -16,27 +16,47 @@
 
 \section{Source statement}
 
-Let $E$ be the $n\times n$ complex transfer matrix of the normalized
-flattening of a matrix-product unitary.  Proposition~III.1 of
-\cite{Cirac2017MPU} derives
+Let $U$ be a matrix-product unitary of bond dimension $D$, and let
+$\widetilde U$ denote its normalized flattening.  Its transfer map is the
+linear endomorphism $T:M_D(\mathbb C)\to M_D(\mathbb C)$ given by
 \begin{align}
-  \tr(E^N)&=1 &&(N>1)
+  T(X)&=\sum_a \widetilde U^a X(\widetilde U^a)^\dagger.
+\end{align}
+For matrix units $F_{k\ell}$, let $E=\widehat T$ be the column-stacked
+transfer-matrix representation of $T$, characterized by
+\begin{align}
+  E_{(j,i),(\ell,k)}&=\bigl(T(F_{k\ell})\bigr)_{ij},\\
+  E\,\operatorname{vec}(X)&=\operatorname{vec}(T(X)).
+\end{align}
+Thus $E$ is indexed by pairs of bond indices and has matrix dimension
+$n=D^2$. For any $n\times n$ matrix $B$, write
+\begin{align}
+  \chi_B(X)&=\det(X\Id_n-B)
+\end{align}
+for its characteristic polynomial; in particular, $\chi_E$ denotes the
+characteristic polynomial of the transfer matrix.
+
+For every integer $N>1$, Proposition~III.1 of
+\cite{Cirac2017MPU} derives the shifted moment identity
+\begin{align}
+  \tr(E^N)&=1.
   \tag{shifted moments}
 \end{align}
-and concludes that the sole nonzero eigenvalue is $1$, with algebraic
-multiplicity one.  Equivalently,
+It concludes that the sole nonzero eigenvalue of $E$ is $1$, with algebraic
+multiplicity one. Equivalently,
 \begin{align}
   \chi_E(X)&=X^{n-1}(X-1).
   \tag{source conclusion}
 \end{align}
 The cited Lemma~A.5 of \cite{Cirac2016MPDO_arXiv} is naturally stated with
-all positive moments, including the first moment.  The MPU hypothesis above
+all positive moments, including the first moment. The MPU hypothesis above
 does not supply $\tr(E)=1$.
 
 \section{Exact shifted-moment argument}
 
-The missing first moment is unnecessary.  For every $m\ge1$, the shifted
-moments imply
+Fix the transfer matrix $E$, its dimension $n$, and its characteristic
+polynomial $\chi_E$ as defined above. The missing first moment is
+unnecessary. For every $m\ge1$, the shifted moments imply
 \begin{align}
   \tr((E^2)^m)&=\tr(E^{2m})=1,
   &\tr((E^3)^m)&=\tr(E^{3m})=1.
@@ -89,8 +109,8 @@ moments with exponent greater than one.\footnote{Formal declarations:
 and
 \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
 in \doclink{TNLean/Algebra/ShiftedTracePowerSpectrum}.}
-For the normalized flattening of an MPU, the specialization gives the exponent
-$D^2-1$.\footnote{Formal declaration:
+For the normalized flattening of an MPU of bond dimension $D$, the
+specialization gives the exponent $D^2-1$.\footnote{Formal declaration:
 \leanid{MPOTensor.IsMPU.normalizedFlattening_charpoly} in
 \doclink{TNLean/MPS/MPU/TransferMatrix}.}
 

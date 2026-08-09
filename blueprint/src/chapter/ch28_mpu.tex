@@ -259,33 +259,30 @@ nonzero spectrum as a set.
   exponent $mr$ gives the result.
 \end{proof}
 
-\begin{theorem}[Trace powers above one determine the characteristic polynomial]
+\begin{theorem}[Trace powers above one determine the nonzero spectrum]
   \label{thm:mpu_shifted_trace_power_spectrum}
   \lean{Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt,
-    Matrix.charpoly_rootMultiplicity_one_eq_one_of_forall_trace_pow_eq_one_of_one_lt,
-    Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
+    Matrix.eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt,
+    Matrix.one_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt}
   \leanok
-  Let $A$ be an $n\times n$ complex matrix.  If $\tr(A^k)=1$ for every
-  $k>1$, then
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^k)=1$ for every
+  integer $k>1$, then
   \begin{align}
-    \sigma(A)\setminus\{0\}&=\{1\},
-    &\operatorname{mult}_{1}(\chi_A)&=1,
-    &\chi_A(X)&=X^{n-1}(X-1).
+    \sigma(A)\setminus\{0\}&=\{1\}.
   \end{align}
-  Thus $1$ is the sole nonzero eigenvalue and has algebraic multiplicity one.
-  This is the exact shifted-moment conclusion of
-  \cite[Proposition~III.1]{Cirac2017MPU}; the first set equality alone would
-  not assert algebraic multiplicity.
+  Thus $1$ occurs and every nonzero spectral value equals $1$. This is the
+  set-spectrum consequence of \cite[Proposition~III.1]{Cirac2017MPU}; set
+  equality alone does not assert algebraic multiplicity.
 \end{theorem}
 
 \begin{proof}\leanok
   \uses{thm:mpu_shifted_trace_power_moments,thm:mpu_trace_power_all}
-  For every $r\ge1$, the hypothesis gives
+  For every positive integer $r$, the shifted moments give
   \begin{align}
     \tr((A^2)^r)&=\tr(A^{2r})=1,
     &\tr((A^3)^r)&=\tr(A^{3r})=1.
   \end{align}
-  Hence Theorem~\ref{thm:mpu_trace_power_all} yields
+  Hence
   \begin{align}
     \chi_{A^2}(X)&=\chi_{A^3}(X)=X^{n-1}(X-1).
   \end{align}
@@ -296,17 +293,86 @@ nonzero spectrum as a set.
     &\mu&=1.
   \end{align}
   Conversely, spectral mapping from $1\in\sigma(A^2)$ supplies a nonzero
-  spectral value of $A$, hence $1\in\sigma(A)$.
+  spectral value of $A$, which must be $1$.
+\end{proof}
 
-  The factorization
+\begin{theorem}[Generalized eigenspace inclusion under squaring]
+  \label{thm:mpu_generalized_eigenspace_one_square}
+  \lean{Matrix.maxGenEigenspace_one_le_sq}
+  \leanok
+  For a complex square matrix $A$, write $G_1(A)$ for its maximal generalized
+  eigenspace at the eigenvalue $1$. Then
+  \begin{align}
+    G_1(A)&\subseteq G_1(A^2).
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  The commuting factorization
   \begin{align}
     A^2-\Id&=(A+\Id)(A-\Id)
   \end{align}
-  with commuting factors includes the maximal generalized $1$-eigenspace of
-  $A$ in that of $A^2$.  Since $1$ has multiplicity one in $\chi_{A^2}$,
-  it has multiplicity at most one in $\chi_A$; its occurrence makes the
-  multiplicity exactly one.  All remaining roots are zero, and splitting the
-  monic characteristic polynomial gives
+  gives, for every nonnegative integer $k$,
+  \begin{align}
+    (A^2-\Id)^k&=(A+\Id)^k(A-\Id)^k.
+  \end{align}
+  Therefore every vector annihilated by a power of $A-\Id$ is annihilated by
+  the corresponding power of $A^2-\Id$.
+\end{proof}
+
+\begin{theorem}[Multiplicity at one does not decrease under squaring]
+  \label{thm:mpu_root_multiplicity_one_square}
+  \lean{Matrix.rootMultiplicity_one_charpoly_le_sq}
+  \leanok
+  For every complex square matrix $A$,
+  \begin{align}
+    \operatorname{mult}_{1}(\chi_A)
+      &\le \operatorname{mult}_{1}(\chi_{A^2}).
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_generalized_eigenspace_one_square}
+  With $G_1$ as above, algebraic multiplicity equals the dimension of the
+  maximal generalized eigenspace. Hence
+  \begin{align}
+    \operatorname{mult}_{1}(\chi_A)
+      &=\dim G_1(A)\\
+      &\le\dim G_1(A^2)
+       =\operatorname{mult}_{1}(\chi_{A^2}).
+  \end{align}
+\end{proof}
+
+\begin{theorem}[Trace powers above one determine the characteristic polynomial]
+  \label{thm:mpu_shifted_trace_power_charpoly}
+  \lean{Matrix.charpoly_rootMultiplicity_one_eq_one_of_forall_trace_pow_eq_one_of_one_lt,
+    Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^k)=1$ for every
+  integer $k>1$, then
+  \begin{align}
+    \operatorname{mult}_{1}(\chi_A)&=1,
+    &\chi_A(X)&=X^{n-1}(X-1).
+  \end{align}
+  Thus $1$ is the sole nonzero eigenvalue and has algebraic multiplicity one.
+  This is the exact shifted-moment conclusion of
+  \cite[Proposition~III.1]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_shifted_trace_power_moments,thm:mpu_trace_power_all,
+    thm:mpu_shifted_trace_power_spectrum,
+    thm:mpu_root_multiplicity_one_square}
+  Applying the all-positive trace-power theorem to $A^2$ gives
+  \begin{align}
+    \chi_{A^2}(X)&=X^{n-1}(X-1),
+    &\operatorname{mult}_{1}(\chi_{A^2})&=1.
+  \end{align}
+  The multiplicity inequality therefore bounds
+  $\operatorname{mult}_{1}(\chi_A)$ by one. The set-spectrum theorem shows
+  that $1$ occurs, so this multiplicity is positive and hence equals one.
+  The same set-spectrum theorem excludes every other nonzero root. Splitting
+  the monic characteristic polynomial now yields
   \begin{align}
     \operatorname{mult}_{1}(\chi_A)&=1,
     &\chi_A(X)&=X^{n-1}(X-1).
@@ -890,10 +956,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_normalized_transfer_trace,
-        thm:mpu_shifted_trace_power_spectrum}
-    The normalized transfer identity gives the shifted moments
+        thm:mpu_shifted_trace_power_charpoly}
+    For every integer $N>1$, the normalized transfer identity gives
     \begin{align}
-        \tr(E^N)&=1 &&(N>1).
+        \tr(E^N)&=1.
     \end{align}
     Applying the exact shifted trace-power theorem in dimension $D^2$ yields
     \begin{align}
@@ -927,25 +993,26 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_shifted_transfer_trace_primitive,
         thm:mpu_unique_active_full_support_normal}
-    Write $K$ for the active block set. The normalized transfer identity gives
+    Write $\widetilde U$ for the normalized flattening, set
+    $T=\mathcal E_{\widetilde U}$ for its transfer map, and let
+    $E=\widehat T$ be the corresponding transfer matrix. Also write $K$ for
+    the active block set and $D_k$ for the bond dimension of an active block
+    $k\in K$. For every integer $N>1$, the normalized transfer identity gives
     \begin{align}
-        \tr(E^N)&=1 &&(N>1).
+        \tr(E^N)&=1.
     \end{align}
     The active-multiplicity theorem and the transfer-spectrum theorem then give
     \begin{align}
         |K|&=1,
-        &r(E)&=1,
-        &\operatorname{peripheral}(E)&=\{1\}.
+        &r(T)&=1,
+        &\operatorname{peripheral}(T)&=\{1\}.
     \end{align}
     Full active support supplies
     \begin{align}
         \sum_{k\in K}D_k&=D.
     \end{align}
     Since $K$ is a singleton, its unique active block has ambient dimension
-    $D$ and therefore makes the ambient tensor irreducible. Combining this
-    irreducibility with the displayed radius and peripheral-spectrum fields
-    gives
-    \begin{align}
-        \widetilde U&\text{ is a normal tensor}.
-    \end{align}
+    $D$ and therefore makes $\widetilde U$ irreducible. The displayed radius
+    and peripheral-spectrum identities provide its remaining normality
+    fields. Consequently $\widetilde U$ is a normal tensor.
 \end{proof}
