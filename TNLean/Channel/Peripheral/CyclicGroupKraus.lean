@@ -14,9 +14,11 @@ import Mathlib.RingTheory.RootsOfUnity.Complex
 For an irreducible unital Kraus map with a positive definite adjoint-fixed point,
 we prove:
 
-1. **Product closure**: if `μ, ν ∈ peripheralEigenvalues E`, then `μ * ν ∈ peripheralEigenvalues E`.
-2. **Cyclic group characterization**: `peripheralEigenvalues E = {γ^j | j = 0, …, m−1}`
-   where `m = |peripheralEigenvalues E|` and `γ` is a primitive `m`-th root of unity.
+1. **Product closure**: if \(\mu\) and \(\nu\) are peripheral eigenvalues,
+   then \(\mu\nu\) is peripheral.
+2. **Cyclic group characterization**: the peripheral spectrum is
+   \(\{\gamma^j\mid 0\leq j<m\}\), where \(m\) is its cardinality and
+   \(\gamma\) is a primitive \(m\)-th root of unity.
 
 The product closure proof uses:
 - KS equality for peripheral eigenvectors (`ks_equality_of_peripheral_eigenvector_of_fixedPoint`)
@@ -25,8 +27,8 @@ The product closure proof uses:
   (via `posDef_of_posSemidef_fixedPoint_irreducible_cp`)
 
 The cyclic characterization uses product and power closure to show directly
-that every peripheral eigenvalue is an `m`-th root of unity, where `m` is the
-number of peripheral eigenvalues. A primitive `m`-th root and a cardinality
+that every peripheral eigenvalue is an \(m\)-th root of unity, where \(m\) is
+the number of peripheral eigenvalues. A primitive \(m\)-th root and a cardinality
 comparison then give the required parametrization.
 
 **Scope restriction (complete positivity and adjoint fixed point):** Wolf
@@ -154,25 +156,27 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
 /-!
 ## Peripheral eigenvalues form a cyclic group of roots of unity
 
-Using product closure + power closure + root-of-unity property, we show
-`peripheralEigenvalues E = Set.range (fun j : Fin m => γ ^ (j : ℕ))` where
-`m` is the cardinality of the peripheral eigenvalue set and `γ` is a primitive
-`m`-th root of unity.
+Using product closure, power closure, and the root-of-unity property, we show
+\(\operatorname{peripheralEigenvalues}(E)=\{\gamma^j\mid j\in\mathrm{Fin}(m)\}\),
+where \(m\) is the cardinality of the peripheral eigenvalue set and \(\gamma\)
+is a primitive \(m\)-th root of unity.
 
 The proof strategy:
-1. The peripheral set `S` is closed under products, powers, and inverses.
-2. Multiplication by any `μ ∈ S` permutes `S`, so a product comparison gives
-   `μ ^ |S| = 1`.
-3. Choose a primitive `|S|`-th root `γ` using `Complex.isPrimitiveRoot_exp`.
-4. Compare cardinalities with the set of `|S|`-th roots to obtain
-   `S = {γ^j | j ∈ Fin |S|}`.
+1. The peripheral set \(S\) is closed under products, powers, and inverses.
+2. Multiplication by any \(\mu\in S\) permutes \(S\), so a product comparison
+   gives \(\mu^{|S|}=1\).
+3. Choose a primitive \(|S|\)-th root \(\gamma\) using
+   `Complex.isPrimitiveRoot_exp`.
+4. Compare cardinalities with the set of \(|S|\)-th roots to obtain
+   \(S=\{\gamma^j\mid j\in\mathrm{Fin}(|S|)\}\).
 -/
 
 /-- The peripheral eigenvalues of an irreducible unital Kraus map with a PD
 adjoint-fixed point form a cyclic group of roots of unity.
 
-Specifically, if `m = |peripheralEigenvalues E|`, there exists a primitive `m`-th
-root of unity `γ` such that `peripheralEigenvalues E = {γ^j | j = 0, …, m−1}`.
+Specifically, if \(m\) is the number of peripheral eigenvalues, there exists a
+primitive \(m\)-th root of unity \(\gamma\) such that the peripheral spectrum is
+\(\{\gamma^j\mid 0\leq j<m\}\).
 
 This is the finite-Kraus specialization of the cyclicity conclusion in Wolf
 Theorem 6.6(1), and it connects the channel-level peripheral spectrum to the
@@ -188,8 +192,8 @@ The proof uses:
 - Power closure (`peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint`)
 - Roots of unity property (`peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint`)
 - `Complex.isPrimitiveRoot_exp` and `IsPrimitiveRoot.card_nthRootsFinset`
-- `IsPrimitiveRoot.eq_pow_of_pow_eq_one`: elements of order dividing `m` are powers of a
-  primitive `m`-th root -/
+- `IsPrimitiveRoot.eq_pow_of_pow_eq_one`: elements of order dividing \(m\) are
+  powers of a primitive \(m\)-th root -/
 theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)

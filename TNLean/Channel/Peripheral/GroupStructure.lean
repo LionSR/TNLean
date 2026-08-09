@@ -451,7 +451,13 @@ theorem peripheral_eigenvalues_cyclic_structure
 
 Combines `peripheral_eigenvalues_cyclic_structure` (cyclic group without
 trace-preservation) with `channel_period_divides_dim` to additionally
-establish `m ∣ D`. -/
+establish `m ∣ D`.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family, trace preservation, and a
+positive-definite fixed point of the adjoint. See
+`docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheral_eigenvalues_form_cyclic_group
     {r : ℕ} [NeZero D]
     (K : Fin r → MatrixAlg D)
