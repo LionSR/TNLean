@@ -144,7 +144,7 @@ theorem spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt
   ext μ
   constructor
   · rintro ⟨hμ, hμ0⟩
-    have hμ_ne : μ ≠ 0 := by simp at hμ0; exact hμ0
+    have hμ_ne : μ ≠ 0 := by simpa only [Set.mem_singleton_iff] using hμ0
     simp [eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt A h hμ hμ_ne]
   · intro hμ
     have hμ1 : μ = 1 := by simpa using hμ
