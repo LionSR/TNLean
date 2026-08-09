@@ -1053,6 +1053,32 @@ $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map.
     coordinate.
 \end{proof}
 
+\begin{theorem}[Trace preservation fixes the vectorized identity on the left]
+    \label{thm:transfer_matrix_trace_preserving_identity_left_fixed}
+    \lean{vecMul_vec_one_transferMatrix_eq_of_trace_preserving}
+    \leanok
+    \uses{def:mpu_transfer_matrix,def:trace_preserving}
+    If $T:M_D(\mathbb C)\to M_D(\mathbb C)$ preserves trace and
+    $(\Phi\rvert=\operatorname{vec}(\Id)^{\mathsf T}$, then
+    \begin{align}
+        (\Phi\rvert\widehat T&=(\Phi\rvert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:matrix_vec_identity_trace_pairing}
+    On the column indexed by the matrix unit $E_{k\ell}$,
+    \begin{align}
+        \bigl((\Phi\rvert\widehat T\bigr)_{(\ell,k)}
+        &=\operatorname{vec}(\Id)\mathbin{\boldsymbol\cdot}
+            \operatorname{vec}(T(E_{k\ell}))\\
+        &=\tr(T(E_{k\ell}))
+         =\tr(E_{k\ell})
+         =\delta_{k\ell}.
+    \end{align}
+    These are precisely the coordinates of $(\Phi\rvert$.
+\end{proof}
+
 \begin{theorem}[Powers and traces of transfer matrices]
     \label{thm:mpu_transfer_matrix_power_trace}
     \lean{transferMatrix_pow,trace_transferMatrix_eq_linearMap_trace}
@@ -1258,6 +1284,111 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     identities gives the three displayed formulas.
 \end{proof}
 
+\begin{definition}[Ambient inclusion of a canonical block]
+    \label{def:mpu_ambient_block_inclusion}
+    \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion}
+    \leanok
+    \uses{def:cpsv_canonical_form,def:mpu_dependent_block_inclusion}
+    If $U$ is the reconstruction coisometry and $J_k$ is the inclusion of the
+    $k$th retained block, define
+    \begin{align}
+        V_k&=U^\dagger J_k.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Ambient block isometry and intertwining]
+    \label{thm:mpu_ambient_block_isometry_intertwining}
+    \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_self,
+        MPSTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion}
+    \leanok
+    \uses{def:cpsv_canonical_form,def:mpu_ambient_block_inclusion}
+    For every retained block and physical index $i$,
+    \begin{align}
+        V_k^\dagger V_k&=\Id,\\
+        A^iV_k&=V_k(\mu_k A_k^i).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_dependent_block_inclusion_identities}
+    The coisometry $UU^\dagger=\Id$ and $J_k^\dagger J_k=\Id$ give
+    \begin{align}
+        V_k^\dagger V_k
+        &=J_k^\dagger UU^\dagger J_k
+         =J_k^\dagger J_k
+         =\Id.
+    \end{align}
+    The canonical reconstruction and block-diagonal intertwining give
+    \begin{align}
+        A^iV_k
+        &=U^\dagger\Bigl(\bigoplus_j\mu_jA_j^i\Bigr)J_k
+         =U^\dagger J_k(\mu_kA_k^i)
+         =V_k(\mu_kA_k^i).
+    \end{align}
+\end{proof}
+
+\begin{definition}[Active weighted-block transfer eigenvalue]
+    \label{def:mpu_active_transfer_eigenvalue}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeTransferEigenvalue}
+    \leanok
+    \uses{def:cpsv_canonical_form}
+    For an active block $k$, define its weighted transfer eigenvalue by
+    \begin{align}
+        q_k&=\mu_k\overline{\mu_k}=\lvert\mu_k\rvert^2.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Shifted traces normalize every active weight]
+    \label{thm:mpu_active_transfer_eigenvalue_one}
+    \lean{MPSTensor.CPSVCanonicalFormData.activeTransferEigenvalue_eq_one}
+    \leanok
+    \uses{def:mpu_active_transfer_eigenvalue,def:mpu_transfer_matrix}
+    If the ambient transfer matrix satisfies $\tr(E^N)=1$ for every integer
+    $N>1$, then every active block satisfies
+    \begin{align}
+        q_k&=1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_ambient_block_isometry_intertwining,
+        thm:mpu_shifted_trace_power_spectrum,
+        thm:mpu_transfer_matrix_eigenvalues}
+    Choose a nonzero fixed matrix $X_k$ for the unweighted normal block and set
+    $Y_k=V_kX_kV_k^\dagger$. The isometry and intertwining identities give
+    \begin{align}
+        Y_k&\ne0,
+        &E(Y_k)&=q_kY_k.
+    \end{align}
+    Thus $q_k$ lies in the ambient transfer spectrum; it is nonzero because
+    $k$ is active. The shifted trace-power spectrum is $\{0,1\}$, hence
+    $q_k=1$.
+\end{proof}
+
+\begin{theorem}[Unique full-support block geometry]
+    \label{thm:mpu_unique_active_full_support_geometry}
+    \lean{MPSTensor.CPSVCanonicalFormData.active_dim_eq_of_card_active_eq_one_of_fullActiveSupport,
+        MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_mul_conjTranspose_eq_one}
+    \leanok
+    \uses{def:mpu_full_active_support,def:mpu_ambient_block_inclusion}
+    If there is exactly one active block $k$ and active support fills the
+    ambient bond space, then
+    \begin{align}
+        D_k&=D,
+        &V_kV_k^\dagger&=\Id.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_ambient_block_isometry_intertwining}
+    The full-support sum reduces to the unique summand:
+    \begin{align}
+        D&=\sum_{j\in\mathrm{Active}}D_j=D_k.
+    \end{align}
+    Therefore $V_k$ is a square matrix. Since $V_k^\dagger V_k=\Id$, finite
+    equal-dimensional inverse symmetry gives $V_kV_k^\dagger=\Id$.
+\end{proof}
+
 \begin{theorem}[Shifted transfer traces determine one active block]
     \label{thm:mpu_shifted_transfer_trace_card_active}
     \lean{MPSTensor.CPSVCanonicalFormData.card_active_eq_one_of_shifted_transfer_trace}
@@ -1459,28 +1590,102 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     pairings force the product of those scalars to be one.
 \end{proof}
 
-\begin{lemma}[Identification with chosen reduced-CFII fixed points]
-    \label{lem:mpu_reduced_cfii_transfer_stabilization}
-    Suppose the normalized flattening is presented by a chosen canonical-form-II
-    representative whose active blocks fill the bond space. Let $\rho$ and
-    $\Phi$ be the diagonal positive right fixed point and the identity left
-    fixed point supplied by that representative, normalized by
-    $(\Phi\mid\rho)=1$. Then
+\begin{theorem}[Identification with chosen reduced-CFII fixed points]
+    \label{thm:mpu_reduced_cfii_transfer_stabilization}
+    \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+        def:mpu_full_active_support,def:mpu_ambient_block_inclusion}
+    Suppose $d>0$, $D>1$, and $\mathcal U$ is an MPU whose normalized
+    flattening is presented by chosen canonical-form-II data with active blocks
+    filling the bond space. There is a
+    unique active block $k$. Normalize its diagonal positive definite fixed
+    matrix $\Lambda_k$ to have trace one, and let $V_k$ be its inclusion into
+    the ambient bond space. Then
+    \begin{align}
+        \rho&=V_k\Lambda_kV_k^\dagger,
+        &\rho&>0,
+        &\tr(\rho)&=1,\\
+        E\lvert\rho)&=\lvert\rho),
+        &(\Phi\rvert E&=(\Phi\rvert,
+        &(\Phi\mid\rho)&=1,
+    \end{align}
+    where $(\Phi\rvert$ is the vectorized identity. Consequently,
     \begin{align}
         E^{D^2-1}=\lvert\rho)(\Phi\rvert.
     \end{align}
-    This is a statement about the chosen reduced representative; it does not
-    assert that every ambient MPU tensor is itself in canonical form II.
-\end{lemma}
+    % Source labels: Erightleft and prop:normal-tensor.
+    The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
+    fixed-point equations in
+    \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient transport
+    $\rho$ need not be diagonal. This is a statement about the chosen reduced
+    representative and the blocking step in
+    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}; it does not assert
+    that every ambient MPU tensor is itself in canonical form II.
+\end{theorem}
 
-\begin{proof}
-    \uses{thm:mpu_normalized_transfer_stabilization,
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace,
+        thm:mpu_shifted_transfer_trace_card_active,
+        thm:mpu_active_transfer_eigenvalue_one,
+        thm:mpu_ambient_block_isometry_intertwining,
+        thm:mpu_unique_active_full_support_geometry,
+        thm:matrix_posdef_coisometric_transport,
+        lem:transfer_map_corner_intertwine,
+        thm:transfer_matrix_trace_preserving_identity_left_fixed,
+        thm:mpu_transfer_matrix_vectorization,
+        thm:matrix_vec_identity_trace_pairing,
+        thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}
-    The finite-blocking theorem shows that every normalized left and right fixed
-    pair factors the stabilized projector. It remains to transport the
-    blockwise canonical-form-II fixed points through the full-support ambient
-    reconstruction and prove the displayed pairing and fixed equations.
-    % Formalization of this remaining step is tracked in GitHub issue #5786.
+    The shifted trace identities satisfy $\tr(E^N)=1$ for every integer
+    $N>1$ and give
+    \begin{align}
+        \tr(E^N)=1
+        \quad\Longrightarrow\quad
+        \operatorname{card}(\mathrm{Active})=1.
+    \end{align}
+    Let $k$ be this active block. Canonical form II supplies a diagonal
+    $\Lambda_0>0$ fixed by the unweighted block transfer map. Normalize it by
+    \begin{align}
+        \Lambda&=\tr(\Lambda_0)^{-1}\Lambda_0,
+        &\tr(\Lambda)&=1.
+    \end{align}
+    If $\omega_k$ is the active weight, then
+    \begin{align}
+        \lvert\omega_k\rvert^2&=1,
+        &E_k(\Lambda)&=\Lambda,
+    \end{align}
+    where $E_k$ is the transfer map of the weighted block
+    $\widetilde B_k=\omega_k B_k$. Full active support makes the block inclusion
+    $V=V_k$ both isometric and onto:
+    \begin{align}
+        V^\dagger V&=I,
+        &VV^\dagger&=I.
+    \end{align}
+    Hence $\rho=V\Lambda V^\dagger$ is positive definite with trace one, and
+    the intertwining equations $A_iV=V\widetilde B_k(i)$ give the fixedness
+    transport
+    \begin{align}
+        E(V\Lambda V^\dagger)
+        &=V E_k(\Lambda)V^\dagger
+         =V\Lambda V^\dagger
+         =\rho.
+    \end{align}
+    The blockwise left-canonical identity transports similarly:
+    \begin{align}
+        \sum_i \widetilde B_k(i)^\dagger\widetilde B_k(i)=I
+        \quad\Longrightarrow\quad
+        \sum_i A_i^\dagger A_i=I
+        \quad\Longrightarrow\quad
+        (\Phi\rvert E=(\Phi\rvert.
+    \end{align}
+    Finally,
+    \begin{align}
+        (\Phi\mid\rho)&=\tr(\rho)=1,
+        &E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+    \end{align}
+    where the last equality is the uniqueness of the normalized fixed-pair
+    factorization for the stabilized power.
 \end{proof}
 
 \begin{theorem}[One-dimensional normalized transfer matrix]
