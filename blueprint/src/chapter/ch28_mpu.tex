@@ -2,7 +2,7 @@
 
 This chapter develops the algebraic prerequisites for matrix product unitaries.
 The first result supplies the corrected nil-matrix bound used in the blocking
-argument of \cite[lines~405--426]{Cirac2017MPU}.
+argument of \cite{Cirac2017MPU}.
 
 \begin{theorem}[Dimension bound for a nilpotent Lie action]
     \label{thm:mpu_lcs_finrank}
@@ -71,7 +71,7 @@ argument of \cite[lines~405--426]{Cirac2017MPU}.
 
 The length $n$ is a weak bound, not a strict bound below $n$; the latter is
 false for strictly upper-triangular matrices.  This corrects the intermediate
-strict inequality in \cite[lines~405--426]{Cirac2017MPU} without changing its
+strict inequality in \cite{Cirac2017MPU} without changing its
 final strict $D^4$ estimate.
 
 \section{The matrix product unitary condition}
@@ -169,7 +169,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
 For the transfer-matrix spectrum argument of
-\cite[Proposition~1, lines~349--354]{Cirac2017MPU} we first record the
+\cite[Proposition~1]{Cirac2017MPU} we first record the
 algebraic fact that a matrix whose positive powers all have trace~$1$ must have
 characteristic polynomial $X^{n-1}(X-1)$.  The source assumes only the powers
 with exponent strictly greater than one; this weaker hypothesis determines the
@@ -246,13 +246,13 @@ nonzero spectrum as a set.
   finite-range hypothesis of Theorem~\ref{thm:mpu_trace_power_le_card}.
 \end{proof}
 
-\begin{lemma}[Shifted moments under matrix powers]
-  \label{lem:mpu_shifted_trace_power_moments}
+\begin{theorem}[Shifted moments under matrix powers]
+  \label{thm:mpu_shifted_trace_power_moments}
   \lean{Matrix.forall_trace_pow_pow_eq_one_of_forall_trace_pow_eq_one_of_one_lt}
   \leanok
   Let $A$ be an $n\times n$ complex matrix such that $\tr(A^k)=1$ for every
   $k>1$, and let $m>1$.  Then $\tr((A^m)^r)=1$ for every $r\ge1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
   For $r\ge1$, one has $(A^m)^r=A^{mr}$ and $mr>1$, so the hypothesis at
@@ -267,24 +267,24 @@ nonzero spectrum as a set.
   \leanok
   Let $A$ be an $n\times n$ complex matrix.  If $\tr(A^k)=1$ for every
   $k>1$, then
-  \begin{align*}
+  \begin{align}
     \sigma(A)\setminus\{0\}&=\{1\}.
-  \end{align*}
+  \end{align}
   Thus $1$ occurs as a spectral value and every nonzero spectral value equals
   $1$.  This is the set-spectrum conclusion of
-  \cite[Proposition~1, lines~349--354]{Cirac2017MPU}; it does not assert
+  \cite[Proposition~1]{Cirac2017MPU}; it does not assert
   algebraic multiplicity.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{lem:mpu_shifted_trace_power_moments, thm:mpu_trace_power_all}
+  \uses{thm:mpu_shifted_trace_power_moments, thm:mpu_trace_power_all}
   For every $r\ge1$, the hypothesis gives
   $\tr((A^2)^r)=\tr(A^{2r})=1$ and
   $\tr((A^3)^r)=\tr(A^{3r})=1$.  Hence, by
   Theorem~\ref{thm:mpu_trace_power_all},
-  \begin{align*}
+  \begin{align}
     \chi_{A^2}(X)&=\chi_{A^3}(X)=X^{n-1}(X-1).
-  \end{align*}
+  \end{align}
   If $\mu\in\sigma(A)$ is nonzero, spectral mapping places $\mu^2$ in
   $\sigma(A^2)$ and $\mu^3$ in $\sigma(A^3)$.  The two characteristic
   polynomials give $\mu^2=\mu^3=1$, and therefore $\mu=1$.
