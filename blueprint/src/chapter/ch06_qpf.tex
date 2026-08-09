@@ -153,7 +153,8 @@ and~\cite{Evans1978Spectral}.
     orthogonal projection and
     \begin{align}
         QE(QXQ)Q
-         & =E(QXQ)
+         & =E(QXQ).
+        \label{eq:cp_fixed_support_invariant}
     \end{align}
     for every $X\in\MN{D}$.
 \end{theorem}
@@ -161,8 +162,8 @@ and~\cite{Evans1978Spectral}.
 \begin{proof}
     \leanok
     The fixed-point equation makes the complementary Kraus corners vanish,
-    $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives the displayed
-    compression identity.
+    $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives
+    Equation~(\ref{eq:cp_fixed_support_invariant}).
 \end{proof}
 
 \begin{theorem}[Nonzero matrix has nonzero support]
@@ -223,7 +224,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:injective_irreducible, thm:psd_fp_pd_irred}
+    \uses{thm:transfer_cp, thm:injective_irreducible, thm:psd_fp_pd_irred}
     Injectivity implies irreducibility of the transfer map. Apply
     Theorem~\ref{thm:psd_fp_pd_irred}.
 \end{proof}
