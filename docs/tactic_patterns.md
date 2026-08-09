@@ -692,6 +692,25 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### shifted trace moments under matrix powers — candidate
+- **Pattern:** turn a trace-moment hypothesis for exponents greater than one
+  into an all-positive trace-moment hypothesis for a matrix power:
+  ```lean
+  intro k hk
+  rw [← pow_mul]
+  exact h (m * k) (hm.trans_le (Nat.le_mul_of_pos_right m hk))
+  ```
+- **Seen:** two occurrences: the target-one theorem
+  `Matrix.forall_trace_pow_pow_eq_one_of_forall_trace_pow_eq_one_of_one_lt` in
+  `TNLean/Algebra/ShiftedTracePowerSpectrum.lean` and the target-zero theorem
+  `Matrix.forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt` in
+  `TNLean/Algebra/ShiftedZeroTraceNilpotent.lean` (review on 2026-08-09).
+- **Abstraction:** if a third occurrence appears, promote a lemma generalized
+  over the common target value `c : ℂ`, then rewrite both current call sites.
+- **Notes:** This is the second occurrence, below the rule-of-three promotion
+  threshold; retain the explicit source-facing target-one and target-zero
+  theorems until another consumer fixes the useful general statement.
+
 ### rectangular complement expansion — candidate
 - **Pattern:** expand a rectangular remainder by associativity:
   `Q * (1 - L * Q) * L = Q * L - (Q * L) * (Q * L)`.
