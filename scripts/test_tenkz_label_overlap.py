@@ -1320,6 +1320,100 @@ def main() -> int:
                 for finding in missing_class_audit.findings):
             raise AssertionError("audit accepted an ink-use without class")
 
+        # A traced row's closure publishes its own contour (#5719).  The
+        # rail that shipped in the print blueprint began one wrap reach out
+        # from the row's west end, and no measured gate could see it, because
+        # a wire carries no measured box.  These four logs seed both the
+        # pre-fix ink and the ink that replaces it.
+        def closure_log(name: str, rail: str, labels: str = "") -> Path:
+            path = work / name
+            path.write_text(
+                "picture|id=1|lang=kernel\n"
+                "atom|picture=1|cell=1-1|kind=dot\n"
+                "kernel-boundary|picture=1|signature=\n"
+                + rail + labels,
+                encoding="utf-8",
+            )
+            return path
+
+        detached = closure_log(
+            "closure-detached.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|"
+            "points=-600000,0;-600000,-800000;2600000,-800000;2600000,0\n",
+        )
+        detached_status, detached_audit = audit_status(detached)
+        detached_findings = [finding for finding in detached_audit.findings
+                             if finding.rule == "closure-detached"]
+        if detached_status != 1 or len(detached_findings) != 2:
+            raise AssertionError(
+                "audit accepted a closure drawn clear of the row it closes"
+            )
+        if not all("9.16pt short" in finding.msg
+                   for finding in detached_findings):
+            raise AssertionError(
+                "the detached closure finding did not measure the gap: "
+                + "; ".join(finding.msg for finding in detached_findings)
+            )
+
+        joined_rail = (
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n"
+        )
+        joined = closure_log("closure-joined.tnlog", joined_rail)
+        joined_status, joined_audit = audit_status(joined)
+        if joined_status != 0 or joined_audit.findings:
+            raise AssertionError(
+                "audit rejected a closure that meets both of its row's ends"
+            )
+
+        # The site name that stood on the return: a box straddling the rail's
+        # own run, which is exactly where a label band shallower than the
+        # trace reach put every name under a traced row.
+        on_rail = closure_log(
+            "closure-label-on-rail.tnlog",
+            joined_rail,
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=400000|xmax=800000|ymin=-900000|ymax=-700000|"
+            "shape=rect|radius=0\n",
+        )
+        on_rail_status, on_rail_audit = audit_status(on_rail)
+        if on_rail_status != 1 or not any(
+                finding.rule == "label-overlap"
+                and "closure wrap-1 of row 1" in finding.msg
+                for finding in on_rail_audit.findings):
+            raise AssertionError(
+                "audit accepted a label lying across a traced row's closure"
+            )
+
+        stepped = closure_log(
+            "closure-label-stepped.tnlog",
+            joined_rail,
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=400000|xmax=800000|ymin=-1200000|ymax=-1000000|"
+            "shape=rect|radius=0\n",
+        )
+        stepped_status, stepped_audit = audit_status(stepped)
+        if stepped_status != 0 or stepped_audit.findings:
+            raise AssertionError(
+                "audit rejected a label stepped clear of the closure"
+            )
+
+        malformed_rail = closure_log(
+            "closure-malformed.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|points=0,0\n",
+        )
+        malformed_status, malformed_audit = audit_status(malformed_rail)
+        if malformed_status != 1 or not any(
+                finding.rule == "malformed-event"
+                for finding in malformed_audit.findings):
+            raise AssertionError("audit accepted a one-point closure contour")
+
         glyph_bbox = work / "glyph-bbox.tnlog"
         glyph_bbox.write_text(
             "picture|id=1|lang=kernel\n"

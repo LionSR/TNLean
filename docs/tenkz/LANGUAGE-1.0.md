@@ -636,6 +636,18 @@ as the long return the authors draw, and a cup joining two vertically
 adjacent ports at one column clears one column and comes back as the shallow
 cap they draw. Nobody chooses which.
 
+A closure is drawn between the two ends it closes, and those are the row's
+own virtual ends, not points near them: the rail leaves the first cell of
+its row, clears the row, and arrives at the last one, so a reader sees the
+closed contour the contraction asserts. A rail that turned at its own reach
+and left the row untouched drew an open chain under a periodic record, and
+no gate could tell, because a wire carries no measured box. Every west-east
+closure therefore publishes its contour — the two ends it names and the
+polyline it lays between them — and a rail that does not start and finish on
+the ends it names is a hard finding. A row whose first or last cell stands
+empty has no virtual end to arrive at, and its rail is the free racetrack
+that an empty lattice draws.
+
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.
 
@@ -672,8 +684,11 @@ two selections is a fact the model holds, and concentric order (§5) steps the
 inner contour in by one clearance. A generated trace return is network ink,
 not a mark, and it takes the same concentric discipline in one direction
 only: a bracket whose selection reaches a traced boundary row steps its arc
-outside the returns routed on the side it speaks from, so a return never
-runs between the arc and its caption, while no mark ever moves a wire —
+outside the returns routed on the side it speaks from, and a name that
+speaks to that side stands beyond the return for the same reason — the
+return is ink already placed, and a band shallower than the trace reach
+would lay every site name across the very wire that closes its row — while
+no mark ever moves a wire —
 which is what keeps mark deletion ink-neutral for the network. The rows a
 selection occupies, span and all, decide whether it reaches the boundary
 row; a member stands where its own address puts it, or — for a cluster's
