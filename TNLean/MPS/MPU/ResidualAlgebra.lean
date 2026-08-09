@@ -13,8 +13,8 @@ This file formalizes the nil-algebra step in the proof of arXiv:1703.09188,
 Proposition `blockingsimple`, lines 405--415.  The residual slices generate a
 nonunital algebra.  Positive residual words have zero trace, so linearity extends
 trace vanishing to the whole algebra.  Every positive power remains in that
-algebra, hence every element is nilpotent.  The finite-dimensional nil-matrix
-theorem then makes every product of exactly `D²` residual matrices vanish.
+algebra, hence every element is nilpotent.  Finally, the finite-dimensional
+nil-matrix theorem shows that every product of exactly `D²` residual matrices vanishes.
 
 The source claims a strict intermediate bound.  We use the corrected exact
 length `D²`; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`.
