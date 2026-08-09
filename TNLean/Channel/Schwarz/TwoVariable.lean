@@ -7,10 +7,6 @@ import TNLean.Channel.Schwarz.TwoPositive
 import TNLean.Channel.Schwarz.AbstractMultiplicativeDomain
 import Mathlib.Data.Matrix.Block
 
-set_option maxHeartbeats 2000000
--- needed for ker_inclusion (heavy dot-product calc)
--- and schwarz_two_variable (ampliation typechecking)
-
 /-!
 # Two-variable operator Schwarz inequality
 
@@ -41,6 +37,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 
 local notation "Mat" => Matrix n n ℂ
 
+omit [DecidableEq n] in
 /-- The block matrix `C†C` for `C = [A B]` (horizontal concatenation) is PSD. -/
 lemma blockMatrix_CtC_posSemidef (A B : Mat) :
     (Matrix.fromBlocks (Aᴴ * A) (Aᴴ * B) (Bᴴ * A) (Bᴴ * B) :
@@ -60,6 +57,7 @@ lemma blockMatrix_CtC_posSemidef (A B : Mat) :
 
 /-! ### 2-positivity ampliation of the block matrix -/
 
+omit [DecidableEq n] in
 /-- The 2-positivity ampliation applied to the block matrix `C†C` yields a PSD
 `2×2` block matrix of the form `[[E(A†A), E(A†B)], [E(B†A), E(B†B)]]`. -/
 lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2PositiveMap E)
@@ -103,6 +101,7 @@ lemma ampliated_block_matrix_posSemidef (E : Mat →ₗ[ℂ] Mat) (h2pos : Is2Po
 /-! ### Real-valued auxiliary lemmas -/
 
 -- (Uses `linear_eq_zero_of_quadratic_nonneg` from AbstractMultiplicativeDomain)
+omit [DecidableEq n] in
 /-- A complex number `z† A z` for a PSD matrix `A` is nonnegative. -/
 private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
     (h : (Matrix.fromBlocks A C Cᴴ B : Matrix (n ⊕ n) (n ⊕ n) ℂ).PosSemidef)
@@ -118,6 +117,7 @@ private lemma dotProduct_mulVec_nonneg_of_posSemidef_block {A C B : Mat}
 
 -- (Uses `dotProduct_star_self_eq_zero` from Mathlib)
 
+omit [DecidableEq n] in
 /-- The quadratic form of a `fromBlocks` matrix on a `Sum`-type vector.
 
 For M = [[A, B], [C, D]] and x = (v, w), we have
@@ -144,6 +144,7 @@ private lemma fromBlocks_quadratic_form {A B C D : Mat} (v w : n → ℂ) :
 
 /-! ### Schur complement lemmas (singular-block case) -/
 
+omit [DecidableEq n] in
 /-- If the `2×2` block matrix `[[A, C], [C†, B]]` is PSD, then `ker(B) ≤ ker(C)`.
 
 This is the kernel-absorption clause of Wolf's Theorem 5.2 (block matrices
@@ -188,8 +189,8 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
     ((t : ℂ) ^ 2) * (star z ⬝ᵥ (A.mulVec z)) + (2 : ℂ) * (t : ℂ) * (star z ⬝ᵥ z) := by
     rw [fromBlocks_quadratic_form ((t : ℂ) • z) y]
     rw [hy, ← hz_def]
-    simp [Matrix.mulVec_smul, dotProduct_smul, star_smul, smul_eq_mul,
-      mul_comm, mul_left_comm, mul_assoc, hyCz_eq, add_comm, add_left_comm, add_assoc]
+    simp [Matrix.mulVec_smul, dotProduct_smul, star_smul,
+      mul_comm, mul_assoc, hyCz_eq, add_comm]
     ring
   have h_quad_nonneg (t : ℝ) : 0 ≤ ((t : ℂ) ^ 2) * (star z ⬝ᵥ (A.mulVec z)) +
       (2 : ℂ) * (t : ℂ) * (star z ⬝ᵥ z) := by
@@ -228,8 +229,6 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
       simp
     rw [hexpr] at h_real
     exact h_real
-  have ha_re_nonneg : 0 ≤ (star z ⬝ᵥ (A.mulVec z)).re :=
-    (Complex.nonneg_iff.mp ha_nonneg).1
   have hb_re_zero : ((star z ⬝ᵥ z).re : ℝ) = 0 := by
     have h_quad' : ∀ t : ℝ, 0 ≤ t * (2 * ((star z ⬝ᵥ z).re : ℝ)) +
       t ^ 2 * ((star z ⬝ᵥ (A.mulVec z)).re : ℝ) := by
@@ -250,6 +249,7 @@ lemma ker_inclusion_of_fromBlocks_posSemidef {A C B : Mat}
   rw [hb_zero] at hz_norm_sq_pos
   exact lt_irrefl 0 hz_norm_sq_pos
 
+omit [DecidableEq n] in
 /-- Schur-complement quadratic-form inequality for a PSD block matrix.
 
 Given a PSD block matrix `[[Amat, Cmat], [CstarMat, Bmat]]` and vectors `v, w`
@@ -277,17 +277,21 @@ lemma schwarz_inequality_of_fromBlocks_posSemidef {Amat Cmat CstarMat Bmat : Mat
   rw [sumElim_dotProduct_sumElim] at hx_nonneg
   -- 0 ≤ (star v ⬝ᵥ (Amat.mulVec v - Cmat.mulVec w))
   --   + (-star w ⬝ᵥ (CstarMat.mulVec v - Bmat.mulVec w))
-  simp [Matrix.mulVec_neg, dotProduct_sub, dotProduct_neg, dotProduct_add] at hx_nonneg
+  have hx_nonneg' :
+      0 ≤ star v ⬝ᵥ (Amat.mulVec v) + -(star v ⬝ᵥ (Cmat.mulVec w)) +
+        (-(star w ⬝ᵥ (CstarMat.mulVec v)) + star w ⬝ᵥ (Bmat.mulVec w)) := by
+    simpa [Matrix.mulVec_neg, dotProduct_neg, dotProduct_add] using hx_nonneg
   -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w
   --   - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ Bmat.mulVec w
-  rw [hwB] at hx_nonneg
+  rw [hwB] at hx_nonneg'
   -- 0 ≤ star v ⬝ᵥ Amat.mulVec v - star v ⬝ᵥ Cmat.mulVec w
   --   - star w ⬝ᵥ CstarMat.mulVec v + star w ⬝ᵥ CstarMat.mulVec v
-  ring_nf at hx_nonneg
-  simpa using hx_nonneg
+  ring_nf at hx_nonneg'
+  simpa using hx_nonneg'
 
 /-! ### Main theorem -/
 
+omit [DecidableEq n] in
 /-- **Two-variable operator Schwarz inequality** (Wolf, Theorem 5.3).
 
 For a 2-positive linear map `E` and all matrices `A, B`, for all vectors `v, w`
