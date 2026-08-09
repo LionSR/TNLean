@@ -60,6 +60,51 @@
     \end{align}
 \end{proof}
 
+\begin{theorem}[Positive-definite transport by a coisometry]
+    \label{thm:matrix_posdef_coisometric_transport}
+    \lean{Matrix.PosDef.mul_mul_conjTranspose_of_mul_conjTranspose_eq_one}
+    \leanok
+    Let $A>0$ be a square complex matrix and let $V$ be a possibly rectangular
+    matrix satisfying $VV^\dagger=\Id$. Then
+    \begin{align}
+        VAV^\dagger&>0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    For a row vector $x$, one has
+    \begin{align}
+        x(VAV^\dagger)x^\dagger&=(xV)A(xV)^\dagger.
+    \end{align}
+    Moreover, $xV=0$ implies
+    \begin{align}
+        x&=x(VV^\dagger)=0.
+    \end{align}
+    Thus every nonzero $x$ gives $xV\ne0$, and positive definiteness of $A$
+    makes the displayed quadratic form strictly positive.
+\end{proof}
+
+\begin{lemma}[Vectorized identity realizes the trace pairing]
+    \label{lem:matrix_vec_identity_trace_pairing}
+    \lean{Matrix.vec_one_dotProduct_vec_eq_trace}
+    \leanok
+    For every square complex matrix $X$,
+    \begin{align}
+        \operatorname{vec}(\Id)\mathbin{\boldsymbol\cdot}
+            \operatorname{vec}(X)&=\tr(X).
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding column stacking gives
+    \begin{align}
+        \sum_{i,j}(\Id)_{ij}X_{ij}
+        &=\sum_{i,j}\delta_{ij}X_{ij}
+         =\sum_iX_{ii}
+         =\tr(X).
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Pairwise orthogonality from a projection resolution]
     \label{lem:orthogonal_projection_mul_eq_zero_of_sum_eq_one}
     \lean{orthogonalProjection_mul_eq_zero_of_sum_eq_one}
