@@ -76,10 +76,9 @@ namespace Matrix
 
 variable {n : ℕ}
 
-/-- A square real matrix has the rank-one factorization of Appendix C.2,
-Lemma C.4 if it is an outer product of two vectors. -/
-def HasRankOneFactorization {ι : Type*} (T : Matrix ι ι ℝ) : Prop :=
-  ∃ a b : ι → ℝ, T = Matrix.vecMulVec a b
+/-- A square matrix has a rank-one factorization if it is an outer product of two vectors. -/
+def HasRankOneFactorization {R ι : Type*} [Mul R] (T : Matrix ι ι R) : Prop :=
+  ∃ a b : ι → R, T = Matrix.vecMulVec a b
 
 /-- The traces of all positive powers of `T` agree with the trace of `T`
 itself. This is the matrix-theoretic consequence of the ZCL step used in
@@ -87,28 +86,28 @@ Appendix C.2, Lemma C.4. -/
 def TracePowersConstant (T : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   ∀ k : ℕ, 0 < k → Matrix.trace (T ^ k) = Matrix.trace T
 
-/-- An idempotent real matrix of trace one has a rank-one factorization.
+/-- An idempotent real or complex matrix of trace one has a rank-one factorization.
 
 This criterion excludes precisely the nilpotent generalized zero-eigenspace
 which is invisible to traces of powers.  It is the algebraic conclusion needed
 after retaining the operator-valued ZCL identity in arXiv:1606.00608,
 Appendix C.2, lines 1489--1497. -/
 theorem hasRankOneFactorization_of_mul_self_eq_self
-    {ι : Type*} [Fintype ι]
-    {T : Matrix ι ι ℝ}
+    {R ι : Type*} [RCLike R] [Fintype ι]
+    {T : Matrix ι ι R}
     (hTT : T * T = T) (hTrace : Matrix.trace T = 1) :
     HasRankOneFactorization T := by
   classical
-  let f : (ι → ℝ) →ₗ[ℝ] (ι → ℝ) := Matrix.toLin' T
+  let f : (ι → R) →ₗ[R] (ι → R) := Matrix.toLin' T
   have hf : IsIdempotentElem f := by
     change Matrix.toLin' T ∘ₗ Matrix.toLin' T = Matrix.toLin' T
     rw [← Matrix.toLin'_mul, hTT]
-  have hrank : Module.finrank ℝ (LinearMap.range f) = 1 := by
+  have hrank : Module.finrank R (LinearMap.range f) = 1 := by
     have h := (LinearMap.isProj_range_iff_isIdempotentElem f).2 hf |>.trace
     rw [Matrix.trace_toLin'_eq, hTrace] at h
     exact_mod_cast h.symm
   rcases finrank_eq_one_iff'.mp hrank with ⟨u, hu, hspan⟩
-  let b : ι → ℝ := fun j ↦
+  let b : ι → R := fun j ↦
     Classical.choose (hspan ⟨f (Pi.single j 1), LinearMap.mem_range_self f _⟩)
   refine ⟨u.1, b, ?_⟩
   ext i j

@@ -971,7 +971,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Finite blocking eliminates the zero-primary transfer component]
     \label{thm:mpu_normalized_transfer_stabilization}
-    \lean{MPOTensor.IsMPU.exists_normalizedTransfer_stabilizes_to_rankOne}
+    \lean{MPOTensor.IsMPU.exists_normalized_transfer_stabilizes_to_rank_one}
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,
         def:mpu_transfer_matrix,thm:mpu_normalized_transfer_nonzero_spectrum}
@@ -989,16 +989,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     such that
     \begin{align}
-        E^J&=\lvert\rho)(\Phi\rvert,
-        &E^k&=E^J\qquad(k\geq J).
+        E^J&=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    Moreover, for every integer $k\geq J$,
+    \begin{align}
+        E^k&=E^J.
     \end{align}
     Thus blocking $J$ sites removes the entire generalized zero-eigenspace.
-    For $D=1$, the transfer matrix is already the identity and stabilization
-    holds at exponent one; the positive bound above is impossible because
-    $D^2-1=0$.
+    The one-dimensional case is stated separately below.
 
-    This is the Jordan-elimination step of
-    \cite[Section~III, lines~397--409]{Cirac2017MPU}.
+    This is the Jordan-elimination step in
+    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1016,9 +1017,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $EP=PE=P$.
 \end{proof}
 
-\begin{lemma}[Uniqueness of the normalized fixed-pair factorization]
-    \label{lem:mpu_stabilized_fixed_pair_uniqueness}
-    \lean{Matrix.StabilizedRankOneData.power_eq_vecMulVec_of_fixed}
+\begin{theorem}[Uniqueness of the normalized fixed-pair factorization]
+    \label{thm:mpu_stabilized_fixed_pair_uniqueness}
+    \lean{Matrix.StabilizedRankOneData.power_eq_vec_mul_vec_of_fixed}
     \leanok
     Let $P=E^J$ be a stabilized rank-one transfer power with normalized left
     and right factors. If $\rho'$ and $\Phi'$ are any other fixed vectors with
@@ -1026,7 +1027,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         P=\lvert\rho')(\Phi'\rvert.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Applying $P$ to $\rho'$ and applying $\Phi'$ to $P$ shows that the two
@@ -1037,7 +1038,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Identification with chosen reduced-CFII fixed points]
     \label{lem:mpu_reduced_cfii_transfer_stabilization}
     \uses{thm:mpu_normalized_transfer_stabilization,
-        lem:mpu_stabilized_fixed_pair_uniqueness}
+        thm:mpu_stabilized_fixed_pair_uniqueness}
     Suppose the normalized flattening is presented by a chosen canonical-form-II
     representative whose active blocks fill the bond space. Let $\rho$ and
     $\Phi$ be the diagonal positive right fixed point and the identity left
@@ -1058,16 +1059,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Formalization of this remaining step is tracked in GitHub issue #5786.
 \end{proof}
 
-\begin{lemma}[One-dimensional transfer stabilization]
-    \label{lem:mpu_transfer_stabilization_fin_one}
-    \lean{MPOTensor.IsMPU.normalizedTransferStabilization_fin_one}
+\begin{theorem}[One-dimensional normalized transfer matrix]
+    \label{thm:mpu_normalized_transfer_fin_one}
+    \lean{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix}
-    If the bond dimension is $D=1$, then $E=1$ and the normalized transfer
-    matrix stabilizes at the positive exponent one.
-\end{lemma}
+    If the bond dimension is $D=1$, then the normalized transfer matrix satisfies
+    \begin{align}
+        E&=1.
+    \end{align}
+    Consequently its powers stabilize at the positive exponent one.
+\end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum}
     In dimension one the characteristic polynomial identity reduces to
     $\chi_E(X)=X-1$, and Cayley--Hamilton gives $E=1$.
 \end{proof}
