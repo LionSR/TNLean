@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.TransferMatrix
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPDO.Purity
 import TNLean.Spectral.MPVOverlapTrace
@@ -14,12 +15,19 @@ This file defines the paper-normalized doubled-physical-index MPS tensor associa
 and proves the transfer-matrix trace identity used in Proposition `prop:normal-tensor` of
 Cirac--Perez-Garcia--Schuch--Verstraete.
 
-## Main definitions and results
+## Main definitions
 
 * `MPOTensor.normalizedFlattening` — the doubled-index MPS tensor `U / sqrt d`.
+
+## Main results
+
 * `MPOTensor.mpvOverlap_normalizedFlattening_self` — its self-overlap scaling law.
 * `MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one` — for every `N > 1`,
   the trace of the `N`-th power of its transfer matrix is one.
+* `MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum` — the nonzero transfer-matrix
+  spectrum of the normalized flattening is `{1}`.
+* `MPOTensor.IsMPU.normalizedFlattening_charpoly` — its exact characteristic polynomial is
+  `X ^ (D * D - 1) * (X - 1)`.
 
 ## References
 
@@ -28,6 +36,7 @@ Cirac--Perez-Garcia--Schuch--Verstraete.
 -/
 
 open scoped Matrix BigOperators
+open Polynomial
 
 namespace MPOTensor
 
@@ -82,5 +91,35 @@ theorem IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one
   push_cast
   rw [← mul_pow]
   simp [NeZero.ne d]
+
+/-- The transfer matrix of the normalized flattening of an MPU has nonzero set spectrum
+exactly `{1}`.
+
+This is the set-spectrum conclusion in Cirac--Perez-Garcia--Schuch--Verstraete,
+Proposition `prop:normal-tensor`, lines 349--354.
+
+**Scope restriction (set spectrum only):** Set equality alone does not assert
+algebraic multiplicity. See `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
+The exact conclusion is `MPOTensor.IsMPU.normalizedFlattening_charpoly`. -/
+theorem IsMPU.normalizedFlattening_nonzero_spectrum
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
+    spectrum ℂ (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) \ {0} = {1} :=
+  Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt _
+    (fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
+
+/-- The transfer matrix of the normalized flattening of an MPU has characteristic
+polynomial `X ^ (D * D - 1) * (X - 1)`. Hence its sole nonzero eigenvalue is
+`1`, with algebraic multiplicity one.
+
+Source: Cirac--Perez-Garcia--Schuch--Verstraete, Proposition
+`prop:normal-tensor`, lines 349--354. -/
+theorem IsMPU.normalizedFlattening_charpoly
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
+    (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)).charpoly =
+      X ^ (D * D - 1) * (X - 1) := by
+  simpa [Fintype.card_prod, Fintype.card_fin] using
+    Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt
+      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening))
+      (fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
 
 end MPOTensor

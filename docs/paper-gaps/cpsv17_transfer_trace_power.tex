@@ -7,8 +7,7 @@
 
 \input{command}
 
-\title{Trace-Power Lemma: All-Positive-Moment Prerequisite\\
-for the MPU Transfer-Matrix Spectrum Argument}
+\title{Shifted Trace Powers and the Exact MPU Transfer Spectrum}
 \author{}
 \date{2026-08-09}
 
@@ -17,63 +16,112 @@ for the MPU Transfer-Matrix Spectrum Argument}
 
 \section{Source statement}
 
-\cite[Proposition~1]{Cirac2017MPU} asserts: if $E$ is the transfer matrix
-of a matrix-product unitary, then $\tr(E^N)=1$ for all $N>1$, and consequently
-the spectrum of $E$ contains a single eigenvalue equal to one with the rest
-vanishing.  The paper cites Lemma~A.5 of \cite{Cirac2016MPDO_arXiv}.
+Let $U$ be a matrix-product unitary of physical dimension $d$ and bond
+dimension $D$.  Combine its two physical indices into
+$a=(p,q)\in\{1,\ldots,d\}^2$ and define its normalized flattening by
+$\widetilde U^{(p,q)}=d^{-1/2}U^{p,q}$.  Its transfer map is the linear
+endomorphism $T:M_D(\mathbb C)\to M_D(\mathbb C)$ given by
+\begin{align}
+  T(X)&=\sum_{a\in\{1,\ldots,d\}^2}
+    \widetilde U^a X(\widetilde U^a)^\dagger.
+\end{align}
+This is \leanid{MPSTensor.transferMap} applied to
+\leanid{MPOTensor.normalizedFlattening}.
+For matrix units $F_{k\ell}$, let $E=\widehat T$ be the column-stacked
+transfer-matrix representation of $T$.  Explicitly, column stacking means
+$\operatorname{vec}(X)_{(j,i)}=X_{ij}$, and $E$ is characterized by
+\begin{align}
+  E_{(j,i),(\ell,k)}&=\bigl(T(F_{k\ell})\bigr)_{ij},\\
+  E\,\operatorname{vec}(X)&=\operatorname{vec}(T(X)).
+\end{align}
+These identities are the defining convention of
+\leanid{transferMatrix} and its application lemma
+\leanid{transferMatrix_mulVec_eq}.
+Thus $E$ is indexed by pairs of bond indices and has matrix dimension
+$n=D^2$. For any $n\times n$ matrix $B$, write
+\begin{align}
+  \chi_B(X)&=\det(X\Id_n-B)
+\end{align}
+for its characteristic polynomial; in particular, $\chi_E$ denotes the
+characteristic polynomial of the transfer matrix.
 
-\section{The present formalization}
+For every integer $N>1$, Proposition~III.1 of
+\cite{Cirac2017MPU} derives the shifted moment identity
+\begin{align}
+  \tr(E^N)&=1.
+  \tag{shifted moments}
+\end{align}
+It concludes that the sole nonzero eigenvalue of $E$ is $1$, with algebraic
+multiplicity one. Equivalently,
+\begin{align}
+  \chi_E(X)&=X^{n-1}(X-1).
+  \tag{source conclusion}
+\end{align}
+The cited Lemma~A.5 of \cite{Cirac2016MPDO_arXiv} is naturally stated with
+all positive moments, including the first moment. The MPU hypothesis above
+does not supply $\tr(E)=1$.
 
-This PR (\ghpr{5732}) proves the algebraic statement: a complex $n\times n$
-matrix whose positive powers all have trace~$1$ satisfies
-$\chi_A(X)=X^{\,n-1}(X-1)$.  The proof is purely algebraic via Newton--Girard
-identities.  The hypothesis requires $\tr(A^k)=1$ for \emph{all} $k\ge 1$,
-including $k=1$.
+\section{Exact shifted-moment argument}
 
-The paper only supplies moments for $N>1$.  This PR does \emph{not} recover
-$\tr(E)=1$ from the definition of the transfer matrix or from the unitary
-hypothesis.  It is a self-contained Newton--Girard prerequisite that needs
-the stronger all-positive-moment input.
+Fix the transfer matrix $E$, its dimension $n$, and its characteristic
+polynomial $\chi_E$ as defined above. The missing first moment is
+unnecessary. For every $m\ge1$, the shifted moments imply
+\begin{align}
+  \tr((E^2)^m)&=\tr(E^{2m})=1,
+  &\tr((E^3)^m)&=\tr(E^{3m})=1.
+\end{align}
+The all-positive-moment characteristic-polynomial theorem therefore gives
+\begin{align}
+  \chi_{E^2}(X)&=\chi_{E^3}(X)=X^{n-1}(X-1).
+\end{align}
+If $\lambda\ne0$ is a spectral value of $E$, spectral mapping gives
+\begin{align}
+  \lambda^2&=1,
+  &\lambda^3&=1,
+  &\lambda&=1.
+\end{align}
+Conversely, spectral mapping from $1\in\sigma(E^2)$ supplies a nonzero
+spectral value of $E$, so
+\begin{align}
+  \sigma(E)\setminus\{0\}&=\{1\}.
+\end{align}
+This set equality alone does not determine algebraic multiplicity.
 
-\section{The $k>1$ conclusion}
+For multiplicity, use the commuting factorization
+\begin{align}
+  E^2-\Id&=(E+\Id)(E-\Id).
+\end{align}
+Every generalized $1$-eigenvector of $E$ is consequently a generalized
+$1$-eigenvector of $E^2$.  Hence
+\begin{align}
+  \operatorname{mult}_{1}(\chi_E)
+  &\le \operatorname{mult}_{1}(\chi_{E^2})
+   =1.
+\end{align}
+Since $1\in\sigma(E)$, the left-hand side is positive and therefore equals
+one.  All other nonzero roots have already been excluded.  Splitting the
+monic characteristic polynomial over $\mathbb C$ yields
+\begin{align}
+  \operatorname{mult}_{1}(\chi_E)&=1,
+  &\chi_E(X)&=X^{n-1}(X-1).
+\end{align}
+No identity for $\tr(E)$, positivity, normality, or diagonalizability is used.
 
-The source's exact $k>1$ conclusion is handled by \ghissue{5737} using
-a purely algebraic spectral-mapping argument.  From $\tr(E^N)=1$ for all
-$N>1$ we have $\tr((E^2)^m)=\tr(E^{2m})=1$ and
-$\tr((E^3)^m)=\tr(E^{3m})=1$ for every $m\ge 1$.  Applying the
-all-positive-powers charpoly theorem of this PR to the matrices $E^2$
-and $E^3$ separately gives
-$\chi_{E^2}(X)=\chi_{E^3}(X)=X^{\,n-1}(X-1)$.  By the spectral mapping
-theorem, the eigenvalues of $E^2$ and $E^3$ are $\{\lambda^2\}$ and
-$\{\lambda^3\}$ for eigenvalues $\lambda$ of $E$.  Hence every nonzero
-eigenvalue $\lambda$ of $E$ satisfies $\lambda^2=\lambda^3=1$, so
-$\lambda=1$.  Thus $\operatorname{spectrum}(E)\setminus\{0\}=\{1\}$ as
-a set.  No positivity, spectral radius, or Perron--Frobenius hypotheses
-are required.
+\section{Verdict and formalization status}
 
-This set-level result (the nonzero spectrum is exactly $\{1\}$) is
-\emph{distinct} from the characteristic-polynomial factorization proved
-in this PR, which additionally shows that the eigenvalue~$1$ has algebraic
-multiplicity~$1$ (all other roots are~$0$).  The algebraic multiplicity
-theorem is a separate, still-unpackaged result.
-
-\section{Formalization status}
-
-\textbf{Verdict: scoped stronger-hypothesis prerequisite.}
-The two Lean theorems in
-\doclink{TNLean/Algebra/TracePowerCharPoly} prove the consequence
-for $k\ge 1$:
-\begin{itemize}
-  \item \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card}
-        (finite-range, $1\le k\le n$, requires $n\ge1$),
-  \item \leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one}
-        (all $k\ge 1$, cardinality derived internally).
-\end{itemize}
-The source-level gap (conclusion from $N>1$ moments alone) is assigned to
-\ghissue{5737}, which proves the set-spectrum result without recovering the
-first moment.  The algebraic multiplicity theorem follows from the charpoly
-factorization proved here once the spectral reduction in \ghissue{5737} is
-applied.
+\textbf{Verdict: the shifted-moment multiplicity gap is closed.}
+The set-spectrum statement remains available as a deliberately narrower
+consequence, but the exact source conclusion is now formalized directly from
+moments with exponent greater than one.\footnote{Formal declarations:
+\leanid{Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt},
+\leanid{Matrix.charpoly_rootMultiplicity_one_eq_one_of_forall_trace_pow_eq_one_of_one_lt},
+and
+\leanid{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
+in \doclink{TNLean/Algebra/ShiftedTracePowerSpectrum}.}
+For the normalized flattening of an MPU of bond dimension $D$, the
+specialization gives the exponent $D^2-1$.\footnote{Formal declaration:
+\leanid{MPOTensor.IsMPU.normalizedFlattening_charpoly} in
+\doclink{TNLean/MPS/MPU/TransferMatrix}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

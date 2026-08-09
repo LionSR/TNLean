@@ -3,8 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.TransferMatrix
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.MPU.ActiveTransferMultiplicity
+import TNLean.MPS.MPU.TransferMatrix
 
 /-!
 # Full-support CPSV canonical forms
@@ -16,8 +19,9 @@ representative is used as an ambient tensor.
 intended reduced canonical representative in the argument for arXiv:1703.09188,
 Proposition `prop:normal-tensor`. The paper's canonical-form definition itself
 permits displayed zero-weight blocks, and the formalization does not construct
-the reduced representative obtained by omitting them. This module also does not
-formalize the proposition's spectral derivation from `IsMPU`. See
+the reduced representative obtained by omitting them. Consequently the MPU
+normality capstone below assumes full active support and does not claim bare
+`IsMPU` implies ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
@@ -249,3 +253,36 @@ theorem isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
 end CPSVCanonicalFormData
 
 end MPSTensor
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- The normalized flattening of an MPU is normal when the chosen CPSV canonical-form
+representative has full active support.
+
+**Scope restriction (full active support):** Bare `IsMPU` does not imply normality for a
+nonminimal ambient representative: adjoining a zero virtual direct summand preserves all
+periodic operators but introduces a nontrivial invariant projection. This theorem treats
+the intended reduced representative in arXiv:1703.09188, Proposition
+`prop:normal-tensor`, lines 319--326 and 344--354, by requiring full active support.
+See `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
+theorem IsMPU.isNormalTensor_normalizedFlattening_of_cpsv
+    [NeZero d] [NeZero D] {U : MPOTensor d D}
+    (hU : U.IsMPU)
+    (data : MPSTensor.CPSVCanonicalFormData U.normalizedFlattening)
+    (hfull : data.HasFullActiveSupport) :
+    MPSTensor.IsNormalTensor U.normalizedFlattening := by
+  have htrace : ∀ N : ℕ, 1 < N →
+      Matrix.trace
+        (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ N) = 1 :=
+    fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
+  have hcard : Fintype.card data.Active = 1 :=
+    data.card_active_eq_one_of_shifted_transfer_trace htrace
+  obtain ⟨hrad, hprim⟩ :=
+    spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace
+      (MPSTensor.transferMap U.normalizedFlattening) htrace
+  exact data.isNormalTensor_of_card_active_eq_one_of_fullActiveSupport
+    hcard hfull hrad hprim
+
+end MPOTensor
