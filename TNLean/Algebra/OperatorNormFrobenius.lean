@@ -50,10 +50,12 @@ theorem toEuclideanCLM_norm_sq_le_sum_norm_sq (A : Matrix n n ℂ) :
             Finset.sum_mul_sq_le_sq_mul_sq Finset.univ _ _
       _ = S * ∑ j, ‖WithLp.ofLp x j‖ ^ 2 := by
         rw [← Finset.sum_mul]
-        congr 1
-        dsimp only [S]
+        unfold S
         rw [Fintype.sum_prod_type]
-  exact (pow_le_pow_left₀ (norm_nonneg _) hop 2).trans_eq (Real.sq_sqrt hS)
+  calc
+    ‖(Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)) A‖ ^ 2 ≤ (√S) ^ 2 :=
+      pow_le_pow_left₀ (norm_nonneg _) hop 2
+    _ = S := Real.sq_sqrt hS
 
 variable {α : Type*} [Fintype α] [DecidableEq α]
 
