@@ -549,10 +549,13 @@ for _macro_class in (
 # brackets of its own, and those brackets are mathematics.  LaTeX reads them
 # as mathematics; plasTeX and MathJax both read them as the length, which
 # turns the row into an error box.  The length is kept when the brackets
-# really hold one, and returned to the row otherwise.
+# really hold one -- a number with a unit, or a named length with an optional
+# factor in front of it -- and returned to the row otherwise.
 _LENGTH = re.compile(
-    r"""\s*[-+]?(\d+(\.\d*)?|\.\d+)\s*
-        (pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)\s*$""",
+    r"""\s*[-+]?\s*(
+          (\d+(\.\d*)?|\.\d+)\s*(pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)
+        | ((\d+(\.\d*)?|\.\d+)\s*)?\\[A-Za-z@]+
+        )\s*$""",
     re.VERBOSE,
 )
 

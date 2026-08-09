@@ -100,6 +100,15 @@ jobs:
             exit 1
           fi
 
+      # A zero exit status says the build ran, not that the pages read. The
+      # site is published from here, so the reader-facing check runs here too
+      # and not only where a pull request is reviewed.
+      - name: Test generated blueprint pages
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
       - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
 

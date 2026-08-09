@@ -55,11 +55,15 @@ METADATA_COMMANDS = (
     "path",
 )
 
-# A length that may follow a row break.  Anything else in those brackets is
-# mathematics and must not be read as the gap to the next row.
+# A length that may follow a row break: a number with a unit, or a named
+# length with an optional factor in front of it.  Anything else in those
+# brackets is mathematics and must not be read as the gap to the next row.
+# This rule is the one `blueprint/src/Packages/_tnlean_patches.py` applies.
 LENGTH = re.compile(
-    r"""\s*[-+]?(\d+(\.\d*)?|\.\d+)\s*
-        (pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)\s*$""",
+    r"""\s*[-+]?\s*(
+          (\d+(\.\d*)?|\.\d+)\s*(pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)
+        | ((\d+(\.\d*)?|\.\d+)\s*)?\\[A-Za-z@]+
+        )\s*$""",
     re.VERBOSE,
 )
 
@@ -143,21 +147,27 @@ READER_TEXT = """(commands) => {
     if (node.parentElement.closest('script, style, mjx-container, .MathJax')) continue;
     parts.push(node.nodeValue);
   }
-  // Mathematics that MathJax has not replaced is still delimited source, not
-  // prose; drop it so only reader-facing text is examined.
-  const text = parts.join(' ')
-    .replace(/\\\\\\(.*?\\\\\\)/gs, ' ')
-    .replace(/\\\\\\[.*?\\\\\\]/gs, ' ');
+  const text = parts.join(' ');
+  const excerpt = index => text.slice(Math.max(0, index - 70), index + 70);
+  // Once MathJax has run, no delimiter and no environment marker is left in
+  // the reader's text. One that survives is a formula the reader is being
+  // shown as source, which is the failure this file exists to reject; it must
+  // be reported rather than skipped over.
+  const source = [];
+  for (const found of text.matchAll(/\\\\\\(|\\\\\\[|\\\\begin\\{/g)) {
+    source.push(excerpt(found.index));
+    if (source.length > 3) break;
+  }
   const leaks = [];
   for (const command of commands) {
     const found = new RegExp('\\\\\\\\' + command + '\\\\b').exec(text);
-    if (found) leaks.push(text.slice(Math.max(0, found.index - 60), found.index + 60));
+    if (found) leaks.push(excerpt(found.index));
   }
   const unresolved = /(^|\\s)\\?\\?(\\s|$|\\.|,)/.exec(text);
   return {
+    source,
     leaks,
-    unresolved: unresolved ? text.slice(Math.max(0, unresolved.index - 80),
-                                        unresolved.index + 40) : null,
+    unresolved: unresolved ? excerpt(unresolved.index) : null,
     errors: [...document.querySelectorAll('mjx-merror')]
       .map(node => node.getAttribute('title') || node.textContent).slice(0, 8),
     typeset: document.querySelectorAll('mjx-container').length,
@@ -188,13 +198,23 @@ OVERFLOW = """() => {
 
 
 def _settle(page: Page) -> None:
-    page.evaluate(
+    """Wait until MathJax has finished its first pass over this page.
+
+    The bundle is fetched asynchronously, so at the moment the document is
+    parsed it may not have installed itself yet.  Waiting for the promise to
+    exist, and only then for it to resolve, is what keeps a page from being
+    read before its mathematics is set.
+    """
+    page.wait_for_function(
         "() => window.MathJax && window.MathJax.startup"
-        " ? window.MathJax.startup.promise : null"
+        " && window.MathJax.startup.promise",
+        timeout=120_000,
     )
+    page.evaluate("() => window.MathJax.startup.promise")
 
 
 def _assert_reader_text(name: str, facts: dict[str, object]) -> None:
+    assert not facts["source"], (name, facts["source"])
     assert not facts["leaks"], (name, facts["leaks"])
     assert facts["unresolved"] is None, (name, facts["unresolved"])
     assert not facts["errors"], (name, facts["errors"])
