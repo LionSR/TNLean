@@ -28,10 +28,10 @@ The cyclic characterization uses product closure + closure under powers + roots 
 to conclude that the peripheral eigenvalues form a finite subgroup of `ℂˣ`, which is
 cyclic by `rootsOfUnity.isCyclic`.
 
-**Scope restriction (complete positivity):** Wolf Theorem 6.6 assumes only positivity,
-unitality, and the Schwarz inequality. This module proves the finite-Kraus, hence
-completely positive, specialization of the cyclicity conclusion in item (1), without
-the bound on the group order; it does not formalize items (2)--(4). See
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map. This module
+assumes a finite Kraus family and a positive-definite fixed point of its adjoint,
+and proves the cyclicity conclusion in item (1) without the order bound. See
 `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 ## References
@@ -68,7 +68,12 @@ Proof: Take eigenvectors `X, Y` for `μ, ν`. The KS equality at `X` gives
 `E(Y * X) = E(Y) * E(X) = (ν * μ) • (Y * X)`. Since `X, Y` are units
 (by `isUnit_peripheral_eigenvector`), `Y * X ≠ 0`, so `μ * ν` is an
 eigenvalue with norm 1. This is the multiplication-closure step in the
-finite-Kraus specialization of Wolf Theorem 6.6(1). -/
+finite-Kraus specialization of Wolf Theorem 6.6(1).
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`. -/
 theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint
     [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -169,6 +174,11 @@ root of unity `γ` such that `peripheralEigenvalues E = {γ^j | j = 0, …, m−
 This is the finite-Kraus specialization of the cyclicity conclusion in Wolf
 Theorem 6.6(1), and it connects the channel-level peripheral spectrum to the
 cyclic decomposition of MPS tensors.
+
+**Scope restriction (complete positivity and adjoint fixed point):** Wolf
+Theorem 6.6 assumes an irreducible positive unital Schwarz map, whereas this
+declaration assumes a finite Kraus family and a positive-definite fixed point of
+its adjoint. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 The proof uses:
 - Product closure (`peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint`)
