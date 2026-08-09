@@ -37,10 +37,10 @@ def IsFriedrichsBound (U V : Submodule ℂ E) (η : ℝ) : Prop :=
 /-- An operator-norm bound for the defect of two orthogonal ground-space
 projections bounds their Friedrichs overlap.
 
-This is the abstract projector interface for Nachtergaele's martingale
-condition C3 in arXiv:cond-mat/9410110, eq. (2.4): after the common ground
-space is removed, the defect operator is the product of the two reduced
-projections. -/
+This lemma connects the operator-norm projector defect to the Friedrichs
+overlap used in Nachtergaele's martingale condition C3,
+arXiv:cond-mat/9410110, eq. (2.4): after the common ground space is removed,
+the defect operator is the product of the two reduced projections. -/
 theorem isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le
     (U V : Submodule ℂ E) {η : ℝ}
     (hDefect : ‖U.starProjection ∘L V.starProjection -

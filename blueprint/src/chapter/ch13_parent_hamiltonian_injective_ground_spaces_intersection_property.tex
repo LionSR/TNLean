@@ -415,8 +415,10 @@
     \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
-    A vector belongs to $\mathcal U_{K,L_0}(A)$ exactly when fixing its final
-    site gives a vector satisfying the left ground condition.
+    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    belongs to $\mathcal U_{K,L_0}(A)$ exactly when the corresponding function
+    satisfies the left ground condition: every fixed-final-site restriction
+    belongs to $G_{K+L_0}(A)$.
 \end{lemma}
 
 \begin{proof}
@@ -430,8 +432,10 @@
     \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
-    A vector belongs to $\mathcal V_{K,L_0}(A)$ exactly when every fixed-prefix
-    restriction satisfies the tail ground condition.
+    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    belongs to $\mathcal V_{K,L_0}(A)$ exactly when the corresponding function
+    satisfies the tail ground condition: every fixed-prefix restriction
+    belongs to $G_{L_0+1}(A)$.
 \end{lemma}
 
 \begin{proof}

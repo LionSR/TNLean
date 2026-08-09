@@ -10,13 +10,14 @@ import TNLean.MPS.ParentHamiltonian.ExtendRight
 /-!
 # Open-chain ground-projector geometry
 
-This file packages the two open-chain ground spaces in Nachtergaele's
-martingale condition C3 and connects the corresponding projector defect to the
-generic Friedrichs-angle anticommutator estimate.
+This file defines the two open-chain ground spaces in Nachtergaele's
+martingale condition C3 and proves that the corresponding projector defect
+implies the generic Friedrichs-angle anticommutator estimate.
 
 **Scope restriction (Nachtergaele C3):** This file formalizes only the open-chain
-projector geometry and its defect-to-Friedrichs/anticommutator interface. The FNW
-numerical transfer bound controlling the defect remains unformalized; see
+projector geometry and the implication from its defect to the Friedrichs and
+anticommutator bounds. The FNW numerical transfer bound controlling the defect
+remains unformalized; see
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 For the increasing intervals \(\Lambda_n = [1, n]\) in arXiv:cond-mat/9410110,
