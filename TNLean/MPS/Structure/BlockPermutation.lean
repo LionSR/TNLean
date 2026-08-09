@@ -110,17 +110,20 @@ noncomputable def componentMap
     Matrix (Fin (D (σ i))) (Fin (D (σ i))) ℂ :=
   blockComponentMap T σ i M
 
+omit [Fintype ι] [∀ i, NeZero (D i)] in
 private theorem componentMap_map_zero
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι} :
     componentMap T σ i 0 = 0 := by
   simp [componentMap, blockComponentMap, Pi.single_zero, map_zero]
 
+omit [Fintype ι] [∀ i, NeZero (D i)] in
 private theorem componentMap_map_add
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
     componentMap T σ i (M + N) = componentMap T σ i M + componentMap T σ i N := by
   simp [componentMap, blockComponentMap, Pi.single_add, map_add, Pi.add_apply]
 
+omit [Fintype ι] [∀ i, NeZero (D i)] in
 theorem componentMap_map_mul
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃+* _} {σ : ι ≃ ι} {i : ι}
     (M N : Matrix (Fin (D i)) (Fin (D i)) ℂ) :
@@ -137,6 +140,7 @@ theorem componentMap_map_one
   simp only [componentMap, blockComponentMap, ringEquiv_single_one_eq T σ hσ i,
     Pi.single_eq_same]
 
+omit [Fintype ι] [∀ i, NeZero (D i)] in
 /-- The component map commutes with ℂ-scalar multiplication when T is a ℂ-algebra map. -/
 theorem componentMap_map_smul_of_algEquiv
     {T : (∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ) ≃ₐ[ℂ] _} {σ : ι ≃ ι} {i : ι}
