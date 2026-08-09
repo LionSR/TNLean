@@ -22,16 +22,21 @@ estimate for overlapping length-\(L\) windows has the form
 given window. Together with \(h_i^2=h_i\) this gives the quadratic-form
 inequality \(H^2\ge \gamma H\), and the spectral theorem turns that into the
 norm bound \(\gamma\|v\|\le \|Hv\|\) on \((\ker H)^\perp\). The
-MPS-specific anticommutator estimate remains a separate hypothesis. A
-norm-compression estimate from principal angles is also recorded as a sufficient
-stronger route.
+MPS-specific anticommutator estimate remains a separate hypothesis. Stronger
+all-vector norm-compression estimates for the excitation projections are also
+recorded as conditional sufficient hypotheses; they are not the source
+principal-angle estimate for the local ground spaces.
 
-The four components are:
+The six components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
+* `Martingale.OpenChain` — open-chain ground-space projectors, their intersection,
+  and the projector-defect reduction to an anticommutator estimate;
+* `Martingale.OverlapReduction` — reduction from overlapping-window commutation
+  to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered
   cross-term and anticommutator bounds to concrete cyclic-window estimates;
 * `Martingale.Gap` — conditional gap theorems from the overlapping cyclic-window
@@ -53,8 +58,10 @@ The four components are:
         \(h_i h_j+h_j h_i\ge -c_{ij}(1-\gamma)(h_i+h_j)\)
 
    with coefficients whose rows are summable uniformly in the chain length.
-   Principal-angle estimates may supply this bound through a norm-compression
-   inequality for the corresponding excitation projections.
+   The cited principal-angle estimates concern the reduced local ground
+   spaces. Converting them to this anticommutator bound remains the source-facing
+   quantitative input; the all-vector excitation-projection norm bounds recorded
+   in this development are only stronger conditional sufficient hypotheses.
 5. **Row-sum bound** \(\sum_{j\ne i} c_{ij}\le 1\): at most \(2(L-1)\) local terms
    overlap a given length-\(L\) cyclic window under the convention used here.
 6. **Quadratic form to norm bound**: combining these estimates with \(h_i^2=h_i\)

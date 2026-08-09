@@ -803,9 +803,7 @@ belong to \(\mathcal G_{N,L}(A_j)\).
 
 These identities are assumptions of this theorem. The boundary-condition
 comparison theorem below gives the conclusion for each block from the displayed
-boundary-crossing
-form. Deriving this displayed form from the source comparison is documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+boundary-crossing form.
 
 This result follows the block-diagonal boundary conditions of arXiv:2011.12127,
 lines 2126--2128, and precedes the final equality in
@@ -819,8 +817,12 @@ is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/060819
 (its block components lie in \(G_N(A_j)\)) and does not assume the
 boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentity`
 is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet
-derived from the periodic ground-space constraint. Documented in
+lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
+retained as an explicit assumption in this intermediate
+complementary-word form. The source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
@@ -884,8 +886,12 @@ block-diagonal boundary representation is the boundary-comparison-free open-boun
 arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
-from the periodic ground-space constraint. Documented in
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as
+an explicit hypothesis of this intermediate complementary-word form. The
+source-range conclusion without it is the global-cut theorem
+`chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
+
+This scope restriction is documented in
 `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities

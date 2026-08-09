@@ -159,7 +159,8 @@
 
 \begin{lemma}[MPS anticommutator input for the martingale condition]\label{lem:martingale_mps}
     \notready
-    \uses{def:parent_interaction, def:local_term_parent, def:injective}
+    \uses{thm:martingale_criterion,
+        def:parent_interaction, def:local_term_parent, def:injective}
     Let $A$ be injective and fix an interaction range $L \ge 2$ as in
     Definition~\ref{def:parent_interaction}. Let
     $h_L(A):=\Pi_{G_L(A)^\perp}$ be the $L$-site parent interaction, and for
@@ -222,12 +223,13 @@
     Theorem~\ref{thm:friedrichs_ground_space_excitation_anticommutator} supplies
     the generic passage from such a reduced ground-space overlap bound to the
     anticommutator estimate for the complementary excitation projections.
-    What remains is to obtain the required uniform Friedrichs bound, with the
-    source blocking convention and constants, for the cyclic-window local
-    ground spaces. The intersection property identifies
+    What remains is the blocked MPS reduced ground-space Friedrichs estimate,
+    with the source blocking convention and uniform constants. The intersection
+    property identifies
     $\ker h_i\cap\ker h_j$ with the parent ground space on the union of the two
-    windows, but it does not by itself supply this numerical bound. The directed
-    excitation-projection estimate
+    windows, but it does not by itself supply this numerical bound.
+    % Live blocked MPS estimate: https://github.com/LionSR/TNLean/issues/5455.
+    The directed excitation-projection estimate
     \begin{align}
         \|h_i h_j v\|
         &\le \eta\|h_i v\|,
@@ -236,7 +238,8 @@
         &<1,
         \notag
     \end{align}
-    remains useful as a sufficient strengthening of the source condition.
+    remains a valid stronger conditional implication, but it is not the source
+    principal-angle target.
 
     \emph{Row-sum bound.}
     Since $L\ge2$, each site $i$ overlaps with at most $2(L-1)$
@@ -261,7 +264,8 @@
     $h_i h_j+h_jh_i \ge -c_{\{i,j\}}(1-\gamma)(h_i+h_j)$.
     If this estimate is obtained with the displayed row-summable coefficients,
     Lemma~\ref{lem:parent_hamiltonian_anticommutator_rowsum_gap} gives the gap.
-    A sufficient stronger route is the norm-compression statement
+    A stronger conditional implication is the all-vector norm-compression
+    statement
     \begin{align}
         \|h_i h_j v\|
         &\le \eta\|h_i v\|,
