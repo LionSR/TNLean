@@ -102,8 +102,8 @@ theorem cornerFixedPoints_blockDiagonal_iff
   have hAtp : ∑ i : Fin d, (A i)ᴴ * A i = Q :=
     cornerCompressionKraus_isTP K h_tp hQproj hInv
   -- Compress the corner family to the support sector along the isometry `V`.
-  obtain ⟨r, C, φ, V, -, hCtp, -, hIntertw, -, -, hLetter, hVtV, hVVt, hφV⟩ :=
-    MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry
+  obtain ⟨r, C, φ, V, -, hCtp, hIntertw, -, -, -, hCi, hVtV, hVVt, hφV⟩ :=
+    exists_cornerCompression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
   have hCi : ∀ i : Fin d, C i = Vᴴ * A i * V := by
@@ -153,16 +153,9 @@ theorem cornerFixedPoints_blockDiagonal_iff
     intro X
     have hφmem : Q * (φ X).1 * Q = (φ X).1 := (φ X).2
     have hintertw' : (φ (adjointMap C X)).1 = Q * adjointMap K (φ X).1 * Q := by
-      have h1 : (φ (MPSTensor.transferMap (d := d) (D := r) (fun i => (C i)ᴴ) X)).1 =
-          MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1) := hIntertw X
-      have h2 : MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1) =
-          adjointMap A (φ X).1 := by simp [adjointMap, MPSTensor.transferMap_apply]
-      have h3 : adjointMap A (φ X).1 = Q * adjointMap K (φ X).1 * Q := by
-        rw [hAdef]; exact adjointMap_cornerCompressionKraus_eq K hQproj hφmem
-      have h4 : MPSTensor.transferMap (d := d) (D := r) (fun i => (C i)ᴴ) X =
-          adjointMap C X := by simp [adjointMap, MPSTensor.transferMap_apply]
-      rw [h4] at h1
-      rw [h1, h2, h3]
+      rw [hIntertw X]
+      rw [hAdef]
+      exact adjointMap_cornerCompressionKraus_eq K hQproj hφmem
     constructor
     · intro hfix
       have hval : (φ (adjointMap C X)).1 = (φ X).1 := by rw [hintertw', hfix]
