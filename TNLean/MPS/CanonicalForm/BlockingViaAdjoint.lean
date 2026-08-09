@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.PeriodicityRemoval
@@ -316,8 +317,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   have hIrrK : IsIrreducibleMap (transferMap (d := d) (D := D) K) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
   have hK_map : Kraus.mapLM K = transferMap (d := d) (D := D) K :=
-    LinearMap.ext fun X => by
-      simp [Kraus.mapLM_apply, Kraus.map_apply, transferMap_apply]
+    Kraus.mapLM_eq_transferMap K
   have hIrrK_map : IsIrreducibleMap (Kraus.mapLM K) := by
     simpa only [hK_map] using hIrrK
   -- A positive definite fixed point for `transferMap A`, hence for `Kraus.adjointMap K`.

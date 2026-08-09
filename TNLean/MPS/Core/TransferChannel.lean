@@ -15,6 +15,7 @@ properties in transfer-map notation.
 
 ## Main declarations
 
+* `Kraus.mapLM_eq_transferMap`: the generic Kraus map and the MPS transfer map agree.
 * `Kraus.isChannel_transferMap`: the MPS transfer map of a trace-preserving Kraus family is
   a channel.
 * `trace_mul_transferMap_adjoint`: the generic Kraus trace-adjoint identity in MPS
@@ -32,14 +33,17 @@ variable {d : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
+/-- The finite Kraus map agrees with the MPS transfer map of the same matrix family. -/
+theorem mapLM_eq_transferMap (K : Fin d → Mat) :
+    mapLM K = MPSTensor.transferMap (d := d) (D := D) K := by
+  apply LinearMap.ext
+  intro X
+  simp [mapLM_apply, map_apply, MPSTensor.transferMap_apply]
+
 /-- The MPS transfer map of a trace-preserving finite Kraus family is a quantum channel. -/
 theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :
     IsChannel (MPSTensor.transferMap (d := d) (D := D) K) := by
-  have hmap : MPSTensor.transferMap (d := d) (D := D) K = mapLM K := by
-    apply LinearMap.ext
-    intro X
-    simp [MPSTensor.transferMap_apply]
-  rw [hmap]
+  rw [← mapLM_eq_transferMap]
   exact isChannel_mapLM K h_tp
 
 end Kraus

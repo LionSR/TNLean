@@ -3,14 +3,14 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Channel.Peripheral.Powers
-import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
-import TNLean.Channel.Schwarz.Basic
 import TNLean.Channel.Irreducible.FixedPoint
 import TNLean.Channel.KrausMap
+import TNLean.Channel.Peripheral.Powers
+import TNLean.Channel.Schwarz.Basic
+import TNLean.Channel.Schwarz.MultiplicativeDomainPowers
 
-import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
 # Peripheral eigenvalues closed under powers (fixed-point version)
