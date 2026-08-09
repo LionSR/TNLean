@@ -255,6 +255,7 @@ import TNLean.MPS.MPDO.RepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.RepresentativeGroupedMarkedLemmaL
 import TNLean.MPS.MPDO.RescalingStableChiAttachment
 import TNLean.MPS.MPDO.RescalingStableChiUniformity
+import TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPBNTClause
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm

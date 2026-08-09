@@ -43,9 +43,11 @@ hadamard2 * χ * hadamard2 = 2 • wMat,     χ = Matrix.diagonal (oneLabelChi.e
 so the hand-defined matrix `oneLabelChi` diagonalizes the local factor of the
 closed-operator formula. This strengthens the earlier eigenvector-only
 spectral link (`wMat_eigenvalue_eq_oneLabelChi_entry`) to an exact matrix
-identity. It does not identify `oneLabelChi` with the diagonal data of the
-existential tensor-attached BNT clause for `R`; that comparison remains open
-in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+identity. This calculation alone does not construct the tensor-attached BNT
+clause. The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT`
+identifies `oneLabelChi` with the diagonal data of the explicit normalized
+vertical component; it does not identify that component with the original
+horizontal closed MPO. See `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
 
