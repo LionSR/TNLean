@@ -16,6 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/tenkz_ctan.py"
+PACKAGE_DIR = "tenkz"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 import tenkz_ctan  # noqa: E402
@@ -168,6 +169,13 @@ def test_the_version_comes_from_one_declaration_or_from_none() -> None:
         )
         assert _refuses(entry, "is not a calendar date")
 
+        # An empty description, which the release harness's own assertion
+        # rejects; the two gates read the same declaration and must agree.
+        entry.write_text(
+            "\\ProvidesPackage{tenkz}[2026/07/22 v0.7 ]\n", encoding="utf-8"
+        )
+        assert _refuses(entry, "not spelled")
+
 
 def test_a_manifest_that_would_write_the_wrong_file_is_refused() -> None:
     closure = tenkz_ctan.walk_closure()
@@ -303,6 +311,20 @@ def test_the_environment_may_fix_the_timestamp() -> None:
         # reproducibility convention hands out most often.
         os.environ["SOURCE_DATE_EPOCH"] = "0"
         assert tenkz_ctan.chosen_epoch(release) == tenkz_ctan.ZIP_EPOCH_FLOOR
+        # Past the format's ceiling is a mistake, not a convention, so it is
+        # refused rather than clamped; nonsense is refused by its own message.
+        for value, fragment in (
+            ("9999999999", "later than the last moment"),
+            ("not-a-number", "not a number of seconds"),
+        ):
+            os.environ["SOURCE_DATE_EPOCH"] = value
+            try:
+                tenkz_ctan.chosen_epoch(release)
+            except SystemExit as refusal:
+                assert fragment in str(refusal), str(refusal)
+            else:
+                raise AssertionError(f"{value} was accepted")
+        os.environ["SOURCE_DATE_EPOCH"] = "0"
         with tempfile.TemporaryDirectory() as directory:
             room = Path(directory)
             subject = room / "tenkz.sty"
@@ -359,11 +381,16 @@ def test_names_outside_the_invariant_subset_fail() -> None:
             "tenkz-café.tex": accidental,
             "-tenkz.tex": accidental,
             "TENKZ.STY": accidental,
+            "README.": accidental,
+            "NUL": accidental,
+            "com1.tex": accidental,
         }
     )
-    assert len(report.failures) == 3, report.failures
+    assert len(report.failures) == 6, report.failures
     assert any("café" in reason for reason in report.failures)
     assert any("differ only in case" in reason for reason in report.failures)
+    assert any("ends in a dot" in reason for reason in report.failures)
+    assert sum("reserved device name" in reason for reason in report.failures) == 2
 
 
 def test_the_staged_tree_carries_no_compilation_leftovers() -> None:
@@ -375,6 +402,87 @@ def test_the_staged_tree_carries_no_compilation_leftovers() -> None:
         (tree / "tenkz.log").write_text("a compilation leftover\n", encoding="utf-8")
         failures = tenkz_ctan.check_debris(tree).failures
     assert any("would ship" in reason for reason in failures), failures
+
+
+def test_an_output_directory_loses_only_this_tools_artifacts() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        out = Path(directory) / "out"
+        out.mkdir()
+        (out / PACKAGE_DIR).mkdir()
+        (out / "tenkz-0.7.zip").write_text("old\n", encoding="utf-8")
+        tenkz_ctan.clear_destination(out)
+        assert list(out.iterdir()) == []
+
+        (out / "somebody-elses-notes.txt").write_text("keep me\n", encoding="utf-8")
+        try:
+            tenkz_ctan.clear_destination(out)
+        except SystemExit as refusal:
+            assert "somebody-elses-notes.txt" in str(refusal), str(refusal)
+        else:
+            raise AssertionError("a directory this tool does not own was emptied")
+        assert (out / "somebody-elses-notes.txt").is_file()
+
+    try:
+        tenkz_ctan.clear_destination(ROOT)
+    except SystemExit as refusal:
+        assert "is not an output directory" in str(refusal), str(refusal)
+    else:
+        raise AssertionError("the repository was accepted as an output directory")
+
+
+def test_material_from_outside_the_repository_is_refused() -> None:
+    closure = tenkz_ctan.walk_closure()
+    for value in ("/etc/hosts", "../outside-the-tree"):
+        try:
+            tenkz_ctan.staged_content({"material": {"LICENSE": value}}, closure)
+        except SystemExit as refusal:
+            assert "outside the" in str(refusal), str(refusal)
+        else:
+            raise AssertionError(f"{value} was staged")
+
+
+def test_the_write_path_refuses_incomplete_material() -> None:
+    manifest = tenkz_ctan.read_manifest()
+    tenkz_ctan.require_complete_material(manifest)
+    thinned = {"material": {k: v for k, v in manifest["material"].items() if k != "LICENSE"}}
+    try:
+        tenkz_ctan.require_complete_material(thinned)
+    except SystemExit as refusal:
+        assert "LICENSE" in str(refusal), str(refusal)
+    else:
+        raise AssertionError("an archive without a licence was allowed")
+
+
+def test_the_clean_install_failure_paths_report_what_went_wrong() -> None:
+    """The two branches no engine reaches on a healthy tree."""
+
+    class Bounced:
+        returncode = 3
+        stdout = "! LaTeX Error: File `tenkz.sty' not found.\n"
+        stderr = "the engine's own complaint\n"
+
+    with tempfile.TemporaryDirectory() as directory:
+        archive, _, _ = tenkz_ctan.build(Path(directory) / "out")
+        engine = tenkz_ctan.shutil.which
+        runner = tenkz_ctan.subprocess.run
+        try:
+            tenkz_ctan.shutil.which = lambda _name: "/somewhere/xelatex"
+            tenkz_ctan.subprocess.run = lambda *a, **k: Bounced()
+            failed = tenkz_ctan.check_smoke(archive, required=True)
+
+            def expire(*_args, **_kwargs):
+                raise subprocess.TimeoutExpired(cmd="xelatex", timeout=120)
+
+            tenkz_ctan.subprocess.run = expire
+            timed_out = tenkz_ctan.check_smoke(archive, required=True)
+        finally:
+            tenkz_ctan.shutil.which = engine
+            tenkz_ctan.subprocess.run = runner
+    assert any("exit 3" in reason for reason in failed.failures), failed.failures
+    assert any(
+        "the engine's own complaint" in reason for reason in failed.failures
+    ), failed.failures
+    assert any("120 seconds" in reason for reason in timed_out.failures), timed_out.failures
 
 
 def test_check_passes_now() -> None:
