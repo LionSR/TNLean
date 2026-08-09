@@ -135,6 +135,55 @@ lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
       simpa using Nat.mod_eq_of_lt hsub
     rw [hmod, Nat.add_sub_of_le hab, Nat.mod_eq_of_lt hb]
 
+/-- Cyclically shift the indices of an `N`-site chain so that `i` becomes the
+initial site. -/
+def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
+  toFun k := ⟨(i.val + k.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
+  invFun k := ⟨(k.val + N - i.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
+  left_inv k := by
+    apply Fin.ext
+    exact offset_mod_eq i.isLt k.isLt
+  right_inv k := by
+    apply Fin.ext
+    exact add_offset_mod_eq i.isLt k.isLt
+
+/-- Split cyclic chain indices into a window of length `L` starting at `i` and
+its ordered complement. -/
+def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
+    Fin L ⊕ Fin (N - L) ≃ Fin N :=
+  finSumFinEquiv |>.trans (finCongr (Nat.add_sub_of_le hLN)) |>.trans
+    (cyclicShiftEquiv N i)
+
+@[simp] theorem cyclicWindowIndexEquiv_inl
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin L) :
+    cyclicWindowIndexEquiv L N hLN i (Sum.inl r) =
+      ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := rfl
+
+@[simp] theorem cyclicWindowIndexEquiv_inr
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin (N - L)) :
+    cyclicWindowIndexEquiv L N hLN i (Sum.inr r) =
+      ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := by
+  apply Fin.ext
+  change (i.val + (L + r.val)) % N = (i.val + L + r.val) % N
+  congr 1
+  omega
+
+/-- Factor a product over a cyclic chain into a consecutive window and its
+ordered complement. -/
+theorem prod_cyclicWindow_complement {M : Type*} [CommMonoid M]
+    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (f : Fin N → M) :
+    (∏ n : Fin N, f n) =
+      (∏ r : Fin L,
+        f ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) *
+        (∏ r : Fin (N - L),
+          f ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) := by
+  rw [Fintype.prod_equiv
+    (cyclicWindowIndexEquiv L N hLN i).symm f
+    (fun x ↦ f (cyclicWindowIndexEquiv L N hLN i x))
+    (fun n ↦ by simp)]
+  rw [Fintype.prod_sum_type]
+  simp only [cyclicWindowIndexEquiv_inl, cyclicWindowIndexEquiv_inr]
+
 /-- Extracting a window after replacing it recovers the replacement values. -/
 @[simp] lemma extractWindow_replaceWindow (L : ℕ) (hLN : L ≤ N) {α : Type*}
     (i : Fin N) (σ : Fin N → α) (τ : Fin L → α) :
