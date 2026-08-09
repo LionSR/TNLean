@@ -76,8 +76,7 @@ theorem verticalComponent_finProdFinEquiv (a b : Fin 4) :
   rw [Matrix.submatrix_single_equiv]
   simp only [Equiv.symm_symm]
 
-/-- The letter index whose supporting matrix unit is at row `r` and column `c`. -/
-def aIndex : Fin 2 → Fin 2 → Fin 4
+private def aIndex : Fin 2 → Fin 2 → Fin 4
   | 0, 0 => 0
   | 1, 1 => 1
   | 0, 1 => 2
@@ -488,8 +487,7 @@ private noncomputable def R_oneLabelAlgebraClause :
     BNTAlgebraClause oneLabelCoeffs
       (verticalBNTOperatorFamily (D := 4) oneLabelVerticalFamily)
       (verticalBNTTraceScalarFamily oneLabelWeight) where
-  positiveChi := PositiveBNTLabelChiTracePowerForm.ofChi
-    oneLabelChi oneLabelChi_posEntries
+  positiveChi := oneLabelChiTracePowerForm
   sameLengthProduct := oneLabel_sameLengthProduct
   idempotent := oneLabel_idempotent
 
