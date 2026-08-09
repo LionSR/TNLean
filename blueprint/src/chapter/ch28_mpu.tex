@@ -1459,12 +1459,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     pairings force the product of those scalars to be one.
 \end{proof}
 
-\begin{lemma}[Identification with chosen reduced-CFII fixed points]
-    \label{lem:mpu_reduced_cfii_transfer_stabilization}
+\begin{theorem}[Identification with chosen reduced-CFII fixed points]
+    \label{thm:mpu_reduced_cfii_transfer_stabilization}
     \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
     \leanok
-    Suppose $D>1$ and the normalized flattening is presented by chosen
-    canonical-form-II data whose active blocks fill the bond space. There is a
+    Suppose $d>0$, $D>1$, and $\mathcal U$ is an MPU whose normalized
+    flattening is presented by chosen canonical-form-II data with active blocks
+    filling the bond space. There is a
     unique active block $k$. Normalize its diagonal positive definite fixed
     matrix $\Lambda_k$ to have trace one, and let $V_k$ be its inclusion into
     the ambient bond space. Then
@@ -1482,15 +1483,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source labels: Erightleft and prop:normal-tensor.
     The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
-    equations of \cite[lines 269--280]{Cirac2017MPU}; its ambient transport
+    fixed-point equations in \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient transport
     $\rho$ need not be diagonal. This is a statement about the chosen reduced
     representative and the blocking step in
     \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}; it does not assert
     that every ambient MPU tensor is itself in canonical form II.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_full_active_support,
+    \uses{def:mpu,def:mpu_normalized_flattening,
+        def:mpu_full_active_support,
         thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}

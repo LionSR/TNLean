@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
@@ -25,6 +26,7 @@ linear map between matrix algebras.
   nonzero matrix span the full matrix algebra
 * `Matrix.submodule_sup_ne_top_of_mul_eq_zero` — two nonzero matrix subspaces with
   one-sided zero product cannot span the full matrix algebra
+* `Matrix.vec_one_dotProduct_vec_eq_trace` — vectorized identity pairing equals the trace
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
 * `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
 * `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
@@ -35,6 +37,12 @@ linear map between matrix algebras.
 open scoped Matrix BigOperators
 
 namespace Matrix
+
+/-- Pairing the vectorized identity with a vectorized matrix gives its trace. -/
+theorem vec_one_dotProduct_vec_eq_trace {n : ℕ} (X : Matrix (Fin n) (Fin n) ℂ) :
+    (1 : Matrix (Fin n) (Fin n) ℂ).vec ⬝ᵥ X.vec = Matrix.trace X := by
+  classical
+  simp [dotProduct, Matrix.vec, Matrix.trace, Matrix.one_apply, Fintype.sum_prod_type]
 
 /-- **David/Perez-Garcia et al. Lemma `lem1` (two-sided nonzero matrix span).**
 

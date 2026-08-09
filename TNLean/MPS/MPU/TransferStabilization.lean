@@ -28,6 +28,9 @@ right fixed witnesses.
 
 * `MPOTensor.IsMPU.exists_normalized_transfer_stabilizes_to_rank_one` gives
   the source-shaped bounded stabilization theorem.
+* `MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii`
+  identifies the stabilized power with the fixed pair supplied by chosen
+  reduced canonical-form-II data.
 * `MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one` proves that the
   one-dimensional normalized transfer matrix is the identity.
 

@@ -146,12 +146,6 @@ private lemma sum_smul_single_eq (ρ : Matrix (Fin D) (Fin D) ℂ) :
 
 /-! ### Fundamental property: T̂ represents T in the vectorized picture -/
 
-/-- Pairing the vectorized identity with a vectorized matrix gives its trace. -/
-theorem Matrix.vec_one_dotProduct_vec_eq_trace (X : Matrix (Fin D) (Fin D) ℂ) :
-    (1 : Matrix (Fin D) (Fin D) ℂ).vec ⬝ᵥ X.vec = Matrix.trace X := by
-  classical
-  simp [dotProduct, Matrix.vec, Matrix.trace, Matrix.one_apply, Fintype.sum_prod_type]
-
 /-- The vectorized identity is a left fixed vector of the transfer matrix of a
 trace-preserving linear map. -/
 theorem vecMul_vec_one_transferMatrix_eq_of_trace_preserving
