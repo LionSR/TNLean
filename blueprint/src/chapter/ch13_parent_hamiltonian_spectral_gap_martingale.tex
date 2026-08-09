@@ -8,7 +8,7 @@ All statements are exact algebraic identities; no FNW contraction or
 norm estimate is derived here.
 
 \begin{definition}[Prefix restriction]\label{def:prefix_restrict}
-    \lean{MPSTensor.prefixRestrictₗ}
+    \lean{MPSTensor.prefixRestrictₗ, MPSTensor.prefixRestrictₗ_apply}
     \leanok
     \uses{def:tail_restrict_parent}
     For $K,L\in\N$ and a fixed suffix configuration $\tau\colon\Fin L\to\Fin d$, the
@@ -41,7 +41,7 @@ norm estimate is derived here.
 \end{proof}
 
 \begin{definition}[Tail boundary map]\label{def:tail_boundary_map}
-    \lean{MPSTensor.tailBoundaryMap}
+    \lean{MPSTensor.tailBoundaryMap, MPSTensor.tailBoundaryMap_apply}
     \leanok
     \uses{def:eval_word}
     For $K,L\in\N$, the \emph{tail boundary map} is the $\C$-linear map
@@ -61,7 +61,7 @@ norm estimate is derived here.
 \end{definition}
 
 \begin{definition}[Left boundary map]\label{def:left_boundary_map}
-    \lean{MPSTensor.leftBoundaryMap}
+    \lean{MPSTensor.leftBoundaryMap, MPSTensor.leftBoundaryMap_apply}
     \leanok
     \uses{def:eval_word}
     For $K,L\in\N$, the \emph{left boundary map} is the $\C$-linear map
