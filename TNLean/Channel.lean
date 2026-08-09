@@ -32,6 +32,7 @@ import TNLean.Channel.Irreducible
 import TNLean.Channel.KoashiImoto
 import TNLean.Channel.KrausCPTP
 import TNLean.Channel.KrausFreedom
+import TNLean.Channel.KrausMap
 import TNLean.Channel.KrausRank
 import TNLean.Channel.KrausRectangular
 import TNLean.Channel.KrausRepresentation

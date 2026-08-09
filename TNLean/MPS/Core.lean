@@ -22,4 +22,5 @@ import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.Transfer
+import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Core.TransferMatrix

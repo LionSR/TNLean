@@ -26,6 +26,8 @@ via TP-gauge reduction).
   irreducible CP map
 - `IrreducibleCPKrausSetup.exists_nonzero_kraus`: a nonzero map in a Kraus
   setup has a nonzero Kraus operator
+- `Kraus.trace_mul_transferMap_adjoint`: the Kraus trace-adjoint identity for a map
+  presented in transfer-map notation
 - `IrreducibleCPKrausSetup.exists_posDef_adjoint_eigenvector`: shared adjoint
   Perron--Frobenius data extracted from an irreducible CP map
 
@@ -38,6 +40,23 @@ via TP-gauge reduction).
 open scoped Matrix ComplexOrder BigOperators
 
 variable {D : ℕ}
+
+namespace Kraus
+
+/-- The trace-adjoint identity for a linear map presented in MPS transfer-map notation. -/
+theorem trace_mul_transferMap_adjoint
+    {n : ℕ} (K : MPSTensor n D)
+    {E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
+    (hE_eq : E = MPSTensor.transferMap (d := n) (D := D) K)
+    (ρ X : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (ρ * E X) =
+      Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) ρ * X) := by
+  rw [hE_eq]
+  simpa only [Kraus.map, Kraus.adjointMap, MPSTensor.transferMap_apply,
+    Matrix.conjTranspose_conjTranspose] using
+      (Kraus.trace_mul_map_eq_trace_adjointMap_mul (K := K) ρ X)
+
+end Kraus
 
 /-- Shared Kraus witness for an irreducible CP map. -/
 structure IrreducibleCPKrausSetup

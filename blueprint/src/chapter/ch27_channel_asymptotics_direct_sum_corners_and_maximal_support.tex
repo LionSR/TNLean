@@ -277,10 +277,10 @@ that Loewner domination transfers the support.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_channel}
-    The trace-preservation hypothesis is the normalization
-    $\sum_iK_i^\dagger K_i=\Id$ of the channel form of the transfer map
-    (Theorem~\ref{thm:transfer_channel}).
+    The transfer-map formula is the finite Kraus map. Its Kraus form is
+    completely positive, while the normalization
+    $\sum_iK_i^\dagger K_i=\Id$ gives $\tr(E(X))=\tr(X)$. Hence $E$ is a
+    channel.
 \end{proof}
 
 \begin{lemma}[Scalar Loewner domination transfers the support]%

@@ -698,11 +698,13 @@
     block of Theorem~\ref{thm:mpdo_length_dependent_rfp_example}, no
     uniform rescaling makes both diagonal entries equal to one.
 
-    The theorem establishes a coefficient-level obstruction for an explicit
-    family defined alongside the displayed tensor; it does not attach that
-    family to a vertical BNT presentation. Positivity, literal CPSV canonical
-    form, and the renormalization fixed-point property of $R$ are proved
-    separately. The tensor is a project example motivated by the
+    The theorem establishes the obstruction for the displayed coefficient
+    family and for every uniform positive rescaling of its diagonal matrix.
+    The unscaled family is attached below to an explicit one-label vertical BNT
+    presentation of $R$. No such tensor attachment is asserted here for the
+    arbitrary rescaled families. Positivity, literal CPSV canonical form, and
+    the renormalization fixed-point property of $R$ are proved separately. The
+    tensor is a project example motivated by the
     discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
     tensor stated there.
 \end{theorem}
@@ -787,10 +789,8 @@
     diagonal $\operatorname{diag}(1,-1)$ is scaled by $7/25$, and the
     off-diagonal matrix units are annihilated. This identifies the
     spectral data of $W$ and of $\varphi$ with $\chi$.
-    % Scope note: the existential tensor-attached BNT algebra clause for R
-    % is obtained below from the general Theorem 4.14 equivalence. Identifying
-    % that witness with the explicit one-label coefficient and diagonal data
-    % displayed here remains open.
+    % The explicit one-label tensor-attached clause below uses these two
+    % eigenvalues as the diagonal entries of its chi matrix.
 \end{theorem}
 \begin{proof}\leanok
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -883,8 +883,8 @@
     $W$ on the physical-index pairs satisfying the bond-matching condition,
     and two are a deterministic assignment on the pairs that fail it,
     chosen so the family resolves the identity. This proves the fixed-point
-    condition directly. The following theorem obtains an existential
-    tensor-attached BNT algebra clause from the general equivalence.
+    condition directly. The following theorem constructs the corresponding
+    one-label tensor-attached BNT algebra clause explicitly.
 \end{theorem}
 \begin{proof}\leanok
     Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
@@ -930,53 +930,85 @@
     full two-site domain.
 \end{proof}
 
-% Source: arXiv:1606.00608, Theorem 4.14(i)--(ii), lines 972--985,
-% and Appendix C.4, lines 1929--2085.
-\begin{theorem}[Existential tensor-attached BNT algebra clause for $R$]%
+% Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985,
+% and Appendix C.4, lines 1929--1947 and 2011--2029.
+\begin{theorem}[Explicit one-label tensor-attached BNT algebra clause for $R$]%
     \label{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        R_hasBNTAlgebraTensorClause}
+        R_oneLabelBNTAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause}
-    The tensor $R$ admits a tensor-attached vertical BNT presentation. Thus
-    there are component tensors $(M_\alpha)_\alpha$, multiplicity matrices
-    $(\mu_\alpha)_\alpha$, coefficients $c^{(L)}_{\alpha,\beta,\gamma}$,
-    and positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that,
-    for every $L>0$,
+    \uses{def:mpdo_bnt_algebra_tensor_clause,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence}
+    The tensor $R$ has a one-label vertical BNT presentation. Its component
+    has $16$ physical letters, bond dimension $4$, and
     \begin{align}
-        O_L(M_\alpha)O_L(M_\beta)
-            &=\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma).
+        M_0^{(a,b)}&=A^a\otimes\overline{A^b}.
         \notag
     \end{align}
-    The coefficients and multiplicities obey
+    The $1\times1$ multiplicity matrix and the $2\times2$ positive coefficient matrix are
     \begin{align}
-        c^{(L)}_{\alpha,\beta,\gamma}
-            &=\tr\!\left(\chi_{\alpha,\beta,\gamma}^{L}\right).
+        \mu_0&=\begin{pmatrix}\frac{25}{32}\end{pmatrix},
+        \notag\\
+        \chi_{0,0,0}&=\operatorname{diag}\!\left(1,\frac{7}{25}\right).
         \notag
     \end{align}
-    With $m_\alpha=\tr(\mu_\alpha)$, the length-one coefficients satisfy
+    The vertical tensor is reconstructed exactly by
     \begin{align}
-        m_\gamma
-            &=\sum_{\alpha,\beta}c^{(1)}_{\alpha,\beta,\gamma}
-                m_\alpha m_\beta.
+        \operatorname{vertical}(R)&=\frac{25}{32}M_0.
         \notag
     \end{align}
-    This is the existential tensor attachment in
-    \cite[Theorem~4.14(i)--(ii), lines~972--985, and Appendix~C.4,
-      lines~1929--2085]{Cirac2016MPDO_arXiv}. It does not identify this
-    presentation with the explicit one-label coefficient and diagonal data
-    below.
+    For every $L>0$, its closed component operator satisfies
+    \begin{align}
+        O_L(M_0)^2
+            &=\left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
+             =\tr\!\left(\chi_{0,0,0}^{L}\right)O_L(M_0).
+        \notag
+    \end{align}
+    At length one, $m_0=\tr(\mu_0)=25/32$ and
+    $c^{(1)}_{0,0,0}=32/25$, so the idempotent identity is
+    \begin{align}
+        \frac{25}{32}
+            &=\frac{32}{25}\left(\frac{25}{32}\right)^2.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_cf,
-      thm:mpdo_bnt_label_rescaling_stable_ismpdo,
-      thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
-      thm:mpdo_cpsv_bnt_rfp_equivalence}
-    Apply the forward implication of
-    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence} to the literal canonical
-    form, positivity, and renormalization fixed-point properties of $R$.
+    \uses{thm:is_normal_tensor_of_is_normal_left_canonical,
+        lem:mpo_doubled,
+        thm:mpdo_bnt_label_rescaling_stable_length_dependence,
+        thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
+    Each letter of $M_0$ is a nonzero multiple of a matrix unit, so the letters
+    span $M_4(\C)$. The tensor $A$ is left-canonical; hence $M_0$ is
+    left-canonical and algebraically normal, and therefore is a normal tensor.
+    The identity coisometry gives both the forward vertical decomposition and
+    its reconstruction.
+
+    The closed operator of $M_0=A\otimes\overline A$ is the pure-state operator
+    $\ketbra{V^{(L)}(A)}{V^{(L)}(A)}$. Its square is its self-overlap times
+    itself. A direct transfer-map computation gives
+    $\braket{V^{(L)}(A)}{V^{(L)}(A)}=\tr(W^L)$, while the
+    Walsh--Hadamard diagonalization gives
+    $\tr(W^L)=\tr(\chi_{0,0,0}^L)=1+(7/25)^L$. The length-one identity is the
+    displayed scalar calculation.
 \end{proof}
+
+\begin{remark}[Vertical and horizontal contractions]
+    Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
+    by separating the $16$-valued physical index of the vertical tensor into
+    two four-valued indices. Then
+    \begin{align}
+        \rho^{(L)}\!\left(
+            \operatorname{rot}(\operatorname{vertical}(R))\right)
+            &=\left(\frac{25}{32}\right)^L O_L(M_0).
+        \notag
+    \end{align}
+    This is a rotated vertical contraction, not the original horizontal tensor
+    $R$, even though both physical and bond dimensions equal $4$. At length one,
+    $\rho^{(1)}(R)$ has rank two, whereas $O_1(M_0)$ has rank one, so these
+    operators are not proportional. In particular, no identity
+    $\rho^{(L)}(R)=(25/32)^L O_L(M_0)$ is asserted.
+\end{remark}
 
 \begin{theorem}[Closed-operator factorization and local diagonalization for $R$]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
@@ -1007,13 +1039,12 @@
         \chi&=\operatorname{diag}(1,\tfrac{7}{25}).
         \notag
     \end{align}
-    Thus the hand-defined matrix $\chi$ diagonalizes the local factor $W$ in
-    the closed-operator formula. Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    independently supplies an existential tensor-attached presentation. The
-    factorization here does not identify that presentation's labels, component
-    operators, coefficients, or diagonal matrices with the explicit one-label
-    data (documented in
-    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}).
+    Thus the matrix $\chi$ diagonalizes the local factor $W$ in the horizontal
+    closed-operator formula. Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    identifies the same matrix with the coefficient matrix of an explicit
+    one-label vertical BNT presentation. The factorization here still concerns
+    the original horizontal operator $\rho^{(N)}(R)$; it is not the scalar
+    reconstruction formula for the rotated vertical contraction.
 \end{theorem}
 \begin{proof}\leanok
     $B$ is built from a two-sided inverse of the first-bit reading $\varphi$
@@ -1056,12 +1087,10 @@
     \end{align}
     Hence $c^{(L)}=\tr(W^L)=1+(7/25)^L$. Here $W^L$ is the ordinary
     matrix power of the fixed $2\times2$ matrix $W$, not the Kronecker power
-    $W_L$ inside $\rho^{(L)}(R)$. The theorem does not identify this explicit
-    coefficient model with the coefficients or diagonal data of the
-    existential presentation in
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}.
-    That identification remains open in
-    \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
+    $W_L$ inside $\rho^{(L)}(R)$. Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    identifies this coefficient model with the explicit one-label vertical
+    component. It does not identify $O_L(M_0)$ with the original horizontal
+    operator $\rho^{(L)}(R)$.
 \end{theorem}
 \begin{proof}\leanok
     The coefficient family is canonically determined by $\chi$, so the

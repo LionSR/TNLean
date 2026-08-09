@@ -29,9 +29,9 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   are eigenvalues of the local factor `wMat` of the `R_isMPDO`
   factorization, exhibited by explicit eigenvectors;
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
-  has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
-  gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
-  off-diagonal matrix units annihilated).
+  has the explicit eigenvalues `{1, lambda, 0, 0}` used in the completed
+  canonical-form analysis (identity fixed, `diag(1,-1)` scaled by `lambda`,
+  the off-diagonal matrix units annihilated).
 
 The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`) for
 `R` continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`.
@@ -73,7 +73,7 @@ and the Schur product theorem (`Matrix.PosSemidef.hadamard`) gives `R_isMPDO`.
 The local-purification (LPDO) route does NOT apply: the undone-vertical
 letters entangle bra- and ket-side labels, so no purification tensor exists.
 
-## Completed structure and remaining identification
+## Completed structure and explicit vertical identification
 
 * `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS` proves that the
   refinement and coarse-graining maps are trace-preserving completely positive,
@@ -86,12 +86,13 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   positive scalar making the retained block's transfer map exactly idempotent (hence
   spectral-radius one). The letters of `R` form the full matrix-unit basis of M₄
   (`R_toMPSTensor_isInjective`).
-* The general Theorem 4.14 equivalence therefore supplies the existential
-  tensor-attached clause `R_hasBNTAlgebraTensorClause`. The remaining problem is to
-  identify its vertical BNT components, same-length coefficients, and positive
-  diagonal data with the explicit one-label families `oneLabelCoeffs` and
-  `oneLabelChi`. In particular, no witness component operator is identified with the
-  original closed operator `mpo R L`. This boundary is documented in
+* The general Theorem 4.14 equivalence supplies the existential tensor-attached
+  clause `R_hasBNTAlgebraTensorClause`. The module
+  `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` gives an explicit one-label
+  witness with normalized component `(doubledTensor A).toMPSTensor`, multiplicity
+  weight `25/32`, coefficients `oneLabelCoeffs`, and positive diagonal data
+  `oneLabelChi`. Its component operator is a rotated vertical contraction, not the
+  original horizontal operator `mpo R L`. This boundary is documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
@@ -499,12 +500,13 @@ identity `wMat_eq_conj_diagonal_oneLabelChi`, which identifies `wMat` itself
 (not only its spectral data) with `oneLabelChi` via the Walsh–Hadamard
 change of basis.
 
-**Scope restriction (partial BNT-coefficient link):** neither this lemma
-nor `wMat_eq_conj_diagonal_oneLabelChi` is the uniform BNT-label
-structure-coefficient statement of arXiv:1606.00608, Theorem 4.14(ii)
-(which requires the `AlgebraStructureData` witness that `R`'s same-length
-product algebra realizes `oneLabelCoeffs`).  That construction needs
-`IsRFPViaTS R`, itself future work (module docstring, *Remaining gap*).
+**Scope restriction (spectral link only):** neither this lemma nor
+`wMat_eq_conj_diagonal_oneLabelChi` alone proves the uniform BNT-label
+structure-coefficient statement of arXiv:1606.00608, Theorem 4.14(ii).
+The module `TNLean.MPS.MPDO.RescalingStableExplicitVerticalBNT` supplies that
+statement for the normalized vertical component and `oneLabelCoeffs`. It does
+not identify the component operator with the original horizontal operator
+`mpo R L` or attach arbitrary uniform rescalings of `oneLabelChi`.
 Documented in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem wMat_eigenvalue_eq_oneLabelChi_entry (k : Fin 2) :
     ∃ v : Fin 2 → ℂ, v ≠ 0 ∧
@@ -545,9 +547,8 @@ theorem transferMap_A_single10 :
 /-- **The explicit eigenvalues of `φ` (`MPSTensor.transferMap A`).** The
 identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is
 scaled by `lambda = 7/25` (eigenvalue `lambda`), and the off-diagonal matrix
-units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lambda,
-0, 0}` are exactly the eigenvalues asserted for `φ` in the module docstring
-(*Remaining gap*).
+units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`). Together `{1, lambda,
+0, 0}` are the eigenvalues used in the completed canonical-form analysis.
 
 **Scope restriction (transfer-map eigenvalue groundwork):** this
 characterizes the per-site map `φ`, not `transferMap R.toMPSTensor` itself.

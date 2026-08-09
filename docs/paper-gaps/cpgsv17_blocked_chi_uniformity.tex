@@ -117,58 +117,106 @@ should not be cited as a formalization of Theorem~4.14(ii). It is a local
 blocked-basis coefficient statement, useful only after the
 uniform BNT-label statement has been separated from the chosen blocked bases.
 
-\section{Closure for the rescaling-stable example R}
+\section{Explicit vertical closure for the rescaling-stable example R}
 
-Verdict: existential tensor attachment closed; explicit coefficient
-identification remains open.
+Verdict: example-specific explicit vertical closure; the general blocked-basis
+scope restriction and the corrected status of printed Theorem~4.14 remain.
 
-The declaration
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_hasBNTAlgebraTensorClause} applies the formalized implication
-Theorem~4.14(i)$\Rightarrow$(ii) to the proved literal canonical form, MPDO
-positivity, and renormalization fixed-point property of $R$.  It supplies a
-vertical BNT component family, its same-length product law, its coefficient
-family, positive diagonal trace-power data, and the length-one idempotent
-identity.  Thus a genuine tensor-attached presentation exists for $R$.
-
-Separately, the generic
-\leanid{MPOTensor.PositiveBNTLabelChiTracePowerForm} apparatus is instantiated
-for the hand-defined one-label family with
-$\chi=\operatorname{diag}(1,7/25)$
-(\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi}).  The
-witness
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
-gives $c^{(L)}_{0,0,0}=\tr(\chi^L)$ for
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs} at every
-positive length.  The identities
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace} and
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-oneLabelCoeffs_coeff_eq_wMat_pow_trace} tie this scalar formula to the local
-factor $W$ in the closed-operator factorization
-\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-mpo_R_eq_B_mul_wN_mul_transpose}.
-
-These two valid results are not yet identified.  In particular, the
-existential witness is not proved to have label type $\operatorname{Fin}1$,
-its component operator is not identified with the original closed operator
-$\rho^{(L)}(R)$, and its attached coefficients and diagonal matrices are not
-proved equal to the separately defined one-label families.  The source
-operator $O_L(M_\alpha)$ is the closed operator of a vertical BNT component,
-not automatically the closed operator of the original tensor.
-
-The tempting direct identification is false.  The ordinary matrix power
-$W^L$ is distinct from the $L$-fold Kronecker power $W_L$ appearing inside
-$\rho^{(L)}(R)$.  Squaring the factorization retains $W_L^2$, rather than
-producing the scalar $\tr(W^L)$.  Already at $L=1$, the proposed law would
-force
+Let $E_{ij}$ denote the $2\times2$ matrix unit and set
 \[
-    \frac{25}{32}W^2=\frac{32}{25}W,
+  A^0=\frac45E_{00},\qquad A^1=\frac45E_{11},\qquad
+  A^2=\frac35E_{01},\qquad A^3=\frac35E_{10}.
 \]
-but the $(0,0)$ entries are $337/800$ and $512/625$.  Any explicit
-identification must therefore construct the actual vertical BNT components
-and retain the multiplicity relating their closed operators to the original
-closed MPO.  This is the remaining scope of issues \#5635 and \#5590.
+The horizontal MPO tensor $R$ is defined by
+\[
+  R^{pq}_{ab}=\frac{25}{32}
+    \left(A^a\otimes\overline{A^b}\right)_{pq}.
+\]
+Its normalized vertical component is the $16$-letter tensor
+$M_0^{(a,b)}=A^a\otimes\overline{A^b}$, and $O_L(M_0)$ denotes the
+length-$L$ closed operator of that component.  Finally, write
+\[
+  W=\begin{pmatrix}16/25&9/25\\9/25&16/25\end{pmatrix},
+  \qquad W_L=W^{\otimes L}.
+\]
+Thus $W^L$ below is an ordinary matrix power, whereas $W_L$ is a Kronecker
+power.
+
+The explicit capstone
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+R_oneLabelBNTAlgebraTensorClause} constructs the tensor-attached clause.  The
+previously established theorem
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.%
+R_hasBNTAlgebraTensorClause} records the corresponding existential statement.
+There is one BNT label.  Its normalized vertical component has $16$ physical letters,
+bond dimension $4$, and
+\[
+    M_0^{(a,b)}=A^a\otimes\overline{A^b}.
+\]
+The
+multiplicity matrix and the coefficient matrix are
+\[
+    \mu_0=\begin{pmatrix}25/32\end{pmatrix},
+    \qquad
+    \chi_{0,0,0}=\operatorname{diag}(1,7/25).
+\]
+The vertical reconstruction is
+\[
+    \operatorname{vertical}(R)=\frac{25}{32}M_0.
+\]
+For every positive length $L$, the component operator satisfies
+\[
+    O_L(M_0)^2
+      = \left(1+\left(\frac{7}{25}\right)^L\right)O_L(M_0)
+      = \tr(\chi_{0,0,0}^L)O_L(M_0).
+\]
+At length one, $m_0=\tr(\mu_0)=25/32$ and
+$c^{(1)}_{0,0,0}=\tr(\chi_{0,0,0})=32/25$, so the idempotent identity is
+\[
+    \frac{25}{32}
+      = \frac{32}{25}\left(\frac{25}{32}\right)^2.
+\]
+Thus the separately defined coefficient family
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelCoeffs} and
+matrix
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChi} are now the
+actual coefficient and diagonal data of this explicit vertical clause.
+
+The contraction orientation is essential.  Let
+$\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained by
+separating the $16$-valued physical index of the vertical tensor into two
+four-valued indices.  Then
+\[
+    \operatorname{mpo}\!\left(
+      \operatorname{rot}(\operatorname{vertical}(R)),L\right)
+      =\left(\frac{25}{32}\right)^L O_L(M_0).
+\]
+This rotated vertical contraction is not the original horizontal tensor $R$,
+even though the physical and bond dimensions both equal $4$.  At length one,
+the original horizontal operator $\operatorname{mpo}(R,1)$ has rank two,
+whereas $O_1(M_0)$ is a pure-state operator of rank one.  They are therefore
+not proportional, and one must not write
+\[
+    \operatorname{mpo}(R,L)
+      =\left(\frac{25}{32}\right)^L O_L(M_0).
+\]
+
+The earlier horizontal countercalculation remains the regression boundary.
+The ordinary matrix power $W^L$ is distinct from the $L$-fold Kronecker power
+$W_L$ in the factorization of the original horizontal operator.  If that
+operator satisfied the false scalar product law, then already at $L=1$ one
+would have
+\[
+    \frac{25}{32}W^2=\frac{32}{25}W.
+\]
+The $(0,0)$ entries are instead $337/800$ and $512/625$.
+
+This closure is specific to $R$.  It does not identify the blocked support
+algebra bases with uniform BNT labels in general, prove that every blocked-basis $\chi$ family is length independent, or attach arbitrary uniform rescalings of
+$\chi$ to tensor presentations.  The formal algebra characterization of
+Theorem~4.14(i)$\Leftrightarrow$(ii) is complete, while the printed theorem
+remains partial because clause~(iii) requires the documented active-support
+correction.
 
 \section{Relation to the algebra-to-fusion converse}
 
