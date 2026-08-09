@@ -26,6 +26,8 @@ The normalized vertical component is the doubled tensor of the four matrices
 
 ## Main results
 
+* `R_hasBNTAlgebraTensorClause` records the immediate existential consequence
+  of the explicit one-label clause.
 * `verticalComponent_isCPSVBasisOfNormalTensors` proves that the normalized
   component gives the one-label vertical BNT basis of `R`.
 * `verticalBNTMPO_verticalComponent` identifies the component's rotated MPO
@@ -519,6 +521,11 @@ noncomputable def R_oneLabelBNTAlgebraTensorClause : BNTAlgebraTensorClause R wh
   reconstruction := R_vertical_reconstruction
   coeffs := oneLabelCoeffs
   algebraClause := R_oneLabelAlgebraClause
+
+/-- The rescaling-stable tensor has a BNT algebra tensor clause, witnessed by the explicit
+one-label vertical clause. -/
+theorem R_hasBNTAlgebraTensorClause : HasBNTAlgebraTensorClause R :=
+  ⟨R_oneLabelBNTAlgebraTensorClause⟩
 
 /-- The explicit BNT algebra tensor clause for `R` has one label. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_labelCount :

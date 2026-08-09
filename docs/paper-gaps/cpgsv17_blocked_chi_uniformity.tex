@@ -142,19 +142,19 @@ length-$L$ closed operator of that component.  Finally, write
 Thus $W^L$ below is an ordinary matrix power, whereas $W_L$ is a Kronecker
 power.
 
-The explicit capstone
+The explicit module
+\path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean} defines the
+capstone
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_oneLabelBNTAlgebraTensorClause} constructs the tensor-attached clause.  The
-previously established theorem
+R_oneLabelBNTAlgebraTensorClause}.  The existential theorem
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.%
-R_hasBNTAlgebraTensorClause} records the corresponding existential statement.
-There is one BNT label.  Its normalized vertical component has $16$ physical letters,
-bond dimension $4$, and
+R_hasBNTAlgebraTensorClause} follows immediately from that explicit clause in
+the same module.  There is one BNT label.  Its normalized vertical component
+has $16$ physical letters, bond dimension $4$, and
 \[
     M_0^{(a,b)}=A^a\otimes\overline{A^b}.
 \]
-The
-multiplicity matrix and the coefficient matrix are
+The multiplicity matrix and the distinct chi matrix are
 \[
     \mu_0=\begin{pmatrix}25/32\end{pmatrix},
     \qquad
