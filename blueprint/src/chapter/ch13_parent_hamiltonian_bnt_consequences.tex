@@ -430,7 +430,7 @@ with the chosen basis of normal tensors.
     \leanok
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:left_canonical_tensor,
-        def:blocks_not_gauge_phase_equiv, def:l_blk_injective}
+        def:blocks_not_gauge_phase_equiv, def:l_blk_injective, def:mpv_overlap}
     % Scope restriction documented in
     % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
     Let $d\ge1$ and $g\ge2$. For $0\le j<g$, let $D_j\ge1$ and
@@ -493,7 +493,7 @@ with the chosen basis of normal tensors.
     \notready
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
-        def:l_blk_injective}
+        def:l_blk_injective, def:mpv_overlap}
     Retain the same nonzero dimensions and weights, irreducibility, normalized
     self-overlap, gauge-phase inequivalence, common block-injectivity length,
     and source-length bounds, but do not assume left-canonicality. For every
@@ -516,9 +516,13 @@ with the chosen basis of normal tensors.
 
 \begin{proof}
     \notready
-    \uses{thm:gs_eq_bnt_span}
-    The doubly-normalized case is Theorem~\ref{thm:gs_eq_bnt_span}. Passing
-    from the general positive dual fixed points to that case requires the
-    gauge-transport argument recorded in the normalization-scope note.
-    % Gauge transport for the general normalization is tracked in issue #5751.
+    A square-root gauge can normalize the dual fixed-point equation, but does
+    not in general preserve the source unital identity. The proof therefore
+    requires weighted, gauge-covariant versions of simultaneous span
+    propagation and the boundary-matrix calculation, followed by transport of
+    the periodic chain spaces, parent-Hamiltonian kernel, and component-vector
+    span through the blockwise gauges.
+    % The normalization scope and elimination plan are recorded in
+    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex; tracking
+    % remains in issue #5751.
 \end{proof}
