@@ -213,6 +213,23 @@ and~\cite{Evans1978Spectral}.
     definiteness.
 \end{proof}
 
+\begin{theorem}[Transfer-map PSD fixed point --- irreducible version]
+    \label{thm:transfer_psd_fp_pd_irred}
+    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+    \leanok
+    \uses{def:transfer_map, def:irreducible_cp}
+    Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible. If
+    $\rho\geq0$, $\rho\neq0$, and $\E_A(\rho)=\rho$, then $\rho$ is positive
+    definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:transfer_cp, thm:psd_fp_pd_irred}
+    The transfer map is completely positive, so
+    Theorem~\ref{thm:psd_fp_pd_irred} applies.
+\end{proof}
+
 \begin{theorem}[PSD fixed point is positive definite]
     \label{thm:psd_fp_pd}
     \lean{MPSTensor.posSemidef_fixedPoint_isPosDef}
@@ -224,9 +241,9 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_cp, thm:injective_irreducible, thm:psd_fp_pd_irred}
+    \uses{thm:injective_irreducible, thm:transfer_psd_fp_pd_irred}
     Injectivity implies irreducibility of the transfer map. Apply
-    Theorem~\ref{thm:psd_fp_pd_irred}.
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred}.
 \end{proof}
 
 \begin{theorem}[Orthogonal trace condition]\label{thm:orthogonal_trace_cond}
