@@ -581,6 +581,63 @@ Theorem~\ref{thm:trace_norm_abs}.
     scaled-trace theorem applies and yields the claimed bound.
 \end{proof}
 
+\begin{lemma}[Choi matrix of the trace-prepare map]
+    \label{lem:choi_matrix_trace_prepare}
+    \lean{Matrix.choiMatrix_tracePrepareMap}
+    \uses{def:choi_matrix_rectangular, def:trace_prepare_map}
+    Let $Y\in\MN{D'}$ be arbitrary.  In the rectangular
+    (output-factor-first) Choi representation,
+    \begin{align}
+        \tau(\mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y))
+        = \frac{1}{D}\,(Y\otimes\Id).
+        \label{eq:choi_trace_prepare}
+    \end{align}
+    See \cite[Chapter~8, Eq.~(8.86)]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:omega_slice_single}
+    Direct computation using the elementwise formula for the
+    omega slice and linearity of the Choi assignment.
+\end{proof}
+
+\begin{theorem}[Choi-dominated Doeblin contraction]
+    \label{thm:choi_dominated_doeblin}
+    \lean{Matrix.traceNorm_map_sub_map_le_of_choi_domination}
+    \leanok
+    \uses{def:trace_norm, def:choi_matrix_rectangular,
+      def:trace_preserving_rectangular, def:density_matrices,
+      thm:quantum_doeblin_contraction}
+    Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving,
+    Hermiticity-preserving linear map and $Y\in\MN{D'}$ Hermitian
+    with $\tr[Y]=1$.  If there exists $\varepsilon\geq0$ such that
+    the rectangular Choi matrix $\tau(T)$ satisfies
+    \begin{align}
+        \tau(T) \ge \frac{\varepsilon}{D}\,(Y\otimes\Id),
+        \label{eq:choi_domination}
+    \end{align}
+    then for all density operators $\rho_1,\rho_2\in\MN{D}$,
+    \begin{equation}
+        \lVert T(\rho_1)-T(\rho_2)\rVert_{\tr}
+        \le (1-\varepsilon)\,\lVert\rho_1-\rho_2\rVert_{\tr}.
+        \label{eq:choi_doeblin_contraction}
+    \end{equation}
+    See \cite[Chapter~8, Eq.~(8.86)]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:quantum_doeblin_contraction, lem:choi_matrix_trace_prepare,
+      lem:choi_cp_equivalence_rectangular}
+    Set $T'(X)=\tr[X]\,Y$ (the map $\mathrm{tracePrepareMap}(Y)$).
+    By Lemma~\ref{lem:choi_matrix_trace_prepare},
+    $\tau(T')=(1/D)(Y\otimes\Id)$. Linearity of the Choi assignment gives
+    $\tau(T-\varepsilon T')=\tau(T)-\varepsilon\tau(T')
+    \ge0$, so $T-\varepsilon T'$ is completely positive
+    (the rectangular Choi CP equivalence) and hence
+    positive. Theorem~\ref{thm:quantum_doeblin_contraction} then
+    yields the asserted bound.
+\end{proof}
+
 \section{Projective pinching}
 
 \begin{theorem}[Projective pinching inequality]
