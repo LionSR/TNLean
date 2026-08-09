@@ -214,20 +214,6 @@ theorem breuerHallSymmetricWitness_posSemidef (U : Matrix (Fin d) (Fin d) ℂ) :
 
 /-! ## Partial-transpose identities -/
 
-/-- The first-factor partial transpose of the identity matrix is the identity matrix. -/
-theorem partialTransposeLeft_one (d d' : ℕ) :
-    Matrix.partialTransposeLeft (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = 1 := by
-  ext p q
-  simp only [Matrix.partialTransposeLeft_apply, Matrix.one_apply, Prod.ext_iff]
-  congr 1
-  simp [eq_comm]
-
-/-- The first-factor partial transpose is additive. -/
-theorem partialTransposeLeft_add {d d' : ℕ} (A B : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
-    Matrix.partialTransposeLeft (A + B)
-      = Matrix.partialTransposeLeft A + Matrix.partialTransposeLeft B := by
-  ext p q; simp [Matrix.partialTransposeLeft_apply, Matrix.add_apply]
-
 /-- The first-factor partial transpose of the SWAP operator is the (identity-)twisted
 maximally entangled projector: `F^{T₁} = twistedOmegaProj 1`. -/
 theorem partialTransposeLeft_swapMatrix (d : ℕ) :

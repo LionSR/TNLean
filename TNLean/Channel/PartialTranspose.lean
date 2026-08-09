@@ -107,6 +107,22 @@ theorem partialTransposeRight_apply (ρ : Matrix (Fin d × Fin d') (Fin d × Fin
     (p q : Fin d × Fin d') :
     partialTransposeRight ρ p q = ρ (p.1, q.2) (q.1, p.2) := rfl
 
+/-! ### Basic algebraic rules -/
+
+/-- The first-factor partial transpose of the identity matrix is the identity matrix. -/
+theorem partialTransposeLeft_one (d d' : ℕ) :
+    partialTransposeLeft (1 : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) = 1 := by
+  ext p q
+  simp only [partialTransposeLeft_apply, Matrix.one_apply, Prod.ext_iff]
+  congr 1
+  simp [eq_comm]
+
+/-- The first-factor partial transpose is additive. -/
+theorem partialTransposeLeft_add (A B : Matrix (Fin d × Fin d') (Fin d × Fin d') ℂ) :
+    partialTransposeLeft (A + B) = partialTransposeLeft A + partialTransposeLeft B := by
+  ext p q
+  simp [partialTransposeLeft_apply, Matrix.add_apply]
+
 /-! ### Involution -/
 
 /-- The first-factor partial transpose is an involution: `(ρ^{T₁})^{T₁} = ρ`. -/
