@@ -407,6 +407,13 @@ direct.
     invariant face.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    Tensor irreducibility is the absence of a nontrivial invariant matrix
+    projection, which is precisely the corresponding irreducibility condition
+    for the transfer map.
+\end{proof}
+
 \begin{lemma}[Positive square-root gauging preserves irreducibility]
     \label{lem:tp_gauge_preserves_irreducibility}
     \lean{MPSTensor.isIrreducibleTensor_tpGauge_of_isIrreducibleMap}
@@ -417,6 +424,13 @@ direct.
     $\Lambda^{1/2}A\Lambda^{-1/2}$ is irreducible.
 \end{lemma}
 
+\begin{proof}
+    \leanok
+    The square-root gauge conjugates the transfer map by an invertible
+    similarity. Invariant faces therefore correspond bijectively before and
+    after gauging.
+\end{proof}
+
 \begin{lemma}[Gauge-phase equivalence transports across two gauges]
     \label{lem:gauge_phase_equiv_transport_left_right}
     \lean{MPSTensor.gaugePhaseEquiv_of_gaugeEquiv_left_right_cast}
@@ -425,6 +439,13 @@ direct.
     Gauge equivalent replacements on both sides preserve gauge-phase
     equivalence, including after identifying equal bond dimensions.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    Compose the left gauge, the gauge-phase intertwiner, and the inverse right
+    gauge. After transporting across the bond-dimension identification, the
+    composite is the required gauge-phase intertwiner.
+\end{proof}
 
 \begin{theorem}[Prepared-gauge simultaneous product span]
     \label{thm:pgvwc_prepared_gauge_product_span}
@@ -493,19 +514,16 @@ direct.
     back to the source representatives.
 \end{proof}
 
-\begin{lemma}[Simultaneous product span at the source length]
-    \label{lem:pgvwc_product_span_source_length}
+\begin{theorem}[Simultaneous product span at the source length]
+    \label{thm:pgvwc_product_span_source_length}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
-    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{def:blockwise_product_word_span,
-        def:blocks_not_gauge_phase_equiv,
-        def:ground_space_parent}
+        def:blocks_not_gauge_phase_equiv}
     Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
     Suppose that every block $A^j$ is irreducible and that no two distinct
     blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
-    and suppose
-    that every block is injective at length $L_0$:
+    and suppose every block is injective at length $L_0$:
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}&=\MN{D_j}. \notag
     \end{align}
@@ -515,21 +533,20 @@ direct.
         \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
         &\sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
     \end{align}
-    For every $n\ge 3(r-1)(L_0+1)$, one has
-    $\spn\{(A^1_w,\ldots,A^r_w):|w|=n\} =\prod_j\MN{D_j}$.
-    Consequently the spaces $G_n(A^j)$ form an internal sum. No identity
-    $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source blocks.
-    The doubly-normalized specialization remains available separately. This is
-    the simultaneous spanning estimate used in
+    For every $n\ge 3(r-1)(L_0+1)$,
+    \begin{align}
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\}&=\prod_j\MN{D_j}. \notag
+    \end{align}
+    No identity $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source
+    blocks. This is the simultaneous spanning estimate used in
     \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:wordspan_propagation_unital,
         lem:unital_simultaneous_product_span_propagation,
-        thm:pgvwc_prepared_gauge_product_span,
-        lem:product_span_block_image_direct_sum}
+        thm:pgvwc_prepared_gauge_product_span}
     Theorem~\ref{thm:wordspan_propagation_unital} first gives
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}=\MN{D_j}
@@ -539,34 +556,47 @@ direct.
         &\Longrightarrow
         \spn\{A^j_w:|w|=3(L_0+1)\}=\MN{D_j}. \notag
     \end{align}
-    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} then gives the full
+    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
     simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
     The source unital identity and
     Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagate
-    this equality to every $n\ge q$. To prove independence, write
-    $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that $\sum_j\phi_j=0$.
-    Comparison of the coefficient of each word, followed by the simultaneous
-    spanning equality, gives
+    this equality to every $n\ge q$.
+\end{proof}
+
+\begin{theorem}[Block-space independence at the source length]
+    \label{thm:pgvwc_block_space_independence_source_length}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
+    \leanok
+    \uses{thm:pgvwc_product_span_source_length, def:ground_space_parent}
+    Under the hypotheses of
+    Theorem~\ref{thm:pgvwc_product_span_source_length}, the spaces $G_n(A^j)$
+    form an internal sum for every $n\ge3(r-1)(L_0+1)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc_product_span_source_length,
+        lem:product_span_block_image_direct_sum}
+    Write $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that
+    $\sum_j\phi_j=0$. The simultaneous spanning equality gives
     \begin{align}
         \sum_j \Gamma_n^{A^j}(X_j)=0
-        &\quad\Longrightarrow\quad
-        \left(\forall (M_j)_j,
-            \sum_j\tr(X_jM_j)=0\right)
-        \quad\Longrightarrow\quad
+        &\Longrightarrow
+        \left(\forall (M_j)_j,\ \sum_j\tr(X_jM_j)=0\right)
+        \Longrightarrow
         \forall j,\ X_j=0. \notag
     \end{align}
-    Indeed, in the last implication one takes a tuple supported in one block
-    and uses nondegeneracy of the trace pairing. Hence every $\phi_j$ vanishes,
-    so the spaces $G_n(A^j)$ form an internal sum.
+    Hence every $\phi_j$ vanishes.
 \end{proof}
 
 \begin{theorem}[Direct-sum restriction intersection at the source length]
     \label{thm:pgvwc_direct_sum_intersection_source_length}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{def:ground_space_parent}
+    \uses{def:ground_space_parent,
+        thm:pgvwc_block_space_independence_source_length}
     Under the hypotheses of
-    Lemma~\ref{lem:pgvwc_product_span_source_length}, let
+    Theorem~\ref{thm:pgvwc_product_span_source_length}, let
     $m\ge3(r-1)(L_0+1)+1$. Then
     \begin{align}
         \C^d\otimes\left(\sum_jG_m(A^j)\right)
@@ -575,7 +605,8 @@ direct.
         &=
         \sum_jG_{m+1}(A^j). \notag
     \end{align}
-    Lemma~\ref{lem:pgvwc_product_span_source_length} also shows that the sums
+    Theorem~\ref{thm:pgvwc_block_space_independence_source_length} also shows
+    that the sums
     at lengths $m$ and $m+1$ are internal. This is the direct-sum lemma in the
     proof of
     \cite[Theorem~12, proof lines~1346--1456]{PerezGarcia2007Matrix}.
@@ -583,7 +614,7 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc_product_span_source_length,
+    \uses{thm:pgvwc_product_span_source_length,
         lem:block_restriction_intersection_subspace}
     Let a vector belong to both restricted spaces. The two endpoint
     decompositions give boundary matrices $C_a^j$ and $D_b^j$. For every pair
