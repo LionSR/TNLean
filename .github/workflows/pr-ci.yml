@@ -75,6 +75,7 @@ on:
       - 'scripts/test_texcase.py'
       - 'scripts/tenkz_ctan.py'
       - 'scripts/test_tenkz_ctan.py'
+      - 'LICENSE'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -143,6 +144,7 @@ on:
       - 'scripts/test_texcase.py'
       - 'scripts/tenkz_ctan.py'
       - 'scripts/test_tenkz_ctan.py'
+      - 'LICENSE'
   workflow_dispatch:
 
 concurrency:
@@ -257,9 +259,14 @@ jobs:
               - 'scripts/test_tenkz_dimension_inventory.py'
               - 'scripts/update_tenkz_dimension_inventory.py'
               - 'scripts/test_tenkz_cubic.py'
+              # Everything the CTAN archive stages: the material comes from
+              # outside `tex/tenkz/` and `docs/tenkz/*.tex`, so the staging
+              # check is gated on its sources too.
               - 'scripts/tenkz_ctan.py'
               - 'scripts/test_tenkz_ctan.py'
               - 'docs/tenkz/ctan/**'
+              - 'docs/tenkz/CHANGES.md'
+              - 'LICENSE'
             shrink:
               - 'blueprint/src/chapter/**'
               - 'tex/tenkz/**'
