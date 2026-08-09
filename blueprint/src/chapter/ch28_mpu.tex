@@ -483,6 +483,55 @@ nonzero spectrum as a set.
   \end{align}
 \end{proof}
 
+\begin{theorem}[Positive zero trace powers determine the characteristic polynomial]
+  \label{thm:mpu_zero_trace_power_charpoly}
+  \lean{Matrix.charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^k)=0$ for every integer
+  $k\geq1$, then
+  \begin{align}
+    \chi_A(X)&=X^n.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:newton_girard}
+  The zero matrix has the same positive trace powers as $A$ and characteristic
+  polynomial $X^n$. Newton--Girard therefore identifies the two characteristic
+  polynomials.
+\end{proof}
+
+\begin{theorem}[Shifted zero trace powers force nilpotence]
+  \label{thm:mpu_shifted_zero_trace_power_nilpotent}
+  \lean{Matrix.forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt,
+    Matrix.eq_zero_of_mem_spectrum_of_forall_trace_pow_eq_zero_of_one_lt,
+    Matrix.charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero_of_one_lt,
+    Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^N)=0$ for every integer
+  $N>1$, then
+  \begin{align}
+    \chi_A(X)&=X^n,
+    &A&\text{ is nilpotent}.
+  \end{align}
+  This is the elementwise nilpotence assertion used before the nil-matrix
+  theorem in \cite[line~410]{Cirac2017MPU}. It requires neither the missing
+  first moment nor positivity, normality, or diagonalizability.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_zero_trace_power_charpoly}
+  Every positive power of both $A^2$ and $A^3$ has vanishing trace. Hence
+  \begin{align}
+    \chi_{A^2}(X)&=\chi_{A^3}(X)=X^n.
+  \end{align}
+  If $\mu$ is a spectral value of $A$, spectral mapping shows that $\mu^2$ and
+  $\mu^3$ are roots of these two characteristic polynomials. They therefore
+  vanish, and already $\mu^2=0$ gives $\mu=0$. Thus every root of the split
+  monic polynomial $\chi_A$ is zero, so $\chi_A(X)=X^n$.
+  Cayley--Hamilton now gives $A^n=0$.
+\end{proof}
+
 The standard-form construction uses the compact singular-value decomposition in
 which the intermediate dimension is the rank rather than the smaller ambient
 dimension.
