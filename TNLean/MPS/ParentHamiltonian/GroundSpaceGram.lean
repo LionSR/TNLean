@@ -67,7 +67,7 @@ theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
       groundSpaceMapES_frobeniusEquivEuclidean_apply A L X⟩
 
 /-- Block injectivity at length \(L\) makes the Hilbert-space boundary map
-\(\Gamma_L\) injective. -/
+\(\Gamma_L^{\mathrm{ES}}\) injective. -/
 theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
     (hInj : IsNBlkInjective A L) :
     Function.Injective (groundSpaceMapES A L) := by
@@ -90,10 +90,11 @@ theorem groundSpaceMapES_injective_of_isNBlkInjective_of_le
   groundSpaceMapES_injective_of_isNBlkInjective
     (isNBlkInjective_of_le hL₀ hInj hL)
 
-/-- For a block-injective MPS, the inverse-Gram range projector of
-\(\Gamma_L\) is the orthogonal projector onto the physical local ground space.
-This is the physical range projector, not the virtual transfer fixed-point
-projector `fixedPointProj`; it does not assert an overlapping-window estimate. -/
+/-- If \(A\) is block-injective at length \(L\), the inverse-Gram range
+projector of \(\Gamma_L^{\mathrm{ES}}\) is the orthogonal projector onto the
+physical local ground space. This is the physical range projector, not the
+virtual transfer fixed-point projector `fixedPointProj`; it does not assert an
+overlapping-window estimate. -/
 theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
     (A : MPSTensor d D) (L : ℕ) (hInj : IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
@@ -103,9 +104,11 @@ theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
   exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
     (range_groundSpaceMapES A L)
 
-/-- For every \(L \ge L₀\), the physical MPS ground-space projector is
+/-- If \(L₀ > 0\), \(A\) is \(L₀\)-block injective, and \(L \ge L₀\), then
 \[
-  P_{G_L(A)} = \Gamma_L (\Gamma_L^\dagger \Gamma_L)^{-1} \Gamma_L^\dagger.
+  P_{G_L^{\mathrm{ES}}(A)} = \Gamma_L^{\mathrm{ES}}
+    ((\Gamma_L^{\mathrm{ES}})^\dagger \Gamma_L^{\mathrm{ES}})^{-1}
+    (\Gamma_L^{\mathrm{ES}})^\dagger.
 \]
 Here the inverse is `ContinuousLinearMap.inverseGram`. This is the physical
 range projector, not the virtual `fixedPointProj`; it does not assert an

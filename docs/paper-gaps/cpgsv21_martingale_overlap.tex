@@ -517,22 +517,24 @@ for injective finite-dimensional maps is
 \leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
 denominator estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under
 $\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.
-Block injectivity makes the Hilbert-space boundary map injective at its base
-length and every longer length; this is recorded by
+Suppose that $L_0>0$ and that $A$ is $L_0$-block injective.  Block
+injectivity then makes the Hilbert-space boundary map injective at every length
+$L\ge L_0$; this is recorded by
 \leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective} and
 \leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}.
-The specialization
+Writing $\mathcal G_L^{\mathrm{ES}}(A)$ for the physical local ground space, the
+specialization
 \leanid{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
-therefore proves the exact physical formula
+therefore proves, for every $L\ge L_0$, the exact physical formula
 \begin{align}
-  P_{\mathcal G_L(A)}
+  P_{\mathcal G_L^{\mathrm{ES}}(A)}
     &=\Gamma_L^{\mathrm{ES}}\mathcal K_L^{-1}
-      (\Gamma_L^{\mathrm{ES}})^\dagger,
-  &L&\ge L_0.
+      (\Gamma_L^{\mathrm{ES}})^\dagger.
 \end{align}
-This is the orthogonal projector onto $\operatorname{ran}\Gamma_L$.  It is not
-the transfer fixed-point projector \leanid{fixedPointProj}; the latter acts on
-the virtual matrix space and cannot substitute for the inverse-Gram formula.
+This is the orthogonal projector onto
+$\operatorname{ran}\Gamma_L^{\mathrm{ES}}$.  It is not the transfer fixed-point
+projector \leanid{fixedPointProj}; the latter acts on the virtual matrix space
+and cannot substitute for the inverse-Gram formula.
 
 To state the source estimate, let $l\in\mathbb N$ be the overlap length and let
 $0\le\lambda<1$ be an admissible transfer-mixing rate satisfying
