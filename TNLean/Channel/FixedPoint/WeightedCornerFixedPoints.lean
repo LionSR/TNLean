@@ -161,7 +161,7 @@ private theorem exists_weighted_compression
   have hAtp : ∑ i : Fin d, (A i)ᴴ * A i = Q :=
     cornerCompressionKraus_isTP K h_tp hQproj hInv
   obtain ⟨r, C, _φ, V, -, hCtp, -, -, -, -, hCi, hVtV, hVVt, -⟩ :=
-    exists_cornerCompression_of_supported_projection
+    exists_corner_compression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
   set σ : Matrix (Fin r) (Fin r) ℂ := Vᴴ * ρ * V with hσdef

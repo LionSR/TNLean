@@ -69,7 +69,7 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ X).1 = V * X * Vᴴ) := by
   obtain ⟨n, C, φ, V, hdim, hCtp, hIntertw, hMul, hStar, hLetter, hCompression,
     hVtV, hVVt, hφV⟩ :=
-    Kraus.exists_cornerCompression_of_supported_projection A P hP hSupp hTP
+    Kraus.exists_corner_compression_of_supported_projection A P hP hSupp hTP
   have hPV : P * V = V := by
     rw [← hVVt, Matrix.mul_assoc, hVtV, Matrix.mul_one]
   have hIntertwineLetter : ∀ i : Fin d, A i * V = V * C i := by

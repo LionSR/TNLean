@@ -224,7 +224,7 @@ theorem cornerFixed_mul
     cornerCompressionKraus_isTP K h_tp hQproj hInv
   obtain ⟨n, C, φ, V, _hdim, hCtp, hIntertw, hMul, _hStar, hLetter, hCi,
     hVtV, hVVt, hφV⟩ :=
-    exists_cornerCompression_of_supported_projection
+    exists_corner_compression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
   set σ : Matrix (Fin n) (Fin n) ℂ := Vᴴ * ρ * V with hσdef
