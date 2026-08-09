@@ -17938,7 +17938,16 @@
 % first colon so the reason keeps every colon of its own.  The relation is
 % read as a number, so a leading zero names the relation it looks like rather
 % than a waiver that never matches.
+% Variants the kernel asks for that a supported expl3 release may not carry
+% ready-made.  Generating one that already exists costs nothing, and a
+% missing one is an undefined control sequence at the author's first
+% equation, which is not where a package should discover its own toolchain.
 \cs_generate_variant:Nn \seq_set_split:Nnn { Nen }
+\cs_generate_variant:Nn \prop_gput:Nnn { NVe }
+\cs_generate_variant:Nn \regex_match:nnTF { nV }
+\cs_generate_variant:Nn \msg_error:nnn { nnV }
+\cs_generate_variant:Nn \prop_get:NnNTF { NVNTF }
+\cs_generate_variant:Nn \prop_get:NnNT { NVNT }
 \cs_new_protected:Npn \__tenkz_kernel_check_off:n #1
   {
     % The author's colon is an ordinary character and the one written here
@@ -17987,17 +17996,19 @@
             % record the comparison as waived twice, and a reader counting
             % records against relations finds an equation that does not
             % add up.
-            \clist_if_in:NeTF \l__tenkz_kernel_check_off_clist
+            \tl_set:Ne \l__tenkz_kernel_check_relation_tl
               { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
+            \clist_if_in:NVTF \l__tenkz_kernel_check_off_clist
+              \l__tenkz_kernel_check_relation_tl
               {
-                \msg_error:nne {tenkz}{kernel-check-twice}
-                  { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
+                \msg_error:nnV {tenkz}{kernel-check-twice}
+                  \l__tenkz_kernel_check_relation_tl
               }
               {
-                \clist_put_right:Ne \l__tenkz_kernel_check_off_clist
-                  { \int_eval:n { \l__tenkz_kernel_check_relation_tl } }
-                \seq_put_right:Ne \l__tenkz_kernel_check_reason_seq
-                  { \tl_use:N \l__tenkz_kernel_check_reason_tl }
+                \clist_put_right:NV \l__tenkz_kernel_check_off_clist
+                  \l__tenkz_kernel_check_relation_tl
+                \seq_put_right:NV \l__tenkz_kernel_check_reason_seq
+                  \l__tenkz_kernel_check_reason_tl
               }
           }
       }
