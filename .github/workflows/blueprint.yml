@@ -92,6 +92,16 @@ jobs:
             echo "::error::Blueprint has missing files (see WARNING lines above)"
             exit 1
           fi
+          # A command plasTeX does not know reaches the page through whichever
+          # template happens to share its name, and a node with no template at
+          # all reaches it through the fallback. Both produced reader-visible
+          # corruption from a build that reported success, so neither may be
+          # published. This is the gate that pr-ci.yml applies to a branch.
+          if grep -qE "WARNING: (unrecognized command/environment|Using default renderer)" \
+               "$tmp_output_file"; then
+            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/_tnlean_patches.py"
+            exit 1
+          fi
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
           fi
@@ -99,6 +109,15 @@ jobs:
             echo "::error::Blueprint contains unrendered tenkz SVG placeholders"
             exit 1
           fi
+
+      # A zero exit status says the build ran, not that the pages read. The
+      # site is published from here, so the reader-facing check runs here too
+      # and not only where a pull request is reviewed.
+      - name: Test generated blueprint pages
+        run: |
+          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
