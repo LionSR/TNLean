@@ -145,7 +145,7 @@ first, the rest sorted, no `picture=`.
 
 | Kind | Fields, in emitted order | Meaning |
 |---|---|---|
-| `picture` | `id` (`k<n>`), `lang` (always `kernel`), `metrics` (when a metric profile is declared), `scope` (when inside `tenkzeq`) | opens a picture |
+| `picture` | `id` (`k<n>`), `lang` (always `kernel`), `metrics` (when a metric profile is declared), `size` (when the resolved size class is not `m`, whether the author stated it or the surrounding mathematics did), `scope` (when inside `tenkzeq`) | opens a picture |
 | `kernel-boundary` | `signature` | closes the record block with the picture's exposed-index multiset, comma-space joined, possibly empty |
 | `check` | `scope`, then `relation` or `product`, `result`, `modulo`, and result-specific fields | one equation-level verdict, emitted after every picture of its scope |
 | `warning` | `picture`, `code`, then code-specific fields | one non-fatal geometry or readability diagnostic |

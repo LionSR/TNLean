@@ -123,6 +123,15 @@
 \msg_new:nnn {tenkz}{kernel-metrics-scope}
   { [TKZ-METRICS-SCOPE]~metrics=~is~picture~policy:~a~group~shares~its~
     picture's~metric~context. }
+\msg_new:nnn {tenkz}{kernel-check-word}
+  { [TKZ-EQ-CHECK-WORD]~the~audit~does~not~know~'#1';~check=~states~the~
+    audit~(signature),~the~equivalence~it~is~taken~up~to~
+    (modulo=bundles),~and~its~recorded~opt-outs~(off={<relation>:~
+    <reason>}). }
+\msg_new:nnn {tenkz}{kernel-check-relation}
+  { [TKZ-EQ-CHECK-RELATION]~relation~#1~is~opted~out~of~the~audit,~but~the~
+    equation~has~#2~relation(s);~an~opt-out~names~a~relation~the~equation~
+    performs. }
 \msg_new:nnn {tenkz}{kernel-check-reason}
   { [TKZ-EQ-CHECK-REASON]~relation~#1~is~opted~out~of~the~audit~with~no~
     reason;~the~opt-out~records~the~mathematics~the~diagram~does~not~draw,~
@@ -271,6 +280,7 @@
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_size_tl
+\tl_new:N   \l__tenkz_kernel_check_spec_tl
 \tl_new:N   \l__tenkz_kernel_slot_tl
 \tl_new:N   \l__tenkz_kernel_child_tl
 \tl_new:N   \l__tenkz_kernel_parent_tl
@@ -7543,9 +7553,14 @@
 \cs_new_protected:Npn \__tenkz_kernel_eq_extent_named:n #1
   {
     \bool_set_true:N \l__tenkz_kernel_eq_extent_named_bool
+    % A declared skin is classified by the primitive it resolves to, as hull
+    % measurement and ink already are, so an alias of the ellipsis cannot
+    % acquire a name's measure by wearing a different word.
     \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_eq_extent_skin_tl
     \quark_if_no_value:NF \l__tenkz_kernel_eq_extent_skin_tl
       {
+        \exp_args:NV \__tenkz_kernel_skin_base:nN
+          \l__tenkz_kernel_eq_extent_skin_tl \l__tenkz_kernel_eq_extent_skin_tl
         \str_case:VnT \l__tenkz_kernel_eq_extent_skin_tl
           { {dots}{} {dot}{} {none}{} }
           { \bool_set_false:N \l__tenkz_kernel_eq_extent_named_bool }
@@ -17894,12 +17909,36 @@
     \prop_get:NnN \l__tenkz_kernel_stage_prop {check} \l__tenkz_kernel_scratch_tl
     \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
       {
+        % The options are read from the specification with the opt-out
+        % payloads taken out first: a reason is prose an author writes about
+        % the mathematics, and prose that happens to name an option is still
+        % prose.  What survives that removal must be one of the words the
+        % audit knows, or the author has written something the audit will
+        % not do and believes it will.
+        \tl_set_eq:NN \l__tenkz_kernel_check_spec_tl \l__tenkz_kernel_scratch_tl
+        \regex_replace_all:nnN
+          {
+            off \s* = \s* \{ \s* \d+ \s* : \s*
+              (?: [^\{\}] | \{ [^\{\}]* \} )* \}
+          }
+          { } \l__tenkz_kernel_check_spec_tl
         \exp_args:NnV \regex_match:nnT
           { modulo \s* = \s* bundles }
-          \l__tenkz_kernel_scratch_tl
+          \l__tenkz_kernel_check_spec_tl
           { \bool_set_true:N \l__tenkz_kernel_check_bundles_bool }
+        \regex_replace_all:nnN
+          { signature | modulo \s* = \s* bundles | [\s,] }
+          { } \l__tenkz_kernel_check_spec_tl
+        \tl_if_empty:NF \l__tenkz_kernel_check_spec_tl
+          {
+            \msg_error:nne {tenkz}{kernel-check-word}
+              { \tl_use:N \l__tenkz_kernel_check_spec_tl }
+          }
         \exp_args:NnV \regex_extract_all:nnN
-          { off \s* = \s* \{ \s* (\d+) \s* : \s* ([^\}]*) \} }
+          {
+            off \s* = \s* \{ \s* (\d+) \s* : \s*
+              ( (?: [^\{\}] | \{ [^\{\}]* \} )* ) \}
+          }
           \l__tenkz_kernel_scratch_tl
           \l__tenkz_kernel_match_seq
         \int_step_inline:nnnn {2} {3}
@@ -18295,6 +18334,21 @@
       { \seq_count:N \g__tenkz_kernel_panel_gseq }
     \int_set:Nn \l__tenkz_kernel_eq_rels_int
       { \seq_count:N \g__tenkz_kernel_rel_gseq }
+    % An opt-out names a relation the equation performs.  The equation's
+    % relations are only counted here, so this is the first place the claim
+    % can be read: an index outside the count waives nothing and leaves the
+    % relation the author meant standing audited, which is a mistyped waiver
+    % rather than a waived comparison.
+    \clist_map_inline:Nn \l__tenkz_kernel_check_off_clist
+      {
+        \bool_lazy_or:nnT
+          { \int_compare_p:nNn {##1} < {1} }
+          { \int_compare_p:nNn {##1} > { \l__tenkz_kernel_eq_rels_int } }
+          {
+            \msg_error:nnee {tenkz}{kernel-check-relation} {##1}
+              { \int_use:N \l__tenkz_kernel_eq_rels_int }
+          }
+      }
     % Arity: relations split the panel sequence into sides and every side
     % must hold at least one panel.  Fewer relations than panel gaps is not
     % an arity failure: panels adjacent without a relation glyph are one
@@ -18533,8 +18587,8 @@
 % this machinery existed.  A fatal is not redirected: it is fatal because
 % carrying on is not possible, and a run that carried on past one would
 % report a torn token stream instead of the refusal that caused it.  The
-% redirection is global and is taken off by redirecting each class to
-% itself, which is l3msg's own spelling for cancelling one.
+% redirection is group-local, so closing the run's group restores whatever
+% routing the document or another package had in force.
 \clist_const:Nn \c__tenkz_kernel_eq_msg_classes_clist
   { error, warning }
 \cs_new_protected:Npn \__tenkz_kernel_eq_measure:
@@ -18575,8 +18629,6 @@
           \seq_map_inline:Nn \l__tenkz_kernel_match_seq {##1}
           \c_math_toggle_token
         }
-      \clist_map_inline:Nn \c__tenkz_kernel_eq_msg_classes_clist
-        { \msg_redirect_class:nn {##1} {##1} }
       \int_gset:Nn \g__tenkz_kernel_picture_int
         { \l__tenkz_kernel_eq_saved_picture_int }
       \int_gset:Nn \g__tenkz_kernel_eq_scope_int

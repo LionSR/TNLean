@@ -815,8 +815,12 @@ sum are read from the class the mathematics already has.
    author has: `check=` selects the audit (`signature`), states the
    equivalence the comparison is taken up to (`modulo=bundles`, which reads a
    bundled index and its members as one boundary entry), and records opt-outs.
-   It cannot switch the audit off silently, and an opt-out without a reason is
-   not an opt-out.
+   It cannot switch the audit off silently. An opt-out without a reason is not
+   an opt-out; an opt-out naming a relation the equation does not perform is a
+   mistyped one and leaves the relation the author meant standing audited; and
+   a word the audit does not know is refused rather than ignored, because a
+   spelling the audit passes over is a comparison the author believes is
+   running and is not.
 5. **Coefficients and summations need no key.** A scalar coefficient is a
    term of empty signature; juxtaposition is a product; concatenating an
    empty signature leaves the panel's boundary as it was. A summation sign is
