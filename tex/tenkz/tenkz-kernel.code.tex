@@ -11644,24 +11644,40 @@
 \bool_new:N \l__tenkz_kernel_r_wrap_rend_bool
 \bool_new:N \l__tenkz_kernel_r_wrap_llead_bool
 \bool_new:N \l__tenkz_kernel_r_wrap_rlead_bool
+% Which end an endpoint is, is settled by the port's own face and not by the
+% slot the record happens to hold it in.  \__tenkz_kernel_port_closure_consume:n
+% fills `from` before `to`, so a row whose west boundary cell carries no port
+% puts the EAST port in `from`: reading the slots in order then called the
+% east station the row's west end, led the rail out of it across the whole
+% row, and drew a west lead where the row has no west site.  A port node
+% records the face it was minted on -- 180 for the west end, 0 for the east
+% one -- and that is the reading taken here.
+\cs_new_protected:Npn \__tenkz_kernel_r_wrap_end:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {#2} \l__tenkz_kernel_r_end_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
+      {
+        \str_if_eq:eeTF
+          { \__tenkz_kernel_node_item:nn
+              { \l__tenkz_kernel_r_end_tl } {face} } {0}
+          {
+            \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
+              \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
+            \bool_set_true:N \l__tenkz_kernel_r_wrap_rend_bool
+          }
+          {
+            \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
+              \l__tenkz_kernel_r_wrap_lx_fp \l__tenkz_kernel_r_wrap_ly_fp
+            \bool_set_true:N \l__tenkz_kernel_r_wrap_lend_bool
+          }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_r_wrap_ends:n #1
   {
     \bool_set_false:N \l__tenkz_kernel_r_wrap_lend_bool
     \bool_set_false:N \l__tenkz_kernel_r_wrap_rend_bool
-    \__tenkz_model_get:nnN {#1} {from} \l__tenkz_kernel_r_end_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
-      {
-        \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
-          \l__tenkz_kernel_r_wrap_lx_fp \l__tenkz_kernel_r_wrap_ly_fp
-        \bool_set_true:N \l__tenkz_kernel_r_wrap_lend_bool
-      }
-    \__tenkz_model_get:nnN {#1} {to} \l__tenkz_kernel_r_end_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_r_end_tl
-      {
-        \__tenkz_kernel_r_wire_end_xy:VNN \l__tenkz_kernel_r_end_tl
-          \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
-        \bool_set_true:N \l__tenkz_kernel_r_wrap_rend_bool
-      }
+    \__tenkz_kernel_r_wrap_end:nn {#1} {from}
+    \__tenkz_kernel_r_wrap_end:nn {#1} {to}
     % A flat rail reaches its end with a straight lead; a ring's sector
     % already starts and finishes there and takes none.
     \bool_set_eq:NN \l__tenkz_kernel_r_wrap_llead_bool
@@ -11678,7 +11694,11 @@
 % the picture's own axes -- the units the measured label and glyph boxes
 % already use.  Each rounded corner enters as its two tangent points and the
 % arc's mid-point, so the reported contour lies inside the ink and claims no
-% clearance the drawing does not have.
+% clearance the drawing does not have.  The record carries the stroke it is
+% drawn with -- half the wire width, the half-stroke reach a measured glyph
+% already publishes -- because the polyline is the centreline of a wire that
+% is not thin: a name that clears the centreline by less than that stands on
+% the wire.
 \tl_new:N \l__tenkz_kernel_r_rail_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_pt:nn #1#2
   {
@@ -11701,8 +11721,8 @@
   }
 % The flat rail, read from the registers the stroke itself read, in the order
 % the stroke laid them: the leads, the two descents, and the run between the
-% corners.  Half a trace reach is the corner radius, and 0.2929 = 1 - cos 45
-% places the mid-point of a quarter turn.
+% corners.  Half a trace reach is the corner radius, and one minus the cosine
+% of 45 degrees places the mid-point of a quarter turn.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_flat:
   {
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
@@ -11726,13 +11746,13 @@
     \__tenkz_kernel_r_rail_pt:nn
       {
         \l__tenkz_kernel_r_wrap_wx_fp
-        + 0.2929 * \__tenkz_metric_ratio:n {pairtracereach} / 2
+        + ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2
       }
       {
         \l__tenkz_kernel_r_y_fp
         + \l__tenkz_kernel_r_yc_fp
           * ( \l__tenkz_kernel_r_reach_fp
-              - 0.2929 * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+              - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
       }
     \__tenkz_kernel_r_rail_pt:nn
       {
@@ -11755,13 +11775,13 @@
     \__tenkz_kernel_r_rail_pt:nn
       {
         \l__tenkz_kernel_r_wrap_ex_fp
-        - 0.2929 * \__tenkz_metric_ratio:n {pairtracereach} / 2
+        - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2
       }
       {
         \l__tenkz_kernel_r_yb_fp
         + \l__tenkz_kernel_r_yc_fp
           * ( \l__tenkz_kernel_r_reach_fp
-              - 0.2929 * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
+              - ( 1 - cosd(45) ) * \__tenkz_metric_ratio:n {pairtracereach} / 2 )
       }
     \__tenkz_kernel_r_rail_pt:nn
       { \l__tenkz_kernel_r_wrap_ex_fp }
@@ -11783,6 +11803,9 @@
   }
 % The ring sector, sampled at sixteenths of its own extent: a chord of a
 % sixteenth of a quarter turn stands well inside the stroke it stands for.
+% The sector is the whole closure: a ring takes no lead, because a station
+% and a reach point both stand on the frame circle, so the sector already
+% starts and finishes on whatever the row has at either side.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_arc:
   {
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
@@ -11824,6 +11847,8 @@
         |east=\__tenkz_kernel_r_rail_end:NNN
           \l__tenkz_kernel_r_wrap_rend_bool
           \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
+        |stroke=\dim_to_decimal_in_sp:n
+          { \__tenkz_dim:n {wirewidth} / 2 }
         |points=\tl_use:N \l__tenkz_kernel_r_rail_tl
       }
   }
@@ -11867,22 +11892,29 @@
                 % A wrap reach beyond half a station puts the two reach
                 % points on the wrong side of one another, and the arc
                 % between them then ran backwards through a sliver of the
-                % closing sector instead of across it.
-                \bool_lazy_and:nnT
-                  { \l__tenkz_kernel_r_wrap_lend_bool }
-                  { \l__tenkz_kernel_r_wrap_rend_bool }
+                % closing sector instead of across it.  Each end is read on
+                % its own, and a ring never takes a lead: a station and a
+                % reach point both stand on the frame circle, so the sector
+                % spans whatever the row has at either side.  A row with one
+                % station closes from that station round to the other side's
+                % reach point, and is spared the straight chord a lead would
+                % otherwise have cut across the ring.
+                \bool_if:NT \l__tenkz_kernel_r_wrap_lend_bool
                   {
                     \fp_set_eq:NN \l__tenkz_kernel_r_x_fp
                       \l__tenkz_kernel_r_wrap_lx_fp
                     \fp_set_eq:NN \l__tenkz_kernel_r_y_fp
                       \l__tenkz_kernel_r_wrap_ly_fp
+                  }
+                \bool_if:NT \l__tenkz_kernel_r_wrap_rend_bool
+                  {
                     \fp_set_eq:NN \l__tenkz_kernel_r_xb_fp
                       \l__tenkz_kernel_r_wrap_rx_fp
                     \fp_set_eq:NN \l__tenkz_kernel_r_yb_fp
                       \l__tenkz_kernel_r_wrap_ry_fp
-                    \bool_set_false:N \l__tenkz_kernel_r_wrap_llead_bool
-                    \bool_set_false:N \l__tenkz_kernel_r_wrap_rlead_bool
                   }
+                \bool_set_false:N \l__tenkz_kernel_r_wrap_llead_bool
+                \bool_set_false:N \l__tenkz_kernel_r_wrap_rlead_bool
                 \fp_set:Nn \l__tenkz_kernel_r_reach_fp
                   {
                     sqrt
@@ -11924,13 +11956,6 @@
                   }
                 \__tenkz_kernel_r_wire_stroke:nn { bond }
                   {
-                    \bool_if:NT \l__tenkz_kernel_r_wrap_llead_bool
-                      {
-                        \__tenkz_kernel_r_pair:nn
-                          { \l__tenkz_kernel_r_wrap_lx_fp }
-                          { \l__tenkz_kernel_r_wrap_ly_fp }
-                        --
-                      }
                     \__tenkz_kernel_r_pair:nn
                       { \l__tenkz_kernel_r_x_fp }
                       { \l__tenkz_kernel_r_y_fp }
@@ -11942,13 +11967,6 @@
                           \__tenkz_kernel_r_pt:n
                             { \l__tenkz_kernel_r_reach_fp }
                       ]
-                    \bool_if:NT \l__tenkz_kernel_r_wrap_rlead_bool
-                      {
-                        --
-                        \__tenkz_kernel_r_pair:nn
-                          { \l__tenkz_kernel_r_wrap_rx_fp }
-                          { \l__tenkz_kernel_r_wrap_ry_fp }
-                      }
                   }
                 \__tenkz_kernel_r_rail_arc:
                 \__tenkz_kernel_r_rail_record:n {#1}

@@ -1231,6 +1231,35 @@ if joined != 4:
     print(f"FAIL: {joined} closure ends were measured, expected 4")
     raise SystemExit(1)
 PROBE
+# A row with one site closes onto the side that site is on.  The closure mints
+# the west port before the east one, so a row whose west boundary cell carries
+# no site puts its east port in the first endpoint slot; reading the slots in
+# order then named the east station the row's west end, led a flat rail out of
+# it across the empty row, and cut a chord to it across a ring.  The three
+# pictures are the east-only row, the west-only row, and the east-only ring.
+python3 - "$WORK/r_trace_end_sides.tnlog" <<'PROBE' || exit 1
+import sys
+
+expected = [("none", "named"), ("named", "none"), ("none", "named")]
+seen = []
+for line in open(sys.argv[1], encoding="utf-8"):
+    if not line.startswith("closure-rail|"):
+        continue
+    fields = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
+    points = [tuple(int(v) for v in p.split(",")) for p in fields["points"].split(";")]
+    seen.append(tuple("none" if fields[side] == "none" else "named"
+                      for side in ("west", "east")))
+    for end, corner in ((fields["west"], points[0]), (fields["east"], points[-1])):
+        if end == "none":
+            continue
+        anchor = tuple(int(v) for v in end.split(","))
+        if max(abs(a - c) for a, c in zip(anchor, corner)) > 655:
+            print("FAIL: a one-sided closure does not meet the end it names")
+            raise SystemExit(1)
+if seen != expected:
+    print(f"FAIL: one-sided closures named {seen}, expected {expected}")
+    raise SystemExit(1)
+PROBE
 grep -Fq '|name=P|ports=n:physical|skin=box' \
     "$WORK/r_declare_atom.tnlog" || {
   echo "FAIL: an identifier atom declaration did not mint a typed command" >&2

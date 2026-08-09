@@ -642,11 +642,14 @@ its row, clears the row, and arrives at the last one, so a reader sees the
 closed contour the contraction asserts. A rail that turned at its own reach
 and left the row untouched drew an open chain under a periodic record, and
 no gate could tell, because a wire carries no measured box. Every west-east
-closure therefore publishes its contour — the two ends it names and the
-polyline it lays between them — and a rail that does not start and finish on
-the ends it names is a hard finding. A row whose first or last cell stands
-empty has no virtual end to arrive at, and its rail is the free racetrack
-that an empty lattice draws.
+closure therefore publishes its contour — the two ends it names, the polyline
+it lays between them, and the width it is drawn with, so a name clearing the
+centreline by less than the wire is thick still counts as standing on it —
+and a rail that does not start and finish on the ends it names is a hard
+finding. A row whose first or last cell stands empty has no virtual end on
+that side, and its rail keeps the free racetrack an empty lattice draws; a
+row carrying a site on one side only closes onto that side, whichever side
+it is.
 
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.

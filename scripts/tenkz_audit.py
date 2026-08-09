@@ -423,21 +423,43 @@ class ScopePolicy(NamedTuple):
 
 
 def _segment_intersects_label(
-        start: Point, end: Point,
+        start: Point, end: Point, stroke: int,
         shape: str, bounds: Rect, radius: int) -> bool:
-    """True when a drawn segment meets a measured label box."""
+    """True when a drawn segment's ink meets a measured label box.
+
+    `stroke` is the half-width the segment is drawn with, the reach a
+    measured glyph already publishes under that name: a centreline clearing
+    the box by less than that still paints on it."""
     if shape != "roundrect" or radius == 0:
-        return _segment_intersects_rect(start, end, bounds)
+        return _segment_stroke_intersects_rect(start, end, stroke, bounds)
     rectangles, circles = _roundrect_parts(bounds, radius)
-    if any(_segment_intersects_rect(start, end, part) for part in rectangles):
+    if any(_segment_stroke_intersects_rect(start, end, stroke, part)
+           for part in rectangles):
         return True
+    # `_roundrect_parts` returns corner centres and diameters already doubled
+    # so that a half-scaled-point centre stays exact; only the segment and the
+    # stroke it is drawn with are doubled here to meet them.
     return any(
         _point_within_segment_stroke(
-            (2 * center[0], 2 * center[1]),
-            (2 * start[0], 2 * start[1]), (2 * end[0], 2 * end[1]), diameter
+            center,
+            (2 * start[0], 2 * start[1]), (2 * end[0], 2 * end[1]),
+            diameter + 2 * stroke,
         )
         for center, diameter in circles
     )
+
+
+def _label_inscribed_in_glyph(
+        label_owner: int, label_rect: Rect,
+        glyph_shape: str, glyph_bounds: Rect, glyph_owner: int) -> bool:
+    """A box label deliberately inscribed in, and covered by, its own glyph.
+
+    Containment is what makes the exemption safe to extend past the glyph's
+    own outline: everything the label meets lies inside the glyph, and the
+    glyph is painted over it."""
+    return (glyph_shape == "rect" and label_owner > 0
+            and label_owner == glyph_owner
+            and _rect_contains(glyph_bounds, label_rect))
 
 
 def parse_sp_point(value: str) -> Point:
@@ -770,15 +792,19 @@ class Audit:
 
     def closure_rails(
             self, pic: Picture
-    ) -> list[tuple[Event, tuple[Point, ...]]]:
-        """Return every well-formed closure contour measured in `pic`."""
-        rails: list[tuple[Event, tuple[Point, ...]]] = []
-        required = {"name", "row", "side", "west", "east", "points"}
+    ) -> list[tuple[Event, tuple[Point, ...], int]]:
+        """Return every well-formed closure contour measured in `pic`.
+
+        A rail is its polyline and the half-stroke it is drawn with."""
+        rails: list[tuple[Event, tuple[Point, ...], int]] = []
+        required = {"name", "row", "side", "west", "east", "stroke", "points"}
         for event in pic.events:
             if event.kind != "closure-rail":
                 continue
             if not self.require_fields(event, required, "closure-rail"):
                 continue
+            if not _is_nonnegative_int(event.attrs["stroke"]):
+                continue  # FIELD_VALIDATORS already reported the bad value.
             try:
                 points = tuple(
                     parse_sp_point(part)
@@ -788,7 +814,7 @@ class Audit:
                 continue  # FIELD_VALIDATORS already reported the bad value.
             if len(points) < 2:
                 continue
-            rails.append((event, points))
+            rails.append((event, points, int(event.attrs["stroke"])))
         return rails
 
     def check_closure_rails(self) -> None:
@@ -801,7 +827,7 @@ class Audit:
         The closure publishes its own contour instead, and the two ends it
         names must be the two ends it starts and finishes on."""
         for pic in self.pictures:
-            for event, points in self.closure_rails(pic):
+            for event, points, _stroke in self.closure_rails(pic):
                 for side, end, corner in (
                         ("west", event.attrs["west"], points[0]),
                         ("east", event.attrs["east"], points[-1]),
@@ -1139,7 +1165,19 @@ class Audit:
                             "intersects visible typed-map wire owned by ink "
                             f"id={wire_event.attrs['owner']}",
                         )
-                for rail_event, rail_points in rails:
+                # A rail runs out of the row's virtual end, which stands at
+                # the end site's own centre, so its first and last stretch
+                # lie under that site's glyph.  A name inscribed in and
+                # covered by that glyph is painted over the rail, not on it.
+                inscribed = any(
+                    _label_inscribed_in_glyph(
+                        label_owner, label_rect,
+                        shape, bounds, int(event.attrs["owner"]))
+                    for event, shape, bounds, _radius, _stroke, _points
+                    in glyphs
+                )
+                for rail_event, rail_points, rail_stroke in (
+                        [] if inscribed else rails):
                     # A closure rail is the one piece of network ink whose
                     # contour is published, and a name that lands on it is
                     # the pre-fix ink this gate was blind to: a label band
@@ -1147,7 +1185,7 @@ class Audit:
                     # across the return that closes its own row.
                     if any(
                             _segment_intersects_label(
-                                start, end,
+                                start, end, rail_stroke,
                                 label_shape, label_rect, label_radius)
                             for start, end in zip(rail_points,
                                                   rail_points[1:])
@@ -1165,9 +1203,9 @@ class Audit:
                     # A box label is deliberately inscribed in its own glyph.
                     # Partial overlaps and intersections with sibling glyphs
                     # remain reportable.
-                    if (shape == "rect" and label_owner > 0
-                            and label_owner == glyph_owner
-                            and _rect_contains(bounds, label_rect)):
+                    if _label_inscribed_in_glyph(
+                            label_owner, label_rect,
+                            shape, bounds, glyph_owner):
                         continue
                     if label_shape == "rect":
                         if shape == "rect":

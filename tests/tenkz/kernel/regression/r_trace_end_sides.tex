@@ -1,0 +1,23 @@
+% Regression: a traced row with one site closes onto the side that site is on.
+%
+% A closure mints the west port of the row's first cell before the east port
+% of its last, and both land in the record's endpoint slots in that order.  A
+% row whose west boundary cell carries no site therefore puts its EAST port in
+% the first slot, and a closure that read the slots in order called that
+% station the row's west end: the flat rail led out of the east site across
+% the whole empty row, and the ring cut a straight chord to the station from
+% the far side of the frame.  The side is settled by the port's own face.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=3, boundary=periodic, bonds=none]
+  \tn[at=(1,3), skin=box]{C}
+\end{tenkz}
+\begin{tenkz}[rows={wire}, cols=3, boundary=periodic, bonds=none]
+  \tn[at=(1,1), skin=box]{A}
+\end{tenkz}
+\begin{tenkz}[ring=3, bonds=none]
+  \tn[at=(1,3), skin=box]{C}
+\end{tenkz}
+\end{document}

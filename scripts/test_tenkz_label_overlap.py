@@ -1339,7 +1339,7 @@ def main() -> int:
         detached = closure_log(
             "closure-detached.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|"
+            "west=0,0|east=2000000,0|stroke=0|"
             "points=-600000,0;-600000,-800000;2600000,-800000;2600000,0\n",
         )
         detached_status, detached_audit = audit_status(detached)
@@ -1358,7 +1358,7 @@ def main() -> int:
 
         joined_rail = (
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|"
+            "west=0,0|east=2000000,0|stroke=0|"
             "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
             "2600000,0;2000000,0\n"
         )
@@ -1406,13 +1406,113 @@ def main() -> int:
         malformed_rail = closure_log(
             "closure-malformed.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|points=0,0\n",
+            "west=0,0|east=2000000,0|stroke=0|points=0,0\n",
         )
         malformed_status, malformed_audit = audit_status(malformed_rail)
         if malformed_status != 1 or not any(
                 finding.rule == "malformed-event"
                 for finding in malformed_audit.findings):
             raise AssertionError("audit accepted a one-point closure contour")
+
+        # A rail is a wire of nonzero width, and the record carries the half
+        # stroke it is drawn with.  A name clearing the centreline by a
+        # hundredth of a point stands on the ink either side of it.
+        stroked_rail = (
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=18023|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n"
+        )
+
+        def stroked_log(name: str, ymin: int, ymax: int) -> Path:
+            return closure_log(
+                name, stroked_rail,
+                "label-use|picture=1\n"
+                "bbox|picture=1|class=label|id=1|owner=0|"
+                f"xmin=400000|xmax=800000|ymin={ymin}|ymax={ymax}|"
+                "shape=rect|radius=0\n",
+            )
+
+        on_stroke_status, on_stroke_audit = audit_status(
+            stroked_log("closure-label-on-stroke.tnlog", -790000, -700000)
+        )
+        if on_stroke_status != 1 or not any(
+                finding.rule == "label-overlap"
+                and "closure wrap-1 of row 1" in finding.msg
+                for finding in on_stroke_audit.findings):
+            raise AssertionError(
+                "audit read the closure as a centreline of no width"
+            )
+
+        off_stroke_status, off_stroke_audit = audit_status(
+            stroked_log("closure-label-off-stroke.tnlog", -770000, -700000)
+        )
+        if off_stroke_status != 0 or off_stroke_audit.findings:
+            raise AssertionError(
+                "audit rejected a label standing clear of the closure stroke"
+            )
+
+        # A rounded name meets the rail on a corner arc alone: neither of the
+        # two rectangles the round box decomposes into is touched, so only a
+        # corner circle can report it.  `_roundrect_parts` hands those circles
+        # back in doubled coordinates, and doubling them a second time put
+        # every such corner four times its own reach away.
+        corner_status, corner_audit = audit_status(closure_log(
+            "closure-label-round-corner.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|"
+            "points=0,0;0,500000;400000,200000;2000000,0\n",
+            "label-use|picture=1\n"
+            "bbox|picture=1|class=label|id=1|owner=0|"
+            "xmin=0|xmax=1000000|ymin=250000|ymax=1250000|"
+            "shape=roundrect|radius=400000\n",
+        ))
+        if corner_status != 1 or not any(
+                finding.rule == "label-overlap"
+                and "closure wrap-1 of row 1" in finding.msg
+                for finding in corner_audit.findings):
+            raise AssertionError(
+                "audit accepted a closure clipping a rounded name's corner"
+            )
+
+        # A rail leaves the row's virtual end, which stands at the end site's
+        # own centre, so its first stretch runs under that site's glyph.  A
+        # name inscribed in and covered by that glyph is painted over the
+        # rail; a name another glyph owns is not.
+        def inscribed_log(name: str, label_owner: int) -> Path:
+            return closure_log(
+                name, stroked_rail,
+                "ink-use|picture=1|class=glyph|id=1|shape=rect\n"
+                "label-use|picture=1\n"
+                "glyph-geometry|picture=1|owner=1|shape=rect|"
+                "xmin=-700000|xmax=700000|ymin=-240000|ymax=240000|"
+                "radius=0|stroke=18023|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0\n"
+                f"bbox|picture=1|class=label|id=1|owner={label_owner}|"
+                "xmin=-200000|xmax=200000|ymin=-160000|ymax=160000|"
+                "shape=rect|radius=0\n",
+            )
+
+        covered_status, covered_audit = audit_status(
+            inscribed_log("closure-label-inscribed.tnlog", 1)
+        )
+        if covered_status != 0 or covered_audit.findings:
+            raise AssertionError(
+                "audit reported a rail hidden under the glyph whose name it "
+                "was measured against: "
+                + "; ".join(finding.msg for finding in covered_audit.findings)
+            )
+
+        sibling_status, sibling_audit = audit_status(
+            inscribed_log("closure-label-sibling.tnlog", 2)
+        )
+        if sibling_status != 1 or not any(
+                finding.rule == "label-overlap"
+                and "closure wrap-1 of row 1" in finding.msg
+                for finding in sibling_audit.findings):
+            raise AssertionError(
+                "the covered-glyph exemption reached a name the glyph does "
+                "not own"
+            )
 
         glyph_bbox = work / "glyph-bbox.tnlog"
         glyph_bbox.write_text(

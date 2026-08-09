@@ -231,6 +231,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "side": _enum("west-east"),
         "west": _is_sp_end,
         "east": _is_sp_end,
+        "stroke": _is_nonnegative_int,
         "points": _is_sp_polyline,
     },
     "tree": {
@@ -251,7 +252,8 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 # whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
-    "closure-rail": frozenset({"name", "row", "side", "west", "east", "points"}),
+    "closure-rail": frozenset(
+        {"name", "row", "side", "west", "east", "stroke", "points"}),
 }
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
