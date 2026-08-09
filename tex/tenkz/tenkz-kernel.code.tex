@@ -11681,7 +11681,17 @@
 % physical opening stands on the first row and leaves along the frame's
 % physical axis; a north or south boundary opening stands on the first or the
 % last row and leaves the way it opens.  A west or east opening leaves along
-% the row and hangs nothing on any return's side.
+% the row and hangs nothing on any return's side; so does an opening at an
+% interface, which points at the row across the interface from it, and which
+% no return can reach -- a return whose rows include the row such a stub
+% hangs from also passes at least one further row line, so it already stands
+% a row spacing and a trace reach beyond the stub.
+%
+% One length is budgeted rather than resolved.  On a projected plane the
+% transverse renderer starts a physical opening at the glyph's own outward
+% support point, so its tip stands that support beyond the leg length counted
+% here.  Reading it would mean asking the glyph-anchor production, which
+% writes the very coordinate registers the reach is computed in.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_open_ink:n #1
   {
     \tl_clear:N \l__tenkz_kernel_r_trace_ink_turn_tl
@@ -11729,17 +11739,39 @@
     \tl_if_empty:NF \l__tenkz_kernel_r_trace_ink_turn_tl
       { \__tenkz_kernel_r_trace_ink_take: }
   }
+% The answer for one range of rows, remembered.  A traced row's reach is read
+% by the stroke that draws its rail, by every name that owes the rail a step,
+% and by the annotation layering once per wire in the picture; a row's records
+% do not change under the render, so the three walks the answer costs are paid
+% once per range and per picture rather than once per reader.
+\prop_new:N \g__tenkz_kernel_r_trace_ink_prop
+\tl_new:N \l__tenkz_kernel_r_trace_ink_key_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_seen_tl
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_row_ink:nn #1#2
   {
-    \fp_zero:N \l__tenkz_kernel_r_trace_ink_fp
-    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_lo_tl {#1}
-    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_hi_tl {#2}
-    \__tenkz_model_map_wires_origin:nN {port-open}
-      \__tenkz_kernel_r_trace_port_ink:n
-    \__tenkz_model_map_wires_origin:nN {policy-leg}
-      \__tenkz_kernel_r_trace_policy_ink:n
-    \__tenkz_model_map_wires_origin:nN {open}
-      \__tenkz_kernel_r_trace_open_ink:n
+    \tl_set:Ne \l__tenkz_kernel_r_trace_ink_key_tl
+      { \int_use:N \g__tenkz_kernel_picture_int - #1 - #2 }
+    \prop_get:NVNTF \g__tenkz_kernel_r_trace_ink_prop
+      \l__tenkz_kernel_r_trace_ink_key_tl
+      \l__tenkz_kernel_r_trace_ink_seen_tl
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
+          { \l__tenkz_kernel_r_trace_ink_seen_tl }
+      }
+      {
+        \fp_zero:N \l__tenkz_kernel_r_trace_ink_fp
+        \tl_set:Nn \l__tenkz_kernel_r_trace_ink_lo_tl {#1}
+        \tl_set:Nn \l__tenkz_kernel_r_trace_ink_hi_tl {#2}
+        \__tenkz_model_map_wires_origin:nN {port-open}
+          \__tenkz_kernel_r_trace_port_ink:n
+        \__tenkz_model_map_wires_origin:nN {policy-leg}
+          \__tenkz_kernel_r_trace_policy_ink:n
+        \__tenkz_model_map_wires_origin:nN {open}
+          \__tenkz_kernel_r_trace_open_ink:n
+        \prop_gput:NVe \g__tenkz_kernel_r_trace_ink_prop
+          \l__tenkz_kernel_r_trace_ink_key_tl
+          { \fp_use:N \l__tenkz_kernel_r_trace_ink_fp }
+      }
   }
 % The side and reach of a traced row's return.  Reads the closed row from
 % \l__tenkz_kernel_r_row_tl and the row's west reach-point ordinate from
@@ -11749,9 +11781,9 @@
 % the passed rows' open-index depth in \l__tenkz_kernel_r_trace_ink_fp, and
 % the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
 % annotation layering of \__tenkz_kernel_r_mark_rails:n both read the rail
-% through this one function, so the two cannot drift.  The envelope walk
-% writes the b and c registers, so the ink scan -- which reads the outward
-% sign -- runs after it.
+% through this one function, so the two cannot drift.  The ink scan reads the
+% outward sign, and the envelope walk borrows the sign register as scratch for
+% the frame answers it collects, so the scan runs after the sign is restated.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_side_reach:
   {
     \int_compare:nNnTF

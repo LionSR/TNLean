@@ -1390,11 +1390,31 @@ def main() -> int:
                 "audit accepted a closure passing inside the open indices of "
                 "the row it closes"
             )
-        if ("12.21pt outside row 1" not in crossed_findings[0].msg
-                or "need 25.94pt" not in crossed_findings[0].msg):
+        crossed_msg = crossed_findings[0].msg
+        if ("12.21pt outside the middle of row 1" not in crossed_msg
+                or "need 25.94pt" not in crossed_msg):
             raise AssertionError(
                 "the crossed-closure finding did not measure both distances: "
                 + crossed_findings[0].msg
+            )
+
+        # The reading is over the row's own middle.  A rail that dips to its
+        # standoff at one corner and runs back beside the row for the rest of
+        # its length has cleared nothing, and a farthest-point reading would
+        # call it clear.
+        dipped = closure_log(
+            "closure-dipped.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=800000|"
+            "points=0,0;-600000,0;-600000,-800000;-500000,-100000;"
+            "2600000,-100000;2600000,0;2000000,0\n",
+        )
+        dipped_status, dipped_audit = audit_status(dipped)
+        if dipped_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in dipped_audit.findings):
+            raise AssertionError(
+                "audit read a closure's farthest corner as its clearance"
             )
 
         # A rail exactly at its standoff is clear: the daylight the standoff

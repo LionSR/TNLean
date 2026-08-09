@@ -871,27 +871,40 @@ class Audit:
         rows it passes demand of it, measured outward from its own row line,
         and the contour says where the rail went; the rail must go at least
         that far.  A frame arc stands off no row line and names no standoff,
-        and neither does a stream written before the field existed."""
+        and neither does a stream written before the field existed.
+
+        The reading is taken over the row's own middle, not at the contour's
+        farthest point.  A rail that dips to its standoff at one corner and
+        runs back beside the row for the rest of its length has cleared
+        nothing, and a farthest-point reading would call it clear."""
         standoff = event.attrs.get("clear", "none")
         if standoff == "none":
             return
         west, east = points[0], points[-1]
         if west[0] == east[0]:
             return  # A row line with no run: no side to measure a drop from.
-        depth = max(
-            abs(Fraction(point[1])
+        middle = Fraction(west[0] + east[0], 2)
+        slope = Fraction(east[1] - west[1], east[0] - west[0])
+        offsets = [
+            abs(Fraction(start[1])
+                + (middle - start[0]) * Fraction(end[1] - start[1],
+                                                 end[0] - start[0])
                 - Fraction(west[1])
-                - Fraction((point[0] - west[0]) * (east[1] - west[1]),
-                           east[0] - west[0]))
-            for point in points
-        )
+                - (middle - west[0]) * slope)
+            for start, end in zip(points, points[1:])
+            if start[0] != end[0]
+            and min(start[0], end[0]) <= middle <= max(start[0], end[0])
+        ]
+        if not offsets:
+            return  # No stretch of the contour stands over the row's middle.
+        depth = max(offsets)
         owed = int(standoff)
         if depth + CLOSURE_JOIN_TOLERANCE_SP < owed:
             self.hard(
                 "closure-crossed",
                 f"{self.log_path.name}:{event.line}",
                 f"picture {pic.ident} closure {event.attrs['name']} passes "
-                f"{float(depth) / 65536:.2f}pt outside row "
+                f"{float(depth) / 65536:.2f}pt outside the middle of row "
                 f"{event.attrs['row']} where the open indices it passes "
                 f"need {owed / 65536:.2f}pt: an index of that row ends on "
                 "the closure that contracts it",
