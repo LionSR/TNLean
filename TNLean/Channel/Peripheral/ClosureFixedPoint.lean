@@ -16,8 +16,13 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 # Peripheral eigenvalues closed under powers (fixed-point version)
 
 This file contains the preferred live formulation of peripheral-spectrum
-closure under powers, following the proof structure of Wolf Theorem 6.6
-(peripheral spectrum of irreducible Schwarz maps).
+closure under powers for finite Kraus maps, following the proof structure of
+Wolf Theorem 6.6.
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.6 assumes only
+positivity, unitality, and the Schwarz inequality. This module proves the
+finite-Kraus, hence completely positive, specialization. See
+`docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 Instead of assuming both unitality and trace preservation, we work with a
 unital Kraus family together with a **positive definite fixed point of the

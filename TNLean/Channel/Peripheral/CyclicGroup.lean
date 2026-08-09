@@ -28,9 +28,10 @@ The cyclic characterization uses product closure + closure under powers + roots 
 to conclude that the peripheral eigenvalues form a finite subgroup of `ℂˣ`, which is
 cyclic by `rootsOfUnity.isCyclic`.
 
-**Scope restriction.** Wolf Theorem 6.6 assumes only positivity, unitality, and the
-Schwarz inequality. This module proves its finite-Kraus, hence completely positive,
-specialization. See `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
+**Scope restriction (complete positivity):** Wolf Theorem 6.6 assumes only positivity,
+unitality, and the Schwarz inequality. This module proves the finite-Kraus, hence
+completely positive, specialization. See
+`docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 ## References
 
