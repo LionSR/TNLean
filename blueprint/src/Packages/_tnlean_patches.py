@@ -29,11 +29,14 @@ The remaining local fixes are:
   ordinary characters, so a key written inside a display survives.
 * ``plasTeX.Base.LaTeX.Arrays.Array.EndRow``: a bracketed expression opening
   the row after a line break is mathematics, not a line-spacing length.
+* ``plasTeX.Base.LaTeX.Arrays.Array.ArrayRow``: a row with no table around it
+  -- a line break inside a braced argument, taken for a row break -- prints
+  the entries it holds and no environment around them.
 
 It also declares the constructions the web document meets but neither plasTeX
-nor its packages define: ``\path`` from ``url``, the small parenthesised
-matrix of ``mathtools``, ``\substack`` from ``amsmath``, the ``samepage``
-grouping, and the inert tensor-network surface selector ``\tenkzkernel``.
+nor its packages define: ``\path`` from ``url``, the small matrices with
+delimiters of ``mathtools``, the ``samepage`` grouping, and the inert
+tensor-network surface selector ``\tenkzkernel``.
 """
 
 from __future__ import annotations
@@ -41,10 +44,10 @@ from __future__ import annotations
 import io
 import os
 import pickle
-import re
 from pathlib import Path
 from typing import Any, Callable
 
+from _tnlean_utils import ROW_BREAK_LENGTH as _ROW_BREAK_LENGTH
 from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
 import plasTeX.Packages.amsmath as _amsmath
@@ -549,15 +552,9 @@ for _macro_class in (
 # brackets of its own, and those brackets are mathematics.  LaTeX reads them
 # as mathematics; plasTeX and MathJax both read them as the length, which
 # turns the row into an error box.  The length is kept when the brackets
-# really hold one -- a number with a unit, or a named length with an optional
-# factor in front of it -- and returned to the row otherwise.
-_LENGTH = re.compile(
-    r"""\s*[-+]?\s*(
-          (\d+(\.\d*)?|\.\d+)\s*(pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)
-        | ((\d+(\.\d*)?|\.\d+)\s*)?\\[A-Za-z@]+
-        )\s*$""",
-    re.VERBOSE,
-)
+# really hold one, and returned to the row otherwise; ``ROW_BREAK_LENGTH``
+# states which brackets hold one, and the generated-page regression reads the
+# same rule from there.
 
 # --- a line break inside a braced argument is not a row of the display ----
 
@@ -595,7 +592,7 @@ def _patched_end_row_source(self) -> str:
     written = _original_end_row_source.fget(self)
     opening = written.find("[")
     if opening != -1 and written.endswith("]"):
-        if not _LENGTH.match(written[opening + 1:-1]):
+        if not _ROW_BREAK_LENGTH.match(written[opening + 1:-1]):
             return "%s {}%s" % (written[:opening], written[opening:])
     return written
 

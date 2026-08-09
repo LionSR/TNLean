@@ -27,10 +27,16 @@ import re
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+_SCRIPTS = Path(__file__).resolve().parent
+sys.path.insert(0, str(_SCRIPTS))
+# The rule deciding what a bracket after a row break means belongs to the
+# renderer. It is read from there rather than restated, so the two cannot
+# come to disagree; the module it lives in imports no renderer of its own.
+sys.path.insert(0, str(_SCRIPTS.parent / "blueprint/src/Packages"))
 
 from playwright.sync_api import Page, sync_playwright
 
+from _tnlean_utils import ROW_BREAK_LENGTH
 from test_tenkz_equation_web import serve
 
 
@@ -53,18 +59,6 @@ METADATA_COMMANDS = (
     "discussion",
     "tenkzkernel",
     "path",
-)
-
-# A length that may follow a row break: a number with a unit, or a named
-# length with an optional factor in front of it.  Anything else in those
-# brackets is mathematics and must not be read as the gap to the next row.
-# This rule is the one `blueprint/src/Packages/_tnlean_patches.py` applies.
-LENGTH = re.compile(
-    r"""\s*[-+]?\s*(
-          (\d+(\.\d*)?|\.\d+)\s*(pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)
-        | ((\d+(\.\d*)?|\.\d+)\s*)?\\[A-Za-z@]+
-        )\s*$""",
-    re.VERBOSE,
 )
 
 ROW_BREAK_BRACKET = re.compile(r"\\\\\s*\[([^\]\n]*)\]")
@@ -115,7 +109,7 @@ def _assert_environments_balanced(page: Path, source: str) -> None:
 def _assert_row_breaks_carry_lengths(page: Path, source: str) -> None:
     """A bracket after a row break holds a length or is guarded as content."""
     for match in ROW_BREAK_BRACKET.finditer(source):
-        assert LENGTH.match(match.group(1)), (
+        assert ROW_BREAK_LENGTH.match(match.group(1)), (
             f"{page.name}: a row break is followed by {match.group(0)!r}, which "
             "is mathematics read as a line spacing"
         )
@@ -163,7 +157,10 @@ READER_TEXT = """(commands) => {
     const found = new RegExp('\\\\\\\\' + command + '\\\\b').exec(text);
     if (found) leaks.push(excerpt(found.index));
   }
-  const unresolved = /(^|\\s)\\?\\?(\\s|$|\\.|,)/.exec(text);
+  // A reference the renderer could not resolve prints two question marks,
+  // bare in prose and parenthesised after \\eqref. Neither spelling depends on
+  // what surrounds it, so neither is required to.
+  const unresolved = /\\?\\?/.exec(text);
   return {
     source,
     leaks,
