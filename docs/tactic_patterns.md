@@ -692,6 +692,35 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### positive-part support-projection trace estimate — candidate
+- **Pattern:** for a positive linear map `T` and Hermitian `H`, decompose
+  `T H = T H⁺ - T H⁻`, obtain the support projection `P` of `(T H)⁺`, and
+  chain the trace estimate:
+  ```lean
+  have hTp : (T H⁺).PosSemidef := ...
+  have hTm : (T H⁻).PosSemidef := ...
+  have hX : (T H).IsHermitian := isHermitian_map_of_positive hpos hH
+  have hdecomp : T H = T H⁺ - T H⁻ := ...
+  obtain ⟨P, hPpsd, hPle, hPmul⟩ : ... := ...
+  calc (((T H)⁺).trace).re
+      = ((P * T H).trace).re := by rw [hPmul]
+    _ = ((P * T H⁺).trace).re - ((P * T H⁻).trace).re := ...
+    _ ≤ ((P * T H⁺).trace).re := ...
+    _ ≤ ((T H⁺).trace).re := ...
+  ```
+- **Seen:** 2 occurrences in `TNLean/Analysis/TraceNormContractivity.lean`:
+  `re_trace_posPart_map_le` (trace-preserving case) and
+  `re_trace_posPart_map_le_of_scaledTrace` (scaled-trace case) before
+  factoring (review on 2026-08-09).
+- **Abstraction:** `Matrix.re_trace_posPart_map_le_aux` in
+  `TNLean/Analysis/TraceNormContractivity.lean` isolates the shared
+  projection-chaining estimate; both source-facing lemmas are now
+  one-`calc`-block corollaries.
+- **Notes:** the abstraction removes ~15 duplicated proof lines from each
+  caller.  The two callers differ only in the final trace-identity step
+  (trace preservation vs. scaled trace), which remains in the thin
+  wrappers.  Mark as promoted if a third call site appears.
+
 ### shifted trace moments under matrix powers — candidate
 - **Pattern:** turn a trace-moment hypothesis for exponents greater than one
   into an all-positive trace-moment hypothesis for a matrix power:

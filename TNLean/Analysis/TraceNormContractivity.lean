@@ -15,6 +15,13 @@ Hermitian matrix, $\|T(H)\|_1 \le \|H\|_1$ (Eq. (8.79)).  In particular, for
 density operators $\rho_1, \rho_2$,
 $\|T(\rho_1) - T(\rho_2)\|_1 \le \|\rho_1 - \rho_2\|_1$ (Eq. (8.80)).
 
+Wolf's Theorem 8.17 (quantum Doeblin): if $T,T'$ are trace-preserving and
+Hermiticity-preserving with $T'(X)=\operatorname{tr}[X]Y$ and
+$T-\varepsilon T'$ is positive for some $\varepsilon\ge 0$, then
+$\|T(\rho_1)-T(\rho_2)\|_1 \le (1-\varepsilon)\|\rho_1-\rho_2\|_1$
+(Eq. (8.82)).  The proof reduces to the scaled-trace contractivity of
+$S = T - \varepsilon T'$, whose trace scales by $c = 1 - \varepsilon$.
+
 The proof follows the source.  Decompose $T(H) = Q_+ - Q_-$ and
 $H = P_+ - P_-$ into orthogonal positive parts and let $\Pi_+$ be the support
 projection of $Q_+$.  Projecting $Q_+ - Q_- = T(P_+) - T(P_-)$ onto the
@@ -50,7 +57,7 @@ requires no continuity hypothesis because the spectrum of a matrix is finite.
 Michael M. Wolf, *Quantum Channels & Operations: Guided Tour* (July 5, 2012),
 Chapter 8, Theorems 8.16 and 8.17 (printed numbering);
 Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 898-918 (Thm. 8.16)
-and 943-977 (Thm. 8.17).
+and 943-969 (Thm. 8.17).
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -195,23 +202,20 @@ lemma isHermitian_map_of_positive
   exact ((hpos _ (nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H))).isHermitian).sub
     ((hpos _ (nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H))).isHermitian)
 
-/-- **Wolf's projection estimate**: for a trace-preserving positive map $T$
-and Hermitian $H$ with Jordan decompositions $H = P_+ - P_-$ and
-$T(H) = Q_+ - Q_-$, the positive parts satisfy
-$\operatorname{tr} Q_+ \le \operatorname{tr} P_+$.  With $\Pi_+$ the support
-projection of $Q_+$, the chain is
-$\operatorname{tr} Q_+ = \operatorname{tr}[\Pi_+ T(P_+)] -
-\operatorname{tr}[\Pi_+ T(P_-)] \le \operatorname{tr}[\Pi_+ T(P_+)] \le
-\operatorname{tr}[T(P_+)] = \operatorname{tr} P_+$.
+
+/-- **Common projection estimate**: For a positive linear map `T` and a Hermitian
+matrix `H`, the real part of the trace of the positive part of `T H` is bounded
+above by the real part of the trace of `T H⁺`.  This factors the shared
+support-projection calculation used by both the trace-preserving and the
+scaled-trace projection estimates.
 
 Wolf Ch. 8, Theorem 8.16 (printed numbering);
 Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 906-911. -/
-lemma re_trace_posPart_map_le
+lemma re_trace_posPart_map_le_aux
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
-    (htr : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, (T ρ).trace = ρ.trace)
     {H : Matrix (Fin D) (Fin D) ℂ} (hH : H.IsHermitian) :
-    (((T H)⁺).trace).re ≤ ((H⁺).trace).re := by
+    (((T H)⁺).trace).re ≤ ((T H⁺).trace).re := by
   have hTp : (T H⁺).PosSemidef :=
     hpos _ (nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H))
   have hTm : (T H⁻).PosSemidef :=
@@ -232,6 +236,26 @@ lemma re_trace_posPart_map_le
         have h0 : 0 ≤ ((P * T H⁻).trace).re := hPpsd.re_trace_mul_nonneg hTm
         linarith
     _ ≤ ((T H⁺).trace).re := hTp.re_trace_mul_le_of_le_one hPle
+
+/-- **Wolf's projection estimate**: for a trace-preserving positive map $T$
+and Hermitian $H$ with Jordan decompositions $H = P_+ - P_-$ and
+$T(H) = Q_+ - Q_-$, the positive parts satisfy
+$\operatorname{tr} Q_+ \le \operatorname{tr} P_+$.  With $\Pi_+$ the support
+projection of $Q_+$, the chain is
+$\operatorname{tr} Q_+ = \operatorname{tr}[\Pi_+ T(P_+)] -
+\operatorname{tr}[\Pi_+ T(P_-)] \le \operatorname{tr}[\Pi_+ T(P_+)] \le
+\operatorname{tr}[T(P_+)] = \operatorname{tr} P_+$.
+
+Wolf Ch. 8, Theorem 8.16 (printed numbering);
+Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 906-911. -/
+lemma re_trace_posPart_map_le
+    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
+    (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
+    (htr : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, (T ρ).trace = ρ.trace)
+    {H : Matrix (Fin D) (Fin D) ℂ} (hH : H.IsHermitian) :
+    (((T H)⁺).trace).re ≤ ((H⁺).trace).re := by
+  calc
+    (((T H)⁺).trace).re ≤ ((T H⁺).trace).re := re_trace_posPart_map_le_aux hpos hH
     _ = ((H⁺).trace).re := by rw [htr]
 
 /-- **Trace-norm contractivity** (Wolf Theorem 8.16, Eq. (8.79)): a
@@ -286,7 +310,7 @@ These lemmas generalize the trace-preserving contractivity results (Wolf
 Theorem 8.16) to positive linear maps whose trace scales by a nonnegative
 real factor `c`: $(T \rho).\operatorname{tr} = c \cdot \rho.\operatorname{tr}$.
 
-They provide the core engine for the quantum Doeblin argument (Wolf
+They are used in the quantum Doeblin argument (Wolf
 Theorem 8.17) where the scaled map is $S = T - \varepsilon T'$ with
 $c = 1 - \varepsilon$. -/
 
@@ -298,7 +322,7 @@ Generalizes `re_trace_posPart_map_le` from the trace-preserving case
 `c = 1`.
 
 Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
-and is used for Theorem 8.17 (lines 943–977). -/
+and is used for Theorem 8.17 (lines 943–969). -/
 lemma re_trace_posPart_map_le_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
@@ -306,26 +330,8 @@ lemma re_trace_posPart_map_le_of_scaledTrace {c : ℝ}
     (_hc_nonneg : 0 ≤ c)
     {H : Matrix (Fin D) (Fin D) ℂ} (hH : H.IsHermitian) :
     (((T H)⁺).trace).re ≤ c * ((H⁺).trace).re := by
-  have hTp : (T H⁺).PosSemidef :=
-    hpos _ (nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H))
-  have hTm : (T H⁻).PosSemidef :=
-    hpos _ (nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H))
-  have hX : (T H).IsHermitian := isHermitian_map_of_positive hpos hH
-  have hdecomp : T H = T H⁺ - T H⁻ := by
-    rw [← map_sub, CFC.posPart_sub_negPart H (isSelfAdjoint_iff.mpr hH)]
-  obtain ⟨P, hPpsd, hPle, hPmul⟩ :
-      ∃ P : Matrix (Fin D') (Fin D') ℂ,
-        P.PosSemidef ∧ P ≤ 1 ∧ P * T H = (T H)⁺ :=
-    ⟨hX.posPartSupportProj, hX.posPartSupportProj_posSemidef,
-      hX.posPartSupportProj_le_one, hX.posPartSupportProj_mul_self⟩
-  calc (((T H)⁺).trace).re
-      = ((P * T H).trace).re := by rw [hPmul]
-    _ = ((P * T H⁺).trace).re - ((P * T H⁻).trace).re := by
-        rw [hdecomp, mul_sub, trace_sub, Complex.sub_re]
-    _ ≤ ((P * T H⁺).trace).re := by
-        have h0 : 0 ≤ ((P * T H⁻).trace).re := hPpsd.re_trace_mul_nonneg hTm
-        linarith
-    _ ≤ ((T H⁺).trace).re := hTp.re_trace_mul_le_of_le_one hPle
+  calc
+    (((T H)⁺).trace).re ≤ ((T H⁺).trace).re := re_trace_posPart_map_le_aux hpos hH
     _ = (((c : ℂ) * (H⁺).trace)).re := by rw [htr_scale]
     _ = c * ((H⁺).trace).re := by simp
 
@@ -337,7 +343,7 @@ Generalizes `traceNorm_map_le_of_positive_of_tracePreserving` from the
 trace-preserving case `c = 1`.
 
 Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
-and is used for Theorem 8.17 (lines 943–977). -/
+and is used for Theorem 8.17 (lines 943–969). -/
 theorem traceNorm_map_le_of_positive_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
