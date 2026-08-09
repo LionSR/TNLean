@@ -624,10 +624,15 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{proof}\leanok
     It is enough by bilinearity and linearity of trace to consider the
-    generators $EA$, $AE$, and $AEB$ of the three summands.  Associativity,
-    $E^2=E$, and the sandwich identity $EAE=0$, also applied to products in
-    $\mathfrak S$, give both formulas in the nine possible pairs of generator
-    types.
+    generators $EA$, $AE$, and $AEB$ of the three summands.  Representative
+    products reduce as
+    \begin{align}
+        (EA)(BE)&=E(AB)E=0,\\
+        (AE)(EB)&=AEB=(AE)E(EB),\\
+        \tr((AEB)E)&=\tr(A(EBE))=0.
+    \end{align}
+    The remaining generator pairs follow by the same use of associativity,
+    $E^2=E$, and $EAE=0$ for $A\in\mathfrak S$.
 \end{proof}
 
 \begin{theorem}[Exact simplicity after the second blocking]
@@ -650,10 +655,10 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{proof}\leanok
     The pairing normalization makes $E$ idempotent.  Write every blocked
     double-layer coefficient as $\delta_{ij}E+R_{ij}$, where
-    $R_{ij}\in\mathcal T$.  The trace identity for $R_{ij}E$ gives
-    \texttt{simple1}, and the insertion identity
-    $R_{ij}R_{k\ell}=R_{ij}ER_{k\ell}$, together with $E^2=E$, gives
-    \texttt{simple2} after expanding both coefficients.
+    $R_{ij}\in\mathcal T$.  The trace identity for $R_{ij}E$ gives the
+    diagonal contraction, and
+    $R_{ij}R_{k\ell}=R_{ij}ER_{k\ell}$, together with $E^2=E$, gives the
+    rank-one insertion identity after expanding both coefficients.
 \end{proof}
 
 \begin{definition}[Physical-basis reindexing]
@@ -695,21 +700,29 @@ closing a chain of $N$ copies of $\mathcal U$.
 \begin{proof}\leanok
     At the stabilization exponent $J$, the normalized double-layer diagonal
     is the rank-one fixed projector $|\rho)(\Phi|$.  The preceding theorem
-    makes the subsequent length-$D^2$ block simple.  Canonically grouping the
-    two blocking stages identifies it with direct length $JD^2$ blocking.
+    makes the subsequent length-$D^2$ block simple.  If $e$ is the canonical
+    grouping bijection, the two blocking stages satisfy
+    \begin{align}
+        e^*((\mathcal U_J)_{D^2})=\mathcal U_{JD^2}.
+    \end{align}
     For $D>1$,
     \begin{align}
         JD^2&<(D^2)D^2=D^4.
     \end{align}
-    The one-dimensional transfer matrix is already the identity.  For further
-    blocking, repeated use of \texttt{simple2} inserts the same rank-one
-    projector between adjacent letters, while repeated \texttt{simple1}
-    multiplies the sitewise Kronecker deltas.
+    The one-dimensional transfer matrix is already the identity.  For a
+    further block with letters $W_1,\ldots,W_L$ and
+    $R=|\rho)(\Phi|$, repeated insertion gives
+    \begin{align}
+        W_1\cdots W_L&=W_1R W_2R\cdots R W_L,\\
+        (\Phi|W_1\cdots W_L|\rho)
+          &=\prod_{q=1}^{L}(\Phi|W_q|\rho).
+    \end{align}
+    The second identity multiplies the sitewise Kronecker deltas.
 \end{proof}
 
 \begin{theorem}[The fixed-point simple1 contraction]
     \label{thm:mpu_simple1}
-    \lean{MPOTensor.IsMPU.exists_normalized_fixedPoints_simple1,
+    \lean{MPOTensor.IsMPU.exists_normalized_fixed_points_simple1,
         MPOTensor.IsMPU.simple1}
     \leanok
     \uses{def:mpu,thm:mpu_positive_mixed_residual_trace,
@@ -721,7 +734,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \begin{align}
         (\Phi|W^{ij}|\rho)&=\delta_{ij}.
     \end{align}
-    The unblocked tensor need not satisfy \texttt{simple2}.
+    The unblocked tensor need not satisfy the rank-one insertion identity.
 \end{theorem}
 
 \begin{proof}\leanok
