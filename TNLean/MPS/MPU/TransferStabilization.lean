@@ -186,11 +186,21 @@ theorem IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii
   have hweightedLeft :
       MPSTensor.IsLeftCanonical (fun i => cfii.weights k.1 • cfii.blocks k.1 i) := by
     unfold MPSTensor.IsLeftCanonical
-    simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [← Finset.smul_sum, cfii.blocks_left_canonical k.1]
     have hweightStar : cfii.weights k.1 * star (cfii.weights k.1) = 1 := by
       simpa using hweight'
-    rw [hweightStar, one_smul]
+    have hweightStarComm : star (cfii.weights k.1) * cfii.weights k.1 = 1 := by
+      rw [mul_comm, hweightStar]
+    calc
+      ∑ i, (cfii.weights k.1 • cfii.blocks k.1 i)ᴴ *
+          (cfii.weights k.1 • cfii.blocks k.1 i) =
+          ∑ i, (star (cfii.weights k.1) * cfii.weights k.1) •
+            ((cfii.blocks k.1 i)ᴴ * cfii.blocks k.1 i) := by
+        apply Finset.sum_congr rfl
+        intro i _
+        rw [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+      _ = (star (cfii.weights k.1) * cfii.weights k.1) • 1 := by
+        rw [← Finset.smul_sum, cfii.blocks_left_canonical k.1]
+      _ = 1 := by rw [hweightStarComm, one_smul]
   have hAeq : ∀ i, U.normalizedFlattening i =
       V * (cfii.weights k.1 • cfii.blocks k.1 i) * Vᴴ := by
     intro i

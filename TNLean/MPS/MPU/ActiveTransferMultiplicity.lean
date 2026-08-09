@@ -59,7 +59,7 @@ theorem ambientBlockInclusion_conjTranspose_mul_self
     data.coisometric, Matrix.one_mul, blockInclusion_conjTranspose_mul_self]
 
 /-- Ambient inclusions of distinct retained blocks have orthogonal ranges. -/
-theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
+private theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
     (data : CPSVCanonicalFormData A) {k l : Fin data.r} (hkl : k ≠ l) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion l = 0 := by
   rw [ambientBlockInclusion, ambientBlockInclusion, Matrix.conjTranspose_mul]
@@ -212,7 +212,7 @@ private theorem transferMap_ambientActiveVector
   simp [Matrix.mul_smul, Matrix.smul_mul]
 
 /-- An active block's weighted transfer eigenvalue is nonzero. -/
-theorem activeTransferEigenvalue_ne
+private theorem activeTransferEigenvalue_ne
     (data : CPSVCanonicalFormData A) (k : data.Active) :
     data.activeTransferEigenvalue k ≠ 0 := by
   simp [activeTransferEigenvalue, k.2]
