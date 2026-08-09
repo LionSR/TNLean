@@ -55,7 +55,7 @@ import tempfile
 import tomllib
 import zipfile
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -65,7 +65,15 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tex/tenkz"
 ENTRY = SOURCE / "tenkz.sty"
 MATERIAL = ROOT / "docs/tenkz/ctan"
-MANIFEST = MATERIAL / "MANIFEST.toml"
+# The pinned staging tree. An environment variable may name another one, so
+# the contract tests can run the whole command against a manifest that is
+# wrong on purpose without editing a tracked file to do it.
+MANIFEST = Path(
+    os.environ.get("TENKZ_CTAN_MANIFEST") or MATERIAL / "MANIFEST.toml"
+)
+MANIFEST_LABEL = (
+    str(MANIFEST.relative_to(ROOT)) if MANIFEST.is_relative_to(ROOT) else str(MANIFEST)
+)
 DEFAULT_OUT = ROOT / "build/ctan"
 
 PACKAGE = "tenkz"
@@ -77,9 +85,15 @@ PAYLOAD = re.compile(
     r"(?P<date>[0-9]{4})/([0-9]{2})/([0-9]{2}) "
     r"v(?P<version>[0-9]+\.[0-9]+(?:\.[0-9]+)?) "
 )
-INPUT_CALL = re.compile(r"\\input\{([^}]*)\}")
-REQUIRE_CALL = re.compile(r"\\RequirePackage(?:\[[^]]*\])?\{([^}]*)\}")
-LIBRARY_CALL = re.compile(r"\\usetikzlibrary\{([^}]*)\}", re.DOTALL)
+# TeX allows space, and a comment-blanked newline, between a control word and
+# its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
+# load, and a closure that missed it would let the manifest pin a dependency
+# list the package does not have.
+INPUT_CALL = re.compile(r"\\input\s*\{([^}]*)\}", re.DOTALL)
+REQUIRE_CALL = re.compile(
+    r"\\RequirePackage\s*(?:\[[^]]*\]\s*)?\{([^}]*)\}", re.DOTALL
+)
+LIBRARY_CALL = re.compile(r"\\usetikzlibrary\s*\{([^}]*)\}", re.DOTALL)
 
 # A name CTAN can carry through any file system and any unpacking tool: the
 # invariant ASCII subset, no leading dot or dash, no space.
@@ -97,6 +111,11 @@ DEBRIS_SUFFIXES = frozenset(
 
 # Midnight UTC on 1 January 1980, the earliest moment a zip entry can carry.
 ZIP_EPOCH_FLOOR = 315532800
+
+# The staged names an upload carries whatever else the manifest declares. A
+# manifest that dropped one of these would build an archive without a licence
+# or without a change record, and every check below it would still pass.
+REQUIRED_MATERIAL = ("README.md", "LICENSE", "CHANGES.md", "CITATION.cff", "tenkz.bib")
 
 # The one licence marker every runtime file carries, and the sentence beside
 # it. Both are checked; the identifier is what a machine reads.
@@ -152,6 +171,13 @@ def read_release(entry: Path = ENTRY) -> Release:
             "spelled [YYYY/MM/DD vVERSION description]"
         )
     year, month, day = match.group(1), match.group(2), match.group(3)
+    try:
+        date(int(year), int(month), int(day))
+    except ValueError:
+        raise SystemExit(
+            f"{entry.name} declares {year}/{month}/{day}, which is not a "
+            "calendar date"
+        ) from None
     return Release(version=match["version"], date=f"{year}-{month}-{day}")
 
 
@@ -183,7 +209,10 @@ def walk_closure(source: Path = SOURCE, entry: str = ENTRY.name) -> Closure:
         if not path.is_file():
             raise SystemExit(f"{entry} loads {name}, which is missing")
         closure.files.append(name)
-        text = strip_comments(path.read_text(encoding="utf-8"))
+        try:
+            text = strip_comments(path.read_bytes().decode("utf-8"))
+        except UnicodeDecodeError as error:
+            raise SystemExit(f"{name} is not UTF-8 and cannot be read: {error}") from None
         for group in REQUIRE_CALL.findall(text):
             packages.extend(part.strip() for part in group.split(",") if part.strip())
         for group in LIBRARY_CALL.findall(text):
@@ -203,9 +232,9 @@ def read_manifest() -> dict:
     try:
         return tomllib.loads(MANIFEST.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        raise SystemExit(f"{MANIFEST.relative_to(ROOT)} is missing") from None
+        raise SystemExit(f"{MANIFEST_LABEL} is missing") from None
     except tomllib.TOMLDecodeError as error:
-        raise SystemExit(f"{MANIFEST.relative_to(ROOT)} does not parse: {error}") from None
+        raise SystemExit(f"{MANIFEST_LABEL} does not parse: {error}") from None
 
 
 # --------------------------------------------------------------------------
@@ -232,7 +261,7 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     collisions = sorted(set(manifest["material"]) & set(closure.files))
     if collisions:
         raise SystemExit(
-            f"{MANIFEST.relative_to(ROOT)} stages material under the runtime "
+            f"{MANIFEST_LABEL} stages material under the runtime "
             f"name(s) {collisions}; the archive would carry a file the closure "
             "and header checks never read"
         )
@@ -241,7 +270,7 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     refused = check_names(content).failures
     if refused:
         raise SystemExit(
-            f"{MANIFEST.relative_to(ROOT)} names a staged file that will not be "
+            f"{MANIFEST_LABEL} names a staged file that will not be "
             "written: " + "; ".join(refused)
         )
     return content
@@ -362,7 +391,7 @@ def check_closure(closure: Closure, manifest: dict) -> Report:
     report.require(
         closure.files == runtime["files"],
         f"the load graph walked from {ENTRY.name} is {closure.files}, and "
-        f"{MANIFEST.relative_to(ROOT)} pins {runtime['files']}",
+        f"{MANIFEST_LABEL} pins {runtime['files']}",
     )
     report.require(
         closure.packages == runtime["requires"]["packages"],
@@ -400,7 +429,7 @@ def check_source_tree(closure: Closure, manifest: dict, source: Path = SOURCE) -
         report.require(
             entry.name in closure.files,
             f"{entry.name} is not loaded by {ENTRY.name} and is not "
-            f"excluded in {MANIFEST.relative_to(ROOT)}",
+            f"excluded in {MANIFEST_LABEL}",
         )
     return report
 
@@ -409,10 +438,17 @@ def check_material(manifest: dict) -> Report:
     """The reader-facing material an upload must carry, and what it must say."""
 
     report = Report("material")
-    for name, relative in manifest["material"].items():
+    declared = manifest["material"]
+    for name in REQUIRED_MATERIAL:
+        report.require(
+            name in declared,
+            f"{MANIFEST_LABEL} stages no {name}, which every upload "
+            "must carry",
+        )
+    for name, relative in declared.items():
         source = ROOT / relative
         report.require(source.is_file(), f"{relative} is declared and missing")
-    readme = ROOT / manifest["material"]["README.md"]
+    readme = ROOT / declared.get("README.md", "docs/tenkz/ctan/README.md")
     if not readme.is_file():
         return report
     text = readme.read_text(encoding="utf-8")
@@ -431,6 +467,9 @@ def check_encoding(content: dict[str, Path]) -> Report:
 
     report = Report("encoding")
     for name, source in content.items():
+        if not source.is_file():
+            report.failures.append(f"{name} is declared and missing")
+            continue
         raw = source.read_bytes()
         report.require(
             not raw.startswith(b"\xef\xbb\xbf"),
@@ -773,13 +812,25 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     content = staged_content(manifest, closure)
     reports.append(check_encoding(content))
     reports.append(check_names(content))
-    with tempfile.TemporaryDirectory(prefix="tenkz-ctan-check-") as directory:
-        destination = keep if keep is not None else Path(directory) / "out"
-        archive, _, digest = build(destination)
-        reports.append(check_permissions(destination / PACKAGE))
-        reports.append(check_debris(destination / PACKAGE))
-        reports.append(check_determinism(release))
-        reports.append(check_smoke(archive, require_smoke))
+    # Nothing below this line can run against a file that is not there, and a
+    # traceback would replace the report naming the file. The checks that need
+    # a built tree report themselves skipped instead, and the missing file is
+    # already a failure of its own.
+    absent = sorted(name for name, source in content.items() if not source.is_file())
+    digest = ""
+    if absent:
+        for name in ("permissions", "debris", "determinism", "clean-install"):
+            skipped = Report(name)
+            skipped.skipped = f"{len(absent)} declared file(s) missing: {absent}"
+            reports.append(skipped)
+    else:
+        with tempfile.TemporaryDirectory(prefix="tenkz-ctan-check-") as directory:
+            destination = keep if keep is not None else Path(directory) / "out"
+            archive, _, digest = build(destination)
+            reports.append(check_permissions(destination / PACKAGE))
+            reports.append(check_debris(destination / PACKAGE))
+            reports.append(check_determinism(release))
+            reports.append(check_smoke(archive, require_smoke))
     for report in reports:
         print(f"  {report.status:4s} {report.name}")
         for note in report.notes:
