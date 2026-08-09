@@ -33,7 +33,7 @@ for all virtual operators `X`. Here, with the physical legs left open,
 * `(M₂ X) (i₁,i₂) (j₁,j₂) = tr(M^{i₁j₁} M^{i₂j₂} X)` is the two-site physical
   operator (figure MPDO_XMM).
 
-Following the codebase convention (as for `MPOTensor.IsRFP` and `MPOTensor.IsZCL`),
+Following the convention used for `MPOTensor.IsZCL`,
 `IsRFPViaTS` is stated on a bare `MPOTensor`; the source's standing hypotheses
 (canonical form, generating an MPDO) are carried at theorem level rather than in
 the predicate.
@@ -256,7 +256,7 @@ intertwining the one-site and two-site physical operators, namely
 * `T[M₁(X)] = M₂(X)` for all `X`  (paper label eq:Tmap).
 
 This is the source's tp-CP-map renormalization fixed point. It is *distinct* from
-`MPOTensor.IsRFP`, the transfer-map idempotence (zero-correlation-length)
+`MPOTensor.IsZCL`, the doubled-index transfer-map idempotence
 condition on the doubled-index completely positive map. Theorem
 `physTraceTransfer_sq_of_isRFPViaTS` proves the source zero-correlation-length
 identity for the physical-trace transfer. It does not identify this identity

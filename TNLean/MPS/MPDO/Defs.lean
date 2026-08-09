@@ -39,7 +39,6 @@ Verstraete):
   generates the adjoint operator family up to spatial reflection.
 * `MPOTensor.IsMPDO`: global positivity predicate.
 * `MPOTensor.IsLPDO`: local purification predicate.
-* `MPOTensor.IsRFP`: renormalization fixed-point predicate.
 * `MPOTensor.toMPSTensor`: view an MPO tensor as an MPS tensor with doubled
   physical index `Fin (d * d)`.
 * `MPOTensor.physicalSlice`: the physical matrix at fixed virtual indices.
@@ -441,21 +440,5 @@ theorem IsLPDO.isMPDO {M : MPOTensor d D} (h : IsLPDO M) : IsMPDO M := by
   -- Evaluate the entries of the finite sum of rank-one matrices.
   simp only [Matrix.sum_apply, Matrix.vecMulVec_apply, Pi.star_apply, starRingEnd_apply]
 
-/-! ### MPDO renormalization fixed points -/
-
-/-- `IsRFP M` is the MPO transfer-map **idempotence** condition `E_M ∘ E_M = E_M`
-(definitionally `IsZCL M`, the zero-correlation-length characterization).
-
-This is *not* the paper's MPDO renormalization-fixed-point Definition 4.1
-(paper label RFPMixedTS, arXiv:1606.00608 line 657: existence of two
-trace-preserving CP maps T and S on the physical indices). Idempotence coincides
-with Definition 4.1 only in the pure (MPS) case. For general MPDO, Definition 4.1
-implies the source zero-correlation-length condition on the physical-trace
-transfer and saturation of the mutual-information area law (Theorem 4.9,
-i ⟹ ii), not the doubled-index transfer-map equation stated here. Definition
-4.1 is `MPOTensor.IsRFPViaTS`; its physical-trace consequence is proved in
-`MPOTensor.physTraceTransfer_sq_of_isRFPViaTS`. -/
-def IsRFP (M : MPOTensor d D) : Prop :=
-  transferMap M ∘ₗ transferMap M = transferMap M
 
 end MPOTensor
