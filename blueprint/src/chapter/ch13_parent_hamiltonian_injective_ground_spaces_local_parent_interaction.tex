@@ -142,11 +142,18 @@ orthogonal projector is the canonical representative used here.
     \label{def:ground_space_map_es}
     \lean{MPSTensor.groundSpaceMapES}
     \leanok
-    \uses{def:ground_space_map}
-    Equip $\MN{D}$ with the Hilbert--Schmidt inner product and the physical
-    coefficient space with its computational-basis $\ell^2$ inner product.
-    The resulting map is again denoted by
-    $\Gamma_L\colon\MN{D}\to\ell^2(\Fin{d}^{L})$.
+    \uses{def:ground_space_map, def:frobenius_vectorization}
+    Let $U\colon\MN{D}\to\ell^2(\Fin{D}\times\Fin{D})$ be Frobenius
+    vectorization in column--row coordinates.  The Hilbert-space boundary map
+    is
+    \begin{align}
+      \Gamma_L^{\mathrm{ES}}
+      &:=\iota_L\circ\Gamma_L\circ U^{-1}
+      \colon\ell^2(\Fin{D}\times\Fin{D})
+      \longrightarrow\ell^2(\Fin{d}^{L}).
+    \end{align}
+    Thus $\Gamma_L^{\mathrm{ES}}$ has a Euclidean coordinate-space domain,
+    whereas the original map $\Gamma_L$ has matrix domain $\MN{D}$.
 \end{definition}
 
 \begin{theorem}[Boundary-map transport under Frobenius vectorization]
@@ -192,7 +199,8 @@ orthogonal projector is the canonical representative used here.
     \lean{MPSTensor.range_groundSpaceMapES}
     \leanok
     \uses{def:ground_space_map_es, def:ground_space_es}
-    The range of $\Gamma_L$ is exactly $G_L^{\mathrm{ES}}(A)$.
+    The range of $\Gamma_L^{\mathrm{ES}}$ is exactly
+    $G_L^{\mathrm{ES}}(A)$.
 \end{theorem}
 
 \begin{proof}
@@ -211,7 +219,8 @@ orthogonal projector is the canonical representative used here.
     \uses{def:ground_space_map_es}
     The boundary Gram operator is
     \begin{align}
-        \mathcal K_L:=\Gamma_L^\dagger\Gamma_L.
+        \mathcal K_L
+        :=(\Gamma_L^{\mathrm{ES}})^\dagger\Gamma_L^{\mathrm{ES}}.
     \end{align}
 \end{definition}
 
@@ -233,8 +242,10 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_map_es_single, lem:ground_space_map_apply}
-    Move the adjoint in $\mathcal K_L=\Gamma_L^\dagger\Gamma_L$ across the
+    \uses{thm:ground_space_map_es_single, lem:ground_space_map_apply, thm:mixed_pow}
+    Move the adjoint in
+    $\mathcal K_L=(\Gamma_L^{\mathrm{ES}})^\dagger\Gamma_L^{\mathrm{ES}}$
+    across the
     inner product and expand the two boundary-map coefficients.  For each
     physical word $\sigma$, the resulting summand is
     $(A^\sigma)_{ec}\,\overline{(A^\sigma)_{ba}}$.  On the other hand,

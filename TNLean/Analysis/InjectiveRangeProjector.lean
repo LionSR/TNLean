@@ -10,8 +10,8 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 /-!
 # Range projectors of injective finite-dimensional maps
 
-For an injective map \(T\) between finite-dimensional Hilbert spaces, this file
-records the standard formula
+For an injective map \(T\) with finite-dimensional Hilbert domain and complete
+Hilbert codomain, this file records the standard formula
 \[
   P_{\operatorname{ran} T}=T(T^\dagger T)^{-1}T^\dagger.
 \]
