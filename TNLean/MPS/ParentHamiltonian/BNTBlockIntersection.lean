@@ -223,14 +223,15 @@ fixed-length injectivity and left-canonical normalization imply normality, hence
 self-overlap normalization. The sharp tuple span is then transported back to the
 source representatives.
 
-Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+Source: PGVWC07, arXiv:quant-ph/0608197, direct-sum proof lines 1346--1421.
 The positive dual datum used for the prepared gauge is supplied by the canonical
 normalization theorem at lines 742--763. These line numbers refer to
 `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
 
-**Scope note:** This result
+**Scope restriction (PGVWC07 parent-Hamiltonian conclusion):** This result
 establishes only the fixed-length tuple span; it does not establish the global-cut
-or parent-Hamiltonian kernel conclusions. -/
+or parent-Hamiltonian kernel conclusions. The remaining conclusion is documented
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -342,14 +343,16 @@ for the base separation theorem. The resulting base span is transported back,
 and the source identity \(\sum_a A^j_aA^{j\dagger}_a=I\) propagates it to
 longer words. No diagonality hypothesis on the dual fixed points is needed.
 
-Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
-The positive dual datum used for the prepared gauge is supplied by the canonical
-normalization theorem at lines 742--763. These line numbers refer to
+Source: PGVWC07, arXiv:quant-ph/0608197, direct-sum proof lines 1346--1421
+and unital propagation lines 893--898. The positive dual datum used for the
+prepared gauge is supplied by the canonical normalization theorem at lines
+742--763. These line numbers refer to
 `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
 
-**Scope note:** This result
+**Scope restriction (PGVWC07 parent-Hamiltonian conclusion):** This result
 establishes only the propagated tuple span; it does not establish the global-cut
-or parent-Hamiltonian kernel conclusions. -/
+or parent-Hamiltonian kernel conclusions. The remaining conclusion is documented
+in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -461,14 +464,16 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
 /-- Under the PGVWC07 source normalization, the block local spaces form an
 internal direct sum throughout the sharp source range.
 
-Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+Source: PGVWC07, arXiv:quant-ph/0608197, direct-sum proof lines 1346--1421.
 The positive dual datum used to reach the prepared canonical gauge is supplied
 by the canonical normalization theorem at lines 742--763. These line numbers
 refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
 
-**Scope note:** This
-result establishes only independence of the block local spaces; it does not
-establish the global-cut or parent-Hamiltonian kernel conclusions. -/
+**Scope restriction (PGVWC07 parent-Hamiltonian conclusion):** This result
+establishes only independence of the block local spaces; it does not establish
+the global-cut or parent-Hamiltonian kernel conclusions. The remaining
+conclusion is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -601,9 +606,11 @@ The positive dual datum used to reach the prepared canonical gauge is supplied
 by the canonical normalization theorem at lines 742--763. These line numbers
 refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
 
-**Scope note:** This
-result establishes only the one-step restriction-intersection identity; it does
-not establish the global-cut or parent-Hamiltonian kernel conclusions. -/
+**Scope restriction (PGVWC07 parent-Hamiltonian conclusion):** This result
+establishes only the one-step restriction-intersection identity; it does not
+establish the global-cut or parent-Hamiltonian kernel conclusions. The remaining
+conclusion is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
