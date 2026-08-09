@@ -229,6 +229,7 @@ The results below turn reducing projections into support isometries, compress te
     \label{lem:matrix_sigma_block_inclusion}
     \lean{Matrix.sigmaBlockInclusion}
     \lean{Matrix.sigmaBlockInclusion_isometry}
+    \lean{Matrix.sigmaBlockInclusion_conjTranspose_mul_of_ne}
     \lean{Matrix.blockDiagonal'_mul_sigmaBlockInclusion}
     \lean{Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal'}
     \lean{Matrix.sigmaBlockInclusion_compression}
@@ -236,10 +237,14 @@ The results below turn reducing projections into support isometries, compress te
     \lean{Matrix.blockDiagonal'_commute_sigmaBlockInclusion_rangeProjection}
     \leanok
     Let $E_k:H_k\to\bigoplus_lH_l$ be the canonical inclusion and let
-    $B=\bigoplus_lB_l$. Then
+    $B=\bigoplus_lB_l$. For distinct $k$ and $\ell$, the corresponding
+    inclusions have orthogonal ranges. The identities are
     \begin{align}
         E_k^\dagger E_k
          & =\Id,
+        \notag                       \\
+        E_k^\dagger E_\ell
+         & =0,
         \notag                       \\
         BE_k
          & =E_kB_k,

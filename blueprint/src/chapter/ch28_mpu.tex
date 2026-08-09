@@ -698,3 +698,117 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Here the fourth equality uses $N>1$, so that the MPU equation applies.
 \end{proof}
+
+\section{Active-block transfer multiplicity}
+
+\begin{definition}[Flattened dependent-block inclusion]
+    \label{def:mpu_dependent_block_inclusion}
+    \lean{MPSTensor.blockInclusion}
+    \leanok
+    Let the blocks be indexed by $k\in\Fin{r}$, let $n_k$ be their
+    nonnegative dimensions, and put $n=\sum_{k\in\Fin{r}}n_k$.  The standard
+    block-order bijection is
+    \begin{align}
+        \phi\colon \bigsqcup_{k\in\Fin{r}}\Fin{n_k}
+          &\longrightarrow \Fin{n},\\
+        \phi(k,a)&=\sum_{j=0}^{k-1}n_j+a.
+    \end{align}
+    For each $k\in\Fin{r}$, define $J_k:\mathbb C^{n_k}\to\mathbb C^n$ by
+    \begin{align}
+        (J_k)_{x,a}&=\begin{cases}
+            1,&x=\phi(k,a),\\
+            0,&x\ne\phi(k,a).
+        \end{cases}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Dependent-block inclusion identities]
+    \label{thm:mpu_dependent_block_inclusion_identities}
+    \lean{MPSTensor.blockInclusion_apply,
+        MPSTensor.blockInclusion_conjTranspose_mul_self,
+        MPSTensor.blockInclusion_conjTranspose_mul_eq_zero,
+        MPSTensor.toTensorFromBlocks_mul_blockInclusion}
+    \leanok
+    \uses{def:mpu_dependent_block_inclusion}
+    The inclusions satisfy the following identities, with the second holding
+    for distinct $k$ and $\ell$:
+    \begin{align}
+        J_k^\dagger J_k&=\Id,\\
+        J_k^\dagger J_\ell&=0.
+    \end{align}
+    If $B^i=\bigoplus_k\mu_k A_k^i$ is a weighted block-diagonal tensor,
+    then
+    \begin{align}
+        B^iJ_k&=J_k(\mu_kA_k^i).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:matrix_sigma_block_inclusion}
+    Reindex the canonical dependent-summand inclusion along the equivalence
+    between dependent pairs and flattened coordinates.  Transporting its
+    isometry, cross-block orthogonality, and block-diagonal intertwining
+    identities gives the three displayed formulas.
+\end{proof}
+
+\begin{theorem}[Shifted transfer traces determine one active block]
+    \label{thm:mpu_shifted_transfer_trace_card_active}
+    \lean{MPSTensor.CPSVCanonicalFormData.card_active_eq_one_of_shifted_transfer_trace}
+    \leanok
+    \uses{def:cpsv_canonical_form,def:mpu_transfer_matrix}
+    Let $A$ have literal CPSV canonical-form data with active block set
+    $K=\{k:\mu_k\ne0\}$.  If its transfer matrix $E$ satisfies
+    $\tr(E^N)=1$ for every integer $N>1$, then
+    \begin{align}
+        |K|&=1.
+    \end{align}
+    This is the active-block multiplicity consequence used in
+    \cite[Proposition~III.1]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:transfer_map_corner_intertwine,
+        thm:mpu_dependent_block_inclusion_identities,
+        thm:mpu_shifted_trace_power_moments,
+        thm:mpu_shifted_trace_power_spectrum,thm:mpu_trace_power_all,
+        thm:mpu_transfer_matrix_power_trace,
+        thm:mpu_transfer_matrix_vectorization,
+        thm:mpu_transfer_matrix_eigenvalues}
+    Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
+    Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
+    inclusion of the $k$th block.  Define the ambient inclusion and transported
+    matrix by
+    \begin{align}
+        V_k&=U^\dagger J_k,
+        &Y_k&=V_kX_kV_k^\dagger.
+    \end{align}
+    The matrix $Y_k$ is nonzero and is an ambient transfer eigenmatrix with
+    eigenvalue $q_k=\mu_k\overline{\mu_k}\ne0$.
+    Theorem~\ref{thm:mpu_shifted_trace_power_spectrum} gives $q_k=1$.
+
+    For distinct $k$ and $\ell$, the inclusion identities give
+    \begin{align}
+        V_k^\dagger Y_kV_k&=X_k,\\
+        V_k^\dagger Y_\ell V_k&=0.
+    \end{align}
+    Hence the matrices $Y_k$, for $k\in K$, are linearly independent.
+    Vectorizing gives
+    \begin{align}
+        \operatorname{vec}(Y_k)&\in\ker(E^2-\Id).
+    \end{align}
+    For every $r\ge1$, the shifted traces and
+    Theorem~\ref{thm:mpu_trace_power_all} give
+    \begin{align}
+        \tr((E^2)^r)&=1,\\
+        \chi_{E^2}(X)&=X^{D^2-1}(X-1).
+    \end{align}
+    The eigenspace dimension is bounded by the algebraic multiplicity, so
+    \begin{align}
+        |K|
+          &\le \dim\ker(E^2-\Id)
+          \le \mult_{1}(\chi_{E^2})
+          =1.
+    \end{align}
+    Finally, if $K$ were empty, every weight and therefore $A$ would vanish,
+    contradicting $\tr(E^2)=1$.  Consequently $|K|=1$.
+\end{proof}
