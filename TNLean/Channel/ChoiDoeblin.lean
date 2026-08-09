@@ -11,9 +11,11 @@ import TNLean.Channel.SupportCompletion
 # Choi-dominated Doeblin contraction
 
 If the rectangular Choi matrix of a trace-preserving, Hermiticity-preserving
-linear map $T : M_D(\mathbb{C}) \to M_{D'}(\mathbb{C})$ dominates $(\varepsilon/D)(Y \otimes \mathbf{1})$ for some $\varepsilon \ge 0$
-and Hermitian $Y$ with $\mathrm{tr}[Y] = 1$, then $T$ satisfies the Doeblin trace-norm
-contraction $\|T(\rho_1) - T(\rho_2)\|_1 \le (1 - \varepsilon)\|\rho_1 - \rho_2\|_1$ for all density matrices.
+linear map $T : M_D(\mathbb{C}) \to M_{D'}(\mathbb{C})$ dominates
+$(\varepsilon/D)(Y \otimes \mathbf{1})$ for some $\varepsilon \ge 0$ and Hermitian $Y$
+with $\mathrm{tr}[Y] = 1$, then $T$ satisfies the Doeblin trace-norm contraction
+$\|T(\rho_1) - T(\rho_2)\|_1 \le (1 - \varepsilon)\|\rho_1 - \rho_2\|_1$ for all
+density matrices.
 
 The proof constructs the trace-prepare map $T'(X) = \mathrm{tr}[X]Y$, computes its
 rectangular Choi matrix as $(1/D)(Y \otimes \mathbf{1})$, uses the rectangular CP/PSD
@@ -45,8 +47,9 @@ namespace Matrix
 /-- **Choi matrix of the trace-prepare map** (auxiliary lemma for Eq. (8.86)).
 
 For an arbitrary matrix $Y$ on the output space, the trace-prepare
-map $T'(X) = \mathrm{tr}[X]Y$ has Choi matrix $(1/d)(Y \otimes \mathbf{1})$ in the output-factor-first
-tensor order of `ChoiRectangular.choiMatrix`.
+map $T'(X) = \mathrm{tr}[X]Y$ has Choi matrix
+$(1/d)(Y \otimes \mathbf{1})$ in the output-factor-first tensor order of
+`ChoiRectangular.choiMatrix`.
 
 `Notes/WolfNoteTexSource/ch08_distance_measures.tex`, line 973. -/
 lemma choiMatrix_tracePrepareMap (d d' : ℕ)
