@@ -1463,7 +1463,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_reduced_cfii_transfer_stabilization}
     \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
     \leanok
-    \uses{def:mpu,def:mpu_normalized_flattening}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
+        def:mpu_full_active_support}
     Suppose $d>0$, $D>1$, and $\mathcal U$ is an MPU whose normalized
     flattening is presented by chosen canonical-form-II data with active blocks
     filling the bond space. There is a
@@ -1493,8 +1494,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_full_active_support,
-        thm:mpu_shifted_transfer_trace_card_active,
+    \uses{thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}
     The shifted trace identities select one active block. Full active support
