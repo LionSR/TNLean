@@ -10,7 +10,7 @@ import TNLean.Channel.Schwarz.Basic
 # Completely positive maps from finite Kraus families
 
 This file connects the concrete finite Kraus action
-$E(X) = \sum_i K_i X K_i^\dagger$ with the abstract positive-map and channel APIs.
+$E(X) = \sum_i K_i X K_i^\dagger$ with positivity, complete positivity, and trace preservation.
 
 ## Main declarations
 
