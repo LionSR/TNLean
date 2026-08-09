@@ -306,9 +306,95 @@ orthogonal projector is the canonical representative used here.
     \label{def:inverse_gram}
     \lean{ContinuousLinearMap.inverseGram}
     \leanok
-    For an injective map $T$ with finite-dimensional domain, define
-    $S_T:=(T^\dagger T)^{-1}$.
+    For an injective continuous linear map $T$ with finite-dimensional domain,
+    let $S_T$ be the continuous endomorphism induced by the inverse linear
+    equivalence of the Gram endomorphism $T^\dagger T$.
 \end{definition}
+
+\begin{theorem}[Left inverse-Gram identity]
+    \label{thm:inverse_gram_left_inverse}
+    \lean{ContinuousLinearMap.inverseGram_comp_adjoint_comp_self}
+    \leanok
+    \uses{def:inverse_gram}
+    Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
+    finite-dimensional complete $\mathbb K$-Hilbert space, and let $F$ be a
+    complete $\mathbb K$-Hilbert space.  If $T\colon E\to F$ is an injective
+    continuous linear map, then
+    \begin{align}
+      S_T(T^\dagger T)&=I_E.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:inverse_gram}
+    By definition, $S_T$ is induced by the inverse linear equivalence of the
+    injective endomorphism $T^\dagger T$.  The inverse equivalence followed by
+    the original map is the identity.
+\end{proof}
+
+\begin{theorem}[Right inverse-Gram identity]
+    \label{thm:inverse_gram_right_inverse}
+    \lean{ContinuousLinearMap.adjoint_comp_self_comp_inverseGram}
+    \leanok
+    \uses{def:inverse_gram}
+    Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
+    finite-dimensional complete $\mathbb K$-Hilbert space, and let $F$ be a
+    complete $\mathbb K$-Hilbert space.  If $T\colon E\to F$ is an injective
+    continuous linear map, then
+    \begin{align}
+      (T^\dagger T)S_T&=I_E.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:inverse_gram}
+    By definition, $S_T$ is induced by the inverse linear equivalence of
+    $T^\dagger T$.  The original map followed by its inverse equivalence is the
+    identity.
+\end{proof}
+
+\begin{theorem}[Inverse Gram as the canonical inverse]
+    \label{thm:inverse_gram_eq_inverse}
+    \lean{ContinuousLinearMap.inverseGram_eq_inverse}
+    \leanok
+    \uses{def:inverse_gram}
+    Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
+    finite-dimensional complete $\mathbb K$-Hilbert space, and let $F$ be a
+    complete $\mathbb K$-Hilbert space.  If $T\colon E\to F$ is an injective
+    continuous linear map, then the inverse Gram operator is the canonical
+    inverse of the Gram endomorphism:
+    \begin{align}
+      S_T&=(T^\dagger T)^{-1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_left_inverse, thm:inverse_gram_right_inverse}
+    The two inverse identities characterize the canonical inverse of a
+    continuous linear endomorphism.
+\end{proof}
+
+\begin{theorem}[Inverse Gram as the ring inverse]
+    \label{thm:inverse_gram_eq_ring_inverse}
+    \lean{ContinuousLinearMap.inverseGram_eq_ringInverse}
+    \leanok
+    \uses{def:inverse_gram}
+    Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
+    finite-dimensional complete $\mathbb K$-Hilbert space, and let $F$ be a
+    complete $\mathbb K$-Hilbert space.  If $T\colon E\to F$ is an injective
+    continuous linear map, then $S_T$ is the inverse of $T^\dagger T$ in the
+    ring of continuous endomorphisms of $E$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_eq_inverse}
+    For continuous linear endomorphisms, the ring inverse agrees with the
+    canonical inverse.
+\end{proof}
 
 \begin{definition}[Injective range-projector candidate]
     \label{def:injective_range_projector}
@@ -426,6 +512,34 @@ orthogonal projector is the canonical representative used here.
     \end{align}
     where the last step uses monotonicity of the reciprocal on the positive
     reals.
+\end{proof}
+
+\begin{theorem}[Quantitative inverse-Gram estimate]
+    \label{thm:inverse_gram_norm_bound}
+    \lean{ContinuousLinearMap.norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le}
+    \leanok
+    \uses{def:inverse_gram}
+    Let $\mathbb K$ be a real or complex scalar field, let $E$ be a
+    finite-dimensional complete $\mathbb K$-Hilbert space, and let $F$ be a
+    complete $\mathbb K$-Hilbert space.  Let $T\colon E\to F$ be an injective
+    continuous linear map.  If $a\in\mathbb R$ satisfies $a<1$ and
+    \begin{align}
+      \lVert I_E-T^\dagger T\rVert&\le a,
+    \end{align}
+    then
+    \begin{align}
+      \lVert S_T\rVert&\le(1-a)^{-1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:inverse_gram_eq_ring_inverse,
+        thm:neumann_inverse_norm_bound}
+    If $E$ is trivial, then $S_T=0$ and the bound follows from $a<1$.
+    Otherwise, identify $S_T$ with the ring inverse of $T^\dagger T$ and apply
+    Theorem~\ref{thm:neumann_inverse_norm_bound} to
+    $t=I_E-T^\dagger T$.
 \end{proof}
 
 \begin{definition}[Canonical parent interaction]\label{def:parent_interaction}

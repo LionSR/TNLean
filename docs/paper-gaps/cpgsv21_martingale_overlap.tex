@@ -516,7 +516,20 @@ The generic identity
 for injective finite-dimensional maps is
 \leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
 denominator estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under
-$\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.
+$\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.  For an injective
+$T$, the identities
+\leanid{ContinuousLinearMap.inverseGram_comp_adjoint_comp_self} and
+\leanid{ContinuousLinearMap.adjoint_comp_self_comp_inverseGram} show that
+$S_T$ is both a left and right inverse of $T^\dagger T$.
+The theorem \leanid{ContinuousLinearMap.inverseGram_eq_ringInverse} identifies
+it with the canonical ring inverse.  Consequently,
+\leanid{ContinuousLinearMap.norm_inverseGram_le_of_norm_one_sub_adjoint_comp_self_le}
+proves directly that
+\begin{align}
+  \lVert S_T\rVert&\le (1-a)^{-1}
+\end{align}
+whenever $\lVert 1-T^\dagger T\rVert\le a<1$.
+
 Suppose that $L_0>0$ and that $A$ is $L_0$-block injective.  Block
 injectivity then makes the Hilbert-space boundary map injective at every length
 $L\ge L_0$; this is recorded by
