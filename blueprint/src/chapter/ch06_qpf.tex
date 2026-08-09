@@ -177,20 +177,37 @@ and~\cite{Evans1978Spectral}.
     for every $i$.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    The matrices $Q$ and $\rho$ have the same kernel. For a vector in the
+    orthogonal complement of the range of $Q$, the fixed-point identity writes
+    its zero quadratic form against $\rho$ as a sum of nonnegative quadratic
+    forms. Each summand vanishes, so $QK_i^\dagger(\Id-Q)=0$. Taking adjoints
+    gives $(\Id-Q)K_iQ=0$.
+\end{proof}
+
 \begin{theorem}[Vanishing lower corners imply invariant compression]
     \label{thm:kraus_lower_zero_invariant_compression}
     \lean{Kraus.lowerZero_implies_invariance}
     \leanok
     \uses{def:kraus_map}
-    Let $Q$ be an orthogonal projection. If $(\Id-Q)K_iQ=0$ for every $i$,
-    then
+    Let $K$ be a finite matrix family with Kraus map $E$, and let $Q$ be an
+    orthogonal projection. If $(\Id-Q)K_iQ=0$ for every $i$, then
     \begin{align}
-        Q E_K(QXQ)Q
-         & =E_K(QXQ)
+        Q E(QXQ)Q
+         & =E(QXQ)
         \notag
     \end{align}
     for every $X\in\MN{D}$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    The lower-corner identity gives $K_iQ=QK_iQ$; taking adjoints gives
+    $QK_i^\dagger=QK_i^\dagger Q$. Substituting these two equalities in every
+    summand of the Kraus representation of $E(QXQ)$ proves the compression
+    identity.
+\end{proof}
 
 \begin{theorem}[Invariant support compression for a CP fixed point]
     \label{thm:cp_fixed_support_invariant}
