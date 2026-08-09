@@ -15215,8 +15215,10 @@
         {none}
           {
             % Pairing ports need a bounded local silhouette even though the
-            % junction contributes no ink.
-            \tl_set:Nn #3 { box~tensor }
+            % junction contributes no ink, and that boundary stays the flat
+            % floor: a glyphless site draws nothing whose proportion a reader
+            % could read, and every port on it stands where the boundary is.
+            \tl_set:Nn #3 { junction~silhouette }
           }
       }
       {

@@ -161,6 +161,14 @@
   circle tensor/.style={box tensor,
       tenkz audited glyph={circle}{0pt}, circle},
   mpo tensor/.style={box tensor},
+  % A glyphless junction draws no outline at all; its silhouette exists only
+  % to give declared ports a boundary to stand on.  It keeps the flat floor
+  % rather than the class reference, because the reference says how a glyph
+  % reads and there is no glyph here -- and because a port standing on an
+  % invisible boundary moves when that boundary grows.
+  junction silhouette/.style={box tensor,
+      minimum size=\tenkz@dim{\tenkz@r@glyphbox},
+      minimum width=\tenkz@dim{\tenkz@r@glyphref}},
   pill tensor/.style={tenkz audited glyph={roundrect}{\tenkz@pillcap},
       draw=tenkzInk, fill=tenkzPaper,
       rectangle,
