@@ -428,30 +428,34 @@ with the chosen basis of normal tensors.
     \label{thm:gs_eq_bnt_span}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
-    \uses{def:parent_hamiltonian, def:bnt_span}
-    Let $d\ge1$ and $g\ge2$. For $1\le j\le g$, let $D_j\ge1$ and
-    let $A_j=(A_j^a)_{a=1}^d$ be an irreducible left-canonical block with
+    \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
+        def:irreducible_tensor, def:left_canonical_tensor,
+        def:blocks_not_gauge_phase_equiv, def:l_blk_injective}
+    % Scope restriction documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
+    Let $d\ge1$ and $g\ge2$. For $0\le j<g$, let $D_j\ge1$ and
+    let $A_j=(A_j^a)_{a=0}^{d-1}$ be an irreducible left-canonical block with
     normalized self-overlap. Assume that no two distinct blocks are equivalent
-    up to gauge and phase. Let $\mu_j\ne0$ for every $j$. Suppose there is a
-    common $L_0>0$ such that the words of length $L_0$ in each block $A_j$ span
-    $\MN{D_j}$. In this doubly-normalized specialization, assume for every
-    $1\le j\le g$ that
+    up to gauge and phase. For every $0\le j<g$, let $\mu_j\ne0$. Suppose
+    there is a common $L_0>0$ such that the words of length $L_0$ in each
+    block $A_j$ span $\MN{D_j}$. In this doubly-normalized specialization,
+    assume for every
+    $0\le j<g$ that
     \begin{align}
-        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id,
+        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
         \notag\\
-        \sum_{a=1}^d A_j^{a\,\dagger}A_j^a&=\Id.
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}A_j^a&=\Id.
         \notag
     \end{align}
     The first identity is the normalization used in the source. In the general
     source canonical form, the second identity is replaced by a positive
     definite matrix $\Lambda_j$ satisfying
     \begin{align}
-        \sum_{a=1}^d A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
         \notag
     \end{align}
-    Thus the result below is the special case $\Lambda_j=\Id$ of the source
-    normalization.
-    If
+    Thus this theorem has the explicit scope restriction $\Lambda_j=\Id$ and
+    does not assert the unrestricted source result. If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
         \notag\\
@@ -463,7 +467,7 @@ with the chosen basis of normal tensors.
     \begin{align}
         \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
         &=
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
         \label{eq:parent_bnt_ground_space}
     \end{align}
 \end{theorem}
@@ -473,6 +477,8 @@ with the chosen basis of normal tensors.
     \uses{cor:block_diagonal_kernel_global_cut,
         thm:chain_ground_space_eq_mpv_normal,
         lem:bnt_span_le_parent_hamiltonian_kernel}
+    % Scope restriction documented in
+    % docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex.
     The source length bounds imply $L_0<L$, $L\le N$, and $L_0+1<N$.
     Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} therefore identifies
     each single-block periodic chain space with its matrix-product-vector
@@ -482,25 +488,28 @@ with the chosen basis of normal tensors.
     containment directly.
 \end{proof}
 
-
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
     \label{thm:gs_eq_bnt_span_source_normalization}
     \notready
-    \uses{def:parent_hamiltonian, def:bnt_span}
-    Retain the same block, injectivity, nonzero-dimension, nonzero-weight, and
-    source-length hypotheses. For every $1\le j\le g$, assume there is a
-    positive definite matrix $\Lambda_j$ such that
+    \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
+        def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
+        def:l_blk_injective}
+    Retain the same nonzero dimensions and weights, irreducibility, normalized
+    self-overlap, gauge-phase inequivalence, common block-injectivity length,
+    and source-length bounds, but do not assume left-canonicality. For every
+    $0\le j<g$, assume there is a positive definite matrix $\Lambda_j$ such
+    that
     \begin{align}
-        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id,
+        \sum_{a=0}^{d-1} A_j^a A_j^{a\,\dagger}&=\Id,
         \notag\\
-        \sum_{a=1}^d A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
+        \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
         \notag
     \end{align}
     Then
     \begin{align}
         \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
         &=
-        \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
+        \spn\{V^{(N)}(A_j):j=0,\ldots,g-1\}.
         \notag
     \end{align}
 \end{theorem}
