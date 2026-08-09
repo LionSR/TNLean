@@ -82,14 +82,12 @@ letters entangle bra- and ket-side labels, so no purification tensor exists.
   `S` is defined but its trace-preserving completely positive property
   and the `eq:Smap` equation are not yet proved (see that file's module
   docstring for the precise remaining lemmas).
-* The uniform BNT-label structure-coefficient statement of
-  arXiv:1606.00608, Theorem 4.14(ii) for `R` — that `oneLabelCoeffs`
-  literally arises from `R`'s same-length product algebra, not only that
-  the closed-operator local factor diagonalizes to `oneLabelChi`
-  (`wMat_eq_conj_diagonal_oneLabelChi`) — requires the
-  `AlgebraStructureData` witness apparatus of
-  `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
-  `IsRFPViaTS R`.  Documented in
+* The existential tensor-attached BNT algebra clause is supplied by
+  `R_hasBNTAlgebraTensorClause`. The stronger identification of its vertical
+  BNT components, same-length coefficients, and positive diagonal data with
+  the explicit one-label families `oneLabelCoeffs` and `oneLabelChi` remains
+  open. In particular, no witness component operator is identified with the
+  original closed operator `mpo R L`. Documented in
   `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 * The literal CPSV canonical form of `R.toMPSTensor` (eq. `II_CF1`) is proved in
   `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm`

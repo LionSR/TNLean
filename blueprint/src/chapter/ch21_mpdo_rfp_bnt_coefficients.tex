@@ -788,13 +788,10 @@
     diagonal $\operatorname{diag}(1,-1)$ is scaled by $7/25$, and the
     off-diagonal matrix units are annihilated. This identifies the
     spectral data of $W$ and of $\varphi$ with $\chi$.
-    % Scope note: this is not the uniform BNT-label structure-coefficient
-    % statement of Theorem 4.14(ii) (Cirac2016MPDO_arXiv) for R itself:
-    % that requires the tensor-attached BNT algebra-structure witness for
-    % R, which is future work. The renormalization fixed-point property of
-    % Definition is_rfp_via_ts is established directly below, without that
-    % witness; the literal CPSV canonical form of $R$ is established
-    % separately below (Theorem thm:mpdo_bnt_label_rescaling_stable_cf).
+    % Scope note: the existential tensor-attached BNT algebra clause for R
+    % is obtained below from the general Theorem 4.14 equivalence. Identifying
+    % that witness with the explicit one-label coefficient and diagonal data
+    % displayed here remains open.
 \end{theorem}
 \begin{proof}\leanok
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -886,10 +883,9 @@
     operators: two share the amplitude $1/\sqrt2$ and the eigenvectors of
     $W$ on the physical-index pairs satisfying the bond-matching condition,
     and two are a deterministic assignment on the pairs that fail it,
-    chosen so the family resolves the identity. This exhibits $R$ as a
-    full renormalization fixed-point example, without the tensor-attached
-    BNT algebra-structure witness anticipated in
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}.
+    chosen so the family resolves the identity. This proves the fixed-point
+    condition directly. The following theorem obtains an existential
+    tensor-attached BNT algebra clause from the general equivalence.
 \end{theorem}
 \begin{proof}\leanok
     Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
@@ -935,6 +931,54 @@
     full two-site domain.
 \end{proof}
 
+% Source: arXiv:1606.00608, Theorem 4.14(i)--(ii), lines 972--985,
+% and Appendix C.4, lines 1929--2085.
+\begin{theorem}[Existential tensor-attached BNT algebra clause for $R$]%
+    \label{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    \lean{MPOTensor.RescalingStableLengthDependentRFP.%
+        R_hasBNTAlgebraTensorClause}
+    \leanok
+    \uses{def:mpdo_bnt_algebra_tensor_clause}
+    The tensor $R$ admits a tensor-attached vertical BNT presentation. Thus
+    there are component tensors $(M_\alpha)_\alpha$, multiplicity matrices
+    $(\mu_\alpha)_\alpha$, coefficients $c^{(L)}_{\alpha,\beta,\gamma}$,
+    and positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ such that,
+    for every $L>0$,
+    \begin{align}
+        O_L(M_\alpha)O_L(M_\beta)
+            &=\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma).
+        \notag
+    \end{align}
+    The coefficients and multiplicities obey
+    \begin{align}
+        c^{(L)}_{\alpha,\beta,\gamma}
+            &=\tr\!\left(\chi_{\alpha,\beta,\gamma}^{L}\right).
+        \notag
+    \end{align}
+    With $m_\alpha=\tr(\mu_\alpha)$, the length-one coefficients satisfy
+    \begin{align}
+        m_\gamma
+            &=\sum_{\alpha,\beta}c^{(1)}_{\alpha,\beta,\gamma}
+                m_\alpha m_\beta.
+        \notag
+    \end{align}
+    This is the existential tensor attachment in
+    \cite[Theorem~4.14(i)--(ii), lines~972--985, and Appendix~C.4,
+      lines~1929--2085]{Cirac2016MPDO_arXiv}. It does not identify this
+    presentation with the explicit one-label coefficient and diagonal data
+    below.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_bnt_label_rescaling_stable_cf,
+      thm:mpdo_bnt_label_rescaling_stable_ismpdo,
+      thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
+      thm:mpdo_cpsv_bnt_rfp_equivalence}
+    Apply the forward implication of
+    Theorem~\ref{thm:mpdo_cpsv_bnt_rfp_equivalence} to the literal canonical
+    form, positivity, and renormalization fixed-point properties of $R$.
+\end{proof}
+
 \begin{theorem}[The closed operator of $R$ attaches $\chi$ exactly]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -968,10 +1012,11 @@
     closed operator of $R$ equals $\chi$ exactly, closing the attachment
     of $\chi$ to $R$ used by
     Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}.
-    This is not the uniform same-length product-algebra statement of
-    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} itself; that statement
-    requires the tensor-attached BNT algebra-structure witness for $R$,
-    which is future work (documented in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    supplies an existential tensor-attached presentation. The closed-operator
+    factorization here does not identify its labels, component operators,
+    coefficients, or diagonal matrices with the explicit one-label data
+    (documented in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}).
 \end{theorem}
 \begin{proof}\leanok
@@ -1032,9 +1077,11 @@
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} for $R$'s one-label
     structure coefficient, at the coefficient level. It is not the
     operator-multiplication closure law
-    $O_L(M_0)O_L(M_0)=c^{(L)}O_L(M_0)$ of that theorem for $R$'s own closed
-    operator; that remains the tensor-attached BNT algebra-structure
-    witness documented as future work in
+    $O_L(M_0)O_L(M_0)=c^{(L)}O_L(M_0)$ for $R$'s original closed operator;
+    indeed that direct identification is false. The existential presentation
+    in Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    instead uses the closed operators of its vertical BNT components. Their
+    explicit identification with the one-label data remains open in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
 \end{theorem}
 \begin{proof}\leanok
