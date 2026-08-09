@@ -523,7 +523,10 @@ noncomputable def R_oneLabelBNTAlgebraTensorClause : BNTAlgebraTensorClause R wh
   algebraClause := R_oneLabelAlgebraClause
 
 /-- The rescaling-stable tensor has a BNT algebra tensor clause, witnessed by the explicit
-one-label vertical clause. -/
+one-label vertical clause.
+
+Source: CPSV16, Theorem 4.14(i)--(ii), lines 972--985, and Appendix C.4,
+lines 1929--2085. -/
 theorem R_hasBNTAlgebraTensorClause : HasBNTAlgebraTensorClause R :=
   ⟨R_oneLabelBNTAlgebraTensorClause⟩
 
