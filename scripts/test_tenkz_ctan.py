@@ -66,6 +66,38 @@ def test_closure_reads_the_load_graph_and_not_the_prose() -> None:
     assert closure.libraries == ["calc", "hobby"], closure.libraries
 
 
+def test_closure_reads_tex_spacing_before_arguments() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "tex"
+        source.mkdir()
+        (source / "tenkz.sty").write_text(
+            STAGE_CONTRACT
+            + "\\RequirePackage [draft] {tikz}\n"
+            "\\usetikzlibrary\n  {calc}\n"
+            "\\input % the stage below\n  {tenkz-stage.code.tex}\n",
+            encoding="utf-8",
+        )
+        (source / "tenkz-stage.code.tex").write_text(STAGE_CONTRACT, encoding="utf-8")
+        closure = tenkz_ctan.walk_closure(source, "tenkz.sty")
+    assert closure.files == ["tenkz.sty", "tenkz-stage.code.tex"], closure.files
+    assert closure.packages == ["tikz"], closure.packages
+    assert closure.libraries == ["calc"], closure.libraries
+
+
+def test_a_runtime_file_that_is_not_utf8_is_refused_by_name() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        source = fake_source(Path(directory))
+        (source / "tenkz-leaf.code.tex").write_bytes(
+            STAGE_CONTRACT.encode("utf-8") + b"% \xff\xfe not text\n"
+        )
+        try:
+            tenkz_ctan.walk_closure(source, "tenkz.sty")
+        except SystemExit as refusal:
+            assert "tenkz-leaf.code.tex is not UTF-8" in str(refusal), str(refusal)
+        else:
+            raise AssertionError("a file that is not UTF-8 was walked")
+
+
 def test_closure_agrees_with_the_pinned_manifest() -> None:
     report = tenkz_ctan.check_closure(
         tenkz_ctan.walk_closure(), tenkz_ctan.read_manifest()
@@ -130,6 +162,12 @@ def test_the_version_comes_from_one_declaration_or_from_none() -> None:
             )
             assert _refuses(entry, "not spelled"), typo
 
+        # A date of the right shape that no calendar has.
+        entry.write_text(
+            "\\ProvidesPackage{tenkz}[2026/02/31 v0.7 Diagrams]\n", encoding="utf-8"
+        )
+        assert _refuses(entry, "is not a calendar date")
+
 
 def test_a_manifest_that_would_write_the_wrong_file_is_refused() -> None:
     closure = tenkz_ctan.walk_closure()
@@ -174,6 +212,40 @@ def test_absent_material_is_reported_rather_than_raised() -> None:
     }
     report = tenkz_ctan.check_version(tenkz_ctan.read_release(), manifest)
     assert len(report.failures) == 6, report.failures
+
+    material = tenkz_ctan.check_material(manifest)
+    assert any("LICENSE" in reason for reason in material.failures), material.failures
+    assert any("CHANGES.md" in reason for reason in material.failures), material.failures
+
+    encoding = tenkz_ctan.check_encoding(
+        {name: ROOT / relative for name, relative in manifest["material"].items()}
+    )
+    assert len(encoding.failures) == 3, encoding.failures
+
+
+def test_the_whole_check_reports_a_missing_file_rather_than_raising() -> None:
+    """The command itself, not one check in isolation: a manifest that names a
+    file which is not there must print its report and exit 1."""
+
+    original = (ROOT / "docs/tenkz/ctan/MANIFEST.toml").read_text(encoding="utf-8")
+    broken = original.replace(
+        '"CITATION.cff" = "docs/tenkz/ctan/CITATION.cff"',
+        '"CITATION.cff" = "docs/tenkz/ctan/nothing-here.cff"',
+    )
+    assert broken != original
+    with tempfile.TemporaryDirectory() as directory:
+        manifest = Path(directory) / "MANIFEST.toml"
+        manifest.write_text(broken, encoding="utf-8")
+        finished = subprocess.run(
+            [sys.executable, str(SCRIPT), "check"],
+            capture_output=True,
+            text=True,
+            env={**os.environ, "TENKZ_CTAN_MANIFEST": str(manifest)},
+        )
+    assert finished.returncode == 1, finished.stdout + finished.stderr
+    assert "Traceback" not in finished.stderr, finished.stderr
+    assert "nothing-here.cff is declared and missing" in finished.stdout, finished.stdout
+    assert "SKIP clean-install" in finished.stdout, finished.stdout
 
 
 def test_the_archive_is_a_function_of_the_files_it_carries() -> None:
