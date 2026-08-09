@@ -765,6 +765,42 @@ closing a chain of $N$ copies of $\mathcal U$.
     on $k'-k$ proves the claim.
 \end{proof}
 
+\begin{theorem}[Supplied-projector simple2 contraction]
+    \label{thm:mpu_supplied_projector_simple2}
+    \lean{MPOTensor.IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu_simple,thm:mpu_blocked_double_layer_diagonal}
+    Let $W$ be simple, and suppose that for some $J>0$ its normalized
+    diagonal satisfies
+    \begin{align}
+        E^J&=|\rho)(\Phi|.
+    \end{align}
+    Then the simple insertion identity holds with these same supplied
+    witnesses:
+    \begin{align}
+        W^{ij}W^{k\ell}
+        &=W^{ij}|\rho)(\Phi|W^{k\ell}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the witnesses $a,b$ from simplicity and put $R=|b)(a|$.  Expanding
+    the normalized diagonal as the average of the diagonal letters, the two
+    defining simple contractions give
+    \begin{align}
+        W^{ij} E W^{k\ell}&=W^{ij}W^{k\ell}.
+    \end{align}
+    Indeed, insert $R$ on both sides of each diagonal letter; its middle
+    sandwich is $R W^{qq}R=R$ by the first contraction, and the normalized sum
+    contains $d$ equal terms.  The same identity makes
+    $W^{ij}E^N=W^{ij}E$ for every $N>0$.  Hence
+    \begin{align}
+        W^{ij}E^J W^{k\ell}&=W^{ij}W^{k\ell}.
+    \end{align}
+    Substituting the supplied equality $E^J=|\rho)(\Phi|$ proves the claim.
+    No uniqueness of rank-one factorizations is used.
+\end{proof}
+
 \begin{theorem}[The fixed-point simple1 contraction]
     \label{thm:mpu_simple1}
     \lean{MPOTensor.IsMPU.exists_normalized_fixed_points_simple1,

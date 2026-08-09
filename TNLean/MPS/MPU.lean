@@ -17,6 +17,7 @@ import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferStabilization
