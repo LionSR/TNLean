@@ -74,6 +74,29 @@ theorem rectangularChoi_apply
     rectangularChoi L (i, a) (j, b) = L (single i j 1) a b := by
   rw [rectangularChoi, linearMapMatrix_apply]
 
+/-- The linear operator with matrix entries obtained from the Choi matrix by
+\(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\). -/
+noncomputable def gramReshuffle
+    (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
+    EuclideanSpace ℂ (α × α) →L[ℂ] EuclideanSpace ℂ (α × α) :=
+  Matrix.toEuclideanCLM (n := α × α) (𝕜 := ℂ) fun (b, a) (e, c) ↦
+    rectangularChoi Φ (c, e) (a, b)
+
+/-- The matrix-unit coefficients of the reshuffled Choi operator are
+\(J(\Phi)_{(c,e),(a,b)}\). -/
+@[simp]
+theorem inner_single_gramReshuffle_single
+    (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) (a b c e : α) :
+    inner ℂ (EuclideanSpace.single (b, a) 1)
+      (gramReshuffle Φ (EuclideanSpace.single (e, c) 1)) =
+      rectangularChoi Φ (c, e) (a, b) := by
+  classical
+  change inner ℂ (WithLp.toLp 2 (Pi.single (b, a) 1))
+    (Matrix.toEuclideanCLM (n := α × α) (𝕜 := ℂ) _
+      (WithLp.toLp 2 (Pi.single (e, c) 1))) = _
+  rw [Matrix.toEuclideanCLM_toLp, EuclideanSpace.inner_toLp_toLp]
+  simp [Matrix.mulVec_single]
+
 /-- Reshaping a coefficient matrix into the rectangular Choi matrix preserves its
 squared Frobenius norm. -/
 theorem rectangularChoi_frobenius_parseval

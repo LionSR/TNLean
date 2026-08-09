@@ -264,7 +264,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
-    \lean{MPSTensor.gramReshuffle}
+    \lean{Matrix.gramReshuffle}
     \leanok
     \uses{def:rectangular_choi}
     For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, define the
@@ -281,10 +281,11 @@ orthogonal projector is the canonical representative used here.
 
 \begin{theorem}[Matrix-unit coordinates of Gram reshuffling]
     \label{thm:gram_reshuffle_single}
-    \lean{MPSTensor.inner_single_gramReshuffle_single}
+    \lean{Matrix.inner_single_gramReshuffle_single}
     \leanok
     \uses{def:gram_reshuffle}
-    Let $\mathbf e_{(j,i)}$ be the standard unit vector at $(j,i)$.  For all
+    Let $\mathcal L\colon\MN{D}\to\MN{D}$ be complex-linear and let
+    $\mathbf e_{(j,i)}$ be the standard unit vector at $(j,i)$.  For all
     $a,b,c,e\in\Fin{D}$,
     \begin{align}
       \bigl\langle \mathbf e_{(b,a)},
@@ -348,8 +349,7 @@ orthogonal projector is the canonical representative used here.
     \label{thm:ground_space_gram_eq_gram_reshuffle}
     \lean{MPSTensor.groundSpaceGram_eq_gramReshuffle}
     \leanok
-    \uses{thm:ground_space_gram_choi_reshuffling,
-        thm:gram_reshuffle_single}
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map}
     The ground-space Gram operator is exactly the operator-level reshuffling of
     the Choi matrix of the iterated transfer map:
     \begin{align}
