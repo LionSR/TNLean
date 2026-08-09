@@ -265,16 +265,19 @@ orthogonal projector is the canonical representative used here.
 \begin{definition}[Operator-level Gram reshuffling]
     \label{def:gram_reshuffle}
     \lean{Matrix.gramReshuffle}
+    \lean{Matrix.gramReshuffleMatrix}
     \leanok
     \uses{def:rectangular_choi}
-    For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, define the
-    operator $\mathscr R(\mathcal L)$ on
-    $\ell^2(\Fin{D}\times\Fin{D})$ by the matrix entries
+    For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, let
+    $R(\mathcal L)$ be the matrix with entries
     \begin{align}
-      \mathscr R(\mathcal L)_{(b,a),(e,c)}
+      R(\mathcal L)_{(b,a),(e,c)}
       &:=J(\mathcal L)_{(c,e),(a,b)}.
-      \label{eq:gram_reshuffle_entries}
+      \label{eq:gram_reshuffle_matrix_entries}
     \end{align}
+    The operator $\mathscr R(\mathcal L)$ on
+    $\ell^2(\Fin{D}\times\Fin{D})$ is represented by the matrix $R(\mathcal L)$
+    in the standard orthonormal basis.
     Thus the row--column pair $((b,a),(e,c))$ is sent explicitly to the Choi
     row--column pair $((c,e),(a,b))$.
 \end{definition}
@@ -294,7 +297,7 @@ orthogonal projector is the canonical representative used here.
       \label{eq:gram_reshuffle_single}
     \end{align}
     This is the coordinate identity in
-    (\ref{eq:gram_reshuffle_entries}); it is not a Hilbert--Schmidt pairing of
+    (\ref{eq:gram_reshuffle_matrix_entries}); it is not a Hilbert--Schmidt pairing of
     $E_{ab}$ with $\mathcal L(E_{ce})$.
 \end{theorem}
 
@@ -303,6 +306,34 @@ orthogonal projector is the canonical representative used here.
     \uses{def:gram_reshuffle}
     Evaluate the matrix of $\mathscr R(\mathcal L)$ on the two standard basis
     vectors.
+\end{proof}
+
+\begin{theorem}[Entrywise Frobenius invariance of Gram reshuffling]
+    \label{thm:gram_reshuffle_matrix_norm_sq}
+    \lean{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}
+    \leanok
+    \uses{def:gram_reshuffle}
+    For every complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, the sum
+    of squared entry norms of $R(\mathcal L)$ equals that of the rectangular
+    Choi matrix:
+    \begin{align}
+      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
+      \bigl\|R(\mathcal L)_{p_1,p_2}\bigr\|^2
+      &=
+      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
+      \bigl\|J(\mathcal L)_{p_1,p_2}\bigr\|^2.
+      \label{eq:gram_reshuffle_matrix_norm_sq}
+    \end{align}
+    The two matrices differ only by a reshuffling of indices; the equality is
+    entrywise Frobenius, not operator norm.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:gram_reshuffle}
+    The map $((b,a),(e,c))\mapsto((c,e),(a,b))$ is an involution (bijection)
+    on the product index space.  Reindexing the sum of squared norms by this
+    involution yields the claimed equality.
 \end{proof}
 
 \begin{theorem}[Transfer--Gram Choi reshuffling]
