@@ -439,3 +439,211 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     Combine the preceding irreducibility conclusion with the supplied
     spectral-radius and primitivity properties.
 \end{proof}
+
+\section{Transfer-matrix identities}
+
+Let $D$ be a positive integer and let
+$T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map.
+
+\begin{definition}[Transfer matrix of a matrix endomorphism]
+    \label{def:mpu_transfer_matrix}
+    \lean{transferMatrix}
+    \leanok
+    Let $E_{k\ell}$ denote the matrix unit with its only nonzero entry in
+    row $k$ and column $\ell$.  The transfer matrix $\widehat T$ is the
+    matrix indexed by pairs of bond indices with entries
+    \begin{align}
+        \widehat T_{(j,i),(\ell,k)}
+        &:=(T(E_{k\ell}))_{ij}.
+    \end{align}
+    Equivalently, this is the matrix of $T$ under the column-stacking
+    identification $M_D(\mathbb C)\cong\mathbb C^{D^2}$.
+\end{definition}
+
+\begin{theorem}[Functoriality of transfer matrices]
+    \label{thm:mpu_transfer_matrix_functoriality}
+    \lean{transferMatrix_id,transferMatrix_comp}
+    \leanok
+    \uses{def:mpu_transfer_matrix}
+    For linear maps $S,T:M_D(\mathbb C)\to M_D(\mathbb C)$,
+    \begin{align}
+        \widehat{\operatorname{id}}&=\Id,\\
+        \widehat{S\circ T}&=\widehat S\,\widehat T.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both sides on matrix units.  The identity formula is immediate,
+    while the composition formula follows by summing over the intermediate
+    row and column indices.
+\end{proof}
+
+\begin{theorem}[Transfer matrices intertwine column stacking]
+    \label{thm:mpu_transfer_matrix_vectorization}
+    \lean{transferMatrix_mulVec_eq}
+    \leanok
+    \uses{def:mpu_transfer_matrix}
+    For every $\rho\in M_D(\mathbb C)$,
+    \begin{align}
+        \widehat T\,\operatorname{vec}(\rho)
+        &=\operatorname{vec}(T(\rho)).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand $\rho$ in the matrix-unit basis and compare every vectorized
+    coordinate.
+\end{proof}
+
+\begin{theorem}[Powers and traces of transfer matrices]
+    \label{thm:mpu_transfer_matrix_power_trace}
+    \lean{transferMatrix_pow,trace_transferMatrix_eq_linearMap_trace}
+    \leanok
+    \uses{def:mpu_transfer_matrix}
+    For every nonnegative integer $N$,
+    \begin{align}
+        \widehat{T^N}&=(\widehat T)^N,\\
+        \tr(\widehat T)&=\operatorname{Tr}(T),
+    \end{align}
+    where the second trace is the operator trace of the endomorphism of
+    $M_D(\mathbb C)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_functoriality}
+    Functoriality proves the power identity by induction.  For the trace
+    identity, expand the operator trace in the matrix-unit basis.  The two
+    diagonal sums differ only by exchanging the row and column indices.
+\end{proof}
+
+\begin{theorem}[Eigenvalues of a transfer matrix]
+    \label{thm:mpu_transfer_matrix_eigenvalues}
+    \lean{transferMatrix_hasEigenvalue_iff}
+    \leanok
+    \uses{def:mpu_transfer_matrix}
+    A complex number $\mu$ is an eigenvalue of $T$ if and only if it is an
+    eigenvalue of $\widehat T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_vectorization}
+    Column stacking is a linear bijection and intertwines $T$ with
+    multiplication by $\widehat T$.  It therefore carries nonzero
+    eigenmatrices to nonzero eigenvectors and conversely.
+\end{proof}
+
+For a matrix product tensor $A$, write $V^{(N)}(A)_\sigma$ for the
+coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
+
+\begin{theorem}[Transfer-matrix powers as periodic overlaps]
+    \label{thm:mpu_transfer_matrix_overlap}
+    \lean{MPSTensor.trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap,
+      MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap}
+    \leanok
+    \uses{def:mpu_transfer_matrix,def:mixed_transfer,def:transfer_map,
+        def:mpv_overlap,def:mps_tensor}
+    Let $A$ and $B$ be matrix product tensors with the same positive bond
+    dimension, and let $F_{A,B}(X)=\sum_i A^iX(B^i)^\dagger$ be their mixed
+    transfer map.  Then
+    \begin{align}
+        \tr\!\left(\widehat{F_{A,B}}^{\,N}\right)
+          &=\sum_\sigma V^{(N)}(A)_\sigma
+             \overline{V^{(N)}(B)_\sigma}.
+    \end{align}
+    In particular, taking $B=A$ identifies the trace of the $N$th power of
+    the ordinary transfer matrix with the length-$N$ self-overlap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_power_trace,thm:overlap_trace,
+        thm:mixed_self}
+    Replace the matrix power by the transfer matrix of the corresponding
+    operator power, identify matrix trace with operator trace, and expand the
+    latter over periodic words.  For the ordinary self-transfer statement,
+    specialize to $B=A$ and use the identity $F_{A,A}=\mathcal E_A$ from
+    Theorem~\ref{thm:mixed_self}.
+\end{proof}
+
+\begin{definition}[Normalized flattening of an MPO tensor]
+    \label{def:mpu_normalized_flattening}
+    \lean{MPOTensor.normalizedFlattening}
+    \leanok
+    \uses{def:mpo_tensor,def:mps_tensor,def:mpo_to_mps}
+    For an MPO tensor $U$ of physical dimension $d>0$, its normalized
+    flattening is the doubled-physical-index MPS tensor
+    \begin{align}
+        \widetilde U^{ij}&=\frac{1}{\sqrt d}\,U^{ij}.
+    \end{align}
+    This is the normalization used in the normal-tensor argument of
+    \cite[Section~III, equation~(13)]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Self-overlap scaling]
+    \label{thm:mpu_self_overlap_scaling}
+    \lean{MPSTensor.mpvOverlap_smul_self,
+      MPOTensor.mpvOverlap_normalizedFlattening_self}
+    \leanok
+    \uses{def:mpu_normalized_flattening,def:mpv_overlap,def:mpo_to_mps,
+        def:mpo_tensor,def:mps_tensor}
+    For a matrix product tensor $A$, a complex number $c$, and a nonnegative
+    integer $N$, scaling every local matrix by $c$ gives
+    \begin{align}
+        \sum_\sigma V^{(N)}(cA)_\sigma
+          \overline{V^{(N)}(cA)_\sigma}
+        &=(c\overline c)^N
+          \sum_\sigma V^{(N)}(A)_\sigma
+          \overline{V^{(N)}(A)_\sigma}.
+    \end{align}
+    Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
+    $d$, then
+    \begin{align}
+        \sum_\sigma V^{(N)}(\widetilde U)_\sigma
+          \overline{V^{(N)}(\widetilde U)_\sigma}
+        &=d^{-N}
+          \sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
+          \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:eval_word_smul}
+    Each length-$N$ coefficient is multiplied by $c^N$.  Multiplication by
+    its complex conjugate gives the first identity.  Taking
+    $c=1/\sqrt d$ gives the second.
+\end{proof}
+
+\begin{theorem}[Normalized MPU transfer trace]
+    \label{thm:mpu_normalized_transfer_trace}
+    \lean{MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
+    \leanok
+    \uses{def:mpu,def:mpo_tensor,def:mps_tensor,def:mpu_normalized_flattening,
+        def:transfer_map,def:mpu_transfer_matrix}
+    Let $U$ be an MPU tensor with positive physical and bond dimensions, and
+    let $E$ be the transfer matrix of its normalized flattening.  For every
+    integer $N>1$,
+    \begin{align}
+        \tr(E^N)&=1.
+    \end{align}
+    This is the trace identity in the proof of the normal-tensor result
+    \cite[Proposition~III.1]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_transfer_matrix_overlap,thm:mpu_self_overlap_scaling,
+        thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint}
+    Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
+    self-overlap by $d^{-N}$.  The doubled-index overlap identity and MPU
+    unitarity give the complete chain
+    \begin{align}
+        \tr(E^N)
+        &=\sum_\sigma V^{(N)}(\widetilde U)_\sigma
+            \overline{V^{(N)}(\widetilde U)_\sigma}\\
+        &=d^{-N}\sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
+            \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}\\
+        &=d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)\\
+        &=d^{-N}\tr(\Id)\\
+        &=d^{-N}d^N\\
+        &=1.
+    \end{align}
+    Here the fourth equality uses $N>1$, so that the MPU equation applies.
+\end{proof}
