@@ -16,6 +16,15 @@ import TNLean.MPS.MPDO.VerticalSectorCoordinates
 The normalized vertical component is the doubled tensor of the four matrices
 `A`.  It is not the original horizontal closed MPO.
 
+## Main results
+
+* `verticalComponent_isCPSVBasisOfNormalTensors` proves that the normalized
+  component gives the one-label vertical BNT basis of `R`.
+* `mpvOverlap_A_eq_wMat_pow_trace` identifies the component square coefficient
+  with the trace powers defining `oneLabelCoeffs`.
+* `R_oneLabelBNTAlgebraTensorClause` packages the explicit tensor-attached
+  clause with multiplicity weight `25/32` and diagonal data `oneLabelChi`.
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,

@@ -29,9 +29,9 @@ of the project example motivated by arXiv:1606.00608, Theorem 4.14 and lines
   are eigenvalues of the local factor `wMat` of the `R_isMPDO`
   factorization, exhibited by explicit eigenvectors;
 * `transferMap_A_eigen` — the per-site transfer map `φ(Y) = Σ_a A^a Y (A^a)^†`
-  has the explicit eigenvalues `{1, lambda, 0, 0}` claimed in the *Remaining
-  gap* section below (identity fixed, `diag(1,-1)` scaled by `lambda`, the
-  off-diagonal matrix units annihilated).
+  has the explicit eigenvalues `{1, lambda, 0, 0}` used in the completed
+  canonical-form analysis (identity fixed, `diag(1,-1)` scaled by `lambda`,
+  the off-diagonal matrix units annihilated).
 
 The renormalization fixed-point maps of Definition 4.1 (`IsRFPViaTS`) for
 `R` continue in `TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS`.
@@ -547,9 +547,8 @@ theorem transferMap_A_single10 :
 /-- **The explicit eigenvalues of `φ` (`MPSTensor.transferMap A`).** The
 identity is fixed (eigenvalue `1`), the traceless diagonal `diag(1, -1)` is
 scaled by `lambda = 7/25` (eigenvalue `lambda`), and the off-diagonal matrix
-units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`).  Together `{1, lambda,
-0, 0}` are exactly the eigenvalues asserted for `φ` in the module docstring
-(*Remaining gap*).
+units `E₀₁`, `E₁₀` are annihilated (eigenvalue `0`). Together `{1, lambda,
+0, 0}` are the eigenvalues used in the completed canonical-form analysis.
 
 **Scope restriction (transfer-map eigenvalue groundwork):** this
 characterizes the per-site map `φ`, not `transferMap R.toMPSTensor` itself.
