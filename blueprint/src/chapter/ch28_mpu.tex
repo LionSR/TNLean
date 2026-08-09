@@ -1006,6 +1006,117 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Finite blocking eliminates the zero-primary transfer component]
+    \label{thm:mpu_normalized_transfer_stabilization}
+    \lean{MPOTensor.IsMPU.exists_normalized_transfer_stabilizes_to_rank_one}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,
+        def:mpu_transfer_matrix,thm:mpu_normalized_transfer_nonzero_spectrum}
+    Let $U$ be an MPU tensor with physical dimension $d>0$ and bond
+    dimension $D>1$, and let $E$ be the transfer matrix of its normalized
+    flattening. There is an integer
+    $J$ satisfying
+    \begin{align}
+        0<J\leq D^2-1
+    \end{align}
+    and vectors $\rho,\Phi$ satisfying
+    \begin{align}
+        (\Phi\mid\rho)&=1,
+        &E\rho&=\rho,
+        &(\Phi\mid E&=(\Phi\mid,
+    \end{align}
+    such that
+    \begin{align}
+        E^J&=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    Moreover, for every integer $k\geq J$,
+    \begin{align}
+        E^k&=E^J.
+    \end{align}
+    Thus blocking $J$ sites removes the entire generalized zero-eigenspace.
+    The one-dimensional case is stated separately below.
+
+    This is the Jordan-elimination step in
+    \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum,
+        thm:mpu_normalized_transfer_trace}
+    The exact characteristic polynomial is
+    \begin{align}
+        \chi_E(X)&=X^{D^2-1}(X-1).
+    \end{align}
+    Cayley--Hamilton gives $E^{D^2}=E^{D^2-1}$. Hence every power from
+    $J=D^2-1$ onward is equal, and $P=E^J$ is idempotent. Since $J>1$, the
+    normalized transfer trace identity gives $\tr(P)=1$. The range of an
+    idempotent has dimension equal to its trace, so $P$ has rank one and
+    factors as $P=\lvert\rho)(\Phi\rvert$. Taking the factors with
+    $(\Phi\mid\rho)=1$ gives the displayed fixed-point identities from
+    $EP=PE=P$.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the normalized fixed-pair factorization]
+    \label{thm:mpu_stabilized_fixed_pair_uniqueness}
+    \lean{Matrix.StabilizedRankOneData.power_eq_vec_mul_vec_of_fixed}
+    \leanok
+    Let $P=E^J$ be a stabilized rank-one transfer power with normalized left
+    and right factors. If $\rho'$ and $\Phi'$ are any other fixed vectors with
+    $(\Phi'\mid\rho')=1$, then
+    \begin{align}
+        P=\lvert\rho')(\Phi'\rvert.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Applying $P$ to $\rho'$ and applying $\Phi'$ to $P$ shows that the two
+    pairs of rank-one factors differ by reciprocal scalars. Their normalized
+    pairings force the product of those scalars to be one.
+\end{proof}
+
+\begin{lemma}[Identification with chosen reduced-CFII fixed points]
+    \label{lem:mpu_reduced_cfii_transfer_stabilization}
+    Suppose the normalized flattening is presented by a chosen canonical-form-II
+    representative whose active blocks fill the bond space. Let $\rho$ and
+    $\Phi$ be the diagonal positive right fixed point and the identity left
+    fixed point supplied by that representative, normalized by
+    $(\Phi\mid\rho)=1$. Then
+    \begin{align}
+        E^{D^2-1}=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    This is a statement about the chosen reduced representative; it does not
+    assert that every ambient MPU tensor is itself in canonical form II.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:mpu_normalized_transfer_stabilization,
+        thm:mpu_stabilized_fixed_pair_uniqueness}
+    The finite-blocking theorem shows that every normalized left and right fixed
+    pair factors the stabilized projector. It remains to transport the
+    blockwise canonical-form-II fixed points through the full-support ambient
+    reconstruction and prove the displayed pairing and fixed equations.
+    % Formalization of this remaining step is tracked in GitHub issue #5786.
+\end{proof}
+
+\begin{theorem}[One-dimensional normalized transfer matrix]
+    \label{thm:mpu_normalized_transfer_fin_one}
+    \lean{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix}
+    If the physical dimension satisfies $d>0$ and the bond dimension is $D=1$,
+    then the normalized transfer matrix satisfies
+    \begin{align}
+        E&=1.
+    \end{align}
+    Consequently its powers stabilize at the positive exponent one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum}
+    In dimension one the characteristic polynomial identity reduces to
+    $\chi_E(X)=X-1$, and Cayley--Hamilton gives $E=1$.
+\end{proof}
+
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}

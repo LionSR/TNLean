@@ -48,6 +48,7 @@ import TNLean.Algebra.MatrixRankBaseChange
 import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixSpectralDecomp
+import TNLean.Algebra.MatrixStabilization
 import TNLean.Algebra.MatrixTracePairing
 import TNLean.Algebra.MatrixTracePowerContinuity
 import TNLean.Algebra.MatrixUnitaryBetween

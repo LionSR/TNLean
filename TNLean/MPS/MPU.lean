@@ -13,3 +13,4 @@ import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.TransferMatrix
+import TNLean.MPS.MPU.TransferStabilization
