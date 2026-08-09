@@ -270,6 +270,160 @@ closing a chain of $N$ copies of $\mathcal U$.
     Hence $U^{(N)}$ is unitary.
 \end{proof}
 
+
+\section{Double-layer blocking and mixed physical traces}
+
+\begin{lemma}[Physical adjoints and double layers commute with blocking]
+    \label{lem:mpu_double_layer_blocking}
+    \lean{MPOTensor.physicalAdjointTensor_blockTensor,
+        MPOTensor.doubleLayerTensor_blockTensor}
+    \leanok
+    \uses{def:mpu_double_layer,thm:mpdo_closed_chain_physical_blocking}
+    For every blocking length $L$, physical adjunction commutes with blocking,
+    and consequently
+    \begin{align}
+        \mathcal W(\mathcal U^{[L]})&=\mathcal W(\mathcal U)^{[L]}.
+    \end{align}
+    The virtual order is unchanged on both sides.
+\end{lemma}
+
+\begin{proof}\leanok
+    Physical adjunction conjugates each matrix entry without reversing the
+    virtual word.  The first identity follows entrywise.  The second follows
+    because physical blocking commutes with the local operator product.
+\end{proof}
+
+\begin{theorem}[Blocked double-layer diagonal is a transfer power]
+    \label{thm:mpu_blocked_double_layer_diagonal}
+    \lean{MPOTensor.normalizedDiagonal_doubleLayerTensor,
+        MPOTensor.normalizedDiagonal_blockTensor,
+        MPOTensor.normalizedDiagonal_doubleLayerTensor_blockTensor,
+        MPOTensor.IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec}
+    \leanok
+    \uses{def:mpu_double_layer,def:mpu_normalized_flattening,
+        def:mpu_transfer_matrix,lem:mpu_double_layer_blocking}
+    Let $E$ be the normalized transfer matrix of $\mathcal U$.  After blocking
+    $L$ sites, the normalized physical diagonal of the double layer is
+    exactly $E^L$.  More precisely, if
+    \begin{align}
+        q:\Fin D\times\Fin D&\longrightarrow\Fin{D^2}
+    \end{align}
+    is the standard product encoding, then its entries are
+    \begin{align}
+        \bigl(E^L\bigr)_{q^{-1}(a),q^{-1}(b)}.
+    \end{align}
+    Thus the row and column reindexings have the same explicit orientation.
+    At the stabilization exponent $J$, this diagonal is the same reindexing of
+    the rank-one projector $|\rho)(\Phi|$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_double_layer_blocking}
+    On one site, expanding the diagonal double-layer contraction gives the
+    transfer matrix after the stated product reindexing.  The factor
+    $d^{-1}$ is the square of the local factor $d^{-1/2}$.  Summing blocked
+    diagonal letters over words and distributing the ordered product shows
+    that normalized diagonals turn blocking into powers.  Simultaneous
+    reindexing preserves multiplication, giving the displayed formula.
+\end{proof}
+
+\begin{theorem}[Identity plus traceless physical decomposition]
+    \label{thm:mpu_WIsom}
+    \lean{MPOTensor.exists_identity_traceless_basis,
+        MPOTensor.exists_identity_add_traceless_decomposition,
+        MPOTensor.residualSlice_eq_contractPhysical_tracelessPart}
+    \leanok
+    \uses{thm:mpu_blocked_double_layer_diagonal}
+    For every double-layer tensor $\mathcal W$, there is a basis
+    $\{\sigma_0,\sigma_\alpha\}$ of the physical matrix algebra and virtual
+    matrices $E,S_\alpha$ such that
+    \begin{align}
+        \sigma_0&=\Id,&
+        \tr(\sigma_\alpha)&=0\quad(\alpha\ne0),\\
+        \mathcal W&=E\otimes\Id+
+          \sum_{\alpha\ne0}S_\alpha\otimes\sigma_\alpha.
+    \end{align}
+    Here $E$ is the normalized physical diagonal.  Equivalently, contraction
+    against a physical matrix $X$ separates as
+    \begin{align}
+        \operatorname{contr}_{\rm phys}(\mathcal W,X)
+          &=\tr(X)E+R_{\mathcal W}(X),\\
+        R_{\mathcal W}(X)
+          &=\operatorname{contr}_{\rm phys}
+            \left(\mathcal W,
+              X-\frac{\tr(X)}d\Id\right),
+    \end{align}
+    where the second physical argument is traceless.  This is equation
+    \texttt{WIsom} in \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace functional is nonzero on the identity.  Extend the identity to
+    a basis adapted to the kernel of the trace; all remaining basis vectors
+    are therefore traceless.  The bilinear pairing
+    $(X,Y)\mapsto\tr(XY)$ is nondegenerate.  Its dual basis gives the virtual
+    coefficients by physical contraction.  The dual vector paired with the
+    identity is $d^{-1}\Id$, so its virtual coefficient is precisely $E$.
+    Expanding matrix units in the dual basis yields the decomposition.
+    Subtracting the trace component gives the equivalent residual formula.
+\end{proof}
+
+\begin{theorem}[Multilinear physical contraction]
+    \label{thm:mpu_multilinear_physical_contraction}
+    \lean{MPOTensor.trace_prod_contractPhysical_of_mpo_eq_one,
+        MPOTensor.IsMPU.trace_prod_contractPhysical_doubleLayerTensor}
+    \leanok
+    \uses{def:mpu,def:mpu_double_layer}
+    Suppose a length-$N$ closed tensor equals the physical identity.  For
+    arbitrary physical matrices $X_0,\ldots,X_{N-1}$,
+    \begin{align}
+      \tr\!\left(\prod_{k=0}^{N-1}
+        \operatorname{contr}_{\rm phys}(\mathcal W,X_k)\right)
+        &=\prod_{k=0}^{N-1}\tr(X_k).
+    \end{align}
+    In particular this applies to the double layer of an MPU whenever $N>1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand each contraction and distribute the ordered product.  The closed
+    tensor coefficient is a Kronecker delta between the two physical words,
+    so only equal words survive.  The remaining independent diagonal sums
+    factor into the product of the physical traces.
+\end{proof}
+
+\begin{theorem}[Mixed residual traces and the rank-one sandwich]
+    \label{thm:mpu_mixed_residual_trace}
+    \lean{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero,
+        MPOTensor.rankOne_sandwich_eq_zero_of_mixed_trace}
+    \leanok
+    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,
+        thm:mpu_normalized_transfer_stabilization}
+    Every closed product containing at least one residual coefficient has
+    zero trace.  In the formal MPU interface this conclusion is obtained for
+    lengths $N>1$, because MPU unitarity is assumed at exactly those lengths;
+    the source states the mixed identity for every positive length, including
+    one residual letter.  If the stabilized transfer operator is rank one,
+    $E=|\rho)(\Phi|$, then every mixed word $P$ satisfying the corresponding
+    trace identity obeys
+    \begin{align}
+        EPE&=0.
+    \end{align}
+    This is equation \texttt{ESE=0} in
+    \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_multilinear_physical_contraction}
+    Represent identity factors by $d^{-1}\Id$ and residual factors by their
+    traceless physical arguments.  The multilinear identity vanishes because
+    one factor on the right has trace zero.  Finally,
+    \begin{align}
+        |\rho)(\Phi|P|\rho)(\Phi|
+          &=\tr\!\left(P|\rho)(\Phi|\right)|\rho)(\Phi|,
+    \end{align}
+    and the scalar trace is zero.
+\end{proof}
+
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
 For the transfer-matrix spectrum argument of

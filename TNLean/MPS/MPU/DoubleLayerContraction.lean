@@ -1,0 +1,519 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import Mathlib.LinearAlgebra.BilinearForm.Properties
+import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixTracePairing
+import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPU.Simple
+import TNLean.MPS.MPU.TransferStabilization
+
+/-!
+# Double-layer blocking and mixed physical contractions
+
+This file formalizes the first algebraic part of the blocking argument in
+arXiv:1703.09188, Proposition `blockingsimple`, lines 390--409.
+-/
+
+open scoped Matrix BigOperators Kronecker
+open Matrix
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- Physical blocking commutes with the physical adjoint. The equality is
+literal: both operations preserve the order of the virtual word.
+
+Source: arXiv:1703.09188, lines 390--405. -/
+theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
+    physicalAdjointTensor (blockTensor U L) =
+      blockTensor (physicalAdjointTensor U) L := by
+  funext I K
+  ext β α
+  rw [blockTensor_apply]
+  have h := evalWord_physicalAdjointTensor U
+    (MPSTensor.wordOfBlock d L I) (MPSTensor.wordOfBlock d L K) (by simp)
+  rw [h]
+  rfl
+
+/-- Physical blocking commutes with formation of the physical-adjoint double
+layer. This is the local compatibility used when applying `WIsom` after
+blocking.
+
+Source: arXiv:1703.09188, lines 390--405. -/
+theorem doubleLayerTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
+    doubleLayerTensor (blockTensor U L) = blockTensor (doubleLayerTensor U) L := by
+  rw [doubleLayerTensor, doubleLayerTensor, blockTensor_mulTensor,
+    physicalAdjointTensor_blockTensor]
+
+/-- A physical matrix basis whose distinguished vector is the identity and all
+other vectors are traceless. This is the physical basis in `WIsom`.
+
+Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
+theorem exists_identity_traceless_basis [NeZero d] :
+    ∃ (b : Module.Basis (Fin (d * d)) ℂ (Matrix (Fin d) (Fin d) ℂ))
+      (e : Fin (d * d)),
+      b e = 1 ∧ ∀ a, a ≠ e → Matrix.trace (b a) = 0 := by
+  let tr := Matrix.traceLinearMap (Fin d) ℂ ℂ
+  have htr : tr (1 : Matrix (Fin d) (Fin d) ℂ) ≠ 0 := by
+    simp [tr, Matrix.traceLinearMap_apply, Matrix.trace_one, Fintype.card_fin,
+      NeZero.ne d]
+  obtain ⟨s, b, e, he, hcoord⟩ := exists_basis_of_pairing_ne_zero htr
+  letI : Fintype s := FiniteDimensional.fintypeBasisIndex b
+  have hcard : Fintype.card s = d * d := by
+    rw [← Module.finrank_eq_card_basis b, Module.finrank_matrix]
+    simp
+  let es : s ≃ Fin (d * d) := Fintype.equivFinOfCardEq hcard
+  let b' := b.reindex es
+  let e' := es e
+  refine ⟨b', e', ?_, ?_⟩
+  · simp [b', e', he]
+  · intro a hae
+    have hne : es.symm a ≠ e := by
+      intro h
+      apply hae
+      simpa [e'] using congrArg es h
+    have h := congrArg (fun f : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] ℂ ↦
+      f (b (es.symm a))) hcoord
+    simp only [LinearMap.smul_apply, smul_eq_mul, Module.Basis.coord_apply,
+      Module.Basis.repr_self, Finsupp.single_apply, if_neg hne] at h
+    simpa [b', tr, Matrix.traceLinearMap_apply] using h
+
+/-- Contract the two physical legs of an MPO letter against a physical matrix.
+The transpose in the coefficient makes `contractPhysical W (single j i 1) = W i j`.
+
+Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
+noncomputable def contractPhysical (W : MPOTensor d D)
+    (X : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  ∑ i : Fin d, ∑ j : Fin d, (X j i) • W i j
+
+@[simp] theorem contractPhysical_single (W : MPOTensor d D) (i j : Fin d) :
+    contractPhysical W (Matrix.single j i 1) = W i j := by
+  classical
+  simp only [contractPhysical]
+  rw [Finset.sum_eq_single i]
+  · rw [Finset.sum_eq_single j]
+    · simp
+    · intro b _ hb
+      simp [Matrix.single, Ne.symm hb]
+    · simp
+  · intro a _ ha
+    simp [Matrix.single, Ne.symm ha]
+  · simp
+
+/-- Physical contraction is linear in the physical matrix. -/
+noncomputable def contractPhysicalLinear (W : MPOTensor d D) :
+    Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ where
+  toFun := contractPhysical W
+  map_add' X Y := by simp [contractPhysical, add_smul, Finset.sum_add_distrib]
+  map_smul' c X := by simp [contractPhysical, smul_smul, Finset.smul_sum]
+
+@[simp] theorem contractPhysicalLinear_apply (W : MPOTensor d D)
+    (X : Matrix (Fin d) (Fin d) ℂ) :
+    contractPhysicalLinear W X = contractPhysical W X := rfl
+
+/-- The normalized physical diagonal of an MPO tensor. -/
+noncomputable def normalizedDiagonal (W : MPOTensor d D) :
+    Matrix (Fin D) (Fin D) ℂ :=
+  (d : ℂ)⁻¹ • contractPhysical W 1
+
+/-- The normalized diagonal turns physical blocking into matrix powers. The
+blocked physical index is reindexed explicitly through `decodeBlockEquiv`.
+-/
+theorem normalizedDiagonal_blockTensor [NeZero d] (L : ℕ)
+    (W : MPOTensor d D) :
+    normalizedDiagonal (blockTensor W L) = normalizedDiagonal W ^ L := by
+  classical
+  have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
+  have hdim : (MPSTensor.blockPhysDim d L : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ L := by
+    rw [MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
+  simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
+    one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, if_true,
+    blockTensor_apply, hdim]
+  have hsum := (MPSTensor.decodeBlockEquiv d L).sum_comp
+    (fun σ ↦ evalWord W (List.ofFn σ) (List.ofFn σ))
+  simp only [MPSTensor.decodeBlockEquiv_apply] at hsum
+  change ((d : ℂ)⁻¹) ^ L •
+      (∑ x, evalWord W (List.ofFn (MPSTensor.decodeBlock d L x))
+        (List.ofFn (MPSTensor.decodeBlock d L x))) = _
+  rw [hsum]
+  simp only [evalWord_ofFn]
+  have hprod := List.prod_ofFn_sum (fun _ : Fin L ↦ fun i : Fin d ↦ W i i)
+  rw [← hprod]
+  rw [smul_pow]
+  congr 1
+  simp [List.ofFn_const]
+
+/-- The normalized diagonal of the physical-adjoint double layer is the
+normalized transfer matrix, with the row and column pair indices explicitly
+encoded by `finProdFinEquiv`.
+
+Source: arXiv:1703.09188, equations `eq:transfer-op` and `WIsom`, lines
+336--340 and 390--395. -/
+theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
+    normalizedDiagonal (doubleLayerTensor U) =
+      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+  classical
+  have hd : (0 : ℝ) < d := by
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
+  have hnorm : ((Real.sqrt d : ℂ)⁻¹) * ((Real.sqrt d : ℂ)⁻¹) = (d : ℂ)⁻¹ := by
+    rw [← mul_inv, ← Complex.ofReal_mul, Real.mul_self_sqrt hd.le]
+    simp
+  ext p q
+  rcases finProdFinEquiv.surjective p with ⟨⟨p₁, p₂⟩, rfl⟩
+  rcases finProdFinEquiv.surjective q with ⟨⟨q₁, q₂⟩, rfl⟩
+  simp only [normalizedDiagonal, contractPhysical, doubleLayerTensor_apply,
+    normalizedFlattening, MPSTensor.transferMap_apply, transferMatrix,
+    Matrix.submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
+    physicalAdjointTensor_apply, Matrix.kronecker_apply,
+    Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul,
+    MPOTensor.toMPSTensor]
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.single,
+    Matrix.of_apply, ite_and, Finset.mul_sum, Finset.sum_mul]
+  simp only [RCLike.star_def, ite_mul, one_mul, zero_mul, mul_ite, mul_zero,
+    Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq',
+    Finset.mem_univ, ↓reduceIte, Matrix.smul_apply, smul_eq_mul, mul_one,
+    star_mul', star_inv₀, Complex.conj_ofReal, Finset.sum_ite_eq]
+  let g : Fin d × Fin d → ℂ := fun x ↦
+    ((Real.sqrt d : ℂ)⁻¹) * U x.1 x.2 p₂ q₂ *
+      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U x.1 x.2 p₁ q₁))
+  let f : Fin (d * d) → ℂ := fun x ↦
+    ((Real.sqrt d : ℂ)⁻¹) * U x.divNat x.modNat p₂ q₂ *
+      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U x.divNat x.modNat p₁ q₁))
+  calc
+    (∑ i : Fin d, ∑ j : Fin d,
+        (d : ℂ)⁻¹ * ((starRingEnd ℂ) (U j i p₁ q₁) * U j i p₂ q₂)) =
+        ∑ x : Fin d × Fin d, g x := by
+      rw [Finset.sum_comm, Fintype.sum_prod_type]
+      apply Finset.sum_congr rfl
+      intro i _
+      apply Finset.sum_congr rfl
+      intro j _
+      simp only [g]
+      rw [← hnorm]
+      ring
+    _ = ∑ x : Fin (d * d), f x := by
+      exact Fintype.sum_equiv finProdFinEquiv g f (by
+        intro x
+        have hx := finProdFinEquiv.symm_apply_apply x
+        have hx₁ := congrArg Prod.fst hx
+        have hx₂ := congrArg Prod.snd hx
+        change (finProdFinEquiv x).divNat = x.1 at hx₁
+        change (finProdFinEquiv x).modNat = x.2 at hx₂
+        simp only [g, f]
+        rw [hx₁, hx₂])
+    _ = _ := rfl
+
+/-- The exact normalized diagonal after blocking is the corresponding power of
+the normalized transfer matrix. Both sides use the explicit encoding
+`Fin D × Fin D ≃ Fin (D * D)` in the same orientation.
+
+Source: arXiv:1703.09188, lines 397--405. -/
+theorem normalizedDiagonal_doubleLayerTensor_blockTensor [NeZero d]
+    (U : MPOTensor d D) (L : ℕ) :
+    normalizedDiagonal (doubleLayerTensor (blockTensor U L)) =
+      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ L).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [doubleLayerTensor_blockTensor, normalizedDiagonal_blockTensor L,
+    normalizedDiagonal_doubleLayerTensor]
+  let E := transferMatrix (MPSTensor.transferMap U.normalizedFlattening)
+  change (E.submatrix finProdFinEquiv.symm finProdFinEquiv.symm) ^ L =
+    (E ^ L).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  induction L with
+  | zero =>
+      simp [Matrix.submatrix_one_equiv]
+  | succ L ih =>
+      rw [pow_succ, pow_succ, ih]
+      exact Matrix.submatrix_mul_equiv (E ^ L) E
+        finProdFinEquiv.symm finProdFinEquiv.symm finProdFinEquiv.symm
+
+
+/-- At the MPU stabilization exponent, the normalized blocked double-layer
+diagonal is the explicitly reindexed rank-one transfer projector.
+
+Source: arXiv:1703.09188, lines 397--405. -/
+theorem IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D) :
+    normalizedDiagonal
+        (doubleLayerTensor (MPOTensor.blockTensor U
+          (hU.normalizedTransferStabilization hD).exponent)) =
+      (Matrix.vecMulVec
+        (hU.normalizedTransferStabilization hD).right
+        (hU.normalizedTransferStabilization hD).left).submatrix
+          finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [normalizedDiagonal_doubleLayerTensor_blockTensor]
+  rw [(hU.normalizedTransferStabilization hD).power_eq]
+
+
+/-- A residual physical slice: subtract the identity coefficient from a physical
+contraction. This is the basis-free form of the residual matrices `S_α` in
+`WIsom`.
+
+Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
+noncomputable def residualSlice [NeZero d] (W : MPOTensor d D)
+    (X : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
+  contractPhysical W X - Matrix.trace X • normalizedDiagonal W
+
+@[simp] theorem residualSlice_one [NeZero d] (W : MPOTensor d D) :
+    residualSlice W 1 = 0 := by
+  simp [residualSlice, normalizedDiagonal, Matrix.trace_one, Fintype.card_fin,
+    NeZero.ne d]
+
+/-- Projection of a physical matrix onto the traceless hyperplane along the identity. -/
+noncomputable def tracelessPart [NeZero d] (X : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin d) (Fin d) ℂ :=
+  X - ((d : ℂ)⁻¹ * Matrix.trace X) • 1
+
+@[simp] theorem trace_tracelessPart [NeZero d]
+    (X : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace (tracelessPart X) = 0 := by
+  simp only [tracelessPart, Matrix.trace_sub, Matrix.trace_smul, Matrix.trace_one,
+    Fintype.card_fin, smul_eq_mul]
+  field_simp [Nat.cast_ne_zero.mpr (NeZero.ne d)]
+  ring_nf
+
+/-- Residual slices are exactly contractions against traceless physical matrices. -/
+theorem residualSlice_eq_contractPhysical_tracelessPart [NeZero d]
+    (W : MPOTensor d D) (X : Matrix (Fin d) (Fin d) ℂ) :
+    residualSlice W X = contractPhysical W (tracelessPart X) := by
+  change contractPhysical W X - Matrix.trace X • ((d : ℂ)⁻¹ • contractPhysical W 1) =
+    contractPhysicalLinear W (X - (((d : ℂ)⁻¹ * Matrix.trace X) • 1))
+  rw [map_sub, map_smul]
+  simp only [contractPhysicalLinear_apply, smul_smul]
+  congr 1
+  ring
+
+/-- Source-facing `WIsom` decomposition. There is a physical basis `σ` with a
+distinguished identity vector and traceless remaining vectors, and virtual
+coefficients `S`, such that every double-layer letter is the identity term
+plus the residual basis terms. The coefficients are constructed by contracting
+against the trace-dual basis.
+
+Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
+theorem exists_identity_add_traceless_decomposition [NeZero d]
+    (W : MPOTensor d D) :
+    ∃ (σ : Module.Basis (Fin (d * d)) ℂ (Matrix (Fin d) (Fin d) ℂ))
+      (e : Fin (d * d)) (S : Fin (d * d) → Matrix (Fin D) (Fin D) ℂ),
+      σ e = 1 ∧
+      (∀ a, a ≠ e → Matrix.trace (σ a) = 0) ∧
+      S e = normalizedDiagonal W ∧
+      ∀ i j, W i j =
+        (if i = j then normalizedDiagonal W else 0) +
+          ∑ a ∈ (Finset.univ.erase e), (σ a i j) • S a := by
+  obtain ⟨σ, e, he, htr⟩ := exists_identity_traceless_basis (d := d)
+  let B := Matrix.traceBilinForm (Fin d)
+  have hB : B.Nondegenerate := Matrix.traceBilinForm_nondegenerate
+  let τ := B.dualBasis hB σ
+  let S : Fin (d * d) → Matrix (Fin D) (Fin D) ℂ := fun a ↦ contractPhysical W (τ a)
+  have hτe : τ e = ((d : ℂ)⁻¹) • (1 : Matrix (Fin d) (Fin d) ℂ) := by
+    apply τ.ext_elem
+    intro a
+    rw [τ.repr_self, Finsupp.single_apply]
+    rw [LinearMap.BilinForm.dualBasis_repr_apply]
+    simp only [B, Matrix.traceBilinForm_apply, Matrix.smul_mul, Matrix.trace_smul,
+      Matrix.one_mul, smul_eq_mul]
+    by_cases hae : a = e
+    · subst a
+      rw [he, Matrix.trace_one, Fintype.card_fin, if_pos rfl]
+      field_simp [Nat.cast_ne_zero.mpr (NeZero.ne d)]
+    · rw [htr a hae, mul_zero, if_neg (Ne.symm hae)]
+  have hSe : S e = normalizedDiagonal W := by
+    simp only [S, hτe, normalizedDiagonal]
+    change contractPhysicalLinear W (((d : ℂ)⁻¹) • 1) = _
+    rw [map_smul]
+    rfl
+  have hfull (i j : Fin d) : W i j = ∑ a : Fin (d * d), (σ a i j) • S a := by
+    have hexpand := τ.sum_repr (Matrix.single j i (1 : ℂ))
+    calc
+      W i j = contractPhysicalLinear W (Matrix.single j i (1 : ℂ)) := by simp
+      _ = contractPhysicalLinear W
+          (∑ a : Fin (d * d), (τ.repr (Matrix.single j i (1 : ℂ)) a) • τ a) := by
+            rw [hexpand]
+      _ = ∑ a : Fin (d * d), (σ a i j) • S a := by
+            simp only [map_sum, map_smul, contractPhysicalLinear_apply, S]
+            apply Finset.sum_congr rfl
+            intro a _
+            congr 1
+            rw [LinearMap.BilinForm.dualBasis_repr_apply]
+            simp [B, Matrix.traceBilinForm_apply, Matrix.trace_single_mul]
+  refine ⟨σ, e, S, he, htr, hSe, ?_⟩
+  intro i j
+  rw [hfull i j, ← Finset.add_sum_erase _ _ (Finset.mem_univ e), hSe]
+  simp [he, Matrix.one_apply]
+
+/-- Multilinear extraction from a closed MPO identity. Contracting every physical
+site against `X k` turns the closed virtual product into the product of the
+physical traces.
+
+The assumption `1 < N` matches the local `IsMPU` API; the algebraic statement
+itself only needs the displayed closed-chain equality.
+
+Source: arXiv:1703.09188, lines 405--410. -/
+theorem trace_prod_contractPhysical_of_mpo_eq_one
+    (W : MPOTensor d D) {N : ℕ}
+    (hW : mpo W N = (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace (List.ofFn (fun k ↦ contractPhysical W (X k))).prod =
+      ∏ k, Matrix.trace (X k) := by
+  classical
+  change Matrix.trace
+      (List.ofFn (fun k ↦ ∑ i : Fin d, ∑ j : Fin d, ((X k) j i) • W i j)).prod = _
+  rw [List.prod_ofFn_sum]
+  simp_rw [List.prod_ofFn_sum]
+  change Matrix.trace
+      (∑ σ : Fin N → Fin d, ∑ τ : Fin N → Fin d,
+        (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k) (τ k))).prod) = _
+  rw [Finset.sum_comm]
+  have hdistrib :
+      Matrix.trace
+          (∑ τ : Fin N → Fin d, ∑ σ : Fin N → Fin d,
+            (List.ofFn (fun k ↦ ((X k) (τ k) (σ k)) • W (σ k) (τ k))).prod) =
+        ∑ τ : Fin N → Fin d, ∑ σ : Fin N → Fin d,
+          (∏ k, (X k) (τ k) (σ k)) *
+            Matrix.trace (List.ofFn (fun k ↦ W (σ k) (τ k))).prod := by
+    rw [Matrix.trace_sum]
+    apply Finset.sum_congr rfl
+    intro τ _
+    rw [Matrix.trace_sum]
+    apply Finset.sum_congr rfl
+    intro σ _
+    rw [List.prod_ofFn_smul, Matrix.trace_smul]
+    rfl
+  rw [hdistrib]
+  have hentry (σ τ : Fin N → Fin d) :
+      Matrix.trace (List.ofFn (fun k ↦ W (σ k) (τ k))).prod =
+        if σ = τ then 1 else 0 := by
+    have h := congrArg (fun M ↦ M σ τ) hW
+    simpa [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply] using h
+  simp_rw [hentry]
+  simp only [mul_ite, mul_one, mul_zero]
+  simp_rw [Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  simp only [Matrix.trace, Matrix.diag]
+  exact (Fintype.prod_sum (fun k i ↦ (X k) i i)).symm
+
+/-- The multilinear contraction identity for the double layer of an MPU. -/
+theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor
+    {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 1 < N)
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace
+        (List.ofFn (fun k ↦ contractPhysical (doubleLayerTensor U) (X k))).prod =
+      ∏ k, Matrix.trace (X k) := by
+  apply trace_prod_contractPhysical_of_mpo_eq_one
+  rw [mpo_doubleLayerTensor, hU.conjTranspose_mpo_mul_mpo hN]
+
+/-- A family of physical contractions has zero closed virtual trace as soon as
+one physical factor is traceless. -/
+theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_trace_eq_zero
+    {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 1 < N)
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ)
+    (hX : ∃ k, Matrix.trace (X k) = 0) :
+    Matrix.trace
+        (List.ofFn (fun k ↦ contractPhysical (doubleLayerTensor U) (X k))).prod = 0 := by
+  rw [hU.trace_prod_contractPhysical_doubleLayerTensor hN]
+  obtain ⟨k, hk⟩ := hX
+  exact Finset.prod_eq_zero (Finset.mem_univ k) hk
+
+/-- Every nonempty closed word of residual slices has zero trace at lengths
+controlled by `IsMPU`. The formal API assumes `N > 1`; the paper states the
+corresponding identity for every positive length.
+
+Source: arXiv:1703.09188, lines 405--410. -/
+theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 1 < N)
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+    Matrix.trace
+        (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor U) (X k))).prod = 0 := by
+  simp_rw [residualSlice_eq_contractPhysical_tracelessPart]
+  apply hU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_trace_eq_zero hN
+  let k : Fin N := ⟨0, by omega⟩
+  exact ⟨k, trace_tracelessPart (X k)⟩
+
+/-- A site is either the normalized identity coefficient or a residual slice. -/
+noncomputable def mixedResidualFactor [NeZero d] (W : MPOTensor d D)
+    (isResidual : Bool) (X : Matrix (Fin d) (Fin d) ℂ) :
+    Matrix (Fin D) (Fin D) ℂ :=
+  if isResidual then residualSlice W X else normalizedDiagonal W
+
+/-- Every mixed closed word containing at least one residual factor has zero
+trace. This is the basis-free residual-slice form of the mixed `S'_α` trace
+identity. The formal statement uses `N > 1`, exactly matching `IsMPU`; the
+paper states the corresponding identity at every positive length.
+
+Source: arXiv:1703.09188, lines 405--410. -/
+theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN : 1 < N)
+    (isResidual : Fin N → Bool)
+    (X : Fin N → Matrix (Fin d) (Fin d) ℂ)
+    (hmixed : ∃ k, isResidual k = true) :
+    Matrix.trace
+        (List.ofFn (fun k ↦ mixedResidualFactor (doubleLayerTensor U)
+          (isResidual k) (X k))).prod = 0 := by
+  let Y : Fin N → Matrix (Fin d) (Fin d) ℂ := fun k ↦
+    if isResidual k then tracelessPart (X k) else ((d : ℂ)⁻¹) • 1
+  have hfactor (k : Fin N) :
+      mixedResidualFactor (doubleLayerTensor U) (isResidual k) (X k) =
+        contractPhysical (doubleLayerTensor U) (Y k) := by
+    simp only [mixedResidualFactor, Y]
+    by_cases hk : isResidual k = true
+    · simp only [hk, ↓reduceIte,
+        residualSlice_eq_contractPhysical_tracelessPart]
+    · have hk' : isResidual k = false := Bool.eq_false_of_not_eq_true hk
+      simp only [hk', Bool.false_eq, normalizedDiagonal]
+      change ((d : ℂ)⁻¹) • contractPhysical (doubleLayerTensor U) 1 =
+        contractPhysicalLinear (doubleLayerTensor U) (((d : ℂ)⁻¹) • 1)
+      rw [map_smul]
+      rfl
+  simp_rw [hfactor]
+  apply hU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_trace_eq_zero hN
+  obtain ⟨k, hk⟩ := hmixed
+  refine ⟨k, ?_⟩
+  simp [Y, hk]
+
+/-- Rank-one sandwiching is scalar multiplication by the corresponding trace. -/
+theorem vecMulVec_mul_mul_vecMulVec_eq_trace_smul
+    {n : Type*} [Fintype n] (ρ Φ : n → ℂ) (P : Matrix n n ℂ) :
+    Matrix.vecMulVec ρ Φ * P * Matrix.vecMulVec ρ Φ =
+      Matrix.trace (P * Matrix.vecMulVec ρ Φ) • Matrix.vecMulVec ρ Φ := by
+  classical
+  have hscalar : (Φ ᵥ* P) ⬝ᵥ ρ =
+      Matrix.trace (P * Matrix.vecMulVec ρ Φ) := by
+    simp only [Matrix.vecMul, dotProduct, Matrix.trace, Matrix.diag,
+      Matrix.mul_apply, Matrix.vecMulVec_apply]
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    intro j _
+    ring
+  rw [Matrix.vecMulVec_mul, Matrix.vecMulVec_mul_vecMulVec, hscalar,
+    Matrix.vecMulVec_smul]
+
+/-- A vanishing mixed trace through a rank-one projector implies the exact
+rank-one sandwich identity used after transfer stabilization. -/
+theorem vecMulVec_mul_mul_vecMulVec_eq_zero_of_trace
+    {n : Type*} [Fintype n] (ρ Φ : n → ℂ) (P : Matrix n n ℂ)
+    (hP : Matrix.trace (P * Matrix.vecMulVec ρ Φ) = 0) :
+    Matrix.vecMulVec ρ Φ * P * Matrix.vecMulVec ρ Φ = 0 := by
+  rw [vecMulVec_mul_mul_vecMulVec_eq_trace_smul, hP, zero_smul]
+
+/-- The rank-one sandwich consequence for a mixed residual word. The middle
+matrix may be any mixed word whose trace against the rank-one transfer
+projector vanishes; `trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero`
+supplies that hypothesis in the MPU application.
+
+Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
+theorem rankOne_sandwich_eq_zero_of_mixed_trace
+    {n : Type*} [Fintype n] (E P : Matrix n n ℂ) (ρ Φ : n → ℂ)
+    (hE : E = Matrix.vecMulVec ρ Φ)
+    (htrace : Matrix.trace (P * E) = 0) :
+    E * P * E = 0 := by
+  subst E
+  exact vecMulVec_mul_mul_vecMulVec_eq_zero_of_trace ρ Φ P htrace
+
+end MPOTensor
