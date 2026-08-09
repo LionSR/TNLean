@@ -109,10 +109,11 @@ private theorem HasThreeForm.residual_mul
 private theorem pow_eq_self_of_pos {E : B} (hE : E * E = E)
     {N : ℕ} (hN : 0 < N) : E ^ N = E := by
   obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
+  clear hN
   induction N with
   | zero => simp
   | succ N ih =>
-      rw [pow_succ, ih (by omega), hE]
+      rw [pow_succ, ih, hE]
 
 
 private theorem list_prod_mem_of_ne_nil
