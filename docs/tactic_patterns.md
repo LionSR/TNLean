@@ -359,7 +359,7 @@ abstracted — record why, so it is not re-proposed).
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
   deriving positivity of `L`, casting `1 ≤ L`, and clearing the positive denominator.
-- **Reuse:** the private file-local lemma `martingaleCoefficient_le_one` in
+- **Reuse:** the private file-local lemma `martingale_coefficient_le_one` in
   `TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean` uses Mathlib's
   `div_le_one` to reduce the estimate to `1 ≤ 4 * L`.
 - **Result:** four explicit gap-bound reductions now share the same coefficient

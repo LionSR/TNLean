@@ -168,7 +168,7 @@ theorem parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds
       (fun i : Fin N => localTermES A L i)
       (fun i : Fin N => localTermES_isSymmetricProjection A L i) c hRow hCol hAnti v)
 
-private lemma martingaleCoefficient_le_one (L : ℕ) (hL : 1 < L) :
+private lemma martingale_coefficient_le_one (L : ℕ) (hL : 1 < L) :
     ((1 : ℝ) / (4 * (L : ℝ))) ≤ 1 := by
   have hLpos : (0 : ℝ) < (L : ℝ) := by
     exact_mod_cast Nat.zero_lt_of_lt hL
@@ -203,7 +203,7 @@ theorem parentHamiltonianES_gap_bound_of_ordered_local_term_bounds
           ‖parentHamiltonianES A L N v‖ := by
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
-  have hγle := martingaleCoefficient_le_one L hL
+  have hγle := martingale_coefficient_le_one L hL
   exact parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds
     A L N hγle (c N) (hRow N hLN) (hCross N hLN) v
 
@@ -239,7 +239,7 @@ theorem parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds
           ‖parentHamiltonianES A L N v‖ := by
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
-  have hγle := martingaleCoefficient_le_one L hL
+  have hγle := martingale_coefficient_le_one L hL
   exact parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds
     A L N hγle (c N) (hRow N hLN) (hCol N hLN) (hAnti N hLN) v
 
@@ -324,7 +324,7 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator
           ‖parentHamiltonianES A L N v‖ := by
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
-  have hγle := martingaleCoefficient_le_one L hL
+  have hγle := martingale_coefficient_le_one L hL
   have hm : 0 < 2 * (L - 1) :=
     Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
   exact parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator
@@ -465,7 +465,7 @@ theorem parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term
           ‖parentHamiltonianES A L N v‖ := by
   refine parentHamiltonianES_gap_bound_of_quadratic_form A L hL ?_
   intro N hLN v
-  have hγle := martingaleCoefficient_le_one L hL
+  have hγle := martingale_coefficient_le_one L hL
   have hm : 0 < 2 * (L - 1) :=
     Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)
   exact parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term
