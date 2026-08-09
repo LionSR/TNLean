@@ -119,7 +119,7 @@ lemma A_map_star (k : Fin 4) : (A k).map (starRingEnd ℂ) = A k := by
     simp [A, Matrix.map_apply, starRingEnd_apply]
 
 lemma A_trace (k : Fin 4) : Matrix.trace (A k) = if k = 0 ∨ k = 1 then (4/5 : ℂ) else 0 := by
-  fin_cases k <;> simp [A, Matrix.trace] <;> norm_num
+  fin_cases k <;> simp [A, Matrix.trace]
 
 /-! ### The MPO tensor (undone-vertical reading) -/
 
@@ -133,7 +133,6 @@ view gives the MPO tensor `R^{pq}_{ab} = (25/32)·B^{ab}_{pq}`, i.e.
 `(p₁,p₂) = bondEquiv⁻¹ p` etc.
 
 Source: arXiv:1606.00608, lines 995--1010 (project example). -/
-
 @[simp] lemma bondEquiv_symm_val (k : Fin 4) : bondEquiv.symm k =
     match k with
     | 0 => ((0 : Fin 2), (0 : Fin 2))
@@ -168,12 +167,12 @@ lemma physTraceTransfer_R_entry (a b : Fin 4) : physTraceTransfer R a b =
   -- Expand the Kronecker product: (A a)(i₁,j₁)*conj(A b)(i₂,j₂)
   fin_cases a <;> fin_cases b <;>
     simp [R_apply, Fin.sum_univ_four, Matrix.kroneckerMap_apply,
-      A_map_star, Matrix.map_apply, starRingEnd_apply,
-      A, Matrix.trace, bondEquiv_symm_val] <;> norm_num
+      starRingEnd_apply, A, Matrix.trace, bondEquiv_symm_val] <;> norm_num
 
 /-- The physical-trace transfer of `R` is idempotent: it is the rank-one
-projector $(25/32)\,|t\rangle\langle t|$ with $t_a = \operatorname{tr}(A^a) = (4/5, 4/5, 0, 0)$.  This is
-the literal zero-correlation-length identity of arXiv:1606.00608,
+projector $(25/32)\,|t\rangle\langle t|$ with
+$t_a = \operatorname{tr}(A^a) = (4/5, 4/5, 0, 0)$.  This is the literal
+zero-correlation-length identity of arXiv:1606.00608,
 Definition 4.2, lines 735--741 (project example). -/
 theorem physTraceTransfer_R_idempotent :
     physTraceTransfer R * physTraceTransfer R = physTraceTransfer R := by
@@ -259,7 +258,7 @@ lemma oneLabelChiScaled_posEntries {s : ℝ} (hs : 0 < s) :
   fin_cases k
   · simp [oneLabelChiScaled, hs]
   · have hlam : (0 : ℝ) < lambda := by norm_num [lambda]
-    simp [oneLabelChiScaled]
+    change (0 : ℂ) < (s : ℂ) * (lambda : ℂ)
     rw [show (s : ℂ) * (lambda : ℂ) = ((s * lambda : ℝ) : ℂ) by norm_cast]
     exact_mod_cast mul_pos hs hlam
 
