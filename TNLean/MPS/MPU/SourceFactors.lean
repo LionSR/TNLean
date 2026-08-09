@@ -8,6 +8,7 @@ import TNLean.Algebra.MatrixUnitaryBetween
 import TNLean.Analysis.MatrixSqrt
 import TNLean.MPS.MPU.SourceCuts
 import Mathlib.Analysis.Matrix.Order
+import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!
 # Source factorizations of a matrix product unitary tensor
@@ -96,6 +97,14 @@ structure SourceCutSVD {α β : Type*} [Fintype α] [Fintype β]
   V_coisometry : V.IsCoisometry
   /-- The right SVD matrix is a row coisometry. -/
   U_coisometry : U.IsCoisometry
+  /-- The singular-value matrix is diagonal. -/
+  diagonal_isDiag : diagonal.IsDiag
+  /-- Every retained singular value is strictly positive. -/
+  diagonal_posDef : diagonal.PosDef
+  /-- The inverse singular-value matrix is diagonal. -/
+  inverseDiagonal_isDiag : inverseDiagonal.IsDiag
+  /-- Every inverse singular value is strictly positive. -/
+  inverseDiagonal_posDef : inverseDiagonal.PosDef
   /-- The diagonal singular-value matrix cancels its inverse. -/
   diagonal_mul_inverseDiagonal : diagonal * inverseDiagonal = 1
 
@@ -119,6 +128,18 @@ private noncomputable def productCompactSVD
   have hU : U'.IsCoisometry := by
     apply Matrix.IsCoisometry.reindex S.U
     exact S.U_mul_conjTranspose
+  have hdiagonal_isDiag : diagonal.IsDiag := by
+    change (S.diagonal.submatrix rankEquiv.symm rankEquiv.symm).IsDiag
+    exact (Matrix.isDiag_diagonal _).submatrix rankEquiv.symm.injective
+  have hdiagonal_posDef : diagonal.PosDef := by
+    change (S.diagonal.submatrix rankEquiv.symm rankEquiv.symm).PosDef
+    exact S.diagonal_posDef.submatrix rankEquiv.symm.injective
+  have hinverseDiagonal_isDiag : inverseDiagonal.IsDiag := by
+    change (S.inverseDiagonal.submatrix rankEquiv.symm rankEquiv.symm).IsDiag
+    exact (Matrix.isDiag_diagonal _).submatrix rankEquiv.symm.injective
+  have hinverseDiagonal_posDef : inverseDiagonal.PosDef := by
+    change (S.inverseDiagonal.submatrix rankEquiv.symm rankEquiv.symm).PosDef
+    exact S.inverseDiagonal_posDef.submatrix rankEquiv.symm.injective
   have hdiagonal : diagonal * inverseDiagonal = 1 := by
     change Matrix.reindexLinearEquiv ℂ ℂ rankEquiv rankEquiv S.diagonal *
       Matrix.reindexLinearEquiv ℂ ℂ rankEquiv rankEquiv S.inverseDiagonal = 1
@@ -143,7 +164,9 @@ private noncomputable def productCompactSVD
             Matrix.reindexLinearEquiv ℂ ℂ _ _ S.diagonal *
             Matrix.reindexLinearEquiv ℂ ℂ _ _ S.U
         rw [Matrix.reindexLinearEquiv_mul, Matrix.reindexLinearEquiv_mul]
-  exact ⟨V, U', diagonal, inverseDiagonal, hfactorization, hV, hU, hdiagonal⟩
+  exact ⟨V, U', diagonal, inverseDiagonal, hfactorization, hV, hU,
+    hdiagonal_isDiag, hdiagonal_posDef, hinverseDiagonal_isDiag,
+    hinverseDiagonal_posDef, hdiagonal⟩
 
 /-- The product-index compact SVD of the first source cut, with intermediate dimension $r$.
 This is arXiv:1703.09188, `eq:sf-svd` for $\mathcal M_1$ (lines 479--486). -/

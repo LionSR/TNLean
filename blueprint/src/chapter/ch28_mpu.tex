@@ -516,6 +516,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
+    \uses{def:mpu_source_weight}
     The Kronecker product of the positive-definite matrices $\rho$ and
     $\Id_d$ is positive definite.
 \end{proof}
@@ -582,7 +583,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_source_svd_data,thm:mpu_source_gram_posdef}
+    \uses{def:mpu_source_weight,def:mpu_source_svd_data,
+        thm:mpu_source_gram_posdef}
     Since $A$ is positive definite, its support projection is the identity and
     \begin{align}
         A^{-1/2}A^{1/2}&=\Id_r,
