@@ -286,21 +286,27 @@ The earlier doubly-normalized declarations remain available as special-purpose
 siblings.
 
 This normalization relaxation has not yet been threaded through the global
-change-of-cut and kernel statements.  Those declarations still use the
-left-canonical source hypothesis when they propagate the cyclic local
+change-of-cut and kernel statements.  Those declarations remain honestly
+restricted to the doubly-normalized specialization: in addition to
+$\sum_aA^j_aA^{j\dagger}_a=I$, they assume
+$\sum_aA^{j\dagger}_aA^j_a=I$, which specializes the positive dual fixed point
+to $\Lambda^j=I$.  Under that extra identity they propagate the cyclic local
 constraints to
 \begin{align}
   \mathcal K_{N,L}(\widehat A)\subseteq
   S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
 \end{align}
-and when they make the sum defining $S_N$ internal.\footnote{Lean declarations:
+and make the sum defining $S_N$ internal.\footnote{Lean declarations:
 \leanid{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
 \leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
 and
 \leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}.}
-The global boundary threading is therefore the remaining normalization-scope
-step; the completed source-shaped tuple-span layer alone does not establish the
-full unrestricted parent-Hamiltonian theorem.
+Threading the positive dual data through the global change-of-cut and kernel
+capstones remains open in
+\href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}; it is not
+completed by the source-shaped tuple-span and one-step intersection layer above.
+Consequently the full unrestricted parent-Hamiltonian theorem is not yet
+established.
 
 Earlier conditional reductions isolated the source comparison in the coordinates
 obtained by opening the periodic boundary for boundary-crossing windows. Suppose
