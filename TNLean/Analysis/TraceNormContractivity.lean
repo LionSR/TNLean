@@ -53,13 +53,17 @@ requires no continuity hypothesis because the spectrum of a matrix is finite.
   contractivity, generalizes Eq. (8.79) to maps with scaled trace.
 * `Matrix.traceNorm_map_sub_map_le_of_doeblin` — Wolf Theorem 8.17
   (quantum Doeblin), Eq. (8.82).
+* `Matrix.choiMatrix_tracePrepareMap` — the rectangular Choi matrix
+  of the trace-prepare map is $(1/d)(Y \otimes \mathbf{1})$.
+* `Matrix.traceNorm_map_sub_map_le_of_choi_domination` — Wolf Eq. (8.86):
+  Choi-dominated Doeblin contraction.
 
 ## References
 
 Michael M. Wolf, *Quantum Channels & Operations: Guided Tour* (July 5, 2012),
 Chapter 8, Theorems 8.16 and 8.17 (printed numbering);
-Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 898-918 (Thm. 8.16)
-and 943-969 (Thm. 8.17).
+Notes/WolfNoteTexSource/ch08_distance_measures.tex lines 898-918 (Thm. 8.16),
+943-969 (Thm. 8.17), and 971-979 (Eq. (8.86)).
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder
@@ -449,7 +453,7 @@ map `T'(X) = tr[X]·Y` has Choi matrix `(1/d)(Y ⊗ 𝟙)` in the output-factor-
 tensor order of `ChoiRectangular.choiMatrix`.
 
 `Notes/WolfNoteTexSource/ch08_distance_measures.tex`, line 973. -/
-theorem choiMatrix_tracePrepareMap [NeZero d]
+lemma choiMatrix_tracePrepareMap [NeZero d]
     (Y : Matrix (Fin d') (Fin d') ℂ) :
     ChoiRectangular.choiMatrix (tracePrepareMap (α := Fin d) Y) =
       (1 / (d : ℂ)) • (kroneckerMap (· * ·) Y (1 : Matrix (Fin d) (Fin d) ℂ)) := by
