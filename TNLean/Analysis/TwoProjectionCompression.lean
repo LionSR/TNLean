@@ -138,8 +138,6 @@ private theorem friedrichs_anticommutator_reduced
   have hsumProj : ‖x‖ ^ 2 + ‖y‖ ^ 2 ≤ (1 + η) * ‖v‖ ^ 2 := by
     let S := ‖x‖ ^ 2 + ‖y‖ ^ 2
     have hS : 0 ≤ S := add_nonneg (sq_nonneg _) (sq_nonneg _)
-    have hsumNormNonneg : 0 ≤ ‖x + y‖ := norm_nonneg _
-    have hvNormNonneg : 0 ≤ ‖v‖ := norm_nonneg _
     have hηone : 0 ≤ 1 + η := by linarith
     by_cases hS0 : S = 0
     · rw [show ‖x‖ ^ 2 + ‖y‖ ^ 2 = 0 from hS0]
@@ -175,7 +173,6 @@ private theorem friedrichs_anticommutator_reduced
   have heSq : (1 - η) * (‖a‖ ^ 2 + ‖b‖ ^ 2) ≤ ‖e‖ ^ 2 := by
     have hc : 0 ≤ 1 - η := sub_nonneg.mpr hηle
     have hQ : 0 ≤ ‖a‖ ^ 2 + ‖b‖ ^ 2 := add_nonneg (sq_nonneg _) (sq_nonneg _)
-    have heNorm : 0 ≤ ‖e‖ := norm_nonneg _
     have hvNorm : 0 ≤ ‖v‖ := norm_nonneg _
     by_cases hv0 : ‖v‖ = 0
     · have hv : v = 0 := norm_eq_zero.mp hv0
