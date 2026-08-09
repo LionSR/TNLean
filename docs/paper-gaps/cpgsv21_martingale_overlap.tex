@@ -494,10 +494,16 @@ and cannot substitute for the inverse-Gram formula.
 What remains open is the source-specific FNW comparison of the inverse-Gram
 range projectors on the two overlapping physical windows.  In particular, the
 present infrastructure does not prove the contraction
-$a_l(1+a_l)/(1-a_l)$, does not identify the physical projector with a transfer
-fixed-point projector, and does not establish the final numerical overlap or
-spectral-gap bound.  That load-bearing overlapping-window estimate remains the
-MPS-specific task tracked in issue \#5752.
+\[
+  c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
+  \qquad c\lambda^l<1,
+\]
+which appears as equation \path{boundAm} in
+\cite[Section~6]{Nachtergaele1996Spectral}, does not identify the physical
+projector with a transfer fixed-point projector, and does not establish the
+final numerical overlap or spectral-gap bound.  That load-bearing
+overlapping-window estimate remains the MPS-specific task tracked in issue
+\#5752.
 
 \textbf{Verdict:} open gap.
 
