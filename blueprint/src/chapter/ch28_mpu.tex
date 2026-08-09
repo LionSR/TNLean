@@ -165,3 +165,94 @@ closing a chain of $N$ copies of $\mathcal U$.
     configurations.  If $N>1$ and $L>0$, then $NL>1$, so $U^{(NL)}$ is
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
+
+We now introduce the two matrices used for the singular-value decompositions of
+a Matrix Product Unitary tensor in Section~III of \cite{Cirac2017MPU}.  Write
+$\mathcal U^i_{j,\alpha,\beta}$ for the entries of the tensor, where $i,j$ are
+physical indices and $\alpha,\beta$ are auxiliary indices.
+
+\begin{definition}[First matrix associated to a Matrix Product Unitary tensor]
+    \label{def:mpu_source_matrix_one}
+    \lean{MPOTensor.sourceCutM₁}
+    \leanok
+    The matrix $M_1$ is obtained by combining the left auxiliary index with the
+    lower physical index, and the upper physical index with the right auxiliary
+    index. Thus
+    \begin{align}
+        (M_1)_{(\alpha,j),(i,\beta)}
+        &= \mathcal U^i_{j,\alpha,\beta}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Second matrix associated to a Matrix Product Unitary tensor]
+    \label{def:mpu_source_matrix_two}
+    \lean{MPOTensor.sourceCutM₂}
+    \leanok
+    The matrix $M_2$ is obtained by combining the left auxiliary index with the
+    upper physical index, and the lower physical index with the right auxiliary
+    index. Thus
+    \begin{align}
+        (M_2)_{(\alpha,i),(j,\beta)}
+        &= \mathcal U^i_{j,\alpha,\beta}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Right rank]
+    \label{def:mpu_right_rank}
+    \lean{MPOTensor.rightRank}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    The right rank is
+    \begin{align}
+        r &= \operatorname{rank}(M_1).
+    \end{align}
+\end{definition}
+
+\begin{definition}[Left rank]
+    \label{def:mpu_left_rank}
+    \lean{MPOTensor.leftRank}
+    \leanok
+    \uses{def:mpu_source_matrix_two}
+    The left rank is
+    \begin{align}
+        \ell &= \operatorname{rank}(M_2).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Right-rank bound]
+    \label{thm:mpu_right_rank_bound}
+    \lean{MPOTensor.rightRank_bound}
+    \leanok
+    \uses{def:mpu_right_rank}
+    If the physical and auxiliary dimensions are $d$ and $D$, respectively,
+    then
+    \begin{align}
+        r &\leq Dd.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    The matrix $M_1$ has $Dd$ rows and $dD$ columns, so its rank is at most
+    $Dd$.
+\end{proof}
+
+\begin{theorem}[Left-rank bound]
+    \label{thm:mpu_left_rank_bound}
+    \lean{MPOTensor.leftRank_bound}
+    \leanok
+    \uses{def:mpu_left_rank}
+    If the physical and auxiliary dimensions are $d$ and $D$, respectively,
+    then
+    \begin{align}
+        \ell &\leq Dd.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_matrix_two}
+    The matrix $M_2$ has $Dd$ rows and $dD$ columns, so its rank is at most
+    $Dd$.
+\end{proof}
