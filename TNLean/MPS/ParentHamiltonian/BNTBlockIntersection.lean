@@ -221,8 +221,12 @@ self-overlap normalization, and pairwise gauge-phase inequivalence pass to the
 prepared family. The sharp tuple span is then transported back to the source
 representatives.
 
-This is the normalization change used in PGVWC07, Theorem 12: the source blocks
-need not also satisfy the left-canonical identity. -/
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+The positive dual datum used for the prepared gauge is supplied by the canonical
+normalization theorem at lines 742--763. These line numbers refer to
+`Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this result
+establishes only the fixed-length tuple span; it does not establish the global-cut
+or parent-Hamiltonian kernel conclusions. -/
 theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -337,7 +341,14 @@ all lengths above the sharp BNT bound.
 The positive dual fixed points are used only to prepare a left-canonical gauge
 for the base separation theorem. The resulting base span is transported back,
 and the source identity \(\sum_a A^j_aA^{j\dagger}_a=I\) propagates it to
-longer words. No diagonality hypothesis on the dual fixed points is needed. -/
+longer words. No diagonality hypothesis on the dual fixed points is needed.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+The positive dual datum used for the prepared gauge is supplied by the canonical
+normalization theorem at lines 742--763. These line numbers refer to
+`Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this result
+establishes only the propagated tuple span; it does not establish the global-cut
+or parent-Hamiltonian kernel conclusions. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -448,7 +459,14 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
       A hr hIrr hLeft hOverlap hBlocks hBlk0 hL₀ hUnital hn)
 
 /-- Under the PGVWC07 source normalization, the block local spaces form an
-internal direct sum throughout the sharp source range. -/
+internal direct sum throughout the sharp source range.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+The positive dual datum used to reach the prepared canonical gauge is supplied
+by the canonical normalization theorem at lines 742--763. These line numbers
+refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this
+result establishes only independence of the block local spaces; it does not
+establish the global-cut or parent-Hamiltonian kernel conclusions. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
@@ -575,7 +593,14 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_p
 
 /-- The PGVWC07 one-step restriction-intersection identity holds under the
 source unital normalization and positive dual fixed points, without a
-left-canonical hypothesis on the source representatives. -/
+left-canonical hypothesis on the source representatives.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
+The positive dual datum used to reach the prepared canonical gauge is supplied
+by the canonical normalization theorem at lines 742--763. These line numbers
+refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this
+result establishes only the one-step restriction-intersection identity; it does
+not establish the global-cut or parent-Hamiltonian kernel conclusions. -/
 theorem
     pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

@@ -402,32 +402,47 @@ direct.
     \label{lem:pgvwc_prepared_gauge_product_span}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
     \leanok
-    \uses{thm:tp_gauge_from_adjoint_fixed,
-        thm:word_tuple_span_gauge_invariance,
-        lem:bnt_direct_sum_block_separation_word_span}
-    Let $r\ge2$. For each block $A^j$, suppose that $\Lambda^j$ is positive
-    definite and
+    \uses{def:blockwise_product_word_span,
+        def:blocks_not_gauge_phase_equiv}
+    Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
+    Suppose that every block $A^j$ is irreducible, that
+    $O_{A^jA^j}(N)\longrightarrow1$, and that no two distinct blocks of the
+    same bond dimension are gauge-phase equivalent. Let $L_0>0$, and suppose
+    that, for every $j$,
+    \begin{align}
+        \spn\{A^j_w:|w|=L_0\}
+        &=\MN{D_j}, \notag\\
+        \spn\{A^j_w:|w|=L_0+1\}
+        &=\MN{D_j}, \notag\\
+        \spn\{A^j_w:|w|=3(L_0+1)\}
+        &=\MN{D_j}. \notag
+    \end{align}
+    For every $j$, let $\Lambda^j$ be positive definite and satisfy
     \begin{align}
         \sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
     \end{align}
-    Gauge $A^j$ temporarily by $(\Lambda^j)^{1/2}$. The resulting block is
-    left-canonical, so the sharp three-block separation argument applies in
-    that gauge. Transporting its conclusion back gives
+    Then
     \begin{align}
         \spn\{(A^1_w,\ldots,A^r_w):|w|=3(r-1)(L_0+1)\}
         &=\prod_j\MN{D_j}. \notag
     \end{align}
-    Diagonality of $\Lambda^j$ is not needed for this argument.
+    Diagonality of $\Lambda^j$ is not needed.
 \end{lemma}
 
 \begin{proof}
     \leanok
+    \uses{lem:tp_gauge_equiv,
+        thm:tp_gauge_from_adjoint_fixed,
+        thm:gauge_invariance,
+        lem:gauge_invariance_block_injective,
+        lem:bnt_direct_sum_block_separation_word_span,
+        thm:word_tuple_span_gauge_invariance}
     The square-root gauge is invertible by positive definiteness, and the dual
     fixed-point equation makes the prepared blocks left-canonical. Similarity
-    preserves irreducibility, fixed-length injectivity, closed self-overlaps,
+    preserves irreducibility, fixed-length injectivity, normalized self-overlaps,
     and pairwise inequivalence up to gauge and phase. Apply the existing sharp
     separation theorem to the prepared family and then use
-    Lemma~\ref{thm:word_tuple_span_gauge_invariance} in the reverse direction.
+    Theorem~\ref{thm:word_tuple_span_gauge_invariance} in the reverse direction.
 \end{proof}
 
 \begin{lemma}[Simultaneous product span at the source length]
@@ -435,13 +450,21 @@ direct.
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{lem:unital_simultaneous_product_span_propagation,
-        lem:pgvwc_prepared_gauge_product_span}
-    Let $r\ge2$. Suppose that the BNT blocks are injective at the common length
-    $L_0>0$ and, for every $j$, satisfy the PGVWC07 canonical data
+    \uses{def:blockwise_product_word_span,
+        def:blocks_not_gauge_phase_equiv,
+        def:ground_space_parent}
+    Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
+    Suppose that every block $A^j$ is irreducible, that
+    $O_{A^jA^j}(N)\longrightarrow1$, and that no two distinct blocks of the
+    same bond dimension are gauge-phase equivalent. Let $L_0>0$, and suppose
+    that every block is injective at length $L_0$:
+    \begin{align}
+        \spn\{A^j_w:|w|=L_0\}&=\MN{D_j}. \notag
+    \end{align}
+    For every $j$, let $\Lambda^j$ be positive definite and assume the PGVWC07
+    canonical identities
     \begin{align}
         \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
-        &\Lambda^j&>0,
         &\sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
     \end{align}
     For every $n\ge 3(r-1)(L_0+1)$, one has
@@ -483,8 +506,7 @@ direct.
     \label{thm:pgvwc_direct_sum_intersection_source_length}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{lem:pgvwc_product_span_source_length,
-        lem:block_restriction_intersection_subspace}
+    \uses{def:ground_space_parent}
     Under the hypotheses of
     Lemma~\ref{lem:pgvwc_product_span_source_length}, let
     $m\ge3(r-1)(L_0+1)+1$. Then
