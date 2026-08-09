@@ -524,7 +524,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{def:mpu_weighted_source_factors}
     \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
         MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁,
-        MPOTensor.sourceGram₁_posDef, MPOTensor.sourceX₁,
+        MPOTensor.sourceX₁,
         MPOTensor.sourceY₁, MPOTensor.sourceZ₁, MPOTensor.sourceX₂,
         MPOTensor.sourceY₂, MPOTensor.sourceZ₂, MPOTensor.sourceX₁_apply,
         MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
@@ -556,6 +556,25 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Equations~\textup{eq:sf-svd}--\textup{Z1Z2}]{Cirac2017MPU}.
 \end{definition}
 
+\begin{theorem}[Positivity of the first source normalization matrix]
+    \label{thm:mpu_source_gram_posdef}
+    \lean{MPOTensor.sourceGram₁_posDef}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,thm:mpu_source_weight_posdef}
+    If $\rho$ is positive definite, then
+    \begin{align}
+        A=V_1W_\rho V_1^\dagger
+    \end{align}
+    is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The map $V_1^\dagger$ is injective because $V_1V_1^\dagger=\Id_r$.
+    Positive definiteness of $W_\rho$ is therefore preserved by this
+    congruence.
+\end{proof}
+
 \begin{theorem}[Source-cut factorizations]
     \label{thm:mpu_source_factorizations}
     \lean{MPOTensor.sourceCutM₁_eq_sourceX₁_mul_sourceY₁,
@@ -581,10 +600,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_compact_svd}
-    The inverse square root and square root of $A$ cancel in the first
-    product. The second product is its compact singular-value decomposition.
-    The entry formulas follow from the definitions of $M_1$ and $M_2$.
+    \uses{def:mpu_weighted_source_factors}
+    The source-factor construction includes the two matrix identities
+    \begin{align}
+        M_1&=X_1Y_1, &M_2&=X_2Y_2.
+    \end{align}
+    Evaluating them at $((\alpha,j),(i,\beta))$ and
+    $((\alpha,i),(j,\beta))$, respectively, gives the entry formulas.
 \end{proof}
 
 \begin{theorem}[Source-factor normalizations]
@@ -604,10 +626,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_source_weight_posdef}
-    Since $A=V_1W_\rho V_1^\dagger$ is positive definite,
-    $A^{-1/2}AA^{-1/2}=\Id_r$. The second identity is
-    $V_2V_2^\dagger=\Id_\ell$.
+    \uses{def:mpu_weighted_source_factors}
+    These are the normalization identities carried by the source-factor
+    construction:
+    \begin{align}
+        X_1^\dagger W_\rho X_1&=\Id_r,
+        &X_2^\dagger X_2&=\Id_\ell.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Right inverses of the source factors]
@@ -625,8 +650,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    The coisometry identities cancel $U_iU_i^\dagger$, the positive diagonal
-    matrices cancel their inverses, and $A^{1/2}A^{-1/2}=\Id_r$.
+    \uses{def:mpu_weighted_source_factors}
+    These are the right-inverse identities carried by the source-factor
+    construction:
+    \begin{align}
+        Y_1Z_1&=\Id_r, &Y_2Z_2&=\Id_\ell.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Right-rank bound]

@@ -25,6 +25,8 @@ normalized for the ordinary inner product.
 ## Main definitions
 
 * `MPOTensor.sourceWeight`: the product-index matrix $\rho\otimes I_d$.
+* `MPOTensor.SourceCutSVD`, `MPOTensor.sourceSVD₁`, `MPOTensor.sourceSVD₂`: the two
+  product-index compact singular-value decompositions.
 * `MPOTensor.SourceFactors`: the six factors together with their source-cut factorizations,
   normalization identities, and right-inverse identities.
 * `MPOTensor.sourceGram₁`: the positive normalization matrix for the first source cut.
@@ -39,8 +41,14 @@ normalized for the ordinary inner product.
   and first normalization matrix.
 * `MPOTensor.sourceX₁_apply`, `sourceY₁_apply`, `sourceZ₁_apply`, `sourceX₂_apply`,
   `sourceY₂_apply`, `sourceZ₂_apply`: stable entry formulas for all six factors.
+* `MPOTensor.sourceCutM₁_eq_sourceX₁_mul_sourceY₁`,
+  `MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂`: the exact source-cut factorizations.
 * `MPOTensor.sourceX₁_mul_sourceY₁_apply`, `MPOTensor.sourceX₂_mul_sourceY₂_apply`: the
   entry formulas identifying the two graphical source decompositions with the tensor entries.
+* `MPOTensor.sourceX₁_weighted_isometry`, `MPOTensor.sourceX₂_isometry`: the two left-factor
+  normalizations.
+* `MPOTensor.sourceY₁_mul_sourceZ₁`, `MPOTensor.sourceY₂_mul_sourceZ₂`: the two right-inverse
+  identities.
 
 ## References
 
