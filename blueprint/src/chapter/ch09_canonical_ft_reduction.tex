@@ -260,7 +260,8 @@ sector maps. The cyclic projections come from
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:blocked_tensor, thm:transfer_peripheral_cyclic_structure}
+    \uses{def:blocked_tensor, def:same_mpv2, def:transfer_map,
+        def:left_canonical_tensor, def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible tensor. Then there is a
     period-removing length $m\ge1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
@@ -291,8 +292,12 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    The cyclic decomposition of the adjoint transfer map gives projections
-    $(P_k)$ with $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating the cyclic relation
+    \uses{thm:transfer_peripheral_cyclic_structure,
+        thm:cyclic_decomposition_irreducible_schwarz,
+        thm:adjoint_fixed_projection_block_decomp_isometry}
+    The peripheral cyclic-structure theorem identifies the period and its
+    primitive root. The cyclic decomposition of the adjoint transfer map gives
+    projections $(P_k)$ with $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating the cyclic relation
     $m$ times gives $(\E_{A^\dagger})^m(P_k)=P_k$, and the blocked-transfer
     identity
     $\E_{(A^{[m]})^\dagger}=(\E_{A^\dagger})^m$

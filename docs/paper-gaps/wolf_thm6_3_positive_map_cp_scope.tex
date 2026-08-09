@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{./command.tex}
+
+\title{Complete-Positivity Scope of the Fixed-Point Case of Wolf Theorem 6.3}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The source theorem}
+
+Wolf Theorem~6.3(2), at lines 112--116 of
+\path{Notes/WolfNotePDF/wolf_ch6_sections.txt}, concerns an irreducible positive
+map $T:M_D(\mathbb C)\to M_D(\mathbb C)$. It states that the spectral radius is
+a simple eigenvalue with a strictly positive eigenvector. In particular, if a
+nonzero positive semidefinite matrix $\rho$ satisfies $T(\rho)=\rho$, then
+$\rho$ is positive definite. Complete positivity is not assumed.
+
+\section{The restriction in the formalization}
+
+The declaration
+\leanid{posDef_of_posSemidef_fixedPoint_irreducible_cp} in
+\path{TNLean/Channel/Irreducible/FixedPoint.lean} proves the fixed-point
+consequence for an irreducible completely positive map. Its proof uses support
+invariance for completely positive maps: the support projection of $\rho$
+defines an invariant compression, and irreducibility forces that projection to
+be the identity. Thus the conclusion agrees with the fixed-point specialization
+of Wolf Theorem~6.3(2), but the formal hypothesis is stronger than the source
+hypothesis.
+
+\section{Elimination plan}
+
+Prove support invariance, or an equivalent kernel-invariance statement, for an
+arbitrary positive map. Irreducibility would then force the support of every
+nonzero positive semidefinite fixed point to be all of $\mathbb C^D$, giving the
+source-general fixed-point theorem. The present completely positive theorem
+should remain as a specialization of that result.
+
+\section{Verdict}
+
+\textbf{Verdict: scope restriction.} The formal declaration proves the
+completely positive specialization of the fixed-point consequence of Wolf
+Theorem~6.3(2). The extension from completely positive maps to arbitrary
+positive maps remains open.
+
+\end{document}
