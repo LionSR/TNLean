@@ -381,7 +381,7 @@ abstracted — record why, so it is not re-proposed).
   `PhysicalSupportProductTransport.lean`, and
   `reindex_physicalCoordinateMatrixN_windowComplement` in
   `PhysicalSectorProductTransport.lean`. Across the three Lean files, the final diff is
-  54 insertions and 87 deletions, a net reduction of 33 lines.
+  64 insertions and 87 deletions, a net reduction of 23 lines.
 
 ### Product-marginal support kernel
 - **Pattern:** the simultaneous marginal-support whitening proof and the
