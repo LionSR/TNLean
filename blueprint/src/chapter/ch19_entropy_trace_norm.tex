@@ -430,12 +430,14 @@ Theorem~\ref{thm:trace_norm_abs}.
       lem:positive_part_support_projection}
     Let $\Pi_+$ be the support projection of $(TH)^+$ from
     Lemma~\ref{lem:positive_part_support_projection}, so that
-    $\Pi_+ T(H)=Q_+$ and $0\leq\Pi_+\leq\Id$.  The estimate follows
+    $\Pi_+ T(H) = (T(H))^+$ and $0\leq\Pi_+\leq\Id$.  The estimate follows
     from the chain
-    $\tr[(TH)^+]=\tr[\Pi_+ T(H^+-H^-)]
-      =\tr[\Pi_+ T(H^+)]-\tr[\Pi_+ T(H^-)]
-      \leq\tr[\Pi_+ T(H^+)]
-      \leq\tr[T(H^+)]$,
+    \begin{align}
+        \tr[(TH)^+] &= \tr[\Pi_+ T(H^+-H^-)] \notag\\
+        &= \tr[\Pi_+ T(H^+)] - \tr[\Pi_+ T(H^-)] \notag\\
+        &\leq \tr[\Pi_+ T(H^+)] \notag\\
+        &\leq \tr[T(H^+)] ,
+    \end{align}
     using Lemmas~\ref{lem:psd_trace_pairing_bounds}
     and~\ref{lem:positive_map_hermitian}.
 \end{proof}

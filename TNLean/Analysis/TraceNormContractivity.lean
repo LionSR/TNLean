@@ -202,7 +202,6 @@ lemma isHermitian_map_of_positive
   exact ((hpos _ (nonneg_iff_posSemidef.mp (CFC.posPart_nonneg H))).isHermitian).sub
     ((hpos _ (nonneg_iff_posSemidef.mp (CFC.negPart_nonneg H))).isHermitian)
 
-
 /-- **Common projection estimate**: For a positive linear map `T` and a Hermitian
 matrix `H`, the real part of the trace of the positive part of `T H` is bounded
 above by the real part of the trace of `T H⁺`.  This factors the shared
@@ -303,12 +302,11 @@ theorem traceNorm_map_sub_map_le_of_positive_of_tracePreserving
   exact traceNorm_map_le_of_positive_of_tracePreserving hpos htr
     (h₁.isHermitian.sub h₂.isHermitian)
 
-
 /-! ### Generalized scaled-trace contractivity
 
 These lemmas generalize the trace-preserving contractivity results (Wolf
 Theorem 8.16) to positive linear maps whose trace scales by a nonnegative
-real factor `c`: $(T \rho).\operatorname{tr} = c \cdot \rho.\operatorname{tr}$.
+real factor `c`: $\operatorname{tr}[T(\rho)] = c \cdot \operatorname{tr}[\rho]$.
 
 They are used in the quantum Doeblin argument (Wolf
 Theorem 8.17) where the scaled map is $S = T - \varepsilon T'$ with
@@ -323,9 +321,9 @@ Generalizes `re_trace_posPart_map_le` from the trace-preserving case
 
 Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
 and is used for Theorem 8.17 (lines 943–969).  The hypothesis `c ≥ 0`
-is not consumed by the projection calculation itself but is retained
-for API consistency with the downstream scaled trace-norm and Doeblin
-theorems, where the scale is a nonnegative contraction coefficient. -/
+is not consumed by the projection calculation itself but is imposed
+because the scale is a nonnegative contraction coefficient in the
+downstream scaled trace-norm and Doeblin theorems. -/
 lemma re_trace_posPart_map_le_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
