@@ -9,7 +9,6 @@ import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.RescalingStableChiUniformity
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCanonicalForm
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
-import TNLean.Spectral.MPVOverlapTrace
 
 /-!
 # Explicit vertical BNT clause for the rescaling-stable example
@@ -84,14 +83,11 @@ def aIndex : Fin 2 → Fin 2 → Fin 4
   | 0, 1 => 2
   | 1, 0 => 3
 
-@[simp] theorem aRow_aIndex (r c : Fin 2) : aRow (aIndex r c) = r := by
+@[simp] private theorem aRow_aIndex (r c : Fin 2) : aRow (aIndex r c) = r := by
   fin_cases r <;> fin_cases c <;> rfl
 
-@[simp] theorem aCol_aIndex (r c : Fin 2) : aCol (aIndex r c) = c := by
+@[simp] private theorem aCol_aIndex (r c : Fin 2) : aCol (aIndex r c) = c := by
   fin_cases r <;> fin_cases c <;> rfl
-
-theorem sVal_aIndex_ne_zero (r c : Fin 2) : sVal (aIndex r c) ≠ 0 :=
-  sVal_ne_zero _
 
 /-- Each matrix unit occurs as a nonzero scaled component letter. -/
 theorem exists_verticalComponent_eq_smul_single (p q : Fin 4) :
@@ -514,24 +510,24 @@ noncomputable def R_oneLabelBNTAlgebraTensorClause : BNTAlgebraTensorClause R wh
   coeffs := oneLabelCoeffs
   algebraClause := R_oneLabelAlgebraClause
 
+/-- The explicit BNT algebra tensor clause for `R` has one label. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_labelCount :
     R_oneLabelBNTAlgebraTensorClause.labelCount = 1 := rfl
 
+/-- The tensor in the unique BNT label is the normalized vertical component. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_tensor (α : Fin 1) :
     R_oneLabelBNTAlgebraTensorClause.tensor α = verticalComponent := rfl
 
+/-- The unique vertical multiplicity weight is `25/32`. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_weight (α : Fin 1) (q : Fin 1) :
     R_oneLabelBNTAlgebraTensorClause.weight α q = 25 / 32 := rfl
 
+/-- The explicit clause uses the coefficient family `oneLabelCoeffs`. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_coeffs :
     R_oneLabelBNTAlgebraTensorClause.coeffs = oneLabelCoeffs := rfl
 
+/-- The positive trace-power family in the explicit clause is `oneLabelChi`. -/
 @[simp] theorem R_oneLabelBNTAlgebraTensorClause_chi :
     R_oneLabelBNTAlgebraTensorClause.algebraClause.positiveChi.chi = oneLabelChi := rfl
-
-/-- `R` admits the explicit one-label BNT algebra tensor clause. -/
-theorem R_hasExplicitOneLabelBNTAlgebraTensorClause :
-    HasBNTAlgebraTensorClause R :=
-  ⟨R_oneLabelBNTAlgebraTensorClause⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP
