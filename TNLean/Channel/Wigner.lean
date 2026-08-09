@@ -10,5 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.Channel.Wigner.ProjectiveCarrierBridge
 import TNLean.Channel.Wigner.ProjectivePureState
+import TNLean.Channel.Wigner.PureStateCharpoly
 import TNLean.Channel.Wigner.Rigidity
 import TNLean.Channel.Wigner.Upstream
