@@ -34,6 +34,36 @@ def IsFriedrichsBound (U V : Submodule ℂ E) (η : ℝ) : Prop :=
     ∀ y : E, y ∈ V → y ∈ (U ⊓ V)ᗮ →
       ‖⟪x, y⟫_ℂ‖ ≤ η * ‖x‖ * ‖y‖
 
+/-- An operator-norm bound for the defect of two orthogonal ground-space
+projections bounds their Friedrichs overlap.
+
+This is the abstract projector interface for Nachtergaele's martingale
+condition C3 in arXiv:cond-mat/9410110, eq. (2.4): after the common ground
+space is removed, the defect operator is the product of the two reduced
+projections. -/
+theorem isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le
+    (U V : Submodule ℂ E) {η : ℝ}
+    (hDefect : ‖U.starProjection ∘L V.starProjection -
+      (U ⊓ V).starProjection‖ ≤ η) :
+    IsFriedrichsBound U V η := by
+  have hη : 0 ≤ η := (norm_nonneg _).trans hDefect
+  intro x hxU _ y hyV hyInter
+  have hyVproj : V.starProjection y = y := V.starProjection_eq_self_iff.mpr hyV
+  have hyInterProj : (U ⊓ V).starProjection y = 0 :=
+    (U ⊓ V).starProjection_apply_eq_zero_iff.mpr hyInter
+  have hProj : ‖U.starProjection y‖ ≤ η * ‖y‖ := by
+    have hApply := ContinuousLinearMap.le_of_opNorm_le
+      (U.starProjection ∘L V.starProjection - (U ⊓ V).starProjection) hDefect y
+    simpa [hyVproj, hyInterProj] using hApply
+  calc
+    ‖⟪x, y⟫_ℂ‖ = ‖⟪U.starProjection x, y⟫_ℂ‖ := by
+      rw [U.starProjection_eq_self_iff.mpr hxU]
+    _ = ‖⟪x, U.starProjection y⟫_ℂ‖ := by
+      rw [U.inner_starProjection_left_eq_right]
+    _ ≤ ‖x‖ * ‖U.starProjection y‖ := norm_inner_le_norm _ _
+    _ ≤ ‖x‖ * (η * ‖y‖) := mul_le_mul_of_nonneg_left hProj (norm_nonneg x)
+    _ = η * ‖x‖ * ‖y‖ := by ring
+
 private theorem starProjection_mem_orthogonal_of_le
     (U W : Submodule ℂ E) (hWU : W ≤ U) {v : E} (hvW : v ∈ Wᗮ) :
     U.starProjection v ∈ Wᗮ := by

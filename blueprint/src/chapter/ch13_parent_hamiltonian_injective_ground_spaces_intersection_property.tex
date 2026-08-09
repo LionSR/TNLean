@@ -396,6 +396,47 @@
     two states coincide, so $\psi$ lies in $G_{K+L_0+1}(A)$.
 \end{proof}
 
+\begin{definition}[Open-chain left and tail ground subspaces]
+    \label{def:open_chain_ground_subspaces_es}
+    \lean{MPSTensor.openChainLeftGroundSpaceES,
+        MPSTensor.openChainTailGroundSpaceES,
+        MPSTensor.openChainLeftGroundProjectionES,
+        MPSTensor.openChainTailGroundProjectionES,
+        MPSTensor.mem_openChainLeftGroundSpaceES_iff,
+        MPSTensor.mem_openChainTailGroundSpaceES_iff}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    In the Hilbert space of an open chain, let
+    $\mathcal U_{K,L_0}(A)$ be the subspace satisfying the ground condition on
+    the first $K+L_0$ sites, and let $\mathcal V_{K,L_0}(A)$ be the subspace
+    satisfying the ground condition on the last $L_0+1$ sites. Equivalently,
+    membership is tested by fixing respectively the final site or every
+    prefix of length $K$ and applying the corresponding restriction map.
+\end{definition}
+
+\begin{theorem}[Open-chain left--tail ground-space intersection]
+    \label{thm:open_chain_left_tail_ground_intersection}
+    \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es,
+        thm:ground_space_extend_right_block_injective}
+    If $A$ is $L_0$-block-injective and $L_0>0$, then
+    \begin{align}
+        \mathcal U_{K,L_0}(A)\cap\mathcal V_{K,L_0}(A)
+        &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A). \notag
+    \end{align}
+    In Nachtergaele's notation, with $n=K+L_0$ and $l=L_0$, this is the
+    common range identity for $G_{\Lambda_n}$ and
+    $G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$ inside $\Lambda_{n+1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The forward inclusion is the growing-back step at the injectivity length.
+    Conversely, a vector in the longer ground space remains in the ground
+    space after every left or tail restriction.
+\end{proof}
+
 \begin{theorem}[Open-chain iteration of the intersection property]%
     \label{thm:normal_open_chain_range_reduction}
     \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
