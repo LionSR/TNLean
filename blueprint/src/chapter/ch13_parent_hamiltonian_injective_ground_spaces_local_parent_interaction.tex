@@ -276,8 +276,8 @@ orthogonal projector is the canonical representative used here.
       \label{eq:gram_reshuffle_matrix_entries}
     \end{align}
     The operator $\mathscr R(\mathcal L)$ on
-    $\ell^2(\Fin{D}\times\Fin{D})$ is then the Euclidean CLM of this matrix:
-    $\mathscr R(\mathcal L):=\operatorname{toEuclideanCLM}(R(\mathcal L))$.
+    $\ell^2(\Fin{D}\times\Fin{D})$ is represented by the matrix $R(\mathcal L)$
+    in the standard orthonormal basis.
     Thus the row--column pair $((b,a),(e,c))$ is sent explicitly to the Choi
     row--column pair $((c,e),(a,b))$.
 \end{definition}
@@ -316,10 +316,10 @@ orthogonal projector is the canonical representative used here.
     The sum of squared entry norms of $R(\mathcal L)$ equals that of the
     rectangular Choi matrix:
     \begin{align}
-      \sum_{p:(\alpha\times\alpha)\times(\alpha\times\alpha)}
+      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
       \bigl\|R(\mathcal L)_{p_1,p_2}\bigr\|^2
       &=
-      \sum_{p:(\alpha\times\alpha)\times(\alpha\times\alpha)}
+      \sum_{p:(\Fin{D}\times\Fin{D})\times(\Fin{D}\times\Fin{D})}
       \bigl\|J(\mathcal L)_{p_1,p_2}\bigr\|^2.
       \label{eq:gram_reshuffle_matrix_norm_sq}
     \end{align}
@@ -330,7 +330,7 @@ orthogonal projector is the canonical representative used here.
 \begin{proof}
     \leanok
     \uses{def:gram_reshuffle}
-    The map $((b,a),(e,c))\mapsto((c,e),(a,b))$ is a fixed-point-free involution
+    The map $((b,a),(e,c))\mapsto((c,e),(a,b))$ is an involution (bijection)
     on the product index space.  Reindexing the sum of squared norms by this
     involution yields the claimed equality.
 \end{proof}
