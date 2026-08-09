@@ -17,6 +17,7 @@ entrywise Frobenius mass. It also applies the bound to the reshuffled Choi matri
 
 - `Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq`
 - `Matrix.sum_entry_norm_sq_le_card_mul_norm_sq`
+- `Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq`
 - `Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq`
 -/
 
@@ -85,15 +86,20 @@ theorem sum_entry_norm_sq_le_card_mul_norm_sq (A : Matrix α α ℂ) :
       Finset.sum_le_sum fun j _ ↦ sum_column_norm_sq_le_norm_sq A j
     _ = (Fintype.card α : ℝ) * ‖A‖ ^ 2 := by simp
 
-/-- Every complex matrix unit has L² operator norm at most one. -/
-theorem single_one_norm_le_one (i j : α) :
-    ‖(single i j 1 : Matrix α α ℂ)‖ ≤ 1 := by
-  rw [l2_opNorm_def]
-  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x ↦ ?_
-  change ‖(EuclideanSpace.equiv α ℂ).symm (single i j 1 *ᵥ x)‖ ≤ 1 * ‖x‖
-  rw [single_mulVec]
-  change ‖EuclideanSpace.single i ((1 : ℂ) * x.ofLp j)‖ ≤ 1 * ‖x‖
-  simpa using PiLp.norm_apply_le x j
+/-- Every complex matrix unit has L² operator norm one. -/
+theorem l2_opNorm_single_one (i j : α) :
+    ‖(single i j 1 : Matrix α α ℂ)‖ = 1 := by
+  apply le_antisymm
+  · rw [l2_opNorm_def]
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x ↦ ?_
+    change ‖(EuclideanSpace.equiv α ℂ).symm (single i j 1 *ᵥ x)‖ ≤ 1 * ‖x‖
+    rw [single_mulVec]
+    change ‖EuclideanSpace.single i ((1 : ℂ) * x.ofLp j)‖ ≤ 1 * ‖x‖
+    simpa using PiLp.norm_apply_le x j
+  · have h := (single i j 1 : Matrix α α ℂ).l2_opNorm_mulVec
+      (EuclideanSpace.single j (1 : ℂ))
+    rw [single_mulVec_eq] at h
+    simpa using h
 
 /-- The squared Euclidean operator norm of the reshuffled Choi matrix is bounded by the
 entrywise squared mass of the rectangular Choi matrix. -/
@@ -130,13 +136,11 @@ theorem gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq
         _ ≤ (Fintype.card α : ℝ) * ‖LinearMap.toContinuousLinearMap Φ‖ ^ 2 := by
           gcongr
           calc
-            ‖Φ (single c a 1)‖ ≤
-                ‖LinearMap.toContinuousLinearMap Φ‖ * ‖(single c a 1 : Matrix α α ℂ)‖ :=
+            ‖Φ (single c a 1)‖ ≤ ‖LinearMap.toContinuousLinearMap Φ‖ *
+                ‖(single c a 1 : Matrix α α ℂ)‖ :=
               (LinearMap.toContinuousLinearMap Φ).le_opNorm _
-            _ ≤ ‖LinearMap.toContinuousLinearMap Φ‖ * 1 := by
-              gcongr
-              exact single_one_norm_le_one c a
-            _ = ‖LinearMap.toContinuousLinearMap Φ‖ := mul_one _
+            _ = ‖LinearMap.toContinuousLinearMap Φ‖ := by
+              rw [l2_opNorm_single_one, mul_one]
     _ = (Fintype.card α : ℝ) ^ 3 * ‖LinearMap.toContinuousLinearMap Φ‖ ^ 2 := by
       simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
       ring
