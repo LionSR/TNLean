@@ -414,6 +414,32 @@ Theorem~\ref{thm:trace_norm_abs}.
     difference of positive semidefinite matrices, hence Hermitian.
 \end{proof}
 
+\begin{lemma}[Common projection estimate]
+    \label{lem:posPart_support_projection_estimate}
+    \lean{Matrix.re_trace_posPart_map_le_aux}
+    \leanok
+    \uses{def:positive_map_rectangular}
+    Let $T:\MN{D}\to\MN{D'}$ be a positive linear map and let
+    $H\in\MN{D}$ be Hermitian.  Then
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:positive_map_hermitian,
+      lem:psd_trace_pairing_bounds,
+      lem:positive_part_support_projection}
+    Let $\Pi_+$ be the support projection of $(TH)^+$ from
+    Lemma~\ref{lem:positive_part_support_projection}, so that
+    $\Pi_+ T(H)=Q_+$ and $0\leq\Pi_+\leq\Id$.  The estimate follows
+    from the chain
+    $\tr[(TH)^+]=\tr[\Pi_+ T(H^+-H^-)]
+      =\tr[\Pi_+ T(H^+)]-\tr[\Pi_+ T(H^-)]
+      \leq\tr[\Pi_+ T(H^+)]
+      \leq\tr[T(H^+)]$,
+    using Lemmas~\ref{lem:psd_trace_pairing_bounds}
+    and~\ref{lem:positive_map_hermitian}.
+\end{proof}
+
 \begin{lemma}[Positive-part trace estimate]
     \label{lem:positive_part_trace_estimate}
     \lean{Matrix.re_trace_posPart_map_le}
@@ -425,26 +451,11 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:positive_part_support_projection,
-      lem:psd_trace_pairing_bounds, lem:positive_map_hermitian,
+    \uses{lem:posPart_support_projection_estimate,
       def:trace_preserving_rectangular}
-    The matrix $T(H)$ is Hermitian by
-    Lemma~\ref{lem:positive_map_hermitian}. Let $\Pi_+$ be the support
-    projection of $Q_+$ from
-    Lemma~\ref{lem:positive_part_support_projection}, so that
-    $\Pi_+T(H)=Q_+$ and $0\leq\Pi_+\leq\Id$. Then
-    \begin{align}
-        \tr[Q_+]
-        &=\tr[\Pi_+T(P_+)]-\tr[\Pi_+T(P_-)]
-          \leq\tr[\Pi_+T(P_+)]
-          \leq\tr[T(P_+)]
-          =\tr[P_+],
-        \notag
-    \end{align}
-    where the first inequality uses $\tr[\Pi_+T(P_-)]\geq0$
-    and the second uses $\Pi_+\leq\Id$ together with $T(P_+)\geq0$
-    (Lemma~\ref{lem:psd_trace_pairing_bounds}); the final step is trace
-    preservation.
+    Lemma~\ref{lem:posPart_support_projection_estimate} gives
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.  The result follows because
+    trace preservation gives $\tr[T(H^+)]=\tr[H^+]$.
 \end{proof}
 
 \begin{theorem}[Trace-norm contractivity]
@@ -510,11 +521,10 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:positive_map_hermitian, lem:psd_trace_pairing_bounds,
-      lem:positive_part_support_projection}
-    Same projection argument as Lemma~\ref{lem:positive_part_trace_estimate},
-    with the trace identity replaced by the scaled version
-    $\tr[T(\rho)] = c\,\tr[\rho]$.
+    \uses{lem:posPart_support_projection_estimate}
+    Lemma~\ref{lem:posPart_support_projection_estimate} gives
+    $\tr[(TH)^+]\leq\tr[T(H^+)]$.  The trace-scaling hypothesis then
+    yields $\tr[T(H^+)] = c\,\tr[H^+]$, giving the claimed bound.
 \end{proof}
 
 \begin{theorem}[Scaled trace-norm contractivity]

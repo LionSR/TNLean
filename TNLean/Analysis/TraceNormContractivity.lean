@@ -322,7 +322,10 @@ Generalizes `re_trace_posPart_map_le` from the trace-preserving case
 `c = 1`.
 
 Wolf Ch. 8; the argument generalizes Theorem 8.16 (lines 898–918)
-and is used for Theorem 8.17 (lines 943–969). -/
+and is used for Theorem 8.17 (lines 943–969).  The hypothesis `c ≥ 0`
+is not consumed by the projection calculation itself but is retained
+for API consistency with the downstream scaled trace-norm and Doeblin
+theorems, where the scale is a nonnegative contraction coefficient. -/
 lemma re_trace_posPart_map_le_of_scaledTrace {c : ℝ}
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D') (Fin D') ℂ}
     (hpos : ∀ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosSemidef → (T ρ).PosSemidef)
