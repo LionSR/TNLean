@@ -45,12 +45,12 @@ variable {d D : ℕ} {A : MPSTensor d D}
 namespace CPSVCanonicalFormData
 
 /-- The inclusion of a retained canonical block into the ambient bond space. -/
-private noncomputable def ambientBlockInclusion (data : CPSVCanonicalFormData A) (k : Fin data.r) :
+noncomputable def ambientBlockInclusion (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Matrix (Fin D) (Fin (data.dim k)) ℂ :=
   data.ambient_coisometryᴴ * blockInclusion data.dim k
 
 /-- A retained block inclusion into the ambient bond space is an isometry. -/
-private theorem ambientBlockInclusion_conjTranspose_mul_self
+theorem ambientBlockInclusion_conjTranspose_mul_self
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion k = 1 := by
   rw [ambientBlockInclusion, Matrix.conjTranspose_mul]
@@ -70,7 +70,7 @@ private theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
 
 /-- The CPSV reconstruction intertwines an ambient block inclusion with the
 corresponding weighted canonical block. -/
-private theorem mul_ambientBlockInclusion
+theorem mul_ambientBlockInclusion
     (data : CPSVCanonicalFormData A) (k : Fin data.r) (i : Fin d) :
     A i * data.ambientBlockInclusion k =
       data.ambientBlockInclusion k * (data.weights k • data.blocks k i) := by
@@ -165,7 +165,7 @@ private theorem transferMap_blockFixedVector (data : CPSVCanonicalFormData A) (k
     (exists_nonzero_transferMap_fixedVector_of_normal (data.blocks_normal k))).2
 
 /-- The transfer eigenvalue contributed by a weighted active block. -/
-private noncomputable def activeTransferEigenvalue
+noncomputable def activeTransferEigenvalue
     (data : CPSVCanonicalFormData A) (k : data.Active) : ℂ :=
   data.weights k.1 * starRingEnd ℂ (data.weights k.1)
 
@@ -219,7 +219,7 @@ private theorem activeTransferEigenvalue_ne
 
 /-- Shifted ambient transfer traces normalize every active weighted-block
 eigenvalue to one. -/
-private theorem activeTransferEigenvalue_eq_one
+theorem activeTransferEigenvalue_eq_one
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (transferMap A) ^ N) = 1)
