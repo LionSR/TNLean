@@ -173,8 +173,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[First matrix associated to a Matrix Product Unitary tensor]
     \label{def:mpu_source_matrix_one}
-    \lean{MPOTensor.sourceCutM₁}
+    \lean{MPOTensor.sourceCutM₁, MPOTensor.sourceCutM₁_apply,
+        MPOTensor.sourceCutM₁Fin, MPOTensor.sourceCutM₁Fin_eq_reindex,
+        MPOTensor.sourceCutM₁Fin_apply,
+        MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank}
     \leanok
+    \uses{def:mpo_tensor}
     The matrix $M_1$ is obtained by combining the left auxiliary index with the
     lower physical index, and the upper physical index with the right auxiliary
     index. Thus
@@ -182,12 +186,24 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (M_1)_{(\alpha,j),(i,\beta)}
         &= \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
+    Transporting the row and column indices along the standard product
+    enumerations gives a matrix $\widetilde M_1$ indexed by
+    $\{0,\ldots,Dd-1\}\times\{0,\ldots,dD-1\}$. Its entries are obtained by
+    applying $M_1$ to the inverse images of the enumerated indices, and
+    \begin{align}
+        \operatorname{rank}(\widetilde M_1)
+        &= \operatorname{rank}(M_1).
+    \end{align}
 \end{definition}
 
 \begin{definition}[Second matrix associated to a Matrix Product Unitary tensor]
     \label{def:mpu_source_matrix_two}
-    \lean{MPOTensor.sourceCutM₂}
+    \lean{MPOTensor.sourceCutM₂, MPOTensor.sourceCutM₂_apply,
+        MPOTensor.sourceCutM₂Fin, MPOTensor.sourceCutM₂Fin_eq_reindex,
+        MPOTensor.sourceCutM₂Fin_apply,
+        MPOTensor.sourceCutM₂_rank_eq_sourceCutM₂Fin_rank}
     \leanok
+    \uses{def:mpo_tensor}
     The matrix $M_2$ is obtained by combining the left auxiliary index with the
     upper physical index, and the lower physical index with the right auxiliary
     index. Thus
@@ -195,11 +211,19 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (M_2)_{(\alpha,i),(j,\beta)}
         &= \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
+    Transporting the row and column indices along the standard product
+    enumerations gives a matrix $\widetilde M_2$ indexed by
+    $\{0,\ldots,Dd-1\}\times\{0,\ldots,dD-1\}$. Its entries are obtained by
+    applying $M_2$ to the inverse images of the enumerated indices, and
+    \begin{align}
+        \operatorname{rank}(\widetilde M_2)
+        &= \operatorname{rank}(M_2).
+    \end{align}
 \end{definition}
 
 \begin{definition}[Right rank]
     \label{def:mpu_right_rank}
-    \lean{MPOTensor.rightRank}
+    \lean{MPOTensor.rightRank, MPOTensor.rightRank_eq}
     \leanok
     \uses{def:mpu_source_matrix_one}
     The right rank is
@@ -210,7 +234,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Left rank]
     \label{def:mpu_left_rank}
-    \lean{MPOTensor.leftRank}
+    \lean{MPOTensor.leftRank, MPOTensor.leftRank_eq}
     \leanok
     \uses{def:mpu_source_matrix_two}
     The left rank is
@@ -234,8 +258,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_source_matrix_one}
-    The matrix $M_1$ has $Dd$ rows and $dD$ columns, so its rank is at most
-    $Dd$.
+    The matrix $M_1$ has $dD$ columns. Its rank is at most its number of
+    columns, hence at most $dD=Dd$.
 \end{proof}
 
 \begin{theorem}[Left-rank bound]
@@ -253,6 +277,6 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_source_matrix_two}
-    The matrix $M_2$ has $Dd$ rows and $dD$ columns, so its rank is at most
-    $Dd$.
+    The matrix $M_2$ has $dD$ columns. Its rank is at most its number of
+    columns, hence at most $dD=Dd$.
 \end{proof}
