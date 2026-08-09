@@ -27,8 +27,8 @@ theorem.
 \section{The restriction in the formalization}
 
 The available Lean statement is
-\leanid{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot} in
-\texttt{TNLean/Channel/Peripheral/CyclicGroup.lean}. It is stated for a finite
+\leanid{Kraus.peripheralEigenvalues_eq_range_primitiveRoot} in
+\texttt{TNLean/Channel/Peripheral/CyclicGroupKraus.lean}. It is stated for a finite
 matrix family $K$ and its Kraus map
 \[
     E(X)=\sum_i K_iXK_i^\dagger.
@@ -41,9 +41,12 @@ Wolf's theorem does not assume it. In the finite-dimensional Kraus setting it
 should instead be derived from unitality and irreducibility, but the present
 Lean declaration requires it explicitly. Thus the Lean theorem proves the
 completely positive specialization of the cyclicity conclusion in Wolf
-Theorem 6.6(1), but not its bound $m\leq D^2$ and not items~(2)--(4). The
-corresponding Blueprint entry states this restriction explicitly and uses its
-own specialization title.
+Theorem 6.6(1), but not its bound $m\leq D^2$. This particular declaration does
+not state items~(2)--(4). Separate finite-Kraus companion declarations establish
+nondegeneracy, peripheral unitaries, and cyclic projections under corresponding
+Kraus hypotheses. They do not supply the abstract positive unital Schwarz-map
+form of Wolf's theorem. The corresponding Blueprint entry uses its own
+specialization title.
 
 \section{Elimination plan}
 
@@ -61,12 +64,12 @@ specialization rather than serving as the source-facing form of Wolf Theorem
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The formal theorem proves only the
-cyclicity conclusion of Wolf Theorem 6.6(1), under the stronger
-complete-positivity hypothesis supplied by a finite Kraus representation and
-with an additional positive-definite adjoint fixed point as explicit input. It
-does not include the bound $m\leq D^2$ or items~(2)--(4). Derivation of the
-fixed point and the abstract Schwarz-map cyclicity statement remain open at the
-source-facing interface.
+\textbf{Verdict: scope restriction.} The cyclicity declaration proves Wolf
+Theorem 6.6(1) under the stronger complete-positivity hypothesis supplied by a
+finite Kraus representation and with an additional positive-definite adjoint
+fixed point as explicit input. It does not include the bound $m\leq D^2$.
+Finite-Kraus companion specializations cover conclusions corresponding to
+items~(2)--(4), but the abstract Schwarz-map formulation of all four items and
+the item-(1) order bound remain open at the source-facing interface.
 
 \end{document}

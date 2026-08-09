@@ -10,7 +10,7 @@ import TNLean.Channel.Irreducible.FromSpectral
 import TNLean.Channel.Peripheral.Spectrum
 import TNLean.Channel.Peripheral.IrreducibleChannel
 import TNLean.Channel.Peripheral.PeriodicityRemoval
-import TNLean.Channel.Peripheral.ClosureFixedPoint
+import TNLean.Channel.Peripheral.ClosureFixedPointKraus
 import TNLean.Channel.FixedPoint.Cesaro
 import TNLean.Channel.Primitive
 import TNLean.Spectral.TransferOperatorGap

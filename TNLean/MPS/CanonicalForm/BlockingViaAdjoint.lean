@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.PeriodicityRemoval
@@ -316,10 +315,6 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   -- Irreducibility of `transferMap K` from tensor-irreducibility of `A`.
   have hIrrK : IsIrreducibleMap (transferMap (d := d) (D := D) K) :=
     isIrreducibleCP_transferMap_conjTranspose_of_isIrreducibleTensor (d := d) (D := D) A hIrrT
-  have hK_map : Kraus.mapLM K = transferMap (d := d) (D := D) K :=
-    Kraus.mapLM_eq_transferMap K
-  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM K) :=
-    Kraus.isIrreducibleMap_mapLM_of_transferMap K hIrrK
   -- A positive definite fixed point for `transferMap A`, hence for `Kraus.adjointMap K`.
   have hCh : IsChannel (transferMap (d := d) (D := D) A) :=
     transferMap_isChannel (d := d) (D := D) A (by simpa only using hTP)
@@ -343,8 +338,8 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     have hμ' : μ ∈ peripheralEigenvalues E := hfin.mem_toFinset.mp hμ
     simpa only using
       (peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
-        (K := K) (d := d) (D := D) h_unitalK ρ hρ_pd h_adjfix hIrrK_map μ
-          (by simpa only [hK_map, E] using hμ'))
+        (K := K) (d := d) (D := D) h_unitalK ρ hρ_pd h_adjfix hIrrK μ
+          (by simpa only [E] using hμ'))
   obtain ⟨p, hp_pos, hp_all⟩ :=
     exists_common_power_eq_one_of_finite (s := hfin.toFinset) hroot
   have hper : ∀ μ : ℂ, μ ∈ peripheralEigenvalues E → μ ^ p = 1 := by

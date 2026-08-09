@@ -11,9 +11,9 @@ import TNLean.Channel.Irreducible.Basic
 
 A nonzero positive-semidefinite fixed point of an irreducible completely positive
 map has full support and is therefore positive definite. This is the fixed-point
-case of the strictly positive eigenvector statement in Wolf Theorem 6.3(2).
+case of the positive-eigenvector conclusions in Wolf Theorem 6.3(2)--(3).
 
-**Scope restriction (complete positivity):** Wolf Theorem 6.3(2) assumes only
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2)--(3) assumes only
 positivity. See `docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex` for the
 source comparison and elimination plan.
 -/
@@ -24,10 +24,10 @@ variable {D : ℕ}
 
 /-- A nonzero positive-semidefinite fixed point of an irreducible completely positive
 map is positive definite. This is the completely positive specialization of the
-fixed-point case of Wolf Theorem 6.3(2).
+fixed-point case of Wolf Theorem 6.3(2)--(3).
 
-**Scope restriction (complete positivity):** Wolf Theorem 6.3(2) assumes only positivity, whereas this
-declaration assumes complete positivity. See
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2)--(3) assumes only
+positivity, whereas this declaration assumes complete positivity. See
 `docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex` for the source comparison
 and elimination plan. -/
 theorem posDef_of_posSemidef_fixedPoint_irreducible_cp

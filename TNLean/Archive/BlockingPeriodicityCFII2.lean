@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Core.TransferChannel
 import TNLean.MPS.Irreducible.FixedPointProjection
 import TNLean.Channel.Peripheral.ClosureFixedPoint
 import TNLean.Channel.Peripheral.PeriodicityRemoval
@@ -743,11 +742,6 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
 
   have hIrrC : IsIrreducibleMap (transferMap (d := d) (D := D) C) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) C hIrrC_tensor
-  have hC_map : Kraus.mapLM C = transferMap (d := d) (D := D) C :=
-    Kraus.mapLM_eq_transferMap C
-  have hIrrC_map : IsIrreducibleMap (Kraus.mapLM C) :=
-    Kraus.isIrreducibleMap_mapLM_of_transferMap C hIrrC
-
   -- Root-of-unity peripheral eigenvalues for the unitalized map.
   let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     transferMap (d := d) (D := D) C
@@ -759,8 +753,8 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     have hμ' : μ ∈ peripheralEigenvalues E := hfin.mem_toFinset.mp hμ
     simpa [E] using
       (peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
-        (K := C) h_unital Λ hΛ_pd h_adjfix hIrrC_map μ
-          (by simpa only [hC_map, E] using hμ'))
+        (K := C) h_unital Λ hΛ_pd h_adjfix hIrrC μ
+          (by simpa only [E] using hμ'))
 
   obtain ⟨p, hp_pos, hp_all⟩ :=
     exists_common_power_eq_one_of_finite (s := hfin.toFinset) hroot
