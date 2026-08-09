@@ -326,7 +326,9 @@ orthogonal projector is the canonical representative used here.
     inverse of the Gram endomorphism:
     \begin{align}
       S_T(T^\dagger T)&=I_E,
-      & (T^\dagger T)S_T&=I_E.
+      \label{eq:inverse_gram_left}\\
+      (T^\dagger T)S_T&=I_E.
+      \label{eq:inverse_gram_right}
     \end{align}
     Consequently, $S_T$ is both the canonical inverse and the ring inverse of
     $T^\dagger T$.
@@ -336,10 +338,11 @@ orthogonal projector is the canonical representative used here.
     \leanok
     \uses{def:inverse_gram}
     By definition, $S_T$ is induced by the inverse linear equivalence of the
-    injective endomorphism $T^\dagger T$.  The two inverse-equivalence
-    identities give the displayed left and right inverse identities.  These
-    identities characterize the canonical inverse of a continuous linear
-    endomorphism, which agrees with its inverse in the endomorphism ring.
+    injective endomorphism $T^\dagger T$.  The inverse-equivalence identities
+    give (\ref{eq:inverse_gram_left}) and
+    (\ref{eq:inverse_gram_right}).  Together these equations characterize the
+    canonical inverse of a continuous linear endomorphism, which agrees with
+    its inverse in the endomorphism ring.
 \end{proof}
 
 \begin{definition}[Injective range-projector candidate]
@@ -365,7 +368,7 @@ orthogonal projector is the canonical representative used here.
 
 \begin{proof}
     \leanok
-    \uses{def:inverse_gram}
+    \uses{def:inverse_gram, thm:inverse_gram_identities}
     The vector $Q_Tx$ lies in $\range T$.  Moreover,
     $T^\dagger Q_Tx=(T^\dagger T)S_TT^\dagger x=T^\dagger x$, so for every
     $y$ the adjoint identity gives
