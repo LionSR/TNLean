@@ -26,16 +26,22 @@ These facts clarify the rectangular maps called unitary around
 `lemuisometry`, `uUnitary`, `ThmFund1`, and `vUnitary` in arXiv:1703.09188,
 lines 534--605.
 
-## Main declarations
+## Main definitions
 
 * `Matrix.IsIsometry` and `Matrix.IsCoisometry` are the two one-sided identities.
 * `Matrix.IsUnitaryBetween` is their conjunction.
+
+## Main results
+
 * `Matrix.IsIsometry.card_le` and `Matrix.IsCoisometry.card_le` give the
   corresponding cardinality inequalities.
-* `Matrix.IsIsometry.isUnitaryBetween_of_card_eq` upgrades an isometry in equal
-  dimensions without choosing an index equivalence.
+* `Matrix.IsIsometry.isUnitaryBetween_of_card_eq` and
+  `Matrix.IsCoisometry.isUnitaryBetween_of_card_eq` give the equal-cardinality
+  upgrades without choosing an index equivalence.
 * `Matrix.IsUnitaryBetween.reindex` and `Matrix.IsUnitaryBetween.mul` give
   coordinate-change and composition compatibility.
+* `Matrix.IsUnitaryBetween.of_mul_left` and `Matrix.IsUnitaryBetween.of_mul_right`
+  cancel unitary-between factors from a unitary-between product.
 * `Matrix.isUnitaryBetween_iff_mem_unitaryGroup` identifies the square case with
   Mathlib's unitary group.
 -/
@@ -225,7 +231,8 @@ theorem mul (A : Matrix m n ℂ) (B : Matrix n o ℂ) (hA : A.IsUnitaryBetween)
 
 /-- If a product and its left factor are unitary-between, then so is its right factor. -/
 theorem of_mul_left (A : Matrix m n ℂ) (B : Matrix n o ℂ)
-    (hA : A.IsUnitaryBetween) (hAB : (A * B).IsUnitaryBetween) : B.IsUnitaryBetween := by
+    (hA : A.IsUnitaryBetween) (hAB : (A * B).IsUnitaryBetween) :
+    B.IsUnitaryBetween := by
   have hAstar := hA.conjTranspose A
   have h := hAstar.mul Aᴴ (A * B) hAB
   have hAeq : Aᴴ * A = 1 := hA.1
@@ -236,7 +243,8 @@ theorem of_mul_left (A : Matrix m n ℂ) (B : Matrix n o ℂ)
 
 /-- If a product and its right factor are unitary-between, then so is its left factor. -/
 theorem of_mul_right (A : Matrix m n ℂ) (B : Matrix n o ℂ)
-    (hB : B.IsUnitaryBetween) (hAB : (A * B).IsUnitaryBetween) : A.IsUnitaryBetween := by
+    (hB : B.IsUnitaryBetween) (hAB : (A * B).IsUnitaryBetween) :
+    A.IsUnitaryBetween := by
   have hBstar := hB.conjTranspose B
   have h := hAB.mul (A * B) Bᴴ hBstar
   have hBeq : B * Bᴴ = 1 := hB.2
