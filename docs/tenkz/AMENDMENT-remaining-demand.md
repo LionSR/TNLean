@@ -104,10 +104,10 @@ set of records serves three roles: it is stroked as a mark, it is stood on as
 a place, and its outside is travelled as a route. The authors did not draw it
 three times because they thought of it once.
 
-The service already exists and is already general: the corridor functions take
-an obstacle set, not a picture, and the maximum-support fold already runs over
-a record set with a per-record angle. The parameter the six mechanisms are
-groping for is already in the signature, and nothing passes it.
+The service already exists and is already general: the hull reach takes an
+obstacle sequence, not a picture, and the maximum-support fold already runs
+over a record set with a per-record angle. The parameter the six mechanisms
+are groping for is already in the signature, and nothing passes it.
 
 Amendments three and four are that finding. The rest follow it.
 
