@@ -6,14 +6,14 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.RescalingStableChiAttachment
 
 /-!
-# Uniform BNT-label χ-trace-power form for R's one-label structure coefficient
+# Uniform trace-power form for an explicit one-label coefficient model
 
-**Scope: partial formalization.** This file continues
-`TNLean.MPS.MPDO.RescalingStableChiAttachment`, closing the example-level
-case of arXiv:1606.00608, Theorem 4.14(ii) for the rescaling-stable
-example's tensor `R`: a single diagonal matrix `χ` such that, for every
-positive length `L`, the length-`L` one-label structure coefficient equals
-`tr(χ^L)`, with the SAME `χ` used at every length.
+**Scope: auxiliary coefficient model.** This file continues
+`TNLean.MPS.MPDO.RescalingStableChiAttachment`. It proves a uniform
+trace-power identity for the hand-defined one-label family `oneLabelCoeffs`
+and connects that scalar identity to the local factor `wMat` of the
+rescaling-stable example. It does not identify this family with the
+coefficients of the existential tensor-attached BNT clause for `R`.
 
 The paper-general form of this statement,
 `MPOTensor.PositiveBNTLabelChiTracePowerForm` (`TNLean.MPS.MPDO.BNTCoefficients`),
@@ -23,10 +23,9 @@ It is already same-length and BNT-label-uniform by construction; it is not
 the length-dependent blocked-basis analogue
 `MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm`
 (`TNLean.MPS.MPDO.AlgebraStructure`), whose diagonal matrix may depend on the
-blocked length. This file instantiates the general predicate for `R`'s
-one-label coefficient family `oneLabelCoeffs`, with `χ = oneLabelChi`, and
-connects the resulting trace-power coefficient to `R`'s own local factor
-`wMat`.
+blocked length. This file instantiates the general predicate for the
+explicit family `oneLabelCoeffs`, with `χ = oneLabelChi`, and connects the
+resulting trace-power coefficient to the local factor `wMat`.
 
 ## Main results
 
@@ -35,7 +34,7 @@ connects the resulting trace-power coefficient to `R`'s own local factor
 * `wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace` — `tr(wMat^L) = tr(χ^L)`
   for every length `L`, since `wMat` is the Walsh–Hadamard conjugate of `χ`
   (`wMat_eq_conj_diagonal_oneLabelChi`).
-* `oneLabelCoeffs_coeff_eq_wMat_pow_trace` — R's one-label structure
+* `oneLabelCoeffs_coeff_eq_wMat_pow_trace` — the explicit one-label
   coefficient equals `tr(wMat^L) = 1 + (7/25)^L` for every positive length
   `L`.
 
@@ -145,37 +144,26 @@ theorem wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace (L : ℕ) :
     (wMat ^ L).trace = (oneLabelChi.matrix 0 0 0 ^ L).trace :=
   wMat_pow_trace_eq_oneLabelChiMatrix2_pow_trace L
 
-/-! ### R's one-label structure coefficient realizes the uniform χ-trace-power
-witness -/
+/-! ### The explicit one-label model realizes a uniform χ-trace-power witness -/
 
-/-- **The uniform BNT-label χ-trace-power witness for `R`'s one-label
-structure coefficient, with `χ = oneLabelChi`.** `oneLabelCoeffs` (the
-coefficient family built canonically from `oneLabelChi` via
-`BNTLabelCoefficientFamily.ofChi`) satisfies the positive-length trace-power
-form of arXiv:1606.00608, Theorem 4.14(ii): the SAME diagonal matrix
-`oneLabelChi` gives `oneLabelCoeffs.coeff L 0 0 0 = tr(oneLabelChi_{0,0,0}^L)`
-at every positive length `L`; only the exponent changes. Contrast
-`MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm`,
-whose diagonal matrix may depend on the blocked length. -/
+/-- **The uniform χ-trace-power witness for the explicit one-label model.**
+`oneLabelCoeffs`, defined canonically from `oneLabelChi` by
+`BNTLabelCoefficientFamily.ofChi`, satisfies the positive-length trace-power
+form: the same diagonal matrix gives
+`oneLabelCoeffs.coeff L 0 0 0 = tr(oneLabelChi_{0,0,0}^L)` at every positive
+length. This declaration does not identify the model with the coefficient
+family of the existential tensor-attached clause for `R`. -/
 noncomputable def oneLabelChiTracePowerForm :
     PositiveBNTLabelChiTracePowerForm oneLabelCoeffs :=
   PositiveBNTLabelChiTracePowerForm.ofChi oneLabelChi oneLabelChi_posEntries
 
-/-- **R's one-label structure coefficient equals the trace of the `L`-th
-ordinary matrix power of `R`'s own local factor `wMat`.** For every positive
-length `L`,
-`oneLabelCoeffs.coeff L 0 0 0 = tr(wMat^L)` (the closed form
-`tr(wMat^L) = 1 + (7/25)^L` follows by
-`wMat_pow_trace_eq_oneLabelChi_matrix_pow_trace` and the diagonal power
-trace). This realizes
-the coefficient-level trace-power identity of `oneLabelChiTracePowerForm`
-concretely from the local factor of `R`'s own closed-operator factorization
-`mpo_R_eq_B_mul_wN_mul_transpose`, via the Walsh–Hadamard diagonalization
-`wMat_eq_conj_diagonal_oneLabelChi`.
-
-See the module docstring for the scope restriction: this is a
-coefficient-level identity, not the operator-multiplication closure law of
-arXiv:1606.00608, Theorem 4.14(ii). -/
+/-- **The explicit one-label coefficient equals the trace of `wMat^L`.**
+For every positive length `L`,
+`oneLabelCoeffs.coeff L 0 0 0 = tr(wMat^L)`. The closed form
+`tr(wMat^L) = 1 + (7/25)^L` follows from the Walsh–Hadamard diagonalization
+and the trace of powers of `oneLabelChi`. This connects the auxiliary
+coefficient model to the local factor in the closed-operator formula for `R`;
+it does not identify the model with a tensor-attached BNT coefficient family. -/
 theorem oneLabelCoeffs_coeff_eq_wMat_pow_trace (L : ℕ) (hL : 0 < L) :
     oneLabelCoeffs.coeff L 0 0 0 = (wMat ^ L).trace := by
   have heq : oneLabelCoeffs.coeff L 0 0 0 = (oneLabelChi.matrix 0 0 0 ^ L).trace :=

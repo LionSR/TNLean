@@ -677,7 +677,7 @@
     where $t_a=\tr(A^a)$; it satisfies $\mathcal T_R^2=\mathcal T_R$,
     the literal zero-correlation-length condition of
     \cite[Definition~4.2, lines~736--741]{Cirac2016MPDO_arXiv}. The
-    attached one-label coefficient family is in trace-power form with
+    hand-defined one-label coefficient model is in trace-power form with
     $\chi=\operatorname{diag}(1,\frac{7}{25})$:
     \begin{align}
         c^{(L)}&=\tr(\chi^L)=1+\left(\frac{7}{25}\right)^L.
@@ -698,12 +698,11 @@
     block of Theorem~\ref{thm:mpdo_length_dependent_rfp_example}, no
     uniform rescaling makes both diagonal entries equal to one.
 
-    Positivity of the closed operators of $R$ on every nonempty chain, the
-    literal CPSV canonical form of $R$, and the renormalization fixed-point
-    property of Definition~\ref{def:is_rfp_via_ts} are not part of this
-    statement: the theorem establishes the coefficient-level obstruction
-    for the explicit family attached to the displayed tensor, not the full
-    fixed-point example. The tensor is a project example motivated by the
+    The theorem establishes a coefficient-level obstruction for an explicit
+    family defined alongside the displayed tensor; it does not attach that
+    family to a vertical BNT presentation. Positivity, literal CPSV canonical
+    form, and the renormalization fixed-point property of $R$ are proved
+    separately. The tensor is a project example motivated by the
     discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}; it is not a
     tensor stated there.
 \end{theorem}
@@ -979,7 +978,7 @@
     form, positivity, and renormalization fixed-point properties of $R$.
 \end{proof}
 
-\begin{theorem}[The closed operator of $R$ attaches $\chi$ exactly]%
+\begin{theorem}[Closed-operator factorization and local diagonalization for $R$]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         mpo_R_eq_B_mul_wN_mul_transpose}
@@ -1008,15 +1007,12 @@
         \chi&=\operatorname{diag}(1,\tfrac{7}{25}).
         \notag
     \end{align}
-    So the one-label BNT structure-coefficient block arising from the
-    closed operator of $R$ equals $\chi$ exactly, closing the attachment
-    of $\chi$ to $R$ used by
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}.
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    supplies an existential tensor-attached presentation. The closed-operator
-    factorization here does not identify its labels, component operators,
-    coefficients, or diagonal matrices with the explicit one-label data
-    (documented in
+    Thus the hand-defined matrix $\chi$ diagonalizes the local factor $W$ in
+    the closed-operator formula. Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    independently supplies an existential tensor-attached presentation. The
+    factorization here does not identify that presentation's labels, component
+    operators, coefficients, or diagonal matrices with the explicit one-label
+    data (documented in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}).
 \end{theorem}
 \begin{proof}\leanok
@@ -1031,8 +1027,8 @@
     entries of $W$ and $\chi$.
 \end{proof}
 
-\begin{theorem}[Uniform $\chi$-trace-power form of R's one-label structure
-    coefficient]%
+\begin{theorem}[Uniform $\chi$-trace-power form of the explicit one-label
+    model]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -1044,44 +1040,27 @@
         lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow,
         thm:mpdo_bnt_label_rescaling_stable_length_dependence,
         thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
-    The coefficient family $c^{(L)}_{0,0,0}$ attached to $R$ in
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
-    is a positive BNT-label $\chi$ trace-power witness
+    The hand-defined family $c^{(L)}_{0,0,0}$ is a positive BNT-label
+    $\chi$ trace-power model
     (Definition~\ref{def:mpdo_positive_bnt_label_chi_trace_power_form}) with
-    $\chi=\operatorname{diag}(1,\tfrac{7}{25})$: the SAME diagonal matrix
-    $\chi$ is used at every positive length $L$, only the exponent changes,
-    so by Lemma~\ref{lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    $\chi=\operatorname{diag}(1,\tfrac{7}{25})$. For every $L>0$,
     \begin{align}
-        c^{(L)}&=\tr(\chi^L),
-        & L&>0.
+        c^{(L)}&=\tr(\chi^L).
         \notag
     \end{align}
-    Moreover this trace-power coefficient equals $\tr(W^L)$, the trace of
-    the $L$-th ordinary matrix power of $R$'s own local factor $W$ from
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}:
+    The matrix $\chi$ diagonalizes the local factor $W$ in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}, so
     \begin{align}
-        \tr(\chi^L)&=\tr(W^L),
-        & L&>0.
+        \tr(\chi^L)&=\tr(W^L).
         \notag
     \end{align}
-    Combined with the closed form
-    $c^{(L)}=\tr(\chi^L)=1+(7/25)^L$ already displayed in
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence}, this
-    gives $\tr(W^L)=1+(7/25)^L$ as well. The matrix power $W^L$ here is the
-    ordinary $L$-fold matrix product of the fixed $2\times2$ matrix $W$,
-    distinct from the $N$-fold Kronecker power $W_N$ appearing inside
-    $\rho^{(N)}(R)$ itself
-    (Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}); the
-    two agree only at $L=N=1$. This closes the example-level uniform
-    BNT-label $\chi$-trace-power statement of
-    \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv} for $R$'s one-label
-    structure coefficient, at the coefficient level. It is not the
-    operator-multiplication closure law
-    $O_L(M_0)O_L(M_0)=c^{(L)}O_L(M_0)$ for $R$'s original closed operator;
-    indeed that direct identification is false. The existential presentation
-    in Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
-    instead uses the closed operators of its vertical BNT components. Their
-    explicit identification with the one-label data remains open in
+    Hence $c^{(L)}=\tr(W^L)=1+(7/25)^L$. Here $W^L$ is the ordinary
+    matrix power of the fixed $2\times2$ matrix $W$, not the Kronecker power
+    $W_L$ inside $\rho^{(L)}(R)$. The theorem does not identify this explicit
+    coefficient model with the coefficients or diagonal data of the
+    existential presentation in
+    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}.
+    That identification remains open in
     \path{docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex}.
 \end{theorem}
 \begin{proof}\leanok
