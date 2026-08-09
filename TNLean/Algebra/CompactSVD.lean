@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.Matrix.Rank
 /-!
 # Compact singular-value decomposition
 
-This file packages the compact singular-value decomposition of a rectangular complex matrix.  The
+This file defines the compact singular-value decomposition of a rectangular complex matrix.  The
 intermediate space has dimension exactly the matrix rank, so every retained singular value is
 strictly positive and the diagonal factor has an explicit two-sided inverse.
 
@@ -26,7 +26,7 @@ spectral-decomposition argument used for the Schmidt decomposition in
 * `Matrix.CompactSVD.diagonal`: the positive diagonal singular-value factor.
 * `Matrix.CompactSVD.inverseDiagonal`: its positive diagonal inverse.
 
-## Main results
+## Main statements
 
 * `Matrix.exists_compactSVD`: existence for every finite rectangular complex matrix.
 * `Matrix.CompactSVD.diagonal_mul_inverseDiagonal`: the right inverse identity.
@@ -91,7 +91,8 @@ theorem inverseSingularValues_pos (S : CompactSVD M) (i : Fin M.rank) :
     0 < S.inverseSingularValues i :=
   inv_pos.mpr (S.singularValues_pos i)
 
-/-- The inverse positive diagonal factor from arXiv:1703.09188, `YZ=1` (lines 495--506). -/
+/-- The inverse of the positive diagonal factor. Such inverses occur in the definitions of
+`Z₁` and `Z₂` in arXiv:1703.09188, `Z1Z2` (lines 495--502). -/
 noncomputable def inverseDiagonal (S : CompactSVD M) : Matrix (Fin M.rank) (Fin M.rank) ℂ :=
   Matrix.diagonal fun i ↦ (S.inverseSingularValues i : ℂ)
 
@@ -107,12 +108,12 @@ theorem inverseDiagonal_posDef (S : CompactSVD M) : S.inverseDiagonal.PosDef := 
   intro i
   exact_mod_cast S.inverseSingularValues_pos i
 
-/-- The factorization written using the packaged diagonal factor. -/
+/-- The factorization expressed with the diagonal factor. -/
 theorem factorization_diagonal (S : CompactSVD M) : M = S.Vᴴ * S.diagonal * S.U :=
   S.factorization
 
-/-- The positive diagonal factor times its packaged inverse is the identity
-(arXiv:1703.09188, `YZ=1`, lines 503--506). -/
+/-- The positive diagonal factor times its inverse is the identity. This is the diagonal-inverse
+cancellation underlying arXiv:1703.09188, `YZ=1` (lines 503--506). -/
 @[simp]
 theorem diagonal_mul_inverseDiagonal (S : CompactSVD M) : S.diagonal * S.inverseDiagonal = 1 := by
   rw [diagonal, inverseDiagonal, Matrix.diagonal_mul_diagonal]
@@ -121,8 +122,8 @@ theorem diagonal_mul_inverseDiagonal (S : CompactSVD M) : S.diagonal * S.inverse
   rw [inverseSingularValues, Complex.ofReal_inv]
   exact mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr (S.singularValues_pos i).ne')
 
-/-- The packaged inverse times the positive diagonal factor is the identity
-(arXiv:1703.09188, `YZ=1`, lines 503--506). -/
+/-- The inverse times the positive diagonal factor is the identity. This is the diagonal-inverse
+cancellation underlying arXiv:1703.09188, `YZ=1` (lines 503--506). -/
 @[simp]
 theorem inverseDiagonal_mul_diagonal (S : CompactSVD M) : S.inverseDiagonal * S.diagonal = 1 := by
   rw [diagonal, inverseDiagonal, Matrix.diagonal_mul_diagonal]
