@@ -26,7 +26,8 @@ The remaining local fixes are:
 * ``plasTeX.Base.LaTeX.Crossref.{label, ref, pageref}`` and
   ``plasTeX.Packages.amsmath.eqref``: read the key of a cross-reference with
   the underscore, superscript, alignment, and dollar characters demoted to
-  ordinary characters, so a key written inside a display survives.
+  ordinary characters, so a key written inside a display survives.  ``\path``
+  reads its argument the same way, over a wider set of characters.
 * ``plasTeX.Base.LaTeX.Arrays.Array.EndRow``: a bracketed expression opening
   the row after a line break is mathematics, not a line-spacing length.
 * ``plasTeX.Base.LaTeX.Arrays.Array.ArrayRow``: a row with no table around it
@@ -47,12 +48,13 @@ import pickle
 from pathlib import Path
 from typing import Any, Callable
 
+from _tnlean_utils import CONTROL_WORD as _CONTROL_WORD
 from _tnlean_utils import ROW_BREAK_LENGTH as _ROW_BREAK_LENGTH
 from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
 import plasTeX.Packages.amsmath as _amsmath
 import plasTeX.Packages.natbib as _natbib
-from plasTeX import Base, Command, Environment, Token
+from plasTeX import Base, Command, DimenCommand, Environment, Token
 from plasTeX import sourceChildren as _source_children
 from plasTeX.Base.LaTeX import Crossref as _crossref
 from plasTeX.Base.LaTeX.Arrays import Array as _Array
@@ -517,9 +519,14 @@ _depgraph.proves.digest = _patched_proves_digest
 # every reference to it.
 _REFERENCE_KEY_CHARACTERS = "_^&$"
 
+# A file path is a name too, and one written with more of TeX's characters in
+# it: a comment mark would discard the rest of the line, and a tie would print
+# as a space where the path has none.
+_PATH_CHARACTERS = "_^&$~#%"
 
-def _read_key_as_written(macro_class) -> None:
-    """Read one macro's argument with the display-only characters demoted."""
+
+def _read_argument_as_written(macro_class, characters: str) -> None:
+    """Read one macro's argument with the given characters demoted."""
 
     original = macro_class.invoke
 
@@ -529,7 +536,7 @@ def _read_key_as_written(macro_class) -> None:
         # record the change: whether it replaces the table or edits it, what
         # is put back is what was read.
         categories = context.categories[:]
-        for character in _REFERENCE_KEY_CHARACTERS:
+        for character in characters:
             context.catcode(character, Token.CC_OTHER)
         try:
             return original(self, tex)
@@ -545,7 +552,7 @@ for _macro_class in (
     _crossref.pageref,
     _amsmath.eqref,
 ):
-    _read_key_as_written(_macro_class)
+    _read_argument_as_written(_macro_class, _REFERENCE_KEY_CHARACTERS)
 
 
 # --- a bracket opening a row is mathematics -------------------------------
@@ -556,8 +563,19 @@ for _macro_class in (
 # as mathematics; plasTeX and MathJax both read them as the length, which
 # turns the row into an error box.  The length is kept when the brackets
 # really hold one, and returned to the row otherwise; ``ROW_BREAK_LENGTH``
-# states which brackets hold one, and the generated-page regression reads the
-# same rule from there.
+# states which brackets hold one by their spelling, and the generated-page
+# regression reads that rule from there.  A dimension the document declares
+# for itself has no telling spelling, so the document is asked directly:
+# plasTeX records a dimension as a ``DimenCommand``, and \alpha is not one.
+
+
+def _names_a_dimension(node, written: str) -> bool:
+    control_word = _CONTROL_WORD.match(written)
+    if control_word is None:
+        return False
+    declared = node.ownerDocument.context.get(control_word.group(4))
+    return declared is not None and issubclass(declared, DimenCommand)
+
 
 # --- a line break inside a braced argument is not a row of the display ----
 
@@ -595,7 +613,9 @@ def _patched_end_row_source(self) -> str:
     written = _original_end_row_source.fget(self)
     opening = written.find("[")
     if opening != -1 and written.endswith("]"):
-        if not _ROW_BREAK_LENGTH.match(written[opening + 1:-1]):
+        bracketed = written[opening + 1:-1]
+        if not (_ROW_BREAK_LENGTH.match(bracketed)
+                or _names_a_dimension(self, bracketed)):
             return "%s {}%s" % (written[:opening], written[opening:])
     return written
 
@@ -611,10 +631,15 @@ class path(Command):
 
     plasTeX leaves the command undefined, and the HTML5 renderer then matches
     the bare name against the link template of ``url``, so every file path in
-    the prose became an empty link followed by its own unstyled text.
+    the prose became an empty link followed by its own unstyled text.  The
+    path is read as written: a comment mark inside it would otherwise discard
+    the rest of the line, and a tie would print as a space the path has not.
     """
 
     args = "self"
+
+
+_read_argument_as_written(path, _PATH_CHARACTERS)
 
 
 class samepage(Environment):

@@ -53,6 +53,12 @@ ROW_BREAK_LENGTH = re.compile(
     re.VERBOSE,
 )
 
+# A dimension a document declares for itself carries no telling spelling, so
+# a lone control word is left to the renderer, which asks the document what
+# the name means.  Everything with structure in it -- a subscript, a comma, a
+# pair of parentheses, a second symbol -- is mathematics either way.
+CONTROL_WORD = re.compile(r"\s*[-+]?\s*((\d+(\.\d*)?|\.\d+)\s*)?\\([A-Za-z@]+)\s*$")
+
 
 def stringify_tex_item(obj: Any) -> str:
     """Extract a stable string from a plasTeX token/list item."""

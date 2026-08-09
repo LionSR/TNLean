@@ -36,7 +36,7 @@ sys.path.insert(0, str(_SCRIPTS.parent / "blueprint/src/Packages"))
 
 from playwright.sync_api import Page, sync_playwright
 
-from _tnlean_utils import ROW_BREAK_LENGTH
+from _tnlean_utils import CONTROL_WORD, ROW_BREAK_LENGTH
 from test_tenkz_equation_web import serve
 
 
@@ -107,9 +107,17 @@ def _assert_environments_balanced(page: Path, source: str) -> None:
 
 
 def _assert_row_breaks_carry_lengths(page: Path, source: str) -> None:
-    """A bracket after a row break holds a length or is guarded as content."""
+    """A bracket after a row break holds a length or is guarded as content.
+
+    A lone control word is left alone: a dimension the document declares for
+    itself is spelled like any other command, and the renderer, which can ask
+    the document what the name means, is the one that decides.  What is
+    rejected here is bracketed material with structure in it -- a subscript, a
+    comma, a pair of parentheses -- which is mathematics on any reading.
+    """
     for match in ROW_BREAK_BRACKET.finditer(source):
-        assert ROW_BREAK_LENGTH.match(match.group(1)), (
+        bracketed = match.group(1)
+        assert ROW_BREAK_LENGTH.match(bracketed) or CONTROL_WORD.match(bracketed), (
             f"{page.name}: a row break is followed by {match.group(0)!r}, which "
             "is mathematics read as a line spacing"
         )
@@ -168,6 +176,12 @@ READER_TEXT = """(commands) => {
     errors: [...document.querySelectorAll('mjx-merror')]
       .map(node => node.getAttribute('title') || node.textContent).slice(0, 8),
     typeset: document.querySelectorAll('mjx-container').length,
+    // A diagram whose address is wrong leaves no placeholder and no warning:
+    // the page loads, the picture is simply not there. An image that arrived
+    // has a natural width.
+    missingPictures: [...document.images]
+      .filter(image => !image.complete || image.naturalWidth === 0)
+      .map(image => image.getAttribute('src')).slice(0, 6),
   };
 }"""
 
@@ -208,11 +222,18 @@ def _settle(page: Page) -> None:
         timeout=120_000,
     )
     page.evaluate("() => window.MathJax.startup.promise")
+    # An image that failed is complete too, with no width, so this settles
+    # whether the pictures arrived or not.
+    page.wait_for_function(
+        "() => [...document.images].every(image => image.complete)",
+        timeout=120_000,
+    )
 
 
 def _assert_reader_text(name: str, facts: dict[str, object]) -> None:
     assert not facts["source"], (name, facts["source"])
     assert not facts["leaks"], (name, facts["leaks"])
+    assert not facts["missingPictures"], (name, facts["missingPictures"])
     assert facts["unresolved"] is None, (name, facts["unresolved"])
     assert not facts["errors"], (name, facts["errors"])
 
