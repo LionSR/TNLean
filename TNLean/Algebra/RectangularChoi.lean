@@ -24,10 +24,12 @@ The argument is independent of positivity and channel normalization.
 
 - `Matrix.linearMapMatrix`: the matrix of a linear map in the matrix-unit bases
 - `Matrix.rectangularChoi`: the unnormalized rectangular Choi matrix
+- `Matrix.gramReshuffle`: the Euclidean operator obtained by reshuffling Choi entries
 - `Matrix.IsHilbertSchmidtContraction`: contraction for the Hilbert--Schmidt norm
 
 ## Main results
 
+- `Matrix.inner_single_gramReshuffle_single`
 - `Matrix.rectangularChoi_frobenius_parseval`
 - `Matrix.rectangularChoi_frobenius_parseval_matrix_units`
 - `Matrix.rectangularChoi_frobenius_sq_le_finrank_range`
