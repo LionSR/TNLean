@@ -522,7 +522,15 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{definition}[Weighted source factors]
     \label{def:mpu_weighted_source_factors}
-    \lean{MPOTensor.SourceFactors, MPOTensor.sourceFactors}
+    \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
+        MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁,
+        MPOTensor.sourceGram₁_posDef, MPOTensor.sourceX₁,
+        MPOTensor.sourceY₁, MPOTensor.sourceZ₁, MPOTensor.sourceX₂,
+        MPOTensor.sourceY₂, MPOTensor.sourceZ₂, MPOTensor.sourceX₁_apply,
+        MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
+        MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
+        MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
+        MPOTensor.sourceFactors}
     \leanok
     \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,
         def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,
@@ -544,16 +552,82 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         &Y_2&=D_2U_2,
         &Z_2&=U_2^\dagger D_2^{-1}.
     \end{align}
-    Then
+    These are the factors in
+    \cite[Equations~\textup{eq:sf-svd}--\textup{Z1Z2}]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Source-cut factorizations]
+    \label{thm:mpu_source_factorizations}
+    \lean{MPOTensor.sourceCutM₁_eq_sourceX₁_mul_sourceY₁,
+        MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂,
+        MPOTensor.sourceX₁_mul_sourceY₁_apply,
+        MPOTensor.sourceX₂_mul_sourceY₂_apply}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    The two factorizations are
     \begin{align}
-        M_1&=X_1Y_1, & M_2&=X_2Y_2,\\
+        M_1&=X_1Y_1, & M_2&=X_2Y_2.
+    \end{align}
+    Equivalently, their entries satisfy
+    \begin{align}
+        (X_1Y_1)_{(\alpha,j),(i,\beta)}
+            &=\mathcal U^i_{j,\alpha,\beta},\\
+        (X_2Y_2)_{(\alpha,i),(j,\beta)}
+            &=\mathcal U^i_{j,\alpha,\beta}.
+    \end{align}
+    These are \cite[Equations~\textup{XY}, \textup{X1Y1},
+    \textup{X2Y2}, and \textup{SVDforms2}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_compact_svd}
+    The inverse square root and square root of $A$ cancel in the first
+    product. The second product is its compact singular-value decomposition.
+    The entry formulas follow from the definitions of $M_1$ and $M_2$.
+\end{proof}
+
+\begin{theorem}[Source-factor normalizations]
+    \label{thm:mpu_source_factor_normalizations}
+    \lean{MPOTensor.sourceX₁_weighted_isometry,
+        MPOTensor.sourceX₂_isometry}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
+    The left factors satisfy
+    \begin{align}
         X_1^\dagger W_\rho X_1&=\Id_r,
-        &X_2^\dagger X_2&=\Id_\ell,\\
+        &X_2^\dagger X_2&=\Id_\ell.
+    \end{align}
+    These are \cite[Equation~\textup{Y1Y1X1X1} and Figure~\textup{X1X2b}]
+    {Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_weight_posdef}
+    Since $A=V_1W_\rho V_1^\dagger$ is positive definite,
+    $A^{-1/2}AA^{-1/2}=\Id_r$. The second identity is
+    $V_2V_2^\dagger=\Id_\ell$.
+\end{proof}
+
+\begin{theorem}[Right inverses of the source factors]
+    \label{thm:mpu_source_factor_right_inverses}
+    \lean{MPOTensor.sourceY₁_mul_sourceZ₁,
+        MPOTensor.sourceY₂_mul_sourceZ₂}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    The right factors satisfy
+    \begin{align}
         Y_1Z_1&=\Id_r, &Y_2Z_2&=\Id_\ell.
     \end{align}
-    These are \cite[Equations~\textup{eq:sf-svd}--\textup{YZ=1}]
-    {Cirac2017MPU}.
-\end{definition}
+    This is \cite[Equation~\textup{YZ=1}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The coisometry identities cancel $U_iU_i^\dagger$, the positive diagonal
+    matrices cancel their inverses, and $A^{1/2}A^{-1/2}=\Id_r$.
+\end{proof}
 
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
