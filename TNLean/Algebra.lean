@@ -29,6 +29,10 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.GramMatrixLI
 import TNLean.Algebra.HermitianHelpers
+import TNLean.Algebra.HermitianSpectrumMultiplicity
+import TNLean.Algebra.HermitianSpectrumPerturbation
+import TNLean.Algebra.HermitianSpectrumPreserver
+import TNLean.Algebra.HermitianTracePower
 import TNLean.Algebra.HermitianUnitaryConjugacy
 import TNLean.Algebra.IrreducibleTensorAction
 import TNLean.Algebra.KroneckerFactorPositivity
@@ -44,6 +48,7 @@ import TNLean.Algebra.MatrixRankClosed
 import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixTracePairing
+import TNLean.Algebra.MatrixTracePowerContinuity
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NewtonGirard
 import TNLean.Algebra.NilMatrixSubalgebra
