@@ -209,7 +209,7 @@ principal-angle estimate. Once assumed, it gives the anticommutator inequality
 with uniformly summable rows. Since at most \(2(L-1)\) local terms overlap a
 length-\(L\) cyclic window, combining this estimate with \(h_i^2=h_i\) yields
 \(H^2\geq\gamma H\). The spectral theorem then gives
-\(\gamma\lVert vVert\leq\lVert HvVert\) on \((\ker H)^\perp\).
+\(\gamma\lVert v\rVert\leq\lVert Hv\rVert\) on \((\ker H)^\perp\).
 
 Despite its historical short name, this declaration is conditional. The
 source-matching conditional theorem is
