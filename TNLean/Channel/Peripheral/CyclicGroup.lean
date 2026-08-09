@@ -68,11 +68,11 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K)) :
     ∀ μ ν : ℂ,
-      μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
-      ν ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) →
-        μ * ν ∈ peripheralEigenvalues (MPSTensor.transferMap (d := d) (D := D) K) := by
+      μ ∈ peripheralEigenvalues (Kraus.mapLM K) →
+      ν ∈ peripheralEigenvalues (Kraus.mapLM K) →
+        μ * ν ∈ peripheralEigenvalues (Kraus.mapLM K) := by
   classical
   intro μ ν hμ hν
   rcases hμ with ⟨hμ_eig, hμ_norm⟩
@@ -82,13 +82,13 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
   rcases hν_eig.exists_hasEigenvector with ⟨Y, hY_eigvec⟩
   have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX_eigvec).2
   have hY_ne : Y ≠ 0 := (Module.End.hasEigenvector_iff.mp hY_eigvec).2
-  have hEig_X : MPSTensor.transferMap (d := d) (D := D) K X = μ • X :=
+  have hEig_X : Kraus.mapLM K X = μ • X :=
     Module.End.mem_eigenspace_iff.1 (Module.End.hasEigenvector_iff.mp hX_eigvec).1
-  have hEig_Y : MPSTensor.transferMap (d := d) (D := D) K Y = ν • Y :=
+  have hEig_Y : Kraus.mapLM K Y = ν • Y :=
     Module.End.mem_eigenspace_iff.1 (Module.End.hasEigenvector_iff.mp hY_eigvec).1
   -- KS equality at X.
   have hEig_X_map : Kraus.map K X = μ • X := by
-    simpa [Kraus.map, MPSTensor.transferMap_apply] using hEig_X
+    simpa [Kraus.mapLM_apply] using hEig_X
   have h_unital' : Kraus.IsUnital K := h_unital.toIsUnital
   have hKS_X_map :
       Kraus.map K (Xᴴ * X) = (Kraus.map K X)ᴴ * Kraus.map K X :=
@@ -107,16 +107,16 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     KadisonSchwarz.multiplicative_domain_right K h_unital X hKS_X Y
   -- Convert to transferMap.
   have hMD_transfer :
-      MPSTensor.transferMap (d := d) (D := D) K (Y * X) =
-        MPSTensor.transferMap (d := d) (D := D) K Y *
-          MPSTensor.transferMap (d := d) (D := D) K X := by
-    simpa [MPSTensor.transferMap_apply, KadisonSchwarz.krausMap] using hMD
+      Kraus.mapLM K (Y * X) =
+        Kraus.mapLM K Y *
+          Kraus.mapLM K X := by
+    simpa [Kraus.mapLM_apply, KadisonSchwarz.krausMap] using hMD
   -- Compute: E(Y * X) = (ν * μ) • (Y * X).
-  have hEig_prod : MPSTensor.transferMap (d := d) (D := D) K (Y * X) = (ν * μ) • (Y * X) := by
+  have hEig_prod : Kraus.mapLM K (Y * X) = (ν * μ) • (Y * X) := by
     calc
-      MPSTensor.transferMap (d := d) (D := D) K (Y * X)
-          = MPSTensor.transferMap (d := d) (D := D) K Y *
-              MPSTensor.transferMap (d := d) (D := D) K X := hMD_transfer
+      Kraus.mapLM K (Y * X)
+          = Kraus.mapLM K Y *
+              Kraus.mapLM K X := hMD_transfer
       _ = (ν • Y) * (μ • X) := by rw [hEig_Y, hEig_X]
       _ = (ν * μ) • (Y * X) := by
             rw [smul_mul_assoc, mul_smul_comm, smul_smul]
@@ -127,10 +127,10 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     isUnit_peripheral_eigenvector K h_unital ρ hρ hfix hIrr Y ν hEig_Y hν_norm hY_ne
   have hYX_ne : Y * X ≠ 0 := (hY_unit.mul hX_unit).ne_zero
   -- μ * ν = ν * μ is a peripheral eigenvalue.
-  have hEig_prod' : MPSTensor.transferMap (d := d) (D := D) K (Y * X) = (μ * ν) • (Y * X) := by
+  have hEig_prod' : Kraus.mapLM K (Y * X) = (μ * ν) • (Y * X) := by
     rw [mul_comm μ ν]; exact hEig_prod
   have hHasEig : Module.End.HasEigenvalue
-      (MPSTensor.transferMap (d := d) (D := D) K) (μ * ν) := by
+      (Kraus.mapLM K) (μ * ν) := by
     exact Module.End.hasEigenvalue_of_hasEigenvector
       (Module.End.hasEigenvector_iff.mpr
         ⟨Module.End.mem_eigenspace_iff.mpr hEig_prod', hYX_ne⟩)
@@ -174,14 +174,14 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
     (h_unital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (hfix : Kraus.adjointMap K ρ = ρ)
-    (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
-    let E := MPSTensor.transferMap (d := d) (D := D) K
+    (hIrr : IsIrreducibleMap (Kraus.mapLM K)) :
+    let E := Kraus.mapLM K
     let hfin := peripheralEigenvalues_finite (f := E)
     let m := hfin.toFinset.card
     0 < m ∧
     ∃ (γ : ℂ), IsPrimitiveRoot γ m ∧
       peripheralEigenvalues E = Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
-  set E := MPSTensor.transferMap (d := d) (D := D) K with E_def
+  set E := Kraus.mapLM K with E_def
   set hfin := peripheralEigenvalues_finite (f := E) with hfin_def
   set S := hfin.toFinset with S_def
   set m := S.card with m_def
@@ -190,7 +190,7 @@ theorem peripheralEigenvalues_eq_range_primitiveRoot [NeZero D]
     refine ⟨?_, by simp⟩
     -- E is unital: E(I) = I → 1 is an eigenvalue.
     have hfix_one : E (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-      simp only [E_def, MPSTensor.transferMap_apply]
+      simp only [E_def, Kraus.mapLM_apply, Kraus.map_apply]
       convert h_unital using 1
       simp [KadisonSchwarz.IsUnitalKraus]
     have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
