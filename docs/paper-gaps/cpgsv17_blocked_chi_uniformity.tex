@@ -122,6 +122,26 @@ uniform BNT-label statement has been separated from the chosen blocked bases.
 Verdict: example-specific explicit vertical closure; the general blocked-basis
 scope restriction and the corrected status of printed Theorem~4.14 remain.
 
+Let $E_{ij}$ denote the $2\times2$ matrix unit and set
+\[
+  A^0=\frac45E_{00},\qquad A^1=\frac45E_{11},\qquad
+  A^2=\frac35E_{01},\qquad A^3=\frac35E_{10}.
+\]
+The horizontal MPO tensor $R$ is defined by
+\[
+  R^{pq}_{ab}=\frac{25}{32}
+    \left(A^a\otimes\overline{A^b}\right)_{pq}.
+\]
+Its normalized vertical component is the $16$-letter tensor
+$M_0^{(a,b)}=A^a\otimes\overline{A^b}$, and $O_L(M_0)$ denotes the
+length-$L$ closed operator of that component.  Finally, write
+\[
+  W=\begin{pmatrix}16/25&9/25\\9/25&16/25\end{pmatrix},
+  \qquad W_L=W^{\otimes L}.
+\]
+Thus $W^L$ below is an ordinary matrix power, whereas $W_L$ is a Kronecker
+power.
+
 The explicit capstone
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.%
 R_oneLabelBNTAlgebraTensorClause} constructs the tensor-attached clause.  The
