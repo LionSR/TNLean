@@ -74,6 +74,22 @@ def _is_dimension(value: str) -> bool:
     return re.fullmatch(r"-?(?:\d+(?:\.\d*)?|\.\d+)pt", value) is not None
 
 
+def _is_sp_point(value: str) -> bool:
+    """An exact picture-space point, two scaled-point integers."""
+    return re.fullmatch(r"-?\d+,-?\d+", value) is not None
+
+
+def _is_sp_end(value: str) -> bool:
+    """A closure end: a measured point, or the word for a row that has none."""
+    return value == "none" or _is_sp_point(value)
+
+
+def _is_sp_polyline(value: str) -> bool:
+    """A measured contour: at least two points, semicolon separated."""
+    parts = value.split(";")
+    return len(parts) >= 2 and all(_is_sp_point(part) for part in parts)
+
+
 # kind -> {field: validator}; fields absent here are accepted as opaque.
 # Numeric slots are validated strictly: they are cell/row coordinates, and
 # a coordinate that is not an integer addresses nothing.
@@ -208,6 +224,16 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "cut-radius": _is_nonnegative_int,
         "cut-id": _is_positive_int,
     },
+    "closure-rail": {
+        "picture": _is_picture_id,
+        "name": _any,
+        "row": _is_positive_int,
+        "side": _enum("west-east"),
+        "west": _is_sp_end,
+        "east": _is_sp_end,
+        "stroke": _is_nonnegative_int,
+        "points": _is_sp_polyline,
+    },
     "tree": {
         "picture": _is_picture_id,
         "id": _is_positive_int,
@@ -226,6 +252,8 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 # whose result determines whether the record can authorize a boundary check.
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
+    "closure-rail": frozenset(
+        {"name", "row", "side", "west", "east", "stroke", "points"}),
 }
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {
@@ -277,6 +305,7 @@ class Picture:
             "ink-use",
             "glyph-geometry",
             "wire-geometry",
+            "closure-rail",
             "frame",
             "kernel-boundary",
             "warning",

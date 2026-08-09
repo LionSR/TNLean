@@ -1,4 +1,5 @@
-% Regression: a circle-frame trace follows the frame arc, not its chord.
+% Regression: a circle-frame trace follows the frame arc, not its chord,
+% and closes on the two stations it joins rather than short of them.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -17,13 +18,15 @@
       \l__tenkz_test_trace_name_tl
     \str_if_eq:VnT \l__tenkz_test_trace_name_tl {wrap-1}
       {
-        % For a two-station circle the closure sector is centred at (-0.5,0).
-        % A short radial probe there meets the frame arc once; the old chord
-        % lies strictly inside it and meets the probe zero times.
+        % A two-station ring closes from one station round to the other, so
+        % its sector is centred at (0.5,0) and stands at the stations' own
+        % radius.  A short radial probe across that radius meets the sector
+        % once; a chord between the two stations runs down the axis and
+        % meets the probe zero times.
         \path [ spath/save = tenkz-test-ring-probe ]
-          \__tenkz_kernel_r_pair:nn {-0.51} {0}
+          \__tenkz_kernel_r_pair:nn {0.49} {0}
           --
-          \__tenkz_kernel_r_pair:nn {-0.499} {0} ;
+          \__tenkz_kernel_r_pair:nn {0.51} {0} ;
         \__tenkz_string_count:nnN
           {wrap-1} {tenkz-test-ring-probe}
           \l__tenkz_test_ring_cross_int
@@ -31,6 +34,21 @@
           {
             \errmessage
               {circle-frame~trace~did~not~follow~the~closing~frame~arc}
+          }
+        % The sector closes ON the two stations.  A probe astride the first
+        % station's own centre meets it, which the sector that stopped a wrap
+        % reach short of the station never did.
+        \path [ spath/save = tenkz-test-ring-meet ]
+          \__tenkz_kernel_r_pair:nn {-0.04} {0.5}
+          --
+          \__tenkz_kernel_r_pair:nn {0.04} {0.5} ;
+        \__tenkz_string_count:nnN
+          {wrap-1} {tenkz-test-ring-meet}
+          \l__tenkz_test_ring_cross_int
+        \int_compare:nNnF { \l__tenkz_test_ring_cross_int } = {1}
+          {
+            \errmessage
+              {circle-frame~trace~did~not~reach~the~station~it~closes}
           }
       }
   }
