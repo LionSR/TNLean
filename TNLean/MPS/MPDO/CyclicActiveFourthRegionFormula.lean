@@ -24,21 +24,6 @@ namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-private theorem sum_eq_sum_subtype_of_eq_zero
-    {α M : Type*} [Fintype α] [AddCommMonoid M]
-    (p : α → Prop) [DecidablePred p] (f : α → M)
-    (hzero : ∀ x, ¬p x → f x = 0) :
-    ∑ x, f x = ∑ x : {x // p x}, f x := by
-  classical
-  calc
-    _ = ∑ x ∈ Finset.univ.filter p, f x := by
-      symm
-      apply Finset.sum_subset (Finset.filter_subset _ _)
-      intro x hx hxnot
-      rw [hzero x]
-      simpa using hxnot
-    _ = _ := Finset.sum_subtype _ (by simp) f
-
 private def cyclicActiveWordSubtypeEquiv
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     {t : Fin N → Fin F.sectorCount // ∀ i, F.IsCyclicActiveSector (t i)} ≃
@@ -146,7 +131,10 @@ theorem reindex_threeSuffixSectorContraction_eq_cyclicActiveUnnormalized
             F.cyclicNeighboringProduct (Fin.append k t.1)
               (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm x) z)
               (F.appendSectorFiber ((F.retainedOpenEdgeEquiv k).symm y) z) := by
-    apply sum_eq_sum_subtype_of_eq_zero
+    apply Finset.sum_congr_set
+      {t : Fin 3 → Fin F.sectorCount | ∀ i, F.IsCyclicActiveSector (t i)}
+    · intro t ht
+      rfl
     intro t ht
     apply Finset.sum_eq_zero
     intro z hz
