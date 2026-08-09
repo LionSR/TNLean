@@ -71,7 +71,7 @@ theorem stationaryProj_mul_cfc_sqrt {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
   have hS_herm : Sᴴ = S := by
     simpa [S] using Matrix.conjTranspose_cfc_sqrt ρ
   have hSS : S * S = ρ := CFC.sqrt_mul_sqrt_self ρ hρ_psd.nonneg
-  have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
+  have hQρ : Q * ρ = ρ := stationaryProj_mul hρ_psd
   -- `(1 - Q) S` has vanishing square, hence vanishes.
   have h0 : ((1 - Q) * S) * ((1 - Q) * S)ᴴ = 0 := by
     have h1 : (1 - Q)ᴴ = 1 - Q := by
@@ -152,25 +152,18 @@ private theorem exists_weighted_compression
   have hQherm : Qᴴ = Q := hQproj.1.eq
   have hInv : ∀ i : Fin d, (1 - Q) * K i * Q = 0 :=
     stationaryProj_lowerZero K hρ_psd hρ_fix
-  have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
-  have hρQ : ρ * Q = ρ := MPSTensor.mul_supportProj (D := D) (ρ := ρ) hρ_psd
+  have hQρ : Q * ρ = ρ := stationaryProj_mul hρ_psd
+  have hρQ : ρ * Q = ρ := mul_stationaryProj hρ_psd
   have hQρQ : Q * ρ * Q = ρ := by rw [hQρ, hρQ]
   set A : Fin d → Mat := cornerCompressionKraus K Q with hAdef
   have hAsupp : ∀ i : Fin d, Q * A i * Q = A i :=
     cornerCompressionKraus_supported K hQproj
   have hAtp : ∑ i : Fin d, (A i)ᴴ * A i = Q :=
     cornerCompressionKraus_isTP K h_tp hQproj hInv
-  obtain ⟨r, C, φ, V, -, hCtp, -, -, -, -, hLetter, hVtV, hVVt, hφV⟩ :=
-    MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry
+  obtain ⟨r, C, _φ, V, -, hCtp, -, -, -, -, hCi, hVtV, hVVt, -⟩ :=
+    exists_corner_compression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
-  have hCi : ∀ i : Fin d, C i = Vᴴ * A i * V := by
-    intro i
-    have h : V * C i * Vᴴ = A i := by simpa [hφV] using hLetter i
-    calc
-      C i = (Vᴴ * V) * C i * (Vᴴ * V) := by rw [hVtV]; simp
-      _ = Vᴴ * (V * C i * Vᴴ) * V := by simp [Matrix.mul_assoc]
-      _ = Vᴴ * A i * V := by rw [h]
   set σ : Matrix (Fin r) (Fin r) ℂ := Vᴴ * ρ * V with hσdef
   have hσpd : σ.PosDef := by
     have := Matrix.PosSemidef.compression_on_support_posDef (D := D) (ρ := ρ) hρ_psd
