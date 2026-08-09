@@ -57,7 +57,8 @@ theorem exists_unitary_conj_or_transpose_of_preserves_hermitian_spectrum
       (isOrthogonalProjection_pureStateMatrix p).1
     exact exists_pureStateMatrix_eq_of_isHermitian_charpoly_eq
       (T (pureStateMatrix p)) p (hHermitian _ hp) (hcharpoly _ hp)
-  let f : ℙ ℂ (Fin d → ℂ) → ℙ ℂ (Fin d → ℂ) := fun p ↦ Classical.choose (himage p)
+  let f : ℙ ℂ (Fin d → ℂ) → ℙ ℂ (Fin d → ℂ) := fun p ↦
+    Classical.choose (himage p)
   have hfimage : ∀ p, pureStateMatrix (f p) = T (pureStateMatrix p) := fun p ↦
     Classical.choose_spec (himage p)
   have hftransition : ∀ p q, transitionProbability (f p) (f q) =
