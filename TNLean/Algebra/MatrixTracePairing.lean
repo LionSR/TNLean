@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.Complex.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Matrix.Trace
+import Mathlib.LinearAlgebra.BilinearForm.Properties
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
@@ -28,6 +29,7 @@ linear map between matrix algebras.
   one-sided zero product cannot span the full matrix algebra
 * `Matrix.vec_one_dotProduct_vec_eq_trace` — vectorized identity pairing equals the trace
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
+* `Matrix.traceBilinForm` — the bilinear trace pairing as a nondegenerate form
 * `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
 * `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
@@ -117,6 +119,19 @@ theorem submodule_sup_ne_top_of_mul_eq_zero {n : Type*} [Fintype n]
   simp [E, Matrix.mul_apply, Matrix.single, Matrix.of_apply, ite_and] at hentry
   exact hentry.elim hip hqj
 
+/-- Bilinear trace pairing on a finite complex matrix algebra. -/
+noncomputable def traceBilinForm (n : Type*) [Fintype n] :
+    LinearMap.BilinForm ℂ (Matrix n n ℂ) :=
+  LinearMap.mk₂ ℂ (fun X Y ↦ Matrix.trace (X * Y))
+    (by intros; simp [Matrix.add_mul, Matrix.trace_add])
+    (by intros; simp [Matrix.trace_smul])
+    (by intros; simp [Matrix.mul_add, Matrix.trace_add])
+    (by intros; simp [Matrix.trace_smul])
+
+@[simp] theorem traceBilinForm_apply {n : Type*} [Fintype n]
+    (X Y : Matrix n n ℂ) :
+    traceBilinForm n X Y = Matrix.trace (X * Y) := rfl
+
 /-- Nondegeneracy of the trace pairing on square matrices over `ℂ`:
 if `trace (M * N) = 0` for all `N`, then `M = 0`. -/
 theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
@@ -129,6 +144,19 @@ theorem trace_mul_right_eq_zero_iff {n : Type*} [Fintype n]
       intro N
       simpa using h N)
   · intro h N; simp [h]
+
+/-- Nondegeneracy of the bilinear trace pairing. -/
+theorem traceBilinForm_nondegenerate {n : Type*} [Fintype n] :
+    (traceBilinForm n).Nondegenerate := by
+  constructor
+  · intro X hX
+    exact (trace_mul_right_eq_zero_iff X).mp hX
+  · intro Y hY
+    apply (trace_mul_right_eq_zero_iff Y).mp
+    intro X
+    rw [trace_mul_comm]
+    exact hY X
+
 
 /-- The trace-pairing adjoint of a linear map between matrix algebras of
 possibly different dimensions: for `E : M_n(ℂ) → M_m(ℂ)` it is the map
