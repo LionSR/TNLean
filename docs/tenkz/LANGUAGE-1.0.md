@@ -776,7 +776,10 @@ sum are read from the class the mathematics already has.
    sub-formula of a display inherits the display's answer rather than
    claiming one of its own. A stated `size=` outranks the sensing, which is
    how a picture in a line asks for the base measure back. An equation
-   senses once for all of its panels. A page-constrained picture declares its
+   settles the class once for all of its panels: a panel that states none
+   takes the equation's, one that states its own keeps it, and an equation
+   that states a class outranks both, as it does for every other policy it
+   carries. A page-constrained picture declares its
    metric profile with `metrics=` (§2.2), which scales the pitch and leaves
    the density profile to the sensing.
 3. **Axis alignment.** Panels align on the declared wire axis (`align=`).
