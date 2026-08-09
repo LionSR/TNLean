@@ -6,13 +6,13 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 
 /-!
-# The closed operator through a boundary partial isometry, and the `χ` attachment
+# Closed-operator factorization and local diagonalization for `R`
 
 **Scope: partial formalization.** This file continues
 `TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`, rewriting the closed
 operator of the rescaling-stable example's tensor `R` through a boundary
-partial isometry and diagonalizing its local factor to identify the
-one-label BNT structure-coefficient block with `oneLabelChi`.
+partial isometry and diagonalizing its local factor by the hand-defined
+matrix `oneLabelChi`.
 
 ## Main results
 
@@ -21,9 +21,9 @@ one-label BNT structure-coefficient block with `oneLabelChi`.
   partial isometry (`B_transpose_mul_B`: `(B N)ᵀ * B N = 1`) built from a
   two-sided inverse of `φ N` on chain-OK strings (`chainEmbed`);
 * `wMat_eq_conj_diagonal_oneLabelChi` — the Walsh–Hadamard change of basis
-  diagonalizes `wMat` exactly to `Matrix.diagonal (oneLabelChi.entry 0 0 0)`,
-  identifying the one-label BNT structure-coefficient block arising from the
-  closed operator of `R` with `oneLabelChi`.
+  diagonalizes `wMat` exactly to `Matrix.diagonal (oneLabelChi.entry 0 0 0)`.
+  This is a local matrix identity, not an identification with the coefficients
+  of a tensor-attached BNT clause.
 
 `mpo_R_entry_formula` is rewritten as a literal matrix product
 (`mpo_R_eq_B_mul_wN_mul_transpose`):
@@ -40,16 +40,12 @@ exactly by the Walsh–Hadamard change of basis `hadamard2 = !![1, 1; 1, -1]`
 ```
 hadamard2 * χ * hadamard2 = 2 • wMat,     χ = Matrix.diagonal (oneLabelChi.entry 0 0 0)
 ```
-so the one-label BNT structure-coefficient block arising from the closed
-operator of `R` equals `oneLabelChi` exactly.  This is the attachment of
-`χ` to `R` used by the blueprint's rescaling-stable coefficient theorem; it
-supersedes the earlier eigenvector-only spectral link
-(`wMat_eigenvalue_eq_oneLabelChi_entry`) with an exact matrix identity.  It
-is not the uniform same-length product-algebra statement of Theorem
-4.14(ii) itself: that requires the `AlgebraStructureData` witness apparatus
-of `TNLean/MPS/MPDO/BNTTheoremWitness.lean`, which in turn needs
-`IsRFPViaTS R`.  Documented in
-`docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
+so the hand-defined matrix `oneLabelChi` diagonalizes the local factor of the
+closed-operator formula. This strengthens the earlier eigenvector-only
+spectral link (`wMat_eigenvalue_eq_oneLabelChi_entry`) to an exact matrix
+identity. It does not identify `oneLabelChi` with the diagonal data of the
+existential tensor-attached BNT clause for `R`; that comparison remains open
+in `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`.
 
 ## References
 
@@ -218,15 +214,14 @@ theorem mpo_R_eq_B_mul_wN_mul_transpose {N : ℕ} (hN : 0 < N) :
   rw [Matrix.smul_apply, smul_eq_mul, B_mul_wN_mul_transpose_apply, ← mul_assoc]
   exact mpo_R_entry_formula hN p q
 
-/-! ### The one-label BNT structure-coefficient block of `R` equals `χ`
+/-! ### The local factor of `R` is diagonalized by `oneLabelChi`
 
 `wMat`, the local factor of the `B W_N Bᵀ` factorization, is diagonalized
 exactly by the (unnormalized) Walsh–Hadamard change of basis: the resulting
-diagonal matrix is `Matrix.diagonal (oneLabelChi.entry 0 0 0)`, i.e. `χ`
-itself. Combined with `mpo_R_eq_B_mul_wN_mul_transpose`, this identifies the
-one-label BNT structure-coefficient block arising from the closed operator
-of `R` with `oneLabelChi`, closing the "Remaining gap" attachment noted in
-the module docstring of `TNLean.MPS.MPDO.RescalingStableLengthDependentRFP`.
+diagonal matrix is `Matrix.diagonal (oneLabelChi.entry 0 0 0)`. This is an
+explicit matrix identity for the closed-operator factorization. It does not
+identify `oneLabelChi` with the diagonal family of the existential
+tensor-attached BNT clause.
 
 Project example; not from CPSV16. -/
 
@@ -245,14 +240,13 @@ lemma hadamard2_mul_self :
       Matrix.cons_val', Matrix.cons_val_fin_one, Matrix.empty_val'] <;>
     norm_num
 
-/-- **The one-label BNT structure-coefficient block of `R` equals `χ`
-exactly.** Conjugating `wMat` by the Walsh–Hadamard basis `hadamard2`
-diagonalizes it exactly to `oneLabelChi`: `hadamard2 * χ * hadamard2 = 2 • wMat`,
-with `χ = Matrix.diagonal (oneLabelChi.entry 0 0 0) = diag(1, 7/25)`. Since
-`wMat` is the local factor of the `mpo R N = (25/32)^N • (B N * wN N *
-(B N)ᵀ)` factorization (`mpo_R_eq_B_mul_wN_mul_transpose`), this identifies
-the structure-coefficient block of the closed operator of `R` with
-`oneLabelChi`.
+/-- **The local factor `wMat` is diagonalized by `oneLabelChi`.** Conjugating
+`wMat` by the Walsh–Hadamard basis `hadamard2` gives
+`hadamard2 * χ * hadamard2 = 2 • wMat`, with
+`χ = Matrix.diagonal (oneLabelChi.entry 0 0 0) = diag(1, 7/25)`. Here `wMat`
+is the local factor of the closed-operator formula
+`mpo R N = (25/32)^N • (B N * wN N * (B N)ᵀ)`. No identification with the
+coefficient or diagonal data of a tensor-attached BNT clause is asserted.
 
 Source: arXiv:1606.00608, lines 995--1010 (project example). -/
 theorem hadamard2_mul_diagonal_oneLabelChi_mul_hadamard2 :
