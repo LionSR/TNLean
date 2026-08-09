@@ -550,8 +550,8 @@ with eigenvalue `λ^n`.
 Comparison: arXiv:1606.00608, Theorem IV.13(ii), lines 972--985, and Appendix
 C.4, lines 2046--2085 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
 passages do not state this elementary power calculation; it records the
-spectral obstruction to deriving the transfer-retract formulation from the
-present support-algebra predicate alone. -/
+spectral obstruction to deriving the one-site transfer-retract criterion from
+the present support-algebra predicate alone. -/
 theorem adjoint_blockedTransferMap_apply_of_adjoint_transferMap_eigenvector
     {M : MPOTensor d D} (n : ℕ) {lam : ℂ} {X : Mat}
     (hX : (transferMap M).adjoint X = lam • X) :
