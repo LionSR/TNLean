@@ -748,8 +748,9 @@ sum are read from the class the mathematics already has.
 1. **One metric context.** All panels share the pitch, the size-class table,
    and one measure. The pitch is the equation's: a panel that named a metric
    profile of its own would scale one side of the equality and not the other,
-   so `metrics=` is refused on a panel inside an equation and stated on the
-   equation instead. A glyph's extent is settled by its size class, the number
+   so `metrics=` is refused on a panel inside an equation — including a panel
+   spelling the equation's own word, which says nothing the equation has not
+   — and is stated on the equation instead. A glyph's extent is settled by its size class, the number
    of port slots on each pair of opposite faces, and the equation's measure
    for that class — by nothing else, and by nothing panel-local. The class
    reference is the floor on both axes: the horizontal extent is that
@@ -825,7 +826,7 @@ sum are read from the class the mathematics already has.
    an opt-out; an opt-out naming a relation the equation does not perform is a
    mistyped one and is refused before the stream records it; a reason may not
    carry the record stream's own field separator, which no reader could put
-   back together; and a word the audit does not know, or a value on a word
+   back together; one relation carries one waiver and one reason; and a word the audit does not know, or a value on a word
    that takes none, is refused rather than ignored, because a spelling the
    audit passes over is a comparison the author believes is running and is
    not.

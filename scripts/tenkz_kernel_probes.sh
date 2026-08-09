@@ -1853,6 +1853,7 @@ for scope_case in n_group_size:TKZ-SIZE-SCOPE \
                   n_check_word:TKZ-EQ-CHECK-WORD \
                   n_check_relation:TKZ-EQ-CHECK-RELATION \
                   n_check_bar:TKZ-EQ-CHECK-BAR \
+                  n_check_twice:TKZ-EQ-CHECK-TWICE \
                   n_panel_metrics:TKZ-METRICS-PANEL; do
   scope_name=${scope_case%%:*}
   scope_code=${scope_case##*:}

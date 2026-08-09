@@ -1,11 +1,13 @@
 % Negative regression: one equation, one pitch.  A panel naming a metric
 % profile of its own would scale one side of the asserted equality and not
-% the other, so inside an equation the profile is the equation's.
+% the other, so inside an equation the profile is the equation's -- and the
+% panel may not name one even when it names the equation's own word, which
+% says nothing the equation has not said already.
 \documentclass{standalone}
 \usepackage{tenkz}
 \begin{document}
 \tenkzkernel
-\begin{tenkzeq}[check={signature}]
+\begin{tenkzeq}[check={signature}, metrics=compact]
   \begin{tenkz}[metrics=compact, rows={wire}, cols=1, bonds=none, west=open]
     \tn[ports={180:virtual}]{A}
   \end{tenkz}
