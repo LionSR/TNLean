@@ -527,6 +527,87 @@ closing a chain of $N$ copies of $\mathcal U$.
     generator belongs to $\mathfrak S$, giving the stated specialization.
 \end{proof}
 
+\begin{definition}[Three-form residual subspace]
+    \label{def:mpu_three_form_subspace}
+    \lean{MPOTensor.projectorMulResidualSubmodule,
+        MPOTensor.residualMulProjectorSubmodule,
+        MPOTensor.residualMulProjectorMulResidualSubmodule,
+        MPOTensor.threeFormSubmodule}
+    \leanok
+    \uses{def:mpu_residual_algebra}
+    Let $E$ be the normalized diagonal after the first blocking and let
+    $\mathfrak S$ be its residual nonunital algebra.  Define
+    \begin{align}
+        \mathcal T={}&\operatorname{span}\{EA:A\in\mathfrak S\}
+          +\operatorname{span}\{AE:A\in\mathfrak S\}\\
+          &+\operatorname{span}\{AEB:A,B\in\mathfrak S\}.
+    \end{align}
+    This is the basis-independent sum of the three forms in equation
+    \texttt{sprimeforms} of
+    \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Ordered second-block expansion]
+    \label{thm:mpu_ordered_second_block_expansion}
+    \lean{MPOTensor.ordered_prod_smul_projector_add_sub_mem_threeFormSubmodule}
+    \leanok
+    \uses{def:mpu_three_form_subspace}
+    Suppose $E^2=E$, $EAE=0$ for every $A\in\mathfrak S$, and every ordered
+    product of $N>0$ elements of $\mathfrak S$ vanishes.  For scalars $c_k$
+    and elements $S_k\in\mathfrak S$,
+    \begin{align}
+      \prod_{k=0}^{N-1}(c_kE+S_k)
+        -\left(\prod_{k=0}^{N-1}c_k\right)E&\in\mathcal T.
+    \end{align}
+    Products are taken in increasing site order and need not commute.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the product as a sum over binary choices of $E$ or $S_k$, retaining
+    the original order.  The all-$E$ choice is the subtracted term because
+    $E^q=E$ for $q>0$.  The all-residual choice vanishes by the length-$N$
+    hypothesis.  In every remaining word, contiguous copies of $E$ collapse.
+    If two resulting copies of $E$ are separated by a nonempty residual word,
+    the factor $EAE$ makes the word zero.  Thus each surviving word has one
+    contiguous projector block and belongs to one of the three summands of
+    $\mathcal T$.
+\end{proof}
+
+\begin{theorem}[Second-block residuals lie in the three-form subspace]
+    \label{thm:mpu_second_block_residual_three_forms}
+    \lean{MPOTensor.IsMPU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_eq_zero,
+        MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSubmodule,
+        MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_mem_threeFormSubmodule}
+    \leanok
+    \uses{def:mpu,def:mpu_residual_algebra,def:mpu_three_form_subspace}
+    Let the first-block tensor be an MPU of bond dimension $D>0$.  Assume its
+    normalized double-layer diagonal $E$ is a rank-one idempotent.  After a
+    second blocking of exactly $D^2$ sites, every residual coefficient belongs
+    to $\mathcal T$.
+
+    The conclusion is membership in the sum of the three subspaces.  It does
+    not assign one exclusive type to a coefficient in an arbitrary physical
+    basis.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_controlled_mixed_residual_trace,
+        thm:mpu_residual_product_d_sq,
+        thm:mpu_ordered_second_block_expansion}
+    First extend $EPE=0$ from nonempty residual words $P$ to every element of
+    $\mathfrak S$ by writing the generated algebra as the linear span of the
+    multiplicative semigroup of residual generators.  For a blocked matrix
+    unit, each local double-layer entry is
+    \begin{align}
+        \delta_{ij}E+R_{ij}.
+    \end{align}
+    The ordered expansion theorem applies with $N=D^2$.  Its all-$E$
+    coefficient is the blocked Kronecker delta and is exactly removed by the
+    residual slice.  Hence every blocked matrix-unit residual lies in
+    $\mathcal T$.  Expanding an arbitrary physical matrix in matrix units and
+    using linearity proves the result.
+\end{proof}
+
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
 For the transfer-matrix spectrum argument of
