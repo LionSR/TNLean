@@ -166,6 +166,83 @@ closing a chain of $N$ copies of $\mathcal U$.
     unitary.  Simultaneous reindexing preserves unitarity.
 \end{proof}
 
+\section{Trace-power lemma}\label{sec:mpu_trace_power}
+
+For the transfer-matrix spectrum argument of \cite[Proposition~1]{Cirac2017MPU} we need the algebraic fact that a matrix
+whose positive powers all have trace~$1$ must have characteristic polynomial
+$X^{n-1}(X-1)$.
+
+\begin{definition}[Rank-one diagonal idempotent]
+  \label{def:mpu_diagonal_one_at}
+  \lean{Matrix.diagonalOneAt}
+  \leanok
+  For an index $i_0$ in a finite set $I$ of cardinality $n$, let $M_{i_0}$ be the $n\times n$
+  diagonal matrix with a $1$ at position $i_0$ and zeros elsewhere.
+\end{definition}
+
+\begin{lemma}[Properties of the rank-one diagonal idempotent]
+  \label{lem:mpu_diagonal_one_at}
+  \lean{Matrix.trace_diagonalOneAt,
+    Matrix.diagonalOneAt_pow, Matrix.trace_pow_diagonalOneAt,
+    Matrix.charpoly_diagonalOneAt}
+  \leanok
+  \uses{def:mpu_diagonal_one_at}
+  The matrix $M_{i_0}$ from definition~\ref{def:mpu_diagonal_one_at} satisfies
+  \begin{itemize}
+    \item $M_{i_0}^k = M_{i_0}$ for every $k\ge 1$,
+    \item $\tr(M_{i_0}^k) = 1$ for every $k\ge 1$,
+    \item $\chi_{M_{i_0}}(X) = X^{\,n-1}(X-1)$.
+  \end{itemize}
+\end{lemma}
+
+\begin{proof}\leanok
+  The first two items follow from $1^k=1$ and $0^k=0$ for $k\ge 1$.
+  The characteristic polynomial is computed from
+  $\chi_{\diag(d)}(X) = \prod_i (X - d_i)$.
+\end{proof}
+
+\begin{theorem}[Finite-range trace-power lemma]
+  \label{thm:mpu_trace_power_le_card}
+  \lean{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_trace_pow_eq_one_of_le_card}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix with $n\ge 1$.  If
+  $\tr(A^k)=1$ for every $k$ with $1\le k\le n$, then
+  \begin{align}
+    \chi_A(X) &= X^{\,n-1}(X-1).
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:newton_girard, lem:mpu_diagonal_one_at}
+  Choose any index $i_0$ (the hypothesis $n\ge1$ makes this possible)
+  and let $B$ be the rank-one diagonal idempotent from
+  Lemma~\ref{lem:mpu_diagonal_one_at}.  For $1\le k\le n$ we have
+  $\tr(A^k)=1=\tr(B^k)$.  The finite-range half of the Newton--Girard
+  Theorem~\ref{thm:newton_girard} then yields $\chi_A = \chi_B =
+  X^{\,n-1}(X-1)$.
+\end{proof}
+
+\begin{theorem}[All-positive-powers trace-power lemma]
+  \label{thm:mpu_trace_power_all}
+  \lean{Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix.  If $\tr(A^k)=1$ for
+  every $k\ge 1$, then
+  \begin{align}
+    \chi_A(X) &= X^{\,n-1}(X-1).
+  \end{align}
+  (The hypothesis already forces $n\ge 1$ because the trace of a
+  $0\times0$ matrix is $0$, contradicting $\tr(A)=1$.)
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_trace_power_le_card}
+  If $n=0$ the hypothesis $\tr(A)=1$ contradicts the fact that the
+  trace of an empty matrix is $0$; the conclusion follows vacuously.
+  When $n\ge1$, the hypothesis on all positive powers implies the
+  finite-range hypothesis of Theorem~\ref{thm:mpu_trace_power_le_card}.
+\end{proof}
+
 We now introduce the two matrices used for the singular-value decompositions of
 a Matrix Product Unitary tensor in Section~III of \cite{Cirac2017MPU}.  Write
 $\mathcal U^i_{j,\alpha,\beta}$ for the entries of the tensor, where $i,j$ are
