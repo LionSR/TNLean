@@ -10,8 +10,8 @@ Theorem~6.6; see
     \label{thm:transfer_peripheral_cyclic_structure}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
     \leanok
-    \uses{def:transfer_map, def:unital_kraus, def:irreducible_cp,
-        def:peripheral_eigenvalues}
+    \uses{def:transfer_map, def:unital_kraus, def:kraus_adjoint_map,
+        def:irreducible_cp, def:peripheral_eigenvalues}
     Let $\E_K$ be the transfer map of a finite matrix family $K$. Assume that
     $\E_K$ is irreducible and unital and has a positive-definite adjoint fixed
     point. Then there exist $m\geq1$ and a primitive $m$-th root of unity
@@ -21,7 +21,8 @@ Theorem~6.6; see
 
 \begin{proof}
     \leanok
-    \uses{thm:peripheral_finite, lem:peripheral_closed_under_mul_group,
+    \uses{thm:one_peripheral, thm:peripheral_finite,
+        lem:peripheral_closed_under_mul_group,
         lem:peripheral_closed_under_inv_group}
     The peripheral eigenvalues form a finite subgroup of $\C^\times$: they
     contain $1$, are nonzero, and are closed under multiplication and
