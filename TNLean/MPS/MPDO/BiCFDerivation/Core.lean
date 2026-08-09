@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.ProductAlgebra
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
+import TNLean.MPS.SharedInfra.WordTupleGauge
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
@@ -63,46 +64,6 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
-
-/-- The tuple of length-`L` word evaluations across all blocks. -/
-def wordTuple
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (L : ℕ) (w : Fin L → Fin d) :
-    (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
-  fun k => evalWord (A k) (List.ofFn w)
-
-/-- Finite-length span condition on the product algebra of block matrices. -/
-def WordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    (L : ℕ) : Prop :=
-  Submodule.span ℂ (Set.range (wordTuple A L)) = ⊤
-
-/-- Reindexing the common physical alphabet by an equivalence preserves the
-simultaneous word-tuple span.
-
-This is the index transport used in the simultaneous BNT blocking of
-arXiv:1606.00608, lines 317--345. -/
-theorem wordTupleSpanTop_reindexPhysical_equiv {d' : ℕ}
-    (e : Fin d' ≃ Fin d) (A : (k : Fin r) → MPSTensor d (dim k)) (L : ℕ) :
-    WordTupleSpanTop (fun k ↦ reindexPhysical e (A k)) L ↔
-      WordTupleSpanTop A L := by
-  unfold WordTupleSpanTop
-  have hRange :
-      Set.range (wordTuple (fun k ↦ reindexPhysical e (A k)) L) =
-        Set.range (wordTuple A L) := by
-    ext X
-    constructor
-    · rintro ⟨w, rfl⟩
-      refine ⟨fun i ↦ e (w i), ?_⟩
-      funext k
-      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
-        Function.comp_def]
-    · rintro ⟨w, rfl⟩
-      refine ⟨fun i ↦ e.symm (w i), ?_⟩
-      funext k
-      simp [wordTuple, evalWord_reindexPhysical, List.map_ofFn,
-        Function.comp_def]
-  rw [hRange]
 
 /-- A simultaneous one-letter span makes every member of the tensor family
 injective.
