@@ -260,7 +260,7 @@ sector maps. The cyclic projections come from
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:blocked_tensor, thm:peripheral_cyclic_structure}
+    \uses{def:blocked_tensor, thm:transfer_peripheral_cyclic_structure}
     Let $A$ be a left-canonical irreducible tensor. Then there is a
     period-removing length $m\ge1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
@@ -375,7 +375,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_cyclic_structure,
+    \uses{thm:transfer_peripheral_cyclic_structure,
         thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
     Left-canonicality makes $K_i:=(A^i)^\dagger$ unital, irreducibility passes
     to the adjoint map, and the quantum Perron--Frobenius theorem provides a

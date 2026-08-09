@@ -2,10 +2,10 @@
 
 The first two results in this section concern finite Kraus maps and hence assume
 complete positivity. They do not supply the abstract Schwarz-map case of Wolf
-Theorem~6.6; see
-\texttt{docs/paper-gaps/wolf\_thm6\_6\_kraus\_scope.tex}.
+Theorem~6.6.
 
-% Scope restriction (complete positivity): finite-Kraus specialization.
+% Scope restriction (complete positivity): finite-Kraus specialization. See
+% docs/paper-gaps/wolf_thm6_6_kraus_scope.tex.
 \begin{theorem}[Transfer-map peripheral eigenvalues: cyclic structure]
     \label{thm:transfer_peripheral_cyclic_structure}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
@@ -34,7 +34,9 @@ Theorem~6.6; see
     \label{thm:peripheral_cyclic_group}
     \lean{PeripheralSpectrum.peripheral_eigenvalues_form_cyclic_group}
     \leanok
-    \uses{thm:transfer_peripheral_cyclic_structure}
+    \uses{def:transfer_map, def:kraus_map, def:unital_kraus, def:tp_kraus,
+        def:kraus_adjoint_map, def:irreducible_cp,
+        def:peripheral_eigenvalues}
     Let $K$ be a finite matrix family on $\MN{D}$ with transfer map $\E_K$.
     Assume that $\E_K$ is irreducible, that $K$ is unital and trace-preserving,
     and that the adjoint Kraus map has a positive-definite fixed point. Then
@@ -58,7 +60,9 @@ Theorem~6.6; see
     \label{thm:channel_period_divides_dim}
     \lean{PeripheralSpectrum.channel_period_divides_dim}
     \leanok
-    \uses{thm:cyclic_decomposition_irreducible_schwarz}
+    \uses{def:transfer_map, def:kraus_map, def:unital_kraus, def:tp_kraus,
+        def:kraus_adjoint_map, def:irreducible_cp,
+        def:peripheral_eigenvalues}
     Let $K$ be a finite matrix family on $\MN{D}$ with transfer map $\E_K$.
     Assume that $\E_K$ is irreducible, that $K$ is unital and trace-preserving,
     and that the adjoint Kraus map fixes a positive-definite matrix. Let
