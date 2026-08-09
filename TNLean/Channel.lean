@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Channel.Basic
 import TNLean.Channel.BreuerHallIndecomposable
 import TNLean.Channel.BreuerHallMap
+import TNLean.Channel.ChoiDoeblin
 import TNLean.Channel.ChoiJamiolkowski
 import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.ChoiTypeMap
