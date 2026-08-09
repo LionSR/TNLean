@@ -364,8 +364,8 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** `MPOTensor.windowComplementEquiv` in `CommutingForm.lean` and the private
   `cyclicShiftEquiv` definitions in `PhysicalSectorProductTransport.lean` and
   `PhysicalSupportProductTransport.lean` now apply the lemma directly, as does its original
-  `MPSTensor.replaceWindow_extractWindow` caller. The Lean sources lose 40 lines net
-  (6 insertions and 46 deletions).
+  `MPSTensor.replaceWindow_extractWindow` caller. The Lean sources lose 41 lines net
+  (6 insertions and 47 deletions).
 
 ### Product-marginal support kernel
 - **Pattern:** the simultaneous marginal-support whitening proof and the
