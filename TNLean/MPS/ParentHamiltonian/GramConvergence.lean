@@ -68,4 +68,47 @@ theorem groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
       gcongr
       exact hbound n
 
+/-- Under the same complementary spectral-radius hypothesis, the ground-space Gram
+operators converge to the reshuffled fixed-point projection. -/
+theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
+    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ)
+    (htr : trace ρ ≠ 0)
+    (hTP : IsTracePreservingMap (transferMap A))
+    (hρ : transferMap A ρ = ρ)
+    (hgap :
+      spectralRadius ℂ
+        ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+          (transferMap A - fixedPointProj ρ htr)) < 1) :
+    Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
+      (nhds (Matrix.gramReshuffle (fixedPointProj ρ htr))) := by
+  rcases groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+    A ρ htr hTP hρ hgap with ⟨C, r, _hC, hr_pos, hr_lt_one, hbound⟩
+  have hrpow : Filter.Tendsto (fun n : ℕ => r ^ n) Filter.atTop (nhds 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hr_pos.le hr_lt_one
+  have hrhs : Filter.Tendsto
+      (fun n : ℕ => (D : ℝ) ^ 3 * (C * r ^ n) ^ 2) Filter.atTop (nhds 0) := by
+    simpa only [zero_pow (by norm_num : (2 : ℕ) ≠ 0), mul_zero] using
+      (tendsto_const_nhds.mul ((tendsto_const_nhds.mul hrpow).pow 2))
+  have hsq : Filter.Tendsto
+      (fun n : ℕ =>
+        ‖groundSpaceGram A n - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ ^ 2)
+      Filter.atTop (nhds 0) := by
+    apply squeeze_zero' (Filter.Eventually.of_forall fun _ => sq_nonneg _)
+      _ hrhs
+    filter_upwards [Filter.eventually_ge_atTop (1 : ℕ)] with n hn
+    exact hbound n hn
+  have hnorm : Filter.Tendsto
+      (fun n : ℕ =>
+        ‖groundSpaceGram A n - Matrix.gramReshuffle (fixedPointProj ρ htr)‖)
+      Filter.atTop (nhds 0) := by
+    have hsqrt := (Real.continuous_sqrt.tendsto 0).comp hsq
+    change Filter.Tendsto
+      (fun n : ℕ =>
+        Real.sqrt
+          (‖groundSpaceGram A n - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ ^ 2))
+      Filter.atTop (nhds (Real.sqrt 0)) at hsqrt
+    simpa only [Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hsqrt
+  rw [← tendsto_sub_nhds_zero_iff, tendsto_zero_iff_norm_tendsto_zero]
+  exact hnorm
+
 end MPSTensor
