@@ -123,8 +123,11 @@ Formerly documented as a scope restriction in
 
 **Item 2** (non-degenerate eigenvalue, strictly positive eigenvector):
 
-Channel-level (general irreducible CP maps) — `TNLean.Channel.Irreducible.PerronFrobenius`:
-* `posDef_of_posSemidef_eigenvector_irreducible_cp`: PSD eigenvector → PosDef
+Channel-level (general irreducible CP maps):
+* `posDef_of_posSemidef_fixedPoint_irreducible_cp` — `TNLean.Channel.Irreducible.FixedPoint`:
+  nonzero PSD fixed point → PosDef
+* `posDef_of_posSemidef_eigenvector_irreducible_cp` —
+  `TNLean.Channel.Irreducible.PerronFrobenius`: PSD eigenvector → PosDef
 * `exists_posDef_eigenvector_of_irreducible_cp`: ∃ PosDef eigenvector with `r > 0`
 * `posSemidef_eigenvector_unique_of_irreducible_cp`: uniqueness up to scalar
 

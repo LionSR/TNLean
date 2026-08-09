@@ -16,11 +16,13 @@
 \section{The source theorem}
 
 Theorem 6.6 of \emph{Quantum Channels \& Operations} (Wolf 2012), stated at
-lines 244--246 of \texttt{Notes/WolfNotePDF/wolf\_ch6\_sections.txt}, concerns
+lines 244--252 of \texttt{Notes/WolfNotePDF/wolf\_ch6\_sections.txt}, concerns
 an irreducible positive unital map $T:M_D(\mathbb C)\to M_D(\mathbb C)$ that
-satisfies the Schwarz inequality. It concludes that the peripheral spectrum
-is a finite cyclic group. Complete positivity and a Kraus representation are
-not hypotheses of the theorem.
+satisfies the Schwarz inequality. Item~(1) concludes that the peripheral
+spectrum is a finite cyclic group of order $m\leq D^2$; items~(2)--(4) give
+nondegeneracy, a peripheral unitary, and cyclic spectral projections.
+Complete positivity and a Kraus representation are not hypotheses of the
+theorem.
 
 \section{The restriction in the formalization}
 
@@ -35,9 +37,9 @@ It assumes that this Kraus map is unital and irreducible and that its adjoint
 has a positive-definite fixed point. A finite Kraus presentation implies
 complete positivity, which is strictly stronger than Wolf's positive Schwarz
 hypothesis. Thus the Lean theorem proves the completely positive
-specialization of Wolf Theorem 6.6, not the theorem at its full source scope.
-The corresponding Blueprint entry states this restriction explicitly and
-uses its own specialization title.
+specialization of the cyclicity conclusion in Wolf Theorem 6.6(1), but not its
+bound $m\leq D^2$ and not items~(2)--(4). The corresponding Blueprint entry
+states this restriction explicitly and uses its own specialization title.
 
 \section{Elimination plan}
 
@@ -52,8 +54,10 @@ of Wolf Theorem 6.6.
 
 \section{Verdict}
 
-This is a \textbf{scope restriction}: the formal theorem proves Wolf Theorem
-6.6 only under the stronger complete-positivity hypothesis supplied by a
-finite Kraus representation. The abstract Schwarz-map case remains open.
+This is a \textbf{scope restriction}: the formal theorem proves only the
+cyclicity conclusion of Wolf Theorem 6.6(1), under the stronger
+complete-positivity hypothesis supplied by a finite Kraus representation. It
+does not include the bound $m\leq D^2$ or items~(2)--(4). The abstract
+Schwarz-map cyclicity statement remains open.
 
 \end{document}

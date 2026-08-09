@@ -30,7 +30,8 @@ cyclic by `rootsOfUnity.isCyclic`.
 
 **Scope restriction (complete positivity):** Wolf Theorem 6.6 assumes only positivity,
 unitality, and the Schwarz inequality. This module proves the finite-Kraus, hence
-completely positive, specialization. See
+completely positive, specialization of the cyclicity conclusion in item (1), without
+the bound on the group order; it does not formalize items (2)--(4). See
 `docs/paper-gaps/wolf_thm6_6_kraus_scope.tex`.
 
 ## References
