@@ -37,6 +37,66 @@ noncomputable section
 
 namespace MPOTensor
 
+namespace VerticalSectorHypotheses
+
+/-- The transported vertical-sector refinement map preserves positivity under
+the strong Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4,
+lines 1972--1979. -/
+theorem Tbar_posSemidef
+    {g₁ g₂ d D : ℕ}
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
+    (X : VerticalSectorAlgebra h.dim₁)
+    (hX : IsVerticalSectorPosSemidef X) :
+    IsVerticalSectorPosSemidef (h.Tbar X) := by
+  exact transportedVerticalSectorT_posSemidef
+    h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁
+    h.U₁ h.U₂ h.T h.hTCPTP X hX
+
+/-- The transported vertical-sector coarse-graining map preserves positivity
+under the strong Appendix C.4 hypotheses.
+
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4,
+lines 1972--1979. -/
+theorem Sbar_posSemidef
+    {g₁ g₂ d D : ℕ}
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
+    (X : VerticalSectorAlgebra h.dim₂)
+    (hX : IsVerticalSectorPosSemidef X) :
+    IsVerticalSectorPosSemidef (h.Sbar X) := by
+  exact transportedVerticalSectorS_posSemidef
+    h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂
+    h.U₁ h.U₂ h.S h.hSCPTP X hX
+
+/-- The coarse-graining--refinement square composite preserves positivity on
+the first vertical-sector algebra.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+theorem SbarTbar_isPositiveDirectSumMap
+    {g₁ g₂ d D : ℕ}
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    Matrix.IsPositiveDirectSumMap h.SbarTbar := by
+  intro X hX
+  exact h.Sbar_posSemidef (h.Tbar X) (h.Tbar_posSemidef X hX)
+
+/-- The refinement--coarse-graining square composite preserves positivity on
+the second vertical-sector algebra.
+
+Source: arXiv:1606.00608, Appendix C.4, lines 1974--1980. -/
+theorem TbarSbar_isPositiveDirectSumMap
+    {g₁ g₂ d D : ℕ}
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    Matrix.IsPositiveDirectSumMap h.TbarSbar := by
+  intro X hX
+  exact h.Tbar_posSemidef (h.Sbar X) (h.Sbar_posSemidef X hX)
+
+end VerticalSectorHypotheses
+
 /-- The transported coarse-graining and refinement maps, as well as their two
 square composites, preserve the appropriate total sector traces.
 
@@ -54,22 +114,10 @@ theorem transportedVerticalSector_composites_tracePreserving
       Matrix.IsTracePreservingBetweenDirectSums h.Tbar ∧
       Matrix.IsTracePreservingBetweenDirectSums h.Sbar := by
   classical
-  have hTbarpos (X : VerticalSectorAlgebra h.dim₁)
-      (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (h.Tbar X) := by
-    exact transportedVerticalSectorT_posSemidef
-      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁ h.U₁ h.U₂ h.T h.hTCPTP X hX
-  have hSbarpos (X : VerticalSectorAlgebra h.dim₂)
-      (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (h.Sbar X) := by
-    exact transportedVerticalSectorS_posSemidef
-      h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂ h.U₁ h.U₂ h.S h.hSCPTP X hX
-  have hF₁pos : Matrix.IsPositiveDirectSumMap h.SbarTbar := by
-    intro X hX
-    exact hSbarpos (h.Tbar X) (hTbarpos X hX)
-  have hF₂pos : Matrix.IsPositiveDirectSumMap h.TbarSbar := by
-    intro X hX
-    exact hTbarpos (h.Sbar X) (hSbarpos X hX)
+  have hTbarpos := h.Tbar_posSemidef
+  have hSbarpos := h.Sbar_posSemidef
+  have hF₁pos := h.SbarTbar_isPositiveDirectSumMap
+  have hF₂pos := h.TbarSbar_isPositiveDirectSumMap
   have hTbarle (X : VerticalSectorAlgebra h.dim₁)
       (hX : IsVerticalSectorPosSemidef X) :
       verticalSectorTrace (h.Tbar X) ≤ verticalSectorTrace X :=

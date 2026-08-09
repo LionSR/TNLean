@@ -730,6 +730,22 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### transported vertical-sector positivity — candidate
+- **Pattern:** reconstruct positivity of the transported `Tbar` and `Sbar`
+  maps from their underlying transported-sector positivity theorems, then
+  compose the two witnesses to prove positivity of `SbarTbar` and `TbarSbar`.
+- **Seen:** two large occurrences across
+  `TNLean/MPS/MPDO/VerticalSectorTracePreservation.lean` and
+  `TNLean/MPS/MPDO/VerticalSectorIdentity.lean` before factoring
+  (2026-08-09).
+- **Abstraction:** `MPOTensor.VerticalSectorHypotheses.Tbar_posSemidef`,
+  `Sbar_posSemidef`, `SbarTbar_isPositiveDirectSumMap`, and
+  `TbarSbar_isPositiveDirectSumMap` in
+  `TNLean/MPS/MPDO/VerticalSectorTracePreservation.lean`.
+- **Notes:** the accessors remove the duplicated proof blocks and four long-line
+  warnings while staying at the Appendix C.4 trace-preservation import
+  boundary. Mark as promoted if a third call site appears.
+
 ### positive-part support-projection trace estimate — candidate
 - **Pattern:** for a positive linear map `T` and Hermitian `H`, decompose
   `T H = T H⁺ - T H⁻`, obtain the support projection `P` of `(T H)⁺`, and

@@ -47,22 +47,8 @@ theorem transportedVerticalSector_composites_eq_id
     h.SbarTbar = LinearMap.id ∧
       h.TbarSbar = LinearMap.id := by
   classical
-  have hTbarpos (X : VerticalSectorAlgebra h.dim₁)
-      (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (h.Tbar X) := by
-    exact transportedVerticalSectorT_posSemidef
-      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.hMult₁ h.hWeight₁ h.U₁ h.U₂ h.T h.hTCPTP X hX
-  have hSbarpos (X : VerticalSectorAlgebra h.dim₂)
-      (hX : IsVerticalSectorPosSemidef X) :
-      IsVerticalSectorPosSemidef (h.Sbar X) := by
-    exact transportedVerticalSectorS_posSemidef
-      h.dim₁ h.mult₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₂ h.hWeight₂ h.U₁ h.U₂ h.S h.hSCPTP X hX
-  have hF₁pos : Matrix.IsPositiveDirectSumMap h.SbarTbar := by
-    intro X hX
-    exact hSbarpos (h.Tbar X) (hTbarpos X hX)
-  have hF₂pos : Matrix.IsPositiveDirectSumMap h.TbarSbar := by
-    intro X hX
-    exact hTbarpos (h.Sbar X) (hSbarpos X hX)
+  have hF₁pos := h.SbarTbar_isPositiveDirectSumMap
+  have hF₂pos := h.TbarSbar_isPositiveDirectSumMap
   obtain ⟨hF₁TP, hF₂TP, _, _⟩ :=
     transportedVerticalSector_composites_tracePreserving h
   obtain ⟨hF₁Schwarz, hF₂Schwarz⟩ :=
