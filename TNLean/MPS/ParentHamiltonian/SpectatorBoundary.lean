@@ -66,9 +66,11 @@ boundary coordinates.
 
 For Nachtergaele C3 (arXiv:cond-mat/9410110, eq. (2.4)), take
 \(K := n - l\), \(L := l + 1\), and let the common ambient space be
-\(\mathcal{H}_{K+L} = \mathcal{H}_{n+1}\).  The left window (first \(K+L-1\) sites) is not directly
-the range of a spectator-indexed left boundary map; it is the subspace
-`InLeftGround` defined by fixing the *last* site.
+\(\mathcal{H}_{K+L} = \mathcal{H}_{n+1}\).  After Euclidean-space transport,
+the tail window is the range of `tailBoundaryMap A K L`, while the left window
+(first \(K+L-1\) sites with one final spectator) is the range of
+`leftBoundaryMap A (K+L-1) 1`.  Thus the two transport theorems below realize
+both C3 subspaces as boundary-map ranges in this common ambient space.
 
 ## References
 
