@@ -211,8 +211,9 @@ lemma exists_ambient_corner_gauge_of_gaugePhase
     simpa only [Matrix.star_eq_conjTranspose] using
       Matrix.UnitaryGroup.star_mul_self W
   have hgCB (i : Fin e) : g (CB i) = c₀ • CA i := by
-    simp [g, hW i, Matrix.unitaryReindexLinearEquiv_apply,
-      Matrix.mul_assoc, hW_star_W]
+    simp only [g, hW i, Matrix.unitaryReindexLinearEquiv_apply, Equiv.refl_symm,
+      Matrix.reindex_refl_refl, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc,
+      hW_star_W, Matrix.mul_one]
     rw [Matrix.star_eq_conjTranspose, ← Matrix.mul_assoc,
       hW_star_W, Matrix.one_mul]
   have htransport (i : Fin e) :

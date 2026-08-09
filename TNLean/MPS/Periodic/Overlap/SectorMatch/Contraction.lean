@@ -82,10 +82,10 @@ lemma sectorTensor_proportional_of_blockedMatch
     (hB_blocks_lc :
       ∀ k, ∑ i : Fin (blockPhysDim d m),
         (blocksB k i)ᴴ * blocksB k i = 1)
-    (hA_mpv :
+    (_hA_mpv :
       SameMPV₂ (blockTensor A m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksA))
-    (hB_mpv :
+    (_hB_mpv :
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     {PA PB : Fin m → MatrixAlg D}
@@ -114,7 +114,6 @@ lemma sectorTensor_proportional_of_blockedMatch
       Uglob * Uglobᴴ = 1 ∧
       Uglobᴴ * Uglob = 1 ∧
       ∀ i, A i = ξ • (Uglob * B i * Uglobᴴ) := by
-  clear hA_mpv hB_mpv
   obtain ⟨L, hL_pos, Ω, hΩ⟩ :=
     exists_common_sectorDecompositionMaps_of_isNormal_leftCanonical
       blocksA hA_blocks_lc hNondeg hNormal
@@ -256,7 +255,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     simp only [combinedWord, cyclicList_zero_card_eq_ofFn, List.length_flatten,
       List.map_ofFn, List.sum_ofFn, segments]
     simp only [Function.comp_apply, List.length_cons, List.length_ofFn]
-    simp
+    simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul]
     exact Nat.mul_comm m (m * L + 1)
   have hcombinedWord_corner :
       ∀ (σ : Fin m → Fin d) (ρ : Fin m → (Fin (m * L) → Fin d)),
@@ -660,11 +659,11 @@ lemma sectorTensor_proportional_of_blockedMatch
     simpa only [γ, norm_mul, hξ_norm, mul_one] using h
   have hP_sum : ∑ k, P k = 1 := by
     change (∑ k, PA (-k)) = 1
-    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PA).trans hPA_sum using 1 <;>
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PA).trans hPA_sum using 1;
       rfl
   have hQ_sum : ∑ k, Q k = 1 := by
     change (∑ k, PB (-k)) = 1
-    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PB).trans hPB_sum using 1 <;>
+    convert (Equiv.sum_comp (Equiv.neg (Fin m)) PB).trans hPB_sum using 1;
       rfl
   have hA_cyclic : ∀ i, A i = ∑ k, P k * A i * P (k + 1) := by
     intro i
@@ -688,7 +687,7 @@ lemma sectorTensor_proportional_of_blockedMatch
   have hκB_norm : ∀ v, ‖κB v‖ = 1 := fun v => hκ_norm (v - q')
   have hκB_prod : ∏ v, κB v = 1 := by
     change (∏ v, κ (v - q')) = 1
-    convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1 <;>
+    convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1;
       rfl
   obtain ⟨φ, hφ_norm, hφ⟩ :=
     TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
@@ -732,7 +731,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     have hcob := hφ u
     change κ (u + q' - q') =
       φ (u + q') * (φ (u + q' + 1))⁻¹ at hcob
-    convert hcob.symm using 1 <;> abel
+    convert hcob.symm using 1; abel
   have hVprod : ∀ (u : Fin m) (i : Fin d),
       V (u + q') * cornerLetter Q B (u + q') i * (V (u + q' + 1))ᴴ =
         κ u • T u i := by
