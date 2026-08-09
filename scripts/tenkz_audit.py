@@ -1538,17 +1538,11 @@ class Audit:
                 continue
             if not products:
                 # Every side is one panel here, so the k-th relation is the
-                # k-th gap and the two numberings coincide.
-                for relation in range(1, len(members)):
-                    if relation in waived:
-                        continue
-                    self._compare_panels(
-                        self.pictures[members[relation - 1]],
-                        self.pictures[members[relation]],
-                        self.hard, "eq-boundary-mismatch",
-                        f"sit on relation {relation} of equation scope {scope}",
-                        modulo=modulo,
-                    )
+                # k-th gap: the walk is the same one, and it can say which
+                # relation each pair sits on.
+                self._compare_adjacent(
+                    members, scope, modulo, waived, by_relation=True
+                )
                 continue
             # A composite side's signature is a fold over an interface the
             # kernel resolves, and its verdict is the `check` record that
@@ -1583,12 +1577,14 @@ class Audit:
         return sides
 
     def _compare_adjacent(self, members: list[int], scope: int, modulo: bool,
-                          waived_gaps: set[int]) -> None:
+                          waived_gaps: set[int],
+                          by_relation: bool = False) -> None:
         """Compare a scope's panels pair by pair, skipping the waived gaps.
 
-        The pairs are gaps, not relations: this runs where the group's own
-        account of its joiners did not hold, so a panel's neighbour is all
-        that is left to compare it against.
+        `by_relation` says whether a pair can be named as the relation it sits
+        on.  It can where every side is one panel; where the group's own
+        account of its joiners did not hold, a panel's neighbour is all there
+        is to compare it against and the finding says only that.
         """
         for gap in range(1, len(members)):
             if gap in waived_gaps:
@@ -1597,6 +1593,8 @@ class Audit:
                 self.pictures[members[gap - 1]],
                 self.pictures[members[gap]],
                 self.hard, "eq-boundary-mismatch",
+                f"sit on relation {gap} of equation scope {scope}"
+                if by_relation else
                 f"are adjacent panels {gap} and {gap + 1} of equation "
                 f"scope {scope}",
                 modulo=modulo,
