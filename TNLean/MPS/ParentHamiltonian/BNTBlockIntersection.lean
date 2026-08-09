@@ -222,8 +222,8 @@ length bound, `hUnital` is the source identity
 \(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
 source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
-documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -310,8 +310,8 @@ length bound, `hUnital` is the source identity
 \(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
 source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
-documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -407,8 +407,8 @@ length bound, `hUnital` is the source identity
 \(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
 source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
-documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

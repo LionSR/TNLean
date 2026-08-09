@@ -79,37 +79,13 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_dir
   rw [← hM1]
   simpa [Nat.add_assoc] using hstep
 
-/-- Finite-length block injectivity gives the periodic-boundary inclusion into the
-sum of local block ground spaces.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j,\qquad S_M=\bigvee_jG_M(A_j).
-\]
-Assume each block is injective at length \(L_0\), the blocks are separated
-normalized BNT blocks, and
-\[
-  M-1\ge (L_0+1)+(r-1)((L_0+1)+((L_0+1)+(L_0+1))).
-\]
-Then the one-step identity for \(S_M\) from arXiv:quant-ph/0608197 holds.
-Consequently, for every \(N\ge L\) in this range,
-\[
-  \mathcal G_{N,L}(B)\subseteq S_N.
-\]
-This is the inclusion into the linear span of block local ground spaces used in
-Theorem 12 of arXiv:quant-ph/0608197 (proof lines
-1430--1456). The replacement of \(S_N\) by periodic block chain spaces is the
-separate step of closing the boundaries with block-diagonal boundary
-conditions.
-
-The proof uses only the span-based one-step intersection identity for normalized
-BNT product spans, which is independent of the boundary-condition comparison at
-boundary-crossing windows. The periodic-boundary upgrade — replacing the
-open-boundary span \(\bigvee_jG_N(A_j)\) by
-\(\sum_j\mathcal G_{N,L}(A_j)\) — is the separate comparison of
-arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
-arXiv:2011.12127, Section IV.C, lines 2126--2128. It is proved by the global
-change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
+/-- Finite-length block injectivity gives the inclusion into the sum of local
+block ground spaces: \(\mathcal G_{N,L}(B)\subseteq\bigvee_j G_N(A_j)\). Assumes
+each block is injective at \(L_0>0\), the blocks are separated normalized BNT
+blocks, and \(M-1\ge(L_0+1)+(r-1)((L_0+1)+((L_0+1)+(L_0+1)))\). This is the
+inclusion used in Theorem 12 of arXiv:quant-ph/0608197 (proof lines
+1430--1456). The periodic-boundary upgrade is proved by the global change-of-cut
+theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -156,8 +132,8 @@ length bound, `hUnital` is the source identity
 \(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
 source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
-documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07
@@ -269,30 +245,11 @@ theorem chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_
       A hIrr hLeft hOverlap hBlocks hBlk hL₀ hUnital (by omega)
 
 /-- Open-boundary block decomposition for vectors satisfying the block-diagonal
-periodic constraints.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j.
-\]
-Assume the blocks are irreducible, left-canonical, normalized in self-overlap,
-pairwise not gauge-phase equivalent, unital, and injective at a common positive
-length. Then every
+periodic constraints. Under the normalized BNT block-separation hypotheses, every
 \(\psi\in\mathcal G_{N,L}(B)\) has a unique decomposition
-\[
-  \psi=\sum_j\psi_j,\qquad \psi_j\in G_N(A_j).
-\]
-This is an open-boundary decomposition. The periodic-boundary upgrade in
-arXiv:quant-ph/0608197, Theorem 12, is a separate boundary-condition
-comparison: one must prove \(\psi_j\in\mathcal G_{N,L}(A_j)\) for the
-block components produced here.
-
-The decomposition uses only the span-based open-boundary inclusion and
-block-separation independence, both independent of the boundary-condition
-comparison at boundary-crossing windows. That periodic-boundary comparison
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128) is proved by the global
-change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
+\(\psi=\sum_j\psi_j\) with \(\psi_j\in G_N(A_j)\). The periodic-boundary upgrade
+to \(\mathcal G_{N,L}(A_j)\) is proved by the global change-of-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`. -/
 theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -339,42 +296,11 @@ theorem exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_
   exact sub_eq_zero.mp hzero
 
 /-- Block-diagonal boundary conditions for a vector satisfying the block-diagonal
-periodic constraints.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j.
-\]
-Under the normalized BNT block-separation hypotheses and the \(L_0\)-block
-injectivity range bound, every \(\psi\in\mathcal G_{N,L}(B)\) can be
-represented by block-diagonal boundary conditions
-\[
-  \psi=\Gamma_N^B\!\left(\bigoplus_jX_j\right)
-\]
-and each component vector
-\[
-  \Gamma_N^{A_j}(\mu_j^NX_j)
-\]
-lies in the open-boundary ground space \(G_N(A_j)\).
-
-The latter membership is the defining open-boundary range property of the
-displayed boundary matrix. The substantive assertion is the block-diagonal
-representation of \(\psi\). The periodic-boundary upgrade is the separate
-boundary-condition comparison for the cyclic windows crossing the chosen cut.
-
-This proves the displayed statement, in which the component membership is the
-open-boundary range property \(\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)\). The
-boundary-condition comparison in arXiv:quant-ph/0608197, proof lines
-1454--1456, and arXiv:2011.12127, lines 2126--2128, shows, under the
-comparison identities, that these same component
-vectors lie in \(\mathcal G_{N,L}(A_j)\).
-
-The block-diagonal boundary representation and the open-boundary component
-membership use only the span-based open-boundary inclusion, independently of
-the boundary-condition comparison at boundary-crossing windows. The
-periodic-boundary upgrade to \(\mathcal G_{N,L}(A_j)\) (arXiv:quant-ph/0608197,
-Theorem 12, proof lines 1446--1456; arXiv:2011.12127, Section IV.C, lines
-2126--2128) is proved by the global change-of-cut theorem in
+periodic constraints. Under the normalized BNT block-separation hypotheses, every
+\(\psi\in\mathcal G_{N,L}(B)\) can be represented by block-diagonal boundary
+conditions \(\psi=\Gamma_N^B(\bigoplus_jX_j)\) with each component
+\(\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)\). The periodic-boundary upgrade to
+\(\mathcal G_{N,L}(A_j)\) is proved by the global change-of-cut theorem in
 `BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1
@@ -435,8 +361,8 @@ length bound, `hUnital` is the source identity
 \(\sum_a A^j_a(A^j_a)^\dagger=1\), while `hLeft` additionally specializes the
 source dual fixed-point equation
 \(\sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j\) to
-\(\Lambda_j=1\). The general normalization is tracked in issue #5751 and
-documented in `docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
+\(\Lambda_j=1\). The general normalization is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`.
 -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07
@@ -535,33 +461,11 @@ theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_
   · exact chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital
       μ A hμ hIrr hLeft hOverlap hBlocks hBlk hInj hL₀ hUnital hN hL hLN hRange
 
-/-- Finite-length block injectivity gives the two established inclusions for the
-block-diagonal periodic chain space.
-
-Let
-\[
-  B=\bigoplus_j\mu_jA_j.
-\]
-Under the normalized BNT block-separation hypotheses and the corresponding
-finite injectivity range,
-\[
-  \bigvee_j \mathcal G_{N,L}(A_j)
-  \subseteq
-  \mathcal G_{N,L}(B)
-  \subseteq
-  \bigvee_j G_N(A_j),
-\]
-and the right-hand local block sum is internal. The separate step from
-arXiv:quant-ph/0608197 is
-to close the boundaries with block-diagonal boundary conditions.
-
-Both displayed inclusions and the internal-direct-sum conclusion use only the
-span-based open-boundary results, independently of the boundary-condition
-comparison at boundary-crossing windows. The periodic-boundary upgrade
-replacing \(\bigvee_jG_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\)
-(arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456;
-arXiv:2011.12127, Section IV.C, lines 2126--2128) is proved by the global
-change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
+/-- Finite-length block injectivity gives the two established inclusions:
+\(\bigvee_j\mathcal G_{N,L}(A_j)\subseteq\mathcal G_{N,L}(B)\subseteq\bigvee_j G_N(A_j)\),
+with the right-hand sum internal. The periodic-boundary upgrade replacing
+\(\bigvee_j G_N(A_j)\) by \(\sum_j\mathcal G_{N,L}(A_j)\) is proved by the
+global change-of-cut theorem in `BNTBlockDiagonalBoundaryClosing`. -/
 theorem chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
