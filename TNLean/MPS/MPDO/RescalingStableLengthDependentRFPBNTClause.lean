@@ -12,6 +12,17 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
 
 This file attaches the existential BNT algebra tensor clause to the explicit
 rescaling-stable renormalization fixed-point tensor.
+
+## Main results
+
+* `R_hasBNTAlgebraTensorClause` — `R` admits a tensor-attached vertical BNT
+  presentation, without identifying that witness with the explicit one-label
+  coefficient model.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Theorem 4.14(i)--(ii) and Appendix C.4
 -/
 
 noncomputable section
