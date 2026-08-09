@@ -608,6 +608,123 @@ closing a chain of $N$ copies of $\mathcal U$.
     using linearity proves the result.
 \end{proof}
 
+\begin{theorem}[Three-form contraction identities]
+    \label{thm:mpu_three_form_contractions}
+    \lean{MPOTensor.mul_eq_mul_projector_mul_of_mem_threeFormSubmodule,
+        MPOTensor.trace_mul_projector_eq_zero_of_mem_threeFormSubmodule}
+    \leanok
+    \uses{def:mpu_three_form_subspace}
+    Suppose $E^2=E$ and $EAE=0$ for every $A\in\mathfrak S$.  For all
+    $X,Y\in\mathcal T$,
+    \begin{align}
+        XY&=XEY,
+        &\tr(XE)&=0.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    It is enough by bilinearity and linearity of trace to consider the
+    generators $EA$, $AE$, and $AEB$ of the three summands.  Associativity,
+    $E^2=E$, and the sandwich identity $EAE=0$, also applied to products in
+    $\mathfrak S$, give both formulas in the nine possible pairs of generator
+    types.
+\end{proof}
+
+\begin{theorem}[Exact simplicity after the second blocking]
+    \label{thm:mpu_second_block_simple}
+    \lean{MPOTensor.IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec}
+    \leanok
+    \uses{thm:mpu_second_block_residual_three_forms,
+        thm:mpu_three_form_contractions}
+    Let $\mathcal V$ be an MPU of positive physical and bond dimensions whose
+    normalized double-layer diagonal is
+    \begin{align}
+        E=|\rho)(\Phi|,
+        &&(\Phi|\rho)=1.
+    \end{align}
+    Then blocking $\mathcal V$ by exactly $D^2$ sites produces a simple tensor
+    with witnesses $a=\Phi$ and $b=\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The pairing normalization makes $E$ idempotent.  Write every blocked
+    double-layer coefficient as $\delta_{ij}E+R_{ij}$, where
+    $R_{ij}\in\mathcal T$.  The trace identity for $R_{ij}E$ gives
+    \texttt{simple1}, and the insertion identity
+    $R_{ij}R_{k\ell}=R_{ij}ER_{k\ell}$, together with $E^2=E$, gives
+    \texttt{simple2} after expanding both coefficients.
+\end{proof}
+
+\begin{theorem}[Bounded blocking to simplicity]
+    \label{thm:mpu_bounded_simple_blocking}
+    \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
+        MPOTensor.IsMPU.blockTensor_one_isMPUSimple_fin_one,
+        MPOTensor.IsMPU.exists_blockTensor_isMPUSimple,
+        MPOTensor.IsMPUSimple.blockTensor,
+        MPOTensor.IsMPUSimple.reindexPhysical,
+        MPOTensor.reindexPhysical_blockTensor_blockTensor}
+    \leanok
+    \uses{thm:mpu_normalized_transfer_stabilization,
+        thm:mpu_normalized_transfer_fin_one,
+        thm:mpu_second_block_simple}
+    Every MPU of positive physical and bond dimensions has a positive blocking
+    length $k\leq D^4$ for which the blocked tensor is simple.  If $D>1$, one
+    may choose
+    \begin{align}
+        k=JD^2<D^4,
+        &&0<J\leq D^2-1.
+    \end{align}
+    If $D=1$, the length-one block is simple.  Simplicity is preserved by
+    every further positive blocking and by a bijective relabeling of the
+    physical basis.
+\end{theorem}
+
+\begin{proof}\leanok
+    At the stabilization exponent $J$, the normalized double-layer diagonal
+    is the rank-one fixed projector $|\rho)(\Phi|$.  The preceding theorem
+    makes the subsequent length-$D^2$ block simple.  Canonically grouping the
+    two blocking stages identifies it with direct length $JD^2$ blocking.
+    For $D>1$,
+    \begin{align}
+        JD^2&<(D^2)D^2=D^4.
+    \end{align}
+    The one-dimensional transfer matrix is already the identity.  For further
+    blocking, repeated use of \texttt{simple2} inserts the same rank-one
+    projector between adjacent letters, while repeated \texttt{simple1}
+    multiplies the sitewise Kronecker deltas.
+\end{proof}
+
+\begin{corollary}[The fixed-point simple1 contraction]
+    \label{cor:mpu_simple1}
+    \lean{MPOTensor.IsMPU.simple1}
+    \leanok
+    \uses{def:mpu,thm:mpu_positive_mixed_residual_trace,
+        thm:mpu_normalized_transfer_stabilization,
+        thm:mpu_normalized_transfer_fin_one}
+    For every MPU of positive physical and bond dimensions there are normalized
+    left and right fixed vectors $\Phi$ and $\rho$ of the transfer matrix such
+    that the unblocked double layer satisfies
+    \begin{align}
+        (\Phi|W^{ij}|\rho)&=\delta_{ij}.
+    \end{align}
+    The unblocked tensor need not satisfy \texttt{simple2}.
+\end{corollary}
+
+\begin{proof}\leanok
+    Let $E^J=|\rho)(\Phi|$ be a stabilized transfer power.  Decompose
+    $W^{ij}=\delta_{ij}E+R_{ij}$.  Fixedness and normalization give
+    \begin{align}
+        \tr(E|\rho)(\Phi|)&=1.
+    \end{align}
+    The mixed residual trace identity applied to one residual factor followed
+    by $J$ diagonal factors gives
+    \begin{align}
+        \tr(R_{ij}E^J)&=0.
+    \end{align}
+    Since $E^J=|\rho)(\Phi|$, these two trace identities are exactly the
+    displayed contraction.
+\end{proof}
+
 \section{Trace-power lemma}\label{sec:mpu_trace_power}
 
 For the transfer-matrix spectrum argument of

@@ -14,6 +14,7 @@ import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.DoubleLayerContraction
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
+import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceFactors
 import TNLean.MPS.MPU.ThreeFormSpan
