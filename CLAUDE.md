@@ -304,3 +304,9 @@ In paper-realignment mode the standard "do not add sorry" rule is the
 preserves a result the source does not assert. Reviewers should evaluate
 paper-realignment PRs against the paper-gap note and the planned
 follow-up, not against the temporary `sorry` count.
+
+## Lean proof automation ledger
+
+| Name | Kind | Use when | Defined in |
+|---|---|---|---|
+| `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary` | helper theorem | Closing block-diagonal boundaries from an open-boundary representation and a simultaneous span across the complementary global cut | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` |

@@ -376,7 +376,7 @@
 
 \begin{theorem}[A global change of cut gives periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
-    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
+    \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
         thm:pgvwc_product_span_doubly_normalized,
@@ -462,13 +462,15 @@
 
 \begin{theorem}[Periodic block decomposition from a global cut]
     \label{thm:block_diagonal_chain_space_global_cut}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent}
-    Let $g\ge2$. Let $A_j$ be irreducible left-canonical blocks with normalized
-    self-overlap, pairwise inequivalent up to gauge and phase, injective at a
-    common length $L_0>0$, and satisfying
-    $\sum_aA^j_aA^{j\,\dagger}_a=\Id$. Let $\mu_j\ne0$ for every $j$, and assume
+    Let $g\ge2$. Let $A_j$ be irreducible blocks with normalized self-overlap,
+    pairwise inequivalent up to gauge and phase, and injective at a common
+    length $L_0>0$. Assume
+    $\sum_aA^j_aA^{j\,\dagger}_a=\Id$ and, for positive-definite $\Lambda_j$,
+    $\sum_aA^{j\,\dagger}_a\Lambda_jA^j_a=\Lambda_j$.
+    Let $\mu_j\ne0$ for every $j$, and assume
     \begin{align}
         L
         &\ge3(g-1)(L_0+1)+1,
@@ -486,6 +488,9 @@
     \end{align}
     as asserted in
     \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
+    The source coordinates are
+    \path{Papers/quant-ph_0608197/MPSarchive.tex}:742--763 for the canonical
+    normalization and 1424--1456 for the block-diagonal parent theorem.
 \end{theorem}
 
 \begin{proof}
@@ -497,7 +502,7 @@
 
 \begin{theorem}[Periodic block decomposition and block-space independence]
     \label{thm:block_diagonal_chain_space_global_cut_independent}
-    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
+    \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
         lem:block_diagonal_boundary_representation_inclusion,
@@ -542,7 +547,7 @@
 
 \begin{corollary}[Kernel containment from the global cut]
     \label{cor:block_diagonal_kernel_global_cut}
-    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut,
         lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}

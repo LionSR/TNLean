@@ -454,8 +454,9 @@ with the chosen basis of normal tensors.
         \sum_{a=0}^{d-1} A_j^{a\,\dagger}\Lambda_j A_j^a&=\Lambda_j.
         \notag
     \end{align}
-    Thus this theorem has the explicit scope restriction $\Lambda_j=\Id$ and
-    does not assert the unrestricted source result. If
+    Thus this theorem has the explicit specialization $\Lambda_j=\Id$ and is
+    retained for compatibility; the unrestricted source result is stated below.
+    If
     \begin{align}
         L&\ge 3(g-1)(L_0+1)+1,
         \notag\\
@@ -490,7 +491,8 @@ with the chosen basis of normal tensors.
 
 \begin{theorem}[PGVWC07 source-length kernel equality at general canonical normalization]
     \label{thm:gs_eq_bnt_span_source_normalization}
-    \notready
+    \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint}
+    \leanok
     \uses{def:parent_hamiltonian, def:bnt_span, def:block_diagonal_tensor,
         def:irreducible_tensor, def:blocks_not_gauge_phase_equiv,
         def:l_blk_injective, def:mpv_overlap}
@@ -515,15 +517,13 @@ with the chosen basis of normal tensors.
 \end{theorem}
 
 \begin{proof}
-    \notready
-    A square-root gauge can normalize the dual fixed-point equation, but does
-    not in general preserve the source unital identity. The proof must first
-    transport the simultaneous fixed-length tuple-span equation through the
-    blockwise gauges. It must then use the source unital identity to propagate
-    that span to longer words and carry out the weighted boundary comparison.
-    Gauge-covariant identifications of the periodic chain spaces,
-    parent-Hamiltonian kernel, and component-vector span complete the route.
-    % The normalization scope and elimination plan are recorded in
-    % docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex. Tracking
-    % remains in issues #5751 and #5755.
+    \leanok
+    Gauge each block by the positive square root of $\Lambda_j$ only inside the
+    fixed-length simultaneous tuple-span argument, and transport that span back
+    to the source representative. The source unital identity then propagates
+    the span to the complementary segment used by the global change of cut.
+    Comparing the two block-diagonal boundary representations closes every
+    block component periodically. The resulting chain-space equality and
+    single-block uniqueness give the forward kernel containment; the periodic
+    component vectors give the reverse containment.
 \end{proof}
