@@ -4531,14 +4531,14 @@
       \l__tenkz_kernel_policy_span_tl
     \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+        \__tenkz_kernel_policy_faces:nn {#1}
           {
-            \__tenkz_kernel_policy_faces:nn {#1}
+            \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
               {
                 \exp_args:Nne \__tenkz_kernel_port_policy_register:nnn
                   {#1}
-                  { \__tenkz_kernel_policy_face_bearing:n {####1} }
-                  {##1}
+                  { \__tenkz_kernel_policy_face_bearing:n {##1} }
+                  {####1}
               }
           }
       }
