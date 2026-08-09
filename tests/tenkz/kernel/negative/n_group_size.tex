@@ -1,0 +1,10 @@
+% Negative regression: a sub-frame shares its picture's size class, so the
+% class is refused at group scope rather than accepted and left inert.
+\documentclass{standalone}
+\usepackage{tenkz}
+\begin{document}
+\tenkzkernel
+\begin{tenkz}[rows={wire}, cols=2]
+  \tngroup[size=s]{\tn{A} & \tn{B}}
+\end{tenkz}
+\end{document}

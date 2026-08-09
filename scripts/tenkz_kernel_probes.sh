@@ -1844,6 +1844,29 @@ grep -Fq '[TKZ-LANG-CHOICE]' "$WORK/n_picture_metrics.transcript" || {
   exit 1
 }
 
+# A key that would be silently inert at group scope is a key the author has
+# misplaced: the class belongs to the picture, the audit to the equation, and
+# a reasonless opt-out is not an opt-out at all.
+for scope_case in n_group_size:TKZ-SIZE-SCOPE \
+                  n_group_check:TKZ-EQ-CHECK-SCOPE \
+                  n_check_reason_blank:TKZ-EQ-CHECK-REASON; do
+  scope_name=${scope_case%%:*}
+  scope_code=${scope_case##*:}
+  if ( cd "$WORK" &&
+       TEXINPUTS="$REPO/tex/tenkz//:" \
+         timeout 120 xelatex -interaction=nonstopmode -halt-on-error \
+         "$KERNEL/negative/$scope_name.tex" \
+         >"$WORK/$scope_name.transcript" 2>&1 ); then
+    echo "FAIL: $scope_name was accepted" >&2
+    exit 1
+  fi
+  grep -Fq "[$scope_code]" "$WORK/$scope_name.transcript" || {
+    echo "FAIL: $scope_name lacked $scope_code" >&2
+    tail -20 "$WORK/$scope_name.transcript" >&2
+    exit 1
+  }
+done
+
 group_metrics_negative="$KERNEL/negative/n_group_metrics.tex"
 if ( cd "$WORK" &&
      TEXINPUTS="$REPO/tex/tenkz//:" \
@@ -2735,20 +2758,14 @@ grep -Fq '[TKZ-EQ-NESTED]' "$WORK/n_nested_equation.transcript" || {
   echo "FAIL: nested equation lacked TKZ-EQ-NESTED" >&2
   exit 1
 }
-# The refusal takes nothing from the equation that finished before it, and
-# the refused one claims no scope in the stream: neither the outer equation,
-# which never draws a panel, nor the inner one the refusal is about.
 grep -Eq '(^|[|])scope=1([|]|$)' "$WORK/n_nested_equation.tnlog" || {
-  echo "FAIL: a rejected nested equation damaged a completed audit scope" >&2
+  echo "FAIL: nested equation did not preserve its outer audit scope" >&2
   exit 1
 }
-for rejected in 2 3; do
-  if grep -Eq "(^|[|])scope=$rejected([|]|\$)" \
-    "$WORK/n_nested_equation.tnlog"; then
-    echo "FAIL: a rejected nested equation claimed scope $rejected" >&2
-    exit 1
-  fi
-done
+if grep -Eq '(^|[|])scope=2([|]|$)' "$WORK/n_nested_equation.tnlog"; then
+  echo "FAIL: a rejected nested equation mutated scope ownership" >&2
+  exit 1
+fi
 
 for arity_negative in n_missing_relation n_dangling_relation; do
   source="$KERNEL/negative/$arity_negative.tex"

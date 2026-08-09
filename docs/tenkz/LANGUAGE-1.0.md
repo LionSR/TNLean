@@ -100,8 +100,10 @@ writes at, resolved from the surrounding mathematics whenever it is unstated
 sets its inscribed names in; the class an atom carries chooses the extent of
 that atom's own glyph (§2.3). The record stream states the resolved class
 wherever it departs from `m`, the class the glyph geometry is calibrated on.
-`check=` belongs to the equation, is refused at picture scope, and is
-described with the audit it configures (§7.4).
+`check=` belongs to the equation and is refused at picture scope; it is
+described with the audit it configures (§7.4). Both keys are refused at group
+scope, as `metrics=` is, because a sub-frame shares its picture's metric
+context and stands inside the equation rather than beside it.
 
 With the default single-member basis, every frame contracts adjacent
 compatible cells by default: `bonds=grid` holds in chain and lattice frames
@@ -753,12 +755,15 @@ sum are read from the class the mathematics already has.
    diameter, a box as its side, a triangle as its circumscribing square.
    Above the floor the glyph answers the equation rather than its own panel.
    The equation reads the widest and the deepest name inscribed in any glyph
-   of a class and draws every glyph of that class on it, so `X` and `X^{-1}`
-   come out one size because the equation says they are one object, and so do
-   a box and a pill of one class holding names of different lengths. The
-   measure only ever grows a glyph, so no name is pushed outside the ink
-   holding it. Outside an equation there is nothing to share, and a glyph
-   answers its class and its slots alone.
+   of a class and sets every name of that class on it, so `X` and `X^{-1}`
+   come out one size because the equation says they are one object. A skin's
+   own padding stands outside that measure and is part of its silhouette, so
+   the guarantee is exact between glyphs of one skin and holds between skins
+   only up to the padding each one keeps. The measure only ever grows a
+   glyph, so no name is pushed outside the ink holding it, and an omitted
+   class is the `m` class the registry declares, not a class of its own.
+   Outside an equation there is nothing to share, and a glyph answers its
+   class and its slots alone.
 2. **Math-style sensing.** The surrounding mathematics chooses the density
    profile; there is no manual compact or inline flag. A picture in a line of
    running mathematics takes the denser class, because there it shares a line

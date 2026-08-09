@@ -71,9 +71,9 @@ generated reference.
    diagram does not draw; the reason is recorded with the waiver.
 7. An equation is one metric context.  Its panels share the pitch, the size
    classes, and one measure: the widest and deepest name inscribed in any
-   glyph of a class is the measure every glyph of that class is drawn on, so
-   an operator and its inverse come out the same size.  The measure only
-   grows a glyph, never shrinks one.
+   glyph of a class is the measure every name of that class is set on, so an
+   operator and its inverse come out the same size.  The measure only grows a
+   glyph, never shrinks one, and a skin's own padding stands outside it.
 8. A picture writes at the density of the mathematics around it, and the
    author states nothing.  A picture in a line of running mathematics takes
    the denser class; a display, anything inside a display, and running text
