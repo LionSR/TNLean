@@ -10,8 +10,6 @@ import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.Spectral.MixedTransfer
 
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-
 /-!
 # Gram operators for MPS ground-space maps
 
@@ -182,5 +180,17 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
           (evalWord A (List.ofFn σ))ᴴ by rfl, Matrix.sum_apply]
   simp_rw [hmul]
   simp [groundSpaceMap_apply, Matrix.trace_mul_single, dotProduct]
+
+/-- The Gram operator of \(\Gamma_L\) equals the reshuffling of the Choi matrix
+of the \(L\)-fold transfer map. -/
+theorem groundSpaceGram_eq_gramReshuffle (A : MPSTensor d D) (L : ℕ) :
+    groundSpaceGram A L = Matrix.gramReshuffle ((transferMap A) ^ L) := by
+  apply ContinuousLinearMap.coe_injective
+  refine (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.ext fun ⟨e, c⟩ => ?_
+  apply PiLp.ext
+  rintro ⟨b, a⟩
+  have h := (inner_single_groundSpaceGram_single_eq_rectangularChoi A L a b c e).trans
+    (Matrix.inner_single_gramReshuffle_single ((transferMap A) ^ L) a b c e).symm
+  simpa [PiLp.inner_apply] using h
 
 end MPSTensor
