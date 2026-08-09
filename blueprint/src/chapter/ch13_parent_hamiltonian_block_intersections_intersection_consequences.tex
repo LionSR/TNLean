@@ -469,14 +469,29 @@ direct.
         thm:cpsv_normal_mpv_phase_gauge,
         lem:bnt_direct_sum_block_separation_word_span,
         thm:word_tuple_span_gauge_invariance}
-    The square-root gauge is invertible by positive definiteness, and the dual
-    fixed-point equation makes the prepared blocks left-canonical. Similarity
-    preserves irreducibility, fixed-length injectivity, and pairwise inequivalence
-    up to gauge and phase. Positive-length injectivity makes each prepared block
-    algebraically normal; left-canonicality then makes it a normal tensor, whose
-    self-overlap converges to one. Apply the existing sharp separation theorem to
-    the prepared family and then use
-    Theorem~\ref{thm:word_tuple_span_gauge_invariance} in the reverse direction.
+    Define the prepared blocks by
+    \begin{align}
+        B^j_a&=(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}. \notag
+    \end{align}
+    Positive definiteness makes this an invertible gauge, while the dual
+    fixed-point equation gives
+    \begin{align}
+        \sum_a(B^j_a)^\dagger B^j_a&=\Id. \notag
+    \end{align}
+    Gauge transport preserves irreducibility, the three fixed-length
+    injectivity statements, and pairwise inequivalence up to gauge and phase.
+    Thus every $B^j$ is algebraically normal and left-canonical, so
+    \begin{align}
+        \lim_{N\to\infty}
+        \left\langle V^{(N)}(B^j),V^{(N)}(B^j)\right\rangle&=1. \notag
+    \end{align}
+    The sharp separation theorem now gives
+    \begin{align}
+        \spn\{(B^1_w,\ldots,B^r_w):|w|=3(r-1)(L_0+1)\}
+        &=\prod_j\MN{D_j}. \notag
+    \end{align}
+    Theorem~\ref{thm:word_tuple_span_gauge_invariance} transports this equality
+    back to the source representatives.
 \end{proof}
 
 \begin{lemma}[Simultaneous product span at the source length]
@@ -495,8 +510,8 @@ direct.
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}&=\MN{D_j}. \notag
     \end{align}
-    For every $j$, let $\Lambda^j$ be positive definite and assume the PGVWC07
-    canonical identities
+    For every $j$, let $\Lambda^j$ be positive definite and assume the canonical
+    identities from \cite{PerezGarcia2007Matrix}:
     \begin{align}
         \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
         &\sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
@@ -516,8 +531,15 @@ direct.
         lem:unital_simultaneous_product_span_propagation,
         thm:pgvwc_prepared_gauge_product_span,
         lem:product_span_block_image_direct_sum}
-    Theorem~\ref{thm:wordspan_propagation_unital} first propagates block
-    injectivity from $L_0$ to $L_0+1$ and $3(L_0+1)$.
+    Theorem~\ref{thm:wordspan_propagation_unital} first gives
+    \begin{align}
+        \spn\{A^j_w:|w|=L_0\}=\MN{D_j}
+        &\Longrightarrow
+        \spn\{A^j_w:|w|=L_0+1\}=\MN{D_j}
+        \notag\\
+        &\Longrightarrow
+        \spn\{A^j_w:|w|=3(L_0+1)\}=\MN{D_j}. \notag
+    \end{align}
     Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} then gives the full
     simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
     The source unital identity and
