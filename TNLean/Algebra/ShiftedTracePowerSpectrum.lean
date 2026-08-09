@@ -114,10 +114,13 @@ theorem one_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt
 /-- If all traces `tr(A^k)` with `k > 1` equal one, the nonzero part of the
 spectrum of `A` is the singleton `{1}`.
 
-This is the exact set-spectrum consequence used in arXiv:1703.09188,
-Proposition `prop:normal-tensor`, lines 349--354. The statement concerns
-spectral values as a set and therefore does not claim their algebraic
-multiplicities. -/
+This is the set-spectrum consequence used in arXiv:1703.09188,
+Proposition `prop:normal-tensor`, lines 349--354.
+
+**Scope restriction (set spectrum only):** the source proposition also states
+that the sole nonzero eigenvalue has algebraic multiplicity one. This theorem
+proves only equality of the nonzero spectrum as a set. See
+`docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
 theorem spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt
     (A : Matrix n n ℂ)
     (h : ∀ k : ℕ, 1 < k → trace (A ^ k) = 1) :
