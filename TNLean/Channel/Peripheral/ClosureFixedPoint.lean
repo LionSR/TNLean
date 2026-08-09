@@ -138,13 +138,13 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
       X ∈ Module.End.eigenspace (Kraus.mapLM K) μ :=
     (Module.End.hasEigenvector_iff.mp hX_eigvec).1
   have hX_ne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX_eigvec).2
-  have hEig_transfer : Kraus.mapLM K X = μ • X :=
+  have hEig_mapLM : Kraus.mapLM K X = μ • X :=
     (Module.End.mem_eigenspace_iff).1 hX_mem
   -- Rewrite the eigenvector equation in terms of `krausMap` / `Kraus.map`.
   have hEig_kraus : KadisonSchwarz.krausMap (d := d) (D := D) K X = μ • X := by
-    simpa [Kraus.mapLM_apply, KadisonSchwarz.krausMap] using hEig_transfer
+    simpa [Kraus.mapLM_apply, KadisonSchwarz.krausMap] using hEig_mapLM
   have hEig_map : Kraus.map K X = μ • X := by
-    simpa [Kraus.mapLM_apply] using hEig_transfer
+    simpa [Kraus.mapLM_apply] using hEig_mapLM
   have h_unital' : Kraus.IsUnital K := h_unital.toIsUnital
   -- KS equality holds at peripheral eigenvectors under the adjoint fixed-point hypothesis.
   have hKS_map :
@@ -158,7 +158,7 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
     simpa [Kraus.map, KadisonSchwarz.krausMap] using hKS_map
   -- Reuse the extracted invertibility lemma.
   have hUnit_X : IsUnit X :=
-    isUnit_peripheral_eigenvector K h_unital ρ hρ hfix hIrr X μ hEig_transfer hμ_norm hX_ne
+    isUnit_peripheral_eigenvector K h_unital ρ hρ hfix hIrr X μ hEig_mapLM hμ_norm hX_ne
   have hXpow_ne : X ^ n ≠ 0 := by
     have hUnit_Xpow : IsUnit (X ^ n) := IsUnit.pow n hUnit_X
     exact hUnit_Xpow.ne_zero
@@ -166,16 +166,16 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
   have hpow_kraus :
       KadisonSchwarz.krausMap (d := d) (D := D) K (X ^ n) = μ ^ n • X ^ n :=
     KadisonSchwarz.krausMap_pow_of_ks_equality (K := K) h_unital X μ hEig_kraus hKS n
-  have hpow_transfer :
+  have hpow_mapLM :
       Kraus.mapLM K (X ^ n) = μ ^ n • X ^ n := by
     simpa [Kraus.mapLM_apply, KadisonSchwarz.krausMap] using hpow_kraus
-  have hEigPow_transfer :
+  have hEigPow_mapLM :
       Module.End.HasEigenvalue (Kraus.mapLM K) (μ ^ n) := by
     -- Use `X^n` as an eigenvector.
     refine Module.End.hasEigenvalue_of_hasEigenvector (x := X ^ n) ?_
     refine (Module.End.hasEigenvector_iff.mpr ?_)
-    exact ⟨(Module.End.mem_eigenspace_iff).2 hpow_transfer, hXpow_ne⟩
-  refine ⟨hEigPow_transfer, ?_⟩
+    exact ⟨(Module.End.mem_eigenspace_iff).2 hpow_mapLM, hXpow_ne⟩
+  refine ⟨hEigPow_mapLM, ?_⟩
   simp [norm_pow, hμ_norm]
 
 /-- For irreducible unital Kraus maps with a positive definite adjoint fixed point,

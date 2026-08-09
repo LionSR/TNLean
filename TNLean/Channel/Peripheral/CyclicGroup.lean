@@ -105,8 +105,8 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
         KadisonSchwarz.krausMap (d := d) (D := D) K Y *
           KadisonSchwarz.krausMap (d := d) (D := D) K X :=
     KadisonSchwarz.multiplicative_domain_right K h_unital X hKS_X Y
-  -- Convert to transferMap.
-  have hMD_transfer :
+  -- Express the multiplicative-domain identity through `mapLM`.
+  have hMD_mapLM :
       Kraus.mapLM K (Y * X) =
         Kraus.mapLM K Y *
           Kraus.mapLM K X := by
@@ -116,7 +116,7 @@ theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoin
     calc
       Kraus.mapLM K (Y * X)
           = Kraus.mapLM K Y *
-              Kraus.mapLM K X := hMD_transfer
+              Kraus.mapLM K X := hMD_mapLM
       _ = (ν • Y) * (μ • X) := by rw [hEig_Y, hEig_X]
       _ = (ν * μ) • (Y * X) := by
             rw [smul_mul_assoc, mul_smul_comm, smul_smul]
