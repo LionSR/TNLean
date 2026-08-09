@@ -19,7 +19,7 @@ This is a Newton--Girard prerequisite for the transfer-matrix spectrum
 argument in arXiv:1703.09188 (Cirac--Perez-Garcia--Schuch--Verstraete),
 Proposition `prop:normal-tensor`, lines 349–354.  The present file proves this statement for the stronger hypothesis
 `tr(A^k) = 1` for all `k ≥ 1` (the Newton--Girard prerequisite).
-The paper's exact `N > 1` hypothesis is handled by #5737, which does
+The paper's exact `N > 1` hypothesis is handled by the companion formalization, which does
 **not** recover `tr(E) = 1`; it proves directly that the nonzero spectrum
 equals `{1}` without computing the first moment.  The bridge between the
 two results is documented in `docs/paper-gaps/cpsv17_transfer_trace_power.tex`.
@@ -192,7 +192,7 @@ argument in arXiv:1703.09188, Proposition `prop:normal-tensor`, lines
 349–354.  The paper supplies `tr(E^N) = 1` for `N > 1` from unitarity of
 blocked tensors.  The present theorem uses the stronger hypothesis
 `tr(A^k) = 1` for all `k ≥ 1`; the paper's exact `N > 1` hypothesis is
-handled by #5737, which proves the nonzero spectrum is `{1}` without
+handled by the companion formalization, which proves the nonzero spectrum is `{1}` without
 recovering `tr(E) = 1`.  See `docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
 theorem charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one
     (A : Matrix n n ℂ)
