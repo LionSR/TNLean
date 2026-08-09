@@ -237,8 +237,8 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   classical
   -- ── Step 1: Kraus representation ──
   obtain ⟨r, K, hK⟩ := hE.cp
-  have hE_eq : E = MPSTensor.transferMap (d := r) (D := D) K :=
-    LinearMap.ext fun X => by simpa [MPSTensor.transferMap_apply] using hK X
+  have hE_eq : E = Kraus.mapLM K :=
+    LinearMap.ext fun X => by simpa [Kraus.mapLM_apply, Kraus.map_apply] using hK X
   have hK_tp : ∑ i : Fin r, (K i)ᴴ * K i = 1 :=
     kraus_sum_conjTranspose_mul_of_tp K E hK hE.tp
   -- ── Step 2: Square root S = CFC.sqrt σ ──
@@ -257,7 +257,11 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
   have hL_unital : KadisonSchwarz.IsUnitalKraus (d := r) (D := D) L := by
     change ∑ i : Fin r, L i * (L i)ᴴ = 1
     exact gauged_unital K S σ hS_det (by rw [hS_herm]; exact hS_sq)
-      (by rw [← hE_eq]; exact hσ_fix)
+      (by
+        have hK_fix : Kraus.mapLM K σ = σ := by
+          rw [← hE_eq]
+          exact hσ_fix
+        simpa [Kraus.mapLM_apply, Kraus.map_apply, MPSTensor.transferMap_apply] using hK_fix)
   -- ── Step 5: Kraus.adjointMap L σ = σ ──
   have hL_adj : Kraus.adjointMap L σ = σ := by
     simp only [Kraus.adjointMap_apply, L]
@@ -287,7 +291,7 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     simp_rw [h_term_adj]
     -- ∑ S * ((K i)ᴴ * K i) * S = S * (∑ (K i)ᴴ * K i) * S = σ
     rw [← Finset.sum_mul, ← Finset.mul_sum, hK_tp, Matrix.mul_one, hS_sq]
-  -- ── Step 6: transferMap L X = S⁻¹ E(SXS) S⁻¹  (key identity) ──
+  -- ── Step 6: mapLM L X = S⁻¹ E(SXS) S⁻¹  (key identity) ──
   have h_term : ∀ (i : Fin r) (X : Mat),
       L i * X * (L i)ᴴ = S⁻¹ * (K i * (S * X * S) * (K i)ᴴ) * S⁻¹ := by
     intro i X
@@ -295,19 +299,19 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
         S⁻¹ * (K i * (S * X * S) * (K i)ᴴ) * S⁻¹
     rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul, hSinv_herm, hS_herm]
     simp only [Matrix.mul_assoc]
-  have hL_transfer : ∀ X, MPSTensor.transferMap (d := r) (D := D) L X =
+  have hL_map : ∀ X, Kraus.mapLM L X =
       S⁻¹ * E (S * X * S) * S⁻¹ := by
     intro X
-    simp only [MPSTensor.transferMap_apply]
+    simp only [Kraus.mapLM_apply, Kraus.map_apply]
     simp_rw [h_term _ X]
     rw [← Finset.sum_mul, ← Finset.mul_sum]
-    rw [hE_eq, MPSTensor.transferMap_apply]
-  -- ── Step 7: transferMap L is irreducible ──
-  have hL_irr : IsIrreducibleMap (MPSTensor.transferMap (d := r) (D := D) L) := by
-    suffices h : MPSTensor.transferMap (d := r) (D := D) L = similarityMap (D := D) S E by
+    rw [hE_eq, Kraus.mapLM_apply, Kraus.map_apply]
+  -- ── Step 7: mapLM L is irreducible ──
+  have hL_irr : IsIrreducibleMap (Kraus.mapLM L) := by
+    suffices h : Kraus.mapLM L = similarityMap (D := D) S E by
       rw [h]; exact isIrreducibleMap_similarity (D := D) hS_det hIrr
     apply LinearMap.ext; intro X
-    rw [hL_transfer X]
+    rw [hL_map X]
     change S⁻¹ * E (S * X * S) * S⁻¹ = S⁻¹ * E (S * X * Sᴴ) * (Sᴴ)⁻¹
     rw [hS_herm]
   -- Auxiliary lemma: sandwich cancellation lemmas
@@ -321,9 +325,9 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
     calc S⁻¹ * (S * A * S) * S⁻¹
         = S⁻¹ * S * A * (S * S⁻¹) := by simp only [Matrix.mul_assoc]
       _ = A := by rw [hSinv, hSmul, Matrix.one_mul, Matrix.mul_one]
-  -- ── Step 8: eigenvalue transfer (E → transferMap L) ──
+  -- ── Step 8: eigenvalue transfer (E → mapLM L) ──
   have heig_fwd : ∀ ν, Module.End.HasEigenvalue E ν →
-      Module.End.HasEigenvalue (MPSTensor.transferMap (d := r) (D := D) L) ν := by
+      Module.End.HasEigenvalue (Kraus.mapLM L) ν := by
     intro ν hν
     obtain ⟨V, hV⟩ := hν.exists_hasEigenvector
     have hVne : V ≠ 0 := hV.2
@@ -333,16 +337,16 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
       intro hW; apply hVne
       have hV_from_W : V = S * W * S := (hSandwich V).symm
       rw [hV_from_W, hW, mul_zero, zero_mul]
-    have hLW : MPSTensor.transferMap (d := r) (D := D) L W = ν • W := by
-      rw [hL_transfer, hSandwich V, hEV, mul_smul_comm, smul_mul_assoc]
+    have hLW : Kraus.mapLM L W = ν • W := by
+      rw [hL_map, hSandwich V, hEV, mul_smul_comm, smul_mul_assoc]
     exact hasEigenvalue_of_eigenvector_eq _ ν W hLW hWne
-  -- ── Step 9: eigenvalue transfer (transferMap L → E) ──
-  have heig_bwd : ∀ ν, Module.End.HasEigenvalue (MPSTensor.transferMap (d := r) (D := D) L) ν →
+  -- ── Step 9: eigenvalue transfer (mapLM L → E) ──
+  have heig_bwd : ∀ ν, Module.End.HasEigenvalue (Kraus.mapLM L) ν →
       Module.End.HasEigenvalue E ν := by
     intro ν hν
     obtain ⟨W, hW⟩ := hν.exists_hasEigenvector
     have hWne : W ≠ 0 := hW.2
-    have hLW : MPSTensor.transferMap (d := r) (D := D) L W = ν • W :=
+    have hLW : Kraus.mapLM L W = ν • W :=
       Module.End.mem_eigenspace_iff.mp hW.1
     let V : Mat := S * W * S
     have hVne : V ≠ 0 := by
@@ -350,16 +354,16 @@ theorem peripheral_powers_closed_of_irreducible_channel_with_fixed [NeZero D]
       have hW_from_V : W = S⁻¹ * V * S⁻¹ := (hSinvSandwich W).symm
       rw [hW_from_V, hV, mul_zero, zero_mul]
     have hEV : E V = ν • V := by
-      -- From hL_transfer W and hLW: S⁻¹ * E V * S⁻¹ = ν • W
+      -- From hL_map W and hLW: S⁻¹ * E V * S⁻¹ = ν • W
       have h1 : S⁻¹ * E V * S⁻¹ = ν • W := by
-        have := hL_transfer W; rw [hLW] at this; exact this.symm
+        have := hL_map W; rw [hLW] at this; exact this.symm
       -- Sandwich with S to recover E V
       have h2 : E V = S * (ν • W) * S := by
         have := hSandwich (E V); rw [h1] at this; exact this.symm
       rw [h2, mul_smul_comm, smul_mul_assoc]
     exact hasEigenvalue_of_eigenvector_eq _ ν V hEV hVne
   -- ── Step 10: Apply power closure theorem and transfer back ──
-  have hμ_L : μ ∈ peripheralEigenvalues (MPSTensor.transferMap (d := r) (D := D) L) :=
+  have hμ_L : μ ∈ peripheralEigenvalues (Kraus.mapLM L) :=
     ⟨heig_fwd μ hμ.1, hμ.2⟩
   have hpow := MPSTensor.peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     L hL_unital σ hσ_pd hL_adj hL_irr μ hμ_L

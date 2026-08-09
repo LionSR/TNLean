@@ -65,22 +65,28 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
+  have hK_map : Kraus.mapLM (fun i ↦ (A i)ᴴ) =
+      transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) :=
+    LinearMap.ext fun X => by
+      simp [Kraus.mapLM_apply, Kraus.map_apply, transferMap_apply]
+  have hIrrK_map : IsIrreducibleMap (Kraus.mapLM (fun i ↦ (A i)ᴴ)) := by
+    simpa only [hK_map] using hIrrK
   obtain ⟨hm, γ, hγroot, hPeriphK⟩ :=
     peripheralEigenvalues_eq_range_primitiveRoot
-      (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK
+      (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK_map
   let m : ℕ := (peripheralEigenvalues_finite
-    (f := transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
+    (f := Kraus.mapLM (fun i ↦ (A i)ᴴ))).toFinset.card
   have hm' : 0 < m := by simpa [m] using hm
   have hγroot' : IsPrimitiveRoot γ m := by simpa [m] using hγroot
   have hPeriphK' :
-      peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.mapLM (fun i ↦ (A i)ᴴ)) =
         Set.range (fun j : Fin m ↦ γ ^ (j : ℕ)) := by
     simpa [m] using hPeriphK
   haveI : NeZero m := ⟨hm'.ne'⟩
   have hKRoots :
       peripheralEigenvalues (transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
         {z : ℂ | z ^ m = 1} := by
-    rw [hPeriphK']
+    rw [← hK_map, hPeriphK']
     ext z
     constructor
     · rintro ⟨j, rfl⟩
