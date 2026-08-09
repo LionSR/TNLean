@@ -111,8 +111,9 @@ theorem gramReshuffle_norm_sq_le_rectangularChoi_norm_sq
   exact (toEuclideanCLM_norm_sq_le_sum_norm_sq (gramReshuffleMatrix Φ)).trans_eq
     (gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq Φ)
 
-/-- Reshuffling the Choi matrix of a linear map on `α × α` matrices costs at most
-`card α ^ 3` when its squared L² operator norm is compared with that of the map. -/
+/-- Reshuffling the Choi matrix of a linear map on \(\alpha \times \alpha\) matrices
+costs at most \((\operatorname{card} \alpha)^3\) when its squared L² operator norm is
+compared with that of the map. -/
 theorem gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq
     (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix α α ℂ) :
     ‖gramReshuffle Φ‖ ^ 2 ≤
