@@ -564,7 +564,9 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
           ∑ x, bntSectorProjection hC hρ hη hR s a x *
             S.basisMPOTensor s x b β α := by
       simpa only [mul_comm, mul_left_comm, mul_assoc] using
-        (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
+        Fintype.sum_mul_mul_eq_mul_sum_mul (S.commonWeight hWeight s)
+          (fun x => bntSectorProjection hC hρ hη hR s a x)
+          (fun x => S.basisMPOTensor s x b β α)
     _ = _ := by rw [h]
 
 /-- Returning the absorbed-weight MPO representative to doubled-index MPS
