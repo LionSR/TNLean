@@ -273,8 +273,8 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \section{Double-layer blocking and mixed physical traces}
 
-\begin{lemma}[Physical adjoints and double layers commute with blocking]
-    \label{lem:mpu_double_layer_blocking}
+\begin{theorem}[Physical adjoints and double layers commute with blocking]
+    \label{thm:mpu_double_layer_blocking}
     \lean{MPOTensor.physicalAdjointTensor_blockTensor,
         MPOTensor.doubleLayerTensor_blockTensor}
     \leanok
@@ -285,7 +285,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         \mathcal W(\mathcal U^{[L]})&=\mathcal W(\mathcal U)^{[L]}.
     \end{align}
     The virtual order is unchanged on both sides.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Physical adjunction conjugates each matrix entry without reversing the
@@ -301,7 +301,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec}
     \leanok
     \uses{def:mpu_double_layer,def:mpu_normalized_flattening,
-        def:mpu_transfer_matrix,lem:mpu_double_layer_blocking}
+        def:mpu_transfer_matrix,thm:mpu_double_layer_blocking}
     Let $E$ be the normalized transfer matrix of $\mathcal U$.  After blocking
     $L$ sites, the normalized physical diagonal of the double layer is
     exactly $E^L$.  More precisely, if
@@ -318,28 +318,28 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_double_layer_blocking}
+    \uses{thm:mpu_double_layer_blocking,
+        thm:mpu_normalized_transfer_stabilization}
     On one site, expanding the diagonal double-layer contraction gives the
     transfer matrix after the stated product reindexing.  The factor
     $d^{-1}$ is the square of the local factor $d^{-1/2}$.  Summing blocked
     diagonal letters over words and distributing the ordered product shows
     that normalized diagonals turn blocking into powers.  Simultaneous
     reindexing preserves multiplication, giving the displayed formula.
+    Transfer stabilization gives the final rank-one specialization.
 \end{proof}
 
 \begin{theorem}[Identity plus traceless physical decomposition]
     \label{thm:mpu_WIsom}
-    \lean{MPOTensor.exists_identity_traceless_basis,
+    \lean{Matrix.exists_identity_traceless_basis,
         MPOTensor.exists_identity_add_traceless_decomposition,
         MPOTensor.residualSlice_eq_contractPhysical_tracelessPart}
     \leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal}
     For every double-layer tensor $\mathcal W$, there is a basis
     $\{\sigma_0,\sigma_\alpha\}$ of the physical matrix algebra and virtual
-    matrices $E,S_\alpha$ such that
+    matrices $E,S_\alpha$ such that $\sigma_0=\Id$ and, for every nonzero
+    index $\alpha$, $\tr(\sigma_\alpha)=0$, while
     \begin{align}
-        \sigma_0&=\Id,&
-        \tr(\sigma_\alpha)&=0\quad(\alpha\ne0),\\
         \mathcal W&=E\otimes\Id+
           \sum_{\alpha\ne0}S_\alpha\otimes\sigma_\alpha.
     \end{align}
@@ -391,37 +391,67 @@ closing a chain of $N$ copies of $\mathcal U$.
     factor into the product of the physical traces.
 \end{proof}
 
-\begin{theorem}[Mixed residual traces and the rank-one sandwich]
-    \label{thm:mpu_mixed_residual_trace}
-    \lean{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero,
-        MPOTensor.rankOne_sandwich_eq_zero_of_mixed_trace}
-    \leanok
-    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,
-        thm:mpu_normalized_transfer_stabilization}
-    Every closed product containing at least one residual coefficient has
-    zero trace.  In the formal MPU interface this conclusion is obtained for
-    lengths $N>1$, because MPU unitarity is assumed at exactly those lengths;
-    the source states the mixed identity for every positive length, including
-    one residual letter.  If the stabilized transfer operator is rank one,
-    $E=|\rho)(\Phi|$, then every mixed word $P$ satisfying the corresponding
-    trace identity obeys
+\begin{theorem}[Positive-length mixed residual traces]
+    \label{thm:mpu_positive_mixed_residual_trace}
+    Every closed product of positive length that contains at least one
+    residual coefficient has zero trace.  In particular, this includes a
+    single residual coefficient.  After transfer stabilization, if
+    $E'=|\rho)(\Phi|$ and $m\geq1$, then
     \begin{align}
-        EPE&=0.
+        E'S'_{\alpha_1}\cdots S'_{\alpha_m}E'&=0.
     \end{align}
-    This is equation \texttt{ESE=0} in
+    This is equation \texttt{ESE=0} and the preceding mixed-trace assertion in
     \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{theorem}
 
-\begin{proof}\leanok
-    \uses{thm:mpu_multilinear_physical_contraction}
-    Represent identity factors by $d^{-1}\Id$ and residual factors by their
-    traceless physical arguments.  The multilinear identity vanishes because
-    one factor on the right has trace zero.  Finally,
+\begin{proof}
+    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,
+        thm:mpu_normalized_transfer_stabilization}
+    The identity component is represented by $d^{-1}\Id$, whereas every
+    residual component is represented by a traceless physical matrix.  The
+    multilinear contraction identity therefore vanishes whenever a residual
+    component occurs.  Transfer stabilization gives $E'=|\rho)(\Phi|$, and
     \begin{align}
         |\rho)(\Phi|P|\rho)(\Phi|
-          &=\tr\!\left(P|\rho)(\Phi|\right)|\rho)(\Phi|,
+          &=\tr\!\left(P|\rho)(\Phi|\right)|\rho)(\Phi|.
     \end{align}
-    and the scalar trace is zero.
+    Taking $P=S'_{\alpha_1}\cdots S'_{\alpha_m}$ gives the sandwich identity.
+\end{proof}
+
+\begin{theorem}[Controlled mixed residual traces and rank-one sandwich]
+    \label{thm:mpu_controlled_mixed_residual_trace}
+    \lean{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero,
+        MPOTensor.IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero,
+        MPOTensor.IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero}
+    \leanok
+    \uses{def:mpu,def:mpu_double_layer,
+        thm:mpu_blocked_double_layer_diagonal}
+    Let $N>1$.  Every closed product of $N$ identity and residual
+    coefficients that contains at least one residual coefficient has zero
+    trace.  If the normalized diagonal is rank one, then every nonempty
+    residual word $P$ satisfies
+    \begin{align}
+        EPE&=0.
+    \end{align}
+    The same conclusion holds after blocking $J>0$ sites whenever the
+    $J$th normalized transfer power is $|\rho)(\Phi|$, with both virtual
+    indices reindexed by $q^{-1}:\Fin{D^2}\longrightarrow\Fin D\times\Fin D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,
+        thm:mpu_blocked_double_layer_diagonal}
+    Represent identity factors by $d^{-1}\Id$ and residual factors by their
+    traceless physical arguments.  Since $N>1$, the multilinear contraction
+    identity applies, and one trace factor vanishes.  For a nonempty residual
+    word, adjoin $E$ as one extra factor; its closed trace has length at least
+    two and therefore vanishes.  Cyclicity of trace and
+    \begin{align}
+        |\rho)(\Phi|P|\rho)(\Phi|
+          &=\tr\!\left(P|\rho)(\Phi|\right)|\rho)(\Phi|
+    \end{align}
+    give $EPE=0$.  The blocked statement follows from the transfer-power
+    formula with the same product-index reindexing in both matrix indices.
 \end{proof}
 
 \section{Trace-power lemma}\label{sec:mpu_trace_power}

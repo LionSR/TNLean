@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{MPU One-Letter Mixed Residual Trace Gap}
+\author{}
+\date{2026-08-09}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+In the proof of Proposition~III.3(ii), Cirac--P\'erez-Garc\'ia--Schuch--
+Verstraete state that the trace of every positive-length product containing at
+least one residual coefficient $S'_\alpha$ vanishes
+\cite[lines~405--409]{Cirac2017MPU}.  This includes the one-letter identity
+\begin{align}
+    \operatorname{tr}(S'_\alpha)&=0.
+\end{align}
+They then use transfer stabilization, $E'=|\rho)(\Phi|$, to deduce
+\begin{align}
+    E'S'_{\alpha_1}\cdots S'_{\alpha_m}E'&=0
+    \qquad (m\geq1).
+\end{align}
+
+\section{The present scope restriction}
+
+The predicate \leanid{MPOTensor.IsMPU} assumes closed-chain unitarity only at
+lengths strictly greater than one.  Consequently,
+\leanid{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero}
+proves the mixed residual trace identity for $N>1$, but does not prove the
+one-letter trace $\operatorname{tr}(S'_\alpha)=0$.
+
+The rank-one sandwich for every nonempty residual word is nevertheless
+available.  The theorem
+\leanid{MPOTensor.IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero}
+adjoins the normalized diagonal as an extra factor, so the closed trace used in
+its proof has length at least two.  Its blocked form,
+\leanid{MPOTensor.IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero},
+combines physical blocking, explicit product-index reindexing, the mixed trace,
+trace cyclicity, and the rank-one sandwich formula.
+
+\section{Elimination plan}
+
+To close the remaining source-faithfulness gap, strengthen the mathematical MPU
+hypotheses with the length-one closed-chain identity or derive that identity
+from a source-faithful canonical-form theorem, and then prove
+$\operatorname{tr}(S'_\alpha)=0$ by the same physical coefficient extraction
+used at lengths greater than one.  Until then, the all-positive-length mixed
+trace assertion remains unmarked in the blueprint; only the $N>1$ theorem and
+the nonempty rank-one sandwich are marked as formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
