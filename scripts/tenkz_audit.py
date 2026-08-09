@@ -417,9 +417,8 @@ class ScopePolicy(NamedTuple):
 
     waived: set[int]         # relations its `check={off={k: ...}}` retires
     modulo_bundles: bool     # whether it compares a bundle as its multiplicity
-    relation_gaps: set[int]  # gaps holding a relation glyph
-    product_gaps: set[int]   # gaps holding none, joining by juxtaposition
-    relation_count: Optional[int]  # relation glyphs over all its gaps
+    relation_order: tuple[int, ...]  # the gap each relation glyph sits on
+    product_gaps: set[int]   # gaps holding no glyph, joining by juxtaposition
 
 
 @dataclass
@@ -1347,19 +1346,21 @@ class Audit:
                 for left, right in zip(members, members[1:])
             ]
             marks = [relation_marks(separator) for separator in separators]
-            relation_gaps = {
-                position + 1 for position, count in enumerate(marks) if count
-            }
+            # One entry per glyph, in source order, so the k-th relation keeps
+            # the gap it sits on even where a gap carries more than one.
+            relation_order = tuple(
+                position + 1
+                for position, count in enumerate(marks)
+                for _ in range(count)
+            )
             product_gaps = {
                 position + 1 for position, count in enumerate(marks) if not count
             }
-            relation_count = sum(marks)
             authorized[scope] = ScopePolicy(
                 _tenkzeq_declared_offs(self._tex_src, begin) or set(),
                 _tenkzeq_declares_bundles(self._tex_src, begin),
-                relation_gaps,
+                relation_order,
                 product_gaps,
-                relation_count,
             )
         return authorized
 
@@ -1442,13 +1443,12 @@ class Audit:
             where = f"{self.log_path.name}:{self.pictures[members[0]].line}"
             source = (
                 None if policy is None
-                else policy.get(
-                    scope, ScopePolicy(set(), False, set(), set(), None)
-                )
+                else policy.get(scope, ScopePolicy(set(), False, (), set()))
             )
             declared = set() if source is None else source.waived
             declared_modulo = logged_modulo if source is None else source.modulo_bundles
-            relation_gaps = set() if source is None else source.relation_gaps
+            relation_order = () if source is None else source.relation_order
+            relation_gaps = set(relation_order)
             product_gaps = set() if source is None else source.product_gaps
             # A bundle expansion loosens the comparison, so the source has to
             # ask for it: a stale stream carrying `modulo=bundles` past a
@@ -1479,10 +1479,7 @@ class Audit:
                 # that moves a joiner to another gap leaves a panel outside
                 # every side while its counts still balance.
                 and (source is None or products == product_gaps)
-                and (
-                    source is None or source.relation_count is None
-                    or len(relations) == source.relation_count
-                )
+                and (source is None or len(relations) == len(relation_order))
                 and len(relations) + len(products) + 1 == len(members)
             )
             waived: set[int] = {
@@ -1536,7 +1533,7 @@ class Audit:
                 # mapped onto the gaps their glyphs sit on first.
                 self._compare_adjacent(
                     members, scope, modulo,
-                    _waived_gaps(waived, relation_gaps),
+                    _waived_gaps(waived, relation_order),
                 )
                 continue
             if not products:
@@ -1852,21 +1849,20 @@ _BUNDLE = re.compile(r"bundle=([1-9]\d*)")
 _PRODUCT_PAIR = re.compile(r"(\d+)-(\d+)")
 
 
-def _waived_gaps(waived: set[int], relation_gaps: set[int]) -> set[int]:
+def _waived_gaps(waived: set[int], relation_order: tuple[int, ...]) -> set[int]:
     """The gaps a scope's waived relations sit on.
 
     A waiver names a relation by its ordinal while a pairwise comparison walks
-    gaps, and the two agree only where every side is one panel.  The k-th
-    relation glyph of a source sits on the k-th of its relation gaps, so where
-    the source is read the ordinals are mapped through it; with no source
-    there is nothing to map them through and they stand as they are.
+    gaps, and the two agree only where every side is one panel.  The source
+    lists the gap each of its relation glyphs sits on, one entry per glyph, so
+    a gap carrying two of them keeps both ordinals; with no source there is
+    nothing to map them through and they stand as they are.
     """
-    if not relation_gaps:
+    if not relation_order:
         return set(waived)
-    ordered = sorted(relation_gaps)
     return {
-        ordered[relation - 1] for relation in waived
-        if 1 <= relation <= len(ordered)
+        relation_order[relation - 1] for relation in waived
+        if 1 <= relation <= len(relation_order)
     }
 
 

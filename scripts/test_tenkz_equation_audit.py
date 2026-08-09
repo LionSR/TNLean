@@ -532,6 +532,24 @@ def main() -> int:
     assert ("eq-check-off", "ADV") in waived_gap, waived_gap
     assert waived_gap_pair(waived_gap_source) == (1, 2), waived_gap
 
+    # Seeded defect: two relation glyphs in one gap.  The scope is malformed
+    # -- a side with no panel -- but the second glyph is still the second
+    # relation, and a waiver naming it must reach the gap it sits on.
+    doubled_glyph_source = (
+        "\\begin{tenkzeq}[check={signature, off={2: drafted}}]\n"
+        f"{PANELS[0]}= =\n{PANELS[1]}"
+        "\\end{tenkzeq}\n"
+    )
+    doubled_glyph = audit_rules(
+        panel(1, "open:w") + panel(2, "phys:up")
+        + "check|scope=1|relation=1|result=off|reason=drafted\n"
+        "check|scope=1|relation=2|result=off|reason=drafted\n",
+        doubled_glyph_source,
+    )
+    assert "eq-boundary-mismatch" not in [
+        rule for rule, _ in doubled_glyph
+    ], doubled_glyph
+
     # A spaced environment name opens the same equation, so its declared
     # waiver is the source's and not a forgery.
     spaced = audit_rules(
@@ -550,7 +568,7 @@ def main() -> int:
     print(
         "tenkz-equation-audit: "
         f"{len(POSITIVE)} positive, {len(NEGATIVE)} negative, "
-        "and 35 seeded group checks passed"
+        "and 36 seeded group checks passed"
     )
     return 0
 
