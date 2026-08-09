@@ -969,6 +969,89 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Finite blocking eliminates the zero-primary transfer component]
+    \label{thm:mpu_normalized_transfer_stabilization}
+    \lean{MPOTensor.IsMPU.exists_normalizedTransfer_stabilizes_to_rankOne}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,
+        def:mpu_transfer_matrix,thm:mpu_normalized_transfer_nonzero_spectrum}
+    Let $U$ be an MPU tensor of bond dimension $D>1$, and let $E$ be the
+    transfer matrix of its normalized flattening. There is an integer
+    $J$ satisfying
+    \begin{align}
+        0<J\leq D^2-1
+    \end{align}
+    and vectors $\rho,\Phi$ satisfying
+    \begin{align}
+        (\Phi\mid\rho)&=1,
+        &E\rho&=\rho,
+        &(\Phi\mid E&=(\Phi\mid,
+    \end{align}
+    such that
+    \begin{align}
+        E^J&=\lvert\rho)(\Phi\rvert,
+        &E^k&=E^J\qquad(k\geq J).
+    \end{align}
+    Thus blocking $J$ sites removes the entire generalized zero-eigenspace.
+    For $D=1$, the transfer matrix is already the identity and stabilization
+    holds at exponent one; the positive bound above is impossible because
+    $D^2-1=0$.
+
+    This is the Jordan-elimination step of
+    \cite[Section~III, lines~397--409]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum}
+    The exact characteristic polynomial is
+    \begin{align}
+        \chi_E(X)&=X^{D^2-1}(X-1).
+    \end{align}
+    Cayley--Hamilton gives $E^{D^2}=E^{D^2-1}$. Hence every power from
+    $J=D^2-1$ onward is equal, and $P=E^J$ is idempotent. Since $J>1$, the
+    normalized transfer trace identity gives $\tr(P)=1$. The range of an
+    idempotent has dimension equal to its trace, so $P$ has rank one and
+    factors as $P=\lvert\rho)(\Phi\rvert$. Taking the factors with
+    $(\Phi\mid\rho)=1$ gives the displayed fixed-point identities from
+    $EP=PE=P$.
+\end{proof}
+
+\begin{lemma}[Identification with chosen reduced-CFII fixed points]
+    \label{lem:mpu_reduced_cfii_transfer_stabilization}
+    \lean{MPOTensor.IsMPU.normalizedTransfer_pow_eq_vecMulVec_of_reduced_cpsvCFII}
+    \leanok
+    \uses{thm:mpu_normalized_transfer_stabilization}
+    Suppose the normalized flattening is presented by a chosen canonical-form-II
+    representative whose active blocks fill the bond space. If $\rho$ and $\Phi$
+    are its normalized right and left fixed vectors, then
+    \begin{align}
+        E^{D^2-1}=\lvert\rho)(\Phi\rvert.
+    \end{align}
+    This is a statement about the chosen reduced representative; it does not
+    assert that every ambient MPU tensor is itself in canonical form II.
+\end{lemma}
+
+\begin{proof}\leanok
+    The finite-blocking theorem gives a normalized rank-one stabilized
+    projector. Any other normalized left and right fixed pair factors the same
+    projector: applying the projector to $\rho$ and applying $\Phi$ on the left
+    identifies the two factors up to reciprocal scalars.
+\end{proof}
+
+\begin{lemma}[One-dimensional transfer stabilization]
+    \label{lem:mpu_transfer_stabilization_fin_one}
+    \lean{MPOTensor.IsMPU.normalizedTransferStabilization_fin_one}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix}
+    If the bond dimension is $D=1$, then $E=1$ and the normalized transfer
+    matrix stabilizes at the positive exponent one.
+\end{lemma}
+
+\begin{proof}\leanok
+    In dimension one the characteristic polynomial identity reduces to
+    $\chi_E(X)=X-1$, and Cayley--Hamilton gives $E=1$.
+\end{proof}
+
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}
