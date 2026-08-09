@@ -8,6 +8,17 @@
 % leads that close it.  A label band shallower than the trace reach put every
 % site name across that same return; the step a label owes the return is
 % counted through the one function that computes it.
+%
+% The joined return then ran through the row it closed.  It stood a fixed
+% trace reach from the row line, and the first row here hangs a named
+% physical index on that very side: a leg, and the band its name occupies.
+% The leg alone is longer than the reach, so at stroke width every open index
+% of the row ended on the wire that contracts it, and its name stood on the
+% far side of that wire from the index it names.  Two probes on the first
+% site's own axis pin the daylight the return now keeps: one reaching to
+% just inside it meets no return, and one reaching just past it meets exactly
+% one.  Both are written in the metric names, so the clearance is the one the
+% table declares and not a number this file remembers.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -18,7 +29,7 @@
 \int_new:N \g__tenkz_test_closure_rows_int
 \int_new:N \g__tenkz_test_closure_step_int
 \int_new:N \g__tenkz_test_closure_flat_int
-\cs_new_protected:Npn \__tenkz_test_closure_probe:nnnnn #1#2#3#4#5
+\cs_new_protected:Npn \__tenkz_test_closure_probe:nnnnnn #1#2#3#4#5#6
   {
     \path [ spath/save = tenkz-test-closure-probe ]
       \__tenkz_kernel_r_pair:nn {#1} {#2}
@@ -27,8 +38,19 @@
     \__tenkz_string_count:nnN
       {wrap-1} {tenkz-test-closure-probe}
       \l__tenkz_test_closure_cross_int
-    \int_compare:nNnF { \l__tenkz_test_closure_cross_int } = {1}
-      { \errmessage {#5} }
+    \int_compare:nNnF { \l__tenkz_test_closure_cross_int } = {#5}
+      { \errmessage {#6} }
+  }
+\cs_new_protected:Npn \__tenkz_test_closure_probe:nnnnn #1#2#3#4#5
+  { \__tenkz_test_closure_probe:nnnnnn {#1} {#2} {#3} {#4} {1} {#5} }
+% The outward reach of a named physical index, in the metric names that
+% place it: the leg, and the band its name occupies below the leg's tip.
+\cs_new:Npn \__tenkz_test_closure_ink:
+  {
+    (
+      \__tenkz_metric_ratio:n {physleg}
+      + \__tenkz_metric_ratio:n {dotlabelband}
+    )
   }
 \cs_new_eq:NN
   \__tenkz_test_closure_stroke:nn
@@ -56,6 +78,29 @@
             \__tenkz_test_closure_probe:nnnnn
               {2.35} {-0.06} {2.35} {0.06}
               {traced~row~left~its~east~end~unjoined}
+            % Only the first picture's row hangs open indices; the second is
+            % bare and its return keeps the trace reach it always had.
+            \int_compare:nNnT { \g__tenkz_test_closure_rows_int } = {1}
+              {
+                \__tenkz_test_closure_probe:nnnnnn
+                  {0} { - \__tenkz_test_closure_ink: }
+                  {0}
+                  {
+                    - \__tenkz_test_closure_ink:
+                    - \__tenkz_metric_ratio:n {daylight} + 0.01
+                  }
+                  {0}
+                  {a~return~ran~inside~the~daylight~its~row's~indices~own}
+                \__tenkz_test_closure_probe:nnnnnn
+                  {0} { - \__tenkz_test_closure_ink: }
+                  {0}
+                  {
+                    - \__tenkz_test_closure_ink:
+                    - \__tenkz_metric_ratio:n {daylight} - 0.01
+                  }
+                  {1}
+                  {a~return~missed~one~daylight~beyond~its~row's~indices}
+              }
           }
       }
   }

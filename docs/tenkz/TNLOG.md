@@ -156,7 +156,7 @@ first, the rest sorted, no `picture=`.
 | `label-use` | `picture` | a label node claimed no ink owner |
 | `bbox` | `picture`, `class=label`, `id`, `owner`, `xmin`, `xmax`, `ymin`, `ymax`, `shape`, `radius` | one measured label box, in integer scaled points |
 | `glyph-geometry` | `picture`, `owner`, `shape`, `xmin`, `xmax`, `ymin`, `ymax`, `radius`, `stroke`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3` | one measured glyph silhouette, in integer scaled points |
-| `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, and the semicolon-separated polyline it lays, all in integer scaled points |
+| `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `clear`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, the standoff the rows it passes demand of it — signed by the side the return runs, measured from its own row line, and `arc` for a frame sector, which stands off no row line — and the semicolon-separated polyline it lays, all in integer scaled points |
 | `tree` | `picture`, `id`, `style`, `leaves`, `vertices`, `topology`, `role`, `species` | one fusion tree |
 | `geomprobe` | `id`, then a caller-supplied payload | one geometry probe, for fixtures |
 
@@ -241,6 +241,16 @@ pictures, enforces one boundary per kernel picture, fails on a `check` result
 of `mismatch` or `malformed`, and audits label overlap, bounding-box coverage,
 repeated topology, and equation boundaries. Its own table of emitted kinds is
 maintained by hand.
+
+`closure-rail`'s `clear` is the worked example of §7's optional-field rule. It
+arrived on a kind that already existed, so the reader validates it when it is
+there and asks nothing when it is absent, and a stream written before it reads
+clean. What the reader cannot then say is whether a live picture stopped
+writing it, so that reading is taken where the live library is the thing being
+read: `scripts/tenkz_kernel_probes.sh` fails on a closure the kernel wrote
+without a standoff, and measures the drawn contour against it there. There is
+no in-band word for "no standoff" other than `arc`: a flat rail that named one
+would take the standoff rule out of its own reading.
 
 ## 7. Compatibility
 

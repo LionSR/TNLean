@@ -1209,8 +1209,14 @@ closure_rails=$(grep -c '^closure-rail|' \
     "contours, expected 2" >&2
   exit 1
 }
+# The return also stands clear of the row it closes (#5766).  The standoff
+# the row's open indices demand rides on the same record, and a reader of an
+# archived stream is held to accepting one written before that field existed
+# -- so it is here, against the live library, that the field is required and
+# the drawn contour is held to it.
 python3 - "$WORK/r_trace_row_closure.tnlog" <<'PROBE' || exit 1
 import sys
+from fractions import Fraction
 
 joined = 0
 for line in open(sys.argv[1], encoding="utf-8"):
@@ -1218,6 +1224,44 @@ for line in open(sys.argv[1], encoding="utf-8"):
         continue
     fields = dict(part.split("=", 1) for part in line.strip().split("|")[1:])
     points = [tuple(int(v) for v in p.split(",")) for p in fields["points"].split(";")]
+    if "clear" not in fields:
+        print("FAIL: a traced row's closure named no standoff")
+        raise SystemExit(1)
+    west, east = points[0], points[-1]
+    ends = [tuple(int(v) for v in fields[side].split(","))[0]
+            for side in ("west", "east") if fields[side] != "none"]
+    # The reading is the audit's, on the same terms: a sector stands off no
+    # row line, and a row with no virtual end is an empty lattice.
+    if fields["clear"] != "arc" and ends:
+        owed = abs(int(fields["clear"]))
+        outward = -1 if int(fields["clear"]) < 0 else 1
+        slope = (Fraction(0) if west[0] == east[0]
+                 else Fraction(east[1] - west[1], east[0] - west[0]))
+        low, high = min(ends), max(ends)
+
+        def out(p):
+            return outward * (Fraction(p[1]) - west[1]
+                              - (p[0] - west[0]) * slope)
+
+        covers = []
+        last = len(points) - 2
+        for index, (a, b) in enumerate(zip(points, points[1:])):
+            lo, hi = max(min(a[0], b[0]), low), min(max(a[0], b[0]), high)
+            if lo > hi:
+                continue
+            if min(out(a), out(b)) + 655 >= owed:
+                covers.append((lo, hi))
+            elif lo != hi or index not in (0, last):
+                print("FAIL: a closure came inside its standoff across its row")
+                raise SystemExit(1)
+        reach = low
+        for a, b in sorted(covers):
+            if a > reach:
+                break
+            reach = max(reach, b)
+        if reach < high:
+            print("FAIL: a closure did not run across its row at its standoff")
+            raise SystemExit(1)
     for end, corner in ((fields["west"], points[0]), (fields["east"], points[-1])):
         if end == "none":
             print("FAIL: a traced row reported no virtual end to close onto")
