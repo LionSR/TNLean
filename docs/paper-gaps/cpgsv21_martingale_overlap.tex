@@ -504,17 +504,17 @@ exact identity is
       =(\mathcal E_A^L(E_{ca}))_{e,b}.
 \end{align}
 This is \leanid{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}.
-For any matrix endomorphism $\mathcal L$, let $\mathcal R(\mathcal L)$ be the
+For any matrix endomorphism $\mathcal L$, let $\mathscr R(\mathcal L)$ be the
 Euclidean operator with matrix entries
 \begin{align}
-  \mathcal R(\mathcal L)_{(b,a),(e,c)}
+  \mathscr R(\mathcal L)_{(b,a),(e,c)}
     &:=J(\mathcal L)_{(c,e),(a,b)}.
 \end{align}
 This is \leanid{Matrix.gramReshuffle}, and
 \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
 identity to the exact operator equality
 \begin{align}
-  \mathcal K_L&=\mathcal R(\mathcal E_A^L).
+  \mathcal K_L&=\mathscr R(\mathcal E_A^L).
 \end{align}
 The ordering is a Choi reshuffling.  It must not be replaced by the generally
 false Hilbert--Schmidt expression
