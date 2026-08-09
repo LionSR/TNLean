@@ -789,15 +789,22 @@ $T_{k,h}=a_kb_h$; it does not refute Lemma~C.5 under all standing hypotheses.
 This obstruction does not survive the full normal Case-I hypotheses: the
 completed route below excludes it and formalizes the structural corollary at
 lines~1503--1506. It remains relevant to the later Case-II passage. The
-proposition proving Theorem~4.9 (ii)$\Rightarrow$(iv) at lines~1740--1788 and
-the proof of (ii)$\Rightarrow$(v) at lines~1810--1825 are not yet formalized
-from their stated SAL and ZCL hypotheses. The normalized representative above
-shows that the broadened implication formed with TNLean's up-to-scalar
-\leanid{MPOTensor.IsSourceZCL} predicate is false; it does not meet the paper's
-literal ZCL diagram and therefore does not settle the exact source statement.
-The constructions from an explicitly supplied rank-one neighboring trace
-factorization remain valid restricted results, but they do not establish these
-two later implications.
+sectorwise analytic part of that passage is now complete. For every absorbed
+BNT representative $\mathcal K_s=\mu_sA_s$, the formalization proves one-site
+injectivity, positivity on every nonempty periodic chain, saturation of the
+area law, and the literal identity
+\[
+  \mathcal T_{\mathcal K_s}^2=\mathcal T_{\mathcal K_s}.
+\]
+The remaining obstruction is normality after coefficient absorption. If
+$A_s$ is normal, then the transfer map of $\mu_sA_s$ has spectral radius
+$|\mu_s|^2$. The global canonical-form convention supplies at least one
+unit-modulus coefficient, but it does not imply $|\mu_s|=1$ for every sector.
+Consequently the normal Case-I structural theorem cannot yet be applied to
+all absorbed BNT representatives. The constructions from an explicitly
+supplied rank-one neighboring trace factorization remain valid restricted
+results, but they do not establish the missing normality or the all-sector
+factorization.
 
 \section{Conclusion}
 
@@ -850,6 +857,36 @@ $\sum_k a_kb_k=1$. This is a project-derived realization of the printed
 all-index coefficient equation in Lemma~C.5: CPSV16 quantifies sector labels
 without defining TNLean's active--inactive split or its ambient filler sectors.
 
+The Case-II sectorwise analytic slice is formalized separately. Literal
+physical-trace idempotence first descends to every weighted canonical block by
+\leanid{MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL}, and then
+to every absorbed BNT representative by
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}.
+Together with the projector, positivity, and entropy arguments,
+\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_caseII_properties_of_literal_ZCL}
+gives, for every $s$,
+\[
+  \mathcal K_s\text{ injective},\qquad
+  \sigma^{(N)}(\mathcal K_s)\geq0\ (N\geq1),\qquad
+  \mathcal K_s\text{ SAL},\qquad
+  \mathcal T_{\mathcal K_s}^2=\mathcal T_{\mathcal K_s}.
+\]
+This literal identity is distinct from the scale-invariant predicate
+\leanid{MPOTensor.IsSourceZCL}. The proof temporarily derives that predicate
+with scalar $1$ only to invoke the existing entropy theorem; it retains the
+literal identity as a separate conclusion.
+
+The absorbed tensor $\mathcal K_s=\mu_sA_s$ is an absorbed BNT representative,
+not automatically a normal representative. Normality of $A_s$ fixes the
+spectral radius of its transfer map to one, whereas coefficient absorption
+changes it to $|\mu_s|^2$. The source's global normalization gives only one
+unit-modulus coefficient across the whole canonical form. It therefore does
+not supply the sectorwise equations $|\mu_s|=1$ needed to invoke the normal
+Case-I theorem for every $s$. This is the precise remaining obstruction in
+Propositions `prop2to3` and `prop2to5`. The explicit tensor-attached vertical
+BNT coefficient problem tracked in \ghissue{5635} is a separate question and
+is not used in this descent argument.
+
 The structural corollary at lines~1503--1506 is now formalized by
 \leanid{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}.
 It retains the selected physical-sector factorization itself: an isometry $U$
@@ -874,8 +911,9 @@ normal tensor assumed in Case~I, and its normal representative loses literal
 ZCL. The raw example therefore does not refute Lemma~C.5 under its complete
 standing hypotheses. The completed normal Case-I corollary does not replace
 literal ZCL by TNLean's scale-invariant \leanid{MPOTensor.IsSourceZCL}
-predicate, and it supplies no Case-II statement. The Case-II passage remains
-separate under issue \ghissue{5673}.
+predicate. The completed Case-II analytic inheritance likewise does not prove
+that coefficient absorption preserves normality. The all-sector structural
+passage remains separate under issue \ghissue{5673}.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site

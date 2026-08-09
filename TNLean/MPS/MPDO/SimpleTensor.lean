@@ -238,6 +238,96 @@ theorem exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL
   rw [Equiv.symm_apply_apply] at h
   simpa [Pi.smul_apply] using h
 
+/-- Literal zero correlation length restricts to every weighted canonical block:
+\[
+  (\mu_{j,q}\mathcal B_j)^2=\mu_{j,q}\mathcal B_j.
+\]
+
+The proof conjugates the ambient physical-trace idempotence equation through the chosen
+canonical-form gauge and then reads the diagonal block indexed by `(j, q)`.
+
+**Scope restriction (literal-ZCL inheritance):** This is only the literal-ZCL inheritance
+part of Case II. It neither gives spectral normality of the absorbed tensor nor completes
+`prop2to3`. The remaining Case-II boundary is recorded in
+`docs/paper-gaps/cpgsv17_pf_rank_one.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782. -/
+theorem weighted_basis_physTraceTransfer_sq_of_literal_ZCL
+    {M : MPOTensor d D}
+    (S : MPSTensor.SectorDecomposition (d * d)) (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hZCL_sq : physTraceTransfer M * physTraceTransfer M = physTraceTransfer M) :
+    ∀ (j : Fin S.basisCount) (q : Fin (S.copies j)),
+      (S.weight j q • doubledPhysTraceTransfer d (S.basis j)) *
+          (S.weight j q • doubledPhysTraceTransfer d (S.basis j)) =
+        S.weight j q • doubledPhysTraceTransfer d (S.basis j) := by
+  classical
+  subst hTotal
+  have hX' : ∀ i : Fin (d * d), M.toMPSTensor i =
+      (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+        S.toTensor i *
+        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := fun i ↦ by
+    simpa using hEq i
+  have hT : physTraceTransfer M =
+      (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+        doubledPhysTraceTransfer d S.toTensor *
+        (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
+    rw [← doubledPhysTraceTransfer_toMPSTensor M]
+    simp only [doubledPhysTraceTransfer]
+    rw [Matrix.mul_sum, Matrix.sum_mul]
+    exact Finset.sum_congr rfl fun i _ ↦ hX' (finProdFinEquiv (i, i))
+  rw [hT] at hZCL_sq
+  have hRR :
+      doubledPhysTraceTransfer d S.toTensor * doubledPhysTraceTransfer d S.toTensor =
+        doubledPhysTraceTransfer d S.toTensor := by
+    have h2 := congrArg (fun Z ↦
+      (((MPSTensor.globalGaugeOfBlocks X)⁻¹ : GL (Fin S.totalDim) ℂ) :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * Z *
+        (MPSTensor.globalGaugeOfBlocks X :
+          Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)) hZCL_sq
+    simpa only [mul_assoc, Units.inv_mul_cancel_left, Units.inv_mul, mul_one] using h2
+  rw [doubledPhysTraceTransfer_toTensor] at hRR
+  have hfun :
+      (fun s ↦ (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s)) *
+          (S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s))) =
+        fun s ↦ S.flatWeight s • doubledPhysTraceTransfer d (S.flatBasis s) := by
+    apply Matrix.blockDiagonal'_injective
+    apply (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv).injective
+    simpa only [Matrix.reindex_apply, Matrix.blockDiagonal'_mul,
+      Matrix.submatrix_mul_equiv] using hRR
+  intro j q
+  have h :
+      (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+            (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+          doubledPhysTraceTransfer d
+            (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1)) *
+        (S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+            (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+          doubledPhysTraceTransfer d
+            (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1)) =
+      S.weight (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1
+          (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).2 •
+        doubledPhysTraceTransfer d
+          (S.basis (S.flatIndexEquiv.symm (S.flatIndexEquiv ⟨j, q⟩)).1) :=
+    congrFun hfun (S.flatIndexEquiv ⟨j, q⟩)
+  rw [Equiv.symm_apply_apply] at h
+  exact h
+
 /-- **Zero correlation length makes the sector weights copy independent**
 (arXiv:1606.00608, Appendix C.2, lines 1646--1661).  Let the doubled-index
 view of $M$ be in canonical form over a basis of normal tensors with per-copy
