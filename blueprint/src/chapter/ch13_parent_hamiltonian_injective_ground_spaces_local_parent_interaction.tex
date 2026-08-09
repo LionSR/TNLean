@@ -327,6 +327,64 @@ orthogonal projector is the canonical representative used here.
     supremum over unit vectors $x\in\ell^2(I)$.
 \end{proof}
 
+\begin{theorem}[Squared mass of one column]
+    \label{thm:sum_column_norm_sq_le_l2_operator_norm_sq}
+    \lean{Matrix.sum_column_norm_sq_le_norm_sq}
+    \leanok
+    Let $I$ be a finite index set, let $A=(A_{ij})_{i,j\in I}$ be a complex
+    matrix, and let $j\in I$.  Then
+    \begin{align}
+      \sum_{i\in I}\lvert A_{ij}\rvert^2
+      &\leq \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
+      \label{eq:sum_column_norm_sq_le_l2_operator_norm_sq}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply $A$ to the unit vector supported at $j$.  Its image is the $j$th
+    column of $A$, while the vector itself has Euclidean norm one.
+\end{proof}
+
+\begin{theorem}[Entrywise mass bounded by the $L^2$ operator norm]
+    \label{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    \lean{Matrix.sum_entry_norm_sq_le_card_mul_norm_sq}
+    \leanok
+    Let $I$ be a finite index set and let $A=(A_{ij})_{i,j\in I}$ be a complex
+    matrix.  Then
+    \begin{align}
+      \sum_{(i,j)\in I\times I}\lvert A_{ij}\rvert^2
+      &\leq |I|\,
+        \lVert A\rVert_{\ell^2(I)\to\ell^2(I)}^2.
+      \label{eq:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:sum_column_norm_sq_le_l2_operator_norm_sq}
+    Sum Theorem~\ref{thm:sum_column_norm_sq_le_l2_operator_norm_sq} over all
+    columns.
+\end{proof}
+
+\begin{theorem}[$L^2$ operator norm of a matrix unit]
+    \label{thm:l2_operator_norm_matrix_unit}
+    \lean{Matrix.l2_opNorm_single_one}
+    \leanok
+    Let $I$ be a finite index set.  For every $i,j\in I$, the matrix unit
+    $E_{ij}$ satisfies
+    \begin{align}
+      \lVert E_{ij}\rVert_{\ell^2(I)\to\ell^2(I)}=1.
+      \label{eq:l2_operator_norm_matrix_unit}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The matrix unit sends the unit vector at $j$ to the unit vector at $i$ and
+    sends every vector to a scalar multiple of that unit vector.
+\end{proof}
+
 \begin{theorem}[Entrywise Frobenius invariance of Gram reshuffling]
     \label{thm:gram_reshuffle_matrix_norm_sq}
     \lean{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}
@@ -382,6 +440,39 @@ orthogonal projector is the canonical representative used here.
     $R(\mathcal L)$, then use
     Theorem~\ref{thm:gram_reshuffle_matrix_norm_sq} to rewrite its entrywise
     Frobenius mass as that of $J(\mathcal L)$.
+\end{proof}
+
+\begin{theorem}[Dimension bound for Gram reshuffling]
+    \label{thm:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+    \lean{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}
+    \leanok
+    \uses{def:gram_reshuffle}
+    Let $I$ be a finite index set, equip $\mathbb C^{I\times I}$ with its
+    $L^2$ operator norm, and let
+    $\mathcal L\colon\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be
+    complex-linear.  Denote the operator norm of $\mathcal L$ for these matrix
+    norms by $\lVert\mathcal L\rVert_{\mathrm{op},L^2}$.  Then
+    \begin{align}
+      \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
+        \ell^2(I\times I)\to\ell^2(I\times I)}^2
+      &\leq |I|^3\,
+        \lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
+      \label{eq:gram_reshuffle_norm_sq_le_card_cube_mul_operator_norm_sq}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:rectangular_choi,
+        thm:gram_reshuffle_norm_sq_le_rectangular_choi,
+        thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq,
+        thm:l2_operator_norm_matrix_unit}
+    Use Theorem~\ref{thm:gram_reshuffle_norm_sq_le_rectangular_choi} and expand
+    the Choi matrix in matrix units.  For each of the $|I|^2$ input matrix
+    units, Theorem~\ref{thm:sum_entry_norm_sq_le_card_mul_l2_operator_norm_sq}
+    contributes a factor $|I|$.  The operator-norm estimate for $\mathcal L$
+    and Theorem~\ref{thm:l2_operator_norm_matrix_unit} bound the remaining
+    matrix norm.
 \end{proof}
 
 \begin{theorem}[Transfer--Gram Choi reshuffling]
