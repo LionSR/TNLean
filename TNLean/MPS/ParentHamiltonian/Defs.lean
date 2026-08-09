@@ -120,7 +120,8 @@ lemma offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
   · rw [Nat.mod_eq_sub_mod hab, Nat.mod_eq_of_lt (by omega : a + b - N < N),
       show a + b - N + N - a = b from by omega, Nat.mod_eq_of_lt hb]
 
-private lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
+/-- Adding the cyclic offset from `a` to `b` modulo `N` recovers `b`. -/
+lemma add_offset_mod_eq {a b N : ℕ} (ha : a < N) (hb : b < N) :
     (a + ((b + N - a) % N)) % N = b := by
   rcases lt_or_ge b a with hab | hab
   · have hmod : (b + N - a) % N = b + N - a := by
