@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.KroneckerFactorPositivity
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
+import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
 /-!
 # Finite-chain products on an isometric physical support

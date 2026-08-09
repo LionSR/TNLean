@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.PhysicalSectorBondTwoSite
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
+import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
 /-!
 # Physical transport of the sector product realization
