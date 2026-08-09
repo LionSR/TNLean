@@ -17,6 +17,11 @@ import TNLean.MPS.MPU.TransferStabilization
 
 This file formalizes the first algebraic part of the blocking argument in
 arXiv:1703.09188, Proposition `blockingsimple`, lines 390--409.
+
+**Scope restriction (one-letter mixed trace):** `IsMPU` assumes closed-chain
+unitarity only for lengths greater than one, whereas the source also states the
+one-letter residual trace. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -374,8 +379,11 @@ theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_tr
   exact Finset.prod_eq_zero (Finset.mem_univ k) hk
 
 /-- Every nonempty closed word of residual slices has zero trace at lengths
-controlled by `IsMPU`. MPU unitarity is assumed only at lengths `N > 1`; the
-paper states the corresponding identity for every positive length.
+controlled by `IsMPU`.
+
+**Scope restriction (length greater than one):** MPU unitarity is assumed only
+at lengths `N > 1`, while the source also states the one-letter identity. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
@@ -396,8 +404,12 @@ noncomputable def mixedResidualFactor (W : MPOTensor d D)
 
 /-- Every mixed closed word containing at least one residual factor has zero
 trace. This is the basis-free residual-slice form of the mixed `S'_α` trace
-identity. The formal statement uses `N > 1`, exactly matching `IsMPU`; the
-paper states the corresponding identity at every positive length.
+identity.
+
+**Scope restriction (length greater than one):** This statement uses `N > 1`,
+exactly matching `IsMPU`, while the source states the identity at every positive
+length. See `docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue
+#5807.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
@@ -434,6 +446,11 @@ theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
 /-- A nonempty residual word is annihilated when sandwiched by a rank-one
 normalized diagonal. The trace premise is derived by adjoining the normalized
 diagonal as one extra closed-chain factor.
+
+**Local fix (nonempty sandwich):** Adjoining the normalized diagonal makes the
+closed chain have length at least two, so this consequence does not require the
+missing one-letter residual trace. See
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
 
 Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
 theorem IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero
