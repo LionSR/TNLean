@@ -367,6 +367,22 @@ abstracted — record why, so it is not re-proposed).
   `MPSTensor.replaceWindow_extractWindow` caller. The Lean sources lose 41 lines net
   (6 insertions and 47 deletions).
 
+### Cyclic window index and product decomposition
+- **Pattern:** two physical-product modules privately defined the same cyclic shift,
+  window/complement index equivalence, its two evaluation lemmas, and the resulting
+  product factorization.
+- **Reuse:** `MPSTensor.cyclicShiftEquiv`, `MPSTensor.cyclicWindowIndexEquiv`,
+  `MPSTensor.cyclicWindowIndexEquiv_inl`, `MPSTensor.cyclicWindowIndexEquiv_inr`, and
+  `MPSTensor.prod_cyclicWindow_complement` in
+  `TNLean/MPS/ParentHamiltonian/Defs.lean` provide the shared API; the product theorem
+  holds for every commutative monoid.
+- **Result:** the exact call sites are `reindex_sitewisePhysicalMatrix_windowComplement`
+  and `embed_twoSiteSectorProjection_eq_finKronecker` in
+  `PhysicalSupportProductTransport.lean`, and
+  `reindex_physicalCoordinateMatrixN_windowComplement` in
+  `PhysicalSectorProductTransport.lean`. Across the three Lean files, the final diff is
+  52 insertions and 87 deletions, a net reduction of 35 lines.
+
 ### Product-marginal support kernel
 - **Pattern:** the simultaneous marginal-support whitening proof and the
   mutual-information estimate both need the support inclusion
