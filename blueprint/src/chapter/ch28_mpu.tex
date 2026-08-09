@@ -1066,7 +1066,7 @@ $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:matrix_vec_identity_trace_pairing}
+    \uses{thm:matrix_vec_identity_trace_pairing}
     On the column indexed by the matrix unit $E_{k\ell}$,
     \begin{align}
         \bigl((\Phi\rvert\widehat T\bigr)_{(\ell,k)}
@@ -1595,7 +1595,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,
-        def:mpu_full_active_support}
+        def:mpu_full_active_support,def:mpu_ambient_block_inclusion}
     Suppose $d>0$, $D>1$, and $\mathcal U$ is an MPU whose normalized
     flattening is presented by chosen canonical-form-II data with active blocks
     filling the bond space. There is a
@@ -1628,10 +1628,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_normalized_transfer_trace,
         thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_active_transfer_eigenvalue_one,
+        thm:mpu_ambient_block_isometry_intertwining,
         thm:mpu_unique_active_full_support_geometry,
         thm:matrix_posdef_coisometric_transport,
-        lem:matrix_vec_identity_trace_pairing,
+        lem:transfer_map_corner_intertwine,
         thm:transfer_matrix_trace_preserving_identity_left_fixed,
+        thm:mpu_transfer_matrix_vectorization,
+        thm:matrix_vec_identity_trace_pairing,
         thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}
     The shifted trace identities satisfy $\tr(E^N)=1$ for every integer

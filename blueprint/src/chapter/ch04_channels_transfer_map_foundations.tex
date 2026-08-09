@@ -84,8 +84,8 @@
     makes the displayed quadratic form strictly positive.
 \end{proof}
 
-\begin{lemma}[Vectorized identity realizes the trace pairing]
-    \label{lem:matrix_vec_identity_trace_pairing}
+\begin{theorem}[Vectorized identity realizes the trace pairing]
+    \label{thm:matrix_vec_identity_trace_pairing}
     \lean{Matrix.vec_one_dotProduct_vec_eq_trace}
     \leanok
     For every square complex matrix $X$,
@@ -93,7 +93,7 @@
         \operatorname{vec}(\Id)\mathbin{\boldsymbol\cdot}
             \operatorname{vec}(X)&=\tr(X).
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Expanding column stacking gives
