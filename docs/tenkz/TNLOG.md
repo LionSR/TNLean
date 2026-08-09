@@ -12,7 +12,10 @@ is the contract.
 
 ## 1. Format version
 
-The event format is version **1.0**, meaning the surface this page describes.
+The event format is version **1.1**, meaning the surface this page describes.
+The minor moved from 1.0 when the `picture` event gained the optional `size`
+field (§6), which is the addition a minor is for: a reader of 1.0 ignores an
+optional field it does not know and reads every record it did before.
 No stream carries that number in band. There is no header line, no magic
 string, no producer record, and no trailer: the first byte of a `.tnlog` is the
 first event, in practice always a `picture` line.
@@ -73,7 +76,7 @@ drift apart unnoticed.
 
 ```toml tenkz-event-kinds-v1
 schema = 1
-version = "1.0"
+version = "1.1"
 emitted = [
   "atom",
   "bbox",

@@ -746,7 +746,10 @@ the language's own datum — juxtaposition and the product signs; relation and
 sum are read from the class the mathematics already has.
 
 1. **One metric context.** All panels share the pitch, the size-class table,
-   and one measure. A glyph's extent is settled by its size class, the number
+   and one measure. The pitch is the equation's: a panel that named a metric
+   profile of its own would scale one side of the equality and not the other,
+   so `metrics=` is refused on a panel inside an equation and stated on the
+   equation instead. A glyph's extent is settled by its size class, the number
    of port slots on each pair of opposite faces, and the equation's measure
    for that class — by nothing else, and by nothing panel-local. The class
    reference is the floor on both axes: the horizontal extent is that
@@ -820,10 +823,12 @@ sum are read from the class the mathematics already has.
    bundled index and its members as one boundary entry), and records opt-outs.
    It cannot switch the audit off silently. An opt-out without a reason is not
    an opt-out; an opt-out naming a relation the equation does not perform is a
-   mistyped one and leaves the relation the author meant standing audited; and
-   a word the audit does not know is refused rather than ignored, because a
-   spelling the audit passes over is a comparison the author believes is
-   running and is not.
+   mistyped one and is refused before the stream records it; a reason may not
+   carry the record stream's own field separator, which no reader could put
+   back together; and a word the audit does not know, or a value on a word
+   that takes none, is refused rather than ignored, because a spelling the
+   audit passes over is a comparison the author believes is running and is
+   not.
 5. **Coefficients and summations need no key.** A scalar coefficient is a
    term of empty signature; juxtaposition is a product; concatenating an
    empty signature leaves the panel's boundary as it was. A summation sign is
