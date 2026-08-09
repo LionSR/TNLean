@@ -17,7 +17,8 @@ single nonzero eigenvalue equal to one, with the rest equal to zero.
 
 This is a Newton--Girard prerequisite for the transfer-matrix spectrum
 argument in arXiv:1703.09188 (Cirac--Perez-Garcia--Schuch--Verstraete),
-Proposition `prop:normal-tensor`, lines 349–354.  The present file proves this statement for the stronger hypothesis
+Proposition `prop:normal-tensor`, lines 349–354.  The present file proves
+this statement for the stronger hypothesis
 `tr(A^k) = 1` for all `k ≥ 1` (the Newton--Girard prerequisite).
 The paper's exact `N > 1` hypothesis is handled by the companion formalization, which does
 **not** recover `tr(E) = 1`; it proves directly that the nonzero spectrum
