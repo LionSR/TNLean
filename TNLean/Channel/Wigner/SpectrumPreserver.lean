@@ -31,7 +31,7 @@ variable {d : ℕ}
 /-- A complex-linear adjoint-preserving map that preserves the complex spectrum as a set on every
 Hermitian matrix is either unitary conjugation or unitary conjugation after transposition.
 
-This is the corollary "Spectrum preserving maps" in Wolf, Chapter 1, lines 289--305. The
+This is the corollary "Spectrum preserving maps" in Wolf, Chapter 1, lines 289--296. The
 hypothesis `hstar` is Wolf's definition of a Hermitian map at line 290. -/
 theorem exists_unitary_conj_or_transpose_of_preserves_hermitian_spectrum
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
