@@ -37,6 +37,7 @@ import TNLean.MPS.ParentHamiltonian.Commuting
 import TNLean.MPS.ParentHamiltonian.CyclicSubmoduleIteration
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.ExtendRight
