@@ -539,3 +539,67 @@ $v$ is multiplied by a nonzero scalar.
     $P_{U\cdot p}=UP_pU^\dagger$ and
     $P_{\overline p}=P_p^{\mathsf T}$ give the two stated formulas.
 \end{proof}
+
+\begin{theorem}[Spectrum preserving maps]
+    \label{thm:hermitian_spectrum_preserver_classification}
+    \lean{Projectivization.exists_unitary_conj_or_transpose_of_preserves_hermitian_spectrum}
+    \leanok
+    Let $T:\MN{d}\to\MN{d}$ be complex linear. Suppose that
+    \begin{align}
+        T(X^\dagger)=T(X)^\dagger
+    \end{align}
+    for every $X\in\MN{d}$, and that
+    \begin{align}
+        \sigma(T(A))=\sigma(A)
+    \end{align}
+    for every Hermitian $A\in\MN{d}$. Then there is a unitary $U$ such that
+    either
+    \begin{align}
+        T(X)=UXU^\dagger
+    \end{align}
+    for every $X\in\MN{d}$, or
+    \begin{align}
+        T(X)=UX^{\mathsf T}U^\dagger
+    \end{align}
+    for every $X\in\MN{d}$. This is the spectrum-preserver classification
+    in \cite[Chapter~1, Spectrum preserving maps]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hermitian_set_spectrum_charpoly,
+      thm:pure_state_matrix_of_hermitian_charpoly_eq,
+      thm:transition_probability_of_sum_charpoly,
+      thm:projective_wigner_rigidity,
+      thm:linear_map_eq_of_eq_on_pure_state_matrix}
+    The adjoint identity shows that $T(A)$ is Hermitian whenever $A$ is
+    Hermitian. Hence Theorem~\ref{thm:hermitian_set_spectrum_charpoly} gives
+    \begin{align}
+        \chi_{T(A)}=\chi_A
+    \end{align}
+    for every Hermitian $A$. For each projective ray $p$, recognize
+    $T(P_p)$ by its characteristic polynomial and choose a ray $f(p)$ such
+    that
+    \begin{align}
+        P_{f(p)}=T(P_p).
+    \end{align}
+    For rays $p,q$, linearity and characteristic-polynomial preservation give
+    \begin{align}
+        \chi_{P_{f(p)}+P_{f(q)}}
+        =\chi_{T(P_p+P_q)}
+        =\chi_{P_p+P_q}.
+    \end{align}
+    Theorem~\ref{thm:transition_probability_of_sum_charpoly} therefore shows
+    that $f$ preserves transition probabilities. Projective Wigner rigidity
+    gives a unitary $U$ and either
+    \begin{align}
+        f(p)=U\cdot p
+    \end{align}
+    for every $p$, or
+    \begin{align}
+        f(p)=U\cdot\overline p
+    \end{align}
+    for every $p$. Thus $T$ agrees on every $P_p$ with, respectively,
+    $X\mapsto UXU^\dagger$ or $X\mapsto UX^{\mathsf T}U^\dagger$.
+    Pure-state extensionality gives the corresponding equality on all
+    matrices.
+\end{proof}
