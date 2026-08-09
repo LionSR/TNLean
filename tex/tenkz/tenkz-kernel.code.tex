@@ -7533,6 +7533,24 @@
 % not two -- otherwise an equation of a bare X against an m-classed inverse
 % would keep the two measures apart and draw exactly the pair of sizes this
 % is here to stop.
+% An ellipsis is decoration, not a name.  Its glyph carries \cdots so that
+% the mark has something to measure, but it belongs to no size class: it must
+% neither lend its extent to the names that do nor be stretched to theirs,
+% because its layout geometry is the zero-radius point its ports are placed
+% from and the ink would leave the anchor behind.
+\bool_new:N \l__tenkz_kernel_eq_extent_named_bool
+\tl_new:N \l__tenkz_kernel_eq_extent_skin_tl
+\cs_new_protected:Npn \__tenkz_kernel_eq_extent_named:n #1
+  {
+    \bool_set_true:N \l__tenkz_kernel_eq_extent_named_bool
+    \__tenkz_model_get:nnN {#1} {skin} \l__tenkz_kernel_eq_extent_skin_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_eq_extent_skin_tl
+      {
+        \str_case:VnT \l__tenkz_kernel_eq_extent_skin_tl
+          { {dots}{} {dot}{} {none}{} }
+          { \bool_set_false:N \l__tenkz_kernel_eq_extent_named_bool }
+      }
+  }
 \cs_new_protected:Npn \__tenkz_kernel_eq_extent_key:nN #1#2
   {
     \__tenkz_model_get:nnN {#1} {size} #2
@@ -7581,9 +7599,13 @@
 % keeps its own baseline and the glyph around it keeps the class geometry.
 \cs_new_protected:Npn \__tenkz_kernel_eq_extent_set:nn #1#2
   {
-    \bool_lazy_and:nnTF
-      { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
-      { ! \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+    \__tenkz_kernel_eq_extent_named:n {#1}
+    \bool_lazy_all:nTF
+      {
+        { \bool_if_p:N \l__tenkz_kernel_ineq_bool }
+        { ! \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+        { \bool_if_p:N \l__tenkz_kernel_eq_extent_named_bool }
+      }
       {
         \__tenkz_kernel_eq_extent_key:nN {#1} \l__tenkz_kernel_eq_extent_key_tl
         \prop_get:NVNTF \g__tenkz_kernel_eq_extent_prop
@@ -7701,9 +7723,13 @@
     % The measuring run reads the name it has just set.  An unnamed glyph --
     % a bead, a junction, a void site -- shares nothing, so it contributes
     % nothing to the class measure.
-    \bool_lazy_and:nnT
-      { \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
-      { ! \tl_if_empty_p:N \l__tenkz_kernel_hull_a_tl }
+    \__tenkz_kernel_eq_extent_named:n {#1}
+    \bool_lazy_all:nT
+      {
+        { \bool_if_p:N \l__tenkz_kernel_eq_probe_bool }
+        { ! \tl_if_empty_p:N \l__tenkz_kernel_hull_a_tl }
+        { \bool_if_p:N \l__tenkz_kernel_eq_extent_named_bool }
+      }
       {
         \exp_args:Nnc \__tenkz_kernel_eq_extent_record:nN {#1}
           { \tl_use:N \l__tenkz_kernel_hull_box_tl }
