@@ -1,0 +1,176 @@
+# Pinned expectations for the supervisor self-test.
+#
+# `docs/tenkz/SOAK-1.0.md` §Release payload evidence: activation runs a closed
+# supervisor self-test suite from the pinned support tree against pinned
+# synthetic fixtures, and a missing or mismatched receipt prevents arming.
+# These rows are that suite. Each drives one mode of
+# `tests/tenkz/release-harness/selftest_probe.py` through the supervisor and
+# fixes the outcome the supervisor must report.
+#
+# `outcome` is one of:
+#   passed            the command exited zero and wrote no receipt
+#   assertion-failed  the command exited ten with the exact closed receipt
+#   fails-closed      the supervisor refused the run; `message` must occur in
+#                     its diagnosis
+
+schema = 1
+synthetic_fingerprint = "5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e"
+
+# The complete manifest of what a self-test command may see. The `isolation`
+# probe enumerates every regular file in its view and requires each one to lie
+# inside a pinned tree or be named here. Naming the whole view rather than a
+# sample matters: a regression that exposed `.github/` or another file under
+# `scripts/` would pass a sampled check that never thought to look there.
+#
+# `roots` are the two pinned trees, exposed to every command in full. `files`
+# are the inventory blob and the four canonical release artifacts, plus the
+# probe's own declared program and fixture paths — `tex/tenkz/tenkz.sty` is
+# both a canonical artifact and the probe's subject.
+
+[view]
+roots = [
+  "tests/tenkz/release-harness",
+  "tests/tenkz/release-support",
+]
+files = [
+  "tests/tenkz/release-tests.toml",
+  "tex/tenkz/tenkz.sty",
+  "docs/tenkz/TNLOG.md",
+]
+
+[[probe]]
+id = "pass"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "assertion"
+outcome = "assertion-failed"
+timeout_seconds = 60
+
+[[probe]]
+id = "unrelated-exit"
+outcome = "fails-closed"
+message = "exited 3, which is neither a pass nor an assertion failure"
+timeout_seconds = 60
+
+[[probe]]
+id = "exit-without-receipt"
+outcome = "fails-closed"
+message = "exited 10 without its receipt"
+timeout_seconds = 60
+
+[[probe]]
+id = "isolation"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "environment"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "readonly"
+outcome = "passed"
+timeout_seconds = 60
+
+[[probe]]
+id = "timeout"
+outcome = "fails-closed"
+message = "exceeded its 1s timeout"
+timeout_seconds = 1
+
+[[probe]]
+id = "bool-schema"
+outcome = "fails-closed"
+message = "receipt schema must be the integer 1"
+timeout_seconds = 60
+
+[[probe]]
+id = "orphan-timeout"
+outcome = "fails-closed"
+message = "exceeded its 1s timeout"
+timeout_seconds = 1
+
+# Escape guards. Each stages one way out of the hermetic view in a throwaway
+# directory and requires the supervisor to refuse it. They cannot be staged
+# from inside a view: a view that could stage them has already failed. The
+# `message` must occur in the refusal, so a guard cannot be satisfied by an
+# unrelated error.
+
+[[guard]]
+id = "nested-symlink"
+message = "contains the symlink"
+
+[[guard]]
+id = "symlinked-program-path"
+message = "rejected without following it"
+
+[[guard]]
+id = "symlinked-parent"
+message = "rejected without following it"
+
+[[guard]]
+id = "special-entry"
+message = "neither a regular file nor a directory"
+
+# The armed enforcement workflow's requirements. `outcome = "accepted"` rows
+# matter as much as refusals: a check that rejected a legal `environment:`
+# spelling would refuse a correctly armed workflow and stall the campaign.
+
+[[guard]]
+id = "armed-workflow-comments"
+message = "job(s) whose `environment:` is tenkz-release-publisher"
+
+[[guard]]
+id = "armed-workflow-foreign-needs"
+message = "it must depend on the validation job"
+
+[[guard]]
+id = "armed-workflow-unknown-needs"
+message = "which is not a job in this workflow"
+
+[[guard]]
+id = "armed-workflow-publisher-action"
+message = "the secret-bearing publisher runs closed inline commands only"
+
+[[guard]]
+id = "armed-workflow-no-op-denial"
+message = "has to do something"
+
+[[guard]]
+id = "armed-workflow-late-denial"
+message = "must precede repository code"
+
+[[guard]]
+id = "armed-workflow-no-filesystem-isolation"
+message = "has no step named tenkz-filesystem-isolated"
+
+[[guard]]
+id = "armed-workflow-mutable-action"
+message = "by a mutable reference rather than a full commit SHA"
+
+[[guard]]
+id = "armed-workflow-short-environment"
+outcome = "accepted"
+
+[[guard]]
+id = "armed-workflow-block-environment"
+outcome = "accepted"
+
+[[guard]]
+id = "armed-workflow-flow-action"
+message = "the secret-bearing publisher runs closed inline commands only"
+
+[[guard]]
+id = "armed-workflow-extra-permission"
+message = "the contract grants it exactly"
+
+[[guard]]
+id = "armed-workflow-container"
+message = "has no container image"
+
+[[guard]]
+id = "armed-workflow-secret-elsewhere"
+message = "the publisher is its sole consumer"

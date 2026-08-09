@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tenkz/release-support/final-tag-object-v1",
+  "title": "tenkz final tag object, version 1",
+  "description": "The closed description of the one annotated tag object the publisher may construct for tenkz-v1.0.0. docs/tenkz/SOAK-1.0.md is the authority. Every value the publisher does not derive from its closed needs tuple is a constant here, so two runs of the publisher on the same tuple produce the same bytes and the same object ID. A retry authenticates that object; it never invents a second one.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "object_format",
+    "header_order",
+    "object",
+    "type",
+    "tag",
+    "tagger_name",
+    "tagger_email",
+    "tagger_epoch_seconds",
+    "tagger_timezone",
+    "message",
+    "signature"
+  ],
+  "properties": {
+    "schema": {
+      "description": "Object schema version. A later tag layout gets a new schema blob in the pinned support tree.",
+      "const": 1
+    },
+    "object_format": {
+      "description": "The repository object-format hash. The object ID the publisher recomputes before its first write is this hash of the completed object bytes.",
+      "const": "sha1"
+    },
+    "header_order": {
+      "description": "The exact header lines, in order, before the blank line that opens the message. No other header may appear.",
+      "const": ["object", "type", "tag", "tagger"]
+    },
+    "object": {
+      "description": "The sign-off integration commit I. The tag peels to exactly this commit.",
+      "$ref": "#/$defs/gitOid"
+    },
+    "type": {
+      "description": "The tagged object type.",
+      "const": "commit"
+    },
+    "tag": {
+      "description": "The tag name. This campaign publishes one name only.",
+      "const": "tenkz-v1.0.0"
+    },
+    "tagger_name": {
+      "description": "The tagger's literal name bytes. Fixed by the pre-activation change that adds final-tag-signing-key.pub; see the note in this tree's README.md. Until that change lands the byte constant is unset and no publisher job may run.",
+      "type": "string",
+      "minLength": 1
+    },
+    "tagger_email": {
+      "description": "The tagger's literal address bytes, written without the surrounding angle brackets. Fixed by the same pre-activation change as tagger_name.",
+      "type": "string",
+      "minLength": 1
+    },
+    "tagger_epoch_seconds": {
+      "description": "The sign-off pull request's mergedAt converted once to an integer Unix second. The publisher takes this from its closed needs tuple and never from the clock.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "tagger_timezone": {
+      "description": "The tagger timezone bytes. Fixed so that the same instant cannot be spelled two ways.",
+      "const": "+0000"
+    },
+    "message": {
+      "description": "The tag message. Its template is fixed; the four substitutions bind the release name, the integration it peels to, the armed policy hash, and the validated ledger prefix.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["template", "release_tag", "policy_sha256", "prefix_sha256"],
+      "properties": {
+        "template": {
+          "description": "The message template. `{integration}` is substituted from the object's own `object` header, not from a separate field: a schema cannot compare two of its properties, so carrying the integration twice would let a signed object authenticate two conflicting identities.",
+          "const": "tenkz {release_tag}\n\nintegration {object}\npolicy {policy_sha256}\nprefix {prefix_sha256}\n"
+        },
+        "release_tag": { "const": "tenkz-v1.0.0" },
+        "policy_sha256": {
+          "description": "SHA-256 of the armed docs/tenkz/DESIGN.md blob, as pinned by the ledger's policy_sha256.",
+          "$ref": "#/$defs/sha256"
+        },
+        "prefix_sha256": {
+          "description": "SHA-256 of the raw docs/tenkz/SOAK-1.0.md bytes of the validated ledger prefix.",
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "signature": {
+      "description": "The Git SSH signature embedded in the tag object after the message.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "namespace", "public_key", "embedding"],
+      "properties": {
+        "algorithm": { "const": "ssh-ed25519" },
+        "namespace": {
+          "description": "The SSH signature namespace Git uses for object signatures.",
+          "const": "git"
+        },
+        "public_key": {
+          "description": "Repository-relative path of the pinned public key the signature is verified against. The private half lives only in the release publisher environment secret and is retired after the publishing job succeeds.",
+          "const": "tests/tenkz/release-support/final-tag-signing-key.pub"
+        },
+        "embedding": {
+          "description": "How the armoured signature joins the object: appended to the message with no separating blank line, each line ending in a single newline, the whole block terminated by a newline.",
+          "const": "ssh-signature-appended-to-message"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "gitOid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

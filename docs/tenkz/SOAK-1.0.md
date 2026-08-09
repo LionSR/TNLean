@@ -158,7 +158,7 @@ While validly armed, later changes preserve the pinned policy and prefix and
 append live entry blocks after the marker. A correction is an appended entry;
 it never revises, deletes, reorders, or inserts preceding bytes.
 
-The following schema block is normative. A later #5352 slice activates its
+The following schema block is normative. The activation slice under #5636 arms its
 machine-checking contract.
 
 ```toml tenkz-soak-v1
@@ -876,7 +876,7 @@ No incident is repaired by deleting, moving, or reusing the name, and none
 starts another 1.0 attempt.
 
 No entry may be appended while `enforcement = "pending"`. The activation slice
-under #5352 will add validation commands only after their scripts,
+under #5636 adds validation commands only after their scripts,
 repository-evidence resolver, tests, CI wiring, closed inventory, blocker
 chain, and tag protection are complete on `main`.
 

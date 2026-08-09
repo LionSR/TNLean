@@ -212,7 +212,7 @@ integration order keeps every merged tree on the single new contract.
 The shrink ledger's `alias(...)` verdict records debt already present; it is not
 permission to introduce another alias.
 
-The activation slice under #5352 will add the validation commands here only
+The activation slice under #5636 adds the validation commands here only
 after their scripts, repository-evidence checks, tests, and CI wiring exist on
 `main`.  Close both blocker groups before activation.  One
 self-referential activation pull request then verifies the current no-update,
