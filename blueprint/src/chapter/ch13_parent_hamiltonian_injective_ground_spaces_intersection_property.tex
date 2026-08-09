@@ -401,25 +401,50 @@
     \lean{MPSTensor.openChainLeftGroundSpaceES,
         MPSTensor.openChainTailGroundSpaceES,
         MPSTensor.openChainLeftGroundProjectionES,
-        MPSTensor.openChainTailGroundProjectionES,
-        MPSTensor.mem_openChainLeftGroundSpaceES_iff,
-        MPSTensor.mem_openChainTailGroundSpaceES_iff}
+        MPSTensor.openChainTailGroundProjectionES}
     \leanok
     \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
     In the Hilbert space of an open chain, let
     $\mathcal U_{K,L_0}(A)$ be the subspace satisfying the ground condition on
     the first $K+L_0$ sites, and let $\mathcal V_{K,L_0}(A)$ be the subspace
-    satisfying the ground condition on the last $L_0+1$ sites. Equivalently,
-    membership is tested by fixing respectively the final site or every
-    prefix of length $K$ and applying the corresponding restriction map.
+    satisfying the ground condition on the last $L_0+1$ sites.
 \end{definition}
+
+\begin{lemma}[Membership in the open-chain left ground subspace]
+    \label{lem:mem_open_chain_left_ground_space_es}
+    \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
+    A vector belongs to $\mathcal U_{K,L_0}(A)$ exactly when fixing its final
+    site gives a vector satisfying the left ground condition.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Transport through the canonical $\ell^2$ equivalence and unfold the
+    left-site restriction condition.
+\end{proof}
+
+\begin{lemma}[Membership in the open-chain tail ground subspace]
+    \label{lem:mem_open_chain_tail_ground_space_es}
+    \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
+    A vector belongs to $\mathcal V_{K,L_0}(A)$ exactly when every fixed-prefix
+    restriction satisfies the tail ground condition.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Transport through the canonical $\ell^2$ equivalence and unfold the tail
+    restriction condition.
+\end{proof}
 
 \begin{theorem}[Open-chain left--tail ground-space intersection]
     \label{thm:open_chain_left_tail_ground_intersection}
     \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es,
-        thm:ground_space_extend_right_block_injective}
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
     If $A$ is $L_0$-block-injective and $L_0>0$, then
     \begin{align}
         \mathcal U_{K,L_0}(A)\cap\mathcal V_{K,L_0}(A)
@@ -432,6 +457,10 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:mem_open_chain_left_ground_space_es,
+        lem:mem_open_chain_tail_ground_space_es, lem:mem_ground_space_es,
+        thm:ground_space_extend_right_block_injective,
+        lem:ground_space_in_left_ground, lem:ground_space_in_tail_ground}
     The forward inclusion is the growing-back step at the injectivity length.
     Conversely, a vector in the longer ground space remains in the ground
     space after every left or tail restriction.

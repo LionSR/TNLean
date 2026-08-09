@@ -122,14 +122,11 @@
     \label{cor:nachtergaele_open_chain_projector_defect}
     \lean{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}
     \leanok
-    \uses{thm:friedrichs_ground_space_excitation_anticommutator,
-        thm:open_chain_left_tail_ground_intersection,
-        lem:projector_defect_to_friedrichs}
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
     Put $\Lambda_n=[1,n]$, let $U$ be the tail ground space on
     $\Lambda_{n+1}\setminus\Lambda_{n-l}$, and let $V$ be the left ground
     space on $\Lambda_n$, both in the Hilbert space on $\Lambda_{n+1}$.
-    Under the block-injectivity hypotheses of
-    Theorem~\ref{thm:open_chain_left_tail_ground_intersection}, suppose
+    Assume that $A$ is $L_0$-block-injective with $L_0>0$, and suppose
     \begin{align}
         \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
           -G_{\Lambda_{n+1}}\|&\le\eta. \notag
@@ -140,6 +137,9 @@
 
 \begin{proof}
     \leanok
+    \uses{thm:open_chain_left_tail_ground_intersection,
+        lem:projector_defect_to_friedrichs,
+        thm:friedrichs_ground_space_excitation_anticommutator}
     The open-chain intersection theorem identifies $U\cap V$ with the ground
     space on $\Lambda_{n+1}$. The projector-defect adapter gives a Friedrichs
     overlap bound, and the reduced two-projection theorem gives the stated
