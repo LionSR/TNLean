@@ -105,9 +105,9 @@ abstracted — record why, so it is not re-proposed).
   when the common factor is not initially on the left. All 19 sites now call
   the lemma, and all 14 consumer files import `TNLean.Algebra.FinSum` directly.
   This removes 76 repeated tactic lines. The final 12-site pass, including
-  three `simp_rw` variants, adds and removes 48 Lean-source lines; together
-  with the initial seven-site pass, the cumulative refactor has 77 additions
-  and 78 deletions, so it removes one Lean-source line net. A binder- and
+  three `simp_rw` variants, has 50 additions and 48 deletions in Lean source;
+  together with the initial seven-site pass, the cumulative refactor has 79
+  additions and 78 deletions, so it adds one Lean-source line net. A binder- and
   `rw`/`simp_rw`-insensitive repository-wide assertion finds no equivalent
   four-line block and exactly 19 calls of the shared lemma.
 
