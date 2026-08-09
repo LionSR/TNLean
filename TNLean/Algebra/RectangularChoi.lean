@@ -24,8 +24,11 @@ The argument is independent of positivity and channel normalization.
 
 - `Matrix.linearMapMatrix`: the matrix of a linear map in the matrix-unit bases
 - `Matrix.rectangularChoi`: the unnormalized rectangular Choi matrix
-- `Matrix.gramReshuffleMatrix`: the matrix with entries \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\); its `toEuclideanCLM` image is `gramReshuffle`
-- `Matrix.gramReshuffle`: the Euclidean CLM of the reshuffling \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\)
+- `Matrix.gramReshuffleMatrix`: the matrix with entries
+    \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\);
+    its `toEuclideanCLM` image is `gramReshuffle`
+- `Matrix.gramReshuffle`: the Euclidean CLM of the reshuffling
+    \(J(\Phi)_{(c,e),(a,b)} \mapsto R(\Phi)_{(b,a),(e,c)}\)
 - `Matrix.IsHilbertSchmidtContraction`: contraction for the Hilbert--Schmidt norm
 
 ## Main results
@@ -116,19 +119,18 @@ theorem gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq
     ∑ p : (α × α) × (α × α), ‖gramReshuffleMatrix Φ p.1 p.2‖ ^ 2 =
     ∑ p : (α × α) × (α × α), ‖rectangularChoi Φ p.1 p.2‖ ^ 2 := by
   classical
-  let e : ((α × α) × (α × α)) ≃ ((α × α) × (α × α)) := {
-    toFun p := ((p.2.2, p.2.1), (p.1.2, p.1.1))
-    invFun p := ((p.2.2, p.2.1), (p.1.2, p.1.1))
-    left_inv p := by rfl
-    right_inv p := by rfl
-  }
+  let e : ((α × α) × (α × α)) ≃ ((α × α) × (α × α)) :=
+    (Equiv.prodComm (α × α) (α × α)).trans
+      ((Equiv.prodComm α α).prodCongr (Equiv.prodComm α α))
+  have he (p : (α × α) × (α × α)) : e p = ((p.2.2, p.2.1), (p.1.2, p.1.1)) := by
+    simp [e, Equiv.trans_apply, Equiv.prodComm_apply, Prod.swap]
   calc
     ∑ p : (α × α) × (α × α), ‖gramReshuffleMatrix Φ p.1 p.2‖ ^ 2 =
         ∑ p : (α × α) × (α × α),
           ‖rectangularChoi Φ (p.2.2, p.2.1) (p.1.2, p.1.1)‖ ^ 2 :=
       by simp [gramReshuffleMatrix]
     _ = ∑ p : (α × α) × (α × α), ‖rectangularChoi Φ p.1 p.2‖ ^ 2 :=
-      Fintype.sum_equiv e _ _ fun _ ↦ rfl
+      Fintype.sum_equiv e _ _ (fun p ↦ by simp [he p])
 
 /-- Reshaping a coefficient matrix into the rectangular Choi matrix preserves its
 squared Frobenius norm. -/

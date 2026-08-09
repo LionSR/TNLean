@@ -510,13 +510,12 @@ Euclidean operator with matrix entries
   \mathscr R(\mathcal L)_{(b,a),(e,c)}
     &:=J(\mathcal L)_{(c,e),(a,b)}.
 \end{align}
-The algebraic matrix $\operatorname{gramReshuffleMatrix}\,\Phi$ with these
-entries is \leanid{Matrix.gramReshuffleMatrix}, so that
-$\mathscr R(\mathcal L)=\operatorname{toEuclideanCLM}(\operatorname{gramReshuffleMatrix}\,\mathcal L)$
-is \leanid{Matrix.gramReshuffle}.  The entrywise Frobenius squared sum is
+The algebraic matrix $R(\mathcal L)$ with these entries is
+\leanid{Matrix.gramReshuffleMatrix}, and the operator
+$\mathscr R(\mathcal L)$ is \leanid{Matrix.gramReshuffle}.  The entrywise Frobenius squared sum is
 invariant under this reshuffling
-(\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}),
-though the operator norm is not.
+(\leanid{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq});
+this entrywise identity does not establish an operator-norm comparison.
 \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
 identity to the exact operator equality
 \begin{align}
