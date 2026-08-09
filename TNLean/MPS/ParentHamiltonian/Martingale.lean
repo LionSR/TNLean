@@ -4,10 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
-import TNLean.MPS.ParentHamiltonian.Martingale.Transport
+import TNLean.MPS.ParentHamiltonian.Martingale.Gap
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
-import TNLean.MPS.ParentHamiltonian.Martingale.Gap
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
 # Martingale estimate for parent Hamiltonians

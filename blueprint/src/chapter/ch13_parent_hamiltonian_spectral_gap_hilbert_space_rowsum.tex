@@ -429,6 +429,28 @@
     $y\in V\cap(U\cap V)^\perp$.
 \end{definition}
 
+\begin{theorem}[Projector defect bounds the Friedrichs overlap]
+    \label{thm:projector_defect_to_friedrichs}
+    \lean{Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
+    \leanok
+    \uses{def:friedrichs_overlap_bound}
+    Let $P_U$, $P_V$, and $P_{U\cap V}$ be the orthogonal projections onto
+    $U$, $V$, and their intersection. If
+    \begin{align}
+        \|P_UP_V-P_{U\cap V}\|&\le\eta, \notag
+    \end{align}
+    then the Friedrichs overlap of $U$ and $V$ is at most $\eta$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $y\in V\cap(U\cap V)^\perp$, the defect applied to $y$ is $P_Uy$.
+    Hence $\|P_Uy\|\le\eta\|y\|$. If also
+    $x\in U\cap(U\cap V)^\perp$, self-adjointness of $P_U$ gives
+    $\langle x,y\rangle=\langle x,P_Uy\rangle$, and Cauchy--Schwarz proves
+    the claim.
+\end{proof}
+
 \begin{lemma}[Projection compression from a Friedrichs overlap bound]
     \label{lem:two_projection_friedrichs_compression}
     \lean{Submodule.norm_starProjection_le_of_friedrichs_bound}

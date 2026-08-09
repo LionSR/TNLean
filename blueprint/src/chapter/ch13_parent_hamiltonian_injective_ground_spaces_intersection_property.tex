@@ -30,15 +30,15 @@
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{lemma}[Ground-space map injectivity after blocking]
-    \label{lem:ground_space_map_injective_blk}
+\begin{theorem}[Ground-space map injectivity after blocking]
+    \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
     \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
     If the length-$L_0$ products span the full matrix algebra,
     $\spn\{A^\omega : |\omega| = L_0\} = \MN{D}$, then $\Gamma_{L_0}$ is
     injective.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -220,8 +220,8 @@
     interval does not wrap around the ring.
 \end{remark}
 
-\begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
-    \label{lem:cyclic_window_boundary_matrix_transport}
+\begin{theorem}[One-site restrictions of cyclic-window boundary conditions]
+    \label{thm:cyclic_window_boundary_matrix_transport}
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
@@ -250,7 +250,7 @@
     In particular, if the two endpoint words are named by the equations
     $a_r=\rho(i_0+r)$ and $b_r=\rho(i_0+r+L+1)$, with site labels read modulo
     $N$, then the same transport identity is written as $Y_0A^a=A^bY_n$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -394,6 +394,86 @@
     of the ground-space vector determined by $X$. Since every configuration is
     obtained by adjoining its final letter to its initial $(K+L_0)$-tuple, the
     two states coincide, so $\psi$ lies in $G_{K+L_0+1}(A)$.
+\end{proof}
+
+\begin{definition}[Open-chain left and tail ground subspaces]
+    \label{def:open_chain_ground_subspaces_es}
+    \lean{MPSTensor.openChainLeftGroundSpaceES,
+        MPSTensor.openChainTailGroundSpaceES,
+        MPSTensor.openChainLeftGroundProjectionES,
+        MPSTensor.openChainTailGroundProjectionES}
+    \leanok
+    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    For every $L\in\N$, let $\mathcal U_L(A)$ be the subspace of the
+    $(L+1)$-site Hilbert space whose corresponding functions satisfy the left
+    ground condition: every fixed-final-site restriction belongs to $G_L(A)$.
+    For every $K,L\in\N$, let $\mathcal V_{K,L}(A)$ be the subspace of the
+    $(K+L)$-site Hilbert space whose corresponding functions satisfy the tail
+    ground condition: every fixed-prefix restriction belongs to $G_L(A)$.
+    These definitions include $L=0$. Let $P^{\mathrm{left}}_L(A)$ and
+    $P^{\mathrm{tail}}_{K,L}(A)$ be the orthogonal projectors onto
+    $\mathcal U_L(A)$ and $\mathcal V_{K,L}(A)$, respectively.
+\end{definition}
+
+\begin{theorem}[Membership in the open-chain left ground subspace]
+    \label{thm:mem_open_chain_left_ground_space_es}
+    \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
+    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    belongs to $\mathcal U_L(A)$ exactly when the corresponding function
+    satisfies the left ground condition: every fixed-final-site restriction
+    belongs to $G_L(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport through the canonical $\ell^2$ equivalence and unfold the
+    left-site restriction condition.
+\end{proof}
+
+\begin{theorem}[Membership in the open-chain tail ground subspace]
+    \label{thm:mem_open_chain_tail_ground_space_es}
+    \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
+    Under the canonical $\ell^2$ identification, a Hilbert-space vector
+    belongs to $\mathcal V_{K,L}(A)$ exactly when the corresponding function
+    satisfies the tail ground condition: every fixed-prefix restriction
+    belongs to $G_L(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Transport through the canonical $\ell^2$ equivalence and unfold the tail
+    restriction condition.
+\end{proof}
+
+\begin{theorem}[Open-chain left--tail ground-space intersection]
+    \label{thm:open_chain_left_tail_ground_intersection}
+    \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
+    \leanok
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es,
+        def:l_blk_injective}
+    If $D\ge1$, $A$ is $L_0$-block-injective, and $L_0>0$, then
+    \begin{align}
+        \mathcal U_{K+L_0}(A)\cap\mathcal V_{K,L_0+1}(A)
+        &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A). \notag
+    \end{align}
+    In Nachtergaele's notation, with $n=K+L_0$ and $l=L_0$, this is the
+    common range identity for $G_{\Lambda_n}$ and
+    $G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$ inside $\Lambda_{n+1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mem_open_chain_left_ground_space_es,
+        thm:mem_open_chain_tail_ground_space_es, lem:mem_ground_space_es,
+        thm:ground_space_extend_right_block_injective,
+        lem:ground_space_in_left_ground, lem:ground_space_in_tail_ground}
+    The forward inclusion is the growing-back step at the injectivity length.
+    Conversely, a vector in the longer ground space remains in the ground
+    space after every left or tail restriction.
 \end{proof}
 
 \begin{theorem}[Open-chain iteration of the intersection property]%

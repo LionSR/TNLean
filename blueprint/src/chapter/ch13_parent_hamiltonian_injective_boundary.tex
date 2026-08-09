@@ -24,7 +24,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    \uses{lem:ground_space_map_injective_blk}
+    \uses{thm:ground_space_map_injective_blk}
     The trace identity for this cyclic interval is tested against all words of
     length $L_0$. Injectivity of $\Gamma_{L_0}$, which follows from
     $L_0$-block injectivity, turns these test-word identities into
@@ -45,7 +45,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    \uses{lem:ground_space_map_injective_blk}
+    \uses{thm:ground_space_map_injective_blk}
     Factor the cyclic word at the second cyclic position, rotate the trace, and
     use injectivity of $\Gamma_{L_0}$ to remove the length-$L_0$ test word.
 \end{proof}
@@ -299,7 +299,7 @@ $X A^j=A^jX$.
     \label{lem:boundary_closing_endpoint_word_products}
     \lean{MPSTensor.boundary_closing_endpoint_word_products_common_background}
     \leanok
-    \uses{lem:cyclic_window_boundary_matrix_transport}
+    \uses{thm:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$. Suppose that matrices
     $Y_r(\rho)$, for $0\le r\le L_0-1$, represent the length-$(L_0+1)$ cyclic
@@ -315,7 +315,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    Use Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} for the
+    Use Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} for the
     $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$. For
     $0\le r<L_0-1$, the two endpoint words are determined by
     \begin{align}
@@ -331,7 +331,7 @@ $X A^j=A^jX$.
     \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses,
         MPSTensor.closure_property_boundary_condition_product_of_window_witnesses_mul_right}
     \leanok
-    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    \uses{rem:cyclic_window_operators, thm:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
@@ -348,7 +348,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    Apply Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
     $L_0-1$ restrictions beginning at $M+1-L_0+r$, with
     $Y_r(\rho)=Y_{M+1-L_0+r}(\rho)$. With $i_0=M+1-L_0$, the site labels
     satisfy
@@ -404,7 +404,7 @@ $X A^j=A^jX$.
     \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
     \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
     \leanok
-    \uses{rem:cyclic_window_operators, lem:cyclic_window_boundary_matrix_transport}
+    \uses{rem:cyclic_window_operators, thm:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
@@ -421,7 +421,7 @@ $X A^j=A^jX$.
 
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:cyclic_window_boundary_matrix_transport} to the
+    Apply Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
     $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$. With $i_0=M$, the
     site labels satisfy
     \begin{align}
