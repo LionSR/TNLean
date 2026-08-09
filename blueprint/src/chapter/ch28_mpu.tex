@@ -1016,14 +1016,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $EP=PE=P$.
 \end{proof}
 
+\begin{lemma}[Uniqueness of the normalized fixed-pair factorization]
+    \label{lem:mpu_stabilized_fixed_pair_uniqueness}
+    \lean{Matrix.StabilizedRankOneData.power_eq_vecMulVec_of_fixed}
+    \leanok
+    Let $P=E^J$ be a stabilized rank-one transfer power with normalized left
+    and right factors. If $\rho'$ and $\Phi'$ are any other fixed vectors with
+    $(\Phi'\mid\rho')=1$, then
+    \begin{align}
+        P=\lvert\rho')(\Phi'\rvert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Applying $P$ to $\rho'$ and applying $\Phi'$ to $P$ shows that the two
+    pairs of rank-one factors differ by reciprocal scalars. Their normalized
+    pairings force the product of those scalars to be one.
+\end{proof}
+
 \begin{lemma}[Identification with chosen reduced-CFII fixed points]
     \label{lem:mpu_reduced_cfii_transfer_stabilization}
-    \lean{MPOTensor.IsMPU.normalizedTransfer_pow_eq_vecMulVec_of_reduced_cpsvCFII}
-    \leanok
-    \uses{thm:mpu_normalized_transfer_stabilization}
+    \uses{thm:mpu_normalized_transfer_stabilization,
+        lem:mpu_stabilized_fixed_pair_uniqueness}
     Suppose the normalized flattening is presented by a chosen canonical-form-II
-    representative whose active blocks fill the bond space. If $\rho$ and $\Phi$
-    are its normalized right and left fixed vectors, then
+    representative whose active blocks fill the bond space. Let $\rho$ and
+    $\Phi$ be the diagonal positive right fixed point and the identity left
+    fixed point supplied by that representative, normalized by
+    $(\Phi\mid\rho)=1$. Then
     \begin{align}
         E^{D^2-1}=\lvert\rho)(\Phi\rvert.
     \end{align}
@@ -1031,11 +1050,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     assert that every ambient MPU tensor is itself in canonical form II.
 \end{lemma}
 
-\begin{proof}\leanok
-    The finite-blocking theorem gives a normalized rank-one stabilized
-    projector. Any other normalized left and right fixed pair factors the same
-    projector: applying the projector to $\rho$ and applying $\Phi$ on the left
-    identifies the two factors up to reciprocal scalars.
+\begin{proof}
+    The finite-blocking theorem shows that every normalized left and right fixed
+    pair factors the stabilized projector. It remains to transport the
+    blockwise canonical-form-II fixed points through the full-support ambient
+    reconstruction and prove the displayed pairing and fixed equations.
+    % Formalization of this remaining step is tracked in GitHub issue #5786.
 \end{proof}
 
 \begin{lemma}[One-dimensional transfer stabilization]

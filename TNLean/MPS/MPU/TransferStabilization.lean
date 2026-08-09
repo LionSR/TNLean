@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Projection
 import Mathlib.LinearAlgebra.Trace
-import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.MPU.TransferMatrix
 
 /-!
@@ -291,30 +290,6 @@ theorem IsMPU.exists_normalizedTransfer_stabilizes_to_rankOne
     data.power_eq, data.stable⟩
   rw [dotProduct_comm]
   exact data.pairing_eq_one
-
-/-- On a chosen reduced CPSV canonical-form-II representative, the
-stabilized factorization uses the representative's normalized fixed witnesses
-`ρ` and `Φ` themselves.
-
-**Scope restriction (chosen reduced CFII representative):** The full-active-support
-premise selects the reduced representative intended in arXiv:1703.09188,
-lines 397--405. The formalization does not claim that a bare ambient `IsMPU`
-representative is normal or already in CFII. See
-`docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem IsMPU.normalizedTransfer_pow_eq_vecMulVec_of_reduced_cpsvCFII
-    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D)
-    (cfii : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
-    (_hfull : ∑ k : cfii.toCPSVCanonicalFormData.Active,
-      cfii.dim k.1 = D)
-    (ρ Φ : Fin D × Fin D → ℂ)
-    (hpair : Φ ⬝ᵥ ρ = 1)
-    (hright : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) *ᵥ ρ = ρ)
-    (hleft : Matrix.vecMul Φ
-      (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) = Φ) :
-    transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ (D * D - 1) =
-      Matrix.vecMulVec ρ Φ := by
-  exact (hU.normalizedTransferStabilization hD).power_eq_vecMulVec_of_fixed
-    ρ Φ hpair hright hleft
 
 /-- In bond dimension one, the normalized transfer matrix is already the
 identity and stabilizes at exponent one. This separate statement is necessary
