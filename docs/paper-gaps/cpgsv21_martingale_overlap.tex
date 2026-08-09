@@ -530,10 +530,29 @@ Combining these two facts gives the completed reshuffled-Choi corollary
   &\leq \sum_{u,v\in I\times I}
     \lvert J(\mathcal L)_{u,v}\rvert^2.
 \end{align}
-This proves only an operator-norm bound by entrywise Frobenius mass.  It proves
-neither operator-norm invariance nor preservation of singular values under
-reshuffling, and it gives no direct bound by the default operator norm of
-$\mathcal L$ as a map on matrices.
+The remaining generic conversion is also complete.  Equip
+$\mathbb C^{I\times I}$ with its $L^2$ operator norm and write
+$\lVert\mathcal L\rVert_{\mathrm{op},L^2}$ for the resulting operator norm of
+$\mathcal L$.  The column estimate
+\leanid{Matrix.sum_column_norm_sq_le_norm_sq}, its entrywise consequence
+\leanid{Matrix.sum_entry_norm_sq_le_card_mul_norm_sq}, and the matrix-unit
+normalization \leanid{Matrix.l2_opNorm_single_one} give
+\leanid{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}:
+\begin{align}
+  \lVert\mathscr R(\mathcal L)\rVert_{
+    \ell^2(I\times I)\to\ell^2(I\times I)}^2
+  &\leq |I|^3\,\lVert\mathcal L\rVert_{\mathrm{op},L^2}^2.
+\end{align}
+Thus for $I=\Fin D$ the corresponding norm factor is $D^{3/2}$.  This is a
+safe generic dimension conversion.  It is not claimed sharp, and it is not
+identified with the FNW source prefactor $c=D^2$.
+
+Reshuffling is still not operator-norm invariant and need not preserve singular
+values.  The identity map gives the basic boundary: its operator norm on
+$\mathbb C^{D\times D}$ is one, whereas
+$\lVert\mathscr R(\mathrm{id})\rVert=D$ for $D>0$.  Hence the preceding
+$D^{3/2}$ factor is an upper bound, not an invariance statement or a source
+constant.
 
 \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} upgrades the coordinate
 identity to the exact operator equality
@@ -606,12 +625,15 @@ and generic prerequisites now include:
   \item The Choi reshuffling is packaged as the exact operator identity
     \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} (module
     \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}).
-  \item The generic operator-norm--to--entrywise-Frobenius estimate and its
-    reshuffled-Choi corollary are
-    \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq} and
-    \leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}.
-    These do not compare directly with the default operator norm of the
-    transfer map.
+  \item The generic operator-norm--to--entrywise-Frobenius estimate, its
+    reshuffled-Choi corollary, and the safe dimension conversion are
+    \leanid{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq},
+    \leanid{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}, and
+    \leanid{Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq}.
+    The last theorem gives squared factor $|I|^3$ against the squared operator
+    norm of the map when the matrix space carries its $L^2$ operator norm.
+    For $I=\Fin D$ this is norm factor $D^{3/2}$; it is not claimed sharp and
+    is not the FNW prefactor $c=D^2$.
   \item The spectator-indexed boundary maps for the tail and left windows are
     defined in \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean},
     together with their exact range equalities
