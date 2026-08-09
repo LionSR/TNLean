@@ -143,6 +143,54 @@ and~\cite{Evans1978Spectral}.
     positive definite.
 \end{proof}
 
+\begin{theorem}[Invariant support compression for a CP fixed point]
+    \label{thm:cp_fixed_support_invariant}
+    \lean{Kraus.invariantCompression_of_supportProj_fixed_by_cpMap}
+    \leanok
+    \uses{def:cp_map}
+    Let $E$ be completely positive, let $\rho\geq0$ satisfy $E(\rho)=\rho$,
+    and let $Q$ be the support projection of $\rho$. Then $Q$ is an
+    orthogonal projection and
+    \begin{align}
+        QE(QXQ)Q
+         & =E(QXQ)
+    \end{align}
+    for every $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The fixed-point equation makes the complementary Kraus corners vanish,
+    $(\Id-Q)K_iQ=0$. Expanding the Kraus sum then gives the displayed
+    compression identity.
+\end{proof}
+
+\begin{theorem}[Nonzero matrix has nonzero support]
+    \label{thm:nonzero_psd_support}
+    \lean{Matrix.PosSemidef.supportProj_ne_zero_of_ne_zero}
+    \leanok
+    If $\rho\geq0$ and $\rho\neq0$, then its support projection is nonzero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A zero support projection would give $\rho=Q\rho=0$.
+\end{proof}
+
+\begin{theorem}[Full support implies positive definiteness]
+    \label{thm:full_support_posdef}
+    \lean{Matrix.PosSemidef.posDef_of_supportProj_eq_one}
+    \leanok
+    If $\rho\geq0$ and its support projection is the identity, then $\rho$ is
+    positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The support is the orthogonal complement of the kernel. Thus full support
+    makes the kernel trivial, so $\rho$ is invertible and positive definite.
+\end{proof}
+
 \begin{theorem}[PSD fixed point is positive definite --- irreducible version]
     \label{thm:psd_fp_pd_irred}
     \lean{posDef_of_posSemidef_fixedPoint_irreducible_cp}
@@ -154,37 +202,14 @@ and~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{def:cp_map, def:irreducible_cp}
-    Choose Kraus operators $K_i$ such that
-    $E(X)=\sum_iK_iXK_i^\dagger$. Suppose $\rho$ is not positive definite,
-    and let $Q$ be its support projection. Since $\rho=Q\rho Q$ and
-    $\rho=E(\rho)$, the $(\Id-Q)$ corner satisfies
-    \begin{align}
-        0
-         & =(\Id-Q)\rho(\Id-Q) \notag \\
-         & =\sum_i
-        \bigl((\Id-Q)K_iQ\bigr)\rho
-        \bigl((\Id-Q)K_iQ\bigr)^\dagger.
-        \notag
-    \end{align}
-    Every summand is positive semidefinite, so each vanishes. The restriction
-    of $\rho$ to its support is positive definite; hence, for every~$i$,
-    \begin{align}
-        (\Id-Q)K_iQ
-         & =0.
-        \notag
-    \end{align}
-    Thus $K_iQ=QK_iQ$, and for every $X$ each summand
-    $K_iQXQK_i^\dagger$ lies in the $Q$ corner. Therefore
-    \begin{align}
-        QE(QXQ)Q
-         & =E(QXQ),
-        \notag
-    \end{align}
-    so $Q$ is invariant. Irreducibility forces $Q=0$ or $Q=\Id$. The first
-    case contradicts $\rho\neq0$, while the second says that $\rho$ is
-    positive definite. This is the support-projection mechanism of
-    \cite[Theorem~6.2(1)]{Wolf2012Quantum}.
+    \uses{thm:cp_fixed_support_invariant, thm:nonzero_psd_support,
+        thm:full_support_posdef}
+    Let $Q$ be the support projection of $\rho$.
+    Theorem~\ref{thm:cp_fixed_support_invariant} makes $Q$ an invariant
+    orthogonal projection, so irreducibility gives $Q=0$ or $Q=\Id$.
+    Theorem~\ref{thm:nonzero_psd_support} excludes $Q=0$, and
+    Theorem~\ref{thm:full_support_posdef} turns $Q=\Id$ into positive
+    definiteness.
 \end{proof}
 
 \begin{theorem}[PSD fixed point is positive definite]

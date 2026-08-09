@@ -1,15 +1,22 @@
 \section{Peripheral eigenvalue group structure}
 
-This section proves the peripheral spectrum structure
-of~\cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
-the peripheral eigenvalues form a finite cyclic group.
+This section proves a finite-Kraus specialization of the peripheral-spectrum
+conclusion of~\cite[Theorem~6.6]{Wolf2012Quantum}: the peripheral eigenvalues
+form a finite cyclic group. Wolf's theorem assumes an irreducible positive
+unital Schwarz map, whereas the statement below assumes a Kraus
+representation and hence complete positivity. The remaining abstract
+Schwarz-map case is recorded in
+\texttt{docs/paper-gaps/wolf\_thm6\_6\_kraus\_scope.tex}.
 The trace-preserving refinement that the order divides the bond
 dimension is proved in Theorem~\ref{thm:peripheral_cyclic_group}. The
 invertibility of peripheral eigenvectors and the product closure of the
 peripheral eigenvalues used below are proved in
 Section~\ref{sec:app_spectral_periodicity}.
 
-\begin{theorem}[Peripheral eigenvalues: cyclic structure]%
+% Scope restriction (complete positivity): Wolf Theorem 6.6 assumes only
+% positivity, unitality, and the Schwarz inequality. See
+% docs/paper-gaps/wolf_thm6_6_kraus_scope.tex.
+\begin{theorem}[Peripheral eigenvalues: cyclic structure for Kraus maps]%
     \label{thm:peripheral_cyclic_structure}
     \lean{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot}
     \leanok
