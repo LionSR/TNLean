@@ -232,6 +232,8 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
+              - 'scripts/tenkz_lint.py'
+              - 'scripts/tenkz_language.py'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
               - 'scripts/tenkz_golden.sh'
