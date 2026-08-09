@@ -457,6 +457,48 @@ explicit than the review paragraph: the exact constants and the cyclic-window
 blocking convention still have to be compared with the FNW, Nachtergaele, and
 Kastoryano--Lucia estimates.
 
+\section{Inverse-Gram infrastructure and the remaining FNW contraction}
+
+For the open-chain boundary map
+\[
+  \Gamma_L(X)(\sigma)=\operatorname{tr}(A^\sigma X),
+\]
+the finite-dimensional Hilbert realization, its exact range, and its Gram
+operator are now recorded by
+\leanid{MPSTensor.groundSpaceMapES},
+\leanid{MPSTensor.range_groundSpaceMapES}, and
+\leanid{MPSTensor.groundSpaceGram}.  On virtual matrix units, the exact identity
+\[
+ \langle E_{ab},\Gamma_L^\dagger\Gamma_L(E_{ce})\rangle_{\mathrm{HS}}
+ =J(\mathcal E_A^L)_{(c,e),(a,b)}
+\]
+is \leanid{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}.
+The ordering on the right is a Choi reshuffling.  It must not be replaced by the
+generally false Hilbert--Schmidt expression
+$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
+
+The generic identity
+\[
+  P_{\operatorname{ran}T}=T(T^\dagger T)^{-1}T^\dagger
+\]
+for injective finite-dimensional maps is
+\leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
+denominator
+estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under $\|t\|\le a<1$ is
+\leanid{NormedRing.norm_inverse_one_sub_le}.  Consequently the physical local
+ground projector is the orthogonal projector onto
+$\operatorname{ran}\Gamma_L$.  It is not the transfer fixed-point projector
+\leanid{fixedPointProj}; the latter acts on the virtual matrix space
+and cannot substitute for the inverse-Gram formula.
+
+What remains open is the source-specific FNW comparison of the inverse-Gram
+range projectors on the two overlapping physical windows.  In particular, the
+present infrastructure does not prove the contraction
+$a_l(1+a_l)/(1-a_l)$, does not identify the physical projector with a transfer
+fixed-point projector, and does not establish the final numerical overlap or
+spectral-gap bound.  That load-bearing overlapping-window estimate remains the
+MPS-specific task tracked in issue \#5752.
+
 \textbf{Verdict:} open gap.
 
 \bibliographystyle{alpha}
