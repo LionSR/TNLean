@@ -49,6 +49,7 @@ import TNLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixSpectralDecomp
 import TNLean.Algebra.MatrixTracePairing
 import TNLean.Algebra.MatrixTracePowerContinuity
+import TNLean.Algebra.MatrixUnitaryBetween
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NewtonGirard
 import TNLean.Algebra.NilMatrixSubalgebra
