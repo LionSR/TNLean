@@ -483,6 +483,73 @@ nonzero spectrum as a set.
   \end{align}
 \end{proof}
 
+\begin{theorem}[Vanishing positive trace powers determine the characteristic polynomial]
+  \label{thm:mpu_zero_trace_power_charpoly}
+  \lean{Matrix.charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^k)=0$ for every integer
+  $k\geq1$, then
+  \begin{align}
+    \chi_A(X)&=X^n.
+  \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:newton_girard}
+  The zero matrix has the same positive trace powers as $A$ and characteristic
+  polynomial $X^n$. Newton--Girard therefore identifies the two characteristic
+  polynomials. This is the characteristic-polynomial consequence of the
+  all-positive trace condition obtained in \cite[lines~405--410]{Cirac2017MPU}.
+\end{proof}
+
+\begin{theorem}[Shifted vanishing moments under matrix powers]
+  \label{thm:mpu_shifted_zero_trace_power_moments}
+  \lean{Matrix.forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix such that $\tr(A^k)=0$ for every
+  $k>1$, and let $m>1$. Then $\tr((A^m)^r)=0$ for every $r\geq1$.
+  This auxiliary result supports the generalization below to a weaker
+  hypothesis; the source itself supplies vanishing for every positive exponent.
+\end{theorem}
+
+\begin{proof}\leanok
+  For $r\geq1$, one has $(A^m)^r=A^{mr}$ and $mr>1$, so the hypothesis at
+  exponent $mr$ gives the result.
+\end{proof}
+
+\begin{theorem}[Shifted zero trace powers force nilpotence]
+  \label{thm:mpu_shifted_zero_trace_power_nilpotent}
+  \lean{Matrix.eq_zero_of_mem_spectrum_of_forall_trace_pow_eq_zero_of_one_lt,
+    Matrix.charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero_of_one_lt,
+    Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt}
+  \leanok
+  Let $A$ be an $n\times n$ complex matrix. If $\tr(A^N)=0$ for every integer
+  $N>1$, then $A$ is nilpotent and
+  \begin{align}
+    \chi_A(X)&=X^n.
+  \end{align}
+  The source obtains the all-positive trace hypothesis in
+  \cite[lines~405--410]{Cirac2017MPU}; its specialization is the elementwise
+  nilpotence assertion used before the nil-matrix theorem. The result above is
+  a stronger generalization because it assumes vanishing only for $N>1$. It is
+  useful independently and requires no positivity, normality, or
+  diagonalizability.
+\end{theorem}
+
+\begin{proof}\leanok
+  \uses{thm:mpu_shifted_zero_trace_power_moments,
+    thm:mpu_zero_trace_power_charpoly}
+  Every positive power of $A^2$ has vanishing trace. Hence
+  \begin{align}
+    \chi_{A^2}(X)&=X^n.
+  \end{align}
+  If $\mu$ is a spectral value of $A$, spectral mapping shows that $\mu^2$ is
+  a root of this characteristic polynomial. Therefore $\mu^2=0$, and hence
+  $\mu=0$. Thus every root of the split
+  monic polynomial $\chi_A$ is zero, so $\chi_A(X)=X^n$.
+  Cayley--Hamilton now proves that $A$ is nilpotent.
+\end{proof}
+
 The standard-form construction uses the compact singular-value decomposition in
 which the intermediate dimension is the rank rather than the smaller ambient
 dimension.

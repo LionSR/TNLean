@@ -69,6 +69,7 @@ import TNLean.Algebra.RectangularChoi
 import TNLean.Algebra.ScalarCommutant
 import TNLean.Algebra.ScalarPowerSumIdentity
 import TNLean.Algebra.ShiftedTracePowerSpectrum
+import TNLean.Algebra.ShiftedZeroTraceNilpotent
 import TNLean.Algebra.SkolemNoether
 import TNLean.Algebra.SkolemNoetherUnitary
 import TNLean.Algebra.SpinCover
