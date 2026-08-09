@@ -1443,6 +1443,71 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{proof}
 
+\begin{definition}[Source tensors $u$ and $v$]
+    \label{def:mpu_source_uv}
+    \lean{MPOTensor.sourceU,MPOTensor.sourceV,
+        MPOTensor.sourceU_apply,MPOTensor.sourceV_apply,
+        MPOTensor.sourceU_conjTranspose_apply,
+        MPOTensor.sourceV_conjTranspose_apply}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    For a positive definite source weight $\rho$, define
+    \begin{align}
+        u &: \mathbb C^d\otimes\mathbb C^d
+            \longrightarrow \mathbb C^\ell\otimes\mathbb C^r,\\
+        v &: \mathbb C^r\otimes\mathbb C^\ell
+            \longrightarrow \mathbb C^d\otimes\mathbb C^d
+    \end{align}
+    by
+    \begin{align}
+        u_{(l,r),(i_1,i_2)}
+          &=\sum_\beta (Y_1)_{r,(i_1,\beta)}(X_2)_{(\beta,i_2),l},\\
+        v_{(j_1,j_2),(r,l)}
+          &=\sum_\alpha (X_1)_{(\alpha,j_1),r}(Y_2)_{l,(j_2,\alpha)}.
+    \end{align}
+    The source legs of $u$ have order $\ell\times r$, whereas those of $v$
+    have order $r\times\ell$. These are equations \texttt{uu} and
+    \texttt{vdagger} in \cite[Section~III]{Cirac2017MPU}. The entry formulas
+    also fix the conjugate-transpose orientation.
+\end{definition}
+
+\begin{theorem}[Exact translated two-site source factorization]
+    \label{thm:mpu_source_uv_two_site_factorization}
+    \lean{MPOTensor.trace_mul_eq_sourceU_mul_sourceV_swap,
+        MPOTensor.mpo_two_pair_entry_eq_sourceU_mul_sourceV_swap,
+        MPOTensor.mpo_two_reindex_eq_sourceU_transpose_mul_sourceV_swap_transpose}
+    \leanok
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
+    Identify a two-site physical configuration with an ordered pair in
+    $\Fin d\times\Fin d$. Then
+    \begin{align}
+        \operatorname{reindex}(U^{(2)})
+          &=u^{\mathsf T}\bigl(\operatorname{swap}_{r,\ell}v\bigr)^{\mathsf T}.
+    \end{align}
+    The transpose records the periodic entry orientation. The map
+    $\operatorname{swap}_{r,\ell}$ is the explicit equivalence
+    $r\times\ell\simeq\ell\times r$; the two product orders are not silently
+    identified. This is the bond swap, or one-site translation, in
+    \cite[Section~III, equations \texttt{SVDforms2}--\texttt{uuvv}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factorizations}
+    At physical pairs $(i_1,i_2)$ and $(j_1,j_2)$, expand the periodic trace as
+    \begin{align}
+        \sum_{\alpha,\beta}
+          \mathcal U^{i_1}_{j_1,\alpha,\beta}
+          \mathcal U^{i_2}_{j_2,\beta,\alpha}.
+    \end{align}
+    Use $M_1=X_1Y_1$ for the first letter and $M_2=X_2Y_2$ for the second.
+    Reordering the four scalar finite sums gives
+    \begin{align}
+        \sum_{l,r}u_{(l,r),(i_1,i_2)}v_{(j_1,j_2),(r,l)}.
+    \end{align}
+    Reindexing both physical configuration spaces and explicitly swapping
+    $(r,l)$ to $(l,r)$ gives the matrix identity.
+\end{proof}
+
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
