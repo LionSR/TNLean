@@ -137,6 +137,15 @@ performed twice. What remains double is a name inscribed in a panel, which is
 what measuring a name costs and is the one place the language's own grammar
 guarantees there is nothing but mathematics to typeset.
 
+The panels are read from the body as written, which is the trade the previous
+paragraph buys. A panel standing behind a conditional the body never takes
+still lends its extent to the measure, and a panel arriving through a macro or
+an included file lends none and is drawn exactly as it would be alone. Both
+are wrong about the *sharing* and neither can misdraw a panel: the measure
+only grows a glyph, and a glyph sharing nothing keeps its own extent. Reading
+the panels along the executed path instead would be right about the sharing
+and wrong about the document, which is the trade this one refuses.
+
 Three cheaper answers do not work. **Fixing the extent to the size class
 alone** is what the contract says in the abstract, and the corpus prices it:
 45 of the 1143 glyphs drawn across the benchmark stand wider than their class
