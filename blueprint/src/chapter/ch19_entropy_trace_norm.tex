@@ -581,10 +581,25 @@ Theorem~\ref{thm:trace_norm_abs}.
     scaled-trace theorem applies and yields the claimed bound.
 \end{proof}
 
+\begin{definition}[Trace-prepare map]
+    \label{def:trace_prepare_map}
+    \lean{Matrix.tracePrepareMap}
+    \lean{Matrix.tracePrepareMap_apply}
+    \leanok
+    For any matrix $Y\in\MN{D'}$, the trace-prepare map
+    $\mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y)$
+    discards the input and prepares $Y$ with the trace weight:
+    \begin{align}
+        \mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y)(X)
+        = \tr[X]\,Y.
+        \label{eq:trace_prepare_map}
+    \end{align}
+\end{definition}
+
 \begin{lemma}[Choi matrix of the trace-prepare map]
     \label{lem:choi_matrix_trace_prepare}
     \lean{Matrix.choiMatrix_tracePrepareMap}
-    \uses{def:choi_matrix_rectangular, def:trace_prepare_map}
+    \uses{def:choi_matrix_rect, def:trace_prepare_map}
     Let $Y\in\MN{D'}$ be arbitrary.  In the rectangular
     (output-factor-first) Choi representation,
     \begin{align}
@@ -596,7 +611,6 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:omega_slice_single}
     Direct computation using the elementwise formula for the
     omega slice and linearity of the Choi assignment.
 \end{proof}
@@ -605,7 +619,7 @@ Theorem~\ref{thm:trace_norm_abs}.
     \label{thm:choi_dominated_doeblin}
     \lean{Matrix.traceNorm_map_sub_map_le_of_choi_domination}
     \leanok
-    \uses{def:trace_norm, def:choi_matrix_rectangular,
+    \uses{def:trace_norm, def:choi_matrix_rect,
       def:trace_preserving_rectangular, def:density_matrices}
     Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving,
     Hermiticity-preserving linear map and $Y\in\MN{D'}$ Hermitian
@@ -626,7 +640,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 
 \begin{proof}\leanok
     \uses{thm:quantum_doeblin_contraction, lem:choi_matrix_trace_prepare,
-      lem:choi_cp_equivalence_rectangular}
+      thm:choi_rect_cp}
     Set $T'(X)=\tr[X]\,Y$ (the map $\mathrm{tracePrepareMap}(Y)$).
     By Lemma~\ref{lem:choi_matrix_trace_prepare},
     $\tau(T')=(1/D)(Y\otimes\Id)$. Linearity of the Choi assignment gives

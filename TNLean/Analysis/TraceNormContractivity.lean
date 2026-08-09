@@ -453,7 +453,6 @@ theorem choiMatrix_tracePrepareMap [NeZero d]
     (Y : Matrix (Fin d') (Fin d') ℂ) :
     ChoiRectangular.choiMatrix (tracePrepareMap (α := Fin d) Y) =
       (1 / (d : ℂ)) • (kroneckerMap (· * ·) Y (1 : Matrix (Fin d) (Fin d) ℂ)) := by
-  classical
   have hdpos : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
   ext ⟨a, i⟩ ⟨b, j⟩
   -- Compute both sides elementwise
@@ -472,7 +471,7 @@ theorem choiMatrix_tracePrepareMap [NeZero d]
       simp [Matrix.smul_single]
     _ = ((1 / (d : ℂ)) * Matrix.trace (Matrix.single i j (1 : ℂ))) * Y a b := by
       rw [Matrix.trace_smul, smul_eq_mul]
-    _ = ((1 : ℂ) / (d : ℂ)) * (kroneckerMap (· * ·) Y (1 : Matrix (Fin d) (Fin d) ℂ))
+    _ = (1 / (d : ℂ)) * (kroneckerMap (· * ·) Y (1 : Matrix (Fin d) (Fin d) ℂ))
           (a, i) (b, j) := by
       by_cases hij : i = j
       · subst hij
@@ -556,7 +555,7 @@ theorem traceNorm_map_sub_map_le_of_choi_domination
         (kroneckerMap (· * ·) Y (1 : Matrix (Fin D) (Fin D) ℂ))) =
         ((ε : ℂ) / (D : ℂ)) •
         (kroneckerMap (· * ·) Y (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-      rw [smul_smul, div_eq_mul_inv, ← mul_assoc]
+      rw [smul_smul]
       congr
       ring
     rw [hsmul]
