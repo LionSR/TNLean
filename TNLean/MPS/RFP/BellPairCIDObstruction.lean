@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
@@ -142,10 +143,8 @@ private lemma single_sum_snd (s : Fin 2 → ℂ) (X : Matrix (Fin 2) (Fin 2) ℂ
       rw [map_sum]
     rw [h1]
     congr 1
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro b _
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      Fintype.sum_mul_mul_eq_mul_sum_mul (1 / 2 : ℂ) s (fun b => X b b)
   rw [Finset.sum_congr rfl fun a _ => hinner a]
   rw [show (∑ a : Fin 2, Matrix.single a a ((1 / 2 : ℂ) * (∑ b : Fin 2, s b * X b b))) =
       ((1 / 2 : ℂ) * (∑ b : Fin 2, s b * X b b)) • ∑ a : Fin 2, Matrix.single a a 1 from by

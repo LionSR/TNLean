@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 
 /-!
@@ -558,10 +559,8 @@ theorem middleFourfoldSynthesis_mul_leftInnerToMiddlePrintedFMatrix
     simp_rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro yh _
-    simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro yi _
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro yh _
@@ -676,10 +675,8 @@ theorem pairFourfoldSynthesis_mul_leftAssocToPairPrintedFMatrix
     simp_rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro yf _
-    simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro yj _
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro yf _
@@ -738,10 +735,8 @@ theorem rightAssocFourfoldSynthesis_mul_pairToRightAssocPrintedFMatrix
     simp_rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro yj _
-    simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro yi _
-    ring
+    simpa only [mul_comm, mul_left_comm, mul_assoc] using
+      (Fintype.sum_mul_mul_eq_mul_sum_mul (R := ℂ) _ _ _)
   · simp_rw [Finset.mul_sum]
     rw [Finset.sum_comm]
     apply Finset.sum_congr rfl

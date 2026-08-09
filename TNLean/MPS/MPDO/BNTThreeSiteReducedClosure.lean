@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinSum
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.MPS.MPDO.BNTClosingSelection
 import TNLean.MPS.MPDO.BNTThreeSiteCollapse
@@ -248,10 +249,12 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
         ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
           ∑ w, mpo (S.basisMPOTensor j) (3 + L)
             (Fin.append u w) (Fin.append v w) := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro w _
-      ring
+      simpa only [mul_comm, mul_left_comm, mul_assoc, mul_one, one_mul] using
+        Fintype.sum_mul_mul_eq_mul_sum_mul
+          ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j)
+          (fun w => mpo (S.basisMPOTensor j) (3 + L)
+            (Fin.append u w) (Fin.append v w))
+          (fun _ => 1)
     _ = ((Matrix.trace (M.mpo (L + 3)))⁻¹ * S.coeff (3 + L) j) *
           Matrix.trace
             ((S.basisMPOTensor j).evalWord (List.ofFn u) (List.ofFn v) *
