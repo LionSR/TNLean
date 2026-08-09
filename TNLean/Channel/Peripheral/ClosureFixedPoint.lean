@@ -57,8 +57,9 @@ end KadisonSchwarz
 namespace MPSTensor
 
 
-/-- A peripheral eigenvector of an irreducible unital Kraus map (with PD adjoint-fixed
-point) is a unit (i.e., an invertible matrix). -/
+/-- A peripheral eigenvector of an irreducible unital Kraus map with a positive-definite
+adjoint fixed point is a unit. This is the finite-Kraus specialization of the
+peripheral-eigenvector normalization used in Wolf Theorem 6.6(1). -/
 theorem isUnit_peripheral_eigenvector
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -124,7 +125,8 @@ theorem isUnit_peripheral_eigenvector
 admitting a positive definite fixed point of the adjoint map.
 
 This is the preferred live formulation. The older unital + trace-preserving
-special case is recovered by taking `ρ = 1`. -/
+special case is recovered by taking `ρ = 1`. It is the power-closure step in the
+finite-Kraus specialization of Wolf Theorem 6.6(1). -/
 theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -188,7 +190,9 @@ theorem peripheralEigenvalues_pow_mem_of_irreducible_unital_of_adjoint_fixedPoin
 /-- For irreducible unital Kraus maps with a positive definite adjoint fixed point,
 all peripheral eigenvalues are roots of unity.
 
-This is a direct formulation around `peripheral_isRootOfUnity_of_closed_powers`. -/
+This is a direct formulation around `peripheral_isRootOfUnity_of_closed_powers`
+and supplies the roots-of-unity step in the finite-Kraus specialization of Wolf
+Theorem 6.6(1). -/
 theorem peripheral_isRootOfUnity_of_irreducible_unital_of_adjoint_fixedPoint
     {d D : ℕ} [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)

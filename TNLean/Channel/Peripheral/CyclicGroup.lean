@@ -67,7 +67,8 @@ Kraus maps with a PD adjoint-fixed point.
 Proof: Take eigenvectors `X, Y` for `μ, ν`. The KS equality at `X` gives
 `E(Y * X) = E(Y) * E(X) = (ν * μ) • (Y * X)`. Since `X, Y` are units
 (by `isUnit_peripheral_eigenvector`), `Y * X ≠ 0`, so `μ * ν` is an
-eigenvalue with norm 1. -/
+eigenvalue with norm 1. This is the multiplication-closure step in the
+finite-Kraus specialization of Wolf Theorem 6.6(1). -/
 theorem peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint
     [NeZero D]
     (K : Fin d → Matrix (Fin D) (Fin D) ℂ)
@@ -165,8 +166,9 @@ adjoint-fixed point form a cyclic group of roots of unity.
 Specifically, if `m = |peripheralEigenvalues E|`, there exists a primitive `m`-th
 root of unity `γ` such that `peripheralEigenvalues E = {γ^j | j = 0, …, m−1}`.
 
-This is the key structural result connecting the channel-level peripheral spectrum
-theory to the cyclic decomposition of MPS tensors (Wolf, Theorem 6.6).
+This is the finite-Kraus specialization of the cyclicity conclusion in Wolf
+Theorem 6.6(1), and it connects the channel-level peripheral spectrum to the
+cyclic decomposition of MPS tensors.
 
 The proof uses:
 - Product closure (`peripheralEigenvalues_mul_mem_of_irreducible_unital_of_adjoint_fixedPoint`)

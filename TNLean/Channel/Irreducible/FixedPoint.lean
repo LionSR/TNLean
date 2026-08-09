@@ -19,7 +19,13 @@ open scoped Matrix ComplexOrder MatrixOrder
 variable {D : ℕ}
 
 /-- A nonzero positive-semidefinite fixed point of an irreducible completely positive
-map is positive definite. This is the fixed-point case of Wolf Theorem 6.3(2). -/
+map is positive definite. This is the completely positive specialization of the
+fixed-point case of Wolf Theorem 6.3(2).
+
+**Scope restriction:** Wolf Theorem 6.3(2) assumes only positivity, whereas this
+declaration assumes complete positivity. See
+`docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex` for the source comparison
+and elimination plan. -/
 theorem posDef_of_posSemidef_fixedPoint_irreducible_cp
     (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
     (hCP : IsCPMap E) (hIrr : IsIrreducibleMap E)
