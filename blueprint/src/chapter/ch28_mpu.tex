@@ -775,18 +775,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_transfer_matrix_vectorization,
         thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
-    After weighting, its eigenvalue is
-    $q_k=\mu_k\overline{\mu_k}\ne0$.  The reconstruction coisometry and
-    Theorem~\ref{thm:mpu_dependent_block_inclusion_identities} transport
-    $X_k$ to a nonzero ambient eigenmatrix supported in the $k$th corner.
+    Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
+    inclusion of the $k$th block.  Define the ambient inclusion and transported
+    matrix by
+    \begin{align}
+        V_k&=U^\dagger J_k,
+        &Y_k&=V_kX_kV_k^\dagger.
+    \end{align}
+    The matrix $Y_k$ is nonzero and is an ambient transfer eigenmatrix with
+    eigenvalue $q_k=\mu_k\overline{\mu_k}\ne0$.
     Theorem~\ref{thm:mpu_shifted_trace_power_spectrum} gives $q_k=1$.
 
-    Compression to the $k$th corner recovers $X_k$ and annihilates every
-    other corner, so the transported active-block vectors are linearly
-    independent.  Vectorizing places them in the $1$-eigenspace of $E^2$.
-    The shifted traces give $\tr((E^2)^r)=1$ for every $r\ge1$; hence
-    Theorem~\ref{thm:mpu_trace_power_all} gives
-    $\chi_{E^2}(X)=X^{D^2-1}(X-1)$.  Thus that eigenspace has dimension at
-    most one.  Finally, if $K$ were empty, every weight and therefore $A$
-    would vanish, contradicting $\tr(E^2)=1$.  Consequently $|K|=1$.
+    For distinct $k$ and $\ell$, the inclusion identities give
+    \begin{align}
+        V_k^\dagger Y_kV_k&=X_k,\\
+        V_k^\dagger Y_\ell V_k&=0.
+    \end{align}
+    Hence the matrices $Y_k$, for $k\in K$, are linearly independent.
+    Vectorizing gives
+    \begin{align}
+        \operatorname{vec}(Y_k)&\in\ker(E^2-\Id).
+    \end{align}
+    The shifted traces and Theorem~\ref{thm:mpu_trace_power_all} give
+    \begin{align}
+        \tr((E^2)^r)&=1\quad(r\ge1),\\
+        \chi_{E^2}(X)&=X^{D^2-1}(X-1).
+    \end{align}
+    The eigenspace dimension is bounded by the algebraic multiplicity, so
+    \begin{align}
+        |K|
+          &\le \dim\ker(E^2-\Id)
+          \le \mult_{1}(\chi_{E^2})
+          =1.
+    \end{align}
+    Finally, if $K$ were empty, every weight and therefore $A$ would vanish,
+    contradicting $\tr(E^2)=1$.  Consequently $|K|=1$.
 \end{proof}
