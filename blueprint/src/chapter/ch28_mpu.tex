@@ -381,6 +381,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_active_block_ambient_irreducible}
     \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_active_dim_eq}
     \leanok
+    \uses{def:cpsv_canonical_form}
     If an active block has bond dimension $D$, then the ambient tensor $A$ is
     irreducible.
 \end{theorem}
@@ -388,11 +389,19 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}\leanok
     \uses{def:cpsv_canonical_form,
         thm:irreducible_tensor_smul_conj}
-    The total-dimension bound and positivity of every retained block dimension
-    force this block to be the only retained block.  The ambient coisometry is
-    square, hence unitary.  The reconstruction is therefore a nonzero scalar
-    multiple and unitary conjugate of the normal block, which preserves
-    irreducibility.
+    If $k$ is the active block with $D_k=D$, the total-dimension bound gives
+    \begin{align}
+      D = D_k \leq \sum_{j=1}^r D_j \leq D.
+    \end{align}
+    Since every retained block dimension is positive, these equalities force
+    $k$ to be the only retained block.  After reindexing its bond coordinates,
+    the ambient coisometry $U$ is square, hence unitary, and reconstruction reads
+    \begin{align}
+      A^i = U^*\bigl(\mu_k B^i\bigr)U,
+    \end{align}
+    where $B$ is the reindexed normal block and $\mu_k\ne0$.  Thus
+    Theorem~\ref{thm:irreducible_tensor_smul_conj} transports irreducibility of
+    $B$ through the nonzero rescaling and unitary conjugation.
 \end{proof}
 
 \begin{theorem}[Unique active block with full support]
@@ -406,9 +415,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{thm:mpu_active_block_ambient_irreducible}
-    The full-support sum over the singleton active family says that its unique
-    block has dimension $D$.  Apply
-    Theorem~\ref{thm:mpu_active_block_ambient_irreducible}.
+    Let $k$ be the unique active block.  The singleton sum and full-support
+    identity give
+    \begin{align}
+      \sum_{j\in\mathrm{Active}} D_j = D_k = D.
+    \end{align}
+    Thus $k$ has ambient bond dimension, so
+    Theorem~\ref{thm:mpu_active_block_ambient_irreducible} applies.
 \end{proof}
 
 \begin{theorem}[Normality of a unique full-support active block]

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.Reduction
 
 /-!
 # Full-support CPSV canonical forms
@@ -21,7 +21,7 @@ formalize the proposition's spectral derivation from `IsMPU`. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 
