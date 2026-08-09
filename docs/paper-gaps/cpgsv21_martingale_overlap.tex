@@ -592,17 +592,35 @@ range with the open-chain tail subspace \(V\), while specializing the left
 transport theorem to \((K+L_0, 1)\) identifies its range with the open-chain
 left subspace \(U\), both in the common ambient
 \(\mathcal H_{K+L_0+1}\); see Section~\ref{sec:open_chain_projector_geometry}.
-The remaining task is to bound the defect
+The remaining task is to bound the projector defect
 \begin{align}
-  \|P_V P_U-P_{U\cap V}\|
+    \bigl\|
+        \mathcal P^{\mathrm{ES}}_{\mathcal V_{K,L_0+1}(A)}
+        \mathcal P^{\mathrm{ES}}_{\mathcal U_{K+L_0}(A)}
+      - \mathcal P^{\mathrm{ES}}_{\mathcal
+        G_{K+L_0+1}^{\mathrm{ES}}(A)}
+    \bigr\|
 \end{align}
-from the Gram/transfer identities, the word-factorization, and
-inverse-Gram norm control.  The present formal development does not yet
+in the common ambient \(\mathcal H_{K+L_0+1}\) (Nachtergaele C3,
+arXiv:cond-mat/9410110, eq.\ (2.4)).  Here
+\(\mathcal U_{K+L_0}(A)\) and \(\mathcal V_{K,L_0+1}(A)\) are the
+left and tail ground subspaces defined earlier, their intersection equals
+\(\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A)\) under block injectivity,
+and \(\mathcal P^{\mathrm{ES}}\) denotes the orthogonal projector in
+the \(\ell^2\) Hilbert-space realization.
+
+The two ranges are transported into this common ambient by
+\leanid{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES}
+(specialized to \((K, L_0+1)\)) and
+\leanid{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES}
+(specialized to \((K+L_0, 1)\)).
+
+The present formal development does not yet
 bound \(\|1-\mathcal K_L\|\) (the deviation of the Gram operator from the
 correctly normalized limiting Gram) by the transfer-mixing rate, so the
-inverse-Gram estimate cannot yet be instantiated; the bounds on
-\(P_VP_U-P_{U\cap V}\) are therefore conditional on both the transfer
-spectral estimate and the Gram-deviation control.  The development does not
+inverse-Gram estimate cannot yet be instantiated; the bound on the displayed
+projector defect is therefore conditional on both the transfer spectral
+estimate and the Gram-deviation control.  The development does not
 prove the contraction
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
