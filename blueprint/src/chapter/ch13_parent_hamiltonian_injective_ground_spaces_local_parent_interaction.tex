@@ -308,6 +308,25 @@ orthogonal projector is the canonical representative used here.
     vectors.
 \end{proof}
 
+\begin{theorem}[Euclidean operator norm bounded by Frobenius mass]
+    \label{thm:euclidean_operator_norm_sq_le_frobenius}
+    \lean{Matrix.toEuclideanCLM_norm_sq_le_sum_norm_sq}
+    \leanok
+    Let $I$ be a finite index set and let $B=(B_{ij})_{i,j\in I}$ be a complex
+    matrix.  Then the squared operator norm of $B$ on $\ell^2(I)$ satisfies
+    \begin{align}
+      \lVert B\rVert_{\ell^2(I)\to\ell^2(I)}^2
+      &\leq \sum_{(i,j)\in I\times I}\lvert B_{ij}\rvert^2.
+      \label{eq:euclidean_operator_norm_sq_le_frobenius}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Cauchy--Schwarz to each row of $Bx$, sum over the rows, and take the
+    supremum over unit vectors $x\in\ell^2(I)$.
+\end{proof}
+
 \begin{theorem}[Entrywise Frobenius invariance of Gram reshuffling]
     \label{thm:gram_reshuffle_matrix_norm_sq}
     \lean{Matrix.gramReshuffleMatrix_norm_sq_eq_rectangularChoi_norm_sq}
@@ -334,6 +353,36 @@ orthogonal projector is the canonical representative used here.
     The map $((b,a),(e,c))\mapsto((c,e),(a,b))$ is an involution (bijection)
     on the product index space.  Reindexing the sum of squared norms by this
     involution yields the claimed equality.
+\end{proof}
+
+\begin{theorem}[Operator bound for a reshuffled Choi matrix]
+    \label{thm:gram_reshuffle_norm_sq_le_rectangular_choi}
+    \lean{Matrix.gramReshuffle_norm_sq_le_rectangularChoi_norm_sq}
+    \leanok
+    \uses{def:gram_reshuffle,
+        thm:euclidean_operator_norm_sq_le_frobenius,
+        thm:gram_reshuffle_matrix_norm_sq}
+    Let $I$ be a finite index set and let
+    $\mathcal L\colon\mathbb C^{I\times I}\to\mathbb C^{I\times I}$ be
+    complex-linear.  Then
+    \begin{align}
+      \bigl\lVert\mathscr R(\mathcal L)\bigr\rVert_{
+        \ell^2(I\times I)\to\ell^2(I\times I)}^2
+      &\leq
+      \sum_{u,v\in I\times I}
+        \bigl\lvert J(\mathcal L)_{u,v}\bigr\rvert^2.
+      \label{eq:gram_reshuffle_norm_sq_le_rectangular_choi}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:euclidean_operator_norm_sq_le_frobenius,
+        thm:gram_reshuffle_matrix_norm_sq}
+    Apply Theorem~\ref{thm:euclidean_operator_norm_sq_le_frobenius} to
+    $R(\mathcal L)$, then use
+    Theorem~\ref{thm:gram_reshuffle_matrix_norm_sq} to rewrite its entrywise
+    Frobenius mass as that of $J(\mathcal L)$.
 \end{proof}
 
 \begin{theorem}[Transfer--Gram Choi reshuffling]
