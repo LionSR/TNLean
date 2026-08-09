@@ -262,6 +262,49 @@ orthogonal projector is the canonical representative used here.
     \end{align}
 \end{definition}
 
+\begin{definition}[Operator-level Gram reshuffling]
+    \label{def:gram_reshuffle}
+    \lean{Matrix.gramReshuffle}
+    \leanok
+    \uses{def:rectangular_choi}
+    For a complex-linear map $\mathcal L\colon\MN{D}\to\MN{D}$, define the
+    operator $\mathscr R(\mathcal L)$ on
+    $\ell^2(\Fin{D}\times\Fin{D})$ by the matrix entries
+    \begin{align}
+      \mathscr R(\mathcal L)_{(b,a),(e,c)}
+      &:=J(\mathcal L)_{(c,e),(a,b)}.
+      \label{eq:gram_reshuffle_entries}
+    \end{align}
+    Thus the row--column pair $((b,a),(e,c))$ is sent explicitly to the Choi
+    row--column pair $((c,e),(a,b))$.
+\end{definition}
+
+\begin{theorem}[Matrix-unit coordinates of Gram reshuffling]
+    \label{thm:gram_reshuffle_single}
+    \lean{Matrix.inner_single_gramReshuffle_single}
+    \leanok
+    \uses{def:gram_reshuffle}
+    Let $\mathcal L\colon\MN{D}\to\MN{D}$ be complex-linear and let
+    $\mathbf e_{(j,i)}$ be the standard unit vector at $(j,i)$.  For all
+    $a,b,c,e\in\Fin{D}$,
+    \begin{align}
+      \bigl\langle \mathbf e_{(b,a)},
+        \mathscr R(\mathcal L)\mathbf e_{(e,c)}\bigr\rangle_{\ell^2}
+      &=J(\mathcal L)_{(c,e),(a,b)}.
+      \label{eq:gram_reshuffle_single}
+    \end{align}
+    This is the coordinate identity in
+    (\ref{eq:gram_reshuffle_entries}); it is not a Hilbert--Schmidt pairing of
+    $E_{ab}$ with $\mathcal L(E_{ce})$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:gram_reshuffle}
+    Evaluate the matrix of $\mathscr R(\mathcal L)$ on the two standard basis
+    vectors.
+\end{proof}
+
 \begin{theorem}[Transfer--Gram Choi reshuffling]
     \label{thm:ground_space_gram_choi_reshuffling}
     \lean{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}
@@ -300,6 +343,32 @@ orthogonal projector is the canonical representative used here.
     The defining Choi indexing
     $J(\mathcal L)_{(c,e),(a,b)}=(\mathcal L(E_{ca}))_{eb}$ now yields the
     stated reshuffling.
+\end{proof}
+
+\begin{theorem}[Ground-space Gram operator as a reshuffled Choi matrix]
+    \label{thm:ground_space_gram_eq_gram_reshuffle}
+    \lean{MPSTensor.groundSpaceGram_eq_gramReshuffle}
+    \leanok
+    \uses{def:ground_space_gram, def:gram_reshuffle, def:transfer_map}
+    The ground-space Gram operator is exactly the operator-level reshuffling of
+    the Choi matrix of the iterated transfer map:
+    \begin{align}
+      \mathcal K_L
+      &=\mathscr R\!\left(\mathcal E_A^L\right).
+      \label{eq:ground_space_gram_eq_gram_reshuffle}
+    \end{align}
+    The equality is an equality of operators on
+    $\ell^2(\Fin{D}\times\Fin{D})$.  Its entries are those in
+    (\ref{eq:gram_reshuffle_single}), rather than Hilbert--Schmidt pairings with
+    $\mathcal E_A^L$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_gram_choi_reshuffling,
+        thm:gram_reshuffle_single}
+    The two operators have equal matrix coefficients on every pair of standard
+    basis vectors.  Hence they are equal.
 \end{proof}
 
 \begin{definition}[Inverse Gram operator]
