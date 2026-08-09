@@ -3,14 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SourceFactors
 
 /-!
 # Source-factor tensors for matrix product unitaries
 
 This file defines the tensors $u$ and $v$ from arXiv:1703.09188, equations
-`uuvv`--`uUnitary` (lines 521--554). The product-index orders are kept
+`SVDforms2` and `uuvv` (lines 526--540). The product-index orders are kept
 explicit: $u : d^2 \to \ell \times r$ and $v : r \times \ell \to d^2$.
 The two-site factorization therefore includes the paper's swap of the dotted
 and solid source bonds rather than identifying the two product orders.
@@ -29,7 +28,7 @@ The row order is `(left source, right source)` and the physical column order is
 `(first ket site, second ket site)`. Its two triangles are $Y_1$ and $X_2$.
 
 Source: arXiv:1703.09188, equation `uu` and Figure `II_umatrix.png`, lines
-521--534. -/
+532--540. -/
 noncomputable def sourceU (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     Matrix (Fin ℓ[U] × Fin r[U]) (Fin d × Fin d) ℂ :=
   fun (l, r) (i₁, i₂) ↦ ∑ β : Fin D,
@@ -41,7 +40,7 @@ The physical row order is `(first bra site, second bra site)` and the column
 order is `(right source, left source)`. Its two triangles are $X_1$ and $Y_2$.
 
 Source: arXiv:1703.09188, equation `vdagger` and Figure `II_vmatrix.png`, lines
-521--534. -/
+532--540. -/
 noncomputable def sourceV (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     Matrix (Fin d × Fin d) (Fin r[U] × Fin ℓ[U]) ℂ :=
   fun (j₁, j₂) (r, l) ↦ ∑ α : Fin D,
@@ -49,7 +48,7 @@ noncomputable def sourceV (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
 
 /-- Stable entry formula for $u$ in the exact solid/dotted leg order.
 
-Source: arXiv:1703.09188, equation `uu`, lines 521--534. -/
+Source: arXiv:1703.09188, equation `uu`, lines 532--540. -/
 @[simp] theorem sourceU_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (l : Fin ℓ[U]) (r : Fin r[U]) (i₁ i₂ : Fin d) :
     sourceU U ρ hρ (l, r) (i₁, i₂) = ∑ β : Fin D,
@@ -57,7 +56,7 @@ Source: arXiv:1703.09188, equation `uu`, lines 521--534. -/
 
 /-- Stable entry formula for $v$ in the exact dotted/solid leg order.
 
-Source: arXiv:1703.09188, equation `vdagger`, lines 521--534. -/
+Source: arXiv:1703.09188, equation `vdagger`, lines 532--540. -/
 @[simp] theorem sourceV_apply (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (j₁ j₂ : Fin d) (r : Fin r[U]) (l : Fin ℓ[U]) :
     sourceV U ρ hρ (j₁, j₂) (r, l) = ∑ α : Fin D,
@@ -65,7 +64,7 @@ Source: arXiv:1703.09188, equation `vdagger`, lines 521--534. -/
 
 /-- Entry formula for the conjugate transpose of $u$.
 
-Source: arXiv:1703.09188, equation `uUnitary`, lines 536--554. -/
+Source: arXiv:1703.09188, equations `uuvv` and `uu`, lines 532--540. -/
 @[simp] theorem sourceU_conjTranspose_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ i₂ : Fin d) (l : Fin ℓ[U]) (r : Fin r[U]) :
@@ -74,7 +73,7 @@ Source: arXiv:1703.09188, equation `uUnitary`, lines 536--554. -/
 
 /-- Entry formula for the conjugate transpose of $v$.
 
-Source: arXiv:1703.09188, equation `vdagger`, lines 521--534. -/
+Source: arXiv:1703.09188, equation `vdagger`, lines 532--540. -/
 @[simp] theorem sourceV_conjTranspose_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (r : Fin r[U]) (l : Fin ℓ[U]) (j₁ j₂ : Fin d) :
@@ -83,7 +82,7 @@ Source: arXiv:1703.09188, equation `vdagger`, lines 521--534. -/
 
 /-- The traced product of two local letters factors through the source tensors.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 515--534. -/
+Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 526--540. -/
 theorem trace_mul_eq_sourceU_mul_sourceV_swap
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ i₂ j₁ j₂ : Fin d) :
@@ -138,7 +137,7 @@ theorem trace_mul_eq_sourceU_mul_sourceV_swap
 
 /-- Entrywise two-site factorization in the paper's site and bond order.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 515--534. -/
+Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 526--540. -/
 theorem mpo_two_pair_entry_eq_sourceU_mul_sourceV_swap
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ i₂ j₁ j₂ : Fin d) :
@@ -158,7 +157,7 @@ columns of $v$ have order $r\times\ell$, so `Equiv.prodComm` explicitly swaps
 them to the $\ell\times r$ order used by the rows of $u$. This is the one-site
 translation/bond swap visible in the paper figures.
 
-Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 515--534. -/
+Source: arXiv:1703.09188, equations `SVDforms2` and `uuvv`, lines 526--540. -/
 theorem mpo_two_reindex_eq_sourceU_transpose_mul_sourceV_swap_transpose
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)) (mpo U 2) =
