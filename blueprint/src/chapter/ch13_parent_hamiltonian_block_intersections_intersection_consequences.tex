@@ -549,6 +549,23 @@ direct.
     inclusion follows by splitting a word of length $m+1$ at either endpoint.
 \end{proof}
 
+\begin{remark}[Doubly normalized specialization]
+    \label{rem:pgvwc_direct_sum_doubly_normalized_specialization}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \leanok
+    Under the hypotheses above, assume additionally that every block has
+    normalized self-overlap and satisfies
+    \begin{align}
+        \sum_a(A^j_a)^\dagger A^j_a&=\Id. \notag
+    \end{align}
+    The retained doubly normalized declarations give the same simultaneous
+    product span, internal-sum independence, and one-step
+    restriction-intersection identity. They are the specialization
+    $\Lambda^j=\Id$ of the source-normalized results.
+\end{remark}
+
 \begin{lemma}[Product span makes the sum of local spaces direct]
     \label{lem:product_span_block_image_direct_sum}
     \lean{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}
