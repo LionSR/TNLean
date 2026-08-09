@@ -191,4 +191,3 @@ noncomputable def of_power_succ_eq [Nonempty ι]
 
 end StabilizedRankOneData
 end Matrix
-

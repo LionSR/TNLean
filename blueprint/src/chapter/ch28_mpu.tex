@@ -1003,7 +1003,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_nonzero_spectrum}
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum,
+        thm:mpu_normalized_transfer_trace}
     The exact characteristic polynomial is
     \begin{align}
         \chi_E(X)&=X^{D^2-1}(X-1).
@@ -1037,8 +1038,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Identification with chosen reduced-CFII fixed points]
     \label{lem:mpu_reduced_cfii_transfer_stabilization}
-    \uses{thm:mpu_normalized_transfer_stabilization,
-        thm:mpu_stabilized_fixed_pair_uniqueness}
     Suppose the normalized flattening is presented by a chosen canonical-form-II
     representative whose active blocks fill the bond space. Let $\rho$ and
     $\Phi$ be the diagonal positive right fixed point and the identity left
@@ -1052,6 +1051,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}
+    \uses{thm:mpu_normalized_transfer_stabilization,
+        thm:mpu_stabilized_fixed_pair_uniqueness}
     The finite-blocking theorem shows that every normalized left and right fixed
     pair factors the stabilized projector. It remains to transport the
     blockwise canonical-form-II fixed points through the full-support ambient
