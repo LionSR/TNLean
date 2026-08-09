@@ -30,6 +30,8 @@ linear map between matrix algebras.
 * `Matrix.vec_one_dotProduct_vec_eq_trace` — vectorized identity pairing equals the trace
 * `Matrix.trace_mul_right_eq_zero_iff` — nondegeneracy of the trace pairing over `ℂ`
 * `Matrix.traceBilinForm` — the bilinear trace pairing as a nondegenerate form
+* `Matrix.exists_identity_traceless_basis` — an identity-plus-traceless basis
+* `Matrix.tracelessPart` — projection along the identity onto traceless matrices
 * `Matrix.traceAdjointMap` — the trace-pairing adjoint of a linear map between matrix algebras
 * `Matrix.trace_traceAdjointMap_mul` — the adjoint satisfies `tr(E*(ρ) X) = tr(ρ E(X))`
 * `Matrix.traceAdjointMap_traceAdjointMap` — the trace-pairing adjoint is involutive
@@ -157,6 +159,49 @@ theorem traceBilinForm_nondegenerate {n : Type*} [Fintype n] :
     rw [trace_mul_comm]
     exact hY X
 
+
+/-- A basis of a nonzero finite matrix algebra whose distinguished vector is the identity
+and whose remaining vectors are traceless. -/
+theorem exists_identity_traceless_basis {d : ℕ} [NeZero d] :
+    ∃ (b : Module.Basis (Fin (d * d)) ℂ (Matrix (Fin d) (Fin d) ℂ))
+      (e : Fin (d * d)),
+      b e = 1 ∧ ∀ a, a ≠ e → trace (b a) = 0 := by
+  let tr := traceLinearMap (Fin d) ℂ ℂ
+  have htr : tr (1 : Matrix (Fin d) (Fin d) ℂ) ≠ 0 := by
+    simp [tr, traceLinearMap_apply, trace_one, Fintype.card_fin, NeZero.ne d]
+  obtain ⟨s, b, e, he, hcoord⟩ := exists_basis_of_pairing_ne_zero htr
+  letI : Fintype s := FiniteDimensional.fintypeBasisIndex b
+  have hcard : Fintype.card s = d * d := by
+    rw [← Module.finrank_eq_card_basis b, Module.finrank_matrix]
+    simp
+  let es : s ≃ Fin (d * d) := Fintype.equivFinOfCardEq hcard
+  let b' := b.reindex es
+  let e' := es e
+  refine ⟨b', e', ?_, ?_⟩
+  · simp [b', e', he]
+  · intro a hae
+    have hne : es.symm a ≠ e := by
+      intro h
+      apply hae
+      simpa [e'] using congrArg es h
+    have h := congrArg (fun f : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] ℂ ↦
+      f (b (es.symm a))) hcoord
+    simp only [LinearMap.smul_apply, smul_eq_mul, Module.Basis.coord_apply,
+      Module.Basis.repr_self, Finsupp.single_apply, if_neg hne] at h
+    simpa [b', tr, traceLinearMap_apply] using h
+
+/-- Projection of a finite matrix onto the traceless hyperplane along the identity. -/
+noncomputable def tracelessPart {d : ℕ} [NeZero d]
+    (X : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin d) (Fin d) ℂ :=
+  X - ((d : ℂ)⁻¹ * trace X) • 1
+
+@[simp] theorem trace_tracelessPart {d : ℕ} [NeZero d]
+    (X : Matrix (Fin d) (Fin d) ℂ) :
+    trace (tracelessPart X) = 0 := by
+  simp only [tracelessPart, trace_sub, trace_smul, trace_one,
+    Fintype.card_fin, smul_eq_mul]
+  field_simp [Nat.cast_ne_zero.mpr (NeZero.ne d)]
+  ring_nf
 
 /-- The trace-pairing adjoint of a linear map between matrix algebras of
 possibly different dimensions: for `E : M_n(ℂ) → M_m(ℂ)` it is the map

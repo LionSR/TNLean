@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.BilinearForm.Properties
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixTracePairing
+import TNLean.Algebra.RankOneSandwich
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.Simple
@@ -49,39 +50,6 @@ theorem doubleLayerTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
     doubleLayerTensor (blockTensor U L) = blockTensor (doubleLayerTensor U) L := by
   rw [doubleLayerTensor, doubleLayerTensor, blockTensor_mulTensor,
     physicalAdjointTensor_blockTensor]
-
-/-- A physical matrix basis whose distinguished vector is the identity and all
-other vectors are traceless. This is the physical basis in `WIsom`.
-
-Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
-theorem exists_identity_traceless_basis [NeZero d] :
-    ∃ (b : Module.Basis (Fin (d * d)) ℂ (Matrix (Fin d) (Fin d) ℂ))
-      (e : Fin (d * d)),
-      b e = 1 ∧ ∀ a, a ≠ e → Matrix.trace (b a) = 0 := by
-  let tr := Matrix.traceLinearMap (Fin d) ℂ ℂ
-  have htr : tr (1 : Matrix (Fin d) (Fin d) ℂ) ≠ 0 := by
-    simp [tr, Matrix.traceLinearMap_apply, Matrix.trace_one, Fintype.card_fin,
-      NeZero.ne d]
-  obtain ⟨s, b, e, he, hcoord⟩ := exists_basis_of_pairing_ne_zero htr
-  letI : Fintype s := FiniteDimensional.fintypeBasisIndex b
-  have hcard : Fintype.card s = d * d := by
-    rw [← Module.finrank_eq_card_basis b, Module.finrank_matrix]
-    simp
-  let es : s ≃ Fin (d * d) := Fintype.equivFinOfCardEq hcard
-  let b' := b.reindex es
-  let e' := es e
-  refine ⟨b', e', ?_, ?_⟩
-  · simp [b', e', he]
-  · intro a hae
-    have hne : es.symm a ≠ e := by
-      intro h
-      apply hae
-      simpa [e'] using congrArg es h
-    have h := congrArg (fun f : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] ℂ ↦
-      f (b (es.symm a))) hcoord
-    simp only [LinearMap.smul_apply, smul_eq_mul, Module.Basis.coord_apply,
-      Module.Basis.repr_self, Finsupp.single_apply, if_neg hne] at h
-    simpa [b', tr, Matrix.traceLinearMap_apply] using h
 
 /-- Contract the two physical legs of an MPO letter against a physical matrix.
 The transpose in the coefficient makes `contractPhysical W (single j i 1) = W i j`.
@@ -255,7 +223,7 @@ contraction. This is the basis-free form of the residual matrices `S_α` in
 `WIsom`.
 
 Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
-noncomputable def residualSlice [NeZero d] (W : MPOTensor d D)
+noncomputable def residualSlice (W : MPOTensor d D)
     (X : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   contractPhysical W X - Matrix.trace X • normalizedDiagonal W
 
@@ -264,23 +232,10 @@ noncomputable def residualSlice [NeZero d] (W : MPOTensor d D)
   simp [residualSlice, normalizedDiagonal, Matrix.trace_one, Fintype.card_fin,
     NeZero.ne d]
 
-/-- Projection of a physical matrix onto the traceless hyperplane along the identity. -/
-noncomputable def tracelessPart [NeZero d] (X : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin d) (Fin d) ℂ :=
-  X - ((d : ℂ)⁻¹ * Matrix.trace X) • 1
-
-@[simp] theorem trace_tracelessPart [NeZero d]
-    (X : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix.trace (tracelessPart X) = 0 := by
-  simp only [tracelessPart, Matrix.trace_sub, Matrix.trace_smul, Matrix.trace_one,
-    Fintype.card_fin, smul_eq_mul]
-  field_simp [Nat.cast_ne_zero.mpr (NeZero.ne d)]
-  ring_nf
-
 /-- Residual slices are exactly contractions against traceless physical matrices. -/
 theorem residualSlice_eq_contractPhysical_tracelessPart [NeZero d]
     (W : MPOTensor d D) (X : Matrix (Fin d) (Fin d) ℂ) :
-    residualSlice W X = contractPhysical W (tracelessPart X) := by
+    residualSlice W X = contractPhysical W (Matrix.tracelessPart X) := by
   change contractPhysical W X - Matrix.trace X • ((d : ℂ)⁻¹ • contractPhysical W 1) =
     contractPhysicalLinear W (X - (((d : ℂ)⁻¹ * Matrix.trace X) • 1))
   rw [map_sub, map_smul]
@@ -305,7 +260,7 @@ theorem exists_identity_add_traceless_decomposition [NeZero d]
       ∀ i j, W i j =
         (if i = j then normalizedDiagonal W else 0) +
           ∑ a ∈ (Finset.univ.erase e), (σ a i j) • S a := by
-  obtain ⟨σ, e, he, htr⟩ := exists_identity_traceless_basis (d := d)
+  obtain ⟨σ, e, he, htr⟩ := Matrix.exists_identity_traceless_basis (d := d)
   let B := Matrix.traceBilinForm (Fin d)
   have hB : B.Nondegenerate := Matrix.traceBilinForm_nondegenerate
   let τ := B.dualBasis hB σ
@@ -350,8 +305,8 @@ theorem exists_identity_add_traceless_decomposition [NeZero d]
 site against `X k` turns the closed virtual product into the product of the
 physical traces.
 
-The assumption `1 < N` matches the local `IsMPU` API; the algebraic statement
-itself only needs the displayed closed-chain equality.
+The assumption `1 < N` matches the lengths controlled by `IsMPU`; the algebraic
+statement itself only needs the displayed closed-chain equality.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem trace_prod_contractPhysical_of_mpo_eq_one
@@ -419,8 +374,8 @@ theorem IsMPU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_tr
   exact Finset.prod_eq_zero (Finset.mem_univ k) hk
 
 /-- Every nonempty closed word of residual slices has zero trace at lengths
-controlled by `IsMPU`. The formal API assumes `N > 1`; the paper states the
-corresponding identity for every positive length.
+controlled by `IsMPU`. MPU unitarity is assumed only at lengths `N > 1`; the
+paper states the corresponding identity for every positive length.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
@@ -431,10 +386,10 @@ theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
   simp_rw [residualSlice_eq_contractPhysical_tracelessPart]
   apply hU.trace_prod_contractPhysical_doubleLayerTensor_eq_zero_of_exists_trace_eq_zero hN
   let k : Fin N := ⟨0, by omega⟩
-  exact ⟨k, trace_tracelessPart (X k)⟩
+  exact ⟨k, Matrix.trace_tracelessPart (X k)⟩
 
 /-- A site is either the normalized identity coefficient or a residual slice. -/
-noncomputable def mixedResidualFactor [NeZero d] (W : MPOTensor d D)
+noncomputable def mixedResidualFactor (W : MPOTensor d D)
     (isResidual : Bool) (X : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin D) (Fin D) ℂ :=
   if isResidual then residualSlice W X else normalizedDiagonal W
@@ -454,7 +409,7 @@ theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
         (List.ofFn (fun k ↦ mixedResidualFactor (doubleLayerTensor U)
           (isResidual k) (X k))).prod = 0 := by
   let Y : Fin N → Matrix (Fin d) (Fin d) ℂ := fun k ↦
-    if isResidual k then tracelessPart (X k) else ((d : ℂ)⁻¹) • 1
+    if isResidual k then Matrix.tracelessPart (X k) else ((d : ℂ)⁻¹) • 1
   have hfactor (k : Fin N) :
       mixedResidualFactor (doubleLayerTensor U) (isResidual k) (X k) =
         contractPhysical (doubleLayerTensor U) (Y k) := by
@@ -474,46 +429,65 @@ theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
   refine ⟨k, ?_⟩
   simp [Y, hk]
 
-/-- Rank-one sandwiching is scalar multiplication by the corresponding trace. -/
-theorem vecMulVec_mul_mul_vecMulVec_eq_trace_smul
-    {n : Type*} [Fintype n] (ρ Φ : n → ℂ) (P : Matrix n n ℂ) :
-    Matrix.vecMulVec ρ Φ * P * Matrix.vecMulVec ρ Φ =
-      Matrix.trace (P * Matrix.vecMulVec ρ Φ) • Matrix.vecMulVec ρ Φ := by
-  classical
-  have hscalar : (Φ ᵥ* P) ⬝ᵥ ρ =
-      Matrix.trace (P * Matrix.vecMulVec ρ Φ) := by
-    simp only [Matrix.vecMul, dotProduct, Matrix.trace, Matrix.diag,
-      Matrix.mul_apply, Matrix.vecMulVec_apply]
-    rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro i _
-    rw [Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro j _
-    ring
-  rw [Matrix.vecMulVec_mul, Matrix.vecMulVec_mul_vecMulVec, hscalar,
-    Matrix.vecMulVec_smul]
 
-/-- A vanishing mixed trace through a rank-one projector implies the exact
-rank-one sandwich identity used after transfer stabilization. -/
-theorem vecMulVec_mul_mul_vecMulVec_eq_zero_of_trace
-    {n : Type*} [Fintype n] (ρ Φ : n → ℂ) (P : Matrix n n ℂ)
-    (hP : Matrix.trace (P * Matrix.vecMulVec ρ Φ) = 0) :
-    Matrix.vecMulVec ρ Φ * P * Matrix.vecMulVec ρ Φ = 0 := by
-  rw [vecMulVec_mul_mul_vecMulVec_eq_trace_smul, hP, zero_smul]
 
-/-- The rank-one sandwich consequence for a mixed residual word. The middle
-matrix may be any mixed word whose trace against the rank-one transfer
-projector vanishes; `trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero`
-supplies that hypothesis in the MPU application.
+/-- A nonempty residual word is annihilated when sandwiched by a rank-one
+normalized diagonal. The trace premise is derived by adjoining the normalized
+diagonal as one extra closed-chain factor.
 
 Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
-theorem rankOne_sandwich_eq_zero_of_mixed_trace
-    {n : Type*} [Fintype n] (E P : Matrix n n ℂ) (ρ Φ : n → ℂ)
-    (hE : E = Matrix.vecMulVec ρ Φ)
-    (htrace : Matrix.trace (P * E) = 0) :
-    E * P * E = 0 := by
-  subst E
-  exact vecMulVec_mul_mul_vecMulVec_eq_zero_of_trace ρ Φ P htrace
+theorem IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
+    {m : ℕ} (hm : 0 < m) (X : Fin m → Matrix (Fin d) (Fin d) ℂ)
+    (ρ Φ : Fin (D * D) → ℂ)
+    (hE : normalizedDiagonal (doubleLayerTensor U) = Matrix.vecMulVec ρ Φ) :
+    normalizedDiagonal (doubleLayerTensor U) *
+        (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor U) (X k))).prod *
+      normalizedDiagonal (doubleLayerTensor U) = 0 := by
+  let isResidual : Fin (m + 1) → Bool := Fin.cases false (fun _ ↦ true)
+  let X' : Fin (m + 1) → Matrix (Fin d) (Fin d) ℂ := Fin.cases 0 X
+  have hmixed : ∃ k, isResidual k = true := by
+    let k : Fin m := ⟨0, hm⟩
+    exact ⟨k.succ, rfl⟩
+  have hclosed := hU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
+    (N := m + 1) (by omega) isResidual X' hmixed
+  have htrace : Matrix.trace
+      ((List.ofFn (fun k ↦ residualSlice (doubleLayerTensor U) (X k))).prod *
+        normalizedDiagonal (doubleLayerTensor U)) = 0 := by
+    rw [Matrix.trace_mul_comm]
+    simpa [isResidual, X', mixedResidualFactor, List.ofFn_succ] using hclosed
+  exact Matrix.rankOne_sandwich_eq_zero_of_trace _ _ ρ Φ hE htrace
+
+/-- If a normalized transfer power is rank one, every nonempty residual word
+of the corresponding blocked double layer is annihilated by its normalized
+diagonal. This theorem performs the physical blocking, explicit product-index
+reindexing, mixed-trace extraction, trace rotation, and rank-one sandwich.
+
+Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
+theorem IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero
+    [NeZero d] {U : MPOTensor d D} (hU : IsMPU U)
+    (J : ℕ) (hJ : 0 < J) (ρ Φ : Fin D × Fin D → ℂ)
+    (hpower : transferMatrix (MPSTensor.transferMap U.normalizedFlattening) ^ J =
+      Matrix.vecMulVec ρ Φ)
+    {m : ℕ} (hm : 0 < m)
+    (X : Fin m → Matrix (Fin (MPSTensor.blockPhysDim d J))
+      (Fin (MPSTensor.blockPhysDim d J)) ℂ) :
+    let V := MPOTensor.blockTensor U J
+    normalizedDiagonal (doubleLayerTensor V) *
+        (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor V) (X k))).prod *
+      normalizedDiagonal (doubleLayerTensor V) = 0 := by
+  letI : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
+    rw [MPSTensor.blockPhysDim_eq_pow]
+    exact pow_ne_zero J (NeZero.ne d)⟩
+  let V := MPOTensor.blockTensor U J
+  have hV : IsMPU V := hU.blockTensor J hJ
+  let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ (finProdFinEquiv.symm i)
+  let Φ' : Fin (D * D) → ℂ := fun i ↦ Φ (finProdFinEquiv.symm i)
+  have hE : normalizedDiagonal (doubleLayerTensor V) = Matrix.vecMulVec ρ' Φ' := by
+    change normalizedDiagonal (doubleLayerTensor (MPOTensor.blockTensor U J)) = _
+    rw [normalizedDiagonal_doubleLayerTensor_blockTensor, hpower]
+    rfl
+  exact hV.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero
+    hm X ρ' Φ' hE
 
 end MPOTensor
