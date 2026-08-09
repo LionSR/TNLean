@@ -61,7 +61,7 @@ separate public-surface occurrence and therefore appears separately.
 
 | Source | Preserve | Codemod | Redraw |
 |---|---|---|---|
-| `ch02_mps.tex` | L25, 56, 176, 208, 281, 851, 981 `tenkz` → `P-grid` | — | — |
+| `ch02_mps.tex` | L25, 56, 176, 208, 294, 864, 994 `tenkz` → `P-grid` | — | — |
 | `ch03_single.tex` | L251 `tenkz` → `P-grid` | — | — |
 | `ch04_channels_choi_foundations.tex` | L87 `tenkz` → `P-grid` | — | — |
 | `ch11_fundamental_theorem_core.tex` | L42, 46 `tenkz` → `P-grid` | — | — |
