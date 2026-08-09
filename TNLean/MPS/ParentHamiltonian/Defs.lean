@@ -154,11 +154,13 @@ def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
   finSumFinEquiv |>.trans (finCongr (Nat.add_sub_of_le hLN)) |>.trans
     (cyclicShiftEquiv N i)
 
+/-- Evaluate the cyclic window equivalence on a window index. -/
 @[simp] theorem cyclicWindowIndexEquiv_inl
     (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin L) :
     cyclicWindowIndexEquiv L N hLN i (Sum.inl r) =
       ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := rfl
 
+/-- Evaluate the cyclic window equivalence on a complementary index. -/
 @[simp] theorem cyclicWindowIndexEquiv_inr
     (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin (N - L)) :
     cyclicWindowIndexEquiv L N hLN i (Sum.inr r) =
