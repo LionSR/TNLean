@@ -279,7 +279,7 @@ theorem transferMatrix_hasEigenvalue_iff
     rw [Module.End.hasEigenvector_iff]
     constructor
     · rw [Module.End.mem_eigenspace_iff]
-      apply Matrix.vec_inj.mp
+      apply (Matrix.vec_inj (A := T X) (B := μ • X)).mp
       rw [Matrix.vec_smul, ← transferMatrix_mulVec_eq, ← Matrix.toLin'_apply]
       exact hv.apply_eq_smul
     · intro hX
