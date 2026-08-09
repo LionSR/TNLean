@@ -429,8 +429,25 @@ with the chosen basis of normal tensors.
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{def:parent_hamiltonian, def:bnt_span}
-    Under the normalized BNT hypotheses and the PGVWC07 source length bounds,
-    the parent-Hamiltonian kernel is exactly the span of the BNT component
+    Let $d\ge1$ and $g\ge2$. For $1\le j\le g$, let $D_j\ge1$ and
+    let $A_j=(A_j^a)_{a=1}^d$ be an irreducible left-canonical block with
+    normalized self-overlap. Assume that no two distinct blocks are equivalent
+    up to gauge and phase. Let $\mu_j\ne0$ for every $j$. Suppose there is a
+    common $L_0>0$ such that the words of length $L_0$ in each block $A_j$ span
+    $\MN{D_j}$, and suppose also that
+    \begin{align}
+        \sum_{a=1}^d A_j^a A_j^{a\,\dagger}&=\Id
+        \qquad (1\le j\le g).
+        \notag
+    \end{align}
+    If
+    \begin{align}
+        L&\ge 3(g-1)(L_0+1)+1,
+        \notag\\
+        N&\ge L+L_0,
+        \notag
+    \end{align}
+    then the parent-Hamiltonian kernel is exactly the span of the BNT component
     vectors:
     \begin{align}
         \ker H_L^{(N)}\!\left(\bigoplus_j \mu_j A_j\right)
