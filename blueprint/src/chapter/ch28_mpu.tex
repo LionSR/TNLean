@@ -171,7 +171,8 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{definition}[Double layer]
     \label{def:mpu_double_layer}
-    \lean{MPOTensor.doubleLayerTensor}
+    \lean{MPOTensor.doubleLayerTensor,
+        MPOTensor.doubleLayerTensor_apply}
     \leanok
     \uses{def:mpdo_physical_adjoint,def:mpdo_operator_product}
     For an MPO tensor $\mathcal U$, let $\mathcal W$ be the double-layer
@@ -208,7 +209,9 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{definition}[Simple matrix product unitary tensor]
     \label{def:mpu_simple}
-    \lean{MPOTensor.IsMPUSimple}
+    \lean{MPOTensor.IsMPUSimple,
+        MPOTensor.IsMPUSimple.simple1,
+        MPOTensor.IsMPUSimple.simple2}
     \leanok
     \uses{def:mpu_double_layer}
     The tensor $\mathcal U$ is \emph{simple} if there are vectors $a,b$ in
