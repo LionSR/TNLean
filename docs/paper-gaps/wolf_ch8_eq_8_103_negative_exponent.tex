@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Wolf Equation~(8.103) --- Small-Power Exponent Scope}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{The source statement}
+
+Wolf considers an upper-triangular matrix $X=\Lambda+N\in M_D(\mathbb C)$,
+where $\Lambda$ is diagonal and $N$ is strictly upper triangular.  For an
+arbitrary submultiplicative norm satisfying $\lVert\Lambda\rVert\le 1$, the
+notes state for every $n\in\mathbb N$ that
+\begin{align}
+  \lVert X^n\rVert
+  \le \lVert\Lambda^n\rVert
+  +(D-1)n^{D-1}\lVert\Lambda\rVert^{n-D+1}
+    \max\{\lVert N\rVert,\lVert N\rVert^{D-1}\}.
+\end{align}
+The local source is
+\path{Notes/WolfNoteTexSource/ch08_distance_measures.tex}, lines~1189--1210,
+especially Equation~(8.103) and its derivation from Equation~(8.105).
+
+\section{The exponent defect}
+
+When $n<D-1$, the exponent $n-D+1$ is negative.  The source gives no
+convention for this negative power.  In particular, if $\Lambda=0$, then the
+factor $\lVert\Lambda\rVert^{n-D+1}$ is not defined in the usual real-power
+interpretation.  Replacing the exponent by truncated natural subtraction
+would silently change the displayed statement.
+
+The derivation from Equation~(8.105) also factors
+\begin{align}
+  \lVert\Lambda\rVert^{n-k}
+  =\lVert\Lambda\rVert^{n-(D-1)}
+   \lVert\Lambda\rVert^{(D-1)-k},
+\end{align}
+which uses natural exponents only when $D-1\le n$ (and $k\le D-1$).
+Thus the proof printed in the notes establishes the displayed natural-power
+bound in that range, but does not supply an all-$n$ interpretation.
+
+\section{Formalization scope}
+
+Equation~(8.105), whose exponents satisfy $k\le n$, is formalized for every
+$n\in\mathbb N$.  Equation~(8.103) is formalized with the explicit hypothesis
+$D-1\le n$.  Its refined constant $(D-1)\binom{n}{D-1}$ is formalized under
+the source's stated hypothesis $2(D-1)\le n$, which implies the first range
+condition.  Both results retain the arbitrary submultiplicative seminorm
+parameter; no particular matrix norm replaces it.
+
+\section{Verdict}
+
+This is a \emph{source scope restriction}, not a missing Lean proof.  The
+formal statement records exactly the range in which the printed
+natural-exponent derivation is meaningful.  Eliminating the restriction would
+require Wolf to specify an interpretation for negative powers, including the
+case $\lVert\Lambda\rVert=0$.  Tracking: \ghissue{5837}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

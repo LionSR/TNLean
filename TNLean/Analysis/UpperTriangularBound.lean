@@ -22,7 +22,11 @@ namespace Matrix
 
 section TriangularDefinitions
 variable {D : ℕ} {R : Type*} [Semiring R]
+
+/-- `IsDiagonal M` holds when `M` has nonzero entries only on the diagonal. -/
 def IsDiagonal (M : Matrix (Fin D) (Fin D) R) : Prop := ∀ i j, i ≠ j → M i j = 0
+
+/-- `IsStrictlyUpperTriangular M` holds when `M i j = 0` whenever `i ≥ j`. -/
 def IsStrictlyUpperTriangular (M : Matrix (Fin D) (Fin D) R) : Prop :=
   ∀ (i j : Fin D), (i : ℕ) ≥ (j : ℕ) → M i j = 0
 end TriangularDefinitions
@@ -47,7 +51,7 @@ lemma IsStrictlyUpperTriangular.mul_apply (hN : IsStrictlyUpperTriangular N)
     (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
     (N * P) i j = Finset.sum
       ((Finset.univ : Finset (Fin D)).filter (fun (k : Fin D) => (i : ℕ) < (k : ℕ)))
-      (λ k => N i k * P k j) := by
+      (fun k => N i k * P k j) := by
   rw [Matrix.mul_apply]
   apply (Finset.sum_subset (Finset.filter_subset (fun (k : Fin D) => (i : ℕ) < (k : ℕ)) _) ?_).symm
   intro k hk_univ hk_not_mem
@@ -60,7 +64,7 @@ lemma IsStrictlyUpperTriangular.mul_apply_right (hN : IsStrictlyUpperTriangular 
     (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
     (P * N) i j = Finset.sum
       ((Finset.univ : Finset (Fin D)).filter (fun (k : Fin D) => (k : ℕ) < (j : ℕ)))
-      (λ k => P i k * N k j) := by
+      (fun k => P i k * N k j) := by
   rw [Matrix.mul_apply]
   apply (Finset.sum_subset (Finset.filter_subset (fun (k : Fin D) => (k : ℕ) < (j : ℕ)) _) ?_).symm
   intro k hk_univ hk_not_mem
@@ -72,12 +76,14 @@ end EntryLemmas
 
 section WordProduct
 variable {D : ℕ} {R : Type*} [Semiring R]
+
+/-- `wordProd Λ N w` is the product of the `n`-word `w` where `false` ↦ `Λ` and `true` ↦ `N`. -/
 def wordProd (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool) :
     Matrix (Fin D) (Fin D) R :=
   (List.ofFn (fun i : Fin n => cond (w i) N Λ)).prod
 
 @[simp] lemma wordProd_zero (Λ N : Matrix (Fin D) (Fin D) R) :
-    wordProd Λ N (λ i => False.elim (i.elim0)) = (1 : Matrix (Fin D) (Fin D) R) := by
+    wordProd Λ N (fun i => False.elim (i.elim0)) = (1 : Matrix (Fin D) (Fin D) R) := by
   simp [wordProd]
 
 lemma wordProd_snoc (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool) (b : Bool) :
@@ -125,19 +131,19 @@ lemma add_pow_eq_sum_wordProd (Λ N : Matrix (Fin D) (Fin D) R) (n : ℕ) :
         (∑ w : Fin n → Bool, wordProd Λ N (Fin.snoc w false)) +
             (∑ w : Fin n → Bool, wordProd Λ N (Fin.snoc w true))
             = Finset.sum (Finset.univ : Finset (Fin n → Bool))
-                (λ w => (wordProd Λ N (Fin.snoc w false) + wordProd Λ N (Fin.snoc w true))) := by
+                (fun w => (wordProd Λ N (Fin.snoc w false) + wordProd Λ N (Fin.snoc w true))) := by
           simp [Finset.sum_add_distrib]
         _ = Finset.sum (Finset.univ : Finset (Fin n → Bool))
-              (λ w => Finset.sum (Finset.univ : Finset Bool) (λ b => wordProd Λ N (Fin.snoc w b))) := by
-          refine Finset.sum_congr rfl (λ w hw => ?_)
+              (fun w => Finset.sum (Finset.univ : Finset Bool) (fun b => wordProd Λ N (Fin.snoc w b))) := by
+          refine Finset.sum_congr rfl (fun w hw => ?_)
           simp [Finset.sum_insert, Finset.sum_singleton, add_comm]
         _ = Finset.sum (Finset.univ : Finset ((Fin n → Bool) × Bool))
-              (λ (p : (Fin n → Bool) × Bool) => wordProd Λ N (Fin.snoc p.1 p.2)) :=
+              (fun (p : (Fin n → Bool) × Bool) => wordProd Λ N (Fin.snoc p.1 p.2)) :=
           (Finset.sum_product (s := Finset.univ) (t := Finset.univ)
-            (λ (p : (Fin n → Bool) × Bool) => wordProd Λ N (Fin.snoc p.1 p.2))).symm
+            (fun (p : (Fin n → Bool) × Bool) => wordProd Λ N (Fin.snoc p.1 p.2))).symm
         _ = ∑ w' : Fin (n + 1) → Bool, wordProd Λ N w' := by
           apply (Finset.sum_bij
-            (λ (p : (Fin n → Bool) × Bool) _ => (Fin.snoc p.1 p.2 : Fin (n+1) → Bool))
+            (fun (p : (Fin n → Bool) × Bool) _ => (Fin.snoc p.1 p.2 : Fin (n+1) → Bool))
             (by intro p hp; exact Finset.mem_univ _)
             (by
               intro p hp q hq h
@@ -160,10 +166,11 @@ end WordExpansion
 section WordVanishing
 variable {D : ℕ} {R : Type*} [Semiring R]
 
+/-- `countN w` is the number of `true` entries in the word `w : Fin n → Bool`. -/
 def countN {n : ℕ} (w : Fin n → Bool) : ℕ :=
-  ((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).card
+  ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card
 
-@[simp] lemma countN_zero {n : ℕ} : countN (λ _ : Fin n => false) = 0 := by simp [countN]
+@[simp] lemma countN_zero {n : ℕ} : countN (fun _ : Fin n => false) = 0 := by simp [countN]
 
 lemma countN_snoc_false_aux {n : ℕ} (w : Fin n → Bool) (i : Fin (n+1)) :
     ((Fin.snoc w false : Fin (n+1) → Bool) i = true) ↔ ∃ (j : Fin n), Fin.castSucc j = i ∧ w j = true := by
@@ -183,8 +190,8 @@ lemma countN_snoc_false_aux {n : ℕ} (w : Fin n → Bool) (i : Fin (n+1)) :
 lemma countN_snoc_false {n : ℕ} (w : Fin n → Bool) :
     countN (Fin.snoc w false) = countN w := by
   dsimp [countN]
-  have h_eq : (Finset.univ : Finset (Fin (n+1))).filter (λ i => (Fin.snoc w false : Fin (n+1) → Bool) i = true) =
-      ((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).map
+  have h_eq : (Finset.univ : Finset (Fin (n+1))).filter (fun i => (Fin.snoc w false : Fin (n+1) → Bool) i = true) =
+      ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).map
       ⟨Fin.castSucc, Fin.castSucc_injective (n := n)⟩ := by
     ext i
     simp [countN_snoc_false_aux w i]
@@ -214,8 +221,8 @@ lemma countN_snoc_true_aux {n : ℕ} (w : Fin n → Bool) (i : Fin (n+1)) :
 lemma countN_snoc_true {n : ℕ} (w : Fin n → Bool) :
     countN (Fin.snoc w true) = countN w + 1 := by
   dsimp [countN]
-  have h_eq : (Finset.univ : Finset (Fin (n+1))).filter (λ i => (Fin.snoc w true : Fin (n+1) → Bool) i = true) =
-      (((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).map
+  have h_eq : (Finset.univ : Finset (Fin (n+1))).filter (fun i => (Fin.snoc w true : Fin (n+1) → Bool) i = true) =
+      (((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).map
         ⟨Fin.castSucc, Fin.castSucc_injective (n := n)⟩) ∪ {Fin.last n} := by
     ext i
     simp [countN_snoc_true_aux w i]
@@ -227,7 +234,7 @@ lemma countN_snoc_true {n : ℕ} (w : Fin n → Bool) :
       · left; rfl
       · right; exact ⟨a, ha, hw⟩
   rw [h_eq]
-  have h_disjoint : Disjoint (((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).map
+  have h_disjoint : Disjoint (((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).map
       ⟨Fin.castSucc, Fin.castSucc_injective (n := n)⟩) ({Fin.last n} : Finset (Fin (n+1))) := by
     apply Finset.disjoint_singleton_right.mpr
     intro h; rw [Finset.mem_map] at h
@@ -293,8 +300,9 @@ section CountCardinality
 
 variable {n : ℕ}
 
+/-- `wordToSupport w` is the set of indices `i` where `w i = true`. -/
 def wordToSupport (w : Fin n → Bool) : Finset (Fin n) :=
-  (Finset.univ : Finset (Fin n)).filter (λ i => w i = true)
+  (Finset.univ : Finset (Fin n)).filter (fun i => w i = true)
 
 @[simp] lemma wordToSupport_card (w : Fin n → Bool) : (wordToSupport w).card = countN w := rfl
 
@@ -305,8 +313,8 @@ lemma wordToSupport_injective :
   simp [wordToSupport] at h_mem ⊢; exact h_mem
 
 lemma card_countN_eq_choose (k : ℕ) :
-    ((Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w = k)).card = Nat.choose n k := by
-  let S := ((Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w = k))
+    ((Finset.univ : Finset (Fin n → Bool)).filter (fun w => countN w = k)).card = Nat.choose n k := by
+  let S := ((Finset.univ : Finset (Fin n → Bool)).filter (fun w => countN w = k))
   let img := S.image wordToSupport
   have h_card_image : img.card = S.card := Finset.card_image_of_injective S wordToSupport_injective
   have h_img_eq_powerset : img = Finset.powersetCard k (Finset.univ : Finset (Fin n)) := by
@@ -316,7 +324,7 @@ lemma card_countN_eq_choose (k : ℕ) :
       rw [Finset.mem_powersetCard]
       exact ⟨Finset.filter_subset _ _, by rw [wordToSupport_card, hcount]⟩
     · intro hs; rw [Finset.mem_powersetCard] at hs; rcases hs with ⟨hs_sub, hs_card⟩
-      let w : Fin n → Bool := λ i => i ∈ s
+      let w : Fin n → Bool := fun i => i ∈ s
       have h_wordToSupport : wordToSupport w = s := by
         ext i; dsimp [w, wordToSupport]; simp [hs_sub]
       have h_countN : countN w = k := by rw [← wordToSupport_card, h_wordToSupport, hs_card]
@@ -331,10 +339,10 @@ section WordProdLemma
 variable {D : ℕ} {R : Type*} [Semiring R]
 
 lemma wordProd_all_false (Λ N : Matrix (Fin D) (Fin D) R) (n : ℕ) :
-    wordProd Λ N (λ _ : Fin n => false) = Λ ^ n := by
+    wordProd Λ N (fun _ : Fin n => false) = Λ ^ n := by
   induction' n with k ih
   · simp [wordProd]
-  · have h_snoc : (λ _ : Fin (k+1) => false) = Fin.snoc (λ _ : Fin k => false) false := by
+  · have h_snoc : (fun _ : Fin (k+1) => false) = Fin.snoc (fun _ : Fin k => false) false := by
       ext i; simp [Fin.snoc]
     rw [h_snoc, wordProd_snoc']; simp [ih, pow_succ]
 
@@ -359,7 +367,27 @@ lemma map_pow_le_pow_of_ne_zero_matrix (f : Matrix (Fin D) (Fin D) R → ℝ)
 
 end SeminormHelpers
 
+section PowMaxAux
+
+/-- If `k` satisfies `1 ≤ k ≤ D-1` then `x^k ≤ max x (x^(D-1))` for nonnegative `x`. -/
+lemma pow_le_max_of_one_le {k D : ℕ} {x : ℝ} (hx_nonneg : 0 ≤ x) (hk1 : 1 ≤ k) (hk2 : k ≤ D - 1) :
+    x ^ k ≤ max x (x ^ (D - 1)) := by
+  by_cases hx1 : x ≤ 1
+  · have h_pow_le_one : x ^ k ≤ x := by
+      calc
+        x ^ k ≤ x ^ 1 := pow_le_pow_of_le_one hx_nonneg hx1 hk1
+        _ = x := by simp
+    have h_max : x ≤ max x (x ^ (D - 1)) := by simp
+    exact h_pow_le_one.trans h_max
+  · have hx1' : 1 ≤ x := by linarith
+    have h_pow_le : x ^ k ≤ x ^ (D - 1) := pow_le_pow_right₀ hx1' hk2
+    have h_max : x ^ (D - 1) ≤ max x (x ^ (D - 1)) := by simp
+    exact h_pow_le.trans h_max
+
+end PowMaxAux
+
 section SeminormBound
+
 
 variable {D : ℕ} {R : Type*} [Ring R]
 
@@ -377,7 +405,7 @@ lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
     have h_le : countN w' ≤ n := by
       dsimp [countN]
       calc
-        ((Finset.univ : Finset (Fin n)).filter (λ i => w' i = true)).card
+        ((Finset.univ : Finset (Fin n)).filter (fun i => w' i = true)).card
             ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
         _ = n := Finset.card_fin n
     rcases b with (rfl | rfl)
@@ -397,11 +425,11 @@ lemma wordProd_seminorm_le (f : Matrix (Fin D) (Fin D) R → ℝ)
         _ = (f Λ) ^ ((n + 1) - countN (Fin.snoc w' false)) * (f N) ^ (countN (Fin.snoc w' false)) := by
           rw [countN_snoc_false w']
     · by_cases hzero_w' : countN w' = 0
-      · have hall_false : w' = (λ _ : Fin n => false) := by
+      · have hall_false : w' = (fun _ : Fin n => false) := by
           ext i
           have hfalse : w' i = false := by
             by_cases h : w' i = true
-            · have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (λ j => w' j = true)) := by
+            · have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (fun j => w' j = true)) := by
                 simp [h]
               have hpos' : 1 ≤ countN w' := by
                 dsimp [countN]; exact Finset.one_le_card.mpr ⟨i, hi_mem⟩
@@ -457,10 +485,10 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
     add_pow_eq_sum_wordProd Λ N n
   rw [h_expand]
   have h_surviving_sum : (∑ w : Fin n → Bool, wordProd Λ N w) =
-      (∑ w ∈ (Finset.univ : Finset (Fin n → Bool)).filter (λ w => countN w < D),
+      (∑ w ∈ (Finset.univ : Finset (Fin n → Bool)).filter (fun w => countN w < D),
         wordProd Λ N w) := by
     rw [Finset.sum_filter]
-    refine Finset.sum_congr rfl (λ w hw => ?_)
+    refine Finset.sum_congr rfl (fun w hw => ?_)
     by_cases h : countN w < D
     · simp [h]
     · have h_ge : D ≤ countN w := by omega
@@ -468,12 +496,12 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
         wordProd_eq_zero_of_N_count_ge_D Λ N hΛ_diag hN_sut w h_ge
       simp [h, h_zero]
   rw [h_surviving_sum]
-  have h_wordProd_zero : wordProd Λ N (λ _ : Fin n => false) = Λ ^ n :=
+  have h_wordProd_zero : wordProd Λ N (fun _ : Fin n => false) = Λ ^ n :=
     wordProd_all_false Λ N n
   let allWords : Finset (Fin n → Bool) := Finset.univ
-  let surWords := allWords.filter (λ w => countN w < D)
-  let kZero := surWords.filter (λ w => countN w = 0)
-  let kPos := surWords.filter (λ w => 1 ≤ countN w)
+  let surWords := allWords.filter (fun w => countN w < D)
+  let kZero := surWords.filter (fun w => countN w = 0)
+  let kPos := surWords.filter (fun w => 1 ≤ countN w)
   have h_disjoint_union : surWords = kZero ∪ kPos := by
     ext w;
     simp [kZero, kPos, surWords]
@@ -486,11 +514,11 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
   have h_sum_split : (∑ w ∈ surWords, wordProd Λ N w) =
       (∑ w ∈ kZero, wordProd Λ N w) + (∑ w ∈ kPos, wordProd Λ N w) := by
     rw [h_disjoint_union, Finset.sum_union h_disjoint]
-  have h_kZero_singleton : kZero = {(λ _ : Fin n => false)} := by
+  have h_kZero_singleton : kZero = {(fun _ : Fin n => false)} := by
     ext w; constructor
     · intro hw
       rw [Finset.mem_filter] at hw; rcases hw with ⟨hw_surv, hzero⟩
-      have hw_all_false : w = (λ _ : Fin n => false) := by
+      have hw_all_false : w = (fun _ : Fin n => false) := by
         ext i
         have hfalse : w i = false := by
           by_contra hnotfalse
@@ -498,7 +526,7 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
             cases hwiv : w i
             · exact (hnotfalse hwiv).elim
             · rfl
-          have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (λ j => w j = true)) := by
+          have hi_mem : i ∈ ((Finset.univ : Finset (Fin n)).filter (fun j => w j = true)) := by
             simp [htrue_val]
           have hcard_pos : 0 < countN w := by
             dsimp [countN]; exact Finset.card_pos.mpr ⟨i, hi_mem⟩
@@ -517,10 +545,10 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
   have h_zero_le : f 0 ≤ 0 := by rw [hf_zero]
   have h_rest_subadd : f (∑ w ∈ kPos, wordProd Λ N w) ≤
       (∑ w ∈ kPos, f (wordProd Λ N w)) :=
-    Finset.le_sum_of_subadditive f h_zero_le hf_add kPos (λ w => wordProd Λ N w)
+    Finset.le_sum_of_subadditive f h_zero_le hf_add kPos (fun w => wordProd Λ N w)
   have h_rest_per_word : (∑ w ∈ kPos, f (wordProd Λ N w)) ≤
       (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) := by
-    refine Finset.sum_le_sum (λ w hw => ?_)
+    refine Finset.sum_le_sum (fun w hw => ?_)
     have hw_kPos : w ∈ kPos := hw
     have hpos_countN : 1 ≤ countN w := by
       rw [Finset.mem_filter] at hw_kPos; exact hw_kPos.2
@@ -529,20 +557,20 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
   have h_fiber_regroup : (∑ w ∈ kPos, (f N) ^ (countN w) * (f Λ) ^ (n - countN w)) =
       (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
         ((Nat.choose n k : ℝ) * (f N) ^ k * (f Λ) ^ (n - k))) := by
-    have h_kPos_eq : kPos = allWords.filter (λ w => 1 ≤ countN w ∧ countN w < D) := by
+    have h_kPos_eq : kPos = allWords.filter (fun w => 1 ≤ countN w ∧ countN w < D) := by
       ext w; simp [kPos, surWords, allWords]; omega
     rw [h_kPos_eq]
-    let fibers (k : ℕ) : Finset (Fin n → Bool) := allWords.filter (λ w => countN w = k)
+    let fibers (k : ℕ) : Finset (Fin n → Bool) := allWords.filter (fun w => countN w = k)
     let keys := Finset.Icc 1 (min n (D - 1))
     have h_filter_eq_biUnion :
-        allWords.filter (λ w => 1 ≤ countN w ∧ countN w < D) = keys.biUnion fibers := by
+        allWords.filter (fun w => 1 ≤ countN w ∧ countN w < D) = keys.biUnion fibers := by
       ext w; constructor
       · intro hw
         rw [Finset.mem_filter] at hw; rcases hw with ⟨hw_univ, ⟨hk_pos, hk_ltD⟩⟩
         have hk_val_le_n : countN w ≤ n := by
           dsimp [countN]
           calc
-            ((Finset.univ : Finset (Fin n)).filter (λ i => w i = true)).card
+            ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card
                 ≤ (Finset.univ : Finset (Fin n)).card := Finset.card_filter_le _ _
             _ = n := Finset.card_fin n
         have hk_mem_keys : countN w ∈ keys := by
@@ -566,14 +594,14 @@ theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
         rw [Finset.disjoint_filter]; intro w _ h₁ h₂; rw [h₁] at h₂; exact hne h₂
       exact h_disjoint_filt
     rw [Finset.sum_biUnion h_disjoint_fibers]
-    refine Finset.sum_congr rfl (λ k hk => ?_)
+    refine Finset.sum_congr rfl (fun k hk => ?_)
     rw [Finset.mem_Icc] at hk; rcases hk with ⟨hk_pos, hk_le⟩
     have h_card : (fibers k).card = Nat.choose n k := by
       dsimp [fibers, allWords]; exact card_countN_eq_choose k
     calc
       (∑ w ∈ fibers k, (f N) ^ (countN w) * (f Λ) ^ (n - countN w))
       = (∑ w ∈ fibers k, (f N) ^ k * (f Λ) ^ (n - k)) := by
-        refine Finset.sum_congr rfl (λ w hw => ?_)
+        refine Finset.sum_congr rfl (fun w hw => ?_)
         rw [Finset.mem_filter] at hw; rcases hw with ⟨_, hw_eq⟩; rw [hw_eq]
       _ = ((fibers k).card : ℝ) * ((f N) ^ k * (f Λ) ^ (n - k)) := by simp
       _ = ((Nat.choose n k : ℕ) : ℝ) * ((f N) ^ k * (f Λ) ^ (n - k)) := by rw [h_card]
@@ -600,7 +628,7 @@ theorem wolf_eq_105_seminorm (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
         ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) :=
-  wolf_eq_105 ν (apply_nonneg ν) (λ x y => ν.mul_le' x y) (λ x y => ν.add_le' x y)
+  wolf_eq_105 ν (apply_nonneg ν) (fun x y => ν.mul_le' x y) (fun x y => ν.add_le' x y)
     (map_zero ν) hΛ_diag hN_sut hDpos n
 
 end RingSeminormCorollary
@@ -658,20 +686,8 @@ theorem wolf_eq_103 (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
           · have hnpos : 0 < n := Nat.pos_of_ne_zero hn0
             exact Nat.pow_le_pow_right hnpos hk2
         exact mod_cast h_choose_nat.trans h_pow_mono
-      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) := by
-        by_cases hN1 : ν N ≤ 1
-        · have h_pow_le_one : (ν N) ^ k ≤ ν N := by
-            calc
-              (ν N) ^ k ≤ (ν N) ^ 1 :=
-                pow_le_pow_of_le_one h_nonneg_νN hN1 hk1
-              _ = ν N := by simp
-          have h_max : ν N ≤ max (ν N) ((ν N) ^ (D-1)) := by simp
-          exact h_pow_le_one.trans h_max
-        · have hN1' : 1 ≤ ν N := by linarith
-          have h_pow_le : (ν N) ^ k ≤ (ν N) ^ (D-1) :=
-            pow_le_pow_right₀ hN1' hk2
-          have h_max : (ν N) ^ (D-1) ≤ max (ν N) ((ν N) ^ (D-1)) := by simp
-          exact h_pow_le.trans h_max
+      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) :=
+        pow_le_max_of_one_le h_nonneg_νN hk1 hk2
       have h_nuΛ_pow : (ν Λ) ^ (n - k) ≤ (ν Λ) ^ (n - (D - 1)) := by
         have h_exp_le : n - (D - 1) ≤ n - k := by omega
         exact pow_le_pow_of_le_one h_nonneg_νΛ hνΛ h_exp_le
@@ -696,7 +712,7 @@ theorem wolf_eq_103 (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
             ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
             (∑ k ∈ Finset.Icc 1 (D - 1),
               (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)))) :=
-          Finset.sum_le_sum (λ k hk => h_term_bound k hk)
+          Finset.sum_le_sum (fun k hk => h_term_bound k hk)
         _ = ((Finset.Icc 1 (D - 1)).card : ℝ) *
             (((n ^ (D-1 : ℕ) : ℕ) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
           simp
@@ -751,7 +767,6 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
         Nat.choose n k ≤ Nat.choose n (D - 1) := by
       rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
       obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk2
-      -- hd: k + d = D - 1
       have h_helper : ∀ d', 2 * (k + d') ≤ n → Nat.choose n k ≤ Nat.choose n (k + d') := by
         intro d'
         induction' d' with d' ih
@@ -773,20 +788,8 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
       rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
       have h_choose : (Nat.choose n k : ℝ) ≤ (Nat.choose n (D-1) : ℝ) :=
         mod_cast h_choose_refined k hk
-      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) := by
-        by_cases hN1 : ν N ≤ 1
-        · have h_pow_le_one : (ν N) ^ k ≤ ν N := by
-            calc
-              (ν N) ^ k ≤ (ν N) ^ 1 :=
-                pow_le_pow_of_le_one h_nonneg_νN hN1 hk1
-              _ = ν N := by simp
-          have h_max : ν N ≤ max (ν N) ((ν N) ^ (D-1)) := by simp
-          exact h_pow_le_one.trans h_max
-        · have hN1' : 1 ≤ ν N := by linarith
-          have h_pow_le : (ν N) ^ k ≤ (ν N) ^ (D-1) :=
-            pow_le_pow_right₀ hN1' hk2
-          have h_max : (ν N) ^ (D-1) ≤ max (ν N) ((ν N) ^ (D-1)) := by simp
-          exact h_pow_le.trans h_max
+      have h_nuN_pow : (ν N) ^ k ≤ max (ν N) ((ν N) ^ (D-1)) :=
+        pow_le_max_of_one_le h_nonneg_νN hk1 hk2
       have h_nuΛ_pow : (ν Λ) ^ (n - k) ≤ (ν Λ) ^ (n - (D - 1)) := by
         have h_exp_le : n - (D - 1) ≤ n - k := by omega
         exact pow_le_pow_of_le_one h_nonneg_νΛ hνΛ h_exp_le
@@ -809,7 +812,7 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
             ((Nat.choose n k : ℝ) * (ν N) ^ k * (ν Λ) ^ (n - k))) ≤
             (∑ k ∈ Finset.Icc 1 (D - 1),
               ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1)))) :=
-          Finset.sum_le_sum (λ k hk => h_term_bound k hk)
+          Finset.sum_le_sum (fun k hk => h_term_bound k hk)
         _ = ((Finset.Icc 1 (D - 1)).card : ℝ) *
             ((Nat.choose n (D-1) : ℝ) * max (ν N) ((ν N) ^ (D-1)) * (ν Λ) ^ (n - (D-1))) := by
           simp

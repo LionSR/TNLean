@@ -1,0 +1,72 @@
+% Source: Wolf (2012), Chapter 8, upper-triangular power lemma
+
+\begin{lemma}[Noncommutative upper-triangular word bound]
+    \label{lem:wolf_upper_triangular_word_bound}
+    \lean{Matrix.wolf_eq_105_seminorm}
+    \leanok
+    Let $D\ge 1$, let $\Lambda,N\in M_D(\mathbb C)$, assume that $\Lambda$ is
+    diagonal and that $N$ is strictly upper triangular, and let $\nu$ be an
+    arbitrary submultiplicative ring seminorm.  Then, for every
+    $n\in\mathbb N$,
+    \begin{align}
+      \nu\bigl((\Lambda+N)^n\bigr)
+      \le \nu(\Lambda^n)
+      +\sum_{k=1}^{\min\{n,D-1\}}
+        \binom{n}{k}\nu(N)^k\nu(\Lambda)^{n-k}.
+    \end{align}
+    In particular, this applies to every submultiplicative norm in Wolf's
+    upper-triangular power lemma
+    \cite[Chapter~8, Equation~(8.105)]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand $(\Lambda+N)^n$ over all ordered words of length $n$ in the two
+    letters $\Lambda$ and $N$; no commutativity is assumed.  A diagonal factor
+    preserves the matrix index, whereas each strictly upper-triangular factor
+    forces a strict increase.  Consequently every word containing at least
+    $D$ copies of $N$ vanishes.  There are $\binom{n}{k}$ words containing
+    exactly $k$ copies of $N$.  Subadditivity and submultiplicativity of $\nu$
+    bound every such word by $\nu(N)^k\nu(\Lambda)^{n-k}$, giving the stated
+    sum.  The word containing no copy of $N$ is kept exactly as
+    $\nu(\Lambda^n)$, so no normalization condition on $\nu(1)$ is needed.
+\end{proof}
+
+\begin{lemma}[Upper-triangular power estimate]
+    \label{lem:wolf_upper_triangular_power_estimate}
+    \lean{Matrix.wolf_eq_103, Matrix.wolf_eq_103_refined}
+    \leanok
+    \uses{lem:wolf_upper_triangular_word_bound}
+    Under the hypotheses of Lemma~\ref{lem:wolf_upper_triangular_word_bound},
+    suppose in addition that $\nu(\Lambda)\le 1$.  If $D-1\le n$, then
+    \begin{align}
+      \nu\bigl((\Lambda+N)^n\bigr)
+      \le \nu(\Lambda^n)
+      +(D-1)n^{D-1}\nu(\Lambda)^{n-D+1}
+        \max\{\nu(N),\nu(N)^{D-1}\}.
+    \end{align}
+    If $2(D-1)\le n$, the factor $(D-1)n^{D-1}$ may be replaced by
+    $(D-1)\binom{n}{D-1}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:wolf_upper_triangular_word_bound}
+    Apply Lemma~\ref{lem:wolf_upper_triangular_word_bound}.  For
+    $1\le k\le D-1$, bound $\binom{n}{k}$ by $n^{D-1}$ and bound
+    $\nu(N)^k$ by $\max\{\nu(N),\nu(N)^{D-1}\}$.  Since
+    $0\le\nu(\Lambda)\le1$ and $D-1\le n$,
+    \begin{align}
+      \nu(\Lambda)^{n-k}\le\nu(\Lambda)^{n-D+1}.
+    \end{align}
+    There are $D-1$ possible positive values of $k$, which gives the first
+    constant.  If $2(D-1)\le n$, the binomial coefficients are increasing for
+    $1\le k\le D-1$, so each is at most $\binom{n}{D-1}$.
+
+    Wolf prints the first estimate for every $n\in\mathbb N$, although the
+    exponent $n-D+1$ is negative when $n<D-1$ and is undefined at
+    $\nu(\Lambda)=0$ without an additional convention.  The formal statement
+    therefore records the exact range in which the displayed natural-power
+    derivation is meaningful; the source-scope defect is documented in
+    \path{docs/paper-gaps/wolf_ch8_eq_8_103_negative_exponent.tex}.
+\end{proof}
