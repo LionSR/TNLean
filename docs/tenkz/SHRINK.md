@@ -2908,3 +2908,67 @@ production caller; it earns its place until those fixtures do not.
 
 The census does not move: no registry row, parser leaf, or alias changes, and
 no flag is raised that a previous session has not already answered.
+
+### 2026-08-09 — the policy legs and the open words, after the kernel rebuild
+
+The recurring gate (#4158) ran over the whole package after the 1.0 kernel
+rebuild and the four fixes that landed on top of it. What it looked at: the
+750 declarations of the ten package files, the ratio registry, the TODO
+sweep, the key surface against the reference chapter, the six census meters,
+and every control sequence in `tex/tenkz` reachable from a caller.
+
+**What grew ad hoc.** Two things, both of them regrowth inside the rebuild
+window rather than survivals from before it. The picture's physical policy
+answers one question — which outward faces an atom grows legs on, and which
+of that face's slots carry one — and five stages had each written that answer
+out for themselves: the boundary signature, the port registrar, the wire
+records, the route classifier, and the leg ink. The three-word policy
+alphabet stood in five copies and the walk over exposed slots in four, with
+the compass letter translated to its page bearing inline at seven places, so
+a face was two spellings of one direction with no owner. Separately, the two
+validators that reject an open-end word the frame cannot honour were the same
+scan twice: same walk over every wire end, same shape, different word class
+and different message.
+
+**What became one thing.** The policy is now read through
+`\__tenkz_kernel_policy_faces:nn` (the faces a policy exposes),
+`\__tenkz_kernel_policy_leg_map:nnn` (the exposed slots on one face), and
+`\__tenkz_kernel_policy_face_bearing:n` (the one place a face letter becomes
+a bearing). Each of the five stages now supplies only what it does with a
+slot. The open-end words are one walk applying a table whose rows read "this
+class of words is admitted on these frames"; a word a frame cannot honour is
+added to the table and nowhere else. Both changes leave every golden event
+stream and every kernel pixel byte-identical, which is the evidence the
+merged mechanisms were one mechanism.
+
+**What stayed separate, and why.** `\__tenkz_kernel_cells_hedge:nn` and
+`\__tenkz_kernel_cells_vedge:nn` look like axis duals and are not one
+function: the horizontal edge separates two rows and offsets by the north or
+south standoff, the vertical edge separates two columns and offsets by the
+east or west one, and the two run their half-edges in opposite senses. An
+axis-parameterised merge would have to carry the standoff pair, the
+coordinate accessor, and the direction pair as arguments, which is three
+tables to save one — the boundary rule is genuinely stated twice because the
+lattice has two axes. Expiry: revisit if a third axis ever appears.
+
+**What a redesign would delete, deleted.** The rebuild orphaned whole limbs
+that nothing had noticed because nothing calls them. Gone: the corridor
+subsystem of the geometry stage (six functions and seven paper registers —
+the exterior routing lane the dialect front ends measured against, replaced
+by the kernel's own hull and route resolution); the render stage's named-node
+primitives, which drew a positional node name for callers that no longer
+exist; the round-bead spacing floor of the metric stage; the model's record
+counter; and the language stage's value-alias registrar together with its
+sequence, whose ledger has stood at zero rows since the front ends died and
+whose census target at 1.0 is zero. Total 120 lines with no reachable caller.
+
+The census does not move: no registry row, parser leaf, key, or alias
+changes, and no flag is raised that a previous session has not answered.
+
+Left standing, with its trigger. `\__tenkz_kernel_eq_rel:` is defined and
+called by nothing, but it sits inside the equation group while #4703 is in
+flight; it is deleted by whoever lands next in that file. The lint's
+`rmp-alias` rule hardcodes the `periodic` spelling and discards two names by
+hand while reading the rest from the registry — knowledge the registry should
+hold, and the fix is a tombstone ledger the linter reads, not another
+discard. Trigger: the next registry tombstone.

@@ -50,14 +50,9 @@
   { \__tenkz_ink_path:nn {#1} {#2} }
 \cs_generate_variant:Nn \__tenkz_render_stroke:nn { en }
 % A coordinator-decided label node: #1 option tokens, #2 position tokens,
-% #3 content tokens.  The named form threads the positional node name --
-% pgf registers positional names before option processing, and name=
-% inside the option list perturbs border-path arithmetic by a scaled
-% point (see \__tenkz_ink_node_named:nnnnn).
+% #3 content tokens.
 \cs_new_protected:Npn \__tenkz_render_labelnode:nnn #1#2#3
   { \node[#1] at #2 {#3}; }
-\cs_new_protected:Npn \__tenkz_render_labelnode_named:nnnn #1#2#3#4
-  { \node[#1] (#2) at #3 {#4}; }
 
 % ---------- skins ------------------------------------------------------------
 % The eight kernel base skins resolve to the calibrated styles of tenkz-core.
@@ -121,23 +116,6 @@
       { \l__tenkz_render_y_tl \tenkz@pitch }
       { \l__tenkz_render_content_tl }
   }
-
-% ---------- named atoms -------------------------------------------------------
-% #1 placement id, #2 the caller's complete option list (style, hue, name)
-% The pt-exact entry: the caller passes the frame-mapped point verbatim
-% (\dim_use strings), so the emitted coordinate is byte-identical to the
-% legacy node's -- the pitch-fraction placement registered alongside it
-% serves geometry queries, not ink.  The fraction route-trip is exact only
-% to one scaled point, which the pixel gate rejects.
-% Positional node names: pgf registers a positional (name) before option
-% processing; name= inside the option list perturbs the border-path
-% arithmetic by a scaled point, which the pixel gate sees.
-\cs_new_protected:Npn \__tenkz_ink_node_named:nnnnn #1#2#3#4#5
-  { \node[#1] (#2) at ( #3 , #4 ) {#5}; }
-\cs_new_protected:Npn \__tenkz_render_atom_named_pt:nnnn #1#2#3#4
-  { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} { } }
-\cs_new_protected:Npn \__tenkz_render_atom_labelled_pt:nnnnn #1#2#3#4#5
-  { \__tenkz_ink_node_named:nnnnn {#4} {#3} {#1} {#2} {#5} }
 
 % ---------- labelled atoms ----------------------------------------------------
 % #1 placement id, #2 the caller's complete option list (style, hue, name),

@@ -113,16 +113,6 @@
       }
   }
 
-% Page-round default beads reduce the two body supports to one diameter.
-\cs_new:Npn \__tenkz_metric_round_bead_spacing_floor:
-  {
-    \fp_eval:n
-      {
-        \__tenkz_metric_ratio:n {dotdia}
-        + \__tenkz_metric_default_bead_page_gap:
-      }
-  }
-
 % ---------- the core table (motivations abridged from tenkz-core) ----------
 \__tenkz_metric_declare:nnn {layersep} {0.80}
   { layers~read~as~layers,~not~as~two~chains }

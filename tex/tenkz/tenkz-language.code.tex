@@ -1,5 +1,5 @@
 % Input: the executable registry and document-level setup declarations.
-% Output: public setup commands, shared picture keys, aliases, and diagnostics.
+% Output: public setup commands, shared picture keys, and diagnostics.
 % Owned state: registry records, atom descriptors, and language validation state.
 % Invariants: public syntax is normalized before any model or geometry mutation.
 % Next stage: tenkz-model.code.tex receives validated semantic records.
@@ -8,7 +8,6 @@
 \seq_new:N \g__tenkz_language_environments_seq
 \seq_new:N \g__tenkz_language_commands_seq
 \seq_new:N \g__tenkz_language_keys_seq
-\seq_new:N \g__tenkz_language_aliases_seq
 \seq_new:N \g__tenkz_language_examples_seq
 \seq_new:N \g__tenkz_language_preludes_seq
 \tl_new:N \l__tenkz_language_atom_skin_tl
@@ -22,8 +21,6 @@
   { \seq_gput_right:Nn \g__tenkz_language_commands_seq {{#1}{#2}{#3}{#4}{#5}} }
 \cs_new_protected:Npn \__tenkz_language_registry_key:nnnnnn #1#2#3#4#5#6
   { \seq_gput_right:Nn \g__tenkz_language_keys_seq {{#1}{#2}{#3}{#4}{#5}{#6}} }
-\cs_new_protected:Npn \__tenkz_language_registry_alias:nnnn #1#2#3#4
-  { \seq_gput_right:Nn \g__tenkz_language_aliases_seq {{#1}{#2}{#3}{#4}} }
 \cs_new_protected:Npn \__tenkz_language_registry_example:nnn #1#2#3
   { \seq_gput_right:Nn \g__tenkz_language_examples_seq {{#1}{#2}{#3}} }
 \cs_new_protected:Npn \__tenkz_language_registry_prelude:nnn #1#2#3

@@ -1635,40 +1635,15 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_signature_physical_axis:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_span:nN {#1}
-      \l__tenkz_kernel_policy_span_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+    \__tenkz_kernel_policy_leg_map:nnn {#1} {#2}
       {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
-          {
-            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
-              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
-              {
-                \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
-                  \l__tenkz_kernel_r_leg_turn_tl
-                \exp_args:NV \__tenkz_kernel_signature_bearing:nN
-                  \l__tenkz_kernel_r_leg_turn_tl
-                  \l__tenkz_kernel_port_face_tl
-                \seq_put_right:Ne \l__tenkz_kernel_emit_seq
-                  { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
-              }
-          }
-      }
-  }
-
-\cs_new_protected:Npn \__tenkz_kernel_signature_physical:nn #1#2
-  {
-    \str_case:nn {#2}
-      {
-        {up}
-          { \__tenkz_kernel_signature_physical_axis:nn {#1} {n} }
-        {down}
-          { \__tenkz_kernel_signature_physical_axis:nn {#1} {s} }
-        {updown}
-          {
-            \__tenkz_kernel_signature_physical_axis:nn {#1} {n}
-            \__tenkz_kernel_signature_physical_axis:nn {#1} {s}
-          }
+        \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
+          \l__tenkz_kernel_r_leg_turn_tl
+        \exp_args:NV \__tenkz_kernel_signature_bearing:nN
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_port_face_tl
+        \seq_put_right:Ne \l__tenkz_kernel_emit_seq
+          { phys: \tl_use:N \l__tenkz_kernel_port_face_tl }
       }
   }
 
@@ -1801,13 +1776,8 @@
       {
         \__tenkz_kernel_policy_leg_renders:nT {##1}
           {
-            \__tenkz_model_get:nnN {##1} {physical}
-              \l__tenkz_kernel_scratch_tl
-            \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
-              {
-                \exp_args:NnV \__tenkz_kernel_signature_physical:nn {##1}
-                  \l__tenkz_kernel_scratch_tl
-              }
+            \__tenkz_kernel_policy_faces:nn {##1}
+              { \__tenkz_kernel_signature_physical_axis:nn {##1} {####1} }
           }
       }
     \seq_sort:Nn \l__tenkz_kernel_emit_seq
@@ -2316,57 +2286,59 @@
       }
   }
 
-\cs_new_protected:Npn \__tenkz_kernel_validate_circle_open_ends:
+% An open end names a place, and a frame either has that place or has not:
+% a circle frame has no corners for the diagonal words, and only a plane
+% frame declares the independent transverse axis that `up' and `down'
+% follow.  Those are one rule -- a class of open words is admitted by a set
+% of frames -- so the table states it once and one walk over the open ends
+% applies every row.  A word some frame cannot honour is added here and
+% nowhere else; the frames that can honour it are the row's second field.
+\cs_new_protected:Npn \__tenkz_kernel_open_word_rules:N #1
   {
-    \str_if_eq:eeT { \__tenkz_kernel_r_frame_word: } {circle}
+    #1 { nw|ne|sw|se } { flat , plane } { kernel-circle-open-direction }
+    #1 { up|down }     { plane }        { kernel-open-transverse-frame }
+  }
+
+\tl_new:N \l__tenkz_kernel_open_word_tl
+\tl_new:N \l__tenkz_kernel_open_wire_tl
+\tl_new:N \l__tenkz_kernel_open_end_tl
+\tl_new:N \l__tenkz_kernel_open_frame_tl
+
+% One row of the table against the open word the walk has in hand: the word
+% class #1 is admitted on the frames #2, and a frame outside that set raises
+% #3 naming the wire, its end, and the word the author wrote.
+\cs_new_protected:Npn \__tenkz_kernel_validate_open_word:nnn #1#2#3
+  {
+    \clist_if_in:nVF {#2} \l__tenkz_kernel_open_frame_tl
       {
-        \__tenkz_model_map_ids:nn {wire}
+        \exp_args:NnV \regex_match:nnT
+          { \A ( #1 ) \Z }
+          \l__tenkz_kernel_open_word_tl
           {
-            \clist_map_inline:nn {from, to}
-              {
-                \__tenkz_model_get:nnN {##1} {####1-open}
-                  \l__tenkz_kernel_scratch_tl
-                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
-                  {
-                    \exp_args:NnV \regex_match:nnT
-                      { \A (nw|ne|sw|se) \Z }
-                      \l__tenkz_kernel_scratch_tl
-                      {
-                        \msg_error:nneee
-                          {tenkz}{kernel-circle-open-direction}
-                          {##1} {####1}
-                          { \tl_use:N \l__tenkz_kernel_scratch_tl }
-                      }
-                  }
-              }
+            \msg_error:nneee {tenkz}{#3}
+              { \tl_use:N \l__tenkz_kernel_open_wire_tl }
+              { \tl_use:N \l__tenkz_kernel_open_end_tl }
+              { \tl_use:N \l__tenkz_kernel_open_word_tl }
           }
       }
   }
-% The transverse open words follow the frame's independent physical axis,
-% which only a plane frame declares.  Flat and circle frames reject them
-% before geometry would ask for the missing transverse vector.
-\cs_new_protected:Npn \__tenkz_kernel_validate_transverse_open_ends:
+
+\cs_new_protected:Npn \__tenkz_kernel_validate_open_words:
   {
-    \str_if_eq:eeF { \__tenkz_kernel_r_frame_word: } {plane}
+    \tl_set:Ne \l__tenkz_kernel_open_frame_tl
+      { \__tenkz_kernel_r_frame_word: }
+    \__tenkz_model_map_ids:nn {wire}
       {
-        \__tenkz_model_map_ids:nn {wire}
+        \tl_set:Nn \l__tenkz_kernel_open_wire_tl {##1}
+        \clist_map_inline:nn {from, to}
           {
-            \clist_map_inline:nn {from, to}
+            \__tenkz_model_get:nnN {##1} {####1-open}
+              \l__tenkz_kernel_open_word_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_open_word_tl
               {
-                \__tenkz_model_get:nnN {##1} {####1-open}
-                  \l__tenkz_kernel_scratch_tl
-                \quark_if_no_value:NF \l__tenkz_kernel_scratch_tl
-                  {
-                    \exp_args:NnV \regex_match:nnT
-                      { \A (up|down) \Z }
-                      \l__tenkz_kernel_scratch_tl
-                      {
-                        \msg_error:nneee
-                          {tenkz}{kernel-open-transverse-frame}
-                          {##1} {####1}
-                          { \tl_use:N \l__tenkz_kernel_scratch_tl }
-                      }
-                  }
+                \tl_set:Nn \l__tenkz_kernel_open_end_tl {####1}
+                \__tenkz_kernel_open_word_rules:N
+                  \__tenkz_kernel_validate_open_word:nnn
               }
           }
       }
@@ -4238,7 +4210,7 @@
             \__tenkz_geom_local_bearing:nnnnN {kpic}
               { \l__tenkz_kernel_leg_row_tl }
               { \l__tenkz_kernel_leg_col_tl }
-              { \str_if_eq:nnTF {#2} {n} {90} {270} }
+              { \__tenkz_kernel_policy_face_bearing:n {#2} }
               #4
           }
       }
@@ -4271,6 +4243,55 @@
           }
       }
       { \prg_return_false: }
+  }
+
+% The outward page bearing of a policy face.  The kernel spells a face with
+% its compass letter and every measurement wants the bearing, so the two
+% spellings of one direction meet here and nowhere else.
+\cs_new:Npn \__tenkz_kernel_policy_face_bearing:n #1
+  { \str_if_eq:nnTF {#1} {n} {90} {270} }
+
+% The faces atom #1's `physical=` policy grows legs on.  Code #2 runs once
+% per face with the face word (n or s) as its #1 -- `##1' inside a
+% definition.  Five stages read this policy: the boundary signature, the
+% port registrar, the wire records, the route classifier, and the ink.  They
+% differ in what they do with a face, never in which faces there are, so the
+% policy alphabet is written out once here.
+\tl_new:N \l__tenkz_kernel_policy_faces_tl
+\cs_new_protected:Npn \__tenkz_kernel_policy_faces:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {physical} \l__tenkz_kernel_policy_faces_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_faces_tl
+      {
+        \str_case:Vn \l__tenkz_kernel_policy_faces_tl
+          {
+            {up}     { \clist_map_inline:nn {n}   {#2} }
+            {down}   { \clist_map_inline:nn {s}   {#2} }
+            {updown} { \clist_map_inline:nn {n,s} {#2} }
+          }
+      }
+  }
+
+% Every exposed policy slot on face #2 of atom #1, in slot order.  Code #3
+% runs once per slot with the slot number as its #1, and reads the resolved
+% span from \l__tenkz_kernel_policy_span_tl, which
+% \__tenkz_kernel_policy_slot_bearing:nnnN wants left standing.  A slot is
+% walked exactly when a leg exists there, so the signature that counts the
+% index, the record that names it, the route that classifies it, and the
+% pass that inks it all walk the same slots.
+\cs_new_protected:Npn \__tenkz_kernel_policy_leg_map:nnn #1#2#3
+  {
+    \__tenkz_kernel_policy_leg_span:nN {#1}
+      \l__tenkz_kernel_policy_span_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+      {
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+          {
+            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
+              { \__tenkz_kernel_policy_face_bearing:n {#2} } {##1}
+              {#3}
+          }
+      }
   }
 
 % A slot span belongs to the atom's own measured silhouette, so it answers
@@ -4501,38 +4522,23 @@
       }
   }
 
+% The registrar declares an identity for every slot the policy owns, whether
+% or not a leg is finally grown there, so it walks the span itself rather
+% than the exposed slots; the faces are the policy's, read from one place.
 \cs_new_protected:Npn \__tenkz_kernel_port_policy_register_atom:n #1
   {
     \__tenkz_kernel_policy_leg_span:nN {#1}
       \l__tenkz_kernel_policy_span_tl
     \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
       {
-        \__tenkz_model_get:nnN {#1} {physical}
-          \l__tenkz_kernel_atom_phys_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_atom_phys_tl
+        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
           {
-            \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
+            \__tenkz_kernel_policy_faces:nn {#1}
               {
-                \str_case:Vn \l__tenkz_kernel_atom_phys_tl
-                  {
-                    {up}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {#1} {90} {##1}
-                      }
-                    {down}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {#1} {270} {##1}
-                      }
-                    {updown}
-                      {
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {#1} {90} {##1}
-                        \__tenkz_kernel_port_policy_register:nnn
-                          {#1} {270} {##1}
-                      }
-                  }
+                \exp_args:Nne \__tenkz_kernel_port_policy_register:nnn
+                  {#1}
+                  { \__tenkz_kernel_policy_face_bearing:n {####1} }
+                  {##1}
               }
           }
       }
@@ -4971,26 +4977,12 @@
 % stand on it -- while the same leg written as a typed port carried both.  The
 % record closes that gap: it adds no index the boundary signature did not
 % already count, and no ink, because the leg pass keeps its own.
-\tl_new:N \l__tenkz_kernel_leg_record_phys_tl
 \cs_new_protected:Npn \__tenkz_kernel_policy_leg_records:
   {
     \__tenkz_model_map_ids:nn {atom}
       {
-        \__tenkz_model_get:nnN {##1} {physical}
-          \l__tenkz_kernel_leg_record_phys_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_leg_record_phys_tl
-          {
-            \str_case:Vn \l__tenkz_kernel_leg_record_phys_tl
-              {
-                {up}     { \__tenkz_kernel_policy_leg_record:nn {##1} {n} }
-                {down}   { \__tenkz_kernel_policy_leg_record:nn {##1} {s} }
-                {updown}
-                  {
-                    \__tenkz_kernel_policy_leg_record:nn {##1} {n}
-                    \__tenkz_kernel_policy_leg_record:nn {##1} {s}
-                  }
-              }
-          }
+        \__tenkz_kernel_policy_faces:nn {##1}
+          { \__tenkz_kernel_policy_leg_record:nn {##1} {####1} }
       }
   }
 % One policy leg per exposed slot, on face #2 of atom #1.  A leg exists
@@ -4999,17 +4991,8 @@
 % it leaves -- the name the leg pass and the crossing grammar already spell.
 \cs_new_protected:Npn \__tenkz_kernel_policy_leg_record:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_span:nN {#1}
-      \l__tenkz_kernel_policy_span_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
-      {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
-          {
-            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
-              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
-              { \__tenkz_kernel_policy_leg_record_slot:nnn {#1} {#2} {##1} }
-          }
-      }
+    \__tenkz_kernel_policy_leg_map:nnn {#1} {#2}
+      { \__tenkz_kernel_policy_leg_record_slot:nnn {#1} {#2} {##1} }
   }
 \cs_new_protected:Npn \__tenkz_kernel_policy_leg_record_slot:nnn #1#2#3
   {
@@ -5979,8 +5962,8 @@
       }
       {
         \__tenkz_kernel_r_page_face:nnN {#1}
-          { \str_if_eq:nnTF {#2} {n} {90} {270} } #3
-        \tl_set:Ne #4 { \str_if_eq:nnTF {#2} {n} {90} {270} }
+          { \__tenkz_kernel_policy_face_bearing:n {#2} } #3
+        \tl_set:Ne #4 { \__tenkz_kernel_policy_face_bearing:n {#2} }
       }
   }
 
@@ -9080,24 +9063,15 @@
 
 \cs_new_protected:Npn \__tenkz_kernel_route_policy_face_add:nnn #1#2#3
   {
-    \__tenkz_kernel_policy_leg_span:nN {#1}
-      \l__tenkz_kernel_policy_span_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
+    \__tenkz_kernel_policy_leg_map:nnn {#1} {#2}
       {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
-          {
-            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
-              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
-              {
-                \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
-                  \l__tenkz_kernel_r_leg_turn_tl
-                \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
-                  \l__tenkz_kernel_r_leg_turn_tl
-                  \l__tenkz_kernel_port_face_tl
-                \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
-                  { \__tenkz_kernel_route_face_add:nnn {#1} {#3} {##1} }
-              }
-          }
+        \__tenkz_kernel_policy_slot_bearing:nnnN {#1} {#2} {##1}
+          \l__tenkz_kernel_r_leg_turn_tl
+        \exp_args:NV \__tenkz_kernel_route_page_bearing_side:nN
+          \l__tenkz_kernel_r_leg_turn_tl
+          \l__tenkz_kernel_port_face_tl
+        \str_if_eq:VnT \l__tenkz_kernel_port_face_tl {#3}
+          { \__tenkz_kernel_route_face_add:nnn {#1} {#3} {##1} }
       }
   }
 
@@ -9106,30 +9080,10 @@
   {
     \seq_map_inline:Nn \l__tenkz_kernel_ro_mem_seq
       {
-        \__tenkz_model_get:nnN {##1} {physical} \l__tenkz_kernel_ro_tl
-        \quark_if_no_value:NF \l__tenkz_kernel_ro_tl
+        \__tenkz_kernel_policy_faces:nn {##1}
           {
-            \str_case:Vn \l__tenkz_kernel_ro_tl
-              {
-                {up}
-                  {
-                    \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {n} {#1}
-                  }
-                {down}
-                  {
-                    \__tenkz_kernel_route_policy_face_add:nnn
-                      {##1} {s} {#1}
-                  }
-                {updown}
-                  {
-                    \clist_map_inline:nn {n,s}
-                      {
-                        \__tenkz_kernel_route_policy_face_add:nnn
-                          {##1} {####1} {#1}
-                      }
-                  }
-              }
+            \__tenkz_kernel_route_policy_face_add:nnn
+              {##1} {####1} {#1}
           }
       }
     \__tenkz_model_map_ids:nn {wire}
@@ -12828,18 +12782,8 @@
             \__tenkz_model_get:nnN {##1} {skin} \l__tenkz_kernel_r_b_tl
             \str_if_eq:VnF \l__tenkz_kernel_r_b_tl {dots}
               {
-                \str_case:Vn \l__tenkz_kernel_r_tl
-                  {
-                    {up}
-                      { \__tenkz_kernel_r_leg:nn {##1} {n} }
-                    {down}
-                      { \__tenkz_kernel_r_leg:nn {##1} {s} }
-                    {updown}
-                      {
-                        \__tenkz_kernel_r_leg:nn {##1} {n}
-                        \__tenkz_kernel_r_leg:nn {##1} {s}
-                      }
-                  }
+                \__tenkz_kernel_policy_faces:nn {##1}
+                  { \__tenkz_kernel_r_leg:nn {##1} {####1} }
               }
           }
       }
@@ -13103,17 +13047,8 @@
 % spanned cell, exactly where the same slots' authored ports would.
 \cs_new_protected:Npn \__tenkz_kernel_r_leg:nn #1#2
   {
-    \__tenkz_kernel_policy_leg_span:nN {#1}
-      \l__tenkz_kernel_policy_span_tl
-    \quark_if_no_value:NF \l__tenkz_kernel_policy_span_tl
-      {
-        \int_step_inline:nn { \l__tenkz_kernel_policy_span_tl }
-          {
-            \__tenkz_kernel_policy_leg_exposed:nnnT {#1}
-              { \str_if_eq:nnTF {#2} {n} {90} {270} } {##1}
-              { \__tenkz_kernel_r_leg_slot:nnn {#1} {#2} {##1} }
-          }
-      }
+    \__tenkz_kernel_policy_leg_map:nnn {#1} {#2}
+      { \__tenkz_kernel_r_leg_slot:nnn {#1} {#2} {##1} }
   }
 % The resolved geometry of one policy-leg slot: the leg's name, bearing,
 % base point (page registers), and reach -- the maximum over the bare
@@ -18162,8 +18097,7 @@
     \__tenkz_kernel_bonds:
     \__tenkz_kernel_closures:
     \__tenkz_kernel_port_opens:
-    \__tenkz_kernel_validate_circle_open_ends:
-    \__tenkz_kernel_validate_transverse_open_ends:
+    \__tenkz_kernel_validate_open_words:
     \__tenkz_kernel_validate_addresses:
     \__tenkz_kernel_plane_model:
     % Last of the derivations, because a policy leg exists only where no

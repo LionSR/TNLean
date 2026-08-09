@@ -186,8 +186,6 @@
   { \prop_get:NeN \l__tenkz_model_record_prop { #1 / #2 } #3 }
 \cs_new_protected:Npn \__tenkz_model_picture_get:nN #1#2
   { \prop_get:NnN \l__tenkz_model_picture_prop {#1} #2 }
-\cs_new_protected:Npn \__tenkz_model_count:nN #1#2
-  { \int_set:Nn #2 { \seq_count:c { l__tenkz_model_ #1 _seq } } }
 \cs_new_protected:Npn \__tenkz_model_map_ids:nn #1#2
   { \seq_map_inline:cn { l__tenkz_model_ #1 _seq } {#2} }
 
