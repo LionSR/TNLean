@@ -209,10 +209,16 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
 |------|-------------|---------------------|----------------------|------------|------------------|---------|
 | 2026-07-20 | 319,850 | 1,260 | 48 (20,500) | 29 | 1,934 | 4 |
 
-## Open debts (tournament order)
+## Ranked debts (tournament order)
+
+For closed entries, the **Evidence**, **Remediation**, and **First PR** fields
+are an archival record of the 2026-07-20 tournament baseline, not a
+description of current `main`.
 
 ## D1. Unbundled hypothesis telescopes and giant anonymous existentials at the MPDO/ParentHamiltonian frontier — abstraction-gap, impact 6/10, effort 6/10
-- **Status**: open (#4517)
+- **Status**: closed 2026-07-22
+  ([#4517](https://github.com/LionSR/TNLean/issues/4517),
+  [PR #4618](https://github.com/LionSR/TNLean/pull/4618))
 - **Evidence**: a 40-line byte-identical hypothesis telescope heads three
   theorems (`MPS/MPDO/VerticalSectorCompletePositivity.lean:257`,
   `VerticalSectorIdentity.lean:44`, `VerticalSectorTracePreservation.lean:49`)
@@ -237,7 +243,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   projections).
 
 ## D2. Fundamental-Theorem gauge-extraction spine re-instantiated per setting; capstone conditional on an unconstructed bridge — abstraction-gap, impact 7/10, effort 7/10
-- **Status**: open (#4518)
+- **Status**: closed 2026-07-25
+  ([#4518](https://github.com/LionSR/TNLean/issues/4518),
+  [PR #4818](https://github.com/LionSR/TNLean/pull/4818))
 - **Evidence**: the intertwining-hom -> AlgEquiv -> Skolem-Noether ->
   gauge-read-off ladder is re-derived in 8 files
   (`MPS/FundamentalTheorem/Basic.lean:59`, `MPS/Chain/AlgebraIsomorphism.lean:109`,
@@ -260,7 +268,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   bridge-free capstone (`PEPS/CycleMPSChainOverlapCapstone.lean:692`).
 
 ## D3. No module hierarchy: flat 121/187-file directories, a hand-listed 821-import root manifest at the CI cap, orphan files CI never builds — architecture, impact 5/10, effort 4/10
-- **Status**: open (#4519)
+- **Status**: closed 2026-07-22
+  ([#4519](https://github.com/LionSR/TNLean/issues/4519),
+  [PR #4619](https://github.com/LionSR/TNLean/pull/4619))
 - **Evidence**: `TNLean.lean` is exactly 1000 lines (the CI hard cap) with
   821 hand-listed imports, 84% transitively redundant; `lakefile.toml` has
   no globs, so files omitted from the manifest are silently never
@@ -281,7 +291,10 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   one PR and pulls the orphans back under CI.
 
 ## D4. BNT/canonical-form carriers in three generations with no carrier-level bridge; live bifurcation in MPDO — duplication, impact 5/10, effort 5/10
-- **Status**: open (#4520)
+- **Status**: tracker closed 2026-07-22
+  ([#4520](https://github.com/LionSR/TNLean/issues/4520),
+  [PR #4622](https://github.com/LionSR/TNLean/pull/4622)); follow-up
+  [PR #4678](https://github.com/LionSR/TNLean/pull/4678) merged 2026-07-23
 - **Evidence**: `IsCPSVBasisOfNormalTensors` (`MPS/CanonicalForm/Definitions.lean:180`,
   18 files), `IsBNT` (`MPS/BNT/Basic.lean:80`, 10 files),
   `IsBNTCanonicalForm` (`MPS/FundamentalTheorem/SectorBNT/Basic.lean:106`,
@@ -300,7 +313,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   into standalone lemmas.
 
 ## D5. General/special variant pairs maintained as forked full proofs while proven bridge lemmas sit unused — duplication, impact 6/10, effort 6/10
-- **Status**: open (#4521)
+- **Status**: closed 2026-07-25
+  ([#4521](https://github.com/LionSR/TNLean/issues/4521)); final follow-up
+  [PR #4806](https://github.com/LionSR/TNLean/pull/4806)
 - **Evidence**: `SectorBNT/ExactMatch.lean` (381 lines) vs
   `ProportionalMatch/Core.lean` (285 lines) share 69 ten-line duplicated
   windows including a 51-line verbatim run, while the bridge
@@ -317,25 +332,29 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   proportional theorem via the unused bridges at `MPS/Defs.lean:244,294`.
 
 ## D6. PEPS insertion/transfer machinery rebuilt at edge, region, and coarse granularities — abstraction-gap, impact 6/10, effort 8/10
-- **Status**: open (#4522)
-- **Evidence**: edge stack 2,126 lines over 3 files
-  (`PEPS/InsertionAlgebra.lean:379-770`); region twin inside RegionBlock's
-  57 files / 26,292 lines, with `RegionBlock/Realization.lean:20` stating
-  it "mirrors TNLean.PEPS.InsertionAlgebra piece by piece"; kernel descent
-  duplicated (`VertexComplement/KernelDescent.lean` vs
-  `RegionBlock/KernelDescent.lean`); CoarseThreeSite adds 12 files / 5,684
-  lines with 4 parallel merge helpers; 28 files hand-roll the boundary
-  configuration sum.
-- **Remediation**: one region-parametrized insertion interface with the
-  transfer/AlgEquiv/realization stack proved once; edge = singleton region.
-  Precondition: a configuration-calculus API (merge/split/reindex of
-  boundary-constrained virtual configurations) replacing the 4 bespoke
-  merge helpers.
-- **First PR**: the configuration-calculus lemma pack, migrating
-  `hostMerge` (`CoarseThreeSite9.lean:112`) as the first call site.
+- **Status**: open ([#4522](https://github.com/LionSR/TNLean/issues/4522))
+- **Evidence**: the shared configuration calculus has landed
+  ([PR #4623](https://github.com/LionSR/TNLean/pull/4623),
+  [PR #5188](https://github.com/LionSR/TNLean/pull/5188)); `hostMerge` is
+  now a thin `regionMerge` specialization, and the duplicate
+  vertex-complement kernel descent was removed by
+  [PR #4757](https://github.com/LionSR/TNLean/pull/4757). The edge
+  `edgeTransferMatrix` and region `regionTransferMatrix` developments
+  remain parallel, while the coarse three-site machinery still lacks a
+  blocked-tensor interface to `RegionInsertionTransfer`.
+- **Remediation**: recover the edge transfer as the singleton-region case
+  of `RegionInsertionTransfer`, including the boundary-data equivalences
+  and physical-configuration reindexing. Then connect the coarse case
+  through the blocked-tensor dictionary and retire the parallel stacks.
+- **First PR**: construct the singleton-region boundary and physical
+  configuration equivalences, then package the existing edge transfer as
+  a `RegionInsertionTransfer`; leave the coarse blocked-tensor dictionary
+  to a separate follow-up.
 
 ## D7. Layer leakage: the support projection built three times, the designated Algebra home holding the weakest version — architecture, impact 5/10, effort 3/10
-- **Status**: open (#4523)
+- **Status**: closed 2026-07-22
+  ([#4523](https://github.com/LionSR/TNLean/issues/4523),
+  [PR #4606](https://github.com/LionSR/TNLean/pull/4606))
 - **Evidence**: `Algebra/PosSemidefSupport.lean:33` defines `supportProj`
   for `Fin D` only; `Channel/MaximalOverlap.lean:136-208` rebuilds it
   generically over any Fintype without importing the Algebra file;
@@ -353,7 +372,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   mechanical import fixes) — best impact/effort ratio in the field.
 
 ## D8. Fragmented concept vocabulary with no glossary — naming-docs, impact 4/10, effort 3/10
-- **Status**: open (#4524)
+- **Status**: closed 2026-07-20
+  ([#4524](https://github.com/LionSR/TNLean/issues/4524),
+  [PR #4538](https://github.com/LionSR/TNLean/pull/4538))
 - **Evidence**: `IsNormal` (`MPS/Defs.lean:372`, 248 uses / 54 files) vs
   `IsNormalTensor` (`MPS/CanonicalForm/Definitions.lean:101`, 64 / 17) name
   different notions with no bridge lemma; 5-6 primitivity predicates
@@ -371,7 +392,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   entry for any new predicate.
 
 ## D9. 1000-line CI hard cap + stage-per-session habit produce numbered-sequel chains with duplicated context and dead stages — hygiene, impact 5/10, effort 4/10
-- **Status**: open (#4525)
+- **Status**: closed 2026-07-22
+  ([#4525](https://github.com/LionSR/TNLean/issues/4525),
+  [PR #4633](https://github.com/LionSR/TNLean/pull/4633))
 - **Evidence**: hard gate at `scripts/check_oversized_lean_files.py:21`
   with no splitting guidance; ~50 numbered-sequel files / ~22.9k lines, 39
   in PEPS (CoarseThreeSite x11, Recovery x11, UnionInjectivityOverlap x7,
@@ -388,7 +411,9 @@ in [`docs/proof_debt.md`](proof_debt.md)); every quantity should trend down.
   failure message) + delete the dead `TorusWindowPeel3.lean`.
 
 ## D10. PEPS mirror-direction duplication: horizontal/vertical and blue/complement re-proved by hand while generic transport sits unused — duplication, impact 5/10, effort 6/10
-- **Status**: open (#4526)
+- **Status**: closed 2026-07-23
+  ([#4526](https://github.com/LionSR/TNLean/issues/4526),
+  [PR #4634](https://github.com/LionSR/TNLean/pull/4634))
 - **Evidence**: 84 exact vertical<->horizontal rename pairs among PEPS
   top-level declarations; `TorusWindowFamilyVertical.lean` (412 lines,
   created after `IsoTransport.lean` landed) says it is the transpose of
