@@ -279,10 +279,12 @@ Let `U` and `V` be the ranges of the ground-space projections `qᵢ` and `qⱼ`.
 common intersection removed, is at most `η`, then
 `hᵢhⱼ + hⱼhᵢ ≥ -η(hᵢ + hⱼ)` as a quadratic-form inequality.
 
-This is the generic two-projection bridge from the ground-space principal-angle estimate to
-arXiv:2011.12127, Section IV.C, `eq:4:martingale-2` (lines 2176--2182). It does not assert the
-false all-vector norm compression bound for the excitation product. The MPS-specific task is only
-to supply the uniform ground-space Friedrichs bound in the chosen blocking convention, as recorded
+This is the generic two-projection reduction from the ground-space
+principal-angle estimate to arXiv:2011.12127, Section IV.C,
+`eq:4:martingale-2` (lines 2176--2182). It does not assert the false all-vector
+norm compression bound for the excitation product. The MPS-specific task is only
+to supply the uniform ground-space Friedrichs bound in the chosen blocking
+convention, as recorded
 in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
 theorem re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound
     (U V : Submodule ℂ E) {η : ℝ} (hη : 0 ≤ η)

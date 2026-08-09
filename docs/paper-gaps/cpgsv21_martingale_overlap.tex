@@ -21,8 +21,8 @@ can be compared with the quantitative estimate isolated in the formal
 parent-Hamiltonian proof.\footnote{For
     traceability, the finite-row reduction is recorded in
     \href{https://github.com/LionSR/TNLean/issues/1044}{issue \#1044}. The remaining
-    quantitative estimate is recorded in
-    \href{https://github.com/LionSR/TNLean/issues/952}{issue \#952}, and the broader
+    blocked MPS ground-space estimate is recorded in
+    \href{https://github.com/LionSR/TNLean/issues/5455}{issue \#5455}, and the broader
     parent-Hamiltonian theorem in
     \href{https://github.com/LionSR/TNLean/issues/460}{issue \#460}.}
 The relevant source passage is the discussion of gaps for MPS parent Hamiltonians
@@ -312,9 +312,10 @@ The qualitative fact that two finite-dimensional subspaces have a well-defined
 principal-angle decomposition is not enough: the martingale reduction needs a
 uniform numerical bound after the same blocking convention has been fixed.
 
-The norm-compression route remains available as a stronger sufficient target:
-any estimate (N$_\eta$) with $\eta\,2(L-1)<1$ gives a positive gap through the
-already formalized reduction. There is, however, a directional point. If
+The all-vector norm-compression theorem remains available as a stronger
+conditional implication: any estimate (N$_\eta$) with
+$\eta\,2(L-1)<1$ gives a positive gap through the already formalized reduction.
+It is not the source principal-angle target. There is, however, a directional point. If
 (N$_\eta$) is imposed for all vectors
 $v$, then $p_i v=0$ implies $p_i p_j v=0$. Thus $p_j$ maps $\ker p_i$ into
 $\ker p_i$. This is stronger than merely knowing that the
@@ -370,11 +371,12 @@ and
 \leanid{parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt},
 with public reformulations
 \leanid{parentHamiltonianES_gap_bound_of_overlap_operator_norm_constant} and
-\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The remaining
-MPS-specific task is to produce a uniform ground-space principal-angle estimate
-for overlapping cyclic windows; the generic theorem above then supplies the
-anticommutator estimate. This uses the intersection identity
-$\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
+\leanid{parentHamiltonian_gapped_of_overlap_operator_norm_constant}. The correct
+remaining route is to prove the blocked MPS reduced ground-space Friedrichs
+estimate tracked in issue~\#5455. The generic theorem
+\leanid{re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
+then supplies the excitation-projection anticommutator estimate. This route uses
+the intersection identity $\ker h_i\cap\ker h_j=\ker(h_i+h_j)$ or its restatement
 \leanid{adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; a uniform
 small bound on $\|p_ip_j\|$ itself is not available in the generic overlapping
 case, since that norm is $1$ whenever the two excitation ranges have a common
@@ -420,10 +422,11 @@ or matched precisely to the cited martingale estimates.
 
 Once the quantitative comparison with the cited martingale estimates is settled,
 the blueprint should say that the cyclic-window anticommutator estimate follows
-from those estimates under the convention used here. If the proof instead goes
-through norm compression, the blueprint should say explicitly that the
-compression bound (N$_\eta$) with $\eta\,2(L-1)<1$ is a stronger sufficient
-estimate implying the anticommutator route.
+from those estimates under the convention used here. The blueprint should
+identify the reduced ground-space
+Friedrichs-to-anticommutator reduction as the source-facing route. The all-vector
+compression bound (N$_\eta$), if separately assumed, is only a stronger
+conditional estimate implying a gap.
 
 \section{Conclusion}
 

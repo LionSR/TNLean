@@ -819,9 +819,10 @@ is the boundary-comparison-free open-boundary inclusion of arXiv:quant-ph/060819
 (its block components lie in \(G_N(A_j)\)) and does not assume the
 boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentity`
 is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
-lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet
-derived from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
+retained as an explicit assumption in this intermediate
+complementary-word API. The source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_complementary_identities_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -884,9 +885,10 @@ block-diagonal boundary representation is the boundary-comparison-free open-boun
 arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
-1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, not yet derived
-from the periodic ground-space constraint. Documented in
-`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
+1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as
+an explicit hypothesis of this intermediate complementary-word API. The
+source-range conclusion without it is the global-cut theorem in
+`BNTBlockDiagonalBoundaryClosing`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_complementary_identities
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

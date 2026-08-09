@@ -8,11 +8,12 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 /-!
 # Uniform spectral gap for the MPS parent Hamiltonian
 
-**Root-only.** This file contains the final conditional spectral-gap theorems
-for the MPS parent Hamiltonian. The source anticommutator estimate remains an
-explicit hypothesis. A cyclic-window norm-compression estimate, obtainable from
-principal-angle bounds when available, is recorded as a sufficient stronger
-hypothesis.
+**Root-only.** This file contains conditional spectral-gap theorems for the
+MPS parent Hamiltonian. The source anticommutator estimate remains an explicit
+hypothesis. All-vector cyclic-window norm and operator-product estimates for the
+excitation projections are recorded only as stronger conditional sufficient
+hypotheses; they are not the source principal-angle estimate for the local
+ground spaces.
 
 ## Main results
 
@@ -197,32 +198,19 @@ orthogonal complement of the ground space satisfies
 The orthogonal complement is computed in the `EuclideanSpace` structure
 on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 
-**Proof strategy (Kastoryano–Lucia 2018 / Nachtergaele 1996).** The parent
-Hamiltonian \(H_N = ∑ᵢ hᵢ\) is a frustration-free sum of local orthogonal
-projectors (`parentHamiltonian_frustrationFree`). The intersection property
-`groundSpace_intersection` gives the local relation
+**Conditional proof boundary.** This theorem assumes the all-vector
+excitation-projection estimate displayed in its statement. That estimate is
+strictly stronger than the source anticommutator condition and is not supplied
+merely by the intersection property or by the cited reduced ground-space
+principal-angle estimate. Once assumed, `Martingale.Reduction` converts it to
+the ordered cross-term estimate, performs the finite cyclic row count, and
+applies the spectral theorem.
 
-    \(\ker h_{\mathrm{left}} \cap \ker h_{\mathrm{right}} \subseteq \ker h\)
+Despite its historical short name, this declaration is conditional. The
+source-matching conditional theorem is
+`parentHamiltonian_gapped_of_anticommutator`.
 
-where \(h_{\mathrm{left}}\) and \(h_{\mathrm{right}}\) are the two overlapping
-length-\(L\) projectors and \(h\) is the length-\(L+1\) projector. The remaining
-principal-angle estimate
-supplies the martingale operator inequality
-
-    \(h_i h_j + h_j h_i ≥ - c_{ij} (1 - γ) (h_i + h_j)\)
-
-with row-summable coefficients. At most \(2(L-1)\) local terms overlap a given
-length-\(L\) cyclic window, so the chosen coefficients have row sum at most one.
-Combined with \(h_i^2 = h_i\), this yields the quadratic-form inequality
-\(H² ≥ γ H\), which feeds into the abstract lemma
-`FrustrationFree.spectralGap_of_martingale` to produce the norm bound
-\(γ ‖v‖ ≤ ‖H v‖\) on \((\ker H)^\perp\). The `LinearMap.IsPositive` hypothesis required
-by `FrustrationFree.spectralGap_of_martingale` is automatic here because
-\(H_N = ∑ᵢ hᵢ\) is a sum of orthogonal projectors.
-
-This theorem records the stronger norm-compression route. The source-matching
-conditional theorem is `parentHamiltonian_gapped_of_anticommutator`. The proof
-below invokes
+This theorem records the stronger norm-compression route. Its proof invokes
 `parentHamiltonianES_gap_bound_of_overlap_norm_bound`, which combines the already
 formalized martingale reductions after the overlapping-window estimate is given. -/
 theorem parentHamiltonian_gapped
@@ -285,10 +273,10 @@ overlapping cyclic-window estimate
 positive lower bound on the parent Hamiltonian, independent of the chain length.
 
 This is the version of `parentHamiltonian_gapped` with an arbitrary compression
-constant.  It is the appropriate target if the principal-angle estimates cited
-in arXiv:2011.12127, Section IV.C, first produce an unspecified positive
-compression constant rather than the explicit coefficient
-\((1 - 1/(4L)) / (2(L-1))\). -/
+constant. It is a stronger conditional interface, not the source
+principal-angle target: the cited estimates concern the reduced local
+ground-space projections, whereas this theorem assumes an all-vector estimate
+for the excitation projections. -/
 theorem parentHamiltonian_gapped_of_overlap_norm_constant
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L) {η : ℝ}
     (hηnonneg : 0 ≤ η)
@@ -326,8 +314,9 @@ anticommutator reduction `re_inner_anticommutator_ge_neg_of_norm_apply_le`, any
 such bound with \(\eta\,2(L-1) < 1\) yields the positive gap constant
 \(1 - \eta\,2(L-1)\).
 
-Like `parentHamiltonianES_gap_bound_of_principal_angle_compression`, this is a
-conditional reduction, not an achievable MPS estimate in the generic overlapping
+Like
+`parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt`, this
+is a conditional reduction, not an achievable MPS estimate in the generic overlapping
 case: \(p_i, p_j\) are the excitation projections, and when their ranges share a
 nonzero vector one has \(\|p_i p_j\| = 1\), making the hypothesis unsatisfiable
 for \(\eta < 1\).  In degenerate cases, for instance when an excitation
