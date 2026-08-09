@@ -665,6 +665,219 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
 \end{definition}
 
+\begin{definition}[Product-index source weight]
+    \label{def:mpu_source_weight}
+    \lean{MPOTensor.sourceWeight}
+    \leanok
+    \uses{def:mpu_source_matrix_one}
+    For $\rho\in\MN{D}$, in the row order $(\alpha,j)$ of $M_1$, define
+    \begin{align}
+        W_\rho&=\rho\otimes\Id_d.
+    \end{align}
+    This is the matrix denoted $\Id_d\otimes\rho$ in the graphical leg order
+    of \cite[Section~III]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Positivity of the product-index source weight]
+    \label{thm:mpu_source_weight_posdef}
+    \lean{MPOTensor.sourceWeight_posDef}
+    \leanok
+    \uses{def:mpu_source_weight}
+    If $\rho$ is positive definite, then $W_\rho$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_weight}
+    The Kronecker product of the positive-definite matrices $\rho$ and
+    $\Id_d$ is positive definite.
+\end{proof}
+
+\begin{definition}[Source singular-value data and normalization matrix]
+    \label{def:mpu_source_svd_data}
+    \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
+        MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁}
+    \leanok
+    \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,
+        def:mpu_source_weight}
+    Choose compact singular-value decompositions
+    \begin{align}
+        M_i&=V_i^\dagger D_iU_i,
+        &V_iV_i^\dagger&=\Id,
+        &U_iU_i^\dagger&=\Id,
+    \end{align}
+    with intermediate dimensions $r$ and $\ell$, respectively. For
+    $\rho\in\MN{D}$, put
+    \begin{align}
+        A&=V_1W_\rho V_1^\dagger.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Positivity of the first source normalization matrix]
+    \label{thm:mpu_source_gram_posdef}
+    \lean{MPOTensor.sourceGram₁_posDef}
+    \leanok
+    \uses{def:mpu_source_svd_data}
+    If $\rho$ is positive definite, then $A$ is positive definite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_svd_data,thm:mpu_source_weight_posdef}
+    The map $V_1^\dagger$ is injective because $V_1V_1^\dagger=\Id_r$.
+    Positive definiteness of $W_\rho$ is therefore preserved by this
+    congruence.
+\end{proof}
+
+\begin{definition}[Weighted source factors]
+    \label{def:mpu_weighted_source_factors}
+    \lean{MPOTensor.sourceX₁, MPOTensor.sourceY₁,
+        MPOTensor.sourceZ₁, MPOTensor.sourceX₂, MPOTensor.sourceY₂,
+        MPOTensor.sourceZ₂, MPOTensor.sourceX₁_apply,
+        MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
+        MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
+        MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
+        MPOTensor.sourceFactors}
+    \leanok
+    \uses{def:mpu_source_svd_data,thm:mpu_source_gram_posdef}
+    Let $\rho\in\MN{D}$ be positive definite. Define
+    \begin{align}
+        X_1&=V_1^\dagger A^{-1/2},
+        &Y_1&=A^{1/2}D_1U_1,
+        &Z_1&=U_1^\dagger D_1^{-1}A^{-1/2},\\
+        X_2&=V_2^\dagger,
+        &Y_2&=D_2U_2,
+        &Z_2&=U_2^\dagger D_2^{-1}.
+    \end{align}
+    These are the factors in \cite[Section~III]{Cirac2017MPU}.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_source_weight,def:mpu_source_svd_data,
+        thm:mpu_source_gram_posdef}
+    Since $A$ is positive definite, its support projection is the identity and
+    \begin{align}
+        A^{-1/2}A^{1/2}&=\Id_r,
+        &A^{-1/2}AA^{-1/2}&=\Id_r.
+    \end{align}
+    Therefore
+    \begin{align}
+        X_1Y_1
+        &=V_1^\dagger A^{-1/2}A^{1/2}D_1U_1
+          =V_1^\dagger D_1U_1=M_1,\\
+        X_1^\dagger W_\rho X_1
+        &=A^{-1/2}V_1W_\rho V_1^\dagger A^{-1/2}
+          =A^{-1/2}AA^{-1/2}=\Id_r,\\
+        Y_1Z_1
+        &=A^{1/2}D_1U_1U_1^\dagger D_1^{-1}A^{-1/2}
+          =A^{1/2}A^{-1/2}=\Id_r.
+    \end{align}
+    For the second cut, $V_2V_2^\dagger=U_2U_2^\dagger=\Id_\ell$ and
+    $D_2D_2^{-1}=\Id_\ell$ give
+    \begin{align}
+        X_2Y_2&=V_2^\dagger D_2U_2=M_2,\\
+        X_2^\dagger X_2&=V_2V_2^\dagger=\Id_\ell,\\
+        Y_2Z_2&=D_2U_2U_2^\dagger D_2^{-1}=\Id_\ell.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Source-cut factorizations]
+    \label{thm:mpu_source_factorizations}
+    \lean{MPOTensor.sourceCutM₁_eq_sourceX₁_mul_sourceY₁,
+        MPOTensor.sourceCutM₂_eq_sourceX₂_mul_sourceY₂}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    The two factorizations are
+    \begin{align}
+        M_1&=X_1Y_1, & M_2&=X_2Y_2.
+    \end{align}
+    These are the source decompositions in
+    \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
+    The source-factor construction supplies $M_1=X_1Y_1$. The second
+    compact singular-value decomposition gives $M_2=X_2Y_2$ directly.
+\end{proof}
+
+\begin{theorem}[Entry forms of the source-cut factorizations]
+    \label{thm:mpu_source_factorization_entries}
+    \lean{MPOTensor.sourceX₁_mul_sourceY₁_apply,
+        MPOTensor.sourceX₂_mul_sourceY₂_apply}
+    \leanok
+    \uses{thm:mpu_source_factorizations,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    The entries of the two products satisfy
+    \begin{align}
+        (X_1Y_1)_{(\alpha,j),(i,\beta)}
+            &=\mathcal U^i_{j,\alpha,\beta},\\
+        (X_2Y_2)_{(\alpha,i),(j,\beta)}
+            &=\mathcal U^i_{j,\alpha,\beta}.
+    \end{align}
+    These are the two graphical entry identifications in
+    \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factorizations,def:mpu_source_matrix_one,
+        def:mpu_source_matrix_two}
+    Evaluate the two matrix factorizations at
+    $((\alpha,j),(i,\beta))$ and $((\alpha,i),(j,\beta))$, respectively.
+\end{proof}
+
+\begin{theorem}[Source-factor normalizations]
+    \label{thm:mpu_source_factor_normalizations}
+    \lean{MPOTensor.sourceX₁_weighted_isometry,
+        MPOTensor.sourceX₂_isometry}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
+    The left factors satisfy
+    \begin{align}
+        X_1^\dagger W_\rho X_1&=\Id_r,
+        &X_2^\dagger X_2&=\Id_\ell.
+    \end{align}
+    These are \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
+    The source-factor construction supplies
+    $X_1^\dagger W_\rho X_1=\Id_r$. Since $X_2=V_2^\dagger$, the
+    coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
+    $X_2^\dagger X_2=\Id_\ell$.
+\end{proof}
+
+\begin{theorem}[Right inverses of the source factors]
+    \label{thm:mpu_source_factor_right_inverses}
+    \lean{MPOTensor.sourceY₁_mul_sourceZ₁,
+        MPOTensor.sourceY₂_mul_sourceZ₂}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    The right factors satisfy
+    \begin{align}
+        Y_1Z_1&=\Id_r, &Y_2Z_2&=\Id_\ell.
+    \end{align}
+    This is \cite[Section~III]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
+    The source-factor construction supplies $Y_1Z_1=\Id_r$. For the
+    second cut,
+    \begin{align}
+        Y_2Z_2
+        &=D_2U_2U_2^\dagger D_2^{-1}
+          =D_2D_2^{-1}=\Id_\ell.
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Right-rank bound]
     \label{thm:mpu_right_rank_bound}
     \lean{MPOTensor.rightRank_bound}
