@@ -242,6 +242,14 @@ of `mismatch` or `malformed`, and audits label overlap, bounding-box coverage,
 repeated topology, and equation boundaries. Its own table of emitted kinds is
 maintained by hand.
 
+`closure-rail`'s `clear` is the worked example of §7's optional-field rule. It
+arrived on a kind that already existed, so the reader validates it when it is
+there and asks nothing when it is not, and a stream written before it reads
+clean. What the reader cannot then say is whether a live picture stopped
+writing it, so that reading is taken where the live library is the thing being
+read: `scripts/tenkz_kernel_probes.sh` fails on a closure the kernel wrote
+without a standoff, and measures the drawn contour against it there.
+
 ## 7. Compatibility
 
 From `DESIGN.md`'s `[event_format]` block:
