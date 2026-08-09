@@ -883,9 +883,11 @@ changes it to $|\mu_s|^2$. The source's global normalization gives only one
 unit-modulus coefficient across the whole canonical form. It therefore does
 not supply the sectorwise equations $|\mu_s|=1$ needed to invoke the normal
 Case-I theorem for every $s$. This is the precise remaining obstruction in
-Propositions `prop2to3` and `prop2to5`. The explicit tensor-attached vertical
-BNT coefficient problem tracked in \ghissue{5635} is a separate question and
-is not used in this descent argument.
+Propositions `prop2to3` and `prop2to5`. For the rescaling-stable example, the
+separate explicit vertical identification is complete in
+\leanid{MPOTensor.RescalingStableLengthDependentRFP.R_oneLabelBNTAlgebraTensorClause};
+it does not supply sectorwise normality and is not used in this descent
+argument.
 
 The structural corollary at lines~1503--1506 is now formalized by
 \leanid{MPOTensor.exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL}.
@@ -913,7 +915,8 @@ standing hypotheses. The completed normal Case-I corollary does not replace
 literal ZCL by TNLean's scale-invariant \leanid{MPOTensor.IsSourceZCL}
 predicate. The completed Case-II analytic inheritance likewise does not prove
 that coefficient absorption preserves normality. The all-sector structural
-passage remains separate under issue \ghissue{5673}.
+passage therefore remains blocked at this normalization boundary, rather than
+being an unfinished consequence of the analytic inheritance theorem.
 
 The raw witness $\mathcal K$ nevertheless has explicit trace-preserving
 completely positive renormalization maps, both before and after two-site
