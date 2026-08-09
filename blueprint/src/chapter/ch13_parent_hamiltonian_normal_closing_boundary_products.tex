@@ -3,8 +3,8 @@
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_closing_restrictions}
     \leanok
     \uses{def:l_blk_injective, def:ground_space_map,
-        rem:cyclic_window_operators, lem:ground_space_map_injective_blk,
-        lem:cyclic_window_boundary_matrix_transport,
+        rem:cyclic_window_operators, thm:ground_space_map_injective_blk,
+        thm:cyclic_window_boundary_matrix_transport,
         lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$.
     Let $\psi$ be a state on the chain of length $M+1$, and let
@@ -54,8 +54,8 @@
         \notag
     \end{align}
     where the two sides are identified by
-    Lemma~\ref{lem:cyclic_window_boundary_matrix_transport}. By
-    Lemma~\ref{lem:ground_space_map_injective_blk},
+    Theorem~\ref{thm:cyclic_window_boundary_matrix_transport}. By
+    Theorem~\ref{thm:ground_space_map_injective_blk},
     $Y_M(\tau^+_j(\mu))A^j = Y_{M+1-L_0}(\tau^-_j(\mu))A^j$.
     Right multiplication by $A^\sigma$ gives the asserted product equation.
 \end{proof}

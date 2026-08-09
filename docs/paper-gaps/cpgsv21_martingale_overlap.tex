@@ -113,6 +113,46 @@ projection estimates inherited from Fannes--Nachtergaele--Werner
 convert one of these source estimates to the cyclic-window inequality used
 below, with constants in the same blocking convention.
 
+\subsection{Open-chain projector geometry}
+
+The source-faithful open-chain geometry is now isolated before any cyclic
+specialization. In the common Hilbert space on $\Lambda_{n+1}$, the formal
+subspaces
+\leanid{openChainLeftGroundSpaceES} and
+\leanid{openChainTailGroundSpaceES} are the ranges of $G_{\Lambda_n}$ and
+$G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$, expressed using the existing
+last-site and fixed-prefix restriction maps. Under $L_0$-block injectivity,
+with $n=K+L_0$ and $l=L_0$, the theorem
+\leanid{openChainLeft_inf_tailGroundSpaceES} proves
+\[
+  U\cap V=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A).
+\]
+
+The generic theorem
+\leanid{isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
+converts
+\[
+  \|P_UP_V-P_{U\cap V}\|\le\eta
+\]
+into a Friedrichs bound. Combining these two results with the complementary
+projection theorem gives the open-chain corollary
+\leanid{re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}.
+Its hypothesis is precisely the C3 defect
+\[
+  \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
+    -G_{\Lambda_{n+1}}\|\le\eta,
+\]
+using the identity following condition C3 in
+\cite[Equation~(2.4)]{Nachtergaele1996Spectral}. Equation~(2.5) is the
+separate batched condition C3$'$ involving $E_n^{(p)}$.
+
+The remaining source step is numerical, not geometric: one must formalize the
+FNW transfer-mixing estimate that bounds this open-chain defect uniformly in
+$n$ by an exponentially decaying function of $l$ (or formalize the Section~6
+C3$'$ route with its batched difference). No cyclic rotation, interval
+evaluator, excitation compression, or numerical transfer estimate is included
+in these results.
+
 \section{Finite-row martingale reduction}
 
 The current development separates the finite-row martingale algebra from the
