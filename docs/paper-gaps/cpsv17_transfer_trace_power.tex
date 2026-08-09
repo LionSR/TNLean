@@ -37,16 +37,19 @@ the stronger all-positive-moment input.
 
 \section{The $k>1$ conclusion}
 
-The source's exact $k>1$ conclusion is handled by \ghissue{5737}, which
-proves the nonzero spectrum is $\{1\}$ directly, without recovering the
-first moment.  The proof uses the fact that $E$ is a positive map whose
-spectral radius is~$1$, together with the observations that both $E^2$
-and $E^3$ have trace~$1$.  For any nonzero eigenvalue $\lambda$ of $E$,
-$\lambda^2$ and $\lambda^3$ are eigenvalues of $E^2$ and $E^3$; since
-$\tr(E^2)=\tr(E^3)=1$, both $\lambda^2$ and $\lambda^3$ must be nonzero
-and their traces constrain them, yielding $\lambda^2=\lambda^3=1$, hence
+The source's exact $k>1$ conclusion is handled by \ghissue{5737} using
+a purely algebraic spectral-mapping argument.  From $\tr(E^N)=1$ for all
+$N>1$ we have $\tr((E^2)^m)=\tr(E^{2m})=1$ and
+$\tr((E^3)^m)=\tr(E^{3m})=1$ for every $m\ge 1$.  Applying the
+all-positive-powers charpoly theorem of this PR to the matrices $E^2$
+and $E^3$ separately gives
+$\chi_{E^2}(X)=\chi_{E^3}(X)=X^{\,n-1}(X-1)$.  By the spectral mapping
+theorem, the eigenvalues of $E^2$ and $E^3$ are $\{\lambda^2\}$ and
+$\{\lambda^3\}$ for eigenvalues $\lambda$ of $E$.  Hence every nonzero
+eigenvalue $\lambda$ of $E$ satisfies $\lambda^2=\lambda^3=1$, so
 $\lambda=1$.  Thus $\operatorname{spectrum}(E)\setminus\{0\}=\{1\}$ as
-a set.
+a set.  No positivity, spectral radius, or Perron--Frobenius hypotheses
+are required.
 
 This set-level result (the nonzero spectrum is exactly $\{1\}$) is
 \emph{distinct} from the characteristic-polynomial factorization proved
