@@ -55,11 +55,22 @@ $n\in\mathbb N$.  Equation~(8.103) is formalized with the explicit hypothesis
 $D-1\le n$.  Its refined constant $(D-1)\binom{n}{D-1}$ is formalized under
 the source's stated hypothesis $2(D-1)\le n$, which implies the first range
 condition.  Both results retain the arbitrary submultiplicative seminorm
-parameter; no particular matrix norm replaces it.
+parameter; no particular matrix norm replaces it.  The corresponding Lean
+declarations are:
+\begin{itemize}
+  \item \leanid{Matrix.wolf_eq_105_seminorm} for the unrestricted
+    Equation~(8.105) word bound;
+  \item \leanid{Matrix.wolf_eq_103} for the natural-power form under
+    $D-1\le n$;
+  \item \leanid{Matrix.wolf_eq_103_refined} for the refined constant under
+    $2(D-1)\le n$.
+\end{itemize}
 
 \section{Verdict}
 
-This is a \emph{source scope restriction}, not a missing Lean proof.  The
+\textbf{Verdict: source scope restriction.}
+
+This is not a missing Lean proof.  The
 formal statement records exactly the range in which the printed
 natural-exponent derivation is meaningful.  Eliminating the restriction would
 require Wolf to specify an interpretation for negative powers, including the

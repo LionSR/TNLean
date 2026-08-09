@@ -4,13 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basic
+import Mathlib.LinearAlgebra.Matrix.IsDiag
 import Mathlib.Data.Fin.Basic
 import Mathlib.Data.List.Basic
 import Mathlib.Data.List.OfFn
 import Mathlib.Data.Nat.Choose.Basic
 import Mathlib.Data.Fintype.Card
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-import Mathlib.Tactic
+import Lean.Elab.Tactic.Omega
+import Mathlib.Tactic.Cases
+import Mathlib.Tactic.GCongr
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 import Mathlib.Analysis.Normed.Unbundled.RingSeminorm
 /-!
 # Upper-triangular power bound -- Wolf Eqs. (8.103) and (8.105)
@@ -23,28 +30,25 @@ namespace Matrix
 section TriangularDefinitions
 variable {D : ℕ} {R : Type*} [Semiring R]
 
-/-- `IsDiagonal M` holds when `M` has nonzero entries only on the diagonal. -/
-def IsDiagonal (M : Matrix (Fin D) (Fin D) R) : Prop := ∀ i j, i ≠ j → M i j = 0
-
-/-- `IsStrictlyUpperTriangular M` holds when `M i j = 0` whenever `i ≥ j`. -/
+/-- A matrix is strictly upper triangular when \(M_{ij}=0\) whenever \(i\ge j\). -/
 def IsStrictlyUpperTriangular (M : Matrix (Fin D) (Fin D) R) : Prop :=
   ∀ (i j : Fin D), (i : ℕ) ≥ (j : ℕ) → M i j = 0
 end TriangularDefinitions
 
 section EntryLemmas
-variable {D : ℕ} {R : Type*} [Semiring R]
-lemma IsDiagonal.mul_apply (hΛ : IsDiagonal Λ) (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
+variable {D : ℕ} {R : Type*} [Semiring R] {Λ N : Matrix (Fin D) (Fin D) R}
+lemma IsDiag.mul_apply (hΛ : IsDiag Λ) (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
     (Λ * P) i j = Λ i i * P i j := by
   rw [Matrix.mul_apply]
   apply Finset.sum_eq_single i
-  · intro k _ hk_ne; rw [hΛ i k (Ne.symm hk_ne), zero_mul]
+  · intro k _ hk_ne; rw [hΛ (Ne.symm hk_ne), zero_mul]
   · intro h; exfalso; exact h (Finset.mem_univ i)
 
-lemma IsDiagonal.mul_apply_right (hΛ : IsDiagonal Λ) (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
+lemma IsDiag.mul_apply_right (hΛ : IsDiag Λ) (P : Matrix (Fin D) (Fin D) R) (i j : Fin D) :
     (P * Λ) i j = P i j * Λ j j := by
   rw [Matrix.mul_apply]
   apply Finset.sum_eq_single j
-  · intro k _ hk_ne; rw [hΛ k j hk_ne, mul_zero]
+  · intro k _ hk_ne; rw [hΛ hk_ne, mul_zero]
   · intro h; exfalso; exact h (Finset.mem_univ j)
 
 lemma IsStrictlyUpperTriangular.mul_apply (hN : IsStrictlyUpperTriangular N)
@@ -77,7 +81,7 @@ end EntryLemmas
 section WordProduct
 variable {D : ℕ} {R : Type*} [Semiring R]
 
-/-- `wordProd Λ N w` is the product of the `n`-word `w` where `false` ↦ `Λ` and `true` ↦ `N`. -/
+/-- The ordered matrix product encoded by a Boolean word, with false selecting \(\Lambda\) and true selecting \(N\). -/
 def wordProd (Λ N : Matrix (Fin D) (Fin D) R) {n : ℕ} (w : Fin n → Bool) :
     Matrix (Fin D) (Fin D) R :=
   (List.ofFn (fun i : Fin n => cond (w i) N Λ)).prod
@@ -166,7 +170,7 @@ end WordExpansion
 section WordVanishing
 variable {D : ℕ} {R : Type*} [Semiring R]
 
-/-- `countN w` is the number of `true` entries in the word `w : Fin n → Bool`. -/
+/-- The number of true entries in a Boolean word. -/
 def countN {n : ℕ} (w : Fin n → Bool) : ℕ :=
   ((Finset.univ : Finset (Fin n)).filter (fun i => w i = true)).card
 
@@ -243,7 +247,7 @@ lemma countN_snoc_true {n : ℕ} (w : Fin n → Bool) :
   rw [Finset.card_union_of_disjoint h_disjoint, Finset.card_map, Finset.card_singleton]
 
 lemma wordProd_apply_eq_zero_of_shift [NeZero D] (Λ N : Matrix (Fin D) (Fin D) R)
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     {n : ℕ} (w : Fin n → Bool) (i j : Fin D)
     (hshift : (j : ℕ) < (i : ℕ) + countN w) :
     (wordProd Λ N w) i j = 0 := by
@@ -262,7 +266,7 @@ lemma wordProd_apply_eq_zero_of_shift [NeZero D] (Λ N : Matrix (Fin D) (Fin D) 
     rw [hw_eq, wordProd_snoc']
     rcases b with (rfl | rfl)
     · simp
-      rw [IsDiagonal.mul_apply_right hΛ_diag (wordProd Λ N w') i j]
+      rw [IsDiag.mul_apply_right hΛ_diag (wordProd Λ N w') i j]
       have hshift' : (j : ℕ) < (i : ℕ) + countN w' := by
         simpa [countN_snoc_false w', hw_eq] using hshift
       rw [ih w' i j hshift', zero_mul]
@@ -280,7 +284,7 @@ lemma wordProd_apply_eq_zero_of_shift [NeZero D] (Λ N : Matrix (Fin D) (Fin D) 
       rw [ih w' i k hk_shift, zero_mul]
 
 lemma wordProd_eq_zero_of_N_count_ge_D [NeZero D] (Λ N : Matrix (Fin D) (Fin D) R)
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     {n : ℕ} (w : Fin n → Bool)
     (hcount : D ≤ countN w) :
     wordProd Λ N w = 0 := by
@@ -294,25 +298,23 @@ lemma wordProd_eq_zero_of_N_count_ge_D [NeZero D] (Λ N : Matrix (Fin D) (Fin D)
   exact wordProd_apply_eq_zero_of_shift Λ N hΛ_diag hN_sut w i j hshift
 end WordVanishing
 
-end Matrix
-
 section CountCardinality
 
 variable {n : ℕ}
 
-/-- `wordToSupport w` is the set of indices `i` where `w i = true`. -/
-def wordToSupport (w : Fin n → Bool) : Finset (Fin n) :=
+/-- The set of indices at which a Boolean word is true. -/
+private def wordToSupport (w : Fin n → Bool) : Finset (Fin n) :=
   (Finset.univ : Finset (Fin n)).filter (fun i => w i = true)
 
-@[simp] lemma wordToSupport_card (w : Fin n → Bool) : (wordToSupport w).card = countN w := rfl
+@[simp] private lemma wordToSupport_card (w : Fin n → Bool) : (wordToSupport w).card = countN w := rfl
 
-lemma wordToSupport_injective :
+private lemma wordToSupport_injective :
     Function.Injective (wordToSupport : (Fin n → Bool) → Finset (Fin n)) := by
   intro w1 w2 h; ext i
   have h_mem : i ∈ wordToSupport w1 ↔ i ∈ wordToSupport w2 := by rw [h]
   simp [wordToSupport] at h_mem ⊢; exact h_mem
 
-lemma card_countN_eq_choose (k : ℕ) :
+private lemma card_countN_eq_choose (k : ℕ) :
     ((Finset.univ : Finset (Fin n → Bool)).filter (fun w => countN w = k)).card = Nat.choose n k := by
   let S := ((Finset.univ : Finset (Fin n → Bool)).filter (fun w => countN w = k))
   let img := S.image wordToSupport
@@ -369,8 +371,8 @@ end SeminormHelpers
 
 section PowMaxAux
 
-/-- If `k` satisfies `1 ≤ k ≤ D-1` then `x^k ≤ max x (x^(D-1))` for nonnegative `x`. -/
-lemma pow_le_max_of_one_le {k D : ℕ} {x : ℝ} (hx_nonneg : 0 ≤ x) (hk1 : 1 ≤ k) (hk2 : k ≤ D - 1) :
+/-- If \(1\le k\le D-1\), then \(x^k\le\max\{x,x^{D-1}\}\) for nonnegative \(x\). -/
+private lemma pow_le_max_of_one_le {k D : ℕ} {x : ℝ} (hx_nonneg : 0 ≤ x) (hk1 : 1 ≤ k) (hk2 : k ≤ D - 1) :
     x ^ k ≤ max x (x ^ (D - 1)) := by
   by_cases hx1 : x ≤ 1
   · have h_pow_le_one : x ^ k ≤ x := by
@@ -469,12 +471,12 @@ end SeminormBound
 
 section WolfEq105
 
-variable {D : ℕ} {R : Type*} [Ring R]
+variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R}
 
 theorem wolf_eq_105 (f : Matrix (Fin D) (Fin D) R → ℝ)
     (hf_nonneg : ∀ x, 0 ≤ f x) (hf_mul : ∀ x y, f (x * y) ≤ f x * f y)
     (hf_add : ∀ x y, f (x + y) ≤ f x + f y) (hf_zero : f 0 = 0)
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (n : ℕ) :
     f ((Λ + N) ^ n) ≤ f (Λ ^ n) +
       (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
@@ -617,13 +619,13 @@ end WolfEq105
 
 section RingSeminormCorollary
 
-variable {D : ℕ} {R : Type*} [Ring R]
+variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R}
 
 open RingSeminorm
 
 /-- **Wolf Eq. (8.105) for `RingSeminorm`**. -/
 theorem wolf_eq_105_seminorm (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (n : ℕ) :
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (∑ k ∈ Finset.Icc 1 (min n (D - 1)),
@@ -636,17 +638,16 @@ end RingSeminormCorollary
 
 section WolfEq103
 
-variable {D : ℕ} {R : Type*} [Ring R]
+variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R} {n : ℕ}
 
 open RingSeminorm
 
-/-- **Wolf Eq. (8.103)** — coarse constant `(D-1) * n^(D-1)`.
+/-- **Wolf Eq. (8.103)** with coarse constant \((D-1)n^{D-1}\).
 
-Assumes `D - 1 ≤ n` so the exponent `n - (D - 1)` is natural.
-The natural exponent range restriction is documented in
-`docs/paper-gaps/wolf_ch8_eq_8_103_negative_exponent.tex`. -/
+Assumes \(D-1\le n\), so the exponent \(n-(D-1)\) is natural.
+The natural-exponent range restriction is documented in the accompanying paper-gap note. -/
 theorem wolf_eq_103 (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (hn_ge : D - 1 ≤ n) (hνΛ : ν Λ ≤ 1) :
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (((D-1 : ℕ) * n ^ (D-1 : ℕ) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
@@ -727,17 +728,17 @@ end WolfEq103
 
 section WolfEq103Refined
 
-variable {D : ℕ} {R : Type*} [Ring R]
+variable {D : ℕ} {R : Type*} [Ring R] {Λ N : Matrix (Fin D) (Fin D) R} {n : ℕ}
 
 open RingSeminorm
 
 /-- **Wolf Eq. (8.103) with refined binomial-coefficient constant**.
 
-Assumes `2*(D-1) ≤ n`, which implies `D-1 ≤ n/2`, monotonicity
+Assumes \(2(D-1)\le n\), which implies \(D-1\le n/2\), monotonicity
 of the binomial coefficient, and the tighter bound
-`(D-1) * C(n, D-1)` instead of `(D-1) * n^(D-1)`. -/
+\((D-1)\binom{n}{D-1}\) instead of \((D-1)n^{D-1}\). -/
 theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
-    (hΛ_diag : IsDiagonal Λ) (hN_sut : IsStrictlyUpperTriangular N)
+    (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (hn_ge : 2 * (D - 1) ≤ n) (hνΛ : ν Λ ≤ 1) :
     ν ((Λ + N) ^ n) ≤ ν (Λ ^ n) +
       (((D-1 : ℕ) * Nat.choose n (D-1) : ℕ) : ℝ) * (ν Λ) ^ (n - (D-1)) *
@@ -762,7 +763,7 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
       have hD1' : 1 ≤ D := by omega
       rw [h_card, Nat.cast_sub hD1', Nat.cast_one]
     -- Refined bound: Nat.choose n k ≤ Nat.choose n (D-1) for k ≤ D-1
-    -- using gap induction from orchestrator suggestion
+    -- The binomial coefficients increase up to the middle index.
     have h_choose_refined (k : ℕ) (hk : k ∈ Finset.Icc 1 (D - 1)) :
         Nat.choose n k ≤ Nat.choose n (D - 1) := by
       rcases Finset.mem_Icc.mp hk with ⟨hk1, hk2⟩
@@ -824,3 +825,5 @@ theorem wolf_eq_103_refined (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
     nlinarith
 
 end WolfEq103Refined
+
+end Matrix
