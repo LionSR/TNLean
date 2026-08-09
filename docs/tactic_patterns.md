@@ -361,11 +361,10 @@ abstracted — record why, so it is not re-proposed).
   when `a` and `b` are both less than `N`.
 - **Reuse:** the public lemma `MPSTensor.add_offset_mod_eq` in
   `TNLean/MPS/ParentHamiltonian/Defs.lean` records this inverse identity.
-- **Result:** `MPOTensor.windowComplementEquiv` in `CommutingForm.lean` and the private
-  `cyclicShiftEquiv` definitions in `PhysicalSectorProductTransport.lean` and
-  `PhysicalSupportProductTransport.lean` now apply the lemma directly, as does its original
-  `MPSTensor.replaceWindow_extractWindow` caller. The Lean sources lose 41 lines net
-  (6 insertions and 47 deletions).
+- **Result:** `MPOTensor.windowComplementEquiv` in `CommutingForm.lean` and the shared
+  `MPSTensor.cyclicShiftEquiv` in `ParentHamiltonian/CyclicWindowIndex.lean` apply the lemma
+  directly, as does its original `MPSTensor.replaceWindow_extractWindow` caller. The initial
+  promotion reduced the Lean sources by 41 lines net (6 insertions and 47 deletions).
 
 ### Cyclic window index and product decomposition
 - **Pattern:** two physical-product modules privately defined the same cyclic shift,
@@ -374,14 +373,16 @@ abstracted — record why, so it is not re-proposed).
 - **Reuse:** `MPSTensor.cyclicShiftEquiv`, `MPSTensor.cyclicWindowIndexEquiv`,
   `MPSTensor.cyclicWindowIndexEquiv_inl`, `MPSTensor.cyclicWindowIndexEquiv_inr`, and
   `MPSTensor.prod_cyclicWindow_complement` in
-  `TNLean/MPS/ParentHamiltonian/Defs.lean` provide the shared API; the product theorem
-  holds for every commutative monoid.
+  `TNLean/MPS/ParentHamiltonian/CyclicWindowIndex.lean` provide the shared API; the
+  product theorem holds for every commutative monoid. Isolating these declarations from
+  `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
 - **Result:** the exact call sites are `reindex_sitewisePhysicalMatrix_windowComplement`
   and `embed_twoSiteSectorProjection_eq_finKronecker` in
   `PhysicalSupportProductTransport.lean`, and
   `reindex_physicalCoordinateMatrixN_windowComplement` in
-  `PhysicalSectorProductTransport.lean`. Across the three Lean files, the final diff is
-  64 insertions and 87 deletions, a net reduction of 23 lines.
+  `PhysicalSectorProductTransport.lean`. Across the four changed Lean files, including
+  the generated ParentHamiltonian aggregator, the final diff is 90 insertions and 87
+  deletions, a net increase of 3 lines.
 
 ### Product-marginal support kernel
 - **Pattern:** the simultaneous marginal-support whitening proof and the
