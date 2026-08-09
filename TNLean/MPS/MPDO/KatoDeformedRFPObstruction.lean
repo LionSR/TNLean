@@ -514,7 +514,8 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
   rw [hflat_symm x, hflat_symm y]
   by_cases h : x = y
   · subst y
-    simp [Matrix.blockDiagonal', katoCFWeights, katoCFBlocks, katoCFBlock0, katoCFBlock1]
+    simp only [Fin.isValue, Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply, smul_eq_mul,
+      katoCFWeights, katoCFBlocks]
     by_cases hp_diag : p.divNat = p.modNat
     · have hp_val : p = 0 ∨ p = 3 := by
         fin_cases p
@@ -767,7 +768,7 @@ private lemma reducedBlockState_tensor_eq_scaled_one {N L : ℕ}
       sum_configurationSign_eq_zero (Nat.sub_pos_of_lt hLN)
     simp [hsum_zero, Matrix.one_apply_eq,
       show ((1 : ℂ) / 2) = (2 : ℂ)⁻¹ by norm_num]
-  · simp [huv, Matrix.one_apply_ne huv, smul_apply]
+  · simp [huv, Matrix.one_apply_ne huv]
 
 /-- For $d \neq 0$, $d \cdot \operatorname{negMulLog}(d^{-1}) = \log d$
 (project derivation). -/
@@ -804,7 +805,7 @@ private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
   -- Now compute von Neumann entropy of c • 1 via charpoly
   rw [vonNeumannEntropy_eq_charpoly_roots _ h_scaled_herm]
   have h_card : Fintype.card (Fin L → Fin 2) = 2 ^ L := by
-    simp [Fintype.card_fun, Fintype.card_fin]
+    simp [Fintype.card_fin]
   have h_charpoly : (((2 : ℂ)⁻¹ ^ L : ℂ) •
       (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).charpoly =
       (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^
