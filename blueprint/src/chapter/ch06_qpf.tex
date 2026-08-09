@@ -166,7 +166,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:cp_fixed_support_invariant}
     \lean{Kraus.invariantCompression_of_supportProj_fixed_by_cpMap}
     \leanok
-    \uses{def:cp_map}
+    \uses{def:cp_map, def:support_proj}
     Let $E$ be completely positive, let $\rho\geq0$ satisfy $E(\rho)=\rho$,
     and let $Q$ be the support projection of $\rho$. Then $Q$ is an
     orthogonal projection and
@@ -189,6 +189,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:nonzero_psd_support}
     \lean{Matrix.PosSemidef.supportProj_ne_zero_of_ne_zero}
     \leanok
+    \uses{def:support_proj}
     If $\rho\geq0$ and $\rho\neq0$, then its support projection is nonzero.
 \end{theorem}
 
@@ -201,6 +202,7 @@ and~\cite{Evans1978Spectral}.
     \label{thm:full_support_posdef}
     \lean{Matrix.PosSemidef.posDef_of_supportProj_eq_one}
     \leanok
+    \uses{def:support_proj}
     If $\rho\geq0$ and its support projection is the identity, then $\rho$ is
     positive definite.
 \end{theorem}
@@ -312,9 +314,9 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_pd_irred}
+    \uses{thm:transfer_psd_fp_pd_irred}
     If $\sigma=0$, take $c=0$. Otherwise,
-    Theorem~\ref{thm:psd_fp_pd_irred} makes both $\rho$ and $\sigma$
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes both $\rho$ and $\sigma$
     positive definite. Write $\rho=SS^\dagger$ and set
     \begin{align}
         H
@@ -332,7 +334,7 @@ and~\cite{Evans1978Spectral}.
     \end{align}
     so $\tau$ is positive semidefinite and singular. Linearity makes $\tau$
     a fixed point. If $\tau\neq0$,
-    Theorem~\ref{thm:psd_fp_pd_irred} would make it positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} would make it positive
     definite, a contradiction. Thus $\tau=0$ and $\sigma=c_0\rho$.
     This is the minimal-eigenvalue mechanism of
     \cite[Theorem~6.3(2)]{Wolf2012Quantum}.
@@ -474,7 +476,7 @@ and~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:psd_fp_pd_irred,
+    \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred,
         thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
     (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
@@ -714,7 +716,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 \begin{proof}\leanok
     \uses{thm:pf_eigenvector_existence, thm:irred_map_smul,
-        thm:adjoint_transfer_ne_zero, thm:psd_fp_pd_irred}
+        thm:adjoint_transfer_ne_zero, thm:transfer_psd_fp_pd_irred}
     By Theorem~\ref{thm:adjoint_transfer_ne_zero},
     $\E_A^\dagger \neq 0$.
     Since $\E_A^\dagger(X) = \sum_i (A^i)^\dagger X A^i$ is a
@@ -735,7 +737,7 @@ The TP-gauge application follows~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     by Theorem~\ref{thm:irred_map_smul}, since irreducibility of $\E_A$
     transfers to the adjoint and is preserved under scaling.
     Since $\E_T$ is irreducible with a positive semidefinite fixed point,
-    Theorem~\ref{thm:psd_fp_pd_irred} gives that $\sigma_0$ is positive
+    Theorem~\ref{thm:transfer_psd_fp_pd_irred} gives that $\sigma_0$ is positive
     definite.
 \end{proof}
 

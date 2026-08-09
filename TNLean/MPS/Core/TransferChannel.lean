@@ -43,7 +43,7 @@ theorem mapLM_eq_transferMap (K : Fin d → Mat) :
   intro X
   simp [mapLM_apply, map_apply, MPSTensor.transferMap_apply]
 
-/-- Transfer-map irreducibility expressed for the definitionally equal finite Kraus map. -/
+/-- Transfer-map irreducibility expressed for the equal finite Kraus map. -/
 theorem isIrreducibleMap_mapLM_of_transferMap (K : Fin d → Mat)
     (hIrr : IsIrreducibleMap (MPSTensor.transferMap (d := d) (D := D) K)) :
     IsIrreducibleMap (mapLM K) := by
