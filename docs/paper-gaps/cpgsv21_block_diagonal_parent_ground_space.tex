@@ -143,26 +143,27 @@ definite fixed point $\Lambda_j$ satisfying
 \begin{align}
   \sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j.
 \end{align}
-The current source-length declarations additionally assume
+The source-shaped gauge-preparation, simultaneous word-span, internal-sum, and
+one-step restriction-intersection declarations no longer assume
 \begin{align}
-  \sum_a (A^j_a)^\dagger A^j_a=I,
+  \sum_a (A^j_a)^\dagger A^j_a=I.
 \end{align}
-which is the special case $\Lambda_j=I$. Consequently the declarations whose
-names end in \texttt{\_pgvwc07} along the global-cut route are doubly normalized
-specializations at the PGVWC07 source length bound, rather than formalizations
-of the unrestricted normalization in Theorem~12.
+They use the positive square root of $\Lambda_j$ only to prepare a temporary
+left-canonical gauge for the sharp fixed-length separation theorem, transport
+the resulting tuple span back to the original representatives, and propagate
+it there using the source identity
+$\sum_a A^j_a(A^j_a)^\dagger=I$.  This source-faithful local layer is completed
+by \href{https://github.com/LionSR/TNLean/issues/5764}{issue~\#5764}.
 
-Eliminating this restriction requires a gauge-covariant version of the route.
-For each positive definite $\Lambda_j$, conjugation by its positive square root
-turns the dual fixed-point equation into the identity fixed-point equation. One
-must transport the simultaneous word spans, open-boundary maps, periodic chain
-spaces, block direct sum, parent-Hamiltonian kernel, and component-vector span
-through these blockwise gauges. The source identity
-$\sum_a A^j_a(A^j_a)^\dagger=I$ must be retained by expressing the tuple-span
-propagation and boundary-matrix calculation in their corresponding weighted,
-gauge-covariant forms, rather than assuming that both unweighted identities
-hold in one gauge. This elimination is tracked by
-\href{https://github.com/LionSR/TNLean/issues/5751}{follow-up issue~\#5751}.
+The global-cut, boundary, periodic chain-space, and parent-Hamiltonian kernel
+declarations have not yet been threaded through the positive dual data.  They
+still additionally assume
+$\sum_a (A^j_a)^\dagger A^j_a=I$, the special case $\Lambda_j=I$, and hence
+remain doubly normalized specializations at the PGVWC07 source length bound.
+Transporting the source-shaped local result through those global arguments is
+tracked by \href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}.
+That issue has not merged, so the unrestricted parent-Hamiltonian theorem is
+not complete.
 
 \section{The block-diagonal intersection identity}
 
@@ -265,13 +266,33 @@ The proved one-step conclusion is therefore
   =
   \bigoplus_j \mathcal G_{m+1}^{A_j}
 \end{align}
-for all sufficiently large $m$ satisfying the product-span hypotheses.\footnote{
-Lean declarations:
-\leanid{MPSTensor.pgvwc07_directSum_restriction_intersection_of_wordTupleSpanTop},
-\leanid{MPSTensor.groundSpace_iSupIndep_of_wordTupleSpanTop}, and
-\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}.}
-The corresponding source-range declarations then propagate the cyclic
-local constraints to
+for all sufficiently large $m$ satisfying the product-span hypotheses.
+The tuple-span, internal-sum, and one-step intersection statements now hold
+under the source canonical data: for each block $j$, let $\Lambda^j$ be a
+positive definite matrix satisfying
+\begin{align}
+  \sum_aA^j_aA^{j\dagger}_a&=I,
+  &\sum_aA^{j\dagger}_a\Lambda^jA^j_a&=\Lambda^j.
+\end{align}
+These statements require neither diagonality of $\Lambda^j$ nor the additional
+identity $\sum_aA^{j\dagger}_aA^j_a=I$ on the same representative. The proof uses the
+positive dual fixed point only to prepare a temporary left-canonical gauge for
+the sharp base separation theorem, transports the tuple span back, and then
+propagates it with the source unital identity.\footnote{Lean declarations:
+\leanid{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint},
+\leanid{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint},
+\leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}, and
+\leanid{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}.}
+The earlier doubly-normalized declarations remain available as special-purpose
+siblings.
+
+This normalization relaxation has not yet been threaded through the global
+change-of-cut and kernel statements.  Those declarations remain honestly
+restricted to the doubly-normalized specialization: in addition to
+$\sum_aA^j_aA^{j\dagger}_a=I$, they assume
+$\sum_aA^{j\dagger}_aA^j_a=I$, which specializes the positive dual fixed point
+to $\Lambda^j=I$.  Under that extra identity they propagate the cyclic local
+constraints to
 \begin{align}
   \mathcal K_{N,L}(\widehat A)\subseteq
   S_N:=\bigvee_{j=1}^b\mathcal G_N^{A_j},
@@ -281,11 +302,12 @@ and make the sum defining $S_N$ internal.\footnote{Lean declarations:
 \leanid{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07},
 and
 \leanid{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07}.}
-The former residual was the source boundary-condition comparison: starting with a
-vector in the periodic-boundary space $\mathcal K_{N,L}(\widehat A)$, produce
-block-diagonal boundary matrices whose block components again belong to the
-blockwise periodic-boundary spaces. The global change-of-cut theorem now proves
-this conclusion at the source length bound.
+Threading the positive dual data through the global change-of-cut and kernel
+capstones remains open in
+\href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}; it is not
+completed by the source-shaped tuple-span and one-step intersection layer above.
+Consequently the full unrestricted parent-Hamiltonian theorem is not yet
+established.
 
 Earlier conditional reductions isolated the source comparison in the coordinates
 obtained by opening the periodic boundary for boundary-crossing windows. Suppose
