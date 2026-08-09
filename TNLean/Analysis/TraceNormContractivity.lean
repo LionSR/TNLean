@@ -6,10 +6,7 @@ Authors: Sirui Lu
 import TNLean.Analysis.TraceNormAbs
 import TNLean.Algebra.MatrixAux
 import TNLean.Channel.ChoiRectangular
-import TNLean.Channel.ChoiJamiolkowski
-import TNLean.Channel.KrausCPTP
 import TNLean.Channel.SupportCompletion
-import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
 # Trace-norm contractivity of trace-preserving positive maps
@@ -441,16 +438,13 @@ theorem traceNorm_map_sub_map_le_of_doeblin
   -- Step 5: apply the scaled-trace contractivity theorem to S
   have h_herm : (ρ₁ - ρ₂).IsHermitian := h₁.isHermitian.sub h₂.isHermitian
   exact traceNorm_map_le_of_positive_of_scaledTrace hpos_diff htr_scale
-
-
     h_one_minus_ε_nonneg h_herm
-
 
 /-! ### Choi-dominated Doeblin contraction (Wolf Chapter 8, Eq. (8.86)) -/
 
 /-- **Choi matrix of the trace-prepare map** (auxiliary lemma for Eq. (8.86)).
 
-For a Hermitian matrix `Y` of trace one on the output space, the trace-prepare
+For an arbitrary matrix `Y` on the output space, the trace-prepare
 map `T'(X) = tr[X]·Y` has Choi matrix `(1/d)(Y ⊗ 𝟙)` in the output-factor-first
 tensor order of `ChoiRectangular.choiMatrix`.
 
@@ -487,11 +481,12 @@ theorem choiMatrix_tracePrepareMap [NeZero d]
     _ = ((1 / (d : ℂ)) • (kroneckerMap (· * ·) Y (1 : Matrix (Fin d) (Fin d) ℂ)))
           (a, i) (b, j) := by
       rw [Matrix.smul_apply, smul_eq_mul]
+
 /-- **Wolf Chapter 8, Eq. (8.86): Choi-dominated Doeblin contraction.**
 
 Let `T : M_D(ℂ) → M_{D'}(ℂ)` be a trace-preserving, Hermiticity-preserving
-linear map.  If there exist `ε ≥ 0` and a Hermitian `Y` with trace one such
-that the (rectangular, output-factor-first) Choi matrix satisfies
+linear map.  For `ε ≥ 0` and a Hermitian `Y` with trace one, if
+the (rectangular, output-factor-first) Choi matrix satisfies
 ```
 τ = choi(T) ≥ (ε/D)(Y ⊗ 𝟙),
 ```

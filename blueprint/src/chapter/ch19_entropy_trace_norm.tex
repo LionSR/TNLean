@@ -606,11 +606,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.traceNorm_map_sub_map_le_of_choi_domination}
     \leanok
     \uses{def:trace_norm, def:choi_matrix_rectangular,
-      def:trace_preserving_rectangular, def:density_matrices,
-      thm:quantum_doeblin_contraction}
+      def:trace_preserving_rectangular, def:density_matrices}
     Let $T:\MN{D}\to\MN{D'}$ be a trace-preserving,
     Hermiticity-preserving linear map and $Y\in\MN{D'}$ Hermitian
-    with $\tr[Y]=1$.  If there exists $\varepsilon\geq0$ such that
+    with $\tr[Y]=1$.  For $\varepsilon\geq0$, if
     the rectangular Choi matrix $\tau(T)$ satisfies
     \begin{align}
         \tau(T) \ge \frac{\varepsilon}{D}\,(Y\otimes\Id),
