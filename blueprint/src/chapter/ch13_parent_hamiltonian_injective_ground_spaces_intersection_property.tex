@@ -30,8 +30,8 @@
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{lemma}[Ground-space map injectivity after blocking]
-    \label{lem:ground_space_map_injective_blk}
+\begin{theorem}[Ground-space map injectivity after blocking]
+    \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
     \uses{thm:ground_space_map_injective_word_span, def:l_blk_injective}
@@ -220,8 +220,8 @@
     interval does not wrap around the ring.
 \end{remark}
 
-\begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
-    \label{lem:cyclic_window_boundary_matrix_transport}
+\begin{theorem}[One-site restrictions of cyclic-window boundary conditions]
+    \label{thm:cyclic_window_boundary_matrix_transport}
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_overlap}
@@ -404,10 +404,15 @@
         MPSTensor.openChainTailGroundProjectionES}
     \leanok
     \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
-    In the Hilbert space of an open chain, let
-    $\mathcal U_{K,L_0}(A)$ be the subspace satisfying the ground condition on
-    the first $K+L_0$ sites, and let $\mathcal V_{K,L_0}(A)$ be the subspace
-    satisfying the ground condition on the last $L_0+1$ sites.
+    For every $L\in\N$, let $\mathcal U_L(A)$ be the subspace of the
+    $(L+1)$-site Hilbert space whose corresponding functions satisfy the left
+    ground condition: every fixed-final-site restriction belongs to $G_L(A)$.
+    For every $K,L\in\N$, let $\mathcal V_{K,L}(A)$ be the subspace of the
+    $(K+L)$-site Hilbert space whose corresponding functions satisfy the tail
+    ground condition: every fixed-prefix restriction belongs to $G_L(A)$.
+    These definitions include $L=0$. Let $P^{\mathrm{left}}_L(A)$ and
+    $P^{\mathrm{tail}}_{K,L}(A)$ be the orthogonal projectors onto
+    $\mathcal U_L(A)$ and $\mathcal V_{K,L}(A)$, respectively.
 \end{definition}
 
 \begin{theorem}[Membership in the open-chain left ground subspace]
@@ -416,9 +421,9 @@
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
     Under the canonical $\ell^2$ identification, a Hilbert-space vector
-    belongs to $\mathcal U_{K,L_0}(A)$ exactly when the corresponding function
+    belongs to $\mathcal U_L(A)$ exactly when the corresponding function
     satisfies the left ground condition: every fixed-final-site restriction
-    belongs to $G_{K+L_0}(A)$.
+    belongs to $G_L(A)$.
 \end{theorem}
 
 \begin{proof}
@@ -433,9 +438,9 @@
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
     Under the canonical $\ell^2$ identification, a Hilbert-space vector
-    belongs to $\mathcal V_{K,L_0}(A)$ exactly when the corresponding function
+    belongs to $\mathcal V_{K,L}(A)$ exactly when the corresponding function
     satisfies the tail ground condition: every fixed-prefix restriction
-    belongs to $G_{L_0+1}(A)$.
+    belongs to $G_L(A)$.
 \end{theorem}
 
 \begin{proof}
@@ -452,7 +457,7 @@
         def:l_blk_injective}
     If $D\ge1$, $A$ is $L_0$-block-injective, and $L_0>0$, then
     \begin{align}
-        \mathcal U_{K,L_0}(A)\cap\mathcal V_{K,L_0}(A)
+        \mathcal U_{K+L_0}(A)\cap\mathcal V_{K,L_0+1}(A)
         &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A). \notag
     \end{align}
     In Nachtergaele's notation, with $n=K+L_0$ and $l=L_0$, this is the

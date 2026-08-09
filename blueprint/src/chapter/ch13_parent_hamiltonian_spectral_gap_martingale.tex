@@ -125,16 +125,25 @@
     \uses{def:open_chain_ground_subspaces_es, def:ground_space_es,
         def:l_blk_injective}
     Assume $D\ge1$ and let $A$ be $L_0$-block-injective with $L_0>0$. Set
-    $n=K+L_0$ and $l=L_0$. Let $U$ be the tail ground space on
-    $\Lambda_{n+1}\setminus\Lambda_{n-l}$, and let $V$ be the left ground
-    space on $\Lambda_n$, both in the Hilbert space on $\Lambda_{n+1}$.
-    Suppose
+    $n=K+L_0$ and $l=L_0$, and write
+    \begin{align}
+        S&=\mathcal U_{K+L_0}(A), &
+        T&=\mathcal V_{K,L_0+1}(A). \notag
+    \end{align}
+    Thus $S$ and $T$ are the left and tail ground spaces in the Hilbert space
+    on $\Lambda_{n+1}$. Let $q_S=P_{S^\perp}$ and $q_T=P_{T^\perp}$ be the
+    complementary excitation projections. If
     \begin{align}
         \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
-          -G_{\Lambda_{n+1}}\|&\le\eta. \notag
+          -G_{\Lambda_{n+1}}\|&\le\eta, \notag
     \end{align}
-    Then the complementary excitation projections satisfy the quadratic-form
-    anticommutator lower bound with coefficient $\eta$.
+    then every vector $v$ in the Hilbert space on $\Lambda_{n+1}$ satisfies
+    \begin{align}
+        -\eta\bigl(
+          \re\langle q_Tv,v\rangle+\re\langle q_Sv,v\rangle\bigr)
+        &\le
+          \re\langle q_Tv,q_Sv\rangle+\re\langle q_Sv,q_Tv\rangle. \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -142,7 +151,7 @@
     \uses{thm:open_chain_left_tail_ground_intersection,
         thm:projector_defect_to_friedrichs,
         thm:friedrichs_ground_space_excitation_anticommutator}
-    The open-chain intersection theorem identifies $U\cap V$ with the ground
+    The open-chain intersection theorem identifies $S\cap T$ with the ground
     space on $\Lambda_{n+1}$. The projector-defect adapter gives a Friedrichs
     overlap bound, and the reduced two-projection theorem gives the stated
     anticommutator inequality.
