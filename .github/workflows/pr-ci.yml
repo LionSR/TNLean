@@ -29,6 +29,7 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
@@ -93,6 +94,7 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
@@ -260,6 +262,7 @@ jobs:
               - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
+              - '.github/workflows/tenkz-rmp-book.yml'
 
   tenkz-shrink:
     name: Check tenkz shrink ratchets

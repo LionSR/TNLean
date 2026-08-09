@@ -9,9 +9,10 @@ name: Tenkz RMP benchmark book
 # or render its pages to images, because that additional step costs about as
 # much time again as the per-target compile, and it exists to produce a book
 # a person reads, not to catch a regression fast. This workflow does that
-# slower step -- once a week, and any time someone asks for it by hand -- and
-# uploads the compiled PDF so a reviewer can open it without a local
-# checkout.
+# slower step -- once a week, and any time someone asks for it by hand --
+# typesetting the book and rendering every page to an image, so the picture
+# pipeline that ships in the blueprint gets exercised too, and it uploads
+# the compiled PDF so a reviewer can open it without a local checkout.
 
 on:
   schedule:
@@ -29,7 +30,7 @@ permissions:
 
 jobs:
   book:
-    name: Typeset the RMP benchmark book
+    name: Typeset and render the RMP benchmark book
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -41,9 +42,12 @@ jobs:
       # Two parallel compiles, matching pr-ci.yml's tenkz-rmp job: GitHub's
       # hosted runner has four shared cores, and four parallel compiles left
       # one target no room to finish inside the harness's fixed per-target
-      # time limit.
-      - name: Typeset the RMP benchmark book
-        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py book --all
+      # time limit. "render" typesets the book and also rasterizes every
+      # target and book page, so this run exercises the same page-image
+      # pipeline the rendered corpus and the blueprint use; the images
+      # themselves are not uploaded, only the book PDF below.
+      - name: Typeset and render the RMP benchmark book
+        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py render --all
 
       - name: Upload the compiled book
         if: success()
