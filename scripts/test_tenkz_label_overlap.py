@@ -1511,6 +1511,24 @@ def main() -> int:
                 "as clear"
             )
 
+        # A vertical detour toward the row at an interior column meets the
+        # span at one x, like a lead does, but it is ink across the indices
+        # rather than a wire leaving a virtual end.
+        notch_status, notch_audit = audit_status(closure_log(
+            "closure-interior-notch.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=-800000|"
+            "points=0,0;-600000,0;-600000,-800000;1000000,-800000;"
+            "1000000,-100000;1000000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if notch_status != 1 or not any(
+                finding.rule == "closure-crossed"
+                for finding in notch_audit.findings):
+            raise AssertionError(
+                "audit exempted a vertical detour inside the row's own span"
+            )
+
         # `arc` is the only word for a closure with no row line.  A flat rail
         # that named any other would take the rule out of its own reading.
         word_status, word_audit = audit_status(closure_log(

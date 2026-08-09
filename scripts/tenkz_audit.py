@@ -485,9 +485,7 @@ def _first_uncovered(low: int, high: int, covers: list[tuple[int, int]]):
         reach = max(reach, end)
         if reach >= high:
             return None
-    if reach >= high and covers:
-        return None
-    return reach if reach > low or not covers else low
+    return reach
 
 
 # A closure end and the rail's own end are computed from one number, so they
@@ -961,9 +959,13 @@ class Audit:
                 continue
             # A stretch that meets the span at one x alone is a lead leaving
             # a virtual end, and a lead stands on the row line by
-            # construction.  On a one-column row every stretch meets the span
-            # that way, and the covering is the whole reading.
-            if here[0] == here[1]:
+            # construction -- but only at an end.  A vertical detour toward
+            # the row at an interior column meets the span the same way and
+            # is ink across the indices, so it is read.  On a one-column row
+            # every stretch meets the span at its one column, and the
+            # covering is the whole reading.
+            if here[0] == here[1] and (low == high
+                                       or here[0] in (low, high)):
                 continue
             if shallow is None or clipped < shallow:
                 shallow = clipped

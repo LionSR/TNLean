@@ -11618,19 +11618,21 @@
           \l__tenkz_kernel_r_trace_ink_bool
         \bool_if:NT \l__tenkz_kernel_r_trace_ink_bool
           {
-            % A glyph that spans wires stands on several rows, and a port on
-            % its south face is placed on the last of them.  The carrier
-            % answers with the anchor row, so the span moves a south port to
-            % the row it is actually drawn from; otherwise that row's own
-            % return would scan past its deepest index.
+            % A glyph that spans wires stands on several rows, and a port
+            % whose face is a south one is placed on the last of them.  The
+            % carrier answers with the anchor row, so the span moves such a
+            % port to the row it is actually drawn from; otherwise that row's
+            % own return would scan past its deepest index.  South is the
+            % whole quadrant, read through the classifier the placement reads
+            % it through, not the one bearing that points straight down.
             \__tenkz_model_get:nnN {#1} {port-face}
               \l__tenkz_kernel_r_trace_ink_face_tl
-            \str_if_eq:eeT
+            \exp_args:Ne \__tenkz_kernel_r_face_side:n
               {
                 \exp_args:NV \__tenkz_kernel_r_compass:n
                   \l__tenkz_kernel_r_trace_ink_face_tl
               }
-              {270}
+            \str_if_eq:VnT \l__tenkz_kernel_r_face_side_tl {s}
               {
                 \exp_args:NV \__tenkz_kernel_r_span:nNN
                   \l__tenkz_kernel_r_trace_ink_host_tl
@@ -11762,6 +11764,10 @@
                 % it to stroke here would lay a second copy of the leg and
                 % save it under the closure's own path name, so the reach is
                 % read from the resolution and the ink left to the leg pass.
+                % The enclosure reach is part of the resolution: a leg that
+                % pierces a contour is drawn out to it, and a scan that
+                % stopped at the bare leg would let the return stand inside
+                % the ink.
                 \__tenkz_model_get:nnN {#1} {from-axis}
                   \l__tenkz_kernel_r_trace_ink_face_tl
                 \exp_args:NVV \__tenkz_kernel_r_physical_axis:nnNN
@@ -11773,10 +11779,15 @@
                   \l__tenkz_kernel_r_trace_ink_host_tl
                   \l__tenkz_kernel_r_physical_anchor_tl
                   \l__tenkz_kernel_r_x_fp \l__tenkz_kernel_r_y_fp
+                \fp_set:Nn \l__tenkz_kernel_r_reach_fp
+                  { \__tenkz_metric_ratio:n {physleg} }
+                \exp_args:NVV \__tenkz_kernel_r_physical_enclosure:nn
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_face_tl
                 \fp_set:Nn \l__tenkz_kernel_r_port_tip_y_fp
                   {
                     \l__tenkz_kernel_r_y_fp
-                    + \__tenkz_metric_ratio:n {physleg}
+                    + \l__tenkz_kernel_r_reach_fp
                       * sind( \l__tenkz_kernel_leg_dir_tl )
                   }
                 \__tenkz_kernel_r_trace_ink_take:n {#1}
