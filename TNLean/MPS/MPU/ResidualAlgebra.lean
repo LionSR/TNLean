@@ -49,7 +49,7 @@ theorem residualSlice_mem_residualAlgebra (U : MPOTensor d D)
   apply NonUnitalAlgebra.subset_adjoin ℂ
   exact ⟨X, rfl⟩
 
-private theorem list_prod_eq_residual_word_of_mem_generatorSet
+private theorem exists_residual_slices_eq_list_of_mem_generatorSet
     (U : MPOTensor d D) (l : List (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
     (hl : ∀ A ∈ l, A ∈ residualGeneratorSet U) :
     ∃ X : Fin l.length → Matrix (Fin d) (Fin d) ℂ,
@@ -79,7 +79,7 @@ theorem IsMPU.trace_list_prod_eq_zero_of_mem_residualGeneratorSet
     (hl : ∀ A ∈ l, A ∈ residualGeneratorSet U) (hne : l ≠ []) :
     Matrix.trace l.prod = 0 := by
   classical
-  obtain ⟨X, hword⟩ := list_prod_eq_residual_word_of_mem_generatorSet U l hl
+  obtain ⟨X, hword⟩ := exists_residual_slices_eq_list_of_mem_generatorSet U l hl
   let isResidual : Fin l.length → Bool := fun _ ↦ true
   have hpos : 0 < l.length := List.length_pos_iff.mpr hne
   have hmixed : ∃ k, isResidual k = true := ⟨⟨0, hpos⟩, rfl⟩
@@ -189,7 +189,7 @@ theorem IsMPU.prod_residualSlice_doubleLayerTensor_eq_zero
     (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor U) (X k))).prod = 0 := by
   apply hU.residualAlgebra_list_prod_eq_zero
   · intro A hA
-    obtain ⟨k, _, rfl⟩ := List.mem_ofFn.mp hA
+    obtain ⟨k, rfl⟩ := List.mem_ofFn.mp hA
     exact residualSlice_mem_residualAlgebra U (X k)
   · simp
 
