@@ -166,14 +166,19 @@ Section~\ref{sec:app_spectral_periodicity}.
     \label{thm:peripheral_multiplicity_one}
     \lean{PeripheralSpectrum.peripheral_eigenvalue_multiplicity_one}
     \leanok
+    \uses{def:transfer_map, def:unital_kraus, def:kraus_adjoint_map,
+        def:irreducible_cp, def:peripheral_eigenvalues}
+    Let $K$ be a finite unital matrix family whose transfer map is irreducible,
+    and suppose that the adjoint Kraus map fixes a positive-definite matrix.
+    For every peripheral eigenvalue $\gamma$ of the transfer map, the
+    $\gamma$-eigenspace is one-dimensional.
+\end{theorem}
+
+\begin{proof}\leanok
     \uses{lem:peripheral_unitary_eigenvector,
         thm:ks_equality_of_peripheral_eigenvector_of_fixedPoint,
         thm:right_multiplicative_identity,
         lem:irreducible_unital_fixed_points_scalar}
-    Each peripheral eigenspace is one-dimensional.
-\end{theorem}
-
-\begin{proof}\leanok
     Given a peripheral unitary eigenvector $U$ for $\gamma$, the
     multiplicative-domain identity gives
     $E(XU^\dagger)=XU^\dagger$ for any $\gamma$-eigenvector $X$.

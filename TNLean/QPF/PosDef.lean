@@ -44,8 +44,12 @@ variable {d D : ℕ}
 
 section PosDef
 
-/-- Corollary for the irreducibility-based formulation (still Wolf Theorem 6.3(2)--(3),
-but with `IsIrreducibleMap E` instead of `IsInjective A`). -/
+/-- Corollary for the irreducibility-based formulation (Wolf Theorem
+6.3(2)--(3), but with `IsIrreducibleMap E` instead of `IsInjective A`).
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2)--(3) assumes
+only positivity, whereas a transfer map is completely positive. See
+`docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex`. -/
 theorem posSemidef_fixedPoint_isPosDef_of_irreducible
     (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (transferMap (d := d) (D := D) A))
@@ -58,7 +62,11 @@ theorem posSemidef_fixedPoint_isPosDef_of_irreducible
 
 /-- **Positive definiteness from injectivity** (Wolf Theorem 6.3(2)--(3)):
 If `A` is injective and `ρ` is a nonzero PSD fixed point of the transfer map,
-then `ρ` is positive definite. -/
+then `ρ` is positive definite.
+
+**Scope restriction (complete positivity):** Wolf Theorem 6.3(2)--(3) assumes
+only positivity, whereas a transfer map is completely positive. See
+`docs/paper-gaps/wolf_thm6_3_positive_map_cp_scope.tex`. -/
 theorem posSemidef_fixedPoint_isPosDef
     (A : MPSTensor d D) (hA : IsInjective A)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
