@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Full Support in the MPU Normal-Tensor Proposition}
+\author{}
+\date{2026-08-08}
+\begin{document}
+\maketitle
+
+\section{Source statement and surrounding convention}
+Proposition~\texttt{prop:normal-tensor} of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete
+states that the normalized MPU transfer matrix has one nonzero eigenvalue, equal
+to one, and that the normalized local tensor is normal
+\cite[lines~344--354]{Cirac2017MPU}.  The proposition itself displays no
+canonical-form or minimality hypothesis.  Its section has already imposed the
+standing convention that, without further notice, the local tensor has first
+been replaced by a tensor in canonical form
+\cite[lines~319--326]{Cirac2017MPU}.  The preceding definition makes canonical
+form a direct sum of irreducible positive-dimensional blocks and says that an
+arbitrary representative may be replaced by another representative generating
+the same matrix product vectors \cite[lines~257--265]{Cirac2017MPU}.
+
+\section{The formal support issue}
+The literal CPSV canonical-form data used in the formalization permits a
+coisometric embedding of the retained direct sum into a larger ambient bond
+space.  It also permits displayed blocks with zero weight.  These choices are
+useful for exact reconstruction.  The paper's literal canonical-form definition
+also permits zero-weight displayed blocks, so canonical-form membership alone
+does not discard these coordinates.  The proof of the proposition is correct
+for the intended reduced representative in which zero-weight blocks and any
+ambient zero complement have been omitted, but the source does not state this
+reduction as a separate step and the formalization does not yet construct it.
+
+This distinction is necessary.  Starting with any MPU representative, adjoin a
+zero virtual direct summand.  Every periodic contraction is unchanged, hence
+the enlarged tensor still generates the same unitary operators for every
+length.  Nevertheless, the projection onto the original virtual summand is a
+nontrivial invariant projection, so the enlarged ambient tensor is not
+irreducible and therefore is not normal.  Thus the bare assertion
+``MPU implies normal tensor'' is false for nonminimal ambient representatives.
+
+The formal support condition is
+\begin{align}
+  \sum_{k:\,\mu_k\ne 0} D_k = D,
+\end{align}
+where $D$ is the ambient bond dimension.  If there is exactly one active block,
+this equality says that the block itself has dimension $D$.  Positivity of all
+retained block dimensions and the total-dimension bound then show that no
+other retained block exists.  The ambient coisometry is square and hence
+unitary; block assembly and unitary conjugation transport irreducibility from
+the normal block to the ambient tensor.
+
+\section{Verdict}
+\textbf{Verdict: the paper's proposition is correct for the intended reduced
+canonical representative, with zero-weight blocks and the ambient zero
+complement omitted; this reduction is not an explicit hypothesis of
+Proposition~\texttt{prop:normal-tensor}, and it does not follow from literal
+canonical-form membership alone.}
+Consequently, a source-faithful formalization must construct this reduced
+representative before applying the proposition or explicitly assume full active
+support for the chosen ambient representative.  The formalization does not yet
+construct the representative reduction.  The latter
+implication is formalized by
+\leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport};
+its normal-tensor conclusion still takes the spectral-radius and primitivity
+conclusions supplied by the proposition's spectral argument as separate data.
+Bare \leanid{MPOTensor.IsMPU} is deliberately not used to infer ambient
+normality.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
