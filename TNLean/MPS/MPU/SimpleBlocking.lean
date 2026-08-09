@@ -184,11 +184,11 @@ private theorem pow_eq_self_of_pos_local {m : Type*} [Fintype m] [DecidableEq m]
 
 /-- A first-block MPU whose normalized double-layer diagonal is a normalized
 rank-one projector becomes MPU-simple after the corrected second blocking of
-exact length `D²`.
+exact length \(D^2\).
 
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 405--427.
 
-**Local fix (nil-matrix length):** the second blocking uses `D²`, replacing the
+**Local fix (nil-matrix length):** the second blocking uses \(D^2\), replacing the
 unsupported strict intermediate bound; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
@@ -260,11 +260,11 @@ theorem IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMul
     simp [Matrix.add_mul, Matrix.mul_add, hEidem, hRR, mul_assoc]
 
 /-- A first-block MPU with supplied normalized rank-one fixed witnesses becomes
-MPU-simple after the corrected second blocking of exact length `D²`.
+MPU-simple after the corrected second blocking of exact length \(D^2\).
 
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 405--427.
 
-**Local fix (nil-matrix length):** the second blocking uses `D²`, replacing the
+**Local fix (nil-matrix length):** the second blocking uses \(D^2\), replacing the
 unsupported strict intermediate bound; see `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
@@ -276,7 +276,7 @@ theorem IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec
 
 end ThreeFormInsertion
 
-section BlockingAssembly
+section BlockingConstruction
 
 private theorem sandwich_mul_rankOne_mul_local {n : Type*} [Fintype n]
     (a b : n → ℂ) (A X : Matrix n n ℂ) :
@@ -342,7 +342,7 @@ positive factor.
 
 This is the iterated-blocking preservation step used in Proposition III.3 of
 arXiv:1703.09188.  After canonical reindexing it applies at direct lengths
-`k * L`; it does not assert the source's stronger all-`k' ≥ k` corollary at
+\(kL\); it does not assert the source's stronger all-\(k' \geq k\) corollary at
 lines 442--445. -/
 theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
     (L : ℕ) (hL : 0 < L) : IsMPUSimple (MPOTensor.blockTensor U L) := by
@@ -399,7 +399,7 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
       obtain ⟨k, rfl⟩ := hA
       exact ⟨_, _, rfl⟩
 
-private theorem IsMPU.normalizedFixedPoints_simple1_of_stabilization
+private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     {bound : ℕ}
     (data : Matrix.StabilizedRankOneData
@@ -494,7 +494,7 @@ private theorem IsMPU.normalizedFixedPoints_simple1_of_stabilization
 `simple2`.
 
 Source: arXiv:1703.09188, Corollary `simple1`, lines 429--438. -/
-theorem IsMPU.exists_normalized_fixedPoints_simple1
+theorem IsMPU.exists_normalized_fixed_points_simple1
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
     ∃ Φ ρ : Fin (D * D) → ℂ,
       Φ ⬝ᵥ ρ = 1 ∧
@@ -504,11 +504,11 @@ theorem IsMPU.exists_normalized_fixedPoints_simple1
         Φ ⬝ᵥ (doubleLayerTensor U i j *ᵥ ρ) = if i = j then 1 else 0 := by
   by_cases hD : D = 1
   · subst D
-    exact hU.normalizedFixedPoints_simple1_of_stabilization
+    exact hU.normalized_fixed_points_simple1_of_stabilization
       hU.normalizedTransferStabilization_fin_one
   · have hDpos : 0 < D := NeZero.pos D
     have hDgt : 1 < D := by omega
-    exact hU.normalizedFixedPoints_simple1_of_stabilization
+    exact hU.normalized_fixed_points_simple1_of_stabilization
       (hU.normalizedTransferStabilization hDgt)
 
 /-- The source `simple1` contraction holds for every MPU, without requiring
@@ -519,7 +519,7 @@ theorem IsMPU.simple1 [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : IsMPU U) :
     ∃ a b : Fin (D * D) → ℂ, ∀ i j : Fin d,
       a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
-  obtain ⟨Φ, ρ, _, _, _, hsimple1⟩ := hU.exists_normalized_fixedPoints_simple1
+  obtain ⟨Φ, ρ, _, _, _, hsimple1⟩ := hU.exists_normalized_fixed_points_simple1
   exact ⟨Φ, ρ, hsimple1⟩
 
 /-- Reindex both physical legs of an MPO tensor by the same equivalence. -/
@@ -590,13 +590,13 @@ theorem reindexPhysical_blockTensor_blockTensor
   rw [MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex,
     MPSTensor.flattenBlockedWord_wordOfBlock_directToIteratedBlockIndex]
 
-/-- For bond dimension greater than one, an MPU has a strictly sub-`D⁴`
+/-- For bond dimension greater than one, an MPU has a strictly less than \(D^4\)
 positive direct blocking that is MPU-simple.
 
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 397--427.
 
-**Local fix (nil-matrix length):** the first exponent satisfies `J ≤ D² - 1`
-and the second length is exactly `D²`, still giving `J D² < D⁴`; see
+**Local fix (nil-matrix length):** the first exponent satisfies \(J \leq D^2 - 1\)
+and the second length is exactly \(D^2\), still giving \(JD^2 < D^4\); see
 `docs/paper-gaps/mpu_nil_matrix_bound.tex`. -/
 theorem IsMPU.exists_blockTensor_isMPUSimple_of_one_lt
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (hD : 1 < D) :
@@ -658,7 +658,7 @@ theorem IsMPU.blockTensor_one_isMPUSimple_fin_one
   simpa using hU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec ρ Φ hpair hE
 
 /-- Every positive-bond-dimension MPU has a positive MPU-simple blocking of
-length at most `D⁴`.
+length at most \(D^4\).
 
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 378--427. -/
 theorem IsMPU.exists_blockTensor_isMPUSimple
@@ -672,6 +672,6 @@ theorem IsMPU.exists_blockTensor_isMPUSimple
     obtain ⟨k, hk, hklt, hsimple⟩ := hU.exists_blockTensor_isMPUSimple_of_one_lt hDgt
     exact ⟨k, hk, hklt.le, hsimple⟩
 
-end BlockingAssembly
+end BlockingConstruction
 
 end MPOTensor
