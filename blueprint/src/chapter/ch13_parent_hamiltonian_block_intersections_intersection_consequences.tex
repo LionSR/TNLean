@@ -411,7 +411,7 @@ direct.
     \label{lem:tp_gauge_preserves_irreducibility}
     \lean{MPSTensor.isIrreducibleTensor_tpGauge_of_isIrreducibleMap}
     \leanok
-    \uses{def:irreducible_tensor, lem:tp_gauge_equiv}
+    \uses{def:irreducible_tensor}
     Let $A$ have positive bond dimension and irreducible transfer map. If
     $\Lambda>0$, then the square-root-gauged tensor
     $\Lambda^{1/2}A\Lambda^{-1/2}$ is irreducible.
@@ -421,7 +421,7 @@ direct.
     \label{lem:gauge_phase_equiv_transport_left_right}
     \lean{MPSTensor.gaugePhaseEquiv_of_gaugeEquiv_left_right_cast}
     \leanok
-    \uses{def:blocks_not_gauge_phase_equiv}
+    \uses{def:gauge_equiv, def:gauge_phase_equiv}
     Gauge equivalent replacements on both sides preserve gauge-phase
     equivalence, including after identifying equal bond dimensions.
 \end{lemma}
@@ -482,8 +482,7 @@ direct.
     injectivity statements, and pairwise inequivalence up to gauge and phase.
     Thus every $B^j$ is algebraically normal and left-canonical, so
     \begin{align}
-        \lim_{N\to\infty}
-        \left\langle V^{(N)}(B^j),V^{(N)}(B^j)\right\rangle&=1. \notag
+        O_{B^jB^j}(N)&\longrightarrow1. \notag
     \end{align}
     The sharp separation theorem now gives
     \begin{align}
