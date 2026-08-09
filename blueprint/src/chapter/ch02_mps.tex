@@ -219,12 +219,24 @@ boundary conditions (PBC).
     \lean{Kraus.mapLM_eq_transferMap}
     \leanok
     \uses{def:kraus_map, def:transfer_map}
-    For every finite matrix family $A$, its Kraus map equals its transfer map.
+    For a finite matrix family $A$, write $\mathcal K_A$ for its Kraus map.
+    Then
+    \begin{align}
+        \mathcal K_A
+         & =\E_A.
+        \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Both maps send $X$ to $\sum_i A^iX(A^i)^\dagger$.
+    For every $X\in\MN{D}$,
+    \begin{align}
+        \mathcal K_A(X)
+         & =\sum_i A^iX(A^i)^\dagger
+          =\E_A(X).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{remark}\leanok
