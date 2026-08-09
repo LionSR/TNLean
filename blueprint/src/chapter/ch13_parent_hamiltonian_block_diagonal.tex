@@ -342,10 +342,11 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{thm:pgvwc_direct_sum_intersection_source_length,
-        lem:pgvwc_product_span_source_length}
+        thm:pgvwc_block_space_independence_source_length}
     Let $g\ge2$. Let $A_j$ be irreducible blocks, pairwise inequivalent up to
     gauge and phase, and injective at the common
-    length $L_0>0$. Assume the PGVWC07 source normalization
+    length $L_0>0$. Assume the canonical normalization of
+    \cite{PerezGarcia2007Matrix}:
     \begin{align}
         \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
         &\sum_aA^{j\,\dagger}_a\Lambda_jA^j_a&=\Lambda_j,
@@ -377,7 +378,7 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
 \begin{proof}
     \leanok
     \uses{thm:pgvwc_direct_sum_intersection_source_length,
-        lem:pgvwc_product_span_source_length,
+        thm:pgvwc_block_space_independence_source_length,
         lem:block_diagonal_periodic_constraints_propagated_sum,
         lem:block_diagonal_boundary_condition_sum}
     Put $S_M=\sum_jG_M(A_j)$. For every $M$ with $L\le M<N$,
@@ -396,7 +397,8 @@ by \cite[Theorem~IV.16]{Cirac2021Matrix}.
         \notag
     \end{align}
     Since $N\ge L\ge3(g-1)(L_0+1)+1$,
-    Lemma~\ref{lem:pgvwc_product_span_source_length} shows that the spaces
+    Theorem~\ref{thm:pgvwc_block_space_independence_source_length} shows that
+    the spaces
     $G_N(A_j)$ form an internal sum.
     Decompose the vector into its block components, choose one boundary matrix
     for each component, and absorb the nonzero factor $\mu_j^N$ into that
