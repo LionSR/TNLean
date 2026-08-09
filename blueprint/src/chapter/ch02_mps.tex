@@ -214,31 +214,6 @@ boundary conditions (PBC).
     and the physical index is summed over between them.
 \end{definition}
 
-\begin{theorem}[Kraus-map form of the transfer map]
-    \label{thm:kraus_map_eq_transfer_map}
-    \lean{Kraus.mapLM_eq_transferMap}
-    \leanok
-    \uses{def:kraus_map, def:transfer_map}
-    For a finite matrix family $A$, write $\mathcal K_A$ for its Kraus map.
-    Then
-    \begin{align}
-        \mathcal K_A
-         & =\E_A.
-        \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    For every $X\in\MN{D}$,
-    \begin{align}
-        \mathcal K_A(X)
-         & =\sum_i A^iX(A^i)^\dagger
-          =\E_A(X).
-        \notag
-    \end{align}
-\end{proof}
-
 \begin{remark}\leanok
     The transfer map is automatically positive: if $X \ge 0$ then
     $\E_A(X) \ge 0$, because each summand $A^i X (A^i)^\dagger$ is

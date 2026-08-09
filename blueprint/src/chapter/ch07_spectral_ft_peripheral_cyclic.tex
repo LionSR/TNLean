@@ -25,12 +25,24 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    \uses{lem:peripheral_mul_closure, lem:peripheral_closed_powers_irred_fp,
-        thm:peripheral_roots_irred_fp}
-    The peripheral eigenvalues form a finite subset of $\C$, contain $1$,
-    and are closed under multiplication. Finiteness and product closure imply
-    closure under inversion, so they form a finite subgroup of $\C^\times$.
-    Every finite subgroup of $\C^\times$ is cyclic. A generator $\gamma$ has
-    order equal to the group cardinality~$m$, and the group is
-    $\{1,\gamma,\gamma^2,\ldots,\gamma^{m-1}\}$.
+    \uses{thm:peripheral_finite, lem:peripheral_mul_closure,
+        lem:peripheral_closed_powers_irred_fp, thm:peripheral_roots_irred_fp}
+    Let $S$ be the set of peripheral eigenvalues and let $m=|S|$.
+    Finiteness of $S$ and $1\in S$ give $m>0$. Every element of $S$ is a root
+    of unity, while $S$ is closed under products and powers. Hence $\mu^{-1}$
+    belongs to $S$ whenever $\mu\in S$. Multiplication by such a $\mu$
+    therefore permutes $S$. Since no element of $S$ vanishes,
+    \begin{align}
+        \prod_{\nu\in S}\nu
+         & =\prod_{\nu\in S}(\mu\nu)
+          =\mu^m\prod_{\nu\in S}\nu.
+        \notag
+    \end{align}
+    Cancelling the nonzero product gives $\mu^m=1$.
+
+    Let $\gamma=\exp(2\pi i/m)$, a primitive $m$-th root of unity. The set
+    $S$ is contained in the set of all $m$-th roots of unity, and both sets
+    have cardinality $m$. Thus they are equal. Consequently every element of
+    $S$ is $\gamma^j$ for some $0\leq j<m$, and power closure gives the reverse
+    inclusion.
 \end{proof}
