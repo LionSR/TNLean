@@ -535,13 +535,13 @@ nonzero spectrum as a set.
 \begin{proof}\leanok
   \uses{thm:mpu_shifted_zero_trace_power_moments,
     thm:mpu_zero_trace_power_charpoly}
-  Every positive power of both $A^2$ and $A^3$ has vanishing trace. Hence
+  Every positive power of $A^2$ has vanishing trace. Hence
   \begin{align}
-    \chi_{A^2}(X)&=\chi_{A^3}(X)=X^n.
+    \chi_{A^2}(X)&=X^n.
   \end{align}
-  If $\mu$ is a spectral value of $A$, spectral mapping shows that $\mu^2$ and
-  $\mu^3$ are roots of these two characteristic polynomials. They therefore
-  vanish, and already $\mu^2=0$ gives $\mu=0$. Thus every root of the split
+  If $\mu$ is a spectral value of $A$, spectral mapping shows that $\mu^2$ is
+  a root of this characteristic polynomial. Therefore $\mu^2=0$, and hence
+  $\mu=0$. Thus every root of the split
   monic polynomial $\chi_A$ is zero, so $\chi_A(X)=X^n$.
   Cayley--Hamilton now gives $A^n=0$.
 \end{proof}

@@ -12,11 +12,10 @@ A finite complex square matrix whose powers of every exponent greater than one
 have trace zero is nilpotent. In fact, its characteristic polynomial is a pure
 power of `X`.
 
-The missing first moment is avoided by passing to `A ^ 2` and `A ^ 3`.
-Newton--Girard computes the characteristic polynomials of both powered matrices,
-and spectral mapping forces every spectral value of `A` to vanish. Splitting the
-characteristic polynomial gives a pure power of `X`, and Cayley--Hamilton then
-proves nilpotence.
+The missing first moment is avoided by passing to `A ^ 2`. Newton--Girard
+computes the characteristic polynomial of the squared matrix, and spectral
+mapping forces every spectral value of `A` to vanish. Splitting the characteristic
+polynomial gives a pure power of `X`, and Cayley--Hamilton then proves nilpotence.
 
 This is the elementwise nilpotence step used in arXiv:1703.09188, line 410,
 before the finite-dimensional nil-matrix theorem is applied to the algebra
@@ -66,11 +65,10 @@ theorem forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt
 /-- If all traces `tr(A ^ N)` with `N > 1` vanish, then every spectral
 value of `A` is zero.
 
-The proof follows the `A ^ 2`, `A ^ 3` spectral-mapping route: both powered
-matrices have characteristic polynomial `X ^ n`, so the square and cube of
-every spectral value vanish. For zero moments the square equation alone already
-forces the value to vanish; the cube records the parallel powered constraint.
-This is the spectral assertion used in arXiv:1703.09188, line 410. -/
+The proof passes to `A ^ 2`, whose characteristic polynomial is `X ^ n`.
+Spectral mapping then forces the square of every spectral value to vanish, hence
+the spectral value itself vanishes. This is the spectral assertion used in
+arXiv:1703.09188, line 410. -/
 theorem eq_zero_of_mem_spectrum_of_forall_trace_pow_eq_zero_of_one_lt
     (A : Matrix n n ℂ)
     (h : ∀ k : ℕ, 1 < k → trace (A ^ k) = 0)
@@ -78,22 +76,13 @@ theorem eq_zero_of_mem_spectrum_of_forall_trace_pow_eq_zero_of_one_lt
     μ = 0 := by
   have hpow2 :=
     forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt A h 2 (by omega)
-  have hpow3 :=
-    forall_trace_pow_pow_eq_zero_of_forall_trace_pow_eq_zero_of_one_lt A h 3 (by omega)
   have hchar2 := charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero (A ^ 2) hpow2
-  have hchar3 := charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero (A ^ 3) hpow3
   have hμ2root : IsRoot (A ^ 2).charpoly (μ ^ 2) :=
     mem_spectrum_iff_isRoot_charpoly.mp (spectrum.pow_mem_pow A 2 hμ)
-  have hμ3root : IsRoot (A ^ 3).charpoly (μ ^ 3) :=
-    mem_spectrum_iff_isRoot_charpoly.mp (spectrum.pow_mem_pow A 3 hμ)
-  have hμpow :
-      (μ ^ 2) ^ Fintype.card n = 0 ∧ (μ ^ 3) ^ Fintype.card n = 0 := by
-    constructor
-    · rw [hchar2] at hμ2root
-      simpa [IsRoot] using hμ2root
-    · rw [hchar3] at hμ3root
-      simpa [IsRoot] using hμ3root
-  have hμ2 : IsNilpotent (μ ^ 2) := ⟨Fintype.card n, hμpow.1⟩
+  have hμpow : (μ ^ 2) ^ Fintype.card n = 0 := by
+    rw [hchar2] at hμ2root
+    simpa [IsRoot] using hμ2root
+  have hμ2 : IsNilpotent (μ ^ 2) := ⟨Fintype.card n, hμpow⟩
   exact sq_eq_zero_iff.mp hμ2.eq_zero
 
 /-- If `tr(A ^ N) = 0` for every `N > 1`, then
