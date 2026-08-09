@@ -149,6 +149,44 @@ orthogonal projector is the canonical representative used here.
     $\Gamma_L\colon\MN{D}\to\ell^2(\Fin{d}^{L})$.
 \end{definition}
 
+\begin{theorem}[Boundary-map transport under Frobenius vectorization]
+    \label{thm:ground_space_map_es_frobenius}
+    \lean{MPSTensor.groundSpaceMapES_frobeniusEquivEuclidean_apply}
+    \leanok
+    \uses{def:ground_space_map_es, def:frobenius_vectorization}
+    Let $U\colon\MN{D}\to\ell^2(\Fin{D}\times\Fin{D})$ be Frobenius
+    vectorization, with the target indexed in column--row order, and let
+    $\iota_L$ be the computational-basis identification on the physical
+    coefficient space.  Then, for every $X\in\MN{D}$,
+    $\Gamma_L^{\mathrm{ES}}(U(X))=\iota_L(\Gamma_L(X))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:ground_space_map}
+    By definition, $\Gamma_L^{\mathrm{ES}}$ is the composite of $U^{-1}$,
+    the original boundary map $\Gamma_L$, and $\iota_L$.  Applying this
+    composite to $U(X)$ and cancelling $U^{-1}U$ gives the claimed identity.
+\end{proof}
+
+\begin{theorem}[Boundary map on a matrix unit]
+    \label{thm:ground_space_map_es_single}
+    \lean{MPSTensor.groundSpaceMapES_single}
+    \leanok
+    \uses{def:ground_space_map_es, def:frobenius_vectorization}
+    Let $e_{(b,a)}$ denote the Frobenius coordinate vector representing the
+    virtual matrix unit $E_{ab}$.  Then
+    $\Gamma_L^{\mathrm{ES}}(e_{(b,a)})=\iota_L(\Gamma_L(E_{ab}))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_frobenius}
+    Frobenius vectorization records a matrix entry $(a,b)$ at the
+    column--row coordinate $(b,a)$, so $U(E_{ab})=e_{(b,a)}$.  Substitute
+    this identity into the boundary-map transport theorem.
+\end{proof}
+
 \begin{theorem}[Exact range of the Hilbert-space boundary map]
     \label{thm:range_ground_space_map_es}
     \lean{MPSTensor.range_groundSpaceMapES}
@@ -156,6 +194,15 @@ orthogonal projector is the canonical representative used here.
     \uses{def:ground_space_map_es, def:ground_space_es}
     The range of $\Gamma_L$ is exactly $G_L^{\mathrm{ES}}(A)$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_frobenius, def:ground_space_parent}
+    Every virtual vector is $U(X)$ for a unique matrix $X$, and the transport
+    identity sends it to $\iota_L(\Gamma_L(X))$.  These are exactly the
+    vectors in $\iota_L(\range\Gamma_L)=G_L^{\mathrm{ES}}(A)$, proving both
+    inclusions.
+\end{proof}
 
 \begin{definition}[Ground-space Gram operator]
     \label{def:ground_space_gram}
@@ -184,15 +231,63 @@ orthogonal projector is the canonical representative used here.
     $\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
 \end{theorem}
 
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_single, lem:ground_space_map_apply}
+    Move the adjoint in $\mathcal K_L=\Gamma_L^\dagger\Gamma_L$ across the
+    inner product and expand the two boundary-map coefficients.  For each
+    physical word $\sigma$, the resulting summand is
+    $(A^\sigma)_{ec}\,\overline{(A^\sigma)_{ba}}$.  On the other hand,
+    expanding the transfer power on $E_{ca}$ gives
+    \begin{align}
+      \bigl(\mathcal E_A^L(E_{ca})\bigr)_{eb}
+      &=\sum_\sigma (A^\sigma)_{ec}\,
+        \overline{(A^\sigma)_{ba}}.
+    \end{align}
+    The defining Choi indexing
+    $J(\mathcal L)_{(c,e),(a,b)}=(\mathcal L(E_{ca}))_{eb}$ now yields the
+    stated reshuffling.
+\end{proof}
+
+\begin{definition}[Inverse Gram operator]
+    \label{def:inverse_gram}
+    \lean{ContinuousLinearMap.inverseGram}
+    \leanok
+    For an injective map $T$ with finite-dimensional domain, define
+    $S_T:=(T^\dagger T)^{-1}$.
+\end{definition}
+
+\begin{definition}[Injective range-projector candidate]
+    \label{def:injective_range_projector}
+    \lean{ContinuousLinearMap.injectiveRangeProjector}
+    \leanok
+    \uses{def:inverse_gram}
+    For injective $T$, define the operator $Q_T:=T S_T T^\dagger$ on its
+    codomain.
+\end{definition}
+
 \begin{theorem}[Injective range-projector formula]
     \label{thm:injective_range_projector_inverse_gram}
     \lean{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}
     \leanok
-    If $T$ is an injective map between finite-dimensional Hilbert spaces, then
+    \uses{def:injective_range_projector}
+    If $T$ is an injective map from a finite-dimensional Hilbert space into a
+    complete Hilbert space, then
     \begin{align}
       P_{\range T}&=T(T^\dagger T)^{-1}T^\dagger.
     \end{align}
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:inverse_gram}
+    The vector $Q_Tx$ lies in $\range T$.  Moreover,
+    $T^\dagger Q_Tx=(T^\dagger T)S_TT^\dagger x=T^\dagger x$, so for every
+    $y$ the adjoint identity gives
+    $\langle x-Q_Tx,Ty\rangle=0$.  Thus $x-Q_Tx$ is orthogonal to
+    $\range T$, and the range--orthogonal decomposition characterizing the
+    orthogonal projector gives $Q_T=P_{\range T}$.
+\end{proof}
 
 \begin{theorem}[Neumann inverse estimate]
     \label{thm:neumann_inverse_norm_bound}
@@ -204,6 +299,21 @@ orthogonal projector is the canonical representative used here.
       \lVert(1-t)^{-1}\rVert&\le(1-a)^{-1}.
     \end{align}
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\lVert t\rVert\le a<1$, the Neumann series converges and
+    $(1-t)^{-1}=\sum_{n\ge0}t^n$.  The triangle inequality and
+    submultiplicativity give
+    \begin{align}
+      \left\lVert\sum_{n\ge0}t^n\right\rVert
+      &\le \sum_{n\ge0}\lVert t\rVert^n
+       =(1-\lVert t\rVert)^{-1}
+       \le(1-a)^{-1},
+    \end{align}
+    where the last step uses monotonicity of the reciprocal on the positive
+    reals.
+\end{proof}
 
 \begin{definition}[Canonical parent interaction]\label{def:parent_interaction}
     \lean{MPSTensor.parentInteraction}
