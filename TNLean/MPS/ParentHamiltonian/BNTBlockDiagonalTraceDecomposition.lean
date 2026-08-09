@@ -548,7 +548,10 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
 explicit assumption in this intermediate trace-decomposition API. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`. -/
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -626,7 +629,10 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
 explicit assumption in this intermediate trace-decomposition API. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`. -/
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -707,7 +713,10 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
 explicit assumption in this intermediate trace-decomposition API. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`. -/
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -780,7 +789,10 @@ arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
 explicit assumption in this intermediate trace-decomposition API. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`. -/
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_trace_decomposition_bnt_c1_span
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

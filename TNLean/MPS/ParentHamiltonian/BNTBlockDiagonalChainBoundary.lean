@@ -46,7 +46,10 @@ boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 as the explicit hypothesis of this intermediate API; the source-range conclusion
 without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
-in `BNTBlockDiagonalBoundaryClosing`. -/
+in `BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_bnt_c1_boundary_decomposition
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))

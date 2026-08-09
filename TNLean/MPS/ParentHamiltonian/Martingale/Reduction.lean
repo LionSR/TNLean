@@ -722,11 +722,6 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
   exact parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le
     A L hL hγpos hγle hηle hOverlapNorm
 
-@[deprecated parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
-  (since := "2026-08-09")]
-alias parentHamiltonianES_gap_bound_of_principal_angle_compression :=
-  parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_lt
-
 /-- Uniform gap-bound reduction from an overlap operator-product norm estimate
 with a separate coefficient.
 

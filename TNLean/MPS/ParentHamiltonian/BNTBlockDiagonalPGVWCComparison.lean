@@ -72,7 +72,10 @@ tail-word span at length \(N-i\) for each boundary-crossing interval. This is
 an explicit assumption of this intermediate span-dependent form.
 The
 source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_chainGroundSpace
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
@@ -186,7 +189,10 @@ boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
 retained as an explicit assumption in this intermediate theorem. The
 source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -260,7 +266,10 @@ large-length BNT product-span bound alone: for a crossing interval beginning at
 \(i=N-1\), the required tail length is \(1\). Thus this theorem is only the
 span-dependent intermediate form; the global-cut
 theorem in `BNTBlockDiagonalBoundaryClosing` removes the hypothesis at the source
-range. -/
+range.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_of_boundary
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -330,7 +339,10 @@ boundary-crossing comparison.
 **Scope restriction (crossing span):** This intermediate theorem retains the
 crossing-tail span hypothesis. The global-cut theorem in
 `BNTBlockDiagonalBoundaryClosing` supplies the source-range periodic-boundary
-upgrade without that hypothesis. -/
+upgrade without that hypothesis.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -417,7 +429,10 @@ assumes the simultaneous tail-word span at the crossing tails of length
 \(N-i<(L_0+1)+3(r-1)(L_0+1)\). For the interval beginning at \(i=N-1\) the tail
 length is \(1\), so the finite BNT range does not supply this span. The global-cut theorem in
 `BNTBlockDiagonalBoundaryClosing` proves the
-source-range conclusion without `hShortSpan`. -/
+source-range conclusion without `hShortSpan`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -503,7 +518,10 @@ shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
 span-dependent intermediate theorem. The global-cut
 theorem
 in `BNTBlockDiagonalBoundaryClosing` proves the source-range periodic-boundary
-upgrade without this hypothesis. -/
+upgrade without this hypothesis.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -566,7 +584,10 @@ shortest crossing tails, where \(N-i\) can be \(1\). This is therefore a
 span-dependent intermediate theorem. The global-cut
 theorem
 in `BNTBlockDiagonalBoundaryClosing` proves the source-range periodic-boundary
-upgrade without this hypothesis. -/
+upgrade without this hypothesis.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -627,7 +648,10 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, retained as an explicit assumption of this intermediate theorem. The
 source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -698,7 +722,10 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, retained as an explicit assumption of this intermediate theorem. The
 source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+These scope restrictions are documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem chainGroundSpace_toTensorFromBlocks_eq_iSup_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -761,7 +788,10 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by
 Theorem 12, proof lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines
 2126--2128, retained as an explicit assumption of this intermediate theorem. The
 source-range conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -839,7 +869,10 @@ simultaneous tail-word products of length \(N-i\) span the product algebra for
 each boundary-crossing interval. This is an explicit assumption of this intermediate theorem;
 the source-range
 conclusion without it is the global-cut theorem in
-`BNTBlockDiagonalBoundaryClosing`. -/
+`BNTBlockDiagonalBoundaryClosing`.
+
+This scope restriction is documented in
+`docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex`. -/
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_crossing_pgvwc_comparison
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
