@@ -720,6 +720,51 @@ closing a chain of $N$ copies of $\mathcal U$.
     The second identity multiplies the sitewise Kronecker deltas.
 \end{proof}
 
+\begin{theorem}[Simplicity at every later direct blocking]
+    \label{thm:mpu_all_later_simple_blockings}
+    \lean{MPOTensor.IsMPU.isMPUSimple_of_simple2,
+        MPOTensor.IsMPU.blockTensor_succ_isMPUSimple,
+        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_le}
+    \leanok
+    \uses{def:mpu,def:mpu_simple}
+    Let $\mathcal U$ generate an MPU, and suppose its direct length-$k$ block
+    is simple for some $k>0$.  Then its direct length-$k'$ block is simple for
+    every $k'\geq k$, without any divisibility condition on $k'$ by $k$.
+    This is the corollary following
+    \cite[Proposition~III.3]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_blocking,lem:mpu_adjoint_mul,
+        thm:mpu_closed_double_layer,thm:mpu_double_layer_blocking}
+    First suppose vectors $a,b$ satisfy the rank-one insertion identity
+    \begin{align}
+        W^{ij}W^{k\ell}&=W^{ij}|b)(a|W^{k\ell}.
+    \end{align}
+    Set $x_{ij}=(a|W^{ij}|b)$.  Applying this identity around the constant
+    two-site and three-site words, and then using MPU unitarity, gives
+    \begin{align}
+        x_{ij}^2&=\delta_{ij},\\
+        x_{ij}^3&=\delta_{ij}.
+    \end{align}
+    Hence $x_{ii}=1$, while $x_{ij}=0$ for $i\ne j$, so the same vectors obey
+    the one-letter contraction $(a|W^{ij}|b)=\delta_{ij}$.
+
+    For the successor step, take four words $I,J,K,L$ of length $k+1$ and
+    write $W^{I,J}=W^{i_0j_0}\cdots W^{i_kj_k}$, with the analogous notation
+    for $W^{K,L}$.  Apply the length-$k$ rank-one insertion identity to the suffixes
+    $I_+=(i_1,\ldots,i_k)$, $J_+=(j_1,\ldots,j_k)$ and the prefixes
+    $K_-=(k_0,\ldots,k_{k-1})$, $L_-=(\ell_0,\ldots,\ell_{k-1})$.  Then
+    \begin{align}
+        W^{I,J}W^{K,L}
+        &=W^{i_0j_0}\bigl(W^{I_+,J_+}W^{K_-,L_-}\bigr)W^{k_k\ell_k}\\
+        &=W^{I,J}|b)(a|W^{K,L}.
+    \end{align}
+    Thus the length-$(k+1)$ block has the same insertion witnesses, and the
+    two- and three-site argument gives their one-letter contraction.  Induction
+    on $k'-k$ proves the claim.
+\end{proof}
+
 \begin{theorem}[The fixed-point simple1 contraction]
     \label{thm:mpu_simple1}
     \lean{MPOTensor.IsMPU.exists_normalized_fixed_points_simple1,
