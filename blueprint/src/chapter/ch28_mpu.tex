@@ -632,7 +632,8 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{theorem}[Exact simplicity after the second blocking]
     \label{thm:mpu_second_block_simple}
-    \lean{MPOTensor.IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec}
+    \lean{MPOTensor.IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec,
+        MPOTensor.IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec}
     \leanok
     \uses{thm:mpu_second_block_residual_three_forms,
         thm:mpu_three_form_contractions}
@@ -655,17 +656,28 @@ closing a chain of $N$ copies of $\mathcal U$.
     \texttt{simple2} after expanding both coefficients.
 \end{proof}
 
+\begin{definition}[Physical-basis reindexing]
+    \label{def:mpu_physical_reindexing}
+    \lean{MPOTensor.reindexPhysical}
+    \leanok
+    For a bijection $e$ between two physical index sets, the reindexed tensor
+    is defined by
+    \begin{align}
+        (e^*\mathcal U)^{ij}=\mathcal U^{e(i)e(j)}.
+    \end{align}
+\end{definition}
+
 \begin{theorem}[Bounded blocking to simplicity]
     \label{thm:mpu_bounded_simple_blocking}
     \lean{MPOTensor.IsMPU.exists_blockTensor_isMPUSimple_of_one_lt,
         MPOTensor.IsMPU.blockTensor_one_isMPUSimple_fin_one,
         MPOTensor.IsMPU.exists_blockTensor_isMPUSimple,
         MPOTensor.IsMPUSimple.blockTensor,
-        MPOTensor.reindexPhysical,
         MPOTensor.IsMPUSimple.reindexPhysical,
         MPOTensor.reindexPhysical_blockTensor_blockTensor}
     \leanok
-    \uses{thm:mpu_normalized_transfer_stabilization,
+    \uses{def:mpu_physical_reindexing,
+        thm:mpu_normalized_transfer_stabilization,
         thm:mpu_normalized_transfer_fin_one,
         thm:mpu_second_block_simple}
     Every MPU of positive physical and bond dimensions has a positive blocking
@@ -675,9 +687,9 @@ closing a chain of $N$ copies of $\mathcal U$.
         k=JD^2<D^4,
         &&0<J\leq D^2-1.
     \end{align}
-    If $D=1$, the length-one block is simple.  Simplicity is preserved by
-    every further positive blocking and by a bijective relabeling of the
-    physical basis.
+    If $D=1$, the length-one block is simple.  Simplicity is preserved under
+    every further iterated blocking by a positive factor and under a bijective
+    relabeling of the physical basis.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -695,9 +707,10 @@ closing a chain of $N$ copies of $\mathcal U$.
     multiplies the sitewise Kronecker deltas.
 \end{proof}
 
-\begin{corollary}[The fixed-point simple1 contraction]
-    \label{cor:mpu_simple1}
-    \lean{MPOTensor.IsMPU.simple1}
+\begin{theorem}[The fixed-point simple1 contraction]
+    \label{thm:mpu_simple1}
+    \lean{MPOTensor.IsMPU.exists_normalized_fixedPoints_simple1,
+        MPOTensor.IsMPU.simple1}
     \leanok
     \uses{def:mpu,thm:mpu_positive_mixed_residual_trace,
         thm:mpu_normalized_transfer_stabilization,
@@ -709,7 +722,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         (\Phi|W^{ij}|\rho)&=\delta_{ij}.
     \end{align}
     The unblocked tensor need not satisfy \texttt{simple2}.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $E^J=|\rho)(\Phi|$ be a stabilized transfer power.  Decompose
