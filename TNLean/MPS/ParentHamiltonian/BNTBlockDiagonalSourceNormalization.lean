@@ -21,7 +21,11 @@ variable {d : ℕ}
 /-- Under the PGVWC07 source normalization, every block-diagonal periodic vector
 belongs to the sum of the open-boundary block spaces at the sharp source length.
 The positive dual fixed points are used only by the tuple-span/intersection layer;
-all long-word propagation remains in the source unital gauge. -/
+all long-word propagation remains in the source unital gauge.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1346--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -59,7 +63,11 @@ theorem
   simpa [Nat.add_assoc] using hstep
 
 /-- Under the source-shaped PGVWC07 hypotheses, the chain-ground-space
-containment is accompanied by independence of the open-boundary block spaces. -/
+containment is accompanied by independence of the open-boundary block spaces.
+
+Source: arXiv:quant-ph/0608197, Theorem 12 direct-sum proof lines 1346--1421
+and canonical normalization lines 742--763 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -91,7 +99,11 @@ theorem
         A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
 /-- Every source-shaped PGVWC07 block-diagonal chain vector has a unique sum
-decomposition into the open-boundary spaces of the blocks. -/
+decomposition into the open-boundary spaces of the blocks.
+
+Source: arXiv:quant-ph/0608197, Theorem 12 direct-sum proof lines 1346--1421
+and canonical normalization lines 742--763 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -143,7 +155,11 @@ theorem
 
 /-- Under the source-shaped PGVWC07 hypotheses, a periodic vector of the block
 sum admits one block-diagonal open-boundary matrix. Its block components belong
-to the corresponding open-boundary block spaces. -/
+to the corresponding open-boundary block spaces.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1424--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]

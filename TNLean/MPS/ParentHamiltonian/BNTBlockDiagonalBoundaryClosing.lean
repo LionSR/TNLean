@@ -373,7 +373,11 @@ theorem exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvw
 /-- A global change of cut closes the block-diagonal boundary conditions
 under the PGVWC07 source normalization: source unitality together with positive,
 full-rank dual fixed points. No left-canonical identity is assumed on the source
-representatives. -/
+representatives.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 global change-of-cut lines 1454--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -419,7 +423,11 @@ theorem
 /-- Under the PGVWC07 source normalization, the periodic chain space of
 the block sum is the sum of the periodic block spaces, and the open-boundary
 block spaces are independent. This is the unrestricted source-shaped chain-space
-conclusion of PGVWC07, Theorem 12. -/
+conclusion of PGVWC07, Theorem 12.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1424--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -460,7 +468,11 @@ theorem
       groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
         A hr hIrr hBlocks Λ hΛ hDualFixed hBlk hL₀ hUnital (by omega)
 
-/-- The unrestricted PGVWC07 source-shaped periodic chain-space equality. -/
+/-- The unrestricted PGVWC07 source-shaped periodic chain-space equality.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1424--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -488,7 +500,11 @@ theorem
 
 /-- Under the unrestricted PGVWC07 source normalization, blockwise periodic
 uniqueness implies containment of the block-sum parent-Hamiltonian kernel in the
-span of the BNT matrix product vectors. -/
+span of the BNT matrix product vectors.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1424--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
@@ -523,7 +539,11 @@ theorem
         hRange hNlarge)
 
 /-- The parent-Hamiltonian kernel of the unrestricted PGVWC07 source-shaped block
-sum is exactly the span of its periodic component vectors. -/
+sum is exactly the span of its periodic component vectors.
+
+Source: arXiv:quant-ph/0608197, canonical normalization lines 742--763 and
+Theorem 12 proof lines 1424--1456 in
+`Papers/quant-ph_0608197/MPSarchive.tex`. -/
 theorem
     ker_parentHamiltonian_toTensorFromBlocks_eq_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07_of_dualFixedPoint
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
