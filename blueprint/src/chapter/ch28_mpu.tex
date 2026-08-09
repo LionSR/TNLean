@@ -739,9 +739,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The first two identities follow by evaluating the coordinate delta
-    functions.  For the last identity, the $k$th column block of $B^i$ has
-    only the $k$th row block nonzero, where it equals $\mu_kA_k^i$.
+    \uses{lem:matrix_sigma_block_inclusion}
+    Reindex the canonical dependent-summand inclusion along the equivalence
+    between dependent pairs and flattened coordinates.  Transporting its
+    isometry, cross-block orthogonality, and block-diagonal intertwining
+    identities gives the three displayed formulas.
 \end{proof}
 
 \begin{theorem}[Shifted transfer traces determine one active block]
