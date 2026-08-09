@@ -298,7 +298,7 @@ This is the algebraic-multiplicity step in arXiv:1703.09188, Proposition
 `prop:normal-tensor`, lines 349--354. No full-active-support, positivity,
 normality, diagonalizability, or first-moment hypothesis is required for the
 ambient tensor. -/
-theorem card_active_eq_one_of_shifted_transfer_trace [NeZero D]
+theorem card_active_eq_one_of_shifted_transfer_trace
     (data : CPSVCanonicalFormData A)
     (htrace : ∀ N, 1 < N →
       Matrix.trace (transferMatrix (transferMap A) ^ N) = 1) :
