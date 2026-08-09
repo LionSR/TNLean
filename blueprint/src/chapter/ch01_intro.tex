@@ -1395,6 +1395,33 @@ $v$ is multiplied by a nonzero scalar.
     factors of the outer product.
 \end{proof}
 
+\begin{theorem}[Recognizing pure states by the characteristic polynomial]
+    \label{thm:pure_state_matrix_of_hermitian_charpoly_eq}
+    \lean{Projectivization.exists_pureStateMatrix_eq_of_isHermitian_charpoly_eq}
+    \leanok
+    \uses{def:projective_pure_state_matrix}
+    Let $A\in M_d(\C)$ be Hermitian, and let $p$ be a projective ray. If
+    \begin{align}
+        \chi_A=\chi_{P_p},
+    \end{align}
+    then there is a projective ray $q$ such that
+    \begin{align}
+        P_q=A.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:hermitian_charpoly_unitary_conjugacy,
+      thm:projective_pure_state_bridge}
+    The matrix $P_p$ is Hermitian. Equality of the characteristic polynomials
+    therefore gives a unitary $U$ such that
+    \begin{align}
+        A=UP_pU^\dagger.
+    \end{align}
+    Taking $q=U\cdot p$ and using $P_{U\cdot p}=UP_pU^\dagger$ proves the
+    claim.
+\end{proof}
+
 \begin{theorem}[Normalized and unnormalized pure states]
     \label{thm:star_dot_self_smul_normalized_pure_state_matrix}
     \lean{Projectivization.star_dot_self_smul_normalizedPureStateMatrix}
