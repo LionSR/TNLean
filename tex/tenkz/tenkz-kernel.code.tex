@@ -291,6 +291,7 @@
 \clist_new:N \l__tenkz_kernel_check_off_clist % relations opted out of check=
 \seq_new:N  \l__tenkz_kernel_check_reason_seq % their written reasons, in order
 \int_new:N  \l__tenkz_kernel_check_index_int
+\bool_new:N \l__tenkz_kernel_check_first_bool
 \tl_new:N   \l__tenkz_kernel_scratch_tl
 \tl_new:N   \l__tenkz_kernel_sig_tl
 \tl_new:N   \l__tenkz_kernel_size_tl
@@ -336,6 +337,8 @@
 \int_new:N  \l__tenkz_kernel_eq_saved_picture_int
 \int_new:N  \l__tenkz_kernel_eq_saved_scope_int
 \int_new:N  \l__tenkz_kernel_eq_saved_group_int
+\prop_new:N \l__tenkz_kernel_eq_saved_skin_prop
+\prop_new:N \l__tenkz_kernel_eq_saved_species_prop
 \seq_new:N  \l__tenkz_kernel_eq_saved_seq
 \tl_new:N   \l__tenkz_kernel_eq_extent_key_tl
 \tl_new:N   \l__tenkz_kernel_eq_extent_tl
@@ -2560,6 +2563,7 @@
 % \tndeclare{class}{name}{keys}: the one extension door.  A declared atom
 % mints a one-label command; skins and species are descriptor tables the
 % style stage consumes.
+\seq_new:N  \g__tenkz_kernel_eq_declared_gseq
 \prop_new:N \g__tenkz_kernel_species_prop
 \prop_new:N \g__tenkz_kernel_species_hue_prop
 \prop_new:N \g__tenkz_kernel_skin_prop
@@ -2652,6 +2656,12 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_atom_aux:nn #1#2
   {
+    % A panel measured for an equation may declare an atom of its own, and
+    % the declaration is global.  The measuring run notes what it minted so
+    % the real run can mint it again from an undefined name, which is what
+    % the declaration asks of the document and what the author wrote once.
+    \bool_if:NT \l__tenkz_kernel_eq_probe_bool
+      { \seq_gput_right:Nn \g__tenkz_kernel_eq_declared_gseq {#1} }
     \exp_args:Nc \NewDocumentCommand {#1} { O{} m }
       { \__tenkz_kernel_tn:nn { #2 , ##1 } {##2} \ignorespaces }
   }
@@ -17960,13 +17970,24 @@
           { \seq_item:Nn \l__tenkz_kernel_match_seq {1} }
         \tl_trim_spaces:N \l__tenkz_kernel_check_relation_tl
         \seq_pop_left:NN \l__tenkz_kernel_match_seq \l__tenkz_kernel_scratch_tl
-        \tl_set:Ne \l__tenkz_kernel_check_reason_tl
-          { \seq_use:Nn \l__tenkz_kernel_match_seq { \c_colon_str } }
-        % The reason is recorded as the author spelled it, not as it means:
-        % a record carrying a macro would be checked as one thing and
-        % written as another, and what a reader wants back is the sentence
-        % on the page.  Reducing it to characters here makes the checks
-        % below read exactly what the stream will carry.
+        % The reason is put back together without being expanded, and only
+        % then reduced to characters: a record carrying a macro would be
+        % checked as one thing and written as another, and what a reader
+        % wants back is the sentence the author wrote.  Rejoining an
+        % expandable reason through an expanding join would settle its
+        % meaning before either check could read its spelling.
+        \tl_clear:N \l__tenkz_kernel_check_reason_tl
+        \bool_set_true:N \l__tenkz_kernel_check_first_bool
+        \seq_map_inline:Nn \l__tenkz_kernel_match_seq
+          {
+            \bool_if:NTF \l__tenkz_kernel_check_first_bool
+              { \bool_set_false:N \l__tenkz_kernel_check_first_bool }
+              {
+                \tl_put_right:Ne \l__tenkz_kernel_check_reason_tl
+                  { \c_colon_str }
+              }
+            \tl_put_right:Nn \l__tenkz_kernel_check_reason_tl {##1}
+          }
         \tl_set:Ne \l__tenkz_kernel_check_reason_tl
           { \tl_to_str:N \l__tenkz_kernel_check_reason_tl }
         \tl_trim_spaces:N \l__tenkz_kernel_check_reason_tl
@@ -18735,6 +18756,11 @@
         { \g__tenkz_kernel_eq_scope_int }
       \int_set:Nn \l__tenkz_kernel_eq_saved_group_int
         { \g__tenkz_kernel_group_int }
+      \prop_set_eq:NN \l__tenkz_kernel_eq_saved_skin_prop
+        \g__tenkz_kernel_skin_prop
+      \prop_set_eq:NN \l__tenkz_kernel_eq_saved_species_prop
+        \g__tenkz_kernel_species_prop
+      \seq_gclear:N \g__tenkz_kernel_eq_declared_gseq
       \seq_clear:N \l__tenkz_kernel_eq_saved_seq
       \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
         {
@@ -18769,6 +18795,13 @@
           \int_gset:cn {##1}
             { \seq_item:Nn \l__tenkz_kernel_eq_saved_seq { \l_tmpa_int } }
         }
+      \prop_gset_eq:NN \g__tenkz_kernel_skin_prop
+        \l__tenkz_kernel_eq_saved_skin_prop
+      \prop_gset_eq:NN \g__tenkz_kernel_species_prop
+        \l__tenkz_kernel_eq_saved_species_prop
+      \seq_map_inline:Nn \g__tenkz_kernel_eq_declared_gseq
+        { \cs_undefine:c {##1} }
+      \seq_gclear:N \g__tenkz_kernel_eq_declared_gseq
       \seq_gclear:N \g__tenkz_kernel_panel_gseq
       \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
       \seq_gclear:N \g__tenkz_kernel_rel_gseq
