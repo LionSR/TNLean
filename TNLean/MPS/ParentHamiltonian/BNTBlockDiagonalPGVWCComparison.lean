@@ -26,7 +26,7 @@ The source proof writes this comparison with boundary-indexed matrices
 \(\beta\) and \(\rho\) below are the word coordinates obtained by opening the
 periodic boundary at the chosen cut, not additional source terminology.
 
-**API note:** The span-dependent and explicit-comparison declarations below
+**Scope note:** The span-dependent and explicit-comparison declarations below
 record intermediate forms of the PGVWC07 \(C^j,D^j,E^j\) argument. The source-range
 conclusion without short crossing-tail span or external comparison hypotheses is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`

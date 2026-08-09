@@ -545,7 +545,7 @@ comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary t
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition API. The
+explicit assumption in this intermediate trace-decomposition theorem. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
 in `BNTBlockDiagonalBoundaryClosing`.
@@ -626,7 +626,7 @@ theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trac
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition API. The
+explicit assumption in this intermediate trace-decomposition theorem. The
 source-range conclusion without it is
 `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07`
 in `BNTBlockDiagonalBoundaryClosing`.
@@ -698,7 +698,7 @@ trace-decomposition form of the boundary-condition comparison in
 arXiv:quant-ph/0608197, Theorem 12. It assumes a finite simultaneous word-spanning
 length \(m\) and the trace equality at that length, for every
 boundary-crossing interval and every block-diagonal boundary representation.
-The trace equality remains the explicit input of this intermediate API. The
+The trace equality remains the explicit input of this intermediate theorem. The
 source-range global-cut theorem proves the periodic-boundary conclusion without
 requiring this trace-decomposition hypothesis.
 
@@ -710,7 +710,7 @@ comparison. The periodic-boundary upgrade encoded by `hTrace` — the boundary t
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition API. The
+explicit assumption in this intermediate trace-decomposition theorem. The
 source-range conclusion without it is
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 
@@ -785,7 +785,7 @@ theorem. The periodic-boundary upgrade encoded by `hTrace` — the boundary trac
 comparison with \(D^j_\beta=(\mu_j^NX_j)A^j_\beta\) — is the boundary-condition
 comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines 1446--1456, and
 arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as an
-explicit assumption in this intermediate trace-decomposition API. The
+explicit assumption in this intermediate trace-decomposition theorem. The
 source-range conclusion without it is
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 

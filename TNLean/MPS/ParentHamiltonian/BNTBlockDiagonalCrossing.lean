@@ -819,7 +819,7 @@ boundary-crossing comparison. The periodic-boundary upgrade encoded by `hIdentit
 is the boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof
 lines 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128,
 retained as an explicit assumption in this intermediate
-complementary-word API. The source-range conclusion without it is the global-cut theorem in
+complementary-word form. The source-range conclusion without it is the global-cut theorem in
 `BNTBlockDiagonalBoundaryClosing`.
 
 This scope restriction is documented in
@@ -887,7 +887,7 @@ arXiv:quant-ph/0608197, Theorem 12, independent of the boundary-crossing
 comparison. The periodic-boundary upgrade encoded by `hIdentity` is the
 boundary-condition comparison of arXiv:quant-ph/0608197, Theorem 12, proof lines
 1446--1456, and arXiv:2011.12127, Section IV.C, lines 2126--2128, retained as
-an explicit hypothesis of this intermediate complementary-word API. The
+an explicit hypothesis of this intermediate complementary-word form. The
 source-range conclusion without it is the global-cut theorem
 `chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07`.
 

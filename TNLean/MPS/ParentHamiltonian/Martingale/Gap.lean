@@ -202,9 +202,14 @@ on `NSiteSpace d N ≃ Cfg d N → ℂ`.
 excitation-projection estimate displayed in its statement. That estimate is
 strictly stronger than the source anticommutator condition and is not supplied
 merely by the intersection property or by the cited reduced ground-space
-principal-angle estimate. Once assumed, `Martingale.Reduction` converts it to
-the ordered cross-term estimate, performs the finite cyclic row count, and
-applies the spectral theorem.
+principal-angle estimate. Once assumed, it gives the anticommutator inequality
+\[
+  h_i h_j + h_j h_i \geq -c_{ij}(1-\gamma)(h_i+h_j)
+\]
+with uniformly summable rows. Since at most \(2(L-1)\) local terms overlap a
+length-\(L\) cyclic window, combining this estimate with \(h_i^2=h_i\) yields
+\(H^2\geq\gamma H\). The spectral theorem then gives
+\(\gamma\lVert vVert\leq\lVert HvVert\) on \((\ker H)^\perp\).
 
 Despite its historical short name, this declaration is conditional. The
 source-matching conditional theorem is
