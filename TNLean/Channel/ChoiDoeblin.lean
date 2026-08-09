@@ -8,7 +8,7 @@ import TNLean.Channel.ChoiRectangular
 import TNLean.Channel.SupportCompletion
 
 /-!
-# Choi-dominated Doeblin contraction (Wolf Chapter 8, Eq. (8.86))
+# Choi-dominated Doeblin contraction
 
 If the rectangular Choi matrix of a trace-preserving, Hermiticity-preserving
 linear map `T : M_D(ℂ) → M_{D'}(ℂ)` dominates `(ε/D)(Y ⊗ 𝟙)` for some `ε ≥ 0`
@@ -40,7 +40,7 @@ noncomputable section
 
 namespace Matrix
 
-/-! ### Choi-dominated Doeblin contraction (Wolf Chapter 8, Eq. (8.86)) -/
+/-! ### Choi-dominated Doeblin contraction -/
 
 /-- **Choi matrix of the trace-prepare map** (auxiliary lemma for Eq. (8.86)).
 
@@ -85,7 +85,7 @@ lemma choiMatrix_tracePrepareMap (d d' : ℕ)
             (a, i) (b, j) := by
         rw [Matrix.smul_apply, smul_eq_mul]
 
-/-- **Wolf Chapter 8, Eq. (8.86): Choi-dominated Doeblin contraction.**
+/-- **Choi-dominated Doeblin contraction.**
 
 Let `T : M_D(ℂ) → M_{D'}(ℂ)` be a trace-preserving, Hermiticity-preserving
 linear map.  For `ε ≥ 0` and a Hermitian `Y` with trace one, if

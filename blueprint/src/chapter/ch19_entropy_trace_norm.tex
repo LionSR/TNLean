@@ -609,6 +609,7 @@ Theorem~\ref{thm:trace_norm_abs}.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{def:choi_matrix_rect, def:trace_prepare_map}
     The normalized omega slice is $D^{-1}E_{ij}$, where $E_{ij}$ is the
     matrix unit.  Since $\tr(E_{ij})=\delta_{ij}$, the trace of the slice
     is $D^{-1}\delta_{ij}$, and $T'_Y$ multiplies this scalar by $Y$.
@@ -631,17 +632,17 @@ Theorem~\ref{thm:trace_norm_abs}.
         \label{eq:choi_domination}
     \end{align}
     then for all density operators $\rho_1,\rho_2\in\MN{D}$,
-    \begin{equation}
+    \begin{align}
         \lVert T(\rho_1)-T(\rho_2)\rVert_{\tr}
         \le (1-\varepsilon)\,\lVert\rho_1-\rho_2\rVert_{\tr}.
         \label{eq:choi_doeblin_contraction}
-    \end{equation}
+    \end{align}
     See \cite[Chapter~8, Eq.~(8.86)]{Wolf2012Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:quantum_doeblin_contraction, lem:choi_matrix_trace_prepare,
-      thm:choi_rect_cp}
+      thm:choi_rect_cp, def:trace_prepare_map, lem:is_kraus_cp_basic}
     Since $\tr[Y]=1$, $T'_Y$ is trace-preserving:
     $\tr[T'_Y(X)]=\tr[X]\tr[Y]=\tr[X]$.  Since $Y$ is Hermitian and
     $\tr[X]$ is real for Hermitian $X$, $T'_Y$ is Hermiticity-preserving.
