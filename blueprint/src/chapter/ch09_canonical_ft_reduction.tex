@@ -51,24 +51,6 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 \end{proof}
 
 
-\begin{definition}[Support projection]\label{def:support_proj}
-    \lean{MPSTensor.supportProj}
-    \leanok
-    For a positive semidefinite matrix $\rho\ge0$, the \emph{support
-        projection} $P$ is the orthogonal projection onto the range of $\rho$.
-    Via the spectral decomposition
-    $\rho=U\diag(\lambda_1,\ldots,\lambda_D)U^\dagger$, it is
-    \begin{align}
-        P
-         & =
-        U\diag\!\bigl(        \mathbf{1}_{\lambda_1>0},\ldots,
-        \mathbf{1}_{\lambda_D>0}
-        \bigr)U^\dagger,
-        \label{eq:canonical_support_projection}
-    \end{align}
-    where $\mathbf{1}_{\lambda_j>0}$ is $1$ if $\lambda_j>0$ and $0$ otherwise.
-\end{definition}
-
 \begin{definition}[Invariant projection condition]\label{def:has_inv_proj}
     \lean{MPSTensor.HasInvariantProj}
     \leanok
@@ -278,7 +260,8 @@ sector maps. The cyclic projections come from
     \label{thm:cyclic_sector_decomp_after_blocking}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor}
     \leanok
-    \uses{def:blocked_tensor, thm:peripheral_cyclic_structure}
+    \uses{def:blocked_tensor, def:same_mpv2, def:transfer_map,
+        def:left_canonical_tensor, def:irreducible_tensor}
     Let $A$ be a left-canonical irreducible tensor. Then there is a
     period-removing length $m\ge1$ such that $A^{[m]}$ admits:
     \begin{enumerate}
@@ -309,8 +292,12 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    The cyclic decomposition of the adjoint transfer map gives projections
-    $(P_k)$ with $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating the cyclic relation
+    \uses{thm:transfer_peripheral_cyclic_structure,
+        thm:cyclic_decomposition_irreducible_schwarz,
+        thm:adjoint_fixed_projection_block_decomp_isometry}
+    The peripheral cyclic-structure theorem identifies the period and its
+    primitive root. The cyclic decomposition of the adjoint transfer map gives
+    projections $(P_k)$ with $\E_{A^\dagger}(P_{k+1})=P_k$. Iterating the cyclic relation
     $m$ times gives $(\E_{A^\dagger})^m(P_k)=P_k$, and the blocked-transfer
     identity
     $\E_{(A^{[m]})^\dagger}=(\E_{A^\dagger})^m$
@@ -393,7 +380,7 @@ sector maps. The cyclic projections come from
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peripheral_cyclic_structure,
+    \uses{thm:transfer_peripheral_cyclic_structure,
         thm:cyclic_sector_decomp_after_blocking, thm:blocked_sector_unconditional}
     Left-canonicality makes $K_i:=(A^i)^\dagger$ unital, irreducibility passes
     to the adjoint map, and the quantum Perron--Frobenius theorem provides a

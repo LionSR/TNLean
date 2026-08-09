@@ -1,20 +1,28 @@
 \section{Peripheral eigenvalue group structure}
 
-This section proves the peripheral spectrum structure
-of~\cite[Theorem~6.6]{Wolf2012Quantum} for irreducible Schwarz maps:
-the peripheral eigenvalues form a finite cyclic group.
-The trace-preserving refinement that the order divides the bond
+This section proves a finite-Kraus specialization of the cyclicity conclusion
+in~\cite[Theorem~6.6(1)]{Wolf2012Quantum}: the peripheral eigenvalues form a
+finite cyclic group. It does not establish the bound on the group order in
+item~(1), nor the conclusions in items~(2)--(4). Wolf's theorem assumes an
+irreducible positive unital Schwarz map, whereas the statement below assumes a
+Kraus representation and hence complete positivity. The remaining abstract
+Schwarz-map case is not included. The trace-preserving refinement that the order divides the bond
 dimension is proved in Theorem~\ref{thm:peripheral_cyclic_group}. The
 invertibility of peripheral eigenvectors and the product closure of the
 peripheral eigenvalues used below are proved in
 Section~\ref{sec:app_spectral_periodicity}.
 
-\begin{theorem}[Peripheral eigenvalues: cyclic structure]%
+% Scope restriction (complete positivity): the cyclicity conclusion in Wolf
+% Theorem 6.6(1) assumes only positivity, unitality, and the Schwarz inequality.
+% The order bound and items (2)--(4) are not part of this entry. See
+% docs/paper-gaps/wolf_thm6_6_kraus_scope.tex.
+\begin{theorem}[Peripheral eigenvalues: cyclic structure for Kraus maps]%
     \label{thm:peripheral_cyclic_structure}
-    \lean{PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure}
+    \lean{Kraus.peripheralEigenvalues_eq_range_primitiveRoot}
     \leanok
-    \uses{thm:ks_peripheral}
-    Let $E$ be an irreducible unital Schwarz map on $\MN{D}$ with a
+    \uses{def:kraus_map, def:kraus_adjoint_map, def:unital_kraus,
+        def:irreducible_cp, def:peripheral_eigenvalues}
+    Let $E$ be an irreducible unital Kraus map on $\MN{D}$ with a
     positive-definite adjoint fixed point (trace-preservation is \emph{not}
     required).
     Then there exist $m \ge 1$ and a primitive $m$-th root of unity
@@ -24,10 +32,24 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    The peripheral eigenvalues form a finite subset of $\C$, contain $1$,
-    and are closed under multiplication. Finiteness and product closure imply
-    closure under inversion, so they form a finite subgroup of $\C^\times$.
-    Every finite subgroup of $\C^\times$ is cyclic. A generator $\gamma$ has
-    order equal to the group cardinality~$m$, and the group is
-    $\{1,\gamma,\gamma^2,\ldots,\gamma^{m-1}\}$.
+    \uses{thm:peripheral_finite, lem:peripheral_mul_closure,
+        lem:peripheral_closed_powers_irred_fp, thm:peripheral_roots_irred_fp}
+    Let $S$ be the set of peripheral eigenvalues and let $m=|S|$.
+    Finiteness of $S$ and $1\in S$ give $m>0$. Every element of $S$ is a root
+    of unity, while $S$ is closed under products and powers. Hence $\mu^{-1}$
+    belongs to $S$ whenever $\mu\in S$. Multiplication by such a $\mu$
+    therefore permutes $S$. Since no element of $S$ vanishes,
+    \begin{align}
+        \prod_{\nu\in S}\nu
+         & =\prod_{\nu\in S}(\mu\nu)
+          =\mu^m\prod_{\nu\in S}\nu.
+        \notag
+    \end{align}
+    Cancelling the nonzero product gives $\mu^m=1$.
+
+    Let $\gamma=\exp(2\pi i/m)$, a primitive $m$-th root of unity. The set
+    $S$ is contained in the set of all $m$-th roots of unity, and both sets
+    have cardinality $m$. Thus they are equal. Consequently every element of
+    $S$ is $\gamma^j$ for some $0\leq j<m$, and power closure gives the reverse
+    inclusion.
 \end{proof}
