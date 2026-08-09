@@ -362,7 +362,7 @@ TNLean/MPDO/
 ├── ZCL.lean                     -- §4.3: ZCL for mixed states (Def 4.2)
 ├── PRFP.lean                    -- §4.3: Purification RFP (Def 4.3, Thm 4.4) — LPDO only
 ├── VerticalCF.lean              -- §4.5, Prop 4.13: horizontal CF ⟹ vertical CF
-└── RFP.lean                     -- §4.1, Def 4.1: IsRFP for general MPDO (T,S tpCPM)
+└── RFPViaTS.lean                -- §4.1, Def 4.1: MPOTensor.IsRFPViaTS for general MPDO (T,S tpCPM)
 ```
 
 **File details**:
@@ -376,7 +376,7 @@ TNLean/MPDO/
 | `MPDO/ZCL.lean` | Def 4.2 | `IsZCL_MPDO` (transfer matrix idempotent condition for MPO) | ~100 | Works for all MPO, not just MPDO. |
 | `MPDO/PRFP.lean` | Def 4.3, Thm 4.4 | `IsPRFP` (purification is RFP). `prfp_iff_zcl_lpdo`. **Restricted to LPDO.** | ~200 | Uses `LPDO.lean` + `MPS/RFP/*`. Paper notes this is too weak (line 786). |
 | `MPDO/VerticalCF.lean` | Prop 4.13, Lem L `Lemma-L` | `verticalCF_of_horizontalCF_mpdo`, `lemmaL_mpv_equality` | ~250 | Uses block-injectivity + Newton-Girard. Works for general MPDO. |
-| `MPDO/RFP.lean` | Def 4.1 `RFPMixedTS` | `IsRFP_MPDO (M : MPOTensor d D)` (∃ T,S tpCPM), pure case recovery | ~120 | Works for general MPDO. |
+| `MPDO/RFPViaTS.lean` | Def 4.1 `RFPMixedTS` | `MPOTensor.IsRFPViaTS M`: trace-preserving CP maps `T` and `S` intertwine the one-site and two-site physical closures for every virtual operator | Implemented | Stated for a bare MPO tensor; canonical form and MPDO generation are theorem-level hypotheses. |
 
 ### Tier 4 — Entropy & area law (new top-level directory: `Entropy/`)
 

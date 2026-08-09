@@ -238,8 +238,9 @@ def stationaryOfFaithfulFixedPoint
     m_apply := fun _ _ _ => rfl
     iota_apply := fun _ _ => rfl }
 
-/-- The stationary tower from a faithful fixed point is compatible with any RFP
-MPO tensor, because all positive blocked transfer maps agree with `transferMap M`. -/
+/-- The stationary tower from a faithful fixed point is compatible with any MPO tensor
+satisfying doubled-index ZCL, because all positive blocked transfer maps agree with
+`transferMap M`. -/
 theorem stationaryOfFaithfulFixedPoint_compatible
     (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
@@ -484,8 +485,8 @@ private theorem adjoint_blockedTransferMap_succ_apply (M : MPOTensor d D) (n : �
       (transferMap M).adjoint ((blockedTransferMap M n).adjoint X) := by
   rw [blockedTransferMap_succ, LinearMap.adjoint_comp, LinearMap.comp_apply]
 
-/-- The algebra-structure RFP predicate forces every adjoint fixed point of the
-blocked transfer map to be an adjoint fixed point of the unblocked transfer
+/-- The blocked adjoint fixed-point-algebra tower predicate forces every adjoint fixed
+point of the blocked transfer map to be an adjoint fixed point of the unblocked transfer
 map.
 
 Concretely, compatibility at size `n` places `X` in `data.A n`; the inclusion
