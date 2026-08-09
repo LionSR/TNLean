@@ -280,3 +280,72 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     The matrix $M_2$ has $dD$ columns. Its rank is at most its number of
     columns, hence at most $dD=Dd$.
 \end{proof}
+
+\section{Full-support canonical representatives}
+
+\begin{definition}[Full active support]
+    \label{def:mpu_full_active_support}
+    \lean{MPSTensor.CPSVCanonicalFormData.HasFullActiveSupport}
+    \leanok
+    \uses{def:cpsv_canonical_form}
+    Let
+    \begin{align}
+      A^i = V^*\left(\bigoplus_{k=1}^r \mu_k A_k^i\right)V
+    \end{align}
+    be CPSV canonical-form data in ambient bond dimension $D$, where every
+    $A_k$ has positive bond dimension $D_k$.  The active blocks are those with
+    $\mu_k\ne0$.  The data have \emph{full active support} when
+    \begin{align}
+      \sum_{k:\,\mu_k\ne0}D_k=D.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[An ambient-dimensional active block is irreducible]
+    \label{thm:mpu_active_block_ambient_irreducible}
+    \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_active_dim_eq}
+    \leanok
+    If an active block has bond dimension $D$, then the ambient tensor $A$ is
+    irreducible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:cpsv_canonical_form,
+        thm:irreducible_tensor_smul_conj}
+    The total-dimension bound and positivity of every retained block dimension
+    force this block to be the only retained block.  The ambient coisometry is
+    square, hence unitary.  The reconstruction is therefore a nonzero scalar
+    multiple and unitary conjugate of the normal block, which preserves
+    irreducibility.
+\end{proof}
+
+\begin{theorem}[Unique active block with full support]
+    \label{thm:mpu_unique_active_full_support_irreducible}
+    \lean{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_card_active_eq_one_of_fullActiveSupport}
+    \leanok
+    \uses{def:mpu_full_active_support}
+    Canonical-form data with one active block and full active support reconstruct
+    an irreducible ambient tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_active_block_ambient_irreducible}
+    The full-support sum over the singleton active family says that its unique
+    block has dimension $D$.  Apply
+    Theorem~\ref{thm:mpu_active_block_ambient_irreducible}.
+\end{proof}
+
+\begin{theorem}[Normality of a unique full-support active block]
+    \label{thm:mpu_unique_active_full_support_normal}
+    \lean{MPSTensor.CPSVCanonicalFormData.isNormalTensor_of_card_active_eq_one_of_fullActiveSupport}
+    \leanok
+    \uses{def:mpu_full_active_support}
+    Suppose that canonical-form data have one active block and full active
+    support.  If the transfer map has spectral radius one and is primitive,
+    then the ambient tensor is a normal tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_unique_active_full_support_irreducible}
+    Combine the preceding irreducibility conclusion with the supplied
+    spectral-radius and primitivity properties.
+\end{proof}
