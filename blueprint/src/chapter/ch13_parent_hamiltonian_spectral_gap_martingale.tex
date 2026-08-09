@@ -34,9 +34,10 @@ norm estimate is derived here.
     \leanok
     \uses{lem:eval_word_append}
     Expand $\Gamma_{K+L}(X)(\sigma,\tau)=\tr(A^{\sigma,\tau}X)$,
-    factor $A^{\sigma,\tau}=A^\sigma A^\tau$, and use cyclicity of the trace
-    to move $A^\sigma$ to the front:
-    $\tr(A^\sigma(A^\tau X))=\Gamma_K(A^\tau X)(\sigma)$.
+    factor $A^{\sigma,\tau}=A^\sigma A^\tau$ by
+    Lemma~\ref{lem:eval_word_append}, and reassociate:
+    $\tr((A^\sigma A^\tau)X)=\tr(A^\sigma(A^\tau X))
+    =\Gamma_K(A^\tau X)(\sigma)$.
 \end{proof}
 
 \begin{definition}[Tail boundary map]\label{def:tail_boundary_map}
@@ -78,6 +79,45 @@ norm estimate is derived here.
     $\tau\colon\Fin L\to\Fin d$ is the suffix.
     When $Z_\tau=A^\tau X$ the output equals the standard $\Gamma_{K+L}(X)$.
 \end{definition}
+
+\begin{lemma}[Tail boundary map on a prefix--suffix pair]\label{lem:tail_boundary_map_append}
+    \lean{MPSTensor.tailBoundaryMap_append}
+    \leanok
+    \uses{def:tail_boundary_map, def:ground_space_map}
+    For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
+    \begin{align}
+        \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
+        &=\Gamma_L(Y_u)(\tau).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unfold the definition of $\Gamma^{\mathrm{tail}}_{K,L}$ on the pair
+    $(u,\tau)=\Fin.\!append\;u\;\tau$, use the decomposition
+    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!natAdd\;K=\tau$ and
+    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$, and apply
+    $\Gamma_L(Y_u)(\tau)=\tr(A^\tau Y_u)$.
+\end{proof}
+
+\begin{lemma}[Suffix restriction of the tail boundary map]\label{lem:tail_restrict_tail_boundary_map}
+    \lean{MPSTensor.tailRestrictₗ_tailBoundaryMap}
+    \leanok
+    \uses{lem:tail_boundary_map_append, def:tail_restrict_parent}
+    Restricting the tail boundary map to the suffix for a fixed prefix
+    $u\in\Fin d^K$ recovers $\Gamma_L(Y_u)$:
+    \begin{align}
+        R^{\mathrm{tail}}_u\bigl(\Gamma^{\mathrm{tail}}_{K,L}(Y)\bigr)
+        &=\Gamma_L(Y_u).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:tail_boundary_map_append}
+    This is Lemma~\ref{lem:tail_boundary_map_append} applied pointwise:
+    for each $\tau$, $(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$.
+\end{proof}
 
 \begin{theorem}[Tail boundary map factorization]\label{thm:tail_boundary_map_factorization}
     \lean{MPSTensor.tailBoundaryMap_factorization}
@@ -130,6 +170,44 @@ norm estimate is derived here.
     so $\psi$ lies in the range.
 \end{proof}
 
+\begin{lemma}[Left boundary map on a prefix--suffix pair]\label{lem:left_boundary_map_append}
+    \lean{MPSTensor.leftBoundaryMap_append}
+    \leanok
+    \uses{def:left_boundary_map, def:ground_space_map}
+    For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
+    \begin{align}
+        \Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)
+        &=\Gamma_K(Z_\tau)(u).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unfold the definition of $\Gamma^{\mathrm{left}}_{K,L}$ on the pair
+    $(u,\tau)$, use $(\Fin.\!append\;u\;\tau)\circ\Fin.\!castAdd\;L=u$ and
+    $(\Fin.\!append\;u\;\tau)\circ\Fin.\!natAdd\;K=\tau$, and apply
+    $\Gamma_K(Z_\tau)(u)=\tr(A^u Z_\tau)$.
+\end{proof}
+
+\begin{lemma}[Prefix restriction of the left boundary map]\label{lem:prefix_restrict_left_boundary_map}
+    \lean{MPSTensor.prefixRestrictₗ_leftBoundaryMap}
+    \leanok
+    \uses{lem:left_boundary_map_append, def:prefix_restrict}
+    Restricting the left boundary map to the prefix for a fixed suffix
+    $\tau\in\Fin d^L$ recovers $\Gamma_K(Z_\tau)$:
+    \begin{align}
+        P_\tau\bigl(\Gamma^{\mathrm{left}}_{K,L}(Z)\bigr)
+        &=\Gamma_K(Z_\tau).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:left_boundary_map_append}
+    Pointwise application of Lemma~\ref{lem:left_boundary_map_append}:
+    for each $\sigma$, $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$.
+\end{proof}
+
 \begin{theorem}[Left boundary map factorization]\label{thm:left_boundary_map_factorization}
     \lean{MPSTensor.leftBoundaryMap_factorization}
     \leanok
@@ -175,6 +253,24 @@ norm estimate is derived here.
     $Z_\tau$ with $\Gamma_K(Z_\tau)=P_\tau\psi$; then
     $\Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)=\tr(A^u Z_\tau)
     =\Gamma_K(Z_\tau)(u)=(P_\tau\psi)(u)=\psi(u,\tau)$.
+\end{proof}
+
+\begin{lemma}[Prefix restriction at $L=1$]\label{lem:prefix_restrict_one_eq_restrict_last}
+    \lean{MPSTensor.prefixRestrictₗ_one_eq_restrictLast}
+    \leanok
+    \uses{def:prefix_restrict, def:restrict_last}
+    For $L=1$, the prefix restriction $P_\tau$ coincides with the last-site
+    restriction: $P_\tau\psi=R^{\mathrm{last}}(\psi,\tau(0))$ for every
+    $\tau\colon\Fin 1\to\Fin d$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Unfolding both sides: for $\sigma\in\Fin d^K$,
+    $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$ while
+    $R^{\mathrm{last}}(\psi,j)(\sigma)=\psi(\sigma_1,\dots,\sigma_K,j)$ with
+    $j=\tau(0)$.  These are equal because $\Fin.\!append\;\sigma\;\tau$ puts
+    $\tau$ after $\sigma$, matching the $\Fin.\!snoc$ pattern of $R^{\mathrm{last}}$.
 \end{proof}
 
 \begin{theorem}[Tail boundary map range: Euclidean-space transport]\label{thm:tail_boundary_map_range_es_transport}
@@ -224,15 +320,15 @@ norm estimate is derived here.
 
 \begin{proof}
     \leanok
-    \uses{thm:left_boundary_map_range_eq, def:prefix_restrict, def:restrict_last}
+    \uses{thm:left_boundary_map_range_eq, lem:prefix_restrict_one_eq_restrict_last, def:restrict_last}
     By Theorem~\ref{thm:left_boundary_map_range_eq} with $L=1$, the range equals
     the intersection over suffixes $\tau\colon\Fin 1\to\Fin d$ of the comaps
     $P_\tau^{-1}(G_K(A))$.  For $L=1$, each suffix $\tau$ is determined by a
-    single index $j\in\Fin d$, and the prefix restriction $P_\tau$ reduces to
-    $R^\mathrm{last}_j$, the last-site restriction of
-    Definition~\ref{def:restrict_last}
-    (Lemma~\ref{lem:prefix_restrict_ground_space_map}).  Transporting the
-    resulting intersection through the canonical $\ell^2$ identification and
+    single index $j\in\Fin d$, and Lemma~\ref{lem:prefix_restrict_one_eq_restrict_last}
+    identifies $P_\tau$ with $R^{\mathrm{last}}(\cdot,j)$, the last-site restriction of
+    Definition~\ref{def:restrict_last}.  Transporting the
+    resulting intersection $\bigcap_{j\in\Fin d}(R^{\mathrm{last}}(\cdot,j))^{-1}(G_K(A))$
+    through the canonical $\ell^2$ identification and
     unfolding Definition~\ref{def:open_chain_ground_subspaces_es} gives
     $\mathcal U_K(A)$.
 \end{proof}
