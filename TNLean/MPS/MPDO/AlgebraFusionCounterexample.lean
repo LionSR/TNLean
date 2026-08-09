@@ -205,7 +205,7 @@ of `HasBlockedAdjointFixedPointAlgebraTower`. -/
 theorem exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
       Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
-        HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬IsZCL M :=
+        HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬ IsZCL M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,
     phaseFlipMPO_hasBlockedAdjointFixedPointAlgebraTower, phaseFlipMPO_not_isZCL⟩
