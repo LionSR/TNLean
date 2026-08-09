@@ -398,6 +398,34 @@ direct.
     block-separating equations with $S=3(L_0+1)$.
 \end{proof}
 
+\begin{theorem}[Tensor irreducibility implies transfer-map irreducibility]
+    \label{thm:irreducible_tensor_to_transfer_map}
+    \lean{MPSTensor.isIrreducibleMap_of_isIrreducibleTensor}
+    \leanok
+    \uses{def:irreducible_tensor}
+    If an MPS tensor is irreducible, then its transfer map has no nontrivial
+    invariant face.
+\end{theorem}
+
+\begin{lemma}[Positive square-root gauging preserves irreducibility]
+    \label{lem:tp_gauge_preserves_irreducibility}
+    \lean{MPSTensor.isIrreducibleTensor_tpGauge_of_isIrreducibleMap}
+    \leanok
+    \uses{def:irreducible_tensor, lem:tp_gauge_equiv}
+    Let $A$ have positive bond dimension and irreducible transfer map. If
+    $\Lambda>0$, then the square-root-gauged tensor
+    $\Lambda^{1/2}A\Lambda^{-1/2}$ is irreducible.
+\end{lemma}
+
+\begin{lemma}[Gauge-phase equivalence transports across two gauges]
+    \label{lem:gauge_phase_equiv_transport_left_right}
+    \lean{MPSTensor.gaugePhaseEquiv_of_gaugeEquiv_left_right_cast}
+    \leanok
+    \uses{def:blocks_not_gauge_phase_equiv}
+    Gauge equivalent replacements on both sides preserve gauge-phase
+    equivalence, including after identifying equal bond dimensions.
+\end{lemma}
+
 \begin{theorem}[Prepared-gauge simultaneous product span]
     \label{thm:pgvwc_prepared_gauge_product_span}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
@@ -433,6 +461,9 @@ direct.
     \leanok
     \uses{lem:tp_gauge_equiv,
         thm:tp_gauge_from_adjoint_fixed,
+        thm:irreducible_tensor_to_transfer_map,
+        lem:tp_gauge_preserves_irreducibility,
+        lem:gauge_phase_equiv_transport_left_right,
         lem:gauge_invariance_block_injective,
         thm:is_normal_tensor_of_is_normal_left_canonical,
         thm:cpsv_normal_mpv_phase_gauge,
@@ -481,10 +512,13 @@ direct.
 
 \begin{proof}
     \leanok
-    \uses{lem:unital_simultaneous_product_span_propagation,
+    \uses{thm:wordspan_propagation_unital,
+        lem:unital_simultaneous_product_span_propagation,
         thm:pgvwc_prepared_gauge_product_span,
         lem:product_span_block_image_direct_sum}
-    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
+    Theorem~\ref{thm:wordspan_propagation_unital} first propagates block
+    injectivity from $L_0$ to $L_0+1$ and $3(L_0+1)$.
+    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} then gives the full
     simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
     The source unital identity and
     Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagate
@@ -549,22 +583,74 @@ direct.
     inclusion follows by splitting a word of length $m+1$ at either endpoint.
 \end{proof}
 
-\begin{remark}[Doubly normalized specialization]
-    \label{rem:pgvwc_direct_sum_doubly_normalized_specialization}
+\begin{theorem}[Doubly normalized simultaneous product span]
+    \label{thm:pgvwc_product_span_doubly_normalized}
     \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \leanok
+    \uses{def:blockwise_product_word_span,
+        def:blocks_not_gauge_phase_equiv, def:mpv_overlap}
+    Let $r\ge2$, and let the bond dimensions be positive. Suppose that the
+    blocks are irreducible, have normalized self-overlap, are pairwise
+    inequivalent up to gauge and phase, and are injective at a common length
+    $L_0>0$. Assume both normalization identities
+    \begin{align}
+        \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
+        &\sum_a(A^j_a)^\dagger A^j_a&=\Id. \notag
+    \end{align}
+    Then for every $n\ge3(r-1)(L_0+1)$,
+    \begin{align}
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=n\}&=\prod_j\MN{D_j}. \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:wordspan_propagation_unital,
+        lem:bnt_direct_sum_block_separation_word_span,
+        lem:unital_simultaneous_product_span_propagation}
+    Propagate injectivity to the two longer lengths used by the sharp block
+    separation theorem, obtain the simultaneous span at
+    $3(r-1)(L_0+1)$, and propagate it using the right-unital identity.
+\end{proof}
+
+\begin{theorem}[Doubly normalized block-space independence]
+    \label{thm:pgvwc_block_space_independence_doubly_normalized}
     \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \leanok
+    \uses{thm:pgvwc_product_span_doubly_normalized, def:ground_space_parent}
+    Under the hypotheses of
+    Theorem~\ref{thm:pgvwc_product_span_doubly_normalized}, the spaces
+    $G_n(A^j)$ form an internal sum for every
+    $n\ge3(r-1)(L_0+1)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc_product_span_doubly_normalized,
+        lem:product_span_block_image_direct_sum}
+    Apply nondegeneracy of the trace pairing to the simultaneous product span.
+\end{proof}
+
+\begin{theorem}[Doubly normalized restriction intersection]
+    \label{thm:pgvwc_direct_sum_intersection_doubly_normalized}
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
     \leanok
-    Under the hypotheses above, assume additionally that every block has
-    normalized self-overlap and satisfies
+    \uses{thm:pgvwc_product_span_doubly_normalized, def:ground_space_parent}
+    Under the same hypotheses, if $m\ge3(r-1)(L_0+1)+1$, then
     \begin{align}
-        \sum_a(A^j_a)^\dagger A^j_a&=\Id. \notag
+        \C^d\otimes\left(\sum_jG_m(A^j)\right)
+        \cap\left(\sum_jG_m(A^j)\right)\otimes\C^d
+        &=\sum_jG_{m+1}(A^j). \notag
     \end{align}
-    The retained doubly normalized declarations give the same simultaneous
-    product span, internal-sum independence, and one-step
-    restriction-intersection identity. They are the specialization
-    $\Lambda^j=\Id$ of the source-normalized results.
-\end{remark}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:pgvwc_product_span_doubly_normalized,
+        lem:block_restriction_intersection_subspace}
+    Use the simultaneous product span at length $m-1$ in the endpoint
+    restriction calculation.
+\end{proof}
 
 \begin{lemma}[Product span makes the sum of local spaces direct]
     \label{lem:product_span_block_image_direct_sum}

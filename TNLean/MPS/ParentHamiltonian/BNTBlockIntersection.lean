@@ -134,6 +134,19 @@ theorem wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSe
     omega
   rwa [hlen] at hSpan
 
+private theorem isNBlkInjective_succ_and_three_mul_succ_of_unital
+    {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
+    (∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1)) ∧
+      ∀ k : Fin r,
+        IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+  constructor <;> intro k
+  · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+
 /-- BNT block-separation conditions and PGVWC07 normalization give the
 simultaneous product span at every length above the BNT block-separation bound.
 
@@ -198,12 +211,8 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
       (L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     WordTupleSpanTop A n := by
   let S : ℕ := (L₀ + 1) + ((L₀ + 1) + (L₀ + 1))
-  have hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1) := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
-  have hBlk3 : ∀ k : Fin r, IsNBlkInjective (A k) S := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  obtain ⟨hBlk1, hBlk3⟩ :=
+    isNBlkInjective_succ_and_three_mul_succ_of_unital A hBlk0 hUnital
   have hPair : HasPairBlockSeparatingWords A S := by
     simpa [S] using
       (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1
@@ -322,13 +331,8 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     WordTupleSpanTop A n := by
-  have hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1) := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
-  have hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  obtain ⟨hBlk1, hBlk3⟩ :=
+    isNBlkInjective_succ_and_three_mul_succ_of_unital A hBlk0 hUnital
   have hBase : WordTupleSpanTop A
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) :=
     wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
@@ -370,13 +374,8 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     {n : ℕ}
     (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
     WordTupleSpanTop A n := by
-  have hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1) := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
-  have hBlk3 : ∀ k : Fin r,
-      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-    intro k
-    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  obtain ⟨hBlk1, hBlk3⟩ :=
+    isNBlkInjective_succ_and_three_mul_succ_of_unital A hBlk0 hUnital
   have hBase :=
     wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
       A hr hIrr hBlocks Λ hΛ hDualFixed hBlk0 hBlk1 hBlk3 hL₀
