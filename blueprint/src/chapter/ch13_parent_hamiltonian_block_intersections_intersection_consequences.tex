@@ -398,31 +398,70 @@ direct.
     block-separating equations with $S=3(L_0+1)$.
 \end{proof}
 
+\begin{lemma}[Prepared-gauge simultaneous product span]
+    \label{lem:pgvwc_prepared_gauge_product_span}
+    \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
+    \leanok
+    \uses{thm:tp_gauge_from_adjoint_fixed,
+        thm:word_tuple_span_gauge_invariance,
+        lem:bnt_direct_sum_block_separation_word_span}
+    Let $r\ge2$. For each block $A^j$, suppose that $\Lambda^j$ is positive
+    definite and
+    \begin{align}
+        \sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
+    \end{align}
+    Gauge $A^j$ temporarily by $(\Lambda^j)^{1/2}$. The resulting block is
+    left-canonical, so the sharp three-block separation argument applies in
+    that gauge. Transporting its conclusion back gives
+    \begin{align}
+        \spn\{(A^1_w,\ldots,A^r_w):|w|=3(r-1)(L_0+1)\}
+        &=\prod_j\MN{D_j}. \notag
+    \end{align}
+    Diagonality of $\Lambda^j$ is not needed for this argument.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The square-root gauge is invertible by positive definiteness, and the dual
+    fixed-point equation makes the prepared blocks left-canonical. Similarity
+    preserves irreducibility, fixed-length injectivity, closed self-overlaps,
+    and pairwise inequivalence up to gauge and phase. Apply the existing sharp
+    separation theorem to the prepared family and then use
+    Lemma~\ref{thm:word_tuple_span_gauge_invariance} in the reverse direction.
+\end{proof}
+
 \begin{lemma}[Simultaneous product span at the source length]
     \label{lem:pgvwc_product_span_source_length}
-    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
-    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
+    \lean{MPSTensor.groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{lem:unital_simultaneous_product_span_propagation,
-        lem:bnt_direct_sum_block_separation_word_span}
-    Let $r\ge2$. Suppose that the normalized BNT blocks are injective at the
-    common length $L_0>0$ and satisfy
-    $\sum_aA^j_aA^{j\,\dagger}_a=\Id$. For every
-    $n\ge 3(r-1)(L_0+1)$, one has
+        lem:pgvwc_prepared_gauge_product_span}
+    Let $r\ge2$. Suppose that the BNT blocks are injective at the common length
+    $L_0>0$ and, for every $j$, satisfy the PGVWC07 canonical data
+    \begin{align}
+        \sum_aA^j_aA^{j\,\dagger}_a&=\Id,
+        &\Lambda^j&>0,
+        &\sum_a(A^j_a)^\dagger\Lambda^jA^j_a&=\Lambda^j. \notag
+    \end{align}
+    For every $n\ge 3(r-1)(L_0+1)$, one has
     $\spn\{(A^1_w,\ldots,A^r_w):|w|=n\} =\prod_j\MN{D_j}$.
-    Consequently the spaces $G_n(A^j)$ form an internal sum. This is the
-    simultaneous spanning estimate used in
+    Consequently the spaces $G_n(A^j)$ form an internal sum. No identity
+    $\sum_a(A^j_a)^\dagger A^j_a=\Id$ is assumed for the source blocks.
+    The doubly-normalized specialization remains available separately. This is
+    the simultaneous spanning estimate used in
     \cite[Theorem~12, proof lines~1424--1456]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:unital_simultaneous_product_span_propagation,
-        lem:bnt_direct_sum_block_separation_word_span,
+        lem:pgvwc_prepared_gauge_product_span,
         lem:product_span_block_image_direct_sum}
-    The block-separation argument gives the full simultaneous span at
-    $q=3(r-1)(L_0+1)$.
-    Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagates
+    Lemma~\ref{lem:pgvwc_prepared_gauge_product_span} gives the full
+    simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
+    The source unital identity and
+    Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagate
     this equality to every $n\ge q$. To prove independence, write
     $\phi_j=\Gamma_n^{A^j}(X_j)$ and suppose that $\sum_j\phi_j=0$.
     Comparison of the coefficient of each word, followed by the simultaneous
@@ -442,7 +481,7 @@ direct.
 
 \begin{theorem}[Direct-sum restriction intersection at the source length]
     \label{thm:pgvwc_direct_sum_intersection_source_length}
-    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07}
+    \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint}
     \leanok
     \uses{lem:pgvwc_product_span_source_length,
         lem:block_restriction_intersection_subspace}

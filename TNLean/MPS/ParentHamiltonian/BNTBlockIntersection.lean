@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
+import TNLean.MPS.Core.TPGauge
+import TNLean.MPS.Symmetry.StringOrderAux
 
 /-!
 # BNT block-separation hypotheses for PGVWC block intersections
@@ -18,7 +20,7 @@ PGVWC07 one-step block-intersection identity.
   direct-sum lemma used there.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
@@ -208,6 +210,82 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1
   exact wordTupleSpanTop_of_ge_of_common_blockInjective_of_unital_of_pairBlockSeparatingWords
     A hBlk1 hUnital hPair (by simpa [S] using hn)
 
+/-- A positive dual fixed point prepares the left-canonical family needed only
+for the sharp BNT separation argument.
+
+For each source block \(A^j\), set
+\(B^j_a=(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}\). Positivity of
+\(\Lambda^j\) makes this an invertible gauge, while the dual fixed-point
+equation makes \(B^j\) left-canonical. Irreducibility, fixed-length injectivity,
+self-overlap normalization, and pairwise gauge-phase inequivalence pass to the
+prepared family. The sharp tuple span is then transported back to the source
+representatives.
+
+This is the normalization change used in PGVWC07, Theorem 12: the source blocks
+need not also satisfy the left-canonical identity. -/
+theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hΛ : ∀ j, (Λ j).PosDef)
+    (hDualFixed : ∀ j,
+      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1))
+    (hBlk3 : ∀ k : Fin r,
+      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))))
+    (hL₀ : 0 < L₀) :
+    WordTupleSpanTop A
+      ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) := by
+  let prepared : (j : Fin r) → MPSTensor d (dim j) :=
+    fun j => tpGauge (A j) (Λ j)
+  have hGauge : ∀ j, GaugeEquiv (A j) (prepared j) := by
+    intro j
+    exact gaugeEquiv_tpGauge (A j) (Λ j) (hΛ j)
+  have hPreparedIrr : HasIrreducibleBlocks (d := d) prepared :=
+    HasIrreducibleBlocks.ofForall fun j =>
+      isIrreducibleTensor_tpGauge_of_isIrreducibleMap
+        (A j) (Λ j) (hΛ j)
+        (isIrreducibleMap_of_isIrreducibleTensor (A j) (hIrr.block_irreducible j))
+  have hPreparedLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
+    IsLeftCanonicalBlockFamily.ofForall fun j =>
+      tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
+        (A j) (Λ j) (hΛ j) (hDualFixed j)
+  have hPreparedOverlap : HasNormalizedSelfOverlap (d := d) prepared := by
+    refine HasNormalizedSelfOverlap.ofForall fun j => ?_
+    have heq :
+        (fun N => mpvOverlap (d := d) (prepared j) (prepared j) N) =
+          fun N => mpvOverlap (d := d) (A j) (A j) N := by
+      funext N
+      simp only [mpvOverlap]
+      apply Finset.sum_congr rfl
+      intro σ _
+      rw [← GaugeEquiv.sameMPV (hGauge j) N σ]
+    rw [heq]
+    exact hOverlap.overlap_tendsto_one j
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+    intro j k hjk hdim hGPE
+    apply hBlocks j k hjk hdim
+    exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
+      (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
+  have hPreparedBlk0 : ∀ k, IsNBlkInjective (prepared k) L₀ :=
+    fun k => isNBlkInjective_of_gaugeEquiv (hBlk0 k) (hGauge k)
+  have hPreparedBlk1 : ∀ k, IsNBlkInjective (prepared k) (L₀ + 1) :=
+    fun k => isNBlkInjective_of_gaugeEquiv (hBlk1 k) (hGauge k)
+  have hPreparedBlk3 : ∀ k,
+      IsNBlkInjective (prepared k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) :=
+    fun k => isNBlkInjective_of_gaugeEquiv (hBlk3 k) (hGauge k)
+  have hPreparedSpan :=
+    wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
+      prepared hPreparedIrr hPreparedLeft hPreparedOverlap hPreparedDistinct
+      hPreparedBlk0 hPreparedBlk1 hPreparedBlk3 hL₀ hr
+  exact wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
+
 /-- The normalized BNT hypotheses give the simultaneous product span in the
 source range of PGVWC07, Theorem 12.
 
@@ -251,6 +329,43 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
       ((r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))) :=
     wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
       A hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀ hr
+  exact wordTupleSpanTop_of_ge_of_unital A hBase hUnital hn
+
+/-- The PGVWC07 source normalization gives the simultaneous product span at
+all lengths above the sharp BNT bound.
+
+The positive dual fixed points are used only to prepare a left-canonical gauge
+for the base separation theorem. The resulting base span is transported back,
+and the source identity \(\sum_a A^j_aA^{j\dagger}_a=I\) propagates it to
+longer words. No diagonality hypothesis on the dual fixed points is needed. -/
+theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hΛ : ∀ j, (Λ j).PosDef)
+    (hDualFixed : ∀ j,
+      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    {n : ℕ}
+    (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
+    WordTupleSpanTop A n := by
+  have hBlk1 : ∀ k : Fin r, IsNBlkInjective (A k) (L₀ + 1) := by
+    intro k
+    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  have hBlk3 : ∀ k : Fin r,
+      IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
+    intro k
+    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  have hBase :=
+    wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
+      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hBlk1 hBlk3 hL₀
   exact wordTupleSpanTop_of_ge_of_unital A hBase hUnital hn
 
 /-- Under the normalized BNT block-separation hypotheses, the local spaces
@@ -331,6 +446,30 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07
   groundSpace_iSupIndep_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
       A hr hIrr hLeft hOverlap hBlocks hBlk0 hL₀ hUnital hn)
+
+/-- Under the PGVWC07 source normalization, the block local spaces form an
+internal direct sum throughout the sharp source range. -/
+theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hΛ : ∀ j, (Λ j).PosDef)
+    (hDualFixed : ∀ j,
+      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    {n : ℕ}
+    (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
+    iSupIndep fun j : Fin r => groundSpace (A j) n :=
+  groundSpace_iSupIndep_of_wordTupleSpanTop A
+    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
 
 /-- BNT block-separation conditions and PGVWC07 normalization give the one-step
 block-intersection identity at every length above the BNT block-separation
@@ -432,6 +571,37 @@ theorem pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_p
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07
       A hr hIrr hLeft hOverlap hBlocks hBlk0 hL₀ hUnital hn)
+    hUnital
+
+/-- The PGVWC07 one-step restriction-intersection identity holds under the
+source unital normalization and positive dual fixed points, without a
+left-canonical hypothesis on the source representatives. -/
+theorem
+    pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+    {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hr : 2 ≤ r)
+    (hIrr : HasIrreducibleBlocks (d := d) A)
+    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
+    (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
+    (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
+    (hΛ : ∀ j, (Λ j).PosDef)
+    (hDualFixed : ∀ j,
+      transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+    {L₀ : ℕ}
+    (hBlk0 : ∀ k : Fin r, IsNBlkInjective (A k) L₀)
+    (hL₀ : 0 < L₀)
+    (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
+    {n : ℕ}
+    (hn : (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) ≤ n) :
+    ((⨅ b : Fin d,
+        (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictLastₗ b)) ⊓
+      (⨅ a : Fin d,
+        (⨆ j : Fin r, groundSpace (A j) (n + 1)).comap (restrictFirstₗ a))) =
+      ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
+  exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
+    (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
     hUnital
 
 /-- Normalized BNT block-separation hypotheses give the large-length block
