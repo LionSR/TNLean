@@ -21,7 +21,7 @@ arXiv:1703.09188, Proposition `blockingsimple`, lines 390--409.
 
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped Matrix BigOperators
 open Matrix
 
 namespace MPOTensor
@@ -202,7 +202,6 @@ theorem normalizedDiagonal_doubleLayerTensor_blockTensor [NeZero d]
       exact Matrix.submatrix_mul_equiv (E ^ L) E
         finProdFinEquiv.symm finProdFinEquiv.symm finProdFinEquiv.symm
 
-
 /-- At the MPU stabilization exponent, the normalized blocked double-layer
 diagonal is the explicitly reindexed rank-one transfer projector.
 
@@ -218,7 +217,6 @@ theorem IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec
           finProdFinEquiv.symm finProdFinEquiv.symm := by
   rw [normalizedDiagonal_doubleLayerTensor_blockTensor]
   rw [(hU.normalizedTransferStabilization hD).power_eq]
-
 
 /-- A residual physical slice: subtract the identity coefficient from a physical
 contraction. This is the basis-free form of the residual matrices `S_α` in

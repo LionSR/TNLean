@@ -163,7 +163,6 @@ theorem traceBilinForm_nondegenerate {n : Type*} [Fintype n] :
     rw [trace_mul_comm]
     exact hY X
 
-
 /-- A basis of a nonzero finite matrix algebra whose distinguished vector is the identity
 and whose remaining vectors are traceless. -/
 theorem exists_identity_traceless_basis {d : ℕ} [NeZero d] :

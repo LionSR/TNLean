@@ -7,7 +7,7 @@
 
 \input{command}
 
-\title{MPU One-Letter Mixed Residual Trace: Resolved Local Fix}
+\title{MPU One-Letter Mixed Residual Trace: Resolved Local Correction}
 \author{}
 \date{2026-08-09}
 
@@ -56,6 +56,10 @@ mixed-residual auxiliary theorems first prove
       &&(N>1),
 \end{align}
 and the analogous identity for mixed identity and residual factors.
+ootnote{Formal declarations:
+  \leanid{MPOTensor.IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero}
+  and
+  \leanid{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero}.}
 
 The apparent one-letter gap is recovered from these longer words.  Fix a
 physical matrix $X$ and set $A=R_{\mathcal W}(X)$.  Repeating $X$ at every site
@@ -84,7 +88,7 @@ does not strengthen the MPU hypotheses.
 
 \section{Verdict}
 
-\textbf{Verdict: resolved local fix.}  The intermediate auxiliary theorems retain
+\textbf{Verdict: local correction (resolved).}  The intermediate auxiliary theorems retain
 the explicit scope restriction $N>1$, but shifted nilpotence derives the
 missing $N=1$ case.  The final positive-length mixed-residual theorem has the
 same hypotheses and conclusion as the cited source assertion.  The former
