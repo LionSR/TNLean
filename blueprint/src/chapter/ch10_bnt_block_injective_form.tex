@@ -6,6 +6,7 @@ apply it to coefficient-form and sector BNTs.
 
 \begin{definition}[Fixed-length block-injective canonical-form condition]
     \label{def:blockwise_product_word_span}
+    \lean{MPSTensor.wordTuple}
     \lean{MPSTensor.WordTupleSpanTop}
     \leanok
     For a fixed blocked length $m$, the fixed-length form of the
@@ -31,6 +32,54 @@ apply it to coefficient-form and sector BNTs.
     This is the fixed-length form of the block-injective canonical-form
     condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
+
+\begin{theorem}[Gauge invariance of simultaneous fixed-length product spans]
+    \label{thm:word_tuple_span_gauge_invariance}
+    \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv}
+    \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv_symm}
+    \lean{MPSTensor.wordTupleSpanTop_iff_of_family_gaugeEquiv}
+    \leanok
+    \uses{def:blockwise_product_word_span, def:gauge_equiv}
+    Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be tensor families with the same
+    physical dimension and the same bond dimension $D_j$ in each labelled
+    block. Suppose that for every $j$ there is an arbitrary invertible matrix
+    $X_j\in\GL_{D_j}(\C)$ such that, for every physical index $i$,
+    \begin{align}
+        B_j^i&=X_jA_j^iX_j^{-1}.
+        \notag
+    \end{align}
+    Then, at every fixed length $L$,
+    \begin{align}
+        \spn\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
+          =\prod_{j=1}^g\MN{D_j}
+        \quad\Longleftrightarrow\quad
+        \spn\{(B_1^\omega,\ldots,B_g^\omega):|\omega|=L\}
+          =\prod_{j=1}^g\MN{D_j}.
+        \notag
+    \end{align}
+    Both directions hold for general invertible gauges; no unitarity condition
+    is imposed. In particular, a separation certificate proved after passing
+    to left-canonical representatives can be transported back to a source
+    unital gauge carrying a positive dual fixed point. This supplies only the
+    simultaneous-span transport; the subsequent source-gauge boundary and
+    parent-Hamiltonian arguments are separate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_gauge}
+    Given a target tuple $(M_j)_j$, conjugate it backwards to
+    $(X_j^{-1}M_jX_j)_j$. If the word tuples of $(A_j)_j$ span the product
+    algebra, one common coefficient family $(c_\omega)_\omega$ expresses this
+    conjugated tuple. Gauge covariance of word evaluation then gives
+    \begin{align}
+        \sum_{|\omega|=L}c_\omega B_j^\omega
+          &=X_j\left(\sum_{|\omega|=L}c_\omega A_j^\omega\right)X_j^{-1}
+          =M_j
+    \end{align}
+    for every $j$. Thus the $(B_j)_j$ word tuples span the product algebra.
+    Replacing every $X_j$ by $X_j^{-1}$ proves the reverse implication.
+\end{proof}
 
 \begin{lemma}[Direct-sum block injectivity at the source length]
     \label{lem:bnt_direct_sum_block_separation_word_span}
@@ -166,7 +215,7 @@ apply it to coefficient-form and sector BNTs.
         thm:exact_pow_four_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
         lem:bnt_direct_sum_block_separation_word_span,
-        lem:gauge_invariance_block_injective}
+        thm:word_tuple_span_gauge_invariance}
     Put every representative in its trace-preserving Perron gauge. Since
     $D_j\leq\sum_kD_k\leq K$, quantum Wielandt and homogeneous-span
     propagation make every representative block-injective at $K^4$,

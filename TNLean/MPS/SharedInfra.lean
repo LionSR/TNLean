@@ -15,3 +15,4 @@ import TNLean.MPS.SharedInfra.KrausAdjointSetup
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.SharedInfra.SectorCompression
 import TNLean.MPS.SharedInfra.SectorDecomposition
+import TNLean.MPS.SharedInfra.WordTupleGauge
