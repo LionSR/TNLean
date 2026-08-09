@@ -975,8 +975,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,
         def:mpu_transfer_matrix,thm:mpu_normalized_transfer_nonzero_spectrum}
-    Let $U$ be an MPU tensor of bond dimension $D>1$, and let $E$ be the
-    transfer matrix of its normalized flattening. There is an integer
+    Let $U$ be an MPU tensor with physical dimension $d>0$ and bond
+    dimension $D>1$, and let $E$ be the transfer matrix of its normalized
+    flattening. There is an integer
     $J$ satisfying
     \begin{align}
         0<J\leq D^2-1
@@ -1065,7 +1066,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
     \leanok
     \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_transfer_matrix}
-    If the bond dimension is $D=1$, then the normalized transfer matrix satisfies
+    If the physical dimension satisfies $d>0$ and the bond dimension is $D=1$,
+    then the normalized transfer matrix satisfies
     \begin{align}
         E&=1.
     \end{align}
