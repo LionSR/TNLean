@@ -11519,14 +11519,136 @@
           }
       }
   }
+% How far a passed row hangs its open indices on the return's side.  Daylight
+% separates a closure from a row's outermost ink, and what that ink is, is the
+% row's own business: a bare row hangs nothing, an open index hangs one leg,
+% and a named one hangs its leg and the band its name occupies.  The scan
+% reads the open-index records the model already carries, keeps the ones whose
+% host stands in the rows the return passes and whose page bearing points the
+% way the return runs, and answers with the deepest of them.  A virtual index
+% is longer than a physical one, so the type it declares chooses its length.
+%
+% A leg the picture's own physical policy grew is an open index exactly as an
+% authored port is, and it records its face under its own key; both readings
+% run, so a policy row is not passed over the way it once was when the closure
+% read authored cells alone.
+\fp_new:N \l__tenkz_kernel_r_trace_ink_fp
+\fp_new:N \l__tenkz_kernel_r_trace_pass_fp
+\fp_new:N \l__tenkz_kernel_r_trace_ink_reach_fp
+\tl_new:N \l__tenkz_kernel_r_trace_ink_lo_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_hi_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_host_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_row_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_col_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_face_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_turn_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_type_tl
+\tl_new:N \l__tenkz_kernel_r_trace_ink_label_tl
+\bool_new:N \l__tenkz_kernel_r_trace_ink_bool
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_leg_ink:nn #1#2
+  {
+    \__tenkz_model_get:nnN {#1} {host} \l__tenkz_kernel_r_trace_ink_host_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_host_tl
+      {
+        \exp_args:NV \__tenkz_kernel_r_record_carrier:nNNN
+          \l__tenkz_kernel_r_trace_ink_host_tl
+          \l__tenkz_kernel_r_trace_ink_row_tl
+          \l__tenkz_kernel_r_trace_ink_col_tl
+          \l__tenkz_kernel_r_trace_ink_bool
+        \bool_lazy_all:nT
+          {
+            { \l__tenkz_kernel_r_trace_ink_bool }
+            {
+              \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+                > { \l__tenkz_kernel_r_trace_ink_lo_tl - 1 }
+            }
+            {
+              \int_compare_p:nNn { \l__tenkz_kernel_r_trace_ink_row_tl }
+                < { \l__tenkz_kernel_r_trace_ink_hi_tl + 1 }
+            }
+          }
+          {
+            \__tenkz_model_get:nnN {#1} {#2}
+              \l__tenkz_kernel_r_trace_ink_face_tl
+            \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_face_tl
+              {
+                \tl_set:Ne \l__tenkz_kernel_r_trace_ink_face_tl
+                  {
+                    \exp_args:NV \__tenkz_kernel_r_compass:n
+                      \l__tenkz_kernel_r_trace_ink_face_tl
+                  }
+                \exp_args:NVV \__tenkz_kernel_r_page_face:nnN
+                  \l__tenkz_kernel_r_trace_ink_host_tl
+                  \l__tenkz_kernel_r_trace_ink_face_tl
+                  \l__tenkz_kernel_r_trace_ink_turn_tl
+                \fp_compare:nNnT
+                  {
+                    \l__tenkz_kernel_r_yc_fp
+                    * sind( \l__tenkz_kernel_r_trace_ink_turn_tl )
+                  }
+                  > {0}
+                  { \__tenkz_kernel_r_trace_leg_depth:n {#1} }
+              }
+          }
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_leg_depth:n #1
+  {
+    \__tenkz_model_get:nnN {#1} {port-type}
+      \l__tenkz_kernel_r_trace_ink_type_tl
+    \str_if_eq:VnTF \l__tenkz_kernel_r_trace_ink_type_tl {physical}
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+          { \__tenkz_metric_ratio:n {physleg} }
+      }
+      {
+        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+          { \__tenkz_metric_ratio:n {stub} }
+      }
+    \__tenkz_model_get:nnN {#1} {port-label}
+      \l__tenkz_kernel_r_trace_ink_label_tl
+    \quark_if_no_value:NF \l__tenkz_kernel_r_trace_ink_label_tl
+      {
+        \tl_if_empty:NF \l__tenkz_kernel_r_trace_ink_label_tl
+          {
+            \fp_add:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+              { \__tenkz_metric_ratio:n {dotlabelband} }
+          }
+      }
+    \fp_set:Nn \l__tenkz_kernel_r_trace_ink_fp
+      {
+        max
+          (
+            \l__tenkz_kernel_r_trace_ink_fp ,
+            \l__tenkz_kernel_r_trace_ink_reach_fp
+          )
+      }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_port_ink:n #1
+  { \__tenkz_kernel_r_trace_leg_ink:nn {#1} {port-face} }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_policy_ink:n #1
+  { \__tenkz_kernel_r_trace_leg_ink:nn {#1} {face} }
+\cs_new_protected:Npn \__tenkz_kernel_r_trace_row_ink:nn #1#2
+  {
+    \fp_zero:N \l__tenkz_kernel_r_trace_ink_fp
+    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_lo_tl {#1}
+    \tl_set:Nn \l__tenkz_kernel_r_trace_ink_hi_tl {#2}
+    \__tenkz_model_map_wires_origin:nN {port-open}
+      \__tenkz_kernel_r_trace_port_ink:n
+    \__tenkz_model_map_wires_origin:nN {policy-leg}
+      \__tenkz_kernel_r_trace_policy_ink:n
+  }
 % The side and reach of a traced row's return.  Reads the closed row from
 % \l__tenkz_kernel_r_row_tl and the row's west reach-point ordinate from
 % \l__tenkz_kernel_r_y_fp; leaves the arc angles in the b/c registers, the
 % outward sign in \l__tenkz_kernel_r_yc_fp, the passed-row count less one in
 % \l__tenkz_kernel_r_xc_fp, the passed rows' envelope in the wrap registers,
-% and the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
+% the passed rows' open-index depth in \l__tenkz_kernel_r_trace_ink_fp, and
+% the reach in \l__tenkz_kernel_r_reach_fp.  The closure stroke and the
 % annotation layering of \__tenkz_kernel_r_mark_rails:n both read the rail
-% through this one function, so the two cannot drift.
+% through this one function, so the two cannot drift.  The envelope walk
+% writes the b and c registers, so the ink scan -- which reads the outward
+% sign -- runs after it.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_side_reach:
   {
     \int_compare:nNnTF
@@ -11541,6 +11663,8 @@
         \fp_set:Nn \l__tenkz_kernel_r_xc_fp
           { \l__tenkz_kernel_r_row_tl - 1 }
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp {1}
+        \__tenkz_kernel_r_trace_row_ink:nn
+          {1} { \l__tenkz_kernel_r_row_tl }
       }
       {
         \tl_set:Nn \l__tenkz_kernel_r_b_tl {270}
@@ -11554,22 +11678,48 @@
             - \l__tenkz_kernel_r_row_tl
           }
         \fp_set:Nn \l__tenkz_kernel_r_yc_fp {-1}
+        \__tenkz_kernel_r_trace_row_ink:nn
+          { \l__tenkz_kernel_r_row_tl } { \l__tenkz_kernel_r_rows_int }
       }
-    % One trace reach past the outward extreme of the passed
-    % row lines per return crossed; the outward extreme is the
-    % signed maximum, so one formula serves both sides.
+    % Two separate distances used to wear one name.  The innermost return
+    % passes the row's own ink, and what a row hangs on its outward side is
+    % an open index -- a leg, and the band its name occupies when it has one.
+    % The trace reach is shorter than a bare physical leg, so the return
+    % crossed the very indices it was drawn beside and each of them read as
+    % ending on the contraction that closes their row.  The leg is the open
+    % index and its length is its own contract; the return is the closure,
+    % and a closure placed beyond a row's outermost ink is exactly what the
+    % metric table's one daylight measures.  So the return yields, by one
+    % daylight beyond the deepest open index the rows it passes hang on its
+    % side, and it keeps its own trace reach as a floor where they hang
+    % nothing.  Every further return crossed still adds one trace reach,
+    % which is what that reach measures here: the paper between two returns,
+    % not the drop of the first below its row.
+    %
+    % The outward extreme of the passed row lines is the signed maximum, so
+    % one formula serves both sides.
+    \fp_set:Nn \l__tenkz_kernel_r_trace_pass_fp
+      {
+        max
+          (
+            \l__tenkz_kernel_r_yc_fp
+            * \l__tenkz_kernel_r_wrap_yhi_fp ,
+            \l__tenkz_kernel_r_yc_fp
+            * \l__tenkz_kernel_r_wrap_ylo_fp
+          )
+        - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+      }
     \fp_set:Nn \l__tenkz_kernel_r_reach_fp
       {
-        ( \l__tenkz_kernel_r_xc_fp + 1 )
-        * \__tenkz_metric_ratio:n {pairtracereach}
-        + max
-            (
-              \l__tenkz_kernel_r_yc_fp
-              * \l__tenkz_kernel_r_wrap_yhi_fp ,
-              \l__tenkz_kernel_r_yc_fp
-              * \l__tenkz_kernel_r_wrap_ylo_fp
-            )
-        - \l__tenkz_kernel_r_yc_fp * \l__tenkz_kernel_r_y_fp
+        max
+          (
+            \__tenkz_metric_ratio:n {pairtracereach} ,
+            \l__tenkz_kernel_r_trace_ink_fp
+            + \__tenkz_metric_ratio:n {daylight}
+          )
+        + \l__tenkz_kernel_r_xc_fp
+          * \__tenkz_metric_ratio:n {pairtracereach}
+        + \l__tenkz_kernel_r_trace_pass_fp
       }
   }
 % The outward step a label owes its row's return.  A label band shallower
@@ -11719,12 +11869,35 @@
       }
       { none }
   }
+% The outward standoff the return owes the rows it passes, measured from its
+% own row line: the deepest open index those rows hang on its side, one
+% daylight beyond it, and the outward extreme of the rows themselves, since a
+% return passing further rows must clear their ink where they stand and not
+% where its own row does.  A flat rail runs out of the row line and answers
+% with a page distance from it; a ring's sector stands off no row line and
+% answers with the word for a row that has none.  The record publishes the
+% standoff beside the contour so a reader of the stream can hold the drawn
+% ink to the clearance the metric table declares, which is the reading a
+% wire's own ink cannot supply: a wire carries no measured box.
+\tl_new:N \l__tenkz_kernel_r_rail_clear_tl
 % The flat rail, read from the registers the stroke itself read, in the order
 % the stroke laid them: the leads, the two descents, and the run between the
 % corners.  Half a trace reach is the corner radius, and one minus the cosine
 % of 45 degrees places the mid-point of a quarter turn.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_flat:
   {
+    \tl_set:Ne \l__tenkz_kernel_r_rail_clear_tl
+      {
+        \dim_to_decimal_in_sp:n
+          {
+            \__tenkz_kernel_r_pt:n
+              {
+                \l__tenkz_kernel_r_trace_ink_fp
+                + \__tenkz_metric_ratio:n {daylight}
+                + \l__tenkz_kernel_r_trace_pass_fp
+              }
+          }
+      }
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
     \bool_if:NT \l__tenkz_kernel_r_wrap_llead_bool
       {
@@ -11808,6 +11981,7 @@
 % starts and finishes on whatever the row has at either side.
 \cs_new_protected:Npn \__tenkz_kernel_r_rail_arc:
   {
+    \tl_set:Nn \l__tenkz_kernel_r_rail_clear_tl {none}
     \tl_clear:N \l__tenkz_kernel_r_rail_tl
     \int_step_inline:nnn {0} {16}
       {
@@ -11849,6 +12023,7 @@
           \l__tenkz_kernel_r_wrap_rx_fp \l__tenkz_kernel_r_wrap_ry_fp
         |stroke=\dim_to_decimal_in_sp:n
           { \__tenkz_dim:n {wirewidth} / 2 }
+        |clear=\tl_use:N \l__tenkz_kernel_r_rail_clear_tl
         |points=\tl_use:N \l__tenkz_kernel_r_rail_tl
       }
   }

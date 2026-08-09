@@ -84,6 +84,11 @@ def _is_sp_end(value: str) -> bool:
     return value == "none" or _is_sp_point(value)
 
 
+def _is_sp_standoff(value: str) -> bool:
+    """A closure standoff: a page distance, or the word for a frame arc."""
+    return value == "none" or _is_nonnegative_int(value)
+
+
 def _is_sp_polyline(value: str) -> bool:
     """A measured contour: at least two points, semicolon separated."""
     parts = value.split(";")
@@ -232,6 +237,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
         "west": _is_sp_end,
         "east": _is_sp_end,
         "stroke": _is_nonnegative_int,
+        "clear": _is_sp_standoff,
         "points": _is_sp_polyline,
     },
     "tree": {
@@ -253,7 +259,7 @@ FIELD_VALIDATORS: dict[str, dict[str, Callable[[str], bool]]] = {
 REQUIRED_FIELDS: dict[str, frozenset[str]] = {
     "check": frozenset({"scope", "result"}),
     "closure-rail": frozenset(
-        {"name", "row", "side", "west", "east", "stroke", "points"}),
+        {"name", "row", "side", "west", "east", "stroke", "clear", "points"}),
 }
 
 REQUIRED_CHECK_FIELDS_BY_RESULT: dict[str, frozenset[str]] = {

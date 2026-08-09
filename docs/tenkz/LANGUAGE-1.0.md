@@ -651,6 +651,23 @@ that side, and its rail keeps the free racetrack an empty lattice draws; a
 row carrying a site on one side only closes onto that side, whichever side
 it is.
 
+A joined rail can still run through the row it joins. What a row hangs on
+the side its return runs is its open indices — a leg, and the band its name
+occupies when it carries one — and a return standing at a fixed reach from
+the row line stood inside them: at stroke width every such index ended on
+the very wire that contracts its row, and every name stood on the far side
+of that wire from the index it names. The leg is the open index and its
+length is its own contract; the return is the closure, and a closure placed
+beyond a row's outermost ink is exactly what the one daylight of the metric
+table measures. So the return yields. It stands one daylight beyond the
+deepest open index the rows it passes hang on its side — authored, or grown
+by the picture's physical policy — and keeps its own trace reach where they
+hang nothing. Each further return crossed still adds one trace reach, which
+is the paper between two returns and not the drop of the first below its
+row. The standoff those indices demand rides on the closure record beside
+the contour, and a rail passing nearer its row than that standoff is a
+second hard finding.
+
 **Beads.** A small tensor on a string is an atom whose address is
 `on <wire> t`. There is no bead vocabulary.
 

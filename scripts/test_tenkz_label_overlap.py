@@ -1339,7 +1339,7 @@ def main() -> int:
         detached = closure_log(
             "closure-detached.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=700000|"
             "points=-600000,0;-600000,-800000;2600000,-800000;2600000,0\n",
         )
         detached_status, detached_audit = audit_status(detached)
@@ -1358,7 +1358,7 @@ def main() -> int:
 
         joined_rail = (
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=700000|"
             "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
             "2600000,0;2000000,0\n"
         )
@@ -1367,6 +1367,61 @@ def main() -> int:
         if joined_status != 0 or joined_audit.findings:
             raise AssertionError(
                 "audit rejected a closure that meets both of its row's ends"
+            )
+
+        # A joined rail can still run through the row it closes (#5766).  The
+        # return that shipped after the closure was joined stood a fixed reach
+        # from the row line, shorter than the open indices the row hangs on
+        # that side, so each of them ended on the wire that contracts the row.
+        # The record names the standoff those indices demand; a rail shallower
+        # than it is reported with both distances.
+        crossed = closure_log(
+            "closure-crossed.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=1700000|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        )
+        crossed_status, crossed_audit = audit_status(crossed)
+        crossed_findings = [finding for finding in crossed_audit.findings
+                            if finding.rule == "closure-crossed"]
+        if crossed_status != 1 or len(crossed_findings) != 1:
+            raise AssertionError(
+                "audit accepted a closure passing inside the open indices of "
+                "the row it closes"
+            )
+        if ("12.21pt outside row 1" not in crossed_findings[0].msg
+                or "need 25.94pt" not in crossed_findings[0].msg):
+            raise AssertionError(
+                "the crossed-closure finding did not measure both distances: "
+                + crossed_findings[0].msg
+            )
+
+        # A rail exactly at its standoff is clear: the daylight the standoff
+        # already carries is what separates the indices from the return.
+        flush_status, flush_audit = audit_status(closure_log(
+            "closure-flush.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=800000|"
+            "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
+            "2600000,0;2000000,0\n",
+        ))
+        if flush_status != 0 or flush_audit.findings:
+            raise AssertionError(
+                "audit rejected a closure standing exactly at its standoff"
+            )
+
+        # A ring's sector stands off no row line, so it names no standoff and
+        # the rule has nothing to read.  Its ends are its two stations.
+        arc_status, arc_audit = audit_status(closure_log(
+            "closure-arc.tnlog",
+            "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
+            "west=0,0|east=2000000,0|stroke=0|clear=none|"
+            "points=0,0;1000000,-100000;2000000,0\n",
+        ))
+        if arc_status != 0 or arc_audit.findings:
+            raise AssertionError(
+                "audit demanded a row-line standoff of a frame arc"
             )
 
         # The site name that stood on the return: a box straddling the rail's
@@ -1406,7 +1461,7 @@ def main() -> int:
         malformed_rail = closure_log(
             "closure-malformed.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|points=0,0\n",
+            "west=0,0|east=2000000,0|stroke=0|clear=0|points=0,0\n",
         )
         malformed_status, malformed_audit = audit_status(malformed_rail)
         if malformed_status != 1 or not any(
@@ -1419,7 +1474,7 @@ def main() -> int:
         # hundredth of a point stands on the ink either side of it.
         stroked_rail = (
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=18023|"
+            "west=0,0|east=2000000,0|stroke=18023|clear=700000|"
             "points=0,0;-600000,0;-600000,-800000;2600000,-800000;"
             "2600000,0;2000000,0\n"
         )
@@ -1460,7 +1515,7 @@ def main() -> int:
         corner_status, corner_audit = audit_status(closure_log(
             "closure-label-round-corner.tnlog",
             "closure-rail|picture=1|name=wrap-1|row=1|side=west-east|"
-            "west=0,0|east=2000000,0|stroke=0|"
+            "west=0,0|east=2000000,0|stroke=0|clear=400000|"
             "points=0,0;0,500000;400000,200000;2000000,0\n",
             "label-use|picture=1\n"
             "bbox|picture=1|class=label|id=1|owner=0|"

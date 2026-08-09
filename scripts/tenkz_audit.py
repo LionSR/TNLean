@@ -25,6 +25,12 @@ Hard errors (exit 1):
                        diagrams" class.
   label-overlap       A measured `tn label` visible support strictly intersects
                       a sibling glyph node or explicit visible wire node.
+  closure-detached    A traced row's closure does not start and finish on the
+                      two virtual ends it names, so the picture records a
+                      periodic contraction and draws an open chain.
+  closure-crossed     A traced row's closure passes nearer its row than the
+                      open indices that row hangs on the closure's side, so
+                      a free index ends on the wire that contracts its row.
   bbox-coverage       A library-owned label, glyph, or wire use did not
                       produce its required measured geometry.
   kernel-crossing     A declared kernel crossing did not produce the
@@ -796,13 +802,17 @@ class Audit:
 
         A rail is its polyline and the half-stroke it is drawn with."""
         rails: list[tuple[Event, tuple[Point, ...], int]] = []
-        required = {"name", "row", "side", "west", "east", "stroke", "points"}
+        required = {"name", "row", "side", "west", "east", "stroke", "clear",
+                    "points"}
         for event in pic.events:
             if event.kind != "closure-rail":
                 continue
             if not self.require_fields(event, required, "closure-rail"):
                 continue
             if not _is_nonnegative_int(event.attrs["stroke"]):
+                continue  # FIELD_VALIDATORS already reported the bad value.
+            standoff = event.attrs["clear"]
+            if standoff != "none" and not _is_nonnegative_int(standoff):
                 continue  # FIELD_VALIDATORS already reported the bad value.
             try:
                 points = tuple(
@@ -845,6 +855,48 @@ class Audit:
                             f"{gap / 65536:.2f}pt short of the {side} virtual "
                             f"end of row {event.attrs['row']}",
                         )
+                self.check_closure_standoff(pic, event, points)
+
+    def check_closure_standoff(
+            self, pic: Picture, event: Event, points: tuple[Point, ...]
+    ) -> None:
+        """A traced row's closure must pass outside the row's open indices.
+
+        A row hangs its open indices on the side its return runs, and the
+        return used to be drawn a fixed reach from the row line -- shorter
+        than a bare physical leg.  Every such index then ended on the very
+        wire that contracts its row, which reads as a fourth contraction
+        rather than as a free index, and nothing saw it: `closure-detached`
+        asks only that the rail meet the row, and a leg carries no measured
+        box for the label gate to read.  The record names the standoff the
+        rows it passes demand of it, measured outward from its own row line,
+        and the contour says where the rail went; the rail must go at least
+        that far.  A frame arc stands off no row line and names no
+        standoff."""
+        standoff = event.attrs["clear"]
+        if standoff == "none":
+            return
+        west, east = points[0], points[-1]
+        if west[0] == east[0]:
+            return  # A row line with no run: no side to measure a drop from.
+        depth = max(
+            abs(Fraction(point[1])
+                - Fraction(west[1])
+                - Fraction((point[0] - west[0]) * (east[1] - west[1]),
+                           east[0] - west[0]))
+            for point in points
+        )
+        owed = int(standoff)
+        if depth + CLOSURE_JOIN_TOLERANCE_SP < owed:
+            self.hard(
+                "closure-crossed",
+                f"{self.log_path.name}:{event.line}",
+                f"picture {pic.ident} closure {event.attrs['name']} passes "
+                f"{float(depth) / 65536:.2f}pt outside row "
+                f"{event.attrs['row']} where the open indices it passes "
+                f"need {owed / 65536:.2f}pt: an index of that row ends on "
+                "the closure that contracts it",
+            )
 
     def check_label_overlaps(self) -> None:
         """Reject label intersections with exact sibling visible geometry."""

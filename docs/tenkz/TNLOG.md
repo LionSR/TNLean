@@ -156,7 +156,7 @@ first, the rest sorted, no `picture=`.
 | `label-use` | `picture` | a label node claimed no ink owner |
 | `bbox` | `picture`, `class=label`, `id`, `owner`, `xmin`, `xmax`, `ymin`, `ymax`, `shape`, `radius` | one measured label box, in integer scaled points |
 | `glyph-geometry` | `picture`, `owner`, `shape`, `xmin`, `xmax`, `ymin`, `ymax`, `radius`, `stroke`, `x1`, `y1`, `x2`, `y2`, `x3`, `y3` | one measured glyph silhouette, in integer scaled points |
-| `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, and the semicolon-separated polyline it lays, all in integer scaled points |
+| `closure-rail` | `picture`, `name`, `row`, `side`, `west`, `east`, `stroke`, `clear`, `points` | one traced row's closure: the two virtual ends it joins, or `none` where the row has no site on that side, the half stroke it is drawn with, the standoff the open indices of the rows it passes demand of it, outward from its own row line — `none` for a frame arc, which stands off no row line — and the semicolon-separated polyline it lays, all in integer scaled points |
 | `tree` | `picture`, `id`, `style`, `leaves`, `vertices`, `topology`, `role`, `species` | one fusion tree |
 | `geomprobe` | `id`, then a caller-supplied payload | one geometry probe, for fixtures |
 

@@ -180,11 +180,14 @@
   {
     \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
       \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
+    % The row hangs named physical indices on the side its return runs, so
+    % the return stands one daylight beyond their legs and name bands
+    % (issue #5766) rather than at the trace reach it once took.
     \__tenkz_test_brk_probe:nnnnnn {wrap-1}
       { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.35 }
+      { \l__tenkz_test_brk_ya_fp - 0.80 }
       { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.45 }
+      { \l__tenkz_test_brk_ya_fp - 0.85 }
       {1}
     % no bar between the rail and the far side of the leg-label band
     \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
@@ -261,16 +264,19 @@
   }
 % The policy picture: the legs come from the picture's physical policy and
 % run out to meet the string routed below the row, well past the rail.  A
-% scan that reads authored legs alone lays the bar across them.
+% scan that reads authored legs alone lays the bar across them.  The return
+% reads those legs too, and stands one daylight beyond an unnamed physical
+% leg (issue #5766); the waypoint that lengthens them to the string carries
+% them past it, which is a crossing rather than an index ending on ink.
 \cs_new_protected:Npn \__tenkz_test_brk_policy_audit:
   {
     \__tenkz_kernel_r_frame_xy:nnNN {1} {1.5}
       \l__tenkz_test_brk_x_fp \l__tenkz_test_brk_ya_fp
     \__tenkz_test_brk_probe:nnnnnn {wrap-1}
       { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.35 }
+      { \l__tenkz_test_brk_ya_fp - 0.50 }
       { \l__tenkz_test_brk_x_fp }
-      { \l__tenkz_test_brk_ya_fp - 0.45 }
+      { \l__tenkz_test_brk_ya_fp - 0.55 }
       {1}
     % no bar between the row and the far side of the lengthened leg tips
     \__tenkz_test_brk_probe:nnnnnn {tenkz-test-bracket}
