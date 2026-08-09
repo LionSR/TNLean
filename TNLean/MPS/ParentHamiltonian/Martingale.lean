@@ -27,12 +27,14 @@ all-vector norm-compression estimates for the excitation projections are also
 recorded as conditional sufficient hypotheses; they are not the source
 principal-angle estimate for the local ground spaces.
 
-The five components are:
+The six components are:
 
 * `Martingale.AbstractCriterion` — abstract martingale criterion
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
+* `Martingale.OpenChain` — open-chain ground-space projectors, their intersection,
+  and the projector-defect reduction to an anticommutator estimate;
 * `Martingale.OverlapReduction` — reduction from overlapping-window commutation
   to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered
