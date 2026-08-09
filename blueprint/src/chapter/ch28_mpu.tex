@@ -770,8 +770,9 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec}
     \leanok
     \uses{def:mpu_simple}
-    Let $W$ be simple with positive physical dimension, and suppose that for
-    some $J>0$ its normalized diagonal satisfies
+    Let $\mathcal U$ be simple with positive physical dimension, let $W$ be
+    its double layer, and let $E$ be the normalized diagonal of $W$.  Suppose
+    that for some $J>0$,
     \begin{align}
         E^J&=|\rho)(\Phi|.
     \end{align}
@@ -784,6 +785,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:mpu_simple}
     Choose the witnesses $a,b$ from simplicity and put $R=|b)(a|$.  Expanding
     the normalized diagonal as the average of the diagonal letters, the two
     defining simple contractions give

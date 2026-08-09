@@ -84,7 +84,7 @@ and only then substitutes the supplied transfer power.  No uniqueness of
 rank-one witnesses is used.
 
 Source: arXiv:1703.09188, equations `simple1`, `simple2`, and `Erightleft`,
-lines 356--374 and 429--438. -/
+lines 274--280, 356--374, and 429--438. -/
 theorem IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     [NeZero d] {W : MPOTensor d D} (hW : IsMPUSimple W)
     (ρ Φ : Fin (D * D) → ℂ) (J : ℕ) (hJ : 0 < J)
