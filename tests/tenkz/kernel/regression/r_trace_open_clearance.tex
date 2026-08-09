@@ -9,11 +9,11 @@
 % points, and a return that reads hosts alone passes straight through it.
 %
 % Two ladders, each traced west to east, each with the return of its first
-% row running north.  The first opens a physical index at column 1, one leg
-% long; the second leaves its whole north boundary open, one stub long -- a
-% stub is the longer of the two, so the two pictures pin different depths.
-% Both probes are written in the metric names, so what is pinned is the
-% clearance the table declares rather than a number this file remembers.
+% row running north.  The first opens a physical index at column 1, the
+% second leaves its whole north boundary open, and the ordinary wire route
+% stands a free end one open index out either way.  The probes are written in
+% the metric names, so what is pinned is the clearance the table declares
+% rather than a number this file remembers.
 \documentclass{standalone}
 \usepackage{tenkz}
 \makeatletter
@@ -67,9 +67,7 @@
         \str_if_eq:VnT \l__tenkz_test_open_name_tl {wrap-1}
           {
             \int_gincr:N \g__tenkz_test_open_rows_int
-            \int_compare:nNnTF { \g__tenkz_test_open_rows_int } = {1}
-              { \__tenkz_test_open_pair:n { \__tenkz_metric_ratio:n {physleg} } }
-              { \__tenkz_test_open_pair:n { \__tenkz_metric_ratio:n {stub} } }
+            \__tenkz_test_open_pair:n { \__tenkz_metric_ratio:n {stub} }
           }
       }
   }

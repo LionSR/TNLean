@@ -11687,11 +11687,16 @@
 % hangs from also passes at least one further row line, so it already stands
 % a row spacing and a trace reach beyond the stub.
 %
-% One length is budgeted rather than resolved.  On a projected plane the
-% transverse renderer starts a physical opening at the glyph's own outward
-% support point, so its tip stands that support beyond the leg length counted
-% here.  Reading it would mean asking the glyph-anchor production, which
-% writes the very coordinate registers the reach is computed in.
+% Two lengths are budgeted rather than resolved, and both are a leg a caller
+% has grown past the metric that names it: one lengthened to reach a
+% waypoint, an enclosure it pierces, or a crossing it must clear, and, on a
+% projected plane, a physical opening the transverse renderer starts at the
+% glyph's own outward support point rather than at the site.  Resolving
+% either means asking the leg-plan or glyph-anchor productions, which write
+% the very coordinate registers the reach is computed in and reads back for
+% the passed rows.  A leg carried out to meet other ink crosses the return
+% rather than ending on it, which is a different reading from the one this
+% clearance is about.
 \cs_new_protected:Npn \__tenkz_kernel_r_trace_open_ink:n #1
   {
     \tl_clear:N \l__tenkz_kernel_r_trace_ink_turn_tl
@@ -11700,13 +11705,20 @@
     \str_if_eq:VnTF \l__tenkz_kernel_r_trace_ink_type_tl {physical}
       {
         \tl_set:Nn \l__tenkz_kernel_r_trace_ink_row_tl {1}
-        \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
-          { \__tenkz_metric_ratio:n {physleg} }
         \__tenkz_model_get:nnN {#1} {from-host}
           \l__tenkz_kernel_r_trace_ink_host_tl
         \quark_if_no_value:NTF \l__tenkz_kernel_r_trace_ink_host_tl
-          { \tl_set:Nn \l__tenkz_kernel_r_trace_ink_turn_tl {90} }
           {
+            % The ordinary route hands the opening to the wire renderer,
+            % which stands a free end one open index out, not one leg.
+            \tl_set:Nn \l__tenkz_kernel_r_trace_ink_turn_tl {90}
+            \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+              { \__tenkz_metric_ratio:n {stub} }
+          }
+          {
+            % The plane route inks a leg along the frame's physical axis.
+            \fp_set:Nn \l__tenkz_kernel_r_trace_ink_reach_fp
+              { \__tenkz_metric_ratio:n {physleg} }
             \exp_args:NV \__tenkz_kernel_r_physical_axis:nnNN
               \l__tenkz_kernel_r_trace_ink_host_tl {n}
               \l__tenkz_kernel_r_trace_ink_turn_tl
