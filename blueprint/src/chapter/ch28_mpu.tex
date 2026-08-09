@@ -1498,16 +1498,54 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_normalized_transfer_stabilization,
         thm:mpu_stabilized_fixed_pair_uniqueness}
-    The shifted trace identities select one active block. Full active support
-    makes its isometric inclusion onto, so conjugation by that inclusion
-    preserves positive definiteness and trace. Normalize the block fixed point
-    before conjugating it. The active weight has squared modulus one, hence the
-    intertwining equation transports block fixedness to $E(\rho)=\rho$.
-    Transporting the blockwise left-canonical identity shows that the ambient
-    transfer map preserves trace, so the vectorized identity is left fixed and
-    its pairing with $\rho$ is $\tr(\rho)=1$. Uniqueness of the normalized
-    fixed-pair factorization now identifies the stabilized power with
-    $\lvert\rho)(\Phi\rvert$.
+    The shifted trace identities give
+    \begin{align}
+        \tr(E^N)=1\quad(N>1)
+        \quad\Longrightarrow\quad
+        \operatorname{card}(\mathrm{Active})=1.
+    \end{align}
+    Let $k$ be this active block. Canonical form II supplies a diagonal
+    $\Lambda_0>0$ fixed by the unweighted block transfer map. Normalize it by
+    \begin{align}
+        \Lambda&=\tr(\Lambda_0)^{-1}\Lambda_0,
+        &\tr(\Lambda)&=1.
+    \end{align}
+    If $\omega_k$ is the active weight, then
+    \begin{align}
+        \lvert\omega_k\rvert^2&=1,
+        &E_k(\Lambda)&=\Lambda,
+    \end{align}
+    where $E_k$ is the transfer map of the weighted block
+    $\widetilde B_k=\omega_k B_k$. Full active support makes the block inclusion
+    $V=V_k$ both isometric and onto:
+    \begin{align}
+        V^\dagger V&=I,
+        &VV^\dagger&=I.
+    \end{align}
+    Hence $\rho=V\Lambda V^\dagger$ is positive definite with trace one, and
+    the intertwining equations $A_iV=V\widetilde B_k(i)$ give the fixedness
+    transport
+    \begin{align}
+        E(V\Lambda V^\dagger)
+        &=V E_k(\Lambda)V^\dagger
+         =V\Lambda V^\dagger
+         =\rho.
+    \end{align}
+    The blockwise left-canonical identity transports similarly:
+    \begin{align}
+        \sum_i \widetilde B_k(i)^\dagger\widetilde B_k(i)=I
+        \quad\Longrightarrow\quad
+        \sum_i A_i^\dagger A_i=I
+        \quad\Longrightarrow\quad
+        (\Phi\rvert E=(\Phi\rvert.
+    \end{align}
+    Finally,
+    \begin{align}
+        (\Phi\mid\rho)&=\tr(\rho)=1,
+        &E^{D^2-1}&=\lvert\rho)(\Phi\rvert,
+    \end{align}
+    where the last equality is the uniqueness of the normalized fixed-pair
+    factorization for the stabilized power.
 \end{proof}
 
 \begin{theorem}[One-dimensional normalized transfer matrix]
