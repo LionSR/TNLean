@@ -160,8 +160,8 @@ private theorem exists_weighted_compression
     cornerCompressionKraus_supported K hQproj
   have hAtp : ∑ i : Fin d, (A i)ᴴ * A i = Q :=
     cornerCompressionKraus_isTP K h_tp hQproj hInv
-  obtain ⟨r, C, φ, V, -, hCtp, -, -, -, -, hLetter, hVtV, hVVt, hφV⟩ :=
-    MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry
+  obtain ⟨r, C, _φ, V, -, hCtp, -, -, -, -, hCi, hVtV, hVVt, -⟩ :=
+    exists_cornerCompression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
   have hCi : ∀ i : Fin d, C i = Vᴴ * A i * V := by

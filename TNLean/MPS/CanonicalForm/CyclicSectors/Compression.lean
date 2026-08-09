@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.Peripheral.CyclicDecomposition
+import TNLean.Channel.KrausCornerCompression
 
 /-!
 # Compression to cyclic sectors
@@ -66,76 +67,30 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       Vᴴ * V = 1 ∧
       V * Vᴴ = P ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ X).1 = V * X * Vᴴ) := by
-  classical
-  obtain ⟨Umat, S, T, n, -, eST, eS, hUU, hU'U, hPdiag_std, hP_decomp,
-    hPdiag_back, htrace, -⟩ := ProjectionSpectralSplit.ofOrthogonalProjection P hP
-  let Pdiag : MatrixAlg D := Umatᴴ * P * Umat
-  let P0 : Matrix (S ⊕ T) (S ⊕ T) ℂ :=
-    Matrix.fromBlocks (1 : Matrix S S ℂ) 0 0 (0 : Matrix T T ℂ)
-  let expand : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] MatrixAlg D :=
-    cornerCompressionExpand Umat eST eS
-  let φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P :=
-    cornerCompressionLinearEquiv (P := P) (Pdiag := Pdiag) Umat eST eS P0 rfl
-      hP_decomp rfl hPdiag_std hPdiag_back hU'U hUU
-  let V : Matrix (Fin D) (Fin n) ℂ := cornerCompressionIsometry Umat eST eS
-  have hV_iso : Vᴴ * V = 1 := by
-    exact cornerCompressionIsometry_conjTranspose_mul Umat eST eS hU'U
-  have hExpand_one : expand 1 = P := by
-    exact cornerCompressionExpand_one (P := P) (Pdiag := Pdiag) Umat eST eS P0 rfl
-      hP_decomp hPdiag_back
-  have hV_range : V * Vᴴ = P := by
-    rw [show V * Vᴴ = expand 1 by
-      simpa [V, expand] using
-        (cornerCompressionExpand_eq_isometry Umat eST eS
-          (1 : Matrix (Fin n) (Fin n) ℂ)).symm]
-    exact hExpand_one
-  have hφ_apply (X : Matrix (Fin n) (Fin n) ℂ) : (φ X).1 = expand X := rfl
-  have hExpand_eq_V (X : Matrix (Fin n) (Fin n) ℂ) : expand X = V * X * Vᴴ := by
-    simpa [expand, V] using cornerCompressionExpand_eq_isometry Umat eST eS X
-  let C : MPSTensor d n := fun i => Vᴴ * A i * V
-  have hLetter : ∀ i : Fin d, expand (C i) = A i := by
-    intro i
-    rw [hExpand_eq_V]
-    change V * (Vᴴ * A i * V) * Vᴴ = A i
-    calc
-      V * (Vᴴ * A i * V) * Vᴴ = (V * Vᴴ) * A i * (V * Vᴴ) := by
-        simp only [Matrix.mul_assoc]
-      _ = P * A i * P := by rw [hV_range]
-      _ = A i := hSupp i
+  obtain ⟨n, C, φ, V, hdim, hCtp, hIntertw, hMul, hStar, hLetter, hCompression,
+    hVtV, hVVt, hφV⟩ :=
+    Kraus.exists_cornerCompression_of_supported_projection A P hP hSupp hTP
   have hPV : P * V = V := by
-    rw [← hV_range, Matrix.mul_assoc, hV_iso, Matrix.mul_one]
+    rw [← hVVt, Matrix.mul_assoc, hVtV, Matrix.mul_one]
   have hIntertwineLetter : ∀ i : Fin d, A i * V = V * C i := by
     intro i
     calc
       A i * V = (P * A i * P) * V := by rw [hSupp i]
       _ = P * A i * (P * V) := by rw [Matrix.mul_assoc (P * A i) P V]
       _ = P * A i * V := by rw [hPV]
-      _ = (V * Vᴴ) * A i * V := by rw [hV_range]
+      _ = (V * Vᴴ) * A i * V := by rw [hVVt]
       _ = V * (Vᴴ * A i * V) := by simp only [Matrix.mul_assoc]
-      _ = V * C i := rfl
+      _ = V * C i := by rw [hCompression i]
   have hEvalCompression (w : List (Fin d)) :
       evalWord C w = Vᴴ * evalWord A w * V := by
     calc
       evalWord C w = 1 * evalWord C w := (Matrix.one_mul _).symm
-      _ = (Vᴴ * V) * evalWord C w := by rw [hV_iso]
+      _ = (Vᴴ * V) * evalWord C w := by rw [hVtV]
       _ = Vᴴ * (V * evalWord C w) := Matrix.mul_assoc _ _ _
       _ = Vᴴ * (evalWord A w * V) := by
         rw [evalWord_intertwine A C V hIntertwineLetter w]
       _ = Vᴴ * evalWord A w * V := (Matrix.mul_assoc _ _ _).symm
-  refine ⟨n, C, φ, V, htrace, ?_, ?_, ?_, ?_, ?_, ?_, hV_iso, hV_range, ?_⟩
-  · apply φ.injective
-    apply Subtype.ext
-    rw [hφ_apply, hφ_apply]
-    rw [map_sum]
-    have hsum : (∑ i : Fin d, expand ((C i)ᴴ * C i)) = (∑ i : Fin d, (A i)ᴴ * A i) := by
-      refine Finset.sum_congr rfl ?_
-      intro i _
-      rw [cornerCompressionExpand_mul Umat eST eS hU'U,
-        ← cornerCompressionExpand_conjTranspose Umat eST eS, hLetter]
-    calc
-      (∑ i : Fin d, expand ((C i)ᴴ * C i)) = (∑ i : Fin d, (A i)ᴴ * A i) := hsum
-      _ = P := hTP
-      _ = expand 1 := by rw [hExpand_one]
+  refine ⟨n, C, φ, V, hdim, hCtp, ?_, ?_, hMul, hStar, hLetter, hVtV, hVVt, hφV⟩
   · intro N σ
     let w := List.ofFn σ
     change Matrix.trace (evalWord C w) = Matrix.trace (P * evalWord A w)
@@ -145,30 +100,10 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
           Matrix.trace ((evalWord A w * V) * Vᴴ) := by
             rw [Matrix.mul_assoc]
             exact Matrix.trace_mul_comm _ _
-      _ = Matrix.trace (evalWord A w * P) := by rw [Matrix.mul_assoc, hV_range]
+      _ = Matrix.trace (evalWord A w * P) := by rw [Matrix.mul_assoc, hVVt]
       _ = Matrix.trace (P * evalWord A w) := Matrix.trace_mul_comm _ _
-  · intro Z
-    rw [hφ_apply]
-    change expand (transferMap (d := d) (D := n) (fun j => (C j)ᴴ) Z) =
-      transferMap (d := d) (D := D) (fun j => (A j)ᴴ) (expand Z)
-    simp only [transferMap_apply, Matrix.conjTranspose_conjTranspose]
-    rw [map_sum]
-    refine Finset.sum_congr rfl ?_
-    intro i _
-    rw [cornerCompressionExpand_mul Umat eST eS hU'U,
-      cornerCompressionExpand_mul Umat eST eS hU'U,
-      ← cornerCompressionExpand_conjTranspose Umat eST eS, hLetter]
-  · intro X Y
-    simp only [hφ_apply]
-    exact cornerCompressionExpand_mul Umat eST eS hU'U X Y
   · intro X
-    simp only [hφ_apply]
-    exact (cornerCompressionExpand_conjTranspose Umat eST eS X).symm
-  · intro i
-    rw [hφ_apply]
-    exact hLetter i
-  · intro X
-    rw [hφ_apply, hExpand_eq_V]
+    simpa [Kraus.adjointMap, transferMap_apply] using hIntertw X
 
 /-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
 space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.

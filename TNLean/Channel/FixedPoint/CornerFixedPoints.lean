@@ -8,7 +8,7 @@ import TNLean.Channel.FixedPoint.CornerAlgebra
 import TNLean.Channel.FixedPoint.StationaryProjection
 import TNLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Channel.Spectral.Support
-import TNLean.MPS.CanonicalForm.CyclicSectors.Compression
+import TNLean.Channel.KrausCornerCompression
 
 /-!
 # Corner-restricted fixed points form a `*`-algebra (Wolf Corollary 6.6)
@@ -222,17 +222,11 @@ theorem cornerFixed_mul
     cornerCompressionKraus_supported K hQproj
   have hAtp : ∑ i : Fin d, (A i)ᴴ * A i = Q :=
     cornerCompressionKraus_isTP K h_tp hQproj hInv
-  obtain ⟨n, C, φ, V, _hdim, hCtp, _hMpv, hIntertw, hMul, _hStar, hLetter, hVtV, hVVt, hφV⟩ :=
-    MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry
+  obtain ⟨n, C, φ, V, _hdim, hCtp, hIntertw, hMul, _hStar, hLetter, hCi,
+    hVtV, hVVt, hφV⟩ :=
+    exists_cornerCompression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
-  have hCi : ∀ i : Fin d, C i = Vᴴ * A i * V := by
-    intro i
-    have h : V * C i * Vᴴ = A i := by simpa [hφV] using hLetter i
-    calc
-      C i = (Vᴴ * V) * C i * (Vᴴ * V) := by rw [hVtV]; simp
-      _ = Vᴴ * (V * C i * Vᴴ) * V := by simp [Matrix.mul_assoc]
-      _ = Vᴴ * A i * V := by rw [h]
   set σ : Matrix (Fin n) (Fin n) ℂ := Vᴴ * ρ * V with hσdef
   have hσpd : σ.PosDef := by
     have := Matrix.PosSemidef.compression_on_support_posDef (D := D) (ρ := ρ) hρ_psd
@@ -272,16 +266,9 @@ theorem cornerFixed_mul
     intro X
     have hφmem : Q * (φ X).1 * Q = (φ X).1 := (φ X).2
     have hintertw' : (φ (adjointMap C X)).1 = Q * adjointMap K (φ X).1 * Q := by
-      have h1 : (φ (MPSTensor.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1) := hIntertw X
-      have h2 : MPSTensor.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1) =
-          adjointMap A (φ X).1 := by simp [adjointMap, MPSTensor.transferMap_apply]
-      have h3 : adjointMap A (φ X).1 = Q * adjointMap K (φ X).1 * Q := by
-        rw [hAdef]; exact adjointMap_cornerCompressionKraus_eq K hQproj hφmem
-      have h4 : MPSTensor.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X =
-          adjointMap C X := by simp [adjointMap, MPSTensor.transferMap_apply]
-      rw [h4] at h1
-      rw [h1, h2, h3]
+      rw [hIntertw X]
+      rw [hAdef]
+      exact adjointMap_cornerCompressionKraus_eq K hQproj hφmem
     constructor
     · intro hfix
       have hval : (φ (adjointMap C X)).1 = (φ X).1 := by rw [hintertw', hfix]
