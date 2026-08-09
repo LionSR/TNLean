@@ -84,5 +84,4 @@ theorem mpo_physicalAdjointTensor (K : MPOTensor d D) (N : ℕ)
     ← AddMonoidHom.map_trace (starRingEnd ℂ)]
   rfl
 
-
 end MPOTensor

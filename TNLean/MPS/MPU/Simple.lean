@@ -190,13 +190,11 @@ double-layer letters.
 Source: arXiv:1703.09188, equation `simple2`, lines 363--374 and Figure
 `II_Simple2.png`. -/
 theorem simple2 {U : MPOTensor d D} (hU : IsMPUSimple U) :
-    ∃ a b : Fin (D * D) → ℂ,
-      (∀ i j : Fin d,
-        a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0) ∧
-      (∀ i j k l : Fin d,
-        doubleLayerTensor U i j * doubleLayerTensor U k l =
-          doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l) :=
-  hU
+    ∃ a b : Fin (D * D) → ℂ, ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l := by
+  obtain ⟨a, b, _, h₂⟩ := hU
+  exact ⟨a, b, h₂⟩
 
 /-- Sequentially applying `simple2` around a closed double-layer chain and
 then `simple1` at every site gives the physical identity.
