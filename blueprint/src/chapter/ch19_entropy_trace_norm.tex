@@ -586,12 +586,10 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.tracePrepareMap}
     \lean{Matrix.tracePrepareMap_apply}
     \leanok
-    For any matrix $Y\in\MN{D'}$, the trace-prepare map
-    $\mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y)$
-    discards the input and prepares $Y$ with the trace weight:
+    For any matrix $Y\in\MN{D'}$, define
+    $T'_Y:\MN{D}\to\MN{D'}$ by
     \begin{align}
-        \mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y)(X)
-        = \tr[X]\,Y.
+        T'_Y(X) = \tr[X]\,Y.
         \label{eq:trace_prepare_map}
     \end{align}
 \end{definition}
@@ -601,19 +599,21 @@ Theorem~\ref{thm:trace_norm_abs}.
     \lean{Matrix.choiMatrix_tracePrepareMap}
     \leanok
     \uses{def:choi_matrix_rect, def:trace_prepare_map}
-    Let $Y\in\MN{D'}$ be arbitrary.  In the rectangular
-    (output-factor-first) Choi representation,
+    For arbitrary $Y\in\MN{D'}$, the rectangular
+    (output-factor-first) Choi matrix of $T'_Y$ is
     \begin{align}
-        \tau(\mathrm{tracePrepareMap}_{\MN{D}\to\MN{D'}}(Y))
-        = \frac{1}{D}\,(Y\otimes\Id).
+        \tau(T'_Y) = \frac{1}{D}\,(Y\otimes\Id).
         \label{eq:choi_trace_prepare}
     \end{align}
     See \cite[Chapter~8, Eq.~(8.86)]{Wolf2012Quantum}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Direct computation using the elementwise formula for the
-    omega slice and linearity of the Choi assignment.
+    The normalized omega slice is $D^{-1}E_{ij}$, where $E_{ij}$ is the
+    matrix unit.  Since $\tr(E_{ij})=\delta_{ij}$, the trace of the slice
+    is $D^{-1}\delta_{ij}$, and $T'_Y$ multiplies this scalar by $Y$.
+    On the other hand, $(Y\otimes\Id)_{(a,i),(b,j)} = Y_{ab}\,\delta_{ij}$,
+    so both sides equal $D^{-1}Y_{ab}\,\delta_{ij}$.
 \end{proof}
 
 \begin{theorem}[Choi-dominated Doeblin contraction]
@@ -642,13 +642,15 @@ Theorem~\ref{thm:trace_norm_abs}.
 \begin{proof}\leanok
     \uses{thm:quantum_doeblin_contraction, lem:choi_matrix_trace_prepare,
       thm:choi_rect_cp}
-    Set $T'(X)=\tr[X]\,Y$ (the map $\mathrm{tracePrepareMap}(Y)$).
+    Since $\tr[Y]=1$, $T'_Y$ is trace-preserving:
+    $\tr[T'_Y(X)]=\tr[X]\tr[Y]=\tr[X]$.  Since $Y$ is Hermitian and
+    $\tr[X]$ is real for Hermitian $X$, $T'_Y$ is Hermiticity-preserving.
     By Lemma~\ref{lem:choi_matrix_trace_prepare},
-    $\tau(T')=(1/D)(Y\otimes\Id)$. Linearity of the Choi assignment gives
-    $\tau(T-\varepsilon T')=\tau(T)-\varepsilon\tau(T')
-    \ge0$, so $T-\varepsilon T'$ is completely positive
-    (the rectangular Choi CP equivalence) and hence
-    positive. Theorem~\ref{thm:quantum_doeblin_contraction} then
+    $\tau(T'_Y)=(1/D)(Y\otimes\Id)$. Linearity of the Choi assignment gives
+    $\tau(T-\varepsilon T'_Y)=\tau(T)-\varepsilon\tau(T'_Y)
+    \ge0$, so $T-\varepsilon T'_Y$ is completely positive
+    (the rectangular Choi CP equivalence, Theorem~\ref{thm:choi_rect_cp})
+    and hence positive. Theorem~\ref{thm:quantum_doeblin_contraction} then
     yields the asserted bound.
 \end{proof}
 
