@@ -82,6 +82,7 @@
     \label{thm:friedrichs_ground_space_excitation_anticommutator}
     \lean{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
     \leanok
+    \uses{def:friedrichs_overlap_bound}
     Let $U$ and $V$ be ground-space ranges in a finite-dimensional complex
     Hilbert space, let $W=U\cap V$, and let $q_U$ and $q_V$ be the orthogonal
     projectors onto $U$ and $V$. Suppose that $\eta\ge0$ and
@@ -119,10 +120,7 @@
 
 \begin{lemma}[MPS anticommutator input for the martingale condition]\label{lem:martingale_mps}
     \notready
-    \uses{thm:martingale_criterion,
-        thm:friedrichs_ground_space_excitation_anticommutator,
-        def:parent_interaction, def:local_term_parent,
-        thm:ground_space_intersection, def:injective}
+    \uses{def:parent_interaction, def:local_term_parent, def:injective}
     Let $A$ be injective and fix an interaction range $L \ge 2$ as in
     Definition~\ref{def:parent_interaction}. Let
     $h_L(A):=\Pi_{G_L(A)^\perp}$ be the $L$-site parent interaction, and for
@@ -174,7 +172,7 @@
 
 \begin{proof}
     \uses{thm:friedrichs_ground_space_excitation_anticommutator,
-        thm:ground_space_intersection, def:injective}
+        thm:ground_space_intersection, thm:martingale_criterion}
     \notready
     The cited martingale paragraph compares the anticommutator estimate with
     principal angles between the local ground spaces. If
