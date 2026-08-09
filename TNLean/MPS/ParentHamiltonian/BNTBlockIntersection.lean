@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.MPDO.BiCFDerivation.BNTDirectSum
 import TNLean.MPS.Core.TPGauge
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Symmetry.StringOrderAux
 
 /-!
@@ -217,14 +218,17 @@ For each source block \(A^j\), set
 \(B^j_a=(\Lambda^j)^{1/2}A^j_a(\Lambda^j)^{-1/2}\). Positivity of
 \(\Lambda^j\) makes this an invertible gauge, while the dual fixed-point
 equation makes \(B^j\) left-canonical. Irreducibility, fixed-length injectivity,
-self-overlap normalization, and pairwise gauge-phase inequivalence pass to the
-prepared family. The sharp tuple span is then transported back to the source
-representatives.
+and pairwise gauge-phase inequivalence pass to the prepared family. Its
+fixed-length injectivity and left-canonical normalization imply normality, hence
+self-overlap normalization. The sharp tuple span is then transported back to the
+source representatives.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
 The positive dual datum used for the prepared gauge is supplied by the canonical
 normalization theorem at lines 742--763. These line numbers refer to
-`Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this result
+`Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
+
+**Scope note:** This result
 establishes only the fixed-length tuple span; it does not establish the global-cut
 or parent-Hamiltonian kernel conclusions. -/
 theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
@@ -232,7 +236,6 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -260,25 +263,21 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     IsLeftCanonicalBlockFamily.ofForall fun j =>
       tpGauge_isTP_of_transferMap_conjTranspose_fixedPoint
         (A j) (Λ j) (hΛ j) (hDualFixed j)
-  have hPreparedOverlap : HasNormalizedSelfOverlap (d := d) prepared := by
-    refine HasNormalizedSelfOverlap.ofForall fun j => ?_
-    have heq :
-        (fun N => mpvOverlap (d := d) (prepared j) (prepared j) N) =
-          fun N => mpvOverlap (d := d) (A j) (A j) N := by
-      funext N
-      simp only [mpvOverlap]
-      apply Finset.sum_congr rfl
-      intro σ _
-      rw [← GaugeEquiv.sameMPV (hGauge j) N σ]
-    rw [heq]
-    exact hOverlap.overlap_tendsto_one j
+  have hPreparedBlk0 : ∀ k, IsNBlkInjective (prepared k) L₀ :=
+    fun k => isNBlkInjective_of_gaugeEquiv (hBlk0 k) (hGauge k)
+  have hPreparedNormal : ∀ j, IsNormal (prepared j) :=
+    fun j => ⟨L₀, hL₀, hPreparedBlk0 j⟩
+  have hPreparedNormalTensor : ∀ j, IsNormalTensor (prepared j) :=
+    fun j => isNormalTensor_of_isNormal_leftCanonical
+      (prepared j) (hPreparedNormal j) (hPreparedLeft.leftCanonical j)
+  have hPreparedOverlap : HasNormalizedSelfOverlap (d := d) prepared :=
+    HasNormalizedSelfOverlap.ofForall fun j =>
+      (hPreparedNormalTensor j).selfOverlap_tendsto_one
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
     apply hBlocks j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
       (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
-  have hPreparedBlk0 : ∀ k, IsNBlkInjective (prepared k) L₀ :=
-    fun k => isNBlkInjective_of_gaugeEquiv (hBlk0 k) (hGauge k)
   have hPreparedBlk1 : ∀ k, IsNBlkInjective (prepared k) (L₀ + 1) :=
     fun k => isNBlkInjective_of_gaugeEquiv (hBlk1 k) (hGauge k)
   have hPreparedBlk3 : ∀ k,
@@ -346,7 +345,9 @@ longer words. No diagonality hypothesis on the dual fixed points is needed.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
 The positive dual datum used for the prepared gauge is supplied by the canonical
 normalization theorem at lines 742--763. These line numbers refer to
-`Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this result
+`Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
+
+**Scope note:** This result
 establishes only the propagated tuple span; it does not establish the global-cut
 or parent-Hamiltonian kernel conclusions. -/
 theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
@@ -354,7 +355,6 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -376,7 +376,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
   have hBase :=
     wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint
-      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hBlk1 hBlk3 hL₀
+      A hr hIrr hBlocks Λ hΛ hDualFixed hBlk0 hBlk1 hBlk3 hL₀
   exact wordTupleSpanTop_of_ge_of_unital A hBase hUnital hn
 
 /-- Under the normalized BNT block-separation hypotheses, the local spaces
@@ -464,7 +464,9 @@ internal direct sum throughout the sharp source range.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
 The positive dual datum used to reach the prepared canonical gauge is supplied
 by the canonical normalization theorem at lines 742--763. These line numbers
-refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this
+refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
+
+**Scope note:** This
 result establishes only independence of the block local spaces; it does not
 establish the global-cut or parent-Hamiltonian kernel conclusions. -/
 theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
@@ -472,7 +474,6 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -487,7 +488,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     iSupIndep fun j : Fin r => groundSpace (A j) n :=
   groundSpace_iSupIndep_of_wordTupleSpanTop A
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
+      A hr hIrr hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
 
 /-- BNT block-separation conditions and PGVWC07 normalization give the one-step
 block-intersection identity at every length above the BNT block-separation
@@ -598,7 +599,9 @@ left-canonical hypothesis on the source representatives.
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 12, proof lines 1424--1456.
 The positive dual datum used to reach the prepared canonical gauge is supplied
 by the canonical normalization theorem at lines 742--763. These line numbers
-refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository. Scope: this
+refer to `Papers/quant-ph_0608197/MPSarchive.tex` in this repository.
+
+**Scope note:** This
 result establishes only the one-step restriction-intersection identity; it does
 not establish the global-cut or parent-Hamiltonian kernel conclusions. -/
 theorem
@@ -607,7 +610,6 @@ theorem
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hr : 2 ≤ r)
     (hIrr : HasIrreducibleBlocks (d := d) A)
-    (hOverlap : HasNormalizedSelfOverlap (d := d) A)
     (hBlocks : BlocksNotGaugePhaseEquiv (d := d) A)
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
@@ -626,7 +628,7 @@ theorem
       ⨆ j : Fin r, groundSpace (A j) (n + 2) := by
   exact pgvwc07_iSup_groundSpace_eq_restriction_intersection A
     (wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      A hr hIrr hOverlap hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
+      A hr hIrr hBlocks Λ hΛ hDualFixed hBlk0 hL₀ hUnital hn)
     hUnital
 
 /-- Normalized BNT block-separation hypotheses give the large-length block

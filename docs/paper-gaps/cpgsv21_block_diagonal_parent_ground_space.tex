@@ -143,26 +143,27 @@ definite fixed point $\Lambda_j$ satisfying
 \begin{align}
   \sum_a (A^j_a)^\dagger\Lambda_j A^j_a=\Lambda_j.
 \end{align}
-The current source-length declarations additionally assume
+The source-shaped gauge-preparation, simultaneous word-span, internal-sum, and
+one-step restriction-intersection declarations no longer assume
 \begin{align}
-  \sum_a (A^j_a)^\dagger A^j_a=I,
+  \sum_a (A^j_a)^\dagger A^j_a=I.
 \end{align}
-which is the special case $\Lambda_j=I$. Consequently the declarations whose
-names end in \texttt{\_pgvwc07} along the global-cut route are doubly normalized
-specializations at the PGVWC07 source length bound, rather than formalizations
-of the unrestricted normalization in Theorem~12.
+They use the positive square root of $\Lambda_j$ only to prepare a temporary
+left-canonical gauge for the sharp fixed-length separation theorem, transport
+the resulting tuple span back to the original representatives, and propagate
+it there using the source identity
+$\sum_a A^j_a(A^j_a)^\dagger=I$.  This source-faithful local layer is completed
+by \href{https://github.com/LionSR/TNLean/issues/5764}{issue~\#5764}.
 
-Eliminating this restriction requires a gauge-covariant version of the route.
-For each positive definite $\Lambda_j$, conjugation by its positive square root
-turns the dual fixed-point equation into the identity fixed-point equation. One
-must transport the simultaneous word spans, open-boundary maps, periodic chain
-spaces, block direct sum, parent-Hamiltonian kernel, and component-vector span
-through these blockwise gauges. The source identity
-$\sum_a A^j_a(A^j_a)^\dagger=I$ must be retained by expressing the tuple-span
-propagation and boundary-matrix calculation in their corresponding weighted,
-gauge-covariant forms, rather than assuming that both unweighted identities
-hold in one gauge. This elimination is tracked by
-\href{https://github.com/LionSR/TNLean/issues/5751}{follow-up issue~\#5751}.
+The global-cut, boundary, periodic chain-space, and parent-Hamiltonian kernel
+declarations have not yet been threaded through the positive dual data.  They
+still additionally assume
+$\sum_a (A^j_a)^\dagger A^j_a=I$, the special case $\Lambda_j=I$, and hence
+remain doubly normalized specializations at the PGVWC07 source length bound.
+Transporting the source-shaped local result through those global arguments is
+tracked by \href{https://github.com/LionSR/TNLean/issues/5770}{issue~\#5770}.
+That issue has not merged, so the unrestricted parent-Hamiltonian theorem is
+not complete.
 
 \section{The block-diagonal intersection identity}
 

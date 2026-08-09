@@ -398,16 +398,16 @@ direct.
     block-separating equations with $S=3(L_0+1)$.
 \end{proof}
 
-\begin{lemma}[Prepared-gauge simultaneous product span]
-    \label{lem:pgvwc_prepared_gauge_product_span}
+\begin{theorem}[Prepared-gauge simultaneous product span]
+    \label{thm:pgvwc_prepared_gauge_product_span}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_dualFixedPoint}
     \leanok
     \uses{def:blockwise_product_word_span,
         def:blocks_not_gauge_phase_equiv}
     Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
-    Suppose that every block $A^j$ is irreducible, that
-    $O_{A^jA^j}(N)\longrightarrow1$, and that no two distinct blocks of the
-    same bond dimension are gauge-phase equivalent. Let $L_0>0$, and suppose
+    Suppose that every block $A^j$ is irreducible and that no two distinct
+    blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
+    and suppose
     that, for every $j$,
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}
@@ -427,7 +427,7 @@ direct.
         &=\prod_j\MN{D_j}. \notag
     \end{align}
     Diagonality of $\Lambda^j$ is not needed.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -435,13 +435,17 @@ direct.
         thm:tp_gauge_from_adjoint_fixed,
         thm:gauge_invariance,
         lem:gauge_invariance_block_injective,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        thm:cpsv_normal_mpv_phase_gauge,
         lem:bnt_direct_sum_block_separation_word_span,
         thm:word_tuple_span_gauge_invariance}
     The square-root gauge is invertible by positive definiteness, and the dual
     fixed-point equation makes the prepared blocks left-canonical. Similarity
-    preserves irreducibility, fixed-length injectivity, normalized self-overlaps,
-    and pairwise inequivalence up to gauge and phase. Apply the existing sharp
-    separation theorem to the prepared family and then use
+    preserves irreducibility, fixed-length injectivity, and pairwise inequivalence
+    up to gauge and phase. Positive-length injectivity makes each prepared block
+    algebraically normal; left-canonicality then makes it a normal tensor, whose
+    self-overlap converges to one. Apply the existing sharp separation theorem to
+    the prepared family and then use
     Theorem~\ref{thm:word_tuple_span_gauge_invariance} in the reverse direction.
 \end{proof}
 
@@ -454,9 +458,9 @@ direct.
         def:blocks_not_gauge_phase_equiv,
         def:ground_space_parent}
     Let $r\ge2$, and let the bond dimensions $D_1,\ldots,D_r$ be positive.
-    Suppose that every block $A^j$ is irreducible, that
-    $O_{A^jA^j}(N)\longrightarrow1$, and that no two distinct blocks of the
-    same bond dimension are gauge-phase equivalent. Let $L_0>0$, and suppose
+    Suppose that every block $A^j$ is irreducible and that no two distinct
+    blocks of the same bond dimension are gauge-phase equivalent. Let $L_0>0$,
+    and suppose
     that every block is injective at length $L_0$:
     \begin{align}
         \spn\{A^j_w:|w|=L_0\}&=\MN{D_j}. \notag
@@ -479,9 +483,9 @@ direct.
 \begin{proof}
     \leanok
     \uses{lem:unital_simultaneous_product_span_propagation,
-        lem:pgvwc_prepared_gauge_product_span,
+        thm:pgvwc_prepared_gauge_product_span,
         lem:product_span_block_image_direct_sum}
-    Lemma~\ref{lem:pgvwc_prepared_gauge_product_span} gives the full
+    Theorem~\ref{thm:pgvwc_prepared_gauge_product_span} gives the full
     simultaneous span at $q=3(r-1)(L_0+1)$ on the source representatives.
     The source unital identity and
     Lemma~\ref{lem:unital_simultaneous_product_span_propagation} propagate
