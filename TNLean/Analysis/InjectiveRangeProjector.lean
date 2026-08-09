@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Analysis.NeumannInverse
-
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
@@ -13,10 +12,15 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Basic
 # Range projectors of injective finite-dimensional maps
 
 For an injective map \(T\) with finite-dimensional Hilbert domain and complete
-Hilbert codomain, this file records the standard formula
+Hilbert codomain, this file develops the inverse Gram operator
+\((T^\dagger T)^{-1}\), identifies it with the canonical and ring inverses, and
+records the range-projector formula
 \[
   P_{\operatorname{ran} T}=T(T^\dagger T)^{-1}T^\dagger.
 \]
+It also derives the quantitative bound
+\(\lVert(T^\dagger T)^{-1}\rVert\le(1-a)^{-1}\) from
+\(\lVert 1-T^\dagger T\rVert\le a<1\).
 -/
 
 
@@ -106,9 +110,11 @@ theorem injectiveRangeProjector_eq_starProjection (T : E →L[𝕜] F)
     rw [map_sub, injectiveRangeProjector, comp_apply, comp_apply]
     change T.adjoint x - (T.adjoint.comp T)
       (inverseGram T hT (T.adjoint x)) = 0
-    rw [inverseGram]
-    exact sub_eq_zero.mpr
-      ((LinearEquiv.ofInjectiveEndo (T.adjoint.comp T).toLinearMap
-        ((T.adjoint_comp_self_injective_iff).2 hT)).apply_symm_apply (T.adjoint x)).symm
+    have hGram :
+        (T.adjoint.comp T) (inverseGram T hT (T.adjoint x)) = T.adjoint x := by
+      change ((T.adjoint.comp T).comp (inverseGram T hT)) (T.adjoint x) = T.adjoint x
+      rw [adjoint_comp_self_comp_inverseGram]
+      rfl
+    rw [hGram, sub_self]
 
 end ContinuousLinearMap
