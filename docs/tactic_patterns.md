@@ -24,18 +24,6 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
-### shifted moments under matrix powers — promoted
-- **Pattern:** turn `tr(A^k) = 1` for every `k > 1` into an all-positive-moment
-  hypothesis for `A ^ m` by rewriting `(A ^ m) ^ k = A ^ (m * k)` and proving
-  `1 < m * k` from `1 < m` and `0 < k`.
-- **Seen:** three uses for the square and cube spectral-mapping arguments in
-  `TNLean/Algebra/ShiftedTracePowerSpectrum.lean` (2026-08-09).
-- **Abstraction:**
-  `Matrix.forall_trace_pow_pow_eq_one_of_forall_trace_pow_eq_one_of_one_lt` in
-  `TNLean/Algebra/ShiftedTracePowerSpectrum.lean`.
-- **Notes:** the lemma isolates the exponent arithmetic needed before applying
-  an all-positive trace-power theorem to a matrix power.
-
 ### pure gauge to heterogeneous repeated blocks — promoted
 - **Pattern:** convert `GaugeEquiv A B` to `HetRepeatedBlocks A B` by passing
   through `EquivalentBlocks`, choosing unit phase, and embedding the
