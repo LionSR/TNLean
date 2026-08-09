@@ -12,5 +12,6 @@ import TNLean.Channel.Wigner.ProjectiveCarrierBridge
 import TNLean.Channel.Wigner.ProjectivePureState
 import TNLean.Channel.Wigner.PureStateCharpoly
 import TNLean.Channel.Wigner.Rigidity
+import TNLean.Channel.Wigner.SpectrumPreserver
 import TNLean.Channel.Wigner.TwoPureStateCharpoly
 import TNLean.Channel.Wigner.Upstream
