@@ -812,3 +812,80 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Finally, if $K$ were empty, every weight and therefore $A$ would vanish,
     contradicting $\tr(E^2)=1$.  Consequently $|K|=1$.
 \end{proof}
+
+\section{Normalized transfer spectrum and conditional normality}
+
+\begin{theorem}[Shifted transfer traces imply radius one and primitivity]
+    \label{thm:mpu_shifted_transfer_trace_primitive}
+    \lean{spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace}
+    \leanok
+    \uses{def:mpu_transfer_matrix}
+    Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map with $D>0$.
+    If
+    \begin{align}
+        \tr(\widehat T^{\,N})&=1
+    \end{align}
+    for every integer $N>1$, then $T$ has spectral radius one and its only
+    eigenvalue on the unit circle is $1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_shifted_trace_power_spectrum,
+        thm:mpu_transfer_matrix_eigenvalues}
+    The shifted trace-power theorem gives
+    \begin{align}
+        \sigma(\widehat T)\setminus\{0\}&=\{1\}.
+    \end{align}
+    Column stacking identifies the eigenvalues of $T$ and $\widehat T$.
+    Thus every spectral value of $T$ is either $0$ or $1$, and $1$ occurs.
+    The spectral radius is therefore one, while the only eigenvalue of norm
+    one is $1$.
+\end{proof}
+
+\begin{theorem}[Nonzero spectrum of the normalized MPU transfer matrix]
+    \label{thm:mpu_normalized_transfer_nonzero_spectrum}
+    \lean{MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum}
+    \leanok
+    \uses{def:mpu_normalized_flattening,def:mpu_transfer_matrix}
+    Let $U$ be an MPU tensor with positive physical and bond dimensions, and
+    let $E$ be the transfer matrix of its normalized flattening. Then
+    \begin{align}
+        \sigma(E)\setminus\{0\}&=\{1\}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace,
+        thm:mpu_shifted_trace_power_spectrum}
+    The normalized transfer identity supplies $\tr(E^N)=1$ for every $N>1$,
+    so the shifted trace-power spectrum theorem applies directly.
+\end{proof}
+
+\begin{theorem}[Normality of a full-support normalized MPU representative]
+    \label{thm:mpu_normalized_full_support_normal}
+    \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}
+    \leanok
+    \uses{def:mpu,def:mpu_normalized_flattening,
+        def:mpu_full_active_support}
+    Let $U$ be an MPU tensor with positive physical and bond dimensions.
+    Suppose that the normalized flattening is equipped with CPSV
+    canonical-form data whose active blocks have full support in the ambient
+    bond space. Then the normalized flattening is a normal tensor.
+
+    The full-support hypothesis is essential for this ambient representative.
+    Adjoining a zero virtual direct summand preserves every periodic operator
+    but introduces a nontrivial invariant projection. Thus this theorem does
+    not assert that an arbitrary, possibly nonminimal MPU representative is
+    normal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace,
+        thm:mpu_shifted_transfer_trace_card_active,
+        thm:mpu_shifted_transfer_trace_primitive,
+        thm:mpu_unique_active_full_support_normal}
+    The normalized transfer traces force the active block set to have
+    cardinality one. The same traces give spectral radius one and primitivity.
+    Full active support then identifies the unique active block with the
+    ambient bond space, so the full-support normality theorem applies.
+\end{proof}

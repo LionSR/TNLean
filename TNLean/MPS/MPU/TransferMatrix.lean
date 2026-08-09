@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Channel.Peripheral.TransferMatrix
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPDO.Purity
 import TNLean.Spectral.MPVOverlapTrace
@@ -20,6 +21,8 @@ Cirac--Perez-Garcia--Schuch--Verstraete.
 * `MPOTensor.mpvOverlap_normalizedFlattening_self` — its self-overlap scaling law.
 * `MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one` — for every `N > 1`,
   the trace of the `N`-th power of its transfer matrix is one.
+* `MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum` — the nonzero transfer-matrix
+  spectrum of the normalized flattening is `{1}`.
 
 ## References
 
@@ -82,5 +85,17 @@ theorem IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one
   push_cast
   rw [← mul_pow]
   simp [NeZero.ne d]
+
+/-- The transfer matrix of the normalized flattening of an MPU has nonzero set spectrum
+exactly `{1}`.
+
+This is the set-spectrum conclusion in Cirac--Perez-Garcia--Schuch--Verstraete,
+Proposition `prop:normal-tensor`, lines 349--354. It does not assert algebraic
+multiplicity. -/
+theorem IsMPU.normalizedFlattening_nonzero_spectrum
+    [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) :
+    spectrum ℂ (transferMatrix (MPSTensor.transferMap U.normalizedFlattening)) \ {0} = {1} :=
+  Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt _
+    (fun _ hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
 
 end MPOTensor
