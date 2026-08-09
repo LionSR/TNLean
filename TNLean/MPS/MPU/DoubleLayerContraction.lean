@@ -21,7 +21,7 @@ arXiv:1703.09188, Proposition `blockingsimple`, lines 390--409.
 **Scope restriction (one-letter mixed trace):** `IsMPU` assumes closed-chain
 unitarity only for lengths greater than one, whereas the source also states the
 one-letter residual trace. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -383,7 +383,7 @@ controlled by `IsMPU`.
 
 **Scope restriction (length greater than one):** MPU unitarity is assumed only
 at lengths `N > 1`, while the source also states the one-letter identity. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero
@@ -408,8 +408,7 @@ identity.
 
 **Scope restriction (length greater than one):** This statement uses `N > 1`,
 exactly matching `IsMPU`, while the source states the identity at every positive
-length. See `docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue
-#5807.
+length. See `docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, lines 405--410. -/
 theorem IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero
@@ -450,7 +449,7 @@ diagonal as one extra closed-chain factor.
 **Local fix (nonempty sandwich):** Adjoining the normalized diagonal makes the
 closed chain have length at least two, so this consequence does not require the
 missing one-letter residual trace. See
-`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex` and issue #5807.
+`docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex`.
 
 Source: arXiv:1703.09188, equation `ESE=0`, lines 405--409. -/
 theorem IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero
