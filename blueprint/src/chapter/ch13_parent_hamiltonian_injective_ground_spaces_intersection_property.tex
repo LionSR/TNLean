@@ -38,7 +38,7 @@
     If the length-$L_0$ products span the full matrix algebra,
     $\spn\{A^\omega : |\omega| = L_0\} = \MN{D}$, then $\Gamma_{L_0}$ is
     injective.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -250,7 +250,7 @@
     In particular, if the two endpoint words are named by the equations
     $a_r=\rho(i_0+r)$ and $b_r=\rho(i_0+r+L+1)$, with site labels read modulo
     $N$, then the same transport identity is written as $Y_0A^a=A^bY_n$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -410,8 +410,8 @@
     satisfying the ground condition on the last $L_0+1$ sites.
 \end{definition}
 
-\begin{lemma}[Membership in the open-chain left ground subspace]
-    \label{lem:mem_open_chain_left_ground_space_es}
+\begin{theorem}[Membership in the open-chain left ground subspace]
+    \label{thm:mem_open_chain_left_ground_space_es}
     \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
@@ -419,7 +419,7 @@
     belongs to $\mathcal U_{K,L_0}(A)$ exactly when the corresponding function
     satisfies the left ground condition: every fixed-final-site restriction
     belongs to $G_{K+L_0}(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -427,8 +427,8 @@
     left-site restriction condition.
 \end{proof}
 
-\begin{lemma}[Membership in the open-chain tail ground subspace]
-    \label{lem:mem_open_chain_tail_ground_space_es}
+\begin{theorem}[Membership in the open-chain tail ground subspace]
+    \label{thm:mem_open_chain_tail_ground_space_es}
     \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
@@ -436,7 +436,7 @@
     belongs to $\mathcal V_{K,L_0}(A)$ exactly when the corresponding function
     satisfies the tail ground condition: every fixed-prefix restriction
     belongs to $G_{L_0+1}(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -448,8 +448,9 @@
     \label{thm:open_chain_left_tail_ground_intersection}
     \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
-    If $A$ is $L_0$-block-injective and $L_0>0$, then
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es,
+        def:l_blk_injective}
+    If $D\ge1$, $A$ is $L_0$-block-injective, and $L_0>0$, then
     \begin{align}
         \mathcal U_{K,L_0}(A)\cap\mathcal V_{K,L_0}(A)
         &=\mathcal G_{K+L_0+1}^{\mathrm{ES}}(A). \notag
@@ -461,8 +462,8 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mem_open_chain_left_ground_space_es,
-        lem:mem_open_chain_tail_ground_space_es, lem:mem_ground_space_es,
+    \uses{thm:mem_open_chain_left_ground_space_es,
+        thm:mem_open_chain_tail_ground_space_es, lem:mem_ground_space_es,
         thm:ground_space_extend_right_block_injective,
         lem:ground_space_in_left_ground, lem:ground_space_in_tail_ground}
     The forward inclusion is the growing-back step at the injectivity length.

@@ -118,27 +118,29 @@
     of the two diagonal excitation forms.
 \end{proof}
 
-\begin{corollary}[Nachtergaele open-chain projector defect]
-    \label{cor:nachtergaele_open_chain_projector_defect}
+\begin{theorem}[Nachtergaele open-chain projector defect]
+    \label{thm:nachtergaele_open_chain_projector_defect}
     \lean{MPSTensor.re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es}
-    Put $\Lambda_n=[1,n]$, let $U$ be the tail ground space on
+    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es,
+        def:l_blk_injective}
+    Assume $D\ge1$ and let $A$ be $L_0$-block-injective with $L_0>0$. Set
+    $n=K+L_0$ and $l=L_0$. Let $U$ be the tail ground space on
     $\Lambda_{n+1}\setminus\Lambda_{n-l}$, and let $V$ be the left ground
     space on $\Lambda_n$, both in the Hilbert space on $\Lambda_{n+1}$.
-    Assume that $A$ is $L_0$-block-injective with $L_0>0$, and suppose
+    Suppose
     \begin{align}
         \|G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}G_{\Lambda_n}
           -G_{\Lambda_{n+1}}\|&\le\eta. \notag
     \end{align}
     Then the complementary excitation projections satisfy the quadratic-form
     anticommutator lower bound with coefficient $\eta$.
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:open_chain_left_tail_ground_intersection,
-        lem:projector_defect_to_friedrichs,
+        thm:projector_defect_to_friedrichs,
         thm:friedrichs_ground_space_excitation_anticommutator}
     The open-chain intersection theorem identifies $U\cap V$ with the ground
     space on $\Lambda_{n+1}$. The projector-defect adapter gives a Friedrichs

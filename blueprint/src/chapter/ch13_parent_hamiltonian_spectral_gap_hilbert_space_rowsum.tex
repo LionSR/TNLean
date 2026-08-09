@@ -429,8 +429,8 @@
     $y\in V\cap(U\cap V)^\perp$.
 \end{definition}
 
-\begin{lemma}[Projector defect bounds the Friedrichs overlap]
-    \label{lem:projector_defect_to_friedrichs}
+\begin{theorem}[Projector defect bounds the Friedrichs overlap]
+    \label{thm:projector_defect_to_friedrichs}
     \lean{Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
     \leanok
     \uses{def:friedrichs_overlap_bound}
@@ -440,7 +440,7 @@
         \|P_UP_V-P_{U\cap V}\|&\le\eta, \notag
     \end{align}
     then the Friedrichs overlap of $U$ and $V$ is at most $\eta$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
