@@ -21,6 +21,9 @@ theory development.
 
 ## Main results
 
+* `Matrix.conjTranspose_cfc_sqrt`: the CFC square root of a matrix is Hermitian.
+* `Matrix.PosDef.isUnit_det_cfc_sqrt`: the CFC square root of a positive-definite matrix
+  has invertible determinant.
 * `Matrix.PosSemidef.cfc_sqrt_isHermitian`: the functional-calculus square
   root of a positive-semidefinite matrix is Hermitian.
 * `Matrix.PosSemidef.cfc_sqrt_mul_self`: the square of that square root is the
@@ -89,6 +92,21 @@ theorem PosSemidef.sqrt_kronecker
     cfcₙ_eq_cfc, cfcₙ_eq_cfc, cfcₙ_eq_cfc]
   exact Matrix.cfc_kronecker_of_mul_posSemidef hA hB Real.sqrt
     (fun x y hx _hy ↦ Real.sqrt_mul hx y)
+
+open scoped Classical in
+/-- The CFC square root of a complex square matrix is Hermitian. -/
+theorem conjTranspose_cfc_sqrt
+    {n : Type*} [Fintype n] (ρ : Matrix n n ℂ) :
+    (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ :=
+  (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg ρ)).isHermitian.eq
+
+open scoped Classical in
+/-- The CFC square root of a positive-definite matrix has invertible determinant. -/
+theorem PosDef.isUnit_det_cfc_sqrt
+    {n : Type*} [Fintype n] [DecidableEq n] {ρ : Matrix n n ℂ} (hρ : ρ.PosDef) :
+    IsUnit (CFC.sqrt ρ).det :=
+  (Matrix.isUnit_iff_isUnit_det (CFC.sqrt ρ)).1
+    ((CFC.isUnit_sqrt_iff ρ hρ.posSemidef.nonneg).2 hρ.isUnit)
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 

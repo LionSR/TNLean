@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Analysis.MatrixSqrt
 import TNLean.MPS.Core.Transfer
 
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
@@ -48,22 +49,15 @@ lemma cfc_sqrt_mul_self_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.Po
 
 /-- `CFC.sqrt ρ` is Hermitian (self-adjoint). -/
 lemma conjTranspose_cfc_sqrt (ρ : Matrix (Fin D) (Fin D) ℂ) :
-    (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := by
-  -- `CFC.sqrt ρ` is nonnegative, hence PSD, hence Hermitian.
-  have hpsd : (CFC.sqrt ρ).PosSemidef :=
-    (Matrix.nonneg_iff_posSemidef).1 (CFC.sqrt_nonneg ρ)
-  simpa using hpsd.isHermitian.eq
+    (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ :=
+  Matrix.conjTranspose_cfc_sqrt ρ
 
 /-- If `ρ` is positive definite, then `det (CFC.sqrt ρ)` is a unit.
 
 (We will use this to rewrite `S * S⁻¹ = 1` for `S := CFC.sqrt ρ`.) -/
 lemma isUnit_det_cfc_sqrt_of_posDef (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
-    IsUnit (Matrix.det (CFC.sqrt ρ)) := by
-  classical
-  have hρ_unit : IsUnit ρ := Matrix.PosDef.isUnit hρ
-  have hnonneg : (0 : Matrix (Fin D) (Fin D) ℂ) ≤ ρ := hρ.posSemidef.nonneg
-  have hS_unit : IsUnit (CFC.sqrt ρ) := (CFC.isUnit_sqrt_iff ρ hnonneg).2 hρ_unit
-  exact (Matrix.isUnit_iff_isUnit_det (CFC.sqrt ρ)).1 hS_unit
+    IsUnit (Matrix.det (CFC.sqrt ρ)) :=
+  Matrix.PosDef.isUnit_det_cfc_sqrt hρ
 
 /-! ## TP gauge construction -/
 
