@@ -37,7 +37,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- If all positive trace powers of a finite complex matrix vanish, its
 characteristic polynomial is `X ^ n`.
 
-This Newton--Girard helper supplies the powered-matrix step in the argument of
+This Newton--Girard auxiliary lemma supplies the powered-matrix step in the argument of
 arXiv:1703.09188, line 410. -/
 theorem charpoly_eq_X_pow_card_of_forall_trace_pow_eq_zero
     (A : Matrix n n ℂ)
