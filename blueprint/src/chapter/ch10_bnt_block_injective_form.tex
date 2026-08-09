@@ -33,8 +33,8 @@ apply it to coefficient-form and sector BNTs.
     condition of \cite[lines~2113--2117]{Cirac2021Matrix}.
 \end{definition}
 
-\begin{lemma}[Gauge invariance of simultaneous fixed-length product spans]
-    \label{lem:word_tuple_span_gauge_invariance}
+\begin{theorem}[Gauge invariance of simultaneous fixed-length product spans]
+    \label{thm:word_tuple_span_gauge_invariance}
     \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv}
     \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv_symm}
     \lean{MPSTensor.wordTupleSpanTop_iff_of_family_gaugeEquiv}
@@ -43,10 +43,9 @@ apply it to coefficient-form and sector BNTs.
     Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be tensor families with the same
     physical dimension and the same bond dimension $D_j$ in each labelled
     block. Suppose that for every $j$ there is an arbitrary invertible matrix
-    $X_j\in\GL_{D_j}(\C)$ such that
+    $X_j\in\GL_{D_j}(\C)$ such that, for every physical index $i$,
     \begin{align}
-        B_j^i&=X_jA_j^iX_j^{-1}
-        \qquad\text{for every physical index }i.
+        B_j^i&=X_jA_j^iX_j^{-1}.
         \notag
     \end{align}
     Then, at every fixed length $L$,
@@ -64,7 +63,7 @@ apply it to coefficient-form and sector BNTs.
     unital gauge carrying a positive dual fixed point. This supplies only the
     simultaneous-span transport; the subsequent source-gauge boundary and
     parent-Hamiltonian arguments are separate.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
