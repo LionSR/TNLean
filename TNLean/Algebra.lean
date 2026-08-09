@@ -57,6 +57,7 @@ import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NewtonGirard
 import TNLean.Algebra.NilMatrixSubalgebra
 import TNLean.Algebra.OperatorBlock
+import TNLean.Algebra.OperatorNormFrobenius
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalProjection
 import TNLean.Algebra.PerronFrobenius
