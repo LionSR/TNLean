@@ -10,8 +10,6 @@ import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.Spectral.MixedTransfer
 
-import Mathlib.Analysis.InnerProductSpace.Adjoint
-
 /-!
 # Gram operators for MPS ground-space maps
 
@@ -142,6 +140,30 @@ noncomputable def groundSpaceGram (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D) :=
   (groundSpaceMapES A L).adjoint.comp (groundSpaceMapES A L)
 
+/-- The operator whose matrix is the explicitly permuted rectangular Choi matrix of `L`.
+This packages Choi reshuffling at operator level; it is neither a transfer fixed-point
+identity nor an FNW contraction estimate. -/
+noncomputable def gramReshuffle
+    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D) :=
+  Matrix.toEuclideanCLM (n := Fin D × Fin D) (𝕜 := ℂ) fun (b, a) (e, c) ↦
+    Matrix.rectangularChoi L (c, e) (a, b)
+
+/-- Matrix-unit coordinates of the operator-level Choi reshuffling. -/
+@[simp]
+theorem inner_single_gramReshuffle_single
+    (L : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (a b c e : Fin D) :
+    inner ℂ (EuclideanSpace.single (b, a) 1)
+      (gramReshuffle L (EuclideanSpace.single (e, c) 1)) =
+      Matrix.rectangularChoi L (c, e) (a, b) := by
+  classical
+  change inner ℂ (WithLp.toLp 2 (Pi.single (b, a) 1))
+    (Matrix.toEuclideanCLM (n := Fin D × Fin D) (𝕜 := ℂ) _
+      (WithLp.toLp 2 (Pi.single (e, c) 1))) = _
+  rw [Matrix.toEuclideanCLM_toLp, EuclideanSpace.inner_toLp_toLp]
+  simp [Matrix.mulVec_single]
+
 /-- Matrix-unit entry of the MPS Gram operator.  The right-hand side is the
 precise Choi reshuffling: it is not the Hilbert--Schmidt pairing with the
 iterated transfer map. -/
@@ -182,5 +204,20 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
           (evalWord A (List.ofFn σ))ᴴ by rfl, Matrix.sum_apply]
   simp_rw [hmul]
   simp [groundSpaceMap_apply, Matrix.trace_mul_single, dotProduct]
+
+/-- The MPS Gram operator is the operator-level packaging of the already-proved
+rectangular-Choi reshuffling. This is not a transfer fixed-point identity or an
+FNW overlapping-window contraction. -/
+theorem groundSpaceGram_eq_gramReshuffle (A : MPSTensor d D) (L : ℕ) :
+    groundSpaceGram A L =
+      gramReshuffle ((transferMap (d := d) (D := D) A) ^ L) := by
+  apply ContinuousLinearMap.coe_injective
+  refine (EuclideanSpace.basisFun (Fin D × Fin D) ℂ).toBasis.ext fun ⟨e, c⟩ => ?_
+  apply PiLp.ext
+  rintro ⟨b, a⟩
+  have h := (inner_single_groundSpaceGram_single_eq_rectangularChoi A L a b c e).trans
+    (inner_single_gramReshuffle_single ((transferMap (d := d) (D := D) A) ^ L)
+      a b c e).symm
+  simpa [PiLp.inner_apply] using h
 
 end MPSTensor
