@@ -11,19 +11,19 @@ import TNLean.Channel.SupportCompletion
 # Choi-dominated Doeblin contraction
 
 If the rectangular Choi matrix of a trace-preserving, Hermiticity-preserving
-linear map `T : M_D(ℂ) → M_{D'}(ℂ)` dominates `(ε/D)(Y ⊗ 𝟙)` for some `ε ≥ 0`
-and Hermitian `Y` with `tr[Y] = 1`, then `T` satisfies the Doeblin trace-norm
-contraction `‖T(ρ₁) - T(ρ₂)‖₁ ≤ (1 - ε)‖ρ₁ - ρ₂‖₁` for all density matrices.
+linear map $T : M_D(\mathbb{C}) \to M_{D'}(\mathbb{C})$ dominates $(\varepsilon/D)(Y \otimes \mathbf{1})$ for some $\varepsilon \ge 0$
+and Hermitian $Y$ with $\mathrm{tr}[Y] = 1$, then $T$ satisfies the Doeblin trace-norm
+contraction $\|T(\rho_1) - T(\rho_2)\|_1 \le (1 - \varepsilon)\|\rho_1 - \rho_2\|_1$ for all density matrices.
 
-The proof constructs the trace-prepare map `T'(X) = tr[X]·Y`, computes its
-rectangular Choi matrix as `(1/D)(Y ⊗ 𝟙)`, uses the rectangular CP/PSD
-equivalence to derive positivity of `T - ε·T'`, and applies the quantum
+The proof constructs the trace-prepare map $T'(X) = \mathrm{tr}[X]Y$, computes its
+rectangular Choi matrix as $(1/D)(Y \otimes \mathbf{1})$, uses the rectangular CP/PSD
+equivalence to derive positivity of $T - \varepsilon T'$, and applies the quantum
 Doeblin theorem (`Matrix.traceNorm_map_sub_map_le_of_doeblin`).
 
 ## Main results
 
 * `Matrix.choiMatrix_tracePrepareMap` — the rectangular Choi matrix
-  of the trace-prepare map is `(1/d)(Y ⊗ 𝟙)`.
+  of the trace-prepare map is $(1/d)(Y \otimes \mathbf{1})$.
 * `Matrix.traceNorm_map_sub_map_le_of_choi_domination` — Wolf Eq. (8.86):
   Choi-dominated Doeblin contraction.
 
@@ -44,8 +44,8 @@ namespace Matrix
 
 /-- **Choi matrix of the trace-prepare map** (auxiliary lemma for Eq. (8.86)).
 
-For an arbitrary matrix `Y` on the output space, the trace-prepare
-map `T'(X) = tr[X]·Y` has Choi matrix `(1/d)(Y ⊗ 𝟙)` in the output-factor-first
+For an arbitrary matrix $Y$ on the output space, the trace-prepare
+map $T'(X) = \mathrm{tr}[X]Y$ has Choi matrix $(1/d)(Y \otimes \mathbf{1})$ in the output-factor-first
 tensor order of `ChoiRectangular.choiMatrix`.
 
 `Notes/WolfNoteTexSource/ch08_distance_measures.tex`, line 973. -/
@@ -87,21 +87,21 @@ lemma choiMatrix_tracePrepareMap (d d' : ℕ)
 
 /-- **Choi-dominated Doeblin contraction.**
 
-Let `T : M_D(ℂ) → M_{D'}(ℂ)` be a trace-preserving, Hermiticity-preserving
-linear map.  For `ε ≥ 0` and a Hermitian `Y` with trace one, if
+Let $T : M_D(\mathbb{C}) \to M_{D'}(\mathbb{C})$ be a trace-preserving, Hermiticity-preserving
+linear map.  For $\varepsilon \ge 0$ and a Hermitian $Y$ with trace one, if
 the (rectangular, output-factor-first) Choi matrix satisfies
 ```
 τ = choi(T) ≥ (ε/D)(Y ⊗ 𝟙),
 ```
-then for all density operators `ρ₁, ρ₂ ∈ M_D`,
+then for all density operators $\rho_1, \rho_2 \in M_D$,
 ```
 ‖T(ρ₁) - T(ρ₂)‖₁ ≤ (1 - ε) ‖ρ₁ - ρ₂‖₁.
 ```
 
-The proof constructs `T'(X) = tr[X]·Y` (the trace-prepare map) and applies
+The proof constructs $T'(X) = \mathrm{tr}[X]Y$ (the trace-prepare map) and applies
 `Matrix.traceNorm_map_sub_map_le_of_doeblin` (Wolf Theorem 8.17, Eq. (8.82)).
 The Choi domination guarantees, via the rectangular CP/PSD equivalence
-(`ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef`), that `T - ε·T'` is
+(`ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef`), that $T - \varepsilon T'$ is
 positive, satisfying the hypothesis of Theorem 8.17.
 
 `Notes/WolfNoteTexSource/ch08_distance_measures.tex`, lines 971–979. -/
