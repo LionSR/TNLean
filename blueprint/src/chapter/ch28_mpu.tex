@@ -488,6 +488,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.trace_transferMatrix_mixedTransferMap_pow_eq_mpvOverlap,
       MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap}
     \leanok
+    \uses{def:mixed_transfer,def:mpv_overlap}
     Let $A$ and $B$ be matrix product tensors with the same positive bond
     dimension, and let $F_{A,B}(X)=\sum_i A^iX(B^i)^\dagger$ be their mixed
     transfer map.  Then
@@ -518,7 +519,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde U^{ij}&=\frac{1}{\sqrt d}\,U^{ij}.
     \end{align}
     This is the normalization used in the normal-tensor argument of
-    \cite[lines~344--354]{Cirac2017MPU}.
+    \cite[Proposition~III.1]{Cirac2017MPU}.
 \end{definition}
 
 \begin{theorem}[Self-overlap scaling]
@@ -566,7 +567,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \tr(E^N)&=1.
     \end{align}
     This is the trace identity in the proof of the normal-tensor result
-    \cite[lines~344--354]{Cirac2017MPU}.
+    \cite[Proposition~III.1]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
