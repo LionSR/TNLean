@@ -145,11 +145,11 @@ and~\cite{Evans1978Spectral}.
 
 \begin{theorem}[PSD fixed point is positive definite --- irreducible version]
     \label{thm:psd_fp_pd_irred}
-    \lean{MPSTensor.posSemidef_fixedPoint_isPosDef_of_irreducible}
+    \lean{posDef_of_posSemidef_fixedPoint_irreducible_cp}
     \leanok
-    \uses{def:irreducible_cp, def:transfer_map}
-    If $\E_A$ is irreducible and $\rho \ge 0$, $\rho \neq 0$
-    is a fixed point, then $\rho$ is positive definite.
+    \uses{def:cp_map, def:irreducible_cp}
+    If $E$ is completely positive and irreducible and $\rho \ge 0$, $\rho \neq 0$
+    is a fixed point of $E$, then $\rho$ is positive definite.
 \end{theorem}
 
 \begin{proof}
