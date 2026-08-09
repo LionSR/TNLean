@@ -212,6 +212,44 @@ orthogonal projector is the canonical representative used here.
     inclusions.
 \end{proof}
 
+\begin{theorem}[Hilbert-space boundary-map injectivity]
+    \label{thm:ground_space_map_es_injective_block}
+    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective}
+    \leanok
+    \uses{def:ground_space_map_es, def:l_blk_injective}
+    If $A$ is $L$-block injective, then
+    $\Gamma_L^{\mathrm{ES}}$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_frobenius,
+        thm:ground_space_map_injective_blk}
+    Write each virtual vector uniquely as $U(X)$ by Frobenius vectorization.
+    The transport identity reduces equality of their images under
+    $\Gamma_L^{\mathrm{ES}}$ to equality of the images of the corresponding
+    matrices under $\Gamma_L$.  Block injectivity makes the latter map
+    injective.
+\end{proof}
+
+\begin{theorem}[Long-length Hilbert-space boundary-map injectivity]
+    \label{thm:ground_space_map_es_injective_block_of_le}
+    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}
+    \leanok
+    \uses{def:ground_space_map_es, def:l_blk_injective}
+    Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that
+    $L\ge L_0$.  Then $\Gamma_L^{\mathrm{ES}}$ is injective.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_injective_block,
+        thm:wordspan_blk_inj_succ}
+    Positive-length propagation makes $A$ block injective at length $L$.
+    The preceding theorem then gives injectivity of
+    $\Gamma_L^{\mathrm{ES}}$.
+\end{proof}
+
 \begin{definition}[Ground-space Gram operator]
     \label{def:ground_space_gram}
     \lean{MPSTensor.groundSpaceGram}
@@ -302,6 +340,66 @@ orthogonal projector is the canonical representative used here.
     $\langle x-Q_Tx,Ty\rangle=0$.  Thus $x-Q_Tx$ is orthogonal to
     $\range T$, and the range--orthogonal decomposition characterizing the
     orthogonal projector gives $Q_T=P_{\range T}$.
+\end{proof}
+
+% Maintainer note: this is the dependency-closed projector slice for issue #5752.
+% Its source boundary is the inverse-Gram/range-projector identity; it does not
+% include or assert the FNW overlapping-window estimate.
+\begin{theorem}[Physical ground-space range projector]
+    \label{thm:ground_space_map_es_injective_range_projector}
+    \lean{MPSTensor.injectiveRangeProjector_groundSpaceMapES_eq_starProjection}
+    \leanok
+    \uses{def:ground_space_map_es, def:ground_space_es,
+        def:injective_range_projector,
+        thm:ground_space_map_es_injective_block}
+    If $A$ is $L$-block injective, then the injective range projector of
+    $\Gamma_L^{\mathrm{ES}}$ is the physical orthogonal projector onto the
+    local ground space:
+    \begin{align}
+      Q_{\Gamma_L^{\mathrm{ES}}}
+      &=P_{G_L^{\mathrm{ES}}(A)}.
+    \end{align}
+    In particular, this is the physical range projector on the local Hilbert
+    space, not the virtual transfer fixed-point projector.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:injective_range_projector_inverse_gram,
+        thm:range_ground_space_map_es}
+    The general injective range-projector theorem identifies
+    $Q_{\Gamma_L^{\mathrm{ES}}}$ with the orthogonal projector onto
+    $\range(\Gamma_L^{\mathrm{ES}})$.  The exact-range theorem identifies
+    this range with $G_L^{\mathrm{ES}}(A)$.
+\end{proof}
+
+\begin{theorem}[Physical ground-space inverse-Gram projector formula]
+    \label{thm:ground_space_es_projection_inverse_gram}
+    \lean{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
+    \leanok
+    \uses{def:ground_space_es, def:ground_space_map_es, def:inverse_gram,
+        thm:ground_space_map_es_injective_block_of_le}
+    Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that
+    $L\ge L_0$.  Then the physical orthogonal projector onto the local ground
+    space is
+    \begin{align}
+      P_{G_L^{\mathrm{ES}}(A)}
+      &=\Gamma_L^{\mathrm{ES}}
+        \left((\Gamma_L^{\mathrm{ES}})^\dagger
+              \Gamma_L^{\mathrm{ES}}\right)^{-1}
+        (\Gamma_L^{\mathrm{ES}})^\dagger.
+    \end{align}
+    Thus the displayed operator is the physical range projector on
+    $\ell^2(\Fin{d}^{L})$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ground_space_map_es_injective_range_projector,
+        thm:wordspan_blk_inj_succ}
+    Positive-length propagation makes $A$ block injective at length $L$.
+    Apply the physical range-projector identity at that length and unfold its
+    inverse-Gram expression.
 \end{proof}
 
 \begin{theorem}[Neumann inverse estimate]

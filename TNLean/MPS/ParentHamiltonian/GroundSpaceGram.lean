@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FrobeniusHilbert
 import TNLean.Algebra.RectangularChoi
+import TNLean.Analysis.InjectiveRangeProjector
+import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.Spectral.MixedTransfer
 
@@ -64,6 +66,60 @@ theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
     exact ⟨Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X,
       groundSpaceMapES_frobeniusEquivEuclidean_apply A L X⟩
 
+/-- Block injectivity at length \(L\) makes the Hilbert-space boundary map
+\(\Gamma_L\) injective. -/
+theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
+    (hInj : IsNBlkInjective A L) :
+    Function.Injective (groundSpaceMapES A L) := by
+  intro x y hxy
+  obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
+  obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective y
+  apply congrArg (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D))
+  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective
+  rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
+    groundSpaceMapES_frobeniusEquivEuclidean_apply] at hxy
+  exact hxy
+
+/-- If \(A\) is block-injective at a positive length \(L₀\), then its
+Hilbert-space boundary map is injective at every length \(L \ge L₀\). -/
+theorem groundSpaceMapES_injective_of_isNBlkInjective_of_le
+    {A : MPSTensor d D} {L₀ L : ℕ} (hL₀ : 0 < L₀)
+    (hInj : IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
+    Function.Injective (groundSpaceMapES A L) :=
+  groundSpaceMapES_injective_of_isNBlkInjective
+    (isNBlkInjective_of_le hL₀ hInj hL)
+
+/-- For a block-injective MPS, the inverse-Gram range projector of
+\(\Gamma_L\) is the orthogonal projector onto the physical local ground space.
+This is the physical range projector, not the virtual transfer fixed-point
+projector `fixedPointProj`; it does not assert an overlapping-window estimate. -/
+theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
+    (A : MPSTensor d D) (L : ℕ) (hInj : IsNBlkInjective A L) :
+    ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
+      (groundSpaceMapES_injective_of_isNBlkInjective hInj) =
+        (groundSpaceES A L).starProjection := by
+  rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
+  exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
+    (range_groundSpaceMapES A L)
+
+/-- For every \(L \ge L₀\), the physical MPS ground-space projector is
+\[
+  P_{G_L(A)} = \Gamma_L (\Gamma_L^\dagger \Gamma_L)^{-1} \Gamma_L^\dagger.
+\]
+Here the inverse is `ContinuousLinearMap.inverseGram`. This is the physical
+range projector, not the virtual `fixedPointProj`; it does not assert an
+overlapping-window estimate. -/
+theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
+    (A : MPSTensor d D) {L₀ L : ℕ} (hL₀ : 0 < L₀)
+    (hInj : IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
+    (groundSpaceES A L).starProjection =
+      (groundSpaceMapES A L).comp
+        ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
+          (groundSpaceMapES_injective_of_isNBlkInjective_of_le hL₀ hInj hL)).comp
+            (groundSpaceMapES A L).adjoint) := by
+  exact (injectiveRangeProjector_groundSpaceMapES_eq_starProjection A L
+    (isNBlkInjective_of_le hL₀ hInj hL)).symm
 
 @[simp]
 theorem groundSpaceMapES_single (A : MPSTensor d D) (L : ℕ) (a b : Fin D) :

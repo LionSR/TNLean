@@ -517,10 +517,22 @@ for injective finite-dimensional maps is
 \leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
 denominator estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under
 $\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.
-Consequently the physical local ground projector is the orthogonal projector
-onto $\operatorname{ran}\Gamma_L$.  It is not the transfer fixed-point
-projector \leanid{fixedPointProj}; the latter acts on the virtual matrix space
-and cannot substitute for the inverse-Gram formula.
+Block injectivity makes the Hilbert-space boundary map injective at its base
+length and every longer length; this is recorded by
+\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective} and
+\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}.
+The specialization
+\leanid{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
+therefore proves the exact physical formula
+\begin{align}
+  P_{\mathcal G_L(A)}
+    &=\Gamma_L^{\mathrm{ES}}\mathcal K_L^{-1}
+      (\Gamma_L^{\mathrm{ES}})^\dagger,
+  &L&\ge L_0.
+\end{align}
+This is the orthogonal projector onto $\operatorname{ran}\Gamma_L$.  It is not
+the transfer fixed-point projector \leanid{fixedPointProj}; the latter acts on
+the virtual matrix space and cannot substitute for the inverse-Gram formula.
 
 To state the source estimate, let $l\in\mathbb N$ be the overlap length and let
 $0\le\lambda<1$ be an admissible transfer-mixing rate satisfying
@@ -530,9 +542,13 @@ the auxiliary, or bond, dimension.  Choose $l$ so that $c\lambda^l<1$.  These
 are parameters of the quoted FNW estimate, not bounds derived by the present
 formal infrastructure.
 
-What remains open is the source-specific FNW comparison of the inverse-Gram
-range projectors on the two overlapping physical windows.  In particular, the
-present infrastructure does not prove the contraction
+What remains open is the source-specific comparison of these exact inverse-Gram
+range projectors on the two overlapping physical windows.  The next formal
+steps are to package the Choi reshuffling as an operator identity with a verified
+norm bound, construct the spectator-indexed boundary maps for the left and tail
+windows, and derive their common-ambient contraction directly from the MPS word
+factorization.  In particular, the present infrastructure does not prove the
+contraction
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
   \qquad c\lambda^l<1,
