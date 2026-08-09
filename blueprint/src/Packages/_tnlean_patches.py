@@ -23,6 +23,17 @@ The remaining local fixes are:
 * ``plastexdepgraph.Packages.depgraph.{uses, alsoIn, proves}.digest``:
   normalize label tokens and defer/fallback label resolution so ``\uses``,
   ``\alsoIn``, and ``\proves`` survive plasTeX timing quirks.
+* ``plasTeX.Base.LaTeX.Crossref.{label, ref, pageref}`` and
+  ``plasTeX.Packages.amsmath.eqref``: read the key of a cross-reference with
+  the underscore, superscript, alignment, and dollar characters demoted to
+  ordinary characters, so a key written inside a display survives.
+* ``plasTeX.Base.LaTeX.Arrays.Array.EndRow``: a bracketed expression opening
+  the row after a line break is mathematics, not a line-spacing length.
+
+It also declares the constructions the web document meets but neither plasTeX
+nor its packages define: ``\path`` from ``url``, the small parenthesised
+matrix of ``mathtools``, ``\substack`` from ``amsmath``, the ``samepage``
+grouping, and the inert tensor-network surface selector ``\tenkzkernel``.
 """
 
 from __future__ import annotations
@@ -30,13 +41,18 @@ from __future__ import annotations
 import io
 import os
 import pickle
+import re
 from pathlib import Path
 from typing import Any, Callable
 
 from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
+import plasTeX.Packages.amsmath as _amsmath
 import plasTeX.Packages.natbib as _natbib
-from plasTeX import Base, Command
+from plasTeX import Base, Command, Environment, Token
+from plasTeX import sourceChildren as _source_children
+from plasTeX.Base.LaTeX import Crossref as _crossref
+from plasTeX.Base.LaTeX.Arrays import Array as _Array
 from plastexdepgraph.Packages import depgraph as _depgraph
 
 
@@ -484,3 +500,175 @@ def _patched_proves_digest(self, tokens):
 _depgraph.uses.digest = _patched_uses_digest
 _depgraph.alsoIn.digest = _patched_also_in_digest
 _depgraph.proves.digest = _patched_proves_digest
+
+
+# --- cross-reference keys read inside a display ---------------------------
+
+# Inside a display, the underscore opens a subscript, the caret a superscript,
+# the ampersand a column break, and the dollar a mode switch.  A cross-
+# reference key is none of those: it is a name.  While the key of a
+# cross-reference is being read these four characters are demoted to ordinary
+# characters, so ``\label{eq:block_diagonal}`` written inside an ``align``
+# yields the key it spells rather than a parse fragment.  Left unhandled, the
+# fragment reaches the page as the identifier of the display and as ``??`` at
+# every reference to it.
+_REFERENCE_KEY_CHARACTERS = "_^&$"
+
+
+def _read_key_as_written(macro_class) -> None:
+    """Read one macro's argument with the display-only characters demoted."""
+
+    original = macro_class.invoke
+
+    def invoke(self, tex):
+        context = self.ownerDocument.context
+        categories = context.categories
+        for character in _REFERENCE_KEY_CHARACTERS:
+            context.catcode(character, Token.CC_OTHER)
+        try:
+            return original(self, tex)
+        finally:
+            context.contexts[-1].categories = context.categories = categories
+
+    macro_class.invoke = invoke
+
+
+for _macro_class in (
+    _crossref.label,
+    _crossref.ref,
+    _crossref.pageref,
+    _amsmath.eqref,
+):
+    _read_key_as_written(_macro_class)
+
+
+# --- a bracket opening a row is mathematics -------------------------------
+
+# After a line break an array row may take a length in brackets that widens
+# the gap to the next row.  A row that opens with a commutator carries
+# brackets of its own, and those brackets are mathematics.  LaTeX reads them
+# as mathematics; plasTeX and MathJax both read them as the length, which
+# turns the row into an error box.  The length is kept when the brackets
+# really hold one, and returned to the row otherwise.
+_LENGTH = re.compile(
+    r"""\s*[-+]?(\d+(\.\d*)?|\.\d+)\s*
+        (pt|pc|in|bp|cm|mm|dd|cc|sp|ex|em|mu)\s*$""",
+    re.VERBOSE,
+)
+
+# --- a line break inside a braced argument is not a row of the display ----
+
+# TeX reads an alignment with braces balanced: a line break inside a braced
+# argument belongs to that argument, not to the alignment around it.  plasTeX
+# ends the row anyway, which leaves a row hanging inside the brace group; the
+# row then prints itself wrapped in a table named after the group, and the
+# reader meets ``\begin{bgroup}`` in the middle of a formula.  A row with no
+# table around it prints the entries it holds and nothing more, which is how
+# a stacked limit such as ``\substack`` reaches MathJax as it was written.
+_original_array_row_source = _Array.ArrayRow.source
+
+
+def _patched_array_row_source(self) -> str:
+    if isinstance(self.parentNode, _Array):
+        return _original_array_row_source.fget(self)
+
+    written = []
+    for cell in self:
+        written.append(_source_children(cell, par=False))
+        if cell.endToken is not None:
+            written.append(cell.endToken.source)
+    if self.endToken is not None:
+        written.append(self.endToken.source)
+    return "".join(written)
+
+
+_Array.ArrayRow.source = property(_patched_array_row_source)
+
+
+_original_end_row_source = _Array.EndRow.source
+
+
+def _patched_end_row_source(self) -> str:
+    written = _original_end_row_source.fget(self)
+    opening = written.find("[")
+    if opening != -1 and written.endswith("]"):
+        if not _LENGTH.match(written[opening + 1:-1]):
+            return "%s {}%s" % (written[:opening], written[opening:])
+    return written
+
+
+_Array.EndRow.source = property(_patched_end_row_source)
+
+
+# --- constructions the web document meets but plasTeX does not define -----
+
+
+class path(Command):
+    r"""``\path`` from ``url``, which ``hyperref`` loads for the printed volume.
+
+    plasTeX leaves the command undefined, and the HTML5 renderer then matches
+    the bare name against the link template of ``url``, so every file path in
+    the prose became an empty link followed by its own unstyled text.
+    """
+
+    args = "self"
+
+
+class samepage(Environment):
+    r"""``samepage`` keeps a statement and its proof on one printed page.
+
+    A page is a notion of the printed volume alone, so on the web the grouping
+    carries its contents and nothing else.  It stands between paragraphs, as
+    the statements it holds together do.
+    """
+
+    blockType = True
+
+
+class tenkzkernel(Command):
+    r"""``\tenkzkernel`` selects the tensor-network kernel surface.
+
+    The surface is bound when the tensor-network package loads, so the
+    selector sets nothing and prints nothing.
+    """
+
+
+class _MathtoolsSmallMatrix(_amsmath.smallmatrix):
+    r"""A small matrix with delimiters, as ``mathtools`` defines it.
+
+    The printed volume loads ``mathtools``; on the web MathJax loads it on
+    first sight of the environment, which is what the request in front of the
+    opening marker asks for.  Without the declaration plasTeX closes the
+    environment before its entries and leaves the closing marker adrift, which
+    reaches the page as an empty display beside the unset entries.
+    """
+
+    macroName = None
+    mathMode = True
+
+    @property
+    def source(self) -> str:
+        written = _amsmath.smallmatrix.source.fget(self)
+        if self.macroMode == Command.MODE_BEGIN:
+            return r"\require{mathtools}" + written
+        return written
+
+
+class psmallmatrix(_MathtoolsSmallMatrix):
+    r"""``psmallmatrix``: a small matrix in parentheses."""
+
+
+class bsmallmatrix(_MathtoolsSmallMatrix):
+    r"""``bsmallmatrix``: a small matrix in square brackets."""
+
+
+class vsmallmatrix(_MathtoolsSmallMatrix):
+    r"""``vsmallmatrix``: a small matrix between single bars."""
+
+
+class Vsmallmatrix(_MathtoolsSmallMatrix):
+    r"""``Vsmallmatrix``: a small matrix between double bars."""
+
+
+class Bsmallmatrix(_MathtoolsSmallMatrix):
+    r"""``Bsmallmatrix``: a small matrix in braces."""

@@ -200,6 +200,7 @@ jobs:
               - 'blueprint/latexindent.yaml'
               - 'scripts/blueprint_bibtex.py'
               - 'scripts/check_reader_facing_prose.py'
+              - 'scripts/test_blueprint_web_render.py'
               - 'scripts/tenkz_audit.py'
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
@@ -734,6 +735,16 @@ jobs:
             echo "::warning::Blueprint has missing file references (see WARNING lines above)"
           fi
 
+          # A command plasTeX does not know reaches the page through whichever
+          # template happens to share its name, and a node with no template at
+          # all reaches it through the fallback. Both produced reader-visible
+          # corruption from a build that reported success, so both fail here.
+          if grep -qE "WARNING: (unrecognized command/environment|Using default renderer)" \
+               "$tmp_output_file"; then
+            echo "::error::Blueprint uses a command the web renderer does not know; declare it in blueprint/src/Packages/_tnlean_patches.py"
+            exit 1
+          fi
+
           # If leanblueprint itself failed, propagate its exit status
           if [ "$cmd_status" -ne 0 ]; then
             exit "$cmd_status"
@@ -753,6 +764,12 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.55.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+
+      # A zero exit status says the build ran, not that the pages read. This
+      # opens every generated page and measures what a reader would meet.
+      - name: Test generated blueprint pages
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls
