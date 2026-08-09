@@ -1100,13 +1100,15 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_trace_loop_chain,
+    \uses{def:global_gauge_of_blocks, def:gauge_equiv,
+      thm:gauge_invariance, lem:mpdo_trace_loop_chain,
       thm:mpo_source_zcl_of_physical_trace_idempotent,
       thm:mpdo_bnt_physical_support_restriction,
       cor:mpdo_absorbed_bnt_sector_is_mpdo,
       thm:mpdo_absorbed_bnt_sector_sal,
       thm:mpdo_absorbed_bnt_sector_literal_zcl}
-    Saturation gives $\tr(\sigma^{(1)}(K))>0$. Since
+    The block-diagonal gauge identifies the MPV families of $K$ and its
+    weighted BNT direct sum. Saturation gives $\tr(\sigma^{(1)}(K))>0$. Since
     $\tr(\sigma^{(1)}(K))=\tr(\mathcal T_K)$, one has
     $\mathcal T_K\ne0$. Together with $\mathcal T_K^2=\mathcal T_K$, this
     gives scale-invariant source zero correlation length with scalar $1$.
