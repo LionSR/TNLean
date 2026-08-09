@@ -79,11 +79,15 @@ DEFAULT_OUT = ROOT / "build/ctan"
 PACKAGE = "tenkz"
 DECLARATION = re.compile(r"^\\ProvidesPackage\{tenkz\}\[([^]]*)\]", re.MULTILINE)
 # The version spelling `RELEASE-POLICY.md` §3 fixes: major, minor, and an
-# optional patch, each a nonempty run of digits. A typo such as `v1..0` is a
-# malformed declaration, not a version this tool carries into an archive name.
+# optional patch, each a nonempty run of digits, followed by a description.
+# A typo such as `v1..0` is a malformed declaration, not a version this tool
+# carries into an archive name. The pattern matches the whole payload, and
+# spells it as `tests/tenkz/release-harness/tex_api_package_version.py` does,
+# so the two gates cannot disagree about the same declaration.
 PAYLOAD = re.compile(
     r"(?P<date>[0-9]{4})/([0-9]{2})/([0-9]{2}) "
-    r"v(?P<version>[0-9]+\.[0-9]+(?:\.[0-9]+)?) "
+    r"v(?P<version>[0-9]+\.[0-9]+(?:\.[0-9]+)?) \S.*",
+    re.DOTALL,
 )
 # TeX allows space, and a comment-blanked newline, between a control word and
 # its arguments, so the patterns allow it too: `\RequirePackage {tikz}` is a
@@ -99,6 +103,15 @@ LIBRARY_CALL = re.compile(r"\\usetikzlibrary\s*\{([^}]*)\}", re.DOTALL)
 # invariant ASCII subset, no leading dot or dash, no space.
 SAFE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
 
+# Names Windows reserves for devices, whatever suffix follows them, and which
+# an unpacking tool there cannot write. A CTAN archive is unpacked on every
+# platform TeX Live runs on.
+RESERVED_NAMES = frozenset(
+    {"CON", "PRN", "AUX", "NUL"}
+    | {f"COM{digit}" for digit in range(1, 10)}
+    | {f"LPT{digit}" for digit in range(1, 10)}
+)
+
 # What a LaTeX run leaves beside its sources. None of it belongs in an upload,
 # and none of it belongs in the directory the upload is walked from either.
 DEBRIS_SUFFIXES = frozenset(
@@ -109,8 +122,15 @@ DEBRIS_SUFFIXES = frozenset(
     }
 )
 
-# Midnight UTC on 1 January 1980, the earliest moment a zip entry can carry.
+# The window a zip entry's date field can express: from midnight UTC on 1
+# January 1980 to the end of 2107. An earlier moment is raised to the floor,
+# because `SOURCE_DATE_EPOCH=0` is a convention meaning "no meaningful date";
+# a later one is refused, because a date past 2107 is a mistake and clamping
+# it would silently mis-date the upload.
 ZIP_EPOCH_FLOOR = 315532800
+ZIP_EPOCH_CEILING = int(
+    datetime(2107, 12, 31, 23, 59, 58, tzinfo=timezone.utc).timestamp()
+)
 
 # The staged names an upload carries whatever else the manifest declares. A
 # manifest that dropped one of these would build an archive without a licence
@@ -164,7 +184,7 @@ def read_release(entry: Path = ENTRY) -> Release:
             f"{entry.name} must carry exactly one "
             f"\\ProvidesPackage{{tenkz}} line; found {len(declarations)}"
         )
-    match = PAYLOAD.match(declarations[0])
+    match = PAYLOAD.fullmatch(declarations[0])
     if match is None:
         raise SystemExit(
             f"{entry.name} declares {declarations[0]!r}, which is not "
@@ -266,7 +286,14 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
             "and header checks never read"
         )
     for name, relative in manifest["material"].items():
-        content[name] = ROOT / relative
+        source = (ROOT / relative).resolve()
+        if not source.is_relative_to(ROOT):
+            raise SystemExit(
+                f"{MANIFEST_LABEL} stages {name} from {source}, outside the "
+                "repository; the archive is built from the tree and from "
+                "nothing else"
+            )
+        content[name] = source
     refused = check_names(content).failures
     if refused:
         raise SystemExit(
@@ -276,12 +303,62 @@ def staged_content(manifest: dict, closure: Closure) -> dict[str, Path]:
     return content
 
 
+def require_complete_material(manifest: dict) -> None:
+    """Refuse to write an upload that is missing material every upload carries.
+
+    The reporting command says which entry is absent and keeps going; a
+    command that writes has nowhere to put that finding, so it stops.
+    """
+
+    missing = [name for name in REQUIRED_MATERIAL if name not in manifest["material"]]
+    if missing:
+        raise SystemExit(
+            f"{MANIFEST_LABEL} stages no {missing}; an upload carries "
+            f"{list(REQUIRED_MATERIAL)}"
+        )
+
+
+def clear_destination(destination: Path) -> None:
+    """Empty the output directory of this tool's own artifacts, and nothing else.
+
+    The output directory is an option, and an option that recursively deleted
+    whatever it was pointed at would be a bad trade for the convenience of
+    rebuilding in place. So the directory itself is never removed: the staged
+    tree and the archives this tool writes are, and anything else standing
+    there stops the run.
+    """
+
+    resolved = destination.resolve()
+    if resolved == Path(resolved.root) or ROOT.is_relative_to(resolved):
+        raise SystemExit(
+            f"{resolved} contains the repository (or is the file-system root) "
+            "and is not an output directory"
+        )
+    if not resolved.exists():
+        return
+    if not resolved.is_dir():
+        raise SystemExit(f"{resolved} is not a directory")
+    ours = []
+    for entry in sorted(resolved.iterdir()):
+        mine = entry.name == PACKAGE or (
+            entry.name.startswith(f"{PACKAGE}-")
+            and (entry.name.endswith(".zip") or entry.name.endswith(".zip.sha256"))
+        )
+        if not mine:
+            raise SystemExit(
+                f"{resolved} holds {entry.name}, which this tool did not write; "
+                "point --out at a directory it owns"
+            )
+        ours.append(entry)
+    for entry in ours:
+        shutil.rmtree(entry) if entry.is_dir() else entry.unlink()
+
+
 def stage(destination: Path, epoch: int, content: dict[str, Path]) -> Path:
-    """Write the staging tree, replacing whatever stood there before."""
+    """Write the staging tree, replacing this tool's earlier output."""
 
     tree = destination / PACKAGE
-    if destination.exists():
-        shutil.rmtree(destination)
+    clear_destination(destination)
     tree.mkdir(parents=True)
     for name, source in content.items():
         target = tree / name
@@ -340,7 +417,9 @@ def build(destination: Path) -> tuple[Path, Release, str]:
     release = read_release()
     epoch = chosen_epoch(release)
     closure = walk_closure()
-    content = staged_content(read_manifest(), closure)
+    manifest = read_manifest()
+    require_complete_material(manifest)
+    content = staged_content(manifest, closure)
     stage(destination, epoch, content)
     archive = write_archive(destination, release, epoch, content)
     return archive, release, hashlib.sha256(archive.read_bytes()).hexdigest()
@@ -356,7 +435,19 @@ def chosen_epoch(release: Release) -> int:
     """
 
     value = os.environ.get("SOURCE_DATE_EPOCH")
-    chosen = int(value) if value else release.epoch
+    if not value:
+        return max(release.epoch, ZIP_EPOCH_FLOOR)
+    try:
+        chosen = int(value)
+    except ValueError:
+        raise SystemExit(
+            f"SOURCE_DATE_EPOCH is {value!r}, which is not a number of seconds"
+        ) from None
+    if chosen > ZIP_EPOCH_CEILING:
+        raise SystemExit(
+            f"SOURCE_DATE_EPOCH is {chosen}, later than the last moment a zip "
+            f"entry can carry ({ZIP_EPOCH_CEILING}, the end of 2107)"
+        )
     return max(chosen, ZIP_EPOCH_FLOOR)
 
 
@@ -448,10 +539,9 @@ def check_material(manifest: dict) -> Report:
     for name, relative in declared.items():
         source = ROOT / relative
         report.require(source.is_file(), f"{relative} is declared and missing")
-    readme = ROOT / declared.get("README.md", "docs/tenkz/ctan/README.md")
-    if not readme.is_file():
+    text = _material_text(manifest, "README.md")
+    if not text:
         return report
-    text = readme.read_text(encoding="utf-8")
     for heading in ("## Requirements", "## Author and maintainer", "## License"):
         report.require(
             heading in text, f"the CTAN README carries no {heading[3:]!r} section"
@@ -491,6 +581,14 @@ def check_names(content: dict[str, Path]) -> Report:
         report.require(
             SAFE_NAME.fullmatch(name) is not None,
             f"{name!r} is not spelled in the invariant ASCII subset",
+        )
+        report.require(
+            not name.endswith("."),
+            f"{name!r} ends in a dot, which Windows drops when it unpacks",
+        )
+        report.require(
+            name.split(".")[0].upper() not in RESERVED_NAMES,
+            f"{name!r} is a reserved device name on Windows, whatever its suffix",
         )
         collision = seen.get(name.lower())
         report.require(
@@ -547,15 +645,20 @@ def check_headers(closure: Closure, source: Path = SOURCE) -> Report:
 
 
 def _material_text(manifest: dict, name: str) -> str:
-    """The staged material's text, or nothing when the file is absent.
+    """The staged material's text, or nothing when it is absent or undeclared.
 
-    An absent file is the material check's finding to report. Reading it here
-    would raise before any check printed its line, which turns a named missing
-    file into a traceback.
+    An undeclared entry and an absent file are both the material check's
+    findings to report. Indexing or reading here would raise before any check
+    printed its line, which turns a named mistake into a traceback. Bytes are
+    decoded permissively for the same reason: the encoding audit owns that
+    verdict, and it prints one line rather than a stack.
     """
 
-    path = ROOT / manifest["material"][name]
-    return path.read_text(encoding="utf-8") if path.is_file() else ""
+    relative = manifest["material"].get(name)
+    if relative is None:
+        return ""
+    path = ROOT / relative
+    return path.read_bytes().decode("utf-8", errors="replace") if path.is_file() else ""
 
 
 def check_version(release: Release, manifest: dict) -> Report:
@@ -570,13 +673,15 @@ def check_version(release: Release, manifest: dict) -> Report:
         f"{ENTRY.relative_to(ROOT)}",
     )
     citation = _material_text(manifest, "CITATION.cff")
+    # Anchored to the start of a line: a commented or nested occurrence of the
+    # right string beside a stale live value would otherwise satisfy this.
     report.require(
-        f'version: "{release.version}"' in citation,
-        f"the citation record must state version {release.version}",
+        re.search(rf'^version: "{re.escape(release.version)}"\s*$', citation, re.M),
+        f"the citation record must state version {release.version} as its own field",
     )
     report.require(
-        f'date-released: "{release.date}"' in citation,
-        f"the citation record must state date-released {release.date}",
+        re.search(rf'^date-released: "{re.escape(release.date)}"\s*$', citation, re.M),
+        f"the citation record must state date-released {release.date} as its own field",
     )
     bibliography = _material_text(manifest, "tenkz.bib")
     year, month, _ = release.date.split("-")
@@ -802,26 +907,28 @@ def command_check(require_smoke: bool, keep: Path | None) -> int:
     release = read_release()
     manifest = read_manifest()
     closure = walk_closure()
+    material = check_material(manifest)
     reports = [
         check_closure(closure, manifest),
         check_source_tree(closure, manifest),
-        check_material(manifest),
+        material,
         check_headers(closure),
         check_version(release, manifest),
     ]
     content = staged_content(manifest, closure)
-    reports.append(check_encoding(content))
+    encoding = check_encoding(content)
+    reports.append(encoding)
     reports.append(check_names(content))
-    # Nothing below this line can run against a file that is not there, and a
-    # traceback would replace the report naming the file. The checks that need
-    # a built tree report themselves skipped instead, and the missing file is
-    # already a failure of its own.
-    absent = sorted(name for name, source in content.items() if not source.is_file())
+    # A build cannot run against material that is absent, undeclared, or
+    # unreadable, and a traceback would replace the report naming it. The
+    # checks that need a built tree report themselves skipped instead; the
+    # material is already a failure of its own.
+    blocked = material.failures + encoding.failures
     digest = ""
-    if absent:
+    if blocked:
         for name in ("permissions", "debris", "determinism", "clean-install"):
             skipped = Report(name)
-            skipped.skipped = f"{len(absent)} declared file(s) missing: {absent}"
+            skipped.skipped = f"the staged material is not complete ({len(blocked)} finding(s))"
             reports.append(skipped)
     else:
         with tempfile.TemporaryDirectory(prefix="tenkz-ctan-check-") as directory:
