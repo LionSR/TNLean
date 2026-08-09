@@ -90,8 +90,10 @@ does not know about. It reads the version from the one declaration that owns
 it and rejects a README, citation record, or archive name that states
 another. It normalizes permissions and rejects compilation leftovers and
 names outside the invariant ASCII subset. Finally it unpacks the archive on
-its own and compiles a picture against it, so a runtime file the archive
-forgot is a failed run rather than a silent fall-back to the repository copy.
+its own and compiles a picture against it, asking the engine to record every
+file it opened and requiring that every tenkz file resolved inside the
+unpacked directory — so a runtime file the archive forgot is a failed run
+rather than a silent fall-back to a copy already installed on the machine.
 
 It does not judge the manual, the prose, or the mathematics, and it does not
 know whether the release campaign permits a tag. Those are read by the

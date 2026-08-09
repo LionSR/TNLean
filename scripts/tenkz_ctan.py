@@ -89,6 +89,9 @@ DEBRIS_SUFFIXES = frozenset(
     }
 )
 
+# Midnight UTC on 1 January 1980, the earliest moment a zip entry can carry.
+ZIP_EPOCH_FLOOR = 315532800
+
 # The one licence marker every runtime file carries, and the sentence beside
 # it. Both are checked; the identifier is what a machine reads.
 LICENSE_MARKER = "% SPDX-License-Identifier: Apache-2.0"
@@ -282,12 +285,17 @@ def build(destination: Path) -> tuple[Path, Release, str]:
 
 
 def chosen_epoch(release: Release) -> int:
-    """`SOURCE_DATE_EPOCH` when the environment sets it, the package date else."""
+    """`SOURCE_DATE_EPOCH` when the environment sets it, the package date else.
+
+    A zip entry cannot carry a date before 1980, and `0` is a common value for
+    the environment variable, so an earlier moment is raised to the format's
+    floor rather than crashing the build. The staged tree is raised with it:
+    one moment stamps both, or the tree and the archive would disagree.
+    """
 
     value = os.environ.get("SOURCE_DATE_EPOCH")
-    if value:
-        return int(value)
-    return release.epoch
+    chosen = int(value) if value else release.epoch
+    return max(chosen, ZIP_EPOCH_FLOOR)
 
 
 # --------------------------------------------------------------------------
@@ -425,7 +433,7 @@ def check_permissions(tree: Path) -> Report:
     """One mode for files, one for directories, whatever the builder's mask."""
 
     report = Report("permissions")
-    for path in sorted(tree.rglob("*")):
+    for path in [tree, *sorted(tree.rglob("*"))]:
         expected = 0o755 if path.is_dir() else 0o644
         mode = path.stat().st_mode & 0o777
         report.require(
@@ -466,18 +474,30 @@ def check_headers(closure: Closure, source: Path = SOURCE) -> Report:
     return report
 
 
+def _material_text(manifest: dict, name: str) -> str:
+    """The staged material's text, or nothing when the file is absent.
+
+    An absent file is the material check's finding to report. Reading it here
+    would raise before any check printed its line, which turns a named missing
+    file into a traceback.
+    """
+
+    path = ROOT / manifest["material"][name]
+    return path.read_text(encoding="utf-8") if path.is_file() else ""
+
+
 def check_version(release: Release, manifest: dict) -> Report:
     """One declaration, and every other record checked against it."""
 
     report = Report("version")
-    readme = (ROOT / manifest["material"]["README.md"]).read_text(encoding="utf-8")
+    readme = _material_text(manifest, "README.md")
     stated = f"Version {release.version}, released {release.date}."
     report.require(
         stated in readme,
         f"the CTAN README must state {stated!r}, the version declared by "
         f"{ENTRY.relative_to(ROOT)}",
     )
-    citation = (ROOT / manifest["material"]["CITATION.cff"]).read_text(encoding="utf-8")
+    citation = _material_text(manifest, "CITATION.cff")
     report.require(
         f'version: "{release.version}"' in citation,
         f"the citation record must state version {release.version}",
@@ -486,10 +506,19 @@ def check_version(release: Release, manifest: dict) -> Report:
         f'date-released: "{release.date}"' in citation,
         f"the citation record must state date-released {release.date}",
     )
-    bibliography = (ROOT / manifest["material"]["tenkz.bib"]).read_text(encoding="utf-8")
+    bibliography = _material_text(manifest, "tenkz.bib")
+    year, month, _ = release.date.split("-")
     report.require(
         f"version {release.version}" in bibliography,
         f"the BibTeX record must state version {release.version}",
+    )
+    report.require(
+        re.search(rf"year\s*=\s*\{{{year}\}}", bibliography) is not None,
+        f"the BibTeX record must state year {year}",
+    )
+    report.require(
+        re.search(rf"month\s*=\s*\{{{int(month)}\}}", bibliography) is not None,
+        f"the BibTeX record must state month {int(month)}",
     )
     report.notes.append(f"{release.archive_stem}.zip from v{release.version} of {release.date}")
     return report
@@ -532,13 +561,42 @@ def check_determinism(release: Release) -> Report:
     return report
 
 
-def check_smoke(archive: Path, required: bool) -> Report:
-    """Unpack the archive alone and compile a document against it.
+def resolved_runtime_files(record: Path) -> list[str]:
+    """The runtime files the engine actually opened, from its input record.
 
-    The search path names the unpacked directory and then the installation,
-    so a runtime file the archive forgot is a failed run rather than a silent
-    fall-back to the repository copy.
+    The search path ends in an empty element, which is what restores the
+    installation's own directories after the unpacked archive — an author who
+    installs the package still needs `tikz`, `hobby`, and `spath3`. That same
+    rule means a machine with an older tenkz installed could answer a file the
+    archive forgot, and the run would pass while proving nothing. So the
+    engine is asked to record every file it opened, and the record, not the
+    exit status, says where the runtime came from.
     """
+
+    opened: list[str] = []
+    for line in record.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.startswith("INPUT "):
+            continue
+        path = line[len("INPUT "):].strip()
+        if Path(path).name.startswith(PACKAGE):
+            opened.append(path)
+    return opened
+
+
+def foreign_runtime_files(opened: list[str], room: Path, unpacked: Path) -> list[str]:
+    """Those of the opened files that came from somewhere else.
+
+    A record line may name a path relative to the directory the engine ran in,
+    so the room is the base against which a name is resolved.
+    """
+
+    return [
+        path for path in opened if not (room / path).resolve().is_relative_to(unpacked)
+    ]
+
+
+def check_smoke(archive: Path, required: bool) -> Report:
+    """Unpack the archive alone and compile a document against it."""
 
     report = Report("clean-install")
     if shutil.which("xelatex") is None:
@@ -551,25 +609,61 @@ def check_smoke(archive: Path, required: bool) -> Report:
         room = Path(directory)
         with zipfile.ZipFile(archive) as bundle:
             bundle.extractall(room)
+        unpacked = (room / PACKAGE).resolve()
         document = room / "smoke.tex"
         document.write_text(SMOKE_DOCUMENT, encoding="utf-8")
         environment = dict(os.environ)
-        environment["TEXINPUTS"] = f"{room / PACKAGE}//:"
+        environment["TEXINPUTS"] = f"{unpacked}//:"
         environment["TEXMFOUTPUT"] = str(room)
-        finished = subprocess.run(
-            ["xelatex", "-interaction=nonstopmode", "-halt-on-error", "smoke.tex"],
-            cwd=room,
-            env=environment,
-            capture_output=True,
-            text=True,
-        )
-        if finished.returncode != 0:
-            tail = "\n".join(finished.stdout.splitlines()[-25:])
-            report.failures.append(
-                f"a document using only the unpacked archive failed to compile:\n{tail}"
+        try:
+            finished = subprocess.run(
+                [
+                    "xelatex",
+                    "-interaction=nonstopmode",
+                    "-halt-on-error",
+                    "-recorder",
+                    "smoke.tex",
+                ],
+                cwd=room,
+                env=environment,
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
-        else:
-            report.notes.append("a two-cell picture compiled from the unpacked archive")
+        except subprocess.TimeoutExpired:
+            report.failures.append(
+                "a document using only the unpacked archive did not finish "
+                "compiling within 120 seconds"
+            )
+            return report
+        if finished.returncode != 0:
+            tail = "\n".join(
+                (finished.stdout + finished.stderr).splitlines()[-25:]
+            )
+            report.failures.append(
+                "a document using only the unpacked archive failed to compile, "
+                f"exit {finished.returncode}:\n{tail}"
+            )
+            return report
+        record = room / "smoke.fls"
+        if not record.is_file():
+            report.failures.append("the engine wrote no input record to read")
+            return report
+        opened = resolved_runtime_files(record)
+        strangers = foreign_runtime_files(opened, room, unpacked)
+        report.require(
+            opened, "the run opened no tenkz file, so it proved nothing"
+        )
+        report.require(
+            not strangers,
+            "the run resolved runtime files outside the unpacked archive, so an "
+            f"installed copy answered for it: {sorted(set(strangers))}",
+        )
+        if not report.failures:
+            report.notes.append(
+                f"a two-cell picture compiled from the unpacked archive, "
+                f"reading {len(set(opened))} of its files and no other tenkz file"
+            )
     return report
 
 

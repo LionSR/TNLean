@@ -133,9 +133,23 @@ def _refuses(entry: Path, fragment: str) -> bool:
 def test_a_stated_version_other_than_the_declared_one_fails() -> None:
     manifest = tenkz_ctan.read_manifest()
     assert not tenkz_ctan.check_version(tenkz_ctan.read_release(), manifest).failures
-    invented = tenkz_ctan.Release(version="9.9", date="1999-01-01")
+    invented = tenkz_ctan.Release(version="9.9", date="1999-02-01")
     failures = tenkz_ctan.check_version(invented, manifest).failures
-    assert len(failures) == 4, failures
+    assert len(failures) == 6, failures
+    assert any("year 1999" in reason for reason in failures), failures
+    assert any("month 2" in reason for reason in failures), failures
+
+
+def test_absent_material_is_reported_rather_than_raised() -> None:
+    manifest = {
+        "material": {
+            "README.md": "docs/tenkz/ctan/nothing-here.md",
+            "CITATION.cff": "docs/tenkz/ctan/nothing-here.cff",
+            "tenkz.bib": "docs/tenkz/ctan/nothing-here.bib",
+        }
+    }
+    report = tenkz_ctan.check_version(tenkz_ctan.read_release(), manifest)
+    assert len(report.failures) == 6, report.failures
 
 
 def test_the_archive_is_a_function_of_the_files_it_carries() -> None:
@@ -176,20 +190,69 @@ def test_staging_ignores_the_builders_file_creation_mask() -> None:
         assert (tree / "tenkz.sty").stat().st_mode & 0o777 == 0o644
         assert tree.stat().st_mode & 0o777 == 0o755
         assert (tree / "tenkz.sty").stat().st_mtime == 1000000
+        assert not tenkz_ctan.check_permissions(tree).failures
+        tree.chmod(0o700)
+        failures = tenkz_ctan.check_permissions(tree).failures
+        tree.chmod(0o755)
+    assert any("700" in reason for reason in failures), failures
 
 
 def test_the_environment_may_fix_the_timestamp() -> None:
     release = tenkz_ctan.Release(version="0.7", date="2026-07-22")
     previous = os.environ.get("SOURCE_DATE_EPOCH")
-    os.environ["SOURCE_DATE_EPOCH"] = "1600000000"
     try:
+        os.environ["SOURCE_DATE_EPOCH"] = "1600000000"
         assert tenkz_ctan.chosen_epoch(release) == 1600000000
+        # A zip entry carries no date before 1980, and 0 is the value the
+        # reproducibility convention hands out most often.
+        os.environ["SOURCE_DATE_EPOCH"] = "0"
+        assert tenkz_ctan.chosen_epoch(release) == tenkz_ctan.ZIP_EPOCH_FLOOR
+        with tempfile.TemporaryDirectory() as directory:
+            room = Path(directory)
+            subject = room / "tenkz.sty"
+            subject.write_text("% one\n", encoding="utf-8")
+            archive = tenkz_ctan.write_archive(
+                room, release, tenkz_ctan.chosen_epoch(release), {"tenkz.sty": subject}
+            )
+            assert archive.is_file()
     finally:
         if previous is None:
             del os.environ["SOURCE_DATE_EPOCH"]
         else:
             os.environ["SOURCE_DATE_EPOCH"] = previous
     assert tenkz_ctan.chosen_epoch(release) == release.epoch
+
+
+def test_the_clean_install_check_reads_where_the_runtime_came_from() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        record = Path(directory) / "smoke.fls"
+        record.write_text(
+            "PWD /work\n"
+            "INPUT /work/tenkz/tenkz.sty\n"
+            "INPUT /usr/share/texmf/tex/latex/tikz/tikz.sty\n"
+            "INPUT tenkz/tenkz-render.code.tex\n"
+            "OUTPUT /work/smoke.pdf\n",
+            encoding="utf-8",
+        )
+        opened = tenkz_ctan.resolved_runtime_files(record)
+    assert opened == ["/work/tenkz/tenkz.sty", "tenkz/tenkz-render.code.tex"], opened
+
+    with tempfile.TemporaryDirectory() as directory:
+        room = Path(directory).resolve()
+        unpacked = room / "tenkz"
+        unpacked.mkdir()
+        installed = room / "texmf"
+        installed.mkdir()
+        strangers = tenkz_ctan.foreign_runtime_files(
+            [
+                str(unpacked / "tenkz.sty"),
+                "tenkz/tenkz-render.code.tex",
+                str(installed / "tenkz-kernel.code.tex"),
+            ],
+            room,
+            unpacked,
+        )
+    assert strangers == [str(installed / "tenkz-kernel.code.tex")], strangers
 
 
 def test_names_outside_the_invariant_subset_fail() -> None:
