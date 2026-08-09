@@ -1,3 +1,241 @@
+\subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
+
+The tail and left boundary maps embed virtual-space data into a common
+ambient $(K+L)$-site Hilbert space.  This places the overlapping ground
+spaces as ranges of linear maps on the same ambient space, a necessary
+step before their projectors can be compared in the martingale condition.
+All statements are exact algebraic identities; no FNW contraction or
+norm estimate is derived here.
+
+\begin{definition}[Prefix restriction]\label{def:prefix_restrict}
+    \lean{MPSTensor.prefixRestrictₗ}
+    \leanok
+    \uses{def:tail_restrict_parent}
+    For $K,L\in\N$ and a fixed suffix configuration $\tau\colon\Fin L\to\Fin d$, the
+    \emph{prefix restriction} is the $\C$-linear map
+    $P_\tau\colon\C^{\Fin d^{K+L}}\to\C^{\Fin d^K}$ defined by
+    $(P_\tau\psi)(\sigma)=\psi(\sigma,\tau)$ for $\sigma\colon\Fin K\to\Fin d$.
+    This is the left-sided analogue of the suffix restriction of
+    Definition~\ref{def:tail_restrict_parent}.
+\end{definition}
+
+\begin{lemma}[Prefix restriction of a ground-space vector]\label{lem:prefix_restrict_ground_space_map}
+    \lean{MPSTensor.prefixRestrictₗ_groundSpaceMap}
+    \leanok
+    \uses{def:prefix_restrict, def:ground_space_map, lem:eval_word_append}
+    For every boundary matrix $X\in\MN{D}$ and every suffix $\tau$,
+    \begin{align}
+        P_\tau\bigl(\Gamma_{K+L}(X)\bigr)
+        &=\Gamma_K\bigl(A^\tau X\bigr).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_append}
+    Expand $\Gamma_{K+L}(X)(\sigma,\tau)=\tr(A^{\sigma,\tau}X)$,
+    factor $A^{\sigma,\tau}=A^\sigma A^\tau$, and use cyclicity of the trace
+    to move $A^\sigma$ to the front:
+    $\tr(A^\sigma(A^\tau X))=\Gamma_K(A^\tau X)(\sigma)$.
+\end{proof}
+
+\begin{definition}[Tail boundary map]\label{def:tail_boundary_map}
+    \lean{MPSTensor.tailBoundaryMap}
+    \leanok
+    \uses{def:ground_space_map}
+    For $K,L\in\N$, the \emph{tail boundary map} is the $\C$-linear map
+    \begin{align}
+        \Gamma^{\mathrm{tail}}_{K,L}\colon
+        \bigl((\Fin K\to\Fin d)\to\MN{D}\bigr)
+        \to\C^{\Fin d^{K+L}}
+    \end{align}
+    defined for every family $Y\colon(\Fin K\to\Fin d)\to\MN{D}$ by
+    \begin{align}
+        \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
+        &=\tr\bigl(A^\tau\,Y_u\bigr),
+    \end{align}
+    where $u\colon\Fin K\to\Fin d$ is the prefix and
+    $\tau\colon\Fin L\to\Fin d$ is the suffix.
+    When $Y_u=X A^u$ the output equals the standard $\Gamma_{K+L}(X)$.
+\end{definition}
+
+\begin{definition}[Left boundary map]\label{def:left_boundary_map}
+    \lean{MPSTensor.leftBoundaryMap}
+    \leanok
+    \uses{def:ground_space_map}
+    For $K,L\in\N$, the \emph{left boundary map} is the $\C$-linear map
+    \begin{align}
+        \Gamma^{\mathrm{left}}_{K,L}\colon
+        \bigl((\Fin L\to\Fin d)\to\MN{D}\bigr)
+        \to\C^{\Fin d^{K+L}}
+    \end{align}
+    defined for every family $Z\colon(\Fin L\to\Fin d)\to\MN{D}$ by
+    \begin{align}
+        \Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)
+        &=\tr\bigl(A^{u}\,Z_{\tau}\bigr),
+    \end{align}
+    where $u\colon\Fin K\to\Fin d$ is the prefix and
+    $\tau\colon\Fin L\to\Fin d$ is the suffix.
+    When $Z_\tau=A^\tau X$ the output equals the standard $\Gamma_{K+L}(X)$.
+\end{definition}
+
+\begin{theorem}[Tail boundary map factorization]\label{thm:tail_boundary_map_factorization}
+    \lean{MPSTensor.tailBoundaryMap_factorization}
+    \leanok
+    \uses{def:tail_boundary_map, def:ground_space_map, lem:eval_word_append}
+    The standard length-$(K+L)$ boundary map factors through the tail boundary map:
+    \begin{align}
+        \Gamma_{K+L}(X)
+        &=\Gamma^{\mathrm{tail}}_{K,L}\bigl(u\mapsto X A^{u}\bigr)
+    \end{align}
+    for every $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_append}
+    Write a configuration $\sigma\in\Fin d^{K+L}$ as $\sigma=(u,\tau)$ with
+    $u\in\Fin d^K$ and $\tau\in\Fin d^L$.  Substitute $Y_u=X A^u$ into the
+    definition of $\Gamma^{\mathrm{tail}}_{K,L}$, apply
+    $\tr(A^\tau(X A^u))=\tr(X A^u A^\tau)$ by cyclicity of the trace,
+    factor $A^u A^\tau=A^{u,\tau}$ by multiplicativity of word evaluation
+    (Lemma~\ref{lem:eval_word_append}), and identify the result with
+    $\Gamma_{K+L}(X)(u,\tau)=\tr(A^{u,\tau}X)$.
+\end{proof}
+
+\begin{theorem}[Tail boundary map range]\label{thm:tail_boundary_map_range_eq}
+    \lean{MPSTensor.tailBoundaryMap_range_eq}
+    \leanok
+    \uses{def:tail_boundary_map, def:ground_space_parent, def:tail_restrict_parent}
+    The range of the tail boundary map is exactly the tail ground space:
+    \begin{align}
+        \range\bigl(\Gamma^{\mathrm{tail}}_{K,L}\bigr)
+        &=\bigl\{\psi\in\C^{\Fin d^{K+L}}
+            \mid \forall u\in\Fin d^K,\;
+            R^{\mathrm{tail}}_u\psi\in G_L(A)\bigr\}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:tail_restrict_parent, def:ground_space_parent}
+    For the forward inclusion, if $\psi=\Gamma^{\mathrm{tail}}_{K,L}(Y)$ then
+    $R^{\mathrm{tail}}_u\psi=\Gamma_L(Y_u)$ for every prefix $u$, so the suffix
+    restriction lies in $G_L(A)$.
+    Conversely, given $\psi$ with $R^{\mathrm{tail}}_u\psi\in G_L(A)$ for every $u$,
+    choose for each $u$ a matrix $Y_u\in\MN{D}$ with
+    $\Gamma_L(Y_u)=R^{\mathrm{tail}}_u\psi$.  Then
+    $\Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)=\tr(A^\tau Y_u)
+    =\Gamma_L(Y_u)(\tau)=(R^{\mathrm{tail}}_u\psi)(\tau)=\psi(u,\tau)$,
+    so $\psi$ lies in the range.
+\end{proof}
+
+\begin{theorem}[Left boundary map factorization]\label{thm:left_boundary_map_factorization}
+    \lean{MPSTensor.leftBoundaryMap_factorization}
+    \leanok
+    \uses{def:left_boundary_map, def:ground_space_map, lem:eval_word_append}
+    The standard length-$(K+L)$ boundary map factors through the left boundary map:
+    \begin{align}
+        \Gamma_{K+L}(X)
+        &=\Gamma^{\mathrm{left}}_{K,L}\bigl(\tau\mapsto A^{\tau}X\bigr)
+    \end{align}
+    for every $X\in\MN{D}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_append}
+    Substitute $Z_\tau=A^\tau X$ into the definition of
+    $\Gamma^{\mathrm{left}}_{K,L}$, giving
+    $\tr(A^u(A^\tau X))=\tr((A^u A^\tau)X)$.  Factor $A^u A^\tau=A^{u,\tau}$ by
+    Lemma~\ref{lem:eval_word_append} and identify the result with
+    $\Gamma_{K+L}(X)(u,\tau)$.
+\end{proof}
+
+\begin{theorem}[Left boundary map range]\label{thm:left_boundary_map_range_eq}
+    \lean{MPSTensor.leftBoundaryMap_range_eq}
+    \leanok
+    \uses{def:left_boundary_map, def:ground_space_parent, def:prefix_restrict}
+    The range of the left boundary map is exactly the left ground space:
+    \begin{align}
+        \range\bigl(\Gamma^{\mathrm{left}}_{K,L}\bigr)
+        &=\bigl\{\psi\in\C^{\Fin d^{K+L}}
+            \mid \forall \tau\in\Fin d^L,\;
+            P_\tau\psi\in G_K(A)\bigr\}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:prefix_restrict, def:ground_space_parent}
+    The proof is symmetric to Theorem~\ref{thm:tail_boundary_map_range_eq}.
+    If $\psi=\Gamma^{\mathrm{left}}_{K,L}(Z)$ then
+    $P_\tau\psi=\Gamma_K(Z_\tau)$, so the prefix restriction lies in $G_K(A)$.
+    Conversely, given $\psi$ with $P_\tau\psi\in G_K(A)$ for every $\tau$, choose
+    $Z_\tau$ with $\Gamma_K(Z_\tau)=P_\tau\psi$; then
+    $\Gamma^{\mathrm{left}}_{K,L}(Z)(u,\tau)=\tr(A^u Z_\tau)
+    =\Gamma_K(Z_\tau)(u)=(P_\tau\psi)(u)=\psi(u,\tau)$.
+\end{proof}
+
+\begin{theorem}[Tail boundary map range: Euclidean-space transport]\label{thm:tail_boundary_map_range_es_transport}
+    \lean{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES}
+    \leanok
+    \uses{thm:tail_boundary_map_range_eq, def:open_chain_ground_subspaces_es}
+    For every $K,L\in\N$, transport of the tail boundary map range by the
+    inverse canonical $\ell^2$ isomorphism
+    identifies it with the open-chain tail ground submodule:
+    \begin{align}
+        \iota_{K+L}^{-1}\bigl(\range(\Gamma^{\mathrm{tail}}_{K,L})\bigr)
+        &=\mathcal V_{K,L}(A).
+    \end{align}
+    Concretely, a vector $v$ in the $(K+L)$-site Euclidean space belongs to
+    $\mathcal V_{K,L}(A)$ exactly when the corresponding function satisfies the
+    tail ground condition (Definition~\ref{def:in_tail_ground}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:tail_boundary_map_range_eq}
+    By Theorem~\ref{thm:tail_boundary_map_range_eq}, the range equals the
+    intersection over prefixes $u$ of the ground-space comaps
+    $(R^{\mathrm{tail}}_u)^{-1}(G_L(A))$.  Transporting this intersection
+    through the canonical $\ell^2$ identification and unfolding the definition
+    of $\mathcal V_{K,L}(A)$ (Definition~\ref{def:open_chain_ground_subspaces_es})
+    gives the stated equality.
+\end{proof}
+
+\begin{theorem}[Left boundary map range: Euclidean-space transport ($L=1$)]%
+    \label{thm:left_boundary_map_range_es_transport}
+    \lean{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES}
+    \leanok
+    \uses{thm:left_boundary_map_range_eq, def:open_chain_ground_subspaces_es}
+    At $L=1$, transport of the left boundary map range by the inverse canonical
+    $\ell^2$ isomorphism identifies
+    it with the open-chain left ground submodule:
+    \begin{align}
+        \iota_{K+1}^{-1}\bigl(\range(\Gamma^{\mathrm{left}}_{K,1})\bigr)
+        &=\mathcal U_K(A).
+    \end{align}
+    Concretely, a vector $v$ in the $(K+1)$-site Euclidean space belongs to
+    $\mathcal U_K(A)$ exactly when the corresponding function satisfies the
+    left ground condition (every fixed-final-site restriction lies in $G_K(A)$;
+    Definition~\ref{def:in_left_ground}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:left_boundary_map_range_eq, def:prefix_restrict, def:restrict_last}
+    By Theorem~\ref{thm:left_boundary_map_range_eq} with $L=1$, the range equals
+    the intersection over suffixes $\tau\colon\Fin 1\to\Fin d$ of the comaps
+    $P_\tau^{-1}(G_K(A))$.  For $L=1$, each suffix $\tau$ is determined by a
+    single index $j\in\Fin d$, and the prefix restriction $P_\tau$ reduces to
+    $R^\mathrm{last}_j$, the last-site restriction of
+    Definition~\ref{def:restrict_last}
+    (Lemma~\ref{lem:prefix_restrict_ground_space_map}).  Transporting the
+    resulting intersection through the canonical $\ell^2$ identification and
+    unfolding Definition~\ref{def:open_chain_ground_subspaces_es} gives
+    $\mathcal U_K(A)$.
+\end{proof}
 \subsection{Martingale gap consequences}\label{subsec:spectral_gap_martingale}
 
 \begin{theorem}[Martingale criterion for spectral gap]\label{thm:martingale_criterion}
