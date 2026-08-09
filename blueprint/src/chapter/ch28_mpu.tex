@@ -313,8 +313,8 @@ closing a chain of $N$ copies of $\mathcal U$.
         \bigl(E^L\bigr)_{q^{-1}(a),q^{-1}(b)}.
     \end{align}
     Thus the row and column reindexings have the same explicit orientation.
-    At the stabilization exponent $J$, this diagonal is the same reindexing of
-    the rank-one projector $|\rho)(\Phi|$.
+    If $D>1$, then at the stabilization exponent $J$ this diagonal is the
+    same reindexing of the rank-one projector $|\rho)(\Phi|$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -335,7 +335,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.exists_identity_add_traceless_decomposition,
         MPOTensor.residualSlice_eq_contractPhysical_tracelessPart}
     \leanok
-    For every double-layer tensor $\mathcal W$, there is a basis
+    Assume $d>0$.  For every double-layer tensor $\mathcal W$, there is a basis
     $\{\sigma_0,\sigma_\alpha\}$ of the physical matrix algebra and virtual
     matrices $E,S_\alpha$ such that $\sigma_0=\Id$ and, for every nonzero
     index $\alpha$, $\tr(\sigma_\alpha)=0$, while
@@ -391,6 +391,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     factor into the product of the physical traces.
 \end{proof}
 
+% Paper gap: docs/paper-gaps/mpu_one_letter_mixed_residual_trace.tex
+% Tracking issue: https://github.com/LionSR/TNLean/issues/5807
 \begin{theorem}[Positive-length mixed residual traces]
     \label{thm:mpu_positive_mixed_residual_trace}
     Every closed product of positive length that contains at least one
@@ -426,7 +428,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \leanok
     \uses{def:mpu,def:mpu_double_layer,
         thm:mpu_blocked_double_layer_diagonal}
-    Let $N>1$.  Every closed product of $N$ identity and residual
+    Let $\mathcal U$ be an MPU with physical dimension $d>0$, and let
+    $N>1$.  Every closed product of $N$ identity and residual
     coefficients that contains at least one residual coefficient has zero
     trace.  If the normalized diagonal is rank one, then every nonempty
     residual word $P$ satisfies
