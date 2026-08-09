@@ -21,6 +21,7 @@ import TNLean.Analysis.EntropyMarkovForward
 import TNLean.Analysis.EntropyMarkovReverse
 import TNLean.Analysis.EntropyReindex
 import TNLean.Analysis.HayashiMarkovStructure
+import TNLean.Analysis.InjectiveRangeProjector
 import TNLean.Analysis.IsometricCompression
 import TNLean.Analysis.JordanBlockPower
 import TNLean.Analysis.KleinInequality
@@ -35,6 +36,7 @@ import TNLean.Analysis.MatrixOrderTopology
 import TNLean.Analysis.MatrixSqrt
 import TNLean.Analysis.MatrixTraceInequalities
 import TNLean.Analysis.MeanErgodic
+import TNLean.Analysis.NeumannInverse
 import TNLean.Analysis.OperatorConvexity
 import TNLean.Analysis.PosSemidefCommute
 import TNLean.Analysis.ProbabilityEntropy

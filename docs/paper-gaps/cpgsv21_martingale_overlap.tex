@@ -457,6 +457,93 @@ explicit than the review paragraph: the exact constants and the cyclic-window
 blocking convention still have to be compared with the FNW, Nachtergaele, and
 Kastoryano--Lucia estimates.
 
+\section{Inverse-Gram infrastructure and the remaining FNW contraction}
+
+For $n\ge1$, write $[n]:=\{0,\ldots,n-1\}$.  Fix an MPS tensor
+$A=\{A^s\}_{s\in[d]}$ with $A^s\in\mathbb C^{D\times D}$.  For
+$a,b\in[D]$, let $E_{ab}$ be the matrix unit with its only nonzero entry,
+equal to one, in row $a$ and column $b$.  The transfer map and its $L$-fold
+composition are
+\begin{align}
+  \mathcal E_A(X)
+    &:=\sum_{s\in[d]}A^sX(A^s)^\dagger,
+  &
+  \mathcal E_A^L
+    &:=\underbrace{\mathcal E_A\circ\cdots\circ\mathcal E_A}_{L\text{ factors}}.
+\end{align}
+For a linear map $T\colon\mathbb C^{D\times D}\to
+\mathbb C^{D\times D}$, this note uses the rectangular Choi convention
+\begin{align}
+  J(T)_{(i,a),(j,b)}
+    &:=(T(E_{ij}))_{a,b}.
+\end{align}
+
+The open-chain boundary map is
+\begin{align}
+  \Gamma_L(X)(\sigma)
+    &:=\operatorname{tr}(A^\sigma X).
+\end{align}
+Let $U\colon\mathbb C^{D\times D}\to\ell^2([D]\times[D])$ be Frobenius
+vectorization, so that $U(E_{ab})=\mathbf e_{(b,a)}$ for the standard unit
+vector $\mathbf e_{(b,a)}$.  After the canonical physical $\ell^2$
+identification, write $\Gamma_L^{\mathrm{ES}}$ for the transported boundary
+map and
+\begin{align}
+  \mathcal K_L
+    &:=(\Gamma_L^{\mathrm{ES}})^\dagger\Gamma_L^{\mathrm{ES}}.
+\end{align}
+Its finite-dimensional Hilbert realization, exact range, and Gram operator are
+recorded by \leanid{MPSTensor.groundSpaceMapES},
+\leanid{MPSTensor.range_groundSpaceMapES}, and
+\leanid{MPSTensor.groundSpaceGram}.  With the coordinate order just fixed, the
+exact identity is
+\begin{align}
+  \left\langle \mathbf e_{(b,a)},
+    \mathcal K_L(\mathbf e_{(e,c)})\right\rangle_{\ell^2}
+    &=J(\mathcal E_A^L)_{(c,e),(a,b)}
+      =(\mathcal E_A^L(E_{ca}))_{e,b}.
+\end{align}
+This is \leanid{MPSTensor.inner_single_groundSpaceGram_single_eq_rectangularChoi}.
+The ordering on the right is a Choi reshuffling.  It must not be replaced by the
+generally false Hilbert--Schmidt expression
+$\langle E_{ab},\mathcal E_A^L(E_{ce})\rangle_{\mathrm{HS}}$.
+
+The generic identity
+\begin{align}
+  P_{\operatorname{ran}T}
+    &=T(T^\dagger T)^{-1}T^\dagger
+\end{align}
+for injective finite-dimensional maps is
+\leanid{ContinuousLinearMap.injectiveRangeProjector_eq_starProjection}, and the
+denominator estimate $\|(1-t)^{-1}\|\le(1-a)^{-1}$ under
+$\|t\|\le a<1$ is \leanid{NormedRing.norm_inverse_one_sub_le}.
+Consequently the physical local ground projector is the orthogonal projector
+onto $\operatorname{ran}\Gamma_L$.  It is not the transfer fixed-point
+projector \leanid{fixedPointProj}; the latter acts on the virtual matrix space
+and cannot substitute for the inverse-Gram formula.
+
+To state the source estimate, let $l\in\mathbb N$ be the overlap length and let
+$0\le\lambda<1$ be an admissible transfer-mixing rate satisfying
+$|\mu|<\lambda$ for every non-unit eigenvalue $\mu$ of the relevant transfer
+operator.  Let $c\ge0$ be its prefactor; the source allows $c=k^2$ when $k$ is
+the auxiliary, or bond, dimension.  Choose $l$ so that $c\lambda^l<1$.  These
+are parameters of the quoted FNW estimate, not bounds derived by the present
+formal infrastructure.
+
+What remains open is the source-specific FNW comparison of the inverse-Gram
+range projectors on the two overlapping physical windows.  In particular, the
+present infrastructure does not prove the contraction
+\begin{align}
+  c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
+  \qquad c\lambda^l<1,
+\end{align}
+which appears as equation \path{boundAm} in
+\cite[Section~6]{Nachtergaele1996Spectral}; it does not identify the physical
+projector with a transfer fixed-point projector, and it does not establish the
+final numerical overlap or spectral-gap bound.  That load-bearing
+overlapping-window estimate remains the MPS-specific task tracked in issue
+\#5752.
+
 \textbf{Verdict:} open gap.
 
 \bibliographystyle{alpha}
