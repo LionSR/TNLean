@@ -457,7 +457,7 @@ explicit than the review paragraph: the exact constants and the cyclic-window
 blocking convention still have to be compared with the FNW, Nachtergaele, and
 Kastoryano--Lucia estimates.
 
-\section{Inverse-Gram infrastructure and the remaining FNW contraction}
+\section{Inverse-Gram reduction and the remaining FNW contraction}
 
 For $n\ge1$, write $[n]:=\{0,\ldots,n-1\}$.  Fix an MPS tensor
 $A=\{A^s\}_{s\in[d]}$ with $A^s\in\mathbb C^{D\times D}$.  For
@@ -567,15 +567,43 @@ $|\mu|<\lambda$ for every non-unit eigenvalue $\mu$ of the relevant transfer
 operator.  Let $c\ge0$ be its prefactor; the source allows $c=k^2$ when $k$ is
 the auxiliary, or bond, dimension.  Choose $l$ so that $c\lambda^l<1$.  These
 are parameters of the quoted FNW estimate, not bounds derived by the present
-formal infrastructure.
+formal development.
 
 What remains open is the source-specific comparison of these exact inverse-Gram
-range projectors on the two overlapping physical windows.  The next formal
-steps are to package the Choi reshuffling as an operator identity with a verified
-norm bound, construct the spectator-indexed boundary maps for the left and tail
-windows, and derive their common-ambient contraction directly from the MPS word
-factorization.  In particular, the present infrastructure does not prove the
-contraction
+range projectors on the two overlapping physical windows.  The first two formal
+steps are now completed:
+\begin{itemize}
+  \item The Choi reshuffling is packaged as the exact operator identity
+    \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} (module
+    \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}).
+  \item The spectator-indexed boundary maps for the tail and left windows are
+    defined in \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean},
+    together with their exact range equalities
+    (\leanid{MPSTensor.tailBoundaryMap_range_eq},
+     \leanid{MPSTensor.leftBoundaryMap_range_eq})
+    and word-factorization identities
+    (\leanid{MPSTensor.tailBoundaryMap_factorization},
+     \leanid{MPSTensor.leftBoundaryMap_factorization}).
+    These place the overlapping ground spaces as ranges of boundary maps on the
+    same ambient \(\mathcal H_{K+L}\).
+\end{itemize}
+Specializing the tail transport theorem to \((K, L_0+1)\) identifies its
+range with the open-chain tail subspace \(V\), while specializing the left
+transport theorem to \((K+L_0, 1)\) identifies its range with the open-chain
+left subspace \(U\), both in the common ambient
+\(\mathcal H_{K+L_0+1}\); see Section~\ref{sec:open_chain_projector_geometry}.
+The remaining task is to bound the defect
+\begin{align}
+  \|P_V P_U-P_{U\cap V}\|
+\end{align}
+from the Gram/transfer identities, the word-factorization, and
+inverse-Gram norm control.  The present formal development does not yet
+bound \(\|1-\mathcal K_L\|\) (the deviation of the Gram operator from the
+correctly normalized limiting Gram) by the transfer-mixing rate, so the
+inverse-Gram estimate cannot yet be instantiated; the bounds on
+\(P_VP_U-P_{U\cap V}\) are therefore conditional on both the transfer
+spectral estimate and the Gram-deviation control.  The development does not
+prove the contraction
 \begin{align}
   c\lambda^l\frac{1+c\lambda^l}{1-c\lambda^l},
   \qquad c\lambda^l<1,
@@ -583,9 +611,10 @@ contraction
 which appears as equation \path{boundAm} in
 \cite[Section~6]{Nachtergaele1996Spectral}; it does not identify the physical
 projector with a transfer fixed-point projector, and it does not establish the
-final numerical overlap or spectral-gap bound.  That load-bearing
-overlapping-window estimate remains the MPS-specific task tracked in issue
-\#5752.
+final numerical overlap or spectral-gap bound.  That overlapping-window
+estimate remains open; both boundary maps are unweighted (Frobenius) and the
+Gram identities are normalization-neutral, so the contraction estimate may
+require a second fixed-point metric or weighted boundary coordinates.
 
 \textbf{Verdict:} open gap.
 
