@@ -644,8 +644,9 @@ open RingSeminorm
 
 /-- **Wolf Eq. (8.103)** with coarse constant \((D-1)n^{D-1}\).
 
-Assumes \(D-1\le n\), so the exponent \(n-(D-1)\) is natural.
-The natural-exponent range restriction is documented in the accompanying paper-gap note. -/
+**Scope restriction (natural exponent):** Wolf prints the estimate for every natural \(n\),
+but the source exponent \(n-D+1\) is negative when \(n<D-1\). This theorem assumes
+\(D-1\le n\). See docs/paper-gaps/wolf_ch8_eq_8_103_negative_exponent.tex. -/
 theorem wolf_eq_103 (ν : RingSeminorm (Matrix (Fin D) (Fin D) R))
     (hΛ_diag : IsDiag Λ) (hN_sut : IsStrictlyUpperTriangular N)
     (hDpos : D ≠ 0) (hn_ge : D - 1 ≤ n) (hνΛ : ν Λ ≤ 1) :
