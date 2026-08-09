@@ -93,8 +93,8 @@ theorem cornerFixedPoints_blockDiagonal_iff
   have hQproj : IsOrthogonalProjection Q := isOrthogonalProjection_stationaryProj hρ_psd
   have hInv : ∀ i : Fin d, (1 - Q) * K i * Q = 0 :=
     stationaryProj_lowerZero K hρ_psd hρ_fix
-  have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
-  have hρQ : ρ * Q = ρ := MPSTensor.mul_supportProj (D := D) (ρ := ρ) hρ_psd
+  have hQρ : Q * ρ = ρ := stationaryProj_mul hρ_psd
+  have hρQ : ρ * Q = ρ := mul_stationaryProj hρ_psd
   have hQρQ : Q * ρ * Q = ρ := by rw [hQρ, hρQ]
   set A : Fin d → Mat := cornerCompressionKraus K Q with hAdef
   have hAsupp : ∀ i : Fin d, Q * A i * Q = A i :=
@@ -106,13 +106,6 @@ theorem cornerFixedPoints_blockDiagonal_iff
     exists_cornerCompression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
-  have hCi : ∀ i : Fin d, C i = Vᴴ * A i * V := by
-    intro i
-    have h : V * C i * Vᴴ = A i := by simpa [hφV] using hLetter i
-    calc
-      C i = (Vᴴ * V) * C i * (Vᴴ * V) := by rw [hVtV]; simp
-      _ = Vᴴ * (V * C i * Vᴴ) * V := by simp [Matrix.mul_assoc]
-      _ = Vᴴ * A i * V := by rw [h]
   -- The compressed Schrödinger map has the positive definite fixed point `σ`.
   set σ : Matrix (Fin r) (Fin r) ℂ := Vᴴ * ρ * V with hσdef
   have hσpd : σ.PosDef := by
