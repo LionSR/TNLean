@@ -94,7 +94,12 @@ theorem eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt
 spectrum of `A`.
 
 This is the existence part of the spectral conclusion in arXiv:1703.09188,
-Proposition `prop:normal-tensor`, lines 349--354. -/
+Proposition `prop:normal-tensor`, lines 349--354.
+
+**Scope restriction (set spectrum only):** the source proposition also states
+that the sole nonzero eigenvalue has algebraic multiplicity one. This theorem
+proves only that `1` is a spectral value. See
+`docs/paper-gaps/cpsv17_transfer_trace_power.tex`. -/
 theorem one_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt
     (A : Matrix n n ℂ)
     (h : ∀ k : ℕ, 1 < k → trace (A ^ k) = 1) :
