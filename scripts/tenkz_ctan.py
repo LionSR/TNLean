@@ -137,6 +137,18 @@ ZIP_EPOCH_CEILING = int(
 # or without a change record, and every check below it would still pass.
 REQUIRED_MATERIAL = ("README.md", "LICENSE", "CHANGES.md", "CITATION.cff", "tenkz.bib")
 
+# A phrase each required file carries if it is the file its staged name says.
+# Existence is not identity: a manifest can point a staged name at the wrong
+# existing file, and an upload whose LICENSE is the change record is worse
+# than one with no licence at all, because it looks answered.
+MATERIAL_MARKS = {
+    "README.md": "## Requirements",
+    "LICENSE": "Apache License",
+    "CHANGES.md": "# tenkz",
+    "CITATION.cff": "cff-version:",
+    "tenkz.bib": "@manual{tenkz",
+}
+
 # The one licence marker every runtime file carries, and the sentence beside
 # it. Both are checked; the identifier is what a machine reads.
 LICENSE_MARKER = "% SPDX-License-Identifier: Apache-2.0"
@@ -326,6 +338,13 @@ def clear_destination(destination: Path) -> None:
     rebuilding in place. So the directory itself is never removed: the staged
     tree and the archives this tool writes are, and anything else standing
     there stops the run.
+
+    Recognizing artifacts by name is not enough on its own. `tex/` holds a
+    directory called `tenkz`, and it is the package's sources; a destination
+    inside the repository is therefore confined to `build/`, which the
+    repository ignores and which holds nothing else's work. Outside the
+    repository any directory will do, as long as it holds only this tool's
+    artifacts.
     """
 
     resolved = destination.resolve()
@@ -333,6 +352,11 @@ def clear_destination(destination: Path) -> None:
         raise SystemExit(
             f"{resolved} contains the repository (or is the file-system root) "
             "and is not an output directory"
+        )
+    if resolved.is_relative_to(ROOT) and not resolved.is_relative_to(ROOT / "build"):
+        raise SystemExit(
+            f"{resolved} is inside the repository and outside build/; an output "
+            "directory there would stand among tracked files"
         )
     if not resolved.exists():
         return
@@ -425,6 +449,18 @@ def build(destination: Path) -> tuple[Path, Release, str]:
     return archive, release, hashlib.sha256(archive.read_bytes()).hexdigest()
 
 
+def even_second(epoch: int) -> int:
+    """The moment a zip entry can actually store.
+
+    A zip date field counts in two-second steps, so an odd second stamped on
+    the staged tree would arrive in the archive as the second before it, and
+    the tree and the archive would disagree about the one timestamp they are
+    supposed to share.
+    """
+
+    return epoch - (epoch % 2)
+
+
 def chosen_epoch(release: Release) -> int:
     """`SOURCE_DATE_EPOCH` when the environment sets it, the package date else.
 
@@ -436,7 +472,7 @@ def chosen_epoch(release: Release) -> int:
 
     value = os.environ.get("SOURCE_DATE_EPOCH")
     if not value:
-        return max(release.epoch, ZIP_EPOCH_FLOOR)
+        return even_second(max(release.epoch, ZIP_EPOCH_FLOOR))
     try:
         chosen = int(value)
     except ValueError:
@@ -448,7 +484,7 @@ def chosen_epoch(release: Release) -> int:
             f"SOURCE_DATE_EPOCH is {chosen}, later than the last moment a zip "
             f"entry can carry ({ZIP_EPOCH_CEILING}, the end of 2107)"
         )
-    return max(chosen, ZIP_EPOCH_FLOOR)
+    return even_second(max(chosen, ZIP_EPOCH_FLOOR))
 
 
 # --------------------------------------------------------------------------
@@ -539,6 +575,18 @@ def check_material(manifest: dict) -> Report:
     for name, relative in declared.items():
         source = ROOT / relative
         report.require(source.is_file(), f"{relative} is declared and missing")
+    # What each required name must turn out to be. A manifest that points a
+    # staged name at the wrong existing file — the change record staged as
+    # LICENSE, say — passes every check that only asks whether a path exists.
+    for name, mark in MATERIAL_MARKS.items():
+        text = _material_text(manifest, name)
+        if not text:
+            continue
+        report.require(
+            mark in text,
+            f"the file staged as {name} does not read as one: it does not "
+            f"contain {mark!r}",
+        )
     text = _material_text(manifest, "README.md")
     if not text:
         return report
@@ -852,15 +900,22 @@ def release_sync(release: Release) -> list[tuple[str, str]]:
     the agreement a tag requires.
     """
 
-    manual = (ROOT / "docs/tenkz/manual2.tex").read_text(encoding="utf-8")
-    changes = (ROOT / "docs/tenkz/CHANGES.md").read_text(encoding="utf-8")
-    tnlog = (ROOT / "docs/tenkz/TNLOG.md").read_text(encoding="utf-8")
+    def text(relative: str) -> str:
+        # The report is the last thing the command prints, after the findings
+        # it exists to report. A missing artifact must not replace them.
+        path = ROOT / relative
+        return path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
+
+    manual = text("docs/tenkz/manual2.tex")
+    changes = text("docs/tenkz/CHANGES.md")
+    tnlog = text("docs/tenkz/TNLOG.md")
     dateline = re.search(r"The TNLean project \\quad---\\quad ([^\\]*)\\par", manual)
     event = re.search(r'^version = "([0-9.]+)"', tnlog, re.MULTILINE)
+    heading = changes.splitlines()[0].lstrip("# ").strip() if changes else "absent"
     return [
         ("tex/tenkz/tenkz.sty", f"v{release.version} of {release.date}"),
         ("docs/tenkz/manual2.tex", (dateline.group(1).strip() if dateline else "no date line")),
-        ("docs/tenkz/CHANGES.md", changes.splitlines()[0].lstrip("# ").strip()),
+        ("docs/tenkz/CHANGES.md", heading),
         ("docs/tenkz/TNLOG.md", f"event format {event.group(1)}" if event else "no version"),
     ]
 

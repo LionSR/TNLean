@@ -307,6 +307,10 @@ def test_the_environment_may_fix_the_timestamp() -> None:
     try:
         os.environ["SOURCE_DATE_EPOCH"] = "1600000000"
         assert tenkz_ctan.chosen_epoch(release) == 1600000000
+        # A zip date counts in two-second steps, so an odd second stamped on
+        # the tree would arrive in the archive as the second before it.
+        os.environ["SOURCE_DATE_EPOCH"] = "1600000001"
+        assert tenkz_ctan.chosen_epoch(release) == 1600000000
         # A zip entry carries no date before 1980, and 0 is the value the
         # reproducibility convention hands out most often.
         os.environ["SOURCE_DATE_EPOCH"] = "0"
@@ -429,6 +433,31 @@ def test_an_output_directory_loses_only_this_tools_artifacts() -> None:
     else:
         raise AssertionError("the repository was accepted as an output directory")
 
+    # `tex/` holds a directory called `tenkz`, and it is the package's own
+    # sources. Recognizing artifacts by name cannot be the only guard.
+    try:
+        tenkz_ctan.clear_destination(ROOT / "tex")
+    except SystemExit as refusal:
+        assert "outside build/" in str(refusal), str(refusal)
+    else:
+        raise AssertionError("the source directory was accepted as an output directory")
+    assert (ROOT / "tex/tenkz/tenkz.sty").is_file()
+
+
+def test_a_material_name_pointed_at_the_wrong_file_is_reported() -> None:
+    manifest = tenkz_ctan.read_manifest()
+    swapped = {
+        "material": dict(
+            manifest["material"],
+            **{
+                "LICENSE": manifest["material"]["CHANGES.md"],
+                "CHANGES.md": manifest["material"]["LICENSE"],
+            },
+        )
+    }
+    report = tenkz_ctan.check_material(swapped)
+    assert any("staged as LICENSE" in reason for reason in report.failures), report.failures
+
 
 def test_material_from_outside_the_repository_is_refused() -> None:
     closure = tenkz_ctan.walk_closure()
@@ -483,6 +512,26 @@ def test_the_clean_install_failure_paths_report_what_went_wrong() -> None:
         "the engine's own complaint" in reason for reason in failed.failures
     ), failed.failures
     assert any("120 seconds" in reason for reason in timed_out.failures), timed_out.failures
+
+
+def test_the_release_report_survives_an_absent_artifact() -> None:
+    """It is printed after the findings, so it must not replace them."""
+
+    release = tenkz_ctan.read_release()
+    root = tenkz_ctan.ROOT
+    try:
+        with tempfile.TemporaryDirectory() as directory:
+            tenkz_ctan.ROOT = Path(directory)
+            rows = tenkz_ctan.release_sync(release)
+    finally:
+        tenkz_ctan.ROOT = root
+    assert [artifact for artifact, _ in rows] == [
+        "tex/tenkz/tenkz.sty",
+        "docs/tenkz/manual2.tex",
+        "docs/tenkz/CHANGES.md",
+        "docs/tenkz/TNLOG.md",
+    ], rows
+    assert dict(rows)["docs/tenkz/CHANGES.md"] == "absent", rows
 
 
 def test_check_passes_now() -> None:
