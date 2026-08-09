@@ -177,7 +177,7 @@ private theorem transferMap_weightedBlock_blockFixedVector
         (data.blockFixedVector k.1) =
       data.activeTransferEigenvalue k • data.blockFixedVector k.1 := by
   rw [transferMap_smul, data.transferMap_blockFixedVector]
-  rfl
+  simp [activeTransferEigenvalue]
 
 /-- The ambient matrix obtained by transporting one active block fixed vector. -/
 private noncomputable def ambientActiveVector
