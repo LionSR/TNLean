@@ -25,7 +25,7 @@ not hypotheses of the theorem.
 \section{The restriction in the formalization}
 
 The available Lean statement is
-\leanid{MPSTensor.peripheralEigenvalues\_eq\_range\_primitiveRoot} in
+\leanid{MPSTensor.peripheralEigenvalues_eq_range_primitiveRoot} in
 \texttt{TNLean/Channel/Peripheral/CyclicGroup.lean}. It is stated for a finite
 matrix family $K$ and its Kraus map
 \[
@@ -49,5 +49,11 @@ operators. The finite-group argument in the present cyclicity theorem then
 applies unchanged. Once that abstract result exists, the Kraus theorem should
 be retained as a specialization rather than serving as the source-facing form
 of Wolf Theorem 6.6.
+
+\section{Verdict}
+
+This is a \textbf{scope restriction}: the formal theorem proves Wolf Theorem
+6.6 only under the stronger complete-positivity hypothesis supplied by a
+finite Kraus representation. The abstract Schwarz-map case remains open.
 
 \end{document}
