@@ -830,7 +830,13 @@ sum are read from the class the mathematics already has.
    that takes none, is refused rather than ignored, because a spelling the
    audit passes over is a comparison the author believes is running and is
    not.
-5. **Coefficients and summations need no key.** A scalar coefficient is a
+5. **A declaration is setup and stands before the equation.** An equation
+   places pictures around the mathematics between them; a declaration made
+   among its panels is a document-wide act performed in the middle of an
+   assertion, ordered by where it happens to sit and read once for every time
+   the equation is measured. It is refused, and written before the equation,
+   where it says the same thing once.
+6. **Coefficients and summations need no key.** A scalar coefficient is a
    term of empty signature; juxtaposition is a product; concatenating an
    empty signature leaves the panel's boundary as it was. A summation sign is
    likewise mathematics, set west of the panel on the shared axis, its limits

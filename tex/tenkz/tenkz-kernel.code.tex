@@ -334,11 +334,10 @@
 \bool_new:N \l__tenkz_kernel_eq_probe_bool    % inside the measuring run
 \prop_new:N \g__tenkz_kernel_eq_extent_prop   % size class -> "wd,ht,dp"
 \box_new:N  \l__tenkz_kernel_eq_probe_box
+\box_new:N  \l__tenkz_kernel_eq_name_box
 \int_new:N  \l__tenkz_kernel_eq_saved_picture_int
 \int_new:N  \l__tenkz_kernel_eq_saved_scope_int
 \int_new:N  \l__tenkz_kernel_eq_saved_group_int
-\prop_new:N \l__tenkz_kernel_eq_saved_skin_prop
-\prop_new:N \l__tenkz_kernel_eq_saved_species_prop
 \seq_new:N  \l__tenkz_kernel_eq_saved_seq
 \tl_new:N   \l__tenkz_kernel_eq_extent_key_tl
 \tl_new:N   \l__tenkz_kernel_eq_extent_tl
@@ -2563,7 +2562,6 @@
 % \tndeclare{class}{name}{keys}: the one extension door.  A declared atom
 % mints a one-label command; skins and species are descriptor tables the
 % style stage consumes.
-\seq_new:N  \g__tenkz_kernel_eq_declared_gseq
 \prop_new:N \g__tenkz_kernel_species_prop
 \prop_new:N \g__tenkz_kernel_species_hue_prop
 \prop_new:N \g__tenkz_kernel_skin_prop
@@ -2656,12 +2654,6 @@
   }
 \cs_new_protected:Npn \__tenkz_kernel_declare_atom_aux:nn #1#2
   {
-    % A panel measured for an equation may declare an atom of its own, and
-    % the declaration is global.  The measuring run notes what it minted so
-    % the real run can mint it again from an undefined name, which is what
-    % the declaration asks of the document and what the author wrote once.
-    \bool_if:NT \l__tenkz_kernel_eq_probe_bool
-      { \seq_gput_right:Nn \g__tenkz_kernel_eq_declared_gseq {#1} }
     \exp_args:Nc \NewDocumentCommand {#1} { O{} m }
       { \__tenkz_kernel_tn:nn { #2 , ##1 } {##2} \ignorespaces }
   }
@@ -7652,15 +7644,24 @@
         \prop_get:NVNTF \g__tenkz_kernel_eq_extent_prop
           \l__tenkz_kernel_eq_extent_key_tl \l__tenkz_kernel_eq_extent_tl
           {
+            % The measure is a floor and never a cap: a name the measuring
+            % run did not see -- one a macro brings to a panel the body does
+            % not spell out -- keeps its own width rather than being pushed
+            % out of the ink holding it.
+            \hbox_set:Nn \l__tenkz_kernel_eq_name_box {#2}
             \hbox_to_wd:nn
-              { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {1} }
+              {
+                \dim_max:nn
+                  { \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {1} }
+                  { \box_wd:N \l__tenkz_kernel_eq_name_box }
+              }
               {
                 \tex_hss:D
                 \tex_vrule:D width \c_zero_dim
                   height \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {2}
                   depth \clist_item:Nn \l__tenkz_kernel_eq_extent_tl {3}
                 \scan_stop:
-                #2
+                \box_use:N \l__tenkz_kernel_eq_name_box
                 \tex_hss:D
               }
           }
@@ -18597,8 +18598,21 @@
   { \__tenkz_kernel_tnmark:nnn {#1} {#2} {#3} }
 \NewDocumentCommand \__tenkz_kernel_tngroup_cmd { O{} m }
   { \__tenkz_kernel_tngroup:nn {#1} {#2} }
+% A declaration is setup, and setup does not stand inside a composition
+% form.  An equation places pictures around the mathematics between them; a
+% declaration made there is a document-wide act performed in the middle of an
+% assertion, ordered by where it happens to sit among the panels, and read
+% once for each time the equation is measured.  It is refused, and the author
+% writes it before the equation, where it says the same thing once.
+\msg_new:nnn {tenkz}{kernel-declare-equation}
+  { [TKZ-DECLARE-EQUATION]~a~declaration~is~setup~and~belongs~before~the~
+    equation,~not~among~its~panels. }
 \NewDocumentCommand \__tenkz_kernel_tndeclare_cmd { m m m }
-  { \__tenkz_kernel_tndeclare:nnn {#1} {#2} {#3} }
+  {
+    \bool_if:NTF \l__tenkz_kernel_ineq_bool
+      { \msg_error:nn {tenkz}{kernel-declare-equation} }
+      { \__tenkz_kernel_tndeclare:nnn {#1} {#2} {#3} }
+  }
 
 % sugar commands: one-line reassemblies of kernel calls
 \NewDocumentCommand \__tenkz_kernel_tnbond_cmd { O{} m m }
@@ -18741,6 +18755,16 @@
   { error, warning }
 \cs_new_protected:Npn \__tenkz_kernel_eq_measure:
   {
+    % A body that declares takes no measure.  The declaration is refused
+    % when it runs, and refusing it twice -- once silently, in a run whose
+    % diagnostics are held back, and once for the author -- would leave the
+    % measuring run drawing panels whose own commands were never minted.
+    \regex_match:nVTF { \c{tndeclare} } \l__tenkz_kernel_eq_body_tl
+      { }
+      { \__tenkz_kernel_eq_measure_run: }
+  }
+\cs_new_protected:Npn \__tenkz_kernel_eq_measure_run:
+  {
     \group_begin:
       \bool_set_true:N \l__tenkz_kernel_eq_probe_bool
       % A picture's own topology prepass silences the stream and then puts
@@ -18756,11 +18780,6 @@
         { \g__tenkz_kernel_eq_scope_int }
       \int_set:Nn \l__tenkz_kernel_eq_saved_group_int
         { \g__tenkz_kernel_group_int }
-      \prop_set_eq:NN \l__tenkz_kernel_eq_saved_skin_prop
-        \g__tenkz_kernel_skin_prop
-      \prop_set_eq:NN \l__tenkz_kernel_eq_saved_species_prop
-        \g__tenkz_kernel_species_prop
-      \seq_gclear:N \g__tenkz_kernel_eq_declared_gseq
       \seq_clear:N \l__tenkz_kernel_eq_saved_seq
       \clist_map_inline:Nn \c__tenkz_kernel_eq_counters_clist
         {
@@ -18795,13 +18814,6 @@
           \int_gset:cn {##1}
             { \seq_item:Nn \l__tenkz_kernel_eq_saved_seq { \l_tmpa_int } }
         }
-      \prop_gset_eq:NN \g__tenkz_kernel_skin_prop
-        \l__tenkz_kernel_eq_saved_skin_prop
-      \prop_gset_eq:NN \g__tenkz_kernel_species_prop
-        \l__tenkz_kernel_eq_saved_species_prop
-      \seq_map_inline:Nn \g__tenkz_kernel_eq_declared_gseq
-        { \cs_undefine:c {##1} }
-      \seq_gclear:N \g__tenkz_kernel_eq_declared_gseq
       \seq_gclear:N \g__tenkz_kernel_panel_gseq
       \seq_gclear:N \g__tenkz_kernel_panel_kind_gseq
       \seq_gclear:N \g__tenkz_kernel_rel_gseq

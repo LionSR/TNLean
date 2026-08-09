@@ -1976,7 +1976,13 @@ def _tenkzeq_declared_offs(source: str, position: int) -> set[int] | None:
         # own, so the relation is read off the front and the rest is left
         # alone.  The relation is read as a number, matching the kernel, so
         # a leading zero names the relation it looks like.
-        match = re.fullmatch(r"\{\s*(\d+)\s*:(?s:.*)\}", value)
+        # The key list strips one layer of braces from a value, so the
+        # kernel reads `off={1: reason}` and `off=1: reason` as one thing
+        # and so does this.
+        payload = value.strip()
+        if payload.startswith("{") and payload.endswith("}"):
+            payload = payload[1:-1]
+        match = re.match(r"\s*(\d+)\s*:", payload)
         if match is not None:
             declared.add(int(match.group(1)))
     return declared
