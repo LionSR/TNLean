@@ -268,14 +268,14 @@ The proved one-step conclusion is therefore
 \end{align}
 for all sufficiently large $m$ satisfying the product-span hypotheses.
 The tuple-span, internal-sum, and one-step intersection statements now hold
-under the source canonical data
+under the source canonical data: for each block $j$, let $\Lambda^j$ be a
+positive definite matrix satisfying
 \begin{align}
   \sum_aA^j_aA^{j\dagger}_a&=I,
-  &\Lambda^j&>0,
-  &\sum_aA^{j\dagger}_a\Lambda^jA^j_a&=\Lambda^j,
+  &\sum_aA^{j\dagger}_a\Lambda^jA^j_a&=\Lambda^j.
 \end{align}
-without requiring either diagonality of $\Lambda^j$ or the additional identity
-$\sum_aA^{j\dagger}_aA^j_a=I$ on the same representative.  The proof uses the
+These statements require neither diagonality of $\Lambda^j$ nor the additional
+identity $\sum_aA^{j\dagger}_aA^j_a=I$ on the same representative. The proof uses the
 positive dual fixed point only to prepare a temporary left-canonical gauge for
 the sharp base separation theorem, transports the tuple span back, and then
 propagates it with the source unital identity.\footnote{Lean declarations:
