@@ -16,7 +16,7 @@ and adjoint map with the corresponding ambient corner actions.
 
 ## Main declaration
 
-* `Kraus.exists_cornerCompression_of_supported_projection`: compression of a supported
+* `Kraus.exists_corner_compression_of_supported_projection`: compression of a supported
   finite Kraus family to the support matrix algebra.
 -/
 
@@ -31,7 +31,7 @@ variable {d D : ℕ}
 matrix algebra. The result includes the corner equivalence, its support isometry, the
 trace-preserving normalization, the adjoint-map intertwining, and the algebraic identities
 needed to move between the compressed and ambient corners. -/
-theorem exists_cornerCompression_of_supported_projection
+theorem exists_corner_compression_of_supported_projection
     (A : Fin d → MatrixAlg D) (P : MatrixAlg D)
     (hP : IsOrthogonalProjection P)
     (hSupp : ∀ i : Fin d, P * A i * P = A i)

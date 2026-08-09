@@ -103,7 +103,7 @@ theorem cornerFixedPoints_blockDiagonal_iff
     cornerCompressionKraus_isTP K h_tp hQproj hInv
   -- Compress the corner family to the support sector along the isometry `V`.
   obtain ⟨r, C, φ, V, -, hCtp, hIntertw, -, -, -, hCi, hVtV, hVVt, hφV⟩ :=
-    exists_cornerCompression_of_supported_projection
+    exists_corner_compression_of_supported_projection
       A Q hQproj hAsupp hAtp
   have hCtp' : IsTP C := hCtp
   -- The compressed Schrödinger map has the positive definite fixed point `σ`.
