@@ -127,7 +127,6 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     funext k
     simp only
     let offset := (k.val + N - i.val) % N
-    have hoffN : offset < N := Nat.mod_lt _ (Fin.pos i)
     have hsite : (i.val + offset) % N = k.val :=
       MPSTensor.add_offset_mod_eq i.isLt k.isLt
     by_cases hoff : offset < L
