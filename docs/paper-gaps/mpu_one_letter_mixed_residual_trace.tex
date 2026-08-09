@@ -1,0 +1,102 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{MPU One-Letter Mixed Residual Trace: Resolved Local Correction}
+\author{}
+\date{2026-08-09}
+
+\begin{document}
+\maketitle
+
+\section{Decomposition and source assertion}
+
+Let $\mathcal U$ be a matrix product unitary with physical dimension $d>0$,
+and let $\mathcal W$ be its physical-adjoint double layer.  The source writes
+the local tensor in the identity-plus-traceless form
+\begin{align}
+    \mathcal W&=E\otimes\operatorname{Id}
+      +\sum_\alpha S_\alpha\otimes\sigma_\alpha,
+\end{align}
+where $E$ and the residual coefficients $S_\alpha$ act on the doubled virtual
+space and every physical matrix $\sigma_\alpha$ is traceless.  In the
+basis-free formulation, contraction against a physical matrix $X$ is
+\begin{align}
+    \operatorname{contr}_{\mathrm{phys}}(\mathcal W,X)
+      &=\tr(X)E+R_{\mathcal W}(X),\\
+    R_{\mathcal W}(X)
+      &=\operatorname{contr}_{\mathrm{phys}}
+        \left(\mathcal W,X-\frac{\tr(X)}d\operatorname{Id}\right).
+\end{align}
+Thus $R_{\mathcal W}(X)$ is a residual slice, and the matrices $S_\alpha$ are
+obtained by choosing traceless basis arguments.
+
+The proof of Proposition~III.3(ii) states that every positive-length closed
+product containing at least one residual coefficient has vanishing trace
+\cite[lines~405--409]{Cirac2017MPU}.  In particular,
+\begin{align}
+    \tr(S_\alpha)&=0,
+\end{align}
+and more generally every mixed word in $E$ and the $S_\alpha$ with at least one
+residual letter has zero trace.
+
+\section{Restricted auxiliary theorems and shifted-nilpotence recovery}
+
+The definition of MPU unitarity directly supplies closed-chain identities at
+lengths $N>1$.  Accordingly, the intermediate constant-residual and
+mixed-residual auxiliary theorems first prove
+\begin{align}
+    \tr\!\left(R_{\mathcal W}(X_0)\cdots
+      R_{\mathcal W}(X_{N-1})\right)&=0
+      &&(N>1),
+\end{align}
+and the analogous identity for mixed identity and residual factors.
+\footnote{Formal declarations:
+  \leanid{MPOTensor.IsMPU.trace_prod_residualSlice_doubleLayerTensor_eq_zero}
+  and
+  \leanid{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero}.}
+
+The apparent one-letter gap is recovered from these longer words.  Fix a
+physical matrix $X$ and set $A=R_{\mathcal W}(X)$.  Repeating $X$ at every site
+in the constant-residual auxiliary theorem gives
+\begin{align}
+    \tr(A^N)&=0 &&(N>1).
+\end{align}
+The shifted zero-trace-power theorem implies that $A$ is nilpotent.  Since the
+trace of a nilpotent complex matrix vanishes,
+\begin{align}
+    \tr(A)&=0.
+\end{align}
+The formal one-letter theorem carries out exactly this argument.
+\footnote{Formal declarations:
+  \leanid{MPOTensor.IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero} and
+  \leanid{Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt}.}
+The full positive-length theorem then separates $N>1$ from $N=1$; in the
+one-letter branch the unique physical site is residual and the preceding
+identity applies.
+\footnote{Formal declaration:
+  \leanid{MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos}.}
+
+This reverses the local order of the source proof: the formal argument proves
+the longer closed words first and derives the one-letter trace afterward.  It
+does not strengthen the MPU hypotheses.
+
+\section{Verdict}
+
+\textbf{Verdict: local correction (resolved).}  The intermediate auxiliary theorems retain
+the explicit scope restriction $N>1$, but shifted nilpotence derives the
+missing $N=1$ case.  The final positive-length mixed-residual theorem has the
+same hypotheses and conclusion as the cited source assertion.  The former
+obligation is recorded in
+\href{https://github.com/LionSR/TNLean/issues/5807}{TNLean issue~\#5807}, which
+was closed after this derivation was formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
