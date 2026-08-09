@@ -259,39 +259,58 @@ nonzero spectrum as a set.
   exponent $mr$ gives the result.
 \end{proof}
 
-\begin{theorem}[Trace powers above one determine the nonzero spectrum]
+\begin{theorem}[Trace powers above one determine the characteristic polynomial]
   \label{thm:mpu_shifted_trace_power_spectrum}
   \lean{Matrix.spectrum_diff_zero_eq_singleton_of_forall_trace_pow_eq_one_of_one_lt,
-    Matrix.eq_one_of_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt,
-    Matrix.one_mem_spectrum_of_forall_trace_pow_eq_one_of_one_lt}
+    Matrix.charpoly_rootMultiplicity_one_eq_one_of_forall_trace_pow_eq_one_of_one_lt,
+    Matrix.charpoly_eq_X_pow_pred_mul_X_sub_one_of_forall_trace_pow_eq_one_of_one_lt}
   \leanok
   Let $A$ be an $n\times n$ complex matrix.  If $\tr(A^k)=1$ for every
   $k>1$, then
   \begin{align}
-    \sigma(A)\setminus\{0\}&=\{1\}.
+    \sigma(A)\setminus\{0\}&=\{1\},
+    &\operatorname{mult}_{1}(\chi_A)&=1,
+    &\chi_A(X)&=X^{n-1}(X-1).
   \end{align}
-  Thus $1$ occurs as a spectral value and every nonzero spectral value equals
-  $1$.  This is the set-spectrum conclusion of
-  \cite[Proposition~1]{Cirac2017MPU}; it does not assert
-  algebraic multiplicity.
+  Thus $1$ is the sole nonzero eigenvalue and has algebraic multiplicity one.
+  This is the exact shifted-moment conclusion of
+  \cite[Proposition~III.1]{Cirac2017MPU}; the first set equality alone would
+  not assert algebraic multiplicity.
 \end{theorem}
 
 \begin{proof}\leanok
-  \uses{thm:mpu_shifted_trace_power_moments, thm:mpu_trace_power_all}
+  \uses{thm:mpu_shifted_trace_power_moments,thm:mpu_trace_power_all}
   For every $r\ge1$, the hypothesis gives
-  $\tr((A^2)^r)=\tr(A^{2r})=1$ and
-  $\tr((A^3)^r)=\tr(A^{3r})=1$.  Hence, by
-  Theorem~\ref{thm:mpu_trace_power_all},
+  \begin{align}
+    \tr((A^2)^r)&=\tr(A^{2r})=1,
+    &\tr((A^3)^r)&=\tr(A^{3r})=1.
+  \end{align}
+  Hence Theorem~\ref{thm:mpu_trace_power_all} yields
   \begin{align}
     \chi_{A^2}(X)&=\chi_{A^3}(X)=X^{n-1}(X-1).
   \end{align}
   If $\mu\in\sigma(A)$ is nonzero, spectral mapping places $\mu^2$ in
-  $\sigma(A^2)$ and $\mu^3$ in $\sigma(A^3)$.  The two characteristic
-  polynomials give $\mu^2=\mu^3=1$, and therefore $\mu=1$.
+  $\sigma(A^2)$ and $\mu^3$ in $\sigma(A^3)$, so
+  \begin{align}
+    \mu^2&=\mu^3=1,
+    &\mu&=1.
+  \end{align}
+  Conversely, spectral mapping from $1\in\sigma(A^2)$ supplies a nonzero
+  spectral value of $A$, hence $1\in\sigma(A)$.
 
-  The value $1$ belongs to $\sigma(A^2)$.  Spectral mapping supplies
-  $\mu\in\sigma(A)$ with $\mu^2=1$; this $\mu$ is nonzero, so the
-  nonzero-value argument gives $\mu=1$.
+  The factorization
+  \begin{align}
+    A^2-\Id&=(A+\Id)(A-\Id)
+  \end{align}
+  with commuting factors includes the maximal generalized $1$-eigenspace of
+  $A$ in that of $A^2$.  Since $1$ has multiplicity one in $\chi_{A^2}$,
+  it has multiplicity at most one in $\chi_A$; its occurrence makes the
+  multiplicity exactly one.  All remaining roots are zero, and splitting the
+  monic characteristic polynomial gives
+  \begin{align}
+    \operatorname{mult}_{1}(\chi_A)&=1,
+    &\chi_A(X)&=X^{n-1}(X-1).
+  \end{align}
 \end{proof}
 
 We now introduce the two matrices used for the singular-value decompositions of
@@ -819,64 +838,88 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_shifted_transfer_trace_primitive}
     \lean{spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace}
     \leanok
-    \uses{def:mpu_transfer_matrix}
+    \uses{def:mpu_transfer_matrix,def:primitive_channel}
     Let $T:M_D(\mathbb C)\to M_D(\mathbb C)$ be a linear map with $D>0$.
-    If
+    If $\tr(\widehat T^{\,N})=1$ for every integer $N>1$, then
     \begin{align}
-        \tr(\widehat T^{\,N})&=1
+        r(T)&=1,
+        &\operatorname{peripheral}(T)&=\{1\}.
     \end{align}
-    for every integer $N>1$, then $T$ has spectral radius one and its only
-    eigenvalue on the unit circle is $1$.
+    This is the radius-and-primitivity part of
+    \cite[Proposition~III.1]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_shifted_trace_power_spectrum,
         thm:mpu_transfer_matrix_eigenvalues}
-    The shifted trace-power theorem gives
+    The shifted traces give
     \begin{align}
         \sigma(\widehat T)\setminus\{0\}&=\{1\}.
     \end{align}
     Column stacking identifies the eigenvalues of $T$ and $\widehat T$.
-    Thus every spectral value of $T$ is either $0$ or $1$, and $1$ occurs.
-    The spectral radius is therefore one, while the only eigenvalue of norm
-    one is $1$.
+    Consequently every spectral value of $T$ is zero or one, and one occurs,
+    so
+    \begin{align}
+        r(T)&=\max_{\lambda\in\sigma(T)}|\lambda|=1.
+    \end{align}
+    Restricting to eigenvalues of modulus one gives
+    \begin{align}
+        \operatorname{peripheral}(T)&=\{1\},
+    \end{align}
+    which is primitivity.
 \end{proof}
 
-\begin{theorem}[Nonzero spectrum of the normalized MPU transfer matrix]
+\begin{theorem}[Exact spectrum of the normalized MPU transfer matrix]
     \label{thm:mpu_normalized_transfer_nonzero_spectrum}
-    \lean{MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum}
+    \lean{MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum,
+        MPOTensor.IsMPU.normalizedFlattening_charpoly}
     \leanok
-    \uses{def:mpu_normalized_flattening,def:mpu_transfer_matrix}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,
+        def:mpu_transfer_matrix}
     Let $U$ be an MPU tensor with positive physical and bond dimensions, and
     let $E$ be the transfer matrix of its normalized flattening. Then
     \begin{align}
-        \sigma(E)\setminus\{0\}&=\{1\}.
+        \sigma(E)\setminus\{0\}&=\{1\},
+        &\operatorname{mult}_{1}(\chi_E)&=1,
+        &\chi_E(X)&=X^{D^2-1}(X-1).
     \end{align}
+    This is the transfer-matrix conclusion of
+    \cite[Proposition~III.1]{Cirac2017MPU}. The first set equality alone does
+    not assert algebraic multiplicity.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_normalized_transfer_trace,
         thm:mpu_shifted_trace_power_spectrum}
-    The normalized transfer identity supplies $\tr(E^N)=1$ for every $N>1$,
-    so the shifted trace-power spectrum theorem applies directly.
+    The normalized transfer identity gives the shifted moments
+    \begin{align}
+        \tr(E^N)&=1 &&(N>1).
+    \end{align}
+    Applying the exact shifted trace-power theorem in dimension $D^2$ yields
+    \begin{align}
+        \chi_E(X)&=X^{D^2-1}(X-1),
+        &\operatorname{mult}_{1}(\chi_E)&=1,
+        &\sigma(E)\setminus\{0\}&=\{1\}.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Normality of a full-support normalized MPU representative]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_cpsv}
     \leanok
-    \uses{def:mpu,def:mpu_normalized_flattening,
-        def:mpu_full_active_support}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_canonical_form,
+        def:mpu_full_active_support,def:normal}
     Let $U$ be an MPU tensor with positive physical and bond dimensions.
     Suppose that the normalized flattening is equipped with CPSV
     canonical-form data whose active blocks have full support in the ambient
     bond space. Then the normalized flattening is a normal tensor.
 
-    The full-support hypothesis is essential for this ambient representative.
-    Adjoining a zero virtual direct summand preserves every periodic operator
-    but introduces a nontrivial invariant projection. Thus this theorem does
-    not assert that an arbitrary, possibly nonminimal MPU representative is
-    normal.
+    This is the full-support representative form of
+    \cite[Proposition~III.1]{Cirac2017MPU}. The full-support hypothesis is
+    essential for this ambient representative: adjoining a zero virtual
+    direct summand preserves every periodic operator but introduces a
+    nontrivial invariant projection. Thus the theorem does not assert that an
+    arbitrary, possibly nonminimal MPU representative is normal.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -884,8 +927,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_shifted_transfer_trace_card_active,
         thm:mpu_shifted_transfer_trace_primitive,
         thm:mpu_unique_active_full_support_normal}
-    The normalized transfer traces force the active block set to have
-    cardinality one. The same traces give spectral radius one and primitivity.
-    Full active support then identifies the unique active block with the
-    ambient bond space, so the full-support normality theorem applies.
+    Write $K$ for the active block set. The normalized transfer identity gives
+    \begin{align}
+        \tr(E^N)&=1 &&(N>1).
+    \end{align}
+    The active-multiplicity theorem and the transfer-spectrum theorem then give
+    \begin{align}
+        |K|&=1,
+        &r(E)&=1,
+        &\operatorname{peripheral}(E)&=\{1\}.
+    \end{align}
+    Full active support supplies
+    \begin{align}
+        \sum_{k\in K}D_k&=D.
+    \end{align}
+    Since $K$ is a singleton, its unique active block has ambient dimension
+    $D$ and therefore makes the ambient tensor irreducible. Combining this
+    irreducibility with the displayed radius and peripheral-spectrum fields
+    gives
+    \begin{align}
+        \widetilde U&\text{ is a normal tensor}.
+    \end{align}
 \end{proof}
