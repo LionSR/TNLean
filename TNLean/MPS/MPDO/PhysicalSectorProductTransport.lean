@@ -182,47 +182,6 @@ private theorem physicalCoordinateMatrixN_mpo
   rw [Fintype.sum_prod_type] at h
   exact h
 
-private def cyclicShiftEquiv (N : ℕ) (i : Fin N) : Fin N ≃ Fin N where
-  toFun k := ⟨(i.val + k.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
-  invFun k := ⟨(k.val + N - i.val) % N, Nat.mod_lt _ (Fin.pos i)⟩
-  left_inv k := by
-    apply Fin.ext
-    exact MPSTensor.offset_mod_eq i.isLt k.isLt
-  right_inv k := by
-    apply Fin.ext
-    exact MPSTensor.add_offset_mod_eq i.isLt k.isLt
-
-private def cyclicWindowIndexEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
-    Fin L ⊕ Fin (N - L) ≃ Fin N :=
-  finSumFinEquiv |>.trans (finCongr (Nat.add_sub_of_le hLN)) |>.trans
-    (cyclicShiftEquiv N i)
-
-@[simp] private theorem cyclicWindowIndexEquiv_inl
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin L) :
-    cyclicWindowIndexEquiv L N hLN i (Sum.inl r) =
-      ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := rfl
-
-@[simp] private theorem cyclicWindowIndexEquiv_inr
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (r : Fin (N - L)) :
-    cyclicWindowIndexEquiv L N hLN i (Sum.inr r) =
-      ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ := by
-  apply Fin.ext
-  change (i.val + (L + r.val)) % N = (i.val + L + r.val) % N
-  congr 1
-  omega
-
-private theorem prod_cyclicWindow_complement
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (f : Fin N → ℂ) :
-    (∏ n : Fin N, f n) =
-      (∏ r : Fin L, f ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) *
-        (∏ r : Fin (N - L),
-          f ⟨(i.val + L + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩) := by
-  rw [Fintype.prod_equiv (cyclicWindowIndexEquiv L N hLN i).symm
-    f (fun x ↦ f (cyclicWindowIndexEquiv L N hLN i x))
-    (fun n ↦ by simp)]
-  rw [Fintype.prod_sum_type]
-  simp only [cyclicWindowIndexEquiv_inl, cyclicWindowIndexEquiv_inr]
-
 private theorem reindex_physicalCoordinateMatrixN_windowComplement
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     Matrix.reindex
@@ -246,7 +205,7 @@ private theorem reindex_physicalCoordinateMatrixN_windowComplement
   have hv : (fun r ↦ t ⟨(i.val + 2 + r.val) % N,
       Nat.mod_lt _ (Fin.pos i)⟩) = v := congrArg Prod.snd het
   change (∏ n : Fin N, F.physicalCoordinateMatrix (s n) (t n)) = _
-  rw [prod_cyclicWindow_complement 2 N hN i]
+  rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
   simp only [MPSTensor.extractWindow] at hx hy
   simp only [physicalCoordinateMatrixN, Matrix.kroneckerMap_apply]
   apply congrArg₂ (fun a b : ℂ ↦ a * b)
