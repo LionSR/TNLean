@@ -379,7 +379,7 @@
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
-        thm:pgvwc_product_span_source_length,
+        thm:pgvwc_product_span_doubly_normalized,
         lem:parent_cyclic_translate_preserves_chain_space,
         lem:block_boundary_intertwiner_from_global_cut,
         lem:block_diagonal_boundary_component_right_boundary_matrices}
@@ -417,7 +417,7 @@
 \begin{proof}
     \leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length,
-        thm:pgvwc_product_span_source_length,
+        thm:pgvwc_product_span_doubly_normalized,
         lem:parent_cyclic_translate_preserves_chain_space,
         lem:block_boundary_intertwiner_from_global_cut,
         lem:block_diagonal_boundary_component_right_boundary_matrices}
@@ -437,7 +437,7 @@
         \notag
     \end{align}
     The length bound and
-    Theorem~\ref{thm:pgvwc_product_span_source_length} imply that the
+    Theorem~\ref{thm:pgvwc_product_span_doubly_normalized} imply that the
     simultaneous products of length $N-L_0$ span the product algebra.
     Therefore,
     Lemma~\ref{lem:block_boundary_intertwiner_from_global_cut} gives, block by
@@ -502,7 +502,7 @@
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
         lem:block_diagonal_boundary_representation_inclusion,
         lem:block_diagonal_boundary_closing_equality,
-        thm:pgvwc_block_space_independence_source_length}
+        thm:pgvwc_block_space_independence_doubly_normalized}
     Under the same hypotheses,
     \begin{align}
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
@@ -518,13 +518,13 @@
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut,
         lem:block_diagonal_boundary_representation_inclusion,
         lem:block_diagonal_boundary_closing_equality,
-        thm:pgvwc_block_space_independence_source_length}
+        thm:pgvwc_block_space_independence_doubly_normalized}
     Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     gives the forward inclusion in the displayed equality. Every periodic
     single-block vector is a periodic vector for the block-diagonal tensor,
     which gives the reverse inclusion.
     For independence, write $\phi_j=\Gamma_N^{A^j}(X_j)$ and suppose that
-    $\sum_j\phi_j=0$. Theorem~\ref{thm:pgvwc_block_space_independence_source_length} and
+    $\sum_j\phi_j=0$. Theorem~\ref{thm:pgvwc_block_space_independence_doubly_normalized} and
     nondegeneracy of the trace pairing give
     \begin{align}
         \sum_j\Gamma_N^{A^j}(X_j)=0
