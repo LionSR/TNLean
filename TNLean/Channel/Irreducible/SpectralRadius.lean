@@ -8,7 +8,6 @@ import TNLean.Algebra.MatrixOperatorSpace
 import TNLean.Channel.Irreducible.KrausSetup
 import TNLean.Channel.Irreducible.PerronFrobenius
 import TNLean.Channel.Irreducible.Similarity
-import TNLean.Channel.Irreducible.TraceAdjoint
 import TNLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.Radius
@@ -182,7 +181,7 @@ theorem spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
   have htrace : ∀ X : Matrix (Fin D) (Fin D) ℂ,
       Matrix.trace (σ * E X) =
         Matrix.trace (MPSTensor.transferMap (d := n) (D := D) (fun i => (K i)ᴴ) σ * X) :=
-    fun X => trace_mul_transferMap_adjoint K hE_eq σ X
+    fun X => Kraus.trace_mul_transferMap_adjoint K hE_eq σ X
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     intro htr_zero
     exact hρ_ne

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Channel.KoashiImoto.SingleWitness
+import TNLean.Channel.KrausMap
 import TNLean.Channel.FixedPoint.MeanErgodicAdjoint
 import TNLean.Channel.Schwarz.KadisonSchwarz
 
@@ -25,10 +26,6 @@ finite-dimensional Schrödinger mean-ergodic theorem entrywise.
 
 ## Main declarations
 
-* `Kraus.isPositiveMap_mapLM`: the Schrödinger action of any Kraus family is a positive map
-  (it is completely positive).
-* `Kraus.isTracePreservingMap_mapLM_of_isTP`: a trace-preserving Kraus family's Schrödinger
-  action is a trace-preserving map.
 * `Kraus.traceAdjointMap_mapLM`: the trace-pairing adjoint of a Kraus family's Schrödinger
   action is its Heisenberg adjoint map.
 * `Kraus.isSchwarzMap_traceAdjointMap_mapLM_of_isTP`: the trace adjoint of a
@@ -67,33 +64,6 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 section TraceAdjointHeisenbergIdentification
 
 variable {d : ℕ}
-
-/-- **A Kraus family's Schrödinger action is completely positive.**
-
-`map K X = ∑ i, K i X (K i)ᴴ` is literally a Kraus sum, witnessing `IsCPMap` directly. -/
-theorem isCPMap_mapLM (K : Fin d → Mat) : IsCPMap (mapLM K) :=
-  ⟨d, K, fun X => (mapLM_apply K X).trans (map_apply K X)⟩
-
-/-- **A Kraus family's Schrödinger action is positive.**
-
-Completely positive maps are positive (`IsCPMap.isPositiveMap`). -/
-theorem isPositiveMap_mapLM (K : Fin d → Mat) : IsPositiveMap (mapLM K) :=
-  (isCPMap_mapLM K).isPositiveMap
-
-/-- **A trace-preserving Kraus family's Schrödinger action is a trace-preserving map.**
-
-`tr(E(X)) = tr(1 · E(X)) = tr(E^*(1) · X) = tr(1 · X) = tr(X)`, using the weighted trace
-identity `Kraus.trace_mul_map_eq_trace_adjointMap_mul` at `ρ := 1` and
-`Kraus.adjointMap_one_of_isTP`. -/
-theorem isTracePreservingMap_mapLM_of_isTP (K : Fin d → Mat) (h_tp : IsTP K) :
-    IsTracePreservingMap (mapLM K) := by
-  intro X
-  show Matrix.trace (mapLM K X) = Matrix.trace X
-  rw [mapLM_apply]
-  have h1 : Matrix.trace ((1 : Mat) * map K X) = Matrix.trace (adjointMap K 1 * X) :=
-    trace_mul_map_eq_trace_adjointMap_mul K 1 X
-  rw [one_mul] at h1
-  rw [h1, adjointMap_one_of_isTP K h_tp, one_mul]
 
 /-- **The trace-pairing adjoint of a Kraus family's Schrödinger action is its Heisenberg
 adjoint.**

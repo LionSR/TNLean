@@ -114,7 +114,7 @@ theorem maximalSupport_of_maximalRank
     have hc_ne : ρ₀.trace ≠ 0 := by
       intro h0
       have hS_herm : (CFC.sqrt ρ₀)ᴴ = CFC.sqrt ρ₀ :=
-        MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ₀
+        Matrix.conjTranspose_cfc_sqrt ρ₀
       have hSS : CFC.sqrt ρ₀ * CFC.sqrt ρ₀ = ρ₀ :=
         CFC.sqrt_mul_sqrt_self ρ₀ hρ₀_psd.nonneg
       have htr : ((CFC.sqrt ρ₀)ᴴ * CFC.sqrt ρ₀).trace = 0 := by

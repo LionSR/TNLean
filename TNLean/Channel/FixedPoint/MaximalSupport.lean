@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Channel.FixedPoint.MaximalSupportBasic
 import TNLean.Channel.FixedPoint.WeightedCornerFixedPoints
-import TNLean.MPS.Core.CPPrimitive
+import TNLean.Channel.KrausMap
 
 /-!
 # Maximal-support fixed points for Kraus maps
@@ -36,13 +36,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- The transfer map of a trace-preserving Kraus family is a quantum channel; the
-trace-preservation hypothesis is the normalization of the channel form of the transfer
-map (`MPSTensor.transferMap_isChannel`). -/
-theorem isChannel_transferMap (K : Fin d → Mat) (h_tp : IsTP K) :
-    IsChannel (MPSTensor.transferMap (d := d) (D := D) K) :=
-  MPSTensor.transferMap_isChannel K h_tp
-
 /-- **A fixed point of maximal support for a Kraus map.** The mean-ergodic image
 of the identity is a positive semidefinite fixed point whose support carries every fixed
 point of the trace-preserving Kraus map. This is the completely positive specialization
@@ -51,8 +44,8 @@ of Wolf, Proposition 6.9, formalized for arbitrary positive trace-preserving map
 theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
     ∃ (ρ₀ : Mat) (hρ₀ : ρ₀.PosSemidef), map K ρ₀ = ρ₀ ∧
       ∀ X : Mat, map K X = X → stationaryProj hρ₀ * X * stationaryProj hρ₀ = X := by
-  let E : Mat →ₗ[ℂ] Mat := MPSTensor.transferMap (d := d) (D := D) K
-  have hE : IsChannel E := isChannel_transferMap K h_tp
+  let E : Mat →ₗ[ℂ] Mat := mapLM K
+  have hE : IsChannel E := isChannel_mapLM K h_tp
   let hbounded := hE.cp.isPositiveMap.hasBoundedOrbits_of_tracePreserving hE.tp
   let ρ₀ : Mat := LinearMap.meanErgodicProjection (𝕜 := ℂ) (E := Mat)
     E hbounded 1
@@ -62,10 +55,10 @@ theorem exists_maximalSupport_fixedPoint (K : Fin d → Mat) (h_tp : IsTP K) :
       hE.cp.isPositiveMap.exists_maximalSupport_fixedPoint hE.tp
   obtain ⟨hρ₀, hfix, hmax⟩ := hgeneric
   refine ⟨ρ₀, hρ₀, ?_, ?_⟩
-  · simpa [E, MPSTensor.transferMap_apply, map] using hfix
+  · simpa [E] using hfix
   · intro X hX
     apply hmax X
-    simpa [E, MPSTensor.transferMap_apply, map] using hX
+    simpa [E] using hX
 
 /-- **Conjugation by the square root at a fixed point of maximal support.** For a
 trace-preserving Kraus map $T$ there is a positive semidefinite fixed point $\rho_0$ such

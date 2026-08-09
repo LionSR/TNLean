@@ -68,7 +68,8 @@ theorem stationaryProj_mul_cfc_sqrt {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
   set S : Mat := CFC.sqrt ρ with hSdef
   have hQproj : IsOrthogonalProjection Q := isOrthogonalProjection_stationaryProj hρ_psd
   have hQherm : Qᴴ = Q := hQproj.1.eq
-  have hS_herm : Sᴴ = S := MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
+  have hS_herm : Sᴴ = S := by
+    simpa [S] using Matrix.conjTranspose_cfc_sqrt ρ
   have hSS : S * S = ρ := CFC.sqrt_mul_sqrt_self ρ hρ_psd.nonneg
   have hQρ : Q * ρ = ρ := MPSTensor.supportProj_mul (D := D) (ρ := ρ) hρ_psd
   -- `(1 - Q) S` has vanishing square, hence vanishes.
@@ -91,7 +92,8 @@ theorem cfc_sqrt_mul_stationaryProj {ρ : Mat} (hρ_psd : ρ.PosSemidef) :
     CFC.sqrt ρ * stationaryProj hρ_psd = CFC.sqrt ρ := by
   have hQherm : (stationaryProj hρ_psd)ᴴ = stationaryProj hρ_psd :=
     (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
-  have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
+  have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ :=
+    Matrix.conjTranspose_cfc_sqrt ρ
   have h := congrArg Matrix.conjTranspose (stationaryProj_mul_cfc_sqrt hρ_psd)
   rwa [Matrix.conjTranspose_mul, hQherm, hS_herm] at h
 
@@ -393,7 +395,8 @@ noncomputable def weightedCornerFixedPointsStarSubalgebra
   letI : StarModule ℂ hQ.Corner := MatrixCorner.cornerStarModuleComplex hQ
     (isOrthogonalProjection_stationaryProj hρ_psd).1.eq
   let Q : Mat := stationaryProj hρ_psd
-  have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ := MPSTensor.conjTranspose_cfc_sqrt (D := D) ρ
+  have hS_herm : (CFC.sqrt ρ)ᴴ = CFC.sqrt ρ :=
+    Matrix.conjTranspose_cfc_sqrt ρ
   have hSρS : CFC.sqrt ρ * Q * CFC.sqrt ρ = ρ := by
     rw [show CFC.sqrt ρ * Q * CFC.sqrt ρ = (CFC.sqrt ρ * Q) * CFC.sqrt ρ from rfl,
       cfc_sqrt_mul_stationaryProj hρ_psd, CFC.sqrt_mul_sqrt_self ρ hρ_psd.nonneg]
@@ -482,7 +485,8 @@ theorem exists_weightedCorner_sqrt_eq_of_fixedPoint
     exists_weighted_compression K h_tp hρ_psd hρ_fix
   set Q : Mat := stationaryProj hρ_psd with hQdef
   set s : Matrix (Fin r) (Fin r) ℂ := CFC.sqrt σ with hsdef
-  have hs_det : IsUnit s.det := MPSTensor.isUnit_det_cfc_sqrt_of_posDef (D := r) σ hσpd
+  have hs_det : IsUnit s.det := by
+    simpa [hsdef] using hσpd.isUnit_det_cfc_sqrt
   have hs_inv_mul : s⁻¹ * s = 1 := Matrix.nonsing_inv_mul s hs_det
   have hs_mul_inv : s * s⁻¹ = 1 := Matrix.mul_nonsing_inv s hs_det
   -- The candidate corner element, built on the support sector.
