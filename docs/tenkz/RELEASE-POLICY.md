@@ -53,9 +53,62 @@ release preparation, sign-off, publisher tag. Nobody pushes a `tenkz-v*` tag
 by hand. The campaign harness named by the policy —
 `tests/tenkz/release-harness/`, `tests/tenkz/release-support/`,
 `tests/tenkz/release-tests.toml`,
-`.github/workflows/tenkz-release-policy.yml` — is not in the tree yet; it is
-the activation slice of #5352, and until it lands and the activation pull
-request arms `SOAK-1.0.md`, no release command exists.
+`.github/workflows/tenkz-release-policy.yml` — landed with the activation slice
+of #5636 and runs per PR. It is not armed. `SOAK-1.0.md` still reads
+`enforcement = "pending"`, so no campaign entry is valid and no release command
+exists. Arming is a separate self-referential pull request whose complete diff
+is the seven scalars in `SOAK-1.0.md`, and it may open only after the blocker
+chain closes and the final-tag signing key lands
+(`tests/tenkz/release-support/README.md`).
+
+What the harness is: the closed inventory names one atomic compatibility
+assertion per entry, each with its own failure fingerprint, and the supervisor
+runs each one in a repository-shaped view holding only the pinned trees, the
+inventory, and that entry's declared subjects — a canonical artifact reaches a
+command only through one of its two declared roles, and the receipt records
+which artifacts were withheld. An
+assertion passes by exiting zero and fails by writing the closed receipt and
+exiting ten; the supervisor rejects every other outcome.
+
+The view is declarative isolation, not a sandbox, and the difference matters
+when reading a receipt. A command runs as the user that owns every path in its
+view, so it can restore write permission on a sealed file and change it; it can
+read an absolute path outside the view; it can open a socket. The mode bits and
+the exposure list stop an accident and make a receipt name everything the
+command could legitimately have seen. They do not stop an adversary. Closing
+that gap needs a mount namespace and an identity that does not own the view,
+which belong to the enforcement workflow — as does the denial of network access
+before repository code runs. Both arrive with the armed workflow, and
+`supervisor.py check-readiness` refuses an armed policy whose workflow lacks
+them.
+
+One consequence for sequencing. The enforcement workflow must supply the
+repository-evidence bundle to `check_tenkz_policy.py` before the campaign is
+armed, because the arming change may touch only the two normative documents and
+so cannot add that wiring itself. An armed ledger without it fails closed on
+every validation. That wiring is therefore a prerequisite change, not part of
+arming.
+
+**What `check_tenkz_policy.py` reports, and when that changes.** The checker
+prints `evidence not-started (0 entries)` and will keep printing it until a
+freeze entry lands. Read it as the campaign's state, not as a defect: while
+`enforcement = "pending"` the ledger is closed to entries by construction, so
+`not-started` is the only state a valid pending ledger can have. Three things
+must happen, in this order, before it reports anything else:
+
+1. the blocker chain closes — #4162, #4703, #4708, and #4163 remain open;
+2. the arming pull request flips both enforcement values and pins the four
+   digests, which moves the checker from a pending ledger to an armed one;
+3. the first `freeze` entry lands, which is what makes the state
+   `attempt-1-active`.
+
+Step 2 alone is not enough. On an armed ledger the validator requires a
+repository-evidence bundle, which the plain command-line entry point does not
+build; the armed states are reachable only through the enforcement workflow,
+which supplies the GitHub and Git evidence. So the bare command reporting a
+live chain is not a milestone this or any other implementation change reaches —
+it is the campaign having started. Until then the standing gates below, not the
+ledger, are the release evidence.
 
 **(this page)** The standing gates below already run per PR and must be green
 at the exact release head:
@@ -71,6 +124,7 @@ at the exact release head:
 | manual compile and event audit | `xelatex manual2.tex` twice; `python3 scripts/tenkz_audit.py manual2.tnlog` | `pr-ci.yml`, `blueprint` |
 | picture-source lint and shared parsers | `python3 scripts/tenkz_lint.py`; `test_tnlog.py`, `test_texcase.py`, `test_tenkz_kernel_audit.py` | `pr-ci.yml`, `blueprint` |
 | evidence-ledger validity | `python3 scripts/check_tenkz_policy.py` (+ `test_check_tenkz_policy.py`, `test_tenkz_policy_evidence.py`) | `tenkz-policy.yml` |
+| release harness, inventory, and assertions | `python3 tests/tenkz/release-harness/selftest.py`; `supervisor.py check-inventory`, `run-all`, `check-readiness` | `tenkz-release-policy.yml` |
 | migration guards | `python3 scripts/check_tenkz_dispositions.py`; `python3 scripts/check_tenkz_demolition.py` | `tenkz-demolition.yml`; both expire with the S4 migration (`HACKING.md` §Pull-request evidence) |
 
 **(this page)** The render evidence standard is working agreement 5 on #4183,
@@ -98,12 +152,16 @@ declaration must agree with it (`DESIGN.md` §Release tags).
 
 The four canonical release artifacts (`DESIGN.md`, `release_*` values) are
 `tex/tenkz/tenkz.sty`, `docs/tenkz/manual2.tex`, `docs/tenkz/CHANGES.md`, and
-`docs/tenkz/TNLOG.md`. The last two are not in the tree yet: the
-release-preparation pull request writes them. `CHANGES.md` follows the
-register of the 0.6 record at `docs/tenkz/history/CHANGES-0.6.md` — a table of
-changed spellings, one motivated paragraph per decision, and the mechanical
-migration per spelling. `TNLOG.md` is the event-format declaration, owned by
-#4162/#4703.
+`docs/tenkz/TNLOG.md`. All four are in the tree; the release-preparation pull
+request sets their version lines together with the manifest. `CHANGES.md`
+follows the register of the 0.6 record at `docs/tenkz/history/CHANGES-0.6.md` —
+a table of changed spellings, one motivated paragraph per decision, and the
+mechanical migration per spelling. `TNLOG.md` is the event-format declaration:
+it states the line syntax, the event kinds, what the reader enforces, and which
+invariants only the writers hold. The in-band `major.minor` header it declares
+does not exist yet and remains owned by #4162/#4703, so until that lands the
+event surface is held by the golden digests rather than by version
+negotiation.
 
 Tags are `tenkz-vMAJOR.MINOR.PATCH`, annotated, never moved or reused. Bare
 `vMAJOR.MINOR.PATCH` tags belong to the Lean toolchain

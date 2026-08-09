@@ -7,7 +7,7 @@ implementation boundaries. The earlier file at `history/DESIGN.md` records the
 0.6 design campaign; it does not define the released contract.
 
 Adopting this policy neither changes the package version nor starts the 1.0
-campaign. Automated enforcement is pending under #5352, and no campaign entry
+campaign. Automated enforcement is pending under #5636, and no campaign entry
 is valid until the implementation and blocker chain below are complete. The
 enforcement-activation pull request is the final prerequisite before a source
 candidate. Its base contains the checker, repository-evidence resolver, tests,
@@ -21,7 +21,7 @@ A later
 self-referential freeze-entry pull request supplies the trusted attempt-ordering
 anchor.
 
-The following block is normative. A later #5352 slice activates its
+The following block is normative. The activation slice under #5636 arms its
 machine-checking contract.
 
 ```toml tenkz-policy-v1
