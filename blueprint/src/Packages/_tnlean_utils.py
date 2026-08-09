@@ -59,6 +59,10 @@ ROW_BREAK_LENGTH = re.compile(
 # pair of parentheses, a second symbol -- is mathematics either way.
 CONTROL_WORD = re.compile(r"\s*[-+]?\s*((\d+(\.\d*)?|\.\d+)\s*)?\\([A-Za-z@]+)\s*$")
 
+# Arithmetic on dimensions has its own primitives, and they appear nowhere
+# else, so a gap computed rather than written is recognised by them.
+DIMENSION_EXPRESSION = re.compile(r"\\(dimexpr|numexpr|glueexpr)\b")
+
 
 def stringify_tex_item(obj: Any) -> str:
     """Extract a stable string from a plasTeX token/list item."""

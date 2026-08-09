@@ -36,7 +36,7 @@ sys.path.insert(0, str(_SCRIPTS.parent / "blueprint/src/Packages"))
 
 from playwright.sync_api import Page, sync_playwright
 
-from _tnlean_utils import CONTROL_WORD, ROW_BREAK_LENGTH
+from _tnlean_utils import CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH
 from test_tenkz_equation_web import serve
 
 
@@ -117,7 +117,10 @@ def _assert_row_breaks_carry_lengths(page: Path, source: str) -> None:
     """
     for match in ROW_BREAK_BRACKET.finditer(source):
         bracketed = match.group(1)
-        assert ROW_BREAK_LENGTH.match(bracketed) or CONTROL_WORD.match(bracketed), (
+        spacing = (ROW_BREAK_LENGTH.match(bracketed)
+                   or CONTROL_WORD.match(bracketed)
+                   or DIMENSION_EXPRESSION.search(bracketed))
+        assert spacing, (
             f"{page.name}: a row break is followed by {match.group(0)!r}, which "
             "is mathematics read as a line spacing"
         )

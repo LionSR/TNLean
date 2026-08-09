@@ -49,6 +49,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from _tnlean_utils import CONTROL_WORD as _CONTROL_WORD
+from _tnlean_utils import DIMENSION_EXPRESSION as _DIMENSION_EXPRESSION
 from _tnlean_utils import ROW_BREAK_LENGTH as _ROW_BREAK_LENGTH
 from _tnlean_utils import stringify_tex_item as _stringify_tex_item
 from leanblueprint.Packages import blueprint as _blueprint
@@ -570,11 +571,17 @@ for _macro_class in (
 
 
 def _names_a_dimension(node, written: str) -> bool:
+    if _DIMENSION_EXPRESSION.search(written):
+        return True
     control_word = _CONTROL_WORD.match(written)
     if control_word is None:
         return False
     declared = node.ownerDocument.context.get(control_word.group(4))
-    return declared is not None and issubclass(declared, DimenCommand)
+    # plasTeX keeps a macro as its class; an instance answers the same
+    # question, and anything else answers no rather than raising.
+    if isinstance(declared, type):
+        return issubclass(declared, DimenCommand)
+    return isinstance(declared, DimenCommand)
 
 
 # --- a line break inside a braced argument is not a row of the display ----
