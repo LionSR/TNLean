@@ -29,6 +29,7 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
@@ -44,6 +45,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
+      - 'Papers/2011.12127/TN-Review-main.tex'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
       - 'scripts/tenkz_manual_doctest.py'
@@ -93,6 +95,7 @@ on:
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/pr-ci.yml'
+      - '.github/workflows/tenkz-rmp-book.yml'
       - 'blueprint/src/**'
       - 'tex/tenkz/**'
       - 'tests/tenkz/**'
@@ -108,6 +111,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/tenkz_rmp.py'
+      - 'Papers/2011.12127/TN-Review-main.tex'
       - 'scripts/update_tenkz_dimension_inventory.py'
       - 'scripts/tenkzlib/**'
       - 'scripts/tenkz_manual_doctest.py'
@@ -235,6 +239,9 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/tenkz_rmp.py'
+              - 'scripts/tenkz_lint.py'
+              - 'scripts/tenkz_language.py'
+              - 'Papers/2011.12127/TN-Review-main.tex'
               - 'scripts/tenkzlib/**'
               - 'scripts/tenkz_corpus.sh'
               - 'scripts/tenkz_golden.sh'
@@ -258,6 +265,7 @@ jobs:
               - 'scripts/test_tenkz_shrink.py'
             workflow:
               - '.github/workflows/pr-ci.yml'
+              - '.github/workflows/tenkz-rmp-book.yml'
 
   tenkz-shrink:
     name: Check tenkz shrink ratchets
@@ -344,6 +352,45 @@ jobs:
         run: TENKZ_CORPUS_JOBS=4 scripts/tenkz_golden.sh --check
       - name: Check string-engine event and pixel probes
         run: scripts/tenkz_string_probes.sh
+
+  # Compiles and audits the 130-target RMP benchmark: tenkz's own reproduction
+  # of the diagrams in the tensor-network review paper it is modeled on. This
+  # is the book the library was actually built against, and it is where every
+  # visual defect in the campaign was found — including one regression that
+  # every other job in this file missed (issue #5824). "check" compiles each
+  # target standalone and audits its render event log; a measured full run
+  # took about four to five minutes on a ten-core development machine at full
+  # harness parallelism, so it runs on every pull request that can move RMP
+  # ink, gated by the same `corpus` path filter already used above. The
+  # slower step -- typesetting the full illustrated book and rendering every
+  # page to an image -- runs weekly and on demand instead, in
+  # tenkz-rmp-book.yml, because that step is about producing the reviewable
+  # book, not about catching a regression quickly.
+  tenkz-rmp:
+    name: Check tenkz RMP benchmark corpus
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.corpus == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install TeX dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      # Each target's XeLaTeX compile has a fixed two-minute ceiling inside
+      # the harness. GitHub's hosted runner has four shared cores, and four
+      # parallel compiles left no slack: one run timed out a target under
+      # ordinary load. Two parallel compiles leave that headroom back.
+      - name: Compile and audit the tenkz RMP benchmark
+        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py check --all
 
   build:
     needs: changes

@@ -1,0 +1,71 @@
+name: Tenkz RMP benchmark book
+
+# The 130-target RMP benchmark is tenkz's own picture book: every case
+# reproduces a diagram from the tensor-network review paper the library is
+# modeled on, and every visual defect found during the campaign was found by
+# reading this book. `pr-ci.yml` compiles and audits all 130 targets on every
+# pull request that can move RMP ink (the `tenkz-rmp` job, gated by the
+# `corpus` path filter). What that job does not do is typeset the book itself
+# or render its pages to images, because that additional step costs about as
+# much time again as the per-target compile, and it exists to produce a book
+# a person reads, not to catch a regression fast. This workflow does that
+# slower step -- once a week, and any time someone asks for it by hand --
+# typesetting the book and rendering every page to an image, so the picture
+# pipeline that ships in the blueprint gets exercised too, and it uploads
+# the compiled PDF so a reviewer can open it without a local checkout.
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"  # Mondays at 10:00 UTC, clear of the housekeeping crons
+  workflow_dispatch:
+
+# A manual dispatch and the weekly schedule share one queue, so a person
+# asking for the book by hand never runs a second, duplicate compile
+# alongside the scheduled one -- the later run waits instead.
+concurrency:
+  group: tenkz-rmp-book
+
+permissions:
+  contents: read
+
+jobs:
+  book:
+    name: Typeset and render the RMP benchmark book
+    runs-on: ubuntu-latest
+    # render --all does more than the pull-request check (it also rasterizes
+    # every target and book page), and its cost at this job's parallelism
+    # was not measured directly before this workflow's first real run -- see
+    # the timeout-minutes budget of the neighboring tenkz-corpus job in
+    # pr-ci.yml for the precedent this follows. Nothing in this workflow
+    # competes with pull-request turnaround, so the wide budget only guards
+    # against a genuine hang, not against a slow but honest compile.
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install TeX dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+
+      # Two parallel compiles, matching pr-ci.yml's tenkz-rmp job: GitHub's
+      # hosted runner has four shared cores, and four parallel compiles left
+      # one target no room to finish inside the harness's fixed per-target
+      # time limit. "render" typesets the book and also rasterizes every
+      # target and book page, so this run exercises the same page-image
+      # pipeline the rendered corpus and the blueprint use; the images
+      # themselves are not uploaded, only the book PDF below.
+      - name: Typeset and render the RMP benchmark book
+        run: TENKZ_RMP_JOBS=2 python3 scripts/tenkz_rmp.py render --all
+
+      # `render` writes the book PDF before it rasterizes pages, so a later
+      # page-rasterization failure must not withhold a book that already
+      # compiled. `always()` still uploads it; if the compile itself failed
+      # before writing a PDF, upload-artifact warns instead of failing, and
+      # the job still reports the failed compile.
+      - name: Upload the compiled book
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenkz-rmp-benchmark
+          path: output/pdf/tenkz-rmp-benchmark.pdf
+          retention-days: 30
+          if-no-files-found: warn
