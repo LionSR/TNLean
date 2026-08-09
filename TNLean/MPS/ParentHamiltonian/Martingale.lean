@@ -33,6 +33,8 @@ The five components are:
   `FrustrationFree.spectralGap_of_martingale` (quadratic form implies norm bound);
 * `Martingale.Transport` — Euclidean local projectors, ground-space and
   Hamiltonian transport, positivity, commutation, and kernel identification;
+* `Martingale.OverlapReduction` — reduction from overlapping-window commutation
+  to all-pairs commutation using locality for disjoint windows;
 * `Martingale.Reduction` — martingale quadratic-form reductions from ordered
   cross-term and anticommutator bounds to concrete cyclic-window estimates;
 * `Martingale.Gap` — conditional gap theorems from the overlapping cyclic-window
